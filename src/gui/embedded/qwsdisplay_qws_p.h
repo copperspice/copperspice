@@ -49,6 +49,7 @@ class QWSDisplay::Data
 
    bool directServerConnection();
    void fillQueue();
+
 #ifndef QT_NO_QWS_MULTIPROCESS
    void connectToPipe();
    void waitForConnection();
@@ -57,10 +58,13 @@ class QWSDisplay::Data
    void waitForRegionEvents(int winId, bool ungrabDisplay);
    bool hasPendingRegionEvents() const;
 #endif
+
    void waitForCreation();
+
 #ifndef QT_NO_COP
    void waitForQCopResponse();
 #endif
+
    void init();
    void reinit( const QString &newAppName );
    void create(int n = 1);
@@ -79,9 +83,11 @@ class QWSDisplay::Data
 
    //    QWSRegionManager *rgnMan;
    uchar *sharedRam;
+
 #ifndef QT_NO_QWS_MULTIPROCESS
    QWSSharedMemory shm;
 #endif
+
    int sharedRamSize;
 
 #ifndef QT_NO_QWS_MULTIPROCESS
@@ -91,9 +97,10 @@ class QWSDisplay::Data
    static void unlockClient(QWSLock::LockType);
    static bool waitClient(QWSLock::LockType, int timeout = -1);
    static QWSLock *getClientLock();
-#endif // QT_NO_QWS_MULTIPROCESS
+#endif
 
  private:
+
 #ifndef QT_NO_QWS_MULTIPROCESS
    QWSSocket *csocket;
 #endif
@@ -106,14 +113,18 @@ class QWSDisplay::Data
    int mouse_winid;
    QPoint region_offset;
    int region_offset_window;
+
 #ifndef QT_NO_COP
    QWSQCopMessageEvent *qcop_response;
 #endif
+
    QWSEvent *current_event;
    QList<int> unused_identifiers;
+
 #ifdef QAPPLICATION_EXTRA_DEBUG
    int mouse_event_count;
 #endif
+
    void (*mouseFilter)(QWSMouseEvent *);
 
    enum { VariableEvent = -1 };

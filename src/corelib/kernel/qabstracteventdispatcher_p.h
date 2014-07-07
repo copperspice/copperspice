@@ -26,8 +26,7 @@
 #ifndef QABSTRACTEVENTDISPATCHER_P_H
 #define QABSTRACTEVENTDISPATCHER_P_H
 
-
-#include "QtCore/qabstracteventdispatcher.h"
+#include <QtCore/qabstracteventdispatcher.h>
 
 QT_BEGIN_NAMESPACE
 

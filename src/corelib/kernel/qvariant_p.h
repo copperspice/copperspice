@@ -85,6 +85,7 @@ inline void v_construct(QVariant::Private *x, const void *copy, T * = 0)
       x->data.shared = copy ? new QVariantPrivateSharedEx<T>(*static_cast<const T *>(copy))
                        : new QVariantPrivateSharedEx<T>;
       x->is_shared = true;
+
    } else {
       if (copy) {
          new (&x->data.ptr) T(*static_cast<const T *>(copy));
@@ -114,6 +115,7 @@ inline void v_clear(QVariant::Private *d, T * = 0)
       //now we need to cast
       //because QVariant::PrivateShared doesn't have a virtual destructor
       delete static_cast<QVariantPrivateSharedEx<T>*>(d->data.shared);
+
    } else {
       v_cast<T>(d)->~T();
    }

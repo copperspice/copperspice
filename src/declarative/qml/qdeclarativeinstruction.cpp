@@ -33,14 +33,13 @@ QT_BEGIN_NAMESPACE
 
 void QDeclarativeCompiledData::dump(QDeclarativeInstruction *instr, int idx)
 {
-#ifdef QT_NO_DEBUG_STREAM
-   Q_UNUSED(instr)
-   Q_UNUSED(idx)
-#else
+
    QByteArray lineNumber = QByteArray::number(instr->line);
+
    if (instr->line == (unsigned short) - 1) {
       lineNumber = "NA";
    }
+
    const char *line = lineNumber.constData();
 
    switch (instr->type) {
@@ -245,7 +244,6 @@ void QDeclarativeCompiledData::dump(QDeclarativeInstruction *instr, int idx)
          qWarning().nospace() << idx << "\t\t" << line << "\t" << "XXX UNKNOWN INSTRUCTION" << "\t" << instr->type;
          break;
    }
-#endif // QT_NO_DEBUG_STREAM
 }
 
 QT_END_NAMESPACE

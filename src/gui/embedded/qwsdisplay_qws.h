@@ -89,7 +89,7 @@ class Q_GUI_EXPORT QWSDisplay
    void setProperty(int winId, int property, int mode, const char *data);
    void removeProperty(int winId, int property);
    bool getProperty(int winId, int property, char *&data, int &len);
-#endif // QT_NO_QWS_PROPERTIES
+#endif
 
    QList<QWSWindowInfo> windowList();
    int windowAt(const QPoint &);
@@ -120,12 +120,14 @@ class Q_GUI_EXPORT QWSDisplay
    void sendMessage(const QString &channel, const QString &msg,
                     const QByteArray &data);
    void flushCommands();
+
 #ifndef QT_NO_QWS_INPUTMETHODS
    void sendIMUpdate(int type, int winId, int widgetid);
    void resetIM();
    void sendIMResponse(int winId, int property, const QVariant &result);
    void sendIMMouseEvent(int index, bool isPress);
 #endif
+
    QWSQCopMessageEvent *waitForQCopResponse();
    void sendFontCommand(int type, const QByteArray &fontName);
 

@@ -29,7 +29,7 @@
 #include <QtCore/qglobal.h>
 
 #if defined(Q_OS_NACL)
-#  include "QtCore/qfunctions_nacl.h"
+#  include <QtCore/qfunctions_nacl.h>
 #endif
 
 #define Q_STATIC_GLOBAL_OPERATOR static

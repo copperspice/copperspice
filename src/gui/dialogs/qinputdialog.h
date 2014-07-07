@@ -165,33 +165,29 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 
    void setVisible(bool visible);
 
-   static QString getText(QWidget *parent, const QString &title, const QString &label,
-                          QLineEdit::EchoMode echo = QLineEdit::Normal,
+   static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo = QLineEdit::Normal,
                           const QString &text = QString(), bool *ok = 0, Qt::WindowFlags flags = 0);
-   static QString getItem(QWidget *parent, const QString &title, const QString &label,
-                          const QStringList &items, int current = 0, bool editable = true,
-                          bool *ok = 0, Qt::WindowFlags flags = 0);
-   static QString getText(QWidget *parent, const QString &title, const QString &label,
-                          QLineEdit::EchoMode echo,
-                          const QString &text, bool *ok, Qt::WindowFlags flags,
-                          Qt::InputMethodHints inputMethodHints);
-   static QString getItem(QWidget *parent, const QString &title, const QString &label,
-                          const QStringList &items, int current, bool editable,
-                          bool *ok, Qt::WindowFlags flags,
-                          Qt::InputMethodHints inputMethodHints);
-   static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0,
-                     int minValue = -2147483647, int maxValue = 2147483647,
-                     int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
-   static double getDouble(QWidget *parent, const QString &title, const QString &label, double value = 0,
-                           double minValue = -2147483647, double maxValue = 2147483647,
-                           int decimals = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
+
+   static QString getItem(QWidget *parent, const QString &title, const QString &label, const QStringList &items, 
+                          int current = 0, bool editable = true,bool *ok = 0, Qt::WindowFlags flags = 0);
+
+   static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo,
+                          const QString &text, bool *ok, Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints);
+
+   static QString getItem(QWidget *parent, const QString &title, const QString &label, const QStringList &items, 
+                          int current, bool editable, bool *ok, Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints);
+
+   static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0, int minValue = -2147483647, 
+                     int maxValue = 2147483647, int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
+
+   static double getDouble(QWidget *parent, const QString &title, const QString &label, double value = 0, 
+                           double minValue = -2147483647, double maxValue = 2147483647, int decimals = 1, 
+                           bool *ok = 0, Qt::WindowFlags flags = 0);
 
    // obsolete
    static int getInteger(QWidget *parent, const QString &title, const QString &label, int value = 0,
-                         int minValue = -2147483647, int maxValue = 2147483647,
-                         int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
-
-   // ### emit signals!
+                         int minValue = -2147483647, int maxValue = 2147483647, int step = 1, bool *ok = 0, Qt::WindowFlags flags = 0);
+   
    GUI_CS_SIGNAL_1(Public, void textValueChanged(const QString &text))
    GUI_CS_SIGNAL_2(textValueChanged, text)
    GUI_CS_SIGNAL_1(Public, void textValueSelected(const QString &text))
@@ -205,7 +201,7 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    GUI_CS_SIGNAL_1(Public, void doubleValueSelected(double value))
    GUI_CS_SIGNAL_2(doubleValueSelected, value)
 
-   void done(int result); // ### Qt5/Make protected.
+   void done(int result); // ### Qt5/Make protected
 
  private:
    Q_DISABLE_COPY(QInputDialog)

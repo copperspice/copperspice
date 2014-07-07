@@ -47,6 +47,7 @@ class Q_CORE_EXPORT QByteArrayMatcher
 
    int indexIn(const QByteArray &ba, int from = 0) const;
    int indexIn(const char *str, int len, int from = 0) const;
+
    inline QByteArray pattern() const {
       if (q_pattern.isNull()) {
          return QByteArray(reinterpret_cast<const char *>(p.p), p.l);

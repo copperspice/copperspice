@@ -26,7 +26,7 @@
 #ifndef QTIMER_H
 #define QTIMER_H
 
-#include <QtCore/qbasictimer.h> // conceptual inheritance
+#include <QtCore/qbasictimer.h>    // conceptual inheritance
 #include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE

@@ -35,6 +35,7 @@ class QObject;
 class Q_CORE_EXPORT QBasicTimer
 {
    int id;
+
  public:
    inline QBasicTimer() : id(0) {}
    inline ~QBasicTimer() {
@@ -46,6 +47,7 @@ class Q_CORE_EXPORT QBasicTimer
    inline bool isActive() const {
       return id != 0;
    }
+
    inline int timerId() const {
       return id;
    }

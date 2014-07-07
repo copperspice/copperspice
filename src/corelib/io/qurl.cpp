@@ -2845,15 +2845,8 @@ static bool isBidirectionalL(uint uc)
    return false;
 }
 
-#ifdef QT_BUILD_INTERNAL
-// export for tst_qurl.cpp
-void qt_nameprep(QString *source, int from);
-bool qt_check_std3rules(const QChar *uc, int len);
-#else
-// non-test build, keep the symbols for ourselves
 static void qt_nameprep(QString *source, int from);
 static bool qt_check_std3rules(const QChar *uc, int len);
-#endif
 
 void qt_nameprep(QString *source, int from)
 {

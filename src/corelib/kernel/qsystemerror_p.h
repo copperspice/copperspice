@@ -54,13 +54,11 @@ class Q_CORE_EXPORT QSystemError
 QSystemError::QSystemError(int error, QSystemError::ErrorScope scope)
    : errorCode(error), errorScope(scope)
 {
-
 }
 
 QSystemError::QSystemError()
    : errorCode(0), errorScope(NoError)
 {
-
 }
 
 QSystemError::ErrorScope QSystemError::scope()

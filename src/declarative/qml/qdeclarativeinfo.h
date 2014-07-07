@@ -127,12 +127,10 @@ class Q_DECLARATIVE_EXPORT QDeclarativeInfo : public QDebug
       return *this;
    }
 
-#ifndef QT_NO_DEBUG_STREAM
    inline QDeclarativeInfo &operator<<(const QUrl &t) {
       static_cast<QDebug &>(*this) << t;
       return *this;
    }
-#endif
 
  private:
    friend Q_DECLARATIVE_EXPORT QDeclarativeInfo qmlInfo(const QObject *me);

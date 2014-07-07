@@ -30,10 +30,9 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include "qgraphicssceneindex_p.h"
-#include "qgraphicsitem_p.h"
-#include "qgraphicsscene_bsp_p.h"
-
+#include <qgraphicssceneindex_p.h>
+#include <qgraphicsitem_p.h>
+#include <qgraphicsscene_bsp_p.h>
 #include <QtCore/qrect.h>
 #include <QtCore/qlist.h>
 
@@ -66,7 +65,6 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
    GUI_CS_SLOT_1(Protected, void updateSceneRect(const QRectF &rect))
    GUI_CS_SLOT_2(updateSceneRect)
 
- protected:
    bool event(QEvent *event);
    void clear();
 
@@ -131,12 +129,12 @@ class QGraphicsSceneBspTreeIndexPrivate : public QGraphicsSceneIndexPrivate
    static inline bool closestItemFirst_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
       return item1->d_ptr->globalStackingOrder < item2->d_ptr->globalStackingOrder;
    }
+
    static inline bool closestItemLast_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
       return item1->d_ptr->globalStackingOrder >= item2->d_ptr->globalStackingOrder;
    }
 
-   static void sortItems(QList<QGraphicsItem *> *itemList, Qt::SortOrder order,
-                         bool cached, bool onlyTopLevelItems = false);
+   static void sortItems(QList<QGraphicsItem *> *itemList, Qt::SortOrder order, bool cached, bool onlyTopLevelItems = false);
 };
 
 static inline bool QRectF_intersects(const QRectF &s, const QRectF &r)
@@ -147,6 +145,7 @@ static inline bool QRectF_intersects(const QRectF &s, const QRectF &r)
    qreal h = s.height();
    qreal l1 = xp;
    qreal r1 = xp;
+
    if (w < 0) {
       l1 += w;
    } else {

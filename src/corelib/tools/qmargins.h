@@ -60,9 +60,6 @@ class QMargins
 
 Q_DECLARE_TYPEINFO(QMargins, Q_MOVABLE_TYPE);
 
-/*****************************************************************************
-  QMargins inline functions
- *****************************************************************************/
 
 inline QMargins::QMargins()
 {
@@ -96,7 +93,6 @@ inline int QMargins::bottom() const
 {
    return m_bottom;
 }
-
 
 inline void QMargins::setLeft(int aleft)
 {
@@ -136,9 +132,7 @@ inline bool operator!=(const QMargins &m1, const QMargins &m2)
       m1.m_bottom != m2.m_bottom;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMargins &);
-#endif
 
 QT_END_NAMESPACE
 

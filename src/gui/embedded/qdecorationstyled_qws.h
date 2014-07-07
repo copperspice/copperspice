@@ -40,8 +40,7 @@ class Q_GUI_EXPORT QDecorationStyled : public QDecorationDefault
    virtual ~QDecorationStyled();
 
    QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
-   bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
-              DecorationState state = Normal);
+   bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All, DecorationState state = Normal);
    int titleBarHeight(const QWidget *widget);
 };
 

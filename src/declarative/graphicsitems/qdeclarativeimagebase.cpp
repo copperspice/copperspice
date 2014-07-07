@@ -23,9 +23,8 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativeimagebase_p.h"
-#include "private/qdeclarativeimagebase_p_p.h"
-
+#include <qdeclarativeimagebase_p.h>
+#include <qdeclarativeimagebase_p_p.h>
 #include <qdeclarativeengine.h>
 #include <qdeclarativeinfo.h>
 #include <qdeclarativepixmapcache_p.h>

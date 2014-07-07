@@ -44,8 +44,10 @@ class Q_CORE_EXPORT QModelIndex
 
  public:
    inline QModelIndex() : r(-1), c(-1), p(0), m(0) {}
+
    inline QModelIndex(const QModelIndex &other)
       : r(other.r), c(other.c), p(other.p), m(other.m) {}
+
    inline ~QModelIndex() {
       p = 0;
       m = 0;
@@ -98,6 +100,7 @@ class Q_CORE_EXPORT QModelIndex
       }
       return false;
    }
+
  private:
    inline QModelIndex(int row, int column, void *ptr, const QAbstractItemModel *model);
    int r, c;
@@ -138,6 +141,7 @@ class Q_CORE_EXPORT QPersistentModelIndex
    Qt::ItemFlags flags() const;
    const QAbstractItemModel *model() const;
    bool isValid() const;
+
  private:
    QPersistentModelIndexData *d;
 
@@ -170,7 +174,6 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
    friend class QIdentityProxyModel;
 
  public:
-
    explicit QAbstractItemModel(QObject *parent = 0);
    virtual ~QAbstractItemModel();
 
@@ -232,9 +235,9 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
 
    using QObject::parent;
 
- public:
    CORE_CS_SIGNAL_1(Public, void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                     const QSet<int> &roles = QSet<int>()) )
+
    CORE_CS_SIGNAL_2(dataChanged, topLeft, bottomRight, roles)
 
    CORE_CS_SIGNAL_1(Public, void headerDataChanged(Qt::Orientation orientation, int first, int last))
@@ -340,30 +343,32 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
 
    void setRoleNames(const QHash<int, QByteArray> &roleNames);
 
- protected :
    CORE_CS_SLOT_1(Protected, void resetInternalData())
    CORE_CS_SLOT_2(resetInternalData)
+
+   QScopedPointer<QAbstractItemModelPrivate> d_ptr;
 
  private:
    Q_DECLARE_PRIVATE(QAbstractItemModel)
    Q_DISABLE_COPY(QAbstractItemModel)
-
- protected:
-   QScopedPointer<QAbstractItemModelPrivate> d_ptr;
+   
 };
 
 inline bool QAbstractItemModel::insertRow(int arow, const QModelIndex &aparent)
 {
    return insertRows(arow, 1, aparent);
 }
+
 inline bool QAbstractItemModel::insertColumn(int acolumn, const QModelIndex &aparent)
 {
    return insertColumns(acolumn, 1, aparent);
 }
+
 inline bool QAbstractItemModel::removeRow(int arow, const QModelIndex &aparent)
 {
    return removeRows(arow, 1, aparent);
 }
+
 inline bool QAbstractItemModel::removeColumn(int acolumn, const QModelIndex &aparent)
 {
    return removeColumns(acolumn, 1, aparent);
@@ -385,7 +390,6 @@ inline QModelIndex QAbstractItemModel::createIndex(int arow, int acolumn, quint3
 }
 
 
-
 class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
 {
    CS_OBJECT(QAbstractTableModel)
@@ -395,8 +399,8 @@ class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
    ~QAbstractTableModel();
 
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
  protected:
    QAbstractTableModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
@@ -415,8 +419,8 @@ class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
    ~QAbstractListModel();
 
    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
  protected:
    QAbstractListModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
@@ -429,8 +433,7 @@ class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
 
 // inline implementations
 
-inline QModelIndex::QModelIndex(int arow, int acolumn, void *adata,
-                                const QAbstractItemModel *amodel)
+inline QModelIndex::QModelIndex(int arow, int acolumn, void *adata, const QAbstractItemModel *amodel)
    : r(arow), c(acolumn), p(adata), m(amodel) {}
 
 inline QModelIndex QModelIndex::parent() const

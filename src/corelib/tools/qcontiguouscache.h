@@ -74,6 +74,7 @@ class QContiguousCache
       QContiguousCacheData *d;
       QContiguousCacheTypedData<T> *p;
    };
+
  public:
    // STL compatibility
    typedef T value_type;
@@ -106,9 +107,11 @@ class QContiguousCache
          detach_helper();
       }
    }
+
    inline bool isDetached() const {
       return d->ref.load() == 1;
    }
+
    inline void setSharable(bool sharable) {
       if (!sharable) {
          detach();
@@ -126,6 +129,7 @@ class QContiguousCache
    inline void swap(QContiguousCache<T> &other) {
       qSwap(d, other.d);
    }
+
    bool operator==(const QContiguousCache<T> &other) const;
    inline bool operator!=(const QContiguousCache<T> &other) const {
       return !(*this == other);
@@ -209,6 +213,7 @@ class QContiguousCache
       p->dump();
    }
 #endif
+
  private:
    void detach_helper();
 
@@ -220,6 +225,7 @@ class QContiguousCache
       return reinterpret_cast<const char *>(&(reinterpret_cast<const Data *>(this))->array[1]) -
              reinterpret_cast<const char *>(this);
    }
+
    int alignOfTypedData() const {
 #ifdef Q_ALIGNOF
       return qMax<int>(sizeof(void *), Q_ALIGNOF(Data));

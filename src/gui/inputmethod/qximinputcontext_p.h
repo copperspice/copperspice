@@ -29,16 +29,16 @@
 #include <qconfig.h>
 #ifndef QT_NO_IM
 
-#include "QtCore/qglobal.h"
-#include "QtGui/qinputcontext.h"
-#include "QtGui/qfont.h"
-#include "QtCore/qhash.h"
+#include <QtCore/qglobal.h>
+#include <QtGui/qinputcontext.h>
+#include <QtGui/qfont.h>
+#include <QtCore/qhash.h>
 
 #ifdef Q_WS_X11
-#include "QtCore/qlist.h"
-#include "QtCore/qbitarray.h"
-#include "QtGui/qwindowdefs.h"
-#include "qt_x11_p.h"
+#include <QtCore/qlist.h>
+#include <QtCore/qbitarray.h>
+#include <QtGui/qwindowdefs.h>
+#include <qt_x11_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -84,6 +84,7 @@ class QXIMInputContext : public QInputContext
    void update();
 
    ICData *icData() const;
+
  protected:
    bool x11FilterEvent( QWidget *keywidget, XEvent *event );
 

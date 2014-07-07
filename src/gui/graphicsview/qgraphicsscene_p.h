@@ -26,14 +26,14 @@
 #ifndef QGRAPHICSSCENE_P_H
 #define QGRAPHICSSCENE_P_H
 
-#include "qgraphicsscene.h"
+#include <qgraphicsscene.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include "qgraphicssceneevent.h"
-#include "qgraphicsview.h"
-#include "qgraphicsview_p.h"
-#include "qgraphicsitem_p.h"
+#include <qgraphicssceneevent.h>
+#include <qgraphicsview.h>
+#include <qgraphicsview_p.h>
+#include <qgraphicsitem_p.h>
 
 #include <QtCore/qbitarray.h>
 #include <QtCore/qlist.h>
@@ -156,12 +156,11 @@ class QGraphicsScenePrivate
    QList<QGraphicsItem *> hoverItems;
    QPointF lastSceneMousePos;
    void enableMouseTrackingOnViews();
+
    QMap<Qt::MouseButton, QPointF> mouseGrabberButtonDownPos;
    QMap<Qt::MouseButton, QPointF> mouseGrabberButtonDownScenePos;
    QMap<Qt::MouseButton, QPoint> mouseGrabberButtonDownScreenPos;
-   QList<QGraphicsItem *> itemsAtPosition(const QPoint &screenPos,
-                                          const QPointF &scenePos,
-                                          QWidget *widget) const;
+   QList<QGraphicsItem *> itemsAtPosition(const QPoint &screenPos, const QPointF &scenePos, QWidget *widget) const;
    void storeMouseButtonsForMouseGrabber(QGraphicsSceneMouseEvent *event);
 
    QList<QGraphicsView *> views;
@@ -179,19 +178,16 @@ class QGraphicsScenePrivate
    bool itemAcceptsHoverEvents_helper(const QGraphicsItem *item) const;
    void leaveScene(QWidget *viewport);
 
-   void cloneDragDropEvent(QGraphicsSceneDragDropEvent *dest,
-                           QGraphicsSceneDragDropEvent *source);
-   void sendDragDropEvent(QGraphicsItem *item,
-                          QGraphicsSceneDragDropEvent *dragDropEvent);
-   void sendHoverEvent(QEvent::Type type, QGraphicsItem *item,
-                       QGraphicsSceneHoverEvent *hoverEvent);
+   void cloneDragDropEvent(QGraphicsSceneDragDropEvent *dest, QGraphicsSceneDragDropEvent *source);
+   void sendDragDropEvent(QGraphicsItem *item,QGraphicsSceneDragDropEvent *dragDropEvent);
+
+   void sendHoverEvent(QEvent::Type type, QGraphicsItem *item, QGraphicsSceneHoverEvent *hoverEvent);
    void sendMouseEvent(QGraphicsSceneMouseEvent *mouseEvent);
    void mousePressEventHandler(QGraphicsSceneMouseEvent *mouseEvent);
    QGraphicsWidget *windowForItem(const QGraphicsItem *item) const;
 
-   void drawItemHelper(QGraphicsItem *item, QPainter *painter,
-                       const QStyleOptionGraphicsItem *option, QWidget *widget,
-                       bool painterStateProtection);
+   void drawItemHelper(QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option, 
+                       QWidget *widget, bool painterStateProtection);
 
    void drawItems(QPainter *painter, const QTransform *const viewTransform,
                   QRegion *exposedRegion, QWidget *widget);
@@ -199,12 +195,14 @@ class QGraphicsScenePrivate
    void drawSubtreeRecursive(QGraphicsItem *item, QPainter *painter, const QTransform *const,
                              QRegion *exposedRegion, QWidget *widget, qreal parentOpacity = qreal(1.0),
                              const QTransform *const effectTransform = 0);
+
    void draw(QGraphicsItem *, QPainter *, const QTransform *const, const QTransform *const,
              QRegion *, QWidget *, qreal, const QTransform *const, bool, bool);
 
    void markDirty(QGraphicsItem *item, const QRectF &rect = QRectF(), bool invalidateChildren = false,
                   bool force = false, bool ignoreOpacity = false, bool removingItemFromScene = false,
                   bool updateBoundingRect = false);
+
    void processDirtyItemsRecursive(QGraphicsItem *item, bool dirtyAncestorContainsChildren = false,
                                    qreal parentOpacity = qreal(1.0));
 
@@ -222,6 +220,7 @@ class QGraphicsScenePrivate
       item->d_ptr->fullUpdatePending = 0;
       item->d_ptr->ignoreVisible = 0;
       item->d_ptr->ignoreOpacity = 0;
+
 #ifndef QT_NO_GRAPHICSEFFECT
       QGraphicsEffect::ChangeFlags flags;
       if (item->d_ptr->notifyBoundingRectChanged) {
@@ -232,17 +231,20 @@ class QGraphicsScenePrivate
          flags |= QGraphicsEffect::SourceInvalidated;
          item->d_ptr->notifyInvalidated = 0;
       }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
       if (recursive) {
          for (int i = 0; i < item->d_ptr->children.size(); ++i) {
             resetDirtyItem(item->d_ptr->children.at(i), recursive);
          }
       }
+
 #ifndef QT_NO_GRAPHICSEFFECT
       if (flags && item->d_ptr->graphicsEffect) {
          item->d_ptr->graphicsEffect->sourceChanged(flags);
       }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
    }
 
    inline void ensureSortedTopLevelItems() {
@@ -276,28 +278,29 @@ class QGraphicsScenePrivate
    void enableTouchEventsOnViews();
 
    QList<QGraphicsObject *> cachedTargetItems;
+
 #ifndef QT_NO_GESTURES
    QHash<QGraphicsObject *, QSet<QGesture *> > cachedItemGestures;
    QHash<QGraphicsObject *, QSet<QGesture *> > cachedAlreadyDeliveredGestures;
    QHash<QGesture *, QGraphicsObject *> gestureTargets;
    QHash<Qt::GestureType, int>  grabbedGestures;
    void gestureEventHandler(QGestureEvent *event);
-   void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures,
-                                 Qt::GestureFlag flag,
-                                 QHash<QGraphicsObject *, QSet<QGesture *> > *targets,
-                                 QSet<QGraphicsObject *> *itemsSet = 0,
-                                 QSet<QGesture *> *normal = 0,
-                                 QSet<QGesture *> *conflicts = 0);
+
+   void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures, Qt::GestureFlag flag, 
+          QHash<QGraphicsObject *, QSet<QGesture *> > *targets, QSet<QGraphicsObject *> *itemsSet = 0,
+          QSet<QGesture *> *normal = 0, QSet<QGesture *> *conflicts = 0);
+
    void cancelGesturesForChildren(QGesture *original);
    void grabGesture(QGraphicsItem *, Qt::GestureType gesture);
    void ungrabGesture(QGraphicsItem *, Qt::GestureType gesture);
-#endif // QT_NO_GESTURES
+
+#endif
 
    void updateInputMethodSensitivityInViews();
 
    QList<QGraphicsItem *> modalPanels;
-   void enterModal(QGraphicsItem *item,
-                   QGraphicsItem::PanelModality panelModality = QGraphicsItem::NonModal);
+
+   void enterModal(QGraphicsItem *item, QGraphicsItem::PanelModality panelModality = QGraphicsItem::NonModal);
    void leaveModal(QGraphicsItem *item);
 
  protected:
@@ -310,10 +313,10 @@ class QGraphicsScenePrivate
 static inline void _q_adjustRect(QRectF *rect)
 {
    Q_ASSERT(rect);
-   if (!rect->width()) {
+   if (! rect->width()) {
       rect->adjust(qreal(-0.00001), 0, qreal(0.00001), 0);
    }
-   if (!rect->height()) {
+   if (! rect->height()) {
       rect->adjust(0, qreal(-0.00001), 0, qreal(0.00001));
    }
 }
@@ -321,6 +324,7 @@ static inline void _q_adjustRect(QRectF *rect)
 static inline QRectF adjustedItemBoundingRect(const QGraphicsItem *item)
 {
    Q_ASSERT(item);
+
    QRectF boundingRect(item->boundingRect());
    _q_adjustRect(&boundingRect);
    return boundingRect;
@@ -329,6 +333,7 @@ static inline QRectF adjustedItemBoundingRect(const QGraphicsItem *item)
 static inline QRectF adjustedItemEffectiveBoundingRect(const QGraphicsItem *item)
 {
    Q_ASSERT(item);
+
    QRectF boundingRect(QGraphicsItemPrivate::get(item)->effectiveBoundingRect());
    _q_adjustRect(&boundingRect);
    return boundingRect;

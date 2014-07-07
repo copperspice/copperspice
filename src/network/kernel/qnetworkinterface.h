@@ -107,9 +107,7 @@ class Q_NETWORK_EXPORT QNetworkInterface
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QNetworkInterface::InterfaceFlags)
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QNetworkInterface &networkInterface);
-#endif
 
 QT_END_NAMESPACE
 

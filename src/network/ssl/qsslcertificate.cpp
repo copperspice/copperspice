@@ -869,7 +869,6 @@ bool QSslCertificatePrivate::isBlacklisted(const QSslCertificate &certificate)
    return false;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const QSslCertificate &certificate)
 {
    debug << "QSslCertificate("
@@ -884,6 +883,7 @@ QDebug operator<<(QDebug debug, const QSslCertificate &certificate)
          << ')';
    return debug;
 }
+
 QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info)
 {
    switch (info) {
@@ -908,6 +908,5 @@ QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info)
    }
    return debug;
 }
-#endif
 
 QT_END_NAMESPACE

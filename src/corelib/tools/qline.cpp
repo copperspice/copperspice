@@ -31,248 +31,19 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QLine
-    \ingroup painting
-
-    \brief The QLine class provides a two-dimensional vector using
-    integer precision.
-
-    A QLine describes a finite length line (or a line segment) on a
-    two-dimensional surface. The start and end points of the line are
-    specified using integer point accuracy for coordinates. Use the
-    QLineF constructor to retrieve a floating point copy.
-
-    \table
-    \row
-        \o \inlineimage qline-point.png
-        \o \inlineimage qline-coordinates.png
-    \endtable
-
-    The positions of the line's start and end points can be retrieved
-    using the p1(), x1(), y1(), p2(), x2(), and y2() functions. The
-    dx() and dy() functions return the horizontal and vertical
-    components of the line. Use isNull() to determine whether the
-    QLine represents a valid line or a null line.
-
-    Finally, the line can be translated a given offset using the
-    translate() function.
-
-    \sa QLineF, QPolygon, QRect
-*/
-
-/*!
-    \fn QLine::QLine()
-
-    Constructs a null line.
-*/
-
-/*!
-    \fn QLine::QLine(const QPoint &p1, const QPoint &p2)
-
-    Constructs a line object that represents the line between \a p1 and
-    \a p2.
-*/
-
-/*!
-    \fn QLine::QLine(int x1, int y1, int x2, int y2)
-
-    Constructs a line object that represents the line between (\a x1, \a y1) and
-    (\a x2, \a y2).
-*/
-
-/*!
-    \fn bool QLine::isNull() const
-
-    Returns true if the line is not set up with valid start and end point;
-    otherwise returns false.
-*/
-
-/*!
-    \fn QPoint QLine::p1() const
-
-    Returns the line's start point.
-
-    \sa x1(), y1(), p2()
-*/
-
-/*!
-    \fn QPoint QLine::p2() const
-
-    Returns the line's end point.
-
-    \sa x2(), y2(), p1()
-*/
-
-/*!
-    \fn int QLine::x1() const
-
-    Returns the x-coordinate of the line's start point.
-
-    \sa p1()
-*/
-
-/*!
-    \fn int QLine::y1() const
-
-    Returns the y-coordinate of the line's start point.
-
-    \sa p1()
-*/
-
-/*!
-    \fn int QLine::x2() const
-
-    Returns the x-coordinate of the line's end point.
-
-    \sa p2()
-*/
-
-/*!
-    \fn int QLine::y2() const
-
-    Returns the y-coordinate of the line's end point.
-
-    \sa p2()
-*/
-
-/*!
-    \fn int QLine::dx() const
-
-    Returns the horizontal component of the line's vector.
-
-    \sa dy()
-*/
-
-/*!
-    \fn int QLine::dy() const
-
-    Returns the vertical component of the line's vector.
-
-    \sa dx()
-*/
-
-/*!
-    \fn bool QLine::operator!=(const QLine &line) const
-
-    Returns true if the given \a line is not the same as \e this line.
-
-    A line is different from another line if any of their start or
-    end points differ, or the internal order of the points is different.
-*/
-
-/*!
-    \fn bool QLine::operator==(const QLine &line) const
-
-    Returns true if the given \a line is the same as \e this line.
-
-    A line is identical to another line if the start and end points
-    are identical, and the internal order of the points is the same.
-*/
-
-/*!
-    \fn void QLine::translate(const QPoint &offset)
-
-    Translates this line by the given \a offset.
-*/
-
-/*!
-    \fn void QLine::translate(int dx, int dy)
-    \overload
-
-    Translates this line the distance specified by \a dx and \a dy.
-*/
-
-/*!
-    \fn QLine QLine::translated(const QPoint &offset) const
-
-    \since 4.4
-
-    Returns this line translated by the given \a offset.
-*/
-
-/*!
-    \fn QLine QLine::translated(int dx, int dy) const
-    \overload
-    \since 4.4
-
-    Returns this line translated the distance specified by \a dx and \a dy.
-*/
-
-
-/*!
-    \fn void QLine::setP1(const QPoint &p1)
-    \since 4.4
-
-    Sets the starting point of this line to \a p1.
-
-    \sa setP2(), p1()
-*/
-
-
-/*!
-    \fn void QLine::setP2(const QPoint &p2)
-    \since 4.4
-
-    Sets the end point of this line to \a p2.
-
-    \sa setP1(), p2()
-*/
-
-
-/*!
-    \fn void QLine::setPoints(const QPoint &p1, const QPoint &p2)
-    \since 4.4
-
-    Sets the start point of this line to \a p1 and the end point of this line to \a p2.
-
-    \sa setP1(), setP2(), p1(), p2()
-*/
-
-
-/*!
-    \fn void QLine::setLine(int x1, int y1, int x2, int y2)
-    \since 4.4
-
-    Sets this line to the start in \a x1, \a y1 and end in \a x2, \a y2.
-
-    \sa setP1(), setP2(), p1(), p2()
-*/
-
-
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QLine &p)
 {
    d << "QLine(" << p.p1() << ',' << p.p2() << ')';
    return d;
 }
-#endif
 
 #ifndef QT_NO_DATASTREAM
-/*!
-    \relates QLine
-
-    Writes the given \a line to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &stream, const QLine &line)
 {
    stream << line.p1() << line.p2();
    return stream;
 }
-
-/*!
-    \relates QLine
-
-    Reads a line from the given \a stream into the given \a line and
-    returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &stream, QLine &line)
 {
@@ -632,11 +403,9 @@ QLineF QLineF::unitVector() const
    qreal len = qSqrt(x * x + y * y);
    QLineF f(p1(), QPointF(pt1.x() + x / len, pt1.y() + y / len));
 
-#ifndef QT_NO_DEBUG
    if (qAbs(f.length() - 1) >= 0.001) {
-      qWarning("QLine::unitVector: New line does not have unit length");
+      qWarning("QLine::unitVector() New line does not have unit length");
    }
-#endif
 
    return f;
 }
@@ -822,14 +591,11 @@ qreal QLineF::angle(const QLineF &l) const
    return q_rad2deg(rad);
 }
 
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QLineF &p)
 {
    d << "QLineF(" << p.p1() << ',' << p.p2() << ')';
    return d;
 }
-#endif
 
 #ifndef QT_NO_DATASTREAM
 /*!

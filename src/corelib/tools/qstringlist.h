@@ -47,8 +47,10 @@ class QStringList : public QList<QString>
    inline explicit QStringList(const QString &i) {
       append(i);
    }
+
    inline QStringList(const QStringList &l) : QList<QString>(l) { }
    inline QStringList(const QList<QString> &l) : QList<QString>(l) { }
+
 #ifdef Q_COMPILER_INITIALIZER_LISTS
    inline QStringList(std::initializer_list<QString> args) : QList<QString>(args) { }
 #endif
@@ -69,10 +71,12 @@ class QStringList : public QList<QString>
       n += other;
       return n;
    }
+
    inline QStringList &operator<<(const QString &str) {
       append(str);
       return *this;
    }
+
    inline QStringList &operator<<(const QStringList &l) {
       *this += l;
       return *this;
@@ -97,8 +101,7 @@ namespace QtPrivate {
 void Q_CORE_EXPORT QStringList_sort(QStringList *that);
 int Q_CORE_EXPORT QStringList_removeDuplicates(QStringList *that);
 QString Q_CORE_EXPORT QStringList_join(const QStringList *that, const QString &sep);
-QStringList Q_CORE_EXPORT QStringList_filter(const QStringList *that, const QString &str,
-      Qt::CaseSensitivity cs);
+QStringList Q_CORE_EXPORT QStringList_filter(const QStringList *that, const QString &str, Qt::CaseSensitivity cs);
 
 QBool Q_CORE_EXPORT QStringList_contains(const QStringList *that, const QString &str, Qt::CaseSensitivity cs);
 void Q_CORE_EXPORT QStringList_replaceInStrings(QStringList *that, const QString &before, const QString &after,
@@ -187,7 +190,7 @@ inline QDataStream &operator<<(QDataStream &out, const QStringList &list)
 {
    return operator<<(out, static_cast<const QList<QString> &>(list));
 }
-#endif // QT_NO_DATASTREAM
+#endif
 
 QT_END_NAMESPACE
 

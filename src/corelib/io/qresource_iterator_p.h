@@ -26,8 +26,8 @@
 #ifndef QRESOURCE_ITERATOR_P_H
 #define QRESOURCE_ITERATOR_P_H
 
-#include "qabstractfileengine.h"
-#include "qdir.h"
+#include <qabstractfileengine.h>
+#include <qdir.h>
 
 QT_BEGIN_NAMESPACE
 

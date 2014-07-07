@@ -26,8 +26,7 @@
 #ifndef QSTATE_P_H
 #define QSTATE_P_H
 
-#include "qabstractstate_p.h"
-
+#include <qabstractstate_p.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qvariant.h>
@@ -37,10 +36,12 @@ QT_BEGIN_NAMESPACE
 struct QPropertyAssignment {
    QPropertyAssignment()
       : object(0), explicitlySet(true) {}
+
    QPropertyAssignment(QObject *o, const QByteArray &n,
                        const QVariant &v, bool es = true)
       : object(o), propertyName(n), value(v), explicitlySet(es) {
    }
+
    QObject *object;
    QByteArray propertyName;
    QVariant value;

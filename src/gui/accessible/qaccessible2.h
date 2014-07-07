@@ -329,8 +329,7 @@ class Q_GUI_EXPORT QAccessibleTable2Interface: public QAccessible2Interface
    virtual void columnsInserted(const QModelIndex &parent, int first, int last) = 0;
    virtual void columnsRemoved(const QModelIndex &parent, int first, int last) = 0;
    virtual void rowsMoved( const QModelIndex &parent, int start, int end, const QModelIndex &destination, int row) = 0;
-   virtual void columnsMoved( const QModelIndex &parent, int start, int end, const QModelIndex &destination,
-                              int column) = 0;
+   virtual void columnsMoved( const QModelIndex &parent, int start, int end, const QModelIndex &destination, int column) = 0;
 
    friend class QAbstractItemView;
    friend class QAbstractItemViewPrivate;

@@ -26,7 +26,7 @@
 #ifndef QTOOLS_P_H
 #define QTOOLS_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

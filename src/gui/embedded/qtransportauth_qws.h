@@ -170,6 +170,7 @@ class Q_GUI_EXPORT RequestAnalyzer
    qint64 bytesAnalyzed() const {
       return dataSize;
    }
+
  protected:
    virtual QString analyze( QByteArray *);
    bool moreData;

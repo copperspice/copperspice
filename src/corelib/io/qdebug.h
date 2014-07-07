@@ -85,15 +85,18 @@ class Q_CORE_EXPORT QDebug
          delete stream;
       }
    }
+
    inline QDebug &space() {
       stream->space = true;
       stream->ts << ' ';
       return *this;
    }
+
    inline QDebug &nospace() {
       stream->space = false;
       return *this;
    }
+
    inline QDebug &maybeSpace() {
       if (stream->space) {
          stream->ts << ' ';
@@ -105,38 +108,47 @@ class Q_CORE_EXPORT QDebug
       stream->ts << '\'' << t << '\'';
       return maybeSpace();
    }
+
    inline QDebug &operator<<(QBool t) {
       stream->ts << (bool(t != 0) ? "true" : "false");
       return maybeSpace();
    }
+
    inline QDebug &operator<<(bool t) {
       stream->ts << (t ? "true" : "false");
       return maybeSpace();
    }
+
    inline QDebug &operator<<(char t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(signed short t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(unsigned short t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(signed int t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(unsigned int t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(signed long t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(unsigned long t) {
       stream->ts << t;
       return maybeSpace();
@@ -156,21 +168,26 @@ class Q_CORE_EXPORT QDebug
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(double t) {
       stream->ts << t;
       return maybeSpace();
    }
+
    inline QDebug &operator<<(const char *t) {
       stream->ts << QString::fromAscii(t);
       return maybeSpace();
    }
+
    inline QDebug &operator<<(const QString &t) {
       stream->ts << '\"' << t  << '\"';
       return maybeSpace();
    }
+
    inline QDebug &operator<<(const QStringRef &t) {
       return operator<<(t.toString());
    }
+
    inline QDebug &operator<<(const QLatin1String &t) {
       stream->ts << '\"'  << t.latin1() << '\"';
       return maybeSpace();
@@ -179,6 +196,7 @@ class Q_CORE_EXPORT QDebug
       stream->ts  << '\"' << t << '\"';
       return maybeSpace();
    }
+ 
    inline QDebug &operator<<(const void *t) {
       stream->ts << t;
       return maybeSpace();
@@ -345,9 +363,11 @@ inline QDebug operator<<(QDebug debug, const QContiguousCache<T> &cache)
 #if defined(FORCE_UREF)
 template <class T>
 inline QDebug &operator<<(QDebug debug, const QFlags<T> &flags)
+
 #else
 template <class T>
 inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
+
 #endif
 {
    debug.nospace() << "QFlags(";
@@ -362,6 +382,7 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
          debug.nospace() << "0x" << QByteArray::number(T(1 << i), 16).constData();
       }
    }
+
    debug << ')';
    return debug.space();
 }
@@ -371,22 +392,10 @@ inline QDebug qDebug()
    return QDebug(QtDebugMsg);
 }
 
-
-#if !defined(QT_NO_WARNING_OUTPUT)
 inline QDebug qWarning()
 {
    return QDebug(QtWarningMsg);
 }
-
-#else
-#undef qWarning
-inline QNoDebug qWarning()
-{
-   return QNoDebug();
-}
-#define qWarning QT_NO_QWARNING_MACRO
-
-#endif
 
 QT_END_NAMESPACE
 

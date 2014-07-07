@@ -71,7 +71,6 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
-
 namespace QtSharedPointer {
 template <class T> class InternalRefCount;
 template <class T> class ExternalRefCount;
@@ -265,6 +264,7 @@ template <class T> class QSharedPointer
 {
    typedef T *QSharedPointer::*RestrictedBool;
    typedef QtSharedPointer::ExternalRefCountData Data;
+
  public:
    typedef T Type;
    typedef T element_type;
@@ -278,18 +278,23 @@ template <class T> class QSharedPointer
    inline T *data() const {
       return value;
    }
+
    inline bool isNull() const {
       return !data();
    }
+
    inline operator RestrictedBool() const {
       return isNull() ? 0 : &QSharedPointer::value;
    }
+
    inline bool operator !() const {
       return isNull();
    }
+
    inline T &operator*() const {
       return *data();
    }
+
    inline T *operator->() const {
       return data();
    }
@@ -323,7 +328,6 @@ template <class T> class QSharedPointer
       swap(other);
       return *this;
    }
-
 
    template <class X>
    inline QSharedPointer(const QSharedPointer<X> &other) : value(other.value), d(other.d) {
@@ -917,10 +921,8 @@ qSharedPointerFromVariant(const QVariant &variant)
    return qSharedPointerObjectCast<T>(QtSharedPointer::sharedPointerFromVariant_internal(variant));
 }
 
-
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QWeakPointer<T>, Q_MOVABLE_TYPE);
 template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedPointer<T>, Q_MOVABLE_TYPE);
-
 
 QT_END_NAMESPACE
 

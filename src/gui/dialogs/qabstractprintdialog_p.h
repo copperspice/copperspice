@@ -26,11 +26,11 @@
 #ifndef QABSTRACTPRINTDIALOG_P_H
 #define QABSTRACTPRINTDIALOG_P_H
 
-#include "qdialog_p.h"
+#include <qdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "QtGui/qabstractprintdialog.h"
+#include <QtGui/qabstractprintdialog.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,8 +26,8 @@
 #ifndef QEVENTDISPATCHER_WIN_P_H
 #define QEVENTDISPATCHER_WIN_P_H
 
-#include "QtCore/qabstracteventdispatcher.h"
-#include "QtCore/qt_windows.h"
+#include <QtCore/qabstracteventdispatcher.h>
+#include <QtCore/qt_windows.h>
 
 QT_BEGIN_NAMESPACE
 

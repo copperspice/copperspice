@@ -33,7 +33,7 @@
 #ifndef QIPADDRESS_P_H
 #define QIPADDRESS_P_H
 
-#include "qstring.h"
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 

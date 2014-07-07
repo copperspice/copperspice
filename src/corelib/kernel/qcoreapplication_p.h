@@ -26,9 +26,9 @@
 #ifndef QCOREAPPLICATION_P_H
 #define QCOREAPPLICATION_P_H
 
-#include "QtCore/qcoreapplication.h"
-#include "QtCore/qtranslator.h"
-#include "QtCore/qsettings.h"
+#include <QtCore/qcoreapplication.h>
+#include <QtCore/qtranslator.h>
+#include <QtCore/qsettings.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -36,7 +36,6 @@ QT_BEGIN_NAMESPACE
 
 class QBasicKeyEventTransitionPrivate;
 
-
 class QBasicKeyEventTransition : public QAbstractTransition
 {
    CS_OBJECT(QBasicKeyEventTransition)

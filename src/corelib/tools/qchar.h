@@ -35,6 +35,7 @@ class QString;
 struct QLatin1Char {
  public:
    inline explicit QLatin1Char(char c) : ch(c) {}
+
 #ifdef Q_COMPILER_MANGLES_RETURN_TYPE
    inline const char toLatin1() const {
       return ch;
@@ -87,8 +88,8 @@ class Q_CORE_EXPORT QChar
    explicit QChar(char c) : ucs(uchar(c)) { }
    explicit QChar(uchar c) : ucs(c) { }
 #endif
-   // Unicode information
 
+   // Unicode information
    enum Category {
       NoCategory,    // ### Qt5/replace with Other_NotAssigned
 

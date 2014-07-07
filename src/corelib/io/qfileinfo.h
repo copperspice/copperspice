@@ -60,9 +60,11 @@ class Q_CORE_EXPORT QFileInfo
 
    bool operator==(const QFileInfo &fileinfo); // 5.0 - remove me
    bool operator==(const QFileInfo &fileinfo) const;
+
    inline bool operator!=(const QFileInfo &fileinfo) {
       return !(operator==(fileinfo));   // 5.0 - remove me
    }
+
    inline bool operator!=(const QFileInfo &fileinfo) const {
       return !(operator==(fileinfo));
    }

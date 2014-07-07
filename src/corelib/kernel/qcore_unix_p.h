@@ -26,11 +26,11 @@
 #ifndef QCORE_UNIX_P_H
 #define QCORE_UNIX_P_H
 
-#include "qplatformdefs.h"
-#include "qatomic.h"
+#include <qplatformdefs.h>
+#include <qatomic.h>
 
 #ifndef Q_OS_UNIX
-# error "qcore_unix_p.h included on a non-Unix system"
+# error <qcore_unix_p.h included on a non-Unix system>
 #endif
 
 #include <string.h>
@@ -48,22 +48,25 @@ struct sockaddr;
 # define QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC 1
 QT_BEGIN_NAMESPACE
 namespace QtLibcSupplement {
-inline int accept4(int, sockaddr *, QT_SOCKLEN_T *, int)
-{
-   errno = ENOSYS;
-   return -1;
+   inline int accept4(int, sockaddr *, QT_SOCKLEN_T *, int)
+   {
+      errno = ENOSYS;
+      return -1;
+   }
+   
+   inline int dup3(int, int, int)
+   {
+      errno = ENOSYS;
+      return -1;
+   }
+   
+   inline int pipe2(int [], int )
+   {
+      errno = ENOSYS;
+      return -1;
+   }
 }
-inline int dup3(int, int, int)
-{
-   errno = ENOSYS;
-   return -1;
-}
-inline int pipe2(int [], int )
-{
-   errno = ENOSYS;
-   return -1;
-}
-}
+
 QT_END_NAMESPACE
 using namespace QT_PREPEND_NAMESPACE(QtLibcSupplement);
 
@@ -91,20 +94,24 @@ inline timeval &normalizedTimeval(timeval &t)
    }
    return t;
 }
+
 inline bool operator<(const timeval &t1, const timeval &t2)
 {
    return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_usec < t2.tv_usec);
 }
+
 inline bool operator==(const timeval &t1, const timeval &t2)
 {
    return t1.tv_sec == t2.tv_sec && t1.tv_usec == t2.tv_usec;
 }
+
 inline timeval &operator+=(timeval &t1, const timeval &t2)
 {
    t1.tv_sec += t2.tv_sec;
    t1.tv_usec += t2.tv_usec;
    return normalizedTimeval(t1);
 }
+
 inline timeval operator+(const timeval &t1, const timeval &t2)
 {
    timeval tmp;
@@ -112,6 +119,7 @@ inline timeval operator+(const timeval &t1, const timeval &t2)
    tmp.tv_usec = t1.tv_usec + t2.tv_usec;
    return normalizedTimeval(tmp);
 }
+
 inline timeval operator-(const timeval &t1, const timeval &t2)
 {
    timeval tmp;
@@ -119,6 +127,7 @@ inline timeval operator-(const timeval &t1, const timeval &t2)
    tmp.tv_usec = t1.tv_usec - (t2.tv_usec + 1000000);
    return normalizedTimeval(tmp);
 }
+
 inline timeval operator*(const timeval &t1, int mul)
 {
    timeval tmp;
@@ -325,8 +334,7 @@ static inline pid_t qt_safe_waitpid(pid_t pid, int *status, int options)
 
 timeval qt_gettime(); // in qelapsedtimer_mac.cpp or qtimestamp_unix.cpp
 
-Q_CORE_EXPORT int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
-                                 const struct timeval *tv);
+Q_CORE_EXPORT int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept, const struct timeval *tv);
 
 // according to X/OPEN we have to define semun ourselves
 // we use prefix as on some systems sem.h will have it

@@ -71,6 +71,7 @@ class QMutexPrivate : public QMutexData
       Q_ASSERT(refCount.load() >= 0);
       return true;
    }
+
    void deref() {
       Q_ASSERT(refCount.load() >= 0);
       if (!refCount.deref()) {
@@ -89,6 +90,7 @@ class QMutexPrivate : public QMutexData
    //platform specific stuff
 #if defined(Q_OS_MAC)
    semaphore_t mach_semaphore;
+
 #elif defined(Q_OS_UNIX)
    bool wakeup;
    pthread_mutex_t mutex;
@@ -97,6 +99,7 @@ class QMutexPrivate : public QMutexData
 #elif defined(Q_OS_WIN32)
    HANDLE event;
 #endif
+
 };
 #endif //Q_OS_LINUX
 

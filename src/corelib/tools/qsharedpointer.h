@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qnamespace.h"
+#include <qnamespace.h>
 
 #ifndef QSHAREDPOINTER_H
 #define QSHAREDPOINTER_H

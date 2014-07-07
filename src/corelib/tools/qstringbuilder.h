@@ -54,6 +54,21 @@ class QStringBuilder
 {
  public:
    QStringBuilder(const A &a_, const B &b_) : a(a_), b(b_) {}
+ 
+   operator ConvertTo() const {
+      return convertTo<ConvertTo>();
+   }
+
+   QByteArray toLatin1() const {
+      return convertTo<QString>().toLatin1();
+   }
+   int size() const {
+      return Concatenable::size(*this);
+   }
+
+   const A &a;
+   const B &b;
+
  private:
    friend class QByteArray;
    friend class QString;
@@ -75,20 +90,7 @@ class QStringBuilder
 
    typedef QConcatenable<QStringBuilder<A, B> > Concatenable;
    typedef typename Concatenable::ConvertTo ConvertTo;
- public:
-   operator ConvertTo() const {
-      return convertTo<ConvertTo>();
-   }
 
-   QByteArray toLatin1() const {
-      return convertTo<QString>().toLatin1();
-   }
-   int size() const {
-      return Concatenable::size(*this);
-   }
-
-   const A &a;
-   const B &b;
 };
 
 template <>
@@ -134,11 +136,13 @@ template <> struct QConcatenable<char> : private QAbstractConcatenable {
    static int size(const char) {
       return 1;
    }
+
 #ifndef QT_NO_CAST_FROM_ASCII
    static inline QT_ASCII_CAST_WARN void appendTo(const char c, QChar *&out) {
       QAbstractConcatenable::convertFromAscii(c, out);
    }
 #endif
+
    static inline void appendTo(const char c, char *&out) {
       *out++ = c;
    }
@@ -148,6 +152,7 @@ template <> struct QConcatenable<QLatin1Char> {
    typedef QLatin1Char type;
    typedef QString ConvertTo;
    enum { ExactSize = true };
+
    static int size(const QLatin1Char) {
       return 1;
    }
@@ -175,6 +180,7 @@ template <> struct QConcatenable<QCharRef> : private QAbstractConcatenable {
    typedef QCharRef type;
    typedef QString ConvertTo;
    enum { ExactSize = true };
+
    static int size(const QCharRef &) {
       return 1;
    }

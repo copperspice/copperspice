@@ -27,7 +27,6 @@
 #define QMATH_H
 
 #include <math.h>
-
 #include <QtCore/qglobal.h>
 
 QT_BEGIN_NAMESPACE

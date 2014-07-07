@@ -28,10 +28,9 @@
 #ifndef QFILEDIALOG_WIN_P_H
 #define QFILEDIALOG_WIN_P_H
 
-//these are the interface declarations needed for the file dialog on Vista and up
-
-//At some point we can hope that all compilers/sdk will support that interface
-//and we won't have to declare it ourselves
+// these are the interface declarations needed for the file dialog on Vista and up
+// at some point we can hope that all compilers/sdk will support that interface
+// and we will not have to declare it ourselves
 
 //declarations
 #define FOS_OVERWRITEPROMPT    0x2
@@ -99,6 +98,7 @@ typedef enum {
    SIATTRIBFLAGS_APPCOMPAT	= 0x3,
    SIATTRIBFLAGS_MASK	= 0x3
 } 	SIATTRIBFLAGS;
+
 typedef enum {
    SIGDN_NORMALDISPLAY = 0x00000000,
    SIGDN_PARENTRELATIVEPARSING = 0x80018001,
@@ -109,22 +109,26 @@ typedef enum {
    SIGDN_FILESYSPATH = 0x80058000,
    SIGDN_URL = 0x80068000
 } SIGDN;
+
 typedef enum {
    FDAP_BOTTOM = 0x00000000,
    FDAP_TOP = 0x00000001
 } FDAP;
+
 typedef enum {
    FDESVR_DEFAULT = 0x00000000,
    FDESVR_ACCEPT = 0x00000001,
    FDESVR_REFUSE = 0x00000002
 } FDE_SHAREVIOLATION_RESPONSE;
+
 typedef FDE_SHAREVIOLATION_RESPONSE FDE_OVERWRITE_RESPONSE;
 
-//the structs
+//
 typedef struct {
    LPCWSTR pszName;
    LPCWSTR pszSpec;
 } qt_COMDLG_FILTERSPEC;
+
 typedef struct {
    GUID fmtid;
    DWORD pid;
@@ -134,10 +138,13 @@ typedef struct {
    USHORT	cb;
    BYTE	abID[1];
 } qt_SHITEMID, *qt_LPSHITEMID;
+
 typedef struct {
    qt_SHITEMID mkid;
 } qt_ITEMIDLIST, *qt_LPITEMIDLIST;
+
 typedef const qt_ITEMIDLIST *qt_LPCITEMIDLIST;
+
 typedef struct {
    HWND          hwndOwner;
    qt_LPCITEMIDLIST pidlRoot;
@@ -158,11 +165,13 @@ DECLARE_INTERFACE_(IShellItem, IUnknown)
    STDMETHOD(GetAttributes)(THIS_ ULONG sfgaoMask, ULONG * psfgaoAttribs) PURE;
    STDMETHOD(Compare)(THIS_ IShellItem * psi, DWORD hint, int *piOrder) PURE;
 };
+
 DECLARE_INTERFACE_(IShellItemFilter, IUnknown)
 {
    STDMETHOD(IncludeItem)(THIS_ IShellItem * psi) PURE;
    STDMETHOD(GetEnumFlagsForItem)(THIS_ IShellItem * psi, DWORD * pgrfFlags) PURE;
 };
+
 DECLARE_INTERFACE_(IEnumShellItems, IUnknown)
 {
    STDMETHOD(Next)(THIS_ ULONG celt, IShellItem **rgelt, ULONG * pceltFetched) PURE;
@@ -170,6 +179,7 @@ DECLARE_INTERFACE_(IEnumShellItems, IUnknown)
    STDMETHOD(Reset)(THIS_) PURE;
    STDMETHOD(Clone)(THIS_ IEnumShellItems **ppenum) PURE;
 };
+
 DECLARE_INTERFACE_(IShellItemArray, IUnknown)
 {
    STDMETHOD(BindToHandler)(THIS_ IBindCtx * pbc, REFGUID rbhid, REFIID riid, void **ppvOut) PURE;
@@ -180,10 +190,12 @@ DECLARE_INTERFACE_(IShellItemArray, IUnknown)
    STDMETHOD(GetItemAt)(THIS_ DWORD dwIndex, IShellItem **ppsi) PURE;
    STDMETHOD(EnumItems)(THIS_ IEnumShellItems **ppenumShellItems) PURE;
 };
+
 DECLARE_INTERFACE_(IModalWindow, IUnknown)
 {
    STDMETHOD(Show)(THIS_ HWND hwndParent) PURE;
 };
+
 DECLARE_INTERFACE_(IFileDialog, IModalWindow)
 {
    STDMETHOD(SetFileTypes)(THIS_ UINT cFileTypes, const qt_COMDLG_FILTERSPEC * rgFilterSpec) PURE;
@@ -210,6 +222,7 @@ DECLARE_INTERFACE_(IFileDialog, IModalWindow)
    STDMETHOD(ClearClientData)(THIS_) PURE;
    STDMETHOD(SetFilter)(THIS_ IShellItemFilter * pFilter) PURE;
 };
+
 DECLARE_INTERFACE_(IFileDialogEvents, IUnknown)
 {
    STDMETHOD(OnFileOk)(THIS_ IFileDialog * pfd) PURE;
@@ -220,12 +233,12 @@ DECLARE_INTERFACE_(IFileDialogEvents, IUnknown)
    STDMETHOD(OnTypeChange)(THIS_ IFileDialog * pfd) PURE;
    STDMETHOD(OnOverwrite)(THIS_ IFileDialog * pfd, IShellItem * psi, FDE_OVERWRITE_RESPONSE * pResponse) PURE;
 };
+
 DECLARE_INTERFACE_(IFileOpenDialog, IFileDialog)
 {
    STDMETHOD(GetResults)(THIS_ IShellItemArray **ppenum) PURE;
    STDMETHOD(GetSelectedItems)(THIS_ IShellItemArray **ppsai) PURE;
 };
-
 
 #ifndef __IPropertyStore_FWD_DEFINED__
 typedef IUnknown IPropertyStore;
@@ -242,8 +255,7 @@ public:
    STDMETHOD(SetProperties)(THIS_ IPropertyStore * pStore) PURE;
    STDMETHOD(SetCollectedProperties)(THIS_ IPropertyStore * pStore) PURE;
    STDMETHOD(GetProperties)(THIS_ IPropertyStore **ppStore) PURE;
-   STDMETHOD(ApplyProperties)(THIS_ IShellItem * psi, IPropertyStore * pStore, HWND hwnd,
-                              IFileOperationProgressSink * pSink) PURE;
+   STDMETHOD(ApplyProperties)(THIS_ IShellItem * psi, IPropertyStore * pStore, HWND hwnd, IFileOperationProgressSink * pSink) PURE;
 };
 
 #endif

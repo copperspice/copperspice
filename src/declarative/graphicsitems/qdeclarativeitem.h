@@ -305,9 +305,7 @@ T qobject_cast(QGraphicsItem *item)
    return qobject_cast<T>(o);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug Q_DECLARATIVE_EXPORT operator<<(QDebug debug, QDeclarativeItem *item);
-#endif
 
 QT_END_NAMESPACE
 

@@ -45,14 +45,12 @@ class Q_NETWORK_EXPORT QSslKey
 
  public:
    QSslKey();
-   QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm,
-           QSsl::EncodingFormat format = QSsl::Pem,
-           QSsl::KeyType type = QSsl::PrivateKey,
-           const QByteArray &passPhrase = QByteArray());
-   QSslKey(QIODevice *device, QSsl::KeyAlgorithm algorithm,
-           QSsl::EncodingFormat format = QSsl::Pem,
-           QSsl::KeyType type = QSsl::PrivateKey,
-           const QByteArray &passPhrase = QByteArray());
+   QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem, 
+           QSsl::KeyType type = QSsl::PrivateKey, const QByteArray &passPhrase = QByteArray());
+
+   QSslKey(QIODevice *device, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem,
+           QSsl::KeyType type = QSsl::PrivateKey, const QByteArray &passPhrase = QByteArray());
+
    QSslKey(const QSslKey &other);
    ~QSslKey();
    QSslKey &operator=(const QSslKey &other);
@@ -79,10 +77,8 @@ class Q_NETWORK_EXPORT QSslKey
    friend class QSslCertificate;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslKey &key);
-#endif
 
 #endif // QT_NO_OPENSSL
 

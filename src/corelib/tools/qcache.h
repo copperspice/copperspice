@@ -65,6 +65,7 @@ class QCache
       hash.remove(*n.keyPtr);
       delete obj;
    }
+
    inline T *relink(const Key &key) {
       typename QHash<Key, Node>::iterator i = hash.find(key);
       if (typename QHash<Key, Node>::const_iterator(i) == hash.constEnd()) {

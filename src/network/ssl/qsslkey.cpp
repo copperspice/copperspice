@@ -23,37 +23,18 @@
 *
 ***********************************************************************/
 
-
-/*!
-    \class QSslKey
-    \brief The QSslKey class provides an interface for private and public keys.
-    \since 4.3
-
-    \reentrant
-    \ingroup network
-    \ingroup ssl
-    \inmodule QtNetwork
-
-    QSslKey provides a simple API for managing keys.
-
-    \sa QSslSocket, QSslCertificate, QSslCipher
-*/
-
-#include "qsslsocket_openssl_symbols_p.h"
-#include "qsslkey.h"
-#include "qsslkey_p.h"
-#include "qsslsocket.h"
-#include "qsslsocket_p.h"
+#include <qsslsocket_openssl_symbols_p.h>
+#include <qsslkey.h>
+#include <qsslkey_p.h>
+#include <qsslsocket.h>
+#include <qsslsocket_p.h>
 
 #include <QtCore/qatomic.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qiodevice.h>
-#ifndef QT_NO_DEBUG_STREAM
 #include <QtCore/qdebug.h>
 
 QT_BEGIN_NAMESPACE
-#endif
-
 
 /*!
     \internal
@@ -453,7 +434,7 @@ bool QSslKey::operator==(const QSslKey &other) const
   returns false.
 */
 
-#ifndef QT_NO_DEBUG_STREAM
+
 class QDebug;
 QDebug operator<<(QDebug debug, const QSslKey &key)
 {
@@ -464,6 +445,6 @@ QDebug operator<<(QDebug debug, const QSslKey &key)
          << ')';
    return debug;
 }
-#endif
+
 
 QT_END_NAMESPACE

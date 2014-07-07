@@ -87,10 +87,9 @@ class Q_NETWORK_EXPORT QNetworkCookie
 };
 Q_DECLARE_TYPEINFO(QNetworkCookie, Q_MOVABLE_TYPE);
 
-#ifndef QT_NO_DEBUG_STREAM
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
-#endif
+
 
 QT_END_NAMESPACE
 

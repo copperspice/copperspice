@@ -35,9 +35,9 @@ QT_BEGIN_NAMESPACE
 
 class QByteDataBuffer
 {
- private:
    QList<QByteArray> buffers;
    qint64 bufferCompleteSize;
+
  public:
    QByteDataBuffer() : bufferCompleteSize(0) {
    }

@@ -110,28 +110,23 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool /*destro
       flags &= ~Qt::WindowType_Mask;
    }
 
-
    bool topLevel = (flags & Qt::Window);
    bool popup = (type == Qt::Popup);
-   bool dialog = (type == Qt::Dialog
-                  || type == Qt::Sheet
-                  || (flags & Qt::MSWindowsFixedSizeDialogHint));
+   bool dialog = (type == Qt::Dialog || type == Qt::Sheet || (flags & Qt::MSWindowsFixedSizeDialogHint));
    bool desktop = (type == Qt::Desktop);
    bool tool = (type == Qt::Tool || type == Qt::SplashScreen || type == Qt::ToolTip);
 
-
-#ifndef QT_NO_WARNING_OUTPUT
+   // 
    static bool toolWarningShown = false;
 
-   if (!toolWarningShown && type == Qt::Tool && !(flags & Qt::FramelessWindowHint)) {
-      qWarning("Qt for Embedded Linux " CS_VERSION_STR " does not support tool windows with frames.\n"
-               "This behavior will change in a later release. To ensure compatibility with\n"
+   if (! toolWarningShown && type == Qt::Tool && ! (flags & Qt::FramelessWindowHint)) {
+      qWarning("Embedded Linux " CS_VERSION_STR " does not support tool windows with frames.\n"
+               "This behavior may change in a later release. To ensure compatibility with\n"
                "future versions, use (Qt::Tool | Qt::FramelessWindowHint).");
       toolWarningShown = true;
    }
-#endif
 
-   WId           id;
+   WId id;
    QWSDisplay *dpy = QWidget::qwsDisplay();
 
    if (!window) {                                 // always initialize

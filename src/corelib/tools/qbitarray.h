@@ -59,15 +59,18 @@ class Q_CORE_EXPORT QBitArray
    inline int size() const {
       return (d.size() << 3) - *d.constData();
    }
+
    inline int count() const {
       return (d.size() << 3) - *d.constData();
    }
+
    int count(bool on) const;
    // ### Qt5/Store the number of set bits separately
 
    inline bool isEmpty() const {
       return d.isEmpty();
    }
+
    inline bool isNull() const {
       return d.isNull();
    }
@@ -77,9 +80,11 @@ class Q_CORE_EXPORT QBitArray
    inline void detach() {
       d.detach();
    }
+
    inline bool isDetached() const {
       return d.isDetached();
    }
+
    inline void clear() {
       d.clear();
    }
@@ -104,6 +109,7 @@ class Q_CORE_EXPORT QBitArray
    inline bool operator==(const QBitArray &a) const {
       return d == a.d;
    }
+
    inline bool operator!=(const QBitArray &a) const {
       return d != a.d;
    }
@@ -174,10 +180,12 @@ inline bool QBitArray::operator[](int i) const
 {
    return testBit(i);
 }
+
 inline bool QBitArray::operator[](uint i) const
 {
    return testBit(i);
 }
+
 inline bool QBitArray::at(int i) const
 {
    return testBit(i);
@@ -190,6 +198,7 @@ class Q_CORE_EXPORT QBitRef
    int i;
    inline QBitRef(QBitArray &array, int idx) : a(array), i(idx) {}
    friend class QBitArray;
+
  public:
    inline operator bool() const {
       return a.testBit(i);
@@ -212,6 +221,7 @@ inline QBitRef QBitArray::operator[](int i)
    Q_ASSERT(i >= 0);
    return QBitRef(*this, i);
 }
+
 inline QBitRef QBitArray::operator[](uint i)
 {
    return QBitRef(*this, i);

@@ -26,9 +26,9 @@
 #ifndef QFSFILEENGINE_P_H
 #define QFSFILEENGINE_P_H
 
-#include "qplatformdefs.h"
-#include "QtCore/qfsfileengine.h"
-#include "qabstractfileengine_p.h"
+#include <qplatformdefs.h>
+#include <QtCore/qfsfileengine.h>
+#include <qabstractfileengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qhash.h>
@@ -62,9 +62,11 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
    bool nativeSyncToDisk();
    bool flushFh();
    qint64 nativeSize() const;
+
 #ifndef Q_OS_WIN
    qint64 sizeFdFh() const;
 #endif
+
    qint64 nativePos() const;
    qint64 posFdFh() const;
    bool nativeSeek(qint64);
@@ -77,6 +79,7 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
    qint64 writeFdFh(const char *data, qint64 len);
    int nativeHandle() const;
    bool nativeIsSequential() const;
+
 #ifndef Q_OS_WIN
    bool isSequentialFdFh() const;
 #endif
@@ -117,7 +120,6 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
    mutable uint tried_stat : 1;
    mutable uint need_lstat : 1;
    mutable uint is_link : 1;
-
 
 #if defined(Q_OS_WIN)
    bool doStat(QFileSystemMetaData::MetaDataFlags flags) const;

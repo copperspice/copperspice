@@ -42,9 +42,9 @@ QT_BEGIN_NAMESPACE
 
 class QTextCodec;
 class QTextDecoder;
-
 class QTextStreamPrivate;
-class Q_CORE_EXPORT QTextStream                                // text stream class
+
+class Q_CORE_EXPORT QTextStream                                
 {
    Q_DECLARE_PRIVATE(QTextStream)
 

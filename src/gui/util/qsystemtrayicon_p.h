@@ -26,14 +26,14 @@
 #ifndef QSYSTEMTRAYICON_P_H
 #define QSYSTEMTRAYICON_P_H
 
-#include "qsystemtrayicon.h"
+#include <qsystemtrayicon.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include "QtGui/qmenu.h"
-#include "QtGui/qpixmap.h"
-#include "QtCore/qstring.h"
-#include "QtCore/qpointer.h"
+#include <QtGui/qmenu.h>
+#include <QtGui/qpixmap.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qpointer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -73,16 +73,19 @@ class QSystemTrayIconPrivate
 class QBalloonTip : public QWidget
 {
    CS_OBJECT(QBalloonTip)
+
  public:
    static void showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,
                            const QString &msg, QSystemTrayIcon *trayIcon,
                            const QPoint &pos, int timeout, bool showArrow = true);
+
    static void hideBalloon();
    static bool isBalloonVisible();
 
  private:
    QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
                const QString &msg, QSystemTrayIcon *trayIcon);
+
    ~QBalloonTip();
    void balloon(const QPoint &, int, bool);
 
@@ -143,9 +146,11 @@ class QSystemTrayIconSys : public QWidget
    bool x11Event(XEvent *event);
    void mousePressEvent(QMouseEvent *event);
    void mouseDoubleClickEvent(QMouseEvent *event);
+
 #ifndef QT_NO_WHEELEVENT
    void wheelEvent(QWheelEvent *event);
 #endif
+
    bool event(QEvent *e);
 
  private:

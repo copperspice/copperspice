@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    GUI_CS_PROPERTY_READ(text, text)
    GUI_CS_PROPERTY_WRITE(text, setText)
 
-   // ### Qt5/Rename 'icon' 'standardIcon' and 'iconPixmap' 'icon' (and use QIcon?)
+   // ### Qt5 Rename 'icon' 'standardIcon' and 'iconPixmap' 'icon' (and use QIcon?)
    GUI_CS_PROPERTY_READ(icon, icon)
    GUI_CS_PROPERTY_WRITE(icon, setIcon)
    GUI_CS_PROPERTY_READ(iconPixmap, iconPixmap)
@@ -127,9 +127,9 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    using StandardButtons = QFlags<StandardButton>;
 
    explicit QMessageBox(QWidget *parent = 0);
-   QMessageBox(Icon icon, const QString &title, const QString &text,
-               StandardButtons buttons = NoButton, QWidget *parent = 0,
-               Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+   QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons = NoButton, 
+               QWidget *parent = 0, Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+
    ~QMessageBox();
 
    void addButton(QAbstractButton *button, ButtonRole role);
@@ -195,8 +195,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    // the following functions are obsolete:
 
-   QMessageBox(const QString &title, const QString &text, Icon icon,
-               int button0, int button1, int button2, QWidget *parent = 0,
+   QMessageBox(const QString &title, const QString &text, Icon icon, int button0, int button1, int button2, QWidget *parent = 0,
                Qt::WindowFlags f = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
    static int information(QWidget *parent, const QString &title, const QString &text,
@@ -208,7 +207,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    inline static StandardButton information(QWidget *parent, const QString &title, const QString &text,
          StandardButton button0, StandardButton button1 = NoButton)
-
    {
       return information(parent, title, text, StandardButtons(button0), button1);
    }
@@ -222,7 +220,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    inline static int question(QWidget *parent, const QString &title, const QString &text,
                               StandardButton button0, StandardButton button1)
-
    {
       return question(parent, title, text, StandardButtons(button0), button1);
    }
@@ -234,19 +231,18 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
                       const QString &button1Text = QString(), const QString &button2Text = QString(),
                       int defaultButtonNumber = 0, int escapeButtonNumber = -1);
 
-   inline static int warning(QWidget *parent, const QString &title, const QString &text,
-                             StandardButton button0, StandardButton button1) {
+   inline static int warning(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1)
+   {
       return warning(parent, title, text, StandardButtons(button0), button1);
    }
 
-   static int critical(QWidget *parent, const QString &title, const QString &text, int button0, int button1,
-                       int button2 = 0);
+   static int critical(QWidget *parent, const QString &title, const QString &text, int button0, int button1, int button2 = 0);
    static int critical(QWidget *parent, const QString &title, const QString &text,
                        const QString &button0Text, const QString &button1Text = QString(), const QString &button2Text = QString(),
                        int defaultButtonNumber = 0, int escapeButtonNumber = -1);
 
-   inline static int critical(QWidget *parent, const QString &title, const QString &text,
-                              StandardButton button0, StandardButton button1) {
+   inline static int critical(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1) 
+   {
       return critical(parent, title, text, StandardButtons(button0), button1);
    }
 
@@ -286,20 +282,10 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)
 
-#define QT_REQUIRE_VERSION(argc, argv, str) { QString s = QString::fromLatin1(str);\
-QString sq = QString::fromLatin1(qVersion()); \
-if ((sq.section(QChar::fromLatin1('.'),0,0).toInt()<<16)+\
-(sq.section(QChar::fromLatin1('.'),1,1).toInt()<<8)+\
-sq.section(QChar::fromLatin1('.'),2,2).toInt()<(s.section(QChar::fromLatin1('.'),0,0).toInt()<<16)+\
-(s.section(QChar::fromLatin1('.'),1,1).toInt()<<8)+\
-s.section(QChar::fromLatin1('.'),2,2).toInt()) { \
-if (!qApp){ \
-    new QApplication(argc,argv); \
-} \
-QString s = QApplication::tr("Executable '%1' requires Qt "\
- "%2, found Qt %3.").arg(qAppName()).arg(QString::fromLatin1(\
-str)).arg(QString::fromLatin1(qVersion())); QMessageBox::critical(0, QApplication::tr(\
-"Incompatible Qt Library Error"), s, QMessageBox::Abort, 0); qFatal("%s", s.toLatin1().data()); }}
+#define QT_REQUIRE_VERSION(argc, argv, str) static_assert(0, "Macro QT_REQUIRE_VERSION(argc, argv, str) has been" \
+   " removed, use function cs_require_version(argc, argv, str) instead");
+
+Q_GUI_EXPORT void cs_require_version(int argc, char *argv[], const char *str); 
 
 #endif // QT_NO_MESSAGEBOX
 

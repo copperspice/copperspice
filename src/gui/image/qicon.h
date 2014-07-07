@@ -120,7 +120,6 @@ class Q_GUI_EXPORT QIcon
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
 #endif
 
-
 };
 
 Q_DECLARE_SHARED(QIcon)

@@ -23,9 +23,8 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativedebugclient_p.h"
-#include "private/qpacketprotocol_p.h"
-
+#include <qdeclarativedebugclient_p.h>
+#include <qpacketprotocol_p.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qstringlist.h>
 

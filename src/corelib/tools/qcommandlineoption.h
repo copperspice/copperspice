@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-/****************************************************************************
+/***********************************************************************
 **
 ** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
 ** Contact: http://www.qt-project.org/legal
 **
-****************************************************************************/
+***********************************************************************/
 
 #ifndef QCOMMANDLINEOPTION_H
 #define QCOMMANDLINEOPTION_H
@@ -44,16 +44,17 @@ class Q_CORE_EXPORT QCommandLineOption
 {
  public:
    explicit QCommandLineOption(const QString &name, const QString &description = QString(),
-                               const QString &valueName = QString(),
-                               const QString &defaultValue = QString());
+                               const QString &valueName = QString(), const QString &defaultValue = QString());
+
    explicit QCommandLineOption(const QStringList &names, const QString &description = QString(),
-                               const QString &valueName = QString(),
-                               const QString &defaultValue = QString());
+                               const QString &valueName = QString(), const QString &defaultValue = QString());
+
    QCommandLineOption(const QCommandLineOption &other);
 
    ~QCommandLineOption();
 
    QCommandLineOption &operator=(const QCommandLineOption &other);
+
 #ifdef Q_COMPILER_RVALUE_REFS
    inline QCommandLineOption &operator=(QCommandLineOption && other) {
       qSwap(d, other.d);

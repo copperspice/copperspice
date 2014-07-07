@@ -26,19 +26,18 @@
 #ifndef QSHAREDMEMORY_P_H
 #define QSHAREDMEMORY_P_H
 
-#include "qsharedmemory.h"
+#include <qsharedmemory.h>
 
 #ifdef QT_NO_SHAREDMEMORY
-# ifndef QT_NO_SYSTEMSEMAPHORE
+#ifndef QT_NO_SYSTEMSEMAPHORE
 namespace QSharedMemoryPrivate {
 int createUnixKeyFile(const QString &fileName);
-QString makePlatformSafeKey(const QString &key,
-                            const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+QString makePlatformSafeKey(const QString &key, const QString &prefix = QLatin1String("qipc_sharedmemory_"));
 }
 #endif
 #else
 
-#include "qsystemsemaphore.h"
+#include <qsystemsemaphore.h>
 
 #ifdef Q_OS_WIN
 #  include <qt_windows.h>
@@ -100,8 +99,7 @@ class QSharedMemoryPrivate
 #endif
 
    static int createUnixKeyFile(const QString &fileName);
-   static QString makePlatformSafeKey(const QString &key,
-                                      const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+   static QString makePlatformSafeKey(const QString &key, const QString &prefix = QLatin1String("qipc_sharedmemory_"));
 
 #ifdef Q_OS_WIN
    HANDLE handle();
@@ -130,6 +128,9 @@ class QSharedMemoryPrivate
    }
 #endif // QT_NO_SYSTEMSEMAPHORE
 
+ protected:
+   QSharedMemory *q_ptr;
+
  private:
 #ifdef Q_OS_WIN
    HANDLE hand;
@@ -138,10 +139,7 @@ class QSharedMemoryPrivate
 #else
    key_t unix_key;
 #endif
-
- protected:
-   QSharedMemory *q_ptr;
-
+ 
 };
 
 QT_END_NAMESPACE

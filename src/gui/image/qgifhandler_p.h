@@ -33,6 +33,7 @@
 QT_BEGIN_NAMESPACE
 
 class QGIFFormat;
+
 class QGifHandler : public QImageIOHandler
 {
  public:

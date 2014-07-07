@@ -1167,13 +1167,11 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
    return qMakePair(QHostAddress(addr), netmask);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QHostAddress &address)
 {
    d.maybeSpace() << "QHostAddress(" << address.toString() << ')';
    return d.space();
 }
-#endif
 
 uint qHash(const QHostAddress &key)
 {

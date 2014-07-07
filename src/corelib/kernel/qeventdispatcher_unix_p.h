@@ -26,12 +26,12 @@
 #ifndef QEVENTDISPATCHER_UNIX_P_H
 #define QEVENTDISPATCHER_UNIX_P_H
 
-#include "QtCore/qabstracteventdispatcher.h"
-#include "QtCore/qlist.h"
-#include "qabstracteventdispatcher_p.h"
-#include "qcore_unix_p.h"
-#include "qpodlist_p.h"
-#include "QtCore/qvarlengtharray.h"
+#include <QtCore/qabstracteventdispatcher.h>
+#include <QtCore/qlist.h>
+#include <qabstracteventdispatcher_p.h>
+#include <qcore_unix_p.h>
+#include <qpodlist_p.h>
+#include <QtCore/qvarlengtharray.h>
 
 #include <sys/time.h>
 #if (!defined(Q_OS_HPUX) || defined(__ia64)) && !defined(Q_OS_NACL)
@@ -52,7 +52,7 @@ struct QTimerInfo {
 
 class QTimerInfoList : public QList<QTimerInfo *>
 {
-#if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_MAC))
+#if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_MAC))
    timeval previousTime;
    clock_t previousTicks;
    int ticksPerSecond;
@@ -140,9 +140,7 @@ class Q_CORE_EXPORT QEventDispatcherUNIX : public QAbstractEventDispatcher
    int activateTimers();
    int activateSocketNotifiers();
 
-   virtual int select(int nfds,
-                      fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-                      timeval *timeout);
+   virtual int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timeval *timeout);
 };
 
 class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatcherPrivate

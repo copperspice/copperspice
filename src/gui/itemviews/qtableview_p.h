@@ -31,22 +31,11 @@
 #include <QtCore/QMap>
 #include <QtCore/QSet>
 #include <QtCore/QDebug>
-#include "qabstractitemview_p.h"
+#include <qabstractitemview_p.h>
 
 #ifndef QT_NO_TABLEVIEW
 
 QT_BEGIN_NAMESPACE
-
-/** \internal
-*
-* This is a list of span with a binary index to look up quickly a span at a certain index.
-*
-* The index is a map of map.
-* spans are mentaly divided into sub spans so that the start of any subspans doesn't overlap
-* with any other subspans. There is no real representation of the subspans.
-* The key of the first map is the row where the subspan starts, the value of the first map is
-* a list (map) of all subspans that starts at the same row.  It is indexed with its row
-*/
 
 class QSpanCollection
 {
@@ -98,10 +87,6 @@ class QSpanCollection
    void updateInsertedColumns(int start, int end);
    void updateRemovedRows(int start, int end);
    void updateRemovedColumns(int start, int end);
-
-#ifdef QT_BUILD_INTERNAL
-   bool checkConsistency() const;
-#endif
 
    typedef QLinkedList<Span *> SpanList;
    SpanList spans; //lists of all spans

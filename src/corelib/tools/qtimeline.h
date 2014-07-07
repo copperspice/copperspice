@@ -108,7 +108,6 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    int frameForTime(int msec) const;
    virtual qreal valueForTime(int msec) const;
 
- public :
    CORE_CS_SLOT_1(Public, void start())
    CORE_CS_SLOT_2(start)
    CORE_CS_SLOT_1(Public, void resume())
@@ -134,12 +133,12 @@ class Q_CORE_EXPORT QTimeLine : public QObject
  protected:
    void timerEvent(QTimerEvent *event);
 
+   QScopedPointer<QTimeLinePrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QTimeLine)
    Q_DECLARE_PRIVATE(QTimeLine)
-
- protected:
-   QScopedPointer<QTimeLinePrivate> d_ptr;
+  
 };
 
 QT_END_NAMESPACE

@@ -41,9 +41,10 @@ class QDecorationAction : public QAction
  public:
    QDecorationAction(const QString &text, QObject *parent, int region)
       : QAction(text, parent), reg(region) {}
+
    int reg;
 };
-#endif // QT_NO_ACTION
+#endif
 
 /*
  Implements decoration styles

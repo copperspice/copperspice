@@ -40,12 +40,10 @@ class Q_GUI_EXPORT QDecorationWindows : public QDecorationDefault
    virtual ~QDecorationWindows();
 
    QRegion region(const QWidget *widget, const QRect &rect, int decorationRegion = All);
-   bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All,
-              DecorationState state = Normal);
+   bool paint(QPainter *painter, const QWidget *widget, int decorationRegion = All, DecorationState state = Normal);
 
  protected:
-   void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion,
-                    DecorationState state, const QPalette &pal);
+   void paintButton(QPainter *painter, const QWidget *widget, int buttonRegion, DecorationState state, const QPalette &pal);
    const char **xpmForRegion(int reg);
 };
 

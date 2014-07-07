@@ -33,9 +33,11 @@ QT_BEGIN_NAMESPACE
 class Q_CORE_EXPORT QBasicAtomicInt
 {
  public:
+
 #ifdef QT_ARCH_PARISC
    int _q_lock[4];
 #endif
+
 #if defined(QT_ARCH_WINDOWS)
    union { // needed for Q_BASIC_ATOMIC_INITIALIZER
       volatile long _q_value;
@@ -52,12 +54,14 @@ class Q_CORE_EXPORT QBasicAtomicInt
    int load() const {
       return _q_value;
    }
+
    int loadAcquire() {
       return _q_value;
    }
    void store(int newValue) {
       _q_value = newValue;
    }
+
    void storeRelease(int newValue) {
       _q_value = newValue;
    }
@@ -97,9 +101,11 @@ template <typename T>
 class QBasicAtomicPointer
 {
  public:
+
 #ifdef QT_ARCH_PARISC
    int _q_lock[4];
 #endif
+
 #if defined(QT_ARCH_WINDOWS)
    union {
       T *volatile _q_value;
@@ -113,6 +119,7 @@ class QBasicAtomicPointer
 #else
    T *volatile _q_value;
 #endif
+
    QBasicAtomicPointer() = default;
    explicit QBasicAtomicPointer(T *value) : _q_value(value) {}
 

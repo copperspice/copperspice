@@ -26,7 +26,7 @@
 #ifndef QFILESYSTEMWATCHER_KQUEUE_P_H
 #define QFILESYSTEMWATCHER_KQUEUE_P_H
 
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher_p.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qmutex.h>
 #include <QtCore/qthread.h>
@@ -40,6 +40,7 @@ QT_BEGIN_NAMESPACE
 class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
    CS_OBJECT(QKqueueFileSystemWatcherEngine)
+
  public:
    ~QKqueueFileSystemWatcherEngine();
 

@@ -26,13 +26,13 @@
 #ifndef QGRAPHICSVIEW_P_H
 #define QGRAPHICSVIEW_P_H
 
-#include "qgraphicsview.h"
+#include <qgraphicsview.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
 #include <QtGui/qevent.h>
 #include <QtCore/qcoreapplication.h>
-#include "qgraphicssceneevent.h"
+#include <qgraphicssceneevent.h>
 #include <QtGui/qstyleoption.h>
 #include <qabstractscrollarea_p.h>
 #include <qapplication_p.h>
@@ -50,7 +50,6 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    void centerView(QGraphicsView::ViewportAnchor anchor);
 
    QPainter::RenderHints renderHints;
-
    QGraphicsView::DragMode dragMode;
 
    quint32 sceneInteractionAllowed : 1;
@@ -139,8 +138,7 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
 
    QGraphicsSceneDragDropEvent *lastDragDropEvent;
    void storeDragDropEvent(const QGraphicsSceneDragDropEvent *event);
-   void populateSceneDragDropEvent(QGraphicsSceneDragDropEvent *dest,
-                                   QDropEvent *source);
+   void populateSceneDragDropEvent(QGraphicsSceneDragDropEvent *dest, QDropEvent *source);
 
    QRect mapToViewRect(const QGraphicsItem *item, const QRectF &rect) const;
    QRegion mapToViewRegion(const QGraphicsItem *item, const QRectF &rect) const;

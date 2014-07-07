@@ -42,7 +42,7 @@
 #include <QtCore/qvector.h>
 #include <QtCore/qvarlengtharray.h>
 #include <QtGui/qwsevent_qws.h>
-#include "qwsprotocolitem_qws.h"
+#include <qwsprotocolitem_qws.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -56,8 +56,7 @@ class QRect;
  *********************************************************************/
 #ifndef QT_NO_QWS_MULTIPROCESS
 void qws_write_command(QIODevice *socket, int type, char *simpleData, int simpleLen, char *rawData, int rawLen);
-bool qws_read_command(QIODevice *socket, char *&simpleData, int &simpleLen, char *&rawData, int &rawLen,
-                      int &bytesRead);
+bool qws_read_command(QIODevice *socket, char *&simpleData, int &simpleLen, char *&rawData, int &rawLen, int &bytesRead);
 #endif
 
 struct QWSCommand : QWSProtocolItem {
@@ -105,13 +104,8 @@ const char *qws_getCommandTypeString( QWSCommand::Type tp );
 #ifndef QT_NO_DEBUG
 class QDebug;
 QDebug &operator<<(QDebug &dbg, QWSCommand::Type tp);
-#endif // QT_NO_DEBUG
+#endif
 
-/*********************************************************************
- *
- * Commands
- *
- *********************************************************************/
 
 struct QWSIdentifyCommand : public QWSCommand {
    QWSIdentifyCommand() :
@@ -150,15 +144,14 @@ struct QWSIdentifyCommand : public QWSCommand {
 
 struct QWSCreateCommand : public QWSCommand {
    QWSCreateCommand(int n = 1) :
-      QWSCommand(QWSCommand::Create, sizeof(count),
-                 reinterpret_cast<char *>(&count)), count(n) {}
+      QWSCommand(QWSCommand::Create, sizeof(count), reinterpret_cast<char *>(&count)), count(n) {}
+
    int count;
 };
 
 struct QWSRegionNameCommand : public QWSCommand {
    QWSRegionNameCommand() :
-      QWSCommand(QWSCommand::RegionName,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::RegionName, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
@@ -166,10 +159,12 @@ struct QWSRegionNameCommand : public QWSCommand {
          qWarning( "region name command - name length too big!" );
          simpleData.nameLen = MAX_COMMAND_SIZE;
       }
+
       if ( simpleData.captionLen > MAX_COMMAND_SIZE ) {
          qWarning( "region name command - caption length too big!" );
          simpleData.captionLen = MAX_COMMAND_SIZE;
       }
+
       if ( simpleData.nameLen + simpleData.captionLen > len ) {
          qWarning( "region name command - name length %d - caption length %d - buffer size %d - buffer overrun!",
                    simpleData.nameLen, simpleData.captionLen, len );
@@ -198,39 +193,38 @@ struct QWSRegionNameCommand : public QWSCommand {
       int nameLen;
       int captionLen;
    } simpleData;
+
    QString name;
    QString caption;
 };
 
 struct QWSRegionCommand : public QWSCommand {
    QWSRegionCommand() :
-      QWSCommand(QWSCommand::Region, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::Region, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem = true) {
       QWSCommand::setData(d, len, allocateMem);
 
       if ( simpleData.nrectangles * int(sizeof(QRect)) + simpleData.surfacekeylength * int(sizeof(
-               QChar)) + simpleData.surfacedatalength * int(sizeof(char)) > len ) {
+         QChar)) + simpleData.surfacedatalength * int(sizeof(char)) > len ) {
          qWarning( "region command - rectangle count %d - surface key length %d - region data size %d - buffer size %d - buffer overrun!",
-                   simpleData.nrectangles, simpleData.surfacekeylength, simpleData.surfacedatalength, len );
+         simpleData.nrectangles, simpleData.surfacekeylength, simpleData.surfacedatalength, len );
+
       } else {
          char *ptr = rawDataPtr;
 
          region.setRects(reinterpret_cast<QRect *>(ptr), simpleData.nrectangles);
          ptr += simpleData.nrectangles * sizeof(QRect);
 
-         surfaceKey = QString(reinterpret_cast<QChar *>(ptr),
-                              simpleData.surfacekeylength);
+         surfaceKey = QString(reinterpret_cast<QChar *>(ptr), simpleData.surfacekeylength);
          ptr += simpleData.surfacekeylength * sizeof(QChar);
 
          surfaceData = QByteArray(ptr, simpleData.surfacedatalength);
       }
    }
 
-   void setData(int id, const QString &key, const QByteArray &data,
-                const QRegion &reg) {
-      surfaceKey = key;
+   void setData(int id, const QString &key, const QByteArray &data, const QRegion &reg) {
+      surfaceKey  = key;
       surfaceData = data;
       region = reg;
 
@@ -242,10 +236,8 @@ struct QWSRegionCommand : public QWSCommand {
       simpleData.nrectangles = rects.count();
 
       QVarLengthArray<char, 256> buffer;
-      buffer.append(reinterpret_cast<const char *>(rects.constData()),
-                    rects.count() * sizeof(QRect));
-      buffer.append(reinterpret_cast<const char *>(key.constData()),
-                    key.size() * sizeof(QChar));
+      buffer.append(reinterpret_cast<const char *>(rects.constData()), rects.count() * sizeof(QRect));
+      buffer.append(reinterpret_cast<const char *>(key.constData()), key.size() * sizeof(QChar));
       buffer.append(data, data.size());
 
       QWSCommand::setData(buffer.constData(), buffer.size(), true);
@@ -281,8 +273,7 @@ struct QWSSetOpacityCommand : public QWSCommand {
 
 struct QWSRegionMoveCommand : public QWSCommand {
    QWSRegionMoveCommand() :
-      QWSCommand(QWSCommand::RegionMove, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::RegionMove, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -294,8 +285,7 @@ struct QWSRegionMoveCommand : public QWSCommand {
 
 struct QWSRegionDestroyCommand : public QWSCommand {
    QWSRegionDestroyCommand() :
-      QWSCommand(QWSCommand::RegionDestroy, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::RegionDestroy, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -331,7 +321,6 @@ struct QWSChangeAltitudeCommand : public QWSCommand {
 
 };
 
-
 struct QWSAddPropertyCommand : public QWSCommand {
    QWSAddPropertyCommand() :
       QWSCommand(QWSCommand::AddProperty, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
@@ -344,8 +333,7 @@ struct QWSAddPropertyCommand : public QWSCommand {
 
 struct QWSSetPropertyCommand : public QWSCommand {
    QWSSetPropertyCommand() :
-      QWSCommand(QWSCommand::SetProperty, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {
+      QWSCommand(QWSCommand::SetProperty, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {
       data = 0;
    }
 
@@ -363,8 +351,7 @@ struct QWSSetPropertyCommand : public QWSCommand {
 
 struct QWSRepaintRegionCommand : public QWSCommand {
    QWSRepaintRegionCommand() :
-      QWSCommand(QWSCommand::RepaintRegion, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::RepaintRegion, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem = true) {
       QWSCommand::setData(d, len, allocateMem);
@@ -411,8 +398,7 @@ struct QWSGetPropertyCommand : public QWSCommand {
 
 struct QWSSetSelectionOwnerCommand : public QWSCommand {
    QWSSetSelectionOwnerCommand() :
-      QWSCommand(QWSCommand::SetSelectionOwner,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::SetSelectionOwner, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -423,8 +409,7 @@ struct QWSSetSelectionOwnerCommand : public QWSCommand {
 
 struct QWSConvertSelectionCommand : public QWSCommand {
    QWSConvertSelectionCommand() :
-      QWSCommand(QWSCommand::ConvertSelection,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::ConvertSelection, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int requestor; // requestor window of the selection
@@ -436,12 +421,12 @@ struct QWSConvertSelectionCommand : public QWSCommand {
 
 struct QWSDefineCursorCommand : public QWSCommand {
    QWSDefineCursorCommand() :
-      QWSCommand(QWSCommand::DefineCursor,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::DefineCursor, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem = true) {
       QWSCommand::setData(d, len, allocateMem);
       data = reinterpret_cast<unsigned char *>(rawDataPtr);
+
       if (simpleData.height * ((simpleData.width + 7) / 8) > len) {
          qWarning("define cursor command - width %d height %d- buffer size %d - buffer overrun",
                   simpleData.width, simpleData.height, len );
@@ -462,8 +447,7 @@ struct QWSDefineCursorCommand : public QWSCommand {
 
 struct QWSSelectCursorCommand : public QWSCommand {
    QWSSelectCursorCommand() :
-      QWSCommand(QWSCommand::SelectCursor,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::SelectCursor, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -473,8 +457,7 @@ struct QWSSelectCursorCommand : public QWSCommand {
 
 struct QWSPositionCursorCommand : public QWSCommand {
    QWSPositionCursorCommand() :
-      QWSCommand(QWSCommand::PositionCursor,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::PositionCursor, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int newX;
@@ -495,8 +478,7 @@ struct QWSGrabMouseCommand : public QWSCommand {
 
 struct QWSGrabKeyboardCommand : public QWSCommand {
    QWSGrabKeyboardCommand() :
-      QWSCommand(QWSCommand::GrabKeyboard,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::GrabKeyboard, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -507,8 +489,7 @@ struct QWSGrabKeyboardCommand : public QWSCommand {
 #ifndef QT_NO_SOUND
 struct QWSPlaySoundCommand : public QWSCommand {
    QWSPlaySoundCommand() :
-      QWSCommand(QWSCommand::PlaySound,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::PlaySound, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
@@ -529,18 +510,18 @@ struct QWSPlaySoundCommand : public QWSCommand {
 #ifndef QT_NO_COP
 struct QWSQCopRegisterChannelCommand : public QWSCommand {
    QWSQCopRegisterChannelCommand() :
-      QWSCommand(QWSCommand::QCopRegisterChannel,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::QCopRegisterChannel, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
+
       if ( simpleData.chLen > MAX_COMMAND_SIZE ) {
          qWarning( "Command channel name too large!" );
          simpleData.chLen = MAX_COMMAND_SIZE;
       }
+
       if ( simpleData.chLen * int(sizeof(QChar)) > len ) {
-         qWarning( "register qcop channel command - channel name length %d - buffer size %d - buffer overrun!", simpleData.chLen,
-                   len );
+         qWarning( "register qcop channel command - channel name length %d - buffer size %d - buffer overrun!", simpleData.chLen, len );
       } else {
          channel = QString(reinterpret_cast<const QChar *>(d), simpleData.chLen);
       }
@@ -560,16 +541,15 @@ struct QWSQCopRegisterChannelCommand : public QWSCommand {
 
 struct QWSQCopSendCommand : public QWSCommand {
    QWSQCopSendCommand() :
-      QWSCommand(QWSCommand::QCopSend,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::QCopSend, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
 
-      if ( simpleData.clen * int(sizeof(QChar)) + simpleData.mlen * int(sizeof(QChar)) + simpleData.dlen * int(sizeof(
-               char)) > len ) {
+      if ( simpleData.clen * int(sizeof(QChar)) + simpleData.mlen * int(sizeof(QChar)) + simpleData.dlen * int(sizeof(char)) > len ) {
          qWarning( "qcop send command - channel name length %d - message name length %d - data size %d - buffer size %d - buffer overrun!",
                    simpleData.clen, simpleData.mlen, simpleData.dlen, len );
+
       } else {
          const QChar *cd = reinterpret_cast<const QChar *>(d);
          channel = QString(cd, simpleData.clen);
@@ -580,8 +560,7 @@ struct QWSQCopSendCommand : public QWSCommand {
       }
    }
 
-   void setMessage(const QString &c, const QString &m,
-                   const QByteArray &data) {
+   void setMessage(const QString &c, const QString &m, const QByteArray &data) {
       this->channel = c;
       this->message = m;
       this->data = data;
@@ -619,8 +598,7 @@ struct QWSQCopSendCommand : public QWSCommand {
 
 struct QWSIMMouseCommand : public QWSCommand {
    QWSIMMouseCommand() :
-      QWSCommand(QWSCommand::IMMouse,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::IMMouse, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -632,8 +610,7 @@ struct QWSIMMouseCommand : public QWSCommand {
 
 struct QWSIMResponseCommand : public QWSCommand {
    QWSIMResponseCommand() :
-      QWSCommand(QWSCommand::IMResponse,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::IMResponse, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
@@ -660,8 +637,7 @@ struct QWSIMResponseCommand : public QWSCommand {
 
 struct QWSIMUpdateCommand: public QWSCommand {
    QWSIMUpdateCommand() :
-      QWSCommand(QWSCommand::IMUpdate,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::IMUpdate, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    struct SimpleData {
       int windowid;
@@ -674,20 +650,16 @@ struct QWSIMUpdateCommand: public QWSCommand {
 
 #ifndef QT_NO_QWSEMBEDWIDGET
 struct QWSEmbedCommand : public QWSCommand {
-   QWSEmbedCommand() : QWSCommand(QWSCommand::Embed,
-                                     sizeof(simpleData),
-                                     reinterpret_cast<char *>(&simpleData)) {
+   QWSEmbedCommand() : QWSCommand(QWSCommand::Embed, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {
    }
 
    void setData(const char *d, int len, bool allocateMem = true) {
       QWSCommand::setData(d, len, allocateMem);
 
       if ( simpleData.rects * int(sizeof(QRect)) > len ) {
-         qWarning( "embed command - region rectangle count %d - buffer size %d - buffer overrun!",
-                   simpleData.rects, len );
+         qWarning( "embed command - region rectangle count %d - buffer size %d - buffer overrun!", simpleData.rects, len ); 
       } else {
-         region.setRects(reinterpret_cast<QRect *>(rawDataPtr),
-                         simpleData.rects);
+         region.setRects(reinterpret_cast<QRect *>(rawDataPtr), simpleData.rects);
       }
    }
 
@@ -701,8 +673,7 @@ struct QWSEmbedCommand : public QWSCommand {
       const QVector<QRect> rects = reg.rects();
       simpleData.rects = rects.count();
 
-      QWSCommand::setData(reinterpret_cast<const char *>(rects.constData()),
-                          rects.count() * sizeof(QRect));
+      QWSCommand::setData(reinterpret_cast<const char *>(rects.constData()), rects.count() * sizeof(QRect));
    }
 
    struct {
@@ -723,8 +694,7 @@ struct QWSFontCommand : public QWSCommand {
    };
 
    QWSFontCommand() :
-      QWSCommand(QWSCommand::Font,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::Font, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem) {
       QWSCommand::setData(d, len, allocateMem);
@@ -745,8 +715,7 @@ struct QWSFontCommand : public QWSCommand {
 
 struct QWSScreenTransformCommand : public QWSCommand {
    QWSScreenTransformCommand() :
-      QWSCommand(QWSCommand::ScreenTransform,
-                 sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
+      QWSCommand(QWSCommand::ScreenTransform, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setTransformation(int screen, int transformation) {
       simpleData.screen = screen;

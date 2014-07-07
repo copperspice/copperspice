@@ -406,157 +406,11 @@ QDataStream &operator>>(QDataStream &s, QSize &sz)
 }
 #endif // QT_NO_DATASTREAM
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QSize &s)
 {
    dbg.nospace() << "QSize(" << s.width() << ", " << s.height() << ')';
    return dbg.space();
 }
-#endif
-
-
-
-/*!
-    \class QSizeF
-    \brief The QSizeF class defines the size of a two-dimensional object
-    using floating point precision.
-
-    \ingroup painting
-
-    A size is specified by a width() and a height().  It can be set in
-    the constructor and changed using the setWidth(), setHeight(), or
-    scale() functions, or using arithmetic operators. A size can also
-    be manipulated directly by retrieving references to the width and
-    height using the rwidth() and rheight() functions. Finally, the
-    width and height can be swapped using the transpose() function.
-
-    The isValid() function determines if a size is valid. A valid size
-    has both width and height greater than or equal to zero. The
-    isEmpty() function returns true if either of the width and height
-    is \e less than (or equal to) zero, while the isNull() function
-    returns true only if both the width and the height is zero.
-
-    Use the expandedTo() function to retrieve a size which holds the
-    maximum height and width of this size and a given
-    size. Similarly, the boundedTo() function returns a size which
-    holds the minimum height and width of this size and a given size.
-
-    The QSizeF class also provides the toSize() function returning a
-    QSize copy of this size, constructed by rounding the width and
-    height to the nearest integers.
-
-    QSizeF objects can be streamed as well as compared.
-
-    \sa QSize, QPointF, QRectF
-*/
-
-
-/*****************************************************************************
-  QSizeF member functions
- *****************************************************************************/
-
-/*!
-    \fn QSizeF::QSizeF()
-
-    Constructs an invalid size.
-
-    \sa isValid()
-*/
-
-/*!
-    \fn QSizeF::QSizeF(const QSize &size)
-
-    Constructs a size with floating point accuracy from the given \a
-    size.
-
-    \sa toSize()
-*/
-
-/*!
-    \fn QSizeF::QSizeF(qreal width, qreal height)
-
-    Constructs a size with the given \a width and \a height.
-*/
-
-/*!
-    \fn bool QSizeF::isNull() const
-
-    Returns true if both the width and height are +0.0; otherwise returns
-    false.
-
-    \note Since this function treats +0.0 and -0.0 differently, sizes with
-    zero width and height where either or both values have a negative
-    sign are not defined to be null sizes.
-
-    \sa isValid(), isEmpty()
-*/
-
-/*!
-    \fn bool QSizeF::isEmpty() const
-
-    Returns true if either of the width and height is less than or
-    equal to 0; otherwise returns false.
-
-    \sa isNull(), isValid()
-*/
-
-/*!
-    \fn bool QSizeF::isValid() const
-
-    Returns true if both the width and height is equal to or greater
-    than 0; otherwise returns false.
-
-    \sa isNull(), isEmpty()
-*/
-
-/*!
-    \fn int QSizeF::width() const
-
-    Returns the width.
-
-    \sa height(), setWidth()
-*/
-
-/*!
-    \fn int QSizeF::height() const
-
-    Returns the height.
-
-    \sa width(), setHeight()
-*/
-
-/*!
-    \fn void QSizeF::setWidth(qreal width)
-
-    Sets the width to the given \a width.
-
-    \sa width(), rwidth(), setHeight()
-*/
-
-/*!
-    \fn void QSizeF::setHeight(qreal height)
-
-    Sets the height to the given \a height.
-
-    \sa height(), rheight(), setWidth()
-*/
-
-/*!
-    \fn QSize QSizeF::toSize() const
-
-    Returns an integer based copy of this size.
-
-    Note that the coordinates in the returned size will be rounded to
-    the nearest integer.
-
-    \sa QSizeF()
-*/
-
-/*!
-    Swaps the width and height values.
-
-    \sa setWidth(), setHeight()
-*/
 
 void QSizeF::transpose()
 {
@@ -564,34 +418,6 @@ void QSizeF::transpose()
    wd = ht;
    ht = tmp;
 }
-
-/*!
-  \fn void QSizeF::scale(qreal width, qreal height, Qt::AspectRatioMode mode)
-
-    Scales the size to a rectangle with the given \a width and \a
-    height, according to the specified \a mode.
-
-    \list
-    \i If \a mode is Qt::IgnoreAspectRatio, the size is set to (\a width, \a height).
-    \i If \a mode is Qt::KeepAspectRatio, the current size is scaled to a rectangle
-       as large as possible inside (\a width, \a height), preserving the aspect ratio.
-    \i If \a mode is Qt::KeepAspectRatioByExpanding, the current size is scaled to a rectangle
-       as small as possible outside (\a width, \a height), preserving the aspect ratio.
-    \endlist
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 5
-
-    \sa setWidth(), setHeight()
-*/
-
-/*!
-    \fn void QSizeF::scale(const QSizeF &size, Qt::AspectRatioMode mode)
-    \overload
-
-    Scales the size to a rectangle with the given \a size, according to
-    the specified \a mode.
-*/
 void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
 {
    if (mode == Qt::IgnoreAspectRatio || qIsNull(wd) || qIsNull(ht)) {
@@ -617,184 +443,13 @@ void QSizeF::scale(const QSizeF &s, Qt::AspectRatioMode mode)
    }
 }
 
-/*!
-    \fn int &QSizeF::rwidth()
-
-    Returns a reference to the width.
-
-    Using a reference makes it possible to manipulate the width
-    directly. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 6
-
-    \sa rheight(), setWidth()
-*/
-
-/*!
-    \fn int &QSizeF::rheight()
-
-    Returns a reference to the height.
-
-    Using a reference makes it possible to manipulate the height
-    directly. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 7
-
-    \sa rwidth(), setHeight()
-*/
-
-/*!
-    \fn QSizeF &QSizeF::operator+=(const QSizeF &size)
-
-    Adds the given \a size to this size and returns a reference to
-    this size. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 8
-*/
-
-/*!
-    \fn QSizeF &QSizeF::operator-=(const QSizeF &size)
-
-    Subtracts the given \a size from this size and returns a reference
-    to this size. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 9
-*/
-
-/*!
-    \fn QSizeF &QSizeF::operator*=(qreal factor)
-    \overload
-
-    Multiplies both the width and height by the given \a factor and
-    returns a reference to the size.
-
-    \sa scale()
-*/
-
-/*!
-    \fn bool operator==(const QSizeF &s1, const QSizeF &s2)
-    \relates QSizeF
-
-    Returns true if \a s1 and \a s2 are equal; otherwise returns
-    false.
-*/
-
-/*!
-    \fn bool operator!=(const QSizeF &s1, const QSizeF &s2)
-    \relates QSizeF
-
-    Returns true if \a s1 and \a s2 are different; otherwise returns false.
-*/
-
-/*!
-    \fn const QSizeF operator+(const QSizeF &s1, const QSizeF &s2)
-    \relates QSizeF
-
-    Returns the sum of \a s1 and \a s2; each component is added separately.
-*/
-
-/*!
-    \fn const QSizeF operator-(const QSizeF &s1, const QSizeF &s2)
-    \relates QSizeF
-
-    Returns \a s2 subtracted from \a s1; each component is subtracted
-    separately.
-*/
-
-/*!
-    \fn const QSizeF operator*(const QSizeF &size, qreal factor)
-
-    \overload
-    \relates QSizeF
-
-    Multiplies the given \a size by the given \a factor and returns
-    the result.
-
-    \sa QSizeF::scale()
-*/
-
-/*!
-    \fn const QSizeF operator*(qreal factor, const QSizeF &size)
-
-    \overload
-    \relates QSizeF
-
-    Multiplies the given \a size by the given \a factor and returns
-    the result.
-*/
-
-/*!
-    \fn QSizeF &QSizeF::operator/=(qreal divisor)
-
-    \overload
-
-    Divides both the width and height by the given \a divisor and
-    returns a reference to the size.
-
-    \sa scale()
-*/
-
-/*!
-    \fn const QSizeF operator/(const QSizeF &size, qreal divisor)
-
-    \relates QSizeF
-    \overload
-
-    Divides the given \a size by the given \a divisor and returns the
-    result.
-
-    \sa QSizeF::scale()
-*/
-
-/*!
-    \fn QSizeF QSizeF::expandedTo(const QSizeF & otherSize) const
-
-    Returns a size holding the maximum width and height of this size
-    and the given \a otherSize.
-
-    \sa boundedTo(), scale()
-*/
-
-/*!
-    \fn QSizeF QSizeF::boundedTo(const QSizeF & otherSize) const
-
-    Returns a size holding the minimum width and height of this size
-    and the given \a otherSize.
-
-    \sa expandedTo(), scale()
-*/
-
-
-
-/*****************************************************************************
-  QSizeF stream functions
- *****************************************************************************/
 #ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QSizeF &size)
-    \relates QSizeF
-
-    Writes the given \a size to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &s, const QSizeF &sz)
 {
    s << double(sz.width()) << double(sz.height());
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QSizeF &size)
-    \relates QSizeF
-
-    Reads a size from the given \a stream into the given \a size and
-    returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &s, QSizeF &sz)
 {
@@ -805,14 +460,12 @@ QDataStream &operator>>(QDataStream &s, QSizeF &sz)
    sz.setHeight(qreal(h));
    return s;
 }
-#endif // QT_NO_DATASTREAM
+#endif
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug dbg, const QSizeF &s)
 {
    dbg.nospace() << "QSizeF(" << s.width() << ", " << s.height() << ')';
    return dbg.space();
 }
-#endif
 
 QT_END_NAMESPACE

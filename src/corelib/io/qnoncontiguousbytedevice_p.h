@@ -31,13 +31,14 @@
 #include <QtCore/qbuffer.h>
 #include <QtCore/qiodevice.h>
 #include <QtCore/QSharedPointer>
-#include "qringbuffer_p.h"
+#include <qringbuffer_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
 {
    CS_OBJECT(QNonContiguousByteDevice)
+
  public:
    virtual const char *readPointer(qint64 maximumLength, qint64 &len) = 0;
    virtual bool advanceReadPointer(qint64 amount) = 0;
@@ -51,16 +52,15 @@ class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
 
    virtual ~QNonContiguousByteDevice();
 
- protected:
-   QNonContiguousByteDevice();
-
-
-   bool resetDisabled;
- public:
    CORE_CS_SIGNAL_1(Public, void readyRead())
    CORE_CS_SIGNAL_2(readyRead)
    CORE_CS_SIGNAL_1(Public, void readProgress(qint64 current, qint64 total))
    CORE_CS_SIGNAL_2(readProgress, current, total)
+
+ protected:
+   QNonContiguousByteDevice();
+
+   bool resetDisabled;  
 };
 
 class Q_CORE_EXPORT QNonContiguousByteDeviceFactory
@@ -85,6 +85,7 @@ class QNonContiguousByteDeviceByteArrayImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+
  protected:
    QByteArray *byteArray;
    qint64 currentPosition;
@@ -100,6 +101,7 @@ class QNonContiguousByteDeviceRingBufferImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+
  protected:
    QSharedPointer<QRingBuffer> ringBuffer;
    qint64 currentPosition;
@@ -108,7 +110,8 @@ class QNonContiguousByteDeviceRingBufferImpl : public QNonContiguousByteDevice
 
 class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
 {
-   CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
+  CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
+
  public:
    QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d);
    ~QNonContiguousByteDeviceIoDeviceImpl();
@@ -117,6 +120,7 @@ class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+
  protected:
    QIODevice *device;
    QByteArray *currentReadBuffer;
@@ -131,6 +135,7 @@ class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
 class QNonContiguousByteDeviceBufferImpl : public QNonContiguousByteDevice
 {
    CS_OBJECT(QNonContiguousByteDeviceBufferImpl)
+
  public:
    QNonContiguousByteDeviceBufferImpl(QBuffer *b);
    ~QNonContiguousByteDeviceBufferImpl();
@@ -139,6 +144,7 @@ class QNonContiguousByteDeviceBufferImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+
  protected:
    QBuffer *buffer;
    QByteArray byteArray;
@@ -155,6 +161,7 @@ class QByteDeviceWrappingIoDevice : public QIODevice
    virtual bool atEnd () const;
    virtual bool reset ();
    virtual qint64 size () const;
+
  protected:
    virtual qint64 readData ( char *data, qint64 maxSize );
    virtual qint64 writeData ( const char *data, qint64 maxSize );

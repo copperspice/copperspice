@@ -37,27 +37,29 @@ QT_BEGIN_NAMESPACE
 namespace QAlgorithmsPrivate {
 
 template <typename RandomAccessIterator, typename T, typename LessThan>
-Q_OUTOFLINE_TEMPLATE void qSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t,
-                                      LessThan lessThan);
+Q_OUTOFLINE_TEMPLATE void qSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t, LessThan lessThan);
+
 template <typename RandomAccessIterator, typename T>
 inline void qSortHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &dummy);
 
 template <typename RandomAccessIterator, typename T, typename LessThan>
 Q_OUTOFLINE_TEMPLATE void qStableSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t,
       LessThan lessThan);
+
 template <typename RandomAccessIterator, typename T>
 inline void qStableSortHelper(RandomAccessIterator, RandomAccessIterator, const T &);
 
 template <typename RandomAccessIterator, typename T, typename LessThan>
 Q_OUTOFLINE_TEMPLATE RandomAccessIterator qLowerBoundHelper(RandomAccessIterator begin, RandomAccessIterator end,
       const T &value, LessThan lessThan);
+
 template <typename RandomAccessIterator, typename T, typename LessThan>
 Q_OUTOFLINE_TEMPLATE RandomAccessIterator qUpperBoundHelper(RandomAccessIterator begin, RandomAccessIterator end,
       const T &value, LessThan lessThan);
+
 template <typename RandomAccessIterator, typename T, typename LessThan>
 Q_OUTOFLINE_TEMPLATE RandomAccessIterator qBinaryFindHelper(RandomAccessIterator begin, RandomAccessIterator end,
       const T &value, LessThan lessThan);
-
 }
 
 template <typename InputIterator, typename OutputIterator>
@@ -320,8 +322,7 @@ inline void qDeleteAll(const Container &c)
 namespace QAlgorithmsPrivate {
 
 template <typename RandomAccessIterator, typename T, typename LessThan>
-Q_OUTOFLINE_TEMPLATE void qSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t,
-                                      LessThan lessThan)
+Q_OUTOFLINE_TEMPLATE void qSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t, LessThan lessThan)
 {
 top:
    int span = int(end - start);

@@ -28,7 +28,7 @@
 
 #include <qpixmapdata_p.h>
 #include <qpixmapdatafactory_p.h>
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -40,8 +40,7 @@ class Q_GUI_EXPORT QX11PixmapData : public QPixmapData
  public:
    QX11PixmapData(PixelType type);
    //     QX11PixmapData(PixelType type, int width, int height);
-   //     QX11PixmapData(PixelType type, const QImage &image,
-   //                    Qt::ImageConversionFlags flags);
+   //     QX11PixmapData(PixelType type, const QImage &image,Qt::ImageConversionFlags flags);
    ~QX11PixmapData();
 
    QPixmapData *createCompatiblePixmapData() const;
@@ -71,6 +70,7 @@ class Q_GUI_EXPORT QX11PixmapData : public QPixmapData
    static Qt::HANDLE createBitmapFromImage(const QImage &image);
 
    void *gl_surface;
+
 #ifndef QT_NO_XRENDER
    void convertToARGB32(bool preserveContents = true);
 #endif

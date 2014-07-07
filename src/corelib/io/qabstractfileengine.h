@@ -39,6 +39,7 @@ class QFileExtensionResult;
 class QVariant;
 class QAbstractFileEngineIterator;
 class QAbstractFileEnginePrivate;
+class QAbstractFileEngineIteratorPrivate;
 
 class Q_CORE_EXPORT QAbstractFileEngine
 {
@@ -143,8 +144,10 @@ class Q_CORE_EXPORT QAbstractFileEngine
       MapExtension,
       UnMapExtension
    };
+
    class ExtensionOption
    {};
+
    class ExtensionReturn
    {};
 
@@ -155,6 +158,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
       qint64 size;
       QFile::MemoryMapFlags flags;
    };
+
    class MapExtensionReturn : public ExtensionReturn
    {
     public:
@@ -195,7 +199,6 @@ class Q_CORE_EXPORT QAbstractFileEngineHandler
    virtual QAbstractFileEngine *create(const QString &fileName) const = 0;
 };
 
-class QAbstractFileEngineIteratorPrivate;
 class Q_CORE_EXPORT QAbstractFileEngineIterator
 {
  public:

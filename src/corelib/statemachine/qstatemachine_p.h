@@ -26,7 +26,7 @@
 #ifndef QSTATEMACHINE_P_H
 #define QSTATEMACHINE_P_H
 
-#include "qstate_p.h"
+#include <qstate_p.h>
 #include <QtCore/qcoreevent.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qlist.h>
@@ -55,7 +55,6 @@ class QStateMachine;
 #ifndef QT_NO_ANIMATION
 class QAbstractAnimation;
 #endif
-
 
 class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
 {

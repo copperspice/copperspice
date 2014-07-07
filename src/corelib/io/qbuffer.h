@@ -62,7 +62,6 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    bool canReadLine() const;
 
  protected:
-
    void connectNotify(const char *);
    void disconnectNotify(const char *);
 

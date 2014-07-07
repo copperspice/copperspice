@@ -53,7 +53,6 @@ class QWSSocket : public QWS_SOCK_BASE
    bool connectToLocalFile(const QString &file);
 
 #ifndef QT_NO_SXE
- public:
    QString errorString();
 
    GUI_CS_SIGNAL_1(Public, void connected())

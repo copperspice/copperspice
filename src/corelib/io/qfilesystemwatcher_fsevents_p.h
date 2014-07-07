@@ -26,7 +26,7 @@
 #ifndef QFILESYSTEMWATCHER_FSEVENTS_P_H
 #define QFILESYSTEMWATCHER_FSEVENTS_P_H
 
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -46,17 +46,21 @@ typedef uint64_t FSEventStreamEventId;
 
 QT_BEGIN_NAMESPACE
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
+
 // Yes, I use a stat64 element here. QFileInfo requires too much knowledge about implementation
 // details to be used as a long-standing record. Since I'm going to have to store this information, I can
 // do the stat myself too.
+
 struct PathInfo {
    PathInfo(const QString &path, const QByteArray &absPath)
       : originalPath(path), absolutePath(absPath) {}
-   QString originalPath; // The path we need to emit
-   QByteArray absolutePath; // The path we need to stat.
-   struct ::stat savedInfo;  // All the info for the path so we can compare it.
+
+   QString originalPath;       // The path we need to emit
+   QByteArray absolutePath;    // The path we need to stat.
+   struct ::stat savedInfo;    // All the info for the path so we can compare it.
 };
+
 typedef QLinkedList<PathInfo> PathInfoList;
 typedef QHash<QString, PathInfoList> PathHash;
 #endif
@@ -64,6 +68,7 @@ typedef QHash<QString, PathInfoList> PathHash;
 class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
    CS_OBJECT(QFSEventsFileSystemWatcherEngine)
+
  public:
    ~QFSEventsFileSystemWatcherEngine();
 
@@ -89,12 +94,14 @@ class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QMutex mutex;
    QWaitCondition waitCondition;
    QWaitCondition waitForStop;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+
+#if ! defined(Q_OS_IOS)
    PathHash filePathInfoHash;
    PathHash dirPathInfoHash;
    void updateHash(PathHash &pathHash);
    void updateList(PathInfoList &list, bool directory, bool emitSignals);
 #endif
+
 };
 
 #endif //QT_NO_FILESYSTEMWATCHER

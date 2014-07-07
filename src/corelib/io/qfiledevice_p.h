@@ -26,8 +26,8 @@
 #ifndef QFILEDEVICE_P_H
 #define QFILEDEVICE_P_H
 
-#include "qiodevice_p.h"
-#include "qringbuffer_p.h"
+#include <qiodevice_p.h>
+#include <qringbuffer_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,7 +36,9 @@ class QFSFileEngine;
 
 class QFileDevicePrivate : public QIODevicePrivate
 {
- Q_DECLARE_PUBLIC(QFileDevice)protected:
+   Q_DECLARE_PUBLIC(QFileDevice)
+
+protected:
    QFileDevicePrivate();
    ~QFileDevicePrivate();
 
@@ -65,7 +67,7 @@ inline bool QFileDevicePrivate::ensureFlushed() const
    // because certain const functions need to call it.
    if (lastWasWrite) {
       const_cast<QFileDevicePrivate *>(this)->lastWasWrite = false;
-      if (!const_cast<QFileDevice *>(q_func())->flush()) {
+      if (! const_cast<QFileDevice *>(q_func())->flush()) {
          return false;
       }
    }

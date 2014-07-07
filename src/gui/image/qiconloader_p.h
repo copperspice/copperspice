@@ -41,6 +41,7 @@ class QIconLoader;
 
 struct QIconDirInfo {
    enum Type { Fixed, Scalable, Threshold };
+
    QIconDirInfo(const QString &_path = QString()) :
       path(_path),
       size(0),
@@ -60,9 +61,7 @@ class QIconLoaderEngineEntry
 {
  public:
    virtual ~QIconLoaderEngineEntry() {}
-   virtual QPixmap pixmap(const QSize &size,
-                          QIcon::Mode mode,
-                          QIcon::State state) = 0;
+   virtual QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) = 0;
    QString filename;
    QIconDirInfo dir;
    static int count;
@@ -159,9 +158,7 @@ class QIconLoader : public QObject
    void ensureInitialized();
 
  private:
-   QThemeIconEntries findIconHelper(const QString &themeName,
-                                    const QString &iconName,
-                                    QStringList &visited) const;
+   QThemeIconEntries findIconHelper(const QString &themeName, const QString &iconName, QStringList &visited) const;
    uint m_themeKey;
    bool m_supportsSvg;
    bool m_initialized;

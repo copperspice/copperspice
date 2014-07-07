@@ -26,7 +26,7 @@
 #ifndef QWSINPUTCONTEXT_P_H
 #define QWSINPUTCONTEXT_P_H
 
-#include "QtGui/qinputcontext.h"
+#include <QtGui/qinputcontext.h>
 
 #ifndef QT_NO_QWS_INPUTMETHODS
 
@@ -39,14 +39,15 @@ class QWSIMInitEvent;
 class QWSInputContext : public QInputContext
 {
    CS_OBJECT(QWSInputContext)
+
  public:
    explicit QWSInputContext(QObject *parent = 0);
    ~QWSInputContext() {}
 
-
    QString identifierName() {
       return QString();
    }
+
    QString language() {
       return QString();
    }

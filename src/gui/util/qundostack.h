@@ -30,7 +30,6 @@
 #include <QtCore/qstring.h>
 #include <QScopedPointer>
 
-
 QT_BEGIN_NAMESPACE
 
 class QAction;

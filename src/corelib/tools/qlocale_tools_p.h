@@ -26,10 +26,10 @@
 #ifndef QLOCALE_TOOLS_P_H
 #define QLOCALE_TOOLS_P_H
 
-#include "qlocale_p.h"
-#include "qstring.h"
+#include <qlocale_p.h>
+#include <qstring.h>
 
-#if !defined(QT_QLOCALE_NEEDS_VOLATILE)
+#if ! defined(QT_QLOCALE_NEEDS_VOLATILE)
 #  if defined(Q_CC_GNU)
 #    if  __GNUC__ == 4
 #      define QT_QLOCALE_NEEDS_VOLATILE
@@ -51,25 +51,21 @@ QString qulltoa(qulonglong l, int base, const QChar _zero);
 QString qlltoa(qlonglong l, int base, const QChar zero);
 
 enum PrecisionMode {
-   PMDecimalDigits =             0x01,
+   PMDecimalDigits =       0x01,
    PMSignificantDigits =   0x02,
    PMChopTrailingZeros =   0x03
 };
 
-QString &decimalForm(QChar zero, QChar decimal, QChar group,
-                     QString &digits, int decpt, uint precision,
-                     PrecisionMode pm,
-                     bool always_show_decpt,
-                     bool thousands_group);
-QString &exponentForm(QChar zero, QChar decimal, QChar exponential,
-                      QChar group, QChar plus, QChar minus,
-                      QString &digits, int decpt, uint precision,
-                      PrecisionMode pm,
-                      bool always_show_decpt);
+QString &decimalForm(QChar zero, QChar decimal, QChar group, QString &digits, int decpt, uint precision,
+                     PrecisionMode pm, bool always_show_decpt, bool thousands_group);
+
+QString &exponentForm(QChar zero, QChar decimal, QChar exponential, QChar group, QChar plus, QChar minus,
+                      QString &digits, int decpt, uint precision, PrecisionMode pm, bool always_show_decpt);
 
 inline bool isZero(double d)
 {
    uchar *ch = (uchar *)&d;
+
 #ifdef QT_ARMFPA
    return !(ch[3] & 0x7F || ch[2] || ch[1] || ch[0] || ch[7] || ch[6] || ch[5] || ch[4]);
 #else
@@ -84,8 +80,7 @@ inline bool isZero(double d)
 // Removes thousand-group separators in "C" locale.
 bool removeGroupSeparators(QLocalePrivate::CharBuff *num);
 
-Q_CORE_EXPORT char *qdtoa(double d, int mode, int ndigits, int *decpt,
-                          int *sign, char **rve, char **digits_str);
+Q_CORE_EXPORT char *qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **digits_str);
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 qlonglong qstrtoll(const char *nptr, const char **endptr, int base, bool *ok);
 qulonglong qstrtoull(const char *nptr, const char **endptr, int base, bool *ok);

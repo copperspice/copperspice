@@ -58,6 +58,7 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 
    static void setInstantInvalidatePropagation(bool enable);
    static bool instantInvalidatePropagation();
+
  protected:
    QGraphicsLayout(QGraphicsLayoutPrivate &, QGraphicsLayoutItem *);
    void addChildLayoutItem(QGraphicsLayoutItem *layoutItem);

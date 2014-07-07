@@ -26,13 +26,13 @@
 #ifndef QPICTURE_P_H
 #define QPICTURE_P_H
 
-#include "QtCore/qatomic.h"
-#include "QtCore/qbuffer.h"
-#include "QtGui/qpicture.h"
-#include "QtGui/qpixmap.h"
-#include "QtGui/qpen.h"
-#include "QtGui/qbrush.h"
-#include "QtCore/qrect.h"
+#include <QtCore/qatomic.h>
+#include <QtCore/qbuffer.h>
+#include <QtGui/qpicture.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qpen.h>
+#include <QtGui/qbrush.h>
+#include <QtCore/qrect.h>
 
 QT_BEGIN_NAMESPACE
 

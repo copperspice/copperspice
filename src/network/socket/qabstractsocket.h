@@ -28,10 +28,7 @@
 
 #include <QtCore/qiodevice.h>
 #include <QtCore/qobject.h>
-
-#ifndef QT_NO_DEBUG_STREAM
 #include <QtCore/qdebug.h>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -226,18 +223,16 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    NET_CS_SLOT_2(_q_forceDisconnect)
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QAbstractSocket::SocketError);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QAbstractSocket::SocketState);
-#endif
 
 QT_END_NAMESPACE
 
 // moved to bottom of file to avoid recursive include issues
-#include "qhostinfo.h"
+#include <qhostinfo.h>
 
 #ifndef QT_NO_NETWORKPROXY
-#include "qnetworkproxy.h"
+#include <qnetworkproxy.h>
 #endif
 
 #endif // QABSTRACTSOCKET_H

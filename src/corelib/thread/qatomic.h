@@ -73,6 +73,7 @@ class QAtomicPointer : public QBasicAtomicPointer<T>
 #endif
       this->store(value);
    }
+
    inline QAtomicPointer(const QAtomicPointer<T> &other) {
 #ifdef QT_ARCH_PARISC
       this->_q_lock[0] = this->_q_lock[1] = this->_q_lock[2] = this->_q_lock[3] = -1;
@@ -123,8 +124,10 @@ inline void qAtomicDetach(T *&d)
    if (d->ref.load() == 1) {
       return;
    }
+
    T *x = d;
    d = new T(*d);
+
    if (!x->ref.deref()) {
       delete x;
    }

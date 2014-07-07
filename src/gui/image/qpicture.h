@@ -154,10 +154,7 @@ class Q_GUI_EXPORT QPictureIO
    static QList<QByteArray> inputFormats();
    static QList<QByteArray> outputFormats();
 
-   static void defineIOHandler(const char *format,
-                               const char *header,
-                               const char *flags,
-                               picture_io_handler read_picture,
+   static void defineIOHandler(const char *format, const char *header, const char *flags, picture_io_handler read_picture,
                                picture_io_handler write_picture);
 
  private:
@@ -170,10 +167,6 @@ class Q_GUI_EXPORT QPictureIO
 
 #endif //QT_NO_PICTUREIO
 
-
-/*****************************************************************************
-  QPicture stream functions
- *****************************************************************************/
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);

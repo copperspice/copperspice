@@ -26,8 +26,8 @@
 #ifndef QGRAPHICSSCENEINDEX_P_H
 #define QGRAPHICSSCENEINDEX_P_H
 
-#include "qgraphicsscene_p.h"
-#include "qgraphicsscene.h"
+#include <qgraphicsscene_p.h>
+#include <qgraphicsscene.h>
 #include <QtCore/qnamespace.h>
 #include <QtCore/qobject.h>
 #include <QtGui/qtransform.h>
@@ -113,6 +113,7 @@ class QGraphicsSceneIndexPrivate
                                QGraphicsSceneIndexIntersector *intersector, QList<QGraphicsItem *> *items,
                                const QTransform &viewTransform,
                                Qt::ItemSelectionMode mode, qreal parentOpacity = 1.0) const;
+
    inline void items_helper(const QRectF &rect, QGraphicsSceneIndexIntersector *intersector,
                             QList<QGraphicsItem *> *items, const QTransform &viewTransform,
                             Qt::ItemSelectionMode mode, Qt::SortOrder order) const;

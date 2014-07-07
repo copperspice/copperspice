@@ -362,65 +362,17 @@ QString QLocalSocket::fullServerName() const
    return d->fullServerName;
 }
 
-/*!
-    Returns the state of the socket.
-
-    \sa error()
- */
 QLocalSocket::LocalSocketState QLocalSocket::state() const
 {
    Q_D(const QLocalSocket);
    return d->state;
 }
 
-/*! \reimp
-*/
 bool QLocalSocket::isSequential() const
 {
    return true;
 }
 
-/*!
-    \enum QLocalSocket::LocalSocketError
-
-    The LocalServerError enumeration represents the errors that can occur.
-    The most recent error can be retrieved through a call to
-    \l QLocalSocket::error().
-
-    \value ConnectionRefusedError The connection was refused by
-        the peer (or timed out).
-    \value PeerClosedError  The remote socket closed the connection.
-        Note that the client socket (i.e., this socket) will be closed
-        after the remote close notification has been sent.
-    \value ServerNotFoundError  The local socket name was not found.
-    \value SocketAccessError The socket operation failed because the
-        application lacked the required privileges.
-    \value SocketResourceError The local system ran out of resources
-        (e.g., too many sockets).
-    \value SocketTimeoutError The socket operation timed out.
-    \value DatagramTooLargeError The datagram was larger than the operating
-        system's limit (which can be as low as 8192 bytes).
-    \value ConnectionError An error occurred with the connection.
-    \value UnsupportedSocketOperationError The requested socket operation
-        is not supported by the local operating system.
-    \value UnknownSocketError An unidentified error occurred.
- */
-
-/*!
-    \enum QLocalSocket::LocalSocketState
-
-    This enum describes the different states in which a socket can be.
-
-    \sa QLocalSocket::state()
-
-    \value UnconnectedState The socket is not connected.
-    \value ConnectingState The socket has started establishing a connection.
-    \value ConnectedState A connection is established.
-    \value ClosingState The socket is about to close
-        (data may still be waiting to be written).
- */
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketError error)
 {
    switch (error) {
@@ -482,8 +434,6 @@ QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketState state)
    }
    return debug;
 }
-#endif
-
 
 #if defined(QT_LOCALSOCKET_TCP)
 

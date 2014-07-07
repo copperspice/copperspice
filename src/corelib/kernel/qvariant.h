@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 // do not move include, if qvarient.h is included directly forward declarations are not sufficient 12/30/2013
-#include "qobject.h"
+#include <qobject.h>
 
 #ifndef QVARIANT_H
 #define QVARIANT_H
@@ -32,10 +32,10 @@
 #include <QtCore/qatomic.h>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qlist.h>
-#include "qmetatype.h"
+#include <qmetatype.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qstring.h>
-#include "qnamespace.h"
+#include <qnamespace.h>
 
 template <class Key, class T>
 class QHash;
@@ -509,6 +509,7 @@ class QVariantComparisonHelper
  public:
    inline QVariantComparisonHelper(const QVariant &var)
       : v(&var) {}
+
  private:
    friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
    const QVariant *v;
@@ -569,7 +570,6 @@ Q_DECLARE_TYPEINFO(QVariant, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
-
 
 QT_END_NAMESPACE
 

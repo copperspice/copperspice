@@ -26,11 +26,11 @@
 #ifndef QSYSTEMSEMAPHORE_P_H
 #define QSYSTEMSEMAPHORE_P_H
 
-#include "qsystemsemaphore.h"
+#include <qsystemsemaphore.h>
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
-#include "qsharedmemory_p.h"
+#include <qsharedmemory_p.h>
 #include <sys/types.h>
 
 #ifdef QT_POSIX_IPC
@@ -51,31 +51,40 @@ class QSystemSemaphorePrivate
 #ifdef Q_OS_WIN
    HANDLE handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
    void setErrorString(const QString &function);
+
 #elif defined(QT_POSIX_IPC)
    bool handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
    void setErrorString(const QString &function);
+
 #else
    key_t handle(QSystemSemaphore::AccessMode mode = QSystemSemaphore::Open);
    void setErrorString(const QString &function);
+
 #endif
+
    void cleanHandle();
    bool modifySemaphore(int count);
 
    QString key;
    QString fileName;
    int initialValue;
+
 #ifdef Q_OS_WIN
    HANDLE semaphore;
    HANDLE semaphoreLock;
+
 #elif defined(QT_POSIX_IPC)
    sem_t *semaphore;
    bool createdSemaphore;
+
 #else
    key_t unix_key;
    int semaphore;
    bool createdFile;
    bool createdSemaphore;
+
 #endif
+
    QString errorString;
    QSystemSemaphore::SystemSemaphoreError error;
 };

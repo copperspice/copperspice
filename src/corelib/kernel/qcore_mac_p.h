@@ -26,7 +26,6 @@
 #ifndef QCORE_MAC_P_H
 #define QCORE_MAC_P_H
 
-
 #ifndef __IMAGECAPTURE__
 #  define __IMAGECAPTURE__
 #endif
@@ -60,7 +59,7 @@
 #  undef old_qDebug
 #endif
 
-#include "qstring.h"
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -129,30 +128,22 @@ class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
    operator CFStringRef() const;
    static QString toQString(CFStringRef cfstr);
    static CFStringRef toCFStringRef(const QString &str);
+
  private:
    QString string;
 };
 
 
-#if !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
 Q_CORE_EXPORT void qt_mac_to_pascal_string(const QString &s, Str255 str, TextEncoding encoding = 0, int len = -1);
 Q_CORE_EXPORT QString qt_mac_from_pascal_string(const Str255 pstr);
 
 Q_CORE_EXPORT OSErr qt_mac_create_fsref(const QString &file, FSRef *fsref);
-// Don't use this function, it won't work in 10.5 (Leopard) and up
+
+// Don't use this function, it will not work in 10.5 (Leopard) and up
 Q_CORE_EXPORT OSErr qt_mac_create_fsspec(const QString &file, FSSpec *spec);
-#endif // !defined(Q_OS_IOS)
+#endif
 
 QT_END_NAMESPACE
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-#ifndef __LP64__
-typedef float CGFloat;
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#define SRefCon SInt32
-#define URefCon UInt32
-#endif
-#endif
 
 #endif // QCORE_MAC_P_H

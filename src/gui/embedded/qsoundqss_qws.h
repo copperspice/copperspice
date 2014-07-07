@@ -70,6 +70,7 @@ class Q_GUI_EXPORT QWSSoundServer : public QObject
 class Q_GUI_EXPORT QWSSoundClient : public QWSSocket
 {
    CS_OBJECT(QWSSoundClient)
+
  public:
 
    enum SoundFlags {
@@ -103,7 +104,6 @@ class Q_GUI_EXPORT QWSSoundClient : public QWSSocket
    // Otherwise, allow sound server to regain audio device
    void setSilent(bool);
 
- public:
    GUI_CS_SIGNAL_1(Public, void soundCompleted(int un_named_arg1))
    GUI_CS_SIGNAL_2(soundCompleted, un_named_arg1)
    GUI_CS_SIGNAL_1(Public, void deviceReady(int id))
@@ -135,12 +135,13 @@ class QWSSoundServerSocket : public QWSServerSocket
 
    GUI_CS_SIGNAL_1(Public, void playFile(int un_named_arg1, int un_named_arg2, const QString &un_named_arg3,
                                          int un_named_arg4, int un_named_arg5))
+
    GUI_CS_SIGNAL_2(playFile, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5)
 
    GUI_CS_SIGNAL_1(Public, void playRawFile(int un_named_arg1, int un_named_arg2, const QString &un_named_arg3,
                    int un_named_arg4, int un_named_arg5, int un_named_arg6, int un_named_arg7))
-   GUI_CS_SIGNAL_2(playRawFile, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5, un_named_arg6,
-                   un_named_arg7)
+
+   GUI_CS_SIGNAL_2(playRawFile, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5, un_named_arg6, un_named_arg7)
 
    GUI_CS_SIGNAL_1(Public, void pauseFile(int un_named_arg1, int un_named_arg2))
    GUI_CS_SIGNAL_2(pauseFile, un_named_arg1, un_named_arg2)

@@ -26,12 +26,12 @@
 #ifndef QFILEINFO_P_H
 #define QFILEINFO_P_H
 
-#include "qfileinfo.h"
-#include "qabstractfileengine.h"
-#include "qdatetime.h"
-#include "qatomic.h"
-#include "qshareddata.h"
-#include "qfilesystemengine_p.h"
+#include <qfileinfo.h>
+#include <qabstractfileengine.h>
+#include <qdatetime.h>
+#include <qatomic.h>
+#include <qshareddata.h>
+#include <qfilesystemengine_p.h>
 
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
@@ -128,9 +128,11 @@ class QFileInfoPrivate : public QSharedData
    mutable uint fileFlags;
    mutable qint64 fileSize;
    mutable QDateTime fileTimes[3];
+
    inline bool getCachedFlag(uint c) const {
       return cache_enabled ? (cachedFlags & c) : 0;
    }
+
    inline void setCachedFlag(uint c) const {
       if (cache_enabled) {
          cachedFlags |= c;

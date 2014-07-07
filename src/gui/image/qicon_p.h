@@ -67,8 +67,10 @@ struct QPixmapIconEngineEntry {
    QPixmapIconEngineEntry(): mode(QIcon::Normal), state(QIcon::Off) {}
    QPixmapIconEngineEntry(const QPixmap &pm, QIcon::Mode m = QIcon::Normal, QIcon::State s = QIcon::Off)
       : pixmap(pm), size(pm.size()), mode(m), state(s) {}
+
    QPixmapIconEngineEntry(const QString &file, const QSize &sz = QSize(), QIcon::Mode m = QIcon::Normal,
                           QIcon::State s = QIcon::Off)
+
       : fileName(file), size(sz), mode(m), state(s) {}
    QPixmap pixmap;
    QString fileName;

@@ -91,6 +91,7 @@ class Q_GUI_EXPORT QUnixSocketMessage
    void setGroupId(gid_t);
 
    bool isValid() const;
+
  private:
    friend class QUnixSocket;
    friend class QUnixSocketPrivate;
@@ -100,6 +101,7 @@ class Q_GUI_EXPORT QUnixSocketMessage
 class Q_GUI_EXPORT QUnixSocket : public QIODevice
 {
    CS_OBJECT(QUnixSocket)
+
  public:
    QUnixSocket(QObject * = 0);
    QUnixSocket(qint64, qint64, QObject * = 0);
@@ -163,7 +165,6 @@ class Q_GUI_EXPORT QUnixSocket : public QIODevice
    virtual bool waitForReadyRead(int msec = 300);
    virtual bool waitForBytesWritten(int msec = 300);
 
- public:
    GUI_CS_SIGNAL_1(Public, void stateChanged(SocketState socketState))
    GUI_CS_SIGNAL_2(stateChanged, socketState)
 

@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT  QBlittablePixmapData : public QPixmapData
 {
    //     Q_DECLARE_PRIVATE(QBlittablePixmapData);
+
  public:
    QBlittablePixmapData();
    ~QBlittablePixmapData();
@@ -68,7 +69,8 @@ class Q_GUI_EXPORT  QBlittablePixmapData : public QPixmapData
    void unmergeOverlay();
    QImage *overlay();
 
-#endif //QT_BLITTER_RASTEROVERLAY
+#endif 
+
  protected:
    QScopedPointer<QBlitterPaintEngine> m_engine;
    QScopedPointer<QBlittable> m_blittable;
@@ -82,7 +84,7 @@ class Q_GUI_EXPORT  QBlittablePixmapData : public QPixmapData
    void markRasterOverlayImpl(const QRectF &);
    void unmarkRasterOverlayImpl(const QRectF &);
    QRectF clipAndTransformRect(const QRectF &) const;
-#endif //QT_BLITTER_RASTEROVERLAY
+#endif 
 
 };
 

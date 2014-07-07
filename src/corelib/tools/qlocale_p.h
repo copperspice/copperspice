@@ -26,10 +26,10 @@
 #ifndef QLOCALE_P_H
 #define QLOCALE_P_H
 
-#include "qstring.h"
-#include "qvarlengtharray.h"
-#include "qmetatype.h"
-#include "qlocale.h"
+#include <qstring.h>
+#include <qvarlengtharray.h>
+#include <qmetatype.h>
+#include <qlocale.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -76,12 +76,9 @@ struct Q_CORE_EXPORT QLocalePrivate {
    static QLocale::Language codeToLanguage(const QString &code);
    static QLocale::Script codeToScript(const QString &code);
    static QLocale::Country codeToCountry(const QString &code);
-   static void getLangAndCountry(const QString &name, QLocale::Language &lang,
-                                 QLocale::Script &script, QLocale::Country &cntry);
-   static const QLocalePrivate *findLocale(QLocale::Language language,
-                                           QLocale::Script script,
-                                           QLocale::Country country);
 
+   static void getLangAndCountry(const QString &name, QLocale::Language &lang, QLocale::Script &script, QLocale::Country &cntry);
+   static const QLocalePrivate *findLocale(QLocale::Language language, QLocale::Script script,QLocale::Country country);
 
    QLocale::MeasurementSystem measurementSystem() const;
 
@@ -112,48 +109,32 @@ struct Q_CORE_EXPORT QLocalePrivate {
       ParseGroupSeparators
    };
 
-   static QString doubleToString(const QChar zero, const QChar plus,
-                                 const QChar minus, const QChar exponent,
-                                 const QChar group, const QChar decimal,
-                                 double d, int precision,
-                                 DoubleForm form,
-                                 int width, unsigned flags);
-   static QString longLongToString(const QChar zero, const QChar group,
-                                   const QChar plus, const QChar minus,
-                                   qint64 l, int precision, int base,
-                                   int width, unsigned flags);
-   static QString unsLongLongToString(const QChar zero, const QChar group,
-                                      const QChar plus,
-                                      quint64 l, int precision,
-                                      int base, int width,
-                                      unsigned flags);
+   static QString doubleToString(const QChar zero, const QChar plus, const QChar minus, const QChar exponent, const QChar group, 
+         const QChar decimal, double d, int precision, DoubleForm form, int width, unsigned flags);
 
-   QString doubleToString(double d,
-                          int precision = -1,
-                          DoubleForm form = DFSignificantDigits,
-                          int width = -1,
-                          unsigned flags = NoFlags) const;
-   QString longLongToString(qint64 l, int precision = -1,
-                            int base = 10,
-                            int width = -1,
-                            unsigned flags = NoFlags) const;
-   QString unsLongLongToString(quint64 l, int precision = -1,
-                               int base = 10,
-                               int width = -1,
-                               unsigned flags = NoFlags) const;
+   static QString longLongToString(const QChar zero, const QChar group, const QChar plus, const QChar minus,qint64 l, 
+         int precision, int base,int width, unsigned flags);
+
+   static QString unsLongLongToString(const QChar zero, const QChar group, const QChar plus, quint64 l, int precision,
+         int base, int width, unsigned flags);
+
+   QString doubleToString(double d, int precision = -1, DoubleForm form = DFSignificantDigits, int width = -1, 
+         unsigned flags = NoFlags) const;
+
+   QString longLongToString(qint64 l, int precision = -1, int base = 10, int width = -1, unsigned flags = NoFlags) const;
+
+   QString unsLongLongToString(quint64 l, int precision = -1, int base = 10, int width = -1, unsigned flags = NoFlags) const;
+
    double stringToDouble(const QString &num, bool *ok, GroupSeparatorMode group_sep_mode) const;
    qint64 stringToLongLong(const QString &num, int base, bool *ok, GroupSeparatorMode group_sep_mode) const;
    quint64 stringToUnsLongLong(const QString &num, int base, bool *ok, GroupSeparatorMode group_sep_mode) const;
-
 
    static double bytearrayToDouble(const char *num, bool *ok, bool *overflow = 0);
    static qint64 bytearrayToLongLong(const char *num, int base, bool *ok, bool *overflow = 0);
    static quint64 bytearrayToUnsLongLong(const char *num, int base, bool *ok);
 
    typedef QVarLengthArray<char, 256> CharBuff;
-   bool numberToCLocale(const QString &num,
-                        GroupSeparatorMode group_sep_mode,
-                        CharBuff *result) const;
+   bool numberToCLocale(const QString &num, GroupSeparatorMode group_sep_mode, CharBuff *result) const;
    inline char digitToCLocale(const QChar &c) const;
 
    static void updateSystemPrivate();
@@ -161,13 +142,11 @@ struct Q_CORE_EXPORT QLocalePrivate {
    enum NumberMode { IntegerMode, DoubleStandardMode, DoubleScientificMode };
    bool validateChars(const QString &str, NumberMode numMode, QByteArray *buff, int decDigits = -1) const;
 
-   QString dateTimeToString(const QString &format, const QDate *date, const QTime *time,
-                            const QLocale *q) const;
+   QString dateTimeToString(const QString &format, const QDate *date, const QTime *time, const QLocale *q) const;
 
    quint16 m_language_id, m_script_id, m_country_id;
 
-   quint16 m_decimal, m_group, m_list, m_percent,
-           m_zero, m_minus, m_plus, m_exponential;
+   quint16 m_decimal, m_group, m_list, m_percent, m_zero, m_minus, m_plus, m_exponential;
    quint16 m_quotation_start, m_quotation_end;
    quint16 m_alternate_quotation_start, m_alternate_quotation_end;
 

@@ -90,14 +90,17 @@ class Q_GUI_EXPORT QMatrix4x4
    friend QMatrix4x4 operator+(const QMatrix4x4 &m1, const QMatrix4x4 &m2);
    friend QMatrix4x4 operator-(const QMatrix4x4 &m1, const QMatrix4x4 &m2);
    friend QMatrix4x4 operator*(const QMatrix4x4 &m1, const QMatrix4x4 &m2);
+
 #ifndef QT_NO_VECTOR3D
    friend QVector3D operator*(const QMatrix4x4 &matrix, const QVector3D &vector);
    friend QVector3D operator*(const QVector3D &vector, const QMatrix4x4 &matrix);
 #endif
+
 #ifndef QT_NO_VECTOR4D
    friend QVector4D operator*(const QVector4D &vector, const QMatrix4x4 &matrix);
    friend QVector4D operator*(const QMatrix4x4 &matrix, const QVector4D &vector);
 #endif
+
    friend QPoint operator*(const QPoint &point, const QMatrix4x4 &matrix);
    friend QPointF operator*(const QPointF &point, const QMatrix4x4 &matrix);
    friend QMatrix4x4 operator-(const QMatrix4x4 &matrix);
@@ -114,6 +117,7 @@ class Q_GUI_EXPORT QMatrix4x4
    void translate(const QVector3D &vector);
    void rotate(qreal angle, const QVector3D &vector);
 #endif
+
    void scale(qreal x, qreal y);
    void scale(qreal x, qreal y, qreal z);
    void scale(qreal factor);
@@ -1011,6 +1015,7 @@ QT_DEPRECATED QGenericMatrix<N, M, qreal> qGenericMatrixFromMatrix4x4(const QMat
    QGenericMatrix<N, M, qreal> result;
    const qreal *m = matrix.constData();
    qreal *values = result.data();
+
    for (int col = 0; col < N; ++col) {
       for (int row = 0; row < M; ++row) {
          if (col < 4 && row < 4) {

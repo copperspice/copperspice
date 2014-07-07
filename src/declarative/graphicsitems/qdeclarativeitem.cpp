@@ -3833,6 +3833,7 @@ void QDeclarativeItem::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidg
 bool QDeclarativeItem::event(QEvent *ev)
 {
    Q_D(QDeclarativeItem);
+
    switch (ev->type()) {
       case QEvent::KeyPress:
       case QEvent::KeyRelease:
@@ -3846,7 +3847,6 @@ bool QDeclarativeItem::event(QEvent *ev)
    return QGraphicsObject::event(ev);
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, QDeclarativeItem *item)
 {
    if (!item) {
@@ -3860,7 +3860,6 @@ QDebug operator<<(QDebug debug, QDeclarativeItem *item)
          << ", z =" << item->zValue() << ')';
    return debug;
 }
-#endif
 
 qint64 QDeclarativeItemPrivate::consistentTime = -1;
 void QDeclarativeItemPrivate::setConsistentTime(qint64 t)

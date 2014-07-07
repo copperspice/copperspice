@@ -402,18 +402,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    bool event(QEvent *);
    bool compressEvent(QEvent *, QObject *receiver, QPostEventList *);
 
-#if defined(Q_INTERNAL_QAPP_SRC)
-   QApplication(int &argc, char **argv);
-   QApplication(int &argc, char **argv, bool GUIenabled);
-   QApplication(int &argc, char **argv, Type);
-
-#if defined(Q_WS_X11)
-   QApplication(Display *dpy, Qt::HANDLE visual = 0, Qt::HANDLE cmap = 0);
-   QApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE cmap = 0);
-#endif
-
-#endif  // Q_INTERNAL_QAPP_SRC
-
  private:
    Q_DISABLE_COPY(QApplication)
    Q_DECLARE_PRIVATE(QApplication)

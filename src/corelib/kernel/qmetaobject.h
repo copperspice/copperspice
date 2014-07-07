@@ -24,12 +24,12 @@
 ***********************************************************************/
 
 // do not move include, if qobject.h is included directly forward declarations are not sufficient 12/30/2013
-#include "qobject.h"
+#include <qobject.h>
 
 #ifndef QMETAOBJECT_H
 #define QMETAOBJECT_H
 
-#include "csmeta.h"
+#include <csmeta.h>
 #include <QMap>
 #include <QMutex>
 #include <QString>

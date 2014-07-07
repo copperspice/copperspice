@@ -30,15 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
-/*! \internal
-
-    Element in a QFreeList. ConstReferenceType and ReferenceType are used as
-    the return values for QFreeList::at() and QFreeList::operator[](). Contains
-    the real data storage (_t) and the id of the next free element (next).
-
-    Note: the t() functions should be used to access the data, not _t.
-*/
 template <typename T>
 struct QFreeListElement {
    typedef const T &ConstReferenceType;
@@ -55,11 +46,6 @@ struct QFreeListElement {
    }
 };
 
-/*! \internal
-
-    Element in a QFreeList without a paylout. ConstReferenceType and
-    ReferenceType are void, the t() functions return void and are empty.
-*/
 template <>
 struct QFreeListElement<void> {
    typedef void ConstReferenceType;
@@ -71,23 +57,6 @@ struct QFreeListElement<void> {
    inline void t() { }
 };
 
-/*! \internal
-
-    Defines default constants used by QFreeList:
-
-    - The initial value returned by QFreeList::next() is zero.
-
-    - QFreeList allows for up to 16777216 elements in QFreeList and uses the top
-      8 bits to store a serial counter for ABA protection.
-
-    - QFreeList will make a maximum of 4 allocations (blocks), with each
-      successive block larger than the previous.
-
-    - Sizes static int[] array to define the size of each block.
-
-    It is possible to define your own constants struct/class and give this to
-    QFreeList to customize/tune the behavior.
-*/
 struct QFreeListDefaultConstants {
    // used by QFreeList, make sure to define all of when customizing
    enum {
@@ -102,23 +71,6 @@ struct QFreeListDefaultConstants {
    static const int Sizes[BlockCount];
 };
 
-/*! \internal
-
-    This is a generic implementation of a lock-free free list. Use next() to
-    get the next free entry in the list, and release(id) when done with the id.
-
-    This version is templated and allows having a payload of type T which can
-    be accessed using the id returned by next(). The payload is allocated and
-    deallocated automatically by the free list, but *NOT* when calling
-    next()/release(). Initialization should be done by code needing it after
-    next() returns. Likewise, cleanup() should happen before calling release().
-    It is possible to have use 'void' as the payload type, in which case the
-    free list only contains indexes to the next free entry.
-
-    The ConstantsType type defaults to QFreeListDefaultConstants above. You can
-    define your custom ConstantsType, see above for details on what needs to be
-    available.
-*/
 template <typename T, typename ConstantsType = QFreeListDefaultConstants>
 class QFreeList
 {

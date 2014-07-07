@@ -29,8 +29,8 @@
 
 #ifndef QT_NO_IM
 
-#include "qinputcontext.h"
-#include "qt_mac_p.h"
+#include <qinputcontext.h>
+#include <qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -77,5 +77,7 @@ class Q_GUI_EXPORT QMacInputContext : public QInputContext
 };
 
 QT_END_NAMESPACE
+
 #endif // QT_NO_IM
+
 #endif // QMACINPUTCONTEXT_P_H

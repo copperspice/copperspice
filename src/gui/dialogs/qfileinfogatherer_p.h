@@ -40,6 +40,8 @@
 
 QT_BEGIN_NAMESPACE
 
+class QFileIconProvider;
+
 class QExtendedInformation
 {
  public:
@@ -51,17 +53,17 @@ class QExtendedInformation
    inline bool isDir() {
       return type() == Dir;
    }
+
    inline bool isFile() {
       return type() == File;
    }
+
    inline bool isSystem() {
       return type() == System;
    }
 
    bool operator ==(const QExtendedInformation &fileInfo) const {
-      return mFileInfo == fileInfo.mFileInfo
-             && displayType == fileInfo.displayType
-             && permissions() == fileInfo.permissions();
+      return mFileInfo == fileInfo.mFileInfo && displayType == fileInfo.displayType && permissions() == fileInfo.permissions();
    }
 
 #ifndef QT_NO_FSFILEENGINE
@@ -90,6 +92,7 @@ class QExtendedInformation
 
    bool isSymLink(bool ignoreNtfsSymLinks = false) const {
       if (ignoreNtfsSymLinks) {
+
 #ifdef Q_OS_WIN
          return !mFileInfo.suffix().compare(QLatin1String("lnk"), Qt::CaseInsensitive);
 #endif
@@ -130,8 +133,6 @@ class QExtendedInformation
    QFileInfo mFileInfo;
 };
 
-class QFileIconProvider;
-
 #ifndef QT_NO_FILESYSTEMMODEL
 
 class QFileInfoGatherer : public QThread
@@ -151,15 +152,13 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SIGNAL_1(Public, void directoryLoaded(const QString &path))
    GUI_CS_SIGNAL_2(directoryLoaded, path)
 
- public:
    QFileInfoGatherer(QObject *parent = 0);
    ~QFileInfoGatherer();
 
    void clear();
    void removePath(const QString &path);
    QExtendedInformation getInfo(const QFileInfo &info) const;
-
- public :
+ 
    GUI_CS_SLOT_1(Public, void list(const QString &directoryPath))
    GUI_CS_SLOT_2(list)
 
@@ -200,13 +199,16 @@ class QFileInfoGatherer : public QThread
 #ifndef QT_NO_FILESYSTEMWATCHER
    QFileSystemWatcher *watcher;
 #endif
+
    bool m_resolveSymlinks;
    QFileIconProvider *m_iconProvider;
    QFileIconProvider defaultProvider;
+
 #ifndef Q_OS_WIN
    uint userId;
    uint groupId;
 #endif
+
 };
 #endif // QT_NO_FILESYSTEMMODEL
 

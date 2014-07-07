@@ -26,13 +26,13 @@
 #ifndef QFILESYSTEMMODEL_P_H
 #define QFILESYSTEMMODEL_P_H
 
-#include "qfilesystemmodel.h"
+#include <qfilesystemmodel.h>
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
 #include <qabstractitemmodel_p.h>
 #include <qabstractitemmodel.h>
-#include "qfileinfogatherer_p.h"
+#include <qfileinfogatherer_p.h>
 #include <qpair.h>
 #include <qdir.h>
 #include <qicon.h>
@@ -70,6 +70,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       }
 
       QString fileName;
+
 #if defined(Q_OS_WIN)
       QString volumeName;
 #endif
@@ -300,11 +301,13 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       // XP == "My Computer",
       // Vista == "Computer",
       // OS X == "Computer" (sometime user generated) "Benjamin's PowerBook G4"
+
 #ifdef Q_OS_WIN
       return QFileSystemModel::tr("My Computer");
 #else
       return QFileSystemModel::tr("Computer");
 #endif
+
    }
 
    inline void delayedSort() {
@@ -339,9 +342,11 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    static int naturalCompare(const QString &s1, const QString &s2, Qt::CaseSensitivity cs);
 
    QDir rootDir;
+
 #ifndef QT_NO_FILESYSTEMWATCHER
    QFileInfoGatherer fileInfoGatherer;
 #endif
+
    QTimer delayedSortTimer;
    bool forceSort;
    int sortColumn;
@@ -351,14 +356,17 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    QDir::Filters filters;
    QHash<const QFileSystemNode *, bool> bypassFilters;
    bool nameFilterDisables;
+
    //This flag is an optimization for the QFileDialog
    //It enable a sort which is not recursive, it means
    //we sort only what we see.
    bool disableRecursiveSort;
+
 #ifndef QT_NO_REGEXP
    QList<QRegExp> nameFilters;
 #endif
-   // ### Qt5/resolvedSymLinks goes away
+
+   // ### Qt5 resolvedSymLinks goes away
    QHash<QString, QString> resolvedSymLinks;
 
    QFileSystemNode root;

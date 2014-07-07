@@ -26,11 +26,11 @@
 #ifndef QPIXMAPCACHE_P_H
 #define QPIXMAPCACHE_P_H
 
-#include "qpixmapcache.h"
-#include "qpaintengine.h"
+#include <qpixmapcache.h>
+#include <qpaintengine.h>
 #include <qimage_p.h>
 #include <qpixmap_raster_p.h>
-#include "qcache.h"
+#include <qcache.h>
 
 QT_BEGIN_NAMESPACE
 

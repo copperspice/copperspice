@@ -23,22 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativeproperty.h"
-#include "private/qdeclarativeproperty_p.h"
-
-#include "qdeclarative.h"
-#include "private/qdeclarativebinding_p.h"
-#include "qdeclarativecontext.h"
-#include "private/qdeclarativecontext_p.h"
-#include "private/qdeclarativeboundsignal_p.h"
-#include "qdeclarativeengine.h"
-#include "private/qdeclarativeengine_p.h"
-#include "private/qdeclarativedata_p.h"
-#include "private/qdeclarativestringconverters_p.h"
-#include "private/qdeclarativelist_p.h"
-#include "private/qdeclarativecompiler_p.h"
-#include "private/qdeclarativevmemetaobject_p.h"
-
+#include <qdeclarativeproperty.h>
+#include <qdeclarativeproperty_p.h>
+#include <qdeclarative.h>
+#include <qdeclarativebinding_p.h>
+#include <qdeclarativecontext.h>
+#include <qdeclarativecontext_p.h>
+#include <qdeclarativeboundsignal_p.h>
+#include <qdeclarativeengine.h>
+#include <qdeclarativeengine_p.h>
+#include <qdeclarativedata_p.h>
+#include <qdeclarativestringconverters_p.h>
+#include <qdeclarativelist_p.h>
+#include <qdeclarativecompiler_p.h>
+#include <qdeclarativevmemetaobject_p.h>
 #include <QStringList>
 #include <QtCore/qdebug.h>
 

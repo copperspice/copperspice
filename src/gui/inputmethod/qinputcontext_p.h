@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-
 #ifndef QINPUTCONTEXT_P_H
 #define QINPUTCONTEXT_P_H
 
-#include "qwidget.h"
-#include "qinputcontext.h"
+#include <qwidget.h>
+#include <qinputcontext.h>
 
 #ifndef QT_NO_IM
 

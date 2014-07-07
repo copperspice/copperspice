@@ -44,6 +44,7 @@ class QWSCursor
    QPoint hotSpot() const {
       return hot;
    }
+
    QImage &image() {
       return cursor;
    }

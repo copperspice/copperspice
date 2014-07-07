@@ -27,7 +27,7 @@
 #define QEASINGCURVE_H
 
 #include <QtCore/qglobal.h>
-#include "qobject.h"
+#include <qobject.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -86,9 +86,7 @@ class Q_CORE_EXPORT QEasingCurve
  private:
    QEasingCurvePrivate *d_ptr;
 
-#ifndef QT_NO_DEBUG_STREAM
    friend Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
-#endif
 
 #ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);
@@ -97,9 +95,7 @@ class Q_CORE_EXPORT QEasingCurve
 
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);

@@ -26,9 +26,9 @@
 #ifndef QTEMPORARYFILE_P_H
 #define QTEMPORARYFILE_P_H
 
-#include "qfsfileengine_p.h"
-#include "qfilesystemengine_p.h"
-#include "qfile_p.h"
+#include <qfsfileengine_p.h>
+#include <qfilesystemengine_p.h>
+#include <qfile_p.h>
 
 QT_BEGIN_NAMESPACE
 

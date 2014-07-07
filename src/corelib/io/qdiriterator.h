@@ -31,6 +31,7 @@
 QT_BEGIN_NAMESPACE
 
 class QDirIteratorPrivate;
+
 class Q_CORE_EXPORT QDirIterator
 {
  public:
@@ -42,15 +43,10 @@ class Q_CORE_EXPORT QDirIterator
    using IteratorFlags = QFlags<IteratorFlag>;
 
    QDirIterator(const QDir &dir, IteratorFlags flags = NoIteratorFlags);
-   QDirIterator(const QString &path,
-                IteratorFlags flags = NoIteratorFlags);
-   QDirIterator(const QString &path,
-                QDir::Filters filter,
-                IteratorFlags flags = NoIteratorFlags);
-   QDirIterator(const QString &path,
-                const QStringList &nameFilters,
-                QDir::Filters filters = QDir::NoFilter,
-                IteratorFlags flags = NoIteratorFlags);
+   QDirIterator(const QString &path, IteratorFlags flags = NoIteratorFlags);
+
+   QDirIterator(const QString &path, QDir::Filters filter, IteratorFlags flags = NoIteratorFlags);
+   QDirIterator(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, IteratorFlags flags = NoIteratorFlags);
 
    virtual ~QDirIterator();
 

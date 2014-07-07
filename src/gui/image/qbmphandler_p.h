@@ -26,13 +26,13 @@
 #ifndef QBMPHANDLER_P_H
 #define QBMPHANDLER_P_H
 
-#include "QtGui/qimageiohandler.h"
+#include <QtGui/qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_BMP
 
 QT_BEGIN_NAMESPACE
 
-struct BMP_FILEHDR {                     // BMP file header
+struct BMP_FILEHDR {                    // BMP file header
    char   bfType[2];                    // "BM"
    qint32  bfSize;                      // size of file
    qint16  bfReserved1;
@@ -40,7 +40,7 @@ struct BMP_FILEHDR {                     // BMP file header
    qint32  bfOffBits;                   // pointer to the pixmap bits
 };
 
-struct BMP_INFOHDR {                     // BMP information header
+struct BMP_INFOHDR {                    // BMP information header
    qint32  biSize;                      // size of this struct
    qint32  biWidth;                     // pixmap width
    qint32  biHeight;                    // pixmap height

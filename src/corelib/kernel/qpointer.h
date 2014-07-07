@@ -39,12 +39,15 @@ class QPointer
    struct TypeSelector {
       typedef QObject Type;
    };
+
    template<typename U>
    struct TypeSelector<const U> {
       typedef const QObject Type;
    };
+
    typedef typename TypeSelector<T>::Type QObjectType;
    QWeakPointer<QObjectType> wp;
+
  public:
    inline QPointer() { }
    inline QPointer(T *p) : wp(p, true) { }

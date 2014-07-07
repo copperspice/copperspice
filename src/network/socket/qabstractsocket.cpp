@@ -2825,7 +2825,6 @@ QNetworkProxy QAbstractSocket::proxy() const
 }
 #endif // QT_NO_NETWORKPROXY
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QAbstractSocket::SocketError error)
 {
    switch (error) {
@@ -2923,8 +2922,6 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QAbstractSocket::SocketState st
    }
    return debug;
 }
-#endif
-
 
 void QAbstractSocket::_q_connectToNextAddress()
 {

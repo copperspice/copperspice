@@ -27,28 +27,15 @@
 #define QGRAPHICSANCHORLAYOUT_P_H
 
 #include <QGraphicsWidget>
-#include "qgraphicslayout_p.h"
-#include "qgraphicsanchorlayout.h"
-#include "qgraph_p.h"
-#include "qsimplex_p.h"
+#include <qgraphicslayout_p.h>
+#include <qgraphicsanchorlayout.h>
+#include <qgraph_p.h>
+#include <qsimplex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 QT_BEGIN_NAMESPACE
 
-/*
-  The public QGraphicsAnchorLayout interface represents an anchorage point
-  as a pair of a <QGraphicsLayoutItem *> and a <Qt::AnchorPoint>.
-
-  Internally though, it has a graph of anchorage points (vertices) and
-  anchors (edges), represented by the AnchorVertex and AnchorData structs
-  respectively.
-*/
-
-/*!
-  \internal
-
-  Represents a vertex (anchorage point) in the internal graph
-*/
+// internal
 struct AnchorVertex {
    enum Type {
       Normal = 0,
@@ -329,8 +316,6 @@ class QGraphicsAnchorPrivate
 };
 
 
-
-
 /*!
   \internal
 
@@ -401,18 +386,12 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    }
 
    // function used by the 4 API functions
-   QGraphicsAnchor *addAnchor(QGraphicsLayoutItem *firstItem,
-                              Qt::AnchorPoint firstEdge,
-                              QGraphicsLayoutItem *secondItem,
-                              Qt::AnchorPoint secondEdge,
-                              qreal *spacing = 0);
+   QGraphicsAnchor *addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge, QGraphicsLayoutItem *secondItem,
+                              Qt::AnchorPoint secondEdge, qreal *spacing = 0);
 
    // Helper for Anchor Manipulation methods
-   void addAnchor_helper(QGraphicsLayoutItem *firstItem,
-                         Qt::AnchorPoint firstEdge,
-                         QGraphicsLayoutItem *secondItem,
-                         Qt::AnchorPoint secondEdge,
-                         AnchorData *data);
+   void addAnchor_helper(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge, QGraphicsLayoutItem *secondItem,
+                         Qt::AnchorPoint secondEdge, AnchorData *data);
 
    QGraphicsAnchor *getAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
                               QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
@@ -424,9 +403,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
 
    void removeVertex(QGraphicsLayoutItem *item, Qt::AnchorPoint edge);
 
-   void correctEdgeDirection(QGraphicsLayoutItem *&firstItem,
-                             Qt::AnchorPoint &firstEdge,
-                             QGraphicsLayoutItem *&secondItem,
+   void correctEdgeDirection(QGraphicsLayoutItem *&firstItem, Qt::AnchorPoint &firstEdge, QGraphicsLayoutItem *&secondItem,
                              Qt::AnchorPoint &secondEdge);
 
    QLayoutStyleInfo &styleInfo() const;
@@ -442,26 +419,24 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    bool simplifyVertices(Orientation orientation);
    bool simplifyGraphIteration(Orientation orientation, bool *feasible);
 
-   bool replaceVertex(Orientation orientation, AnchorVertex *oldV,
-                      AnchorVertex *newV, const QList<AnchorData *> &edges);
-
+   bool replaceVertex(Orientation orientation, AnchorVertex *oldV, AnchorVertex *newV, const QList<AnchorData *> &edges);
 
    void restoreSimplifiedGraph(Orientation orientation);
    void restoreSimplifiedAnchor(AnchorData *edge);
    void restoreSimplifiedConstraints(ParallelAnchorData *parallel);
    void restoreVertices(Orientation orientation);
 
-   bool calculateTrunk(Orientation orientation, const GraphPath &trunkPath,
-                       const QList<QSimplexConstraint *> &constraints,
+   bool calculateTrunk(Orientation orientation, const GraphPath &trunkPath, const QList<QSimplexConstraint *> &constraints,
                        const QList<AnchorData *> &variables);
-   bool calculateNonTrunk(const QList<QSimplexConstraint *> &constraints,
-                          const QList<AnchorData *> &variables);
+
+   bool calculateNonTrunk(const QList<QSimplexConstraint *> &constraints, const QList<AnchorData *> &variables);
 
    // Support functions for calculateGraph()
    void refreshAllSizeHints(Orientation orientation);
    void findPaths(Orientation orientation);
    void constraintsFromPaths(Orientation orientation);
    void updateAnchorSizes(Orientation orientation);
+
    QList<QSimplexConstraint *> constraintsFromSizeHints(const QList<AnchorData *> &anchors);
    QList<QList<QSimplexConstraint *> > getGraphParts(Orientation orientation);
    void identifyFloatItems(const QSet<AnchorData *> &visited, Orientation orientation);
@@ -478,8 +453,10 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    inline void changeLayoutVertex(Orientation orientation, AnchorVertex *oldV, AnchorVertex *newV) {
       if (layoutFirstVertex[orientation] == oldV) {
          layoutFirstVertex[orientation] = newV;
+
       } else if (layoutCentralVertex[orientation] == oldV) {
          layoutCentralVertex[orientation] = newV;
+
       } else if (layoutLastVertex[orientation] == oldV) {
          layoutLastVertex[orientation] = newV;
       }
@@ -507,8 +484,8 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    void dumpGraph(const QString &name = QString());
 #endif
 
-
    qreal spacings[NOrientations];
+
    // Size hints from simplex engine
    qreal sizeHints[2][3];
 
@@ -517,7 +494,6 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
 
    // Mapping between high level anchorage points (Item, Edge) to low level
    // ones (Graph Vertices)
-
    QHash<QPair<QGraphicsLayoutItem *, Qt::AnchorPoint>, QPair<AnchorVertex *, int> > m_vertexList;
 
    // Internal graph of anchorage points and anchors, for both orientations

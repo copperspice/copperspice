@@ -26,13 +26,13 @@
 #ifndef QDATETIME_P_H
 #define QDATETIME_P_H
 
-#include "qplatformdefs.h"
-#include "QtCore/qatomic.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qlocale.h"
-#include "QtCore/qvariant.h"
-#include "QtCore/qvector.h"
+#include <qplatformdefs.h>
+#include <QtCore/qatomic.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qlocale.h>
+#include <QtCore/qvariant.h>
+#include <QtCore/qvector.h>
 
 #define QDATETIMEEDIT_TIME_MIN QTime(0, 0, 0, 0)
 #define QDATETIMEEDIT_TIME_MAX QTime(23, 59, 59, 999)
@@ -171,6 +171,7 @@ class Q_CORE_EXPORT QDateTimeParser
 #ifndef QT_NO_DATESTRING
    StateNode parse(QString &input, int &cursorPosition, const QDateTime &currentValue, bool fixup) const;
 #endif
+
    int sectionMaxSize(int index) const;
    int sectionSize(int index) const;
    int sectionMaxSize(Section s, int count) const;
@@ -183,25 +184,27 @@ class Q_CORE_EXPORT QDateTimeParser
    QString sectionText(const QString &text, int sectionIndex, int index) const;
    int getDigit(const QDateTime &dt, int index) const;
    bool setDigit(QDateTime &t, int index, int newval) const;
+
    int parseSection(const QDateTime &currentValue, int sectionIndex, QString &txt, int &cursorPosition,
                     int index, QDateTimeParser::State &state, int *used = 0) const;
+
    int absoluteMax(int index, const QDateTime &value = QDateTime()) const;
    int absoluteMin(int index) const;
    bool parseFormat(const QString &format);
+
 #ifndef QT_NO_DATESTRING
    bool fromString(const QString &text, QDate *date, QTime *time) const;
 #endif
 
 #ifndef QT_NO_TEXTDATE
-   int findMonth(const QString &str1, int monthstart, int sectionIndex,
-                 QString *monthName = 0, int *used = 0) const;
-   int findDay(const QString &str1, int intDaystart, int sectionIndex,
-               QString *dayName = 0, int *used = 0) const;
+   int findMonth(const QString &str1, int monthstart, int sectionIndex, QString *monthName = 0, int *used = 0) const;
+
+   int findDay(const QString &str1, int intDaystart, int sectionIndex, QString *dayName = 0, int *used = 0) const;
 #endif
+
    int findAmPm(QString &str1, int index, int *used = 0) const;
    int maxChange(int s) const;
-   bool potentialValue(const QString &str, int min, int max, int index,
-                       const QDateTime &currentValue, int insert) const;
+   bool potentialValue(const QString &str, int min, int max, int index, const QDateTime &currentValue, int insert) const;
    bool skipToNextSection(int section, const QDateTime &current, const QString &sectionText) const;
    QString sectionName(int s) const;
    QString stateName(int s) const;
@@ -221,12 +224,14 @@ class Q_CORE_EXPORT QDateTimeParser
 
    virtual QDateTime getMinimum() const;
    virtual QDateTime getMaximum() const;
+
    virtual int cursorPosition() const {
       return -1;
    }
    virtual QString displayText() const {
       return text;
    }
+
    virtual QString getAmPmText(AmPm ap, Case cs) const;
    virtual QLocale locale() const {
       return defaultLocale;

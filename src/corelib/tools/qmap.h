@@ -379,6 +379,7 @@ class QMap
       }
       inline const_iterator() : i(0) { }
       inline const_iterator(QMapData::Node *node) : i(node) { }
+
 #ifdef QT_STRICT_ITERATORS
       explicit inline const_iterator(const iterator &o)
 #else
@@ -470,25 +471,32 @@ class QMap
       detach();
       return iterator(e->forward[0]);
    }
+
    inline const_iterator begin() const {
       return const_iterator(e->forward[0]);
    }
+
    inline const_iterator cbegin() const {
       return const_iterator(e->forward[0]);
    }
+
    inline const_iterator constBegin() const {
       return const_iterator(e->forward[0]);
    }
+
    inline iterator end() {
       detach();
       return iterator(e);
    }
+
    inline const_iterator end() const {
       return const_iterator(e);
    }
+
    inline const_iterator cend() const {
       return const_iterator(e);
    }
+
    inline const_iterator constEnd() const {
       return const_iterator(e);
    }
@@ -497,18 +505,23 @@ class QMap
    // more Qt
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
+
    inline int count() const {
       return d->size;
    }
+
    iterator find(const Key &key);
+
    const_iterator find(const Key &key) const;
    const_iterator constFind(const Key &key) const;
+
    iterator lowerBound(const Key &key);
    const_iterator lowerBound(const Key &key) const;
+
    iterator upperBound(const Key &key);
    const_iterator upperBound(const Key &key) const;
-   iterator insert(const Key &key, const T &value);
 
+   iterator insert(const Key &key, const T &value);
    iterator insertMulti(const Key &key, const T &value);
 
    QMap<Key, T> &unite(const QMap<Key, T> &other);

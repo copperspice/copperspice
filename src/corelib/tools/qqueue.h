@@ -36,18 +36,23 @@ class QQueue : public QList<T>
  public:
    inline QQueue() {}
    inline ~QQueue() {}
+
    inline void swap(QQueue<T> &other) {
       QList<T>::swap(other);   // prevent QList<->QQueue swaps
    }
+
    inline void enqueue(const T &t) {
       QList<T>::append(t);
    }
+
    inline T dequeue() {
       return QList<T>::takeFirst();
    }
+
    inline T &head() {
       return QList<T>::first();
    }
+
    inline const T &head() const {
       return QList<T>::first();
    }

@@ -73,15 +73,19 @@ class QVarLengthArray
       Q_ASSERT(s > 0);
       realloc(s - 1, a);
    }
+
    inline int size() const {
       return s;
    }
+
    inline int count() const {
       return s;
    }
+
    inline bool isEmpty() const {
       return (s == 0);
    }
+
    inline void resize(int size);
    inline void clear() {
       resize(0);
@@ -90,16 +94,19 @@ class QVarLengthArray
    inline int capacity() const {
       return a;
    }
+
    inline void reserve(int size);
 
    inline T &operator[](int idx) {
       Q_ASSERT(idx >= 0 && idx < s);
       return ptr[idx];
    }
+
    inline const T &operator[](int idx) const {
       Q_ASSERT(idx >= 0 && idx < s);
       return ptr[idx];
    }
+
    inline const T &at(int idx) const {
       return operator[](idx);
    }
@@ -361,6 +368,7 @@ Q_OUTOFLINE_TEMPLATE T QVarLengthArray<T, Prealloc>::value(int i) const
    }
    return at(i);
 }
+
 template <class T, int Prealloc>
 Q_OUTOFLINE_TEMPLATE T QVarLengthArray<T, Prealloc>::value(int i, const T &defaultValue) const
 {
@@ -373,24 +381,28 @@ inline void QVarLengthArray<T, Prealloc>::insert(int i, const T &t)
    Q_ASSERT_X(i >= 0 && i <= s, "QVarLengthArray::insert", "index out of range");
    insert(begin() + i, 1, t);
 }
+
 template <class T, int Prealloc>
 inline void QVarLengthArray<T, Prealloc>::insert(int i, int n, const T &t)
 {
    Q_ASSERT_X(i >= 0 && i <= s, "QVarLengthArray::insert", "index out of range");
    insert(begin() + i, n, t);
 }
+
 template <class T, int Prealloc>
 inline void QVarLengthArray<T, Prealloc>::remove(int i, int n)
 {
    Q_ASSERT_X(i >= 0 && n >= 0 && i + n <= s, "QVarLengthArray::remove", "index out of range");
    erase(begin() + i, begin() + i + n);
 }
+
 template <class T, int Prealloc>
 inline void QVarLengthArray<T, Prealloc>::remove(int i)
 {
    Q_ASSERT_X(i >= 0 && i < s, "QVarLengthArray::remove", "index out of range");
    erase(begin() + i, begin() + i + 1);
 }
+
 template <class T, int Prealloc>
 inline void QVarLengthArray<T, Prealloc>::prepend(const T &t)
 {
@@ -404,7 +416,6 @@ inline void QVarLengthArray<T, Prealloc>::replace(int i, const T &t)
    const T copy(t);
    data()[i] = copy;
 }
-
 
 template <class T, int Prealloc>
 Q_OUTOFLINE_TEMPLATE typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(

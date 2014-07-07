@@ -148,11 +148,10 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
 
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 #include <QtCore/qdebug.h>
+
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QLocalSocket::LocalSocketError);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QLocalSocket::LocalSocketState);
-#endif
 
 #endif // QT_NO_LOCALSOCKET
 

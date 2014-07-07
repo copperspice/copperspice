@@ -26,7 +26,7 @@
 #ifndef QPAGESETUPDialog_Unix_P_H
 #define QPAGESETUPDialog_Unix_P_H
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
@@ -45,7 +45,8 @@ class QPageSetupWidget : public QWidget
    QPageSetupWidget(QWidget *parent = 0);
    QPageSetupWidget(QPrinter *printer, QWidget *parent = 0);
    void setPrinter(QPrinter *printer);
-   /// copy information from the widget and apply that to the printer.
+
+   /// copy information from the widget and apply that to the printer
    void setupPrinter() const;
    void selectPrinter(QCUPSSupport *m_cups);
    void selectPdfPsPrinter(const QPrinter *p);
@@ -65,8 +66,7 @@ class QPageSetupWidget : public QWidget
    GUI_CS_SLOT_2(setLeftMargin)
    GUI_CS_SLOT_1(Private, void setRightMargin(double newValue))
    GUI_CS_SLOT_2(setRightMargin)
-
- private:
+ 
    Ui::QPageSetupWidget widget;
    QPagePreview *m_pagePreview;
    QPrinter *m_printer;

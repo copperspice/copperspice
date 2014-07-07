@@ -55,6 +55,7 @@ class QWSSharedMemory
    int shmId;
    void *shmBase;
    mutable int shmSize;
+
 #ifdef QT_POSIX_IPC
    int hand;
 #endif

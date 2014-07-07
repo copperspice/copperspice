@@ -30,7 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
 #ifndef QT_NO_QWS_KEYBOARD
 
 #ifndef QT_NO_QWS_KBD_UM

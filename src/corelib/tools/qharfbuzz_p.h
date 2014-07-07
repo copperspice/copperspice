@@ -33,8 +33,7 @@ QT_BEGIN_NAMESPACE
 
 // temporary forward until all the textengine code has been moved to QtCore
 Q_CORE_EXPORT void qGetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
-                                      const HB_ScriptItem *items, hb_uint32 numItems,
-                                      HB_CharAttributes *attributes);
+                                      const HB_ScriptItem *items, hb_uint32 numItems, HB_CharAttributes *attributes);
 
 Q_CORE_EXPORT HB_Bool qShapeItem(HB_ShaperItem *item);
 

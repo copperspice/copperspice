@@ -162,9 +162,11 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    QRgb color(int i) const;
    void setColor(int i, QRgb c);
+
 #ifdef QT_DEPRECATED
    QT_DEPRECATED void setNumColors(int);
 #endif
+
    void setColorCount(int);
 
    bool allGray() const;
@@ -173,6 +175,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    uchar *bits();
    const uchar *bits() const;
    const uchar *constBits() const;
+
 #ifdef QT_DEPRECATED
    QT_DEPRECATED int numBytes() const;
 #endif
@@ -259,6 +262,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    void setDotsPerMeterY(int);
    QPoint offset() const;
    void setOffset(const QPoint &);
+
 #ifndef QT_NO_IMAGE_TEXT
    QStringList textKeys() const;
    QString text(const QString &key = QString()) const;

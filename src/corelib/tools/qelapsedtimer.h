@@ -59,6 +59,7 @@ class Q_CORE_EXPORT QElapsedTimer
    bool operator==(const QElapsedTimer &other) const {
       return t1 == other.t1 && t2 == other.t2;
    }
+
    bool operator!=(const QElapsedTimer &other) const {
       return !(*this == other);
    }

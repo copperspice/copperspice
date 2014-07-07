@@ -39,7 +39,7 @@ class Q_CORE_EXPORT QDate
       DateFormat = 0,
       StandaloneFormat
    };
- public:
+ 
    QDate() {
       jd = 0;
    }
@@ -60,8 +60,7 @@ class Q_CORE_EXPORT QDate
    int weekNumber(int *yearNum = 0) const;
 
 #ifndef QT_NO_TEXTDATE
-
-   // ### Qt5/merge these functions.
+   // ### Qt5/merge these functions
    static QString shortMonthName(int month);
    static QString shortMonthName(int month, MonthNameType type);
    static QString shortDayName(int weekday);
@@ -171,10 +170,12 @@ class Q_CORE_EXPORT QTime
    int minute() const;
    int second() const;
    int msec() const;
+
 #ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
 #endif
+
    bool setHMS(int h, int m, int s, int ms = 0);
 
    QTime addSecs(int secs) const;
@@ -185,23 +186,29 @@ class Q_CORE_EXPORT QTime
    bool operator==(const QTime &other) const {
       return mds == other.mds;
    }
+
    bool operator!=(const QTime &other) const {
       return mds != other.mds;
    }
+
    bool operator<(const QTime &other) const {
       return mds < other.mds;
    }
+
    bool operator<=(const QTime &other) const {
       return mds <= other.mds;
    }
+
    bool operator>(const QTime &other) const {
       return mds > other.mds;
    }
+
    bool operator>=(const QTime &other) const {
       return mds >= other.mds;
    }
 
    static QTime currentTime();
+
 #ifndef QT_NO_DATESTRING
    static QTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QTime fromString(const QString &s, const QString &format);
@@ -211,6 +218,7 @@ class Q_CORE_EXPORT QTime
    void start();
    int restart();
    int elapsed() const;
+
  private:
    enum TimeFlag { NullTime = -1 };
    inline int ds() const {
@@ -220,6 +228,7 @@ class Q_CORE_EXPORT QTime
 
    friend class QDateTime;
    friend class QDateTimePrivate;
+
 #ifndef QT_NO_DATASTREAM
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
@@ -265,6 +274,7 @@ class Q_CORE_EXPORT QDateTime
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
 #endif
+
    QDateTime addDays(int days) const;
    QDateTime addMonths(int months) const;
    QDateTime addYears(int years) const;
@@ -275,6 +285,7 @@ class Q_CORE_EXPORT QDateTime
    inline QDateTime toLocalTime() const {
       return toTimeSpec(Qt::LocalTime);
    }
+
    inline QDateTime toUTC() const {
       return toTimeSpec(Qt::UTC);
    }
@@ -288,13 +299,16 @@ class Q_CORE_EXPORT QDateTime
    inline bool operator!=(const QDateTime &other) const {
       return !(*this == other);
    }
+
    bool operator<(const QDateTime &other) const;
    inline bool operator<=(const QDateTime &other) const {
       return !(other < *this);
    }
+
    inline bool operator>(const QDateTime &other) const {
       return other < *this;
    }
+
    inline bool operator>=(const QDateTime &other) const {
       return !(*this < other);
    }
@@ -329,6 +343,7 @@ class Q_CORE_EXPORT QDateTime
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
 #endif
 };
+
 Q_DECLARE_TYPEINFO(QDateTime, Q_MOVABLE_TYPE);
 
 #ifndef QT_NO_DATASTREAM
@@ -338,9 +353,9 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
-#endif // QT_NO_DATASTREAM
+#endif
 
-#if !defined(QT_NO_DEBUG_STREAM) && !defined(QT_NO_DATESTRING)
+#if ! defined(QT_NO_DATESTRING)
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDate &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);

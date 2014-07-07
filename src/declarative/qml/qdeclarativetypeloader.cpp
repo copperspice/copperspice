@@ -23,14 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativetypeloader_p.h"
-
-#include <private/qdeclarativeengine_p.h>
-#include <private/qdeclarativecompiler_p.h>
-#include <private/qdeclarativecomponent_p.h>
-#include <private/qdeclarativeglobal_p.h>
-#include <private/qdeclarativedebugtrace_p.h>
-
+#include <qdeclarativetypeloader_p.h>
+#include <qdeclarativeengine_p.h>
+#include <qdeclarativecompiler_p.h>
+#include <qdeclarativecomponent_p.h>
+#include <qdeclarativeglobal_p.h>
+#include <qdeclarativedebugtrace_p.h>
 #include <QtDeclarative/qdeclarativecomponent.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qdir.h>

@@ -26,7 +26,7 @@
 #ifndef QRESOURCE_P_H
 #define QRESOURCE_P_H
 
-#include "QtCore/qabstractfileengine.h"
+#include <QtCore/qabstractfileengine.h>
 
 QT_BEGIN_NAMESPACE
 

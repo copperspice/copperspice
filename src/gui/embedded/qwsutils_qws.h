@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 #define QWS_SOCK_SERVER_BASE QUnixSocketServer
 class QUnixSocket;
 class QUnixSocketServer;
+
 #else
 #define QWS_SOCK_BASE QTcpSocket
 #define QWS_SOCK_SERVER_BASE QTcpServer

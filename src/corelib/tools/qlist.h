@@ -547,7 +547,6 @@ class QList
       return tmp;
    }
 
-
  private:
    Node *detach_helper_grow(int i, int n);
    void detach_helper(int alloc);

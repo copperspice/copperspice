@@ -151,7 +151,6 @@ struct QByteArrayDataPtr {
 
 class Q_CORE_EXPORT QByteArray
 {
- private:
    typedef QTypedArrayData<char> Data;
 
  public:
@@ -389,6 +388,11 @@ class Q_CORE_EXPORT QByteArray
       : d(static_cast<Data *>(dd.ptr)) {
    }
 
+  typedef Data *DataPtr;
+   inline DataPtr &data_ptr() {
+      return d;
+   }
+
  private:
    operator QNoImplicitBoolCast() const;
    Data *d;
@@ -398,13 +402,7 @@ class Q_CORE_EXPORT QByteArray
 
    friend class QByteRef;
    friend class QString;
-   friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
-
- public:
-   typedef Data *DataPtr;
-   inline DataPtr &data_ptr() {
-      return d;
-   }
+   friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes); 
 };
 
 inline int QByteArray::size() const
@@ -835,7 +833,6 @@ inline QByteArray &QByteArray::setNum(float n, char f, int prec)
 {
    return setNum(double(n), f, prec);
 }
-
 
 #if !defined(QT_NO_DATASTREAM)
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);

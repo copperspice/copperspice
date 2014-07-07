@@ -298,6 +298,7 @@ class Q_GUI_EXPORT QGraphicsSceneMoveEvent : public QGraphicsSceneEvent
 {
    Q_DECLARE_PRIVATE(QGraphicsSceneMoveEvent)
    Q_DISABLE_COPY(QGraphicsSceneMoveEvent)
+
  public:
    QGraphicsSceneMoveEvent();
    ~QGraphicsSceneMoveEvent();

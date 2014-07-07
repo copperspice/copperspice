@@ -63,6 +63,7 @@ class Q_GUI_EXPORT QWSSignalHandler
    inline void removeWSLock(QWSLock *wslock) {
       wslocks.removeOne(wslock);
    }
+
 #endif
    inline void addObject(QObject *object) {
       (void)objects.add(object);
@@ -76,10 +77,12 @@ class Q_GUI_EXPORT QWSSignalHandler
    static void handleSignal(int signal);
 
    QHash<int, qt_sighandler_t> oldHandlers;
+
 #ifndef QT_NO_QWS_MULTIPROCESS
    QList<QLock *> locks;
    QList<QWSLock *> wslocks;
 #endif
+
    QObjectCleanupHandler objects;
 
    friend class QWSSignalHandlerPrivate;

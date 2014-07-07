@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qnetworkinterface.h"
-#include "qnetworkinterface_p.h"
-
-#include "qdebug.h"
-#include "qendian.h"
+#include <qnetworkinterface.h>
+#include <qnetworkinterface_p.h>
+#include <qdebug.h>
+#include <qendian.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
@@ -557,7 +556,6 @@ QList<QHostAddress> QNetworkInterface::allAddresses()
    return result;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 static inline QDebug flagsDebug(QDebug debug, QNetworkInterface::InterfaceFlags flags)
 {
    if (flags & QNetworkInterface::IsUp) {
@@ -606,7 +604,6 @@ QDebug operator<<(QDebug debug, const QNetworkInterface &networkInterface)
 
    return debug.space();
 }
-#endif
 
 QT_END_NAMESPACE
 

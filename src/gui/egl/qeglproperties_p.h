@@ -46,6 +46,7 @@ class Q_GUI_EXPORT QEglProperties
    int value(int name) const;
    void setValue(int name, int value);
    bool removeValue(int name);
+
    bool isEmpty() const {
       return props[0] == EGL_NONE;
    }
@@ -55,9 +56,11 @@ class Q_GUI_EXPORT QEglProperties
    }
 
    void setPixelFormat(QImage::Format pixelFormat);
+
 #ifdef Q_WS_X11
    void setVisualFormat(const QX11Info *xinfo);
 #endif
+
    void setDeviceType(int devType);
    void setPaintDeviceFormat(QPaintDevice *dev);
    void setRenderableType(QEgl::API api);

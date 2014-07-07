@@ -26,11 +26,12 @@
 #ifndef QEVENTTRANSITION_P_H
 #define QEVENTTRANSITION_P_H
 
-#include "qabstracttransition_p.h"
+#include <qabstracttransition_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QEventTransition;
+
 class Q_CORE_EXPORT QEventTransitionPrivate : public QAbstractTransitionPrivate
 {
    Q_DECLARE_PUBLIC(QEventTransition)

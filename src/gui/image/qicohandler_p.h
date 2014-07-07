@@ -53,7 +53,6 @@ class QIcoHandler: public QImageIOHandler
    QVariant option(ImageOption option) const;
 
  private:
-
    void setupReader() const;
 
    int m_currentIconIndex;

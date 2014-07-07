@@ -29,16 +29,14 @@
 
 #ifndef QT_NO_DBUS
 
-#if !defined(QDBUS_THREAD_DEBUG) && defined(QT_BUILD_INTERNAL)
-# define QDBUS_THREAD_DEBUG 1
-#endif
-
 #if QDBUS_THREAD_DEBUG
+
 QT_BEGIN_NAMESPACE
 typedef void (*qdbusThreadDebugFunc)(int, int, QDBusConnectionPrivate *);
 Q_DBUS_EXPORT void qdbusDefaultThreadDebug(int, int, QDBusConnectionPrivate *);
 extern Q_DBUS_EXPORT qdbusThreadDebugFunc qdbusThreadDebug;
 QT_END_NAMESPACE
+
 #endif
 
 enum ThreadAction {

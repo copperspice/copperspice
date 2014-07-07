@@ -26,8 +26,7 @@
 #ifndef QFILESYSTEMWATCHER_DNOTIFY_P_H
 #define QFILESYSTEMWATCHER_DNOTIFY_P_H
 
-
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 

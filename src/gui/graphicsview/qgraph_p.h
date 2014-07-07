@@ -127,6 +127,7 @@ class Graph
       // Creates a bidirectional edge
 
       if (edgeData(first, second)) {
+
 #ifdef QT_DEBUG
          qWarning("%s-%s already has an edge", qPrintable(first->toString()), qPrintable(second->toString()));
 #endif

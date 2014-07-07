@@ -26,7 +26,7 @@
 #ifndef QFILE_P_H
 #define QFILE_P_H
 
-#include "qfiledevice_p.h"
+#include <qfiledevice_p.h>
 
 QT_BEGIN_NAMESPACE
 

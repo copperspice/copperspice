@@ -26,13 +26,14 @@
 #ifndef QPPMHANDLER_P_H
 #define QPPMHANDLER_P_H
 
-#include "QtGui/qimageiohandler.h"
+#include <QtGui/qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_PPM
 
 QT_BEGIN_NAMESPACE
 
 class QByteArray;
+
 class QPpmHandler : public QImageIOHandler
 {
  public:

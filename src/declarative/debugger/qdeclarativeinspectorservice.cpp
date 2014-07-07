@@ -23,9 +23,8 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativeinspectorservice_p.h"
-#include "private/qdeclarativeinspectorinterface_p.h"
-
+#include <qdeclarativeinspectorservice_p.h>
+#include <qdeclarativeinspectorinterface_p.h>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

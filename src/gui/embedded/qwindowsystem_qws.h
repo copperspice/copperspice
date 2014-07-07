@@ -271,10 +271,12 @@ class Q_GUI_EXPORT QWSServer : public QObject
    static QWSMouseHandler *mouseHandler();
    static const QList<QWSMouseHandler *> &mouseHandlers();
    static void setMouseHandler(QWSMouseHandler *);
+
 #ifndef QT_NO_QWS_KEYBOARD
    static QWSKeyboardHandler *keyboardHandler();
    static void setKeyboardHandler(QWSKeyboardHandler *kh);
 #endif
+
    QWSWindow *windowAt(const QPoint &pos);
 
    const QList<QWSWindow *> &clientWindows();
@@ -283,6 +285,7 @@ class Q_GUI_EXPORT QWSServer : public QObject
    void closeMouse();
    void suspendMouse();
    void resumeMouse();
+
 #ifndef QT_NO_QWS_KEYBOARD
    void openKeyboard();
    void closeKeyboard();
@@ -370,7 +373,6 @@ class Q_GUI_EXPORT QWSServer : public QObject
    GUI_CS_SLOT_1(Private, void _q_screenSaverTimeout())
    GUI_CS_SLOT_2(_q_screenSaverTimeout)
 
-
 #ifndef QT_NO_QWS_MULTIPROCESS
    GUI_CS_SLOT_1(Private, void _q_newConnection())
    GUI_CS_SLOT_2(_q_newConnection)
@@ -383,6 +385,7 @@ class Q_GUI_EXPORT QWSServer : public QObject
 class Q_GUI_EXPORT QWSInputMethod : public QObject
 {
    CS_OBJECT(QWSInputMethod)
+
  public:
    QWSInputMethod();
    virtual ~QWSInputMethod();
@@ -474,9 +477,9 @@ class Q_GUI_EXPORT QWSClient : public QObject
 #endif
 
 #ifndef QT_NO_QWSEMBEDWIDGET
-   void sendEmbedEvent(int winid, QWSEmbedEvent::Type type,
-                       const QRegion &region = QRegion());
+   void sendEmbedEvent(int winid, QWSEmbedEvent::Type type, const QRegion &region = QRegion());
 #endif
+
    QWSCommand *readMoreCommand();
 
    int clientId() const {

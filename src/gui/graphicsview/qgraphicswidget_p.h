@@ -26,8 +26,8 @@
 #ifndef QGRAPHICSWIDGET_P_H
 #define QGRAPHICSWIDGET_P_H
 
-#include "qgraphicsitem_p.h"
-#include "qgraphicswidget.h"
+#include <qgraphicsitem_p.h>
+#include <qgraphicswidget.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qpalette.h>
 #include <QtGui/qsizepolicy.h>

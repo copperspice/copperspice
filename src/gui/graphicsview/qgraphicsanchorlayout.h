@@ -86,8 +86,7 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
    void addCornerAnchors(QGraphicsLayoutItem *firstItem, Qt::Corner firstCorner,
                          QGraphicsLayoutItem *secondItem, Qt::Corner secondCorner);
 
-   void addAnchors(QGraphicsLayoutItem *firstItem,
-                   QGraphicsLayoutItem *secondItem,
+   void addAnchors(QGraphicsLayoutItem *firstItem, QGraphicsLayoutItem *secondItem,
                    Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
 
    void setHorizontalSpacing(qreal spacing);

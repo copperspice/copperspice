@@ -282,8 +282,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
    virtual void drawBackground(QPainter *painter, const QRectF &rect);
    virtual void drawForeground(QPainter *painter, const QRectF &rect);
-   virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[],
-                          const QStyleOptionGraphicsItem options[]);
+   virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[]);
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsView)

@@ -74,13 +74,11 @@ class Q_CORE_EXPORT QMimeData : public QObject
 
  protected:
    virtual QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+   QScopedPointer<QMimeDataPrivate> d_ptr;
 
  private:
    Q_DISABLE_COPY(QMimeData)
-   Q_DECLARE_PRIVATE(QMimeData)
-
- protected:
-   QScopedPointer<QMimeDataPrivate> d_ptr;
+   Q_DECLARE_PRIVATE(QMimeData) 
 
 };
 

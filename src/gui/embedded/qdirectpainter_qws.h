@@ -68,7 +68,6 @@ class Q_GUI_EXPORT QDirectPainter : public QObject
    void raise();
    void lower();
 
-
    static QRegion reserveRegion(const QRegion &);
    static QRegion reservedRegion();
    static QRegion region() {

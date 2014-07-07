@@ -74,19 +74,10 @@ class Q_CORE_EXPORT QSize
 };
 Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
 
-/*****************************************************************************
-  QSize stream functions
- *****************************************************************************/
-
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
 #endif
-
-
-/*****************************************************************************
-  QSize inline functions
- *****************************************************************************/
 
 inline QSize::QSize()
 {
@@ -224,10 +215,7 @@ inline QSize QSize::boundedTo(const QSize &otherSize) const
    return QSize(qMin(wd, otherSize.wd), qMin(ht, otherSize.ht));
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QSize &);
-#endif
-
 
 class Q_CORE_EXPORT QSizeF
 {
@@ -277,19 +265,10 @@ class Q_CORE_EXPORT QSizeF
 Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
 
 
-/*****************************************************************************
-  QSizeF stream functions
- *****************************************************************************/
-
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSizeF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSizeF &);
 #endif
-
-
-/*****************************************************************************
-  QSizeF inline functions
- *****************************************************************************/
 
 inline QSizeF::QSizeF()
 {
@@ -437,9 +416,7 @@ inline QSize QSizeF::toSize() const
    return QSize(qRound(wd), qRound(ht));
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QSizeF &);
-#endif
 
 QT_END_NAMESPACE
 

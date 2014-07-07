@@ -26,16 +26,16 @@
 #ifndef QSETTINGS_P_H
 #define QSETTINGS_P_H
 
-#include "QtCore/qdatetime.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qmutex.h"
-#include "QtCore/qiodevice.h"
-#include "QtCore/qstack.h"
-#include "QtCore/qstringlist.h"
-#include "qscopedpointer_p.h"
+#include <QtCore/qdatetime.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qmutex.h>
+#include <QtCore/qiodevice.h>
+#include <QtCore/qstack.h>
+#include <QtCore/qstringlist.h>
+#include <qscopedpointer_p.h>
 
 #ifdef Q_OS_WIN
-#include "QtCore/qt_windows.h"
+#include <QtCore/qt_windows.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -66,6 +66,7 @@ class QSettingsKey : public QString
       return -1;
    }
 };
+
 #else
 static const Qt::CaseSensitivity IniCaseSensitivity = Qt::CaseInsensitive;
 
@@ -161,10 +162,12 @@ class QConfFile
    bool userPerms;
 
  private:
+
 #ifdef Q_DISABLE_COPY
    QConfFile(const QConfFile &);
    QConfFile &operator=(const QConfFile &);
 #endif
+
    QConfFile(const QString &name, bool _userPerms);
 
    friend class QConfFile_createsItself; // silences compiler warning
@@ -176,8 +179,7 @@ class QSettingsPrivate
 
  public:
    QSettingsPrivate(QSettings::Format format);
-   QSettingsPrivate(QSettings::Format format, QSettings::Scope scope,
-                    const QString &organization, const QString &application);
+   QSettingsPrivate(QSettings::Format format, QSettings::Scope scope, const QString &organization, const QString &application);
 
    virtual ~QSettingsPrivate();
 
@@ -218,9 +220,8 @@ class QSettingsPrivate
    static bool iniUnescapedKey(const QByteArray &key, int from, int to, QString &result);
    static void iniEscapedString(const QString &str, QByteArray &result, QTextCodec *codec);
    static void iniEscapedStringList(const QStringList &strs, QByteArray &result, QTextCodec *codec);
-   static bool iniUnescapedStringList(const QByteArray &str, int from, int to,
-                                      QString &stringResult, QStringList &stringListResult,
-                                      QTextCodec *codec);
+   static bool iniUnescapedStringList(const QByteArray &str, int from, int to, QString &stringResult, 
+                                      QStringList &stringListResult, QTextCodec *codec);
    static QStringList splitArgs(const QString &s, int idx);
 
    /*
@@ -250,15 +251,14 @@ class QSettingsPrivate
    bool pendingChanges;
    mutable QSettings::Status status;
 
- protected:
    QSettings *q_ptr;
 };
 
 class QConfFileSettingsPrivate : public QSettingsPrivate
 {
  public:
-   QConfFileSettingsPrivate(QSettings::Format format, QSettings::Scope scope,
-                            const QString &organization, const QString &application);
+   QConfFileSettingsPrivate(QSettings::Format format, QSettings::Scope scope, const QString &organization, const QString &application);
+
    QConfFileSettingsPrivate(const QString &fileName, QSettings::Format format);
    ~QConfFileSettingsPrivate();
 
@@ -275,20 +275,20 @@ class QConfFileSettingsPrivate : public QSettingsPrivate
    QString fileName() const;
 
    static bool readIniFile(const QByteArray &data, UnparsedSettingsMap *unparsedIniSections);
-   static bool readIniSection(const QSettingsKey &section, const QByteArray &data,
-                              ParsedSettingsMap *settingsMap, QTextCodec *codec);
-   static bool readIniLine(const QByteArray &data, int &dataPos, int &lineStart, int &lineLen,
-                           int &equalsPos);
+   static bool readIniSection(const QSettingsKey &section, const QByteArray &data, ParsedSettingsMap *settingsMap, QTextCodec *codec);
+   static bool readIniLine(const QByteArray &data, int &dataPos, int &lineStart, int &lineLen, int &equalsPos);
 
  private:
    void initFormat();
    void initAccess();
    void syncConfFile(int confFileNo);
    bool writeIniFile(QIODevice &device, const ParsedSettingsMap &map);
+
 #ifdef Q_OS_MAC
    bool readPlistFile(const QString &fileName, ParsedSettingsMap *map) const;
    bool writePlistFile(const QString &fileName, const ParsedSettingsMap &map) const;
 #endif
+
    void ensureAllSectionsParsed(QConfFile *confFile) const;
    void ensureSectionParsed(QConfFile *confFile, const QSettingsKey &key) const;
 

@@ -26,9 +26,9 @@
 #ifndef QCOREGLOBALDATA_P_H
 #define QCOREGLOBALDATA_P_H
 
-#include "QtCore/qmap.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qreadwritelock.h"
+#include <QtCore/qmap.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qreadwritelock.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -38,7 +38,6 @@ struct QCoreGlobalData {
 
    static QCoreGlobalData *instance();
 };
-
 
 QT_END_NAMESPACE
 #endif // QCOREGLOBALDATA_P_H

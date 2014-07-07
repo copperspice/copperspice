@@ -47,8 +47,7 @@ class Q_GUI_EXPORT QWSPointerCalibrationData
 class Q_GUI_EXPORT QWSMouseHandler
 {
  public:
-   explicit QWSMouseHandler(const QString &driver = QString(),
-                            const QString &device = QString());
+   explicit QWSMouseHandler(const QString &driver = QString(), const QString &device = QString());
    virtual ~QWSMouseHandler();
 
    virtual void clearCalibration() {}
@@ -60,6 +59,7 @@ class Q_GUI_EXPORT QWSMouseHandler
 
    void limitToScreen(QPoint &pt);
    void mouseChanged(const QPoint &pos, int bstate, int wheel = 0);
+
    const QPoint &pos() const {
       return mousePos;
    }
@@ -75,8 +75,7 @@ class Q_GUI_EXPORT QWSMouseHandler
 class Q_GUI_EXPORT QWSCalibratedMouseHandler : public QWSMouseHandler
 {
  public:
-   explicit QWSCalibratedMouseHandler(const QString &driver = QString(),
-                                      const QString &device = QString());
+   explicit QWSCalibratedMouseHandler(const QString &driver = QString(), const QString &device = QString());
 
    virtual void clearCalibration();
    virtual void calibrate(const QWSPointerCalibrationData *);

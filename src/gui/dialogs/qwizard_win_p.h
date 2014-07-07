@@ -70,12 +70,14 @@ class QVistaHelper : public QObject
    QVistaBackButton *backButton() const {
       return backButton_;
    }
+
    void disconnectBackButton();
    void hideBackButton() {
       if (backButton_) {
          backButton_->hide();
       }
    }
+
    void setWindowPosHack();
    QColor basicWindowFrameColor();
    enum VistaState { VistaAero, VistaBasic, Classic, Dirty };
@@ -83,10 +85,12 @@ class QVistaHelper : public QObject
    static int titleBarSize() {
       return frameSize() + captionSize();
    }
+
    static int topPadding() { // padding under text
       return int(QStyleHelper::dpiScaled(
                     QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7 ? 4 : 6));
    }
+
    static int topOffset();
 
  private:
@@ -97,6 +101,7 @@ class QVistaHelper : public QObject
    static int frameSize() {
       return GetSystemMetrics(SM_CYSIZEFRAME);
    }
+
    static int captionSize() {
       return GetSystemMetrics(SM_CYCAPTION);
    }

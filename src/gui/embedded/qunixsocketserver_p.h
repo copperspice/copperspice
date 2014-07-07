@@ -37,9 +37,7 @@ class Q_GUI_EXPORT QUnixSocketServer : public QObject
    CS_OBJECT(QUnixSocketServer)
 
  public:
-   enum ServerError { NoError, InvalidPath, ResourceError, BindError,
-                      ListenError
-                    };
+   enum ServerError { NoError, InvalidPath, ResourceError, BindError, ListenError };
 
    QUnixSocketServer(QObject *parent = 0);
    virtual ~QUnixSocketServer();
@@ -67,7 +65,6 @@ class Q_GUI_EXPORT QUnixSocketServer : public QObject
    friend class QUnixSocketServerPrivate;
    QUnixSocketServerPrivate *d;
 };
-
 
 QT_END_NAMESPACE
 #endif // QUNIXSOCKETSERVER_P_H

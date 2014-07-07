@@ -36,10 +36,8 @@ class Q_CORE_EXPORT QStringMatcher
 {
  public:
    QStringMatcher();
-   QStringMatcher(const QString &pattern,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
-   QStringMatcher(const QChar *uc, int len,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
+   QStringMatcher(const QString &pattern, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+   QStringMatcher(const QChar *uc, int len, Qt::CaseSensitivity cs = Qt::CaseSensitive);
    QStringMatcher(const QStringMatcher &other);
    ~QStringMatcher();
 
@@ -51,6 +49,7 @@ class Q_CORE_EXPORT QStringMatcher
    int indexIn(const QString &str, int from = 0) const;
    int indexIn(const QChar *str, int length, int from = 0) const;
    QString pattern() const;
+
    inline Qt::CaseSensitivity caseSensitivity() const {
       return q_cs;
    }

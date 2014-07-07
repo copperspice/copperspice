@@ -28,12 +28,12 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include "QtGui/qtreeview.h"
-#include "QtGui/qabstractproxymodel.h"
-#include "qcompleter.h"
-#include "QtGui/qitemdelegate.h"
-#include "QtGui/qpainter.h"
-#include "qabstractproxymodel_p.h"
+#include <QtGui/qtreeview.h>
+#include <QtGui/qabstractproxymodel.h>
+#include <qcompleter.h>
+#include <QtGui/qitemdelegate.h>
+#include <QtGui/qpainter.h>
+#include <qabstractproxymodel_p.h>
 
 QT_BEGIN_NAMESPACE
 

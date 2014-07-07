@@ -293,10 +293,6 @@ inline bool QPixmap::loadFromData(const QByteArray &buf, const char *format,
    return loadFromData(reinterpret_cast<const uchar *>(buf.constData()), buf.size(), format, flags);
 }
 
-/*****************************************************************************
- QPixmap stream functions
-*****************************************************************************/
-
 #if !defined(QT_NO_DATASTREAM)
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPixmap &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);

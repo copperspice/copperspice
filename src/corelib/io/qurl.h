@@ -63,9 +63,11 @@ class Q_CORE_EXPORT QUrl
    using FormattingOptions = QFlags<FormattingOption>;
 
    QUrl();
+
 #ifdef QT_NO_URL_CAST_FROM_STRING
    explicit
 #endif
+
    QUrl(const QString &url);
    QUrl(const QString &url, ParsingMode mode);
 

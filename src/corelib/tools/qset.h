@@ -40,6 +40,7 @@ class QSet
 
  public:
    inline QSet() {}
+
 #ifdef Q_COMPILER_INITIALIZER_LISTS
    inline QSet(std::initializer_list<T> list) {
       reserve(list.size());
@@ -48,6 +49,7 @@ class QSet
       }
    }
 #endif
+
    inline QSet(const QSet<T> &other) : q_hash(other.q_hash) {}
 
    inline QSet<T> &operator=(const QSet<T> &other) {
@@ -281,8 +283,7 @@ class QSet
    iterator erase(iterator i) {
       return q_hash.erase(reinterpret_cast<typename Hash::iterator &>(i));
    }
-
-   // more Qt
+   
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
    inline int count() const {

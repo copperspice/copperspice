@@ -23,54 +23,54 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qabstracteventdispatcher.h"
-#include "qaccessible.h"
-#include "qapplication.h"
-#include "qclipboard.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qdir.h"
-#include "qevent.h"
-#include "qfile.h"
-#include "qfileinfo.h"
-#include "qgraphicsscene.h"
-#include "qhash.h"
-#include "qset.h"
-#include "qlayout.h"
-#include "qsessionmanager.h"
-#include "qstyle.h"
-#include "qstylefactory.h"
-#include "qtextcodec.h"
-#include "qtranslator.h"
-#include "qvariant.h"
-#include "qwidget.h"
-#include "qdnd_p.h"
-#include "qcolormap.h"
-#include "qdebug.h"
-#include "qgraphicssystemfactory_p.h"
-#include "qgraphicssystem_p.h"
-#include "qstylesheetstyle_p.h"
-#include "qstyle_p.h"
-#include "qmessagebox.h"
+#include <qplatformdefs.h>
+#include <qabstracteventdispatcher.h>
+#include <qaccessible.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qdir.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qgraphicsscene.h>
+#include <qhash.h>
+#include <qset.h>
+#include <qlayout.h>
+#include <qsessionmanager.h>
+#include <qstyle.h>
+#include <qstylefactory.h>
+#include <qtextcodec.h>
+#include <qtranslator.h>
+#include <qvariant.h>
+#include <qwidget.h>
+#include <qdnd_p.h>
+#include <qcolormap.h>
+#include <qdebug.h>
+#include <qgraphicssystemfactory_p.h>
+#include <qgraphicssystem_p.h>
+#include <qstylesheetstyle_p.h>
+#include <qstyle_p.h>
+#include <qmessagebox.h>
 #include <QtGui/qgraphicsproxywidget.h>
 
 #ifdef QT_GRAPHICSSYSTEM_RUNTIME
-#include "qgraphicssystem_runtime_p.h"
+#include <qgraphicssystem_runtime_p.h>
 #endif
 
-#include "qinputcontext.h"
-#include "qkeymapper_p.h"
+#include <qinputcontext.h>
+#include <qkeymapper_p.h>
 
 #ifdef Q_WS_X11
 #include <qt_x11_p.h>
 #endif
 
 #if defined(Q_WS_X11)
-#include "qinputcontextfactory.h"
+#include <qinputcontextfactory.h>
 #endif
 
-#include "qguiplatformplugin_p.h"
+#include <qguiplatformplugin_p.h>
 
 #include <qthread.h>
 #include <stdlib.h>
@@ -81,14 +81,14 @@
 #include <link.h>
 #endif
 
-#include "qapplication_p.h"
-#include "qevent_p.h"
-#include "qwidget_p.h"
-#include "qapplication.h"
-#include "qgesture.h"
-#include "qlibrary.h"
-#include "qdatetime.h"
-#include "qgesturemanager_p.h"
+#include <qapplication_p.h>
+#include <qevent_p.h>
+#include <qwidget_p.h>
+#include <qapplication.h>
+#include <qgesture.h>
+#include <qlibrary.h>
+#include <qdatetime.h>
+#include <qgesturemanager_p.h>
 
 #ifdef Q_OS_MAC
 #include <qt_cocoa_helpers_mac_p.h>
@@ -317,8 +317,10 @@ void QApplicationPrivate::process_cmdline()
          // obsolete argument
       } else if (arg.indexOf("-style=", 0) != -1) {
          s = QString::fromLocal8Bit(arg.right(arg.length() - 7).toLower());
+
       } else if (arg == "-style" && i < argc - 1) {
          s = QString::fromLocal8Bit(argv[++i]).toLower();
+
 #ifndef QT_NO_SESSIONMANAGER
       } else if (arg == "-session" && i < argc - 1) {
          ++i;
@@ -332,10 +334,12 @@ void QApplicationPrivate::process_cmdline()
             is_session_restored = true;
          }
 #endif
+
 #ifndef QT_NO_STYLE_STYLESHEET
       } else if (arg == "-stylesheet" && i < argc - 1) {
          styleSheet = QLatin1String("file:///");
          styleSheet.append(QString::fromLocal8Bit(argv[++i]));
+
       } else if (arg.indexOf("-stylesheet=") != -1) {
          styleSheet = QLatin1String("file:///");
          styleSheet.append(QString::fromLocal8Bit(arg.right(arg.length() - 12)));
@@ -343,12 +347,16 @@ void QApplicationPrivate::process_cmdline()
       } else if (qstrcmp(arg, "-reverse") == 0) {
          force_reverse = true;
          QApplication::setLayoutDirection(Qt::RightToLeft);
+
       } else if (qstrcmp(arg, "-widgetcount") == 0) {
          widgetCount = true;
+
       } else if (qstrcmp(arg, "-testability") == 0) {
          load_testability = true;
+
       } else if (arg == "-graphicssystem" && i < argc - 1) {
          graphics_system_name = QString::fromLocal8Bit(argv[++i]);
+
       } else {
          argv[j++] = argv[i];
       }
@@ -367,13 +375,6 @@ void QApplicationPrivate::process_cmdline()
    }
 }
 
-QApplication::QApplication(int &argc, char **argv)
-   : QCoreApplication(*new QApplicationPrivate(argc, argv, GuiClient, 0x040000))
-{
-   Q_D(QApplication);
-   d->construct();
-}
-
 QApplication::QApplication(int &argc, char **argv, int _internal)
    : QCoreApplication(*new QApplicationPrivate(argc, argv, GuiClient, _internal))
 {
@@ -381,63 +382,8 @@ QApplication::QApplication(int &argc, char **argv, int _internal)
    d->construct();
 }
 
-
-/*!
-    Constructs an application object with \a argc command line arguments in
-    \a argv. If \a GUIenabled is true, a GUI application is constructed,
-    otherwise a non-GUI (console) application is created.
-
-    \warning The data referred to by \a argc and \a argv must stay valid for
-    the entire lifetime of the QApplication object. In addition, \a argc must
-    be greater than zero and \a argv must contain at least one valid character
-    string.
-
-    Set \a GUIenabled to false for programs without a graphical user interface
-    that should be able to run without a window system.
-
-    On X11, the window system is initialized if \a GUIenabled is true. If
-    \a GUIenabled is false, the application does not connect to the X server.
-    On Windows and Mac OS, currently the window system is always initialized,
-    regardless of the value of GUIenabled. This may change in future versions
-    of Qt.
-
-    The following example shows how to create an application that uses a
-    graphical interface when available.
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 0
-*/
-
-QApplication::QApplication(int &argc, char **argv, bool GUIenabled )
-   : QCoreApplication(*new QApplicationPrivate(argc, argv, GUIenabled ? GuiClient : Tty, 0x040000))
-{
-   Q_D(QApplication);
-   d->construct();
-}
-
 QApplication::QApplication(int &argc, char **argv, bool GUIenabled , int _internal)
    : QCoreApplication(*new QApplicationPrivate(argc, argv, GUIenabled ? GuiClient : Tty, _internal))
-{
-   Q_D(QApplication);
-   d->construct();
-}
-
-
-
-/*!
-    Constructs an application object with \a argc command line arguments in
-    \a argv.
-
-    \warning The data referred to by \a argc and \a argv must stay valid for
-    the entire lifetime of the QApplication object. In addition, \a argc must
-    be greater than zero and \a argv must contain at least one valid character
-    string.
-
-    With Qt for Embedded Linux, passing QApplication::GuiServer for \a type
-    makes this application the server (equivalent to running with the
-    \c -qws option).
-*/
-QApplication::QApplication(int &argc, char **argv, Type type)
-   : QCoreApplication(*new QApplicationPrivate(argc, argv, type, 0x040000))
 {
    Q_D(QApplication);
    d->construct();
@@ -1069,30 +1015,24 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 
 #endif // QT_NO_STYLE_STYLESHEET
 
-/*!
-    Returns the application's style object.
 
-    \sa setStyle(), QStyle
-*/
 QStyle *QApplication::style()
 {
    if (QApplicationPrivate::app_style) {
       return QApplicationPrivate::app_style;
    }
-   if (!qt_is_gui_used) {
-      Q_ASSERT(!"No style available in non-gui applications!");
+
+   if (! qt_is_gui_used) {
+      Q_ASSERT("No style available in non-gui applications" && 0);
       return 0;
    }
 
    if (!QApplicationPrivate::app_style) {
       // Compile-time search for default style
-      //
+      
       QString style;
-#ifdef QT_BUILD_INTERNAL
-      QString envStyle = QString::fromLocal8Bit(qgetenv("QT_STYLE_OVERRIDE"));
-#else
       QString envStyle;
-#endif
+
       if (!QApplicationPrivate::styleOverride.isEmpty()) {
          style = QApplicationPrivate::styleOverride;
       } else if (!envStyle.isEmpty()) {
@@ -1103,7 +1043,8 @@ QStyle *QApplication::style()
 
       QStyle *&app_style = QApplicationPrivate::app_style;
       app_style = QStyleFactory::create(style);
-      if (!app_style) {
+
+      if (! app_style) {
          QStringList styles = QStyleFactory::keys();
          for (int i = 0; i < styles.size(); ++i) {
             if ((app_style = QStyleFactory::create(styles.at(i)))) {
@@ -1112,7 +1053,7 @@ QStyle *QApplication::style()
          }
       }
       if (!app_style) {
-         Q_ASSERT(!"No styles available!");
+         Q_ASSERT("No styles available" && 0);
          return 0;
       }
    }

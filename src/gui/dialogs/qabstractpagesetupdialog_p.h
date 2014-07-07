@@ -26,13 +26,13 @@
 #ifndef QABSTRACTPAGESETUPDIALOG_P_H
 #define QABSTRACTPAGESETUPDIALOG_P_H
 
-#include "qdialog_p.h"
+#include <qdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "qbytearray.h"
-#include "qpagesetupdialog.h"
-#include "qpointer.h"
+#include <qbytearray.h>
+#include <qpagesetupdialog.h>
+#include <qpointer.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -52,15 +52,12 @@ class Q_GUI_EXPORT QPixmapData
    virtual QPixmapData *createCompatiblePixmapData() const;
 
    virtual void resize(int width, int height) = 0;
-   virtual void fromImage(const QImage &image,
-                          Qt::ImageConversionFlags flags) = 0;
-   virtual void fromImageReader(QImageReader *imageReader,
-                                Qt::ImageConversionFlags flags);
+   virtual void fromImage(const QImage &image, Qt::ImageConversionFlags flags) = 0;
+   virtual void fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags);
 
-   virtual bool fromFile(const QString &filename, const char *format,
-                         Qt::ImageConversionFlags flags);
-   virtual bool fromData(const uchar *buffer, uint len, const char *format,
-                         Qt::ImageConversionFlags flags);
+   virtual bool fromFile(const QString &filename, const char *format, Qt::ImageConversionFlags flags);
+
+   virtual bool fromData(const uchar *buffer, uint len, const char *format, Qt::ImageConversionFlags flags);
 
    virtual void copy(const QPixmapData *data, const QRect &rect);
    virtual bool scroll(int dx, int dy, const QRect &rect);
@@ -70,8 +67,7 @@ class Q_GUI_EXPORT QPixmapData
    virtual QBitmap mask() const;
    virtual void setMask(const QBitmap &mask);
    virtual bool hasAlphaChannel() const = 0;
-   virtual QPixmap transformed(const QTransform &matrix,
-                               Qt::TransformationMode mode) const;
+   virtual QPixmap transformed(const QTransform &matrix,Qt::TransformationMode mode) const;
    virtual void setAlphaChannel(const QPixmap &alphaChannel);
    virtual QPixmap alphaChannel() const;
    virtual QImage toImage() const = 0;
@@ -126,7 +122,6 @@ class Q_GUI_EXPORT QPixmapData
    }
 
  protected:
-
    void setSerialNumber(int serNo);
    int w;
    int h;
@@ -155,6 +150,7 @@ class Q_GUI_EXPORT QPixmapData
 #  if defined(Q_OS_WIN)
 #    define QT_XFORM_TYPE_WINDOWSPIXMAP 2
 #  endif
+
 extern bool qt_xForm_helper(const QTransform &, int, int, int, uchar *, int, int, int, const uchar *, int, int, int);
 
 QT_END_NAMESPACE

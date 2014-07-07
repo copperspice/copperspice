@@ -26,17 +26,17 @@
 #ifndef QCORECMDLINEARGS_P_H
 #define QCORECMDLINEARGS_P_H
 
-#include "QtCore/qstring.h"
-#include "QtCore/qstringlist.h"
+#include <QtCore/qstring.h>
+#include <QtCore/qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 
 #if defined(Q_OS_WIN32)
 
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "QtCore/qvector.h"
+# include <QtCore/qvector.h>
 # if defined(Q_OS_WIN32)
-#  include "qt_windows.h"
+#  include <qt_windows.h>
 # endif
 QT_END_INCLUDE_NAMESPACE
 
@@ -53,7 +53,7 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
    argc = 0;
 
    while (*p && p < p_end) {                                // parse cmd line arguments
-      while (QChar((short)(*p)).isSpace()) {                        // skip white space
+      while (QChar((short)(*p)).isSpace()) {                // skip white space
          p++;
       }
       if (*p && p < p_end) {                                // arg starts
@@ -131,7 +131,8 @@ static inline QStringList qCmdLineArgs(int argc, char *argv[])
    return qWinCmdArgs(cmdLine);
 }
 #endif
-#else  // !Q_OS_WIN
+
+#else 
 
 static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {

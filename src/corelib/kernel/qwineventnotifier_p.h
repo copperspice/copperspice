@@ -26,8 +26,8 @@
 #ifndef QWINEVENTNOTIFIER_P_H
 #define QWINEVENTNOTIFIER_P_H
 
-#include "QtCore/qobject.h"
-#include "QtCore/qt_windows.h"
+#include <QtCore/qobject.h>
+#include <QtCore/qt_windows.h>
 
 QT_BEGIN_NAMESPACE
 

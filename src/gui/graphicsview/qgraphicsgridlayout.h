@@ -31,7 +31,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsGridLayoutPrivate;
 
@@ -42,8 +42,7 @@ class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
    QGraphicsGridLayout(QGraphicsLayoutItem *parent = 0);
    virtual ~QGraphicsGridLayout();
 
-   void addItem(QGraphicsLayoutItem *item, int row, int column, int rowSpan, int columnSpan,
-                Qt::Alignment alignment = 0);
+   void addItem(QGraphicsLayoutItem *item, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = 0);
    inline void addItem(QGraphicsLayoutItem *item, int row, int column, Qt::Alignment alignment = 0);
 
    void setHorizontalSpacing(qreal spacing);

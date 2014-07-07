@@ -23,19 +23,16 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativefontloader_p.h"
-
+#include <qdeclarativefontloader_p.h>
 #include <qdeclarativecontext.h>
 #include <qdeclarativeengine.h>
-
 #include <QStringList>
 #include <QUrl>
 #include <QDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QFontDatabase>
-
-#include <private/qdeclarativeengine_p.h>
+#include <qdeclarativeengine_p.h>
 #include <qdeclarativeinfo.h>
 
 QT_BEGIN_NAMESPACE

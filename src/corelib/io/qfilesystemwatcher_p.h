@@ -26,7 +26,7 @@
 #ifndef QFILESYSTEMWATCHER_P_H
 #define QFILESYSTEMWATCHER_P_H
 
-#include "qfilesystemwatcher.h"
+#include <qfilesystemwatcher.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 

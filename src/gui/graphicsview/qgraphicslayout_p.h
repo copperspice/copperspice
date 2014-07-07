@@ -30,8 +30,8 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include "qgraphicslayout.h"
-#include "qgraphicslayoutitem_p.h"
+#include <qgraphicslayout.h>
+#include <qgraphicslayoutitem_p.h>
 #include <QtGui/qstyle.h>
 #include <QtGui/qwidget.h>
 #include <QtGui/qstyleoption.h>
@@ -59,6 +59,7 @@ class QLayoutStyleInfo
    inline QLayoutStyleInfo() {
       invalidate();
    }
+
    inline QLayoutStyleInfo(QStyle *style, QWidget *widget)
       : m_valid(true), m_style(style), m_widget(widget) {
       Q_ASSERT(style);
@@ -78,6 +79,7 @@ class QLayoutStyleInfo
    inline QStyle *style() const {
       return m_style;
    }
+
    inline QWidget *widget() const {
       return m_widget;
    }
@@ -85,6 +87,7 @@ class QLayoutStyleInfo
    inline bool operator==(const QLayoutStyleInfo &other) {
       return m_style == other.m_style && m_widget == other.m_widget;
    }
+
    inline bool operator!=(const QLayoutStyleInfo &other) {
       return !(*this == other);
    }
@@ -99,12 +102,12 @@ class QLayoutStyleInfo
       return m_defaultSpacing[o - 1];
    }
 
-   inline qreal perItemSpacing(QSizePolicy::ControlType control1,
-                               QSizePolicy::ControlType control2,
-                               Qt::Orientation orientation) const {
+   inline qreal perItemSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation) const
+   {
       Q_ASSERT(style());
       return style()->layoutSpacing(control1, control2, orientation, &m_styleOption, widget());
    }
+
  private:
    bool m_valid;
    QStyle *m_style;
@@ -118,8 +121,8 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsLayout)
 
  public:
-   QGraphicsLayoutPrivate() : QGraphicsLayoutItemPrivate(0, true), left(-1.0), top(-1.0), right(-1.0), bottom(-1.0),
-      activated(true) { }
+   QGraphicsLayoutPrivate() : QGraphicsLayoutItemPrivate(0, true), left(-1.0), top(-1.0), right(-1.0), bottom(-1.0), activated(true)
+   { }
 
    void reparentChildItems(QGraphicsItem *newParent);
    void getMargin(qreal *result, qreal userMargin, QStyle::PixelMetric pm) const;

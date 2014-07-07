@@ -73,14 +73,12 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    typedef bool(*EventFilter)(void *message);
    EventFilter setEventFilter(EventFilter filter);
    bool filterEvent(void *message);
-
- public:
+ 
    CORE_CS_SIGNAL_1(Public, void aboutToBlock())
    CORE_CS_SIGNAL_2(aboutToBlock)
    CORE_CS_SIGNAL_1(Public, void awake())
    CORE_CS_SIGNAL_2(awake)
 
- protected:
    QAbstractEventDispatcher(QAbstractEventDispatcherPrivate &, QObject *parent);
 
  protected:

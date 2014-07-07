@@ -42,7 +42,7 @@
 #include <exception>
 #include <errno.h>
 
-#if defined(Q_OS_MAC) && !defined(Q_OS_IOS)
+#if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
 #endif
 

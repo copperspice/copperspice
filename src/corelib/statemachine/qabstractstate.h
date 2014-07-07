@@ -62,12 +62,12 @@ class Q_CORE_EXPORT QAbstractState : public QObject
    bool event(QEvent *e);
    QAbstractState(QAbstractStatePrivate &dd, QState *parent);
 
+   QScopedPointer<QAbstractStatePrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QAbstractState)
    Q_DECLARE_PRIVATE(QAbstractState)
-
- protected:
-   QScopedPointer<QAbstractStatePrivate> d_ptr;
+  
 };
 
 #endif //QT_NO_STATEMACHINE

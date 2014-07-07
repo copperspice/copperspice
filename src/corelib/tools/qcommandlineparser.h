@@ -23,19 +23,17 @@
 *
 ***********************************************************************/
 
-
-/****************************************************************************
+/**********************************************************************
 **
 ** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
 ** Contact: http://www.qt-project.org/legal
 **
-****************************************************************************/
+***********************************************************************/
 
 #ifndef QCOMMANDLINEPARSER_H
 #define QCOMMANDLINEPARSER_H
 
 #include <QtCore/qstringlist.h>
-
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qcommandlineoption.h>
 
@@ -47,6 +45,7 @@ class QCoreApplication;
 class Q_CORE_EXPORT QCommandLineParser
 {
    Q_DECLARE_TR_FUNCTIONS(QCommandLineParser)
+
  public:
    QCommandLineParser();
    ~QCommandLineParser();

@@ -179,6 +179,7 @@ template <typename X, typename Y> struct QScopedArrayEnsureSameType;
 template <typename X> struct QScopedArrayEnsureSameType<X, X> {
    typedef X *Type;
 };
+
 template <typename X> struct QScopedArrayEnsureSameType<const X, X> {
    typedef X *Type;
 };

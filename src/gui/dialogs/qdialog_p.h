@@ -26,11 +26,11 @@
 #ifndef QDIALOG_P_H
 #define QDIALOG_P_H
 
-#include "qwidget_p.h"
-#include "QtCore/qeventloop.h"
-#include "QtCore/qpointer.h"
-#include "QtGui/qdialog.h"
-#include "QtGui/qpushbutton.h"
+#include <qwidget_p.h>
+#include <QtCore/qeventloop.h>
+#include <QtCore/qpointer.h>
+#include <QtGui/qdialog.h>
+#include <QtGui/qpushbutton.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,6 +39,7 @@ class QSizeGrip;
 class QDialogPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QDialog)
+
  public:
 
    QDialogPrivate()
@@ -55,10 +56,12 @@ class QDialogPrivate : public QWidgetPrivate
    QWidget *extension;
    bool doShowExtension;
    QSize size, min, max;
+
 #ifndef QT_NO_SIZEGRIP
    QSizeGrip *resizer;
    bool sizeGripEnabled;
 #endif
+
    QPoint lastRMBPress;
 
    void setDefault(QPushButton *);

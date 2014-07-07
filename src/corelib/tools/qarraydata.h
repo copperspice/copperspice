@@ -105,8 +105,7 @@ struct Q_CORE_EXPORT QArrayData {
 Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::AllocationOptions)
 
 template <class T>
-struct QTypedArrayData
-      : QArrayData {
+struct QTypedArrayData : QArrayData {
    typedef T *iterator;
    typedef const T *const_iterator;
 
@@ -136,8 +135,7 @@ struct QTypedArrayData
       T data;
    };
 
-   static QTypedArrayData *allocate(size_t capacity,
-                                    AllocationOptions options = Default) Q_REQUIRED_RESULT {
+   static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) Q_REQUIRED_RESULT {
       return static_cast<QTypedArrayData *>(QArrayData::allocate(sizeof(T),
       Q_ALIGNOF(AlignmentDummy), capacity, options));
    }
@@ -146,8 +144,7 @@ struct QTypedArrayData
       QArrayData::deallocate(data, sizeof(T), Q_ALIGNOF(AlignmentDummy));
    }
 
-   static QTypedArrayData *fromRawData(const T *data, size_t n,
-                                       AllocationOptions options = Default) {
+   static QTypedArrayData *fromRawData(const T *data, size_t n, AllocationOptions options = Default) {
       QTypedArrayData *result = allocate(0, options | RawData);
       if (result) {
          Q_ASSERT(!result->ref.isShared()); // No shared empty, please!

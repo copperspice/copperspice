@@ -31,7 +31,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_QWS_KEYBOARD) && !defined(QT_NO_QWS_KBD_QNX)
+#if ! defined(QT_NO_QWS_KEYBOARD) && ! defined(QT_NO_QWS_KBD_QNX)
 
 class Q_GUI_EXPORT QWSQnxKeyboardHandler : public QObject, public QWSKeyboardHandler
 {

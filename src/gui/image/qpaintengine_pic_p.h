@@ -26,7 +26,7 @@
 #ifndef QPAINTENGINE_PIC_P_H
 #define QPAINTENGINE_PIC_P_H
 
-#include "QtGui/qpaintengine.h"
+#include <QtGui/qpaintengine.h>
 
 #ifndef QT_NO_PICTURE
 
@@ -38,6 +38,7 @@ class QBuffer;
 class QPicturePaintEngine : public QPaintEngine
 {
    Q_DECLARE_PRIVATE(QPicturePaintEngine)
+
  public:
    QPicturePaintEngine();
    ~QPicturePaintEngine();

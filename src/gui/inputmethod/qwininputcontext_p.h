@@ -30,8 +30,8 @@
 
 #ifndef QT_NO_IM
 
-#include "QtGui/qinputcontext.h"
-#include "QtCore/qt_windows.h"
+#include <QtGui/qinputcontext.h>
+#include <QtCore/qt_windows.h>
 
 #if !defined(IMR_RECONVERTSTRING)
 typedef struct tagRECONVERTSTRING {
@@ -51,6 +51,7 @@ QT_BEGIN_NAMESPACE
 class QWinInputContext : public QInputContext
 {
    CS_OBJECT(QWinInputContext)
+
  public:
    explicit QWinInputContext(QObject *parent = 0);
    virtual ~QWinInputContext();

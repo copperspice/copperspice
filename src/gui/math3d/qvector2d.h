@@ -91,6 +91,7 @@ class Q_GUI_EXPORT QVector2D
 #ifndef QT_NO_VECTOR3D
    QVector3D toVector3D() const;
 #endif
+
 #ifndef QT_NO_VECTOR4D
    QVector4D toVector4D() const;
 #endif

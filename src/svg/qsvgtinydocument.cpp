@@ -59,11 +59,7 @@ QSvgTinyDocument::~QSvgTinyDocument()
 }
 
 #ifndef QT_NO_COMPRESS
-#   ifdef QT_BUILD_INTERNAL
-QByteArray qt_inflateGZipDataFrom(QIODevice *device);
-#   else
 static QByteArray qt_inflateGZipDataFrom(QIODevice *device);
-#   endif
 
 QByteArray qt_inflateGZipDataFrom(QIODevice *device)
 {

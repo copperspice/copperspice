@@ -29,8 +29,10 @@
 #include <QtCore/qstring.h>
 
 #if defined(Q_OS_WIN)
+
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
+
 typedef struct _GUID {
    ulong   Data1;
    ushort  Data2;
@@ -38,6 +40,7 @@ typedef struct _GUID {
    uchar   Data4[8];
 } GUID, *REFGUID, *LPGUID;
 #endif
+
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -47,18 +50,18 @@ class Q_CORE_EXPORT QUuid
  public:
    enum Variant {
       VarUnknown        = -1,
-      NCS                = 0, // 0 - -
-      DCE                = 2, // 1 0 -
-      Microsoft        = 6, // 1 1 0
-      Reserved        = 7  // 1 1 1
+      NCS               = 0, // 0 - -
+      DCE               = 2, // 1 0 -
+      Microsoft         = 6, // 1 1 0
+      Reserved          = 7  // 1 1 1
    };
 
    enum Version {
       VerUnknown        = -1,
-      Time                = 1, // 0 0 0 1
-      EmbeddedPOSIX        = 2, // 0 0 1 0
-      Name                = 3, // 0 0 1 1
-      Random                = 4  // 0 1 0 0
+      Time              = 1, // 0 0 0 1
+      EmbeddedPOSIX     = 2, // 0 0 1 0
+      Name              = 3, // 0 0 1 1
+      Random            = 4  // 0 1 0 0
    };
 
    QUuid() {
@@ -82,16 +85,20 @@ class Q_CORE_EXPORT QUuid
       data4[6] = b7;
       data4[7] = b8;
    }
+
 #ifndef QT_NO_QUUID_STRING
    QUuid(const QString &);
    QUuid(const char *);
    QString toString() const;
+
    operator QString() const {
       return toString();   // ### Qt5/remove
    }
+
    QUuid(const QByteArray &);
    QByteArray toByteArray() const;
 #endif
+
    QByteArray toRfc4122() const;
    static QUuid fromRfc4122(const QByteArray &);
    bool isNull() const;

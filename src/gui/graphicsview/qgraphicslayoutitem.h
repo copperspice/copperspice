@@ -47,6 +47,7 @@ class Q_GUI_EXPORT QGraphicsLayoutItem
    void setSizePolicy(const QSizePolicy &policy);
    void setSizePolicy(QSizePolicy::Policy hPolicy, QSizePolicy::Policy vPolicy,
                       QSizePolicy::ControlType controlType = QSizePolicy::DefaultType);
+
    QSizePolicy sizePolicy() const;
 
    void setMinimumSize(const QSizeF &size);

@@ -51,6 +51,7 @@ class QTiffHandler : public QImageIOHandler
       NoCompression = 0,
       LzwCompression = 1
    };
+
  private:
    void convert32BitOrder(void *buffer, int width);
    void convert32BitOrderBigEndian(void *buffer, int width);

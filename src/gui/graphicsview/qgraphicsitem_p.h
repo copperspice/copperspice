@@ -26,16 +26,16 @@
 #ifndef QGRAPHICSITEM_P_H
 #define QGRAPHICSITEM_P_H
 
-#include "qgraphicsitem.h"
-#include "qset.h"
-#include "qpixmapcache.h"
+#include <qgraphicsitem.h>
+#include <qset.h>
+#include <qpixmapcache.h>
 #include <qgraphicsview_p.h>
-#include "qgraphicstransform.h"
+#include <qgraphicstransform.h>
 #include <qgraphicstransform_p.h>
 #include <qgraphicseffect_p.h>
 #include <qgraphicseffect.h>
 #include <QtCore/qpoint.h>
-#include "qdeclarativelistproperty.h"
+#include <qdeclarativelistproperty.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -197,21 +197,22 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
                              bool ignoreDirtyBit = false, bool ignoreOpacity = false) const;
    virtual void transformChanged() {}
    int depth() const;
+
 #ifndef QT_NO_GRAPHICSEFFECT
    enum InvalidateReason {
       OpacityChanged
    };
    void invalidateParentGraphicsEffectsRecursively();
    void invalidateChildGraphicsEffectsRecursively(InvalidateReason reason);
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
    void invalidateDepthRecursively();
    void resolveDepth();
    void addChild(QGraphicsItem *child);
    void removeChild(QGraphicsItem *child);
 
    QDeclarativeListProperty<QGraphicsObject> childrenList() const;
-   void setParentItemHelper(QGraphicsItem *parent, const QVariant *newParentVariant,
-                            const QVariant *thisPointerVariant);
+   void setParentItemHelper(QGraphicsItem *parent, const QVariant *newParentVariant, const QVariant *thisPointerVariant);
 
    void childrenBoundingRectHelper(QTransform *x, QRectF *rect, QGraphicsItem *topMostEffectItem);
 
@@ -447,6 +448,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    QGraphicsItem *focusScopeItem;
    Qt::InputMethodHints imHints;
    QGraphicsItem::PanelModality panelModality;
+
 #ifndef QT_NO_GESTURES
    QMap<Qt::GestureType, Qt::GestureFlags> gestureContext;
 #endif

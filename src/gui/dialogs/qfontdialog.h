@@ -116,7 +116,6 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_updateSample())
    GUI_CS_SLOT_2(_q_updateSample)
 
-
 #if defined(Q_OS_MAC)
    GUI_CS_SLOT_1(Private, void _q_macRunNativeAppModalPanel())
    GUI_CS_SLOT_2(_q_macRunNativeAppModalPanel)

@@ -65,7 +65,6 @@ class Q_GUI_EXPORT QUnixPrintWidget : public QWidget
 };
 #endif
 
-
 class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 {
    CS_OBJECT(QPrintDialog)

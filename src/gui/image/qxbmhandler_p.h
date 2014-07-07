@@ -26,7 +26,7 @@
 #ifndef QXBMHANDLER_P_H
 #define QXBMHANDLER_P_H
 
-#include "QtGui/qimageiohandler.h"
+#include <QtGui/qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XBM
 

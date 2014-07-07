@@ -23,11 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativepropertymap.h"
-
-#include <private/qmetaobjectbuilder_p.h>
-#include "private/qdeclarativeopenmetaobject_p.h"
-
+#include <qdeclarativepropertymap.h>
+#include <qmetaobjectbuilder_p.h>
+#include <qdeclarativeopenmetaobject_p.h>
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE

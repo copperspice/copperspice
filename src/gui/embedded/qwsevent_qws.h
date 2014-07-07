@@ -40,8 +40,6 @@ struct QWSEvent : QWSProtocolItem {
 
    QWSEvent(int t, int len, char *ptr) : QWSProtocolItem(t, len, ptr) {}
 
-
-
    enum Type {
       NoEvent,
       Connected,
@@ -84,8 +82,7 @@ struct QWSEvent : QWSProtocolItem {
 
 struct QWSConnectedEvent : QWSEvent {
    QWSConnectedEvent()
-      : QWSEvent(QWSEvent::Connected, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::Connected, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
 
    void setData(const char *d, int len, bool allocateMem = true) {
       QWSEvent::setData(d, len, allocateMem);
@@ -113,8 +110,7 @@ struct QWSMaxWindowRectEvent : QWSEvent {
 
 struct QWSMouseEvent : QWSEvent {
    QWSMouseEvent()
-      : QWSEvent(QWSEvent::Mouse, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::Mouse, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int window;
       int x_root, y_root, state, delta;
@@ -135,8 +131,7 @@ struct QWSFocusEvent : QWSEvent {
 
 struct QWSKeyEvent: QWSEvent {
    QWSKeyEvent()
-      : QWSEvent(QWSEvent::Key, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::Key, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int window;
       uint keycode;
@@ -150,8 +145,7 @@ struct QWSKeyEvent: QWSEvent {
 
 struct QWSCreationEvent : QWSEvent {
    QWSCreationEvent()
-      : QWSEvent(QWSEvent::Creation, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::Creation, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int objectid;
       int count;
@@ -161,8 +155,7 @@ struct QWSCreationEvent : QWSEvent {
 #ifndef QT_NO_QWS_PROPERTIES
 struct QWSPropertyNotifyEvent : QWSEvent {
    QWSPropertyNotifyEvent()
-      : QWSEvent(QWSEvent::PropertyNotify, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::PropertyNotify, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    enum State {
       PropertyNewValue,
       PropertyDeleted
@@ -177,8 +170,7 @@ struct QWSPropertyNotifyEvent : QWSEvent {
 
 struct QWSSelectionClearEvent : QWSEvent {
    QWSSelectionClearEvent()
-      : QWSEvent(QWSEvent::SelectionClear, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::SelectionClear, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int window;
    } simpleData;
@@ -186,8 +178,7 @@ struct QWSSelectionClearEvent : QWSEvent {
 
 struct QWSSelectionRequestEvent : QWSEvent {
    QWSSelectionRequestEvent()
-      : QWSEvent(QWSEvent::SelectionRequest, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::SelectionRequest, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int window;
       int requestor; // window which wants the selection
@@ -199,8 +190,7 @@ struct QWSSelectionRequestEvent : QWSEvent {
 
 struct QWSSelectionNotifyEvent : QWSEvent {
    QWSSelectionNotifyEvent()
-      : QWSEvent(QWSEvent::SelectionNotify, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {}
+      : QWSEvent(QWSEvent::SelectionNotify, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {}
    struct SimpleData {
       int window;
       int requestor; // the window which wanted the selection and to which this event is sent
@@ -213,8 +203,7 @@ struct QWSSelectionNotifyEvent : QWSEvent {
 
 struct QWSRegionEvent : QWSEvent {
    QWSRegionEvent()
-      : QWSEvent(QWSEvent::Region, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {
+      : QWSEvent(QWSEvent::Region, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {
       memset(reinterpret_cast<char *>(&simpleData), 0, sizeof(simpleData));
    }
 
@@ -225,14 +214,15 @@ struct QWSRegionEvent : QWSEvent {
 
    void setData(int winId, const QRegion &region, uint type) {
       const QVector<QRect> rects = region.rects();
-      setData(reinterpret_cast<const char *>(rects.constData()),
-              rects.size() * sizeof(QRect));
+      setData(reinterpret_cast<const char *>(rects.constData()), rects.size() * sizeof(QRect));
       simpleData.window = winId;
       simpleData.nrectangles = rects.size();
       simpleData.type = type;
+
 #ifdef QT_QWS_CLIENTBLIT
       simpleData.id = 0;
 #endif
+
    }
 
    enum Type {Allocation
@@ -309,8 +299,7 @@ struct QWSPropertyReplyEvent : QWSEvent {
 #ifndef QT_NO_COP
 struct QWSQCopMessageEvent : QWSEvent {
    QWSQCopMessageEvent()
-      : QWSEvent(QWSEvent::QCopMessage, sizeof(simpleData),
-                 reinterpret_cast<char *>(&simpleData)) {
+      : QWSEvent(QWSEvent::QCopMessage, sizeof(simpleData), reinterpret_cast<char *>(&simpleData)) {
       memset(reinterpret_cast<char *>(&simpleData), 0, sizeof(simpleData));
    }
 

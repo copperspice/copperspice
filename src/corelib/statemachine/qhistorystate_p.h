@@ -26,7 +26,7 @@
 #ifndef QHISTORYSTATE_P_H
 #define QHISTORYSTATE_P_H
 
-#include "qabstractstate_p.h"
+#include <qabstractstate_p.h>
 #include <QtCore/qlist.h>
 
 QT_BEGIN_NAMESPACE

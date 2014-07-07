@@ -23,18 +23,14 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativespringanimation_p.h"
-#include "private/qdeclarativeanimation_p_p.h"
-
+#include <qdeclarativespringanimation_p.h>
+#include <qdeclarativeanimation_p_p.h>
 #include <qdeclarativeproperty_p.h>
-
 #include <QtCore/qdebug.h>
-
 #include <limits.h>
 #include <math.h>
 
 QT_BEGIN_NAMESPACE
-
 
 class QDeclarativeSpringAnimationPrivate : public QDeclarativePropertyAnimationPrivate
 {

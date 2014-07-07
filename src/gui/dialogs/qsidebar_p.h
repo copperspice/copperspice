@@ -41,8 +41,7 @@ class QSideBarDelegate : public QStyledItemDelegate
 {
  public:
    QSideBarDelegate(QWidget *parent = 0) : QStyledItemDelegate(parent) {}
-   void initStyleOption(QStyleOptionViewItem *option,
-                        const QModelIndex &index) const;
+   void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const;
 };
 
 class QUrlModel : public QStandardItemModel

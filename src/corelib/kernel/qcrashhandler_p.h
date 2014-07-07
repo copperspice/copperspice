@@ -38,6 +38,7 @@ class Q_CORE_EXPORT QSegfaultHandler
 {
    friend void qt_signal_handler(int);
    static QtCrashHandler callback;
+
  public:
    static void initialize(char **, int);
 

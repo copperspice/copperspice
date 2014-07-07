@@ -30,7 +30,6 @@
 #define QTHREAD_H
 
 #include <QScopedPointer>
-
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
@@ -76,7 +75,6 @@ class Q_CORE_EXPORT QThread : public QObject
 
    void exit(int retcode = 0);
 
- public :
    CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
    CORE_CS_SLOT_2(start)
    CORE_CS_SLOT_1(Public, void terminate())

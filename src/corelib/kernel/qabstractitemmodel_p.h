@@ -26,9 +26,9 @@
 #ifndef QABSTRACTITEMMODEL_P_H
 #define QABSTRACTITEMMODEL_P_H
 
-#include "QtCore/qstack.h"
-#include "QtCore/qset.h"
-#include "QtCore/qhash.h"
+#include <QtCore/qstack.h>
+#include <QtCore/qset.h>
+#include <QtCore/qhash.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -56,6 +56,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    void removePersistentIndexData(QPersistentModelIndexData *data);
    void movePersistentIndexes(QVector<QPersistentModelIndexData *> indexes, int change,
                               const QModelIndex &parent, Qt::Orientation orientation);
+
    void rowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
    void rowsInserted(const QModelIndex &parent, int first, int last);
    void rowsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
@@ -69,8 +70,10 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
 
    void itemsAboutToBeMoved(const QModelIndex &srcParent, int srcFirst, int srcLast,
                             const QModelIndex &destinationParent, int destinationChild, Qt::Orientation);
+
    void itemsMoved(const QModelIndex &srcParent, int srcFirst, int srcLast,
                    const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
+
    bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast,
                   const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
 

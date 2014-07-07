@@ -26,12 +26,12 @@
 #ifndef QWSMANAGER_P_H
 #define QWSMANAGER_P_H
 
-#include "QtGui/qregion.h"
-#include "QtGui/qdecoration_qws.h"
+#include <QtGui/qregion.h>
+#include <QtGui/qdecoration_qws.h>
 
 #ifndef QT_NO_QWS_MANAGER
 
-#include "QtCore/qhash.h"
+#include <QtCore/qhash.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -69,6 +69,7 @@ class QWSManagerPrivate
    int previousRegionType;
    bool previousRegionRepainted; // Hover/Press handled
    bool entireDecorationNeedsRepaint;
+
    struct RegionCaching {
       int regionType;
       QRegion region;
@@ -81,9 +82,7 @@ class QWSManagerPrivate
       return cached_region.regionType;
    }
 
-   void dirtyRegion(int decorationRegion,
-                    QDecoration::DecorationState state,
-                    const QRegion &clip = QRegion());
+   void dirtyRegion(int decorationRegion, QDecoration::DecorationState state, const QRegion &clip = QRegion());
    void clearDirtyRegions();
 
    QList<int> dirtyRegions;

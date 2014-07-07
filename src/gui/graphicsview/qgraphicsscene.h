@@ -186,8 +186,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    // ### obsolete
    QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
 
-   QList<QGraphicsItem *> collidingItems(const QGraphicsItem *item,
-                                         Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   QList<QGraphicsItem *> collidingItems(const QGraphicsItem *item, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
 
    // ### obsolete
    QGraphicsItem *itemAt(const QPointF &pos) const;
@@ -235,8 +234,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    QGraphicsSimpleTextItem *addSimpleText(const QString &text, const QFont &font = QFont());
    QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags wFlags = 0);
 
-   inline QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(),
-                                           const QBrush &brush = QBrush()) {
+   inline QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(), const QBrush &brush = QBrush()) {
       return addEllipse(QRectF(x, y, w, h), pen, brush);
    }
 
@@ -323,6 +321,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
  protected:
    bool event(QEvent *event);
    bool eventFilter(QObject *watched, QEvent *event);
+
    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
@@ -344,6 +343,8 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    virtual void drawForeground(QPainter *painter, const QRectF &rect);
    virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[],
                           const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
+
+   QScopedPointer<QGraphicsScenePrivate> d_ptr;
 
    GUI_CS_SLOT_1(Protected, bool focusNextPrevChild(bool next))
    GUI_CS_SLOT_2(focusNextPrevChild)
@@ -381,10 +382,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 #ifndef QT_NO_GESTURES
    friend class QGesture;
 #endif
-
- protected:
-   QScopedPointer<QGraphicsScenePrivate> d_ptr;
-
+  
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsScene::SceneLayers)

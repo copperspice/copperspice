@@ -84,12 +84,15 @@ class RefCount
    inline bool operator==(int value) const {
       return atomic.load() == value;
    }
+
    inline bool operator!=(int value) const {
       return atomic.load() != value;
    }
+
    inline bool operator!() const {
       return !atomic.load();
    }
+
    inline operator int() const {
       return atomic.load();
    }

@@ -75,7 +75,6 @@ class QLibraryPrivate
 
    bool isPlugin(QSettings *settings = 0);
 
-
  private:
    explicit QLibraryPrivate(const QString &canonicalFileName, const QString &version);
    ~QLibraryPrivate();

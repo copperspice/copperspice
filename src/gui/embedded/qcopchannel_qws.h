@@ -28,7 +28,6 @@
 
 #include <QtCore/qobject.h>
 
-
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_COP

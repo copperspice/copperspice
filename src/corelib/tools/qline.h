@@ -175,9 +175,7 @@ inline bool QLine::operator==(const QLine &d) const
    return pt1 == d.pt1 && pt2 == d.pt2;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QLine &p);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLine &);
@@ -376,17 +374,12 @@ inline void QLineF::setLine(qreal aX1, qreal aY1, qreal aX2, qreal aY2)
    pt2 = QPointF(aX2, aY2);
 }
 
-
 inline bool QLineF::operator==(const QLineF &d) const
 {
    return pt1 == d.pt1 && pt2 == d.pt2;
 }
 
-
-
-#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QLineF &p);
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLineF &);

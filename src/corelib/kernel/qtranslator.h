@@ -46,30 +46,25 @@ class Q_CORE_EXPORT QTranslator : public QObject
    ~QTranslator();
 
    // ### Qt5/Merge (with "int n = -1")
-   virtual QString translate(const char *context, const char *sourceText,
-                             const char *disambiguation = 0) const;
-   QString translate(const char *context, const char *sourceText, const char *disambiguation,
-                     int n) const;
+   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = 0) const;
+   QString translate(const char *context, const char *sourceText, const char *disambiguation, int n) const;
 
    virtual bool isEmpty() const;
 
-   bool load(const QString &filename,
-             const QString &directory = QString(),
-             const QString &search_delimiters = QString(),
+   bool load(const QString &filename, const QString &directory = QString(), const QString &search_delimiters = QString(),
              const QString &suffix = QString());
-   bool load(const QLocale &locale,
-             const QString &filename,
-             const QString &prefix = QString(),
-             const QString &directory = QString(),
+ 
+   bool load(const QLocale &locale, const QString &filename, const QString &prefix = QString(), const QString &directory = QString(),
              const QString &suffix = QString());
+
    bool load(const uchar *data, int len);
+
+ protected:
+   QScopedPointer<QTranslatorPrivate> d_ptr;
 
  private:
    Q_DISABLE_COPY(QTranslator)
    Q_DECLARE_PRIVATE(QTranslator)
-
- protected:
-   QScopedPointer<QTranslatorPrivate> d_ptr;
 
 };
 

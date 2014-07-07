@@ -26,14 +26,12 @@
 #ifndef QFSCOMPLETER_P_H
 #define QFSCOMPLETER_P_H
 
-#include "qcompleter.h"
+#include <qcompleter.h>
 #include <QtGui/qfilesystemmodel.h>
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_FSCOMPLETER
 
-/*!
-    QCompleter that can deal with QFileSystemModel
-  */
+//  QCompleter which can deal with QFileSystemModel
 class QFSCompleter :  public QCompleter
 {
  public:
@@ -51,5 +49,6 @@ class QFSCompleter :  public QCompleter
 };
 #endif // QT_NO_FSCOMPLETER
 QT_END_NAMESPACE
+
 #endif // QFSCOMPLETOR_P_H
 

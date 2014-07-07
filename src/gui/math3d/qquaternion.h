@@ -58,6 +58,7 @@ class Q_GUI_EXPORT QQuaternion
    QVector3D vector() const;
    void setVector(const QVector3D &vector);
 #endif
+
    void setVector(qreal x, qreal y, qreal z);
 
    qreal x() const;

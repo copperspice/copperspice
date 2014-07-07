@@ -26,7 +26,7 @@
 #ifndef QFILESYSTEMMETADATA_P_H
 #define QFILESYSTEMMETADATA_P_H
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 #include <QtCore/qglobal.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qabstractfileengine.h>
@@ -178,9 +178,11 @@ class QFileSystemMetaData
    bool isSequential() const               {
       return (entryFlags & SequentialType);
    }
+
    bool isHidden() const                   {
       return (entryFlags & HiddenAttribute);
    }
+
 #if defined(Q_OS_WIN)
    bool isLnkFile() const                  {
       return (entryFlags & WinLnkType);
@@ -218,6 +220,7 @@ class QFileSystemMetaData
    inline void fillFromFindData(WIN32_FIND_DATA &findData, bool setLinkType = false, bool isDriveRoot = false);
    inline void fillFromFindInfo(BY_HANDLE_FILE_INFORMATION &fileInfo);
 #endif
+
  private:
    friend class QFileSystemEngine;
 

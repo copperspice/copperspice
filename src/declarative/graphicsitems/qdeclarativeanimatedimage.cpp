@@ -263,24 +263,25 @@ void QDeclarativeAnimatedImage::movieRequestFinished()
    d->redirectCount = 0;
 
    d->_movie = new QMovie(d->reply);
-   if (!d->_movie->isValid()) {
-#ifndef QT_NO_DEBUG_STREAM
+
+   if (! d->_movie->isValid()) {
       qmlInfo(this) << "Error Reading Animated Image File " << d->url;
-#endif
+
       delete d->_movie;
       d->_movie = 0;
       d->status = Error;
       emit statusChanged(d->status);
       return;
    }
-   connect(d->_movie, SIGNAL(stateChanged(QMovie::MovieState)),
-           this, SLOT(playingStatusChanged()));
-   connect(d->_movie, SIGNAL(frameChanged(int)),
-           this, SLOT(movieUpdate()));
+
+   connect(d->_movie, SIGNAL(stateChanged(QMovie::MovieState)), this, SLOT(playingStatusChanged()));
+   connect(d->_movie, SIGNAL(frameChanged(int)), this, SLOT(movieUpdate()));
    d->_movie->setCacheMode(QMovie::CacheAll);
+
    if (d->playing) {
       d->_movie->start();
    }
+
    if (d->paused || !d->playing) {
       d->_movie->jumpToFrame(d->preset_currentframe);
       d->preset_currentframe = 0;

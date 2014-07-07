@@ -26,8 +26,8 @@
 #ifndef QGRAPHICSPROXYWIDGET_P_H
 #define QGRAPHICSPROXYWIDGET_P_H
 
-#include "qgraphicsproxywidget.h"
-#include "qgraphicswidget_p.h"
+#include <qgraphicsproxywidget.h>
+#include <qgraphicswidget_p.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -36,6 +36,7 @@ QT_BEGIN_NAMESPACE
 class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsProxyWidget)
+
  public:
    QGraphicsProxyWidgetPrivate()
       : dragDropWidget(0),
@@ -48,6 +49,7 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
         tooltipChangeMode(NoMode),
         focusFromWidgetToProxy(0) {
    }
+
    void init();
    void sendWidgetMouseEvent(QGraphicsSceneMouseEvent *event);
    void sendWidgetMouseEvent(QGraphicsSceneHoverEvent *event);
@@ -85,6 +87,7 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
       ProxyToWidgetMode,
       WidgetToProxyMode
    };
+
    quint32 posChangeMode : 2;
    quint32 sizeChangeMode : 2;
    quint32 visibleChangeMode : 2;

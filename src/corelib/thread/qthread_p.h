@@ -26,12 +26,12 @@
 #ifndef QTHREAD_P_H
 #define QTHREAD_P_H
 
-#include "qplatformdefs.h"
-#include "QtCore/qthread.h"
-#include "QtCore/qmutex.h"
-#include "QtCore/qstack.h"
-#include "QtCore/qwaitcondition.h"
-#include "QtCore/qmap.h"
+#include <qplatformdefs.h>
+#include <QtCore/qthread.h>
+#include <QtCore/qmutex.h>
+#include <QtCore/qstack.h>
+#include <QtCore/qwaitcondition.h>
+#include <QtCore/qmap.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -95,8 +95,9 @@ class QPostEventList : public QList<QPostEvent>
          insert(at, ev);
       }
    }
+
  private:
-   //hides because they do not keep that list sorted. addEvent must be used
+   // hides because they do not keep that list sorted. addEvent must be used
    using QList<QPostEvent>::append;
    using QList<QPostEvent>::insert;
 };
@@ -146,7 +147,6 @@ class QThreadPrivate
 # endif
 
    QThreadData *data;
-
    static void createEventDispatcher(QThreadData *data);
 
  protected:
@@ -196,6 +196,7 @@ class QThreadData
 class QScopedLoopLevelCounter
 {
    QThreadData *threadData;
+
  public:
    inline QScopedLoopLevelCounter(QThreadData *threadData)
       : threadData(threadData) {

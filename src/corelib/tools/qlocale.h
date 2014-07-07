@@ -834,10 +834,12 @@ inline QString QLocale::toString(float i, char f, int prec) const
 {
    return toString(double(i), f, prec);
 }
+
 inline bool QLocale::operator==(const QLocale &other) const
 {
    return d() == other.d() && numberOptions() == other.numberOptions();
 }
+
 inline bool QLocale::operator!=(const QLocale &other) const
 {
    return d() != other.d() || numberOptions() != other.numberOptions();
@@ -847,18 +849,22 @@ inline QString QLocale::toCurrencyString(short i, const QString &symbol) const
 {
    return toCurrencyString(qlonglong(i), symbol);
 }
+
 inline QString QLocale::toCurrencyString(ushort i, const QString &symbol) const
 {
    return toCurrencyString(qulonglong(i), symbol);
 }
+
 inline QString QLocale::toCurrencyString(int i, const QString &symbol) const
 {
    return toCurrencyString(qlonglong(i), symbol);
 }
+
 inline QString QLocale::toCurrencyString(uint i, const QString &symbol) const
 {
    return toCurrencyString(qulonglong(i), symbol);
 }
+
 inline QString QLocale::toCurrencyString(float i, const QString &symbol) const
 {
    return toCurrencyString(double(i), symbol);

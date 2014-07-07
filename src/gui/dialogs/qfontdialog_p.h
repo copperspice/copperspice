@@ -26,9 +26,9 @@
 #ifndef QFONTDIALOG_P_H
 #define QFONTDIALOG_P_H
 
-#include "qdialog_p.h"
-#include "qfontdatabase.h"
-#include "qfontdialog.h"
+#include <qdialog_p.h>
+#include <qfontdatabase.h>
+#include <qfontdialog.h>
 
 #ifndef QT_NO_FONTDIALOG
 
@@ -56,8 +56,8 @@ class QFontDialogPrivate : public QDialogPrivate
    void updateStyles();
    void updateSizes();
 
-   static QFont getFont(bool *ok, const QFont &initial, QWidget *parent,
-                        const QString &title, QFontDialog::FontDialogOptions options);
+   static QFont getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title, 
+                        QFontDialog::FontDialogOptions options);
 
    void init();
    void _q_sizeChanged(const QString &);
@@ -116,6 +116,7 @@ class QFontDialogPrivate : public QDialogPrivate
    inline void done(int result) {
       q_func()->done(result);
    }
+
    inline QFontDialog *fontDialog() {
       return q_func();
    }

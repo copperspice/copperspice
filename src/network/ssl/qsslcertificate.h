@@ -44,7 +44,9 @@ class QIODevice;
 class QSslKey;
 class QStringList;
 class QSslCertificatePrivate;
-template <typename T, typename U> class QMultiMap;
+
+template <typename T, typename U>
+class QMultiMap;
 
 class Q_NETWORK_EXPORT QSslCertificate
 {
@@ -62,10 +64,13 @@ class Q_NETWORK_EXPORT QSslCertificate
    QSslCertificate(QIODevice *device, QSsl::EncodingFormat format = QSsl::Pem);
    QSslCertificate( // ### s/encoded/data (to be consistent with signature in .cpp file) ?
       const QByteArray &encoded = QByteArray(), QSsl::EncodingFormat format = QSsl::Pem);
+
    QSslCertificate(const QSslCertificate &other);
    ~QSslCertificate();
+
    QSslCertificate &operator=(const QSslCertificate &other);
    bool operator==(const QSslCertificate &other) const;
+
    inline bool operator!=(const QSslCertificate &other) const {
       return !operator==(other);
    }
@@ -90,13 +95,11 @@ class Q_NETWORK_EXPORT QSslCertificate
    QByteArray toPem() const;
    QByteArray toDer() const;
 
-   static QList<QSslCertificate> fromPath(
-      const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-      QRegExp::PatternSyntax syntax = QRegExp::FixedString);
-   static QList<QSslCertificate> fromDevice(
-      QIODevice *device, QSsl::EncodingFormat format = QSsl::Pem);
-   static QList<QSslCertificate> fromData(
-      const QByteArray &data, QSsl::EncodingFormat format = QSsl::Pem);
+   static QList<QSslCertificate> fromPath(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
+         QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+
+   static QList<QSslCertificate> fromDevice(QIODevice *device, QSsl::EncodingFormat format = QSsl::Pem);
+   static QList<QSslCertificate> fromData(const QByteArray &data, QSsl::EncodingFormat format = QSsl::Pem);
 
    Qt::HANDLE handle() const;
 
@@ -106,11 +109,9 @@ class Q_NETWORK_EXPORT QSslCertificate
    friend class QSslSocketBackendPrivate;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info);
-#endif
 
 #endif // QT_NO_OPENSSL
 

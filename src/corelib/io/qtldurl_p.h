@@ -26,8 +26,8 @@
 #ifndef QTLDURL_P_H
 #define QTLDURL_P_H
 
-#include "QtCore/qurl.h"
-#include "QtCore/qstring.h"
+#include <QtCore/qurl.h>
+#include <QtCore/qstring.h>
 
 QT_BEGIN_NAMESPACE
 

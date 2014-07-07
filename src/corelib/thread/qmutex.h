@@ -78,6 +78,7 @@ class Q_CORE_EXPORT QMutex : public QBasicMutex
    enum RecursionMode { NonRecursive, Recursive };
    explicit QMutex(RecursionMode mode = NonRecursive);
    ~QMutex();
+
  private:
    Q_DISABLE_COPY(QMutex)
 };

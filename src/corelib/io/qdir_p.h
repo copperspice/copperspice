@@ -26,8 +26,8 @@
 #ifndef QDIR_P_H
 #define QDIR_P_H
 
-#include "qfilesystementry_p.h"
-#include "qfilesystemmetadata_p.h"
+#include <qfilesystementry_p.h>
+#include <qfilesystemmetadata_p.h>
 
 QT_BEGIN_NAMESPACE
 

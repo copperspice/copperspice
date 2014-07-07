@@ -75,6 +75,7 @@ struct Q_GUI_EXPORT QImageData {        // internal image data
 #ifndef QT_NO_IMAGE_TEXT
    QMap<QString, QString> text;
 #endif
+
    bool doImageIO(const QImage *image, QImageWriter *io, int quality) const;
 
    QPaintEngine *paintEngine;

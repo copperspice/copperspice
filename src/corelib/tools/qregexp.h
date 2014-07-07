@@ -49,8 +49,7 @@ class Q_CORE_EXPORT QRegExp
    enum CaretMode { CaretAtZero, CaretAtOffset, CaretWontMatch };
 
    QRegExp();
-   explicit QRegExp(const QString &pattern, Qt::CaseSensitivity cs = Qt::CaseSensitive,
-                    PatternSyntax syntax = RegExp);
+   explicit QRegExp(const QString &pattern, Qt::CaseSensitivity cs = Qt::CaseSensitive, PatternSyntax syntax = RegExp);
    QRegExp(const QRegExp &rx);
    ~QRegExp();
    QRegExp &operator=(const QRegExp &rx);
@@ -93,6 +92,7 @@ class Q_CORE_EXPORT QRegExp
 #ifdef QT_DEPRECATED
    QT_DEPRECATED int numCaptures() const;
 #endif
+
    int captureCount() const;
    QStringList capturedTexts() const;
    QStringList capturedTexts();

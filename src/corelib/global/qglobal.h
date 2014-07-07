@@ -36,7 +36,7 @@
 
 // useage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 0, 0))
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
-
+ 
 #define QT_PACKAGEDATE_STR "YYYY-MM-DD"
 #define QT_PACKAGE_TAG ""
 
@@ -1213,19 +1213,8 @@ inline QDebug qDebug();
 inline QDebug qWarning();
 inline QDebug qCritical();
 
-#ifdef QT_NO_WARNING_OUTPUT
-inline QNoDebug qWarning();
-#endif
-
-#define QT_NO_QDEBUG_MACRO while (false) qDebug
-#ifdef QT_NO_DEBUG_OUTPUT
-#  define qDebug QT_NO_QDEBUG_MACRO
-#endif
-
+#define QT_NO_QDEBUG_MACRO   while (false) qDebug
 #define QT_NO_QWARNING_MACRO while (false) qWarning
-#ifdef QT_NO_WARNING_OUTPUT
-#  define qWarning QT_NO_QWARNING_MACRO
-#endif
 
 //
 Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);

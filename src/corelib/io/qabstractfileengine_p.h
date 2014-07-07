@@ -26,18 +26,21 @@
 #ifndef QABSTRACTFILEENGINE_P_H
 #define QABSTRACTFILEENGINE_P_H
 
-#include "QtCore/qabstractfileengine.h"
-#include "QtCore/qfile.h"
+#include <QtCore/qabstractfileengine.h>
+#include <QtCore/qfile.h>
 
 QT_BEGIN_NAMESPACE
 
 class QAbstractFileEnginePrivate
 {
  public:
-   inline QAbstractFileEnginePrivate()
-      : fileError(QFile::UnspecifiedError) {
+   inline QAbstractFileEnginePrivate() : fileError(QFile::UnspecifiedError) 
+   {
    }
-   inline virtual ~QAbstractFileEnginePrivate() { }
+
+   inline virtual ~QAbstractFileEnginePrivate()
+   { 
+   }
 
    QFile::FileError fileError;
    QString errorString;

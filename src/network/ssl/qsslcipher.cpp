@@ -42,13 +42,11 @@
     \sa QSslSocket, QSslKey
 */
 
-#include "qsslcipher.h"
-#include "qsslcipher_p.h"
-#include "qsslsocket.h"
+#include <qsslcipher.h>
+#include <qsslcipher_p.h>
+#include <qsslsocket.h>
 
-#ifndef QT_NO_DEBUG_STREAM
 #include <QtCore/qdebug.h>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -186,29 +184,16 @@ QString QSslCipher::encryptionMethod() const
    return d->encryptionMethod;
 }
 
-/*!
-    Returns the cipher's protocol as a QString.
-
-    \sa protocol()
-*/
 QString QSslCipher::protocolString() const
 {
    return d->protocolString;
 }
 
-/*!
-    Returns the cipher's protocol type, or \l QSsl::UnknownProtocol if
-    QSslCipher is unable to determine the protocol (protocolString() may
-    contain more information).
-
-    \sa protocolString()
-*/
 QSsl::SslProtocol QSslCipher::protocol() const
 {
    return d->protocol;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const QSslCipher &cipher)
 {
    debug << "QSslCipher(name=" << qPrintable(cipher.name())
@@ -217,6 +202,5 @@ QDebug operator<<(QDebug debug, const QSslCipher &cipher)
          << ')';
    return debug;
 }
-#endif
 
 QT_END_NAMESPACE

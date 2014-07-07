@@ -26,12 +26,11 @@
 #ifndef QFILESYSTEMWATCHER_WIN_P_H
 #define QFILESYSTEMWATCHER_WIN_P_H
 
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
 #include <qt_windows.h>
-
 #include <QtCore/qdatetime.h>
 #include <QtCore/qfile.h>
 #include <QtCore/qfileinfo.h>
@@ -103,6 +102,7 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
                  || lastModified != fileInfo.lastModified());
       }
    };
+
  private:
    QList<QWindowsFileSystemWatcherEngineThread *> threads;
 

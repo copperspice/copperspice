@@ -26,11 +26,11 @@
 #ifndef QFLICKGESTURE_P_H
 #define QFLICKGESTURE_P_H
 
-#include "qevent.h"
-#include "qgesturerecognizer.h"
-#include "qgesture_p.h"
-#include "qscroller.h"
-#include "qscopedpointer.h"
+#include <qevent.h>
+#include <qgesturerecognizer.h>
+#include <qgesture_p.h>
+#include <qscroller.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_GESTURES
 
@@ -56,6 +56,7 @@ class PressDelayHandler;
 class QFlickGesturePrivate : public QGesturePrivate
 {
    Q_DECLARE_PUBLIC(QFlickGesture)
+
  public:
    QFlickGesturePrivate();
 

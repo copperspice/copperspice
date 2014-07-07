@@ -26,10 +26,10 @@
 #ifndef QNATIVEIMAGE_P_H
 #define QNATIVEIMAGE_P_H
 
-#include "qimage.h"
+#include <qimage.h>
 
 #ifdef Q_OS_WIN
-#include "qt_windows.h"
+#include <qt_windows.h>
 
 #elif defined(Q_WS_X11)
 #include <qt_x11_p.h>

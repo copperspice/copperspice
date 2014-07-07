@@ -86,11 +86,11 @@ class Q_CORE_EXPORT QSharedMemory : public QObject
    SharedMemoryError error() const;
    QString errorString() const;
 
- private:
-   Q_DISABLE_COPY(QSharedMemory)
-
  protected:
    QScopedPointer<QSharedMemoryPrivate> d_ptr;
+
+ private:
+   Q_DISABLE_COPY(QSharedMemory)
 
 };
 

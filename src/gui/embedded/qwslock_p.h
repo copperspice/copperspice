@@ -59,6 +59,7 @@ class QWSLock
 
    int semId;
    int lockCount[2];
+
 #ifdef QT_POSIX_IPC
    sem_t *sems[3];
    bool owned;

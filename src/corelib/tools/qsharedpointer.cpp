@@ -33,21 +33,10 @@
 
 QT_BEGIN_NAMESPACE
 
-
-/*  internal
-
-    This function is called for a just-created QObject \a obj, to enable
-    the use of QSharedPointer and QWeakPointer in the future.
- */
 void QtSharedPointer::ExternalRefCountData::setQObjectShared(const QObject *, bool)
-{}
+{
+}
 
-/*
-    internal
-
-    This function is called when a QSharedPointer is created from a QWeakPointer
-    We check that the QWeakPointer was really created from a QSharedPointer, and not from a QObject
-*/
 void QtSharedPointer::ExternalRefCountData::checkQObjectShared(const QObject *)
 {
    if (strongref.load() < 0) {
@@ -112,15 +101,15 @@ QT_END_NAMESPACE
 
 
 //#  define QT_SHARED_POINTER_BACKTRACE_SUPPORT
-#  ifdef QT_SHARED_POINTER_BACKTRACE_SUPPORT
-#    if defined(__GLIBC__) && (__GLIBC__ >= 2) && !defined(__UCLIBC__) && !defined(QT_LINUXBASE)
+#ifdef QT_SHARED_POINTER_BACKTRACE_SUPPORT
+#if defined(__GLIBC__) && (__GLIBC__ >= 2) && !defined(__UCLIBC__) && !defined(QT_LINUXBASE)
 #      define BACKTRACE_SUPPORTED
-#    elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MAC)
 #      define BACKTRACE_SUPPORTED
-#    endif
-#  endif
+#endif
+#endif
 
-#  if defined(BACKTRACE_SUPPORTED)
+#if defined(BACKTRACE_SUPPORTED)
 #    include <sys/types.h>
 #    include <execinfo.h>
 #    include <stdio.h>
@@ -194,15 +183,17 @@ static void printBacktrace(QByteArray stacktrace)
 
 QT_END_NAMESPACE
 
-#  endif  // BACKTRACE_SUPPORTED
+#endif  // BACKTRACE_SUPPORTED
 
 namespace {
+
 QT_USE_NAMESPACE
 struct Data {
    const volatile void *pointer;
-#  ifdef BACKTRACE_SUPPORTED
+
+#ifdef BACKTRACE_SUPPORTED
    QByteArray backtrace;
-#  endif
+#endif
 };
 
 class KnownPointers
@@ -239,18 +230,21 @@ void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile v
 
    const void *other_d_ptr = kp->dataPointers.value(ptr, 0);
    if (other_d_ptr) {
-#  ifdef BACKTRACE_SUPPORTED
+
+#ifdef BACKTRACE_SUPPORTED
       printBacktrace(knownPointers()->dPointers.value(other_d_ptr).backtrace);
-#  endif
+#endif
+
       qFatal("QSharedPointer: internal self-check failed: pointer %p was already tracked "
              "by another QSharedPointer object %p", ptr, other_d_ptr);
    }
 
    Data data;
    data.pointer = ptr;
-#  ifdef BACKTRACE_SUPPORTED
+
+#ifdef BACKTRACE_SUPPORTED
    data.backtrace = saveBacktrace();
-#  endif
+#endif
 
    kp->dPointers.insert(d_ptr, data);
    kp->dataPointers.insert(ptr, d_ptr);
@@ -285,26 +279,6 @@ void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
    kp->dataPointers.erase(it2);
    kp->dPointers.erase(it);
    Q_ASSERT(kp->dPointers.size() == kp->dataPointers.size());
-}
-
-/*!
-    \internal
-    Called by the QSharedPointer autotest
-*/
-void QtSharedPointer::internalSafetyCheckCleanCheck()
-{
-#  ifdef QT_BUILD_INTERNAL
-   KnownPointers *const kp = knownPointers();
-   Q_ASSERT_X(kp, "internalSafetyCheckSelfCheck()", "Called after global statics deletion!");
-
-   if (kp->dPointers.size() != kp->dataPointers.size()) {
-      qFatal("Internal consistency error: the number of pointers is not equal!");
-   }
-
-   if (!kp->dPointers.isEmpty()) {
-      qFatal("Pointer cleaning failed: %d entries remaining", kp->dPointers.size());
-   }
-#  endif
 }
 
 QT_END_NAMESPACE

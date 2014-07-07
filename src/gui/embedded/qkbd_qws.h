@@ -41,8 +41,7 @@ class  Q_GUI_EXPORT QWSKeyboardHandler
    QWSKeyboardHandler(const QString &device);
    virtual ~QWSKeyboardHandler();
 
-   virtual void processKeyEvent(int unicode, int keycode, Qt::KeyboardModifiers modifiers,
-                                bool isPress, bool autoRepeat);
+   virtual void processKeyEvent(int unicode, int keycode, Qt::KeyboardModifiers modifiers, bool isPress, bool autoRepeat);
 
    enum KeycodeAction {
       None               = 0,

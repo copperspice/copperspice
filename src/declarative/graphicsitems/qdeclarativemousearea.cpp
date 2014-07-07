@@ -23,13 +23,10 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativemousearea_p.h"
-#include "private/qdeclarativemousearea_p_p.h"
-
-#include "private/qdeclarativeevents_p_p.h"
-
+#include <qdeclarativemousearea_p.h>
+#include <qdeclarativemousearea_p_p.h>
+#include <qdeclarativeevents_p_p.h>
 #include <QGraphicsSceneMouseEvent>
-
 #include <float.h>
 
 QT_BEGIN_NAMESPACE

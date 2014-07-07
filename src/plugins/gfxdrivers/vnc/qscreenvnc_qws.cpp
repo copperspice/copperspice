@@ -180,9 +180,7 @@ QVNCScreenPrivate::QVNCScreenPrivate(QVNCScreen *parent)
     : dpiX(72), dpiY(72), doOnScreenSurface(false), refreshRate(25),
       vncServer(0), q_ptr(parent), noDisablePainting(false)
 {
-#ifdef QT_BUILD_INTERNAL
-    noDisablePainting = (qgetenv("QT_VNC_NO_DISABLEPAINTING").toInt() > 0);
-#endif
+
 #ifndef QT_NO_QWS_SIGNALHANDLER
     QWSSignalHandler::instance()->addObject(this);
 #endif

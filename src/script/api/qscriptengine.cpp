@@ -23,50 +23,50 @@
 *
 ***********************************************************************/
 
-#include "config.h"
-#include "qscriptengine.h"
-#include "qscriptsyntaxchecker_p.h"
+#include <config.h>
+#include <qscriptengine.h>
+#include <qscriptsyntaxchecker_p.h>
 
-#include "qscriptengine_p.h"
-#include "qscriptengineagent_p.h"
-#include "qscriptcontext_p.h"
-#include "qscriptstring_p.h"
-#include "qscriptvalue_p.h"
-#include "qscriptvalueiterator.h"
-#include "qscriptclass.h"
-#include "qscriptcontextinfo.h"
-#include "qscriptprogram.h"
-#include "qscriptprogram_p.h"
-#include "qdebug.h"
+#include <qscriptengine_p.h>
+#include <qscriptengineagent_p.h>
+#include <qscriptcontext_p.h>
+#include <qscriptstring_p.h>
+#include <qscriptvalue_p.h>
+#include <qscriptvalueiterator.h>
+#include <qscriptclass.h>
+#include <qscriptcontextinfo.h>
+#include <qscriptprogram.h>
+#include <qscriptprogram_p.h>
+#include <qdebug.h>
 
 #include <QtCore/qstringlist.h>
 #include <QtCore/qmetaobject.h>
 
 #include <math.h>
 
-#include "CodeBlock.h"
-#include "Error.h"
-#include "Interpreter.h"
+#include <CodeBlock.h>
+#include <Error.h>
+#include <Interpreter.h>
 
-#include "ExceptionHelpers.h"
-#include "PrototypeFunction.h"
-#include "InitializeThreading.h"
-#include "ObjectPrototype.h"
-#include "SourceCode.h"
-#include "FunctionPrototype.h"
-#include "TimeoutChecker.h"
-#include "JSFunction.h"
-#include "Parser.h"
-#include "PropertyNameArray.h"
-#include "Operations.h"
+#include <ExceptionHelpers.h>
+#include <PrototypeFunction.h>
+#include <InitializeThreading.h>
+#include <ObjectPrototype.h>
+#include <SourceCode.h>
+#include <FunctionPrototype.h>
+#include <TimeoutChecker.h>
+#include <JSFunction.h>
+#include <Parser.h>
+#include <PropertyNameArray.h>
+#include <Operations.h>
 
-#include "bridge/qscriptfunction_p.h"
-#include "bridge/qscriptclassobject_p.h"
-#include "bridge/qscriptvariant_p.h"
-#include "bridge/qscriptqobject_p.h"
-#include "bridge/qscriptglobalobject_p.h"
-#include "bridge/qscriptactivationobject_p.h"
-#include "bridge/qscriptstaticscopeobject_p.h"
+#include <qscriptfunction_p.h>
+#include <qscriptclassobject_p.h>
+#include <qscriptvariant_p.h>
+#include <qscriptqobject_p.h>
+#include <qscriptglobalobject_p.h>
+#include <qscriptactivationobject_p.h>
+#include <qscriptstaticscopeobject_p.h>
 
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qdir.h>
@@ -75,7 +75,7 @@
 #include <QtCore/qpluginloader.h>
 #include <QtCore/qset.h>
 #include <QtCore/qtextstream.h>
-#include "qscriptextensioninterface.h"
+#include <qscriptextensioninterface.h>
 
 Q_DECLARE_METATYPE(QScriptValue)
 Q_DECLARE_METATYPE(QObjectList)
@@ -4636,17 +4636,6 @@ QScriptSyntaxCheckResult &QScriptSyntaxCheckResult::operator=(const QScriptSynta
    d_ptr = other.d_ptr;
    return *this;
 }
-
-#ifdef QT_BUILD_INTERNAL
-bool qt_script_isJITEnabled()
-{
-#if ENABLE(JIT)
-   return true;
-#else
-   return false;
-#endif
-}
-#endif
 
 void QScriptEngine::_q_objectDestroyed(QObject *un_named_arg1)
 {

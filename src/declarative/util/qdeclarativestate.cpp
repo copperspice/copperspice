@@ -710,19 +710,19 @@ void QDeclarativeState::apply(QDeclarativeStateGroup *group, QDeclarativeTransit
    // All the local reverts now become part of the ongoing revertList
    d->revertList << additionalReverts;
 
-#ifndef QT_NO_DEBUG_STREAM
+
    // Output for debugging
    if (stateChangeDebug()) {
       foreach(const QDeclarativeAction & action, applyList) {
          if (action.event) {
             qWarning() << "    QDeclarativeAction event:" << action.event->typeName();
+
          } else
             qWarning() << "    QDeclarativeAction:" << action.property.object()
                        << action.property.name() << "From:" << action.fromValue
                        << "To:" << action.toValue;
       }
    }
-#endif
 
    d->transitionManager.transition(applyList, trans);
 }

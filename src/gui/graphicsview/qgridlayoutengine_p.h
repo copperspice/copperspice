@@ -26,20 +26,23 @@
 #ifndef QGRIDLAYOUTENGINE_P_H
 #define QGRIDLAYOUTENGINE_P_H
 
-#include "qalgorithms.h"
-#include "qbitarray.h"
-#include "qlist.h"
-#include "qmap.h"
-#include "qpair.h"
-#include "qvector.h"
-#include "qgraphicslayout_p.h"
+#include <qalgorithms.h>
+#include <qbitarray.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qpair.h>
+#include <qvector.h>
+#include <qgraphicslayout_p.h>
 #include <float.h>
 
 QT_BEGIN_NAMESPACE
 
-class QGraphicsLayoutItem;
 class QStyle;
 class QWidget;
+
+class QGraphicsLayoutItem;
+class QGridLayoutRowInfo;
+class QGridLayoutEngine;
 
 // ### deal with Descent in a similar way
 enum {
@@ -140,6 +143,7 @@ class QGridLayoutBox
    qreal q_maximumSize;
    qreal q_minimumDescent;
    qreal q_minimumAscent;
+
    inline qreal &q_sizes(int which) {
       qreal *t;
       switch (which) {
@@ -191,6 +195,7 @@ class QGridLayoutBox
 };
 
 bool operator==(const QGridLayoutBox &box1, const QGridLayoutBox &box2);
+
 inline bool operator!=(const QGridLayoutBox &box1, const QGridLayoutBox &box2)
 {
    return !operator==(box1, box2);
@@ -207,8 +212,6 @@ class QGridLayoutMultiCellData
 
 typedef QMap<QPair<int, int>, QGridLayoutMultiCellData> MultiCellMap;
 
-class QGridLayoutRowInfo;
-
 class QGridLayoutRowData
 {
  public:
@@ -217,6 +220,7 @@ class QGridLayoutRowData
    void calculateGeometries(int start, int end, qreal targetSize, qreal *positions, qreal *sizes,
                             qreal *descents, const QGridLayoutBox &totalBox,
                             const QGridLayoutRowInfo &rowInfo);
+
    QGridLayoutBox totalBox(int start, int end) const;
    void stealBox(int start, int end, int which, qreal *positions, qreal *sizes);
 
@@ -232,7 +236,6 @@ class QGridLayoutRowData
    bool hasIgnoreFlag;
 };
 
-class QGridLayoutEngine;
 
 class QGridLayoutItem
 {

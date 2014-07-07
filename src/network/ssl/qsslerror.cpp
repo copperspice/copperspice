@@ -23,65 +23,11 @@
 *
 ***********************************************************************/
 
-
-/*!
-    \class QSslError
-    \brief The QSslError class provides an SSL error.
-    \since 4.3
-
-    \reentrant
-    \ingroup network
-    \ingroup ssl
-    \inmodule QtNetwork
-
-    QSslError provides a simple API for managing errors during QSslSocket's
-    SSL handshake.
-
-    \sa QSslSocket, QSslCertificate, QSslCipher
-*/
-
-/*!
-    \enum QSslError::SslError
-
-    Describes all recognized errors that can occur during an SSL handshake.
-
-    \value NoError
-    \value UnableToGetIssuerCertificate
-    \value UnableToDecryptCertificateSignature
-    \value UnableToDecodeIssuerPublicKey
-    \value CertificateSignatureFailed
-    \value CertificateNotYetValid
-    \value CertificateExpired
-    \value InvalidNotBeforeField
-    \value InvalidNotAfterField
-    \value SelfSignedCertificate
-    \value SelfSignedCertificateInChain
-    \value UnableToGetLocalIssuerCertificate
-    \value UnableToVerifyFirstCertificate
-    \value CertificateRevoked
-    \value InvalidCaCertificate
-    \value PathLengthExceeded
-    \value InvalidPurpose
-    \value CertificateUntrusted
-    \value CertificateRejected
-    \value SubjectIssuerMismatch
-    \value AuthorityIssuerSerialNumberMismatch
-    \value NoPeerCertificate
-    \value HostNameMismatch
-    \value UnspecifiedError
-    \value NoSslSupport
-    \value CertificateBlacklisted
-
-    \sa QSslError::errorString()
-*/
-
-#include "qsslerror.h"
-#include "qsslsocket.h"
-#ifndef QT_NO_DEBUG_STREAM
+#include <qsslerror.h>
+#include <qsslsocket.h>
 #include <QtCore/qdebug.h>
 
 QT_BEGIN_NAMESPACE
-#endif
 
 class QSslErrorPrivate
 {
@@ -89,11 +35,6 @@ class QSslErrorPrivate
    QSslError::SslError error;
    QSslCertificate certificate;
 };
-
-/*!
-    Constructs a QSslError object with no error and default certificate.
-
-*/
 
 // RVCT compiler in debug build does not like about default values in const-
 // So as an workaround we define all constructor overloads here explicitly
@@ -145,41 +86,18 @@ QSslError::~QSslError()
 {
 }
 
-/*!
-    \since 4.4
-
-    Assigns the contents of \a other to this error.
-*/
 QSslError &QSslError::operator=(const QSslError &other)
 {
    *d.data() = *other.d.data();
    return *this;
 }
 
-/*!
-    \since 4.4
-
-    Returns true if this error is equal to \a other; otherwise returns false.
-*/
 bool QSslError::operator==(const QSslError &other) const
 {
    return d->error == other.d->error
           && d->certificate == other.d->certificate;
 }
 
-/*!
-    \fn bool QSslError::operator!=(const QSslError &other) const
-    \since 4.4
-
-    Returns true if this error is not equal to \a other; otherwise returns
-    false.
-*/
-
-/*!
-    Returns the type of the error.
-
-    \sa errorString(), certificate()
-*/
 QSslError::SslError QSslError::error() const
 {
    return d->error;
@@ -288,18 +206,17 @@ QSslCertificate QSslError::certificate() const
    return d->certificate;
 }
 
-#ifndef QT_NO_DEBUG_STREAM
-//class QDebug;
 QDebug operator<<(QDebug debug, const QSslError &error)
 {
    debug << error.errorString();
    return debug;
 }
+
 QDebug operator<<(QDebug debug, const QSslError::SslError &error)
 {
    debug << QSslError(error).errorString();
    return debug;
 }
-#endif
+
 
 QT_END_NAMESPACE

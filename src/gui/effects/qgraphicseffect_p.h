@@ -26,7 +26,7 @@
 #ifndef QGRAPHICSEFFECT_P_H
 #define QGRAPHICSEFFECT_P_H
 
-#include "qgraphicseffect.h"
+#include <qgraphicseffect.h>
 #include <QPixmapCache>
 #include <qpixmapfilter_p.h>
 #include <QScopedPointer>
@@ -53,11 +53,12 @@ class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
    QRectF boundingRect(Qt::CoordinateSystem coordinateSystem = Qt::LogicalCoordinates) const;
    QRect deviceRect() const;
    QPixmap pixmap(Qt::CoordinateSystem system = Qt::LogicalCoordinates,
-                  QPoint *offset = 0,
-                  QGraphicsEffect::PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect) const;
+                  QPoint *offset = 0, QGraphicsEffect::PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect) const;
 
  protected:
    QGraphicsEffectSource(QGraphicsEffectSourcePrivate &dd, QObject *parent = 0);
+
+   QScopedPointer<QGraphicsEffectSourcePrivate> d_ptr;
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsEffectSource)
@@ -70,10 +71,6 @@ class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
    friend class QGraphicsItemPrivate;
    friend class QWidget;
    friend class QWidgetPrivate;
-
- protected:
-   QScopedPointer<QGraphicsEffectSourcePrivate> d_ptr;
-
 };
 
 class QGraphicsEffectSourcePrivate
@@ -118,14 +115,14 @@ class QGraphicsEffectSourcePrivate
    friend class QGraphicsItem;
    friend class QGraphicsItemPrivate;
 
+ protected:
+   QGraphicsEffectSource *q_ptr;
+
  private:
    mutable Qt::CoordinateSystem m_cachedSystem;
    mutable QGraphicsEffect::PixmapPadMode m_cachedMode;
    mutable QPoint m_cachedOffset;
    mutable QPixmapCache::Key m_cacheKey;
-
- protected:
-   QGraphicsEffectSource *q_ptr;
 };
 
 
@@ -171,6 +168,7 @@ class QGraphicsColorizeEffectPrivate : public QGraphicsEffectPrivate
 class QGraphicsBlurEffectPrivate : public QGraphicsEffectPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsBlurEffect)
+
  public:
    QGraphicsBlurEffectPrivate() : filter(new QPixmapBlurFilter) {}
    ~QGraphicsBlurEffectPrivate() {
@@ -183,6 +181,7 @@ class QGraphicsBlurEffectPrivate : public QGraphicsEffectPrivate
 class QGraphicsDropShadowEffectPrivate : public QGraphicsEffectPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsDropShadowEffect)
+
  public:
    QGraphicsDropShadowEffectPrivate() : filter(new QPixmapDropShadowFilter) {}
    ~QGraphicsDropShadowEffectPrivate() {
@@ -195,6 +194,7 @@ class QGraphicsDropShadowEffectPrivate : public QGraphicsEffectPrivate
 class QGraphicsOpacityEffectPrivate : public QGraphicsEffectPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsOpacityEffect)
+
  public:
    QGraphicsOpacityEffectPrivate()
       : opacity(qreal(0.7)), isFullyTransparent(0), isFullyOpaque(0), hasOpacityMask(0) {}

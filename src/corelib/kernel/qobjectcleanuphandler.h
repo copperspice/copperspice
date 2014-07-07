@@ -53,4 +53,4 @@ class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
 
 QT_END_NAMESPACE
 
-#endif // QOBJECTCLEANUPHANDLER_H
+#endif 

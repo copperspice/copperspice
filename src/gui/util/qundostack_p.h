@@ -29,8 +29,7 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qaction.h>
-
-#include "qundostack.h"
+#include <qundostack.h>
 
 QT_BEGIN_NAMESPACE
 class QUndoCommand;

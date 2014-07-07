@@ -30,9 +30,9 @@
 
 #ifndef QT_NO_SXE
 
-#include "qtransportauth_qws.h"
-#include "qtransportauthdefs_qws.h"
-#include "qbuffer.h"
+#include <qtransportauth_qws.h>
+#include <qtransportauthdefs_qws.h>
+#include <qbuffer.h>
 #include <qmutex.h>
 #include <qdatetime.h>
 #include <QtCore/qcache.h>
@@ -103,6 +103,7 @@ class SxeRegistryLocker : public QObject
    bool success() const {
       return m_success;
    }
+
  private:
    bool m_success;
    QObject *m_reg;
@@ -141,9 +142,7 @@ class FAREnforcer
    void logAuthAttempt( QDateTime time = QDateTime::currentDateTime() );
    void reset();
 
-#ifndef TEST_FAR_ENFORCER
  private:
-#endif
    FAREnforcer();
    FAREnforcer( const FAREnforcer &);
    FAREnforcer &operator=(FAREnforcer const &);

@@ -44,6 +44,7 @@ class QFileSystemEntry
 #else
    typedef QString NativePath;
 #endif
+
    struct FromNativePath {};
    struct FromInternalPath {};
 
@@ -79,10 +80,13 @@ class QFileSystemEntry
  private:
    // creates the QString version out of the bytearray version
    void resolveFilePath() const;
+
    // creates the bytearray version out of the QString version
    void resolveNativeFilePath() const;
+
    // resolves the separator
    void findLastSeparator() const;
+
    // resolves the dots and the separator
    void findFileNameSeparators() const;
 

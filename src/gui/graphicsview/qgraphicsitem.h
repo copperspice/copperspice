@@ -33,8 +33,8 @@
 #include <QtCore/qscopedpointer.h>
 #include <QtGui/qpainterpath.h>
 #include <QtGui/qpixmap.h>
-#include "qtextcursor.h"
-#include "qdeclarativelistproperty.h"
+#include <qtextcursor.h>
+#include <qdeclarativelistproperty.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -63,9 +63,20 @@ class QPainter;
 class QPen;
 class QPointF;
 class QRectF;
+class QTextDocument;
+
 class QStyleOptionGraphicsItem;
 class QGraphicsItemPrivate;
 class QAbstractGraphicsShapeItemPrivate;
+class QGraphicsPathItemPrivate;
+class QGraphicsRectItemPrivate;
+class QGraphicsEllipseItemPrivate;
+class QGraphicsPolygonItemPrivate;
+class QGraphicsLineItemPrivate;
+class QGraphicsPixmapItemPrivate;
+class QGraphicsTextItemPrivate;
+class QGraphicsSimpleTextItemPrivate;
+class QGraphicsItemGroupPrivate;
 
 class Q_GUI_EXPORT QGraphicsItem
 {
@@ -143,10 +154,8 @@ class Q_GUI_EXPORT QGraphicsItem
       SceneModal
    };
 
-   QGraphicsItem(QGraphicsItem *parent = 0
-                                         // ### Qt5/check if obsolete argument
-                                         , QGraphicsScene *scene = 0
-                );
+   // ### Qt5/check if 2nd argument is obsolete
+   QGraphicsItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
 
    virtual ~QGraphicsItem();
 
@@ -465,8 +474,7 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual bool supportsExtension(Extension extension) const;
    virtual void setExtension(Extension extension, const QVariant &variant);
    virtual QVariant extension(const QVariant &variant) const;
-
- protected:
+ 
    QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene);
    QScopedPointer<QGraphicsItemPrivate> d_ptr;
 
@@ -583,19 +591,21 @@ inline QPolygonF QGraphicsItem::mapFromScene(qreal ax, qreal ay, qreal w, qreal 
 {
    return mapFromScene(QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem *item, qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectFromItem(item, QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectFromParent(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectFromParent(QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectFromScene(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectFromScene(QRectF(ax, ay, w, h));
 }
-
 
 class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 {
@@ -655,19 +665,16 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    GUI_CS_PROPERTY_WRITE(effect, setGraphicsEffect)
 #endif
 
-   // private properties
    GUI_CS_PROPERTY_READ(children, cs_childrenList)
    GUI_CS_PROPERTY_DESIGNABLE(children, false)
    GUI_CS_PROPERTY_NOTIFY(children, childrenChanged)
 
-   // private properties
    GUI_CS_PROPERTY_READ(width, cs_width)
    GUI_CS_PROPERTY_WRITE(width, cs_setWidth)
    GUI_CS_PROPERTY_NOTIFY(width, widthChanged)
    GUI_CS_PROPERTY_RESET(width, cs_resetWidth)
    GUI_CS_PROPERTY_FINAL(width)
 
-   // private properties
    GUI_CS_PROPERTY_READ(height, cs_height)
    GUI_CS_PROPERTY_WRITE(height, cs_setHeight)
    GUI_CS_PROPERTY_NOTIFY(height, heightChanged)
@@ -770,7 +777,6 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
    Q_DECLARE_PRIVATE(QAbstractGraphicsShapeItem)
 };
 
-class QGraphicsPathItemPrivate;
 class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
 {
  public:
@@ -808,7 +814,6 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
    Q_DECLARE_PRIVATE(QGraphicsPathItem)
 };
 
-class QGraphicsRectItemPrivate;
 class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
 {
  public:
@@ -855,7 +860,6 @@ inline void QGraphicsRectItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
    setRect(QRectF(ax, ay, w, h));
 }
 
-class QGraphicsEllipseItemPrivate;
 class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
 {
  public:
@@ -907,7 +911,6 @@ inline void QGraphicsEllipseItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
    setRect(QRectF(ax, ay, w, h));
 }
 
-class QGraphicsPolygonItemPrivate;
 class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
 {
  public:
@@ -947,7 +950,6 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
    Q_DECLARE_PRIVATE(QGraphicsPolygonItem)
 };
 
-class QGraphicsLineItemPrivate;
 class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
 {
  public:
@@ -993,7 +995,6 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
    Q_DECLARE_PRIVATE(QGraphicsLineItem)
 };
 
-class QGraphicsPixmapItemPrivate;
 class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
 {
  public:
@@ -1050,9 +1051,6 @@ inline void QGraphicsPixmapItem::setOffset(qreal ax, qreal ay)
 {
    setOffset(QPointF(ax, ay));
 }
-
-class QGraphicsTextItemPrivate;
-class QTextDocument;
 
 class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
 {
@@ -1169,8 +1167,6 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    GUI_CS_SLOT_2(_q_ensureVisible)
 };
 
-class QGraphicsSimpleTextItemPrivate;
-
 class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
 {
 
@@ -1210,8 +1206,6 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
    Q_DISABLE_COPY(QGraphicsSimpleTextItem)
    Q_DECLARE_PRIVATE(QGraphicsSimpleTextItem)
 };
-
-class QGraphicsItemGroupPrivate;
 
 class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
 {

@@ -26,7 +26,7 @@
 #ifndef QFILESYSTEMWATCHER_INOTIFY_P_H
 #define QFILESYSTEMWATCHER_INOTIFY_P_H
 
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -61,7 +61,6 @@ class QInotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QHash<QString, int> pathToID;
    QHash<int, QString> idToPath;
 };
-
 
 QT_END_NAMESPACE
 #endif // QT_NO_FILESYSTEMWATCHER

@@ -37,22 +37,9 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
-#ifdef QT_BUILD_INTERNAL
-static bool fetchedRoot = false;
-void qt_test_resetFetchedRoot()
-{
-   fetchedRoot = false;
-}
 
-bool qt_test_isFetchedRoot()
-{
-   return fetchedRoot;
-}
-#endif
+// Creates thread
 
-/*!
-    Creates thread
-*/
 QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
    : QThread(parent), abort(false),
 #ifndef QT_NO_FILESYSTEMWATCHER
@@ -278,19 +265,18 @@ void QFileInfoGatherer::getFileInfos(const QString &path, const QStringList &fil
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
    if (files.isEmpty()
-         && !watcher->directories().contains(path)
-         && !path.isEmpty()
-         && !path.startsWith(QLatin1String("//")) /*don't watch UNC path*/) {
+         && ! watcher->directories().contains(path)
+         && ! path.isEmpty()
+         && ! path.startsWith(QLatin1String("//")) /*don't watch UNC path*/) {
       watcher->addPath(path);
    }
 #endif
 
    // List drives
    if (path.isEmpty()) {
-#ifdef QT_BUILD_INTERNAL
-      fetchedRoot = true;
-#endif
+
       QFileInfoList infoList;
+
       if (files.isEmpty()) {
          infoList = QDir::drives();
       } else {

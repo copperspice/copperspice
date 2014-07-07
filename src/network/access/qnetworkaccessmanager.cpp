@@ -23,35 +23,35 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccessmanager.h"
-#include "qnetworkaccessmanager_p.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "qnetworkreply_p.h"
-#include "qnetworkcookie.h"
-#include "qabstractnetworkcache.h"
+#include <qnetworkaccessmanager.h>
+#include <qnetworkaccessmanager_p.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <qnetworkreply_p.h>
+#include <qnetworkcookie.h>
+#include <qabstractnetworkcache.h>
 
-#include "QtNetwork/qnetworksession.h"
-#include "qsharednetworksession_p.h"
-#include "qnetworkaccesshttpbackend_p.h"
-#include "qnetworkaccessftpbackend_p.h"
-#include "qnetworkaccessfilebackend_p.h"
-#include "qnetworkaccessdebugpipebackend_p.h"
-#include "qnetworkaccesscachebackend_p.h"
-#include "qnetworkreplydataimpl_p.h"
-#include "qnetworkreplyfileimpl_p.h"
-#include "qnetworkcookiejar.h"
+#include <QtNetwork/qnetworksession.h>
+#include <qsharednetworksession_p.h>
+#include <qnetworkaccesshttpbackend_p.h>
+#include <qnetworkaccessftpbackend_p.h>
+#include <qnetworkaccessfilebackend_p.h>
+#include <qnetworkaccessdebugpipebackend_p.h>
+#include <qnetworkaccesscachebackend_p.h>
+#include <qnetworkreplydataimpl_p.h>
+#include <qnetworkreplyfileimpl_p.h>
+#include <qnetworkcookiejar.h>
 
-#include "QtCore/qbuffer.h"
-#include "QtCore/qurl.h"
-#include "QtCore/qvector.h"
-#include "qauthenticator_p.h"
-#include "QtNetwork/qsslconfiguration.h"
-#include "QtNetwork/qnetworkconfigmanager.h"
-#include "QtNetwork/qhttpmultipart.h"
-#include "qhttpmultipart_p.h"
+#include <QtCore/qbuffer.h>
+#include <QtCore/qurl.h>
+#include <QtCore/qvector.h>
+#include <qauthenticator_p.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <QtNetwork/qnetworkconfigmanager.h>
+#include <QtNetwork/qhttpmultipart.h>
+#include <qhttpmultipart_p.h>
 
-#include "qthread.h"
+#include <qthread.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -65,10 +65,6 @@ Q_GLOBAL_STATIC(QNetworkAccessFileBackendFactory, fileBackend)
 Q_GLOBAL_STATIC(QNetworkAccessFtpBackendFactory, ftpBackend)
 #endif
 
-#ifdef QT_BUILD_INTERNAL
-Q_GLOBAL_STATIC(QNetworkAccessDebugPipeBackendFactory, debugpipeBackend)
-#endif
-
 static void ensureInitialized()
 {
 #ifndef QT_NO_HTTP
@@ -77,10 +73,6 @@ static void ensureInitialized()
 
 #ifndef QT_NO_FTP
    (void) ftpBackend();
-#endif
-
-#ifdef QT_BUILD_INTERNAL
-   (void) debugpipeBackend();
 #endif
 
    // leave this one last since it will query the special QAbstractFileEngines

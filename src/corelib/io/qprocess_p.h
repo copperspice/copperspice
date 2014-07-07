@@ -26,19 +26,19 @@
 #ifndef QPROCESS_P_H
 #define QPROCESS_P_H
 
-#include "QtCore/qprocess.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qshareddata.h"
-#include "qringbuffer_p.h"
-#include "qiodevice_p.h"
+#include <QtCore/qprocess.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qshareddata.h>
+#include <qringbuffer_p.h>
+#include <qiodevice_p.h>
 
 #ifdef Q_OS_UNIX
 #include <qorderedmutexlocker_p.h>
 #endif
 
 #ifdef Q_OS_WIN
-#include "QtCore/qt_windows.h"
+#include <QtCore/qt_windows.h>
 typedef HANDLE Q_PIPE;
 #define INVALID_Q_PIPE INVALID_HANDLE_VALUE
 #else
@@ -66,6 +66,7 @@ class QProcEnvKey : public QString
       return !compare(other, Qt::CaseInsensitive);
    }
 };
+
 inline uint qHash(const QProcEnvKey &key)
 {
    return qHash(key.toCaseFolded());
@@ -123,8 +124,10 @@ class QProcEnvValue
    mutable QByteArray byteValue;
    mutable QString stringValue;
 };
+
 Q_DECLARE_TYPEINFO(QProcEnvValue, Q_MOVABLE_TYPE);
 #endif
+
 Q_DECLARE_TYPEINFO(QProcEnvKey, Q_MOVABLE_TYPE);
 
 class QProcessEnvironmentPrivate: public QSharedData
@@ -133,25 +136,32 @@ class QProcessEnvironmentPrivate: public QSharedData
 #ifdef Q_OS_WIN
    typedef QProcEnvKey Key;
    typedef QProcEnvValue Value;
+
    inline Key prepareName(const QString &name) const {
       return Key(name);
    }
+
    inline QString nameToString(const Key &name) const {
       return name;
    }
+
    inline Value prepareValue(const QString &value) const {
       return value;
    }
+
    inline QString valueToString(const Value &value) const {
       return value;
    }
+
    struct MutexLocker {
       MutexLocker(const QProcessEnvironmentPrivate *) {}
    };
+
    struct OrderedMutexLocker {
-      OrderedMutexLocker(const QProcessEnvironmentPrivate *,
-                         const QProcessEnvironmentPrivate *) {}
+      OrderedMutexLocker(const QProcessEnvironmentPrivate *,const QProcessEnvironmentPrivate *)
+      {}
    };
+
 #else
    class Key
    {
@@ -207,14 +217,17 @@ class QProcessEnvironmentPrivate: public QSharedData
       }
       return ent;
    }
+
    inline QString nameToString(const Key &name) const {
       const QString sname = QString::fromLocal8Bit(name.key);
       nameMap[sname] = name;
       return sname;
    }
+
    inline Value prepareValue(const QString &value) const {
       return Value(value);
    }
+
    inline QString valueToString(const Value &value) const {
       return value.string();
    }
@@ -222,9 +235,10 @@ class QProcessEnvironmentPrivate: public QSharedData
    struct MutexLocker : public QMutexLocker {
       MutexLocker(const QProcessEnvironmentPrivate *d) : QMutexLocker(&d->mutex) {}
    };
-   struct OrderedMutexLocker : public QOrderedMutexLocker {
-      OrderedMutexLocker(const QProcessEnvironmentPrivate *d1,
+
+   struct OrderedMutexLocker : public QOrderedMutexLocker {OrderedMutexLocker(const QProcessEnvironmentPrivate *d1, 
                          const QProcessEnvironmentPrivate *d2) :
+
          QOrderedMutexLocker(&d1->mutex, &d2->mutex) {
       }
    };
@@ -263,9 +277,11 @@ class QProcessEnvironmentPrivate: public QSharedData
    QStringList keys() const;
    void insert(const QProcessEnvironmentPrivate &other);
 };
+
 #ifndef Q_OS_WIN
 Q_DECLARE_TYPEINFO(QProcessEnvironmentPrivate::Key, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(QProcessEnvironmentPrivate::Value, Q_MOVABLE_TYPE);
+
 inline uint qHash(const QProcessEnvironmentPrivate::Key &key)
 {
    return key.hash;
@@ -297,7 +313,7 @@ class QProcessPrivate : public QIODevicePrivate
          PipeSource = 1,
          PipeSink = 2,
          Redirect = 3
-                    // if you add "= 4" here, increase the number of bits below
+         // if you add "= 4" here, increase the number of bits below
       };
 
       Channel() : process(0), notifier(0), type(Normal), closed(false), append(false) {
@@ -366,9 +382,11 @@ class QProcessPrivate : public QIODevicePrivate
 
    QString program;
    QStringList arguments;
+
 #if defined(Q_OS_WIN)
    QString nativeArguments;
 #endif
+
    QProcessEnvironment environment;
 
    QRingBuffer outputReadBuffer;
@@ -407,9 +425,8 @@ class QProcessPrivate : public QIODevicePrivate
    qint64 pipeWriterBytesToWrite() const;
 #endif
 
-   static bool startDetached(const QString &program, const QStringList &arguments,
-                             const QString &workingDirectory = QString(),
-                             qint64 *pid = 0);
+   static bool startDetached(const QString &program, const QStringList &arguments, 
+                             const QString &workingDirectory = QString(), qint64 *pid = 0);
 
    int exitCode;
    QProcess::ExitStatus exitStatus;
@@ -432,6 +449,7 @@ class QProcessPrivate : public QIODevicePrivate
    qint64 writeToStdin(const char *data, qint64 maxlen);
 
    void cleanup();
+
 #ifdef Q_OS_UNIX
    static void initializeProcessManager();
 #endif

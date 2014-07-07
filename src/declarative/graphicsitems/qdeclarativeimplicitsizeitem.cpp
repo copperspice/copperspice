@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "private/qdeclarativeimplicitsizeitem_p.h"
-#include "private/qdeclarativeimplicitsizeitem_p_p.h"
+#include <qdeclarativeimplicitsizeitem_p.h>
+#include <qdeclarativeimplicitsizeitem_p_p.h>
 
 QT_BEGIN_NAMESPACE
 

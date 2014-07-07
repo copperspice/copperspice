@@ -72,14 +72,14 @@ class Q_CORE_EXPORT QSignalMapper : public QObject
    CORE_CS_SLOT_1(Public, void map(QObject *sender))
    CORE_CS_SLOT_OVERLOAD(map, (QObject *))
 
+ protected:
+   QScopedPointer<QSignalMapperPrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QSignalMapper)
 
    CORE_CS_SLOT_1(Private, void _q_senderDestroyed())
    CORE_CS_SLOT_2(_q_senderDestroyed)
-
- protected:
-   QScopedPointer<QSignalMapperPrivate> d_ptr;
 };
 
 #endif // QT_NO_SIGNALMAPPER
