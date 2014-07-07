@@ -14,7 +14,6 @@ lib_libCsGui1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui -Iinclude/
     -DQT_BUILD_GUI_LIB  \
     -DQT_SHARED         \
     -DQT_BUILTIN_GIF_READER      \
-    -DQ_INTERNAL_QAPP_SRC        \
     -DMNG_BUILD_SO               \
     -DMNG_NO_INCLUDE_JNG
 

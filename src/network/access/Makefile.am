@@ -44,7 +44,6 @@ NETWORK_ACCESS_PRIVATE_INCLUDES = \
 	qnetworkaccessmanager_p.h \
 	qnetworkaccesscache_p.h \
 	qnetworkaccessbackend_p.h \
-	qnetworkaccessdebugpipebackend_p.h \
 	qnetworkaccesshttpbackend_p.h \
 	qnetworkaccessfilebackend_p.h \
 	qnetworkaccesscachebackend_p.h \
@@ -79,7 +78,6 @@ lib_libCsNetwork1_la_SOURCES += \
 	src/network/access/qnetworkaccessmanager.cpp \
 	src/network/access/qnetworkaccesscache.cpp \
 	src/network/access/qnetworkaccessbackend.cpp \
-	src/network/access/qnetworkaccessdebugpipebackend.cpp \
 	src/network/access/qnetworkaccessfilebackend.cpp \
 	src/network/access/qnetworkaccesscachebackend.cpp \
 	src/network/access/qnetworkaccessftpbackend.cpp \
