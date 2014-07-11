@@ -813,7 +813,7 @@ static bool tryFindFallback(const QFileSystemEntry &fname, QFileSystemMetaData &
         WIN32_FIND_DATA findData;
         if (getFindData(fname.nativeFilePath(), findData)
             && findData.dwFileAttributes != INVALID_FILE_ATTRIBUTES) {
-            data.fillFromFindData(findData, true, fname.isDriveRoot());
+            data.fillFromFindData(findData, true, fname.isRoot());
             filledData = true;
         }
     }
@@ -884,7 +884,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
         bool ok = ::GetFileAttributesEx((wchar_t*)fname.nativeFilePath().utf16(), GetFileExInfoStandard,
                                         reinterpret_cast<WIN32_FILE_ATTRIBUTE_DATA *>(&findData));
         if (ok) {
-            data.fillFromFindData(findData, false, fname.isDriveRoot());
+            data.fillFromFindData(findData, false, fname.isRoot());
         } else {
             if (!tryFindFallback(fname, data))
                 tryDriveUNCFallback(fname, data);

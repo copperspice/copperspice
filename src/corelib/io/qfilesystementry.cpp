@@ -37,16 +37,32 @@ QT_BEGIN_NAMESPACE
 #ifdef Q_OS_WIN
 static bool isUncRoot(const QString &server)
 {
-    QString localPath = QDir::toNativeSeparators(server);
-    if (!localPath.startsWith(QLatin1String("\\\\")))
-        return false;
+   QString localPath = QDir::toNativeSeparators(server);
 
-    int idx = localPath.indexOf(QLatin1Char('\\'), 2);
-    if (idx == -1 || idx + 1 == localPath.length())
-        return true;
+   if (! localPath.startsWith(QLatin1String("\\\\"))) {
+      return false;
+   }
 
-    localPath = localPath.right(localPath.length() - idx - 1).trimmed();
-    return localPath.isEmpty();
+   int idx = localPath.indexOf(QLatin1Char('\\'), 2);
+   if (idx == -1 || idx + 1 == localPath.length()) {
+      return true;
+   }
+
+   // if there anythng after the 'server name'?
+   localPath = localPath.right(localPath.length() - idx - 1).trimmed();
+
+   if (localPath.isEmpty()) {
+      return true;
+   }
+
+   // test the 'share name'
+   idx = localPath.indexOf(QLatin1Char('\\'), idx);
+
+   if (idx == -1 || idx + 1 == localPath.length()) {
+      return true;
+   }
+
+   return false;
 }
 
 static inline QString fixIfRelativeUncPath(const QString &path)
