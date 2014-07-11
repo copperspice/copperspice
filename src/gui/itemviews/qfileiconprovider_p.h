@@ -71,7 +71,6 @@ class QFileIconProviderPrivate
    mutable QIcon home;
 };
 
-
 QT_END_NAMESPACE
 
 #endif // QFILEICONPROVIDER_P_H

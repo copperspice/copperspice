@@ -26,9 +26,9 @@
 #ifndef QNETWORKSESSION_P_H
 #define QNETWORKSESSION_P_H
 
-#include "qnetworksession.h"
-#include "qnetworkconfiguration_p.h"
-#include "QtCore/qsharedpointer.h"
+#include <qnetworksession.h>
+#include <qnetworkconfiguration_p.h>
+#include <QtCore/qsharedpointer.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
@@ -75,18 +75,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    virtual quint64 bytesWritten() const = 0;
    virtual quint64 bytesReceived() const = 0;
    virtual quint64 activeTime() const = 0;
-
- protected:
-   inline QNetworkConfigurationPrivatePointer privateConfiguration(const QNetworkConfiguration &config) const {
-      return config.d;
-   }
-
-   inline void setPrivateConfiguration(QNetworkConfiguration &config,
-                                       QNetworkConfigurationPrivatePointer ptr) const {
-      config.d = ptr;
-   }
-
- public:
+ 
    //releases any pending waitForOpened() calls
    NET_CS_SIGNAL_1(Public, void quitPendingWaitsForOpened())
    NET_CS_SIGNAL_2(quitPendingWaitsForOpened)
@@ -106,7 +95,16 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    NET_CS_SIGNAL_1(Public, void preferredConfigurationChanged(const QNetworkConfiguration &config, bool isSeamless))
    NET_CS_SIGNAL_2(preferredConfigurationChanged, config, isSeamless)
 
+
  protected:
+   inline QNetworkConfigurationPrivatePointer privateConfiguration(const QNetworkConfiguration &config) const {
+      return config.d;
+   }
+
+   inline void setPrivateConfiguration(QNetworkConfiguration &config, QNetworkConfigurationPrivatePointer ptr) const {
+      config.d = ptr;
+   }
+ 
    QNetworkSession *q;
 
    // The config set on QNetworkSession.

@@ -87,7 +87,6 @@ class QAuthenticatorPrivate
    void updateCredentials();
 };
 
-
 QT_END_NAMESPACE
 
 #endif

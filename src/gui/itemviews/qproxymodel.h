@@ -28,7 +28,6 @@
 
 #include <QtCore/qabstractitemmodel.h>
 
-
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PROXYMODEL
@@ -59,8 +58,7 @@ class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                      int role = Qt::EditRole);
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
    QStringList mimeTypes() const;
    QMimeData *mimeData(const QModelIndexList &indexes) const;
@@ -77,8 +75,7 @@ class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value,
-                         int hits = 1, Qt::MatchFlags flags =
-                            Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const;
+                         int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const;
 
    QSize span(const QModelIndex &index) const;
 
@@ -86,7 +83,6 @@ class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
    void revert();
 
    using QObject::parent;
-
 
  protected:
    QProxyModel(QProxyModelPrivate &, QObject *parent = 0);

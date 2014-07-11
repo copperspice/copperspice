@@ -55,9 +55,7 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-   void setModelData(QWidget *editor,
-                     QAbstractItemModel *model,
-                     const QModelIndex &index) const;
+   void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -68,12 +66,10 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
    virtual QString displayText(const QVariant &value, const QLocale &locale) const;
 
  protected:
-   virtual void initStyleOption(QStyleOptionViewItem *option,
-                                const QModelIndex &index) const;
+   virtual void initStyleOption(QStyleOptionViewItem *option,const QModelIndex &index) const;
 
    bool eventFilter(QObject *object, QEvent *event);
-   bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                    const QStyleOptionViewItem &option, const QModelIndex &index);
+   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index);
 
  private:
    Q_DECLARE_PRIVATE(QStyledItemDelegate)

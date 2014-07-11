@@ -26,11 +26,11 @@
 #ifndef QNETWORKREPLY_P_H
 #define QNETWORKREPLY_P_H
 
-#include "qnetworkrequest.h"
-#include "qnetworkrequest_p.h"
-#include "qnetworkreply.h"
-#include "QtCore/qpointer.h"
-#include "qiodevice_p.h"
+#include <qnetworkrequest.h>
+#include <qnetworkrequest_p.h>
+#include <qnetworkreply.h>
+#include <QtCore/qpointer.h>
+#include <qiodevice_p.h>
 
 QT_BEGIN_NAMESPACE
 

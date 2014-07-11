@@ -26,10 +26,9 @@
 #ifndef QNETWORKACCESSCACHEBACKEND_P_H
 #define QNETWORKACCESSCACHEBACKEND_P_H
 
-
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
 
 QT_BEGIN_NAMESPACE
 

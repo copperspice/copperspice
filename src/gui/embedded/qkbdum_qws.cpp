@@ -67,7 +67,7 @@ QWSUmKeyboardHandlerPrivate::QWSUmKeyboardHandlerPrivate(const QString &device)
    kbdBuffer = new unsigned char [kbdBufferLen];
 
    if ((kbdFD = QT_OPEN((const char *)device.toLocal8Bit(), O_RDONLY | O_NDELAY, 0)) < 0) {
-      qDebug("Cannot open %s (%s)", (const char *)device.toLocal8Bit(),
+      qDebug("Can not open %s (%s)", (const char *)device.toLocal8Bit(),
              strerror(errno));
    } else {
       // Clear pending input

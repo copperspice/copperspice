@@ -457,22 +457,24 @@ void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
     \sa QMetaProperty::isUser()
 */
 
-void QItemDelegate::setModelData(QWidget *editor,
-                                 QAbstractItemModel *model,
-                                 const QModelIndex &index) const
+void QItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
 #ifdef QT_NO_PROPERTIES
    Q_UNUSED(model);
    Q_UNUSED(editor);
    Q_UNUSED(index);
+
 #else
    Q_D(const QItemDelegate);
    Q_ASSERT(model);
    Q_ASSERT(editor);
+
    QByteArray n = editor->metaObject()->userProperty().name();
-   if (n.isEmpty())
-      n = d->editorFactory()->valuePropertyName(
-             static_cast<QVariant::Type>(model->data(index, Qt::EditRole).userType()));
+
+   if (n.isEmpty()) {
+      n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(model->data(index, Qt::EditRole).userType()));
+   }
+
    if (!n.isEmpty()) {
       model->setData(index, editor->property(n), Qt::EditRole);
    }
@@ -484,19 +486,20 @@ void QItemDelegate::setModelData(QWidget *editor,
     according to the style \a option given.
 */
 
-void QItemDelegate::updateEditorGeometry(QWidget *editor,
-      const QStyleOptionViewItem &option,
-      const QModelIndex &index) const
+void QItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    if (!editor) {
       return;
    }
+
    Q_ASSERT(index.isValid());
+
    QPixmap pixmap = decoration(option, index.data(Qt::DecorationRole));
    QString text = QItemDelegatePrivate::replaceNewLine(index.data(Qt::DisplayRole).toString());
    QRect pixmapRect = QRect(QPoint(0, 0), option.decorationSize).intersected(pixmap.rect());
    QRect textRect = textRectangle(0, option.rect, option.font, text);
    QRect checkRect = check(option, textRect, index.data(Qt::CheckStateRole));
+
    QStyleOptionViewItem opt = option;
    opt.showDecorationSelected = true; // let the editor take up all available space
    doLayout(opt, &checkRect, &pixmapRect, &textRect, false);

@@ -1,1 +1,1 @@
-#include "qnetworkconfigmanager.h"
+#include <qnetworkconfigmanager.h>

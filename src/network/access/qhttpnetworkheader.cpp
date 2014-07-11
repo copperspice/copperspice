@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qhttpnetworkheader_p.h"
+#include <qhttpnetworkheader_p.h>
 
 #ifndef QT_NO_HTTP
 

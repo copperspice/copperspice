@@ -23,70 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qhttpmultipart.h"
-#include "qhttpmultipart_p.h"
-#include "QtCore/qdatetime.h" // for initializing the random number generator with QTime
-#include "QtCore/qmutex.h"
-#include "QtCore/qthreadstorage.h"
+#include <qhttpmultipart.h>
+#include <qhttpmultipart_p.h>
+#include <QtCore/qdatetime.h>       // for initializing the random number generator with QTime
+#include <QtCore/qmutex.h>
+#include <QtCore/qthreadstorage.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QHttpPart
-    \brief The QHttpPart class holds a body part to be used inside a
-           HTTP multipart MIME message.
-    \since 4.8
-
-    \ingroup network
-    \inmodule QtNetwork
-
-    The QHttpPart class holds a body part to be used inside a HTTP
-    multipart MIME message (which is represented by the QHttpMultiPart class).
-    A QHttpPart consists of a header block
-    and a data block, which are separated by each other by two
-    consecutive new lines. An example for one part would be:
-
-    \snippet doc/src/snippets/code/src_network_access_qhttppart.cpp 0
-
-    For setting headers, use setHeader() and setRawHeader(), which behave
-    exactly like QNetworkRequest::setHeader() and QNetworkRequest::setRawHeader().
-
-    For reading small pieces of data, use setBody(); for larger data blocks
-    like e.g. images, use setBodyDevice(). The latter method saves memory by
-    not copying the data internally, but reading directly from the device.
-    This means that the device must be opened and readable at the moment when
-    the multipart message containing the body part is sent on the network via
-    QNetworkAccessManager::post().
-
-    To construct a QHttpPart with a small body, consider the following snippet
-    (this produces the data shown in the example above):
-
-    \snippet doc/src/snippets/code/src_network_access_qhttppart.cpp 1
-
-    To construct a QHttpPart reading from a device (e.g. a file), the following
-    can be applied:
-
-    \snippet doc/src/snippets/code/src_network_access_qhttppart.cpp 2
-
-    Be aware that QHttpPart does not take ownership of the device when set, so
-    it is the developer's responsibility to destroy it when it is not needed anymore.
-    A good idea might be to set the multipart message as parent object for the device,
-    as documented at the documentation for QHttpMultiPart.
-
-    \sa QHttpMultiPart, QNetworkAccessManager
-*/
-
-
-/*!
-    Constructs an empty QHttpPart object.
-*/
 QHttpPart::QHttpPart() : d(new QHttpPartPrivate)
 {
 }
 
-/*!
-    Creates a copy of \a other.
-*/
 QHttpPart::QHttpPart(const QHttpPart &other) : d(other.d)
 {
 }

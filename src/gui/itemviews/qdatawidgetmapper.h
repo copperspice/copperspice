@@ -26,8 +26,8 @@
 #ifndef QDATAWIDGETMAPPER_H
 #define QDATAWIDGETMAPPER_H
 
-#include "QtCore/qobject.h"
-#include "qabstractitemdelegate.h"
+#include <QtCore/qobject.h>
+#include <qabstractitemdelegate.h>
 #include <QScopedPointer>
 
 #ifndef QT_NO_DATAWIDGETMAPPER
@@ -102,6 +102,9 @@ class Q_GUI_EXPORT QDataWidgetMapper: public QObject
    GUI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
    GUI_CS_SIGNAL_2(currentIndexChanged, index)
 
+ protected:
+   QScopedPointer<QDataWidgetMapperPrivate> d_ptr;
+
  private:
    Q_DECLARE_PRIVATE(QDataWidgetMapper)
    Q_DISABLE_COPY(QDataWidgetMapper)
@@ -117,10 +120,6 @@ class Q_GUI_EXPORT QDataWidgetMapper: public QObject
 
    GUI_CS_SLOT_1(Private, void _q_modelDestroyed())
    GUI_CS_SLOT_2(_q_modelDestroyed)
-
- protected:
-   QScopedPointer<QDataWidgetMapperPrivate> d_ptr;
-
 };
 
 QT_END_NAMESPACE

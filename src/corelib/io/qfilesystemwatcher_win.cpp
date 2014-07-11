@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qfilesystemwatcher.h"
-#include "qfilesystemwatcher_win_p.h"
+#include <qfilesystemwatcher.h>
+#include <qfilesystemwatcher_win_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -61,13 +61,13 @@ QWindowsFileSystemWatcherEngine::~QWindowsFileSystemWatcherEngine()
    }
 }
 
-QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
-      QStringList *files,
-      QStringList *directories)
+QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths, 
+      QStringList *files, QStringList *directories)
 {
    // qDebug()<<"Adding"<<paths.count()<<"to existing"<<(files->count() + directories->count())<<"watchers";
    QStringList p = paths;
    QMutableListIterator<QString> it(p);
+
    while (it.hasNext()) {
       QString path = it.next();
       QString normalPath = path;
@@ -79,7 +79,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       }
 
       QFileInfo fileInfo(normalPath.toLower());
-      if (!fileInfo.exists()) {
+      if (! fileInfo.exists()) {
          continue;
       }
 

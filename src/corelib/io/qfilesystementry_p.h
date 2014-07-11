@@ -67,9 +67,10 @@ class QFileSystemEntry
    bool isRelative() const;
    bool isClean() const;
 
-#if defined(Q_OS_WIN)
-   bool isDriveRoot() const;
+#if defined(Q_OS_WIN)  
+   bool isDriveLetter_Root() const;
 #endif
+
    bool isRoot() const;
 
    bool isEmpty() const;

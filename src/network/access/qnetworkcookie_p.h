@@ -26,7 +26,7 @@
 #ifndef QNETWORKCOOKIE_P_H
 #define QNETWORKCOOKIE_P_H
 
-#include "QtCore/qdatetime.h"
+#include <QtCore/qdatetime.h>
 
 QT_BEGIN_NAMESPACE
 

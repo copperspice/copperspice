@@ -26,14 +26,14 @@
 #ifndef QABSTRACTSOCKET_P_H
 #define QABSTRACTSOCKET_P_H
 
-#include "QtNetwork/qabstractsocket.h"
-#include "QtCore/qbytearray.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qtimer.h"
-#include "qringbuffer_p.h"
-#include "qiodevice_p.h"
-#include "qabstractsocketengine_p.h"
-#include "qnetworkproxy.h"
+#include <QtNetwork/qabstractsocket.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qtimer.h>
+#include <qringbuffer_p.h>
+#include <qiodevice_p.h>
+#include <qabstractsocketengine_p.h>
+#include <qnetworkproxy.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -106,6 +106,7 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
 #else
    inline void resolveProxy(const QString &, quint16) { }
 #endif
+
    inline void resolveProxy(quint16 port) {
       resolveProxy(QString(), port);
    }

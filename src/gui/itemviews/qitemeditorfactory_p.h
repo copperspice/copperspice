@@ -34,7 +34,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
 class QExpandingLineEdit : public QLineEdit
 {
    CS_OBJECT(QExpandingLineEdit)
@@ -46,13 +45,12 @@ class QExpandingLineEdit : public QLineEdit
       widgetOwnsGeometry = value;
    }
 
- protected:
-   void changeEvent(QEvent *e);
-
- public :
    GUI_CS_SLOT_1(Public, void resizeToContents())
    GUI_CS_SLOT_2(resizeToContents)
 
+ protected:
+   void changeEvent(QEvent *e);
+ 
  private:
    void updateMinimumWidth();
 

@@ -61,6 +61,7 @@ typedef QPair<QHttpNetworkRequest, QHttpNetworkReply *> HttpMessagePair;
 class QHttpNetworkConnectionChannel : public QObject
 {
    CS_OBJECT(QHttpNetworkConnectionChannel)
+
  public:
    enum ChannelState {
       IdleState = 0,          // ready to send request
@@ -71,6 +72,7 @@ class QHttpNetworkConnectionChannel : public QObject
       ClosingState = 16,
       BusyState = (ConnectingState | WritingState | WaitingState | ReadingState | ClosingState)
    };
+
    QAbstractSocket *socket;
    bool ssl;
    ChannelState state;
@@ -88,10 +90,12 @@ class QHttpNetworkConnectionChannel : public QObject
    QAuthenticator proxyAuthenticator;
    bool authenticationCredentialsSent;
    bool proxyCredentialsSent;
+
 #ifndef QT_NO_OPENSSL
    bool ignoreAllSslErrors;
    QList<QSslError> ignoreSslErrorsList;
 #endif
+
 #ifndef QT_NO_BEARERMANAGEMENT
    QSharedPointer<QNetworkSession> networkSession;
 #endif

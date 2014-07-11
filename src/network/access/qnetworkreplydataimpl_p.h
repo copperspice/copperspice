@@ -26,14 +26,15 @@
 #ifndef QNETWORKREPLYDATAIMPL_P_H
 #define QNETWORKREPLYDATAIMPL_P_H
 
-#include "qnetworkreply.h"
-#include "qnetworkreply_p.h"
-#include "qnetworkaccessmanager.h"
+#include <qnetworkreply.h>
+#include <qnetworkreply_p.h>
+#include <qnetworkaccessmanager.h>
 #include <QBuffer>
 
 QT_BEGIN_NAMESPACE
 
 class QNetworkReplyDataImplPrivate;
+
 class QNetworkReplyDataImpl: public QNetworkReply
 {
    CS_OBJECT(QNetworkReplyDataImpl)

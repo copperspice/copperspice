@@ -26,11 +26,12 @@
 #ifndef QHTTPMULTIPART_P_H
 #define QHTTPMULTIPART_P_H
 
-#include "QtCore/qshareddata.h"
-#include "qnetworkrequest_p.h" // for deriving QHttpPartPrivate from QNetworkHeadersPrivate
+#include <QtCore/qshareddata.h>
+#include <qnetworkrequest_p.h>       // for deriving QHttpPartPrivate from QNetworkHeadersPrivate
 
 QT_BEGIN_NAMESPACE
 
+class QHttpMultiPartPrivate;
 
 class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
@@ -41,7 +42,6 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 
    ~QHttpPartPrivate() {
    }
-
 
    QHttpPartPrivate(const QHttpPartPrivate &other)
       : QSharedData(other), QNetworkHeadersPrivate(other), body(other.body),
@@ -80,10 +80,6 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
    mutable bool headerCreated;
    qint64 readPointer;
 };
-
-
-
-class QHttpMultiPartPrivate;
 
 class QHttpMultiPartIODevice : public QIODevice
 {
@@ -126,8 +122,6 @@ class QHttpMultiPartIODevice : public QIODevice
    mutable qint64 deviceSize;
 };
 
-
-
 class QHttpMultiPartPrivate
 {
  public:
@@ -146,6 +140,5 @@ class QHttpMultiPartPrivate
 };
 
 QT_END_NAMESPACE
-
 
 #endif // QHTTPMULTIPART_P_H

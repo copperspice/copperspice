@@ -71,9 +71,7 @@ static QString driveSpec(const QString &path)
 #endif
 }
 
-//************* QDirPrivate
-QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,
-                         QDir::Filters filters_)
+QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,  QDir::Filters filters_)
    : QSharedData()
    , nameFilters(nameFilters_)
    , sort(sort_)
@@ -113,15 +111,19 @@ bool QDirPrivate::exists() const
    if (fileEngine.isNull()) {
       QFileSystemEngine::fillMetaData(dirEntry, metaData,
                                       QFileSystemMetaData::ExistsAttribute | QFileSystemMetaData::DirectoryType); // always stat
+
       return metaData.exists() && metaData.isDirectory();
    }
+
    const QAbstractFileEngine::FileFlags info =
       fileEngine->fileFlags(QAbstractFileEngine::DirectoryType
                             | QAbstractFileEngine::ExistsFlag
                             | QAbstractFileEngine::Refresh);
+
    if (!(info & QAbstractFileEngine::DirectoryType)) {
       return false;
    }
+
    return info & QAbstractFileEngine::ExistsFlag;
 }
 
@@ -809,22 +811,12 @@ QString QDir::toNativeSeparators(const QString &pathName)
    return pathName;
 }
 
-/*!
-    \since 4.2
 
-    Returns \a pathName using '/' as file separator. On Windows,
-    for instance, fromNativeSeparators("\c{c:\\winnt\\system32}") returns
-    "c:/winnt/system32".
-
-    The returned string may be the same as the argument on some
-    operating systems, for example on Unix.
-
-    \sa toNativeSeparators(), separator()
-*/
 QString QDir::fromNativeSeparators(const QString &pathName)
 {
 #if defined(Q_OS_WIN)
    int i = pathName.indexOf(QLatin1Char('\\'));
+
    if (i != -1) {
       QString n(pathName);
 
@@ -843,28 +835,19 @@ QString QDir::fromNativeSeparators(const QString &pathName)
    return pathName;
 }
 
-/*!
-    Changes the QDir's directory to \a dirName.
-
-    Returns true if the new directory exists and is readable;
-    otherwise returns false. Note that the logical cd() operation is
-    not performed if the new directory does not exist.
-
-    Calling cd("..") is equivalent to calling cdUp().
-
-    \sa cdUp(), isReadable(), exists(), path()
-*/
 bool QDir::cd(const QString &dirName)
 {
-   // Don't detach just yet.
+   // Don't detach just yet
    const QDirPrivate *const d = d_ptr.constData();
 
    if (dirName.isEmpty() || dirName == QLatin1String(".")) {
       return true;
    }
+
    QString newPath;
    if (isAbsolutePath(dirName)) {
       newPath = cleanPath(dirName);
+
    } else {
       if (isRoot()) {
          if (dirName == QLatin1String("..")) {
@@ -1501,8 +1484,10 @@ bool QDir::removeRecursively()
 
    bool success = true;
    const QString dirPath = path();
+
    // not empty -- we must empty it first
    QDirIterator di(dirPath, QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
+
    while (di.hasNext()) {
       di.next();
       const QFileInfo &fi = di.fileInfo();

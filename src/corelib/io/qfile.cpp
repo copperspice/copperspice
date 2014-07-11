@@ -487,8 +487,7 @@ QFile::setEncodingFunction(EncoderFn f)
     \sa setEncodingFunction(), decodeName()
 */
 
-void
-QFile::setDecodingFunction(DecoderFn f)
+void QFile::setDecodingFunction(DecoderFn f)
 {
    if (!f) {
       f = locale_decode;
@@ -496,57 +495,24 @@ QFile::setDecodingFunction(DecoderFn f)
    QFilePrivate::decoder = f;
 }
 
-/*!
-    \overload
 
-    Returns true if the file specified by fileName() exists; otherwise
-    returns false.
-
-    \sa fileName(), setFileName()
-*/
-
-bool
-QFile::exists() const
+bool QFile::exists() const
 {
    Q_D(const QFile);
+
    // 0x1000000 = QAbstractFileEngine::Refresh, forcing an update
-   return (d->engine()->fileFlags(QAbstractFileEngine::FlagsMask
-                                  | QAbstractFileEngine::FileFlag(0x1000000)) & QAbstractFileEngine::ExistsFlag);
+
+   return (d->engine()->fileFlags(QAbstractFileEngine::FlagsMask | QAbstractFileEngine::FileFlag(0x1000000)) 
+         & QAbstractFileEngine::ExistsFlag);
 }
 
-/*!
-    Returns true if the file specified by \a fileName exists; otherwise
-    returns false.
-*/
 
-bool
-QFile::exists(const QString &fileName)
+bool QFile::exists(const QString &fileName)
 {
    return QFileInfo(fileName).exists();
 }
 
-/*!
-    \fn QString QFile::symLinkTarget() const
-    \since 4.2
-    \overload
-
-    Returns the absolute path of the file or directory a symlink (or shortcut
-    on Windows) points to, or a an empty string if the object isn't a symbolic
-    link.
-
-    This name may not represent an existing file; it is only a string.
-    QFile::exists() returns true if the symlink points to an existing file.
-
-    \sa fileName() setFileName()
-*/
-
-/*!
-    \obsolete
-
-    Use symLinkTarget() instead.
-*/
-QString
-QFile::readLink() const
+QString QFile::readLink() const
 {
    Q_D(const QFile);
    return d->engine()->fileName(QAbstractFileEngine::LinkName);

@@ -26,8 +26,8 @@
 #ifndef QSOCKS5SOCKETENGINE_P_H
 #define QSOCKS5SOCKETENGINE_P_H
 
-#include "qabstractsocketengine_p.h"
-#include "qnetworkproxy.h"
+#include <qabstractsocketengine_p.h>
+#include <qnetworkproxy.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -67,22 +67,19 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    qint64 write(const char *data, qint64 len);
 
 #ifndef QT_NO_UDPSOCKET
+
 #ifndef QT_NO_NETWORKINTERFACE
-   bool joinMulticastGroup(const QHostAddress &groupAddress,
-                           const QNetworkInterface &interface);
-   bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                            const QNetworkInterface &interface);
+   bool joinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &interface);
+   bool leaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &interface);
    QNetworkInterface multicastInterface() const;
    bool setMulticastInterface(const QNetworkInterface &iface);
-#endif // QT_NO_NETWORKINTERFACE
+#endif
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,
-                       quint16 *port = 0);
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,
-                        quint16 port);
+   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,quint16 *port = 0);
+   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr, quint16 port);
    bool hasPendingDatagrams() const;
    qint64 pendingDatagramSize() const;
-#endif // QT_NO_UDPSOCKET
+#endif
 
    qint64 bytesToWrite() const;
 
@@ -91,8 +88,8 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
 
    bool waitForRead(int msecs = 30000, bool *timedOut = 0);
    bool waitForWrite(int msecs = 30000, bool *timedOut = 0);
-   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite,
-                           bool checkRead, bool checkWrite,
+
+   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite,
                            int msecs = 30000, bool *timedOut = 0);
 
    bool isReadNotificationEnabled() const;
@@ -138,7 +135,6 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    NET_CS_SLOT_1(Private, void _q_controlSocketStateChanged(QAbstractSocket::SocketState un_named_arg1))
    NET_CS_SLOT_2(_q_controlSocketStateChanged)
 };
-
 
 class QTcpSocket;
 
@@ -290,7 +286,6 @@ class QSocks5SocketEngineHandler : public QSocketEngineHandler
          const QNetworkProxy &, QObject *parent);
    virtual QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent);
 };
-
 
 QT_END_NAMESPACE
 #endif // QT_NO_SOCKS5

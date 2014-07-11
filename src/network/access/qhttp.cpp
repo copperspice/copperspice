@@ -26,25 +26,25 @@
 //#define QHTTP_DEBUG
 
 #include <qplatformdefs.h>
-#include "qhttp.h"
+#include <qhttp.h>
 
 #ifndef QT_NO_HTTP
-# include "qtcpsocket.h"
-# include "qsslsocket.h"
-# include "qtextstream.h"
-# include "qmap.h"
-# include "qlist.h"
-# include "qstring.h"
-# include "qstringlist.h"
-# include "qbuffer.h"
-# include "qringbuffer_p.h"
-# include "qcoreevent.h"
-# include "qurl.h"
-# include "qnetworkproxy.h"
-# include "qauthenticator.h"
-# include "qauthenticator_p.h"
-# include "qdebug.h"
-# include "qtimer.h"
+#include <qtcpsocket.h>
+#include <qsslsocket.h>
+#include <qtextstream.h>
+#include <qmap.h>
+#include <qlist.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qbuffer.h>
+#include <qringbuffer_p.h>
+#include <qcoreevent.h>
+#include <qurl.h>
+#include <qnetworkproxy.h>
+#include <qauthenticator.h>
+#include <qauthenticator_p.h>
+#include <qdebug.h>
+#include <qtimer.h>
 #endif
 
 #ifndef QT_NO_HTTP

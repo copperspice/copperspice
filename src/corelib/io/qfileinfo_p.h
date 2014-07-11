@@ -32,7 +32,6 @@
 #include <qatomic.h>
 #include <qshareddata.h>
 #include <qfilesystemengine_p.h>
-
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 
@@ -52,6 +51,7 @@ class QFileInfoPrivate : public QSharedData
         isDefaultConstructed(true),
         cache_enabled(true), fileFlags(0), fileSize(0) {
    }
+
    inline QFileInfoPrivate(const QFileInfoPrivate &copy)
       : QSharedData(copy),
         fileEntry(copy.fileEntry),
@@ -85,8 +85,9 @@ class QFileInfoPrivate : public QSharedData
         cachedFlags(0),
         isDefaultConstructed(false),
         cache_enabled(true), fileFlags(0), fileSize(0) {
-      //If the file engine is not null, this maybe a "mount point" for a custom file engine
-      //in which case we can't trust the metadata
+     
+      // If the file engine is not null, this maybe a "mount point" for a custom file engine
+      // in which case we ca not trust the metadata
       if (fileEngine) {
          metaData = QFileSystemMetaData();
       }
@@ -99,6 +100,7 @@ class QFileInfoPrivate : public QSharedData
          (void)fileEngine->fileFlags(QAbstractFileEngine::Refresh);
       }
    }
+
    inline void clear() {
       metaData.clear();
       clearFlags();

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-
 #ifndef QSSLSOCKET_H
 #define QSSLSOCKET_H
 
 #include <qlist.h>
 #include <qregexp.h>
+
 #ifndef QT_NO_OPENSSL
 #   include <qtcpsocket.h>
 #   include <qsslerror.h>
@@ -69,8 +69,8 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
    void connectToHostEncrypted(const QString &hostName, quint16 port, OpenMode mode = ReadWrite);
    void connectToHostEncrypted(const QString &hostName, quint16 port, const QString &sslPeerName,
                                OpenMode mode = ReadWrite);
-   bool setSocketDescriptor(int socketDescriptor, SocketState state = ConnectedState,
-                            OpenMode openMode = ReadWrite);
+
+   bool setSocketDescriptor(int socketDescriptor, SocketState state = ConnectedState, OpenMode openMode = ReadWrite);
 
    // ### Qt5/Make virtual
    void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value);
@@ -119,11 +119,12 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
    QList<QSslCertificate> peerCertificateChain() const;
    QSslCipher sessionCipher() const;
 
-   // Private keys, for server sockets.
+   // Private keys, for server sockets
    void setPrivateKey(const QSslKey &key);
-   void setPrivateKey(const QString &fileName, QSsl::KeyAlgorithm algorithm = QSsl::Rsa,
-                      QSsl::EncodingFormat format = QSsl::Pem,
-                      const QByteArray &passPhrase = QByteArray());
+   void setPrivateKey(const QString &fileName, 
+         QSsl::KeyAlgorithm algorithm = QSsl::Rsa,QSsl::EncodingFormat format = QSsl::Pem, 
+         const QByteArray &passPhrase = QByteArray());
+
    QSslKey privateKey() const;
 
    // Cipher settings.
@@ -137,12 +138,15 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
    // CA settings.
    bool addCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
                           QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+
    void addCaCertificate(const QSslCertificate &certificate);
    void addCaCertificates(const QList<QSslCertificate> &certificates);
    void setCaCertificates(const QList<QSslCertificate> &certificates);
    QList<QSslCertificate> caCertificates() const;
+
    static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
                                         QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+
    static void addDefaultCaCertificate(const QSslCertificate &certificate);
    static void addDefaultCaCertificates(const QList<QSslCertificate> &certificates);
    static void setDefaultCaCertificates(const QList<QSslCertificate> &certificates);
@@ -191,8 +195,7 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 
    NET_CS_SLOT_1(Protected, void disconnectFromHostImplementation())
    NET_CS_SLOT_2(disconnectFromHostImplementation)
-
- protected:
+ 
    qint64 readData(char *data, qint64 maxlen);
    qint64 writeData(const char *data, qint64 len);
 

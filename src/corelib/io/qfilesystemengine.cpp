@@ -23,15 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qfilesystemengine_p.h"
+#include <qfilesystemengine_p.h>
 #include <QtCore/qdir.h>
 #include <QtCore/qset.h>
 #include <QtCore/qstringbuilder.h>
 #include <qabstractfileengine_p.h>
-
-#ifdef QT_BUILD_CORE_LIB
 #include <qresource_p.h>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -104,8 +101,7 @@ QString QFileSystemEngine::slowCanonicalized(const QString &path)
 static inline bool _q_checkEntry(QFileSystemEntry &entry, QFileSystemMetaData &data, bool resolvingEntry)
 {
    if (resolvingEntry) {
-      if (!QFileSystemEngine::fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute)
-            || !data.exists()) {
+      if (! QFileSystemEngine::fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute) || ! data.exists()) {
          data.clear();
          return false;
       }
@@ -135,7 +131,6 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
       return _q_checkEntry(engine, resolvingEntry);
    }
 
-#if defined(QT_BUILD_CORE_LIB)
    for (int prefixSeparator = 0; prefixSeparator < filePath.size(); ++prefixSeparator) {
       QChar const ch = filePath[prefixSeparator];
       if (ch == QLatin1Char('/')) {
@@ -172,7 +167,6 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
       //  if (!ch.isLetterOrNumber())
       //      break;
    }
-#endif // defined(QT_BUILD_CORE_LIB)
 
    return _q_checkEntry(entry, data, resolvingEntry);
 }
@@ -204,10 +198,10 @@ QAbstractFileEngine *QFileSystemEngine::resolveEntryAndCreateLegacyEngine(
    return engine;
 }
 
-//these unix functions are in this file, because they are shared by symbian port
-//for open C file handles.
+
+// these unix functions are in this file, because they are shared by symbian port for open C file handles
 #ifdef Q_OS_UNIX
-//static
+
 bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data)
 {
    data.entryFlags &= ~QFileSystemMetaData::PosixStatFlags;
@@ -267,10 +261,10 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    // Attributes
    entryFlags |= QFileSystemMetaData::ExistsAttribute;
    size_ = statBuffer.st_size;
-#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC) \
-        && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+
+#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)
    if (statBuffer.st_flags & UF_HIDDEN) {
-      entryFlags |= QFileSystemMetaData::HiddenAttribute;
+      entryFlags     |= QFileSystemMetaData::HiddenAttribute;
       knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
    }
 #endif
@@ -375,11 +369,14 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
 #if defined(Q_OS_WIN)
    Q_UNUSED(metaData);
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
-#else //(Q_OS_UNIX)
+
+#else 
+
    if (!metaData.hasFlags(QFileSystemMetaData::GroupId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);
    }
    return resolveGroupName(metaData.groupId());
+
 #endif
 }
 

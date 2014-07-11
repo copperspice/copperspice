@@ -23,7 +23,6 @@
 *
 ***********************************************************************/
 
-
 #ifndef QIDENTITYPROXYMODEL_H
 #define QIDENTITYPROXYMODEL_H
 
@@ -73,16 +72,14 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
                  int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsInserted)
 
    GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
                  int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
    GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
@@ -101,8 +98,7 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
                  int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-                 int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeRemoved)
 
    GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,

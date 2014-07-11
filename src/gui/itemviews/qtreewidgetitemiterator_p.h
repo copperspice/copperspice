@@ -29,7 +29,7 @@
 #include <QtCore/qstack.h>
 
 #ifndef QT_NO_TREEWIDGET
-#include "qtreewidgetitemiterator.h"
+#include <qtreewidgetitemiterator.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,6 +39,7 @@ class QTreeWidgetItem;
 class QTreeWidgetItemIteratorPrivate
 {
    Q_DECLARE_PUBLIC(QTreeWidgetItemIterator)
+
  public:
    QTreeWidgetItemIteratorPrivate(QTreeWidgetItemIterator *q, QTreeModel *model)
       : m_currentIndex(0), m_model(model), q_ptr(q) {
@@ -66,10 +67,11 @@ class QTreeWidgetItemIteratorPrivate
 
    QTreeWidgetItem *next(const QTreeWidgetItem *current);
    QTreeWidgetItem *previous(const QTreeWidgetItem *current);
+
  private:
-   int             m_currentIndex;
-   QTreeModel     *m_model;        // This iterator class should not have ownership of the model.
-   QStack<int>     m_parentIndex;
+   int m_currentIndex;
+   QTreeModel *m_model;        // This iterator class should not have ownership of the model.
+   QStack<int>  m_parentIndex;
    QTreeWidgetItemIterator *q_ptr;
 };
 

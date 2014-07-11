@@ -126,7 +126,6 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    virtual void setSslConfigurationImplementation(const QSslConfiguration &configuration);
    virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors);
 
- public :
    NET_CS_SLOT_1(Public, virtual void ignoreSslErrors())
    NET_CS_SLOT_OVERLOAD(ignoreSslErrors, ())
 

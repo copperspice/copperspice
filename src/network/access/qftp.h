@@ -139,6 +139,9 @@ class Q_NETWORK_EXPORT QFtp : public QObject
    NET_CS_SIGNAL_1(Public, void done(bool un_named_arg1))
    NET_CS_SIGNAL_2(done, un_named_arg1)
 
+ protected:
+   QScopedPointer<QFtpPrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QFtp)
    Q_DECLARE_PRIVATE(QFtp)
@@ -157,10 +160,6 @@ class Q_NETWORK_EXPORT QFtp : public QObject
 
    NET_CS_SLOT_1(Private, void _q_piFtpReply(int un_named_arg1, const QString &un_named_arg2))
    NET_CS_SLOT_2(_q_piFtpReply)
-
- protected:
-   QScopedPointer<QFtpPrivate> d_ptr;
-
 };
 
 #endif // QT_NO_FTP

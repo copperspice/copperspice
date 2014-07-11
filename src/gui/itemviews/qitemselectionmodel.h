@@ -36,13 +36,16 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_ITEMVIEWS
 
+class QItemSelection;
+class QItemSelectionModelPrivate;
+
 class Q_GUI_EXPORT QItemSelectionRange
 {
-
  public:
    inline QItemSelectionRange() {}
    inline QItemSelectionRange(const QItemSelectionRange &other)
       : tl(other.tl), br(other.br) {}
+
    inline QItemSelectionRange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
    explicit inline QItemSelectionRange(const QModelIndex &index) {
       tl = index;
@@ -151,9 +154,6 @@ inline QItemSelectionRange::QItemSelectionRange(const QModelIndex &atopLeft,
 }
 
 
-class QItemSelection;
-class QItemSelectionModelPrivate;
-
 class Q_GUI_EXPORT QItemSelectionModel : public QObject
 {
    CS_OBJECT(QItemSelectionModel)
@@ -162,7 +162,6 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
    GUI_CS_FLAG(SelectionFlag, SelectionFlags)
 
  public:
-
    enum SelectionFlag {
       NoUpdate       = 0x0000,
       Clear          = 0x0001,
@@ -201,7 +200,6 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
 
    const QAbstractItemModel *model() const;
 
- public :
    GUI_CS_SLOT_1(Public, void setCurrentIndex(const QModelIndex &index, QItemSelectionModel::SelectionFlags command))
    GUI_CS_SLOT_2(setCurrentIndex)
 
@@ -283,9 +281,7 @@ class Q_GUI_EXPORT QItemSelection : public QList<QItemSelectionRange>
    bool contains(const QModelIndex &index) const;
    QModelIndexList indexes() const;
    void merge(const QItemSelection &other, QItemSelectionModel::SelectionFlags command);
-   static void split(const QItemSelectionRange &range,
-                     const QItemSelectionRange &other,
-                     QItemSelection *result);
+   static void split(const QItemSelectionRange &range, const QItemSelectionRange &other, QItemSelection *result);
 };
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QItemSelectionRange &);

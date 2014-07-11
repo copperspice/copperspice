@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qnetworkcookiejar.h"
-#include "qnetworkcookiejar_p.h"
-#include "QtNetwork/qnetworkcookie.h"
-#include "QtCore/qurl.h"
-#include "QtCore/qdatetime.h"
-#include "qtldurl_p.h"
+#include <qnetworkcookiejar.h>
+#include <qnetworkcookiejar_p.h>
+#include <QtNetwork/qnetworkcookie.h>
+#include <QtCore/qurl.h>
+#include <QtCore/qdatetime.h>
+#include <qtldurl_p.h>
 
 QT_BEGIN_NAMESPACE
 

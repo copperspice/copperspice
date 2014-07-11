@@ -97,7 +97,6 @@ class QHttpNetworkConnection : public QObject
 #endif
 
    bool isSsl() const;
-
    QHttpNetworkConnectionChannel *channels() const;
 
 #ifndef QT_NO_OPENSSL
@@ -105,6 +104,9 @@ class QHttpNetworkConnection : public QObject
    void ignoreSslErrors(int channel = -1);
    void ignoreSslErrors(const QList<QSslError> &errors, int channel = -1);
 #endif
+
+ protected:
+   QScopedPointer<QHttpNetworkConnectionPrivate> d_ptr;
 
  private:
    Q_DECLARE_PRIVATE(QHttpNetworkConnection)
@@ -115,10 +117,7 @@ class QHttpNetworkConnection : public QObject
    friend class QHttpNetworkConnectionChannel;
 
    NET_CS_SLOT_1(Private, void _q_startNextRequest())
-   NET_CS_SLOT_2(_q_startNextRequest)
-
- protected:
-   QScopedPointer<QHttpNetworkConnectionPrivate> d_ptr;
+   NET_CS_SLOT_2(_q_startNextRequest) 
 };
 
 

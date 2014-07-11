@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qfilesystemengine_p.h"
+#include <qfilesystemengine_p.h>
 
 #define _POSIX_
-#include "qplatformdefs.h"
-#include "qabstractfileengine.h"
-#include "qfsfileengine_p.h"
+#include <qplatformdefs.h>
+#include <qabstractfileengine.h>
+#include <qfsfileengine_p.h>
 #include <qsystemlibrary_p.h>
 #include <qdebug.h>
 
-#include "qfile.h"
-#include "qdir.h"
-#include "qmutexpool_p.h"
-#include "qvarlengtharray.h"
-#include "qdatetime.h"
-#include "qt_windows.h"
+#include <qfile.h>
+#include <qdir.h>
+#include <qmutexpool_p.h>
+#include <qvarlengtharray.h>
+#include <qdatetime.h>
+#include <qt_windows.h>
 
 #include <sys/types.h>
 #include <direct.h>
@@ -309,6 +309,7 @@ static QString readSymLink(const QFileSystemEntry &link)
             const wchar_t *PathBuffer = &rdb->SymbolicLinkReparseBuffer.PathBuffer[offset];
             result = QString::fromWCharArray(PathBuffer, length);
          }
+
          // cut-off "//?/" and "/??/"
          if (result.size() > 4 && result.at(0) == QLatin1Char('\\') && result.at(2) == QLatin1Char('?') &&
                result.at(3) == QLatin1Char('\\')) {
@@ -796,14 +797,17 @@ static bool tryDriveUNCFallback(const QFileSystemEntry &fname, QFileSystemMetaDa
    bool entryExists = false;
    DWORD fileAttrib = 0;
 
-   if (fname.isDriveRoot()) {
-      // a valid drive ??
+   if (fname.isDriveLetter_Root()) {
+      // a valid drive letter
+
       DWORD drivesBitmask = ::GetLogicalDrives();
       int drivebit = 1 << (fname.filePath().at(0).toUpper().unicode() - QLatin1Char('A').unicode());
+
       if (drivesBitmask & drivebit) {
          fileAttrib = FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_SYSTEM;
          entryExists = true;
       }
+
    } else {
 
       const QString &path = fname.nativeFilePath();
@@ -847,13 +851,15 @@ static bool tryDriveUNCFallback(const QFileSystemEntry &fname, QFileSystemMetaDa
 static bool tryFindFallback(const QFileSystemEntry &fname, QFileSystemMetaData &data)
 {
    bool filledData = false;
-   // This assumes the last call to a Windows API failed.
+
+   // This assumes the last call to a Windows API failed
    int errorCode = GetLastError();
+
    if (errorCode == ERROR_ACCESS_DENIED || errorCode == ERROR_SHARING_VIOLATION) {
       WIN32_FIND_DATA findData;
-      if (getFindData(fname.nativeFilePath(), findData)
-            && findData.dwFileAttributes != INVALID_FILE_ATTRIBUTES) {
-         data.fillFromFindData(findData, true, fname.isDriveRoot());
+
+      if (getFindData(fname.nativeFilePath(), findData) && findData.dwFileAttributes != INVALID_FILE_ATTRIBUTES) {
+         data.fillFromFindData(findData, true, fname.isRoot());
          filledData = true;
       }
    }
@@ -862,28 +868,29 @@ static bool tryFindFallback(const QFileSystemEntry &fname, QFileSystemMetaData &
 
 
 //static
-bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data,
-                                     QFileSystemMetaData::MetaDataFlags what)
+bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
    HANDLE fHandle = (HANDLE)_get_osfhandle(fd);
+
    if (fHandle  != INVALID_HANDLE_VALUE) {
       return fillMetaData(fHandle, data, what);
    }
    return false;
 }
 
-
 //static
-bool QFileSystemEngine::fillMetaData(HANDLE fHandle, QFileSystemMetaData &data,
-                                     QFileSystemMetaData::MetaDataFlags what)
+bool QFileSystemEngine::fillMetaData(HANDLE fHandle, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
    data.entryFlags &= ~what;
+
    clearWinStatData(data);
    BY_HANDLE_FILE_INFORMATION fileInfo;
    UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
+
    if (GetFileInformationByHandle(fHandle , &fileInfo)) {
       data.fillFromFindInfo(fileInfo);
    }
+
    SetErrorMode(oldmode);
    return data.hasFlags(what);
 }
@@ -891,7 +898,7 @@ bool QFileSystemEngine::fillMetaData(HANDLE fHandle, QFileSystemMetaData &data,
 static bool isDirPath(const QString &dirPath, bool *existed);
 
 //static
-bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data,
+bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data, 
                                      QFileSystemMetaData::MetaDataFlags what)
 {
    what |= QFileSystemMetaData::WinLnkType | QFileSystemMetaData::WinStatFlags;
@@ -899,12 +906,16 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
    QFileSystemEntry fname;
    data.knownFlagsMask |= QFileSystemMetaData::WinLnkType;
+
    // Check for ".lnk": Directories named ".lnk" should be skipped, corrupted
    // link files should still be detected as links.
+
    const QString origFilePath = entry.filePath();
-   if (origFilePath.endsWith(QLatin1String(".lnk")) && !isDirPath(origFilePath, 0)) {
+
+   if (origFilePath.endsWith(QLatin1String(".lnk")) && ! isDirPath(origFilePath, 0)) {
       data.entryFlags |= QFileSystemMetaData::WinLnkType;
       fname = QFileSystemEntry(readLink(entry));
+
    } else {
       fname = entry;
    }
@@ -919,33 +930,41 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
       UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
       clearWinStatData(data);
       WIN32_FIND_DATA findData;
+
       // The memory structure for WIN32_FIND_DATA is same as WIN32_FILE_ATTRIBUTE_DATA
       // for all members used by fillFindData().
+
       bool ok = ::GetFileAttributesEx((wchar_t *)fname.nativeFilePath().utf16(), GetFileExInfoStandard,
                                       reinterpret_cast<WIN32_FILE_ATTRIBUTE_DATA *>(&findData));
+
       if (ok) {
-         data.fillFromFindData(findData, false, fname.isDriveRoot());
+         data.fillFromFindData(findData, false, fname.isRoot());
+
       } else {
-         if (!tryFindFallback(fname, data)) {
+         if (! tryFindFallback(fname, data)) {
             tryDriveUNCFallback(fname, data);
          }
       }
+
       SetErrorMode(oldmode);
    }
 
    if (what & QFileSystemMetaData::Permissions) {
       fillPermissions(fname, data, what);
    }
-   if ((what & QFileSystemMetaData::LinkType)
-         && data.missingFlags(QFileSystemMetaData::LinkType)) {
+
+   if ((what & QFileSystemMetaData::LinkType) && data.missingFlags(QFileSystemMetaData::LinkType)) {
       data.knownFlagsMask |= QFileSystemMetaData::LinkType;
+
       if (data.fileAttribute_ & FILE_ATTRIBUTE_REPARSE_POINT) {
          WIN32_FIND_DATA findData;
+
          if (getFindData(fname.nativeFilePath(), findData)) {
             data.fillFromFindData(findData, true);
          }
       }
    }
+
    data.knownFlagsMask |= what;
    return data.hasFlags(what);
 }

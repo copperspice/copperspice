@@ -26,8 +26,8 @@
 #ifndef QNETWORKACCESSBACKEND_P_H
 #define QNETWORKACCESSBACKEND_P_H
 
-#include "qnetworkreplyimpl_p.h"
-#include "QtCore/qobject.h"
+#include <qnetworkreplyimpl_p.h>
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,6 +52,7 @@ class QNonContiguousByteDevice;
 class QNetworkAccessBackend : public QObject
 {
    CS_OBJECT(QNetworkAccessBackend)
+
  public:
    QNetworkAccessBackend();
    virtual ~QNetworkAccessBackend();
@@ -103,6 +104,7 @@ class QNetworkAccessBackend : public QObject
    // information about the request
    QNetworkAccessManager::Operation operation() const;
    QNetworkRequest request() const;
+
 #ifndef QT_NO_NETWORKPROXY
    QList<QNetworkProxy> proxyList() const;
 #endif
@@ -155,6 +157,10 @@ class QNetworkAccessBackend : public QObject
       return false;
    }
 
+   // for task 251801, needs to be a slot to be called asynchronously
+   NET_CS_SLOT_1(Public, void writeDownstreamData(QIODevice *data))
+   NET_CS_SLOT_OVERLOAD(writeDownstreamData, (QIODevice *))
+
  protected:
    // Create the device used for reading the upload data
    QNonContiguousByteDevice *createUploadByteDevice();
@@ -169,13 +175,7 @@ class QNetworkAccessBackend : public QObject
    char *getDownloadBuffer(qint64);
 
    QSharedPointer<QNonContiguousByteDevice> uploadByteDevice;
-
- public :
-   // for task 251801, needs to be a slot to be called asynchronously
-   NET_CS_SLOT_1(Public, void writeDownstreamData(QIODevice *data))
-   NET_CS_SLOT_OVERLOAD(writeDownstreamData, (QIODevice *))
-
- protected :
+  
    NET_CS_SLOT_1(Protected, void finished())
    NET_CS_SLOT_2(finished)
 
@@ -202,7 +202,6 @@ class QNetworkAccessBackend : public QObject
    NET_CS_SLOT_1(Protected, void emitReplyUploadProgress(qint64 bytesSent, qint64 bytesTotal))
    NET_CS_SLOT_2(emitReplyUploadProgress)
 
- protected:
    // FIXME In the long run we should get rid of our QNAM architecture
    // and scrap this ReplyImpl/Backend distinction.
    QNetworkAccessManagerPrivate *manager;
@@ -221,8 +220,7 @@ class QNetworkAccessBackendFactory
  public:
    QNetworkAccessBackendFactory();
    virtual ~QNetworkAccessBackendFactory();
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op,
-                                         const QNetworkRequest &request) const = 0;
+   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const = 0;
 };
 
 QT_END_NAMESPACE

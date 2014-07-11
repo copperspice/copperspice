@@ -133,7 +133,6 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void reset();
    void setRootIndex(const QModelIndex &index);
 
- public:
    GUI_CS_SIGNAL_1(Public, void indexesMoved(const QModelIndexList &indexes))
    GUI_CS_SIGNAL_2(indexesMoved, indexes)
 

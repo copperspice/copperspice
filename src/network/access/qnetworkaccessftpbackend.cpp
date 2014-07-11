@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccessftpbackend_p.h"
-#include "qnetworkaccessmanager_p.h"
-#include "QtNetwork/qauthenticator.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qnetworkaccessftpbackend_p.h>
+#include <qnetworkaccessmanager_p.h>
+#include <QtNetwork/qauthenticator.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 #ifndef QT_NO_FTP
 

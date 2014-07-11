@@ -87,12 +87,9 @@ class Q_NETWORK_EXPORT QUrlInfo
    bool isReadable() const;
    bool isExecutable() const;
 
-   static bool greaterThan(const QUrlInfo &i1, const QUrlInfo &i2,
-                           int sortBy);
-   static bool lessThan(const QUrlInfo &i1, const QUrlInfo &i2,
-                        int sortBy);
-   static bool equal(const QUrlInfo &i1, const QUrlInfo &i2,
-                     int sortBy);
+   static bool greaterThan(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy);
+   static bool lessThan(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy);
+   static bool equal(const QUrlInfo &i1, const QUrlInfo &i2,int sortBy);
 
    bool operator==(const QUrlInfo &i) const;
    inline bool operator!=(const QUrlInfo &i) const {

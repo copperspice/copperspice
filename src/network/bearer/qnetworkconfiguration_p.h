@@ -26,8 +26,7 @@
 #ifndef QNETWORKCONFIGURATION_P_H
 #define QNETWORKCONFIGURATION_P_H
 
-#include "qnetworkconfiguration.h"
-
+#include <qnetworkconfiguration.h>
 #include <QtCore/qshareddata.h>
 #include <QtCore/qmutex.h>
 #include <QtCore/qmap.h>

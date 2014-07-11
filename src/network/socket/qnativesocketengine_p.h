@@ -26,11 +26,11 @@
 #ifndef QNATIVESOCKETENGINE_P_H
 #define QNATIVESOCKETENGINE_P_H
 
-#include "QtNetwork/qhostaddress.h"
-#include "qabstractsocketengine_p.h"
+#include <QtNetwork/qhostaddress.h>
+#include <qabstractsocketengine_p.h>
 
 #ifndef Q_OS_WIN
-#  include "qplatformdefs.h"
+#  include <qplatformdefs.h>
 #else
 #  include <winsock2.h>
 #endif
@@ -42,6 +42,7 @@ QT_BEGIN_NAMESPACE
 #  define QT_SS_ALIGNSIZE (sizeof(qint64))
 #  define QT_SS_PAD1SIZE (QT_SS_ALIGNSIZE - sizeof (short))
 #  define QT_SS_PAD2SIZE (QT_SS_MAXSIZE - (sizeof (short) + QT_SS_PAD1SIZE + QT_SS_ALIGNSIZE))
+
 struct qt_sockaddr_storage {
    short ss_family;
    char __ss_pad1[QT_SS_PAD1SIZE];
@@ -60,6 +61,7 @@ struct qt_sockaddr_storage {
 struct qt_in6_addr {
    quint8 qt_s6_addr[16];
 };
+
 struct qt_sockaddr_in6 {
    short   sin6_family;            /* AF_INET6 */
    quint16 sin6_port;              /* Transport level port number */
@@ -83,6 +85,7 @@ class QNetworkInterface;
 class QNativeSocketEngine : public QAbstractSocketEngine
 {
    CS_OBJECT(QNativeSocketEngine)
+
  public:
    QNativeSocketEngine(QObject *parent = 0);
    ~QNativeSocketEngine();
@@ -116,10 +119,8 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    qint64 read(char *data, qint64 maxlen);
    qint64 write(const char *data, qint64 len);
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,
-                       quint16 *port = 0);
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,
-                        quint16 port);
+   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,quint16 *port = 0);
+   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,quint16 port);
    bool hasPendingDatagrams() const;
    qint64 pendingDatagramSize() const;
 
@@ -136,8 +137,7 @@ class QNativeSocketEngine : public QAbstractSocketEngine
 
    bool waitForRead(int msecs = 30000, bool *timedOut = 0);
    bool waitForWrite(int msecs = 30000, bool *timedOut = 0);
-   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite,
-                           bool checkRead, bool checkWrite,
+   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite, 
                            int msecs = 30000, bool *timedOut = 0);
 
    bool isReadNotificationEnabled() const;
@@ -147,8 +147,6 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    bool isExceptionNotificationEnabled() const;
    void setExceptionNotificationEnabled(bool enable);
 
- public :
-   // non-virtual override;
    NET_CS_SLOT_1(Public, void connectionNotification())
    NET_CS_SLOT_2(connectionNotification)
 
@@ -172,6 +170,7 @@ class QSocketNotifier;
 class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
 {
    Q_DECLARE_PUBLIC(QNativeSocketEngine)
+
  public:
    QNativeSocketEnginePrivate();
    ~QNativeSocketEnginePrivate();
@@ -226,27 +225,26 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
    bool nativeBind(const QHostAddress &address, quint16 port);
    bool nativeListen(int backlog);
    int nativeAccept();
+
 #ifndef QT_NO_NETWORKINTERFACE
-   bool nativeJoinMulticastGroup(const QHostAddress &groupAddress,
-                                 const QNetworkInterface &iface);
-   bool nativeLeaveMulticastGroup(const QHostAddress &groupAddress,
-                                  const QNetworkInterface &iface);
+   bool nativeJoinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface);
+   bool nativeLeaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface);
    QNetworkInterface nativeMulticastInterface() const;
    bool nativeSetMulticastInterface(const QNetworkInterface &iface);
 #endif
+
    qint64 nativeBytesAvailable() const;
 
    bool nativeHasPendingDatagrams() const;
    qint64 nativePendingDatagramSize() const;
-   qint64 nativeReceiveDatagram(char *data, qint64 maxLength,
-                                QHostAddress *address, quint16 *port);
-   qint64 nativeSendDatagram(const char *data, qint64 length,
-                             const QHostAddress &host, quint16 port);
+   qint64 nativeReceiveDatagram(char *data, qint64 maxLength, QHostAddress *address, quint16 *port);
+
+   qint64 nativeSendDatagram(const char *data, qint64 length, const QHostAddress &host, quint16 port);
    qint64 nativeRead(char *data, qint64 maxLength);
    qint64 nativeWrite(const char *data, qint64 length);
    int nativeSelect(int timeout, bool selectForRead) const;
-   int nativeSelect(int timeout, bool checkRead, bool checkWrite,
-                    bool *selectForRead, bool *selectForWrite) const;
+   int nativeSelect(int timeout, bool checkRead, bool checkWrite, bool *selectForRead, bool *selectForWrite) const;
+
 #ifdef Q_OS_WIN
    void setPortAndAddress(sockaddr_in *sockAddrIPv4, qt_sockaddr_in6 *sockAddrIPv6,
                           quint16 port, const QHostAddress &address, sockaddr **sockAddrPtr, QT_SOCKLEN_T *sockAddrSize);

@@ -41,8 +41,7 @@ class QItemSelectionModelPrivate
 
    virtual ~QItemSelectionModelPrivate() {}
 
-   QItemSelection expandSelection(const QItemSelection &selection,
-                                  QItemSelectionModel::SelectionFlags command) const;
+   QItemSelection expandSelection(const QItemSelection &selection,QItemSelectionModel::SelectionFlags command) const;
 
    void initModel(QAbstractItemModel *model);
 

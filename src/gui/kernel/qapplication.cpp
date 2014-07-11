@@ -472,34 +472,11 @@ void QApplicationPrivate::construct(
 }
 
 #if defined(Q_WS_X11)
-// ### a string literal is a cont char*
-// ### using it as a char* is wrong and could lead to segfaults
-// ### if aargv is modified someday
-// ########## make it work with argc == argv == 0
+
 static int aargc = 1;
-static char *aargv[] = { (char *)"unknown", 0 };
+static char fakeData[] = "unknown";
 
-/*!
-    \fn QApplication::QApplication(Display* display, Qt::HANDLE visual, Qt::HANDLE colormap)
-
-    Creates an application, given an already open display \a display. If
-    \a visual and \a colormap are non-zero, the application will use those
-    values as the default Visual and Colormap contexts.
-
-    \warning Qt only supports TrueColor visuals at depths higher than 8
-    bits-per-pixel.
-
-    This function is only available on X11.
-*/
-QApplication::QApplication(Display *dpy, Qt::HANDLE visual, Qt::HANDLE colormap)
-   : QCoreApplication(*new QApplicationPrivate(aargc, aargv, GuiClient, 0x040000))
-{
-   if (! dpy) {
-      qWarning("QApplication: Invalid Display* argument");
-   }
-   Q_D(QApplication);
-   d->construct(dpy, visual, colormap);
-}
+static char *aargv[] = {fakeData, 0};
 
 QApplication::QApplication(Display *dpy, Qt::HANDLE visual, Qt::HANDLE colormap, int _internal)
    : QCoreApplication(*new QApplicationPrivate(aargc, aargv, GuiClient, _internal))
@@ -507,49 +484,24 @@ QApplication::QApplication(Display *dpy, Qt::HANDLE visual, Qt::HANDLE colormap,
    if (! dpy) {
       qWarning("QApplication: Invalid Display* argument");
    }
+
    Q_D(QApplication);
    d->construct(dpy, visual, colormap);
    QApplicationPrivate::app_compile_version = _internal;
 }
 
-/*!
-    \fn QApplication::QApplication(Display *display, int &argc, char **argv,
-        Qt::HANDLE visual, Qt::HANDLE colormap)
-
-    Creates an application, given an already open \a display and using \a argc
-    command line arguments in \a argv. If \a visual and \a colormap are
-    non-zero, the application will use those values as the default Visual
-    and Colormap contexts.
-
-    \warning Qt only supports TrueColor visuals at depths higher than 8
-    bits-per-pixel.
-
-    This function is only available on X11.
-*/
-QApplication::QApplication(Display *dpy, int &argc, char **argv,
-                           Qt::HANDLE visual, Qt::HANDLE colormap)
-   : QCoreApplication(*new QApplicationPrivate(argc, argv, GuiClient, 0x040000))
-{
-   if (! dpy) {
-      qWarning("QApplication: Invalid Display* argument");
-   }
-   Q_D(QApplication);
-   d->construct(dpy, visual, colormap);
-}
-
-QApplication::QApplication(Display *dpy, int &argc, char **argv,
-                           Qt::HANDLE visual, Qt::HANDLE colormap, int _internal)
+QApplication::QApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual, Qt::HANDLE colormap, int _internal)
    : QCoreApplication(*new QApplicationPrivate(argc, argv, GuiClient, _internal))
 {
    if (! dpy) {
       qWarning("QApplication: Invalid Display* argument");
    }
+
    Q_D(QApplication);
    d->construct(dpy, visual, colormap);
    QApplicationPrivate::app_compile_version = _internal;
 }
-
-#endif // Q_WS_X11
+#endif
 
 extern void qInitDrawhelperAsm();
 extern void qInitImageConversions();
@@ -584,6 +536,7 @@ void QApplicationPrivate::initialize()
    }
    // trigger registering of QVariant's GUI types
    qRegisterGuiVariant();
+
 #ifndef QT_NO_STATEMACHINE
    // trigger registering of QStateMachine's GUI types
    qRegisterGuiStateMachine();
@@ -592,6 +545,7 @@ void QApplicationPrivate::initialize()
    is_app_running = true; // no longer starting up
 
    Q_Q(QApplication);
+
 #ifndef QT_NO_SESSIONMANAGER
    // connect to the session manager
    session_manager = new QSessionManager(q, session_id, session_key);

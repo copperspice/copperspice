@@ -27,7 +27,7 @@
 #define QNETWORKCONFIGMANAGER_H
 
 #ifdef QT_MOBILITY_BEARER
-# include "qmobilityglobal.h"
+# include <qmobilityglobal.h>
 #endif
 
 #include <QtCore/qobject.h>

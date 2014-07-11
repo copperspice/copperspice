@@ -44,12 +44,12 @@ class Q_GUI_EXPORT QListWidgetItem
 {
    friend class QListModel;
    friend class QListWidget;
+
  public:
    enum ItemType { Type = 0, UserType = 1000 };
    explicit QListWidgetItem(QListWidget *view = 0, int type = Type);
    explicit QListWidgetItem(const QString &text, QListWidget *view = 0, int type = Type);
-   explicit QListWidgetItem(const QIcon &icon, const QString &text,
-                            QListWidget *view = 0, int type = Type);
+   explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = 0, int type = Type);
    QListWidgetItem(const QListWidgetItem &other);
    virtual ~QListWidgetItem();
 
@@ -289,9 +289,7 @@ class Q_GUI_EXPORT QListWidget : public QListView
    void setItemHidden(const QListWidgetItem *item, bool hide);
    void dropEvent(QDropEvent *event);
 
- public :
-   GUI_CS_SLOT_1(Public, void scrollToItem(const QListWidgetItem *item,
-                                           QAbstractItemView::ScrollHint hint = EnsureVisible))
+   GUI_CS_SLOT_1(Public, void scrollToItem(const QListWidgetItem *item, QAbstractItemView::ScrollHint hint = EnsureVisible))
    GUI_CS_SLOT_2(scrollToItem)
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)

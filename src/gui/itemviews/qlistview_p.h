@@ -26,16 +26,19 @@
 #ifndef QLISTVIEW_P_H
 #define QLISTVIEW_P_H
 
-#include "qabstractitemview_p.h"
-#include "qrubberband.h"
-#include "qbitarray.h"
-#include "qbsptree_p.h"
+#include <qabstractitemview_p.h>
+#include <qrubberband.h>
+#include <qbitarray.h>
+#include <qbsptree_p.h>
 #include <limits.h>
 #include <qscrollbar.h>
 
 #ifndef QT_NO_LISTVIEW
 
 QT_BEGIN_NAMESPACE
+
+class QListView;
+class QListViewPrivate;
 
 class QListViewItem
 {
@@ -103,9 +106,6 @@ struct QListViewLayoutInfo {
    int max;
 };
 
-class QListView;
-class QListViewPrivate;
-
 class QCommonListViewBase
 {
  public:
@@ -154,7 +154,6 @@ class QCommonListViewBase
       return false;
    }
 #endif
-
 
    //other inline members
    inline int spacing() const;
@@ -246,9 +245,10 @@ class QListModeViewBase : public QCommonListViewBase
  private:
    QPoint initStaticLayout(const QListViewLayoutInfo &info);
    void doStaticLayout(const QListViewLayoutInfo &info);
-   int perItemScrollToValue(int index, int value, int height,
-                            QAbstractItemView::ScrollHint hint,
+
+   int perItemScrollToValue(int index, int value, int height, QAbstractItemView::ScrollHint hint,
                             Qt::Orientation orientation, bool wrap, int extent) const;
+
    int perItemScrollingPageSteps(int length, int bounds, bool wrap) const;
 };
 
@@ -307,6 +307,7 @@ class QIconModeViewBase : public QCommonListViewBase
 class QListViewPrivate: public QAbstractItemViewPrivate
 {
    Q_DECLARE_PUBLIC(QListView)
+
  public:
    QListViewPrivate();
    ~QListViewPrivate();
@@ -450,11 +451,9 @@ class QListViewPrivate: public QAbstractItemViewPrivate
       emit q_func()->indexesMoved(indexes);
    }
 
-
    QCommonListViewBase *commonListView;
 
    // ### FIXME: see if we can move the members into the dynamic/static classes
-
    bool wrap;
    int space;
    QSize grid;
@@ -465,8 +464,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    QListView::LayoutMode layoutMode;
    QListView::ViewMode viewMode;
 
-   // the properties controlling the
-   // icon- or list-view modes
+   // the properties controlling the icon- or list-view modes
    enum ModeProperties {
       Wrap = 1,
       Spacing = 2,
@@ -566,10 +564,12 @@ inline QStyleOptionViewItemV4 QCommonListViewBase::viewOptions() const
 {
    return dd->viewOptionsV4();
 }
+
 inline QWidget *QCommonListViewBase::viewport() const
 {
    return dd->viewport;
 }
+
 inline QRect QCommonListViewBase::clipRect() const
 {
    return dd->clipRect();
@@ -579,10 +579,12 @@ inline QSize QCommonListViewBase::cachedItemSize() const
 {
    return dd->cachedItemSize;
 }
+
 inline QRect QCommonListViewBase::viewItemRect(const QListViewItem &item) const
 {
    return dd->viewItemRect(item);
 }
+
 inline QSize QCommonListViewBase::itemSize(const QStyleOptionViewItemV2 &opt, const QModelIndex &idx) const
 {
    return dd->itemSize(opt, idx);

@@ -26,7 +26,7 @@
 #ifndef QNET_UNIX_P_H
 #define QNET_UNIX_P_H
 
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -47,11 +47,13 @@ static inline int qt_safe_socket(int domain, int type, int protocol, int flags =
    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
    int fd;
+
 #if defined(SOCK_CLOEXEC) && defined(SOCK_NONBLOCK)
    int newtype = type | SOCK_CLOEXEC;
    if (flags & O_NONBLOCK) {
       newtype |= SOCK_NONBLOCK;
    }
+
    fd = ::socket(domain, newtype, protocol);
    if (fd != -1 || errno != EINVAL) {
       return fd;
@@ -79,12 +81,14 @@ static inline int qt_safe_accept(int s, struct sockaddr *addr, QT_SOCKLEN_T *add
    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
    int fd;
+
 #if QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC && defined(SOCK_CLOEXEC) && defined(SOCK_NONBLOCK)
    // use accept4
    int sockflags = SOCK_CLOEXEC;
    if (flags & O_NONBLOCK) {
       sockflags |= SOCK_NONBLOCK;
    }
+
    fd = ::accept4(s, addr, static_cast<QT_SOCKLEN_T *>(addrlen), sockflags);
    if (fd != -1 || !(errno == ENOSYS || errno == EINVAL)) {
       return fd;
@@ -115,6 +119,7 @@ static inline int qt_safe_listen(int s, int backlog)
 static inline int qt_safe_connect(int sockfd, const struct sockaddr *addr, QT_SOCKLEN_T addrlen)
 {
    int ret;
+
    // Solaris e.g. expects a non-const 2nd parameter
    EINTR_LOOP(ret, QT_SOCKET_CONNECT(sockfd, const_cast<struct sockaddr *>(addr), addrlen));
    return ret;

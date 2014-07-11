@@ -334,7 +334,6 @@ inline void QStandardItem::appendRow(QStandardItem *aitem)
    insertRow(rowCount(), aitem);
 }
 
-
 class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
 {
    CS_OBJECT(QStandardItemModel)

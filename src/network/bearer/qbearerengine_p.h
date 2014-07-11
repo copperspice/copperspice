@@ -26,9 +26,9 @@
 #ifndef QBEARERENGINE_P_H
 #define QBEARERENGINE_P_H
 
-#include "qnetworkconfiguration_p.h"
-#include "qnetworksession.h"
-#include "qnetworkconfigmanager.h"
+#include <qnetworkconfiguration_p.h>
+#include <qnetworksession.h>
+#include <qnetworkconfigmanager.h>
 
 #include <QtCore/qobject.h>
 #include <QtCore/qglobal.h>
@@ -65,7 +65,6 @@ class Q_NETWORK_EXPORT QBearerEngine : public QObject
    virtual bool requiresPolling() const;
    bool configurationsInUse() const;
 
- public:
    NET_CS_SIGNAL_1(Public, void configurationAdded(QNetworkConfigurationPrivatePointer config))
    NET_CS_SIGNAL_2(configurationAdded, config)
    NET_CS_SIGNAL_1(Public, void configurationRemoved(QNetworkConfigurationPrivatePointer config))

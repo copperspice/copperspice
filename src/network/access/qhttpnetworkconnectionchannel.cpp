@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qhttpnetworkconnection_p.h"
-#include "qhttpnetworkconnectionchannel_p.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qhttpnetworkconnection_p.h>
+#include <qhttpnetworkconnectionchannel_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 #include <qpair.h>
 #include <qdebug.h>
 
@@ -38,7 +38,7 @@
 #endif
 
 #ifndef QT_NO_BEARERMANAGEMENT
-#include "qnetworksession_p.h"
+#include <qnetworksession_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

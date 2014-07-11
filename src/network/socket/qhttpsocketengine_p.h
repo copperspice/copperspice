@@ -26,10 +26,10 @@
 #ifndef QHTTPSOCKETENGINE_P_H
 #define QHTTPSOCKETENGINE_P_H
 
-#include "qabstractsocketengine_p.h"
-#include "qabstractsocket.h"
-#include "qnetworkproxy.h"
-#include "qauthenticator_p.h"
+#include <qabstractsocketengine_p.h>
+#include <qabstractsocket.h>
+#include <qnetworkproxy.h>
+#include <qauthenticator_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,6 +41,7 @@ class QHttpSocketEnginePrivate;
 class QHttpSocketEngine : public QAbstractSocketEngine
 {
    CS_OBJECT(QHttpSocketEngine)
+
  public:
    enum HttpState {
       None,
@@ -71,27 +72,22 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    void close();
 
    qint64 bytesAvailable() const;
-
    qint64 read(char *data, qint64 maxlen);
    qint64 write(const char *data, qint64 len);
 
 #ifndef QT_NO_UDPSOCKET
 #ifndef QT_NO_NETWORKINTERFACE
-   bool joinMulticastGroup(const QHostAddress &groupAddress,
-                           const QNetworkInterface &interface);
-   bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                            const QNetworkInterface &interface);
+   bool joinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &interface);
+   bool leaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &interface);
    QNetworkInterface multicastInterface() const;
    bool setMulticastInterface(const QNetworkInterface &iface);
-#endif // QT_NO_NETWORKINTERFACE
+#endif
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,
-                       quint16 *port = 0);
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,
-                        quint16 port);
+   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0, quint16 *port = 0);
+   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr, quint16 port);
    bool hasPendingDatagrams() const;
    qint64 pendingDatagramSize() const;
-#endif // QT_NO_UDPSOCKET
+#endif
 
    qint64 bytesToWrite() const;
 
@@ -100,9 +96,8 @@ class QHttpSocketEngine : public QAbstractSocketEngine
 
    bool waitForRead(int msecs = 30000, bool *timedOut = 0);
    bool waitForWrite(int msecs = 30000, bool *timedOut = 0);
-   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite,
-                           bool checkRead, bool checkWrite,
-                           int msecs = 30000, bool *timedOut = 0);
+   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite, 
+         int msecs = 30000, bool *timedOut = 0);
 
    bool isReadNotificationEnabled() const;
    void setReadNotificationEnabled(bool enable);
@@ -111,7 +106,6 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    bool isExceptionNotificationEnabled() const;
    void setExceptionNotificationEnabled(bool enable);
 
- public :
    NET_CS_SLOT_1(Public, void slotSocketConnected())
    NET_CS_SLOT_2(slotSocketConnected)
    NET_CS_SLOT_1(Public, void slotSocketDisconnected())
@@ -133,20 +127,19 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    NET_CS_SLOT_1(Private, void emitPendingConnectionNotification())
    NET_CS_SLOT_2(emitPendingConnectionNotification)
 
- private:
    void emitReadNotification();
    void emitWriteNotification();
    void emitConnectionNotification();
 
    Q_DECLARE_PRIVATE(QHttpSocketEngine)
    Q_DISABLE_COPY(QHttpSocketEngine)
-
 };
 
 
 class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
 {
    Q_DECLARE_PUBLIC(QHttpSocketEngine)
+
  public:
    QHttpSocketEnginePrivate();
    ~QHttpSocketEnginePrivate();
@@ -174,6 +167,7 @@ class QHttpSocketEngineHandler : public QSocketEngineHandler
  public:
    virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
          const QNetworkProxy &, QObject *parent);
+
    virtual QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent);
 };
 #endif

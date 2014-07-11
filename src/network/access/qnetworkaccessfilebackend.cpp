@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccessfilebackend_p.h"
-#include "qfileinfo.h"
-#include "qurlinfo.h"
-#include "qdir.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qnetworkaccessfilebackend_p.h>
+#include <qfileinfo.h>
+#include <qurlinfo.h>
+#include <qdir.h>
+#include <qnoncontiguousbytedevice_p.h>
 #include <QtCore/QCoreApplication>
 
 QT_BEGIN_NAMESPACE

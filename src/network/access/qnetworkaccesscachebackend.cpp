@@ -25,12 +25,12 @@
 
 //#define QNETWORKACCESSCACHEBACKEND_DEBUG
 
-#include "qnetworkaccesscachebackend_p.h"
-#include "qabstractnetworkcache.h"
-#include "qfileinfo.h"
-#include "qurlinfo.h"
-#include "qdir.h"
-#include "qcoreapplication.h"
+#include <qnetworkaccesscachebackend_p.h>
+#include <qabstractnetworkcache.h>
+#include <qfileinfo.h>
+#include <qurlinfo.h>
+#include <qdir.h>
+#include <qcoreapplication.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,8 +26,8 @@
 #ifndef QSHAREDNETWORKSESSION_P_H
 #define QSHAREDNETWORKSESSION_P_H
 
-#include "qnetworksession.h"
-#include "qnetworkconfiguration.h"
+#include <qnetworksession.h>
+#include <qnetworkconfiguration.h>
 #include <QHash>
 #include <QSharedPointer>
 #include <QWeakPointer>
@@ -44,6 +44,7 @@ class QSharedNetworkSessionManager
  public:
    static QSharedPointer<QNetworkSession> getSession(QNetworkConfiguration config);
    static void setSession(QNetworkConfiguration config, QSharedPointer<QNetworkSession> session);
+
  private:
    QHash<QNetworkConfiguration, QWeakPointer<QNetworkSession> > sessions;
 };

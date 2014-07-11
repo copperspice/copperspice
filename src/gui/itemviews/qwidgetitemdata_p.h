@@ -26,13 +26,12 @@
 #ifndef QWIDGETITEMDATA_P_H
 #define QWIDGETITEMDATA_P_H
 
-#include "qdatastream.h"
+#include <qdatastream.h>
 
 QT_BEGIN_NAMESPACE
 
 class QWidgetItemData
 {
-
  public:
    inline QWidgetItemData() : role(-1) {}
    inline QWidgetItemData(int r, QVariant v) : role(r), value(v) {}

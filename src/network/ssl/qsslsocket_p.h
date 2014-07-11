@@ -57,14 +57,14 @@ typedef OSStatus (*PtrSecTrustCopyAnchorCertificates)(CFArrayRef *);
 
 #if defined(Q_OS_WIN)
 typedef HCERTSTORE (WINAPI *PtrCertOpenSystemStoreW)(HCRYPTPROV_LEGACY, LPCWSTR);
-typedef PCCERT_CONTEXT (WINAPI *PtrCertFindCertificateInStore)(HCERTSTORE, DWORD, DWORD, DWORD, const void *,
-      PCCERT_CONTEXT);
+typedef PCCERT_CONTEXT (WINAPI *PtrCertFindCertificateInStore)(HCERTSTORE, DWORD, DWORD, DWORD, const void *, PCCERT_CONTEXT);
 typedef BOOL (WINAPI *PtrCertCloseStore)(HCERTSTORE, DWORD);
 #endif
 
 class QSslSocketPrivate : public QTcpSocketPrivate
 {
    Q_DECLARE_PUBLIC(QSslSocket)
+
  public:
    QSslSocketPrivate();
    virtual ~QSslSocketPrivate();

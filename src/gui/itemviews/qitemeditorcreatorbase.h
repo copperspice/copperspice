@@ -1,1 +1,1 @@
-#include "qitemeditorfactory.h"
+#include <qitemeditorfactory.h>

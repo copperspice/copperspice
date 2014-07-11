@@ -73,7 +73,6 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    CS_OBJECT_MULTIPLE(QHttpNetworkReply, QObject)
 
  public:
-
    explicit QHttpNetworkReply(const QUrl &url = QUrl(), QObject *parent = 0);
    virtual ~QHttpNetworkReply();
 
@@ -128,16 +127,15 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    void ignoreSslErrors();
    void ignoreSslErrors(const QList<QSslError> &errors);
 
- public:
    NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &errors))
    NET_CS_SIGNAL_2(sslErrors, errors)
 #endif
+
    NET_CS_SIGNAL_1(Public, void readyRead())
    NET_CS_SIGNAL_2(readyRead)
    NET_CS_SIGNAL_1(Public, void finished())
    NET_CS_SIGNAL_2(finished)
-   NET_CS_SIGNAL_1(Public, void finishedWithError(QNetworkReply::NetworkError errorCode,
-                   const QString &detail = QString()))
+   NET_CS_SIGNAL_1(Public, void finishedWithError(QNetworkReply::NetworkError errorCode, const QString &detail = QString()))
    NET_CS_SIGNAL_2(finishedWithError, errorCode, detail)
    NET_CS_SIGNAL_1(Public, void headerChanged())
    NET_CS_SIGNAL_2(headerChanged)
@@ -168,7 +166,6 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
  protected:
    QScopedPointer<QHttpNetworkReplyPrivate> d_ptr;
 };
-
 
 class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
 {
@@ -205,11 +202,13 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    bool isChunked();
    bool isConnectionCloseEnabled();
    bool isGzipped();
+
 #ifndef QT_NO_COMPRESS
    bool gzipCheckHeader(QByteArray &content, int &pos);
    int gunzipBodyPartially(QByteArray &compressed, QByteArray &inflated);
    void gunzipBodyPartiallyEnd();
 #endif
+
    void removeAutoDecompressHeader();
 
    enum ReplyState {
@@ -242,9 +241,11 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    QPointer<QHttpNetworkConnectionChannel> connectionChannel;
    bool initInflate;
    bool streamEnd;
+
 #ifndef QT_NO_COMPRESS
    z_stream inflateStrm;
 #endif
+
    bool autoDecompress;
 
    QByteDataBuffer responseData; // uncompressed body
@@ -257,14 +258,10 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    char *userProvidedDownloadBuffer;
 };
 
-
-
-
 QT_END_NAMESPACE
 
 //Q_DECLARE_METATYPE(QHttpNetworkReply)
 
 #endif // QT_NO_HTTP
-
 
 #endif // QHTTPNETWORKREPLY_H

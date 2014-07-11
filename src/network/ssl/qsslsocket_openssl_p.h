@@ -26,10 +26,12 @@
 #ifndef QSSLSOCKET_OPENSSL_P_H
 #define QSSLSOCKET_OPENSSL_P_H
 
-#include "qsslsocket_p.h"
+#include <qsslsocket_p.h>
 
 #ifdef Q_OS_WIN
+
 #include <qt_windows.h>
+
 #if defined(OCSP_RESPONSE)
 #undef OCSP_RESPONSE
 #endif
@@ -52,7 +54,8 @@
 #include <openssl/dsa.h>
 #include <openssl/rsa.h>
 #include <openssl/crypto.h>
-#if OPENSSL_VERSION_NUMBER >= 0x0090806fL && !defined(OPENSSL_NO_TLSEXT)
+
+#if OPENSSL_VERSION_NUMBER >= 0x0090806fL && ! defined(OPENSSL_NO_TLSEXT)
 #include <openssl/tls1.h>
 #endif
 
@@ -65,6 +68,7 @@ QT_BEGIN_NAMESPACE
 class QSslSocketBackendPrivate : public QSslSocketPrivate
 {
    Q_DECLARE_PUBLIC(QSslSocket)
+
  public:
    QSslSocketBackendPrivate();
    virtual ~QSslSocketBackendPrivate();

@@ -28,7 +28,7 @@
 
 #include <QtCore/QObject>
 #include <QNetworkSession>
-#include "qsslerror.h"
+#include <qsslerror.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -171,7 +171,6 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    NET_CS_SLOT_1(Private, void _q_networkSessionStateChanged(QNetworkSession::State un_named_arg1))
    NET_CS_SLOT_2(_q_networkSessionStateChanged)
 #endif
-
 
 };
 

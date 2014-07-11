@@ -26,10 +26,9 @@
 #ifndef QNETWORKREPLYFILEIMPL_P_H
 #define QNETWORKREPLYFILEIMPL_P_H
 
-
-#include "qnetworkreply.h"
-#include "qnetworkreply_p.h"
-#include "qnetworkaccessmanager.h"
+#include <qnetworkreply.h>
+#include <qnetworkreply_p.h>
+#include <qnetworkaccessmanager.h>
 #include <QFile>
 #include <QAbstractFileEngine>
 

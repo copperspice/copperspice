@@ -26,7 +26,7 @@
 #ifndef QTREEVIEW_P_H
 #define QTREEVIEW_P_H
 
-#include "qabstractitemview_p.h"
+#include <qabstractitemview_p.h>
 #include <QtCore/qvariantanimation.h>
 #include <QtCore/qabstractitemmodel.h>
 
@@ -37,6 +37,7 @@ QT_BEGIN_NAMESPACE
 struct QTreeViewItem {
    QTreeViewItem() : parentItem(-1), expanded(false), spanning(false), hasChildren(false),
       hasMoreSiblings(false), total(0), level(0), height(0) {}
+
    QModelIndex index; // we remove items whenever the indexes are invalidated
    int parentItem; // parent item index in viewItems
    uint expanded : 1;
@@ -102,7 +103,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    void drawAnimatedOperation(QPainter *painter) const;
    QPixmap renderTreeToPixmapForAnimation(const QRect &rect) const;
    void _q_endAnimatedOperation();
-#endif //QT_NO_ANIMATION
+#endif
 
    void expand(int item, bool emitSignal);
    void collapse(int item, bool emitSignal);
@@ -128,6 +129,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
 
    void insertViewItems(int pos, int count, const QTreeViewItem &viewItem);
    void removeViewItems(int pos, int count);
+
 #if 0
    bool checkViewItems() const;
 #endif
@@ -213,10 +215,12 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       int i = item;
       while (isItemHiddenOrDisabled(--item)) {} return item < 0 ? i : item;
    }
+
    inline int below(int item) const {
       int i = item;
       while (isItemHiddenOrDisabled(++item)) {} return item >= viewItems.count() ? i : item;
    }
+
    inline void invalidateHeightCache(int item) const {
       viewItems[item].height = 0;
    }

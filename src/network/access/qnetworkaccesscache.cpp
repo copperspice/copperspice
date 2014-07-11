@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccesscache_p.h"
-#include "QtCore/qpointer.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qqueue.h"
-#include "qnetworkaccessmanager_p.h"
-#include "qnetworkreply_p.h"
-#include "qnetworkrequest.h"
+#include <qnetworkaccesscache_p.h>
+#include <QtCore/qpointer.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qqueue.h>
+#include <qnetworkaccessmanager_p.h>
+#include <qnetworkreply_p.h>
+#include <qnetworkrequest.h>
 
 QT_BEGIN_NAMESPACE
 

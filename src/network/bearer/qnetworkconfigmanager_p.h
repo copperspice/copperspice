@@ -26,9 +26,8 @@
 #ifndef QNETWORKCONFIGMANAGER_P_H
 #define QNETWORKCONFIGMANAGER_P_H
 
-#include "qnetworkconfigmanager.h"
-#include "qnetworkconfiguration_p.h"
-
+#include <qnetworkconfigmanager.h>
+#include <qnetworkconfiguration_p.h>
 #include <QtCore/qmutex.h>
 #include <QtCore/qset.h>
 
@@ -64,14 +63,13 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
 
    void initialize();
    void cleanup();
- public :
+
    NET_CS_SLOT_1(Public, void updateConfigurations())
    NET_CS_SLOT_2(updateConfigurations)
 
    NET_CS_SLOT_1(Public, static void addPostRoutine())
    NET_CS_SLOT_2(addPostRoutine)
 
- public:
    NET_CS_SIGNAL_1(Public, void configurationAdded(const QNetworkConfiguration &config))
    NET_CS_SIGNAL_OVERLOAD(configurationAdded, (const QNetworkConfiguration &), config)
 

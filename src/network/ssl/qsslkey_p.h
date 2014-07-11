@@ -26,7 +26,7 @@
 #ifndef QSSLKEY_P_H
 #define QSSLKEY_P_H
 
-#include "qsslkey.h"
+#include <qsslkey.h>
 #include <openssl/rsa.h>
 #include <openssl/dsa.h>
 

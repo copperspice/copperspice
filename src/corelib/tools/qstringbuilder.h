@@ -52,6 +52,9 @@ template <typename T> struct QConcatenable {};
 template <typename A, typename B>
 class QStringBuilder
 {
+   typedef QConcatenable<QStringBuilder<A, B> > Concatenable;
+   typedef typename Concatenable::ConvertTo ConvertTo;
+
  public:
    QStringBuilder(const A &a_, const B &b_) : a(a_), b(b_) {}
  
@@ -87,10 +90,6 @@ class QStringBuilder
       }
       return s;
    }
-
-   typedef QConcatenable<QStringBuilder<A, B> > Concatenable;
-   typedef typename Concatenable::ConvertTo ConvertTo;
-
 };
 
 template <>

@@ -26,7 +26,7 @@
 #ifndef QSTANDARDITEMMODEL_P_H
 #define QSTANDARDITEMMODEL_P_H
 
-#include "qabstractitemmodel_p.h"
+#include <qabstractitemmodel_p.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
@@ -42,6 +42,7 @@ QT_BEGIN_NAMESPACE
 class QStandardItemPrivate
 {
    Q_DECLARE_PUBLIC(QStandardItem)
+
  public:
    inline QStandardItemPrivate()
       : model(0),

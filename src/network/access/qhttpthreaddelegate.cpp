@@ -25,14 +25,14 @@
 
 //#define QHTTPTHREADDELEGATE_DEBUG
 
-#include "qhttpthreaddelegate_p.h"
+#include <qhttpthreaddelegate_p.h>
 #include <QThread>
 #include <QTimer>
 #include <QAuthenticator>
 #include <QEventLoop>
-#include "qhttpnetworkreply_p.h"
-#include "qnetworkaccesscache_p.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qhttpnetworkreply_p.h>
+#include <qnetworkaccesscache_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 #ifndef QT_NO_HTTP
 

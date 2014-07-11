@@ -1,1 +1,1 @@
-#include "qnetworkinterface.h"
+#include <qnetworkinterface.h>

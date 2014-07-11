@@ -25,20 +25,20 @@
 
 //#define QNETWORKACCESSHTTPBACKEND_DEBUG
 
-#include "qnetworkaccesshttpbackend_p.h"
-#include "qnetworkaccessmanager_p.h"
-#include "qnetworkaccesscache_p.h"
-#include "qabstractnetworkcache.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "qnetworksession_p.h"
-#include "qnetworkrequest_p.h"
-#include "qnetworkcookie_p.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qelapsedtimer.h"
-#include "QtNetwork/qsslconfiguration.h"
-#include "qhttpthreaddelegate_p.h"
-#include "qthread.h"
+#include <qnetworkaccesshttpbackend_p.h>
+#include <qnetworkaccessmanager_p.h>
+#include <qnetworkaccesscache_p.h>
+#include <qabstractnetworkcache.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <qnetworksession_p.h>
+#include <qnetworkrequest_p.h>
+#include <qnetworkcookie_p.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qelapsedtimer.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <qhttpthreaddelegate_p.h>
+#include <qthread.h>
 
 #ifndef QT_NO_HTTP
 

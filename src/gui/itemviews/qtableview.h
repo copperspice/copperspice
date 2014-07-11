@@ -107,7 +107,6 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 
    void sortByColumn(int column, Qt::SortOrder order);
 
- public :
    GUI_CS_SLOT_1(Public, void selectRow(int row))
    GUI_CS_SLOT_2(selectRow)
 

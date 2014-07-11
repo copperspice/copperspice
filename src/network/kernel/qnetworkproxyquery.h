@@ -1,1 +1,1 @@
-#include "qnetworkproxy.h"
+#include <qnetworkproxy.h>

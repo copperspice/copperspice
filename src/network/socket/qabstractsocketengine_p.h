@@ -26,8 +26,8 @@
 #ifndef QABSTRACTSOCKETENGINE_P_H
 #define QABSTRACTSOCKETENGINE_P_H
 
-#include "QtNetwork/qhostaddress.h"
-#include "QtNetwork/qabstractsocket.h"
+#include <QtNetwork/qhostaddress.h>
+#include <QtNetwork/qabstractsocket.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -63,9 +63,9 @@ class QAbstractSocketEngine : public QObject
    CS_OBJECT(QAbstractSocketEngine)
 
  public:
-
    static QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
          const QNetworkProxy &, QObject *parent);
+
    static QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent);
 
    QAbstractSocketEngine(QObject *parent = 0);
@@ -109,21 +109,20 @@ class QAbstractSocketEngine : public QObject
 
 #ifndef QT_NO_UDPSOCKET
 #ifndef QT_NO_NETWORKINTERFACE
-   virtual bool joinMulticastGroup(const QHostAddress &groupAddress,
-                                   const QNetworkInterface &iface) = 0;
-   virtual bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                                    const QNetworkInterface &iface) = 0;
+   virtual bool joinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface) = 0;
+   virtual bool leaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface) = 0;
+
    virtual QNetworkInterface multicastInterface() const = 0;
    virtual bool setMulticastInterface(const QNetworkInterface &iface) = 0;
-#endif // QT_NO_NETWORKINTERFACE
+#endif
 
-   virtual qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,
-                               quint16 *port = 0) = 0;
-   virtual qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,
-                                quint16 port) = 0;
+   virtual qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0, quint16 *port = 0) = 0;
+
+   virtual qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr, quint16 port) = 0;
+
    virtual bool hasPendingDatagrams() const = 0;
    virtual qint64 pendingDatagramSize() const = 0;
-#endif // QT_NO_UDPSOCKET
+#endif
 
    virtual qint64 bytesToWrite() const = 0;
 
@@ -132,8 +131,7 @@ class QAbstractSocketEngine : public QObject
 
    virtual bool waitForRead(int msecs = 30000, bool *timedOut = 0) = 0;
    virtual bool waitForWrite(int msecs = 30000, bool *timedOut = 0) = 0;
-   virtual bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite,
-                                   bool checkRead, bool checkWrite,
+   virtual bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite,
                                    int msecs = 30000, bool *timedOut = 0) = 0;
 
    QAbstractSocket::SocketError error() const;
@@ -154,7 +152,6 @@ class QAbstractSocketEngine : public QObject
    virtual bool isExceptionNotificationEnabled() const = 0;
    virtual void setExceptionNotificationEnabled(bool enable) = 0;
 
- public :
    NET_CS_SLOT_1(Public, void readNotification())
    NET_CS_SLOT_2(readNotification)
    NET_CS_SLOT_1(Public, void writeNotification())
@@ -183,13 +180,11 @@ class QAbstractSocketEngine : public QObject
    void setPeerAddress(const QHostAddress &address);
    void setPeerPort(quint16 port);
 
- private:
-   Q_DECLARE_PRIVATE(QAbstractSocketEngine)
-   Q_DISABLE_COPY(QAbstractSocketEngine)
-
- protected:
    QScopedPointer<QAbstractSocketEnginePrivate> d_ptr;
 
+ private:
+   Q_DECLARE_PRIVATE(QAbstractSocketEngine)
+   Q_DISABLE_COPY(QAbstractSocketEngine)  
 };
 
 class QAbstractSocketEnginePrivate

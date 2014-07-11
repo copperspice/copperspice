@@ -54,59 +54,44 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
    void setClipping(bool clip);
 
    // painting
-   void paint(QPainter *painter,
-              const QStyleOptionViewItem &option,
-              const QModelIndex &index) const;
-   QSize sizeHint(const QStyleOptionViewItem &option,
-                  const QModelIndex &index) const;
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
    // editing
-   QWidget *createEditor(QWidget *parent,
-                         const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const;
+   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-   void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   void setEditorData(QWidget *editor, const QModelIndex &index) const; 
    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-   void updateEditorGeometry(QWidget *editor,
-                             const QStyleOptionViewItem &option,
-                             const QModelIndex &index) const;
+   void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
    // editor factory
    QItemEditorFactory *itemEditorFactory() const;
    void setItemEditorFactory(QItemEditorFactory *factory);
 
  protected:
-   virtual void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
-                            const QRect &rect, const QString &text) const;
-   virtual void drawDecoration(QPainter *painter, const QStyleOptionViewItem &option,
-                               const QRect &rect, const QPixmap &pixmap) const;
-   virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option,
-                          const QRect &rect) const;
-   virtual void drawCheck(QPainter *painter, const QStyleOptionViewItem &option,
-                          const QRect &rect, Qt::CheckState state) const;
-   void drawBackground(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const;
+   virtual void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, const QString &text) const;
 
-   void doLayout(const QStyleOptionViewItem &option,
-                 QRect *checkRect, QRect *iconRect, QRect *textRect, bool hint) const;
+   virtual void drawDecoration(QPainter *painter, const QStyleOptionViewItem &option,const QRect &rect, const QPixmap &pixmap) const;
+
+   virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect) const;
+   virtual void drawCheck(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, Qt::CheckState state) const;
+
+   void drawBackground(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   void doLayout(const QStyleOptionViewItem &option, QRect *checkRect, QRect *iconRect, QRect *textRect, bool hint) const;
 
    QRect rect(const QStyleOptionViewItem &option, const QModelIndex &index, int role) const;
 
    bool eventFilter(QObject *object, QEvent *event);
-   bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                    const QStyleOptionViewItem &option, const QModelIndex &index);
+   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index);
 
-   QStyleOptionViewItem setOptions(const QModelIndex &index,
-                                   const QStyleOptionViewItem &option) const;
+   QStyleOptionViewItem setOptions(const QModelIndex &index, const QStyleOptionViewItem &option) const;
 
    QPixmap decoration(const QStyleOptionViewItem &option, const QVariant &variant) const;
    QPixmap *selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const;
 
-   QRect check(const QStyleOptionViewItem &option, const QRect &bounding,
-               const QVariant &variant) const;
-   QRect textRectangle(QPainter *painter, const QRect &rect,
-                       const QFont &font, const QString &text) const;
+   QRect check(const QStyleOptionViewItem &option, const QRect &bounding, const QVariant &variant) const;
+   QRect textRectangle(QPainter *painter, const QRect &rect, const QFont &font, const QString &text) const;
 
  private:
    Q_DECLARE_PRIVATE(QItemDelegate)

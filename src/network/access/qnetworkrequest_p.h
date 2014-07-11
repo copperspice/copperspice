@@ -26,12 +26,12 @@
 #ifndef QNETWORKREQUEST_P_H
 #define QNETWORKREQUEST_P_H
 
-#include "qnetworkrequest.h"
-#include "QtCore/qbytearray.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qshareddata.h"
-#include "QtCore/qsharedpointer.h"
+#include <qnetworkrequest.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qshareddata.h>
+#include <QtCore/qsharedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

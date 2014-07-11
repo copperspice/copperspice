@@ -127,8 +127,9 @@ class QHttpThreadDelegate : public QObject
 #endif
 
    NET_CS_SIGNAL_1(Public, void downloadMetaData(const QList <QPair <QByteArray, QByteArray>> &un_named_arg1,
-                   int un_named_arg2,
-                   const QString &un_named_arg3, bool un_named_arg4, QSharedPointer <char> un_named_arg5, qint64 un_named_arg6))
+                   int un_named_arg2, const QString &un_named_arg3, bool un_named_arg4, 
+                   QSharedPointer <char> un_named_arg5, qint64 un_named_arg6))
+
    NET_CS_SIGNAL_2(downloadMetaData, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5,
                    un_named_arg6)
 
@@ -153,9 +154,11 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SLOT_2(readBufferSizeChanged)
    NET_CS_SLOT_1(Public, void readBufferFreed(qint64 size))
    NET_CS_SLOT_2(readBufferFreed)
+
    // This is called with a BlockingQueuedConnection from user thread
    NET_CS_SLOT_1(Public, void startRequestSynchronously())
    NET_CS_SLOT_2(startRequestSynchronously)
+
  protected :
    // From QHttp*
    NET_CS_SLOT_1(Protected, void readyReadSlot())
@@ -196,7 +199,6 @@ class QHttpThreadDelegate : public QObject
    // Cache for all the QHttpNetworkConnection objects.
    // This is per thread.
    static QThreadStorage<QNetworkAccessCache *> connections;
-
 };
 
 // This QNonContiguousByteDevice is connected to the QNetworkAccessHttpBackend

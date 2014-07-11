@@ -39,6 +39,7 @@ class QUdpSocketPrivate;
 class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 {
    CS_OBJECT(QUdpSocket)
+
  public:
    enum BindFlag {
       DefaultForPlatform = 0x0,
@@ -55,15 +56,14 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
    bool bind(quint16 port = 0);
    bool bind(const QHostAddress &address, quint16 port, BindMode mode);
    bool bind(quint16 port, BindMode mode);
+
    // ### Qt5/Merge the bind functions
 
 #ifndef QT_NO_NETWORKINTERFACE
    bool joinMulticastGroup(const QHostAddress &groupAddress);
-   bool joinMulticastGroup(const QHostAddress &groupAddress,
-                           const QNetworkInterface &iface);
+   bool joinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface);
    bool leaveMulticastGroup(const QHostAddress &groupAddress);
-   bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                            const QNetworkInterface &iface);
+   bool leaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface);
 
    QNetworkInterface multicastInterface() const;
    void setMulticastInterface(const QNetworkInterface &iface);
@@ -73,6 +73,7 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
    qint64 pendingDatagramSize() const;
    qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *host = 0, quint16 *port = 0);
    qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &host, quint16 port);
+
    inline qint64 writeDatagram(const QByteArray &datagram, const QHostAddress &host, quint16 port) {
       return writeDatagram(datagram.constData(), datagram.size(), host, port);
    }

@@ -26,21 +26,21 @@
 //#define QFTPPI_DEBUG
 //#define QFTPDTP_DEBUG
 
-#include "qftp.h"
-#include "qabstractsocket.h"
+#include <qftp.h>
+#include <qabstractsocket.h>
 
 #ifndef QT_NO_FTP
 
-#include "qcoreapplication.h"
-#include "qtcpsocket.h"
-#include "qurlinfo.h"
-#include "qstringlist.h"
-#include "qregexp.h"
-#include "qtimer.h"
-#include "qfileinfo.h"
-#include "qhash.h"
-#include "qtcpserver.h"
-#include "qlocale.h"
+#include <qcoreapplication.h>
+#include <qtcpsocket.h>
+#include <qurlinfo.h>
+#include <qstringlist.h>
+#include <qregexp.h>
+#include <qtimer.h>
+#include <qfileinfo.h>
+#include <qhash.h>
+#include <qtcpserver.h>
+#include <qlocale.h>
 
 QT_BEGIN_NAMESPACE
 

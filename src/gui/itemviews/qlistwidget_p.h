@@ -56,6 +56,7 @@ class QListModelGreaterThan
 class QListModel : public QAbstractListModel
 {
    CS_OBJECT(QListModel)
+
  public:
    QListModel(QListWidget *parent);
    ~QListModel();
@@ -85,20 +86,18 @@ class QListModel : public QAbstractListModel
 
    void sort(int column, Qt::SortOrder order);
    void ensureSorted(int column, Qt::SortOrder order, int start, int end);
-   static bool itemLessThan(const QPair<QListWidgetItem *, int> &left,
-                            const QPair<QListWidgetItem *, int> &right);
-   static bool itemGreaterThan(const QPair<QListWidgetItem *, int> &left,
-                               const QPair<QListWidgetItem *, int> &right);
-   static QList<QListWidgetItem *>::iterator sortedInsertionIterator(
-      const QList<QListWidgetItem *>::iterator &begin,
-      const QList<QListWidgetItem *>::iterator &end,
-      Qt::SortOrder order, QListWidgetItem *item);
+   static bool itemLessThan(const QPair<QListWidgetItem *, int> &left,const QPair<QListWidgetItem *, int> &right);
+   static bool itemGreaterThan(const QPair<QListWidgetItem *, int> &left, const QPair<QListWidgetItem *, int> &right);
+
+   static QList<QListWidgetItem *>::iterator sortedInsertionIterator(const QList<QListWidgetItem *>::iterator &begin,
+      const QList<QListWidgetItem *>::iterator &end,Qt::SortOrder order, QListWidgetItem *item);
 
    void itemChanged(QListWidgetItem *item);
 
    // dnd
    QStringList mimeTypes() const;
    QMimeData *mimeData(const QModelIndexList &indexes) const;
+
 #ifndef QT_NO_DRAGANDDROP
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                      int row, int column, const QModelIndex &parent);
@@ -106,6 +105,7 @@ class QListModel : public QAbstractListModel
 #endif
 
    QMimeData *internalMimeData()  const;
+
  private:
    QList<QListWidgetItem *> items;
 
@@ -118,11 +118,14 @@ class QListModel : public QAbstractListModel
 class QListWidgetPrivate : public QListViewPrivate
 {
    Q_DECLARE_PUBLIC(QListWidget)
+
  public:
    QListWidgetPrivate() : QListViewPrivate(), sortOrder(Qt::AscendingOrder), sortingEnabled(false) {}
+
    inline QListModel *listModel() const {
       return qobject_cast<QListModel *>(model);
    }
+
    void setup();
    void _q_emitItemPressed(const QModelIndex &index);
    void _q_emitItemClicked(const QModelIndex &index);

@@ -26,19 +26,19 @@
 #ifndef QHOSTINFO_P_H
 #define QHOSTINFO_P_H
 
-#include "QtCore/qcoreapplication.h"
-#include "qcoreapplication_p.h"
-#include "QtNetwork/qhostinfo.h"
-#include "QtCore/qmutex.h"
-#include "QtCore/qwaitcondition.h"
-#include "QtCore/qobject.h"
-#include "QtCore/qpointer.h"
-#include "QtCore/qthread.h"
-#include "QtCore/qthreadpool.h"
-#include "QtCore/qmutex.h"
-#include "QtCore/qrunnable.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qqueue.h"
+#include <QtCore/qcoreapplication.h>
+#include <qcoreapplication_p.h>
+#include <QtNetwork/qhostinfo.h>
+#include <QtCore/qmutex.h>
+#include <QtCore/qwaitcondition.h>
+#include <QtCore/qobject.h>
+#include <QtCore/qpointer.h>
+#include <QtCore/qthread.h>
+#include <QtCore/qthreadpool.h>
+#include <QtCore/qmutex.h>
+#include <QtCore/qrunnable.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qqueue.h>
 #include <QElapsedTimer>
 #include <QCache>
 #include <QNetworkSession>
@@ -113,6 +113,7 @@ class QHostInfoCache
 
    bool isEnabled();
    void setEnabled(bool e);
+
  private:
    bool enabled;
    struct QHostInfoCacheElement {
@@ -157,6 +158,7 @@ class QAbstractHostInfoLookupManager : public QObject
 class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
 {
    CS_OBJECT(QHostInfoLookupManager)
+
  public:
    QHostInfoLookupManager();
    ~QHostInfoLookupManager();
@@ -173,6 +175,7 @@ class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
    bool wasAborted(int id);
 
    friend class QHostInfoRunnable;
+
  protected:
    QList<QHostInfoRunnable *> currentLookups; // in progress
    QList<QHostInfoRunnable *> postponedLookups; // postponed because in progress for same host

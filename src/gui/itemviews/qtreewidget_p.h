@@ -45,6 +45,7 @@ class QTreeModelPrivate;
 class QTreeModel : public QAbstractItemModel
 {
    CS_OBJECT(QTreeModel)
+
    friend class QTreeWidget;
    friend class QTreeWidgetPrivate;
    friend class QTreeWidgetItem;
@@ -79,18 +80,16 @@ class QTreeModel : public QAbstractItemModel
    QMap<int, QVariant> itemData(const QModelIndex &index) const;
 
    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                      int role);
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,int role);
 
    Qt::ItemFlags flags(const QModelIndex &index) const;
 
    void sort(int column, Qt::SortOrder order);
-   void ensureSorted(int column, Qt::SortOrder order,
-                     int start, int end, const QModelIndex &parent);
-   static bool itemLessThan(const QPair<QTreeWidgetItem *, int> &left,
-                            const QPair<QTreeWidgetItem *, int> &right);
-   static bool itemGreaterThan(const QPair<QTreeWidgetItem *, int> &left,
-                               const QPair<QTreeWidgetItem *, int> &right);
+   void ensureSorted(int column, Qt::SortOrder order, int start, int end, const QModelIndex &parent);
+   static bool itemLessThan(const QPair<QTreeWidgetItem *, int> &left,const QPair<QTreeWidgetItem *, int> &right);
+
+   static bool itemGreaterThan(const QPair<QTreeWidgetItem *, int> &left, const QPair<QTreeWidgetItem *, int> &right);
+
    static QList<QTreeWidgetItem *>::iterator sortedInsertionIterator(
       const QList<QTreeWidgetItem *>::iterator &begin,
       const QList<QTreeWidgetItem *>::iterator &end,
@@ -104,8 +103,7 @@ class QTreeModel : public QAbstractItemModel
    // dnd
    QStringList mimeTypes() const;
    QMimeData *mimeData(const QModelIndexList &indexes) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent);
    Qt::DropActions supportedDropActions() const;
 
    QMimeData *internalMimeData() const;
@@ -113,6 +111,18 @@ class QTreeModel : public QAbstractItemModel
    inline QModelIndex createIndexFromItem(int row, int col, QTreeWidgetItem *item) const {
       return createIndex(row, col, item);
    }
+
+   struct SkipSorting {
+      const QTreeModel *const model;
+      const bool previous;
+      SkipSorting(const QTreeModel *m) : model(m), previous(model->skipPendingSort) {
+         model->skipPendingSort = true;
+      }
+      ~SkipSorting() {
+         model->skipPendingSort = previous;
+      }
+   };
+   friend struct SkipSorting;
 
  protected:
    QTreeModel(QTreeModelPrivate &, QTreeWidget *parent = 0);
@@ -136,21 +146,9 @@ class QTreeModel : public QAbstractItemModel
    bool inline executePendingSort() const;
 
    bool isChanging() const;
-
- private:
+ 
    Q_DECLARE_PRIVATE(QTreeModel)
- public:
-   struct SkipSorting {
-      const QTreeModel *const model;
-      const bool previous;
-      SkipSorting(const QTreeModel *m) : model(m), previous(model->skipPendingSort) {
-         model->skipPendingSort = true;
-      }
-      ~SkipSorting() {
-         model->skipPendingSort = previous;
-      }
-   };
-   friend struct SkipSorting;
+
 };
 
 QT_BEGIN_INCLUDE_NAMESPACE
@@ -195,14 +193,18 @@ class QTreeWidgetPrivate : public QTreeViewPrivate
 {
    friend class QTreeModel;
    Q_DECLARE_PUBLIC(QTreeWidget)
+
  public:
    QTreeWidgetPrivate() : QTreeViewPrivate(), explicitSortColumn(-1) {}
+
    inline QTreeModel *treeModel() const {
       return qobject_cast<QTreeModel *>(model);
    }
+
    inline QModelIndex index(const QTreeWidgetItem *item, int column = 0) const {
       return treeModel()->index(item, column);
    }
+
    inline QTreeWidgetItem *item(const QModelIndex &index) const {
       return treeModel()->item(index);
    }

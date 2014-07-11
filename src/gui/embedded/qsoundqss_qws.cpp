@@ -602,7 +602,7 @@ class QWSSoundServerBucket : public QWSSoundServerProvider
             } else if ( qstrncmp(chunk.id, "fmt ", 4) == 0 ) {
                if ( ::read(dev, (char *)&chunkdata, sizeof(chunkdata)) != sizeof(chunkdata) ) {
                   // XXX check error? or don't we care?
-                  //qDebug("couldn't ready chunkdata");
+                  //qDebug("could not ready chunkdata");
                   mFinishedRead = true;
                }
 

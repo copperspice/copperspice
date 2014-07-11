@@ -66,6 +66,7 @@ class QTableModelGreaterThan
 class QTableModel : public QAbstractTableModel
 {
    CS_OBJECT(QTableModel)
+
  public:
    enum ItemFlagsExtension {
       ItemIsHeaderItem = 128
@@ -117,18 +118,15 @@ class QTableModel : public QAbstractTableModel
    Qt::ItemFlags flags(const QModelIndex &index) const;
 
    void sort(int column, Qt::SortOrder order);
-   static bool itemLessThan(const QPair<QTableWidgetItem *, int> &left,
-                            const QPair<QTableWidgetItem *, int> &right);
-   static bool itemGreaterThan(const QPair<QTableWidgetItem *, int> &left,
-                               const QPair<QTableWidgetItem *, int> &right);
+   static bool itemLessThan(const QPair<QTableWidgetItem *, int> &left, const QPair<QTableWidgetItem *, int> &right);
+   static bool itemGreaterThan(const QPair<QTableWidgetItem *, int> &left, const QPair<QTableWidgetItem *, int> &right);
 
    void ensureSorted(int column, Qt::SortOrder order, int start, int end);
    QVector<QTableWidgetItem *> columnItems(int column) const;
    void updateRowIndexes(QModelIndexList &indexes, int movedFromRow, int movedToRow);
-   static QVector<QTableWidgetItem *>::iterator sortedInsertionIterator(
-      const QVector<QTableWidgetItem *>::iterator &begin,
-      const QVector<QTableWidgetItem *>::iterator &end,
-      Qt::SortOrder order, QTableWidgetItem *item);
+
+   static QVector<QTableWidgetItem *>::iterator sortedInsertionIterator(const QVector<QTableWidgetItem *>::iterator &begin,
+      const QVector<QTableWidgetItem *>::iterator &end, Qt::SortOrder order, QTableWidgetItem *item);
 
    bool isValid(const QModelIndex &index) const;
    inline long tableIndex(int row, int column) const {
@@ -146,8 +144,7 @@ class QTableModel : public QAbstractTableModel
    // dnd
    QStringList mimeTypes() const;
    QMimeData *mimeData(const QModelIndexList &indexes) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent);
    Qt::DropActions supportedDropActions() const;
 
    QMimeData *internalMimeData()  const;
@@ -165,6 +162,7 @@ class QTableModel : public QAbstractTableModel
 class QTableWidgetPrivate : public QTableViewPrivate
 {
    Q_DECLARE_PUBLIC(QTableWidget)
+
  public:
    QTableWidgetPrivate() : QTableViewPrivate() {}
    inline QTableModel *tableModel() const {
@@ -178,10 +176,13 @@ class QTableWidgetPrivate : public QTableViewPrivate
    void _q_emitItemDoubleClicked(const QModelIndex &index);
    void _q_emitItemActivated(const QModelIndex &index);
    void _q_emitItemEntered(const QModelIndex &index);
+
    // model signals
    void _q_emitItemChanged(const QModelIndex &index);
+
    // selection signals
    void _q_emitCurrentItemChanged(const QModelIndex &previous, const QModelIndex &current);
+
    // sorting
    void _q_sort();
    void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);

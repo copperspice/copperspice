@@ -62,6 +62,7 @@ class Q_NETWORK_EXPORT QAuthenticator
 
    bool isNull() const;
    void detach();
+
  private:
    friend class QAuthenticatorPrivate;
    QAuthenticatorPrivate *d;

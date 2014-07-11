@@ -1098,7 +1098,9 @@ QDir::Filters QFileDialog::filter() const
 void QFileDialog::setFilter(QDir::Filters filters)
 {
    Q_D(QFileDialog);
+
    d->model->setFilter(filters);
+
    if (d->nativeDialogInUse) {
       d->setFilter_sys();
       return;

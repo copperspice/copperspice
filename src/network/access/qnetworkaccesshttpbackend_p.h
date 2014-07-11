@@ -26,15 +26,15 @@
 #ifndef QNETWORKACCESSHTTPBACKEND_P_H
 #define QNETWORKACCESSHTTPBACKEND_P_H
 
-#include "qhttpnetworkconnection_p.h"
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "qabstractsocket.h"
-#include "QtCore/qpointer.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qsharedpointer.h"
-#include "qatomic.h"
+#include <qhttpnetworkconnection_p.h>
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <qabstractsocket.h>
+#include <QtCore/qpointer.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qsharedpointer.h>
+#include <qatomic.h>
 
 #ifndef QT_NO_HTTP
 
@@ -46,6 +46,7 @@ class QNetworkAccessHttpBackendIODevice;
 class QNetworkAccessHttpBackend: public QNetworkAccessBackend
 {
    CS_OBJECT(QNetworkAccessHttpBackend)
+
  public:
    QNetworkAccessHttpBackend();
    virtual ~QNetworkAccessHttpBackend();
@@ -76,7 +77,6 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    bool canResume() const;
    void setResumeOffset(quint64 offset);
 
- public:
    // To HTTP thread:
    NET_CS_SIGNAL_1(Public, void startHttpRequest())
    NET_CS_SIGNAL_2(startHttpRequest)
@@ -104,6 +104,7 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    NET_CS_SLOT_1(Private, void replyDownloadMetaData(
                     const QList <QPair <QByteArray, QByteArray>> &un_named_arg1, int un_named_arg2, const QString &un_named_arg3,
                     bool un_named_arg4, QSharedPointer <char> un_named_arg5, qint64 un_named_arg6))
+
    NET_CS_SLOT_2(replyDownloadMetaData)
    NET_CS_SLOT_1(Private, void replyDownloadProgressSlot(qint64 un_named_arg1, qint64 un_named_arg2))
    NET_CS_SLOT_2(replyDownloadProgressSlot)
@@ -115,6 +116,7 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
 #ifndef QT_NO_OPENSSL
    NET_CS_SLOT_1(Private, void replySslErrors(const QList <QSslError> &un_named_arg1, bool *un_named_arg2,
                  QList <QSslError> *un_named_arg3))
+
    NET_CS_SLOT_2(replySslErrors)
    NET_CS_SLOT_1(Private, void replySslConfigurationChanged(const QSslConfiguration &un_named_arg1))
    NET_CS_SLOT_2(replySslConfigurationChanged)
@@ -131,10 +133,10 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    NET_CS_SLOT_1(Private, bool sendCacheContents(const QNetworkCacheMetaData &metaData))
    NET_CS_SLOT_2(sendCacheContents)
 
- private:
    QHttpNetworkRequest httpRequest; // There is also a copy in the HTTP thread
    int statusCode;
    QString reasonPhrase;
+
    // Will be increased by HTTP thread:
    QSharedPointer<QAtomicInt> pendingDownloadDataEmissions;
    QSharedPointer<QAtomicInt> pendingDownloadProgressEmissions;
@@ -147,7 +149,6 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    bool pendingIgnoreAllSslErrors;
    QList<QSslError> pendingIgnoreSslErrorsList;
 #endif
-
    quint64 resumeOffset;
 
    bool loadFromCacheIfAllowed(QHttpNetworkRequest &httpRequest);

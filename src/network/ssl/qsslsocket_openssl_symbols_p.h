@@ -26,7 +26,7 @@
 #ifndef QSSLSOCKET_OPENSSL_SYMBOLS_P_H
 #define QSSLSOCKET_OPENSSL_SYMBOLS_P_H
 
-#include "qsslsocket_openssl_p.h"
+#include <qsslsocket_openssl_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,12 +37,12 @@ QT_BEGIN_NAMESPACE
 // ret func(arg)
 
 #  define DEFINEFUNC(ret, func, arg, a, err, funcret)				\
-    typedef ret (*_q_PTR_##func)(arg);					\
-    static _q_PTR_##func _q_##func = 0;					\
-    ret q_##func(arg) {						\
-        if (!_q_##func) {				\
+    typedef ret (*_q_PTR_##func)(arg);			\
+    static _q_PTR_##func _q_##func = 0;		\
+    ret q_##func(arg) {						      \
+        if (!_q_##func) {				         \
             qWarning("QSslSocket: cannot call unresolved function "#func);	\
-            err;								\
+            err;							      	\
         } \
         funcret _q_##func(a); \
     }
@@ -190,12 +190,14 @@ void q_CRYPTO_set_locking_callback(void (*a)(int, int, const char *, int));
 void q_CRYPTO_set_id_callback(unsigned long (*a)());
 void q_CRYPTO_free(void *a);
 void q_DSA_free(DSA *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x00908000L
 // 0.9.8 broke SC and BC by changing this function's signature.
 X509 *q_d2i_X509(X509 **a, const unsigned char **b, long c);
 #else
 X509 *q_d2i_X509(X509 **a, unsigned char **b, long c);
 #endif
+
 char *q_ERR_error_string(unsigned long a, char *b);
 unsigned long q_ERR_get_error();
 const EVP_CIPHER *q_EVP_des_ede3_cbc();
@@ -210,19 +212,18 @@ EVP_PKEY *q_EVP_PKEY_new();
 int q_i2d_X509(X509 *a, unsigned char **b);
 const char *q_OBJ_nid2sn(int a);
 int q_OBJ_obj2nid(const ASN1_OBJECT *a);
+
 #ifdef SSLEAY_MACROS
 // ### verify
-void *q_PEM_ASN1_read_bio(d2i_of_void *a, const char *b, BIO *c, void **d, pem_password_cb *e,
-                          void *f);
+void *q_PEM_ASN1_read_bio(d2i_of_void *a, const char *b, BIO *c, void **d, pem_password_cb *e, void *f);
 // ### ditto for write
 #else
 DSA *q_PEM_read_bio_DSAPrivateKey(BIO *a, DSA **b, pem_password_cb *c, void *d);
 RSA *q_PEM_read_bio_RSAPrivateKey(BIO *a, RSA **b, pem_password_cb *c, void *d);
-int q_PEM_write_bio_DSAPrivateKey(BIO *a, DSA *b, const EVP_CIPHER *c, unsigned char *d,
-                                  int e, pem_password_cb *f, void *g);
-int q_PEM_write_bio_RSAPrivateKey(BIO *a, RSA *b, const EVP_CIPHER *c, unsigned char *d,
-                                  int e, pem_password_cb *f, void *g);
+int q_PEM_write_bio_DSAPrivateKey(BIO *a, DSA *b, const EVP_CIPHER *c, unsigned char *d,int e, pem_password_cb *f, void *g);
+int q_PEM_write_bio_RSAPrivateKey(BIO *a, RSA *b, const EVP_CIPHER *c, unsigned char *d,int e, pem_password_cb *f, void *g);
 #endif
+
 DSA *q_PEM_read_bio_DSA_PUBKEY(BIO *a, DSA **b, pem_password_cb *c, void *d);
 RSA *q_PEM_read_bio_RSA_PUBKEY(BIO *a, RSA **b, pem_password_cb *c, void *d);
 int q_PEM_write_bio_DSA_PUBKEY(BIO *a, DSA *b);
@@ -232,6 +233,7 @@ int q_RAND_status();
 void q_RSA_free(RSA *a);
 int q_sk_num(STACK *a);
 void q_sk_pop_free(STACK *a, void (*b)(void *));
+
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 void q_sk_free(_STACK *a);
 void *q_sk_value(STACK *a, int b);
@@ -239,23 +241,28 @@ void *q_sk_value(STACK *a, int b);
 void q_sk_free(STACK *a);
 char *q_sk_value(STACK *a, int b);
 #endif
+
 int q_SSL_accept(SSL *a);
 int q_SSL_clear(SSL *a);
 char *q_SSL_CIPHER_description(SSL_CIPHER *a, char *b, int c);
 int q_SSL_connect(SSL *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x00908000L
 // 0.9.8 broke SC and BC by changing this function's signature.
 int q_SSL_CTX_check_private_key(const SSL_CTX *a);
 #else
 int q_SSL_CTX_check_private_key(SSL_CTX *a);
 #endif
+
 long q_SSL_CTX_ctrl(SSL_CTX *a, int b, long c, void *d);
 void q_SSL_CTX_free(SSL_CTX *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 SSL_CTX *q_SSL_CTX_new(const SSL_METHOD *a);
 #else
 SSL_CTX *q_SSL_CTX_new(SSL_METHOD *a);
 #endif
+
 int q_SSL_CTX_set_cipher_list(SSL_CTX *a, const char *b);
 int q_SSL_CTX_set_default_verify_paths(SSL_CTX *a);
 void q_SSL_CTX_set_verify(SSL_CTX *a, int b, int (*c)(int, X509_STORE_CTX *));
@@ -266,37 +273,45 @@ int q_SSL_CTX_use_PrivateKey(SSL_CTX *a, EVP_PKEY *b);
 int q_SSL_CTX_use_RSAPrivateKey(SSL_CTX *a, RSA *b);
 int q_SSL_CTX_use_PrivateKey_file(SSL_CTX *a, const char *b, int c);
 void q_SSL_free(SSL *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x00908000L
 // 0.9.8 broke SC and BC by changing this function's signature.
 STACK_OF(SSL_CIPHER) *q_SSL_get_ciphers(const SSL *a);
 #else
 STACK_OF(SSL_CIPHER) *q_SSL_get_ciphers(SSL *a);
 #endif
+
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 const SSL_CIPHER *q_SSL_get_current_cipher(SSL *a);
 #else
 SSL_CIPHER *q_SSL_get_current_cipher(SSL *a);
 #endif
+
 int q_SSL_get_error(SSL *a, int b);
 STACK_OF(X509) *q_SSL_get_peer_cert_chain(SSL *a);
 X509 *q_SSL_get_peer_certificate(SSL *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x00908000L
 // 0.9.8 broke SC and BC by changing this function's signature.
 long q_SSL_get_verify_result(const SSL *a);
 #else
 long q_SSL_get_verify_result(SSL *a);
 #endif
+
 int q_SSL_library_init();
 void q_SSL_load_error_strings();
 SSL *q_SSL_new(SSL_CTX *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x0090806fL && !defined(OPENSSL_NO_TLSEXT)
 long q_SSL_ctrl(SSL *ssl, int cmd, long larg, void *parg);
 #endif
+
 int q_SSL_read(SSL *a, void *b, int c);
 void q_SSL_set_bio(SSL *a, BIO *b, BIO *c);
 void q_SSL_set_accept_state(SSL *a);
 void q_SSL_set_connect_state(SSL *a);
 int q_SSL_shutdown(SSL *a);
+
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 const SSL_METHOD *q_SSLv2_client_method();
 const SSL_METHOD *q_SSLv3_client_method();
@@ -316,8 +331,10 @@ SSL_METHOD *q_SSLv3_server_method();
 SSL_METHOD *q_SSLv23_server_method();
 SSL_METHOD *q_TLSv1_server_method();
 #endif
+
 int q_SSL_write(SSL *a, const void *b, int c);
 int q_X509_cmp(X509 *a, X509 *b);
+
 #ifdef SSLEAY_MACROS
 void *q_ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, char *x);
 #define q_X509_dup(x509) (X509 *)q_ASN1_dup((i2d_of_void *)q_i2d_X509, \
@@ -325,6 +342,7 @@ void *q_ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, char *x);
 #else
 X509 *q_X509_dup(X509 *a);
 #endif
+
 ASN1_OBJECT *q_X509_EXTENSION_get_object(X509_EXTENSION *a);
 void q_X509_free(X509 *a);
 X509_EXTENSION *q_X509_get_ext(X509 *a, int b);
@@ -353,11 +371,13 @@ STACK_OF(X509) *q_X509_STORE_CTX_get_chain(X509_STORE_CTX *ctx);
 
 #define q_BIO_get_mem_data(b, pp) (int)q_BIO_ctrl(b,BIO_CTRL_INFO,0,(char *)pp)
 #define q_BIO_pending(b) (int)q_BIO_ctrl(b,BIO_CTRL_PENDING,0,NULL)
+
 #ifdef SSLEAY_MACROS
 int 	q_i2d_DSAPrivateKey(const DSA *a, unsigned char **pp);
 int 	q_i2d_RSAPrivateKey(const RSA *a, unsigned char **pp);
 RSA *q_d2i_RSAPrivateKey(RSA **a, unsigned char **pp, long length);
 DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
+
 #define	q_PEM_read_bio_RSAPrivateKey(bp, x, cb, u) \
         (RSA *)q_PEM_ASN1_read_bio( \
         (void *(*)(void**, const unsigned char**, long int))q_d2i_RSAPrivateKey, PEM_STRING_RSA, bp, (void **)x, cb, u)
@@ -371,6 +391,7 @@ DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
 		PEM_ASN1_write_bio((int (*)(void*, unsigned char**))q_i2d_DSAPrivateKey,PEM_STRING_DSA,\
 			bp,(char *)x,enc,kstr,klen,cb,u)
 #endif
+
 #define q_SSL_CTX_set_options(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_OPTIONS,(op),NULL)
 #define q_SKM_sk_num(type, st) ((int (*)(const STACK_OF(type) *))q_sk_num)(st)
 #define q_SKM_sk_value(type, st,i) ((type * (*)(const STACK_OF(type) *, int))q_sk_value)(st, i)
@@ -380,19 +401,22 @@ DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
 #define q_sk_X509_value(st, i) q_SKM_sk_value(X509, (st), (i))
 #define q_sk_SSL_CIPHER_num(st) q_SKM_sk_num(SSL_CIPHER, (st))
 #define q_sk_SSL_CIPHER_value(st, i) q_SKM_sk_value(SSL_CIPHER, (st), (i))
+
 #define q_SSL_CTX_add_extra_chain_cert(ctx,x509) \
         q_SSL_CTX_ctrl(ctx,SSL_CTRL_EXTRA_CHAIN_CERT,0,(char *)x509)
+
 #define q_X509_get_notAfter(x) X509_get_notAfter(x)
 #define q_X509_get_notBefore(x) X509_get_notBefore(x)
-#define q_EVP_PKEY_assign_RSA(pkey,rsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_RSA,\
-					(char *)(rsa))
-#define q_EVP_PKEY_assign_DSA(pkey,dsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_DSA,\
-					(char *)(dsa))
+
+#define q_EVP_PKEY_assign_RSA(pkey,rsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_RSA,(char *)(rsa))
+#define q_EVP_PKEY_assign_DSA(pkey,dsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_DSA,(char *)(dsa))
+
 #ifdef OPENSSL_LOAD_CONF
 #define q_OpenSSL_add_all_algorithms() q_OPENSSL_add_all_algorithms_conf()
 #else
 #define q_OpenSSL_add_all_algorithms() q_OPENSSL_add_all_algorithms_noconf()
 #endif
+
 void q_OPENSSL_add_all_algorithms_noconf();
 void q_OPENSSL_add_all_algorithms_conf();
 int q_SSL_CTX_load_verify_locations(SSL_CTX *ctx, const char *CAfile, const char *CApath);

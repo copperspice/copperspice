@@ -88,7 +88,6 @@ class QNetworkInterfaceManager
    QList<QNetworkInterfacePrivate *> scan();
 };
 
-
 QT_END_NAMESPACE
 
 #endif // QT_NO_NETWORKINTERFACE

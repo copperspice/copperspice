@@ -349,9 +349,11 @@ int QHeaderView::sectionSizeHint(int logicalIndex) const
    if (isSectionHidden(logicalIndex)) {
       return 0;
    }
+
    if (logicalIndex < 0 || logicalIndex >= count()) {
       return -1;
    }
+
    QSize size;
    QVariant value = d->model->headerData(logicalIndex, d->orientation, Qt::SizeHintRole);
    if (value.isValid()) {
@@ -2001,12 +2003,13 @@ void QHeaderView::paintEvent(QPaintEvent *e)
       }
       currentSectionRect.translate(offset);
 
-      QVariant variant = d->model->headerData(logical, d->orientation,
-                                              Qt::FontRole);
+      QVariant variant = d->model->headerData(logical, d->orientation,Qt::FontRole);
+
       if (variant.isValid() && variant.canConvert<QFont>()) {
          QFont sectionFont = qvariant_cast<QFont>(variant);
          painter.setFont(sectionFont);
       }
+
       paintSection(&painter, currentSectionRect, logical);
       painter.restore();
    }
@@ -2272,6 +2275,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
 {
    Q_D(QHeaderView);
    switch (e->type()) {
+
 #ifndef QT_NO_TOOLTIP
       case QEvent::ToolTip: {
          QHelpEvent *he = static_cast<QHelpEvent *>(e);
@@ -2286,6 +2290,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
          break;
       }
 #endif
+
 #ifndef QT_NO_WHATSTHIS
       case QEvent::QueryWhatsThis: {
          QHelpEvent *he = static_cast<QHelpEvent *>(e);
@@ -2309,14 +2314,14 @@ bool QHeaderView::viewportEvent(QEvent *e)
          }
          break;
       }
-#endif // QT_NO_WHATSTHIS
+#endif
+
 #ifndef QT_NO_STATUSTIP
       case QEvent::StatusTip: {
          QHelpEvent *he = static_cast<QHelpEvent *>(e);
          int logical = logicalIndexAt(he->pos());
          if (logical != -1) {
-            QString statustip = d->model->headerData(logical, d->orientation,
-                                Qt::StatusTipRole).toString();
+            QString statustip = d->model->headerData(logical, d->orientation, Qt::StatusTipRole).toString();
             if (!statustip.isEmpty()) {
                setStatusTip(statustip);
             }
@@ -2395,25 +2400,25 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
                           ? QStyleOptionHeader::SortDown : QStyleOptionHeader::SortUp;
 
    // setup the style options structure
-   QVariant textAlignment = d->model->headerData(logicalIndex, d->orientation,
-                            Qt::TextAlignmentRole);
-   opt.rect = rect;
+   QVariant textAlignment = d->model->headerData(logicalIndex, d->orientation,Qt::TextAlignmentRole);
+   opt.rect    = rect;
    opt.section = logicalIndex;
-   opt.state |= state;
+   opt.state  |= state;
+
    opt.textAlignment = Qt::Alignment(textAlignment.isValid()
                                      ? Qt::Alignment(textAlignment.toInt())
                                      : d->defaultAlignment);
 
    opt.iconAlignment = Qt::AlignVCenter;
-   opt.text = d->model->headerData(logicalIndex, d->orientation,
-                                   Qt::DisplayRole).toString();
+   opt.text = d->model->headerData(logicalIndex, d->orientation, Qt::DisplayRole).toString();
+
    if (d->textElideMode != Qt::ElideNone) {
       opt.text = opt.fontMetrics.elidedText(opt.text, d->textElideMode , rect.width() - 4);
    }
 
-   QVariant variant = d->model->headerData(logicalIndex, d->orientation,
-                                           Qt::DecorationRole);
+   QVariant variant = d->model->headerData(logicalIndex, d->orientation, Qt::DecorationRole);
    opt.icon = qvariant_cast<QIcon>(variant);
+
    if (opt.icon.isNull()) {
       opt.icon = qvariant_cast<QPixmap>(variant);
    }
@@ -2445,9 +2450,11 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
       opt.position = QStyleOptionHeader::Middle;
    }
    opt.orientation = d->orientation;
+
    // the selected position
    bool previousSelected = d->isSectionSelected(this->logicalIndex(visual - 1));
    bool nextSelected =  d->isSectionSelected(this->logicalIndex(visual + 1));
+
    if (previousSelected && nextSelected) {
       opt.selectedPosition = QStyleOptionHeader::NextAndPreviousAreSelected;
    } else if (previousSelected) {
@@ -2457,6 +2464,7 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    } else {
       opt.selectedPosition = QStyleOptionHeader::NotAdjacent;
    }
+
    // draw the section
    style()->drawControl(QStyle::CE_Header, &opt, painter, this);
 
@@ -2487,9 +2495,9 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
    QStyleOptionHeader opt;
    initStyleOption(&opt);
    opt.section = logicalIndex;
-   QVariant var = d->model->headerData(logicalIndex, d->orientation,
-                                       Qt::FontRole);
+   QVariant var = d->model->headerData(logicalIndex, d->orientation,Qt::FontRole);
    QFont fnt;
+
    if (var.isValid() && var.canConvert<QFont>()) {
       fnt = qvariant_cast<QFont>(var);
    } else {
@@ -3252,11 +3260,15 @@ void QHeaderViewPrivate::clear()
 void QHeaderViewPrivate::flipSortIndicator(int section)
 {
    Q_Q(QHeaderView);
+
    Qt::SortOrder sortOrder;
+
    if (sortIndicatorSection == section) {
       sortOrder = (sortIndicatorOrder == Qt::DescendingOrder) ? Qt::AscendingOrder : Qt::DescendingOrder;
+
    } else {
       const QVariant value = model->headerData(section, orientation, Qt::InitialSortOrderRole);
+
       if (value.canConvert(QVariant::Int)) {
          sortOrder = static_cast<Qt::SortOrder>(value.toInt());
       } else {
@@ -3295,8 +3307,9 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
       }
 
       // resize the section
-      if (!sectionResized) {
+      if (! sectionResized) {
          newSize = qMax(newSize, minimumSize);
+
          if (oldSize != newSize) {
             resizeSectionSpan(visual, oldSize, newSize);
          }
@@ -3311,17 +3324,22 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
          if (currentSectionSize <= minimumSize) {
             continue;
          }
+
          int newSectionSize = qMax(currentSectionSize - delta, minimumSize);
          //qDebug() << "### cascading to" << i << newSectionSize - currentSectionSize << delta;
+
          resizeSectionSpan(i, currentSectionSize, newSectionSize);
          saveCascadingSectionSize(i, currentSectionSize);
          delta = delta - (currentSectionSize - newSectionSize);
+
          //qDebug() << "new delta" << delta;
          //if (newSectionSize != minimumSize)
+
          if (delta <= 0) {
             break;
          }
       }
+
    } else { // smaller
       bool sectionResized = false;
 

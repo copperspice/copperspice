@@ -33,6 +33,7 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_NO_NETWORKDISKCACHE
 
 class QNetworkDiskCachePrivate;
+
 class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
 {
    CS_OBJECT(QNetworkDiskCache)

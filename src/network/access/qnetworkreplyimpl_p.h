@@ -26,15 +26,15 @@
 #ifndef QNETWORKREPLYIMPL_P_H
 #define QNETWORKREPLYIMPL_P_H
 
-#include "qnetworkreply.h"
-#include "qnetworkreply_p.h"
-#include "qnetworkaccessmanager.h"
-#include "qnetworkproxy.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qqueue.h"
-#include "QtCore/qbuffer.h"
-#include "qringbuffer_p.h"
-#include "qbytedata_p.h"
+#include <qnetworkreply.h>
+#include <qnetworkreply_p.h>
+#include <qnetworkaccessmanager.h>
+#include <qnetworkproxy.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qqueue.h>
+#include <QtCore/qbuffer.h>
+#include <qringbuffer_p.h>
+#include <qbytedata_p.h>
 #include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -62,7 +62,6 @@ class QNetworkReplyImpl: public QNetworkReply
    virtual bool event(QEvent *);
 
 #ifndef QT_NO_OPENSSL
-
    virtual void ignoreSslErrors();
 
    virtual QSslConfiguration sslConfigurationImplementation() const override;
@@ -185,6 +184,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
    bool notificationHandlingPaused;
 
    QUrl urlForLastAuthentication;
+
 #ifndef QT_NO_NETWORKPROXY
    QNetworkProxy lastProxyAuthentication;
    QList<QNetworkProxy> proxyList;
@@ -219,11 +219,12 @@ class QDisabledNetworkReply : public QNetworkReply
    CS_OBJECT(QDisabledNetworkReply)
 
  public:
-   QDisabledNetworkReply(QObject *parent, const QNetworkRequest &req,
-                         QNetworkAccessManager::Operation op);
+   QDisabledNetworkReply(QObject *parent, const QNetworkRequest &req, QNetworkAccessManager::Operation op);
    ~QDisabledNetworkReply();
 
-   void abort() { }
+   void abort()
+   { }
+
  protected:
    qint64 readData(char *, qint64) {
       return -1;

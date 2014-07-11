@@ -69,12 +69,9 @@ class QHttpNetworkHeaderPrivate : public QSharedData
 
 };
 
-
 QT_END_NAMESPACE
 
-
 #endif // QT_NO_HTTP
-
 
 #endif // QHTTPNETWORKHEADER_H
 

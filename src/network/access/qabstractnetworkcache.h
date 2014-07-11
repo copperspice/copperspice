@@ -37,8 +37,8 @@ class QIODevice;
 class QDateTime;
 class QNetworkCacheMetaDataPrivate;
 class QAbstractNetworkCachePrivate;
-
 class QUrl;
+
 template<class T> class QList;
 
 class Q_NETWORK_EXPORT QNetworkCacheMetaData

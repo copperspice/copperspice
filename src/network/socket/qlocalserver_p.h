@@ -28,7 +28,7 @@
 
 #ifndef QT_NO_LOCALSERVER
 
-#include "qlocalserver.h"
+#include <qlocalserver.h>
 #include <qqueue.h>
 
 #if defined(QT_LOCALSOCKET_TCP)
@@ -67,7 +67,6 @@ class QLocalServerPrivate
    void _q_onNewConnection();
 
 #if defined(QT_LOCALSOCKET_TCP)
-
    QTcpServer tcpServer;
    QMap<quintptr, QTcpSocket *> socketMap;
 

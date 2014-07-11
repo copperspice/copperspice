@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 #define QNetworkSessionExport Q_NETWORK_EXPORT
 
 #else
-#include "qmobilityglobal.h"
+#include <qmobilityglobal.h>
 QTM_BEGIN_NAMESPACE
 #define QNetworkSessionExport Q_BEARER_EXPORT
 
@@ -155,7 +155,6 @@ Q_DECLARE_METATYPE(QNetworkSession::SessionError)
 QTM_END_NAMESPACE
 
 #endif
-
 
 #endif // QT_NO_BEARERMANAGEMENT
 

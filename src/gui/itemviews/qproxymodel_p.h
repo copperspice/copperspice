@@ -26,8 +26,8 @@
 #ifndef QPROXYMODEL_P_H
 #define QPROXYMODEL_P_H
 
-#include "QtCore/qabstractitemmodel.h"
-#include "qabstractitemmodel_p.h"
+#include <QtCore/qabstractitemmodel.h>
+#include <qabstractitemmodel_p.h>
 
 #ifndef QT_NO_PROXYMODEL
 

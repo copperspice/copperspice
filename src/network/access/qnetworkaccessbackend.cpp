@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkaccessmanager_p.h"
-#include "qnetworkconfigmanager.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "qnetworkreply_p.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qmutex.h"
-#include "qnetworksession_p.h"
-#include "qnetworkaccesscachebackend_p.h"
-#include "qabstractnetworkcache.h"
-#include "qhostinfo.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkaccessmanager_p.h>
+#include <qnetworkconfigmanager.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <qnetworkreply_p.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qmutex.h>
+#include <qnetworksession_p.h>
+#include <qnetworkaccesscachebackend_p.h>
+#include <qabstractnetworkcache.h>
+#include <qhostinfo.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 QT_BEGIN_NAMESPACE
 

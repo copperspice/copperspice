@@ -26,11 +26,11 @@
 #ifndef QNETWORKACCESSCACHE_P_H
 #define QNETWORKACCESSCACHE_P_H
 
-#include "QtCore/qobject.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qbytearray.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qmetatype.h"
+#include <QtCore/qobject.h>
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qmetatype.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -74,11 +74,11 @@ class QNetworkAccessCache: public QObject
    void addEntry(const QByteArray &key, CacheableObject *entry);
    bool hasEntry(const QByteArray &key) const;
    bool requestEntry(const QByteArray &key, QObject *target, const char *member);
+ 
    CacheableObject *requestEntryNow(const QByteArray &key);
    void releaseEntry(const QByteArray &key);
    void removeEntry(const QByteArray &key);
-
- public:
+ 
    NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject *un_named_arg1))
    NET_CS_SIGNAL_2(entryReady, un_named_arg1)
 

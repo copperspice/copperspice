@@ -26,7 +26,7 @@
 #ifndef QCOLUMNVIEW_P_H
 #define QCOLUMNVIEW_P_H
 
-#include "qcolumnview.h"
+#include <qcolumnview.h>
 
 #ifndef QT_NO_QCOLUMNVIEW
 
@@ -147,9 +147,7 @@ class QColumnViewDelegate : public QItemDelegate
    explicit QColumnViewDelegate(QObject *parent = 0) : QItemDelegate(parent) {}
    ~QColumnViewDelegate() {}
 
-   void paint(QPainter *painter,
-              const QStyleOptionViewItem &option,
-              const QModelIndex &index) const;
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 #endif // QT_NO_QCOLUMNVIEW
 

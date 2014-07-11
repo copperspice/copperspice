@@ -26,18 +26,18 @@
 #ifndef QABSTRACTITEMVIEW_P_H
 #define QABSTRACTITEMVIEW_P_H
 
-#include "qabstractscrollarea_p.h"
-#include "qabstractitemmodel_p.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/qevent.h"
-#include "QtGui/qmime.h"
-#include "QtGui/qpainter.h"
-#include "QtCore/qpair.h"
-#include "QtGui/qregion.h"
-#include "QtCore/qdebug.h"
-#include "QtGui/qpainter.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qelapsedtimer.h"
+#include <qabstractscrollarea_p.h>
+#include <qabstractitemmodel_p.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qmime.h>
+#include <QtGui/qpainter.h>
+#include <QtCore/qpair.h>
+#include <QtGui/qregion.h>
+#include <QtCore/qdebug.h>
+#include <QtGui/qpainter.h>
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qelapsedtimer.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -125,6 +125,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 #ifndef QT_NO_DRAGANDDROP
    virtual bool dropOn(QDropEvent *event, int *row, int *col, QModelIndex *index);
 #endif
+
    bool droppingOnItself(QDropEvent *event, const QModelIndex &index);
 
    QWidget *editor(const QModelIndex &index, const QStyleOptionViewItem &options);

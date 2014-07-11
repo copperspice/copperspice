@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfilesystementry_p.h"
+#include <qfilesystementry_p.h>
 #include <QtCore/qdir.h>
 #include <QtCore/qfile.h>
 #include <qfsfileengine_p.h>
@@ -38,7 +38,8 @@ QT_BEGIN_NAMESPACE
 static bool isUncRoot(const QString &server)
 {
    QString localPath = QDir::toNativeSeparators(server);
-   if (!localPath.startsWith(QLatin1String("\\\\"))) {
+
+   if (! localPath.startsWith(QLatin1String("\\\\"))) {
       return false;
    }
 
@@ -47,8 +48,21 @@ static bool isUncRoot(const QString &server)
       return true;
    }
 
+   // if there anythng after the 'server name'?
    localPath = localPath.right(localPath.length() - idx - 1).trimmed();
-   return localPath.isEmpty();
+
+   if (localPath.isEmpty()) {
+      return true;
+   }
+
+   // test the 'share name'
+   idx = localPath.indexOf(QLatin1Char('\\'), idx);
+
+   if (idx == -1 || idx + 1 == localPath.length()) {
+      return true;
+   }
+
+   return false;
 }
 
 static inline QString fixIfRelativeUncPath(const QString &path)
@@ -130,8 +144,10 @@ QFileSystemEntry::NativePath QFileSystemEntry::nativeFilePath() const
 void QFileSystemEntry::resolveFilePath() const
 {
    if (m_filePath.isEmpty() && !m_nativeFilePath.isEmpty()) {
+
 #if defined(QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16)
       m_filePath = QDir::fromNativeSeparators(m_nativeFilePath);
+
 #ifdef Q_OS_WIN
       if (m_filePath.startsWith(QLatin1String("//?/UNC/"))) {
          m_filePath = m_filePath.remove(2, 6);
@@ -140,6 +156,7 @@ void QFileSystemEntry::resolveFilePath() const
          m_filePath = m_filePath.remove(0, 4);
       }
 #endif
+
 #else
       m_filePath = QDir::fromNativeSeparators(QFile::decodeName(m_nativeFilePath));
 #endif
@@ -149,50 +166,60 @@ void QFileSystemEntry::resolveFilePath() const
 void QFileSystemEntry::resolveNativeFilePath() const
 {
    if (!m_filePath.isEmpty() && m_nativeFilePath.isEmpty()) {
+
 #ifdef Q_OS_WIN
       QString filePath = m_filePath;
       if (isRelative()) {
          filePath = fixIfRelativeUncPath(m_filePath);
       }
       m_nativeFilePath = QFSFileEnginePrivate::longFileName(QDir::toNativeSeparators(filePath));
+
 #elif defined(QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16)
       m_nativeFilePath = QDir::toNativeSeparators(m_filePath);
 #else
       m_nativeFilePath = QFile::encodeName(QDir::toNativeSeparators(m_filePath));
 #endif
+
    }
 }
 
 QString QFileSystemEntry::fileName() const
 {
    findLastSeparator();
+
 #if defined(Q_OS_WIN)
    if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
       return m_filePath.mid(2);
    }
 #endif
+
    return m_filePath.mid(m_lastSeparator + 1);
 }
 
 QString QFileSystemEntry::path() const
 {
    findLastSeparator();
+
    if (m_lastSeparator == -1) {
+
 #if defined(Q_OS_WIN)
       if (m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
          return m_filePath.left(2);
       }
 #endif
+
       return QString(QLatin1Char('.'));
    }
    if (m_lastSeparator == 0) {
       return QString(QLatin1Char('/'));
    }
+
 #if defined(Q_OS_WIN)
    if (m_lastSeparator == 2 && m_filePath.at(1) == QLatin1Char(':')) {
       return m_filePath.left(m_lastSeparator + 1);
    }
 #endif
+
    return m_filePath.left(m_lastSeparator);
 }
 
@@ -200,17 +227,22 @@ QString QFileSystemEntry::baseName() const
 {
    findFileNameSeparators();
    int length = -1;
+
    if (m_firstDotInFileName >= 0) {
       length = m_firstDotInFileName;
-      if (m_lastSeparator != -1) { // avoid off by one
+
+      if (m_lastSeparator != -1) { 
+         // avoid off by one
          length--;
       }
    }
+
 #if defined(Q_OS_WIN)
    if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
       return m_filePath.mid(2, length - 2);
    }
 #endif
+
    return m_filePath.mid(m_lastSeparator + 1, length);
 }
 
@@ -218,17 +250,22 @@ QString QFileSystemEntry::completeBaseName() const
 {
    findFileNameSeparators();
    int length = -1;
+
    if (m_firstDotInFileName >= 0) {
       length = m_firstDotInFileName + m_lastDotInFileName;
-      if (m_lastSeparator != -1) { // avoid off by one
+
+      if (m_lastSeparator != -1) { 
+         // avoid off by one
          length--;
       }
    }
+
 #if defined(Q_OS_WIN)
    if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
       return m_filePath.mid(2, length - 2);
    }
 #endif
+
    return m_filePath.mid(m_lastSeparator + 1, length);
 }
 
@@ -246,6 +283,7 @@ QString QFileSystemEntry::suffix() const
 QString QFileSystemEntry::completeSuffix() const
 {
    findFileNameSeparators();
+
    if (m_firstDotInFileName == -1) {
       return QString();
    }
@@ -254,58 +292,78 @@ QString QFileSystemEntry::completeSuffix() const
 }
 
 #if defined(Q_OS_WIN)
+
 bool QFileSystemEntry::isRelative() const
 {
    resolveFilePath();
-   return (m_filePath.isEmpty() || (!m_filePath.isEmpty() && (m_filePath[0].unicode() != '/')
-                                    && (!(m_filePath.length() >= 2 && m_filePath[1].unicode() == ':'))));
-}
-
-bool QFileSystemEntry::isAbsolute() const
-{
-   resolveFilePath();
-   return (!m_filePath.isEmpty() && ((m_filePath.length() >= 3
-                                      && (m_filePath[0].isLetter() && m_filePath[1].unicode() == ':' && m_filePath[2].unicode() == '/'))
-#ifdef Q_OS_WIN
-                                     || (m_filePath.length() >= 2 && (m_filePath.at(0) == QLatin1Char('/') && m_filePath.at(1) == QLatin1Char('/')))
-#endif
-                                    ));
-}
-#else
-bool QFileSystemEntry::isRelative() const
-{
-   return !isAbsolute();
-}
-
-bool QFileSystemEntry::isAbsolute() const
-{
-   resolveFilePath();
-   return (!m_filePath.isEmpty() && (m_filePath[0].unicode() == '/'));
-}
-#endif
-
-#if defined(Q_OS_WIN)
-bool QFileSystemEntry::isDriveRoot() const
-{
-   resolveFilePath();
-   return (m_filePath.length() == 3
-           && m_filePath.at(0).isLetter() && m_filePath.at(1) == QLatin1Char(':')
-           && m_filePath.at(2) == QLatin1Char('/'));
-}
-#endif
-
-bool QFileSystemEntry::isRoot() const
-{
-   resolveFilePath();
-   if (m_filePath == QLatin1String("/")
-#if defined(Q_OS_WIN)
-         || isDriveRoot()
-         || isUncRoot(m_filePath)
-#endif
-      ) {
+  
+   if (m_filePath.isEmpty()) {
       return true;
    }
 
+   bool retval = (m_filePath[0].unicode() != '/') && ! (m_filePath.length() >= 2 && m_filePath[1].unicode() == ':');
+
+   return retval;
+}
+
+bool QFileSystemEntry::isAbsolute() const
+{
+   resolveFilePath();
+
+   if (m_filePath.isEmpty()) {
+      return false;
+   }
+  
+   bool temp1  = m_filePath.length() >= 3 && (m_filePath[0].isLetter() && m_filePath[1].unicode() == ':' && m_filePath[2].unicode() == '/');
+   bool retval = temp1 || (m_filePath.length() >= 2 && (m_filePath.at(0) == QLatin1Char('/') && m_filePath.at(1) == QLatin1Char('/')));
+   
+   return retval;
+}
+
+bool QFileSystemEntry::isDriveLetter_Root() const
+{
+   resolveFilePath();
+
+   bool retval = false;
+
+   if (m_filePath.length() == 3) {
+      retval = m_filePath.at(0).isLetter() && m_filePath.at(1) == QLatin1Char(':') && m_filePath.at(2) == QLatin1Char('/');
+   }
+
+   return retval; 
+}
+
+#else
+
+bool QFileSystemEntry::isRelative() const
+{
+   return ! isAbsolute();
+}
+
+bool QFileSystemEntry::isAbsolute() const
+{
+   resolveFilePath();
+   return (! m_filePath.isEmpty() && (m_filePath[0].unicode() == '/'));
+}
+#endif
+
+
+bool QFileSystemEntry::isRoot() const
+{
+   resolveFilePath(); 
+
+  if (m_filePath == QLatin1String("/")) {
+      return true;
+   }
+
+#if defined(Q_OS_WIN)
+
+   if (isDriveLetter_Root() || isUncRoot(m_filePath)) {
+      return true;
+   }
+
+#endif
+    
    return false;
 }
 
@@ -316,12 +374,12 @@ bool QFileSystemEntry::isEmpty() const
 }
 
 // private methods
-
 void QFileSystemEntry::findLastSeparator() const
 {
    if (m_lastSeparator == -2) {
       resolveFilePath();
       m_lastSeparator = -1;
+
       for (int i = m_filePath.size() - 1; i >= 0; --i) {
          if (m_filePath[i].unicode() == '/') {
             m_lastSeparator = i;

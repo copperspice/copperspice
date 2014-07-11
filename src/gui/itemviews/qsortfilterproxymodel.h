@@ -139,12 +139,10 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-   bool setHeaderData(int section, Qt::Orientation orientation,
-                      const QVariant &value, int role = Qt::EditRole);
+   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
    QMimeData *mimeData(const QModelIndexList &indexes) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action,int row, int column, const QModelIndex &parent);
 
    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());

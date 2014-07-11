@@ -30,9 +30,9 @@
 #include <QtCore/qstringlist.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qpair.h>
-#include "qabstractsocket.h"
+#include <qabstractsocket.h>
 #include <QScopedPointer>
-#include "qsslerror.h"
+#include <qsslerror.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -129,7 +129,6 @@ class Q_NETWORK_EXPORT QHttpResponseHeader : public QHttpHeader
 
 class Q_NETWORK_EXPORT QHttpRequestHeader : public QHttpHeader
 {
-
  public:
    QHttpRequestHeader();
    QHttpRequestHeader(const QString &method, const QString &path, int majorVer = 1, int minorVer = 1);
@@ -263,8 +262,10 @@ class Q_NETWORK_EXPORT QHttp : public QObject
    NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *un_named_arg2))
    NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, un_named_arg2)
 #endif
+
    NET_CS_SIGNAL_1(Public, void authenticationRequired(const QString &hostname, quint16 port,
                    QAuthenticator *un_named_arg3))
+
    NET_CS_SIGNAL_2(authenticationRequired, hostname, port, un_named_arg3)
 
 #ifndef QT_NO_OPENSSL

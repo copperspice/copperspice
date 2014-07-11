@@ -26,7 +26,7 @@
 #ifndef QNETWORKCOOKIEJAR_P_H
 #define QNETWORKCOOKIEJAR_P_H
 
-#include "qnetworkcookie.h"
+#include <qnetworkcookie.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -29,7 +29,7 @@
 #ifndef QT_MOBILITY_BEARER
 # include <QtCore/qglobal.h>
 #else
-# include "qmobilityglobal.h"
+# include <qmobilityglobal.h>
 #endif
 
 #include <QtCore/qshareddata.h>

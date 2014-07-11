@@ -150,7 +150,6 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 
    void reset();
 
- public :
    GUI_CS_SLOT_1(Public, void setOffset(int offset))
    GUI_CS_SLOT_2(setOffset)
    GUI_CS_SLOT_1(Public, void setOffsetToSectionPosition(int visualIndex))
@@ -248,14 +247,17 @@ inline int QHeaderView::logicalIndexAt(int ax, int ay) const
 {
    return orientation() == Qt::Horizontal ? logicalIndexAt(ax) : logicalIndexAt(ay);
 }
+
 inline int QHeaderView::logicalIndexAt(const QPoint &apos) const
 {
    return logicalIndexAt(apos.x(), apos.y());
 }
+
 inline void QHeaderView::hideSection(int alogicalIndex)
 {
    setSectionHidden(alogicalIndex, true);
 }
+
 inline void QHeaderView::showSection(int alogicalIndex)
 {
    setSectionHidden(alogicalIndex, false);

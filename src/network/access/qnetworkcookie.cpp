@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qnetworkcookie.h"
-#include "qnetworkcookie_p.h"
+#include <qnetworkcookie.h>
+#include <qnetworkcookie_p.h>
 
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "QtCore/qbytearray.h"
-#include "QtCore/qdebug.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qlocale.h"
-#include "QtCore/qstring.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qurl.h"
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qdebug.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qlocale.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qurl.h>
 
 QT_BEGIN_NAMESPACE
 

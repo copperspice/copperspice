@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qhttpnetworkrequest_p.h"
-#include "qnoncontiguousbytedevice_p.h"
+#include <qhttpnetworkrequest_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 #ifndef QT_NO_HTTP
 

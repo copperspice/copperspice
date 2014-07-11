@@ -28,12 +28,13 @@
 
 QT_BEGIN_NAMESPACE
 
-#include "qhostaddress.h"
-#include "qabstractsocket.h"
+#include <qhostaddress.h>
+#include <qabstractsocket.h>
 
 class QNetmaskAddress: public QHostAddress
 {
    int length;
+
  public:
    QNetmaskAddress() : QHostAddress(), length(-1) { }
 
@@ -43,7 +44,6 @@ class QNetmaskAddress: public QHostAddress
    int prefixLength() const;
    void setPrefixLength(QAbstractSocket::NetworkLayerProtocol proto, int len);
 };
-
 
 QT_END_NAMESPACE
 

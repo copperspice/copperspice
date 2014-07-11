@@ -29,6 +29,7 @@
 #include <QtGui/qtableview.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qvector.h>
+
 //#include <QtGui/qitemselectionmodel.h>
 
 QT_BEGIN_NAMESPACE
@@ -326,9 +327,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    const QTableWidgetItem *itemPrototype() const;
    void setItemPrototype(const QTableWidgetItem *item);
 
- public :
-   GUI_CS_SLOT_1(Public, void scrollToItem(const QTableWidgetItem *item,
-                                           QAbstractItemView::ScrollHint hint = EnsureVisible))
+   GUI_CS_SLOT_1(Public, void scrollToItem(const QTableWidgetItem *item, QAbstractItemView::ScrollHint hint = EnsureVisible))
    GUI_CS_SLOT_2(scrollToItem)
    GUI_CS_SLOT_1(Public, void insertRow(int row))
    GUI_CS_SLOT_2(insertRow)
@@ -343,7 +342,6 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    GUI_CS_SLOT_1(Public, void clearContents())
    GUI_CS_SLOT_2(clearContents)
 
- public:
    GUI_CS_SIGNAL_1(Public, void itemPressed(QTableWidgetItem *item))
    GUI_CS_SIGNAL_2(itemPressed, item)
    GUI_CS_SIGNAL_1(Public, void itemClicked(QTableWidgetItem *item))

@@ -26,13 +26,13 @@
 #ifndef QHEADERVIEW_P_H
 #define QHEADERVIEW_P_H
 
-#include "qabstractitemview_p.h"
+#include <qabstractitemview_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
-#include "QtCore/qbitarray.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/qlabel.h"
+#include <QtCore/qbitarray.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qlabel.h>
 
 QT_BEGIN_NAMESPACE
 

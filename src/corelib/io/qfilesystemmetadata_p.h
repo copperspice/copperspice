@@ -157,43 +157,49 @@ class QFileSystemMetaData
       knownFlagsMask &= ~flags;
    }
 
-   bool exists() const                     {
+   bool exists() const {
       return (entryFlags & ExistsAttribute);
    }
 
-   bool isLink() const                     {
+   bool isLink() const {
       return  (entryFlags & LinkType);
    }
-   bool isFile() const                     {
+
+   bool isFile() const {
       return (entryFlags & FileType);
    }
-   bool isDirectory() const                {
+
+   bool isDirectory() const {
       return (entryFlags & DirectoryType);
    }
+
    bool isBundle() const;
    bool isAlias() const;
-   bool isLegacyLink() const               {
+
+   bool isLegacyLink() const {
       return (entryFlags & LegacyLinkType);
    }
-   bool isSequential() const               {
+
+   bool isSequential() const {
       return (entryFlags & SequentialType);
    }
 
-   bool isHidden() const                   {
+   bool isHidden() const   {
       return (entryFlags & HiddenAttribute);
    }
 
 #if defined(Q_OS_WIN)
-   bool isLnkFile() const                  {
+   bool isLnkFile() const {
       return (entryFlags & WinLnkType);
    }
+
 #else
-   bool isLnkFile() const                  {
+   bool isLnkFile() const  {
       return false;
    }
 #endif
 
-   qint64 size() const                     {
+   qint64 size() const {
       return size_;
    }
 
@@ -249,7 +255,7 @@ class QFileSystemMetaData
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileSystemMetaData::MetaDataFlags)
 
-#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)
+#if !defined(QWS) && ! defined(Q_WS_QPA) && defined(Q_OS_MAC)
 inline bool QFileSystemMetaData::isBundle() const
 {
    return (entryFlags & BundleType);
@@ -258,6 +264,7 @@ inline bool QFileSystemMetaData::isAlias() const
 {
    return (entryFlags & AliasType);
 }
+
 #else
 inline bool QFileSystemMetaData::isBundle() const
 {
@@ -321,14 +328,17 @@ inline uint QFileSystemMetaData::ownerId(QAbstractFileEngine::FileOwner owner) c
 #endif
 
 #if defined(Q_OS_WIN)
+
 inline uint QFileSystemMetaData::userId() const
 {
    return (uint) - 2;
 }
+
 inline uint QFileSystemMetaData::groupId() const
 {
    return (uint) - 2;
 }
+
 inline uint QFileSystemMetaData::ownerId(QAbstractFileEngine::FileOwner owner) const
 {
    if (owner == QAbstractFileEngine::OwnerUser) {
@@ -340,36 +350,53 @@ inline uint QFileSystemMetaData::ownerId(QAbstractFileEngine::FileOwner owner) c
 
 inline void QFileSystemMetaData::fillFromFileAttribute(DWORD fileAttribute, bool isDriveRoot)
 {
+
+   // broom
+   if (isDriveRoot) {     
+      qDebug("fillFromFileAttribute() TRUE, it is a rootDrive");
+   } else {
+      qDebug("fillFromFileAttribute() is NOT a rootDrive");
+   }
+   // broom 
+
+
+
    fileAttribute_ = fileAttribute;
-   // Ignore the hidden attribute for drives.
-   if (!isDriveRoot && (fileAttribute_ & FILE_ATTRIBUTE_HIDDEN)) {
+
+   // Ignore the hidden attribute for drives
+   if (! isDriveRoot && (fileAttribute_ & FILE_ATTRIBUTE_HIDDEN)) {
       entryFlags |= HiddenAttribute;
    }
-   entryFlags |= ((fileAttribute & FILE_ATTRIBUTE_DIRECTORY) ? DirectoryType : FileType);
-   entryFlags |= ExistsAttribute;
+
+   entryFlags     |= ((fileAttribute & FILE_ATTRIBUTE_DIRECTORY) ? DirectoryType : FileType);
+   entryFlags     |= ExistsAttribute;
    knownFlagsMask |= FileType | DirectoryType | HiddenAttribute | ExistsAttribute;
 }
 
 inline void QFileSystemMetaData::fillFromFindData(WIN32_FIND_DATA &findData, bool setLinkType, bool isDriveRoot)
 {
    fillFromFileAttribute(findData.dwFileAttributes, isDriveRoot);
-   creationTime_ = findData.ftCreationTime;
+
+   creationTime_   = findData.ftCreationTime;
    lastAccessTime_ = findData.ftLastAccessTime;
-   lastWriteTime_ = findData.ftLastWriteTime;
+   lastWriteTime_  = findData.ftLastWriteTime;
+
    if (fileAttribute_ & FILE_ATTRIBUTE_DIRECTORY) {
       size_ = 0;
+
    } else {
       size_ = findData.nFileSizeHigh;
       size_ <<= 32;
       size_ += findData.nFileSizeLow;
    }
+
    knownFlagsMask |=  Times | SizeAttribute;
+
    if (setLinkType) {
       knownFlagsMask |=  LinkType;
       entryFlags &= ~LinkType;
 
-      if ((fileAttribute_ & FILE_ATTRIBUTE_REPARSE_POINT)
-            && findData.dwReserved0 == IO_REPARSE_TAG_SYMLINK) {
+      if ((fileAttribute_ & FILE_ATTRIBUTE_REPARSE_POINT) && findData.dwReserved0 == IO_REPARSE_TAG_SYMLINK) {
          entryFlags |= LinkType;
       }
    }
@@ -381,6 +408,7 @@ inline void QFileSystemMetaData::fillFromFindInfo(BY_HANDLE_FILE_INFORMATION &fi
    creationTime_ = fileInfo.ftCreationTime;
    lastAccessTime_ = fileInfo.ftLastAccessTime;
    lastWriteTime_ = fileInfo.ftLastWriteTime;
+
    if (fileAttribute_ & FILE_ATTRIBUTE_DIRECTORY) {
       size_ = 0;
    } else {

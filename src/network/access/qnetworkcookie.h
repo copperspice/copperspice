@@ -90,7 +90,6 @@ Q_DECLARE_TYPEINFO(QNetworkCookie, Q_MOVABLE_TYPE);
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 
-
 QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QNetworkCookie)

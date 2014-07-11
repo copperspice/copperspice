@@ -26,11 +26,11 @@
 #ifndef QSSLCONFIGURATION_P_H
 #define QSSLCONFIGURATION_P_H
 
-#include "qsslconfiguration.h"
-#include "qlist.h"
-#include "qsslcertificate.h"
-#include "qsslcipher.h"
-#include "qsslkey.h"
+#include <qsslconfiguration.h>
+#include <qlist.h>
+#include <qsslcertificate.h>
+#include <qsslcipher.h>
+#include <qsslkey.h>
 
 QT_BEGIN_NAMESPACE
 

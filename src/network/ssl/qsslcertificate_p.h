@@ -26,8 +26,8 @@
 #ifndef QSSLCERTIFICATE_P_H
 #define QSSLCERTIFICATE_P_H
 
-#include "qsslcertificate.h"
-#include "qsslsocket_p.h"
+#include <qsslcertificate.h>
+#include <qsslsocket_p.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qmap.h>
 #include <openssl/x509.h>

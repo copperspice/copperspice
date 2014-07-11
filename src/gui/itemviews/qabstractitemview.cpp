@@ -241,13 +241,16 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
 
       disconnect(d->model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),   this,
                  SLOT(_q_rowsRemoved(const QModelIndex &, int, int)));
+
       disconnect(d->model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),  this,
                  SLOT(_q_rowsInserted(const QModelIndex &, int, int)));
+
       disconnect(d->model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex &, int, int)),
                  this, SLOT(_q_columnsAboutToBeRemoved(const QModelIndex &, int, int)));
 
       disconnect(d->model, SIGNAL(columnsRemoved(const QModelIndex &, int, int)),  this,
                  SLOT(_q_columnsRemoved(const QModelIndex &, int, int)));
+
       disconnect(d->model, SIGNAL(columnsInserted(const QModelIndex &, int, int)), this,
                  SLOT(_q_columnsInserted(const QModelIndex &, int, int)));
 
@@ -276,6 +279,7 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
       connect(d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(_q_headerDataChanged()));
       connect(d->model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),  this, SLOT(rowsInserted(const QModelIndex &,
               int, int)));
+
       connect(d->model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),  this, SLOT(_q_rowsInserted(const QModelIndex &,
               int, int)));
 
@@ -290,6 +294,7 @@ void QAbstractItemView::setModel(QAbstractItemModel *model)
 
       connect(d->model, SIGNAL(columnsRemoved(const QModelIndex &, int, int)),  this,
               SLOT(_q_columnsRemoved(const QModelIndex &, int, int)));
+
       connect(d->model, SIGNAL(columnsInserted(const QModelIndex &, int, int)), this,
               SLOT(_q_columnsInserted(const QModelIndex &, int, int)));
 
@@ -422,6 +427,7 @@ void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate *de
    Q_D(QAbstractItemView);
 
    if (QAbstractItemDelegate *rowDelegate = d->rowDelegates.value(row, 0)) {
+
       if (d->delegateRefCount(rowDelegate) == 1) {
          disconnect(rowDelegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)),
                     this, SLOT(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
@@ -2096,6 +2102,7 @@ void QAbstractItemView::updateEditorGeometries()
    while (it != d->editorIndexHash.end()) {
       QModelIndex index = it.value();
       QWidget *editor = it.key();
+
       if (index.isValid() && editor) {
          option.rect = visualRect(index);
          if (option.rect.isValid()) {
@@ -2320,16 +2327,7 @@ void QAbstractItemView::editorDestroyed(QObject *editor)
 }
 
 /*!
-    \obsolete
-    Sets the horizontal scroll bar's steps per item to \a steps.
-
-    This is the number of steps used by the horizontal scroll bar to
-    represent the width of an item.
-
-    Note that if the view has a horizontal header, the item steps
-    will be ignored and the header section size will be used instead.
-
-    \sa horizontalStepsPerItem() setVerticalStepsPerItem()
+    \obsolete   
 */
 void QAbstractItemView::setHorizontalStepsPerItem(int steps)
 {
@@ -2338,10 +2336,7 @@ void QAbstractItemView::setHorizontalStepsPerItem(int steps)
 }
 
 /*!
-    \obsolete
-    Returns the horizontal scroll bar's steps per item.
-
-    \sa setHorizontalStepsPerItem() verticalStepsPerItem()
+    \obsolete  
 */
 int QAbstractItemView::horizontalStepsPerItem() const
 {
@@ -2778,28 +2773,32 @@ void QAbstractItemView::rowsAboutToBeRemoved(const QModelIndex &parent, int star
 
    // Ensure one selected item in single selection mode.
    QModelIndex current = currentIndex();
-   if (d->selectionMode == SingleSelection
-         && current.isValid()
-         && current.row() >= start
-         && current.row() <= end
+   if (d->selectionMode == SingleSelection && current.isValid() && current.row() >= start && current.row() <= end
          && current.parent() == parent) {
+
       int totalToRemove = end - start + 1;
+
       if (d->model->rowCount(parent) <= totalToRemove) { // no more children
          QModelIndex index = parent;
          while (index != d->root && !d->isIndexEnabled(index)) {
             index = index.parent();
          }
+
          if (index != d->root) {
             setCurrentIndex(index);
          }
+
       } else {
          int row = end + 1;
          QModelIndex next;
+
          do { // find the next visible and enabled item
             next = d->model->index(row++, current.column(), current.parent());
          } while (next.isValid() && (isIndexHidden(next) || !d->isIndexEnabled(next)));
+
          if (row > d->model->rowCount(parent)) {
             row = start - 1;
+
             do { // find the previous visible and enabled item
                next = d->model->index(row--, current.column(), current.parent());
             } while (next.isValid() && (isIndexHidden(next) || !d->isIndexEnabled(next)));
@@ -2825,13 +2824,6 @@ void QAbstractItemView::rowsAboutToBeRemoved(const QModelIndex &parent, int star
    }
 }
 
-/*!
-    \internal
-
-    This slot is called when rows have been removed. The deleted
-    rows are those under the given \a parent from \a start to \a end
-    inclusive.
-*/
 void QAbstractItemViewPrivate::_q_rowsRemoved(const QModelIndex &index, int start, int end)
 {
    Q_UNUSED(index)
@@ -2839,10 +2831,12 @@ void QAbstractItemViewPrivate::_q_rowsRemoved(const QModelIndex &index, int star
    Q_UNUSED(end)
 
    Q_Q(QAbstractItemView);
+
    if (q->isVisible()) {
       q->updateEditorGeometries();
    }
    q->setState(QAbstractItemView::NoState);
+
 #ifndef QT_NO_ACCESSIBILITY
 #ifdef Q_WS_X11
    if (QAccessible::isActive()) {
@@ -2872,7 +2866,9 @@ void QAbstractItemViewPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &par
          && selectionMode == QAbstractItemView::SingleSelection
          && current.column() >= start
          && current.column() <= end) {
+
       int totalToRemove = end - start + 1;
+
       if (model->columnCount(parent) < totalToRemove) { // no more columns
          QModelIndex index = parent;
          while (index.isValid() && !isIndexEnabled(index)) {
@@ -3607,8 +3603,6 @@ void QAbstractItemViewPrivate::interruptDelayedItemsLayout() const
    delayedLayout.stop();
    delayedPendingLayout = false;
 }
-
-
 
 QWidget *QAbstractItemViewPrivate::editor(const QModelIndex &index, const QStyleOptionViewItem &options)
 {

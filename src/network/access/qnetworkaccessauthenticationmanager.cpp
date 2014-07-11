@@ -23,20 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qnetworkaccessmanager.h"
-#include "qnetworkaccessmanager_p.h"
-#include "qnetworkaccessauthenticationmanager_p.h"
+#include <qnetworkaccessmanager.h>
+#include <qnetworkaccessmanager_p.h>
+#include <qnetworkaccessauthenticationmanager_p.h>
 
-#include "QtCore/qbuffer.h"
-#include "QtCore/qurl.h"
-#include "QtCore/qvector.h"
-#include "QtCore/QMutexLocker"
-#include "QtNetwork/qauthenticator.h"
+#include <QtCore/qbuffer.h>
+#include <QtCore/qurl.h>
+#include <QtCore/qvector.h>
+#include <QtCore/QMutexLocker>
+#include <QtNetwork/qauthenticator.h>
 
 QT_BEGIN_NAMESPACE
-
-
-
 
 class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredential>,
    public QNetworkAccessCache::CacheableObject

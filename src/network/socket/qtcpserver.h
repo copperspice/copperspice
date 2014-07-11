@@ -86,7 +86,6 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
  private:
    Q_DISABLE_COPY(QTcpServer)
    Q_DECLARE_PRIVATE(QTcpServer)
-
 };
 
 QT_END_NAMESPACE

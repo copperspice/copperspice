@@ -26,13 +26,12 @@
 #ifndef QNETWORKACCESSFTPBACKEND_P_H
 #define QNETWORKACCESSFTPBACKEND_P_H
 
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkaccesscache_p.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "QtNetwork/qftp.h"
-
-#include "QtCore/qpointer.h"
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkaccesscache_p.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <QtNetwork/qftp.h>
+#include <QtCore/qpointer.h>
 
 #ifndef QT_NO_FTP
 
@@ -66,7 +65,6 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 
    void disconnectFromFtp();
 
- public :
    NET_CS_SLOT_1(Public, void ftpConnectionReady(QNetworkAccessCache::CacheableObject *object))
    NET_CS_SLOT_2(ftpConnectionReady)
    NET_CS_SLOT_1(Public, void ftpDone())
@@ -89,8 +87,7 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 class QNetworkAccessFtpBackendFactory: public QNetworkAccessBackendFactory
 {
  public:
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op,
-                                         const QNetworkRequest &request) const;
+   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const;
 };
 
 QT_END_NAMESPACE

@@ -26,7 +26,7 @@
 #ifndef QABSTRACTPROXYMODEL_P_H
 #define QABSTRACTPROXYMODEL_P_H
 
-#include "qabstractitemmodel_p.h"
+#include <qabstractitemmodel_p.h>
 
 #ifndef QT_NO_PROXYMODEL
 

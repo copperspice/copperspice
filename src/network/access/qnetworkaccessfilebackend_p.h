@@ -26,10 +26,10 @@
 #ifndef QNETWORKACCESSFILEBACKEND_P_H
 #define QNETWORKACCESSFILEBACKEND_P_H
 
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkrequest.h"
-#include "qnetworkreply.h"
-#include "QtCore/qfile.h"
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkrequest.h>
+#include <qnetworkreply.h>
+#include <QtCore/qfile.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,8 +64,7 @@ class QNetworkAccessFileBackend: public QNetworkAccessBackend
 class QNetworkAccessFileBackendFactory: public QNetworkAccessBackendFactory
 {
  public:
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op,
-                                         const QNetworkRequest &request) const;
+   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const;
 };
 
 QT_END_NAMESPACE

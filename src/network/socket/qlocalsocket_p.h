@@ -96,6 +96,7 @@ class QLocalSocketPrivate : public QIODevicePrivate
    void errorOccurred(QLocalSocket::LocalSocketError, const QString &function);
    void _q_stateChanged(QAbstractSocket::SocketState newState);
    void _q_error(QAbstractSocket::SocketError newError);
+
 #elif defined(Q_OS_WIN)
    ~QLocalSocketPrivate();
    void destroyPipeHandles();
@@ -120,6 +121,7 @@ class QLocalSocketPrivate : public QIODevicePrivate
    bool pendingReadyRead;
    bool pipeClosed;
    static const qint64 initialReadBufferSize = 4096;
+
 #else
    QLocalUnixSocket unixSocket;
    QString generateErrorString(QLocalSocket::LocalSocketError, const QString &function) const;

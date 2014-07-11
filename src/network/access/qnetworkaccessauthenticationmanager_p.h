@@ -26,11 +26,11 @@
 #ifndef QNETWORKACCESSAUTHENTICATIONMANAGER_P_H
 #define QNETWORKACCESSAUTHENTICATIONMANAGER_P_H
 
-#include "qnetworkaccessmanager.h"
-#include "qnetworkaccesscache_p.h"
-#include "qnetworkaccessbackend_p.h"
-#include "QtNetwork/qnetworkproxy.h"
-#include "QtCore/QMutex"
+#include <qnetworkaccessmanager.h>
+#include <qnetworkaccesscache_p.h>
+#include <qnetworkaccessbackend_p.h>
+#include <QtNetwork/qnetworkproxy.h>
+#include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
 

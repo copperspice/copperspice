@@ -26,7 +26,7 @@
 #ifndef QBEARERPLUGIN_P_H
 #define QBEARERPLUGIN_P_H
 
-#include "qbearerengine_p.h"
+#include <qbearerengine_p.h>
 
 #include <QtCore/qplugin.h>
 #include <QtCore/qfactoryinterface.h>
