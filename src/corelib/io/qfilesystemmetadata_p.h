@@ -350,17 +350,6 @@ inline uint QFileSystemMetaData::ownerId(QAbstractFileEngine::FileOwner owner) c
 
 inline void QFileSystemMetaData::fillFromFileAttribute(DWORD fileAttribute, bool isDriveRoot)
 {
-
-   // broom
-   if (isDriveRoot) {     
-      qDebug("fillFromFileAttribute() TRUE, it is a rootDrive");
-   } else {
-      qDebug("fillFromFileAttribute() is NOT a rootDrive");
-   }
-   // broom 
-
-
-
    fileAttribute_ = fileAttribute;
 
    // Ignore the hidden attribute for drives
