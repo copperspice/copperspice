@@ -1,4 +1,4 @@
-AC_INIT([copperspice], [1.0.0], [ansel@copperspice.com])
+AC_INIT([copperspice], [1.0.X], [ansel@copperspice.com])
 
 AC_CONFIG_AUX_DIR([autotools/build-aux])
 
@@ -44,16 +44,8 @@ esac
 
 AC_PROG_OBJCXX
 
-# verify packages are installed
+# not mandatory
 echo ""
-PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
-PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeType")
-PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
-PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
-PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
-
-# not required
-PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
 PKG_CHECK_MODULES(SSL, openssl, SSL="yes", true)
 PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
 
@@ -61,6 +53,17 @@ AC_CHECK_HEADERS([cups/cups.h])
 AC_SEARCH_LIBS(clock_gettime, rt)
 
 if test "$OSTYPE" == LINUX; then 
+
+# verify dependencies
+PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
+PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeType")
+PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
+PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
+PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
+
+# not mandatory
+PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
+
 # verify dependencies
 AC_SEARCH_LIBS([IceOpenConnection], [ICE], [], missing="$missing ICE")
 AC_SEARCH_LIBS([AuOpenServer], [audio], [], missing="$missing Audio")
