@@ -26,15 +26,13 @@
 #ifndef QCOMMONSTYLE_P_H
 #define QCOMMONSTYLE_P_H
 
-#include "qcommonstyle.h"
-#include "qstyle_p.h"
-
-#include "qstyleoption.h"
+#include <qcommonstyle.h>
+#include <qstyle_p.h>
+#include <qstyleoption.h>
 
 QT_BEGIN_NAMESPACE
 
 class QStringList;
-
 
 class QCommonStylePrivate : public QStylePrivate
 {
@@ -52,12 +50,12 @@ class QCommonStylePrivate : public QStylePrivate
       delete cachedOption;
    }
    void viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const;
-   void viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect,
-                       QRect *pixmapRect, QRect *textRect, bool sizehint) const;
+   void viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect, QRect *pixmapRect, QRect *textRect, bool sizehint) const;
    QSize viewItemSize(const QStyleOptionViewItemV4 *option, int role) const;
 
    mutable QRect decorationRect, displayRect, checkRect;
    mutable QStyleOptionViewItemV4 *cachedOption;
+
    bool isViewItemCached(const QStyleOptionViewItemV4 &option) const {
       return cachedOption && (option.rect == cachedOption->rect
                               && option.direction == cachedOption->direction
@@ -76,6 +74,7 @@ class QCommonStylePrivate : public QStylePrivate
    }
 #endif
    mutable QIcon tabBarcloseButtonIcon;
+
 #ifndef QT_NO_TABBAR
    void tabLayout(const QStyleOptionTabV3 *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
 #endif

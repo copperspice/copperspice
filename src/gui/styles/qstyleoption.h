@@ -36,6 +36,7 @@
 #include <QtGui/qtabwidget.h>
 #include <QtGui/qrubberband.h>
 #include <QtGui/qframe.h>
+
 #ifndef QT_NO_ITEMVIEWS
 #   include <QtCore/qabstractitemmodel.h>
 #endif

@@ -65,17 +65,13 @@ class Q_GUI_EXPORT QStyle : public QObject
 
    virtual void polish(QPalette &);
 
-   virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r,
-                              int flags, bool enabled, const QString &text) const;
-
+   virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const;
    virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
 
-   virtual void drawItemText(QPainter *painter, const QRect &rect,
-                             int flags, const QPalette &pal, bool enabled,
+   virtual void drawItemText(QPainter *painter, const QRect &rect,int flags, const QPalette &pal, bool enabled,
                              const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
 
-   virtual void drawItemPixmap(QPainter *painter, const QRect &rect,
-                               int alignment, const QPixmap &pixmap) const;
+   virtual void drawItemPixmap(QPainter *painter, const QRect &rect,int alignment, const QPixmap &pixmap) const;
 
    virtual QPalette standardPalette() const;
 
@@ -178,8 +174,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_CustomBase = 0xf000000
    };
 
-   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                              const QWidget *w = 0) const = 0;
+   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const = 0;
    enum ControlElement {
       CE_PushButton,
       CE_PushButtonBevel,
@@ -416,11 +411,12 @@ class Q_GUI_EXPORT QStyle : public QObject
    using SubControls = QFlags<SubControl>;
 
    virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-                                   const QWidget *widget = 0) const = 0;
+         const QWidget *widget = 0) const = 0;
+
    virtual SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
          const QPoint &pt, const QWidget *widget = 0) const = 0;
-   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
-                                SubControl sc, const QWidget *widget = 0) const = 0;
+
+   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget = 0) const = 0;
 
    enum PixelMetric {
       PM_ButtonMargin,
@@ -547,8 +543,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_CustomBase = 0xf0000000
    };
 
-   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
-                           const QWidget *widget = 0) const = 0;
+   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const = 0;
 
    enum ContentsType {
       CT_PushButton,
@@ -767,45 +762,29 @@ class Q_GUI_EXPORT QStyle : public QObject
    };
 
    virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt = 0,
-                                  const QWidget *widget = 0) const = 0;
+         const QWidget *widget = 0) const = 0;
 
    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
    virtual QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-                                       const QStyleOption *opt) const = 0;
+         const QStyleOption *opt) const = 0;
 
-   static QRect visualRect(Qt::LayoutDirection direction, const QRect &boundingRect,
-                           const QRect &logicalRect);
-
-   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect,
-                           const QPoint &logicalPos);
+   static QRect visualRect(Qt::LayoutDirection direction, const QRect &boundingRect,const QRect &logicalRect);
+   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect,const QPoint &logicalPos);
 
    static int sliderPositionFromValue(int min, int max, int val, int space, bool upsideDown = false);
    static int sliderValueFromPosition(int min, int max, int pos, int space, bool upsideDown = false);
    static Qt::Alignment visualAlignment(Qt::LayoutDirection direction, Qt::Alignment alignment);
 
-   static QRect alignedRect(Qt::LayoutDirection direction, Qt::Alignment alignment,
-                            const QSize &size, const QRect &rectangle);
+   static QRect alignedRect(Qt::LayoutDirection direction, Qt::Alignment alignment, const QSize &size, const QRect &rectangle);
 
    int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
-                     const QStyleOption *option = 0, const QWidget *widget = 0) const;
+         const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
-   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,
-                             QSizePolicy::ControlTypes controls2, Qt::Orientation orientation,
-                             QStyleOption *option = 0, QWidget *widget = 0) const;
+   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,QSizePolicy::ControlTypes controls2, 
+         Qt::Orientation orientation, QStyleOption *option = 0, QWidget *widget = 0) const;
 
    const QStyle *proxy() const;
-
- private:
-   Q_DISABLE_COPY(QStyle)
-
-   void setProxy(QStyle *style);
-
-   friend class QWidget;
-   friend class QWidgetPrivate;
-   friend class QApplication;
-   friend class QProxyStyle;
-   friend class QProxyStylePrivate;
 
  protected:
    QStyle(QStylePrivate &dd);
@@ -818,6 +797,17 @@ class Q_GUI_EXPORT QStyle : public QObject
                                            const QWidget *widget = 0) const;
 
    QScopedPointer<QStylePrivate> d_ptr;
+
+ private:
+   Q_DISABLE_COPY(QStyle)
+
+   void setProxy(QStyle *style);
+
+   friend class QWidget;
+   friend class QWidgetPrivate;
+   friend class QApplication;
+   friend class QProxyStyle;
+   friend class QProxyStylePrivate;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::State)

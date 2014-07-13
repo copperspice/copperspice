@@ -26,9 +26,9 @@
 #ifndef QWINDOWSVISTASTYLE_P_H
 #define QWINDOWSVISTASTYLE_P_H
 
-#include "qwindowsvistastyle.h"
+#include <qwindowsvistastyle.h>
 
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
 #include <qwindowsxpstyle_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qlibrary.h>

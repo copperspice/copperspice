@@ -56,20 +56,15 @@ class Q_GUI_EXPORT QWindowsStyle : public QCommonStyle
 
    void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const;
 
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-                          const QSize &contentsSize, const QWidget *widget = 0) const;
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, const QWidget *widget = 0) const;
 
-   int pixelMetric(PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+   int pixelMetric(PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0) const; 
+   int styleHint(StyleHint hint, const QStyleOption *opt = 0, const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const;
 
-   int styleHint(StyleHint hint, const QStyleOption *opt = 0, const QWidget *widget = 0,
-                 QStyleHintReturn *returnData = 0) const;
-
-   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
-                          const QWidget *widget = 0) const;
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = 0) const;
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option,
-                                    const QWidget *widget = 0) const;
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const;
 
    bool eventFilter(QObject *o, QEvent *e);
    void timerEvent(QTimerEvent *event);

@@ -69,7 +69,6 @@ class QStylePrivate
         }
 
 
-
 #define END_STYLE_PIXMAPCACHE \
         if (doPixmapCache) { \
             p->end(); \

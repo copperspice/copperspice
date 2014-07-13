@@ -40,17 +40,13 @@ class Q_GUI_EXPORT QCDEStyle : public QMotifStyle
    explicit QCDEStyle(bool useHighlightCols = false);
    virtual ~QCDEStyle();
 
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
-                   const QWidget *widget = 0) const;
-   void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,
-                    const QWidget *w = 0) const;
-   void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                      const QWidget *w = 0) const;
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,  const QWidget *widget = 0) const;
+   void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const;
+   void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const;
    QPalette standardPalette() const;
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0,
-                                    const QWidget *widget = 0) const;
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const;
 
 };
 

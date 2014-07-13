@@ -26,8 +26,8 @@
 #ifndef QCLEANLOOKSSTYLE_P_H
 #define QCLEANLOOKSSTYLE_P_H
 
-#include "qwindowsstyle.h"
-#include "qwindowsstyle_p.h"
+#include <qwindowsstyle.h>
+#include <qwindowsstyle_p.h>
 
 #ifndef QT_NO_STYLE_CLEANLOOKS
 

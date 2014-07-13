@@ -164,41 +164,60 @@ typedef GtkIconTheme *(*Ptr_gtk_icon_theme_get_default) (void);
 typedef void (*Ptr_gtk_widget_style_get)(GtkWidget *, const gchar *first_property_name, ...);
 typedef GtkTreeViewColumn *(*Ptr_gtk_tree_view_column_new)(void);
 typedef GtkWidget *(*Ptr_gtk_fixed_new)(void);
+
 typedef GdkPixbuf *(*Ptr_gtk_icon_set_render_icon)(GtkIconSet *, GtkStyle *, GtkTextDirection, GtkStateType,
       GtkIconSize, GtkWidget *, const char *);
+
 typedef void (*Ptr_gtk_tree_view_append_column) (GtkTreeView *, GtkTreeViewColumn *);
+
 typedef void  (*Ptr_gtk_paint_check) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                      GtkWidget *, const gchar *, gint , gint , gint , gint);
+      GtkWidget *, const gchar *, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_box) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                    GtkWidget *, const gchar *, gint , gint , gint , gint);
+      GtkWidget *, const gchar *, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_box_gap) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                        GtkWidget *, const gchar *, gint, gint, gint , gint, GtkPositionType, gint gap_x, gint gap_width);
+      GtkWidget *, const gchar *, gint, gint, gint , gint, GtkPositionType, gint gap_x, gint gap_width);
+
 typedef void  (*Ptr_gtk_paint_resize_grip) (GtkStyle *, GdkWindow *, GtkStateType, const GdkRectangle *, GtkWidget *,
       const gchar *, GdkWindowEdge, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_focus) (GtkStyle *, GdkWindow *, GtkStateType, const GdkRectangle *, GtkWidget *,
-                                      const gchar *, gint , gint , gint , gint);
+      const gchar *, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_shadow) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                       GtkWidget *, const gchar *, gint , gint , gint , gint);
+      GtkWidget *, const gchar *, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_slider) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                       GtkWidget *, const gchar *, gint , gint , gint , gint, GtkOrientation);
+      GtkWidget *, const gchar *, gint , gint , gint , gint, GtkOrientation);
+
 typedef void  (*Ptr_gtk_paint_expander) (GtkStyle *, GdkWindow *, GtkStateType, const GdkRectangle *, GtkWidget *,
       const gchar *, gint , gint , GtkExpanderStyle );
+
 typedef void  (*Ptr_gtk_paint_handle) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                       GtkWidget *, const gchar *, gint , gint , gint , gint, GtkOrientation);
+      GtkWidget *, const gchar *, gint , gint , gint , gint, GtkOrientation);
+
 typedef void  (*Ptr_gtk_paint_arrow) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                      GtkWidget *, const gchar *, GtkArrowType, gboolean, gint , gint , gint , gint);
+      GtkWidget *, const gchar *, GtkArrowType, gboolean, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_option) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
-                                       GtkWidget *, const gchar *, gint , gint , gint , gint);
+      GtkWidget *, const gchar *, gint , gint , gint , gint);
+
 typedef void  (*Ptr_gtk_paint_flat_box) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
       GtkWidget *, const gchar *, gint , gint , gint , gint);
+
 typedef void (*Ptr_gtk_paint_extension) (GtkStyle *, GdkWindow *, GtkStateType, GtkShadowType, const GdkRectangle *,
       GtkWidget *, const gchar *, gint, gint, gint, gint, GtkPositionType);
+
 typedef void (*Ptr_gtk_adjustment_configure) (GtkAdjustment *, double, double, double, double, double, double);
 typedef GtkObject *(*Ptr_gtk_adjustment_new) (double, double, double, double, double, double);
+
 typedef void   (*Ptr_gtk_paint_hline) (GtkStyle *, GdkWindow *, GtkStateType, const GdkRectangle *, GtkWidget *,
-                                       const gchar *, gint, gint, gint y);
+      const gchar *, gint, gint, gint y);
+
 typedef void   (*Ptr_gtk_paint_vline) (GtkStyle *, GdkWindow *, GtkStateType, const GdkRectangle *, GtkWidget *,
-                                       const gchar *, gint, gint, gint);
+      const gchar *, gint, gint, gint);
+
 typedef void (*Ptr_gtk_menu_item_set_submenu) (GtkMenuItem *, GtkWidget *);
 typedef void (*Ptr_gtk_container_forall) (GtkContainer *, GtkCallback, gpointer);
 typedef void (*Ptr_gtk_widget_size_allocate) (GtkWidget *, GtkAllocation *);
@@ -225,11 +244,10 @@ typedef void (*Ptr_gtk_file_chooser_set_filter)(GtkFileChooser *chooser, GtkFile
 typedef GtkFileFilter *(*Ptr_gtk_file_chooser_get_filter)(GtkFileChooser *chooser);
 typedef gchar  *(*Ptr_gtk_file_chooser_get_filename)(GtkFileChooser *chooser);
 typedef GSList *(*Ptr_gtk_file_chooser_get_filenames)(GtkFileChooser *chooser);
-typedef GtkWidget *(*Ptr_gtk_file_chooser_dialog_new)(const gchar *title,
-      GtkWindow *parent,
-      GtkFileChooserAction action,
-      const gchar *first_button_text,
-      ...);
+
+typedef GtkWidget *(*Ptr_gtk_file_chooser_dialog_new)(const gchar *title, GtkWindow *parent, GtkFileChooserAction action,
+      const gchar *first_button_text, ...);
+
 typedef void (*Ptr_gtk_file_chooser_set_current_name) (GtkFileChooser *, const gchar *);
 typedef gboolean (*Ptr_gtk_file_chooser_set_filename) (GtkFileChooser *chooser, const gchar *name);
 typedef gint (*Ptr_gtk_dialog_run) (GtkDialog *);
@@ -239,15 +257,17 @@ typedef guchar *(*Ptr_gdk_pixbuf_get_pixels) (const GdkPixbuf *pixbuf);
 typedef int (*Ptr_gdk_pixbuf_get_width) (const GdkPixbuf *pixbuf);
 typedef void (*Ptr_gdk_color_free) (const GdkColor *);
 typedef int (*Ptr_gdk_pixbuf_get_height) (const GdkPixbuf *pixbuf);
-typedef GdkPixbuf *(*Ptr_gdk_pixbuf_get_from_drawable) (GdkPixbuf *dest, GdkDrawable *src,
-      GdkColormap *cmap, int src_x,
-      int src_y, int dest_x, int dest_y,
-      int width, int height);
+typedef GdkPixbuf *(*Ptr_gdk_pixbuf_get_from_drawable) (GdkPixbuf *dest, GdkDrawable *src, GdkColormap *cmap, 
+      int src_x, int src_y, int dest_x, int dest_y, int width, int height);
+
 typedef GdkPixmap *(*Ptr_gdk_pixmap_new) (GdkDrawable *drawable, gint width, gint height, gint depth);
+
 typedef GdkPixbuf *(*Ptr_gdk_pixbuf_new) (GdkColorspace colorspace, gboolean has_alpha,
       int bits_per_sample, int width, int height);
-typedef void (*Ptr_gdk_draw_rectangle) (GdkDrawable *drawable, GdkGC *gc,
-                                        gboolean filled, gint x, gint y, gint width, gint height);
+
+typedef void (*Ptr_gdk_draw_rectangle) (GdkDrawable *drawable, GdkGC *gc, gboolean filled, gint x, gint y, 
+      gint width, gint height);
+
 typedef void (*Ptr_gdk_pixbuf_unref)(GdkPixbuf *);
 typedef void (*Ptr_gdk_drawable_unref)(GdkDrawable *);
 typedef gint (*Ptr_gdk_drawable_get_depth)(GdkDrawable *);
@@ -310,6 +330,7 @@ typedef char *(*Ptr_gnome_icon_lookup_sync)  (
 class QGtkStylePrivate : public QCleanlooksStylePrivate
 {
    Q_DECLARE_PUBLIC(QGtkStyle)
+
  public:
    QGtkStylePrivate();
    ~QGtkStylePrivate();
@@ -341,17 +362,20 @@ class QGtkStylePrivate : public QCleanlooksStylePrivate
    virtual int getSpinboxArrowSize() const;
 
    static void setupGtkFileChooser(GtkWidget *gtkFileChooser, QWidget *parent,
-                                   const QString &dir, const QString &filter, QString *selectedFilter,
-                                   QFileDialog::Options options, bool isSaveDialog = false,
-                                   QMap<GtkFileFilter *, QString> *filterMap = 0);
+         const QString &dir, const QString &filter, QString *selectedFilter,
+         QFileDialog::Options options, bool isSaveDialog = false, QMap<GtkFileFilter *, QString> *filterMap = 0);
 
    static QString openFilename(QWidget *parent, const QString &caption, const QString &dir, const QString &filter,
-                               QString *selectedFilter, QFileDialog::Options options);
+         QString *selectedFilter, QFileDialog::Options options);
+
    static QString saveFilename(QWidget *parent, const QString &caption, const QString &dir, const QString &filter,
-                               QString *selectedFilter, QFileDialog::Options options);
+         QString *selectedFilter, QFileDialog::Options options);
+
    static QString openDirectory(QWidget *parent, const QString &caption, const QString &dir, QFileDialog::Options options);
+         
    static QStringList openFilenames(QWidget *parent, const QString &caption, const QString &dir, const QString &filter,
-                                    QString *selectedFilter, QFileDialog::Options options);
+         QString *selectedFilter, QFileDialog::Options options);
+
    static QIcon getFilesystemIcon(const QFileInfo &);
 
    static Ptr_gtk_container_forall gtk_container_forall;

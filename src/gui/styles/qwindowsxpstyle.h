@@ -49,34 +49,24 @@ class Q_GUI_EXPORT QWindowsXPStyle : public QWindowsStyle
    void polish(QPalette &);
    void unpolish(QWidget *);
 
-   void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p,
-                      const QWidget *widget = 0) const;
-
-   void drawControl(ControlElement element, const QStyleOption *option, QPainter *p,
-                    const QWidget *wwidget = 0) const;
+   void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p, const QWidget *widget = 0) const;
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *p, const QWidget *wwidget = 0) const;
 
    QRect subElementRect(SubElement r, const QStyleOption *option, const QWidget *widget = 0) const;
+   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *option, SubControl sc, const QWidget *widget = 0) const;
 
-   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *option, SubControl sc,
-                        const QWidget *widget = 0) const;
+   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *option, QPainter *p, const QWidget *widget = 0) const;
 
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *option, QPainter *p,
-                           const QWidget *widget = 0) const;
-
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *option, const QSize &contentsSize,
-                          const QWidget *widget = 0) const;
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *option, const QSize &contentsSize, const QWidget *widget = 0) const;
 
    int pixelMetric(PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0) const;
-
-   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
-                 QStyleHintReturn *returnData = 0) const;
+   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const;
 
    QPalette standardPalette() const;
    QPixmap standardPixmap(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const;
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option,
-                                    const QWidget *widget = 0) const;
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const;
 
  private:
    Q_DISABLE_COPY(QWindowsXPStyle)

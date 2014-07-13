@@ -26,8 +26,8 @@
 #ifndef QWINDOWSSTYLE_P_H
 #define QWINDOWSSTYLE_P_H
 
-#include "qwindowsstyle.h"
-#include "qcommonstyle_p.h"
+#include <qwindowsstyle.h>
+#include <qcommonstyle_p.h>
 
 #ifndef QT_NO_STYLE_WINDOWS
 #include <qlist.h>
@@ -42,6 +42,7 @@ class QProgressBar;
 class QWindowsStylePrivate : public QCommonStylePrivate
 {
    Q_DECLARE_PUBLIC(QWindowsStyle)
+
  public:
    QWindowsStylePrivate();
    void startAnimation(QObject *o, QProgressBar *bar);

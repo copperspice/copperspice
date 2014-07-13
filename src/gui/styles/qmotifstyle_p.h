@@ -25,11 +25,12 @@
 
 #ifndef QMOTIFSTYLE_P_H
 #define QMOTIFSTYLE_P_H
+
 #include <qlist.h>
 #include <qdatetime.h>
 #include <qprogressbar.h>
-#include "qmotifstyle.h"
-#include "qcommonstyle_p.h"
+#include <qmotifstyle.h>
+#include <qcommonstyle_p.h>
 
 QT_BEGIN_NAMESPACE
 

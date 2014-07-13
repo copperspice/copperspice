@@ -60,26 +60,21 @@ class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
 
    void polish(QPalette &pal);
 
-   void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-                      const QWidget *w = 0) const;
-   void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,
-                    const QWidget *w = 0) const;
+   void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const;
+   void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const;
    QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const;
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-                           const QWidget *w = 0) const;
-   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-                                    const QPoint &pt, const QWidget *w = 0) const;
-   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
-                        const QWidget *w = 0) const;
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-                          const QSize &contentsSize, const QWidget *w = 0) const;
+
+   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const;
+   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *w = 0) const;
+
+   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *w = 0) const;
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,const QSize &contentsSize, const QWidget *w = 0) const;
 
    int pixelMetric(PixelMetric pm, const QStyleOption *opt = 0, const QWidget *widget = 0) const;
 
    QPalette standardPalette() const;
 
-   virtual int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0,
-                         QStyleHintReturn *shret = 0) const;
+   virtual int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const;
 
    enum FocusRectPolicy { FocusEnabled, FocusDisabled, FocusDefault };
    static void setFocusRectPolicy(QWidget *w, FocusRectPolicy policy);
@@ -91,22 +86,18 @@ class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
 
    QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *opt, const QWidget *widget = 0) const;
 
-   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-                               const QStyleOption *opt) const;
+   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const;
 
    virtual void drawItemText(QPainter *p, const QRect &r, int flags, const QPalette &pal,
-                             bool enabled, const QString &text, QPalette::ColorRole textRole  = QPalette::NoRole) const;
+         bool enabled, const QString &text, QPalette::ColorRole textRole  = QPalette::NoRole) const;
 
    bool event(QEvent *e);
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0,
-                                    const QWidget *widget = 0) const;
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const;
 
-   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
-                                   Qt::Orientation orientation,
-                                   const QStyleOption *option = 0, const QWidget *widget = 0) const;
-
+   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation, 
+         const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
  private:
    Q_DISABLE_COPY(QMacStyle)

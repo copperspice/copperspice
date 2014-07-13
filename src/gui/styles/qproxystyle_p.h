@@ -26,9 +26,9 @@
 #ifndef QPROXYSTYLE_P_H
 #define QPROXYSTYLE_P_H
 
-#include "qcommonstyle.h"
-#include "qcommonstyle_p.h"
-#include "qproxystyle.h"
+#include <qcommonstyle.h>
+#include <qcommonstyle_p.h>
+#include <qproxystyle.h>
 
 #ifndef QT_NO_STYLE_PROXY
 
@@ -37,8 +37,10 @@ QT_BEGIN_NAMESPACE
 class QProxyStylePrivate : public QCommonStylePrivate
 {
    Q_DECLARE_PUBLIC(QProxyStyle)
+
  public:
    void ensureBaseStyle() const;
+
  private:
    QProxyStylePrivate() :
       QCommonStylePrivate(), baseStyle(0) {}

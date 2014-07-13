@@ -45,14 +45,13 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QStyle *baseStyle() const;
    void setBaseStyle(QStyle *style);
 
-   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
-                      const QWidget *widget = 0) const;
-   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
-                    const QWidget *widget = 0) const;
-   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
-                           const QWidget *widget = 0) const;
+   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const; 
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const;
+   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = 0) const;
+
    void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
-                     const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
+         const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
+
    virtual void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const;
 
    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const;
@@ -63,11 +62,13 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
 
    SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option, const QPoint &pos,
-                                    const QWidget *widget = 0) const;
-   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
-                 QStyleHintReturn *returnData = 0) const;
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+         const QWidget *widget = 0) const;
 
+   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
+         QStyleHintReturn *returnData = 0) const;
+
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+   
    QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = 0) const;
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const;
    QPalette standardPalette() const;
@@ -84,9 +85,8 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
 
    QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const;
 
-   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
-                                   Qt::Orientation orientation,
-                                   const QStyleOption *option = 0, const QWidget *widget = 0) const;
+   int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
+         const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
  private:
    Q_DISABLE_COPY(QProxyStyle)
