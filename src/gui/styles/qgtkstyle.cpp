@@ -55,8 +55,6 @@
 #include <QtGui/QStyledItemDelegate>
 #include <qpixmapcache.h>
 
-#undef signals // Collides with GTK stymbols
-
 #include <qgtkpainter_p.h>
 #include <qstylehelper_p.h>
 #include <qgtkstyle_p.h>

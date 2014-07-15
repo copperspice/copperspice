@@ -588,18 +588,18 @@ void QNetworkReplyImplPrivate::initCacheSaveDevice()
    cacheSaveDevice = networkCache()->prepare(metaData);
 
    if (cacheSaveDevice) {
-      q->connect(cacheSaveDevice, SIGNAL(aboutToClose()), SLOT(_q_cacheSaveDeviceAboutToClose()));
+      q->connect(cacheSaveDevice, SIGNAL(aboutToClose()), q, SLOT(_q_cacheSaveDeviceAboutToClose()));
    }
 
    if (!cacheSaveDevice || (cacheSaveDevice && !cacheSaveDevice->isOpen())) {
       if (cacheSaveDevice && !cacheSaveDevice->isOpen())
-         qCritical("QNetworkReplyImpl: network cache returned a device that is not open -- "
-                   "class %s probably needs to be fixed",
-                   networkCache()->metaObject()->className());
+         qCritical("QNetworkReplyImpl::initCacheSaveDevice() Network cache returned a device that is not open -- "
+                   "class %s probably needs to be fixed", networkCache()->metaObject()->className());
 
       networkCache()->remove(url);
       cacheSaveDevice = 0;
       cacheEnabled = false;
+
    } else {
       q->connect(networkCache(), SIGNAL(destroyed()), q, SLOT(_q_cacheDestroyed()));
    }
@@ -1232,5 +1232,12 @@ void QNetworkReplyImpl::_q_cacheDestroyed()
    Q_D(QNetworkReplyImpl);
    d->_q_cacheDestroyed();
 }
+
+void QNetworkReplyImpl::_q_cacheSaveDeviceAboutToClose()
+{
+   Q_D(QNetworkReplyImpl);
+   d->_q_cacheSaveDeviceAboutToClose();
+}
+
 
 QT_END_NAMESPACE

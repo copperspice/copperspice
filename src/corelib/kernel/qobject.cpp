@@ -349,7 +349,7 @@ bool QObject::connect(const QObject *sender, const char *signalMethod, const QOb
 #ifdef CS_Debug
       qDebug("");
       for (int k = 0; k < senderMetaObject->methodCount(); ++k) {
-         qDebug("QObject:connect()  Class %s has method %s", senderMetaObject->className(),
+         qDebug("QObject::connect()  Class %s has method %s", senderMetaObject->className(),
                 senderMetaObject->method(k).methodSignature().constData() );
       }
       qDebug("");

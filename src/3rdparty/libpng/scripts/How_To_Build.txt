@@ -1,0 +1,9 @@
+To generate pnglibconf.h
+
+cd src/3rdparty/libpng
+make -f scripts/pnglibconf.mak
+
+Verify pnglibconf.h versoin for ZLIB is changed as follows:
+
+#define PNG_ZLIB_VERNUM 0x1280
+

@@ -1,0 +1,973 @@
+# 1 "pnglibconf.c"
+# 1 "<command-line>"
+# 1 "pnglibconf.c"
+# 1 "pnglibconf.dfn" 1
+
+
+
+ PNG_DFN "/* pnglibconf.h - library build configuration */"
+ PNG_DFN ""
+ PNG_DFN "/* libpng version 1.6.12 - June 12, 2014 */"
+ PNG_DFN ""
+ PNG_DFN "/* Copyright (c) 1998-2012 Glenn Randers-Pehrson */"
+ PNG_DFN ""
+ PNG_DFN "/* This code is released under the libpng license. */"
+ PNG_DFN "/* For conditions of distribution and use, see the disclaimer */"
+ PNG_DFN "/* and license in png.h */"
+ PNG_DFN ""
+ PNG_DFN "/* pnglibconf.h */"
+ PNG_DFN "/* Machine generated file: DO NOT EDIT */"
+ PNG_DFN "/* Derived from: scripts/pnglibconf.dfa */"
+ PNG_DFN "#ifndef PNGLCONF_H"
+ PNG_DFN "#define PNGLCONF_H"
+# 30 "pnglibconf.dfn"
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 1 3
+# 34 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 1 3
+# 365 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 3
+typedef unsigned char Byte;
+
+typedef unsigned int uInt;
+typedef unsigned long uLong;
+
+
+
+
+
+   typedef Byte Bytef;
+
+typedef char charf;
+typedef int intf;
+typedef uInt uIntf;
+typedef uLong uLongf;
+
+
+   typedef void const *voidpc;
+   typedef void *voidpf;
+   typedef void *voidp;
+# 394 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 3
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 1 3 4
+# 34 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/syslimits.h" 1 3 4
+
+
+
+
+
+
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 1 3 4
+# 169 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/limits.h" 1 3 4
+
+
+
+
+
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/crtdefs.h" 1 3 4
+# 10 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/crtdefs.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 1 3 4
+# 12 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw_mac.h" 1 3 4
+# 13 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 2 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw_secapi.h" 1 3 4
+# 14 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 2 3 4
+# 278 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/vadefs.h" 1 3 4
+# 9 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/vadefs.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 1 3 4
+# 682 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sdks/_mingw_directx.h" 1 3 4
+# 683 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 2 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sdks/_mingw_ddk.h" 1 3 4
+# 684 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 2 3 4
+# 10 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/vadefs.h" 2 3 4
+
+
+#pragma pack(push,_CRT_PACKING)
+# 22 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/vadefs.h" 3 4
+  typedef __builtin_va_list __gnuc_va_list;
+
+
+
+
+
+
+  typedef __gnuc_va_list va_list;
+# 101 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/vadefs.h" 3 4
+#pragma pack(pop)
+# 279 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 2 3 4
+
+
+#pragma pack(push,_CRT_PACKING)
+# 375 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef unsigned int size_t;
+# 385 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef int ssize_t;
+# 397 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef int intptr_t;
+# 410 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef unsigned int uintptr_t;
+# 423 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef int ptrdiff_t;
+
+
+
+
+
+
+
+typedef unsigned short wchar_t;
+
+
+
+
+
+
+
+typedef unsigned short wint_t;
+typedef unsigned short wctype_t;
+# 459 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+typedef int errno_t;
+
+
+
+
+typedef long __time32_t;
+
+
+
+
+__extension__ typedef long long __time64_t;
+
+
+
+
+
+typedef __time32_t time_t;
+# 652 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw.h" 3 4
+void __attribute__((__cdecl__)) __debugbreak(void);
+extern __inline__ __attribute__((__always_inline__,__gnu_inline__)) void __attribute__((__cdecl__)) __debugbreak(void)
+{
+  __asm__ __volatile__("int $3");
+}
+
+
+
+
+const char *__mingw_get_crt_info (void);
+
+
+
+
+
+
+#pragma pack(pop)
+# 11 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/crtdefs.h" 2 3 4
+# 26 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/crtdefs.h" 3 4
+typedef size_t rsize_t;
+# 153 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/crtdefs.h" 3 4
+struct threadlocaleinfostruct;
+struct threadmbcinfostruct;
+typedef struct threadlocaleinfostruct *pthreadlocinfo;
+typedef struct threadmbcinfostruct *pthreadmbcinfo;
+struct __lc_time_data;
+
+typedef struct localeinfo_struct {
+  pthreadlocinfo locinfo;
+  pthreadmbcinfo mbcinfo;
+} _locale_tstruct,*_locale_t;
+
+
+
+typedef struct tagLC_ID {
+  unsigned short wLanguage;
+  unsigned short wCountry;
+  unsigned short wCodePage;
+} LC_ID,*LPLC_ID;
+
+
+
+
+typedef struct threadlocaleinfostruct {
+  int refcount;
+  unsigned int lc_codepage;
+  unsigned int lc_collate_cp;
+  unsigned long lc_handle[6];
+  LC_ID lc_id[6];
+  struct {
+    char *locale;
+    wchar_t *wlocale;
+    int *refcount;
+    int *wrefcount;
+  } lc_category[6];
+  int lc_clike;
+  int mb_cur_max;
+  int *lconv_intl_refcount;
+  int *lconv_num_refcount;
+  int *lconv_mon_refcount;
+  struct lconv *lconv;
+  int *ctype1_refcount;
+  unsigned short *ctype1;
+  const unsigned short *pctype;
+  const unsigned char *pclmap;
+  const unsigned char *pcumap;
+  struct __lc_time_data *lc_time_curr;
+} threadlocinfo;
+# 7 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/limits.h" 2 3 4
+# 170 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 2 3 4
+# 8 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/syslimits.h" 2 3 4
+# 35 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include-fixed/limits.h" 2 3 4
+# 395 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 2 3
+# 409 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 3
+   typedef unsigned z_crc_t;
+# 424 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 3
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sys/types.h" 1 3
+# 43 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sys/types.h" 3
+typedef unsigned short _ino_t;
+
+typedef unsigned short ino_t;
+
+
+
+
+
+typedef unsigned int _dev_t;
+
+typedef unsigned int dev_t;
+
+
+
+
+
+
+typedef int _pid_t;
+
+
+
+
+
+
+
+typedef _pid_t pid_t;
+
+
+
+
+
+typedef unsigned short _mode_t;
+
+
+typedef _mode_t mode_t;
+
+
+
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw_off_t.h" 1 3
+
+
+
+
+  typedef long _off_t;
+
+  typedef long off32_t;
+
+
+
+
+
+  __extension__ typedef long long _off64_t;
+
+  __extension__ typedef long long off64_t;
+# 26 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/_mingw_off_t.h" 3
+typedef off32_t off_t;
+# 82 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sys/types.h" 2 3
+
+
+typedef unsigned int useconds_t;
+
+
+
+
+struct timespec {
+  time_t tv_sec;
+  long tv_nsec;
+};
+
+struct itimerspec {
+  struct timespec it_interval;
+  struct timespec it_value;
+};
+# 106 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/sys/types.h" 3
+typedef unsigned long _sigset_t;
+# 425 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 2 3
+
+
+
+
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include/stddef.h" 1 3 4
+# 1 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/stddef.h" 1 3 4
+# 18 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/stddef.h" 3 4
+  __attribute__ ((__dllimport__)) extern int *__attribute__((__cdecl__)) _errno(void);
+
+  errno_t __attribute__((__cdecl__)) _set_errno(int _Value);
+  errno_t __attribute__((__cdecl__)) _get_errno(int *_Value);
+
+
+  __attribute__ ((__dllimport__)) extern unsigned long __attribute__((__cdecl__)) __threadid(void);
+
+  __attribute__ ((__dllimport__)) extern uintptr_t __attribute__((__cdecl__)) __threadhandle(void);
+# 2 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/include/stddef.h" 2 3 4
+# 430 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zconf.h" 2 3
+# 35 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 2 3
+# 80 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+typedef voidpf (*alloc_func) (voidpf opaque, uInt items, uInt size);
+typedef void (*free_func) (voidpf opaque, voidpf address);
+
+struct internal_state;
+
+typedef struct z_stream_s {
+    Bytef *next_in;
+    uInt avail_in;
+    uLong total_in;
+
+    Bytef *next_out;
+    uInt avail_out;
+    uLong total_out;
+
+    char *msg;
+    struct internal_state *state;
+
+    alloc_func zalloc;
+    free_func zfree;
+    voidpf opaque;
+
+    int data_type;
+    uLong adler;
+    uLong reserved;
+} z_stream;
+
+typedef z_stream *z_streamp;
+
+
+
+
+
+typedef struct gz_header_s {
+    int text;
+    uLong time;
+    int xflags;
+    int os;
+    Bytef *extra;
+    uInt extra_len;
+    uInt extra_max;
+    Bytef *name;
+    uInt name_max;
+    Bytef *comment;
+    uInt comm_max;
+    int hcrc;
+    int done;
+
+} gz_header;
+
+typedef gz_header *gz_headerp;
+# 216 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern const char * zlibVersion (void);
+# 246 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflate (z_streamp strm, int flush);
+# 353 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateEnd (z_streamp strm);
+# 392 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflate (z_streamp strm, int flush);
+# 508 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateEnd (z_streamp strm);
+# 587 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateSetDictionary (z_streamp strm, const Bytef *dictionary, uInt dictLength)
+
+                                                               ;
+# 631 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateCopy (z_streamp dest, z_streamp source)
+                                                      ;
+# 649 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateReset (z_streamp strm);
+# 660 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateParams (z_streamp strm, int level, int strategy)
+
+                                                    ;
+# 681 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateTune (z_streamp strm, int good_length, int max_lazy, int nice_length, int max_chain)
+
+
+
+                                                   ;
+# 698 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern uLong deflateBound (z_streamp strm, uLong sourceLen)
+                                                        ;
+# 713 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflatePending (z_streamp strm, unsigned *pending, int *bits)
+
+                                                  ;
+# 728 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflatePrime (z_streamp strm, int bits, int value)
+
+                                                ;
+# 745 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateSetHeader (z_streamp strm, gz_headerp head)
+                                                          ;
+# 819 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateSetDictionary (z_streamp strm, const Bytef *dictionary, uInt dictLength)
+
+                                                               ;
+# 842 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateSync (z_streamp strm);
+# 861 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateCopy (z_streamp dest, z_streamp source)
+                                                      ;
+# 877 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateReset (z_streamp strm);
+# 887 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateReset2 (z_streamp strm, int windowBits)
+                                                      ;
+# 899 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflatePrime (z_streamp strm, int bits, int value)
+
+                                                ;
+# 920 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern long inflateMark (z_streamp strm);
+# 948 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateGetHeader (z_streamp strm, gz_headerp head)
+                                                          ;
+# 1010 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+typedef unsigned (*in_func) (void *, unsigned char * *);
+typedef int (*out_func) (void *, unsigned char *, unsigned);
+
+extern int inflateBack (z_streamp strm, in_func in, void *in_desc, out_func out, void *out_desc)
+
+                                                                      ;
+# 1082 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int inflateBackEnd (z_streamp strm);
+
+
+
+
+
+
+
+extern uLong zlibCompileFlags (void);
+# 1143 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int compress (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen)
+                                                                       ;
+# 1157 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int compress2 (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen, int level)
+
+                                             ;
+# 1173 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern uLong compressBound (uLong sourceLen);
+
+
+
+
+
+
+extern int uncompress (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen)
+                                                                         ;
+# 1207 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+typedef struct gzFile_s *gzFile;
+# 1247 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern gzFile gzdopen (int fd, const char *mode);
+# 1270 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzbuffer (gzFile file, unsigned size);
+# 1287 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzsetparams (gzFile file, int level, int strategy);
+# 1296 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzread (gzFile file, voidp buf, unsigned len);
+# 1324 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzwrite (gzFile file, voidpc buf, unsigned len)
+                                                          ;
+
+
+
+
+
+
+extern int gzprintf (gzFile file, const char *format, ...);
+# 1347 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzputs (gzFile file, const char *s);
+
+
+
+
+
+
+
+extern char * gzgets (gzFile file, char *buf, int len);
+# 1368 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzputc (gzFile file, int c);
+
+
+
+
+
+extern int gzgetc (gzFile file);
+# 1383 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzungetc (int c, gzFile file);
+# 1395 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzflush (gzFile file, int flush);
+# 1430 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzrewind (gzFile file);
+# 1458 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzeof (gzFile file);
+# 1473 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzdirect (gzFile file);
+# 1494 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzclose (gzFile file);
+# 1507 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int gzclose_r (gzFile file);
+extern int gzclose_w (gzFile file);
+# 1519 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern const char * gzerror (gzFile file, int *errnum);
+# 1535 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern void gzclearerr (gzFile file);
+# 1552 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern uLong adler32 (uLong adler, const Bytef *buf, uInt len);
+# 1583 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern uLong crc32 (uLong crc, const Bytef *buf, uInt len);
+# 1616 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+extern int deflateInit_ (z_streamp strm, int level, const char *version, int stream_size)
+                                                                           ;
+extern int inflateInit_ (z_streamp strm, const char *version, int stream_size)
+                                                                           ;
+extern int deflateInit2_ (z_streamp strm, int level, int method, int windowBits, int memLevel, int strategy, const char *version, int stream_size)
+
+
+                                                       ;
+extern int inflateInit2_ (z_streamp strm, int windowBits, const char *version, int stream_size)
+                                                                            ;
+extern int inflateBackInit_ (z_streamp strm, int windowBits, unsigned char *window, const char *version, int stream_size)
+
+
+                                                          ;
+# 1653 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+struct gzFile_s {
+    unsigned have;
+    unsigned char *next;
+    long pos;
+};
+extern int gzgetc_ (gzFile file);
+# 1708 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+   extern gzFile gzopen (const char *, const char *);
+   extern long gzseek (gzFile, long, int);
+   extern long gztell (gzFile);
+   extern long gzoffset (gzFile);
+   extern uLong adler32_combine (uLong, uLong, long);
+   extern uLong crc32_combine (uLong, uLong, long);
+# 1725 "c:\\mingw\\bin\\../lib/gcc/i686-w64-mingw32/4.7.2/../../../../i686-w64-mingw32/include/zlib.h" 3
+    struct internal_state {int dummy;};
+
+
+
+extern const char * zError (int);
+extern int inflateSyncPoint (z_streamp);
+extern const z_crc_t * get_crc_table (void);
+extern int inflateUndermine (z_streamp, int);
+extern int inflateResetKeep (z_streamp);
+extern int deflateResetKeep (z_streamp);
+
+extern gzFile gzopen_w (const wchar_t *path, const char *mode)
+                                                              ;
+# 31 "pnglibconf.dfn" 2
+# 60 "pnglibconf.dfn"
+ PNG_DFN "/* options */"
+PNG_DFN_START_SORT 2
+# 89 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_UNKNOWN_CHUNKS_SUPPORTED"
+# 122 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_INFO_IMAGE_SUPPORTED"
+# 158 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SET_UNKNOWN_CHUNKS_SUPPORTED"
+# 191 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_GET_PALETTE_MAX_SUPPORTED"
+# 224 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_POINTER_INDEXING_SUPPORTED"
+# 257 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WARNINGS_SUPPORTED"
+# 290 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_FLOATING_ARITHMETIC_SUPPORTED"
+# 323 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_SUPPORTED"
+# 359 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_INTERLACING_SUPPORTED"
+# 395 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_16BIT_SUPPORTED"
+# 428 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_EASY_ACCESS_SUPPORTED"
+# 461 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_CHECK_FOR_INVALID_INDEX_SUPPORTED"
+# 497 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_WEIGHTED_FILTER_SUPPORTED"
+# 536 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_UNKNOWN_CHUNKS_SUPPORTED"
+# 569 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_BUILD_GRAYSCALE_PALETTE_SUPPORTED"
+# 602 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_FIXED_POINT_SUPPORTED"
+# 634 "pnglibconf.dfn"
+ PNG_DFN "/*#undef PNG_ERROR_NUMBERS_SUPPORTED*/"
+# 663 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_ERROR_TEXT_SUPPORTED"
+# 696 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_SUPPORTED"
+# 729 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_BENIGN_ERRORS_SUPPORTED"
+# 762 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SETJMP_SUPPORTED"
+# 795 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_TIME_RFC1123_SUPPORTED"
+# 831 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_BENIGN_READ_ERRORS_SUPPORTED"
+# 867 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_FLUSH_SUPPORTED"
+# 900 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_MNG_FEATURES_SUPPORTED"
+# 932 "pnglibconf.dfn"
+ PNG_DFN "/*#undef PNG_SAFE_LIMITS_SUPPORTED*/"
+# 961 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_ALIGNED_MEMORY_SUPPORTED"
+# 994 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_FLOATING_POINT_SUPPORTED"
+# 1030 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_OPTIMIZE_CMF_SUPPORTED"
+# 1063 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_INCH_CONVERSIONS_SUPPORTED"
+# 1096 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_STDIO_SUPPORTED"
+# 1129 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_USER_MEM_SUPPORTED"
+# 1162 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_IO_STATE_SUPPORTED"
+# 1203 "pnglibconf.dfn"
+ PNG_DFN "/*#undef PNG_ARM_NEON_CHECK_SUPPORTED*/"
+# 1235 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_ANCILLARY_CHUNKS_SUPPORTED"
+# 1266 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_INT_FUNCTIONS_SUPPORTED"
+# 1302 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_ANCILLARY_CHUNKS_SUPPORTED"
+# 1338 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_FILTER_SUPPORTED"
+# 1374 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_zTXt_SUPPORTED"
+# 1410 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_iCCP_SUPPORTED"
+# 1446 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_TRANSFORMS_SUPPORTED"
+# 1482 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_bKGD_SUPPORTED"
+# 1518 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_sCAL_SUPPORTED"
+# 1554 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_hIST_SUPPORTED"
+# 1590 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_HANDLE_AS_UNKNOWN_SUPPORTED"
+# 1626 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_OPT_PLTE_SUPPORTED"
+# 1662 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_gAMA_SUPPORTED"
+# 1698 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_GRAY_TO_RGB_SUPPORTED"
+# 1734 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_pCAL_SUPPORTED"
+# 1770 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_INVERT_ALPHA_SUPPORTED"
+# 1806 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_TRANSFORMS_SUPPORTED"
+# 1848 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_CHECK_FOR_INVALID_INDEX_SUPPORTED"
+# 1884 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_sBIT_SUPPORTED"
+# 1920 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_CUSTOMIZE_ZTXT_COMPRESSION_SUPPORTED"
+# 1956 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_PACK_SUPPORTED"
+# 1992 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_iTXt_SUPPORTED"
+# 2031 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_SWAP_SUPPORTED"
+# 2067 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_cHRM_SUPPORTED"
+# 2103 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_STRIP_16_TO_8_SUPPORTED"
+# 2139 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_tIME_SUPPORTED"
+# 2170 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_INTERLACING_SUPPORTED"
+# 2206 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_tRNS_SUPPORTED"
+# 2242 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_pHYs_SUPPORTED"
+# 2278 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_INVERT_SUPPORTED"
+# 2314 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_sRGB_SUPPORTED"
+# 2350 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_oFFs_SUPPORTED"
+# 2386 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_FILLER_SUPPORTED"
+# 2422 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_SHIFT_SUPPORTED"
+# 2458 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_PROGRESSIVE_READ_SUPPORTED"
+# 2494 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_SHIFT_SUPPORTED"
+# 2530 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_CONVERT_tIME_SUPPORTED"
+# 2566 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_USER_TRANSFORM_SUPPORTED"
+# 2602 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_INT_FUNCTIONS_SUPPORTED"
+# 2641 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_USER_CHUNKS_SUPPORTED"
+# 2677 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_hIST_SUPPORTED"
+# 2713 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_16BIT_SUPPORTED"
+# 2749 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_SWAP_ALPHA_SUPPORTED"
+# 2785 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_COMPOSITE_NODIV_SUPPORTED"
+# 2821 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SEQUENTIAL_READ_SUPPORTED"
+# 2857 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_QUANTIZE_SUPPORTED"
+# 2893 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_zTXt_SUPPORTED"
+# 2929 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_USER_LIMITS_SUPPORTED"
+# 2965 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_iCCP_SUPPORTED"
+# 3001 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_STRIP_ALPHA_SUPPORTED"
+# 3037 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_PACKSWAP_SUPPORTED"
+# 3073 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_sRGB_SUPPORTED"
+# 3115 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED"
+# 3151 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_gAMA_SUPPORTED"
+# 3187 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_pCAL_SUPPORTED"
+# 3226 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SAVE_UNKNOWN_CHUNKS_SUPPORTED"
+# 3262 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_EXPAND_SUPPORTED"
+# 3298 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_sPLT_SUPPORTED"
+# 3334 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_iTXt_SUPPORTED"
+# 3373 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_SWAP_SUPPORTED"
+# 3408 "pnglibconf.dfn"
+ PNG_DFN "/*#undef PNG_BENIGN_WRITE_ERRORS_SUPPORTED*/"
+# 3440 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_tIME_SUPPORTED"
+# 3476 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_pHYs_SUPPORTED"
+# 3512 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_SWAP_ALPHA_SUPPORTED"
+# 3553 "pnglibconf.dfn"
+ PNG_DFN "/*#undef PNG_ARM_NEON_API_SUPPORTED*/"
+# 3585 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_SCALE_16_TO_8_SUPPORTED"
+# 3621 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_BGR_SUPPORTED"
+# 3652 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_USER_CHUNKS_SUPPORTED"
+# 3686 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_GET_PALETTE_MAX_SUPPORTED"
+# 3722 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_CONSOLE_IO_SUPPORTED"
+# 3756 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SET_OPTION_SUPPORTED"
+# 3793 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED"
+# 3830 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_UNKNOWN_CHUNKS_SUPPORTED"
+# 3866 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_PACK_SUPPORTED"
+# 3902 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_FILLER_SUPPORTED"
+# 3938 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_bKGD_SUPPORTED"
+# 3974 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_tRNS_SUPPORTED"
+# 4010 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_sPLT_SUPPORTED"
+# 4046 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_sCAL_SUPPORTED"
+# 4082 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_oFFs_SUPPORTED"
+# 4118 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SET_USER_LIMITS_SUPPORTED"
+# 4154 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_sBIT_SUPPORTED"
+# 4190 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_INVERT_SUPPORTED"
+# 4226 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_cHRM_SUPPORTED"
+# 4260 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_16BIT_SUPPORTED"
+# 4296 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_USER_TRANSFORM_SUPPORTED"
+# 4332 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_BGR_SUPPORTED"
+# 4368 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_PACKSWAP_SUPPORTED"
+# 4404 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_INVERT_ALPHA_SUPPORTED"
+# 4438 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sCAL_SUPPORTED"
+# 4469 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SET_CHUNK_CACHE_LIMIT_SUPPORTED"
+# 4511 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_GAMMA_SUPPORTED"
+# 4555 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_USER_TRANSFORM_INFO_SUPPORTED"
+# 4589 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_GET_PALETTE_MAX_SUPPORTED"
+# 4623 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sBIT_SUPPORTED"
+# 4654 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SET_CHUNK_MALLOC_LIMIT_SUPPORTED"
+# 4691 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_STORE_UNKNOWN_CHUNKS_SUPPORTED"
+# 4751 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_WRITE_SUPPORTED"
+# 4785 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_cHRM_SUPPORTED"
+# 4824 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_ALPHA_MODE_SUPPORTED"
+# 4858 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_bKGD_SUPPORTED"
+# 4892 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_tRNS_SUPPORTED"
+# 4926 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_oFFs_SUPPORTED"
+# 4965 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_RGB_TO_GRAY_SUPPORTED"
+# 5007 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_EXPAND_16_SUPPORTED"
+# 5051 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_USER_TRANSFORM_PTR_SUPPORTED"
+# 5090 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_TEXT_SUPPORTED"
+# 5124 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_COMPRESSED_TEXT_SUPPORTED"
+# 5158 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_hIST_SUPPORTED"
+# 5197 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_WRITE_AFIRST_SUPPORTED"
+# 5231 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_zTXt_SUPPORTED"
+# 5265 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_iCCP_SUPPORTED"
+# 5307 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_BACKGROUND_SUPPORTED"
+# 5341 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sRGB_SUPPORTED"
+# 5375 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_gAMA_SUPPORTED"
+# 5409 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_pCAL_SUPPORTED"
+# 5448 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WRITE_tEXt_SUPPORTED"
+# 5482 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_iTXt_SUPPORTED"
+# 5516 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_tIME_SUPPORTED"
+# 5550 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_pHYs_SUPPORTED"
+# 5589 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_TEXT_SUPPORTED"
+# 5626 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SAVE_INT_32_SUPPORTED"
+# 5660 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sPLT_SUPPORTED"
+# 5709 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_COLORSPACE_SUPPORTED"
+# 5748 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_READ_tEXt_SUPPORTED"
+# 5850 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_READ_SUPPORTED"
+# 5889 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_WRITE_BGR_SUPPORTED"
+# 5928 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_READ_AFIRST_SUPPORTED"
+# 5967 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_SIMPLIFIED_READ_BGR_SUPPORTED"
+# 6001 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_TEXT_SUPPORTED"
+# 6050 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_GAMMA_SUPPORTED"
+# 6084 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_tEXt_SUPPORTED"
+# 6118 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_FORMAT_AFIRST_SUPPORTED"
+# 6152 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_FORMAT_BGR_SUPPORTED"
+
+
+
+
+
+PNG_DFN_END_SORT
+ PNG_DFN "/* end of options */"
+
+
+ PNG_DFN "/* settings */"
+PNG_DFN_START_SORT 2
+# 6175 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_MAX_GAMMA_8 11"
+# 6214 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_QUANTIZE_RED_BITS 5"
+# 6241 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_Z_DEFAULT_COMPRESSION @" (-1) "@"
+# 6292 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_INFLATE_BUF_SIZE 1024"
+# 6307 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_QUANTIZE_GREEN_BITS 5"
+# 6322 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_Z_DEFAULT_NOFILTER_STRATEGY @" 0 "@"
+# 6337 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_API_RULE 0"
+# 6364 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_IDAT_READ_SIZE PNG_ZBUF_SIZE"
+# 6379 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_QUANTIZE_BLUE_BITS 5"
+# 6418 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_ZLIB_VERNUM @" 0x1270 "@"
+# 6445 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_TEXT_Z_DEFAULT_STRATEGY @" 0 "@"
+# 6460 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sCAL_PRECISION 5"
+# 6475 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_COST_SHIFT 3"
+# 6490 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_WEIGHT_SHIFT 8"
+# 6505 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_TEXT_Z_DEFAULT_COMPRESSION @" (-1) "@"
+# 6544 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_DEFAULT_READ_MACROS 1"
+# 6559 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_ZBUF_SIZE 8192"
+# 6574 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_Z_DEFAULT_STRATEGY @" 1 "@"
+# 6589 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_GAMMA_THRESHOLD_FIXED 5000"
+# 6604 "pnglibconf.dfn"
+ PNG_DFN "#define PNG_sRGB_PROFILE_CHECKS 2"
+
+
+
+PNG_DFN_END_SORT
+ PNG_DFN "/* end of settings */"
+ PNG_DFN "#endif /* PNGLCONF_H */"
+# 1 "pnglibconf.c" 2

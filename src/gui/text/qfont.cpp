@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qfont.h"
-#include "qdebug.h"
-#include "qpaintdevice.h"
-#include "qfontdatabase.h"
-#include "qfontmetrics.h"
-#include "qfontinfo.h"
-#include "qpainter.h"
-#include "qhash.h"
-#include "qdatastream.h"
-#include "qapplication.h"
-#include "qstringlist.h"
-#include "qthread.h"
-#include "qthreadstorage.h"
+#include <qfont.h>
+#include <qdebug.h>
+#include <qpaintdevice.h>
+#include <qfontdatabase.h>
+#include <qfontmetrics.h>
+#include <qfontinfo.h>
+#include <qpainter.h>
+#include <qhash.h>
+#include <qdatastream.h>
+#include <qapplication.h>
+#include <qstringlist.h>
+#include <qthread.h>
+#include <qthreadstorage.h>
 
 #include <qunicodetables_p.h>
 #include <qfont_p.h>
@@ -45,7 +45,7 @@
 #include <limits.h>
 
 #ifdef Q_WS_X11
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #include <qt_x11_p.h>
 #endif
 
@@ -54,7 +54,7 @@
 
 #if !defined(QT_NO_QWS_QPF2)
 #include <qfile.h>
-#include "qfontengine_qpf_p.h"
+#include <qfontengine_qpf_p.h>
 #endif
 
 #endif
@@ -129,15 +129,14 @@ bool QFontDef::exactMatch(const QFontDef &other) const
    this_family = QFontDatabase::resolveFontFamilyAlias(this_family);
    other_family = QFontDatabase::resolveFontFamilyAlias(other_family);
 
-   return (styleHint     == other.styleHint
+   return (styleHint        == other.styleHint
            && styleStrategy == other.styleStrategy
            && weight        == other.weight
-           && style        == other.style
+           && style         == other.style
            && this_family   == other_family
            && (styleName.isEmpty() || other.styleName.isEmpty() || styleName == other.styleName)
-           && (this_foundry.isEmpty()
-               || other_foundry.isEmpty()
-               || this_foundry == other_foundry)
+           && (this_foundry.isEmpty() || other_foundry.isEmpty() || this_foundry == other_foundry)
+
 #ifdef Q_WS_X11
            && addStyle == other.addStyle
 #endif
@@ -268,6 +267,7 @@ QFontPrivate::QFontPrivate(const QFontPrivate &other)
 #ifdef Q_OS_WIN
    hdc = other.hdc;
 #endif
+
    if (scFont && scFont != this) {
       scFont->ref.ref();
    }
@@ -278,10 +278,12 @@ QFontPrivate::~QFontPrivate()
    if (engineData && !engineData->ref.deref()) {
       delete engineData;
    }
+
    engineData = 0;
    if (scFont && scFont != this) {
       scFont->ref.deref();
    }
+
    scFont = 0;
 }
 
@@ -1961,20 +1963,6 @@ QFont QFont::resolve(const QFont &other) const
    return font;
 }
 
-/*!
-    \fn uint QFont::resolve() const
-    \internal
-*/
-
-/*!
-    \fn void QFont::resolve(uint mask)
-    \internal
-*/
-
-/*****************************************************************************
-  QFont substitution management
- *****************************************************************************/
-
 typedef QHash<QString, QStringList> QFontSubst;
 Q_GLOBAL_STATIC(QFontSubst, globalFontSubst)
 
@@ -1985,13 +1973,15 @@ static void initFontSubst()
    static const char *const initTbl[] = {
 
 #if defined(Q_WS_X11)
-      "arial",        "helvetica",
+      "arial",           "helvetica",
       "times new roman", "times",
-      "courier new",  "courier",
-      "sans serif",   "helvetica",
+      "courier new",     "courier",
+      "sans serif",      "helvetica",
+
 #elif defined(Q_OS_MAC)
       ".lucida grande ui", "lucida grande",
 #elif defined(Q_OS_WIN)
+
       "times",        "times new roman",
       "courier",      "courier new",
       "helvetica",    "arial",
@@ -2020,23 +2010,13 @@ static void initFontSubst()
    }
 }
 
-/*!
-    Returns the first family name to be used whenever \a familyName is
-    specified. The lookup is case insensitive.
-
-    If there is no substitution for \a familyName, \a familyName is
-    returned.
-
-    To obtain a list of substitutions use substitutes().
-
-    \sa setFamily() insertSubstitutions() insertSubstitution() removeSubstitution()
-*/
 QString QFont::substitute(const QString &familyName)
 {
    initFontSubst();
 
    QFontSubst *fontSubst = globalFontSubst();
    Q_ASSERT(fontSubst != 0);
+
    QFontSubst::ConstIterator it = fontSubst->constFind(familyName.toLower());
    if (it != fontSubst->constEnd() && !(*it).isEmpty()) {
       return (*it).first();
@@ -2045,16 +2025,6 @@ QString QFont::substitute(const QString &familyName)
    return familyName;
 }
 
-
-/*!
-    Returns a list of family names to be used whenever \a familyName
-    is specified. The lookup is case insensitive.
-
-    If there is no substitution for \a familyName, an empty list is
-    returned.
-
-    \sa substitute() insertSubstitutions() insertSubstitution() removeSubstitution()
- */
 QStringList QFont::substitutes(const QString &familyName)
 {
    initFontSubst();
@@ -2064,20 +2034,13 @@ QStringList QFont::substitutes(const QString &familyName)
    return fontSubst->value(familyName.toLower(), QStringList());
 }
 
-
-/*!
-    Inserts \a substituteName into the substitution
-    table for the family \a familyName.
-
-    \sa insertSubstitutions() removeSubstitution() substitutions() substitute() substitutes()
-*/
-void QFont::insertSubstitution(const QString &familyName,
-                               const QString &substituteName)
+void QFont::insertSubstitution(const QString &familyName, const QString &substituteName)
 {
    initFontSubst();
 
    QFontSubst *fontSubst = globalFontSubst();
    Q_ASSERT(fontSubst != 0);
+
    QStringList &list = (*fontSubst)[familyName.toLower()];
    QString s = substituteName.toLower();
    if (!list.contains(s)) {
@@ -2085,15 +2048,7 @@ void QFont::insertSubstitution(const QString &familyName,
    }
 }
 
-
-/*!
-    Inserts the list of families \a substituteNames into the
-    substitution list for \a familyName.
-
-    \sa insertSubstitution(), removeSubstitution(), substitutions(), substitute()
-*/
-void QFont::insertSubstitutions(const QString &familyName,
-                                const QStringList &substituteNames)
+void QFont::insertSubstitutions(const QString &familyName, const QStringList &substituteNames)
 {
    initFontSubst();
 
@@ -2110,30 +2065,9 @@ void QFont::insertSubstitutions(const QString &familyName,
    }
 }
 
-/*! \fn void QFont::initialize()
-  \internal
-
-  Internal function that initializes the font system.  The font cache
-  and font dict do not alloc the keys. The key is a QString which is
-  shared between QFontPrivate and QXFontName.
-*/
-
-/*! \fn void QFont::cleanup()
-  \internal
-
-  Internal function that cleans up the font system.
-*/
-
-// ### mark: should be called removeSubstitutions()
-/*!
-    Removes all the substitutions for \a familyName.
-
-    \sa insertSubstitutions(), insertSubstitution(), substitutions(), substitute()
-*/
 void QFont::removeSubstitution(const QString &familyName)
 {
-   // ### function name should be removeSubstitutions() or
-   // ### removeSubstitutionList()
+   // ### function name should be removeSubstitutions() or removeSubstitutionList()
    initFontSubst();
 
    QFontSubst *fontSubst = globalFontSubst();
@@ -2141,18 +2075,13 @@ void QFont::removeSubstitution(const QString &familyName)
    fontSubst->remove(familyName.toLower());
 }
 
-
-/*!
-    Returns a sorted list of substituted family names.
-
-    \sa insertSubstitution(), removeSubstitution(), substitute()
-*/
 QStringList QFont::substitutions()
 {
    initFontSubst();
 
    QFontSubst *fontSubst = globalFontSubst();
    Q_ASSERT(fontSubst != 0);
+
    QStringList ret;
    QFontSubst::ConstIterator it = fontSubst->constBegin();
 
@@ -2173,6 +2102,7 @@ QStringList QFont::substitutions()
 static quint8 get_font_bits(int version, const QFontPrivate *f)
 {
    Q_ASSERT(f != 0);
+
    quint8 bits = 0;
    if (f->request.style) {
       bits |= 0x01;
@@ -2234,6 +2164,7 @@ static void set_font_bits(int version, quint8 bits, QFontPrivate *f)
    f->request.fixedPitch    = (bits & 0x08) != 0;
    // f->hintSetByUser      = (bits & 0x10) != 0;
    f->rawMode               = (bits & 0x20) != 0;
+
    if (version >= QDataStream::Qt_4_0) {
       f->kerning               = (bits & 0x10) != 0;
    }
@@ -2250,25 +2181,11 @@ static void set_extended_font_bits(quint8 bits, QFontPrivate *f)
 }
 #endif
 
-
-/*!
-    Returns the font's key, a textual representation of a font. It is
-    typically used as the key for a cache or dictionary of fonts.
-
-    \sa QMap
-*/
 QString QFont::key() const
 {
    return toString();
 }
 
-/*!
-    Returns a description of the font. The description is a
-    comma-separated list of the attributes, perfectly suited for use
-    in QSettings.
-
-    \sa fromString()
- */
 QString QFont::toString() const
 {
    const QChar comma(QLatin1Char(','));
@@ -2307,6 +2224,7 @@ bool QFont::fromString(const QString &descrip)
    if (count > 1 && l[1].toDouble() > 0.0) {
       setPointSizeF(l[1].toDouble());
    }
+
    if (count == 9) {
       setStyleHint((StyleHint) l[2].toInt());
       setWeight(qMax(qMin(99, l[3].toInt()), 0));
@@ -2780,17 +2698,10 @@ bool QFontInfo::exactMatch() const
 {
    QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
    Q_ASSERT(engine != 0);
-   return (d->rawMode
-           ? engine->type() != QFontEngine::Box
-           : d->request.exactMatch(engine->fontDef));
+
+   return (d->rawMode ? engine->type() != QFontEngine::Box : d->request.exactMatch(engine->fontDef));
 }
 
-
-
-
-// **********************************************************************
-// QFontCache
-// **********************************************************************
 
 #ifdef QFONTCACHE_DEBUG
 // fast timeouts for debugging
@@ -2799,17 +2710,17 @@ static const int slow_timeout =   5000;  // 5s
 #else
 static const int fast_timeout =  10000; // 10s
 static const int slow_timeout = 300000; //  5m
-#endif // QFONTCACHE_DEBUG
+#endif
 
 const uint QFontCache::min_cost = 4 * 1024; // 4mb
-
 
 Q_GLOBAL_STATIC(QThreadStorage<QFontCache *>, theFontCache)
 
 QFontCache *QFontCache::instance()
 {
    QFontCache *&fontCache = theFontCache()->localData();
-   if (!fontCache) {
+
+   if (! fontCache) {
       fontCache = new QFontCache;
    }
    return fontCache;
@@ -2818,19 +2729,20 @@ QFontCache *QFontCache::instance()
 void QFontCache::cleanup()
 {
    QThreadStorage<QFontCache *> *cache = 0;
+
    QT_TRY {
       cache = theFontCache();
    } QT_CATCH (const std::bad_alloc &) {
       // no cache - just ignore
    }
+
    if (cache && cache->hasLocalData()) {
       cache->setLocalData(0);
    }
 }
 
 QFontCache::QFontCache()
-   : QObject(), total_cost(0), max_cost(min_cost),
-     current_timestamp(0), fast(false), timer_id(-1)
+   : QObject(), total_cost(0), max_cost(min_cost), current_timestamp(0), fast(false), timer_id(-1)
 {
 }
 
@@ -2838,56 +2750,65 @@ QFontCache::~QFontCache()
 {
    clear();
    {
-      EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
-                                     end = engineDataCache.constEnd();
+      EngineDataCache::ConstIterator it  = engineDataCache.constBegin();
+      EngineDataCache::ConstIterator end = engineDataCache.constEnd();
+
       while (it != end) {
-	 if (it.value()->ref.deref() == 0) {
-	    delete it.value();
-	 } else {
-	    FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
-		     it.value(), int(it.value()->ref));
-	 }
-	 ++it;
+         if (it.value()->ref.deref() == 0) {
+            delete it.value();
+
+         } else {
+            FC_DEBUG("QFontCache::~QFontCache() EngineData %p still has refcount %d", it.value(), it.value()->ref.load());
+
+         }
+
+         ++it;
       }
    }
 }
 
 void QFontCache::clear()
 {
-   {
-      EngineDataCache::Iterator it = engineDataCache.begin(),
-                                end = engineDataCache.end();
+   {  
+      EngineDataCache::Iterator it  = engineDataCache.begin();
+      EngineDataCache::Iterator end = engineDataCache.end();
+
       while (it != end) {
          QFontEngineData *data = it.value();
-#if !defined(Q_OS_MAC)
+
+#if ! defined(Q_OS_MAC)
 	 for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
 	    if (data->engines[i] && !data->engines[i]->ref.deref()) {
 	       delete data->engines[i];
 	    }
+
 	    data->engines[i] = 0;
 	 }
+
 #else
-	 if (data->engine && !data->engine->ref.deref()) {
+	 if (data->engine && ! data->engine->ref.deref()) {
 	    delete data->engine;
 	 }
+
 	 data->engine = 0;
+
 #endif
 	 ++it;
       }
    }
 
    for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
-	 it != end; ++it) {
+	it != end; ++it) {
       if (it->data->ref.deref() == 0) {
-	 delete it->data;
-	 it->data = 0;
+         delete it->data;
+         it->data = 0;
       }
    }
 
    engineCache.clear();
 }
 
-#if defined(Q_WS_QWS) && !defined(QT_NO_QWS_QPF2)
+#if defined(Q_WS_QWS) && ! defined(QT_NO_QWS_QPF2)
 void QFontCache::removeEngineForFont(const QByteArray &_fontName)
 {
 
@@ -2901,8 +2822,9 @@ void QFontCache::removeEngineForFont(const QByteArray &_fontName)
 
 QFontEngineData *QFontCache::findEngineData(const Key &key) const
 {
-   EngineDataCache::ConstIterator it = engineDataCache.find(key),
-                                  end = engineDataCache.end();
+   EngineDataCache::ConstIterator it  = engineDataCache.find(key);
+   EngineDataCache::ConstIterator end = engineDataCache.end();
+
    if (it == end) {
       return 0;
    }
@@ -2923,8 +2845,9 @@ void QFontCache::insertEngineData(const Key &key, QFontEngineData *engineData)
 
 QFontEngine *QFontCache::findEngine(const Key &key)
 {
-   EngineCache::Iterator it = engineCache.find(key),
-                         end = engineCache.end();
+   EngineCache::Iterator it  = engineCache.find(key);
+   EngineCache::Iterator end = engineCache.end();
+
    if (it == end) {
       return 0;
    }
@@ -2933,7 +2856,7 @@ QFontEngine *QFontCache::findEngine(const Key &key)
    it.value().hits++;
    it.value().timestamp = ++current_timestamp;
 
-   FC_DEBUG("QFontCache: found font engine\n"
+   FC_DEBUG("QFontCache::findEngine() Found font engine\n"
             "  %p: timestamp %4u hits %3u ref %2d/%2d, type '%s'",
             it.value().data, it.value().timestamp, it.value().hits,
             it.value().data->ref.load(), it.value().data->cache_count,
@@ -3003,51 +2926,56 @@ void QFontCache::decreaseCost(uint cost)
 #if defined(Q_OS_WIN) || defined (Q_WS_QWS)
 void QFontCache::cleanupPrinterFonts()
 {
-   FC_DEBUG("QFontCache::cleanupPrinterFonts");
+   FC_DEBUG("QFontCache::cleanupPrinterFonts() ");
 
    {
       FC_DEBUG("  CLEAN engine data:");
 
       // clean out all unused engine data
-      EngineDataCache::Iterator it = engineDataCache.begin(),
-                                end = engineDataCache.end();
+      EngineDataCache::Iterator it  = engineDataCache.begin();
+      EngineDataCache::Iterator end = engineDataCache.end();
+     
       while (it != end) {
-	 if (it.key().screen == 0) {
-	    ++it;
-	    continue;
-	 }
+         if (it.key().screen == 0) {
+   	    ++it;
+   	    continue;
+        }
 
-	 if (it.value()->ref.load() > 1) {
-	    for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
-	       if (it.value()->engines[i] && !it.value()->engines[i]->ref.deref()) {
-		  delete it.value()->engines[i];
-	       }
-	       it.value()->engines[i] = 0;
-	    }
-	    ++it;
-	 } else {
-
-	    EngineDataCache::Iterator rem = it++;
-
-	    decreaseCost(sizeof(QFontEngineData));
-
-	    FC_DEBUG("    %p", rem.value());
-
-	    if (!rem.value()->ref.deref()) {
-	       delete rem.value();
-	    }
-	    delete rem.value();
-	    engineDataCache.erase(rem);
-	 }
+         if (it.value()->ref.load() > 1) {
+      	   for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+      	      if (it.value()->engines[i] && !it.value()->engines[i]->ref.deref()) {
+                  delete it.value()->engines[i];
+      	      }
+   
+      	      it.value()->engines[i] = 0;
+      	    }
+   
+      	    ++it;
+   
+         } else {
+      
+      	    EngineDataCache::Iterator rem = it++;   
+      	    decreaseCost(sizeof(QFontEngineData));
+      
+      	    FC_DEBUG("    %p", rem.value());
+      
+      	    if (!rem.value()->ref.deref()) {
+      	       delete rem.value();
+      	    }
+   
+      	    delete rem.value();
+      	    engineDataCache.erase(rem);
+         }
       }
    }
 
-   EngineCache::Iterator it = engineCache.begin(),
-                         end = engineCache.end();
+   EngineCache::Iterator it  = engineCache.begin();
+   EngineCache::Iterator end = engineCache.end();
+
    while (it != end) {
       if (it.value().data->ref.load() != 1 || it.key().screen == 0) {
-	 ++it;
-	 continue;
+         ++it;
+   	   continue;
       }
 
       FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, type '%s'",
@@ -3071,7 +2999,7 @@ void QFontCache::cleanupPrinterFonts()
 
 void QFontCache::timerEvent(QTimerEvent *)
 {
-   FC_DEBUG("QFontCache::timerEvent: performing cache maintenance (timestamp %u)",
+   FC_DEBUG("QFontCache::timerEvent() Performing cache maintenance (timestamp %u)",
             current_timestamp);
 
    if (total_cost <= max_cost && max_cost <= min_cost) {
@@ -3094,8 +3022,9 @@ void QFontCache::timerEvent(QTimerEvent *)
       const uint engine_data_cost =
          sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
 
-      EngineDataCache::ConstIterator it = engineDataCache.constBegin(),
-                                     end = engineDataCache.constEnd();
+      EngineDataCache::ConstIterator it  = engineDataCache.constBegin();
+      EngineDataCache::ConstIterator end = engineDataCache.constEnd();
+
       for (; it != end; ++it) {
 
 #ifdef QFONTCACHE_DEBUG
@@ -3103,6 +3032,7 @@ void QFontCache::timerEvent(QTimerEvent *)
 
 #  if defined(Q_WS_X11) || defined(Q_OS_WIN)
          // print out all engines
+
          for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
             if (! it.value()->engines[i]) {
                continue;
@@ -3121,9 +3051,11 @@ void QFontCache::timerEvent(QTimerEvent *)
    {
       FC_DEBUG("  SWEEP engine:");
 
-      EngineCache::ConstIterator it = engineCache.constBegin(),
-                                 end = engineCache.constEnd();
+      EngineCache::ConstIterator it  = engineCache.constBegin();
+      EngineCache::ConstIterator end = engineCache.constEnd();
+
       for (; it != end; ++it) {
+
 	 FC_DEBUG("    %p: timestamp %4u hits %2u ref %2d/%2d, cost %u bytes",
 		  it.value().data, it.value().timestamp, it.value().hits,
 		  it.value().data->ref.load(), it.value().data->cache_count,
@@ -3177,8 +3109,9 @@ void QFontCache::timerEvent(QTimerEvent *)
       FC_DEBUG("  CLEAN engine data:");
 
       // clean out all unused engine data
-      EngineDataCache::Iterator it = engineDataCache.begin(),
-                                end = engineDataCache.end();
+      EngineDataCache::Iterator it  = engineDataCache.begin();
+      EngineDataCache::Iterator end = engineDataCache.end();
+
       while (it != end) {
 	 if (it.value()->ref.load() > 1) {
 	    ++it;
@@ -3201,8 +3134,9 @@ void QFontCache::timerEvent(QTimerEvent *)
    do {
       current_cost = total_cost;
 
-      EngineCache::Iterator it = engineCache.begin(),
-                            end = engineCache.end();
+      EngineCache::Iterator it  = engineCache.begin();
+      EngineCache::Iterator end = engineCache.end();
+
       // determine the oldest and least popular of the unused engines
       uint oldest = ~0u;
       uint least_popular = ~0u;

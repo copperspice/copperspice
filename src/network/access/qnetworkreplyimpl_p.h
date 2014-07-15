@@ -99,7 +99,6 @@ class QNetworkReplyImpl: public QNetworkReply
 
    NET_CS_SLOT_1(Private, void _q_cacheSaveDeviceAboutToClose())
    NET_CS_SLOT_2(_q_cacheSaveDeviceAboutToClose)
-
 };
 
 class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
