@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    TrueType-specific tables loader (body).                              */
 /*                                                                         */
-/*  Copyright 1996-2001, 2002, 2004, 2005, 2006, 2007, 2008 by             */
+/*  Copyright 1996-2002, 2004-2013 by                                      */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -58,7 +58,6 @@
   /* <Return>                                                              */
   /*    FreeType error code.  0 means success.                             */
   /*                                                                       */
-
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_loca( TT_Face    face,
                      FT_Stream  stream )
@@ -73,7 +72,7 @@
 
     /* it is possible that a font doesn't have a glyf table at all */
     /* or its size is zero                                         */
-    if ( error == TT_Err_Table_Missing )
+    if ( FT_ERR_EQ( error, Table_Missing ) )
       face->glyf_len = 0;
     else if ( error )
       goto Exit;
@@ -82,7 +81,7 @@
     error = face->goto_table( face, TTAG_loca, stream, &table_len );
     if ( error )
     {
-      error = TT_Err_Locations_Missing;
+      error = FT_THROW( Locations_Missing );
       goto Exit;
     }
 
@@ -92,11 +91,11 @@
 
       if ( table_len >= 0x40000L )
       {
-        FT_TRACE2(( "table too large!\n" ));
-        error = TT_Err_Invalid_Table;
+        FT_TRACE2(( "table too large\n" ));
+        error = FT_THROW( Invalid_Table );
         goto Exit;
       }
-      face->num_locations = (FT_UInt)( table_len >> shift );
+      face->num_locations = table_len >> shift;
     }
     else
     {
@@ -104,22 +103,23 @@
 
       if ( table_len >= 0x20000L )
       {
-        FT_TRACE2(( "table too large!\n" ));
-        error = TT_Err_Invalid_Table;
+        FT_TRACE2(( "table too large\n" ));
+        error = FT_THROW( Invalid_Table );
         goto Exit;
       }
-      face->num_locations = (FT_UInt)( table_len >> shift );
+      face->num_locations = table_len >> shift;
     }
 
-    if ( face->num_locations != (FT_UInt)face->root.num_glyphs )
+    if ( face->num_locations != (FT_ULong)face->root.num_glyphs + 1 )
     {
       FT_TRACE2(( "glyph count mismatch!  loca: %d, maxp: %d\n",
-                  face->num_locations, face->root.num_glyphs ));
+                  face->num_locations - 1, face->root.num_glyphs ));
 
       /* we only handle the case where `maxp' gives a larger value */
-      if ( face->num_locations < (FT_UInt)face->root.num_glyphs )
+      if ( face->num_locations <= (FT_ULong)face->root.num_glyphs )
       {
-        FT_Long   new_loca_len = (FT_Long)face->root.num_glyphs << shift;
+        FT_Long   new_loca_len =
+                    ( (FT_Long)( face->root.num_glyphs ) + 1 ) << shift;
 
         TT_Table  entry = face->dir_tables;
         TT_Table  limit = entry + face->num_tables;
@@ -138,9 +138,15 @@
             dist = diff;
         }
 
+        if ( entry == limit )
+        {
+          /* `loca' is the last table */
+          dist = stream->size - pos;
+        }
+
         if ( new_loca_len <= dist )
         {
-          face->num_locations = (FT_Long)face->root.num_glyphs;
+          face->num_locations = face->root.num_glyphs + 1;
           table_len           = new_loca_len;
 
           FT_TRACE2(( "adjusting num_locations to %d\n",
@@ -204,12 +210,31 @@
       }
     }
 
-    /* It isn't mentioned explicitly that the `loca' table must be  */
-    /* ordered, but implicitly it refers to the length of an entry  */
-    /* as the difference between the current and the next position. */
-    /* Anyway, there do exist (malformed) fonts which don't obey    */
-    /* this rule, so we are only able to provide an upper bound for */
-    /* the size.                                                    */
+    /* Check broken location data */
+    if ( pos1 > face->glyf_len )
+    {
+      FT_TRACE1(( "tt_face_get_location:"
+                  " too large offset=0x%08lx found for gid=0x%04lx,"
+                  " exceeding the end of glyf table (0x%08lx)\n",
+                  pos1, gindex, face->glyf_len ));
+      *asize = 0;
+      return 0;
+    }
+
+    if ( pos2 > face->glyf_len )
+    {
+      FT_TRACE1(( "tt_face_get_location:"
+                  " too large offset=0x%08lx found for gid=0x%04lx,"
+                  " truncate at the end of glyf table (0x%08lx)\n",
+                  pos2, gindex + 1, face->glyf_len ));
+      pos2 = face->glyf_len;
+    }
+
+    /* The `loca' table must be ordered; it refers to the length of */
+    /* an entry as the difference between the current and the next  */
+    /* position.  However, there do exist (malformed) fonts which   */
+    /* don't obey this rule, so we are only able to provide an      */
+    /* upper bound for the size.                                    */
     /*                                                              */
     /* We get (intentionally) a wrong, non-zero result in case the  */
     /* `glyf' table is missing.                                     */
@@ -267,11 +292,11 @@
     error = face->goto_table( face, TTAG_cvt, stream, &table_len );
     if ( error )
     {
-      FT_TRACE2(( "is missing!\n" ));
+      FT_TRACE2(( "is missing\n" ));
 
       face->cvt_size = 0;
       face->cvt      = NULL;
-      error          = TT_Err_Ok;
+      error          = FT_Err_Ok;
 
       goto Exit;
     }
@@ -289,7 +314,7 @@
       FT_Short*  limit = cur + face->cvt_size;
 
 
-      for ( ; cur <  limit; cur++ )
+      for ( ; cur < limit; cur++ )
         *cur = FT_GET_SHORT();
     }
 
@@ -309,7 +334,7 @@
     FT_UNUSED( face   );
     FT_UNUSED( stream );
 
-    return TT_Err_Ok;
+    return FT_Err_Ok;
 
 #endif
   }
@@ -350,9 +375,9 @@
     {
       face->font_program      = NULL;
       face->font_program_size = 0;
-      error                   = TT_Err_Ok;
+      error                   = FT_Err_Ok;
 
-      FT_TRACE2(( "is missing!\n" ));
+      FT_TRACE2(( "is missing\n" ));
     }
     else
     {
@@ -371,7 +396,7 @@
     FT_UNUSED( face   );
     FT_UNUSED( stream );
 
-    return TT_Err_Ok;
+    return FT_Err_Ok;
 
 #endif
   }
@@ -411,9 +436,9 @@
     {
       face->cvt_program      = NULL;
       face->cvt_program_size = 0;
-      error                  = TT_Err_Ok;
+      error                  = FT_Err_Ok;
 
-      FT_TRACE2(( "is missing!\n" ));
+      FT_TRACE2(( "is missing\n" ));
     }
     else
     {
@@ -432,7 +457,7 @@
     FT_UNUSED( face   );
     FT_UNUSED( stream );
 
-    return TT_Err_Ok;
+    return FT_Err_Ok;
 
 #endif
   }
@@ -470,7 +495,7 @@
     /* this table is optional */
     error = face->goto_table( face, TTAG_hdmx, stream, &table_size );
     if ( error || table_size < 8 )
-      return TT_Err_Ok;
+      return FT_Err_Ok;
 
     if ( FT_FRAME_EXTRACT( table_size, face->hdmx_table ) )
       goto Exit;
@@ -500,7 +525,7 @@
 
     if ( version != 0 || num_records > 255 || record_size > 0x10001L )
     {
-      error = TT_Err_Invalid_File_Format;
+      error = FT_THROW( Invalid_File_Format );
       goto Fail;
     }
 
@@ -534,10 +559,10 @@
   tt_face_free_hdmx( TT_Face  face )
   {
     FT_Stream  stream = face->root.stream;
-    FT_Memory  memory = stream ? stream->memory : NULL;
+    FT_Memory  memory = stream->memory;
 
-    if ( face->hdmx_record_sizes )
-      FT_FREE( face->hdmx_record_sizes );
+
+    FT_FREE( face->hdmx_record_sizes );
     FT_FRAME_RELEASE( face->hdmx_table );
   }
 

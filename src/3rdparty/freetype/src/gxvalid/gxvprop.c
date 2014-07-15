@@ -96,7 +96,10 @@
 
     if ( glyph->advance.x != (FT_Pos)0 ||
          glyph->advance.y != (FT_Pos)0 )
+    {
+      GXV_TRACE(( "  found non-zero advance in zero-advance glyph\n" ));
       FT_INVALID_DATA;
+    }
 
     GXV_EXIT;
   }
@@ -119,7 +122,10 @@
 
       offset = (FT_UShort)( property & GXV_PROP_COMPLEMENTARY_BRACKET_OFFSET );
       if ( offset == 0 )
-        FT_INVALID_DATA;
+      {
+        GXV_TRACE(( "  found zero offset to property\n" ));
+        FT_INVALID_OFFSET;
+      }
 
       complement = (char)( offset >> 8 );
       if ( complement & 0x08 )
@@ -131,7 +137,10 @@
 
         /* The gid for complement must be greater than 0 */
         if ( glyph <= complement )
+        {
+          GXV_TRACE(( "  found non-positive glyph complement\n" ));
           FT_INVALID_DATA;
+        }
       }
       else
       {
@@ -150,28 +159,37 @@
     if ( property & GXV_PROP_ATTACHING_TO_RIGHT )
     {
       if ( GXV_PROP_DATA( version ) == 0x00010000UL )
+      {
+        GXV_TRACE(( "  found older version (1.0) in new version table\n" ));
         FT_INVALID_DATA;
+      }
     }
 
     if ( property & GXV_PROP_RESERVED )
+    {
+      GXV_TRACE(( "  found non-zero bits in reserved bits\n" ));
       FT_INVALID_DATA;
+    }
 
     if ( ( property & GXV_PROP_DIRECTIONALITY_CLASS ) > 11 )
     {
       /* TODO: Too restricted. Use the validation level. */
       if ( GXV_PROP_DATA( version ) == 0x00010000UL ||
            GXV_PROP_DATA( version ) == 0x00020000UL )
+      {
+        GXV_TRACE(( "  found too old version in directionality class\n" ));
         FT_INVALID_DATA;
+      }
     }
   }
 
 
   static void
   gxv_prop_LookupValue_validate( FT_UShort            glyph,
-                                 GXV_LookupValueDesc  value,
+                                 GXV_LookupValueCPtr  value_p,
                                  GXV_Validator        valid )
   {
-    gxv_prop_property_validate( value.u, glyph, valid );
+    gxv_prop_property_validate( value_p->u, glyph, valid );
   }
 
 
@@ -204,7 +222,7 @@
 
   static GXV_LookupValueDesc
   gxv_prop_LookupFmt4_transit( FT_UShort            relative_gindex,
-                               GXV_LookupValueDesc  base_value,
+                               GXV_LookupValueCPtr  base_value_p,
                                FT_Bytes             lookuptbl_limit,
                                GXV_Validator        valid )
   {
@@ -214,8 +232,8 @@
     GXV_LookupValueDesc  value;
 
     /* XXX: check range? */
-    offset = (FT_UShort)( base_value.u +
-                          relative_gindex * sizeof( FT_UShort ) );
+    offset = (FT_UShort)( base_value_p->u +
+                          relative_gindex * sizeof ( FT_UShort ) );
     p      = valid->lookuptbl_head + offset;
     limit  = lookuptbl_limit;
 
@@ -264,16 +282,26 @@
     format      = FT_NEXT_USHORT( p );
     defaultProp = FT_NEXT_USHORT( p );
 
+    GXV_TRACE(( "  version 0x%08x\n", version ));
+    GXV_TRACE(( "  format  0x%04x\n", format ));
+    GXV_TRACE(( "  defaultProp  0x%04x\n", defaultProp ));
+
     /* only versions 1.0, 2.0, 3.0 are defined (1996) */
     if ( version != 0x00010000UL &&
          version != 0x00020000UL &&
          version != 0x00030000UL )
+    {
+      GXV_TRACE(( "  found unknown version\n" ));
       FT_INVALID_FORMAT;
+    }
 
 
     /* only formats 0x0000, 0x0001 are defined (1996) */
     if ( format > 1 )
+    {
+      GXV_TRACE(( "  found unknown format\n" ));
       FT_INVALID_FORMAT;
+    }
 
     gxv_prop_property_validate( defaultProp, 0, valid );
 

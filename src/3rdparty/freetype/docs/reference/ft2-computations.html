@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>FreeType-2.3.9 API Reference</title>
+<title>FreeType-2.5.3 API Reference</title>
 <style type="text/css">
   body { font-family: Verdana, Geneva, Arial, Helvetica, serif;
          color: #000000;
@@ -35,7 +35,7 @@
 <table align=center><tr><td><font size=-1>[<a href="ft2-index.html">Index</a>]</font></td>
 <td width="100%"></td>
 <td><font size=-1>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
-<center><h1>FreeType-2.3.9 API Reference</h1></center>
+<center><h1>FreeType-2.5.3 API Reference</h1></center>
 
 <center><h1>
 Computations
@@ -58,7 +58,7 @@ Computations
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_MulDiv">FT_MulDiv</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -69,7 +69,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>A very simple function used to perform the computation &lsquo;(a*b)/c&rsquo; with maximal accuracy (it uses a 64-bit intermediate integer whenever necessary).</p>
+<p>A very simple function used to perform the computation &lsquo;(a*b)/c&rsquo; with maximum accuracy (it uses a 64-bit intermediate integer whenever necessary).</p>
 <p>This function isn't necessarily as fast as some processor specific operations, but is at least completely portable.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
@@ -98,7 +98,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_MulFix">FT_MulFix</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -108,7 +108,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>A very simple function used to perform the computation &lsquo;(a*b)/0x10000&rsquo; with maximal accuracy. Most of the time this is used to multiply a given value by a 16.16 fixed float factor.</p>
+<p>A very simple function used to perform the computation &lsquo;(a*b)/0x10000&rsquo; with maximum accuracy. Most of the time this is used to multiply a given value by a 16.16 fixed-point factor.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -137,7 +137,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_DivFix">FT_DivFix</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -147,7 +147,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>A very simple function used to perform the computation &lsquo;(a*0x10000)/b&rsquo; with maximal accuracy. Most of the time, this is used to divide a given value by a 16.16 fixed float factor.</p>
+<p>A very simple function used to perform the computation &lsquo;(a*0x10000)/b&rsquo; with maximum accuracy. Most of the time, this is used to divide a given value by a 16.16 fixed-point factor.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -175,7 +175,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_RoundFix">FT_RoundFix</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -206,7 +206,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_CeilFix">FT_CeilFix</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -237,7 +237,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_FloorFix">FT_FloorFix</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -268,7 +268,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_Transform">FT_Vector_Transform</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_FREETYPE_H (freetype/freetype.h).
+Defined in FT_FREETYPE_H (freetype.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -308,7 +308,7 @@ Defined in FT_FREETYPE_H (freetype/freetype.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Matrix_Multiply">FT_Matrix_Multiply</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_GLYPH_H (freetype/ftglyph.h).
+Defined in FT_GLYPH_H (ftglyph.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -348,7 +348,7 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Matrix_Invert">FT_Matrix_Invert</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_GLYPH_H (freetype/ftglyph.h).
+Defined in FT_GLYPH_H (ftglyph.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -379,7 +379,15 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Angle">FT_Angle</a></h4>
 <table align=center width="87%"><tr><td>
-<p>This type is used to model angle values in FreeType. Note that the angle is a 16.16 fixed float value expressed in degrees.</p>
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <a href="ft2-basic_types.html#FT_Fixed">FT_Fixed</a>  <b>FT_Angle</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
+<p>This type is used to model angle values in FreeType. Note that the angle is a 16.16 fixed-point value expressed in degrees.</p>
 </td></tr></table><br>
 </td></tr></table>
 <hr width="75%">
@@ -389,6 +397,14 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_ANGLE_PI">FT_ANGLE_PI</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+#define <b>FT_ANGLE_PI</b>  ( 180L &lt;&lt; 16 )
+
+</pre></table><br>
 <table align=center width="87%"><tr><td>
 <p>The angle pi expressed in <a href="ft2-computations.html#FT_Angle">FT_Angle</a> units.</p>
 </td></tr></table><br>
@@ -401,6 +417,14 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_ANGLE_2PI">FT_ANGLE_2PI</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+#define <b>FT_ANGLE_2PI</b>  ( <a href="ft2-computations.html#FT_ANGLE_PI">FT_ANGLE_PI</a> * 2 )
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>The angle 2*pi expressed in <a href="ft2-computations.html#FT_Angle">FT_Angle</a> units.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -411,6 +435,14 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_ANGLE_PI2">FT_ANGLE_PI2</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+#define <b>FT_ANGLE_PI2</b>  ( <a href="ft2-computations.html#FT_ANGLE_PI">FT_ANGLE_PI</a> / 2 )
+
+</pre></table><br>
 <table align=center width="87%"><tr><td>
 <p>The angle pi/2 expressed in <a href="ft2-computations.html#FT_Angle">FT_Angle</a> units.</p>
 </td></tr></table><br>
@@ -423,6 +455,14 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_ANGLE_PI4">FT_ANGLE_PI4</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+#define <b>FT_ANGLE_PI4</b>  ( <a href="ft2-computations.html#FT_ANGLE_PI">FT_ANGLE_PI</a> / 4 )
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>The angle pi/4 expressed in <a href="ft2-computations.html#FT_Angle">FT_Angle</a> units.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -434,7 +474,7 @@ Defined in FT_GLYPH_H (freetype/ftglyph.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Sin">FT_Sin</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -443,7 +483,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>Return the sinus of a given angle in fixed point format.</p>
+<p>Return the sinus of a given angle in fixed-point format.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -468,7 +508,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Cos">FT_Cos</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -477,7 +517,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>Return the cosinus of a given angle in fixed point format.</p>
+<p>Return the cosinus of a given angle in fixed-point format.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -502,7 +542,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Tan">FT_Tan</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -511,7 +551,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>Return the tangent of a given angle in fixed point format.</p>
+<p>Return the tangent of a given angle in fixed-point format.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -533,7 +573,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Atan2">FT_Atan2</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -568,7 +608,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Angle_Diff">FT_Angle_Diff</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -603,7 +643,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_Unit">FT_Vector_Unit</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -641,7 +681,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_Rotate">FT_Vector_Rotate</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -678,7 +718,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_Length">FT_Vector_Length</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -709,7 +749,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_Polarize">FT_Vector_Polarize</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -750,7 +790,7 @@ Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Vector_From_Polar">FT_Vector_From_Polar</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_TRIGONOMETRY_H (freetype/fttrigon.h).
+Defined in FT_TRIGONOMETRY_H (fttrigon.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 

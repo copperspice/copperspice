@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>FreeType-2.3.9 API Reference</title>
+<title>FreeType-2.5.3 API Reference</title>
 <style type="text/css">
   body { font-family: Verdana, Geneva, Arial, Helvetica, serif;
          color: #000000;
@@ -35,7 +35,7 @@
 <table align=center><tr><td><font size=-1>[<a href="ft2-index.html">Index</a>]</font></td>
 <td width="100%"></td>
 <td><font size=-1>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
-<center><h1>FreeType-2.3.9 API Reference</h1></center>
+<center><h1>FreeType-2.5.3 API Reference</h1></center>
 
 <center><h1>
 Cache Sub-System
@@ -63,7 +63,7 @@ Cache Sub-System
 <p>Note that all types and functions begin with the &lsquo;FTC_&rsquo; prefix.</p>
 <p>The cache is highly portable and thus doesn't know anything about the fonts installed on your system, or how to access them. This implies the following scheme:</p>
 <p>First, available or installed font faces are uniquely identified by <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a> values, provided to the cache by the client. Note that the cache only stores and compares these values, and doesn't try to interpret them in any way.</p>
-<p>Second, the cache calls, only when needed, a client-provided function to convert a <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a> into a new <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object. The latter is then completely managed by the cache, including its termination through <a href="ft2-base_interface.html#FT_Done_Face">FT_Done_Face</a>.</p>
+<p>Second, the cache calls, only when needed, a client-provided function to convert an <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a> into a new <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object. The latter is then completely managed by the cache, including its termination through <a href="ft2-base_interface.html#FT_Done_Face">FT_Done_Face</a>. To monitor termination of face objects, the finalizer callback in the &lsquo;generic&rsquo; field of the <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object can be used, which might also be used to store the <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a> of the face.</p>
 <p>Clients are free to map face IDs to anything else. The most simple usage is to associate them to a (pathname,face_index) pair that is used to call <a href="ft2-base_interface.html#FT_New_Face">FT_New_Face</a>. However, more complex schemes are also possible.</p>
 <p>Note that for the cache to work correctly, the face ID values must be <b>persistent</b>, which means that the contents they point to should not change at runtime, or that their value should not become invalid.</p>
 <p>If this is unavoidable (e.g., when a font is uninstalled at runtime), you should call <a href="ft2-cache_subsystem.html#FTC_Manager_RemoveFaceID">FTC_Manager_RemoveFaceID</a> as soon as possible, to let the cache get rid of any references to the old <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a> it may keep internally. Failure to do so will lead to incorrect behaviour or even crashes.</p>
@@ -75,6 +75,14 @@ Cache Sub-System
 </td></tr></table><br>
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager">FTC_Manager</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_ManagerRec_*  <b>FTC_Manager</b>;
+
+</pre></table><br>
 <table align=center width="87%"><tr><td>
 <p>This object corresponds to one instance of the cache-subsystem. It is used to cache one or more <a href="ft2-base_interface.html#FT_Face">FT_Face</a> objects, along with corresponding <a href="ft2-base_interface.html#FT_Size">FT_Size</a> objects.</p>
 <p>The manager intentionally limits the total number of opened <a href="ft2-base_interface.html#FT_Face">FT_Face</a> and <a href="ft2-base_interface.html#FT_Size">FT_Size</a> objects to control memory usage. See the &lsquo;max_faces&rsquo; and &lsquo;max_sizes&rsquo; parameters of <a href="ft2-cache_subsystem.html#FTC_Manager_New">FTC_Manager_New</a>.</p>
@@ -90,12 +98,20 @@ Cache Sub-System
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_FaceID">FTC_FaceID</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <a href="ft2-basic_types.html#FT_Pointer">FT_Pointer</a>  <b>FTC_FaceID</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>An opaque pointer type that is used to identity face objects. The contents of such objects is application-dependent.</p>
 <p>These pointers are typically used to point to a user-defined structure containing a font file path, and face index.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
 <p>Never use NULL as a valid <a href="ft2-cache_subsystem.html#FTC_FaceID">FTC_FaceID</a>.</p>
-<p>Face IDs are passed by the client to the cache manager, which calls, when needed, the <a href="ft2-cache_subsystem.html#FTC_Face_Requester">FTC_Face_Requester</a> to translate them into new <a href="ft2-base_interface.html#FT_Face">FT_Face</a> objects.</p>
+<p>Face IDs are passed by the client to the cache manager that calls, when needed, the <a href="ft2-cache_subsystem.html#FTC_Face_Requester">FTC_Face_Requester</a> to translate them into new <a href="ft2-base_interface.html#FT_Face">FT_Face</a> objects.</p>
 <p>If the content of a given face ID changes at runtime, or if the value becomes invalid (e.g., when uninstalling a font), you should immediately call <a href="ft2-cache_subsystem.html#FTC_Manager_RemoveFaceID">FTC_Manager_RemoveFaceID</a> before any other cache function.</p>
 <p>Failure to do so will result in incorrect behaviour or even memory leaks and crashes.</p>
 </td></tr></table>
@@ -108,7 +124,7 @@ Cache Sub-System
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Face_Requester">FTC_Face_Requester</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -160,8 +176,16 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Node">FTC_Node</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_NodeRec_*  <b>FTC_Node</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>An opaque handle to a cache node object. Each cache node is reference-counted. A node with a count of&nbsp;0 might be flushed out of a full cache whenever a lookup request is performed.</p>
-<p>If you lookup nodes, you have the ability to &lsquo;acquire&rsquo; them, i.e., to increment their reference count. This will prevent the node from being flushed out of the cache until you explicitly &lsquo;release&rsquo; it (see <a href="ft2-cache_subsystem.html#FTC_Node_Unref">FTC_Node_Unref</a>).</p>
+<p>If you look up nodes, you have the ability to &lsquo;acquire&rsquo; them, i.e., to increment their reference count. This will prevent the node from being flushed out of the cache until you explicitly &lsquo;release&rsquo; it (see <a href="ft2-cache_subsystem.html#FTC_Node_Unref">FTC_Node_Unref</a>).</p>
 <p>See also <a href="ft2-cache_subsystem.html#FTC_SBitCache_Lookup">FTC_SBitCache_Lookup</a> and <a href="ft2-cache_subsystem.html#FTC_ImageCache_Lookup">FTC_ImageCache_Lookup</a>.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -173,7 +197,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_New">FTC_Manager_New</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -233,7 +257,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_Reset">FTC_Manager_Reset</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -261,7 +285,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_Done">FTC_Manager_Done</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -289,7 +313,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_LookupFace">FTC_Manager_LookupFace</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -326,7 +350,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 </td></tr></table>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
 <p>The returned <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object is always owned by the manager. You should never try to discard it yourself.</p>
-<p>The <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object doesn't necessarily have a current size object (i.e., face-&gt;size can be 0). If you need a specific &lsquo;font size&rsquo;, use <a href="ft2-cache_subsystem.html#FTC_Manager_LookupSize">FTC_Manager_LookupSize</a> instead.</p>
+<p>The <a href="ft2-base_interface.html#FT_Face">FT_Face</a> object doesn't necessarily have a current size object (i.e., face-&gt;size can be&nbsp;0). If you need a specific &lsquo;font size&rsquo;, use <a href="ft2-cache_subsystem.html#FTC_Manager_LookupSize">FTC_Manager_LookupSize</a> instead.</p>
 <p>Never change the face's transformation matrix (i.e., never call the <a href="ft2-base_interface.html#FT_Set_Transform">FT_Set_Transform</a> function) on a returned face! If you need to transform glyphs, do it yourself after glyph loading.</p>
 <p>When you perform a lookup, out-of-memory errors are detected <i>within</i> the lookup and force incremental flushes of the cache until enough memory is released for the lookup to succeed.</p>
 <p>If a lookup fails with &lsquo;FT_Err_Out_Of_Memory&rsquo; the cache has already been completely flushed, and still no memory was available for the operation.</p>
@@ -340,7 +364,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ScalerRec">FTC_ScalerRec</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -394,6 +418,14 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Scaler">FTC_Scaler</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_ScalerRec_*  <b>FTC_Scaler</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>A handle to an <a href="ft2-cache_subsystem.html#FTC_ScalerRec">FTC_ScalerRec</a> structure.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -405,7 +437,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_LookupSize">FTC_Manager_LookupSize</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -457,7 +489,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Node_Unref">FTC_Node_Unref</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -489,7 +521,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_Manager_RemoveFaceID">FTC_Manager_RemoveFaceID</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -525,6 +557,14 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_CMapCache">FTC_CMapCache</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_CMapCacheRec_*  <b>FTC_CMapCache</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>An opaque handle used to model a charmap cache. This cache is to hold character codes -&gt; glyph indices mappings.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -536,7 +576,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_CMapCache_New">FTC_CMapCache_New</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -579,7 +619,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_CMapCache_Lookup">FTC_CMapCache_Lookup</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -622,7 +662,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageTypeRec">FTC_ImageTypeRec</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -665,6 +705,14 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageType">FTC_ImageType</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_ImageTypeRec_*  <b>FTC_ImageType</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>A handle to an <a href="ft2-cache_subsystem.html#FTC_ImageTypeRec">FTC_ImageTypeRec</a> structure.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -676,7 +724,15 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageCache">FTC_ImageCache</a></h4>
 <table align=center width="87%"><tr><td>
-<p>A handle to an glyph image cache object. They are designed to hold many distinct glyph images while not exceeding a certain memory threshold.</p>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_ImageCacheRec_*  <b>FTC_ImageCache</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
+<p>A handle to a glyph image cache object. They are designed to hold many distinct glyph images while not exceeding a certain memory threshold.</p>
 </td></tr></table><br>
 </td></tr></table>
 <hr width="75%">
@@ -687,7 +743,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageCache_New">FTC_ImageCache_New</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -727,7 +783,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageCache_Lookup">FTC_ImageCache_Lookup</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -784,7 +840,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_ImageCache_LookupScaler">FTC_ImageCache_LookupScaler</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -846,6 +902,14 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBit">FTC_SBit</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_SBitRec_*  <b>FTC_SBit</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>A handle to a small bitmap descriptor. See the <a href="ft2-cache_subsystem.html#FTC_SBitRec">FTC_SBitRec</a> structure for details.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -857,7 +921,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBitRec">FTC_SBitRec</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -926,6 +990,14 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBitCache">FTC_SBitCache</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_CACHE_H (ftcache.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  <span class="keyword">typedef</span> <span class="keyword">struct</span> FTC_SBitCacheRec_*  <b>FTC_SBitCache</b>;
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>A handle to a small bitmap cache. These are special cache objects used to store small glyph bitmaps (and anti-aliased pixmaps) in a much more efficient way than the traditional glyph image cache implemented by <a href="ft2-cache_subsystem.html#FTC_ImageCache">FTC_ImageCache</a>.</p>
 </td></tr></table><br>
 </td></tr></table>
@@ -937,7 +1009,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBitCache_New">FTC_SBitCache_New</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -977,7 +1049,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBitCache_Lookup">FTC_SBitCache_Lookup</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -1035,7 +1107,7 @@ Defined in FT_CACHE_H (freetype/ftcache.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FTC_SBitCache_LookupScaler">FTC_SBitCache_LookupScaler</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_CACHE_H (freetype/ftcache.h).
+Defined in FT_CACHE_H (ftcache.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 

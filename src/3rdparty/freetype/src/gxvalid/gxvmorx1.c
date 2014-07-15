@@ -103,13 +103,15 @@
   gxv_morx_subtable_type1_entry_validate(
     FT_UShort                       state,
     FT_UShort                       flags,
-    GXV_StateTable_GlyphOffsetDesc  glyphOffset,
+    GXV_StateTable_GlyphOffsetCPtr  glyphOffset_p,
     FT_Bytes                        table,
     FT_Bytes                        limit,
     GXV_Validator                   valid )
   {
+#ifdef GXV_LOAD_TRACE_VARS
     FT_UShort  setMark;
     FT_UShort  dontAdvance;
+#endif
     FT_UShort  reserved;
     FT_Short   markIndex;
     FT_Short   currentIndex;
@@ -122,13 +124,15 @@
     FT_UNUSED( limit );
 
 
+#ifdef GXV_LOAD_TRACE_VARS
     setMark      = (FT_UShort)( ( flags >> 15 ) & 1 );
     dontAdvance  = (FT_UShort)( ( flags >> 14 ) & 1 );
+#endif
 
     reserved = (FT_UShort)( flags & 0x3FFF );
 
-    markIndex    = (FT_Short)( glyphOffset.ul >> 16 );
-    currentIndex = (FT_Short)( glyphOffset.ul       );
+    markIndex    = (FT_Short)( glyphOffset_p->ul >> 16 );
+    currentIndex = (FT_Short)( glyphOffset_p->ul       );
 
     GXV_TRACE(( " setMark=%01d dontAdvance=%01d\n",
                 setMark, dontAdvance ));
@@ -136,8 +140,7 @@
     if ( 0 < reserved )
     {
       GXV_TRACE(( " non-zero bits found in reserved range\n" ));
-      if ( valid->root->level >= FT_VALIDATE_PARANOID )
-        FT_INVALID_DATA;
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_DATA );
     }
 
     GXV_TRACE(( "markIndex = %d, currentIndex = %d\n",
@@ -155,14 +158,14 @@
 
   static void
   gxv_morx_subtable_type1_LookupValue_validate( FT_UShort            glyph,
-                                                GXV_LookupValueDesc  value,
+                                                GXV_LookupValueCPtr  value_p,
                                                 GXV_Validator        valid )
   {
     FT_UNUSED( glyph ); /* for the non-debugging case */
 
-    GXV_TRACE(( "morx subtable type1 subst.: %d -> %d\n", glyph, value.u ));
+    GXV_TRACE(( "morx subtable type1 subst.: %d -> %d\n", glyph, value_p->u ));
 
-    if ( value.u > valid->face->num_glyphs )
+    if ( value_p->u > valid->face->num_glyphs )
       FT_INVALID_GLYPH_ID;
   }
 
@@ -170,7 +173,7 @@
   static GXV_LookupValueDesc
   gxv_morx_subtable_type1_LookupFmt4_transit(
     FT_UShort            relative_gindex,
-    GXV_LookupValueDesc  base_value,
+    GXV_LookupValueCPtr  base_value_p,
     FT_Bytes             lookuptbl_limit,
     GXV_Validator        valid )
   {
@@ -180,7 +183,7 @@
     GXV_LookupValueDesc  value;
 
     /* XXX: check range? */
-    offset = (FT_UShort)( base_value.u +
+    offset = (FT_UShort)( base_value_p->u +
                           relative_gindex * sizeof ( FT_UShort ) );
 
     p     = valid->lookuptbl_head + offset;

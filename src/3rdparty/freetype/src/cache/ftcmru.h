@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    Simple MRU list-cache (specification).                               */
 /*                                                                         */
-/*  Copyright 2000-2001, 2003, 2004, 2005, 2006 by                         */
+/*  Copyright 2000-2001, 2003-2006, 2010, 2013 by                          */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -107,7 +107,7 @@ FT_BEGIN_HEADER
 
   typedef struct  FTC_MruListClassRec_
   {
-    FT_UInt                  node_size;
+    FT_Offset                node_size;
     FTC_MruNode_CompareFunc  node_compare;
     FTC_MruNode_InitFunc     node_init;
     FTC_MruNode_ResetFunc    node_reset;
@@ -163,10 +163,10 @@ FT_BEGIN_HEADER
   FT_BEGIN_STMNT                                                            \
     FTC_MruNode*             _pfirst  = &(list)->nodes;                     \
     FTC_MruNode_CompareFunc  _compare = (FTC_MruNode_CompareFunc)(compare); \
-    FTC_MruNode              _first, _node, *_pnode;                        \
+    FTC_MruNode              _first, _node;                                 \
                                                                             \
                                                                             \
-    error  = 0;                                                             \
+    error  = FT_Err_Ok;                                                     \
     _first = *(_pfirst);                                                    \
     _node  = NULL;                                                          \
                                                                             \
@@ -180,8 +180,7 @@ FT_BEGIN_HEADER
           if ( _node != _first )                                            \
             FTC_MruNode_Up( _pfirst, _node );                               \
                                                                             \
-          _pnode = (FTC_MruNode*)(void*)&(node);                            \
-          *_pnode = _node;                                                  \
+          node = _node;                                                     \
           goto _MruOk;                                                      \
         }                                                                   \
         _node = _node->next;                                                \

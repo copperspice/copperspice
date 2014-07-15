@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>FreeType-2.3.9 API Reference</title>
+<title>FreeType-2.5.3 API Reference</title>
 <style type="text/css">
   body { font-family: Verdana, Geneva, Arial, Helvetica, serif;
          color: #000000;
@@ -35,27 +35,50 @@
 <table align=center><tr><td><font size=-1>[<a href="ft2-index.html">Index</a>]</font></td>
 <td width="100%"></td>
 <td><font size=-1>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
-<center><h1>FreeType-2.3.9 API Reference</h1></center>
+<center><h1>FreeType-2.5.3 API Reference</h1></center>
 
 <center><h1>
 Module Management
 </h1></center>
 <h2>Synopsis</h2>
 <table align=center cellspacing=5 cellpadding=0 border=0>
-<tr><td></td><td><a href="#FT_Module_Constructor">FT_Module_Constructor</a></td><td></td><td><a href="#FT_Get_Module">FT_Get_Module</a></td><td></td><td><a href="#FT_Add_Default_Modules">FT_Add_Default_Modules</a></td></tr>
-<tr><td></td><td><a href="#FT_Module_Destructor">FT_Module_Destructor</a></td><td></td><td><a href="#FT_Remove_Module">FT_Remove_Module</a></td><td></td><td><a href="#FT_Renderer_Class">FT_Renderer_Class</a></td></tr>
-<tr><td></td><td><a href="#FT_Module_Requester">FT_Module_Requester</a></td><td></td><td><a href="#FT_New_Library">FT_New_Library</a></td><td></td><td><a href="#FT_Get_Renderer">FT_Get_Renderer</a></td></tr>
-<tr><td></td><td><a href="#FT_Module_Class">FT_Module_Class</a></td><td></td><td><a href="#FT_Done_Library">FT_Done_Library</a></td><td></td><td><a href="#FT_Set_Renderer">FT_Set_Renderer</a></td></tr>
-<tr><td></td><td><a href="#FT_Add_Module">FT_Add_Module</a></td><td></td><td><a href="#FT_Set_Debug_Hook">FT_Set_Debug_Hook</a></td><td></td><td></td></tr>
+<tr><td></td><td><a href="#FT_Module_Constructor">FT_Module_Constructor</a></td><td></td><td><a href="#FT_Remove_Module">FT_Remove_Module</a></td><td></td><td><a href="#FT_Set_Debug_Hook">FT_Set_Debug_Hook</a></td></tr>
+<tr><td></td><td><a href="#FT_Module_Destructor">FT_Module_Destructor</a></td><td></td><td><a href="#FT_Property_Set">FT_Property_Set</a></td><td></td><td><a href="#FT_Add_Default_Modules">FT_Add_Default_Modules</a></td></tr>
+<tr><td></td><td><a href="#FT_Module_Requester">FT_Module_Requester</a></td><td></td><td><a href="#FT_Property_Get">FT_Property_Get</a></td><td></td><td><a href="#FT_Renderer_Class">FT_Renderer_Class</a></td></tr>
+<tr><td></td><td><a href="#FT_Module_Class">FT_Module_Class</a></td><td></td><td><a href="#FT_Reference_Library">FT_Reference_Library</a></td><td></td><td><a href="#FT_Get_Renderer">FT_Get_Renderer</a></td></tr>
+<tr><td></td><td><a href="#FT_Add_Module">FT_Add_Module</a></td><td></td><td><a href="#FT_New_Library">FT_New_Library</a></td><td></td><td><a href="#FT_Set_Renderer">FT_Set_Renderer</a></td></tr>
+<tr><td></td><td><a href="#FT_Get_Module">FT_Get_Module</a></td><td></td><td><a href="#FT_Done_Library">FT_Done_Library</a></td><td></td><td></td></tr>
 </table><br><br>
 
 <table align=center width="87%"><tr><td>
-<p>The definitions below are used to manage modules within FreeType. Modules can be added, upgraded, and removed at runtime.</p>
+<p>The definitions below are used to manage modules within FreeType. Modules can be added, upgraded, and removed at runtime. Additionally, some module properties can be controlled also.</p>
+<p>Here is a list of possible values of the &lsquo;module_name&rsquo; field in the <a href="ft2-module_management.html#FT_Module_Class">FT_Module_Class</a> structure.</p>
+<pre class="colored">
+  autofitter                                                       
+  bdf                                                              
+  cff                                                              
+  gxvalid                                                          
+  otvalid                                                          
+  pcf                                                              
+  pfr                                                              
+  psaux                                                            
+  pshinter                                                         
+  psnames                                                          
+  raster1, raster5                                                 
+  sfnt                                                             
+  smooth, smooth-lcd, smooth-lcdv                                  
+  truetype                                                         
+  type1                                                            
+  type42                                                           
+  t1cid                                                            
+  winfonts                                                         
+</pre>
+<p>Note that the FreeType Cache sub-system is not a FreeType module.</p>
 </td></tr></table><br>
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Module_Constructor">FT_Module_Constructor</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -83,7 +106,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Module_Destructor">FT_Module_Destructor</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -111,7 +134,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Module_Requester">FT_Module_Requester</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -127,7 +150,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <p></p>
 <table cellpadding=3 border=0>
 <tr valign=top><td><b>module</b></td><td>
-<p>The module to finalize.</p>
+<p>The module to be searched.</p>
 </td></tr>
 <tr valign=top><td><b>name</b></td><td>
 <p>The name of the interface in the module.</p>
@@ -143,7 +166,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Module_Class">FT_Module_Class</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -205,7 +228,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Add_Module">FT_Add_Module</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -248,7 +271,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Get_Module">FT_Get_Module</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -286,7 +309,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Remove_Module">FT_Remove_Module</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -327,9 +350,173 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <td><font size=-2>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
 
 <table align=center width="75%"><tr><td>
+<h4><a name="FT_Property_Set">FT_Property_Set</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_MODULE_H (ftmodapi.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  FT_EXPORT( <a href="ft2-basic_types.html#FT_Error">FT_Error</a> )
+  <b>FT_Property_Set</b>( <a href="ft2-base_interface.html#FT_Library">FT_Library</a>        library,
+                   <span class="keyword">const</span> <a href="ft2-basic_types.html#FT_String">FT_String</a>*  module_name,
+                   <span class="keyword">const</span> <a href="ft2-basic_types.html#FT_String">FT_String</a>*  property_name,
+                   <span class="keyword">const</span> <span class="keyword">void</span>*       value );
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
+<p>Set a property for a given module.</p>
+</td></tr></table><br>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
+<p></p>
+<table cellpadding=3 border=0>
+<tr valign=top><td><b>library</b></td><td>
+<p>A handle to the library the module is part of.</p>
+</td></tr>
+<tr valign=top><td><b>module_name</b></td><td>
+<p>The module name.</p>
+</td></tr>
+<tr valign=top><td><b>property_name</b></td><td>
+<p>The property name. Properties are described in the &lsquo;Synopsis&rsquo; subsection of the module's documentation.</p>
+<p>Note that only a few modules have properties.</p>
+</td></tr>
+<tr valign=top><td><b>value</b></td><td>
+<p>A generic pointer to a variable or structure that gives the new value of the property. The exact definition of &lsquo;value&rsquo; is dependent on the property; see the &lsquo;Synopsis&rsquo; subsection of the module's documentation.</p>
+</td></tr>
+</table>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>return</b></em></td></tr><tr><td>
+<p>FreeType error code. 0&nbsp;means success.</p>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
+<p>If &lsquo;module_name&rsquo; isn't a valid module name, or &lsquo;property_name&rsquo; doesn't specify a valid property, or if &lsquo;value&rsquo; doesn't represent a valid value for the given property, an error is returned.</p>
+<p>The following example sets property &lsquo;bar&rsquo; (a simple integer) in module &lsquo;foo&rsquo; to value&nbsp;1.</p>
+<pre class="colored">
+  FT_UInt  bar;
+
+
+  bar = 1;
+  FT_Property_Set( library, "foo", "bar", &amp;bar );
+</pre>
+<p>Note that the FreeType Cache sub-system doesn't recognize module property changes. To avoid glyph lookup confusion within the cache you should call <a href="ft2-cache_subsystem.html#FTC_Manager_Reset">FTC_Manager_Reset</a> to completely flush the cache if a module property gets changed after <a href="ft2-cache_subsystem.html#FTC_Manager_New">FTC_Manager_New</a> has been called.</p>
+<p>It is not possible to set properties of the FreeType Cache sub-system itself with FT_Property_Set; use ?FTC_Property_Set? instead.</p>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>since</b></em></td></tr><tr><td>
+<p>2.4.11</p>
+</td></tr></table>
+</td></tr></table>
+<hr width="75%">
+<table align=center width="75%"><tr><td><font size=-2>[<a href="ft2-index.html">Index</a>]</font></td>
+<td width="100%"></td>
+<td><font size=-2>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
+
+<table align=center width="75%"><tr><td>
+<h4><a name="FT_Property_Get">FT_Property_Get</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_MODULE_H (ftmodapi.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  FT_EXPORT( <a href="ft2-basic_types.html#FT_Error">FT_Error</a> )
+  <b>FT_Property_Get</b>( <a href="ft2-base_interface.html#FT_Library">FT_Library</a>        library,
+                   <span class="keyword">const</span> <a href="ft2-basic_types.html#FT_String">FT_String</a>*  module_name,
+                   <span class="keyword">const</span> <a href="ft2-basic_types.html#FT_String">FT_String</a>*  property_name,
+                   <span class="keyword">void</span>*             value );
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
+<p>Get a module's property value.</p>
+</td></tr></table><br>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
+<p></p>
+<table cellpadding=3 border=0>
+<tr valign=top><td><b>library</b></td><td>
+<p>A handle to the library the module is part of.</p>
+</td></tr>
+<tr valign=top><td><b>module_name</b></td><td>
+<p>The module name.</p>
+</td></tr>
+<tr valign=top><td><b>property_name</b></td><td>
+<p>The property name. Properties are described in the &lsquo;Synopsis&rsquo; subsection of the module's documentation.</p>
+</td></tr>
+</table>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>inout</b></em></td></tr><tr><td>
+<p></p>
+<table cellpadding=3 border=0>
+<tr valign=top><td><b>value</b></td><td>
+<p>A generic pointer to a variable or structure that gives the value of the property. The exact definition of &lsquo;value&rsquo; is dependent on the property; see the &lsquo;Synopsis&rsquo; subsection of the module's documentation.</p>
+</td></tr>
+</table>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>return</b></em></td></tr><tr><td>
+<p>FreeType error code. 0&nbsp;means success.</p>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
+<p>If &lsquo;module_name&rsquo; isn't a valid module name, or &lsquo;property_name&rsquo; doesn't specify a valid property, or if &lsquo;value&rsquo; doesn't represent a valid value for the given property, an error is returned.</p>
+<p>The following example gets property &lsquo;baz&rsquo; (a range) in module &lsquo;foo&rsquo;.</p>
+<pre class="colored">
+  typedef  range_
+  {
+    FT_Int32  min;
+    FT_Int32  max;
+
+  } range;
+
+  range  baz;
+
+
+  FT_Property_Get( library, "foo", "baz", &amp;baz );
+</pre>
+<p>It is not possible to retrieve properties of the FreeType Cache sub-system with FT_Property_Get; use ?FTC_Property_Get? instead.</p>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>since</b></em></td></tr><tr><td>
+<p>2.4.11</p>
+</td></tr></table>
+</td></tr></table>
+<hr width="75%">
+<table align=center width="75%"><tr><td><font size=-2>[<a href="ft2-index.html">Index</a>]</font></td>
+<td width="100%"></td>
+<td><font size=-2>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
+
+<table align=center width="75%"><tr><td>
+<h4><a name="FT_Reference_Library">FT_Reference_Library</a></h4>
+<table align=center width="87%"><tr><td>
+Defined in FT_MODULE_H (ftmodapi.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+  FT_EXPORT( <a href="ft2-basic_types.html#FT_Error">FT_Error</a> )
+  <b>FT_Reference_Library</b>( <a href="ft2-base_interface.html#FT_Library">FT_Library</a>  library );
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
+<p>A counter gets initialized to&nbsp;1 at the time an <a href="ft2-base_interface.html#FT_Library">FT_Library</a> structure is created. This function increments the counter. <a href="ft2-module_management.html#FT_Done_Library">FT_Done_Library</a> then only destroys a library if the counter is&nbsp;1, otherwise it simply decrements the counter.</p>
+<p>This function helps in managing life-cycles of structures that reference <a href="ft2-base_interface.html#FT_Library">FT_Library</a> objects.</p>
+</td></tr></table><br>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
+<p></p>
+<table cellpadding=3 border=0>
+<tr valign=top><td><b>library</b></td><td>
+<p>A handle to a target library object.</p>
+</td></tr>
+</table>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>return</b></em></td></tr><tr><td>
+<p>FreeType error code. 0&nbsp;means success.</p>
+</td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>since</b></em></td></tr><tr><td>
+<p>2.4.2</p>
+</td></tr></table>
+</td></tr></table>
+<hr width="75%">
+<table align=center width="75%"><tr><td><font size=-2>[<a href="ft2-index.html">Index</a>]</font></td>
+<td width="100%"></td>
+<td><font size=-2>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
+
+<table align=center width="75%"><tr><td>
 <h4><a name="FT_New_Library">FT_New_Library</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -340,6 +527,8 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 </pre></table><br>
 <table align=center width="87%"><tr><td>
 <p>This function is used to create a new FreeType library instance from a given memory object. It is thus possible to use libraries with distinct memory allocators within the same program.</p>
+<p>Normally, you would call this function (followed by a call to <a href="ft2-module_management.html#FT_Add_Default_Modules">FT_Add_Default_Modules</a> or a series of calls to <a href="ft2-module_management.html#FT_Add_Module">FT_Add_Module</a>) instead of <a href="ft2-base_interface.html#FT_Init_FreeType">FT_Init_FreeType</a> to initialize the FreeType library.</p>
+<p>Don't use <a href="ft2-base_interface.html#FT_Done_FreeType">FT_Done_FreeType</a> but <a href="ft2-module_management.html#FT_Done_Library">FT_Done_Library</a> to destroy a library instance.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -360,6 +549,9 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>return</b></em></td></tr><tr><td>
 <p>FreeType error code. 0&nbsp;means success.</p>
 </td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
+<p>See the discussion of reference counters in the description of <a href="ft2-module_management.html#FT_Reference_Library">FT_Reference_Library</a>.</p>
+</td></tr></table>
 </td></tr></table>
 <hr width="75%">
 <table align=center width="75%"><tr><td><font size=-2>[<a href="ft2-index.html">Index</a>]</font></td>
@@ -369,7 +561,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Done_Library">FT_Done_Library</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -391,6 +583,9 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>return</b></em></td></tr><tr><td>
 <p>FreeType error code. 0&nbsp;means success.</p>
 </td></tr></table>
+<table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
+<p>See the discussion of reference counters in the description of <a href="ft2-module_management.html#FT_Reference_Library">FT_Reference_Library</a>.</p>
+</td></tr></table>
 </td></tr></table>
 <hr width="75%">
 <table align=center width="75%"><tr><td><font size=-2>[<a href="ft2-index.html">Index</a>]</font></td>
@@ -400,7 +595,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Set_Debug_Hook">FT_Set_Debug_Hook</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -445,7 +640,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Add_Default_Modules">FT_Add_Default_Modules</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_MODULE_H (freetype/ftmodapi.h).
+Defined in FT_MODULE_H (ftmodapi.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -473,7 +668,7 @@ Defined in FT_MODULE_H (freetype/ftmodapi.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Renderer_Class">FT_Renderer_Class</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_RENDER_H (freetype/ftrender.h).
+Defined in FT_RENDER_H (ftrender.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -520,9 +715,6 @@ Defined in FT_RENDER_H (freetype/ftrender.h).
 <tr valign=top><td><b>raster_class</b></td><td>
 <p>For <a href="ft2-basic_types.html#FT_Glyph_Format">FT_GLYPH_FORMAT_OUTLINE</a> renderers only. This is a pointer to its raster's class.</p>
 </td></tr>
-<tr valign=top><td><b>raster</b></td><td>
-<p>For <a href="ft2-basic_types.html#FT_Glyph_Format">FT_GLYPH_FORMAT_OUTLINE</a> renderers only. This is a pointer to the corresponding raster object, if any.</p>
-</td></tr>
 </table>
 </td></tr></table>
 </td></tr></table>
@@ -534,7 +726,7 @@ Defined in FT_RENDER_H (freetype/ftrender.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Get_Renderer">FT_Get_Renderer</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_RENDER_H (freetype/ftrender.h).
+Defined in FT_RENDER_H (ftrender.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -573,7 +765,7 @@ Defined in FT_RENDER_H (freetype/ftrender.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Set_Renderer">FT_Set_Renderer</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_RENDER_H (freetype/ftrender.h).
+Defined in FT_RENDER_H (ftrender.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -615,6 +807,7 @@ Defined in FT_RENDER_H (freetype/ftrender.h).
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>note</b></em></td></tr><tr><td>
 <p>In case of success, the renderer will be used to convert glyph images in the renderer's known format into bitmaps.</p>
 <p>This doesn't change the current renderer for other formats.</p>
+<p>Currently, only the B/W renderer, if compiled with FT_RASTER_OPTION_ANTI_ALIASING (providing a 5-levels anti-aliasing mode; this option must be set directly in &lsquo;ftraster.c&rsquo; and is undefined by default) accepts a single tag &lsquo;pal5&rsquo; to set its gray palette as a character string with 5&nbsp;elements. Consequently, the third and fourth argument are zero normally.</p>
 </td></tr></table>
 </td></tr></table>
 <hr width="75%">

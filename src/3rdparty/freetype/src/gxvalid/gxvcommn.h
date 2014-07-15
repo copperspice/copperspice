@@ -4,7 +4,8 @@
 /*                                                                         */
 /*    TrueTypeGX/AAT common tables validation (specification).             */
 /*                                                                         */
-/*  Copyright 2004, 2005 by suzuki toshiya, Masatake YAMATO, Red Hat K.K., */
+/*  Copyright 2004, 2005, 2012                                             */
+/*  by suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                      */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -51,6 +52,19 @@
 FT_BEGIN_HEADER
 
 
+  /* some variables are not evaluated or only used in trace */
+
+#ifdef  FT_DEBUG_LEVEL_TRACE
+#define GXV_LOAD_TRACE_VARS
+#else
+#undef  GXV_LOAD_TRACE_VARS
+#endif
+
+#undef GXV_LOAD_UNUSED_VARS /* debug purpose */
+
+#define IS_PARANOID_VALIDATION          ( valid->root->level >= FT_VALIDATE_PARANOID )
+#define GXV_SET_ERR_IF_PARANOID( err )  { if ( IS_PARANOID_VALIDATION ) ( err ); }
+
   /*************************************************************************/
   /*************************************************************************/
   /*****                                                               *****/
@@ -79,6 +93,8 @@ FT_BEGIN_HEADER
 
   } GXV_LookupValueDesc;
 
+  typedef const GXV_LookupValueDesc* GXV_LookupValueCPtr;
+
   typedef enum  GXV_LookupValue_SignSpec_
   {
     GXV_LOOKUPVALUE_UNSIGNED = 0,
@@ -89,12 +105,12 @@ FT_BEGIN_HEADER
 
   typedef void
   (*GXV_Lookup_Value_Validate_Func)( FT_UShort            glyph,
-                                     GXV_LookupValueDesc  value,
+                                     GXV_LookupValueCPtr  value_p,
                                      GXV_Validator        valid );
 
   typedef GXV_LookupValueDesc
   (*GXV_Lookup_Fmt4_Transit_Func)( FT_UShort            relative_gindex,
-                                   GXV_LookupValueDesc  base_value,
+                                   GXV_LookupValueCPtr  base_value_p,
                                    FT_Bytes             lookuptbl_limit,
                                    GXV_Validator        valid );
 
@@ -134,6 +150,7 @@ FT_BEGIN_HEADER
 
   } GXV_StateTable_GlyphOffsetDesc;
 
+  typedef const GXV_StateTable_GlyphOffsetDesc* GXV_StateTable_GlyphOffsetCPtr;
 
   typedef void
   (*GXV_StateTable_Subtable_Setup_Func)( FT_UShort      table_size,
@@ -149,7 +166,7 @@ FT_BEGIN_HEADER
   (*GXV_StateTable_Entry_Validate_Func)(
      FT_Byte                         state,
      FT_UShort                       flags,
-     GXV_StateTable_GlyphOffsetDesc  glyphOffset,
+     GXV_StateTable_GlyphOffsetCPtr  glyphOffset_p,
      FT_Bytes                        statetable_table,
      FT_Bytes                        statetable_limit,
      GXV_Validator                   valid );
@@ -175,6 +192,8 @@ FT_BEGIN_HEADER
 
   typedef GXV_StateTable_GlyphOffsetDesc  GXV_XStateTable_GlyphOffsetDesc;
 
+  typedef const GXV_XStateTable_GlyphOffsetDesc* GXV_XStateTable_GlyphOffsetCPtr;
+
   typedef void
   (*GXV_XStateTable_Subtable_Setup_Func)( FT_ULong       table_size,
                                           FT_ULong       classTable,
@@ -189,7 +208,7 @@ FT_BEGIN_HEADER
   (*GXV_XStateTable_Entry_Validate_Func)(
      FT_UShort                       state,
      FT_UShort                       flags,
-     GXV_StateTable_GlyphOffsetDesc  glyphOffset,
+     GXV_StateTable_GlyphOffsetCPtr  glyphOffset_p,
      FT_Bytes                        xstatetable_table,
      FT_Bytes                        xstatetable_limit,
      GXV_Validator                   valid );
@@ -228,6 +247,9 @@ FT_BEGIN_HEADER
     GXV_Lookup_Value_Validate_Func  lookupval_func;
     GXV_Lookup_Fmt4_Transit_Func    lookupfmt4_trans;
     FT_Bytes                        lookuptbl_head;
+
+    FT_UShort  min_gid;
+    FT_UShort  max_gid;
 
     GXV_StateTable_ValidatorRec     statetable;
     GXV_XStateTable_ValidatorRec    xstatetable;
@@ -295,8 +317,8 @@ FT_BEGIN_HEADER
 #define GXV_32BIT_ALIGNMENT_VALIDATE( a ) \
           FT_BEGIN_STMNT                  \
             {                             \
-              if ( 0 != ( (a) % 4 ) )     \
-                FT_INVALID_OFFSET ;       \
+              if ( (a) & 3 )              \
+                FT_INVALID_OFFSET;        \
             }                             \
           FT_END_STMNT
 

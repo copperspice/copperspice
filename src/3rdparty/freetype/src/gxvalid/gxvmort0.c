@@ -64,7 +64,7 @@
   gxv_mort_subtable_type0_entry_validate(
     FT_Byte                         state,
     FT_UShort                       flags,
-    GXV_StateTable_GlyphOffsetDesc  glyphOffset,
+    GXV_StateTable_GlyphOffsetCPtr  glyphOffset_p,
     FT_Bytes                        table,
     FT_Bytes                        limit,
     GXV_Validator                   valid )
@@ -80,7 +80,7 @@
     FT_UNUSED( limit );
 
     FT_UNUSED( GXV_Mort_IndicScript_Msg[verb] ); /* for the non-debugging */
-    FT_UNUSED( glyphOffset );                    /* case                  */
+    FT_UNUSED( glyphOffset_p );                  /* case                  */
 
 
     markFirst   = (FT_UShort)( ( flags >> 15 ) & 1 );
@@ -91,17 +91,31 @@
     verb     = (FT_UShort)( flags & 0x000F );
 
     GXV_TRACE(( "  IndicScript MorphRule for glyphOffset 0x%04x",
-                glyphOffset.u ));
+                glyphOffset_p->u ));
     GXV_TRACE(( " markFirst=%01d", markFirst ));
     GXV_TRACE(( " dontAdvance=%01d", dontAdvance ));
     GXV_TRACE(( " markLast=%01d", markLast ));
     GXV_TRACE(( " %02d", verb ));
     GXV_TRACE(( " %s\n", GXV_Mort_IndicScript_Msg[verb] ));
 
+    if ( markFirst > 0 && markLast > 0 )
+    {
+      GXV_TRACE(( "  [odd] a glyph is marked as the first and last"
+                  "  in Indic rearrangement\n" ));
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_DATA );
+    }
+
+    if ( markFirst > 0 && dontAdvance > 0 )
+    {
+      GXV_TRACE(( "  [odd] the first glyph is marked as dontAdvance"
+                  " in Indic rearrangement\n" ));
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_DATA );
+    }
+
     if ( 0 < reserved )
     {
       GXV_TRACE(( " non-zero bits found in reserved range\n" ));
-      FT_INVALID_DATA;
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_DATA );
     }
     else
       GXV_TRACE(( "\n" ));

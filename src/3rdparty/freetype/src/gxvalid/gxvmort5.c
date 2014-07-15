@@ -121,6 +121,9 @@
          offset < optdata->entryTable + *(optdata->entryTable_length_p) )
       GXV_TRACE(( " offset runs into EntryTable" ));
 
+#ifndef GXV_LOAD_TRACE_VARS
+    GXV_LIMIT_CHECK( count * 2 );
+#else
     while ( p < table + offset + ( count * 2 ) )
     {
       FT_UShort insert_glyphID;
@@ -130,8 +133,8 @@
       insert_glyphID = FT_NEXT_USHORT( p );
       GXV_TRACE(( " 0x%04x", insert_glyphID ));
     }
-
     GXV_TRACE(( "\n" ));
+#endif
   }
 
 
@@ -139,17 +142,19 @@
   gxv_mort_subtable_type5_entry_validate(
     FT_Byte                         state,
     FT_UShort                       flags,
-    GXV_StateTable_GlyphOffsetDesc  glyphOffset,
+    GXV_StateTable_GlyphOffsetCPtr  glyphOffset,
     FT_Bytes                        table,
     FT_Bytes                        limit,
     GXV_Validator                   valid )
   {
+#ifdef GXV_LOAD_UNUSED_VARS
     FT_Bool    setMark;
     FT_Bool    dontAdvance;
     FT_Bool    currentIsKashidaLike;
     FT_Bool    markedIsKashidaLike;
     FT_Bool    currentInsertBefore;
     FT_Bool    markedInsertBefore;
+#endif
     FT_Byte    currentInsertCount;
     FT_Byte    markedInsertCount;
     FT_UShort  currentInsertList;
@@ -158,18 +163,20 @@
     FT_UNUSED( state );
 
 
+#ifdef GXV_LOAD_UNUSED_VARS
     setMark              = FT_BOOL( ( flags >> 15 ) & 1 );
     dontAdvance          = FT_BOOL( ( flags >> 14 ) & 1 );
     currentIsKashidaLike = FT_BOOL( ( flags >> 13 ) & 1 );
     markedIsKashidaLike  = FT_BOOL( ( flags >> 12 ) & 1 );
     currentInsertBefore  = FT_BOOL( ( flags >> 11 ) & 1 );
     markedInsertBefore   = FT_BOOL( ( flags >> 10 ) & 1 );
+#endif
 
     currentInsertCount   = (FT_Byte)( ( flags >> 5 ) & 0x1F   );
     markedInsertCount    = (FT_Byte)(   flags        & 0x001F );
 
-    currentInsertList    = (FT_UShort)( glyphOffset.ul >> 16 );
-    markedInsertList     = (FT_UShort)( glyphOffset.ul       );
+    currentInsertList    = (FT_UShort)( glyphOffset->ul >> 16 );
+    markedInsertList     = (FT_UShort)( glyphOffset->ul       );
 
     if ( 0 != currentInsertList && 0 != currentInsertCount )
     {

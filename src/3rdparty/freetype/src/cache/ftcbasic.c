@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    The FreeType basic cache interface (body).                           */
 /*                                                                         */
-/*  Copyright 2003, 2004, 2005, 2006, 2007 by                              */
+/*  Copyright 2003-2007, 2009-2011, 2013 by                                */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -17,52 +17,17 @@
 
 
 #include <ft2build.h>
+#include FT_INTERNAL_OBJECTS_H
+#include FT_INTERNAL_DEBUG_H
 #include FT_CACHE_H
 #include "ftcglyph.h"
 #include "ftcimage.h"
 #include "ftcsbits.h"
-#include FT_INTERNAL_MEMORY_H
 
 #include "ftccback.h"
 #include "ftcerror.h"
 
-
-#ifdef FT_CONFIG_OPTION_OLD_INTERNALS
-
-  /*
-   *  These structures correspond to the FTC_Font and FTC_ImageDesc types
-   *  that were defined in version 2.1.7.
-   */
-  typedef struct  FTC_OldFontRec_
-  {
-    FTC_FaceID  face_id;
-    FT_UShort   pix_width;
-    FT_UShort   pix_height;
-
-  } FTC_OldFontRec, *FTC_OldFont;
-
-
-  typedef struct  FTC_OldImageDescRec_
-  {
-    FTC_OldFontRec  font;
-    FT_UInt32       flags;
-
-  } FTC_OldImageDescRec, *FTC_OldImageDesc;
-
-
-  /*
-   *  Notice that FTC_OldImageDescRec and FTC_ImageTypeRec are nearly
-   *  identical, bit-wise.  The only difference is that the `width' and
-   *  `height' fields are expressed as 16-bit integers in the old structure,
-   *  and as normal `int' in the new one.
-   *
-   *  We are going to perform a weird hack to detect which structure is
-   *  being passed to the image and sbit caches.  If the new structure's
-   *  `width' is larger than 0x10000, we assume that we are really receiving
-   *  an FTC_OldImageDesc.
-   */
-
-#endif /* FT_CONFIG_OPTION_OLD_INTERNALS */
+#define FT_COMPONENT  trace_cache
 
 
   /*
@@ -140,8 +105,18 @@
 
     error = FTC_Manager_LookupFace( manager, family->attrs.scaler.face_id,
                                     &face );
+
+    if ( error || !face )
+      return result;
+
+    if ( (FT_ULong)face->num_glyphs > FT_UINT_MAX || 0 > face->num_glyphs )
+    {
+      FT_TRACE1(( "ftc_basic_family_get_count: too large number of glyphs " ));
+      FT_TRACE1(( "in this face, truncated\n", face->num_glyphs ));
+    }
+
     if ( !error )
-      result = face->num_glyphs;
+      result = (FT_UInt)face->num_glyphs;
 
     return result;
   }
@@ -213,7 +188,7 @@
           }
         }
         else
-          error = FTC_Err_Invalid_Argument;
+          error = FT_THROW( Invalid_Argument );
       }
     }
 
@@ -225,7 +200,8 @@
   FT_CALLBACK_DEF( FT_Bool )
   ftc_basic_gnode_compare_faceid( FTC_Node    ftcgnode,
                                   FT_Pointer  ftcface_id,
-                                  FTC_Cache   cache )
+                                  FTC_Cache   cache,
+                                  FT_Bool*    list_changed )
   {
     FTC_GNode        gnode   = (FTC_GNode)ftcgnode;
     FTC_FaceID       face_id = (FTC_FaceID)ftcface_id;
@@ -233,6 +209,8 @@
     FT_Bool          result;
 
 
+    if ( list_changed )
+      *list_changed = FALSE;
     result = FT_BOOL( family->attrs.scaler.face_id == face_id );
     if ( result )
     {
@@ -304,15 +282,15 @@
                          FTC_Node       *anode )
   {
     FTC_BasicQueryRec  query;
-    FTC_INode          node = 0;  /* make compiler happy */
+    FTC_Node           node = 0; /* make compiler happy */
     FT_Error           error;
-    FT_UInt32          hash;
+    FT_PtrDist         hash;
 
 
     /* some argument checks are delayed to FTC_Cache_Lookup */
     if ( !aglyph )
     {
-      error = FTC_Err_Invalid_Argument;
+      error = FT_THROW( Invalid_Argument );
       goto Exit;
     }
 
@@ -320,31 +298,17 @@
     if ( anode )
       *anode  = NULL;
 
-#ifdef FT_CONFIG_OPTION_OLD_INTERNALS
-
-    /*
-     *  This one is a major hack used to detect whether we are passed a
-     *  regular FTC_ImageType handle, or a legacy FTC_OldImageDesc one.
-     */
-    if ( type->width >= 0x10000 )
     {
-      FTC_OldImageDesc  desc = (FTC_OldImageDesc)type;
+      if ( (FT_ULong)(type->flags - FT_INT_MIN) > FT_UINT_MAX )
+      {
+        FT_TRACE1(( "FTC_ImageCache_Lookup: higher bits in load_flags" ));
+        FT_TRACE1(( "0x%x are dropped\n", (type->flags & ~((FT_ULong)FT_UINT_MAX)) ));
+      }
 
-
-      query.attrs.scaler.face_id = desc->font.face_id;
-      query.attrs.scaler.width   = desc->font.pix_width;
-      query.attrs.scaler.height  = desc->font.pix_height;
-      query.attrs.load_flags     = desc->flags;
-    }
-    else
-
-#endif /* FT_CONFIG_OPTION_OLD_INTERNALS */
-
-    {
       query.attrs.scaler.face_id = type->face_id;
       query.attrs.scaler.width   = type->width;
       query.attrs.scaler.height  = type->height;
-      query.attrs.load_flags     = type->flags;
+      query.attrs.load_flags     = (FT_UInt)type->flags;
     }
 
     query.attrs.scaler.pixel = 1;
@@ -365,7 +329,7 @@
     error = FTC_GCache_Lookup( FTC_GCACHE( cache ),
                                hash, gindex,
                                FTC_GQUERY( &query ),
-                               (FTC_Node*) &node );
+                               &node );
 #endif
     if ( !error )
     {
@@ -373,8 +337,8 @@
 
       if ( anode )
       {
-        *anode = FTC_NODE( node );
-        FTC_NODE( node )->ref_count++;
+        *anode = node;
+        node->ref_count++;
       }
     }
 
@@ -394,15 +358,15 @@
                                FTC_Node       *anode )
   {
     FTC_BasicQueryRec  query;
-    FTC_INode          node = 0;  /* make compiler happy */
+    FTC_Node           node = 0; /* make compiler happy */
     FT_Error           error;
-    FT_UInt32          hash;
+    FT_PtrDist         hash;
 
 
     /* some argument checks are delayed to FTC_Cache_Lookup */
     if ( !aglyph || !scaler )
     {
-      error = FTC_Err_Invalid_Argument;
+      error = FT_THROW( Invalid_Argument );
       goto Exit;
     }
 
@@ -410,8 +374,15 @@
     if ( anode )
       *anode  = NULL;
 
+    /* FT_Load_Glyph(), FT_Load_Char() take FT_UInt flags */
+    if ( load_flags > FT_UINT_MAX )
+    {
+      FT_TRACE1(( "FTC_ImageCache_LookupScaler: higher bits in load_flags" ));
+      FT_TRACE1(( "0x%x are dropped\n", (load_flags & ~((FT_ULong)FT_UINT_MAX)) ));
+    }
+
     query.attrs.scaler     = scaler[0];
-    query.attrs.load_flags = load_flags;
+    query.attrs.load_flags = (FT_UInt)load_flags;
 
     hash = FTC_BASIC_ATTR_HASH( &query.attrs ) + gindex;
 
@@ -428,8 +399,8 @@
 
       if ( anode )
       {
-        *anode = FTC_NODE( node );
-        FTC_NODE( node )->ref_count++;
+        *anode = node;
+        node->ref_count++;
       }
     }
 
@@ -438,148 +409,17 @@
   }
 
 
-  
-#ifdef FT_CONFIG_OPTION_OLD_INTERNALS
-
-  /* yet another backwards-legacy structure */
-  typedef struct  FTC_OldImage_Desc_
-  {
-    FTC_FontRec  font;
-    FT_UInt      image_type;
-
-  } FTC_OldImage_Desc;
-
-
-#define FTC_OLD_IMAGE_FORMAT( x )  ( (x) & 7 )
-
-
-#define ftc_old_image_format_bitmap    0x0000
-#define ftc_old_image_format_outline   0x0001
-
-#define ftc_old_image_format_mask      0x000F
-
-#define ftc_old_image_flag_monochrome  0x0010
-#define ftc_old_image_flag_unhinted    0x0020
-#define ftc_old_image_flag_autohinted  0x0040
-#define ftc_old_image_flag_unscaled    0x0080
-#define ftc_old_image_flag_no_sbits    0x0100
-
-  /* monochrome bitmap */
-#define ftc_old_image_mono             ftc_old_image_format_bitmap   | \
-                                       ftc_old_image_flag_monochrome
-
-  /* anti-aliased bitmap */
-#define ftc_old_image_grays            ftc_old_image_format_bitmap
-
-  /* scaled outline */
-#define ftc_old_image_outline          ftc_old_image_format_outline
-
-
-  static void
-  ftc_image_type_from_old_desc( FTC_ImageType       typ,
-                                FTC_OldImage_Desc*  desc )
-  {
-    typ->face_id = desc->font.face_id;
-    typ->width   = desc->font.pix_width;
-    typ->height  = desc->font.pix_height;
-
-    /* convert image type flags to load flags */
-    {
-      FT_UInt  load_flags = FT_LOAD_DEFAULT;
-      FT_UInt  type       = desc->image_type;
-
-
-      /* determine load flags, depending on the font description's */
-      /* image type                                                */
-
-      if ( FTC_OLD_IMAGE_FORMAT( type ) == ftc_old_image_format_bitmap )
-      {
-        if ( type & ftc_old_image_flag_monochrome )
-          load_flags |= FT_LOAD_MONOCHROME;
-
-        /* disable embedded bitmaps loading if necessary */
-        if ( type & ftc_old_image_flag_no_sbits )
-          load_flags |= FT_LOAD_NO_BITMAP;
-      }
-      else
-      {
-        /* we want an outline, don't load embedded bitmaps */
-        load_flags |= FT_LOAD_NO_BITMAP;
-
-        if ( type & ftc_old_image_flag_unscaled )
-          load_flags |= FT_LOAD_NO_SCALE;
-      }
-
-      /* always render glyphs to bitmaps */
-      load_flags |= FT_LOAD_RENDER;
-
-      if ( type & ftc_old_image_flag_unhinted )
-        load_flags |= FT_LOAD_NO_HINTING;
-
-      if ( type & ftc_old_image_flag_autohinted )
-        load_flags |= FT_LOAD_FORCE_AUTOHINT;
-
-      typ->flags = load_flags;
-    }
-  }
-
-
-  FT_EXPORT( FT_Error )
-  FTC_Image_Cache_New( FTC_Manager      manager,
-                       FTC_ImageCache  *acache );
-
-  FT_EXPORT( FT_Error )
-  FTC_Image_Cache_Lookup( FTC_ImageCache      icache,
-                          FTC_OldImage_Desc*  desc,
-                          FT_UInt             gindex,
-                          FT_Glyph           *aglyph );
-
-
-  FT_EXPORT_DEF( FT_Error )
-  FTC_Image_Cache_New( FTC_Manager      manager,
-                       FTC_ImageCache  *acache )
-  {
-    return FTC_ImageCache_New( manager, (FTC_ImageCache*)acache );
-  }
-
-
-
-  FT_EXPORT_DEF( FT_Error )
-  FTC_Image_Cache_Lookup( FTC_ImageCache      icache,
-                          FTC_OldImage_Desc*  desc,
-                          FT_UInt             gindex,
-                          FT_Glyph           *aglyph )
-  {
-    FTC_ImageTypeRec  type0;
-
-
-    if ( !desc )
-      return FTC_Err_Invalid_Argument;
-
-    ftc_image_type_from_old_desc( &type0, desc );
-
-    return FTC_ImageCache_Lookup( (FTC_ImageCache)icache,
-                                   &type0,
-                                   gindex,
-                                   aglyph,
-                                   NULL );
-  }
-
-#endif /* FT_CONFIG_OPTION_OLD_INTERNALS */
-
-
- /*
-  *
-  * basic small bitmap cache
-  *
-  */
-
+  /*
+   *
+   * basic small bitmap cache
+   *
+   */
 
   FT_CALLBACK_TABLE_DEF
   const FTC_SFamilyClassRec  ftc_basic_sbit_family_class =
   {
     {
-      sizeof( FTC_BasicFamilyRec ),
+      sizeof ( FTC_BasicFamilyRec ),
       ftc_basic_family_compare,
       ftc_basic_family_init,
       0,                            /* FTC_MruNode_ResetFunc */
@@ -630,8 +470,8 @@
   {
     FT_Error           error;
     FTC_BasicQueryRec  query;
-    FTC_SNode          node = 0; /* make compiler happy */
-    FT_UInt32          hash;
+    FTC_Node           node = 0; /* make compiler happy */
+    FT_PtrDist         hash;
 
 
     if ( anode )
@@ -639,34 +479,21 @@
 
     /* other argument checks delayed to FTC_Cache_Lookup */
     if ( !ansbit )
-      return FTC_Err_Invalid_Argument;
+      return FT_THROW( Invalid_Argument );
 
     *ansbit = NULL;
 
-#ifdef FT_CONFIG_OPTION_OLD_INTERNALS
-
-    /*  This one is a major hack used to detect whether we are passed a
-     *  regular FTC_ImageType handle, or a legacy FTC_OldImageDesc one.
-     */
-    if ( type->width >= 0x10000 )
     {
-      FTC_OldImageDesc  desc = (FTC_OldImageDesc)type;
+      if ( (FT_ULong)(type->flags - FT_INT_MIN) > FT_UINT_MAX )
+      {
+        FT_TRACE1(( "FTC_ImageCache_Lookup: higher bits in load_flags" ));
+        FT_TRACE1(( "0x%x are dropped\n", (type->flags & ~((FT_ULong)FT_UINT_MAX)) ));
+      }
 
-
-      query.attrs.scaler.face_id = desc->font.face_id;
-      query.attrs.scaler.width   = desc->font.pix_width;
-      query.attrs.scaler.height  = desc->font.pix_height;
-      query.attrs.load_flags     = desc->flags;
-    }
-    else
-
-#endif /* FT_CONFIG_OPTION_OLD_INTERNALS */
-
-    {
       query.attrs.scaler.face_id = type->face_id;
       query.attrs.scaler.width   = type->width;
       query.attrs.scaler.height  = type->height;
-      query.attrs.load_flags     = type->flags;
+      query.attrs.load_flags     = (FT_UInt)type->flags;
     }
 
     query.attrs.scaler.pixel = 1;
@@ -690,17 +517,18 @@
                                hash,
                                gindex,
                                FTC_GQUERY( &query ),
-                               (FTC_Node*)&node );
+                               &node );
 #endif
     if ( error )
       goto Exit;
 
-    *ansbit = node->sbits + ( gindex - FTC_GNODE( node )->gindex );
+    *ansbit = FTC_SNODE( node )->sbits +
+              ( gindex - FTC_GNODE( node )->gindex );
 
     if ( anode )
     {
-      *anode = FTC_NODE( node );
-      FTC_NODE( node )->ref_count++;
+      *anode = node;
+      node->ref_count++;
     }
 
   Exit:
@@ -720,8 +548,8 @@
   {
     FT_Error           error;
     FTC_BasicQueryRec  query;
-    FTC_SNode          node = 0; /* make compiler happy */
-    FT_UInt32          hash;
+    FTC_Node           node = 0; /* make compiler happy */
+    FT_PtrDist         hash;
 
 
     if ( anode )
@@ -729,12 +557,19 @@
 
     /* other argument checks delayed to FTC_Cache_Lookup */
     if ( !ansbit || !scaler )
-        return FTC_Err_Invalid_Argument;
+        return FT_THROW( Invalid_Argument );
 
     *ansbit = NULL;
 
+    /* FT_Load_Glyph(), FT_Load_Char() take FT_UInt flags */
+    if ( load_flags > FT_UINT_MAX )
+    {
+      FT_TRACE1(( "FTC_ImageCache_LookupScaler: higher bits in load_flags" ));
+      FT_TRACE1(( "0x%x are dropped\n", (load_flags & ~((FT_ULong)FT_UINT_MAX)) ));
+    }
+
     query.attrs.scaler     = scaler[0];
-    query.attrs.load_flags = load_flags;
+    query.attrs.load_flags = (FT_UInt)load_flags;
 
     /* beware, the hash must be the same for all glyph ranges! */
     hash = FTC_BASIC_ATTR_HASH( &query.attrs ) +
@@ -750,62 +585,18 @@
     if ( error )
       goto Exit;
 
-    *ansbit = node->sbits + ( gindex - FTC_GNODE( node )->gindex );
+    *ansbit = FTC_SNODE( node )->sbits +
+              ( gindex - FTC_GNODE( node )->gindex );
 
     if ( anode )
     {
-      *anode = FTC_NODE( node );
-      FTC_NODE( node )->ref_count++;
+      *anode = node;
+      node->ref_count++;
     }
 
   Exit:
     return error;
   }
-
-
-#ifdef FT_CONFIG_OPTION_OLD_INTERNALS
-
-  FT_EXPORT( FT_Error )
-  FTC_SBit_Cache_New( FTC_Manager     manager,
-                      FTC_SBitCache  *acache );
-
-  FT_EXPORT( FT_Error )
-  FTC_SBit_Cache_Lookup( FTC_SBitCache       cache,
-                         FTC_OldImage_Desc*  desc,
-                         FT_UInt             gindex,
-                         FTC_SBit           *ansbit );
-
-
-  FT_EXPORT_DEF( FT_Error )
-  FTC_SBit_Cache_New( FTC_Manager     manager,
-                      FTC_SBitCache  *acache )
-  {
-    return FTC_SBitCache_New( manager, (FTC_SBitCache*)acache );
-  }
-
-
-  FT_EXPORT_DEF( FT_Error )
-  FTC_SBit_Cache_Lookup( FTC_SBitCache       cache,
-                         FTC_OldImage_Desc*  desc,
-                         FT_UInt             gindex,
-                         FTC_SBit           *ansbit )
-  {
-    FTC_ImageTypeRec  type0;
-
-
-    if ( !desc )
-      return FT_Err_Invalid_Argument;
-
-    ftc_image_type_from_old_desc( &type0, desc );
-
-    return FTC_SBitCache_Lookup( (FTC_SBitCache)cache,
-                                  &type0,
-                                  gindex,
-                                  ansbit,
-                                  NULL );
-  }
-
-#endif /* FT_CONFIG_OPTION_OLD_INTERNALS */
 
 
 /* END */

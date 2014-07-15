@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    FreeType abstract glyph cache (specification).                       */
 /*                                                                         */
-/*  Copyright 2000-2001, 2003, 2004, 2006, 2007 by                         */
+/*  Copyright 2000-2001, 2003, 2004, 2006, 2007, 2011 by                   */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -180,12 +180,18 @@ FT_BEGIN_HEADER
                   FT_UInt     gindex,  /* glyph index for node */
                   FTC_Family  family );
 
+#ifdef FTC_INLINE
+
   /* returns TRUE iff the query's glyph index correspond to the node;  */
   /* this assumes that the `family' and `hash' fields of the query are */
   /* already correctly set                                             */
   FT_LOCAL( FT_Bool )
   FTC_GNode_Compare( FTC_GNode   gnode,
-                     FTC_GQuery  gquery );
+                     FTC_GQuery  gquery,
+                     FTC_Cache   cache,
+                     FT_Bool*    list_changed );
+
+#endif
 
   /* call this function to clear a node's family -- this is necessary */
   /* to implement the `node_remove_faceid' cache method correctly     */
@@ -254,7 +260,7 @@ FT_BEGIN_HEADER
 #ifndef FTC_INLINE
   FT_LOCAL( FT_Error )
   FTC_GCache_Lookup( FTC_GCache   cache,
-                     FT_UInt32    hash,
+                     FT_PtrDist   hash,
                      FT_UInt      gindex,
                      FTC_GQuery   query,
                      FTC_Node    *anode );
@@ -277,12 +283,14 @@ FT_BEGIN_HEADER
     FTC_GCache               _gcache   = FTC_GCACHE( cache );               \
     FTC_GQuery               _gquery   = (FTC_GQuery)( query );             \
     FTC_MruNode_CompareFunc  _fcompare = (FTC_MruNode_CompareFunc)(famcmp); \
+    FTC_MruNode              _mrunode;                                      \
                                                                             \
                                                                             \
     _gquery->gindex = (gindex);                                             \
                                                                             \
     FTC_MRULIST_LOOKUP_CMP( &_gcache->families, _gquery, _fcompare,         \
-                            _gquery->family, error );                       \
+                            _mrunode, error );                              \
+    _gquery->family = FTC_FAMILY( _mrunode );                               \
     if ( !error )                                                           \
     {                                                                       \
       FTC_Family  _gqfamily = _gquery->family;                              \
@@ -303,11 +311,10 @@ FT_BEGIN_HEADER
 #define FTC_GCACHE_LOOKUP_CMP( cache, famcmp, nodecmp, hash,          \
                                gindex, query, node, error )           \
    FT_BEGIN_STMNT                                                     \
-     void*  _n = &(node);                                             \
-                                                                      \
                                                                       \
      error = FTC_GCache_Lookup( FTC_GCACHE( cache ), hash, gindex,    \
-                                FTC_GQUERY( query ), (FTC_Node*)_n ); \
+                                FTC_GQUERY( query ), &node );         \
+                                                                      \
    FT_END_STMNT
 
 #endif /* !FTC_INLINE */

@@ -1,4 +1,4 @@
-#  Content (c) 2002, 2004, 2006, 2007, 2008, 2009
+#  Content (c) 2002, 2004, 2006-2009, 2012, 2013
 #    David Turner <david@freetype.org>
 #
 #  This file contains routines used to parse the content of documentation
@@ -32,7 +32,7 @@ re_code_end   = re.compile( r"(\s*)}\s*$" )
 # this regular expression is used to isolate identifiers from
 # other text
 #
-re_identifier = re.compile( r'(\w*)' )
+re_identifier = re.compile( r'((?:\w|-)*)' )
 
 
 # we collect macros ending in `_H'; while outputting the object data, we use
@@ -267,15 +267,6 @@ class  DocMarkup:
             return self.fields[0].items[0].words[0]
         except:
             return None
-
-    def  get_start( self ):
-        try:
-            result = ""
-            for word in self.fields[0].items[0].words:
-                result = result + " " + word
-            return result[1:]
-        except:
-            return "ERROR"
 
     def  dump( self, margin ):
         print " " * margin + "<" + self.tag + ">"
@@ -540,7 +531,7 @@ class  DocBlock:
         while start < end and not string.strip( source[end] ):
             end = end - 1
 
-        if start == end:
+        if start == end and not string.strip( source[start] ):
             self.code = []
         else:
             self.code = source[start:end + 1]
@@ -554,14 +545,6 @@ class  DocBlock:
             if m.tag == string.lower( tag_name ):
                 return m
         return None
-
-    def  get_markup_name( self, tag_name ):
-        """return the name of a given primary markup in a block"""
-        try:
-            m = self.get_markup( tag_name )
-            return m.get_name()
-        except:
-            return None
 
     def  get_markup_words( self, tag_name ):
         try:

@@ -42,9 +42,9 @@ in this Software without prior written authorization from The Open Group.
 
   FT_LOCAL_DEF( void )
   BitOrderInvert( unsigned char*  buf,
-                  int             nbytes )
+                  size_t          nbytes )
   {
-    for ( ; --nbytes >= 0; buf++ )
+    for ( ; nbytes > 0; nbytes--, buf++ )
     {
       unsigned int  val = *buf;
 
@@ -64,13 +64,13 @@ in this Software without prior written authorization from The Open Group.
 
   FT_LOCAL_DEF( void )
   TwoByteSwap( unsigned char*  buf,
-               int             nbytes )
+               size_t          nbytes )
   {
-    unsigned char  c;
-
-
     for ( ; nbytes >= 2; nbytes -= 2, buf += 2 )
     {
+      unsigned char  c;
+
+
       c      = buf[0];
       buf[0] = buf[1];
       buf[1] = c;
@@ -83,13 +83,13 @@ in this Software without prior written authorization from The Open Group.
 
   FT_LOCAL_DEF( void )
   FourByteSwap( unsigned char*  buf,
-                int             nbytes )
+                size_t          nbytes )
   {
-    unsigned char  c;
-
-
     for ( ; nbytes >= 4; nbytes -= 4, buf += 4 )
     {
+      unsigned char  c;
+
+
       c      = buf[0];
       buf[0] = buf[3];
       buf[3] = c;

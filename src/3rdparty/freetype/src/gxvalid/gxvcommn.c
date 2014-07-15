@@ -4,7 +4,8 @@
 /*                                                                         */
 /*    TrueTypeGX/AAT common tables validation (body).                      */
 /*                                                                         */
-/*  Copyright 2004, 2005 by suzuki toshiya, Masatake YAMATO, Red Hat K.K., */
+/*  Copyright 2004, 2005, 2009, 2010, 2013                                 */
+/*  by suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                      */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -303,8 +304,7 @@
                   binSrchHeader->unitSize, binSrchHeader->nUnits,
                   searchRange, entrySelector, rangeShift ));
 
-      if ( valid->root->level >= FT_VALIDATE_PARANOID )
-        FT_INVALID_DATA;
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_DATA );
     }
   }
 
@@ -404,8 +404,8 @@
             if ( UNITSIZE != CORRECTSIZE )                             \
             {                                                          \
               FT_ERROR(( "unitSize=%d differs from"                    \
-                         "expected unitSize=%d"                        \
-                         "in LookupTable %s",                          \
+                         " expected unitSize=%d"                       \
+                         " in LookupTable %s\n",                       \
                           UNITSIZE, CORRECTSIZE, FORMAT ));            \
               if ( UNITSIZE != 0 && NUNITS != 0 )                      \
               {                                                        \
@@ -441,13 +441,12 @@
       {
         GXV_TRACE(( "too short, glyphs %d - %d are missing\n",
                     i, valid->face->num_glyphs ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
         break;
       }
 
       value = GXV_LOOKUP_VALUE_LOAD( p, valid->lookupval_sign );
-      valid->lookupval_func( i, value, valid );
+      valid->lookupval_func( i, &value, valid );
     }
 
     valid->subtable_length = p - table;
@@ -530,8 +529,7 @@
         GXV_TRACE(( "reverse ordered segment specification:"
                     " lastGlyph[%d]=%d < lastGlyph[%d]=%d\n",
                     unit, lastGlyph, unit - 1 , gid ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
       }
 
       if ( lastGlyph < firstGlyph )
@@ -539,8 +537,7 @@
         GXV_TRACE(( "reverse ordered range specification at unit %d:",
                     " lastGlyph %d < firstGlyph %d ",
                     unit, lastGlyph, firstGlyph ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
 
         if ( valid->root->level == FT_VALIDATE_TIGHT )
           continue;     /* ftxvalidator silently skips such an entry */
@@ -552,7 +549,7 @@
       }
 
       for ( gid = firstGlyph; gid <= lastGlyph; gid++ )
-        valid->lookupval_func( gid, value, valid );
+        valid->lookupval_func( gid, &value, valid );
     }
 
     gxv_LookupTable_fmt2_skip_endmarkers( p, unitSize, valid );
@@ -603,8 +600,7 @@
         GXV_TRACE(( "reverse ordered segment specification:"
                     " lastGlyph[%d]=%d < lastGlyph[%d]=%d\n",
                     unit, lastGlyph, unit - 1 , gid ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
       }
 
       if ( lastGlyph < firstGlyph )
@@ -612,8 +608,7 @@
         GXV_TRACE(( "reverse ordered range specification at unit %d:",
                     " lastGlyph %d < firstGlyph %d ",
                     unit, lastGlyph, firstGlyph ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
 
         if ( valid->root->level == FT_VALIDATE_TIGHT )
           continue; /* ftxvalidator silently skips such an entry */
@@ -630,11 +625,11 @@
       for ( gid = firstGlyph; gid <= lastGlyph; gid++ )
       {
         value = valid->lookupfmt4_trans( (FT_UShort)( gid - firstGlyph ),
-                                         base_value,
+                                         &base_value,
                                          limit,
                                          valid );
 
-        valid->lookupval_func( gid, value, valid );
+        valid->lookupval_func( gid, &value, valid );
       }
     }
 
@@ -704,12 +699,11 @@
       {
         GXV_TRACE(( "current gid 0x%04x < previous gid 0x%04x\n",
                     glyph, prev_glyph ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_GLYPH_ID;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
       }
       prev_glyph = glyph;
 
-      valid->lookupval_func( glyph, value, valid );
+      valid->lookupval_func( glyph, &value, valid );
     }
 
     gxv_LookupTable_fmt6_skip_endmarkers( p, unitSize, valid );
@@ -749,7 +743,7 @@
     {
       GXV_LIMIT_CHECK( 2 );
       value = GXV_LOOKUP_VALUE_LOAD( p, valid->lookupval_sign );
-      valid->lookupval_func( (FT_UShort)( firstGlyph + i ), value, valid );
+      valid->lookupval_func( (FT_UShort)( firstGlyph + i ), &value, valid );
     }
 
     valid->subtable_length = p - table;
@@ -833,8 +827,7 @@
     {
       GXV_TRACE(( " gxv_glyphid_check() gid overflow: num_glyphs %d < %d\n",
                   face->num_glyphs, gid ));
-      if ( valid->root->level >= FT_VALIDATE_PARANOID )
-        FT_INVALID_GLYPH_ID;
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_GLYPH_ID );
     }
 
     return 0;
@@ -1100,8 +1093,7 @@
 
     if ( ( maxEntry + 1 ) * entrySize > *length_p )
     {
-      if ( valid->root->level >= FT_VALIDATE_PARANOID )
-        FT_INVALID_TOO_SHORT;
+      GXV_SET_ERR_IF_PARANOID( FT_INVALID_TOO_SHORT );
 
       /* ftxvalidator and FontValidator both warn and continue */
       maxEntry = (FT_Byte)( *length_p / entrySize - 1 );
@@ -1125,8 +1117,7 @@
       {
         GXV_TRACE(( " newState offset 0x%04x is out of stateArray\n",
                     newState ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_OFFSET;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_OFFSET );
         continue;
       }
 
@@ -1134,8 +1125,7 @@
       {
         GXV_TRACE(( " newState offset 0x%04x is not aligned to %d-classes\n",
                     newState,  1 + maxClassID ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_OFFSET;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_OFFSET );
         continue;
       }
 
@@ -1172,15 +1162,14 @@
         break;
 
       default:
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_FORMAT;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_FORMAT );
         goto Exit;
       }
 
       if ( NULL != valid->statetable.entry_validate_func )
         valid->statetable.entry_validate_func( state,
                                                flags,
-                                               glyphOffset,
+                                               &glyphOffset,
                                                statetable_table,
                                                statetable_limit,
                                                valid );
@@ -1299,7 +1288,9 @@
                                valid );
     else
     {
+#if 0
       maxState = 1;     /* 0:start of text, 1:start of line are predefined */
+#endif
       maxEntry = 0;
     }
 
@@ -1345,21 +1336,21 @@
     l[1] = stateArray_length_p;
     l[2] = entryTable_length_p;
 
-    gxv_set_length_by_ulong_offset( o, l, buff, 4, table_size, valid );
+    gxv_set_length_by_ulong_offset( o, l, buff, 3, table_size, valid );
   }
 
 
   static void
   gxv_XClassTable_lookupval_validate( FT_UShort            glyph,
-                                      GXV_LookupValueDesc  value,
+                                      GXV_LookupValueCPtr  value_p,
                                       GXV_Validator        valid )
   {
     FT_UNUSED( glyph );
 
-    if ( value.u >= valid->xstatetable.nClasses )
+    if ( value_p->u >= valid->xstatetable.nClasses )
       FT_INVALID_DATA;
-    if ( value.u > valid->xstatetable.maxClassID )
-      valid->xstatetable.maxClassID = value.u;
+    if ( value_p->u > valid->xstatetable.maxClassID )
+      valid->xstatetable.maxClassID = value_p->u;
   }
 
 
@@ -1391,7 +1382,7 @@
   */
   static GXV_LookupValueDesc
   gxv_XClassTable_lookupfmt4_transit( FT_UShort            relative_gindex,
-                                      GXV_LookupValueDesc  base_value,
+                                      GXV_LookupValueCPtr  base_value_p,
                                       FT_Bytes             lookuptbl_limit,
                                       GXV_Validator        valid )
   {
@@ -1401,7 +1392,7 @@
     GXV_LookupValueDesc  value;
 
     /* XXX: check range? */
-    offset = (FT_UShort)( base_value.u +
+    offset = (FT_UShort)( base_value_p->u +
                           relative_gindex * sizeof ( FT_UShort ) );
 
     p     = valid->lookuptbl_head + offset;
@@ -1502,8 +1493,7 @@
       {
         GXV_TRACE(( "  newState index 0x%04x points out of stateArray\n",
                     newState_idx ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_OFFSET;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_OFFSET );
       }
 
       state = (FT_UShort)( newState_idx / ( 1 + maxClassID ) );
@@ -1512,8 +1502,7 @@
         FT_TRACE4(( "-> new state = %d (supposed)\n"
                     "but newState index 0x%04x is not aligned to %d-classes\n",
                     state, newState_idx,  1 + maxClassID ));
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_OFFSET;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_OFFSET );
       }
 
       switch ( GXV_GLYPHOFFSET_FMT( xstatetable ) )
@@ -1547,15 +1536,14 @@
         break;
 
       default:
-        if ( valid->root->level >= FT_VALIDATE_PARANOID )
-          FT_INVALID_FORMAT;
+        GXV_SET_ERR_IF_PARANOID( FT_INVALID_FORMAT );
         goto Exit;
       }
 
       if ( NULL != valid->xstatetable.entry_validate_func )
         valid->xstatetable.entry_validate_func( state,
                                                 flags,
-                                                glyphOffset,
+                                                &glyphOffset,
                                                 xstatetable_table,
                                                 xstatetable_limit,
                                                 valid );
@@ -1635,8 +1623,10 @@
       gxv_LookupTable_validate( table + classTable,
                                 table + classTable + classTable_length,
                                 valid );
+#if 0
       if ( valid->subtable_length < classTable_length )
         classTable_length = valid->subtable_length;
+#endif
     }
     else
     {
@@ -1655,7 +1645,9 @@
                                 valid );
     else
     {
+#if 0
       maxState = 1; /* 0:start of text, 1:start of line are predefined */
+#endif
       maxEntry = 0;
     }
 
@@ -1718,9 +1710,9 @@
                         const FT_String*  name,
                         GXV_odtect_Range  odtect )
   {
-    odtect->range[ odtect->nRanges ].start  = start;
-    odtect->range[ odtect->nRanges ].length = length;
-    odtect->range[ odtect->nRanges ].name   = (FT_String*)name;
+    odtect->range[odtect->nRanges].start  = start;
+    odtect->range[odtect->nRanges].length = length;
+    odtect->range[odtect->nRanges].name   = (FT_String*)name;
     odtect->nRanges++;
   }
 
@@ -1741,6 +1733,7 @@
                                       odtect->range[j].start,
                                       odtect->range[j].length ) )
         {
+#ifdef FT_DEBUG_LEVEL_TRACE
           if ( odtect->range[i].name || odtect->range[j].name )
             GXV_TRACE(( "found overlap between range %d and range %d\n",
                         i, j ));
@@ -1748,6 +1741,7 @@
             GXV_TRACE(( "found overlap between `%s' and `%s\'\n",
                         odtect->range[i].name,
                         odtect->range[j].name ));
+#endif
           FT_INVALID_OFFSET;
         }
 

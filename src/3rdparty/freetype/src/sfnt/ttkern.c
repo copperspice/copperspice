@@ -5,7 +5,7 @@
 /*    Load the basic TrueType kerning table.  This doesn't handle          */
 /*    kerning data within the GPOS table at the moment.                    */
 /*                                                                         */
-/*  Copyright 1996-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009 by       */
+/*  Copyright 1996-2007, 2009, 2010, 2013 by                               */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -22,7 +22,6 @@
 #include FT_INTERNAL_STREAM_H
 #include FT_TRUETYPE_TAGS_H
 #include "ttkern.h"
-#include "ttload.h"
 
 #include "sferrors.h"
 
@@ -60,14 +59,16 @@
 
     if ( table_size < 4 )  /* the case of a malformed table */
     {
-      FT_ERROR(( "kerning table is too small - ignored\n" ));
-      error = SFNT_Err_Table_Missing;
+      FT_ERROR(( "tt_face_load_kern:"
+                 " kerning table is too small - ignored\n" ));
+      error = FT_THROW( Table_Missing );
       goto Exit;
     }
 
     if ( FT_FRAME_EXTRACT( table_size, face->kern_table ) )
     {
-      FT_ERROR(( "could not extract kerning table\n" ));
+      FT_ERROR(( "tt_face_load_kern:"
+                 " could not extract kerning table\n" ));
       goto Exit;
     }
 
@@ -86,7 +87,7 @@
     {
       FT_UInt    num_pairs, length, coverage;
       FT_Byte*   p_next;
-      FT_UInt32  mask = 1UL << nn;
+      FT_UInt32  mask = (FT_UInt32)1UL << nn;
 
 
       if ( p + 6 > p_limit )
@@ -114,7 +115,7 @@
       num_pairs = FT_NEXT_USHORT( p );
       p        += 6;
 
-      if ( ( p_next - p ) / 6 < (int)num_pairs ) /* handle broken count */
+      if ( ( p_next - p ) < 6 * (int)num_pairs ) /* handle broken count */
         num_pairs = (FT_UInt)( ( p_next - p ) / 6 );
 
       avail |= mask;
@@ -125,8 +126,8 @@
        */
       if ( num_pairs > 0 )
       {
-        FT_UInt  count;
-        FT_UInt  old_pair;
+        FT_ULong  count;
+        FT_ULong  old_pair;
 
 
         old_pair = FT_NEXT_ULONG( p );
@@ -182,7 +183,7 @@
                        FT_UInt  right_glyph )
   {
     FT_Int    result = 0;
-    FT_UInt   count, mask = 1;
+    FT_UInt   count, mask;
     FT_Byte*  p       = face->kern_table;
     FT_Byte*  p_limit = p + face->kern_table_size;
 
@@ -195,7 +196,7 @@
           count--, mask <<= 1 )
     {
       FT_Byte* base     = p;
-      FT_Byte* next     = base;
+      FT_Byte* next;
       FT_UInt  version  = FT_NEXT_USHORT( p );
       FT_UInt  length   = FT_NEXT_USHORT( p );
       FT_UInt  coverage = FT_NEXT_USHORT( p );
@@ -219,7 +220,7 @@
       num_pairs = FT_NEXT_USHORT( p );
       p        += 6;
 
-      if ( ( next - p ) / 6 < (int)num_pairs )  /* handle broken count  */
+      if ( ( next - p ) < 6 * (int)num_pairs )  /* handle broken count  */
         num_pairs = (FT_UInt)( ( next - p ) / 6 );
 
       switch ( coverage >> 8 )

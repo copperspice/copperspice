@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    FreeType Image cache (body).                                         */
 /*                                                                         */
-/*  Copyright 2000-2001, 2003, 2004, 2006 by                               */
+/*  Copyright 2000-2001, 2003, 2004, 2006, 2010 by                         */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -61,7 +61,7 @@
   {
     FT_Memory  memory = cache->memory;
     FT_Error   error;
-    FTC_INode  inode;
+    FTC_INode  inode  = NULL;
 
 
     if ( !FT_NEW( inode ) )
@@ -103,12 +103,12 @@
   }
 
 
-  FT_LOCAL_DEF( FT_ULong )
+  FT_LOCAL_DEF( FT_Offset )
   ftc_inode_weight( FTC_Node   ftcinode,
                     FTC_Cache  ftccache )
   {
     FTC_INode  inode = (FTC_INode)ftcinode;
-    FT_ULong   size  = 0;
+    FT_Offset  size  = 0;
     FT_Glyph   glyph = inode->glyph;
 
     FT_UNUSED( ftccache );
@@ -151,7 +151,7 @@
 
 #if 0
 
-  FT_LOCAL_DEF( FT_ULong )
+  FT_LOCAL_DEF( FT_Offset )
   FTC_INode_Weight( FTC_INode  inode )
   {
     return ftc_inode_weight( FTC_NODE( inode ), NULL );

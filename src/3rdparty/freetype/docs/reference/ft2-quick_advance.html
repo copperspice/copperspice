@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>FreeType-2.3.9 API Reference</title>
+<title>FreeType-2.5.3 API Reference</title>
 <style type="text/css">
   body { font-family: Verdana, Geneva, Arial, Helvetica, serif;
          color: #000000;
@@ -35,7 +35,7 @@
 <table align=center><tr><td><font size=-1>[<a href="ft2-index.html">Index</a>]</font></td>
 <td width="100%"></td>
 <td><font size=-1>[<a href="ft2-toc.html">TOC</a>]</font></td></tr></table>
-<center><h1>FreeType-2.3.9 API Reference</h1></center>
+<center><h1>FreeType-2.5.3 API Reference</h1></center>
 
 <center><h1>
 Quick retrieval of advance values
@@ -52,10 +52,18 @@ Quick retrieval of advance values
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_ADVANCE_FLAG_FAST_ONLY">FT_ADVANCE_FLAG_FAST_ONLY</a></h4>
 <table align=center width="87%"><tr><td>
+Defined in FT_ADVANCES_H (ftadvanc.h).
+</td></tr></table><br>
+<table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
+
+#define <b>FT_ADVANCE_FLAG_FAST_ONLY</b>  0x20000000UL
+
+</pre></table><br>
+<table align=center width="87%"><tr><td>
 <p>A bit-flag to be OR-ed with the &lsquo;flags&rsquo; parameter of the <a href="ft2-quick_advance.html#FT_Get_Advance">FT_Get_Advance</a> and <a href="ft2-quick_advance.html#FT_Get_Advances">FT_Get_Advances</a> functions.</p>
 <p>If set, it indicates that you want these functions to fail if the corresponding hinting mode or font driver doesn't allow for very quick advance computation.</p>
-<p>Typically, glyphs which are either unscaled, unhinted, bitmapped, or light-hinted can have their advance width computed very quickly.</p>
-<p>Normal and bytecode hinted modes, which require loading, scaling, and hinting of the glyph outline, are extremely slow by comparison.</p>
+<p>Typically, glyphs that are either unscaled, unhinted, bitmapped, or light-hinted can have their advance width computed very quickly.</p>
+<p>Normal and bytecode hinted modes that require loading, scaling, and hinting of the glyph outline, are extremely slow by comparison.</p>
 </td></tr></table><br>
 </td></tr></table>
 <hr width="75%">
@@ -66,7 +74,7 @@ Quick retrieval of advance values
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Get_Advance">FT_Get_Advance</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
+Defined in FT_ADVANCES_H (ftadvanc.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -78,7 +86,7 @@ Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>Retrieve the advance value of a given glyph outline in an <a href="ft2-base_interface.html#FT_Face">FT_Face</a>. By default, the unhinted advance is returned in font units.</p>
+<p>Retrieve the advance value of a given glyph outline in an <a href="ft2-base_interface.html#FT_Face">FT_Face</a>.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -98,7 +106,7 @@ Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
 <p></p>
 <table cellpadding=3 border=0>
 <tr valign=top><td><b>padvance</b></td><td>
-<p>The advance value, in either font units or 16.16 format.</p>
+<p>The advance value. If scaling is performed (based on the value of &lsquo;load_flags&rsquo;), the advance value is in 16.16 format. Otherwise, it is in font units.</p>
 <p>If <a href="ft2-base_interface.html#FT_LOAD_XXX">FT_LOAD_VERTICAL_LAYOUT</a> is set, this is the vertical advance corresponding to a vertical layout. Otherwise, it is the horizontal advance in a horizontal layout.</p>
 </td></tr>
 </table>
@@ -119,7 +127,7 @@ Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
 <table align=center width="75%"><tr><td>
 <h4><a name="FT_Get_Advances">FT_Get_Advances</a></h4>
 <table align=center width="87%"><tr><td>
-Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
+Defined in FT_ADVANCES_H (ftadvanc.h).
 </td></tr></table><br>
 <table align=center width="87%"><tr bgcolor="#D6E8FF"><td><pre>
 
@@ -132,7 +140,7 @@ Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
 
 </pre></table><br>
 <table align=center width="87%"><tr><td>
-<p>Retrieve the advance values of several glyph outlines in an <a href="ft2-base_interface.html#FT_Face">FT_Face</a>. By default, the unhinted advances are returned in font units.</p>
+<p>Retrieve the advance values of several glyph outlines in an <a href="ft2-base_interface.html#FT_Face">FT_Face</a>.</p>
 </td></tr></table><br>
 <table align=center width="87%" cellpadding=5><tr bgcolor="#EEEEFF"><td><em><b>input</b></em></td></tr><tr><td>
 <p></p>
@@ -155,7 +163,8 @@ Defined in FT_ADVANCES_H (freetype/ftadvanc.h).
 <p></p>
 <table cellpadding=3 border=0>
 <tr valign=top><td><b>padvance</b></td><td>
-<p>The advances, in either font units or 16.16 format. This array must contain at least &lsquo;count&rsquo; elements.</p>
+<p>The advance values. This array, to be provided by the caller, must contain at least &lsquo;count&rsquo; elements.</p>
+<p>If scaling is performed (based on the value of &lsquo;load_flags&rsquo;), the advance values are in 16.16 format. Otherwise, they are in font units.</p>
 <p>If <a href="ft2-base_interface.html#FT_LOAD_XXX">FT_LOAD_VERTICAL_LAYOUT</a> is set, these are the vertical advances corresponding to a vertical layout. Otherwise, they are the horizontal advances in a horizontal layout.</p>
 </td></tr>
 </table>
