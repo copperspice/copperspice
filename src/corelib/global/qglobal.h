@@ -29,10 +29,10 @@
 #include <stddef.h>
 
 // CopperSpice Versoin
-#define CS_VERSION_STR  "1.0.0"
+#define CS_VERSION_STR  "1.0.1"
 
 // CopperSpice - Version  (major << 16) + (minor << 8) + patch
-#define CS_VERSION 0x010000
+#define CS_VERSION 0x010001
 
 // useage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 0, 0))
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
