@@ -23,43 +23,4 @@
 *
 ***********************************************************************/
 
-#ifndef Qt_Gui_Pch_H
-#define Qt_Gui_Pch_H
-
-// from core/global/qt_pch.h
-#if defined __cplusplus
-#include <qglobal.h>
-
-#ifdef Q_OS_WIN
-# define _POSIX_
-# include <limits.h>
-# undef _POSIX_
-#endif
-
-#include <qcoreapplication.h>
-#include <qlist.h>
-#include <qvariant.h>
-#include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qdesktopwidget.h>
-#include <qevent.h>
-#include <qimage.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qstyle.h>
-#include <qtimer.h>
-#include <qwidget.h>
-
-#include <stdlib.h>
-
-#endif
-
-#endif
+// no code is located in this cpp 

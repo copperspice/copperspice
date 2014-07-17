@@ -26,7 +26,7 @@
 #define RCC_VERSION_STR "1.0.0"
 
 #include <rcc.h>
-#include "../../corelib/kernel/qcorecmdlineargs_p.h"
+#include <qcorecmdlineargs_p.h>
 
 #include <QDebug>
 #include <QDir>

@@ -43,7 +43,7 @@ bin_uic_LDFLAGS= -lpthread
 $(bin_uic_SOURCES) : $(CORE_HEADERS_INSTALLED)
 
 bin_uic_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) -I$(top_srcdir)/src/tools/uic/cpp -I$(top_srcdir)/src/tools/uic \
-            -I$(top_srcdir)/src/corelib/global \
+            -I$(top_srcdir)/src/core/global \
             -DQT_UIC   \
             -DQT_UIC_CPP_GENERATOR \
             -UQT_BUILD_CORE_LIB

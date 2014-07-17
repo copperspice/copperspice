@@ -23,43 +23,45 @@
 *
 ***********************************************************************/
 
-#ifndef Qt_Gui_Pch_H
-#define Qt_Gui_Pch_H
-
-// from core/global/qt_pch.h
-#if defined __cplusplus
-#include <qglobal.h>
-
-#ifdef Q_OS_WIN
-# define _POSIX_
-# include <limits.h>
-# undef _POSIX_
-#endif
-
-#include <qcoreapplication.h>
-#include <qlist.h>
-#include <qvariant.h>
-#include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <qtextcodecplugin.h>
 #include <qstringlist.h>
-#include <qtextcodec.h>
 
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qdesktopwidget.h>
-#include <qevent.h>
-#include <qimage.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qstyle.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#ifndef QT_NO_TEXTCODECPLUGIN
 
-#include <stdlib.h>
+QT_BEGIN_NAMESPACE
 
-#endif
+QTextCodecPlugin::QTextCodecPlugin(QObject *parent)
+   : QObject(parent)
+{
+}
 
-#endif
+QTextCodecPlugin::~QTextCodecPlugin()
+{
+}
+
+QStringList QTextCodecPlugin::keys() const
+{
+   QStringList keys;
+   QList<QByteArray> list = names();
+   list += aliases();
+   for (int i = 0; i < list.size(); ++i) {
+      keys += QString::fromLatin1(list.at(i));
+   }
+   QList<int> mibs = mibEnums();
+   for (int i = 0; i < mibs.count(); ++i) {
+      keys += QLatin1String("MIB: ") + QString::number(mibs.at(i));
+   }
+   return keys;
+}
+
+QTextCodec *QTextCodecPlugin::create(const QString &name)
+{
+   if (name.startsWith(QLatin1String("MIB: "))) {
+      return createForMib(name.mid(4).toInt());
+   }
+   return createForName(name.toLatin1());
+}
+
+QT_END_NAMESPACE
+
+#endif // QT_NO_TEXTCODECPLUGIN
