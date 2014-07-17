@@ -29,7 +29,7 @@
 #include <QtGui/qwindowdefs.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qsharedpointer.h>
-#include "qobject.h"
+#include <qobject.h>
 
 #if defined(Q_WS_X11) || defined(Q_WS_QWS)
 typedef struct FT_FaceRec_ *FT_Face;
@@ -230,7 +230,6 @@ class Q_GUI_EXPORT QFont
       return *this;
    }
 
-
 #ifdef Q_OS_WIN
    HFONT handle() const;
 #else
@@ -332,7 +331,6 @@ inline bool QFont::bold() const
 {
    return weight() > Normal;
 }
-
 
 inline void QFont::setBold(bool enable)
 {

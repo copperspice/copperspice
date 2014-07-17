@@ -29,12 +29,12 @@
 #include <stddef.h>
 
 // CopperSpice Version
-#define CS_VERSION_STR  "1.0.0"
+#define CS_VERSION_STR  "1.1.0"
 
 // CopperSpice - Version  (major << 16) + (minor << 8) + patch
 #define CS_VERSION 0x010000
 
-// useage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 0, 0))
+// useage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 1, 0))
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 #define QT_PACKAGEDATE_STR "YYYY-MM-DD"

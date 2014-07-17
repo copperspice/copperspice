@@ -26,21 +26,21 @@
 #ifndef QTEXTDOCUMENT_P_H
 #define QTEXTDOCUMENT_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtCore/qstring.h"
-#include "QtCore/qvector.h"
-#include "QtCore/qlist.h"
-#include "qfragmentmap_p.h"
-#include "QtGui/qtextlayout.h"
-#include "QtGui/qtextoption.h"
-#include "qtextformat_p.h"
-#include "QtGui/qtextdocument.h"
-#include "QtGui/qtextobject.h"
-#include "QtGui/qtextcursor.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qvariant.h"
-#include "QtCore/qurl.h"
-#include "qcssparser_p.h"
+#include <QtCore/qglobal.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qvector.h>
+#include <QtCore/qlist.h>
+#include <qfragmentmap_p.h>
+#include <QtGui/qtextlayout.h>
+#include <QtGui/qtextoption.h>
+#include <qtextformat_p.h>
+#include <QtGui/qtextdocument.h>
+#include <QtGui/qtextobject.h>
+#include <QtGui/qtextcursor.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qvariant.h>
+#include <QtCore/qurl.h>
+#include <qcssparser_p.h>
 
 // #define QT_QMAP_DEBUG
 
@@ -122,6 +122,7 @@ class QTextUndoCommand
       MoveCursor = 1
    };
    quint16 command;
+
  uint block_part :
    1; // all commands that are part of an undo block (including the first and the last one) have this set to 1
    uint block_end : 1; // the last command in an undo block has this set to 1.
@@ -301,26 +302,7 @@ class QTextDocumentPrivate
    }
 
    void clearUndoRedoStacks(QTextDocument::Stacks stacksToClear, bool emitSignals = false);
-
- private:
-   bool split(int pos);
-   bool unite(uint f);
-
-   void insert_string(int pos, uint strPos, uint length, int format, QTextUndoCommand::Operation op);
-   int insert_block(quint32 pos, uint strPos, int format, int blockformat, QTextUndoCommand::Operation op, int command);
-   int remove_string(int pos, uint length, QTextUndoCommand::Operation op);
-   int remove_block(int pos, int *blockformat, int command, QTextUndoCommand::Operation op);
-
-   void insert_frame(QTextFrame *f);
-   void scan_frames(int pos, int charsRemoved, int charsAdded);
-   static void clearFrame(QTextFrame *f);
-
-   void adjustDocumentChangesAndCursors(int from, int addedOrRemoved, QTextUndoCommand::Operation op);
-
-   bool wasUndoAvailable;
-   bool wasRedoAvailable;
-
- public:
+ 
    void documentChange(int from, int length);
 
    inline void addCursor(QTextCursorPrivate *c) {
@@ -349,7 +331,49 @@ class QTextDocumentPrivate
 
    bool ensureMaximumBlockCount();
 
+   QTextOption defaultTextOption;
+   Qt::CursorMoveStyle defaultCursorMoveStyle;
+
+#ifndef QT_NO_CSSPARSER
+   QCss::StyleSheet parsedDefaultStyleSheet;
+#endif
+
+   int maximumBlockCount;
+   uint needsEnsureMaximumBlockCount : 1;
+   uint inContentsChange : 1;
+   uint blockCursorAdjustment : 1;
+   QSizeF pageSize;
+   QString title;
+   QString url;
+   qreal indentWidth;
+   qreal documentMargin;
+
+   void mergeCachedResources(const QTextDocumentPrivate *priv);
+
+   friend class QTextHtmlExporter;
+   friend class QTextCursor;
+
+ protected:
+   QTextDocument *q_ptr;
+
  private:
+   bool split(int pos);
+   bool unite(uint f);
+
+   void insert_string(int pos, uint strPos, uint length, int format, QTextUndoCommand::Operation op);
+   int insert_block(quint32 pos, uint strPos, int format, int blockformat, QTextUndoCommand::Operation op, int command);
+   int remove_string(int pos, uint length, QTextUndoCommand::Operation op);
+   int remove_block(int pos, int *blockformat, int command, QTextUndoCommand::Operation op);
+
+   void insert_frame(QTextFrame *f);
+   void scan_frames(int pos, int charsRemoved, int charsAdded);
+   static void clearFrame(QTextFrame *f);
+
+   void adjustDocumentChangesAndCursors(int from, int addedOrRemoved, QTextUndoCommand::Operation op);
+
+   bool wasUndoAvailable;
+   bool wasRedoAvailable;
+
    QTextDocumentPrivate(const QTextDocumentPrivate &m);
    QTextDocumentPrivate &operator= (const QTextDocumentPrivate &m);
 
@@ -366,6 +390,7 @@ class QTextDocumentPrivate
    bool undoEnabled;
    int undoState;
    int revision;
+
    // position in undo stack of the last setModified(false) call
    int modifiedState;
    bool modified;
@@ -391,31 +416,6 @@ class QTextDocumentPrivate
    QString defaultStyleSheet;
 
    int lastBlockCount;
-
- public:
-   QTextOption defaultTextOption;
-   Qt::CursorMoveStyle defaultCursorMoveStyle;
-#ifndef QT_NO_CSSPARSER
-   QCss::StyleSheet parsedDefaultStyleSheet;
-#endif
-   int maximumBlockCount;
-   uint needsEnsureMaximumBlockCount : 1;
-   uint inContentsChange : 1;
-   uint blockCursorAdjustment : 1;
-   QSizeF pageSize;
-   QString title;
-   QString url;
-   qreal indentWidth;
-   qreal documentMargin;
-
-   void mergeCachedResources(const QTextDocumentPrivate *priv);
-
-   friend class QTextHtmlExporter;
-   friend class QTextCursor;
-
- protected:
-   QTextDocument *q_ptr;
-
 };
 
 class QTextTable;

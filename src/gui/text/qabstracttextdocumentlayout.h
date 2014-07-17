@@ -107,6 +107,8 @@ class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
    int formatIndex(int pos);
    QTextCharFormat format(int pos);
 
+   QScopedPointer<QAbstractTextDocumentLayoutPrivate> d_ptr;
+
  private:
    friend class QTextControl;
    friend class QTextDocument;
@@ -122,11 +124,7 @@ class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
    GUI_CS_SLOT_2(_q_dynamicPageCountSlot)
 
    GUI_CS_SLOT_1(Private, QSizeF _q_dynamicDocumentSizeSlot())
-   GUI_CS_SLOT_2(_q_dynamicDocumentSizeSlot)
-
- protected:
-   QScopedPointer<QAbstractTextDocumentLayoutPrivate> d_ptr;
-
+   GUI_CS_SLOT_2(_q_dynamicDocumentSizeSlot)  
 };
 
 class Q_GUI_EXPORT QTextObjectInterface

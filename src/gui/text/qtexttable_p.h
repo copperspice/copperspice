@@ -26,21 +26,24 @@
 #ifndef QTEXTTABLE_P_H
 #define QTEXTTABLE_P_H
 
-#include "qtextobject_p.h"
-#include "qtextdocument_p.h"
+#include <qtextobject_p.h>
+#include <qtextdocument_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QTextTablePrivate : public QTextFramePrivate
 {
    Q_DECLARE_PUBLIC(QTextTable)
+
  public:
    QTextTablePrivate(QTextDocument *document) : QTextFramePrivate(document), grid(0), nRows(0), nCols(0), dirty(true),
       blockFragmentUpdates(false) {}
+
    ~QTextTablePrivate();
 
    static QTextTable *createTable(QTextDocumentPrivate *, int pos, int rows, int cols,
                                   const QTextTableFormat &tableFormat);
+
    void fragmentAdded(const QChar &type, uint fragment);
    void fragmentRemoved(const QChar &type, uint fragment);
 

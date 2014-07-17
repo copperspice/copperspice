@@ -31,9 +31,8 @@
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/qset.h>
 #include <QtCore/qstack.h>
-
-#include "qtextdocument_p.h"
-#include "qtextdocumentwriter.h"
+#include <qtextdocument_p.h>
+#include <qtextdocumentwriter.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -79,6 +78,7 @@ class QTextOdfWriter
    void writeInlineCharacter(QXmlStreamWriter &writer, const QTextFragment &fragment) const;
 
    const QString officeNS, textNS, styleNS, foNS, tableNS, drawNS, xlinkNS, svgNS;
+
  private:
    const QTextDocument *m_document;
    QIODevice *m_device;

@@ -39,7 +39,6 @@ class QFontDatabasePrivate;
 template <class T> class QList;
 struct QFontDef;
 
-
 class Q_GUI_EXPORT QFontDatabase
 {
    CS_GADGET(QFontDatabase)

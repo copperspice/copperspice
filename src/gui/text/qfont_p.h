@@ -26,12 +26,12 @@
 #ifndef QFONT_P_H
 #define QFONT_P_H
 
-#include "QtGui/qfont.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qobject.h"
+#include <QtGui/qfont.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qobject.h>
 #include <qunicodetables_p.h>
 #include <QtGui/qfontdatabase.h>
-#include "qfixed_p.h"
+#include <qfixed_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -198,6 +198,7 @@ class Q_GUI_EXPORT QFontPrivate
    }
 
    void resolve(uint mask, const QFontPrivate *other);
+
  private:
    QFontPrivate &operator=(const QFontPrivate &) {
       return *this;
@@ -208,6 +209,7 @@ class Q_GUI_EXPORT QFontPrivate
 class QFontCache : public QObject
 {
    CS_OBJECT(QFontCache)
+
  public:
    // note: these static functions work on a per-thread basis
    static QFontCache *instance();
@@ -217,9 +219,11 @@ class QFontCache : public QObject
    ~QFontCache();
 
    void clear();
+
 #if defined(Q_WS_QWS) && !defined(QT_NO_QWS_QPF2)
    void removeEngineForFont(const QByteArray &fontName);
 #endif
+
    // universal key structure.  QFontEngineDatas and QFontEngines are cached using
    // the same keys
    struct Key {

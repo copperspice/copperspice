@@ -30,7 +30,7 @@
 #include <QtCore/qsize.h>
 #include <QtCore/qrect.h>
 #include <QtGui/qfont.h>
-#include "qtextcursor.h"
+#include <qtextcursor.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -51,6 +51,7 @@ class QUrl;
 class QVariant;
 class QRectF;
 class QTextOption;
+class QTextDocumentPrivate;
 
 template<typename T> class QVector;
 
@@ -66,8 +67,6 @@ class Q_GUI_EXPORT QAbstractUndoItem
 inline QAbstractUndoItem::~QAbstractUndoItem()
 {
 }
-
-class QTextDocumentPrivate;
 
 class Q_GUI_EXPORT QTextDocument : public QObject
 {
@@ -302,7 +301,6 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    Q_DISABLE_COPY(QTextDocument)
    Q_DECLARE_PRIVATE(QTextDocument)
    friend class QTextObjectPrivate;
-
 
 };
 

@@ -26,11 +26,11 @@
 #ifndef QTEXTCURSOR_P_H
 #define QTEXTCURSOR_P_H
 
-#include "qtextcursor.h"
-#include "qtextdocument.h"
-#include "qtextdocument_p.h"
+#include <qtextcursor.h>
+#include <qtextdocument.h>
+#include <qtextdocument_p.h>
 #include <qtextformat_p.h>
-#include "qtextobject.h"
+#include <qtextobject.h>
 
 QT_BEGIN_NAMESPACE
 

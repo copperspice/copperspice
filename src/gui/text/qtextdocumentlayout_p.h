@@ -26,14 +26,13 @@
 #ifndef QTEXTDOCUMENTLAYOUT_P_H
 #define QTEXTDOCUMENTLAYOUT_P_H
 
-#include "QtGui/qabstracttextdocumentlayout.h"
-#include "QtGui/qtextoption.h"
-#include "QtGui/qtextobject.h"
+#include <QtGui/qabstracttextdocumentlayout.h>
+#include <QtGui/qtextoption.h>
+#include <QtGui/qtextobject.h>
 
 QT_BEGIN_NAMESPACE
 
 class QTextListFormat;
-
 class QTextDocumentLayoutPrivate;
 
 class QTextDocumentLayout : public QAbstractTextDocumentLayout
@@ -82,9 +81,11 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    void documentChanged(int from, int oldLength, int length);
    void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
    void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
+
    void drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
                          int posInDocument, const QTextFormat &format);
    virtual void timerEvent(QTimerEvent *e);
+
  private:
    QRectF doLayout(int from, int oldLength, int length);
    void layoutFinished();

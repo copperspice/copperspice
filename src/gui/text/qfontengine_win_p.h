@@ -47,13 +47,15 @@ class QFontEngineWin : public QFontEngine
    virtual QFixed emSquareSize() const;
 
    virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const;
+         QTextEngine::ShaperFlags flags) const;
+
    virtual void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const;
 
    virtual void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
-                                 QTextItem::RenderFlags flags);
-   virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-                                QPainterPath *path, QTextItem::RenderFlags flags);
+         QTextItem::RenderFlags flags);
+
+   virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
+         QTextItem::RenderFlags flags);
 
    HGDIOBJ selectDesignFont() const;
 
@@ -122,8 +124,7 @@ class QFontEngineWin : public QFontEngine
    mutable int designAdvancesSize;
 
  private:
-   QNativeImage *drawGDIGlyph(HFONT font, glyph_t, int margin, const QTransform &xform,
-                              QImage::Format mask_format);
+   QNativeImage *drawGDIGlyph(HFONT font, glyph_t, int margin, const QTransform &xform, QImage::Format mask_format);
 
 };
 

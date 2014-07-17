@@ -82,10 +82,12 @@ class Q_GUI_EXPORT QFontMetrics
 
    QRect boundingRect(const QString &text) const;
    QRect boundingRect(const QRect &r, int flags, const QString &text, int tabstops = 0, int *tabarray = 0) const;
-   inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text,
-                             int tabstops = 0, int *tabarray = 0) const {
+
+   inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text, int tabstops = 0, 
+            int *tabarray = 0) const {
       return boundingRect(QRect(x, y, w, h), flags, text, tabstops, tabarray);
    }
+
    QSize size(int flags, const QString &str, int tabstops = 0, int *tabarray = 0) const;
 
    QRect tightBoundingRect(const QString &text) const;
@@ -99,9 +101,11 @@ class Q_GUI_EXPORT QFontMetrics
 
    bool operator==(const QFontMetrics &other); // 5.0 - remove me
    bool operator==(const QFontMetrics &other) const;
+
    inline bool operator !=(const QFontMetrics &other) {
       return !operator==(other);   // 5.0 - remove me
    }
+
    inline bool operator !=(const QFontMetrics &other) const {
       return !operator==(other);
    }

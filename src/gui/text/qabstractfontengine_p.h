@@ -26,8 +26,8 @@
 #ifndef QABSTRACTFONTENGINE_P_H
 #define QABSTRACTFONTENGINE_P_H
 
-#include "qfontengine_p.h"
-#include "qabstractfontengine_qws.h"
+#include <qfontengine_p.h>
+#include <qabstractfontengine_qws.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,16 +36,20 @@ class QCustomFontEngine;
 class QProxyFontEngine : public QFontEngine
 {
    CS_OBJECT(QProxyFontEngine)
+
  public:
    QProxyFontEngine(QAbstractFontEngine *engine, const QFontDef &def);
    virtual ~QProxyFontEngine();
 
    virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
                              QTextEngine::ShaperFlags flags) const;
+
    virtual void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const;
    virtual QImage alphaMapForGlyph(glyph_t);
+
    virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path,
                                 QTextItem::RenderFlags flags);
+
    virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
    virtual glyph_metrics_t boundingBox(glyph_t glyph);
 

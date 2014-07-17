@@ -26,11 +26,13 @@
 #ifndef QSTATICTEXT_P_H
 #define QSTATICTEXT_P_H
 
-#include "qstatictext.h"
+#include <qstatictext.h>
 #include <qtextureglyphcache_p.h>
 #include <QtGui/qcolor.h>
 
 QT_BEGIN_NAMESPACE
+
+class QStaticText;
 
 class QStaticTextUserData
 {
@@ -132,7 +134,6 @@ class Q_GUI_EXPORT QStaticTextItem
 
 };
 
-class QStaticText;
 class QStaticTextPrivate
 {
  public:

@@ -28,7 +28,7 @@
 
 #ifndef QT_NO_DIRECTWRITE
 
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 
 struct IDWriteFont ;
 struct IDWriteFontFace ;
@@ -41,10 +41,11 @@ QT_BEGIN_NAMESPACE
 class QFontEngineDirectWrite : public QFontEngine
 {
    CS_OBJECT(QFontEngineDirectWrite)
+
  public:
    explicit QFontEngineDirectWrite(IDWriteFactory *directWriteFactory,
-                                   IDWriteFontFace *directWriteFontFace,
-                                   qreal pixelSize);
+         IDWriteFontFace *directWriteFontFace, qreal pixelSize);
+
    ~QFontEngineDirectWrite();
 
    QFixed lineThickness() const;
@@ -54,15 +55,12 @@ class QFontEngineDirectWrite : public QFontEngine
    bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const;
    void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const;
 
-   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-                        QPainterPath *path, QTextItem::RenderFlags flags);
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
+         QTextItem::RenderFlags flags);
 
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
    glyph_metrics_t boundingBox(glyph_t g);
-   glyph_metrics_t alphaMapBoundingBox(glyph_t glyph,
-                                       QFixed subPixelPosition,
-                                       const QTransform &matrix,
-                                       GlyphFormat format);
+   glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition, const QTransform &matrix, GlyphFormat format);
 
    QFixed ascent() const;
    QFixed descent() const;
@@ -75,8 +73,7 @@ class QFontEngineDirectWrite : public QFontEngine
    bool supportsSubPixelPositions() const;
 
    QImage alphaMapForGlyph(glyph_t, QFixed subPixelPosition, const QTransform &t);
-   QImage alphaRGBMapForGlyph(glyph_t t, QFixed subPixelPosition, int margin,
-                              const QTransform &xform);
+   QImage alphaRGBMapForGlyph(glyph_t t, QFixed subPixelPosition, int margin, const QTransform &xform);
 
    QFontEngine *cloneWithSize(qreal pixelSize) const;
 

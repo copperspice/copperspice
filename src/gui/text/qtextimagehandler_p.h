@@ -26,8 +26,8 @@
 #ifndef QTEXTIMAGEHANDLER_P_H
 #define QTEXTIMAGEHANDLER_P_H
 
-#include "QtCore/qobject.h"
-#include "QtGui/qabstracttextdocumentlayout.h"
+#include <QtCore/qobject.h>
+#include <QtGui/qabstracttextdocumentlayout.h>
 
 QT_BEGIN_NAMESPACE
 

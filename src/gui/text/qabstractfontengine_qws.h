@@ -101,6 +101,7 @@ class QAbstractFontEnginePrivate;
 class Q_GUI_EXPORT QAbstractFontEngine : public QObject
 {
    CS_OBJECT(QAbstractFontEngine)
+
  public:
    enum Capability {
       CanOutlineGlyphs = 1,

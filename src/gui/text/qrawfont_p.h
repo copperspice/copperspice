@@ -26,8 +26,8 @@
 #ifndef QRAWFONT_P_H
 #define QRAWFONT_P_H
 
-#include "qrawfont.h"
-#include "qfontengine_p.h"
+#include <qrawfont.h>
+#include <qfontengine_p.h>
 #include <QtCore/qthread.h>
 #include <QtCore/qthreadstorage.h>
 
@@ -36,8 +36,9 @@
 QT_BEGIN_NAMESPACE
 
 namespace {
-class CustomFontFileLoader;
+   class CustomFontFileLoader;
 }
+
 class QRawFontPrivate
 {
  public:
@@ -75,9 +76,7 @@ class QRawFontPrivate
 
    void cleanUp();
    void platformCleanUp();
-   void platformLoadFromData(const QByteArray &fontData,
-                             qreal pixelSize,
-                             QFont::HintingPreference hintingPreference);
+   void platformLoadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    static QRawFontPrivate *get(const QRawFont &font) {
       return font.d.data();

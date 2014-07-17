@@ -48,12 +48,6 @@ class Q_GUI_EXPORT QTextObject : public QObject
 {
    CS_OBJECT(QTextObject)
 
- protected:
-   explicit QTextObject(QTextDocument *doc);
-   ~QTextObject();
-
-   void setFormat(const QTextFormat &format);
-
  public:
    QTextFormat format() const;
    int formatIndex() const;
@@ -65,6 +59,11 @@ class Q_GUI_EXPORT QTextObject : public QObject
    QTextDocumentPrivate *docHandle() const;
 
  protected:
+  explicit QTextObject(QTextDocument *doc);
+   ~QTextObject();
+
+   void setFormat(const QTextFormat &format);
+
    QTextObject(QTextObjectPrivate &p, QTextDocument *doc);
    QScopedPointer<QTextObjectPrivate> d_ptr;
 

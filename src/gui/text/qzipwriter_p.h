@@ -79,6 +79,7 @@ class Q_GUI_EXPORT QZipWriter
    void addSymLink(const QString &fileName, const QString &destination);
 
    void close();
+
  private:
    QZipWriterPrivate *d;
    Q_DISABLE_COPY(QZipWriter)

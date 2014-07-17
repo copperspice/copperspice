@@ -26,15 +26,15 @@
 #ifndef QTEXTHTMLPARSER_P_H
 #define QTEXTHTMLPARSER_P_H
 
-#include "QtCore/qvector.h"
-#include "QtGui/qbrush.h"
-#include "QtGui/qcolor.h"
-#include "QtGui/qfont.h"
-#include "QtGui/qtextdocument.h"
-#include "QtGui/qtextcursor.h"
-#include "qtextformat_p.h"
-#include "qtextdocument_p.h"
-#include "qcssparser_p.h"
+#include <QtCore/qvector.h>
+#include <QtGui/qbrush.h>
+#include <QtGui/qcolor.h>
+#include <QtGui/qfont.h>
+#include <QtGui/qtextdocument.h>
+#include <QtGui/qtextcursor.h>
+#include <qtextformat_p.h>
+#include <qtextdocument_p.h>
+#include <qcssparser_p.h>
 
 #ifndef QT_NO_TEXTHTMLPARSER
 
@@ -296,6 +296,7 @@ class QTextHtmlParser
    void parse(const QString &text, const QTextDocument *resourceProvider);
 
    static int lookupElement(const QString &element);
+
  protected:
    QTextHtmlParserNode *newNode(int parent);
    QVector<QTextHtmlParserNode> nodes;
@@ -315,6 +316,7 @@ class QTextHtmlParser
    QStringList parseAttributes();
    void applyAttributes(const QStringList &attributes);
    void eatSpace();
+
    inline bool hasPrefix(QChar c, int lookahead = 0) const {
       return pos + lookahead < len && txt.at(pos) == c;
    }

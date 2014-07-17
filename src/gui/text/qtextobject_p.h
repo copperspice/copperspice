@@ -26,12 +26,13 @@
 #ifndef QTEXTOBJECT_P_H
 #define QTEXTOBJECT_P_H
 
-#include "QtGui/qtextobject.h"
-#include "QtGui/qtextdocument.h"
+#include <QtGui/qtextobject.h>
+#include <QtGui/qtextdocument.h>
 
 QT_BEGIN_NAMESPACE
 
 class QTextDocumentPrivate;
+class QTextFrameLayoutData;
 
 class QTextObjectPrivate
 {
@@ -52,7 +53,6 @@ class QTextObjectPrivate
 
 };
 
-
 class QTextBlockGroupPrivate : public QTextObjectPrivate
 {
    Q_DECLARE_PUBLIC(QTextBlockGroup)
@@ -65,8 +65,6 @@ class QTextBlockGroupPrivate : public QTextObjectPrivate
    BlockList blocks;
    void markBlocksDirty();
 };
-
-class QTextFrameLayoutData;
 
 class QTextFramePrivate : public QTextObjectPrivate
 {

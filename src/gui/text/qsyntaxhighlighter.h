@@ -80,6 +80,8 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 
    QTextBlock currentBlock() const;
 
+   QScopedPointer<QSyntaxHighlighterPrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QSyntaxHighlighter)
 
@@ -88,10 +90,7 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_delayedRehighlight())
    GUI_CS_SLOT_2(_q_delayedRehighlight)
-
- protected:
-   QScopedPointer<QSyntaxHighlighterPrivate> d_ptr;
-
+   
 };
 
 QT_END_NAMESPACE

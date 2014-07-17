@@ -26,7 +26,7 @@
 #ifndef QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 #define QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 
-#include "QtCore/qhash.h"
+#include <QtCore/qhash.h>
 
 QT_BEGIN_NAMESPACE
 

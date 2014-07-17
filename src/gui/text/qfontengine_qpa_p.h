@@ -30,7 +30,7 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/qendian.h>
 #include <QtCore/QBuffer>
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 #include <QtCore/QFile>
 
 QT_BEGIN_NAMESPACE

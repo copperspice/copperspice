@@ -26,22 +26,22 @@
 #ifndef QFONTENGINE_P_H
 #define QFONTENGINE_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtCore/qatomic.h"
+#include <QtCore/qglobal.h>
+#include <QtCore/qatomic.h>
 #include <QtCore/qvarlengtharray.h>
 #include <QtCore/QLinkedList>
-#include "qtextengine_p.h"
-#include "qfont_p.h"
+#include <qtextengine_p.h>
+#include <qfont_p.h>
 
 #ifdef Q_OS_WIN
-#   include "QtCore/qt_windows.h"
+#   include <QtCore/qt_windows.h>
 #endif
 
 #ifdef Q_OS_MAC
-#   include "qt_mac_p.h"
-#   include "QtCore/qmap.h"
-#   include "QtCore/qcache.h"
-#   include "qcore_mac_p.h"
+#   include <qt_mac_p.h>
+#   include <QtCore/qmap.h>
+#   include <QtCore/qcache.h>
+#   include <qcore_mac_p.h>
 #endif
 
 #include <qfontengineglyphcache_p.h>
@@ -53,7 +53,6 @@ QT_BEGIN_NAMESPACE
 
 class QChar;
 class QPainterPath;
-
 class QTextEngine;
 struct QGlyphLayout;
 
@@ -63,7 +62,6 @@ struct QGlyphLayout;
     (((quint32)(ch3)) << 8) | \
     ((quint32)(ch4)) \
    )
-
 
 class Q_GUI_EXPORT QFontEngine : public QObject
 {
@@ -167,6 +165,7 @@ class Q_GUI_EXPORT QFontEngine : public QObject
 #if !defined(Q_WS_X11) && !defined(Q_OS_WIN) && !defined(Q_OS_MAC) && !defined(Q_WS_QPA)
    virtual void draw(QPaintEngine *p, qreal x, qreal y, const QTextItemInt &si) = 0;
 #endif
+
    virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
                                 QPainterPath *path, QTextItem::RenderFlags flags);
 

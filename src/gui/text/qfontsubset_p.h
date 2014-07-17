@@ -26,7 +26,7 @@
 #ifndef QFONTSUBSET_P_H
 #define QFONTSUBSET_P_H
 
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 
 #ifndef QT_NO_PRINTER
 

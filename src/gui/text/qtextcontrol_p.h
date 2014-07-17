@@ -281,6 +281,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
    virtual void timerEvent(QTimerEvent *e);
    virtual bool event(QEvent *e);
 
+   QScopedPointer<QTextControlPrivate> d_ptr;
+ 
  private:
    Q_DISABLE_COPY(QTextControl)
 
@@ -301,10 +303,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_documentLayoutChanged())
    GUI_CS_SLOT_2(_q_documentLayoutChanged)
-
- protected:
-   QScopedPointer<QTextControlPrivate> d_ptr;
-
+ 
 };
 
 
@@ -312,6 +311,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
 class QUnicodeControlCharacterMenu : public QMenu
 {
    CS_OBJECT(QUnicodeControlCharacterMenu)
+
  public:
    QUnicodeControlCharacterMenu(QObject *editWidget, QWidget *parent);
 
@@ -319,7 +319,6 @@ class QUnicodeControlCharacterMenu : public QMenu
    GUI_CS_SLOT_1(Private, void menuActionTriggered())
    GUI_CS_SLOT_2(menuActionTriggered)
 
- private:
    QObject *editWidget;
 };
 #endif // QT_NO_CONTEXTMENU
@@ -332,8 +331,10 @@ class QTextEditMimeData : public QMimeData
    inline QTextEditMimeData(const QTextDocumentFragment &aFragment) : fragment(aFragment) {}
 
    virtual QStringList formats() const;
+
  protected:
    virtual QVariant retrieveData(const QString &mimeType, QVariant::Type type) const;
+
  private:
    void setup() const;
 

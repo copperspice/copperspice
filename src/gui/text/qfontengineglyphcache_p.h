@@ -26,20 +26,20 @@
 #ifndef QFONTENGINEGLYPHCACHE_P_H
 #define QFONTENGINEGLYPHCACHE_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtCore/qatomic.h"
+#include <QtCore/qglobal.h>
+#include <QtCore/qatomic.h>
 #include <QtCore/qvarlengtharray.h>
-#include "qfont_p.h"
+#include <qfont_p.h>
 
 #ifdef Q_OS_WIN
-#   include "QtCore/qt_windows.h"
+#   include <QtCore/qt_windows.h>
 #endif
 
 #ifdef Q_OS_MAC
-#   include "qt_mac_p.h"
-#   include "QtCore/qmap.h"
-#   include "QtCore/qcache.h"
-#   include "qcore_mac_p.h"
+#   include <qt_mac_p.h>
+#   include <QtCore/qmap.h>
+#   include <QtCore/qcache.h>
+#   include <qcore_mac_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

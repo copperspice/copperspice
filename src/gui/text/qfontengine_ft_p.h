@@ -26,7 +26,7 @@
 #ifndef QFONTENGINE_FT_P_H
 #define QFONTENGINE_FT_P_H
 
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 
 #ifndef QT_NO_FREETYPE
 

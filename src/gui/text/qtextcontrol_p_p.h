@@ -26,14 +26,14 @@
 #ifndef QTEXTCONTROL_P_P_H
 #define QTEXTCONTROL_P_P_H
 
-#include "QtGui/qtextdocumentfragment.h"
-#include "QtGui/qscrollbar.h"
-#include "QtGui/qtextcursor.h"
-#include "QtGui/qtextformat.h"
-#include "QtGui/qmenu.h"
-#include "QtGui/qabstracttextdocumentlayout.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qpointer.h"
+#include <QtGui/qtextdocumentfragment.h>
+#include <QtGui/qscrollbar.h>
+#include <QtGui/qtextcursor.h>
+#include <QtGui/qtextformat.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qabstracttextdocumentlayout.h>
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qpointer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -61,10 +61,8 @@ class QTextControlPrivate
 
    void createAutoBulletList();
 
-   void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
-             QTextDocument *document = 0);
-   void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(),
-                   QTextDocument *document = 0);
+   void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = 0);
+   void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = 0);
    void startDrag();
 
    void paste(const QMimeData *source);
@@ -107,29 +105,24 @@ class QTextControlPrivate
    QString anchorForCursor(const QTextCursor &anchor) const;
 
    void keyPressEvent(QKeyEvent *e);
-   void mousePressEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                        Qt::KeyboardModifiers modifiers,
-                        Qt::MouseButtons buttons,
-                        const QPoint &globalPos);
-   void mouseMoveEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                       Qt::KeyboardModifiers modifiers,
-                       Qt::MouseButtons buttons,
-                       const QPoint &globalPos);
-   void mouseReleaseEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                          Qt::KeyboardModifiers modifiers,
-                          Qt::MouseButtons buttons,
-                          const QPoint &globalPos);
-   void mouseDoubleClickEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos,
-                              Qt::KeyboardModifiers modifiers,
-                              Qt::MouseButtons buttons,
-                              const QPoint &globalPos);
-   bool sendMouseEventToInputContext(QEvent *e,  QEvent::Type eventType, Qt::MouseButton button,
-                                     const QPointF &pos,
-                                     Qt::KeyboardModifiers modifiers,
-                                     Qt::MouseButtons buttons,
-                                     const QPoint &globalPos);
+   void mousePressEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
+         Qt::MouseButtons buttons, const QPoint &globalPos);
+
+   void mouseMoveEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
+         Qt::MouseButtons buttons, const QPoint &globalPos);
+
+   void mouseReleaseEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
+         Qt::MouseButtons buttons, const QPoint &globalPos);
+
+   void mouseDoubleClickEvent(QEvent *e, Qt::MouseButton button, const QPointF &pos, Qt::KeyboardModifiers modifiers,
+         Qt::MouseButtons buttons, const QPoint &globalPos);
+
+   bool sendMouseEventToInputContext(QEvent *e,  QEvent::Type eventType, Qt::MouseButton button, const QPointF &pos,
+         Qt::KeyboardModifiers modifiers, Qt::MouseButtons buttons, const QPoint &globalPos);
+
    void contextMenuEvent(const QPoint &screenPos, const QPointF &docPos, QWidget *contextWidget);
    void focusEvent(QFocusEvent *e);
+
 #ifdef QT_KEYPAD_NAVIGATION
    void editFocusEvent(QEvent *e);
 #endif
@@ -189,9 +182,11 @@ class QTextControlPrivate
 
    QPalette palette;
    bool hasFocus;
+
 #ifdef QT_KEYPAD_NAVIGATION
    bool hasEditFocus;
 #endif
+
    bool isEnabled;
 
    QString highlightedAnchor; // Anchor below cursor

@@ -51,12 +51,8 @@ class Q_GUI_EXPORT QRawFont
    };
 
    QRawFont();
-   QRawFont(const QString &fileName,
-            qreal pixelSize,
-            QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
-   QRawFont(const QByteArray &fontData,
-            qreal pixelSize,
-            QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+   QRawFont(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+   QRawFont(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
    QRawFont(const QRawFont &other);
    ~QRawFont();
 
@@ -80,9 +76,9 @@ class Q_GUI_EXPORT QRawFont
    bool glyphIndexesForChars(const QChar *chars, int numChars, quint32 *glyphIndexes, int *numGlyphs) const;
    bool advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *advances, int numGlyphs) const;
 
-   QImage alphaMapForGlyph(quint32 glyphIndex,
-                           AntialiasingType antialiasingType = SubPixelAntialiasing,
+   QImage alphaMapForGlyph(quint32 glyphIndex, AntialiasingType antialiasingType = SubPixelAntialiasing,
                            const QTransform &transform = QTransform()) const;
+
    QPainterPath pathForGlyph(quint32 glyphIndex) const;
 
    void setPixelSize(qreal pixelSize);
@@ -99,13 +95,9 @@ class Q_GUI_EXPORT QRawFont
 
    qreal unitsPerEm() const;
 
-   void loadFromFile(const QString &fileName,
-                     qreal pixelSize,
-                     QFont::HintingPreference hintingPreference);
+   void loadFromFile(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
-   void loadFromData(const QByteArray &fontData,
-                     qreal pixelSize,
-                     QFont::HintingPreference hintingPreference);
+   void loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    bool supportsCharacter(quint32 ucs4) const;
    bool supportsCharacter(QChar character) const;
@@ -113,8 +105,7 @@ class Q_GUI_EXPORT QRawFont
 
    QByteArray fontTable(const char *tagName) const;
 
-   static QRawFont fromFont(const QFont &font,
-                            QFontDatabase::WritingSystem writingSystem = QFontDatabase::Any);
+   static QRawFont fromFont(const QFont &font, QFontDatabase::WritingSystem writingSystem = QFontDatabase::Any);
 
  private:
    friend class QRawFontPrivate;

@@ -26,16 +26,16 @@
 #ifndef QTEXTDOCUMENTFRAGMENT_P_H
 #define QTEXTDOCUMENTFRAGMENT_P_H
 
-#include "QtGui/qtextdocument.h"
-#include "qtexthtmlparser_p.h"
-#include "qtextdocument_p.h"
-#include "QtGui/qtexttable.h"
-#include "QtCore/qatomic.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qpointer.h"
-#include "QtCore/qvarlengtharray.h"
-#include "QtCore/qdatastream.h"
+#include <QtGui/qtextdocument.h>
+#include <qtexthtmlparser_p.h>
+#include <qtextdocument_p.h>
+#include <QtGui/qtexttable.h>
+#include <QtCore/qatomic.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qpointer.h>
+#include <QtCore/qvarlengtharray.h>
+#include <QtCore/qdatastream.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -87,6 +87,7 @@ class QTextDocumentFragmentPrivate
    QTextDocument *doc;
 
    uint importedFromPlainText : 1;
+
  private:
    Q_DISABLE_COPY(QTextDocumentFragmentPrivate)
 };
@@ -137,6 +138,7 @@ class QTextHtmlImporter : public QTextHtmlParser
 #ifdef Q_CC_SUN
    friend struct QTextHtmlImporter::Table;
 #endif
+
    struct TableCellIterator {
       inline TableCellIterator(QTextTable *t = 0) : table(t), row(0), column(0) {}
 

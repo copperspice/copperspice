@@ -26,8 +26,8 @@
 #ifndef QGLYPHRUN_P_H
 #define QGLYPHRUN_P_H
 
-#include "qglyphrun.h"
-#include "qrawfont.h"
+#include <qglyphrun.h>
+#include <qrawfont.h>
 #include <qfont.h>
 
 #if !defined(QT_NO_RAWFONT)
