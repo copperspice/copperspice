@@ -23,6 +23,7 @@
 ***********************************************************************/
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QHash>
 #include <QtCore/QRegExp>
 #include <QtCore/QMutexLocker>
 #include <QtGui/QTextDocument>
@@ -31,15 +32,12 @@
 
 QString QHelpGlobal::uniquifyConnectionName(const QString &name, void *pointer)
 {
-    static int counter = 0;
     static QMutex mutex;
-
     QMutexLocker locker(&mutex);
-    if (++counter > 1000)
-        counter = 0;
+    static QHash<QString,quint16> idHash;
 
     return QString::fromLatin1("%1-%2-%3").
-        arg(name).arg(quintptr(pointer)).arg(counter);
+        arg(name).arg(quintptr(pointer)).arg(++idHash[name]);
 }
 
 QString QHelpGlobal::documentTitle(const QString &content)
