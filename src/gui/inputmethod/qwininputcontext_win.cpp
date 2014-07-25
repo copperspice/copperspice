@@ -426,7 +426,7 @@ bool QWinInputContext::endComposition()
 {
    QWidget *fw = focusWidget();
 #ifdef Q_IME_DEBUG
-   qDebug("endComposition! fw = %s", fw ? fw->className() : "(null)");
+   qDebug() << "endComposition! fw=" <<  fw;
 #endif
    bool result = true;
    if (imePosition == -1 || recursionGuard) {
@@ -473,7 +473,7 @@ void QWinInputContext::reset()
    QWidget *fw = focusWidget();
 
 #ifdef Q_IME_DEBUG
-   qDebug("sending accept to focus widget %s", fw ? fw->className() : "(null)");
+   qDebug() << "sending accept to focus widget" <<  fw;
 #endif
 
    if (fw && imePosition != -1) {
@@ -551,7 +551,7 @@ bool QWinInputContext::composition(LPARAM lParam)
    if (lParam & CS_NOMOVECARET) {
       str += "NOMOVECARET ";
    }
-   qDebug("composition, lParam=(%x) %s imePosition=%d", lParam, str.latin1(), imePosition);
+   qDebug("composition, lParam=(%x) %s imePosition=%d", lParam, qPrintable(str), imePosition);
 #endif
 
    bool result = true;
@@ -698,7 +698,7 @@ void QWinInputContext::updateImeStatus(QWidget *w, bool hasFocus)
             && !(focusProxyWidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText));
    bool hasIme = e && hasFocus;
 #ifdef Q_IME_DEBUG
-   qDebug("%s HasFocus = %d hasIme = %d e = %d ", w->className(), hasFocus, hasIme, e);
+   qDebug("%s HasFocus = %d hasIme = %d e = %d ", w->metaObject()->className(), hasFocus, hasIme, e);
 #endif
    if (hasFocus || e) {
       if (isInPopup(w)) {
@@ -720,7 +720,7 @@ void QWinInputContext::enablePopupChild(QWidget *w, bool e)
       return;
    }
 #ifdef Q_IME_DEBUG
-   qDebug("enablePopupChild: w=%s, enable = %s", w ? w->className() : "(null)" , e ? "true" : "false");
+   qDebug() << "enablePopupChild: w=" << w << "enable=" << e;
 #endif
    QWidget *parent = findParentforPopup(w);
    if (parent) {
@@ -738,7 +738,7 @@ void QWinInputContext::enable(QWidget *w, bool e)
 {
    if (w) {
 #ifdef Q_IME_DEBUG
-      qDebug("enable: w=%s, enable = %s", w ? w->className() : "(null)" , e ? "true" : "false");
+       qDebug() <<"enable: w=" << w << "enable=" << e;
 #endif
       if (!w->testAttribute(Qt::WA_WState_Created)) {
          return;
