@@ -2245,28 +2245,39 @@ QScriptValue QDeclarativeEnginePrivate::scriptValueFromVariant(const QVariant &v
 
 QVariant QDeclarativeEnginePrivate::scriptValueToVariant(const QScriptValue &val, int hint)
 {
-   QScriptDeclarativeClass *dc = QScriptDeclarativeClass::scriptClass(val);
-   if (dc == objectClass) {
-      return QVariant::fromValue(objectClass->toQObject(val));
-   } else if (dc == valueTypeClass) {
-      return valueTypeClass->toVariant(val);
-   } else if (dc == contextClass) {
-      return QVariant();
-   }
+    QScriptDeclarativeClass *dc = QScriptDeclarativeClass::scriptClass(val);
+    if (dc == objectClass)
+        return QVariant::fromValue(objectClass->toQObject(val));
+    else if (dc == valueTypeClass)
+        return valueTypeClass->toVariant(val);
+    else if (dc == contextClass)
+        return QVariant();
 
-   // Convert to a QList<QObject*> only if val is an array and we were explicitly hinted
-   if (hint == qMetaTypeId<QList<QObject *> >() && val.isArray()) {
-      QList<QObject *> list;
-      int length = val.property(QLatin1String("length")).toInt32();
-      for (int ii = 0; ii < length; ++ii) {
-         QScriptValue arrayItem = val.property(ii);
-         QObject *d = arrayItem.toQObject();
-         list << d;
-      }
-      return QVariant::fromValue(list);
-   }
+    bool containsQObjects = false;
 
-   return val.toVariant();
+    if (val.isArray()) {
+        int length = val.property(QLatin1String("length")).toInt32();
+        for (int ii = 0; ii < length; ++ii) {
+            if (val.property(ii).isQObject()) {
+                containsQObjects = true;
+                break;
+            }
+        }
+    }
+
+    // Convert to a QList<QObject*> only if val is an array and we were explicitly hinted
+    if (hint == qMetaTypeId<QList<QObject *> >() && val.isArray() && containsQObjects) {
+        QList<QObject *> list;
+        int length = val.property(QLatin1String("length")).toInt32();
+        for (int ii = 0; ii < length; ++ii) {
+            QScriptValue arrayItem = val.property(ii);
+            QObject *d = arrayItem.toQObject();
+            list << d;
+        }
+        return QVariant::fromValue(list);
+    }
+
+    return val.toVariant();
 }
 
 /*!
