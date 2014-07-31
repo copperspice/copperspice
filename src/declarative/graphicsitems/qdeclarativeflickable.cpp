@@ -1596,6 +1596,7 @@ bool QDeclarativeFlickable::sendMouseEvent(QGraphicsSceneMouseEvent *event)
                return true;
             }
             d->handleMouseReleaseEvent(&mouseEvent);
+            stealThisEvent = d->stealMouse;
             break;
          default:
             break;
