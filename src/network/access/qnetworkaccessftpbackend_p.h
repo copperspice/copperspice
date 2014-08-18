@@ -63,7 +63,12 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 
    virtual void downstreamReadyWrite();
 
-   void disconnectFromFtp();
+   enum CacheCleanupMode {
+       ReleaseCachedConnection,
+       RemoveCachedConnection
+   };
+
+   void disconnectFromFtp(CacheCleanupMode mode = ReleaseCachedConnection);
 
    NET_CS_SLOT_1(Public, void ftpConnectionReady(QNetworkAccessCache::CacheableObject *object))
    NET_CS_SLOT_2(ftpConnectionReady)
