@@ -449,7 +449,7 @@ QT_USE_NAMESPACE
 - (void)panelSelectionDidChange: (id)sender
 {
    Q_UNUSED(sender);
-   if (mPriv) {
+   if (mPriv && [mSavePanel isVisible]) {
       QString selection = QT_PREPEND_NAMESPACE(qt_mac_NSStringToQString([mSavePanel filename]));
       if (selection != mCurrentSelection) {
          *mCurrentSelection = selection;
