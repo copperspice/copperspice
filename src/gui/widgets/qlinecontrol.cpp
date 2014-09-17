@@ -1783,7 +1783,7 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
          paste(mode);
       }
    } else if (event == QKeySequence::Cut) {
-      if (!isReadOnly()) {
+      if (!isReadOnly() && hasSelectedText()) {
          copy();
          del();
       }
