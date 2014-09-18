@@ -797,6 +797,17 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
    }
 
    if (metric) {
+      // If metrics requested, retrieve first using GGO_METRICS, because the returned
+      // values are incorrect for OpenType PS fonts if obtained at the same time as the
+      // glyph paths themselves (ie. with GGO_NATIVE as the format).
+      uint format = GGO_METRICS;
+      if (ttf) {
+          format |= GGO_GLYPH_INDEX;
+      }
+      int res = GetGlyphOutline(hdc, glyph, format, &gMetric, 0, 0, &mat);
+      if (res == GDI_ERROR) {
+          return false;
+      }
       // #### obey scale
       *metric = glyph_metrics_t(gMetric.gmptGlyphOrigin.x, -gMetric.gmptGlyphOrigin.y,
                                 (int)gMetric.gmBlackBoxX, (int)gMetric.gmBlackBoxY,
