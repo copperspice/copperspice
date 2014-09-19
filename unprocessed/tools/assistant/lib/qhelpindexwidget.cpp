@@ -213,7 +213,7 @@ QHelpIndexModel::QHelpIndexModel(QHelpEnginePrivate *helpEngine)
     d = new QHelpIndexModelPrivate(helpEngine);
 
     connect(d->indexProvider, SIGNAL(finished()), this, SLOT(insertIndices()));
-    connect(helpEngine->q, SIGNAL(setupStarted()), this, SLOT(invalidateIndex()));
+    connect(helpEngine->q, SIGNAL(readersAboutToBeInvalidated()), this, SLOT(invalidateIndex()));
 }
 
 QHelpIndexModel::~QHelpIndexModel()

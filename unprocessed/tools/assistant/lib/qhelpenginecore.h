@@ -102,6 +102,7 @@ Q_SIGNALS:
     void setupFinished();
     void currentFilterChanged(const QString &newFilter);
     void warning(const QString &msg);
+    void readersAboutToBeInvalidated();
 
 protected:
     QHelpEngineCore(QHelpEngineCorePrivate *helpEngineCorePrivate,
