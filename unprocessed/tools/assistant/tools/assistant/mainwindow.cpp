@@ -381,9 +381,10 @@ void MainWindow::qtDocumentationInstalled()
 void MainWindow::checkInitState()
 {
     TRACE_OBJ
-    HelpEngineWrapper::instance().initialDocSetupDone();
-    if (!m_cmdLine->enableRemoteControl())
+    if (!m_cmdLine->enableRemoteControl()) {
+        HelpEngineWrapper::instance().initialDocSetupDone();
         return;
+    }
 
     HelpEngineWrapper &helpEngine = HelpEngineWrapper::instance();
     if (helpEngine.contentModel()->isCreatingContents()
@@ -400,6 +401,7 @@ void MainWindow::checkInitState()
             disconnect(helpEngine.contentModel(), 0, this, 0);
             disconnect(helpEngine.indexModel(), 0, this, 0);
         }
+        HelpEngineWrapper::instance().initialDocSetupDone();
         emit initDone();
     }
 }
