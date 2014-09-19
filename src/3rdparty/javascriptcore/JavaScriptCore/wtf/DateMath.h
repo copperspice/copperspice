@@ -50,6 +50,34 @@
 #include <wtf/UnusedParam.h>
 
 namespace WTF {
+
+struct LocalTimeOffset {
+    LocalTimeOffset()
+        : isDST(false)
+        , offset(0)
+    {
+    }
+
+    LocalTimeOffset(bool isDST, int offset)
+        : isDST(isDST)
+        , offset(offset)
+    {
+    }
+
+    bool operator==(const LocalTimeOffset& other)
+    {
+        return isDST == other.isDST && offset == other.offset;
+    }
+
+    bool operator!=(const LocalTimeOffset& other)
+    {
+        return isDST != other.isDST || offset != other.offset;
+    }
+
+    bool isDST;
+    int offset;
+};
+
 void initializeDates();
 int equivalentYearForDST(int year);
 
@@ -83,6 +111,9 @@ int dayInYear(double ms, int year);
 int monthFromDayInYear(int dayInYear, bool leapYear);
 int dayInMonthFromDayInYear(int dayInYear, bool leapYear);
 
+// Returns combined offset in millisecond (UTC + DST).
+LocalTimeOffset calculateLocalTimeOffset(double utcInMilliseconds);
+
 } // namespace WTF
 
 using WTF::dateToDaysFrom1970;
@@ -94,6 +125,8 @@ using WTF::msPerDay;
 using WTF::msPerSecond;
 using WTF::msToYear;
 using WTF::secondsPerMinute;
+using WTF::LocalTimeOffset;
+using WTF::calculateLocalTimeOffset;
 
 #if USE(JSC)
 namespace JSC {
@@ -126,33 +159,6 @@ struct GregorianDateTime : Noncopyable {
     ~GregorianDateTime()
     {
         delete [] timeZone;
-    }
-
-    GregorianDateTime(ExecState* exec, const tm& inTm)
-        : second(inTm.tm_sec)
-        , minute(inTm.tm_min)
-        , hour(inTm.tm_hour)
-        , weekDay(inTm.tm_wday)
-        , monthDay(inTm.tm_mday)
-        , yearDay(inTm.tm_yday)
-        , month(inTm.tm_mon)
-        , year(inTm.tm_year)
-        , isDST(inTm.tm_isdst)
-    {
-        UNUSED_PARAM(exec);
-#if HAVE(TM_GMTOFF)
-        utcOffset = static_cast<int>(inTm.tm_gmtoff);
-#else
-        utcOffset = static_cast<int>(getUTCOffset(exec) / WTF::msPerSecond + (isDST ? WTF::secondsPerHour : 0));
-#endif
-
-#if HAVE(TM_ZONE)
-        int inZoneSize = strlen(inTm.tm_zone) + 1;
-        timeZone = new char[inZoneSize];
-        strncpy(timeZone, inTm.tm_zone, inZoneSize);
-#else
-        timeZone = 0;
-#endif
     }
 
     operator tm() const

@@ -129,10 +129,8 @@ ConstructType DateConstructor::getConstructData(ConstructData& constructData)
 // ECMA 15.9.2
 static JSValue JSC_HOST_CALL callDate(ExecState* exec, JSObject*, JSValue, const ArgList&)
 {
-    time_t localTime = time(0);
-    tm localTM;
-    getLocalTime(&localTime, &localTM);
-    GregorianDateTime ts(exec, localTM);
+    GregorianDateTime ts;
+    msToGregorianDateTime(exec, currentTimeMS(), false, ts);
     DateConversionBuffer date;
     DateConversionBuffer time;
     formatDate(ts, date);

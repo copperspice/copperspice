@@ -165,7 +165,6 @@ JSGlobalData::JSGlobalData(GlobalDataType globalDataType, ThreadStackType thread
     , heap(this)
     , globalObjectCount(0)
     , dynamicGlobalObject(0)
-    , cachedUTCOffset(NaN)
     , maxReentryDepth(threadStackType == ThreadStackTypeSmall ? MaxSmallThreadReentryDepth : MaxLargeThreadReentryDepth)
     , m_regExpCache(new RegExpCache(this))
 #if ENABLE(REGEXP_TRACING)
@@ -377,8 +376,7 @@ JSGlobalData::ClientData::~ClientData()
 
 void JSGlobalData::resetDateCache()
 {
-    cachedUTCOffset = NaN;
-    dstOffsetCache.reset();
+    localTimeOffsetCache.reset();
     cachedDateString = UString();
     cachedDateStringValue = NaN;
     dateInstanceCache.reset();

@@ -143,7 +143,6 @@ JSGlobalData::JSGlobalData(bool isShared)
     , functionCodeBlockBeingReparsed(0)
     , firstStringifierToMark(0)
     , markStack(jsArrayVPtr)
-    , cachedUTCOffset(NaN)
 #ifndef NDEBUG
     , mainThreadOnly(false)
 #endif
@@ -259,8 +258,7 @@ JSGlobalData::ClientData::~ClientData()
 
 void JSGlobalData::resetDateCache()
 {
-    cachedUTCOffset = NaN;
-    dstOffsetCache.reset();
+    localTimeOffsetCache.reset();
     cachedDateString = UString();
     dateInstanceCache.reset();
 }

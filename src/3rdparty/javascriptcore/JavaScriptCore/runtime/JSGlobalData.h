@@ -39,6 +39,7 @@
 #include "SmallStrings.h"
 #include "TimeoutChecker.h"
 #include "WeakRandom.h"
+#include <wtf/DateMath.h>
 #include <wtf/Forward.h>
 #include <wtf/HashMap.h>
 #include <wtf/RefCounted.h>
@@ -63,21 +64,23 @@ namespace JSC {
     struct HashTable;
     struct Instruction;    
 
-    struct DSTOffsetCache {
-        DSTOffsetCache()
+    struct LocalTimeOffsetCache {
+        LocalTimeOffsetCache()
+            : start(0.0)
+            , end(-1.0)
+            , increment(0.0)
         {
-            reset();
         }
-        
+
         void reset()
         {
-            offset = 0.0;
+            offset = LocalTimeOffset();
             start = 0.0;
             end = -1.0;
             increment = 0.0;
         }
 
-        double offset;
+        LocalTimeOffset offset;
         double start;
         double end;
         double increment;
@@ -179,8 +182,7 @@ namespace JSC {
 
         MarkStack markStack;
 
-        double cachedUTCOffset;
-        DSTOffsetCache dstOffsetCache;
+        LocalTimeOffsetCache localTimeOffsetCache;
         
         UString cachedDateString;
         double cachedDateStringValue;
