@@ -56,6 +56,7 @@ public:
 
 class QHelpContentProvider : public QThread
 {
+    Q_OBJECT
 public:
     QHelpContentProvider(QHelpEnginePrivate *helpEngine);
     ~QHelpContentProvider();
@@ -64,11 +65,13 @@ public:
     QHelpContentItem *rootItem();
     int nextChildCount() const;
 
+signals:
+    void finishedSuccessFully();
+
 private:
     void run();
 
     QHelpEnginePrivate *m_helpEngine;
-    QHelpContentItem *m_rootItem;
     QStringList m_filterAttributes;
     QQueue<QHelpContentItem*> m_rootItems;
     QMutex m_mutex;
@@ -179,7 +182,6 @@ QHelpContentProvider::QHelpContentProvider(QHelpEnginePrivate *helpEngine)
     : QThread(helpEngine)
 {
     m_helpEngine = helpEngine;
-    m_rootItem = 0;
     m_abort = false;
 }
 
@@ -236,8 +238,7 @@ void QHelpContentProvider::run()
     QHelpContentItem *item = 0;
 
     m_mutex.lock();
-    m_rootItem = new QHelpContentItem(QString(), QString(), 0);
-    m_rootItems.enqueue(m_rootItem);
+    QHelpContentItem * const rootItem = new QHelpContentItem(QString(), QString(), 0);
     QStringList atts = m_filterAttributes;
     const QStringList fileNames = m_helpEngine->orderedFileNameList;
     m_mutex.unlock();
@@ -245,9 +246,10 @@ void QHelpContentProvider::run()
     foreach (const QString &dbFileName, fileNames) {
         m_mutex.lock();
         if (m_abort) {
+            delete rootItem;
             m_abort = false;
             m_mutex.unlock();
-            break;
+            return;
         }
         m_mutex.unlock();
         QHelpDBReader reader(dbFileName,
@@ -275,8 +277,8 @@ CHECK_DEPTH:
                 if (depth == 0) {
                     m_mutex.lock();
                     item = new QHelpContentItem(title, link,
-                        m_helpEngine->fileNameReaderMap.value(dbFileName), m_rootItem);
-                    m_rootItem->appendChild(item);
+                        m_helpEngine->fileNameReaderMap.value(dbFileName), rootItem);
+                    rootItem->appendChild(item);
                     m_mutex.unlock();
                     stack.push(item);
                     _depth = 1;
@@ -300,8 +302,10 @@ CHECK_DEPTH:
         }
     }
     m_mutex.lock();
+    m_rootItems.enqueue(rootItem);
     m_abort = false;
     m_mutex.unlock();
+    emit finishedSuccessFully();
 }
 
 
@@ -336,7 +340,7 @@ QHelpContentModel::QHelpContentModel(QHelpEnginePrivate *helpEngine)
     d->rootItem = 0;
     d->qhelpContentProvider = new QHelpContentProvider(helpEngine);
 
-    connect(d->qhelpContentProvider, SIGNAL(finished()),
+    connect(d->qhelpContentProvider, SIGNAL(finishedSuccessFully()),
         this, SLOT(insertContents()), Qt::QueuedConnection);
     connect(helpEngine->q, SIGNAL(readersAboutToBeInvalidated()), this, SLOT(invalidateContents()));
 }
@@ -375,6 +379,9 @@ void QHelpContentModel::createContents(const QString &customFilterName)
 
 void QHelpContentModel::insertContents()
 {
+    QHelpContentItem * const newRootItem = d->qhelpContentProvider->rootItem();
+    if (!newRootItem)
+        return;
     int count;
     if (d->rootItem) {
         count = d->rootItem->childCount() - 1;
@@ -386,7 +393,7 @@ void QHelpContentModel::insertContents()
 
     count = d->qhelpContentProvider->nextChildCount() - 1;
     beginInsertRows(QModelIndex(), 0, count > 0 ? count : 0);
-    d->rootItem = d->qhelpContentProvider->rootItem();
+    d->rootItem = newRootItem;
     endInsertRows();
     reset();
     emit contentsCreated();
@@ -573,3 +580,5 @@ void QHelpContentWidget::showLink(const QModelIndex &index)
 }
 
 QT_END_NAMESPACE
+
+#include "qhelpcontentwidget.moc"
