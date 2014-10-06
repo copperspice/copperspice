@@ -507,7 +507,7 @@ class QSystemTrayIconQMenu : public QMenu
          [item setState: action->isChecked() ? NSOnState : NSOffState];
          [item setToolTip: (NSString *)QCFString::toCFStringRef(action->toolTip())];
          const QIcon icon = action->icon();
-         if (!icon.isNull()) {
+         if (!icon.isNull() && action->isIconVisibleInMenu()) {
 
             const short scale = [[NSApp mainMenu] menuBarHeight];
 
