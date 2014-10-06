@@ -2777,7 +2777,7 @@ void QWidgetPrivate::setGeometry_sys_helper(int x, int y, int w, int h, bool isM
 
       setWSGeometry(false, oldRect);
 
-      if (isResize && QApplicationPrivate::graphicsSystem()) {
+      if (isResize && q->parentWidget() && QApplicationPrivate::graphicsSystem()) {
          invalidateBuffer_resizeHelper(oldp, olds);
       }
    }
