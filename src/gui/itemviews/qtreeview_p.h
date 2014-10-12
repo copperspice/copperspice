@@ -199,6 +199,8 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    QSet<QPersistentModelIndex> hiddenIndexes;
 
    inline bool isRowHidden(const QModelIndex &idx) const {
+      if (hiddenIndexes.isEmpty())
+          return false;
       //We first check if the idx is a QPersistentModelIndex, because creating QPersistentModelIndex is slow
       return isPersistent(idx) && hiddenIndexes.contains(idx);
    }
