@@ -291,6 +291,7 @@ class QGridLayoutItem
    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
    QGridLayoutBox box(Qt::Orientation orientation, qreal constraint = -1.0) const;
    QRectF geometryWithin(qreal x, qreal y, qreal width, qreal height, qreal rowDescent) const;
+   bool isIgnored();
 
    QGraphicsLayoutItem *layoutItem() const {
       return q_layoutItem;
