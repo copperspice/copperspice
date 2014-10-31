@@ -109,12 +109,14 @@ PlatformMouseEvent::PlatformMouseEvent(QInputEvent* event, int clickCount)
     if (me) {
         m_position = IntPoint(me->pos());
         m_globalPosition = IntPoint(me->globalPos());
+        const Qt::MouseButtons mouseButtons = (m_eventType == MouseEventMoved) ? me->buttons() : me->button();
 
-        if (me->button() == Qt::LeftButton || (me->buttons() & Qt::LeftButton))
+
+        if (mouseButtons & Qt::LeftButton)
             m_button = LeftButton;
-        else if (me->button() == Qt::RightButton || (me->buttons() & Qt::RightButton))
+        else if (mouseButtons & Qt::RightButton)
             m_button = RightButton;
-        else if (me->button() == Qt::MidButton || (me->buttons() & Qt::MidButton))
+        else if (mouseButtons  & Qt::MidButton)
             m_button = MiddleButton;
         else
             m_button = NoButton;
