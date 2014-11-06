@@ -27,7 +27,6 @@
 #define QPRINTERINFO_H
 
 #include <QtCore/QList>
-
 #include <QtGui/QPrinter>
 
 QT_BEGIN_NAMESPACE
@@ -38,7 +37,6 @@ class QPrinterInfoPrivateDeleter;
 
 class Q_GUI_EXPORT QPrinterInfo
 {
-
  public:
    QPrinterInfo();
    QPrinterInfo(const QPrinterInfo &other);

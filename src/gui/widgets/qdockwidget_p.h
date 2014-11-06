@@ -26,10 +26,10 @@
 #ifndef QDockWidget_P_H
 #define QDockWidget_P_H
 
-#include "QtGui/qstyleoption.h"
-#include "qwidget_p.h"
-#include "QtGui/qboxlayout.h"
-#include "QtGui/qdockwidget.h"
+#include <QtGui/qstyleoption.h>
+#include <qwidget_p.h>
+#include <QtGui/qboxlayout.h>
+#include <QtGui/qdockwidget.h>
 
 #ifndef QT_NO_DOCKWIDGET
 
@@ -58,8 +58,7 @@ class QDockWidgetPrivate : public QWidgetPrivate
  public:
    inline QDockWidgetPrivate()
       : QWidgetPrivate(), state(0),
-        features(QDockWidget::DockWidgetClosable
-                 | QDockWidget::DockWidgetMovable
+        features(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable 
                  | QDockWidget::DockWidgetFloatable),
         allowedAreas(Qt::AllDockWidgetAreas) {
    }
@@ -104,6 +103,7 @@ class QDockWidgetPrivate : public QWidgetPrivate
 class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
 {
    CS_OBJECT(QDockWidgetLayout)
+
  public:
    QDockWidgetLayout(QWidget *parent = 0);
    ~QDockWidgetLayout();

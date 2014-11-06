@@ -26,9 +26,9 @@
 #ifndef QCOLOR_P_H
 #define QCOLOR_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtGui/qrgb.h"
-#include "QtCore/qstringlist.h"
+#include <QtCore/qglobal.h>
+#include <QtGui/qrgb.h>
+#include <QtCore/qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -65,9 +65,7 @@ class Q_GUI_EXPORT QActionGroup : public QObject
    GUI_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
    GUI_CS_SLOT_2(setEnabled)
 
-   GUI_CS_SLOT_1(Public, void setDisabled(bool b) {
-      setEnabled(!b);
-   })
+   GUI_CS_SLOT_1(Public, void setDisabled(bool b) { setEnabled(!b); })
    GUI_CS_SLOT_2(setDisabled)
 
    GUI_CS_SLOT_1(Public, void setVisible(bool un_named_arg1))
@@ -82,6 +80,9 @@ class Q_GUI_EXPORT QActionGroup : public QObject
    GUI_CS_SIGNAL_1(Public, void hovered(QAction *un_named_arg1))
    GUI_CS_SIGNAL_2(hovered, un_named_arg1)
 
+ protected:
+   QScopedPointer<QActionGroupPrivate> d_ptr;
+
  private:
    Q_DISABLE_COPY(QActionGroup)
 
@@ -93,9 +94,6 @@ class Q_GUI_EXPORT QActionGroup : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_actionHovered())
    GUI_CS_SLOT_2(_q_actionHovered)
-
- protected:
-   QScopedPointer<QActionGroupPrivate> d_ptr;
 
 };
 

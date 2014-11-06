@@ -29,7 +29,7 @@
 #define QNSTitledFrame_MAC_P_H
 
 #import <Cocoa/Cocoa.h>
-#import "qnsframeview_mac_p.h"
+#import <qnsframeview_mac_p.h>
 
 @interface NSTitledFrame : NSFrameView
 {

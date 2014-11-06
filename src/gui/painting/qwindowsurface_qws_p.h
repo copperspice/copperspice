@@ -26,7 +26,7 @@
 #ifndef QWINDOWSURFACE_QWS_P_H
 #define QWINDOWSURFACE_QWS_P_H
 
-#include "qwindowsurface_p.h"
+#include <qwindowsurface_p.h>
 #include <qregion.h>
 #include <qimage.h>
 #include <qdirectpainter_qws.h>
@@ -49,8 +49,7 @@ class Q_GUI_EXPORT QWSWindowSurface : public QWindowSurface
 
    virtual void setGeometry(const QRect &rect);
    virtual void setGeometry(const QRect &rect, const QRegion &mask);
-   virtual void flush(QWidget *widget, const QRegion &region,
-                      const QPoint &offset);
+   virtual void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
 
    virtual bool move(const QPoint &offset);
    virtual QRegion move(const QPoint &offset, const QRegion &newClip);
@@ -190,6 +189,7 @@ class Q_GUI_EXPORT QWSLocalMemSurface : public QWSMemorySurface
 
    void setPermanentState(const QByteArray &data);
    virtual void releaseSurface();
+
  protected:
    uchar *mem;
    int memsize;
@@ -295,8 +295,7 @@ class QScreen;
 class Q_GUI_EXPORT QWSDirectPainterSurface : public QWSWindowSurface
 {
  public:
-   QWSDirectPainterSurface(bool isClient = false,
-                           QDirectPainter::SurfaceFlag flags = QDirectPainter::NonReserved);
+   QWSDirectPainterSurface(bool isClient = false, QDirectPainter::SurfaceFlag flags = QDirectPainter::NonReserved);
    ~QWSDirectPainterSurface();
 
    void setReserved() {

@@ -26,17 +26,18 @@
 #ifndef QPAINTENGINE_MAC_P_H
 #define QPAINTENGINE_MAC_P_H
 
-#include "qpaintengine.h"
-#include "qt_mac_p.h"
-#include "qpaintengine_p.h"
-#include "qpolygonclipper_p.h"
-#include "qfont_p.h"
-#include "qhash.h"
+#include <qpaintengine.h>
+#include <qt_mac_p.h>
+#include <qpaintengine_p.h>
+#include <qpolygonclipper_p.h>
+#include <qfont_p.h>
+#include <qhash.h>
 
 typedef struct CGColorSpace *CGColorSpaceRef;
 QT_BEGIN_NAMESPACE
 
 class QCoreGraphicsPaintEnginePrivate;
+
 class QCoreGraphicsPaintEngine : public QPaintEngine
 {
    Q_DECLARE_PRIVATE(QCoreGraphicsPaintEngine)
@@ -126,12 +127,10 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    Q_DISABLE_COPY(QCoreGraphicsPaintEngine)
 };
 
-/*****************************************************************************
-  Private data
- *****************************************************************************/
 class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QCoreGraphicsPaintEngine)
+
  public:
    QCoreGraphicsPaintEnginePrivate()
       : hd(0), shading(0), stackCount(0), complexXForm(false), disabledSmoothFonts(false) {
@@ -172,6 +171,7 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
    float penOffset();
    QPointF devicePixelSize(CGContextRef context);
    float adjustPenWidth(float penWidth);
+
    inline void setTransform(const QTransform *matrix = 0) {
       CGContextConcatCTM(hd, CGAffineTransformInvert(CGContextGetCTM(hd)));
       CGAffineTransform xform = orig_xform;
@@ -236,6 +236,7 @@ class QMacQuartzPaintDevice : public QPaintDevice
       qWarning("This function should never be called.");
       return 0;
    }
+
  private:
    CGContextRef mCG;
    int mWidth;

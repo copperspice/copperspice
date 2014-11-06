@@ -26,16 +26,17 @@
 #ifndef QABSTRACTSLIDER_P_H
 #define QABSTRACTSLIDER_P_H
 
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qelapsedtimer.h"
-#include "qwidget_p.h"
-#include "qstyle.h"
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qelapsedtimer.h>
+#include <qwidget_p.h>
+#include <qstyle.h>
 
 QT_BEGIN_NAMESPACE
 
 class QAbstractSliderPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractSlider)
+
  public:
    QAbstractSliderPrivate();
    ~QAbstractSliderPrivate();

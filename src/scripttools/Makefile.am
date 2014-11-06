@@ -11,18 +11,6 @@ lib_libCsScriptTools1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -I
 lib_libCsScriptTools1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsScriptTools1_la_LIBADD = lib/libCsCore1.la lib/libCsScript1.la lib/libCsGui1.la
 
-if OSTYPE_LINUX
-lib_libCsScriptTools1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsScriptTools1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsScriptTools1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-endif
-
 SCRIPTTOOLS_INCLUDES =
 SCRIPTTOOLS_PUBLIC_INCLUDES =
 SCRIPTTOOLS_PRIVATE_INCLUDES =

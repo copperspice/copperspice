@@ -58,13 +58,13 @@ class Q_GUI_EXPORT QSound : public QObject
    GUI_CS_SLOT_1(Public, void stop())
    GUI_CS_SLOT_2(stop)
 
- private:
-   Q_DECLARE_PRIVATE(QSound)
-   friend class QAuServer;
-
  protected:
    QScopedPointer<QSoundPrivate> d_ptr;
 
+ private:
+   Q_DECLARE_PRIVATE(QSound)
+   friend class QAuServer;
+ 
 };
 
 #endif // QT_NO_SOUND

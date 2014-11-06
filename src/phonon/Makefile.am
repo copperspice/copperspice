@@ -15,20 +15,6 @@ lib_libCsPhonon1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/phonon -Ipriv
 lib_libCsPhonon1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsPhonon1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la lib/libCsNetwork1.la
 
-if OSTYPE_LINUX
-lib_libCsPhonon1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-lib_libCsPhonon1_la_CXXFLAGS +=
-endif
-
-if OSTYPE_WIN
-lib_libCsPhonon1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-lib_libCsPhonon1_la_LDFLAGS +=
-endif
-
-if OSTYPE_DARWIN
-lib_libCsPhonon1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++  -DQ_OS_UNIX
-endif
-
 PHONON_PUBLIC_INCLUDES = \
 	AbstractAudioOutput \
 	AbstractMediaStream \

@@ -33,7 +33,6 @@ QT_BEGIN_NAMESPACE
 
 class QVariant;
 
-
 #ifdef QT_NO_CURSOR
 // fake class, used on touchscreen devices
 
@@ -51,7 +50,6 @@ class Q_GUI_EXPORT QCursor
 };
 
 #endif
-
 
 
 #ifndef QT_NO_CURSOR
@@ -96,8 +94,6 @@ class Q_GUI_EXPORT QCursor
       setPos(p.x(), p.y());
    }
 
-
-
 #if defined(Q_OS_WIN)
    HCURSOR handle() const;
    QCursor(HCURSOR cursor);
@@ -121,9 +117,6 @@ class Q_GUI_EXPORT QCursor
 #endif
 };
 
-/*****************************************************************************
-  QCursor stream functions
- *****************************************************************************/
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);

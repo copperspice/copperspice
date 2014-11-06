@@ -13,18 +13,6 @@ lib_libCsOpenGL1_la_OBJCXXFLAGS = $(lib_libCsOpenGL1_la_CXXFLAGS)
 lib_libCsOpenGL1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsOpenGL1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la
 
-if OSTYPE_LINUX
-lib_libCsOpenGL1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsOpenGL1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsOpenGL1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-endif
-
 OPENGL_INCLUDES =
 OPENGL_PUBLIC_INCLUDES =
 OPENGL_PRIVATE_INCLUDES =

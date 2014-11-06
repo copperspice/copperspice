@@ -22,6 +22,7 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #ifndef QPLATFORMWINDOWFORMAT_QPA_H
 #define QPLATFORMWINDOWFORMAT_QPA_H
 

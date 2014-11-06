@@ -10,18 +10,6 @@ lib_libCsMultimedia1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Ii
 lib_libCsMultimedia1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsMultimedia1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la
 
-if OSTYPE_LINUX
-lib_libCsMultimedia1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsMultimedia1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsMultimedia1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++ -DQ_OS_UNIX
-endif
-
 MULTIMEDIA_INCLUDES =
 MULTIMEDIA_PUBLIC_INCLUDES =
 MULTIMEDIA_PRIVATE_INCLUDES =

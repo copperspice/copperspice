@@ -26,10 +26,10 @@
 #ifndef QGESTUREMANAGER_P_H
 #define QGESTUREMANAGER_P_H
 
-#include "qobject.h"
-#include "qbasictimer.h"
-#include "qwidget_p.h"
-#include "qgesturerecognizer.h"
+#include <qobject.h>
+#include <qbasictimer.h>
+#include <qwidget_p.h>
+#include <qgesturerecognizer.h>
 
 #ifndef QT_NO_GESTURES
 
@@ -40,6 +40,7 @@ class QGraphicsObject;
 class QGestureManager : public QObject
 {
    CS_OBJECT(QGestureManager)
+
  public:
    QGestureManager(QObject *parent);
    ~QGestureManager();
@@ -49,19 +50,18 @@ class QGestureManager : public QObject
 
    bool filterEvent(QWidget *receiver, QEvent *event);
    bool filterEvent(QObject *receiver, QEvent *event);
+
 #ifndef QT_NO_GRAPHICSVIEW
    bool filterEvent(QGraphicsObject *receiver, QEvent *event);
-#endif //QT_NO_GRAPHICSVIEW
+#endif
 
    static QGestureManager *instance(); // declared in qapplication.cpp
 
    void cleanupCachedGestures(QObject *target, Qt::GestureType type);
-
    void recycle(QGesture *gesture);
 
  protected:
-   bool filterEventThroughContexts(const QMultiMap<QObject *, Qt::GestureType> &contexts,
-                                   QEvent *event);
+   bool filterEventThroughContexts(const QMultiMap<QObject *, Qt::GestureType> &contexts, QEvent *event);
 
  private:
    QMultiMap<Qt::GestureType, QGestureRecognizer *> m_recognizers;
@@ -106,13 +106,11 @@ class QGestureManager : public QObject
    QSet<QGesture *> m_gesturesToDelete;
    void cleanupGesturesForRemovedRecognizer(QGesture *gesture);
 
-   QGesture *getState(QObject *widget, QGestureRecognizer *recognizer,
-                      Qt::GestureType gesture);
-   void deliverEvents(const QSet<QGesture *> &gestures,
-                      QSet<QGesture *> *undeliveredGestures);
-   void getGestureTargets(const QSet<QGesture *> &gestures,
-                          QMap<QWidget *, QList<QGesture *> > *conflicts,
-                          QMap<QWidget *, QList<QGesture *> > *normal);
+   QGesture *getState(QObject *widget, QGestureRecognizer *recognizer, Qt::GestureType gesture);
+   void deliverEvents(const QSet<QGesture *> &gestures, QSet<QGesture *> *undeliveredGestures);
+
+   void getGestureTargets(const QSet<QGesture *> &gestures, 
+                          QMap<QWidget *, QList<QGesture *> > *conflicts, QMap<QWidget *, QList<QGesture *> > *normal);
 
    void cancelGesturesForChildren(QGesture *originatingGesture);
 };

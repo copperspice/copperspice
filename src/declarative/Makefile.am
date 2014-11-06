@@ -17,18 +17,6 @@ lib_libCsDeclarative1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsDeclarative1_la_LIBADD = lib/libCsCore1.la  lib/libCsGui1.la  lib/libCsNetwork1.la  lib/libCsScript1.la \
 					lib/libCsSql1.la  lib/libCsXmlPatterns1.la
 
-if OSTYPE_LINUX
-lib_libCsDeclarative1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsDeclarative1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsDeclarative1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-endif
-
 DECLARATIVE_INCLUDES =
 DECLARATIVE_PUBLIC_INCLUDES =
 DECLARATIVE_PRIVATE_INCLUDES =

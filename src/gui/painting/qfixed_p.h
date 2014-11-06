@@ -26,9 +26,9 @@
 #ifndef QFIXED_P_H
 #define QFIXED_P_H
 
-#include "QtCore/qdebug.h"
-#include "QtCore/qpoint.h"
-#include "QtCore/qsize.h"
+#include <QtCore/qdebug.h>
+#include <QtCore/qpoint.h>
+#include <QtCore/qsize.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -123,8 +123,8 @@ Qt::DropAction qt_mac_mapNSDragOperation(NSDragOperation nsActions);
 Qt::DropActions qt_mac_mapNSDragOperations(NSDragOperation nsActions);
 
 QWidget *qt_mac_getTargetForKeyEvent(QWidget *widgetThatReceivedEvent);
-QWidget *qt_mac_getTargetForMouseEvent(NSEvent *event, QEvent::Type eventType,
-                                       QPoint &returnLocalPoint, QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
+QWidget *qt_mac_getTargetForMouseEvent(NSEvent *event, QEvent::Type eventType, QPoint &returnLocalPoint, 
+                                       QPoint &returnGlobalPoint, QWidget *nativeWidget, QWidget **returnWidgetUnderMouse);
 
 bool qt_mac_handleMouseEvent(NSEvent *event, QEvent::Type eventType, Qt::MouseButton button, QWidget *nativeWidget,
                              bool fakeEvent = false);
@@ -255,7 +255,6 @@ class QMacScrollOptimization
 };
 
 void qt_mac_post_retranslateAppMenu();
-
 
 void qt_mac_display(QWidget *widget);
 void qt_mac_setNeedsDisplay(QWidget *widget);

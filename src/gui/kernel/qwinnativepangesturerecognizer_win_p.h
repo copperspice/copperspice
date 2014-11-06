@@ -32,7 +32,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_NATIVE_GESTURES)
+#if ! defined(QT_NO_NATIVE_GESTURES)
 
 class QWinNativePanGestureRecognizer : public QGestureRecognizer
 {

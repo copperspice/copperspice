@@ -69,9 +69,11 @@ class Q_GUI_EXPORT QMouseEvent : public QInputEvent
  public:
    QMouseEvent(Type type, const QPoint &pos, Qt::MouseButton button,
                Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers);
+
    QMouseEvent(Type type, const QPoint &pos, const QPoint &globalPos,
                Qt::MouseButton button, Qt::MouseButtons buttons,
                Qt::KeyboardModifiers modifiers);
+
    ~QMouseEvent();
 
    inline const QPoint &pos() const {
@@ -102,6 +104,7 @@ class Q_GUI_EXPORT QMouseEvent : public QInputEvent
    static QMouseEvent *createExtendedMouseEvent(Type type, const QPointF &pos,
          const QPoint &globalPos, Qt::MouseButton button,
          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers);
+
    inline bool hasExtendedInfo() const {
       return reinterpret_cast<const QMouseEvent *>(d) == this;
    }
@@ -187,11 +190,13 @@ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
    enum TabletDevice { NoDevice, Puck, Stylus, Airbrush, FourDMouse,
                        XFreeEraser /*internal*/, RotationStylus
                      };
+
    enum PointerType { UnknownPointer, Pen, Cursor, Eraser };
    QTabletEvent(Type t, const QPoint &pos, const QPoint &globalPos, const QPointF &hiResGlobalPos,
                 int device, int pointerType, qreal pressure, int xTilt, int yTilt,
                 qreal tangentialPressure, qreal rotation, int z,
                 Qt::KeyboardModifiers keyState, qint64 uniqueID);
+
    ~QTabletEvent();
 
    inline const QPoint &pos() const {
@@ -273,9 +278,11 @@ class Q_GUI_EXPORT QKeyEvent : public QInputEvent
    int key() const {
       return k;
    }
+
 #ifndef QT_NO_SHORTCUT
    bool matches(QKeySequence::StandardKey key) const;
 #endif
+
    Qt::KeyboardModifiers modifiers() const;
    inline QString text() const {
       return txt;
@@ -289,13 +296,13 @@ class Q_GUI_EXPORT QKeyEvent : public QInputEvent
 
    // Functions for the extended key event information
    static QKeyEvent *createExtendedKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers,
-         quint32 nativeScanCode, quint32 nativeVirtualKey,
-         quint32 nativeModifiers,
-         const QString &text = QString(), bool autorep = false,
-         ushort count = 1);
+         quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers,
+         const QString &text = QString(), bool autorep = false, ushort count = 1);
+
    inline bool hasExtendedInfo() const {
       return reinterpret_cast<const QKeyEvent *>(d) == this;
    }
+
    quint32 nativeScanCode() const;
    quint32 nativeVirtualKey() const;
    quint32 nativeModifiers() const;

@@ -42,15 +42,15 @@ class Q_GUI_EXPORT QBlittable
  public:
    enum Capability {
 
-      SolidRectCapability             = 0x0001,
-      SourcePixmapCapability          = 0x0002,
-      SourceOverPixmapCapability      = 0x0004,
+      SolidRectCapability              = 0x0001,
+      SourcePixmapCapability           = 0x0002,
+      SourceOverPixmapCapability       = 0x0004,
       SourceOverScaledPixmapCapability = 0x0008,
-      AlphaFillRectCapability         = 0x0010,
-      OpacityPixmapCapability         = 0x0020,
+      AlphaFillRectCapability          = 0x0010,
+      OpacityPixmapCapability          = 0x0020,
 
       // Internal ones
-      OutlineCapability               = 0x0001000,
+      OutlineCapability                = 0x0001000,
    };
    using Capabilities = QFlags<Capability>;
 
@@ -78,7 +78,6 @@ class Q_GUI_EXPORT QBlittable
       Q_UNUSED(opacity);
       qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
    }
-
 
    bool isLocked() const;
 

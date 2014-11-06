@@ -17,18 +17,11 @@ if !SSL
 lib_libCsNetwork1_la_CXXFLAGS += -DQT_NO_OPENSSL
 endif
 
-if OSTYPE_LINUX
-lib_libCsNetwork1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-lib_libCsNetwork1_la_CXXFLAGS +=
-endif
-
 if OSTYPE_WIN
-lib_libCsNetwork1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
 lib_libCsNetwork1_la_LDFLAGS += -lws2_32
 endif
 
 if OSTYPE_DARWIN
-lib_libCsNetwork1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
 lib_libCsNetwork1_la_LDFLAGS += -framework CoreServices
 endif
 

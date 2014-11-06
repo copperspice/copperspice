@@ -26,7 +26,7 @@
 #ifndef QPOLYGONCLIPPER_P_H
 #define QPOLYGONCLIPPER_P_H
 
-#include "qdatabuffer_p.h"
+#include <qdatabuffer_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -62,7 +62,6 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       return t;
    }
 
-
    inline OutType intersectRight(const OutType &p1, const OutType &p2) {
       OutType t;
       qreal dy = (p1.y - p2.y) / qreal(p1.x - p2.x);
@@ -70,7 +69,6 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       t.y = static_cast<CastType>(p2.y + (x2 - p2.x) * dy);
       return t;
    }
-
 
    inline OutType intersectTop(const OutType &p1, const OutType &p2) {
       OutType t;
@@ -80,7 +78,6 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       return t;
    }
 
-
    inline OutType intersectBottom(const OutType &p1, const OutType &p2) {
       OutType t;
       qreal dx = (p1.x - p2.x) / qreal(p1.y - p2.y);
@@ -89,9 +86,7 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       return t;
    }
 
-
-   void clipPolygon(const InType *inPoints, int inCount, OutType **outPoints, int *outCount,
-                    bool closePolygon = true) {
+   void clipPolygon(const InType *inPoints, int inCount, OutType **outPoints, int *outCount, bool closePolygon = true) {
       Q_ASSERT(outPoints);
       Q_ASSERT(outCount);
 

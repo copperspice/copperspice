@@ -26,11 +26,11 @@
 #ifndef QPRINTERINFO_P_H
 #define QPRINTERINFO_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 #ifndef QT_NO_PRINTER
 
-#include "QtCore/qlist.h"
+#include <QtCore/qlist.h>
 
 QT_BEGIN_NAMESPACE
 

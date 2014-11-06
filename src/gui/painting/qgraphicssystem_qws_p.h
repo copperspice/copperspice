@@ -25,7 +25,8 @@
 
 #ifndef QGRAPHICSSYSTEM_QWS_P_H
 #define QGRAPHICSSYSTEM_QWS_P_H
-#include "qgraphicssystem_p.h"
+
+#include <qgraphicssystem_p.h>
 
 QT_BEGIN_NAMESPACE
 

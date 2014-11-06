@@ -59,7 +59,6 @@ class QCalendarTextNavigator: public QObject
    bool eventFilter(QObject *o, QEvent *e);
    void timerEvent(QTimerEvent *e);
 
- public:
    GUI_CS_SIGNAL_1(Public, void dateChanged(const QDate &date))
    GUI_CS_SIGNAL_2(dateChanged, date)
    GUI_CS_SIGNAL_1(Public, void editingFinished())

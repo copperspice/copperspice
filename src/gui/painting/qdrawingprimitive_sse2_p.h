@@ -189,11 +189,11 @@ QT_BEGIN_NAMESPACE
             __m128i alphaChannel = _mm_srli_epi32(srcVector, 24); \
             alphaChannel = _mm_or_si128(alphaChannel, _mm_slli_epi32(alphaChannel, 16)); \
             alphaChannel = _mm_sub_epi16(one, alphaChannel); \
- \
+\
             const __m128i dstVector = _mm_load_si128((__m128i *)&dst[x]); \
             __m128i destMultipliedByOneMinusAlpha; \
             BYTE_MUL_SSE2(destMultipliedByOneMinusAlpha, dstVector, alphaChannel, colorMask, half); \
- \
+\
             const __m128i result = _mm_add_epi8(srcVector, destMultipliedByOneMinusAlpha); \
             _mm_store_si128((__m128i *)&dst[x], result); \
         } \

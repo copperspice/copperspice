@@ -31,7 +31,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
 #ifndef QT_NO_TEXTBROWSER
 
 class QTextBrowserPrivate;

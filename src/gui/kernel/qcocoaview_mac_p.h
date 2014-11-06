@@ -27,7 +27,7 @@
 #define QCocoaView_MAC_P_H
 
 #include <qevent.h>
-#import <Cocoa/Cocoa.h>
+#import  <Cocoa/Cocoa.h>
 
 @class QT_MANGLE_NAMESPACE(QCocoaView);
 QT_FORWARD_DECLARE_CLASS(QWidgetPrivate);

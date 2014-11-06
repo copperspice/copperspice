@@ -33,8 +33,8 @@
 #include <QtGui/qwindowdefs.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qstack.h>
-#include "qabstracteventdispatcher_p.h"
-#include "qt_mac_p.h"
+#include <qabstracteventdispatcher_p.h>
+#include <qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -141,8 +141,7 @@ class QEventDispatcherMacPrivate : public QAbstractEventDispatcherPrivate
    static Boolean postedEventSourceEqualCallback(const void *info1, const void *info2);
    static void postedEventsSourcePerformCallback(void *info);
    static void activateTimer(CFRunLoopTimerRef, void *info);
-   static void waitingObserverCallback(CFRunLoopObserverRef observer,
-                                       CFRunLoopActivity activity, void *info);
+   static void waitingObserverCallback(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info);
    static void firstLoopEntry(CFRunLoopObserverRef ref, CFRunLoopActivity activity, void *info);
 };
 

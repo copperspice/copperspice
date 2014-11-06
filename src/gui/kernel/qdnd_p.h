@@ -26,16 +26,16 @@
 #ifndef QDND_P_H
 #define QDND_P_H
 
-#include "QtCore/qobject.h"
-#include "QtCore/qmap.h"
-#include "QtGui/qmime.h"
-#include "QtGui/qdrag.h"
-#include "QtGui/qpixmap.h"
-#include "QtGui/qcursor.h"
-#include "QtCore/qpoint.h"
+#include <QtCore/qobject.h>
+#include <QtCore/qmap.h>
+#include <QtGui/qmime.h>
+#include <QtGui/qdrag.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qcursor.h>
+#include <QtCore/qpoint.h>
 
 #ifdef Q_OS_MAC
-# include "qt_mac_p.h"
+# include <qt_mac_p.h>
 #endif
 
 #if defined(Q_OS_WIN)
@@ -47,7 +47,7 @@ QT_BEGIN_NAMESPACE
 
 class QEventLoop;
 
-#if !(defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
+#if ! (defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
 
 class Q_GUI_EXPORT QInternalMimeData : public QMimeData
 {
@@ -95,11 +95,9 @@ class QOleDataObject : public IDataObject
    STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
    STDMETHOD(QueryGetData)(LPFORMATETC pformatetc);
    STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut);
-   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium,
-                      BOOL fRelease);
+   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium, BOOL fRelease);
    STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc);
-   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf,
-                      LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
+   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
    STDMETHOD(DUnadvise)(DWORD dwConnection);
    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR *ppenumAdvise);
 
@@ -192,6 +190,7 @@ class QDragManager: public QObject
    friend class QDragMoveEvent;
    friend class QDropEvent;
    friend class QApplication;
+
 #ifdef Q_OS_MAC
    friend class QWidgetPrivate; //dnd is implemented here
 #endif
@@ -217,8 +216,7 @@ class QDragManager: public QObject
    }
 
    static QDragManager *self();
-   Qt::DropAction defaultAction(Qt::DropActions possibleActions,
-                                Qt::KeyboardModifiers modifiers) const;
+   Qt::DropAction defaultAction(Qt::DropActions possibleActions, Qt::KeyboardModifiers modifiers) const;
 
    QDrag *object;
 
@@ -301,16 +299,17 @@ class QOleDropTarget : public IDropTarget
 class QCocoaDropData : public QInternalMimeData
 {
    CS_OBJECT(QCocoaDropData)
+
  public:
    QCocoaDropData(CFStringRef pasteboard);
    ~QCocoaDropData();
 
+   CFStringRef dropPasteboard;
+
  protected:
    bool hasFormat_sys(const QString &mimeType) const;
    QStringList formats_sys() const;
-   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
- public:
-   CFStringRef dropPasteboard;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;   
 };
 #endif
 

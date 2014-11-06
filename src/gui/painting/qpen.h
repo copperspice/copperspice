@@ -126,7 +126,6 @@ Q_DECLARE_SHARED(QPen)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPen &);
 
-
 QT_END_NAMESPACE
 
 #endif // QPEN_H

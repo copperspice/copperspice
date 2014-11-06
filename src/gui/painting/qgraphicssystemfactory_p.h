@@ -41,5 +41,4 @@ class QGraphicsSystemFactory
 
 QT_END_NAMESPACE
 
-#endif // QGRAPHICSSYSTEMFACTORY_H
-
+#endif

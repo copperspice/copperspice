@@ -69,6 +69,8 @@ CORE_GLOBAL_INCLUDES = \
 	qnamespace.h \
 	qnoimplicitboolcast.h \
 	qnumeric.h \
+	qplatformdefs.h \
+	qplatformposix.h \
 	qsysinfo.h \
 	qt.h \
 	qtconfig.h \

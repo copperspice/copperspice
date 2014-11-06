@@ -26,13 +26,13 @@
 #ifndef QBEZIER_P_H
 #define QBEZIER_P_H
 
-#include "QtCore/qpoint.h"
-#include "QtCore/qline.h"
-#include "QtCore/qrect.h"
-#include "QtCore/qvector.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qpair.h"
-#include "QtGui/qtransform.h"
+#include <QtCore/qpoint.h>
+#include <QtCore/qline.h>
+#include <QtCore/qrect.h>
+#include <QtCore/qvector.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qpair.h>
+#include <QtGui/qtransform.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,8 +41,7 @@ class QPolygonF;
 class Q_GUI_EXPORT QBezier
 {
  public:
-   static QBezier fromPoints(const QPointF &p1, const QPointF &p2,
-                             const QPointF &p3, const QPointF &p4);
+   static QBezier fromPoints(const QPointF &p1, const QPointF &p2, const QPointF &p3, const QPointF &p4);
 
    static void coefficients(qreal t, qreal &a, qreal &b, qreal &c, qreal &d);
 

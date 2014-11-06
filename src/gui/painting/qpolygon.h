@@ -83,17 +83,10 @@ inline QPolygon::QPolygon(int asize) : QVector<QPoint>(asize) {}
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygon &);
 
-/*****************************************************************************
-  QPolygon stream functions
- *****************************************************************************/
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPolygon &polygon);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPolygon &polygon);
 #endif
-
-/*****************************************************************************
-  Misc. QPolygon functions
- *****************************************************************************/
 
 inline void QPolygon::setPoint(int index, const QPoint &pt)
 {

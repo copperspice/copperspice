@@ -26,8 +26,8 @@
 #ifndef QSTANDARDGESTURES_P_H
 #define QSTANDARDGESTURES_P_H
 
-#include "qgesturerecognizer.h"
-#include "qgesture_p.h"
+#include <qgesturerecognizer.h>
+#include <qgesture_p.h>
 
 #ifndef QT_NO_GESTURES
 

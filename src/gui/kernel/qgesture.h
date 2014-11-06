@@ -260,7 +260,6 @@ class Q_GUI_EXPORT QSwipeGesture : public QGesture
    friend class QSwipeGestureRecognizer;
 
  private:
-
    // wrapper for overloaded method
    qreal cs_velocity() const;
 

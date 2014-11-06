@@ -26,17 +26,17 @@
 #ifndef QTEXTEDIT_P_H
 #define QTEXTEDIT_P_H
 
-#include "qabstractscrollarea_p.h"
-#include "QtGui/qtextdocumentfragment.h"
-#include "QtGui/qscrollbar.h"
-#include "QtGui/qtextcursor.h"
-#include "QtGui/qtextformat.h"
-#include "QtGui/qmenu.h"
-#include "QtGui/qabstracttextdocumentlayout.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qurl.h"
-#include "qtextcontrol_p.h"
-#include "qtextedit.h"
+#include <qabstractscrollarea_p.h>
+#include <QtGui/qtextdocumentfragment.h>
+#include <QtGui/qscrollbar.h>
+#include <QtGui/qtextcursor.h>
+#include <QtGui/qtextformat.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qabstracttextdocumentlayout.h>
+#include <QtCore/qbasictimer.h>
+#include <QtCore/qurl.h>
+#include <qtextcontrol_p.h>
+#include <qtextedit.h>
 
 QT_BEGIN_NAMESPACE
 

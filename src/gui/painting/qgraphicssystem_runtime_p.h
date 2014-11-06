@@ -26,7 +26,7 @@
 #ifndef QGRAPHICSSYSTEM_RUNTIME_P_H
 #define QGRAPHICSSYSTEM_RUNTIME_P_H
 
-#include "qgraphicssystem_p.h"
+#include <qgraphicssystem_p.h>
 #include <qpixmapdata_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -42,11 +42,11 @@ class Q_GUI_EXPORT QRuntimePixmapData : public QPixmapData
 
    virtual QPixmapData *createCompatiblePixmapData() const;
    virtual void resize(int width, int height);
-   virtual void fromImage(const QImage &image,
-                          Qt::ImageConversionFlags flags);
+   virtual void fromImage(const QImage &image, Qt::ImageConversionFlags flags);
 
    virtual bool fromFile(const QString &filename, const char *format,
                          Qt::ImageConversionFlags flags);
+
    virtual bool fromData(const uchar *buffer, uint len, const char *format,
                          Qt::ImageConversionFlags flags);
 
@@ -58,8 +58,7 @@ class Q_GUI_EXPORT QRuntimePixmapData : public QPixmapData
    virtual QBitmap mask() const;
    virtual void setMask(const QBitmap &mask);
    virtual bool hasAlphaChannel() const;
-   virtual QPixmap transformed(const QTransform &matrix,
-                               Qt::TransformationMode mode) const;
+   virtual QPixmap transformed(const QTransform &matrix, Qt::TransformationMode mode) const;
    virtual void setAlphaChannel(const QPixmap &alphaChannel);
    virtual QPixmap alphaChannel() const;
    virtual QImage toImage() const;
@@ -84,8 +83,7 @@ class QRuntimeWindowSurface : public QWindowSurface
    ~QRuntimeWindowSurface();
 
    virtual QPaintDevice *paintDevice();
-   virtual void flush(QWidget *widget, const QRegion &region,
-                      const QPoint &offset);
+   virtual void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
    virtual void setGeometry(const QRect &rect);
 
    virtual bool scroll(const QRegion &area, int dx, int dy);

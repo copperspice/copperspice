@@ -235,10 +235,6 @@ class Q_GUI_EXPORT QRegion
    static void cleanUp(QRegionData *x);
 };
 
-/*****************************************************************************
-  QRegion stream functions
- *****************************************************************************/
-
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &);

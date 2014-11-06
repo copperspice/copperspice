@@ -324,8 +324,10 @@ class Q_GUI_EXPORT QPainter
 
    void drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
                         Qt::SizeMode mode = Qt::AbsoluteSize);
+
    inline void drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius,
                                Qt::SizeMode mode = Qt::AbsoluteSize);
+
    inline void drawRoundedRect(const QRect &rect, qreal xRadius, qreal yRadius,
                                Qt::SizeMode mode = Qt::AbsoluteSize);
 
@@ -336,6 +338,7 @@ class Q_GUI_EXPORT QPainter
    void drawTiledPixmap(const QRectF &rect, const QPixmap &pm, const QPointF &offset = QPointF());
    inline void drawTiledPixmap(int x, int y, int w, int h, const QPixmap &, int sx = 0, int sy = 0);
    inline void drawTiledPixmap(const QRect &, const QPixmap &, const QPoint & = QPoint());
+
 #ifndef QT_NO_PICTURE
    void drawPicture(const QPointF &p, const QPicture &picture);
    inline void drawPicture(int x, int y, const QPicture &picture);
@@ -344,10 +347,8 @@ class Q_GUI_EXPORT QPainter
 
    void drawPixmap(const QRectF &targetRect, const QPixmap &pixmap, const QRectF &sourceRect);
    inline void drawPixmap(const QRect &targetRect, const QPixmap &pixmap, const QRect &sourceRect);
-   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pm,
-                          int sx, int sy, int sw, int sh);
-   inline void drawPixmap(int x, int y, const QPixmap &pm,
-                          int sx, int sy, int sw, int sh);
+   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pm, int sx, int sy, int sw, int sh);
+   inline void drawPixmap(int x, int y, const QPixmap &pm, int sx, int sy, int sw, int sh);
    inline void drawPixmap(const QPointF &p, const QPixmap &pm, const QRectF &sr);
    inline void drawPixmap(const QPoint &p, const QPixmap &pm, const QRect &sr);
    void drawPixmap(const QPointF &p, const QPixmap &pm);
@@ -363,12 +364,16 @@ class Q_GUI_EXPORT QPainter
 
    void drawImage(const QRectF &targetRect, const QImage &image, const QRectF &sourceRect,
                   Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    inline void drawImage(const QRect &targetRect, const QImage &image, const QRect &sourceRect,
                          Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    inline void drawImage(const QPointF &p, const QImage &image, const QRectF &sr,
                          Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    inline void drawImage(const QPoint &p, const QImage &image, const QRect &sr,
                          Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    inline void drawImage(const QRectF &r, const QImage &image);
    inline void drawImage(const QRect &r, const QImage &image);
    void drawImage(const QPointF &p, const QImage &image);

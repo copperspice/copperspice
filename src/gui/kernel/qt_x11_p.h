@@ -26,14 +26,15 @@
 #ifndef QT_X11_P_H
 #define QT_X11_P_H
 
-#include "QtGui/qwindowdefs.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qvariant.h"
+#include <QtGui/qwindowdefs.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qvariant.h>
 
 // the following is necessary to work around breakage in many versions
 // of XFree86's Xlib.h still in use
 // ### which versions?
+
 #if defined(_XLIB_H_) // crude hack, but...
 #error "cannot include <X11/Xlib.h> before this file"
 #endif
@@ -703,7 +704,6 @@ Q_DECLARE_TYPEINFO(XChar2b, Q_PRIMITIVE_TYPE);
 #ifndef QT_NO_XRENDER
 Q_DECLARE_TYPEINFO(XGlyphElt32, Q_PRIMITIVE_TYPE);
 #endif
-
 
 QT_END_NAMESPACE
 

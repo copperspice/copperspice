@@ -26,13 +26,13 @@
 #ifndef QPRINTENGINE_QWS_P_H
 #define QPRINTENGINE_QWS_P_H
 
-#include "QtGui/qprinter.h"
+#include <QtGui/qprinter.h>
 
 #ifndef QT_NO_PRINTER
 
-#include "QtGui/qprintengine.h"
-#include "QtCore/qbytearray.h"
-#include "qpaintengine_p.h"
+#include <QtGui/qprintengine.h>
+#include <QtCore/qbytearray.h>
+#include <qpaintengine_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -44,6 +44,7 @@ class QImage;
 class QtopiaPrintEngine : public QPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QtopiaPrintEngine)
+
  public:
    QtopiaPrintEngine(QPrinter::PrinterMode mode);
 
@@ -124,6 +125,7 @@ class QtopiaPrintBuffer
 class QtopiaPrintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QtopiaPrintEngine)
+
  public:
    QtopiaPrintEnginePrivate(QPrinter::PrinterMode m) :
       mode(m),

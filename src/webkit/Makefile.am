@@ -35,18 +35,13 @@ if ! SSL
 ______lib_libCsWebKit1_la_CXXFLAGS += -DQT_NO_OPENSSL
 endif
 
-if OSTYPE_LINUX
-______lib_libCsWebKit1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
 if OSTYPE_WIN
-______lib_libCsWebKit1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++ -DQT_MAKEDLL
+______lib_libCsWebKit1_la_CXXFLAGS += -DQT_MAKEDLL
 ______lib_libCsWebKit1_la_LDFLAGS += -lgdi32 -lwinmm -lshlwapi -lversion
 ______lib_libCsWebKit1_la_LDFLAGS += -Wl,-s
 endif
 
 if OSTYPE_DARWIN
-______lib_libCsWebKit1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++ -DQ_OS_UNIX
 ______lib_libCsWebKit1_la_OBJCXXFLAGS = $(______lib_libCsWebKit1_la_CXXFLAGS)
 endif
 

@@ -26,23 +26,24 @@
 #ifndef QLABEL_P_H
 #define QLABEL_P_H
 
-#include "qlabel.h"
-#include "qtextdocumentlayout_p.h"
-#include "qtextcontrol_p.h"
-#include "qtextdocumentfragment.h"
-#include "qframe_p.h"
-#include "qtextdocument.h"
-#include "qmovie.h"
-#include "qimage.h"
-#include "qbitmap.h"
-#include "qpicture.h"
-#include "qmenu.h"
+#include <qlabel.h>
+#include <qtextdocumentlayout_p.h>
+#include <qtextcontrol_p.h>
+#include <qtextdocumentfragment.h>
+#include <qframe_p.h>
+#include <qtextdocument.h>
+#include <qmovie.h>
+#include <qimage.h>
+#include <qbitmap.h>
+#include <qpicture.h>
+#include <qmenu.h>
 
 QT_BEGIN_NAMESPACE
 
 class QLabelPrivate : public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QLabel)
+
  public:
    QLabelPrivate() {}
 
@@ -60,21 +61,26 @@ class QLabelPrivate : public QFramePrivate
    QPixmap  *pixmap;
    QPixmap *scaledpixmap;
    QImage *cachedimage;
+
 #ifndef QT_NO_PICTURE
    QPicture *picture;
 #endif
+
 #ifndef QT_NO_MOVIE
    QPointer<QMovie> movie;
    void _q_movieUpdated(const QRect &);
    void _q_movieResized(const QSize &);
 #endif
+
 #ifndef QT_NO_SHORTCUT
    void updateShortcut();
 #endif
+
 #ifndef QT_NO_SHORTCUT
    QPointer<QWidget> buddy;
    int shortcutId;
 #endif
+
    ushort align;
    short indent;
    uint scaledcontents : 1;
@@ -89,8 +95,7 @@ class QLabelPrivate : public QFramePrivate
    Qt::TextInteractionFlags textInteractionFlags;
 
    inline bool needTextControl() const {
-      return isTextLabel
-             && (isRichText
+      return isTextLabel && (isRichText
                  || (!isRichText && (textInteractionFlags & (Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard))));
    }
 
@@ -105,6 +110,7 @@ class QLabelPrivate : public QFramePrivate
    QRect documentRect() const;
    QPoint layoutPoint(const QPoint &p) const;
    Qt::LayoutDirection textDirection() const;
+
 #ifndef QT_NO_CONTEXTMENU
    QMenu *createStandardContextMenu(const QPoint &pos);
 #endif

@@ -26,7 +26,7 @@
 #ifndef QSOUND_P_H
 #define QSOUND_P_H
 
-#include "QtCore/qobject.h"
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 

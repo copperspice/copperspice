@@ -26,10 +26,10 @@
 #ifndef QNSThemeFrame_MAC_P_H
 #define QNSThemeFrame_MAC_P_H
 
-// Private AppKit class (dumped from classdump).
+// Private AppKit class (dumped from classdump)
 
 #import <Cocoa/Cocoa.h>
-#import "qnstitledframe_mac_p.h"
+#import <qnstitledframe_mac_p.h>
 
 @interface NSThemeFrame : NSTitledFrame
 {

@@ -26,9 +26,9 @@
 #ifndef QSTROKER_P_H
 #define QSTROKER_P_H
 
-#include "QtGui/qpainterpath.h"
-#include "qdatabuffer_p.h"
-#include "qnumeric_p.h"
+#include <QtGui/qpainterpath.h>
+#include <qdatabuffer_p.h>
+#include <qnumeric_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,10 +36,12 @@ QT_BEGIN_NAMESPACE
 
 #if defined QFIXED_IS_26_6
 typedef int qfixed;
+
 #define qt_real_to_fixed(real) qfixed(real * 64)
 #define qt_int_to_fixed(real) qfixed(int(real) << 6)
 #define qt_fixed_to_real(fixed) qreal(fixed / qreal(64))
 #define qt_fixed_to_int(fixed) int(fixed >> 6)
+
 struct qfixed2d {
    qfixed x;
    qfixed y;
@@ -96,10 +98,7 @@ qreal qt_t_for_arc_angle(qreal angle);
 
 typedef void (*qStrokerMoveToHook)(qfixed x, qfixed y, void *data);
 typedef void (*qStrokerLineToHook)(qfixed x, qfixed y, void *data);
-typedef void (*qStrokerCubicToHook)(qfixed c1x, qfixed c1y,
-                                    qfixed c2x, qfixed c2y,
-                                    qfixed ex, qfixed ey,
-                                    void *data);
+typedef void (*qStrokerCubicToHook)(qfixed c1x, qfixed c1y, qfixed c2x, qfixed c2y, qfixed ex, qfixed ey, void *data);
 
 // qtransform.cpp
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
@@ -385,9 +384,7 @@ inline void QStroker::emitLineTo(qfixed x, qfixed y)
    QStrokerOps::emitLineTo(x, y);
 }
 
-inline void QStroker::emitCubicTo(qfixed c1x, qfixed c1y,
-                                  qfixed c2x, qfixed c2y,
-                                  qfixed ex, qfixed ey)
+inline void QStroker::emitCubicTo(qfixed c1x, qfixed c1y, qfixed c2x, qfixed c2y, qfixed ex, qfixed ey)
 {
    if (c2x == ex && c2y == ey) {
       if (c1x == ex && c1y == ey) {

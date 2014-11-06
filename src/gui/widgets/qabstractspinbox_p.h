@@ -26,17 +26,17 @@
 #ifndef QABSTRACTSPINBOX_P_H
 #define QABSTRACTSPINBOX_P_H
 
-#include "QtGui/qabstractspinbox.h"
+#include <QtGui/qabstractspinbox.h>
 
 #ifndef QT_NO_SPINBOX
 
-#include "QtGui/qlineedit.h"
-#include "QtGui/qstyleoption.h"
-#include "QtGui/qvalidator.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qvariant.h"
-#include "qwidget_p.h"
-#include "qdatetime_p.h"
+#include <QtGui/qlineedit.h>
+#include <QtGui/qstyleoption.h>
+#include <QtGui/qvalidator.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qvariant.h>
+#include <qwidget_p.h>
+#include <qdatetime_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -65,6 +65,7 @@ class QSpinBoxValidator;
 class QAbstractSpinBoxPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractSpinBox)
+
  public:
    QAbstractSpinBoxPrivate();
    ~QAbstractSpinBoxPrivate();
@@ -131,6 +132,7 @@ class QSpinBoxValidator : public QValidator
    QSpinBoxValidator(QAbstractSpinBox *qptr, QAbstractSpinBoxPrivate *dptr);
    QValidator::State validate(QString &input, int &) const;
    void fixup(QString &) const;
+
  private:
    QAbstractSpinBox *qptr;
    QAbstractSpinBoxPrivate *dptr;

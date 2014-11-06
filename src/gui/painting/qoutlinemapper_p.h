@@ -35,7 +35,7 @@
 
 #include <qrasterdefs_p.h>
 #include <qdatabuffer_p.h>
-#include "qpaintengineex_p.h"
+#include <qpaintengineex_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -90,7 +90,7 @@ class QOutlineMapper
 
    void beginOutline(Qt::FillRule fillRule) {
 #ifdef QT_DEBUG_CONVERT
-      printf("QOutlineMapper::beginOutline rule=%d\n", fillRule);
+      printf("QOutlineMapper::beginOutline() rule=%d\n", fillRule);
 #endif
       m_valid = true;
       m_elements.reset();
@@ -176,7 +176,6 @@ class QOutlineMapper
       return m_element_types.size() == 0 ? 0 : m_element_types.data();
    }
 
- public:
    QDataBuffer<QPainterPath::ElementType> m_element_types;
    QDataBuffer<QPointF> m_elements;
    QDataBuffer<QPointF> m_elements_dev;

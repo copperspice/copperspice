@@ -92,14 +92,17 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
    int physicalDpiY() const {
       return metric(PdmPhysicalDpiY);
    }
+
 #ifdef QT_DEPRECATED
    QT_DEPRECATED int numColors() const {
       return metric(PdmNumColors);
    }
 #endif
+
    int colorCount() const {
       return metric(PdmNumColors);
    }
+
    int depth() const {
       return metric(PdmDepth);
    }
@@ -108,7 +111,7 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
    QPaintDevice();
    virtual int metric(PaintDeviceMetric metric) const;
 
-   ushort        painters;                        // refcount
+   ushort painters;       // refcount
 
  private:
    Q_DISABLE_COPY(QPaintDevice)
@@ -118,11 +121,6 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
    friend class QX11PaintEngine;
    friend Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, PaintDeviceMetric metric);
 };
-
-
-/*****************************************************************************
-  Inline functions
- *****************************************************************************/
 
 inline int QPaintDevice::devType() const
 {

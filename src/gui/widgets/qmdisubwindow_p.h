@@ -26,7 +26,7 @@
 #ifndef QMDISUBWINDOW_P_H
 #define QMDISUBWINDOW_P_H
 
-#include "qmdisubwindow.h"
+#include <qmdisubwindow.h>
 
 #ifndef QT_NO_MDIAREA
 
@@ -76,6 +76,7 @@ class ControlContainer : public QObject
       return m_menuBar;
    }
 #endif
+
    void updateWindowIcon(const QIcon &windowIcon);
    QWidget *controllerWidget() const {
       return m_controllerWidget;
@@ -87,9 +88,11 @@ class ControlContainer : public QObject
  private:
    QPointer<QWidget> previousLeft;
    QPointer<QWidget> previousRight;
+
 #ifndef QT_NO_MENUBAR
    QPointer<QMenuBar> m_menuBar;
 #endif
+
    QPointer<QWidget> m_controllerWidget;
    QPointer<QWidget> m_menuLabel;
    QPointer<QMdiSubWindow> mdiChild;
@@ -156,12 +159,15 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    QPointer<QWidget> baseWidget;
    QPointer<QWidget> restoreFocusWidget;
    QPointer<QMdi::ControlContainer> controlContainer;
+
 #ifndef QT_NO_SIZEGRIP
    QPointer<QSizeGrip> sizeGrip;
 #endif
+
 #ifndef QT_NO_RUBBERBAND
    QRubberBand *rubberBand;
 #endif
+
    QPoint mousePressPosition;
    QRect oldGeometry;
    QSize internalMinimumSize;
@@ -170,9 +176,11 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    bool resizeEnabled;
    bool moveEnabled;
    bool isInInteractiveMode;
+
 #ifndef QT_NO_RUBBERBAND
    bool isInRubberBandMode;
 #endif
+
    bool isShadeMode;
    bool ignoreWindowTitleChange;
    bool ignoreNextActivationEvent;
@@ -191,9 +199,11 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    Qt::FocusReason focusInReason;
    OperationInfoMap operationMap;
    QPointer<QMenu> systemMenu;
+
 #ifndef QT_NO_ACTIONS
    QPointer<QAction> actions[NumWindowStateActions];
 #endif
+
    QMdiSubWindow::SubWindowOptions options;
    QString lastChildWindowTitle;
    QPalette titleBarPalette;
@@ -212,9 +222,11 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    void leaveInteractiveMode();
    void removeBaseWidget();
    void initOperationMap();
+
 #ifndef QT_NO_MENU
    void createSystemMenu();
 #endif
+
    void updateCursor();
    void updateDirtyRegions();
    void updateGeometryConstraints();
@@ -258,7 +270,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
 #ifndef QT_NO_MENU
    void addToSystemMenu(WindowStateAction, const QString &text, const char *slot);
 #endif
-#endif // QT_NO_ACTION
+#endif
 
    QSize iconSize() const;
 

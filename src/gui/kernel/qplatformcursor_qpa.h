@@ -38,7 +38,6 @@ QT_BEGIN_NAMESPACE
 
 class QPlatformCursor;
 
-
 class Q_GUI_EXPORT QPlatformCursorImage
 {
 
@@ -55,6 +54,7 @@ class Q_GUI_EXPORT QPlatformCursorImage
    void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
    void set(const QImage &image, int hx, int hy);
    void set(Qt::CursorShape);
+
  private:
    static void createSystemCursor(int id);
    QImage cursorImage;

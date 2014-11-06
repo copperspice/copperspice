@@ -40,8 +40,8 @@
 #include <QtGui/qbrush.h>
 #include <QtGui/qcursor.h>
 #include <QtGui/qkeysequence.h>
-#include "qicon.h"
-#include "qlocale.h"
+#include <qicon.h>
+#include <qlocale.h>
 
 #ifdef Q_WS_QPA    //should this go somewhere else?
 #include <QtGui/qplatformwindowformat_qpa.h>

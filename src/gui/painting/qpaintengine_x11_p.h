@@ -26,13 +26,13 @@
 #ifndef QPAINTENGINE_X11_P_H
 #define QPAINTENGINE_X11_P_H
 
-#include "QtGui/qpaintengine.h"
-#include "QtGui/qregion.h"
-#include "QtGui/qpen.h"
-#include "QtCore/qpoint.h"
-#include "qpaintengine_p.h"
-#include "qpainter_p.h"
-#include "qpolygonclipper_p.h"
+#include <QtGui/qpaintengine.h>
+#include <QtGui/qregion.h>
+#include <QtGui/qpen.h>
+#include <QtCore/qpoint.h>
+#include <qpaintengine_p.h>
+#include <qpainter_p.h>
+#include <qpolygonclipper_p.h>
 
 typedef unsigned long Picture;
 
@@ -49,6 +49,7 @@ struct qt_float_point {
 class QX11PaintEngine : public QPaintEngine
 {
    Q_DECLARE_PRIVATE(QX11PaintEngine)
+
  public:
    QX11PaintEngine();
    ~QX11PaintEngine();
@@ -116,6 +117,7 @@ class QX11PaintEngine : public QPaintEngine
 class QX11PaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QX11PaintEngine)
+
  public:
    QX11PaintEnginePrivate() {
       scrn = -1;
@@ -147,18 +149,14 @@ class QX11PaintEnginePrivate : public QPaintEnginePrivate
    void strokePolygon_translated(const QPointF *points, int pointCount, bool close);
    void setupAdaptedOrigin(const QPoint &p);
    void resetAdaptedOrigin();
-   void decidePathFallback() {
-      use_path_fallback = has_alpha_brush
-                          || has_alpha_pen
-                          || has_custom_pen
-                          || has_complex_xform
+
+   void decidePathFallback() { 
+      use_path_fallback = has_alpha_brush || has_alpha_pen || has_custom_pen || has_complex_xform
                           || (render_hints & QPainter::Antialiasing);
    }
    void decideCoordAdjust() {
-      adjust_coords = !(render_hints & QPainter::Antialiasing)
-                      && (has_alpha_pen
-                          || (has_alpha_brush && has_pen && !has_alpha_pen)
-                          || (cpen.style() > Qt::SolidLine));
+      adjust_coords = ! (render_hints & QPainter::Antialiasing)
+                      && (has_alpha_pen || (has_alpha_brush && has_pen && !has_alpha_pen) || (cpen.style() > Qt::SolidLine));
    }
    void clipPolygon_dev(const QPolygonF &poly, QPolygonF *clipped_poly);
    void systemStateChanged();
@@ -168,6 +166,7 @@ class QX11PaintEnginePrivate : public QPaintEnginePrivate
    int pdev_depth;
    Qt::HANDLE hd;
    QPixmap brush_pm;
+
 #if !defined (QT_NO_XRENDER)
    Qt::HANDLE picture;
    Qt::HANDLE current_brush;
@@ -176,6 +175,7 @@ class QX11PaintEnginePrivate : public QPaintEnginePrivate
 #else
    Qt::HANDLE picture;
 #endif
+
    GC gc;
    GC gc_brush;
 
@@ -210,6 +210,7 @@ class QX11PaintEnginePrivate : public QPaintEnginePrivate
    QPolygonClipper<qt_float_point, qt_float_point, float> polygonClipper;
 
    int xlibMaxLinePoints;
+
 #ifndef QT_NO_XRENDER
    QXRenderTessellator *tessellator;
 #endif

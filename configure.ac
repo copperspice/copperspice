@@ -6,7 +6,7 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-AC_CONFIG_SRCDIR([src/corelib/kernel/qobject.cpp])
+AC_CONFIG_SRCDIR([src/core/kernel/qobject.cpp])
 AM_INIT_AUTOMAKE([foreign tar-pax 1.12.1])
 
 LT_INIT([win32-dll disable-static])
@@ -52,7 +52,7 @@ PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
 AC_CHECK_HEADERS([cups/cups.h])
 AC_SEARCH_LIBS(clock_gettime, rt)
 
-if test "$OSTYPE" == LINUX; then 
+if test "$OSTYPE" == LINUX; then
 
 # verify dependencies
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
@@ -77,19 +77,25 @@ AC_SEARCH_LIBS([XGetExtensionVersion], [Xi], [], missing="$missing Xi")
 AC_SEARCH_LIBS([XineramaQueryExtension], [Xinerama], [], missing="$missing Xinerama")
 AC_SEARCH_LIBS([XRRSetScreenConfigAndRate], [Xrandr], [], missing="$missing Xrandr")
 AC_SEARCH_LIBS([XRenderCreateCursor], [Xrender], [], missing="$missing Xrender")
-AC_SEARCH_LIBS([XCreateWindow], [X11], [], missing="$missing X11")   
+AC_SEARCH_LIBS([XCreateWindow], [X11], [], missing="$missing X11")
 fi
 
+
 if test "x$missing" != "x"; then
-   echo "------------------------------------------------------------"      
+   echo "------------------------------------------------------------"
    echo "The following libraries are missing and must be installed to build CopperSpice"
    echo "Refer to the CS documentation for package names or consult your platform package manager"
-   echo $missing      
+   echo $missing
    echo "------------------------------------------------------------"
 
+   if [[ $missing =~ "Open GL" && -e /var/lib/parallels-tools/.backup/.libgl/libGL.so.1.2.0 ]]; then
+     echo "We suggest you run the following command to link OpenGL on Parallels"
+     echo "sudo cp /var/lib/parallels-tools/.backup/.libgl/libGL.so.1.2.0 /usr/lib/x86_64-linux-gnu/mesa/"
+   fi
+
    echo ""
-   echo "CopperSpice configuration aborted"   
-   exit 
+   echo "CopperSpice configuration aborted"
+   exit
 fi
 
 
@@ -172,6 +178,6 @@ echo "CopperSpice will be installed in:     " ${prefix}
 echo
 echo "CopperSpice is now configured"
 
-AC_CONFIG_FILES([Makefile src/webkit/Makefile src/corelib/global/cs_build_info.h])
+AC_CONFIG_FILES([Makefile src/webkit/Makefile src/core/global/cs_build_info.h])
 AC_CONFIG_MACRO_DIR([autotools/m4])
 AC_OUTPUT

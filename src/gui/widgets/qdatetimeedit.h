@@ -221,6 +221,7 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
 {
    CS_OBJECT(QTimeEdit)
+
  public:
    QTimeEdit(QWidget *parent = 0);
    QTimeEdit(const QTime &time, QWidget *parent = 0);
@@ -229,6 +230,7 @@ class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
 class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
 {
    CS_OBJECT(QDateEdit)
+
  public:
    QDateEdit(QWidget *parent = 0);
    QDateEdit(const QDate &date, QWidget *parent = 0);

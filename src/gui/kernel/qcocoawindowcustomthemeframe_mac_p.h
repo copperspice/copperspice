@@ -26,9 +26,9 @@
 #ifndef QCocoaWindowCustomThemeFrame_MAC_P_H
 #define QCocoaWindowCustomThemeFrame_MAC_P_H
 
-#import <Cocoa/Cocoa.h>
-#include "qmacdefines_mac.h"
-#import "qnsthemeframe_mac_p.h"
+#import  <Cocoa/Cocoa.h>
+#include <qmacdefines_mac.h>
+#import  <qnsthemeframe_mac_p.h>
 
 @interface QT_MANGLE_NAMESPACE(QCocoaWindowCustomThemeFrame) : NSThemeFrame
 {

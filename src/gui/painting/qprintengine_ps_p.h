@@ -28,12 +28,12 @@
 
 #ifndef QT_NO_PRINTER
 
-#include "qpdf_p.h"
-#include "qplatformdefs.h"
-#include "QtCore/qlibrary.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qabstractitemmodel.h"
+#include <qpdf_p.h>
+#include <qplatformdefs.h>
+#include <QtCore/qlibrary.h>
+#include <QtCore/qstringlist.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qabstractitemmodel.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -43,6 +43,7 @@ class QPSPrintEnginePrivate;
 class QPSPrintEngine : public QPdfBaseEngine
 {
    Q_DECLARE_PRIVATE(QPSPrintEngine)
+
  public:
    // QPrinter uses these
    explicit QPSPrintEngine(QPrinter::PrinterMode m);
@@ -90,9 +91,9 @@ class QPSPrintEnginePrivate : public QPdfBaseEnginePrivate
    void drawImageHelper(qreal x, qreal y, qreal w, qreal h, const QImage &img, const QImage &mask,
                         bool gray, qreal scaleX, qreal scaleY);
 
-   int         pageCount;
-   bool        epsf;
-   QByteArray     fontsUsed;
+   int pageCount;
+   bool epsf;
+   QByteArray fontsUsed;
 
    // stores the descriptions of the n first pages.
    QPdf::ByteStream buffer;

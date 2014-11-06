@@ -26,8 +26,8 @@
 #ifndef QLAYOUT_P_H
 #define QLAYOUT_P_H
 
-#include "qstyle.h"
-#include "qsizepolicy.h"
+#include <qstyle.h>
+#include <qsizepolicy.h>
 
 QT_BEGIN_NAMESPACE
 

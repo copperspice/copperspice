@@ -30,7 +30,7 @@
 #ifndef QCocoaApplication_MAC_P_H
 #define QCocoaApplication_MAC_P_H
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #import <AppKit/AppKit.h>
 

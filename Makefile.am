@@ -59,7 +59,7 @@ include src/tools/lrelease/Makefile.am
 include src/tools/lupdate/Makefile.am
 include src/tools/lconvert/Makefile.am
 
-include src/corelib/Makefile.am
+include src/core/Makefile.am
 include src/gui/Makefile.am
 include src/multimedia/Makefile.am
 include src/network/Makefile.am

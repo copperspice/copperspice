@@ -26,22 +26,22 @@
 #ifndef QDRAWHELPER_P_H
 #define QDRAWHELPER_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtGui/qcolor.h"
-#include "QtGui/qpainter.h"
-#include "QtGui/qimage.h"
+#include <QtCore/qglobal.h>
+#include <QtGui/qcolor.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qimage.h>
 
 #ifndef QT_FT_BEGIN_HEADER
 #define QT_FT_BEGIN_HEADER
 #define QT_FT_END_HEADER
 #endif
 
-#include "qrasterdefs_p.h"
+#include <qrasterdefs_p.h>
 #include <qsimd_p.h>
 #include <qmath_p.h>
 
 #ifdef Q_WS_QWS
-#include "QtGui/qscreen_qws.h"
+#include <QtGui/qscreen_qws.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -62,7 +62,6 @@ static const uint RMASK = 0x00ff0000;
 static const uint GMASK = 0x0000ff00;
 static const uint BMASK = 0x000000ff;
 
-
 typedef QT_FT_Span QSpan;
 
 struct QSolidData;
@@ -78,45 +77,24 @@ class QClipData;
 class QRasterPaintEngineState;
 
 typedef QT_FT_SpanFunc ProcessSpans;
-typedef void (*BitmapBlitFunc)(QRasterBuffer *rasterBuffer,
-                               int x, int y, quint32 color,
-                               const uchar *bitmap,
-                               int mapWidth, int mapHeight, int mapStride);
+typedef void (*BitmapBlitFunc)(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
+                               const uchar *bitmap, int mapWidth, int mapHeight, int mapStride);
 
-typedef void (*AlphamapBlitFunc)(QRasterBuffer *rasterBuffer,
-                                 int x, int y, quint32 color,
-                                 const uchar *bitmap,
-                                 int mapWidth, int mapHeight, int mapStride,
-                                 const QClipData *clip);
+typedef void (*AlphamapBlitFunc)(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
+                                 const uchar *bitmap, int mapWidth, int mapHeight, int mapStride, const QClipData *clip);
 
-typedef void (*AlphaRGBBlitFunc)(QRasterBuffer *rasterBuffer,
-                                 int x, int y, quint32 color,
-                                 const uint *rgbmask,
-                                 int mapWidth, int mapHeight, int mapStride,
-                                 const QClipData *clip);
+typedef void (*AlphaRGBBlitFunc)(QRasterBuffer *rasterBuffer, int x, int y, quint32 color, const uint *rgbmask,
+                                 int mapWidth, int mapHeight, int mapStride, const QClipData *clip);
 
-typedef void (*RectFillFunc)(QRasterBuffer *rasterBuffer,
-                             int x, int y, int width, int height,
-                             quint32 color);
+typedef void (*RectFillFunc)(QRasterBuffer *rasterBuffer, int x, int y, int width, int height, quint32 color);
 
-typedef void (*SrcOverBlendFunc)(uchar *destPixels, int dbpl,
-                                 const uchar *src, int spbl,
-                                 int w, int h,
-                                 int const_alpha);
+typedef void (*SrcOverBlendFunc)(uchar *destPixels, int dbpl, const uchar *src, int spbl, int w, int h, int const_alpha);
 
-typedef void (*SrcOverScaleFunc)(uchar *destPixels, int dbpl,
-                                 const uchar *src, int spbl, int srch,
-                                 const QRectF &targetRect,
-                                 const QRectF &sourceRect,
-                                 const QRect &clipRect,
-                                 int const_alpha);
+typedef void (*SrcOverScaleFunc)(uchar *destPixels, int dbpl, const uchar *src, int spbl, int srch, const QRectF &targetRect,
+                                 const QRectF &sourceRect, const QRect &clipRect, int const_alpha);
 
-typedef void (*SrcOverTransformFunc)(uchar *destPixels, int dbpl,
-                                     const uchar *src, int spbl,
-                                     const QRectF &targetRect,
-                                     const QRectF &sourceRect,
-                                     const QRect &clipRect,
-                                     const QTransform &targetRectTransform,
+typedef void (*SrcOverTransformFunc)(uchar *destPixels, int dbpl, const uchar *src, int spbl, const QRectF &targetRect,
+                                     const QRectF &sourceRect, const QRect &clipRect, const QTransform &targetRectTransform,
                                      int const_alpha);
 
 typedef void (*MemRotateFunc)(const uchar *srcPixels, int w, int h, int sbpl, uchar *destPixels, int dbpl);
@@ -145,6 +123,7 @@ void qBlendTextureCallback(int count, const QSpan *spans, void *userData);
 
 typedef void (QT_FASTCALL *CompositionFunction)(uint *Q_DECL_RESTRICT dest, const uint *Q_DECL_RESTRICT src, int length,
       uint const_alpha);
+
 typedef void (QT_FASTCALL *CompositionFunctionSolid)(uint *dest, int length, uint color, uint const_alpha);
 
 struct LinearGradientValues {
@@ -262,11 +241,13 @@ struct QTextureData {
    QImage::Format format;
    const QVector<QRgb> *colorTable;
    bool hasAlpha;
+
    enum Type {
       Plain,
       Tiled
    };
    Type type;
+
    int const_alpha;
 };
 
@@ -277,9 +258,11 @@ struct QSpanData {
    }
 
    QRasterBuffer *rasterBuffer;
+
 #ifdef Q_WS_QWS
    QRasterPaintEngine *rasterEngine;
 #endif
+
    ProcessSpans blend;
    ProcessSpans unclipped_blend;
    BitmapBlitFunc bitmapBlit;
@@ -288,6 +271,7 @@ struct QSpanData {
    RectFillFunc fillRect;
    qreal m11, m12, m13, m21, m22, m23, m33, dx, dy;   // inverse xform matrix
    const QClipData *clip;
+
    enum Type {
       None,
       Solid,
@@ -300,6 +284,7 @@ struct QSpanData {
    int fast_matrix : 1;
    bool bilinear;
    QImage *tempImage;
+
    union {
       QSolidData solid;
       QGradientData gradient;
@@ -309,8 +294,10 @@ struct QSpanData {
    void init(QRasterBuffer *rb, const QRasterPaintEngine *pe);
    void setup(const QBrush &brush, int alpha, QPainter::CompositionMode compositionMode);
    void setupMatrix(const QTransform &matrix, int bilinear);
+
    void initTexture(const QImage *image, int alpha, QTextureData::Type = QTextureData::Plain,
                     const QRect &sourceRect = QRect());
+
    void adjustSpanMethods();
 };
 
@@ -402,6 +389,7 @@ const uint *QT_FASTCALL qt_fetch_radial_gradient_template(uint *buffer, const Op
       const qreal delta_delta_det = (delta_b_delta_b + 4 * op->radial.a * delta_rx_plus_ry) * inv_a;
 
       RadialFetchFunc::fetch(buffer, end, op, data, det, delta_det, delta_delta_det, b, delta_b);
+
    } else {
       qreal rw = data->m23 * (y + qreal(0.5))
                  + data->m33 + data->m13 * (x + qreal(0.5));
@@ -488,7 +476,8 @@ class QRadialFetchSimd
             v_buffer_mask.v = Simd::v_greaterOrEqual(det_vec.v, v_min); \
             const typename Simd::Float32x4 v_index_local = Simd::v_sub(Simd::v_sqrt(Simd::v_max(v_min, det_vec.v)), b_vec.v); \
             const typename Simd::Float32x4 v_index = Simd::v_add(Simd::v_mul(v_index_local, v_max), v_half); \
-            v_buffer_mask.v = Simd::v_and(v_buffer_mask.v, Simd::v_greaterOrEqual(Simd::v_add(v_r0, Simd::v_mul(v_dr, v_index_local)), v_min)); \
+            v_buffer_mask.v = Simd::v_and(v_buffer_mask.v, \
+            Simd::v_greaterOrEqual(Simd::v_add(v_r0, Simd::v_mul(v_dr, v_index_local)), v_min)); \
             typename Simd::Vect_buffer_i index_vec;
 
 #define FETCH_RADIAL_LOOP_CLAMP_REPEAT \
@@ -839,6 +828,7 @@ qargb8565::operator quint32() const
    const int tr = qMin(a, (r >> 8) | (r >> 13));
    const int tg = qMin(a, (g >> 3) | (g >> 9));
    const int tb = qMin(a, (b << 3) | (b >> 2));
+
    return qRgba(tr, tg, tb, data[0]);
 }
 
@@ -851,8 +841,7 @@ qargb8565 qargb8565::operator+(qargb8565 v) const
 {
    qargb8565 t;
    t.data[0] = data[0] + v.data[0];
-   const quint16 rgb =  ((data[2] + v.data[2]) << 8)
-                        + (data[1] + v.data[1]);
+   const quint16 rgb =  ((data[2] + v.data[2]) << 8) + (data[1] + v.data[1]);
    t.data[1] = rgb & 0xff;
    t.data[2] = rgb >> 8;
    return t;
@@ -864,8 +853,8 @@ qargb8565 qargb8565::byte_mul(quint8 a) const
    result.data[0] = (data[0] * a) >> 5;
 
    const quint16 x = (data[2] << 8) | data[1];
-   const quint16 t = ((((x & 0x07e0) >> 5) * a) & 0x07e0) |
-                     ((((x & 0xf81f) * a) >> 5) & 0xf81f);
+   const quint16 t = ((((x & 0x07e0) >> 5) * a) & 0x07e0) | ((((x & 0xf81f) * a) >> 5) & 0xf81f);
+
    result.data[1] = t & 0xff;
    result.data[2] = t >> 8;
    return result;
@@ -873,9 +862,7 @@ qargb8565 qargb8565::byte_mul(quint8 a) const
 
 bool qargb8565::operator==(const qargb8565 &v) const
 {
-   return data[0] == v.data[0]
-          && data[1] == v.data[1]
-          && data[2] == v.data[2];
+   return data[0] == v.data[0] && data[1] == v.data[1] && data[2] == v.data[2];
 }
 
 quint32 qargb8565::rawValue() const
@@ -933,8 +920,7 @@ qrgb565 qrgb565::operator+(qrgb565 v) const
 qrgb565 qrgb565::byte_mul(quint8 a) const
 {
    qrgb565 result;
-   result.data = ((((data & 0x07e0) >> 5) * a) & 0x07e0) |
-                 ((((data & 0xf81f) * a) >> 5) & 0xf81f);
+   result.data = ((((data & 0x07e0) >> 5) * a) & 0x07e0) | ((((data & 0xf81f) * a) >> 5) & 0xf81f);
    return result;
 }
 
@@ -1069,6 +1055,7 @@ class qrgb555
    inline bool operator==(const qrgb555 &v) const {
       return v.data == data;
    }
+
    inline bool operator!=(const qrgb555 &v) const {
       return v.data != data;
    }
@@ -1873,10 +1860,8 @@ class qrgb_generic16
       const int g = qGreen(color) >> (8 - qrgb::len_green);
       const int b = qBlue(color) >> (8 - qrgb::len_blue);
       const int a = qAlpha(color) >> (8 - qrgb::len_alpha);
-      data = (r << qrgb::off_red)
-             | (g << qrgb::off_green)
-             | (b << qrgb::off_blue)
-             | (a << qrgb::off_alpha);
+
+      data = (r << qrgb::off_red) | (g << qrgb::off_green) | (b << qrgb::off_blue) | (a << qrgb::off_alpha);
    }
 
    inline operator quint16 () {
@@ -2067,11 +2052,13 @@ inline void qt_memconvert(qrgb666 *dest, const quint32 *src, int count)
                   | ((src[0] & 0x00fc0000) >> 6)
                   | ((src[0] & 0x0000fc00) >> 4)
                   |  ((src[0] & 0x000000fc) >> 2);
+
       dest32[1] = ((src[2] & 0x003c0000) << 10)
                   | ((src[2] & 0x0000fc00) << 12)
                   | ((src[2] & 0x000000fc) << 14)
                   | ((src[1] & 0x00fc0000) >> 14)
                   | ((src[1] & 0x0000f000) >> 12);
+
       dest32[2] = ((src[3] & 0x00fc0000) << 2)
                   | ((src[3] & 0x0000fc00) << 4)
                   | ((src[3] & 0x000000fc) << 6)
@@ -2093,9 +2080,7 @@ inline void qt_memconvert(qrgb666 *dest, const quint32 *src, int count)
 #endif // Q_BYTE_ORDER
 
 template <class T>
-inline void qt_rectcopy(T *dest, const T *src,
-                        int x, int y, int width, int height,
-                        int dstStride, int srcStride)
+inline void qt_rectcopy(T *dest, const T *src, int x, int y, int width, int height, int dstStride, int srcStride)
 {
    char *d = (char *)(dest + x) + y * dstStride;
    const char *s = (char *)(src);
@@ -2142,12 +2127,10 @@ QT_RECTCONVERT_TRIVIAL_IMPL(qrgb444)
 #undef QT_RECTCONVERT_TRIVIAL_IMPL
 
 #ifdef QT_QWS_DEPTH_GENERIC
-template <> void qt_rectconvert(qrgb *dest, const quint32 *src,
-                                int x, int y, int width, int height,
+template <> void qt_rectconvert(qrgb *dest, const quint32 *src, int x, int y, int width, int height,
                                 int dstStride, int srcStride);
 
-template <> void qt_rectconvert(qrgb *dest, const quint16 *src,
-                                int x, int y, int width, int height,
+template <> void qt_rectconvert(qrgb *dest, const quint16 *src, int x, int y, int width, int height,
                                 int dstStride, int srcStride);
 #endif // QT_QWS_DEPTH_GENERIC
 
@@ -2157,14 +2140,14 @@ template <> void qt_rectconvert(qrgb *dest, const quint16 *src,
 #define QT_MEMFILL_USHORT(dest, length, color) \
     qt_memfill<quint16>(dest, color, length);
 
-#define QT_MEMCPY_REV_UINT(dest, src, length) \
-do {                                          \
-    /* Duff's device */                       \
-    uint *_d = (uint*)(dest) + length;         \
-    const uint *_s = (uint*)(src) + length;    \
-    int n = ((length) + 7) / 8;      \
-    switch ((length) & 0x07)                  \
-    {                                         \
+#define QT_MEMCPY_REV_UINT(dest, src, length)   \
+do {                                            \
+    /* Duff's device */                         \
+    uint *_d = (uint*)(dest) + length;          \
+    const uint *_s = (uint*)(src) + length;     \
+    int n = ((length) + 7) / 8;                 \
+    switch ((length) & 0x07)                    \
+    {                                           \
     case 0: do { *--_d = *--_s;                 \
     case 7:      *--_d = *--_s;                 \
     case 6:      *--_d = *--_s;                 \
@@ -2173,18 +2156,18 @@ do {                                          \
     case 3:      *--_d = *--_s;                 \
     case 2:      *--_d = *--_s;                 \
     case 1:      *--_d = *--_s;                 \
-    } while (--n > 0);                        \
-    }                                         \
+    } while (--n > 0);                          \
+    }                                           \
 } while (0)
 
-#define QT_MEMCPY_USHORT(dest, src, length) \
-do {                                          \
-    /* Duff's device */                       \
-    ushort *_d = (ushort*)(dest);         \
-    const ushort *_s = (ushort*)(src);    \
-    int n = ((length) + 7) / 8;      \
-    switch ((length) & 0x07)                  \
-    {                                         \
+#define QT_MEMCPY_USHORT(dest, src, length)     \
+do {                                            \
+    /* Duff's device */                         \
+    ushort *_d = (ushort*)(dest);               \
+    const ushort *_s = (ushort*)(src);          \
+    int n = ((length) + 7) / 8;                 \
+    switch ((length) & 0x07)                    \
+    {                                           \
     case 0: do { *_d++ = *_s++;                 \
     case 7:      *_d++ = *_s++;                 \
     case 6:      *_d++ = *_s++;                 \
@@ -2194,7 +2177,7 @@ do {                                          \
     case 2:      *_d++ = *_s++;                 \
     case 1:      *_d++ = *_s++;                 \
     } while (--n > 0);                          \
-    }                                          \
+    }                                           \
 } while (0)
 
 Q_STATIC_INLINE_FUNCTION int qt_div_255(int x)
@@ -2421,3 +2404,4 @@ void QT_FASTCALL rasterop_solid_SourceAndNotDestination(uint *dest, int length, 
 QT_END_NAMESPACE
 
 #endif // QDRAWHELPER_P_H
+ 

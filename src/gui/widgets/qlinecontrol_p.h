@@ -26,19 +26,19 @@
 #ifndef QLINECONTROL_P_H
 #define QLINECONTROL_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 #ifndef QT_NO_LINEEDIT
-#include "qwidget_p.h"
-#include "QtGui/qlineedit.h"
-#include "QtGui/qtextlayout.h"
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qpointer.h"
-#include "QtGui/qclipboard.h"
-#include "QtCore/qpoint.h"
-#include "QtGui/qcompleter.h"
-#include "QtGui/qaccessible.h"
-#include "qplatformdefs.h"
+#include <qwidget_p.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qtextlayout.h>
+#include <QtGui/qstyleoption.h>
+#include <QtCore/qpointer.h>
+#include <QtGui/qclipboard.h>
+#include <QtCore/qpoint.h>
+#include <QtGui/qcompleter.h>
+#include <QtGui/qaccessible.h>
+#include <qplatformdefs.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -563,6 +563,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_clipboardChanged())
    GUI_CS_SLOT_2(_q_clipboardChanged)
+
    GUI_CS_SLOT_1(Private, void _q_deleteSelected())
    GUI_CS_SLOT_2(_q_deleteSelected)
 

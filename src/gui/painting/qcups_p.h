@@ -26,9 +26,9 @@
 #ifndef QCUPS_P_H
 #define QCUPS_P_H
 
-#include "QtCore/qstring.h"
-#include "QtCore/qstringlist.h"
-#include "QtGui/qprinter.h"
+#include <QtCore/qstring.h>
+#include <QtCore/qstringlist.h>
+#include <QtGui/qprinter.h>
 
 #ifndef QT_NO_CUPS
 #include <QtCore/qlibrary.h>
@@ -49,6 +49,7 @@ class QCUPSSupport
    static int cupsVersion() {
       return isAvailable() ? CUPS_VERSION_MAJOR * 10000 + CUPS_VERSION_MINOR * 100 + CUPS_VERSION_PATCH : 0;
    }
+
    int availablePrintersCount() const;
    const cups_dest_t *availablePrinters() const;
    int currentPrinterIndex() const;
@@ -85,9 +86,11 @@ class QCUPSSupport
    const ppd_option_t *page_sizes;
    int currPrinterIndex;
    ppd_file_t *currPPD;
+
 #ifndef QT_NO_TEXTCODEC
    QTextCodec *codec;
 #endif
+
 };
 
 QT_END_NAMESPACE

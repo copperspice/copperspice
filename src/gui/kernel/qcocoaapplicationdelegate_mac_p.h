@@ -30,7 +30,7 @@
 #ifndef QCocoaApplicationDelegate_MAC_P_H
 #define QCocoaApplicationDelegate_MAC_P_H
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #import <Cocoa/Cocoa.h>
 

@@ -26,8 +26,8 @@
 #ifndef QTABBAR_P_H
 #define QTABBAR_P_H
 
-#include "qtabbar.h"
-#include "qwidget_p.h"
+#include <qtabbar.h>
+#include <qwidget_p.h>
 #include <qicon.h>
 #include <qtoolbutton.h>
 #include <qdebug.h>

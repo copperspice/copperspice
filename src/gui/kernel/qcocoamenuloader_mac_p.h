@@ -26,7 +26,7 @@
 #ifndef QCOCOAMENULOADER_MAC_P_H
 #define QCOCOAMENULOADER_MAC_P_H
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #import <Cocoa/Cocoa.h>
 

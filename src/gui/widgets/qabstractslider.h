@@ -150,9 +150,11 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    void keyPressEvent(QKeyEvent *ev);
    void timerEvent(QTimerEvent *);
+
 #ifndef QT_NO_WHEELEVENT
    void wheelEvent(QWheelEvent *e);
 #endif
+
    void changeEvent(QEvent *e);
 
    QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent = 0);

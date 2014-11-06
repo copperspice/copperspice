@@ -26,9 +26,9 @@
 #ifndef QTOOLBAR_P_H
 #define QTOOLBAR_P_H
 
-#include "qtoolbar.h"
-#include "QtGui/qaction.h"
-#include "qwidget_p.h"
+#include <qtoolbar.h>
+#include <QtGui/qaction.h>
+#include <qwidget_p.h>
 #include <QtCore/qbasictimer.h>
 
 QT_BEGIN_NAMESPACE

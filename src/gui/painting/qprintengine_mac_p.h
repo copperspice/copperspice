@@ -28,10 +28,10 @@
 
 #ifndef QT_NO_PRINTER
 
-#include "QtGui/qprinter.h"
-#include "QtGui/qprintengine.h"
-#include "qpaintengine_mac_p.h"
-#include "qpainter_p.h"
+#include <QtGui/qprinter.h>
+#include <QtGui/qprintengine.h>
+#include <qpaintengine_mac_p.h>
+#include <qpainter_p.h>
 
 #ifdef __OBJC__
 @class NSPrintInfo;
@@ -43,9 +43,11 @@ QT_BEGIN_NAMESPACE
 
 class QPrinterPrivate;
 class QMacPrintEnginePrivate;
+
 class QMacPrintEngine : public QPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QMacPrintEngine)
+
  public:
    QMacPrintEngine(QPrinter::PrinterMode mode);
 
@@ -68,8 +70,6 @@ class QMacPrintEngine : public QPaintEngine, public QPrintEngine
    bool abort();
    int metric(QPaintDevice::PaintDeviceMetric) const;
 
-   //forwarded functions
-
    void updateState(const QPaintEngineState &state);
 
    virtual void drawLines(const QLineF *lines, int lineCount);
@@ -91,6 +91,7 @@ class QMacPrintEngine : public QPaintEngine, public QPrintEngine
 class QMacPrintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QMacPrintEngine)
+
  public:
    QPrinter::PrinterMode mode;
    QPrinter::PrinterState state;
@@ -113,10 +114,12 @@ class QMacPrintEnginePrivate : public QPaintEnginePrivate
    qreal bottomMargin;
    QHash<QMacPrintEngine::PrintEnginePropertyKey, QVariant> valueCache;
    PMPaper customPaper;
+
    QMacPrintEnginePrivate() : mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
       orient(QPrinter::Portrait), printInfo(0), format(0), settings(0),
       session(0), paintEngine(0), suppressStatus(false),
       hasCustomPaperSize(false), hasCustomPageMargins(false) {}
+
    ~QMacPrintEnginePrivate();
    void initialize();
    void releaseSession();
@@ -124,6 +127,7 @@ class QMacPrintEnginePrivate : public QPaintEnginePrivate
    void setPaperSize(QPrinter::PaperSize ps);
    QPrinter::PaperSize paperSize() const;
    QList<QVariant> supportedResolutions() const;
+
    inline bool isPrintSessionInitialized() const {
       return printInfo != 0;
    }

@@ -32,15 +32,11 @@ QT_BEGIN_NAMESPACE
 
 #if defined(QT_HAVE_ARM_SIMD)
 
-void qt_blend_argb32_on_argb32_arm_simd(uchar *destPixels, int dbpl,
-                                        const uchar *srcPixels, int sbpl,
-                                        int w, int h,
-                                        int const_alpha);
+void qt_blend_argb32_on_argb32_arm_simd(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, 
+      int w, int h, int const_alpha);
 
-void qt_blend_rgb32_on_rgb32_arm_simd(uchar *destPixels, int dbpl,
-                                      const uchar *srcPixels, int sbpl,
-                                      int w, int h,
-                                      int const_alpha);
+void qt_blend_rgb32_on_rgb32_arm_simd(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
+      int w, int h, int const_alpha);
 
 #endif // QT_HAVE_ARM_SIMD
 

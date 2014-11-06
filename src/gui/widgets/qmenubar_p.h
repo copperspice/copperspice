@@ -26,11 +26,11 @@
 #ifndef QMENUBAR_P_H
 #define QMENUBAR_P_H
 
-#include "QtGui/qstyleoption.h"
+#include <QtGui/qstyleoption.h>
 #include <qmenu_p.h> // Mac needs what in this file!
 
 #ifdef Q_WS_X11
-#include "qabstractplatformmenubar_p.h"
+#include <qabstractplatformmenubar_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

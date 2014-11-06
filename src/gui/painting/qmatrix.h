@@ -47,8 +47,7 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
            qreal dx, qreal dy);
    QMatrix(const QMatrix &matrix);
 
-   void setMatrix(qreal m11, qreal m12, qreal m21, qreal m22,
-                  qreal dx, qreal dy);
+   void setMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy);
 
    qreal m11() const {
       return _m11;
@@ -95,9 +94,11 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
    bool isInvertible() const {
       return !qFuzzyIsNull(_m11 * _m22 - _m12 * _m21);
    }
+
    qreal determinant() const {
       return _m11 * _m22 - _m12 * _m21;
    }
+
 #ifdef QT_DEPRECATED
    QT_DEPRECATED qreal det() const {
       return _m11 * _m22 - _m12 * _m21;

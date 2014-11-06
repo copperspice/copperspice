@@ -67,10 +67,10 @@ class QWidgetBackingStore
    }
 
    inline bool isDirty() const {
-      return !(dirtyWidgets.isEmpty() && dirty.isEmpty() && !hasDirtyFromPreviousSync
-               && !fullUpdatePending
-#if defined(Q_WS_QWS) && !defined(QT_NO_QWS_MANAGER)
-               && !hasDirtyWindowDecoration()
+      return ! (dirtyWidgets.isEmpty() && dirty.isEmpty() && ! hasDirtyFromPreviousSync && ! fullUpdatePending
+
+#if defined(Q_WS_QWS) && ! defined(QT_NO_QWS_MANAGER)
+               && ! hasDirtyWindowDecoration()
 #endif
               );
    }
@@ -78,6 +78,7 @@ class QWidgetBackingStore
    // ### Qt 4.6: Merge into a template function (after MSVC isn't supported anymore).
    void markDirty(const QRegion &rgn, QWidget *widget, bool updateImmediately = false,
                   bool invalidateBuffer = false);
+
    void markDirty(const QRect &rect, QWidget *widget, bool updateImmediately = false,
                   bool invalidateBuffer = false);
 
@@ -90,9 +91,11 @@ class QWidgetBackingStore
    QVector<QWidget *> *dirtyOnScreenWidgets;
    QList<QWidget *> staticWidgets;
    QWindowSurface *windowSurface;
+
 #ifdef Q_BACKINGSTORE_SUBSURFACES
    QList<QWindowSurface *> subSurfaces;
 #endif
+
    uint hasDirtyFromPreviousSync : 1;
    uint fullUpdatePending : 1;
 
@@ -119,17 +122,23 @@ class QWidgetBackingStore
    bool hasDirtyWindowDecoration() const;
    void paintWindowDecoration();
 #endif
+
    void updateLists(QWidget *widget);
 
    inline void addDirtyWidget(QWidget *widget, const QRegion &rgn) {
       if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
          QWidgetPrivate *widgetPrivate = widget->d_func();
+
 #ifndef QT_NO_GRAPHICSEFFECT
          if (widgetPrivate->graphicsEffect) {
             widgetPrivate->dirty = widgetPrivate->effectiveRectFor(rgn.boundingRect());
+
          } else
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+         {
             widgetPrivate->dirty = rgn;
+         }
+
          dirtyWidgets.append(widget);
          widgetPrivate->inDirtyList = true;
       }
@@ -137,6 +146,7 @@ class QWidgetBackingStore
 
    inline void dirtyWidgetsRemoveAll(QWidget *widget) {
       int i = 0;
+
       while (i < dirtyWidgets.size()) {
          if (dirtyWidgets.at(i) == widget) {
             dirtyWidgets.remove(i);

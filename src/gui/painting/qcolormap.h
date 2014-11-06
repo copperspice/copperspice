@@ -72,4 +72,4 @@ class Q_GUI_EXPORT QColormap
 
 QT_END_NAMESPACE
 
-#endif // QCOLORMAP_H
+#endif 

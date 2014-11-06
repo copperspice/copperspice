@@ -68,7 +68,6 @@ class Q_GUI_EXPORT QPlatformWindow
    QScopedPointer<QPlatformWindowPrivate> d_ptr;
 
  private:
-
    Q_DISABLE_COPY(QPlatformWindow)
 };
 

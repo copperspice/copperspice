@@ -26,13 +26,14 @@
 #ifndef QWIDGETACTION_P_H
 #define QWIDGETACTION_P_H
 
-#include "qaction_p.h"
+#include <qaction_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QWidgetActionPrivate : public QActionPrivate
 {
    Q_DECLARE_PUBLIC(QWidgetAction)
+
  public:
    inline QWidgetActionPrivate() : defaultWidgetInUse(false), autoCreated(false) {}
    QPointer<QWidget> defaultWidget;

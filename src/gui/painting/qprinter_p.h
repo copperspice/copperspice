@@ -26,14 +26,13 @@
 #ifndef QPRINTER_P_H
 #define QPRINTER_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 #ifndef QT_NO_PRINTER
 
-#include "QtGui/qprinter.h"
-#include "QtGui/qprintengine.h"
-#include "QtCore/qpointer.h"
-
+#include <QtGui/qprinter.h>
+#include <QtGui/qprintengine.h>
+#include <QtCore/qpointer.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
@@ -67,6 +66,7 @@ class QPrinterPrivate
    }
 
    void createDefaultEngines();
+
 #ifndef QT_NO_PRINTPREVIEWWIDGET
    QList<const QPicture *> previewPages() const;
    void setPreviewMode(bool);
@@ -81,6 +81,7 @@ class QPrinterPrivate
 
    QPrintEngine *realPrintEngine;
    QPaintEngine *realPaintEngine;
+
 #ifndef QT_NO_PRINTPREVIEWWIDGET
    QPreviewPaintEngine *previewEngine;
 #endif

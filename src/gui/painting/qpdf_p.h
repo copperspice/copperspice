@@ -26,16 +26,16 @@
 #ifndef QPDF_P_H
 #define QPDF_P_H
 
-#include "QtGui/qmatrix.h"
-#include "QtCore/qstring.h"
-#include "QtCore/qvector.h"
-#include "qstroker_p.h"
-#include "qfontengine_p.h"
-#include "QtGui/qprinter.h"
-#include "qfontsubset_p.h"
-#include "qpaintengine_alpha_p.h"
-#include "qprintengine.h"
-#include "qbuffer.h"
+#include <QtGui/qmatrix.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qvector.h>
+#include <qstroker_p.h>
+#include <qfontengine_p.h>
+#include <QtGui/qprinter.h>
+#include <qfontsubset_p.h>
+#include <qpaintengine_alpha_p.h>
+#include <qprintengine.h>
+#include <qbuffer.h>
 
 #ifndef QT_NO_PRINTER
 
@@ -68,6 +68,7 @@ class ByteStream
    ByteStream &operator <<(qreal val);
    ByteStream &operator <<(int val);
    ByteStream &operator <<(const QPointF &p);
+
    // Note that the stream may be invalidated by calls that insert data.
    QIODevice *stream();
    void clear();
@@ -85,8 +86,7 @@ class ByteStream
 
  private:
    void prepareBuffer();
-
- private:
+ 
    QIODevice *dev;
    QByteArray ba;
    bool fileBackingEnabled;
@@ -104,6 +104,7 @@ QByteArray generatePath(const QPainterPath &path, const QTransform &matrix, Path
 QByteArray generateMatrix(const QTransform &matrix);
 QByteArray generateDashes(const QPen &pen);
 QByteArray patternForBrush(const QBrush &b);
+
 #ifdef USE_NATIVE_GRADIENTS
 QByteArray generateLinearGradientShader(const QLinearGradient *lg, const QPointF *page_rect, bool alpha = false);
 #endif
@@ -116,6 +117,7 @@ struct Stroker {
    bool first;
    QTransform matrix;
    bool cosmeticPen;
+
  private:
    QStroker basicStroker;
    QDashStroker dashStroker;
@@ -160,6 +162,7 @@ class QPdfBaseEnginePrivate;
 class QPdfBaseEngine : public QAlphaPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QPdfBaseEngine)
+
  public:
    QPdfBaseEngine(QPdfBaseEnginePrivate &d, PaintEngineFeatures f);
    ~QPdfBaseEngine() {}
@@ -197,6 +200,7 @@ class QPdfBaseEngine : public QAlphaPaintEngine, public QPrintEngine
 class QPdfBaseEnginePrivate : public QAlphaPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QPdfBaseEngine)
+
  public:
    QPdfBaseEnginePrivate(QPrinter::PrinterMode m);
    ~QPdfBaseEnginePrivate();

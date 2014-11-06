@@ -27,7 +27,7 @@
 #define QWINDOWSURFACE_X11_P_H
 
 #include <qglobal.h>
-#include "qwindowsurface_p.h"
+#include <qwindowsurface_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -62,4 +62,4 @@ class QX11WindowSurface : public QWindowSurface
 
 QT_END_NAMESPACE
 
-#endif // QWINDOWSURFACE_X11_P_H
+#endif

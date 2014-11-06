@@ -108,6 +108,7 @@ class QPixmapFilter;
 class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
 {
    Q_DECLARE_PRIVATE(QPaintEngineEx)
+
  public:
    QPaintEngineEx();
 
@@ -164,9 +165,9 @@ class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
 
    virtual void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
                                     QPainter::PixmapFragmentHints hints);
+
    virtual void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-                                    const QPixmap &pixmap,
-                                    QPainter::PixmapFragmentHints hints);
+                                    const QPixmap &pixmap, QPainter::PixmapFragmentHints hints);
 
    virtual void updateState(const QPaintEngineState &state);
 

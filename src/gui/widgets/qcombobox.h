@@ -187,15 +187,17 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    QVariant itemData(int index, int role = Qt::UserRole) const;
 
    inline void addItem(const QString &text, const QVariant &userData = QVariant());
-   inline void addItem(const QIcon &icon, const QString &text,
-                       const QVariant &userData = QVariant());
+   inline void addItem(const QIcon &icon, const QString &text, const QVariant &userData = QVariant());
+
    inline void addItems(const QStringList &texts) {
       insertItems(count(), texts);
    }
 
    inline void insertItem(int index, const QString &text, const QVariant &userData = QVariant());
+
    void insertItem(int index, const QIcon &icon, const QString &text,
                    const QVariant &userData = QVariant());
+
    void insertItems(int index, const QStringList &texts);
    void insertSeparator(int index);
 
@@ -215,8 +217,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    virtual void hidePopup();
 
    bool event(QEvent *event);
-
- public :
+ 
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
    GUI_CS_SLOT_1(Public, void clearEditText())
@@ -271,8 +272,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    void inputMethodEvent(QInputMethodEvent *);
    QVariant inputMethodQuery(Qt::InputMethodQuery) const;
    void initStyleOption(QStyleOptionComboBox *option) const;
-
- protected:
+ 
    QComboBox(QComboBoxPrivate &, QWidget *);
 
  private:

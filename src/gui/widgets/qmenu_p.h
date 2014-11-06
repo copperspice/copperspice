@@ -26,13 +26,13 @@
 #ifndef QMENU_P_H
 #define QMENU_P_H
 
-#include "QtGui/qmenubar.h"
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qbasictimer.h"
-#include "qwidget_p.h"
+#include <QtGui/qmenubar.h>
+#include <QtGui/qstyleoption.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qmap.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qbasictimer.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

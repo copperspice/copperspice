@@ -114,8 +114,7 @@ class Q_GUI_EXPORT QPainterPath
    inline void arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength);
 
    void cubicTo(const QPointF &ctrlPt1, const QPointF &ctrlPt2, const QPointF &endPt);
-   inline void cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y,
-                       qreal endPtx, qreal endPty);
+   inline void cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty);
    void quadTo(const QPointF &ctrlPt, const QPointF &endPt);
    inline void quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty);
 
@@ -132,18 +131,13 @@ class Q_GUI_EXPORT QPainterPath
    void addPath(const QPainterPath &path);
    void addRegion(const QRegion &region);
 
-   void addRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
-                       Qt::SizeMode mode = Qt::AbsoluteSize);
-   inline void addRoundedRect(qreal x, qreal y, qreal w, qreal h,
-                              qreal xRadius, qreal yRadius,
-                              Qt::SizeMode mode = Qt::AbsoluteSize);
+   void addRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
+   inline void addRoundedRect(qreal x, qreal y, qreal w, qreal h,  qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
 
    void addRoundRect(const QRectF &rect, int xRnd, int yRnd);
-   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                            int xRnd, int yRnd);
+   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h, int xRnd, int yRnd);
    inline void addRoundRect(const QRectF &rect, int roundness);
-   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                            int roundness);
+   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h, int roundness);
 
    void connectPath(const QPainterPath &path);
 
@@ -177,11 +171,11 @@ class Q_GUI_EXPORT QPainterPath
    inline const QPainterPath::Element &elementAt(int i) const;
    inline void setElementPositionAt(int i, qreal x, qreal y);
 
-   qreal   length() const;
-   qreal   percentAtLength(qreal t) const;
+   qreal length() const;
+   qreal percentAtLength(qreal t) const;
    QPointF pointAtPercent(qreal t) const;
-   qreal   angleAtPercent(qreal t) const;
-   qreal   slopeAtPercent(qreal t) const;
+   qreal angleAtPercent(qreal t) const;
+   qreal slopeAtPercent(qreal t) const;
 
    bool intersects(const QPainterPath &p) const;
    bool contains(const QPainterPath &p) const;
@@ -248,10 +242,12 @@ class QPainterPathPrivate
    friend class QTransform;
    friend class QVectorPath;
    friend struct QPainterPathPrivateDeleter;
+
 #ifndef QT_NO_DATASTREAM
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
 #endif
+
  private:
    QAtomicInt ref;
    QVector<QPainterPath::Element> elements;
@@ -324,11 +320,9 @@ inline void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal an
    arcMoveTo(QRectF(x, y, w, h), angle);
 }
 
-inline void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y,
-                                  qreal endPtx, qreal endPty)
+inline void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)
 {
-   cubicTo(QPointF(ctrlPt1x, ctrlPt1y), QPointF(ctrlPt2x, ctrlPt2y),
-           QPointF(endPtx, endPty));
+   cubicTo(QPointF(ctrlPt1x, ctrlPt1y), QPointF(ctrlPt2x, ctrlPt2y), QPointF(endPtx, endPty));
 }
 
 inline void QPainterPath::quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty)
@@ -352,33 +346,31 @@ inline void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)
 }
 
 inline void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h,
-      qreal xRadius, qreal yRadius,
-      Qt::SizeMode mode)
+      qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
    addRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
 }
 
-inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                                       int xRnd, int yRnd)
+inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h, int xRnd, int yRnd)
 {
    addRoundRect(QRectF(x, y, w, h), xRnd, yRnd);
 }
 
-inline void QPainterPath::addRoundRect(const QRectF &rect,
-                                       int roundness)
+inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness) 
 {
    int xRnd = roundness;
    int yRnd = roundness;
+
    if (rect.width() > rect.height()) {
       xRnd = int(roundness * rect.height() / rect.width());
    } else {
       yRnd = int(roundness * rect.width() / rect.height());
    }
+
    addRoundRect(rect, xRnd, yRnd);
 }
 
-inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                                       int roundness)
+inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h, int roundness)
 {
    addRoundRect(QRectF(x, y, w, h), roundness);
 }
@@ -412,6 +404,7 @@ inline const QPainterPath::Element &QPainterPath::elementAt(int i) const
 {
    Q_ASSERT(d_ptr);
    Q_ASSERT(i >= 0 && i < elementCount());
+
    return d_ptr->elements.at(i);
 }
 
@@ -419,6 +412,7 @@ inline void QPainterPath::setElementPositionAt(int i, qreal x, qreal y)
 {
    Q_ASSERT(d_ptr);
    Q_ASSERT(i >= 0 && i < elementCount());
+
    detach();
    QPainterPath::Element &e = d_ptr->elements[i];
    e.x = x;

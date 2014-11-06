@@ -12,19 +12,10 @@ lib_libCsSvg1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude
 lib_libCsSvg1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsSvg1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la
 
-if OSTYPE_LINUX
-lib_libCsSvg1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-lib_libCsSvg1_la_CXXFLAGS +=
-endif
-
 if OSTYPE_WIN
-lib_libCsSvg1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
 lib_libCsSvg1_la_LDFLAGS += -lws2_32
 endif
 
-if OSTYPE_DARWIN
-lib_libCsSvg1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++ -DQ_OS_UNIX
-endif
 
 SVG_PUBLIC_INCLUDES = \
 	QtSvg \

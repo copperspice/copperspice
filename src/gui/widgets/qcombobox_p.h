@@ -26,25 +26,25 @@
 #ifndef QCOMBOBOX_P_H
 #define QCOMBOBOX_P_H
 
-#include "QtGui/qcombobox.h"
+#include <QtGui/qcombobox.h>
 
 #ifndef QT_NO_COMBOBOX
-#include "QtGui/qabstractslider.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/qitemdelegate.h"
-#include "QtGui/qstandarditemmodel.h"
-#include "QtGui/qlineedit.h"
-#include "QtGui/qlistview.h"
-#include "QtGui/qpainter.h"
-#include "QtGui/qstyle.h"
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qpair.h"
-#include "QtCore/qtimer.h"
-#include "qwidget_p.h"
-#include "QtCore/qpointer.h"
-#include "QtGui/qcompleter.h"
-#include "QtGui/qevent.h"
+#include <QtGui/qabstractslider.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qitemdelegate.h>
+#include <QtGui/qstandarditemmodel.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qlistview.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qstyle.h>
+#include <QtGui/qstyleoption.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qpair.h>
+#include <QtCore/qtimer.h>
+#include <qwidget_p.h>
+#include <QtCore/qpointer.h>
+#include <QtGui/qcompleter.h>
+#include <QtGui/qevent.h>
 #include "QtCore/qdebug.h"
 
 #include <limits.h>
@@ -52,6 +52,7 @@
 QT_BEGIN_NAMESPACE
 
 class QAction;
+class QStandardItemModel;
 
 class QComboBoxListView : public QListView
 {
@@ -101,9 +102,6 @@ class QComboBoxListView : public QListView
    QComboBox *combo;
 };
 
-
-class QStandardItemModel;
-
 class QComboBoxPrivateScroller : public QWidget
 {
    CS_OBJECT(QComboBoxPrivateScroller)
@@ -117,6 +115,9 @@ class QComboBoxPrivateScroller : public QWidget
    QSize sizeHint() const {
       return QSize(20, style()->pixelMetric(QStyle::PM_MenuScrollerHeight));
    }
+
+   GUI_CS_SIGNAL_1(Public, void doScroll(int action))
+   GUI_CS_SIGNAL_2(doScroll, action)
 
  protected:
    inline void stopTimer() {
@@ -176,11 +177,7 @@ class QComboBoxPrivateScroller : public QWidget
       p.eraseRect(rect());
       style()->drawControl(QStyle::CE_MenuScroller, &menuOpt, &p);
    }
-
- public:
-   GUI_CS_SIGNAL_1(Public, void doScroll(int action))
-   GUI_CS_SIGNAL_2(doScroll, action)
-
+ 
  private:
    QAbstractSlider::SliderAction sliderAction;
    QBasicTimer timer;
@@ -201,14 +198,18 @@ class QComboBoxPrivateContainer : public QFrame
    QTimer blockMouseReleaseTimer;
    QBasicTimer adjustSizeTimer;
    QPoint initialClickPosition;
-
- public :
+ 
    GUI_CS_SLOT_1(Public, void scrollItemView(int action))
    GUI_CS_SLOT_2(scrollItemView)
    GUI_CS_SLOT_1(Public, void updateScrollers())
    GUI_CS_SLOT_2(updateScrollers)
    GUI_CS_SLOT_1(Public, void viewDestroyed())
    GUI_CS_SLOT_2(viewDestroyed)
+
+   GUI_CS_SIGNAL_1(Public, void itemSelected(const QModelIndex &un_named_arg1))
+   GUI_CS_SIGNAL_2(itemSelected, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void resetButton())
+   GUI_CS_SIGNAL_2(resetButton)
 
  protected:
    void changeEvent(QEvent *e);
@@ -221,18 +222,13 @@ class QComboBoxPrivateContainer : public QFrame
    void leaveEvent(QEvent *e);
    void resizeEvent(QResizeEvent *e);
    QStyleOptionComboBox comboStyleOption() const;
-
- public:
-   GUI_CS_SIGNAL_1(Public, void itemSelected(const QModelIndex &un_named_arg1))
-   GUI_CS_SIGNAL_2(itemSelected, un_named_arg1)
-   GUI_CS_SIGNAL_1(Public, void resetButton())
-   GUI_CS_SIGNAL_2(resetButton)
-
+ 
  private:
    QComboBox *combo;
    QAbstractItemView *view;
    QComboBoxPrivateScroller *top;
    QComboBoxPrivateScroller *bottom;
+
 #ifdef QT_SOFTKEYS_ENABLED
    QAction *selectAction;
    QAction *cancelAction;
@@ -242,6 +238,7 @@ class QComboBoxPrivateContainer : public QFrame
 class QComboMenuDelegate : public QAbstractItemDelegate
 {
    CS_OBJECT(QComboMenuDelegate)
+
  public:
    QComboMenuDelegate(QObject *parent, QComboBox *cmb) : QAbstractItemDelegate(parent), mCombo(cmb) {}
 
@@ -262,8 +259,7 @@ class QComboMenuDelegate : public QAbstractItemDelegate
    }
 
  private:
-   QStyleOptionMenuItem getStyleOption(const QStyleOptionViewItem &option,
-                                       const QModelIndex &index) const;
+   QStyleOptionMenuItem getStyleOption(const QStyleOptionViewItem &option, const QModelIndex &index) const;
    QComboBox *mCombo;
 };
 
@@ -339,9 +335,11 @@ class QComboBoxPrivate : public QWidgetPrivate
    void _q_emitCurrentIndexChanged(const QModelIndex &index);
    void _q_modelDestroyed();
    void _q_modelReset();
+
 #ifdef QT_KEYPAD_NAVIGATION
    void _q_completerActivated();
 #endif
+
    void _q_resetButton();
    void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
    void _q_updateIndexBeforeChange();
@@ -389,9 +387,11 @@ class QComboBoxPrivate : public QWidgetPrivate
    QPersistentModelIndex root;
    Qt::CaseSensitivity autoCompletionCaseSensitivity;
    int indexBeforeChange;
+
 #ifndef QT_NO_COMPLETER
    QPointer<QCompleter> completer;
 #endif
+
    static QPalette viewContainerPalette(QComboBox *cmb) {
       return cmb->d_func()->viewContainer()->palette();
    }

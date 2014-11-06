@@ -90,6 +90,7 @@ class QTextItemIntCopy
    QTextItemInt &operator () () {
       return m_item;
    }
+
  private:
    QTextItemInt m_item;
    QFont m_font;
@@ -324,6 +325,7 @@ class QPaintBufferEnginePrivate;
 class QPaintBufferEngine : public QPaintEngineEx
 {
    Q_DECLARE_PRIVATE(QPaintBufferEngine)
+
  public:
    QPaintBufferEngine(QPaintBufferPrivate *buffer);
 
@@ -405,13 +407,14 @@ class QPaintBufferEngine : public QPaintEngineEx
 class Q_GUI_EXPORT QPaintBufferSignalProxy : public QObject
 {
    CS_OBJECT(QPaintBufferSignalProxy)
+
  public:
    QPaintBufferSignalProxy() : QObject() {}
    void emitAboutToDestroy(const QPaintBufferPrivate *buffer) {
       emit aboutToDestroy(buffer);
    }
    static QPaintBufferSignalProxy *instance();
- public:
+ 
    GUI_CS_SIGNAL_1(Public, void aboutToDestroy(const QPaintBufferPrivate *buffer))
    GUI_CS_SIGNAL_2(aboutToDestroy, buffer)
 };

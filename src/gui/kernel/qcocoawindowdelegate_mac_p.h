@@ -26,9 +26,8 @@
 #ifndef QCocoaWindowDelegate_MAC_P_H
 #define QCocoaWindowDelegate_MAC_P_H
 
-#include "qmacdefines_mac.h"
-
-#import <Cocoa/Cocoa.h>
+#include <qmacdefines_mac.h>
+#import  <Cocoa/Cocoa.h>
 
 QT_BEGIN_NAMESPACE
 template <class Key, class T> class QHash;

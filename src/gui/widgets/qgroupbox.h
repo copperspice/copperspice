@@ -34,6 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class QGroupBoxPrivate;
 class QStyleOptionGroupBox;
+
 class Q_GUI_EXPORT QGroupBox : public QWidget
 {
    CS_OBJECT(QGroupBox)

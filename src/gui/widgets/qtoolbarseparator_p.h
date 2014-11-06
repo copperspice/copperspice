@@ -26,7 +26,7 @@
 #ifndef QToolBarSeparator_P_H
 #define QToolBarSeparator_P_H
 
-#include "QtGui/qwidget.h"
+#include <QtGui/qwidget.h>
 
 QT_BEGIN_NAMESPACE
 

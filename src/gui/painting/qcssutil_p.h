@@ -26,12 +26,12 @@
 #ifndef QCSSUTIL_P_H
 #define QCSSUTIL_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 #ifndef QT_NO_CSSPARSER
 
-#include "qcssparser_p.h"
-#include "QtCore/qsize.h"
+#include <qcssparser_p.h>
+#include <QtCore/qsize.h>
 
 QT_BEGIN_NAMESPACE
 

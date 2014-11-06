@@ -16,18 +16,6 @@ lib_libCsXmlPatterns1_la_LIBADD = lib/libCsCore1.la lib/libCsNetwork1.la
 # BROOM (enable OpenSSL)
 lib_libCsXmlPatterns1_la_CXXFLAGS += -DQT_NO_OPENSSL
 
-if OSTYPE_LINUX
-lib_libCsXmlPatterns1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsXmlPatterns1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsXmlPatterns1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-endif
-
 XMLPATTERNS_INCLUDES =
 XMLPATTERNS_PUBLIC_INCLUDES =
 XMLPATTERNS_PRIVATE_INCLUDES =

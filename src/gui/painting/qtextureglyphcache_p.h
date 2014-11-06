@@ -30,7 +30,6 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qtransform.h>
-
 #include <qfontengineglyphcache_p.h>
 
 #ifndef QT_DEFAULT_TEXTURE_GLYPH_CACHE_WIDTH
@@ -39,7 +38,6 @@
 
 struct glyph_metrics_t;
 typedef unsigned int glyph_t;
-
 
 QT_BEGIN_NAMESPACE
 

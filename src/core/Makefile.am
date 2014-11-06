@@ -16,28 +16,16 @@ lib_libCsCore1_la_CFLAGS = $(AM_CFLAGS)
 lib_libCsCore1_la_OBJCXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)
 lib_libCsCore1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 
-EXTRA_DIST += mkspecs/common/posix/qplatformdefs.h \
-              mkspecs/common/c89/qplatformdefs.h \
-              mkspecs/common/mac/qplatformdefs.h \
-              mkspecs/linux-g++/qplatformdefs.h \
-              mkspecs/win32-g++/qplatformdefs.h \
-              mkspecs/macx-g++/qplatformdefs.h
-
 if OSTYPE_LINUX
-lib_libCsCore1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
 lib_libCsCore1_la_LDFLAGS += -ldl -lpthread
 endif
 
 if OSTYPE_WIN
-lib_libCsCore1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-lib_libCsCore1_la_CFLAGS += -I$(top_srcdir)/mkspecs/win32-g++ -DQT_MAKEDLL
+lib_libCsCore1_la_CFLAGS += -DQT_MAKEDLL
 lib_libCsCore1_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_CFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-lib_libCsCore1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-lib_libCsCore1_la_OBJCXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
 lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lObjC
 endif
 
@@ -145,5 +133,5 @@ EXTRA_DIST+= \
 macdir=$(prefix)/mac
 dist_mac_DATA=
 if OSTYPE_DARWIN
-dist_mac_DATA+=mkspecs/macx-g++/Info.plist.app
+dist_mac_DATA+=src/core/global/Info.plist.app
 endif

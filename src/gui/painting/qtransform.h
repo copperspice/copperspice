@@ -22,6 +22,7 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #ifndef QTRANSFORM_H
 #define QTRANSFORM_H
 
@@ -83,9 +84,7 @@ class Q_GUI_EXPORT QTransform
    qreal dx() const;
    qreal dy() const;
 
-   void setMatrix(qreal m11, qreal m12, qreal m13,
-                  qreal m21, qreal m22, qreal m23,
-                  qreal m31, qreal m32, qreal m33);
+   void setMatrix(qreal m11, qreal m12, qreal m13, qreal m21, qreal m22, qreal m23, qreal m31, qreal m32, qreal m33);
 
    QTransform inverted(bool *invertible = 0) const;
    QTransform adjoint() const;
@@ -99,9 +98,7 @@ class Q_GUI_EXPORT QTransform
 
    static bool squareToQuad(const QPolygonF &square, QTransform &result);
    static bool quadToSquare(const QPolygonF &quad, QTransform &result);
-   static bool quadToQuad(const QPolygonF &one,
-                          const QPolygonF &two,
-                          QTransform &result);
+   static bool quadToQuad(const QPolygonF &one, const QPolygonF &two, QTransform &result);
 
    bool operator==(const QTransform &) const;
    bool operator!=(const QTransform &) const;
@@ -139,9 +136,7 @@ class Q_GUI_EXPORT QTransform
    static QTransform fromScale(qreal dx, qreal dy);
 
  private:
-   inline QTransform(qreal h11, qreal h12, qreal h13,
-                     qreal h21, qreal h22, qreal h23,
-                     qreal h31, qreal h32, qreal h33, bool)
+   inline QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23, qreal h31, qreal h32, qreal h33, bool)
       : affine(h11, h12, h21, h22, h31, h32, true)
       , m_13(h13), m_23(h23), m_33(h33)
       , m_type(TxNone)
@@ -165,7 +160,6 @@ class Q_GUI_EXPORT QTransform
 };
 Q_DECLARE_TYPEINFO(QTransform, Q_MOVABLE_TYPE);
 
-/******* inlines *****/
 inline QTransform::TransformationType QTransform::inline_type() const
 {
    if (m_dirty == TxNone) {
@@ -178,6 +172,7 @@ inline bool QTransform::isAffine() const
 {
    return inline_type() < TxProject;
 }
+
 inline bool QTransform::isIdentity() const
 {
    return inline_type() == TxNone;
@@ -270,6 +265,7 @@ inline QTransform &QTransform::operator*=(qreal num)
    affine._dx  *= num;
    affine._dy  *= num;
    m_33        *= num;
+
    if (m_dirty < TxScale) {
       m_dirty = TxScale;
    }

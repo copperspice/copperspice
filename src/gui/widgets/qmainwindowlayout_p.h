@@ -26,19 +26,19 @@
 #ifndef QMAINWINDOWLAYOUT_P_H
 #define QMAINWINDOWLAYOUT_P_H
 
-#include "qmainwindow.h"
+#include <qmainwindow.h>
 
 #ifndef QT_NO_MAINWINDOW
 
-#include "QtGui/qlayout.h"
-#include "QtGui/qtabbar.h"
-#include "QtCore/qvector.h"
-#include "QtCore/qset.h"
-#include "QtCore/qbasictimer.h"
-#include "qlayoutengine_p.h"
-#include "qwidgetanimator_p.h"
-#include "qdockarealayout_p.h"
-#include "qtoolbararealayout_p.h"
+#include <QtGui/qlayout.h>
+#include <QtGui/qtabbar.h>
+#include <QtCore/qvector.h>
+#include <QtCore/qset.h>
+#include <QtCore/qbasictimer.h>
+#include <qlayoutengine_p.h>
+#include <qwidgetanimator_p.h>
+#include <qdockarealayout_p.h>
+#include <qtoolbararealayout_p.h>
 
 //#define Q_DEBUG_MAINWINDOW_LAYOUT
 
@@ -202,7 +202,8 @@ class QMainWindowLayout : public QLayout
    void setTabShape(QTabWidget::TabShape tabShape);
    QTabWidget::TabPosition tabPosition(Qt::DockWidgetArea area) const;
    void setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition);
-#endif // QT_NO_TABWIDGET
+#endif
+
 #endif // QT_NO_TABBAR
 
    // separators
@@ -272,7 +273,6 @@ class QMainWindowLayout : public QLayout
 #endif
 
 #ifdef Q_OS_MAC
-
  public:
    struct ToolBarSaveState {
       ToolBarSaveState() : movable(false) { }
@@ -298,8 +298,6 @@ class QMainWindowLayout : public QLayout
 
    QUnifiedToolbarSurface *unifiedSurface;
    void updateUnifiedToolbarOffset();
-
-
 #endif
 
 };

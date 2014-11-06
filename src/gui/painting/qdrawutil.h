@@ -27,7 +27,7 @@
 #define QDRAWUTIL_H
 
 #include <QtCore/qnamespace.h>
-#include <QtCore/qstring.h> // char*->QString conversion
+#include <QtCore/qstring.h>       // char*->QString conversion
 #include <QtCore/qmargins.h>
 #include <QtGui/qpixmap.h>
 
@@ -96,6 +96,7 @@ Q_GUI_EXPORT void qDrawPlainRect(QPainter *p, const QRect &r, const QColor &,
 struct QTileRules {
    inline QTileRules(Qt::TileRule horizontalRule, Qt::TileRule verticalRule)
       : horizontal(horizontalRule), vertical(verticalRule) {}
+
    inline QTileRules(Qt::TileRule rule = Qt::StretchTile)
       : horizontal(rule), vertical(rule) {}
    Qt::TileRule horizontal;

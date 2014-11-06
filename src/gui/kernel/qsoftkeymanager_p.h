@@ -27,7 +27,7 @@
 #define QSOFTKEYMANAGER_P_H
 
 #include <QtCore/qobject.h>
-#include "QtGui/qaction.h"
+#include <QtGui/qaction.h>
 #include <QScopedPointer>
 
 #ifndef QT_NO_SOFTKEYMANAGER
@@ -76,7 +76,6 @@ class QSoftKeyManager : public QObject
    GUI_CS_SLOT_2(sendKeyEvent)
 
    Q_DISABLE_COPY(QSoftKeyManager)
-
 };
 
 QT_END_NAMESPACE

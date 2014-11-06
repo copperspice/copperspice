@@ -26,8 +26,8 @@
 #ifndef QABSTRACTBUTTON_P_H
 #define QABSTRACTBUTTON_P_H
 
-#include "QtCore/qbasictimer.h"
-#include "qwidget_p.h"
+#include <QtCore/qbasictimer.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

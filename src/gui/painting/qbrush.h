@@ -103,10 +103,18 @@ class Q_GUI_EXPORT QBrush
       return !(operator==(b));
    }
 
+  inline bool isDetached() const;
+   typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
+   inline DataPtr &data_ptr() {
+      return d;
+   }
+
  private:
+
 #if defined(Q_WS_X11)
    friend class QX11PaintEngine;
 #endif
+
    friend class QRasterPaintEngine;
    friend class QRasterPaintEnginePrivate;
    friend struct QSpanData;
@@ -115,14 +123,7 @@ class Q_GUI_EXPORT QBrush
    void detach(Qt::BrushStyle newStyle);
    void init(const QColor &color, Qt::BrushStyle bs);
    QScopedPointer<QBrushData, QBrushDataPointerDeleter> d;
-   void cleanUp(QBrushData *x);
-
- public:
-   inline bool isDetached() const;
-   typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
-   inline DataPtr &data_ptr() {
-      return d;
-   }
+   void cleanUp(QBrushData *x); 
 };
 
 inline void QBrush::setColor(Qt::GlobalColor acolor)
@@ -132,10 +133,6 @@ inline void QBrush::setColor(Qt::GlobalColor acolor)
 
 Q_DECLARE_TYPEINFO(QBrush, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QBrush)
-
-/*****************************************************************************
-  QBrush stream functions
- *****************************************************************************/
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QBrush &);
@@ -172,9 +169,6 @@ inline bool QBrush::isDetached() const
    return d->ref.load() == 1;
 }
 
-/*******************************************************************************
- * QGradients
- */
 class QGradientPrivate;
 
 typedef QPair<qreal, QColor> QGradientStop;

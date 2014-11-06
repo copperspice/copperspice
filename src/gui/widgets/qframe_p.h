@@ -26,8 +26,8 @@
 #ifndef QFRAME_P_H
 #define QFRAME_P_H
 
-#include "qwidget_p.h"
-#include "qframe.h"
+#include <qwidget_p.h>
+#include <qframe.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,7 +26,7 @@
 #ifndef QToolBarExtension_P_H
 #define QToolBarExtension_P_H
 
-#include "QtGui/qtoolbutton.h"
+#include <QtGui/qtoolbutton.h>
 
 QT_BEGIN_NAMESPACE
 

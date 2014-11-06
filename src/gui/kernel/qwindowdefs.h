@@ -66,7 +66,6 @@ typedef QList<QWidget *> QWidgetList;
 
 QT_END_NAMESPACE
 
-
 // Window system dependent definitions
 
 #if defined(Q_OS_MAC) && !defined(Q_WS_QWS)

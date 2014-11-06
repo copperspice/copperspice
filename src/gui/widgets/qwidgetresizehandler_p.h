@@ -26,8 +26,8 @@
 #ifndef QWIDGETRESIZEHANDLER_P_H
 #define QWIDGETRESIZEHANDLER_P_H
 
-#include "QtCore/qobject.h"
-#include "QtCore/qpoint.h"
+#include <QtCore/qobject.h>
+#include <QtCore/qpoint.h>
 
 #ifndef QT_NO_RESIZEHANDLER
 
@@ -81,8 +81,7 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 
    void doResize();
    void doMove();
-
- public:
+ 
    GUI_CS_SIGNAL_1(Public, void activate())
    GUI_CS_SIGNAL_2(activate)
 

@@ -28,7 +28,7 @@
 
 #ifndef QT_NO_MENUBAR
 
-#include "qabstractplatformmenubar_p.h"
+#include <qabstractplatformmenubar_p.h>
 
 QT_BEGIN_NAMESPACE
 

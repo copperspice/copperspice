@@ -26,8 +26,8 @@
 #ifndef QABSTRACTSCROLLAREA_P_H
 #define QABSTRACTSCROLLAREA_P_H
 
-#include "qframe_p.h"
-#include "qabstractscrollarea.h"
+#include <qframe_p.h>
+#include <qabstractscrollarea.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,6 +35,8 @@ QT_BEGIN_NAMESPACE
 
 class QScrollBar;
 class QAbstractScrollAreaScrollBarContainer;
+class QBoxLayout;
+
 class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QAbstractScrollArea)
@@ -51,6 +53,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    QWidget *viewport;
    QWidget *cornerWidget;
    QRect cornerPaintingRect;
+
 #ifdef Q_OS_MAC
    QRect reverseCornerPaintingRect;
 #endif
@@ -60,6 +63,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 
    void init();
    void layoutChildren();
+
    // ### Fix for 4.4, talk to Bjoern E or Girish.
    virtual void scrollBarPolicyChanged(Qt::Orientation, Qt::ScrollBarPolicy) {}
 
@@ -83,6 +87,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 class QAbstractScrollAreaFilter : public QObject
 {
    CS_OBJECT(QAbstractScrollAreaFilter)
+
  public:
    QAbstractScrollAreaFilter(QAbstractScrollAreaPrivate *p) : d(p) {
       setObjectName(QLatin1String("qt_abstractscrollarea_filter"));
@@ -90,11 +95,11 @@ class QAbstractScrollAreaFilter : public QObject
    bool eventFilter(QObject *o, QEvent *e) {
       return (o == d->viewport ? d->viewportEvent(e) : false);
    }
+
  private:
    QAbstractScrollAreaPrivate *d;
 };
 
-class QBoxLayout;
 class QAbstractScrollAreaScrollBarContainer : public QWidget
 {
  public:
@@ -107,6 +112,7 @@ class QAbstractScrollAreaScrollBarContainer : public QWidget
 
    QScrollBar *scrollBar;
    QBoxLayout *layout;
+
  private:
    int scrollBarLayoutIndex() const;
 

@@ -26,9 +26,9 @@
 #ifndef QSHORTCUTMAP_P_H
 #define QSHORTCUTMAP_P_H
 
-#include "QtGui/qkeysequence.h"
-#include "QtCore/qvector.h"
-#include "QtCore/qscopedpointer.h"
+#include <QtGui/qkeysequence.h>
+#include <QtCore/qvector.h>
+#include <QtCore/qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,6 +48,7 @@ class QObject;
 class QShortcutMap
 {
    Q_DECLARE_PRIVATE(QShortcutMap)
+
  public:
    QShortcutMap();
    ~QShortcutMap();
@@ -69,15 +70,17 @@ class QShortcutMap
 
    bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
-
  private:
    bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const;
+
 #ifndef QT_NO_GRAPHICSVIEW
    bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window) const;
 #endif
+
 #ifndef QT_NO_ACTION
    bool correctContext(Qt::ShortcutContext context, QAction *a, QWidget *active_window) const;
 #endif
+
    QScopedPointer<QShortcutMapPrivate> d_ptr;
 
    QKeySequence::SequenceMatch find(QKeyEvent *e);

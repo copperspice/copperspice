@@ -26,19 +26,19 @@
 #ifndef QCURSOR_P_H
 #define QCURSOR_P_H
 
-#include "QtCore/qatomic.h"
-#include "QtCore/qglobal.h"
-#include "QtCore/qnamespace.h"
-#include "QtGui/qpixmap.h"
+#include <QtCore/qatomic.h>
+#include <QtCore/qglobal.h>
+#include <QtCore/qnamespace.h>
+#include <QtGui/qpixmap.h>
 
 # if defined (Q_OS_MAC)
-#  include "qt_mac_p.h"
+#  include <qt_mac_p.h>
 
 # elif defined(Q_WS_X11)
-#  include "qt_x11_p.h"
+#  include <qt_x11_p.h>
 
 # elif defined(Q_OS_WIN)
-#  include "QtCore/qt_windows.h"
+#  include <QtCore/qt_windows.h>
 
 #endif
 

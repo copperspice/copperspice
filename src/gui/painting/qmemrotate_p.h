@@ -26,7 +26,7 @@
 #ifndef QMEMROTATE_P_H
 #define QMEMROTATE_P_H
 
-#include "qdrawhelper_p.h"
+#include <qdrawhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,11 +36,13 @@ QT_BEGIN_NAMESPACE
 #define QT_ROTATION_TILED 4
 
 #ifndef QT_ROTATION_ALGORITHM
+
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 #define QT_ROTATION_ALGORITHM QT_ROTATION_TILED
 #else
 #define QT_ROTATION_ALGORITHM QT_ROTATION_CACHEDREAD
 #endif
+
 #endif
 
 #ifdef Q_WS_QWS

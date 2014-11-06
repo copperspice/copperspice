@@ -26,8 +26,8 @@
 #ifndef QCLIPBOARD_P_H
 #define QCLIPBOARD_P_H
 
-#include "QtGui/qmime.h"
-#include "QtGui/qclipboard.h"
+#include <QtGui/qmime.h>
+#include <QtGui/qclipboard.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -56,6 +56,7 @@ class QMimeSourceWrapper : public QMimeData
 
  protected:
    QVariant retrieveData(const QString &mimetype, QVariant::Type) const;
+
  private:
    QClipboardPrivate *d;
    QClipboard::Mode mode;

@@ -28,7 +28,7 @@
 
 #include <QtCore/qnamespace.h>
 #include <QtCore/qstring.h>
-#include "qobject.h"
+#include <qobject.h>
 
 QT_BEGIN_NAMESPACE
 

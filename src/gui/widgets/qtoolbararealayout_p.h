@@ -127,7 +127,6 @@ class QToolBarAreaLayoutItem
 
 class QToolBarAreaLayoutLine
 {
-
  public:
    QToolBarAreaLayoutLine(Qt::Orientation orientation);
 
@@ -145,7 +144,6 @@ class QToolBarAreaLayoutLine
 
 class QToolBarAreaLayoutInfo
 {
-
  public:
    QToolBarAreaLayoutInfo(QInternal::DockPosition pos = QInternal::TopDock);
 
@@ -177,7 +175,6 @@ class QToolBarAreaLayoutInfo
 
 class QToolBarAreaLayout
 {
-
  public:
    enum { // sentinel values used to validate state data
       ToolBarStateMarker = 0xfe,

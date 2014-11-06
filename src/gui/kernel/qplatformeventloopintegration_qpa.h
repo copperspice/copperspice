@@ -36,6 +36,7 @@ class QPlatformEventLoopIntegrationPrivate;
 class Q_GUI_EXPORT QPlatformEventLoopIntegration
 {
    Q_DECLARE_PRIVATE(QPlatformEventLoopIntegration);
+
  public:
    QPlatformEventLoopIntegration();
    virtual ~QPlatformEventLoopIntegration();

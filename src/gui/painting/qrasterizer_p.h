@@ -26,8 +26,8 @@
 #ifndef QRASTERIZER_P_H
 #define QRASTERIZER_P_H
 
-#include "QtCore/qglobal.h"
-#include "QtGui/qpainter.h"
+#include <QtCore/qglobal.h>
+#include <QtGui/qpainter.h>
 #include <qdrawhelper_p.h>
 #include <qrasterdefs_p.h>
 
@@ -37,11 +37,11 @@ struct QSpanData;
 class QRasterBuffer;
 class QRasterizerPrivate;
 
-class
 #ifdef Q_WS_QWS
-   Q_GUI_EXPORT
-#endif
-   QRasterizer
+   class Q_GUI_EXPORT QRasterizer
+#else
+   class QRasterizer
+#endif   
 {
  public:
    QRasterizer();

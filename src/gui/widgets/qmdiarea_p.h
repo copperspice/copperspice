@@ -26,8 +26,8 @@
 #ifndef QMDIAREA_P_H
 #define QMDIAREA_P_H
 
-#include "qmdiarea.h"
-#include "qmdisubwindow.h"
+#include <qmdiarea.h>
+#include <qmdisubwindow.h>
 
 #ifndef QT_NO_MDIAREA
 
@@ -96,8 +96,7 @@ class Placer
  public:
    // Places the rectangle defined by 'size' relative to 'rects' and 'domain'.
    // Returns the position of the resulting rectangle.
-   virtual QPoint place(
-      const QSize &size, const QList<QRect> &rects, const QRect &domain) const = 0;
+   virtual QPoint place(const QSize &size, const QList<QRect> &rects, const QRect &domain) const = 0;
    virtual ~Placer() {}
 };
 
@@ -122,6 +121,7 @@ class QMdiAreaTabBar;
 class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
 {
    Q_DECLARE_PUBLIC(QMdiArea)
+
  public:
    QMdiAreaPrivate();
 
@@ -130,9 +130,11 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
    QMdi::Rearranger *regularTiler;
    QMdi::Rearranger *iconTiler;
    QMdi::Placer *placer;
+
 #ifndef QT_NO_RUBBERBAND
    QRubberBand *rubberBand;
 #endif
+
    QMdiAreaTabBar *tabBar;
    QList<QMdi::Rearranger *> pendingRearrangements;
    QList< QPointer<QMdiSubWindow> > pendingPlacements;
@@ -144,15 +146,18 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
    QMdiArea::WindowOrder activationOrder;
    QMdiArea::AreaOptions options;
    QMdiArea::ViewMode viewMode;
+
 #ifndef QT_NO_TABBAR
    bool documentMode;
    bool tabsClosable;
    bool tabsMovable;
 #endif
+
 #ifndef QT_NO_TABWIDGET
    QTabWidget::TabShape tabShape;
    QTabWidget::TabPosition tabPosition;
 #endif
+
    bool ignoreGeometryChange;
    bool ignoreWindowStateChange;
    bool isActivated;
@@ -199,6 +204,7 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
    QList<QMdiSubWindow *> subWindowList(QMdiArea::WindowOrder, bool reversed = false) const;
    void disconnectSubWindow(QObject *subWindow);
    void setViewMode(QMdiArea::ViewMode mode);
+
 #ifndef QT_NO_TABBAR
    void updateTabBarGeometry();
    void refreshTabBar();

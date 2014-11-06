@@ -288,7 +288,6 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
 #ifdef QT_KEYPAD_NAVIGATION
    GUI_CS_SLOT_1(Private, void _q_editFocusChange(bool un_named_arg1))
    GUI_CS_SLOT_2(_q_editFocusChange)
-
 #endif
 
    GUI_CS_SLOT_1(Private, void _q_selectionChanged())

@@ -35,23 +35,19 @@ QT_BEGIN_NAMESPACE
 /*!
     \relates QByteArray
 
-    A portable \c vsnprintf() function. Will call \c ::vsnprintf(), \c
-    ::_vsnprintf(), or \c ::vsnprintf_s depending on the system, or
-    fall back to an internal version.
+    A portable vsnprintf() function. 
 
-    \a fmt is the \c printf() format string. The result is put into
-    \a str, which is a buffer of at least \a n bytes.
+    Will call ::vsnprintf(), ::_vsnprintf(), or ::vsnprintf_s depending on the system, or fall back to an internal version.
 
-    The caller is responsible to call \c va_end() on \a ap.
+    fmt is the printf() format string. The result is put into str, which is a buffer of at least n bytes.
 
-    \warning Since vsnprintf() shows different behavior on certain
-    platforms, you should not rely on the return value or on the fact
+    The caller is responsible to call va_end() on ap.
+
+    Since vsnprintf() shows different behavior on certain platforms, you should not rely on the return value or on the fact
     that you will always get a 0 terminated string back.
 
-    Ideally, you should never call this function but use QString::sprintf()
-    instead.
-
-    \sa qsnprintf(), QString::sprintf()
+    Ideally, you should never call this function but use QString::sprintf() instead.
+   
 */
 
 int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap)
@@ -92,14 +88,14 @@ int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap)
 
     A portable snprintf() function, calls qvsnprintf.
 
-    \a fmt is the \c printf() format string. The result is put into
-    \a str, which is a buffer of at least \a n bytes.
+    fmt is the \c printf() format string. The result is put into
+    str, which is a buffer of at least n bytes.
 
-    \warning Call this function only when you know what you are doing
+    Call this function only when you know what you are doing
     since it shows different behavior on certain platforms.
+ 
     Use QString::sprintf() to format a string instead.
-
-    \sa qvsnprintf(), QString::sprintf()
+   
 */
 
 int qsnprintf(char *str, size_t n, const char *fmt, ...)

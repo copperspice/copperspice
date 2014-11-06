@@ -79,10 +79,12 @@ class QCosmeticStroker
         lastAxisAligned(false) {
       setup();
    }
+
    ~QCosmeticStroker() {
       free(pattern);
       free(reversePattern);
    }
+
    void drawLine(const QPointF &p1, const QPointF &p2);
    void drawPath(const QVectorPath &path);
    void drawPoints(const QPoint *points, int num);
@@ -120,6 +122,8 @@ class QCosmeticStroker
    Point lastPixel;
    bool lastAxisAligned;
 
+   bool clipLine(qreal &x1, qreal &y1, qreal &x2, qreal &y2);
+
  private:
    void setup();
 
@@ -127,9 +131,7 @@ class QCosmeticStroker
    void renderCubicSubdivision(PointF *points, int level, int caps);
    // used for closed subpaths
    void calculateLastPoint(qreal rx1, qreal ry1, qreal rx2, qreal ry2);
-
- public:
-   bool clipLine(qreal &x1, qreal &y1, qreal &x2, qreal &y2);
+   
 };
 
 QT_END_NAMESPACE

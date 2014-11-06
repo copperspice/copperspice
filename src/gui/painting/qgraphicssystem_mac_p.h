@@ -26,7 +26,7 @@
 #ifndef QGRAPHICSSYSTEM_MAC_P_H
 #define QGRAPHICSSYSTEM_MAC_P_H
 
-#include "qgraphicssystem_p.h"
+#include <qgraphicssystem_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,16 +26,15 @@
 #ifndef QPAINTER_P_H
 #define QPAINTER_P_H
 
-#include "QtGui/qbrush.h"
-#include "QtGui/qfont.h"
-#include "QtGui/qpen.h"
-#include "QtGui/qregion.h"
-#include "QtGui/qmatrix.h"
-#include "QtGui/qpainter.h"
-#include "QtGui/qpainterpath.h"
-#include "QtGui/qpaintengine.h"
+#include <QtGui/qbrush.h>
+#include <QtGui/qfont.h>
+#include <QtGui/qpen.h>
+#include <QtGui/qregion.h>
+#include <QtGui/qmatrix.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qpainterpath.h>
+#include <QtGui/qpaintengine.h>
 #include <QtCore/qhash.h>
-
 #include <qpen_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -247,8 +246,7 @@ class QPainterPrivate
 
 #if !defined(QT_NO_RAWFONT)
    void drawGlyphs(const quint32 *glyphArray, QFixedPoint *positionArray, int glyphCount,
-                   const QRawFont &font, bool overline = false, bool underline = false,
-                   bool strikeOut = false);
+                   const QRawFont &font, bool overline = false, bool underline = false, bool strikeOut = false);
 #endif
 
    void updateMatrix();

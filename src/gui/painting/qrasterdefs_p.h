@@ -190,31 +190,19 @@ typedef enum  QT_FT_Glyph_Format_ {
 typedef struct TRaster_ *QT_FT_Raster;
 
 typedef struct  QT_FT_Span_ {
-   short           x;
-   unsigned short  len;
+   short x;
+   unsigned short len;
    short y;
-   unsigned char   coverage;
+   unsigned char coverage;
 } QT_FT_Span;
 
 
-typedef void
-(*QT_FT_SpanFunc)(int        count,
-                  const QT_FT_Span  *spans,
-                  void     *worker);
+typedef void (*QT_FT_SpanFunc)(int count, const QT_FT_Span *spans, void *worker);
 
 #define QT_FT_Raster_Span_Func   QT_FT_SpanFunc
 
-
-typedef int
-(*QT_FT_Raster_BitTest_Func)( int    y,
-                              int    x,
-                              void  *user );
-
-
-typedef void
-(*QT_FT_Raster_BitSet_Func)( int    y,
-                             int    x,
-                             void  *user );
+typedef int (*QT_FT_Raster_BitTest_Func)(int y, int x, void  *user );
+typedef void (*QT_FT_Raster_BitSet_Func)(int y, int x, void  *user );
 
 
 #define QT_FT_RASTER_FLAG_DEFAULT  0x0
@@ -230,16 +218,16 @@ typedef void
 
 
 typedef struct  QT_FT_Raster_Params_ {
-   QT_FT_Bitmap              *target;
-   void                   *source;
-   int                     flags;
-   QT_FT_SpanFunc             gray_spans;
-   QT_FT_SpanFunc             black_spans;
-   QT_FT_Raster_BitTest_Func  bit_test;     /* doesn't work! */
-   QT_FT_Raster_BitSet_Func   bit_set;      /* doesn't work! */
-   void                   *user;
-   QT_FT_BBox                 clip_box;
-   int                     skip_spans;
+   QT_FT_Bitmap  *target;
+   void *source;
+   int flags;
+   QT_FT_SpanFunc gray_spans;
+   QT_FT_SpanFunc black_spans;
+   QT_FT_Raster_BitTest_Func bit_test;     /* doesn't work! */
+   QT_FT_Raster_BitSet_Func  bit_set;      /* doesn't work! */
+   void *user;
+   QT_FT_BBox clip_box;
+   int skip_spans;
 
 } QT_FT_Raster_Params;
 
@@ -255,22 +243,17 @@ typedef void
 #define  QT_FT_Raster_Done_Func   QT_FT_Raster_DoneFunc
 
 typedef void
-(*QT_FT_Raster_ResetFunc)( QT_FT_Raster       raster,
-                           unsigned char  *pool_base,
-                           unsigned long   pool_size );
+(*QT_FT_Raster_ResetFunc)( QT_FT_Raster raster, unsigned char *pool_base, unsigned long  pool_size );
 
 #define  QT_FT_Raster_Reset_Func   QT_FT_Raster_ResetFunc
 
 typedef int
-(*QT_FT_Raster_SetModeFunc)( QT_FT_Raster      raster,
-                             unsigned long  mode,
-                             void          *args );
+(*QT_FT_Raster_SetModeFunc)( QT_FT_Raster raster, unsigned long mode, void *args );
 
 #define  QT_FT_Raster_Set_Mode_Func  QT_FT_Raster_SetModeFunc
 
 typedef int
-(*QT_FT_Raster_RenderFunc)( QT_FT_Raster          raster,
-                            QT_FT_Raster_Params  *params );
+(*QT_FT_Raster_RenderFunc)( QT_FT_Raster raster, QT_FT_Raster_Params  *params );
 
 #define  QT_FT_Raster_Render_Func    QT_FT_Raster_RenderFunc
 
@@ -284,7 +267,6 @@ typedef struct  QT_FT_Raster_Funcs_ {
    QT_FT_Raster_DoneFunc      raster_done;
 
 } QT_FT_Raster_Funcs;
-
 
 QT_FT_END_HEADER
 

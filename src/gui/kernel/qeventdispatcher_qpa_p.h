@@ -26,7 +26,7 @@
 #ifndef QEVENTDISPATCHER_QPA_P_H
 #define QEVENTDISPATCHER_QPA_P_H
 
-#include "qeventdispatcher_unix_p.h"
+#include <qeventdispatcher_unix_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -50,8 +50,7 @@ class QEventDispatcherQPA : public QEventDispatcherUNIX
    void flush();
 
  protected:
-   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-              timeval *timeout);
+   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timeval *timeout);
 };
 
 QT_END_NAMESPACE

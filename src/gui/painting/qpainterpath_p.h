@@ -26,10 +26,10 @@
 #ifndef QPAINTERPATH_P_H
 #define QPAINTERPATH_P_H
 
-#include "QtGui/qpainterpath.h"
-#include "QtGui/qregion.h"
-#include "QtCore/qlist.h"
-#include "QtCore/qvarlengtharray.h"
+#include <QtGui/qpainterpath.h>
+#include <QtGui/qregion.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qvarlengtharray.h>
 
 #include <qdebug.h>
 #include <qvectorpath_p.h>
@@ -55,8 +55,7 @@ class QVectorPathConverter
  public:
    QVectorPathConverter(const QVector<QPainterPath::Element> &path, uint fillRule, bool convex)
       : pathData(path, fillRule, convex),
-        path(pathData.points.data(), path.size(),
-             pathData.elements.data(), pathData.flags) {}
+        path(pathData.points.data(), path.size(), pathData.elements.data(), pathData.flags) {}
 
    const QVectorPath &vectorPath() {
       return path;

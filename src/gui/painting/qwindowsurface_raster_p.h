@@ -27,7 +27,7 @@
 #define QWINDOWSURFACE_RASTER_P_H
 
 #include <qglobal.h>
-#include "qwindowsurface_p.h"
+#include <qwindowsurface_p.h>
 
 #ifdef Q_OS_MAC
 #include <qt_cocoa_helpers_mac_p.h>
@@ -57,6 +57,7 @@ struct Q_UPDATELAYEREDWINDOWINFO {
 typedef BOOL (WINAPI *PtrUpdateLayeredWindow)(HWND hwnd, HDC hdcDst, const POINT *pptDst,
       const SIZE *psize, HDC hdcSrc, const POINT *pptSrc, COLORREF crKey,
       const BLENDFUNCTION *pblend, DWORD dwflags);
+
 typedef BOOL (WINAPI *PtrUpdateLayeredWindowIndirect)(HWND hwnd, const Q_UPDATELAYEREDWINDOWINFO *pULWInfo);
 extern PtrUpdateLayeredWindow ptrUpdateLayeredWindow;
 extern PtrUpdateLayeredWindowIndirect ptrUpdateLayeredWindowIndirect;
@@ -73,7 +74,6 @@ class QNativeImage;
 
 class Q_GUI_EXPORT QRasterWindowSurface : public QWindowSurface
 {
-
  public:
    QRasterWindowSurface(QWidget *widget, bool setDefaultSurface = true);
    ~QRasterWindowSurface();

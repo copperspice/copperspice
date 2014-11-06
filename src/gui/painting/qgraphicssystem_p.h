@@ -26,9 +26,9 @@
 #ifndef QGRAPHICSSYSTEM_P_H
 #define QGRAPHICSSYSTEM_P_H
 
-#include "qpixmapdata_p.h"
-#include "qwindowsurface_p.h"
-#include "qpaintengine_blitter_p.h"
+#include <qpixmapdata_p.h>
+#include <qwindowsurface_p.h>
+#include <qpaintengine_blitter_p.h>
 
 #include <qdebug.h>
 

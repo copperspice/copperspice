@@ -153,7 +153,6 @@ class Q_GUI_EXPORT QVectorPath
       return 0;
    }
 
-
  private:
    Q_DISABLE_COPY(QVectorPath)
 

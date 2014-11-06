@@ -27,17 +27,13 @@
 #define QBLENDFUNCTIONS_P_H
 
 #include <qmath.h>
-#include "qdrawhelper_p.h"
+#include <qdrawhelper_p.h>
 
 QT_BEGIN_NAMESPACE
 
 template <typename SRC, typename T>
-void qt_scale_image_16bit(uchar *destPixels, int dbpl,
-                          const uchar *srcPixels, int sbpl, int sh,
-                          const QRectF &targetRect,
-                          const QRectF &srcRect,
-                          const QRect &clip,
-                          T blender)
+void qt_scale_image_16bit(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int sh,
+                          const QRectF &targetRect, const QRectF &srcRect, const QRect &clip, T blender)
 {
    qreal sx = targetRect.width() / (qreal) srcRect.width();
    qreal sy = targetRect.height() / (qreal) srcRect.height();
@@ -274,15 +270,11 @@ struct QTransformImageVertex {
 };
 
 template <class SrcT, class DestT, class Blender>
-void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
-                                  const SrcT *srcPixels, int sbpl,
+void qt_transform_image_rasterize(DestT *destPixels, int dbpl, const SrcT *srcPixels, int sbpl,
                                   const QTransformImageVertex &topLeft, const QTransformImageVertex &bottomLeft,
                                   const QTransformImageVertex &topRight, const QTransformImageVertex &bottomRight,
-                                  const QRect &sourceRect,
-                                  const QRect &clip,
-                                  qreal topY, qreal bottomY,
-                                  int dudx, int dvdx, int dudy, int dvdy, int u0, int v0,
-                                  Blender blender)
+                                  const QRect &sourceRect, const QRect &clip, qreal topY, qreal bottomY,
+                                  int dudx, int dvdx, int dudy, int dvdy, int u0, int v0, Blender blender)
 {
    int fromY = qMax(qRound(topY), clip.top());
    int toY = qMin(qRound(bottomY), clip.top() + clip.height());
@@ -463,13 +455,8 @@ void qt_transform_image_rasterize(DestT *destPixels, int dbpl,
 }
 
 template <class SrcT, class DestT, class Blender>
-void qt_transform_image(DestT *destPixels, int dbpl,
-                        const SrcT *srcPixels, int sbpl,
-                        const QRectF &targetRect,
-                        const QRectF &sourceRect,
-                        const QRect &clip,
-                        const QTransform &targetRectTransform,
-                        Blender blender)
+void qt_transform_image(DestT *destPixels, int dbpl, const SrcT *srcPixels, int sbpl, const QRectF &targetRect,
+                        const QRectF &sourceRect, const QRect &clip, const QTransform &targetRectTransform, Blender blender)
 {
    enum Corner {
       TopLeft,

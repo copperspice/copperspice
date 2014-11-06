@@ -26,17 +26,16 @@
 #ifndef QPAINTENGINE_RASTER_P_H
 #define QPAINTENGINE_RASTER_P_H
 
-#include "qpaintengineex_p.h"
-#include "QtGui/qpainterpath.h"
-#include "qdatabuffer_p.h"
-#include "qdrawhelper_p.h"
-#include "qpaintengine_p.h"
-#include "qrasterizer_p.h"
-#include "qstroker_p.h"
-#include "qpainter_p.h"
-#include "qtextureglyphcache_p.h"
-#include "qoutlinemapper_p.h"
-
+#include <qpaintengineex_p.h>
+#include <QtGui/qpainterpath.h>
+#include <qdatabuffer_p.h>
+#include <qdrawhelper_p.h>
+#include <qpaintengine_p.h>
+#include <qrasterizer_p.h>
+#include <qstroker_p.h>
+#include <qpainter_p.h>
+#include <qtextureglyphcache_p.h>
+#include <qoutlinemapper_p.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
@@ -155,8 +154,7 @@ class
    void drawPixmap(const QPointF &p, const QPixmap &pm);
    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
    void drawImage(const QPointF &p, const QImage &img);
-   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor);
+   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags = Qt::AutoColor);
    void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &sr);
    void drawTextItem(const QPointF &p, const QTextItem &textItem);
 
@@ -222,6 +220,7 @@ class
 
  protected:
    QRasterPaintEngine(QRasterPaintEnginePrivate &d, QPaintDevice *);
+
  private:
    friend struct QSpanData;
    friend class QBlitterPaintEngine;
@@ -265,17 +264,14 @@ class
    }
 };
 
-
-/*******************************************************************************
- * QRasterPaintEnginePrivate
- */
-class
 #ifdef Q_WS_QWS
-   Q_GUI_EXPORT
+   class Q_GUI_EXPORT QRasterPaintEnginePrivate : public QPaintEngineExPrivate
+#else
+   class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
 #endif
-   QRasterPaintEnginePrivate : public QPaintEngineExPrivate
 {
    Q_DECLARE_PUBLIC(QRasterPaintEngine)
+
  public:
    QRasterPaintEnginePrivate();
 
@@ -356,12 +352,12 @@ class
    QScopedPointer<QRasterizer> rasterizer;
 };
 
-
-class
 #ifdef Q_WS_QWS
-   Q_GUI_EXPORT
+   class Q_GUI_EXPORT QClipData
+#else 
+   class QClipData
 #endif
-   QClipData
+   
 {
  public:
    QClipData(int height);
@@ -472,16 +468,12 @@ class Q_GUI_EXPORT QCustomRasterPaintDevice : public QPaintDevice
 };
 #endif
 
-/*******************************************************************************
- * QRasterBuffer
- */
-class
 
 #ifdef Q_WS_QWS
-   Q_GUI_EXPORT
+   class Q_GUI_EXPORT QRasterBuffer
+#else
+   class QRasterBuffer
 #endif
-
-   QRasterBuffer
 {
  public:
    QRasterBuffer() : m_width(0), m_height(0), m_buffer(0) {
@@ -494,9 +486,11 @@ class
 
    QImage::Format prepare(QImage *image);
    QImage::Format prepare(QPixmap *pix);
+
 #ifdef Q_WS_QWS
    void prepare(QCustomRasterPaintDevice *device);
 #endif
+
    void prepare(int w, int h);
    void prepareBuffer(int w, int h);
 

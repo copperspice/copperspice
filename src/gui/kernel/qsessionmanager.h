@@ -80,14 +80,13 @@ class Q_GUI_EXPORT  QSessionManager : public QObject
    bool isPhase2() const;
    void requestPhase2();
 
+ protected:
+   QScopedPointer<QSessionManagerPrivate> d_ptr;
+
  private:
    friend class QApplication;
    friend class QApplicationPrivate;
    friend class QBaseApplication;
-
- protected:
-   QScopedPointer<QSessionManagerPrivate> d_ptr;
-
 };
 
 QT_END_NAMESPACE

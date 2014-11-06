@@ -40,18 +40,22 @@ class QStylePainter : public QPainter
    inline explicit QStylePainter(QWidget *w) {
       begin(w, w);
    }
+
    inline QStylePainter(QPaintDevice *pd, QWidget *w) {
       begin(pd, w);
    }
+
    inline bool begin(QWidget *w) {
       return begin(w, w);
    }
+
    inline bool begin(QPaintDevice *pd, QWidget *w) {
       Q_ASSERT_X(w, "QStylePainter::QStylePainter", "Widget must be non-zero");
       widget = w;
       wstyle = w->style();
       return QPainter::begin(pd);
    };
+
    inline void drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &opt);
    inline void drawControl(QStyle::ControlElement ce, const QStyleOption &opt);
    inline void drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &opt);

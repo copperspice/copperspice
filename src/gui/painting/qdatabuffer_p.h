@@ -26,7 +26,7 @@
 #ifndef QDATABUFFER_P_H
 #define QDATABUFFER_P_H
 
-#include "QtCore/qbytearray.h"
+#include <QtCore/qbytearray.h>
 
 QT_BEGIN_NAMESPACE
 

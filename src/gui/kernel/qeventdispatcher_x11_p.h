@@ -26,7 +26,7 @@
 #ifndef QEVENTDISPATCHER_X11_P_H
 #define QEVENTDISPATCHER_X11_P_H
 
-#include "qeventdispatcher_unix_p.h"
+#include <qeventdispatcher_unix_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -50,8 +50,7 @@ class QEventDispatcherX11 : public QEventDispatcherUNIX
    void closingDown();
 
  protected:
-   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-              timeval *timeout);
+   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timeval *timeout);
 };
 
 QT_END_NAMESPACE

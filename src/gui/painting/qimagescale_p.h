@@ -22,6 +22,7 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+
 #ifndef QIMAGESCALE_P_H
 #define QIMAGESCALE_P_H
 

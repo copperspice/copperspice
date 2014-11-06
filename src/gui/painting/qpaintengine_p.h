@@ -26,9 +26,9 @@
 #ifndef QPAINTENGINE_P_H
 #define QPAINTENGINE_P_H
 
-#include "QtGui/qpainter.h"
-#include "QtGui/qpaintengine.h"
-#include "QtGui/qregion.h"
+#include <QtGui/qpainter.h>
+#include <QtGui/qpaintengine.h>
+#include <QtGui/qregion.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,10 +37,13 @@ class QPaintDevice;
 class QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QPaintEngine)
+
  public:
    QPaintEnginePrivate() : pdev(0), q_ptr(0), currentClipWidget(0), hasSystemTransform(0),
       hasSystemViewport(0) {}
+
    virtual ~QPaintEnginePrivate() { }
+
    QPaintDevice *pdev;
    QPaintEngine *q_ptr;
    QRegion systemClip;

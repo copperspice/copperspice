@@ -33,8 +33,8 @@ QT_BEGIN_NAMESPACE
 class QPenPrivate
 {
  public:
-   QPenPrivate(const QBrush &brush, qreal width, Qt::PenStyle, Qt::PenCapStyle,
-               Qt::PenJoinStyle _joinStyle);
+   QPenPrivate(const QBrush &brush, qreal width, Qt::PenStyle, Qt::PenCapStyle, Qt::PenJoinStyle _joinStyle);
+
    QAtomicInt ref;
    qreal width;
    QBrush brush;

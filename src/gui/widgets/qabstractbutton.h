@@ -111,8 +111,7 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 #ifndef QT_NO_BUTTONGROUP
    QButtonGroup *group() const;
 #endif
-
- public :
+ 
    GUI_CS_SLOT_1(Public, void setIconSize(const QSize &size))
    GUI_CS_SLOT_2(setIconSize)
    GUI_CS_SLOT_1(Public, void animateClick(int msec = 100))

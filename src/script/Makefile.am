@@ -56,17 +56,13 @@ lib_libCsScript1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclu
 lib_libCsScript1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsScript1_la_LIBADD = lib/libCsCore1.la
 
-if OSTYPE_LINUX
-lib_libCsScript1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
 
 if OSTYPE_WIN
-lib_libCsScript1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
 lib_libCsScript1_la_LDFLAGS += -lwinmm
 endif
 
 if OSTYPE_DARWIN
-lib_libCsScript1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++ -DENABLE_JSC_MULTIPLE_THREADS=0
+lib_libCsScript1_la_CXXFLAGS += -DENABLE_JSC_MULTIPLE_THREADS=0
 endif
 
 SCRIPT_INCLUDES =

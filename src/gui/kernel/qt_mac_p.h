@@ -35,12 +35,12 @@
 
 #include <cs_carbon_wrapper_p.h>
 
-#include "qglobal.h"
-#include "qvariant.h"
-#include "qmimedata.h"
-#include "qpointer.h"
-#include "qcore_mac_p.h"
-#include "qpainter.h"
+#include <qglobal.h>
+#include <qvariant.h>
+#include <qmimedata.h>
+#include <qpointer.h>
+#include <qcore_mac_p.h>
+#include <qpainter.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -61,7 +61,6 @@ const UInt32 kEventClassQt = 'Cute';
 #endif
 
 enum {
-
    // part of Qt,not Carbon
    typeAEClipboardChanged  = 1,
    typeQWidget             = 1,
@@ -464,12 +463,12 @@ extern const CFStringRef kTISPropertyUnicodeKeyLayoutData;
 #define kThemeAppearanceAquaGraphite CFSTR("com.apple.theme.appearance.aqua.graphite")
 
 QString qt_mac_removeMnemonics(const QString &original); //implemented in qmacstyle_mac.cpp
-void    qt_mac_copy_answer_rect(const QDragMoveEvent &event);
-bool    qt_mac_mouse_inside_answer_rect(QPoint mouse);
+void qt_mac_copy_answer_rect(const QDragMoveEvent &event);
+bool qt_mac_mouse_inside_answer_rect(QPoint mouse);
 
-QFont   qt_mac_fontForThemeFont(ThemeFontID themeID);
-QColor  qt_mac_colorForTheme(ThemeBrush brush);
-QColor  qt_mac_colorForThemeTextColor(ThemeTextColor themeColor);
+QFont qt_mac_fontForThemeFont(ThemeFontID themeID);
+QColor qt_mac_colorForTheme(ThemeBrush brush);
+QColor qt_mac_colorForThemeTextColor(ThemeTextColor themeColor);
 
 // Simple class to manage short-lived regions
 class QMacSmartQuickDrawRegion

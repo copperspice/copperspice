@@ -25,7 +25,7 @@
 #ifndef QWINDOWSYSTEMINTERFACE_QPA_P_H
 #define QWINDOWSYSTEMINTERFACE_QPA_P_H
 
-#include "qwindowsysteminterface_qpa.h"
+#include <qwindowsysteminterface_qpa.h>
 
 QT_BEGIN_NAMESPACE
 

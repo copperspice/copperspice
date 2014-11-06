@@ -44,7 +44,6 @@ class Q_GUI_EXPORT QClipboard : public QObject
    CS_OBJECT(QClipboard)
    Q_DECLARE_PRIVATE(QClipboard)
 
- private:
    QClipboard(QObject *parent);
    ~QClipboard();
 
@@ -103,8 +102,6 @@ class Q_GUI_EXPORT QClipboard : public QObject
 
    GUI_CS_SLOT_1(Private, void ownerDestroyed())
    GUI_CS_SLOT_2(ownerDestroyed)
-
-
 };
 
 #endif // QT_NO_CLIPBOARD

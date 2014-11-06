@@ -26,7 +26,7 @@
 #ifndef QPAINTENGINE_BLITTER_P_H
 #define QPAINTENGINE_BLITTER_P_H
 
-#include "qpaintengine_raster_p.h"
+#include <qpaintengine_raster_p.h>
 
 #ifndef QT_NO_BLITTABLE
 QT_BEGIN_NAMESPACE
@@ -38,6 +38,7 @@ class QBlittable;
 class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 {
    Q_DECLARE_PRIVATE(QBlitterPaintEngine);
+
  public:
    QBlitterPaintEngine(QBlittablePixmapData *p);
 
@@ -74,8 +75,10 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void fillPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
    void drawEllipse(const QRectF &rect);
    void drawImage(const QPointF &p, const QImage &img);
+
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
                   Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &sr);
    void drawTextItem(const QPointF &p, const QTextItem &textItem);
    void drawPoints(const QPointF *points, int pointCount);
@@ -85,6 +88,7 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 };
 
 QT_END_NAMESPACE
+
 #endif //QT_NO_BLITTABLE
 #endif // QPAINTENGINE_BLITTER_P_H
 

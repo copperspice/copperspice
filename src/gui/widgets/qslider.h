@@ -30,7 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 
-
 #ifndef QT_NO_SLIDER
 
 class QSliderPrivate;

@@ -26,24 +26,25 @@
 #ifndef QLINEEDIT_P_H
 #define QLINEEDIT_P_H
 
-#include "QtCore/qglobal.h"
+#include <QtCore/qglobal.h>
 
 #ifndef QT_NO_LINEEDIT
-#include "qwidget_p.h"
-#include "QtGui/qlineedit.h"
-#include "QtGui/qtextlayout.h"
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qbasictimer.h"
-#include "QtGui/qcompleter.h"
-#include "QtCore/qpointer.h"
-#include "QtGui/qlineedit.h"
-#include "qlinecontrol_p.h"
+#include <qwidget_p.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qtextlayout.h>
+#include <QtGui/qstyleoption.h>
+#include <QtCore/qbasictimer.h>
+#include <QtGui/qcompleter.h>
+#include <QtCore/qpointer.h>
+#include <QtGui/qlineedit.h>
+#include <qlinecontrol_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QLineEditPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QLineEdit)
+
  public:
 
    QLineEditPrivate()
@@ -95,14 +96,18 @@ class QLineEditPrivate : public QWidgetPrivate
    void _q_handleWindowActivate();
    void _q_textEdited(const QString &);
    void _q_cursorPositionChanged(int, int);
+
 #ifdef QT_KEYPAD_NAVIGATION
    void _q_editFocusChange(bool);
 #endif
+
    void _q_selectionChanged();
    void _q_updateNeeded(const QRect &);
+
 #ifndef QT_NO_COMPLETER
    void _q_completionHighlighted(QString);
 #endif
+
 #ifndef QT_NO_DRAGANDDROP
    QPoint dndPos;
    QBasicTimer dndTimer;

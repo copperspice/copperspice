@@ -176,7 +176,6 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    bool toolBarBreak(QToolBar *toolbar) const;
 #endif
 
-
    QByteArray saveState(int version = 0) const;
    bool restoreState(const QByteArray &state, int version = 0);
 

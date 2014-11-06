@@ -26,7 +26,7 @@
 #ifndef QPushButton_P_H
 #define QPushButton_P_H
 
-#include "qabstractbutton_p.h"
+#include <qabstractbutton_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -140,8 +140,7 @@ static inline int sign(int x)
 }
 
 #ifndef Q_OS_MAC
-inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
-      int outOriginX, int outExtentX,
+inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY, int outOriginX, int outExtentX,
       int outOriginY, int outExtentY) const
 {
    QPointF ret;
@@ -239,6 +238,7 @@ PaletteHash *qt_app_palettes_hash();
 class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 {
    Q_DECLARE_PUBLIC(QApplication)
+
  public:
    QApplicationPrivate(int &argc, char **argv, QApplication::Type type, int flags);
    ~QApplicationPrivate();
@@ -533,8 +533,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    int findClosestTouchPointId(const QPointF &screenPos);
    void appendTouchPoint(const QTouchEvent::TouchPoint &touchPoint);
    void removeTouchPoint(int touchPointId);
-   static void translateRawTouchEvent(QWidget *widget,
-                                      QTouchEvent::DeviceType deviceType,
+   static void translateRawTouchEvent(QWidget *widget, QTouchEvent::DeviceType deviceType,
                                       const QList<QTouchEvent::TouchPoint> &touchPoints);
 
 #if defined(Q_OS_WIN)
@@ -555,7 +554,8 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    PtrBeginPanningFeedback BeginPanningFeedback;
    PtrUpdatePanningFeedback UpdatePanningFeedback;
    PtrEndPanningFeedback EndPanningFeedback;
-#endif // QT_NO_GESTURES
+#endif 
+
 #endif
 
 #ifdef QT_RX71_MULTITOUCH
@@ -577,6 +577,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 #endif
 
  private:
+
 #ifdef Q_WS_QWS
    QMap<const QScreen *, QRect> maxWindowRects;
 #endif

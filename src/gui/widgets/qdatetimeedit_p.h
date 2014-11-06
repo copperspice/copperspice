@@ -26,25 +26,27 @@
 #ifndef QDATETIMEEDIT_P_H
 #define QDATETIMEEDIT_P_H
 
-#include "QtGui/qcombobox.h"
-#include "QtGui/qcalendarwidget.h"
-#include "QtGui/qspinbox.h"
-#include "QtGui/qtoolbutton.h"
-#include "QtGui/qmenu.h"
-#include "QtGui/qlabel.h"
-#include "QtGui/qdatetimeedit.h"
-#include "qabstractspinbox_p.h"
-#include "qdatetime_p.h"
-#include "qdebug.h"
+#include <QtGui/qcombobox.h>
+#include <QtGui/qcalendarwidget.h>
+#include <QtGui/qspinbox.h>
+#include <QtGui/qtoolbutton.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qdatetimeedit.h>
+#include <qabstractspinbox_p.h>
+#include <qdatetime_p.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_DATETIMEEDIT
 
 QT_BEGIN_NAMESPACE
 
 class QCalendarPopup;
+
 class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimeParser
 {
    Q_DECLARE_PUBLIC(QDateTimeEdit)
+
  public:
    QDateTimeEditPrivate();
 
@@ -80,15 +82,19 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    virtual QDateTime getMinimum() const {
       return minimum.toDateTime();
    }
+
    virtual QDateTime getMaximum() const {
       return maximum.toDateTime();
    }
+ 
    virtual QLocale locale() const {
       return q_func()->locale();
    }
+
    QString valueToText(const QVariant &var) const {
       return textFromValue(var);
    }
+  
    QString getAmPmText(AmPm ap, Case cs) const;
    int cursorPosition() const {
       return edit ? edit->cursorPosition() : -1;
@@ -130,21 +136,25 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
 class QCalendarPopup : public QWidget
 {
    CS_OBJECT(QCalendarPopup)
+
  public:
    QCalendarPopup(QWidget *parent = 0, QCalendarWidget *cw = 0);
    QDate selectedDate() {
       return verifyCalendarInstance()->selectedDate();
    }
+
    void setDate(const QDate &date);
    void setDateRange(const QDate &min, const QDate &max);
    void setFirstDayOfWeek(Qt::DayOfWeek dow) {
       verifyCalendarInstance()->setFirstDayOfWeek(dow);
    }
+
    QCalendarWidget *calendarWidget() const {
       return const_cast<QCalendarPopup *>(this)->verifyCalendarInstance();
    }
+
    void setCalendarWidget(QCalendarWidget *cw);
- public:
+ 
    GUI_CS_SIGNAL_1(Public, void activated(const QDate &date))
    GUI_CS_SIGNAL_2(activated, date)
    GUI_CS_SIGNAL_1(Public, void newDateSelected(const QDate &newDate))
@@ -154,19 +164,18 @@ class QCalendarPopup : public QWidget
    GUI_CS_SIGNAL_1(Public, void resetButton())
    GUI_CS_SIGNAL_2(resetButton)
 
- private :
-   GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))
-   GUI_CS_SLOT_2(dateSelected)
-   GUI_CS_SLOT_1(Private, void dateSelectionChanged())
-   GUI_CS_SLOT_2(dateSelectionChanged)
-
  protected:
    void hideEvent(QHideEvent *);
    void mousePressEvent(QMouseEvent *e);
    void mouseReleaseEvent(QMouseEvent *);
    bool event(QEvent *e);
 
- private:
+ private :
+   GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))
+   GUI_CS_SLOT_2(dateSelected)
+   GUI_CS_SLOT_1(Private, void dateSelectionChanged())
+   GUI_CS_SLOT_2(dateSelectionChanged)
+ 
    QCalendarWidget *verifyCalendarInstance();
 
    QWeakPointer<QCalendarWidget> calendar;

@@ -26,11 +26,10 @@
 #ifndef QGESTURE_P_H
 #define QGESTURE_P_H
 
-
-#include "qrect.h"
-#include "qpoint.h"
-#include "qgesture.h"
-#include "qelapsedtimer.h"
+#include <qrect.h>
+#include <qpoint.h>
+#include <qgesture.h>
+#include <qelapsedtimer.h>
 
 #ifndef QT_NO_GESTURES
 

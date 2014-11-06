@@ -77,6 +77,7 @@ class Q_GUI_EXPORT QWindowSystemInterface
 
    static void handleTouchEvent(QWidget *w, QEvent::Type type, QTouchEvent::DeviceType devType,
                                 const QList<struct TouchPoint> &points);
+
    static void handleTouchEvent(QWidget *w, ulong timestamp, QEvent::Type type,
                                 QTouchEvent::DeviceType devType, const QList<struct TouchPoint> &points);
 
@@ -93,7 +94,6 @@ class Q_GUI_EXPORT QWindowSystemInterface
    static void handleScreenCountChange(int count);
 
    static void handleLocaleChange();
-
    static void handlePlatformPanelEvent(QWidget *w);
 };
 

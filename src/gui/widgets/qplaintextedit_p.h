@@ -26,16 +26,16 @@
 #ifndef QPLAINTEXTEDIT_P_H
 #define QPLAINTEXTEDIT_P_H
 
-#include "qabstractscrollarea_p.h"
-#include "QtGui/qtextdocumentfragment.h"
-#include "QtGui/qscrollbar.h"
-#include "QtGui/qtextcursor.h"
-#include "QtGui/qtextformat.h"
-#include "QtGui/qmenu.h"
-#include "QtGui/qabstracttextdocumentlayout.h"
-#include "QtCore/qbasictimer.h"
-#include "qtextcontrol_p.h"
-#include "qplaintextedit.h"
+#include <qabstractscrollarea_p.h>
+#include <QtGui/qtextdocumentfragment.h>
+#include <QtGui/qscrollbar.h>
+#include <QtGui/qtextcursor.h>
+#include <QtGui/qtextformat.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qabstracttextdocumentlayout.h>
+#include <QtCore/qbasictimer.h>
+#include <qtextcontrol_p.h>
+#include <qplaintextedit.h>
 
 #ifndef QT_NO_TEXTEDIT
 
@@ -73,7 +73,6 @@ class QPlainTextEditControl : public QTextControl
       textEdit->ensureCursorVisible();
       emit microFocusChanged();
    }
-
 
    QPlainTextEdit *textEdit;
    int topBlock;

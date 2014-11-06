@@ -26,12 +26,13 @@
 #ifndef QDESKTOPWIDGET_QPA_P_H
 #define QDESKTOPWIDGET_QPA_P_H
 
-#include "QDesktopWidget"
-#include "qwidget_p.h"
+#include <QDesktopWidget>
+#include <qwidget_p.h>
 
 class QDesktopScreenWidget : public QWidget
 {
    CS_OBJECT(QDesktopScreenWidget)
+
  public:
    QDesktopScreenWidget(int screenNumber = -1) {
       setWindowFlags(Qt::Desktop);

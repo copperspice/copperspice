@@ -28,7 +28,7 @@
 
 #ifndef QT_NO_PRINTER
 
-#include "qpaintengine_p.h"
+#include <qpaintengine_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -66,6 +66,7 @@ class QAlphaPaintEngine : public QPaintEngine
 class QAlphaPaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QAlphaPaintEngine)
+
  public:
    QAlphaPaintEnginePrivate();
    ~QAlphaPaintEnginePrivate();

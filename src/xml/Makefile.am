@@ -9,18 +9,6 @@ lib_libCsXml1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/
 lib_libCsXml1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsXml1_la_LIBADD = lib/libCsCore1.la
 
-if OSTYPE_LINUX
-lib_libCsXml1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/linux-g++
-endif
-
-if OSTYPE_WIN
-lib_libCsXml1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/win32-g++
-endif
-
-if OSTYPE_DARWIN
-lib_libCsXml1_la_CXXFLAGS += -I$(top_srcdir)/mkspecs/macx-g++
-endif
-
 XML_INCLUDES =
 XML_PUBLIC_INCLUDES =
 XML_PRIVATE_INCLUDES =

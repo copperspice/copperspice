@@ -26,7 +26,7 @@
 #ifndef QKEYSEQUENCE_P_H
 #define QKEYSEQUENCE_P_H
 
-#include "qkeysequence.h"
+#include <qkeysequence.h>
 
 QT_BEGIN_NAMESPACE
 

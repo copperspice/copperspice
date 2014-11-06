@@ -69,35 +69,44 @@ class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPlugi
    virtual int platformHint(PlatformHint hint);
 
    virtual void fileDialogDelete(QFileDialog *) {}
+
    virtual bool fileDialogSetVisible(QFileDialog *, bool) {
       return false;
    }
+
    virtual QDialog::DialogCode fileDialogResultCode(QFileDialog *) {
       return QDialog::Rejected;
    }
+
    virtual void fileDialogSetDirectory(QFileDialog *, const QString &) {}
+
    virtual QString fileDialogDirectory(const QFileDialog *) const {
       return QString();
    }
+
    virtual void fileDialogSelectFile(QFileDialog *, const QString &) {}
+
    virtual QStringList fileDialogSelectedFiles(const QFileDialog *) const {
       return QStringList();
    }
+
    virtual void fileDialogSetFilter(QFileDialog *) {}
    virtual void fileDialogSetNameFilters(QFileDialog *, const QStringList &) {}
    virtual void fileDialogSelectNameFilter(QFileDialog *, const QString &) {}
+
    virtual QString fileDialogSelectedNameFilter(const QFileDialog *) const {
       return QString();
    }
 
    virtual void colorDialogDelete(QColorDialog *) {}
+
    virtual bool colorDialogSetVisible(QColorDialog *, bool) {
       return false;
    }
+
    virtual void colorDialogSetCurrentColor(QColorDialog *, const QColor &) {}
 };
 
-//internal
 QGuiPlatformPlugin *qt_guiPlatformPlugin();
 
 QT_END_NAMESPACE

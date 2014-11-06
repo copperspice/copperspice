@@ -27,7 +27,6 @@
 #define QPLAINTEXTEDIT_H
 
 #include <QtGui/qtextedit.h>
-
 #include <QtGui/qabstractscrollarea.h>
 #include <QtGui/qtextdocument.h>
 #include <QtGui/qtextoption.h>

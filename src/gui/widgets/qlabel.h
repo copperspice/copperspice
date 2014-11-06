@@ -27,7 +27,7 @@
 #define QLABEL_H
 
 #include <QtGui/qframe.h>
-#include "qpicture.h"
+#include <qpicture.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -114,7 +114,6 @@ class Q_GUI_EXPORT QLabel : public QFrame
    QString selectedText() const;
    int selectionStart() const;
 
- public :
    GUI_CS_SLOT_1(Public, void setText(const QString &un_named_arg1))
    GUI_CS_SLOT_2(setText)
    GUI_CS_SLOT_1(Public, void setPixmap(const QPixmap &un_named_arg1))
@@ -167,8 +166,8 @@ class Q_GUI_EXPORT QLabel : public QFrame
 
    GUI_CS_SLOT_1(Private, void _q_movieResized(const QSize &un_named_arg1))
    GUI_CS_SLOT_2(_q_movieResized)
-
 #endif
+
    GUI_CS_SLOT_1(Private, void _q_linkHovered(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_linkHovered)
 

@@ -26,20 +26,19 @@
 #ifndef QPRINTENGINE_PDF_P_H
 #define QPRINTENGINE_PDF_P_H
 
-#include "QtGui/qprintengine.h"
+#include <QtGui/qprintengine.h>
 
 #ifndef QT_NO_PRINTER
-#include "QtCore/qmap.h"
-#include "QtGui/qmatrix.h"
-#include "QtCore/qstring.h"
-#include "QtCore/qvector.h"
-#include "QtGui/qpaintengine.h"
-#include "QtGui/qpainterpath.h"
-#include "QtCore/qdatastream.h"
-
-#include "qfontengine_p.h"
-#include "qpdf_p.h"
-#include "qpaintengine_p.h"
+#include <QtCore/qmap.h>
+#include <QtGui/qmatrix.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qvector.h>
+#include <QtGui/qpaintengine.h>
+#include <QtGui/qpainterpath.h>
+#include <QtCore/qdatastream.h>
+#include <qfontengine_p.h>
+#include <qpdf_p.h>
+#include <qpaintengine_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -58,6 +57,7 @@ class QPdfEnginePrivate;
 class QPdfEngine : public QPdfBaseEngine
 {
    Q_DECLARE_PRIVATE(QPdfEngine)
+
  public:
    QPdfEngine(QPrinter::PrinterMode m);
    virtual ~QPdfEngine();
@@ -100,6 +100,7 @@ class QPdfEngine : public QPdfBaseEngine
 class QPdfEnginePrivate : public QPdfBaseEnginePrivate
 {
    Q_DECLARE_PUBLIC(QPdfEngine)
+
  public:
    QPdfEnginePrivate(QPrinter::PrinterMode m);
    ~QPdfEnginePrivate();

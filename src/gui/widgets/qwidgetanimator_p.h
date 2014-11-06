@@ -48,17 +48,17 @@ class QWidgetAnimator : public QObject
 
    void abort(QWidget *widget);
 
-#ifndef QT_NO_ANIMATION
- private :
-   GUI_CS_SLOT_1(Private, void animationFinished())
-   GUI_CS_SLOT_2(animationFinished)
-#endif
-
  private:
    typedef QMap<QWidget *, QPointer<QPropertyAnimation> > AnimationMap;
 
    AnimationMap m_animation_map;
    QMainWindowLayout *m_mainWindowLayout;
+
+#ifndef QT_NO_ANIMATION 
+   GUI_CS_SLOT_1(Private, void animationFinished())
+   GUI_CS_SLOT_2(animationFinished)
+#endif
+ 
 };
 
 QT_END_NAMESPACE
