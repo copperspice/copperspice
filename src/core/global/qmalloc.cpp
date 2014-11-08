@@ -23,14 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-
+#include <qplatformdefs.h>
 #include <stdlib.h>
 
-/*
-    Define the container allocation functions in a separate file, so that our
-    users can easily override them.
-*/
+// Define the container allocation functions in a separate file, so users can easily override them.
 
 QT_BEGIN_NAMESPACE
 

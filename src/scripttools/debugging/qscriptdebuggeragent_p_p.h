@@ -26,25 +26,14 @@
 #ifndef QSCRIPTDEBUGGERAGENT_P_P_H
 #define QSCRIPTDEBUGGERAGENT_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtScript/qscriptvalue.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qlist.h>
 
-#include "qscriptscriptdata_p.h"
-#include "qscriptbreakpointdata_p.h"
+#include <qscriptscriptdata_p.h>
+#include <qscriptbreakpointdata_p.h>
 
 QT_BEGIN_NAMESPACE
 

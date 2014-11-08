@@ -1,1 +1,1 @@
-#include "qlocale.h"
+#include <qlocale.h>

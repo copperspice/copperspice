@@ -23,33 +23,33 @@
 *
 ***********************************************************************/
 
-#include "qwizard.h"
+#include <qwizard.h>
 
 #ifndef QT_NO_WIZARD
 
-#include "qabstractspinbox.h"
-#include "qalgorithms.h"
-#include "qapplication.h"
-#include "qboxlayout.h"
-#include "qlayoutitem.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qframe.h"
-#include "qlabel.h"
-#include "qlineedit.h"
-#include "qpainter.h"
-#include "qpushbutton.h"
-#include "qset.h"
-#include "qstyle.h"
-#include "qvarlengtharray.h"
+#include <qabstractspinbox.h>
+#include <qalgorithms.h>
+#include <qapplication.h>
+#include <qboxlayout.h>
+#include <qlayoutitem.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
+#include <qset.h>
+#include <qstyle.h>
+#include <qvarlengtharray.h>
 
 #if defined(Q_OS_MAC)
 #include <qt_mac_p.h>
 #include <qlibrary.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
-#include "qwizard_win_p.h"
-#include "qtimer.h"
+#include <qwizard_win_p.h>
+#include <qtimer.h>
 
 #endif
 
@@ -58,7 +58,7 @@
 #include <string.h>
 
 #ifdef QT_SOFTKEYS_ENABLED
-#include "qaction.h"
+#include <qaction.h>
 #endif
 
 QT_BEGIN_NAMESPACE

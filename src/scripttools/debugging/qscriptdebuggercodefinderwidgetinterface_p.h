@@ -26,28 +26,17 @@
 #ifndef QSCRIPTDEBUGGERCODEFINDERWIDGETINTERFACE_P_H
 #define QSCRIPTDEBUGGERCODEFINDERWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtGui/qwidget.h>
-
 #include <QtGui/qtextdocument.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerCodeFinderWidgetInterfacePrivate;
-class QScriptDebuggerCodeFinderWidgetInterface:
-   public QWidget
+
+class QScriptDebuggerCodeFinderWidgetInterface : public QWidget
 {
    CS_OBJECT(QScriptDebuggerCodeFinderWidgetInterface)
+
  public:
    ~QScriptDebuggerCodeFinderWidgetInterface();
 
@@ -58,8 +47,7 @@ class QScriptDebuggerCodeFinderWidgetInterface:
 
    virtual void setOK(bool ok) = 0;
    virtual void setWrapped(bool wrapped) = 0;
-
- public:
+ 
    CS_SIGNAL_1(Public, void findRequest(const QString &exp, int options))
    CS_SIGNAL_2(findRequest, exp, options)
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfiledialog.h"
+#include <qfiledialog.h>
 
 #ifndef QT_NO_FILEDIALOG
 
@@ -46,7 +46,7 @@
 #include <qabstracteventdispatcher.h>
 
 #import <AppKit/NSSavePanel.h>
-#include "ui_qfiledialog.h"
+#include <ui_qfiledialog.h>
 
 QT_BEGIN_NAMESPACE
 

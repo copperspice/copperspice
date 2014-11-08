@@ -24,11 +24,10 @@
 ***********************************************************************/
 
 // Most of the code here was originally written by Hans Petter Bieker,
-// and is included in Qt with the author's permission, and the grateful
-// thanks of the Qt team.
+// and is included in Qt with the author's permission, and the grateful thanks of the Qt team.
 
-#include "qtsciicodec_p.h"
-#include "qlist.h"
+#include <qtsciicodec_p.h>
+#include <qlist.h>
 
 #ifndef QT_NO_CODECS
 

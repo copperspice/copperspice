@@ -1,1 +1,1 @@
-#include "qtextstream.h"
+#include <qtextstream.h>

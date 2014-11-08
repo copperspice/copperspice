@@ -23,107 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #if !defined(QT_NO_RAWFONT)
 
-#include "qrawfont.h"
-#include "qrawfont_p.h"
+#include <qrawfont.h>
+#include <qrawfont_p.h>
 
 #include <QtCore/qendian.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-   \class QRawFont
-   \brief The QRawFont class provides access to a single physical instance of a font.
-   \since 4.8
-
-   \ingroup text
-   \mainclass
-
-   \note QRawFont is a low level class. For most purposes QFont is a more appropriate class.
-
-   Most commonly, when presenting text in a user interface, the exact fonts used
-   to render the characters is to some extent unknown. This can be the case for several
-   reasons: For instance, the actual, physical fonts present on the target system could be
-   unexpected to the developers, or the text could contain user selected styles, sizes or
-   writing systems that are not supported by font chosen in the code.
-
-   Therefore, Qt's QFont class really represents a query for fonts. When text is interpreted,
-   Qt will do its best to match the text to the query, but depending on the support, different
-   fonts can be used behind the scenes.
-
-   For most use cases, this is both expected and necessary, as it minimizes the possibility of
-   text in the user interface being undisplayable. In some cases, however, more direct control
-   over the process might be useful. It is for these use cases the QRawFont class exists.
-
-   A QRawFont object represents a single, physical instance of a given font in a given pixel size.
-   I.e. in the typical case it represents a set of TrueType or OpenType font tables and uses a
-   user specified pixel size to convert metrics into logical pixel units. It can be used in
-   combination with the QGlyphRun class to draw specific glyph indexes at specific positions, and
-   also have accessors to some relevant data in the physical font.
-
-   QRawFont only provides support for the main font technologies: GDI and DirectWrite on Windows
-   platforms, FreeType on Symbian and Linux platforms and CoreText on Mac OS X. For other
-   font back-ends, the APIs will be disabled.
-
-   QRawFont can be constructed in a number of ways:
-   \list
-   \o It can be constructed by calling QTextLayout::glyphs() or QTextFragment::glyphs(). The
-      returned QGlyphs objects will contain QRawFont objects which represent the actual fonts
-      used to render each portion of the text.
-   \o It can be constructed by passing a QFont object to QRawFont::fromFont(). The function
-      will return a QRawFont object representing the font that will be selected as response to
-      the QFont query and the selected writing system.
-   \o It can be constructed by passing a file name or QByteArray directly to the QRawFont
-      constructor, or by calling loadFromFile() or loadFromData(). In this case, the
-      font will not be registered in QFontDatabase, and it will not be available as part of
-      regular font selection.
-   \endlist
-
-   QRawFont is considered local to the thread in which it is constructed (either using a
-   constructor, or by calling loadFromData() or loadFromFile()). The QRawFont cannot be moved to a
-   different thread, but will have to be recreated in the thread in question.
-
-   \note For the requirement of caching glyph indexes and font selections for static text to avoid
-   reshaping and relayouting in the inner loop of an application, a better choice is the QStaticText
-   class, since it optimizes the memory cost of the cache and also provides the possibility of paint
-   engine specific caches for an additional speed-up.
-*/
-
-/*!
-    \enum QRawFont::AntialiasingType
-
-    This enum represents the different ways a glyph can be rasterized in the function
-    alphaMapForGlyph().
-
-    \value PixelAntialiasing Will rasterize by measuring the coverage of the shape on whole pixels.
-           The returned image contains the alpha values of each pixel based on the coverage of
-           the glyph shape.
-    \value SubPixelAntialiasing Will rasterize by measuring the coverage of each subpixel,
-           returning a separate alpha value for each of the red, green and blue components of
-           each pixel.
-*/
-
-/*!
-   Constructs an invalid QRawFont.
-*/
 QRawFont::QRawFont()
    : d(new QRawFontPrivate)
 {
 }
 
-/*!
-   Constructs a QRawFont representing the font contained in the file referenced
-   by \a fileName for the size (in pixels) given by \a pixelSize, and using the
-   hinting preference specified by \a hintingPreference.
-
-   \note The referenced file must contain a TrueType or OpenType font.
-*/
-QRawFont::QRawFont(const QString &fileName,
-                   qreal pixelSize,
-                   QFont::HintingPreference hintingPreference)
+QRawFont::QRawFont(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference)
    : d(new QRawFontPrivate)
 {
    loadFromFile(fileName, pixelSize, hintingPreference);
@@ -136,9 +52,7 @@ QRawFont::QRawFont(const QString &fileName,
 
    \note The data must contain a TrueType or OpenType font.
 */
-QRawFont::QRawFont(const QByteArray &fontData,
-                   qreal pixelSize,
-                   QFont::HintingPreference hintingPreference)
+QRawFont::QRawFont(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
    : d(new QRawFontPrivate)
 {
    loadFromData(fontData, pixelSize, hintingPreference);

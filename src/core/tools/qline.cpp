@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qline.h"
-#include "qdebug.h"
-#include "qdatastream.h"
-#include "qmath.h"
+#include <qline.h>
+#include <qdebug.h>
+#include <qdatastream.h>
+#include <qmath.h>
 #include <qnumeric_p.h>
 
 QT_BEGIN_NAMESPACE

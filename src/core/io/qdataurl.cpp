@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qurl.h"
-#include "qdataurl_p.h"
+#include <qplatformdefs.h>
+#include <qurl.h>
+#include <qdataurl_p.h>
 
 QT_BEGIN_NAMESPACE
 

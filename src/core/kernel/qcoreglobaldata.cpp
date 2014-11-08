@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcoreglobaldata_p.h"
+#include <qcoreglobaldata_p.h>
 
 QT_BEGIN_NAMESPACE
 

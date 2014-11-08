@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qpoint.h"
-#include "qdatastream.h"
-#include "qdebug.h"
+#include <qpoint.h>
+#include <qdatastream.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

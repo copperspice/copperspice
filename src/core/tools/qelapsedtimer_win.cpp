@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qelapsedtimer.h"
+#include <qelapsedtimer.h>
 #include <windows.h>
 #include <qsystemlibrary_p.h>
 

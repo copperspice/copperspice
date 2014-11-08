@@ -29,11 +29,11 @@
 #include <QApplication>
 #include <qdebug.h>
 
-#include "qtoolbararealayout_p.h"
-#include "qmainwindowlayout_p.h"
-#include "qwidgetanimator_p.h"
-#include "qtoolbarlayout_p.h"
-#include "qtoolbar_p.h"
+#include <qtoolbararealayout_p.h>
+#include <qmainwindowlayout_p.h>
+#include <qwidgetanimator_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qtoolbar_p.h>
 
 /******************************************************************************
 ** QToolBarAreaLayoutItem

@@ -23,48 +23,48 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qwindowsystem_qws.h"
-#include "qwsevent_qws.h"
-#include "qwscommand_qws_p.h"
-#include "qtransportauth_qws_p.h"
-#include "qwsutils_qws.h"
-#include "qwscursor_qws.h"
-#include "qwsdisplay_qws.h"
-#include "qmouse_qws.h"
-#include "qcopchannel_qws.h"
-#include "qwssocket_qws.h"
+#include <qplatformdefs.h>
+#include <qwindowsystem_qws.h>
+#include <qwsevent_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qtransportauth_qws_p.h>
+#include <qwsutils_qws.h>
+#include <qwscursor_qws.h>
+#include <qwsdisplay_qws.h>
+#include <qmouse_qws.h>
+#include <qcopchannel_qws.h>
+#include <qwssocket_qws.h>
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qsocketnotifier.h"
-#include "qpolygon.h"
-#include "qimage.h"
-#include "qcursor.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qsocketnotifier.h>
+#include <qpolygon.h>
+#include <qimage.h>
+#include <qcursor.h>
 #include <qpaintengine_raster_p.h>
-#include "qscreen_qws.h"
-#include "qwindowdefs.h"
-#include "qlock_p.h"
-#include "qwslock_p.h"
-#include "qfile.h"
-#include "qtimer.h"
-#include "qpen.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qinputcontext.h"
-#include "qpainter.h"
+#include <qscreen_qws.h>
+#include <qwindowdefs.h>
+#include <qlock_p.h>
+#include <qwslock_p.h>
+#include <qfile.h>
+#include <qtimer.h>
+#include <qpen.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qinputcontext.h>
+#include <qpainter.h>
 
 #include <qdebug.h>
 
-#include "qkbddriverfactory_qws.h"
-#include "qmousedriverfactory_qws.h"
+#include <qkbddriverfactory_qws.h>
+#include <qmousedriverfactory_qws.h>
 
 #include <qbuffer.h>
 #include <qdir.h>
 #include <qwindowsurface_qws_p.h>
 #include <qfontengine_qpf_p.h>
 
-#include "qwindowsystem_p.h"
+#include <qwindowsystem_p.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -82,7 +82,7 @@
 #include <sys/ioctl.h>
 #include <sys/soundcard.h>
 #else
-#include "qsoundqss_qws.h"
+#include <qsoundqss_qws.h>
 #endif
 #endif
 

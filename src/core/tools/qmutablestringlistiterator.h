@@ -1,1 +1,1 @@
-#include "qstringlist.h"
+#include <qstringlist.h>

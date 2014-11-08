@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "qprintdialog.h"
+#include <qprintdialog.h>
 #include <qwidget.h>
 #include <qapplication.h>
 #include <qmessagebox.h>

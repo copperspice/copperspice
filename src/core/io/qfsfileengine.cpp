@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qfsfileengine_p.h"
-#include "qfsfileengine_iterator_p.h"
-#include "qfilesystemengine_p.h"
-#include "qdatetime.h"
-#include "qdiriterator.h"
-#include "qset.h"
-#include <QtCore/qdebug.h>
+#include <qfsfileengine_p.h>
+#include <qfsfileengine_iterator_p.h>
+#include <qfilesystemengine_p.h>
+#include <qdatetime.h>
+#include <qdiriterator.h>
+#include <qset.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_FSFILEENGINE
 #include <errno.h>
 
 #if defined(Q_OS_UNIX)
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 #endif
 
 #include <stdio.h>
@@ -65,26 +65,8 @@ QT_BEGIN_NAMESPACE
 #  endif
 #endif
 
-/*! \class QFSFileEngine
-    \brief The QFSFileEngine class implements Qt's default file engine.
-    \since 4.1
 
-    This class is part of the file engine framework in Qt. If you only want to
-    access files or directories, use QFile, QFileInfo or QDir instead.
-
-    QFSFileEngine is the default file engine for accessing regular files. It
-    is provided for convenience; by subclassing this class, you can alter its
-    behavior slightly, without having to write a complete QAbstractFileEngine
-    subclass. To install your custom file engine, you must also subclass
-    QAbstractFileEngineHandler and create an instance of your handler.
-
-    It can also be useful to create a QFSFileEngine object directly if you
-    need to use the local file system inside QAbstractFileEngine::create(), in
-    order to avoid recursion (as higher-level classes tend to call
-    QAbstractFileEngine::create()).
-*/
-
-//**************** QFSFileEnginePrivate
+// QFSFileEnginePrivate
 QFSFileEnginePrivate::QFSFileEnginePrivate() : QAbstractFileEnginePrivate()
 {
    init();

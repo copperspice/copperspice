@@ -29,69 +29,11 @@
 #include <qstringlist.h>
 #include <qdebug.h>
 #include <qvariant.h>
-#include "qjson_p.h"
-#include "qjsonwriter_p.h"
+#include <qjson_p.h>
+#include <qjsonwriter_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QJsonObject
-    \inmodule QtCore
-    \ingroup json
-    \reentrant
-    \since 5.0
-
-    \brief The QJsonObject class encapsulates a JSON object.
-
-    A JSON object is a list of key value pairs, where the keys are unique strings
-    and the values are represented by a QJsonValue.
-
-    A QJsonObject can be converted to and from a QVariantMap. You can query the
-    number of (key, value) pairs with size(), insert(), and remove() entries from it
-    and iterate over its content using the standard C++ iterator pattern.
-
-    QJsonObject is an implicitly shared class, and shares the data with the document
-    it has been created from as long as it is not being modified.
-
-    You can convert the array to and from text based JSON through QJsonDocument.
-*/
-
-/*!
-    \typedef QJsonObject::Iterator
-
-    Qt-style synonym for QJsonObject::iterator.
-*/
-
-/*!
-    \typedef QJsonObject::ConstIterator
-
-    Qt-style synonym for QJsonObject::const_iterator.
-*/
-
-/*!
-    \typedef QJsonObject::key_type
-
-    Typedef for QString. Provided for STL compatibility.
-*/
-
-/*!
-    \typedef QJsonObject::mapped_type
-
-    Typedef for QJsonValue. Provided for STL compatibility.
-*/
-
-/*!
-    \typedef QJsonObject::size_type
-
-    Typedef for int. Provided for STL compatibility.
-*/
-
-
-/*!
-    Constructs an empty JSON object
-
-    \sa isEmpty()
- */
 QJsonObject::QJsonObject()
    : d(0), o(0)
 {

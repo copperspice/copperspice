@@ -1,1 +1,1 @@
-#include "qprintdialog.h"
+#include <qprintdialog.h>

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstringbuilder.h"
+#include <qstringbuilder.h>
 #include <QtCore/qtextcodec.h>
 
 QT_BEGIN_NAMESPACE

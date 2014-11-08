@@ -26,13 +26,13 @@
 #ifndef QOBJECT_H
 #define QOBJECT_H
 
-#include "csobject_macro.h"
+#include <csobject_macro.h>
 
 // include before qmetaobject.h
-#include "csregister1.h"
+#include <csregister1.h>
 
-#include "qmetaobject.h"
-#include "csregister2.h"
+#include <qmetaobject.h>
+#include <csregister2.h>
 
 #include <QList>
 #include <QRegExp>
@@ -621,6 +621,6 @@ class Q_CORE_EXPORT CSInternalThreadData
 QT_END_NAMESPACE
 
 // best way to handle declarations
-#include "csobject_internal.h"
+#include <csobject_internal.h>
 
 #endif

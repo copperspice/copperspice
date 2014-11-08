@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qresource.h"
-#include "qresource_iterator_p.h"
-
-#include <QtCore/qvariant.h>
+#include <qresource.h>
+#include <qresource_iterator_p.h>
+#include <qvariant.h>
 
 QT_BEGIN_NAMESPACE
 

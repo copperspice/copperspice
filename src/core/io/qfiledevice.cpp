@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qfiledevice.h"
-#include "qfiledevice_p.h"
-#include "qfsfileengine_p.h"
+#include <qplatformdefs.h>
+#include <qfiledevice.h>
+#include <qfiledevice_p.h>
+#include <qfsfileengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

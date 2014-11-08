@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "QtCore/qxmlstream.h"
+#include <qxmlstream.h>
 
 #if defined(QT_BUILD_XML_LIB) && defined(Q_OS_MAC)
 // No need to define this in the 64-bit Mac libraries Since Qt 4.4 and previous were not
@@ -34,7 +34,7 @@
 
 #ifndef QT_NO_XMLSTREAM
 
-#include "qxmlutils_p.h"
+#include <qxmlutils_p.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <stdio.h>
@@ -45,7 +45,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#include "qxmlstream_p.h"
+#include <qxmlstream_p.h>
 
 /*!
   Destroys the entity resolver.

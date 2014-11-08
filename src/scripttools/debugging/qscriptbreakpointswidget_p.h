@@ -49,40 +49,26 @@ class QScriptBreakpointsWidget:
    void keyPressEvent(QKeyEvent *e);
 
  private:
-   CS_SLOT_1(Private, void _q_newBreakpoint())
-   CS_SLOT_2(_q_newBreakpoint)
-
+  
    /*  PRIVATE_SLOT
    void _q_newBreakpoint()
    {
    	Q_D(QScriptBreakpointsWidget);
    	d->_q_newBreakpoint();
    }
-   */
-   CS_SLOT_1(Private, void _q_deleteBreakpoint())
-   CS_SLOT_2(_q_deleteBreakpoint)
 
-   /*  PRIVATE_SLOT
    void _q_deleteBreakpoint()
    {
    	Q_D(QScriptBreakpointsWidget);
    	d->_q_deleteBreakpoint();
    }
-   */
-   CS_SLOT_1(Private, void _q_onCurrentChanged(const QModelIndex &un_named_arg1))
-   CS_SLOT_2(_q_onCurrentChanged)
 
-   /*  PRIVATE_SLOT
    void _q_onCurrentChanged(const QModelIndex & un_named_arg1)
    {
    	Q_D(QScriptBreakpointsWidget);
    	d->_q_onCurrentChanged();
    }
-   */
-   CS_SLOT_1(Private, void _q_onNewBreakpointRequest(const QString &un_named_arg1, int un_named_arg2))
-   CS_SLOT_2(_q_onNewBreakpointRequest)
 
-   /*  PRIVATE_SLOT
    void _q_onNewBreakpointRequest(const QString & un_named_arg1,int un_named_arg2)
    {
    	Q_D(QScriptBreakpointsWidget);
@@ -90,6 +76,18 @@ class QScriptBreakpointsWidget:
    }
    */
 
+   CS_SLOT_1(Private, void _q_newBreakpoint())
+   CS_SLOT_2(_q_newBreakpoint)
+
+   CS_SLOT_1(Private, void _q_deleteBreakpoint())
+   CS_SLOT_2(_q_deleteBreakpoint)
+   
+   CS_SLOT_1(Private, void _q_onCurrentChanged(const QModelIndex &un_named_arg1))
+   CS_SLOT_2(_q_onCurrentChanged)
+
+   CS_SLOT_1(Private, void _q_onNewBreakpointRequest(const QString &un_named_arg1, int un_named_arg2))
+   CS_SLOT_2(_q_onNewBreakpointRequest)
+  
    Q_DECLARE_PRIVATE(QScriptBreakpointsWidget)
    Q_DISABLE_COPY(QScriptBreakpointsWidget)
 };

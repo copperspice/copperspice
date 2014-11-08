@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qhistorystate.h"
+#include <qhistorystate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qhistorystate_p.h"
+#include <qhistorystate_p.h>
 
 QT_BEGIN_NAMESPACE
 

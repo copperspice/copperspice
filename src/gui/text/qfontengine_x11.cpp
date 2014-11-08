@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbitmap.h"
+#include <qbitmap.h>
 
 // #define FONTENGINE_DEBUG
 
@@ -33,26 +33,26 @@
 #include <qtextcodec.h>
 #include <qthread.h>
 
-#include "qfontdatabase.h"
-#include "qpaintdevice.h"
-#include "qpainter.h"
-#include "qvarlengtharray.h"
-#include "qwidget.h"
-#include "qsettings.h"
-#include "qfile.h"
+#include <qfontdatabase.h>
+#include <qpaintdevice.h>
+#include <qpainter.h>
+#include <qvarlengtharray.h>
+#include <qwidget.h>
+#include <qsettings.h>
+#include <qfile.h>
 
 #include <qpaintengine_x11_p.h>
-#include "qfont.h"
-#include "qfont_p.h"
-#include "qfontengine_p.h"
+#include <qfont.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
 #include <qhash.h>
 
 #include <qpainter_p.h>
 #include <qunicodetables_p.h>
 #include <qt_x11_p.h>
 #include <qpixmap_x11_p.h>
-#include "qx11info_x11.h"
-#include "qfontengine_x11_p.h"
+#include <qx11info_x11.h>
+#include <qfontengine_x11_p.h>
 
 #include <limits.h>
 #include <ft2build.h>

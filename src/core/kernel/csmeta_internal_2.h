@@ -26,7 +26,7 @@
 #ifndef CSMETA_INTERNAL_2_H
 #define CSMETA_INTERNAL_2_H
 
-#include "QVariant"
+#include <QVariant>
 
 // **
 // template<class T, class=void, class=typename std::enable_if<!std::is_constructible<QVariant, T>::value>::type>

@@ -25,15 +25,15 @@
 
 //#define QIODEVICE_DEBUG
 
-#include "qbytearray.h"
-#include "qdebug.h"
-#include "qiodevice_p.h"
-#include "qfile.h"
-#include "qstringlist.h"
+#include <qbytearray.h>
+#include <qdebug.h>
+#include <qiodevice_p.h>
+#include <qfile.h>
+#include <qstringlist.h>
 #include <limits.h>
 
 #ifdef QIODEVICE_DEBUG
-#  include <ctype.h>
+#include <ctype.h>
 #endif
 
 QT_BEGIN_NAMESPACE

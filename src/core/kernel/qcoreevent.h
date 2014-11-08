@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
+#include <qobject.h>
 
 #ifndef QCOREEVENT_H
 #define QCOREEVENT_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qbytearray.h>
+#include <qnamespace.h>
+#include <qbytearray.h>
 
 QT_BEGIN_NAMESPACE
 

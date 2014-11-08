@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qmousedriverplugin_qws.h"
-#include "qmouse_qws.h"
+#include <qmousedriverplugin_qws.h>
+#include <qmouse_qws.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -84,10 +84,8 @@ class Q_CORE_EXPORT QChar
    QChar(SpecialCharacter s) : ucs(ushort(s)) {} // implicit
    QChar(QLatin1Char ch) : ucs(ch.unicode()) {} // implicit
 
-#ifndef QT_NO_CAST_FROM_ASCII
    explicit QChar(char c) : ucs(uchar(c)) { }
    explicit QChar(uchar c) : ucs(c) { }
-#endif
 
    // Unicode information
    enum Category {
@@ -330,12 +328,9 @@ class Q_CORE_EXPORT QChar
    static QString QT_FASTCALL decomposition(uint ucs4);
 
  private:
-#ifdef QT_NO_CAST_FROM_ASCII
-   QChar(char c);
-   QChar(uchar c);
-#endif
    ushort ucs;
 }
+
 #if (defined(__arm__) && defined(QT_NO_ARM_EABI))
 Q_PACKED
 #endif

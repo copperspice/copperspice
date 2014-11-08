@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qaccessibleobject.h"
+#include <qaccessibleobject.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qpointer.h"
-#include "qmetaobject.h"
-#include "qvarlengtharray.h"
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qpointer.h>
+#include <qmetaobject.h>
+#include <qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -96,7 +96,7 @@ QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QSqlDriverFactoryInterface_iid, "/sqldrivers"))
 
-QT_STATIC_CONST_IMPL char *QSqlDatabase::defaultConnection = "qt_sql_default_connection";
+const char *QSqlDatabase::defaultConnection = "qt_sql_default_connection";
 
 typedef QHash<QString, QSqlDriverCreatorBase *> DriverDict;
 

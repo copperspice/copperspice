@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qcommandlinkbutton.h"
-#include "qstylepainter.h"
-#include "qstyleoption.h"
-#include "qtextdocument.h"
-#include "qtextlayout.h"
-#include "qcolor.h"
-#include "qfont.h"
+#include <qcommandlinkbutton.h>
+#include <qstylepainter.h>
+#include <qstyleoption.h>
+#include <qtextdocument.h>
+#include <qtextlayout.h>
+#include <qcolor.h>
+#include <qfont.h>
 #include <qmath.h>
-#include "qpushbutton_p.h"
+#include <qpushbutton_p.h>
 
 QT_BEGIN_NAMESPACE
 

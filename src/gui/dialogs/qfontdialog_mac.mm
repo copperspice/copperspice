@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfontdialog_p.h"
+#include <qfontdialog_p.h>
 
 #if !defined(QT_NO_FONTDIALOG) && defined(Q_OS_MAC)
 #include <qapplication.h>

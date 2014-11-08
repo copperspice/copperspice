@@ -23,45 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qaccessibleplugin.h"
+#include <qaccessibleplugin.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qaccessible.h"
+#include <qaccessible.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QAccessiblePlugin
-    \brief The QAccessiblePlugin class provides an abstract base for
-    accessibility plugins.
-
-    \ingroup plugins
-    \ingroup accessibility
-
-    Writing an accessibility plugin is achieved by subclassing this
-    base class, reimplementing the pure virtual functions keys() and
-    create(), and exporting the class with the Q_EXPORT_PLUGIN2()
-    macro.
-
-    \sa QAccessibleBridgePlugin, {How to Create Qt Plugins}
-*/
-
-/*!
-    Constructs an accessibility plugin with the given \a parent. This
-    is invoked automatically by the Q_EXPORT_PLUGIN2() macro.
-*/
 QAccessiblePlugin::QAccessiblePlugin(QObject *parent)
    : QObject(parent)
 {
 }
 
-/*!
-    Destroys the accessibility plugin.
-
-    You never have to call this explicitly. Qt destroys a plugin
-    automatically when it is no longer used.
-*/
 QAccessiblePlugin::~QAccessiblePlugin()
 {
 }

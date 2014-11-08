@@ -26,9 +26,9 @@
 #ifndef CSMETA_INTERNAL_1_H
 #define CSMETA_INTERNAL_1_H
 
-#include "qmetatype.h"
-#include "qvariant.h"
-#include "qstring.h"
+#include <qmetatype.h>
+#include <qvariant.h>
+#include <qstring.h>
 
 #include <initializer_list>
 #include <memory>

@@ -1,1 +1,1 @@
-#include "qrect.h"
+#include <qrect.h>

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qlocale_p.h"
-#include "qstringbuilder.h"
-#include "qdatetime.h"
-#include "qstringlist.h"
-#include "qvariant.h"
+#include <qlocale_p.h>
+#include <qstringbuilder.h>
+#include <qdatetime.h>
+#include <qstringlist.h>
+#include <qvariant.h>
 
 QT_BEGIN_NAMESPACE
 

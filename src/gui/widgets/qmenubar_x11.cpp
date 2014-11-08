@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qmenubar_x11_p.h"
+#include <qmenubar_x11_p.h>
 
 #ifndef QT_NO_MENUBAR
 
-#include "qapplication.h"
-#include "qdebug.h"
-#include "qevent.h"
-#include "qmenu.h"
-#include "qmenubar.h"
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qmenu.h>
+#include <qmenubar.h>
 #include <qfactoryloader_p.h>
 
 QT_BEGIN_NAMESPACE

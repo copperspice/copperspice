@@ -23,18 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
+
 #ifndef QT_NO_EFFECTS
-#include "qdesktopwidget.h"
-#include "qeffects_p.h"
-#include "qevent.h"
-#include "qimage.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qpointer.h"
-#include "qtimer.h"
-#include "qelapsedtimer.h"
-#include "qdebug.h"
+#include <qdesktopwidget.h>
+#include <qeffects_p.h>
+#include <qevent.h>
+#include <qimage.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qpointer.h>
+#include <qtimer.h>
+#include <qelapsedtimer.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,31 +23,31 @@
 *
 ***********************************************************************/
 
-#include "qtextdocument.h"
+#include <qtextdocument.h>
 #include <qtextformat.h>
-#include "qtextdocumentlayout_p.h"
-#include "qtextdocumentfragment.h"
-#include "qtextdocumentfragment_p.h"
-#include "qtexttable.h"
-#include "qtextlist.h"
+#include <qtextdocumentlayout_p.h>
+#include <qtextdocumentfragment.h>
+#include <qtextdocumentfragment_p.h>
+#include <qtexttable.h>
+#include <qtextlist.h>
 #include <qdebug.h>
 #include <qregexp.h>
 #include <qvarlengtharray.h>
 #include <qtextcodec.h>
 #include <qthread.h>
-#include "qtexthtmlparser_p.h"
-#include "qpainter.h"
-#include "qprinter.h"
-#include "qtextedit.h"
+#include <qtexthtmlparser_p.h>
+#include <qpainter.h>
+#include <qprinter.h>
+#include <qtextedit.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qapplication.h>
-#include "qtextcontrol_p.h"
-#include "qfont_p.h"
-#include "qtextedit_p.h"
-#include "qdataurl_p.h"
-#include "qtextdocument_p.h"
+#include <qtextcontrol_p.h>
+#include <qfont_p.h>
+#include <qtextedit_p.h>
+#include <qdataurl_p.h>
+#include <qtextdocument_p.h>
 #include <qprinter_p.h>
 #include <qabstracttextdocumentlayout_p.h>
 

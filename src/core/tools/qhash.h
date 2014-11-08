@@ -26,15 +26,12 @@
 #ifndef QHASH_H
 #define QHASH_H
 
-#include <QtCore/qchar.h>
-#include <QtCore/qiterator.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qrefcount.h>
-
-#ifdef Q_COMPILER_INITIALIZER_LISTS
+#include <qchar.h>
+#include <qiterator.h>
+#include <qlist.h>
+#include <qpair.h>
+#include <qrefcount.h>
 #include <initializer_list>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -1077,14 +1074,14 @@ class QMultiHash : public QHash<Key, T>
 {
  public:
    QMultiHash() {}
-#ifdef Q_COMPILER_INITIALIZER_LISTS
+
    inline QMultiHash(std::initializer_list<std::pair<Key, T> > list) {
       this->reserve(list.size());
       for (typename std::initializer_list<std::pair<Key, T> >::const_iterator it = list.begin(); it != list.end(); ++it) {
          insert(it->first, it->second);
       }
    }
-#endif
+
    QMultiHash(const QHash<Key, T> &other) : QHash<Key, T>(other) {}
    inline void swap(QMultiHash<Key, T> &other) {
       QHash<Key, T>::swap(other);   // prevent QMultiHash<->QHash swaps

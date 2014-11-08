@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qkbd_qws.h"
-#include "qkbd_qws_p.h"
+#include <qkbd_qws.h>
+#include <qkbd_qws_p.h>
 
 #ifndef QT_NO_QWS_KEYBOARD
 
@@ -33,8 +33,8 @@
 #include <QStringList>
 
 #ifdef Q_WS_QWS
-#include "qwindowsystem_qws.h"
-#include "qscreen_qws.h"
+#include <qwindowsystem_qws.h>
+#include <qscreen_qws.h>
 #endif
 
 #ifdef Q_WS_QPA
@@ -42,7 +42,7 @@
 #include <QKeyEvent>
 #endif
 
-#include "qtimer.h"
+#include <qtimer.h>
 #include <stdlib.h>
 
 //#define QT_DEBUG_KEYMAP

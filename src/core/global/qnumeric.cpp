@@ -23,54 +23,36 @@
 *
 ***********************************************************************/
 
-#include "qnumeric.h"
-#include "qnumeric_p.h"
+#include <qnumeric.h>
+#include <qnumeric_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    Returns true if the double \a {d} is equivalent to infinity.
-*/
 Q_CORE_EXPORT bool qIsInf(double d)
 {
    return qt_is_inf(d);
 }
 
-/*!
-    Returns true if the double \a {d} is not a number (NaN).
-*/
 Q_CORE_EXPORT bool qIsNaN(double d)
 {
    return qt_is_nan(d);
 }
 
-/*!
-    Returns true if the double \a {d} is a finite number.
-*/
 Q_CORE_EXPORT bool qIsFinite(double d)
 {
    return qt_is_finite(d);
 }
 
-/*!
-    Returns true if the float \a {f} is equivalent to infinity.
-*/
 Q_CORE_EXPORT bool qIsInf(float f)
 {
    return qt_is_inf(f);
 }
 
-/*!
-    Returns true if the float \a {f} is not a number (NaN).
-*/
 Q_CORE_EXPORT bool qIsNaN(float f)
 {
    return qt_is_nan(f);
 }
 
-/*!
-    Returns true if the float \a {f} is a finite number.
-*/
 Q_CORE_EXPORT bool qIsFinite(float f)
 {
    return qt_is_finite(f);

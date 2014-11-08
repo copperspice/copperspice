@@ -1,1 +1,1 @@
-#include "qwizard.h"
+#include <qwizard.h>

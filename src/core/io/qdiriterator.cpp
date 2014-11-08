@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qdiriterator.h"
-#include "qdir_p.h"
-#include "qabstractfileengine.h"
-#include <QtCore/qset.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qvariant.h>
+#include <qdiriterator.h>
+#include <qdir_p.h>
+#include <qabstractfileengine.h>
+#include <qset.h>
+#include <qstack.h>
+#include <qvariant.h>
 #include <qfilesystemiterator_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
-#include <QtCore/qfsfileengine.h>
+#include <qfsfileengine.h>
 #include <qfileinfo_p.h>
 
 QT_BEGIN_NAMESPACE

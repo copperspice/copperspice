@@ -31,7 +31,7 @@
 #undef qDebug
 #endif
 
-#include "qdebug.h"
+#include <qdebug.h>
 
 // This file is needed to force compilation of QDebug into the kernel library.
 

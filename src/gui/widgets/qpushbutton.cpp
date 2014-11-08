@@ -23,37 +23,37 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdesktopwidget.h"
-#include "qdialog.h"
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdesktopwidget.h>
+#include <qdialog.h>
 #include <qdialog_p.h>
-#include "qdrawutil.h"
-#include "qevent.h"
-#include "qfontmetrics.h"
-#include "qmenu.h"
-#include "qstylepainter.h"
-#include "qpixmap.h"
-#include "qpointer.h"
-#include "qpushbutton.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qtoolbar.h"
-#include "qdebug.h"
-#include "qlayoutitem.h"
-#include "qdialogbuttonbox.h"
+#include <qdrawutil.h>
+#include <qevent.h>
+#include <qfontmetrics.h>
+#include <qmenu.h>
+#include <qstylepainter.h>
+#include <qpixmap.h>
+#include <qpointer.h>
+#include <qpushbutton.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qtoolbar.h>
+#include <qdebug.h>
+#include <qlayoutitem.h>
+#include <qdialogbuttonbox.h>
 
 #ifdef Q_OS_MAC
-#include "qmacstyle_mac.h"
-#include "qmacstyle_mac_p.h"
+#include <qmacstyle_mac.h>
+#include <qmacstyle_mac_p.h>
 #endif
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
-#include "qmenu_p.h"
-#include "qpushbutton_p.h"
+#include <qmenu_p.h>
+#include <qpushbutton_p.h>
 
 QT_BEGIN_NAMESPACE
 

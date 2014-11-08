@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qsharedpointer.h"
+#include <qsharedpointer.h>
 
 // to be sure we are not causing a namespace clash:
-#include "qshareddata.h"
+#include <qshareddata.h>
 
 #include <qset.h>
 #include <qmutex.h>
@@ -40,7 +40,7 @@ void QtSharedPointer::ExternalRefCountData::setQObjectShared(const QObject *, bo
 void QtSharedPointer::ExternalRefCountData::checkQObjectShared(const QObject *)
 {
    if (strongref.load() < 0) {
-      qWarning("QSharedPointer: cannot create a QSharedPointer from a QObject-tracking QWeakPointer");
+      qWarning("QSharedPointer: Can not create a QSharedPointer from a QObject, tracking QWeakPointer");
    }
 }
 

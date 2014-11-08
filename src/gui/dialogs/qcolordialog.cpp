@@ -23,30 +23,30 @@
 *
 ***********************************************************************/
 
-#include "qcolordialog_p.h"
+#include <qcolordialog_p.h>
 
 #ifndef QT_NO_COLORDIALOG
 
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qdrawutil.h"
-#include "qevent.h"
-#include "qimage.h"
-#include "qlabel.h"
-#include "qlayout.h"
-#include "qlineedit.h"
-#include "qmenu.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qpushbutton.h"
-#include "qsettings.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qvalidator.h"
-#include "qmime.h"
-#include "qspinbox.h"
-#include "qdialogbuttonbox.h"
-#include "qguiplatformplugin_p.h"
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qdrawutil.h>
+#include <qevent.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qmenu.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qpushbutton.h>
+#include <qsettings.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qvalidator.h>
+#include <qmime.h>
+#include <qspinbox.h>
+#include <qdialogbuttonbox.h>
+#include <qguiplatformplugin_p.h>
 
 QT_BEGIN_NAMESPACE
 

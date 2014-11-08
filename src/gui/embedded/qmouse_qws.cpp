@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qmouse_qws.h"
-#include "qwindowsystem_qws.h"
-#include "qscreen_qws.h"
-#include "qapplication.h"
-#include "qtextstream.h"
-#include "qfile.h"
-#include "qdebug.h"
-#include "qscreen_qws.h"
+#include <qmouse_qws.h>
+#include <qwindowsystem_qws.h>
+#include <qscreen_qws.h>
+#include <qapplication.h>
+#include <qtextstream.h>
+#include <qfile.h>
+#include <qdebug.h>
+#include <qscreen_qws.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,124 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-#include "qgraphicslayout.h"
-#include "qgraphicslayout_p.h"
-#include "qgraphicslayoutitem.h"
-#include "qgraphicslayoutitem_p.h"
-#include "qgraphicswidget.h"
-#include "qgraphicswidget_p.h"
-#include "qgraphicsscene.h"
+#include <qgraphicslayout.h>
+#include <qgraphicslayout_p.h>
+#include <qgraphicslayoutitem.h>
+#include <qgraphicslayoutitem_p.h>
+#include <qgraphicswidget.h>
+#include <qgraphicswidget_p.h>
+#include <qgraphicsscene.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QGraphicsLayout
-    \brief The QGraphicsLayout class provides the base class for all layouts
-    in Graphics View.
-    \since 4.4
-    \ingroup graphicsview-api
-
-    QGraphicsLayout is an abstract class that defines a virtual API for
-    arranging QGraphicsWidget children and other QGraphicsLayoutItem objects
-    for a QGraphicsWidget. QGraphicsWidget assigns responsibility to a
-    QGraphicsLayout through QGraphicsWidget::setLayout(). As the widget
-    is resized, the layout will automatically arrange the widget's children.
-    QGraphicsLayout inherits QGraphicsLayoutItem, so, it can be managed by
-    any layout, including its own subclasses.
-
-    \section1 Writing a Custom Layout
-
-    You can use QGraphicsLayout as a base to write your own custom layout
-    (e.g., a flowlayout), but it is more common to use one of its subclasses
-    instead - QGraphicsLinearLayout or QGraphicsGridLayout. When creating
-    a custom layout, the following functions must be reimplemented as a bare
-    minimum:
-
-    \table
-    \header \o Function                     \o Description
-    \row     \o QGraphicsLayoutItem::setGeometry()
-               \o Notifies you when the geometry of the layout is set. You can
-                   store the geometry in your own layout class in a reimplementation
-                   of this function.
-    \row    \o QGraphicsLayoutItem::sizeHint()
-               \o Returns the layout's size hints.
-    \row    \o QGraphicsLayout::count()
-              \o Returns the number of items in your layout.
-    \row    \o QGraphicsLayout::itemAt()
-              \o Returns a pointer to an item in your layout.
-    \row    \o QGraphicsLayout::removeAt()
-              \o Removes an item from your layout without destroying it.
-    \endtable
-
-    For more details on how to implement each function, refer to the individual
-    function documentation.
-
-    Each layout defines its own API for arranging widgets and layout items.
-    For example, with a grid layout, you require a row and a
-    column index with optional row and column spans, alignment, spacing, and more.
-    A linear layout, however, requires a single row or column index to position its
-    items. For a grid layout, the order of insertion does not affect the layout in
-    any way, but for a linear layout, the order is essential. When writing your own
-    layout subclass, you are free to choose the API that best suits your layout.
-
-    For adding layout items to the custom layout, the QGraphicsLayout provides
-    convenience function addChildLayoutItem(). The function will take care of
-    automatically reparenting graphics items, if needed.
-
-    \section1 Activating the Layout
-
-    When the layout's geometry changes, QGraphicsLayout immediately rearranges
-    all of its managed items by calling setGeometry() on each item. This
-    rearrangement is called \e activating the layout.
-
-    QGraphicsLayout updates its own geometry to match the contentsRect() of the
-    QGraphicsLayoutItem it is managing. Thus, it will automatically rearrange all
-    its items when the widget is resized. QGraphicsLayout caches the sizes of all
-    its managed items to avoid calling setGeometry() too often.
-
-    \note A QGraphicsLayout will have the same geometry as the contentsRect()
-    of the widget (not the layout) it is assigned to.
-
-    \section2 Activating the Layout Implicitly
-
-    The layout can be activated implicitly using one of two ways: by calling
-    activate() or by calling invalidate(). Calling activate() activates the layout
-    immediately. In contrast, calling invalidate() is delayed, as it posts a
-    \l{QEvent::LayoutRequest}{LayoutRequest} event to the managed widget. Due
-    to event compression, the activate() will only be called once after control has
-    returned to the event loop. This is referred to as \e invalidating the layout.
-    Invalidating the layout also invalidates any cached information. Also, the
-    invalidate() function is a virtual function. So, you can invalidate your own
-    cache in a subclass of QGraphicsLayout by reimplementing this function.
-
-    \section1 Event Handling
-
-    QGraphicsLayout listens to events for the widget it manages through the
-    virtual widgetEvent() event handler. When the layout is assigned to a
-    widget, all events delivered to the widget are first processed by
-    widgetEvent(). This allows the layout to be aware of any relevant state
-    changes on the widget such as visibility changes or layout direction changes.
-
-    \section1 Margin Handling
-
-    The margins of a QGraphicsLayout can be modified by reimplementing
-    setContentsMargins() and getContentsMargins().
-
-*/
-
-/*!
-    Contructs a QGraphicsLayout object.
-
-    \a parent is passed to QGraphicsLayoutItem's constructor and the
-    QGraphicsLayoutItem's isLayout argument is set to \e true.
-
-    If \a parent is a QGraphicsWidget the layout will be installed
-    on that widget. (Note that installing a layout will delete the old one
-    installed.)
-*/
 QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutItem *parent)
    : QGraphicsLayoutItem(*new QGraphicsLayoutPrivate)
 {

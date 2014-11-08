@@ -23,18 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qthread.h"
-#include "qplatformdefs.h"
+#include <qthread.h>
+#include <qplatformdefs.h>
 #include <qcoreapplication_p.h>
 
-#  if !defined(QT_NO_GLIB)
-#    include "qeventdispatcher_glib_p.h"
-#  endif
-#  include <qeventdispatcher_unix_p.h>
+#if !defined(QT_NO_GLIB)
+#include <qeventdispatcher_glib_p.h>
+#endif
 
-#include "qthreadstorage.h"
-#include "qthread_p.h"
-#include "qdebug.h"
+#include <qeventdispatcher_unix_p.h>
+
+#include <qthreadstorage.h>
+#include <qthread_p.h>
+#include <qdebug.h>
 
 #include <sched.h>
 #include <errno.h>

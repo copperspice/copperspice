@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qplaintextedit_p.h"
+#include <qplaintextedit_p.h>
 #include <qfont.h>
 #include <qpainter.h>
 #include <qevent.h>
@@ -34,13 +34,13 @@
 #include <qmenu.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include "qtextdocumentlayout_p.h"
-#include "qabstracttextdocumentlayout_p.h"
-#include "qtextdocument.h"
-#include "qtextdocument_p.h"
-#include "qtextlist.h"
-#include "qtextcontrol_p.h"
-#include "qaccessible.h"
+#include <qtextdocumentlayout_p.h>
+#include <qabstracttextdocumentlayout_p.h>
+#include <qtextdocument.h>
+#include <qtextdocument_p.h>
+#include <qtextlist.h>
+#include <qtextcontrol_p.h>
+#include <qaccessible.h>
 #include <qtextformat.h>
 #include <qdatetime.h>
 #include <qapplication.h>

@@ -76,8 +76,8 @@ QT_END_NAMESPACE
 
 #endif
 
-#include "qprocess.h"
-#include "qprocess_p.h"
+#include <qprocess.h>
+#include <qprocess_p.h>
 
 #include <qbytearray.h>
 #include <qelapsedtimer.h>

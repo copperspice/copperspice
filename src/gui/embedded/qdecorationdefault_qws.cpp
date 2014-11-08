@@ -28,7 +28,7 @@
 #include <qpainter.h>
 #include <qpaintengine.h>
 #include <qdrawutil.h>
-#include "qdecorationdefault_qws.h"
+#include <qdecorationdefault_qws.h>
 
 QT_BEGIN_NAMESPACE
 

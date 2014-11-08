@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtoolbox.h"
+#include <qtoolbox.h>
 
 #ifndef QT_NO_TOOLBOX
 
@@ -38,7 +38,7 @@
 #include <qtooltip.h>
 #include <qabstractbutton.h>
 
-#include "qframe_p.h"
+#include <qframe_p.h>
 
 QT_BEGIN_NAMESPACE
 

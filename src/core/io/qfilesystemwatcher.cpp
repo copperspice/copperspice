@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qfilesystemwatcher.h"
-#include "qfilesystemwatcher_p.h"
+#include <qfilesystemwatcher.h>
+#include <qfilesystemwatcher_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -37,19 +37,19 @@
 #include <qtimer.h>
 
 #if defined(Q_OS_WIN)
-#  include "qfilesystemwatcher_win_p.h"
+#  include <qfilesystemwatcher_win_p.h>
 
 #elif defined(Q_OS_LINUX)
-#  include "qfilesystemwatcher_inotify_p.h"
-#  include "qfilesystemwatcher_dnotify_p.h"
+#  include <qfilesystemwatcher_inotify_p.h>
+#  include <qfilesystemwatcher_dnotify_p.h>
 
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
 
 #  if (defined Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-#  include "qfilesystemwatcher_fsevents_p.h"
+#  include <qfilesystemwatcher_fsevents_p.h>
 #  endif
 
-#  include "qfilesystemwatcher_kqueue_p.h"
+#  include <qfilesystemwatcher_kqueue_p.h>
 
 #endif
 

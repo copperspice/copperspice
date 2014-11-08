@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qcopchannel_qws.h"
+#include <qcopchannel_qws.h>
 
 #ifndef QT_NO_COP
 
-#include "qwsdisplay_qws.h"
-#include "qwscommand_qws_p.h"
-#include "qwindowsystem_qws.h"
-#include "qwindowsystem_p.h"
-#include "qlist.h"
-#include "qmap.h"
-#include "qdatastream.h"
-#include "qpointer.h"
-#include "qmutex.h"
+#include <qwsdisplay_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qwindowsystem_qws.h>
+#include <qwindowsystem_p.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qdatastream.h>
+#include <qpointer.h>
+#include <qmutex.h>
 
-#include "qdebug.h"
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

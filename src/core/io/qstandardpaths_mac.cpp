@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qstandardpaths.h"
+#include <qstandardpaths.h>
 #include <qdir.h>
-#include "qcore_mac_p.h"
+#include <qcore_mac_p.h>
 #include <qcoreapplication.h>
 
 #include <CoreFoundation/CoreFoundation.h>

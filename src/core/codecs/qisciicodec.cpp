@@ -22,20 +22,13 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qisciicodec_p.h"
-#include "qlist.h"
+
+#include <qisciicodec_p.h>
+#include <qlist.h>
 
 #ifndef QT_NO_CODECS
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QIsciiCodec
-    \brief The QIsciiCodec class provides conversion to and from the ISCII encoding.
-
-    \internal
-*/
-
 
 struct Codecs {
    const char name[10];

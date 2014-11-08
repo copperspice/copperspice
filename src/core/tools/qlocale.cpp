@@ -23,47 +23,51 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_SYSTEMLOCALE
+
 QT_BEGIN_NAMESPACE
+
 class QSystemLocale;
 static QSystemLocale *QSystemLocale_globalSystemLocale();
 QT_END_NAMESPACE
 #endif
 
 #if !defined(QWS) && defined(Q_OS_MAC)
-#   include "qcore_mac_p.h"
-#   include <CoreFoundation/CoreFoundation.h>
+#include <qcore_mac_p.h>
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qdatastream.h"
-#include "qstring.h"
-#include "qlocale.h"
-#include "qlocale_p.h"
-#include "qlocale_tools_p.h"
-#include "qdatetime_p.h"
-#include "qnamespace.h"
-#include "qdatetime.h"
-#include "qstringlist.h"
-#include "qvariant.h"
-#include "qstringbuilder.h"
+#include <qdatastream.h>
+#include <qstring.h>
+#include <qlocale.h>
+#include <qlocale_p.h>
+#include <qlocale_tools_p.h>
+#include <qdatetime_p.h>
+#include <qnamespace.h>
+#include <qdatetime.h>
+#include <qstringlist.h>
+#include <qvariant.h>
+#include <qstringbuilder.h>
 
 #if defined(Q_OS_WIN)
-#   include "qt_windows.h"
-#   include <time.h>
+#include <qt_windows.h>
+#include <time.h>
 #endif
 
-#include "qnumeric_p.h"
-#include "qsystemlibrary_p.h"
+#include <qnumeric_p.h>
+#include <qsystemlibrary_p.h>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SYSTEMLOCALE
+
 static QSystemLocale *_systemLocale = 0;
 Q_GLOBAL_STATIC_WITH_ARGS(QSystemLocale, QSystemLocale_globalSystemLocale, (true))
+
 static QLocalePrivate *system_lp = 0;
 Q_GLOBAL_STATIC(QLocalePrivate, globalLocalePrivate)
 #endif
@@ -79,7 +83,7 @@ extern bool qt_u_strToLower(const QString &str, QString *out, const QLocale &loc
 */
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qlocale_data_p.h"
+#include <qlocale_data_p.h>
 QT_END_INCLUDE_NAMESPACE
 
 QLocale::Language QLocalePrivate::codeToLanguage(const QString &code)

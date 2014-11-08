@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qtextoption.h"
-#include "qapplication.h"
-#include "qlist.h"
+#include <qtextoption.h>
+#include <qapplication.h>
+#include <qlist.h>
 
-QT_BEGIN_NAMESPACE
+<QT_BEGIN_NAMESPAC>
 
 struct QTextOptionPrivate {
    QList<QTextOption::Tab> tabStops;

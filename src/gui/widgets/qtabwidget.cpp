@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qtabwidget.h"
+#include <qtabwidget.h>
 
 #ifndef QT_NO_TABWIDGET
-#include "qwidget_p.h"
-#include "qtabbar_p.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qlayout.h"
-#include "qstackedwidget.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qstylepainter.h"
-#include "qtabbar.h"
-#include "qtoolbutton.h"
+#include <qwidget_p.h>
+#include <qtabbar_p.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qlayout.h>
+#include <qstackedwidget.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
+#include <qtabbar.h>
+#include <qtoolbutton.h>
 
 QT_BEGIN_NAMESPACE
 

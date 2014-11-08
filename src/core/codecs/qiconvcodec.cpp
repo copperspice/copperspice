@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qiconvcodec_p.h"
-#include "qtextcodec_p.h"
+#include <qiconvcodec_p.h>
+#include <qtextcodec_p.h>
 #include <qlibrary.h>
 #include <qdebug.h>
 #include <qthreadstorage.h>

@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qdesktopservices.h"
+#include <qdesktopservices.h>
 
 #ifndef QT_NO_DESKTOPSERVICES
 
 #include <qdebug.h>
 
 #if defined(Q_WS_QWS) || defined(Q_WS_QPA)
-#include "qdesktopservices_qws.cpp"
+#include <qdesktopservices_qws.cpp>
 
 #elif defined(Q_WS_X11)
-#include "qdesktopservices_x11.cpp"
+#include <qdesktopservices_x11.cpp>
 
 #elif defined(Q_OS_WIN)
-#include "qdesktopservices_win.cpp"
+#include <qdesktopservices_win.cpp>
 
 #elif defined(Q_OS_MAC)
-#include "qdesktopservices_mac.cpp"
+#include <qdesktopservices_mac.cpp>
 
 #endif
 

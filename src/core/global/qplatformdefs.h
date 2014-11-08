@@ -28,16 +28,93 @@
 
 #include <qglobal.h>
 
+#ifdef HAVE_FEATURES_H
+#include <features.h>
+#endif
+
+#ifdef HAVE_PTHREAD_H
+#include <pthread.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#endif
+
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+
+#ifdef HAVE_GRP_H
+#include <grp.h>
+#endif
+
+#ifdef HAVE_PWD_H
+#include <pwd.h>
+#endif
+
+#ifdef HAVE_SIGNAL_H
+#include <signal.h>
+#endif
+
+#ifdef HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif
+
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+
+#ifdef HAVE_SYS_IOCTL_H
+#include <sys/ioctl.h>
+#endif
+
+#ifdef HAVE_SYS_IPC_H
+#include <sys/ipc.h>
+#endif
+
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+
+#ifdef HAVE_SYS_SHM_H
+#include <sys/shm.h>
+#endif
+
+#ifdef HAVE_SOCKET_H
+#include <sys/socket.h>
+#endif
+
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
+
+#ifdef HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
+
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+
+#ifdef HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+
+
 // ***********
 
 #if defined(Q_OS_WIN)
 
-#ifdef UNICODE
-
-#ifndef _UNICODE
+#if defined(UNICODE) && ! defined(_UNICODE)
 #define _UNICODE
-#endif
-
 #endif
 
 #include <tchar.h>
@@ -52,7 +129,6 @@
 #include <limits.h>
 
 #if ! defined(_WIN32_WINNT) || (_WIN32_WINNT-0 < 0x0500)
-
 typedef enum {
     NameUnknown           = 0, 
     NameFullyQualifiedDN  = 1, 
@@ -94,6 +170,7 @@ typedef enum {
 #define QT_OPEN               ::_open
 #define QT_CLOSE              ::_close
 
+//  block A
 #ifdef QT_LARGEFILE_SUPPORT
 #define QT_LSEEK              ::_lseeki64
 
@@ -112,7 +189,7 @@ typedef enum {
 #define QT_TSTAT              ::_wstat
 #endif
 
-#endif
+#endif  // end block A
 
 #define QT_READ               ::_read
 #define QT_WRITE              ::_write
@@ -131,8 +208,8 @@ typedef enum {
 #define QT_OPEN_APPEND        _O_APPEND
 
 #if defined(O_TEXT)
-# define QT_OPEN_TEXT         _O_TEXT
-# define QT_OPEN_BINARY       _O_BINARY
+#define QT_OPEN_TEXT         _O_TEXT
+#define QT_OPEN_BINARY       _O_BINARY
 #endif
 
 #define QT_FPOS_T              fpos_t
@@ -154,8 +231,8 @@ typedef enum {
 #define QT_OFF_T              off64_t
 #endif
 
-#define QT_VSNPRINTF          ::_vsnprintf
 #define QT_SNPRINTF           ::_snprintf
+#define QT_VSNPRINTF          ::_vsnprintf
 
 #define F_OK                  0
 #define X_OK                  1
@@ -168,35 +245,10 @@ typedef enum {
 
 // may need to reset default environment if _BSD_SOURCE is defined
 
+#define _XOPEN_SOURCE 700
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
-#endif
-
-#include <unistd.h>
-
-#ifdef HAVE_FEATURES_H
-#include <features.h>
-#endif
-
-#include <pthread.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <grp.h>
-#include <pwd.h>
-#include <signal.h>
-
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/ipc.h>
-#include <sys/time.h>
-#include <sys/shm.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <netinet/in.h>
-
-#ifndef QT_NO_IPV6IFNAME
-#include <net/if.h>
 #endif
 
 #define QT_USE_XOPEN_LFS_EXTENSIONS
@@ -205,44 +257,19 @@ typedef enum {
 #undef QT_SOCKLEN_T
 #define QT_SOCKLEN_T          socklen_t
 
-#if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
 #define QT_SNPRINTF           ::snprintf
 #define QT_VSNPRINTF          ::vsnprintf
-#endif
 
 
 // ***********
 #elif defined(Q_OS_MAC)
 
-#include <unistd.h>
-
-#include <pthread.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <grp.h>
-#include <pwd.h>
-#include <signal.h>
-
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/ipc.h>
-#include <sys/time.h>
-#include <sys/shm.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <netinet/in.h>
-
-#ifndef QT_NO_IPV6IFNAME
-#include <net/if.h>
-#endif
-
 #include <qplatformposix.h>
 
-#undef QT_OPEN_LARGEFILE
-#undef QT_SOCKLEN_T
-                              
+#undef QT_OPEN_LARGEFILE                             
 #define QT_OPEN_LARGEFILE     0
+
+#undef QT_SOCKLEN_T
 #define QT_SOCKLEN_T          socklen_t
 
 #define QT_SNPRINTF           ::snprintf
@@ -250,32 +277,7 @@ typedef enum {
 
 
 // ***********
-#elif defined(Q_OS_FREEBSD)
-
-#include <unistd.h>
-
-#include <pthread.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <grp.h>
-#include <pwd.h>
-#include <signal.h>
-#include <dlfcn.h>
-
-#include <sys/param.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/ipc.h>
-#include <sys/time.h>
-#include <sys/shm.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <netinet/in.h>
-
-#ifndef QT_NO_IPV6IFNAME
-#include <net/if.h>
-#endif
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
 
 #include <qplatformposix.h>
 

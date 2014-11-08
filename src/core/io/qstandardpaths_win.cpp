@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qstandardpaths.h"
+#include <qstandardpaths.h>
 
 #include <qdir.h>
-#include "qsystemlibrary_p.h"
+#include <qsystemlibrary_p.h>
 #include <qstringlist.h>
 #include <qcoreapplication.h>
 #include <qt_windows.h>

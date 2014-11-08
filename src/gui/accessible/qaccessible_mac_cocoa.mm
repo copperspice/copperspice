@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qaccessible.h"
-#include "qaccessible_mac_p.h"
-#include "qdebug.h"
-#include "qtabwidget.h"
+#include <qaccessible.h>
+#include <qaccessible_mac_p.h>
+#include <qdebug.h>
+#include <qtabwidget.h>
 #include <qt_mac_p.h>
 #include <qcocoaview_mac_p.h>
 #include <qwidget_p.h>

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qlinkedlist.h"
+#include <qlinkedlist.h>
 
 QT_BEGIN_NAMESPACE
 

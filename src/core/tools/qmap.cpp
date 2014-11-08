@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qmap.h"
-
+#include <qmap.h>
 #include <stdlib.h>
 
 #ifdef QT_QMAP_DEBUG

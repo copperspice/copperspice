@@ -23,89 +23,17 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGraphicsLinearLayout
-    \brief The QGraphicsLinearLayout class provides a horizontal or vertical
-    layout for managing widgets in Graphics View.
-    \since 4.4
-    \ingroup graphicsview-api
-
-    The default orientation for a linear layout is Qt::Horizontal. You can
-    choose a vertical orientation either by calling setOrientation(), or by
-    passing Qt::Vertical to QGraphicsLinearLayout's constructor.
-
-    The most common way to use QGraphicsLinearLayout is to construct an object
-    on the heap with no parent, add widgets and layouts by calling addItem(),
-    and finally assign the layout to a widget by calling
-    QGraphicsWidget::setLayout().
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicslinearlayout.cpp 0
-
-    You can add widgets, layouts, stretches (addStretch(), insertStretch() or
-    setStretchFactor()), and spacings (setItemSpacing()) to a linear
-    layout. The layout takes ownership of the items. In some cases when the layout
-    item also inherits from QGraphicsItem (such as QGraphicsWidget) there will be a
-    ambiguity in ownership because the layout item belongs to two ownership hierarchies.
-	See the documentation of QGraphicsLayoutItem::setOwnedByLayout() how to handle
-	this.
-	You can access each item in the layout by calling count() and itemAt(). Calling
-    removeAt() or removeItem() will remove an item from the layout, without
-    destroying it.
-
-    \section1 Size Hints and Size Policies in QGraphicsLinearLayout
-
-    QGraphicsLinearLayout respects each item's size hints and size policies,
-    and when the layout contains more space than the items can fill, each item
-    is arranged according to the layout's alignment for that item. You can set
-    an alignment for each item by calling setAlignment(), and check the
-    alignment for any item by calling alignment(). By default, items are
-    aligned to the top left.
-
-    \section1 Spacing within QGraphicsLinearLayout
-
-    Between the items, the layout distributes some space. The actual amount of
-    space depends on the managed widget's current style, but the common
-    spacing is 4. You can also set your own spacing by calling setSpacing(),
-    and get the current spacing value by calling spacing(). If you want to
-    configure individual spacing for your items, you can call setItemSpacing().
-
-    \section1 Stretch Factor in QGraphicsLinearLayout
-
-    You can assign a stretch factor to each item to control how much space it
-    will get compared to the other items. By default, two identical widgets
-    arranged in a linear layout will have the same size, but if the first
-    widget has a stretch factor of 1 and the second widget has a stretch
-    factor of 2, the first widget will get 1/3 of the available space, and the
-    second will get 2/3.
-
-    QGraphicsLinearLayout calculates the distribution of sizes by adding up
-    the stretch factors of all items, and then dividing the available space
-    accordingly. The default stretch factor is 0 for all items; a factor of 0
-    means the item does not have any defined stretch factor; effectively this
-    is the same as setting the stretch factor to 1. The stretch factor only
-    applies to the available space in the lengthwise direction of the layout
-    (following its orientation). If you want to control both the item's
-    horizontal and vertical stretch, you can use QGraphicsGridLayout instead.
-
-    \section1 QGraphicsLinearLayout Compared to Other Layouts
-
-    QGraphicsLinearLayout is very similar to QVBoxLayout and QHBoxLayout, but
-    in contrast to these classes, it is used to manage QGraphicsWidget and
-    QGraphicsLayout instead of QWidget and QLayout.
-
-    \sa QGraphicsGridLayout, QGraphicsWidget
-*/
-
-#include "qapplication.h"
+#include <qapplication.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qwidget.h"
-#include "qgraphicslayout_p.h"
-#include "qgraphicslayoutitem.h"
-#include "qgraphicslinearlayout.h"
-#include "qgraphicswidget.h"
-#include "qgridlayoutengine_p.h"
+#include <qwidget.h>
+#include <qgraphicslayout_p.h>
+#include <qgraphicslayoutitem.h>
+#include <qgraphicslinearlayout.h>
+#include <qgraphicswidget.h>
+#include <qgridlayoutengine_p.h>
+
 #ifdef QT_DEBUG
 #include <QtCore/qdebug.h>
 #endif

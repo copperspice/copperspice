@@ -23,24 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qaccessible.h"
+#include <qaccessible.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qaccessibleplugin.h"
-#include "qaccessiblewidget.h"
-#include "qapplication.h"
-#include "qhash.h"
-#include "qmetaobject.h"
-#include "qmutex.h"
+#include <qaccessibleplugin.h>
+#include <qaccessiblewidget.h>
+#include <qapplication.h>
+#include <qhash.h>
+#include <qmetaobject.h>
+#include <qmutex.h>
 #include <qfactoryloader_p.h>
-#include "qwidget.h"
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
-
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAccessibleFactoryInterface_iid, QLatin1String("/accessible")))
 Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)
 
 QAccessible::UpdateHandler QAccessible::updateHandler = 0;

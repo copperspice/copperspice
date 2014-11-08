@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qtextformat.h"
-#include "qtextformat_p.h"
+#include <qtextformat.h>
+#include <qtextformat_p.h>
 
 #include <qvariant.h>
 #include <qdatastream.h>

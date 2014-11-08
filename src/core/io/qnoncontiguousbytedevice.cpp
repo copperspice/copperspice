@@ -23,106 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qnoncontiguousbytedevice_p.h"
+#include <qnoncontiguousbytedevice_p.h>
 #include <qbuffer.h>
 #include <qdebug.h>
 #include <qfile.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QNonContiguousByteDevice
-    \brief A QNonContiguousByteDevice is a representation of a
-    file, array or buffer that allows access with a read pointer.
-    \since 4.6
-
-    \inmodule QtCore
-
-    The goal of this class is to have a data representation that
-    allows us to avoid doing a memcpy as we have to do with QIODevice.
-
-    \sa QNonContiguousByteDeviceFactory
-
-    \internal
-*/
-/*!
-    \fn virtual const char* QNonContiguousByteDevice::readPointer(qint64 maximumLength, qint64 &len)
-
-    Return a byte pointer for at most \a maximumLength bytes of that device.
-    if \a maximumLength is -1, the caller does not care about the length and
-    the device may return what it desires to.
-    The actual number of bytes the pointer is valid for is returned in
-    the \a len variable.
-    \a len will be -1 if EOF or an error occurs.
-    If it was really EOF can then afterwards be checked with atEnd()
-    Returns 0 if it is not possible to read at that position.
-
-    \sa atEnd()
-
-    \internal
-*/
-/*!
-    \fn virtual bool QNonContiguousByteDevice::advanceReadPointer(qint64 amount)
-
-     will advance the internal read pointer by \a amount bytes.
-     The old readPointer is invalid after this call.
-
-    \sa readPointer()
-
-    \internal
-*/
-/*!
-    \fn virtual bool QNonContiguousByteDevice::atEnd()
-
-     Returns true if everything has been read and the read
-     pointer cannot be advanced anymore.
-
-    \sa readPointer(), advanceReadPointer(), reset()
-
-    \internal
-*/
-/*!
-    \fn virtual bool QNonContiguousByteDevice::reset()
-
-    Moves the internal read pointer back to the beginning.
-    Returns false if this was not possible.
-
-    \sa atEnd(), disableReset()
-
-    \internal
-*/
-/*!
-    \fn void QNonContiguousByteDevice::disableReset()
-
-    Disable the reset() call, e.g. it will always
-    do nothing and return false.
-
-    \sa reset()
-
-    \internal
-*/
-/*!
-    \fn virtual qint64 QNonContiguousByteDevice::size()
-
-    Returns the size of the complete device or -1 if unknown.
-    May also return less/more than what can be actually read with readPointer()
-
-    \internal
-*/
-/*!
-    \fn void QNonContiguousByteDevice::readyRead()
-
-    Emitted when there is data available
-
-    \internal
-*/
-/*!
-    \fn void QNonContiguousByteDevice::readProgress(qint64 current, qint64 total)
-
-    Emitted when data has been "read" by advancing the read pointer
-
-    \internal
-*/
 
 QNonContiguousByteDevice::QNonContiguousByteDevice() : QObject((QObject *)0), resetDisabled(false)
 {

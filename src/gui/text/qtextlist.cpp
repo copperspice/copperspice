@@ -24,10 +24,10 @@
 ***********************************************************************/
 
 
-#include "qtextlist.h"
-#include "qtextobject_p.h"
-#include "qtextcursor.h"
-#include "qtextdocument_p.h"
+#include <qtextlist.h>
+#include <qtextobject_p.h>
+#include <qtextcursor.h>
+#include <qtextdocument_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

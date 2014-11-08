@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
-#include "csmeta_callevent.h"
+#include <qobject.h>
+#include <csmeta_callevent.h>
 
 // internal class
 CSMetaCallEvent::CSMetaCallEvent(const BentoAbstract *bento, const TeaCupAbstract *dataPack,

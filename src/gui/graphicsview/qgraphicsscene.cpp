@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qgraphicsscene.h"
+#include <qgraphicsscene.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicsitem.h"
-#include "qgraphicsitem_p.h"
-#include "qgraphicslayout.h"
-#include "qgraphicsscene_p.h"
-#include "qgraphicssceneevent.h"
-#include "qgraphicsview.h"
-#include "qgraphicsview_p.h"
-#include "qgraphicswidget.h"
-#include "qgraphicswidget_p.h"
-#include "qgraphicssceneindex_p.h"
-#include "qgraphicsscenebsptreeindex_p.h"
-#include "qgraphicsscenelinearindex_p.h"
+#include <qgraphicsitem.h>
+#include <qgraphicsitem_p.h>
+#include <qgraphicslayout.h>
+#include <qgraphicsscene_p.h>
+#include <qgraphicssceneevent.h>
+#include <qgraphicsview.h>
+#include <qgraphicsview_p.h>
+#include <qgraphicswidget.h>
+#include <qgraphicswidget_p.h>
+#include <qgraphicssceneindex_p.h>
+#include <qgraphicsscenebsptreeindex_p.h>
+#include <qgraphicsscenelinearindex_p.h>
 
 #include <QtCore/qdebug.h>
 #include <QtCore/qlist.h>

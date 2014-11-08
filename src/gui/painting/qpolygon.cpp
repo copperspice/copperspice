@@ -23,23 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qpolygon.h"
-#include "qrect.h"
-#include "qdatastream.h"
-#include "qmatrix.h"
-#include "qdebug.h"
-#include "qpainterpath.h"
-#include "qvariant.h"
-#include "qpainterpath_p.h"
-#include "qbezier_p.h"
+#include <qpolygon.h>
+#include <qrect.h>
+#include <qdatastream.h>
+#include <qmatrix.h>
+#include <qdebug.h>
+#include <qpainterpath.h>
+#include <qvariant.h>
+#include <qpainterpath_p.h>
+#include <qbezier_p.h>
 
 #include <stdarg.h>
 
 QT_BEGIN_NAMESPACE
 
 //same as qt_painterpath_isect_line in qpainterpath.cpp
-static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QPointF &pos,
-                                  int *winding)
+static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QPointF &pos, int *winding)
 {
    qreal x1 = p1.x();
    qreal y1 = p1.y();

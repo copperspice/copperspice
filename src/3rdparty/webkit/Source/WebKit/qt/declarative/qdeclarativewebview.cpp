@@ -739,7 +739,6 @@ QWebPage* QDeclarativeWebView::page() const
     \qmlproperty bool WebView::settings.printElementBackgrounds
     \qmlproperty bool WebView::settings.offlineStorageDatabaseEnabled
     \qmlproperty bool WebView::settings.offlineWebApplicationCacheEnabled
-    \qmlproperty bool WebView::settings.localStorageDatabaseEnabled
     \qmlproperty bool WebView::settings.localContentCanAccessRemoteUrls
 
     These properties give access to the settings controlling the web view.

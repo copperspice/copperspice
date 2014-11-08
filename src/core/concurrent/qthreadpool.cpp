@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qthreadpool.h"
-#include "qthreadpool_p.h"
-#include "qelapsedtimer.h"
+#include <qthreadpool.h>
+#include <qthreadpool_p.h>
+#include <qelapsedtimer.h>
 
 QT_BEGIN_NAMESPACE
 

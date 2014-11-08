@@ -23,29 +23,29 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qtranslator.h"
+#include <qplatformdefs.h>
+#include <qtranslator.h>
 
 #ifndef QT_NO_TRANSLATION
 
-#include "qfileinfo.h"
-#include "qstring.h"
-#include "qstringlist.h"
-#include "qcoreapplication.h"
-#include "qcoreapplication_p.h"
-#include "qdatastream.h"
-#include "qdir.h"
-#include "qfile.h"
-#include "qmap.h"
-#include "qalgorithms.h"
-#include "qhash.h"
-#include "qtranslator_p.h"
-#include "qlocale.h"
-#include "qresource.h"
+#include <qfileinfo.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qcoreapplication.h>
+#include <qcoreapplication_p.h>
+#include <qdatastream.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qmap.h>
+#include <qalgorithms.h>
+#include <qhash.h>
+#include <qtranslator_p.h>
+#include <qlocale.h>
+#include <qresource.h>
 
 #if defined(Q_OS_UNIX)
 #define QT_USE_MMAP
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 #endif
 
 // most of the headers below are already included in qplatformdefs.h

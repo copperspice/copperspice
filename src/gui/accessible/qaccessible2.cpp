@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qaccessible2.h"
-#include "qapplication.h"
-#include "qclipboard.h"
-#include "qtextboundaryfinder.h"
+#include <qaccessible2.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qtextboundaryfinder.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicswidget.h"
-#include "qgraphicswidget_p.h"
-#include "qgraphicslayout.h"
-#include "qgraphicslayout_p.h"
-#include "qgraphicsscene.h"
-#include "qgraphicssceneevent.h"
+#include <qgraphicswidget.h>
+#include <qgraphicswidget_p.h>
+#include <qgraphicslayout.h>
+#include <qgraphicslayout_p.h>
+#include <qgraphicsscene.h>
+#include <qgraphicssceneevent.h>
 
 #ifndef QT_NO_ACTION
 #include <qaction_p.h>

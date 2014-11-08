@@ -26,34 +26,23 @@
 #ifndef QSCRIPTDEBUGGERFRONTEND_P_P_H
 #define QSCRIPTDEBUGGERFRONTEND_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
 
 #include <QtCore/qobjectdefs.h>
-
 #include <QtCore/qlist.h>
 #include <QtCore/qhash.h>
-
-#include "qscriptdebuggercommand_p.h"
+#include <qscriptdebuggercommand_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerEventHandlerInterface;
 class QScriptDebuggerResponseHandlerInterface;
 class QEvent;
-
 class QScriptDebuggerFrontend;
+
 class QScriptDebuggerFrontendPrivate
 {
    Q_DECLARE_PUBLIC(QScriptDebuggerFrontend)
+
  public:
    QScriptDebuggerFrontendPrivate();
    virtual ~QScriptDebuggerFrontendPrivate();

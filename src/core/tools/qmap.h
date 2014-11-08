@@ -1093,13 +1093,13 @@ class QMultiMap : public QMap<Key, T>
 {
  public:
    QMultiMap() {}
-#ifdef Q_COMPILER_INITIALIZER_LISTS
+
    inline QMultiMap(std::initializer_list<std::pair<Key, T> > list) {
       for (typename std::initializer_list<std::pair<Key, T> >::const_iterator it = list.begin(); it != list.end(); ++it) {
          insert(it->first, it->second);
       }
    }
-#endif
+
    QMultiMap(const QMap<Key, T> &other) : QMap<Key, T>(other) {}
    inline void swap(QMultiMap<Key, T> &other) {
       QMap<Key, T>::swap(other);
@@ -1108,7 +1108,8 @@ class QMultiMap : public QMap<Key, T>
    inline typename QMap<Key, T>::iterator replace(const Key &key, const T &value) {
       return QMap<Key, T>::insert(key, value);
    }
-   inline typename QMap<Key, T>::iterator insert(const Key &key, const T &value) {
+ 
+  inline typename QMap<Key, T>::iterator insert(const Key &key, const T &value) {
       return QMap<Key, T>::insertMulti(key, value);
    }
 
@@ -1116,6 +1117,7 @@ class QMultiMap : public QMap<Key, T>
       this->unite(other);
       return *this;
    }
+
    inline QMultiMap operator+(const QMultiMap &other) const {
       QMultiMap result = *this;
       result += other;

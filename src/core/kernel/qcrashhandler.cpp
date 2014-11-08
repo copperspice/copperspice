@@ -40,9 +40,9 @@
  *
  ************************************************************************/
 
-#include "qplatformdefs.h"
-#include "qcrashhandler_p.h"
-#include "qbytearray.h"
+#include <qplatformdefs.h>
+#include <qcrashhandler_p.h>
+#include <qbytearray.h>
 
 #ifndef QT_NO_CRASHHANDLER
 
@@ -56,8 +56,8 @@ QtCrashHandler QSegfaultHandler::callback = 0;
 
 #if defined(__GLIBC__) && (__GLIBC__ >= 2) && !defined(__UCLIBC__) && !defined(QT_LINUXBASE)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qstring.h"
-# include <execinfo.h>
+#include <qstring.h>
+#include <execinfo.h>
 QT_END_INCLUDE_NAMESPACE
 
 static void print_backtrace(FILE *outb)

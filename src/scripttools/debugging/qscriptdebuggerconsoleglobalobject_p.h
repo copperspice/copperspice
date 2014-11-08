@@ -26,23 +26,10 @@
 #ifndef QSCRIPTDEBUGGERCONSOLEGLOBALOBJECT_P_H
 #define QSCRIPTDEBUGGERCONSOLEGLOBALOBJECT_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qobject.h>
-
 #include <QtCore/qstringlist.h>
-
-#include "qscriptdebuggerconsolecommandgroupdata_p.h"
-#include "qscriptdebuggerconsolecommand_p.h"
+#include <qscriptdebuggerconsolecommandgroupdata_p.h>
+#include <qscriptdebuggerconsolecommand_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,12 +40,12 @@ class QScriptDebuggerConsole;
 class QScriptDebuggerValue;
 class QScriptDebuggerCommand;
 class QScriptBreakpointData;
-
 class QScriptDebuggerConsoleGlobalObjectPrivate;
-class QScriptDebuggerConsoleGlobalObject
-   : public QObject
+
+class QScriptDebuggerConsoleGlobalObject : public QObject
 {
    CS_OBJECT(QScriptDebuggerConsoleGlobalObject)
+
  public:
    QScriptDebuggerConsoleGlobalObject(QObject *parent = 0);
    ~QScriptDebuggerConsoleGlobalObject();
@@ -74,9 +61,7 @@ class QScriptDebuggerConsoleGlobalObject
 
    QScriptDebuggerConsole *console() const;
    void setConsole(QScriptDebuggerConsole *console);
-
- public :
-   // frontend
+ 
    CS_SLOT_1(Public, int scheduleInterrupt())
    CS_SLOT_2(scheduleInterrupt)
    CS_SLOT_1(Public, int scheduleContinue())

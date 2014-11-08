@@ -26,26 +26,16 @@
 #ifndef QSCRIPTDEBUGGERSCRIPTSWIDGET_P_H
 #define QSCRIPTDEBUGGERSCRIPTSWIDGET_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qscriptdebuggerscriptswidgetinterface_p.h"
+#include <qscriptdebuggerscriptswidgetinterface_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerScriptsWidgetPrivate;
-class QScriptDebuggerScriptsWidget:
-   public QScriptDebuggerScriptsWidgetInterface
+
+class QScriptDebuggerScriptsWidget :  public QScriptDebuggerScriptsWidgetInterface
 {
    CS_OBJECT(QScriptDebuggerScriptsWidget)
+
  public:
    QScriptDebuggerScriptsWidget(QWidget *parent = 0);
    ~QScriptDebuggerScriptsWidget();

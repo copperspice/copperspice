@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qmargins.h"
-#include "qdatastream.h"
-#include "qdebug.h"
+#include <qmargins.h>
+#include <qdatastream.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

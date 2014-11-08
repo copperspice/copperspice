@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qelapsedtimer.h"
+#include <qelapsedtimer.h>
 
 QT_BEGIN_NAMESPACE
 

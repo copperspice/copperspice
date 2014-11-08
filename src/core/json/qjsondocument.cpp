@@ -30,67 +30,29 @@
 #include <qstringlist.h>
 #include <qvariant.h>
 #include <qdebug.h>
-#include "qjsonwriter_p.h"
-#include "qjsonparser_p.h"
-#include "qjson_p.h"
+#include <qjsonwriter_p.h>
+#include <qjsonparser_p.h>
+#include <qjson_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*! \class QJsonDocument
-    \inmodule QtCore
-    \ingroup json
-    \reentrant
-    \since 5.0
-
-    \brief The QJsonDocument class provides a way to read and write JSON documents.
-
-    QJsonDocument is a class that wraps a complete JSON document and can read and
-    write this document both from a UTF-8 encoded text based representation as well
-    as Qt's own binary format.
-
-    A JSON document can be converted from its text-based representation to a QJsonDocument
-    using QJsonDocument::fromJson(). toJson() converts it back to text. The parser is very
-    fast and efficient and converts the JSON to the binary representation used by Qt.
-
-    Validity of the parsed document can be queried with !isNull()
-
-    A document can be queried as to whether it contains an array or an object using isArray()
-    and isObject(). The array or object contained in the document can be retrieved using
-    array() or object() and then read or manipulated.
-
-    A document can also be created from a stored binary representation using fromBinaryData() or
-    fromRawData().
-*/
-
-/*!
- * Constructs an empty and invalid document.
- */
 QJsonDocument::QJsonDocument()
    : d(0)
 {
 }
 
-/*!
- * Creates a QJsonDocument from \a object.
- */
 QJsonDocument::QJsonDocument(const QJsonObject &object)
    : d(0)
 {
    setObject(object);
 }
 
-/*!
- * Constructs a QJsonDocument from \a array.
- */
 QJsonDocument::QJsonDocument(const QJsonArray &array)
    : d(0)
 {
    setArray(array);
 }
 
-/*!
-    \internal
- */
 QJsonDocument::QJsonDocument(QJsonPrivate::Data *data)
    : d(data)
 {
@@ -98,11 +60,6 @@ QJsonDocument::QJsonDocument(QJsonPrivate::Data *data)
    d->ref.ref();
 }
 
-/*!
- Deletes the document.
-
- Binary data set with fromRawData is not freed.
- */
 QJsonDocument::~QJsonDocument()
 {
    if (d && !d->ref.deref()) {
@@ -110,9 +67,6 @@ QJsonDocument::~QJsonDocument()
    }
 }
 
-/*!
- * Creates a copy of the \a other document.
- */
 QJsonDocument::QJsonDocument(const QJsonDocument &other)
 {
    d = other.d;

@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qelfparser_p.h"
+#include <qelfparser_p.h>
 
 #if defined (Q_OF_ELF) && defined(Q_CC_GNU)
 
-#include "qlibrary_p.h"
+#include <qlibrary_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

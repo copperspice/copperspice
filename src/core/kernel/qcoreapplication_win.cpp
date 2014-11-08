@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qcoreapplication.h"
-#include "qcoreapplication_p.h"
-#include "qstringlist.h"
-#include "qt_windows.h"
-#include "qvector.h"
-#include "qmutex.h"
-#include "qfileinfo.h"
-#include "qcorecmdlineargs_p.h"
+#include <qcoreapplication.h>
+#include <qcoreapplication_p.h>
+#include <qstringlist.h>
+#include <qt_windows.h>
+#include <qvector.h>
+#include <qmutex.h>
+#include <qfileinfo.h>
+#include <qcorecmdlineargs_p.h>
 #include <qthread_p.h>
 #include <ctype.h>
 
@@ -240,7 +240,7 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
 
 QT_BEGIN_INCLUDE_NAMESPACE
 #include <windowsx.h>
-#include "qdebug.h"
+#include <qdebug.h>
 QT_END_INCLUDE_NAMESPACE
 
 #if !defined(GET_X_LPARAM)
@@ -251,6 +251,7 @@ QT_END_INCLUDE_NAMESPACE
 // The values below should never change. Note that none of the usual
 // WM_...FIRST & WM_...LAST values are in the list, as they normally have other
 // WM_... representations
+
 struct KnownWM {
    uint WM;
    const char *str;

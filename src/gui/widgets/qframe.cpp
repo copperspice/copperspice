@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qframe.h"
-#include "qbitmap.h"
-#include "qdrawutil.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qapplication.h"
-#include "qframe_p.h"
+#include <qframe.h>
+#include <qbitmap.h>
+#include <qdrawutil.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qapplication.h>
+#include <qframe_p.h>
 
 QT_BEGIN_NAMESPACE
 

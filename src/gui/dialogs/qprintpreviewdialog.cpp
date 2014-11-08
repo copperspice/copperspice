@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qprintpreviewdialog.h"
-#include "qprintpreviewwidget.h"
+#include <qprintpreviewdialog.h>
+#include <qprintpreviewwidget.h>
 #include <qprinter_p.h>
-#include "qdialog_p.h"
-#include "qprintdialog.h"
+#include <qdialog_p.h>
+#include <qprintdialog.h>
 
 #include <QtGui/qaction.h>
 #include <QtGui/qboxlayout.h>

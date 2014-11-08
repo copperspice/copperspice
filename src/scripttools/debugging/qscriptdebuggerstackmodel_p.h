@@ -26,28 +26,15 @@
 #ifndef QSCRIPTDEBUGGERSTACKMODEL_P_H
 #define QSCRIPTDEBUGGERSTACKMODEL_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qabstractitemmodel.h>
-
 #include <QtCore/qlist.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptContextInfo;
-
 class QScriptDebuggerStackModelPrivate;
-class QScriptDebuggerStackModel
-   : public QAbstractTableModel
+
+class QScriptDebuggerStackModel : public QAbstractTableModel
 {
  public:
    QScriptDebuggerStackModel(QObject *parent = 0);

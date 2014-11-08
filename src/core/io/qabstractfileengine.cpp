@@ -23,71 +23,27 @@
 *
 ***********************************************************************/
 
-#include "qabstractfileengine.h"
-#include "qabstractfileengine_p.h"
+#include <qabstractfileengine.h>
+#include <qabstractfileengine_p.h>
 
 #ifdef QT_BUILD_CORE_LIB
-#include "qresource_p.h"
+#include <qresource_p.h>
 #endif
 
-#include "qdatetime.h"
-#include "qreadwritelock.h"
-#include "qvariant.h"
+#include <qdatetime.h>
+#include <qreadwritelock.h>
+#include <qvariant.h>
 
 // built-in handlers
-#include "qfsfileengine.h"
-#include "qdiriterator.h"
-#include "qstringbuilder.h"
+#include <qfsfileengine.h>
+#include <qdiriterator.h>
+#include <qstringbuilder.h>
 
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QAbstractFileEngineHandler
-    \reentrant
-
-    \brief The QAbstractFileEngineHandler class provides a way to register
-    custom file engines with your application.
-
-    \ingroup io
-    \since 4.1
-
-    QAbstractFileEngineHandler is a factory for creating QAbstractFileEngine
-    objects (file engines), which are used internally by QFile, QFileInfo, and
-    QDir when working with files and directories.
-
-    When you open a file, Qt chooses a suitable file engine by passing the
-    file name from QFile or QDir through an internal list of registered file
-    engine handlers. The first handler to recognize the file name is used to
-    create the engine. Qt provides internal file engines for working with
-    regular files and resources, but you can also register your own
-    QAbstractFileEngine subclasses.
-
-    To install an application-specific file engine, you subclass
-    QAbstractFileEngineHandler and reimplement create(). When you instantiate
-    the handler (e.g. by creating an instance on the stack or on the heap), it
-    will automatically register with Qt. (The latest registered handler takes
-    precedence over existing handlers.)
-
-    For example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qabstractfileengine.cpp 0
-
-    When the handler is destroyed, it is automatically removed from Qt.
-
-    The most common approach to registering a handler is to create an instance
-    as part of the start-up phase of your application. It is also possible to
-    limit the scope of the file engine handler to a particular area of
-    interest (e.g. a special file dialog that needs a custom file engine). By
-    creating the handler inside a local scope, you can precisely control the
-    area in which your engine will be applied without disturbing file
-    operations in other parts of your application.
-
-    \sa QAbstractFileEngine, QAbstractFileEngine::create()
-*/
 
 static bool qt_file_engine_handlers_in_use = false;
 

@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qabstractbutton.h"
-#include "qabstractitemview.h"
-#include "qbuttongroup.h"
-#include "qabstractbutton_p.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qapplication.h"
-#include "qstyle.h"
-#include "qaction.h"
+#include <qabstractbutton.h>
+#include <qabstractitemview.h>
+#include <qbuttongroup.h>
+#include <qabstractbutton_p.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qapplication.h>
+#include <qstyle.h>
+#include <qaction.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 QT_BEGIN_NAMESPACE

@@ -23,26 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qurl.h"
-#include "qatomic.h"
-#include "qbytearray.h"
-#include "qdir.h"
-#include "qfile.h"
-#include "qlist.h"
+#include <qplatformdefs.h>
+#include <qurl.h>
+#include <qatomic.h>
+#include <qbytearray.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qlist.h>
 
 #ifndef QT_NO_REGEXP
-#include "qregexp.h"
+#include <qregexp.h>
 #endif
 
-#include "qstring.h"
-#include "qstringlist.h"
-#include "qstack.h"
-#include "qvarlengtharray.h"
-#include "qdebug.h"
-#include "qtldurl_p.h"
-#include "qmutex.h"
-#include "qorderedmutexlocker_p.h"
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qstack.h>
+#include <qvarlengtharray.h>
+#include <qdebug.h>
+#include <qtldurl_p.h>
+#include <qmutex.h>
+#include <qorderedmutexlocker_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -4158,45 +4158,6 @@ QString QUrlPrivate::createErrorString()
    return errorString;
 }
 
-/*!
-    \macro QT_NO_URL_CAST_FROM_STRING
-    \relates QUrl
-
-    Disables automatic conversions from QString (or char *) to QUrl.
-
-    Compiling your code with this define is useful when you have a lot of
-    code that uses QString for file names and you wish to convert it to
-    use QUrl for network transparency. In any code that uses QUrl, it can
-    help avoid missing QUrl::resolved() calls, and other misuses of
-    QString to QUrl conversions.
-
-    \oldcode
-        url = filename; // probably not what you want
-    \newcode
-        url = QUrl::fromLocalFile(filename);
-        url = baseurl.resolved(QUrl(filename));
-    \endcode
-
-    \sa QT_NO_CAST_FROM_ASCII
-*/
-
-
-/*!
-    Constructs a URL by parsing \a url. \a url is assumed to be in human
-    readable representation, with no percent encoding. QUrl will automatically
-    percent encode all characters that are not allowed in a URL.
-    The default parsing mode is TolerantMode.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qurl.cpp 0
-
-    To construct a URL from an encoded string, call fromEncoded():
-
-    \snippet doc/src/snippets/code/src_corelib_io_qurl.cpp 1
-
-    \sa setUrl(), setEncodedUrl(), fromEncoded(), TolerantMode
-*/
 QUrl::QUrl(const QString &url) : d(0)
 {
    if (!url.isEmpty()) {

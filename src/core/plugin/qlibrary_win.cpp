@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qlibrary_p.h"
-#include "qfile.h"
-#include "qdir.h"
-#include "qfileinfo.h"
-#include "qdir.h"
+#include <qplatformdefs.h>
+#include <qlibrary_p.h>
+#include <qfile.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 #include <qfilesystementry_p.h>
 
 #if defined(QT_NO_LIBRARY) && defined(Q_OS_WIN)
@@ -36,7 +36,7 @@
 #pragma message("QT_NO_LIBRARY is not supported on Windows")
 #endif
 
-#include "qt_windows.h"
+#include <qt_windows.h>
 
 QT_BEGIN_NAMESPACE
 

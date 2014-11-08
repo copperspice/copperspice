@@ -65,8 +65,8 @@ bool qSharedBuild()
 #if !defined(QWS) && defined(Q_OS_MAC)
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qcore_mac_p.h"
-#include "qnamespace.h"
+#include <qcore_mac_p.h>
+#include <qnamespace.h>
 QT_END_INCLUDE_NAMESPACE
 
 static QSysInfo::MacVersion macVersion()
@@ -85,44 +85,36 @@ const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
 #elif defined(Q_OS_WIN32)
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qt_windows.h"
+#include <qt_windows.h>
 QT_END_INCLUDE_NAMESPACE
 
 static inline OSVERSIONINFO winOsVersion()
 {
    OSVERSIONINFO result = { sizeof(OSVERSIONINFO), 0, 0, 0, 0, {'\0'}};
+   
    // GetVersionEx() has been deprecated in Windows 8.1 and will return
    // only Windows 8 from that version on.
 
-#  if defined(_MSC_VER) && _MSC_VER >= 1800
-#    pragma warning( push )
-#    pragma warning( disable : 4996 )
-#  endif
-
    GetVersionEx(&result);
-
-#  if defined(_MSC_VER) && _MSC_VER >= 1800
-#    pragma warning( pop )
-#  endif
-
 
    if (result.dwMajorVersion == 6 && result.dwMinorVersion == 2) {
       // This could be Windows 8.1 or higher. Note that as of Windows 9,
       // the major version needs to be checked as well.
+
       DWORDLONG conditionMask = 0;
       VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
       VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
       VER_SET_CONDITION(conditionMask, VER_PLATFORMID, VER_EQUAL);
+
       OSVERSIONINFOEX checkVersion = { sizeof(OSVERSIONINFOEX), result.dwMajorVersion, result.dwMinorVersion,
-				       result.dwBuildNumber, result.dwPlatformId, {'\0'}, 0, 0, 0, 0, 0
-				     };
+                   result.dwBuildNumber, result.dwPlatformId, {'\0'}, 0, 0, 0, 0, 0
+                 };
 
-      for ( ;
-	    VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, conditionMask);
-	    ++checkVersion.dwMinorVersion) {
-
-	 result.dwMinorVersion = checkVersion.dwMinorVersion;
+      while ( VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, conditionMask) ) {         
+         result.dwMinorVersion = checkVersion.dwMinorVersion;
+         ++checkVersion.dwMinorVersion; 
       }
+
    }
 
    return result;
@@ -137,81 +129,91 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
    winver = QSysInfo::WV_NT;
    const OSVERSIONINFO osver = winOsVersion();
+
    switch (osver.dwPlatformId) {
 
       case VER_PLATFORM_WIN32s:
-	 winver = QSysInfo::WV_32s;
-	 break;
+         winver = QSysInfo::WV_32s;
+         break;
 
       case VER_PLATFORM_WIN32_WINDOWS:
-	 // Windows Me (minor 90) is the same as Windows 98
-	 if (osver.dwMinorVersion == 90) {
-	    winver = QSysInfo::WV_Me;
-	 }
+         // Windows Me (minor 90) is the same as Windows 98
 
-	 else if (osver.dwMinorVersion == 10) {
-	    winver = QSysInfo::WV_98;
-	 }
+         if (osver.dwMinorVersion == 90) {
+            winver = QSysInfo::WV_Me;
 
-	 else {
-	    winver = QSysInfo::WV_95;
-	 }
+         } else if (osver.dwMinorVersion == 10) {
+            winver = QSysInfo::WV_98;
 
-	 break;
+         } else {
+            winver = QSysInfo::WV_95;
+         }
 
-      default: // VER_PLATFORM_WIN32_NT
-	 if (osver.dwMajorVersion < 5) {
-	    winver = QSysInfo::WV_NT;
-	 } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 0) {
-	    winver = QSysInfo::WV_2000;
-	 } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 1) {
-	    winver = QSysInfo::WV_XP;
-	 } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 2) {
-	    winver = QSysInfo::WV_2003;
-	 } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 0) {
-	    winver = QSysInfo::WV_VISTA;
-	 } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1) {
-	    winver = QSysInfo::WV_WINDOWS7;
-	 } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2) {
-	    winver = QSysInfo::WV_WINDOWS8;
-	 } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 3) {
-	    winver = QSysInfo::WV_WINDOWS8_1;
-	 } else {
-	    qWarning("Qt: Untested Windows version %d.%d detected!",
-		     int(osver.dwMajorVersion), int(osver.dwMinorVersion));
+         break;
 
-	    winver = QSysInfo::WV_NT_based;
-	 }
-   }
+      default: 
+          // VER_PLATFORM_WIN32_NT
+
+          if (osver.dwMajorVersion < 5) {
+             winver = QSysInfo::WV_NT;
+
+          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 0) {
+             winver = QSysInfo::WV_2000;
+
+          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 1) {
+             winver = QSysInfo::WV_XP;
+
+          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 2) {
+             winver = QSysInfo::WV_2003;
+
+          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 0) {
+             winver = QSysInfo::WV_VISTA;
+
+          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1) {
+             winver = QSysInfo::WV_WINDOWS7;
+
+          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2) {
+             winver = QSysInfo::WV_WINDOWS8;
+
+          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 3) {
+             winver = QSysInfo::WV_WINDOWS8_1;
+
+          } else {
+             qWarning("Qt: Untested Windows version %d.%d detected!", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
+                   winver = QSysInfo::WV_NT_based;
+          }
+
+         }
 
 #ifdef QT_DEBUG
    {
       QByteArray override = qgetenv("QT_WINVER_OVERRIDE");
-      if (override.isEmpty()) {
-	 return winver;
-      }
 
-      if (override == "Me") {
-	 winver = QSysInfo::WV_Me;
-      }
-      if (override == "95") {
-	 winver = QSysInfo::WV_95;
-      } else if (override == "98") {
-	 winver = QSysInfo::WV_98;
-      } else if (override == "NT") {
-	 winver = QSysInfo::WV_NT;
+      if (override.isEmpty()) {
+         return winver;
+      }    
+    
+      if (override == "NT") {
+         winver = QSysInfo::WV_NT;
+
       } else if (override == "2000") {
-	 winver = QSysInfo::WV_2000;
+         winver = QSysInfo::WV_2000;
+
       } else if (override == "2003") {
-	 winver = QSysInfo::WV_2003;
+         winver = QSysInfo::WV_2003;
+
       } else if (override == "XP") {
-	 winver = QSysInfo::WV_XP;
+          winver = QSysInfo::WV_XP;
+
       } else if (override == "VISTA") {
-	 winver = QSysInfo::WV_VISTA;
+          winver = QSysInfo::WV_VISTA;
+
       } else if (override == "WINDOWS7") {
-	 winver = QSysInfo::WV_WINDOWS7;
+          winver = QSysInfo::WV_WINDOWS7;
+
       } else if (override == "WINDOWS8") {
-	 winver = QSysInfo::WV_WINDOWS8;
+         winver = QSysInfo::WV_WINDOWS8;
+
       }
    }
 #endif
@@ -282,8 +284,8 @@ Q_CORE_EXPORT unsigned int qt_int_sqrt(unsigned int n)
       h = p + q;
       p >>= 1;
       if (r >= h) {
-	 p += q;
-	 r -= h;
+    p += q;
+    r -= h;
       }
    }
    return p;
@@ -336,45 +338,45 @@ QString qt_error_string(int errorCode)
    }
    switch (errorCode) {
       case 0:
-	 break;
+    break;
       case EACCES:
-	 s = QT_TRANSLATE_NOOP("QIODevice", "Permission denied");
-	 break;
+    s = QT_TRANSLATE_NOOP("QIODevice", "Permission denied");
+    break;
       case EMFILE:
-	 s = QT_TRANSLATE_NOOP("QIODevice", "Too many open files");
-	 break;
+    s = QT_TRANSLATE_NOOP("QIODevice", "Too many open files");
+    break;
       case ENOENT:
-	 s = QT_TRANSLATE_NOOP("QIODevice", "No such file or directory");
-	 break;
+    s = QT_TRANSLATE_NOOP("QIODevice", "No such file or directory");
+    break;
       case ENOSPC:
-	 s = QT_TRANSLATE_NOOP("QIODevice", "No space left on device");
-	 break;
+    s = QT_TRANSLATE_NOOP("QIODevice", "No space left on device");
+    break;
       default: {
 
 #ifdef Q_OS_WIN
-	 wchar_t *string = 0;
-	 FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		       NULL,
-		       errorCode,
-		       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		       (LPWSTR)&string,
-		       0,
-		       NULL);
-	 ret = QString::fromWCharArray(string);
-	 LocalFree((HLOCAL)string);
+    wchar_t *string = 0;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+             NULL,
+             errorCode,
+             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+             (LPWSTR)&string,
+             0,
+             NULL);
+    ret = QString::fromWCharArray(string);
+    LocalFree((HLOCAL)string);
 
-	 if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
-	    ret = QString::fromLatin1("The specified module could not be found.");
-	 }
+    if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
+       ret = QString::fromLatin1("The specified module could not be found.");
+    }
 
 #elif defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
-	 QByteArray buf(1024, '\0');
-	 ret = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
+    QByteArray buf(1024, '\0');
+    ret = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
 #else
-	 ret = QString::fromLocal8Bit(strerror(errorCode));
+    ret = QString::fromLocal8Bit(strerror(errorCode));
 #endif
 
-	 break;
+    break;
       }
    }
 
@@ -446,11 +448,11 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
    QByteArray buf;
    if (msg) {
       QT_TRY {
-	 buf = QString().vsprintf(msg, ap).toLocal8Bit();
+    buf = QString().vsprintf(msg, ap).toLocal8Bit();
       } QT_CATCH(const std::bad_alloc &) {
-	 qEmergencyOut(msgType, msg, ap);
-	 // don't rethrow - we use qWarning and friends in destructors.
-	 return;
+    qEmergencyOut(msgType, msg, ap);
+    // don't rethrow - we use qWarning and friends in destructors.
+    return;
       }
    }
    qt_message_output(msgType, buf.constData());
@@ -557,7 +559,7 @@ void qsrand(uint seed)
    if (seedStorage) {
       SeedStorageType *pseed = seedStorage->localData();
       if (!pseed) {
-	 seedStorage->setLocalData(pseed = new SeedStorageType);
+    seedStorage->setLocalData(pseed = new SeedStorageType);
       }
       *pseed = seed;
    } else {
@@ -581,8 +583,8 @@ int qrand()
    if (seedStorage) {
       SeedStorageType *pseed = seedStorage->localData();
       if (!pseed) {
-	 seedStorage->setLocalData(pseed = new SeedStorageType);
-	 *pseed = 1;
+    seedStorage->setLocalData(pseed = new SeedStorageType);
+    *pseed = 1;
       }
       return rand_r(pseed);
 

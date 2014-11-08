@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
+#include <qobject.h>
 
 static void dumpRecursive(int level, QObject *object)
 {

@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qnamespace.h"
-#include "qmetaobject.h"
-#include "qtextcodec.h"
+#include <qnamespace.h>
+#include <qmetaobject.h>
+#include <qtextcodec.h>
 #include <set>
 
 static const std::set<QString> elementSet = {

@@ -23,25 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qerrormessage.h"
+#include <qerrormessage.h>
 
 #ifndef QT_NO_ERRORMESSAGE
 
-#include "qapplication.h"
-#include "qcheckbox.h"
-#include "qlabel.h"
-#include "qlayout.h"
-#include "qmessagebox.h"
-#include "qpushbutton.h"
-#include "qstringlist.h"
-#include "qtextedit.h"
-#include "qdialog_p.h"
-#include "qpixmap.h"
-#include "qmetaobject.h"
-#include "qthread.h"
-#include "qqueue.h"
-#include "qset.h"
-#include "qnamespace.h"
+#include <qapplication.h>
+#include <qcheckbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qmessagebox.h>
+#include <qpushbutton.h>
+#include <qstringlist.h>
+#include <qtextedit.h>
+#include <qdialog_p.h>
+#include <qpixmap.h>
+#include <qmetaobject.h>
+#include <qthread.h>
+#include <qqueue.h>
+#include <qset.h>
+#include <qnamespace.h>
 
 #include <stdio.h>
 #include <stdlib.h>

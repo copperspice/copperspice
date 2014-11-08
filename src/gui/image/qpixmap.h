@@ -244,7 +244,6 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    void initAlphaPixmap(uchar *bytes, int length, struct tagBITMAPINFO *bmi);
 #endif
 
-   Q_DUMMY_COMPARISON_OPERATOR(QPixmap)
 
 #ifdef Q_OS_MAC
    friend CGContextRef qt_mac_cg_context(const QPaintDevice *);

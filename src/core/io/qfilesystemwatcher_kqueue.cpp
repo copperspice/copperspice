@@ -24,9 +24,9 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
-#include "qfilesystemwatcher.h"
-#include "qfilesystemwatcher_kqueue_p.h"
-#include "qcore_unix_p.h"
+#include <qfilesystemwatcher.h>
+#include <qfilesystemwatcher_kqueue_p.h>
+#include <qcore_unix_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 

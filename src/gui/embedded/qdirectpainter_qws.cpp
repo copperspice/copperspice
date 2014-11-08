@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qdirectpainter_qws.h"
+#include <qdirectpainter_qws.h>
 
-#include "qscreen_qws.h"
-#include "qapplication_p.h"
-#include "qwsdisplay_qws.h"
-#include "qwidget.h"
-#include "qimage.h"
+#include <qscreen_qws.h>
+#include <qapplication_p.h>
+#include <qwsdisplay_qws.h>
+#include <qwidget.h>
+#include <qimage.h>
 #include <qwsevent_qws.h>
 #include <qwindowsurface_qws_p.h>
 #include <qwsdisplay_qws_p.h>

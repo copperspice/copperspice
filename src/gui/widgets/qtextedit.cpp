@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qtextedit_p.h"
-#include "qlineedit.h"
-#include "qtextbrowser.h"
+#include <qtextedit_p.h>
+#include <qlineedit.h>
+#include <qtextbrowser.h>
 
 #ifndef QT_NO_TEXTEDIT
 #include <qfont.h>
@@ -38,11 +38,11 @@
 #include <qmenu.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include "qtextdocumentlayout_p.h"
-#include "qtextdocument.h"
-#include "qtextdocument_p.h"
-#include "qtextlist.h"
-#include "qtextcontrol_p.h"
+#include <qtextdocumentlayout_p.h>
+#include <qtextdocument.h>
+#include <qtextdocument_p.h>
+#include <qtextlist.h>
+#include <qtextcontrol_p.h>
 
 #include <qtextformat.h>
 #include <qdatetime.h>

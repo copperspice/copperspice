@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qsystemsemaphore.h"
-#include "qsystemsemaphore_p.h"
-#include "qcoreapplication.h"
+#include <qsystemsemaphore.h>
+#include <qsystemsemaphore_p.h>
+#include <qcoreapplication.h>
 #include <qdebug.h>
 
 #ifndef QT_NO_SYSTEMSEMAPHORE

@@ -23,129 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qsize.h"
-#include "qdatastream.h"
-#include "qdebug.h"
+#include <qsize.h>
+#include <qdatastream.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QSize
-    \ingroup painting
-
-    \brief The QSize class defines the size of a two-dimensional
-    object using integer point precision.
-
-    A size is specified by a width() and a height().  It can be set in
-    the constructor and changed using the setWidth(), setHeight(), or
-    scale() functions, or using arithmetic operators. A size can also
-    be manipulated directly by retrieving references to the width and
-    height using the rwidth() and rheight() functions. Finally, the
-    width and height can be swapped using the transpose() function.
-
-    The isValid() function determines if a size is valid (a valid size
-    has both width and height greater than zero). The isEmpty()
-    function returns true if either of the width and height is less
-    than, or equal to, zero, while the isNull() function returns true
-    only if both the width and the height is zero.
-
-    Use the expandedTo() function to retrieve a size which holds the
-    maximum height and width of \e this size and a given
-    size. Similarly, the boundedTo() function returns a size which
-    holds the minimum height and width of \e this size and a given
-    size.
-
-    QSize objects can be streamed as well as compared.
-
-    \sa QSizeF, QPoint, QRect
-*/
-
-
-/*****************************************************************************
-  QSize member functions
- *****************************************************************************/
-
-/*!
-    \fn QSize::QSize()
-
-    Constructs a size with an invalid width and height (i.e., isValid()
-    returns false).
-
-    \sa isValid()
-*/
-
-/*!
-    \fn QSize::QSize(int width, int height)
-
-    Constructs a size with the given \a width and \a height.
-
-    \sa setWidth(), setHeight()
-*/
-
-/*!
-    \fn bool QSize::isNull() const
-
-    Returns true if both the width and height is 0; otherwise returns
-    false.
-
-    \sa isValid(), isEmpty()
-*/
-
-/*!
-    \fn bool QSize::isEmpty() const
-
-    Returns true if either of the width and height is less than or
-    equal to 0; otherwise returns false.
-
-    \sa isNull(), isValid()
-*/
-
-/*!
-    \fn bool QSize::isValid() const
-
-    Returns true if both the width and height is equal to or greater
-    than 0; otherwise returns false.
-
-    \sa isNull(), isEmpty()
-*/
-
-/*!
-    \fn int QSize::width() const
-
-    Returns the width.
-
-    \sa height(), setWidth()
-*/
-
-/*!
-    \fn int QSize::height() const
-
-    Returns the height.
-
-    \sa width(), setHeight()
-*/
-
-/*!
-    \fn void QSize::setWidth(int width)
-
-    Sets the width to the given \a width.
-
-    \sa rwidth(), width(), setHeight()
-*/
-
-/*!
-    \fn void QSize::setHeight(int height)
-
-    Sets the height to the given \a height.
-
-    \sa rheight(), height(), setWidth()
-*/
-
-/*!
-    Swaps the width and height values.
-
-    \sa setWidth(), setHeight()
-*/
 
 void QSize::transpose()
 {
@@ -154,33 +36,6 @@ void QSize::transpose()
    ht = tmp;
 }
 
-/*!
-  \fn void QSize::scale(int width, int height, Qt::AspectRatioMode mode)
-
-    Scales the size to a rectangle with the given \a width and \a
-    height, according to the specified \a mode:
-
-    \list
-    \i If \a mode is Qt::IgnoreAspectRatio, the size is set to (\a width, \a height).
-    \i If \a mode is Qt::KeepAspectRatio, the current size is scaled to a rectangle
-       as large as possible inside (\a width, \a height), preserving the aspect ratio.
-    \i If \a mode is Qt::KeepAspectRatioByExpanding, the current size is scaled to a rectangle
-       as small as possible outside (\a width, \a height), preserving the aspect ratio.
-    \endlist
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qsize.cpp 0
-
-    \sa setWidth(), setHeight()
-*/
-
-/*!
-    \fn void QSize::scale(const QSize &size, Qt::AspectRatioMode mode)
-    \overload
-
-    Scales the size to a rectangle with the given \a size, according to
-    the specified \a mode.
-*/
 void QSize::scale(const QSize &s, Qt::AspectRatioMode mode)
 {
    if (mode == Qt::IgnoreAspectRatio || wd == 0 || ht == 0) {

@@ -176,10 +176,6 @@ class Q_CORE_EXPORT QVariant
       d.data.f = f;
    }
 
-#ifndef QT_NO_CAST_FROM_ASCII
-   QT_ASCII_CAST_WARN_CONSTRUCTOR QVariant(const char *str);
-#endif
-
    QVariant(const QByteArray &bytearray);
    QVariant(const QBitArray &bitarray);
    QVariant(const QString &string);
@@ -415,12 +411,6 @@ class Q_CORE_EXPORT QVariant
       Q_ASSERT(false);
    }
 
-#ifdef QT_NO_CAST_FROM_ASCII
-   // force compile error when implicit conversion is not wanted
-   inline QVariant(const char *) {
-      Q_ASSERT(false);
-   }
-#endif
 
 };
 

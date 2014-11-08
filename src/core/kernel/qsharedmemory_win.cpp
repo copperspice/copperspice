@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsharedmemory.h"
-#include "qsharedmemory_p.h"
+#include <qsharedmemory.h>
+#include <qsharedmemory_p.h>
 
 #include <qdebug.h>
 

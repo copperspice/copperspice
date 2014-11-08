@@ -26,7 +26,7 @@
 #ifndef CSMETA_H
 #define CSMETA_H
 
-#include "csmeta_internal_1.h"
+#include <csmeta_internal_1.h>
 
 #include <QByteArray>
 #include <QList>

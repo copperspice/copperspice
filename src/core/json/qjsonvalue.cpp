@@ -31,7 +31,7 @@
 #include <qstringlist.h>
 #include <qdebug.h>
 
-#include "qjson_p.h"
+#include <qjson_p.h>
 
 QT_BEGIN_NAMESPACE
 

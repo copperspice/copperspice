@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
-#include "csmeta.h"
-#include "qmetaobject.h"
+#include <qobject.h>
+#include <csmeta.h>
+#include <qmetaobject.h>
 
 #include <QByteArray>
 #include <QStringList>

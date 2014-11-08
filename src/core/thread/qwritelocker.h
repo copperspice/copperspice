@@ -1,1 +1,1 @@
-#include "qreadwritelock.h"
+#include <qreadwritelock.h>

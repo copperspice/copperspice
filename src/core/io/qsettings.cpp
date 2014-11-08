@@ -24,32 +24,31 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include "qplatformdefs.h"
-#include "qsettings.h"
+#include <qplatformdefs.h>
+#include <qsettings.h>
 
 #ifndef QT_NO_SETTINGS
 
-#include "qsettings_p.h"
-#include "qcache.h"
-#include "qfile.h"
-#include "qdir.h"
-#include "qfileinfo.h"
-#include "qmutex.h"
-#include "qlibraryinfo.h"
-#include "qtemporaryfile.h"
+#include <qsettings_p.h>
+#include <qcache.h>
+#include <qfile.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qmutex.h>
+#include <qlibraryinfo.h>
+#include <qtemporaryfile.h>
 
 #ifndef QT_NO_TEXTCODEC
-#  include "qtextcodec.h"
+#  include <qtextcodec.h>
 #endif
 
-#include "qsize.h"
-#include "qpoint.h"
-#include "qrect.h"
+#include <qsize.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qcoreapplication.h>
 
-#include "qcoreapplication.h"
-
-#ifdef Q_OS_WIN // for homedirpath reading from registry
-#include "qt_windows.h"
+#ifdef Q_OS_WIN                // for homedirpath reading from registry
+#include <qt_windows.h>
 #include <qsystemlibrary_p.h>
 #endif
 

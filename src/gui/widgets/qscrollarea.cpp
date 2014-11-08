@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qscrollarea.h"
-#include "qscrollarea_p.h"
+#include <qscrollarea.h>
+#include <qscrollarea_p.h>
 
 #ifndef QT_NO_SCROLLAREA
 
-#include "qscrollbar.h"
-#include "qlayout.h"
-#include "qstyle.h"
-#include "qapplication.h"
-#include "qvariant.h"
-#include "qdebug.h"
-#include "qlayoutengine_p.h"
+#include <qscrollbar.h>
+#include <qlayout.h>
+#include <qstyle.h>
+#include <qapplication.h>
+#include <qvariant.h>
+#include <qdebug.h>
+#include <qlayoutengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,21 +26,9 @@
 #ifndef QSCRIPTDEBUGGERCONSOLE_P_H
 #define QSCRIPTDEBUGGERCONSOLE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qobjectdefs.h>
 #include <QtCore/qscopedpointer.h>
-
-#include "qscriptdebuggerconsolehistorianinterface_p.h"
+#include <qscriptdebuggerconsolehistorianinterface_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -49,26 +37,23 @@ class QScriptDebuggerConsoleCommandJob;
 class QScriptMessageHandlerInterface;
 class QScriptDebuggerCommandSchedulerInterface;
 class QScriptDebuggerConsoleCommandManager;
-
 class QScriptDebuggerConsolePrivate;
-class QScriptDebuggerConsole
-   : public QScriptDebuggerConsoleHistorianInterface
+
+class QScriptDebuggerConsole : public QScriptDebuggerConsoleHistorianInterface
 {
  public:
    QScriptDebuggerConsole();
    ~QScriptDebuggerConsole();
 
-   void loadScriptedCommands(const QString &scriptsPath,
-                             QScriptMessageHandlerInterface *messageHandler);
-
+   void loadScriptedCommands(const QString &scriptsPath, QScriptMessageHandlerInterface *messageHandler);
    void showDebuggerInfoMessage(QScriptMessageHandlerInterface *messageHandler);
 
    QScriptDebuggerConsoleCommandManager *commandManager() const;
 
    QScriptDebuggerConsoleCommandJob *consumeInput(
-      const QString &input,
-      QScriptMessageHandlerInterface *messageHandler,
+      const QString &input, QScriptMessageHandlerInterface *messageHandler,
       QScriptDebuggerCommandSchedulerInterface *commandScheduler);
+
    bool hasIncompleteInput() const;
    QString incompleteInput() const;
    void setIncompleteInput(const QString &input);

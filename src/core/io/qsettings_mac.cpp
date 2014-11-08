@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qsettings.h"
-#include "qsettings_p.h"
-#include "qdatetime.h"
-#include "qdir.h"
-#include "qvarlengtharray.h"
-#include "qcore_mac_p.h"
-#include "qcoreapplication.h"
+#include <qsettings.h>
+#include <qsettings_p.h>
+#include <qdatetime.h>
+#include <qdir.h>
+#include <qvarlengtharray.h>
+#include <qcore_mac_p.h>
+#include <qcoreapplication.h>
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 #include <Security/SecCode.h>

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qsocketnotifier.h"
-#include "qplatformdefs.h"
-#include "qabstracteventdispatcher.h"
-#include "qcoreapplication.h"
+#include <qsocketnotifier.h>
+#include <qplatformdefs.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreapplication.h>
 #include <qthread_p.h>
 
 QT_BEGIN_NAMESPACE

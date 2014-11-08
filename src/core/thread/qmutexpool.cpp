@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qatomic.h"
-#include "qmutexpool_p.h"
+#include <qatomic.h>
+#include <qmutexpool_p.h>
 
 QT_BEGIN_NAMESPACE
 

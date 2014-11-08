@@ -348,8 +348,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    inline bool cs_quitOnLastWindowClosed() const;
 
 #ifdef QT_KEYPAD_NAVIGATION
-   static Q_DECL_DEPRECATED void setKeypadNavigationEnabled(bool);
-   static bool keypadNavigationEnabled();
    static void setNavigationMode(Qt::NavigationMode mode);
    static Qt::NavigationMode navigationMode();
 #endif

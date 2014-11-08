@@ -22,11 +22,12 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qpen.h"
-#include "qpen_p.h"
-#include "qdatastream.h"
-#include "qvariant.h"
-#include "qbrush.h"
+
+#include <qpen.h>
+#include <qpen_p.h>
+#include <qdatastream.h>
+#include <qvariant.h>
+#include <qbrush.h>
 
 #include <qdebug.h>
 

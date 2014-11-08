@@ -1,8 +1,0 @@
-<?xml version="1.0" standalone="yes"?>
-<backup_registration>
-    <passive_backup>
-        <include_directory name = "\" />
-    </passive_backup>
-    <system_backup/>
-    <restore requires_reboot = "no"/>
-</backup_registration>

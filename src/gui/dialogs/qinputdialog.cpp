@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qinputdialog.h"
+#include <qinputdialog.h>
 
 #ifndef QT_NO_INPUTDIALOG
 
-#include "qapplication.h"
-#include "qcombobox.h"
-#include "qdialogbuttonbox.h"
-#include "qlabel.h"
-#include "qlayout.h"
-#include "qlineedit.h"
-#include "qlistwidget.h"
-#include "qpushbutton.h"
-#include "qspinbox.h"
-#include "qstackedlayout.h"
-#include "qvalidator.h"
-#include "qevent.h"
-#include "qdialog_p.h"
+#include <qapplication.h>
+#include <qcombobox.h>
+#include <qdialogbuttonbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qlistwidget.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
+#include <qstackedlayout.h>
+#include <qvalidator.h>
+#include <qevent.h>
+#include <qdialog_p.h>
 
 QT_USE_NAMESPACE
 

@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qtextobject.h"
-#include "qtextobject_p.h"
-#include "qtextdocument.h"
-#include "qtextformat_p.h"
-#include "qtextdocument_p.h"
-#include "qtextcursor.h"
-#include "qtextlist.h"
-#include "qabstracttextdocumentlayout.h"
-#include "qtextengine_p.h"
-#include "qdebug.h"
+#include <qtextobject.h>
+#include <qtextobject_p.h>
+#include <qtextdocument.h>
+#include <qtextformat_p.h>
+#include <qtextdocument_p.h>
+#include <qtextcursor.h>
+#include <qtextlist.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qtextengine_p.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

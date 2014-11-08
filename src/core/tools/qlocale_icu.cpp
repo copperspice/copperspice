@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
-#include "qlibrary.h"
-#include "qdebug.h"
+#include <qglobal.h>
+#include <qlibrary.h>
+#include <qdebug.h>
 
-#include "unicode/uversion.h"
-#include "unicode/ucol.h"
+#include <unicode/uversion.h>
+#include <unicode/ucol.h>
 
 QT_BEGIN_NAMESPACE
 

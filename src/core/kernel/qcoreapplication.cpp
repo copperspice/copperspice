@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qcoreapplication.h"
-#include "qcoreapplication_p.h"
-#include "qabstracteventdispatcher.h"
-#include "qcoreevent.h"
-#include "qeventloop.h"
-#include "qcorecmdlineargs_p.h"
+#include <qcoreapplication.h>
+#include <qcoreapplication_p.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreevent.h>
+#include <qeventloop.h>
+#include <qcorecmdlineargs_p.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qdir.h>
@@ -51,23 +51,23 @@
 
 #if defined(Q_OS_UNIX)
 #    if !defined(QT_NO_GLIB)
-#      include "qeventdispatcher_glib_p.h"
+#    include <qeventdispatcher_glib_p.h>
 #    endif
-#    include "qeventdispatcher_unix_p.h"
+#    include <qeventdispatcher_unix_p.h>
 #endif
 
 #ifdef Q_OS_WIN
-#  include "qeventdispatcher_win_p.h"
+#include <qeventdispatcher_win_p.h>
 #endif
 
 #ifdef Q_OS_MAC
-#  include "qcore_mac_p.h"
+#include <qcore_mac_p.h>
 #endif
 
 #include <stdlib.h>
 
 #ifdef Q_OS_UNIX
-#  include <locale.h>
+#include <locale.h>
 #endif
 
 QT_BEGIN_NAMESPACE

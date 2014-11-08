@@ -27,9 +27,9 @@
 ** Copyright (C) 2012 Intel Corporation
 *****************************************************/
 
-#include "qipaddress_p.h"
-#include "qlocale_tools_p.h"
-#include "qvarlengtharray.h"
+#include <qipaddress_p.h>
+#include <qlocale_tools_p.h>
+#include <qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 namespace QIPAddressUtils {

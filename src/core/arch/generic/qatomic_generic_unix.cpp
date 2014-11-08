@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 #include <QtCore/qatomic.h>
 
 QT_BEGIN_NAMESPACE

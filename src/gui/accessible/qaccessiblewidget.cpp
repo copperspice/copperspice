@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qaccessiblewidget.h"
+#include <qaccessiblewidget.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qaction.h"
-#include "qapplication.h"
-#include "qgroupbox.h"
-#include "qlabel.h"
-#include "qtooltip.h"
-#include "qwhatsthis.h"
-#include "qwidget.h"
-#include "qdebug.h"
+#include <qaction.h>
+#include <qapplication.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qwidget.h>
+#include <qdebug.h>
 #include <qmath.h>
 #include <QRubberBand>
-#include <QtGui/QFocusFrame>
-#include <QtGui/QMenu>
+#include <QFocusFrame>
+#include <QMenu>
 
 QT_BEGIN_NAMESPACE
 

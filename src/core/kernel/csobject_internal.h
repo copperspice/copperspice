@@ -30,8 +30,8 @@
 #include <QThread>
 #include <QSemaphore>
 
-#include "csmeta_callevent.h"
-#include "qthread.h"
+#include <csmeta_callevent.h>
+#include <qthread.h>
 
 
 // 1

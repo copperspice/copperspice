@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qlocale_p.h"
-#include "qstringlist.h"
-#include "qvariant.h"
-#include "qdatetime.h"
-#include "qstringbuilder.h"
+#include <qlocale_p.h>
+#include <qstringlist.h>
+#include <qvariant.h>
+#include <qdatetime.h>
+#include <qstringbuilder.h>
 
 #if !defined(QWS) && defined(Q_OS_MAC)
-#   include "qcore_mac_p.h"
-#   include <CoreFoundation/CoreFoundation.h>
+#include <qcore_mac_p.h>
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 QT_BEGIN_NAMESPACE

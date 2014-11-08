@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qwindowspipewriter_p.h"
+#include <qwindowspipewriter_p.h>
 #include <string.h>
 
 QT_BEGIN_NAMESPACE

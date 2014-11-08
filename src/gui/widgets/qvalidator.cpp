@@ -24,11 +24,11 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include "qvalidator.h"
+#include <qvalidator.h>
 
 #ifndef QT_NO_VALIDATOR
 
-#include "qlocale_p.h"
+#include <qlocale_p.h>
 #include <limits.h>
 #include <math.h>
 

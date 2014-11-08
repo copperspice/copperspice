@@ -26,8 +26,8 @@
 #ifndef QJSONOBJECT_H
 #define QJSONOBJECT_H
 
-#include <QtCore/qjsonvalue.h>
-#include <QtCore/qiterator.h>
+#include <qjsonvalue.h>
+#include <qiterator.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -84,8 +84,8 @@ class Q_CORE_EXPORT QJsonObject
       //        typedef T *pointer;
       typedef QJsonValueRef reference;
 
-      Q_DECL_CONSTEXPR inline iterator() : o(0), i(0) {}
-      Q_DECL_CONSTEXPR inline iterator(QJsonObject *obj, int index) : o(obj), i(index) {}
+      constexpr inline iterator() : o(0), i(0) {}
+      constexpr inline iterator(QJsonObject *obj, int index) : o(obj), i(index) {}
 
       inline QString key() const {
          return o->keyAt(i);
@@ -161,8 +161,8 @@ class Q_CORE_EXPORT QJsonObject
       typedef QJsonValue value_type;
       typedef QJsonValue reference;
 
-      Q_DECL_CONSTEXPR inline const_iterator() : o(0), i(0) {}
-      Q_DECL_CONSTEXPR inline const_iterator(const QJsonObject *obj, int index)
+      constexpr inline const_iterator() : o(0), i(0) {}
+      constexpr inline const_iterator(const QJsonObject *obj, int index)
          : o(obj), i(index) {}
       inline const_iterator(const iterator &other)
          : o(other.o), i(other.i) {}

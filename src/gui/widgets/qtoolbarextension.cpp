@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtoolbarextension_p.h"
+#include <qtoolbarextension_p.h>
 #include <qpixmap.h>
 #include <qstyle.h>
 #include <qstylepainter.h>

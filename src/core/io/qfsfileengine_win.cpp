@@ -24,22 +24,22 @@
 ***********************************************************************/
 
 #define _POSIX_
-#include "qplatformdefs.h"
-#include "qabstractfileengine.h"
-#include "qfsfileengine_p.h"
-#include "qfilesystemengine_p.h"
+#include <qplatformdefs.h>
+#include <qabstractfileengine.h>
+#include <qfsfileengine_p.h>
+#include <qfilesystemengine_p.h>
 #include <qdebug.h>
 
-#include "qfile.h"
-#include "qdir.h"
-#include "qmutexpool_p.h"
-#include "qvarlengtharray.h"
-#include "qdatetime.h"
-#include "qt_windows.h"
+#include <qfile.h>
+#include <qdir.h>
+#include <qmutexpool_p.h>
+#include <qvarlengtharray.h>
+#include <qdatetime.h>
+#include <qt_windows.h>
 
-#  include <sys/types.h>
-#  include <direct.h>
-#  include <winioctl.h>
+#include <sys/types.h>
+#include <direct.h>
+#include <winioctl.h>
 
 #include <objbase.h>
 #include <shlobj.h>
@@ -47,6 +47,7 @@
 #include <accctrl.h>
 #include <ctype.h>
 #include <limits.h>
+
 #define SECURITY_WIN32
 #include <security.h>
 

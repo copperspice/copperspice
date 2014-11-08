@@ -66,10 +66,10 @@
     \sa QAbstractAnimation, QVariantAnimation, {The Animation Framework}
 */
 
-#include "qanimationgroup.h"
+#include <qanimationgroup.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qcoreevent.h>
-#include "qanimationgroup_p.h"
+#include <qanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION
 

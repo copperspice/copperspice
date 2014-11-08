@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qaccessiblebridge.h"
+#include <qaccessiblebridge.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

@@ -23,65 +23,26 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QParallelAnimationGroup
-    \brief The QParallelAnimationGroup class provides a parallel group of animations.
-    \since 4.6
-    \ingroup animation
+#include <qparallelanimationgroup.h>
+#include <qparallelanimationgroup_p.h>
 
-    QParallelAnimationGroup--a \l{QAnimationGroup}{container for
-    animations}--starts all its animations when it is
-    \l{QAbstractAnimation::start()}{started} itself, i.e., runs all
-    animations in parallel. The animation group finishes when the
-    longest lasting animation has finished.
-
-    You can treat QParallelAnimation as any other QAbstractAnimation,
-    e.g., pause, resume, or add it to other animation groups.
-
-    \code
-        QParallelAnimationGroup *group = new QParallelAnimationGroup;
-        group->addAnimation(anim1);
-        group->addAnimation(anim2);
-
-        group->start();
-    \endcode
-
-    In this example, \c anim1 and \c anim2 are two
-    \l{QPropertyAnimation}s that have already been set up.
-
-    \sa QAnimationGroup, QPropertyAnimation, {The Animation Framework}
-*/
-
-
-#include "qparallelanimationgroup.h"
-#include "qparallelanimationgroup_p.h"
-//#define QANIMATION_DEBUG
+// #define QANIMATION_DEBUG
 
 #ifndef QT_NO_ANIMATION
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    Constructs a QParallelAnimationGroup.
-    \a parent is passed to QObject's constructor.
-*/
 QParallelAnimationGroup::QParallelAnimationGroup(QObject *parent)
    : QAnimationGroup(*new QParallelAnimationGroupPrivate, parent)
 {
 }
 
-/*!
-    \internal
-*/
 QParallelAnimationGroup::QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd,
       QObject *parent)
    : QAnimationGroup(dd, parent)
 {
 }
 
-/*!
-    Destroys the animation group. It will also destroy all its animations.
-*/
 QParallelAnimationGroup::~QParallelAnimationGroup()
 {
 }

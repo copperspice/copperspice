@@ -23,19 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qbytearray.h"
-#include "qbytearraymatcher.h"
-#include "qtools_p.h"
-#include "qstring.h"
-#include "qlist.h"
-#include "qlocale.h"
-#include "qlocale_p.h"
-#include "qscopedpointer.h"
+#include <qbytearray.h>
+#include <qbytearraymatcher.h>
+#include <qtools_p.h>
+#include <qstring.h>
+#include <qlist.h>
+#include <qlocale.h>
+#include <qlocale_p.h>
+#include <qscopedpointer.h>
 #include <qdatastream.h>
 
 #ifndef QT_NO_COMPRESS
 #include <zlib.h>
 #endif
+
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
@@ -988,16 +989,6 @@ QByteArray &QByteArray::operator=(const char *str)
     data ends at the first '\\0' they encounter.
 
     \sa constData()
-*/
-
-/*!
-  \macro QT_NO_CAST_FROM_BYTEARRAY
-  \relates QByteArray
-
-  Disables automatic conversions from QByteArray to
-  const char * or const void *.
-
-  \sa QT_NO_CAST_TO_ASCII, QT_NO_CAST_FROM_ASCII
 */
 
 /*! \fn char *QByteArray::data()
@@ -2837,337 +2828,11 @@ QDataStream &operator>>(QDataStream &in, QByteArray &ba)
 
    return in;
 }
-#endif // QT_NO_DATASTREAM
+#endif 
 
-/*! \fn bool QByteArray::operator==(const QString &str) const
 
-    Returns true if this byte array is equal to string \a str;
-    otherwise returns false.
 
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
 
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool QByteArray::operator!=(const QString &str) const
-
-    Returns true if this byte array is not equal to string \a str;
-    otherwise returns false.
-
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
-
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool QByteArray::operator<(const QString &str) const
-
-    Returns true if this byte array is lexically less than string \a
-    str; otherwise returns false.
-
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
-
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool QByteArray::operator>(const QString &str) const
-
-    Returns true if this byte array is lexically greater than string
-    \a str; otherwise returns false.
-
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
-
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool QByteArray::operator<=(const QString &str) const
-
-    Returns true if this byte array is lexically less than or equal
-    to string \a str; otherwise returns false.
-
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
-
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool QByteArray::operator>=(const QString &str) const
-
-    Returns true if this byte array is greater than or equal to string
-    \a str; otherwise returns false.
-
-    The Unicode data is converted into 8-bit characters using
-    QString::toAscii().
-
-    The comparison is case sensitive.
-
-    You can disable this operator by defining \c
-    QT_NO_CAST_FROM_ASCII when you compile your applications. You
-    then need to call QString::fromAscii(), QString::fromLatin1(),
-    QString::fromUtf8(), or QString::fromLocal8Bit() explicitly if
-    you want to convert the byte array to a QString before doing the
-    comparison.
-*/
-
-/*! \fn bool operator==(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is equal to byte array \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator==(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is equal to string \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator==(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is equal to byte array \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator!=(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is not equal to byte array \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator!=(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is not equal to string \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator!=(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is not equal to byte array \a a2;
-    otherwise returns false.
-*/
-
-/*! \fn bool operator<(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically less than byte array
-    \a a2; otherwise returns false.
-*/
-
-/*! \fn inline bool operator<(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically less than string
-    \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator<(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is lexically less than byte array
-    \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator<=(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically less than or equal
-    to byte array \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator<=(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically less than or equal
-    to string \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator<=(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is lexically less than or equal
-    to byte array \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically greater than byte
-    array \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically greater than string
-    \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is lexically greater than byte array
-    \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>=(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically greater than or
-    equal to byte array \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>=(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if byte array \a a1 is lexically greater than or
-    equal to string \a a2; otherwise returns false.
-*/
-
-/*! \fn bool operator>=(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns true if string \a a1 is lexically greater than or
-    equal to byte array \a a2; otherwise returns false.
-*/
-
-/*! \fn const QByteArray operator+(const QByteArray &a1, const QByteArray &a2)
-    \relates QByteArray
-
-    Returns a byte array that is the result of concatenating byte
-    array \a a1 and byte array \a a2.
-
-    \sa QByteArray::operator+=()
-*/
-
-/*! \fn const QByteArray operator+(const QByteArray &a1, const char *a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns a byte array that is the result of concatenating byte
-    array \a a1 and string \a a2.
-*/
-
-/*! \fn const QByteArray operator+(const QByteArray &a1, char a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns a byte array that is the result of concatenating byte
-    array \a a1 and character \a a2.
-*/
-
-/*! \fn const QByteArray operator+(const char *a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns a byte array that is the result of concatenating string
-    \a a1 and byte array \a a2.
-*/
-
-/*! \fn const QByteArray operator+(char a1, const QByteArray &a2)
-    \relates QByteArray
-
-    \overload
-
-    Returns a byte array that is the result of concatenating character
-    \a a1 and byte array \a a2.
-*/
-
-/*!
-    Returns a byte array that has whitespace removed from the start
-    and the end, and which has each sequence of internal whitespace
-    replaced with a single space.
-
-    Whitespace means any character for which the standard C++
-    isspace() function returns true. This includes the ASCII
-    characters '\\t', '\\n', '\\v', '\\f', '\\r', and ' '.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 32
-
-    \sa trimmed()
-*/
 QByteArray QByteArray::simplified() const
 {
    if (d->size == 0) {

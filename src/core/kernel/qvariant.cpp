@@ -23,31 +23,31 @@
 *
 ***********************************************************************/
 
-#include "qvariant.h"
-#include "qbitarray.h"
-#include "qbytearray.h"
-#include "qdatastream.h"
-#include "qdebug.h"
-#include "qmap.h"
-#include "qdatetime.h"
-#include "qeasingcurve.h"
-#include "qlist.h"
-#include "qstring.h"
-#include "qstringlist.h"
-#include "qurl.h"
-#include "qlocale.h"
-#include "quuid.h"
+#include <qvariant.h>
+#include <qbitarray.h>
+#include <qbytearray.h>
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qmap.h>
+#include <qdatetime.h>
+#include <qeasingcurve.h>
+#include <qlist.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qurl.h>
+#include <qlocale.h>
+#include <quuid.h>
 
-#include "qabstractitemmodel.h"
-#include "qjsonvalue.h"
-#include "qjsonobject.h"
-#include "qjsonarray.h"
-#include "qjsondocument.h"
-#include "qvariant_p.h"
-#include "qsize.h"
-#include "qpoint.h"
-#include "qrect.h"
-#include "qline.h"
+#include <qabstractitemmodel.h>
+#include <qjsonvalue.h>
+#include <qjsonobject.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qvariant_p.h>
+#include <qsize.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qline.h>
 
 #include <float.h>
 
@@ -1455,16 +1455,6 @@ QVariant::QVariant(QDataStream &s)
    s >> *this;
 }
 #endif
-
-
-#ifndef QT_NO_CAST_FROM_ASCII
-QVariant::QVariant(const char *val)
-{
-   QString s = QString::fromAscii(val);
-   create(String, &s);
-}
-#endif
-
 
 QVariant::QVariant(Type type)
 {

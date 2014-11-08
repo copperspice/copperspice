@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qlocale_p.h"
-#include "qlocale_tools_p.h"
-#include "qstringlist.h"
-#include "qvariant.h"
-#include "qdatetime.h"
-#include "qsystemlibrary_p.h"
-#include "qdebug.h"
+#include <qlocale_p.h>
+#include <qlocale_tools_p.h>
+#include <qstringlist.h>
+#include <qvariant.h>
+#include <qdatetime.h>
+#include <qsystemlibrary_p.h>
+#include <qdebug.h>
 
 #if defined(Q_OS_WIN)
-#   include "qt_windows.h"
-#   include <time.h>
+#include <qt_windows.h>
+#include <time.h>
 #endif
 
 QT_BEGIN_NAMESPACE

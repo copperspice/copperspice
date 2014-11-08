@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qfilesystemwatcher.h"
-#include "qfilesystemwatcher_dnotify_p.h"
+#include <qplatformdefs.h>
+#include <qfilesystemwatcher.h>
+#include <qfilesystemwatcher_dnotify_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
@@ -43,7 +43,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 
 #ifdef QT_LINUXBASE
 

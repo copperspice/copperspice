@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfunctions_nacl.h"
+#include <qfunctions_nacl.h>
 #include <pthread.h>
 #include <qglobal.h>
 

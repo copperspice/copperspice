@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qimage.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qmap.h"
-#include "qmatrix.h"
-#include "qtransform.h"
-#include "qimagereader.h"
-#include "qimagewriter.h"
-#include "qstringlist.h"
-#include "qvariant.h"
-#include "qimagepixmapcleanuphooks_p.h"
+#include <qimage.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qmap.h>
+#include <qmatrix.h>
+#include <qtransform.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qstringlist.h>
+#include <qvariant.h>
+#include <qimagepixmapcleanuphooks_p.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <limits.h>

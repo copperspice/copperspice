@@ -31,11 +31,8 @@
 #define QSHAREDPOINTER_IMPL_H
 
 #include <new>
-#include <QtCore/qatomic.h>
-
-#if defined(Q_COMPILER_RVALUE_REFS) && defined(Q_COMPILER_VARIADIC_TEMPLATES)
-#  include <utility>
-#endif
+#include <qatomic.h>
+#include <utility>
 
 QT_BEGIN_NAMESPACE
 
@@ -211,17 +208,18 @@ struct ExternalRefCountWithCustomDeleter: public ExternalRefCountData {
 
       return d;
    }
+
  private:
    // prevent construction
-   ExternalRefCountWithCustomDeleter() Q_DECL_EQ_DELETE;
-   ~ExternalRefCountWithCustomDeleter() Q_DECL_EQ_DELETE;
+   ExternalRefCountWithCustomDeleter()  = delete;
+   ~ExternalRefCountWithCustomDeleter() = delete;
    Q_DISABLE_COPY(ExternalRefCountWithCustomDeleter)
 };
 
 // This class extends ExternalRefCountData and adds a "T"
 // member. That way, when the create() function is called, we allocate
-// memory for both QSharedPointer's d-pointer and the actual object being
-// tracked.
+// memory for both QSharedPointer's d-pointer and the actual object being tracked.
+
 template <class T>
 struct ExternalRefCountWithContiguousData: public ExternalRefCountData {
    typedef ExternalRefCountData Parent;
@@ -251,8 +249,8 @@ struct ExternalRefCountWithContiguousData: public ExternalRefCountData {
 
  private:
    // prevent construction
-   ExternalRefCountWithContiguousData() Q_DECL_EQ_DELETE;
-   ~ExternalRefCountWithContiguousData() Q_DECL_EQ_DELETE;
+   ExternalRefCountWithContiguousData()  = delete;
+   ~ExternalRefCountWithContiguousData() = delete;
    Q_DISABLE_COPY(ExternalRefCountWithContiguousData)
 };
 
@@ -398,46 +396,29 @@ template <class T> class QSharedPointer
 
    QWeakPointer<T> toWeakRef() const;
 
-#if defined(Q_COMPILER_RVALUE_REFS) && defined(Q_COMPILER_VARIADIC_TEMPLATES)
    template <typename... Args>
    static QSharedPointer<T> create(Args  &&...arguments) {
       typedef QtSharedPointer::ExternalRefCountWithContiguousData<T> Private;
+
 # ifdef QT_SHAREDPOINTER_TRACK_POINTERS
       typename Private::DestroyerFn destroy = &Private::safetyCheckDeleter;
 # else
       typename Private::DestroyerFn destroy = &Private::deleter;
 # endif
+
       QSharedPointer<T> result(Qt::Uninitialized);
       result.d = Private::create(&result.value, destroy);
 
       // now initialize the data
       new (result.data()) T(std::forward<Args>(arguments)...);
       result.d->setQObjectShared(result.value, true);
-# ifdef QT_SHAREDPOINTER_TRACK_POINTERS
-      internalSafetyCheckAdd(result.d, result.value);
-# endif
-      return result;
-   }
-#else
-   static inline QSharedPointer<T> create() {
-      typedef QtSharedPointer::ExternalRefCountWithContiguousData<T> Private;
-# ifdef QT_SHAREDPOINTER_TRACK_POINTERS
-      typename Private::DestroyerFn destroy = &Private::safetyCheckDeleter;
-# else
-      typename Private::DestroyerFn destroy = &Private::deleter;
-# endif
-      QSharedPointer<T> result(Qt::Uninitialized);
-      result.d = Private::create(&result.value, destroy);
 
-      // now initialize the data
-      new (result.data()) T();
 # ifdef QT_SHAREDPOINTER_TRACK_POINTERS
       internalSafetyCheckAdd(result.d, result.value);
+
 # endif
-      result.d->setQObjectShared(result.value, true);
       return result;
    }
-#endif
 
  private:
    explicit QSharedPointer(Qt::Initialization) {}
@@ -495,14 +476,11 @@ template <class T> class QSharedPointer
       qSwap(this->value, other.value);
    }
 
-#if defined(Q_NO_TEMPLATE_FRIENDS)
- public:
-#else
    template <class X> friend class QSharedPointer;
    template <class X> friend class QWeakPointer;
    template <class X, class Y> friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
          const QSharedPointer<Y> &src);
-#endif
+
    inline void ref() const {
       d->weakref.ref();
       d->strongref.ref();
@@ -669,13 +647,8 @@ class QWeakPointer
 #endif
 
  private:
-
-#if defined(Q_NO_TEMPLATE_FRIENDS)
- public:
-#else
    template <class X> friend class QSharedPointer;
    template <class X> friend class QPointer;
-#endif
 
    template <class X>
    inline QWeakPointer &assign(X *ptr) {

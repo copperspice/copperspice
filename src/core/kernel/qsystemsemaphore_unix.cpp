@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsystemsemaphore.h"
-#include "qsystemsemaphore_p.h"
+#include <qsystemsemaphore.h>
+#include <qsystemsemaphore_p.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qfile.h>
@@ -41,7 +41,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 
 // OpenBSD 4.2 doesn't define EIDRM, see BUGS section:
 // http://www.openbsd.org/cgi-bin/man.cgi?query=semop&manpath=OpenBSD+4.2

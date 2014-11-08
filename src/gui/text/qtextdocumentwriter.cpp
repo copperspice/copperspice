@@ -22,7 +22,8 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qtextdocumentwriter.h"
+
+#include <qtextdocumentwriter.h>
 
 #include <QtCore/qfile.h>
 #include <QtCore/qbytearray.h>
@@ -30,11 +31,11 @@
 #include <QtCore/qtextcodec.h>
 #include <QtCore/qtextstream.h>
 #include <QtCore/qdebug.h>
-#include "qtextdocument.h"
-#include "qtextdocumentfragment.h"
+#include <qtextdocument.h>
+#include <qtextdocumentfragment.h>
 
-#include "qtextdocumentfragment_p.h"
-#include "qtextodfwriter_p.h"
+#include <qtextdocumentfragment_p.h>
+#include <qtextodfwriter_p.h>
 
 QT_BEGIN_NAMESPACE
 

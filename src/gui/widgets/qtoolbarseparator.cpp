@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtoolbarseparator_p.h"
+#include <qtoolbarseparator_p.h>
 
 #ifndef QT_NO_TOOLBAR
 

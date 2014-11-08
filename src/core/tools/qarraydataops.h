@@ -26,17 +26,19 @@
 #ifndef QARRAYDATAOPS_H
 #define QARRAYDATAOPS_H
 
-#include <QtCore/qarraydata.h>
+#include <qarraydata.h>
 #include <new>
 #include <string.h>
+
+#include <type_traits>
 
 QT_BEGIN_NAMESPACE
 
 namespace QtPrivate {
 
 template <class T>
-struct QPodArrayOps
-      : QTypedArrayData<T> {
+struct QPodArrayOps : QTypedArrayData<T> {
+
    void appendInitialize(size_t newSize) {
       Q_ASSERT(!this->ref.isShared());
       Q_ASSERT(newSize > uint(this->size));
@@ -77,7 +79,7 @@ struct QPodArrayOps
    void destroyAll() { // Call from destructors, ONLY!
       Q_ASSERT(this->ref == 0);
 
-      // As this is to be called only from destructor, it doesn't need to be
+      // As this is to be called only from destructor, it does not need to be
       // exception safe; size not updated.
    }
 
@@ -104,8 +106,8 @@ struct QPodArrayOps
 };
 
 template <class T>
-struct QGenericArrayOps
-      : QTypedArrayData<T> {
+struct QGenericArrayOps : QTypedArrayData<T> {
+
    void appendInitialize(size_t newSize) {
       Q_ASSERT(!this->ref.isShared());
       Q_ASSERT(newSize > uint(this->size));
@@ -246,13 +248,8 @@ struct QGenericArrayOps
 };
 
 template <class T>
-struct QMovableArrayOps
-      : QGenericArrayOps<T> {
-   // using QGenericArrayOps<T>::appendInitialize;
-   // using QGenericArrayOps<T>::copyAppend;
-   // using QGenericArrayOps<T>::truncate;
-   // using QGenericArrayOps<T>::destroyAll;
-
+struct QMovableArrayOps : QGenericArrayOps<T> {
+  
    void insert(T *where, const T *b, const T *e) {
       Q_ASSERT(!this->ref.isShared());
       Q_ASSERT(where >= this->begin() && where < this->end()); // Use copyAppend at end
@@ -260,8 +257,7 @@ struct QMovableArrayOps
       Q_ASSERT(e <= where || b > this->end()); // No overlap
       Q_ASSERT(size_t(e - b) <= this->alloc - uint(this->size));
 
-      // Provides strong exception safety guarantee,
-      // provided T::~T() nothrow
+      // Provides strong exception safety guarantee, provided T::~T() nothrow
 
       struct ReversibleDisplace {
          ReversibleDisplace(T *begin, T *end, size_t displace)
@@ -351,28 +347,22 @@ struct QArrayOpsSelector {
 };
 
 template <class T>
-struct QArrayOpsSelector < T,
-      typename QEnableIf <
-      !QTypeInfo<T>::isComplex  &&!QTypeInfo<T>::isStatic
-      >::Type > {
+struct QArrayOpsSelector < T, typename std::enable_if< ! QTypeInfo<T>::isComplex  && ! QTypeInfo<T>::isStatic >::type > {
    typedef QPodArrayOps<T> Type;
 };
 
 template <class T>
-struct QArrayOpsSelector < T,
-      typename QEnableIf <
-      QTypeInfo<T>::isComplex  &&!QTypeInfo<T>::isStatic
-      >::Type > {
+struct QArrayOpsSelector < T, typename std::enable_if< QTypeInfo<T>::isComplex  &&!QTypeInfo<T>::isStatic >::type > {
    typedef QMovableArrayOps<T> Type;
 };
 
 } // namespace QtPrivate
 
+
 template <class T>
-struct QArrayDataOps
-      : QtPrivate::QArrayOpsSelector<T>::Type {
+struct QArrayDataOps : QtPrivate::QArrayOpsSelector<T>::Type {
 };
 
 QT_END_NAMESPACE
 
-#endif // include guard
+#endif 

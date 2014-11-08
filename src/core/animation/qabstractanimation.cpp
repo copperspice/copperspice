@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qabstractanimation.h"
-#include "qanimationgroup.h"
+#include <qabstractanimation.h>
+#include <qanimationgroup.h>
 #include <QtCore/qdebug.h>
-#include "qabstractanimation_p.h"
+#include <qabstractanimation_p.h>
 
 #include <QtCore/qmath.h>
 #include <QtCore/qthreadstorage.h>

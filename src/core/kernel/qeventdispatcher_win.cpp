@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qeventdispatcher_win_p.h"
-#include "qcoreapplication.h"
-#include "qhash.h"
+#include <qeventdispatcher_win_p.h>
+#include <qcoreapplication.h>
+#include <qhash.h>
 #include <qsystemlibrary_p.h>
-#include "qpair.h"
-#include "qset.h"
-#include "qsocketnotifier.h"
-#include "qvarlengtharray.h"
-#include "qwineventnotifier_p.h"
-#include "qabstracteventdispatcher_p.h"
-#include "qcoreapplication_p.h"
+#include <qpair.h>
+#include <qset.h>
+#include <qsocketnotifier.h>
+#include <qvarlengtharray.h>
+#include <qwineventnotifier_p.h>
+#include <qabstracteventdispatcher_p.h>
+#include <qcoreapplication_p.h>
 #include <qthread_p.h>
 
 QT_BEGIN_NAMESPACE

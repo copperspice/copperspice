@@ -1,1 +1,1 @@
-#include "qcoreevent.h"
+#include <qcoreevent.h>

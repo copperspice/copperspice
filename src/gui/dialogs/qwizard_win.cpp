@@ -57,6 +57,7 @@ typedef struct  {       //MARGINS
    int cyTopHeight;    // height of top border that retains its size
    int cyBottomHeight; // height of bottom border that retains its size
 } WIZ_MARGINS;
+
 typedef struct {        //DTTOPTS
    DWORD dwSize;
    DWORD dwFlags;
@@ -78,28 +79,28 @@ typedef struct {
    DWORD dwMask;
 } WIZ_WTA_OPTIONS;
 
-#define WIZ_WM_THEMECHANGED                 0x031A
-#define WIZ_WM_DWMCOMPOSITIONCHANGED        0x031E
+#define WIZ_WM_THEMECHANGED              0x031A
+#define WIZ_WM_DWMCOMPOSITIONCHANGED     0x031E
 
 enum WIZ_WINDOWTHEMEATTRIBUTETYPE {
    WIZ_WTA_NONCLIENT = 1
 };
 
-#define WIZ_WTNCA_NODRAWCAPTION 0x00000001
-#define WIZ_WTNCA_NODRAWICON    0x00000002
+#define WIZ_WTNCA_NODRAWCAPTION          0x00000001
+#define WIZ_WTNCA_NODRAWICON             0x00000002
 
-#define WIZ_DT_CENTER                   0x00000001 //DT_CENTER
-#define WIZ_DT_VCENTER                  0x00000004
-#define WIZ_DT_SINGLELINE               0x00000020
-#define WIZ_DT_NOPREFIX                 0x00000800
+#define WIZ_DT_CENTER                    0x00000001 
+#define WIZ_DT_VCENTER                   0x00000004
+#define WIZ_DT_SINGLELINE                0x00000020
+#define WIZ_DT_NOPREFIX                  0x00000800
 
-enum WIZ_NAVIGATIONPARTS {          //NAVIGATIONPARTS
+enum WIZ_NAVIGATIONPARTS {               // NAVIGATIONPARTS
    WIZ_NAV_BACKBUTTON = 1,
    WIZ_NAV_FORWARDBUTTON = 2,
    WIZ_NAV_MENUBUTTON = 3,
 };
 
-enum WIZ_NAV_BACKBUTTONSTATES {     //NAV_BACKBUTTONSTATES
+enum WIZ_NAV_BACKBUTTONSTATES {          //NAV_BACKBUTTONSTATES
    WIZ_NAV_BB_NORMAL = 1,
    WIZ_NAV_BB_HOT = 2,
    WIZ_NAV_BB_PRESSED = 3,
@@ -112,10 +113,10 @@ enum WIZ_NAV_BACKBUTTONSTATES {     //NAV_BACKBUTTONSTATES
 
 #define WIZ_WM_NCMOUSELEAVE 674             //WM_NCMOUSELEAVE
 
-#define WIZ_WP_CAPTION             1 //WP_CAPTION
-#define WIZ_CS_ACTIVE              1 //CS_ACTIVE
-#define WIZ_TMT_FILLCOLORHINT   3821 //TMT_FILLCOLORHINT
-#define WIZ_TMT_BORDERCOLORHINT 3822 //TMT_BORDERCOLORHINT
+#define WIZ_WP_CAPTION             1        //WP_CAPTION
+#define WIZ_CS_ACTIVE              1        //CS_ACTIVE
+#define WIZ_TMT_FILLCOLORHINT   3821        //TMT_FILLCOLORHINT
+#define WIZ_TMT_BORDERCOLORHINT 3822        //TMT_BORDERCOLORHINT
 
 typedef BOOL (WINAPI *PtrDwmDefWindowProc)(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 typedef HRESULT (WINAPI *PtrDwmIsCompositionEnabled)(BOOL *pfEnabled);
@@ -134,12 +135,16 @@ typedef bool (WINAPI *PtrIsThemeActive)();
 typedef HANDLE (WINAPI *PtrOpenThemeData)(HWND hwnd, LPCWSTR pszClassList);
 typedef HRESULT (WINAPI *PtrCloseThemeData)(HANDLE hTheme);
 typedef HRESULT (WINAPI *PtrGetThemeSysFont)(HANDLE hTheme, int iFontId, LOGFONTW *plf);
+
 typedef HRESULT (WINAPI *PtrDrawThemeTextEx)(HANDLE hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText,
       int cchText, DWORD dwTextFlags, LPRECT pRect, const WIZ_DTTOPTS *pOptions);
+
 typedef HRESULT (WINAPI *PtrDrawThemeBackground)(HANDLE hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect,
       OPTIONAL const RECT *pClipRect);
+
 typedef HRESULT (WINAPI *PtrGetThemePartSize)(HANDLE hTheme, HDC hdc, int iPartId, int iStateId, OPTIONAL RECT *prc,
       enum THEMESIZE eSize, OUT SIZE *psz);
+
 typedef HRESULT (WINAPI *PtrGetThemeColor)(HANDLE hTheme, int iPartId, int iStateId, int iPropId, OUT COLORREF *pColor);
 
 static PtrIsAppThemed pIsAppThemed = 0;

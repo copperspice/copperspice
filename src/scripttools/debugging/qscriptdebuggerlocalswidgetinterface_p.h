@@ -26,17 +26,6 @@
 #ifndef QSCRIPTDEBUGGERLOCALSWIDGETINTERFACE_P_H
 #define QSCRIPTDEBUGGERLOCALSWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtGui/qwidget.h>
 
 QT_BEGIN_NAMESPACE
@@ -44,12 +33,12 @@ QT_BEGIN_NAMESPACE
 class QScriptDebuggerLocalsModel;
 class QModelIndex;
 class QScriptCompletionProviderInterface;
-
 class QScriptDebuggerLocalsWidgetInterfacePrivate;
-class QScriptDebuggerLocalsWidgetInterface:
-   public QWidget
+
+class QScriptDebuggerLocalsWidgetInterface : public QWidget
 {
    CS_OBJECT(QScriptDebuggerLocalsWidgetInterface)
+
  public:
    ~QScriptDebuggerLocalsWidgetInterface();
 

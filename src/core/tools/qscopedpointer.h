@@ -78,7 +78,6 @@ class QScopedPointer
       Cleanup::cleanup(oldD);
    }
 
-#ifdef Q_COMPILER_RVALUE_REFS
    inline QScopedPointer(QScopedPointer<T, Cleanup> &&other)
       : d(other.take()) {
    }
@@ -87,7 +86,6 @@ class QScopedPointer
       reset(other.take());
       return *this;
    }
-#endif
 
    inline T &operator*() const {
       Q_ASSERT(d);

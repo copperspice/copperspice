@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qscreen_qws.h"
-#include "qcolormap.h"
-#include "qscreendriverfactory_qws.h"
-#include "qwindowsystem_qws.h"
-#include "qwidget.h"
-#include "qcolor.h"
-#include "qpixmap.h"
-#include "qvarlengtharray.h"
-#include "qwsdisplay_qws.h"
-#include "qpainter.h"
+#include <qplatformdefs.h>
+#include <qscreen_qws.h>
+#include <qcolormap.h>
+#include <qscreendriverfactory_qws.h>
+#include <qwindowsystem_qws.h>
+#include <qwidget.h>
+#include <qcolor.h>
+#include <qpixmap.h>
+#include <qvarlengtharray.h>
+#include <qwsdisplay_qws.h>
+#include <qpainter.h>
 #include <qdrawhelper_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qpixmap_raster_p.h>

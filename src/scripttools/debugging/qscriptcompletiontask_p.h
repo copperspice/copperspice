@@ -26,19 +26,7 @@
 #ifndef QSCRIPTCOMPLETIONTASK_P_H
 #define QSCRIPTCOMPLETIONTASK_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qscriptcompletiontaskinterface_p.h"
-
+#include <qscriptcompletiontaskinterface_p.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qmap.h>
 
@@ -47,12 +35,12 @@ QT_BEGIN_NAMESPACE
 class QScriptDebuggerCommandSchedulerInterface;
 class QScriptDebuggerJobSchedulerInterface;
 class QScriptDebuggerConsole;
-
 class QScriptCompletionTaskPrivate;
-class QScriptCompletionTask
-   : public QScriptCompletionTaskInterface
+
+class QScriptCompletionTask : public QScriptCompletionTaskInterface
 {
    CS_OBJECT(QScriptCompletionTask)
+
  public:
    QScriptCompletionTask(
       const QString &contents, int cursorPosition, int frameIndex,

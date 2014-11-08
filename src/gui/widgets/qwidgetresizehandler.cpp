@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qwidgetresizehandler_p.h"
+#include <qwidgetresizehandler_p.h>
 
 #ifndef QT_NO_RESIZEHANDLER
-#include "qframe.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qcursor.h"
-#include "qsizegrip.h"
-#include "qevent.h"
+#include <qframe.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qcursor.h>
+#include <qsizegrip.h>
+#include <qevent.h>
 
 #if defined(Q_OS_WIN)
-#include "qt_windows.h"
+#include <qt_windows.h>
 #endif
 
-#include "qdebug.h"
-#include "qlayoutengine_p.h"
+#include <qdebug.h>
+#include <qlayoutengine_p.h>
 
 QT_BEGIN_NAMESPACE
 

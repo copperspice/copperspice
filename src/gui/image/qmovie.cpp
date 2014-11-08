@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_MOVIE
 
-#include "qmovie.h"
-#include "qimage.h"
-#include "qimagereader.h"
-#include "qpixmap.h"
-#include "qrect.h"
-#include "qdatetime.h"
-#include "qtimer.h"
-#include "qpair.h"
-#include "qmap.h"
-#include "qlist.h"
-#include "qbuffer.h"
-#include "qdir.h"
+#include <qmovie.h>
+#include <qimage.h>
+#include <qimagereader.h>
+#include <qpixmap.h>
+#include <qrect.h>
+#include <qdatetime.h>
+#include <qtimer.h>
+#include <qpair.h>
+#include <qmap.h>
+#include <qlist.h>
+#include <qbuffer.h>
+#include <qdir.h>
 
 #define QMOVIE_INVALID_DELAY -1
 

@@ -23,41 +23,41 @@
 *
 ***********************************************************************/
 
-#include "qmotifstyle.h"
-#include "qcdestyle.h"
+#include <qmotifstyle.h>
+#include <qcdestyle.h>
 
 #if !defined(QT_NO_STYLE_MOTIF) || defined(QT_PLUGIN)
 
-#include "qmenu.h"
-#include "qapplication.h"
-#include "qpainter.h"
-#include "qdrawutil.h"
-#include "qpixmap.h"
-#include "qpalette.h"
-#include "qwidget.h"
-#include "qpushbutton.h"
-#include "qscrollbar.h"
-#include "qtabbar.h"
-#include "qtabwidget.h"
-#include "qlistview.h"
-#include "qsplitter.h"
-#include "qslider.h"
-#include "qcombobox.h"
-#include "qlineedit.h"
-#include "qprogressbar.h"
-#include "qimage.h"
-#include "qfocusframe.h"
-#include "qdebug.h"
-#include "qpainterpath.h"
-#include "qmotifstyle_p.h"
-#include "qdialogbuttonbox.h"
-#include "qformlayout.h"
+#include <qmenu.h>
+#include <qapplication.h>
+#include <qpainter.h>
+#include <qdrawutil.h>
+#include <qpixmap.h>
+#include <qpalette.h>
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qscrollbar.h>
+#include <qtabbar.h>
+#include <qtabwidget.h>
+#include <qlistview.h>
+#include <qsplitter.h>
+#include <qslider.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include <qprogressbar.h>
+#include <qimage.h>
+#include <qfocusframe.h>
+#include <qdebug.h>
+#include <qpainterpath.h>
+#include <qmotifstyle_p.h>
+#include <qdialogbuttonbox.h>
+#include <qformlayout.h>
 #include <limits.h>
 #include <QtGui/qgraphicsproxywidget.h>
 #include <QtGui/qgraphicsview.h>
 
 #ifdef Q_WS_X11
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #endif
 
 QT_BEGIN_NAMESPACE

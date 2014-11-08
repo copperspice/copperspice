@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qobjectcleanuphandler.h"
+#include <qobjectcleanuphandler.h>
 
 QT_BEGIN_NAMESPACE
 

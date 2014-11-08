@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qstate.h"
+#include <qstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qstate_p.h"
-#include "qhistorystate.h"
-#include "qhistorystate_p.h"
-#include "qabstracttransition.h"
-#include "qabstracttransition_p.h"
-#include "qsignaltransition.h"
-#include "qstatemachine.h"
-#include "qstatemachine_p.h"
+#include <qstate_p.h>
+#include <qhistorystate.h>
+#include <qhistorystate_p.h>
+#include <qabstracttransition.h>
+#include <qabstracttransition_p.h>
+#include <qsignaltransition.h>
+#include <qstatemachine.h>
+#include <qstatemachine_p.h>
 
 QT_BEGIN_NAMESPACE
 

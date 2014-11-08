@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qreadwritelock.h"
-#include "qmutex.h"
-#include "qthread.h"
-#include "qwaitcondition.h"
-#include "qreadwritelock_p.h"
+#include <qplatformdefs.h>
+#include <qreadwritelock.h>
+#include <qmutex.h>
+#include <qthread.h>
+#include <qwaitcondition.h>
+#include <qreadwritelock_p.h>
 
 QT_BEGIN_NAMESPACE
 

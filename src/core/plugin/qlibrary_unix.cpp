@@ -23,18 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 #include <qfile.h>
-#include "qlibrary_p.h"
+#include <qlibrary_p.h>
 #include <qcoreapplication.h>
 #include <qfilesystementry_p.h>
 
 #ifdef Q_OS_MAC
-#  include <qcore_mac_p.h>
-#endif
-
-#if defined(QT_AOUT_UNDERSCORE)
-#include <string.h>
+#include <qcore_mac_p.h>
 #endif
 
 #if defined (Q_OS_NACL)
@@ -44,6 +40,7 @@
 QT_BEGIN_NAMESPACE
 
 #if !defined(QT_HPUX_LD) && !defined(QT_NO_DYNAMIC_LIBRARY)
+
 QT_BEGIN_INCLUDE_NAMESPACE
 #include <dlfcn.h>
 QT_END_INCLUDE_NAMESPACE
@@ -262,27 +259,25 @@ Q_CORE_EXPORT void *qt_mac_resolve_sys(void *handle, const char *symbol)
 
 void *QLibraryPrivate::resolve_sys(const char *symbol)
 {
-#if defined(QT_AOUT_UNDERSCORE)
-   // older a.out systems add an underscore in front of symbols
-   char *undrscr_symbol = new char[strlen(symbol) + 2];
-   undrscr_symbol[0] = '_';
-   strcpy(undrscr_symbol + 1, symbol);
-   void *address = dlsym(pHnd, undrscr_symbol);
-   delete [] undrscr_symbol;
-#elif defined(QT_HPUX_LD)
+
+#if defined(QT_HPUX_LD)
    void *address = 0;
    if (shl_findsym((shl_t *)&pHnd, symbol, TYPE_UNDEFINED, &address) < 0) {
       address = 0;
    }
+
 #elif defined (QT_NO_DYNAMIC_LIBRARY)
    void *address = 0;
+
 #else
    void *address = dlsym(pHnd, symbol);
+
 #endif
+
    if (!address) {
-      errorString = QLibrary::tr("Cannot resolve symbol \"%1\" in %2: %3").arg(
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
                        QString::fromAscii(symbol)).arg(fileName).arg(qdlerror());
-   } else {
+   } else {are
       errorString.clear();
    }
    return address;

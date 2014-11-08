@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qcore_unix_p.h"
-#include "qelapsedtimer.h"
+#include <qcore_unix_p.h>
+#include <qelapsedtimer.h>
 
 #ifdef Q_OS_NACL
 

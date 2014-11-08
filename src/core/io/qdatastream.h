@@ -46,11 +46,18 @@ template <typename T> class QSet;
 template <class Key, class T> class QHash;
 template <class Key, class T> class QMap;
 
-#if !defined(QT_NO_DATASTREAM)
+#if ! defined(QT_NO_DATASTREAM)
+
 class QDataStreamPrivate;
+
 class Q_CORE_EXPORT QDataStream
 {
  public:
+
+#if CS_VERSION >= 0x010200
+#error (CS compile issue in qdatastream.h) Verify CopperSpice Version is listed in the following enum
+#endif
+
    enum Version {
       Qt_1_0 = 1,
       Qt_2_0 = 2,
@@ -69,13 +76,14 @@ class Q_CORE_EXPORT QDataStream
       Qt_4_8 = Qt_4_7,
       Qt_4_9 = Qt_4_8,
       Qt_5_0 = 13,
-      Qt_5_1 = 14
-#if CS_VERSION >= CS_VERSION_CHECK(1,1,0)
-#error Add the datastream version for this CopperSpice version
-#endif
-
+      Qt_5_1 = 14,
+      Qt_5_2 = 15,
+      Qt_5_3 = Qt_5_2,
+ 
+      CS_1_0 = 128,
+      CS_1_1 = CS_1_0
    };
-
+ 
    enum ByteOrder {
       BigEndian = QSysInfo::BigEndian,
       LittleEndian = QSysInfo::LittleEndian

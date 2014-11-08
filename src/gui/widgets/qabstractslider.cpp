@@ -24,13 +24,13 @@
 ***********************************************************************/
 
 #include <qapplication.h>
-#include "qabstractslider.h"
-#include "qevent.h"
-#include "qabstractslider_p.h"
-#include "qdebug.h"
+#include <qabstractslider.h>
+#include <qevent.h>
+#include <qabstractslider_p.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 #include <limits.h>

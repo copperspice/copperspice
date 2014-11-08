@@ -23,56 +23,17 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGraphicsGridLayout
-    \brief The QGraphicsGridLayout class provides a grid layout for managing
-    widgets in Graphics View.
-    \since 4.4
-
-    \ingroup graphicsview-api
-
-    The most common way to use QGraphicsGridLayout is to construct an object
-    on the heap with no parent, add widgets and layouts by calling addItem(),
-    and finally assign the layout to a widget by calling
-    QGraphicsWidget::setLayout(). QGraphicsGridLayout automatically computes
-    the dimensions of the grid as you add items.
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsgridlayout.cpp 0
-
-    The layout takes ownership of the items. In some cases when the layout
-    item also inherits from QGraphicsItem (such as QGraphicsWidget) there will be a
-    ambiguity in ownership because the layout item belongs to two ownership hierarchies.
-    See the documentation of QGraphicsLayoutItem::setOwnedByLayout() how to handle
-    this.
-    You can access each item in the layout by calling count() and itemAt(). Calling
-    removeAt() will remove an item from the layout, without
-    destroying it.
-
-    \section1 Size Hints and Size Policies in QGraphicsGridLayout
-
-    QGraphicsGridLayout respects each item's size hints and size policies,
-    and when a cell in the grid has more space than the items can fill, each item
-    is arranged according to the layout's alignment for that item. You can set
-    an alignment for each item by calling setAlignment(), and check the
-    alignment for any item by calling alignment(). You can also set the alignment
-    for an entire row or column by calling setRowAlignment() and setColumnAlignment()
-    respectively.  By default, items are aligned to the top left.
-
-
-    \sa QGraphicsLinearLayout, QGraphicsWidget
-*/
-
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qgraphicslayout_p.h"
-#include "qgraphicslayoutitem.h"
-#include "qgraphicsgridlayout.h"
-#include "qgraphicswidget.h"
-#include "qgridlayoutengine_p.h"
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qgraphicslayout_p.h>
+#include <qgraphicslayoutitem.h>
+#include <qgraphicsgridlayout.h>
+#include <qgraphicswidget.h>
+#include <qgridlayoutengine_p.h>
 #include <QtCore/qdebug.h>
 
 QT_BEGIN_NAMESPACE

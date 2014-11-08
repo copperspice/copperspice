@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qabstractprintdialog_p.h"
-#include "qcoreapplication.h"
-#include "qprintdialog.h"
-#include "qprinter.h"
-#include "qprinter_p.h"
+#include <qabstractprintdialog_p.h>
+#include <qcoreapplication.h>
+#include <qprintdialog.h>
+#include <qprinter.h>
+#include <qprinter_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 

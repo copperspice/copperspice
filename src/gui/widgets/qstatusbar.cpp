@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qstatusbar.h"
+#include <qstatusbar.h>
 #ifndef QT_NO_STATUSBAR
 
-#include "qlist.h"
-#include "qdebug.h"
-#include "qevent.h"
-#include "qlayout.h"
-#include "qpainter.h"
-#include "qtimer.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qsizegrip.h"
-#include "qmainwindow.h"
+#include <qlist.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qtimer.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qsizegrip.h>
+#include <qmainwindow.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 #include <qlayoutengine_p.h>

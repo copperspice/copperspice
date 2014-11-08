@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qpagesetupdialog.h"
+#include <qpagesetupdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
-#include "qpagesetupdialog_unix_p.h"
+#include <qpagesetupdialog_unix_p.h>
 
-#include "qpainter.h"
-#include "qprintdialog.h"
-#include "qdialogbuttonbox.h"
+#include <qpainter.h>
+#include <qprintdialog.h>
+#include <qdialogbuttonbox.h>
 
 #include <ui_qpagesetupwidget.h>
 
-#include <QtGui/qprinter.h>
+#include <qprinter.h>
 #include <qabstractpagesetupdialog_p.h>
 #include <qprinter_p.h>
 
-#if !defined(QT_NO_CUPS)
+#if ! defined(QT_NO_CUPS)
 #  include <qcups_p.h>
 #  include <cups/cups.h>
 #  include <qpdf_p.h>

@@ -23,27 +23,27 @@
 *
 ***********************************************************************/
 
-#include "qlayoutengine_p.h"
-#include "qabstractitemdelegate.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qstylepainter.h"
-#include "qtabwidget.h"
-#include "qtooltip.h"
-#include "qwhatsthis.h"
-#include "qtextengine_p.h"
+#include <qlayoutengine_p.h>
+#include <qabstractitemdelegate.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
+#include <qtabwidget.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qtextengine_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
-#include "qdebug.h"
-#include "qtabbar_p.h"
+#include <qdebug.h>
+#include <qtabbar_p.h>
 
 #ifndef QT_NO_TABBAR
 

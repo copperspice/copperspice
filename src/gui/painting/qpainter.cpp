@@ -7656,16 +7656,19 @@ struct QPaintDeviceRedirection {
    QPaintDeviceRedirection() : device(0), replacement(0), internalWidgetRedirectionIndex(-1) {}
    QPaintDeviceRedirection(const QPaintDevice *device, QPaintDevice *replacement,
                            const QPoint &offset, int internalWidgetRedirectionIndex)
+
       : device(device), replacement(replacement), offset(offset),
         internalWidgetRedirectionIndex(internalWidgetRedirectionIndex) { }
+
    const QPaintDevice *device;
    QPaintDevice *replacement;
    QPoint offset;
    int internalWidgetRedirectionIndex;
+
    bool operator==(const QPaintDevice *pdev) const {
       return device == pdev;
    }
-   Q_DUMMY_COMPARISON_OPERATOR(QPaintDeviceRedirection)
+   
 };
 
 typedef QList<QPaintDeviceRedirection> QPaintDeviceRedirectionList;

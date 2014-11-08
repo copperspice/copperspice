@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qcursor.h"
-#include "qbitmap.h"
-#include "qscreen_qws.h"
-#include "qapplication.h"
-#include "qwindowsystem_qws.h"
-#include "qwindowsystem_p.h"
-#include "qwscursor_qws.h"
+#include <qcursor.h>
+#include <qbitmap.h>
+#include <qscreen_qws.h>
+#include <qapplication.h>
+#include <qwindowsystem_qws.h>
+#include <qwindowsystem_p.h>
+#include <qwscursor_qws.h>
 
 QT_BEGIN_NAMESPACE
 

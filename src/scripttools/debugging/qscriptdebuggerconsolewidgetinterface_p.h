@@ -26,32 +26,19 @@
 #ifndef QSCRIPTDEBUGGERCONSOLEWIDGETINTERFACE_P_H
 #define QSCRIPTDEBUGGERCONSOLEWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtGui/qwidget.h>
-
-#include "qscriptmessagehandlerinterface_p.h"
+#include <qscriptmessagehandlerinterface_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerConsoleHistorianInterface;
 class QScriptCompletionProviderInterface;
-
 class QScriptDebuggerConsoleWidgetInterfacePrivate;
-class QScriptDebuggerConsoleWidgetInterface:
-   public QWidget,
-   public QScriptMessageHandlerInterface
+
+class QScriptDebuggerConsoleWidgetInterface : public QWidget, public QScriptMessageHandlerInterface
 {
    CS_OBJECT(QScriptDebuggerConsoleWidgetInterface)
+
  public:
    enum InputMode {
       NormalInputMode,
@@ -69,8 +56,7 @@ class QScriptDebuggerConsoleWidgetInterface:
    virtual void setLineContinuationMode(bool enabled) = 0;
 
    virtual void clear() = 0;
-
- public:
+ 
    CS_SIGNAL_1(Public, void lineEntered(const QString &contents))
    CS_SIGNAL_2(lineEntered, contents)
 

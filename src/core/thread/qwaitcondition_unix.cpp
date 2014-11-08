@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qwaitcondition.h"
-#include "qmutex.h"
-#include "qreadwritelock.h"
-#include "qatomic.h"
-#include "qstring.h"
+#include <qplatformdefs.h>
+#include <qwaitcondition.h>
+#include <qmutex.h>
+#include <qreadwritelock.h>
+#include <qatomic.h>
+#include <qstring.h>
 
-#include "qmutex_p.h"
-#include "qreadwritelock_p.h"
+#include <qmutex_p.h>
+#include <qreadwritelock_p.h>
 
 #include <errno.h>
 

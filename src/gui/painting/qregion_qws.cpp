@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-// XXX - add appropriate friendship relationships
 #define private public
-#include "qregion.h"
+#include <qregion.h>
+
 #undef private
-#include "qpainterpath.h"
-#include "qpolygon.h"
-#include "qbuffer.h"
-#include "qimage.h"
+#include <qpainterpath.h>
+#include <qpolygon.h>
+#include <qbuffer.h>
+#include <qimage.h>
 #include <qdebug.h>
-#include "qbitmap.h"
+#include <qbitmap.h>
 #include <stdlib.h>
 #include <qatomic.h>
 #include <qsemaphore.h>
@@ -43,6 +43,7 @@ class QFastMutex
 {
    QAtomicInt contenders;
    QSemaphore semaphore;
+
  public:
    inline QFastMutex()
       : contenders(0), semaphore(0) {

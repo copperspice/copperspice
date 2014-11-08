@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qwindowdefs.h"
+#include <qwindowdefs.h>
 
 #ifndef QT_NO_FONTDIALOG
 
-#include "qfontdialog.h"
-#include "qfontdialog_p.h"
+#include <qfontdialog.h>
+#include <qfontdialog_p.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>

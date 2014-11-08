@@ -24,24 +24,26 @@
 ***********************************************************************/
 
 //#define QPROCESS_DEBUG
-#include "qdebug.h"
+#include <qdebug.h>
 
 #ifndef QT_NO_PROCESS
 
 #if defined QPROCESS_DEBUG
-#include "qstring.h"
+#include <qstring.h>
 #include <ctype.h>
 
 /*
     Returns a human readable representation of the first \a len
     characters in \a data.
 */
+
 QT_BEGIN_NAMESPACE
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
-   if (!data) {
+   if (! data) {
       return "(null)";
    }
+
    QByteArray out;
    for (int i = 0; i < len; ++i) {
       char c = data[i];
@@ -73,10 +75,10 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 QT_END_NAMESPACE
 #endif
 
-#include "qplatformdefs.h"
-#include "qprocess.h"
-#include "qprocess_p.h"
-#include "qcore_unix_p.h"
+#include <qplatformdefs.h>
+#include <qprocess.h>
+#include <qprocess_p.h>
+#include <qcore_unix_p.h>
 
 #ifdef Q_OS_MAC
 #include <qcore_mac_p.h>
@@ -116,6 +118,7 @@ static void qt_sa_sigchld_sigaction(int signum, siginfo_t *info, void *context)
    // these arguments contain garbage and we'd most likely crash.
 
    qt_safe_write(qt_qprocess_deadChild_pipe[1], "", 1);
+
 #if defined (QPROCESS_DEBUG)
    fprintf(stderr, "*** SIGCHLD\n");
 #endif

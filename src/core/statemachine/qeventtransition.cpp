@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qeventtransition.h"
+#include <qeventtransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qeventtransition_p.h"
-#include "qstate.h"
-#include "qstate_p.h"
-#include "qstatemachine.h"
-#include "qstatemachine_p.h"
+#include <qeventtransition_p.h>
+#include <qstate.h>
+#include <qstate_p.h>
+#include <qstatemachine.h>
+#include <qstatemachine_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

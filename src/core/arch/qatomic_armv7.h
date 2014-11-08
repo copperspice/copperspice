@@ -35,7 +35,7 @@
 
 // ... but the implementation is otherwise identical to that for ARMv6
 QT_BEGIN_INCLUDE_HEADER
-#include "QtCore/qatomic_armv6.h"
+#include <qatomic_armv6.h>
 QT_END_INCLUDE_HEADER
 
 #endif // QATOMIC_ARMV7_H

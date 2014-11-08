@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qtextdocumentfragment.h"
-#include "qtextdocumentfragment_p.h"
-#include "qtextcursor_p.h"
-#include "qtextlist.h"
+#include <qtextdocumentfragment.h>
+#include <qtextdocumentfragment_p.h>
+#include <qtextcursor_p.h>
+#include <qtextlist.h>
 
 #include <qdebug.h>
 #include <qtextcodec.h>

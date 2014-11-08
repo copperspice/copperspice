@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtconcurrentexception.h"
+#include <qtconcurrentexception.h>
 
 QT_BEGIN_NAMESPACE
 

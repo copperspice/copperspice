@@ -25,8 +25,8 @@
 
 #include <qcoreapplication.h>
 #include <qdebug.h>
-#include "qjsonparser_p.h"
-#include "qjson_p.h"
+#include <qjsonparser_p.h>
+#include <qjson_p.h>
 
 //#define PARSER_DEBUG
 #ifdef PARSER_DEBUG

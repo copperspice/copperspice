@@ -26,7 +26,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 
-#include "qxmlutils_p.h"
+#include <qxmlutils_p.h>
 
 QT_BEGIN_NAMESPACE
 

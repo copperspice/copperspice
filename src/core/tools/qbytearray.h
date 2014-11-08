@@ -122,17 +122,12 @@ struct QByteArrayDataPtr {
 };
 
 #define Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, offset) \
-    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } \
-    /**/
+    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } 
 
 #define Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER(size) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QByteArrayData)) \
-    /**/
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QByteArrayData)) 
 
-
-#if defined(Q_COMPILER_LAMBDA)
-
-#  define QByteArrayLiteral(str) \
+#define QByteArrayLiteral(str) \
     ([]() -> QByteArrayDataPtr { \
         enum { Size = sizeof(str) - 1 }; \
         static const QStaticByteArrayData<Size> qbytearray_literal = \
@@ -140,14 +135,6 @@ struct QByteArrayDataPtr {
         QByteArrayDataPtr holder = { qbytearray_literal.data_ptr() }; \
         return holder; \
     }())
-
-#endif
-
-
-#ifndef QByteArrayLiteral
-// no lambdas, not GCC, use const char * instead
-# define QByteArrayLiteral(str) (str)
-#endif
 
 class Q_CORE_EXPORT QByteArray
 {
@@ -295,26 +282,22 @@ class Q_CORE_EXPORT QByteArray
 
    QByteArray repeated(int times) const;
 
-#ifndef QT_NO_CAST_TO_ASCII
-   QT_ASCII_CAST_WARN QByteArray &append(const QString &s);
-   QT_ASCII_CAST_WARN QByteArray &insert(int i, const QString &s);
-   QT_ASCII_CAST_WARN QByteArray &replace(const QString &before, const char *after);
-   QT_ASCII_CAST_WARN QByteArray &replace(char c, const QString &after);
-   QT_ASCII_CAST_WARN QByteArray &replace(const QString &before, const QByteArray &after);
+   QByteArray &append(const QString &s);
+   QByteArray &insert(int i, const QString &s);
+   QByteArray &replace(const QString &before, const char *after);
+   QByteArray &replace(char c, const QString &after);
+   QByteArray &replace(const QString &before, const QByteArray &after);
 
-   QT_ASCII_CAST_WARN QByteArray &operator+=(const QString &s);
-   QT_ASCII_CAST_WARN int indexOf(const QString &s, int from = 0) const;
-   QT_ASCII_CAST_WARN int lastIndexOf(const QString &s, int from = -1) const;
-#endif
+   QByteArray &operator+=(const QString &s);
+   int indexOf(const QString &s, int from = 0) const;
+   int lastIndexOf(const QString &s, int from = -1) const;
 
-#ifndef QT_NO_CAST_FROM_ASCII
-   inline QT_ASCII_CAST_WARN bool operator==(const QString &s2) const;
-   inline QT_ASCII_CAST_WARN bool operator!=(const QString &s2) const;
-   inline QT_ASCII_CAST_WARN bool operator<(const QString &s2) const;
-   inline QT_ASCII_CAST_WARN bool operator>(const QString &s2) const;
-   inline QT_ASCII_CAST_WARN bool operator<=(const QString &s2) const;
-   inline QT_ASCII_CAST_WARN bool operator>=(const QString &s2) const;
-#endif
+   inline bool operator==(const QString &s2) const;
+   inline bool operator!=(const QString &s2) const;
+   inline bool operator<(const QString &s2) const;
+   inline bool operator>(const QString &s2) const;
+   inline bool operator<=(const QString &s2) const;
+   inline bool operator>=(const QString &s2) const;
 
    short toShort(bool *ok = 0, int base = 10) const;
    ushort toUShort(bool *ok = 0, int base = 10) const;

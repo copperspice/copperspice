@@ -23,27 +23,27 @@
 *
 ***********************************************************************/
 
-#include "qkbdtty_qws.h"
+#include <qkbdtty_qws.h>
 
-#if !defined(QT_NO_QWS_KEYBOARD) && !defined(QT_NO_QWS_KBD_TTY)
+#if ! defined(QT_NO_QWS_KEYBOARD) && ! defined(QT_NO_QWS_KBD_TTY)
 
 #include <QSocketNotifier>
 #include <QStringList>
 #include <qplatformdefs.h>
-#include <qcore_unix_p.h>       // overrides QT_OPEN
+#include <qcore_unix_p.h>        // overrides QT_OPEN
 
 #include <errno.h>
 #include <termios.h>
 
 #if defined Q_OS_LINUX
 #  include <linux/kd.h>
-#  include <linux/vt.h> //TODO: move vt handling somewhere else (QLinuxFbScreen?)
+#  include <linux/vt.h>          //TODO: move vt handling somewhere else (QLinuxFbScreen?)
 
-#  include "qscreen_qws.h"
-#  include "qwindowsystem_qws.h"
-#  include "qapplication.h"
-#  include "qwindowsurface_qws_p.h"
-#  include "qwssignalhandler_p.h"
+#  include <qscreen_qws.h>
+#  include <qwindowsystem_qws.h>
+#  include <qapplication.h>
+#  include <qwindowsurface_qws_p.h>
+#  include <qwssignalhandler_p.h>
 
 #  define VTACQSIG SIGUSR1
 #  define VTRELSIG SIGUSR2

@@ -23,68 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qfuturewatcher.h"
+#include <qfuturewatcher.h>
 
 #include <QtCore/qcoreevent.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qthread.h>
 
-#include "qfuturewatcher_p.h"
+#include <qfuturewatcher_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*! \class QFutureWatcher
-    \reentrant
-    \since 4.4
-
-    \ingroup thread
-
-    \brief The QFutureWatcher class allows monitoring a QFuture using signals
-    and slots.
-
-    QFutureWatcher provides information and notifications about a QFuture. Use
-    the setFuture() function to start watching a particular QFuture. The
-    future() function returns the future set with setFuture().
-
-    For convenience, several of QFuture's functions are also available in
-    QFutureWatcher: progressValue(), progressMinimum(), progressMaximum(),
-    progressText(), isStarted(), isFinished(), isRunning(), isCanceled(),
-    isPaused(), waitForFinished(), result(), and resultAt(). The cancel(),
-    setPaused(), pause(), resume(), and togglePaused() functions are slots in
-    QFutureWatcher.
-
-    Status changes are reported via the started(), finished(), canceled(),
-    paused(), resumed(), resultReadyAt(), and resultsReadyAt() signals.
-    Progress information is provided from the progressRangeChanged(),
-    void progressValueChanged(), and progressTextChanged() signals.
-
-    Throttling control is provided by the setPendingResultsLimit() function.
-    When the number of pending resultReadyAt() or resultsReadyAt() signals
-    exceeds the limit, the computation represented by the future will be
-    throttled automatically. The computation will resume once the number of
-    pending signals drops below the limit.
-
-    Example: Starting a computation and getting a slot callback when it's
-    finished:
-
-    \snippet doc/src/snippets/code/src_corelib_concurrent_qfuturewatcher.cpp 0
-
-    Be aware that not all asynchronous computations can be canceled or paused.
-    For example, the future returned by QtConcurrent::run() cannot be
-    canceled; but the future returned by QtConcurrent::mappedReduced() can.
-
-    QFutureWatcher<void> is specialized to not contain any of the result
-    fetching functions. Any QFuture<T> can be watched by a
-    QFutureWatcher<void> as well. This is useful if only status or progress
-    information is needed; not the actual result data.
-
-    \sa QFuture, {Concurrent Programming}{Qt Concurrent}
-*/
-
-/*! \fn QFutureWatcher::QFutureWatcher(QObject *parent)
-
-    Constructs a new QFutureWatcher with the given \a parent.
-*/
 QFutureWatcherBase::QFutureWatcherBase(QObject *parent)
    : QObject(parent), d_ptr(new QFutureWatcherBasePrivate)
 {
@@ -100,23 +48,6 @@ void QFutureWatcherBase::cancel()
    futureInterface().cancel();
 }
 
-/*! \fn void QFutureWatcher::setPaused(bool paused)
-
-    If \a paused is true, this function pauses the asynchronous computation
-    represented by the future(). If the computation is already paused, this
-    function does nothing. This QFutureWatcher will stop delivering progress
-    and result ready signals while the future is paused. Signal delivery will
-    continue once the computation is resumed.
-
-    If \a paused is false, this function resumes the asynchronous computation.
-    If the computation was not previously paused, this function does nothing.
-
-    Be aware that not all computations can be paused. For example, the
-    QFuture returned by QtConcurrent::run() cannot be paused; but the QFuture
-    returned by QtConcurrent::mappedReduced() can.
-
-    \sa pause(), resume(), togglePaused()
-*/
 void QFutureWatcherBase::setPaused(bool paused)
 {
    futureInterface().setPaused(paused);

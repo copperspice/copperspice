@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qutfcodec_p.h"
-#include "qlist.h"
-#include "qendian.h"
-#include "qchar.h"
+#include <qutfcodec_p.h>
+#include <qlist.h>
+#include <qendian.h>
+#include <qchar.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,8 +41,7 @@ static inline bool isUnicodeNonCharacter(uint ucs4)
    // U+1FFFE, U+1FFFF, etc.) as well as the entries between U+FDD0 and
    // U+FDEF (inclusive)
 
-   return (ucs4 & 0xfffe) == 0xfffe
-          || (ucs4 - 0xfdd0U) < 16;
+   return (ucs4 & 0xfffe) == 0xfffe || (ucs4 - 0xfdd0U) < 16;
 }
 
 QByteArray QUtf8::convertFromUnicode(const QChar *uc, int len, QTextCodec::ConverterState *state)

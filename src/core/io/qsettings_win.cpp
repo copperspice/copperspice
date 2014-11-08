@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qsettings.h"
+#include <qsettings.h>
 
 #ifndef QT_NO_SETTINGS
 
-#include "qsettings_p.h"
-#include "qvector.h"
-#include "qmap.h"
-#include "qt_windows.h"
-#include "qdebug.h"
+#include <qsettings_p.h>
+#include <qvector.h>
+#include <qmap.h>
+#include <qt_windows.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -44,8 +44,7 @@ QT_BEGIN_NAMESPACE
 */
 
 /*
-  We don't use KEY_ALL_ACCESS because it gives more rights than what we
-  need. See task 199061.
+  We don't use KEY_ALL_ACCESS because it gives more rights than what we need. See task 199061.
  */
 static const REGSAM registryPermissions = KEY_READ | KEY_WRITE;
 

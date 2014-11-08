@@ -26,17 +26,14 @@
 #ifndef QLIST_H
 #define QLIST_H
 
-#include <QtCore/qalgorithms.h>
-#include <QtCore/qiterator.h>
-#include <QtCore/qrefcount.h>
+#include <qalgorithms.h>
+#include <qiterator.h>
+#include <qrefcount.h>
 
 #include <iterator>
 #include <list>
-
-#ifdef Q_COMPILER_INITIALIZER_LISTS
 #include <iterator>
 #include <initializer_list>
-#endif
 
 #include <exception>
 #include <stdexcept>
@@ -141,11 +138,9 @@ class QList
       qSwap(d, other.d);
    }
 
-#ifdef Q_COMPILER_INITIALIZER_LISTS
    QList(std::initializer_list<T> args) : d( QListData::sharedNull() ) {
       qCopy(args.begin(), args.end(), std::back_inserter(*this));
    }
-#endif
 
    bool operator==(const QList<T> &l) const;
    inline bool operator!=(const QList<T> &l) const {

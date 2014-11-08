@@ -41,16 +41,6 @@
 #include <CoreFoundation/CFString.h>
 #endif
 
-#if COMPILER(MSVC) && !OS(WINCE) && !PLATFORM(BREWMP)
-#ifndef WINVER
-#define WINVER 0x0500
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#endif
-#include <crtdbg.h>
-#endif
-
 #if OS(WINDOWS)
 #include <windows.h>
 #endif
@@ -75,11 +65,8 @@ static void printLog(const Vector<char>& buffer)
     // Each call to DBGPRINTF generates at most 128 bytes of output on the Windows SDK.
     // On Qualcomm chipset targets, DBGPRINTF() comes out the diag port (though this may change).
     // The length of each output string is constrained even more than on the Windows SDK.
-#if COMPILER(MSVC)
-    const int printBufferSize = 128;
-#else
+
     const int printBufferSize = 32;
-#endif
 
     char printBuffer[printBufferSize + 1];
     printBuffer[printBufferSize] = 0; // to guarantee null termination
@@ -136,20 +123,9 @@ static void vprintf_stderr_common(const char* format, va_list args)
                 break;
 
             if (_vsnprintf(buffer, size, format, args) != -1) {
-#if OS(WINCE)
-                // WinCE only supports wide chars
-                wchar_t* wideBuffer = (wchar_t*)malloc(size * sizeof(wchar_t));
-                if (wideBuffer == NULL)
-                    break;
-                for (unsigned int i = 0; i < size; ++i) {
-                    if (!(wideBuffer[i] = buffer[i]))
-                        break;
-                }
-                OutputDebugStringW(wideBuffer);
-                free(wideBuffer);
-#else
+
                 OutputDebugStringA(buffer);
-#endif
+
                 free(buffer);
                 break;
             }
@@ -159,11 +135,8 @@ static void vprintf_stderr_common(const char* format, va_list args)
         } while (size > 1024);
     }
 #endif
-#if OS(SYMBIAN)
-    vfprintf(stdout, format, args);
-#else
+
     vfprintf(stderr, format, args);
-#endif
 }
 
 WTF_ATTRIBUTE_PRINTF(1, 2)
@@ -177,7 +150,7 @@ static void printf_stderr_common(const char* format, ...)
 
 static void printCallSite(const char* file, int line, const char* function)
 {
-#if OS(WINDOWS) && !OS(WINCE) && defined(_DEBUG)
+#if OS(WINDOWS) && defined(_DEBUG)
     _CrtDbgReport(_CRT_WARN, file, line, NULL, "%s\n", function);
 #else
     // By using this format, which matches the format used by MSVC for compiler errors, developers

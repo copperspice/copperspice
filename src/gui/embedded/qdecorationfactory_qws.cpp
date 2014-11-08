@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qdecorationfactory_qws.h"
-#include "qdecorationplugin_qws.h"
-#include "qfactoryloader_p.h"
-#include "qmutex.h"
-#include "qapplication.h"
-#include "qdecorationdefault_qws.h"
-#include "qdecorationwindows_qws.h"
-#include "qdecorationstyled_qws.h"
+#include <qdecorationfactory_qws.h>
+#include <qdecorationplugin_qws.h>
+#include <qfactoryloader_p.h>
+#include <qmutex.h>
+#include <qapplication.h>
+#include <qdecorationdefault_qws.h>
+#include <qdecorationwindows_qws.h>
+#include <qdecorationstyled_qws.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_TEXTODFWRITER
 
-#include "qtextodfwriter_p.h"
+#include <qtextodfwriter_p.h>
 
 #include <QImageWriter>
 #include <QTextListFormat>
@@ -35,11 +35,11 @@
 #include <QBuffer>
 #include <QUrl>
 
-#include "qtextdocument_p.h"
-#include "qtexttable.h"
-#include "qtextcursor.h"
-#include "qtextimagehandler_p.h"
-#include "qzipwriter_p.h"
+#include <qtextdocument_p.h>
+#include <qtexttable.h>
+#include <qtextcursor.h>
+#include <qtextimagehandler_p.h>
+#include <qzipwriter_p.h>
 
 #include <QDebug>
 

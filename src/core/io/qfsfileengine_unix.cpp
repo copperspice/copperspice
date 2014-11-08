@@ -23,26 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qabstractfileengine.h"
-#include "qfsfileengine_p.h"
-#include "qcore_unix_p.h"
-#include "qfilesystementry_p.h"
-#include "qfilesystemengine_p.h"
+#include <qplatformdefs.h>
+#include <qabstractfileengine.h>
+#include <qfsfileengine_p.h>
+#include <qcore_unix_p.h>
+#include <qfilesystementry_p.h>
+#include <qfilesystemengine_p.h>
 
 #ifndef QT_NO_FSFILEENGINE
 
-#include "qfile.h"
-#include "qdir.h"
-#include "qdatetime.h"
-#include "qvarlengtharray.h"
+#include <qfile.h>
+#include <qdir.h>
+#include <qdatetime.h>
+#include <qvarlengtharray.h>
 
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
 
-#if !defined(QWS) && defined(Q_OS_MAC)
+#if ! defined(QWS) && defined(Q_OS_MAC)
 # include <qcore_mac_p.h>
 #endif
 

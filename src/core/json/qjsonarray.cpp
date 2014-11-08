@@ -31,8 +31,8 @@
 #include <qvariant.h>
 #include <qdebug.h>
 
-#include "qjsonwriter_p.h"
-#include "qjson_p.h"
+#include <qjsonwriter_p.h>
+#include <qjson_p.h>
 
 QT_BEGIN_NAMESPACE
 

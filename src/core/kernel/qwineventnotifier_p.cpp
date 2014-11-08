@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qwineventnotifier_p.h"
-#include "qeventdispatcher_win_p.h"
-#include "qcoreapplication.h"
+#include <qwineventnotifier_p.h>
+#include <qeventdispatcher_win_p.h>
+#include <qcoreapplication.h>
 #include <qthread_p.h>
 
 QT_BEGIN_NAMESPACE

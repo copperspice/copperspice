@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpicture.h"
+#include <qpicture.h>
 #include <qpicture_p.h>
 
 #ifndef QT_NO_PICTURE
@@ -31,15 +31,15 @@
 #include <qfactoryloader_p.h>
 #include <qpaintengine_pic_p.h>
 #include <qfont_p.h>
-#include "qdatastream.h"
-#include "qfile.h"
-#include "qimage.h"
-#include "qmutex.h"
-#include "qpainter.h"
-#include "qpainterpath.h"
-#include "qpixmap.h"
-#include "qregion.h"
-#include "qdebug.h"
+#include <qdatastream.h>
+#include <qfile.h>
+#include <qimage.h>
+#include <qmutex.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qpixmap.h>
+#include <qregion.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -27,8 +27,8 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qwidget.h>
 
-#include "qegl_p.h"
-#include "qeglcontext_p.h"
+#include <qegl_p.h>
+#include <qeglcontext_p.h>
 
 #if !defined(QT_NO_EGL)
 

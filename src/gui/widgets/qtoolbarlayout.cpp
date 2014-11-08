@@ -32,10 +32,10 @@
 #include <qdebug.h>
 #include <qmath.h>
 
-#include "qmainwindowlayout_p.h"
-#include "qtoolbarextension_p.h"
-#include "qtoolbarlayout_p.h"
-#include "qtoolbarseparator_p.h"
+#include <qmainwindowlayout_p.h>
+#include <qtoolbarextension_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qtoolbarseparator_p.h>
 
 #ifndef QT_NO_TOOLBAR
 

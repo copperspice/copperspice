@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qmimedata.h"
-#include "qurl.h"
-#include "qstringlist.h"
-#include "qtextcodec.h"
+#include <qmimedata.h>
+#include <qurl.h>
+#include <qstringlist.h>
+#include <qtextcodec.h>
 
 QT_BEGIN_NAMESPACE
 

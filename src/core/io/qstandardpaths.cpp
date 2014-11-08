@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstandardpaths.h"
+#include <qstandardpaths.h>
 
 #include <qdir.h>
 #include <qfileinfo.h>

@@ -530,10 +530,11 @@ Q_OUTOFLINE_TEMPLATE RandomAccessIterator qBinaryFindHelper(RandomAccessIterator
 #define QALGORITHMS_USE_BUILTIN_POPCOUNT
 #endif
 
-Q_DECL_CONSTEXPR inline uint qPopulationCount(quint32 v)
+constexpr inline uint qPopulationCount(quint32 v)
 {
 #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
    return __builtin_popcount(v);
+
 #else
    // See http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
    return
@@ -543,17 +544,18 @@ Q_DECL_CONSTEXPR inline uint qPopulationCount(quint32 v)
 #endif
 }
 
-Q_DECL_CONSTEXPR inline uint qPopulationCount(quint8 v)
+constexpr inline uint qPopulationCount(quint8 v)
 {
 #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
    return __builtin_popcount(v);
+
 #else
-   return
+   return 
       (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
 #endif
 }
 
-Q_DECL_CONSTEXPR inline uint qPopulationCount(quint16 v)
+constexpr inline uint qPopulationCount(quint16 v)
 {
 #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
    return __builtin_popcount(v);
@@ -564,7 +566,7 @@ Q_DECL_CONSTEXPR inline uint qPopulationCount(quint16 v)
 #endif
 }
 
-Q_DECL_CONSTEXPR inline uint qPopulationCount(quint64 v)
+constexpr inline uint qPopulationCount(quint64 v)
 {
 #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
    return __builtin_popcountll(v);
@@ -579,7 +581,7 @@ Q_DECL_CONSTEXPR inline uint qPopulationCount(quint64 v)
 #endif
 }
 
-Q_DECL_CONSTEXPR inline uint qPopulationCount(long unsigned int v)
+constexpr inline uint qPopulationCount(long unsigned int v)
 {
    return qPopulationCount(static_cast<quint64>(v));
 }

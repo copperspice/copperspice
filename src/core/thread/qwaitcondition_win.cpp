@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qwaitcondition.h"
-#include "qnamespace.h"
-#include "qmutex.h"
-#include "qreadwritelock.h"
-#include "qlist.h"
-#include "qalgorithms.h"
-#include "qt_windows.h"
+#include <qwaitcondition.h>
+#include <qnamespace.h>
+#include <qmutex.h>
+#include <qreadwritelock.h>
+#include <qlist.h>
+#include <qalgorithms.h>
+#include <qt_windows.h>
 
 #define Q_MUTEX_T void*
 #include <qmutex_p.h>

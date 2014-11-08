@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qregion.h"
-#include "qpainterpath.h"
-#include "qpolygon.h"
-#include "qbuffer.h"
-#include "qdatastream.h"
-#include "qvariant.h"
-#include "qvarlengtharray.h"
+#include <qregion.h>
+#include <qpainterpath.h>
+#include <qpolygon.h>
+#include <qbuffer.h>
+#include <qdatastream.h>
+#include <qvariant.h>
+#include <qvarlengtharray.h>
 
 #include <qdebug.h>
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_WIN)
-#include "qimage.h"
-#include "qbitmap.h"
+#include <qimage.h>
+#include <qbitmap.h>
 #include <stdlib.h>
 #endif
 

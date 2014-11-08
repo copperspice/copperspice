@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qabstracttransition.h"
+#include <qabstracttransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qabstracttransition_p.h"
-#include "qabstractstate.h"
-#include "qstate.h"
-#include "qstatemachine.h"
+#include <qabstracttransition_p.h>
+#include <qabstractstate.h>
+#include <qstate.h>
+#include <qstatemachine.h>
 
 QT_BEGIN_NAMESPACE
 

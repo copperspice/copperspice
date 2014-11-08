@@ -23,29 +23,29 @@
 *
 ***********************************************************************/
 
-#include "qworkspace.h"
+#include <qworkspace.h>
 
 #ifndef QT_NO_WORKSPACE
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qhash.h"
-#include "qicon.h"
-#include "qimage.h"
-#include "qlabel.h"
-#include "qlayout.h"
-#include "qmenubar.h"
-#include "qmenu.h"
-#include "qpainter.h"
-#include "qpointer.h"
-#include "qscrollbar.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qelapsedtimer.h"
-#include "qtooltip.h"
-#include "qdebug.h"
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qhash.h>
+#include <qicon.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qmenubar.h>
+#include <qmenu.h>
+#include <qpainter.h>
+#include <qpointer.h>
+#include <qscrollbar.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qelapsedtimer.h>
+#include <qtooltip.h>
+#include <qdebug.h>
 #include <qwidget_p.h>
 #include <qwidgetresizehandler_p.h>
 #include <qlayoutengine_p.h>

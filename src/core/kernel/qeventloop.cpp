@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qeventloop.h"
-#include "qabstracteventdispatcher.h"
-#include "qcoreapplication.h"
-#include "qelapsedtimer.h"
+#include <qeventloop.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreapplication.h>
+#include <qelapsedtimer.h>
 #include <qthread_p.h>
 
 QT_BEGIN_NAMESPACE

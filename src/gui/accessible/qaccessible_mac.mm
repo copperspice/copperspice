@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qaccessible.h"
+#include <qaccessible.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible_mac_p.h"
-#include "qhash.h"
-#include "qset.h"
-#include "qpointer.h"
-#include "qapplication.h"
-#include "qmainwindow.h"
-#include "qtextdocument.h"
-#include "qdebug.h"
-#include "qabstractslider.h"
-#include "qsplitter.h"
-#include "qtabwidget.h"
-#include "qlistview.h"
-#include "qtableview.h"
-#include "qdockwidget.h"
+#include <qaccessible_mac_p.h>
+#include <qhash.h>
+#include <qset.h>
+#include <qpointer.h>
+#include <qapplication.h>
+#include <qmainwindow.h>
+#include <qtextdocument.h>
+#include <qdebug.h>
+#include <qabstractslider.h>
+#include <qsplitter.h>
+#include <qtabwidget.h>
+#include <qlistview.h>
+#include <qtableview.h>
+#include <qdockwidget.h>
 
 #include <qt_mac_p.h>
 #include <qwidget_p.h>

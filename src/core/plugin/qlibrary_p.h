@@ -27,14 +27,14 @@
 #define QLIBRARY_P_H
 
 #ifdef Q_OS_WIN
-# include "QtCore/qt_windows.h"
+# include <qt_windows.h>
 #endif
 
-#include "QtCore/qlibrary.h"
-#include "QtCore/qpointer.h"
-#include "QtCore/qstringlist.h"
-#include "QtCore/qplugin.h"
-#include "QtCore/qsharedpointer.h"
+#include <qlibrary.h>
+#include <qpointer.h>
+#include <qstringlist.h>
+#include <qplugin.h>
+#include <qsharedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qstandardpaths.h"
+#include <qstandardpaths.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qhash.h>
 #include <qtextstream.h>
-#include "qfilesystemengine_p.h"
+#include <qfilesystemengine_p.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <qcoreapplication.h>

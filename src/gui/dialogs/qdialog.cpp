@@ -23,20 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qdialog.h"
-#include "qevent.h"
-#include "qdesktopwidget.h"
-#include "qpushbutton.h"
-#include "qapplication.h"
-#include "qlayout.h"
-#include "qsizegrip.h"
-#include "qwhatsthis.h"
-#include "qmenu.h"
-#include "qcursor.h"
-#include "qdialog_p.h"
+#include <qdialog.h>
+#include <qevent.h>
+#include <qdesktopwidget.h>
+#include <qpushbutton.h>
+#include <qapplication.h>
+#include <qlayout.h>
+#include <qsizegrip.h>
+#include <qwhatsthis.h>
+#include <qmenu.h>
+#include <qcursor.h>
+#include <qdialog_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 #if defined(Q_WS_X11)

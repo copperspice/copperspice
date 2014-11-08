@@ -26,7 +26,7 @@
 #ifndef QICONVCODEC_P_H
 #define QICONVCODEC_P_H
 
-#include "qtextcodec.h"
+#include <qtextcodec.h>
 
 #if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
 

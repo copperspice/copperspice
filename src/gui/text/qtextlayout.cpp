@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qtextlayout.h"
-#include "qtextengine_p.h"
+#include <qtextlayout.h>
+#include <qtextengine_p.h>
 
 #include <qfont.h>
 #include <qapplication.h>
@@ -33,19 +33,19 @@
 #include <qvarlengtharray.h>
 #include <qtextformat.h>
 #include <qabstracttextdocumentlayout.h>
-#include "qtextdocument_p.h"
-#include "qtextformat_p.h"
-#include "qstyleoption.h"
-#include "qpainterpath.h"
-#include "qglyphrun.h"
-#include "qglyphrun_p.h"
-#include "qrawfont.h"
-#include "qrawfont_p.h"
+#include <qtextdocument_p.h>
+#include <qtextformat_p.h>
+#include <qstyleoption.h>
+#include <qpainterpath.h>
+#include <qglyphrun.h>
+#include <qglyphrun_p.h>
+#include <qrawfont.h>
+#include <qrawfont_p.h>
 #include <limits.h>
 
 #include <qdebug.h>
 
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 
 #if !defined(QT_NO_FREETYPE)
 #  include "qfontengine_ft_p.h"

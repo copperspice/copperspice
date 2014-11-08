@@ -330,7 +330,7 @@ QScriptValue::QScriptValue(QScriptEngine *engine, const QString &val)
   registers it with the script \a engine.
 */
 
-#ifndef QT_NO_CAST_FROM_ASCII
+
 QScriptValue::QScriptValue(QScriptEngine *engine, const char *val)
    : d_ptr(new (QScriptEnginePrivate::get(engine))QScriptValuePrivate(QScriptEnginePrivate::get(engine)))
 {
@@ -342,7 +342,7 @@ QScriptValue::QScriptValue(QScriptEngine *engine, const char *val)
       d_ptr->initFrom(QString::fromAscii(val));
    }
 }
-#endif
+
 
 /*!
   \since 4.5
@@ -434,13 +434,11 @@ QScriptValue::QScriptValue(const QLatin1String &value)
   Constructs a new QScriptValue with a string \a value.
 */
 
-#ifndef QT_NO_CAST_FROM_ASCII
 QScriptValue::QScriptValue(const char *value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(QString::fromAscii(value));
 }
-#endif
 
 /*!
   Assigns the \a other value to this QScriptValue.

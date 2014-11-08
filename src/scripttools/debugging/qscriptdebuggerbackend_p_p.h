@@ -26,24 +26,11 @@
 #ifndef QSCRIPTDEBUGGERBACKEND_P_P_H
 #define QSCRIPTDEBUGGERBACKEND_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtCore/qobjectdefs.h>
-
 #include <QtCore/qhash.h>
 #include <QtCore/qlist.h>
 #include <QtScript/qscriptvalue.h>
-
-#include "qscriptdebuggerbackend_p.h"
+#include <qscriptdebuggerbackend_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -55,11 +42,12 @@ class QScriptValueIterator;
 class QScriptObjectSnapshot;
 class QScriptDebuggerAgent;
 class QScriptDebuggerCommandExecutor;
-
 class QScriptDebuggerBackend;
+
 class QScriptDebuggerBackendPrivate
 {
    Q_DECLARE_PUBLIC(QScriptDebuggerBackend)
+
  public:
    QScriptDebuggerBackendPrivate();
    virtual ~QScriptDebuggerBackendPrivate();

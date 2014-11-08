@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qprogressdialog.h"
+#include <qprogressdialog.h>
 
 #ifndef QT_NO_PROGRESSDIALOG
 
-#include "qpainter.h"
-#include "qdrawutil.h"
+#include <qpainter.h>
+#include <qdrawutil.h>
 #include <QCursor>
 #include <QLabel>
 #include <QProgressBar>

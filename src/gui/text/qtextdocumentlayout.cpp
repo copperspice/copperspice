@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qtextdocumentlayout_p.h"
-#include "qtextdocument_p.h"
-#include "qtextimagehandler_p.h"
-#include "qtexttable.h"
-#include "qtextlist.h"
-#include "qtextengine_p.h"
-#include "qcssutil_p.h"
+#include <qtextdocumentlayout_p.h>
+#include <qtextdocument_p.h>
+#include <qtextimagehandler_p.h>
+#include <qtexttable.h>
+#include <qtextlist.h>
+#include <qtextengine_p.h>
+#include <qcssutil_p.h>
 
-#include "qabstracttextdocumentlayout_p.h"
-#include "qcssparser_p.h"
+#include <qabstracttextdocumentlayout_p.h>
+#include <qcssparser_p.h>
 
 #include <qpainter.h>
 #include <qmath.h>
@@ -43,7 +43,7 @@
 #include <limits.h>
 #include <qstyle.h>
 #include <qbasictimer.h>
-#include "qfunctions_p.h"
+#include <qfunctions_p.h>
 
 // #define LAYOUT_DEBUG
 

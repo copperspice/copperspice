@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qtextcursor.h"
-#include "qtextcursor_p.h"
-#include "qglobal.h"
-#include "qtextdocumentfragment.h"
-#include "qtextdocumentfragment_p.h"
-#include "qtextlist.h"
-#include "qtexttable.h"
-#include "qtexttable_p.h"
-#include "qtextengine_p.h"
-#include "qabstracttextdocumentlayout.h"
+#include <qtextcursor.h>
+#include <qtextcursor_p.h>
+#include <qglobal.h>
+#include <qtextdocumentfragment.h>
+#include <qtextdocumentfragment_p.h>
+#include <qtextlist.h>
+#include <qtexttable.h>
+#include <qtexttable_p.h>
+#include <qtextengine_p.h>
+#include <qabstracttextdocumentlayout.h>
 
 #include <qtextlayout.h>
 #include <qdebug.h>

@@ -27,15 +27,15 @@
 ** Copyright (C) 2012 David Faure <faure@kde.org>
 *****************************************************/
 
-#include "qplatformdefs.h"
-#include "qsavefile.h"
-#include "qsavefile_p.h"
-#include "qfileinfo.h"
-#include "qabstractfileengine_p.h"
-#include "qdebug.h"
-#include "qtemporaryfile.h"
-#include "qiodevice_p.h"
-#include "qtemporaryfile_p.h"
+#include <qplatformdefs.h>
+#include <qsavefile.h>
+#include <qsavefile_p.h>
+#include <qfileinfo.h>
+#include <qabstractfileengine_p.h>
+#include <qdebug.h>
+#include <qtemporaryfile.h>
+#include <qiodevice_p.h>
+#include <qtemporaryfile_p.h>
 
 #ifdef Q_OS_UNIX
 #include <errno.h>
@@ -54,64 +54,18 @@ QSaveFilePrivate::~QSaveFilePrivate()
 {
 }
 
-/*!
-    \class QSaveFile
-    \inmodule QtCore
-    \brief The QSaveFile class provides an interface for safely writing to files.
-
-    \ingroup io
-
-    \reentrant
-
-    \since 5.1
-
-    QSaveFile is an I/O device for writing text and binary files, without losing
-    existing data if the writing operation fails.
-
-    While writing, the contents will be written to a temporary file, and if
-    no error happened, commit() will move it to the final file. This ensures that
-    no data at the final file is lost in case an error happens while writing,
-    and no partially-written file is ever present at the final location. Always
-    use QSaveFile when saving entire documents to disk.
-
-    QSaveFile automatically detects errors while writing, such as the full partition
-    situation, where write() cannot write all the bytes. It will remember that
-    an error happened, and will discard the temporary file in commit().
-
-    Much like with QFile, the file is opened with open(). Data is usually read
-    and written using QDataStream or QTextStream, but you can also call the
-    QIODevice-inherited functions read(), readLine(), readAll(), write().
-
-    Unlike QFile, calling close() is not allowed. commit() replaces it. If commit()
-    was not called and the QSaveFile instance is destroyed, the temporary file is
-    discarded.
-
-    To abort saving due to an application error, call cancelWriting(), so that
-    even a call to commit() later on will not save.
-
-    \sa QTextStream, QDataStream, QFileInfo, QDir, QFile, QTemporaryFile
-*/
-
-/*!
-    Constructs a new file object with the given \a parent.
-*/
 QSaveFile::QSaveFile(QObject *parent)
    : QFileDevice(*new QSaveFilePrivate, parent)
 {
 }
-/*!
-    Constructs a new file object to represent the file with the given \a name.
-*/
+
 QSaveFile::QSaveFile(const QString &name)
    : QFileDevice(*new QSaveFilePrivate, 0)
 {
    Q_D(QSaveFile);
    d->fileName = name;
 }
-/*!
-    Constructs a new file object with the given \a parent to represent the
-    file with the specified \a name.
-*/
+
 QSaveFile::QSaveFile(const QString &name, QObject *parent)
    : QFileDevice(*new QSaveFilePrivate, parent)
 {
@@ -119,9 +73,6 @@ QSaveFile::QSaveFile(const QString &name, QObject *parent)
    d->fileName = name;
 }
 
-/*!
-    Destroys the file object, discarding the saved contents unless commit() was called.
-*/
 QSaveFile::~QSaveFile()
 {
    Q_D(QSaveFile);
@@ -133,39 +84,16 @@ QSaveFile::~QSaveFile()
    }
 }
 
-/*!
-    Returns the name set by setFileName() or to the QSaveFile
-    constructor.
-
-    \sa setFileName()
-*/
 QString QSaveFile::fileName() const
 {
    return d_func()->fileName;
 }
 
-/*!
-    Sets the \a name of the file. The name can have no path, a
-    relative path, or an absolute path.
-
-    \sa QFile::setFileName(), fileName()
-*/
 void QSaveFile::setFileName(const QString &name)
 {
    d_func()->fileName = name;
 }
 
-/*!
-    Opens the file using OpenMode \a mode, returning true if successful;
-    otherwise false.
-
-    Important: the \a mode must include QIODevice::WriteOnly.
-    It may also have additional flags, such as QIODevice::Text and QIODevice::Unbuffered.
-
-    QIODevice::ReadWrite and QIODevice::Append are not supported at the moment.
-
-    \sa QIODevice::OpenMode, setFileName()
-*/
 bool QSaveFile::open(OpenMode mode)
 {
    Q_D(QSaveFile);
@@ -192,9 +120,11 @@ bool QSaveFile::open(OpenMode mode)
       return false;
    }
    d->fileEngine = new QTemporaryFileEngine(d->fileName);
+
    // Same as in QFile: QIODevice provides the buffering, so there's no need to request it from the file engine.
    if (!d->fileEngine->open(mode | QIODevice::Unbuffered)) {
       QFileDevice::FileError err = d->fileEngine->error();
+
 #ifdef Q_OS_UNIX
       if (d->directWriteFallback && err == QFileDevice::OpenError && errno == EACCES) {
          delete d->fileEngine;
@@ -207,6 +137,7 @@ bool QSaveFile::open(OpenMode mode)
          err = d->fileEngine->error();
       }
 #endif
+
       if (err == QFileDevice::UnspecifiedError) {
          err = QFileDevice::OpenError;
       }
@@ -235,18 +166,6 @@ void QSaveFile::close()
    qFatal("QSaveFile::close called");
 }
 
-/*!
-  Commits the changes to disk, if all previous writes were successful.
-
-  It is mandatory to call this at the end of the saving operation, otherwise the file will be
-  discarded.
-
-  If an error happened during writing, deletes the temporary file and returns false.
-  Otherwise, renames it to the final fileName and returns true on success.
-  Finally, closes the device.
-
-  \sa cancelWriting()
-*/
 bool QSaveFile::commit()
 {
    Q_D(QSaveFile);

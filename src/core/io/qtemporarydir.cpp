@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qtemporarydir.h"
+#include <qtemporarydir.h>
 
 #ifndef QT_NO_TEMPORARYFILE
 
-#include "qdiriterator.h"
-#include "qplatformdefs.h"
-#include "qdir_p.h"
+#include <qdiriterator.h>
+#include <qplatformdefs.h>
+#include <qdir_p.h>
 #include <QDebug>
 
 #if defined(QT_BUILD_CORE_LIB)
-#include "qcoreapplication.h"
+#include <qcoreapplication.h>
 #endif
 
 #include <stdlib.h>

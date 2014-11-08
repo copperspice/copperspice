@@ -23,26 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
 #include <qabstractprintdialog_p.h>
-#include "qprintdialog.h"
+#include <qprintdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "qapplication.h"
-#include "qbuttongroup.h"
-#include "qradiobutton.h"
-#include "qcombobox.h"
-#include "qspinbox.h"
-#include "qprinter.h"
-#include "qlineedit.h"
-#include "qdir.h"
-#include "qmessagebox.h"
-#include "qinputdialog.h"
-#include "qlayout.h"
-#include "qlabel.h"
-#include "qlibrary.h"
+#include <qapplication.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qcombobox.h>
+#include <qspinbox.h>
+#include <qprinter.h>
+#include <qlineedit.h>
+#include <qdir.h>
+#include <qmessagebox.h>
+#include <qinputdialog.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qlibrary.h>
 
 #ifndef QT_NO_NIS
 
@@ -572,6 +572,6 @@ void QPrintDialog::_q_checkFields()
 
 QT_END_NAMESPACE
 
-#include "qrc_qprintdialog.cpp"
+#include <qrc_qprintdialog.cpp>
 
 #endif // QT_NO_PRINTDIALOG

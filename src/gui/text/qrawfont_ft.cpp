@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_RAWFONT)
 
-#include "qrawfont_p.h"
-#include "qfontengine_ft_p.h"
-#include "quuid.h"
+#include <qrawfont_p.h>
+#include <qfontengine_ft_p.h>
+#include <quuid.h>
 
 #if defined(Q_WS_X11) && !defined(QT_NO_FONTCONFIG)
-#  include "qfontengine_x11_p.h"
+#  include <qfontengine_x11_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

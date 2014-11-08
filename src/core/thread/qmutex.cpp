@@ -23,103 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qmutex.h"
+#include <qplatformdefs.h>
+#include <qmutex.h>
 #include <qdebug.h>
-#include "qatomic.h"
-#include "qelapsedtimer.h"
-#include "qthread.h"
-#include "qmutex_p.h"
+#include <qatomic.h>
+#include <qelapsedtimer.h>
+#include <qthread.h>
+#include <qmutex_p.h>
 
 #ifndef Q_OS_LINUX
-#include "qfreelist_p.h"
+#include <qfreelist_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QBasicMutex
-    \brief QMutex POD
-    \internal
-
-    \ingroup thread
-
-    - Can be used as global static object.
-    - Always non-recursive
-    - Do not use tryLock with timeout > 0, else you can have a leak (see the ~QMutex destructor)
-*/
-
-
-/*!
-    \class QMutex
-    \brief The QMutex class provides access serialization between threads.
-
-    \threadsafe
-
-    \ingroup thread
-
-    The purpose of a QMutex is to protect an object, data structure or
-    section of code so that only one thread can access it at a time
-    (this is similar to the Java \c synchronized keyword). It is
-    usually best to use a mutex with a QMutexLocker since this makes
-    it easy to ensure that locking and unlocking are performed
-    consistently.
-
-    For example, say there is a method that prints a message to the
-    user on two lines:
-
-    \snippet doc/src/snippets/code/src_corelib_thread_qmutex.cpp 0
-
-    If these two methods are called in succession, the following happens:
-
-    \snippet doc/src/snippets/code/src_corelib_thread_qmutex.cpp 1
-
-    If these two methods are called simultaneously from two threads then the
-    following sequence could result:
-
-    \snippet doc/src/snippets/code/src_corelib_thread_qmutex.cpp 2
-
-    If we add a mutex, we should get the result we want:
-
-    \snippet doc/src/snippets/code/src_corelib_thread_qmutex.cpp 3
-
-    Then only one thread can modify \c number at any given time and
-    the result is correct. This is a trivial example, of course, but
-    applies to any other case where things need to happen in a
-    particular sequence.
-
-    When you call lock() in a thread, other threads that try to call
-    lock() in the same place will block until the thread that got the
-    lock calls unlock(). A non-blocking alternative to lock() is
-    tryLock().
-
-    \sa QMutexLocker, QReadWriteLock, QSemaphore, QWaitCondition
-*/
-
-/*!
-    \enum QMutex::RecursionMode
-
-    \value Recursive  In this mode, a thread can lock the same mutex
-                      multiple times and the mutex won't be unlocked
-                      until a corresponding number of unlock() calls
-                      have been made.
-
-    \value NonRecursive  In this mode, a thread may only lock a mutex
-                         once.
-
-    \sa QMutex()
-*/
-
-/*!
-    Constructs a new mutex. The mutex is created in an unlocked state.
-
-    If \a mode is QMutex::Recursive, a thread can lock the same mutex
-    multiple times and the mutex won't be unlocked until a
-    corresponding number of unlock() calls have been made. The
-    default is QMutex::NonRecursive.
-
-    \sa lock(), unlock()
-*/
 QMutex::QMutex(RecursionMode mode)
 {
    d_ptr.store(mode == Recursive ? new QRecursiveMutexPrivate : 0);

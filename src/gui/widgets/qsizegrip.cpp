@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qsizegrip.h"
+#include <qsizegrip.h>
 
 #ifndef QT_NO_SIZEGRIP
 
-#include "qapplication.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qlayout.h"
-#include "qdebug.h"
+#include <qapplication.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qlayout.h>
+#include <qdebug.h>
 #include <QDesktopWidget>
 
 #if defined(Q_WS_X11)
 #include <qt_x11_p.h>
 
 #elif defined (Q_OS_WIN)
-#include "qt_windows.h"
+#include <qt_windows.h>
 #endif
 
 #ifdef Q_OS_MAC

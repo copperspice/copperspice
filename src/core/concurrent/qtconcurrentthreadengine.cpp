@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtconcurrentthreadengine.h"
+#include <qtconcurrentthreadengine.h>
 
 QT_BEGIN_NAMESPACE
 

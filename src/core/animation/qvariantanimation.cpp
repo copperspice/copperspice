@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qvariantanimation.h"
-#include "qvariantanimation_p.h"
+#include <qvariantanimation.h>
+#include <qvariantanimation_p.h>
 
 #include <QtCore/qrect.h>
 #include <QtCore/qline.h>

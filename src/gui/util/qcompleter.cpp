@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qcompleter_p.h"
+#include <qcompleter_p.h>
 
 #ifndef QT_NO_COMPLETER
 
-#include "QtGui/qscrollbar.h"
-#include "QtGui/qstringlistmodel.h"
-#include "QtGui/qdirmodel.h"
-#include "QtGui/qfilesystemmodel.h"
-#include "QtGui/qheaderview.h"
-#include "QtGui/qlistview.h"
-#include "QtGui/qapplication.h"
-#include "QtGui/qevent.h"
-#include "QtGui/qheaderview.h"
-#include "QtGui/qdesktopwidget.h"
-#include "QtGui/qlineedit.h"
+#include <QtGui/qscrollbar.h>
+#include <QtGui/qstringlistmodel.h>
+#include <QtGui/qdirmodel.h>
+#include <QtGui/qfilesystemmodel.h>
+#include <QtGui/qheaderview.h>
+#include <QtGui/qlistview.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qheaderview.h>
+#include <QtGui/qdesktopwidget.h>
+#include <QtGui/qlineedit.h>
 
 QT_BEGIN_NAMESPACE
 

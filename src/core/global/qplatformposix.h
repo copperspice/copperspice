@@ -26,15 +26,6 @@
 #ifndef Q_POSIX_QPLATFORMDEFS_H
 #define Q_POSIX_QPLATFORMDEFS_H
 
-#include <signal.h>
-#include <sys/types.h>
-
-#ifndef QT_NO_SOCKET_H
-#  include <sys/socket.h>
-#endif
-
-#include <sys/stat.h>
-
 #if defined(QT_USE_XOPEN_LFS_EXTENSIONS) && defined(QT_LARGEFILE_SUPPORT)
 
 #define QT_STATBUF              struct stat64
@@ -85,14 +76,16 @@
 
 // Posix extensions to C89
 #if ! defined(QT_USE_XOPEN_LFS_EXTENSIONS) && ! defined(QT_NO_USE_FSEEKO)
-#undef QT_OFF_T
-#undef QT_FSEEK
-#undef QT_FTELL
 
+#undef QT_OFF_T
 #define QT_OFF_T                off_t
 
+#undef QT_FSEEK
 #define QT_FSEEK                ::fseeko
+
+#undef QT_FTELL
 #define QT_FTELL                ::ftello
+
 #endif
 
 #define QT_MMAP                 ::mmap

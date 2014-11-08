@@ -22,30 +22,14 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-/*!
-    \class QGraphicsSceneIndex
-    \brief The QGraphicsSceneIndex class provides a base class to implement
-    a custom indexing algorithm for discovering items in QGraphicsScene.
-    \since 4.6
-    \ingroup graphicsview-api
 
-    \internal
-
-    The QGraphicsSceneIndex class provides a base class to implement
-    a custom indexing algorithm for discovering items in QGraphicsScene. You
-    need to subclass it and reimplement addItem, removeItem, estimateItems
-    and items in order to have an functional indexing.
-
-    \sa QGraphicsScene, QGraphicsView
-*/
-
-#include "qdebug.h"
-#include "qgraphicsscene.h"
-#include "qgraphicsitem_p.h"
-#include "qgraphicsscene_p.h"
-#include "qgraphicswidget.h"
-#include "qgraphicssceneindex_p.h"
-#include "qgraphicsscenebsptreeindex_p.h"
+#include <qdebug.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsitem_p.h>
+#include <qgraphicsscene_p.h>
+#include <qgraphicswidget.h>
+#include <qgraphicssceneindex_p.h>
+#include <qgraphicsscenebsptreeindex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 

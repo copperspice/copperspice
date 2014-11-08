@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qgraphicsitem.h"
+#include <qgraphicsitem.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicsscene.h"
-#include "qgraphicsscene_p.h"
-#include "qgraphicssceneevent.h"
-#include "qgraphicsview.h"
-#include "qgraphicswidget.h"
-#include "qgraphicsproxywidget.h"
-#include "qgraphicsscenebsptreeindex_p.h"
+#include <qgraphicsscene.h>
+#include <qgraphicsscene_p.h>
+#include <qgraphicssceneevent.h>
+#include <qgraphicsview.h>
+#include <qgraphicswidget.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsscenebsptreeindex_p.h>
 #include <QtCore/qbitarray.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qpoint.h>
@@ -53,7 +53,7 @@
 #include <QtGui/qgraphicseffect.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+# include <qaccessible.h>
 #endif
 
 #include <qgraphicsitem_p.h>

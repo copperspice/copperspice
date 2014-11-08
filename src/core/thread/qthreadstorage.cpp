@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qthreadstorage.h"
+#include <qthreadstorage.h>
 
-#include "qthread.h"
-#include "qthread_p.h"
-#include "qmutex.h"
+#include <qthread.h>
+#include <qthread_p.h>
+#include <qmutex.h>
 
 #include <string.h>
 
@@ -35,10 +35,11 @@ QT_BEGIN_NAMESPACE
 
 
 #ifdef THREADSTORAGE_DEBUG
-#  define DEBUG_MSG qtsDebug
+#define DEBUG_MSG qtsDebug
 
-#  include <stdio.h>
-#  include <stdarg.h>
+#include <stdio.h>
+#include <stdarg.h>
+
 void qtsDebug(const char *fmt, ...)
 {
    va_list va;

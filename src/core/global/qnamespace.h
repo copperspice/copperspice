@@ -26,9 +26,9 @@
 #ifndef QNAMESPACE_H
 #define QNAMESPACE_H
 
-#include "qglobal.h"
-#include "csobject_macro.h"
-#include "csregister1.h"
+#include <qglobal.h>
+#include <csobject_macro.h>
+#include <csregister1.h>
 
 class CSGadget_Fake_Parent;
 class QMetaObject;

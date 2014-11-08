@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qtextcontrol_p.h"
-#include "qtextcontrol_p_p.h"
+#include <qtextcontrol_p.h>
+#include <qtextcontrol_p_p.h>
 
 #ifndef QT_NO_TEXTCONTROL
 
@@ -39,17 +39,17 @@
 #include <qmenu.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include "qtextdocumentlayout_p.h"
-#include "qabstracttextdocumentlayout_p.h"
-#include "qtextedit_p.h"
-#include "qtextdocument.h"
-#include "qtextdocument_p.h"
-#include "qtextlist.h"
-#include "qtextcontrol_p.h"
-#include "qgraphicssceneevent.h"
-#include "qprinter.h"
-#include "qtextdocumentwriter.h"
-#include "qtextcursor_p.h"
+#include <qtextdocumentlayout_p.h>
+#include <qabstracttextdocumentlayout_p.h>
+#include <qtextedit_p.h>
+#include <qtextdocument.h>
+#include <qtextdocument_p.h>
+#include <qtextlist.h>
+#include <qtextcontrol_p.h>
+#include <qgraphicssceneevent.h>
+#include <qprinter.h>
+#include <qtextdocumentwriter.h>
+#include <qtextcursor_p.h>
 
 #include <qtextformat.h>
 #include <qdatetime.h>
@@ -67,12 +67,15 @@
 #include <QtGui/qaccessible.h>
 
 #ifndef QT_NO_SHORTCUT
-#include "qapplication_p.h"
-#include "qshortcutmap_p.h"
+#include <qapplication_p.h>
+#include <qshortcutmap_p.h>
 #include <qkeysequence.h>
-#define ACCEL_KEY(k) (!qApp->d_func()->shortcutMap.hasShortcutForKeySequence(k) ? QLatin1Char('\t') + QString(QKeySequence(k)) : QString())
+
+#define ACCEL_KEY(k) (! qApp->d_func()->shortcutMap.hasShortcutForKeySequence(k) ? QLatin1Char('\t') + QString(QKeySequence(k)) : QString())
+
 #else
 #define ACCEL_KEY(k) QString()
+
 #endif
 
 QT_BEGIN_NAMESPACE

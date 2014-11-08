@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qwsproperty_qws.h"
+#include <qwsproperty_qws.h>
 
 #ifndef QT_NO_QWS_PROPERTIES
-#include "qwscommand_qws_p.h"
-#include "qwindowsystem_qws.h"
-#include "qhash.h"
-#include "qalgorithms.h"
-#include "qbytearray.h"
+#include <qwscommand_qws_p.h>
+#include <qwindowsystem_qws.h>
+#include <qhash.h>
+#include <qalgorithms.h>
+#include <qbytearray.h>
 
 #include <stdio.h>
 

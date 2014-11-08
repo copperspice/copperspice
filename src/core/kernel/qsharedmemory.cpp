@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qsharedmemory.h"
-#include "qsharedmemory_p.h"
-#include "qsystemsemaphore.h"
+#include <qsharedmemory.h>
+#include <qsharedmemory_p.h>
+#include <qsystemsemaphore.h>
 #include <qdir.h>
 #include <qcryptographichash.h>
 

@@ -486,7 +486,7 @@ void QMetaObject_T<T>::register_property_reset(const char *name, U method)
 }
 
 // best way to handle declarations
-#include "csmeta_internal_2.h"
+#include <csmeta_internal_2.h>
 
 QT_END_NAMESPACE
 

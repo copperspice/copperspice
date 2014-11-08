@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtconcurrentiteratekernel.h"
+#include <qtconcurrentiteratekernel.h>
 
 #if defined(Q_OS_MAC)
 #include <mach/mach.h>
@@ -39,7 +39,7 @@
 
 #endif
 
-#include "qfunctions_p.h"
+#include <qfunctions_p.h>
 
 QT_BEGIN_NAMESPACE
 

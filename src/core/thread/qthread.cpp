@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qthread.h"
-#include "qthreadstorage.h"
-#include "qmutex.h"
-#include "qmutexpool_p.h"
-#include "qreadwritelock.h"
-#include "qabstracteventdispatcher.h"
+#include <qthread.h>
+#include <qthreadstorage.h>
+#include <qmutex.h>
+#include <qmutexpool_p.h>
+#include <qreadwritelock.h>
+#include <qabstracteventdispatcher.h>
 #include <qeventloop.h>
 #include <qhash.h>
-#include "qthread_p.h"
-#include "qcoreapplication_p.h"
+#include <qthread_p.h>
+#include <qcoreapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

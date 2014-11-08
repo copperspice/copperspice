@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qabstracteventdispatcher.h"
-#include "qabstracteventdispatcher_p.h"
+#include <qabstracteventdispatcher.h>
+#include <qabstracteventdispatcher_p.h>
 
-#include "qthread.h"
+#include <qthread.h>
 #include <qthread_p.h>
 #include <qcoreapplication_p.h>
 

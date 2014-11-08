@@ -23,26 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qsplitter.h"
+#include <qsplitter.h>
 #ifndef QT_NO_SPLITTER
 
-#include "qapplication.h"
-#include "qcursor.h"
-#include "qdrawutil.h"
-#include "qevent.h"
-#include "qlayout.h"
-#include "qlist.h"
-#include "qpainter.h"
-#include "qrubberband.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qtextstream.h"
-#include "qvarlengtharray.h"
-#include "qvector.h"
-#include "qlayoutengine_p.h"
-#include "qsplitter_p.h"
-#include "qtimer.h"
-#include "qdebug.h"
+#include <qapplication.h>
+#include <qcursor.h>
+#include <qdrawutil.h>
+#include <qevent.h>
+#include <qlayout.h>
+#include <qlist.h>
+#include <qpainter.h>
+#include <qrubberband.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qtextstream.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
+#include <qlayoutengine_p.h>
+#include <qsplitter_p.h>
+#include <qtimer.h>
+#include <qdebug.h>
 
 #include <ctype.h>
 

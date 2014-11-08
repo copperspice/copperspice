@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
-#include "csmeta.h"
-#include "qmetaobject.h"
+#include <qobject.h>
+#include <csmeta.h>
+#include <qmetaobject.h>
 
 QMetaMethod::QMetaMethod(const char *typeName,
                          const QByteArray &signature,

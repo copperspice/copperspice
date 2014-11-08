@@ -26,28 +26,32 @@
 #ifndef QNUMERIC_P_H
 #define QNUMERIC_P_H
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(Q_CC_MIPS)
+#if ! defined(Q_CC_MIPS)
 
 static const union {
    unsigned char c[8];
    double d;
 } qt_be_inf_bytes = { { 0x7f, 0xf0, 0, 0, 0, 0, 0, 0 } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_le_inf_bytes = { { 0, 0, 0, 0, 0, 0, 0xf0, 0x7f } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_armfpa_inf_bytes = { { 0, 0, 0xf0, 0x7f, 0, 0, 0, 0 } };
+
 static inline double qt_inf()
 {
 #ifdef QT_ARMFPA
    return qt_armfpa_inf_bytes.d;
+
 #else
    return (QSysInfo::ByteOrder == QSysInfo::BigEndian
            ? qt_be_inf_bytes.d
@@ -60,14 +64,17 @@ static const union {
    unsigned char c[8];
    double d;
 } qt_be_snan_bytes = { { 0x7f, 0xf8, 0, 0, 0, 0, 0, 0 } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_le_snan_bytes = { { 0, 0, 0, 0, 0, 0, 0xf8, 0x7f } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_armfpa_snan_bytes = { { 0, 0, 0xf8, 0x7f, 0, 0, 0, 0 } };
+
 static inline double qt_snan()
 {
 #ifdef QT_ARMFPA
@@ -84,14 +91,17 @@ static const union {
    unsigned char c[8];
    double d;
 } qt_be_qnan_bytes = { { 0xff, 0xf8, 0, 0, 0, 0, 0, 0 } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_le_qnan_bytes = { { 0, 0, 0, 0, 0, 0, 0xf8, 0xff } };
+
 static const union {
    unsigned char c[8];
    double d;
 } qt_armfpa_qnan_bytes = { { 0, 0, 0xf8, 0xff, 0, 0, 0, 0 } };
+
 static inline double qt_qnan()
 {
 #ifdef QT_ARMFPA
@@ -108,6 +118,7 @@ static inline double qt_qnan()
 static const unsigned char qt_be_inf_bytes[] = { 0x7f, 0xf0, 0, 0, 0, 0, 0, 0 };
 static const unsigned char qt_le_inf_bytes[] = { 0, 0, 0, 0, 0, 0, 0xf0, 0x7f };
 static const unsigned char qt_armfpa_inf_bytes[] = { 0, 0, 0xf0, 0x7f, 0, 0, 0, 0 };
+
 static inline double qt_inf()
 {
    const unsigned char *bytes;
@@ -131,6 +142,7 @@ static inline double qt_inf()
 static const unsigned char qt_be_snan_bytes[] = { 0x7f, 0xf8, 0, 0, 0, 0, 0, 0 };
 static const unsigned char qt_le_snan_bytes[] = { 0, 0, 0, 0, 0, 0, 0xf8, 0x7f };
 static const unsigned char qt_armfpa_snan_bytes[] = { 0, 0, 0xf8, 0x7f, 0, 0, 0, 0 };
+
 static inline double qt_snan()
 {
    const unsigned char *bytes;

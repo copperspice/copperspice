@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "quuid.h"
-
-#include "qdatastream.h"
-#include "qendian.h"
+#include <quuid.h>
+#include <qdatastream.h>
+#include <qendian.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -827,10 +826,10 @@ QUuid QUuid::createUuid()
 #else // !Q_OS_WIN32
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qdatetime.h"
-#include "qfile.h"
-#include "qthreadstorage.h"
-#include <stdlib.h> // for RAND_MAX
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qthreadstorage.h>
+#include <stdlib.h>                // for RAND_MAX
 QT_END_INCLUDE_NAMESPACE
 
 #if defined(Q_OS_UNIX)

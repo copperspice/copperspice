@@ -260,13 +260,14 @@ inline QDebug &QDebug::operator=(const QDebug &other)
 #if defined(FORCE_UREF)
 template <class T>
 inline QDebug &operator<<(QDebug debug, const QList<T> &list)
+
 #else
 template <class T>
 inline QDebug operator<<(QDebug debug, const QList<T> &list)
 #endif
 {
    debug.nospace() << '(';
-   for (Q_TYPENAME QList<T>::size_type i = 0; i < list.count(); ++i) {
+   for (typename QList<T>::size_type i = 0; i < list.count(); ++i) {
       if (i) {
          debug << ", ";
       }

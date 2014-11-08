@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qwscommand_qws_p.h"
-#include "qtransportauth_qws.h"
-#include "qtransportauth_qws_p.h"
+#include <qwscommand_qws_p.h>
+#include <qtransportauth_qws.h>
+#include <qtransportauth_qws_p.h>
 
 #include <unistd.h>
 
@@ -33,13 +33,14 @@
 
 #ifdef QWSCOMMAND_DEBUG
 # include <qdebug.h>
-# include "qfile.h"
+# include <qfile.h>
 # include <ctype.h>
 #endif
 
 QT_BEGIN_NAMESPACE
 
 #ifdef QWSCOMMAND_DEBUG
+
 // QWSHexDump -[ start ]---------------------------------------------
 # define QWSHEXDUMP_MAX 32
 class QWSHexDump

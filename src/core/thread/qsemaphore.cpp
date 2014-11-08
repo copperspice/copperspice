@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qsemaphore.h"
-#include "qmutex.h"
-#include "qwaitcondition.h"
-#include "qelapsedtimer.h"
-#include "qdatetime.h"
+#include <qsemaphore.h>
+#include <qmutex.h>
+#include <qwaitcondition.h>
+#include <qelapsedtimer.h>
+#include <qdatetime.h>
 
 QT_BEGIN_NAMESPACE
 

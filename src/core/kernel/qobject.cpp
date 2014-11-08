@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
-#include "csmeta_callevent.h"
-#include "qorderedmutexlocker_p.h"
-#include "qdebug.h"
-#include "qthread_p.h"
+#include <qobject.h>
+#include <csmeta_callevent.h>
+#include <qorderedmutexlocker_p.h>
+#include <qdebug.h>
+#include <qthread_p.h>
 
 #include <QAbstractEventDispatcher>
 #include <QCoreApplication>

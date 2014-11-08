@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpagesetupdialog.h"
+#include <qpagesetupdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
 #include <qapplication.h>

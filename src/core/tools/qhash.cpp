@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qhash.h"
+#include <qhash.h>
 
 #ifdef truncate
 #undef truncate

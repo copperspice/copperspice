@@ -55,12 +55,10 @@ class Q_CORE_EXPORT QCommandLineOption
 
    QCommandLineOption &operator=(const QCommandLineOption &other);
 
-#ifdef Q_COMPILER_RVALUE_REFS
    inline QCommandLineOption &operator=(QCommandLineOption && other) {
       qSwap(d, other.d);
       return *this;
    }
-#endif
 
    inline void swap(QCommandLineOption &other) {
       qSwap(d, other.d);

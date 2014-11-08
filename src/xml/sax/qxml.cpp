@@ -23,15 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qxml.h"
-#include "qtextcodec.h"
-#include "qbuffer.h"
-#include "qregexp.h"
-#include "qmap.h"
-#include "qhash.h"
-#include "qstack.h"
+#include <qxml.h>
+#include <qtextcodec.h>
+#include <qbuffer.h>
+#include <qregexp.h>
+#include <qmap.h>
+#include <qhash.h>
+#include <qstack.h>
 #include <qdebug.h>
-
 
 //#define QT_QXML_DEBUG
 
@@ -254,6 +253,7 @@ class QXmlSimpleReaderPrivate
 {
  public:
    ~QXmlSimpleReaderPrivate();
+
  private:
    // functions
    QXmlSimpleReaderPrivate(QXmlSimpleReader *reader);
@@ -271,19 +271,18 @@ class QXmlSimpleReaderPrivate
       ExternParameterEntity(const QString &p, const QString &s)
          : publicId(p), systemId(s) {}
       QString publicId;
-      QString systemId;
-
-      Q_DUMMY_COMPARISON_OPERATOR(ExternParameterEntity)
+      QString systemId;     
    };
+
    struct ExternEntity {
       ExternEntity() {}
       ExternEntity(const QString &p, const QString &s, const QString &n)
          : publicId(p), systemId(s), notation(n) {}
       QString publicId;
       QString systemId;
-      QString notation;
-      Q_DUMMY_COMPARISON_OPERATOR(ExternEntity)
+      QString notation;      
    };
+
    QMap<QString, ExternParameterEntity> externParameterEntities;
    QMap<QString, QString> parameterEntities;
    QMap<QString, ExternEntity> externEntities;

@@ -25,19 +25,19 @@
 
 #include <cs_carbon_wrapper_p.h>
 
-#include "qmenu.h"
-#include "qhash.h"
+#include <qmenu.h>
+#include <qhash.h>
 #include <qdebug.h>
-#include "qapplication.h"
+#include <qapplication.h>
 #include <qt_mac_p.h>
-#include "qregexp.h"
-#include "qmainwindow.h"
-#include "qdockwidget.h"
-#include "qtoolbar.h"
-#include "qevent.h"
-#include "qstyle.h"
-#include "qwidgetaction.h"
-#include "qmacnativewidget_mac.h"
+#include <qregexp.h>
+#include <qmainwindow.h>
+#include <qdockwidget.h>
+#include <qtoolbar.h>
+#include <qevent.h>
+#include <qstyle.h>
+#include <qwidgetaction.h>
+#include <qmacnativewidget_mac.h>
 
 #include <qapplication_p.h>
 #include <qcocoaapplication_mac_p.h>

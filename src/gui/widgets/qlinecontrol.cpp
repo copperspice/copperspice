@@ -23,22 +23,26 @@
 *
 ***********************************************************************/
 
-#include "qlinecontrol_p.h"
+#include <qlinecontrol_p.h>
 
 #ifndef QT_NO_LINEEDIT
 
-#include "qabstractitemview.h"
-#include "qclipboard.h"
+#include <qabstractitemview.h>
+#include <qclipboard.h>
+
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
+
 #ifndef QT_NO_IM
-#include "qinputcontext.h"
-#include "qlist.h"
+#include <qinputcontext.h>
+#include <qlist.h>
 #endif
-#include "qapplication.h"
+
+#include <qapplication.h>
+
 #ifndef QT_NO_GRAPHICSVIEW
-#include "qgraphicssceneevent.h"
+#include <qgraphicssceneevent.h>
 #endif
 
 QT_BEGIN_NAMESPACE

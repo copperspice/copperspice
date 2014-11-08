@@ -26,28 +26,17 @@
 #ifndef QSCRIPTDEBUGGERCOMMANDSCHEDULERJOB_P_P_H
 #define QSCRIPTDEBUGGERCOMMANDSCHEDULERJOB_P_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qscriptdebuggerjob_p_p.h"
+#include <qscriptdebuggerjob_p_p.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerCommandSchedulerInterface;
-
 class QScriptDebuggerCommandSchedulerJob;
-class QScriptDebuggerCommandSchedulerJobPrivate
-   : public QScriptDebuggerJobPrivate
+
+class QScriptDebuggerCommandSchedulerJobPrivate : public QScriptDebuggerJobPrivate
 {
    Q_DECLARE_PUBLIC(QScriptDebuggerCommandSchedulerJob)
+
  public:
    QScriptDebuggerCommandSchedulerJobPrivate();
    ~QScriptDebuggerCommandSchedulerJobPrivate();

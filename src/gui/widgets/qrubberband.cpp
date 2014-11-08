@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qbitmap.h"
-#include "qevent.h"
-#include "qstylepainter.h"
-#include "qrubberband.h"
-#include "qtimer.h"
+#include <qbitmap.h>
+#include <qevent.h>
+#include <qstylepainter.h>
+#include <qrubberband.h>
+#include <qtimer.h>
 
 #ifndef QT_NO_RUBBERBAND
 
-#include "qstyle.h"
-#include "qstyleoption.h"
+#include <qstyle.h>
+#include <qstyleoption.h>
 
 #ifdef Q_OS_MAC
 #  include <qt_mac_p.h>

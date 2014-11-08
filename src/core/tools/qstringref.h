@@ -1,1 +1,1 @@
-#include "qstring.h"
+#include <qstring.h>

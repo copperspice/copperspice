@@ -33,7 +33,7 @@
 #ifndef QSAVEFILE_P_H
 #define QSAVEFILE_P_H
 
-#include "qfiledevice_p.h"
+#include <qfiledevice_p.h>
 
 QT_BEGIN_NAMESPACE
 

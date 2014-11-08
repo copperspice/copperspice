@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qfinalstate.h"
+#include <qfinalstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include "qabstractstate_p.h"
+#include <qabstractstate_p.h>
 
 QT_BEGIN_NAMESPACE
 

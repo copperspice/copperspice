@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qobject.h"
-#include "csmeta.h"
+#include <qobject.h>
+#include <csmeta.h>
 
 QMetaClassInfo::QMetaClassInfo(const char *name, const char *value)
 {

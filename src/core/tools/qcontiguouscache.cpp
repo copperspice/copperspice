@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcontiguouscache.h"
+#include <qcontiguouscache.h>
 #ifdef QT_QCONTIGUOUSCACHE_DEBUG
 #include <QDebug>
 #endif

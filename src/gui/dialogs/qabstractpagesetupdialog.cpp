@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qabstractpagesetupdialog.h"
-#include "qabstractpagesetupdialog_p.h"
+#include <qabstractpagesetupdialog.h>
+#include <qabstractpagesetupdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 

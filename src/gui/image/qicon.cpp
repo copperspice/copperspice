@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qicon.h"
-#include "qicon_p.h"
-#include "qiconengine.h"
-#include "qiconengineplugin.h"
-#include "qfactoryloader_p.h"
-#include "qiconloader_p.h"
-#include "qapplication.h"
-#include "qstyleoption.h"
-#include "qpainter.h"
-#include "qfileinfo.h"
-#include "qstyle.h"
-#include "qpixmapcache.h"
-#include "qvariant.h"
-#include "qcache.h"
-#include "qdebug.h"
-#include "qguiplatformplugin_p.h"
+#include <qicon.h>
+#include <qicon_p.h>
+#include <qiconengine.h>
+#include <qiconengineplugin.h>
+#include <qfactoryloader_p.h>
+#include <qiconloader_p.h>
+#include <qapplication.h>
+#include <qstyleoption.h>
+#include <qpainter.h>
+#include <qfileinfo.h>
+#include <qstyle.h>
+#include <qpixmapcache.h>
+#include <qvariant.h>
+#include <qcache.h>
+#include <qdebug.h>
+#include <qguiplatformplugin_p.h>
 
 #ifdef Q_OS_MAC
 #include <qt_mac_p.h>
@@ -46,11 +46,11 @@
 #endif
 
 #ifdef Q_WS_X11
-#include "qt_x11_p.h"
-#include "qkde_p.h"
+#include <qt_x11_p.h>
+#include <qkde_p.h>
 #endif
 
-#include "qhexstring_p.h"
+#include <qhexstring_p.h>
 
 #ifndef QT_NO_ICON
 QT_BEGIN_NAMESPACE

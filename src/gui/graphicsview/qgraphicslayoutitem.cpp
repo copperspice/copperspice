@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicslayout.h"
-#include "qgraphicsscene.h"
-#include "qgraphicslayoutitem.h"
-#include "qgraphicslayoutitem_p.h"
-#include "qwidget.h"
-#include "qgraphicswidget.h"
+#include <qgraphicslayout.h>
+#include <qgraphicsscene.h>
+#include <qgraphicslayoutitem.h>
+#include <qgraphicslayoutitem_p.h>
+#include <qwidget.h>
+#include <qgraphicswidget.h>
 
 #include <QtDebug>
 

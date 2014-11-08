@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qmenu.h"
+#include <qmenu.h>
 
 #ifndef QT_NO_MENU
 
-#include "qdebug.h"
-#include "qstyle.h"
-#include "qevent.h"
-#include "qtimer.h"
-#include "qlayout.h"
-#include "qpainter.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
+#include <qdebug.h>
+#include <qstyle.h>
+#include <qevent.h>
+#include <qtimer.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+#  include <qaccessible.h>
 #endif
 
 #ifndef QT_NO_EFFECTS
@@ -48,12 +48,12 @@
 # include <qwhatsthis.h>
 #endif
 
-#include "qmenu_p.h"
-#include "qmenubar_p.h"
-#include "qwidgetaction.h"
-#include "qtoolbutton.h"
-#include "qpushbutton.h"
-#include "qtooltip.h"
+#include <qmenu_p.h>
+#include <qmenubar_p.h>
+#include <qwidgetaction.h>
+#include <qtoolbutton.h>
+#include <qpushbutton.h>
+#include <qtooltip.h>
 #include <qpushbutton_p.h>
 #include <qaction_p.h>
 #include <qsoftkeymanager_p.h>

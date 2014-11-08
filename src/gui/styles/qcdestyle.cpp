@@ -23,31 +23,31 @@
 *
 ***********************************************************************/
 
-#include "qcdestyle.h"
+#include <qcdestyle.h>
 
 #if !defined(QT_NO_STYLE_CDE) || defined(QT_PLUGIN)
 
-#include "qmenu.h"
-#include "qapplication.h"
-#include "qpainter.h"
-#include "qdrawutil.h"
-#include "qpixmap.h"
-#include "qpalette.h"
-#include "qwidget.h"
-#include "qpushbutton.h"
-#include "qscrollbar.h"
-#include "qtabbar.h"
-#include "qtabwidget.h"
-#include "qlistview.h"
-#include "qsplitter.h"
-#include "qslider.h"
-#include "qcombobox.h"
-#include "qlineedit.h"
-#include "qprogressbar.h"
-#include "qimage.h"
-#include "qfocusframe.h"
-#include "qpainterpath.h"
-#include "qdebug.h"
+#include <qmenu.h>
+#include <qapplication.h>
+#include <qpainter.h>
+#include <qdrawutil.h>
+#include <qpixmap.h>
+#include <qpalette.h>
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qscrollbar.h>
+#include <qtabbar.h>
+#include <qtabwidget.h>
+#include <qlistview.h>
+#include <qsplitter.h>
+#include <qslider.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include <qprogressbar.h>
+#include <qimage.h>
+#include <qfocusframe.h>
+#include <qpainterpath.h>
+#include <qdebug.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

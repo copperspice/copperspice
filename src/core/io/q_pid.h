@@ -1,1 +1,1 @@
-#include "qprocess.h"
+#include <qprocess.h>

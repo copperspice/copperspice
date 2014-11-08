@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qfactoryloader_p.h"
-#include "qfactoryinterface.h"
-#include "qmap.h"
+#include <qfactoryloader_p.h>
+#include <qfactoryinterface.h>
+#include <qmap.h>
 #include <qdir.h>
 #include <qsettings.h>
 #include <qdebug.h>
-#include "qmutex.h"
-#include "qplugin.h"
-#include "qpluginloader.h"
-#include "qlibraryinfo.h"
-#include "qcoreapplication_p.h"
+#include <qmutex.h>
+#include <qplugin.h>
+#include <qpluginloader.h>
+#include <qlibraryinfo.h>
+#include <qcoreapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

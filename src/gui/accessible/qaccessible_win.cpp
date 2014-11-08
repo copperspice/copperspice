@@ -22,15 +22,17 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qaccessible.h"
+
+#include <qaccessible.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 
-#include "qapplication.h"
+#include <qapplication.h>
 #include <qsystemlibrary_p.h>
-#include "qmessagebox.h" // ### dependency
-#include "qt_windows.h"
-#include "qwidget.h"
-#include "qsettings.h"
+#include <qmessagebox.h>
+#include <qt_windows.h>
+#include <qwidget.h>
+#include <qsettings.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qpointer.h>

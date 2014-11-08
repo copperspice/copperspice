@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qradiobutton.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qbuttongroup.h"
-#include "qstylepainter.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qevent.h"
-#include "qabstractbutton_p.h"
+#include <qradiobutton.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qbuttongroup.h>
+#include <qstylepainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qevent.h>
+#include <qabstractbutton_p.h>
 
 QT_BEGIN_NAMESPACE
 

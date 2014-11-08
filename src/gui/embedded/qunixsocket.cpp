@@ -46,75 +46,45 @@ extern "C" {
 
 #define UNIX_PATH_MAX 108 // From unix(7)
 
+// ****
 #ifdef QT_LINUXBASE
-// LSB doesn't declare ucred
+
+// LSB does not declare ucred
 struct ucred {
    pid_t pid;                    /* PID of sending process.  */
    uid_t uid;                    /* UID of sending process.  */
    gid_t gid;                    /* GID of sending process.  */
 };
 
-// LSB doesn't define the ones below
+// LSB does not define the ones below
 #ifndef SO_PASSCRED
 #  define SO_PASSCRED   16
 #endif
+
 #ifndef SCM_CREDENTIALS
 #  define SCM_CREDENTIALS 0x02
 #endif
+
 #ifndef MSG_DONTWAIT
 #  define MSG_DONTWAIT 0x40
 #endif
+
 #ifndef MSG_NOSIGNAL
 #  define MSG_NOSIGNAL 0x4000
 #endif
 
-#endif // QT_LINUXBASE
+#endif 
 
 QT_BEGIN_NAMESPACE
 
-///////////////////////////////////////////////////////////////////////////////
-// class QUnixSocketRights
-///////////////////////////////////////////////////////////////////////////////
-/*!
-  \class QUnixSocketRights
-  \internal
-
-  \brief The QUnixSocketRights class encapsulates QUnixSocket rights data.
-  \omit
-  \ingroup Platform::DeviceSpecific
-  \ingroup Platform::OS
-  \ingroup Platform::Communications
-  \endomit
-  \ingroup qws
-
-  \l QUnixSocket allows you to transfer Unix file descriptors between processes.
-  A file descriptor is referred to as "rights data" as it allows one process to
-  transfer its right to access a resource to another.
-
-  The Unix system verifies resource permissions only when the resource is first
-  opened.  For example, consider a file on disk readable only by the user "qt".
-  A process running as user "qt" will be able to open this file for reading.
-  If, while the process was still reading from the file, the ownership was
-  changed from user "qt" to user "root", the process would be allowed to
-  continue reading from the file, even though attempting to reopen the file
-  would be denied.  Permissions are associated with special descriptors called
-  file descriptors which are returned to a process after it initially opens a
-  resource.
-
-  File descriptors can be duplicated within a process through the dup(2) system
-  call.  File descriptors can be passed between processes using the
-  \l QUnixSocket class in the same way.  Even though the receiving process never
-  opened the resource directly, it has the same permissions to access it as the
-  process that did.
-
-  \sa QUnixSocket
- */
 struct QUnixSocketRightsPrivate : public QSharedData {
+
    virtual ~QUnixSocketRightsPrivate() {
 #ifdef QUNIXSOCKET_DEBUG
       int closerv =
 #endif
          QT_CLOSE(fd);
+
 #ifdef QUNIXSOCKET_DEBUG
       if (0 != closerv) {
          qDebug() << "QUnixSocketRightsPrivate: Unable to close managed"

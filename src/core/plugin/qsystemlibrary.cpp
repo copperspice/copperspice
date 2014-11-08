@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsystemlibrary_p.h"
+#include <qsystemlibrary_p.h>
 
 #include <QtCore/qvarlengtharray.h>
 #include <QtCore/qstringlist.h>

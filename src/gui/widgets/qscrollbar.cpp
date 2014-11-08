@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
-#include "qcursor.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qscrollbar.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qmenu.h"
-#include <QtCore/qelapsedtimer.h>
+#include <qapplication.h>
+#include <qcursor.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qscrollbar.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qmenu.h>
+#include <qelapsedtimer.h>
 
 #ifndef QT_NO_SCROLLBAR
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 #include <limits.h>
-#include "qabstractslider_p.h"
+#include <qabstractslider_p.h>
 
 QT_BEGIN_NAMESPACE
 

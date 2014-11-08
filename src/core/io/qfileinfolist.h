@@ -1,1 +1,1 @@
-#include "qfileinfo.h"
+#include <qfileinfo.h>

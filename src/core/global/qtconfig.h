@@ -1,1 +1,1 @@
-#include "qconfig.h"
+#include <qconfig.h>

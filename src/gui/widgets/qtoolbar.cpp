@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtoolbar.h"
+#include <qtoolbar.h>
 
 #ifndef QT_NO_TOOLBAR
 
@@ -49,10 +49,10 @@
 
 #include <qmainwindowlayout_p.h>
 
-#include "qtoolbar_p.h"
-#include "qtoolbarseparator_p.h"
-#include "qtoolbarlayout_p.h"
-#include "qdebug.h"
+#include <qtoolbar_p.h>
+#include <qtoolbarseparator_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qdebug.h>
 
 #define POPUP_TIMER_INTERVAL 500
 

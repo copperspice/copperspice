@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbytearraymatcher.h"
-
+#include <qbytearraymatcher.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

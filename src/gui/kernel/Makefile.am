@@ -172,7 +172,6 @@ GUI_KERNEL_INCLUDES = \
 	qplatformglcontext.h \
 	qplatformglcontext_qpa.h \
 	qplatformintegration.h \
-	qplatformintegration_qpa.h \
 	qplatformintegrationfactoryinterface.h \
 	qplatformintegrationplugin.h \
 	qplatformintegrationplugin_qpa.h \

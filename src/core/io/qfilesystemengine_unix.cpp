@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qfilesystemengine_p.h"
-#include "qplatformdefs.h"
-#include "qfsfileengine.h"
-#include "qfile.h"
-#include "qfileinfo.h"
+#include <qplatformdefs.h>
+#include <qfilesystemengine_p.h>
+#include <qplatformdefs.h>
+#include <qfsfileengine.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 
 #include <QtCore/qvarlengtharray.h>
 

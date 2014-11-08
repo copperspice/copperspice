@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qmutex.h"
-#include "qstring.h"
-#include "qatomic.h"
-#include "qmutex_p.h"
+#include <qplatformdefs.h>
+#include <qmutex.h>
+#include <qstring.h>
+#include <qatomic.h>
+#include <qmutex_p.h>
 #include <errno.h>
 
 QT_BEGIN_NAMESPACE

@@ -23,140 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qsystemsemaphore.h"
-#include "qsystemsemaphore_p.h"
+#include <qsystemsemaphore.h>
+#include <qsystemsemaphore_p.h>
 #include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
-/*!
-  \class QSystemSemaphore
-  \since 4.4
-
-  \brief The QSystemSemaphore class provides a general counting system semaphore.
-
-  A semaphore is a generalization of a mutex. While a mutex can be
-  locked only once, a semaphore can be acquired multiple times.
-  Typically, a semaphore is used to protect a certain number of
-  identical resources.
-
-  Like its lighter counterpart QSemaphore, a QSystemSemaphore can be
-  accessed from multiple \l {QThread} {threads}. Unlike QSemaphore, a
-  QSystemSemaphore can also be accessed from multiple \l {QProcess}
-  {processes}. This means QSystemSemaphore is a much heavier class, so
-  if your application doesn't need to access your semaphores across
-  multiple processes, you will probably want to use QSemaphore.
-
-  Semaphores support two fundamental operations, acquire() and release():
-
-  acquire() tries to acquire one resource. If there isn't a resource
-  available, the call blocks until a resource becomes available. Then
-  the resource is acquired and the call returns.
-
-  release() releases one resource so it can be acquired by another
-  process. The function can also be called with a parameter n > 1,
-  which releases n resources.
-
-  A system semaphore is created with a string key that other processes
-  can use to use the same semaphore.
-
-  Example: Create a system semaphore
-  \snippet doc/src/snippets/code/src_corelib_kernel_qsystemsemaphore.cpp 0
-
-  A typical application of system semaphores is for controlling access
-  to a circular buffer shared by a producer process and a consumer
-  processes.
-
-  \section1 Platform-Specific Behavior
-
-  When using this class, be aware of the following platform
-  differences:
-
-  \bold{Windows:} QSystemSemaphore does not own its underlying system
-  semaphore. Windows owns it. This means that when all instances of
-  QSystemSemaphore for a particular key have been destroyed, either by
-  having their destructors called, or because one or more processes
-  crash, Windows removes the underlying system semaphore.
-
-  \bold{Unix:}
-
-  \list
-  \o QSystemSemaphore owns the underlying system semaphore
-  in Unix systems. This means that the last process having an instance of
-  QSystemSemaphore for a particular key must remove the underlying
-  system semaphore in its destructor. If the last process crashes
-  without running the QSystemSemaphore destructor, Unix does not
-  automatically remove the underlying system semaphore, and the
-  semaphore survives the crash. A subsequent process that constructs a
-  QSystemSemaphore with the same key will then be given the existing
-  system semaphore. In that case, if the QSystemSemaphore constructor
-  has specified its \l {QSystemSemaphore::AccessMode} {access mode} as
-  \l {QSystemSemaphore::} {Open}, its initial resource count will not
-  be reset to the one provided but remain set to the value it received
-  in the crashed process. To protect against this, the first process
-  to create a semaphore for a particular key (usually a server), must
-  pass its \l {QSystemSemaphore::AccessMode} {access mode} as \l
-  {QSystemSemaphore::} {Create}, which will force Unix to reset the
-  resource count in the underlying system semaphore.
-
-  \o When a process using QSystemSemaphore terminates for
-  any reason, Unix automatically reverses the effect of all acquire
-  operations that were not released. Thus if the process acquires a
-  resource and then exits without releasing it, Unix will release that
-  resource.
-
-  \o Symbian: QSystemSemaphore behaves the same as Windows semaphores.
-  In other words, the operating system owns the semaphore and ignores
-  QSystemSemaphore::AccessMode.
-
-  \endlist
-
-  \sa QSharedMemory, QSemaphore
- */
-
-/*!
-  Requests a system semaphore for the specified \a key. The parameters
-  \a initialValue and \a mode are used according to the following
-  rules, which are system dependent.
-
-  In Unix, if the \a mode is \l {QSystemSemaphore::} {Open} and the
-  system already has a semaphore identified by \a key, that semaphore
-  is used, and the semaphore's resource count is not changed, i.e., \a
-  initialValue is ignored. But if the system does not already have a
-  semaphore identified by \a key, it creates a new semaphore for that
-  key and sets its resource count to \a initialValue.
-
-  In Unix, if the \a mode is \l {QSystemSemaphore::} {Create} and the
-  system already has a semaphore identified by \a key, that semaphore
-  is used, and its resource count is set to \a initialValue. If the
-  system does not already have a semaphore identified by \a key, it
-  creates a new semaphore for that key and sets its resource count to
-  \a initialValue.
-
-  In QNX, if the \a mode is \l {QSystemSemaphore::} {Create} and the
-  system already has a semaphore identified by \a key, that semaphore
-  will be deleted and the new one will be created for that key with
-  a resource count set to \a initialValue.
-
-  In Windows and in Symbian, \a mode is ignored, and the system always tries to
-  create a semaphore for the specified \a key. If the system does not
-  already have a semaphore identified as \a key, it creates the
-  semaphore and sets its resource count to \a initialValue. But if the
-  system already has a semaphore identified as \a key it uses that
-  semaphore and ignores \a initialValue.
-
-  The \l {QSystemSemaphore::AccessMode} {mode} parameter is only used
-  in Unix systems to handle the case where a semaphore survives a
-  process crash. In that case, the next process to allocate a
-  semaphore with the same \a key will get the semaphore that survived
-  the crash, and unless \a mode is \l {QSystemSemaphore::} {Create},
-  the resource count will not be reset to \a initialValue but will
-  retain the initial value it had been given by the crashed process.
-
-  \sa acquire(), key()
- */
 QSystemSemaphore::QSystemSemaphore(const QString &key, int initialValue, AccessMode mode)
    : d(new QSystemSemaphorePrivate)
 {

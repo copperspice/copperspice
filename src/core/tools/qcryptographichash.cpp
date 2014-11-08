@@ -25,14 +25,13 @@
 
 #include <qcryptographichash.h>
 
-
 #include "../../3rdparty/md5/md5.h"
 #include "../../3rdparty/md5/md5.cpp"
 #include "../../3rdparty/md4/md4.h"
 #include "../../3rdparty/md4/md4.cpp"
 #include "../../3rdparty/sha1/sha1.cpp"
-#include <qiodevice.h>
 
+#include <qiodevice.h>
 
 QT_BEGIN_NAMESPACE
 

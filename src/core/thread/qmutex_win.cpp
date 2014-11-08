@@ -24,10 +24,9 @@
 ***********************************************************************/
 
 #include <qt_windows.h>
-
-#include "qmutex.h"
+#include <qmutex.h>
 #include <qatomic.h>
-#include "qmutex_p.h"
+#include <qmutex_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qfsfileengine_iterator_p.h"
-#include "qfileinfo_p.h"
-#include "qvariant.h"
+#include <qfsfileengine_iterator_p.h>
+#include <qfileinfo_p.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_FSFILEENGINE
 #ifndef QT_NO_FILESYSTEMITERATOR
@@ -45,8 +45,7 @@ QFSFileEngineIterator::~QFSFileEngineIterator()
 bool QFSFileEngineIterator::hasNext() const
 {
    if (!done && !nativeIterator) {
-      nativeIterator.reset(new QFileSystemIterator(QFileSystemEntry(path()),
-                           filters(), nameFilters()));
+      nativeIterator.reset(new QFileSystemIterator(QFileSystemEntry(path()), filters(), nameFilters()));
       advance();
    }
 

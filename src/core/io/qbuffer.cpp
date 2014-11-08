@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qbuffer.h"
-#include "qiodevice_p.h"
+#include <qbuffer.h>
+#include <qiodevice_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtimeline.h"
+#include <qtimeline.h>
 
 #include <QtCore/qcoreevent.h>
 #include <QtCore/qmath.h>

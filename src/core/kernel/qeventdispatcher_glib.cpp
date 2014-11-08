@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qeventdispatcher_glib_p.h"
-#include "qeventdispatcher_unix_p.h"
+#include <qeventdispatcher_glib_p.h>
+#include <qeventdispatcher_unix_p.h>
 #include <qmutexpool_p.h>
 #include <qthread_p.h>
-#include "qcoreapplication.h"
-#include "qsocketnotifier.h"
+#include <qcoreapplication.h>
+#include <qsocketnotifier.h>
 
-#include <QtCore/qhash.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qpair.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qpair.h>
 
 #include <glib.h>
 

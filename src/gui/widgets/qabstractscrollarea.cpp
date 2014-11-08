@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qabstractscrollarea.h"
+#include <qabstractscrollarea.h>
 
 #ifndef QT_NO_SCROLLAREA
 
-#include "qscrollbar.h"
-#include "qapplication.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qevent.h"
-#include "qdebug.h"
-#include "qboxlayout.h"
-#include "qpainter.h"
-#include "qmargins.h"
+#include <qscrollbar.h>
+#include <qapplication.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qevent.h>
+#include <qdebug.h>
+#include <qboxlayout.h>
+#include <qpainter.h>
+#include <qmargins.h>
 
-#include "qabstractscrollarea_p.h"
+#include <qabstractscrollarea_p.h>
 #include <qwidget.h>
 #include <qapplication_p.h>
 

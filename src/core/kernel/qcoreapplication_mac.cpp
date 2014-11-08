@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qcoreapplication.h"
-#include "qcoreapplication_p.h"
+#include <qcoreapplication.h>
+#include <qcoreapplication_p.h>
 #include <qcore_mac_p.h>
 
 QT_BEGIN_NAMESPACE

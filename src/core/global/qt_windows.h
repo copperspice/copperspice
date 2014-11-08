@@ -27,6 +27,7 @@
 #define QT_WINDOWS_H
 
 #if defined(Q_CC_MINGW)
+
 // mingw windows.h file does not set this value properly, only place in CopperSpice WINVER is defined
 // this define must come before including windows.h
 

@@ -1,1 +1,1 @@
-#include "qcoreapplication.h"
+#include <qcoreapplication.h>

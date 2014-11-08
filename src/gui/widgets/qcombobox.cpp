@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcombobox.h"
+#include <qcombobox.h>
 
 #ifndef QT_NO_COMBOBOX
 #include <qstylepainter.h>
@@ -43,7 +43,7 @@
 #include <qmath.h>
 
 #ifndef QT_NO_IM
-#include "qinputcontext.h"
+#include <qinputcontext.h>
 #endif
 
 #include <qapplication_p.h>
@@ -68,7 +68,7 @@
 #endif
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 QT_BEGIN_NAMESPACE

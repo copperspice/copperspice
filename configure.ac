@@ -1,4 +1,8 @@
-AC_INIT([copperspice], [1.1.X], [ansel@copperspice.com])
+AC_INIT([copperspice], [1.1.0], [ansel@copperspice.com])
+
+# derive CS hex version from "@PACKAGE_VERSION@"
+HEX_VERSION=$(printf "0x%02x%02x%02x" `echo -n $PACKAGE_VERSION | tr '.' ' '`)
+AC_SUBST([HEX_VERSION])
 
 AC_CONFIG_AUX_DIR([autotools/build-aux])
 
@@ -50,6 +54,27 @@ PKG_CHECK_MODULES(SSL, openssl, SSL="yes", true)
 PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
 
 AC_CHECK_HEADERS([cups/cups.h])
+AC_CHECK_HEADERS([features.h])
+AC_CHECK_HEADERS([pthread.h])
+AC_CHECK_HEADERS([unistd.h])
+AC_CHECK_HEADERS([dirent.h])
+AC_CHECK_HEADERS([fcntl.h])
+AC_CHECK_HEADERS([grp.h])
+AC_CHECK_HEADERS([pwd.h])
+AC_CHECK_HEADERS([signal.h])
+AC_CHECK_HEADERS([dlfcn.h])
+AC_CHECK_HEADERS([sys/types.h])
+AC_CHECK_HEADERS([sys/ioctl.h])
+AC_CHECK_HEADERS([sys/ipc.h])
+AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([sys/shm.h])
+AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([sys/stat.h])
+AC_CHECK_HEADERS([sys/wait.h])
+AC_CHECK_HEADERS([sys/param.h])
+AC_CHECK_HEADERS([netinet/in.h])
+AC_CHECK_HEADERS([net/if.h])
+
 AC_SEARCH_LIBS(clock_gettime, rt)
 
 if test "$OSTYPE" == LINUX; then
@@ -178,6 +203,6 @@ echo "CopperSpice will be installed in:     " ${prefix}
 echo
 echo "CopperSpice is now configured"
 
-AC_CONFIG_FILES([Makefile src/webkit/Makefile src/core/global/cs_build_info.h])
+AC_CONFIG_FILES([Makefile    src/webkit/Makefile     src/core/global/cs_build_info.h])
 AC_CONFIG_MACRO_DIR([autotools/m4])
 AC_OUTPUT

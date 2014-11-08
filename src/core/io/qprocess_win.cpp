@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qprocess.h"
-#include "qprocess_p.h"
-#include "qwindowspipewriter_p.h"
+#include <qprocess.h>
+#include <qprocess_p.h>
+#include <qwindowspipewriter_p.h>
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -37,7 +37,7 @@
 #include <qwineventnotifier_p.h>
 #include <qthread_p.h>
 #include <qdebug.h>
-#include "qfsfileengine_p.h"
+#include <qfsfileengine_p.h>
 
 #ifndef QT_NO_PROCESS
 

@@ -26,10 +26,8 @@
 #ifndef QSET_H
 #define QSET_H
 
-#include <QtCore/qhash.h>
-#ifdef Q_COMPILER_INITIALIZER_LISTS
+#include <qhash.h>
 #include <initializer_list>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -41,14 +39,12 @@ class QSet
  public:
    inline QSet() {}
 
-#ifdef Q_COMPILER_INITIALIZER_LISTS
    inline QSet(std::initializer_list<T> list) {
       reserve(list.size());
       for (typename std::initializer_list<T>::const_iterator it = list.begin(); it != list.end(); ++it) {
          insert(*it);
       }
    }
-#endif
 
    inline QSet(const QSet<T> &other) : q_hash(other.q_hash) {}
 
@@ -187,8 +183,8 @@ class QSet
       }
    };
 
-   class const_iterator
-   {
+   class const_iterator {
+
       typedef QHash<T, QHashDummyValue> Hash;
       typename Hash::const_iterator i;
       friend class iterator;
@@ -379,32 +375,6 @@ class QSet
       result -= other;
       return result;
    }
-
-
-#if CS_VERSION < CS_VERSION_CHECK(1, 1, 0)
-   // ### Qt5/remove
-
-   inline QSet<T> operator|(const QSet<T> &other) {
-      QSet<T> result = *this;
-      result |= other;
-      return result;
-   }
-   inline QSet<T> operator&(const QSet<T> &other) {
-      QSet<T> result = *this;
-      result &= other;
-      return result;
-   }
-   inline QSet<T> operator+(const QSet<T> &other) {
-      QSet<T> result = *this;
-      result += other;
-      return result;
-   }
-   inline QSet<T> operator-(const QSet<T> &other) {
-      QSet<T> result = *this;
-      result -= other;
-      return result;
-   }
-#endif
 
    QList<T> toList() const;
    inline QList<T> values() const {

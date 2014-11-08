@@ -28,9 +28,8 @@
 ** Copyright (C) 2013 David Faure <faure@kde.org>
 *****************************************************/
 
-#include "qcommandlineoption.h"
-
-#include "qset.h"
+#include <qcommandlineoption.h>
+#include <qset.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qtimer.h"
-#include "qabstracteventdispatcher.h"
-#include "qcoreapplication.h"
+#include <qtimer.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreapplication.h>
 
 QT_BEGIN_NAMESPACE
 

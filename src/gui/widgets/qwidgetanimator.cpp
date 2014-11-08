@@ -27,7 +27,7 @@
 #include <QtGui/qwidget.h>
 #include <qmainwindowlayout_p.h>
 
-#include "qwidgetanimator_p.h"
+#include <qwidgetanimator_p.h>
 
 QT_BEGIN_NAMESPACE
 

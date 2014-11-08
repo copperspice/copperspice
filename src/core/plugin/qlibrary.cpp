@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qlibrary.h"
-#include "qlibrary_p.h"
+#include <qplatformdefs.h>
+#include <qlibrary.h>
+#include <qlibrary_p.h>
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -33,20 +33,20 @@
 #include <qmap.h>
 #include <qsettings.h>
 #include <qdatetime.h>
-#include "qcoreapplication_p.h"
+#include <qcoreapplication_p.h>
 
 #ifdef Q_OS_MAC
-#  include "qcore_mac_p.h"
+#  include <qcore_mac_p.h>
 #endif
 
 #ifndef NO_ERRNO_H
 #include <errno.h>
-#endif // NO_ERROR_H
+#endif
 
 #include <qdebug.h>
 #include <qvector.h>
 #include <qdir.h>
-#include "qelfparser_p.h"
+#include <qelfparser_p.h>
 
 QT_BEGIN_NAMESPACE
 

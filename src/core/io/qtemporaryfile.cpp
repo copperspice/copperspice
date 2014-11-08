@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qtemporaryfile.h"
+#include <qtemporaryfile.h>
 
 #ifndef QT_NO_TEMPORARYFILE
 
-#include "qplatformdefs.h"
-#include "qtemporaryfile_p.h"
-#include "qfile_p.h"
-#include "qsystemerror_p.h"
+#include <qplatformdefs.h>
+#include <qtemporaryfile_p.h>
+#include <qfile_p.h>
+#include <qsystemerror_p.h>
 
-#if !defined(Q_OS_WIN)
-#include "qcore_unix_p.h"       // overrides QT_OPEN
+#if ! defined(Q_OS_WIN)
+#include <qcore_unix_p.h>       // overrides QT_OPEN
 #include <errno.h>
 #endif
 
 #if defined(QT_BUILD_CORE_LIB)
-#include "qcoreapplication.h"
+#include <qcoreapplication.h>
 #endif
 
 QT_BEGIN_NAMESPACE

@@ -22,22 +22,22 @@
 *
 ***********************************************************************/
 
-#include "qfont.h"
-#include "qfont_p.h"
-#include "qfontengine_p.h"
-#include "qfontengine_mac_p.h"
-#include "qfontengine_coretext_p.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpaintdevice.h"
-#include "qstring.h"
+#include <qfont.h>
+#include <qfont_p.h>
+#include <qfontengine_p.h>
+#include <qfontengine_mac_p.h>
+#include <qfontengine_coretext_p.h>
+#include <qfontinfo.h>
+#include <qfontmetrics.h>
+#include <qpaintdevice.h>
+#include <qstring.h>
 #include <qt_mac_p.h>
 #include <qtextengine_p.h>
 #include <qunicodetables_p.h>
 #include <qapplication.h>
-#include "qfontdatabase.h"
+#include <qfontdatabase.h>
 #include <qpainter.h>
-#include "qtextengine_p.h"
+#include <qtextengine_p.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE

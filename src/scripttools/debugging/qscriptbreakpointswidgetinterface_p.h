@@ -26,29 +26,18 @@
 #ifndef QSCRIPTBREAKPOINTSWIDGETINTERFACE_P_H
 #define QSCRIPTBREAKPOINTSWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptBreakpointsModel;
 class QScriptDebuggerScriptsModel;
-
 class QScriptBreakpointsWidgetInterfacePrivate;
-class QScriptBreakpointsWidgetInterface:
-   public QWidget
+
+class QScriptBreakpointsWidgetInterface : public QWidget
 {
    CS_OBJECT(QScriptBreakpointsWidgetInterface)
+
  public:
    ~QScriptBreakpointsWidgetInterface();
 

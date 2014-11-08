@@ -1785,6 +1785,7 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
       }
       QWidget *prev = focus_widget;
       focus_widget = focus;
+
 #ifndef QT_NO_IM
       if (prev && ((reason != Qt::PopupFocusReason && reason != Qt::MenuBarFocusReason
                     && prev->testAttribute(Qt::WA_InputMethodEnabled))
@@ -1798,7 +1799,7 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
             qic->setFocusWidget(0);
          }
       }
-#endif //QT_NO_IM
+#endif 
 
       if (focus_widget) {
          focus_widget->d_func()->setFocus_sys();
@@ -1808,14 +1809,6 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
 
          //send events
          if (prev) {
-
-#ifdef QT_KEYPAD_NAVIGATION
-            if (QApplication::keypadNavigationEnabled()) {
-               if (prev->hasEditFocus() && reason != Qt::PopupFocusReason) {
-                  prev->setEditFocus(false);
-               }
-            }
-#endif
 
 #ifndef QT_NO_IM
             if (focus) {
@@ -4245,209 +4238,7 @@ Qt::NavigationMode QApplication::navigationMode()
 {
    return QApplicationPrivate::navigationMode;
 }
-
-void QApplication::setKeypadNavigationEnabled(bool enable)
-{
-   if (enable) {
-      QApplication::setNavigationMode(Qt::NavigationModeKeypadTabOrder);
-   } else {
-      QApplication::setNavigationMode(Qt::NavigationModeNone);
-   }
-}
-
-bool QApplication::keypadNavigationEnabled()
-{
-   return QApplicationPrivate::navigationMode == Qt::NavigationModeKeypadTabOrder ||
-          QApplicationPrivate::navigationMode == Qt::NavigationModeKeypadDirectional;
-}
 #endif
-
-/*!
-    \fn void QApplication::alert(QWidget *widget, int msec)
-    \since 4.3
-
-    Causes an alert to be shown for \a widget if the window is not the active
-    window. The alert is shown for \a msec miliseconds. If \a msec is zero (the
-    default), then the alert is shown indefinitely until the window becomes
-    active again.
-
-    Currently this function does nothing on Qt for Embedded Linux.
-
-    On Mac OS X, this works more at the application level and will cause the
-    application icon to bounce in the dock.
-
-    On Windows, this causes the window's taskbar entry to flash for a time. If
-    \a msec is zero, the flashing will stop and the taskbar entry will turn a
-    different color (currently orange).
-
-    On X11, this will cause the window to be marked as "demands attention", the
-    window must not be hidden (i.e. not have hide() called on it, but be
-    visible in some sort of way) in order for this to work.
-*/
-
-/*!
-    \property QApplication::cursorFlashTime
-    \brief the text cursor's flash (blink) time in milliseconds
-
-    The flash time is the time required to display, invert and restore the
-    caret display. Usually the text cursor is displayed for half the cursor
-    flash time, then hidden for the same amount of time, but this may vary.
-
-    The default value on X11 is 1000 milliseconds. On Windows, the
-    \gui{Control Panel} value is used and setting this property sets the cursor
-    flash time for all applications.
-
-    We recommend that widgets do not cache this value as it may change at any
-    time if the user changes the global desktop settings.
-*/
-
-/*!
-    \property QApplication::doubleClickInterval
-    \brief the time limit in milliseconds that distinguishes a double click
-    from two consecutive mouse clicks
-
-    The default value on X11 is 400 milliseconds. On Windows and Mac OS, the
-    operating system's value is used. However, on Windows and Symbian OS,
-    calling this function sets the double click interval for all applications.
-*/
-
-/*!
-    \property QApplication::keyboardInputInterval
-    \brief the time limit in milliseconds that distinguishes a key press
-    from two consecutive key presses
-    \since 4.2
-
-    The default value on X11 is 400 milliseconds. On Windows and Mac OS, the
-    operating system's value is used.
-*/
-
-/*!
-    \property QApplication::wheelScrollLines
-    \brief the number of lines to scroll a widget, when the
-    mouse wheel is rotated.
-
-    If the value exceeds the widget's number of visible lines, the widget
-    should interpret the scroll operation as a single \e{page up} or
-    \e{page down}. If the widget is an \l{QAbstractItemView}{item view class},
-    then the result of scrolling one \e line depends on the setting of the
-    widget's \l{QAbstractItemView::verticalScrollMode()}{scroll mode}. Scroll
-    one \e line can mean \l{QAbstractItemView::ScrollPerItem}{scroll one item}
-    or \l{QAbstractItemView::ScrollPerPixel}{scroll one pixel}.
-
-    By default, this property has a value of 3.
-*/
-
-/*!
-    \fn void QApplication::setEffectEnabled(Qt::UIEffect effect, bool enable)
-
-    Enables the UI effect \a effect if \a enable is true, otherwise the effect
-    will not be used.
-
-    \note All effects are disabled on screens running at less than 16-bit color
-    depth.
-
-    \sa isEffectEnabled(), Qt::UIEffect, setDesktopSettingsAware()
-*/
-
-/*!
-    \fn bool QApplication::isEffectEnabled(Qt::UIEffect effect)
-
-    Returns true if \a effect is enabled; otherwise returns false.
-
-    By default, Qt will try to use the desktop settings. To prevent this, call
-    setDesktopSettingsAware(false).
-
-    \note All effects are disabled on screens running at less than 16-bit color
-    depth.
-
-    \sa setEffectEnabled(), Qt::UIEffect
-*/
-
-/*!
-    \fn QWidget *QApplication::mainWidget()
-
-    Returns the main application widget, or 0 if there is no main widget.
-*/
-
-/*!
-    \fn void QApplication::setMainWidget(QWidget *mainWidget)
-
-    Sets the application's main widget to \a mainWidget.
-
-    In most respects the main widget is like any other widget, except that if
-    it is closed, the application exits. QApplication does \e not take
-    ownership of the \a mainWidget, so if you create your main widget on the
-    heap you must delete it yourself.
-
-    You need not have a main widget; connecting lastWindowClosed() to quit()
-    is an alternative.
-
-    On X11, this function also resizes and moves the main widget according
-    to the \e -geometry command-line option, so you should set the default
-    geometry (using \l QWidget::setGeometry()) before calling setMainWidget().
-
-    \sa mainWidget(), exec(), quit()
-*/
-
-/*!
-    \fn void QApplication::beep()
-
-    Sounds the bell, using the default volume and sound. The function is \e not
-    available in Qt for Embedded Linux.
-*/
-
-/*!
-    \fn void QApplication::setOverrideCursor(const QCursor &cursor)
-
-    Sets the application override cursor to \a cursor.
-
-    Application override cursors are intended for showing the user that the
-    application is in a special state, for example during an operation that
-    might take some time.
-
-    This cursor will be displayed in all the application's widgets until
-    restoreOverrideCursor() or another setOverrideCursor() is called.
-
-    Application cursors are stored on an internal stack. setOverrideCursor()
-    pushes the cursor onto the stack, and restoreOverrideCursor() pops the
-    active cursor off the stack. changeOverrideCursor() changes the curently
-    active application override cursor.
-
-    Every setOverrideCursor() must eventually be followed by a corresponding
-    restoreOverrideCursor(), otherwise the stack will never be emptied.
-
-    Example:
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication_x11.cpp 0
-
-    \sa overrideCursor(), restoreOverrideCursor(), changeOverrideCursor(),
-    QWidget::setCursor()
-*/
-
-/*!
-    \fn void QApplication::restoreOverrideCursor()
-
-    Undoes the last setOverrideCursor().
-
-    If setOverrideCursor() has been called twice, calling
-    restoreOverrideCursor() will activate the first cursor set. Calling this
-    function a second time restores the original widgets' cursors.
-
-    \sa setOverrideCursor(), overrideCursor()
-*/
-
-/*!
-    \macro qApp
-    \relates QApplication
-
-    A global pointer referring to the unique application object. It is
-    equivalent to the pointer returned by the QCoreApplication::instance()
-    function except that, in GUI applications, it is a pointer to a
-    QApplication instance.
-
-    Only one application object can be created.
-
-    \sa QCoreApplication::instance()
-*/
 
 #ifndef QT_NO_IM
 // ************************************************************************

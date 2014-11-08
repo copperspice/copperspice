@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "QtGui/qapplication.h"
-#include "QtGui/qwidget.h"
-#include "QtGui/qtabbar.h"
-#include "QtGui/qstyle.h"
-#include "QtGui/qdesktopwidget.h"
-#include "QtCore/qvariant.h"
-#include "qdockarealayout_p.h"
-#include "qdockwidget.h"
-#include "qmainwindow.h"
-#include "qwidgetanimator_p.h"
-#include "qmainwindowlayout_p.h"
-#include "qdockwidget_p.h"
+#include <QtGui/qapplication.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/qtabbar.h>
+#include <QtGui/qstyle.h>
+#include <QtGui/qdesktopwidget.h>
+#include <QtCore/qvariant.h>
+#include <qdockarealayout_p.h>
+#include <qdockwidget.h>
+#include <qmainwindow.h>
+#include <qwidgetanimator_p.h>
+#include <qmainwindowlayout_p.h>
+#include <qdockwidget_p.h>
 #include <qlayoutengine_p.h>
 
 #include <qpainter.h>

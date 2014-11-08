@@ -24,14 +24,13 @@
 ***********************************************************************/
 
 // qfutureinterface.h included from qfuture.h
-#include "qfuture.h"
+#include <qfuture.h>
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qthreadpool.h>
+#include <qatomic.h>
+#include <qthread.h>
+#include <qthreadpool.h>
 #include <qthreadpool_p.h>
-
-#include "qfutureinterface_p.h"
+#include <qfutureinterface_p.h>
 
 QT_BEGIN_NAMESPACE
 

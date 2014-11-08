@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstringmatcher.h"
+#include <qstringmatcher.h>
 
 QT_BEGIN_NAMESPACE
 

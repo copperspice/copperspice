@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 // do not move include, if qeventloop.h is included directly forward declarations are not sufficient 12/30/2013
-#include "qobject.h"
+#include <qobject.h>
 
 #ifndef QEVENTLOOP_H
 #define QEVENTLOOP_H

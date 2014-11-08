@@ -23,25 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qresource.h"
-#include "qresource_p.h"
-#include "qresource_iterator_p.h"
-#include "qset.h"
-#include "qhash.h"
-#include "qmutex.h"
-#include "qdebug.h"
-#include "qlocale.h"
-#include "qglobal.h"
-#include "qvector.h"
-#include "qdatetime.h"
-#include "qbytearray.h"
-#include "qstringlist.h"
+#include <qresource.h>
+#include <qresource_p.h>
+#include <qresource_iterator_p.h>
+#include <qset.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qdebug.h>
+#include <qlocale.h>
+#include <qglobal.h>
+#include <qvector.h>
+#include <qdatetime.h>
+#include <qbytearray.h>
+#include <qstringlist.h>
 #include <qshareddata.h>
 #include <qplatformdefs.h>
-#include "qabstractfileengine_p.h"
+#include <qabstractfileengine_p.h>
 
 #ifdef Q_OS_UNIX
-# include "qcore_unix_p.h"
+# include <qcore_unix_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

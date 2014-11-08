@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qstatemachine.h"
+#include <qstatemachine.h>
 
 #ifndef QT_NO_STATEMACHINE
 

@@ -25,8 +25,8 @@
  */ 
 
 #if defined (BUILDING_GTK__)
-#include "autotoolsconfig.h"
-#endif /* defined (BUILDING_GTK__) */
+#include <autotoolsconfig.h>
+#endif
 
 #include <wtf/DisallowCType.h>
 #include <wtf/Platform.h>
@@ -109,8 +109,8 @@ static const type& name() \
 #define WINVER 0x0500
 #endif
 
-/* If we don't define these, they get defined in windef.h. */
-/* We want to use std::min and std::max. */
+// If not defined, they get defined in windef.h
+// We want to use std::min and std::max
 #ifndef max
 #define max max
 #endif
@@ -143,12 +143,16 @@ static const type& name() \
 
 #if PLATFORM(MAC)
 #define PLUGIN_ARCHITECTURE_MAC 1
+
 #elif PLATFORM(WIN)
 #define PLUGIN_ARCHITECTURE_WIN 1
+
 #elif (PLATFORM(QT) || (PLATFORM(GTK))) && (OS(UNIX) && !OS(MAC_OS_X) && !OS(SYMBIAN))
 #define PLUGIN_ARCHITECTURE_X11 1
+
 #else
 #define PLUGIN_ARCHITECTURE_UNSUPPORTED 1
+
 #endif
 
 #define PLUGIN_ARCHITECTURE(ARCH) (defined PLUGIN_ARCHITECTURE_##ARCH && PLUGIN_ARCHITECTURE_##ARCH)

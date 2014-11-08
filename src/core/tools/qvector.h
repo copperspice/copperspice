@@ -36,10 +36,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef Q_COMPILER_INITIALIZER_LISTS
 #include <initializer_list>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -74,9 +71,7 @@ class QVector
       qSwap(d, other.d);
    }
 
-#ifdef Q_COMPILER_INITIALIZER_LISTS
    inline QVector(std::initializer_list<T> args);
-#endif
 
    bool operator==(const QVector<T> &v) const;
    inline bool operator!=(const QVector<T> &v) const {
@@ -699,7 +694,6 @@ QVector<T>::QVector(int asize, const T &t)
    }
 }
 
-#ifdef Q_COMPILER_INITIALIZER_LISTS
 template <typename T>
 QVector<T>::QVector(std::initializer_list<T> args)
 {
@@ -709,7 +703,6 @@ QVector<T>::QVector(std::initializer_list<T> args)
    copyConstruct(args.begin(), args.end(), d->begin());
    d->size = int(args.size());
 }
-#endif
 
 template <typename T>
 void QVector<T>::free(Data *x)
@@ -857,7 +850,7 @@ void QVector<T>::append(const T &t)
 }
 
 template <typename T>
-Q_TYPENAME QVector<T>::iterator QVector<T>::insert(iterator before, size_type n, const T &t)
+typename QVector<T>::iterator QVector<T>::insert(iterator before, size_type n, const T &t)
 {
    int offset = int(before - d->begin());
    if (n != 0) {
@@ -895,7 +888,7 @@ Q_TYPENAME QVector<T>::iterator QVector<T>::insert(iterator before, size_type n,
 }
 
 template <typename T>
-Q_TYPENAME QVector<T>::iterator QVector<T>::erase(iterator abegin, iterator aend)
+typename QVector<T>::iterator QVector<T>::erase(iterator abegin, iterator aend)
 {
    abegin = qMax(abegin, d->begin());
    aend = qMin(aend, d->end());

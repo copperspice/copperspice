@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qcolordialog_p.h"
+#include <qcolordialog_p.h>
 
-#if !defined(QT_NO_COLORDIALOG) && defined(Q_OS_MAC)
+#if ! defined(QT_NO_COLORDIALOG) && defined(Q_OS_MAC)
 
 #include <qapplication.h>
 #include <qtimer.h>

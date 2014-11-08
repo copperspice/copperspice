@@ -26,9 +26,17 @@
 #ifndef CS_BUILD_INFO_H_IN
 #define CS_BUILD_INFO_H_IN
 
-struct csBuildInfo {
-   static constexpr const char *install_prefix = "@prefix@";
-   static constexpr const char *built_for = "@target@";
-};
+// CopperSpice Version  "1.0.0"
+#define CS_VERSION_STR  "@PACKAGE_VERSION@"
+
+// CopperSpice Version  0x010000  (major << 16) + (minor << 8) + patch
+#define CS_VERSION      @HEX_VERSION@
+
+#if defined(__cplusplus)
+   struct csBuildInfo {
+      static constexpr const char *install_prefix = "@prefix@";
+      static constexpr const char *built_for = "@target@";
+   };
+#endif
 
 #endif

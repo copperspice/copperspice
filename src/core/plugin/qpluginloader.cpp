@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qplugin.h"
-#include "qpluginloader.h"
+#include <qplatformdefs.h>
+#include <qplugin.h>
+#include <qpluginloader.h>
 #include <qfileinfo.h>
-#include "qlibrary_p.h"
-#include "qdebug.h"
-#include "qdir.h"
+#include <qlibrary_p.h>
+#include <qdebug.h>
+#include <qdir.h>
 
 QT_BEGIN_NAMESPACE
 

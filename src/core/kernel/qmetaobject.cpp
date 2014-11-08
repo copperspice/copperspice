@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qmetaobject.h"
-#include "qobject.h"
-#include "csmeta.h"
-#include "qthread_p.h"
+#include <qmetaobject.h>
+#include <qobject.h>
+#include <csmeta.h>
+#include <qthread_p.h>
 
 #include <QCoreApplication>
 #include <QStringList>

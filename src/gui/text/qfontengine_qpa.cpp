@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfontengine_qpa_p.h"
+#include <qfontengine_qpa_p.h>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>

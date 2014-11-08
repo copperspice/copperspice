@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbitarray.h"
+#include <qbitarray.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <string.h>

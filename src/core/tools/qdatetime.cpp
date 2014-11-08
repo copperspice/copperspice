@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qdatetime_p.h"
-#include "qdatastream.h"
-#include "qset.h"
-#include "qlocale.h"
-#include "qdatetime.h"
-#include "qregexp.h"
-#include "qdebug.h"
+#include <qplatformdefs.h>
+#include <qdatetime_p.h>
+#include <qdatastream.h>
+#include <qset.h>
+#include <qlocale.h>
+#include <qdatetime.h>
+#include <qregexp.h>
+#include <qdebug.h>
 
 #ifdef Q_OS_WIN32
 #include <qt_windows.h>
@@ -59,7 +59,7 @@ QT_BEGIN_NAMESPACE
 enum {
    FIRST_YEAR = -4713,
    FIRST_MONTH = 1,
-   FIRST_DAY = 2,  // ### Qt 5: make FIRST_DAY = 1, by support jd == 0 as valid
+   FIRST_DAY = 2,                // ### Qt 5: make FIRST_DAY = 1, by support jd == 0 as valid
    SECS_PER_DAY = 86400,
    MSECS_PER_DAY = 86400000,
    SECS_PER_HOUR = 3600,

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsidebar_p.h"
-#include "qfilesystemmodel.h"
+#include <qsidebar_p.h>
+#include <qfilesystemmodel.h>
 
 #ifndef QT_NO_FILEDIALOG
 

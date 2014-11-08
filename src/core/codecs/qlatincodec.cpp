@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qlatincodec_p.h"
-#include "qlist.h"
+#include <qlatincodec_p.h>
+#include <qlist.h>
 
 #ifndef QT_NO_TEXTCODEC
 

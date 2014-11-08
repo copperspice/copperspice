@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qatomic.h"
-#include "qbitmap.h"
-#include "qbuffer.h"
-#include "qimage.h"
-#include "qpolygon.h"
-#include "qregion.h"
-#include "qt_windows.h"
-#include "qpainterpath.h"
+#include <qatomic.h>
+#include <qbitmap.h>
+#include <qbuffer.h>
+#include <qimage.h>
+#include <qpolygon.h>
+#include <qregion.h>
+#include <qt_windows.h>
+#include <qpainterpath.h>
 
 QT_BEGIN_NAMESPACE
 

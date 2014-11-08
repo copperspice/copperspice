@@ -24,7 +24,7 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include <qglobal.h> // for Q_OS_WIN define (non-PCH)
+#include <qglobal.h>      
 
 #ifdef Q_OS_WIN
 #include <qlibrary.h>
@@ -33,18 +33,18 @@
 
 #include <QtGui/qpaintdevice.h>
 #include <QtGui/qwidget.h>
-#include "qwindowsurface_raster_p.h"
-#include "qnativeimage_p.h"
-#include "qwidget_p.h"
+#include <qwindowsurface_raster_p.h>
+#include <qnativeimage_p.h>
+#include <qwidget_p.h>
 
 #ifdef Q_WS_X11
-#include "qpixmap_x11_p.h"
-#include "qt_x11_p.h"
-#include "qwidget_p.h"
-#include "qx11info_x11.h"
+#include <qpixmap_x11_p.h>
+#include <qt_x11_p.h>
+#include <qwidget_p.h>
+#include <qx11info_x11.h>
 #endif
 
-#include "qdrawhelper_p.h"
+#include <qdrawhelper_p.h>
 
 #ifdef Q_OS_MAC
 #include <qt_cocoa_helpers_mac_p.h>

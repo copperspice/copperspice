@@ -23,23 +23,23 @@
 *
 ***********************************************************************/
 
-#include "qtransportauth_qws.h"
-#include "qtransportauth_qws_p.h"
+#include <qtransportauth_qws.h>
+#include <qtransportauth_qws_p.h>
 
 #ifndef QT_NO_SXE
 
-#include "../../3rdparty/md5/md5.h"
-#include "../../3rdparty/md5/md5.cpp"
-#include "qwsutils_qws.h"
-#include "qwssocket_qws.h"
-#include "qwscommand_qws_p.h"
-#include "qwindowsystem_qws.h"
-#include "qbuffer.h"
-#include "qthread.h"
-#include "qabstractsocket.h"
-#include "qlibraryinfo.h"
-#include "qfile.h"
-#include "qdebug.h"
+#include "../../3rdparty/md5/md5.h"            // do not change to < >
+#include "../../3rdparty/md5/md5.cpp"          // do not change to < >  
+#include <qwsutils_qws.h>
+#include <qwssocket_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qwindowsystem_qws.h>
+#include <qbuffer.h>
+#include <qthread.h>
+#include <qabstractsocket.h>
+#include <qlibraryinfo.h>
+#include <qfile.h>
+#include <qdebug.h>
 #include <qcore_unix_p.h> // overrides QT_OPEN
 
 #include <syslog.h>

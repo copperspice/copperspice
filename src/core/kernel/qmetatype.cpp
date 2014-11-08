@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qmetatype.h"
-#include "qdatetime.h"
-#include "qbytearray.h"
-#include "qreadwritelock.h"
-#include "qstring.h"
-#include "qstringlist.h"
-#include "qvector.h"
-#include "qlocale.h"
-#include "qeasingcurve.h"
-#include "qbitarray.h"
-#include "qurl.h"
-#include "qvariant.h"
-#include "quuid.h"
-#include "qmodelindex.h"
-#include "qsize.h"
-#include "qpoint.h"
-#include "qrect.h"
-#include "qline.h"
+#include <qmetatype.h>
+#include <qdatetime.h>
+#include <qbytearray.h>
+#include <qreadwritelock.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qvector.h>
+#include <qlocale.h>
+#include <qeasingcurve.h>
+#include <qbitarray.h>
+#include <qurl.h>
+#include <qvariant.h>
+#include <quuid.h>
+#include <qmodelindex.h>
+#include <qsize.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qline.h>
 
 QT_BEGIN_NAMESPACE
 

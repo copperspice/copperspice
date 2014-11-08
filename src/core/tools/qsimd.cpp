@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsimd_p.h"
+#include <qsimd_p.h>
 #include <QByteArray>
 #include <stdio.h>
 
@@ -32,7 +32,7 @@
 #endif
 
 #if defined(Q_OS_LINUX) && defined(__arm__)
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 
 // the kernel header definitions for HWCAP_*
 // (the ones we need/may need anyway)

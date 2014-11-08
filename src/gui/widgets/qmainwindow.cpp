@@ -25,13 +25,13 @@
 
 //#define QT_EXPERIMENTAL_CLIENT_DECORATIONS
 
-#include "qmainwindow.h"
-#include "qmainwindowlayout_p.h"
+#include <qmainwindow.h>
+#include <qmainwindowlayout_p.h>
 
 #ifndef QT_NO_MAINWINDOW
 
-#include "qdockwidget.h"
-#include "qtoolbar.h"
+#include <qdockwidget.h>
+#include <qtoolbar.h>
 #include <qapplication.h>
 #include <qmenubar.h>
 #include <qstatusbar.h>
@@ -40,8 +40,8 @@
 #include <qdebug.h>
 #include <qpainter.h>
 #include <qwidget_p.h>
-#include "qtoolbar_p.h"
-#include "qwidgetanimator_p.h"
+#include <qtoolbar_p.h>
+#include <qwidgetanimator_p.h>
 
 #ifdef Q_OS_MAC
 #include <qt_mac_p.h>

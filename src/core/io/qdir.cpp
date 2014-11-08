@@ -23,28 +23,28 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qdir.h"
-#include "qdir_p.h"
-#include "qabstractfileengine.h"
+#include <qplatformdefs.h>
+#include <qdir.h>
+#include <qdir_p.h>
+#include <qabstractfileengine.h>
 
-#include "qdebug.h"
-#include "qdiriterator.h"
-#include "qfsfileengine.h"
-#include "qdatetime.h"
-#include "qstring.h"
-#include "qregexp.h"
-#include "qvector.h"
-#include "qalgorithms.h"
-#include "qvarlengtharray.h"
-#include "qfilesystementry_p.h"
-#include "qfilesystemmetadata_p.h"
-#include "qfilesystemengine_p.h"
+#include <qdebug.h>
+#include <qdiriterator.h>
+#include <qfsfileengine.h>
+#include <qdatetime.h>
+#include <qstring.h>
+#include <qregexp.h>
+#include <qvector.h>
+#include <qalgorithms.h>
+#include <qvarlengtharray.h>
+#include <qfilesystementry_p.h>
+#include <qfilesystemmetadata_p.h>
+#include <qfilesystemengine_p.h>
 #include <qstringbuilder.h>
 
 #ifdef QT_BUILD_CORE_LIB
-#  include "qresource.h"
-#  include "qcoreglobaldata_p.h"
+#  include <qresource.h>
+#  include <qcoreglobaldata_p.h>
 #endif
 
 #include <stdlib.h>

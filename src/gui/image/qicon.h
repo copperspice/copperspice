@@ -104,9 +104,7 @@ class Q_GUI_EXPORT QIcon
 
    static QString themeName();
    static void setThemeName(const QString &path);
-
-   Q_DUMMY_COMPARISON_OPERATOR(QIcon)
-
+   
    typedef QIconPrivate *DataPtr;
    inline DataPtr &data_ptr() {
       return d;

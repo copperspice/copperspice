@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfiledialog.h"
+#include <qfiledialog.h>
 
 #ifndef QT_NO_FILEDIALOG
 
@@ -37,7 +37,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qsystemlibrary_p.h>
-#include "qfiledialog_win_p.h"
+#include <qfiledialog_win_p.h>
 
 // declare them here because they are not present for all SDK/compilers
 static const IID   QT_IID_IFileOpenDialog  = {0xd57c7288, 0xd4ad, 0x4768, {0xbe, 0x02, 0x9d, 0x96, 0x95, 0x32, 0xd9, 0x60} };

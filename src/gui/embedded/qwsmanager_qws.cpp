@@ -23,30 +23,30 @@
 *
 ***********************************************************************/
 
-#include "qwsmanager_qws.h"
+#include <qwsmanager_qws.h>
 
 #ifndef QT_NO_QWS_MANAGER
 
-#include "qdrawutil.h"
-#include "qapplication.h"
-#include "qstyle.h"
-#include "qwidget.h"
-#include "qmenu.h"
-#include "qpainter.h"
-#include "qpainter_p.h"
-#include "qregion.h"
-#include "qevent.h"
-#include "qcursor.h"
-#include "qwsdisplay_qws.h"
-#include "qdesktopwidget.h"
+#include <qdrawutil.h>
+#include <qapplication.h>
+#include <qstyle.h>
+#include <qwidget.h>
+#include <qmenu.h>
+#include <qpainter.h>
+#include <qpainter_p.h>
+#include <qregion.h>
+#include <qevent.h>
+#include <qcursor.h>
+#include <qwsdisplay_qws.h>
+#include <qdesktopwidget.h>
 
 #include <qapplication_p.h>
 #include <qwidget_p.h>
 #include <qbackingstore_p.h>
 #include <qwindowsurface_qws_p.h>
-#include "qdecorationfactory_qws.h"
-#include "qlayout.h"
-#include "qwsmanager_p.h"
+#include <qdecorationfactory_qws.h>
+#include <qlayout.h>
+#include <qwsmanager_p.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE

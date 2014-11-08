@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qfilesystemwatcher.h"
-#include "qfilesystemwatcher_inotify_p.h"
+#include <qfilesystemwatcher.h>
+#include <qfilesystemwatcher_inotify_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include "qcore_unix_p.h"
+#include <qcore_unix_p.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <qfileinfo.h>

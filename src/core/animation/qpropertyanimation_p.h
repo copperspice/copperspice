@@ -26,8 +26,8 @@
 #ifndef QPROPERTYANIMATION_P_H
 #define QPROPERTYANIMATION_P_H
 
-#include "qpropertyanimation.h"
-#include "qvariantanimation_p.h"
+#include <qpropertyanimation.h>
+#include <qvariantanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 

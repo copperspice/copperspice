@@ -26,12 +26,12 @@
 #ifndef QWSDISPLAY_QWS_P_H
 #define QWSDISPLAY_QWS_P_H
 
-#include "qwsdisplay_qws.h"
-#include "qwssocket_qws.h"
-#include "qwsevent_qws.h"
+#include <qwsdisplay_qws.h>
+#include <qwssocket_qws.h>
+#include <qwsevent_qws.h>
 #include <qwssharedmemory_p.h>
-#include "qwscommand_qws_p.h"
-#include "qwslock_p.h"
+#include <qwscommand_qws_p.h>
+#include <qwslock_p.h>
 
 QT_BEGIN_NAMESPACE
 

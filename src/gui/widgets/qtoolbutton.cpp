@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtoolbutton.h"
+#include <qtoolbutton.h>
 
 #ifndef QT_NO_TOOLBUTTON
 

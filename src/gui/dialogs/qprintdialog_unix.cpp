@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "qabstractprintdialog_p.h"
+#include <qabstractprintdialog_p.h>
 #include <QtGui/qmessagebox.h>
-#include "qprintdialog.h"
-#include "qfiledialog.h"
+#include <qprintdialog.h>
+#include <qfiledialog.h>
 #include <QtCore/qdir.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qfilesystemmodel.h>
@@ -38,10 +38,10 @@
 #include <QtGui/qprinter.h>
 #include <QtGui/qdialogbuttonbox.h>
 
-#include "qfscompleter_p.h"
-#include "ui_qprintpropertieswidget.h"
-#include "ui_qprintsettingsoutput.h"
-#include "ui_qprintwidget.h"
+#include <qfscompleter_p.h>
+#include <ui_qprintpropertieswidget.h>
+#include <ui_qprintsettingsoutput.h>
+#include <ui_qprintwidget.h>
 
 #if !defined(QT_NO_CUPS)
 #  include <qcups_p.h>
@@ -1383,7 +1383,7 @@ void QPrintDialog::_q_checkFields()
 
 QT_END_NAMESPACE
 
-#include "qrc_qprintdialog.cpp"
+#include <qrc_qprintdialog.cpp>
 
 #endif // QT_NO_PRINTDIALOG
 

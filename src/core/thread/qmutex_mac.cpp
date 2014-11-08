@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qmutex.h"
+#include <qplatformdefs.h>
+#include <qmutex.h>
 
 #if !defined(QT_NO_THREAD)
 
-#include "qmutex_p.h"
+#include <qmutex_p.h>
 
 #include <mach/mach.h>
 #include <mach/task.h>

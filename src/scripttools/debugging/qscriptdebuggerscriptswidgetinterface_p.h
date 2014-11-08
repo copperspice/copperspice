@@ -26,28 +26,17 @@
 #ifndef QSCRIPTDEBUGGERSCRIPTSWIDGETINTERFACE_P_H
 #define QSCRIPTDEBUGGERSCRIPTSWIDGETINTERFACE_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
 #include <QtGui/qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
 class QScriptDebuggerScriptsModel;
-
 class QScriptDebuggerScriptsWidgetInterfacePrivate;
-class QScriptDebuggerScriptsWidgetInterface:
-   public QWidget
+
+class QScriptDebuggerScriptsWidgetInterface : public QWidget
 {
    CS_OBJECT(QScriptDebuggerScriptsWidgetInterface)
+
  public:
    ~QScriptDebuggerScriptsWidgetInterface();
 
@@ -57,7 +46,6 @@ class QScriptDebuggerScriptsWidgetInterface:
    virtual qint64 currentScriptId() const = 0;
    virtual void setCurrentScript(qint64 id) = 0;
 
- public:
    CS_SIGNAL_1(Public, void currentScriptChanged(qint64 scriptId))
    CS_SIGNAL_2(currentScriptChanged, scriptId)
    CS_SIGNAL_1(Public, void scriptLocationSelected(int lineNumber))

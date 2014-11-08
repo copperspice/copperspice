@@ -33,29 +33,31 @@
 #include <QtCore/QtGlobal>
 
 #ifndef PHONON_EXPORT
+
 # if defined Q_OS_WIN
-#  ifdef MAKE_PHONON_LIB /* We are building this library */
-#   define PHONON_EXPORT Q_DECL_EXPORT
-#  else /* We are using this library */
-#   define PHONON_EXPORT Q_DECL_IMPORT
+
+#  ifdef MAKE_PHONON_LIB 
+#    define PHONON_EXPORT    Q_DECL_EXPORT
+#  else 
+#    define PHONON_EXPORT    Q_DECL_IMPORT
 #  endif
-# else /* UNIX */
-#  ifdef MAKE_PHONON_LIB /* We are building this library */
-#   define PHONON_EXPORT Q_DECL_EXPORT
-#  else /* We are using this library */
-#   define PHONON_EXPORT Q_DECL_IMPORT
+
+# else 
+
+#  ifdef MAKE_PHONON_LIB 
+#    define PHONON_EXPORT    Q_DECL_EXPORT
+#  else 
+#    define PHONON_EXPORT    Q_DECL_IMPORT
 #  endif
+
 # endif
+
 #endif
 
-#ifndef PHONON_EXPORT_DEPRECATED
-# define PHONON_EXPORT_DEPRECATED Q_DECL_DEPRECATED PHONON_EXPORT
-#endif
-
-// QT_(BEGIN|END)_NAMESPACE appeared in 4.4
 #ifndef QT_BEGIN_NAMESPACE
 #  define QT_BEGIN_NAMESPACE
 #endif
+
 #ifndef QT_END_NAMESPACE
 #  define QT_END_NAMESPACE
 #endif

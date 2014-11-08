@@ -24,7 +24,7 @@
 *
 ***********************************************************************/
 
-#include "qfreelist_p.h"
+#include <qfreelist_p.h>
 
 // default sizes and offsets (no need to define these when customizing)
 enum {

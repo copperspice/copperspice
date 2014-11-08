@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpagesetupdialog.h"
+#include <qpagesetupdialog.h>
 #include <qhash.h>
 #include <qapplication_p.h>
 #include <qprintengine_mac_p.h>

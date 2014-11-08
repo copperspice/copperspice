@@ -69,7 +69,6 @@ class QGenericMatrix
       return *m;
    }
 
-#if !defined(Q_NO_TEMPLATE_FRIENDS)
    template<int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator+(const QGenericMatrix<NN, MM, TT> &m1, const QGenericMatrix<NN, MM, TT> &m2);
    template<int NN, int MM, typename TT>
@@ -86,15 +85,12 @@ class QGenericMatrix
    friend QGenericMatrix<NN, MM, TT> operator/(const QGenericMatrix<NN, MM, TT> &matrix, TT divisor);
 
  private:
-#endif
    T m[N][M];    // Column-major order to match OpenGL.
 
    QGenericMatrix(int) {}       // Construct without initializing identity matrix.
 
-#if !defined(Q_NO_TEMPLATE_FRIENDS)
    template <int NN, int MM, typename TT>
    friend class QGenericMatrix;
-#endif
 };
 
 template <int N, int M, typename T>

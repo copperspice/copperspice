@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qdockwidget.h"
+#include <qdockwidget.h>
 
 #ifndef QT_NO_DOCKWIDGET
 #include <qaction.h>
@@ -39,8 +39,8 @@
 #include <qdebug.h>
 #include <qwidgetresizehandler_p.h>
 
-#include "qdockwidget_p.h"
-#include "qmainwindowlayout_p.h"
+#include <qdockwidget_p.h>
+#include <qmainwindowlayout_p.h>
 
 #ifdef Q_OS_MAC
 #include <qapplication_p.h>

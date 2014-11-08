@@ -27,7 +27,7 @@
 #include <QtCore/qvarlengtharray.h>
 #include <qunicodetables_p.h>
 #include <qdebug.h>
-#include "qharfbuzz_p.h"
+#include <qharfbuzz_p.h>
 
 QT_BEGIN_NAMESPACE
 

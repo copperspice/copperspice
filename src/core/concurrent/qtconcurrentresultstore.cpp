@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qtconcurrentresultstore.h"
+#include <qtconcurrentresultstore.h>
 
 QT_BEGIN_NAMESPACE
 

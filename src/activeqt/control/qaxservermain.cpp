@@ -40,8 +40,7 @@
 
 #include <qstringlist.h>
 #include <qvector.h>
-
-#include "qaxfactory.h"
+#include <qaxfactory.h>
 
 #ifndef QT_NO_WIN_ACTIVEQT
 
@@ -55,11 +54,11 @@ static bool qAxActivity = false;
 static HANDLE hEventShutdown;
 
 #ifdef QT_DEBUG
-QT_STATIC_CONST DWORD dwTimeOut = 1000;
-QT_STATIC_CONST DWORD dwPause = 500;
+static const DWORD dwTimeOut = 1000;
+static const DWORD dwPause = 500;
 #else
-QT_STATIC_CONST DWORD dwTimeOut = 5000; // time for EXE to be idle before shutting down
-QT_STATIC_CONST DWORD dwPause = 1000; // time to wait for threads to finish up
+static const DWORD dwTimeOut = 5000; // time for EXE to be idle before shutting down
+static const DWORD dwPause = 1000; // time to wait for threads to finish up
 #endif
 
 extern HANDLE hEventShutdown;
