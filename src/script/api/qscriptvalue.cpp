@@ -322,33 +322,6 @@ QScriptValue::QScriptValue(QScriptEngine *engine, const QString &val)
    }
 }
 
-/*!
-  \fn QScriptValue::QScriptValue(QScriptEngine *engine, const char *value)
-  \obsolete
-
-  Constructs a new QScriptValue with the string \a value and
-  registers it with the script \a engine.
-*/
-
-
-QScriptValue::QScriptValue(QScriptEngine *engine, const char *val)
-   : d_ptr(new (QScriptEnginePrivate::get(engine))QScriptValuePrivate(QScriptEnginePrivate::get(engine)))
-{
-   if (engine) {
-      QScript::APIShim shim(d_ptr->engine);
-      JSC::ExecState *exec = d_ptr->engine->currentFrame;
-      d_ptr->initFrom(JSC::jsString(exec, val));
-   } else {
-      d_ptr->initFrom(QString::fromAscii(val));
-   }
-}
-
-
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a special \a value.
-*/
 QScriptValue::QScriptValue(SpecialValue value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
@@ -384,81 +357,36 @@ QScriptValue::QScriptValue(int value)
    d_ptr->initFrom(value);
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a number \a value.
-*/
 QScriptValue::QScriptValue(uint value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(value);
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a number \a value.
-*/
 QScriptValue::QScriptValue(qsreal value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(value);
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a string \a value.
-*/
 QScriptValue::QScriptValue(const QString &value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(value);
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a string \a value.
-*/
 QScriptValue::QScriptValue(const QLatin1String &value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(value);
 }
 
-/*!
-  \since 4.5
-
-  Constructs a new QScriptValue with a string \a value.
-*/
-
-QScriptValue::QScriptValue(const char *value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
-{
-   d_ptr->initFrom(QString::fromAscii(value));
-}
-
-/*!
-  Assigns the \a other value to this QScriptValue.
-
-  Note that if \a other is an object (isObject() returns true),
-  only a reference to the underlying object will be assigned;
-  the object itself will not be copied.
-*/
 QScriptValue &QScriptValue::operator=(const QScriptValue &other)
 {
    d_ptr = other.d_ptr;
    return *this;
 }
 
-/*!
-  Returns true if this QScriptValue is an object of the Error class;
-  otherwise returns false.
-
-  \sa QScriptContext::throwError()
-*/
 bool QScriptValue::isError() const
 {
    Q_D(const QScriptValue);
@@ -468,12 +396,6 @@ bool QScriptValue::isError() const
    return QScriptEnginePrivate::isError(d->jscValue);
 }
 
-/*!
-  Returns true if this QScriptValue is an object of the Array class;
-  otherwise returns false.
-
-  \sa QScriptEngine::newArray()
-*/
 bool QScriptValue::isArray() const
 {
    Q_D(const QScriptValue);
@@ -483,12 +405,6 @@ bool QScriptValue::isArray() const
    return QScriptEnginePrivate::isArray(d->jscValue);
 }
 
-/*!
-  Returns true if this QScriptValue is an object of the Date class;
-  otherwise returns false.
-
-  \sa QScriptEngine::newDate()
-*/
 bool QScriptValue::isDate() const
 {
    Q_D(const QScriptValue);
@@ -498,12 +414,6 @@ bool QScriptValue::isDate() const
    return QScriptEnginePrivate::isDate(d->jscValue);
 }
 
-/*!
-  Returns true if this QScriptValue is an object of the RegExp class;
-  otherwise returns false.
-
-  \sa QScriptEngine::newRegExp()
-*/
 bool QScriptValue::isRegExp() const
 {
    Q_D(const QScriptValue);
@@ -513,13 +423,6 @@ bool QScriptValue::isRegExp() const
    return QScriptEnginePrivate::isRegExp(d->jscValue);
 }
 
-/*!
-  If this QScriptValue is an object, returns the internal prototype
-  (\c{__proto__} property) of this object; otherwise returns an
-  invalid QScriptValue.
-
-  \sa setPrototype(), isObject()
-*/
 QScriptValue QScriptValue::prototype() const
 {
    Q_D(const QScriptValue);
@@ -529,17 +432,6 @@ QScriptValue QScriptValue::prototype() const
    return d->engine->scriptValueFromJSCValue(JSC::asObject(d->jscValue)->prototype());
 }
 
-/*!
-  If this QScriptValue is an object, sets the internal prototype
-  (\c{__proto__} property) of this object to be \a prototype;
-  otherwise does nothing.
-
-  The internal prototype should not be confused with the public
-  property with name "prototype"; the public prototype is usually
-  only set on functions that act as constructors.
-
-  \sa prototype(), isObject()
-*/
 void QScriptValue::setPrototype(const QScriptValue &prototype)
 {
    Q_D(QScriptValue);

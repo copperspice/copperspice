@@ -113,8 +113,8 @@ if test "x$missing" != "x"; then
    echo $missing
    echo "------------------------------------------------------------"
 
-   if [[ $missing =~ "Open GL" && -e /var/lib/parallels-tools/.backup/.libgl/libGL.so.1.2.0 ]]; then
-     echo "We suggest you run the following command to link OpenGL on Parallels"
+   if test -z "${missing##*OpenGL*}" && test -e /var/lib/parallels-tools/.backup/.libgl/libGL.so.1.2.0 ; then
+     echo "If you are on Parallels, execute the following command so CopperSpice can link with OpenGL"
      echo "sudo cp /var/lib/parallels-tools/.backup/.libgl/libGL.so.1.2.0 /usr/lib/x86_64-linux-gnu/mesa/"
    fi
 
