@@ -80,8 +80,10 @@ void Effect::setupEffectParams()
         GParamSpec **property_specs;
         guint propertyCount, i;
         property_specs = g_object_class_list_properties(G_OBJECT_GET_CLASS (m_effectElement), &propertyCount);
+
         for (i = 0; i < propertyCount; i++) {
             GParamSpec *param = property_specs[i];
+
             if (param->flags & G_PARAM_WRITABLE) {
                 QString propertyName = g_param_spec_get_name (param);
 
@@ -101,7 +103,7 @@ void Effect::setupEffectParams()
                     case G_TYPE_STRING:
                         m_parameterList.append(Phonon::EffectParameter(i, propertyName,
                             0,   //hints
-                            G_PARAM_SPEC_STRING(param)->default_value,
+                            QString(G_PARAM_SPEC_STRING(param)->default_value),
                             0,
                             0));
                         break;
@@ -117,9 +119,9 @@ void Effect::setupEffectParams()
                     case G_TYPE_FLOAT:
                         m_parameterList.append(Phonon::EffectParameter(i, propertyName,
                             0,   //hints
-                            QVariant((double)G_PARAM_SPEC_FLOAT(param)->default_value),
-                            QVariant((double)G_PARAM_SPEC_FLOAT(param)->minimum),
-                            QVariant((double)G_PARAM_SPEC_FLOAT(param)->maximum)));
+                            QVariant(static_cast<double>(G_PARAM_SPEC_FLOAT(param)->default_value)),
+                            QVariant(static_cast<double>(G_PARAM_SPEC_FLOAT(param)->minimum)),
+                            QVariant(static_cast<double>(G_PARAM_SPEC_FLOAT(param)->maximum))) );
                         break;
 
                     case G_TYPE_DOUBLE:
@@ -133,8 +135,8 @@ void Effect::setupEffectParams()
                     case G_TYPE_BOOLEAN:
                         m_parameterList.append(Phonon::EffectParameter(i, propertyName, 
                             Phonon::EffectParameter::ToggledHint,   //hints
-                            QVariant((bool)G_PARAM_SPEC_BOOLEAN(param)->default_value),
-                            QVariant((bool)false), QVariant((bool)true)));
+                            QVariant(static_cast<bool>(G_PARAM_SPEC_BOOLEAN(param)->default_value)),
+                            QVariant(static_cast<bool>(false)), QVariant(static_cast<bool>(true)) ));
                         break;
 
                     default:
@@ -186,10 +188,12 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
             {
                 GParamSpec* spec = g_object_class_find_property(G_OBJECT_GET_CLASS(m_effectElement), p.name().toLatin1().constData());
                 Q_ASSERT(spec);
+
                 if (spec && spec->value_type == G_TYPE_FLOAT) {
                     gfloat val = 0;
                     g_object_get(G_OBJECT(m_effectElement), qPrintable(p.name()), &val, (const char*)NULL);
                     returnVal = QVariant((float)val);
+
                 } else {
                     gdouble val = 0;
                     g_object_get(G_OBJECT(m_effectElement), qPrintable(p.name()), &val, (const char*)NULL);
@@ -225,6 +229,7 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &v)
                 if (v.toDouble() >= p.minimumValue().toDouble() && v.toDouble() <= p.maximumValue().toDouble()) {
                     GParamSpec* spec = g_object_class_find_property(G_OBJECT_GET_CLASS(m_effectElement), p.name().toLatin1().constData());
                     Q_ASSERT(spec);
+
                     if (spec && spec->value_type == G_TYPE_FLOAT)
                         g_object_set(G_OBJECT(m_effectElement), qPrintable(p.name()), (gfloat)v.toDouble(), (const char*)NULL);
                     else
