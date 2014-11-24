@@ -2680,7 +2680,7 @@ Do you want to delete it anyway?</source>
         <location line="+31"/>
         <location filename="../src/corelib/plugin/qlibrary_win.cpp" line="+15"/>
         <source>Cannot resolve symbol &quot;%1&quot; in %2: %3</source>
-        <translation>无法解析%2中的符号“%2”：%3</translation>
+        <translation>无法解析%1中的符号“%2”：%3</translation>
     </message>
 </context>
 <context>
@@ -7494,7 +7494,7 @@ Please choose a different file name.</source>
     <message>
         <location line="+267"/>
         <source>Each name of a template parameter must be unique; %1 is duplicated.</source>
-        <translation>每一个模板参数的名称都必须是唯一的；%2是重复的。</translation>
+        <translation>每一个模板参数的名称都必须是唯一的；%1是重复的。</translation>
     </message>
     <message>
         <location line="+129"/>
