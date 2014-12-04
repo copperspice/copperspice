@@ -183,12 +183,12 @@ QString QDesktopServices::storageLocation(StandardLocation type)
       case DataLocation:
          if (SHGetSpecialFolderPath(0, path, CSIDL_LOCAL_APPDATA, FALSE)) {
             result = QString::fromWCharArray(path);
-         }
-         if (!QCoreApplication::organizationName().isEmpty()) {
-            result = result + QLatin1String("\\") + QCoreApplication::organizationName();
-         }
-         if (!QCoreApplication::applicationName().isEmpty()) {
-            result = result + QLatin1String("\\") + QCoreApplication::applicationName();
+            if (!QCoreApplication::organizationName().isEmpty()) {
+               result = result + QLatin1String("\\") + QCoreApplication::organizationName();
+            }
+            if (!QCoreApplication::applicationName().isEmpty()) {
+               result = result + QLatin1String("\\") + QCoreApplication::applicationName();
+            }
          }
          break;
 
