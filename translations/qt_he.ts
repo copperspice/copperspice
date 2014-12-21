@@ -12,7 +12,7 @@
     <name>Debugger::JSAgentWatchData</name>
     <message>
         <source>[Array of length %1]</source>
-        <translation type="unfinished"></translation>
+        <translation>[מערך באורך %1]</translation>
     </message>
     <message>
         <source>&lt;undefined&gt;</source>
@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר אחרים</translation>
     </message>
     <message>
         <source>Show All</source>
@@ -135,11 +135,11 @@ have libgstreamer-plugins-base installed.</source>
     </message>
     <message>
         <source>Missing codec helper script assistant.</source>
-        <translation type="unfinished"></translation>
+        <translation>חסר מסייע לתסריט תמיכה לקודק.</translation>
     </message>
     <message>
         <source>Plugin codec installation failed for codec: %0</source>
-        <translation>התקנת קודק תוספת נכשלה עבור קודק: %0</translation>
+        <translation>התקנת קודק תוסף נכשלה עבור קודק: %0</translation>
     </message>
     <message>
         <source>A required codec is missing. You need to install the following codec(s) to play this content: %0</source>
@@ -198,7 +198,7 @@ have libgstreamer-plugins-base installed.</source>
     </message>
     <message>
         <source>Underflow</source>
-        <translation type="unfinished"></translation>
+        <translation>חריגה תחתית</translation>
     </message>
     <message>
         <source>Already exists</source>
@@ -388,12 +388,12 @@ have libgstreamer-plugins-base installed.</source>
     <message>
         <source>Decay HF ratio (%)</source>
         <extracomment>DecayHFRatio: Ratio of high-frequency decay time to the value specified by DecayTime.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>יחס התנוונות בתדר גבוה (%)</translation>
     </message>
     <message>
         <source>Decay time (ms)</source>
         <extracomment>DecayTime: Time over which reverberation is diminished.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>זמן התנוונות (מילישניות)</translation>
     </message>
     <message>
         <source>Density (%)</source>
@@ -408,32 +408,32 @@ have libgstreamer-plugins-base installed.</source>
     <message>
         <source>Reflections delay (ms)</source>
         <extracomment>ReflectionsDelay: Amount of delay between the arrival of the direct path from the source and the arrival of the first reflection.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>השהיית בבואה (מילישניות)</translation>
     </message>
     <message>
         <source>Reflections level (mB)</source>
         <extracomment>ReflectionsLevel: Amplitude of reflections. This value is corrected by the RoomLevel to give the final reflection amplitude.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>רמת בבואה (מיליבל)</translation>
     </message>
     <message>
         <source>Reverb delay (ms)</source>
         <extracomment>ReverbDelay: Amount of time between arrival of the first reflection and start of the late reverberation.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>השהיית הד מרוח (Reverb) (מילישניות)</translation>
     </message>
     <message>
         <source>Reverb level (mB)</source>
         <extracomment>ReverbLevel: Amplitude of reverberations. This value is corrected by the RoomLevel to give the final reverberation amplitude.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>רמת הד מרוח (Reverb) (מיליבל)</translation>
     </message>
     <message>
         <source>Room HF level</source>
         <extracomment>RoomHFLevel: Amplitude of low-pass filter used to attenuate the high frequency component of reflected sound.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>רמת תדרים גבוהים כללית</translation>
     </message>
     <message>
         <source>Room level (mB)</source>
         <extracomment>RoomLevel: Master volume control for all reflected sound.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>רמה כללית (מיליבל)</translation>
     </message>
 </context>
 <context>
@@ -562,7 +562,7 @@ have libgstreamer-plugins-base installed.</source>
     </message>
     <message>
         <source>Attributes</source>
-        <translation type="unfinished">תכונות</translation>
+        <translation>תכונות</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -927,7 +927,7 @@ to
     </message>
     <message>
         <source>Contains commands to manipulate the window</source>
-        <translation type="unfinished"></translation>
+        <translation>מכיל פקודות לביצוע שינויים בחלון</translation>
     </message>
     <message>
         <source>Puts a minimized window back to normal</source>
@@ -935,7 +935,7 @@ to
     </message>
     <message>
         <source>Moves the window out of the way</source>
-        <translation type="unfinished"></translation>
+        <translation>מזיז את החלון החוצה</translation>
     </message>
     <message>
         <source>Puts a maximized window back to normal</source>
@@ -951,7 +951,7 @@ to
     </message>
     <message>
         <source>Displays the name of the window and contains controls to manipulate it</source>
-        <translation type="unfinished"></translation>
+        <translation>מציג את שם החלון ומכיל פקדים כדי לבצע בו שינויים</translation>
     </message>
 </context>
 <context>
@@ -1320,15 +1320,15 @@ to
     <name>QDeclarativeAbstractAnimation</name>
     <message>
         <source>Cannot animate non-existent property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן להנפיש תכונה לא קיימת &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Cannot animate read-only property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן להנפיש תכונה לקריאה בלבד &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Animation is an abstract class</source>
-        <translation type="unfinished"></translation>
+        <translation>‏Animation היא מחלקה מופשטת</translation>
     </message>
 </context>
 <context>
@@ -1342,27 +1342,27 @@ to
     <name>QDeclarativeAnchors</name>
     <message>
         <source>Possible anchor loop detected on fill.</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת עוגן אפשרית בתוך fill.</translation>
     </message>
     <message>
         <source>Possible anchor loop detected on centerIn.</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת עוגן אפשרית בתוך centerin.</translation>
     </message>
     <message>
         <source>Cannot anchor to an item that isn&apos;t a parent or sibling.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לעגן לפריט שאינו הורה או אח.</translation>
     </message>
     <message>
         <source>Possible anchor loop detected on vertical anchor.</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת עוגן אפשרית בעוגן אנכי.</translation>
     </message>
     <message>
         <source>Possible anchor loop detected on horizontal anchor.</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת עוגן אפשרית בעוגן אופקי.</translation>
     </message>
     <message>
         <source>Cannot specify left, right, and hcenter anchors.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לציין עוגנים שמאלי, ימני וממורכז אופקית.</translation>
     </message>
     <message>
         <source>Cannot anchor to a null item.</source>
@@ -1370,23 +1370,23 @@ to
     </message>
     <message>
         <source>Cannot anchor a horizontal edge to a vertical edge.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לעגן קצה אופקי לקצה אנכי.</translation>
     </message>
     <message>
         <source>Cannot anchor item to self.</source>
-        <translation type="unfinished">אין אפשרות לעגן פריט אל עצמו.</translation>
+        <translation>לא ניתן לעגן פריט אל עצמו.</translation>
     </message>
     <message>
         <source>Cannot specify top, bottom, and vcenter anchors.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לציין עוגנים עליון, תחתון וממורכז אנכית.</translation>
     </message>
     <message>
         <source>Baseline anchor cannot be used in conjunction with top, bottom, or vcenter anchors.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן להשתמש בעוגן שורת טקסט בשילוב עם עוגנים עליון, תחתון או ממורכז אנכית.</translation>
     </message>
     <message>
         <source>Cannot anchor a vertical edge to a horizontal edge.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לעגן קצה אנכי לקצה אופקי.</translation>
     </message>
 </context>
 <context>
@@ -1407,21 +1407,21 @@ to
     <name>QDeclarativeBehavior</name>
     <message>
         <source>Cannot change the animation assigned to a Behavior.</source>
-        <translation type="unfinished">אין אפשרות לשנות את האנימציה אשר מוקצית אל התנהגות.</translation>
+        <translation>אין אפשרות לשנות את ההנפשה אשר מוקצית אל התנהגות.</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeBinding</name>
     <message>
         <source>Binding loop detected for property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת קישור עבור תכונה &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeCompiledBindings</name>
     <message>
         <source>Binding loop detected for property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>אותרה לולאת קישור עבור תכונה &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -1500,7 +1500,7 @@ to
     </message>
     <message>
         <source>Component elements may not contain properties other than id</source>
-        <translation type="unfinished"></translation>
+        <translation>אלמנט רכיב לא יכול להכיל תכונות מלבד מזהה</translation>
     </message>
     <message>
         <source>Invalid component id specification</source>
@@ -1516,15 +1516,15 @@ to
     </message>
     <message>
         <source>Component objects cannot declare new properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>אלמנט רכיב לא יכול להצהיר על תכונות חדשות.</translation>
     </message>
     <message>
         <source>Component objects cannot declare new signals.</source>
-        <translation type="unfinished"></translation>
+        <translation>אלמנט רכיב לא יכול להצהיר על אותו חדשים.</translation>
     </message>
     <message>
         <source>Component objects cannot declare new functions.</source>
-        <translation type="unfinished"></translation>
+        <translation>אלמנט רכיב לא יכול להצהיר על פונקציות חדשות.</translation>
     </message>
     <message>
         <source>Cannot create empty component specification</source>
@@ -1536,15 +1536,15 @@ to
     </message>
     <message>
         <source>&quot;%1.%2&quot; is not available due to component versioning.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1.%2&quot; אינו זמין בעקבות גרסת רכיב.</translation>
     </message>
     <message>
         <source>Incorrectly specified signal assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>צוינה בטעות השמה לאות</translation>
     </message>
     <message>
         <source>Cannot assign a value to a signal (expecting a script to be run)</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה לאות (מצפה לתסריט להרצה)</translation>
     </message>
     <message>
         <source>Empty signal assignment</source>
@@ -1556,15 +1556,15 @@ to
     </message>
     <message>
         <source>Attached properties cannot be used here</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן להשתמש כאן במאפיינים מקושרים</translation>
     </message>
     <message>
         <source>Non-existent attached object</source>
-        <translation type="unfinished"></translation>
+        <translation>אובייקט מקושר לא קיים</translation>
     </message>
     <message>
         <source>Invalid attached object assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>השמה לא תקינה של אובייקט מקושר</translation>
     </message>
     <message>
         <source>Cannot assign to non-existent default property</source>
@@ -1576,11 +1576,11 @@ to
     </message>
     <message>
         <source>Invalid use of namespace</source>
-        <translation type="unfinished">שימוש לא תקין של namespace</translation>
+        <translation>שימוש לא תקין של namespace</translation>
     </message>
     <message>
         <source>Not an attached property name</source>
-        <translation type="unfinished"></translation>
+        <translation>לא שם של מאפיין מקושר</translation>
     </message>
     <message>
         <source>Invalid use of id property</source>
@@ -1588,15 +1588,15 @@ to
     </message>
     <message>
         <source>Property has already been assigned a value</source>
-        <translation type="unfinished"></translation>
+        <translation>כבר נעשתה השמה לערך של מאפיין</translation>
     </message>
     <message>
         <source>Invalid grouped property access</source>
-        <translation type="unfinished"></translation>
+        <translation>גישה לא תקינה למאפיין מקובץ</translation>
     </message>
     <message>
         <source>Cannot assign a value directly to a grouped property</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה ישירה של ערך למאפיין מקובץ</translation>
     </message>
     <message>
         <source>Invalid property use</source>
@@ -1604,11 +1604,11 @@ to
     </message>
     <message>
         <source>Property assignment expected</source>
-        <translation type="unfinished"></translation>
+        <translation>צפויה השמה למאפיין</translation>
     </message>
     <message>
         <source>Single property assignment expected</source>
-        <translation type="unfinished"></translation>
+        <translation>צפויה השמה בודדת למאפיין</translation>
     </message>
     <message>
         <source>Unexpected object assignment</source>
@@ -1620,15 +1620,15 @@ to
     </message>
     <message>
         <source>Can only assign one binding to lists</source>
-        <translation type="unfinished"></translation>
+        <translation>ניתן לבצע השמה של קישור אחד בלבד לרשימות</translation>
     </message>
     <message>
         <source>Cannot assign primitives to lists</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה של ערכים פשוטים לרשימות</translation>
     </message>
     <message>
         <source>Cannot assign multiple values to a script property</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה של מספר ערכים למאפיין תסריט</translation>
     </message>
     <message>
         <source>Invalid property assignment: script expected</source>
@@ -1636,7 +1636,7 @@ to
     </message>
     <message>
         <source>Cannot assign multiple values to a singular property</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה של מספר ערכים למאפיין יחידני</translation>
     </message>
     <message>
         <source>Cannot assign object to property</source>
@@ -1724,23 +1724,23 @@ to
     </message>
     <message>
         <source>No property alias location</source>
-        <translation type="unfinished"></translation>
+        <translation>אין מיקום לכינוי מאפיין</translation>
     </message>
     <message>
         <source>Invalid alias location</source>
-        <translation type="unfinished"></translation>
+        <translation>מיקום כינוי לא תקין</translation>
     </message>
     <message>
         <source>Invalid alias reference. An alias reference must be specified as &lt;id&gt;, &lt;id&gt;.&lt;property&gt; or &lt;id&gt;.&lt;value property&gt;.&lt;property&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>התייחסות לכינוי לא תקינה. התייחסות לכינוי חייבת להיות מוגדרת בתור &lt;id&gt;‏, &lt;id&gt; &lt;property&gt; או &lt;id&gt; &lt;value property&gt; &lt;property&gt;</translation>
     </message>
     <message>
         <source>Invalid alias reference. Unable to find id &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>מיקום כינוי לא תקין. לא ניתן למצוא או המזהה &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Alias property exceeds alias bounds</source>
-        <translation type="unfinished"></translation>
+        <translation>מאפיין כינוי חורג מגבולות כינוי</translation>
     </message>
 </context>
 <context>
@@ -1758,11 +1758,11 @@ to
     <name>QDeclarativeConnections</name>
     <message>
         <source>Cannot assign to non-existent property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה למאפיין לא קיים &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Connections: nested objects not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>חיבורים: אובייקטים מקוננים לא מורשים</translation>
     </message>
     <message>
         <source>Connections: syntax error</source>
@@ -1777,7 +1777,7 @@ to
     <name>QDeclarativeEngine</name>
     <message>
         <source>executeSql called outside transaction()</source>
-        <translation type="unfinished"></translation>
+        <translation>‏executeSql נקראה מחוץ ל־transaction()</translation>
     </message>
     <message>
         <source>Read-only Transaction</source>
@@ -1785,7 +1785,7 @@ to
     </message>
     <message>
         <source>Version mismatch: expected %1, found %2</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה לא תואמת: צפויה %1, נמצאה %2</translation>
     </message>
     <message>
         <source>SQL transaction failed</source>
@@ -1804,22 +1804,22 @@ to
     <name>QDeclarativeFlipable</name>
     <message>
         <source>front is a write-once property</source>
-        <translation type="unfinished"></translation>
+        <translation>‏front הוא מאפיין שניתן לכתיבה פעם אחת</translation>
     </message>
     <message>
         <source>back is a write-once property</source>
-        <translation type="unfinished"></translation>
+        <translation>‏back הוא מאפיין שניתן לכתיבה פעם אחת</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeImportDatabase</name>
     <message>
         <source>plugin cannot be loaded for module &quot;%1&quot;: %2</source>
-        <translation type="unfinished">אין אפשרות לטעון תוספת עבור מודול &quot;%1&quot;: %2</translation>
+        <translation>אין אפשרות לטעון תוסף עבור מודול &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>module &quot;%1&quot; plugin &quot;%2&quot; not found</source>
-        <translation>מודול &quot;%1&quot; תוספת &quot;%2&quot; לא נמצא</translation>
+        <translation>מודול &quot;%1&quot; תוסף &quot;%2&quot; לא נמצא</translation>
     </message>
     <message>
         <source>module &quot;%1&quot; version %2.%3 is not installed</source>
@@ -1835,15 +1835,15 @@ to
     </message>
     <message>
         <source>import &quot;%1&quot; has no qmldir and no namespace</source>
-        <translation type="unfinished"></translation>
+        <translation>import &quot;%1&quot; ללא qmldir וללא namespace</translation>
     </message>
     <message>
         <source>- %1 is not a namespace</source>
-        <translation type="unfinished"></translation>
+        <translation>- %1 אינו namespace</translation>
     </message>
     <message>
         <source>- nested namespaces not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>- קינון namespace לא מורשה</translation>
     </message>
     <message>
         <source>local directory</source>
@@ -1851,15 +1851,15 @@ to
     </message>
     <message>
         <source>is ambiguous. Found in %1 and in %2</source>
-        <translation type="unfinished"></translation>
+        <translation>הוא דו משמעי. נמצא בתוך %1 ובתוך %2</translation>
     </message>
     <message>
         <source>is ambiguous. Found in %1 in version %2.%3 and %4.%5</source>
-        <translation type="unfinished"></translation>
+        <translation>הוא דו משמעי. נמצא בתוך %1 בגרסה %2.%3 ובתוך %4.%5</translation>
     </message>
     <message>
         <source>is instantiated recursively</source>
-        <translation type="unfinished"></translation>
+        <translation>נוצר באופן רקורסיבי</translation>
     </message>
     <message>
         <source>is not a type</source>
@@ -1867,123 +1867,123 @@ to
     </message>
     <message>
         <source>File name case mismatch for &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>רישיות אינן תואמות בשם הקובץ עבור &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeKeyNavigationAttached</name>
     <message>
         <source>KeyNavigation is only available via attached properties</source>
-        <translation type="unfinished"></translation>
+        <translation>‏KeyNavigation זמין רק באמצעות מאפיינים מקושרים</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeKeysAttached</name>
     <message>
         <source>Keys is only available via attached properties</source>
-        <translation type="unfinished"></translation>
+        <translation>‏Keys זמין רק באמצעות מאפיינים מקושרים</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeLayoutMirroringAttached</name>
     <message>
         <source>LayoutDirection attached property only works with Items</source>
-        <translation type="unfinished"></translation>
+        <translation>מאפיין מקושר LayoutDirection עובד רק עם Items</translation>
     </message>
     <message>
         <source>LayoutMirroring is only available via attached properties</source>
-        <translation type="unfinished"></translation>
+        <translation>‏LayoutMirroring זמין רק באמצעות מאפיינים מקושרים</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeListModel</name>
     <message>
         <source>remove: index %1 out of range</source>
-        <translation type="unfinished">remove: אינדקס %1 מחוץ לטווח</translation>
+        <translation>remove: אינדקס %1 מחוץ לטווח</translation>
     </message>
     <message>
         <source>insert: value is not an object</source>
-        <translation type="unfinished">insert: ערך אינו אובייקט</translation>
+        <translation>insert: ערך אינו אובייקט</translation>
     </message>
     <message>
         <source>insert: index %1 out of range</source>
-        <translation type="unfinished">insert: אינדקס %1 מחוץ לטווח</translation>
+        <translation>insert: אינדקס %1 מחוץ לטווח</translation>
     </message>
     <message>
         <source>move: out of range</source>
-        <translation type="unfinished">move: מחוץ לטווח</translation>
+        <translation>move: מחוץ לטווח</translation>
     </message>
     <message>
         <source>append: value is not an object</source>
-        <translation type="unfinished">append: ערך אינו אובייקט</translation>
+        <translation>append: ערך אינו אובייקט</translation>
     </message>
     <message>
         <source>set: value is not an object</source>
-        <translation type="unfinished">set: ערך אינו אובייקט</translation>
+        <translation>set: ערך אינו אובייקט</translation>
     </message>
     <message>
         <source>set: index %1 out of range</source>
-        <translation type="unfinished">set: אינדקס %1 מחוץ לטווח</translation>
+        <translation>set: אינדקס %1 מחוץ לטווח</translation>
     </message>
     <message>
         <source>ListElement: cannot contain nested elements</source>
-        <translation type="unfinished"></translation>
+        <translation>ListElement: לא יכול להכיל אלמנטים מקוננים</translation>
     </message>
     <message>
         <source>ListElement: cannot use reserved &quot;id&quot; property</source>
-        <translation type="unfinished">ListElement: אין אפשרות להשתמש במאפיין שמור &quot;id&quot;</translation>
+        <translation>ListElement: אין אפשרות להשתמש במאפיין שמור &quot;id&quot;</translation>
     </message>
     <message>
         <source>ListElement: cannot use script for property value</source>
-        <translation type="unfinished">ListElement: אין אפשרות להשתמש בתסריט עבור ערך מאפיין</translation>
+        <translation>ListElement: אין אפשרות להשתמש בתסריט עבור ערך מאפיין</translation>
     </message>
     <message>
         <source>ListModel: undefined property &apos;%1&apos;</source>
-        <translation type="unfinished">ListModel: מאפיין לא מוגדר &apos;%1&apos;</translation>
+        <translation>ListModel: מאפיין לא מוגדר &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeLoader</name>
     <message>
         <source>Loader does not support loading non-visual elements.</source>
-        <translation type="unfinished"></translation>
+        <translation>‏Loader לא תומך בטעינת אלמנטים שאינם חזותיים.</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeParentAnimation</name>
     <message>
         <source>Unable to preserve appearance under complex transform</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת המרה מורכבת</translation>
     </message>
     <message>
         <source>Unable to preserve appearance under non-uniform scale</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת שינוי גודל שאינו אחיד</translation>
     </message>
     <message>
         <source>Unable to preserve appearance under scale of 0</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת שינוי גודל של 0</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeParentChange</name>
     <message>
         <source>Unable to preserve appearance under complex transform</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת המרה מורכבת</translation>
     </message>
     <message>
         <source>Unable to preserve appearance under non-uniform scale</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת שינוי גודל שאינו אחיד</translation>
     </message>
     <message>
         <source>Unable to preserve appearance under scale of 0</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לשמר הופעה תחת שינוי גודל של 0</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeParser</name>
     <message>
         <source>Illegal unicode escape sequence</source>
-        <translation type="unfinished">רצף unicode escape לא חוקי</translation>
+        <translation>רצף unicode escape לא חוקי</translation>
     </message>
     <message>
         <source>Illegal character</source>
@@ -1991,15 +1991,15 @@ to
     </message>
     <message>
         <source>Unclosed string at end of line</source>
-        <translation type="unfinished"></translation>
+        <translation>מחרוזת לא סגורה בסוף שורה</translation>
     </message>
     <message>
         <source>Illegal escape sequence</source>
-        <translation type="unfinished">רצף escape לא חוקי</translation>
+        <translation>רצף escape לא חוקי</translation>
     </message>
     <message>
         <source>Unclosed comment at end of file</source>
-        <translation type="unfinished"></translation>
+        <translation>הערה לא סגורה בסוף שורה</translation>
     </message>
     <message>
         <source>Illegal syntax for exponential number</source>
@@ -2011,19 +2011,19 @@ to
     </message>
     <message>
         <source>Unterminated regular expression literal</source>
-        <translation type="unfinished"></translation>
+        <translation>ליטרל לא גמור של ביטוי רגולארי</translation>
     </message>
     <message>
         <source>Invalid regular expression flag &apos;%0&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>דגל לא תקין של ביטוי רגולארי &apos;%0&apos;</translation>
     </message>
     <message>
         <source>Unterminated regular expression backslash sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>רצף לוכסן אחורי לא גמור בביטוי רגולארי</translation>
     </message>
     <message>
         <source>Unterminated regular expression class</source>
-        <translation type="unfinished"></translation>
+        <translation>מחלקה לא גמורה בביטוי רגולארי</translation>
     </message>
     <message>
         <source>Syntax error</source>
@@ -2039,7 +2039,7 @@ to
     </message>
     <message>
         <source>Property value set multiple times</source>
-        <translation type="unfinished"></translation>
+        <translation>ערך מאפיין נקבע מספר פעמים</translation>
     </message>
     <message>
         <source>Expected type name</source>
@@ -2047,23 +2047,23 @@ to
     </message>
     <message>
         <source>Invalid import qualifier ID</source>
-        <translation type="unfinished"></translation>
+        <translation>מזהה מגדיר ייבוא לא תקין</translation>
     </message>
     <message>
         <source>Reserved name &quot;Qt&quot; cannot be used as an qualifier</source>
-        <translation>אין אפשרות להשתמש בשם השמור &quot;Qt&quot; בתור qualifier</translation>
+        <translation>אין אפשרות להשתמש בשם השמור &quot;Qt&quot; בתור מגדיר</translation>
     </message>
     <message>
         <source>Script import qualifiers must be unique.</source>
-        <translation type="unfinished">qualifiers יבוא תסריט חייבים להיות ייחודיים.</translation>
+        <translation>מגדיר ייבוא של תסריט חייב להיות ייחודי.</translation>
     </message>
     <message>
         <source>Script import requires a qualifier</source>
-        <translation type="unfinished"></translation>
+        <translation>ייבוא של תסריט דורש מגדיר</translation>
     </message>
     <message>
         <source>Library import requires a version</source>
-        <translation type="unfinished"></translation>
+        <translation>ייבוא של ספריה דורש גרסה</translation>
     </message>
     <message>
         <source>Expected parameter type</source>
@@ -2071,11 +2071,11 @@ to
     </message>
     <message>
         <source>Invalid property type modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>‏modifier של סוג מאפיין לא תקין</translation>
     </message>
     <message>
         <source>Unexpected property type modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>‏modifier של סוג מאפיין לא צפוי</translation>
     </message>
     <message>
         <source>Expected property type</source>
@@ -2083,7 +2083,7 @@ to
     </message>
     <message>
         <source>Readonly not yet supported</source>
-        <translation type="unfinished"></translation>
+        <translation>‏Readonly לא נתמך עדיין</translation>
     </message>
     <message>
         <source>JavaScript declaration outside Script element</source>
@@ -2123,26 +2123,26 @@ to
     <name>QDeclarativePropertyChanges</name>
     <message>
         <source>PropertyChanges does not support creating state-specific objects.</source>
-        <translation type="unfinished"></translation>
+        <translation>‏PropertyChanges לא תומך ביצירת אובייקטים ספציפיים למצב.</translation>
     </message>
     <message>
         <source>Cannot assign to non-existent property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה למאפיין לא קיים &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Cannot assign to read-only property &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לבצע השמה למאפיין לקריאה בלבד &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
     <name>QDeclarativeTextInput</name>
     <message>
         <source>Could not load cursor delegate</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לטעון נציג של סמן</translation>
     </message>
     <message>
         <source>Could not instantiate cursor delegate</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן ליצור נציג של סמן</translation>
     </message>
 </context>
 <context>
@@ -2157,7 +2157,7 @@ to
     </message>
     <message>
         <source>Namespace %1 cannot be used as a type</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן להשתמש ב־namespace‏ %1 בתור סוג</translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -2180,7 +2180,7 @@ to
     </message>
     <message>
         <source>Cannot connect mismatched signal/slot %1 %vs. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לחבר אות/חריץ שאינם תואמים %1  לעומת %2</translation>
     </message>
     <message>
         <source>Cannot assign an object to signal property %1</source>
@@ -2196,7 +2196,7 @@ to
     </message>
     <message>
         <source>Unable to create attached object</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן ליצור אובייקט מקושר</translation>
     </message>
     <message>
         <source>Cannot set properties on %1 as it is null</source>
@@ -2207,7 +2207,7 @@ to
     <name>QDeclarativeVisualDataModel</name>
     <message>
         <source>Delegate component must be Item type.</source>
-        <translation type="unfinished"></translation>
+        <translation>רכיב Delegate חייב להיות מסוג Item.</translation>
     </message>
 </context>
 <context>
@@ -2440,7 +2440,7 @@ to
     </message>
     <message>
         <source>Will not rename sequential file using block copy</source>
-        <translation type="unfinished"></translation>
+        <translation>לא יתבצע שינוי שם לקובץ סדרתי באמצעות העתקת בלוק</translation>
     </message>
     <message>
         <source>Cannot remove source file</source>
@@ -2464,7 +2464,7 @@ to
     </message>
     <message>
         <source>No file engine available or engine does not support UnMapExtension</source>
-        <translation type="unfinished"></translation>
+        <translation>אין מנוע קבצים זמין או שהמנוע אינו תומך UnMapExtension</translation>
     </message>
 </context>
 <context>
@@ -2596,7 +2596,7 @@ Do you want to delete it anyway?</source>
     <message>
         <source>File Folder</source>
         <comment>Match Windows Explorer</comment>
-        <translation type="unfinished"></translation>
+        <translation>תיקיית קבצים</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -2606,7 +2606,7 @@ Do you want to delete it anyway?</source>
     <message>
         <source>Alias</source>
         <comment>Mac OS X Finder</comment>
-        <translation type="unfinished"></translation>
+        <translation>כינוי</translation>
     </message>
     <message>
         <source>Shortcut</source>
@@ -2659,7 +2659,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Go to the parent directory</source>
-        <translation type="unfinished"></translation>
+        <translation>לך אל ספרייה מעלה</translation>
     </message>
     <message>
         <source>Create a New Folder</source>
@@ -2667,11 +2667,11 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Change to list view mode</source>
-        <translation type="unfinished"></translation>
+        <translation>החלף למצב תצוגת רשימה</translation>
     </message>
     <message>
         <source>Change to detail view mode</source>
-        <translation type="unfinished"></translation>
+        <translation>החלף למצב תצוגת פרטים</translation>
     </message>
 </context>
 <context>
@@ -2907,7 +2907,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>N&apos;Ko</source>
-        <translation type="unfinished"></translation>
+        <translation>נ&apos;קו</translation>
     </message>
 </context>
 <context>
@@ -3400,15 +3400,15 @@ Do you want to delete it anyway?</source>
     <name>QLibrary</name>
     <message>
         <source>Plugin verification data mismatch in &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>חוסר התאמה במידע אימות תוסף בתוך &apos;%1&apos;</translation>
     </message>
     <message>
         <source>The plugin &apos;%1&apos; uses incompatible Qt library. (%2.%3.%4) [%5]</source>
-        <translation type="unfinished"></translation>
+        <translation>התוסף &apos;%1&apos; משתמש בספריית Qt שאינה תואמת (%2.%3.%4) [%5]</translation>
     </message>
     <message>
         <source>The plugin &apos;%1&apos; uses incompatible Qt library. Expected build key &quot;%2&quot;, got &quot;%3&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>התוסף &apos;%1&apos; משתמש בספריית Qt שאינה תואמת. מפתח בניה צפוי &quot;%2&quot;, נמצא &quot;%3&quot;</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -3416,15 +3416,15 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>The shared library was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>הספריה המשותפת לא נמצאה.</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; is not a valid Qt plugin.</source>
-        <translation>הקובץ &apos;%1&apos; אינו תוספת Qt תקינה.</translation>
+        <translation>הקובץ &apos;%1&apos; אינו תוסף Qt תקין.</translation>
     </message>
     <message>
         <source>The plugin &apos;%1&apos; uses incompatible Qt library. (Cannot mix debug and release libraries.)</source>
-        <translation type="unfinished"></translation>
+        <translation>התוסף &apos;%1&apos; משתמש בספריית Qt שאינה תואמת (לא ניתן לערבב ספריית debug וספריית release.)</translation>
     </message>
     <message>
         <source>Cannot load library %1: %2</source>
@@ -3777,7 +3777,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Multiple input method switcher that uses the context menu of the text widgets</source>
-        <translation type="unfinished">מחליף שיטת קלט מרובה אשר משתמש בתפריט הקשר של widgets של טקסט</translation>
+        <translation>מחליף שיטת קלט מרובה אשר משתמש בתפריט הקשר של widgets של טקסט</translation>
     </message>
 </context>
 <context>
@@ -3876,7 +3876,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Operation on non-socket</source>
-        <translation type="unfinished"></translation>
+        <translation>פעולה על אובייקט שאינו שקע</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -3920,7 +3920,7 @@ Do you want to delete it anyway?</source>
     <name>QNetworkAccessFileBackend</name>
     <message>
         <source>Request for opening non-local file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>בקשה לפתיחת קובץ שאינו מקומי %1</translation>
     </message>
     <message>
         <source>Error opening %1: %2</source>
@@ -4138,7 +4138,7 @@ Do you want to delete it anyway?</source>
     <name>QODBCResult</name>
     <message>
         <source>QODBCResult::reset: Unable to set &apos;SQL_CURSOR_STATIC&apos; as statement attribute. Please check your ODBC driver configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>QODBCResult::reset: לא ניתן לקבוע את &apos;SQL_CURSOR_STATIC&apos; כתכונת הוראה. נא לבדוק את תצורת דרייבר ה־ODBC</translation>
     </message>
     <message>
         <source>Unable to execute statement</source>
@@ -4181,7 +4181,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>&quot;%1&quot; duplicates a previous role name and will be disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; משכפל שם תפקיד קודם וינוטרל.</translation>
     </message>
     <message>
         <source>invalid query: &quot;%1&quot;</source>
@@ -4197,11 +4197,11 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Sequential device (eg socket) for image read not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>התקן סדרתי (לדוגמה socket) לקריאת תמונה אינו נתמך</translation>
     </message>
     <message>
         <source>Seek file/device for image read failed</source>
-        <translation type="unfinished"></translation>
+        <translation>סריקת קובץ/התקן לקריאת תמונה נכשלה</translation>
     </message>
     <message>
         <source>Image mHeader read failed</source>
@@ -4217,15 +4217,15 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Could not seek to image read footer</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לסרוק לסיומת קריאת תמונה</translation>
     </message>
     <message>
         <source>Could not read footer</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לקרוא סיומת</translation>
     </message>
     <message>
         <source>Image type (non-TrueVision 2.0) not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>סוג תמונה (לא TrueVision 2.0) לא נתמך</translation>
     </message>
     <message>
         <source>Could not reset to start position</source>
@@ -4372,7 +4372,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>The plugin was not loaded.</source>
-        <translation>התוספת לא נטענה.</translation>
+        <translation>התוסף לא נטען.</translation>
     </message>
 </context>
 <context>
@@ -4713,7 +4713,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Write %1 file</source>
-        <translation type="unfinished"></translation>
+        <translation>כתוב קובץ %1</translation>
     </message>
     <message>
         <source>The &apos;From&apos; value cannot be greater than the &apos;To&apos; value.</source>
@@ -4780,7 +4780,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Show facing pages</source>
-        <translation type="unfinished">הצג עמודים facing</translation>
+        <translation>הצג עמודים facing</translation>
     </message>
     <message>
         <source>Show overview of all pages</source>
@@ -4948,11 +4948,11 @@ Please choose a different file name.</source>
     <name>QProcess</name>
     <message>
         <source>Could not open input redirection for reading</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לפתוח הפניית קלט לקריאה</translation>
     </message>
     <message>
         <source>Could not open output redirection for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לפתוח הפניית פלט לכתיבה</translation>
     </message>
     <message>
         <source>Resource error (fork failure): %1</source>
@@ -5012,11 +5012,11 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>disabled feature used</source>
-        <translation type="unfinished"></translation>
+        <translation>נעשה שימוש בתכונה מנוטרלת</translation>
     </message>
     <message>
         <source>bad char class syntax</source>
-        <translation type="unfinished"></translation>
+        <translation>תחביר רע למחלקת תו</translation>
     </message>
     <message>
         <source>bad lookahead syntax</source>
@@ -5024,7 +5024,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>lookbehinds not supported, see QTBUG-2371</source>
-        <translation type="unfinished"></translation>
+        <translation>סריקה לאחור לא נתמכת, ראה QTBUG-2371</translation>
     </message>
     <message>
         <source>bad repetition syntax</source>
@@ -5036,7 +5036,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>missing left delim</source>
-        <translation type="unfinished"></translation>
+        <translation>חסר תוחם שמאלי</translation>
     </message>
     <message>
         <source>unexpected end</source>
@@ -5044,7 +5044,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>met internal limit</source>
-        <translation type="unfinished"></translation>
+        <translation>גבול פנימי עבר</translation>
     </message>
     <message>
         <source>invalid interval</source>
@@ -5151,19 +5151,19 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Condition</source>
-        <translation type="unfinished"></translation>
+        <translation>תנאי</translation>
     </message>
     <message>
         <source>Ignore-count</source>
-        <translation type="unfinished"></translation>
+        <translation>מספר התעלמויות</translation>
     </message>
     <message>
         <source>Single-shot</source>
-        <translation type="unfinished"></translation>
+        <translation>חד פעמי</translation>
     </message>
     <message>
         <source>Hit-count</source>
-        <translation type="unfinished"></translation>
+        <translation>מספר פגיעות</translation>
     </message>
 </context>
 <context>
@@ -5189,7 +5189,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Interrupt</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Shift+F5</source>
@@ -5205,7 +5205,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Step Into</source>
-        <translation type="unfinished"></translation>
+        <translation>צעד לתוך</translation>
     </message>
     <message>
         <source>F11</source>
@@ -5213,7 +5213,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Step Over</source>
-        <translation type="unfinished"></translation>
+        <translation>צעד מעל</translation>
     </message>
     <message>
         <source>F10</source>
@@ -5221,7 +5221,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Step Out</source>
-        <translation type="unfinished"></translation>
+        <translation>צעד החוצה</translation>
     </message>
     <message>
         <source>Shift+F11</source>
@@ -5229,7 +5229,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Run to Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>רוץ לסמן</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
@@ -5237,7 +5237,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Run to New Script</source>
-        <translation type="unfinished"></translation>
+        <translation>רוץ לתסריט חדש</translation>
     </message>
     <message>
         <source>Toggle Breakpoint</source>
@@ -5316,7 +5316,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>&lt;img src=&quot;:/qt/scripttools/debugging/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;img src=&quot;:/qt/scripttools/debugging/images/wrap.png&quot;&gt;&amp;nbsp;חיפוש קפץ</translation>
     </message>
 </context>
 <context>
@@ -5368,7 +5368,7 @@ Please choose a different file name.</source>
     <name>QScriptEngineDebugger</name>
     <message>
         <source>Loaded Scripts</source>
-        <translation type="unfinished">תסריטים טעונים</translation>
+        <translation>תסריטים טעונים</translation>
     </message>
     <message>
         <source>Breakpoints</source>
@@ -5376,15 +5376,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Stack</source>
-        <translation type="unfinished"></translation>
+        <translation>מחסנית</translation>
     </message>
     <message>
         <source>Locals</source>
-        <translation type="unfinished"></translation>
+        <translation>משתנים מקומיים</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>מסוף</translation>
     </message>
     <message>
         <source>Debug Output</source>
@@ -5396,15 +5396,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">חיפוש</translation>
+        <translation>חיפוש</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">תצוגה</translation>
+        <translation>תצוגה</translation>
     </message>
     <message>
         <source>Qt Script Debugger</source>
-        <translation type="unfinished">מנפה שגיאות תסריט Qt</translation>
+        <translation>מנפה שגיאות תסריט Qt</translation>
     </message>
 </context>
 <context>
@@ -5485,12 +5485,12 @@ Please choose a different file name.</source>
     <name>QSharedMemory</name>
     <message>
         <source>%1: unable to set key on lock</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: לא ניתן לקבוע מפתח במנעול</translation>
     </message>
     <message>
         <source>%1: create size is less then 0</source>
         <translatorcomment>typo</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>%1: גודל יצירה הוא פחות מ־0</translation>
     </message>
     <message>
         <source>%1: unable to lock</source>
@@ -5542,7 +5542,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1: system-imposed size restrictions</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: מגבלות גודל נקבעו ע&quot;י המערכת</translation>
     </message>
     <message>
         <source>%1: bad name</source>
@@ -5912,15 +5912,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Back Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>העברה אחורה</translation>
     </message>
     <message>
         <source>Application Left</source>
-        <translation type="unfinished"></translation>
+        <translation>יישום שמאלה</translation>
     </message>
     <message>
         <source>Application Right</source>
-        <translation type="unfinished"></translation>
+        <translation>יישום ימינה</translation>
     </message>
     <message>
         <source>Book</source>
@@ -5940,7 +5940,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Clear Grab</source>
-        <translation type="unfinished"></translation>
+        <translation>ניקוי גרירה</translation>
     </message>
     <message>
         <source>Close</source>
@@ -6004,7 +6004,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Menu PB</source>
-        <translation type="unfinished"></translation>
+        <translation>תפריט PB</translation>
     </message>
     <message>
         <source>My Sites</source>
@@ -6016,7 +6016,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Home Office</source>
-        <translation type="unfinished"></translation>
+        <translation>משרד ביתי</translation>
     </message>
     <message>
         <source>Option</source>
@@ -6040,15 +6040,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Rotate Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>סובב חלונות</translation>
     </message>
     <message>
         <source>Rotation PB</source>
-        <translation type="unfinished"></translation>
+        <translation>סיבוב PB</translation>
     </message>
     <message>
         <source>Rotation KB</source>
-        <translation type="unfinished"></translation>
+        <translation>סיבוב KB</translation>
     </message>
     <message>
         <source>Save</source>
@@ -6064,7 +6064,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Split Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>פצל מסך</translation>
     </message>
     <message>
         <source>Support</source>
@@ -6096,7 +6096,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>XFer</source>
-        <translation type="unfinished"></translation>
+        <translation>העבר</translation>
     </message>
     <message>
         <source>Zoom In</source>
@@ -6108,7 +6108,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Away</source>
-        <translation type="unfinished"></translation>
+        <translation>רחוק</translation>
     </message>
     <message>
         <source>Messenger</source>
@@ -6120,7 +6120,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Mail Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>העברת דואר</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -6144,7 +6144,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Ultra Wide Band</source>
-        <translation type="unfinished"></translation>
+        <translation>פס אולטרה רחב</translation>
     </message>
     <message>
         <source>Audio Forward</source>
@@ -6172,7 +6172,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>תצוגה</translation>
     </message>
     <message>
         <source>Top Menu</source>
@@ -6275,7 +6275,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Flip</source>
-        <translation type="unfinished"></translation>
+        <translation>הפוך</translation>
     </message>
     <message>
         <source>Voice Dial</source>
@@ -6299,123 +6299,123 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Kanji</source>
-        <translation type="unfinished"></translation>
+        <translation>קאנג&apos;י</translation>
     </message>
     <message>
         <source>Muhenkan</source>
-        <translation type="unfinished"></translation>
+        <translation>מוהנקאן</translation>
     </message>
     <message>
         <source>Henkan</source>
-        <translation type="unfinished"></translation>
+        <translation>הנקאן</translation>
     </message>
     <message>
         <source>Romaji</source>
-        <translation type="unfinished"></translation>
+        <translation>רומאנג&apos;י</translation>
     </message>
     <message>
         <source>Hiragana</source>
-        <translation type="unfinished"></translation>
+        <translation>היראגאנה</translation>
     </message>
     <message>
         <source>Katakana</source>
-        <translation type="unfinished"></translation>
+        <translation>קאטאקאנה</translation>
     </message>
     <message>
         <source>Hiragana Katakana</source>
-        <translation type="unfinished"></translation>
+        <translation>היראגאנה קטאטקאנה</translation>
     </message>
     <message>
         <source>Zenkaku</source>
-        <translation type="unfinished"></translation>
+        <translation>זנקאקו</translation>
     </message>
     <message>
         <source>Hankaku</source>
-        <translation type="unfinished"></translation>
+        <translation>האנקאקו</translation>
     </message>
     <message>
         <source>Zenkaku Hankaku</source>
-        <translation type="unfinished"></translation>
+        <translation>זנקאקו האנקאקו</translation>
     </message>
     <message>
         <source>Touroku</source>
-        <translation type="unfinished"></translation>
+        <translation>טואורוקו</translation>
     </message>
     <message>
         <source>Massyo</source>
-        <translation type="unfinished"></translation>
+        <translation>מאסיו</translation>
     </message>
     <message>
         <source>Kana Lock</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Kana Shift</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Eisu Shift</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Eisu toggle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Code input</source>
-        <translation type="unfinished"></translation>
+        <translation>קלט קוד</translation>
     </message>
     <message>
         <source>Multiple Candidate</source>
-        <translation type="unfinished"></translation>
+        <translation>מספר מועמדים</translation>
     </message>
     <message>
         <source>Previous Candidate</source>
-        <translation type="unfinished"></translation>
+        <translation>מועמד קודם</translation>
     </message>
     <message>
         <source>Hangul</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול</translation>
     </message>
     <message>
         <source>Hangul Start</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול התחלה</translation>
     </message>
     <message>
         <source>Hangul End</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול סיום</translation>
     </message>
     <message>
         <source>Hangul Hanja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול האנג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul Jamo</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול ג&apos;אמו</translation>
     </message>
     <message>
         <source>Hangul Romaja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול רומאג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul Jeonja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול ג&apos;אונג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul Banja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול באנג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul PreHanja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול  לפני האנג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul PostHanja</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול אחרי האנג&apos;ה</translation>
     </message>
     <message>
         <source>Hangul Special</source>
-        <translation type="unfinished"></translation>
+        <translation>האנגול מיוחד</translation>
     </message>
     <message>
         <source>Ctrl</source>
@@ -6431,7 +6431,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Meta</source>
-        <translation type="unfinished"></translation>
+        <translation>מטא</translation>
     </message>
     <message>
         <source>+</source>
@@ -6706,23 +6706,23 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>The root certificate of the certificate chain is self-signed, and untrusted</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת השורש של שרשרת התעודות היא בעלת חתימה עצמית, ולא אמינה</translation>
     </message>
     <message>
         <source>The issuer certificate of a locally looked up certificate could not be found</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת המנפיק של תעודה בחיפוש מקומי לא נמצא</translation>
     </message>
     <message>
         <source>No certificates could be verified</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לאמת תעודות</translation>
     </message>
     <message>
         <source>One of the CA certificates is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>אחת מתעודות CA אינה תקינה</translation>
     </message>
     <message>
         <source>The basicConstraints path length parameter has been exceeded</source>
-        <translation type="unfinished"></translation>
+        <translation>חריגה מפרמטר אורך הנתיב basicConstraints</translation>
     </message>
     <message>
         <source>The supplied certificate is unsuitable for this purpose</source>
@@ -6730,19 +6730,19 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>The root CA certificate is not trusted for this purpose</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת CA השורש אינה אמינה למטרה זו</translation>
     </message>
     <message>
         <source>The root CA certificate is marked to reject the specified purpose</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת CA השורש מסומנת לדחיית המטרה המוגדרת</translation>
     </message>
     <message>
         <source>The current candidate issuer certificate was rejected because its subject name did not match the issuer name of the current certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת המנפיק של התעודה הנוכחית נדחתה כיוון ששם הנושא לא תואם לשם המנפיק של התעודה הנוכחית</translation>
     </message>
     <message>
         <source>The current candidate issuer certificate was rejected because its issuer name and serial number was present and did not match the authority key identifier of the current certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>תעודת המנפיק של התעודה הנוכחית נדחתה כיוון ששם המנפיק והמספר הסידורי נמצאים ואינם תואמים למזהה מפתח האמינות של התעודה הנוכחית</translation>
     </message>
     <message>
         <source>The peer did not present any certificate</source>
@@ -6750,7 +6750,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>The host name did not match any of the valid hosts for this certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המארח אינו תואם אף אחד מהמארחים החוקיים עבור תעודה זו</translation>
     </message>
     <message>
         <source>The peer certificate is blacklisted</source>
@@ -6765,15 +6765,15 @@ Please choose a different file name.</source>
     <name>QStateMachine</name>
     <message>
         <source>Missing initial state in compound state &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>חסר מצב ראשוני במצב מורכב &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Missing default state in history state &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>חסר מצב ברירת מחדל במצב הסטוריה &apos;%1&apos;</translation>
     </message>
     <message>
         <source>No common ancestor for targets and source of transition from state &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>אין אב משותף ליעדים והמקור של המעבר ממצב &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -6792,7 +6792,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>POLICY_DB_DEFAULT must be defined before any other POLICY definitions can be used</source>
-        <translation type="unfinished"></translation>
+        <translation>POLICY_DB_DEFAULT חייב להיות מוגדר לפני שניתן להשתמש בכל הגדרת POLICY אחרת</translation>
     </message>
     <message>
         <source>Unable to begin transaction</source>
@@ -6942,7 +6942,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Operation on non-socket</source>
-        <translation type="unfinished"></translation>
+        <translation>פעולה על אובייקט שאינו שקע</translation>
     </message>
     <message>
         <source>The proxy type is invalid for this operation</source>
@@ -7546,7 +7546,7 @@ Please choose a different file name.</source>
     <message>
         <source>Slider</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>מחליק</translation>
     </message>
     <message>
         <source>Slider Thumb</source>
@@ -7556,12 +7556,12 @@ Please choose a different file name.</source>
     <message>
         <source>Rewind Button</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>כפתור העברה לאחור</translation>
     </message>
     <message>
         <source>Return to Real-time Button</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>כפתור חזרה לזמן אמיתי</translation>
     </message>
     <message>
         <source>Elapsed Time</source>
@@ -7576,7 +7576,7 @@ Please choose a different file name.</source>
     <message>
         <source>Status Display</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>תצוגת מצב</translation>
     </message>
     <message>
         <source>Fullscreen Button</source>
@@ -7586,22 +7586,22 @@ Please choose a different file name.</source>
     <message>
         <source>Seek Forward Button</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>כפתור קפיצה קדימה</translation>
     </message>
     <message>
         <source>Seek Back Button</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>כפתור קפיצה לאחור</translation>
     </message>
     <message>
         <source>Audio element playback controls and status display</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>תצוגת פקדים ומצב נגינה של אלמנט שמע</translation>
     </message>
     <message>
         <source>Video element playback controls and status display</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>תצוגת פקדים ומצב נגינה של אלמנט וידאו</translation>
     </message>
     <message>
         <source>Mute audio tracks</source>
@@ -7626,7 +7626,7 @@ Please choose a different file name.</source>
     <message>
         <source>Movie time scrubber</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>אלמנט שליטה על מדיה</translation>
     </message>
     <message>
         <source>Movie time scrubber thumb</source>
@@ -7636,12 +7636,12 @@ Please choose a different file name.</source>
     <message>
         <source>Rewind movie</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>העברת סרט לאחור</translation>
     </message>
     <message>
         <source>Return streaming movie to real-time</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>החזרת סרט בזרימה לזמן אמיתי</translation>
     </message>
     <message>
         <source>Current movie time</source>
@@ -7666,12 +7666,12 @@ Please choose a different file name.</source>
     <message>
         <source>Seek quickly back</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>קפיצה מהירה לאחור</translation>
     </message>
     <message>
         <source>Seek quickly forward</source>
         <comment>Media controller element</comment>
-        <translation type="unfinished"></translation>
+        <translation>קפיצה מהירה קדימה</translation>
     </message>
     <message>
         <source>Indefinite time</source>
@@ -7721,7 +7721,7 @@ Please choose a different file name.</source>
     <message>
         <source>Missing Plug-in</source>
         <comment>Label text to be used when a plug-in is missing</comment>
-        <translation>תוספת חסרה</translation>
+        <translation>תוסף חסר</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -7792,8 +7792,8 @@ Please choose a different file name.</source>
     <message numerus="yes">
         <source>%n file(s)</source>
         <comment>number of chosen file</comment>
-        <translation type="unfinished">
-            <numerusform>קובץ %n</numerusform>
+        <translation>
+            <numerusform>קובץ אחד</numerusform>
             <numerusform>%n קבצים</numerusform>
         </translation>
     </message>
@@ -7807,7 +7807,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>JavaScript Prompt - %1</source>
-        <translation type="unfinished">שאלת JavaScript‏ - %1</translation>
+        <translation>שאלת JavaScript‏ - %1</translation>
     </message>
     <message>
         <source>JavaScript Problem - %1</source>
@@ -7815,7 +7815,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>The script on this page appears to have a problem. Do you want to stop the script?</source>
-        <translation type="unfinished"></translation>
+        <translation>נראה כי ישנה בעיה עם התסריט בדף הזה. האם ברצונך לעצור את התסריט?</translation>
     </message>
     <message>
         <source>Move the cursor to the next character</source>
@@ -7867,7 +7867,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Paste and Match Style</source>
-        <translation type="unfinished"></translation>
+        <translation>הדבק והתאם סגנון</translation>
     </message>
     <message>
         <source>Remove formatting</source>
@@ -7887,11 +7887,11 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Insert Bulleted List</source>
-        <translation type="unfinished"></translation>
+        <translation>הכנס רשימת תבליטים</translation>
     </message>
     <message>
         <source>Insert Numbered List</source>
-        <translation type="unfinished"></translation>
+        <translation>הכנס רשימה ממוספרת</translation>
     </message>
     <message>
         <source>Indent</source>
@@ -7899,7 +7899,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Outdent</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל הזחה</translation>
     </message>
     <message>
         <source>Center</source>
@@ -7983,7 +7983,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Redirection limit reached</source>
-        <translation type="unfinished"></translation>
+        <translation>חריגה מגבול הפניות</translation>
     </message>
 </context>
 <context>
@@ -8240,7 +8240,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
+        <translation>קידומת namespace‏ &apos;%1&apos; לא הוצהרה</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
@@ -8248,7 +8248,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
+        <translation>תו לא צפוי &apos;%1&apos; בליטראל מזהה ציבורי.</translation>
     </message>
     <message>
         <source>Invalid XML version string.</source>
@@ -8268,7 +8268,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
+        <translation>‏Standalone מקבל רק כן או לא.</translation>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
@@ -8276,7 +8276,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
+        <translation>סיום מסמך מוקדם מדי.</translation>
     </message>
     <message>
         <source>Invalid document.</source>
@@ -8284,27 +8284,27 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Expected </source>
-        <translation type="unfinished"></translation>
+        <translation>צפוי </translation>
     </message>
     <message>
         <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>, אך נמצא &apos;</translation>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>לא צפוי &apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"></translation>
+        <translation>צפוי מידע תו.</translation>
     </message>
     <message>
         <source>Recursive entity detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>נמצאה ישות רקורסיבית.</translation>
     </message>
     <message>
         <source>Start tag expected.</source>
-        <translation type="unfinished"></translation>
+        <translation>צפוי תג התחלה.</translation>
     </message>
     <message>
         <source>XML declaration not at start of document.</source>
@@ -8312,19 +8312,19 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>NDATA in parameter entity declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation>‏NDATA בהצהרת יישות פרמטר.</translation>
     </message>
     <message>
         <source>%1 is an invalid processing instruction name.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 הוא שם לא תקין להוראת עיבוד.</translation>
     </message>
     <message>
         <source>Invalid processing instruction name.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם לא תקין להוראת עיבוד.</translation>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation>הצהרת namespace לא חוקית.</translation>
     </message>
     <message>
         <source>Invalid XML name.</source>
@@ -8332,7 +8332,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Opening and ending tag mismatch.</source>
-        <translation type="unfinished"></translation>
+        <translation>חוסר התאמה בין תג פותח לסוגר.</translation>
     </message>
     <message>
         <source>Reference to unparsed entity &apos;%1&apos;.</source>
@@ -8352,15 +8352,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
+        <translation>נמצא תוכן בקידוד לא נכון.</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>מאפיין הדמה standalone חייב להופיע אחרי הקידוד.</translation>
     </message>
     <message>
         <source>%1 is an invalid PUBLIC identifier.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 הוא מזהה PUBLIC לא חוקי.</translation>
     </message>
 </context>
 <context>
@@ -8378,7 +8378,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Play/Pause Animations</source>
-        <translation>הנפש/השהה אנימציות</translation>
+        <translation>הנפש/השהה הנפשות</translation>
     </message>
     <message>
         <source>Select</source>
@@ -8455,7 +8455,7 @@ Please choose a different file name.</source>
     <name>QtXmlPatterns</name>
     <message>
         <source>Network timeout.</source>
-        <translation type="unfinished">פקיעת זמן רשת.</translation>
+        <translation>פקיעת זמן רשת.</translation>
     </message>
     <message>
         <source>Element %1 can&apos;t be serialized because it appears outside the document element.</source>
@@ -8588,15 +8588,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>A comment cannot contain %1</source>
-        <translation type="unfinished">הערה לא יכולה להכיל %1</translation>
+        <translation>הערה לא יכולה להכיל %1</translation>
     </message>
     <message>
         <source>A comment cannot end with a %1.</source>
-        <translation type="unfinished">הערה לא יכולה להסתיים עם %1.</translation>
+        <translation>הערה לא יכולה להסתיים עם %1.</translation>
     </message>
     <message>
         <source>An attribute node cannot be a child of a document node. Therefore, the attribute %1 is out of place.</source>
-        <translation type="unfinished">צומת מאפיין לא יכול להיות צאצא של צומת מסמך. לכן, המאפיין %1 אינו במקום.</translation>
+        <translation>צומת מאפיין לא יכול להיות צאצא של צומת מסמך. לכן, המאפיין %1 אינו במקום.</translation>
     </message>
     <message>
         <source>A library module cannot be evaluated directly. It must be imported from a main module.</source>
@@ -8604,7 +8604,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>No template by name %1 exists.</source>
-        <translation type="unfinished">לא קיימת תבנית בשם %1.</translation>
+        <translation>לא קיימת תבנית בשם %1.</translation>
     </message>
     <message>
         <source>A value of type %1 cannot be a predicate. A predicate must have either a numeric type or an Effective Boolean Value type.</source>
@@ -8724,7 +8724,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>The root node of the second argument to function %1 must be a document node. %2 is not a document node.</source>
-        <translation type="unfinished">צומת שורש של הארגומנט השני לפונקציה %1 חייב להיות צומת מסמך. %2 אינו צומת מסמך.</translation>
+        <translation>צומת שורש של הארגומנט השני לפונקציה %1 חייב להיות צומת מסמך. %2 אינו צומת מסמך.</translation>
     </message>
     <message>
         <source>The default collection is undefined</source>
@@ -9048,7 +9048,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1 is an unsupported encoding.</source>
-        <translation type="unfinished">%1 אינו קידוד נתמך.</translation>
+        <translation>%1 אינו קידוד נתמך.</translation>
     </message>
     <message>
         <source>%1 contains octets which are disallowed in the requested encoding %2.</source>
@@ -9108,7 +9108,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Running an XSL-T 1.0 stylesheet with a 2.0 processor.</source>
-        <translation type="unfinished">מריץ גליון סגנון XSL-T 1.0 בעזרת מעבד 2.0.</translation>
+        <translation>מריץ גליון סגנון XSL-T 1.0 בעזרת מעבד 2.0.</translation>
     </message>
     <message>
         <source>Unknown XSL-T attribute %1.</source>
@@ -9352,7 +9352,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Derivation method of %1 must be extension because the base type %2 is a simple type.</source>
-        <translation type="unfinished">שיטת גזירה של %1 חייבת להיות extension מכיוון שטיפוס בסיס %2 הינו טיפוס פשוט.</translation>
+        <translation>שיטת גזירה של %1 חייבת להיות extension מכיוון שטיפוס בסיס %2 הינו טיפוס פשוט.</translation>
     </message>
     <message>
         <source>Complex type %1 has duplicated element %2 in its content model.</source>
@@ -9376,7 +9376,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Complex type %1 must have the same simple type as its base class %2.</source>
-        <translation type="unfinished">לטיפוס מורכב %1 חייב להיות את אותו טיפוס פשוט כמו מבנה בסיס שלו %2.</translation>
+        <translation>לטיפוס מורכב %1 חייב להיות את אותו טיפוס פשוט כמו מבנה בסיס שלו %2.</translation>
     </message>
     <message>
         <source>Complex type %1 cannot be derived from base type %2%3.</source>
@@ -9400,7 +9400,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1 is not allowed to have a member type with the same name as itself.</source>
-        <translation type="unfinished">%1 אינו רשאי שיהיה לו טיפוס חבר עם אותו שם כמו של עצמו.</translation>
+        <translation>%1 אינו רשאי שיהיה לו טיפוס חבר עם אותו שם כמו של עצמו.</translation>
     </message>
     <message>
         <source>%1 facet collides with %2 facet.</source>
@@ -9520,7 +9520,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Type of element %1 cannot be derived from type of substitution group affiliation.</source>
-        <translation type="unfinished">טיפוס של אלמנט %1 לא יכול להיגזר מתוך טיפוס של שיוך קבוצת החלפה.</translation>
+        <translation>טיפוס של אלמנט %1 לא יכול להיגזר מתוך טיפוס של שיוך קבוצת החלפה.</translation>
     </message>
     <message>
         <source>Value constraint of attribute %1 is not of attributes type: %2.</source>
@@ -9576,7 +9576,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Derived attribute %1 does not match the wildcard in the base definition.</source>
-        <translation type="unfinished">מאפיין נגזר %1 לא תואם את wildcard בהגדרת בסיס.</translation>
+        <translation>מאפיין נגזר %1 לא תואם את wildcard בהגדרת בסיס.</translation>
     </message>
     <message>
         <source>Base attribute %1 is required but missing in derived definition.</source>
@@ -9640,11 +9640,11 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1 element is not allowed to have the same %2 attribute value as the target namespace %3.</source>
-        <translation type="unfinished">אלמנט %1 אינו רשאי שיהיה לו את אותו ערך מאפיין %2 כשל namespace יעד %3.</translation>
+        <translation>אלמנט %1 אינו רשאי שיהיה לו את אותו ערך מאפיין %2 כשל namespace יעד %3.</translation>
     </message>
     <message>
         <source>%1 element without %2 attribute is not allowed inside schema without target namespace.</source>
-        <translation type="unfinished">אלמנט %1 ללא מאפיין %2 אינו מורשה בתוך סכמה ללא namespace יעד.</translation>
+        <translation>אלמנט %1 ללא מאפיין %2 אינו מורשה בתוך סכמה ללא namespace יעד.</translation>
     </message>
     <message>
         <source>%1 element is not allowed inside %2 element if %3 attribute is present.</source>
@@ -9664,15 +9664,15 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1 attribute of %2 element must have a value of %3.</source>
-        <translation type="unfinished">למאפיין %1 של אלמנט %2 חייב שיהיה ערך של %3.</translation>
+        <translation>למאפיין %1 של אלמנט %2 חייב שיהיה ערך של %3.</translation>
     </message>
     <message>
         <source>%1 attribute of %2 element must have a value of %3 or %4.</source>
-        <translation type="unfinished">למאפיין %1 של אלמנט %2 חייב שיהיה ערך של %3 או %4.</translation>
+        <translation>למאפיין %1 של אלמנט %2 חייב שיהיה ערך של %3 או %4.</translation>
     </message>
     <message>
         <source>%1 element must not have %2 and %3 attribute together.</source>
-        <translation type="unfinished">לאלמנט %1 אסור שיהיה מאפיין %2 וגם %3 יחדיו.</translation>
+        <translation>לאלמנט %1 אסור שיהיה מאפיין %2 וגם %3 יחדיו.</translation>
     </message>
     <message>
         <source>Content of %1 attribute of %2 element must not be from namespace %3.</source>
@@ -9824,7 +9824,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Reference %1 of %2 element cannot be resolved.</source>
-        <translation type="unfinished">התייחסות %1 של אלמנט %2 לא ניתנת לפתירה.</translation>
+        <translation>התייחסות %1 של אלמנט %2 לא ניתנת לפתירה.</translation>
     </message>
     <message>
         <source>Circular group reference for %1.</source>
@@ -10108,7 +10108,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Element %1 is missing child element.</source>
-        <translation type="unfinished">אלמנט %1 נעדר אלמנט צאצא.</translation>
+        <translation>אלמנט %1 נעדר אלמנט צאצא.</translation>
     </message>
     <message>
         <source>There is one IDREF value with no corresponding ID: %1.</source>
@@ -10120,7 +10120,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>%1 contains invalid data.</source>
-        <translation type="unfinished">%1 מכיל נתונים לא תקינים.</translation>
+        <translation>%1 מכיל נתונים לא תקינים.</translation>
     </message>
     <message>
         <source>xsi:schemaLocation namespace %1 has already appeared earlier in the instance document.</source>
@@ -10260,11 +10260,11 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>More than one value found for field %1.</source>
-        <translation type="unfinished">יותר מאשר ערך אחד נמצא עבור שדה %1.</translation>
+        <translation>יותר מאשר ערך אחד נמצא עבור שדה %1.</translation>
     </message>
     <message>
         <source>Field %1 has no simple type.</source>
-        <translation type="unfinished">לשדה %1 אין טיפוס פשוט.</translation>
+        <translation>לשדה %1 אין טיפוס פשוט.</translation>
     </message>
     <message>
         <source>ID value &apos;%1&apos; is not unique.</source>
