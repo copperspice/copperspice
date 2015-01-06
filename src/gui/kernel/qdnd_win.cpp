@@ -607,7 +607,8 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP
 QOleDropTarget::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)
 {
 #ifdef QDND_DEBUG
-   qDebug("QOleDropTarget::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)");
+   qDebug("QOleDropTarget::DragEnter(grfKeyState %d, pt (%d,%d), pdwEffect %lu)",
+           grfKeyState, pt.x, pt.y, *pdwEffect);
 #endif
 
    if (!QApplicationPrivate::tryModalHelper(widget)) {
@@ -674,7 +675,8 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP
 QOleDropTarget::DragOver(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)
 {
 #ifdef QDND_DEBUG
-   qDebug("QOleDropTarget::DragOver(grfKeyState %d, pt (%d,%d), pdwEffect %d)", grfKeyState, pt.x, pt.y, pdwEffect);
+   qDebug("QOleDropTarget::DragOver(grfKeyState %d, pt (%d,%d), pdwEffect %lu)",
+           grfKeyState, pt.x, pt.y, *pdwEffect);
 #endif
 
    QWidget *dragOverWidget = widget->childAt(widget->mapFromGlobal(QPoint(pt.x, pt.y)));
