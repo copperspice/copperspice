@@ -336,29 +336,21 @@ init_context:
    }
 
    // Add all our CAs to this store.
-   QList<QSslCertificate> expiredCerts;
    foreach (const QSslCertificate & caCertificate, q->caCertificates()) {
-      // add expired certs later, so that the
-      // valid ones are used before the expired ones
-      if (! caCertificate.isValid()) {
-         expiredCerts.append(caCertificate);
-      } else {
-         q_X509_STORE_add_cert(ctx->cert_store, (X509 *)caCertificate.handle());
-      }
-   }
-
-   bool addExpiredCerts = true;
-#if defined(Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED == MAC_OS_X_VERSION_10_5)
-   //On Leopard SSL does not work if we add the expired certificates.
-   if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_5) {
-      addExpiredCerts = false;
-   }
-#endif
-   // now add the expired certs
-   if (addExpiredCerts) {
-      foreach (const QSslCertificate & caCertificate, expiredCerts) {
-         q_X509_STORE_add_cert(ctx->cert_store, (X509 *)caCertificate.handle());
-      }
+       // From https://www.openssl.org/docs/ssl/SSL_CTX_load_verify_locations.html:
+       //
+       // If several CA certificates matching the name, key identifier, and
+       // serial number condition are available, only the first one will be
+       // examined. This may lead to unexpected results if the same CA
+       // certificate is available with different expiration dates. If a
+       // ``certificate expired'' verification error occurs, no other
+       // certificate will be searched. Make sure to not have expired
+       // certificates mixed with valid ones.
+       //
+       // See also: QSslContext::fromConfiguration()
+       if (caCertificate.expiryDate() >= QDateTime::currentDateTime()) {
+	   q_X509_STORE_add_cert(ctx->cert_store, (X509 *)caCertificate.handle());
+       }
    }
 
    if (s_loadRootCertsOnDemand && allowRootCertOnDemandLoading) {
