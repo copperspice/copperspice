@@ -114,6 +114,8 @@ class QCoreTextFontEngine : public QFontEngine
 
    static int antialiasingThreshold;
 
+   virtual QFontEngine::Properties properties() const;
+
  private:
    friend class QRawFontPrivate;
 
