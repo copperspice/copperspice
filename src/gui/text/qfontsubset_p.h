@@ -41,7 +41,7 @@ class QFontSubset
       addGlyph(0);
    }
    ~QFontSubset() {
-      if (!fontEngine->ref.deref()) {
+      if (!fontEngine->ref.deref() && fontEngine->cache_count == 0) {
          delete fontEngine;
       }
    }
