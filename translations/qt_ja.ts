@@ -2755,12 +2755,11 @@ Do you want to delete it anyway?</source>
     <name>QFontDatabase</name>
     <message>
         <source>Normal</source>
-        <translatorcomment>ここはどう訳すべきか...</translatorcomment>
-        <translation>明朝</translation>
+        <translation>標準</translation>
     </message>
     <message>
         <source>Bold</source>
-        <translation>ゴシック</translation>
+        <translation>太字</translation>
     </message>
     <message>
         <source>Demi Bold</source>
