@@ -1765,7 +1765,7 @@ Do you want to delete it anyway?</source>
     <message>
         <location line="+7"/>
         <source>Date Modified</source>
-        <translation>日期被修改</translation>
+        <translation>修改时间</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs/qfilesystemmodel_p.h" line="+234"/>
