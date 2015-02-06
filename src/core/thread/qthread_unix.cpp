@@ -221,6 +221,7 @@ extern "C" {
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {
+   QMutexLocker l(&data->postEventList.mutex);
 
 #if !defined(QT_NO_GLIB)
    if (qgetenv("QT_NO_GLIB").isEmpty()
@@ -231,6 +232,7 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
 #endif
 
       data->eventDispatcher = new QEventDispatcherUNIX;
+   l.unlock();
    data->eventDispatcher->startingUp();
 }
 

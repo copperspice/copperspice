@@ -255,7 +255,10 @@ DWORD WINAPI qt_adopted_thread_watcher_function(LPVOID)
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {
+   QMutexLocker l(&data->postEventList.mutex);
+
    data->eventDispatcher = new QEventDispatcherWin32;
+   l.unlock();
    data->eventDispatcher->startingUp();
 }
 
