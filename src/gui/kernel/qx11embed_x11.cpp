@@ -479,6 +479,9 @@ QX11EmbedWidget::QX11EmbedWidget(QWidget *parent)
    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    QApplication::instance()->installEventFilter(this);
 
+    // Focus itself at first.
+    qApp->setActiveWindow(this);
+
 #ifdef QX11EMBED_DEBUG
    qDebug() << "QX11EmbedWidget::QX11EmbedWidget: constructed client"
             << (void *)this << "with winId" << winId();
