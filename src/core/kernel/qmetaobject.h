@@ -47,6 +47,8 @@ class QObject;
 class Q_CORE_EXPORT QMetaObject
 {
  public:
+   virtual ~QMetaObject() {}
+
    virtual QMetaClassInfo classInfo(int index) const = 0;
    virtual int classInfoCount() const = 0;
    int classInfoOffset() const;

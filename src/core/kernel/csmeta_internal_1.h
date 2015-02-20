@@ -211,6 +211,8 @@ std::pair<T, bool> convertFromQVariant(QVariant data);
 class JarReadAbstract
 {
  public:
+   virtual ~JarReadAbstract() {}
+
    virtual QVariant runV(const QObject *) const = 0;
 
    template<class R>
@@ -313,6 +315,7 @@ R SpiceJarRead<T, R>::call(const QObject *obj) const
 class JarWriteAbstract
 {
  public:
+   virtual ~JarWriteAbstract() {}
    virtual bool runV(QObject *, QVariant data) const = 0;
 
    template<class V>
@@ -389,6 +392,8 @@ bool SpiceJarWrite<T, V>::call(QObject *obj, V data) const
 class JarResetAbstract
 {
  public:
+   virtual ~JarResetAbstract() {}
+
    virtual bool runV(QObject *) const = 0;
 };
 
