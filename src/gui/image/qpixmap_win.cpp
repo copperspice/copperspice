@@ -23,25 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qpixmap.h"
-#include "qpixmap_raster_p.h"
+#include <qpixmap.h>
+#include <qpixmap_raster_p.h>
 
-#include "qbitmap.h"
-#include "qimage.h"
-#include "qwidget.h"
-#include "qpainter.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qfile.h"
-#include "qfileinfo.h"
-#include "qdatetime.h"
-#include "qpixmapcache.h"
-#include "qimagereader.h"
-#include "qimagewriter.h"
-#include "qdebug.h"
-#include "qt_windows.h"
+#include <qbitmap.h>
+#include <qimage.h>
+#include <qwidget.h>
+#include <qpainter.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qdatetime.h>
+#include <qpixmapcache.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qdebug.h>
+#include <qt_windows.h>
 
 #ifndef CAPTUREBLT
 #define CAPTUREBLT ((DWORD)0x40000000)

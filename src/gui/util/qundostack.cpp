@@ -24,74 +24,13 @@
 ***********************************************************************/
 
 #include <QtCore/qdebug.h>
-#include "qundostack.h"
-#include "qundogroup.h"
-#include "qundostack_p.h"
+#include <qundostack.h>
+#include <qundogroup.h>
+#include <qundostack_p.h>
 
 #ifndef QT_NO_UNDOCOMMAND
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QUndoCommand
-    \brief The QUndoCommand class is the base class of all commands stored on a QUndoStack.
-    \since 4.2
-
-    For an overview of Qt's Undo Framework, see the
-    \l{Overview of Qt's Undo Framework}{overview document}.
-
-    A QUndoCommand represents a single editing action on a document; for example,
-    inserting or deleting a block of text in a text editor. QUndoCommand can apply
-    a change to the document with redo() and undo the change with undo(). The
-    implementations for these functions must be provided in a derived class.
-
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 0
-
-    A QUndoCommand has an associated text(). This is a short string
-    describing what the command does. It is used to update the text
-    properties of the stack's undo and redo actions; see
-    QUndoStack::createUndoAction() and QUndoStack::createRedoAction().
-
-    QUndoCommand objects are owned by the stack they were pushed on.
-    QUndoStack deletes a command if it has been undone and a new command is pushed. For example:
-
-\snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 1
-
-    In effect, when a command is pushed, it becomes the top-most command
-    on the stack.
-
-    To support command compression, QUndoCommand has an id() and the virtual function
-    mergeWith(). These functions are used by QUndoStack::push().
-
-    To support command macros, a QUndoCommand object can have any number of child
-    commands. Undoing or redoing the parent command will cause the child
-    commands to be undone or redone. A command can be assigned
-    to a parent explicitly in the constructor. In this case, the command
-    will be owned by the parent.
-
-    The parent in this case is usually an empty command, in that it doesn't
-    provide its own implementation of undo() and redo(). Instead, it uses
-    the base implementations of these functions, which simply call undo() or
-    redo() on all its children. The parent should, however, have a meaningful
-    text().
-
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 2
-
-    Another way to create macros is to use the convenience functions
-    QUndoStack::beginMacro() and QUndoStack::endMacro().
-
-    \sa QUndoStack
-*/
-
-/*!
-    Constructs a QUndoCommand object with the given \a parent and \a text.
-
-    If \a parent is not 0, this command is appended to parent's child list.
-    The parent command then owns this command and will delete it in its
-    destructor.
-
-    \sa ~QUndoCommand()
-*/
 
 QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
 {

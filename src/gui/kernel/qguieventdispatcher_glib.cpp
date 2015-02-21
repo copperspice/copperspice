@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qguieventdispatcher_glib_p.h"
+#include <qguieventdispatcher_glib_p.h>
 
-#include "qapplication.h"
-#include "qx11info_x11.h"
+#include <qapplication.h>
+#include <qx11info_x11.h>
 
-#include "qt_x11_p.h"
-
+#include <qt_x11_p.h>
 #include <glib.h>
 
 QT_BEGIN_NAMESPACE

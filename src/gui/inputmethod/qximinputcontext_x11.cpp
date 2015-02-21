@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qdebug.h"
-#include "qximinputcontext_p.h"
+#include <qplatformdefs.h>
+#include <qdebug.h>
+#include <qximinputcontext_p.h>
 
 #if !defined(QT_NO_IM)
 
@@ -34,17 +34,17 @@ QT_BEGIN_NAMESPACE
 #if !defined(QT_NO_XIM)
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qstring.h"
-#include "qlist.h"
-#include "qtextcodec.h"
-#include "qevent.h"
-#include "qtextformat.h"
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qstring.h>
+#include <qlist.h>
+#include <qtextcodec.h>
+#include <qevent.h>
+#include <qtextformat.h>
 
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 
 #include <stdlib.h>
 #include <limits.h>

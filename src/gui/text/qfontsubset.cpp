@@ -24,20 +24,20 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include "qfontsubset_p.h"
+#include <qfontsubset_p.h>
 #include <qendian.h>
 #include <qpainterpath.h>
-#include "qpdf_p.h"
-#include "qfunctions_p.h"
+#include <qpdf_p.h>
+#include <qfunctions_p.h>
 
 #ifdef Q_WS_X11
-#include "qfontengine_x11_p.h"
+#include <qfontengine_x11_p.h>
 #endif
 
 #ifndef QT_NO_FREETYPE
 
 #if defined(Q_WS_X11) || defined(Q_WS_QWS)
-#include "qfontengine_ft_p.h"
+#include <qfontengine_ft_p.h>
 #endif
 
 #include <ft2build.h>

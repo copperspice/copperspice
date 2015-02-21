@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include <private/qgraphicssystemplugin_p.h>
-#include <private/qgraphicssystem_gl_p.h>
+#include <qgraphicssystemplugin_p.h>
+#include <qgraphicssystem_gl_p.h>
 #include <qgl.h>
 
 QT_BEGIN_NAMESPACE

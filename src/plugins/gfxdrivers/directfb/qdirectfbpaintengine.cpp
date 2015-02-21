@@ -148,7 +148,7 @@ private:
 
 #ifdef QT_DIRECTFB_IMAGECACHE
 QT_BEGIN_INCLUDE_NAMESPACE
-#include <private/qimage_p.h>
+#include <qimage_p.h>
 QT_END_INCLUDE_NAMESPACE
 struct CachedImage
 {

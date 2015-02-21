@@ -164,7 +164,7 @@ void QWSKbPrivate::autoRepeat()
 }
 
 // simple builtin US keymap
-#include "qkbd_defaultmap_qws_p.h"
+#include <qkbd_defaultmap_qws_p.h>
 
 // the unloadKeymap() function needs to be AFTER the defaultmap include,
 // since the sizeof(s_keymap_default) wouldn't work otherwise.

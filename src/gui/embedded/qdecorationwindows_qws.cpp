@@ -27,7 +27,7 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
-#include "qdecorationwindows_qws.h"
+#include <qdecorationwindows_qws.h>
 
 QT_BEGIN_NAMESPACE
 

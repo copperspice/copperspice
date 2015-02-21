@@ -25,11 +25,11 @@
 
 //#define QSSLSOCKET_DEBUG
 
-#include "qsslsocket_openssl_p.h"
-#include "qsslsocket_openssl_symbols_p.h"
-#include "qsslsocket.h"
-#include "qsslcertificate_p.h"
-#include "qsslcipher_p.h"
+#include <qsslsocket_openssl_p.h>
+#include <qsslsocket_openssl_symbols_p.h>
+#include <qsslsocket.h>
+#include <qsslcertificate_p.h>
+#include <qsslcipher_p.h>
 
 #include <QtCore/qdatetime.h>
 #include <QtCore/qdebug.h>
@@ -42,7 +42,7 @@
 #include <QtCore/qthread.h>
 #include <QtCore/qurl.h>
 #include <QtCore/qvarlengtharray.h>
-#include <QLibrary> // for loading the security lib for the CA store
+#include <QLibrary>                      // for loading the security lib for the CA store
 
 #if OPENSSL_VERSION_NUMBER >= 0x0090806fL && !defined(OPENSSL_NO_TLSEXT)
 // Symbian does not seem to have the symbol for SNI defined
@@ -57,10 +57,12 @@ QT_BEGIN_NAMESPACE
 PtrSecCertificateGetData QSslSocketPrivate::ptrSecCertificateGetData = 0;
 PtrSecTrustSettingsCopyCertificates QSslSocketPrivate::ptrSecTrustSettingsCopyCertificates = 0;
 PtrSecTrustCopyAnchorCertificates QSslSocketPrivate::ptrSecTrustCopyAnchorCertificates = 0;
+
 #elif defined(Q_OS_WIN)
 PtrCertOpenSystemStoreW QSslSocketPrivate::ptrCertOpenSystemStoreW = 0;
 PtrCertFindCertificateInStore QSslSocketPrivate::ptrCertFindCertificateInStore = 0;
 PtrCertCloseStore QSslSocketPrivate::ptrCertCloseStore = 0;
+
 #endif
 
 bool QSslSocketPrivate::s_libraryLoaded = false;

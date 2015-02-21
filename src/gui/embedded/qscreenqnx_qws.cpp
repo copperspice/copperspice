@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qscreenqnx_qws.h"
-
+#include <qscreenqnx_qws.h>
 #include <qapplication.h>
 #include <qregexp.h>
 

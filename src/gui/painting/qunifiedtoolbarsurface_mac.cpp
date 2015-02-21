@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qunifiedtoolbarsurface_mac_p.h"
+#include <qunifiedtoolbarsurface_mac_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
 #include <qbackingstore_p.h>
 #include <qmainwindowlayout_p.h>

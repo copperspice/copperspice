@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #include <qaction.h>
 #include <qcoreapplication.h>

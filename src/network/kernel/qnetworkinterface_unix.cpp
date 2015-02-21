@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qset.h"
-#include "qnetworkinterface.h"
-#include "qnetworkinterface_p.h"
-#include "qalgorithms.h"
-#include "qnet_unix_p.h"
+#include <qset.h>
+#include <qnetworkinterface.h>
+#include <qnetworkinterface_p.h>
+#include <qalgorithms.h>
+#include <qnet_unix_p.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 

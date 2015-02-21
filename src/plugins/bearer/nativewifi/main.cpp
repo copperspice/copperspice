@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qnativewifiengine.h"
-#include "platformdefs.h"
+#include <qnativewifiengine.h>
+#include <platformdefs.h>
 
-#include <QtCore/private/qsystemlibrary_p.h>
-
-#include <QtNetwork/private/qbearerplugin_p.h>
+#include <qsystemlibrary_p.h>
+#include <qbearerplugin_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

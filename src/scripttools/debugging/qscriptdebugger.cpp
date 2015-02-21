@@ -2056,4 +2056,124 @@ void QScriptDebugger::timerEvent(QTimerEvent *e)
    }
 }
 
+void QScriptDebugger::_q_onLineEntered(const QString & un_named_arg1)
+{
+	Q_D(QScriptDebugger);
+	d->_q_onLineEntered();
+}
+
+void QScriptDebugger::_q_onCurrentFrameChanged(int un_named_arg1)
+{
+	Q_D(QScriptDebugger);
+	d->_q_onCurrentFrameChanged();
+}
+
+void QScriptDebugger::_q_onCurrentScriptChanged(qint64 un_named_arg1)
+{
+	Q_D(QScriptDebugger);
+	d->_q_onCurrentScriptChanged();
+}
+
+void QScriptDebugger::_q_onScriptLocationSelected(int un_named_arg1)
+{
+	Q_D(QScriptDebugger);
+	d->_q_onScriptLocationSelected();
+}
+
+void QScriptDebugger::_q_interrupt()
+{
+	Q_D(QScriptDebugger);
+	d->_q_interrupt();
+}
+
+void QScriptDebugger::_q_continue()
+{
+	Q_D(QScriptDebugger);
+	d->_q_continue();
+}
+
+void QScriptDebugger::_q_stepInto()
+{
+	Q_D(QScriptDebugger);
+	d->_q_stepInto();
+}
+
+void QScriptDebugger::_q_stepOver()
+{
+	Q_D(QScriptDebugger);
+	d->_q_stepOver();
+}
+
+void QScriptDebugger::_q_stepOut()
+{
+	Q_D(QScriptDebugger);
+	d->_q_stepOut();
+}
+
+void QScriptDebugger::_q_runToNewScript()
+{
+	Q_D(QScriptDebugger);
+	d->_q_runToNewScript();
+}
+
+void QScriptDebugger::_q_runToCursor()
+{
+	Q_D(QScriptDebugger);
+	d->_q_runToCursor();
+}
+
+void QScriptDebugger::_q_toggleBreakpoint()
+{
+	Q_D(QScriptDebugger);
+	d->_q_toggleBreakpoint();
+}
+
+void QScriptDebugger::_q_clearDebugOutput()
+{
+	Q_D(QScriptDebugger);
+	d->_q_clearDebugOutput();
+}
+
+void QScriptDebugger::_q_clearErrorLog()
+{
+	Q_D(QScriptDebugger);
+	d->_q_clearErrorLog();
+}
+
+void QScriptDebugger::_q_clearConsole()
+{
+	Q_D(QScriptDebugger);
+	d->_q_clearConsole();
+}
+
+void QScriptDebugger::_q_findInScript()
+{
+	Q_D(QScriptDebugger);
+	d->_q_findInScript();
+}
+
+void QScriptDebugger::_q_findNextInScript()
+{
+	Q_D(QScriptDebugger);
+	d->_q_findNextInScript();
+}
+
+void QScriptDebugger::_q_findPreviousInScript()
+{
+	Q_D(QScriptDebugger);
+	d->_q_findPreviousInScript();
+}
+
+void QScriptDebugger::_q_onFindCodeRequest(const QString & un_named_arg1,int un_named_arg2)
+{
+	Q_D(QScriptDebugger);
+	d->_q_onFindCodeRequest();
+}
+
+void QScriptDebugger::_q_goToLine()
+{
+	Q_D(QScriptDebugger);
+	d->_q_goToLine();
+}
+   
 QT_END_NAMESPACE

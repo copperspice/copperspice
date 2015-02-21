@@ -60,41 +60,8 @@ QT_BEGIN_INCLUDE_NAMESPACE
 QT_END_INCLUDE_NAMESPACE
 #endif
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
 
-/*!
-    \class QStyleFactory
-    \brief The QStyleFactory class creates QStyle objects.
-
-    \ingroup appearance
-
-    The QStyle class is an abstract base class that encapsulates the
-    look and feel of a GUI. QStyleFactory creates a QStyle object
-    using the create() function and a key identifying the style. The
-    styles are either built-in or dynamically loaded from a style
-    plugin (see QStylePlugin).
-
-    The valid keys can be retrieved using the keys()
-    function. Typically they include "windows", "motif", "cde",
-    "plastique" and "cleanlooks".  Depending on the platform,
-    "windowsxp", "windowsvista" and "macintosh" may be available.
-    Note that keys are case insensitive.
-
-    \sa QStyle
-*/
-
-/*!
-    Creates and returns a QStyle object that matches the given \a key, or
-    returns 0 if no matching style is found.
-
-    Both built-in styles and styles from style plugins are queried for a
-    matching style.
-
-    \note The keys used are case insensitive.
-
-    \sa keys()
-*/
 QStyle *QStyleFactory::create(const QString &key)
 {
    QStyle *ret = 0;

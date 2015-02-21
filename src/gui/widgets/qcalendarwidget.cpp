@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcalendarwidget.h"
+#include <qcalendarwidget.h>
 
 #ifndef QT_NO_CALENDARWIDGET
 

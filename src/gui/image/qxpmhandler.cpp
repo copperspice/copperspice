@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qxpmhandler_p.h"
+#include <qxpmhandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
 

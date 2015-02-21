@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qsocks5socketengine_p.h"
+#include <qsocks5socketengine_p.h>
 
 #ifndef QT_NO_SOCKS5
 
-#include "qtcpsocket.h"
-#include "qudpsocket.h"
-#include "qtcpserver.h"
-#include "qdebug.h"
-#include "qhash.h"
-#include "qqueue.h"
-#include "qelapsedtimer.h"
-#include "qmutex.h"
-#include "qthread.h"
-#include "qcoreapplication.h"
-#include "qurl.h"
-#include "qauthenticator.h"
+#include <qtcpsocket.h>
+#include <qudpsocket.h>
+#include <qtcpserver.h>
+#include <qdebug.h>
+#include <qhash.h>
+#include <qqueue.h>
+#include <qelapsedtimer.h>
+#include <qmutex.h>
+#include <qthread.h>
+#include <qcoreapplication.h>
+#include <qurl.h>
+#include <qauthenticator.h>
 #include <qendian.h>
 #include <qnetworkinterface.h>
 

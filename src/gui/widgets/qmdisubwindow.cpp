@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qmdisubwindow_p.h"
+#include <qmdisubwindow_p.h>
 
 #ifndef QT_NO_MDIAREA
 

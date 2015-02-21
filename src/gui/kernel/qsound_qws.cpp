@@ -23,26 +23,25 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
 
 #ifndef QT_NO_SOUND
 
-#include "qsound.h"
-#include "qpaintdevice.h"
-#include "qwsdisplay_qws.h"
-#include "qsound_p.h"
+#include <qsound.h>
+#include <qpaintdevice.h>
+#include <qwsdisplay_qws.h>
+#include <qsound_p.h>
 
-#include "qsoundqss_qws.h"
+#include <qsoundqss_qws.h>
 
-#include "qhash.h"
-#include "qfileinfo.h"
+#include <qhash.h>
+#include <qfileinfo.h>
 
-#include "qbytearray.h"
-#include "quuid.h"
-#include "qdatastream.h"
-#include "qcopchannel_qws.h"
-#include "qbuffer.h"
-
+#include <qbytearray.h>
+#include <quuid.h>
+#include <qdatastream.h>
+#include <qcopchannel_qws.h>
+#include <qbuffer.h>
 
 QT_BEGIN_NAMESPACE
 

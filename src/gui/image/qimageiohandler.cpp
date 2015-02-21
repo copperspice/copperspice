@@ -200,7 +200,7 @@
     \sa QImageIOPlugin
 */
 
-#include "qimageiohandler.h"
+#include <qimageiohandler.h>
 
 #include <qbytearray.h>
 #include <qimage.h>

@@ -27,7 +27,7 @@
 ** Copyright (C) 2007-2008, Apple, Inc.
 ***********************************************************************/
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #import <qcocoaapplicationdelegate_mac_p.h>
 #import <qcocoamenuloader_mac_p.h>

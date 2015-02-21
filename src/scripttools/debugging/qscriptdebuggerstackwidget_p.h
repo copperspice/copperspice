@@ -51,15 +51,7 @@ class QScriptDebuggerStackWidget: public QScriptDebuggerStackWidgetInterface
    Q_DISABLE_COPY(QScriptDebuggerStackWidget)
 
    CS_SLOT_1(Private, void _q_onCurrentChanged(const QModelIndex &un_named_arg1))
-   CS_SLOT_2(_q_onCurrentChanged)
-
-   /*  PRIVATE_SLOT
-   void _q_onCurrentChanged(const QModelIndex & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerStackWidget);
-   	d->_q_onCurrentChanged();
-   }
-   */
+   CS_SLOT_2(_q_onCurrentChanged)    
 };
 
 QT_END_NAMESPACE

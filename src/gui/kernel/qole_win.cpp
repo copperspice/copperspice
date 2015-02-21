@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qdnd_p.h"
+#include <qdnd_p.h>
 
 #if !(defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
 

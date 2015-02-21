@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qfontengine_p.h"
+#include <qfontengine_p.h>
 #include <qwsdisplay_qws.h>
 #include <qvarlengtharray.h>
 #include <qpainter_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qpdf_p.h>
-#include "qtextengine_p.h"
-#include "qcore_unix_p.h" // overrides QT_OPEN
+#include <qtextengine_p.h>
+#include <qcore_unix_p.h>          // overrides QT_OPE
 
 #include <qdebug.h>
 
 #ifndef QT_NO_QWS_QPF
 
-#include "qplatformdefs.h"
-#include "qfile.h"
+#include <qplatformdefs.h>
+#include <qfile.h>
 #include <stdlib.h>
 
 #define QT_USE_MMAP

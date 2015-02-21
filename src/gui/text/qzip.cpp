@@ -27,8 +27,8 @@
 
 #ifndef QT_NO_TEXTODFWRITER
 
-#include "qzipreader_p.h"
-#include "qzipwriter_p.h"
+#include <qzipreader_p.h>
+#include <qzipwriter_p.h>
 #include <qdatetime.h>
 #include <qplatformdefs.h>
 #include <qendian.h>

@@ -23,12 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qnativewifiengine.h"
-#include "platformdefs.h"
-#include "../qnetworksession_impl.h"
+#include <qnativewifiengine.h>
+#include <platformdefs.h>
+#include <qnetworksession_impl.h>
 
-#include <QtNetwork/private/qnetworkconfiguration_p.h>
-
+#include <qnetworkconfiguration_p.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qcoreapplication.h>
 

@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qabstractsocketengine_p.h"
-#include "qnativesocketengine_p.h"
-#include "qmutex.h"
-#include "qnetworkproxy.h"
+#include <qabstractsocketengine_p.h>
+#include <qnativesocketengine_p.h>
+#include <qmutex.h>
+#include <qnetworkproxy.h>
 
 QT_BEGIN_NAMESPACE
 

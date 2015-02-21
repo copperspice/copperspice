@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qdirectfbwindowsurface.h"
-#include "qdirectfbscreen.h"
-#include "qdirectfbpaintengine.h"
+#include <qdirectfbwindowsurface.h>
+#include <qdirectfbscreen.h>
+#include <qdirectfbpaintengine.h>
 
-#include <private/qwidget_p.h>
+#include <qwidget_p.h>
 #include <qwidget.h>
 #include <qwindowsystem_qws.h>
 #include <qpaintdevice.h>

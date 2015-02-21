@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_QCOLUMNVIEW
 
-#include "qcolumnviewgrip_p.h"
+#include <qcolumnviewgrip_p.h>
 #include <qstyleoption.h>
 #include <qpainter.h>
 #include <qbrush.h>
@@ -34,24 +34,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*
-    \internal
-    class QColumnViewGrip
-
-    QColumnViewGrip is created to go inside QAbstractScrollArea's corner.
-    When the mouse it moved it will resize the scroll area and emit's a signal.
- */
-
-/*
-    \internal
-    \fn void QColumnViewGrip::gripMoved()
-    Signal that is emitted when the grip moves the parent widget.
- */
-
-/*!
-    Creates a new QColumnViewGrip with the given \a parent to view a model.
-    Use setModel() to set the model.
-*/
 QColumnViewGrip::QColumnViewGrip(QWidget *parent)
    :  QWidget(*new QColumnViewGripPrivate, parent, 0)
 {

@@ -31,14 +31,14 @@
 #include <qmath.h>
 
 #if defined(Q_OS_WIN)
-#include "qt_windows.h"
+#include <qt_windows.h>
 
 #elif defined(Q_OS_MAC)
 #include <qt_cocoa_helpers_mac_p.h>
 
 #endif
 
-#include "qstylehelper_p.h"
+#include <qstylehelper_p.h>
 #include <qstringbuilder.h>
 
 QT_BEGIN_NAMESPACE

@@ -25,7 +25,7 @@
 
 #include <windows.h>
 #include <mmsystem.h>
-#include "qaudiodeviceinfo_win32_p.h"
+#include <qaudiodeviceinfo_win32_p.h>
 
 QT_BEGIN_NAMESPACE
 

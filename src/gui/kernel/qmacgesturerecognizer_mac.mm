@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qmacgesturerecognizer_mac_p.h"
-#include "qgesture.h"
-#include "qgesture_p.h"
-#include "qevent.h"
-#include "qevent_p.h"
-#include "qwidget.h"
-#include "qdebug.h"
+#include <qmacgesturerecognizer_mac_p.h>
+#include <qgesture.h>
+#include <qgesture_p.h>
+#include <qevent.h>
+#include <qevent_p.h>
+#include <qwidget.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_GESTURES
 

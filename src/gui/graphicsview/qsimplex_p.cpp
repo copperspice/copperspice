@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsimplex_p.h"
+#include <qsimplex_p.h>
 
 #include <QtCore/qset.h>
 #include <QtCore/qdebug.h>

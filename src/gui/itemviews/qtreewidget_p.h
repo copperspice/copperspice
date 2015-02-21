@@ -152,7 +152,7 @@ class QTreeModel : public QAbstractItemModel
 };
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qabstractitemmodel_p.h"
+#include <qabstractitemmodel_p.h>
 QT_END_INCLUDE_NAMESPACE
 
 class QTreeModelPrivate : public QAbstractItemModelPrivate

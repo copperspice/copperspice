@@ -25,73 +25,14 @@
 
 //#define QTCPSERVER_DEBUG
 
-/*! \class QTcpServer
-
-    \brief The QTcpServer class provides a TCP-based server.
-
-    \reentrant
-    \ingroup network
-    \inmodule QtNetwork
-
-    This class makes it possible to accept incoming TCP connections.
-    You can specify the port or have QTcpServer pick one
-    automatically. You can listen on a specific address or on all the
-    machine's addresses.
-
-    Call listen() to have the server listen for incoming connections.
-    The newConnection() signal is then emitted each time a client
-    connects to the server.
-
-    Call nextPendingConnection() to accept the pending connection as
-    a connected QTcpSocket. The function returns a pointer to a
-    QTcpSocket in QAbstractSocket::ConnectedState that you can use for
-    communicating with the client.
-
-    If an error occurs, serverError() returns the type of error, and
-    errorString() can be called to get a human readable description of
-    what happened.
-
-    When listening for connections, the address and port on which the
-    server is listening are available as serverAddress() and
-    serverPort().
-
-    Calling close() makes QTcpServer stop listening for incoming
-    connections.
-
-    Although QTcpServer is mostly designed for use with an event
-    loop, it's possible to use it without one. In that case, you must
-    use waitForNewConnection(), which blocks until either a
-    connection is available or a timeout expires.
-
-    \section1 Symbian Platform Security Requirements
-
-    On Symbian, processes which use this class must have the
-    \c NetworkServices platform security capability. If the client
-    process lacks this capability, it will lead to a panic.
-
-    Platform security capabilities are added via the
-    \l{qmake-variable-reference.html#target-capability}{TARGET.CAPABILITY}
-    qmake variable.
-
-    \sa QTcpSocket, {Fortune Server Example}, {Threaded Fortune Server Example},
-        {Loopback Example}, {Torrent Example}
-*/
-
-/*! \fn void QTcpServer::newConnection()
-
-    This signal is emitted every time a new connection is available.
-
-    \sa hasPendingConnections(), nextPendingConnection()
-*/
-
-#include "qalgorithms.h"
-#include "qhostaddress.h"
-#include "qlist.h"
-#include "qpointer.h"
-#include "qabstractsocketengine_p.h"
-#include "qtcpserver.h"
-#include "qtcpsocket.h"
-#include "qnetworkproxy.h"
+#include <qalgorithms.h>
+#include <qhostaddress.h>
+#include <qlist.h>
+#include <qpointer.h>
+#include <qabstractsocketengine_p.h>
+#include <qtcpserver.h>
+#include <qtcpsocket.h>
+#include <qnetworkproxy.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qmousetslib_qws.h"
+#include <qmousetslib_qws.h>
 
 #if !defined(QT_NO_QWS_MOUSE_TSLIB) || defined(QT_PLUGIN)
 
 #include <QtCore/qregexp.h>
 #include <QtCore/qstringlist.h>
-#include "qsocketnotifier.h"
-#include "qscreen_qws.h"
+#include <qsocketnotifier.h>
+#include <qscreen_qws.h>
 
 #include <tslib.h>
 #include <errno.h>

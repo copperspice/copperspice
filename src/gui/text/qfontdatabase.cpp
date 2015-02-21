@@ -1110,19 +1110,19 @@ QMutex *qt_fontdatabase_mutex()
 
 QT_BEGIN_INCLUDE_NAMESPACE
 #if defined(Q_WS_X11)
-#  include "qfontdatabase_x11.cpp"
+#  include <qfontdatabase_x11.cpp>
 
 #elif defined(Q_OS_MAC)
-#  include "qfontdatabase_mac.cpp"
+#  include <qfontdatabase_mac.cpp>
 
 #elif defined(Q_OS_WIN)
-#  include "qfontdatabase_win.cpp"
+#  include <qfontdatabase_win.cpp>
 
 #elif defined(Q_WS_QWS)
-#  include "qfontdatabase_qws.cpp"
+#  include <qfontdatabase_qws.cpp>
 
 #elif defined(Q_WS_QPA)
-#  include "qfontdatabase_qpa.cpp"
+#  include <qfontdatabase_qpa.cpp>
 
 #endif
 QT_END_INCLUDE_NAMESPACE

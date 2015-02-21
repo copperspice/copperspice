@@ -23,33 +23,33 @@
 *
 ***********************************************************************/
 
-#include "qmime.h"
+#include <qmime.h>
 
 //#define USE_INTERNET_CONFIG
 
 #ifndef USE_INTERNET_CONFIG
-# include "qfile.h"
-# include "qfileinfo.h"
-# include "qtextstream.h"
-# include "qdir.h"
+# include <qfile.h>
+# include <qfileinfo.h>
+# include <qtextstream.h>
+# include <qdir.h>
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/fcntl.h>
 #endif
 
-#include "qdebug.h"
-#include "qpixmap.h"
-#include "qimagewriter.h"
-#include "qimagereader.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qdatetime.h"
-#include "qapplication_p.h"
-#include "qtextcodec.h"
-#include "qregexp.h"
-#include "qurl.h"
-#include "qmap.h"
+#include <qdebug.h>
+#include <qpixmap.h>
+#include <qimagewriter.h>
+#include <qimagereader.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qdatetime.h>
+#include <qapplication_p.h>
+#include <qtextcodec.h>
+#include <qregexp.h>
+#include <qurl.h>
+#include <qmap.h>
 #include <qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE

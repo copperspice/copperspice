@@ -23,53 +23,11 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGraphicsItemAnimation
-    \brief The QGraphicsItemAnimation class provides simple animation
-    support for QGraphicsItem.
-    \since 4.2
-    \ingroup graphicsview-api
-    \deprecated
-
-    The QGraphicsItemAnimation class animates a QGraphicsItem. You can
-    schedule changes to the item's transformation matrix at
-    specified steps. The QGraphicsItemAnimation class has a
-    current step value. When this value changes the transformations
-    scheduled at that step are performed. The current step of the
-    animation is set with the \c setStep() function.
-
-    QGraphicsItemAnimation will do a simple linear interpolation
-    between the nearest adjacent scheduled changes to calculate the
-    matrix. For instance, if you set the position of an item at values
-    0.0 and 1.0, the animation will show the item moving in a straight
-    line between these positions. The same is true for scaling and
-    rotation.
-
-    It is usual to use the class with a QTimeLine. The timeline's
-    \l{QTimeLine::}{valueChanged()} signal is then connected to the
-    \c setStep() slot. For example, you can set up an item for rotation
-    by calling \c setRotationAt() for different step values.
-    The animations timeline is set with the setTimeLine() function.
-
-    An example animation with a timeline follows:
-
-    \snippet doc/src/snippets/timeline/main.cpp 0
-
-    Note that steps lie between 0.0 and 1.0. It may be necessary to use
-    \l{QTimeLine::}{setUpdateInterval()}. The default update interval
-    is 40 ms. A scheduled transformation cannot be removed when set,
-    so scheduling several transformations of the same kind (e.g.,
-    rotations) at the same step is not recommended.
-
-    \sa QTimeLine, {Graphics View Framework}
-*/
-
-#include "qgraphicsitemanimation.h"
+#include <qgraphicsitemanimation.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicsitem.h"
-
+#include <qgraphicsitem.h>
 #include <QtCore/qtimeline.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qpointer.h>

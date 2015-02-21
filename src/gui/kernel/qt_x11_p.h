@@ -31,17 +31,16 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qvariant.h>
 
-// the following is necessary to work around breakage in many versions
-// of XFree86's Xlib.h still in use
-// ### which versions?
+// necessary to work around breakage in many versions of XFree86's Xlib.h 
 
-#if defined(_XLIB_H_) // crude hack, but...
-#error "cannot include <X11/Xlib.h> before this file"
+#if defined(_XLIB_H_)    // crude hack
+#error "Can not include <X11/Xlib.h> before this file"
 #endif
 
 #define XRegisterIMInstantiateCallback qt_XRegisterIMInstantiateCallback
 #define XUnregisterIMInstantiateCallback qt_XUnregisterIMInstantiateCallback
 #define XSetIMValues qt_XSetIMValues
+
 #include <X11/Xlib.h>
 #undef XRegisterIMInstantiateCallback
 #undef XUnregisterIMInstantiateCallback
@@ -59,7 +58,6 @@
 
 #include <X11/Xatom.h>
 
-//#define QT_NO_SHAPE
 #ifdef QT_NO_SHAPE
 #  define XShapeCombineRegion(a,b,c,d,e,f,g)
 #  define XShapeCombineMask(a,b,c,d,e,f,g)
@@ -71,74 +69,25 @@
 #  include <X11/extensions/XInput.h>
 #endif
 
-// #define QT_NO_XINERAMA
-#ifndef QT_NO_XINERAMA
-#  if 0 // ### Xsun, but how to detect it?
-// Xinerama is only supported in Solaris 7 with patches 107648/108376 and
-// Solaris 8 or above which introduce the X11R6.4 Xserver.
-// To switch the Xinerama functionality on, you need to add the "+xinerama"
-// argument to the Xsun start line.
-// At least Solaris 7 and 8 are missing Xinerama system headers and function
-// declarations (bug 4284701).
-// The Xinerama API is not documented. In theory it could change but it
-// probably won't because Sun are using it in at least dtlogin (bug 4221829).
-extern "C" Bool XPanoramiXQueryExtension(
-   Display *,
-   int *,
-   int *
-);
-extern "C" Status XPanoramiXQueryVersion(
-   Display *,
-   int *,
-   int *
-);
-extern "C" Status XPanoramiXGetState(
-   Display *,
-   Drawable,
-   XPanoramiXInfo *
-);
-extern "C" Status XPanoramiXGetScreenCount(
-   Display *,
-   Drawable,
-   XPanoramiXInfo *
-);
-extern "C" Status XPanoramiXGetScreenSize(
-   Display *,
-   Drawable,
-   int,
-   XPanoramiXInfo *
-);
-#  else // XFree86
-// XFree86 does not C++ify Xinerama (at least up to XFree86 4.0.3).
+
 extern "C" {
-#    include <X11/extensions/Xinerama.h>
+#include <X11/extensions/Xinerama.h>
 }
-#  endif
-#endif // QT_NO_XINERAMA
 
-// #define QT_NO_XRANDR
-#ifndef QT_NO_XRANDR
-#  include <X11/extensions/Xrandr.h>
-#endif // QT_NO_XRANDR
-
-// #define QT_NO_XRENDER
-#ifndef QT_NO_XRENDER
-#  include <X11/extensions/Xrender.h>
-#endif // QT_NO_XRENDER
+#include <X11/extensions/Xrandr.h>
+#include <X11/extensions/Xrender.h>
 
 #ifndef QT_NO_XSYNC
 extern "C" {
-#  include "X11/extensions/sync.h"
+#  include "X11/extensions/sync.h"         // do not change to < > 
 }
 #endif
 
-// #define QT_NO_XKB
 #ifndef QT_NO_XKB
 #  include <X11/XKBlib.h>
-#endif // QT_NO_XKB
+#endif 
 
-
-#if !defined(XlibSpecificationRelease)
+#if ! defined(XlibSpecificationRelease)
 #  define X11R4
 typedef char *XPointer;
 #else
@@ -148,14 +97,11 @@ typedef char *XPointer;
 #if defined(X11R4)
 // X11R4 does not have XIM
 # define QT_NO_XIM
-
 #elif defined(Q_OS_HPUX) && defined(__LP64__)
 // XCreateIC broken when compiling 64-bit ELF on HP-UX 11.0
 # define QT_NO_XIM
+#endif
 
-#endif // QT_NO_XIM
-
-#ifndef QT_NO_XFIXES
 typedef Bool (*PtrXFixesQueryExtension)(Display *, int *, int *);
 typedef Status (*PtrXFixesQueryVersion)(Display *, int *, int *);
 typedef void (*PtrXFixesSetCursorName)(Display *dpy, Cursor cursor, const char *name);
@@ -163,25 +109,22 @@ typedef void (*PtrXFixesSelectSelectionInput)(Display *dpy, Window win, Atom sel
 typedef void (*PtrXFixesDestroyRegion)(Display *dpy, /*XserverRegion*/ XID region);
 typedef /*XserverRegion*/ XID (*PtrXFixesCreateRegionFromWindow)(Display *dpy, Window window, int kind);
 typedef XRectangle *(*PtrXFixesFetchRegion)(Display *dpy, /*XserverRegion*/ XID region, int *nrectanglesRet);
-#endif
 
 #ifndef QT_NO_XCURSOR
 #include <X11/Xcursor/Xcursor.h>
 typedef Cursor (*PtrXcursorLibraryLoadCursor)(Display *, const char *);
 #endif
 
-#ifndef QT_NO_XINERAMA
 typedef Bool (*PtrXineramaQueryExtension)(Display *dpy, int *event_base, int *error_base);
 typedef Bool (*PtrXineramaIsActive)(Display *dpy);
 typedef XineramaScreenInfo *(*PtrXineramaQueryScreens)(Display *dpy, int *number);
-#endif
 
-#ifndef QT_NO_XRANDR
+
 typedef void (*PtrXRRSelectInput)(Display *, Window, int);
 typedef int (*PtrXRRUpdateConfiguration)(XEvent *);
 typedef int (*PtrXRRRootToScreen)(Display *, Window);
 typedef Bool (*PtrXRRQueryExtension)(Display *, int *, int *);
-#endif
+
 
 #ifndef QT_NO_XINPUT
 typedef int (*PtrXCloseDevice)(Display *, XDevice *);
@@ -192,14 +135,13 @@ typedef int (*PtrXSelectExtensionEvent)(Display *, Window, XEventClass *, int);
 #endif
 
 /*
- * Solaris patch 108652-47 and higher fixes crases in
- * XRegisterIMInstantiateCallback, but the function doesn't seem to
- * work.
+ * Solaris patch 108652-47 and higher fixes crases in XRegisterIMInstantiateCallback, but the
+ * function doesn't seem to work.
  *
  * Instead, we disabled R6 input, and open the input method
  * immediately at application start.
  */
-#if !defined(QT_NO_XIM) && (XlibSpecificationRelease >= 6) && !defined(Q_OS_SOLARIS)
+#if ! defined(QT_NO_XIM) && (XlibSpecificationRelease >= 6) && !defined(Q_OS_SOLARIS)
 #define USE_X11R6_XIM
 
 //######### XFree86 has wrong declarations for XRegisterIMInstantiateCallback
@@ -246,12 +188,12 @@ extern "C" char *XSetIMValues(XIM /* im */, ...);
 
 #ifndef X11R4
 #  include <X11/Xlocale.h>
-#endif // X11R4
+#endif
 
 
 #ifndef QT_NO_MITSHM
 #  include <X11/extensions/XShm.h>
-#endif // QT_NO_MITSHM
+#endif
 
 QT_BEGIN_NAMESPACE
 

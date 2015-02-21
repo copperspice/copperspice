@@ -26,7 +26,7 @@
 #ifndef QLOCK_P_H
 #define QLOCK_P_H
 
-#include "QtCore/qstring.h"
+#include <QtCore/qstring.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qxlibscreen.h"
+#include <qxlibscreen.h>
 
 #include <X11/extensions/Xfixes.h>
 
-#include "qxlibcursor.h"
-#include "qxlibwindow.h"
-#include "qxlibkeyboard.h"
-#include "qxlibstatic.h"
-#include "qxlibclipboard.h"
-#include "qxlibdisplay.h"
+#include <qxlibcursor.h>
+#include <qxlibwindow.h>
+#include <qxlibkeyboard.h>
+#include <qxlibstatic.h>
+#include <qxlibclipboard.h>
+#include <qxlibdisplay.h>
 
 #include <QtCore/QDebug>
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QElapsedTimer>
 
-#include <private/qapplication_p.h>
+#include <qapplication_p.h>
 
 QT_BEGIN_NAMESPACE
 

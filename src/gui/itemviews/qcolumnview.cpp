@@ -27,9 +27,9 @@
 
 #ifndef QT_NO_COLUMNVIEW
 
-#include "qcolumnview.h"
-#include "qcolumnview_p.h"
-#include "qcolumnviewgrip_p.h"
+#include <qcolumnview.h>
+#include <qcolumnview_p.h>
+#include <qcolumnviewgrip_p.h>
 
 #include <qlistview.h>
 #include <qabstractitemdelegate.h>

@@ -23,19 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qsqlfield.h"
-#include "qatomic.h"
-#include "qdebug.h"
+#include <qsqlfield.h>
+#include <qatomic.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
 class QSqlFieldPrivate
 {
  public:
-   QSqlFieldPrivate(const QString &name,
-                    QVariant::Type type) :
-      ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
-      len(-1), prec(-1), tp(-1), gen(true), autoval(false) {
+   QSqlFieldPrivate(const QString &name, QVariant::Type type) 
+      : ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
+        len(-1), prec(-1), tp(-1), gen(true), autoval(false) {
    }
 
    QSqlFieldPrivate(const QSqlFieldPrivate &other)

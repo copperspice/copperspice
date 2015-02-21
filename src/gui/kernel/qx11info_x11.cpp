@@ -23,42 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qwidget.h"
-#include "qpixmap.h"
-#include "qx11info_x11.h"
-#include "qt_x11_p.h"
+#include <qwidget.h>
+#include <qpixmap.h>
+#include <qx11info_x11.h>
+#include <qt_x11_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QX11Info
-    \brief The QX11Info class provides information about the X display
-    configuration.
-
-    \ingroup shared
-
-    The class provides two APIs: a set of non-static functions that
-    provide information about a specific widget or pixmap, and a set
-    of static functions that provide the default information for the
-    application.
-
-    \warning This class is only available on X11. For querying
-    per-screen information in a portable way, use QDesktopWidget.
-
-    \sa QWidget::x11Info(), QPixmap::x11Info(), QDesktopWidget
-*/
-
-/*!
-    Constructs an empty QX11Info object.
-*/
 QX11Info::QX11Info()
    : x11data(0)
 {
 }
 
-/*!
-    Constructs a copy of \a other.
-*/
 QX11Info::QX11Info(const QX11Info &other)
 {
    x11data = other.x11data;
@@ -67,10 +43,6 @@ QX11Info::QX11Info(const QX11Info &other)
    }
 }
 
-/*!
-    Assigns \a other to this object and returns a reference to this
-    object.
-*/
 QX11Info &QX11Info::operator=(const QX11Info &other)
 {
    if (other.x11data) {
@@ -83,21 +55,12 @@ QX11Info &QX11Info::operator=(const QX11Info &other)
    return *this;
 }
 
-/*!
-    Destroys the QX11Info object.
-*/
 QX11Info::~QX11Info()
 {
    if (x11data && !--x11data->ref) {
       delete x11data;
    }
 }
-
-/*!
-    \internal
-    Makes a shallow copy of the X11-specific data of \a fromDevice, if it is not
-    null. Otherwise this function sets it to null.
-*/
 
 void QX11Info::copyX11Data(const QPaintDevice *fromDevice)
 {

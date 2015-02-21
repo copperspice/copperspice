@@ -23,21 +23,21 @@
 *
 ***********************************************************************/
 
-#include "qwininputcontext_p.h"
-#include "qinputcontext_p.h"
+#include <qwininputcontext_p.h>
+#include <qinputcontext_p.h>
 #ifndef QT_NO_IM
 
-#include "qfont.h"
-#include "qwidget.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qtextformat.h"
-#include "qtextboundaryfinder.h"
+#include <qfont.h>
+#include <qwidget.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qtextformat.h>
+#include <qtextboundaryfinder.h>
 
 //#define Q_IME_DEBUG
 
 #ifdef Q_IME_DEBUG
-#include "qdebug.h"
+#include <qdebug.h>
 #endif
 
 QT_BEGIN_NAMESPACE

@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qsqlquerymodel.h"
+#include <qsqlquerymodel.h>
 
 #include <qdebug.h>
 #include <qsqldriver.h>
 #include <qsqlfield.h>
 
-#include "qsqlquerymodel_p.h"
+#include <qsqlquerymodel_p.h>
 
 QT_BEGIN_NAMESPACE
 

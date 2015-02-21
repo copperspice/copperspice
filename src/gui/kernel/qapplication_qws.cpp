@@ -23,63 +23,63 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
-#include "qlibrary.h"
-#include "qcursor.h"
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qwidget.h"
-#include "qbitarray.h"
-#include "qpainter.h"
-#include "qpixmapcache.h"
-#include "qdatetime.h"
-#include "qtextcodec.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qsocketnotifier.h"
-#include "qsessionmanager.h"
-#include "qclipboard.h"
-#include "qbitmap.h"
-#include "qwssocket_qws.h"
-#include "qtransportauth_qws.h"
-#include "qtransportauth_qws_p.h"
-#include "qwsevent_qws.h"
-#include "qwscommand_qws_p.h"
-#include "qwsproperty_qws.h"
-#include "qscreen_qws.h"
-#include "qscreenproxy_qws.h"
-#include "qcopchannel_qws.h"
-#include "qlock_p.h"
-#include "qwslock_p.h"
+#include <qglobal.h>
+#include <qlibrary.h>
+#include <qcursor.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qwidget.h>
+#include <qbitarray.h>
+#include <qpainter.h>
+#include <qpixmapcache.h>
+#include <qdatetime.h>
+#include <qtextcodec.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qsocketnotifier.h>
+#include <qsessionmanager.h>
+#include <qclipboard.h>
+#include <qbitmap.h>
+#include <qwssocket_qws.h>
+#include <qtransportauth_qws.h>
+#include <qtransportauth_qws_p.h>
+#include <qwsevent_qws.h>
+#include <qwscommand_qws_p.h>
+#include <qwsproperty_qws.h>
+#include <qscreen_qws.h>
+#include <qscreenproxy_qws.h>
+#include <qcopchannel_qws.h>
+#include <qlock_p.h>
+#include <qwslock_p.h>
 
-//#include "qmemorymanager_qws.h"
-#include "qwsmanager_qws.h"
-//#include "qwsregionmanager_qws.h"
+//#include <qmemorymanager_qws.h>
+#include <qwsmanager_qws.h>
+//#include <qwsregionmanager_qws.h>
 
-#include "qwindowsystem_qws.h"
-#include "qwindowsystem_p.h"
-#include "qdecorationfactory_qws.h"
+#include <qwindowsystem_qws.h>
+#include <qwindowsystem_p.h>
+#include <qdecorationfactory_qws.h>
 
-#include "qwsdisplay_qws.h"
-#include "qwsdisplay_qws_p.h"
-#include "qwsinputcontext_p.h"
-#include "qfile.h"
-#include "qhash.h"
-#include "qdesktopwidget.h"
-#include "qcolormap.h"
-#include "qcursor_p.h"
-#include "qsettings.h"
-#include "qdebug.h"
-#include "qeventdispatcher_qws_p.h"
+#include <qwsdisplay_qws.h>
+#include <qwsdisplay_qws_p.h>
+#include <qwsinputcontext_p.h>
+#include <qfile.h>
+#include <qhash.h>
+#include <qdesktopwidget.h>
+#include <qcolormap.h>
+#include <qcursor_p.h>
+#include <qsettings.h>
+#include <qdebug.h>
+#include <qeventdispatcher_qws_p.h>
 
 #if !defined(QT_NO_GLIB)
-#  include "qeventdispatcher_glib_qws_p.h"
+#  include <qeventdispatcher_glib_qws_p.h>
 #endif
 
-#include "qwidget_p.h"
-#include "qbackingstore_p.h"
-#include "qwindowsurface_qws_p.h"
-#include "qfont_p.h"
+#include <qwidget_p.h>
+#include <qbackingstore_p.h>
+#include <qwindowsurface_qws_p.h>
+#include <qfont_p.h>
 
 #include <unistd.h>
 #include <stdio.h>

@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qabstractvideobuffer_p.h"
-
+#include <qabstractvideobuffer_p.h>
 #include <qvariant.h>
 
 QT_BEGIN_NAMESPACE

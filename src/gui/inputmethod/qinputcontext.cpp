@@ -25,17 +25,17 @@
 
 //#define QT_NO_IM_PREEDIT_RELOCATION
 
-#include "qinputcontext.h"
-#include "qinputcontext_p.h"
+#include <qinputcontext.h>
+#include <qinputcontext_p.h>
 
 #ifndef QT_NO_IM
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qapplication.h"
-#include "qmenu.h"
-#include "qtextformat.h"
-#include "qpalette.h"
+#include <qapplication.h>
+#include <qmenu.h>
+#include <qtextformat.h>
+#include <qpalette.h>
 
 #include <stdlib.h>
 #include <limits.h>

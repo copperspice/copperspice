@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qaudiodeviceinfo_alsa_p.h"
+#include <qaudiodeviceinfo_alsa_p.h>
 #include <alsa/version.h>
 
 QT_BEGIN_NAMESPACE

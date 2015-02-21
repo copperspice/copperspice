@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qdirectfbscreen.h"
-#include "qdirectfbwindowsurface.h"
-#include "qdirectfbpixmap.h"
-#include "qdirectfbmouse.h"
-#include "qdirectfbkeyboard.h"
+#include <qdirectfbscreen.h>
+#include <qdirectfbwindowsurface.h>
+#include <qdirectfbpixmap.h>
+#include <qdirectfbmouse.h>
+#include <qdirectfbkeyboard.h>
 #include <QtGui/qwsdisplay_qws.h>
 #include <QtGui/qcolor.h>
 #include <QtGui/qapplication.h>
 #include <QtGui/qwindowsystem_qws.h>
-#include <QtGui/private/qgraphicssystem_qws_p.h>
-#include <QtGui/private/qwssignalhandler_p.h>
+#include <qgraphicssystem_qws_p.h>
+#include <qwssignalhandler_p.h>
 #include <QtCore/qvarlengtharray.h>
 #include <QtCore/qvector.h>
 #include <QtCore/qrect.h>

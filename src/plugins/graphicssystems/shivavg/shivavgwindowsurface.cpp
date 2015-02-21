@@ -24,11 +24,13 @@
 ***********************************************************************/
 
 #define GL_GLEXT_PROTOTYPES
-#include "shivavgwindowsurface.h"
-#include <QtOpenVG/private/qpaintengine_vg_p.h>
+
+#include <shivavgwindowsurface.h>
+#include <qpaintengine_vg_p.h>
+
 #if defined(Q_WS_X11)
-#include "private/qt_x11_p.h"
-#include "qx11info_x11.h"
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
 #include <GL/glx.h>
 
 extern QX11Info *qt_x11Info(const QPaintDevice *pd);

@@ -48,7 +48,7 @@
 #include <qfontengine_p.h>
 
 #if !defined(QT_NO_FREETYPE)
-#  include "qfontengine_ft_p.h"
+#  include <qfontengine_ft_p.h>
 #endif
 
 QT_BEGIN_NAMESPACE

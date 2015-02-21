@@ -23,30 +23,30 @@
 *
 ***********************************************************************/
 
-#include "qcursor.h"
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qpainter.h"
-#include "qbitmap.h"
-#include "qimage.h"
-#include "qhash.h"
-#include "qstack.h"
-#include "qlayout.h"
-#include "qtextcodec.h"
-#include "qinputcontext.h"
-#include "qdesktopwidget.h"
+#include <qcursor.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qpainter.h>
+#include <qbitmap.h>
+#include <qimage.h>
+#include <qhash.h>
+#include <qstack.h>
+#include <qlayout.h>
+#include <qtextcodec.h>
+#include <qinputcontext.h>
+#include <qdesktopwidget.h>
 
-#include "qwsdisplay_qws.h"
-#include "qwsdisplay_qws_p.h"
-#include "qscreen_qws.h"
-#include "qwsmanager_qws.h"
+#include <qwsdisplay_qws.h>
+#include <qwsdisplay_qws_p.h>
+#include <qscreen_qws.h>
+#include <qwsmanager_qws.h>
 #include <qwsmanager_p.h>
 #include <qbackingstore_p.h>
 #include <qwindowsurface_qws_p.h>
 #include <qwslock_p.h>
-#include "qpaintengine.h"
-#include "qdebug.h"
-#include "qwidget_p.h"
+#include <qpaintengine.h>
+#include <qdebug.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

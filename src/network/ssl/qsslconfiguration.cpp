@@ -23,121 +23,35 @@
 *
 ***********************************************************************/
 
-#include "qsslconfiguration.h"
-#include "qsslconfiguration_p.h"
-#include "qsslsocket.h"
-#include "qmutex.h"
-#include "qdebug.h"
+#include <qsslconfiguration.h>
+#include <qsslconfiguration_p.h>
+#include <qsslsocket.h>
+#include <qmutex.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QSslConfiguration
-    \brief The QSslConfiguration class holds the configuration and state of an SSL connection
-    \since 4.4
-
-    \reentrant
-    \inmodule QtNetwork
-    \ingroup network
-    \ingroup ssl
-
-    QSslConfiguration is used by Qt networking classes to relay
-    information about an open SSL connection and to allow the
-    application to control certain features of that connection.
-
-    The settings that QSslConfiguration currently supports are:
-
-    \list
-      \o The SSL/TLS protocol to be used
-      \o The certificate to be presented to the peer during connection
-         and its associated private key
-      \o The ciphers allowed to be used for encrypting the connection
-      \o The list of Certificate Authorities certificates that are
-         used to validate the peer's certificate
-    \endlist
-
-    These settings are applied only during the connection
-    handshake. Setting them after the connection has been established
-    has no effect.
-
-    The state that QSslConfiguration supports are:
-    \list
-      \o The certificate the peer presented during handshake, along
-         with the chain leading to a CA certificate
-      \o The cipher used to encrypt this session
-    \endlist
-
-    The state can only be obtained once the SSL connection starts, but
-    not necessarily before it's done. Some settings may change during
-    the course of the SSL connection without need to restart it (for
-    instance, the cipher can be changed over time).
-
-    State in QSslConfiguration objects cannot be changed.
-
-    QSslConfiguration can be used with QSslSocket and the Network
-    Access API.
-
-    Note that changing settings in QSslConfiguration is not enough to
-    change the settings in the related SSL connection. You must call
-    setSslConfiguration on a modified QSslConfiguration object to
-    achieve that. The following example illustrates how to change the
-    protocol to TLSv1 in a QSslSocket object:
-
-    \snippet doc/src/snippets/code/src_network_ssl_qsslconfiguration.cpp 0
-
-    \sa QSsl::SslProtocol, QSslCertificate, QSslCipher, QSslKey
-        QSslSocket, QNetworkAccessManager,
-        QSslSocket::sslConfiguration(), QSslSocket::setSslConfiguration()
-*/
-
-/*!
-    Constructs an empty SSL configuration. This configuration contains
-    no valid settings and the state will be empty. isNull() will
-    return true after this constructor is called.
-
-    Once any setter methods are called, isNull() will return false.
-*/
 QSslConfiguration::QSslConfiguration()
    : d(new QSslConfigurationPrivate)
 {
 }
 
-/*!
-    Copies the configuration and state of \a other. If \a other is
-    null, this object will be null too.
-*/
 QSslConfiguration::QSslConfiguration(const QSslConfiguration &other)
    : d(other.d)
 {
 }
 
-/*!
-    Releases any resources held by QSslConfiguration.
-*/
 QSslConfiguration::~QSslConfiguration()
 {
    // QSharedDataPointer deletes d for us if necessary
 }
 
-/*!
-    Copies the configuration and state of \a other. If \a other is
-    null, this object will be null too.
-*/
 QSslConfiguration &QSslConfiguration::operator=(const QSslConfiguration &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    Returns true if this QSslConfiguration object is equal to \a
-    other.
-
-    Two QSslConfiguration objects are considered equal if they have
-    the exact same settings and state.
-
-    \sa operator!=()
-*/
 bool QSslConfiguration::operator==(const QSslConfiguration &other) const
 {
    if (d == other.d) {

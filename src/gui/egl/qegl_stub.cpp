@@ -28,9 +28,8 @@
 #include <QtGui/qwidget.h>
 #include <QtCore/qdebug.h>
 
-#include "qegl_p.h"
-#include "qeglcontext_p.h"
-
+#include <qegl_p.h>
+#include <qeglcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

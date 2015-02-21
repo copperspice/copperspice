@@ -25,13 +25,13 @@
 
 //#define QNATIVESOCKETENGINE_DEBUG
 
-#include "qnativesocketengine_p.h"
-#include "qnet_unix_p.h"
-#include "qiodevice.h"
-#include "qhostaddress.h"
-#include "qelapsedtimer.h"
-#include "qvarlengtharray.h"
-#include "qnetworkinterface.h"
+#include <qnativesocketengine_p.h>
+#include <qnet_unix_p.h>
+#include <qiodevice.h>
+#include <qhostaddress.h>
+#include <qelapsedtimer.h>
+#include <qvarlengtharray.h>
+#include <qnetworkinterface.h>
 #include <time.h>
 #include <errno.h>
 #include <fcntl.h>

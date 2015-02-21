@@ -23,147 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qdatastream.h"
-#include "qdebug.h"
-#include "qmatrix.h"
-#include "qregion.h"
-#include "qpainterpath.h"
-#include "qvariant.h"
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qmatrix.h>
+#include <qregion.h>
+#include <qpainterpath.h>
+#include <qvariant.h>
 #include <qmath.h>
 
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QMatrix
-    \brief The QMatrix class specifies 2D transformations of a
-    coordinate system.
-    \obsolete
-
-    \ingroup painting
-
-    A matrix specifies how to translate, scale, shear or rotate the
-    coordinate system, and is typically used when rendering graphics.
-    QMatrix, in contrast to QTransform, does not allow perspective
-    transformations. QTransform is the recommended transformation
-    class in Qt.
-
-    A QMatrix object can be built using the setMatrix(), scale(),
-    rotate(), translate() and shear() functions.  Alternatively, it
-    can be built by applying \l {QMatrix#Basic Matrix
-    Operations}{basic matrix operations}. The matrix can also be
-    defined when constructed, and it can be reset to the identity
-    matrix (the default) using the reset() function.
-
-    The QMatrix class supports mapping of graphic primitives: A given
-    point, line, polygon, region, or painter path can be mapped to the
-    coordinate system defined by \e this matrix using the map()
-    function. In case of a rectangle, its coordinates can be
-    transformed using the mapRect() function. A rectangle can also be
-    transformed into a \e polygon (mapped to the coordinate system
-    defined by \e this matrix), using the mapToPolygon() function.
-
-    QMatrix provides the isIdentity() function which returns true if
-    the matrix is the identity matrix, and the isInvertible() function
-    which returns true if the matrix is non-singular (i.e. AB = BA =
-    I). The inverted() function returns an inverted copy of \e this
-    matrix if it is invertible (otherwise it returns the identity
-    matrix). In addition, QMatrix provides the determinant() function
-    returning the matrix's determinant.
-
-    Finally, the QMatrix class supports matrix multiplication, and
-    objects of the class can be streamed as well as compared.
-
-    \tableofcontents
-
-    \section1 Rendering Graphics
-
-    When rendering graphics, the matrix defines the transformations
-    but the actual transformation is performed by the drawing routines
-    in QPainter.
-
-    By default, QPainter operates on the associated device's own
-    coordinate system.  The standard coordinate system of a
-    QPaintDevice has its origin located at the top-left position. The
-    \e x values increase to the right; \e y values increase
-    downward. For a complete description, see the \l {Coordinate
-    System}{coordinate system} documentation.
-
-    QPainter has functions to translate, scale, shear and rotate the
-    coordinate system without using a QMatrix. For example:
-
-    \table 100%
-    \row
-    \o \inlineimage qmatrix-simpletransformation.png
-    \o
-    \snippet doc/src/snippets/matrix/matrix.cpp 0
-    \endtable
-
-    Although these functions are very convenient, it can be more
-    efficient to build a QMatrix and call QPainter::setMatrix() if you
-    want to perform more than a single transform operation. For
-    example:
-
-    \table 100%
-    \row
-    \o \inlineimage qmatrix-combinedtransformation.png
-    \o
-    \snippet doc/src/snippets/matrix/matrix.cpp 1
-    \endtable
-
-    \section1 Basic Matrix Operations
-
-    \image qmatrix-representation.png
-
-    A QMatrix object contains a 3 x 3 matrix.  The \c dx and \c dy
-    elements specify horizontal and vertical translation. The \c m11
-    and \c m22 elements specify horizontal and vertical scaling. And
-    finally, the \c m21 and \c m12 elements specify horizontal and
-    vertical \e shearing.
-
-    QMatrix transforms a point in the plane to another point using the
-    following formulas:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qmatrix.cpp 0
-
-    The point \e (x, y) is the original point, and \e (x', y') is the
-    transformed point. \e (x', y') can be transformed back to \e (x,
-    y) by performing the same operation on the inverted() matrix.
-
-    The various matrix elements can be set when constructing the
-    matrix, or by using the setMatrix() function later on. They can also
-    be manipulated using the translate(), rotate(), scale() and
-    shear() convenience functions, The currently set values can be
-    retrieved using the m11(), m12(), m21(), m22(), dx() and dy()
-    functions.
-
-    Translation is the simplest transformation. Setting \c dx and \c
-    dy will move the coordinate system \c dx units along the X axis
-    and \c dy units along the Y axis.  Scaling can be done by setting
-    \c m11 and \c m22. For example, setting \c m11 to 2 and \c m22 to
-    1.5 will double the height and increase the width by 50%.  The
-    identity matrix has \c m11 and \c m22 set to 1 (all others are set
-    to 0) mapping a point to itself. Shearing is controlled by \c m12
-    and \c m21. Setting these elements to values different from zero
-    will twist the coordinate system. Rotation is achieved by
-    carefully setting both the shearing factors and the scaling
-    factors.
-
-    Here's the combined transformations example using basic matrix
-    operations:
-
-    \table 100%
-    \row
-    \o \inlineimage qmatrix-combinedtransformation.png
-    \o
-    \snippet doc/src/snippets/matrix/matrix.cpp 2
-    \endtable
-
-    \sa QPainter, QTransform, {Coordinate System},
-    {demos/affine}{Affine Transformations Demo}, {Transformations Example}
-*/
-
 
 // some defines to inline some code
 #define MAPDOUBLE(x, y, nx, ny) \
@@ -181,23 +51,6 @@ QT_BEGIN_NAMESPACE
     nx = qRound(_m11*fx + _m21*fy + _dx); \
     ny = qRound(_m12*fx + _m22*fy + _dy); \
 }
-
-/*****************************************************************************
-  QMatrix member functions
- *****************************************************************************/
-/*!
-    \fn QMatrix::QMatrix(Qt::Initialization)
-    \internal
-*/
-
-/*!
-    Constructs an identity matrix.
-
-    All elements are set to zero except \c m11 and \c m22 (specifying
-    the scale), which are set to 1.
-
-    \sa reset()
-*/
 
 QMatrix::QMatrix()
    : _m11(1.)

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qstandardgestures_p.h"
-#include "qgesture.h"
-#include "qgesture_p.h"
-#include "qevent.h"
-#include "qwidget.h"
-#include "qabstractscrollarea.h"
+#include <qstandardgestures_p.h>
+#include <qgesture.h>
+#include <qgesture_p.h>
+#include <qevent.h>
+#include <qwidget.h>
+#include <qabstractscrollarea.h>
 #include <qgraphicssceneevent.h>
-#include "qdebug.h"
+#include <qdebug.h>
 
 #ifndef QT_NO_GESTURES
 

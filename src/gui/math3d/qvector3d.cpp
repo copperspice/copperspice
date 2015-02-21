@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qvector3d.h"
-#include "qvector2d.h"
-#include "qvector4d.h"
+#include <qvector3d.h>
+#include <qvector2d.h>
+#include <qvector4d.h>
 #include <QtCore/qmath.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qdebug.h>
@@ -34,61 +34,8 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_VECTOR3D
 
-/*!
-    \class QVector3D
-    \brief The QVector3D class represents a vector or vertex in 3D space.
-    \since 4.6
-    \ingroup painting-3D
-
-    Vectors are one of the main building blocks of 3D representation and
-    drawing.  They consist of three coordinates, traditionally called
-    x, y, and z.
-
-    The QVector3D class can also be used to represent vertices in 3D space.
-    We therefore do not need to provide a separate vertex class.
-
-    \bold{Note:} By design values in the QVector3D instance are stored as \c float.
-    This means that on platforms where the \c qreal arguments to QVector3D
-    functions are represented by \c double values, it is possible to
-    lose precision.
-
-    \sa QVector2D, QVector4D, QQuaternion
-*/
-
-/*!
-    \fn QVector3D::QVector3D()
-
-    Constructs a null vector, i.e. with coordinates (0, 0, 0).
-*/
-
-/*!
-    \fn QVector3D::QVector3D(qreal xpos, qreal ypos, qreal zpos)
-
-    Constructs a vector with coordinates (\a xpos, \a ypos, \a zpos).
-*/
-
-/*!
-    \fn QVector3D::QVector3D(const QPoint& point)
-
-    Constructs a vector with x and y coordinates from a 2D \a point, and a
-    z coordinate of 0.
-*/
-
-/*!
-    \fn QVector3D::QVector3D(const QPointF& point)
-
-    Constructs a vector with x and y coordinates from a 2D \a point, and a
-    z coordinate of 0.
-*/
-
 #ifndef QT_NO_VECTOR2D
 
-/*!
-    Constructs a 3D vector from the specified 2D \a vector.  The z
-    coordinate is set to zero.
-
-    \sa toVector2D()
-*/
 QVector3D::QVector3D(const QVector2D &vector)
 {
    xp = vector.xp;
@@ -96,12 +43,6 @@ QVector3D::QVector3D(const QVector2D &vector)
    zp = 0.0f;
 }
 
-/*!
-    Constructs a 3D vector from the specified 2D \a vector.  The z
-    coordinate is set to \a zpos.
-
-    \sa toVector2D()
-*/
 QVector3D::QVector3D(const QVector2D &vector, qreal zpos)
 {
    xp = vector.xp;
@@ -113,12 +54,6 @@ QVector3D::QVector3D(const QVector2D &vector, qreal zpos)
 
 #ifndef QT_NO_VECTOR4D
 
-/*!
-    Constructs a 3D vector from the specified 4D \a vector.  The w
-    coordinate is dropped.
-
-    \sa toVector4D()
-*/
 QVector3D::QVector3D(const QVector4D &vector)
 {
    xp = vector.xp;
@@ -128,70 +63,6 @@ QVector3D::QVector3D(const QVector4D &vector)
 
 #endif
 
-/*!
-    \fn bool QVector3D::isNull() const
-
-    Returns true if the x, y, and z coordinates are set to 0.0,
-    otherwise returns false.
-*/
-
-/*!
-    \fn qreal QVector3D::x() const
-
-    Returns the x coordinate of this point.
-
-    \sa setX(), y(), z()
-*/
-
-/*!
-    \fn qreal QVector3D::y() const
-
-    Returns the y coordinate of this point.
-
-    \sa setY(), x(), z()
-*/
-
-/*!
-    \fn qreal QVector3D::z() const
-
-    Returns the z coordinate of this point.
-
-    \sa setZ(), x(), y()
-*/
-
-/*!
-    \fn void QVector3D::setX(qreal x)
-
-    Sets the x coordinate of this point to the given \a x coordinate.
-
-    \sa x(), setY(), setZ()
-*/
-
-/*!
-    \fn void QVector3D::setY(qreal y)
-
-    Sets the y coordinate of this point to the given \a y coordinate.
-
-    \sa y(), setX(), setZ()
-*/
-
-/*!
-    \fn void QVector3D::setZ(qreal z)
-
-    Sets the z coordinate of this point to the given \a z coordinate.
-
-    \sa z(), setX(), setY()
-*/
-
-/*!
-    Returns the normalized unit vector form of this vector.
-
-    If this vector is null, then a null vector is returned.  If the length
-    of the vector is very close to 1, then the vector will be returned as-is.
-    Otherwise the normalized form of the vector of length 1 will be returned.
-
-    \sa length(), normalize()
-*/
 QVector3D QVector3D::normalized() const
 {
    // Need some extra precision if the length is very small.

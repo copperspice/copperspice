@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qlocalserver.h"
-#include "qlocalserver_p.h"
-#include "qlocalsocket.h"
+#include <qlocalserver.h>
+#include <qlocalserver_p.h>
+#include <qlocalsocket.h>
 
 #include <qdebug.h>
 

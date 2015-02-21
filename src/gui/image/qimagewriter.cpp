@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qimagewriter.h"
+#include <qimagewriter.h>
 #include <qbytearray.h>
 #include <qfile.h>
 #include <qfileinfo.h>

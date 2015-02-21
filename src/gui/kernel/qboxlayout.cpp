@@ -23,22 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qboxlayout.h"
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qlist.h"
-#include "qsizepolicy.h"
-#include "qvector.h"
+#include <qboxlayout.h>
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qlist.h>
+#include <qsizepolicy.h>
+#include <qvector.h>
 
-#include "qlayoutengine_p.h"
-#include "qlayout_p.h"
+#include <qlayoutengine_p.h>
+#include <qlayout_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*
-    Returns true if the \a widget can be added to the \a layout;
-    otherwise returns false.
-*/
 static bool checkWidget(QLayout *layout, QWidget *widget)
 {
    if (!widget) {

@@ -23,9 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qnetworkreplyfileimpl_p.h"
-
-#include "QtCore/qdatetime.h"
+#include <qnetworkreplyfileimpl_p.h>
+#include <QtCore/qdatetime.h>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFileInfo>
 #include <QDebug>

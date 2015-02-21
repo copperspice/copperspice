@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbmphandler_p.h"
+#include <qbmphandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_BMP
 

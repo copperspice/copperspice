@@ -23,38 +23,38 @@
 *
 ***********************************************************************/
 
-#include "qwhatsthis.h"
+#include <qwhatsthis.h>
 
 #ifndef QT_NO_WHATSTHIS
-#include "qpointer.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qpixmap.h"
-#include "qpainter.h"
-#include "qtimer.h"
-#include "qhash.h"
-#include "qaction.h"
-#include "qcursor.h"
-#include "qbitmap.h"
-#include "qtextdocument.h"
-#include "qtextdocumentlayout_p.h"
-#include "qtoolbutton.h"
-#include "qdebug.h"
+#include <qpointer.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qtimer.h>
+#include <qhash.h>
+#include <qaction.h>
+#include <qcursor.h>
+#include <qbitmap.h>
+#include <qtextdocument.h>
+#include <qtextdocumentlayout_p.h>
+#include <qtoolbutton.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
 #if defined(Q_OS_WIN)
-#include "qt_windows.h"
+#include <qt_windows.h>
 #ifndef SPI_GETDROPSHADOW
 #define SPI_GETDROPSHADOW                   0x1024
 #endif
 #endif
 
 #if defined(Q_WS_X11)
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #include <qwidget.h>
 #endif
 

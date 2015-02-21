@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qbrush.h"
-#include "qpixmap.h"
-#include "qbitmap.h"
-#include "qpixmapcache.h"
-#include "qdatastream.h"
-#include "qvariant.h"
-#include "qline.h"
-#include "qdebug.h"
+#include <qbrush.h>
+#include <qpixmap.h>
+#include <qbitmap.h>
+#include <qpixmapcache.h>
+#include <qdatastream.h>
+#include <qvariant.h>
+#include <qline.h>
+#include <qdebug.h>
 #include <QtCore/qcoreapplication.h>
-#include "qhexstring_p.h"
+#include <qhexstring_p.h>
 #include <QtCore/qnumeric.h>
 
 QT_BEGIN_NAMESPACE

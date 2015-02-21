@@ -417,4 +417,22 @@ void QScriptDebuggerLocalsWidget::expand(const QModelIndex &index)
    d->view->setFirstColumnSpanned(index.row(), QModelIndex(), true);
 }
 
+void QScriptDebuggerLocalsWidget::_q_onCompletionTaskFinished()
+{
+	Q_D(QScriptDebuggerLocalsWidget);
+	d->_q_onCompletionTaskFinished();
+}
+
+void QScriptDebuggerLocalsWidget::_q_insertCompletion(const QString & un_named_arg1)
+{
+	Q_D(QScriptDebuggerLocalsWidget);
+	d->_q_insertCompletion();
+}
+
+void QScriptDebuggerLocalsWidget::_q_expandIndex(const QModelIndex & un_named_arg1)
+{
+	Q_D(QScriptDebuggerLocalsWidget);
+	d->_q_expandIndex();
+}
+
 QT_END_NAMESPACE

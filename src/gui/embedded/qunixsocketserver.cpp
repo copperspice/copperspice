@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qunixsocketserver_p.h"
+#include <qunixsocketserver_p.h>
 
 // #define QUNIXSOCKETSERVER_DEBUG
 

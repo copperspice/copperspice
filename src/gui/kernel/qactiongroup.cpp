@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qactiongroup.h"
+#include <qactiongroup.h>
 
 #ifndef QT_NO_ACTION
 
-#include "qaction_p.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qlist.h"
+#include <qaction_p.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

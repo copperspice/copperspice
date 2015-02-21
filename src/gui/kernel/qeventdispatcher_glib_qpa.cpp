@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qeventdispatcher_glib_qpa_p.h"
-#include "qapplication.h"
-#include "qplatformdefs.h"
-#include "qapplication.h"
+#include <qeventdispatcher_glib_qpa_p.h>
+#include <qapplication.h>
+#include <qplatformdefs.h>
+#include <qapplication.h>
 
 #include <glib.h>
-#include "qapplication_p.h"
+#include <qapplication_p.h>
 
 #include <qdebug.h>
 

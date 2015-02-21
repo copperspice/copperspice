@@ -23,12 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qsql_odbc.h"
+#include <qsql_odbc.h>
 #include <qsqlrecord.h>
 
 #if defined (Q_OS_WIN32)
 #include <qt_windows.h>
 #endif
+
 #include <qcoreapplication.h>
 #include <qvariant.h>
 #include <qdatetime.h>

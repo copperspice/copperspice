@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpixmapdatafactory_p.h"
+#include <qpixmapdatafactory_p.h>
 
 #ifdef Q_WS_QWS
 # include <QtGui/qscreen_qws.h>
@@ -45,8 +45,8 @@
 # include <qpixmap_raster_p.h>
 #endif
 
-#include "qapplication_p.h"
-#include "qgraphicssystem_p.h"
+#include <qapplication_p.h>
+#include <qgraphicssystem_p.h>
 
 QT_BEGIN_NAMESPACE
 

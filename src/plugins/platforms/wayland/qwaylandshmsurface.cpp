@@ -22,14 +22,15 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qwaylandshmsurface.h"
 
-#include <QtCore/qdebug.h>
-#include <QtGui/private/qapplication_p.h>
+#include <qwaylandshmsurface.h>
 
-#include "qwaylanddisplay.h"
-#include "qwaylandshmwindow.h"
-#include "qwaylandscreen.h"
+#include <qdebug.h>
+#include <qapplication_p.h>
+
+#include <qwaylanddisplay.h>
+#include <qwaylandshmwindow.h>
+#include <qwaylandscreen.h>
 
 #include <wayland-client.h>
 #include <unistd.h>

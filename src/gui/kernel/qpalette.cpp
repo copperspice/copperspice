@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qpalette.h"
-#include "qapplication.h"
-#include "qdatastream.h"
-#include "qvariant.h"
+#include <qpalette.h>
+#include <qapplication.h>
+#include <qdatastream.h>
+#include <qvariant.h>
 
 QT_BEGIN_NAMESPACE
 

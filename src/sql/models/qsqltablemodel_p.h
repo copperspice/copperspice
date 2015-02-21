@@ -26,8 +26,8 @@
 #ifndef QSQLTABLEMODEL_P_H
 #define QSQLTABLEMODEL_P_H
 
-#include "QtCore/qmap.h"
-#include "qsqlquerymodel_p.h"
+#include <QtCore/qmap.h>
+#include <qsqlquerymodel_p.h>
 
 QT_BEGIN_NAMESPACE
 

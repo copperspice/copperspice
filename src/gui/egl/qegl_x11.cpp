@@ -33,8 +33,8 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qwidget.h>
 #include <QtGui/qcolormap.h>
-#include "qegl_p.h"
-#include "qeglcontext_p.h"
+#include <qegl_p.h>
+#include <qeglcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

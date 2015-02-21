@@ -1,1 +1,1 @@
-#include "qvalidator.h"
+#include <qvalidator.h>

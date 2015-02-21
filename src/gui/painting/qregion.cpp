@@ -1589,17 +1589,17 @@ void QRegionPrivate::selfTest() const
 
 #if defined(Q_WS_X11)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qregion_x11.cpp"
+# include <qregion_x11.cpp>
 QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_MAC)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qregion_mac.cpp"
+# include <qregion_mac.cpp>
 QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_WIN)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qregion_win.cpp"
+# include <qregion_win.cpp>
 QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)

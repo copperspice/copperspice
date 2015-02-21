@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 #import  "qcocoawindowcustomthemeframe_mac_p.h"
 #import  "qcocoawindow_mac_p.h"
-#include "qt_cocoa_helpers_mac_p.h"
-#include "qwidget.h"
+#include <qt_cocoa_helpers_mac_p.h>
+#include <qwidget.h>
 
 @implementation QT_MANGLE_NAMESPACE(QCocoaWindowCustomThemeFrame)
 

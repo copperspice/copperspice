@@ -23,18 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qxcbintegration.h"
-#include "qxcbconnection.h"
-#include "qxcbscreen.h"
-#include "qxcbwindow.h"
-#include "qxcbwindowsurface.h"
-#include "qxcbnativeinterface.h"
+#include <qxcbintegration.h>
+#include <qxcbconnection.h>
+#include <qxcbscreen.h>
+#include <qxcbwindow.h>
+#include <qxcbwindowsurface.h>
+#include <qxcbnativeinterface.h>
 
 #include <xcb/xcb.h>
-
-#include <private/qpixmap_raster_p.h>
-
-#include "qgenericunixfontdatabase.h"
+#include <qpixmap_raster_p.h>
+#include <qgenericunixfontdatabase.h>
 
 #include <stdio.h>
 

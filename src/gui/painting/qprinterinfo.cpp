@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qprinterinfo.h"
-#include "qprinterinfo_p.h"
+#include <qprinterinfo.h>
+#include <qprinterinfo_p.h>
 
 #ifndef QT_NO_PRINTER
 
@@ -32,55 +32,11 @@ QT_BEGIN_NAMESPACE
 
 QPrinterInfoPrivate QPrinterInfoPrivate::shared_null;
 
-
-/*!
-    \class QPrinterInfo
-
-    \brief The QPrinterInfo class gives access to information about
-    existing printers.
-
-    \ingroup printing
-
-    Use the static functions to generate a list of QPrinterInfo
-    objects. Each QPrinterInfo object in the list represents a single
-    printer and can be queried for name, supported paper sizes, and
-    whether or not it is the default printer.
-
-    \since 4.4
-*/
-
-/*!
-    \fn QList<QPrinterInfo> QPrinterInfo::availablePrinters()
-
-    Returns a list of available printers on the system.
-*/
-
-/*!
-    \fn QPrinterInfo QPrinterInfo::defaultPrinter()
-
-    Returns the default printer on the system.
-
-    The return value should be checked using isNull() before being
-    used, in case there is no default printer.
-
-    \sa isNull()
-*/
-
-/*!
-    Constructs an empty QPrinterInfo object.
-
-    \sa isNull()
-*/
 QPrinterInfo::QPrinterInfo()
    : d_ptr(&QPrinterInfoPrivate::shared_null)
 {
 }
 
-/*!
-    \since 4.8
-
-    Constructs a copy of \a other.
-*/
 QPrinterInfo::QPrinterInfo(const QPrinterInfo &other)
    : d_ptr(new QPrinterInfoPrivate(*other.d_ptr))
 {

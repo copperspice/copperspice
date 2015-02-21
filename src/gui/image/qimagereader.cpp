@@ -25,7 +25,7 @@
 
 //#define QIMAGEREADER_DEBUG
 
-#include "qimagereader.h"
+#include <qimagereader.h>
 #include <qbytearray.h>
 
 #ifdef QIMAGEREADER_DEBUG

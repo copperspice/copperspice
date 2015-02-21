@@ -303,4 +303,46 @@ QScriptDebuggerCodeViewInterface *QScriptDebuggerCodeWidget::currentView() const
    return qobject_cast<QScriptDebuggerCodeViewInterface *>(d->viewStack->currentWidget());
 }
 
+void QScriptDebuggerCodeWidget::_q_onBreakpointToggleRequest(int un_named_arg1,bool un_named_arg2)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onBreakpointToggleRequest();
+}
+
+void QScriptDebuggerCodeWidget:_q_onBreakpointEnableRequest(int un_named_arg1,bool un_named_arg2)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onBreakpointEnableRequest();
+}
+
+void QScriptDebuggerCodeWidget:_q_onBreakpointsAboutToBeRemoved(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onBreakpointsAboutToBeRemoved();
+}
+
+void QScriptDebuggerCodeWidget:_q_onBreakpointsInserted(const QModelIndex & un_named_arg1,int un_named_arg2,int un_named_arg3)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onBreakpointsInserted();
+}
+
+void QScriptDebuggerCodeWidget:_q_onBreakpointsDataChanged(const QModelIndex & un_named_arg1,const QModelIndex & un_named_arg2)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onBreakpointsDataChanged();
+}
+
+void QScriptDebuggerCodeWidget: _q_onScriptsChanged()
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onScriptsChanged();
+}
+
+void QScriptDebuggerCodeWidget:_q_onToolTipRequest(const QPoint & un_named_arg1,int un_named_arg2,const QStringList & un_named_arg3)
+{
+	Q_D(QScriptDebuggerCodeWidget);
+	d->_q_onToolTipRequest();
+}
+
 QT_END_NAMESPACE

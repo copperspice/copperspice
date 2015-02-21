@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qnetworkinterface.h"
-#include "qnetworkinterface_p.h"
+#include <qnetworkinterface.h>
+#include <qnetworkinterface_p.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
-#include "qnetworkinterface_win_p.h"
+#include <qnetworkinterface_win_p.h>
 #include <qhostinfo.h>
 #include <qhash.h>
 #include <qurl.h>

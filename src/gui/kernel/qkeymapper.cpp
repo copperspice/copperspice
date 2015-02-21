@@ -23,34 +23,18 @@
 *
 ***********************************************************************/
 
-
-#include "qapplication.h"
-
-#include "qkeymapper_p.h"
+#include <qapplication.h>
+#include <qkeymapper_p.h>
 #include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QKeyMapper
-    \since 4.2
-    \internal
-
-    \sa QObject
-*/
-
-/*!
-    Constructs a new key mapper.
-*/
 QKeyMapper::QKeyMapper()
    : QObject(0), d_ptr(new QKeyMapperPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the key mapper.
-*/
 QKeyMapper::~QKeyMapper()
 {
 }

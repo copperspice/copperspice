@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qmacdefines_mac.h"
+#include <qmacdefines_mac.h>
 
 #import <qcocoawindow_mac_p.h>
 #import <qcocoawindowdelegate_mac_p.h>
@@ -69,6 +69,7 @@ QT_USE_NAMESPACE
   This is a bit unfortunate, but thanks to the dynamic dispatch we
   have to duplicate this code or resort to really silly forwarding methods
 **************************************************************************/
-#include "qcocoasharedwindowmethods_mac_p.h"
+
+#include <qcocoasharedwindowmethods_mac_p.h>
 
 @end

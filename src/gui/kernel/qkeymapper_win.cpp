@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qkeymapper_p.h"
+#include <qkeymapper_p.h>
 
 #include <qt_windows.h>
 #include <qdebug.h>

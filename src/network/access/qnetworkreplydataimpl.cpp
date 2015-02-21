@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qnetworkreplydataimpl_p.h"
-#include "qdataurl_p.h"
+#include <qnetworkreplydataimpl_p.h>
+#include <qdataurl_p.h>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QMetaObject>
 

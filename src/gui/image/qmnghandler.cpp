@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qmnghandler_p.h"
+#include <qmnghandler_p.h>
 
-#include "qimage.h"
-#include "qvariant.h"
-#include "qcolor.h"
+#include <qimage.h>
+#include <qvariant.h>
+#include <qcolor.h>
 
 #define MNG_USE_SO
 #include <libmng.h>

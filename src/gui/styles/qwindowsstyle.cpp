@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qwindowsstyle.h"
-#include "qwindowsstyle_p.h"
+#include <qwindowsstyle.h>
+#include <qwindowsstyle_p.h>
 
 #if !defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
 
 #include <qsystemlibrary_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
-#include <qdrawutil.h>    // for now
+#include <qdrawutil.h>   
 #include <qevent.h>
 #include <qmenu.h>
 #include <qmenubar.h>
@@ -66,7 +66,7 @@ QT_BEGIN_NAMESPACE
 #if defined(Q_OS_WIN)
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qt_windows.h"
+#include <qt_windows.h>
 QT_END_INCLUDE_NAMESPACE
 #  ifndef COLOR_GRADIENTACTIVECAPTION
 #    define COLOR_GRADIENTACTIVECAPTION     27

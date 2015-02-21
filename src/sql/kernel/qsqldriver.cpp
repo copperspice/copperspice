@@ -23,20 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qsqldriver.h"
+#include <qsqldriver.h>
 
-#include "qdatetime.h"
-#include "qsqlerror.h"
-#include "qsqlfield.h"
-#include "qsqlindex.h"
+#include <qdatetime.h>
+#include <qsqlerror.h>
+#include <qsqlfield.h>
+#include <qsqlindex.h>
 
 QT_BEGIN_NAMESPACE
 
-static QString prepareIdentifier(const QString &identifier,
-                                 QSqlDriver::IdentifierType type, const QSqlDriver *driver)
+static QString prepareIdentifier(const QString &identifier, QSqlDriver::IdentifierType type, const QSqlDriver *driver)
 {
    Q_ASSERT( driver != NULL );
    QString ret = identifier;
+
    if (!driver->isIdentifierEscaped(identifier, type)) {
       ret = driver->escapeIdentifier(identifier, type);
    }

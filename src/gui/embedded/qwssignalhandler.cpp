@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qwssignalhandler_p.h"
+#include <qwssignalhandler_p.h>
 
 #ifndef QT_NO_QWS_SIGNALHANDLER
 
-#include "qlock_p.h"
-#include "qwslock_p.h"
-
+#include <qlock_p.h>
+#include <qwslock_p.h>
 #include <sys/types.h>
 #include <signal.h>
 

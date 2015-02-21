@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qnetworkproxy.h"
+#include <qnetworkproxy.h>
 
 #ifndef QT_NO_NETWORKPROXY
 

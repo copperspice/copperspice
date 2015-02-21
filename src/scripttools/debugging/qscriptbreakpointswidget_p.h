@@ -31,10 +31,11 @@
 QT_BEGIN_NAMESPACE
 
 class QScriptBreakpointsWidgetPrivate;
-class QScriptBreakpointsWidget:
-   public QScriptBreakpointsWidgetInterface
+
+class QScriptBreakpointsWidget : public QScriptBreakpointsWidgetInterface
 {
    CS_OBJECT(QScriptBreakpointsWidget)
+
  public:
    QScriptBreakpointsWidget(QWidget *parent = 0);
    ~QScriptBreakpointsWidget();
@@ -49,33 +50,6 @@ class QScriptBreakpointsWidget:
    void keyPressEvent(QKeyEvent *e);
 
  private:
-  
-   /*  PRIVATE_SLOT
-   void _q_newBreakpoint()
-   {
-   	Q_D(QScriptBreakpointsWidget);
-   	d->_q_newBreakpoint();
-   }
-
-   void _q_deleteBreakpoint()
-   {
-   	Q_D(QScriptBreakpointsWidget);
-   	d->_q_deleteBreakpoint();
-   }
-
-   void _q_onCurrentChanged(const QModelIndex & un_named_arg1)
-   {
-   	Q_D(QScriptBreakpointsWidget);
-   	d->_q_onCurrentChanged();
-   }
-
-   void _q_onNewBreakpointRequest(const QString & un_named_arg1,int un_named_arg2)
-   {
-   	Q_D(QScriptBreakpointsWidget);
-   	d->_q_onNewBreakpointRequest();
-   }
-   */
-
    CS_SLOT_1(Private, void _q_newBreakpoint())
    CS_SLOT_2(_q_newBreakpoint)
 

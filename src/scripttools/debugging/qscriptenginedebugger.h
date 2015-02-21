@@ -33,16 +33,20 @@ QT_BEGIN_NAMESPACE
 class QAction;
 class QScriptEngine;
 class QWidget;
+
 #ifndef QT_NO_MAINWINDOW
 class QMainWindow;
 #endif
+
 class QMenu;
 class QToolBar;
 
 class QScriptEngineDebuggerPrivate;
+
 class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
 {
    CS_OBJECT(QScriptEngineDebugger)
+
  public:
    enum DebuggerWidget {
       ConsoleWidget,
@@ -99,9 +103,9 @@ class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
 
    DebuggerState state() const;
 
- public:
    CS_SIGNAL_1(Public, void evaluationSuspended())
    CS_SIGNAL_2(evaluationSuspended)
+
    CS_SIGNAL_1(Public, void evaluationResumed())
    CS_SIGNAL_2(evaluationResumed)
 
@@ -110,15 +114,7 @@ class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
    Q_DISABLE_COPY(QScriptEngineDebugger)
 
    CS_SLOT_1(Private, void _q_showStandardWindow())
-   CS_SLOT_2(_q_showStandardWindow)
-
-   /*  PRIVATE_SLOT
-   void _q_showStandardWindow()
-   {
-   	Q_D(QScriptEngineDebugger);
-   	d->_q_showStandardWindow();
-   }
-   */
+   CS_SLOT_2(_q_showStandardWindow)     
 };
 
 QT_END_NAMESPACE

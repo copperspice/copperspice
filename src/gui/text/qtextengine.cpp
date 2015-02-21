@@ -877,9 +877,11 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
 QT_BEGIN_INCLUDE_NAMESPACE
 
 #if defined(Q_WS_X11) || defined (Q_WS_QWS)
-#   include "qfontengine_ft_p.h"
+#  include <qfontengine_ft_p.h>
+
 #elif defined(Q_OS_MAC)
-# include "qtextengine_mac.cpp"
+#  include <qtextengine_mac.cpp>
+
 #endif
 
 #include <qharfbuzz_p.h>

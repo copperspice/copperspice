@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qaudiooutput_win32_p.h"
+#include <qaudiooutput_win32_p.h>
 #include <QtEndian>
 
 #ifndef SPEAKER_FRONT_LEFT

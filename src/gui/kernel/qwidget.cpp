@@ -23,61 +23,61 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qbrush.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qhash.h"
-#include "qlayout.h"
-#include "qmenu.h"
-#include "qmetaobject.h"
-#include "qpixmap.h"
-#include "qpointer.h"
-#include "qstack.h"
-#include "qstyle.h"
-#include "qstylefactory.h"
-#include "qvariant.h"
-#include "qwidget.h"
-#include "qstyleoption.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qbrush.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qhash.h>
+#include <qlayout.h>
+#include <qmenu.h>
+#include <qmetaobject.h>
+#include <qpixmap.h>
+#include <qpointer.h>
+#include <qstack.h>
+#include <qstyle.h>
+#include <qstylefactory.h>
+#include <qvariant.h>
+#include <qwidget.h>
+#include <qstyleoption.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+# include <qaccessible.h>
 #endif
 
 #if defined(Q_OS_WIN)
-# include "qt_windows.h"
+# include <qt_windows.h>
 #endif
 
 #if defined(Q_OS_MAC)
-# include "qt_mac_p.h"
-# include "qt_cocoa_helpers_mac_p.h"
-# include "qmainwindow.h"
-# include "qtoolbar.h"
+# include <qt_mac_p.h>
+# include <qt_cocoa_helpers_mac_p.h>
+# include <qmainwindow.h>
+# include <qtoolbar.h>
 # include <qmainwindowlayout_p.h>
 #endif
 
 #if defined(Q_WS_QWS)
-# include "qwsdisplay_qws.h"
-# include "qwsmanager_qws.h"
-# include "qpaintengine.h" // for PorterDuff
-# include "qwindowsurface_qws_p.h"
+# include <qwsdisplay_qws.h>
+# include <qwsmanager_qws.h>
+# include <qpaintengine.h"             // for PorterDuff
+# include <qwindowsurface_qws_p.h>
 #endif
 
 #if defined(Q_WS_QPA)
-#include "qplatformwindow_qpa.h"
+#include <qplatformwindow_qpa.h>
 #endif
 
-#include "qpainter.h"
-#include "qtooltip.h"
-#include "qwhatsthis.h"
-#include "qdebug.h"
-#include "qstylesheetstyle_p.h"
-#include "qstyle_p.h"
-#include "qinputcontext_p.h"
-#include "qfileinfo.h"
-#include "qsoftkeymanager_p.h"
+#include <qpainter.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qdebug.h>
+#include <qstylesheetstyle_p.h>
+#include <qstyle_p.h>
+#include <qinputcontext_p.h>
+#include <qfileinfo.h>
+#include <qsoftkeymanager_p.h>
 
 #if defined (Q_OS_WIN)
 # include <qwininputcontext_p.h>
@@ -85,7 +85,7 @@
 
 #if defined(Q_WS_X11)
 # include <qpaintengine_x11_p.h>
-# include "qx11info_x11.h"
+# include <qx11info_x11.h>
 #endif
 
 #include <qgraphicseffect_p.h>
@@ -98,20 +98,20 @@
 
 #include <qpaintengine_raster_p.h>
 
-#include "qwidget_p.h"
-#include "qaction_p.h"
-#include "qlayout_p.h"
-#include "QtGui/qgraphicsproxywidget.h"
-#include "QtGui/qgraphicsscene.h"
-#include "qgraphicsproxywidget_p.h"
-#include "QtGui/qabstractscrollarea.h"
-#include "qabstractscrollarea_p.h"
-#include "qevent_p.h"
-#include "qgraphicssystem_p.h"
-#include "qgesturemanager_p.h"
+#include <qwidget_p.h>
+#include <qaction_p.h>
+#include <qlayout_p.h>
+#include <QtGui/qgraphicsproxywidget.h>
+#include <QtGui/qgraphicsscene.h>
+#include <qgraphicsproxywidget_p.h>
+#include <QtGui/qabstractscrollarea.h>
+#include <qabstractscrollarea_p.h>
+#include <qevent_p.h>
+#include <qgraphicssystem_p.h>
+#include <qgesturemanager_p.h>
 
 #ifdef QT_KEYPAD_NAVIGATION
-#include "qtabwidget.h" // Needed in inTabWidget()
+#include <qtabwidget.h>             // needed in inTabWidget()
 #endif
 
 QT_BEGIN_NAMESPACE

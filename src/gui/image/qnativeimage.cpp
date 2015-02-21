@@ -16,7 +16,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 * Lesser General Public License for more details.
-*
+
 * You should have received a copy of the GNU Lesser General Public
 * License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
@@ -24,12 +24,12 @@
 ***********************************************************************/
 
 #include <qdebug.h>
-#include "qnativeimage_p.h"
-#include "qcolormap.h"
+#include <qnativeimage_p.h>
+#include <qcolormap.h>
 
-#include "qpaintengine_raster_p.h"
-#include "qapplication_p.h"
-#include "qgraphicssystem_p.h"
+#include <qpaintengine_raster_p.h>
+#include <qapplication_p.h>
+#include <qgraphicssystem_p.h>
 
 #if defined(Q_WS_X11) && !defined(QT_NO_MITSHM)
 #include <qx11info_x11.h>

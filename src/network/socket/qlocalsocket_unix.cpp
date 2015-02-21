@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qlocalsocket.h"
-#include "qlocalsocket_p.h"
-#include "qnet_unix_p.h"
+#include <qlocalsocket.h>
+#include <qlocalsocket_p.h>
+#include <qnet_unix_p.h>
 
 #ifndef QT_NO_LOCALSOCKET
 

@@ -30,24 +30,24 @@
 #include <qt_mac_p.h>
 #include <qeventdispatcher_mac_p.h>
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qfileinfo.h"
-#include "qimage.h"
-#include "qlayout.h"
-#include "qmenubar.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qfileinfo.h>
+#include <qimage.h>
+#include <qlayout.h>
+#include <qmenubar.h>
 #include <qbackingstore_p.h>
 #include <qwindowsurface_mac_p.h>
 #include <qpaintengine_mac_p.h>
-#include "qpainter.h"
-#include "qstyle.h"
-#include "qtimer.h"
-#include "qfocusframe.h"
-#include "qdebug.h"
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qtimer.h>
+#include <qfocusframe.h>
+#include <qdebug.h>
 #include <qmainwindowlayout_p.h>
 
 #include <qabstractscrollarea_p.h>
@@ -60,11 +60,11 @@
 #include <qcocoawindowdelegate_mac_p.h>
 #include <qcocoapanel_mac_p.h>
 
-#include "qwidget_p.h"
-#include "qevent_p.h"
-#include "qdnd_p.h"
+#include <qwidget_p.h>
+#include <qevent_p.h>
+#include <qdnd_p.h>
 #include <qgraphicsproxywidget.h>
-#include "qmainwindow.h"
+#include <qmainwindow.h>
 
 QT_BEGIN_NAMESPACE
 

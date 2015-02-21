@@ -23,16 +23,7 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QIcoHandler
-    \since 4.4
-    \brief The QIcoHandler class provides support for the ICO image format.
-    \internal
-*/
-
-
-
-#include "qicohandler_p.h"
+#include <qicohandler_p.h>
 #include <QtCore/qendian.h>
 #include <QtGui/QImage>
 #include <QtCore/QFile>

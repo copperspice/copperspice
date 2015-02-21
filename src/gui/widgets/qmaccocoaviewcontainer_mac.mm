@@ -26,7 +26,7 @@
 #import  <Cocoa/Cocoa.h>
 
 #include <qwidget_p.h>
-#include "qmaccocoaviewcontainer_mac.h"
+#include <qmaccocoaviewcontainer_mac.h>
 #include <qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE

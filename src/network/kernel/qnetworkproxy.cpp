@@ -23,194 +23,17 @@
 *
 ***********************************************************************/
 
-
-/*!
-    \class QNetworkProxy
-
-    \since 4.1
-
-    \brief The QNetworkProxy class provides a network layer proxy.
-
-    \reentrant
-    \ingroup network
-    \inmodule QtNetwork
-
-    QNetworkProxy provides the method for configuring network layer
-    proxy support to the Qt network classes. The currently supported
-    classes are QAbstractSocket, QTcpSocket, QUdpSocket, QTcpServer,
-    QNetworkAccessManager and QFtp. The proxy support is designed to
-    be as transparent as possible. This means that existing
-    network-enabled applications that you have written should
-    automatically support network proxy using the following code.
-
-    \snippet doc/src/snippets/code/src_network_kernel_qnetworkproxy.cpp 0
-
-    An alternative to setting an application wide proxy is to specify
-    the proxy for individual sockets using QAbstractSocket::setProxy()
-    and QTcpServer::setProxy(). In this way, it is possible to disable
-    the use of a proxy for specific sockets using the following code:
-
-    \snippet doc/src/snippets/code/src_network_kernel_qnetworkproxy.cpp 1
-
-    Network proxy is not used if the address used in \l
-    {QAbstractSocket::connectToHost()}{connectToHost()}, \l
-    {QUdpSocket::bind()}{bind()} or \l
-    {QTcpServer::listen()}{listen()} is equivalent to
-    QHostAddress::LocalHost or QHostAddress::LocalHostIPv6.
-
-    Each type of proxy support has certain restrictions associated with it.
-    You should read the \l{ProxyType} documentation carefully before
-    selecting a proxy type to use.
-
-    \note Changes made to currently connected sockets do not take effect.
-    If you need to change a connected socket, you should reconnect it.
-
-    \section1 SOCKS5
-
-    The SOCKS5 support in Qt 4 is based on \l{RFC 1928} and \l{RFC 1929}.
-    The supported authentication methods are no authentication and
-    username/password authentication.  Both IPv4 and IPv6 are
-    supported. Domain names are resolved through the SOCKS5 server if
-    the QNetworkProxy::HostNameLookupCapability is enabled, otherwise
-    they are resolved locally and the IP address is sent to the
-    server. There are several things to remember when using SOCKS5
-    with QUdpSocket and QTcpServer:
-
-    With QUdpSocket, a call to \l {QUdpSocket::bind()}{bind()} may fail
-    with a timeout error. If a port number other than 0 is passed to
-    \l {QUdpSocket::bind()}{bind()}, it is not guaranteed that it is the
-    specified port that will be used.
-    Use \l{QUdpSocket::localPort()}{localPort()} and
-    \l{QUdpSocket::localAddress()}{localAddress()} to get the actual
-    address and port number in use. Because proxied UDP goes through
-    two UDP connections, it is more likely that packets will be dropped.
-
-    With QTcpServer a call to \l{QTcpServer::listen()}{listen()} may
-    fail with a timeout error. If a port number other than 0 is passed
-    to \l{QTcpServer::listen()}{listen()}, then it is not guaranteed
-    that it is the specified port that will be used.
-    Use \l{QTcpServer::serverPort()}{serverPort()} and
-    \l{QTcpServer::serverAddress()}{serverAddress()} to get the actual
-    address and port used to listen for connections. SOCKS5 only supports
-    one accepted connection per call to \l{QTcpServer::listen()}{listen()},
-    and each call is likely to result in a different
-    \l{QTcpServer::serverPort()}{serverPort()} being used.
-
-    \sa QAbstractSocket, QTcpServer
-*/
-
-/*!
-    \enum QNetworkProxy::ProxyType
-
-    This enum describes the types of network proxying provided in Qt.
-
-    There are two types of proxies that Qt understands:
-    transparent proxies and caching proxies. The first group consists
-    of proxies that can handle any arbitrary data transfer, while the
-    second can only handle specific requests. The caching proxies only
-    make sense for the specific classes where they can be used.
-
-    \value NoProxy No proxying is used
-    \value DefaultProxy Proxy is determined based on the application proxy set using setApplicationProxy()
-    \value Socks5Proxy \l Socks5 proxying is used
-    \value HttpProxy HTTP transparent proxying is used (This value was introduced in 4.3.)
-    \value HttpCachingProxy Proxying for HTTP requests only (This value was introduced in 4.4.)
-    \value FtpCachingProxy Proxying for FTP requests only (This value was introduced in 4.4.)
-
-    The table below lists different proxy types and their
-    capabilities. Since each proxy type has different capabilities, it
-    is important to understand them before choosing a proxy type.
-
-    \table
-    \header
-        \o Proxy type
-        \o Description
-        \o Default capabilities
-
-    \row
-        \o SOCKS 5
-        \o Generic proxy for any kind of connection. Supports TCP,
-           UDP, binding to a port (incoming connections) and
-           authentication.
-        \o TunnelingCapability, ListeningCapability,
-           UdpTunnelingCapability, HostNameLookupCapability
-
-    \row
-        \o HTTP
-        \o Implemented using the "CONNECT" command, supports only
-           outgoing TCP connections; supports authentication.
-        \o TunnelingCapability, CachingCapability, HostNameLookupCapability
-
-    \row
-        \o Caching-only HTTP
-        \o Implemented using normal HTTP commands, it is useful only
-           in the context of HTTP requests (see QNetworkAccessManager)
-        \o CachingCapability, HostNameLookupCapability
-
-    \row
-        \o Caching FTP
-        \o Implemented using an FTP proxy, it is useful only in the
-           context of FTP requests (see QFtp,
-           QNetworkAccessManager)
-        \o CachingCapability, HostNameLookupCapability
-
-    \endtable
-
-    Also note that you shouldn't set the application default proxy
-    (setApplicationProxy()) to a proxy that doesn't have the
-    TunnelingCapability capability. If you do, QTcpSocket will not
-    know how to open connections.
-
-    \sa setType(), type(), capabilities(), setCapabilities()
-*/
-
-/*!
-    \enum QNetworkProxy::Capability
-    \since 4.5
-
-    These flags indicate the capabilities that a given proxy server
-    supports.
-
-    QNetworkProxy sets different capabilities by default when the
-    object is created (see QNetworkProxy::ProxyType for a list of the
-    defaults). However, it is possible to change the capabitilies
-    after the object has been created with setCapabilities().
-
-    The capabilities that QNetworkProxy supports are:
-
-    \value TunnelingCapability Ability to open transparent, tunneled
-    TCP connections to a remote host. The proxy server relays the
-    transmission verbatim from one side to the other and does no
-    caching.
-
-    \value ListeningCapability Ability to create a listening socket
-    and wait for an incoming TCP connection from a remote host.
-
-    \value UdpTunnelingCapability Ability to relay UDP datagrams via
-    the proxy server to and from a remote host.
-
-    \value CachingCapability Ability to cache the contents of the
-    transfer. This capability is specific to each protocol and proxy
-    type. For example, HTTP proxies can cache the contents of web data
-    transferred with "GET" commands.
-
-    \value HostNameLookupCapability Ability to connect to perform the
-    lookup on a remote host name and connect to it, as opposed to
-    requiring the application to perform the name lookup and request
-    connection to IP addresses only.
-*/
-
-#include "qnetworkproxy.h"
+#include <qnetworkproxy.h>
 
 #ifndef QT_NO_NETWORKPROXY
 
-#include "qnetworkproxy_p.h"
-#include "qsocks5socketengine_p.h"
-#include "qhttpsocketengine_p.h"
-#include "qauthenticator.h"
-#include "qhash.h"
-#include "qmutex.h"
-#include "qurl.h"
+#include <qnetworkproxy_p.h>
+#include <qsocks5socketengine_p.h>
+#include <qhttpsocketengine_p.h>
+#include <qauthenticator.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qurl.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 #include <QtNetwork/QNetworkConfiguration>
@@ -233,9 +56,11 @@ class QGlobalNetworkProxy
 #ifdef QT_USE_SYSTEM_PROXIES
       setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
 #endif
+
 #ifndef QT_NO_SOCKS5
       socks5SocketEngineHandler = new QSocks5SocketEngineHandler();
 #endif
+
 #ifndef QT_NO_HTTP
       httpSocketEngineHandler = new QHttpSocketEngineHandler();
 #endif

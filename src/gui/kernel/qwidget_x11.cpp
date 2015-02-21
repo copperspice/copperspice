@@ -23,33 +23,33 @@
 *
 ***********************************************************************/
 
-#include "qevent.h"
-#include "qwidget.h"
-#include "qdesktopwidget.h"
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qabstracteventdispatcher.h"
-#include "qnamespace.h"
-#include "qpainter.h"
-#include "qbitmap.h"
-#include "qlayout.h"
-#include "qtextcodec.h"
-#include "qelapsedtimer.h"
-#include "qcursor.h"
-#include "qstack.h"
-#include "qcolormap.h"
-#include "qdebug.h"
-#include "qmenu.h"
-#include "qmenu_p.h"
-#include "qbackingstore_p.h"
-#include "qwindowsurface_x11_p.h"
+#include <qevent.h>
+#include <qwidget.h>
+#include <qdesktopwidget.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qabstracteventdispatcher.h>
+#include <qnamespace.h>
+#include <qpainter.h>
+#include <qbitmap.h>
+#include <qlayout.h>
+#include <qtextcodec.h>
+#include <qelapsedtimer.h>
+#include <qcursor.h>
+#include <qstack.h>
+#include <qcolormap.h>
+#include <qdebug.h>
+#include <qmenu.h>
+#include <qmenu_p.h>
+#include <qbackingstore_p.h>
+#include <qwindowsurface_x11_p.h>
 
 //extern bool qt_sendSpontaneousEvent(QObject *, QEvent *); //qapplication_x11.cpp
 
 #include <qpixmap_x11_p.h>
 #include <qpaintengine_x11_p.h>
-#include "qt_x11_p.h"
-#include "qx11info_x11.h"
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
 
 #include <stdlib.h>
 
@@ -59,12 +59,12 @@
 // bool qt_wstate_iconified(WId);
 // void qt_updated_rootinfo();
 
-#if !defined(QT_NO_IM)
-#include "qinputcontext.h"
-#include "qinputcontextfactory.h"
+#if ! defined(QT_NO_IM)
+#include <qinputcontext.h>
+#include <qinputcontextfactory.h>
 #endif
 
-#include "qwidget_p.h"
+#include <qwidget_p.h>
 
 #define XCOORD_MAX 16383
 #define WRECT_MAX 8191

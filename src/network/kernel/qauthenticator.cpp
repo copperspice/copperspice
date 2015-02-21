@@ -41,88 +41,17 @@
 QT_BEGIN_NAMESPACE
 
 #ifdef NTLMV1_CLIENT
-#include "../../3rdparty/des/des.cpp"
+#include "../../3rdparty/des/des.cpp"      // do not change to < >
 #endif
 
 static QByteArray qNtlmPhase1();
 static QByteArray qNtlmPhase3(QAuthenticatorPrivate *ctx, const QByteArray &phase2data);
 
-/*!
-  \class QAuthenticator
-  \brief The QAuthenticator class provides an authentication object.
-  \since 4.3
-
-  \reentrant
-  \ingroup network
-  \inmodule QtNetwork
-
-  The QAuthenticator class is usually used in the
-  \l{QNetworkAccessManager::}{authenticationRequired()} and
-  \l{QNetworkAccessManager::}{proxyAuthenticationRequired()} signals of QNetworkAccessManager and
-  QAbstractSocket. The class provides a way to pass back the required
-  authentication information to the socket when accessing services that
-  require authentication.
-
-  QAuthenticator supports the following authentication methods:
-  \list
-    \o Basic
-    \o NTLM version 2
-    \o Digest-MD5
-  \endlist
-
-  \section1 Options
-
-  In addition to the username and password required for authentication, a
-  QAuthenticator object can also contain additional options. The
-  options() function can be used to query incoming options sent by
-  the server; the setOption() function can
-  be used to set outgoing options, to be processed by the authenticator
-  calculation. The options accepted and provided depend on the authentication
-  type (see method()).
-
-  The following tables list known incoming options as well as accepted
-  outgoing options. The list of incoming options is not exhaustive, since
-  servers may include additional information at any time. The list of
-  outgoing options is exhaustive, however, and no unknown options will be
-  treated or sent back to the server.
-
-  \section2 Basic
-
-  \table
-    \header \o Option \o Direction \o Description
-    \row \o \tt{realm} \o Incoming \o Contains the realm of the authentication, the same as realm()
-  \endtable
-
-  The Basic authentication mechanism supports no outgoing options.
-
-  \section2 NTLM version 2
-
-  The NTLM authentication mechanism currently supports no incoming or outgoing options.
-
-  \section2 Digest-MD5
-
-  \table
-    \header \o Option \o Direction \o Description
-    \row \o \tt{realm} \o Incoming \o Contains the realm of the authentication, the same as realm()
-  \endtable
-
-  The Digest-MD5 authentication mechanism supports no outgoing options.
-
-  \sa QSslSocket
-*/
-
-
-/*!
-  Constructs an empty authentication object
-*/
 QAuthenticator::QAuthenticator()
    : d(0)
 {
 }
 
-/*!
-  Destructs the object
-*/
 QAuthenticator::~QAuthenticator()
 {
    if (d) {

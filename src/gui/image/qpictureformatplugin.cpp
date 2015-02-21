@@ -23,78 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qpictureformatplugin.h"
+#include <qpictureformatplugin.h>
+
 #if !defined(QT_NO_PICTURE)
-#include "qpicture.h"
+#include <qpicture.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \obsolete
-
-    \class QPictureFormatPlugin
-    \brief The QPictureFormatPlugin class provides an abstract base
-    for custom picture format plugins.
-
-    \ingroup plugins
-
-    The picture format plugin is a simple plugin interface that makes
-    it easy to create custom picture formats that can be used
-    transparently by applications.
-
-    Writing an picture format plugin is achieved by subclassing this
-    base class, reimplementing the pure virtual functions keys(),
-    loadPicture(), savePicture(), and installIOHandler(), and
-    exporting the class with the Q_EXPORT_PLUGIN2() macro.
-
-    \sa {How to Create Qt Plugins}
-*/
-
-/*!
-    \fn QStringList QPictureFormatPlugin::keys() const
-
-    Returns the list of picture formats this plugin supports.
-
-    \sa installIOHandler()
-*/
-
-/*!
-    \fn bool QPictureFormatPlugin::installIOHandler(const QString &format)
-
-    Installs a QPictureIO picture I/O handler for the picture format \a
-    format.
-
-    \sa keys()
-*/
-
-
-/*!
-    Constructs an picture format plugin with the given \a parent.
-    This is invoked automatically by the Q_EXPORT_PLUGIN2() macro.
-*/
 QPictureFormatPlugin::QPictureFormatPlugin(QObject *parent)
    : QObject(parent)
 {
 }
 
-/*!
-    Destroys the picture format plugin.
-
-    You never have to call this explicitly. Qt destroys a plugin
-    automatically when it is no longer used.
-*/
 QPictureFormatPlugin::~QPictureFormatPlugin()
 {
 }
 
-
-/*!
-    Loads the picture stored in the file called \a fileName, with the
-    given \a format, into *\a picture. Returns true on success;
-    otherwise returns false.
-
-    \sa savePicture()
-*/
 bool QPictureFormatPlugin::loadPicture(const QString &format, const QString &fileName, QPicture *picture)
 {
    Q_UNUSED(format)

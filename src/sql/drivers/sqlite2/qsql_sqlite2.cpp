@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsql_sqlite2.h"
+#include <qsql_sqlite2.h>
 
 #include <qcoreapplication.h>
 #include <qvariant.h>

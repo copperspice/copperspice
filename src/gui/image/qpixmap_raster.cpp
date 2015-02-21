@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qpixmap.h"
+#include <qpixmap.h>
 #include <qfont_p.h>
-#include "qpixmap_raster_p.h"
-#include "qnativeimage_p.h"
-#include "qimage_p.h"
-#include "qpaintengine.h"
-#include "qbitmap.h"
-#include "qimage.h"
+#include <qpixmap_raster_p.h>
+#include <qnativeimage_p.h>
+#include <qimage_p.h>
+#include <qpaintengine.h>
+#include <qbitmap.h>
+#include <qimage.h>
 #include <QBuffer>
 #include <QImageReader>
 #include <qimage_p.h>

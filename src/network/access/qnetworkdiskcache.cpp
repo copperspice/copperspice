@@ -25,10 +25,9 @@
 
 //#define QNETWORKDISKCACHE_DEBUG
 
-
-#include "qnetworkdiskcache.h"
-#include "qnetworkdiskcache_p.h"
-#include "QtCore/qscopedpointer.h"
+#include <qnetworkdiskcache.h>
+#include <qnetworkdiskcache_p.h>
+#include <QtCore/qscopedpointer.h>
 
 #include <qfile.h>
 #include <qdir.h>

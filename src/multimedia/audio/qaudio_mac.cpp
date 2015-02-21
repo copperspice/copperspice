@@ -23,8 +23,7 @@
 *
 ***********************************************************************/
 
-
-#include "qaudio_mac_p.h"
+#include <qaudio_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

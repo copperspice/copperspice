@@ -23,53 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qlocalserver.h"
-#include "qlocalserver_p.h"
-#include "qlocalsocket.h"
+#include <qlocalserver.h>
+#include <qlocalserver_p.h>
+#include <qlocalsocket.h>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_LOCALSERVER
 
-/*!
-    \class QLocalServer
-    \since 4.4
-
-    \brief The QLocalServer class provides a local socket based server.
-
-    This class makes it possible to accept incoming local socket
-    connections.
-
-    Call listen() to have the server start listening
-    for incoming connections on a specified key.  The
-    newConnection() signal is then emitted each time a client
-    connects to the server.
-
-    Call nextPendingConnection() to accept the pending connection
-    as a connected QLocalSocket.  The function returns a pointer to a
-    QLocalSocket that can be used for communicating with the client.
-
-    If an error occurs, serverError() returns the type of error, and
-    errorString() can be called to get a human readable description
-    of what happened.
-
-    When listening for connections, the name which the server is
-    listening on is available through serverName().
-
-    Calling close() makes QLocalServer stop listening for incoming connections.
-
-    Although QLocalServer is designed for use with an event loop, it's possible
-    to use it without one. In that case, you must use waitForNewConnection(),
-    which blocks until either a connection is available or a timeout expires.
-
-    \sa QLocalSocket, QTcpServer
-*/
-
-/*!
-    Create a new local socket server with the given \a parent.
-
-    \sa listen()
- */
 QLocalServer::QLocalServer(QObject *parent)
    : QObject(parent), d_ptr(new QLocalServerPrivate)
 {
@@ -79,15 +40,6 @@ QLocalServer::QLocalServer(QObject *parent)
    d->init();
 }
 
-/*!
-    Destroys the QLocalServer object.  If the server is listening for
-    connections, it is automatically closed.
-
-    Any client QLocalSockets that are still connected must either
-    disconnect or be reparented before the server is deleted.
-
-    \sa close()
- */
 QLocalServer::~QLocalServer()
 {
    if (isListening()) {
@@ -95,12 +47,6 @@ QLocalServer::~QLocalServer()
    }
 }
 
-/*!
-    Stop listening for incoming connections.  Existing connections are not
-    effected, but any new connections will be refused.
-
-    \sa isListening(), listen()
- */
 void QLocalServer::close()
 {
    Q_D(QLocalServer);

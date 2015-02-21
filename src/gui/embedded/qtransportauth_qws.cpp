@@ -40,7 +40,7 @@
 #include <qlibraryinfo.h>
 #include <qfile.h>
 #include <qdebug.h>
-#include <qcore_unix_p.h> // overrides QT_OPEN
+#include <qcore_unix_p.h>                      // overrides QT_OPEN
 
 #include <syslog.h>
 #include <unistd.h>

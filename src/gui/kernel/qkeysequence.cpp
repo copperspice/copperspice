@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qkeysequence.h"
-#include "qkeysequence_p.h"
-#include "qapplication_p.h"
+#include <qkeysequence.h>
+#include <qkeysequence_p.h>
+#include <qapplication_p.h>
 
 #ifndef QT_NO_SHORTCUT
 
-#include "qshortcut.h"
-#include "qdebug.h"
+#include <qshortcut.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_REGEXP
-# include "qregexp.h"
+# include <qregexp.h>
 #endif
 
 #ifndef QT_NO_DATASTREAM
-# include "qdatastream.h"
+# include <qdatastream.h>
 #endif
 
-#include "qvariant.h"
+#include <qvariant.h>
 
 #ifdef Q_OS_MAC
 # include <qt_mac_p.h>

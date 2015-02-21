@@ -1,1 +1,1 @@
-#include "qplatformfontdatabase_qpa.h"
+#include <qplatformfontdatabase_qpa.h>

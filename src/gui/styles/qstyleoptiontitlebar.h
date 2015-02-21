@@ -1,1 +1,1 @@
-#include "qstyleoption.h"
+#include <qstyleoption.h>

@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qmime.h"
+#include <qmime.h>
 
-#include "qimagereader.h"
-#include "qimagewriter.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qt_windows.h"
-#include "qapplication_p.h"
-#include "qtextcodec.h"
-#include "qregexp.h"
-#include "qalgorithms.h"
-#include "qmap.h"
-#include "qdnd_p.h"
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qt_windows.h>
+#include <qapplication_p.h>
+#include <qtextcodec.h>
+#include <qregexp.h>
+#include <qalgorithms.h>
+#include <qmap.h>
+#include <qdnd_p.h>
 #include <shlobj.h>
-#include "qurl.h"
-#include "qvariant.h"
-#include "qtextdocument.h"
-#include "qdir.h"
+#include <qurl.h>
+#include <qvariant.h>
+#include <qtextdocument.h>
+#include <qdir.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,12 +48,14 @@ QT_BEGIN_NAMESPACE
 #ifndef CF_DIBV5
 #define CF_DIBV5 17
 #endif
+
 /* The MSVC compilers allows multi-byte characters, that has the behavior of
  * that each character gets shifted into position. 0x73524742 below is for MSVC
  * equivalent to doing 'sRGB', but this does of course not work
  * on conformant C++ compilers. */
-#define BMP_LCS_sRGB  0x73524742
-#define BMP_LCS_GM_IMAGES  0x00000004L
+
+#define BMP_LCS_sRGB        0x73524742
+#define BMP_LCS_GM_IMAGES   0x00000004L
 
 struct _CIEXYZ {
    long ciexyzX, ciexyzY, ciexyzZ;

@@ -32,7 +32,7 @@
 #include <QtCore/qfile.h>
 #endif
 
-#include "qgraphicsanchorlayout_p.h"
+#include <qgraphicsanchorlayout_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 QT_BEGIN_NAMESPACE

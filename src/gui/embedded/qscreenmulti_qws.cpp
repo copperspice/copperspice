@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qscreenmulti_qws_p.h"
+#include <qscreenmulti_qws_p.h>
 
 #ifndef QT_NO_QWS_MULTISCREEN
 

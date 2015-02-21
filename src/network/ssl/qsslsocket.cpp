@@ -282,10 +282,10 @@
     \sa peerVerifyError()
 */
 
-#include "qsslcipher.h"
-#include "qsslsocket.h"
-#include "qsslsocket_openssl_p.h"
-#include "qsslconfiguration_p.h"
+#include <qsslcipher.h>
+#include <qsslsocket.h>
+#include <qsslsocket_openssl_p.h>
+#include <qsslconfiguration_p.h>
 
 #include <QtCore/qdebug.h>
 #include <QtCore/qdir.h>

@@ -23,11 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qcorewlanengine.h"
-
-#include <QtNetwork/private/qbearerplugin_p.h>
-
-#include <QtCore/qdebug.h>
+#include <qcorewlanengine.h>
+#include <qbearerplugin_p.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

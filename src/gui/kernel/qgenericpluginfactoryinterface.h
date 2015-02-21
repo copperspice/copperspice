@@ -1,1 +1,1 @@
-#include "qgenericplugin_qpa.h"
+#include <qgenericplugin_qpa.h>

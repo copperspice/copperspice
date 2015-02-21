@@ -23,19 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qxcbnativeinterface.h"
-
-#include "qxcbscreen.h"
-
-#include <QtGui/private/qapplication_p.h>
+#include <qxcbnativeinterface.h>
+#include <qxcbscreen.h>
+#include <qapplication_p.h>
 #include <QtCore/QMap>
 
 #include <QtCore/QDebug>
 
 #if defined(XCB_USE_EGL)
 #include "../eglconvenience/qeglplatformcontext.h"
+
 #elif defined (XCB_USE_DRI2)
-#include "qdri2context.h"
+#include <qdri2context.h>
 #endif
 
 class QXcbResourceMap : public QMap<QByteArray, QXcbNativeInterface::ResourceType>

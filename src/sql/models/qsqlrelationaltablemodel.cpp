@@ -23,85 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qsqlrelationaltablemodel.h"
+#include <qsqlrelationaltablemodel.h>
 
-#include "qhash.h"
-#include "qstringlist.h"
-#include "qsqldatabase.h"
-#include "qsqldriver.h"
-#include "qsqlerror.h"
-#include "qsqlfield.h"
-#include "qsqlindex.h"
-#include "qsqlquery.h"
-#include "qsqlrecord.h"
+#include <qhash.h>
+#include <qstringlist.h>
+#include <qsqldatabase.h>
+#include <qsqldriver.h>
+#include <qsqlerror.h>
+#include <qsqlfield.h>
+#include <qsqlindex.h>
+#include <qsqlquery.h>
+#include <qsqlrecord.h>
 
-#include "qsqltablemodel_p.h"
-
-#include "qdebug.h"
+#include <qsqltablemodel_p.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QSqlRelation
-    \brief The QSqlRelation class stores information about an SQL foreign key.
-
-    QSqlRelation is a helper class for QSqlRelationalTableModel. See
-    QSqlRelationalTableModel::setRelation() and
-    QSqlRelationalTableModel::relation() for details.
-
-    \sa QSqlRelationalTableModel, QSqlRelationalDelegate,
-        {Relational Table Model Example}
-*/
-
-/*!
-    \fn QSqlRelation::QSqlRelation()
-
-    Constructs an invalid QSqlRelation object.
-
-    For such an object, the tableName(), indexColumn(), and
-    displayColumn() functions return an empty string.
-
-    \sa isValid()
-*/
-
-/*!
-    \fn QSqlRelation::QSqlRelation(const QString &tableName, const QString &indexColumn,
-                                   const QString &displayColumn)
-
-    Constructs a QSqlRelation object, where \a tableName is the SQL
-    table name to which a foreign key refers, \a indexColumn is the
-    foreign key, and \a displayColumn is the field that should be
-    presented to the user.
-
-    \sa tableName(), indexColumn(), displayColumn()
-*/
-
-/*!
-    \fn QString QSqlRelation::tableName() const
-
-    Returns the name of the table to which a foreign key refers.
-*/
-
-/*!
-    \fn QString QSqlRelation::indexColumn() const
-
-    Returns the index column from table tableName() to which a
-    foreign key refers.
-*/
-
-/*!
-    \fn QString QSqlRelation::displayColumn() const
-
-    Returns the column from table tableName() that should be
-    presented to the user instead of a foreign key.
-*/
-
-/*!
-    \fn bool QSqlRelation::isValid() const
-
-    Returns true if the QSqlRelation object is valid; otherwise
-    returns false.
-*/
 
 class QRelatedTableModel;
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qcursor.h"
+#include <qcursor.h>
 
 #ifndef QT_NO_CURSOR
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfontengine_coretext_p.h"
+#include <qfontengine_coretext_p.h>
 #include <qendian.h>
 #include <qsettings.h>
 #include <qimage_p.h>

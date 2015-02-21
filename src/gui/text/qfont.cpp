@@ -50,7 +50,7 @@
 #endif
 
 #ifdef Q_WS_QWS
-#include "qscreen_qws.h"
+#include <qscreen_qws.h>
 
 #if !defined(QT_NO_QWS_QPF2)
 #include <qfile.h>

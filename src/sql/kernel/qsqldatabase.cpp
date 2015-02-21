@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsqldatabase.h"
-#include "qsqlquery.h"
+#include <qsqldatabase.h>
+#include <qsqlquery.h>
 
 #ifdef Q_OS_WIN32
 // Conflicting declarations of LPCBYTE in sqlfront.h and winscard.h
@@ -32,7 +32,7 @@
 #endif
 
 #ifdef QT_SQL_PSQL
-#include "../drivers/psql/qsql_psql.h"
+#include <../drivers/psql/qsql_psql.h
 #endif
 
 #ifdef QT_SQL_MYSQL
@@ -67,7 +67,7 @@
 #endif
 
 #ifdef QT_SQL_IBASE
-#undef SQL_FLOAT  // avoid clash with ODBC
+#undef SQL_FLOAT              // avoid clash with ODBC
 #undef SQL_DOUBLE
 #undef SQL_TIMESTAMP
 #undef SQL_TYPE_TIME
@@ -79,17 +79,17 @@
 #undef SCHAR
 #endif
 
-#include "qdebug.h"
-#include "qcoreapplication.h"
-#include "qreadwritelock.h"
-#include "qsqlresult.h"
-#include "qsqldriver.h"
-#include "qsqldriverplugin.h"
-#include "qsqlindex.h"
-#include "qfactoryloader_p.h"
-#include "qsqlnulldriver_p.h"
-#include "qmutex.h"
-#include "qhash.h"
+#include <qdebug.h>
+#include <qcoreapplication.h>
+#include <qreadwritelock.h>
+#include <qsqlresult.h>
+#include <qsqldriver.h>
+#include <qsqldriverplugin.h>
+#include <qsqlindex.h>
+#include <qfactoryloader_p.h>
+#include <qsqlnulldriver_p.h>
+#include <qmutex.h>
+#include <qhash.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE

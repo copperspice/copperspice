@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qkbdum_qws.h"
+#include <qkbdum_qws.h>
 
 #if !defined(QT_NO_QWS_KEYBOARD) && !defined(QT_NO_QWS_KBD_UM)
 
@@ -37,8 +37,8 @@
 #include <qstring.h>
 #include <qwindowsystem_qws.h>
 #include <qsocketnotifier.h>
-#include "qplatformdefs.h"
-#include "qvfbhdr.h"
+#include <qplatformdefs.h>
+#include <qvfbhdr.h>
 
 QT_BEGIN_NAMESPACE
 

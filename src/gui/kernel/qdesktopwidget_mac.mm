@@ -29,24 +29,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "qapplication.h"
-#include "qdesktopwidget.h"
+#include <qapplication.h>
+#include <qdesktopwidget.h>
 #include <qt_mac_p.h>
-#include "qwidget_p.h"
+#include <qwidget_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
 #include <qdesktopwidget_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 
 QT_USE_NAMESPACE
-
-/*****************************************************************************
-  Externals
- *****************************************************************************/
-
-/*****************************************************************************
-  QDesktopWidget member functions
- *****************************************************************************/
 
 Q_GLOBAL_STATIC(QDesktopWidgetImplementation, qdesktopWidgetImplementation)
 

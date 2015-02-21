@@ -30,45 +30,45 @@
 #include <Cocoa/Cocoa.h>
 #include <cs_carbon_wrapper_p.h>
 
-#include "qapplication.h"
-#include "qbitarray.h"
-#include "qclipboard.h"
-#include "qcursor.h"
-#include "qdatastream.h"
-#include "qdatetime.h"
-#include "qdesktopwidget.h"
-#include "qdockwidget.h"
-#include "qevent.h"
-#include "qhash.h"
-#include "qlayout.h"
-#include "qmenubar.h"
-#include "qmessagebox.h"
-#include "qmime.h"
-#include "qpixmapcache.h"
-#include "qpointer.h"
-#include "qsessionmanager.h"
-#include "qsettings.h"
-#include "qsocketnotifier.h"
-#include "qstyle.h"
-#include "qstylefactory.h"
-#include "qtextcodec.h"
-#include "qtoolbar.h"
-#include "qvariant.h"
-#include "qwidget.h"
-#include "qcolormap.h"
-#include "qdir.h"
-#include "qdebug.h"
-#include "qtimer.h"
-#include "qurl.h"
-#include "qmacinputcontext_p.h"
-#include "qpaintengine_mac_p.h"
-#include "qcursor_p.h"
-#include "qapplication_p.h"
-#include "qcolor_p.h"
-#include "qwidget_p.h"
-#include "qkeymapper_p.h"
-#include "qeventdispatcher_mac_p.h"
-#include "qeventdispatcher_unix_p.h"
+#include <qapplication.h>
+#include <qbitarray.h>
+#include <qclipboard.h>
+#include <qcursor.h>
+#include <qdatastream.h>
+#include <qdatetime.h>
+#include <qdesktopwidget.h>
+#include <qdockwidget.h>
+#include <qevent.h>
+#include <qhash.h>
+#include <qlayout.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include <qmime.h>
+#include <qpixmapcache.h>
+#include <qpointer.h>
+#include <qsessionmanager.h>
+#include <qsettings.h>
+#include <qsocketnotifier.h>
+#include <qstyle.h>
+#include <qstylefactory.h>
+#include <qtextcodec.h>
+#include <qtoolbar.h>
+#include <qvariant.h>
+#include <qwidget.h>
+#include <qcolormap.h>
+#include <qdir.h>
+#include <qdebug.h>
+#include <qtimer.h>
+#include <qurl.h>
+#include <qmacinputcontext_p.h>
+#include <qpaintengine_mac_p.h>
+#include <qcursor_p.h>
+#include <qapplication_p.h>
+#include <qcolor_p.h>
+#include <qwidget_p.h>
+#include <qkeymapper_p.h>
+#include <qeventdispatcher_mac_p.h>
+#include <qeventdispatcher_unix_p.h>
 #include <qcocoamenuloader_mac_p.h>
 #include <qcocoaapplication_mac_p.h>
 #include <qcocoaapplicationdelegate_mac_p.h>
@@ -80,11 +80,11 @@
 #include <qvarlengtharray.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#  include "qaccessible.h"
+#  include <qaccessible.h>
 #endif
 
 #ifndef QT_NO_THREAD
-#  include "qmutex.h"
+#  include <qmutex.h>
 #endif
 
 #include <unistd.h>
@@ -103,7 +103,7 @@
 
 #define QMAC_SPEAK_TO_ME
 #ifdef QMAC_SPEAK_TO_ME
-#include "qregexp.h"
+#include <qregexp.h>
 #endif
 
 #ifndef kThemeBrushAlternatePrimaryHighlightColor

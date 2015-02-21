@@ -29,26 +29,23 @@
 #include <qbitmap.h>
 #include <qapplication.h>
 #include <qt_x11_p.h>
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 
 QT_BEGIN_NAMESPACE
 
-/*! \internal
-
-    Returns the X11 Drawable of the paint device. 0 is returned if it
-    can't be obtained.
-*/
 
 Drawable Q_GUI_EXPORT qt_x11Handle(const QPaintDevice *pd)
 {
    if (!pd) {
       return 0;
    }
+
    if (pd->devType() == QInternal::Widget) {
       return static_cast<const QWidget *>(pd)->handle();
    } else if (pd->devType() == QInternal::Pixmap) {
       return static_cast<const QPixmap *>(pd)->handle();
    }
+
    return 0;
 }
 

@@ -50,9 +50,11 @@ class QToolBar;
 #endif
 
 class QScriptDebuggerPrivate;
+
 class QScriptDebugger : public QObject
 {
    CS_OBJECT(QScriptDebugger)
+
  public:
    // mirrors QScriptEngineDebugger::DebuggerWidget
    enum DebuggerWidget {
@@ -144,14 +146,14 @@ class QScriptDebugger : public QObject
    QAction *clearErrorLogAction(QObject *parent) const;
 
    QMenu *createStandardMenu(QWidget *widgetParent, QObject *actionParent);
+
 #ifndef QT_NO_TOOLBAR
    QToolBar *createStandardToolBar(QWidget *widgetParent, QObject *actionParent);
 #endif
-   bool eventFilter(QObject *, QEvent *e);
 
+   bool eventFilter(QObject *, QEvent *e);
    bool isInteractive() const;
 
- public:
    CS_SIGNAL_1(Public, void stopped())
    CS_SIGNAL_2(stopped)
    CS_SIGNAL_1(Public, void started())
@@ -159,218 +161,75 @@ class QScriptDebugger : public QObject
 
  protected:
    void timerEvent(QTimerEvent *e);
-
- protected:
+ 
    QScriptDebugger(QScriptDebuggerPrivate &dd, QObject *parent);
 
  private:
    Q_DECLARE_PRIVATE(QScriptDebugger)
    Q_DISABLE_COPY(QScriptDebugger)
 
+
    CS_SLOT_1(Private, void _q_onLineEntered(const QString &un_named_arg1))
    CS_SLOT_2(_q_onLineEntered)
 
-   /*  PRIVATE_SLOT
-   void _q_onLineEntered(const QString & un_named_arg1)
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_onLineEntered();
-   }
-   */
    CS_SLOT_1(Private, void _q_onCurrentFrameChanged(int un_named_arg1))
    CS_SLOT_2(_q_onCurrentFrameChanged)
 
-   /*  PRIVATE_SLOT
-   void _q_onCurrentFrameChanged(int un_named_arg1)
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_onCurrentFrameChanged();
-   }
-   */
    CS_SLOT_1(Private, void _q_onCurrentScriptChanged(qint64 un_named_arg1))
    CS_SLOT_2(_q_onCurrentScriptChanged)
-
-   /*  PRIVATE_SLOT
-   void _q_onCurrentScriptChanged(qint64 un_named_arg1)
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_onCurrentScriptChanged();
-   }
-   */
+ 
    CS_SLOT_1(Private, void _q_onScriptLocationSelected(int un_named_arg1))
    CS_SLOT_2(_q_onScriptLocationSelected)
-
-   /*  PRIVATE_SLOT
-   void _q_onScriptLocationSelected(int un_named_arg1)
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_onScriptLocationSelected();
-   }
-   */
-
+  
    CS_SLOT_1(Private, void _q_interrupt())
    CS_SLOT_2(_q_interrupt)
 
-   /*  PRIVATE_SLOT
-   void _q_interrupt()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_interrupt();
-   }
-   */
    CS_SLOT_1(Private, void _q_continue())
    CS_SLOT_2(_q_continue)
-
-   /*  PRIVATE_SLOT
-   void _q_continue()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_continue();
-   }
-   */
+  
    CS_SLOT_1(Private, void _q_stepInto())
    CS_SLOT_2(_q_stepInto)
-
-   /*  PRIVATE_SLOT
-   void _q_stepInto()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_stepInto();
-   }
-   */
+   
    CS_SLOT_1(Private, void _q_stepOver())
    CS_SLOT_2(_q_stepOver)
-
-   /*  PRIVATE_SLOT
-   void _q_stepOver()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_stepOver();
-   }
-   */
+  
    CS_SLOT_1(Private, void _q_stepOut())
    CS_SLOT_2(_q_stepOut)
-
-   /*  PRIVATE_SLOT
-   void _q_stepOut()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_stepOut();
-   }
-   */
+   
    CS_SLOT_1(Private, void _q_runToCursor())
    CS_SLOT_2(_q_runToCursor)
-
-   /*  PRIVATE_SLOT
-   void _q_runToCursor()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_runToCursor();
-   }
-   */
+ 
    CS_SLOT_1(Private, void _q_runToNewScript())
    CS_SLOT_2(_q_runToNewScript)
-
-   /*  PRIVATE_SLOT
-   void _q_runToNewScript()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_runToNewScript();
-   }
-   */
-
+  
    CS_SLOT_1(Private, void _q_toggleBreakpoint())
-   CS_SLOT_2(_q_toggleBreakpoint)
-
-   /*  PRIVATE_SLOT
-   void _q_toggleBreakpoint()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_toggleBreakpoint();
-   }
-   */
+   CS_SLOT_2(_q_toggleBreakpoint)    
 
    CS_SLOT_1(Private, void _q_clearDebugOutput())
    CS_SLOT_2(_q_clearDebugOutput)
 
-   /*  PRIVATE_SLOT
-   void _q_clearDebugOutput()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_clearDebugOutput();
-   }
-   */
    CS_SLOT_1(Private, void _q_clearErrorLog())
    CS_SLOT_2(_q_clearErrorLog)
 
-   /*  PRIVATE_SLOT
-   void _q_clearErrorLog()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_clearErrorLog();
-   }
-   */
    CS_SLOT_1(Private, void _q_clearConsole())
    CS_SLOT_2(_q_clearConsole)
-
-   /*  PRIVATE_SLOT
-   void _q_clearConsole()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_clearConsole();
-   }
-   */
 
    CS_SLOT_1(Private, void _q_findInScript())
    CS_SLOT_2(_q_findInScript)
 
-   /*  PRIVATE_SLOT
-   void _q_findInScript()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_findInScript();
-   }
-   */
    CS_SLOT_1(Private, void _q_findNextInScript())
    CS_SLOT_2(_q_findNextInScript)
 
-   /*  PRIVATE_SLOT
-   void _q_findNextInScript()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_findNextInScript();
-   }
-   */
    CS_SLOT_1(Private, void _q_findPreviousInScript())
    CS_SLOT_2(_q_findPreviousInScript)
 
-   /*  PRIVATE_SLOT
-   void _q_findPreviousInScript()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_findPreviousInScript();
-   }
-   */
    CS_SLOT_1(Private, void _q_onFindCodeRequest(const QString &un_named_arg1, int un_named_arg2))
    CS_SLOT_2(_q_onFindCodeRequest)
 
-   /*  PRIVATE_SLOT
-   void _q_onFindCodeRequest(const QString & un_named_arg1,int un_named_arg2)
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_onFindCodeRequest();
-   }
-   */
    CS_SLOT_1(Private, void _q_goToLine())
    CS_SLOT_2(_q_goToLine)
 
-   /*  PRIVATE_SLOT
-   void _q_goToLine()
-   {
-   	Q_D(QScriptDebugger);
-   	d->_q_goToLine();
-   }
-   */
+   
 };
 
 QT_END_NAMESPACE

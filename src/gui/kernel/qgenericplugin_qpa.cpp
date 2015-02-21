@@ -23,48 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qgenericplugin_qpa.h"
+#include <qgenericplugin_qpa.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QGenericPlugin
-    \ingroup plugins
-    \ingroup qpa
-    \since 4.8
-
-    \brief The QGenericPlugin class is an abstract base class for
-    window-system related plugins in Qt QPA.
-
-    Note that this class is only available in Qt QPA.
-
-    A mouse plugin can be created by subclassing
-    QGenericPlugin and reimplementing the pure virtual keys() and
-    create() functions. By exporting the derived class using the
-    Q_EXPORT_PLUGIN2() macro, The default implementation of the
-    QGenericPluginFactory class will automatically detect the plugin and
-    load the driver into the server application at run-time. See \l
-    {How to Create Qt Plugins} for details.
-
-    \sa QGenericPluginFactory
-*/
-
-/*!
-    \fn QStringList QGenericPlugin::keys() const
-
-    Implement this function to return the list of valid keys, i.e. the
-    drivers supported by this plugin.
-
-    \sa create()
-*/
-
-/*!
-    Constructs a plugin with the given \a parent.
-
-    Note that this constructor is invoked automatically by the
-    Q_EXPORT_PLUGIN2() macro, so there is no need for calling it
-    explicitly.
-*/
 QGenericPlugin::QGenericPlugin(QObject *parent)
    : QObject(parent)
 {

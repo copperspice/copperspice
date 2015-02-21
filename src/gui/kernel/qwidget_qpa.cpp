@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qwidget.h"
-#include "qevent.h"
-#include "qapplication.h"
-#include "qbackingstore_p.h"
-#include "qwidget_p.h"
-#include "qgraphicssystem_p.h"
-#include "qapplication_p.h"
-#include "qdesktopwidget.h"
-#include "qplatformwindow_qpa.h"
-#include "qplatformglcontext_qpa.h"
+#include <qwidget.h>
+#include <qevent.h>
+#include <qapplication.h>
+#include <qbackingstore_p.h>
+#include <qwidget_p.h>
+#include <qgraphicssystem_p.h>
+#include <qapplication_p.h>
+#include <qdesktopwidget.h>
+#include <qplatformwindow_qpa.h>
+#include <qplatformglcontext_qpa.h>
 #include <QPlatformCursor>
 
 QT_BEGIN_NAMESPACE

@@ -123,4 +123,10 @@ void QScriptDebuggerStackWidget::setCurrentFrameIndex(int frameIndex)
    d->view->setCurrentIndex(d->view->model()->index(frameIndex, 0));
 }
 
+void QScriptDebuggerStackWidget::_q_onCurrentChanged(const QModelIndex & un_named_arg1)
+{
+  	Q_D(QScriptDebuggerStackWidget);
+  	d->_q_onCurrentChanged();
+}
+
 QT_END_NAMESPACE

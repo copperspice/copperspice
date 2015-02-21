@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qcolormap.h"
-#include "qcolor.h"
-#include "qpaintdevice.h"
-#include "qscreen_qws.h"
-#include "qwsdisplay_qws.h"
+#include <qcolormap.h>
+#include <qcolor.h>
+#include <qpaintdevice.h>
+#include <qscreen_qws.h>
+#include <qwsdisplay_qws.h>
 
 QT_BEGIN_NAMESPACE
 

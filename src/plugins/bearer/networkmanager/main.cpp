@@ -23,10 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qnetworkmanagerengine.h"
-
-#include <QtNetwork/private/qbearerplugin_p.h>
-
+#include <qnetworkmanagerengine.h>
+#include <qbearerplugin_p.h>
 #include <QtCore/qdebug.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT

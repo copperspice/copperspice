@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qclipboard.h"
+#include <qclipboard.h>
 
 #ifndef QT_NO_CLIPBOARD
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qpixmap.h"
-#include "qclipboard_p.h"
-#include "qvariant.h"
-#include "qbuffer.h"
-#include "qimage.h"
-#include "qtextcodec.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qpixmap.h>
+#include <qclipboard_p.h>
+#include <qvariant.h>
+#include <qbuffer.h>
+#include <qimage.h>
+#include <qtextcodec.h>
 
 QT_BEGIN_NAMESPACE
 

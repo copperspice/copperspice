@@ -26,13 +26,13 @@
 #ifndef QSQLQUERYMODEL_P_H
 #define QSQLQUERYMODEL_P_H
 
-#include "qabstractitemmodel_p.h"
-#include "QtSql/qsqlerror.h"
-#include "QtSql/qsqlquery.h"
-#include "QtSql/qsqlrecord.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qvarlengtharray.h"
-#include "QtCore/qvector.h"
+#include <qabstractitemmodel_p.h>
+#include <QtSql/qsqlerror.h>
+#include <QtSql/qsqlquery.h>
+#include <QtSql/qsqlrecord.h>
+#include <QtCore/qhash.h>
+#include <QtCore/qvarlengtharray.h>
+#include <QtCore/qvector.h>
 
 QT_BEGIN_NAMESPACE
 

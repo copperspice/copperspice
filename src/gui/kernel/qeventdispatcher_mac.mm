@@ -27,22 +27,22 @@
 ** Copyright (C) 2007-2008, Apple, Inc.
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qt_mac_p.h"
-#include "qeventdispatcher_mac_p.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qdialog.h"
-#include "qhash.h"
-#include "qsocketnotifier.h"
-#include "qwidget_p.h"
-#include "qthread_p.h"
-#include "qapplication_p.h"
+#include <qplatformdefs.h>
+#include <qt_mac_p.h>
+#include <qeventdispatcher_mac_p.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qdialog.h>
+#include <qhash.h>
+#include <qsocketnotifier.h>
+#include <qwidget_p.h>
+#include <qthread_p.h>
+#include <qapplication_p.h>
 #include <qcocoaapplication_mac_p.h>
-#include "qt_cocoa_helpers_mac_p.h"
+#include <qt_cocoa_helpers_mac_p.h>
 
 #ifndef QT_NO_THREAD
-#  include "qmutex.h"
+#  include <qmutex.h>
 #endif
 
 QT_BEGIN_NAMESPACE

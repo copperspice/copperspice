@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qscreentransformed_qws.h"
+#include <qscreentransformed_qws.h>
 
 #ifndef QT_NO_QWS_TRANSFORMED
 #include <qscreendriverfactory_qws.h>

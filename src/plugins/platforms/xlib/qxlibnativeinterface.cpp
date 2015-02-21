@@ -23,10 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qxlibnativeinterface.h"
-
-#include "qxlibdisplay.h"
-#include <QtGui/private/qapplication_p.h>
+#include <qxlibnativeinterface.h>
+#include <qxlibdisplay.h>
+#include <qapplication_p.h>
 
 class QXlibResourceMap : public QMap<QByteArray, QXlibNativeInterface::ResourceType>
 {

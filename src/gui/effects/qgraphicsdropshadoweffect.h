@@ -1,1 +1,1 @@
-#include "qgraphicseffect.h"
+#include <qgraphicseffect.h>

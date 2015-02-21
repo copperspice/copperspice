@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpixmapdata_p.h"
+#include <qpixmapdata_p.h>
 #include <QtCore/qbuffer.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qimagereader.h>

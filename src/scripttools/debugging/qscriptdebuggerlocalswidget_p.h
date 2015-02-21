@@ -48,37 +48,16 @@ class QScriptDebuggerLocalsWidget : public QScriptDebuggerLocalsWidgetInterface
  private:
    Q_DECLARE_PRIVATE(QScriptDebuggerLocalsWidget)
    Q_DISABLE_COPY(QScriptDebuggerLocalsWidget)
-
+ 
    CS_SLOT_1(Private, void _q_onCompletionTaskFinished())
    CS_SLOT_2(_q_onCompletionTaskFinished)
-
-   /*  PRIVATE_SLOT
-   void _q_onCompletionTaskFinished()
-   {
-   	Q_D(QScriptDebuggerLocalsWidget);
-   	d->_q_onCompletionTaskFinished();
-   }
-   */
+  
    CS_SLOT_1(Private, void _q_insertCompletion(const QString &un_named_arg1))
    CS_SLOT_2(_q_insertCompletion)
 
-   /*  PRIVATE_SLOT
-   void _q_insertCompletion(const QString & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerLocalsWidget);
-   	d->_q_insertCompletion();
-   }
-   */
    CS_SLOT_1(Private, void _q_expandIndex(const QModelIndex &un_named_arg1))
    CS_SLOT_2(_q_expandIndex)
 
-   /*  PRIVATE_SLOT
-   void _q_expandIndex(const QModelIndex & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerLocalsWidget);
-   	d->_q_expandIndex();
-   }
-   */
 };
 
 QT_END_NAMESPACE

@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qmacdefines_mac.h"
-#include "qapplication.h"
+#include <qmacdefines_mac.h>
+#include <qapplication.h>
 
 #import <qcocoamenu_mac_p.h>
 #import <qcocoamenuloader_mac_p.h>

@@ -25,55 +25,13 @@
 
 //#define QTCPSOCKET_DEBUG
 
-/*!
-    \class QTcpSocket
-
-    \brief The QTcpSocket class provides a TCP socket.
-
-    \reentrant
-    \ingroup network
-    \inmodule QtNetwork
-
-    TCP (Transmission Control Protocol) is a reliable,
-    stream-oriented, connection-oriented transport protocol. It is
-    especially well suited for continuous transmission of data.
-
-    QTcpSocket is a convenience subclass of QAbstractSocket that
-    allows you to establish a TCP connection and transfer streams of
-    data. See the QAbstractSocket documentation for details.
-
-    \bold{Note:} TCP sockets cannot be opened in QIODevice::Unbuffered mode.
-
-    \section1 Symbian Platform Security Requirements
-
-    On Symbian, processes which use this class must have the
-    \c NetworkServices platform security capability. If the client
-    process lacks this capability, it will result in a panic.
-
-    Platform security capabilities are added via the
-    \l{qmake-variable-reference.html#target-capability}{TARGET.CAPABILITY}
-    qmake variable.
-
-    \sa QTcpServer, QUdpSocket, QFtp, QNetworkAccessManager,
-    {Fortune Server Example}, {Fortune Client Example},
-    {Threaded Fortune Server Example}, {Blocking Fortune Client Example},
-    {Loopback Example}, {Torrent Example}
-*/
-
-#include "qlist.h"
-#include "qtcpsocket_p.h"
-#include "qtcpsocket.h"
-#include "qhostaddress.h"
+#include <qlist.h>
+#include <qtcpsocket_p.h>
+#include <qtcpsocket.h>
+#include <qhostaddress.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    Creates a QTcpSocket object in state \c UnconnectedState.
-
-    \a parent is passed on to the QObject constructor.
-
-    \sa socketType()
-*/
 QTcpSocket::QTcpSocket(QObject *parent)
    : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)
 {
@@ -82,12 +40,6 @@ QTcpSocket::QTcpSocket(QObject *parent)
 #endif
    d_func()->isBuffered = true;
 }
-
-/*!
-    Destroys the socket, closing the connection if necessary.
-
-    \sa close()
-*/
 
 QTcpSocket::~QTcpSocket()
 {

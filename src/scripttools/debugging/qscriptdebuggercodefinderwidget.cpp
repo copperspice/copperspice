@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qscriptdebuggercodefinderwidget_p.h"
-#include "qscriptdebuggercodefinderwidgetinterface_p_p.h"
+#include <qscriptdebuggercodefinderwidget_p.h>
+#include <qscriptdebuggercodefinderwidgetinterface_p_p.h>
 
 #include <QtGui/qboxlayout.h>
 #include <QtGui/qlineedit.h>
@@ -231,6 +231,30 @@ void QScriptDebuggerCodeFinderWidget::keyPressEvent(QKeyEvent *e)
    } else {
       QScriptDebuggerCodeFinderWidgetInterface::keyPressEvent(e);
    }
+}
+
+void QScriptDebuggerCodeFinderWidget::_q_updateButtons()
+{
+	Q_D(QScriptDebuggerCodeFinderWidget);
+	d->_q_updateButtons();
+}
+
+void QScriptDebuggerCodeFinderWidget::_q_onTextChanged(const QString & un_named_arg1)
+{
+	Q_D(QScriptDebuggerCodeFinderWidget);
+	d->_q_onTextChanged();
+}
+
+void QScriptDebuggerCodeFinderWidget::_q_next()
+{
+	Q_D(QScriptDebuggerCodeFinderWidget);
+	d->_q_next();
+}
+
+void QScriptDebuggerCodeFinderWidget::_q_previous()
+{
+	Q_D(QScriptDebuggerCodeFinderWidget);
+	d->_q_previous();
 }
 
 QT_END_NAMESPACE

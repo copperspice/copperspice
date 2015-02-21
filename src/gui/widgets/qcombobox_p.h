@@ -45,7 +45,7 @@
 #include <QtCore/qpointer.h>
 #include <QtGui/qcompleter.h>
 #include <QtGui/qevent.h>
-#include "QtCore/qdebug.h"
+#include <QtCore/qdebug.h>
 
 #include <limits.h>
 

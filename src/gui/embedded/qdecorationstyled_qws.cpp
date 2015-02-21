@@ -27,10 +27,10 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
-#include "qdecorationstyled_qws.h"
-#include "qstyle.h"
-#include "qstyleoption.h"
-#include "qpaintengine.h"
+#include <qdecorationstyled_qws.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qpaintengine.h>
 
 QT_BEGIN_NAMESPACE
 

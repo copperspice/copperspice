@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsharednetworksession_p.h"
-#include "qbearerengine_p.h"
+#include <qsharednetworksession_p.h>
+#include <qbearerengine_p.h>
 #include <QThreadStorage>
 
 #ifndef QT_NO_BEARERMANAGEMENT

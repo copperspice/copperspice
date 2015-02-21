@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
-#include "qdesktopwidget.h"
-#include "qwidget_p.h"
+#include <qglobal.h>
+#include <qdesktopwidget.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

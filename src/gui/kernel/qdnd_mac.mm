@@ -23,22 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
 
 #ifndef QT_NO_DRAGANDDROP
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qurl.h"
-#include "qwidget.h"
-#include "qfile.h"
-#include "qfileinfo.h"
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qurl.h>
+#include <qwidget.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <stdlib.h>
 #include <string.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+# include <qaccessible.h>
 #endif
 
 #include <qapplication_p.h>

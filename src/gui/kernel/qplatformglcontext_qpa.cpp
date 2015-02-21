@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qplatformglcontext_qpa.h"
+#include <qplatformglcontext_qpa.h>
 
 #include <QtCore/QThreadStorage>
 #include <QtCore/QThread>

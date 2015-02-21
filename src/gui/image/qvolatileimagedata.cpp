@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qvolatileimagedata_p.h"
+#include <qvolatileimagedata_p.h>
 #include <QtGui/qpaintengine.h>
 
 QT_BEGIN_NAMESPACE

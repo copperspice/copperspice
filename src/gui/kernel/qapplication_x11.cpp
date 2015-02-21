@@ -29,47 +29,47 @@
 // provide a proper alternative for others. See also the exports in
 // qapplication_win.cpp, which suggest a unification.
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qcolormap.h"
-#include "qdesktopwidget.h"
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qcursor.h"
-#include "qwidget.h"
-#include "qbitarray.h"
-#include "qpainter.h"
-#include "qfile.h"
-#include "qpixmapcache.h"
-#include "qdatetime.h"
-#include "qtextcodec.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qsocketnotifier.h"
-#include "qsessionmanager.h"
-#include "qclipboard.h"
-#include "qwhatsthis.h"
-#include "qsettings.h"
-#include "qstylefactory.h"
-#include "qfileinfo.h"
-#include "qdir.h"
-#include "qhash.h"
-#include "qevent.h"
-#include "qevent_p.h"
-#include "qvarlengtharray.h"
-#include "qdebug.h"
+#include <qcolormap.h>
+#include <qdesktopwidget.h>
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qcursor.h>
+#include <qwidget.h>
+#include <qbitarray.h>
+#include <qpainter.h>
+#include <qfile.h>
+#include <qpixmapcache.h>
+#include <qdatetime.h>
+#include <qtextcodec.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qsocketnotifier.h>
+#include <qsessionmanager.h>
+#include <qclipboard.h>
+#include <qwhatsthis.h>
+#include <qsettings.h>
+#include <qstylefactory.h>
+#include <qfileinfo.h>
+#include <qdir.h>
+#include <qhash.h>
+#include <qevent.h>
+#include <qevent_p.h>
+#include <qvarlengtharray.h>
+#include <qdebug.h>
 #include <qcrashhandler_p.h>
 #include <qcolor_p.h>
 #include <qcursor_p.h>
 #include <qiconloader_p.h>
 #include <qgtkstyle.h>
-#include "qstyle.h"
-#include "qmetaobject.h"
-#include "qtimer.h"
-#include "qlibrary.h"
+#include <qstyle.h>
+#include <qmetaobject.h>
+#include <qtimer.h>
+#include <qlibrary.h>
 #include <qgraphicssystemfactory_p.h>
-#include "qguiplatformplugin_p.h"
-#include "qkde_p.h"
+#include <qguiplatformplugin_p.h>
+#include <qkde_p.h>
 
 #if !defined (QT_NO_TABLET)
 extern "C" {
@@ -87,25 +87,25 @@ extern "C" {
 //#define ALIEN_DEBUG
 
 #if !defined(QT_NO_GLIB)
-#  include "qguieventdispatcher_glib_p.h"
+#  include <qguieventdispatcher_glib_p.h>
 #endif
-#include "qeventdispatcher_x11_p.h"
+#include <qeventdispatcher_x11_p.h>
 #include <qpaintengine_x11_p.h>
 
 #include <qkeymapper_p.h>
 
 // Input method stuff
 #ifndef QT_NO_IM
-#include "qinputcontext.h"
-#include "qinputcontextfactory.h"
-#endif // QT_NO_IM
+#include <qinputcontext.h>
+#include <qinputcontextfactory.h>
+#endif
 
 #ifndef QT_NO_XFIXES
 #include <X11/extensions/Xfixes.h>
 #endif // QT_NO_XFIXES
 
-#include "qt_x11_p.h"
-#include "qx11info_x11.h"
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
 
 #define XK_MISCELLANY
 #include <X11/keysymdef.h>
@@ -118,7 +118,7 @@ extern "C" {
 #include <ctype.h>
 #include <locale.h>
 
-#include "qwidget_p.h"
+#include <qwidget_p.h>
 
 #include <qbackingstore_p.h>
 

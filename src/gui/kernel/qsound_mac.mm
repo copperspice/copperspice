@@ -24,11 +24,12 @@
 ***********************************************************************/
 
 #include <qapplication.h>
-#include "qsound.h"
-#include "qsound_p.h"
+#include <qsound.h>
+#include <qsound_p.h>
 #include <qt_mac_p.h>
 #include <qhash.h>
 #include <qdebug.h>
+
 #import <AppKit/AppKit.h>
 
 #include <AppKit/NSSound.h>

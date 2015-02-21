@@ -23,48 +23,22 @@
 *
 ***********************************************************************/
 
-#include "qsqlindex.h"
+#include <qsqlindex.h>
 
-#include "qsqlfield.h"
-#include "qstringlist.h"
+#include <qsqlfield.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QSqlIndex
-    \brief The QSqlIndex class provides functions to manipulate and
-    describe database indexes.
-
-    \ingroup database
-    \inmodule QtSql
-
-    An \e index refers to a single table or view in a database.
-    Information about the fields that comprise the index can be used
-    to generate SQL statements.
-*/
-
-/*!
-    Constructs an empty index using the cursor name \a cursorname and
-    index name \a name.
-*/
 
 QSqlIndex::QSqlIndex(const QString &cursorname, const QString &name)
    : cursor(cursorname), nm(name)
 {
 }
 
-/*!
-    Constructs a copy of \a other.
-*/
-
 QSqlIndex::QSqlIndex(const QSqlIndex &other)
    : QSqlRecord(other), cursor(other.cursor), nm(other.nm), sorts(other.sorts)
 {
 }
-
-/*!
-    Sets the index equal to \a other.
-*/
 
 QSqlIndex &QSqlIndex::operator=(const QSqlIndex &other)
 {
@@ -75,9 +49,6 @@ QSqlIndex &QSqlIndex::operator=(const QSqlIndex &other)
    return *this;
 }
 
-/*!
-    Destroys the object and frees any allocated resources.
-*/
 
 QSqlIndex::~QSqlIndex()
 {

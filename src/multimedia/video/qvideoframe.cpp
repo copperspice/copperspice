@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qvideoframe.h"
+#include <qvideoframe.h>
 
 #include <qimagevideobuffer_p.h>
 #include <qmemoryvideobuffer_p.h>

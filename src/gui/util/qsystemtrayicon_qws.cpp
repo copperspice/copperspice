@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsystemtrayicon_p.h"
+#include <qsystemtrayicon_p.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 

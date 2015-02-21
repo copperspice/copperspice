@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qinputcontextplugin.h"
+#include <qinputcontextplugin.h>
 
 #ifndef QT_NO_IM
 

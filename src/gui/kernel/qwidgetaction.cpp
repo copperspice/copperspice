@@ -23,83 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qwidgetaction.h"
-#include "qdebug.h"
+#include <qwidgetaction.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_ACTION
-#include "qwidgetaction_p.h"
+#include <qwidgetaction_p.h>
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QWidgetAction
-    \since 4.2
-    \brief The QWidgetAction class extends QAction by an interface
-    for inserting custom widgets into action based containers, such
-    as toolbars.
-
-    \ingroup mainwindow-classes
-
-    Most actions in an application are represented as items in menus or
-    buttons in toolbars. However sometimes more complex widgets are
-    necessary. For example a zoom action in a word processor may be
-    realized using a QComboBox in a QToolBar, presenting a range
-    of different zoom levels. QToolBar provides QToolBar::insertWidget()
-    as convenience function for inserting a single widget.
-    However if you want to implement an action that uses custom
-    widgets for visualization in multiple containers then you have to
-    subclass QWidgetAction.
-
-    If a QWidgetAction is added for example to a QToolBar then
-    QWidgetAction::createWidget() is called. Reimplementations of that
-    function should create a new custom widget with the specified parent.
-
-    If the action is removed from a container widget then
-    QWidgetAction::deleteWidget() is called with the previously created custom
-    widget as argument. The default implementation hides the widget and deletes
-    it using QObject::deleteLater().
-
-    If you have only one single custom widget then you can set it as default
-    widget using setDefaultWidget(). That widget will then be used if the
-    action is added to a QToolBar, or in general to an action container that
-    supports QWidgetAction. If a QWidgetAction with only a default widget is
-    added to two toolbars at the same time then the default widget is shown
-    only in the first toolbar the action was added to. QWidgetAction takes
-    over ownership of the default widget.
-
-    Note that it is up to the widget to activate the action, for example by
-    reimplementing mouse event handlers and calling QAction::trigger().
-
-    \bold {Mac OS X}: If you add a widget to a menu in the application's menu
-    bar on Mac OS X, the widget will be added and it will function but with some
-    limitations:
-    \list 1
-        \o The widget is reparented away from the QMenu to the native menu
-            view. If you show the menu in some other place (e.g. as a popup menu),
-            the widget will not be there.
-        \o Focus/Keyboard handling of the widget is not possible.
-        \o Due to Apple's design, mouse tracking on the widget currently does
-            not work.
-        \o Connecting the triggered() signal to a slot that opens a modal
-            dialog will cause a crash in Mac OS X 10.4 (known bug acknowledged
-            by Apple), a workaround is to use a QueuedConnection instead of a
-            DirectConnection.
-    \endlist
-
-    \sa QAction, QActionGroup, QWidget
-*/
-
-/*!
-    Constructs an action with \a parent.
-*/
 QWidgetAction::QWidgetAction(QObject *parent)
    : QAction(*(new QWidgetActionPrivate), parent)
 {
 }
 
-/*!
-    Destroys the object and frees allocated resources.
-*/
 QWidgetAction::~QWidgetAction()
 {
    Q_D(QWidgetAction);
@@ -112,13 +48,6 @@ QWidgetAction::~QWidgetAction()
    delete d->defaultWidget;
 }
 
-/*!
-    Sets \a widget to be the default widget. The ownership is
-    transferred to QWidgetAction. Unless createWidget() is
-    reimplemented by a subclass to return a new widget the default
-    widget is used when a container widget requests a widget through
-    requestWidget().
-*/
 void QWidgetAction::setDefaultWidget(QWidget *widget)
 {
    Q_D(QWidgetAction);

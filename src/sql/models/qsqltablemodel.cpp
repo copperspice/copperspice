@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qsqltablemodel.h"
+#include <qsqltablemodel.h>
 
-#include "qsqldriver.h"
-#include "qsqlerror.h"
-#include "qsqlfield.h"
-#include "qsqlindex.h"
-#include "qsqlquery.h"
-#include "qsqlrecord.h"
-#include "qsqlresult.h"
+#include <qsqldriver.h>
+#include <qsqlerror.h>
+#include <qsqlfield.h>
+#include <qsqlindex.h>
+#include <qsqlquery.h>
+#include <qsqlrecord.h>
+#include <qsqlresult.h>
 
-#include "qsqltablemodel_p.h"
+#include <qsqltablemodel_p.h>
 
 #include <qdebug.h>
 

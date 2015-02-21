@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qvideosurfaceformat.h"
+#include <qvideosurfaceformat.h>
 
 #include <qdebug.h>
 #include <qmetatype.h>

@@ -37,11 +37,12 @@
 #include <QtGui/QPlatformCursor>
 #include <QtGui/QPlatformWindowFormat>
 
-#include <QtGui/private/qpixmap_raster_p.h>
+#include <qpixmap_raster_p.h>
+
 #ifdef QT_WAYLAND_GL_SUPPORT
 #include "gl_integration/qwaylandglintegration.h"
 #include "gl_integration/qwaylandglwindowsurface.h"
-#include <QtOpenGL/private/qpixmapdata_gl_p.h>
+#include <qpixmapdata_gl_p.h>
 #endif
 
 QWaylandIntegration::QWaylandIntegration(bool useOpenGL)

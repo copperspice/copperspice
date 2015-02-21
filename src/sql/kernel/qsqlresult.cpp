@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qvariant.h"
-#include "qhash.h"
-#include "qregexp.h"
-#include "qsqlerror.h"
-#include "qsqlfield.h"
-#include "qsqlrecord.h"
-#include "qsqlresult.h"
-#include "qvector.h"
-#include "qsqldriver.h"
-#include "qpointer.h"
+#include <qvariant.h>
+#include <qhash.h>
+#include <qregexp.h>
+#include <qsqlerror.h>
+#include <qsqlfield.h>
+#include <qsqlrecord.h>
+#include <qsqlresult.h>
+#include <qvector.h>
+#include <qsqldriver.h>
+#include <qpointer.h>
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE

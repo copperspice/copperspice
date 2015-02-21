@@ -23,28 +23,28 @@
 *
 ***********************************************************************/
 
-#include "qinputcontextfactory.h"
+#include <qinputcontextfactory.h>
 
 #ifndef QT_NO_IM
-#include "qcoreapplication.h"
-#include "qinputcontext.h"
-#include "qinputcontextplugin.h"
+#include <qcoreapplication.h>
+#include <qinputcontext.h>
+#include <qinputcontextplugin.h>
 
 #ifdef Q_WS_X11
-#include "qt_x11_p.h"
-#include "qximinputcontext_p.h"
+#include <qt_x11_p.h>
+#include <qximinputcontext_p.h>
 #endif
 
 #ifdef Q_OS_WIN
-#include "qwininputcontext_p.h"
+#include <qwininputcontext_p.h>
 #endif
 
 #ifdef Q_OS_MAC
-#include "qmacinputcontext_p.h"
+#include <qmacinputcontext_p.h>
 #endif
 
-#include "qfactoryloader_p.h"
-#include "qmutex.h"
+#include <qfactoryloader_p.h>
+#include <qmutex.h>
 
 QT_BEGIN_NAMESPACE
 

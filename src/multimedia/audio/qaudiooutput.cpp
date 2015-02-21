@@ -23,87 +23,14 @@
 *
 ***********************************************************************/
 
-
 #include <QtMultimedia/qaudio.h>
 #include <QtMultimedia/qaudiodeviceinfo.h>
 #include <QtMultimedia/qaudioengine.h>
 #include <QtMultimedia/qaudiooutput.h>
 
-#include "qaudiodevicefactory_p.h"
-
+#include <qaudiodevicefactory_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QAudioOutput
-    \brief The QAudioOutput class provides an interface for sending audio data to an audio output device.
-
-    \inmodule QtMultimedia
-    \ingroup  multimedia
-    \since 4.6
-
-    You can construct an audio output with the system's
-    \l{QAudioDeviceInfo::defaultOutputDevice()}{default audio output
-    device}. It is also possible to create QAudioOutput with a
-    specific QAudioDeviceInfo. When you create the audio output, you
-    should also send in the QAudioFormat to be used for the playback
-    (see the QAudioFormat class description for details).
-
-    To play a file:
-
-    Starting to play an audio stream is simply a matter of calling
-    start() with a QIODevice. QAudioOutput will then fetch the data it
-    needs from the io device. So playing back an audio file is as
-    simple as:
-
-    \snippet doc/src/snippets/audio/main.cpp 9
-    \dots 4
-    \snippet doc/src/snippets/audio/main.cpp 4
-
-    The file will start playing assuming that the audio system and
-    output device support it. If you run out of luck, check what's
-    up with the error() function.
-
-    After the file has finished playing, we need to stop the device:
-
-    \snippet doc/src/snippets/audio/main.cpp 5
-
-    At any given time, the QAudioOutput will be in one of four states:
-    active, suspended, stopped, or idle. These states are described
-    by the QAudio::State enum.
-    State changes are reported through the stateChanged() signal. You
-    can use this signal to, for instance, update the GUI of the
-    application; the mundane example here being changing the state of
-    a \c { play/pause } button. You request a state change directly
-    with suspend(), stop(), reset(), resume(), and start().
-
-    While the stream is playing, you can set a notify interval in
-    milliseconds with setNotifyInterval(). This interval specifies the
-    time between two emissions of the notify() signal. This is
-    relative to the position in the stream, i.e., if the QAudioOutput
-    is in the SuspendedState or the IdleState, the notify() signal is
-    not emitted. A typical use-case would be to update a
-    \l{QSlider}{slider} that allows seeking in the stream.
-    If you want the time since playback started regardless of which
-    states the audio output has been in, elapsedUSecs() is the function for you.
-
-    If an error occurs, you can fetch the \l{QAudio::Error}{error
-    type} with the error() function. Please see the QAudio::Error enum
-    for a description of the possible errors that are reported.  When
-    an error is encountered, the state changes to QAudio::StoppedState.
-    You can check for errors by connecting to the stateChanged()
-    signal:
-
-    \snippet doc/src/snippets/audio/main.cpp 8
-
-    \sa QAudioInput, QAudioDeviceInfo
-*/
-
-/*!
-    Construct a new audio output and attach it to \a parent.
-    The default audio output device is used with the output
-    \a format parameters.
-*/
 
 QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
    QObject(parent)
@@ -113,12 +40,6 @@ QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
-/*!
-    Construct a new audio output and attach it to \a parent.
-    The device referenced by \a audioDevice is used with the output
-    \a format parameters.
-*/
-
 QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
@@ -127,43 +48,16 @@ QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioForm
    connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
 }
 
-/*!
-    Destroys this audio output.
-*/
-
 QAudioOutput::~QAudioOutput()
 {
    delete d;
 }
-
-/*!
-    Returns the QAudioFormat being used.
-
-*/
 
 QAudioFormat QAudioOutput::format() const
 {
    return d->format();
 }
 
-/*!
-    Uses the \a device as the QIODevice to transfer data.
-    Passing a QIODevice allows the data to be transferred without any extra code.
-    All that is required is to open the QIODevice.
-
-    If able to successfully output audio data to the systems audio device the
-    state() is set to QAudio::ActiveState, error() is set to QAudio::NoError
-    and the stateChanged() signal is emitted.
-
-    If a problem occurs during this process the error() is set to QAudio::OpenError,
-    state() is set to QAudio::StoppedState and stateChanged() signal is emitted.
-
-    In either case, the stateChanged() signal may be emitted either synchronously
-    during execution of the start() function or asynchronously after start() has
-    returned to the caller.
-
-    \sa QIODevice
-*/
 
 void QAudioOutput::start(QIODevice *device)
 {

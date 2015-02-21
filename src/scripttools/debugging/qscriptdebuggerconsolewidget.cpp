@@ -411,4 +411,22 @@ bool QScriptDebuggerConsoleWidget::focusNextPrevChild(bool b)
    }
 }
 
+void QScriptDebuggerConsoleWidget::_q_onLineEntered(const QString & un_named_arg1)
+{
+	Q_D(QScriptDebuggerConsoleWidget);
+	d->_q_onLineEntered();
+}
+
+void QScriptDebuggerConsoleWidget::_q_onLineEdited(const QString & un_named_arg1)
+{
+	Q_D(QScriptDebuggerConsoleWidget);
+	d->_q_onLineEdited();
+}
+
+void QScriptDebuggerConsoleWidget::_q_onCompletionTaskFinished()
+{
+	Q_D(QScriptDebuggerConsoleWidget);
+	d->_q_onCompletionTaskFinished();
+}
+
 QT_END_NAMESPACE

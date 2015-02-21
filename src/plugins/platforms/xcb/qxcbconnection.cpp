@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qxcbconnection.h"
-#include "qxcbkeyboard.h"
-#include "qxcbscreen.h"
-#include "qxcbwindow.h"
+#include <qxcbconnection.h>
+#include <qxcbkeyboard.h>
+#include <qxcbscreen.h>
+#include <qxcbwindow.h>
 
 #include <QtAlgorithms>
 #include <QSocketNotifier>
-#include <QtGui/private/qapplication_p.h>
+#include <qapplication_p.h>
 #include <QAbstractEventDispatcher>
 
 #include <QtCore/QDebug>
@@ -43,7 +43,7 @@
 #include <X11/Xlib-xcb.h>
 #endif
 
-#ifdef XCB_USE_EGL //don't pull in eglext prototypes
+#ifdef XCB_USE_EGL          //don't pull in eglext prototypes
 #include <EGL/egl.h>
 #endif
 

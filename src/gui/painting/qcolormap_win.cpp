@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qcolor.h"
-#include "qcolormap.h"
-#include "qvector.h"
-#include "qt_windows.h"
+#include <qcolor.h>
+#include <qcolormap.h>
+#include <qvector.h>
+#include <qt_windows.h>
 
 QT_BEGIN_NAMESPACE
 

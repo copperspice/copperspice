@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 // copperspice - IPV6 on
 #ifdef Q_OS_WIN
@@ -32,12 +32,12 @@
 #  include <sys/socket.h>
 #endif
 
-#include "qhostaddress.h"
-#include "qhostaddress_p.h"
-#include "qdebug.h"
-#include "qplatformdefs.h"
-#include "qstringlist.h"
-#include "qendian.h"
+#include <qhostaddress.h>
+#include <qhostaddress_p.h>
+#include <qdebug.h>
+#include <qplatformdefs.h>
+#include <qstringlist.h>
+#include <qendian.h>
 
 #ifndef QT_NO_DATASTREAM
 #include <qdatastream.h>

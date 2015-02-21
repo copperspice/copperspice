@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qwsembedwidget.h"
+#include <qwsembedwidget.h>
 
 #ifndef QT_NO_QWSEMBEDWIDGET
 

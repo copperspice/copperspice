@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsqldriverplugin.h"
+#include <qsqldriverplugin.h>
 
 QT_BEGIN_NAMESPACE
 

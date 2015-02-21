@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
 
-#include "qapplication_p.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qwidget.h"
-#include "qbuffer.h"
-#include "qdatastream.h"
-#include "qcursor.h"
-#include "qt_windows.h"
+#include <qapplication_p.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qwidget.h>
+#include <qbuffer.h>
+#include <qdatastream.h>
+#include <qcursor.h>
+#include <qt_windows.h>
 #include <shlobj.h>
 
 #ifndef QT_NO_ACCESSIBILITY
-#include "qaccessible.h"
+#include <qaccessible.h>
 #endif
 
-#include "qdnd_p.h"
-#include "qdebug.h"
+#include <qdnd_p.h>
+#include <qdebug.h>
 
 // support for xbuttons
 #ifndef MK_XBUTTON1

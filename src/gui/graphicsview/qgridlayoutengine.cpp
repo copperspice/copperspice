@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <math.h>
 
-#include "qgraphicslayoutitem.h"
-#include "qgridlayoutengine_p.h"
-#include "qstyleoption.h"
-#include "qvarlengtharray.h"
-#include "qgraphicswidget_p.h"
+#include <qgraphicslayoutitem.h>
+#include <qgridlayoutengine_p.h>
+#include <qstyleoption.h>
+#include <qvarlengtharray.h>
+#include <qgraphicswidget_p.h>
 
 #include <QtDebug>
 #include <QtCore/qmath.h>

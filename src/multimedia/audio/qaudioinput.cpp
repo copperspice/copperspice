@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-
 #include <QtMultimedia/qaudio.h>
 #include <QtMultimedia/qaudiodeviceinfo.h>
 #include <QtMultimedia/qaudioengine.h>
 #include <QtMultimedia/qaudioinput.h>
 
-#include "qaudiodevicefactory_p.h"
+#include <qaudiodevicefactory_p.h>
 
 QT_BEGIN_NAMESPACE
 

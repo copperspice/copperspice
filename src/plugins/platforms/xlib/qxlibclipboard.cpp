@@ -23,19 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qxlibclipboard.h"
-
-#include "qxlibscreen.h"
-#include "qxlibmime.h"
-#include "qxlibdisplay.h"
-
-#include <private/qapplication_p.h>
-
+#include <qxlibclipboard.h>
+#include <qxlibscreen.h>
+#include <qxlibmime.h>
+#include <qxlibdisplay.h>
+#include <qapplication_p.h>
 #include <QtCore/QDebug>
 
 class QXlibClipboardMime : public QXlibMime
 {
     Q_OBJECT
+
 public:
     QXlibClipboardMime(QClipboard::Mode mode, QXlibClipboard *clipboard)
         : QXlibMime()

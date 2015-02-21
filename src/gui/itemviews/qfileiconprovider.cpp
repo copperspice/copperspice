@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qfileiconprovider.h"
-#include "qfileiconprovider_p.h"
+#include <qfileiconprovider.h>
+#include <qfileiconprovider_p.h>
 
 #ifndef QT_NO_FILEICONPROVIDER
 #include <qfileinfo.h>

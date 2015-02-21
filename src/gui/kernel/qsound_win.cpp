@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qsound.h"
+#include <qsound.h>
 
 #ifndef QT_NO_SOUND
 
-#include "qapplication.h"
-#include "qapplication_p.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
 #include <qfile.h>
-#include "qpointer.h"
-#include "qsound_p.h"
+#include <qpointer.h>
+#include <qsound_p.h>
 
 #include <qt_windows.h>
 

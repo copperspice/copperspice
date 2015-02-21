@@ -23,10 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qlocalserver.h"
-#include "qlocalserver_p.h"
-#include "qlocalsocket.h"
-#include "qlocalsocket_p.h"
+#include <qlocalserver.h>
+#include <qlocalserver_p.h>
+#include <qlocalsocket.h>
+#include <qlocalsocket_p.h>
 
 #include <qhostaddress.h>
 #include <qsettings.h>

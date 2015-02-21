@@ -28,19 +28,19 @@
 ** Copyright 1999 Matt Koss
 *****************************************************/
 
-#include "qplatformdefs.h"
-#include "qapplication.h"
+#include <qplatformdefs.h>
+#include <qapplication.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
-#include "qdebug.h"
-#include "qtextcodec.h"
-#include "qwidget.h"
-#include "qevent.h"
-#include "qt_x11_p.h"
-#include "qx11info_x11.h"
-#include "qiodevice.h"
-#include "qdnd_p.h"
+#include <qdebug.h>
+#include <qtextcodec.h>
+#include <qwidget.h>
+#include <qevent.h>
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
+#include <qiodevice.h>
+#include <qdnd_p.h>
 
 #include <stdlib.h>
 

@@ -23,11 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qgenericengine.h"
-
-#include <QtNetwork/private/qbearerplugin_p.h>
-
-#include <QtCore/qdebug.h>
+#include <qgenericengine.h>
+#include <qbearerplugin_p.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

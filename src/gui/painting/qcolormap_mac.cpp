@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qcolormap.h"
-#include "qcolor.h"
+#include <qcolormap.h>
+#include <qcolor.h>
 
 QT_BEGIN_NAMESPACE
 

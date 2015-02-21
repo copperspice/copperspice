@@ -23,67 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qabstractvideosurface_p.h"
+#include <qabstractvideosurface_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QAbstractVideoSurface
-    \brief The QAbstractVideoSurface class is a base class for video presentation surfaces.
-    \since 4.6
-
-    The QAbstractVideoSurface class defines the standard interface that video producers use to
-    inter-operate with video presentation surfaces.  It is not supposed to be instantiated directly.
-    Instead, you should subclass it to create new video surfaces.
-
-    A video surface presents a continuous stream of identically formatted frames, where the format
-    of each frame is compatible with a stream format supplied when starting a presentation.
-
-    A list of pixel formats a surface can present is given by the supportedPixelFormats() function,
-    and the isFormatSupported() function will test if a video surface format is supported.  If a
-    format is not supported the nearestFormat() function may be able to suggest a similar format.
-    For example if a surface supports fixed set of resolutions it may suggest the smallest
-    supported resolution that contains the proposed resolution.
-
-    The start() function takes a supported format and enables a video surface.  Once started a
-    surface will begin displaying the frames it receives in the present() function.  Surfaces may
-    hold a reference to the buffer of a presented video frame until a new frame is presented or
-    streaming is stopped. The stop() function will disable a surface and a release any video
-    buffers it holds references to.
-*/
-
-/*!
-    \enum QAbstractVideoSurface::Error
-    This enum describes the errors that may be returned by the error() function.
-
-    \value NoError No error occurred.
-    \value UnsupportedFormatError A video format was not supported.
-    \value IncorrectFormatError A video frame was not compatible with the format of the surface.
-    \value StoppedError The surface has not been started.
-    \value ResourceError The surface could not allocate some resource.
-*/
-
-/*!
-    Constructs a video surface with the given \a parent.
-*/
 
 QAbstractVideoSurface::QAbstractVideoSurface(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractVideoSurfacePrivate)
 {
 }
 
-/*!
-    \internal
-*/
-
 QAbstractVideoSurface::QAbstractVideoSurface(QAbstractVideoSurfacePrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
 }
-
-/*!
-    Destroys a video surface.
-*/
 
 QAbstractVideoSurface::~QAbstractVideoSurface()
 {

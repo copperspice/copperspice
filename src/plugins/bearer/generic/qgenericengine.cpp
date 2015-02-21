@@ -23,21 +23,20 @@
 *
 ***********************************************************************/
 
-#include "qgenericengine.h"
-#include "../qnetworksession_impl.h"
-
-#include <QtNetwork/private/qnetworkconfiguration_p.h>
+#include <qgenericengine.h>
+#include <qnetworksession_impl.h>
+#include <qnetworkconfiguration_p.h>
 
 #include <QtCore/qthread.h>
 #include <QtCore/qmutex.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qstringlist.h>
 
-#include <QtCore/qdebug.h>
-#include <QtCore/private/qcoreapplication_p.h>
+#include <qdebug.h>
+#include <qcoreapplication_p.h>
 
 #ifdef Q_OS_WIN
-#include "../platformdefs_win.h"
+#include <platformdefs_win.h>
 #endif
 
 #ifdef Q_OS_LINUX

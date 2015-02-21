@@ -456,7 +456,7 @@ class QTestFontEngine : public QFontEngineBox
 QT_END_NAMESPACE
 
 #ifdef Q_OS_WIN
-#   include "qfontengine_win_p.h"
+#   include <qfontengine_win_p.h>
 #endif
 
 #endif // QFONTENGINE_P_H

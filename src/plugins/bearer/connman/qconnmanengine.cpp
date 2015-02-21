@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qconnmanengine.h"
-#include "qconnmanservice_linux_p.h"
-#include "qofonoservice_linux_p.h"
-#include "../qnetworksession_impl.h"
+#include <qconnmanengine.h>
+#include <qconnmanservice_linux_p.h>
+#include <qofonoservice_linux_p.h>
+#include <qnetworksession_impl.h>
 
-#include <QtNetwork/private/qnetworkconfiguration_p.h>
-
+#include <qnetworkconfiguration_p.h>
 #include <QtNetwork/qnetworksession.h>
 
 #include <QtCore/qdebug.h>

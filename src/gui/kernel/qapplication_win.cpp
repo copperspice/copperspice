@@ -321,7 +321,7 @@ extern HRGN qt_tryCreateRegion(QRegion::RegionType type, int left, int top, int 
 #endif
 
 QT_BEGIN_INCLUDE_NAMESPACE
-#include "qwidget_p.h"
+#include <qwidget_p.h>
 QT_END_INCLUDE_NAMESPACE
 
 static int translateButtonState(int s, int type, int button);

@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qnetworkconfigmanager.h"
-#include "qnetworkconfigmanager_p.h"
-#include "qbearerengine_p.h"
+#include <qnetworkconfigmanager.h>
+#include <qnetworkconfigmanager_p.h>
+#include <qbearerengine_p.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qmutex.h>

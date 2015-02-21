@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
+#include <qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include "qgraphicslayout_p.h"
-#include "qgraphicslayout.h"
-#include "qgraphicswidget.h"
-#include "qapplication.h"
+#include <qgraphicslayout_p.h>
+#include <qgraphicslayout.h>
+#include <qgraphicswidget.h>
+#include <qapplication.h>
 
 QT_BEGIN_NAMESPACE
 

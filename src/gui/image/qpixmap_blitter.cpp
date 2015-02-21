@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpixmap_blitter_p.h"
+#include <qpixmap_blitter_p.h>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qapplication_p.h>

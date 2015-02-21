@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qurlinfo.h"
+#include <qurlinfo.h>
 
 #ifndef QT_NO_URLINFO
 
-#include "qurl.h"
-#include "qdir.h"
+#include <qurl.h>
+#include <qdir.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

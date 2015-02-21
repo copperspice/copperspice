@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qsqlerror.h"
-#include "qdebug.h"
+#include <qsqlerror.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

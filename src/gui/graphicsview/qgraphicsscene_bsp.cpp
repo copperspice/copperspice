@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qgraphicsscene_bsp_p.h"
+#include <qgraphicsscene_bsp_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 

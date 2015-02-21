@@ -23,13 +23,13 @@
 *
 ***********************************************************************/
 
-#include "qhttpsocketengine_p.h"
-#include "qtcpsocket.h"
-#include "qhostaddress.h"
-#include "qurl.h"
-#include "qhttp.h"
-#include "qelapsedtimer.h"
-#include "qnetworkinterface.h"
+#include <qhttpsocketengine_p.h>
+#include <qtcpsocket.h>
+#include <qhostaddress.h>
+#include <qurl.h>
+#include <qhttp.h>
+#include <qelapsedtimer.h>
+#include <qnetworkinterface.h>
 
 #if !defined(QT_NO_NETWORKPROXY) && !defined(QT_NO_HTTP)
 #include <qdebug.h>

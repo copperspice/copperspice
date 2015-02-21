@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qkeymapper_p.h"
+#include <qkeymapper_p.h>
 
-#include "qdebug.h"
-#include "qtextcodec.h"
-#include "qwidget.h"
+#include <qdebug.h>
+#include <qtextcodec.h>
+#include <qwidget.h>
 
-#include "qapplication_p.h"
-#include "qevent_p.h"
-#include "qt_x11_p.h"
+#include <qapplication_p.h>
+#include <qevent_p.h>
+#include <qt_x11_p.h>
 
 #ifndef QT_NO_XKB
 #  include <X11/XKBlib.h>
@@ -62,7 +62,7 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_NO_XKB
 
 // bring in the auto-generated xkbLayoutData
-#include "qkeymapper_x11_p.cpp"
+#include <qkeymapper_x11_p.cpp>
 
 QLocale q_getKeyboardLocale(const QByteArray &layoutName, const QByteArray &variantName)
 {

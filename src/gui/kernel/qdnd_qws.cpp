@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
+#include <qapplication.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
-#include "qwidget.h"
-#include "qdatetime.h"
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qevent.h"
-#include "qpainter.h"
-#include "qdnd_p.h"
+#include <qwidget.h>
+#include <qdatetime.h>
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qdnd_p.h>
 
 QT_BEGIN_NAMESPACE
 

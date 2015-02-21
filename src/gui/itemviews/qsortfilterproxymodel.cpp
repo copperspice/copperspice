@@ -23,11 +23,11 @@
 *
 ***********************************************************************/
 
-#include "qsortfilterproxymodel.h"
+#include <qsortfilterproxymodel.h>
 
 #ifndef QT_NO_SORTFILTERPROXYMODEL
 
-#include "qitemselectionmodel.h"
+#include <qitemselectionmodel.h>
 #include <qsize.h>
 #include <qdebug.h>
 #include <qdatetime.h>

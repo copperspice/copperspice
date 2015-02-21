@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssceneevent.h"
+#include <qgraphicssceneevent.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
@@ -35,8 +35,8 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qsize.h>
 #include <QtCore/qstring.h>
-#include "qgraphicsview.h"
-#include "qgraphicsitem.h"
+#include <qgraphicsview.h>
+#include <qgraphicsitem.h>
 #include <QtGui/qgesture.h>
 #include <qevent_p.h>
 

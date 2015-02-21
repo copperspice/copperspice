@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qdesktopwidget.h"
-#include "qapplication_p.h"
-#include "qgraphicssystem_p.h"
+#include <qdesktopwidget.h>
+#include <qapplication_p.h>
+#include <qgraphicssystem_p.h>
 #include <QWidget>
-#include "qwidget_p.h"
-#include "qdesktopwidget_qpa_p.h"
+#include <qwidget_p.h>
+#include <qdesktopwidget_qpa_p.h>
 QT_BEGIN_NAMESPACE
 
 QT_USE_NAMESPACE

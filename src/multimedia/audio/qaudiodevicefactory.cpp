@@ -27,23 +27,23 @@
 #include <QtMultimedia/qaudioengine.h>
 #include <QtMultimedia/qaudioengineplugin.h>
 #include <qfactoryloader_p.h>
-#include "qaudiodevicefactory_p.h"
+#include <qaudiodevicefactory_p.h>
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if defined(Q_OS_WIN)
-#include "qaudiodeviceinfo_win32_p.h"
-#include "qaudiooutput_win32_p.h"
-#include "qaudioinput_win32_p.h"
+#include <qaudiodeviceinfo_win32_p.h>
+#include <qaudiooutput_win32_p.h>
+#include <qaudioinput_win32_p.h>
 
 #elif defined(Q_OS_MAC)
-#include "qaudiodeviceinfo_mac_p.h"
-#include "qaudiooutput_mac_p.h"
-#include "qaudioinput_mac_p.h"
+#include <qaudiodeviceinfo_mac_p.h>
+#include <qaudiooutput_mac_p.h>
+#include <qaudioinput_mac_p.h>
 
 #elif defined(HAS_ALSA)
-#include "qaudiodeviceinfo_alsa_p.h"
-#include "qaudiooutput_alsa_p.h"
-#include "qaudioinput_alsa_p.h"
+#include <qaudiodeviceinfo_alsa_p.h>
+#include <qaudiooutput_alsa_p.h>
+#include <qaudioinput_alsa_p.h>
 #endif
 #endif
 

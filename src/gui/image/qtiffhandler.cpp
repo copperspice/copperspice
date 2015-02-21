@@ -23,13 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qtiffhandler_p.h"
+#include <qtiffhandler_p.h>
 #include <qvariant.h>
 #include <qdebug.h>
 #include <qimage.h>
 #include <qglobal.h>
+
 extern "C" {
-#include "tiffio.h"
+#include <tiffio.h>
 }
 
 QT_BEGIN_NAMESPACE

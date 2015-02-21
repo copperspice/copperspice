@@ -22,10 +22,9 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
-#include "qconnmanengine.h"
 
-#include <QtNetwork/private/qbearerplugin_p.h>
-
+#include <qconnmanengine.h>
+#include <qbearerplugin_p.h>
 #include <QtCore/qdebug.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT

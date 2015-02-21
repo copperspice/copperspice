@@ -605,12 +605,6 @@ QMainWindow *QScriptEngineDebugger::standardWindow() const
 }
 #endif // QT_NO_MAINWINDOW
 
-/*!
-  Creates a standard debugger menu with the given \a parent.
-  Returns the new menu object.
-
-  \sa createStandardToolBar()
-*/
 QMenu *QScriptEngineDebugger::createStandardMenu(QWidget *parent)
 {
    Q_D(QScriptEngineDebugger);
@@ -618,12 +612,6 @@ QMenu *QScriptEngineDebugger::createStandardMenu(QWidget *parent)
    return d->debugger->createStandardMenu(parent, this);
 }
 
-/*!
-  Creates a standard debugger toolbar with the given \a parent.
-  Returns the new toolbar object.
-
-  \sa createStandardMenu()
-*/
 #ifndef QT_NO_TOOLBAR
 QToolBar *QScriptEngineDebugger::createStandardToolBar(QWidget *parent)
 {
@@ -633,23 +621,10 @@ QToolBar *QScriptEngineDebugger::createStandardToolBar(QWidget *parent)
 }
 #endif
 
-/*!
-    \fn QScriptEngineDebugger::evaluationSuspended()
-
-    This signal is emitted when the debugger has suspended script
-    evaluation for whatever reason (e.g. due to an uncaught script
-    exception, or due to a breakpoint being triggered).
-
-    \sa evaluationResumed()
-*/
-
-/*!
-    \fn QScriptEngineDebugger::evaluationResumed()
-
-    This signal is emitted when the debugger has resumed script
-    evaluation (e.g. the user gave the "continue" command).
-
-    \sa evaluationSuspended()
-*/
+void QScriptEngineDebugger::_q_showStandardWindow()
+{
+  	Q_D(QScriptEngineDebugger);
+	d->_q_showStandardWindow();
+}
 
 QT_END_NAMESPACE

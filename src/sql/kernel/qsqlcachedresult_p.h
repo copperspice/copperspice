@@ -26,7 +26,7 @@
 #ifndef QSQLCACHEDRESULT_P_H
 #define QSQLCACHEDRESULT_P_H
 
-#include "QtSql/qsqlresult.h"
+#include <QtSql/qsqlresult.h>
 
 QT_BEGIN_NAMESPACE
 

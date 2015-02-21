@@ -24,13 +24,13 @@
 ***********************************************************************/
 
 
-#include "qkde_p.h"
+#include <qkde_p.h>
 #include <QtCore/QLibrary>
 #include <QtCore/QDir>
 #include <QtCore/qdebug.h>
 #include <QtCore/QSettings>
-#include "QtGui/qstylefactory.h"
-#include "qt_x11_p.h"
+#include <QtGui/qstylefactory.h>
+#include <qt_x11_p.h>
 
 #if defined(Q_WS_X11)
 

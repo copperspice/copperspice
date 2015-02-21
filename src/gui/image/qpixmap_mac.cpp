@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qpixmap.h"
-#include "qimage.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qmatrix.h"
-#include "qtransform.h"
-#include "qlibrary.h"
-#include "qvarlengtharray.h"
-#include "qdebug.h"
+#include <qpixmap.h>
+#include <qimage.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qmatrix.h>
+#include <qtransform.h>
+#include <qlibrary.h>
+#include <qvarlengtharray.h>
+#include <qdebug.h>
 #include <qdrawhelper_p.h>
 #include <qpixmap_mac_p.h>
 #include <qpixmap_raster_p.h>

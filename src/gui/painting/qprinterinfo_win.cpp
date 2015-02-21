@@ -23,11 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qprinterinfo.h"
-#include "qprinterinfo_p.h"
-
+#include <qprinterinfo.h>
+#include <qprinterinfo_p.h>
 #include <qstringlist.h>
-
 #include <qt_windows.h>
 
 QT_BEGIN_NAMESPACE

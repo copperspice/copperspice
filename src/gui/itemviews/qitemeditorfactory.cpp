@@ -24,8 +24,8 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
-#include "qitemeditorfactory.h"
-#include "qitemeditorfactory_p.h"
+#include <qitemeditorfactory.h>
+#include <qitemeditorfactory_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 

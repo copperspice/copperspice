@@ -1,1 +1,1 @@
-#include "qtextformat.h"
+#include <qtextformat.h>

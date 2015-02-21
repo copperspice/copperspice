@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qplatformwindowformat_qpa.h"
+#include <qplatformwindowformat_qpa.h>
 
 #include <QtCore/QDebug>
 

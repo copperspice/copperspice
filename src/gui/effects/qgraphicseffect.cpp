@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qgraphicseffect_p.h"
-#include "qgraphicsitem_p.h"
+#include <qgraphicseffect_p.h>
+#include <qgraphicsitem_p.h>
 #include <QtGui/qgraphicsitem.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qpainter.h>

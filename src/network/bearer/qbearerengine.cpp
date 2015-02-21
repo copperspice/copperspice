@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbearerengine_p.h"
+#include <qbearerengine_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

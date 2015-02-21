@@ -23,17 +23,17 @@
 *
 ***********************************************************************/
 
-#include "qnetworkreplyimpl_p.h"
-#include "qnetworkaccessbackend_p.h"
-#include "qnetworkcookie.h"
-#include "qnetworkcookiejar.h"
-#include "qabstractnetworkcache.h"
-#include "QtCore/qcoreapplication.h"
-#include "QtCore/qdatetime.h"
-#include "QtNetwork/qsslconfiguration.h"
-#include "QtNetwork/qnetworksession.h"
-#include "qnetworkaccesshttpbackend_p.h"
-#include "qnetworkaccessmanager_p.h"
+#include <qnetworkreplyimpl_p.h>
+#include <qnetworkaccessbackend_p.h>
+#include <qnetworkcookie.h>
+#include <qnetworkcookiejar.h>
+#include <qabstractnetworkcache.h>
+#include <QtCore/qcoreapplication.h>
+#include <QtCore/qdatetime.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <QtNetwork/qnetworksession.h>
+#include <qnetworkaccesshttpbackend_p.h>
+#include <qnetworkaccessmanager_p.h>
 
 #include <QtCore/QCoreApplication>
 

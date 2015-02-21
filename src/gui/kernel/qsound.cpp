@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qsound.h"
+#include <qsound.h>
 
 #ifndef QT_NO_SOUND
 
-#include "qlist.h"
-#include "qsound_p.h"
+#include <qlist.h>
+#include <qsound_p.h>
 
 QT_BEGIN_NAMESPACE
 

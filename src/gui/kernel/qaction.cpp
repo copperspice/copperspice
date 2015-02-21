@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qaction.h"
-#include "qactiongroup.h"
+#include <qaction.h>
+#include <qactiongroup.h>
 
 #ifndef QT_NO_ACTION
-#include "qaction_p.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qlist.h"
-#include "qdebug.h"
+#include <qaction_p.h>
+#include <qapplication.h>
+#include <qevent.h>
+#include <qlist.h>
+#include <qdebug.h>
 #include <qshortcutmap_p.h>
 #include <qapplication_p.h>
 #include <qmenu_p.h>

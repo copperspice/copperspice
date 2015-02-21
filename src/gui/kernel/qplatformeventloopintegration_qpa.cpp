@@ -23,10 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qplatformeventloopintegration_qpa.h"
-
+#include <qplatformeventloopintegration_qpa.h>
 #include <QtCore/QCoreApplication>
-
 #include <QtCore/QDebug>
 
 class QPlatformEventLoopIntegrationPrivate

@@ -23,103 +23,8 @@
 *
 ***********************************************************************/
 
-/*!
-    \class QGraphicsAnchorLayout
-    \brief The QGraphicsAnchorLayout class provides a layout where one can anchor widgets
-    together in Graphics View.
-    \since 4.6
-    \ingroup appearance
-    \ingroup geomanagement
-    \ingroup graphicsview-api
+#include <qgraphicsanchorlayout_p.h>
 
-    The anchor layout allows developers to specify how widgets should be placed relative to
-    each other, and to the layout itself. The specification is made by adding anchors to the
-    layout by calling addAnchor(), addAnchors() or addCornerAnchors().
-
-    Existing anchors in the layout can be accessed with the anchor() function.
-    Items that are anchored are automatically added to the layout, and if items
-    are removed, all their anchors will be automatically removed.
-
-    \div {class="float-left"}
-    \inlineimage simpleanchorlayout-example.png Using an anchor layout to align simple colored widgets.
-    \enddiv
-
-    Anchors are always set up between edges of an item, where the "center" is also considered to
-    be an edge. Consider the following example:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding anchors
-
-    Here, the right edge of item \c a is anchored to the left edge of item \c b and the bottom
-    edge of item \c a is anchored to the top edge of item \c b, with the result that
-    item \c b will be placed diagonally to the right and below item \c b.
-
-    The addCornerAnchors() function provides a simpler way of anchoring the corners
-    of two widgets than the two individual calls to addAnchor() shown in the code
-    above. Here, we see how a widget can be anchored to the top-left corner of the enclosing
-    layout:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding a corner anchor
-
-    In cases where anchors are used to match the widths or heights of widgets, it is
-    convenient to use the addAnchors() function. As with the other functions for specifying
-    anchors, it can also be used to anchor a widget to a layout.
-
-    \clearfloat
-    \section1 Size Hints and Size Policies in an Anchor Layout
-
-    QGraphicsAnchorLayout respects each item's size hints and size policies.
-    Note that there are some properties of QSizePolicy that are \l{Known issues}{not respected}.
-
-    \section1 Spacing within an Anchor Layout
-
-    The layout may distribute some space between the items. If the spacing has not been
-    explicitly specified, the actual amount of space will usually be 0.
-
-    However, if the first edge is the \e opposite of the second edge (e.g., the right edge
-    of the first widget is anchored to the left edge of the second widget), the size of the
-    anchor will be queried from the style through a pixel metric:
-    \l{QStyle::}{PM_LayoutHorizontalSpacing} for horizontal anchors and
-    \l{QStyle::}{PM_LayoutVerticalSpacing} for vertical anchors.
-
-    If the spacing is negative, the items will overlap to some extent.
-
-
-    \section1 Known issues
-    There are some features that QGraphicsAnchorLayout currently does not support.
-    This might change in the future, so avoid using these features if you want to
-    avoid any future regressions in behaviour:
-    \list
-
-    \o Stretch factors are not respected.
-
-    \o QSizePolicy::ExpandFlag is not respected.
-
-    \o Height for width is not respected.
-
-    \endlist
-
-    \sa QGraphicsLinearLayout, QGraphicsGridLayout, QGraphicsLayout
-*/
-
-/*!
-    \class QGraphicsAnchor
-    \brief The QGraphicsAnchor class represents an anchor between two items in a
-           QGraphicsAnchorLayout.
-    \since 4.6
-    \ingroup appearance
-    \ingroup geomanagement
-    \ingroup graphicsview-api
-
-    The graphics anchor provides an API that enables you to query and manipulate the
-    properties an anchor has. When an anchor is added to the layout with
-    QGraphicsAnchorLayout::addAnchor(), a QGraphicsAnchor instance is returned where the properties
-    are initialized to their default values. The properties can then be further changed, and they
-    will be picked up the next time the layout is activated.
-
-    \sa QGraphicsAnchorLayout::anchor()
-
-*/
-#include "qgraphicsanchorlayout_p.h"
 #ifndef QT_NO_GRAPHICSVIEW
 QT_BEGIN_NAMESPACE
 
@@ -133,27 +38,9 @@ QGraphicsAnchor::QGraphicsAnchor(QGraphicsAnchorLayout *parentLayout)
    d->layoutPrivate = parentLayout->d_func();
 }
 
-/*!
-    Removes the QGraphicsAnchor object from the layout and destroys it.
-*/
 QGraphicsAnchor::~QGraphicsAnchor()
 {
 }
-
-/*!
-    \property QGraphicsAnchor::sizePolicy
-    \brief the size policy for the QGraphicsAnchor.
-
-    By setting the size policy on an anchor you can configure how the anchor can resize itself
-    from its preferred spacing. For instance, if the anchor has the size policy
-    QSizePolicy::Minimum, the spacing is the minimum size of the anchor. However, its size
-    can grow up to the anchors maximum size. If the default size policy is QSizePolicy::Fixed,
-    the anchor can neither grow or shrink, which means that the only size the anchor can have
-    is the spacing. QSizePolicy::Fixed is the default size policy.
-    QGraphicsAnchor always has a minimum spacing of 0 and a very large maximum spacing.
-
-    \sa QGraphicsAnchor::spacing
-*/
 
 void QGraphicsAnchor::setSizePolicy(QSizePolicy::Policy policy)
 {
@@ -167,15 +54,6 @@ QSizePolicy::Policy QGraphicsAnchor::sizePolicy() const
    return d->sizePolicy;
 }
 
-/*!
-    \property QGraphicsAnchor::spacing
-    \brief the preferred space between items in the QGraphicsAnchorLayout.
-
-    Depending on the anchor type, the default spacing is either
-    0 or a value returned from the style.
-
-    \sa QGraphicsAnchorLayout::addAnchor()
-*/
 void QGraphicsAnchor::setSpacing(qreal spacing)
 {
    Q_D(QGraphicsAnchor);

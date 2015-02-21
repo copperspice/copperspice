@@ -1,1 +1,1 @@
-#include "qsqlrelationaltablemodel.h"
+#include <qsqlrelationaltablemodel.h>

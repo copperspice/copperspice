@@ -1,1 +1,1 @@
-#include "qsplitter.h"
+#include <qsplitter.h>

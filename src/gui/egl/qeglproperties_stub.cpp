@@ -26,8 +26,8 @@
 #include <QtCore/qdebug.h>
 #include <QtCore/qstringlist.h>
 
-#include "qeglproperties_p.h"
-#include "qeglcontext_p.h"
+#include <qeglproperties_p.h>
+#include <qeglcontext_p.h>
 
 QT_BEGIN_NAMESPACE
 

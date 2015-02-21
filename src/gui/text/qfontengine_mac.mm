@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qfontengine_mac_p.h"
+#include <qfontengine_mac_p.h>
 
 #include <qapplication_p.h>
 #include <qfontengine_p.h>

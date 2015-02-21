@@ -1,1 +1,1 @@
-#include "qplatformintegrationplugin_qpa.h"
+#include <qplatformintegrationplugin_qpa.h>

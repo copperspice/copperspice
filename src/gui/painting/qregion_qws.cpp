@@ -25,8 +25,8 @@
 
 #define private public
 #include <qregion.h>
-
 #undef private
+
 #include <qpainterpath.h>
 #include <qpolygon.h>
 #include <qbuffer.h>
@@ -333,12 +333,12 @@ bool QRegionPrivate::canPrepend(const QRegionPrivate *r) const
 
 #if defined(Q_WS_X11)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qregion_x11.cpp"
+# include <qregion_x11.cpp>
 QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_MAC)
 QT_BEGIN_INCLUDE_NAMESPACE
-# include "qregion_mac.cpp"
+# include <qregion_mac.cpp>
 QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_QWS)

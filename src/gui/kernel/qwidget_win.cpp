@@ -23,24 +23,24 @@
 *
 ***********************************************************************/
 
-#include "qapplication.h"
-#include "qapplication_p.h"
-#include "qbitmap.h"
-#include "qcursor.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qimage.h"
-#include "qlayout.h"
-#include "qpainter.h"
-#include "qstack.h"
-#include "qthread.h"
-#include "qt_windows.h"
-#include "qwidget.h"
-#include "qwidget_p.h"
-#include "qbackingstore_p.h"
-#include "qwindowsurface_raster_p.h"
-#include "qscrollbar.h"
-#include "qabstractscrollarea.h"
+#include <qapplication.h>
+#include <qapplication_p.h>
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qimage.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qstack.h>
+#include <qthread.h>
+#include <qt_windows.h>
+#include <qwidget.h>
+#include <qwidget_p.h>
+#include <qbackingstore_p.h>
+#include <qwindowsurface_raster_p.h>
+#include <qscrollbar.h>
+#include <qabstractscrollarea.h>
 #include <qabstractscrollarea_p.h>
 
 #include <qdebug.h>

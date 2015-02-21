@@ -34,9 +34,9 @@
 #include <QtCore/qdebug.h>
 #include <QtMultimedia/qaudiooutput.h>
 
-#include "qaudio_mac_p.h"
-#include "qaudiooutput_mac_p.h"
-#include "qaudiodeviceinfo_mac_p.h"
+#include <qaudio_mac_p.h>
+#include <qaudiooutput_mac_p.h>
+#include <qaudiodeviceinfo_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 

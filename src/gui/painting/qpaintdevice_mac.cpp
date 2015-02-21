@@ -23,12 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qpaintdevice.h"
-#include "qpainter.h"
-#include "qwidget.h"
-#include "qbitmap.h"
-#include "qapplication.h"
-#include "qprinter.h"
+#include <qpaintdevice.h>
+#include <qpainter.h>
+#include <qwidget.h>
+#include <qbitmap.h>
+#include <qapplication.h>
+#include <qprinter.h>
 #include <qdebug.h>
 #include <qt_mac_p.h>
 #include <qprintengine_mac_p.h>
@@ -36,10 +36,6 @@
 #include <qpixmap_raster_p.h>
 
 QT_BEGIN_NAMESPACE
-
-/*****************************************************************************
-  Internal variables and functions
- *****************************************************************************/
 
 /*! \internal */
 float qt_mac_defaultDpi_x()

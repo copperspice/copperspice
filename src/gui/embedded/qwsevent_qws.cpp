@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qwsevent_qws.h"
+#include <qwsevent_qws.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qxcbwindow.h"
-
+#include <qxcbwindow.h>
 #include <QtDebug>
 
-#include "qxcbconnection.h"
-#include "qxcbscreen.h"
+#include <qxcbconnection.h>
+#include <qxcbscreen.h>
+
 #ifdef XCB_USE_DRI2
-#include "qdri2context.h"
+#include <qdri2context.h>
 #endif
 
 // Fix xcb-icccm 3.8 support
@@ -60,9 +60,8 @@
 #define XCB_WM_STATE_ICONIC XCB_ICCCM_WM_STATE_ICONIC
 #endif
 
-#include <private/qapplication_p.h>
-#include <private/qwindowsurface_p.h>
-
+#include <qapplication_p.h>
+#include <qwindowsurface_p.h>
 #include <QtGui/QWindowSystemInterface>
 
 #include <stdio.h>
@@ -73,8 +72,9 @@
 #endif
 
 #if defined(XCB_USE_GLX)
-#include "qglxintegration.h"
-#include "qglxconvenience.h"
+#include <qglxintegration.h>
+#include <qglxconvenience.h>
+
 #elif defined(XCB_USE_EGL)
 #include "../eglconvenience/qeglplatformcontext.h"
 #include "../eglconvenience/qeglconvenience.h"

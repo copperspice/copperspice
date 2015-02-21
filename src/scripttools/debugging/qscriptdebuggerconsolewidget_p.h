@@ -64,33 +64,12 @@ class QScriptDebuggerConsoleWidget : public QScriptDebuggerConsoleWidgetInterfac
    CS_SLOT_1(Private, void _q_onLineEntered(const QString &un_named_arg1))
    CS_SLOT_2(_q_onLineEntered)
 
-   /*  PRIVATE_SLOT
-   void _q_onLineEntered(const QString & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerConsoleWidget);
-   	d->_q_onLineEntered();
-   }
-   */
    CS_SLOT_1(Private, void _q_onLineEdited(const QString &un_named_arg1))
    CS_SLOT_2(_q_onLineEdited)
-
-   /*  PRIVATE_SLOT
-   void _q_onLineEdited(const QString & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerConsoleWidget);
-   	d->_q_onLineEdited();
-   }
-   */
+ 
    CS_SLOT_1(Private, void _q_onCompletionTaskFinished())
    CS_SLOT_2(_q_onCompletionTaskFinished)
-
-   /*  PRIVATE_SLOT
-   void _q_onCompletionTaskFinished()
-   {
-   	Q_D(QScriptDebuggerConsoleWidget);
-   	d->_q_onCompletionTaskFinished();
-   }
-   */
+  
 };
 
 QT_END_NAMESPACE

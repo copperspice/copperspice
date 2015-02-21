@@ -1,1 +1,1 @@
-#include "qcopchannel_qws.h"
+#include <qcopchannel_qws.h>

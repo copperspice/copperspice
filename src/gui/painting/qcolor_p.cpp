@@ -23,9 +23,9 @@
 *
 ***********************************************************************/
 
-#include "qglobal.h"
-#include "qrgb.h"
-#include "qstringlist.h"
+#include <qglobal.h>
+#include <qrgb.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 

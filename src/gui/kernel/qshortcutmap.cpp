@@ -23,19 +23,19 @@
 *
 ***********************************************************************/
 
-#include "qshortcutmap_p.h"
-#include "qkeysequence.h"
-#include "qgraphicsscene.h"
-#include "qgraphicsview.h"
-#include "qdebug.h"
-#include "qevent.h"
-#include "qwidget.h"
-#include "qapplication.h"
-#include "qvector.h"
-#include "qmenu.h"
-#include "qmenubar.h"
-#include "qshortcut.h"
-#include "qapplication_p.h"
+#include <qshortcutmap_p.h>
+#include <qkeysequence.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsview.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qwidget.h>
+#include <qapplication.h>
+#include <qvector.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qshortcut.h>
+#include <qapplication_p.h>
 #include <qaction_p.h>
 #include <qkeymapper_p.h>
 #include <qwidget_p.h>

@@ -37,19 +37,19 @@
 #undef QT_MITSHM
 #endif
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qdebug.h"
-#include "qiodevice.h"
-#include "qpixmap_x11_p.h"
-#include "qbitmap.h"
-#include "qcolormap.h"
-#include "qimage.h"
-#include "qmatrix.h"
-#include "qapplication.h"
+#include <qdebug.h>
+#include <qiodevice.h>
+#include <qpixmap_x11_p.h>
+#include <qbitmap.h>
+#include <qcolormap.h>
+#include <qimage.h>
+#include <qmatrix.h>
+#include <qapplication.h>
 #include <qpaintengine_x11_p.h>
 #include <qt_x11_p.h>
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #include <qdrawhelper_p.h>
 #include <qimage_p.h>
 #include <qimagepixmapcleanuphooks_p.h>

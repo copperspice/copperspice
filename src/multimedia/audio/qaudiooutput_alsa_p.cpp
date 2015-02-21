@@ -24,8 +24,8 @@
 ***********************************************************************/
 
 #include <QtCore/qcoreapplication.h>
-#include "qaudiooutput_alsa_p.h"
-#include "qaudiodeviceinfo_alsa_p.h"
+#include <qaudiooutput_alsa_p.h>
+#include <qaudiodeviceinfo_alsa_p.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,8 +26,8 @@
 #ifndef QSQLTABLEMODEL_H
 #define QSQLTABLEMODEL_H
 
-#include "qsqldatabase.h"
-#include "qsqlquerymodel.h"
+#include <qsqldatabase.h>
+#include <qsqlquerymodel.h>
 #include <QSqlRecord>
 
 QT_BEGIN_NAMESPACE

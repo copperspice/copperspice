@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qsyntaxhighlighter.h"
+#include <qsyntaxhighlighter.h>
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 #include <qtextdocument.h>

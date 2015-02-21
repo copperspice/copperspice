@@ -26,7 +26,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-#include "qnativesocketengine_p.h"
+#include <qnativesocketengine_p.h>
 
 #include <qabstracteventdispatcher.h>
 #include <qsocketnotifier.h>

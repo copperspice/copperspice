@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
-#include "qwssocket_qws.h"
+#include <qplatformdefs.h>
+#include <qwssocket_qws.h>
 
 #ifndef QT_NO_QWS_MULTIPROCESS
 

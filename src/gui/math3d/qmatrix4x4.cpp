@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qmatrix4x4.h"
+#include <qmatrix4x4.h>
 #include <QtCore/qmath.h>
 #include <QtCore/qvariant.h>
 #include <QtGui/qmatrix.h>

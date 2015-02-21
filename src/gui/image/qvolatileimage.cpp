@@ -23,8 +23,8 @@
 *
 ***********************************************************************/
 
-#include "qvolatileimage_p.h"
-#include "qvolatileimagedata_p.h"
+#include <qvolatileimage_p.h>
+#include <qvolatileimagedata_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qpixmapdata_p.h>
 

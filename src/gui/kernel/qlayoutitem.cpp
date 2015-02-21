@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qlayout.h"
+#include <qlayout.h>
 
-#include "qapplication.h"
-#include "qlayoutengine_p.h"
-#include "qmenubar.h"
-#include "qtoolbar.h"
-#include "qevent.h"
-#include "qstyle.h"
-#include "qvariant.h"
-#include "qwidget_p.h"
+#include <qapplication.h>
+#include <qlayoutengine_p.h>
+#include <qmenubar.h>
+#include <qtoolbar.h>
+#include <qevent.h>
+#include <qstyle.h>
+#include <qvariant.h>
+#include <qwidget_p.h>
 
 QT_BEGIN_NAMESPACE
 

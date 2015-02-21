@@ -23,13 +23,12 @@
 *
 ***********************************************************************/
 
-#include "qnetworkmanagerengine.h"
-#include "qnetworkmanagerservice.h"
-#include "../qnetworksession_impl.h"
+#include <qnetworkmanagerengine.h>
+#include <qnetworkmanagerservice.h>
+#include <qnetworksession_impl.h>
 
-#include <QtNetwork/private/qnetworkconfiguration_p.h>
-
-#include <QtNetwork/qnetworksession.h>
+#include <qnetworkconfiguration_p.h>
+#include <qnetworksession.h>
 
 #include <QtCore/qdebug.h>
 

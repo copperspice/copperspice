@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qnetworksession.h"
-#include "qbearerengine_p.h"
+#include <qnetworksession.h>
+#include <qbearerengine_p.h>
 
 #include <QEventLoop>
 #include <QTimer>
 #include <QThread>
 
-#include "qnetworkconfigmanager_p.h"
-#include "qnetworksession_p.h"
+#include <qnetworkconfigmanager_p.h>
+#include <qnetworksession_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

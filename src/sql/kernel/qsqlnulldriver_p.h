@@ -26,10 +26,10 @@
 #ifndef QSQLNULLDRIVER_P_H
 #define QSQLNULLDRIVER_P_H
 
-#include "QtCore/qvariant.h"
-#include "QtSql/qsqldriver.h"
-#include "QtSql/qsqlerror.h"
-#include "QtSql/qsqlresult.h"
+#include <QtCore/qvariant.h>
+#include <QtSql/qsqldriver.h>
+#include <QtSql/qsqlerror.h>
+#include <QtSql/qsqlresult.h>
 
 QT_BEGIN_NAMESPACE
 

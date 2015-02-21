@@ -44,13 +44,12 @@
 #  include <X11/extensions/Xfixes.h>
 #endif
 
-#include "qx11info_x11.h"
+#include <qx11info_x11.h>
 #include <qpixmap_x11_p.h>
 
 QT_BEGIN_NAMESPACE
 
-// Define QT_USE_APPROXIMATE_CURSORS when compiling if you REALLY want to
-// use the ugly X11 cursors.
+// Define QT_USE_APPROXIMATE_CURSORS when compiling if you REALLY want to use the ugly X11 cursors.
 
 /*****************************************************************************
   Internal QCursorData class

@@ -23,38 +23,38 @@
 *
 ***********************************************************************/
 
-#include "qplatformdefs.h"
+#include <qplatformdefs.h>
 
-#include "qapplication.h"
-#include "qabstracteventdispatcher.h"
+#include <qapplication.h>
+#include <qabstracteventdispatcher.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
-#include "qwidget.h"
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qbitmap.h"
-#include "qdesktopwidget.h"
-#include "qevent.h"
-#include "qiodevice.h"
-#include "qpointer.h"
-#include "qcursor.h"
-#include "qelapsedtimer.h"
-#include "qvariant.h"
-#include "qvector.h"
-#include "qurl.h"
-#include "qdebug.h"
-#include "qimagewriter.h"
-#include "qbuffer.h"
-#include "qtextcodec.h"
+#include <qwidget.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qbitmap.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qiodevice.h>
+#include <qpointer.h>
+#include <qcursor.h>
+#include <qelapsedtimer.h>
+#include <qvariant.h>
+#include <qvector.h>
+#include <qurl.h>
+#include <qdebug.h>
+#include <qimagewriter.h>
+#include <qbuffer.h>
+#include <qtextcodec.h>
 
-#include "qdnd_p.h"
-#include "qapplication_p.h"
-#include "qt_x11_p.h"
-#include "qx11info_x11.h"
+#include <qdnd_p.h>
+#include <qapplication_p.h>
+#include <qt_x11_p.h>
+#include <qx11info_x11.h>
 
-#include "qwidget_p.h"
-#include "qcursor_p.h"
+#include <qwidget_p.h>
+#include <qcursor_p.h>
 
 #ifndef QT_NO_XFIXES
 #include <X11/extensions/Xfixes.h>

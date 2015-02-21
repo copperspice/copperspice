@@ -53,48 +53,20 @@ class QScriptDebuggerCodeFinderWidget : public QScriptDebuggerCodeFinderWidgetIn
 
  private:
    Q_DECLARE_PRIVATE(QScriptDebuggerCodeFinderWidget)
-   Q_DISABLE_COPY(QScriptDebuggerCodeFinderWidget)
+   Q_DISABLE_COPY(QScriptDebuggerCodeFinderWidget) 
 
    CS_SLOT_1(Private, void _q_updateButtons())
    CS_SLOT_2(_q_updateButtons)
-
-   /*  PRIVATE_SLOT
-   void _q_updateButtons()
-   {
-   	Q_D(QScriptDebuggerCodeFinderWidget);
-   	d->_q_updateButtons();
-   }
-   */
+ 
    CS_SLOT_1(Private, void _q_onTextChanged(const QString &un_named_arg1))
    CS_SLOT_2(_q_onTextChanged)
-
-   /*  PRIVATE_SLOT
-   void _q_onTextChanged(const QString & un_named_arg1)
-   {
-   	Q_D(QScriptDebuggerCodeFinderWidget);
-   	d->_q_onTextChanged();
-   }
-   */
+  
    CS_SLOT_1(Private, void _q_next())
    CS_SLOT_2(_q_next)
 
-   /*  PRIVATE_SLOT
-   void _q_next()
-   {
-   	Q_D(QScriptDebuggerCodeFinderWidget);
-   	d->_q_next();
-   }
-   */
    CS_SLOT_1(Private, void _q_previous())
    CS_SLOT_2(_q_previous)
-
-   /*  PRIVATE_SLOT
-   void _q_previous()
-   {
-   	Q_D(QScriptDebuggerCodeFinderWidget);
-   	d->_q_previous();
-   }
-   */
+  
 };
 
 QT_END_NAMESPACE

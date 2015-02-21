@@ -1,4 +1,4 @@
-/***********************************************************************
+<**********************************************************************>
 *
 * Copyright (c) 2012-2014 Barbara Geller
 * Copyright (c) 2012-2014 Ansel Sermersheim
@@ -24,8 +24,8 @@
 ***********************************************************************/
 
 #include <QtCore/qcoreapplication.h>
-#include "qaudioinput_alsa_p.h"
-#include "qaudiodeviceinfo_alsa_p.h"
+#include <qaudioinput_alsa_p.h>
+#include <qaudiodeviceinfo_alsa_p.h>
 
 QT_BEGIN_NAMESPACE
 

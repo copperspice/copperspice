@@ -25,47 +25,47 @@
 
 #include <qglobal.h>
 
-#include "qpixmap.h"
-#include "qpixmapdata_p.h"
-#include "qimagepixmapcleanuphooks_p.h"
-#include "qbitmap.h"
-#include "qcolormap.h"
-#include "qimage.h"
-#include "qwidget.h"
-#include "qpainter.h"
-#include "qdatastream.h"
-#include "qbuffer.h"
-#include "qapplication.h"
+#include <qpixmap.h>
+#include <qpixmapdata_p.h>
+#include <qimagepixmapcleanuphooks_p.h>
+#include <qbitmap.h>
+#include <qcolormap.h>
+#include <qimage.h>
+#include <qwidget.h>
+#include <qpainter.h>
+#include <qdatastream.h>
+#include <qbuffer.h>
+#include <qapplication.h>
 #include <qapplication_p.h>
 #include <qgraphicssystem_p.h>
 #include <qwidget_p.h>
-#include "qevent.h"
-#include "qfile.h"
-#include "qfileinfo.h"
-#include "qpixmapcache.h"
-#include "qdatetime.h"
-#include "qimagereader.h"
-#include "qimagewriter.h"
-#include "qpaintengine.h"
-#include "qthread.h"
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qpixmapcache.h>
+#include <qdatetime.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qpaintengine.h>
+#include <qthread.h>
 
 #ifdef Q_OS_MAC
-# include "qt_mac_p.h"
-# include "qpixmap_mac_p.h"
+# include <qt_mac_p.h>
+# include <qpixmap_mac_p.h>
 #endif
 
 #ifdef Q_WS_QPA
-# include "qplatformintegration_qpa.h"
+# include <qplatformintegration_qpa.h>
 #endif
 
 #if defined(Q_WS_X11)
-# include "qx11info_x11.h"
+# include <qx11info_x11.h>
 # include <qt_x11_p.h>
 # include <qpixmap_x11_p.h>
 #endif
 
-#include "qpixmap_raster_p.h"
-#include "qhexstring_p.h"
+#include <qpixmap_raster_p.h>
+#include <qhexstring_p.h>
 
 QT_BEGIN_NAMESPACE
 

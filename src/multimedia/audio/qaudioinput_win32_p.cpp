@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qaudioinput_win32_p.h"
+#include <qaudioinput_win32_p.h>
 
 QT_BEGIN_NAMESPACE
 

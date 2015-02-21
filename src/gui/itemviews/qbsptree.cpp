@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qbsptree_p.h"
+#include <qbsptree_p.h>
 
 QT_BEGIN_NAMESPACE
 

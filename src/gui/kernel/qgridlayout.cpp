@@ -23,15 +23,15 @@
 *
 ***********************************************************************/
 
-#include "qgridlayout.h"
-#include "qapplication.h"
-#include "qwidget.h"
-#include "qlist.h"
-#include "qsizepolicy.h"
-#include "qvector.h"
-#include "qvarlengtharray.h"
-#include "qlayoutengine_p.h"
-#include "qlayout_p.h"
+#include <qgridlayout.h>
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qlist.h>
+#include <qsizepolicy.h>
+#include <qvector.h>
+#include <qvarlengtharray.h>
+#include <qlayoutengine_p.h>
+#include <qlayout_p.h>
 
 QT_BEGIN_NAMESPACE
 

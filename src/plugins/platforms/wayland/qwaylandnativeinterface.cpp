@@ -23,11 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qwaylandnativeinterface.h"
-
-#include "qwaylanddisplay.h"
-#include "qwaylandwindow.h"
-#include <QtGui/private/qapplication_p.h>
+#include <qwaylandnativeinterface.h>
+#include <qwaylanddisplay.h>
+#include <qwaylandwindow.h>
+#include <qapplication_p.h>
 
 void *QWaylandNativeInterface::nativeResourceForWidget(const QByteArray &resourceString, QWidget *widget)
 {

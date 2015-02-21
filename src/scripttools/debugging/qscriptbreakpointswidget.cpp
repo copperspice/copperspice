@@ -361,4 +361,28 @@ void QScriptBreakpointsWidget::keyPressEvent(QKeyEvent *e)
    }
 }
 
+void QScriptBreakpointsWidget::_q_newBreakpoint()
+{
+	Q_D(QScriptBreakpointsWidget);
+	d->_q_newBreakpoint();
+}
+
+void QScriptBreakpointsWidget::_q_deleteBreakpoint()
+{
+	Q_D(QScriptBreakpointsWidget);
+	d->_q_deleteBreakpoint();
+}
+
+void QScriptBreakpointsWidget::_q_onCurrentChanged(const QModelIndex & un_named_arg1)
+{
+	Q_D(QScriptBreakpointsWidget);
+	d->_q_onCurrentChanged();
+}
+
+void QScriptBreakpointsWidget::_q_onNewBreakpointRequest(const QString & un_named_arg1,int un_named_arg2)
+{
+	Q_D(QScriptBreakpointsWidget);
+	d->_q_onNewBreakpointRequest();
+}
+
 QT_END_NAMESPACE

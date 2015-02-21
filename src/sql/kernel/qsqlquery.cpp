@@ -23,18 +23,18 @@
 *
 ***********************************************************************/
 
-#include "qsqlquery.h"
+#include <qsqlquery.h>
 
 //#define QT_DEBUG_SQL
 
-#include "qatomic.h"
-#include "qsqlrecord.h"
-#include "qsqlresult.h"
-#include "qsqldriver.h"
-#include "qsqldatabase.h"
-#include "qsqlnulldriver_p.h"
-#include "qvector.h"
-#include "qmap.h"
+#include <qatomic.h>
+#include <qsqlrecord.h>
+#include <qsqlresult.h>
+#include <qsqldriver.h>
+#include <qsqldatabase.h>
+#include <qsqlnulldriver_p.h>
+#include <qvector.h>
+#include <qmap.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qnetworkproxy.h"
+#include <qnetworkproxy.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QUrl>

@@ -23,16 +23,16 @@
 *
 ***********************************************************************/
 
-#include "qclipboard.h"
+#include <qclipboard.h>
 
 #ifndef QT_NO_CLIPBOARD
 
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdatetime.h"
-#include "qbuffer.h"
-#include "qwidget.h"
-#include "qevent.h"
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdatetime.h>
+#include <qbuffer.h>
+#include <qwidget.h>
+#include <qevent.h>
 
 #include <qwsdisplay_qws.h>
 #include <qwsproperty_qws.h>
@@ -43,9 +43,7 @@ QT_BEGIN_NAMESPACE
 QT_USE_NAMESPACE
 
 
-/*****************************************************************************
-  Internal QClipboard functions for Qt for Embedded Linux
- *****************************************************************************/
+//  Internal QClipboard functions for Qt for Embedded Linux
 
 static const int TextClipboard = 424242;
 static bool init = false;
@@ -152,7 +150,6 @@ void QClipboard::clear(Mode mode)
 {
    setText(QString(), mode);
 }
-
 
 bool QClipboard::event(QEvent *e)
 {

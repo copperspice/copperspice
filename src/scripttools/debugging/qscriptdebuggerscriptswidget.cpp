@@ -134,4 +134,10 @@ void QScriptDebuggerScriptsWidget::setCurrentScript(qint64 id)
    d->view->setCurrentIndex(scriptsModel()->indexFromScriptId(id));
 }
 
+void QScriptDebuggerScriptsWidget::_q_onCurrentChanged(const QModelIndex & un_named_arg1)
+{
+  	Q_D(QScriptDebuggerScriptsWidget);
+  	d->_q_onCurrentChanged();
+}
+
 QT_END_NAMESPACE

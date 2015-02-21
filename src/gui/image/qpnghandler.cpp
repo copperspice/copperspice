@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "qpnghandler_p.h"
+#include <qpnghandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_PNG
 #include <qcoreapplication.h>
@@ -35,8 +35,8 @@
 #include <qvector.h>
 
 #ifdef QT_USE_BUNDLED_LIBPNG
-#include <../../3rdparty/libpng/png.h>
-#include <../../3rdparty/libpng/pngconf.h>
+#include <../../3rdparty/libpng/png.h>            // not sure if this can be changed to < >
+#include <../../3rdparty/libpng/pngconf.h>        // not sure if this can be changed to < > 
 #else
 #include <png.h>
 #include <pngconf.h>
