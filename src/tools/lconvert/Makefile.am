@@ -18,7 +18,7 @@ bin_lconvert_SOURCES = \
 
 bin_lconvert_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)   \
    -DPROEVALUATOR_CUMULATIVE -DPROEVALUATOR_INIT_PROPS  \
-   -Iinclude/QtCore  -I$(top_srcdir)/src/tools/shared   \
+   -Iinclude/QtCore  -Iinclude/QtXml -I$(top_srcdir)/src/tools/shared   \
    -Iprivateinclude/QtCore/private
 
 bin_lconvert_LDADD = lib/libCsCore1.la lib/libCsXml1.la

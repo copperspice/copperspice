@@ -13,7 +13,7 @@ bin_rcc_LDFLAGS= -lpthread
 $(bin_rcc_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
 
 bin_rcc_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)  -I$(top_srcdir)/src/tools/rcc  \
-    -Iincludes/QtCore -Iincludes/QtXml \
+    -Iinclude/QtCore -Iinclude/QtXml \
     -UQT_BUILD_CORE_LIB
 
 bin_rcc_LDADD = lib/libCsCore1.la lib/libCsXml1.la

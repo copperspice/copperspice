@@ -28,7 +28,7 @@ bin_lupdate_SOURCES = \
 #	src/tools/lupdate/qdeclarative.cpp
 
 bin_lupdate_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) \
-   -Iinclude/QtCore     \
+   -Iinclude/QtCore  -Iinclude/QtXml   \
    -Iprivateinclude/QtCore/private -I$(top_srcdir)/src/tools/shared
 
 bin_lupdate_LDADD = lib/libCsCore1.la lib/libCsXml1.la
