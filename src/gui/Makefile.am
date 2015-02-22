@@ -7,6 +7,7 @@ lib_libCsGui1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui -Iinclude/
     -I$(top_srcdir)/src/3rdparty/zlib         \
     -I$(top_srcdir)/src/3rdparty/libtiff/libtiff  \
     -I$(top_srcdir)/src/3rdparty/libmng  -I$(top_srcdir)/src/3rdparty/libjpeg  \
+    -I$(top_srcdir)/src/gui/kernel \
     -Isrc/gui/graphicsview  -Isrc/gui/itemviews  -Isrc/gui/dialogs \
     -Isrc/gui/image  -Isrc/gui/kernel    \
     -Isrc/gui/styles  -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets  -Isrc/gui/painting  \
