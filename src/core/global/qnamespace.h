@@ -46,6 +46,8 @@ class Q_CORE_EXPORT Qt
       static constexpr const char *value = "Qt";
    };
 
+   ~Qt();
+
  public:
    using cs_parent = CSGadget_Fake_Parent;
    using cs_class = Qt;

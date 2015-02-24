@@ -681,7 +681,7 @@ std::tuple<Ts...> funcRemove(std::tuple<Ts..., Last> tupleValue, Ts...Vs )
 class TeaCupAbstract
 {
  public:
-   virtual ~TeaCupAbstract() {};
+   virtual ~TeaCupAbstract() {}
    //    virtual QList<QVariant> toVariantList() const = 0;
 };
 
@@ -809,7 +809,7 @@ std::tuple<Ts...> TeaCup_Data<Ts...>::getData() const
 class BentoAbstract
 {
  public:
-   virtual ~BentoAbstract() {};
+   virtual ~BentoAbstract() {}
 
    virtual bool operator ==(const BentoAbstract &right) const = 0;
    bool operator !=(const BentoAbstract &right) const;
@@ -889,7 +889,7 @@ Bento<T>::Bento(T lambda)
 }
 
 template<class T>
-bool Bento<T>::operator ==(const BentoAbstract &right) const
+bool Bento<T>::operator ==(const BentoAbstract &) const
 {
    // can not compare two lambdas
    return false;

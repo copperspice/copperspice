@@ -260,7 +260,7 @@ inline int qRegisterMetaTypeStreamOperators()
    SavePtr sptr = qMetaTypeSaveHelper<T>;
    LoadPtr lptr = qMetaTypeLoadHelper<T>;
 
-   register int id = qMetaTypeId<T>();
+   int id = qMetaTypeId<T>();
    QMetaType::registerStreamOperators(id, reinterpret_cast<QMetaType::SaveOperator>(sptr),
                                       reinterpret_cast<QMetaType::LoadOperator>(lptr));
 

@@ -230,7 +230,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
          try {
             senderLock.lock();
 
-         } catch (std::exception &e) {
+         } catch (std::exception &) {
 
             if (receiverInSameThread) {
                QObject::resetCurrentSender(receiver, &currentSender, previousSender);
@@ -784,11 +784,11 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
       QList<QString> msgList;
 
       // find registerd methods which match the name
-      for (int index = 0; index < metaObject->methodCount(); ++index) {
+      for (int k = 0; k < metaObject->methodCount(); ++k) {
 
          int numOfChars = sig.indexOf('(') + 1;
 
-         QMetaMethod testMethod   = metaObject->method(index);
+         QMetaMethod testMethod   = metaObject->method(k);
          QByteArray testSignature = testMethod.methodSignature();
 
          if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
@@ -837,11 +837,11 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
       QList<QString> msgList;
 
       // find registerd methods which match the name
-      for (int index = 0; index < metaObject->methodCount(); ++index) {
+      for (int k = 0; k < metaObject->methodCount(); ++index) {
 
          int numOfChars = sig.indexOf('(') + 1;
 
-         QMetaMethod testMethod   = metaObject->method(index);
+         QMetaMethod testMethod   = metaObject->method(k);
          QByteArray testSignature = testMethod.methodSignature();
 
          if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
