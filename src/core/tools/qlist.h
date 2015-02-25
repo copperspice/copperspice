@@ -138,6 +138,7 @@ class QList
       qSwap(d, other.d);
    }
 
+
    QList(std::initializer_list<T> args) : d( QListData::sharedNull() ) {
       qCopy(args.begin(), args.end(), std::back_inserter(*this));
    }
@@ -146,6 +147,14 @@ class QList
    inline bool operator!=(const QList<T> &l) const {
       return !(*this == l);
    }
+
+   typedef int size_type;
+   typedef T value_type;
+   typedef value_type *pointer;
+   typedef const value_type *const_pointer;
+   typedef value_type &reference;
+   typedef const value_type &const_reference;
+   typedef qptrdiff difference_type;
 
    inline int size() const {
       return p.size();
@@ -204,7 +213,7 @@ class QList
    void move(int from, int to);
    void swap(int i, int j);
    int indexOf(const T &t, int from = 0) const;
-   int lastIndexOf(const T &t, int from = -1) const;
+   difference_type lastIndexOf(const T &t, int from = -1) const;
    QBool contains(const T &t) const;
    int count(const T &t) const;
 
@@ -385,7 +394,7 @@ class QList
       inline const_iterator operator-(int j) const {
          return const_iterator(i - j);
       }
-      inline int operator-(const_iterator j) const {
+      inline difference_type operator-(const_iterator j) const {
          return i - j.i;
       }
    };
@@ -494,14 +503,6 @@ class QList
    inline bool empty() const {
       return isEmpty();
    }
-   typedef int size_type;
-   typedef T value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef value_type &reference;
-   typedef const value_type &const_reference;
-   typedef qptrdiff difference_type;
-
    // comfort
    QList<T> &operator+=(const QList<T> &l);
    inline QList<T> operator+(const QList<T> &l) const {
@@ -1119,7 +1120,7 @@ Q_OUTOFLINE_TEMPLATE int QList<T>::removeAll(const T &_t)
       }
    }
 
-   int removedCount = e - n;
+   difference_type removedCount = e - n;
    d->end -= removedCount;
    return removedCount;
 }
@@ -1194,7 +1195,7 @@ Q_OUTOFLINE_TEMPLATE int QList<T>::indexOf(const T &t, int from) const
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE int QList<T>::lastIndexOf(const T &t, int from) const
+Q_OUTOFLINE_TEMPLATE typename QList<T>::difference_type QList<T>::lastIndexOf(const T &t, int from) const
 {
    if (from < 0) {
       from += p.size();
