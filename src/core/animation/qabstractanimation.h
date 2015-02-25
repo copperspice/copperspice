@@ -153,8 +153,8 @@ class Q_CORE_EXPORT QAnimationDriver : public QObject
    bool isRunning() const;
 
  protected:
-   virtual void started() {};
-   virtual void stopped() {};
+   virtual void started() {}
+   virtual void stopped() {}
 
    QAnimationDriver(QAnimationDriverPrivate &dd, QObject *parent = 0);
    QScopedPointer<QAnimationDriverPrivate> d_ptr;

@@ -71,7 +71,7 @@
       static const char *cs_className() \
       { \
          return #classNameX; \
-      }; \
+      } \
       static const QMetaObject_T<classNameX> & staticMetaObject() \
       { \
          QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
