@@ -162,7 +162,7 @@ inline CSReturnArgument<void>::CSReturnArgument()
 {
 }
 
-inline void CSReturnArgument<void>::setData(CSVoidReturn data)
+inline void CSReturnArgument<void>::setData(CSVoidReturn)
 {
 }
 
@@ -493,7 +493,7 @@ class Index_Sequence_For
 // ** function uses Index_Sequence Class to unpack a tuple into arguments to a function
 template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes, size_t ...Ks>
 FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(FunctionArgTypes...),
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...> dummy)
+      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
 {
    // BROOM (unpack, recheck forward)
    // return functionPtr(std::forward<typename std::tuple_element<Ks, std::tuple<FunctionArgTypes...> >::type > (std::get<Ks>(data))...);
