@@ -4265,17 +4265,117 @@ QImage QImage::createMaskFromColor(QRgb color, Qt::MaskMode mode) const
 }
 
 
-/*
-  This code is contributed by Philipp Lang,
-  GeneriCom Software Germany (www.generi.com)
-  under the terms of the QPL, Version 1.0
-*/
-
 /*!
     \fn QImage QImage::mirror(bool horizontal, bool vertical) const
 
     Use mirrored() instead.
 */
+
+template<class T> inline void do_mirror_data(QImageData *dst, QImageData *src,
+                                             int dstX0, int dstY0,
+                                             int dstXIncr, int dstYIncr,
+                                             int w, int h)
+{
+    if (dst == src) {
+        // When mirroring in-place, stop in the middle for one of the directions, since we
+        // are swapping the bytes instead of merely copying.
+        const int srcXEnd = dstX0 ? w / 2 : w;
+        const int srcYEnd = !dstX0 && dstY0 ? h / 2 : h;
+        for (int srcY = 0, dstY = dstY0; srcY < srcYEnd; ++srcY, dstY += dstYIncr) {
+            T *srcPtr = (T *) (src->data + srcY * src->bytes_per_line);
+            T *dstPtr = (T *) (dst->data + dstY * dst->bytes_per_line);
+            for (int srcX = 0, dstX = dstX0; srcX < srcXEnd; ++srcX, dstX += dstXIncr)
+                std::swap(srcPtr[srcX], dstPtr[dstX]);
+        }
+    } else {
+        for (int srcY = 0, dstY = dstY0; srcY < h; ++srcY, dstY += dstYIncr) {
+            T *srcPtr = (T *) (src->data + srcY * src->bytes_per_line);
+            T *dstPtr = (T *) (dst->data + dstY * dst->bytes_per_line);
+            for (int srcX = 0, dstX = dstX0; srcX < w; ++srcX, dstX += dstXIncr)
+                dstPtr[dstX] = srcPtr[srcX];
+        }
+    }
+}
+
+inline void do_mirror(QImageData *dst, QImageData *src, bool horizontal, bool vertical)
+{
+    Q_ASSERT(src->width == dst->width && src->height == dst->height && src->depth == dst->depth);
+    int w = src->width;
+    int h = src->height;
+    int depth = src->depth;
+
+    if (src->depth == 1) {
+        w = (w + 7) / 8; // byte aligned width
+        depth = 8;
+    }
+
+    int dstX0 = 0, dstXIncr = 1;
+    int dstY0 = 0, dstYIncr = 1;
+    if (horizontal) {
+        // 0 -> w-1, 1 -> w-2, 2 -> w-3, ...
+        dstX0 = w - 1;
+        dstXIncr = -1;
+    }
+    if (vertical) {
+        // 0 -> h-1, 1 -> h-2, 2 -> h-3, ...
+        dstY0 = h - 1;
+        dstYIncr = -1;
+    }
+
+    switch (depth) {
+    case 32:
+        do_mirror_data<quint32>(dst, src, dstX0, dstY0, dstXIncr, dstYIncr, w, h);
+        break;
+    case 24:
+        do_mirror_data<quint24>(dst, src, dstX0, dstY0, dstXIncr, dstYIncr, w, h);
+        break;
+    case 16:
+        do_mirror_data<quint16>(dst, src, dstX0, dstY0, dstXIncr, dstYIncr, w, h);
+        break;
+    case 8:
+        do_mirror_data<quint8>(dst, src, dstX0, dstY0, dstXIncr, dstYIncr, w, h);
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+
+    // The bytes are now all in the correct place. In addition, the bits in the individual
+    // bytes have to be flipped too when horizontally mirroring a 1 bit-per-pixel image.
+    if (horizontal && dst->depth == 1) {
+        Q_ASSERT(dst->format == QImage::Format_Mono || dst->format == QImage::Format_MonoLSB);
+        const int shift = 8 - (dst->width % 8);
+        const uchar *bitflip = qt_get_bitflip_array();
+        for (int y = 0; y < h; ++y) {
+            uchar *begin = dst->data + y * dst->bytes_per_line;
+            uchar *end = begin + dst->bytes_per_line;
+            for (uchar *p = begin; p < end; ++p) {
+                *p = bitflip[*p];
+                // When the data is non-byte aligned, an extra bit shift (of the number of
+                // unused bits at the end) is needed for the entire scanline.
+                if (shift != 8 && p != begin) {
+                    if (dst->format == QImage::Format_Mono) {
+                        for (int i = 0; i < shift; ++i) {
+                            p[-1] <<= 1;
+                            p[-1] |= (*p & (128 >> i)) >> (7 - i);
+                        }
+                    } else {
+                        for (int i = 0; i < shift; ++i) {
+                            p[-1] >>= 1;
+                            p[-1] |= (*p & (1 << i)) << (7 - i);
+                        }
+                    }
+                }
+            }
+            if (shift != 8) {
+                if (dst->format == QImage::Format_Mono)
+                    end[-1] <<= shift;
+                else
+                    end[-1] >>= shift;
+            }
+        }
+    }
+}
 
 /*!
     Returns a mirror of the image, mirrored in the horizontal and/or
@@ -4288,114 +4388,26 @@ QImage QImage::createMaskFromColor(QRgb color, Qt::MaskMode mode) const
 */
 QImage QImage::mirrored(bool horizontal, bool vertical) const
 {
-   if (!d) {
-      return QImage();
-   }
+    if (!d)
+        return QImage();
 
-   if ((d->width <= 1 && d->height <= 1) || (!horizontal && !vertical)) {
-      return *this;
-   }
+    if ((d->width <= 1 && d->height <= 1) || (!horizontal && !vertical))
+        return *this;
 
-   int w = d->width;
-   int h = d->height;
-   // Create result image, copy colormap
-   QImage result(d->width, d->height, d->format);
-   QIMAGE_SANITYCHECK_MEMORY(result);
+    // Create result image, copy colormap
+    QImage result(d->width, d->height, d->format);
+    QIMAGE_SANITYCHECK_MEMORY(result);
 
-   // check if we ran out of of memory..
-   if (!result.d) {
-      return QImage();
-   }
+    // check if we ran out of of memory..
+    if (!result.d)
+        return QImage();
 
-   result.d->colortable = d->colortable;
-   result.d->has_alpha_clut = d->has_alpha_clut;
+    result.d->colortable = d->colortable;
+    result.d->has_alpha_clut = d->has_alpha_clut;
+    result.d->dpmx = d->dpmx;
+    result.d->dpmy = d->dpmy;
 
-   if (depth() == 1) {
-      w = (w + 7) / 8;
-   }
-   int dxi = horizontal ? -1 : 1;
-   int dxs = horizontal ? w - 1 : 0;
-   int dyi = vertical ? -1 : 1;
-   int dy = vertical ? h - 1 : 0;
-
-   // 1 bit, 8 bit
-   if (d->depth == 1 || d->depth == 8) {
-      for (int sy = 0; sy < h; sy++, dy += dyi) {
-         quint8 *ssl = (quint8 *)(d->data + sy * d->bytes_per_line);
-         quint8 *dsl = (quint8 *)(result.d->data + dy * result.d->bytes_per_line);
-         int dx = dxs;
-         for (int sx = 0; sx < w; sx++, dx += dxi) {
-            dsl[dx] = ssl[sx];
-         }
-      }
-   }
-   // 16 bit
-   else if (d->depth == 16) {
-      for (int sy = 0; sy < h; sy++, dy += dyi) {
-         quint16 *ssl = (quint16 *)(d->data + sy * d->bytes_per_line);
-         quint16 *dsl = (quint16 *)(result.d->data + dy * result.d->bytes_per_line);
-         int dx = dxs;
-         for (int sx = 0; sx < w; sx++, dx += dxi) {
-            dsl[dx] = ssl[sx];
-         }
-      }
-   }
-   // 24 bit
-   else if (d->depth == 24) {
-      for (int sy = 0; sy < h; sy++, dy += dyi) {
-         quint24 *ssl = (quint24 *)(d->data + sy * d->bytes_per_line);
-         quint24 *dsl = (quint24 *)(result.d->data + dy * result.d->bytes_per_line);
-         int dx = dxs;
-         for (int sx = 0; sx < w; sx++, dx += dxi) {
-            dsl[dx] = ssl[sx];
-         }
-      }
-   }
-   // 32 bit
-   else if (d->depth == 32) {
-      for (int sy = 0; sy < h; sy++, dy += dyi) {
-         quint32 *ssl = (quint32 *)(d->data + sy * d->bytes_per_line);
-         quint32 *dsl = (quint32 *)(result.d->data + dy * result.d->bytes_per_line);
-         int dx = dxs;
-         for (int sx = 0; sx < w; sx++, dx += dxi) {
-            dsl[dx] = ssl[sx];
-         }
-      }
-   }
-
-   // special handling of 1 bit images for horizontal mirroring
-   if (horizontal && d->depth == 1) {
-      int shift = width() % 8;
-      for (int y = h - 1; y >= 0; y--) {
-         quint8 *a0 = (quint8 *)(result.d->data + y * d->bytes_per_line);
-         // Swap bytes
-         quint8 *a = a0 + dxs;
-         while (a >= a0) {
-            *a = bitflip[*a];
-            a--;
-         }
-         // Shift bits if unaligned
-         if (shift != 0) {
-            a = a0 + dxs;
-            quint8 c = 0;
-            if (format() == Format_MonoLSB) {
-               while (a >= a0) {
-                  quint8 nc = *a << shift;
-                  *a = (*a >> (8 - shift)) | c;
-                  --a;
-                  c = nc;
-               }
-            } else {
-               while (a >= a0) {
-                  quint8 nc = *a >> shift;
-                  *a = (*a << (8 - shift)) | c;
-                  --a;
-                  c = nc;
-               }
-            }
-         }
-      }
-   }
+    do_mirror(result.d, d, horizontal, vertical);
 
    return result;
 }
