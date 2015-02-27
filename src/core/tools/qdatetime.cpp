@@ -521,49 +521,30 @@ int QDate::weekNumber(int *yearNumber) const
    }
 
    int year = QDate::year();
-   int yday = dayOfYear() - 1;
+   int yday = dayOfYear();
    int wday = dayOfWeek();
-   if (wday == 7) {
-      wday = 0;
-   }
-   int w;
 
-   for (;;) {
-      int len;
-      int bot;
-      int top;
+   int week = (yday - wday + 10) / 7;
 
-      len = isLeapYear(year) ? 366 : 365;
-      /*
-      ** What yday (-3 ... 3) does
-      ** the ISO year begin on?
-      */
-      bot = ((yday + 11 - wday) % 7) - 3;
-      /*
-      ** What yday does the NEXT
-      ** ISO year begin on?
-      */
-      top = bot - (len % 7);
-      if (top < -3) {
-         top += 7;
-      }
-      top += len;
-      if (yday >= top) {
-         ++year;
-         w = 1;
-         break;
-      }
-      if (yday >= bot) {
-         w = 1 + ((yday - bot) / 7);
-         break;
-      }
+   if (week == 0) {
+      // last week of previous year
       --year;
-      yday += isLeapYear(year) ? 366 : 365;
+      week = (yday + 365 + (QDate::isLeapYear(year) ? 1 : 0) - wday + 10) / 7;
+      Q_ASSERT(week == 52 || week == 53);
+   } else if (week == 53) {
+      // maybe first week of next year
+      int w = (yday - 365 - (QDate::isLeapYear(year + 1) ? 1 : 0) - wday + 10) / 7;
+      if (w > 0) {
+         ++year;
+         week = w;
+      }
+      Q_ASSERT(week == 53 || week == 1);
    }
+
    if (yearNumber != 0) {
       *yearNumber = year;
    }
-   return w;
+  return week;
 }
 
 #ifndef QT_NO_TEXTDATE
