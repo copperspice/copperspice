@@ -1616,7 +1616,7 @@ void QWidgetPrivate::setParent_sys(QWidget *parent, Qt::WindowFlags f)
 
    // Maintain the glWidgets list on parent change: add "our" gl widgets
    // to the list on the new parent and grandparents.
-   if (glWidgets.isEmpty() == false) {
+   if (glWidgets.isEmpty() == false && ! q->isWindow()) {
       QWidget *current = q->parentWidget();
       while (current) {
          current->d_func()->glWidgets += glWidgets;
