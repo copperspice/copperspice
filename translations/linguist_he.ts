@@ -218,7 +218,7 @@ Will assume a single universal form.</source>
     </message>
     <message>
         <source>Find Next</source>
-        <translation>מצא את הבא</translation>
+        <translation>הלאה</translation>
     </message>
     <message>
         <source>Click here to close this window.</source>
@@ -1002,7 +1002,7 @@ Options:
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation>&amp;פתיחה...</translation>
+        <translation>&amp;פתח...</translation>
     </message>
     <message>
         <source>Open a Qt translation source file (TS file) for editing</source>
@@ -1034,7 +1034,7 @@ Options:
     </message>
     <message>
         <source>Save &amp;As...</source>
-        <translation>שמירה &amp;בתור...</translation>
+        <translation>שמור &amp;בשם...</translation>
     </message>
     <message>
         <source>Save As...</source>
@@ -1054,7 +1054,7 @@ Options:
     </message>
     <message>
         <source>&amp;Print...</source>
-        <translation>&amp;הדפסה...</translation>
+        <translation>&amp;הדפס...</translation>
     </message>
     <message>
         <source>Print a list of all the translation units in the current translation source file.</source>
@@ -1138,7 +1138,7 @@ Options:
     </message>
     <message>
         <source>&amp;Find...</source>
-        <translation>&amp;חיפוש...</translation>
+        <translation>&amp;חפש...</translation>
     </message>
     <message>
         <source>Search for some text in the translation source file.</source>
@@ -1314,7 +1314,7 @@ Options:
     </message>
     <message>
         <source>&amp;Open Phrase Book...</source>
-        <translation>&amp;פתיחת פנקס ביטויים...</translation>
+        <translation>&amp;פתח פנקס ביטויים...</translation>
     </message>
     <message>
         <source>Open a phrase book to assist translation.</source>
@@ -1386,7 +1386,7 @@ Options:
     </message>
     <message>
         <source>&amp;Search And Translate...</source>
-        <translation>&amp;חיפוש ותרגום...</translation>
+        <translation>&amp;חפש ותרגם...</translation>
     </message>
     <message>
         <source>Replace the translation on all entries that matches the search source text.</source>
@@ -1402,7 +1402,7 @@ Options:
     </message>
     <message>
         <source>Release As...</source>
-        <translation>שחרור בתור...</translation>
+        <translation>שחרר בשם...</translation>
     </message>
     <message>
         <source>Create a Qt message file suitable for released applications from the current message file. The filename will automatically be determined from the name of the TS file.</source>
@@ -1454,7 +1454,7 @@ Options:
     </message>
     <message>
         <source>Open Read-O&amp;nly...</source>
-        <translation>פתיחת קריאה &amp;בלבד...</translation>
+        <translation>פתח לקריאה &amp;בלבד...</translation>
     </message>
     <message>
         <source>&amp;Save All</source>
@@ -1798,7 +1798,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Search And &amp;Translate...</source>
-        <translation>חיפוש ו&amp;תרגום...</translation>
+        <translation>חפש ו&amp;תרגם...</translation>
     </message>
     <message>
         <source>Cannot read from phrase book &apos;%1&apos;.</source>
