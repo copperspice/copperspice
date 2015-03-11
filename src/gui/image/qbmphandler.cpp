@@ -489,20 +489,20 @@ static bool read_dib_body(QDataStream &s, const BMP_INFOHDR &bi, int offset, int
                         p = data + (h - y - 1) * bpl;
                         break;
                      case 2:                        // delta (jump)
-                        // Protection
-                        if ((uint)x >= (uint)w) {
-                           x = w - 1;
-                        }
-                        if ((uint)y >= (uint)h) {
-                           y = h - 1;
-                        }
-
                         {
                            quint8 tmp;
                            d->getChar((char *)&tmp);
                            x += tmp;
                            d->getChar((char *)&tmp);
                            y += tmp;
+                        }
+
+                        // Protection
+                        if ((uint)x >= (uint)w) {
+                           x = w - 1;
+                        }
+                        if ((uint)y >= (uint)h) {
+                           y = h - 1;
                         }
                         p = data + (h - y - 1) * bpl + x;
                         break;
