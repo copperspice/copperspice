@@ -178,6 +178,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
           } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 3) {
              winver = QSysInfo::WV_WINDOWS8_1;
 
+          } else if (osver.dwMajorVersion == 10 && osver.dwMinorVersion == 0) {
+             winver = QSysInfo::WV_WINDOWS10;
+
           } else {
              qWarning("Qt: Untested Windows version %d.%d detected!", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
                    winver = QSysInfo::WV_NT_based;
