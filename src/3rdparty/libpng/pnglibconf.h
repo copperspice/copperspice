@@ -1,8 +1,10 @@
+/* libpng 1.6.17 STANDARD API DEFINITION */
+
 /* pnglibconf.h - library build configuration */
 
-/* libpng version 1.6.12 - June 12, 2014 */
+/* Libpng version 1.6.17 - March 26, 2015 */
 
-/* Copyright (c) 1998-2012 Glenn Randers-Pehrson */
+/* Copyright (c) 1998-2014 Glenn Randers-Pehrson */
 
 /* This code is released under the libpng license. */
 /* For conditions of distribution and use, see the disclaimer */
@@ -127,6 +129,7 @@
 #define PNG_WRITE_BGR_SUPPORTED
 #define PNG_WRITE_CHECK_FOR_INVALID_INDEX_SUPPORTED
 #define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED
+#define PNG_WRITE_CUSTOMIZE_COMPRESSION_SUPPORTED
 #define PNG_WRITE_CUSTOMIZE_ZTXT_COMPRESSION_SUPPORTED
 #define PNG_WRITE_FILLER_SUPPORTED
 #define PNG_WRITE_FILTER_SUPPORTED
@@ -196,9 +199,13 @@
 #define PNG_QUANTIZE_RED_BITS 5
 #define PNG_TEXT_Z_DEFAULT_COMPRESSION (-1)
 #define PNG_TEXT_Z_DEFAULT_STRATEGY 0
+#define PNG_USER_CHUNK_CACHE_MAX 1000
+#define PNG_USER_CHUNK_MALLOC_MAX 8000000
+#define PNG_USER_HEIGHT_MAX 1000000
+#define PNG_USER_WIDTH_MAX 1000000
 #define PNG_WEIGHT_SHIFT 8
 #define PNG_ZBUF_SIZE 8192
-#define PNG_ZLIB_VERNUM 0x1280
+#define PNG_ZLIB_VERNUM 0 /* unknown */
 #define PNG_Z_DEFAULT_COMPRESSION (-1)
 #define PNG_Z_DEFAULT_NOFILTER_STRATEGY 0
 #define PNG_Z_DEFAULT_STRATEGY 1
