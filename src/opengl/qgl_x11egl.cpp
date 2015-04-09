@@ -488,7 +488,7 @@ QGLTexture *QGLContextPrivate::bindTextureFromNativePixmap(QPixmap *pixmap, cons
 
          pixmapData->gl_surface = (void *)QEgl::createSurface(pixmap, config);
          if (pixmapData->gl_surface == (void *)EGL_NO_SURFACE) {
-            return false;
+            return 0;
          }
       }
 
