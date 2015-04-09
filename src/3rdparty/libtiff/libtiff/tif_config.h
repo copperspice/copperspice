@@ -2,17 +2,24 @@
   Configuration defines for Qt.
 */
 
+#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <qglobal.h>
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Support CCITT Group 3 & 4 algorithms */
-#define CCITT_SUPPORT 1
+/* #undef CCITT_SUPPORT */
 
 /* Pick up YCbCr subsampling info from the JPEG data stream to support files
    lacking the tag (default enabled). */
-#define CHECK_JPEG_YCBCR_SUBSAMPLING 1
+/* #undef CHECK_JPEG_YCBCR_SUBSAMPLING */
+
+/* enable partial strip reading for large strips (experimental) */
+/* #undef CHUNKY_STRIP_READ_SUPPORT */
 
 /* Support C++ stream API (requires C++ compiler) */
 /* #undef CXX_SUPPORT */
@@ -20,10 +27,10 @@
 /* Treat extra sample as alpha (default enabled). The RGBA interface will
    treat a fourth sample with no EXTRASAMPLE_ value as being ASSOCALPHA. Many
    packages produce RGBA files but don't mark the alpha properly. */
-#define DEFAULT_EXTRASAMPLE_AS_ALPHA 1
+/* #undef DEFAULT_EXTRASAMPLE_AS_ALPHA */
 
-/* Use the Apple OpenGL framework. */
-/* #undef HAVE_APPLE_OPENGL_FRAMEWORK */
+/* enable deferred strip/tile offset/size loading (experimental) */
+/* #undef DEFER_STRILE_LOAD */
 
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
@@ -40,9 +47,21 @@
 /* Define to 1 if you have the `getopt' function. */
 /* #undef HAVE_GETOPT */
 
+/* Define to 1 if you have the <GLUT/glut.h> header file. */
+/* #undef HAVE_GLUT_GLUT_H */
+
+/* Define to 1 if you have the <GL/glut.h> header file. */
+/* #undef HAVE_GL_GLUT_H */
+
+/* Define to 1 if you have the <GL/glu.h> header file. */
+/* #undef HAVE_GL_GLU_H */
+
+/* Define to 1 if you have the <GL/gl.h> header file. */
+/* #undef HAVE_GL_GL_H */
+
 /* Define as 0 or 1 according to the floating point format suported by the
    machine */
-#define HAVE_IEEEFP 1
+/* #undef HAVE_IEEEFP */
 
 
 /* Define to 1 if you have the <inttypes.h> header file. */
@@ -83,6 +102,12 @@
 
 /* Define to 1 if you have the `mmap' function. */
 /* #undef HAVE_MMAP */
+
+/* Define to 1 if you have the <OpenGL/glu.h> header file. */
+/* #undef HAVE_OPENGL_GLU_H */
+
+/* Define to 1 if you have the <OpenGL/gl.h> header file. */
+/* #undef HAVE_OPENGL_GL_H */
 
 /* Define to 1 if you have the `pow' function. */
 /* #undef HAVE_POW */
@@ -129,6 +154,9 @@
 /* Define to 1 if you have the `strtoul' function. */
 /* #undef HAVE_STRTOUL */
 
+/* Define to 1 if you have the `strtoull' function. */
+/* #undef HAVE_STRTOULL */
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 /* #undef HAVE_SYS_STAT_H */
 
@@ -143,41 +171,49 @@
 #define HAVE_UNISTD_H 1
 #endif
 
+/* Use nonstandard varargs form for the GLU tesselator callback */
+/* #undef HAVE_VARARGS_GLU_TESSCB */
+
 /* Define to 1 if you have the <windows.h> header file. */
 /* #undef HAVE_WINDOWS_H */
 
 /* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
    (Intel) */
-#if (Q_BYTE_ORDER == Q_BIG_ENDIAN)
-#define HOST_BIGENDIAN 1
-#else
-#define HOST_BIGENDIAN 0
-#endif
+/* #undef HOST_BIGENDIAN */
 
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
-#define HOST_FILLORDER FILLORDER_LSB2MSB
+/* #undef HOST_FILLORDER FILLORDER_LSB2MSB */
 
 /* Support ISO JBIG compression (requires JBIG-KIT library) */
 /* #undef JBIG_SUPPORT */
 
+/* 8/12 bit libjpeg dual mode enabled */
+/* #undef JPEG_DUAL_MODE_8_12 */
+
 /* Support JPEG compression (requires IJG JPEG library) */
 /* #undef JPEG_SUPPORT */
 
+/* 12bit libjpeg primary include file with path */
+/* #undef LIBJPEG_12_PATH */
+
 /* Support LogLuv high dynamic range encoding */
-#define LOGLUV_SUPPORT 1
+/* #undef LOGLUV_SUPPORT */
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 /* #undef LT_OBJDIR */
 
+/* Support LZMA2 compression */
+/* #undef LZMA_SUPPORT */
+
 /* Support LZW algorithm */
-#define LZW_SUPPORT 1
+/* #undef LZW_SUPPORT */
 
 /* Support Microsoft Document Imaging format */
-#define MDI_SUPPORT 1
+/* #undef MDI_SUPPORT */
 
 /* Support NeXT 2-bit RLE algorithm */
-#define NEXT_SUPPORT 1
+/* #undef NEXT_SUPPORT */
 
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 /* #undef NO_MINUS_C_MINUS_O */
@@ -204,13 +240,13 @@
 /* #undef PACKAGE_URL */
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.9.2"
+#define PACKAGE_VERSION "4.0.3"
 
 /* Support Macintosh PackBits algorithm */
-#define PACKBITS_SUPPORT 1
+/* #undef PACKBITS_SUPPORT */
 
 /* Support Pixar log-format algorithm (requires Zlib) */
-#define PIXARLOG_SUPPORT 1
+/* #undef PIXARLOG_SUPPORT */
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
@@ -232,45 +268,98 @@
 /* The size of `signed long long', as computed by sizeof. */
 /* #undef SIZEOF_SIGNED_LONG_LONG */
 
+/* The size of `signed short', as computed by sizeof. */
+/* #undef SIZEOF_SIGNED_SHORT */
+
+/* The size of `unsigned char *', as computed by sizeof. */
+/* #undef SIZEOF_UNSIGNED_CHAR_P */
+
+/* The size of `unsigned int', as computed by sizeof. */
+/* #undef SIZEOF_UNSIGNED_INT */
+
 /* The size of `unsigned long', as computed by sizeof. */
 /* #undef SIZEOF_UNSIGNED_LONG */
 
 /* The size of `unsigned long long', as computed by sizeof. */
 /* #undef SIZEOF_UNSIGNED_LONG_LONG */
 
+/* The size of `unsigned short', as computed by sizeof. */
+/* #undef SIZEOF_UNSIGNED_SHORT */
+
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS */
 
 /* Support strip chopping (whether or not to convert single-strip uncompressed
    images to mutiple strips of specified size to reduce memory usage) */
-#define STRIPCHOP_DEFAULT TIFF_STRIPCHOP
+/* #undef STRIPCHOP_DEFAULT TIFF_STRIPCHOP */
 
 /* Default size of the strip in bytes (when strip chopping enabled) */
 /* #undef STRIP_SIZE_DEFAULT */
 
 /* Enable SubIFD tag (330) support */
-#define SUBIFD_SUPPORT 1
+/* #undef SUBIFD_SUPPORT */
 
 /* Support ThunderScan 4-bit RLE algorithm */
-#define THUNDER_SUPPORT 1
+/* #undef THUNDER_SUPPORT */
+
+/* Signed 16-bit type */
+/* #undef TIFF_INT16_T qint16 */
+
+/* Signed 32-bit type formatter */
+#define TIFF_INT32_FORMAT "%d"
+
+/* Signed 32-bit type */
+/* #undef TIFF_INT32_T qint32 */
 
 /* Signed 64-bit type formatter */
-/* #undef TIFF_INT64_FORMAT */
+#define TIFF_INT64_FORMAT "%lld"
 
 /* Signed 64-bit type */
-#define TIFF_INT64_T qint64
+/* #undef TIFF_INT64_T qint64 */
+
+/* Signed 8-bit type */
+/* #undef TIFF_INT8_T qint8 */
+
+/* Pointer difference type formatter */
+#define TIFF_PTRDIFF_FORMAT "%ld"
+
+/* Pointer difference type */
+#define TIFF_PTRDIFF_T ptrdiff_t
+
+/* Signed size type formatter */
+#define TIFF_SSIZE_FORMAT "%zd"
+
+/* Signed size type */
+/* #undef TIFF_SSIZE_T qint64 */
+
+/* Unsigned 16-bit type */
+/* #undef TIFF_UINT16_T quint16 */
+
+/* Unsigned 32-bit type formatter */
+#define TIFF_UINT32_FORMAT "%u"
+
+/* Unsigned 32-bit type */
+/* #undef TIFF_UINT32_T quint32 */
 
 /* Unsigned 64-bit type formatter */
-/* #undef TIFF_UINT64_FORMAT */
+#define TIFF_UINT64_FORMAT "%llu"
 
 /* Unsigned 64-bit type */
-#define TIFF_UINT64_T quint64
+/* #undef TIFF_UINT64_T quint64 */
+
+/* Unsigned 8-bit type */
+/* #undef TIFF_UINT8_T quint8 */
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 /* #undef TIME_WITH_SYS_TIME */
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
+
+/* define to use win32 IO system */
+#ifdef Q_OS_WIN
+#define USE_WIN32_FILEIO 1
+#endif
 
 /* Version number of package */
 /* #undef VERSION */
@@ -285,7 +374,14 @@
 /* #undef X_DISPLAY_MISSING */
 
 /* Support Deflate compression */
-#define ZIP_SUPPORT 1
+/* #undef ZIP_SUPPORT */
+
+/* Enable large inode numbers on Mac OS X 10.5.  */
+#if defined(Q_OS_MAC)
+#ifndef _DARWIN_USE_64_BIT_INODE
+# define _DARWIN_USE_64_BIT_INODE 1
+#endif
+#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
@@ -295,6 +391,16 @@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
+
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#if defined(Q_CC_MSVC)
+#ifndef __cplusplus
+# ifndef inline
+#  define inline __inline
+# endif
+#endif
+#endif
 
 /* Define to `long int' if <sys/types.h> does not define. */
 /* #undef off_t */

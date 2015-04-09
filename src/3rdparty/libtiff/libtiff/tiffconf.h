@@ -9,6 +9,36 @@
 
 #include <qglobal.h>
 
+/* Signed 16-bit type */
+#define TIFF_INT16_T qint16
+
+/* Signed 32-bit type */
+#define TIFF_INT32_T qint32
+
+/* Signed 64-bit type */
+#define TIFF_INT64_T qint64
+
+/* Signed 8-bit type */
+#define TIFF_INT8_T qint8
+
+/* Unsigned 16-bit type */
+#define TIFF_UINT16_T quint16
+
+/* Unsigned 32-bit type */
+#define TIFF_UINT32_T quint32
+
+/* Unsigned 64-bit type */
+#define TIFF_UINT64_T quint64
+
+/* Unsigned 8-bit type */
+#define TIFF_UINT8_T quint8
+
+/* Signed size type */
+#define TIFF_SSIZE_T ssize_t
+
+/* Pointer difference type */
+#define TIFF_PTRDIFF_T ptrdiff_t
+
 /* Define to 1 if the system has the type `int16'. */
 /* #undef HAVE_INT16 */
 
