@@ -1,7 +1,7 @@
 AC_INIT([copperspice], [1.1.0], [ansel@copperspice.com])
 
 # derive CS hex version from "@PACKAGE_VERSION@"
-HEX_VERSION=$(printf "0x%02x%02x%02x" `echo -n $PACKAGE_VERSION | tr '.' ' '`)
+HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
 AC_SUBST([HEX_VERSION])
 
 AC_CONFIG_AUX_DIR([autotools/build-aux])
@@ -73,7 +73,11 @@ AC_CHECK_HEADERS([sys/stat.h])
 AC_CHECK_HEADERS([sys/wait.h])
 AC_CHECK_HEADERS([sys/param.h])
 AC_CHECK_HEADERS([netinet/in.h])
-AC_CHECK_HEADERS([net/if.h])
+AC_CHECK_HEADERS([net/if.h], [], [],
+[#ifdef HAVE_SYS_SOCKET_H
+#  include <sys/socket.h>
+#endif
+])
 
 AC_SEARCH_LIBS(clock_gettime, rt)
 
