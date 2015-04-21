@@ -501,16 +501,6 @@ quintptr and qptrdiff are guaranteed to be the same size as a pointer
       && sizeof(void *) == sizeof(qptrdiff)
 */
 
-
-
-
-// TEST 
-Q_CORE_EXPORT const char *qVersion();
-
-
-
-
-
 template<int>
 struct QIntegerForSize;
 
@@ -957,7 +947,7 @@ class Q_CORE_EXPORT QSysInfo
 #endif
 };
 
-// BROOM  was here Q_CORE_EXPORT const char *qVersion();
+Q_CORE_EXPORT const char *qVersion();
 Q_CORE_EXPORT bool qSharedBuild();
 
 #if defined(Q_OS_MAC)
