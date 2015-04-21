@@ -106,7 +106,6 @@ EXTRA_DIST+= \
 	src/3rdparty/zlib/crc32.h \
 	src/3rdparty/zlib/deflate.c \
 	src/3rdparty/zlib/deflate.h \
-	src/3rdparty/zlib/example.c \
 	src/3rdparty/zlib/gzclose.c \
 	src/3rdparty/zlib/gzguts.h \
 	src/3rdparty/zlib/gzlib.c \
@@ -120,7 +119,6 @@ EXTRA_DIST+= \
 	src/3rdparty/zlib/inflate.h \
 	src/3rdparty/zlib/inftrees.c \
 	src/3rdparty/zlib/inftrees.h \
-	src/3rdparty/zlib/minigzip.c \
 	src/3rdparty/zlib/trees.c \
 	src/3rdparty/zlib/trees.h \
 	src/3rdparty/zlib/uncompr.c \
