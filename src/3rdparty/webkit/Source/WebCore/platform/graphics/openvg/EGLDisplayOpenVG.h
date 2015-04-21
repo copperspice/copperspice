@@ -45,7 +45,7 @@ public:
     EGLDisplay display() const { return m_display; }
     SurfaceOpenVG* sharedPlatformSurface();
 
-    /** Creates a pbuffer surface using the given config. If no surface
+    /* Creates a pbuffer surface using the given config. If no surface
      * could be created, EGL_NO_SURFACE is returned and errors can be
      * checked with the value that is written to the errorCode parameter
      * If no surface could be created and errorCode is zero, this method

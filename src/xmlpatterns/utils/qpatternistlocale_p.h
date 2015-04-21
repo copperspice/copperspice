@@ -36,19 +36,7 @@
 
 QT_BEGIN_NAMESPACE
 
-/**
- * @file
- * @short Contains functions used for formatting arguments, such as keywords and paths,
- * in translated strings.
- */
-
 namespace QPatternist {
-/**
- * @short Provides a translation context & functions for the QtXmlPatterns
- * module.
- *
- * This class is not supposed to be instantiated.
- */
 class QtXmlPatterns
 {
  public:

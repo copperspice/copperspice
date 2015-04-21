@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qcomparisonplatform_p.h.
- * If you need includes in this file, put them in qcomparisonplatform_p.h, outside of the namespace.
- */
-
 template <typename TSubClass, bool issueError,
           AtomicComparator::ComparisonType comparisonType, ReportContext::ErrorCode errorCode>
 bool ComparisonPlatform<TSubClass, issueError, comparisonType, errorCode>::

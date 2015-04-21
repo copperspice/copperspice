@@ -34,7 +34,7 @@ class EGLDisplayOpenVG;
 class PainterOpenVG;
 class IntSize;
 
-/**
+/*
  * SurfaceOpenVG provides the functionality of surfaces and contexts that are
  * underlying the OpenVG implementation. In the vast majority of cases, that
  * underlying technology is EGL, but OpenVG doesn't depend on EGL per se.

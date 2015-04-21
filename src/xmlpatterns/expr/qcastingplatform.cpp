@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qcastingplatform_p.h.
- * If you need includes in this file, put them in CasttingPlatform.h, outside of the namespace.
- */
-
 template <typename TSubClass, const bool issueError>
 Item CastingPlatform<TSubClass, issueError>::castWithCaster(const Item &sourceValue,
       const AtomicCaster::Ptr &caster,

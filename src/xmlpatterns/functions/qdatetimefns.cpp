@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qdatetimefns_p.h.
- * If you need includes in this file, put them in qdatetimefns_p.h, outside of the namespace.
- */
-
 template<typename TSubClass>
 Item ExtractFromDurationFN<TSubClass>::evaluateSingleton(const DynamicContext::Ptr &context) const
 {

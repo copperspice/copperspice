@@ -23,13 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qcastingplatform_p.h.
- * If you need includes in this file, put them in CasttingPlatform.h,
- * outside of the namespace.
- */
-
 template<typename TokenLookupClass,
          typename LookupKey>
 MaintainingReader<TokenLookupClass, LookupKey>::MaintainingReader(const typename

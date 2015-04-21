@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qabstractfloat_p.h.
- * If you need includes in this file, put them in qabstractfloat_p.h, outside of the namespace.
- */
-
 template <const bool isDouble>
 AbstractFloat<isDouble>::AbstractFloat(const xsDouble num) : m_value(num)
 {

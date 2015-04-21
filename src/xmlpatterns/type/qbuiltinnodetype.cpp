@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by BuiltintNodeType.h.
- * If you need includes in this file, put them in BuiltintNodeType.h, outside of the namespace.
- */
-
 template <const QXmlNodeModelIndex::NodeKind kind>
 BuiltinNodeType<kind>::BuiltinNodeType()
 {

@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qstackcontextbase_p.h.
- * If you need includes in this file, put them in qstackcontextbase_p.h, outside of the namespace.
- */
-
 template<typename TSuperClass>
 StackContextBase<TSuperClass>::StackContextBase() : m_rangeVariables(10),
    m_expressionVariables(10),

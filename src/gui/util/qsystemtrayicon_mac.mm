@@ -70,10 +70,12 @@ QT_USE_NAMESPACE
 -(QRectF)geometry;
 - (void)triggerSelector: (id)sender button: (Qt::MouseButton)mouseButton;
 - (void)doubleClickSelector: (id)sender;
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification;
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification;
 #endif
+
 @end
 
 @interface QT_MANGLE_NAMESPACE(QNSImageView) : NSImageView
@@ -104,18 +106,24 @@ class QSystemTrayIconSys
    QSystemTrayIconSys(QSystemTrayIcon *icon, QSystemTrayIconPrivate *d) {
       QMacCocoaAutoReleasePool pool;
       item = [[QT_MANGLE_NAMESPACE(QNSStatusItem) alloc] initWithIcon: icon iconPrivate: d];
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
       if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
          [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:item];
       }
+#endif
+
    }
    ~QSystemTrayIconSys() {
       QMacCocoaAutoReleasePool pool;
       [[[item item] view] setHidden: YES];
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
         if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:nil];
         }
 #endif
+
       [item release];
    }
     

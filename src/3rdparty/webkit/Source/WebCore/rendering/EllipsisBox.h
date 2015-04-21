@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2003, 2006 Apple Computer, Inc.
  *
  * This library is free software; you can redistribute it and/or

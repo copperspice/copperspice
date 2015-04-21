@@ -50,7 +50,7 @@ typedef struct _k_GstAlsaSinkClass _k_GstAlsaSinkClass;
 #define GST_ALSA_SINK2_LOCK(obj)	        (g_mutex_lock (GST_ALSA_SINK2_GET_LOCK (obj)))
 #define GST_ALSA_SINK2_UNLOCK(obj)	(g_mutex_unlock (GST_ALSA_SINK2_GET_LOCK (obj)))
 
-/**
+/*
  * _k_GstAlsaSink:
  *
  * Opaque data structure

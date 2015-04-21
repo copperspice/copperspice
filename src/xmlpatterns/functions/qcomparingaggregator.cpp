@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file qcomparingaggregator.cpp
- * @short This file is included by qcomparingaggregator_p.h.
- * If you need includes in this file, put them in qcomparingaggregator_p.h, outside of the namespace.
- */
-
 template <AtomicComparator::Operator oper, AtomicComparator::ComparisonResult result>
 inline Item
 ComparingAggregator<oper, result>::applyNumericPromotion(const Item &old,

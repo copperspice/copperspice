@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qacceltreebuilder_p.h.
- * If you need includes in this file, put them in qacceltreebuilder_p.h, outside of the namespace.
- */
-
 template <bool FromDocument>
 AccelTreeBuilder<FromDocument>::AccelTreeBuilder(const QUrl &docURI,
       const QUrl &baseURI,

@@ -402,7 +402,6 @@ QT_USE_NAMESPACE
 
 #endif
 
-
 #ifndef Q_PACKED
 #  define Q_PACKED
 #  undef Q_NO_PACKED_REFERENCE
@@ -502,29 +501,45 @@ quintptr and qptrdiff are guaranteed to be the same size as a pointer
       && sizeof(void *) == sizeof(qptrdiff)
 */
 
-template<int>  struct QIntegerForSize;
 
-template <>    struct QIntegerForSize<1> {
+
+
+// TEST 
+Q_CORE_EXPORT const char *qVersion();
+
+
+
+
+
+template<int>
+struct QIntegerForSize;
+
+template <>
+struct QIntegerForSize<1> {
    typedef quint8  Unsigned;
    typedef qint8  Signed;
 };
 
-template <>     struct QIntegerForSize<2> {
+template <>
+struct QIntegerForSize<2> {
    typedef quint16 Unsigned;
    typedef qint16 Signed;
 };
 
-template <>     struct QIntegerForSize<4> {
+template <>
+struct QIntegerForSize<4> {
    typedef quint32 Unsigned;
    typedef qint32 Signed;
 };
 
-template <>     struct QIntegerForSize<8> {
+template <>
+struct QIntegerForSize<8> {
    typedef quint64 Unsigned;
    typedef qint64 Signed;
 };
 
-template <class T> struct QIntegerForSizeof : QIntegerForSize<sizeof(T)> {
+template <class T>
+struct QIntegerForSizeof : QIntegerForSize<sizeof(T)> {
 };
 
 typedef QIntegerForSizeof<void *>::Unsigned   quintptr;
@@ -942,7 +957,7 @@ class Q_CORE_EXPORT QSysInfo
 #endif
 };
 
-Q_CORE_EXPORT const char *qVersion();
+// BROOM  was here Q_CORE_EXPORT const char *qVersion();
 Q_CORE_EXPORT bool qSharedBuild();
 
 #if defined(Q_OS_MAC)

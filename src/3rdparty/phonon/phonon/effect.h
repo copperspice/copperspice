@@ -46,27 +46,7 @@ namespace Phonon
 {
     class EffectParameter;
     class EffectPrivate;
-
-    /** \class Effect effect.h Phonon/Effect
-     * \short Effects that can be inserted into a Path.
-     * An effect is a special object which can perform
-     * transformations on the specified path. Examples may include simple
-     * modifiers such as fading or pitch shifting, or more complex mathematical
-     * transformations.
-     *
-     * In order to use an effect, insert it into the path as follows:
-     * \code
-     * Path path = Phonon::createPath(...);
-     * Effect *effect = new Effect(this);
-     * path.insertEffect(effect);
-     * \endcode
-     *
-     * The effect will immediately begin applying it's transformations on
-     * the path. To stop it, remove the Effect from the path.
-     *
-     * \ingroup PhononEffects
-     * \author Matthias Kretz <kretz@kde.org>
-     */
+   
     class PHONON_EXPORT Effect : public QObject, public MediaNode
     {
         CS_OBJECT(Effect)

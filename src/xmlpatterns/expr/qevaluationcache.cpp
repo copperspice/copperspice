@@ -23,12 +23,6 @@
 *
 ***********************************************************************/
 
-/**
- * @file
- * @short This file is included by qevaluationcache_p.h.
- * If you need includes in this file, put them in qevaluationcache_p.h, outside of the namespace.
- */
-
 template<bool IsForGlobal>
 EvaluationCache<IsForGlobal>::EvaluationCache(const Expression::Ptr &op,
       const VariableDeclaration *varDecl,

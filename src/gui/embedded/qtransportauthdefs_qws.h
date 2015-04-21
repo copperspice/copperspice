@@ -78,7 +78,7 @@ struct AuthMessage {
    char payLoad[AMOUNT_TO_AUTHENTICATE];
 };
 
-/**
+/*
   Auth data as stored in _key
 */
 struct AuthCookie {
@@ -101,7 +101,7 @@ struct AuthRecord {
    time_t change_time;
 };
 
-/*!
+/*
   \class usr_key_entry
   This comes from the SXE kernel patch file include/linux/lidsif.h
 
@@ -124,7 +124,7 @@ struct usr_key_entry {
 };
 
 
-/*!
+/*
   \class IdBlock
   \brief Data record for the manifest file.
   The manifest file maps program id's to files

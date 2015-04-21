@@ -1,6 +1,4 @@
-/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-/* vim:set ts=2 sw=2 sts=2 et cindent: */
-/* ***** BEGIN LICENSE BLOCK *****
+/* ********************************************************************************
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -35,7 +33,7 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
- * ***** END LICENSE BLOCK ***** */
+ * ***** ************************************************************************ */
 
 // Necessary modifications are made to the original CheckedInt.h file to remove
 // dependencies on prtypes.
@@ -55,8 +53,7 @@ namespace CheckedInt_internal {
  * depending on the platform, e.g. on certain platform they use nonstandard built-in types
  */
 
-/*** Step 1: manually record information for all the types that we want to support
- ***/
+/* Step 1: manually record information for all the types that we want to support */
 
 struct unsupported_type {};
 
@@ -149,12 +146,12 @@ template<typename T>
 struct TYPE_NOT_SUPPORTED_BY_CheckedInt<T, true> { static void run() {} };
 
 
-/*** Step 2: record some info about a given integer type,
- ***         including whether it is supported, whether a twice bigger integer type
- ***         is supported, what that twice bigger type is, and some stuff as found
- ***         in std::numeric_limits (which we don't use because int.. types may
- ***         not support it, if they are defined directly from compiler built-in types).
- ***/
+/* Step 2: record some info about a given integer type,
+          including whether it is supported, whether a twice bigger integer type
+          is supported, what that twice bigger type is, and some stuff as found
+          in std::numeric_limits (which we don't use because int.. types may
+          not support it, if they are defined directly from compiler built-in types).
+*/
 
 template<typename T> struct is_unsupported_type { enum { answer = 0 }; };
 template<> struct is_unsupported_type<unsupported_type> { enum { answer = 1 }; };
@@ -186,8 +183,7 @@ template<typename T> struct integer_traits
     }
 };
 
-/*** Step 3: Implement the actual validity checks --- ideas taken from IntegerLib, code different.
- ***/
+/* Step 3: Implement the actual validity checks --- ideas taken from IntegerLib, code different. */
 
 // bitwise ops may return a larger type, so it's good to use these inline helpers guaranteeing that
 // the result is really of type T
@@ -354,10 +350,9 @@ template<typename T> inline T is_div_valid(T x, T y)
 } // end namespace CheckedInt_internal
 
 
-/*** Step 4: Now define the CheckedInt class.
- ***/
+/* Step 4: Now define the CheckedInt class. */
 
-/** \class CheckedInt
+/*  \class CheckedInt
   * \brief Integer wrapper class checking for integer overflow and other errors
   * \param T the integer type to wrap. Can be any of int8_t, uint8_t, int16_t, uint16_t,
   *          int32_t, uint32_t, int64_t, uint64_t.
@@ -585,4 +580,4 @@ inline bool operator ==(const U & lhs, const CheckedInt<T> &rhs)
 
 } // end namespace WebCore
 
-#endif /* CheckedInt_h */
+#endif
