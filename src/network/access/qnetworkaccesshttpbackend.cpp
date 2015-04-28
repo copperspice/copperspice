@@ -192,6 +192,7 @@ QNetworkAccessHttpBackendFactory::create(QNetworkAccessManager::Operation op, co
 QNetworkAccessHttpBackend::QNetworkAccessHttpBackend()
    : QNetworkAccessBackend()
    , statusCode(0)
+   , uploadByteDevicePosition(false)
    , pendingDownloadDataEmissions(new QAtomicInt())
    , pendingDownloadProgressEmissions(new QAtomicInt())
    , loadingFromCache(false)
@@ -649,8 +650,8 @@ void QNetworkAccessHttpBackend::postRequest()
          delegate->httpRequest.setUploadByteDevice(forwardUploadDevice);
 
          // From main thread to user thread:
-         QObject::connect(this, SIGNAL(haveUploadData(const QByteArray &, bool, qint64)),
-                          forwardUploadDevice, SLOT(haveDataSlot(const QByteArray &, bool, qint64)), Qt::QueuedConnection);
+         QObject::connect(this, SIGNAL(haveUploadData(qint64, const QByteArray &, bool, qint64)),
+                          forwardUploadDevice, SLOT(haveDataSlot(qint64, const QByteArray &, bool, qint64)), Qt::QueuedConnection);
 
          QObject::connect(uploadByteDevice.data(), SIGNAL(readyRead()),
                           forwardUploadDevice, SLOT(readyRead()), Qt::QueuedConnection);
@@ -658,7 +659,7 @@ void QNetworkAccessHttpBackend::postRequest()
          // From http thread to user thread:
          QObject::connect(forwardUploadDevice, SIGNAL(wantData(qint64)), this, SLOT(wantUploadDataSlot(qint64)));
 
-         QObject::connect(forwardUploadDevice, SIGNAL(processedData(qint64)), this, SLOT(sentUploadDataSlot(qint64)));
+         QObject::connect(forwardUploadDevice, SIGNAL(processedData(qint64, qint64)), this, SLOT(sentUploadDataSlot(qint64, qint64)));
 
          // this is the only one with BlockingQueued!
          connect(forwardUploadDevice, SIGNAL(resetData(bool *)), this, SLOT(resetUploadDataSlot(bool *)),
@@ -971,12 +972,21 @@ void QNetworkAccessHttpBackend::replySslConfigurationChanged(const QSslConfigura
 void QNetworkAccessHttpBackend::resetUploadDataSlot(bool *r)
 {
    *r = uploadByteDevice->reset();
+   if (*r) {
+      // reset our own position which is used for the inter-thread communication
+      uploadByteDevicePosition = 0;
+  }
 }
 
 // Coming from QNonContiguousByteDeviceThreadForwardImpl in HTTP thread
-void QNetworkAccessHttpBackend::sentUploadDataSlot(qint64 amount)
+void QNetworkAccessHttpBackend::sentUploadDataSlot(qint64 pos, qint64 amount)
 {
+   if (uploadByteDevicePosition + amount != pos) {
+      // Sanity check, should not happen.
+      error(QNetworkReply::UnknownNetworkError, "");
+   }
    uploadByteDevice->advanceReadPointer(amount);
+   uploadByteDevicePosition += amount;
 }
 
 // Coming from QNonContiguousByteDeviceThreadForwardImpl in HTTP thread
@@ -990,7 +1000,7 @@ void QNetworkAccessHttpBackend::wantUploadDataSlot(qint64 maxSize)
    QByteArray dataArray(data, currentUploadDataLength);
 
    // Communicate back to HTTP thread
-   emit haveUploadData(dataArray, uploadByteDevice->atEnd(), uploadByteDevice->size());
+   emit haveUploadData(uploadByteDevicePosition, dataArray, uploadByteDevice->atEnd(), uploadByteDevice->size());
 }
 
 /*

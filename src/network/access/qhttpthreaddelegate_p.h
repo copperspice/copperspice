@@ -214,6 +214,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
    QByteArray m_dataArray;
    bool m_atEnd;
    qint64 m_size;
+   qint64 m_pos;
 
  public:
    QNonContiguousByteDeviceThreadForwardImpl(bool aE, qint64 s)
@@ -222,10 +223,15 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
         m_amount(0),
         m_data(0),
         m_atEnd(aE),
-        m_size(s) {
+        m_size(s),
+        m_pos(0) {
    }
 
    ~QNonContiguousByteDeviceThreadForwardImpl() {
+   }
+
+   qint64 pos() {
+      return m_pos;
    }
 
    const char *readPointer(qint64 maximumLength, qint64 &len) {
@@ -254,11 +260,10 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
       m_amount -= a;
       m_data += a;
+      m_pos += a;
 
-      // To main thread to inform about our state
-      emit processedData(a);
-
-      // FIXME possible optimization, already ask user thread for some data
+      // To main thread to inform about our state. The m_pos will be sent as a sanity check.
+      emit processedData(m_pos, a);
 
       return true;
    }
@@ -274,10 +279,23 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
    bool reset() {
       m_amount = 0;
       m_data = 0;
+      m_dataArray.clear();
+
+      if (wantDataPending) {
+	 // had requested the user thread to send some data (only 1 in-flight at any moment)
+	  wantDataPending = false;
+      }
 
       // Communicate as BlockingQueuedConnection
       bool b = false;
       emit resetData(&b);
+
+      if (b) {
+	 // the reset succeeded, we're at pos 0 again
+	  m_pos = 0;
+	  // the HTTP code will anyway abort the request if !b.
+      }
+
       return b;
    }
 
@@ -287,16 +305,16 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
  public :
    // From user thread
-   NET_CS_SLOT_1(Public, void haveDataSlot(const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
+   NET_CS_SLOT_1(Public, void haveDataSlot(qint64 pos, const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
    NET_CS_SLOT_2(haveDataSlot)
 
    // to main thread
    NET_CS_SIGNAL_1(Public, void wantData(qint64 un_named_arg1))
    NET_CS_SIGNAL_2(wantData, un_named_arg1)
 
-   NET_CS_SIGNAL_1(Public, void processedData(qint64 un_named_arg1))
+   NET_CS_SIGNAL_1(Public, void processedData(qint64 pos, qint64 amount))
+   NET_CS_SIGNAL_2(processedData, pos, amount)
 
-   NET_CS_SIGNAL_2(processedData, un_named_arg1)
    NET_CS_SIGNAL_1(Public, void resetData(bool *b))
    NET_CS_SIGNAL_2(resetData, b)
 };

@@ -90,8 +90,8 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    NET_CS_SIGNAL_1(Public, void startHttpRequestSynchronously())
    NET_CS_SIGNAL_2(startHttpRequestSynchronously)
 
-   NET_CS_SIGNAL_1(Public, void haveUploadData(const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
-   NET_CS_SIGNAL_2(haveUploadData, dataArray, dataAtEnd, dataSize)
+   NET_CS_SIGNAL_1(Public, void haveUploadData(const qint64 pos, const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
+   NET_CS_SIGNAL_2(haveUploadData, pos, dataArray, dataAtEnd, dataSize)
 
  private :
    // From HTTP thread:
@@ -127,7 +127,7 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    NET_CS_SLOT_2(resetUploadDataSlot)
    NET_CS_SLOT_1(Private, void wantUploadDataSlot(qint64 un_named_arg1))
    NET_CS_SLOT_2(wantUploadDataSlot)
-   NET_CS_SLOT_1(Private, void sentUploadDataSlot(qint64 un_named_arg1))
+   NET_CS_SLOT_1(Private, void sentUploadDataSlot(qint64 un_named_arg1, qint64 un_named_arg2))
    NET_CS_SLOT_2(sentUploadDataSlot)
 
    NET_CS_SLOT_1(Private, bool sendCacheContents(const QNetworkCacheMetaData &metaData))
@@ -135,6 +135,7 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
 
    QHttpNetworkRequest httpRequest; // There is also a copy in the HTTP thread
    int statusCode;
+   qint64 uploadByteDevicePosition;
    QString reasonPhrase;
 
    // Will be increased by HTTP thread:

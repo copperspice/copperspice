@@ -49,6 +49,9 @@ class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
       return resetDisabled;
    }
    virtual qint64 size() = 0;
+   virtual qint64 pos() {
+       return -1;
+   }
 
    virtual ~QNonContiguousByteDevice();
 
@@ -85,6 +88,7 @@ class QNonContiguousByteDeviceByteArrayImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+   qint64 pos();
 
  protected:
    QByteArray *byteArray;
@@ -101,6 +105,7 @@ class QNonContiguousByteDeviceRingBufferImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+   qint64 pos();
 
  protected:
    QSharedPointer<QRingBuffer> ringBuffer;
@@ -120,6 +125,7 @@ class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
    bool atEnd();
    bool reset();
    qint64 size();
+   qint64 pos();
 
  protected:
    QIODevice *device;

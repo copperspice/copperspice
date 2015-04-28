@@ -658,9 +658,16 @@ void  QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNet
 
 #endif
 
-void QNonContiguousByteDeviceThreadForwardImpl::haveDataSlot(const QByteArray &dataArray, bool dataAtEnd,
+void QNonContiguousByteDeviceThreadForwardImpl::haveDataSlot(qint64 pos, const QByteArray &dataArray, bool dataAtEnd,
       qint64 dataSize)
 {
+
+   if (pos != m_pos) {
+      // Sometimes when re-sending a request in the qhttpnetwork* layer there is a pending haveData from the
+      // user thread on the way to us. We need to ignore it since it is the data for the wrong(later) chunk.
+      return;
+   }
+
    wantDataPending = false;
 
    m_dataArray = dataArray;
