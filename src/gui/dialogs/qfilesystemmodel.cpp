@@ -1038,16 +1038,15 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
    }
 
    QList<QPair<QFileSystemModelPrivate::QFileSystemNode *, int> > values;
-   QHash<QString, QFileSystemNode *>::const_iterator iterator;
+
    int i = 0;
+   for (auto item: indexNode->children) {
 
-   for (iterator = indexNode->children.begin() ; iterator != indexNode->children.end() ; ++iterator) {
-
-      if (filtersAcceptsNode(iterator.value())) {
-         values.append(QPair<QFileSystemModelPrivate::QFileSystemNode *, int>((iterator.value()), i)); 
+      if (filtersAcceptsNode(item)) {
+         values.append(QPair<QFileSystemModelPrivate::QFileSystemNode *, int>(item, i)); 
 
       } else {
-         iterator.value()->isVisible = false;
+         item->isVisible = false;
       }
 
       i++;
@@ -1552,17 +1551,14 @@ void QFileSystemModelPrivate::_q_directoryChanged(const QString &directory, cons
    QStringList newFiles = files;
 
    qSort(newFiles.begin(), newFiles.end());
-   QHash<QString, QFileSystemNode *>::const_iterator childElement = parentNode->children.constBegin();
 
-   while (childElement != parentNode->children.constEnd()) {
+   for (auto childElement : parentNode->children) {
       QStringList::iterator iterator;
-      iterator = qBinaryFind(newFiles.begin(), newFiles.end(), childElement.value()->fileName);
+      iterator = qBinaryFind(newFiles.begin(), newFiles.end(), childElement->fileName);
 
       if (iterator == newFiles.end()) {
-         toRemove.append(childElement.value()->fileName);
+         toRemove.append(childElement->fileName);
       }
-
-      ++childElement;
    }
 
    for (int i = 0 ; i < toRemove.count() ; ++i ) {

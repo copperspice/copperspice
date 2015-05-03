@@ -29,6 +29,7 @@
 #include <QtSql/qsql.h>
 #include <QtSql/qsqldatabase.h>
 #include <QtCore/qstring.h>
+#include <QtCore/qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -38,8 +39,6 @@ class QSqlError;
 class QSqlResult;
 class QSqlRecord;
 class QSqlQueryPrivate;
-
-template <class Key, class T> class QMap;
 
 class Q_SQL_EXPORT QSqlQuery
 {

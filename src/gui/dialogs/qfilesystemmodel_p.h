@@ -57,7 +57,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    {
       class FileNameCompare {
          public:
-            static bool operator()(const QString &a, const QString &b) {
+            bool operator()(const QString &a, const QString &b) const {
 #ifdef Q_OS_WIN
                return a.compare(b, Qt::CaseInsensitive) < 0;         
 #else

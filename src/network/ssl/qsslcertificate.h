@@ -32,6 +32,7 @@
 #include <QtCore/qregexp.h>
 #include <QtCore/qsharedpointer.h>
 #include <QtNetwork/qssl.h>
+#include <QtCore/qcontainerfwd.h>
 
 typedef struct x509_st X509; // ### check if this works
 
@@ -44,9 +45,6 @@ class QIODevice;
 class QSslKey;
 class QStringList;
 class QSslCertificatePrivate;
-
-template <typename T, typename U>
-class QMultiMap;
 
 class Q_NETWORK_EXPORT QSslCertificate
 {

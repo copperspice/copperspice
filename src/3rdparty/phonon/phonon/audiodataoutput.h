@@ -33,13 +33,9 @@
 #include "phonon_export.h"
 #include "abstractaudiooutput.h"
 #include "phonondefs.h"
+#include <QtCore/qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template<typename T> class QVector;
-template<typename Key, typename T> class QMap;
-#endif
 
 namespace Phonon
 {
