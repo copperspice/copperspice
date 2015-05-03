@@ -55,17 +55,28 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
  public:
    class QFileSystemNode
    {
+      class FileNameCompare {
+         public:
+            static bool operator()(const QString &a, const QString &b) {
+#ifdef Q_OS_WIN
+               return a.compare(b, Qt::CaseInsensitive) < 0;         
+#else
+               return a < b;
+#endif
+            }
+      };
+
     public:
       QFileSystemNode(const QString &filename = QString(), QFileSystemNode *p = 0)
          : fileName(filename), populatedChildren(false), isVisible(false), dirtyChildrenIndex(-1), parent(p), info(0) {}
-      ~QFileSystemNode() {
-         QHash<QString, QFileSystemNode *>::const_iterator i = children.constBegin();
-         while (i != children.constEnd()) {
-            delete i.value();
-            ++i;
+
+      ~QFileSystemNode() {         
+         for (auto i : children) {
+            delete i;           
          }
+
          delete info;
-         info = 0;
+         info   = 0;
          parent = 0;
       }
 
@@ -108,6 +119,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       inline bool isExecutable() const {
          return ((permissions() & QFile::ExeUser) != 0);
       }
+
       inline bool isDir() const {
          if (info) {
             return info->isDir();
@@ -117,33 +129,39 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
          return false;
       }
+
       inline bool isFile() const {
          if (info) {
             return info->isFile();
          }
          return true;
       }
+
       inline bool isSystem() const {
          if (info) {
             return info->isSystem();
          }
          return true;
       }
+
       inline bool isHidden() const {
          if (info) {
             return info->isHidden();
          }
          return false;
       }
+
       inline bool isSymLink(bool ignoreNtfsSymLinks = false) const {
          return info && info->isSymLink(ignoreNtfsSymLinks);
       }
+
       inline bool caseSensitive() const {
          if (info) {
             return info->isCaseSensitive();
          }
          return false;
       }
+
       inline QIcon icon() const {
          if (info) {
             return info->icon;
@@ -157,6 +175,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
          return QString::compare(fileName, node.fileName, Qt::CaseInsensitive) < 0;
       }
+
       inline bool operator >(const QString &name) const {
          if (caseSensitive()) {
             return fileName > name;
@@ -169,9 +188,11 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
          return QString::compare(fileName, name, Qt::CaseInsensitive) < 0;
       }
+
       inline bool operator !=(const QExtendedInformation &fileInfo) const {
          return !operator==(fileInfo);
       }
+
       bool operator ==(const QString &name) const {
          if (caseSensitive()) {
             return fileName == name;
@@ -187,7 +208,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       }
 
       void populate(const QExtendedInformation &fileInfo) {
-         if (!info) {
+         if (! info) {
             info = new QExtendedInformation(fileInfo.fileInfo());
          }
          (*info) = fileInfo;
@@ -197,21 +218,24 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       inline int visibleLocation(QString childName) {
          return visibleChildren.indexOf(childName);
       }
+
       void updateIcon(QFileIconProvider *iconProvider, const QString &path) {
          if (info) {
             info->icon = iconProvider->icon(QFileInfo(path));
          }
-         QHash<QString, QFileSystemNode *>::const_iterator iterator;
-         for (iterator = children.constBegin() ; iterator != children.constEnd() ; ++iterator) {
+        
+         for (auto i : children) {
             //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
-            if (!path.isEmpty()) {
+
+            if (! path.isEmpty()) {
                if (path.endsWith(QLatin1Char('/'))) {
-                  iterator.value()->updateIcon(iconProvider, path + iterator.value()->fileName);
+                  i->updateIcon(iconProvider, path + i->fileName);
                } else {
-                  iterator.value()->updateIcon(iconProvider, path + QLatin1Char('/') + iterator.value()->fileName);
+                  i->updateIcon(iconProvider, path + QLatin1Char('/') + i->fileName);
                }
+
             } else {
-               iterator.value()->updateIcon(iconProvider, iterator.value()->fileName);
+               i->updateIcon(iconProvider, i->fileName);
             }
          }
       }
@@ -220,28 +244,30 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          if (info) {
             info->displayType = iconProvider->type(QFileInfo(path));
          }
-         QHash<QString, QFileSystemNode *>::const_iterator iterator;
-         for (iterator = children.constBegin() ; iterator != children.constEnd() ; ++iterator) {
+        
+         for (auto i : children) {
+
             //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
-            if (!path.isEmpty()) {
+            if (! path.isEmpty()) {
                if (path.endsWith(QLatin1Char('/'))) {
-                  iterator.value()->retranslateStrings(iconProvider, path + iterator.value()->fileName);
+                  i->retranslateStrings(iconProvider, path + i->fileName);
                } else {
-                  iterator.value()->retranslateStrings(iconProvider, path + QLatin1Char('/') + iterator.value()->fileName);
+                  i->retranslateStrings(iconProvider, path + QLatin1Char('/') + i->fileName);
                }
             } else {
-               iterator.value()->retranslateStrings(iconProvider, iterator.value()->fileName);
+               i->retranslateStrings(iconProvider, i->fileName);
             }
          }
       }
 
       bool populatedChildren;
       bool isVisible;
-      QHash<QString, QFileSystemNode *> children;
+
+      QMap<QString, QFileSystemNode *, FileNameCompare> children;
+
       QList<QString> visibleChildren;
       int dirtyChildrenIndex;
       QFileSystemNode *parent;
-
 
       QExtendedInformation *info;
 
@@ -268,11 +294,14 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    inline bool isHiddenByFilter(QFileSystemNode *indexNode, const QModelIndex &index) const {
       return (indexNode != &root && !index.isValid());
    }
+
    QFileSystemNode *node(const QModelIndex &index) const;
    QFileSystemNode *node(const QString &path, bool fetch = true) const;
+
    inline QModelIndex index(const QString &path) {
       return index(node(path));
    }
+
    QModelIndex index(const QFileSystemNode *node) const;
    bool filtersAcceptsNode(const QFileSystemNode *node) const;
    bool passNameFilters(const QFileSystemNode *node) const;

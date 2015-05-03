@@ -31,11 +31,18 @@
 #include <QtCore/qhash.h>
 #include <QtCore/qset.h>
 #include <QScopedPointer>
+#include <QtCore/qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 class QAbstractItemModel;
 class QPersistentModelIndex;
+class QPersistentModelIndexData;
+class QModelIndex;
+class QMimeData;
+class QAbstractItemModelPrivate;
+
+typedef QList<QModelIndex> QModelIndexList;
 
 class Q_CORE_EXPORT QModelIndex
 {
@@ -111,8 +118,6 @@ Q_DECLARE_TYPEINFO(QModelIndex, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QModelIndex &);
 
-class QPersistentModelIndexData;
-
 class Q_CORE_EXPORT QPersistentModelIndex
 {
  public:
@@ -156,14 +161,6 @@ inline uint qHash(const QPersistentModelIndex &index)
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
-
-template<typename T> class QList;
-typedef QList<QModelIndex> QModelIndexList;
-
-class QMimeData;
-class QAbstractItemModelPrivate;
-template <class Key, class T> class QMap;
-
 
 class Q_CORE_EXPORT QAbstractItemModel : public QObject
 {

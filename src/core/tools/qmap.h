@@ -29,6 +29,7 @@
 #include <QtCore/qiterator.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qrefcount.h>
+#include <QtCore/qcontainerfwd.h>
 
 #include <map>
 #include <new>
@@ -105,7 +106,7 @@ struct QMapNode {
    T value;
 
  private:
-   // never access these members through this structure.
+   // never access these members through this structure
    // see below
    QMapData::Node *backward;
    QMapData::Node *forward[1];
@@ -134,7 +135,16 @@ struct QMapPayloadNode {
    QMapData::Node *backward;
 };
 
-template <class Key, class T>
+template <class Key>
+class qMapCompare
+{
+   public:
+      bool operator()(const Key &a, const Key &b)  const {
+         return qMapLessThanKey(a, b);
+      }
+};
+
+template <class Key, class T, class Compare>
 class QMap
 {
    typedef QMapNode<Key, T> Node;
@@ -145,9 +155,12 @@ class QMap
       QMapData::Node *e;
    };
 
+   Compare m_compare;
+
    static inline int payload() {
       return sizeof(PayloadNode) - sizeof(QMapData::Node *);
    }
+
    static inline int alignment() {
 #ifdef Q_ALIGNOF
       return int(qMax(sizeof(void *), Q_ALIGNOF(Node)));
@@ -155,6 +168,7 @@ class QMap
       return 0;
 #endif
    }
+
    static inline Node *concrete(QMapData::Node *node) {
       return reinterpret_cast<Node *>(reinterpret_cast<char *>(node) - payload());
    }
@@ -162,7 +176,7 @@ class QMap
  public:
    inline QMap() : d( QMapData::sharedNull() ) { }
 
-   inline QMap(const QMap<Key, T> &other) : d(other.d) {
+   inline QMap(const QMap<Key, T, Compare> &other) : d(other.d) {
       d->ref.ref();
       if (!d->sharable) {
          detach();
@@ -182,23 +196,23 @@ class QMap
       }
    }
 
-   QMap<Key, T> &operator=(const QMap<Key, T> &other);
+   QMap<Key, T, Compare> &operator=(const QMap<Key, T, Compare> &other);
 
-   inline QMap<Key, T> &operator=(QMap<Key, T> && other) {
+   inline QMap<Key, T, Compare> &operator=(QMap<Key, T, Compare> && other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QMap<Key, T> &other) {
+   inline void swap(QMap<Key, T, Compare> &other) {
       qSwap(d, other.d);
    }
 
    explicit QMap(const typename std::map<Key, T> &other);
    std::map<Key, T> toStdMap() const;
 
-   bool operator==(const QMap<Key, T> &other) const;
+   bool operator==(const QMap<Key, T, Compare> &other) const;
 
-   inline bool operator!=(const QMap<Key, T> &other) const {
+   inline bool operator!=(const QMap<Key, T, Compare> &other) const {
       return !(*this == other);
    }
 
@@ -229,9 +243,10 @@ class QMap
       }
    }
 
-   inline bool isSharedWith(const QMap<Key, T> &other) const {
+   inline bool isSharedWith(const QMap<Key, T, Compare> &other) const {
       return d == other.d;
    }
+
    inline void setInsertInOrder(bool ordered) {
       if (ordered) {
          detach();
@@ -524,7 +539,7 @@ class QMap
    iterator insert(const Key &key, const T &value);
    iterator insertMulti(const Key &key, const T &value);
 
-   QMap<Key, T> &unite(const QMap<Key, T> &other);
+   QMap<Key, T, Compare> &unite(const QMap<Key, T, Compare> &other);
 
    // STL compatibility
    typedef Key key_type;
@@ -546,12 +561,11 @@ class QMap
    void freeData(QMapData *d);
    QMapData::Node *findNode(const Key &key) const;
    QMapData::Node *mutableFindNode(QMapData::Node *update[], const Key &key) const;
-   QMapData::Node *node_create(QMapData *d, QMapData::Node *update[], const Key &key,
-                               const T &value);
+   QMapData::Node *node_create(QMapData *d, QMapData::Node *update[], const Key &key, const T &value);
 };
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE QMap<Key, T> &QMap<Key, T>::operator=(const QMap<Key, T> &other)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE QMap<Key, T, Compare> &QMap<Key, T, Compare>::operator=(const QMap<Key, T, Compare> &other)
 {
    if (d != other.d) {
       QMapData *o = other.d;
@@ -567,15 +581,15 @@ Q_INLINE_TEMPLATE QMap<Key, T> &QMap<Key, T>::operator=(const QMap<Key, T> &othe
    return *this;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE void QMap<Key, T>::clear()
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE void QMap<Key, T, Compare>::clear()
 {
-   *this = QMap<Key, T>();
+   *this = QMap<Key, T, Compare>();
 }
 
-template <class Key, class T>
+template <class Key, class T, class Compare>
 Q_INLINE_TEMPLATE typename QMapData::Node *
-QMap<Key, T>::node_create(QMapData *adt, QMapData::Node *aupdate[], const Key &akey, const T &avalue)
+QMap<Key, T, Compare>::node_create(QMapData *adt, QMapData::Node *aupdate[], const Key &akey, const T &avalue)
 {
    QMapData::Node *abstractNode = adt->node_create(aupdate, payload(), alignment());
    QT_TRY {
@@ -605,27 +619,27 @@ QMap<Key, T>::node_create(QMapData *adt, QMapData::Node *aupdate[], const Key &a
    return abstractNode;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE QMapData::Node *QMap<Key, T>::findNode(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE QMapData::Node *QMap<Key, T, Compare>::findNode(const Key &akey) const
 {
-   QMapData::Node *cur = e;
+   QMapData::Node *cur  = e;
    QMapData::Node *next = e;
 
    for (int i = d->topLevel; i >= 0; i--) {
-      while ((next = cur->forward[i]) != e && qMapLessThanKey<Key>(concrete(next)->key, akey)) {
+      while ((next = cur->forward[i]) != e && m_compare(concrete(next)->key, akey)) {
          cur = next;
       }
    }
 
-   if (next != e && !qMapLessThanKey<Key>(akey, concrete(next)->key)) {
+   if (next != e && ! m_compare(akey, concrete(next)->key)) {
       return next;
    } else {
       return e;
    }
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE const T QMap<Key, T>::value(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE const T QMap<Key, T, Compare>::value(const Key &akey) const
 {
    QMapData::Node *node;
    if (d->size == 0 || (node = findNode(akey)) == e) {
@@ -635,8 +649,8 @@ Q_INLINE_TEMPLATE const T QMap<Key, T>::value(const Key &akey) const
    }
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE const T QMap<Key, T>::value(const Key &akey, const T &adefaultValue) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE const T QMap<Key, T, Compare>::value(const Key &akey, const T &adefaultValue) const
 {
    QMapData::Node *node;
    if (d->size == 0 || (node = findNode(akey)) == e) {
@@ -646,14 +660,14 @@ Q_INLINE_TEMPLATE const T QMap<Key, T>::value(const Key &akey, const T &adefault
    }
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE const T QMap<Key, T>::operator[](const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE const T QMap<Key, T, Compare>::operator[](const Key &akey) const
 {
    return value(akey);
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE T &QMap<Key, T>::operator[](const Key &akey)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE T &QMap<Key, T, Compare>::operator[](const Key &akey)
 {
    detach();
 
@@ -665,8 +679,8 @@ Q_INLINE_TEMPLATE T &QMap<Key, T>::operator[](const Key &akey)
    return concrete(node)->value;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE int QMap<Key, T>::count(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE int QMap<Key, T, Compare>::count(const Key &akey) const
 {
    int cnt = 0;
    QMapData::Node *node = findNode(akey);
@@ -674,20 +688,19 @@ Q_INLINE_TEMPLATE int QMap<Key, T>::count(const Key &akey) const
       do {
          ++cnt;
          node = node->forward[0];
-      } while (node != e && !qMapLessThanKey<Key>(akey, concrete(node)->key));
+      } while (node != e && !m_compare(akey, concrete(node)->key));
    }
    return cnt;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE bool QMap<Key, T>::contains(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE bool QMap<Key, T, Compare>::contains(const Key &akey) const
 {
    return findNode(akey) != e;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::insert(const Key &akey,
-      const T &avalue)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::insert(const Key &akey, const T &avalue)
 {
    detach();
 
@@ -701,9 +714,8 @@ Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::insert(const Key
    return iterator(node);
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::insertMulti(const Key &akey,
-      const T &avalue)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::insertMulti(const Key &akey, const T &avalue)
 {
    detach();
 
@@ -712,29 +724,29 @@ Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::insertMulti(cons
    return iterator(node_create(d, update, akey, avalue));
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::const_iterator QMap<Key, T>::find(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::const_iterator QMap<Key, T, Compare>::find(const Key &akey) const
 {
    return const_iterator(findNode(akey));
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::const_iterator QMap<Key, T>::constFind(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::const_iterator QMap<Key, T, Compare>::constFind(const Key &akey) const
 {
    return const_iterator(findNode(akey));
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::find(const Key &akey)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::find(const Key &akey)
 {
    detach();
    return iterator(findNode(akey));
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE QMap<Key, T> &QMap<Key, T>::unite(const QMap<Key, T> &other)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE QMap<Key, T, Compare> &QMap<Key, T, Compare>::unite(const QMap<Key, T, Compare> &other)
 {
-   QMap<Key, T> copy(other);
+   QMap<Key, T, Compare> copy(other);
    const_iterator it = copy.constEnd();
    const const_iterator b = copy.constBegin();
    while (it != b) {
@@ -744,12 +756,13 @@ Q_INLINE_TEMPLATE QMap<Key, T> &QMap<Key, T>::unite(const QMap<Key, T> &other)
    return *this;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE void QMap<Key, T>::freeData(QMapData *x)
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE void QMap<Key, T, Compare>::freeData(QMapData *x)
 {
    if (QTypeInfo<Key>::isComplex || QTypeInfo<T>::isComplex) {
       QMapData *cur = x;
       QMapData *next = cur->forward[0];
+
       while (next != x) {
          cur = next;
          next = cur->forward[0];
@@ -762,8 +775,8 @@ Q_OUTOFLINE_TEMPLATE void QMap<Key, T>::freeData(QMapData *x)
    x->continueFreeData(payload());
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE int QMap<Key, T>::remove(const Key &akey)
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE int QMap<Key, T, Compare>::remove(const Key &akey)
 {
    detach();
 
@@ -773,28 +786,29 @@ Q_OUTOFLINE_TEMPLATE int QMap<Key, T>::remove(const Key &akey)
    int oldSize = d->size;
 
    for (int i = d->topLevel; i >= 0; i--) {
-      while ((next = cur->forward[i]) != e && qMapLessThanKey<Key>(concrete(next)->key, akey)) {
+      while ((next = cur->forward[i]) != e && m_compare(concrete(next)->key, akey)) {
          cur = next;
       }
       update[i] = cur;
    }
 
-   if (next != e && !qMapLessThanKey<Key>(akey, concrete(next)->key)) {
+   if (next != e && !m_compare(akey, concrete(next)->key)) {
       bool deleteNext = true;
       do {
          cur = next;
          next = cur->forward[0];
-         deleteNext = (next != e && !qMapLessThanKey<Key>(concrete(cur)->key, concrete(next)->key));
+         deleteNext = (next != e && !m_compare(concrete(cur)->key, concrete(next)->key));
          concrete(cur)->key.~Key();
          concrete(cur)->value.~T();
          d->node_delete(update, payload(), cur);
       } while (deleteNext);
    }
+
    return oldSize - d->size;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE T QMap<Key, T>::take(const Key &akey)
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE T QMap<Key, T, Compare>::take(const Key &akey)
 {
    detach();
 
@@ -803,13 +817,13 @@ Q_OUTOFLINE_TEMPLATE T QMap<Key, T>::take(const Key &akey)
    QMapData::Node *next = e;
 
    for (int i = d->topLevel; i >= 0; i--) {
-      while ((next = cur->forward[i]) != e && qMapLessThanKey<Key>(concrete(next)->key, akey)) {
+      while ((next = cur->forward[i]) != e && m_compare(concrete(next)->key, akey)) {
          cur = next;
       }
       update[i] = cur;
    }
 
-   if (next != e && !qMapLessThanKey<Key>(akey, concrete(next)->key)) {
+   if (next != e && !m_compare(akey, concrete(next)->key)) {
       T t = concrete(next)->value;
       concrete(next)->key.~Key();
       concrete(next)->value.~T();
@@ -819,8 +833,8 @@ Q_OUTOFLINE_TEMPLATE T QMap<Key, T>::take(const Key &akey)
    return T();
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::erase(iterator it)
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::erase(iterator it)
 {
    QMapData::Node *update[QMapData::LastLevel + 1];
    QMapData::Node *cur = e;
@@ -831,7 +845,7 @@ Q_OUTOFLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::erase(iterato
    }
 
    for (int i = d->topLevel; i >= 0; i--) {
-      while ((next = cur->forward[i]) != e && qMapLessThanKey<Key>(concrete(next)->key, it.key())) {
+      while ((next = cur->forward[i]) != e && m_compare(concrete(next)->key, it.key())) {
          cur = next;
       }
       update[i] = cur;
@@ -857,19 +871,22 @@ Q_OUTOFLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::erase(iterato
    return end();
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE void QMap<Key, T>::detach_helper()
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE void QMap<Key, T, Compare>::detach_helper()
 {
    union {
       QMapData *d;
       QMapData::Node *e;
    } x;
+
    x.d = QMapData::createData(alignment());
+
    if (d->size) {
       x.d->insertInOrder = true;
       QMapData::Node *update[QMapData::LastLevel + 1];
       QMapData::Node *cur = e->forward[0];
       update[0] = x.e;
+
       while (cur != e) {
          QT_TRY {
             Node *concreteNode = concrete(cur);
@@ -888,32 +905,33 @@ Q_OUTOFLINE_TEMPLATE void QMap<Key, T>::detach_helper()
    d = x.d;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QMapData::Node *QMap<Key, T>::mutableFindNode(QMapData::Node *aupdate[],
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QMapData::Node *QMap<Key, T, Compare>::mutableFindNode(QMapData::Node *aupdate[],
       const Key &akey) const
 {
    QMapData::Node *cur = e;
    QMapData::Node *next = e;
 
    for (int i = d->topLevel; i >= 0; i--) {
-      while ((next = cur->forward[i]) != e && qMapLessThanKey<Key>(concrete(next)->key, akey)) {
+      while ((next = cur->forward[i]) != e && m_compare(concrete(next)->key, akey)) {
          cur = next;
       }
       aupdate[i] = cur;
    }
-   if (next != e && !qMapLessThanKey<Key>(akey, concrete(next)->key)) {
+   if (next != e && !m_compare(akey, concrete(next)->key)) {
       return next;
    } else {
       return e;
    }
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T>::uniqueKeys() const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T, Compare>::uniqueKeys() const
 {
    QList<Key> res;
    res.reserve(size()); // May be too much, but assume short lifetime
    const_iterator i = begin();
+
    if (i != end()) {
       for (;;) {
          const Key &aKey = i.key();
@@ -929,8 +947,8 @@ break_out_of_outer_loop:
    return res;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T>::keys() const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T, Compare>::keys() const
 {
    QList<Key> res;
    res.reserve(size());
@@ -942,8 +960,8 @@ Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T>::keys() const
    return res;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T>::keys(const T &avalue) const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T, Compare>::keys(const T &avalue) const
 {
    QList<Key> res;
    const_iterator i = begin();
@@ -956,14 +974,14 @@ Q_OUTOFLINE_TEMPLATE QList<Key> QMap<Key, T>::keys(const T &avalue) const
    return res;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE const Key QMap<Key, T>::key(const T &avalue) const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE const Key QMap<Key, T, Compare>::key(const T &avalue) const
 {
    return key(avalue, Key());
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE const Key QMap<Key, T>::key(const T &avalue, const Key &defaultKey) const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE const Key QMap<Key, T, Compare>::key(const T &avalue, const Key &defaultKey) const
 {
    const_iterator i = begin();
    while (i != end()) {
@@ -976,8 +994,8 @@ Q_OUTOFLINE_TEMPLATE const Key QMap<Key, T>::key(const T &avalue, const Key &def
    return defaultKey;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T>::values() const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T, Compare>::values() const
 {
    QList<T> res;
    res.reserve(size());
@@ -989,8 +1007,8 @@ Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T>::values() const
    return res;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T>::values(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T, Compare>::values(const Key &akey) const
 {
    QList<T> res;
    QMapData::Node *node = findNode(akey);
@@ -998,49 +1016,50 @@ Q_OUTOFLINE_TEMPLATE QList<T> QMap<Key, T>::values(const Key &akey) const
       do {
          res.append(concrete(node)->value);
          node = node->forward[0];
-      } while (node != e && !qMapLessThanKey<Key>(akey, concrete(node)->key));
+      } while (node != e && !m_compare(akey, concrete(node)->key));
    }
    return res;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::const_iterator
-QMap<Key, T>::lowerBound(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::const_iterator
+QMap<Key, T, Compare>::lowerBound(const Key &akey) const
 {
    QMapData::Node *update[QMapData::LastLevel + 1];
    mutableFindNode(update, akey);
    return const_iterator(update[0]->forward[0]);
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::lowerBound(const Key &akey)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::lowerBound(const Key &akey)
 {
    detach();
    return static_cast<QMapData::Node *>(const_cast<const QMap *>(this)->lowerBound(akey));
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::const_iterator
-QMap<Key, T>::upperBound(const Key &akey) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::const_iterator
+QMap<Key, T, Compare>::upperBound(const Key &akey) const
 {
    QMapData::Node *update[QMapData::LastLevel + 1];
    mutableFindNode(update, akey);
    QMapData::Node *node = update[0]->forward[0];
-   while (node != e && !qMapLessThanKey<Key>(akey, concrete(node)->key)) {
+
+   while (node != e && !m_compare(akey, concrete(node)->key)) {
       node = node->forward[0];
    }
    return const_iterator(node);
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE typename QMap<Key, T>::iterator QMap<Key, T>::upperBound(const Key &akey)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE typename QMap<Key, T, Compare>::iterator QMap<Key, T, Compare>::upperBound(const Key &akey)
 {
    detach();
    return static_cast<QMapData::Node *>(const_cast<const QMap *>(this)->upperBound(akey));
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE bool QMap<Key, T>::operator==(const QMap<Key, T> &other) const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE bool QMap<Key, T, Compare>::operator==(const QMap<Key, T, Compare> &other) const
 {
    if (size() != other.size()) {
       return false;
@@ -1053,7 +1072,7 @@ Q_OUTOFLINE_TEMPLATE bool QMap<Key, T>::operator==(const QMap<Key, T> &other) co
    const_iterator it2 = other.begin();
 
    while (it1 != end()) {
-      if (!(it1.value() == it2.value()) || qMapLessThanKey(it1.key(), it2.key()) || qMapLessThanKey(it2.key(), it1.key())) {
+      if (!(it1.value() == it2.value()) || m_compare(it1.key(), it2.key()) || m_compare(it2.key(), it1.key())) {
          return false;
       }
       ++it2;
@@ -1062,8 +1081,8 @@ Q_OUTOFLINE_TEMPLATE bool QMap<Key, T>::operator==(const QMap<Key, T> &other) co
    return true;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QMap<Key, T>::QMap(const std::map<Key, T> &other)
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE QMap<Key, T, Compare>::QMap(const std::map<Key, T> &other)
 {
    d = QMapData::createData(alignment());
    d->insertInOrder = true;
@@ -1075,8 +1094,8 @@ Q_OUTOFLINE_TEMPLATE QMap<Key, T>::QMap(const std::map<Key, T> &other)
    d->insertInOrder = false;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE std::map<Key, T> QMap<Key, T>::toStdMap() const
+template <class Key, class T, class Compare>
+Q_OUTOFLINE_TEMPLATE std::map<Key, T> QMap<Key, T, Compare>::toStdMap() const
 {
    std::map<Key, T> map;
    const_iterator it = end();
@@ -1088,8 +1107,8 @@ Q_OUTOFLINE_TEMPLATE std::map<Key, T> QMap<Key, T>::toStdMap() const
 }
 
 
-template <class Key, class T>
-class QMultiMap : public QMap<Key, T>
+template <class Key, class T, class Compare>
+class QMultiMap : public QMap<Key, T, Compare>
 {
  public:
    QMultiMap() {}
@@ -1100,17 +1119,17 @@ class QMultiMap : public QMap<Key, T>
       }
    }
 
-   QMultiMap(const QMap<Key, T> &other) : QMap<Key, T>(other) {}
-   inline void swap(QMultiMap<Key, T> &other) {
-      QMap<Key, T>::swap(other);
+   QMultiMap(const QMap<Key, T, Compare> &other) : QMap<Key, T, Compare>(other) {}
+   inline void swap(QMultiMap<Key, T, Compare> &other) {
+      QMap<Key, T, Compare>::swap(other);
    }
 
-   inline typename QMap<Key, T>::iterator replace(const Key &key, const T &value) {
-      return QMap<Key, T>::insert(key, value);
+   inline typename QMap<Key, T, Compare>::iterator replace(const Key &key, const T &value) {
+      return QMap<Key, T, Compare>::insert(key, value);
    }
  
-  inline typename QMap<Key, T>::iterator insert(const Key &key, const T &value) {
-      return QMap<Key, T>::insertMulti(key, value);
+  inline typename QMap<Key, T, Compare>::iterator insert(const Key &key, const T &value) {
+      return QMap<Key, T, Compare>::insertMulti(key, value);
    }
 
    inline QMultiMap &operator+=(const QMultiMap &other) {
@@ -1124,11 +1143,11 @@ class QMultiMap : public QMap<Key, T>
       return result;
    }
 
-   using QMap<Key, T>::contains;
-   using QMap<Key, T>::remove;
-   using QMap<Key, T>::count;
-   using QMap<Key, T>::find;
-   using QMap<Key, T>::constFind;
+   using QMap<Key, T, Compare>::contains;
+   using QMap<Key, T, Compare>::remove;
+   using QMap<Key, T, Compare>::count;
+   using QMap<Key, T, Compare>::find;
+   using QMap<Key, T, Compare>::constFind;
 
    bool contains(const Key &key, const T &value) const;
 
@@ -1136,10 +1155,11 @@ class QMultiMap : public QMap<Key, T>
 
    int count(const Key &key, const T &value) const;
 
-   typename QMap<Key, T>::iterator find(const Key &key, const T &value) {
-      typename QMap<Key, T>::iterator i(find(key));
-      typename QMap<Key, T>::iterator end(this->end());
-      while (i != end && !qMapLessThanKey<Key>(key, i.key())) {
+   typename QMap<Key, T, Compare>::iterator find(const Key &key, const T &value) {
+      typename QMap<Key, T, Compare>::iterator i(find(key));
+      typename QMap<Key, T, Compare>::iterator end(this->end());
+
+      while (i != end && !m_compare(key, i.key())) {
          if (i.value() == value) {
             return i;
          }
@@ -1147,10 +1167,11 @@ class QMultiMap : public QMap<Key, T>
       }
       return end;
    }
-   typename QMap<Key, T>::const_iterator find(const Key &key, const T &value) const {
-      typename QMap<Key, T>::const_iterator i(constFind(key));
-      typename QMap<Key, T>::const_iterator end(QMap<Key, T>::constEnd());
-      while (i != end && !qMapLessThanKey<Key>(key, i.key())) {
+   typename QMap<Key, T, Compare>::const_iterator find(const Key &key, const T &value) const {
+      typename QMap<Key, T, Compare>::const_iterator i(constFind(key));
+      typename QMap<Key, T, Compare>::const_iterator end(QMap<Key, T, Compare>::constEnd());
+
+      while (i != end && !m_compare(key, i.key())) {
          if (i.value() == value) {
             return i;
          }
@@ -1158,7 +1179,7 @@ class QMultiMap : public QMap<Key, T>
       }
       return end;
    }
-   typename QMap<Key, T>::const_iterator constFind(const Key &key, const T &value) const {
+   typename QMap<Key, T, Compare>::const_iterator constFind(const Key &key, const T &value) const {
       return find(key, value);
    }
  private:
@@ -1166,19 +1187,20 @@ class QMultiMap : public QMap<Key, T>
    const T operator[](const Key &key) const;
 };
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE bool QMultiMap<Key, T>::contains(const Key &key, const T &value) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE bool QMultiMap<Key, T, Compare>::contains(const Key &key, const T &value) const
 {
-   return constFind(key, value) != QMap<Key, T>::constEnd();
+   return constFind(key, value) != QMap<Key, T, Compare>::constEnd();
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE int QMultiMap<Key, T>::remove(const Key &key, const T &value)
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE int QMultiMap<Key, T, Compare>::remove(const Key &key, const T &value)
 {
    int n = 0;
-   typename QMap<Key, T>::iterator i(find(key));
-   typename QMap<Key, T>::iterator end(QMap<Key, T>::end());
-   while (i != end && !qMapLessThanKey<Key>(key, i.key())) {
+   typename QMap<Key, T, Compare>::iterator i(find(key));
+   typename QMap<Key, T, Compare>::iterator end(QMap<Key, T, Compare>::end());
+
+   while (i != end && !m_compare(key, i.key())) {
       if (i.value() == value) {
          i = this->erase(i);
          ++n;
@@ -1189,13 +1211,13 @@ Q_INLINE_TEMPLATE int QMultiMap<Key, T>::remove(const Key &key, const T &value)
    return n;
 }
 
-template <class Key, class T>
-Q_INLINE_TEMPLATE int QMultiMap<Key, T>::count(const Key &key, const T &value) const
+template <class Key, class T, class Compare>
+Q_INLINE_TEMPLATE int QMultiMap<Key, T, Compare>::count(const Key &key, const T &value) const
 {
    int n = 0;
-   typename QMap<Key, T>::const_iterator i(constFind(key));
-   typename QMap<Key, T>::const_iterator end(QMap<Key, T>::constEnd());
-   while (i != end && !qMapLessThanKey<Key>(key, i.key())) {
+   typename QMap<Key, T, Compare>::const_iterator i(constFind(key));
+   typename QMap<Key, T, Compare>::const_iterator end(QMap<Key, T, Compare>::constEnd());
+   while (i != end && !m_compare(key, i.key())) {
       if (i.value() == value) {
          ++n;
       }

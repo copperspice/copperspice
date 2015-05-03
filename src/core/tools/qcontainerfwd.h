@@ -32,11 +32,15 @@ QT_BEGIN_NAMESPACE
 
 template <class Key, class T> class QCache;
 template <class Key, class T> class QHash;
-template <class T> class QLinkedList;
+
 template <class T> class QList;
-template <class Key, class T> class QMap;
+template <class T> class QLinkedList;
+
+template <class Key> class qMapCompare;
+template <class Key, class T, class Compare = qMapCompare<Key>> class QMap;
+template <class Key, class T, class Compare = qMapCompare<Key>> class QMultiMap;
+
 template <class Key, class T> class QMultiHash;
-template <class Key, class T> class QMultiMap;
 template <class T1, class T2> struct QPair;
 template <class T> class QQueue;
 template <class T> class QSet;

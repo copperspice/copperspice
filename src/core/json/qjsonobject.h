@@ -28,11 +28,11 @@
 
 #include <qjsonvalue.h>
 #include <qiterator.h>
+#include <QtCore/qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 class QDebug;
-template <class Key, class T> class QMap;
 typedef QMap<QString, QVariant> QVariantMap;
 
 class Q_CORE_EXPORT QJsonObject

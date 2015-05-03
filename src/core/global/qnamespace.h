@@ -1405,7 +1405,11 @@ class Q_CORE_EXPORT Qt
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
    typedef void *HANDLE;
 
+#else
+   typedef void *HANDLE;
+
 #endif
+
    typedef WindowFlags WFlags;
 
    enum WindowModality {
