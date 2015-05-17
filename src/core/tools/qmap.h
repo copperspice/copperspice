@@ -179,6 +179,12 @@ class QMap
  public:
    inline QMap() : d( QMapData::sharedNull() ) { }
 
+   inline QMap(Compare compare) 
+       : d( QMapData::sharedNull() ),
+       m_compare(compare)
+   {
+   }
+
    inline QMap(const QMap<Key, T, Compare> &other) : d(other.d) {
       d->ref.ref();
       if (!d->sharable) {
