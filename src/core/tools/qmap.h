@@ -155,7 +155,10 @@ class QMap
       QMapData::Node *e;
    };
 
+ protected:
    Compare m_compare;
+
+ private:
 
    static inline int payload() {
       return sizeof(PayloadNode) - sizeof(QMapData::Node *);
@@ -1159,7 +1162,7 @@ class QMultiMap : public QMap<Key, T, Compare>
       typename QMap<Key, T, Compare>::iterator i(find(key));
       typename QMap<Key, T, Compare>::iterator end(this->end());
 
-      while (i != end && !m_compare(key, i.key())) {
+      while (i != end && ! this->m_compare(key, i.key())) {
          if (i.value() == value) {
             return i;
          }
@@ -1171,7 +1174,7 @@ class QMultiMap : public QMap<Key, T, Compare>
       typename QMap<Key, T, Compare>::const_iterator i(constFind(key));
       typename QMap<Key, T, Compare>::const_iterator end(QMap<Key, T, Compare>::constEnd());
 
-      while (i != end && !m_compare(key, i.key())) {
+      while (i != end && ! this->m_compare(key, i.key())) {
          if (i.value() == value) {
             return i;
          }
@@ -1200,7 +1203,7 @@ Q_INLINE_TEMPLATE int QMultiMap<Key, T, Compare>::remove(const Key &key, const T
    typename QMap<Key, T, Compare>::iterator i(find(key));
    typename QMap<Key, T, Compare>::iterator end(QMap<Key, T, Compare>::end());
 
-   while (i != end && !m_compare(key, i.key())) {
+   while (i != end && ! this->m_compare(key, i.key())) {
       if (i.value() == value) {
          i = this->erase(i);
          ++n;
@@ -1217,7 +1220,7 @@ Q_INLINE_TEMPLATE int QMultiMap<Key, T, Compare>::count(const Key &key, const T 
    int n = 0;
    typename QMap<Key, T, Compare>::const_iterator i(constFind(key));
    typename QMap<Key, T, Compare>::const_iterator end(QMap<Key, T, Compare>::constEnd());
-   while (i != end && !m_compare(key, i.key())) {
+   while (i != end && ! this->m_compare(key, i.key())) {
       if (i.value() == value) {
          ++n;
       }
