@@ -106,8 +106,7 @@ struct QMapNode {
    T value;
 
  private:
-   // never access these members through this structure
-   // see below
+   // never access these members through this structure, see below
    QMapData::Node *backward;
    QMapData::Node *forward[1];
 };
@@ -159,7 +158,6 @@ class QMap
    Compare m_compare;
 
  private:
-
    static inline int payload() {
       return sizeof(PayloadNode) - sizeof(QMapData::Node *);
    }
@@ -177,29 +175,32 @@ class QMap
    }
 
  public:
-   inline QMap() : d( QMapData::sharedNull() ) { }
+   inline QMap()
+       : d( QMapData::sharedNull() ) 
+   { }
 
-   inline QMap(Compare compare) 
-       : d( QMapData::sharedNull() ),
-       m_compare(compare)
+   explicit inline QMap(Compare compare) 
+       : d( QMapData::sharedNull() ), m_compare(compare)
+   { }
+
+   inline QMap(const QMap<Key, T, Compare> &other) 
+      : d(other.d), m_compare(other.m_compare) 
    {
-   }
-
-   inline QMap(const QMap<Key, T, Compare> &other) : d(other.d) {
       d->ref.ref();
-      if (!d->sharable) {
+      if (! d->sharable) {
          detach();
       }
    }
 
    inline ~QMap() {
-      if (!d->ref.deref()) {
+      if (! d->ref.deref()) {
          freeData(d);
       }
    }
 
    inline QMap(std::initializer_list<std::pair<Key, T> > list)
-      : d(QMapData::sharedNull() ) {
+      : d(QMapData::sharedNull() ) 
+   {
       for (typename std::initializer_list<std::pair<Key, T> >::const_iterator it = list.begin(); it != list.end(); ++it) {
          insert(it->first, it->second);
       }
@@ -209,11 +210,13 @@ class QMap
 
    inline QMap<Key, T, Compare> &operator=(QMap<Key, T, Compare> && other) {
       qSwap(d, other.d);
+      m_compare = std::move(other.m_compare);
       return *this;
    }
 
    inline void swap(QMap<Key, T, Compare> &other) {
       qSwap(d, other.d);
+      swap(m_compare, other.m_compare);
    }
 
    explicit QMap(const typename std::map<Key, T> &other);
@@ -579,21 +582,27 @@ Q_INLINE_TEMPLATE QMap<Key, T, Compare> &QMap<Key, T, Compare>::operator=(const 
    if (d != other.d) {
       QMapData *o = other.d;
       o->ref.ref();
+
       if (!d->ref.deref()) {
          freeData(d);
       }
+
       d = o;
+
       if (!d->sharable) {
          detach_helper();
       }
    }
+
+   m_compare = other.m_compare;   
+
    return *this;
 }
 
 template <class Key, class T, class Compare>
 Q_INLINE_TEMPLATE void QMap<Key, T, Compare>::clear()
 {
-   *this = QMap<Key, T, Compare>();
+   *this = QMap<Key, T, Compare>(m_compare);
 }
 
 template <class Key, class T, class Compare>
@@ -769,7 +778,7 @@ template <class Key, class T, class Compare>
 Q_OUTOFLINE_TEMPLATE void QMap<Key, T, Compare>::freeData(QMapData *x)
 {
    if (QTypeInfo<Key>::isComplex || QTypeInfo<T>::isComplex) {
-      QMapData *cur = x;
+      QMapData *cur  = x;
       QMapData *next = cur->forward[0];
 
       while (next != x) {
@@ -801,7 +810,7 @@ Q_OUTOFLINE_TEMPLATE int QMap<Key, T, Compare>::remove(const Key &akey)
       update[i] = cur;
    }
 
-   if (next != e && !m_compare(akey, concrete(next)->key)) {
+   if (next != e && ! m_compare(akey, concrete(next)->key)) {
       bool deleteNext = true;
       do {
          cur = next;
@@ -1176,6 +1185,7 @@ class QMultiMap : public QMap<Key, T, Compare>
       }
       return end;
    }
+
    typename QMap<Key, T, Compare>::const_iterator find(const Key &key, const T &value) const {
       typename QMap<Key, T, Compare>::const_iterator i(constFind(key));
       typename QMap<Key, T, Compare>::const_iterator end(QMap<Key, T, Compare>::constEnd());
@@ -1188,9 +1198,11 @@ class QMultiMap : public QMap<Key, T, Compare>
       }
       return end;
    }
+
    typename QMap<Key, T, Compare>::const_iterator constFind(const Key &key, const T &value) const {
       return find(key, value);
    }
+
  private:
    T &operator[](const Key &key);
    const T operator[](const Key &key) const;
