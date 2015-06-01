@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-/*!
+/*
 @function
 @abstract Reports an object's non-GC memory payload to the garbage collector.
 @param ctx The execution context to use.

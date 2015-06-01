@@ -67,7 +67,7 @@ class QWebElementPrivate {
 public:
 };
 
-/*!
+/*
     \class QWebElement
     \since 4.6
     \brief The QWebElement class provides convenient access to DOM elements in
@@ -135,7 +135,7 @@ public:
     features of this class and provides sample code you can start working with.
 */
 
-/*!
+/*
     Constructs a null web element.
 */
 QWebElement::QWebElement()
@@ -144,7 +144,7 @@ QWebElement::QWebElement()
 {
 }
 
-/*!
+/*
     \internal
 */
 QWebElement::QWebElement(WebCore::Element* domElement)
@@ -155,7 +155,7 @@ QWebElement::QWebElement(WebCore::Element* domElement)
         m_element->ref();
 }
 
-/*!
+/*
     \internal
 */
 QWebElement::QWebElement(WebCore::Node* node)
@@ -168,7 +168,7 @@ QWebElement::QWebElement(WebCore::Node* node)
     }
 }
 
-/*!
+/*
     Constructs a copy of \a other.
 */
 QWebElement::QWebElement(const QWebElement &other)
@@ -179,7 +179,7 @@ QWebElement::QWebElement(const QWebElement &other)
         m_element->ref();
 }
 
-/*!
+/*
     Assigns \a other to this element and returns a reference to this element.
 */
 QWebElement &QWebElement::operator=(const QWebElement &other)
@@ -196,7 +196,7 @@ QWebElement &QWebElement::operator=(const QWebElement &other)
     return *this;
 }
 
-/*!
+/*
     Destroys the element. However, the underlying DOM element is not destroyed.
 */
 QWebElement::~QWebElement()
@@ -216,7 +216,7 @@ bool QWebElement::operator!=(const QWebElement& o) const
     return m_element != o.m_element;
 }
 
-/*!
+/*
     Returns true if the element is a null element; otherwise returns false.
 */
 bool QWebElement::isNull() const
@@ -224,7 +224,7 @@ bool QWebElement::isNull() const
     return !m_element;
 }
 
-/*!
+/*
     Returns a new list of child elements matching the given CSS selector
     \a selectorQuery. If there are no matching elements, an empty list is
     returned.
@@ -240,7 +240,7 @@ QWebElementCollection QWebElement::findAll(const QString &selectorQuery) const
     return QWebElementCollection(*this, selectorQuery);
 }
 
-/*!
+/*
     Returns the first child element that matches the given CSS selector
     \a selectorQuery.
 
@@ -258,7 +258,7 @@ QWebElement QWebElement::findFirst(const QString &selectorQuery) const
     return QWebElement(m_element->querySelector(selectorQuery, exception).get());
 }
 
-/*!
+/*
     Replaces the existing content of this element with \a text.
 
     This is equivalent to setting the HTML innerText property.
@@ -273,7 +273,7 @@ void QWebElement::setPlainText(const QString &text)
     static_cast<HTMLElement*>(m_element)->setInnerText(text, exception);
 }
 
-/*!
+/*
     Returns the text between the start and the end tag of this
     element.
 
@@ -288,7 +288,7 @@ QString QWebElement::toPlainText() const
     return static_cast<HTMLElement*>(m_element)->innerText();
 }
 
-/*!
+/*
     Replaces the contents of this element as well as its own tag with
     \a markup. The string may contain HTML or XML tags, which is parsed and
     formatted before insertion into the document.
@@ -307,7 +307,7 @@ void QWebElement::setOuterXml(const QString &markup)
     static_cast<HTMLElement*>(m_element)->setOuterHTML(markup, exception);
 }
 
-/*!
+/*
     Returns this element converted to XML, including the start and the end
     tags as well as its attributes.
 
@@ -328,7 +328,7 @@ QString QWebElement::toOuterXml() const
     return static_cast<HTMLElement*>(m_element)->outerHTML();
 }
 
-/*!
+/*
     Replaces the contents of this element with \a markup. The string may
     contain HTML or XML tags, which is parsed and formatted before insertion
     into the document.
@@ -347,7 +347,7 @@ void QWebElement::setInnerXml(const QString &markup)
     static_cast<HTMLElement*>(m_element)->setInnerHTML(markup, exception);
 }
 
-/*!
+/*
     Returns the XML content between the element's start and end tags.
 
     \note This is currently implemented for (X)HTML elements only.
@@ -367,7 +367,7 @@ QString QWebElement::toInnerXml() const
     return static_cast<HTMLElement*>(m_element)->innerHTML();
 }
 
-/*!
+/*
     Adds an attribute with the given \a name and \a value. If an attribute with
     the same name exists, its value is replaced by \a value.
 
@@ -381,7 +381,7 @@ void QWebElement::setAttribute(const QString &name, const QString &value)
     m_element->setAttribute(name, value, exception);
 }
 
-/*!
+/*
     Adds an attribute with the given \a name in \a namespaceUri with \a value.
     If an attribute with the same name exists, its value is replaced by
     \a value.
@@ -396,7 +396,7 @@ void QWebElement::setAttributeNS(const QString &namespaceUri, const QString &nam
     m_element->setAttributeNS(namespaceUri, name, value, exception);
 }
 
-/*!
+/*
     Returns the attribute with the given \a name. If the attribute does not
     exist, \a defaultValue is returned.
 
@@ -412,7 +412,7 @@ QString QWebElement::attribute(const QString &name, const QString &defaultValue)
         return defaultValue;
 }
 
-/*!
+/*
     Returns the attribute with the given \a name in \a namespaceUri. If the
     attribute does not exist, \a defaultValue is returned.
 
@@ -428,7 +428,7 @@ QString QWebElement::attributeNS(const QString &namespaceUri, const QString &nam
         return defaultValue;
 }
 
-/*!
+/*
     Returns true if this element has an attribute with the given \a name;
     otherwise returns false.
 
@@ -441,7 +441,7 @@ bool QWebElement::hasAttribute(const QString &name) const
     return m_element->hasAttribute(name);
 }
 
-/*!
+/*
     Returns true if this element has an attribute with the given \a name, in
     \a namespaceUri; otherwise returns false.
 
@@ -454,7 +454,7 @@ bool QWebElement::hasAttributeNS(const QString &namespaceUri, const QString &nam
     return m_element->hasAttributeNS(namespaceUri, name);
 }
 
-/*!
+/*
     Removes the attribute with the given \a name from this element.
 
     \sa attribute(), setAttribute(), hasAttribute()
@@ -467,7 +467,7 @@ void QWebElement::removeAttribute(const QString &name)
     m_element->removeAttribute(name, exception);
 }
 
-/*!
+/*
     Removes the attribute with the given \a name, in \a namespaceUri, from this
     element.
 
@@ -481,7 +481,7 @@ void QWebElement::removeAttributeNS(const QString &namespaceUri, const QString &
     m_element->removeAttributeNS(namespaceUri, name, exception);
 }
 
-/*!
+/*
     Returns true if the element has any attributes defined; otherwise returns
     false;
 
@@ -494,7 +494,7 @@ bool QWebElement::hasAttributes() const
     return m_element->hasAttributes();
 }
 
-/*!
+/*
     Return the list of attributes for the namespace given as \a namespaceUri.
 
     \sa attribute(), setAttribute()
@@ -518,7 +518,7 @@ QStringList QWebElement::attributeNames(const QString& namespaceUri) const
     return attributeNameList;
 }
 
-/*!
+/*
     Returns true if the element has keyboard input focus; otherwise, returns false
 
     \sa setFocus()
@@ -532,7 +532,7 @@ bool QWebElement::hasFocus() const
     return false;
 }
 
-/*!
+/*
     Gives keyboard input focus to this element
 
     \sa hasFocus()
@@ -545,7 +545,7 @@ void QWebElement::setFocus()
         m_element->document()->setFocusedNode(m_element);
 }
 
-/*!
+/*
     Returns the geometry of this element, relative to its containing frame.
 
     \sa tagName()
@@ -557,7 +557,7 @@ QRect QWebElement::geometry() const
     return m_element->getRect();
 }
 
-/*!
+/*
     Returns the tag name of this element.
 
     \sa geometry()
@@ -569,7 +569,7 @@ QString QWebElement::tagName() const
     return m_element->tagName();
 }
 
-/*!
+/*
     Returns the namespace prefix of the element. If the element has no\
     namespace prefix, empty string is returned.
 */
@@ -580,7 +580,7 @@ QString QWebElement::prefix() const
     return m_element->prefix();
 }
 
-/*!
+/*
     Returns the local name of the element. If the element does not use
     namespaces, an empty string is returned.
 */
@@ -591,7 +591,7 @@ QString QWebElement::localName() const
     return m_element->localName();
 }
 
-/*!
+/*
     Returns the namespace URI of this element. If the element has no namespace
     URI, an empty string is returned.
 */
@@ -602,7 +602,7 @@ QString QWebElement::namespaceUri() const
     return m_element->namespaceURI();
 }
 
-/*!
+/*
     Returns the parent element of this elemen. If this element is the root
     document element, a null element is returned.
 */
@@ -613,7 +613,7 @@ QWebElement QWebElement::parent() const
     return QWebElement();
 }
 
-/*!
+/*
     Returns the element's first child.
 
     \sa lastChild(), previousSibling(), nextSibling()
@@ -631,7 +631,7 @@ QWebElement QWebElement::firstChild() const
     return QWebElement();
 }
 
-/*!
+/*
     Returns the element's last child.
 
     \sa firstChild(), previousSibling(), nextSibling()
@@ -649,7 +649,7 @@ QWebElement QWebElement::lastChild() const
     return QWebElement();
 }
 
-/*!
+/*
     Returns the element's next sibling.
 
     \sa firstChild(), previousSibling(), lastChild()
@@ -667,7 +667,7 @@ QWebElement QWebElement::nextSibling() const
     return QWebElement();
 }
 
-/*!
+/*
     Returns the element's previous sibling.
 
     \sa firstChild(), nextSibling(), lastChild()
@@ -685,7 +685,7 @@ QWebElement QWebElement::previousSibling() const
     return QWebElement();
 }
 
-/*!
+/*
     Returns the document which this element belongs to.
 */
 QWebElement QWebElement::document() const
@@ -698,7 +698,7 @@ QWebElement QWebElement::document() const
     return QWebElement(document->documentElement());
 }
 
-/*!
+/*
     Returns the web frame which this element is a part of. If the element is a
     null element, null is returned.
 */
@@ -767,7 +767,7 @@ static bool setupScriptContext(WebCore::Element* element, v8::Handle<v8::Value>&
 #endif
 
 
-/*!
+/*
     Executes \a scriptSource with this element as \c this object.
 */
 QVariant QWebElement::evaluateJavaScript(const QString& scriptSource)
@@ -804,7 +804,7 @@ QVariant QWebElement::evaluateJavaScript(const QString& scriptSource)
 #endif
 }
 
-/*!
+/*
     \enum QWebElement::StyleResolveStrategy
 
     This enum describes how QWebElement's styleProperty resolves the given
@@ -820,7 +820,7 @@ QVariant QWebElement::evaluateJavaScript(const QString& scriptSource)
            of the style property resolved from the environment.
 */
 
-/*!
+/*
     Returns the value of the style with the given \a name using the specified
     \a strategy. If a style with \a name does not exist, an empty string is
     returned.
@@ -897,7 +897,7 @@ QString QWebElement::styleProperty(const QString &name, StyleResolveStrategy str
     return QString();
 }
 
-/*!
+/*
     Sets the value of the inline style with the given \a name to \a value.
 
     Setting a value, does not necessarily mean that it will become the applied
@@ -921,7 +921,7 @@ void QWebElement::setStyleProperty(const QString &name, const QString &value)
     style->setProperty(name, value, exception);
 }
 
-/*!
+/*
     Returns the list of classes of this element.
 */
 QStringList QWebElement::classes() const
@@ -934,7 +934,7 @@ QStringList QWebElement::classes() const
     return classes;
 }
 
-/*!
+/*
     Returns true if this element has a class with the given \a name; otherwise
     returns false.
 */
@@ -944,7 +944,7 @@ bool QWebElement::hasClass(const QString &name) const
     return list.contains(name);
 }
 
-/*!
+/*
     Adds the specified class with the given \a name to the element.
 */
 void QWebElement::addClass(const QString &name)
@@ -957,7 +957,7 @@ void QWebElement::addClass(const QString &name)
     }
 }
 
-/*!
+/*
     Removes the specified class with the given \a name from the element.
 */
 void QWebElement::removeClass(const QString &name)
@@ -970,7 +970,7 @@ void QWebElement::removeClass(const QString &name)
     }
 }
 
-/*!
+/*
     Adds the specified class with the given \a name if it is not present. If
     the class is already present, it will be removed.
 */
@@ -986,7 +986,7 @@ void QWebElement::toggleClass(const QString &name)
     setAttribute(QLatin1String("class"), value);
 }
 
-/*!
+/*
     Appends the given \a element as the element's last child.
 
     If \a element is the child of another element, it is re-parented to this
@@ -1006,7 +1006,7 @@ void QWebElement::appendInside(const QWebElement &element)
     m_element->appendChild(element.m_element, exception);
 }
 
-/*!
+/*
     Appends the result of parsing \a markup as the element's last child.
 
     Calling this function on a null element does nothing.
@@ -1028,7 +1028,7 @@ void QWebElement::appendInside(const QString &markup)
     m_element->appendChild(fragment, exception);
 }
 
-/*!
+/*
     Prepends \a element as the element's first child.
 
     If \a element is the child of another element, it is re-parented to this
@@ -1052,7 +1052,7 @@ void QWebElement::prependInside(const QWebElement &element)
         m_element->appendChild(element.m_element, exception);
 }
 
-/*!
+/*
     Prepends the result of parsing \a markup as the element's first child.
 
     Calling this function on a null element does nothing.
@@ -1079,7 +1079,7 @@ void QWebElement::prependInside(const QString &markup)
 }
 
 
-/*!
+/*
     Inserts the given \a element before this element.
 
     If \a element is the child of another element, it is re-parented to the
@@ -1101,7 +1101,7 @@ void QWebElement::prependOutside(const QWebElement &element)
     m_element->parentNode()->insertBefore(element.m_element, m_element, exception);
 }
 
-/*!
+/*
     Inserts the result of parsing \a markup before this element.
 
     Calling this function on a null element does nothing.
@@ -1126,7 +1126,7 @@ void QWebElement::prependOutside(const QString &markup)
     m_element->parentNode()->insertBefore(fragment, m_element, exception);
 }
 
-/*!
+/*
     Inserts the given \a element after this element.
 
     If \a element is the child of another element, it is re-parented to the
@@ -1151,7 +1151,7 @@ void QWebElement::appendOutside(const QWebElement &element)
         m_element->parentNode()->insertBefore(element.m_element, m_element->nextSibling(), exception);
 }
 
-/*!
+/*
     Inserts the result of parsing \a markup after this element.
 
     Calling this function on a null element does nothing.
@@ -1179,7 +1179,7 @@ void QWebElement::appendOutside(const QString &markup)
         m_element->parentNode()->insertBefore(fragment, m_element->nextSibling(), exception);
 }
 
-/*!
+/*
     Returns a clone of this element.
 
     The clone may be inserted at any point in the document.
@@ -1194,7 +1194,7 @@ QWebElement QWebElement::clone() const
     return QWebElement(m_element->cloneElementWithChildren().get());
 }
 
-/*!
+/*
     Removes this element from the document and returns a reference to it.
 
     The element is still valid after removal, and can be inserted into other
@@ -1213,7 +1213,7 @@ QWebElement &QWebElement::takeFromDocument()
     return *this;
 }
 
-/*!
+/*
     Removes this element from the document and makes it a null element.
 
     \sa removeAllChildren(), takeFromDocument()
@@ -1229,7 +1229,7 @@ void QWebElement::removeFromDocument()
     m_element = 0;
 }
 
-/*!
+/*
     Removes all children from this element.
 
     \sa removeFromDocument(), takeFromDocument()
@@ -1266,7 +1266,7 @@ static RefPtr<Node> findInsertionPoint(PassRefPtr<Node> root)
     return node;
 }
 
-/*!
+/*
     Encloses the contents of this element with \a element. This element becomes
     the child of the deepest descendant within \a element.
 
@@ -1299,7 +1299,7 @@ void QWebElement::encloseContentsWith(const QWebElement &element)
         m_element->appendChild(element.m_element, exception);
 }
 
-/*!
+/*
     Encloses the contents of this element with the result of parsing \a markup.
     This element becomes the child of the deepest descendant within \a markup.
 
@@ -1342,7 +1342,7 @@ void QWebElement::encloseContentsWith(const QString &markup)
         m_element->appendChild(fragment, exception);
 }
 
-/*!
+/*
     Encloses this element with \a element. This element becomes the child of
     the deepest descendant within \a element.
 
@@ -1374,7 +1374,7 @@ void QWebElement::encloseWith(const QWebElement &element)
         parent->insertBefore(element.m_element, siblingNode, exception);
 }
 
-/*!
+/*
     Encloses this element with the result of parsing \a markup. This element
     becomes the child of the deepest descendant within \a markup.
 
@@ -1418,7 +1418,7 @@ void QWebElement::encloseWith(const QString &markup)
         parent->insertBefore(fragment, siblingNode, exception);
 }
 
-/*!
+/*
     Replaces this element with \a element.
 
     This method will not replace the <html>, <head> or <body> elements.
@@ -1434,7 +1434,7 @@ void QWebElement::replace(const QWebElement &element)
     takeFromDocument();
 }
 
-/*!
+/*
     Replaces this element with the result of parsing \a markup.
 
     This method will not replace the <html>, <head> or <body> elements.
@@ -1450,7 +1450,7 @@ void QWebElement::replace(const QString &markup)
     takeFromDocument();
 }
 
-/*!
+/*
     \internal
     Walk \a node's parents until a valid QWebElement is found.
     For example, a WebCore::Text node is not a valid Html QWebElement, but its
@@ -1467,14 +1467,14 @@ QWebElement QWebElement::enclosingElement(WebCore::Node* node)
     return element;
 }
 
-/*!
+/*
     \fn inline bool QWebElement::operator==(const QWebElement& o) const;
 
     Returns true if this element points to the same underlying DOM object as
     \a o; otherwise returns false.
 */
 
-/*!
+/*
     \fn inline bool QWebElement::operator!=(const QWebElement& o) const;
 
     Returns true if this element points to a different underlying DOM object
@@ -1482,7 +1482,7 @@ QWebElement QWebElement::enclosingElement(WebCore::Node* node)
 */
 
 
-/*! 
+/* 
   Render the element into \a painter .
 */
 void QWebElement::render(QPainter* painter)
@@ -1490,7 +1490,7 @@ void QWebElement::render(QPainter* painter)
     render(painter, QRect());
 }
 
-/*!
+/*
   Render the element into \a painter clipping to \a clip.
 */
 void QWebElement::render(QPainter* painter, const QRect& clip)
@@ -1555,7 +1555,7 @@ QWebElementCollectionPrivate* QWebElementCollectionPrivate::create(const PassRef
     return priv;
 }
 
-/*!
+/*
     \class QWebElementCollection
     \since 4.6
     \brief The QWebElementCollection class represents a collection of web elements.
@@ -1579,14 +1579,14 @@ QWebElementCollectionPrivate* QWebElementCollectionPrivate::create(const PassRef
     \endcode
 */
 
-/*!
+/*
     Constructs an empty collection.
 */
 QWebElementCollection::QWebElementCollection()
 {
 }
 
-/*!
+/*
     Constructs a copy of \a other.
 */
 QWebElementCollection::QWebElementCollection(const QWebElementCollection &other)
@@ -1594,7 +1594,7 @@ QWebElementCollection::QWebElementCollection(const QWebElementCollection &other)
 {
 }
 
-/*!
+/*
     Constructs a collection of elements from the list of child elements of \a contextElement that
     match the specified CSS selector \a query.
 */
@@ -1603,7 +1603,7 @@ QWebElementCollection::QWebElementCollection(const QWebElement &contextElement, 
     d = QExplicitlySharedDataPointer<QWebElementCollectionPrivate>(QWebElementCollectionPrivate::create(contextElement.m_element, query));
 }
 
-/*!
+/*
     Assigns \a other to this collection and returns a reference to this collection.
 */
 QWebElementCollection &QWebElementCollection::operator=(const QWebElementCollection &other)
@@ -1612,14 +1612,14 @@ QWebElementCollection &QWebElementCollection::operator=(const QWebElementCollect
     return *this;
 }
 
-/*!
+/*
     Destroys the collection.
 */
 QWebElementCollection::~QWebElementCollection()
 {
 }
 
-/*! \fn QWebElementCollection &QWebElementCollection::operator+=(const QWebElementCollection &other)
+/* \fn QWebElementCollection &QWebElementCollection::operator+=(const QWebElementCollection &other)
 
     Appends the items of the \a other list to this list and returns a
     reference to this list.
@@ -1627,7 +1627,7 @@ QWebElementCollection::~QWebElementCollection()
     \sa operator+(), append()
 */
 
-/*!
+/*
     Returns a collection that contains all the elements of this collection followed
     by all the elements in the \a other collection. Duplicates may occur in the result.
 
@@ -1638,7 +1638,7 @@ QWebElementCollection QWebElementCollection::operator+(const QWebElementCollecti
     QWebElementCollection n = *this; n.d.detach(); n += other; return n;
 }
 
-/*!
+/*
     Extends the collection by appending all items of \a other.
 
     The resulting collection may include duplicate elements.
@@ -1669,7 +1669,7 @@ void QWebElementCollection::append(const QWebElementCollection &other)
     d->m_result = StaticNodeList::adopt(nodes);
 }
 
-/*!
+/*
     Returns the number of elements in the collection.
 */
 int QWebElementCollection::count() const
@@ -1679,7 +1679,7 @@ int QWebElementCollection::count() const
     return d->m_result->length();
 }
 
-/*!
+/*
     Returns the element at index position \a i in the collection.
 */
 QWebElement QWebElementCollection::at(int i) const
@@ -1690,27 +1690,27 @@ QWebElement QWebElementCollection::at(int i) const
     return QWebElement(static_cast<Element*>(n));
 }
 
-/*!
+/*
     \fn const QWebElement QWebElementCollection::operator[](int position) const
 
     Returns the element at the specified \a position in the collection.
 */
 
-/*! \fn QWebElement QWebElementCollection::first() const
+/* \fn QWebElement QWebElementCollection::first() const
 
     Returns the first element in the collection.
 
     \sa last(), operator[](), at(), count()
 */
 
-/*! \fn QWebElement QWebElementCollection::last() const
+/* \fn QWebElement QWebElementCollection::last() const
 
     Returns the last element in the collection.
 
     \sa first(), operator[](), at(), count()
 */
 
-/*!
+/*
     Returns a QList object with the elements contained in this collection.
 */
 QList<QWebElement> QWebElementCollection::toList() const
@@ -1728,7 +1728,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     return elements;
 }
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::begin() const
 
     Returns an STL-style iterator pointing to the first element in the collection.
@@ -1736,7 +1736,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa end()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::end() const
 
     Returns an STL-style iterator pointing to the imaginary element after the
@@ -1745,7 +1745,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa begin()
 */
 
-/*!
+/*
     \class QWebElementCollection::const_iterator
     \since 4.6
     \brief The QWebElementCollection::const_iterator class provides an STL-style const iterator for QWebElementCollection.
@@ -1755,24 +1755,24 @@ QList<QWebElement> QWebElementCollection::toList() const
     QWebElementCollection::const_iterator allows you to iterate over a QWebElementCollection.
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator::const_iterator(const const_iterator &other)
 
     Constructs a copy of \a other.
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator::const_iterator(const QWebElementCollection *collection, int index)
     \internal
 */
 
-/*!
+/*
     \fn const QWebElement QWebElementCollection::const_iterator::operator*() const
 
     Returns the current element.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator==(const const_iterator &other) const
 
     Returns true if \a other points to the same item as this iterator;
@@ -1781,7 +1781,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator!=()
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator!=(const const_iterator &other) const
 
     Returns true if \a other points to a different element than this;
@@ -1790,7 +1790,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator==()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator &QWebElementCollection::const_iterator::operator++()
 
     The prefix ++ operator (\c{++it}) advances the iterator to the next element in the collection
@@ -1801,7 +1801,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator--()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::const_iterator::operator++(int)
 
     \overload
@@ -1812,7 +1812,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     Calling this function on QWebElementCollection::end() leads to undefined results.
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator &QWebElementCollection::const_iterator::operator--()
 
     The prefix -- operator (\c{--it}) makes the preceding element current and returns an
@@ -1823,7 +1823,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator++()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::const_iterator::operator--(int)
 
     \overload
@@ -1832,7 +1832,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     an iterator to the previously current element.
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator &QWebElementCollection::const_iterator::operator+=(int j)
 
     Advances the iterator by \a j elements. If \a j is negative, the iterator goes backward.
@@ -1840,7 +1840,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator-=(), operator+()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator &QWebElementCollection::const_iterator::operator-=(int j)
 
     Makes the iterator go back by \a j elements. If \a j is negative, the iterator goes forward.
@@ -1848,7 +1848,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator+=(), operator-()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::const_iterator::operator+(int j) const
 
     Returns an iterator to the element at \a j positions forward from this iterator. If \a j
@@ -1857,7 +1857,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator-(), operator+=()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::const_iterator::operator-(int j) const
 
     Returns an iterator to the element at \a j positiosn backward from this iterator.
@@ -1866,42 +1866,42 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator+(), operator-=()
 */
 
-/*!
+/*
     \fn int QWebElementCollection::const_iterator::operator-(const_iterator other) const
 
     Returns the number of elements between the item point to by \a other
     and the element pointed to by this iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator<(const const_iterator &other) const
 
     Returns true if the element pointed to by this iterator is less than the element pointed to
     by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator<=(const const_iterator &other) const
 
     Returns true if the element pointed to by this iterator is less than or equal to the
     element pointed to by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator>(const const_iterator &other) const
 
     Returns true if the element pointed to by this iterator is greater than the element pointed to
     by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::const_iterator::operator>=(const const_iterator &other) const
 
     Returns true if the element pointed to by this iterator is greater than or equal to the
     element pointed to by the \a other iterator.
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::begin()
 
     Returns an STL-style iterator pointing to the first element in the collection.
@@ -1909,7 +1909,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa end()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::end()
 
     Returns an STL-style iterator pointing to the imaginary element after the
@@ -1918,7 +1918,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa begin()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::constBegin() const
 
     Returns an STL-style iterator pointing to the first element in the collection.
@@ -1926,7 +1926,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa end()
 */
 
-/*!
+/*
     \fn QWebElementCollection::const_iterator QWebElementCollection::constEnd() const
 
     Returns an STL-style iterator pointing to the imaginary element after the
@@ -1935,7 +1935,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa begin()
 */
 
-/*!
+/*
     \class QWebElementCollection::iterator
     \since 4.6
     \brief The QWebElementCollection::iterator class provides an STL-style iterator for QWebElementCollection.
@@ -1945,24 +1945,24 @@ QList<QWebElement> QWebElementCollection::toList() const
     QWebElementCollection::iterator allows you to iterate over a QWebElementCollection.
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator::iterator(const iterator &other)
 
     Constructs a copy of \a other.
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator::iterator(const QWebElementCollection *collection, int index)
     \internal
 */
 
-/*!
+/*
     \fn const QWebElement QWebElementCollection::iterator::operator*() const
 
     Returns the current element.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator==(const iterator &other) const
 
     Returns true if \a other points to the same item as this iterator;
@@ -1971,7 +1971,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator!=()
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator!=(const iterator &other) const
 
     Returns true if \a other points to a different element than this;
@@ -1980,7 +1980,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator==()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator &QWebElementCollection::iterator::operator++()
 
     The prefix ++ operator (\c{++it}) advances the iterator to the next element in the collection
@@ -1991,7 +1991,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator--()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::iterator::operator++(int)
 
     \overload
@@ -2002,7 +2002,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     Calling this function on QWebElementCollection::end() leads to undefined results.
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator &QWebElementCollection::iterator::operator--()
 
     The prefix -- operator (\c{--it}) makes the preceding element current and returns an
@@ -2013,7 +2013,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator++()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::iterator::operator--(int)
 
     \overload
@@ -2022,7 +2022,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     an iterator to the previously current element.
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator &QWebElementCollection::iterator::operator+=(int j)
 
     Advances the iterator by \a j elements. If \a j is negative, the iterator goes backward.
@@ -2030,7 +2030,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator-=(), operator+()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator &QWebElementCollection::iterator::operator-=(int j)
 
     Makes the iterator go back by \a j elements. If \a j is negative, the iterator goes forward.
@@ -2038,7 +2038,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator+=(), operator-()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::iterator::operator+(int j) const
 
     Returns an iterator to the element at \a j positions forward from this iterator. If \a j
@@ -2047,7 +2047,7 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator-(), operator+=()
 */
 
-/*!
+/*
     \fn QWebElementCollection::iterator QWebElementCollection::iterator::operator-(int j) const
 
     Returns an iterator to the element at \a j positiosn backward from this iterator.
@@ -2056,35 +2056,35 @@ QList<QWebElement> QWebElementCollection::toList() const
     \sa operator+(), operator-=()
 */
 
-/*!
+/*
     \fn int QWebElementCollection::iterator::operator-(iterator other) const
 
     Returns the number of elements between the item point to by \a other
     and the element pointed to by this iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator<(const iterator &other) const
 
     Returns true if the element pointed to by this iterator is less than the element pointed to
     by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator<=(const iterator &other) const
 
     Returns true if the element pointed to by this iterator is less than or equal to the
     element pointed to by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator>(const iterator &other) const
 
     Returns true if the element pointed to by this iterator is greater than the element pointed to
     by the \a other iterator.
 */
 
-/*!
+/*
     \fn bool QWebElementCollection::iterator::operator>=(const iterator &other) const
 
     Returns true if the element pointed to by this iterator is greater than or equal to the

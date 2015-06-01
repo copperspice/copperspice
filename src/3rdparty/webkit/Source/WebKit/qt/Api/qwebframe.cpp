@@ -170,7 +170,7 @@ bool QWEBKIT_EXPORT qtwebkit_webframe_scrollOverflow(QWebFrame* qFrame, int dx, 
 }
 
 
-/*!
+/*
   \internal
   Scrolls nested frames starting at this frame, \a dx pixels to the right 
   and \a dy pixels downward. Both \a dx and \a dy may be negative. First attempts
@@ -474,7 +474,7 @@ void QWebFramePrivate::_q_orientationChanged()
     frame->sendOrientationChangeEvent(orientation);
 #endif
 }
-/*!
+/*
     \class QWebFrame
     \since 4.4
     \brief The QWebFrame class represents a frame in a web page.
@@ -524,7 +524,7 @@ void QWebFramePrivate::_q_orientationChanged()
     \sa QWebPage
 */
 
-/*!
+/*
     \enum QWebFrame::RenderLayer
 
     This enum describes the layers available for rendering using \l{QWebFrame::}{render()}.
@@ -572,7 +572,7 @@ QWebFrame::~QWebFrame()
     delete d;
 }
 
-/*!
+/*
     Make \a object available under \a name from within the frame's JavaScript
     context. The \a object will be inserted as a child of the frame's window
     object.
@@ -594,7 +594,7 @@ void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object
     addToJavaScriptWindowObject(name, object, QScriptEngine::QtOwnership);
 }
 
-/*!
+/*
     \fn void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership own)
     \overload
 
@@ -652,7 +652,7 @@ void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object
 #endif
 }
 
-/*!
+/*
     Returns the frame's content as HTML, enclosed in HTML and BODY tags.
 
     \sa setHtml(), toPlainText()
@@ -664,7 +664,7 @@ QString QWebFrame::toHtml() const
     return createMarkup(d->frame->document());
 }
 
-/*!
+/*
     Returns the content of this frame converted to plain text, completely
     stripped of all HTML formatting.
 
@@ -681,7 +681,7 @@ QString QWebFrame::toPlainText() const
     return QString();
 }
 
-/*!
+/*
     Returns a dump of the rendering tree. This is mainly useful for debugging
     html.
 */
@@ -693,7 +693,7 @@ QString QWebFrame::renderTreeDump() const
     return externalRepresentation(d->frame);
 }
 
-/*!
+/*
     \property QWebFrame::title
     \brief the title of the frame as defined by the HTML &lt;title&gt; element
 
@@ -707,7 +707,7 @@ QString QWebFrame::title() const
     return QString();
 }
 
-/*!
+/*
     \since 4.5
     \brief Returns the meta data in this frame as a QMultiMap
 
@@ -783,7 +783,7 @@ static inline QUrl ensureAbsoluteUrl(const QUrl &url)
     return baseUrl.resolved(toResolve);
 }
 
-/*!
+/*
     \property QWebFrame::url
     \brief the url of the frame currently viewed
 
@@ -807,7 +807,7 @@ QUrl QWebFrame::url() const
     return d->url;
 }
 
-/*!
+/*
     \since 4.6
     \property QWebFrame::requestedUrl
 
@@ -820,7 +820,7 @@ QUrl QWebFrame::requestedUrl() const
 {
     return d->frameLoaderClient->lastRequestedUrl();
 }
-/*!
+/*
     \since 4.6
     \property QWebFrame::baseUrl
     \brief the base URL of the frame, can be used to resolve relative URLs
@@ -834,7 +834,7 @@ QUrl QWebFrame::baseUrl() const
     return d->frame->document()->baseURL();
 }
 
-/*!
+/*
     \property QWebFrame::icon
     \brief the icon associated with this frame
 
@@ -846,7 +846,7 @@ QIcon QWebFrame::icon() const
     return QWebSettings::iconForUrl(d->frame->document()->url());
 }
 
-/*!
+/*
   The name of this frame as defined by the parent frame.
 */
 QString QWebFrame::frameName() const
@@ -854,7 +854,7 @@ QString QWebFrame::frameName() const
     return d->frame->tree()->uniqueName();
 }
 
-/*!
+/*
   The web page that contains this frame.
 
   \sa pageChanged()
@@ -864,7 +864,7 @@ QWebPage *QWebFrame::page() const
     return d->page;
 }
 
-/*!
+/*
   Loads \a url into this frame.
 
   \note The view remains the same until enough data has arrived to display the new \a url.
@@ -877,7 +877,7 @@ void QWebFrame::load(const QUrl &url)
     load(QNetworkRequest(url));
 }
 
-/*!
+/*
   Loads a network request, \a req, into this frame, using the method specified in \a
   operation.
 
@@ -944,7 +944,7 @@ void QWebFrame::load(const QNetworkRequest &req, QNetworkAccessManager::Operatio
         d->page->d->insideOpenCall = false;
 }
 
-/*!
+/*
   Sets the content of this frame to \a html. \a baseUrl is optional and used to resolve relative
   URLs in the document, such as referenced images or stylesheets.
 
@@ -978,7 +978,7 @@ void QWebFrame::setHtml(const QString &html, const QUrl &baseUrl)
     d->frame->loader()->load(request, substituteData, false);
 }
 
-/*!
+/*
   Sets the content of this frame to the specified content \a data. If the \a mimeType argument
   is empty it is currently assumed that the content is HTML but in future versions we may introduce
   auto-detection.
@@ -1008,7 +1008,7 @@ void QWebFrame::setContent(const QByteArray &data, const QString &mimeType, cons
     d->frame->loader()->load(request, substituteData, false);
 }
 
-/*!
+/*
   Returns the parent frame of this frame, or 0 if the frame is the web pages
   main frame.
 
@@ -1021,7 +1021,7 @@ QWebFrame *QWebFrame::parentFrame() const
     return d->parentFrame();
 }
 
-/*!
+/*
   Returns a list of all frames that are direct children of this frame.
 
   \sa parentFrame()
@@ -1042,7 +1042,7 @@ QList<QWebFrame*> QWebFrame::childFrames() const
     return rc;
 }
 
-/*!
+/*
     Returns the scrollbar policy for the scrollbar defined by \a orientation.
 */
 Qt::ScrollBarPolicy QWebFrame::scrollBarPolicy(Qt::Orientation orientation) const
@@ -1052,7 +1052,7 @@ Qt::ScrollBarPolicy QWebFrame::scrollBarPolicy(Qt::Orientation orientation) cons
     return d->verticalScrollBarPolicy;
 }
 
-/*!
+/*
     Sets the scrollbar policy for the scrollbar defined by \a orientation to \a policy.
 */
 void QWebFrame::setScrollBarPolicy(Qt::Orientation orientation, Qt::ScrollBarPolicy policy)
@@ -1076,7 +1076,7 @@ void QWebFrame::setScrollBarPolicy(Qt::Orientation orientation, Qt::ScrollBarPol
     }
 }
 
-/*!
+/*
   Sets the current \a value for the scrollbar with orientation \a orientation.
 
   The scrollbar forces the \a value to be within the legal range: minimum <= value <= maximum.
@@ -1098,7 +1098,7 @@ void QWebFrame::setScrollBarValue(Qt::Orientation orientation, int value)
     }
 }
 
-/*!
+/*
   Returns the current value for the scrollbar with orientation \a orientation, or 0
   if no scrollbar is found for \a orientation.
 
@@ -1113,7 +1113,7 @@ int QWebFrame::scrollBarValue(Qt::Orientation orientation) const
     return 0;
 }
 
-/*!
+/*
   Returns the maximum value for the scrollbar with orientation \a orientation, or 0
   if no scrollbar is found for \a orientation.
 
@@ -1128,7 +1128,7 @@ int QWebFrame::scrollBarMaximum(Qt::Orientation orientation) const
     return 0;
 }
 
-/*!
+/*
   Returns the minimum value for the scrollbar with orientation \a orientation.
 
   The minimum value is always 0.
@@ -1141,7 +1141,7 @@ int QWebFrame::scrollBarMinimum(Qt::Orientation orientation) const
     return 0;
 }
 
-/*!
+/*
   \since 4.6
   Returns the geometry for the scrollbar with orientation \a orientation.
 
@@ -1156,7 +1156,7 @@ QRect QWebFrame::scrollBarGeometry(Qt::Orientation orientation) const
     return QRect();
 }
 
-/*!
+/*
   \since 4.5
   Scrolls the frame \a dx pixels to the right and \a dy pixels downward. Both
   \a dx and \a dy may be negative.
@@ -1172,7 +1172,7 @@ void QWebFrame::scroll(int dx, int dy)
     d->frame->view()->scrollBy(IntSize(dx, dy));
 }
 
-/*!
+/*
   \property QWebFrame::scrollPosition
   \since 4.5
   \brief the position the frame is currently scrolled to.
@@ -1195,7 +1195,7 @@ void QWebFrame::setScrollPosition(const QPoint &pos)
     scroll(dx, dy);
 }
 
-/*!
+/*
   \since 4.7
   Scrolls the frame to the given \a anchor name.
 */
@@ -1206,7 +1206,7 @@ void QWebFrame::scrollToAnchor(const QString& anchor)
         view->scrollToAnchor(anchor);
 }
 
-/*!
+/*
   \since 4.6
   Render the \a layer of the frame using \a painter clipping to \a clip.
 
@@ -1225,7 +1225,7 @@ void QWebFrame::render(QPainter* painter, RenderLayer layer, const QRegion& clip
         d->renderRelativeCoords(&context, layer, QRegion(d->frame->view()->frameRect()));
 }
 
-/*!
+/*
   Render the frame into \a painter clipping to \a clip.
 */
 void QWebFrame::render(QPainter* painter, const QRegion& clip)
@@ -1237,7 +1237,7 @@ void QWebFrame::render(QPainter* painter, const QRegion& clip)
     d->renderRelativeCoords(&context, AllLayers, clip);
 }
 
-/*!
+/*
   Render the frame into \a painter.
 */
 void QWebFrame::render(QPainter* painter)
@@ -1252,7 +1252,7 @@ void QWebFrame::render(QPainter* painter)
     d->renderRelativeCoords(&context, AllLayers, QRegion(d->frame->view()->frameRect()));
 }
 
-/*!
+/*
     \property QWebFrame::textSizeMultiplier
     \brief the scaling factor for all text in the frame
     \obsolete
@@ -1264,7 +1264,7 @@ void QWebFrame::render(QPainter* painter)
     QWebSettings.
 */
 
-/*!
+/*
     Sets the value of the multiplier used to scale the text in a Web frame to
     the \a factor specified.
 */
@@ -1275,7 +1275,7 @@ void QWebFrame::setTextSizeMultiplier(qreal factor)
     d->frame->setPageAndTextZoomFactors(1, factor);
 }
 
-/*!
+/*
     Returns the value of the multiplier used to scale the text in a Web frame.
 */
 qreal QWebFrame::textSizeMultiplier() const
@@ -1283,7 +1283,7 @@ qreal QWebFrame::textSizeMultiplier() const
     return page()->settings()->testAttribute(QWebSettings::ZoomTextOnly) ? d->frame->textZoomFactor() : d->frame->pageZoomFactor();
 }
 
-/*!
+/*
     \property QWebFrame::zoomFactor
     \since 4.5
     \brief the zoom factor for the frame
@@ -1302,7 +1302,7 @@ qreal QWebFrame::zoomFactor() const
     return page()->settings()->testAttribute(QWebSettings::ZoomTextOnly) ? d->frame->textZoomFactor() : d->frame->pageZoomFactor();
 }
 
-/*!
+/*
     \property QWebFrame::focus
     \since 4.6
 
@@ -1314,7 +1314,7 @@ bool QWebFrame::hasFocus() const
     return ff && QWebFramePrivate::kit(ff) == this;
 }
 
-/*!
+/*
     \since 4.6
 
     Gives keyboard input focus to this frame.
@@ -1324,7 +1324,7 @@ void QWebFrame::setFocus()
     QWebFramePrivate::core(this)->page()->focusController()->setFocusedFrame(QWebFramePrivate::core(this));
 }
 
-/*!
+/*
     Returns the position of the frame relative to it's parent frame.
 */
 QPoint QWebFrame::pos() const
@@ -1335,7 +1335,7 @@ QPoint QWebFrame::pos() const
     return d->frame->view()->frameRect().location();
 }
 
-/*!
+/*
     Return the geometry of the frame relative to it's parent frame.
 */
 QRect QWebFrame::geometry() const
@@ -1345,7 +1345,7 @@ QRect QWebFrame::geometry() const
     return d->frame->view()->frameRect();
 }
 
-/*!
+/*
     \property QWebFrame::contentsSize
     \brief the size of the contents in this frame
 
@@ -1359,7 +1359,7 @@ QSize QWebFrame::contentsSize() const
     return QSize(view->contentsWidth(), view->contentsHeight());
 }
 
-/*!
+/*
     \since 4.6
 
     Returns the document element of this frame.
@@ -1375,7 +1375,7 @@ QWebElement QWebFrame::documentElement() const
     return QWebElement(doc->documentElement());
 }
 
-/*!
+/*
     \since 4.6
     Returns a new list of elements matching the given CSS selector \a selectorQuery.
     If there are no matching elements, an empty list is returned.
@@ -1390,7 +1390,7 @@ QWebElementCollection QWebFrame::findAllElements(const QString &selectorQuery) c
     return documentElement().findAll(selectorQuery);
 }
 
-/*!
+/*
     \since 4.6
     Returns the first element in the frame's document that matches the
     given CSS selector \a selectorQuery. If there is no matching element, a
@@ -1406,7 +1406,7 @@ QWebElement QWebFrame::findFirstElement(const QString &selectorQuery) const
     return documentElement().findFirst(selectorQuery);
 }
 
-/*!
+/*
     Performs a hit test on the frame contents at the given position \a pos and returns the hit test result.
 */
 QWebHitTestResult QWebFrame::hitTestContent(const QPoint &pos) const
@@ -1422,7 +1422,7 @@ QWebHitTestResult QWebFrame::hitTestContent(const QPoint &pos) const
     return QWebHitTestResult(new QWebHitTestResultPrivate(result));
 }
 
-/*! \reimp
+/* \reimp
 */
 bool QWebFrame::event(QEvent *e)
 {
@@ -1430,7 +1430,7 @@ bool QWebFrame::event(QEvent *e)
 }
 
 #ifndef QT_NO_PRINTER
-/*!
+/*
     Prints the frame to the given \a printer.
 
     \sa render()
@@ -1527,7 +1527,7 @@ void QWebFrame::print(QPrinter *printer) const
 }
 #endif // QT_NO_PRINTER
 
-/*!
+/*
     Evaluates the JavaScript defined by \a scriptSource using this frame as context
     and returns the result of the last executed statement.
 
@@ -1553,7 +1553,7 @@ QVariant QWebFrame::evaluateJavaScript(const QString& scriptSource)
     return rc;
 }
 
-/*!
+/*
     \since 4.5
 
     Returns the frame's security origin.
@@ -1576,7 +1576,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
 }
 
 
-/*!
+/*
     \fn void QWebFrame::javaScriptWindowObjectCleared()
 
     This signal is emitted whenever the global window object of the JavaScript
@@ -1588,12 +1588,12 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     loading new URLs.
 */
 
-/*!
+/*
     \fn void QWebFrame::provisionalLoad()
     \internal
 */
 
-/*!
+/*
     \fn void QWebFrame::titleChanged(const QString &title)
 
     This signal is emitted whenever the title of the frame changes.
@@ -1602,7 +1602,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \sa title()
 */
 
-/*!
+/*
     \fn void QWebFrame::urlChanged(const QUrl &url)
 
     This signal is emitted with the URL of the frame when the frame's title is
@@ -1611,7 +1611,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \sa url()
 */
 
-/*!
+/*
     \fn void QWebFrame::initialLayoutCompleted()
 
     This signal is emitted when the frame is laid out the first time.
@@ -1620,7 +1620,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \note A frame can be laid out multiple times.
 */
 
-/*!
+/*
   \fn void QWebFrame::iconChanged()
 
   This signal is emitted when the icon ("favicon") associated with the frame
@@ -1629,7 +1629,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
   \sa icon()
 */
 
-/*!
+/*
   \fn void QWebFrame::contentsSizeChanged(const QSize &size)
   \since 4.6
 
@@ -1639,7 +1639,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
   \sa contentsSize()
 */
 
-/*!
+/*
     \fn void QWebFrame::loadStarted()
     \since 4.6
 
@@ -1648,7 +1648,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \sa loadFinished()
 */
 
-/*!
+/*
     \fn void QWebFrame::loadFinished(bool ok)
     \since 4.6
 
@@ -1658,7 +1658,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \sa loadStarted()
 */
 
-/*!
+/*
     \fn void QWebFrame::pageChanged()
     \since 4.7
 
@@ -1667,7 +1667,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     \sa page()
 */
 
-/*!
+/*
     \class QWebHitTestResult
     \since 4.4
     \brief The QWebHitTestResult class provides information about the web
@@ -1679,7 +1679,7 @@ QWebFrame* QWebFramePrivate::kit(const WebCore::Frame* coreFrame)
     information about the content of the web page at the specified position.
 */
 
-/*!
+/*
     \internal
 */
 QWebHitTestResult::QWebHitTestResult(QWebHitTestResultPrivate *priv)
@@ -1727,7 +1727,7 @@ QWebHitTestResultPrivate::QWebHitTestResultPrivate(const WebCore::HitTestResult 
     enclosingBlock = QWebElement(WebCore::enclosingBlock(innerNode.get()));
 }
 
-/*!
+/*
     Constructs a null hit test result.
 */
 QWebHitTestResult::QWebHitTestResult()
@@ -1735,7 +1735,7 @@ QWebHitTestResult::QWebHitTestResult()
 {
 }
 
-/*!
+/*
     Constructs a hit test result from \a other.
 */
 QWebHitTestResult::QWebHitTestResult(const QWebHitTestResult &other)
@@ -1745,7 +1745,7 @@ QWebHitTestResult::QWebHitTestResult(const QWebHitTestResult &other)
         d = new QWebHitTestResultPrivate(*other.d);
 }
 
-/*!
+/*
     Assigns the \a other hit test result to this.
 */
 QWebHitTestResult &QWebHitTestResult::operator=(const QWebHitTestResult &other)
@@ -1763,7 +1763,7 @@ QWebHitTestResult &QWebHitTestResult::operator=(const QWebHitTestResult &other)
     return *this;
 }
 
-/*!
+/*
     Destructor.
 */
 QWebHitTestResult::~QWebHitTestResult()
@@ -1771,7 +1771,7 @@ QWebHitTestResult::~QWebHitTestResult()
     delete d;
 }
 
-/*!
+/*
     Returns true if the hit test result is null; otherwise returns false.
 */
 bool QWebHitTestResult::isNull() const
@@ -1779,7 +1779,7 @@ bool QWebHitTestResult::isNull() const
     return !d;
 }
 
-/*!
+/*
     Returns the position where the hit test occured.
 */
 QPoint QWebHitTestResult::pos() const
@@ -1789,7 +1789,7 @@ QPoint QWebHitTestResult::pos() const
     return d->pos;
 }
 
-/*!
+/*
     \since 4.5
     Returns the bounding rect of the element.
 */
@@ -1800,7 +1800,7 @@ QRect QWebHitTestResult::boundingRect() const
     return d->boundingRect;
 }
 
-/*!
+/*
     \since 4.6
     Returns the block element that encloses the element hit.
 
@@ -1815,7 +1815,7 @@ QWebElement QWebHitTestResult::enclosingBlockElement() const
     return d->enclosingBlock;
 }
 
-/*!
+/*
     Returns the title of the nearest enclosing HTML element.
 */
 QString QWebHitTestResult::title() const
@@ -1825,7 +1825,7 @@ QString QWebHitTestResult::title() const
     return d->title;
 }
 
-/*!
+/*
     Returns the text of the link.
 */
 QString QWebHitTestResult::linkText() const
@@ -1835,7 +1835,7 @@ QString QWebHitTestResult::linkText() const
     return d->linkText;
 }
 
-/*!
+/*
     Returns the url to which the link points to.
 */
 QUrl QWebHitTestResult::linkUrl() const
@@ -1845,7 +1845,7 @@ QUrl QWebHitTestResult::linkUrl() const
     return d->linkUrl;
 }
 
-/*!
+/*
     Returns the title of the link.
 */
 QUrl QWebHitTestResult::linkTitle() const
@@ -1855,7 +1855,7 @@ QUrl QWebHitTestResult::linkTitle() const
     return d->linkTitle;
 }
 
-/*!
+/*
   \since 4.6
   Returns the element that represents the link.
 
@@ -1868,7 +1868,7 @@ QWebElement QWebHitTestResult::linkElement() const
     return d->linkElement;
 }
 
-/*!
+/*
     Returns the frame that will load the link if it is activated.
 
     \sa linkElement()
@@ -1880,7 +1880,7 @@ QWebFrame *QWebHitTestResult::linkTargetFrame() const
     return d->linkTargetFrame;
 }
 
-/*!
+/*
     Returns the alternate text of the element. This corresponds to the HTML alt attribute.
 */
 QString QWebHitTestResult::alternateText() const
@@ -1890,7 +1890,7 @@ QString QWebHitTestResult::alternateText() const
     return d->alternateText;
 }
 
-/*!
+/*
     Returns the url of the image.
 */
 QUrl QWebHitTestResult::imageUrl() const
@@ -1900,7 +1900,7 @@ QUrl QWebHitTestResult::imageUrl() const
     return d->imageUrl;
 }
 
-/*!
+/*
     Returns a QPixmap containing the image. A null pixmap is returned if the
     element being tested is not an image.
 */
@@ -1911,7 +1911,7 @@ QPixmap QWebHitTestResult::pixmap() const
     return d->pixmap;
 }
 
-/*!
+/*
     Returns true if the content is editable by the user; otherwise returns false.
 */
 bool QWebHitTestResult::isContentEditable() const
@@ -1921,7 +1921,7 @@ bool QWebHitTestResult::isContentEditable() const
     return d->isContentEditable;
 }
 
-/*!
+/*
     Returns true if the content tested is part of the selection; otherwise returns false.
 */
 bool QWebHitTestResult::isContentSelected() const
@@ -1931,7 +1931,7 @@ bool QWebHitTestResult::isContentSelected() const
     return d->isContentSelected;
 }
 
-/*!
+/*
     \since 4.6
     Returns the underlying DOM element as QWebElement.
 */
@@ -1943,7 +1943,7 @@ QWebElement QWebHitTestResult::element() const
     return QWebElement(static_cast<WebCore::Element*>(d->innerNonSharedNode.get()));
 }
 
-/*!
+/*
     Returns the frame the hit test was executed in.
 */
 QWebFrame *QWebHitTestResult::frame() const

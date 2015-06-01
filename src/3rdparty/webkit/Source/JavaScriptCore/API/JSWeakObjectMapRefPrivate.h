@@ -33,10 +33,10 @@
 extern "C" {
 #endif
     
-/*! @typedef JSWeakObjectMapRef A weak map for storing JSObjectRefs */
+/* @typedef JSWeakObjectMapRef A weak map for storing JSObjectRefs */
 typedef struct OpaqueJSWeakObjectMap* JSWeakObjectMapRef;
 
-/*! 
+/* 
  @typedef JSWeakMapDestroyedCallback
  @abstract The callback invoked when a JSWeakObjectMapRef is being destroyed.
  @param map The map that is being destroyed.
@@ -44,7 +44,7 @@ typedef struct OpaqueJSWeakObjectMap* JSWeakObjectMapRef;
  */
 typedef void (*JSWeakMapDestroyedCallback)(JSWeakObjectMapRef map, void* data);
 
-/*!
+/*
  @function
  @abstract Creates a weak value map that can be used to reference user defined objects without preventing them from being collected.
  @param ctx The execution context to use.
@@ -56,7 +56,7 @@ typedef void (*JSWeakMapDestroyedCallback)(JSWeakObjectMapRef map, void* data);
  */
 JS_EXPORT JSWeakObjectMapRef JSWeakObjectMapCreate(JSContextRef ctx, void* data, JSWeakMapDestroyedCallback destructor);
 
-/*!
+/*
  @function
  @abstract Associates a JSObjectRef with the given key in a JSWeakObjectMap.
  @param ctx The execution context to use.
@@ -66,7 +66,7 @@ JS_EXPORT JSWeakObjectMapRef JSWeakObjectMapCreate(JSContextRef ctx, void* data,
  */
 JS_EXPORT void JSWeakObjectMapSet(JSContextRef ctx, JSWeakObjectMapRef map, void* key, JSObjectRef);
 
-/*!
+/*
  @function
  @abstract Retrieves the JSObjectRef associated with a key.
  @param ctx The execution context to use.
@@ -76,7 +76,7 @@ JS_EXPORT void JSWeakObjectMapSet(JSContextRef ctx, JSWeakObjectMapRef map, void
  */
 JS_EXPORT JSObjectRef JSWeakObjectMapGet(JSContextRef ctx, JSWeakObjectMapRef map, void* key);
 
-/*!
+/*
  @function
  @abstract Removes the entry for the given key if the key is present, otherwise it has no effect.
  @param ctx The execution context to use.

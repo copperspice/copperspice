@@ -33,7 +33,7 @@
 #include <stdbool.h>
 #endif
 
-/*!
+/*
 @enum JSType
 @abstract     A constant identifying the type of a JSValue.
 @constant     kJSTypeUndefined  The unique undefined value.
@@ -56,7 +56,7 @@ typedef enum {
 extern "C" {
 #endif
 
-/*!
+/*
 @function
 @abstract       Returns a JavaScript value's type.
 @param ctx  The execution context to use.
@@ -65,7 +65,7 @@ extern "C" {
 */
 JS_EXPORT JSType JSValueGetType(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the undefined type.
 @param ctx  The execution context to use.
@@ -74,7 +74,7 @@ JS_EXPORT JSType JSValueGetType(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsUndefined(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the null type.
 @param ctx  The execution context to use.
@@ -83,7 +83,7 @@ JS_EXPORT bool JSValueIsUndefined(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsNull(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the boolean type.
 @param ctx  The execution context to use.
@@ -92,7 +92,7 @@ JS_EXPORT bool JSValueIsNull(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsBoolean(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the number type.
 @param ctx  The execution context to use.
@@ -101,7 +101,7 @@ JS_EXPORT bool JSValueIsBoolean(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsNumber(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the string type.
 @param ctx  The execution context to use.
@@ -110,7 +110,7 @@ JS_EXPORT bool JSValueIsNumber(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsString(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Tests whether a JavaScript value's type is the object type.
 @param ctx  The execution context to use.
@@ -119,7 +119,7 @@ JS_EXPORT bool JSValueIsString(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT bool JSValueIsObject(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract Tests whether a JavaScript value is an object with a given class in its class chain.
 @param ctx The execution context to use.
@@ -131,7 +131,7 @@ JS_EXPORT bool JSValueIsObjectOfClass(JSContextRef ctx, JSValueRef value, JSClas
 
 /* Comparing values */
 
-/*!
+/*
 @function
 @abstract Tests whether two JavaScript values are equal, as compared by the JS == operator.
 @param ctx The execution context to use.
@@ -142,7 +142,7 @@ JS_EXPORT bool JSValueIsObjectOfClass(JSContextRef ctx, JSValueRef value, JSClas
 */
 JS_EXPORT bool JSValueIsEqual(JSContextRef ctx, JSValueRef a, JSValueRef b, JSValueRef* exception);
 
-/*!
+/*
 @function
 @abstract       Tests whether two JavaScript values are strict equal, as compared by the JS === operator.
 @param ctx  The execution context to use.
@@ -152,7 +152,7 @@ JS_EXPORT bool JSValueIsEqual(JSContextRef ctx, JSValueRef a, JSValueRef b, JSVa
 */
 JS_EXPORT bool JSValueIsStrictEqual(JSContextRef ctx, JSValueRef a, JSValueRef b);
 
-/*!
+/*
 @function
 @abstract Tests whether a JavaScript value is an object constructed by a given constructor, as compared by the JS instanceof operator.
 @param ctx The execution context to use.
@@ -165,7 +165,7 @@ JS_EXPORT bool JSValueIsInstanceOfConstructor(JSContextRef ctx, JSValueRef value
 
 /* Creating values */
 
-/*!
+/*
 @function
 @abstract       Creates a JavaScript value of the undefined type.
 @param ctx  The execution context to use.
@@ -173,7 +173,7 @@ JS_EXPORT bool JSValueIsInstanceOfConstructor(JSContextRef ctx, JSValueRef value
 */
 JS_EXPORT JSValueRef JSValueMakeUndefined(JSContextRef ctx);
 
-/*!
+/*
 @function
 @abstract       Creates a JavaScript value of the null type.
 @param ctx  The execution context to use.
@@ -181,7 +181,7 @@ JS_EXPORT JSValueRef JSValueMakeUndefined(JSContextRef ctx);
 */
 JS_EXPORT JSValueRef JSValueMakeNull(JSContextRef ctx);
 
-/*!
+/*
 @function
 @abstract       Creates a JavaScript value of the boolean type.
 @param ctx  The execution context to use.
@@ -190,7 +190,7 @@ JS_EXPORT JSValueRef JSValueMakeNull(JSContextRef ctx);
 */
 JS_EXPORT JSValueRef JSValueMakeBoolean(JSContextRef ctx, bool boolean);
 
-/*!
+/*
 @function
 @abstract       Creates a JavaScript value of the number type.
 @param ctx  The execution context to use.
@@ -199,7 +199,7 @@ JS_EXPORT JSValueRef JSValueMakeBoolean(JSContextRef ctx, bool boolean);
 */
 JS_EXPORT JSValueRef JSValueMakeNumber(JSContextRef ctx, double number);
 
-/*!
+/*
 @function
 @abstract       Creates a JavaScript value of the string type.
 @param ctx  The execution context to use.
@@ -211,7 +211,7 @@ JS_EXPORT JSValueRef JSValueMakeString(JSContextRef ctx, JSStringRef string);
 
 /* Converting to and from JSON formatted strings */
 
-/*!
+/*
  @function
  @abstract       Creates a JavaScript value from a JSON formatted string.
  @param ctx      The execution context to use.
@@ -220,7 +220,7 @@ JS_EXPORT JSValueRef JSValueMakeString(JSContextRef ctx, JSStringRef string);
  */
 JS_EXPORT JSValueRef JSValueMakeFromJSONString(JSContextRef ctx, JSStringRef string) AVAILABLE_AFTER_WEBKIT_VERSION_4_0;
 
-/*!
+/*
  @function
  @abstract       Creates a JavaScript string containing the JSON serialized representation of a JS value.
  @param ctx      The execution context to use.
@@ -233,7 +233,7 @@ JS_EXPORT JSStringRef JSValueCreateJSONString(JSContextRef ctx, JSValueRef value
 
 /* Converting to primitive values */
 
-/*!
+/*
 @function
 @abstract       Converts a JavaScript value to boolean and returns the resulting boolean.
 @param ctx  The execution context to use.
@@ -242,7 +242,7 @@ JS_EXPORT JSStringRef JSValueCreateJSONString(JSContextRef ctx, JSValueRef value
 */
 JS_EXPORT bool JSValueToBoolean(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Converts a JavaScript value to number and returns the resulting number.
 @param ctx  The execution context to use.
@@ -252,7 +252,7 @@ JS_EXPORT bool JSValueToBoolean(JSContextRef ctx, JSValueRef value);
 */
 JS_EXPORT double JSValueToNumber(JSContextRef ctx, JSValueRef value, JSValueRef* exception);
 
-/*!
+/*
 @function
 @abstract       Converts a JavaScript value to string and copies the result into a JavaScript string.
 @param ctx  The execution context to use.
@@ -262,7 +262,7 @@ JS_EXPORT double JSValueToNumber(JSContextRef ctx, JSValueRef value, JSValueRef*
 */
 JS_EXPORT JSStringRef JSValueToStringCopy(JSContextRef ctx, JSValueRef value, JSValueRef* exception);
 
-/*!
+/*
 @function
 @abstract Converts a JavaScript value to object and returns the resulting object.
 @param ctx  The execution context to use.
@@ -273,7 +273,7 @@ JS_EXPORT JSStringRef JSValueToStringCopy(JSContextRef ctx, JSValueRef value, JS
 JS_EXPORT JSObjectRef JSValueToObject(JSContextRef ctx, JSValueRef value, JSValueRef* exception);
 
 /* Garbage collection */
-/*!
+/*
 @function
 @abstract Protects a JavaScript value from garbage collection.
 @param ctx The execution context to use.
@@ -284,7 +284,7 @@ A value may be protected multiple times and must be unprotected an equal number 
 */
 JS_EXPORT void JSValueProtect(JSContextRef ctx, JSValueRef value);
 
-/*!
+/*
 @function
 @abstract       Unprotects a JavaScript value from garbage collection.
 @param ctx      The execution context to use.

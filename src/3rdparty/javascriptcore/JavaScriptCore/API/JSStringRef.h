@@ -39,7 +39,7 @@ extern "C" {
 
 #if !defined(WIN32) && !defined(_WIN32) && !defined(__WINSCW__) \
     && !(defined(__CC_ARM) || defined(__ARMCC__)) /* RVCT */
-/*!
+/*
 @typedef JSChar
 @abstract A Unicode character.
 */
@@ -48,7 +48,7 @@ extern "C" {
     typedef wchar_t JSChar;
 #endif
 
-/*!
+/*
 @function
 @abstract         Creates a JavaScript string from a buffer of Unicode characters.
 @param chars      The buffer of Unicode characters to copy into the new JSString.
@@ -56,7 +56,7 @@ extern "C" {
 @result           A JSString containing chars. Ownership follows the Create Rule.
 */
 JS_EXPORT JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars);
-/*!
+/*
 @function
 @abstract         Creates a JavaScript string from a null-terminated UTF8 string.
 @param string     The null-terminated UTF8 string to copy into the new JSString.
@@ -64,28 +64,28 @@ JS_EXPORT JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t n
 */
 JS_EXPORT JSStringRef JSStringCreateWithUTF8CString(const char* string);
 
-/*!
+/*
 @function
 @abstract         Retains a JavaScript string.
 @param string     The JSString to retain.
 @result           A JSString that is the same as string.
 */
 JS_EXPORT JSStringRef JSStringRetain(JSStringRef string);
-/*!
+/*
 @function
 @abstract         Releases a JavaScript string.
 @param string     The JSString to release.
 */
 JS_EXPORT void JSStringRelease(JSStringRef string);
 
-/*!
+/*
 @function
 @abstract         Returns the number of Unicode characters in a JavaScript string.
 @param string     The JSString whose length (in Unicode characters) you want to know.
 @result           The number of Unicode characters stored in string.
 */
 JS_EXPORT size_t JSStringGetLength(JSStringRef string);
-/*!
+/*
 @function
 @abstract         Returns a pointer to the Unicode character buffer that 
  serves as the backing store for a JavaScript string.
@@ -95,7 +95,7 @@ JS_EXPORT size_t JSStringGetLength(JSStringRef string);
 */
 JS_EXPORT const JSChar* JSStringGetCharactersPtr(JSStringRef string);
 
-/*!
+/*
 @function
 @abstract Returns the maximum number of bytes a JavaScript string will 
  take up if converted into a null-terminated UTF8 string.
@@ -106,7 +106,7 @@ JS_EXPORT const JSChar* JSStringGetCharactersPtr(JSStringRef string);
  up requiring could be less than this, but never more.
 */
 JS_EXPORT size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string);
-/*!
+/*
 @function
 @abstract Converts a JavaScript string into a null-terminated UTF8 string, 
  and copies the result into an external byte buffer.
@@ -121,7 +121,7 @@ JS_EXPORT size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string);
 */
 JS_EXPORT size_t JSStringGetUTF8CString(JSStringRef string, char* buffer, size_t bufferSize);
 
-/*!
+/*
 @function
 @abstract     Tests whether two JavaScript strings match.
 @param a      The first JSString to test.
@@ -129,7 +129,7 @@ JS_EXPORT size_t JSStringGetUTF8CString(JSStringRef string, char* buffer, size_t
 @result       true if the two strings match, otherwise false.
 */
 JS_EXPORT bool JSStringIsEqual(JSStringRef a, JSStringRef b);
-/*!
+/*
 @function
 @abstract     Tests whether a JavaScript string matches a null-terminated UTF8 string.
 @param a      The JSString to test.

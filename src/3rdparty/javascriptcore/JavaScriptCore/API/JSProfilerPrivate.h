@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-/*!
+/*
 @function JSStartProfiling
 @abstract Enables the profler.
 @param ctx The execution context to use.
@@ -45,7 +45,7 @@ extern "C" {
 */
 JS_EXPORT void JSStartProfiling(JSContextRef ctx, JSStringRef title);
 
-/*!
+/*
 @function JSEndProfiling
 @abstract Disables the profler.
 @param ctx The execution context to use.

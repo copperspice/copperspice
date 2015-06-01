@@ -28,7 +28,7 @@
 
 using namespace WebCore;
 
-/*!
+/*
     \class QWebDatabase
     \since 4.5
     \brief The QWebDatabase class provides access to HTML 5 databases created with JavaScript.
@@ -56,7 +56,7 @@ using namespace WebCore;
     \sa QWebSecurityOrigin
 */
 
-/*!
+/*
     Constructs a web database from \a other.
 */
 QWebDatabase::QWebDatabase(const QWebDatabase& other)
@@ -64,7 +64,7 @@ QWebDatabase::QWebDatabase(const QWebDatabase& other)
 {
 }
 
-/*!
+/*
     Assigns the \a other web database to this.
 */
 QWebDatabase& QWebDatabase::operator=(const QWebDatabase& other)
@@ -73,7 +73,7 @@ QWebDatabase& QWebDatabase::operator=(const QWebDatabase& other)
     return *this;
 }
 
-/*!
+/*
     Returns the name of the database.
 */
 QString QWebDatabase::name() const
@@ -81,7 +81,7 @@ QString QWebDatabase::name() const
     return d->name;
 }
 
-/*!
+/*
     Returns the name of the database in a format that is suitable for display to the user.
 */
 QString QWebDatabase::displayName() const
@@ -94,7 +94,7 @@ QString QWebDatabase::displayName() const
 #endif
 }
 
-/*!
+/*
     Returns the expected size of the database in bytes as defined by the web author.
 */
 qint64 QWebDatabase::expectedSize() const
@@ -107,7 +107,7 @@ qint64 QWebDatabase::expectedSize() const
 #endif
 }
 
-/*!
+/*
     Returns the current size of the database in bytes.
 */
 qint64 QWebDatabase::size() const
@@ -120,7 +120,7 @@ qint64 QWebDatabase::size() const
 #endif
 }
 
-/*!
+/*
     \internal
 */
 QWebDatabase::QWebDatabase(QWebDatabasePrivate* priv)
@@ -128,7 +128,7 @@ QWebDatabase::QWebDatabase(QWebDatabasePrivate* priv)
     d = priv;
 }
 
-/*!
+/*
     Returns the file name of the web database.
 
     The name can be used to access the database through the QtSql database module, for example:
@@ -154,7 +154,7 @@ QString QWebDatabase::fileName() const
 #endif
 }
 
-/*!
+/*
     Returns the databases's security origin.
 */
 QWebSecurityOrigin QWebDatabase::origin() const
@@ -164,7 +164,7 @@ QWebSecurityOrigin QWebDatabase::origin() const
     return origin;
 }
 
-/*!
+/*
     Removes the database \a db from its security origin. All data stored in the
     database \a db will be destroyed.
 */
@@ -175,7 +175,7 @@ void QWebDatabase::removeDatabase(const QWebDatabase& db)
 #endif
 }
 
-/*!
+/*
   \since 4.6
 
   Deletes all web databases in the configured offline storage path.
@@ -189,7 +189,7 @@ void QWebDatabase::removeAllDatabases()
 #endif
 }
 
-/*!
+/*
     Destroys the web database object. The data within this database is \b not destroyed.
 */
 QWebDatabase::~QWebDatabase()

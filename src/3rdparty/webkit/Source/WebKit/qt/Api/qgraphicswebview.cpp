@@ -155,7 +155,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
 #endif
 }
 
-/*!
+/*
     \class QGraphicsWebView
     \brief The QGraphicsWebView class allows Web content to be added to a GraphicsView.
     \since 4.6
@@ -185,7 +185,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa QWebView, QGraphicsTextItem
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::titleChanged(const QString &title)
 
     This signal is emitted whenever the \a title of the main frame changes.
@@ -193,7 +193,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa title()
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::urlChanged(const QUrl &url)
 
     This signal is emitted when the \a url of the view changes.
@@ -201,7 +201,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa url(), load()
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::iconChanged()
 
     This signal is emitted whenever the icon of the page is loaded or changes.
@@ -212,7 +212,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa icon(), QWebSettings::setIconDatabasePath()
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::loadStarted()
 
     This signal is emitted when a new load of the page is started.
@@ -220,7 +220,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa loadProgress(), loadFinished()
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::loadFinished(bool ok)
 
     This signal is emitted when a load of the page is finished.
@@ -229,7 +229,7 @@ void QGraphicsWebViewPrivate::_q_scaleChanged()
     \sa loadStarted()
 */
 
-/*!
+/*
     Constructs an empty QGraphicsWebView with parent \a parent.
 
     \sa load()
@@ -250,7 +250,7 @@ QGraphicsWebView::QGraphicsWebView(QGraphicsItem* parent)
 #endif
 }
 
-/*!
+/*
     Destroys the item.
 */
 QGraphicsWebView::~QGraphicsWebView()
@@ -258,7 +258,7 @@ QGraphicsWebView::~QGraphicsWebView()
     delete d;
 }
 
-/*!
+/*
     Returns a pointer to the underlying web page.
 
     \sa setPage()
@@ -281,7 +281,7 @@ QWebPage* QGraphicsWebView::page() const
     return d->page;
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
@@ -306,7 +306,7 @@ void QGraphicsWebView::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->setRenderHints(oldHints);
 }
 
-/*! \reimp
+/* \reimp
 */
 bool QGraphicsWebView::sceneEvent(QEvent* event)
 {
@@ -324,7 +324,7 @@ bool QGraphicsWebView::sceneEvent(QEvent* event)
     return QGraphicsWidget::sceneEvent(event);
 }
 
-/*! \reimp
+/* \reimp
 */
 QVariant QGraphicsWebView::itemChange(GraphicsItemChange change, const QVariant& value)
 {
@@ -349,7 +349,7 @@ QVariant QGraphicsWebView::itemChange(GraphicsItemChange change, const QVariant&
     return QGraphicsWidget::itemChange(change, value);
 }
 
-/*! \reimp
+/* \reimp
 */
 QSizeF QGraphicsWebView::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
 {
@@ -358,7 +358,7 @@ QSizeF QGraphicsWebView::sizeHint(Qt::SizeHint which, const QSizeF& constraint) 
     return QGraphicsWidget::sizeHint(which, constraint);
 }
 
-/*! \reimp
+/* \reimp
 */
 QVariant QGraphicsWebView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
@@ -367,7 +367,7 @@ QVariant QGraphicsWebView::inputMethodQuery(Qt::InputMethodQuery query) const
     return QVariant();
 }
 
-/*!
+/*
     \property QGraphicsWebView::renderHints
     \since 4.8
     \brief the default render hints for the view
@@ -383,7 +383,7 @@ QVariant QGraphicsWebView::inputMethodQuery(Qt::InputMethodQuery query) const
     \sa QPainter::renderHints()
 */
 
-/*!
+/*
     \since 4.8
     Returns the render hints used by the view to render content.
 
@@ -394,7 +394,7 @@ QPainter::RenderHints QGraphicsWebView::renderHints() const
     return d->renderHints;
 }
 
-/*!
+/*
     \since 4.8
     Sets the render hints used by the view to the specified \a hints.
 
@@ -408,7 +408,7 @@ void QGraphicsWebView::setRenderHints(QPainter::RenderHints hints)
     update();
 }
 
-/*!
+/*
     \since 4.8
     If \a enabled is true, enables the specified render \a hint; otherwise
     disables it.
@@ -426,7 +426,7 @@ void QGraphicsWebView::setRenderHint(QPainter::RenderHint hint, bool enabled)
         update();
 }
 
-/*! \reimp
+/* \reimp
 */
 bool QGraphicsWebView::event(QEvent* event)
 {
@@ -488,7 +488,7 @@ void QGraphicsWebViewPrivate::detachCurrentPage()
     page = 0;
 }
 
-/*!
+/*
     Makes \a page the new web page of the web graphicsitem.
 
     The parent QObject of the provided page remains the owner
@@ -536,7 +536,7 @@ void QGraphicsWebView::setPage(QWebPage* page)
 #endif
 }
 
-/*!
+/*
     \property QGraphicsWebView::url
     \brief the url of the web page currently viewed
 
@@ -560,7 +560,7 @@ QUrl QGraphicsWebView::url() const
     return QUrl();
 }
 
-/*!
+/*
     \property QGraphicsWebView::title
     \brief the title of the web page currently viewed
 
@@ -576,7 +576,7 @@ QString QGraphicsWebView::title() const
     return QString();
 }
 
-/*!
+/*
     \property QGraphicsWebView::icon
     \brief the icon associated with the web page currently viewed
 
@@ -592,7 +592,7 @@ QIcon QGraphicsWebView::icon() const
     return QIcon();
 }
 
-/*!
+/*
     \property QGraphicsWebView::zoomFactor
     \brief the zoom factor for the view
 */
@@ -610,7 +610,7 @@ qreal QGraphicsWebView::zoomFactor() const
     return page()->mainFrame()->zoomFactor();
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::updateGeometry()
 {
@@ -626,7 +626,7 @@ void QGraphicsWebView::updateGeometry()
     d->page->setViewportSize(size);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::setGeometry(const QRectF& rect)
 {
@@ -644,7 +644,7 @@ void QGraphicsWebView::setGeometry(const QRectF& rect)
     d->page->setViewportSize(size);
 }
 
-/*!
+/*
     Convenience slot that stops loading the document.
 
     \sa reload(), loadFinished()
@@ -655,7 +655,7 @@ void QGraphicsWebView::stop()
         d->page->triggerAction(QWebPage::Stop);
 }
 
-/*!
+/*
     Convenience slot that loads the previous document in the list of documents
     built by navigating links. Does nothing if there is no previous document.
 
@@ -667,7 +667,7 @@ void QGraphicsWebView::back()
         d->page->triggerAction(QWebPage::Back);
 }
 
-/*!
+/*
     Convenience slot that loads the next document in the list of documents
     built by navigating links. Does nothing if there is no next document.
 
@@ -679,7 +679,7 @@ void QGraphicsWebView::forward()
         d->page->triggerAction(QWebPage::Forward);
 }
 
-/*!
+/*
     Reloads the current document.
 
     \sa stop(), loadStarted()
@@ -690,7 +690,7 @@ void QGraphicsWebView::reload()
         d->page->triggerAction(QWebPage::Reload);
 }
 
-/*!
+/*
     Loads the specified \a url and displays it.
 
     \note The view remains the same until enough data has arrived to display the new \a url.
@@ -702,7 +702,7 @@ void QGraphicsWebView::load(const QUrl& url)
     page()->mainFrame()->load(url);
 }
 
-/*!
+/*
     \fn void QGraphicsWebView::load(const QNetworkRequest &request, QNetworkAccessManager::Operation operation, const QByteArray &body)
 
     Loads a network request, \a request, using the method specified in \a operation.
@@ -721,7 +721,7 @@ void QGraphicsWebView::load(const QNetworkRequest& request,
     page()->mainFrame()->load(request, operation, body);
 }
 
-/*!
+/*
     Sets the content of the web view to the specified \a html.
 
     External objects such as stylesheets or images referenced in the HTML
@@ -747,7 +747,7 @@ void QGraphicsWebView::setHtml(const QString& html, const QUrl& baseUrl)
     page()->mainFrame()->setHtml(html, baseUrl);
 }
 
-/*!
+/*
     Sets the content of the web graphicsitem to the specified content \a data. If the \a mimeType argument
     is empty it is currently assumed that the content is HTML but in future versions we may introduce
     auto-detection.
@@ -763,7 +763,7 @@ void QGraphicsWebView::setContent(const QByteArray& data, const QString& mimeTyp
     page()->mainFrame()->setContent(data, mimeType, baseUrl);
 }
 
-/*!
+/*
     Returns a pointer to the view's history of navigated web pages.
 
     It is equivalent to
@@ -775,7 +775,7 @@ QWebHistory* QGraphicsWebView::history() const
     return page()->history();
 }
 
-/*!
+/*
     \property QGraphicsWebView::modified
     \brief whether the document was modified by the user
 
@@ -791,7 +791,7 @@ bool QGraphicsWebView::isModified() const
     return false;
 }
 
-/*!
+/*
     Returns a pointer to the view/page specific settings object.
 
     It is equivalent to
@@ -805,7 +805,7 @@ QWebSettings* QGraphicsWebView::settings() const
     return page()->settings();
 }
 
-/*!
+/*
     Returns a pointer to a QAction that encapsulates the specified web action \a action.
 */
 QAction *QGraphicsWebView::pageAction(QWebPage::WebAction action) const
@@ -818,7 +818,7 @@ QAction *QGraphicsWebView::pageAction(QWebPage::WebAction action) const
 #endif
 }
 
-/*!
+/*
     Triggers the specified \a action. If it is a checkable action the specified
     \a checked state is assumed.
 
@@ -829,7 +829,7 @@ void QGraphicsWebView::triggerPageAction(QWebPage::WebAction action, bool checke
     page()->triggerAction(action, checked);
 }
 
-/*!
+/*
     Finds the specified string, \a subString, in the page, using the given \a options.
 
     If the HighlightAllOccurrences flag is passed, the function will highlight all occurrences
@@ -852,7 +852,7 @@ bool QGraphicsWebView::findText(const QString &subString, QWebPage::FindFlags op
     return false;
 }
 
-/*!
+/*
     \property QGraphicsWebView::resizesToContents
     \brief whether the size of the QGraphicsWebView and its viewport changes to match the contents size
     \since 4.7 
@@ -881,7 +881,7 @@ bool QGraphicsWebView::resizesToContents() const
     return d->resizesToContents;
 }
 
-/*!
+/*
     \property QGraphicsWebView::tiledBackingStoreFrozen
     \brief whether the tiled backing store updates its contents
     \since 4.7 
@@ -923,7 +923,7 @@ void QGraphicsWebView::setTiledBackingStoreFrozen(bool frozen)
 #endif
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::hoverMoveEvent(QGraphicsSceneHoverEvent* ev)
 {
@@ -940,14 +940,14 @@ void QGraphicsWebView::hoverMoveEvent(QGraphicsSceneHoverEvent* ev)
         QGraphicsItem::hoverMoveEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::hoverLeaveEvent(QGraphicsSceneHoverEvent* ev)
 {
     Q_UNUSED(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::mouseMoveEvent(QGraphicsSceneMouseEvent* ev)
 {
@@ -961,7 +961,7 @@ void QGraphicsWebView::mouseMoveEvent(QGraphicsSceneMouseEvent* ev)
         QGraphicsItem::mouseMoveEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::mousePressEvent(QGraphicsSceneMouseEvent* ev)
 {
@@ -975,7 +975,7 @@ void QGraphicsWebView::mousePressEvent(QGraphicsSceneMouseEvent* ev)
         QGraphicsItem::mousePressEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent* ev)
 {
@@ -989,7 +989,7 @@ void QGraphicsWebView::mouseReleaseEvent(QGraphicsSceneMouseEvent* ev)
         QGraphicsItem::mouseReleaseEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ev)
 {
@@ -1003,7 +1003,7 @@ void QGraphicsWebView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ev)
         QGraphicsItem::mouseDoubleClickEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::keyPressEvent(QKeyEvent* ev)
 {
@@ -1014,7 +1014,7 @@ void QGraphicsWebView::keyPressEvent(QKeyEvent* ev)
         QGraphicsItem::keyPressEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::keyReleaseEvent(QKeyEvent* ev)
 {
@@ -1025,7 +1025,7 @@ void QGraphicsWebView::keyReleaseEvent(QKeyEvent* ev)
         QGraphicsItem::keyReleaseEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::focusInEvent(QFocusEvent* ev)
 {
@@ -1035,7 +1035,7 @@ void QGraphicsWebView::focusInEvent(QFocusEvent* ev)
         QGraphicsItem::focusInEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::focusOutEvent(QFocusEvent* ev)
 {
@@ -1045,7 +1045,7 @@ void QGraphicsWebView::focusOutEvent(QFocusEvent* ev)
         QGraphicsItem::focusOutEvent(ev);
 }
 
-/*! \reimp
+/* \reimp
 */
 bool QGraphicsWebView::focusNextPrevChild(bool next)
 {
@@ -1055,7 +1055,7 @@ bool QGraphicsWebView::focusNextPrevChild(bool next)
     return QGraphicsWidget::focusNextPrevChild(next);
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::dragEnterEvent(QGraphicsSceneDragDropEvent* ev)
 {
@@ -1067,7 +1067,7 @@ void QGraphicsWebView::dragEnterEvent(QGraphicsSceneDragDropEvent* ev)
 #endif
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::dragLeaveEvent(QGraphicsSceneDragDropEvent* ev)
 {
@@ -1085,7 +1085,7 @@ void QGraphicsWebView::dragLeaveEvent(QGraphicsSceneDragDropEvent* ev)
 #endif
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::dragMoveEvent(QGraphicsSceneDragDropEvent* ev)
 {
@@ -1103,7 +1103,7 @@ void QGraphicsWebView::dragMoveEvent(QGraphicsSceneDragDropEvent* ev)
 #endif
 }
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::dropEvent(QGraphicsSceneDragDropEvent* ev)
 {
@@ -1122,7 +1122,7 @@ void QGraphicsWebView::dropEvent(QGraphicsSceneDragDropEvent* ev)
 }
 
 #ifndef QT_NO_CONTEXTMENU
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::contextMenuEvent(QGraphicsSceneContextMenuEvent* ev)
 {
@@ -1135,7 +1135,7 @@ void QGraphicsWebView::contextMenuEvent(QGraphicsSceneContextMenuEvent* ev)
 #endif // QT_NO_CONTEXTMENU
 
 #ifndef QT_NO_WHEELEVENT
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent* ev)
 {
@@ -1150,7 +1150,7 @@ void QGraphicsWebView::wheelEvent(QGraphicsSceneWheelEvent* ev)
 }
 #endif // QT_NO_WHEELEVENT
 
-/*! \reimp
+/* \reimp
 */
 void QGraphicsWebView::inputMethodEvent(QInputMethodEvent* ev)
 {
@@ -1161,13 +1161,13 @@ void QGraphicsWebView::inputMethodEvent(QInputMethodEvent* ev)
         QGraphicsItem::inputMethodEvent(ev);
 }
 
-/*!
+/*
     \fn void QGraphicsWebView::statusBarMessage(const QString& text)
 
     This signal is emitted when the statusbar \a text is changed by the page.
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::loadProgress(int progress)
 
     This signal is emitted every time an element in the web page
@@ -1181,7 +1181,7 @@ void QGraphicsWebView::inputMethodEvent(QInputMethodEvent* ev)
     \sa loadStarted(), loadFinished()
 */
 
-/*!
+/*
     \fn void QGraphicsWebView::linkClicked(const QUrl &url)
 
     This signal is emitted whenever the user clicks on a link and the page's linkDelegationPolicy

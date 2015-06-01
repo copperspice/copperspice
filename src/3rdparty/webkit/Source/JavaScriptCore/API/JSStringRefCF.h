@@ -35,7 +35,7 @@ extern "C" {
 
 /* CFString convenience methods */
 
-/*!
+/*
 @function
 @abstract         Creates a JavaScript string from a CFString.
 @discussion       This function is optimized to take advantage of cases when 
@@ -44,7 +44,7 @@ extern "C" {
 @result           A JSString containing string. Ownership follows the Create Rule.
 */
 JS_EXPORT JSStringRef JSStringCreateWithCFString(CFStringRef string);
-/*!
+/*
 @function
 @abstract         Creates a CFString from a JavaScript string.
 @param alloc      The alloc parameter to pass to CFStringCreate.

@@ -206,7 +206,7 @@ OpaqueJSClassStaticFunctionsTable* OpaqueJSClass::staticFunctions(JSC::ExecState
     return jsClassData.staticFunctions;
 }
 
-/*!
+/*
 // Doc here in case we make this public. (Hopefully we won't.)
 @function
  @abstract Returns the prototype that will be used when constructing an object with a given class.

@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-/*!
+/*
  @function
  @abstract Sets a private property on an object.  This private property cannot be accessed from within JavaScript.
  @param ctx The execution context to use.
@@ -46,7 +46,7 @@ extern "C" {
  */
 JS_EXPORT bool JSObjectSetPrivateProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef value);
 
-/*!
+/*
  @function
  @abstract Gets a private property from an object.
  @param ctx The execution context to use.
@@ -56,7 +56,7 @@ JS_EXPORT bool JSObjectSetPrivateProperty(JSContextRef ctx, JSObjectRef object, 
  */
 JS_EXPORT JSValueRef JSObjectGetPrivateProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName);
 
-/*!
+/*
  @function
  @abstract Deletes a private property from an object.
  @param ctx The execution context to use.

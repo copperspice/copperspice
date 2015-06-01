@@ -32,34 +32,34 @@
 
 /* JavaScript engine interface */
 
-/*! @typedef JSContextGroupRef A group that associates JavaScript contexts with one another. Contexts in the same group may share and exchange JavaScript objects. */
+/* @typedef JSContextGroupRef A group that associates JavaScript contexts with one another. Contexts in the same group may share and exchange JavaScript objects. */
 typedef const struct OpaqueJSContextGroup* JSContextGroupRef;
 
-/*! @typedef JSContextRef A JavaScript execution context. Holds the global object and other execution state. */
+/* @typedef JSContextRef A JavaScript execution context. Holds the global object and other execution state. */
 typedef const struct OpaqueJSContext* JSContextRef;
 
-/*! @typedef JSGlobalContextRef A global JavaScript execution context. A JSGlobalContext is a JSContext. */
+/* @typedef JSGlobalContextRef A global JavaScript execution context. A JSGlobalContext is a JSContext. */
 typedef struct OpaqueJSContext* JSGlobalContextRef;
 
-/*! @typedef JSStringRef A UTF16 character buffer. The fundamental string representation in JavaScript. */
+/* @typedef JSStringRef A UTF16 character buffer. The fundamental string representation in JavaScript. */
 typedef struct OpaqueJSString* JSStringRef;
 
-/*! @typedef JSClassRef A JavaScript class. Used with JSObjectMake to construct objects with custom behavior. */
+/* @typedef JSClassRef A JavaScript class. Used with JSObjectMake to construct objects with custom behavior. */
 typedef struct OpaqueJSClass* JSClassRef;
 
-/*! @typedef JSPropertyNameArrayRef An array of JavaScript property names. */
+/* @typedef JSPropertyNameArrayRef An array of JavaScript property names. */
 typedef struct OpaqueJSPropertyNameArray* JSPropertyNameArrayRef;
 
-/*! @typedef JSPropertyNameAccumulatorRef An ordered set used to collect the names of a JavaScript object's properties. */
+/* @typedef JSPropertyNameAccumulatorRef An ordered set used to collect the names of a JavaScript object's properties. */
 typedef struct OpaqueJSPropertyNameAccumulator* JSPropertyNameAccumulatorRef;
 
 
 /* JavaScript data types */
 
-/*! @typedef JSValueRef A JavaScript value. The base type for all JavaScript values, and polymorphic functions on them. */
+/* @typedef JSValueRef A JavaScript value. The base type for all JavaScript values, and polymorphic functions on them. */
 typedef const struct OpaqueJSValue* JSValueRef;
 
-/*! @typedef JSObjectRef A JavaScript object. A JSObject is a JSValue. */
+/* @typedef JSObjectRef A JavaScript object. A JSObject is a JSValue. */
 typedef struct OpaqueJSValue* JSObjectRef;
 
 /* JavaScript symbol exports */
@@ -85,7 +85,7 @@ extern "C" {
 
 /* Script Evaluation */
 
-/*!
+/*
 @function JSEvaluateScript
 @abstract Evaluates a string of JavaScript.
 @param ctx The execution context to use.
@@ -98,7 +98,7 @@ extern "C" {
 */
 JS_EXPORT JSValueRef JSEvaluateScript(JSContextRef ctx, JSStringRef script, JSObjectRef thisObject, JSStringRef sourceURL, int startingLineNumber, JSValueRef* exception);
 
-/*!
+/*
 @function JSCheckScriptSyntax
 @abstract Checks for syntax errors in a string of JavaScript.
 @param ctx The execution context to use.
@@ -110,7 +110,7 @@ JS_EXPORT JSValueRef JSEvaluateScript(JSContextRef ctx, JSStringRef script, JSOb
 */
 JS_EXPORT bool JSCheckScriptSyntax(JSContextRef ctx, JSStringRef script, JSStringRef sourceURL, int startingLineNumber, JSValueRef* exception);
 
-/*!
+/*
 @function JSGarbageCollect
 @abstract Performs a JavaScript garbage collection. 
 @param ctx The execution context to use.

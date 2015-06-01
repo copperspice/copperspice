@@ -39,7 +39,7 @@ extern "C" {
 
 /* COM convenience methods */
 
-/*!
+/*
 @function
 @abstract         Creates a JavaScript string from a BSTR.
 @param string     The BSTR to copy into the new JSString.
@@ -47,7 +47,7 @@ extern "C" {
 */
 JS_EXPORT JSStringRef JSStringCreateWithBSTR(const BSTR string);
 
-/*!
+/*
 @function
 @abstract         Creates a BSTR from a JavaScript string.
 @param string     The JSString to copy into the new BSTR.

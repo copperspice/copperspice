@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-/*!
+/*
 @function
 @abstract Gets the global context of a JavaScript execution context.
 @param ctx The JSContext whose global context you want to get.

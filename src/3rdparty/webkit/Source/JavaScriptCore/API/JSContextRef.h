@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-/*!
+/*
 @function
 @abstract Creates a JavaScript context group.
 @discussion A JSContextGroup associates JavaScript contexts with one another.
@@ -50,7 +50,7 @@ extern "C" {
 */
 JS_EXPORT JSContextGroupRef JSContextGroupCreate() AVAILABLE_IN_WEBKIT_VERSION_4_0;
 
-/*!
+/*
 @function
 @abstract Retains a JavaScript context group.
 @param group The JSContextGroup to retain.
@@ -58,14 +58,14 @@ JS_EXPORT JSContextGroupRef JSContextGroupCreate() AVAILABLE_IN_WEBKIT_VERSION_4
 */
 JS_EXPORT JSContextGroupRef JSContextGroupRetain(JSContextGroupRef group) AVAILABLE_IN_WEBKIT_VERSION_4_0;
 
-/*!
+/*
 @function
 @abstract Releases a JavaScript context group.
 @param group The JSContextGroup to release.
 */
 JS_EXPORT void JSContextGroupRelease(JSContextGroupRef group) AVAILABLE_IN_WEBKIT_VERSION_4_0;
 
-/*!
+/*
 @function
 @abstract Creates a global JavaScript execution context.
 @discussion JSGlobalContextCreate allocates a global object and populates it with all the
@@ -80,7 +80,7 @@ JS_EXPORT void JSContextGroupRelease(JSContextGroupRef group) AVAILABLE_IN_WEBKI
 */
 JS_EXPORT JSGlobalContextRef JSGlobalContextCreate(JSClassRef globalObjectClass) AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
 
-/*!
+/*
 @function
 @abstract Creates a global JavaScript execution context in the context group provided.
 @discussion JSGlobalContextCreateInGroup allocates a global object and populates it with
@@ -94,7 +94,7 @@ JS_EXPORT JSGlobalContextRef JSGlobalContextCreate(JSClassRef globalObjectClass)
 */
 JS_EXPORT JSGlobalContextRef JSGlobalContextCreateInGroup(JSContextGroupRef group, JSClassRef globalObjectClass) AVAILABLE_IN_WEBKIT_VERSION_4_0;
 
-/*!
+/*
 @function
 @abstract Retains a global JavaScript execution context.
 @param ctx The JSGlobalContext to retain.
@@ -102,14 +102,14 @@ JS_EXPORT JSGlobalContextRef JSGlobalContextCreateInGroup(JSContextGroupRef grou
 */
 JS_EXPORT JSGlobalContextRef JSGlobalContextRetain(JSGlobalContextRef ctx);
 
-/*!
+/*
 @function
 @abstract Releases a global JavaScript execution context.
 @param ctx The JSGlobalContext to release.
 */
 JS_EXPORT void JSGlobalContextRelease(JSGlobalContextRef ctx);
 
-/*!
+/*
 @function
 @abstract Gets the global object of a JavaScript execution context.
 @param ctx The JSContext whose global object you want to get.
@@ -117,7 +117,7 @@ JS_EXPORT void JSGlobalContextRelease(JSGlobalContextRef ctx);
 */
 JS_EXPORT JSObjectRef JSContextGetGlobalObject(JSContextRef ctx);
 
-/*!
+/*
 @function
 @abstract Gets the context group to which a JavaScript execution context belongs.
 @param ctx The JSContext whose group you want to get.
