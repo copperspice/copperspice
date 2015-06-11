@@ -138,7 +138,7 @@ endif
 noinst_HEADERS+=$(patsubst %,src/opengl/%,$(OPENGL_INCLUDES)) \
 		$(patsubst %,src/opengl/%,$(OPENGL_ROOT_PRIVATE_INCLUDES)) \
 		$(patsubst %,src/opengl/gl2paintengineex/%,$(OPENGL_GL2_PRIVATE_INCLUDES))  \
-   	$(patsubst %,src/opengl/util/%,$(OPENGL_UTIL_PRIVATE_INCLUDES))
+	$(patsubst %,src/opengl/util/%,$(OPENGL_UTIL_PRIVATE_INCLUDES))
 
 
 OPENGL_HEADERS_INSTALLED= \
@@ -156,15 +156,19 @@ $(lib_libCsOpenGL1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALL
 
 .opengl-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtOpenGL:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtOpenGL/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(OPENGL_PUBLIC_INCLUDES); do \
-		echo "include/QtOpenGL/$$i: include/QtOpenGL/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtOpenGL/$$i: include/QtOpenGL/$$(echo $$i | tr A-Z a-z).h include/QtOpenGL" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(OPENGL_DIRS); do \
-		echo "include/QtOpenGL/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtOpenGL/%: $$i/% include/QtOpenGL" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(OPENGL_DIRS); do \
-		echo "privateinclude/QtOpenGL/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtOpenGL/private/%: $$i/% privateinclude/QtOpenGL/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

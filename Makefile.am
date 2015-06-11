@@ -200,9 +200,8 @@ clean-cs:
 	find . -name 'ui_*.h' -exec rm -f \{\} \;	
 
 install-data-hook: webkit-headers
-	for i in `cd include; find Qt*  phonon -type f`; do \
-		$(INSTALL) -D include/$$i $(includedir)/$$i; \
-	done
+	mkdir -p $(includedir)
+	cp -r include/Qt* include/phonon $(includedir)
 
 uninstall-hook:
 	for i in `cd include; find Qt* -type f`; do \

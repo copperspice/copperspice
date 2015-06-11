@@ -541,15 +541,19 @@ $(lib_libCsScript1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INST
 
 .script-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtScript:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtScript/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SCRIPT_PUBLIC_INCLUDES); do \
-		echo "include/QtScript/$$i: include/QtScript/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtScript/$$i: include/QtScript/$$(echo $$i | tr A-Z a-z).h include/QtScript" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SCRIPT_DIRS); do \
-		echo "include/QtScript/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtScript/%: $$i/% include/QtScript" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SCRIPT_DIRS); do \
-		echo "privateinclude/QtScript/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtScript/private/%: $$i/% privateinclude/QtScript/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

@@ -49,15 +49,19 @@ $(lib_libCsNetwork1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_IN
 
 .network-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtNetwork:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtNetwork/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(NETWORK_PUBLIC_INCLUDES); do \
-		echo "include/QtNetwork/$$i: include/QtNetwork/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtNetwork/$$i: include/QtNetwork/$$(echo $$i | tr A-Z a-z).h include/QtNetwork" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(NETWORK_DIRS); do \
-		echo "include/QtNetwork/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtNetwork/%: $$i/% include/QtNetwork" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(NETWORK_DIRS); do \
-		echo "privateinclude/QtNetwork/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtNetwork/private/%: $$i/% privateinclude/QtNetwork/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

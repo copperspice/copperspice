@@ -5287,17 +5287,21 @@ BUILT_SOURCES+=.webkit-header-deps.mk create-webkit-headers
 
 .webkit-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "../../include/QtWebKit:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "../../privateinclude/QtWebKit/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(WEBKIT_PUBLIC_INCLUDES); do \
-		echo "../../include/QtWebKit/$$i: ../../include/QtWebKit/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "../../include/QtWebKit/$$i: ../../include/QtWebKit/$$(echo $$i | tr A-Z a-z).h ../../include/QtWebKit" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(WEBKIT_DIRS); do \
-		echo "../../include/QtWebKit/%: ./$$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "../../include/QtWebKit/%: $$i/% ../../include/QtWebKit" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(WEBKIT_DIRS); do \
-		echo "../../privateinclude/QtWebKit/private/%: ./$$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "../../privateinclude/QtWebKit/private/%: $$i/% ../../privateinclude/QtWebKit/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 
 ui_%.h: %.ui | ../../bin/uic$(EXEEXT)

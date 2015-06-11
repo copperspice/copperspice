@@ -31,15 +31,19 @@ $(lib_libCsXml1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED)
 
 .xml-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtXml:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtXml/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(XML_PUBLIC_INCLUDES); do \
-		echo "include/QtXml/$$i: include/QtXml/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtXml/$$i: include/QtXml/$$(echo $$i | tr A-Z a-z).h include/QtXml" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(XML_DIRS); do \
-		echo "include/QtXml/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtXml/%: $$i/% include/QtXml" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(XML_DIRS); do \
-		echo "privateinclude/QtXml/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtXml/private/%: $$i/% privateinclude/QtXml/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

@@ -45,15 +45,19 @@ $(lib_libCsSql1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SQL_HEADERS_INSTALLED)
 
 .sql-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtSql:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtSql/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SQL_PUBLIC_INCLUDES); do \
-		echo "include/QtSql/$$i: include/QtSql/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtSql/$$i: include/QtSql/$$(echo $$i | tr A-Z a-z).h include/QtSql" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SQL_DIRS); do \
-		echo "include/QtSql/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtSql/%: $$i/% include/QtSql" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SQL_DIRS); do \
-		echo "privateinclude/QtSql/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtSql/private/%: $$i/% privateinclude/QtSql/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

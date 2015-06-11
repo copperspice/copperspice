@@ -86,17 +86,21 @@ $(lib_libCsCore1_la_SOURCES): $(CORE_HEADERS_INSTALLED)
 
 .core-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtCore:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtCore/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(CORE_PUBLIC_INCLUDES); do \
-		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h include/QtCore" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(CORE_DIRS); do \
-		echo "include/QtCore/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtCore/%: $$i/% include/QtCore" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(CORE_DIRS); do \
-		echo "privateinclude/QtCore/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtCore/private/%: $$i/% privateinclude/QtCore/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 
 EXTRA_DIST+= \
