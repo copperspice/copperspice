@@ -1,4 +1,4 @@
-AC_INIT([copperspice], [1.0.1], [ansel@copperspice.com])
+AC_INIT([copperspice], [1.0.2], [ansel@copperspice.com])
 
 AC_CONFIG_AUX_DIR([autotools/build-aux])
 
