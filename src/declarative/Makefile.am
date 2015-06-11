@@ -56,15 +56,19 @@ $(lib_libCsDeclarative1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_IN
 
 .declarative-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtDeclarative:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtDeclarative/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(DECLARATIVE_PUBLIC_INCLUDES); do \
-		echo "include/QtDeclarative/$$i: include/QtDeclarative/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtDeclarative/$$i: include/QtDeclarative/$$(echo $$i | tr A-Z a-z).h include/QtDeclarative" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(DECLARATIVE_DIRS); do \
-		echo "include/QtDeclarative/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtDeclarative/%: $$i/% include/QtDeclarative" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(DECLARATIVE_DIRS); do \
-		echo "privateinclude/QtDeclarative/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtDeclarative/private/%: $$i/% privateinclude/QtDeclarative/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

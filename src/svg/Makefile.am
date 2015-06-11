@@ -80,15 +80,19 @@ $(lib_libCsSvg1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED)
 
 .svg-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtSvg:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtSvg/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SVG_PUBLIC_INCLUDES); do \
-		echo "include/QtSvg/$$i: include/QtSvg/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtSvg/$$i: include/QtSvg/$$(echo $$i | tr A-Z a-z).h include/QtSvg" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SVG_DIRS); do \
-		echo "include/QtSvg/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtSvg/%: $$i/% include/QtSvg" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SVG_DIRS); do \
-		echo "privateinclude/QtSvg/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtSvg/private/%: $$i/% privateinclude/QtSvg/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

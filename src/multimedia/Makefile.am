@@ -43,15 +43,19 @@ $(lib_libCsMultimedia1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INS
 
 .multimedia-header-deps.mk: Makefile
 	@- rm -rf $@
+	echo "include/QtMultimedia:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "privateinclude/QtMultimedia/private:" >> $@; \
+	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(MULTIMEDIA_PUBLIC_INCLUDES); do \
-		echo "include/QtMultimedia/$$i: include/QtMultimedia/$$(echo $$i | tr A-Z a-z).h" >> $@; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtMultimedia/$$i: include/QtMultimedia/$$(echo $$i | tr A-Z a-z).h include/QtMultimedia" >> $@; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(MULTIMEDIA_DIRS); do \
-		echo "include/QtMultimedia/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "include/QtMultimedia/%: $$i/% include/QtMultimedia" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(MULTIMEDIA_DIRS); do \
-		echo "privateinclude/QtMultimedia/private/%: $$i/%" >> $@ ; \
-		echo "	\$$(INSTALL) -D \$$^ \$$@" >> $@ ; \
+		echo "privateinclude/QtMultimedia/private/%: $$i/% privateinclude/QtMultimedia/private" >> $@ ; \
+		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
