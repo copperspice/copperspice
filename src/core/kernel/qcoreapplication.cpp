@@ -458,6 +458,7 @@ void QCoreApplication::flush()
 QCoreApplication::QCoreApplication(int &argc, char **argv, int _internal)
    : QObject(0), d_ptr(new QCoreApplicationPrivate(argc, argv, _internal) )
 {
+   d_ptr->q_ptr = this;
    init();
    QCoreApplicationPrivate::eventDispatcher->startingUp();
 }
