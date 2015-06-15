@@ -1076,7 +1076,7 @@ enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMs
 
 Q_CORE_EXPORT void qt_message_output(QtMsgType, const char *buf);
 
-typedef void (*QtMsgHandler)(QtMsgType, const char *);
+using QtMsgHandler = void (*)(QtMsgType, const char*);
 Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
 
 
