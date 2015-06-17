@@ -39,7 +39,7 @@ namespace Phonon
 {
 class StreamInterface;
 
-/** \class MediaObjectInterface mediaobjectinterface.h Phonon/MediaObjectInterface
+/* \class MediaObjectInterface mediaobjectinterface.h Phonon/MediaObjectInterface
  * \short Backend interface for media sources.
  *
  * The backend implementation has to provide two signals, that are not defined
@@ -75,7 +75,7 @@ class MediaObjectInterface
     public:
         virtual ~MediaObjectInterface() {}
 
-        /**
+        /*
          * Requests the playback to start.
          *
          * This method is only called if the state transition to \ref PlayingState is possible.
@@ -86,7 +86,7 @@ class MediaObjectInterface
          */
         virtual void play() = 0;
 
-        /**
+        /*
          * Requests the playback to pause.
          *
          * This method is only called if the state transition to \ref PausedState is possible.
@@ -96,7 +96,7 @@ class MediaObjectInterface
          */
         virtual void pause() = 0;
 
-        /**
+        /*
          * Requests the playback to be stopped.
          *
          * This method is only called if the state transition to \ref StoppedState is possible.
@@ -109,7 +109,7 @@ class MediaObjectInterface
          */
         virtual void stop() = 0;
 
-        /**
+        /*
          * Requests the playback to be seeked to the given time.
          *
          * The backend does not have to finish seeking while in this function
@@ -126,14 +126,14 @@ class MediaObjectInterface
          */
         virtual void seek(qint64 milliseconds) = 0;
 
-        /**
+        /*
          * Return the time interval in milliseconds between two ticks.
          *
          * \returns Returns the tick interval that it was set to (might not
          * be the same as you asked for).
          */
         virtual qint32 tickInterval() const = 0;
-        /**
+        /*
          * Change the interval the tick signal is emitted. If you set \p
          * interval to 0 the signal gets disabled.
          *
@@ -144,40 +144,40 @@ class MediaObjectInterface
          */
         virtual void setTickInterval(qint32 interval) = 0;
 
-        /**
+        /*
          * Check whether the media data includes a video stream.
          *
          * \return returns \p true if the media contains video data
          */
         virtual bool hasVideo() const = 0;
-        /**
+        /*
          * If the current media may be seeked returns true.
          *
          * \returns whether the current media may be seeked.
          */
         virtual bool isSeekable() const = 0;
-        /**
+        /*
          * Get the current time (in milliseconds) of the file currently being played.
          */
         virtual qint64 currentTime() const = 0;
-        /**
+        /*
          * Get the current state.
          */
         virtual Phonon::State state() const = 0;
 
-        /**
+        /*
          * A translated string describing the error.
          */
         virtual QString errorString() const = 0;
 
-        /**
+        /*
          * Tells your program what to do about the error.
          *
          * \see Phonon::ErrorType
          */
         virtual Phonon::ErrorType errorType() const = 0;
 
-        /**
+        /*
          * Returns the total time of the media in milliseconds.
          *
          * If the total time is not know return -1. Do not block until it is
@@ -186,12 +186,12 @@ class MediaObjectInterface
          */
         virtual qint64 totalTime() const = 0;
 
-        /**
+        /*
          * Returns the current source.
          */
         virtual MediaSource source() const = 0;
 
-        /**
+        /*
          * Sets the current source. When this function is called the MediaObject is
          * expected to stop all current activity and start loading the new
          * source (i.e. go into LoadingState).
@@ -213,7 +213,7 @@ class MediaObjectInterface
          */
         virtual void setSource(const MediaSource &) = 0;
 
-        /**
+        /*
          * Sets the next source to be used for transitions. When a next source
          * is set playback should continue with the new source. In that case
          * finished and prefinishMarkReached are not emitted.

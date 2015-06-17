@@ -45,7 +45,7 @@ namespace Phonon
 class Effect;
 class EffectParameterPrivate;
 
-/** \class EffectParameter effectparameter.h Phonon/EffectParameter
+/* \class EffectParameter effectparameter.h Phonon/EffectParameter
  * \brief This class describes one parameter of an effect.
  *
  * \ingroup PhononEffects
@@ -56,21 +56,21 @@ class PHONON_EXPORT EffectParameter
 {
     friend class BrightnessControl;
     public:
-        /**
+        /*
          * \internal
          *
          * Creates an invalid effect parameter.
          */
         EffectParameter();
 
-        /**
+        /*
          * The name of the parameter. Can be used as the label.
          *
          * \return A label for the parameter.
          */
         const QString &name() const;
 
-        /**
+        /*
          * The parameter may come with a description (LADSPA doesn't have a
          * field for this, so don't expect many effects to provide a
          * description).
@@ -81,7 +81,7 @@ class PHONON_EXPORT EffectParameter
          */
         const QString &description() const;
 
-        /**
+        /*
          * Returns the parameter type.
          *
          * Common types are QVariant::Int, QVariant::Double, QVariant::Bool and QVariant::String. When
@@ -89,14 +89,14 @@ class PHONON_EXPORT EffectParameter
          */
         QVariant::Type type() const;
 
-        /**
+        /*
          * Returns whether the parameter should be
          * displayed using a logarithmic scale. This is particularly useful for
          * frequencies and gains.
          */
         bool isLogarithmicControl() const;
 
-        /**
+        /*
          * The minimum value to be used for the control to edit the parameter.
          *
          * If the returned QVariant is invalid the value is not bounded from
@@ -104,7 +104,7 @@ class PHONON_EXPORT EffectParameter
          */
         QVariant minimumValue() const;
 
-        /**
+        /*
          * The maximum value to be used for the control to edit the parameter.
          *
          * If the returned QVariant is invalid the value is not bounded from
@@ -112,12 +112,12 @@ class PHONON_EXPORT EffectParameter
          */
         QVariant maximumValue() const;
 
-        /**
+        /*
          * The default value.
          */
         QVariant defaultValue() const;
 
-        /**
+        /*
          * The possible values to be used for the control to edit the parameter.
          *
          * if the value of this parameter is to be picked from predefined values
@@ -125,19 +125,19 @@ class PHONON_EXPORT EffectParameter
          */
         QVariantList possibleValues() const;
 
-        /**
+        /*
          * \internal
          * compares the ids of the parameters
          */
         bool operator<(const EffectParameter &rhs) const;
 
-        /**
+        /*
          * \internal
          * compares the ids of the parameters
          */
         bool operator>(const EffectParameter &rhs) const;
 
-        /**
+        /*
          * \internal
          * compares the ids of the parameters
          */
@@ -148,7 +148,7 @@ class PHONON_EXPORT EffectParameter
         EffectParameter(const EffectParameter &rhs);
         EffectParameter &operator=(const EffectParameter &rhs);
 
-        /**
+        /*
          * Only for backend developers:
          *
          * Flags to set the return values of isToggleControl(),
@@ -157,7 +157,7 @@ class PHONON_EXPORT EffectParameter
          * used for LADSPA effects.
          */
         enum Hint {
-            /**
+            /*
              * If this hint is set it means that
              * the the control has only two states: zero and non-zero.
              *
@@ -169,18 +169,18 @@ class PHONON_EXPORT EffectParameter
              * to normal bounds, as the backend knows the sample rate - and the
              * frontend doesn't */
 
-            /**
+            /*
              * \see isLogarithmicControl()
              */
             LogarithmicHint  = 0x10,
-            /**
+            /*
              * \see isIntegerControl
              */
             IntegerHint      = 0x20
         };
         using Hints = QFlags<Hint>;
 
-        /**
+        /*
          * Only to be used by backend implementations:
          *
          * Creates a new effect parameter.
@@ -209,7 +209,7 @@ class PHONON_EXPORT EffectParameter
                 const QVariant &max = QVariant(), const QVariantList &values = QVariantList(),
                 const QString &description = QString());
 
-        /**
+        /*
          * \internal
          *
          * Returns the parameter's id.
@@ -217,7 +217,7 @@ class PHONON_EXPORT EffectParameter
         int id() const;
 
     protected:
-        /**
+        /*
          * The data is implicitly shared.
          */
         QExplicitlySharedDataPointer<EffectParameterPrivate> d;
