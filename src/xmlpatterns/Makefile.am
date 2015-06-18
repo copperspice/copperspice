@@ -38,7 +38,8 @@ include src/xmlpatterns/utils/Makefile.am
 XMLPATTERNS_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtXmlPatterns/%,$(XMLPATTERNS_INCLUDES)) \
 	$(patsubst %,include/QtXmlPatterns/%,$(XMLPATTERNS_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtXmlPatterns/private/%,$(XMLPATTERNS_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtXmlPatterns/private/%,$(XMLPATTERNS_PRIVATE_INCLUDES)) \
+	include/QtXmlPatterns privateinclude/QtXmlPatterns/private
 
 BUILT_SOURCES+=.xmlpatterns-header-deps.mk
 
@@ -54,15 +55,15 @@ $(lib_libCsXmlPatterns1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADER
 	echo "privateinclude/QtXmlPatterns/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(XMLPATTERNS_PUBLIC_INCLUDES); do \
-		echo "include/QtXmlPatterns/$$i: include/QtXmlPatterns/$$(echo $$i | tr A-Z a-z).h include/QtXmlPatterns" >> $@; \
+		echo "include/QtXmlPatterns/$$i: include/QtXmlPatterns/$$(echo $$i | tr A-Z a-z).h | include/QtXmlPatterns" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(XMLPATTERNS_DIRS); do \
-		echo "include/QtXmlPatterns/%: $$i/% include/QtXmlPatterns" >> $@ ; \
+		echo "include/QtXmlPatterns/%: $$i/% | include/QtXmlPatterns" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(XMLPATTERNS_DIRS); do \
-		echo "privateinclude/QtXmlPatterns/private/%: $$i/% privateinclude/QtXmlPatterns/private" >> $@ ; \
+		echo "privateinclude/QtXmlPatterns/private/%: $$i/% | privateinclude/QtXmlPatterns/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 

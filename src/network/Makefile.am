@@ -39,11 +39,12 @@ include src/network/ssl/Makefile.am
 NETWORK_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtNetwork/%,$(NETWORK_INCLUDES)) \
 	$(patsubst %,include/QtNetwork/%,$(NETWORK_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtNetwork/private/%,$(NETWORK_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtNetwork/private/%,$(NETWORK_PRIVATE_INCLUDES)) \
+	include/QtNetwork privateinclude/QtNetwork/private
 
 BUILT_SOURCES+=.network-header-deps.mk
 
-$(lib_libCsNetwork1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED)
+$(lib_libCsNetwork1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) 
 
 -include .network-header-deps.mk
 
@@ -54,14 +55,14 @@ $(lib_libCsNetwork1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_IN
 	echo "privateinclude/QtNetwork/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(NETWORK_PUBLIC_INCLUDES); do \
-		echo "include/QtNetwork/$$i: include/QtNetwork/$$(echo $$i | tr A-Z a-z).h include/QtNetwork" >> $@; \
+		echo "include/QtNetwork/$$i: include/QtNetwork/$$(echo $$i | tr A-Z a-z).h | include/QtNetwork" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(NETWORK_DIRS); do \
-		echo "include/QtNetwork/%: $$i/% include/QtNetwork" >> $@ ; \
+		echo "include/QtNetwork/%: $$i/% | include/QtNetwork" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(NETWORK_DIRS); do \
-		echo "privateinclude/QtNetwork/private/%: $$i/% privateinclude/QtNetwork/private" >> $@ ; \
+		echo "privateinclude/QtNetwork/private/%: $$i/% | privateinclude/QtNetwork/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

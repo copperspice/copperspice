@@ -531,11 +531,12 @@ lib_libCsScript1_la_SOURCES += \
 SCRIPT_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtScript/%,$(SCRIPT_INCLUDES)) \
 	$(patsubst %,include/QtScript/%,$(SCRIPT_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtScript/private/%,$(SCRIPT_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtScript/private/%,$(SCRIPT_PRIVATE_INCLUDES)) \
+	include/QtScript privateinclude/QtScript/private
 
 BUILT_SOURCES+=.script-header-deps.mk
 
-$(lib_libCsScript1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INSTALLED)
+$(lib_libCsScript1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INSTALLED) 
 
 -include .script-header-deps.mk
 
@@ -546,14 +547,14 @@ $(lib_libCsScript1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INST
 	echo "privateinclude/QtScript/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SCRIPT_PUBLIC_INCLUDES); do \
-		echo "include/QtScript/$$i: include/QtScript/$$(echo $$i | tr A-Z a-z).h include/QtScript" >> $@; \
+		echo "include/QtScript/$$i: include/QtScript/$$(echo $$i | tr A-Z a-z).h | include/QtScript" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SCRIPT_DIRS); do \
-		echo "include/QtScript/%: $$i/% include/QtScript" >> $@ ; \
+		echo "include/QtScript/%: $$i/% | include/QtScript" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SCRIPT_DIRS); do \
-		echo "privateinclude/QtScript/private/%: $$i/% privateinclude/QtScript/private" >> $@ ; \
+		echo "privateinclude/QtScript/private/%: $$i/% | privateinclude/QtScript/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

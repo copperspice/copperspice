@@ -76,7 +76,9 @@ include src/core/xml/Makefile.am
 CORE_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtCore/%,$(CORE_INCLUDES)) \
 	$(patsubst %,include/QtCore/%,$(CORE_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtCore/private/%,$(CORE_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtCore/private/%,$(CORE_PRIVATE_INCLUDES)) \
+	include/QtCore \
+	privateinclude/QtCore/private
 
 BUILT_SOURCES+=.core-header-deps.mk
 
@@ -91,15 +93,15 @@ $(lib_libCsCore1_la_SOURCES): $(CORE_HEADERS_INSTALLED)
 	echo "privateinclude/QtCore/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(CORE_PUBLIC_INCLUDES); do \
-		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h include/QtCore" >> $@; \
+		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h | include/QtCore" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(CORE_DIRS); do \
-		echo "include/QtCore/%: $$i/% include/QtCore" >> $@ ; \
+		echo "include/QtCore/%: $$i/% | include/QtCore" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(CORE_DIRS); do \
-		echo "privateinclude/QtCore/private/%: $$i/% privateinclude/QtCore/private" >> $@ ; \
+		echo "privateinclude/QtCore/private/%: $$i/% | privateinclude/QtCore/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 
