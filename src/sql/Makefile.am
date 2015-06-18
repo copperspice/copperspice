@@ -45,7 +45,8 @@ include src/sql/models/Makefile.am
 SQL_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtSql/%,$(SQL_INCLUDES)) \
 	$(patsubst %,include/QtSql/%,$(SQL_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtSql/private/%,$(SQL_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtSql/private/%,$(SQL_PRIVATE_INCLUDES)) \
+	include/QtSql privateinclude/QtSql/private
 
 BUILT_SOURCES+=.sql-header-deps.mk
 
@@ -60,14 +61,14 @@ $(lib_libCsSql1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SQL_HEADERS_INSTALLED)
 	echo "privateinclude/QtSql/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SQL_PUBLIC_INCLUDES); do \
-		echo "include/QtSql/$$i: include/QtSql/$$(echo $$i | tr A-Z a-z).h include/QtSql" >> $@; \
+		echo "include/QtSql/$$i: include/QtSql/$$(echo $$i | tr A-Z a-z).h | include/QtSql" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SQL_DIRS); do \
-		echo "include/QtSql/%: $$i/% include/QtSql" >> $@ ; \
+		echo "include/QtSql/%: $$i/% | include/QtSql" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SQL_DIRS); do \
-		echo "privateinclude/QtSql/private/%: $$i/% privateinclude/QtSql/private" >> $@ ; \
+		echo "privateinclude/QtSql/private/%: $$i/% | privateinclude/QtSql/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

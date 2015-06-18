@@ -5281,12 +5281,12 @@ noinst_HEADERS+=$(patsubst %,../../src/webkit/%,$(WEBKIT_MAIN_INCLUDES)) \
 create-webkit-headers: \
 	$(patsubst %,../../include/QtWebKit/%,$(WEBKIT_INCLUDES)) \
 	$(patsubst %,../../include/QtWebKit/%,$(WEBKIT_PUBLIC_INCLUDES)) \
-	$(patsubst %,../../privateinclude/QtWebKit/private/%,$(WEBKIT_PRIVATE_INCLUDES))
+	$(patsubst %,../../privateinclude/QtWebKit/private/%,$(WEBKIT_PRIVATE_INCLUDES)) \
+	../../include/QtWebKit ../../privateinclude/QtWebKit/private
 
 BUILT_SOURCES+=.webkit-header-deps.mk create-webkit-headers
 
-#$(lib_CsWebKit1_la_SOURCES): create-core-headers create-gui-headers create-webkit-headers
-
+#$(lib_CsWebKit1_la_SOURCES): create-core-headers create-gui-headers create-webkit-headers 
 
 -include .webkit-header-deps.mk
 
@@ -5297,15 +5297,15 @@ BUILT_SOURCES+=.webkit-header-deps.mk create-webkit-headers
 	echo "../../privateinclude/QtWebKit/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(WEBKIT_PUBLIC_INCLUDES); do \
-		echo "../../include/QtWebKit/$$i: ../../include/QtWebKit/$$(echo $$i | tr A-Z a-z).h ../../include/QtWebKit" >> $@; \
+		echo "../../include/QtWebKit/$$i: ../../include/QtWebKit/$$(echo $$i | tr A-Z a-z).h | ../../include/QtWebKit" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(WEBKIT_DIRS); do \
-		echo "../../include/QtWebKit/%: $$i/% ../../include/QtWebKit" >> $@ ; \
+		echo "../../include/QtWebKit/%: $$i/% | ../../include/QtWebKit" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(WEBKIT_DIRS); do \
-		echo "../../privateinclude/QtWebKit/private/%: $$i/% ../../privateinclude/QtWebKit/private" >> $@ ; \
+		echo "../../privateinclude/QtWebKit/private/%: $$i/% | ../../privateinclude/QtWebKit/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 

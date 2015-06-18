@@ -216,7 +216,8 @@ PHONON_INCLUDES=$(PHONON_3RDPARTY_INCLUDES) $(PHONON_MAIN_INCLUDES)
 PHONON_HEADERS_INSTALLED= \
    $(patsubst %,include/phonon/%,$(PHONON_INCLUDES)) \
 	$(patsubst %,include/phonon/%,$(PHONON_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/phonon/private/%,$(PHONON_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/phonon/private/%,$(PHONON_PRIVATE_INCLUDES)) \
+	include/phonon privateinclude/phonon/private
 
 BUILT_SOURCES+=.phonon-header-deps.mk
 
@@ -231,15 +232,15 @@ $(lib_libCsPhonon1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALL
 	echo "privateinclude/phonon/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(PHONON_PUBLIC_INCLUDES); do \
-		echo "include/phonon/$$i: include/phonon/$$(echo $$i | tr A-Z a-z).h include/phonon" >> $@; \
+		echo "include/phonon/$$i: include/phonon/$$(echo $$i | tr A-Z a-z).h | include/phonon" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(PHONON_DIRS); do \
-		echo "include/phonon/%: $$i/% include/phonon" >> $@ ; \
+		echo "include/phonon/%: $$i/% | include/phonon" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(PHONON_DIRS); do \
-		echo "privateinclude/phonon/private/%: $$i/% privateinclude/phonon/private" >> $@ ; \
+		echo "privateinclude/phonon/private/%: $$i/% | privateinclude/phonon/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 

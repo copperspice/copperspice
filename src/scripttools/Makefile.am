@@ -34,6 +34,7 @@ SCRIPTTOOLS_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtScriptTools/%,$(SCRIPTTOOLS_INCLUDES)) \
 	$(patsubst %,include/QtScriptTools/%,$(SCRIPTTOOLS_PUBLIC_INCLUDES)) \
 	$(patsubst %,privateinclude/QtScriptTools/private/%,$(SCRIPTTOOLS_PRIVATE_INCLUDES))
+	include/QtScriptTools privateinclude/QtScriptTools/private
 
 BUILT_SOURCES+=.scripttools-header-deps.mk
 
@@ -49,14 +50,14 @@ $(lib_libCsScriptTools1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_IN
 	echo "privateinclude/QtScriptTools/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SCRIPTTOOLS_PUBLIC_INCLUDES); do \
-		echo "include/QtScriptTools/$$i: include/QtScriptTools/$$(echo $$i | tr A-Z a-z).h include/QtScriptTools" >> $@; \
+		echo "include/QtScriptTools/$$i: include/QtScriptTools/$$(echo $$i | tr A-Z a-z).h | include/QtScriptTools" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SCRIPTTOOLS_DIRS); do \
-		echo "include/QtScriptTools/%: $$i/% include/QtScriptTools" >> $@ ; \
+		echo "include/QtScriptTools/%: $$i/% | include/QtScriptTools" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SCRIPTTOOLS_DIRS); do \
-		echo "privateinclude/QtScriptTools/private/%: $$i/% privateinclude/QtScriptTools/private" >> $@ ; \
+		echo "privateinclude/QtScriptTools/private/%: $$i/% | privateinclude/QtScriptTools/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

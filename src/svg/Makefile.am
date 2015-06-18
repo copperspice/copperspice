@@ -69,7 +69,8 @@ noinst_HEADERS+=$(patsubst %,src/svg/%,$(SVG_INCLUDES)) \
 SVG_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtSvg/%,$(SVG_INCLUDES)) \
 	$(patsubst %,include/QtSvg/%,$(SVG_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtSvg/private/%,$(SVG_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtSvg/private/%,$(SVG_PRIVATE_INCLUDES)) \
+	include/QtSvg privateinclude/QtSvg/private
 
 BUILT_SOURCES+=.svg-header-deps.mk
 
@@ -85,14 +86,14 @@ $(lib_libCsSvg1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED)
 	echo "privateinclude/QtSvg/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(SVG_PUBLIC_INCLUDES); do \
-		echo "include/QtSvg/$$i: include/QtSvg/$$(echo $$i | tr A-Z a-z).h include/QtSvg" >> $@; \
+		echo "include/QtSvg/$$i: include/QtSvg/$$(echo $$i | tr A-Z a-z).h | include/QtSvg" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(SVG_DIRS); do \
-		echo "include/QtSvg/%: $$i/% include/QtSvg" >> $@ ; \
+		echo "include/QtSvg/%: $$i/% | include/QtSvg" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(SVG_DIRS); do \
-		echo "privateinclude/QtSvg/private/%: $$i/% privateinclude/QtSvg/private" >> $@ ; \
+		echo "privateinclude/QtSvg/private/%: $$i/% | privateinclude/QtSvg/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done

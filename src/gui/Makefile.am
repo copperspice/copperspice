@@ -82,7 +82,8 @@ include src/gui/widgets/Makefile.am
 GUI_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtGui/%,$(GUI_INCLUDES)) \
 	$(patsubst %,include/QtGui/%,$(GUI_PUBLIC_INCLUDES)) \
-	$(patsubst %,privateinclude/QtGui/private/%,$(GUI_PRIVATE_INCLUDES))
+	$(patsubst %,privateinclude/QtGui/private/%,$(GUI_PRIVATE_INCLUDES)) \
+	include/QtGui privateinclude/QtGui/private
 
 BUILT_SOURCES+=.gui-header-deps.mk
 
@@ -97,15 +98,15 @@ $(lib_libCsGui1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED)
 	echo "privateinclude/QtGui/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(GUI_PUBLIC_INCLUDES); do \
-		echo "include/QtGui/$$i: include/QtGui/$$(echo $$i | tr A-Z a-z).h include/QtGui" >> $@; \
+		echo "include/QtGui/$$i: include/QtGui/$$(echo $$i | tr A-Z a-z).h | include/QtGui" >> $@; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(GUI_DIRS); do \
-		echo "include/QtGui/%: $$i/% include/QtGui" >> $@ ; \
+		echo "include/QtGui/%: $$i/% | include/QtGui" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done;\
 	for i in $(GUI_DIRS); do \
-		echo "privateinclude/QtGui/private/%: $$i/% privateinclude/QtGui/private" >> $@ ; \
+		echo "privateinclude/QtGui/private/%: $$i/% | privateinclude/QtGui/private" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done
 
