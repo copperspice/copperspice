@@ -1097,8 +1097,94 @@ QList<T> QList<T>::fromVector(const QVector<T> &vector)
    return vector.toList();
 }
 
-Q_DECLARE_SEQUENTIAL_ITERATOR(Vector)
-Q_DECLARE_MUTABLE_SEQUENTIAL_ITERATOR(Vector)
+template <class T>
+class QVectorIterator
+{ 
+   typedef typename QVector<T>::const_iterator const_iterator;
+   QVector<T> c;
+   const_iterator i;
+   
+   public:
+      inline QVectorIterator(const QVector<T> &container)
+         : c(container), i(c.constBegin()) {}
+   
+      inline QVectorIterator &operator=(const QVector<T> &container)
+         { c = container; i = c.constBegin(); return *this; }
+      
+      inline void toFront() { i = c.constBegin(); } 
+      inline void toBack() { i = c.constEnd(); } 
+      inline bool hasNext() const { return i != c.constEnd(); } 
+      inline const T &next() { return *i++; } 
+      inline const T &peekNext() const { return *i; } 
+      inline bool hasPrevious() const { return i != c.constBegin(); } 
+      inline const T &previous() { return *--i; } 
+      inline const T &peekPrevious() const { const_iterator p = i; return *--p; } 
+      
+      inline bool findNext(const T &t)  { 
+         while (i != c.constEnd()) {
+            if (*i++ == t) {
+               return true; 
+            }
+         }
+         return false;           
+      }
+      
+      inline bool findPrevious(const T &t)   { 
+         while (i != c.constBegin()) {
+            if (*(--i) == t)  {
+               return true; 
+            }
+         }  
+         return false;                 
+      }
+};
+
+template <class T>
+class QMutableVectorIterator
+{ 
+   typedef typename QVector<T>::iterator iterator;
+   typedef typename QVector<T>::const_iterator const_iterator;
+   QVector<T> *c;
+   iterator i, n;
+   inline bool item_exists() const { return const_iterator(n) != c->constEnd(); } 
+   
+   public:
+      inline QMutableVectorIterator(QVector<T> &container)
+         : c(&container)
+      { c->setSharable(false); i = c->begin(); n = c->end(); } 
+      
+      inline ~QMutableVectorIterator()
+         { c->setSharable(true); }
+
+      inline QMutableVectorIterator &operator=(QVector<T> &container)
+         { c->setSharable(true); c = &container; c->setSharable(false);
+
+      i = c->begin(); n = c->end(); return *this; }
+      inline void toFront() { i = c->begin(); n = c->end(); }
+      inline void toBack() { i = c->end(); n = i; }
+      inline bool hasNext() const { return c->constEnd() != const_iterator(i); }
+      inline T &next() { n = i++; return *n; }
+      inline T &peekNext() const { return *i; }
+      inline bool hasPrevious() const { return c->constBegin() != const_iterator(i); }
+      inline T &previous() { n = --i; return *n; }
+      inline T &peekPrevious() const { iterator p = i; return *--p; }
+
+      inline void remove()
+         { if (c->constEnd() != const_iterator(n)) { i = c->erase(n); n = c->end(); } }
+
+      inline void setValue(const T &t) const { if (c->constEnd() != const_iterator(n)) *n = t; }
+      inline T &value() { Q_ASSERT(item_exists()); return *n; }
+      inline const T &value() const { Q_ASSERT(item_exists()); return *n; }
+      inline void insert(const T &t) { n = i = c->insert(i, t); ++i; } 
+
+      inline bool findNext(const T &t) 
+         { while (c->constEnd() != const_iterator(n = i)) if (*i++ == t) return true; return false; } 
+
+      inline bool findPrevious(const T &t) 
+         { while (c->constBegin() != const_iterator(i)) if (*(n = --i) == t) return true; 
+
+      n = c->end(); return false;  } 
+};
 
 QT_END_NAMESPACE
 

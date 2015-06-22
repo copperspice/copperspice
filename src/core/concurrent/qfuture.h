@@ -201,6 +201,7 @@ class QFuture
       QFuture const *future;
       int index;
    };
+
    friend class const_iterator;
    typedef const_iterator ConstIterator;
 
@@ -251,7 +252,47 @@ inline QFuture<T> QFutureInterface<T>::future()
    return QFuture<T>(this);
 }
 
-Q_DECLARE_SEQUENTIAL_ITERATOR(Future)
+template <class T>
+class QFutureIterator
+{ 
+   typedef typename QFuture<T>::const_iterator const_iterator;
+   QFuture<T> c;
+   const_iterator i;
+   
+   public:
+      inline QFutureIterator(const QFuture<T> &container)
+         : c(container), i(c.constBegin()) {}
+   
+      inline QFutureIterator &operator=(const QFuture<T> &container)
+         { c = container; i = c.constBegin(); return *this; }
+      
+      inline void toFront() { i = c.constBegin(); } 
+      inline void toBack() { i = c.constEnd(); } 
+      inline bool hasNext() const { return i != c.constEnd(); } 
+      inline const T &next() { return *i++; } 
+      inline const T &peekNext() const { return *i; } 
+      inline bool hasPrevious() const { return i != c.constBegin(); } 
+      inline const T &previous() { return *--i; } 
+      inline const T &peekPrevious() const { const_iterator p = i; return *--p; } 
+      
+      inline bool findNext(const T &t)  { 
+         while (i != c.constEnd()) {
+            if (*i++ == t) {
+               return true; 
+            }
+         }
+         return false;           
+      }
+      
+      inline bool findPrevious(const T &t)   { 
+         while (i != c.constBegin()) {
+            if (*(--i) == t)  {
+               return true; 
+            }
+         }  
+         return false;                 
+      }
+};
 
 template <>
 class QFuture<void>
@@ -277,7 +318,7 @@ class QFuture<void>
       return (d != other.d);
    }
 
-#if !defined(Q_CC_XLC)
+#if ! defined(Q_CC_XLC)
    template <typename T>
    QFuture(const QFuture<T> &other)
       : d(other.d) {

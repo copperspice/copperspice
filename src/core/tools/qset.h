@@ -484,7 +484,47 @@ QList<T> QList<T>::fromSet(const QSet<T> &set)
    return set.toList();
 }
 
-Q_DECLARE_SEQUENTIAL_ITERATOR(Set)
+template <class T>
+class QSetIterator
+{ 
+   typedef typename QSet<T>::const_iterator const_iterator;
+   QSet<T> c;
+   const_iterator i;
+   
+   public:
+      inline QSetIterator(const QSet<T> &container)
+         : c(container), i(c.constBegin()) {}
+   
+      inline QSetIterator &operator=(const QSet<T> &container)
+         { c = container; i = c.constBegin(); return *this; }
+      
+      inline void toFront() { i = c.constBegin(); } 
+      inline void toBack() { i = c.constEnd(); } 
+      inline bool hasNext() const { return i != c.constEnd(); } 
+      inline const T &next() { return *i++; } 
+      inline const T &peekNext() const { return *i; } 
+      inline bool hasPrevious() const { return i != c.constBegin(); } 
+      inline const T &previous() { return *--i; } 
+      inline const T &peekPrevious() const { const_iterator p = i; return *--p; } 
+      
+      inline bool findNext(const T &t)  { 
+         while (i != c.constEnd()) {
+            if (*i++ == t) {
+               return true; 
+            }
+         }
+         return false;           
+      }
+      
+      inline bool findPrevious(const T &t)   { 
+         while (i != c.constBegin()) {
+            if (*(--i) == t)  {
+               return true; 
+            }
+         }  
+         return false;                 
+      }
+};
 
 template <typename T>
 class QMutableSetIterator
