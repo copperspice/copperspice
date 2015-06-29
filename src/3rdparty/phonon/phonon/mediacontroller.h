@@ -45,12 +45,6 @@ namespace Phonon
 class MediaControllerPrivate;
 class MediaObject;
 
-/** \class MediaController mediacontroller.h Phonon/MediaController
- * \brief Controls optional features of a media file/device like title, chapter, angle.
- *
- * \ingroup Playback
- * \author Matthias Kretz <kretz@kde.org>
- */
 class PHONON_EXPORT MediaController : public QObject
 {
     CS_OBJECT(MediaController)
