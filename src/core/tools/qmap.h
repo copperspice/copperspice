@@ -26,7 +26,6 @@
 #ifndef QMAP_H
 #define QMAP_H
 
-#include <QtCore/qiterator.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qrefcount.h>
 #include <QtCore/qcontainerfwd.h>

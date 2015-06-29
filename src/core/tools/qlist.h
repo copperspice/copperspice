@@ -27,7 +27,6 @@
 #define QLIST_H
 
 #include <qalgorithms.h>
-#include <qiterator.h>
 #include <qrefcount.h>
 
 #include <iterator>

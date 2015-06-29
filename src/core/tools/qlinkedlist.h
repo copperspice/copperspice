@@ -26,7 +26,6 @@
 #ifndef QLINKEDLIST_H
 #define QLINKEDLIST_H
 
-#include <QtCore/qiterator.h>
 #include <QtCore/qrefcount.h>
 
 #include <iterator>

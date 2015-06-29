@@ -27,7 +27,6 @@
 #define QVECTOR_H
 
 #include <QtCore/qalgorithms.h>
-#include <QtCore/qiterator.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qrefcount.h>
 #include <QtCore/qarraydata.h>

@@ -101,7 +101,6 @@
 #include <qeasingcurve.h>
 #include <qelapsedtimer.h>
 #include <qhash.h>
-#include <qiterator.h>
 #include <qline.h>
 #include <qlinkedlist.h>
 #include <qlist.h>

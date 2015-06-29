@@ -27,7 +27,6 @@
 #define QJSONOBJECT_H
 
 #include <qjsonvalue.h>
-#include <qiterator.h>
 #include <QtCore/qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE

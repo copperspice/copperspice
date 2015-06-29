@@ -27,7 +27,6 @@
 #define QHASH_H
 
 #include <qchar.h>
-#include <qiterator.h>
 #include <qlist.h>
 #include <qpair.h>
 #include <qrefcount.h>
