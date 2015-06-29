@@ -32,12 +32,6 @@
 #include <QtCore/qnamespace.h>
 
 #include <string>
-
-#ifndef QT_NO_STL_WCHAR
-// workaround for some headers that have no typedef std::wstring
-typedef std::basic_string<wchar_t> QStdWString;
-#endif 
-
 #include <stdarg.h>
 
 #ifdef truncate
@@ -646,8 +640,8 @@ class Q_CORE_EXPORT QString
    inline std::string toStdString() const;
 
 #ifndef QT_NO_STL_WCHAR
-   static inline QString fromStdWString(const QStdWString &s);
-   inline QStdWString toStdWString() const;
+   static inline QString fromStdWString(const std::wstring &s);
+   inline std::wstring toStdWString() const;
 #endif
 
    // compatibility
@@ -1660,15 +1654,15 @@ inline QString QString::fromStdString(const std::string &s)
 }
 
 # ifndef QT_NO_STL_WCHAR
-inline QStdWString QString::toStdWString() const
+inline std::wstring QString::toStdWString() const
 {
-   QStdWString str;
+   std::wstring str;
    str.resize(length());
    str.resize(toWCharArray(&(*str.begin())));
    return str;
 }
 
-inline QString QString::fromStdWString(const QStdWString &s)
+inline QString QString::fromStdWString(const std::wstring &s)
 {
    return fromWCharArray(s.data(), int(s.size()));
 }
