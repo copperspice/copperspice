@@ -16,6 +16,8 @@ bin_lconvert_SOURCES = \
 	src/tools/shared/xliff.cpp \
 	src/tools/lconvert/main.cpp
 
+$(bin_lconvert_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+
 bin_lconvert_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)   \
    -DPROEVALUATOR_CUMULATIVE -DPROEVALUATOR_INIT_PROPS  \
    -Iinclude/QtCore  -I$(top_srcdir)/src/tools/shared   \
