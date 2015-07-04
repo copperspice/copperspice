@@ -49,7 +49,7 @@ class PHONON_EXPORT Path
 {
     friend class FactoryPrivate;
     public:
-        /**
+        /*
          * Destroys this reference to the Path. If the path was valid the connection is not broken
          * as both the source and the sink MediaNodes still keep a reference to the Path.
          *
@@ -57,7 +57,7 @@ class PHONON_EXPORT Path
          */
         ~Path();
 
-        /**
+        /*
          * Creates an invalid path.
          *
          * You can still make it a valid path by calling reconnect. To create a path you should use
@@ -68,14 +68,14 @@ class PHONON_EXPORT Path
          */
         Path();
 
-        /**
+        /*
          * Constructs a copy of the given path.
          *
          * This constructor is fast thanks to explicit sharing.
          */
         Path(const Path &);
 
-        /**
+        /*
          * Returns whether the path object connects two MediaNodes or not.
          *
          * \return \p true when the path connects two MediaNodes
@@ -85,7 +85,7 @@ class PHONON_EXPORT Path
         //MediaStreamTypes mediaStreamTypes() const;
 
 #ifndef QT_NO_PHONON_EFFECT
-        /**
+        /*
          * Creates and inserts an effect into the path.
          *
          * You may insert effects of the same class as often as you like,
@@ -108,7 +108,7 @@ class PHONON_EXPORT Path
          */
         Effect *insertEffect(const EffectDescription &desc, Effect *insertBefore = 0);
 
-        /**
+        /*
          * Inserts an effect into the path.
          *
          * You may insert effects of the same class as often as you like,
@@ -131,7 +131,7 @@ class PHONON_EXPORT Path
          */
         bool insertEffect(Effect *newEffect, Effect *insertBefore = 0);
 
-        /**
+        /*
          * Removes an effect from the path.
          *
          * If the effect gets deleted while it is still connected the effect
@@ -148,7 +148,7 @@ class PHONON_EXPORT Path
          */
         bool removeEffect(Effect *effect);
 
-        /**
+        /*
          * Returns a list of Effect objects that are currently
          * used as effects. The order in the list determines the order the
          * signal is sent through the effects.
@@ -161,42 +161,42 @@ class PHONON_EXPORT Path
         QList<Effect *> effects() const;
 #endif //QT_NO_PHONON_EFFECT
 
-        /**
+        /*
          * Tries to change the MediaNodes the path is connected to.
          *
          * If reconnect fails the old connection is kept.
          */
         bool reconnect(MediaNode *source, MediaNode *sink);
 
-        /**
+        /*
          * Disconnects the path from the MediaNodes it was connected to. This invalidates the path
          * (isValid returns \p false then).
          */
         bool disconnect();
 
-        /**
+        /*
          * Assigns \p p to this Path and returns a reference to this Path.
          *
          * This operation is fast thanks to explicit sharing.
          */
         Path &operator=(const Path &p);
 
-        /**
+        /*
          * Returns \p true if this Path is equal to \p p; otherwise returns \p false;
          */
         bool operator==(const Path &p) const;
 
-        /**
+        /*
          * Returns \p true if this Path is not equal to \p p; otherwise returns \p false;
          */
         bool operator!=(const Path &p) const;
 
-        /**
+        /*
          * Returns the source MediaNode used by the path.
          */
         MediaNode *source() const;
 
-        /**
+        /*
          * Returns the sink MediaNode used by the path.
          */
         MediaNode *sink() const;
@@ -207,7 +207,7 @@ class PHONON_EXPORT Path
         QExplicitlySharedDataPointer<PathPrivate> d;
 };
 
-/**
+/*
  * \relates Path
  * Creates a new Path connecting two MediaNodes.
  *

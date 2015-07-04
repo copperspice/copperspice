@@ -44,65 +44,65 @@ namespace Phonon
 {
     PHONON_EXPORT const char *phononVersion();
 
-    /**
+    /*
      * Enum to identify the media discs supported by MediaObject.
      *
      * \see MediaSource(Phonon::DiscType, const QString &deviceName)
      */
     enum DiscType {
-        /**
+        /*
          * No disc was selected. This is only useful as a return value from
          * MediaSource::distType();
          */
         NoDisc = -1,
-        /**
+        /*
          * Identifies Audio CDs.
          */
         Cd = 0,
-        /**
+        /*
          * Identifies DVDs (not arbitrary data DVDs, only movie DVDs).
          */
         Dvd = 1,
-        /**
+        /*
          * Identifies Video CDs.
          */
         Vcd = 2
     };
 
-    /**
+    /*
      * Provided as keys for \ref MediaObject::metaData for convenience, in addition to the strings defined in
      * the Ogg Vorbis specification.
      */
     enum MetaData {
-        /**
+        /*
          * The artist generally considered responsible for the work. In popular
          * music this is usually the performing band or singer. For classical
          * music it would be the composer. For an audio book it would be the
          * author of the original text.
          */
         ArtistMetaData,
-        /**
+        /*
          * The collection name to which this track belongs.
          */
         AlbumMetaData,
-        /**
+        /*
          * Track/Work name
          */
         TitleMetaData,
-        /**
+        /*
          * Date the track was recorded
          */
         DateMetaData,
-        /**
+        /*
          * A short text indication of music genre
          */
         GenreMetaData,
-        /**
+        /*
          * The track number of this piece if part of a specific larger
          * collection or album
          */
         TracknumberMetaData,
-        /**
+        /*
          * A short text description of the contents
          */
         DescriptionMetaData,
@@ -119,7 +119,7 @@ namespace Phonon
         ErrorState
     };
 
-    /**
+    /*
      * Set's the category your program should be listed in in the mixer.
      *
      * A Jukebox will set this to Music, a VoIP program to Communication, a
@@ -134,60 +134,60 @@ namespace Phonon
      */
     enum Category
     {
-        /**
+        /*
          * Will make use of the default device.
          */
         NoCategory = -1,
-        /**
+        /*
          * If the sounds produced are notifications (bing, beep and such) you
          * should use this category.
          */
         NotificationCategory = 0,
-        /**
+        /*
          * If your application is a music player (like a jukebox or media player
          * playing an audio file).
          */
         MusicCategory = 1,
-        /**
+        /*
          * If the sound is the audio channel of a video.
          */
         VideoCategory = 2,
-        /**
+        /*
          * If your applications produces sounds from communication with somebody
          * else (VoIP, voice chat).
          */
         CommunicationCategory = 3,
-        /**
+        /*
          * Sound produced by a computer game should go into this category.
          */
         GameCategory = 4,
-        /**
+        /*
          * Sounds produced for accessibility (e.g. Text-To-Speech)
          */
         AccessibilityCategory = 5,
-        /**
+        /*
          * \internal
          * Holds the largest value of categories.
          */
         LastCategory = AccessibilityCategory
     };
 
-    /**
+    /*
      * Tells your program how to recover from an error.
      *
      * \see MediaObject::errorType()
      */
     enum ErrorType {
-        /**
+        /*
          * No error. MediaObject::errorType() returns this if
          * MediaObject::state() != Phonon::ErrorState.
          */
         NoError = 0,
-        /**
+        /*
          * Playback should work, and trying with another URL should work.
          */
         NormalError = 1,
-        /**
+        /*
          * Something important does not work. Your program cannot continue
          * playback or capture or whatever it was trying to do
          * without help from the user.
@@ -195,7 +195,7 @@ namespace Phonon
         FatalError = 2
     };
 
-    /**
+    /*
      * Returns a (translated) string to show to the user identifying the given
      * Category.
      */
