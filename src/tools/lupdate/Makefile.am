@@ -27,6 +27,8 @@ bin_lupdate_SOURCES = \
 
 #	src/tools/lupdate/qdeclarative.cpp
 
+$(bin_lupdate_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+
 bin_lupdate_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) \
    -Iinclude/QtCore  -Iinclude/QtXml   \
    -Iprivateinclude/QtCore/private -I$(top_srcdir)/src/tools/shared
