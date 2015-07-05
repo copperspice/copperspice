@@ -183,39 +183,13 @@ namespace std{
 
 namespace WTF {
 
-// constructor
-template<typename T>
-decltype(std::is_trivially_constructible<T>::value, std::is_trivially_constructible<T>{}) 
-   cs_check_constructor(const cs_preferred &)
-{
-}
-
-template<typename T>
-decltype(std::has_trivial_default_constructor<T>::value, std::has_trivial_default_constructor<T>{}) 
-   cs_check_constructor(const cs_alternate &)
-{
-}
-
 template<typename T> 
-struct HasTrivialConstructor : public decltype(cs_check_constructor<T>(cs_preferred{}))
+  struct HasTrivialConstructor : public std::false_type
 {
 };
 
-// destructor
 template<typename T>
-decltype(std::is_trivially_destructible<T>::value, std::is_trivially_destructible<T>{}) 
-   cs_check_destructor(const cs_preferred &)
-{
-}
-
-template<typename T>
-decltype(std::has_trivial_destructor<T>::value, std::has_trivial_destructor<T>{}) 
-   cs_check_destructor(const cs_alternate &)
-{
-}
-
-template<typename T>
-struct HasTrivialDestructor : public decltype(cs_check_destructor<T>(cs_preferred{}))
+  struct HasTrivialDestructor : public std::false_type
 {
 };
 
