@@ -110,7 +110,7 @@ QT_USE_NAMESPACE
 - (void)removeActionsFromAppMenu
 {
     for (NSMenuItem *item in [appMenu itemArray])
-        [item setTag:nil];
+        [item setTag:0];
 }
 
 - (void)dealloc
