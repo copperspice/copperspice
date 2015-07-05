@@ -2052,7 +2052,7 @@ void QWidgetPrivate::hide_sys()
 
          // Only needed if it exists from 10.7 or later
          if ((q->windowType() == Qt::Tool) && [window respondsToSelector: @selector(setAnimationBehavior:)]) {
-            [window setAnimationBehavior: 2];   // NSWindowAnimationBehaviorNone == 2
+            [window setAnimationBehavior: NSWindowAnimationBehaviorNone];   // NSWindowAnimationBehaviorNone == 2
          }
 
          [window orderOut: window];

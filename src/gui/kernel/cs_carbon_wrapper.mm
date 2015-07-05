@@ -31,9 +31,14 @@
 
 bool documentMode;
 
-CTFontUIFontType CS_HIThemeGetUIFontType(ThemeFontID themeID)
+CS_FontUIFontType CS_HIThemeGetUIFontType(ThemeFontID themeID)
 {
-   return HIThemeGetUIFontType(themeID);
+   return CS_FontUIFontType(HIThemeGetUIFontType(themeID));
+}
+
+CTFontRef CS_CTFontCreateUIFontForLanguage(CS_FontUIFontType uiType, CGFloat size, CFStringRef language )
+{
+  return CTFontCreateUIFontForLanguage(CTFontUIFontType(uiType), size, language);
 }
 
 void CS_HIThemeBrushCreateCGColor(ThemeBrush brush, CGColorRef *cgClr)

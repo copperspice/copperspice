@@ -234,7 +234,7 @@ QMacMenuAction::~QMacMenuAction()
                  && menuItem != [getMenuLoader() quitMenuItem]) {
          [menuItem setHidden: YES];
       }
-      [menuItem setTag: nil];
+      [menuItem setTag: 0];
    }
    [menuItem release];
 

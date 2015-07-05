@@ -32,8 +32,8 @@ QT_BEGIN_NAMESPACE
 
 static CTFontRef CopyCTThemeFont(ThemeFontID themeID)
 {
-   CTFontUIFontType ctID = CS_HIThemeGetUIFontType(themeID);
-   return CTFontCreateUIFontForLanguage(ctID, 0, 0);
+   CS_FontUIFontType ctID = CS_HIThemeGetUIFontType(themeID);
+   return CS_CTFontCreateUIFontForLanguage(ctID, 0, 0);
 }
 
 QFont qt_mac_fontForThemeFont(ThemeFontID themeID)

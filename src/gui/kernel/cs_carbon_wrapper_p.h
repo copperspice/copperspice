@@ -91,7 +91,7 @@ using ATSFontFormat                = UInt32;
 using ATSOptionFlags               = UInt32;
 using ATSFontContainerRef          = UInt32;
 using CFAbsoluteTime               = double;
-using CTFontUIFontType             = OSType;
+using CS_FontUIFontType             = uint32_t;
 using ControlPartCode              = SInt16;
 using DescType                     = UInt32;
 
@@ -387,7 +387,8 @@ struct HIThemeWindowDrawInfo {
 #endif
 
 // methods
-CTFontUIFontType CS_HIThemeGetUIFontType(ThemeFontID themeID);
+CS_FontUIFontType CS_HIThemeGetUIFontType(ThemeFontID themeID);
+CTFontRef CS_CTFontCreateUIFontForLanguage(CS_FontUIFontType uiType, CGFloat size, CFStringRef language );
 void CS_HIThemeBrushCreateCGColor(ThemeBrush brush, CGColorRef *cgClr);
 
 void CS_EnableSecureEventInput();
