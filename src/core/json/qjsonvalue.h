@@ -211,6 +211,32 @@ class Q_CORE_EXPORT QJsonValueRef
    uint index : 31;
 };
 
+class Q_CORE_EXPORT QJsonValueRefPtr {
+ public:
+    template<typename T1, typename T2>
+    QJsonValueRefPtr(T1 a, T2 b)
+	: m_ref(a, b) { 
+    };
+    
+    QJsonValueRef* operator->() const { return &m_ref; };
+    
+ private:
+    mutable QJsonValueRef m_ref;
+};
+
+class Q_CORE_EXPORT QJsonValuePtr {
+ public:
+
+    QJsonValuePtr(QJsonValue val)
+	: m_value(val) { 
+    };
+    
+    const QJsonValue * operator->() const { return &m_value; };
+    
+ private:
+    const QJsonValue m_value;
+};
+
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QJsonValue &);
 
 QT_END_NAMESPACE

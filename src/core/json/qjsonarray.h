@@ -90,7 +90,7 @@ class Q_CORE_EXPORT QJsonArray
       typedef std::random_access_iterator_tag  iterator_category;
       typedef int difference_type;
       typedef QJsonValue value_type;
-      //typedef T *pointer;
+      typedef QJsonValueRefPtr pointer;
       typedef QJsonValueRef reference;
 
       inline iterator() : a(0), i(0) { }
@@ -99,7 +99,9 @@ class Q_CORE_EXPORT QJsonArray
       inline QJsonValueRef operator*() const {
          return QJsonValueRef(a, i);
       }
-      //inline T *operator->() const { return &concrete(i)->value; }
+      inline QJsonValueRefPtr operator->() const { 
+	  return QJsonValueRefPtr(a, i); 
+      }
       inline QJsonValueRef operator[](int j) const {
          return QJsonValueRef(a, i + j);
       }
@@ -186,7 +188,7 @@ class Q_CORE_EXPORT QJsonArray
       typedef std::random_access_iterator_tag  iterator_category;
       typedef qptrdiff difference_type;
       typedef QJsonValue value_type;
-      //typedef const T *pointer;
+      typedef QJsonValuePtr pointer;
       typedef QJsonValue reference;
 
       inline const_iterator() : a(0), i(0) { }
@@ -197,7 +199,9 @@ class Q_CORE_EXPORT QJsonArray
       inline QJsonValue operator*() const {
          return a->at(i);
       }
-      //inline T *operator->() const { return &concrete(i)->value; }
+      inline QJsonValuePtr operator->() const { 
+	  return QJsonValuePtr(a->at(i));
+      }
       inline QJsonValue operator[](int j) const {
          return a->at(i + j);
       }

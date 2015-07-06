@@ -80,7 +80,7 @@ class Q_CORE_EXPORT QJsonObject
       typedef std::bidirectional_iterator_tag iterator_category;
       typedef int difference_type;
       typedef QJsonValue value_type;
-      //        typedef T *pointer;
+      typedef QJsonValueRefPtr pointer;
       typedef QJsonValueRef reference;
 
       constexpr inline iterator() : o(0), i(0) {}
@@ -95,7 +95,9 @@ class Q_CORE_EXPORT QJsonObject
       inline QJsonValueRef operator*() const {
          return QJsonValueRef(o, i);
       }
-      //inline T *operator->() const { return &concrete(i)->value; }
+      inline QJsonValueRefPtr operator->() const { 
+	  return QJsonValueRefPtr(o, i); 
+      }
       inline bool operator==(const iterator &other) const {
          return i == other.i;
       }
@@ -157,7 +159,8 @@ class Q_CORE_EXPORT QJsonObject
     public:
       typedef std::bidirectional_iterator_tag iterator_category;
       typedef int difference_type;
-      typedef QJsonValue value_type;
+      typedef QJsonValue* value_type;
+      typedef QJsonValuePtr pointer;
       typedef QJsonValue reference;
 
       constexpr inline const_iterator() : o(0), i(0) {}
@@ -175,7 +178,9 @@ class Q_CORE_EXPORT QJsonObject
       inline QJsonValue operator*() const {
          return o->valueAt(i);
       }
-      //inline const T *operator->() const { return &concrete(i)->value; }
+      inline QJsonValuePtr operator->() const { 
+	  return  QJsonValuePtr(o->valueAt(i));
+      }
       inline bool operator==(const const_iterator &other) const {
          return i == other.i;
       }
