@@ -771,6 +771,11 @@ Q_INLINE_TEMPLATE uint qHash(const QSharedPointer<T> &ptr, uint seed = 0)
    return QT_PREPEND_NAMESPACE(qHash)(ptr.data(), seed);
 }
 
+template<class T, class...Args>
+Q_INLINE_TEMPLATE QSharedPointer<T> QMakeShared(Args&&... args)
+{
+    return QSharedPointer<T>(new T(std::forward<Args>(args)...));
+}
 
 template <class T>
 Q_INLINE_TEMPLATE QWeakPointer<T> QSharedPointer<T>::toWeakRef() const
