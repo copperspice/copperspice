@@ -864,7 +864,7 @@ Q_GUI_EXPORT void qt_x11_apply_settings_in_all_apps()
 */
 bool QApplicationPrivate::x11_apply_settings()
 {
-   QSettings settings(QSettings::UserScope, QLatin1String("CopperSpiceh"));
+   QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
 
    settings.beginGroup(QLatin1String("CS"));
 
