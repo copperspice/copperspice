@@ -1,0 +1,39 @@
+set(MULTIMEDIA_PUBLIC_INCLUDES
+    ${MULTIMEDIA_PUBLIC_INCLUDES}
+    QVideoFrame
+    QAbstractVideoBuffer
+    QAbstractVideoSurface
+    QVideoSurfaceFormat
+    QtMultimedia
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_INCLUDES
+    ${MULTIMEDIA_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideobuffer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideosurface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvideoframe.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvideosurfaceformat.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtmultimedia.h
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_PRIVATE_INCLUDES
+    ${MULTIMEDIA_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideobuffer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideosurface_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qimagevideobuffer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmemoryvideobuffer_p.h
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_SOURCES
+    ${MULTIMEDIA_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideobuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractvideosurface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qimagevideobuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmemoryvideobuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvideoframe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvideosurfaceformat.cpp
+    PARENT_SCOPE
+)

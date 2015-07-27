@@ -1,0 +1,39 @@
+set(NETWORK_PUBLIC_INCLUDES
+    ${NETWORK_PUBLIC_INCLUDES}
+    QNetworkConfiguration
+    QNetworkSession
+    QNetworkConfigurationManager
+    PARENT_SCOPE
+)
+
+set(NETWORK_INCLUDES
+    ${NETWORK_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfiguration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworksession.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfigurationmanager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfigmanager.h
+    PARENT_SCOPE
+)
+
+set(NETWORK_PRIVATE_INCLUDES
+    ${NETWORK_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfigmanager_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfiguration_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworksession_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbearerengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbearerplugin_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qsharednetworksession_p.h
+    PARENT_SCOPE
+)
+
+set(NETWORK_SOURCES
+    ${NETWORK_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworksession.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfigmanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfiguration.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qnetworkconfigmanager_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbearerengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbearerplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qsharednetworksession.cpp
+    PARENT_SCOPE
+)

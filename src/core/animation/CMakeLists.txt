@@ -1,0 +1,48 @@
+set(CORE_PUBLIC_INCLUDES
+    ${CORE_PUBLIC_INCLUDES}
+    QAbstractAnimation
+    QAnimationDriver
+    QAnimationGroup
+    QParallelAnimationGroup
+    QPauseAnimation
+    QPropertyAnimation
+    QSequentialAnimationGroup
+    QVariantAnimation
+    PARENT_SCOPE
+)
+
+set(CORE_INCLUDES
+    ${CORE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractanimation.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qanimationdriver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qanimationgroup.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qparallelanimationgroup.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpauseanimation.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpropertyanimation.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qsequentialanimationgroup.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvariantanimation.h
+    PARENT_SCOPE
+)
+
+set(CORE_PRIVATE_INCLUDES
+    ${CORE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractanimation_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qanimationgroup_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qparallelanimationgroup_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpropertyanimation_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qsequentialanimationgroup_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvariantanimation_p.h
+    PARENT_SCOPE
+)
+
+set(CORE_SOURCES
+    ${CORE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvariantanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpropertyanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qanimationgroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qsequentialanimationgroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qparallelanimationgroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpauseanimation.cpp
+    PARENT_SCOPE
+)

@@ -1,0 +1,83 @@
+set(MULTIMEDIA_PUBLIC_INCLUDES
+    ${MULTIMEDIA_PUBLIC_INCLUDES}
+    QAudio
+    QAudioFormat
+    QAudioInput
+    QAudioOutput
+    QAudioDeviceInfo
+    QAudioEnginePlugin
+    QAudioEngineFactoryInterface
+    QAbstractAudioDeviceInfo
+    QAbstractAudioInput
+    QAbstractAudioOutput
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_INCLUDES
+    ${MULTIMEDIA_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractaudiodeviceinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractaudioinput.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qabstractaudiooutput.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudio.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioformat.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioengineplugin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioenginefactoryinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioengine.h
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_PRIVATE_INCLUDES
+    ${MULTIMEDIA_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodevicefactory_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudio_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput_win32_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput_win32_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo_win32_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput_alsa_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput_alsa_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo_alsa_p.h
+    PARENT_SCOPE
+)
+
+set(MULTIMEDIA_SOURCES
+    ${MULTIMEDIA_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudio.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qaudioformat.cpp
+    PARENT_SCOPE
+)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+    set(MULTIMEDIA_SOURCES
+        ${MULTIMEDIA_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo_win32_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput_win32_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput_win32_p.cpp
+        PARENT_SCOPE
+    )
+    set(EXTRA_MULTIMEDIA_LIBS
+        ${EXTRA_MULTIMEDIA_LIBS}
+        winmm
+        PARENT_SCOPE
+    )
+endif()
+
+if(ALSA_FOUND)
+    set(MULTIMEDIA_SOURCES
+        ${MULTIMEDIA_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudiodeviceinfo_alsa_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudiooutput_alsa_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qaudioinput_alsa_p.cpp
+        PARENT_SCOPE
+    )
+    set(EXTRA_MULTIMEDIA_LIBS
+        ${EXTRA_MULTIMEDIA_LIBS}
+        asound
+        PARENT_SCOPE
+    )
+endif()

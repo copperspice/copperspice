@@ -1,0 +1,48 @@
+set(CORE_PUBLIC_INCLUDE
+    ${CORE_PUBLIC_INCLUDE}
+    QXmlStreamAttribute
+    QXmlStreamAttributes
+    QXmlStreamEntityDeclaration
+    QXmlStreamEntityDeclarations
+    QXmlStreamEntityResolver
+    QXmlStreamNamespaceDeclaration
+    QXmlStreamNamespaceDeclarations
+    QXmlStreamNotationDeclaration
+    QXmlStreamNotationDeclarations
+    QXmlStreamReader
+    QXmlStreamStringRef
+    QXmlStreamWriter
+    PARENT_SCOPE
+)
+
+set(CORE_INCLUDES
+    ${CORE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamattribute.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamattributes.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamentitydeclaration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamentitydeclarations.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamentityresolver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamnamespacedeclaration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamnamespacedeclarations.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamnotationdeclaration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamnotationdeclarations.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamreader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamstringref.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstreamwriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstream.h
+    PARENT_SCOPE
+)
+
+set(CORE_PRIVATE_INCLUDES
+    ${CORE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstream_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlutils_p.h
+    PARENT_SCOPE
+)
+
+set(CORE_SOURCES
+    ${CORE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlstream.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qxmlutils.cpp
+    PARENT_SCOPE
+)

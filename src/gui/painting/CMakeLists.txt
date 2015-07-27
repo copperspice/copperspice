@@ -1,0 +1,250 @@
+set(GUI_PUBLIC_INCLUDES
+    ${GUI_PUBLIC_INCLUDES}
+    QBrush
+    QBrushData
+    QColor
+    QColormap
+    QConicalGradient
+    QGradient
+    QGradientStop
+    QGradientStops
+    QLinearGradient
+    QMatrix
+    QPaintDevice
+    QPaintEngine
+    QPaintEngineState
+    QPainter
+    QPainterPath
+    QPainterPathPrivate
+    QPainterPathStroker
+    QPen
+    QPolygon
+    QPolygonF
+    QPrintEngine
+    QPrinter
+    QPrinterInfo
+    QRadialGradient
+    QRegion
+    QRgb
+    QStylePainter
+    QTextItem
+    QTileRules
+    QTransform
+    PARENT_SCOPE
+)
+
+set(GUI_INCLUDES
+    ${GUI_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbrush.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbrushdata.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcolor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcolormap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qconicalgradient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawutil.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgradient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgradientstop.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgradientstops.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qlineargradient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmatrix.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintenginestate.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainterpath.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainterpathprivate.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainterpathstroker.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpen.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpolygon.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpolygonf.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qradialgradient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qregion.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qrgb.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qstylepainter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtextitem.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtilerules.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtransform.h
+    PARENT_SCOPE
+)
+
+set(GUI_PRIVATE_INCLUDES
+    ${GUI_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbackingstore_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbezier_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qblendfunctions_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qblittable_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcolor_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcosmeticstroker_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcssutil_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcups_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdatabuffer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_arm_simd_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_mmx_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_neon_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_sse_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper_x86_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qemulationpaintengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qfixed_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystemplugin_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_raster_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_runtime_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystemex_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystemfactory_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgrayraster_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qimagescale_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmath_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmemrotate_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qoutlinemapper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_alpha_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_blitter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_preview_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_raster_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_x11_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengineex_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainterpath_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpathclipper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpdf_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpen_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpolygonclipper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_pdf_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintbuffer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_ps_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qrasterdefs_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qrasterizer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qregion_mac.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qstroker_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtessellator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtextureglyphcache_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qunifiedtoolbarsurface_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qvectorpath_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qunifiedtoolbarsurface_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_raster_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_x11_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qregion_x11.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qregion_win.cpp
+    PARENT_SCOPE
+)
+
+set(GUI_SOURCES
+    ${GUI_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbezier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qblendfunctions.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbrush.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcolor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcolor_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcosmeticstroker.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qcssutil.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawutil.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qemulationpaintengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_raster.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystemfactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_runtime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmatrix.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qmemrotate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qoutlinemapper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_alpha.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_preview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengineex.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpainterpath.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpathclipper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpdf.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpen.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpolygon.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_pdf.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_ps.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qrasterizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qregion.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qstroker.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qstylepainter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtessellator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtextureglyphcache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtransform.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintbuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_raster.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qdrawhelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qimagescale.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgrayraster.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystemplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_blitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qblittable.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qbackingstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_raster.cpp
+    PARENT_SCOPE
+)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcolormap_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo_win.cpp
+        PARENT_SCOPE
+    )
+    set(EXTRA_GUI_LIBS
+        ${EXTRA_GUI_LIBS}
+        msimg32
+        PARENT_SCOPE
+    )
+endif()
+
+if(X11_FOUND)
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcolormap_x11.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice_x11.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_x11.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcups.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_x11.cpp
+        PARENT_SCOPE
+    )
+endif()
+
+# FIXME: COCOCA?
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcups.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcolormap_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qprinterinfo_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qprintengine_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/qwindowsurface_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qunifiedtoolbarsurface_mac.cpp
+        PARENT_SCOPE
+    )
+endif()
+
+if(QPA_FOUND)
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcolormap_qpa.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/qpaintdevice_qpa.cpp
+        PARENT_SCOPE
+    )
+endif()
