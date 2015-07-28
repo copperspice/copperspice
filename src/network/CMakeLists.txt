@@ -16,7 +16,6 @@ include(ssl/ssl.cmake)
 macro_generate_public("${NETWORK_PUBLIC_INCLUDES}" QtNetwork)
 macro_generate_private("${NETWORK_PRIVATE_INCLUDES}" QtNetwork)
 macro_generate_misc("${NETWORK_INCLUDES}" QtNetwork)
-macro_generate_resources("${NETWORK_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -53,6 +52,8 @@ set_target_properties(CsNetwork${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_NETWORK_CXXFLAGS}
     LINK_FLAGS ${EXTRA_NETWORK_LDFLAGS}
 )
+
+macro_generate_resources("${NETWORK_SOURCES}" CsNetwork${BUILD_MAJOR})
 
 install(TARGETS CsNetwork${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtNetwork DESTINATION include)

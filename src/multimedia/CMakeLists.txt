@@ -9,7 +9,6 @@ include(video/video.cmake)
 macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
 macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
 macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
-macro_generate_resources("${MULTIMEDIA_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -31,6 +30,8 @@ set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
     LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
 )
+
+macro_generate_resources("${MULTIMEDIA_SOURCES}" CsMultimedia${BUILD_MAJOR})
 
 install(TARGETS CsMultimedia${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtMultimedia DESTINATION include)

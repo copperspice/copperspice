@@ -4,7 +4,6 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DMNG_NO_INCLUDE_JNG
     -DPNG_NO_CONFIG_H
     -DMNG_BUILD_SO
-    -DMNG_NO_INCLUDE_JNG
 )
 
 # set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
@@ -33,7 +32,6 @@ include(widgets/widgets.cmake)
 macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
 macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
-macro_generate_resources("${GUI_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -148,6 +146,8 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
+
+macro_generate_resources("${GUI_SOURCES}" CsGui${BUILD_MAJOR})
 
 install(TARGETS CsGui${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui DESTINATION include)

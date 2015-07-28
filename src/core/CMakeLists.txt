@@ -1,5 +1,5 @@
 add_definitions(-DQT_BUILD_CORE_LIB)
-set(EXTRA_CORE_LIBS "")
+set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES})
 set(EXTRA_CORE_CXXFLAGS "-Wno-undefined")
 set(EXTRA_CORE_LDFLAGS " ") # whitespace is required!
 
@@ -20,7 +20,6 @@ include(xml/xml.cmake)
 macro_generate_public("${CORE_PUBLIC_INCLUDES}" QtCore)
 macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
 macro_generate_misc("${CORE_INCLUDES}" QtCore)
-macro_generate_resources("${CORE_SOURCES}")
 
 if(ZLIB_FOUND)
     set(EXTRA_CORE_LIBS
@@ -67,6 +66,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/thread
     ${CMAKE_CURRENT_SOURCE_DIR}/tools
     ${CMAKE_CURRENT_SOURCE_DIR}/xml
+    ${GLIB2_INCLUDE_DIR}
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -106,6 +106,8 @@ set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_CORE_LDFLAGS}
 )
+
+macro_generate_resources("${CORE_SOURCES}" QtCore${BUILD_MAJOR})
 
 install(TARGETS CsCore${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore DESTINATION include)

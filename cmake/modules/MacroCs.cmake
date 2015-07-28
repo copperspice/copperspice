@@ -45,18 +45,27 @@ macro(MACRO_GENERATE_MISC MISC_INCLUDES SUBDIR)
     endforeach(header)
 endmacro()
 
-macro(MACRO_GENERATE_RESOURCES RESOURCES)
+macro(MACRO_GENERATE_RESOURCES RESOURCES TARGET)
     foreach(resource ${RESOURCES})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
         if(${rscext} STREQUAL ".ui")
             set(rscout ${CMAKE_BINARY_DIR}/include/ui_${rscname}.h)
-            message(STATUS "Writing UI: ${rscout}")
-            execute_process(COMMAND "uic" "${resource}" "-o" "${rscout}")
+            add_custom_command(
+                TARGET ${TARGET}
+                PRE_BUILD
+                COMMAND "uic" "${resource}" "-o" "${rscout}"
+                COMMENT "Writing UI: ${rscout}"
+                )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
-            message(STATUS "Writing QRC: ${rscout}")
-            execute_process(COMMAND "rcc" "${resource}" "-o" "${rscout}")
+            add_custom_command(
+                TARGET ${TARGET}
+                PRE_BUILD
+                COMMAND "rcc" "${resource}" "-o" "${rscout}"
+                COMMENT "Writing QRC: ${rscout}"
+            )
+            # FIXME: add rscout to target sources
         endif()
     endforeach()
 endmacro()

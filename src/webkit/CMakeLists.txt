@@ -5236,7 +5236,6 @@ endif()
 macro_generate_public("${WEBKIT_PUBLIC_INCLUDES}" QtWebKit)
 # macro_generate_private("${WEBKIT_PRIVATE_INCLUDES}" QtWebKit)
 macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
-macro_generate_resources("${WEBKIT_SOURCES}")
 
 add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES})
 target_link_libraries(CsWebKit${BUILD_MAJOR} ${EXTRA_WEBKIT_LIBS})
@@ -5245,6 +5244,8 @@ set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}
 )
+
+macro_generate_resources("${WEBKIT_SOURCES}" CsWebKit${BUILD_MAJOR})
 
 install(TARGETS CsWebKit${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtWebKit DESTINATION include)
