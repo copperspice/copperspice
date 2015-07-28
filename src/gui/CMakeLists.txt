@@ -7,63 +7,33 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DMNG_NO_INCLUDE_JNG
 )
 
-set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
+# set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_GUI_LIBS)
 set(EXTRA_GUI_CXXFLAGS "-Wno-undefined")
 set(EXTRA_GUI_LDFLAGS " ") # whitespace is required!
 
-add_subdirectory(accessible)
-add_subdirectory(animation)
-add_subdirectory(dialogs)
-add_subdirectory(effects)
-# add_subdirectory(embedded) # currently unused
-add_subdirectory(graphicsview)
-add_subdirectory(image)
+include(accessible/accessible.cmake)
+include(animation/animation.cmake)
+include(dialogs/dialogs.cmake)
+include(effects/effects.cmake)
+# include(embedded/embedded.cmake) # currently unused
+include(graphicsview/graphicsview.cmake)
+include(image/image.cmake)
+include(inputmethod/inputmethod.cmake)
+include(itemviews/itemviews.cmake)
+include(kernel/kernel.cmake)
+include(math3d/math3d.cmake)
+include(painting/painting.cmake)
+include(statemachine/statemachine.cmake)
+include(styles/styles.cmake)
+include(text/text.cmake)
+include(util/util.cmake)
+include(widgets/widgets.cmake)
 
-# TODO: process
-# add_subdirectory(inputmethod)
-# add_subdirectory(itemviews)
-# add_subdirectory(kernel)
-# add_subdirectory(math3d)
-add_subdirectory(painting)
-# add_subdirectory(statemachine)
-# add_subdirectory(styles)
-# add_subdirectory(text)
-# add_subdirectory(util)
-# add_subdirectory(widgets)
-
-# TODO: make them macros to be shared between components
-foreach(pubheader ${GUI_PUBLIC_INCLUDES})
-    string(TOLOWER ${pubheader} pubname)
-    get_filename_component(pubname ${pubname} NAME)
-    set(pubout ${CMAKE_BINARY_DIR}/include/QtGui/${pubheader})
-    message(STATUS "Writing public: ${pubout}")
-    file(WRITE ${pubout} "#include <${pubname}.h>")
-endforeach(pubheader)
-
-foreach(privheader ${GUI_PRIVATE_INCLUDES})
-    get_filename_component(privname ${privheader} NAME)
-    set(privout ${CMAKE_BINARY_DIR}/privateinclude/QtGui/${privname})
-    message(STATUS "Writing private: ${privout}")
-    file(COPY ${privheader} DESTINATION ${CMAKE_BINARY_DIR}/privateinclude/QtGui/)
-endforeach(privheader)
-
-foreach(header ${GUI_INCLUDES})
-    get_filename_component(headername ${header} NAME)
-    set(headout ${CMAKE_BINARY_DIR}/include/QtGui/${headername})
-    message(STATUS "Writing: ${headout}")
-    file(COPY ${header} DESTINATION ${CMAKE_BINARY_DIR}/include/QtGui/)
-endforeach(header)
-
-set(UI_FOUND)
-foreach(src ${GUI_SOURCES})
-    string(FIND ${src} ".ui" UI_FOUND)
-    if(UI_FOUND)
-        get_filename_component(uiname ${src} NAME_WE)
-        set(uiout ${CMAKE_BINARY_DIR}/include/ui_${uiname}.h)
-        message(STATUS "Writing UI: ${uiout}")
-        execute_process(COMMAND "uic" "${src}" "-o" "${uiout}")
-    endif()
-endforeach()
+macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
+macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
+macro_generate_misc("${GUI_INCLUDES}" QtGui)
+macro_generate_resources("${GUI_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -178,10 +148,6 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
-
-if(UI_FOUND)
-    add_dependencies(CsGui${BUILD_MAJOR} uic)
-endif()
 
 install(TARGETS CsGui${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui DESTINATION include)

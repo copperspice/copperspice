@@ -10,6 +10,7 @@ include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
+include(MacroCs)
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
@@ -23,6 +24,9 @@ set(PACKAGE_TARNAME "copperspice")
 set(PACKAGE_BUGREPORT "ansel@copperspice.com")
 set(PACKAGE_URL "http://www.copperspice.com/") # empty leaves it undefined
 set(VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
+set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(target "${CMAKE_SYSTEM_NAME}")
 
 add_definitions(-std=c++11 -DQT_SHARED -DHAVE_CONFIG_H)
 add_definitions(-DBUILD_DATE="${BUILD_DATE}")

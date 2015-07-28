@@ -23,106 +23,103 @@ set(GUI_PUBLIC_INCLUDES
     QPictureIO
     QPixmap
     QPixmapCache
-    PARENT_SCOPE
 )
 
 set(GUI_INCLUDES
     ${GUI_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/qbitmap.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qicon.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconengine.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconenginefactoryinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconenginefactoryinterfacev2.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconengineplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconenginepluginv2.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconenginev2.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconset.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimageiohandler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimageiohandlerfactoryinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimageioplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagereader.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagetextkeylang.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagewriter.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qmovie.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpicture.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpictureformatinterface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpictureformatplugin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpictureio.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapcache.h
-    PARENT_SCOPE
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qbitmap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengine.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginefactoryinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginefactoryinterfacev2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengineplugin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginepluginv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginev2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconset.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandlerfactoryinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageioplugin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagereader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagetextkeylang.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagewriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmovie.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpicture.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpictureformatinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpictureformatplugin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpictureio.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapcache.h
 )
 
 set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/qbmphandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qicohandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qicon_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconloader_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimage_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagepixmapcleanuphooks_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qjpeghandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qmnghandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qnativeimage_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qnativeimagehandleprovider_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qgifhandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_pic_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpicture_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_blitter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_raster_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_x11_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapcache_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapdata_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapdatafactory_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapfilter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpnghandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qppmhandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtiffhandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qvolatileimage_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qvolatileimagedata_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qxbmhandler_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qxpmhandler_p.h
-    PARENT_SCOPE
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qbmphandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicohandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconloader_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagepixmapcleanuphooks_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qjpeghandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmnghandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimagehandleprovider_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qgifhandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpaintengine_pic_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpicture_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_blitter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_raster_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_x11_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapcache_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdata_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdatafactory_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapfilter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpnghandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qppmhandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qtiffhandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimagedata_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qxbmhandler_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qxpmhandler_p.h
 )
 
 set(GUI_SOURCES
     ${GUI_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/qbmphandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qbitmap.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qicon.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconloader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimageiohandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagereader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagewriter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_pic.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpicture.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpictureformatplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapcache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapdata.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapdatafactory.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmapfilter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconengine.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qiconengineplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qmovie.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_raster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_blitter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qnativeimage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qimagepixmapcleanuphooks.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qvolatileimage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qgifhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qicohandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qpnghandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qjpeghandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qxpmhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qxbmhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qppmhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtiffhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qmnghandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/qvolatileimagedata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qbmphandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qbitmap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagereader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagewriter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpaintengine_pic.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpicture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpictureformatplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapcache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapdatafactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmapfilter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengineplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmovie.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_raster.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_blitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qnativeimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagepixmapcleanuphooks.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qgifhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicohandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpnghandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qjpeghandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qxpmhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qxbmhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qppmhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qtiffhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmnghandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qvolatileimagedata.cpp
 
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jaricom.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapimin.c
@@ -237,10 +234,10 @@ set(GUI_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_warning.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_write.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
-    PARENT_SCOPE
 )
 
 set(EXTRA_DIST
+    ${EXTRA_DIST}
     src/3rdparty/libtiff/libtiff/t4.h
     src/3rdparty/libtiff/libtiff/tif_config.h
     src/3rdparty/libtiff/libtiff/tif_config.vc.h
@@ -302,22 +299,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${GUI_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_win32.c
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_win.cpp
-        PARENT_SCOPE
+        ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_win.cpp
     )
 else()
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_unix.c
-        PARENT_SCOPE
     )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_x11.cpp
-        PARENT_SCOPE
+        ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_x11.cpp
     )
 endif()
 
@@ -325,8 +319,7 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/qpixmap_mac.cpp
-        PARENT_SCOPE
+        ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap_mac.cpp
     )
 endif()
 

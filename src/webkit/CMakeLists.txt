@@ -5233,29 +5233,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-
-# TODO: make them macros to be shared between components
-foreach(pubheader ${WEBKIT_PUBLIC_INCLUDES})
-    string(TOLOWER ${pubheader} pubname)
-    get_filename_component(pubname ${pubname} NAME)
-    set(pubout ${CMAKE_BINARY_DIR}/include/QtWebKit/${pubheader})
-    message(STATUS "Writing public: ${pubout}")
-    file(WRITE ${pubout} "#include <${pubname}.h>")
-endforeach(pubheader)
-
-foreach(privheader ${WEBKIT_PRIVATE_INCLUDES})
-    get_filename_component(privname ${privheader} NAME)
-    set(privout ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit/${privname})
-    message(STATUS "Writing private: ${privout}")
-    file(COPY ${privheader} DESTINATION ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit/)
-endforeach(privheader)
-
-foreach(header ${WEBKIT_INCLUDES})
-    get_filename_component(headername ${header} NAME)
-    set(headout ${CMAKE_BINARY_DIR}/include/QtWebKit/${headername})
-    message(STATUS "Writing: ${headout}")
-    file(COPY ${header} DESTINATION ${CMAKE_BINARY_DIR}/include/QtWebKit/)
-endforeach(header)
+macro_generate_public("${WEBKIT_PUBLIC_INCLUDES}" QtWebKit)
+# macro_generate_private("${WEBKIT_PRIVATE_INCLUDES}" QtWebKit)
+macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
+macro_generate_resources("${WEBKIT_SOURCES}")
 
 add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES})
 target_link_libraries(CsWebKit${BUILD_MAJOR} ${EXTRA_WEBKIT_LIBS})

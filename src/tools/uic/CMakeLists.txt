@@ -1,5 +1,5 @@
 add_definitions(-DQT_UIC -DQT_UIC_CPP_GENERATOR -UQT_BUILD_CORE_LIB)
-set(EXTRA_UIC_LIBS pthread)
+set(EXTRA_UIC_LIBS CsCore${BUILD_MAJOR} pthread)
 set(EXTRA_UIC_CXXFLAGS "-Wno-undefined")
 set(EXTRA_UIC_LDFLAGS " ") # whitespace is required!
 
@@ -52,7 +52,7 @@ set(UIC_INCLUDES
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
-    set(EXTRA_CORE_LIBS
+    set(EXTRA_UIC_LIBS
         ${EXTRA_UIC_LIBS}
         uuid
     )
@@ -60,6 +60,10 @@ endif()
 
 add_executable(uic ${UIC_SOURCES} ${UIC_INCLUDES})
 target_link_libraries(uic ${EXTRA_UIC_LIBS})
+set_target_properties(uic PROPERTIES
+    COMPILE_FLAGS ${EXTRA_UIC_CXXFLAGS}
+    LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
+)
 
 install(TARGETS uic RUNTIME DESTINATION bin)
 

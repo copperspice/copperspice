@@ -1,0 +1,158 @@
+set(GUI_PUBLIC_INCLUDES
+    ${GUI_PUBLIC_INCLUDES}
+    QAbstractPageSetupDialog
+    QAbstractPrintDialog
+    QColorDialog
+    QDialog
+    QErrorMessage
+    QFileDialog
+    QFileSystemModel
+    QFontDialog
+    QInputDialog
+    QMessageBox
+    QPageSetupDialog
+    QPrintDialog
+    QUnixPrintWidget
+    QPrintPreviewDialog
+    QProgressDialog
+    QWizard
+    QWizardPage
+)
+
+set(GUI_INCLUDES
+    ${GUI_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractpagesetupdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractprintdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qunixprintwidget.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qerrormessage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfilesystemmodel.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfontdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qinputdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintpreviewdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprogressdialog.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizardpage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard.h
+)
+
+set(GUI_PRIVATE_INCLUDES
+    ${GUI_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractpagesetupdialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractprintdialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qdialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfileinfogatherer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfilesystemmodel_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfontdialog_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfscompleter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qsidebar_p.h
+)
+
+set(GUI_SOURCES
+    ${GUI_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractpagesetupdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qabstractprintdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qerrormessage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfileinfogatherer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfilesystemmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfontdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qinputdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintpreviewdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprogressdialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qsidebar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.ui
+    # ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qmessagebox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog.qrc
+)
+
+set(EXTRA_DIST
+    ${EXTRA_DIST}
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog.qrc
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/cslogo-64.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-page-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-page-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-width-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-width-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-first-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-first-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-last-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-last-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-next-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-next-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-previous-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-previous-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-landscape-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-landscape-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-portrait-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-portrait-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/page-setup-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/page-setup-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/print-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/print-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-multi-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-multi-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-one-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-one-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-sided-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-sided-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-in-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-in-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-out-24.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-out-32.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/status-color.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/status-gray-scale.png
+)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qprintdialog.cpp
+    )
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintsettingsoutput.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintwidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintpropertieswidget.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupwidget.ui
+    )
+endif()
+
+# FIXME: COCOCA?
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfontdialog_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qnspanelproxy_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qprintdialog.cpp
+    )
+endif()

@@ -3,42 +3,24 @@ set(EXTRA_CORE_LIBS "")
 set(EXTRA_CORE_CXXFLAGS "-Wno-undefined")
 set(EXTRA_CORE_LDFLAGS " ") # whitespace is required!
 
-add_subdirectory(animation)
-add_subdirectory(arch)
-add_subdirectory(codecs)
-add_subdirectory(concurrent)
-add_subdirectory(global)
-add_subdirectory(io)
-add_subdirectory(json)
-add_subdirectory(kernel)
-add_subdirectory(plugin)
-add_subdirectory(statemachine)
-add_subdirectory(thread)
-add_subdirectory(tools)
-add_subdirectory(xml)
+include(animation/animation.cmake)
+include(arch/arch.cmake)
+include(codecs/codecs.cmake)
+include(concurrent/concurrent.cmake)
+include(global/global.cmake)
+include(io/io.cmake)
+include(json/json.cmake)
+include(kernel/kernel.cmake)
+include(plugin/plugin.cmake)
+include(statemachine/statemachine.cmake)
+include(thread/thread.cmake)
+include(tools/tools.cmake)
+include(xml/xml.cmake)
 
-# TODO: make them macros to be shared between components
-foreach(pubheader ${CORE_PUBLIC_INCLUDES})
-    string(TOLOWER ${pubheader} pubname)
-    get_filename_component(pubname ${pubname} NAME)
-    set(pubout ${CMAKE_BINARY_DIR}/include/QtCore/${pubheader})
-    message(STATUS "Writing public: ${pubout}")
-    file(WRITE ${pubout} "#include <${pubname}.h>")
-endforeach(pubheader)
-
-foreach(privheader ${CORE_PRIVATE_INCLUDES})
-    get_filename_component(privname ${privheader} NAME)
-    set(privout ${CMAKE_BINARY_DIR}/privateinclude/QtCore/${privname})
-    message(STATUS "Writing private: ${privout}")
-    file(COPY ${privheader} DESTINATION ${CMAKE_BINARY_DIR}/privateinclude/QtCore/)
-endforeach(privheader)
-
-foreach(header ${CORE_INCLUDES})
-    get_filename_component(headername ${header} NAME)
-    set(headout ${CMAKE_BINARY_DIR}/include/QtCore/${headername})
-    message(STATUS "Writing: ${headout}")
-    file(COPY ${header} DESTINATION ${CMAKE_BINARY_DIR}/include/QtCore/)
-endforeach(header)
+macro_generate_public("${CORE_PUBLIC_INCLUDES}" QtCore)
+macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
+macro_generate_misc("${CORE_INCLUDES}" QtCore)
+macro_generate_resources("${CORE_SOURCES}")
 
 if(ZLIB_FOUND)
     set(EXTRA_CORE_LIBS
@@ -117,13 +99,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 
-add_library(CsCore1 SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
-target_link_libraries(CsCore1 ${EXTRA_CORE_LIBS})
-set_target_properties(CsCore1 PROPERTIES
+add_library(CsCore${BUILD_MAJOR} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
+target_link_libraries(CsCore${BUILD_MAJOR} ${EXTRA_CORE_LIBS})
+set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_CORE_LDFLAGS}
 )
 
-install(TARGETS CsCore1 LIBRARY DESTINATION lib)
+install(TARGETS CsCore${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore DESTINATION include)

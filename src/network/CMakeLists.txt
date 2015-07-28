@@ -7,34 +7,16 @@ if(NOT OPENSSL_FOUND)
     add_definitions(-DQT_NO_OPENSSL)
 endif()
 
-add_subdirectory(access)
-add_subdirectory(bearer)
-add_subdirectory(kernel)
-add_subdirectory(socket)
-add_subdirectory(ssl)
+include(access/access.cmake)
+include(bearer/bearer.cmake)
+include(kernel/kernel.cmake)
+include(socket/socket.cmake)
+include(ssl/ssl.cmake)
 
-# TODO: make them macros to be shared between components
-foreach(pubheader ${NETWORK_PUBLIC_INCLUDES})
-    string(TOLOWER ${pubheader} pubname)
-    get_filename_component(pubname ${pubname} NAME)
-    set(pubout ${CMAKE_BINARY_DIR}/include/QtNetwork/${pubheader})
-    message(STATUS "Writing public: ${pubout}")
-    file(WRITE ${pubout} "#include <${pubname}.h>")
-endforeach(pubheader)
-
-foreach(privheader ${NETWORK_PRIVATE_INCLUDES})
-    get_filename_component(privname ${privheader} NAME)
-    set(privout ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/${privname})
-    message(STATUS "Writing private: ${privout}")
-    file(COPY ${privheader} DESTINATION ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/)
-endforeach(privheader)
-
-foreach(header ${NETWORK_INCLUDES})
-    get_filename_component(headername ${header} NAME)
-    set(headout ${CMAKE_BINARY_DIR}/include/QtNetwork/${headername})
-    message(STATUS "Writing: ${headout}")
-    file(COPY ${header} DESTINATION ${CMAKE_BINARY_DIR}/include/QtNetwork/)
-endforeach(header)
+macro_generate_public("${NETWORK_PUBLIC_INCLUDES}" QtNetwork)
+macro_generate_private("${NETWORK_PRIVATE_INCLUDES}" QtNetwork)
+macro_generate_misc("${NETWORK_INCLUDES}" QtNetwork)
+macro_generate_resources("${NETWORK_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include

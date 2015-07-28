@@ -1,36 +1,15 @@
-add_definitions(-DQT_BUILD_MULTIMEDIA_LIB
-    -DQT_MAKEDLL
-)
-
+add_definitions(-DQT_BUILD_MULTIMEDIA_LIB -DQT_MAKEDLL)
 set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
 set(EXTRA_MULTIMEDIA_CXXFLAGS "-Wno-undefined")
 set(EXTRA_MULTIMEDIA_LDFLAGS " ") # whitespace is required!
 
-add_subdirectory(audio)
-add_subdirectory(video)
+include(audio/audio.cmake)
+include(video/video.cmake)
 
-# TODO: make them macros to be shared between components
-foreach(pubheader ${MULTIMEDIA_PUBLIC_INCLUDES})
-    string(TOLOWER ${pubheader} pubname)
-    get_filename_component(pubname ${pubname} NAME)
-    set(pubout ${CMAKE_BINARY_DIR}/include/QtMultimedia/${pubheader})
-    message(STATUS "Writing public: ${pubout}")
-    file(WRITE ${pubout} "#include <${pubname}.h>")
-endforeach(pubheader)
-
-foreach(privheader ${MULTIMEDIA_PRIVATE_INCLUDES})
-    get_filename_component(privname ${privheader} NAME)
-    set(privout ${CMAKE_BINARY_DIR}/privateinclude/QtMultimedia/${privname})
-    message(STATUS "Writing private: ${privout}")
-    file(COPY ${privheader} DESTINATION ${CMAKE_BINARY_DIR}/privateinclude/QtMultimedia/)
-endforeach(privheader)
-
-foreach(header ${MULTIMEDIA_INCLUDES})
-    get_filename_component(headername ${header} NAME)
-    set(headout ${CMAKE_BINARY_DIR}/include/QtMultimedia/${headername})
-    message(STATUS "Writing: ${headout}")
-    file(COPY ${header} DESTINATION ${CMAKE_BINARY_DIR}/include/QtMultimedia/)
-endforeach(header)
+macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
+macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
+macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
+macro_generate_resources("${MULTIMEDIA_SOURCES}")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
