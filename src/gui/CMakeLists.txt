@@ -32,7 +32,6 @@ macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
 macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
 
-
 include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/privateinclude
