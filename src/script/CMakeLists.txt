@@ -328,7 +328,8 @@ set(SCRIPT_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfileNode.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/ProfilerServer.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler/CallIdentifier.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated/chartables.c
+    # https://bugreports.qt.io/browse/QTBUG-9958
+    # ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated/chartables.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre/ucptable.cpp
 )
 
@@ -499,6 +500,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/api
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
@@ -534,9 +536,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${EXTRA_SCRIPT_LDFLAGS}
         -Wl,-s
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(SCRIPT_INCLUDES
         ${SCRIPT_INCLUDES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdbool.h
