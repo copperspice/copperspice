@@ -24,7 +24,7 @@ add_definitions(-DBUILDING_WEBKIT
     -DENABLE_SVG_FOREIGN_OBJECT=1
     -DENABLE_DATALIST=1
 )
-set(EXTRA_WEBKIT_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
+set(EXTRA_WEBKIT_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR})
 set(EXTRA_WEBKIT_CXXFLAGS "-Wno-undefined -O2")
 set(EXTRA_WEBKIT_LDFLAGS " ") # whitespace is required!
 
@@ -98,10 +98,15 @@ set(WEBKIT_PRIVATE_INCLUDES)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/include/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
     ${CMAKE_BINARY_DIR}/include/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/include/QtScript
+    ${CMAKE_BINARY_DIR}/privateinclude/QtScript
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore

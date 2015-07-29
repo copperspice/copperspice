@@ -164,7 +164,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     include_directories(${GLIB2_INCLUDE_DIR})
 endif()
 
-configure_file(qt-acconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/include/qt-acconfig.h)
+configure_file(qt-acconfig.h.cmake ${CMAKE_BINARY_DIR}/include/qt-acconfig.h)
 
 add_subdirectory(src)
 
