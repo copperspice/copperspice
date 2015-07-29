@@ -57,6 +57,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtSvg
     ${CMAKE_BINARY_DIR}/privateinclude/QtSvg
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")

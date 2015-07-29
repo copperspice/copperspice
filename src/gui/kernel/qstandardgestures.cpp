@@ -31,7 +31,6 @@
 #include <qabstractscrollarea.h>
 #include <qgraphicssceneevent.h>
 #include <qdebug.h>
-#include <QtGui/qevent.h>
 
 #ifndef QT_NO_GESTURES
 

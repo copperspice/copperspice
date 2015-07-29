@@ -70,6 +70,7 @@ if(ALSA_FOUND)
     )
     set(EXTRA_MULTIMEDIA_LIBS
         ${EXTRA_MULTIMEDIA_LIBS}
-        asound
+        ${ALSA_LIBRARIES}
     )
+    include_directories(${ALSA_INCLUDE_DIRS})
 endif()

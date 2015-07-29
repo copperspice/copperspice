@@ -41,7 +41,6 @@
 #include <qx11info_x11.h>
 #include <qiodevice.h>
 #include <qdnd_p.h>
-#include <QtGui/qevent.h>
 
 #include <stdlib.h>
 

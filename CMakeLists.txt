@@ -28,8 +28,18 @@ set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(target "${CMAKE_SYSTEM_NAME}")
 
-add_definitions(-std=c++11 -DQT_SHARED -DHAVE_CONFIG_H)
-add_definitions(-DBUILD_DATE="${BUILD_DATE}")
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ library derived from the existing Qt 4.8 framework")
+set(CPACK_PACKAGE_VENDOR "copperspice")
+# set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
+# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MINOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${BUILD_MICRO})
+include(CPack)
+
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
+add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
 
 check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
 check_include_file(features.h HAVE_FEATURES_H)
@@ -61,8 +71,9 @@ check_include_file(stdint.h HAVE_STDINT_H)
 check_include_file(stdlib.h HAVE_STDLIB_H)
 check_include_file(strings.h HAVE_STRINGS_H)
 check_include_file(string.h HAVE_STRING_H)
-check_include_files(stdlib.h stddef.h STDC_HEADERS) # FIXME: something is wrong here
-check_type_size("size_t" SIZEOF_SIZE_T)
+# FIXME: what's wrong with this?
+check_include_files(dlfcn.h stdint.h stddef.h inttypes.h stdlib.h strings.h string.h float.h STDC_HEADERS)
+check_type_size(size_t SIZEOF_SIZE_T)
 
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES
@@ -70,7 +81,7 @@ set_package_properties(OpenSSL PROPERTIES
     DESCRIPTION "Support for secure network communications (SSL and TLS)"
     URL "http://openssl.org"
     TYPE RECOMMENDED
-    )
+)
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -78,32 +89,78 @@ set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
     URL "http://zlib.net"
     TYPE RECOMMENDED
-    )
+)
 
 find_package(Cups)
 set_package_properties(Cups PROPERTIES
     PURPOSE "Required for printing support"
     DESCRIPTION "CUPS is the standards-based, open source printing system"
-    URL "http://www.cups.org/"
+    URL "http://www.cups.org"
     TYPE RECOMMENDED
-    )
+)
+
+find_package(ALSA)
+set_package_properties(ALSA PROPERTIES
+    PURPOSE "Required for ALSA audio support"
+    DESCRIPTION "Advanced Linux Sound Architecture"
+    URL "http://www.alsa-project.org"
+    TYPE RECOMMENDED
+)
 
 find_package(PostgreSQL)
-find_package(ALSA)
-find_package(GTK2)
+set_package_properties(PostgreSQL PROPERTIES
+    PURPOSE "Required for PostgreSQL database support"
+    DESCRIPTION "The world's most advanced open source database"
+    URL "http://www.postgresql.org"
+    TYPE RECOMMENDED
+)
+
 find_package(MySQL)
+set_package_properties(MySQL PROPERTIES
+    PURPOSE "Required for MySQL database support"
+    DESCRIPTION "The world's most popular open source database"
+    URL "http://www.mysql.com"
+    TYPE RECOMMENDED
+)
+
 # find_package(QPA) TODO: what is QPA?
+
+
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_package(GTK2)
+    set_package_properties(GTK2 PROPERTIES
+        PURPOSE "Required for GTK style and application integration support"
+        DESCRIPTION "Multi-platform toolkit for creating graphical user interfaces"
+        URL "http://www.gtk.org"
+        TYPE RECOMMENDED
+    )
+endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_library(audio_FOUND audio) # AuOpenServer
     find_library(GL_FOUND GL) # glClear
     find_library(pthread_FOUND pthread) # pthread_create
 
-    find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11 REQUIRED)
-    find_package(Fontconfig REQUIRED)
+    find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
+    set_package_properties(X11 PROPERTIES
+        PURPOSE "Required for X11/X.Org integration support"
+        DESCRIPTION "Open source implementation of the X Window System"
+        URL "http://www.x.org"
+        TYPE REQUIRED
+    )
+
+    find_package(Fontconfig)
+    set_package_properties(Fontconfig PROPERTIES
+        PURPOSE "Required for fonts configuration support"
+        DESCRIPTION "Library for configuring and customizing font access"
+        URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
+        TYPE REQUIRED
+    )
+
     find_package(Freetype REQUIRED)
     find_package(GLIB2 REQUIRED)
     find_package(GStreamer REQUIRED)
+    find_package(LibXml2 REQUIRED)
     include_directories(${GLIB2_INCLUDE_DIR})
 endif()
 

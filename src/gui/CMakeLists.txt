@@ -79,10 +79,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
         X11
-        lXrender
-        lXrandr
-        lXcursor
-        lXinerama
+        Xrender
+        Xrandr
+        Xcursor
+        Xinerama
         SM
         ICE
         audio

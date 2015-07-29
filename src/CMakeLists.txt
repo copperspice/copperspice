@@ -1,9 +1,15 @@
+# XXX: as bad as this can be it is neccessary for building properly when Qt4 is
+# installed on the system because they have the same headers names with the
+# difference being that CopperSpice does not install non-fancy headers into
+# <prefix>/include.
+set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
+
 add_subdirectory(core)
 # TODO: add_subdirectory(declarative)
 add_subdirectory(gui)
 add_subdirectory(multimedia)
 add_subdirectory(network)
-# TODO: add_subdirectory(opengl)
+add_subdirectory(opengl)
 add_subdirectory(phonon)
 # TODO: add_subdirectory(script)
 # TODO: add_subdirectory(scripttools)

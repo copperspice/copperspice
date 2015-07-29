@@ -2,6 +2,10 @@ add_definitions(-DMAKE_PHONON_LIB -DQT_NO_DBUS -DQT_BUILD_PHONON_LIB -DQT_MAKEDL
 set(EXTRA_PHONON_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
 set(EXTRA_PHONON_CXXFLAGS "-Wno-undefined")
 set(EXTRA_PHONON_LDFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
+set(EXTRA_PHONON2_CXXFLAGS "-Wno-undefined")
+set(EXTRA_PHONON2_LDFLAGS " ") # whitespace is required!
+set(PHONON2_SUFFIX)
 
 set(PHONON_PUBLIC_INCLUDES
     AbstractAudioOutput
@@ -281,8 +285,8 @@ include_directories(
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
-    set(PHONON_SOURCES
-        ${PHONON_SOURCES}
+    set(PHONON2_SOURCES
+        ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/abstractvideorenderer.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/audiooutput.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/backend.cpp
@@ -303,16 +307,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/videorenderer_evr.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/videorenderer_vmr9.cpp
     )
-    set(EXTRA_PHONON_LIBS
-        ${EXTRA_PHONON_LIBS}
+    set(EXTRA_PHONON2_LIBS
+        ${EXTRA_PHONON2_LIBS}
         opengl32
         lmsdmo
         ole32
         oleaut32
         gdi32
     )
-    set(EXTRA_PHONON_LDFLAGS
-        ${EXTRA_PHONON_LDFLAGS}
+    set(EXTRA_PHONON2_LDFLAGS
+        ${EXTRA_PHONON2_LDFLAGS}
         -module
         -Wl,-lstrmiids
         -Wl,-ldmoguids
@@ -326,11 +330,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9
     )
+    set(PHONON2_SUFFIX "ds9")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(PHONON_SOURCES
-        ${PHONON_SOURCES}
+    set(PHONON2_SOURCES
+        ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/abstractrenderer.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/artssink.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/audiodataoutput.cpp
@@ -354,9 +359,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/widgetrenderer.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/x11renderer.cpp
     )
-    set(EXTRA_PHONON_LIBS
-        ${EXTRA_PHONON_LIBS}
+    set(EXTRA_PHONON2_LIBS
+        ${EXTRA_PHONON2_LIBS}
         ${GSTREAMER_LIBRARIES}
+        # ${LIBXML2_LIBRARIES}
     )
     add_definitions(
         -DQT_NO_OPENGL
@@ -364,16 +370,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         -DQT_SHARED
         -DQT_MAKEDLL
         ${GSTREAMER_DEFINITIONS}
+        ${LIBXML2_DEFINITIONS}
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer
         ${GSTREAMER_INCLUDE_DIR}
+        ${LIBXML2_INCLUDE_DIR}
     )
+    set(PHONON2_SUFFIX "gstreamer")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(PHONON_SOURCES
-        ${PHONON_SOURCES}
+    set(PHONON2_SOURCES
+        ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimevideoplayer.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/backendheader.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/medianodevideopart.mm
@@ -397,8 +406,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audionode.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/videowidget.mm
     )
-    set(EXTRA_PHONON_LIBS
-        ${EXTRA_PHONON_LIBS}
+    set(EXTRA_PHONON2_LIBS
+        ${EXTRA_PHONON2_LIBS}
         gdi32
         winmm
         ole32
@@ -407,8 +416,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         comdlg32
         imm32
     )
-    set(EXTRA_PHONON_LDFLAGS
-        ${EXTRA_PHONON_LDFLAGS}
+    set(EXTRA_PHONON2_LDFLAGS
+        ${EXTRA_PHONON2_LDFLAGS}
         -module -Xarch_i386
         -framework QuickTime
         -Xarch_x86_64
@@ -430,17 +439,27 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7
         ${CMAKE_SOURCE_DIR}/OpenGL # TODO: whaat?
     )
+    set(PHONON2_SUFFIX "qt7")
 endif()
 
-add_library(phonon SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
-target_link_libraries(phonon ${EXTRA_PHONON_LIBS})
-set_target_properties(phonon PROPERTIES
+add_library(CsPhonon${BUILD_MAJOR} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
+target_link_libraries(CsPhonon${BUILD_MAJOR} ${EXTRA_PHONON_LIBS})
+set_target_properties(CsPhonon${BUILD_MAJOR} PROPERTIES
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON_LDFLAGS}
 )
 
-macro_generate_resources("${SVG_SOURCES}" phonon)
+add_library(phonon_${PHONON2_SUFFIX} SHARED ${PHONON2_SOURCES} ${PHONON_INCLUDES})
+target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
+set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
+    COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
+    LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
+)
 
-install(TARGETS phonon LIBRARY DESTINATION lib)
+macro_generate_resources("${PHONON_SOURCES}" CsPhonon${BUILD_MAJOR})
+macro_generate_resources("${PHONON2_SOURCES}" phonon_${PHONON2_SUFFIX})
+
+install(TARGETS CsPhonon${BUILD_MAJOR} LIBRARY DESTINATION lib)
+install(TARGETS phonon_${PHONON2_SUFFIX} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/phonon DESTINATION include)
