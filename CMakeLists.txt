@@ -101,7 +101,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_library(pthread_FOUND pthread) # pthread_create
     find_library(SM_FOUND SM) # SmcOpenConnection
 
-    find_package(X11 REQUIRED)
+    find_package(X11 REQUIRED) # TODO: components
     find_package(Fontconfig REQUIRED)
     find_package(Freetype REQUIRED)
     find_package(GLIB2 REQUIRED)
