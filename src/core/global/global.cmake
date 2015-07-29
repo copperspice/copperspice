@@ -38,7 +38,6 @@ set(CORE_PUBLIC_INCLUDES
     QtEndian
     QtGlobal
     QtNamespace
-    PARENT_SCOPE
 )
 
 set(CORE_INCLUDES

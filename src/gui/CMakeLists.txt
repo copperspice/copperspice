@@ -6,8 +6,7 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DMNG_BUILD_SO
 )
 
-# set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_GUI_LIBS)
+set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
 set(EXTRA_GUI_CXXFLAGS "-Wno-undefined")
 set(EXTRA_GUI_LDFLAGS " ") # whitespace is required!
 
@@ -33,6 +32,7 @@ macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
 macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
 
+
 include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/privateinclude
@@ -40,11 +40,22 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
-    ${CMAKE_CURRENT_SOURCE_DIR}/access
-    ${CMAKE_CURRENT_SOURCE_DIR}/bearer
+    ${CMAKE_CURRENT_SOURCE_DIR}/accessible
+    ${CMAKE_CURRENT_SOURCE_DIR}/animation
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
+    ${CMAKE_CURRENT_SOURCE_DIR}/effects
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview
+    ${CMAKE_CURRENT_SOURCE_DIR}/image
+    ${CMAKE_CURRENT_SOURCE_DIR}/inputmethod
+    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
-    ${CMAKE_CURRENT_SOURCE_DIR}/socket
-    ${CMAKE_CURRENT_SOURCE_DIR}/ssl
+    ${CMAKE_CURRENT_SOURCE_DIR}/math3d
+    ${CMAKE_CURRENT_SOURCE_DIR}/painting
+    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles
+    ${CMAKE_CURRENT_SOURCE_DIR}/text
+    ${CMAKE_CURRENT_SOURCE_DIR}/util
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
     ${CMAKE_SOURCE_DIR}/src/3rdparty/wintab
     ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib

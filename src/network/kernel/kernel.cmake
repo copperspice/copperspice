@@ -38,7 +38,6 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_win_p.h
-    PARENT_SCOPE
 )
 
 set(NETWORK_SOURCES
@@ -57,7 +56,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_generic.cpp
-        PARENT_SCOPE
     )
 endif()
 

@@ -11,7 +11,7 @@
 #
 #   MACRO_GENERATE_MISC(<someheader.h> [<someheader2.h>] ... <subdir>)
 #
-#   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
+#   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ... <target>)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
@@ -45,27 +45,25 @@ macro(MACRO_GENERATE_MISC MISC_INCLUDES SUBDIR)
     endforeach(header)
 endmacro()
 
-macro(MACRO_GENERATE_RESOURCES RESOURCES TARGET)
+macro(MACRO_GENERATE_RESOURCES RESOURCES FORTARGET)
     foreach(resource ${RESOURCES})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
         if(${rscext} STREQUAL ".ui")
             set(rscout ${CMAKE_BINARY_DIR}/include/ui_${rscname}.h)
             add_custom_command(
-                TARGET ${TARGET}
-                PRE_BUILD
+                OUTPUT "${rscout}"
                 COMMAND "uic" "${resource}" "-o" "${rscout}"
-                COMMENT "Writing UI: ${rscout}"
+                MAIN_DEPENDENCY "${resource}"
                 )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
             add_custom_command(
-                TARGET ${TARGET}
-                PRE_BUILD
+                OUTPUT "${rscout}"
                 COMMAND "rcc" "${resource}" "-o" "${rscout}"
-                COMMENT "Writing QRC: ${rscout}"
+                MAIN_DEPENDENCY "${resource}"
             )
-            # FIXME: add rscout to target sources
+            set_property(SOURCE "${resource}" APPEND PROPERTY OBJECT_DEPENDS "${rscout}")
         endif()
     endforeach()
 endmacro()

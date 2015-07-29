@@ -26,6 +26,7 @@
 #include <qapplication.h>
 #include <qkeymapper_p.h>
 #include <qwidget.h>
+#include <QtGui/qevent.h>
 
 QT_BEGIN_NAMESPACE
 
