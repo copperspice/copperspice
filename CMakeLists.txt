@@ -112,7 +112,7 @@ configure_file(qt-acconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/include/qt-acconf
 add_subdirectory(src)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    foreach(library ICE audio GL pthread SM)
+    foreach(library audio GL pthread)
         if(NOT ${library}_FOUND)
             message(SEND_ERROR "${library} not found")
         endif()
