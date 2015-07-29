@@ -95,13 +95,11 @@ find_package(MySQL)
 # find_package(QPA) TODO: what is QPA?
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    find_library(ICE_FOUND ICE) # IceOpenConnection
     find_library(audio_FOUND audio) # AuOpenServer
     find_library(GL_FOUND GL) # glClear
     find_library(pthread_FOUND pthread) # pthread_create
-    find_library(SM_FOUND SM) # SmcOpenConnection
 
-    find_package(X11 REQUIRED) # TODO: components
+    find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11 REQUIRED)
     find_package(Fontconfig REQUIRED)
     find_package(Freetype REQUIRED)
     find_package(GLIB2 REQUIRED)
