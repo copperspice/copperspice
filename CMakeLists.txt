@@ -121,6 +121,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     endforeach()
 endif()
 
+option(WITH_WEBKIT "Build WebKit component" ON)
+add_feature_info(WebKit WITH_WEBKIT "an open source web browser engine")
+
 feature_summary(WHAT ALL
     INCLUDE_QUIET_PACKAGES
     FATAL_ON_MISSING_REQUIRED_PACKAGES
