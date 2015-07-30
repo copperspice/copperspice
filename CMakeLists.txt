@@ -70,8 +70,7 @@ check_include_file(stdint.h HAVE_STDINT_H)
 check_include_file(stdlib.h HAVE_STDLIB_H)
 check_include_file(strings.h HAVE_STRINGS_H)
 check_include_file(string.h HAVE_STRING_H)
-# FIXME: what's wrong with this?
-check_include_files(dlfcn.h stdint.h stddef.h inttypes.h stdlib.h strings.h string.h float.h STDC_HEADERS)
+check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
 check_type_size(size_t SIZEOF_SIZE_T)
 
 find_package(OpenSSL)
@@ -175,10 +174,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     endforeach()
 endif()
 
+option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
+add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "the world's most advanced open source database")
+
+option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
+add_feature_info(MySQL WITH_MYSQL_PLUGIN "the world's most popular open source database")
+
 option(WITH_WEBKIT "Build WebKit component" ON)
 add_feature_info(WebKit WITH_WEBKIT "an open source web browser engine")
 
-feature_summary(WHAT ALL
-    INCLUDE_QUIET_PACKAGES
-    FATAL_ON_MISSING_REQUIRED_PACKAGES
-    )
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
