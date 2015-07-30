@@ -50,7 +50,7 @@ include_directories(
 )
 
 add_library(CsXmlPatterns${BUILD_MAJOR} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
-target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XML_LIBS})
+target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XMLPATTERNS_LIBS})
 set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}

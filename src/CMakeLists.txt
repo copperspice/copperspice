@@ -5,7 +5,7 @@
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 
 add_subdirectory(core)
-# TODO: add_subdirectory(declarative)
+add_subdirectory(declarative)
 add_subdirectory(gui)
 add_subdirectory(multimedia)
 add_subdirectory(network)
