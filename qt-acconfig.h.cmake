@@ -116,7 +116,7 @@
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
 
 /* Define to 1 if you have the ANSI C header files. */
-#cmakedefine STDC_HEADERS
+#cmakedefine01 STDC_HEADERS
 
 /* Version number of package */
 #cmakedefine VERSION "@VERSION@"
