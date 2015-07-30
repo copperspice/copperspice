@@ -28,7 +28,6 @@ set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(target "${CMAKE_SYSTEM_NAME}")
 
-
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ library derived from the existing Qt 4.8 framework")
 set(CPACK_PACKAGE_VENDOR "copperspice")
 # set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")

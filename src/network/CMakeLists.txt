@@ -44,7 +44,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
 endif()
 
-
 add_library(CsNetwork${BUILD_MAJOR} SHARED ${NETWORK_SOURCES} ${NETWORK_INCLUDES})
 target_link_libraries(CsNetwork${BUILD_MAJOR} ${EXTRA_NETWORK_LIBS})
 set_target_properties(CsNetwork${BUILD_MAJOR} PROPERTIES
