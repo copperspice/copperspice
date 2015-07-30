@@ -6,8 +6,8 @@ set(EXTRA_DECLARATIVE_LDFLAGS " ") # whitespace is required!
 include(debugger/debugger.cmake)
 include(graphicsitems/graphicsitems.cmake)
 include(qml/qml.cmake)
-include(qml/parser.cmake)
-include(qml/rewriter.cmake)
+include(qml/parser/parser.cmake)
+include(qml/rewriter/rewriter.cmake)
 include(util/util.cmake)
 
 macro_generate_public("${DECLARATIVE_PUBLIC_INCLUDES}" QtDeclarative)
@@ -21,6 +21,8 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/include/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
     ${CMAKE_BINARY_DIR}/include/QtDeclarative

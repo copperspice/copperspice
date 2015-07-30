@@ -10,8 +10,8 @@ set(XMLPATTERNS_PRIVATE_INCLUDES
 
 set(XMLPATTERNS_SOURCES
     ${XMLPATTERNS_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/acceltree/qacceltree.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/acceltree/qacceltreeresourceloader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/acceltree/qacceliterators.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/acceltree/qcompressedwhitespace.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/qacceltree.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/qacceltreeresourceloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/qacceliterators.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/acceltree/qcompressedwhitespace.cpp
 )
