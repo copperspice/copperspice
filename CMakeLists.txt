@@ -1,3 +1,9 @@
+# NOTE: to find all FIXME/TODO related to the CMake build system execute the
+# following in the top-directory of the source tree:
+#
+# find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
+# find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
+
 project(copperspice)
 
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
