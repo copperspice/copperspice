@@ -157,7 +157,7 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
 
-macro_generate_resources("${GUI_SOURCES}" CsGui${BUILD_MAJOR})
+macro_generate_resources("${GUI_SOURCES}")
 
 install(TARGETS CsGui${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui DESTINATION include)

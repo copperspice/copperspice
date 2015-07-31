@@ -5250,7 +5250,7 @@ set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}
 )
 
-macro_generate_resources("${WEBKIT_SOURCES}" CsWebKit${BUILD_MAJOR})
+macro_generate_resources("${WEBKIT_SOURCES}")
 
 install(TARGETS CsWebKit${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtWebKit DESTINATION include)

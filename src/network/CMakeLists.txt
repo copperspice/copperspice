@@ -52,7 +52,7 @@ set_target_properties(CsNetwork${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_NETWORK_LDFLAGS}
 )
 
-macro_generate_resources("${NETWORK_SOURCES}" CsNetwork${BUILD_MAJOR})
+macro_generate_resources("${NETWORK_SOURCES}")
 
 install(TARGETS CsNetwork${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtNetwork DESTINATION include)

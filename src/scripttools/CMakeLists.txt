@@ -30,7 +30,7 @@ set_target_properties(CsScriptTools${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_SCRIPTTOOLS_LDFLAGS}
 )
 
-macro_generate_resources("${SCRIPTTOOLS_SOURCES}" CsScriptTools${BUILD_MAJOR})
+macro_generate_resources("${SCRIPTTOOLS_SOURCES}")
 
 install(TARGETS CsScriptTools${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScriptTools DESTINATION include)

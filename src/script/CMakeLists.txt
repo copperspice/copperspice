@@ -555,7 +555,7 @@ set_target_properties(CsScript${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_SCRIPT_LDFLAGS}
 )
 
-macro_generate_resources("${SCRIPT_SOURCES}" CsScript${BUILD_MAJOR})
+macro_generate_resources("${SCRIPT_SOURCES}")
 
 install(TARGETS CsScript${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript DESTINATION include)

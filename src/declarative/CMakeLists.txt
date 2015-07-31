@@ -45,7 +45,7 @@ set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_DECLARATIVE_LDFLAGS}
 )
 
-macro_generate_resources("${DECLARATIVE_SOURCES}" CsDeclarative${BUILD_MAJOR})
+macro_generate_resources("${DECLARATIVE_SOURCES}")
 
 install(TARGETS CsDeclarative${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtDeclarative DESTINATION include)

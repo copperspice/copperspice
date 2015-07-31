@@ -169,7 +169,7 @@ set_target_properties(CsOpenGL${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_OPENGL_LDFLAGS}
 )
 
-macro_generate_resources("${OPENGL_SOURCES}" CsOpenGL${BUILD_MAJOR})
+macro_generate_resources("${OPENGL_SOURCES}")
 
 install(TARGETS CsOpenGL${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtOpenGL DESTINATION include)

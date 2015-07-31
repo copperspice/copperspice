@@ -436,8 +436,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7
-        ${CMAKE_SOURCE_DIR}/OpenGL # TODO: whaat?
+        ${CMAKE_SOURCE_DIR}/privateInclude/OpenGL # TODO: whaat?
     )
     set(PHONON2_SUFFIX "qt7")
 endif()
@@ -457,8 +456,8 @@ set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
 )
 
-macro_generate_resources("${PHONON_SOURCES}" CsPhonon${BUILD_MAJOR})
-macro_generate_resources("${PHONON2_SOURCES}" phonon_${PHONON2_SUFFIX})
+macro_generate_resources("${PHONON_SOURCES}")
+macro_generate_resources("${PHONON2_SOURCES}")
 
 install(TARGETS CsPhonon${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(TARGETS phonon_${PHONON2_SUFFIX} LIBRARY DESTINATION lib)

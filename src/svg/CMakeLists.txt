@@ -75,7 +75,7 @@ set_target_properties(CsSvg${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_SVG_LDFLAGS}
 )
 
-macro_generate_resources("${SVG_SOURCES}" CsSvg${BUILD_MAJOR})
+macro_generate_resources("${SVG_SOURCES}")
 
 install(TARGETS CsSvg${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSvg DESTINATION include)

@@ -57,7 +57,7 @@ set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_XMLPATTERNS_LDFLAGS}
 )
 
-macro_generate_resources("${XMLPATTERNS_SOURCES}" CsXmlPatterns${BUILD_MAJOR})
+macro_generate_resources("${XMLPATTERNS_SOURCES}")
 
 install(TARGETS CsXmlPatterns${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtXmlPatterns DESTINATION include)

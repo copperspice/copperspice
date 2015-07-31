@@ -32,7 +32,7 @@ set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_XML_LDFLAGS}
 )
 
-macro_generate_resources("${XML_SOURCES}" CsXml${BUILD_MAJOR})
+macro_generate_resources("${XML_SOURCES}")
 
 install(TARGETS CsXml${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtXml DESTINATION include)

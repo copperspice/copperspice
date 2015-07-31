@@ -31,7 +31,7 @@ set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
 )
 
-macro_generate_resources("${MULTIMEDIA_SOURCES}" CsMultimedia${BUILD_MAJOR})
+macro_generate_resources("${MULTIMEDIA_SOURCES}")
 
 install(TARGETS CsMultimedia${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtMultimedia DESTINATION include)

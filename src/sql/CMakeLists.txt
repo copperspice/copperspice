@@ -59,7 +59,7 @@ set_target_properties(CsSql${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_SQL_LDFLAGS}
 )
 
-macro_generate_resources("${SQL_SOURCES}" CsSql${BUILD_MAJOR})
+macro_generate_resources("${SQL_SOURCES}")
 
 install(TARGETS CsSql${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSql DESTINATION include)

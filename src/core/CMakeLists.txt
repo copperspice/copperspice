@@ -107,7 +107,7 @@ set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
     LINK_FLAGS ${EXTRA_CORE_LDFLAGS}
 )
 
-macro_generate_resources("${CORE_SOURCES}" CsCore${BUILD_MAJOR})
+macro_generate_resources("${CORE_SOURCES}")
 
 install(TARGETS CsCore${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore DESTINATION include)
