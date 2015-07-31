@@ -1,6 +1,7 @@
 project(copperspice)
 
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+# cmake_policy(VERSION 2.8.11)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -10,7 +11,7 @@ include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
-include(MacroCs)
+include(MacroCopperSpice)
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
