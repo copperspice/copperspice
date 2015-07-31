@@ -42,10 +42,7 @@ class QAnimationDriverPrivate;
 class Q_CORE_EXPORT QAbstractAnimation : public QObject
 {
    CS_OBJECT(QAbstractAnimation)
-
-   CORE_CS_ENUM(State)
-   CORE_CS_ENUM(Direction)
-
+ 
    CORE_CS_PROPERTY_READ(state, state)
    CORE_CS_PROPERTY_NOTIFY(state, stateChanged)
 
@@ -80,6 +77,9 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
       KeepWhenStopped = 0,
       DeleteWhenStopped
    };
+
+   CORE_CS_ENUM(State)
+   CORE_CS_ENUM(Direction)
 
    QAbstractAnimation(QObject *parent = 0);
    virtual ~QAbstractAnimation();

@@ -1838,7 +1838,7 @@ void QMetaObject_X::register_enum_data(const char *args, const char *scope)
    }
 }
 
-void QMetaObject_X::register_method(const char *name, QMetaMethod::Access access, QMetaMethod::MethodType kind)
+void QMetaObject_X::register_method_s1(const char *name, QMetaMethod::Access access, QMetaMethod::MethodType kind)
 {
    if (! name || ! name[0] ) {
       return;

@@ -110,9 +110,7 @@ struct QLocalePrivate;
 class Q_CORE_EXPORT QLocale
 {
    CS_GADGET(QLocale)
-
-   CORE_CS_ENUM(Language)
-   CORE_CS_ENUM(Country)
+ 
 
    friend class QString;
    friend class QByteArray;
@@ -124,6 +122,7 @@ class Q_CORE_EXPORT QLocale
  public:
    // GENERATED PART STARTS HERE
    // see qlocale_data_p.h for more info on generated data
+
    enum Language {
       AnyLanguage = 0,
       C = 1,
@@ -672,6 +671,9 @@ class Q_CORE_EXPORT QLocale
       CurrencySymbol,
       CurrencyDisplayName
    };
+
+   CORE_CS_ENUM(Language)
+   CORE_CS_ENUM(Country)
 
    QLocale();
    QLocale(const QString &name);

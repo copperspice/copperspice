@@ -37,8 +37,6 @@ class Q_CORE_EXPORT QEasingCurve
 {
    CS_GADGET(QEasingCurve)
 
-   CORE_CS_ENUM(Type)
-
  public:
    enum Type {
       Linear,
@@ -55,6 +53,8 @@ class Q_CORE_EXPORT QEasingCurve
       InCurve, OutCurve, SineCurve, CosineCurve,
       Custom, NCurveTypes
    };
+
+   CORE_CS_ENUM(Type)
 
    QEasingCurve(Type type = Linear);
    QEasingCurve(const QEasingCurve &other);

@@ -2862,15 +2862,19 @@ void qt_nameprep(QString *source, int from)
          *out = QChar(uc | 0x20);
       }
    }
+
    if (out == e) {
       return;   // everything was mapped easily (lowercased, actually)
    }
+
    int firstNonAscii = out - src;
 
    // Characters unassigned in Unicode 3.2 are not allowed in "stored string" scheme
    // but allowed in "query" scheme
    // (Table A.1)
+
    const bool isUnassignedAllowed = false; // ###
+
    // Characters commonly mapped to nothing are simply removed
    // (Table B.1)
    const QChar *in = out;
@@ -2883,6 +2887,7 @@ void qt_nameprep(QString *source, int from)
             uc = QChar::surrogateToUcs4(uc, low);
          }
       }
+
       if (!isUnassignedAllowed) {
          QChar::UnicodeVersion version = QChar::unicodeVersion(uc);
          if (version == QChar::Unicode_Unassigned || version > QChar::Unicode_3_2) {
@@ -2890,6 +2895,7 @@ void qt_nameprep(QString *source, int from)
             return;
          }
       }
+
       if (!isMappedToNothing(uc)) {
          if (uc <= 0xFFFF) {
             *out++ = *in;
@@ -2909,6 +2915,7 @@ void qt_nameprep(QString *source, int from)
    // Normalize to Unicode 3.2 form KC
    extern void qt_string_normalize(QString * data, QString::NormalizationForm mode,
                                    QChar::UnicodeVersion version, int from);
+
    qt_string_normalize(source, QString::NormalizationForm_KC, QChar::Unicode_3_2,
                        firstNonAscii > from ? firstNonAscii - 1 : from);
 
@@ -2919,10 +2926,11 @@ void qt_nameprep(QString *source, int from)
    }
 
    // Check for valid bidirectional characters
-   bool containsLCat = false;
+   bool containsLCat      = false;
    bool containsRandALCat = false;
    src = source->data();
    e = src + source->size();
+
    for (in = src + from; in < e && (!containsLCat || !containsRandALCat); ++in) {
       uint uc = in->unicode();
       if (QChar(uc).isHighSurrogate() && in < e - 1) {
@@ -2932,12 +2940,14 @@ void qt_nameprep(QString *source, int from)
             uc = QChar::surrogateToUcs4(uc, low);
          }
       }
+
       if (isBidirectionalL(uc)) {
          containsLCat = true;
       } else if (isBidirectionalRorAL(uc)) {
          containsRandALCat = true;
       }
    }
+
    if (containsRandALCat) {
       if (containsLCat || (!isBidirectionalRorAL(src[from].unicode())
                            || !isBidirectionalRorAL(e[-1].unicode()))) {

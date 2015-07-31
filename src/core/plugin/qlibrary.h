@@ -42,8 +42,6 @@ class Q_CORE_EXPORT QLibrary : public QObject
    CORE_CS_PROPERTY_READ(loadHints, loadHints)
    CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
 
-   CORE_CS_FLAG(LoadHint, LoadHints)
-
  public:
    enum LoadHint {
       ResolveAllSymbolsHint = 0x01,
@@ -52,6 +50,8 @@ class Q_CORE_EXPORT QLibrary : public QObject
       ImprovedSearchHeuristics = 0x08
    };
    using LoadHints = QFlags<LoadHint>;
+
+   CORE_CS_FLAG(LoadHint, LoadHints)
 
    explicit QLibrary(QObject *parent = 0);
    explicit QLibrary(const QString &fileName, QObject *parent = 0);

@@ -43,9 +43,7 @@ class QAbstractAnimation;
 class Q_CORE_EXPORT QStateMachine : public QState
 {
    CS_OBJECT(QStateMachine)
-
-   CORE_CS_ENUM(RestorePolicy)
-
+  
    CORE_CS_PROPERTY_READ(errorString, errorString)
    CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)
    CORE_CS_PROPERTY_WRITE(globalRestorePolicy, setGlobalRestorePolicy)
@@ -56,6 +54,7 @@ class Q_CORE_EXPORT QStateMachine : public QState
 #endif
 
  public:
+
    class Q_CORE_EXPORT SignalEvent : public QEvent
    {
     public:
@@ -114,6 +113,8 @@ class Q_CORE_EXPORT QStateMachine : public QState
       NoDefaultStateInHistoryStateError,
       NoCommonAncestorForTransitionError
    };
+
+   CORE_CS_ENUM(RestorePolicy)
 
    QStateMachine(QObject *parent = 0);
    ~QStateMachine();

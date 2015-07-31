@@ -5400,7 +5400,7 @@ QString QString::arg(qlonglong a, int fieldWidth, int base, QChar fillChar) cons
 
    if (d.occurrences == 0) { 
       qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
-               "Format String: %s     Argument Value: %s\n", this->toLocal8Bit().data(), a.toLocal8Bit().data());
+               "Format String: %s     Argument Value: %lld\n", this->toLocal8Bit().data(), a);
 
       return *this;
    }
@@ -5449,7 +5449,7 @@ QString QString::arg(qulonglong a, int fieldWidth, int base, QChar fillChar) con
 
    if (d.occurrences == 0) {    
       qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
-               "Format String: %s     Argument Value: %s\n", this->toLocal8Bit().data(), a.toLocal8Bit().data());
+               "Format String: %s     Argument Value: %llu\n", this->toLocal8Bit().data(), a);
 
       return *this;
    }
@@ -5541,7 +5541,7 @@ QString QString::arg(double a, int fieldWidth, char fmt, int prec, QChar fillCha
 
    if (d.occurrences == 0) {
       qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
-               "Format String: %s     Argument Value: %s\n", this->toLocal8Bit().data(), a.toLocal8Bit().data());
+               "Format String: %s     Argument Value: %f\n", this->toLocal8Bit().data(), a);
       return *this;
    }
 
@@ -5654,8 +5654,8 @@ QString QString::multiArg(int numArgs, const QString **args) const
 
    // sanity
    if (numArgs > arg) {
-      qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
-               "Format String: %s     Argument Value: %s\n", this->toLocal8Bit().data(), a.toLocal8Bit().data());
+      qWarning("Warning: QString::multiArg() Missing place marker '%%n'\n"
+               "Format String: %s\n", this->toLocal8Bit().data());
       numArgs = arg;
    }
 

@@ -510,6 +510,7 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
 
       // 1. CODESET from ctype if it contains a .CODESET part (e.g. en_US.ISO8859-15)
       codeset = ctype ? strchr(ctype, '.') : 0;
+
       if (codeset && *codeset == '.') {
          ++codeset;
          cd = iconv_open(to ? to : codeset, from ? from : codeset);
@@ -517,6 +518,7 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
 
       // 2. CODESET from lang if it contains a .CODESET part
       codeset = lang ? strchr(lang, '.') : 0;
+
       if (cd == (iconv_t) - 1 && codeset && *codeset == '.') {
          ++codeset;
          cd = iconv_open(to ? to : codeset, from ? from : codeset);

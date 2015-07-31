@@ -43,10 +43,7 @@ class Q_CORE_EXPORT QIODevice : public QObject
 {
    CS_OBJECT(QIODevice)
 
- public:
-   CORE_CS_ENUM(OpenModeFlag)
-   CORE_CS_FLAG(OpenModeFlag, OpenMode)
-
+ public:   
    enum OpenModeFlag {
       NotOpen = 0x0000,
       ReadOnly = 0x0001,
@@ -58,6 +55,9 @@ class Q_CORE_EXPORT QIODevice : public QObject
       Unbuffered = 0x0020
    };
    using OpenMode = QFlags<OpenModeFlag>;
+
+   CORE_CS_ENUM(OpenModeFlag)
+   CORE_CS_FLAG(OpenModeFlag, OpenMode)
 
    QIODevice();
 

@@ -27,13 +27,9 @@
 #include <csmeta.h>
 #include <qmetaobject.h>
 
-QMetaMethod::QMetaMethod(const char *typeName,
-                         const QByteArray &signature,
-                         QList<QByteArray> paramNames,
-                         QMetaMethod::Access access,
-                         QMetaMethod::MethodType methodType,
-                         QMetaMethod::Attributes attributes,
-                         QMetaObject *obj)
+QMetaMethod::QMetaMethod(const char *typeName, const QByteArray &signature, QList<QByteArray> paramNames,
+                         QMetaMethod::Access access, QMetaMethod::MethodType methodType, 
+                         QMetaMethod::Attributes attributes, QMetaObject *obj)
 {
    m_typeName   = typeName;
    m_signature  = signature;
@@ -46,11 +42,6 @@ QMetaMethod::QMetaMethod(const char *typeName,
    m_bento     = nullptr;
    m_tag       = "";
    m_revision  = 0;
-
-
-   // BROOM
-   name();
-
 }
 
 QMetaMethod::QMetaMethod()

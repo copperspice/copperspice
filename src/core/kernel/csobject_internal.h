@@ -100,7 +100,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
    Bento<void (SignalClass::*)(SignalArgTypes...)> signal_Bento(signal);
 
    if (sender->m_declarativeData && CSAbstractDeclarativeData::signalEmitted) {
-      // BROOM (on hold, declarative)
+      // broom (on hold, declarative)
       // CSAbstractDeclarativeData::signalEmitted(sender->m_declarativeData, sender, methodOffset, Vs...);
    }
 
@@ -975,12 +975,12 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       QSemaphore semaphore;
 
-      // BROOM (on hold, ok)
+      // broom (on hold, ok)
       // add &retval to QMetaCallEvent so we can return a value
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 0, -1,
-            &semaphore);
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 
+            0, -1, &semaphore);
       QCoreApplication::postEvent(object, event);
 
       semaphore.acquire();

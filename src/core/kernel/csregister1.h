@@ -26,20 +26,15 @@
 #ifndef CSREGISTER1_H
 #define CSREGISTER1_H
 
-// ** enum
-template<class T, class E, class name, class scope>
-class cs_record_enum
-{
- public:
-   static const int placeholder;
-};
+#include <typeindex>
 
+// ** enum
+template<class T>
+void cs_namespace_register_enum(const char *name, std::type_index id, const char *scope);
+  
 // ** flags
-template<class T, class F, class enumName, class scope, class flagName>
-class cs_record_flag
-{
- public:
-   static const int placeholder;
-};
+template<class T>
+void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id);
+ 
 
 #endif

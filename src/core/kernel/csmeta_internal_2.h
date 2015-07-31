@@ -145,5 +145,18 @@ inline const char *cs_typeName_internal< QFlags<E> >::typeName()
    }
 }
 
+template<class T>
+void cs_namespace_register_enum(const char *name, std::type_index id, const char *scope)
+{
+   const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(name, id, scope);
+}
+
+  
+// ** flags
+template<class T>
+void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id)
+{
+   const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(enumName, scope, flagName, id); 
+}
 
 #endif
