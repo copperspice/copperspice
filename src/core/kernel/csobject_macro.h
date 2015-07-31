@@ -313,7 +313,7 @@ class cs_number<0>
 
 #define CS_INVOKABLE_METHOD_2(methodName) \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
-            #methodName, &cs_class::method, QMetaMethod::Method, va_args, accessType); \
+            #methodName, &cs_class::methodName, QMetaMethod::Method, va_args, accessType); \
       } \
 
 
@@ -610,7 +610,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data) \
-    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const \
       {  \
          return data; \
       } \
@@ -654,7 +654,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data) \
-   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const \
       {  \
          return data; \
       } \
@@ -699,7 +699,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_STORED_NONSTATIC(name, data) \
-   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const \
       {  \
          return data; \
       } \
@@ -744,7 +744,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_USER_NONSTATIC(name, data) \
-   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  const \
       {  \
          return data; \
       } \
