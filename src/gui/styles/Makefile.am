@@ -149,10 +149,12 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/styles/qproxystyle.cpp \
    src/gui/styles/qstylesheetstyle.cpp \
    src/gui/styles/qstylesheetstyle_default.cpp \
-	src/gui/styles/qrc_qstyle.cpp \
 	src/gui/styles/qplastiquestyle.cpp \
 	src/gui/styles/qcleanlooksstyle.cpp \
 	src/gui/styles/qcdestyle.cpp
+
+nodist_lib_libCsGui1_la_SOURCES += \
+	src/gui/styles/qrc_qstyle.cpp 
 
 EXTRA_DIST+=\
 	src/gui/styles/qstyle.qrc \
