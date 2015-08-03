@@ -946,6 +946,7 @@ class cs_number<0>
 #define GUI_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
 #define GUI_CS_GADGET(className)                                  CS_GADGET(className)
+#define GUI_CS_CLASSINFO(name, data)                              CS_CLASSINFO(name, data)
 
 #define GUI_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define GUI_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
@@ -979,6 +980,7 @@ class cs_number<0>
 #define GUI_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
 #define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define GUI_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+#define GUI_CS_CLASSINFO(name, data)                              
 
 #define GUI_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define GUI_CS_SLOT_2(slotName)
@@ -1149,6 +1151,7 @@ class cs_number<0>
 #define PHN_CS_OBJECT(className)                                  CS_OBJECT(className)
 #define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
 #define PHN_CS_GADGET(className)                                  CS_GADGET(className)
+#define PHN_CS_CLASSINFO(name, data)                              CS_CLASSINFO(name, data)
 
 #define PHN_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define PHN_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
@@ -1182,6 +1185,7 @@ class cs_number<0>
 #define PHN_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
 #define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define PHN_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+#define PHN_CS_CLASSINFO(name, data)                             
 
 #define PHN_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define PHN_CS_SLOT_2(slotName)
@@ -1476,6 +1480,7 @@ class cs_number<0>
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT(className)
 #define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE(className, parentX)
 #define DECL_CS_GADGET(className)                                 CS_GADGET(className)
+#define DECL_CS_CLASSINFO(name, data)                             CS_CLASSINFO(name, data)
 
 #define DECL_CS_SLOT_1(access, ...)                               CS_SLOT_1(access, __VA_ARGS__)
 #define DECL_CS_SLOT_2(slotName)                                  CS_SLOT_2(slotName)
@@ -1513,6 +1518,7 @@ class cs_number<0>
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT_OUTSIDE(className)
 #define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define DECL_CS_GADGET(className)                                 CS_GADGET_OUTSIDE(className)
+#define DECL_CS_CLASSINFO(name, data)                             
 
 #define DECL_CS_SLOT_1(access, ...)                               __VA_ARGS__;
 #define DECL_CS_SLOT_2(slotName)

@@ -73,7 +73,7 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
    CS_PROPERTY_READ(roles, roleObjects)
    CS_PROPERTY_READ(count, count)
    CS_PROPERTY_NOTIFY(count, countChanged)
-   CS_CLASSINFO("DefaultProperty", "roles")
+   DECL_CS_CLASSINFO("DefaultProperty", "roles")
 
  public:
    QDeclarativeXmlListModel(QObject *parent = 0);

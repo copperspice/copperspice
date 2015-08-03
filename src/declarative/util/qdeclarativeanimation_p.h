@@ -64,7 +64,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAbstractAnimation
    CS_PROPERTY_WRITE(loops, setLoops)
    CS_PROPERTY_NOTIFY(loops, loopCountChanged)
 
-   CS_CLASSINFO("DefaultMethod", "start()")
+   DECL_CS_CLASSINFO("DefaultMethod", "start()")
 
  public:
    QDeclarativeAbstractAnimation(QObject *parent = 0);
@@ -446,7 +446,7 @@ class QDeclarativeAnimationGroup : public QDeclarativeAbstractAnimation
    DECL_CS_OBJECT(QDeclarativeAnimationGroup)
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
-   CS_CLASSINFO("DefaultProperty", "animations")
+   DECL_CS_CLASSINFO("DefaultProperty", "animations")
    CS_PROPERTY_READ(animations, animations)
 
  public:

@@ -38,7 +38,7 @@ class QDeclarativePackage : public QObject
    DECL_CS_OBJECT(QDeclarativePackage)
    Q_DECLARE_PRIVATE(QDeclarativePackage)
 
-   CS_CLASSINFO("DefaultProperty", "data")
+   DECL_CS_CLASSINFO("DefaultProperty", "data")
    CS_PROPERTY_READ(data, data)
    CS_PROPERTY_SCRIPTABLE(data, false)
 

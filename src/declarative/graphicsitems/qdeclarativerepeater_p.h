@@ -44,7 +44,7 @@ class QDeclarativeRepeater : public QDeclarativeItem
    DECL_CS_PROPERTY_READ(count, count)
    DECL_CS_PROPERTY_NOTIFY(count, countChanged)
 
-   CS_CLASSINFO("DefaultProperty", "delegate")
+   DECL_CS_CLASSINFO("DefaultProperty", "delegate")
 
  public:
    QDeclarativeRepeater(QDeclarativeItem *parent = 0);

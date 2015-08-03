@@ -43,13 +43,13 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBehavior : public QObject, public
    Q_DECLARE_PRIVATE(QDeclarativeBehavior)
 
    CS_INTERFACES(QDeclarativePropertyValueInterceptor)
-   CS_CLASSINFO("DefaultProperty", "animation")
+   DECL_CS_CLASSINFO("DefaultProperty", "animation")
    CS_PROPERTY_READ(*animation, animation)
    CS_PROPERTY_WRITE(*animation, setAnimation)
    CS_PROPERTY_READ(enabled, enabled)
    CS_PROPERTY_WRITE(enabled, setEnabled)
    CS_PROPERTY_NOTIFY(enabled, enabledChanged)
-   CS_CLASSINFO("DeferredPropertyNames", "animation")
+   DECL_CS_CLASSINFO("DeferredPropertyNames", "animation")
 
  public:
    QDeclarativeBehavior(QObject *parent = 0);

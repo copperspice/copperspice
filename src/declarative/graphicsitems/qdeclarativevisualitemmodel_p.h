@@ -99,7 +99,7 @@ class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
    CS_PROPERTY_READ(children, children)
    CS_PROPERTY_NOTIFY(children, childrenChanged)
    CS_PROPERTY_DESIGNABLE(children, false)
-   CS_CLASSINFO("DefaultProperty", "children")
+   DECL_CS_CLASSINFO("DefaultProperty", "children")
 
  public:
    QDeclarativeVisualItemModel(QObject *parent = 0);
@@ -146,7 +146,7 @@ class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
    CS_PROPERTY_WRITE(rootIndex, setRootIndex)
    CS_PROPERTY_NOTIFY(rootIndex, rootIndexChanged)
 
-   CS_CLASSINFO("DefaultProperty", "delegate")
+   DECL_CS_CLASSINFO("DefaultProperty", "delegate")
 
  public:
    QDeclarativeVisualDataModel();

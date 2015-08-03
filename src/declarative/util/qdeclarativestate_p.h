@@ -136,8 +136,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeState : public QObject
    CS_PROPERTY_READ(extend, extends)
    CS_PROPERTY_WRITE(extend, setExtends)
    CS_PROPERTY_READ(changes, changes)
-   CS_CLASSINFO("DefaultProperty", "changes")
-   CS_CLASSINFO("DeferredPropertyNames", "changes")
+   DECL_CS_CLASSINFO("DefaultProperty", "changes")
+   DECL_CS_CLASSINFO("DeferredPropertyNames", "changes")
 
  public:
    QDeclarativeState(QObject *parent = 0);

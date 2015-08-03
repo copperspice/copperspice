@@ -55,8 +55,8 @@ class AudioOutputAdaptor: public QDBusAbstractAdaptor
 
     PHN_CS_OBJECT(AudioOutputAdaptor)
 
-    CS_CLASSINFO("D-Bus Interface", "org.kde.Phonon.AudioOutput")
-    CS_CLASSINFO("D-Bus Introspection", ""
+    PHN_CS_CLASSINFO("D-Bus Interface", "org.kde.Phonon.AudioOutput")
+    PHN_CS_CLASSINFO("D-Bus Introspection", ""
 "    <interface name=\"org.kde.Phonon.AudioOutput\" >\n"
 "    <property access=\"readwrite\" type=\"d\" name=\"volume\" />\n"
 "    <property access=\"readwrite\" type=\"b\" name=\"muted\" />\n"

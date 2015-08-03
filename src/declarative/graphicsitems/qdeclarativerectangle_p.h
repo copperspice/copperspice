@@ -113,7 +113,7 @@ class QDeclarativeGradient : public QObject
    DECL_CS_OBJECT(QDeclarativeGradient)
 
    CS_PROPERTY_READ(stops, stops)
-   CS_CLASSINFO("DefaultProperty", "stops")
+   DECL_CS_CLASSINFO("DefaultProperty", "stops")
 
  public:
    QDeclarativeGradient(QObject *parent = 0) : QObject(parent), m_gradient(0) {}

@@ -113,7 +113,7 @@ class QDeclarativeGridView : public QDeclarativeFlickable
    DECL_CS_ENUM(Flow)
    DECL_CS_ENUM(PositionMode)
 
-   CS_CLASSINFO("DefaultProperty", "data")
+   DECL_CS_CLASSINFO("DefaultProperty", "data")
 
  public:
    QDeclarativeGridView(QDeclarativeItem *parent = 0);

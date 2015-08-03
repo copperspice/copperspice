@@ -233,7 +233,7 @@ class QDeclarativePath : public QObject, public QDeclarativeParserStatus
    CS_PROPERTY_NOTIFY(startY, startYChanged)
    CS_PROPERTY_READ(closed, isClosed)
    CS_PROPERTY_NOTIFY(closed, changed)
-   CS_CLASSINFO("DefaultProperty", "pathElements")
+   DECL_CS_CLASSINFO("DefaultProperty", "pathElements")
 
  public:
    QDeclarativePath(QObject *parent = 0);

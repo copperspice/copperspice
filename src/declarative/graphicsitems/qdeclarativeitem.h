@@ -162,7 +162,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeItem : public QGraphicsObject, public QDe
 
    DECL_CS_ENUM(TransformOrigin)
 
-   CS_CLASSINFO("DefaultProperty", "data")
+   DECL_CS_CLASSINFO("DefaultProperty", "data")
 
  public:
    enum TransformOrigin {

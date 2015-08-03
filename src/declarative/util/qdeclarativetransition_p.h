@@ -51,8 +51,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeTransition : public QObject
    CS_PROPERTY_WRITE(reversible, setReversible)
    CS_PROPERTY_NOTIFY(reversible, reversibleChanged)
    CS_PROPERTY_READ(animations, animations)
-   CS_CLASSINFO("DefaultProperty", "animations")
-   CS_CLASSINFO("DeferredPropertyNames", "animations")
+   DECL_CS_CLASSINFO("DefaultProperty", "animations")
+   DECL_CS_CLASSINFO("DeferredPropertyNames", "animations")
 
  public:
    QDeclarativeTransition(QObject *parent = 0);

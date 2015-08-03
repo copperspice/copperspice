@@ -174,7 +174,7 @@ class QDeclarativeListView : public QDeclarativeFlickable
    CS_ENUM(Orientation)
    CS_ENUM(SnapMode)
    CS_ENUM(PositionMode)
-   CS_CLASSINFO("DefaultProperty", "data")
+   DECL_CS_CLASSINFO("DefaultProperty", "data")
 
  public:
    QDeclarativeListView(QDeclarativeItem *parent = 0);

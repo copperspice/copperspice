@@ -681,7 +681,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    GUI_CS_PROPERTY_RESET(height, cs_resetHeight)
    GUI_CS_PROPERTY_FINAL(height)
 
-   CS_CLASSINFO("DefaultProperty", "children")
+   GUI_CS_CLASSINFO("DefaultProperty", "children")
    CS_INTERFACES(QGraphicsItem)
 
  public:
