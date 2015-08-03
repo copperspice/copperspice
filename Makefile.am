@@ -168,6 +168,7 @@ distdir: $(DISTFILES) DISTFILES.list
 	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
 	|| chmod -R a+r "$(distdir)"
 	-rm -f DISTFILES.list
+	find $(distdir) -exec touch -r $(distdir) \{\} \;
 
 
 $(distdir)/%: $(DISTFILES)
