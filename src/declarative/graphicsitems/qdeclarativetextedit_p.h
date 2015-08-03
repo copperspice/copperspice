@@ -39,7 +39,7 @@ class QDeclarativeTextEditPrivate;
 
 class QDeclarativeTextEdit : public QDeclarativeImplicitSizePaintedItem
 {
-   CS_OBJECT(QDeclarativeTextEdit)
+   DECL_CS_OBJECT(QDeclarativeTextEdit)
 
    CS_ENUM(VAlignment)
    CS_ENUM(HAlignment)

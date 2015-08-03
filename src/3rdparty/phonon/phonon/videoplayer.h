@@ -69,7 +69,7 @@ class VideoWidget;
  */
 class PHONON_EXPORT VideoPlayer : public QWidget
 {
-    CS_OBJECT(VideoPlayer)
+    PHN_CS_OBJECT(VideoPlayer)
 
     public:      
         explicit VideoPlayer(Phonon::Category category, QWidget *parent = 0);

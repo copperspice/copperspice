@@ -1012,6 +1012,10 @@ class cs_number<0>
 
 // ** 3
 #ifdef QT_BUILD_MULTIMEDIA_LIB
+#define MULTI_CS_OBJECT(className)                                CS_OBJECT(className)
+#define MULTI_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE(className, parentX)
+#define MULTI_CS_GADGET(className)                                CS_GADGET(className)
+
 #define MULTI_CS_SLOT_1(access, ...)                              CS_SLOT_1(access, __VA_ARGS__)
 #define MULTI_CS_SLOT_2(slotName)                                 CS_SLOT_2(slotName)
 #define MULTI_CS_SLOT_OVERLOAD(slotName, argTypes)                CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1021,6 +1025,10 @@ class cs_number<0>
 #define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define MULTI_CS_OBJECT(className)                                CS_OBJECT_OUTSIDE(className)
+#define MULTI_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define MULTI_CS_GADGET(className)                                CS_GADGET_OUTSIDE(className)
+
 #define MULTI_CS_SLOT_1(access, ...)                              __VA_ARGS__;
 #define MULTI_CS_SLOT_2(slotName)
 #define MULTI_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1034,6 +1042,10 @@ class cs_number<0>
 
 // ** 4
 #ifdef QT_BUILD_NETWORK_LIB
+#define NET_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define NET_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define NET_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define NET_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define NET_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define NET_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1065,6 +1077,10 @@ class cs_number<0>
 #define NET_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
 
 #else
+#define NET_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define NET_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define NET_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define NET_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define NET_CS_SLOT_2(slotName)
 #define NET_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1100,6 +1116,10 @@ class cs_number<0>
 
 // ** 5
 #ifdef QT_BUILD_OPENGL_LIB
+#define OPENGL_CS_OBJECT(className)                               CS_OBJECT(className)
+#define OPENGL_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
+#define OPENGL_CS_GADGET(className)                               CS_GADGET(className)
+
 #define OPENGL_CS_SLOT_1(access, ...)                             CS_SLOT_1(access, __VA_ARGS__)
 #define OPENGL_CS_SLOT_2(slotName)                                CS_SLOT_2(slotName)
 #define OPENGL_CS_SLOT_OVERLOAD(slotName, argTypes)               CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1109,6 +1129,10 @@ class cs_number<0>
 #define OPENGL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define OPENGL_CS_OBJECT(className)                               CS_OBJECT_OUTSIDE(className)
+#define OPENGL_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define OPENGL_CS_GADGET(className)                               CS_GADGET_OUTSIDE(className)
+
 #define OPENGL_CS_SLOT_1(access, ...)                             __VA_ARGS__;
 #define OPENGL_CS_SLOT_2(slotName)
 #define OPENGL_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1122,6 +1146,10 @@ class cs_number<0>
 
 // ** 6
 #ifdef QT_BUILD_PHONON_LIB
+#define PHN_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define PHN_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define PHN_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define PHN_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define PHN_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1151,6 +1179,10 @@ class cs_number<0>
 #define PHN_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
 
 #else
+#define PHN_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define PHN_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define PHN_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define PHN_CS_SLOT_2(slotName)
 #define PHN_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1184,6 +1216,10 @@ class cs_number<0>
 
 // ** 7
 #ifdef QT_BUILD_SCRIPT_LIB
+#define SCRIPT_CS_OBJECT(className)                               CS_OBJECT(className)
+#define SCRIPT_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
+#define SCRIPT_CS_GADGET(className)                               CS_GADGET(className)
+
 #define SCRIPT_CS_SLOT_1(access, ...)                             CS_SLOT_1(access, __VA_ARGS__)
 #define SCRIPT_CS_SLOT_2(slotName)                                CS_SLOT_2(slotName)
 #define SCRIPT_CS_SLOT_OVERLOAD(slotName, argTypes)               CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1193,6 +1229,10 @@ class cs_number<0>
 #define SCRIPT_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define SCRIPT_CS_OBJECT(className)                               CS_OBJECT_OUTSIDE(className)
+#define SCRIPT_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define SCRIPT_CS_GADGET(className)                               CS_GADGET_OUTSIDE(className)
+
 #define SCRIPT_CS_SLOT_1(access, ...)                             __VA_ARGS__;
 #define SCRIPT_CS_SLOT_2(slotName)
 #define SCRIPT_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1205,6 +1245,10 @@ class cs_number<0>
 
 // ** 8
 #ifdef QT_BUILD_SCRIPTTOOLS_LIB
+#define SCRIPT_T_CS_OBJECT(className)                             CS_OBJECT(className)
+#define SCRIPT_T_CS_OBJECT_MULTIPLE(className, parentX)           CS_OBJECT_MULTIPLE(className, parentX)
+#define SCRIPT_T_CS_GADGET(className)                             CS_GADGET(className)
+
 #define SCRIPT_T_CS_SLOT_1(access, ...)                           CS_SLOT_1(access, __VA_ARGS__)
 #define SCRIPT_T_CS_SLOT_2(slotName)                              CS_SLOT_2(slotName)
 #define SCRIPT_T_CS_SLOT_OVERLOAD(slotName, argTypes)             CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1214,6 +1258,10 @@ class cs_number<0>
 #define SCRIPT_T_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)    CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define SCRIPT_T_CS_OBJECT(className)                             CS_OBJECT_OUTSIDE(className)
+#define SCRIPT_T_CS_OBJECT_MULTIPLE(className, parentX)           CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define SCRIPT_T_CS_GADGET(className)                             CS_GADGET_OUTSIDE(className)
+
 #define SCRIPT_T_CS_SLOT_1(access, ...)                           __VA_ARGS__;
 #define SCRIPT_T_CS_SLOT_2(slotName)
 #define SCRIPT_T_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1226,6 +1274,10 @@ class cs_number<0>
 
 // ** 9
 #ifdef QT_BUILD_SQL_LIB
+#define SQL_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define SQL_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define SQL_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define SQL_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define SQL_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define SQL_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1235,6 +1287,10 @@ class cs_number<0>
 #define SQL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define SQL_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define SQL_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define SQL_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define SQL_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define SQL_CS_SLOT_2(slotName)
 #define SQL_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1248,6 +1304,10 @@ class cs_number<0>
 
 // ** 10
 #ifdef QT_BUILD_SVG_LIB
+#define SVG_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define SVG_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define SVG_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define SVG_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define SVG_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define SVG_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1274,6 +1334,10 @@ class cs_number<0>
 #define SVG_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
 
 #else
+#define SVG_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define SVG_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define SVG_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define SVG_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define SVG_CS_SLOT_2(slotName)
 #define SVG_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1304,6 +1368,10 @@ class cs_number<0>
 
 // ** 11
 #ifdef QT_BUILD_XMLPATTERNS_LIB
+#define XMLP_CS_OBJECT(className)                                 CS_OBJECT(className)
+#define XMLP_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE(className, parentX)
+#define XMLP_CS_GADGET(className)                                 CS_GADGET(className)
+
 #define XMLP_CS_SLOT_1(access, ...)                               CS_SLOT_1(access, __VA_ARGS__)
 #define XMLP_CS_SLOT_2(slotName)                                  CS_SLOT_2(slotName)
 #define XMLP_CS_SLOT_OVERLOAD(slotName, argTypes)                 CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1313,7 +1381,11 @@ class cs_number<0>
 #define XMLP_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)        CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
-#define XMLP_CS_SLOT_1(access, ...)                                 __VA_ARGS__;
+#define XMLP_CS_OBJECT(className)                                 CS_OBJECT_OUTSIDE(className)
+#define XMLP_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define XMLP_CS_GADGET(className)                                 CS_GADGET_OUTSIDE(className)
+
+#define XMLP_CS_SLOT_1(access, ...)                               __VA_ARGS__;
 #define XMLP_CS_SLOT_2(slotName)
 #define XMLP_CS_SLOT_OVERLOAD(slotName, argTypes)
 
@@ -1325,6 +1397,10 @@ class cs_number<0>
 
 // ** 12
 #ifdef BUILDING_WEBKIT
+#define WEB_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define WEB_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define WEB_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define WEB_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define WEB_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define WEB_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1357,6 +1433,10 @@ class cs_number<0>
 #define WEB_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
 
 #else
+#define WEB_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define WEB_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define WEB_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define WEB_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define WEB_CS_SLOT_2(slotName)
 #define WEB_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1393,6 +1473,10 @@ class cs_number<0>
 
 // ** 13
 #ifdef QT_BUILD_DECLARE_LIB
+#define DECL_CS_OBJECT(className)                                 CS_OBJECT(className)
+#define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE(className, parentX)
+#define DECL_CS_GADGET(className)                                 CS_GADGET(className)
+
 #define DECL_CS_SLOT_1(access, ...)                               CS_SLOT_1(access, __VA_ARGS__)
 #define DECL_CS_SLOT_2(slotName)                                  CS_SLOT_2(slotName)
 #define DECL_CS_SLOT_OVERLOAD(slotName, argTypes)                 CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1426,6 +1510,10 @@ class cs_number<0>
 #define DECL_CS_PROPERTY_FINAL(name)                              CS_PROPERTY_FINAL(name)
 
 #else
+#define DECL_CS_OBJECT(className)                                 CS_OBJECT_OUTSIDE(className)
+#define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define DECL_CS_GADGET(className)                                 CS_GADGET_OUTSIDE(className)
+
 #define DECL_CS_SLOT_1(access, ...)                               __VA_ARGS__;
 #define DECL_CS_SLOT_2(slotName)
 #define DECL_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1463,6 +1551,10 @@ class cs_number<0>
 
 // ** 14
 #ifdef QT_BUILD_GSTREAMER_LIB
+#define GSTRM_CS_OBJECT(className)                                CS_OBJECT(className)
+#define GSTRM_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE(className, parentX)
+#define GSTRM_CS_GADGET(className)                                CS_GADGET(className)
+
 #define GSTRM_CS_SLOT_1(access, ...)                              CS_SLOT_1(access, __VA_ARGS__)
 #define GSTRM_CS_SLOT_2(slotName)                                 CS_SLOT_2(slotName)
 #define GSTRM_CS_SLOT_OVERLOAD(slotName, argTypes)                CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1472,6 +1564,10 @@ class cs_number<0>
 #define GSTRM_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define GSTRM_CS_OBJECT(className)                                CS_OBJECT_OUTSIDE(className)
+#define GSTRM_CS_OBJECT_MULTIPLE(className, parentX)              CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define GSTRM_CS_GADGET(className)                                CS_GADGET_OUTSIDE(className)
+
 #define GSTRM_CS_SLOT_1(access, ...)                              __VA_ARGS__;
 #define GSTRM_CS_SLOT_2(slotName)
 #define GSTRM_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1485,6 +1581,10 @@ class cs_number<0>
 
 // ** 15
 #ifdef QT_BUILD_DS9_LIB
+#define DS9_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define DS9_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define DS9_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define DS9_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define DS9_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define DS9_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1494,6 +1594,10 @@ class cs_number<0>
 #define DS9_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define DS9_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define DS9_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define DS9_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define DS9_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define DS9_CS_SLOT_2(slotName)
 #define DS9_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1507,6 +1611,10 @@ class cs_number<0>
 
 // ** 16
 #ifdef QT_BUILD_QT7_LIB
+#define QT7_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define QT7_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define QT7_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define QT7_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define QT7_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define QT7_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -1516,6 +1624,10 @@ class cs_number<0>
 #define QT7_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
+#define QT7_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define QT7_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define QT7_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define QT7_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define QT7_CS_SLOT_2(slotName)
 #define QT7_CS_SLOT_OVERLOAD(slotName, argTypes)

@@ -38,7 +38,7 @@ class QLocalServerPrivate;
 
 class Q_NETWORK_EXPORT QLocalServer : public QObject
 {
-   CS_OBJECT(QLocalServer)
+   NET_CS_OBJECT(QLocalServer)
    Q_DECLARE_PRIVATE(QLocalServer)
 
  public:

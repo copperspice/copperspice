@@ -103,7 +103,7 @@ class WorkerErrorEvent : public QEvent
 
 class QDeclarativeWorkerScriptEnginePrivate : public QObject
 {
-   CS_OBJECT(QDeclarativeWorkerScriptEnginePrivate)
+   DECL_CS_OBJECT(QDeclarativeWorkerScriptEnginePrivate)
 
  public:
    enum WorkerEventTypes {

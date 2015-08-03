@@ -55,7 +55,7 @@ class QGLWindowSurfaceGLPaintDevice : public QGLPaintDevice
 
 class Q_OPENGL_EXPORT QGLWindowSurface : public QObject, public QWindowSurface // , public QPaintDevice
 {
-   CS_OBJECT(QGLWindowSurface)
+   OPENGL_CS_OBJECT(QGLWindowSurface)
  public:
    QGLWindowSurface(QWidget *window);
    ~QGLWindowSurface();

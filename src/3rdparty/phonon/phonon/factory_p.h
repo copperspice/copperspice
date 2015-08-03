@@ -61,7 +61,7 @@ namespace Factory
 {    
     class Sender : public QObject
     {
-        CS_OBJECT(Sender)
+        PHN_CS_OBJECT(Sender)
 
         public:            
             PHN_CS_SIGNAL_1(Public, void backendChanged())

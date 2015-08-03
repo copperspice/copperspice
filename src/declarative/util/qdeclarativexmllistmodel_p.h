@@ -50,7 +50,7 @@ struct QDeclarativeXmlQueryResult {
 
 class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeXmlListModel)
+   DECL_CS_OBJECT(QDeclarativeXmlListModel)
    CS_INTERFACES(QDeclarativeParserStatus)
    CS_ENUM(Status)
 
@@ -153,7 +153,7 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
 
 class QDeclarativeXmlListModelRole : public QObject
 {
-   CS_OBJECT(QDeclarativeXmlListModelRole)
+   DECL_CS_OBJECT(QDeclarativeXmlListModelRole)
    CS_PROPERTY_READ(name, name)
    CS_PROPERTY_WRITE(name, setName)
    CS_PROPERTY_NOTIFY(name, nameChanged)

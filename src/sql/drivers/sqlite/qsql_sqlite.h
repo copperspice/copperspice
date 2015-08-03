@@ -71,7 +71,7 @@ class QSQLiteResult : public QSqlCachedResult
 
 class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
 {
-   CS_OBJECT(QSQLiteDriver)
+   SQL_CS_OBJECT(QSQLiteDriver)
    friend class QSQLiteResult;
 
  public:

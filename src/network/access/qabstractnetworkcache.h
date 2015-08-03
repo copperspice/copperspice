@@ -90,7 +90,7 @@ Q_NETWORK_EXPORT QDataStream &operator>>(QDataStream &, QNetworkCacheMetaData &)
 
 class Q_NETWORK_EXPORT QAbstractNetworkCache : public QObject
 {
-   CS_OBJECT(QAbstractNetworkCache)
+   NET_CS_OBJECT(QAbstractNetworkCache)
 
  public:
    virtual ~QAbstractNetworkCache();

@@ -84,7 +84,7 @@ class QMYSQLResult : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 {
-   CS_OBJECT(QMYSQLDriver)
+   SQL_CS_OBJECT(QMYSQLDriver)
    friend class QMYSQLResult;
 
  public:

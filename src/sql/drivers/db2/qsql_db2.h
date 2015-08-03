@@ -72,7 +72,7 @@ class QDB2Result : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_DB2 QDB2Driver : public QSqlDriver
 {
-   CS_OBJECT(QDB2Driver)
+   SQL_CS_OBJECT(QDB2Driver)
 
  public:
    explicit QDB2Driver(QObject *parent = 0);

@@ -37,7 +37,7 @@ class QGraphicsSvgItemPrivate;
 
 class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
 {
-   CS_OBJECT(QGraphicsSvgItem)
+   SVG_CS_OBJECT(QGraphicsSvgItem)
    CS_INTERFACES(QGraphicsItem)
 
    SVG_CS_PROPERTY_READ(elementId, elementId)

@@ -41,7 +41,7 @@ class QUrl;
 // QNetworkAccessManager, e.g. existing TCP connections or credentials.
 class QNetworkAccessCache: public QObject
 {
-   CS_OBJECT(QNetworkAccessCache)
+   NET_CS_OBJECT(QNetworkAccessCache)
 
  public:
    struct Node;

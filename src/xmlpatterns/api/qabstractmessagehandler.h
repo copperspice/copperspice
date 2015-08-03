@@ -36,7 +36,7 @@ class QAbstractMessageHandlerPrivate;
 
 class Q_XMLPATTERNS_EXPORT QAbstractMessageHandler : public QObject
 {
-   CS_OBJECT(QAbstractMessageHandler)
+   XMLP_CS_OBJECT(QAbstractMessageHandler)
 
  public:
    QAbstractMessageHandler(QObject *parent = 0);

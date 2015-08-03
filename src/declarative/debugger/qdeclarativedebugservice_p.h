@@ -36,7 +36,7 @@ class QDeclarativeDebugServicePrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeDebugService : public QObject
 {
-   CS_OBJECT(QDeclarativeDebugService)
+   DECL_CS_OBJECT(QDeclarativeDebugService)
 
    Q_DECLARE_PRIVATE(QDeclarativeDebugService)
    Q_DISABLE_COPY(QDeclarativeDebugService)

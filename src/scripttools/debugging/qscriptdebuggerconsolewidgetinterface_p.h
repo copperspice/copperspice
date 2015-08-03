@@ -37,7 +37,7 @@ class QScriptDebuggerConsoleWidgetInterfacePrivate;
 
 class QScriptDebuggerConsoleWidgetInterface : public QWidget, public QScriptMessageHandlerInterface
 {
-   CS_OBJECT(QScriptDebuggerConsoleWidgetInterface)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerConsoleWidgetInterface)
 
  public:
    enum InputMode {

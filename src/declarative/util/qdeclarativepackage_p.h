@@ -35,7 +35,7 @@ class QDeclarativePackageAttached;
 
 class QDeclarativePackage : public QObject
 {
-   CS_OBJECT(QDeclarativePackage)
+   DECL_CS_OBJECT(QDeclarativePackage)
    Q_DECLARE_PRIVATE(QDeclarativePackage)
 
    CS_CLASSINFO("DefaultProperty", "data")
@@ -56,7 +56,7 @@ class QDeclarativePackage : public QObject
 
 class QDeclarativePackageAttached : public QObject
 {
-   CS_OBJECT(QDeclarativePackageAttached)
+   DECL_CS_OBJECT(QDeclarativePackageAttached)
    CS_PROPERTY_READ(name, name)
    CS_PROPERTY_WRITE(name, setName)
  public:

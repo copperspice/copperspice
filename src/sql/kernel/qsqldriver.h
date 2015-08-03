@@ -45,7 +45,7 @@ class QVariant;
 
 class Q_SQL_EXPORT QSqlDriver : public QObject
 {
-   CS_OBJECT(QSqlDriver)
+   SQL_CS_OBJECT(QSqlDriver)
    Q_DECLARE_PRIVATE(QSqlDriver)
 
  public:

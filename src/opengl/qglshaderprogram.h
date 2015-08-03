@@ -42,7 +42,7 @@ class QGLShaderPrivate;
 
 class Q_OPENGL_EXPORT QGLShader : public QObject
 {
-   CS_OBJECT(QGLShader)
+   OPENGL_CS_OBJECT(QGLShader)
 
  public:
    enum ShaderTypeBit {
@@ -98,7 +98,7 @@ class QGLShaderProgramPrivate;
 
 class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
 {
-   CS_OBJECT(QGLShaderProgram)
+   OPENGL_CS_OBJECT(QGLShaderProgram)
 
  public:
    explicit QGLShaderProgram(QObject *parent = 0);

@@ -101,7 +101,7 @@ namespace Phonon
 template<ObjectDescriptionType type>
 class PHONON_TEMPLATE_CLASS_EXPORT ObjectDescriptionModel : public QAbstractListModel
 {
-   CS_OBJECT(ObjectDescriptionModel)
+   PHN_CS_OBJECT(ObjectDescriptionModel)
 
 public:    
          

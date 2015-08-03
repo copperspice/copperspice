@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativePinch : public QObject
 {
-   CS_OBJECT(QDeclarativePinch)
+   DECL_CS_OBJECT(QDeclarativePinch)
 
    CS_ENUM(Axis)
    CS_PROPERTY_READ(*target, target)
@@ -235,7 +235,7 @@ class QDeclarativePinch : public QObject
 
 class QDeclarativePinchEvent : public QObject
 {
-   CS_OBJECT(QDeclarativePinchEvent)
+   DECL_CS_OBJECT(QDeclarativePinchEvent)
 
    CS_PROPERTY_READ(center, center)
    CS_PROPERTY_READ(startCenter, startCenter)
@@ -354,7 +354,7 @@ class QDeclarativeMouseEvent;
 class QDeclarativePinchAreaPrivate;
 class QDeclarativePinchArea : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativePinchArea)
+   DECL_CS_OBJECT(QDeclarativePinchArea)
 
    CS_PROPERTY_READ(enabled, isEnabled)
    CS_PROPERTY_WRITE(enabled, setEnabled)

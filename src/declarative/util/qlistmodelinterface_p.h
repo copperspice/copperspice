@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QListModelInterface : public QObject
 {
-   CS_OBJECT(QListModelInterface)
+   DECL_CS_OBJECT(QListModelInterface)
 
  public:
    QListModelInterface(QObject *parent = 0) : QObject(parent) {}

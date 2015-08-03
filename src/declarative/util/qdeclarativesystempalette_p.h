@@ -36,7 +36,7 @@ class QDeclarativeSystemPalettePrivate;
 
 class QDeclarativeSystemPalette : public QObject
 {
-   CS_OBJECT(QDeclarativeSystemPalette)
+   DECL_CS_OBJECT(QDeclarativeSystemPalette)
 
    CS_ENUM(ColorGroup)
    Q_DECLARE_PRIVATE(QDeclarativeSystemPalette)

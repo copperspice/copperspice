@@ -37,7 +37,7 @@ class QDeclarativeTimerPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeTimer : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeTimer)
+   DECL_CS_OBJECT(QDeclarativeTimer)
 
    Q_DECLARE_PRIVATE(QDeclarativeTimer)
 

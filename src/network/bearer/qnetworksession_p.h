@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
 {
-   CS_OBJECT(QNetworkSessionPrivate)
+   NET_CS_OBJECT(QNetworkSessionPrivate)
 
    friend class QNetworkSession;
 

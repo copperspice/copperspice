@@ -35,7 +35,7 @@ class QScriptErrorLogWidgetInterfacePrivate;
 
 class QScriptErrorLogWidgetInterface: public QWidget, public QScriptMessageHandlerInterface
 {
-   CS_OBJECT(QScriptErrorLogWidgetInterface)
+   SCRIPT_T_CS_OBJECT(QScriptErrorLogWidgetInterface)
 
  public:
    ~QScriptErrorLogWidgetInterface();

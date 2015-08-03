@@ -54,7 +54,7 @@ class QNetworkSessionPrivate;
 
 class QNetworkSessionExport QNetworkSession : public QObject
 {
-   CS_OBJECT(QNetworkSession)
+   NET_CS_OBJECT(QNetworkSession)
 
  public:
    enum State {

@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeFontLoaderPrivate;
 class QDeclarativeFontLoader : public QObject
 {
-   CS_OBJECT(QDeclarativeFontLoader)
+   DECL_CS_OBJECT(QDeclarativeFontLoader)
    Q_DECLARE_PRIVATE(QDeclarativeFontLoader)
 
    CS_ENUM(Status)

@@ -175,7 +175,7 @@ class QDeclarativeFlickablePrivate : public QDeclarativeItemPrivate, public QDec
 
 class QDeclarativeFlickableVisibleArea : public QObject
 {
-   CS_OBJECT(QDeclarativeFlickableVisibleArea)
+   DECL_CS_OBJECT(QDeclarativeFlickableVisibleArea)
 
    CS_PROPERTY_READ(xPosition, xPosition)
    CS_PROPERTY_NOTIFY(xPosition, xPositionChanged)

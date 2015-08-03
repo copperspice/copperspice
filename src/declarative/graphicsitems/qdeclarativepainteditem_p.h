@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 class QDeclarativePaintedItemPrivate;
 class QDeclarativePaintedItem : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativePaintedItem)
+   DECL_CS_OBJECT(QDeclarativePaintedItem)
 
    CS_PROPERTY_READ(contentsSize, contentsSize)
    CS_PROPERTY_WRITE(contentsSize, setContentsSize)

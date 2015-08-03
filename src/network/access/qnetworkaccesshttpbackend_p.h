@@ -45,7 +45,7 @@ class QNetworkAccessHttpBackendIODevice;
 
 class QNetworkAccessHttpBackend: public QNetworkAccessBackend
 {
-   CS_OBJECT(QNetworkAccessHttpBackend)
+   NET_CS_OBJECT(QNetworkAccessHttpBackend)
 
  public:
    QNetworkAccessHttpBackend();

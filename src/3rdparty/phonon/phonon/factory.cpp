@@ -58,7 +58,7 @@ class PlatformPlugin;
 class FactoryPrivate : public Phonon::Factory::Sender
 {
    
-    CS_OBJECT(FactoryPrivate)
+    PHN_CS_OBJECT(FactoryPrivate)
 
    friend QObject *Factory::backend(bool);
 

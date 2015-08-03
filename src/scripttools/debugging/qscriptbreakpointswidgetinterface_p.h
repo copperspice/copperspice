@@ -36,7 +36,7 @@ class QScriptBreakpointsWidgetInterfacePrivate;
 
 class QScriptBreakpointsWidgetInterface : public QWidget
 {
-   CS_OBJECT(QScriptBreakpointsWidgetInterface)
+   SCRIPT_T_CS_OBJECT(QScriptBreakpointsWidgetInterface)
 
  public:
    ~QScriptBreakpointsWidgetInterface();

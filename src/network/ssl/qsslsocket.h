@@ -46,7 +46,7 @@ class QSslSocketPrivate;
 
 class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 {
-   CS_OBJECT(QSslSocket)
+   NET_CS_OBJECT(QSslSocket)
 
  public:
    enum SslMode {

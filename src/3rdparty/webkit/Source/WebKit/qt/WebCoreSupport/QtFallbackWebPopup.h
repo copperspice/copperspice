@@ -39,7 +39,7 @@ class ChromeClientQt;
 class QtFallbackWebPopupCombo;
 
 class QtFallbackWebPopup : public QWebSelectMethod {
-    CS_OBJECT(QtFallbackWebPopup)
+    WEB_CS_OBJECT(QtFallbackWebPopup)
 
 public:
     QtFallbackWebPopup(const ChromeClientQt*);

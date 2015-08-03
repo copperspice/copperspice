@@ -41,7 +41,7 @@ class QDeclarativeVisualDataModelPrivate;
 
 class QDeclarativeVisualModel : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualModel)
+   DECL_CS_OBJECT(QDeclarativeVisualModel)
 
    CS_PROPERTY_READ(count, count)
    CS_PROPERTY_NOTIFY(count, countChanged)
@@ -93,7 +93,7 @@ class QDeclarativeVisualItemModelPrivate;
 
 class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
 {
-   CS_OBJECT(QDeclarativeVisualItemModel)
+   DECL_CS_OBJECT(QDeclarativeVisualItemModel)
    Q_DECLARE_PRIVATE(QDeclarativeVisualItemModel)
 
    CS_PROPERTY_READ(children, children)
@@ -131,7 +131,7 @@ class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
 
 class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
 {
-   CS_OBJECT(QDeclarativeVisualDataModel)
+   DECL_CS_OBJECT(QDeclarativeVisualDataModel)
    Q_DECLARE_PRIVATE(QDeclarativeVisualDataModel)
 
    CS_PROPERTY_READ(model, model)
@@ -228,7 +228,7 @@ class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
 
 class QDeclarativeVisualItemModelAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualItemModelAttached)
+   DECL_CS_OBJECT(QDeclarativeVisualItemModelAttached)
 
  public:
    QDeclarativeVisualItemModelAttached(QObject *parent)

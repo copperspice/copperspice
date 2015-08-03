@@ -37,7 +37,8 @@ namespace QPatternist {
  */
 class QIODeviceDelegate : public QNetworkReply
 {
-   CS_OBJECT(QIODeviceDelegate)
+   XMLP_CS_OBJECT(QIODeviceDelegate)
+
  public:
    QIODeviceDelegate(QIODevice *const source);
 

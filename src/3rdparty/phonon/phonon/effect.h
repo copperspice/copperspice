@@ -49,7 +49,7 @@ namespace Phonon
    
     class PHONON_EXPORT Effect : public QObject, public MediaNode
     {
-        CS_OBJECT(Effect)
+        PHN_CS_OBJECT(Effect)
         K_DECLARE_PRIVATE(Effect)
 
         public:

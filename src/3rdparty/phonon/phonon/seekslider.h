@@ -47,7 +47,7 @@ class SeekSliderPrivate;
 
 class PHONON_EXPORT SeekSlider : public QWidget
 {
-    CS_OBJECT(SeekSlider)
+    PHN_CS_OBJECT(SeekSlider)
     K_DECLARE_PRIVATE(SeekSlider)
 
     PHN_CS_PROPERTY_READ(iconVisible, isIconVisible)

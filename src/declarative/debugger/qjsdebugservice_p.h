@@ -53,7 +53,7 @@ struct JSAgentCoverageData {
 
 class QJSDebugService : public QDeclarativeDebugService
 {
-   CS_OBJECT(QJSDebugService)
+   DECL_CS_OBJECT(QJSDebugService)
 
  public:
    QJSDebugService(QObject *parent = 0);

@@ -41,7 +41,7 @@ class QDeclarativeState;
 
 class QDeclarativeEngineDebugService : public QDeclarativeDebugService
 {
-   CS_OBJECT(QDeclarativeEngineDebugService)
+   DECL_CS_OBJECT(QDeclarativeEngineDebugService)
  public:
    QDeclarativeEngineDebugService(QObject * = 0);
 

@@ -35,7 +35,7 @@ class QDeclarativeEngine;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeExtensionPlugin : public QObject, public QDeclarativeExtensionInterface
 {
-   CS_OBJECT(QDeclarativeExtensionPlugin)
+   DECL_CS_OBJECT(QDeclarativeExtensionPlugin)
    CS_INTERFACES(QDeclarativeExtensionInterface)
  public:
    explicit QDeclarativeExtensionPlugin(QObject *parent = 0);

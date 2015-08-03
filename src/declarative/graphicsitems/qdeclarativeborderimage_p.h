@@ -37,7 +37,7 @@ class QDeclarativeBorderImagePrivate;
 
 class QDeclarativeBorderImage : public QDeclarativeImageBase
 {
-   CS_OBJECT(QDeclarativeBorderImage)
+   DECL_CS_OBJECT(QDeclarativeBorderImage)
    CS_ENUM(TileMode)
 
    CS_PROPERTY_READ(*border, border)

@@ -40,7 +40,7 @@ class QDeclarativeConnectionsPrivate;
 
 class QDeclarativeConnections : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeConnections)
+   DECL_CS_OBJECT(QDeclarativeConnections)
    Q_DECLARE_PRIVATE(QDeclarativeConnections)
 
    CS_INTERFACES(QDeclarativeParserStatus)

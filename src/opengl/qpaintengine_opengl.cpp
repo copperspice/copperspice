@@ -213,7 +213,7 @@ Q_GLOBAL_STATIC(QGLMaskTextureCache, qt_mask_texture_cache)
 
 class QGLOffscreen : public QObject
 {
-   CS_OBJECT(QGLOffscreen)
+   OPENGL_CS_OBJECT(QGLOffscreen)
 
  public:
    QGLOffscreen()
@@ -510,7 +510,7 @@ typedef QMultiHash<const QGLContext *, GLProgram> QGLProgramHash;
 
 class QGLProgramCache : public QObject
 {
-   CS_OBJECT(QGLProgramCache)
+   OPENGL_CS_OBJECT(QGLProgramCache)
 
  public:
    QGLProgramCache() {
@@ -628,7 +628,7 @@ class QOpenGLPaintEnginePrivate;
 
 class QGLPrivateCleanup : public QObject
 {
-   CS_OBJECT(QGLPrivateCleanup)
+   OPENGL_CS_OBJECT(QGLPrivateCleanup)
 
  public:
    QGLPrivateCleanup(QOpenGLPaintEnginePrivate *priv)
@@ -997,7 +997,7 @@ Q_GLOBAL_STATIC(QGLStrokeCache, qt_opengl_stroke_cache)
 
 class QGLGradientCache : public QObject
 {
-   CS_OBJECT(QGLGradientCache)
+   OPENGL_CS_OBJECT(QGLGradientCache)
 
    struct CacheInfo {
       inline CacheInfo(QGradientStops s, qreal op, QGradient::InterpolationMode mode) :
@@ -4680,7 +4680,7 @@ static inline void qt_delete_glyph_hash(QGLGlyphHash *hash)
 
 class QGLGlyphCache : public QObject
 {
-   CS_OBJECT(QGLGlyphCache)
+   OPENGL_CS_OBJECT(QGLGlyphCache)
 
  public:
    QGLGlyphCache() : QObject(0) {

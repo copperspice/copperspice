@@ -36,7 +36,7 @@ class QDeclarativeSpringAnimationPrivate;
 
 class QDeclarativeSpringAnimation : public QDeclarativeNumberAnimation
 {
-   CS_OBJECT(QDeclarativeSpringAnimation)
+   DECL_CS_OBJECT(QDeclarativeSpringAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeSpringAnimation)
 
    CS_INTERFACES(QDeclarativePropertyValueSource)

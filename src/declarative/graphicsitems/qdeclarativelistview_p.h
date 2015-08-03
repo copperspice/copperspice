@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeViewSection : public QObject
 {
-   CS_OBJECT(QDeclarativeViewSection)
+   DECL_CS_OBJECT(QDeclarativeViewSection)
 
    CS_PROPERTY_READ(property, property)
    CS_PROPERTY_WRITE(property, setProperty)
@@ -88,7 +88,7 @@ class QDeclarativeListViewPrivate;
 
 class QDeclarativeListView : public QDeclarativeFlickable
 {
-   CS_OBJECT(QDeclarativeListView)
+   DECL_CS_OBJECT(QDeclarativeListView)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeListView)
 
    CS_PROPERTY_READ(model, model)
@@ -369,7 +369,7 @@ class QDeclarativeListView : public QDeclarativeFlickable
 
 class QDeclarativeListViewAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeListViewAttached)
+   DECL_CS_OBJECT(QDeclarativeListViewAttached)
  public:
    QDeclarativeListViewAttached(QObject *parent)
       : QObject(parent), m_view(0), m_isCurrent(false), m_delayRemove(false) {}

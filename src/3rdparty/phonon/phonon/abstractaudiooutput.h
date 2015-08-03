@@ -44,7 +44,7 @@ namespace Phonon
 
     class PHONON_EXPORT AbstractAudioOutput : public QObject, public MediaNode
     {
-        CS_OBJECT(AbstractAudioOutput)
+        PHN_CS_OBJECT(AbstractAudioOutput)
         K_DECLARE_PRIVATE(AbstractAudioOutput)
 
        protected:

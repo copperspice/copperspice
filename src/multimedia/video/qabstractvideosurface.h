@@ -38,7 +38,7 @@ class QAbstractVideoSurfacePrivate;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 {
-   CS_OBJECT(QAbstractVideoSurface)
+   MULTI_CS_OBJECT(QAbstractVideoSurface)
 
  public:
    enum Error {

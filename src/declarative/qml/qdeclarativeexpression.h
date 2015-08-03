@@ -42,7 +42,7 @@ class QScriptValue;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeExpression : public QObject
 {
-   CS_OBJECT(QDeclarativeExpression)
+   DECL_CS_OBJECT(QDeclarativeExpression)
 
  public:
    QDeclarativeExpression();

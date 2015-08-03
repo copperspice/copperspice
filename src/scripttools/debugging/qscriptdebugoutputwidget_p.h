@@ -34,7 +34,7 @@ class QScriptDebugOutputWidgetPrivate;
 
 class QScriptDebugOutputWidget: public QScriptDebugOutputWidgetInterface
 {
-   CS_OBJECT(QScriptDebugOutputWidget)
+   SCRIPT_T_CS_OBJECT(QScriptDebugOutputWidget)
 
  public:
    QScriptDebugOutputWidget(QWidget *parent = 0);

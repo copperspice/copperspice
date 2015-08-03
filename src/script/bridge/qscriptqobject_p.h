@@ -109,10 +109,10 @@ class QObjectDelegate : public QScriptObjectDelegate
 
 class QObjectPrototypeObject : public QObject
 {
-   CS_OBJECT(QObjectPrototypeObject)
+   SCRIPT_CS_OBJECT(QObjectPrototypeObject)
+
  public:
-   QObjectPrototypeObject(QObject *parent = 0)
-      : QObject(parent) { }
+   QObjectPrototypeObject(QObject *parent = 0) : QObject(parent) { }
    ~QObjectPrototypeObject() { }
 };
 

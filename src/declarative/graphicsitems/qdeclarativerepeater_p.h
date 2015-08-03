@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeRepeaterPrivate;
 class QDeclarativeRepeater : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeRepeater)
+   DECL_CS_OBJECT(QDeclarativeRepeater)
 
    DECL_CS_PROPERTY_READ(model, model)
    DECL_CS_PROPERTY_WRITE(model, setModel)

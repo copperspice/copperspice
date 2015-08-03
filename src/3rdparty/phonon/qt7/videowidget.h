@@ -41,7 +41,7 @@ namespace QT7
 
     class VideoWidget : public MediaNode, public Phonon::VideoWidgetInterface
     {
-        CS_OBJECT(VideoWidget)
+        QT7_CS_OBJECT(VideoWidget)
         CS_INTERFACES(Phonon::VideoWidgetInterface)
 
      public:

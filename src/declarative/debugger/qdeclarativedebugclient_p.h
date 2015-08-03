@@ -36,7 +36,7 @@ class QDeclarativeDebugConnectionPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugConnection : public QTcpSocket
 {
-   CS_OBJECT(QDeclarativeDebugConnection)
+   DECL_CS_OBJECT(QDeclarativeDebugConnection)
    Q_DISABLE_COPY(QDeclarativeDebugConnection)
 
  public:
@@ -54,7 +54,7 @@ class QDeclarativeDebugClientPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugClient : public QObject
 {
-   CS_OBJECT(QDeclarativeDebugClient)
+   DECL_CS_OBJECT(QDeclarativeDebugClient)
    Q_DECLARE_PRIVATE(QDeclarativeDebugClient)
    Q_DISABLE_COPY(QDeclarativeDebugClient)
 

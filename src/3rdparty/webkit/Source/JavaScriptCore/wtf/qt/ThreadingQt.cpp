@@ -70,7 +70,7 @@ void ThreadPrivate::run()
 
 class ThreadMonitor : public QObject
 {
-    CS_OBJECT(ThreadMonitor)
+    WEB_CS_OBJECT(ThreadMonitor)
 
 public:
     static ThreadMonitor * instance()

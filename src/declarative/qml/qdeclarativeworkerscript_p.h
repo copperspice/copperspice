@@ -39,7 +39,7 @@ class QDeclarativeWorkerScriptEnginePrivate;
 
 class QDeclarativeWorkerScriptEngine : public QThread
 {
-   CS_OBJECT(QDeclarativeWorkerScriptEngine)
+   DECL_CS_OBJECT(QDeclarativeWorkerScriptEngine)
 
  public:
    QDeclarativeWorkerScriptEngine(QDeclarativeEngine *parent = 0);
@@ -59,7 +59,7 @@ class QDeclarativeWorkerScriptEngine : public QThread
 
 class QDeclarativeWorkerScript : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeWorkerScript)
+   DECL_CS_OBJECT(QDeclarativeWorkerScript)
    CS_PROPERTY_READ(source, source)
    CS_PROPERTY_WRITE(source, setSource)
    CS_PROPERTY_NOTIFY(source, sourceChanged)

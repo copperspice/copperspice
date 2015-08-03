@@ -37,7 +37,7 @@ class QDeclarativeAnimatedImagePrivate;
 
 class QDeclarativeAnimatedImage : public QDeclarativeImage
 {
-   CS_OBJECT(QDeclarativeAnimatedImage)
+   DECL_CS_OBJECT(QDeclarativeAnimatedImage)
 
    CS_PROPERTY_READ(playing, isPlaying)
    CS_PROPERTY_WRITE(playing, setPlaying)

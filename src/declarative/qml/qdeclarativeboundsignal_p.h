@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeAbstractBoundSignal : public QObject
 {
-   CS_OBJECT(QDeclarativeAbstractBoundSignal)
+   DECL_CS_OBJECT(QDeclarativeAbstractBoundSignal)
 
  public:
    QDeclarativeAbstractBoundSignal(QObject *parent = 0);

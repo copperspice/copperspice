@@ -159,7 +159,7 @@ class QDeclarativeBindingPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpression,
    public QDeclarativeAbstractBinding
 {
-   CS_OBJECT(QDeclarativeBinding)
+   DECL_CS_OBJECT(QDeclarativeBinding)
 
  public:
    enum EvaluateFlag { RequiresThisObject = 0x01 };

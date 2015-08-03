@@ -44,7 +44,7 @@ namespace QT7
 
     class VideoEffect : public MediaNode, public Phonon::EffectInterface
     {
-        CS_OBJECT(VideoEffect)
+        QT7_CS_OBJECT(VideoEffect)
         CS_INTERFACES(Phonon::EffectInterface)
 
         public:

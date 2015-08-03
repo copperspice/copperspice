@@ -35,7 +35,7 @@ class QDeclarativeImagePrivate;
 
 class QDeclarativeImage : public QDeclarativeImageBase
 {
-   CS_OBJECT(QDeclarativeImage)
+   DECL_CS_OBJECT(QDeclarativeImage)
    CS_ENUM(FillMode)
 
    CS_PROPERTY_READ(fillMode, fillMode)

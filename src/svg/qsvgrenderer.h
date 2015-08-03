@@ -44,7 +44,7 @@ class QByteArray;
 
 class Q_SVG_EXPORT QSvgRenderer : public QObject
 {
-   CS_OBJECT(QSvgRenderer)
+   SVG_CS_OBJECT(QSvgRenderer)
 
    SVG_CS_PROPERTY_READ(viewBox, viewBoxF)
    SVG_CS_PROPERTY_WRITE(viewBox, cs_setViewBox)

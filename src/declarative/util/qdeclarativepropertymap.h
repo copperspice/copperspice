@@ -37,7 +37,7 @@ class QDeclarativePropertyMapPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativePropertyMap : public QObject
 {
-   CS_OBJECT(QDeclarativePropertyMap)
+   DECL_CS_OBJECT(QDeclarativePropertyMap)
 
  public:
    QDeclarativePropertyMap(QObject *parent = 0);

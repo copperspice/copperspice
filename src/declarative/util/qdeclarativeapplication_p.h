@@ -36,7 +36,7 @@ class QDeclarativeApplicationPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeApplication : public QObject
 {
-   CS_OBJECT(QDeclarativeApplication)
+   DECL_CS_OBJECT(QDeclarativeApplication)
    CS_PROPERTY_READ(active, active)
    CS_PROPERTY_NOTIFY(active, activeChanged)
    CS_PROPERTY_READ(layoutDirection, layoutDirection)

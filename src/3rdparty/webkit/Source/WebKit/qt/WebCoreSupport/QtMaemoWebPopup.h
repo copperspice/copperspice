@@ -31,7 +31,7 @@ class QListWidget;
 namespace WebCore {
 
 class Maemo5Popup : public QDialog {
-    CS_OBJECT(Maemo5Popup)
+    WEB_CS_OBJECT(Maemo5Popup)
 public:
     Maemo5Popup(const QWebSelectData& data) : m_data(data) {}
 
@@ -51,7 +51,7 @@ protected:
 
 
 class QtMaemoWebPopup : public QWebSelectMethod {
-    CS_OBJECT(QtMaemoWebPopup)
+    WEB_CS_OBJECT(QtMaemoWebPopup)
 public:
     QtMaemoWebPopup();
     ~QtMaemoWebPopup();
@@ -75,7 +75,7 @@ private:
 
 
 class Maemo5SingleSelectionPopup : public Maemo5Popup {
-    CS_OBJECT(Maemo5SingleSelectionPopup)
+    WEB_CS_OBJECT(Maemo5SingleSelectionPopup)
 
 public:
     Maemo5SingleSelectionPopup(const QWebSelectData& data);
@@ -83,7 +83,7 @@ public:
 
 
 class Maemo5MultipleSelectionPopup : public Maemo5Popup {
-    CS_OBJECT(Maemo5MultipleSelectionPopup)
+    WEB_CS_OBJECT(Maemo5MultipleSelectionPopup)
 
 public:
     Maemo5MultipleSelectionPopup(const QWebSelectData& data);

@@ -53,7 +53,7 @@ class AudioOutputAdaptor: public QDBusAbstractAdaptor
     friend class Phonon::AudioOutputPrivate;
     friend class Phonon::AudioOutput;
 
-    CS_OBJECT(AudioOutputAdaptor)
+    PHN_CS_OBJECT(AudioOutputAdaptor)
 
     CS_CLASSINFO("D-Bus Interface", "org.kde.Phonon.AudioOutput")
     CS_CLASSINFO("D-Bus Introspection", ""

@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeValueType : public QObject
 {
-   CS_OBJECT(QDeclarativeValueType)
+   DECL_CS_OBJECT(QDeclarativeValueType)
  public:
    QDeclarativeValueType(QObject *parent = 0);
    virtual void read(QObject *, int) = 0;
@@ -82,7 +82,7 @@ class QDeclarativePointFValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(x, setX)
    CS_PROPERTY_READ(y, y)
    CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativePointFValueType)
+   DECL_CS_OBJECT(QDeclarativePointFValueType)
  public:
    QDeclarativePointFValueType(QObject *parent = 0);
 
@@ -106,7 +106,7 @@ class QDeclarativePointValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(x, setX)
    CS_PROPERTY_READ(y, y)
    CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativePointValueType)
+   DECL_CS_OBJECT(QDeclarativePointValueType)
  public:
    QDeclarativePointValueType(QObject *parent = 0);
 
@@ -130,7 +130,7 @@ class QDeclarativeSizeFValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(width, setWidth)
    CS_PROPERTY_READ(height, height)
    CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeSizeFValueType)
+   DECL_CS_OBJECT(QDeclarativeSizeFValueType)
  public:
    QDeclarativeSizeFValueType(QObject *parent = 0);
 
@@ -154,7 +154,7 @@ class QDeclarativeSizeValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(width, setWidth)
    CS_PROPERTY_READ(height, height)
    CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeSizeValueType)
+   DECL_CS_OBJECT(QDeclarativeSizeValueType)
  public:
    QDeclarativeSizeValueType(QObject *parent = 0);
 
@@ -182,7 +182,7 @@ class QDeclarativeRectFValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(width, setWidth)
    CS_PROPERTY_READ(height, height)
    CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeRectFValueType)
+   DECL_CS_OBJECT(QDeclarativeRectFValueType)
  public:
    QDeclarativeRectFValueType(QObject *parent = 0);
 
@@ -215,7 +215,7 @@ class QDeclarativeRectValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(width, setWidth)
    CS_PROPERTY_READ(height, height)
    CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeRectValueType)
+   DECL_CS_OBJECT(QDeclarativeRectValueType)
  public:
    QDeclarativeRectValueType(QObject *parent = 0);
 
@@ -244,7 +244,7 @@ class QDeclarativeVector2DValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(x, setX)
    CS_PROPERTY_READ(y, y)
    CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativeVector2DValueType)
+   DECL_CS_OBJECT(QDeclarativeVector2DValueType)
  public:
    QDeclarativeVector2DValueType(QObject *parent = 0);
 
@@ -270,7 +270,7 @@ class QDeclarativeVector3DValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(y, setY)
    CS_PROPERTY_READ(z, z)
    CS_PROPERTY_WRITE(z, setZ)
-   CS_OBJECT(QDeclarativeVector3DValueType)
+   DECL_CS_OBJECT(QDeclarativeVector3DValueType)
  public:
    QDeclarativeVector3DValueType(QObject *parent = 0);
 
@@ -300,7 +300,7 @@ class QDeclarativeVector4DValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(z, setZ)
    CS_PROPERTY_READ(w, w)
    CS_PROPERTY_WRITE(w, setW)
-   CS_OBJECT(QDeclarativeVector4DValueType)
+   DECL_CS_OBJECT(QDeclarativeVector4DValueType)
  public:
    QDeclarativeVector4DValueType(QObject *parent = 0);
 
@@ -332,7 +332,7 @@ class QDeclarativeQuaternionValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(y, setY)
    CS_PROPERTY_READ(z, z)
    CS_PROPERTY_WRITE(z, setZ)
-   CS_OBJECT(QDeclarativeQuaternionValueType)
+   DECL_CS_OBJECT(QDeclarativeQuaternionValueType)
  public:
    QDeclarativeQuaternionValueType(QObject *parent = 0);
 
@@ -388,7 +388,7 @@ class QDeclarativeMatrix4x4ValueType : public QDeclarativeValueType
    CS_PROPERTY_WRITE(m43, setM43)
    CS_PROPERTY_READ(m44, m44)
    CS_PROPERTY_WRITE(m44, setM44)
-   CS_OBJECT(QDeclarativeMatrix4x4ValueType)
+   DECL_CS_OBJECT(QDeclarativeMatrix4x4ValueType)
  public:
    QDeclarativeMatrix4x4ValueType(QObject *parent = 0);
 
@@ -501,7 +501,7 @@ class QDeclarativeMatrix4x4ValueType : public QDeclarativeValueType
 
 class QDeclarativeEasingValueType : public QDeclarativeValueType
 {
-   CS_OBJECT(QDeclarativeEasingValueType)
+   DECL_CS_OBJECT(QDeclarativeEasingValueType)
    CS_ENUM(Type)
 
    CS_PROPERTY_READ(type, type)
@@ -561,7 +561,7 @@ class QDeclarativeEasingValueType : public QDeclarativeValueType
 
 class QDeclarativeFontValueType : public QDeclarativeValueType
 {
-   CS_OBJECT(QDeclarativeFontValueType)
+   DECL_CS_OBJECT(QDeclarativeFontValueType)
    CS_ENUM(FontWeight)
    CS_ENUM(Capitalization)
 

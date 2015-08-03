@@ -40,7 +40,7 @@ class QHttpSocketEnginePrivate;
 
 class QHttpSocketEngine : public QAbstractSocketEngine
 {
-   CS_OBJECT(QHttpSocketEngine)
+   NET_CS_OBJECT(QHttpSocketEngine)
 
  public:
    enum HttpState {

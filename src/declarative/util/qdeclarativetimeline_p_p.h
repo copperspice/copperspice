@@ -39,7 +39,7 @@ class QDeclarativeTimeLineObject;
 
 class QDeclarativeTimeLine : public QAbstractAnimation
 {
-   CS_OBJECT(QDeclarativeTimeLine)
+   DECL_CS_OBJECT(QDeclarativeTimeLine)
 
  public:
    QDeclarativeTimeLine(QObject *parent = 0);

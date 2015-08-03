@@ -62,7 +62,7 @@ class QIBaseResult : public QSqlCachedResult
 
 class QIBaseDriver : public QSqlDriver
 {
-   CS_OBJECT(QIBaseDriver)
+   SQL_CS_OBJECT(QIBaseDriver)
 
    friend class QIBaseDriverPrivate;
    friend class QIBaseResultPrivate;

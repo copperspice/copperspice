@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScaleGrid : public QObject
 {
-   CS_OBJECT(QDeclarativeScaleGrid)
+   DECL_CS_OBJECT(QDeclarativeScaleGrid)
    CS_ENUM(TileRule)
 
    CS_PROPERTY_READ(left, left)

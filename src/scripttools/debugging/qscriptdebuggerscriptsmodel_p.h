@@ -36,7 +36,7 @@ class QScriptDebuggerScriptsModelPrivate;
 
 class QScriptDebuggerScriptsModel : public QAbstractItemModel
 {
-   CS_OBJECT(QScriptDebuggerScriptsModel)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerScriptsModel)
 
  public:
    QScriptDebuggerScriptsModel(QObject *parent = 0);

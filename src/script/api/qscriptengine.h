@@ -94,7 +94,7 @@ class Q_SCRIPT_EXPORT QScriptEngine
    : public QObject
 
 {
-   CS_OBJECT(QScriptEngine)
+   SCRIPT_CS_OBJECT(QScriptEngine)
 
  public:
    enum ValueOwnership {

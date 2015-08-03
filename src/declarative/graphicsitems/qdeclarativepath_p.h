@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativePathElement : public QObject
 {
-   CS_OBJECT(QDeclarativePathElement)
+   DECL_CS_OBJECT(QDeclarativePathElement)
 
  public:
    QDeclarativePathElement(QObject *parent = 0) : QObject(parent) {}
@@ -46,7 +46,7 @@ class QDeclarativePathElement : public QObject
 
 class QDeclarativePathAttribute : public QDeclarativePathElement
 {
-   CS_OBJECT(QDeclarativePathAttribute)
+   DECL_CS_OBJECT(QDeclarativePathAttribute)
 
    CS_PROPERTY_READ(name, name)
    CS_PROPERTY_WRITE(name, setName)
@@ -76,7 +76,7 @@ class QDeclarativePathAttribute : public QDeclarativePathElement
 
 class QDeclarativeCurve : public QDeclarativePathElement
 {
-   CS_OBJECT(QDeclarativeCurve)
+   DECL_CS_OBJECT(QDeclarativeCurve)
 
    CS_PROPERTY_READ(x, x)
    CS_PROPERTY_WRITE(x, setX)
@@ -107,7 +107,7 @@ class QDeclarativeCurve : public QDeclarativePathElement
 
 class QDeclarativePathLine : public QDeclarativeCurve
 {
-   CS_OBJECT(QDeclarativePathLine)
+   DECL_CS_OBJECT(QDeclarativePathLine)
 
  public:
    QDeclarativePathLine(QObject *parent = 0) : QDeclarativeCurve(parent) {}
@@ -117,7 +117,7 @@ class QDeclarativePathLine : public QDeclarativeCurve
 
 class QDeclarativePathQuad : public QDeclarativeCurve
 {
-   CS_OBJECT(QDeclarativePathQuad)
+   DECL_CS_OBJECT(QDeclarativePathQuad)
 
    CS_PROPERTY_READ(controlX, controlX)
    CS_PROPERTY_WRITE(controlX, setControlX)
@@ -148,7 +148,7 @@ class QDeclarativePathQuad : public QDeclarativeCurve
 
 class QDeclarativePathCubic : public QDeclarativeCurve
 {
-   CS_OBJECT(QDeclarativePathCubic)
+   DECL_CS_OBJECT(QDeclarativePathCubic)
 
    CS_PROPERTY_READ(control1X, control1X)
    CS_PROPERTY_WRITE(control1X, setControl1X)
@@ -199,7 +199,7 @@ class QDeclarativePathCubic : public QDeclarativeCurve
 
 class QDeclarativePathPercent : public QDeclarativePathElement
 {
-   CS_OBJECT(QDeclarativePathPercent)
+   DECL_CS_OBJECT(QDeclarativePathPercent)
    CS_PROPERTY_READ(value, value)
    CS_PROPERTY_WRITE(value, setValue)
    CS_PROPERTY_NOTIFY(value, valueChanged)
@@ -220,7 +220,7 @@ class QDeclarativePathPercent : public QDeclarativePathElement
 class QDeclarativePathPrivate;
 class QDeclarativePath : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativePath)
+   DECL_CS_OBJECT(QDeclarativePath)
 
    CS_INTERFACES(QDeclarativeParserStatus, QDeclarativeParserStatus)
 

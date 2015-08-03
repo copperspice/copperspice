@@ -45,7 +45,7 @@ extern Q_GUI_EXPORT bool qt_applefontsmoothing_enabled;
 
 class QTextDocumentWithImageResources : public QTextDocument
 {
-   CS_OBJECT(QTextDocumentWithImageResources)
+   DECL_CS_OBJECT(QTextDocumentWithImageResources)
 
  public:
    QTextDocumentWithImageResources(QDeclarativeText *parent);

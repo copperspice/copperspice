@@ -51,7 +51,7 @@ class QDeclarativeNetworkAccessManagerFactory;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeEngine : public QObject
 {
-   CS_OBJECT(QDeclarativeEngine)
+   DECL_CS_OBJECT(QDeclarativeEngine)
 
    CS_PROPERTY_READ(offlineStoragePath, offlineStoragePath)
    CS_PROPERTY_WRITE(offlineStoragePath, setOfflineStoragePath)

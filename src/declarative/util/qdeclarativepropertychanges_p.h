@@ -35,7 +35,7 @@ class QDeclarativePropertyChangesPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePropertyChanges : public QDeclarativeStateOperation
 {
-   CS_OBJECT(QDeclarativePropertyChanges)
+   DECL_CS_OBJECT(QDeclarativePropertyChanges)
    Q_DECLARE_PRIVATE(QDeclarativePropertyChanges)
 
    CS_PROPERTY_READ(*target, object)

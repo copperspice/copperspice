@@ -50,7 +50,7 @@ namespace Gstreamer
                             public AudioDataOutputInterface,
                             public MediaNode
     {
-        CS_OBJECT(AudioDataOutput)
+        GSTRM_CS_OBJECT(AudioDataOutput)
 
         CS_INTERFACES(Phonon::AudioDataOutputInterface, Phonon::Gstreamer::MediaNode)       
 

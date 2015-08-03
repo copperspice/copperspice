@@ -51,7 +51,7 @@ public :
 };
 
 class DeviceManager : public QObject {
-    CS_OBJECT(DeviceManager)
+    GSTRM_CS_OBJECT(DeviceManager)
 
 public:
     DeviceManager(Backend *parent);

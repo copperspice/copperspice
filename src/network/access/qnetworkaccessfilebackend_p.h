@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 
 class QNetworkAccessFileBackend: public QNetworkAccessBackend
 {
-   CS_OBJECT(QNetworkAccessFileBackend)
+   NET_CS_OBJECT(QNetworkAccessFileBackend)
 
  public:
    QNetworkAccessFileBackend();

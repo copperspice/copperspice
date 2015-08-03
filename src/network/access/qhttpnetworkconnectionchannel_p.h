@@ -60,7 +60,7 @@ typedef QPair<QHttpNetworkRequest, QHttpNetworkReply *> HttpMessagePair;
 
 class QHttpNetworkConnectionChannel : public QObject
 {
-   CS_OBJECT(QHttpNetworkConnectionChannel)
+   NET_CS_OBJECT(QHttpNetworkConnectionChannel)
 
  public:
    enum ChannelState {

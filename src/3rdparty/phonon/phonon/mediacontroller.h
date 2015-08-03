@@ -47,7 +47,7 @@ class MediaObject;
 
 class PHONON_EXPORT MediaController : public QObject
 {
-    CS_OBJECT(MediaController)
+    PHN_CS_OBJECT(MediaController)
 
     PHN_CS_ENUM(Feature)
     PHN_CS_FLAG(Feature,Features)

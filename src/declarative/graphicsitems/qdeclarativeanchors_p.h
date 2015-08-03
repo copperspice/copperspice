@@ -38,7 +38,7 @@ class QDeclarativeAnchorLine;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAnchors : public QObject
 {
-   CS_OBJECT(QDeclarativeAnchors)
+   DECL_CS_OBJECT(QDeclarativeAnchors)
 
    CS_PROPERTY_READ(left, left)
    CS_PROPERTY_WRITE(left, setLeft)

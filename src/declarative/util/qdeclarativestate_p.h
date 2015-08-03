@@ -102,7 +102,7 @@ class QDeclarativeState;
 class QDeclarativeStateOperationPrivate;
 class Q_DECLARATIVE_EXPORT QDeclarativeStateOperation : public QObject
 {
-   CS_OBJECT(QDeclarativeStateOperation)
+   DECL_CS_OBJECT(QDeclarativeStateOperation)
  public:
    QDeclarativeStateOperation(QObject *parent = 0)
       : QObject(parent) {}
@@ -127,7 +127,7 @@ class QDeclarativeTransition;
 class QDeclarativeStatePrivate;
 class Q_DECLARATIVE_EXPORT QDeclarativeState : public QObject
 {
-   CS_OBJECT(QDeclarativeState)
+   DECL_CS_OBJECT(QDeclarativeState)
 
    CS_PROPERTY_READ(name, name)
    CS_PROPERTY_WRITE(name, setName)

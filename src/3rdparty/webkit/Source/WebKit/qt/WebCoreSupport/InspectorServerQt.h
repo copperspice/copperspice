@@ -38,7 +38,7 @@ class InspectorServerRequestHandlerQt;
 class InspectorClientQt;
 
 class InspectorServerQt : public QObject {
-    CS_OBJECT(InspectorServerQt)
+    WEB_CS_OBJECT(InspectorServerQt)
 public:
 
     static InspectorServerQt* server();
@@ -68,7 +68,7 @@ private:
 };
 
 class RemoteFrontendChannel : public QObject {
-    CS_OBJECT(RemoteFrontendChannel)
+    WEB_CS_OBJECT(RemoteFrontendChannel)
 public:
 
     RemoteFrontendChannel(InspectorServerRequestHandlerQt* requestHandler);
@@ -79,7 +79,7 @@ private:
 };
 
 class InspectorServerRequestHandlerQt : public QObject {
-    CS_OBJECT(InspectorServerRequestHandlerQt)
+    WEB_CS_OBJECT(InspectorServerRequestHandlerQt)
 
 public:
 

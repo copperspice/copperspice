@@ -39,7 +39,7 @@ namespace QT7
 {
     class Backend : public QObject, public BackendInterface
     {
-        CS_OBJECT(Backend)
+        QT7_CS_OBJECT(Backend)
         CS_INTERFACES(Phonon::BackendInterface)
 
         public:

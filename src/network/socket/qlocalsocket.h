@@ -37,7 +37,7 @@ class QLocalSocketPrivate;
 
 class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
 {
-   CS_OBJECT(QLocalSocket)
+   NET_CS_OBJECT(QLocalSocket)
    Q_DECLARE_PRIVATE(QLocalSocket)
 
  public:

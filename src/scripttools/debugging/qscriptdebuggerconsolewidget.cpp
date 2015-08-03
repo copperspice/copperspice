@@ -75,7 +75,7 @@ class InputEdit : public QLineEdit
 
 class CommandLine : public QWidget
 {
-   CS_OBJECT(CommandLine)
+   SCRIPT_T_CS_OBJECT(CommandLine)
 
  public:
    CommandLine(QWidget *parent = 0) : QWidget(parent) {

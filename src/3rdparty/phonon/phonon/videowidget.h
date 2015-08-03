@@ -62,7 +62,7 @@ class AbstractVideoOutput;
      */
     class PHONON_EXPORT VideoWidget : public QWidget, public Phonon::AbstractVideoOutput
     {
-        CS_OBJECT(VideoWidget)
+        PHN_CS_OBJECT(VideoWidget)
         K_DECLARE_PRIVATE(VideoWidget)
                 
         PHN_CS_ENUM(AspectRatio)

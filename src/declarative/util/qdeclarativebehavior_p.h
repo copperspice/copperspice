@@ -39,7 +39,7 @@ class QDeclarativeBehaviorPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBehavior : public QObject, public QDeclarativePropertyValueInterceptor
 {
-   CS_OBJECT(QDeclarativeBehavior)
+   DECL_CS_OBJECT(QDeclarativeBehavior)
    Q_DECLARE_PRIVATE(QDeclarativeBehavior)
 
    CS_INTERFACES(QDeclarativePropertyValueInterceptor)

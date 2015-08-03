@@ -50,7 +50,7 @@ class QDeclarativeLayoutMirroringAttached;
 //### merge into private?
 class QDeclarativeContents : public QObject, public QDeclarativeItemChangeListener
 {
-   CS_OBJECT(QDeclarativeContents)
+   DECL_CS_OBJECT(QDeclarativeContents)
  public:
    QDeclarativeContents(QDeclarativeItem *item);
    ~QDeclarativeContents();
@@ -356,7 +356,7 @@ class QDeclarativeKeyNavigationAttachedPrivate
 
 class QDeclarativeKeyNavigationAttached : public QObject, public QDeclarativeItemKeyFilter
 {
-   CS_OBJECT(QDeclarativeKeyNavigationAttached)
+   DECL_CS_OBJECT(QDeclarativeKeyNavigationAttached)
    Q_DECLARE_PRIVATE(QDeclarativeKeyNavigationAttached)
 
    CS_PROPERTY_READ(*left, left)
@@ -429,7 +429,7 @@ class QDeclarativeKeyNavigationAttached : public QObject, public QDeclarativeIte
 
 class QDeclarativeLayoutMirroringAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeLayoutMirroringAttached)
+   DECL_CS_OBJECT(QDeclarativeLayoutMirroringAttached)
    CS_PROPERTY_READ(enabled, enabled)
    CS_PROPERTY_WRITE(enabled, setEnabled)
    CS_PROPERTY_RESET(enabled, resetEnabled)
@@ -492,7 +492,7 @@ class QDeclarativeKeysAttachedPrivate
 
 class QDeclarativeKeysAttached : public QObject, public QDeclarativeItemKeyFilter
 {
-   CS_OBJECT(QDeclarativeKeysAttached)
+   DECL_CS_OBJECT(QDeclarativeKeysAttached)
    Q_DECLARE_PRIVATE(QDeclarativeKeysAttached)
 
    CS_PROPERTY_READ(enabled, enabled)

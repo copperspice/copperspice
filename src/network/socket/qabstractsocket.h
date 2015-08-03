@@ -43,7 +43,7 @@ class QNetworkProxy;
 
 class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
 {
-   CS_OBJECT(QAbstractSocket)
+   NET_CS_OBJECT(QAbstractSocket)
 
    NET_CS_ENUM(SocketType)
    NET_CS_ENUM(NetworkLayerProtocol)

@@ -390,7 +390,7 @@ class QGLEngineShaderProg
 
 class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
 {
-   CS_OBJECT(QGLEngineShaderManager)
+   OPENGL_CS_OBJECT(QGLEngineShaderManager)
  public:
    QGLEngineShaderManager(QGLContext *context);
    ~QGLEngineShaderManager();

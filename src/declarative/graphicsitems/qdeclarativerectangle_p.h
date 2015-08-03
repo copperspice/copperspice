@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
 {
-   CS_OBJECT(QDeclarativePen)
+   DECL_CS_OBJECT(QDeclarativePen)
 
    CS_PROPERTY_READ(width, width)
    CS_PROPERTY_WRITE(width, setWidth)
@@ -74,7 +74,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
 
 class QDeclarativeGradientStop : public QObject
 {
-   CS_OBJECT(QDeclarativeGradientStop)
+   DECL_CS_OBJECT(QDeclarativeGradientStop)
 
    CS_PROPERTY_READ(position, position)
    CS_PROPERTY_WRITE(position, setPosition)
@@ -110,7 +110,7 @@ class QDeclarativeGradientStop : public QObject
 
 class QDeclarativeGradient : public QObject
 {
-   CS_OBJECT(QDeclarativeGradient)
+   DECL_CS_OBJECT(QDeclarativeGradient)
 
    CS_PROPERTY_READ(stops, stops)
    CS_CLASSINFO("DefaultProperty", "stops")
@@ -143,7 +143,7 @@ class QDeclarativeGradient : public QObject
 class QDeclarativeRectanglePrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeRectangle : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeRectangle)
+   DECL_CS_OBJECT(QDeclarativeRectangle)
 
    CS_PROPERTY_READ(color, color)
    CS_PROPERTY_WRITE(color, setColor)

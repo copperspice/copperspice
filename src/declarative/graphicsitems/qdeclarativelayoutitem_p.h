@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeLayoutItem : public QDeclarativeItem, public QGraphicsLayoutItem
 {
-   CS_OBJECT(QDeclarativeLayoutItem)
+   DECL_CS_OBJECT(QDeclarativeLayoutItem)
 
    CS_INTERFACES(QGraphicsLayoutItem)
    CS_PROPERTY_READ(maximumSize, maximumSize)

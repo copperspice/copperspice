@@ -42,7 +42,7 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class QDeclarativeInclude : public QObject
 {
-   CS_OBJECT(QDeclarativeInclude)
+   DECL_CS_OBJECT(QDeclarativeInclude)
  public:
    enum Status {
       Ok = 0,

@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeFocusPanel : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeFocusPanel)
+   DECL_CS_OBJECT(QDeclarativeFocusPanel)
 
    CS_PROPERTY_READ(active, isActive)
    CS_PROPERTY_WRITE(active, setActive)

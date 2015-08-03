@@ -54,7 +54,7 @@ class EffectManager;
 
 class Backend : public QObject, public BackendInterface
 {
-    CS_OBJECT(Backend)
+    GSTRM_CS_OBJECT(Backend)
     CS_INTERFACES(Phonon::BackendInterface)
 
 public:

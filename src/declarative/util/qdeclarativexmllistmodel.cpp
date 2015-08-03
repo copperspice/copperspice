@@ -131,7 +131,7 @@ struct XmlQueryJob {
 class QDeclarativeXmlQueryEngine;
 class QDeclarativeXmlQueryThreadObject : public QObject
 {
-   CS_OBJECT(QDeclarativeXmlQueryThreadObject)
+   DECL_CS_OBJECT(QDeclarativeXmlQueryThreadObject)
 
  public:
    QDeclarativeXmlQueryThreadObject(QDeclarativeXmlQueryEngine *);
@@ -146,7 +146,7 @@ class QDeclarativeXmlQueryThreadObject : public QObject
 
 class QDeclarativeXmlQueryEngine : public QThread
 {
-   CS_OBJECT(QDeclarativeXmlQueryEngine)
+   DECL_CS_OBJECT(QDeclarativeXmlQueryEngine)
 
  public:
    QDeclarativeXmlQueryEngine(QDeclarativeEngine *eng);

@@ -65,7 +65,7 @@ class QDeclarativePixmapData;
 
 class QDeclarativePixmapReply : public QObject
 {
-   CS_OBJECT(QDeclarativePixmapReply)
+   DECL_CS_OBJECT(QDeclarativePixmapReply)
 
  public:
    enum ReadError { NoError, Loading, Decoding };
@@ -112,7 +112,7 @@ class QDeclarativePixmapReply : public QObject
 
 class QDeclarativePixmapReaderThreadObject : public QObject
 {
-   CS_OBJECT(QDeclarativePixmapReaderThreadObject)
+   DECL_CS_OBJECT(QDeclarativePixmapReaderThreadObject)
 
  public:
    QDeclarativePixmapReaderThreadObject(QDeclarativePixmapReader *);
@@ -130,7 +130,7 @@ class QDeclarativePixmapData;
 
 class QDeclarativePixmapReader : public QThread
 {
-   CS_OBJECT(QDeclarativePixmapReader)
+   DECL_CS_OBJECT(QDeclarativePixmapReader)
 
  public:
    QDeclarativePixmapReader(QDeclarativeEngine *eng);
@@ -608,7 +608,7 @@ inline uint qHash(const QDeclarativePixmapKey &key)
 
 class QDeclarativePixmapStore : public QObject
 {
-   CS_OBJECT(QDeclarativePixmapStore)
+   DECL_CS_OBJECT(QDeclarativePixmapStore)
 
  public:
    QDeclarativePixmapStore();

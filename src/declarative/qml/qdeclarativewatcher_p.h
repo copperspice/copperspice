@@ -42,7 +42,7 @@ class QMetaProperty;
 
 class QDeclarativeWatcher : public QObject
 {
-   CS_OBJECT(QDeclarativeWatcher)
+   DECL_CS_OBJECT(QDeclarativeWatcher)
  public:
    QDeclarativeWatcher(QObject * = 0);
 

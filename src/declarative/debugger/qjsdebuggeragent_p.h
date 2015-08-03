@@ -125,7 +125,7 @@ inline uint qHash(const JSAgentBreakpointData &b)
 
 class QJSDebuggerAgent : public QObject, public QScriptEngineAgent
 {
-   CS_OBJECT(QJSDebuggerAgent)
+   DECL_CS_OBJECT(QJSDebuggerAgent)
 
  public:
    QJSDebuggerAgent(QScriptEngine *engine, QObject *parent = 0);

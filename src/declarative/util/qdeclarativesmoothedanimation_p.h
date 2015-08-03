@@ -37,7 +37,7 @@ class QDeclarativeSmoothedAnimationPrivate;
 
 class QDeclarativeSmoothedAnimation : public QDeclarativeNumberAnimation
 {
-   CS_OBJECT(QDeclarativeSmoothedAnimation)
+   DECL_CS_OBJECT(QDeclarativeSmoothedAnimation)
 
    Q_DECLARE_PRIVATE(QDeclarativeSmoothedAnimation)
    CS_ENUM(ReversingMode)

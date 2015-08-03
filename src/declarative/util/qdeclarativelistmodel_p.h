@@ -47,7 +47,7 @@ struct ModelNode;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeListModel : public QListModelInterface
 {
-   CS_OBJECT(QDeclarativeListModel)
+   DECL_CS_OBJECT(QDeclarativeListModel)
    CS_PROPERTY_READ(count, count)
    CS_PROPERTY_NOTIFY(count, countChanged)
 
@@ -129,7 +129,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeListModel : public QListModelInte
 // ### FIXME
 class QDeclarativeListElement : public QObject
 {
-   CS_OBJECT(QDeclarativeListElement)
+   DECL_CS_OBJECT(QDeclarativeListElement)
 };
 
 class QDeclarativeListModelParser : public QDeclarativeCustomParser

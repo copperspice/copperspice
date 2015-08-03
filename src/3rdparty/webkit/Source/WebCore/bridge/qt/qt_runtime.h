@@ -212,7 +212,7 @@ private:
 
 class QtConnectionObject: public QObject
 {
-   CS_OBJECT(QtConnectionObject)
+   WEB_CS_OBJECT(QtConnectionObject)
 
 public:
     QtConnectionObject(JSGlobalData&, PassRefPtr<QtInstance> instance, int signalIndex, JSObject* thisObject, JSObject* funcObject);

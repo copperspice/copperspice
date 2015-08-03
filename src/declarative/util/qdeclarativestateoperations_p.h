@@ -38,7 +38,7 @@ class QDeclarativeParentChangePrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeParentChange : public QDeclarativeStateOperation,
    public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeParentChange)
+   DECL_CS_OBJECT(QDeclarativeParentChange)
    Q_DECLARE_PRIVATE(QDeclarativeParentChange)
 
    CS_PROPERTY_READ(*target, object)
@@ -109,7 +109,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeParentChange : public QDeclarativ
 class QDeclarativeStateChangeScriptPrivate;
 class QDeclarativeStateChangeScript : public QDeclarativeStateOperation, public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeStateChangeScript)
+   DECL_CS_OBJECT(QDeclarativeStateChangeScript)
    Q_DECLARE_PRIVATE(QDeclarativeStateChangeScript)
 
    CS_PROPERTY_READ(script, script)
@@ -138,7 +138,7 @@ class QDeclarativeAnchorChanges;
 class QDeclarativeAnchorSetPrivate;
 class QDeclarativeAnchorSet : public QObject
 {
-   CS_OBJECT(QDeclarativeAnchorSet)
+   DECL_CS_OBJECT(QDeclarativeAnchorSet)
 
    CS_PROPERTY_READ(left, left)
    CS_PROPERTY_WRITE(left, setLeft)
@@ -259,7 +259,7 @@ class QDeclarativeAnchorChangesPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAnchorChanges : public QDeclarativeStateOperation,
    public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeAnchorChanges)
+   DECL_CS_OBJECT(QDeclarativeAnchorChanges)
    Q_DECLARE_PRIVATE(QDeclarativeAnchorChanges)
 
    CS_PROPERTY_READ(*target, object)

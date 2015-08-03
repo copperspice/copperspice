@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeWatchProxy : public QObject
 {
-   CS_OBJECT(QDeclarativeWatchProxy)
+   DECL_CS_OBJECT(QDeclarativeWatchProxy)
 
  public:
    QDeclarativeWatchProxy(int id, QObject *object, int debugId,

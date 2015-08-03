@@ -44,7 +44,7 @@ class SocketStreamHandleClient;
 class SocketStreamHandlePrivate;
 
 class SocketStreamHandlePrivate : public QObject {
-    CS_OBJECT(SocketStreamHandlePrivate)
+    WEB_CS_OBJECT(SocketStreamHandlePrivate)
 
 public:
     SocketStreamHandlePrivate(SocketStreamHandle*, const KURL&);

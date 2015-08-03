@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeKeyEvent : public QObject
 {
-   CS_OBJECT(QDeclarativeKeyEvent)
+   DECL_CS_OBJECT(QDeclarativeKeyEvent)
    CS_PROPERTY_READ(key, key)
    CS_PROPERTY_READ(text, text)
    CS_PROPERTY_READ(modifiers, modifiers)
@@ -83,7 +83,7 @@ class QDeclarativeKeyEvent : public QObject
 
 class QDeclarativeMouseEvent : public QObject
 {
-   CS_OBJECT(QDeclarativeMouseEvent)
+   DECL_CS_OBJECT(QDeclarativeMouseEvent)
    CS_PROPERTY_READ(x, x)
    CS_PROPERTY_READ(y, y)
    CS_PROPERTY_READ(button, button)

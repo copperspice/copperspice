@@ -34,7 +34,7 @@
 namespace WebCore {
 
 class IconDatabaseClientQt : public QObject, public IconDatabaseClient {
-    CS_OBJECT(IconDatabaseClientQt)
+    WEB_CS_OBJECT(IconDatabaseClientQt)
 public:
     static IconDatabaseClientQt* instance();
 

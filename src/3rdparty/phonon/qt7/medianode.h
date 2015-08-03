@@ -45,7 +45,7 @@ namespace QT7
 
     class MediaNode : public QObject
     {
-        CS_OBJECT(MediaNode)
+        QT7_CS_OBJECT(MediaNode)
 
         public:
             enum NodeDescriptionEnum {

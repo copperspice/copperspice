@@ -35,7 +35,7 @@ class QDeclarativeBindPrivate;
 
 class QDeclarativeBind : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeBind)
+   DECL_CS_OBJECT(QDeclarativeBind)
    Q_DECLARE_PRIVATE(QDeclarativeBind)
    CS_INTERFACES(QDeclarativeParserStatus)
    CS_PROPERTY_READ(*target, object)

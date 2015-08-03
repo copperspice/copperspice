@@ -39,7 +39,7 @@ class QDeclarativeGraphicsWidgetPrivate;
 // ### TODO can the extension object be the anchor directly? We save one allocation -> awesome.
 class QDeclarativeGraphicsWidget : public QObject
 {
-   CS_OBJECT(QDeclarativeGraphicsWidget)
+   DECL_CS_OBJECT(QDeclarativeGraphicsWidget)
 
    CS_PROPERTY_READ(anchors, anchors)
    CS_PROPERTY_DESIGNABLE(anchors, false)

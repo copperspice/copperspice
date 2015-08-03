@@ -129,7 +129,7 @@ class QDeclarativeDataBlob : public QDeclarativeRefCount
 
 class QDeclarativeDataLoader : public QObject
 {
-   CS_OBJECT(QDeclarativeDataLoader)
+   DECL_CS_OBJECT(QDeclarativeDataLoader)
 
  public:
    QDeclarativeDataLoader(QDeclarativeEngine *);
@@ -159,7 +159,7 @@ class QDeclarativeDataLoader : public QObject
 
 class QDeclarativeTypeLoader : public QDeclarativeDataLoader
 {
-   CS_OBJECT(QDeclarativeTypeLoader)
+   DECL_CS_OBJECT(QDeclarativeTypeLoader)
 
  public:
    QDeclarativeTypeLoader(QDeclarativeEngine *);

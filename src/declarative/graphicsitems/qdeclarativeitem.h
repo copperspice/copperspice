@@ -46,7 +46,7 @@ class QDeclarativeItemPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeItem : public QGraphicsObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeItem)
+   DECL_CS_OBJECT(QDeclarativeItem)
 
    CS_INTERFACES(QDeclarativeParserStatus)
 

@@ -95,7 +95,7 @@ QT_BEGIN_NAMESPACE
 
 class QPacketProtocolPrivate : public QObject
 {
-   CS_OBJECT(QPacketProtocolPrivate)
+   DECL_CS_OBJECT(QPacketProtocolPrivate)
 
  public:
    QPacketProtocolPrivate(QPacketProtocol *parent, QIODevice *_dev)

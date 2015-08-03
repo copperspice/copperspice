@@ -38,7 +38,7 @@ namespace QT7
 {
     class QuickTimeStreamReader : public QObject, Phonon::StreamInterface
     {
-        CS_OBJECT(QuickTimeStreamReader)
+        QT7_CS_OBJECT(QuickTimeStreamReader)
         CS_INTERFACES(Phonon::StreamInterface)
 
     public:

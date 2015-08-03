@@ -39,7 +39,7 @@ namespace WTF {
 
 class MainThreadInvoker : public QObject
 {
-    CS_OBJECT(MainThreadInvoker)
+    WEB_CS_OBJECT(MainThreadInvoker)
 
 public:
     MainThreadInvoker();

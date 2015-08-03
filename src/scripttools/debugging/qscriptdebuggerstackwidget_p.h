@@ -34,7 +34,7 @@ class QScriptDebuggerStackWidgetPrivate;
 
 class QScriptDebuggerStackWidget: public QScriptDebuggerStackWidgetInterface
 {
-   CS_OBJECT(QScriptDebuggerStackWidget)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerStackWidget)
 
  public:
    QScriptDebuggerStackWidget(QWidget *parent = 0);

@@ -38,7 +38,7 @@ class QDeclarativeTransitionManager;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeTransition : public QObject
 {
-   CS_OBJECT(QDeclarativeTransition)
+   DECL_CS_OBJECT(QDeclarativeTransition)
    Q_DECLARE_PRIVATE(QDeclarativeTransition)
 
    CS_PROPERTY_READ(from, fromState)

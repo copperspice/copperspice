@@ -34,7 +34,7 @@ class QDeclarativeTranslatePrivate;
 
 class QDeclarativeTranslate : public QGraphicsTransform
 {
-   CS_OBJECT(QDeclarativeTranslate)
+   DECL_CS_OBJECT(QDeclarativeTranslate)
 
    CS_PROPERTY_READ(x, x)
    CS_PROPERTY_WRITE(x, setX)

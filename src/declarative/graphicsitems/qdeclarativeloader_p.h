@@ -34,7 +34,7 @@ class QDeclarativeLoaderPrivate;
 
 class QDeclarativeLoader : public QDeclarativeImplicitSizeItem
 {
-   CS_OBJECT(QDeclarativeLoader)
+   DECL_CS_OBJECT(QDeclarativeLoader)
    CS_ENUM(Status)
 
    CS_PROPERTY_READ(source, source)

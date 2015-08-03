@@ -434,7 +434,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QGLContext::BindOptions)
 
 class Q_OPENGL_EXPORT QGLWidget : public QWidget
 {
-   CS_OBJECT(QGLWidget)
+   OPENGL_CS_OBJECT(QGLWidget)
    Q_DECLARE_PRIVATE(QGLWidget)
 
  public:

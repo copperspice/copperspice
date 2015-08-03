@@ -108,7 +108,7 @@ class AbstractMediaStreamPrivate;
  */
 class PHONON_EXPORT AbstractMediaStream : public QObject
 {
-    CS_OBJECT(AbstractMediaStream)
+    PHN_CS_OBJECT(AbstractMediaStream)
     Q_DECLARE_PRIVATE(AbstractMediaStream)
     friend class MediaObject;
     friend class MediaObjectPrivate;

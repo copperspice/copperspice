@@ -51,7 +51,7 @@ class QDeclarativeDebugClientPrivate
 
 class QDeclarativeDebugConnectionPrivate : public QObject
 {
-   CS_OBJECT(QDeclarativeDebugConnectionPrivate)
+   DECL_CS_OBJECT(QDeclarativeDebugConnectionPrivate)
 
  public:
    QDeclarativeDebugConnectionPrivate(QDeclarativeDebugConnection *c);

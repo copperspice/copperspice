@@ -45,7 +45,7 @@ class QDeclarativeAnimationGroup;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAbstractAnimation
    : public QObject, public QDeclarativePropertyValueSource, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeAbstractAnimation)
+   DECL_CS_OBJECT(QDeclarativeAbstractAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeAbstractAnimation)
 
    CS_INTERFACES(QDeclarativeParserStatus, QDeclarativePropertyValueSource)
@@ -148,7 +148,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAbstractAnimation
 class QDeclarativePauseAnimationPrivate;
 class QDeclarativePauseAnimation : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativePauseAnimation)
+   DECL_CS_OBJECT(QDeclarativePauseAnimation)
    Q_DECLARE_PRIVATE(QDeclarativePauseAnimation)
 
    CS_PROPERTY_READ(duration, duration)
@@ -173,7 +173,7 @@ class QDeclarativePauseAnimation : public QDeclarativeAbstractAnimation
 class QDeclarativeScriptActionPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScriptAction : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativeScriptAction)
+   DECL_CS_OBJECT(QDeclarativeScriptAction)
    Q_DECLARE_PRIVATE(QDeclarativeScriptAction)
 
    CS_PROPERTY_READ(script, script)
@@ -201,7 +201,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScriptAction : public QDeclarativ
 class QDeclarativePropertyActionPrivate;
 class QDeclarativePropertyAction : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativePropertyAction)
+   DECL_CS_OBJECT(QDeclarativePropertyAction)
    Q_DECLARE_PRIVATE(QDeclarativePropertyAction)
 
    CS_PROPERTY_READ(*target, target)
@@ -259,7 +259,7 @@ class QDeclarativeItem;
 class QDeclarativePropertyAnimationPrivate;
 class QDeclarativePropertyAnimation : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativePropertyAnimation)
+   DECL_CS_OBJECT(QDeclarativePropertyAnimation)
    Q_DECLARE_PRIVATE(QDeclarativePropertyAnimation)
 
    CS_PROPERTY_READ(duration, duration)
@@ -340,7 +340,7 @@ class QDeclarativePropertyAnimation : public QDeclarativeAbstractAnimation
 
 class QDeclarativeColorAnimation : public QDeclarativePropertyAnimation
 {
-   CS_OBJECT(QDeclarativeColorAnimation)
+   DECL_CS_OBJECT(QDeclarativeColorAnimation)
    Q_DECLARE_PRIVATE(QDeclarativePropertyAnimation)
    CS_PROPERTY_READ(from, from)
    CS_PROPERTY_WRITE(from, setFrom)
@@ -360,7 +360,7 @@ class QDeclarativeColorAnimation : public QDeclarativePropertyAnimation
 
 class QDeclarativeNumberAnimation : public QDeclarativePropertyAnimation
 {
-   CS_OBJECT(QDeclarativeNumberAnimation)
+   DECL_CS_OBJECT(QDeclarativeNumberAnimation)
    Q_DECLARE_PRIVATE(QDeclarativePropertyAnimation)
 
    CS_PROPERTY_READ(from, from)
@@ -387,7 +387,7 @@ class QDeclarativeNumberAnimation : public QDeclarativePropertyAnimation
 
 class QDeclarativeVector3dAnimation : public QDeclarativePropertyAnimation
 {
-   CS_OBJECT(QDeclarativeVector3dAnimation)
+   DECL_CS_OBJECT(QDeclarativeVector3dAnimation)
    Q_DECLARE_PRIVATE(QDeclarativePropertyAnimation)
 
    CS_PROPERTY_READ(from, from)
@@ -409,7 +409,7 @@ class QDeclarativeVector3dAnimation : public QDeclarativePropertyAnimation
 class QDeclarativeRotationAnimationPrivate;
 class QDeclarativeRotationAnimation : public QDeclarativePropertyAnimation
 {
-   CS_OBJECT(QDeclarativeRotationAnimation)
+   DECL_CS_OBJECT(QDeclarativeRotationAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeRotationAnimation)
    CS_ENUM(RotationDirection)
 
@@ -443,7 +443,7 @@ class QDeclarativeRotationAnimation : public QDeclarativePropertyAnimation
 class QDeclarativeAnimationGroupPrivate;
 class QDeclarativeAnimationGroup : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativeAnimationGroup)
+   DECL_CS_OBJECT(QDeclarativeAnimationGroup)
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
    CS_CLASSINFO("DefaultProperty", "animations")
@@ -462,7 +462,7 @@ class QDeclarativeAnimationGroup : public QDeclarativeAbstractAnimation
 
 class QDeclarativeSequentialAnimation : public QDeclarativeAnimationGroup
 {
-   CS_OBJECT(QDeclarativeSequentialAnimation)
+   DECL_CS_OBJECT(QDeclarativeSequentialAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
  public:
@@ -478,7 +478,7 @@ class QDeclarativeSequentialAnimation : public QDeclarativeAnimationGroup
 
 class QDeclarativeParallelAnimation : public QDeclarativeAnimationGroup
 {
-   CS_OBJECT(QDeclarativeParallelAnimation)
+   DECL_CS_OBJECT(QDeclarativeParallelAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
  public:
@@ -495,7 +495,7 @@ class QDeclarativeParallelAnimation : public QDeclarativeAnimationGroup
 class QDeclarativeParentAnimationPrivate;
 class QDeclarativeParentAnimation : public QDeclarativeAnimationGroup
 {
-   CS_OBJECT(QDeclarativeParentAnimation)
+   DECL_CS_OBJECT(QDeclarativeParentAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeParentAnimation)
 
    CS_PROPERTY_READ(*target, target)
@@ -539,7 +539,7 @@ class QDeclarativeParentAnimation : public QDeclarativeAnimationGroup
 class QDeclarativeAnchorAnimationPrivate;
 class QDeclarativeAnchorAnimation : public QDeclarativeAbstractAnimation
 {
-   CS_OBJECT(QDeclarativeAnchorAnimation)
+   DECL_CS_OBJECT(QDeclarativeAnchorAnimation)
    Q_DECLARE_PRIVATE(QDeclarativeAnchorAnimation)
    CS_PROPERTY_READ(targets, targets)
    CS_PROPERTY_READ(duration, duration)

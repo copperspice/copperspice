@@ -155,7 +155,7 @@ class Q_NETWORK_EXPORT QHttpRequestHeader : public QHttpHeader
 
 class Q_NETWORK_EXPORT QHttp : public QObject
 {
-   CS_OBJECT(QHttp)
+   NET_CS_OBJECT(QHttp)
 
  public:
    enum ConnectionMode {

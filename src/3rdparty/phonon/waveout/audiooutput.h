@@ -46,7 +46,7 @@ namespace Phonon
     {
         class AudioOutput : public QObject, public Phonon::AudioOutputInterface
         {
-            CS_OBJECT(AudioOutput)
+            PHN_CS_OBJECT(AudioOutput)
             CS_INTERFACES(Phonon::AudioOutputInterface)
 
         public:

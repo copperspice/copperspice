@@ -1051,7 +1051,7 @@ QScriptValue Document::xmlEncoding(QScriptContext *context, QScriptEngine *engin
 
 class QDeclarativeXMLHttpRequest : public QObject
 {
-   CS_OBJECT(QDeclarativeXMLHttpRequest)
+   DECL_CS_OBJECT(QDeclarativeXMLHttpRequest)
 
  public:
    enum State { Unsent = 0,

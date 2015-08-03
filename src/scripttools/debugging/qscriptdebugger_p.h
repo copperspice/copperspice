@@ -53,7 +53,7 @@ class QScriptDebuggerPrivate;
 
 class QScriptDebugger : public QObject
 {
-   CS_OBJECT(QScriptDebugger)
+   SCRIPT_T_CS_OBJECT(QScriptDebugger)
 
  public:
    // mirrors QScriptEngineDebugger::DebuggerWidget

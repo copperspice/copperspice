@@ -105,7 +105,7 @@ private:
 
 class QWEBKIT_EXPORT QWebFrame : public QObject
 {
-    CS_OBJECT(QWebFrame)
+    WEB_CS_OBJECT(QWebFrame)
 
     WEB_CS_PROPERTY_READ(textSizeMultiplier, textSizeMultiplier)
     WEB_CS_PROPERTY_WRITE(textSizeMultiplier, setTextSizeMultiplier)

@@ -246,7 +246,7 @@ namespace {
 
 class WidgetClosedNotifier : public QObject
 {
-   CS_OBJECT(WidgetClosedNotifier)
+   SCRIPT_T_CS_OBJECT(WidgetClosedNotifier)
 
  public:
    WidgetClosedNotifier(QWidget *w, QObject *parent = 0)

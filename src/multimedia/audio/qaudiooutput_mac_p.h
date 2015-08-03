@@ -52,7 +52,7 @@ class QAudioOutputBuffer;
 
 class QAudioOutputPrivate : public QAbstractAudioOutput
 {
-   CS_OBJECT(QAudioOutputPrivate)
+   MULTI_CS_OBJECT(QAudioOutputPrivate)
 
  public:
    bool            isOpen;

@@ -45,7 +45,7 @@ class QScriptEngineDebuggerPrivate;
 
 class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
 {
-   CS_OBJECT(QScriptEngineDebugger)
+   SCRIPT_T_CS_OBJECT(QScriptEngineDebugger)
 
  public:
    enum DebuggerWidget {

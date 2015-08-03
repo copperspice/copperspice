@@ -63,7 +63,7 @@ private:
 };
 
 class QNetworkReplyWrapper : public QObject {
-    CS_OBJECT(QNetworkReplyWrapper)
+    WEB_CS_OBJECT(QNetworkReplyWrapper)
 public:
     QNetworkReplyWrapper(QNetworkReplyHandlerCallQueue*, QNetworkReply*, bool sniffMIMETypes, QObject* parent = 0);
     ~QNetworkReplyWrapper();
@@ -115,7 +115,7 @@ private :
 
 class QNetworkReplyHandler : public QObject
 {
-    CS_OBJECT(QNetworkReplyHandler)
+    WEB_CS_OBJECT(QNetworkReplyHandler)
 public:
     enum LoadType {
         AsynchronousLoad,
@@ -163,7 +163,7 @@ private :
 //  been emitted. With the presence of QNetworkReplyHandler::release I do
 //  not want to gurantee this.
 class FormDataIODevice : public QIODevice {
-    CS_OBJECT(FormDataIODevice)
+    WEB_CS_OBJECT(FormDataIODevice)
 public:
     FormDataIODevice(FormData*);
     ~FormDataIODevice();

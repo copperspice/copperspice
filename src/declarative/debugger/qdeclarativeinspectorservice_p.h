@@ -37,7 +37,7 @@ class QDeclarativeInspectorInterface;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeInspectorService : public QDeclarativeDebugService
 {
-   CS_OBJECT(QDeclarativeInspectorService)
+   DECL_CS_OBJECT(QDeclarativeInspectorService)
 
  public:
    QDeclarativeInspectorService();

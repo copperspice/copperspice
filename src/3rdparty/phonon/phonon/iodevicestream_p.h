@@ -44,7 +44,7 @@ namespace Phonon
 class IODeviceStreamPrivate;
 class IODeviceStream : public AbstractMediaStream
 {
-    CS_OBJECT(IODeviceStream)
+    PHN_CS_OBJECT(IODeviceStream)
     Q_DECLARE_PRIVATE(IODeviceStream)
     public:
         explicit IODeviceStream(QIODevice *ioDevice, QObject *parent = 0);

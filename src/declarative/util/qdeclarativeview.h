@@ -43,7 +43,7 @@ class QDeclarativeViewPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeView : public QGraphicsView
 {
-   CS_OBJECT(QDeclarativeView)
+   DECL_CS_OBJECT(QDeclarativeView)
 
    CS_PROPERTY_READ(resizeMode, resizeMode)
    CS_PROPERTY_WRITE(resizeMode, setResizeMode)

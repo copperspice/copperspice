@@ -34,7 +34,7 @@ class QScriptDebuggerLocalsWidgetPrivate;
 
 class QScriptDebuggerLocalsWidget : public QScriptDebuggerLocalsWidgetInterface
 {
-   CS_OBJECT(QScriptDebuggerLocalsWidget)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerLocalsWidget)
 
  public:
    QScriptDebuggerLocalsWidget(QWidget *parent = 0);

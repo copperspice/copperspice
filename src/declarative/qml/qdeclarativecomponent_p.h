@@ -101,7 +101,7 @@ class QDeclarativeComponentPrivate : public QDeclarativeTypeData::TypeDataCallba
 
 class QDeclarativeComponentAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeComponentAttached)
+   DECL_CS_OBJECT(QDeclarativeComponentAttached)
 
  public:
    QDeclarativeComponentAttached(QObject *parent = 0);

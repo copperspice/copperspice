@@ -63,7 +63,7 @@ class ResourceLoader;
 struct LoadErrorResetToken;
 
 class FrameLoaderClientQt : public QObject, public FrameLoaderClient {
-    CS_OBJECT(FrameLoaderClientQt)
+    WEB_CS_OBJECT(FrameLoaderClientQt)
 
     friend class ::QWebFrame;
     void callPolicyFunction(FramePolicyFunction function, PolicyAction action);

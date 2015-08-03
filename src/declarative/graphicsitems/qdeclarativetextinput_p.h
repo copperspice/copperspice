@@ -40,7 +40,7 @@ class QValidator;
 
 class QDeclarativeTextInput : public QDeclarativeImplicitSizePaintedItem
 {
-   CS_OBJECT(QDeclarativeTextInput)
+   DECL_CS_OBJECT(QDeclarativeTextInput)
 
    CS_ENUM(HAlignment)
    CS_ENUM(EchoMode)

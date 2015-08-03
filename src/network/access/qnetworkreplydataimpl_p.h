@@ -37,7 +37,7 @@ class QNetworkReplyDataImplPrivate;
 
 class QNetworkReplyDataImpl: public QNetworkReply
 {
-   CS_OBJECT(QNetworkReplyDataImpl)
+   NET_CS_OBJECT(QNetworkReplyDataImpl)
 
  public:
    QNetworkReplyDataImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);

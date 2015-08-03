@@ -38,7 +38,7 @@ class QDeclarativeBasePositionerPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBasePositioner : public QDeclarativeImplicitSizeItem
 {
-   CS_OBJECT(QDeclarativeBasePositioner)
+   DECL_CS_OBJECT(QDeclarativeBasePositioner)
 
    CS_PROPERTY_READ(spacing, spacing)
    CS_PROPERTY_WRITE(spacing, setSpacing)
@@ -108,7 +108,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBasePositioner : public QDeclarat
 
 class QDeclarativeColumn : public QDeclarativeBasePositioner
 {
-   CS_OBJECT(QDeclarativeColumn)
+   DECL_CS_OBJECT(QDeclarativeColumn)
 
  public:
    QDeclarativeColumn(QDeclarativeItem *parent = 0);
@@ -123,7 +123,7 @@ class QDeclarativeColumn : public QDeclarativeBasePositioner
 
 class QDeclarativeRow: public QDeclarativeBasePositioner
 {
-   CS_OBJECT(QDeclarativeRow)
+   DECL_CS_OBJECT(QDeclarativeRow)
 
    CS_PROPERTY_READ(layoutDirection, layoutDirection)
    CS_PROPERTY_WRITE(layoutDirection, setLayoutDirection)
@@ -151,7 +151,7 @@ class QDeclarativeRow: public QDeclarativeBasePositioner
 
 class QDeclarativeGrid : public QDeclarativeBasePositioner
 {
-   CS_OBJECT(QDeclarativeGrid)
+   DECL_CS_OBJECT(QDeclarativeGrid)
    CS_PROPERTY_READ(rows, rows)
    CS_PROPERTY_WRITE(rows, setRows)
    CS_PROPERTY_NOTIFY(rows, rowsChanged)
@@ -213,7 +213,7 @@ class QDeclarativeGrid : public QDeclarativeBasePositioner
 class QDeclarativeFlowPrivate;
 class QDeclarativeFlow: public QDeclarativeBasePositioner
 {
-   CS_OBJECT(QDeclarativeFlow)
+   DECL_CS_OBJECT(QDeclarativeFlow)
 
    CS_PROPERTY_READ(flow, flow)
    CS_PROPERTY_WRITE(flow, setFlow)

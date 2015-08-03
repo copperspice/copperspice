@@ -40,7 +40,7 @@ namespace Phonon
         class VolumeEffectFilter;
         class VolumeEffect : public Effect, public Phonon::VolumeFaderInterface
         {
-            CS_OBJECT(VolumeEffect)
+            DS9_CS_OBJECT(VolumeEffect)
                 CS_INTERFACES(Phonon::VolumeFaderInterface)
         public:
             VolumeEffect(QObject *parent);

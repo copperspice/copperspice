@@ -36,7 +36,7 @@ class QDeclarativePathViewAttached;
 
 class QDeclarativePathView : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativePathView)
+   DECL_CS_OBJECT(QDeclarativePathView)
 
    CS_PROPERTY_READ(model, model)
    CS_PROPERTY_WRITE(model, setModel)
@@ -242,7 +242,7 @@ class QDeclarativePathView : public QDeclarativeItem
 class QDeclarativeOpenMetaObject;
 class QDeclarativePathViewAttached : public QObject
 {
-   CS_OBJECT(QDeclarativePathViewAttached)
+   DECL_CS_OBJECT(QDeclarativePathViewAttached)
 
    CS_PROPERTY_READ(*view, view)
    CS_PROPERTY_CONSTANT(*view)

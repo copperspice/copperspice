@@ -37,7 +37,7 @@ class QDeclarativeFlipablePrivate;
 
 class QDeclarativeFlipable : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeFlipable)
+   DECL_CS_OBJECT(QDeclarativeFlipable)
 
    CS_ENUM(Side)
    CS_PROPERTY_READ(*front, front)

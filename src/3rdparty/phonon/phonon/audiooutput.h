@@ -50,7 +50,7 @@ namespace Phonon
         friend class FactoryPrivate;
         friend class ::AudioOutputAdaptor;
 
-        CS_OBJECT(AudioOutput)
+        PHN_CS_OBJECT(AudioOutput)
         K_DECLARE_PRIVATE(AudioOutput)
       
         PHN_CS_PROPERTY_READ(name, name)

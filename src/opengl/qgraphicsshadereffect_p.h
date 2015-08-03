@@ -36,7 +36,7 @@ class QGraphicsShaderEffectPrivate;
 
 class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 {
-   CS_OBJECT(QGraphicsShaderEffect)
+   OPENGL_CS_OBJECT(QGraphicsShaderEffect)
  public:
    QGraphicsShaderEffect(QObject *parent = 0);
    virtual ~QGraphicsShaderEffect();

@@ -181,7 +181,7 @@ class QAudioPacketFeeder
 
 class QAudioInputBuffer : public QObject
 {
-   CS_OBJECT(QAudioInputBuffer)
+   MULTI_CS_OBJECT(QAudioInputBuffer)
 
  public:
    QAudioInputBuffer(int bufferSize,
@@ -422,7 +422,7 @@ class QAudioInputBuffer : public QObject
 
 class MacInputDevice : public QIODevice
 {
-   CS_OBJECT(MacInputDevice)
+   MULTI_CS_OBJECT(MacInputDevice)
 
  public:
    MacInputDevice(QAudioInputBuffer *audioBuffer, QObject *parent):

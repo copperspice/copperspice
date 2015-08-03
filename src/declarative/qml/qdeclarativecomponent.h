@@ -42,7 +42,7 @@ class QDeclarativeComponentAttached;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeComponent : public QObject
 {
-   CS_OBJECT(QDeclarativeComponent)
+   DECL_CS_OBJECT(QDeclarativeComponent)
    Q_DECLARE_PRIVATE(QDeclarativeComponent)
 
    CS_PROPERTY_READ(progress, progress)

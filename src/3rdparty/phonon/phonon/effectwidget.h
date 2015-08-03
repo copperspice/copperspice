@@ -46,7 +46,7 @@ class Effect;
 
     class PHONON_EXPORT EffectWidget : public QWidget
     {
-        CS_OBJECT(EffectWidget)
+        PHN_CS_OBJECT(EffectWidget)
         K_DECLARE_PRIVATE(EffectWidget)
 
         public:

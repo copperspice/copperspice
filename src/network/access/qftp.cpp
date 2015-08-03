@@ -52,7 +52,7 @@ class QFtpPI;
 */
 class QFtpDTP : public QObject
 {
-   CS_OBJECT(QFtpDTP)
+   NET_CS_OBJECT(QFtpDTP)
 
  public:
    enum ConnectState {
@@ -152,7 +152,7 @@ class QFtpDTP : public QObject
 
 class QFtpPI : public QObject
 {
-   CS_OBJECT(QFtpPI)
+   NET_CS_OBJECT(QFtpPI)
 
  public:
    QFtpPI(QObject *parent = 0);

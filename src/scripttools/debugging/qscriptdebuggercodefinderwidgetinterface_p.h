@@ -35,7 +35,7 @@ class QScriptDebuggerCodeFinderWidgetInterfacePrivate;
 
 class QScriptDebuggerCodeFinderWidgetInterface : public QWidget
 {
-   CS_OBJECT(QScriptDebuggerCodeFinderWidgetInterface)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerCodeFinderWidgetInterface)
 
  public:
    ~QScriptDebuggerCodeFinderWidgetInterface();

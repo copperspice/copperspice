@@ -52,7 +52,7 @@ class QNetworkAccessCachedHttpConnection;
 
 class QHttpThreadDelegate : public QObject
 {
-   CS_OBJECT(QHttpThreadDelegate)
+   NET_CS_OBJECT(QHttpThreadDelegate)
 
  public:
    explicit QHttpThreadDelegate(QObject *parent = 0);
@@ -205,7 +205,7 @@ class QHttpThreadDelegate : public QObject
 // and represents the PUT/POST data.
 class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevice
 {
-   CS_OBJECT(QNonContiguousByteDeviceThreadForwardImpl)
+   NET_CS_OBJECT(QNonContiguousByteDeviceThreadForwardImpl)
 
  protected:
    bool wantDataPending;
