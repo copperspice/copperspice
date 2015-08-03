@@ -37,7 +37,7 @@ class QAbstractButtonPrivate;
 
 class Q_GUI_EXPORT QAbstractButton : public QWidget
 {
-   CS_OBJECT(QAbstractButton)
+   GUI_CS_OBJECT(QAbstractButton)
 
    GUI_CS_PROPERTY_READ(text, text)
    GUI_CS_PROPERTY_WRITE(text, setText)

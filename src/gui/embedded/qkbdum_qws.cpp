@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSUmKeyboardHandlerPrivate : public QObject
 {
-   CS_OBJECT(QWSUmKeyboardHandlerPrivate)
+   GUI_CS_OBJECT(QWSUmKeyboardHandlerPrivate)
 
  public:
    QWSUmKeyboardHandlerPrivate(const QString &);

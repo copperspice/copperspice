@@ -48,7 +48,7 @@ CS_DECLARE_INTERFACE(QGuiPlatformPluginInterface, QGuiPlatformPluginInterface_ii
 
 class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPluginInterface
 {
-   CS_OBJECT(QGuiPlatformPlugin)
+   GUI_CS_OBJECT(QGuiPlatformPlugin)
    CS_INTERFACES(QGuiPlatformPluginInterface, QFactoryInterface)
 
  public:

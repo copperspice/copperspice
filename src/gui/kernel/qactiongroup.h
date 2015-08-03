@@ -37,7 +37,7 @@ class QActionGroupPrivate;
 
 class Q_GUI_EXPORT QActionGroup : public QObject
 {
-   CS_OBJECT(QActionGroup)
+   GUI_CS_OBJECT(QActionGroup)
    Q_DECLARE_PRIVATE(QActionGroup)
 
    GUI_CS_PROPERTY_READ(exclusive, isExclusive)

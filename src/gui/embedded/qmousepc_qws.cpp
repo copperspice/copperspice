@@ -476,7 +476,7 @@ class QWSPcMouseSubHandler_ms : public QWSPcMouseSubHandler_serial
 
 class QWSPcMouseHandlerPrivate : public QObject
 {
-   CS_OBJECT(QWSPcMouseHandlerPrivate)
+   GUI_CS_OBJECT(QWSPcMouseHandlerPrivate)
 
  public:
    QWSPcMouseHandlerPrivate(QWSPcMouseHandler *h, const QString &, const QString &);

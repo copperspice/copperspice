@@ -36,7 +36,7 @@ class QSocketNotifier;
 
 class QVFbMouseHandler : public QObject, public QWSMouseHandler
 {
-   CS_OBJECT_MULTIPLE(QVFbMouseHandler, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QVFbMouseHandler, QObject)
 
  public:
    QVFbMouseHandler(const QString &driver = QString(),

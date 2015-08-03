@@ -46,7 +46,7 @@ class QAbstractAnimation;
 
 class Q_CORE_EXPORT QAbstractTransition : public QObject
 {
-   CS_OBJECT(QAbstractTransition)
+   CORE_CS_OBJECT(QAbstractTransition)
 
    CORE_CS_PROPERTY_READ(sourceState, sourceState)
    CORE_CS_PROPERTY_READ(targetState, targetState)

@@ -35,7 +35,7 @@ class QStyleOptionButton;
 
 class Q_GUI_EXPORT QCheckBox : public QAbstractButton
 {
-   CS_OBJECT(QCheckBox)
+   GUI_CS_OBJECT(QCheckBox)
 
    GUI_CS_PROPERTY_READ(tristate, isTristate)
    GUI_CS_PROPERTY_WRITE(tristate, setTristate)

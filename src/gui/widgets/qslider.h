@@ -37,7 +37,7 @@ class QStyleOptionSlider;
 
 class Q_GUI_EXPORT QSlider : public QAbstractSlider
 {
-   CS_OBJECT(QSlider)
+   GUI_CS_OBJECT(QSlider)
 
    GUI_CS_ENUM(TickPosition)
 

@@ -34,7 +34,7 @@ class QAbstractSliderPrivate;
 
 class Q_GUI_EXPORT QAbstractSlider : public QWidget
 {
-   CS_OBJECT(QAbstractSlider)
+   GUI_CS_OBJECT(QAbstractSlider)
 
    GUI_CS_PROPERTY_READ(minimum, minimum)
    GUI_CS_PROPERTY_WRITE(minimum, setMinimum)

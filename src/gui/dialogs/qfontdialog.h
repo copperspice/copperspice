@@ -38,7 +38,7 @@ class QFontDialogPrivate;
 
 class Q_GUI_EXPORT QFontDialog : public QDialog
 {
-   CS_OBJECT(QFontDialog)
+   GUI_CS_OBJECT(QFontDialog)
    Q_DECLARE_PRIVATE(QFontDialog)
 
    GUI_CS_ENUM(FontDialogOption)

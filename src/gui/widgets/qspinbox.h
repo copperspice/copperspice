@@ -37,7 +37,7 @@ class QDoubleSpinBoxPrivate;
 
 class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
 {
-   CS_OBJECT(QSpinBox)
+   GUI_CS_OBJECT(QSpinBox)
 
    GUI_CS_PROPERTY_READ(suffix, suffix)
    GUI_CS_PROPERTY_WRITE(suffix, setSuffix)
@@ -112,7 +112,7 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
 
 class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
 {
-   CS_OBJECT(QDoubleSpinBox)
+   GUI_CS_OBJECT(QDoubleSpinBox)
 
    GUI_CS_PROPERTY_READ(prefix, prefix)
    GUI_CS_PROPERTY_WRITE(prefix, setPrefix)

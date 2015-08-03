@@ -39,7 +39,7 @@ QT_BEGIN_NAMESPACE
 
 class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QKqueueFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QKqueueFileSystemWatcherEngine)
 
  public:
    ~QKqueueFileSystemWatcherEngine();

@@ -41,7 +41,7 @@ class QIODevicePrivate;
 
 class Q_CORE_EXPORT QIODevice : public QObject
 {
-   CS_OBJECT(QIODevice)
+   CORE_CS_OBJECT(QIODevice)
 
  public:   
    enum OpenModeFlag {

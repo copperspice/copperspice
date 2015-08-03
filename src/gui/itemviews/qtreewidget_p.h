@@ -44,7 +44,7 @@ class QTreeModelPrivate;
 
 class QTreeModel : public QAbstractItemModel
 {
-   CS_OBJECT(QTreeModel)
+   GUI_CS_OBJECT(QTreeModel)
 
    friend class QTreeWidget;
    friend class QTreeWidgetPrivate;

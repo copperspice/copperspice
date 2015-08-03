@@ -47,7 +47,7 @@ class QAccessiblePluginPrivate;
 
 class Q_GUI_EXPORT QAccessiblePlugin : public QObject, public QAccessibleFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QAccessiblePlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QAccessiblePlugin, QObject)
    CS_INTERFACES(QAccessibleFactoryInterface, QFactoryInterface)
 
  public:

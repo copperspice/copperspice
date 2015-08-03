@@ -36,7 +36,7 @@ class QPropertyAnimationPrivate;
 
 class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
 {
-   CS_OBJECT(QPropertyAnimation)
+   CORE_CS_OBJECT(QPropertyAnimation)
 
    CORE_CS_PROPERTY_READ(propertyName, propertyName)
    CORE_CS_PROPERTY_WRITE(propertyName, setPropertyName)

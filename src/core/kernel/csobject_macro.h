@@ -80,6 +80,20 @@ class cs_number<0>
       CS_OBJECT_INTERNAL(classNameX) \
    private:
 
+#define CS_OBJECT_OUTSIDE(classNameX) \
+   public: \
+      typedef cs_class cs_parent; \
+      typedef classNameX cs_class; \
+      CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+   private:
+
+#define CS_OBJECT_MULTIPLE_OUTSIDE(classNameX,parentX) \
+   public: \
+      typedef parentX cs_parent; \
+      typedef classNameX cs_class; \
+      CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+   private:
+
 #define CS_OBJECT_INTERNAL(classNameX) \
    public: \
       static const char *cs_className() \
@@ -90,21 +104,21 @@ class cs_number<0>
       static void cs_regTrigger(cs_number<N>) \
       { \
       } \
-      static constexpr cs_number<0> cs_counter(cs_number<0>)  \
+      static constexpr cs_number<0> cs_counter(cs_number<0>)   \
       { \
-         return cs_number<0>{};   \
+         return cs_number<0>{};  \
       } \
       friend QMetaObject_T<classNameX>; \
-      static const QMetaObject_T<classNameX> & staticMetaObject()  \
+      static const QMetaObject_T<classNameX> & staticMetaObject()   \
       { \
          QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
-         auto index = temp.find(typeid(cs_class));  \
-         if (index == temp.end()) {     \
+         auto index = temp.find(typeid(cs_class));    \
+         if (index == temp.end()) {             \
             QMetaObject_T<classNameX> *xx = new QMetaObject_T<classNameX>;  \
             temp.insert(typeid(cs_class), xx);  \
             xx->postConstruct(); \
             return *xx; \
-         } else {    \
+         } else {      \
             return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
          } \
       } \
@@ -112,6 +126,22 @@ class cs_number<0>
       { \
          return &staticMetaObject(); \
       } \
+      CS_TR_FUNCTIONS \
+   private: \
+      struct cs_classname \
+      { \
+         static constexpr const char *value = #classNameX; \
+      };
+
+
+#define CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+   public: \
+      static const char *cs_className() \
+      { \
+         return #classNameX; \
+      } \
+      static const QMetaObject_T<classNameX> & staticMetaObject(); \
+      virtual const QMetaObject *metaObject() const; \
       CS_TR_FUNCTIONS \
    private: \
       struct cs_classname \
@@ -128,6 +158,13 @@ class cs_number<0>
       CS_GADGET_INTERNAL(classNameX) \
    private:
 
+#define CS_GADGET_OUTSIDE(classNameX) \
+   public: \
+      typedef CSGadget_Fake_Parent cs_parent; \
+      typedef classNameX cs_class; \
+      CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
+   private:
+
 
 #define CS_GADGET_INTERNAL(classNameX) \
    public: \
@@ -139,22 +176,38 @@ class cs_number<0>
       static void cs_regTrigger(cs_number<N>) \
       { \
       } \
-      static constexpr cs_number<0> cs_counter(cs_number<0>)  \
+      static constexpr cs_number<0> cs_counter(cs_number<0>)   \
       { \
-         return cs_number<0>{};   \
+         return cs_number<0>{};  \
       } \
+      friend QMetaObject_T<classNameX>; \
       static const QMetaObject_T<classNameX> & staticMetaObject() \
       { \
          QMap<std::type_index, QMetaObject *> &temp = CSGadget_Fake_Parent::m_metaObjectsAll(); \
-         auto index = temp.find(typeid(cs_class));    \
-         if (index == temp.end()) {     \
+         auto index = temp.find(typeid(cs_class));      \
+         if (index == temp.end()) {       \
             QMetaObject_T<classNameX> *xx = new QMetaObject_T<classNameX>;  \
             temp.insert(typeid(cs_class), xx);  \
+            xx->postConstruct(); \
             return *xx; \
-         } else {    \
+         } else {      \
             return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
          } \
       } \
+      CS_TR_FUNCTIONS \
+   private: \
+      struct cs_classname \
+      { \
+         static constexpr const char *value = #classNameX; \
+      };
+
+#define CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
+   public: \
+      static const char *cs_className() \
+      { \
+         return #classNameX; \
+      } \
+      static const QMetaObject_T<classNameX> & staticMetaObject(); \
       CS_TR_FUNCTIONS \
    private: \
       struct cs_classname \
@@ -180,12 +233,12 @@ class cs_number<0>
       }
 
 
-#define CS_INTERFACES(...)  \
+#define CS_INTERFACES(...)    \
    public: \
-      bool cs_interface_query(const char *data) const  \
+      bool cs_interface_query(const char *data) const    \
       {  \
          if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
-            return true;  \
+            return true;   \
          }  \
          return false;  \
       }  \
@@ -254,7 +307,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         cs_namespace_register_flag<cs_class>(#enumName, cs_classname::value,  \
+         cs_namespace_register_flag<cs_class>(#enumName, cs_classname::value,    \
             #flagName, typeid(flagName));  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
@@ -273,22 +326,24 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;  \
+         const char *va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );
+         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
 
 #define CS_INVOKABLE_CONSTRUCTOR_2(className, ...) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
-            #className, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)<__VA_ARGS__>,     \
+         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method    \
+            <QObject * (*)(__VA_ARGS__)>(   \
+            #className, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)<__VA_ARGS__>,  \
             QMetaMethod::Constructor, va_args, accessType); \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );  \
       } \
       template <class... Ts> \
    static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)(Ts...Vs) \
       { \
-         return new className{Vs...};   \
+         return new className{Vs...};  \
       }
 
 
@@ -304,24 +359,27 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;  \
+         const char *va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );
+         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
 
 #define CS_INVOKABLE_METHOD_2(methodName) \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
             #methodName, &cs_class::methodName, QMetaMethod::Method, va_args, accessType); \
-      } \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );  \
+      }
 
 
 #define CS_INVOKABLE_OVERLOAD(methodName, argTypes, ...) \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
             #methodName, static_cast<void (cs_class::*)argTypes>(&cs_class::methodName), \
             QMetaMethod::Method, va_args, accessType); \
-      } \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );  \
+      }
 
 
 // ** revision
@@ -363,24 +421,25 @@ class cs_number<0>
 #define CS_SLOT_1(access, ...) \
    __VA_ARGS__; \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
-            decltype( cs_counter(cs_number<255>{}) )::value; \
+            decltype(cs_counter(cs_number<255>{}))::value; \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>) \
       {  \
-         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};      \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};      \
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;  \
+         const char *va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );
+         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
 
 #define CS_SLOT_2(slotName) \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
             #slotName, &cs_class::slotName, QMetaMethod::Slot, va_args, accessType); \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} ); \
       }
 
 
@@ -391,7 +450,7 @@ class cs_number<0>
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>) \
       {  \
-         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};      \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};      \
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
@@ -417,7 +476,7 @@ class cs_number<0>
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s2(  \
-            #signalName, &cs_class::signalName, QMetaMethod::Signal);  \
+            #signalName, &cs_class::signalName, QMetaMethod::Signal);   \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }  \
@@ -431,7 +490,7 @@ class cs_number<0>
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>)   \
       {  \
-         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};        \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};        \
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
@@ -446,21 +505,24 @@ class cs_number<0>
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(    \
             #slotName #argTypes, static_cast<void (cs_class::*)argTypes>(&cs_class::slotName),  \
             QMetaMethod::Slot, va_args, accessType); \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );  \
       }
 
 
 #define CS_SLOT_OVERLOAD_BOOL(slotName, argTypes) \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(     \
             #slotName #argTypes, static_cast<bool (cs_class::*)argTypes>(&cs_class::slotName),   \
-            QMetaMethod::Slot, va_args, accessType); \
+            QMetaMethod::Slot, va_args, accessType);  \
+         \
+         cs_regTrigger(cs_number<cntValue + 1>{} );   \
       }
-
 
 #ifndef QT_NO_DEBUG
 
 
-#define CS_NUMBER_TO_STRING_INTERNAL(number)      #number
-#define CS_NUMBER_TO_STRING(number)               CS_NUMBER_TO_STRING_INTERNAL(number)
+#define CS_NUMBER_TO_STRING_INTERNAL(number)       #number
+#define CS_NUMBER_TO_STRING(number)                CS_NUMBER_TO_STRING_INTERNAL(number)
 
 // SIGNAL
 #define SIGNAL(...) \
@@ -490,11 +552,11 @@ class cs_number<0>
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>)    \
       {  \
-         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};         \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};         \
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_tag(#name, #data); \
+         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_tag(#name, #data); \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
@@ -514,7 +576,7 @@ class cs_number<0>
       {  \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())   \
             .register_property_read(#name, cs_typeName< cs_returnType<decltype(&cs_class::method)>::type> (),  \
-             new SpiceJarRead<cs_class, cs_returnType< decltype(&cs_class::method) >::type> (&cs_class::method));  \
+            new SpiceJarRead<cs_class, cs_returnType< decltype(&cs_class::method) >::type> (&cs_class::method));  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
@@ -610,7 +672,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data) \
-    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const \
+   bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const \
       {  \
          return data; \
       } \
@@ -676,7 +738,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_STORED(name, data) \
-    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+   static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
       {  \
          return data; \
       } \
@@ -722,7 +784,7 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_USER(name, data) \
-    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
+   static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  \
       {  \
          return data; \
       } \
@@ -766,15 +828,21 @@ class cs_number<0>
 
 
 #define CS_PROPERTY_CONSTANT(name) \
-   struct CS_TOKENPASTE2(cs_fauxName, __LINE__) \
-      { \
-         static constexpr const char *value = #name; \
-      }; \
-   int CS_TOKENPASTE2(cs_faux, __LINE__)() \
-      { \
-         return cs_record_property_int<cs_class, CS_TOKENPASTE2(cs_fauxName, __LINE__), 1, \
-                                          QMetaProperty::CONSTANT>::placeholder; \
+   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
+            decltype( cs_counter(cs_number<255>{}) )::value; \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
+            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>)    \
+      {  \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};         \
+      }  \
+   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
+      {  \
+         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(  \
+            #name, 1, QMetaProperty::CONSTANT); \
+         \
+         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
+
 
 #define CS_PROPERTY_FINAL(name) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
@@ -786,7 +854,8 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(#name, 1, QMetaProperty::FINAL); \
+         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(  \
+            #name, 1, QMetaProperty::FINAL); \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
@@ -796,6 +865,11 @@ class cs_number<0>
 
 // ** 1
 #ifdef QT_BUILD_CORE_LIB
+#define CORE_CS_OBJECT(className)                              CS_OBJECT(className)
+#define CORE_CS_OBJECT_MULTIPLE(className, parentX)            CS_OBJECT_MULTIPLE(className, parentX)
+#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL(className)
+#define CORE_CS_GADGET(className)                              CS_GADGET(className)
+
 #define CORE_CS_SLOT_1(access, ...)                            CS_SLOT_1(access, __VA_ARGS__)
 #define CORE_CS_SLOT_2(slotName)                               CS_SLOT_2(slotName)
 #define CORE_CS_SLOT_OVERLOAD(slotName, argTypes)              CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -828,7 +902,12 @@ class cs_number<0>
 #define CORE_CS_PROPERTY_FINAL(name)                           CS_PROPERTY_FINAL(name)
 
 #else
-#define CORE_CS_SLOT_1(access, ...)                            __VA_ARGS__;
+#define CORE_CS_OBJECT(className)                              CS_OBJECT_OUTSIDE(className)
+#define CORE_CS_OBJECT_MULTIPLE(className, parentX)            CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL_OUTSIDE(className)
+#define CORE_CS_GADGET(className)                              CS_GADGET_OUTSIDE(className)
+
+#define CORE_CS_SLOT_1(access, ...)                             __VA_ARGS__;
 #define CORE_CS_SLOT_2(slotName)
 #define CORE_CS_SLOT_OVERLOAD(slotName, argTypes)
 
@@ -840,7 +919,7 @@ class cs_number<0>
 #define CORE_CS_INVOKABLE_CONSTRUCTOR_2(className, ...)
 
 #define CORE_CS_ENUM(name)
-#define CORE_CS_REGISTER_ENUM(...)                             __VA_ARGS__          // do not add ;
+#define CORE_CS_REGISTER_ENUM(...)                             __VA_ARGS__           // do not add ;
 #define CORE_CS_FLAG(enumName, flagName)
 
 #define CORE_CS_PROPERTY_READ(name, method)
@@ -864,6 +943,10 @@ class cs_number<0>
 
 // ** 2
 #ifdef QT_BUILD_GUI_LIB
+#define GUI_CS_OBJECT(className)                                  CS_OBJECT(className)
+#define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE(className, parentX)
+#define GUI_CS_GADGET(className)                                  CS_GADGET(className)
+
 #define GUI_CS_SLOT_1(access, ...)                                CS_SLOT_1(access, __VA_ARGS__)
 #define GUI_CS_SLOT_2(slotName)                                   CS_SLOT_2(slotName)
 #define GUI_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -893,6 +976,10 @@ class cs_number<0>
 #define GUI_CS_PROPERTY_FINAL(name)                               CS_PROPERTY_FINAL(name)
 
 #else
+#define GUI_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
+#define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+#define GUI_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
+
 #define GUI_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define GUI_CS_SLOT_2(slotName)
 #define GUI_CS_SLOT_OVERLOAD(slotName, argTypes)
@@ -902,7 +989,7 @@ class cs_number<0>
 #define GUI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #define GUI_CS_ENUM(name)
-#define GUI_CS_REGISTER_ENUM(...)                                 __VA_ARGS__          // do not add ;
+#define GUI_CS_REGISTER_ENUM(...)                                 __VA_ARGS__           // do not add ;
 #define GUI_CS_FLAG(enumName, flagName)
 
 #define GUI_CS_PROPERTY_READ(name, method)
@@ -938,7 +1025,7 @@ class cs_number<0>
 #define MULTI_CS_SLOT_2(slotName)
 #define MULTI_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-#define MULTI_CS_SIGNAL_1(access, ...)                            Q_DECL_IMPORT __VA_ARGS__;
+#define MULTI_CS_SIGNAL_1(access, ...)                             Q_DECL_IMPORT __VA_ARGS__;
 #define MULTI_CS_SIGNAL_2(signalName, ...)
 #define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
@@ -990,7 +1077,7 @@ class cs_number<0>
 #define NET_CS_INVOKABLE_METHOD_2(methodName)
 
 #define NET_CS_ENUM(name)
-#define NET_CS_REGISTER_ENUM(...)                                 __VA_ARGS__          // do not add ;
+#define NET_CS_REGISTER_ENUM(...)                                 __VA_ARGS__           // do not add ;
 
 #define NET_CS_PROPERTY_READ(name, method)
 #define NET_CS_PROPERTY_WRITE(name, method)
@@ -1073,7 +1160,7 @@ class cs_number<0>
 #define PHN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #define PHN_CS_ENUM(name)
-#define PHN_CS_REGISTER_ENUM(...)                                 __VA_ARGS__          // do not add ;
+#define PHN_CS_REGISTER_ENUM(...)                                 __VA_ARGS__           // do not add ;
 #define PHN_CS_FLAG(enumName, flagName)
 
 #define PHN_CS_PROPERTY_READ(name, method)
@@ -1131,7 +1218,7 @@ class cs_number<0>
 #define SCRIPT_T_CS_SLOT_2(slotName)
 #define SCRIPT_T_CS_SLOT_OVERLOAD(slotName, argTypes)
 
-#define SCRIPT_T_CS_SIGNAL_1(access, ...)                         Q_DECL_IMPORT __VA_ARGS__;
+#define SCRIPT_T_CS_SIGNAL_1(access, ...)                          Q_DECL_IMPORT __VA_ARGS__;
 #define SCRIPT_T_CS_SIGNAL_2(signalName, ...)
 #define SCRIPT_T_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
@@ -1226,7 +1313,7 @@ class cs_number<0>
 #define XMLP_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)        CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #else
-#define XMLP_CS_SLOT_1(access, ...)                               __VA_ARGS__;
+#define XMLP_CS_SLOT_1(access, ...)                                 __VA_ARGS__;
 #define XMLP_CS_SLOT_2(slotName)
 #define XMLP_CS_SLOT_OVERLOAD(slotName, argTypes)
 
@@ -1282,7 +1369,7 @@ class cs_number<0>
 #define WEB_CS_INVOKABLE_METHOD_2(methodName)
 
 #define WEB_CS_ENUM(name)
-#define WEB_CS_REGISTER_ENUM(...)                                 __VA_ARGS__          // do not add ;
+#define WEB_CS_REGISTER_ENUM(...)                                 __VA_ARGS__           // do not add ;
 #define WEB_CS_FLAG(enumName, flagName)
 
 #define WEB_CS_PROPERTY_READ(name, method)
@@ -1353,7 +1440,7 @@ class cs_number<0>
 #define DECL_CS_REVISION_OVERLOAD(methodName, revision, argTypes)
 
 #define DECL_CS_ENUM(name)
-#define DECL_CS_REGISTER_ENUM(...)                                __VA_ARGS__          // do not add ;
+#define DECL_CS_REGISTER_ENUM(...)                                __VA_ARGS__           // do not add ;
 
 #define DECL_CS_PROPERTY_READ(name, method)
 #define DECL_CS_PROPERTY_WRITE(name, method)

@@ -94,7 +94,7 @@ class ZoomFactorValidator : public QDoubleValidator
 
 class LineEdit : public QLineEdit
 {
-   CS_OBJECT(LineEdit)
+   GUI_CS_OBJECT(LineEdit)
 
  public:
    LineEdit(QWidget *parent = 0)

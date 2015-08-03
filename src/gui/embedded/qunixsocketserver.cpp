@@ -47,7 +47,7 @@ QT_BEGIN_NAMESPACE
 
 class QUnixSocketServerPrivate : public QObject
 {
-   CS_OBJECT(QUnixSocketServerPrivate)
+   GUI_CS_OBJECT(QUnixSocketServerPrivate)
 
  public:
    QUnixSocketServerPrivate(QUnixSocketServer *parent)

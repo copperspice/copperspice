@@ -37,7 +37,7 @@ class QSoundPrivate;
 
 class Q_GUI_EXPORT QSound : public QObject
 {
-   CS_OBJECT(QSound)
+   GUI_CS_OBJECT(QSound)
 
  public:
    static bool isAvailable();

@@ -36,7 +36,7 @@ class QProxyModelPrivate;
 
 class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
 {
-   CS_OBJECT(QProxyModel)
+   GUI_CS_OBJECT(QProxyModel)
 
  public:
    explicit QProxyModel(QObject *parent = 0);

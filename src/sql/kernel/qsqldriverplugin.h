@@ -42,7 +42,7 @@ CS_DECLARE_INTERFACE(QSqlDriverFactoryInterface, QSqlDriverFactoryInterface_iid)
 
 class Q_SQL_EXPORT QSqlDriverPlugin : public QObject, public QSqlDriverFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QSqlDriverPlugin, QObject)
+   SQL_CS_OBJECT_MULTIPLE(QSqlDriverPlugin, QObject)
    CS_INTERFACES(QSqlDriverFactoryInterface, QFactoryInterface)
 
  public:

@@ -36,7 +36,7 @@ class QHistoryStatePrivate;
 
 class Q_CORE_EXPORT QHistoryState : public QAbstractState
 {
-   CS_OBJECT(QHistoryState)
+   CORE_CS_OBJECT(QHistoryState)
 
    CORE_CS_PROPERTY_READ(defaultState, defaultState)
    CORE_CS_PROPERTY_WRITE(defaultState, setDefaultState)

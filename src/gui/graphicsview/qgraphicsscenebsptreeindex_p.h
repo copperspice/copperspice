@@ -45,7 +45,7 @@ class QGraphicsSceneBspTreeIndexPrivate;
 
 class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
 {
-   CS_OBJECT(QGraphicsSceneBspTreeIndex)
+   GUI_CS_OBJECT(QGraphicsSceneBspTreeIndex)
 
    GUI_CS_PROPERTY_READ(bspTreeDepth, bspTreeDepth)
    GUI_CS_PROPERTY_WRITE(bspTreeDepth, setBspTreeDepth)

@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class QFileSystemWatcherEngine : public QThread
 {
-   CS_OBJECT(QFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QFileSystemWatcherEngine)
 
  protected:
    inline QFileSystemWatcherEngine(bool move = true) {

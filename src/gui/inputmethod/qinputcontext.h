@@ -46,7 +46,7 @@ class QInputContextPrivate;
 
 class Q_GUI_EXPORT QInputContext : public QObject
 {
-   CS_OBJECT(QInputContext)
+   GUI_CS_OBJECT(QInputContext)
    Q_DECLARE_PRIVATE(QInputContext)
 
  public:

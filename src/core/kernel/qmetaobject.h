@@ -374,8 +374,7 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
    if (! name || ! name[0] ) {
       return;
    }
-
-   //
+   
    QMap<QString, QMetaMethod> *map;
 
    if (kind == QMetaMethod::Constructor) {

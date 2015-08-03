@@ -41,7 +41,7 @@ class QHelpEvent;
 
 class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 {
-   CS_OBJECT(QAbstractItemDelegate)
+   GUI_CS_OBJECT(QAbstractItemDelegate)
 
  public:
 

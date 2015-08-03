@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class QToolBarExtension : public QToolButton
 {
-   CS_OBJECT(QToolBarExtension)
+   GUI_CS_OBJECT(QToolBarExtension)
    Qt::Orientation orientation;
 
  public:

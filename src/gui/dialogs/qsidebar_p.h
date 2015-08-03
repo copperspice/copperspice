@@ -46,7 +46,7 @@ class QSideBarDelegate : public QStyledItemDelegate
 
 class QUrlModel : public QStandardItemModel
 {
-   CS_OBJECT(QUrlModel)
+   GUI_CS_OBJECT(QUrlModel)
 
  public:
    enum Roles {
@@ -89,7 +89,7 @@ class QUrlModel : public QStandardItemModel
 
 class QSidebar : public QListView
 {
-   CS_OBJECT(QSidebar)
+   GUI_CS_OBJECT(QSidebar)
 
  public:
    GUI_CS_SIGNAL_1(Public, void goToUrl(const QUrl &url))

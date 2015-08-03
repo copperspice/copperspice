@@ -36,7 +36,7 @@ class QWSEmbedWidgetPrivate;
 
 class Q_GUI_EXPORT QWSEmbedWidget : public QWidget
 {
-   CS_OBJECT(QWSEmbedWidget)
+   GUI_CS_OBJECT(QWSEmbedWidget)
 
  public:
    QWSEmbedWidget(WId winId, QWidget *parent = 0);

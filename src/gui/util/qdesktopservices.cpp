@@ -53,7 +53,7 @@ QT_BEGIN_NAMESPACE
 
 class QOpenUrlHandlerRegistry : public QObject
 {
-   CS_OBJECT(QOpenUrlHandlerRegistry)
+   GUI_CS_OBJECT(QOpenUrlHandlerRegistry)
 
  public:
    inline QOpenUrlHandlerRegistry() : mutex(QMutex::Recursive) {}

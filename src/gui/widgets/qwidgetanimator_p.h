@@ -39,7 +39,7 @@ class QRect;
 
 class QWidgetAnimator : public QObject
 {
-   CS_OBJECT(QWidgetAnimator)
+   GUI_CS_OBJECT(QWidgetAnimator)
 
  public:
    QWidgetAnimator(QMainWindowLayout *layout);

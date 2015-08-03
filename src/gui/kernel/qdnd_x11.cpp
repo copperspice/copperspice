@@ -273,7 +273,7 @@ static const char *const default_pm[] = {
 
 class QShapedPixmapWidget : public QWidget
 {
-   CS_OBJECT(QShapedPixmapWidget)
+   GUI_CS_OBJECT(QShapedPixmapWidget)
 
  public:
    QShapedPixmapWidget(QWidget *w) :

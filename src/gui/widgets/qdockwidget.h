@@ -39,7 +39,7 @@ class QStyleOptionDockWidget;
 
 class Q_GUI_EXPORT QDockWidget : public QWidget
 {
-   CS_OBJECT(QDockWidget)
+   GUI_CS_OBJECT(QDockWidget)
 
    GUI_CS_FLAG(DockWidgetFeature, DockWidgetFeatures)
 

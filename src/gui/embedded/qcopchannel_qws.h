@@ -37,7 +37,7 @@ class QCopChannelPrivate;
 
 class Q_GUI_EXPORT QCopChannel : public QObject
 {
-   CS_OBJECT(QCopChannel)
+   GUI_CS_OBJECT(QCopChannel)
 
  public:
    explicit QCopChannel(const QString &channel, QObject *parent = 0);

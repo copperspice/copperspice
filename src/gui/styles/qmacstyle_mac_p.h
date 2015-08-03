@@ -114,7 +114,7 @@ bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOpti
 
 class QMacStylePrivate : public QObject
 {
-   CS_OBJECT(QMacStylePrivate)
+   GUI_CS_OBJECT(QMacStylePrivate)
 
  public:
    QMacStylePrivate(QMacStyle *style);

@@ -42,7 +42,7 @@ CS_DECLARE_INTERFACE(QWSMouseHandlerFactoryInterface, QWSMouseHandlerFactoryInte
 
 class Q_GUI_EXPORT QMouseDriverPlugin : public QObject, public QWSMouseHandlerFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QMouseDriverPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QMouseDriverPlugin, QObject)
    CS_INTERFACES(QWSMouseHandlerFactoryInterface, QFactoryInterface)
 
  public:

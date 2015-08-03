@@ -82,7 +82,7 @@ class Q_CORE_EXPORT QProcessEnvironment
 
 class Q_CORE_EXPORT QProcess : public QIODevice
 {
-   CS_OBJECT(QProcess)
+   CORE_CS_OBJECT(QProcess)
 
  public:
    enum ProcessError {

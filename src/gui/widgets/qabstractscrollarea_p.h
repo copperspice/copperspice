@@ -86,7 +86,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 
 class QAbstractScrollAreaFilter : public QObject
 {
-   CS_OBJECT(QAbstractScrollAreaFilter)
+   GUI_CS_OBJECT(QAbstractScrollAreaFilter)
 
  public:
    QAbstractScrollAreaFilter(QAbstractScrollAreaPrivate *p) : d(p) {

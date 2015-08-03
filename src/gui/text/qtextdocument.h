@@ -70,7 +70,7 @@ inline QAbstractUndoItem::~QAbstractUndoItem()
 
 class Q_GUI_EXPORT QTextDocument : public QObject
 {
-   CS_OBJECT(QTextDocument)
+   GUI_CS_OBJECT(QTextDocument)
 
    GUI_CS_PROPERTY_READ(undoRedoEnabled, isUndoRedoEnabled)
    GUI_CS_PROPERTY_WRITE(undoRedoEnabled, setUndoRedoEnabled)

@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE
 
 class QFontListView : public QListView
 {
-   CS_OBJECT(QFontListView)
+   GUI_CS_OBJECT(QFontListView)
 
  public:
    QFontListView(QWidget *parent);

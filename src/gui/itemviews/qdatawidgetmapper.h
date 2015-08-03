@@ -40,7 +40,7 @@ class QDataWidgetMapperPrivate;
 
 class Q_GUI_EXPORT QDataWidgetMapper: public QObject
 {
-   CS_OBJECT(QDataWidgetMapper)
+   GUI_CS_OBJECT(QDataWidgetMapper)
 
    GUI_CS_ENUM(SubmitPolicy)
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)

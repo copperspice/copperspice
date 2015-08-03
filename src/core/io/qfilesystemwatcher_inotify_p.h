@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class QInotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QInotifyFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QInotifyFileSystemWatcherEngine)
 
  public:
    ~QInotifyFileSystemWatcherEngine();

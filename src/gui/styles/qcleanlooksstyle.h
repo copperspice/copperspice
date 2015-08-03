@@ -36,7 +36,7 @@ class QCleanlooksStylePrivate;
 
 class Q_GUI_EXPORT QCleanlooksStyle : public QWindowsStyle
 {
-   CS_OBJECT(QCleanlooksStyle)
+   GUI_CS_OBJECT(QCleanlooksStyle)
    Q_DECLARE_PRIVATE(QCleanlooksStyle)
 
  public:

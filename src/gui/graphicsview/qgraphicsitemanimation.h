@@ -41,7 +41,7 @@ template <class T1, class T2> struct QPair;
 
 class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
 {
-   CS_OBJECT(QGraphicsItemAnimation)
+   GUI_CS_OBJECT(QGraphicsItemAnimation)
 
  public:
    QGraphicsItemAnimation(QObject *parent = 0);

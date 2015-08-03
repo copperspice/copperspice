@@ -33,7 +33,7 @@ class DeviceOrientationProviderQt;
 
 class DeviceOrientationClientQt : public QObject, public DeviceOrientationClient {
 
-    CS_OBJECT_MULTIPLE(DeviceOrientationClientQt, QObject)
+    WEB_CS_OBJECT_MULTIPLE(DeviceOrientationClientQt, QObject)
 
 public:
     DeviceOrientationClientQt(QWebPage*);

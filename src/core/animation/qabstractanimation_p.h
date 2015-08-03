@@ -93,7 +93,7 @@ class QAbstractAnimationPrivate
 
 class QDefaultAnimationDriver : public QAnimationDriver
 {
-   CS_OBJECT(QDefaultAnimationDriver)
+   CORE_CS_OBJECT(QDefaultAnimationDriver)
 
  public:
    QDefaultAnimationDriver(QUnifiedTimer *timer);

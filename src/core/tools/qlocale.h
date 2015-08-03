@@ -109,9 +109,8 @@ class Q_CORE_EXPORT QSystemLocale
 struct QLocalePrivate;
 class Q_CORE_EXPORT QLocale
 {
-   CS_GADGET(QLocale)
+   CORE_CS_GADGET(QLocale)
  
-
    friend class QString;
    friend class QByteArray;
    friend class QIntValidator;

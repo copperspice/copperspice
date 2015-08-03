@@ -45,7 +45,7 @@ class QDateTimeEdit;
 
 class Q_GUI_EXPORT QLineEdit : public QWidget
 {
-   CS_OBJECT(QLineEdit)
+   GUI_CS_OBJECT(QLineEdit)
 
    GUI_CS_ENUM(EchoMode)
 

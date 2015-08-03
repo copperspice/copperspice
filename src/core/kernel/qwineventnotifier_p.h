@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QWinEventNotifier : public QObject
 {
-   CS_OBJECT(QWinEventNotifier)
+   CORE_CS_OBJECT(QWinEventNotifier)
 
  public:
    explicit QWinEventNotifier(QObject *parent = 0);

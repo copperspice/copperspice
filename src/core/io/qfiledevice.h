@@ -35,7 +35,7 @@ class QFileDevicePrivate;
 
 class Q_CORE_EXPORT QFileDevice : public QIODevice
 {
-   CS_OBJECT(QFileDevice)
+   CORE_CS_OBJECT(QFileDevice)
    Q_DECLARE_PRIVATE(QFileDevice)
 
  public:

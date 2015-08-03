@@ -78,7 +78,7 @@ void QTimer::timerEvent(QTimerEvent *e)
 
 class QSingleShotTimer : public QObject
 {
-   CS_OBJECT(QSingleShotTimer)
+   CORE_CS_OBJECT(QSingleShotTimer)
    int timerId;
 
  public:

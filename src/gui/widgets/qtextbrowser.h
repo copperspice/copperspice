@@ -37,7 +37,7 @@ class QTextBrowserPrivate;
 
 class Q_GUI_EXPORT QTextBrowser : public QTextEdit
 {
-   CS_OBJECT(QTextBrowser)
+   GUI_CS_OBJECT(QTextBrowser)
 
    GUI_CS_PROPERTY_READ(source, source)
    GUI_CS_PROPERTY_WRITE(source, setSource)

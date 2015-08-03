@@ -74,7 +74,7 @@ class QApplicationPrivate;
 
 class Q_GUI_EXPORT QApplication : public QCoreApplication
 {
-   CS_OBJECT(QApplication)
+   GUI_CS_OBJECT(QApplication)
 
    GUI_CS_PROPERTY_READ(layoutDirection, cs_layoutDirection)
    GUI_CS_PROPERTY_WRITE(layoutDirection, cs_setLayoutDirection)

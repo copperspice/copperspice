@@ -35,7 +35,7 @@ class QEasingCurvePrivate;
 
 class Q_CORE_EXPORT QEasingCurve
 {
-   CS_GADGET(QEasingCurve)
+   CORE_CS_GADGET(QEasingCurve)
 
  public:
    enum Type {

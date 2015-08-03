@@ -39,7 +39,7 @@ class QStatePrivate;
 
 class Q_CORE_EXPORT QState : public QAbstractState
 {
-   CS_OBJECT(QState)
+   CORE_CS_OBJECT(QState)
 
    CORE_CS_PROPERTY_READ(initialState, initialState)
    CORE_CS_PROPERTY_WRITE(initialState, setInitialState)

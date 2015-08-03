@@ -42,7 +42,7 @@ CS_DECLARE_INTERFACE(QDecorationFactoryInterface, QDecorationFactoryInterface_ii
 
 class Q_GUI_EXPORT QDecorationPlugin : public QObject, public QDecorationFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QDecorationPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QDecorationPlugin, QObject)
    CS_INTERFACES(QDecorationFactoryInterface, QFactoryInterface)
 
  public:

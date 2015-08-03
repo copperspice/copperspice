@@ -40,7 +40,7 @@ class QVariantAnimationPrivate;
 
 class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
 {
-   CS_OBJECT(QVariantAnimation)
+   CORE_CS_OBJECT(QVariantAnimation)
 
    CORE_CS_PROPERTY_READ(startValue, startValue)
    CORE_CS_PROPERTY_WRITE(startValue, setStartValue)

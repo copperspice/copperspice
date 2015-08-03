@@ -42,7 +42,7 @@ typedef bool(*LessThan)(const QPair<QTableWidgetItem *, int> &, const QPair<QTab
 
 class QTableWidgetMimeData : public QMimeData
 {
-   CS_OBJECT(QTableWidgetMimeData)
+   GUI_CS_OBJECT(QTableWidgetMimeData)
  public:
    QList<QTableWidgetItem *> items;
 };
@@ -65,7 +65,7 @@ class QTableModelGreaterThan
 
 class QTableModel : public QAbstractTableModel
 {
-   CS_OBJECT(QTableModel)
+   GUI_CS_OBJECT(QTableModel)
 
  public:
    enum ItemFlagsExtension {

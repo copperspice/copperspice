@@ -37,7 +37,7 @@ class QFactoryLoaderPrivate;
 
 class Q_CORE_EXPORT QFactoryLoader : public QObject
 {
-   CS_OBJECT(QFactoryLoader)
+   CORE_CS_OBJECT(QFactoryLoader)
    Q_DECLARE_PRIVATE(QFactoryLoader)
 
  public:

@@ -82,7 +82,7 @@ class QIncrementalSleepTimer
 
 class Q_CORE_EXPORT QWindowsPipeWriter : public QThread
 {
-   CS_OBJECT(QWindowsPipeWriter)
+   CORE_CS_OBJECT(QWindowsPipeWriter)
 
  public:
    CORE_CS_SIGNAL_1(Public, void canWrite())

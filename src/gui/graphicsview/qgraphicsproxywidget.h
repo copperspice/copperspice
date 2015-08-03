@@ -36,7 +36,7 @@ class QGraphicsProxyWidgetPrivate;
 
 class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
 {
-   CS_OBJECT(QGraphicsProxyWidget)
+   GUI_CS_OBJECT(QGraphicsProxyWidget)
 
  public:
    QGraphicsProxyWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);

@@ -50,7 +50,7 @@ class QToolBarItem : public QWidgetItem
 
 class QToolBarLayout : public QLayout
 {
-   CS_OBJECT(QToolBarLayout)
+   GUI_CS_OBJECT(QToolBarLayout)
 
  public:
    QToolBarLayout(QWidget *parent = 0);

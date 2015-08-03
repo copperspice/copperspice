@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSSocket : public QWS_SOCK_BASE
 {
-   CS_OBJECT(QWSSocket)
+   GUI_CS_OBJECT(QWSSocket)
 
  public:
    explicit QWSSocket(QObject *parent = 0);
@@ -75,7 +75,7 @@ class QWSSocket : public QWS_SOCK_BASE
 
 class QWSServerSocket : public QWS_SOCK_SERVER_BASE
 {
-   CS_OBJECT(QWSServerSocket)
+   GUI_CS_OBJECT(QWSServerSocket)
 
  public:
    QWSServerSocket(const QString &file, QObject *parent = 0);

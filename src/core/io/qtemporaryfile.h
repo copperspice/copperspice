@@ -41,7 +41,7 @@ class QTemporaryFilePrivate;
 
 class Q_CORE_EXPORT QTemporaryFile : public QFile
 {
-   CS_OBJECT(QTemporaryFile)
+   CORE_CS_OBJECT(QTemporaryFile)
 
    Q_DECLARE_PRIVATE(QTemporaryFile)
 

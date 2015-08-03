@@ -50,7 +50,7 @@ class QEventDispatcherMacPrivate;
 
 class QEventDispatcherMac : public QAbstractEventDispatcher
 {
-   CS_OBJECT(QEventDispatcherMac)
+   GUI_CS_OBJECT(QEventDispatcherMac)
    Q_DECLARE_PRIVATE(QEventDispatcherMac)
 
  public:

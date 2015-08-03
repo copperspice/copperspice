@@ -76,7 +76,7 @@ class QAuBucketNAS : public QAuBucket
 
 class QAuServerNAS : public QAuServer
 {
-   CS_OBJECT(QAuServerNAS)
+   GUI_CS_OBJECT(QAuServerNAS)
 
    QSocketNotifier *sn;
 

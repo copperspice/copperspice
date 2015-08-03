@@ -37,7 +37,7 @@ class QTableViewPrivate;
 
 class Q_GUI_EXPORT QTableView : public QAbstractItemView
 {
-   CS_OBJECT(QTableView)
+   GUI_CS_OBJECT(QTableView)
 
    GUI_CS_PROPERTY_READ(showGrid, showGrid)
    GUI_CS_PROPERTY_WRITE(showGrid, setShowGrid)

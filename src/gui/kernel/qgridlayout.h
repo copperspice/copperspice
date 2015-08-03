@@ -35,7 +35,7 @@ class QGridLayoutPrivate;
 
 class Q_GUI_EXPORT QGridLayout : public QLayout
 {
-   CS_OBJECT(QGridLayout)
+   GUI_CS_OBJECT(QGridLayout)
    Q_DECLARE_PRIVATE(QGridLayout)
 
    // following 4 were qdoc_property 1/5/2014

@@ -37,7 +37,7 @@ class QFutureWatcherBasePrivate;
 
 class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 {
-   CS_OBJECT(QFutureWatcherBase)
+   CORE_CS_OBJECT(QFutureWatcherBase)
    Q_DECLARE_PRIVATE(QFutureWatcherBase)
 
  public:

@@ -34,7 +34,7 @@ class QFramePrivate;
 
 class Q_GUI_EXPORT QFrame : public QWidget
 {
-   CS_OBJECT(QFrame)
+   GUI_CS_OBJECT(QFrame)
 
    GUI_CS_ENUM(Shape)
    GUI_CS_ENUM(Shadow)

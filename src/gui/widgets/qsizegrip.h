@@ -35,7 +35,7 @@ class QSizeGripPrivate;
 
 class Q_GUI_EXPORT QSizeGrip : public QWidget
 {
-   CS_OBJECT(QSizeGrip)
+   GUI_CS_OBJECT(QSizeGrip)
 
  public:
    explicit QSizeGrip(QWidget *parent);

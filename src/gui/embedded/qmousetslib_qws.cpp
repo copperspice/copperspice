@@ -83,7 +83,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSTslibMouseHandlerPrivate : public QObject
 {
-   CS_OBJECT(QWSTslibMouseHandlerPrivate
+   GUI_CS_OBJECT(QWSTslibMouseHandlerPrivate
 
              public:
              QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h,

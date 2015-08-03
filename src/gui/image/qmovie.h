@@ -49,7 +49,7 @@ class QMoviePrivate;
 
 class Q_GUI_EXPORT QMovie : public QObject
 {
-   CS_OBJECT(QMovie)
+   GUI_CS_OBJECT(QMovie)
    Q_DECLARE_PRIVATE(QMovie)
 
    GUI_CS_ENUM(MovieState)

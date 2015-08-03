@@ -78,7 +78,7 @@ static void qfswd_sigio_monitor(int signum, siginfo_t *i, void *v)
 
 class QDnotifySignalThread : public QThread
 {
-   CS_OBJECT(QDnotifySignalThread)
+   CORE_CS_OBJECT(QDnotifySignalThread)
 
  public:
    QDnotifySignalThread();

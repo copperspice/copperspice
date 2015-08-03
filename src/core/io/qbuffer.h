@@ -36,7 +36,7 @@ class QBufferPrivate;
 
 class Q_CORE_EXPORT QBuffer : public QIODevice
 {
-   CS_OBJECT(QBuffer)
+   CORE_CS_OBJECT(QBuffer)
 
  public:
    explicit QBuffer(QObject *parent = 0);

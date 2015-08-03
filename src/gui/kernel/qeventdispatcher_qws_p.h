@@ -34,7 +34,7 @@ class QEventDispatcherQWSPrivate;
 
 class QEventDispatcherQWS : public QEventDispatcherUNIX
 {
-   CS_OBJECT(QEventDispatcherQWS)
+   GUI_CS_OBJECT(QEventDispatcherQWS)
    Q_DECLARE_PRIVATE(QEventDispatcherQWS)
 
  public:

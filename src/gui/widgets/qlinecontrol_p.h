@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QLineControl : public QObject
 {
-   CS_OBJECT(QLineControl)
+   GUI_CS_OBJECT(QLineControl)
 
  public:
    QLineControl(const QString &txt = QString())

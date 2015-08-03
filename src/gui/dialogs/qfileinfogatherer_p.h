@@ -137,7 +137,7 @@ class QExtendedInformation
 
 class QFileInfoGatherer : public QThread
 {
-   CS_OBJECT(QFileInfoGatherer)
+   GUI_CS_OBJECT(QFileInfoGatherer)
 
  public:
    GUI_CS_SIGNAL_1(Public, void updates(const QString &directory, const QList <QPair <QString, QFileInfo>> &updates))

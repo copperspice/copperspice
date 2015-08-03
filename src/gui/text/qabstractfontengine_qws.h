@@ -79,7 +79,7 @@ CS_DECLARE_INTERFACE(QFontEngineFactoryInterface, QFontEngineFactoryInterface_ii
 
 class Q_GUI_EXPORT QFontEnginePlugin : public QObject, public QFontEngineFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QFontEnginePlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QFontEnginePlugin, QObject)
    CS_INTERFACES(QFontEngineFactoryInterface, QFactoryInterface)
 
  public:
@@ -100,7 +100,7 @@ class QAbstractFontEnginePrivate;
 
 class Q_GUI_EXPORT QAbstractFontEngine : public QObject
 {
-   CS_OBJECT(QAbstractFontEngine)
+   GUI_CS_OBJECT(QAbstractFontEngine)
 
  public:
    enum Capability {

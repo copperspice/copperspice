@@ -35,7 +35,7 @@ class QBoxLayoutPrivate;
 
 class Q_GUI_EXPORT QBoxLayout : public QLayout
 {
-   CS_OBJECT(QBoxLayout)
+   GUI_CS_OBJECT(QBoxLayout)
    Q_DECLARE_PRIVATE(QBoxLayout)
 
  public:
@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
 
 class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
 {
-   CS_OBJECT(QHBoxLayout)
+   GUI_CS_OBJECT(QHBoxLayout)
 
  public:
    QHBoxLayout();
@@ -107,7 +107,7 @@ class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
 
 class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
 {
-   CS_OBJECT(QVBoxLayout)
+   GUI_CS_OBJECT(QVBoxLayout)
 
  public:
    QVBoxLayout();

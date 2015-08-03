@@ -37,7 +37,7 @@ class QToolBoxPrivate;
 
 class Q_GUI_EXPORT QToolBox : public QFrame
 {
-   CS_OBJECT(QToolBox)
+   GUI_CS_OBJECT(QToolBox)
 
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)

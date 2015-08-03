@@ -35,7 +35,7 @@ class QLabelPrivate;
 
 class Q_GUI_EXPORT QLabel : public QFrame
 {
-   CS_OBJECT(QLabel)
+   GUI_CS_OBJECT(QLabel)
 
    GUI_CS_PROPERTY_READ(text, text)
    GUI_CS_PROPERTY_WRITE(text, setText)

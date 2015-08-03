@@ -164,7 +164,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
 
 class Q_CORE_EXPORT QAbstractItemModel : public QObject
 {
-   CS_OBJECT(QAbstractItemModel)
+   CORE_CS_OBJECT(QAbstractItemModel)
 
    friend class QPersistentModelIndexData;
    friend class QAbstractItemViewPrivate;
@@ -389,7 +389,7 @@ inline QModelIndex QAbstractItemModel::createIndex(int arow, int acolumn, quint3
 
 class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
 {
-   CS_OBJECT(QAbstractTableModel)
+   CORE_CS_OBJECT(QAbstractTableModel)
 
  public:
    explicit QAbstractTableModel(QObject *parent = 0);
@@ -409,7 +409,7 @@ class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
 
 class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
 {
-   CS_OBJECT(QAbstractListModel)
+   CORE_CS_OBJECT(QAbstractListModel)
 
  public:
    explicit QAbstractListModel(QObject *parent = 0);

@@ -81,7 +81,7 @@ class QGraphicsScenePrivate;
 
 class Q_GUI_EXPORT QGraphicsScene : public QObject
 {
-   CS_OBJECT(QGraphicsScene)
+   GUI_CS_OBJECT(QGraphicsScene)
 
    GUI_CS_PROPERTY_READ(backgroundBrush, backgroundBrush)
    GUI_CS_PROPERTY_WRITE(backgroundBrush, setBackgroundBrush)

@@ -34,7 +34,7 @@ class QCommandLinkButtonPrivate;
 
 class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
 {
-   CS_OBJECT(QCommandLinkButton)
+   GUI_CS_OBJECT(QCommandLinkButton)
 
    GUI_CS_PROPERTY_READ(description, description)
    GUI_CS_PROPERTY_WRITE(description, setDescription)

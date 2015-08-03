@@ -37,7 +37,7 @@ class QThreadPoolPrivate;
 
 class Q_CORE_EXPORT QThreadPool : public QObject
 {
-   CS_OBJECT(QThreadPool)
+   CORE_CS_OBJECT(QThreadPool)
 
    Q_DECLARE_PRIVATE(QThreadPool)
 

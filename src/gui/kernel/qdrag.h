@@ -41,7 +41,7 @@ class QDragManager;
 
 class Q_GUI_EXPORT QDrag : public QObject
 {
-   CS_OBJECT(QDrag)
+   GUI_CS_OBJECT(QDrag)
    Q_DECLARE_PRIVATE(QDrag)
 
  public:

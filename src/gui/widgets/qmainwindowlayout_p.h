@@ -124,7 +124,7 @@ class QMainWindowLayoutState
 
 class QMainWindowLayout : public QLayout
 {
-   CS_OBJECT(QMainWindowLayout)
+   GUI_CS_OBJECT(QMainWindowLayout)
 
  public:
    QMainWindowLayoutState layoutState, savedState;

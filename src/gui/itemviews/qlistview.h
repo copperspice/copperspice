@@ -36,7 +36,7 @@ class QListViewPrivate;
 
 class Q_GUI_EXPORT QListView : public QAbstractItemView
 {
-   CS_OBJECT(QListView)
+   GUI_CS_OBJECT(QListView)
 
    GUI_CS_ENUM(Movement)
    GUI_CS_ENUM(Flow)

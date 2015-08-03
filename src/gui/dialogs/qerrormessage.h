@@ -36,7 +36,7 @@ class QErrorMessagePrivate;
 
 class Q_GUI_EXPORT QErrorMessage: public QDialog
 {
-   CS_OBJECT(QErrorMessage)
+   GUI_CS_OBJECT(QErrorMessage)
    Q_DECLARE_PRIVATE(QErrorMessage)
 
  public:

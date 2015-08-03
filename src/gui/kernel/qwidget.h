@@ -132,7 +132,7 @@ class QWidgetPrivate;
 
 class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 {
-   CS_OBJECT_MULTIPLE(QWidget, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QWidget, QObject)
    Q_DECLARE_PRIVATE(QWidget)
 
    GUI_CS_PROPERTY_READ(modal, isModal)

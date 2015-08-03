@@ -41,7 +41,7 @@ class QUnixPrintWidgetPrivate;
 
 class Q_GUI_EXPORT QUnixPrintWidget : public QWidget
 {
-   CS_OBJECT(QUnixPrintWidget)
+   GUI_CS_OBJECT(QUnixPrintWidget)
 
  public:
    QUnixPrintWidget(QPrinter *printer, QWidget *parent = 0);
@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QUnixPrintWidget : public QWidget
 
 class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 {
-   CS_OBJECT(QPrintDialog)
+   GUI_CS_OBJECT(QPrintDialog)
    Q_DECLARE_PRIVATE(QPrintDialog)
 
    GUI_CS_ENUM(PrintDialogOption)

@@ -1857,7 +1857,6 @@ void QMetaObject_X::register_method_s1(const char *name, QMetaMethod::Access acc
 
    QList<QByteArray> tempNames = paramNames;
 
-
    for ( int k = 0; k < size; ++k )  {
 
       if (size > 1) {
@@ -1888,7 +1887,7 @@ void QMetaObject_X::register_method_s1(const char *name, QMetaMethod::Access acc
       if (kind == QMetaMethod::Constructor) {
          m_constructor.insert(tokenKey, data);
       } else  {
-         m_methods.insert(tokenKey, data);
+         m_methods.insert(tokenKey, data);        
       }
    }
 }
@@ -1901,17 +1900,18 @@ void QMetaObject_X::register_tag(const char *name, const char *method)
 
    auto item = m_methods.find(method);
 
-   if ( item != m_methods.end() )  {
+   if ( item == m_methods.end() )  {
+      // entry not found 
+      throw std::logic_error("Unable to register method tag, verify signal/slot macros");
+
+
+   } else { 
       // retrieve existing obj
       QMetaMethod obj = item.value();
       obj.setTag(name);
 
       // update QMetaMethod
       m_methods.insert(method, obj);
-
-   } else {
-      throw std::logic_error("Unable to register method tag, verify signal/slot macros");
-
    }
 }
 

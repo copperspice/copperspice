@@ -38,7 +38,7 @@ class QSocketNotifier;
 
 class QVFbKeyboardHandler : public QObject, public QWSKeyboardHandler
 {
-   CS_OBJECT(QVFbKeyboardHandler)
+   GUI_CS_OBJECT(QVFbKeyboardHandler)
 
  public:
    QVFbKeyboardHandler(const QString &device);

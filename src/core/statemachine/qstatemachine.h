@@ -42,7 +42,7 @@ class QAbstractAnimation;
 
 class Q_CORE_EXPORT QStateMachine : public QState
 {
-   CS_OBJECT(QStateMachine)
+   CORE_CS_OBJECT(QStateMachine)
   
    CORE_CS_PROPERTY_READ(errorString, errorString)
    CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)

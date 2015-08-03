@@ -40,7 +40,7 @@ class QCUPSSupport;
 
 class QPageSetupWidget : public QWidget
 {
-   CS_OBJECT(QPageSetupWidget)
+   GUI_CS_OBJECT(QPageSetupWidget)
  public:
    QPageSetupWidget(QWidget *parent = 0);
    QPageSetupWidget(QPrinter *printer, QWidget *parent = 0);

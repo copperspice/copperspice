@@ -40,7 +40,7 @@ class QSvgGeneratorPrivate;
 
 class Q_SVG_EXPORT QSvgGenerator : public QPaintDevice
 {
-   CS_GADGET(QSvgGenerator)
+   SVG_CS_GADGET(QSvgGenerator)
    Q_DECLARE_PRIVATE(QSvgGenerator)
 
    SVG_CS_PROPERTY_READ(size, size)

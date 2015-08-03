@@ -37,7 +37,7 @@ class QStyleOptionGroupBox;
 
 class Q_GUI_EXPORT QGroupBox : public QWidget
 {
-   CS_OBJECT(QGroupBox)
+   GUI_CS_OBJECT(QGroupBox)
 
    GUI_CS_PROPERTY_READ(title, title)
    GUI_CS_PROPERTY_WRITE(title, setTitle)

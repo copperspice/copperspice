@@ -37,7 +37,7 @@ class QPrintPreviewWidgetPrivate;
 
 class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
 {
-   CS_OBJECT(QPrintPreviewWidget)
+   GUI_CS_OBJECT(QPrintPreviewWidget)
    Q_DECLARE_PRIVATE(QPrintPreviewWidget)
 
  public:

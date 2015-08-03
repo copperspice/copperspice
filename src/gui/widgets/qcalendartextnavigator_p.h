@@ -40,7 +40,7 @@ class QFrame;
 
 class QCalendarTextNavigator: public QObject
 {
-   CS_OBJECT(QCalendarTextNavigator)
+   GUI_CS_OBJECT(QCalendarTextNavigator)
 
  public:
    QCalendarTextNavigator(QObject *parent = 0)

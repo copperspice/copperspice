@@ -43,7 +43,7 @@ class QGraphicsRotationPrivate;
 
 class Q_GUI_EXPORT QGraphicsTransform : public QObject
 {
-   CS_OBJECT(QGraphicsTransform)
+   GUI_CS_OBJECT(QGraphicsTransform)
 
  public:
    QGraphicsTransform(QObject *parent = 0);
@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QGraphicsTransform : public QObject
 
 class Q_GUI_EXPORT QGraphicsScale : public QGraphicsTransform
 {
-   CS_OBJECT(QGraphicsScale)
+   GUI_CS_OBJECT(QGraphicsScale)
 
    GUI_CS_PROPERTY_READ(origin, origin)
    GUI_CS_PROPERTY_WRITE(origin, setOrigin)
@@ -117,7 +117,7 @@ class Q_GUI_EXPORT QGraphicsScale : public QGraphicsTransform
 
 class Q_GUI_EXPORT QGraphicsRotation : public QGraphicsTransform
 {
-   CS_OBJECT(QGraphicsRotation)
+   GUI_CS_OBJECT(QGraphicsRotation)
 
    GUI_CS_PROPERTY_READ(origin, origin)
    GUI_CS_PROPERTY_WRITE(origin, setOrigin)

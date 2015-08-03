@@ -63,7 +63,7 @@ class QWorkspaceTitleBarPrivate;
 */
 class QMDIControl : public QWidget
 {
-   CS_OBJECT(QMDIControl)
+   GUI_CS_OBJECT(QMDIControl)
 
    GUI_CS_SIGNAL_1(Public, void _q_minimize())
    GUI_CS_SIGNAL_2(_q_minimize)
@@ -229,7 +229,7 @@ void QMDIControl::paintEvent(QPaintEvent *)
 
 class QWorkspaceTitleBar : public QWidget
 {
-   CS_OBJECT(QWorkspaceTitleBar)
+   GUI_CS_OBJECT(QWorkspaceTitleBar)
 
    Q_DECLARE_PRIVATE(QWorkspaceTitleBar)
 
@@ -949,7 +949,7 @@ QSize QWorkspaceTitleBar::sizeHint() const
 
 class QWorkspaceChild : public QWidget
 {
-   CS_OBJECT(QWorkspaceChild)
+   GUI_CS_OBJECT(QWorkspaceChild)
 
    friend class QWorkspacePrivate;
    friend class QWorkspace;

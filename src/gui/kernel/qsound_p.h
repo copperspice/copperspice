@@ -50,7 +50,7 @@ class QAuBucket
 
 class QAuServer : public QObject
 {
-   CS_OBJECT(QAuServer)
+   GUI_CS_OBJECT(QAuServer)
 
  public:
    explicit QAuServer(QObject *parent);

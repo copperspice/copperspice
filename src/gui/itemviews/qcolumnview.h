@@ -36,7 +36,7 @@ class QColumnViewPrivate;
 
 class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 {
-   CS_OBJECT(QColumnView)
+   GUI_CS_OBJECT(QColumnView)
 
    GUI_CS_PROPERTY_READ(resizeGripsVisible, resizeGripsVisible)
    GUI_CS_PROPERTY_WRITE(resizeGripsVisible, setResizeGripsVisible)

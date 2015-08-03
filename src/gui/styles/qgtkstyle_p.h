@@ -540,7 +540,7 @@ class QGtkStylePrivate : public QCleanlooksStylePrivate
 // before updating our own palettes
 class QGtkStyleUpdateScheduler : public QObject
 {
-   CS_OBJECT(QGtkStyleUpdateScheduler)
+   GUI_CS_OBJECT(QGtkStyleUpdateScheduler)
 
  public :
    GUI_CS_SLOT_1(Public, void updateTheme())

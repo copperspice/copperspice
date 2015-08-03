@@ -40,7 +40,7 @@ class QStyleOptionToolBar;
 
 class Q_GUI_EXPORT QToolBar : public QWidget
 {
-   CS_OBJECT(QToolBar)
+   GUI_CS_OBJECT(QToolBar)
 
    GUI_CS_PROPERTY_READ(movable, isMovable)
    GUI_CS_PROPERTY_WRITE(movable, setMovable)

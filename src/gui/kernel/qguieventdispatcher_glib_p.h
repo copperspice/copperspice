@@ -34,7 +34,7 @@ class QGuiEventDispatcherGlibPrivate;
 
 class QGuiEventDispatcherGlib : public QEventDispatcherGlib
 {
-   CS_OBJECT(QGuiEventDispatcherGlib)
+   GUI_CS_OBJECT(QGuiEventDispatcherGlib)
    Q_DECLARE_PRIVATE(QGuiEventDispatcherGlib)
 
  public:

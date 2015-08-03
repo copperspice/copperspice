@@ -41,7 +41,7 @@ class QItemEditorFactory;
 
 class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 {
-   CS_OBJECT(QItemDelegate)
+   GUI_CS_OBJECT(QItemDelegate)
 
    GUI_CS_PROPERTY_READ(clipping, hasClipping)
    GUI_CS_PROPERTY_WRITE(clipping, setClipping)

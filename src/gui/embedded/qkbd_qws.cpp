@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSKbPrivate : public QObject
 {
-   CS_OBJECT(QWSKbPrivate)
+   GUI_CS_OBJECT(QWSKbPrivate)
 
  public:
    QWSKbPrivate(QWSKeyboardHandler *h, const QString &device)

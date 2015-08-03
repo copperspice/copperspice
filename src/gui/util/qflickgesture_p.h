@@ -41,7 +41,7 @@ class QGraphicsItem;
 
 class Q_GUI_EXPORT QFlickGesture : public QGesture
 {
-   CS_OBJECT(QFlickGesture)
+   GUI_CS_OBJECT(QFlickGesture)
    Q_DECLARE_PRIVATE(QFlickGesture)
 
  public:

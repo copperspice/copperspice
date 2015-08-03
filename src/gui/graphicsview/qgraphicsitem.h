@@ -609,7 +609,7 @@ inline QRectF QGraphicsItem::mapRectFromScene(qreal ax, qreal ay, qreal w, qreal
 
 class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 {
-   CS_OBJECT_MULTIPLE(QGraphicsObject, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QGraphicsObject, QObject)
 
    GUI_CS_PROPERTY_READ(parent, parentObject)
    GUI_CS_PROPERTY_WRITE(parent, setParentItem)
@@ -1054,7 +1054,7 @@ inline void QGraphicsPixmapItem::setOffset(qreal ax, qreal ay)
 
 class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
 {
-   CS_OBJECT(QGraphicsTextItem)
+   GUI_CS_OBJECT(QGraphicsTextItem)
 
    // following 4 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(openExternalLinks, openExternalLinks)

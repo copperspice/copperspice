@@ -34,7 +34,7 @@ class QFormLayoutPrivate;
 
 class Q_GUI_EXPORT QFormLayout : public QLayout
 {
-   CS_OBJECT(QFormLayout)
+   GUI_CS_OBJECT(QFormLayout)
 
    Q_DECLARE_PRIVATE(QFormLayout)
 

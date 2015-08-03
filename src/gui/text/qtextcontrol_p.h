@@ -52,7 +52,7 @@ class QTimerEvent;
 
 class Q_GUI_EXPORT QTextControl : public QObject
 {
-   CS_OBJECT(QTextControl)
+   GUI_CS_OBJECT(QTextControl)
    Q_DECLARE_PRIVATE(QTextControl)
 
 #ifndef QT_NO_TEXTHTMLPARSER
@@ -310,7 +310,7 @@ class Q_GUI_EXPORT QTextControl : public QObject
 #ifndef QT_NO_CONTEXTMENU
 class QUnicodeControlCharacterMenu : public QMenu
 {
-   CS_OBJECT(QUnicodeControlCharacterMenu)
+   GUI_CS_OBJECT(QUnicodeControlCharacterMenu)
 
  public:
    QUnicodeControlCharacterMenu(QObject *editWidget, QWidget *parent);

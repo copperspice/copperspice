@@ -40,7 +40,7 @@ class QAction;
 
 class Q_GUI_EXPORT QUndoGroup : public QObject
 {
-   CS_OBJECT(QUndoGroup)
+   GUI_CS_OBJECT(QUndoGroup)
    Q_DECLARE_PRIVATE(QUndoGroup)
 
  public:

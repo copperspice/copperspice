@@ -159,7 +159,7 @@ struct QProcessInfo {
 
 class QProcessManager : public QThread
 {
-   CS_OBJECT(QProcessManager)
+   CORE_CS_OBJECT(QProcessManager)
 
  public:
    QProcessManager();

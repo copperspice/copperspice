@@ -127,7 +127,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeviceClosedNotifier : public QObject
 {
-   CS_OBJECT(QDeviceClosedNotifier)
+   CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
    inline QDeviceClosedNotifier() {

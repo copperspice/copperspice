@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSLinuxInputMousePrivate : public QObject
 {
-   CS_OBJECT(QWSLinuxInputMousePrivate)
+   GUI_CS_OBJECT(QWSLinuxInputMousePrivate)
 
  public:
    QWSLinuxInputMousePrivate(QWSLinuxInputMouseHandler *, const QString &);

@@ -42,7 +42,7 @@ CS_DECLARE_INTERFACE(QWSKeyboardHandlerFactoryInterface, QWSKeyboardHandlerFacto
 
 class Q_GUI_EXPORT QKbdDriverPlugin : public QObject, public QWSKeyboardHandlerFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QKbdDriverPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QKbdDriverPlugin, QObject)
    CS_INTERFACES(QWSKeyboardHandlerFactoryInterface, QFactoryInterface)
 
  public:

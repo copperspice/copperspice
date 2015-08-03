@@ -34,7 +34,7 @@ class QVariant;
 
 class Q_GUI_EXPORT QSizePolicy
 {
-   CS_GADGET(QSizePolicy)
+   GUI_CS_GADGET(QSizePolicy)
    GUI_CS_ENUM(Policy)
 
    enum SizePolicyMasks {

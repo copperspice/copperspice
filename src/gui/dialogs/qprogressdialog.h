@@ -42,7 +42,7 @@ class QVBoxLayout;
 
 class Q_GUI_EXPORT QProgressDialog : public QDialog
 {
-   CS_OBJECT(QProgressDialog)
+   GUI_CS_OBJECT(QProgressDialog)
 
    GUI_CS_PROPERTY_READ(wasCanceled, wasCanceled)
 

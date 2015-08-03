@@ -44,7 +44,7 @@ CS_DECLARE_INTERFACE(QBearerEngineFactoryInterface, QBearerEngineFactoryInterfac
 
 class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngineFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QBearerEnginePlugin, QObject)
+   NET_CS_OBJECT_MULTIPLE(QBearerEnginePlugin, QObject)
    CS_INTERFACES(QBearerEngineFactoryInterface, QFactoryInterface)
 
  public:

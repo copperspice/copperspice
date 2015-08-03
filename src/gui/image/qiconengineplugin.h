@@ -43,7 +43,7 @@ CS_DECLARE_INTERFACE(QIconEngineFactoryInterface, QIconEngineFactoryInterface_ii
 
 class Q_GUI_EXPORT QIconEnginePlugin : public QObject, public QIconEngineFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QIconEnginePlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QIconEnginePlugin, QObject)
    CS_INTERFACES(QIconEngineFactoryInterface, QFactoryInterface)
 
  public:
@@ -64,7 +64,7 @@ CS_DECLARE_INTERFACE(QIconEngineFactoryInterfaceV2, QIconEngineFactoryInterfaceV
 
 class Q_GUI_EXPORT QIconEnginePluginV2 : public QObject, public QIconEngineFactoryInterfaceV2
 {
-   CS_OBJECT_MULTIPLE(QIconEnginePluginV2, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QIconEnginePluginV2, QObject)
    CS_INTERFACES(QIconEngineFactoryInterfaceV2, QFactoryInterface)
 
  public:

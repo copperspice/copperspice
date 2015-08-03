@@ -34,7 +34,7 @@ class QLibraryPrivate;
 
 class Q_CORE_EXPORT QLibrary : public QObject
 {
-   CS_OBJECT(QLibrary)
+   CORE_CS_OBJECT(QLibrary)
 
    CORE_CS_PROPERTY_READ(fileName, fileName)
    CORE_CS_PROPERTY_WRITE(fileName, setFileName)

@@ -38,7 +38,7 @@ class QStyleOptionTab;
 
 class Q_GUI_EXPORT QTabBar: public QWidget
 {
-   CS_OBJECT(QTabBar)
+   GUI_CS_OBJECT(QTabBar)
 
    GUI_CS_ENUM(Shape)
 

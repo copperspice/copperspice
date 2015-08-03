@@ -116,7 +116,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
 
 class Q_GUI_EXPORT QTextFormat
 {
-   CS_GADGET(QTextFormat)
+   GUI_CS_GADGET(QTextFormat)
 
    GUI_CS_ENUM(FormatType)
    GUI_CS_ENUM(Property)

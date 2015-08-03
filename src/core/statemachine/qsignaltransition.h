@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 {
-   CS_OBJECT(QSignalTransition)
+   CORE_CS_OBJECT(QSignalTransition)
 
    CORE_CS_PROPERTY_READ(senderObject, senderObject)
    CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)

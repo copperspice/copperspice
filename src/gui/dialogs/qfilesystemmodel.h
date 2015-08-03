@@ -42,7 +42,7 @@ class QFileIconProvider;
 
 class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 {
-   CS_OBJECT(QFileSystemModel)
+   GUI_CS_OBJECT(QFileSystemModel)
 
    GUI_CS_PROPERTY_READ(resolveSymlinks, resolveSymlinks)
    GUI_CS_PROPERTY_WRITE(resolveSymlinks, setResolveSymlinks)

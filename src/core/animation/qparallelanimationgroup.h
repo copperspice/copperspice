@@ -36,7 +36,7 @@ class QParallelAnimationGroupPrivate;
 
 class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
 {
-   CS_OBJECT(QParallelAnimationGroup)
+   CORE_CS_OBJECT(QParallelAnimationGroup)
 
  public:
    QParallelAnimationGroup(QObject *parent = 0);

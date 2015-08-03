@@ -50,7 +50,7 @@ QT_BEGIN_NAMESPACE
 
 class QWinInputContext : public QInputContext
 {
-   CS_OBJECT(QWinInputContext)
+   GUI_CS_OBJECT(QWinInputContext)
 
  public:
    explicit QWinInputContext(QObject *parent = 0);

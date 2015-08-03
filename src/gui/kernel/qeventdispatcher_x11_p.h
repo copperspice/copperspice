@@ -34,7 +34,7 @@ class QEventDispatcherX11Private;
 
 class QEventDispatcherX11 : public QEventDispatcherUNIX
 {
-   CS_OBJECT(QEventDispatcherX11)
+   GUI_CS_OBJECT(QEventDispatcherX11)
    Q_DECLARE_PRIVATE(QEventDispatcherX11)
 
  public:

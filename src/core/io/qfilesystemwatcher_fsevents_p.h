@@ -67,7 +67,7 @@ typedef QHash<QString, PathInfoList> PathHash;
 
 class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QFSEventsFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QFSEventsFileSystemWatcherEngine)
 
  public:
    ~QFSEventsFileSystemWatcherEngine();

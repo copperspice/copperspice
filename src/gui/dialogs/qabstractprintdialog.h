@@ -38,7 +38,7 @@ class QPrinter;
 // ### Qt5/remove this class
 class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 {
-   CS_OBJECT(QAbstractPrintDialog)
+   GUI_CS_OBJECT(QAbstractPrintDialog)
    Q_DECLARE_PRIVATE(QAbstractPrintDialog)
 
  public:

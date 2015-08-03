@@ -46,7 +46,7 @@ class QSettingsPrivate;
 
 class Q_CORE_EXPORT QSettings : public QObject
 {
-   CS_OBJECT(QSettings)
+   CORE_CS_OBJECT(QSettings)
    Q_DECLARE_PRIVATE(QSettings)
 
  public:

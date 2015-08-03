@@ -43,7 +43,7 @@ static int qt_pixmap_serial = 0;
 
 class QDeferredGraphicsSystemChange : public QObject
 {
-   CS_OBJECT(QDeferredGraphicsSystemChange)
+   GUI_CS_OBJECT(QDeferredGraphicsSystemChange)
 
  public:
    QDeferredGraphicsSystemChange(QRuntimeGraphicsSystem *gs, const QString &graphicsSystemName)

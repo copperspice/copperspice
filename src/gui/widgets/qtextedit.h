@@ -44,7 +44,7 @@ class QMimeData;
 
 class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 {
-   CS_OBJECT(QTextEdit)
+   GUI_CS_OBJECT(QTextEdit)
    Q_DECLARE_PRIVATE(QTextEdit)
 
    GUI_CS_FLAG(AutoFormattingFlag, AutoFormatting)

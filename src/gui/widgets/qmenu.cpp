@@ -76,7 +76,7 @@ QMenu *QMenuPrivate::mouseDown = 0;
 // internal class used for the torn off popup
 class QTornOffMenu : public QMenu
 {
-   CS_OBJECT(QTornOffMenu)
+   GUI_CS_OBJECT(QTornOffMenu)
 
    class QTornOffMenuPrivate : public QMenuPrivate
    {

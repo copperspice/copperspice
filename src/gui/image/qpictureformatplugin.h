@@ -51,7 +51,7 @@ CS_DECLARE_INTERFACE(QPictureFormatInterface, QPictureFormatInterface_iid)
 
 class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatInterface
 {
-   CS_OBJECT(QPictureFormatPlugin)
+   GUI_CS_OBJECT(QPictureFormatPlugin)
    CS_INTERFACES(QPictureFormatInterface, QFactoryInterface)
 
  public:

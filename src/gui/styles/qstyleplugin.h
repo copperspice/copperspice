@@ -43,7 +43,7 @@ CS_DECLARE_INTERFACE(QStyleFactoryInterface, QStyleFactoryInterface_iid)
 
 class Q_GUI_EXPORT QStylePlugin : public QObject, public QStyleFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QStylePlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QStylePlugin, QObject)
    CS_INTERFACES(QStyleFactoryInterface, QFactoryInterface)
 
  public:

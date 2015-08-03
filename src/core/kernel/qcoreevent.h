@@ -37,7 +37,7 @@ class QEventPrivate;
 
 class Q_CORE_EXPORT QEvent           // event base class
 {
-   CS_GADGET(QEvent)
+   CORE_CS_GADGET(QEvent)
    
  public:
    enum Type {

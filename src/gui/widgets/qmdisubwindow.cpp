@@ -261,7 +261,7 @@ namespace QMdi {
 // internal class
 class ControlLabel : public QWidget
 {
-   CS_OBJECT(ControlLabel)
+   GUI_CS_OBJECT(ControlLabel)
 
  public:
    ControlLabel(QMdiSubWindow *subWindow, QWidget *parent = 0);
@@ -393,7 +393,7 @@ namespace QMdi {
 */
 class ControllerWidget : public QWidget
 {
-   CS_OBJECT(ControllerWidget)
+   GUI_CS_OBJECT(ControllerWidget)
 
  public:
    ControllerWidget(QMdiSubWindow *subWindow, QWidget *parent = 0);

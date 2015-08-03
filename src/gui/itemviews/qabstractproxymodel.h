@@ -37,7 +37,7 @@ class QItemSelection;
 
 class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 {
-   CS_OBJECT(QAbstractProxyModel)
+   GUI_CS_OBJECT(QAbstractProxyModel)
 
  public:
    QAbstractProxyModel(QObject *parent = 0);

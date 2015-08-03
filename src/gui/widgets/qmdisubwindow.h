@@ -43,7 +43,7 @@ class QMdiSubWindowPrivate;
 
 class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 {
-   CS_OBJECT(QMdiSubWindow)
+   GUI_CS_OBJECT(QMdiSubWindow)
 
    GUI_CS_PROPERTY_READ(keyboardSingleStep, keyboardSingleStep)
    GUI_CS_PROPERTY_WRITE(keyboardSingleStep, setKeyboardSingleStep)

@@ -50,7 +50,7 @@ class QList;
 
 class QGraphicsSceneIndex : public QObject
 {
-   CS_OBJECT(QGraphicsSceneIndex)
+   GUI_CS_OBJECT(QGraphicsSceneIndex)
 
  public:
    QGraphicsSceneIndex(QGraphicsScene *scene = 0);

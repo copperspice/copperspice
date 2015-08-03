@@ -36,7 +36,7 @@ class QPageSetupDialogPrivate;
 
 class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
 {
-   CS_OBJECT(QPageSetupDialog)
+   GUI_CS_OBJECT(QPageSetupDialog)
    Q_DECLARE_PRIVATE(QPageSetupDialog)
 
    GUI_CS_ENUM(PageSetupDialogOption)

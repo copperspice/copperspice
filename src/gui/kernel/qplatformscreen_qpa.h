@@ -40,7 +40,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QPlatformScreen : public QObject
 {
-   CS_OBJECT(QPlatformScreen)
+   GUI_CS_OBJECT(QPlatformScreen)
 
  public:
    virtual ~QPlatformScreen() { }

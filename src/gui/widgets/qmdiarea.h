@@ -38,7 +38,7 @@ class QMdiAreaPrivate;
 
 class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
 {
-   CS_OBJECT(QMdiArea)
+   GUI_CS_OBJECT(QMdiArea)
 
    GUI_CS_ENUM(ViewMode)
 

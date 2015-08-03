@@ -45,7 +45,7 @@ class QWSManagerPrivate;
 
 class Q_GUI_EXPORT QWSManager : public QObject
 {
-   CS_OBJECT(QWSManager)
+   GUI_CS_OBJECT(QWSManager)
    Q_DECLARE_PRIVATE(QWSManager)
 
  public:

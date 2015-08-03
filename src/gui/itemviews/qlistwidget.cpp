@@ -38,7 +38,7 @@ typedef bool(*LessThan)(const QPair<QListWidgetItem *, int> &, const QPair<QList
 
 class QListWidgetMimeData : public QMimeData
 {
-   CS_OBJECT(QListWidgetMimeData)
+   GUI_CS_OBJECT(QListWidgetMimeData)
 
  public:
    QList<QListWidgetItem *> items;

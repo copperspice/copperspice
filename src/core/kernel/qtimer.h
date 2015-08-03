@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QTimer : public QObject
 {
-   CS_OBJECT(QTimer)
+   CORE_CS_OBJECT(QTimer)
 
    CORE_CS_PROPERTY_READ(singleShot, isSingleShot)
    CORE_CS_PROPERTY_WRITE(singleShot, setSingleShot)

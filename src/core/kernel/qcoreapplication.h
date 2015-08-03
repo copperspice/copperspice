@@ -49,7 +49,7 @@ class QStringList;
 
 class Q_CORE_EXPORT QCoreApplication : public QObject
 {
-   CS_OBJECT(QCoreApplication)
+   CORE_CS_OBJECT(QCoreApplication)
 
    CORE_CS_PROPERTY_READ(applicationName, cs_applicationName)
    CORE_CS_PROPERTY_WRITE(applicationName, cs_setApplicationName)

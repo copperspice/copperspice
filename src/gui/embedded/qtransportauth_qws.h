@@ -48,7 +48,7 @@ class QMutex;
 
 class Q_GUI_EXPORT QTransportAuth : public QObject
 {
-   CS_OBJECT(QTransportAuth)
+   GUI_CS_OBJECT(QTransportAuth)
 
  public:
    static QTransportAuth *getInstance();
@@ -188,7 +188,7 @@ class Q_GUI_EXPORT RequestAnalyzer
 */
 class Q_GUI_EXPORT QAuthDevice : public QIODevice
 {
-   CS_OBJECT(QAuthDevice)
+   GUI_CS_OBJECT(QAuthDevice)
 
  public:
    enum AuthDirection {

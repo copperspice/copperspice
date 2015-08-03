@@ -81,7 +81,7 @@ class Q_CORE_EXPORT QObject
    typedef QObject cs_class;
 
  private:
-   CS_OBJECT_INTERNAL(QObject)
+   CORE_CS_OBJECT_INTERNAL(QObject)
 
    CORE_CS_PROPERTY_READ(objectName,  objectName)
    CORE_CS_PROPERTY_WRITE(objectName, setObjectName)

@@ -104,7 +104,7 @@ QT_BEGIN_NAMESPACE
 
 class QTipLabel : public QLabel
 {
-   CS_OBJECT(QTipLabel)
+   GUI_CS_OBJECT(QTipLabel)
 
  public:
    QTipLabel(const QString &text, QWidget *w);

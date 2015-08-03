@@ -38,7 +38,7 @@ class QShortcutPrivate;
 
 class Q_GUI_EXPORT QShortcut : public QObject
 {
-   CS_OBJECT(QShortcut)
+   GUI_CS_OBJECT(QShortcut)
    Q_DECLARE_PRIVATE(QShortcut)
 
    GUI_CS_PROPERTY_READ(key, key)

@@ -40,7 +40,7 @@ class QStyleOptionMenuItem;
 
 class Q_GUI_EXPORT QMenu : public QWidget
 {
-   CS_OBJECT(QMenu)
+   GUI_CS_OBJECT(QMenu)
    Q_DECLARE_PRIVATE(QMenu)
 
    GUI_CS_PROPERTY_READ(tearOffEnabled, isTearOffEnabled)

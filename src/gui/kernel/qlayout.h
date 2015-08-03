@@ -43,7 +43,7 @@ class QLayoutPrivate;
 
 class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
 {
-   CS_OBJECT_MULTIPLE(QLayout, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QLayout, QObject)
    Q_DECLARE_PRIVATE(QLayout)
 
    GUI_CS_ENUM(SizeConstraint)

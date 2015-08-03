@@ -153,6 +153,7 @@ class Q_CORE_EXPORT QVariant
    ~QVariant();
 
    // force compile error, prevent QVariant(bool) to be called
+   QVariant(const char *) = delete;
    QVariant(void *) = delete;
 
    QVariant(Type type);

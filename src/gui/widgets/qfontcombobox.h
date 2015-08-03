@@ -37,7 +37,7 @@ class QFontComboBoxPrivate;
 
 class Q_GUI_EXPORT QFontComboBox : public QComboBox
 {
-   CS_OBJECT(QFontComboBox)
+   GUI_CS_OBJECT(QFontComboBox)
 
    GUI_CS_FLAG(FontFilter, FontFilters)
 

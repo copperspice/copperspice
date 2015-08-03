@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 class QExpandingLineEdit : public QLineEdit
 {
-   CS_OBJECT(QExpandingLineEdit)
+   GUI_CS_OBJECT(QExpandingLineEdit)
 
  public:
    QExpandingLineEdit(QWidget *parent);

@@ -106,7 +106,7 @@ CS_DECLARE_INTERFACE(QImageIOHandlerFactoryInterface, QImageIOHandlerFactoryInte
 
 class Q_GUI_EXPORT QImageIOPlugin : public QObject, public QImageIOHandlerFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QImageIOPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QImageIOPlugin, QObject)
    CS_INTERFACES(QImageIOHandlerFactoryInterface, QFactoryInterface)
 
  public:

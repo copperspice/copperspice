@@ -40,7 +40,7 @@ class QGtkStylePrivate;
 
 class Q_GUI_EXPORT QGtkStyle : public QCleanlooksStyle
 {
-   CS_OBJECT(QGtkStyle)
+   GUI_CS_OBJECT(QGtkStyle)
    Q_DECLARE_PRIVATE(QGtkStyle)
 
  public:

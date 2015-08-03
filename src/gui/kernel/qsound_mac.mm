@@ -52,7 +52,7 @@ static Sounds sounds;
 
 class QAuServerMac : public QAuServer
 {
-   CS_OBJECT(QAuServerMac)
+   GUI_CS_OBJECT(QAuServerMac)
 
  public:
    QAuServerMac(QObject *parent) : QAuServer(parent) { }

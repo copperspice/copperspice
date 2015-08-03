@@ -39,7 +39,7 @@ class QMotifStylePrivate;
 
 class Q_GUI_EXPORT QMotifStyle : public QCommonStyle
 {
-   CS_OBJECT(QMotifStyle)
+   GUI_CS_OBJECT(QMotifStyle)
 
  public:
    explicit QMotifStyle(bool useHighlightCols = false);

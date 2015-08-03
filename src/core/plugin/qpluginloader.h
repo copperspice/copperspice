@@ -34,7 +34,7 @@ class QLibraryPrivate;
 
 class Q_CORE_EXPORT QPluginLoader : public QObject
 {
-   CS_OBJECT(QPluginLoader)
+   CORE_CS_OBJECT(QPluginLoader)
 
    CORE_CS_PROPERTY_READ(fileName, fileName)
    CORE_CS_PROPERTY_WRITE(fileName, setFileName)

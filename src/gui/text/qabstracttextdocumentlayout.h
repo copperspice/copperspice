@@ -42,7 +42,7 @@ class QTextFrame;
 
 class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
 {
-   CS_OBJECT(QAbstractTextDocumentLayout)
+   GUI_CS_OBJECT(QAbstractTextDocumentLayout)
    Q_DECLARE_PRIVATE(QAbstractTextDocumentLayout)
 
  public:

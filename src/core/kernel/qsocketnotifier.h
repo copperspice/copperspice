@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QSocketNotifier : public QObject
 {
-   CS_OBJECT(QSocketNotifier)
+   CORE_CS_OBJECT(QSocketNotifier)
 
  public:
    enum Type { Read, Write, Exception };

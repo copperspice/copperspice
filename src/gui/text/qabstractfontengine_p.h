@@ -35,7 +35,7 @@ class QCustomFontEngine;
 
 class QProxyFontEngine : public QFontEngine
 {
-   CS_OBJECT(QProxyFontEngine)
+   GUI_CS_OBJECT(QProxyFontEngine)
 
  public:
    QProxyFontEngine(QAbstractFontEngine *engine, const QFontDef &def);

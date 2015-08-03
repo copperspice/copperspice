@@ -37,7 +37,7 @@ class QTextDocumentLayoutPrivate;
 
 class QTextDocumentLayout : public QAbstractTextDocumentLayout
 {
-   CS_OBJECT(QTextDocumentLayout)
+   GUI_CS_OBJECT(QTextDocumentLayout)
    Q_DECLARE_PRIVATE(QTextDocumentLayout)
 
    GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)

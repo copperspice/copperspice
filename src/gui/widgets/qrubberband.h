@@ -37,7 +37,7 @@ class QStyleOptionRubberBand;
 
 class Q_GUI_EXPORT QRubberBand : public QWidget
 {
-   CS_OBJECT(QRubberBand)
+   GUI_CS_OBJECT(QRubberBand)
 
  public:
    enum Shape { Line, Rectangle };

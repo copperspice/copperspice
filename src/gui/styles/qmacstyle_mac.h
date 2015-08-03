@@ -46,7 +46,7 @@ class QMacStylePrivate;
 
 class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
 {
-   CS_OBJECT(QMacStyle)
+   GUI_CS_OBJECT(QMacStyle)
 
  public:
    QMacStyle();

@@ -41,7 +41,7 @@ class QAnimationDriverPrivate;
 
 class Q_CORE_EXPORT QAbstractAnimation : public QObject
 {
-   CS_OBJECT(QAbstractAnimation)
+   CORE_CS_OBJECT(QAbstractAnimation)
  
    CORE_CS_PROPERTY_READ(state, state)
    CORE_CS_PROPERTY_NOTIFY(state, stateChanged)
@@ -140,7 +140,7 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
 
 class Q_CORE_EXPORT QAnimationDriver : public QObject
 {
-   CS_OBJECT(QAnimationDriver)
+   CORE_CS_OBJECT(QAnimationDriver)
    Q_DECLARE_PRIVATE(QAnimationDriver)
 
  public:

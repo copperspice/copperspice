@@ -36,7 +36,7 @@ class QPauseAnimationPrivate;
 
 class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
 {
-   CS_OBJECT(QPauseAnimation)
+   CORE_CS_OBJECT(QPauseAnimation)
 
    CORE_CS_PROPERTY_READ(duration, duration)
    CORE_CS_PROPERTY_WRITE(duration, setDuration)

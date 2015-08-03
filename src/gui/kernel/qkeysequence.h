@@ -45,7 +45,7 @@ class QKeySequencePrivate;
 
 class Q_GUI_EXPORT QKeySequence
 {
-   CS_GADGET(QKeySequence)
+   GUI_CS_GADGET(QKeySequence)
 
    GUI_CS_ENUM(StandardKey)
 

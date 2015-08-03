@@ -37,7 +37,7 @@ class QHeaderView;
 
 class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 {
-   CS_OBJECT(QTreeView)
+   GUI_CS_OBJECT(QTreeView)
 
    GUI_CS_PROPERTY_READ(autoExpandDelay, autoExpandDelay)
    GUI_CS_PROPERTY_WRITE(autoExpandDelay, setAutoExpandDelay)

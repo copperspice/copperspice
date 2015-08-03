@@ -39,7 +39,7 @@ class QStyleOptionSpinBox;
 
 class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 {
-   CS_OBJECT(QAbstractSpinBox)
+   GUI_CS_OBJECT(QAbstractSpinBox)
 
    GUI_CS_ENUM(ButtonSymbols)
    GUI_CS_ENUM(CorrectionMode)

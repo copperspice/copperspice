@@ -108,7 +108,7 @@ typedef struct {
 
 class QWSLinuxTPMouseHandlerPrivate : public QObject
 {
-   CS_OBJECT(QWSLinuxTPMouseHandlerPrivate)
+   GUI_CS_OBJECT(QWSLinuxTPMouseHandlerPrivate)
 
  public:
    QWSLinuxTPMouseHandlerPrivate(QWSLinuxTPMouseHandler *h, const QString &);
