@@ -29,11 +29,11 @@
 #include <QtCore/qobject.h>
 #include <QtMultimedia/qvideoframe.h>
 #include <QScopedPointer>
+#include <QVideoSurfaceFormat>
 
 QT_BEGIN_NAMESPACE
 
 class QRectF;
-class QVideoSurfaceFormat;
 class QAbstractVideoSurfacePrivate;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject

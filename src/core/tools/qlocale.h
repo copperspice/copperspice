@@ -107,6 +107,7 @@ class Q_CORE_EXPORT QSystemLocale
 
 
 struct QLocalePrivate;
+
 class Q_CORE_EXPORT QLocale
 {
    CORE_CS_GADGET(QLocale)

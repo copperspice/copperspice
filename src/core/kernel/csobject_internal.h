@@ -164,8 +164,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
 
          // store the signal data, true indicates the data will be copied into a TeaCup Object (stored on the heap)
          CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento, new TeaCup_Data<SignalArgTypes...>(true,
-               std::forward<Ts>(Vs)... ),
-               sender, signal_index);
+               std::forward<Ts>(Vs)... ), sender, signal_index);
 
          QCoreApplication::postEvent(receiver, event);
 
@@ -184,8 +183,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
 
          // store the signal data, false indicates the data will not be copied
          CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento, new TeaCup_Data<SignalArgTypes...>(false,
-               std::forward<Ts>(Vs)... ),
-               sender, signal_index, &semaphore);
+               std::forward<Ts>(Vs)... ), sender, signal_index, &semaphore);
 
          QCoreApplication::postEvent(receiver, event);
 
