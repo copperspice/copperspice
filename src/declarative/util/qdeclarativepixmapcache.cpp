@@ -93,11 +93,11 @@ class QDeclarativePixmapReply : public QObject
    };
    void postReply(ReadError, const QString &, const QSize &, const QImage &);
 
-   CS_SIGNAL_1(Public, void finished())
-   CS_SIGNAL_2(finished)
+   DECL_CS_SIGNAL_1(Public, void finished())
+   DECL_CS_SIGNAL_2(finished)
 
-   CS_SIGNAL_1(Public, void downloadProgress(qint64 un_named_arg1, qint64 un_named_arg2))
-   CS_SIGNAL_2(downloadProgress, un_named_arg1, un_named_arg2)
+   DECL_CS_SIGNAL_1(Public, void downloadProgress(qint64 un_named_arg1, qint64 un_named_arg2))
+   DECL_CS_SIGNAL_2(downloadProgress, un_named_arg1, un_named_arg2)
 
  protected:
    bool event(QEvent *event);
@@ -120,8 +120,8 @@ class QDeclarativePixmapReaderThreadObject : public QObject
    virtual bool event(QEvent *e);
 
  private:
-   CS_SLOT_1(Private, void networkRequestDone())
-   CS_SLOT_2(networkRequestDone)
+   DECL_CS_SLOT_1(Private, void networkRequestDone())
+   DECL_CS_SLOT_2(networkRequestDone)
 
    QDeclarativePixmapReader *reader;
 };

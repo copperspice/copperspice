@@ -38,12 +38,12 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePropertyChanges : public QDeclara
    DECL_CS_OBJECT(QDeclarativePropertyChanges)
    Q_DECLARE_PRIVATE(QDeclarativePropertyChanges)
 
-   CS_PROPERTY_READ(*target, object)
-   CS_PROPERTY_WRITE(*target, setObject)
-   CS_PROPERTY_READ(restoreEntryValues, restoreEntryValues)
-   CS_PROPERTY_WRITE(restoreEntryValues, setRestoreEntryValues)
-   CS_PROPERTY_READ(explicit, isExplicit)
-   CS_PROPERTY_WRITE(explicit, setIsExplicit)
+   DECL_CS_PROPERTY_READ(*target, object)
+   DECL_CS_PROPERTY_WRITE(*target, setObject)
+   DECL_CS_PROPERTY_READ(restoreEntryValues, restoreEntryValues)
+   DECL_CS_PROPERTY_WRITE(restoreEntryValues, setRestoreEntryValues)
+   DECL_CS_PROPERTY_READ(explicit, isExplicit)
+   DECL_CS_PROPERTY_WRITE(explicit, setIsExplicit)
 
  public:
    QDeclarativePropertyChanges();

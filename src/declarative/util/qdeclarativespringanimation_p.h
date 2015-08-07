@@ -41,20 +41,20 @@ class QDeclarativeSpringAnimation : public QDeclarativeNumberAnimation
 
    CS_INTERFACES(QDeclarativePropertyValueSource)
 
-   CS_PROPERTY_READ(velocity, velocity)
-   CS_PROPERTY_WRITE(velocity, setVelocity)
-   CS_PROPERTY_READ(spring, spring)
-   CS_PROPERTY_WRITE(spring, setSpring)
-   CS_PROPERTY_READ(damping, damping)
-   CS_PROPERTY_WRITE(damping, setDamping)
-   CS_PROPERTY_READ(epsilon, epsilon)
-   CS_PROPERTY_WRITE(epsilon, setEpsilon)
-   CS_PROPERTY_READ(modulus, modulus)
-   CS_PROPERTY_WRITE(modulus, setModulus)
-   CS_PROPERTY_NOTIFY(modulus, modulusChanged)
-   CS_PROPERTY_READ(mass, mass)
-   CS_PROPERTY_WRITE(mass, setMass)
-   CS_PROPERTY_NOTIFY(mass, massChanged)
+   DECL_CS_PROPERTY_READ(velocity, velocity)
+   DECL_CS_PROPERTY_WRITE(velocity, setVelocity)
+   DECL_CS_PROPERTY_READ(spring, spring)
+   DECL_CS_PROPERTY_WRITE(spring, setSpring)
+   DECL_CS_PROPERTY_READ(damping, damping)
+   DECL_CS_PROPERTY_WRITE(damping, setDamping)
+   DECL_CS_PROPERTY_READ(epsilon, epsilon)
+   DECL_CS_PROPERTY_WRITE(epsilon, setEpsilon)
+   DECL_CS_PROPERTY_READ(modulus, modulus)
+   DECL_CS_PROPERTY_WRITE(modulus, setModulus)
+   DECL_CS_PROPERTY_NOTIFY(modulus, modulusChanged)
+   DECL_CS_PROPERTY_READ(mass, mass)
+   DECL_CS_PROPERTY_WRITE(mass, setMass)
+   DECL_CS_PROPERTY_NOTIFY(mass, massChanged)
 
  public:
    QDeclarativeSpringAnimation(QObject *parent = 0);
@@ -81,12 +81,12 @@ class QDeclarativeSpringAnimation : public QDeclarativeNumberAnimation
    virtual void transition(QDeclarativeStateActions &actions, QDeclarativeProperties &modified,
                            TransitionDirection direction);
 
-   CS_SIGNAL_1(Public, void modulusChanged())
-   CS_SIGNAL_2(modulusChanged)
-   CS_SIGNAL_1(Public, void massChanged())
-   CS_SIGNAL_2(massChanged)
-   CS_SIGNAL_1(Public, void syncChanged())
-   CS_SIGNAL_2(syncChanged)
+   DECL_CS_SIGNAL_1(Public, void modulusChanged())
+   DECL_CS_SIGNAL_2(modulusChanged)
+   DECL_CS_SIGNAL_1(Public, void massChanged())
+   DECL_CS_SIGNAL_2(massChanged)
+   DECL_CS_SIGNAL_1(Public, void syncChanged())
+   DECL_CS_SIGNAL_2(syncChanged)
 
  protected:
    virtual QAbstractAnimation *qtAnimation();

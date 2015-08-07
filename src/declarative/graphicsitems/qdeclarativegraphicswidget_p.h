@@ -41,34 +41,34 @@ class QDeclarativeGraphicsWidget : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeGraphicsWidget)
 
-   CS_PROPERTY_READ(anchors, anchors)
-   CS_PROPERTY_DESIGNABLE(anchors, false)
-   CS_PROPERTY_CONSTANT(anchors)
-   CS_PROPERTY_FINAL(anchors)
+   DECL_CS_PROPERTY_READ(anchors, anchors)
+   DECL_CS_PROPERTY_DESIGNABLE(anchors, false)
+   DECL_CS_PROPERTY_CONSTANT(anchors)
+   DECL_CS_PROPERTY_FINAL(anchors)
 
-   CS_PROPERTY_READ(left, left)
-   CS_PROPERTY_CONSTANT(left)
-   CS_PROPERTY_FINAL(left)
+   DECL_CS_PROPERTY_READ(left, left)
+   DECL_CS_PROPERTY_CONSTANT(left)
+   DECL_CS_PROPERTY_FINAL(left)
 
-   CS_PROPERTY_READ(right, right)
-   CS_PROPERTY_CONSTANT(right)
-   CS_PROPERTY_FINAL(right)
+   DECL_CS_PROPERTY_READ(right, right)
+   DECL_CS_PROPERTY_CONSTANT(right)
+   DECL_CS_PROPERTY_FINAL(right)
 
-   CS_PROPERTY_READ(horizontalCenter, horizontalCenter)
-   CS_PROPERTY_CONSTANT(horizontalCenter)
-   CS_PROPERTY_FINAL(horizontalCenter)
+   DECL_CS_PROPERTY_READ(horizontalCenter, horizontalCenter)
+   DECL_CS_PROPERTY_CONSTANT(horizontalCenter)
+   DECL_CS_PROPERTY_FINAL(horizontalCenter)
 
-   CS_PROPERTY_READ(top, top)
-   CS_PROPERTY_CONSTANT(top)
-   CS_PROPERTY_FINAL(top)
+   DECL_CS_PROPERTY_READ(top, top)
+   DECL_CS_PROPERTY_CONSTANT(top)
+   DECL_CS_PROPERTY_FINAL(top)
 
-   CS_PROPERTY_READ(bottom, bottom)
-   CS_PROPERTY_CONSTANT(bottom)
-   CS_PROPERTY_FINAL(bottom)
+   DECL_CS_PROPERTY_READ(bottom, bottom)
+   DECL_CS_PROPERTY_CONSTANT(bottom)
+   DECL_CS_PROPERTY_FINAL(bottom)
 
-   CS_PROPERTY_READ(verticalCenter, verticalCenter)
-   CS_PROPERTY_CONSTANT(verticalCenter)
-   CS_PROPERTY_FINAL(verticalCenter)
+   DECL_CS_PROPERTY_READ(verticalCenter, verticalCenter)
+   DECL_CS_PROPERTY_CONSTANT(verticalCenter)
+   DECL_CS_PROPERTY_FINAL(verticalCenter)
 
    // ### TODO : QGraphicsWidget don't have a baseline concept yet.
    //Q_PROPERTY(QDeclarativeAnchorLine baseline READ baseline CONSTANT FINAL)

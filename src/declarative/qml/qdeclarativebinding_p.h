@@ -191,8 +191,8 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpr
          QObject *parent = 0);
 
  public :
-   CS_SLOT_1(Public, void update())
-   CS_SLOT_OVERLOAD(update)
+   DECL_CS_SLOT_1(Public, void update())
+   DECL_CS_SLOT_OVERLOAD(update)
 
  protected:
    ~QDeclarativeBinding();

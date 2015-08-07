@@ -70,8 +70,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeExpression : public QObject
 
    QVariant evaluate(bool *valueIsUndefined = 0);
 
-   CS_SIGNAL_1(Public, void valueChanged())
-   CS_SIGNAL_2(valueChanged)
+   DECL_CS_SIGNAL_1(Public, void valueChanged())
+   DECL_CS_SIGNAL_2(valueChanged)
 
  protected:
    QDeclarativeExpression(QDeclarativeContextData *, QObject *, const QString &, QDeclarativeExpressionPrivate &dd);
@@ -86,8 +86,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeExpression : public QObject
    Q_DISABLE_COPY(QDeclarativeExpression)
    Q_DECLARE_PRIVATE(QDeclarativeExpression)
 
-   CS_SLOT_1(Private, void _q_notify())
-   CS_SLOT_2(_q_notify)
+   DECL_CS_SLOT_1(Private, void _q_notify())
+   DECL_CS_SLOT_2(_q_notify)
 
    friend class QDeclarativeDebugger;
    friend class QDeclarativeContext;

@@ -41,16 +41,16 @@ class Q_DECLARATIVE_EXPORT QDeclarativeTransition : public QObject
    DECL_CS_OBJECT(QDeclarativeTransition)
    Q_DECLARE_PRIVATE(QDeclarativeTransition)
 
-   CS_PROPERTY_READ(from, fromState)
-   CS_PROPERTY_WRITE(from, setFromState)
-   CS_PROPERTY_NOTIFY(from, fromChanged)
-   CS_PROPERTY_READ(to, toState)
-   CS_PROPERTY_WRITE(to, setToState)
-   CS_PROPERTY_NOTIFY(to, toChanged)
-   CS_PROPERTY_READ(reversible, reversible)
-   CS_PROPERTY_WRITE(reversible, setReversible)
-   CS_PROPERTY_NOTIFY(reversible, reversibleChanged)
-   CS_PROPERTY_READ(animations, animations)
+   DECL_CS_PROPERTY_READ(from, fromState)
+   DECL_CS_PROPERTY_WRITE(from, setFromState)
+   DECL_CS_PROPERTY_NOTIFY(from, fromChanged)
+   DECL_CS_PROPERTY_READ(to, toState)
+   DECL_CS_PROPERTY_WRITE(to, setToState)
+   DECL_CS_PROPERTY_NOTIFY(to, toChanged)
+   DECL_CS_PROPERTY_READ(reversible, reversible)
+   DECL_CS_PROPERTY_WRITE(reversible, setReversible)
+   DECL_CS_PROPERTY_NOTIFY(reversible, reversibleChanged)
+   DECL_CS_PROPERTY_READ(animations, animations)
    DECL_CS_CLASSINFO("DefaultProperty", "animations")
    DECL_CS_CLASSINFO("DeferredPropertyNames", "animations")
 
@@ -77,12 +77,12 @@ class Q_DECLARATIVE_EXPORT QDeclarativeTransition : public QObject
    void stop();
 
  public:
-   CS_SIGNAL_1(Public, void fromChanged())
-   CS_SIGNAL_2(fromChanged)
-   CS_SIGNAL_1(Public, void toChanged())
-   CS_SIGNAL_2(toChanged)
-   CS_SIGNAL_1(Public, void reversibleChanged())
-   CS_SIGNAL_2(reversibleChanged)
+   DECL_CS_SIGNAL_1(Public, void fromChanged())
+   DECL_CS_SIGNAL_2(fromChanged)
+   DECL_CS_SIGNAL_1(Public, void toChanged())
+   DECL_CS_SIGNAL_2(toChanged)
+   DECL_CS_SIGNAL_1(Public, void reversibleChanged())
+   DECL_CS_SIGNAL_2(reversibleChanged)
 };
 
 QT_END_NAMESPACE

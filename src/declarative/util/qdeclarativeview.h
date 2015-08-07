@@ -45,13 +45,13 @@ class Q_DECLARATIVE_EXPORT QDeclarativeView : public QGraphicsView
 {
    DECL_CS_OBJECT(QDeclarativeView)
 
-   CS_PROPERTY_READ(resizeMode, resizeMode)
-   CS_PROPERTY_WRITE(resizeMode, setResizeMode)
-   CS_PROPERTY_READ(status, status)
-   CS_PROPERTY_NOTIFY(status, statusChanged)
-   CS_PROPERTY_READ(source, source)
-   CS_PROPERTY_WRITE(source, setSource)
-   CS_PROPERTY_DESIGNABLE(source, true)
+   DECL_CS_PROPERTY_READ(resizeMode, resizeMode)
+   DECL_CS_PROPERTY_WRITE(resizeMode, setResizeMode)
+   DECL_CS_PROPERTY_READ(status, status)
+   DECL_CS_PROPERTY_NOTIFY(status, statusChanged)
+   DECL_CS_PROPERTY_READ(source, source)
+   DECL_CS_PROPERTY_WRITE(source, setSource)
+   DECL_CS_PROPERTY_DESIGNABLE(source, true)
 
    CS_ENUM(ResizeMode)
    CS_ENUM(Status)
@@ -82,14 +82,14 @@ class Q_DECLARATIVE_EXPORT QDeclarativeView : public QGraphicsView
    QSize initialSize() const;
 
  public:
-   CS_SIGNAL_1(Public, void sceneResized(QSize size))
-   CS_SIGNAL_2(sceneResized, size) // ???
-   CS_SIGNAL_1(Public, void statusChanged(QDeclarativeView::Status un_named_arg1))
-   CS_SIGNAL_2(statusChanged, un_named_arg1)
+   DECL_CS_SIGNAL_1(Public, void sceneResized(QSize size))
+   DECL_CS_SIGNAL_2(sceneResized, size) // ???
+   DECL_CS_SIGNAL_1(Public, void statusChanged(QDeclarativeView::Status un_named_arg1))
+   DECL_CS_SIGNAL_2(statusChanged, un_named_arg1)
 
  private :
-   CS_SLOT_1(Private, void continueExecute())
-   CS_SLOT_2(continueExecute)
+   DECL_CS_SLOT_1(Private, void continueExecute())
+   DECL_CS_SLOT_2(continueExecute)
 
  protected:
    virtual void resizeEvent(QResizeEvent *);

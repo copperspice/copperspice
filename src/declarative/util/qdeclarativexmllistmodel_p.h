@@ -54,25 +54,25 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
    CS_INTERFACES(QDeclarativeParserStatus)
    CS_ENUM(Status)
 
-   CS_PROPERTY_READ(status, status)
-   CS_PROPERTY_NOTIFY(status, statusChanged)
-   CS_PROPERTY_READ(progress, progress)
-   CS_PROPERTY_NOTIFY(progress, progressChanged)
-   CS_PROPERTY_READ(source, source)
-   CS_PROPERTY_WRITE(source, setSource)
-   CS_PROPERTY_NOTIFY(source, sourceChanged)
-   CS_PROPERTY_READ(xml, xml)
-   CS_PROPERTY_WRITE(xml, setXml)
-   CS_PROPERTY_NOTIFY(xml, xmlChanged)
-   CS_PROPERTY_READ(query, query)
-   CS_PROPERTY_WRITE(query, setQuery)
-   CS_PROPERTY_NOTIFY(query, queryChanged)
-   CS_PROPERTY_READ(namespaceDeclarations, namespaceDeclarations)
-   CS_PROPERTY_WRITE(namespaceDeclarations, setNamespaceDeclarations)
-   CS_PROPERTY_NOTIFY(namespaceDeclarations, namespaceDeclarationsChanged)
-   CS_PROPERTY_READ(roles, roleObjects)
-   CS_PROPERTY_READ(count, count)
-   CS_PROPERTY_NOTIFY(count, countChanged)
+   DECL_CS_PROPERTY_READ(status, status)
+   DECL_CS_PROPERTY_NOTIFY(status, statusChanged)
+   DECL_CS_PROPERTY_READ(progress, progress)
+   DECL_CS_PROPERTY_NOTIFY(progress, progressChanged)
+   DECL_CS_PROPERTY_READ(source, source)
+   DECL_CS_PROPERTY_WRITE(source, setSource)
+   DECL_CS_PROPERTY_NOTIFY(source, sourceChanged)
+   DECL_CS_PROPERTY_READ(xml, xml)
+   DECL_CS_PROPERTY_WRITE(xml, setXml)
+   DECL_CS_PROPERTY_NOTIFY(xml, xmlChanged)
+   DECL_CS_PROPERTY_READ(query, query)
+   DECL_CS_PROPERTY_WRITE(query, setQuery)
+   DECL_CS_PROPERTY_NOTIFY(query, queryChanged)
+   DECL_CS_PROPERTY_READ(namespaceDeclarations, namespaceDeclarations)
+   DECL_CS_PROPERTY_WRITE(namespaceDeclarations, setNamespaceDeclarations)
+   DECL_CS_PROPERTY_NOTIFY(namespaceDeclarations, namespaceDeclarationsChanged)
+   DECL_CS_PROPERTY_READ(roles, roleObjects)
+   DECL_CS_PROPERTY_READ(count, count)
+   DECL_CS_PROPERTY_NOTIFY(count, countChanged)
    DECL_CS_CLASSINFO("DefaultProperty", "roles")
 
  public:
@@ -111,40 +111,40 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
    virtual void componentComplete();
 
  public:
-   CS_SIGNAL_1(Public, void statusChanged(QDeclarativeXmlListModel::Status un_named_arg1))
-   CS_SIGNAL_2(statusChanged, un_named_arg1)
-   CS_SIGNAL_1(Public, void progressChanged(qreal progress))
-   CS_SIGNAL_2(progressChanged, progress)
-   CS_SIGNAL_1(Public, void countChanged())
-   CS_SIGNAL_2(countChanged)
-   CS_SIGNAL_1(Public, void sourceChanged())
-   CS_SIGNAL_2(sourceChanged)
-   CS_SIGNAL_1(Public, void xmlChanged())
-   CS_SIGNAL_2(xmlChanged)
-   CS_SIGNAL_1(Public, void queryChanged())
-   CS_SIGNAL_2(queryChanged)
-   CS_SIGNAL_1(Public, void namespaceDeclarationsChanged())
-   CS_SIGNAL_2(namespaceDeclarationsChanged)
+   DECL_CS_SIGNAL_1(Public, void statusChanged(QDeclarativeXmlListModel::Status un_named_arg1))
+   DECL_CS_SIGNAL_2(statusChanged, un_named_arg1)
+   DECL_CS_SIGNAL_1(Public, void progressChanged(qreal progress))
+   DECL_CS_SIGNAL_2(progressChanged, progress)
+   DECL_CS_SIGNAL_1(Public, void countChanged())
+   DECL_CS_SIGNAL_2(countChanged)
+   DECL_CS_SIGNAL_1(Public, void sourceChanged())
+   DECL_CS_SIGNAL_2(sourceChanged)
+   DECL_CS_SIGNAL_1(Public, void xmlChanged())
+   DECL_CS_SIGNAL_2(xmlChanged)
+   DECL_CS_SIGNAL_1(Public, void queryChanged())
+   DECL_CS_SIGNAL_2(queryChanged)
+   DECL_CS_SIGNAL_1(Public, void namespaceDeclarationsChanged())
+   DECL_CS_SIGNAL_2(namespaceDeclarationsChanged)
 
  public :
    // ### need to use/expose Expiry to guess when to call this?
    // ### property to auto-call this on reasonable Expiry?
    // ### LastModified/Age also useful to guess.
    // ### Probably also applies to other network-requesting types.
-   CS_SLOT_1(Public, void reload())
-   CS_SLOT_2(reload)
+   DECL_CS_SLOT_1(Public, void reload())
+   DECL_CS_SLOT_2(reload)
 
  private :
-   CS_SLOT_1(Private, void requestFinished())
-   CS_SLOT_2(requestFinished)
-   CS_SLOT_1(Private, void requestProgress(qint64 un_named_arg1, qint64 un_named_arg2))
-   CS_SLOT_2(requestProgress)
-   CS_SLOT_1(Private, void dataCleared())
-   CS_SLOT_2(dataCleared)
-   CS_SLOT_1(Private, void queryCompleted(const QDeclarativeXmlQueryResult &un_named_arg1))
-   CS_SLOT_2(queryCompleted)
-   CS_SLOT_1(Private, void queryError(void *object, const QString &error))
-   CS_SLOT_2(queryError)
+   DECL_CS_SLOT_1(Private, void requestFinished())
+   DECL_CS_SLOT_2(requestFinished)
+   DECL_CS_SLOT_1(Private, void requestProgress(qint64 un_named_arg1, qint64 un_named_arg2))
+   DECL_CS_SLOT_2(requestProgress)
+   DECL_CS_SLOT_1(Private, void dataCleared())
+   DECL_CS_SLOT_2(dataCleared)
+   DECL_CS_SLOT_1(Private, void queryCompleted(const QDeclarativeXmlQueryResult &un_named_arg1))
+   DECL_CS_SLOT_2(queryCompleted)
+   DECL_CS_SLOT_1(Private, void queryError(void *object, const QString &error))
+   DECL_CS_SLOT_2(queryError)
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativeXmlListModel)
@@ -154,15 +154,15 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
 class QDeclarativeXmlListModelRole : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeXmlListModelRole)
-   CS_PROPERTY_READ(name, name)
-   CS_PROPERTY_WRITE(name, setName)
-   CS_PROPERTY_NOTIFY(name, nameChanged)
-   CS_PROPERTY_READ(query, query)
-   CS_PROPERTY_WRITE(query, setQuery)
-   CS_PROPERTY_NOTIFY(query, queryChanged)
-   CS_PROPERTY_READ(isKey, isKey)
-   CS_PROPERTY_WRITE(isKey, setIsKey)
-   CS_PROPERTY_NOTIFY(isKey, isKeyChanged)
+   DECL_CS_PROPERTY_READ(name, name)
+   DECL_CS_PROPERTY_WRITE(name, setName)
+   DECL_CS_PROPERTY_NOTIFY(name, nameChanged)
+   DECL_CS_PROPERTY_READ(query, query)
+   DECL_CS_PROPERTY_WRITE(query, setQuery)
+   DECL_CS_PROPERTY_NOTIFY(query, queryChanged)
+   DECL_CS_PROPERTY_READ(isKey, isKey)
+   DECL_CS_PROPERTY_WRITE(isKey, setIsKey)
+   DECL_CS_PROPERTY_NOTIFY(isKey, isKeyChanged)
  public:
    QDeclarativeXmlListModelRole() : m_isKey(false) {}
    ~QDeclarativeXmlListModelRole() {}
@@ -209,12 +209,12 @@ class QDeclarativeXmlListModelRole : public QObject
    }
 
  public:
-   CS_SIGNAL_1(Public, void nameChanged())
-   CS_SIGNAL_2(nameChanged)
-   CS_SIGNAL_1(Public, void queryChanged())
-   CS_SIGNAL_2(queryChanged)
-   CS_SIGNAL_1(Public, void isKeyChanged())
-   CS_SIGNAL_2(isKeyChanged)
+   DECL_CS_SIGNAL_1(Public, void nameChanged())
+   DECL_CS_SIGNAL_2(nameChanged)
+   DECL_CS_SIGNAL_1(Public, void queryChanged())
+   DECL_CS_SIGNAL_2(queryChanged)
+   DECL_CS_SIGNAL_1(Public, void isKeyChanged())
+   DECL_CS_SIGNAL_2(isKeyChanged)
 
  private:
    QString m_name;

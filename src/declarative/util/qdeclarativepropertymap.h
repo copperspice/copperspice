@@ -58,8 +58,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativePropertyMap : public QObject
    QVariant operator[](const QString &key) const;
 
  public:
-   CS_SIGNAL_1(Public, void valueChanged(const QString &key, const QVariant &value))
-   CS_SIGNAL_2(valueChanged, key, value)
+   DECL_CS_SIGNAL_1(Public, void valueChanged(const QString &key, const QVariant &value))
+   DECL_CS_SIGNAL_2(valueChanged, key, value)
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativePropertyMap)

@@ -35,13 +35,13 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeKeyEvent : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeKeyEvent)
-   CS_PROPERTY_READ(key, key)
-   CS_PROPERTY_READ(text, text)
-   CS_PROPERTY_READ(modifiers, modifiers)
-   CS_PROPERTY_READ(isAutoRepeat, isAutoRepeat)
-   CS_PROPERTY_READ(count, count)
-   CS_PROPERTY_READ(accepted, isAccepted)
-   CS_PROPERTY_WRITE(accepted, setAccepted)
+   DECL_CS_PROPERTY_READ(key, key)
+   DECL_CS_PROPERTY_READ(text, text)
+   DECL_CS_PROPERTY_READ(modifiers, modifiers)
+   DECL_CS_PROPERTY_READ(isAutoRepeat, isAutoRepeat)
+   DECL_CS_PROPERTY_READ(count, count)
+   DECL_CS_PROPERTY_READ(accepted, isAccepted)
+   DECL_CS_PROPERTY_WRITE(accepted, setAccepted)
 
  public:
    QDeclarativeKeyEvent(QEvent::Type type, int key, Qt::KeyboardModifiers modifiers, const QString &text = QString(),
@@ -84,15 +84,15 @@ class QDeclarativeKeyEvent : public QObject
 class QDeclarativeMouseEvent : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeMouseEvent)
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_READ(button, button)
-   CS_PROPERTY_READ(buttons, buttons)
-   CS_PROPERTY_READ(modifiers, modifiers)
-   CS_PROPERTY_READ(wasHeld, wasHeld)
-   CS_PROPERTY_READ(isClick, isClick)
-   CS_PROPERTY_READ(accepted, isAccepted)
-   CS_PROPERTY_WRITE(accepted, setAccepted)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_READ(button, button)
+   DECL_CS_PROPERTY_READ(buttons, buttons)
+   DECL_CS_PROPERTY_READ(modifiers, modifiers)
+   DECL_CS_PROPERTY_READ(wasHeld, wasHeld)
+   DECL_CS_PROPERTY_READ(isClick, isClick)
+   DECL_CS_PROPERTY_READ(accepted, isAccepted)
+   DECL_CS_PROPERTY_WRITE(accepted, setAccepted)
 
  public:
    QDeclarativeMouseEvent(int x, int y, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers

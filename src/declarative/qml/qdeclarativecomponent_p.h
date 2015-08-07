@@ -127,10 +127,10 @@ class QDeclarativeComponentAttached : public QObject
    QDeclarativeComponentAttached *next;
 
  public:
-   CS_SIGNAL_1(Public, void completed())
-   CS_SIGNAL_2(completed)
-   CS_SIGNAL_1(Public, void destruction())
-   CS_SIGNAL_2(destruction)
+   DECL_CS_SIGNAL_1(Public, void completed())
+   DECL_CS_SIGNAL_2(completed)
+   DECL_CS_SIGNAL_1(Public, void destruction())
+   DECL_CS_SIGNAL_2(destruction)
 
  private:
    friend class QDeclarativeContextData;

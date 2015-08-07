@@ -53,8 +53,8 @@ class QDeclarativeWatcher : public QObject
    void removeWatch(int id);
 
  public:
-   CS_SIGNAL_1(Public, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
-   CS_SIGNAL_2(propertyChanged, id, objectId, property, value)
+   DECL_CS_SIGNAL_1(Public, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
+   DECL_CS_SIGNAL_2(propertyChanged, id, objectId, property, value)
 
  private:
    friend class QDeclarativeWatchProxy;

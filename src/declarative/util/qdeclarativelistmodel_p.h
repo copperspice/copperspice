@@ -48,8 +48,8 @@ struct ModelNode;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeListModel : public QListModelInterface
 {
    DECL_CS_OBJECT(QDeclarativeListModel)
-   CS_PROPERTY_READ(count, count)
-   CS_PROPERTY_NOTIFY(count, countChanged)
+   DECL_CS_PROPERTY_READ(count, count)
+   DECL_CS_PROPERTY_NOTIFY(count, countChanged)
 
  public:
    QDeclarativeListModel(QObject *parent = 0);
@@ -98,8 +98,8 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeListModel : public QListModelInte
 
    QDeclarativeListModelWorkerAgent *agent();
 
-   CS_SIGNAL_1(Public, void countChanged())
-   CS_SIGNAL_2(countChanged)
+   DECL_CS_SIGNAL_1(Public, void countChanged())
+   DECL_CS_SIGNAL_2(countChanged)
 
  private:
    friend class QDeclarativeListModelParser;

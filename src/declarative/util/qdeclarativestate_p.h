@@ -129,13 +129,13 @@ class Q_DECLARATIVE_EXPORT QDeclarativeState : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeState)
 
-   CS_PROPERTY_READ(name, name)
-   CS_PROPERTY_WRITE(name, setName)
-   CS_PROPERTY_READ(*when, when)
-   CS_PROPERTY_WRITE(*when, setWhen)
-   CS_PROPERTY_READ(extend, extends)
-   CS_PROPERTY_WRITE(extend, setExtends)
-   CS_PROPERTY_READ(changes, changes)
+   DECL_CS_PROPERTY_READ(name, name)
+   DECL_CS_PROPERTY_WRITE(name, setName)
+   DECL_CS_PROPERTY_READ(*when, when)
+   DECL_CS_PROPERTY_WRITE(*when, setWhen)
+   DECL_CS_PROPERTY_READ(extend, extends)
+   DECL_CS_PROPERTY_WRITE(extend, setExtends)
+   DECL_CS_PROPERTY_READ(changes, changes)
    DECL_CS_CLASSINFO("DefaultProperty", "changes")
    DECL_CS_CLASSINFO("DeferredPropertyNames", "changes")
 
@@ -180,8 +180,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeState : public QObject
 
    bool isStateActive() const;
 
-   CS_SIGNAL_1(Public, void completed())
-   CS_SIGNAL_2(completed)
+   DECL_CS_SIGNAL_1(Public, void completed())
+   DECL_CS_SIGNAL_2(completed)
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativeState)

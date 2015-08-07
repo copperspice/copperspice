@@ -66,7 +66,7 @@ class QDeclarativeImplicitSizeItem : public QDeclarativeItem
 
 class QDeclarativeImplicitSizePaintedItem : public QDeclarativePaintedItem
 {
-   DECL_DECL_CS_OBJECT(QDeclarativeImplicitSizePaintedItem)
+   DECL_CS_OBJECT(QDeclarativeImplicitSizePaintedItem)
    DECL_CS_PROPERTY_READ(implicitWidth, implicitWidth)
    DECL_CS_PROPERTY_NOTIFY(implicitWidth, implicitWidthChanged)
    DECL_CS_PROPERTY_REVISION(implicitWidth, 1)

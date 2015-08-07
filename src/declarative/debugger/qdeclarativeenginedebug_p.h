@@ -84,10 +84,10 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeEngineDebug : public QObject
    bool resetBindingForObject(int objectDebugId, const QString &propertyName);
    bool setMethodBody(int objectDebugId, const QString &methodName, const QString &methodBody);
 
-   CS_SIGNAL_1(Public, void newObjects())
-   CS_SIGNAL_2(newObjects)
-   CS_SIGNAL_1(Public, void statusChanged(Status status))
-   CS_SIGNAL_2(statusChanged, status)
+   DECL_CS_SIGNAL_1(Public, void newObjects())
+   DECL_CS_SIGNAL_2(newObjects)
+   DECL_CS_SIGNAL_1(Public, void statusChanged(Status status))
+   DECL_CS_SIGNAL_2(statusChanged, status)
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativeEngineDebug)
@@ -112,14 +112,14 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugWatch : public QObject
    State state() const;
 
  public:
-   CS_SIGNAL_1(Public, void stateChanged(QDeclarativeDebugWatch::State un_named_arg1))
-   CS_SIGNAL_2(stateChanged, un_named_arg1)
+   DECL_CS_SIGNAL_1(Public, void stateChanged(QDeclarativeDebugWatch::State un_named_arg1))
+   DECL_CS_SIGNAL_2(stateChanged, un_named_arg1)
    //void objectChanged(int, const QDeclarativeDebugObjectReference &);
    //void valueChanged(int, const QVariant &);
 
    // Server sends value as string if it is a user-type variant
-   CS_SIGNAL_1(Public, void valueChanged(const QByteArray &name, const QVariant &value))
-   CS_SIGNAL_2(valueChanged, name, value)
+   DECL_CS_SIGNAL_1(Public, void valueChanged(const QByteArray &name, const QVariant &value))
+   DECL_CS_SIGNAL_2(valueChanged, name, value)
 
  private:
    friend class QDeclarativeEngineDebug;
@@ -174,8 +174,8 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeDebugQuery : public QObject
    //    bool waitUntilCompleted();
 
  public:
-   CS_SIGNAL_1(Public, void stateChanged(QDeclarativeDebugQuery::State un_named_arg1))
-   CS_SIGNAL_2(stateChanged, un_named_arg1)
+   DECL_CS_SIGNAL_1(Public, void stateChanged(QDeclarativeDebugQuery::State un_named_arg1))
+   DECL_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
  protected:
    QDeclarativeDebugQuery(QObject *);

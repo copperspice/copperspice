@@ -64,11 +64,11 @@ class QDeclarativeDebugConnectionPrivate : public QObject
 
    void advertisePlugins();
 
-   CS_SLOT_1(Public, void connected())
-   CS_SLOT_2(connected)
+   DECL_CS_SLOT_1(Public, void connected())
+   DECL_CS_SLOT_2(connected)
 
-   CS_SLOT_1(Public, void readyRead())
-   CS_SLOT_2(readyRead)
+   DECL_CS_SLOT_1(Public, void readyRead())
+   DECL_CS_SLOT_2(readyRead)
 };
 
 QDeclarativeDebugConnectionPrivate::QDeclarativeDebugConnectionPrivate(QDeclarativeDebugConnection *c)

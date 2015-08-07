@@ -40,18 +40,18 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScaleGrid : public QObject
    DECL_CS_OBJECT(QDeclarativeScaleGrid)
    CS_ENUM(TileRule)
 
-   CS_PROPERTY_READ(left, left)
-   CS_PROPERTY_WRITE(left, setLeft)
-   CS_PROPERTY_NOTIFY(left, borderChanged)
-   CS_PROPERTY_READ(top, top)
-   CS_PROPERTY_WRITE(top, setTop)
-   CS_PROPERTY_NOTIFY(top, borderChanged)
-   CS_PROPERTY_READ(right, right)
-   CS_PROPERTY_WRITE(right, setRight)
-   CS_PROPERTY_NOTIFY(right, borderChanged)
-   CS_PROPERTY_READ(bottom, bottom)
-   CS_PROPERTY_WRITE(bottom, setBottom)
-   CS_PROPERTY_NOTIFY(bottom, borderChanged)
+   DECL_CS_PROPERTY_READ(left, left)
+   DECL_CS_PROPERTY_WRITE(left, setLeft)
+   DECL_CS_PROPERTY_NOTIFY(left, borderChanged)
+   DECL_CS_PROPERTY_READ(top, top)
+   DECL_CS_PROPERTY_WRITE(top, setTop)
+   DECL_CS_PROPERTY_NOTIFY(top, borderChanged)
+   DECL_CS_PROPERTY_READ(right, right)
+   DECL_CS_PROPERTY_WRITE(right, setRight)
+   DECL_CS_PROPERTY_NOTIFY(right, borderChanged)
+   DECL_CS_PROPERTY_READ(bottom, bottom)
+   DECL_CS_PROPERTY_WRITE(bottom, setBottom)
+   DECL_CS_PROPERTY_NOTIFY(bottom, borderChanged)
 
  public:
    QDeclarativeScaleGrid(QObject *parent = 0);
@@ -80,8 +80,8 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScaleGrid : public QObject
    void setBottom(int);
 
  public:
-   CS_SIGNAL_1(Public, void borderChanged())
-   CS_SIGNAL_2(borderChanged)
+   DECL_CS_SIGNAL_1(Public, void borderChanged())
+   DECL_CS_SIGNAL_2(borderChanged)
 
  private:
    int _left;

@@ -177,14 +177,14 @@ class QDeclarativeFlickableVisibleArea : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeFlickableVisibleArea)
 
-   CS_PROPERTY_READ(xPosition, xPosition)
-   CS_PROPERTY_NOTIFY(xPosition, xPositionChanged)
-   CS_PROPERTY_READ(yPosition, yPosition)
-   CS_PROPERTY_NOTIFY(yPosition, yPositionChanged)
-   CS_PROPERTY_READ(widthRatio, widthRatio)
-   CS_PROPERTY_NOTIFY(widthRatio, widthRatioChanged)
-   CS_PROPERTY_READ(heightRatio, heightRatio)
-   CS_PROPERTY_NOTIFY(heightRatio, heightRatioChanged)
+   DECL_CS_PROPERTY_READ(xPosition, xPosition)
+   DECL_CS_PROPERTY_NOTIFY(xPosition, xPositionChanged)
+   DECL_CS_PROPERTY_READ(yPosition, yPosition)
+   DECL_CS_PROPERTY_NOTIFY(yPosition, yPositionChanged)
+   DECL_CS_PROPERTY_READ(widthRatio, widthRatio)
+   DECL_CS_PROPERTY_NOTIFY(widthRatio, widthRatioChanged)
+   DECL_CS_PROPERTY_READ(heightRatio, heightRatio)
+   DECL_CS_PROPERTY_NOTIFY(heightRatio, heightRatioChanged)
 
  public:
    QDeclarativeFlickableVisibleArea(QDeclarativeFlickable *parent = 0);
@@ -197,14 +197,14 @@ class QDeclarativeFlickableVisibleArea : public QObject
    void updateVisible();
 
  public:
-   CS_SIGNAL_1(Public, void xPositionChanged(qreal xPosition))
-   CS_SIGNAL_2(xPositionChanged, xPosition)
-   CS_SIGNAL_1(Public, void yPositionChanged(qreal yPosition))
-   CS_SIGNAL_2(yPositionChanged, yPosition)
-   CS_SIGNAL_1(Public, void widthRatioChanged(qreal widthRatio))
-   CS_SIGNAL_2(widthRatioChanged, widthRatio)
-   CS_SIGNAL_1(Public, void heightRatioChanged(qreal heightRatio))
-   CS_SIGNAL_2(heightRatioChanged, heightRatio)
+   DECL_CS_SIGNAL_1(Public, void xPositionChanged(qreal xPosition))
+   DECL_CS_SIGNAL_2(xPositionChanged, xPosition)
+   DECL_CS_SIGNAL_1(Public, void yPositionChanged(qreal yPosition))
+   DECL_CS_SIGNAL_2(yPositionChanged, yPosition)
+   DECL_CS_SIGNAL_1(Public, void widthRatioChanged(qreal widthRatio))
+   DECL_CS_SIGNAL_2(widthRatioChanged, widthRatio)
+   DECL_CS_SIGNAL_1(Public, void heightRatioChanged(qreal heightRatio))
+   DECL_CS_SIGNAL_2(heightRatioChanged, heightRatio)
 
  private:
    QDeclarativeFlickable *flickable;

@@ -66,8 +66,8 @@ class QDeclarativeInclude : public QObject
    static QScriptValue worker_include(QScriptContext *ctxt, QScriptEngine *engine);
 
  public :
-   CS_SLOT_1(Public, void finished())
-   CS_SLOT_2(finished)
+   DECL_CS_SLOT_1(Public, void finished())
+   DECL_CS_SLOT_2(finished)
 
  private:
    QDeclarativeEngine *m_engine;

@@ -39,8 +39,8 @@ class QDeclarativePackage : public QObject
    Q_DECLARE_PRIVATE(QDeclarativePackage)
 
    DECL_CS_CLASSINFO("DefaultProperty", "data")
-   CS_PROPERTY_READ(data, data)
-   CS_PROPERTY_SCRIPTABLE(data, false)
+   DECL_CS_PROPERTY_READ(data, data)
+   DECL_CS_PROPERTY_SCRIPTABLE(data, false)
 
  public:
    QDeclarativePackage(QObject *parent = 0);
@@ -57,8 +57,8 @@ class QDeclarativePackage : public QObject
 class QDeclarativePackageAttached : public QObject
 {
    DECL_CS_OBJECT(QDeclarativePackageAttached)
-   CS_PROPERTY_READ(name, name)
-   CS_PROPERTY_WRITE(name, setName)
+   DECL_CS_PROPERTY_READ(name, name)
+   DECL_CS_PROPERTY_WRITE(name, setName)
  public:
    QDeclarativePackageAttached(QObject *parent);
    virtual ~QDeclarativePackageAttached();

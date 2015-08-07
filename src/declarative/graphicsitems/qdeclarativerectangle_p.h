@@ -36,12 +36,12 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
 {
    DECL_CS_OBJECT(QDeclarativePen)
 
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_NOTIFY(width, penChanged)
-   CS_PROPERTY_READ(color, color)
-   CS_PROPERTY_WRITE(color, setColor)
-   CS_PROPERTY_NOTIFY(color, penChanged)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_NOTIFY(width, penChanged)
+   DECL_CS_PROPERTY_READ(color, color)
+   DECL_CS_PROPERTY_WRITE(color, setColor)
+   DECL_CS_PROPERTY_NOTIFY(color, penChanged)
 
  public:
    QDeclarativePen(QObject *parent = 0)
@@ -63,8 +63,8 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
    }
 
  public:
-   CS_SIGNAL_1(Public, void penChanged())
-   CS_SIGNAL_2(penChanged)
+   DECL_CS_SIGNAL_1(Public, void penChanged())
+   DECL_CS_SIGNAL_2(penChanged)
 
  private:
    int _width;
@@ -76,10 +76,10 @@ class QDeclarativeGradientStop : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeGradientStop)
 
-   CS_PROPERTY_READ(position, position)
-   CS_PROPERTY_WRITE(position, setPosition)
-   CS_PROPERTY_READ(color, color)
-   CS_PROPERTY_WRITE(color, setColor)
+   DECL_CS_PROPERTY_READ(position, position)
+   DECL_CS_PROPERTY_WRITE(position, setPosition)
+   DECL_CS_PROPERTY_READ(color, color)
+   DECL_CS_PROPERTY_WRITE(color, setColor)
 
  public:
    QDeclarativeGradientStop(QObject *parent = 0) : QObject(parent) {}
@@ -112,7 +112,7 @@ class QDeclarativeGradient : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeGradient)
 
-   CS_PROPERTY_READ(stops, stops)
+   DECL_CS_PROPERTY_READ(stops, stops)
    DECL_CS_CLASSINFO("DefaultProperty", "stops")
 
  public:
@@ -128,8 +128,8 @@ class QDeclarativeGradient : public QObject
    const QGradient *gradient() const;
 
  public:
-   CS_SIGNAL_1(Public, void updated())
-   CS_SIGNAL_2(updated)
+   DECL_CS_SIGNAL_1(Public, void updated())
+   DECL_CS_SIGNAL_2(updated)
 
  private:
    void doUpdate();
@@ -145,16 +145,16 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeRectangle : public QDeclarativeIt
 {
    DECL_CS_OBJECT(QDeclarativeRectangle)
 
-   CS_PROPERTY_READ(color, color)
-   CS_PROPERTY_WRITE(color, setColor)
-   CS_PROPERTY_NOTIFY(color, colorChanged)
-   CS_PROPERTY_READ(*gradient, gradient)
-   CS_PROPERTY_WRITE(*gradient, setGradient)
-   CS_PROPERTY_READ(*, border)
-   CS_PROPERTY_CONSTANT(*)
-   CS_PROPERTY_READ(radius, radius)
-   CS_PROPERTY_WRITE(radius, setRadius)
-   CS_PROPERTY_NOTIFY(radius, radiusChanged)
+   DECL_CS_PROPERTY_READ(color, color)
+   DECL_CS_PROPERTY_WRITE(color, setColor)
+   DECL_CS_PROPERTY_NOTIFY(color, colorChanged)
+   DECL_CS_PROPERTY_READ(*gradient, gradient)
+   DECL_CS_PROPERTY_WRITE(*gradient, setGradient)
+   DECL_CS_PROPERTY_READ(*, border)
+   DECL_CS_PROPERTY_CONSTANT(*)
+   DECL_CS_PROPERTY_READ(radius, radius)
+   DECL_CS_PROPERTY_WRITE(radius, setRadius)
+   DECL_CS_PROPERTY_NOTIFY(radius, radiusChanged)
  public:
    QDeclarativeRectangle(QDeclarativeItem *parent = 0);
 
@@ -174,14 +174,14 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeRectangle : public QDeclarativeIt
    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
  public:
-   CS_SIGNAL_1(Public, void colorChanged())
-   CS_SIGNAL_2(colorChanged)
-   CS_SIGNAL_1(Public, void radiusChanged())
-   CS_SIGNAL_2(radiusChanged)
+   DECL_CS_SIGNAL_1(Public, void colorChanged())
+   DECL_CS_SIGNAL_2(colorChanged)
+   DECL_CS_SIGNAL_1(Public, void radiusChanged())
+   DECL_CS_SIGNAL_2(radiusChanged)
 
  private :
-   CS_SLOT_1(Private, void doUpdate())
-   CS_SLOT_2(doUpdate)
+   DECL_CS_SLOT_1(Private, void doUpdate())
+   DECL_CS_SLOT_2(doUpdate)
 
    void generateRoundedRect();
    void generateBorderedRect();

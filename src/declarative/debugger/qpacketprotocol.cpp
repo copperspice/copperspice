@@ -111,23 +111,23 @@ class QPacketProtocolPrivate : public QObject
       QObject::connect(dev,  SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
    }
 
-   CS_SIGNAL_1(Public, void readyRead())
-   CS_SIGNAL_2(readyRead)
+   DECL_CS_SIGNAL_1(Public, void readyRead())
+   DECL_CS_SIGNAL_2(readyRead)
 
-   CS_SIGNAL_1(Public, void packetWritten())
-   CS_SIGNAL_2(packetWritten)
+   DECL_CS_SIGNAL_1(Public, void packetWritten())
+   DECL_CS_SIGNAL_2(packetWritten)
 
-   CS_SIGNAL_1(Public, void invalidPacket())
-   CS_SIGNAL_2(invalidPacket)
+   DECL_CS_SIGNAL_1(Public, void invalidPacket())
+   DECL_CS_SIGNAL_2(invalidPacket)
 
-   CS_SLOT_1(Public, void aboutToClose())
-   CS_SLOT_2(aboutToClose)
+   DECL_CS_SLOT_1(Public, void aboutToClose())
+   DECL_CS_SLOT_2(aboutToClose)
 
-   CS_SLOT_1(Public, void bytesWritten(qint64 bytes))
-   CS_SLOT_2(bytesWritten)
+   DECL_CS_SLOT_1(Public, void bytesWritten(qint64 bytes))
+   DECL_CS_SLOT_2(bytesWritten)
 
-   CS_SLOT_1(Public, void readyToRead())
-   CS_SLOT_2(readyToRead)
+   DECL_CS_SLOT_1(Public, void readyToRead())
+   DECL_CS_SLOT_2(readyToRead)
 
  public:
    QList<qint64> sendingPackets;

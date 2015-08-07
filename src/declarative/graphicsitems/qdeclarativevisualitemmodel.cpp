@@ -447,8 +447,8 @@ class QDeclarativeVisualDataModelData : public QObject
 
    void ensureProperties();
 
-   CS_SIGNAL_1(Public, void indexChanged())
-   CS_SIGNAL_2(indexChanged)
+   DECL_CS_SIGNAL_1(Public, void indexChanged())
+   DECL_CS_SIGNAL_2(indexChanged)
 
  private:
    friend class QDeclarativeVisualDataModelDataMetaObject;

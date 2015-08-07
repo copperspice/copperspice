@@ -77,8 +77,8 @@ class QDeclarativeEngineDebugService : public QDeclarativeDebugService
    virtual void messageReceived(const QByteArray &);
 
  private :
-   CS_SLOT_1(Private, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
-   CS_SLOT_2(propertyChanged)
+   DECL_CS_SLOT_1(Private, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
+   DECL_CS_SLOT_2(propertyChanged)
 
  private:
    void prepareDeferredObjects(QObject *);

@@ -68,8 +68,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeDebugServer : public QObject
 
    QDeclarativeDebugServer();
 
-   CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1, QByteArray un_named_arg2))
-   CS_SLOT_2(_q_deliverMessage)
+   DECL_CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1, QByteArray un_named_arg2))
+   DECL_CS_SLOT_2(_q_deliverMessage)
 
  protected:
    QScopedPointer<QDeclarativeDebugServerPrivate> d_ptr;

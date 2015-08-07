@@ -79,10 +79,10 @@ class QDeclarativeTimeLine : public QAbstractAnimation
 
    virtual int duration() const;
  public:
-   CS_SIGNAL_1(Public, void updated())
-   CS_SIGNAL_2(updated)
-   CS_SIGNAL_1(Public, void completed())
-   CS_SIGNAL_2(completed)
+   DECL_CS_SIGNAL_1(Public, void updated())
+   DECL_CS_SIGNAL_2(updated)
+   DECL_CS_SIGNAL_1(Public, void completed())
+   DECL_CS_SIGNAL_2(completed)
 
  protected:
    virtual void updateCurrentTime(int);
