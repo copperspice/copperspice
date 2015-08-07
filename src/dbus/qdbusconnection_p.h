@@ -89,7 +89,7 @@ public:
 
 class QDBusConnectionPrivate: public QObject
 {
-    Q_OBJECT
+    CS_OBJECT(QDBusConnectionPrivate)
 public:
     // structs and enums
     enum ConnectionMode { InvalidMode, ServerMode, ClientMode, PeerMode }; // LocalMode
@@ -234,23 +234,34 @@ protected:
     void customEvent(QEvent *e);
     void timerEvent(QTimerEvent *e);
 
-public slots:
+public :
     // public slots
-    void doDispatch();
-    void socketRead(int);
-    void socketWrite(int);
-    void objectDestroyed(QObject *o);
-    void relaySignal(QObject *obj, const QMetaObject *, int signalId, const QVariantList &args);
+    CS_SLOT_1(Public, void doDispatch())
+    CS_SLOT_2(doDispatch) 
+    CS_SLOT_1(Public, void socketRead(int un_named_arg1))
+    CS_SLOT_2(socketRead) 
+    CS_SLOT_1(Public, void socketWrite(int un_named_arg1))
+    CS_SLOT_2(socketWrite) 
+    CS_SLOT_1(Public, void objectDestroyed(QObject * o))
+    CS_SLOT_2(objectDestroyed) 
+    CS_SLOT_1(Public, void relaySignal(QObject * obj,const QMetaObject * un_named_arg2,int signalId,const QVariantList & args))
+    CS_SLOT_2(relaySignal) 
 
-private slots:
-    void serviceOwnerChangedNoLock(const QString &name, const QString &oldOwner, const QString &newOwner);
-    void registerServiceNoLock(const QString &serviceName);
-    void unregisterServiceNoLock(const QString &serviceName);
+private :
+    CS_SLOT_1(Private, void serviceOwnerChangedNoLock(const QString & name,const QString & oldOwner,const QString & newOwner))
+    CS_SLOT_2(serviceOwnerChangedNoLock) 
+    CS_SLOT_1(Private, void registerServiceNoLock(const QString & serviceName))
+    CS_SLOT_2(registerServiceNoLock) 
+    CS_SLOT_1(Private, void unregisterServiceNoLock(const QString & serviceName))
+    CS_SLOT_2(unregisterServiceNoLock) 
 
-signals:
-    void serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
-    void callWithCallbackFailed(const QDBusError &error, const QDBusMessage &message);
-    void newServerConnection(const QDBusConnection &connection);
+public:
+    CS_SIGNAL_1(Public, void serviceOwnerChanged(const QString & name,const QString & oldOwner,const QString & newOwner))
+    CS_SIGNAL_2(serviceOwnerChanged,name,oldOwner,newOwner) 
+    CS_SIGNAL_1(Public, void callWithCallbackFailed(const QDBusError & error,const QDBusMessage & message))
+    CS_SIGNAL_2(callWithCallbackFailed,error,message) 
+    CS_SIGNAL_1(Public, void newServerConnection(const QDBusConnection & connection))
+    CS_SIGNAL_2(newServerConnection,connection) 
 
 public:
     QAtomicInt ref;

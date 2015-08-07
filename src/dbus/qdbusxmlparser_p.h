@@ -45,10 +45,8 @@ class QDBusXmlParser
     QDomElement m_node;
 
 public:
-    QDBusXmlParser(const QString& service, const QString& path,
-                   const QString& xmlData);
-    QDBusXmlParser(const QString& service, const QString& path,
-                   const QDomElement& node);
+    QDBusXmlParser(const QString & service, const QString& path, const QString & xmlData);
+    QDBusXmlParser(const QString & service, const QString& path, const QDomElement& node);
 
     QDBusIntrospection::Interfaces interfaces() const;
     QSharedDataPointer<QDBusIntrospection::Object> object() const;

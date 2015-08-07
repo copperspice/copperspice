@@ -55,9 +55,10 @@ class QDBusConnectionPrivate;
 
 class Q_DBUS_EXPORT QDBusConnection
 {
-    Q_GADGET
-    Q_ENUMS(BusType UnregisterMode)
-    Q_FLAGS(RegisterOptions)
+    CS_GADGET(QDBusConnection)
+    CS_ENUM(BusType)
+    CS_ENUM(UnregisterMode)
+    CS_FLAG(Resolve Flag -->,RegisterOptions)
 public:
     enum BusType { SessionBus, SystemBus, ActivationBus };
     enum RegisterOption {
@@ -91,7 +92,7 @@ public:
         UnregisterNode,
         UnregisterTree
     };
-    Q_DECLARE_FLAGS(RegisterOptions, RegisterOption)
+    using RegisterOptions = QFlags<RegisterOption>;
 
     enum VirtualObjectRegisterOption {
         SingleNode = 0x0,
@@ -99,12 +100,12 @@ public:
         // Reserved = 0xff000000
     };
 
-    Q_DECLARE_FLAGS(VirtualObjectRegisterOptions, VirtualObjectRegisterOption)
+    using VirtualObjectRegisterOptions = QFlags<VirtualObjectRegisterOption>;
 
     enum ConnectionCapability {
         UnixFileDescriptorPassing = 0x0001
     };
-    Q_DECLARE_FLAGS(ConnectionCapabilities, ConnectionCapability)
+    using ConnectionCapabilities = QFlags<ConnectionCapability>;
 
     QDBusConnection(const QString &name);
     QDBusConnection(const QDBusConnection &other);
