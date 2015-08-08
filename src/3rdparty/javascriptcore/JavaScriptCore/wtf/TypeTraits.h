@@ -173,14 +173,6 @@ class cs_alternate{};
 
 class cs_preferred : public cs_alternate{};
 
-namespace std{
-   template<class> struct is_trivially_constructible;
-   template<class> struct has_trivial_default_constructor;
-  
-   template<class> struct is_trivially_destructible; 
-   template<class> struct has_trivial_destructor;  
-}
-
 namespace WTF {
 
 template<typename T> 

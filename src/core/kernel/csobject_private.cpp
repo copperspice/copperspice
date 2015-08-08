@@ -406,6 +406,7 @@ int *QObject::queuedConnectionTypes(const QList<QByteArray> &typeNames)
 // ** macros defined in csmeta.h
 
 // classes
+CS_REGISTER_CLASS(QAbstractState)
 CS_REGISTER_CLASS(QColor)
 CS_REGISTER_CLASS(QChar)
 CS_REGISTER_CLASS(QCursor)
@@ -448,6 +449,7 @@ CS_REGISTER_CLASS(QRgb)
 CS_REGISTER_CLASS(QSize)
 CS_REGISTER_CLASS(QSizeF)
 CS_REGISTER_CLASS(QSizePolicy)
+CS_REGISTER_CLASS(QState)
 CS_REGISTER_CLASS(QString)
 CS_REGISTER_CLASS(QStringList)
 CS_REGISTER_CLASS(QStyleOption)
@@ -483,7 +485,4 @@ CS_REGISTER_TYPE(unsigned long long)
 CS_REGISTER_TYPE(short)
 CS_REGISTER_TYPE(unsigned short)
 CS_REGISTER_TYPE(void)
-
-
-
 
