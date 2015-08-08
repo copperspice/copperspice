@@ -26,7 +26,7 @@ lib_libCsCore1_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lObjC
+lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lobjc
 endif
 
 if ZLIB

@@ -41,7 +41,7 @@ if OSTYPE_DARWIN
 nodist_lib_libCsGui1_la_SOURCES += src/gui/mac/qrc_macresources.cpp
 lib_libCsGui1_la_OBJCXXFLAGS += $(lib_libCsGui1_la_CXXFLAGS)
 lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSVISTA
-lib_libCsGui1_la_LDFLAGS += -lObjC -framework Carbon
+lib_libCsGui1_la_LDFLAGS += -lobjc -framework Carbon
 endif
 
 EXTRA_DIST += src/gui/mac/macresources.qrc \
