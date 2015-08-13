@@ -33,7 +33,7 @@
 #define CS_VERSION      @HEX_VERSION@
 
 #if defined(__cplusplus)
-   struct csBuildInfo {
+   struct CsLibraryInfo {
       static constexpr const char *install_prefix = "@prefix@";
       static constexpr const char *built_for = "@target@";
    };

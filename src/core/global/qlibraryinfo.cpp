@@ -216,8 +216,8 @@ Q_CORE_EXPORT void cs_print_build_info()
           "   Built For:        %s\n",
           CS_VERSION_STR,
           build_Date.toString("MM/dd/yyyy").toLatin1().constData(),
-          csBuildInfo::install_prefix,
-          csBuildInfo::built_for);
+          CsLibraryInfo::install_prefix,
+          CsLibraryInfo::built_for);
 
    fflush(stdout);
 }
