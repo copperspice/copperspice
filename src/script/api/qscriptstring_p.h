@@ -50,7 +50,7 @@ class QScriptStringPrivate
 
    static inline bool isValid(const QScriptString &q);
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
    QScriptEnginePrivate *engine;
    JSC::Identifier identifier;
    AllocationType type;

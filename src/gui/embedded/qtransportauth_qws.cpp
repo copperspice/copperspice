@@ -1442,16 +1442,17 @@ void FAREnforcer::logAuthAttempt( QDateTime time )
 
 #if defined(SXE_DISCOVERY)
       if ( QTransportAuth::getInstance()->isDiscoveryMode() ) {
-         static QBasicAtomicInt reported = Q_BASIC_ATOMIC_INITIALIZER(0);
+         static QAtomicInt reported = 0;
+
          if ( reported.testAndSetRelaxed(0, 1) ) {
 
-
             QString logFilePath = QTransportAuth::getInstance()->logFilePath();
-            if ( !logFilePath.isEmpty() ) {
+
+            if ( ! logFilePath.isEmpty() ) {
                QFile log( logFilePath );
-               if ( !log.open(QIODevice::WriteOnly | QIODevice::Append) ) {
-                  qWarning("Could not write to log in discovery mode: %s",
-                           qPrintable(logFilePath) );
+               if ( ! log.open(QIODevice::WriteOnly | QIODevice::Append) ) { 
+                  qWarning("Could not write to log in discovery mode: %s", qPrintable(logFilePath) );
+
                } else {
                   QTextStream ts( &log );
                   ts << "\t\tWarning: False Authentication Rate of " <<  minutelyRate << "\n"

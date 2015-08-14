@@ -5,8 +5,8 @@ CORE_PUBLIC_INCLUDES += \
 	QMutex \
 	QMutexData \
 	QMutexLocker \
-	QBasicAtomicInt \
-	QBasicAtomicPointer \
+	QAtomicInt \
+	QAtomicPointer \
 	QReadLocker \
 	QReadWriteLock \
 	QSemaphore \
@@ -18,9 +18,8 @@ CORE_PUBLIC_INCLUDES += \
 
 CORE_THREAD_INCLUDES = \
 	qatomic.h \
-	qbasicatomic.h \
-	qbasicatomicint.h \
-	qbasicatomicpointer.h \
+	qatomicint.h \
+	qatomicpointer.h \
 	qmutex.h \
 	qmutexdata.h \
 	qmutexlocker.h \
@@ -48,7 +47,6 @@ noinst_HEADERS+=$(patsubst %,src/core/thread/%,$(CORE_THREAD_INCLUDES)) \
 		$(patsubst %,src/core/thread/%,$(CORE_THREAD_PRIVATE_INCLUDES))
 
 lib_libCsCore1_la_SOURCES += \
-	src/core/thread/qatomic.cpp \
 	src/core/thread/qmutex.cpp \
 	src/core/thread/qmutexpool.cpp \
 	src/core/thread/qreadwritelock.cpp \

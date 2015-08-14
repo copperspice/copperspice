@@ -37,18 +37,20 @@ namespace {
 class GlobalInstanceDeleter
 {
  private:
-   QBasicAtomicPointer<QDeclarativeDebugTrace> &m_pointer;
+   QAtomicPointer<QDeclarativeDebugTrace> &m_pointer;
+
  public:
-   GlobalInstanceDeleter(QBasicAtomicPointer<QDeclarativeDebugTrace> &p)
+   GlobalInstanceDeleter(QAtomicPointer<QDeclarativeDebugTrace> &p)
       : m_pointer(p) {
    }
+
    ~GlobalInstanceDeleter() {
       delete m_pointer;
       m_pointer = 0;
    }
 };
 
-QBasicAtomicPointer<QDeclarativeDebugTrace> s_globalInstance = Q_BASIC_ATOMIC_INITIALIZER(0);
+QAtomicPointer<QDeclarativeDebugTrace> s_globalInstance = 0;
 }
 
 

@@ -59,7 +59,6 @@ CORE_PUBLIC_INCLUDES =
 CORE_PRIVATE_INCLUDES =
 CORE_DIRS =
 
-include src/core/arch/Makefile.am
 include src/core/animation/Makefile.am
 include src/core/codecs/Makefile.am
 include src/core/concurrent/Makefile.am

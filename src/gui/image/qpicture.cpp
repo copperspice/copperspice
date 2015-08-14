@@ -1443,7 +1443,8 @@ static void cleanup()
 
 void qt_init_picture_handlers()                // initialize picture handlers
 {
-   static QBasicAtomicInt done = Q_BASIC_ATOMIC_INITIALIZER(0);
+   static QAtomicInt done = 0;
+
    if (done.testAndSetRelaxed(0, 1)) {
       qAddPostRoutine(cleanup);
    }

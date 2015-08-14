@@ -357,14 +357,18 @@ const int features_count = (sizeof features_indices - 1) / (sizeof features_indi
 
 uint qDetectCPUFeatures()
 {
-   static QBasicAtomicInt features = QBasicAtomicInt {Q_BASIC_ATOMIC_INITIALIZER(-1)};
-   if (features.load() != -1) {
-      return features.load();
+   static QAtomicInt features = QAtomicInt { -1 };
+
+   uint f = features.loadAcquire();
+
+   if (f != -1) {
+      return f;
    }
 
-   uint f = detectProcessorFeatures();
+   f = detectProcessorFeatures();
    QByteArray disable = qgetenv("QT_NO_CPU_FEATURE");
-   if (!disable.isEmpty()) {
+
+   if (! disable.isEmpty()) {
       disable.prepend(' ');
       for (int i = 0; i < features_count; ++i) {
          if (disable.contains(features_string + features_indices[i])) {
@@ -373,7 +377,8 @@ uint qDetectCPUFeatures()
       }
    }
 
-   features.store(f);
+   features.testAndSetRelease(-1, f);
+
    return f;
 }
 
@@ -381,6 +386,7 @@ void qDumpCPUFeatures()
 {
    uint features = qDetectCPUFeatures();
    printf("Processor features: ");
+
    for (int i = 0; i < features_count; ++i) {
       if (features & (1 << i)) {
          printf("%s", features_string + features_indices[i]);

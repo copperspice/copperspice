@@ -1017,7 +1017,7 @@ QSocks5SocketEngine::~QSocks5SocketEngine()
    }
 }
 
-static QBasicAtomicInt descriptorCounter = Q_BASIC_ATOMIC_INITIALIZER(1);
+static QAtomicInt descriptorCounter = 1;
 
 bool QSocks5SocketEngine::initialize(QAbstractSocket::SocketType type, QAbstractSocket::NetworkLayerProtocol protocol)
 {

@@ -101,7 +101,7 @@ const QVector<QRgb> *qt_image_colortable(const QImage &image)
    return &image.d->colortable;
 }
 
-QBasicAtomicInt qimage_serial_number = Q_BASIC_ATOMIC_INITIALIZER(1);
+QAtomicInt qimage_serial_number = 1;
 
 QImageData::QImageData()
    : ref(0), width(0), height(0), depth(0), nbytes(0), data(0),

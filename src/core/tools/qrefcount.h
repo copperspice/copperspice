@@ -26,7 +26,8 @@
 #ifndef QREFCOUNT_H
 #define QREFCOUNT_H
 
-#include <QtCore/qatomic.h>
+#include <qglobal.h>
+#include <qatomic.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -101,12 +102,12 @@ class RefCount
       atomic.store(1);
    }
 
-   QBasicAtomicInt atomic;
+   QAtomicInt atomic;
 };
 
 }
 
-#define Q_REFCOUNT_INITIALIZE_STATIC { Q_BASIC_ATOMIC_INITIALIZER(-1) }
+#define Q_REFCOUNT_INITIALIZE_STATIC { -1 }
 
 QT_END_NAMESPACE
 

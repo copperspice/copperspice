@@ -268,12 +268,13 @@ class QFtpCommand
       QByteArray *ba;
       QIODevice *dev;
    } data;
+
    bool is_ba;
 
-   static QBasicAtomicInt idCounter;
+   static QAtomicInt idCounter;
 };
 
-QBasicAtomicInt QFtpCommand::idCounter = Q_BASIC_ATOMIC_INITIALIZER(1);
+QAtomicInt QFtpCommand::idCounter = 1;
 
 QFtpCommand::QFtpCommand(QFtp::Command cmd, QStringList raw, const QByteArray &ba)
    : command(cmd), rawCmds(raw), is_ba(true)

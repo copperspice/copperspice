@@ -109,7 +109,7 @@ class QScriptValuePrivate
    QScriptValuePrivate *prev;
    QScriptValuePrivate *next;
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 inline QScriptValuePrivate::QScriptValuePrivate(QScriptEnginePrivate *e)

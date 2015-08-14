@@ -49,7 +49,7 @@ QT_BEGIN_NAMESPACE
 #include <QtCore/QAtomicInt>
 #include <QByteArray>
 
-static QBasicAtomicInt localUniqueId = Q_BASIC_ATOMIC_INITIALIZER(1);
+static QAtomicInt localUniqueId = 1;
 
 static inline QByteArray makeKey(int id)
 {

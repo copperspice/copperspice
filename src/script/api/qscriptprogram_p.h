@@ -51,7 +51,7 @@ class QScriptProgramPrivate
                                    QScriptEnginePrivate *engine);
    void detachFromEngine();
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 
    QString sourceCode;
    QString fileName;

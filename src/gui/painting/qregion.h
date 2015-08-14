@@ -210,7 +210,7 @@ class Q_GUI_EXPORT QRegion
 #endif
 
    struct QRegionData {
-      QBasicAtomicInt ref;
+      QAtomicInt ref;
 
 #if defined(Q_OS_WIN)
       HRGN   rgn;

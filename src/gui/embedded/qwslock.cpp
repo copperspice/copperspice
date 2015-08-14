@@ -59,7 +59,7 @@ QT_BEGIN_NAMESPACE
 #ifdef QT_POSIX_IPC
 #include <QtCore/QAtomicInt>
 
-static QBasicAtomicInt localUniqueId = Q_BASIC_ATOMIC_INITIALIZER(1);
+static QAtomicInt localUniqueId = 1;
 #endif
 
 QWSLock::QWSLock(int id) : semId(id)

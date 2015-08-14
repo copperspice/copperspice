@@ -1082,16 +1082,15 @@ using QtMsgHandler = void (*)(QtMsgType, const char*);
 Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
 
 
-// forward declaration since qatomic.h needs qglobal.h
+// * * 
 template <typename T> 
-class QBasicAtomicPointer;
+class QAtomicPointer;
 
-// ****
 template <typename T>
 class QGlobalStatic
 {
  public:
-   QBasicAtomicPointer<T> pointer;
+   QAtomicPointer<T> pointer;
    bool destroyed;
 };
 
@@ -1113,7 +1112,7 @@ class QGlobalStaticDeleter
 };
 
 #define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
-   static QGlobalStatic<TYPE> this_ ## NAME = { QBasicAtomicPointer<TYPE>(0), false }
+   static QGlobalStatic<TYPE> this_ ## NAME = { QAtomicPointer<TYPE>(0), false }
 
 #define Q_GLOBAL_STATIC(TYPE, NAME)                                       \
    static TYPE *NAME()                                                    \

@@ -115,10 +115,13 @@ template <class T> struct RemovePointer<QWeakPointer<T> > {
 // The deleter is stored in the destroyer member and is always a pointer to
 // a static function in ExternalRefCountWithCustomDeleter or in
 // ExternalRefCountWithContiguousData
+
 struct ExternalRefCountData {
    typedef void (*DestroyerFn)(ExternalRefCountData *);
-   QBasicAtomicInt weakref;
-   QBasicAtomicInt strongref;
+
+   QAtomicInt weakref;
+   QAtomicInt strongref;
+
    DestroyerFn destroyer;
 
    inline ExternalRefCountData(DestroyerFn d)
@@ -129,7 +132,7 @@ struct ExternalRefCountData {
 
    inline ExternalRefCountData(Qt::Initialization) { }
    ~ExternalRefCountData() {
-      Q_ASSERT(!weakref.load());
+      Q_ASSERT(! weakref.load());
       Q_ASSERT(strongref.load() <= 0);
    }
 

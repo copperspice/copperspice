@@ -29,14 +29,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-  \since 4.5
-  \class QScriptDebuggerConsoleCommandGroupData
-  \internal
-
-  \brief The QScriptDebuggerConsoleCommandGroupData class holds data associated with a console command group.
-*/
-
 class QScriptDebuggerConsoleCommandGroupDataPrivate
 {
  public:
@@ -46,7 +38,7 @@ class QScriptDebuggerConsoleCommandGroupDataPrivate
    QString shortDescription;
    QString longDescription;
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 QScriptDebuggerConsoleCommandGroupDataPrivate::QScriptDebuggerConsoleCommandGroupDataPrivate()

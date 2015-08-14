@@ -63,7 +63,7 @@ class Q_CORE_EXPORT QBasicMutex
    bool lockInternal(int timeout = -1);
    void unlockInternal();
 
-   QBasicAtomicPointer<QMutexData> d_ptr;
+   QAtomicPointer<QMutexData> d_ptr;
    static inline QMutexData *dummyLocked() {
       return reinterpret_cast<QMutexData *>(quintptr(1));
    }

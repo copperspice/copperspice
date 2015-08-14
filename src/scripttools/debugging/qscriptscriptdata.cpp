@@ -31,14 +31,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-  \since 4.5
-  \class QScriptScriptData
-  \internal
-
-  \brief The QScriptScriptData class holds data associated with a script.
-*/
-
 class QScriptScriptDataPrivate
 {
  public:
@@ -50,7 +42,7 @@ class QScriptScriptDataPrivate
    int baseLineNumber;
    QDateTime timeStamp;
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 QScriptScriptDataPrivate::QScriptScriptDataPrivate()

@@ -54,7 +54,7 @@ class QScriptDebuggerValuePrivate
       qint64 objectId;
    };
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 QScriptDebuggerValuePrivate::QScriptDebuggerValuePrivate()
