@@ -71,6 +71,9 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
+template <class T> 
+uint qHash(const T *key, uint seed = 0);
+
 namespace QtSharedPointer {
 template <class T> class InternalRefCount;
 template <class T> class ExternalRefCount;
@@ -81,8 +84,8 @@ template <class X, class Y> QSharedPointer<X> copyAndSetPointer(X *ptr, const QS
 Q_CORE_EXPORT void internalSafetyCheckAdd(const void *, const volatile void *);
 Q_CORE_EXPORT void internalSafetyCheckRemove(const void *);
 
-template <class T, typename Klass, typename RetVal>
-inline void executeDeleter(T *t, RetVal (Klass:: *memberDeleter)())
+template <class T, typename Class, typename RetVal>
+inline void executeDeleter(T *t, RetVal (Class:: *memberDeleter)())
 {
    (t->*memberDeleter)();
 }
