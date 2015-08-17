@@ -126,12 +126,6 @@ static uint qt_create_qhash_seed()
        }
        qt_safe_close(randomfd);
    }
-#elif defined(Q_OS_WIN32)
-   errno_t err;
-   err = rand_s(&seed);
-   if (err == 0) {
-       return seed;
-   }
 #endif 
    
    // general fallback: initialize from the current timestamp, pid,
