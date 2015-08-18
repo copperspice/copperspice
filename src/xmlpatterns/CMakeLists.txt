@@ -2,8 +2,8 @@ add_definitions(-DQT_BUILD_XMLPATTERNS_LIB -DQT_SHARED -DQT_MAKEDLL)
 # BROOM (enable OpenSSL)
 add_definitions(-DQT_NO_OPENSSL)
 set(EXTRA_XMLPATTERNS_LIBS "")
-set(EXTRA_XMLPATTERNS_CXXFLAGS "-Wno-undefined")
-set(EXTRA_XMLPATTERNS_LDFLAGS " ") # whitespace is required!
+set(EXTRA_XMLPATTERNS_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_XMLPATTERNS_LDFLAGS "-Wl,--no-undefined")
 
 include(acceltree/acceltree.cmake)
 include(api/api.cmake)

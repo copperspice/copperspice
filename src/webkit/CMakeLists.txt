@@ -25,8 +25,8 @@ add_definitions(-DBUILDING_WEBKIT
     -DENABLE_DATALIST=1
 )
 set(EXTRA_WEBKIT_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR})
-set(EXTRA_WEBKIT_CXXFLAGS "-Wno-undefined -O2")
-set(EXTRA_WEBKIT_LDFLAGS " ") # whitespace is required!
+set(EXTRA_WEBKIT_CXXFLAGS "-O2")
+set(EXTRA_WEBKIT_LDFLAGS "-Wl,--no-undefined")
 
 if(NOT OPENSSL_FOUND)
     add_definitions(-DQT_NO_OPENSSL)

@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_SVG_LIB -DQT_SHARED -DQT_MAKEDLL)
 set(EXTRA_SVG_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
-set(EXTRA_SVG_CXXFLAGS "-Wno-undefined")
-set(EXTRA_SVG_LDFLAGS " ") # whitespace is required!
+set(EXTRA_SVG_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_SVG_LDFLAGS "-Wl,--no-undefined")
 
 set(SVG_PUBLIC_INCLUDES
     QtSvg

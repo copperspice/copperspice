@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_NETWORK_LIB -DQT_MAKEDLL)
 set(EXTRA_NETWORK_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_NETWORK_CXXFLAGS "-Wno-undefined")
-set(EXTRA_NETWORK_LDFLAGS " ") # whitespace is required!
+set(EXTRA_NETWORK_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_NETWORK_LDFLAGS "-Wl,--no-undefined")
 
 if(NOT OPENSSL_FOUND)
     add_definitions(-DQT_NO_OPENSSL)

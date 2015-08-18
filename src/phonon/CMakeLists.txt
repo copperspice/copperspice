@@ -1,10 +1,10 @@
 add_definitions(-DMAKE_PHONON_LIB -DQT_NO_DBUS -DQT_BUILD_PHONON_LIB -DQT_MAKEDLL)
 set(EXTRA_PHONON_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
-set(EXTRA_PHONON_CXXFLAGS "-Wno-undefined")
-set(EXTRA_PHONON_LDFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON_LDFLAGS "-Wl,--no-undefined")
 set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
-set(EXTRA_PHONON2_CXXFLAGS "-Wno-undefined")
-set(EXTRA_PHONON2_LDFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON2_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON2_LDFLAGS "-Wl,--no-undefined")
 set(PHONON2_SUFFIX)
 
 set(PHONON_PUBLIC_INCLUDES

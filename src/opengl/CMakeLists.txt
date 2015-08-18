@@ -1,7 +1,7 @@
 add_definitions(-DQT_NO_EGL -DQT_BUILD_OPENGL_LIB -DQT_SHARED -DQT_MAKEDLL)
 set(EXTRA_OPENGL_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} ${OPENGL_LIBRARIES})
-set(EXTRA_OPENGL_CXXFLAGS "-Wno-undefined")
-set(EXTRA_OPENGL_LDFLAGS " ") # whitespace is required!
+set(EXTRA_OPENGL_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_OPENGL_LDFLAGS "-Wl,--no-undefined")
 
 set(OPENGL_PUBLIC_INCLUDES
     QGLBuffer

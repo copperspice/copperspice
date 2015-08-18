@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_MULTIMEDIA_LIB -DQT_MAKEDLL)
 set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
-set(EXTRA_MULTIMEDIA_CXXFLAGS "-Wno-undefined")
-set(EXTRA_MULTIMEDIA_LDFLAGS " ") # whitespace is required!
+set(EXTRA_MULTIMEDIA_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_MULTIMEDIA_LDFLAGS "-Wl,--no-undefined")
 
 include(audio/audio.cmake)
 include(video/video.cmake)

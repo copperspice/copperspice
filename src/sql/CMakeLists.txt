@@ -1,7 +1,7 @@
 add_definitions(-DQT_SQL_SQLITE -DQT_BUILD_SQL_LIB -DQT_SHARED -DQT_MAKEDLL)
 set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_SQL_CXXFLAGS "-Wno-undefined")
-set(EXTRA_SQL_LDFLAGS " ") # whitespace is required!
+set(EXTRA_SQL_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_SQL_LDFLAGS "-Wl,--no-undefined")
 
 include(kernel/kernel.cmake)
 include(models/models.cmake)

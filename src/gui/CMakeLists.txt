@@ -7,8 +7,8 @@ add_definitions(-DQT_BUILD_GUI_LIB
 )
 
 set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_GUI_CXXFLAGS "-Wno-undefined")
-set(EXTRA_GUI_LDFLAGS " ") # whitespace is required!
+set(EXTRA_GUI_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_GUI_LDFLAGS "-Wl,--no-undefined")
 
 include(accessible/accessible.cmake)
 include(animation/animation.cmake)

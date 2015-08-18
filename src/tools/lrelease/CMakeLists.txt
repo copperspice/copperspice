@@ -1,7 +1,7 @@
 # add_definitions()
 set(EXTRA_LRELEASE_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR})
-set(EXTRA_LRELEASE_CXXFLAGS "-Wno-undefined")
-set(EXTRA_LRELEASE_LDFLAGS " ") # whitespace is required!
+set(EXTRA_LRELEASE_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_LRELEASE_LDFLAGS "-Wl,--no-undefined")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include

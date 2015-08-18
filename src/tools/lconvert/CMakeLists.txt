@@ -1,7 +1,7 @@
 add_definitions(-DPROEVALUATOR_CUMULATIVE -DPROEVALUATOR_INIT_PROPS)
 set(EXTRA_LCONVERT_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR})
-set(EXTRA_LCONVERT_CXXFLAGS "-Wno-undefined")
-set(EXTRA_LCONVERT_LDFLAGS " ") # whitespace is required!
+set(EXTRA_LCONVERT_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_LCONVERT_LDFLAGS "-Wl,--no-undefined")
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include

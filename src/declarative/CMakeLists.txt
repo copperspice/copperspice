@@ -1,7 +1,7 @@
 add_definitions(-DQT_NO_OPENSSL -DQT_BUILD_DECLARATIVE_LIB -DQT_SHARED -DQT_MAKEDLL)
 set(EXTRA_DECLARATIVE_LIBS "")
-set(EXTRA_DECLARATIVE_CXXFLAGS "-Wno-undefined")
-set(EXTRA_DECLARATIVE_LDFLAGS " ") # whitespace is required!
+set(EXTRA_DECLARATIVE_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_DECLARATIVE_LDFLAGS "-Wl,--no-undefined")
 
 include(debugger/debugger.cmake)
 include(graphicsitems/graphicsitems.cmake)

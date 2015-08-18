@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_CORE_LIB)
 set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES})
-set(EXTRA_CORE_CXXFLAGS "-Wno-undefined")
-set(EXTRA_CORE_LDFLAGS " ") # whitespace is required!
+set(EXTRA_CORE_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_CORE_LDFLAGS "-Wl,--no-undefined")
 
 include(animation/animation.cmake)
 include(arch/arch.cmake)

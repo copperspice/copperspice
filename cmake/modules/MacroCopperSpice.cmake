@@ -11,7 +11,7 @@
 #
 #   MACRO_GENERATE_MISC(<someheader.h> [<someheader2.h>] ... <subdir>)
 #
-#   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ... <target>)
+#   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
@@ -55,14 +55,14 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
             set(rscout ${CMAKE_BINARY_DIR}/include/ui_${rscname}.h)
             add_custom_command(
                 OUTPUT ${rscout}
-                COMMAND "uic" "${resource}" "-o" "${rscout}"
+                COMMAND uic "${resource}" -o "${rscout}"
                 MAIN_DEPENDENCY "${resource}"
                 )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
             add_custom_command(
                 OUTPUT ${rscout}
-                COMMAND "rcc" "${resource}" "-o" "${rscout}"
+                COMMAND rcc "${resource}" -o "${rscout}"
                 MAIN_DEPENDENCY ${resource}
             )
             set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})

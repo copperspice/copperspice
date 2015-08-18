@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_SCRIPTTOOLS_LIB -DQT_SHARED -DQT_MAKEDLL)
 set(EXTRA_SCRIPTTOOLS_LIBS "")
-set(EXTRA_SCRIPTTOOLS_CXXFLAGS "-Wno-undefined")
-set(EXTRA_SCRIPTTOOLS_LDFLAGS " ") # whitespace is required!
+set(EXTRA_SCRIPTTOOLS_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_SCRIPTTOOLS_LDFLAGS "-Wl,--no-undefined")
 
 include(debugging/debugging.cmake)
 

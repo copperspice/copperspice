@@ -26,8 +26,8 @@ add_definitions(
 )
 
 set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_SCRIPT_CXXFLAGS "-Wno-undefined")
-set(EXTRA_SCRIPT_LDFLAGS " ") # whitespace is required!
+set(EXTRA_SCRIPT_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_SCRIPT_LDFLAGS "-Wl,--no-undefined")
 
 include(api/api.cmake)
 include(bridge/bridge.cmake)

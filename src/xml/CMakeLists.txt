@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_XML_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_XML_LIBS "")
-set(EXTRA_XML_CXXFLAGS "-Wno-undefined")
-set(EXTRA_XML_LDFLAGS " ") # whitespace is required!
+set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_XML_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_XML_LDFLAGS "-Wl,--no-undefined")
 
 include(dom/dom.cmake)
 include(sax/sax.cmake)

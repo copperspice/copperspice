@@ -1,4 +1,4 @@
-# - Try to find the libmng
+# - Try to find Network Audio System
 # Once done this will define
 #
 #  NAS_FOUND - system has Network Audio System
