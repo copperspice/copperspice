@@ -78,14 +78,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
-        X11
-        Xrender
-        Xrandr
-        Xcursor
-        Xinerama
-        SM
-        ICE
-        audio
+        # ${X11_LIBRARIES} should contain all of them but it does not sadly
+        ${X11_X11_LIB}
+        ${X11_Xrender_LIB}
+        ${X11_Xrandr_LIB}
+        ${X11_Xcursor_LIB}
+        ${X11_Xinerama_LIB}
+        ${X11_SM_LIB}
+        ${X11_ICE_LIB}
+        ${NAS_LIBRARIES}
         pthread
         rt
     )
@@ -99,6 +100,17 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         -DQT_NO_STYLE_WINDOWSXP
         -DQT_NO_STYLE_WINDOWSVISTA
         -DQT_NO_TABLET
+    )
+    include_directories(
+        # ${X11_INCLUDE_DIR} should contain all of them but it does not sadly
+        ${X11_X11_INCLUDE_PATH}
+        ${X11_Xrender_INCLUDE_PATH}
+        ${X11_Xrandr_INCLUDE_PATH}
+        ${X11_Xcursor_INCLUDE_PATH}
+        ${X11_Xinerama_INCLUDE_PATH}
+        ${X11_SM_INCLUDE_PATH}
+        ${X11_ICE_INCLUDE_PATH}
+        ${NAS_INCLUDES}
     )
 endif()
 

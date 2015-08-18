@@ -142,9 +142,23 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    find_library(audio_FOUND audio) # AuOpenServer
-    find_library(GL_FOUND GL) # glClear
     find_library(pthread_FOUND pthread) # pthread_create
+
+    find_package(NAS)
+    set_package_properties(NAS PROPERTIES
+        PURPOSE "Basic audio support over wire"
+        DESCRIPTION "Network transparent, client/server audio transport system"
+        URL "http://www.radscan.com/nas.html"
+        TYPE REQUIRED
+    )
+
+    find_package(OpenGL)
+    set_package_properties(OpenGL PROPERTIES
+        PURPOSE "Required OpenGL support"
+        DESCRIPTION "The Mesa 3D Graphics Library"
+        URL "http://www.mesa3d.org/"
+        TYPE REQUIRED
+    )
 
     find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
     set_package_properties(X11 PROPERTIES
@@ -174,7 +188,7 @@ configure_file(qt-acconfig.h.cmake ${CMAKE_BINARY_DIR}/include/qt-acconfig.h)
 add_subdirectory(src)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    foreach(library audio GL pthread)
+    foreach(library pthread)
         if(NOT ${library}_FOUND)
             message(SEND_ERROR "${library} not found")
         endif()

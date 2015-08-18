@@ -1,5 +1,5 @@
 add_definitions(-DQT_NO_EGL -DQT_BUILD_OPENGL_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_OPENGL_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
+set(EXTRA_OPENGL_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} ${OPENGL_LIBRARIES})
 set(EXTRA_OPENGL_CXXFLAGS "-Wno-undefined")
 set(EXTRA_OPENGL_LDFLAGS " ") # whitespace is required!
 
@@ -116,6 +116,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/util
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
     ${FREETYPE_INCLUDE_DIRS}
+    ${OPENGL_INCLUDE_DIR}
 )
 
 if(X11_FOUND)
@@ -126,6 +127,8 @@ if(X11_FOUND)
     )
 endif()
 
+# TODO: if ${OPENGL_LIBRARIES} is sufficient for all platforms drop
+# hardcoded additions to ${EXTRA_OPENGL_LIBS} and ${EXTRA_OPENGL_LDFLAGS}
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
