@@ -508,7 +508,7 @@ template <class T> class QSharedPointer
       if (o) {
          // increase the strongref, but never up from zero
          // or less (-1 is used by QWeakPointer on untracked QObject)
-         register int tmp = o->strongref.load();
+         int tmp = o->strongref.load();
          while (tmp > 0) {
             // try to increment from "tmp" to "tmp + 1"
             if (o->strongref.testAndSetRelaxed(tmp, tmp + 1)) {
