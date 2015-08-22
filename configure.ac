@@ -9,6 +9,7 @@ AC_CONFIG_AUX_DIR([autotools/build-aux])
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
+AC_SYS_LARGEFILE
 
 AC_CONFIG_SRCDIR([src/core/kernel/qobject.cpp])
 AM_INIT_AUTOMAKE([foreign tar-pax 1.12.1])
@@ -33,6 +34,8 @@ case "$target" in
 	OSTYPE=LINUX ;;
 *-*-darwin*)
 	OSTYPE=DARWIN ;;
+*-*-*bsd*)
+	OSTYPE=BSD ;;
 esac
 
 AC_CHECK_SIZEOF(size_t)
@@ -81,7 +84,7 @@ AC_CHECK_HEADERS([net/if.h], [], [],
 
 AC_SEARCH_LIBS(clock_gettime, rt)
 
-if test "$OSTYPE" == LINUX; then
+if test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD; then
 
 # verify dependencies
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
@@ -131,8 +134,9 @@ fi
 AM_CONDITIONAL(OSTYPE_WIN, test "$OSTYPE" == WIN)
 AM_CONDITIONAL(OSTYPE_LINUX, test "$OSTYPE" == LINUX)
 AM_CONDITIONAL(OSTYPE_DARWIN, test "$OSTYPE" == DARWIN)
+AM_CONDITIONAL(OSTYPE_BSD, test "$OSTYPE" == BSD)
 
-AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX)
+AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
 AM_CONDITIONAL(COCOA, test "$OSTYPE" == DARWIN)
 
 AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
@@ -141,8 +145,8 @@ AM_CONDITIONAL(QPA, false)
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
 #AM_CONDITIONAL(FREETYPE, test "x$FREETYPE" = x""yes)
-AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX)
-AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX)
+AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
+AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 
 # turns zlib and alsa off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)

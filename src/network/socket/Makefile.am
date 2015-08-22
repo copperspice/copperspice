@@ -52,6 +52,13 @@ lib_libCsNetwork1_la_SOURCES += \
 	src/network/socket/qlocalserver_unix.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsNetwork1_la_SOURCES += \
+        src/network/socket/qnativesocketengine_unix.cpp \
+        src/network/socket/qlocalsocket_unix.cpp \
+        src/network/socket/qlocalserver_unix.cpp
+endif
+
 if OSTYPE_DARWIN
 lib_libCsNetwork1_la_SOURCES += \
 	src/network/socket/qnativesocketengine_unix.cpp \

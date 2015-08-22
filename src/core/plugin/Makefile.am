@@ -52,6 +52,11 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/plugin/qlibrary_unix.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_SOURCES += \
+        src/core/plugin/qlibrary_unix.cpp
+endif
+
 if OSTYPE_DARWIN
 lib_libCsCore1_la_SOURCES += \
 	src/core/plugin/qlibrary_unix.cpp

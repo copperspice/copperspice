@@ -20,6 +20,10 @@ if OSTYPE_LINUX
 lib_libCsCore1_la_LDFLAGS += -ldl -lpthread
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv 
+endif
+
 if OSTYPE_WIN
 lib_libCsCore1_la_CFLAGS += -DQT_MAKEDLL
 lib_libCsCore1_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid

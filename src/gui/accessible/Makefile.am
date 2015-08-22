@@ -81,6 +81,12 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/accessible/qaccessiblebridge.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsGui1_la_SOURCES += \
+        src/gui/accessible/qaccessible_unix.cpp \
+        src/gui/accessible/qaccessiblebridge.cpp
+endif
+
 if COCOA
 lib_libCsGui1_la_SOURCES += \
 	src/gui/accessible/qaccessible_mac.mm \

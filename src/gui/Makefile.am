@@ -32,6 +32,13 @@ lib_libCsGui1_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WIND
 lib_libCsGui1_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
+if OSTYPE_BSD
+lib_libCsGui1_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
+    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
+
+lib_libCsGui1_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
+endif
+
 if OSTYPE_WIN
 lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE -DQT_MAKEDLL
 lib_libCsGui1_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid --export-all-symbols

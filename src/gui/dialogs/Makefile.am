@@ -142,6 +142,13 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qprintdialog_unix.cpp \
 	src/gui/dialogs/qpagesetupdialog_unix.cpp 
 endif
+
+if OSTYPE_BSD
+lib_libCsGui1_la_SOURCES += \
+        src/gui/dialogs/qprintdialog_unix.cpp \
+        src/gui/dialogs/qpagesetupdialog_unix.cpp
+endif
+
 EXTRA_DIST += \
 	src/gui/dialogs/qprintsettingsoutput.ui \
 	src/gui/dialogs/qprintwidget.ui \

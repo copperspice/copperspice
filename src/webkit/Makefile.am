@@ -5250,6 +5250,19 @@ ______lib_libCsWebKit1_la_SOURCES+= \
 	../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
 endif
 
+if OSTYPE_BSD
+______lib_libCsWebKit1_la_CXXFLAGS += \
+        -DXP_UNIX \
+        -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1 \
+        -DENABLE_NETSCAPE_PLUGIN_API=1
+______lib_libCsWebKit1_la_SOURCES+= \
+        ../3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp \
+        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp \
+        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp \
+        ../3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+endif
+
+
 if OSTYPE_DARWIN
 ______lib_libCsWebKit1_la_CXXFLAGS += \
 	-I$(top_srcdir)/src/3rdparty/webkit/Source/WebCore/platform/mac

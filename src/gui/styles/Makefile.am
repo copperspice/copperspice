@@ -301,6 +301,10 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/styles/qwindowsstyle.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP
+endif
+
 if OSTYPE_DARWIN
 lib_libCsGui1_la_SOURCES += \
 	src/gui/styles/qwindowsstyle.cpp  \

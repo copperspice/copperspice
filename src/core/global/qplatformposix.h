@@ -108,7 +108,7 @@
 #define QT_READ                 ::read
 #define QT_WRITE                ::write
 
-#define QT_OPEN_LARGEFILE       O_LARGEFILE
+#define QT_OPEN_LARGEFILE       0
 #define QT_OPEN_RDONLY          O_RDONLY
 #define QT_OPEN_WRONLY          O_WRONLY
 #define QT_OPEN_RDWR            O_RDWR
