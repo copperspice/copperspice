@@ -15,6 +15,16 @@ lib_libCsPhonon1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/phonon -Ipriv
 lib_libCsPhonon1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsPhonon1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la lib/libCsNetwork1.la
 
+if GLIB
+if PULSEAUDIO_MAINLOOP_GLIB
+lib_libCsPhonon1_la_CXXFLAGS += -DHAVE_PULSEAUDIO $(PULSEAUDIO_MAINLOOP_GLIB_CFLAGS) $(PULSEAUDIO_CFLAGS)
+lib_libCsPhonon1_la_LDFLAGS += $(PULSEAUDIO_LIBS) $(PULSEAUDIO_MAINLOOP_GLIB_LIBS)
+if PULSEAUDIO_DEVICE_MANAGER
+lib_libCsPhonon1_la_CXXFLAGS += -DHAVE_PULSEAUDIO_DEVICE_MANAGER
+endif
+endif
+endif
+
 PHONON_PUBLIC_INCLUDES = \
 	AbstractAudioOutput \
 	AbstractMediaStream \
