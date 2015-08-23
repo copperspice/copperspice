@@ -36,16 +36,16 @@ QAudioOutput::QAudioOutput(const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
    d = QAudioDeviceFactory::createDefaultOutputDevice(format);
-   connect(d, SIGNAL(notify()), SIGNAL(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
 }
 
 QAudioOutput::QAudioOutput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
    d = QAudioDeviceFactory::createOutputDevice(audioDevice, format);
-   connect(d, SIGNAL(notify()), SIGNAL(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
 }
 
 QAudioOutput::~QAudioOutput()

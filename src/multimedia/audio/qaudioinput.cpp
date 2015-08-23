@@ -120,8 +120,8 @@ QAudioInput::QAudioInput(const QAudioFormat &format, QObject *parent):
    QObject(parent)
 {
    d = QAudioDeviceFactory::createDefaultInputDevice(format);
-   connect(d, SIGNAL(notify()), SIGNAL(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
 }
 
 /*!
@@ -134,8 +134,8 @@ QAudioInput::QAudioInput(const QAudioDeviceInfo &audioDevice, const QAudioFormat
    QObject(parent)
 {
    d = QAudioDeviceFactory::createInputDevice(audioDevice, format);
-   connect(d, SIGNAL(notify()), SIGNAL(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), SIGNAL(stateChanged(QAudio::State)));
+   connect(d, SIGNAL(notify()), this, SLOT(emitNotify()));
+   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(emitStateChanged(QAudio::State)));
 }
 
 /*!
