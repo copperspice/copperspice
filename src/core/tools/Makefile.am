@@ -131,6 +131,7 @@ CORE_TOOLS_INCLUDES = \
 	qhashdata.h \
 	qhashdummynode.h \
 	qhashdummyvalue.h \
+	qhashfwd.h \
 	qhashiterator.h \
 	qhashnode.h \
 	qlatin1char.h \
