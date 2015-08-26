@@ -3,8 +3,8 @@ set(CORE_PUBLIC_INCLUDES
     QMutex
     QMutexData
     QMutexLocker
-    QBasicAtomicInt
-    QBasicAtomicPointer
+    QAtomicInt
+    QAtomicPointer
     QReadLocker
     QReadWriteLock
     QSemaphore
@@ -18,9 +18,8 @@ set(CORE_PUBLIC_INCLUDES
 set(CORE_INCLUDES
     ${CORE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomic.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qbasicatomic.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qbasicatomicint.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qbasicatomicpointer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomicint.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomicpointer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.h
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutexdata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutexlocker.h
@@ -45,7 +44,6 @@ set(CORE_PRIVATE_INCLUDES
 
 set(CORE_SOURCES
     ${CORE_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutexpool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qreadwritelock.cpp
@@ -63,7 +61,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_linux.cpp
@@ -80,3 +78,5 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
     )
 endif()
+
+

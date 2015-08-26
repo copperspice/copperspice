@@ -27,12 +27,19 @@ include_directories(
 add_library(CsXml${BUILD_MAJOR} SHARED ${XML_SOURCES} ${XML_INCLUDES})
 target_link_libraries(CsXml${BUILD_MAJOR} ${EXTRA_XML_LIBS})
 set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_XML_CXXFLAGS}
     LINK_FLAGS ${EXTRA_XML_LDFLAGS}
 )
 
 macro_generate_resources("${XML_SOURCES}")
+macro_generate_package(
+    CsXml${BUILD_MAJOR}
+    "${EXTRA_XML_CXXFLAGS}"
+    "${EXTRA_XML_LIBS}"
+    "CsCore${BUILD_MAJOR}"
+)
 
 install(TARGETS CsXml${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtXml DESTINATION include)

@@ -180,7 +180,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix.cpp

@@ -4,7 +4,6 @@ set(EXTRA_CORE_CXXFLAGS " ") # whitespace is required!
 set(EXTRA_CORE_LDFLAGS "-Wl,--no-undefined")
 
 include(animation/animation.cmake)
-include(arch/arch.cmake)
 include(codecs/codecs.cmake)
 include(concurrent/concurrent.cmake)
 include(global/global.cmake)
@@ -71,13 +70,17 @@ include_directories(
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(EXTRA_CORE_LIBS
-        ${EXTRA_CORE_LIBS} dl pthread
+        ${EXTRA_CORE_LIBS}
+        dl
+        pthread
     )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(EXTRA_CORE_LIBS
-        ${EXTRA_CORE_LIBS} ole32 ws2_32
+        ${EXTRA_CORE_LIBS}
+        ole32
+        ws2_32
     )
     set(EXTRA_CORE_LDFLAGS
         ${EXTRA_CORE_LDFLAGS}
@@ -92,7 +95,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         -framework CoreFoundation
         -framework Security
         -framework ApplicationServices
-        -lObjC
+        -lobjc
     )
     # FIXME: where does this go? some variables must be replaced too
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/global/Info.plist.app DESTINATION mac)
@@ -102,12 +105,19 @@ endif()
 add_library(CsCore${BUILD_MAJOR} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
 target_link_libraries(CsCore${BUILD_MAJOR} ${EXTRA_CORE_LIBS})
 set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_CORE_LDFLAGS}
 )
 
 macro_generate_resources("${CORE_SOURCES}")
+macro_generate_package(
+    CsCore${BUILD_MAJOR}
+    "${EXTRA_CORE_CXXFLAGS}"
+    "${EXTRA_CORE_LIBS}"
+    ""
+)
 
 install(TARGETS CsCore${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore DESTINATION include)

@@ -185,7 +185,7 @@ if(QPA_FOUND)
     add_definitions(-DQT_NO_FONTCONFIG -DQT_NO_FREETYPE)
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_win.cpp

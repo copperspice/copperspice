@@ -1,5 +1,5 @@
 # NOTE: to find all FIXME/TODO related to the CMake build system execute the
-# following in the top-directory of the source tree:
+# following in the top-level directory of the source tree:
 #
 # find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
 # find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
@@ -10,6 +10,13 @@ cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 # cmake_policy(VERSION 2.8.11)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+install(
+    FILES
+    cmake/modules/FindCopperSpice.cmake
+    cmake/modules/CopperSpiceMacros.cmake
+    DESTINATION
+    share/cmake/modules
+)
 
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
@@ -17,11 +24,12 @@ include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
+include(TestLargeFiles)
 include(MacroCopperSpice)
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
-set(BUILD_MINOR "1")
+set(BUILD_MINOR "2")
 set(BUILD_MICRO "0")
 set(PACKAGE "copperspice")
 set(PACKAGE_NAME "copperspice")
@@ -37,9 +45,11 @@ set(target "${CMAKE_SYSTEM_NAME}")
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ library derived from the existing Qt 4.8 framework")
 set(CPACK_PACKAGE_VENDOR "copperspice")
-# set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
-set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MINOR})
+# set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/ReadMe.txt")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license/LICENSE.LGPL")
+set(CPACK_SOURCE_IGNORE_FILES "/build/;/.git;${CPACK_SOURCE_IGNORE_FILES}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CMAKE_INSTALL_PREFIX})
+set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${BUILD_MICRO})
 include(CPack)
@@ -79,6 +89,7 @@ check_include_file(strings.h HAVE_STRINGS_H)
 check_include_file(string.h HAVE_STRING_H)
 check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
 check_type_size(size_t SIZEOF_SIZE_T)
+opj_test_large_files(HAVE_LARGEFILESUPPORT)
 
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES
@@ -130,7 +141,6 @@ set_package_properties(MySQL PROPERTIES
 
 # find_package(QPA) TODO: what is QPA?
 
-
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     find_package(GTK2)
     set_package_properties(GTK2 PROPERTIES
@@ -141,7 +151,7 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     find_library(pthread_FOUND pthread) # pthread_create
 
     find_package(NAS)
@@ -176,18 +186,70 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         TYPE REQUIRED
     )
 
-    find_package(Freetype REQUIRED)
-    find_package(GLIB2 REQUIRED)
-    find_package(GStreamer REQUIRED)
-    find_package(LibXml2 REQUIRED)
+    find_package(Freetype)
+    set_package_properties(Freetype PROPERTIES
+        PURPOSE "Required for fonts configuration support"
+        DESCRIPTION "Freely available software library to render fonts"
+        URL "http://www.freetype.org"
+        TYPE REQUIRED
+    )
+
+    find_package(GLIB2)
+    set_package_properties(GLIB2 PROPERTIES
+        PURPOSE "Required for glib mainloop support"
+        DESCRIPTION "Core application building blocks for libraries and applications written in C"
+        URL "https://developer.gnome.org/glib"
+        TYPE REQUIRED
+    )
     include_directories(${GLIB2_INCLUDE_DIR})
+
+    find_package(GStreamer)
+    set_package_properties(GStreamer PROPERTIES
+        PURPOSE "Required for multimedia support"
+        DESCRIPTION "Open source multimedia framework"
+        URL "http://gstreamer.freedesktop.org"
+        TYPE REQUIRED
+    )
+
+    find_package(LibXml2 REQUIRED)
+
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        find_package(Iconv)
+        set_package_properties(Iconv PROPERTIES
+            PURPOSE "Iconv support"
+            DESCRIPTION "iconv() implementation, for use on systems which don't have one or lack Unicode support"
+            URL "http://www.gnu.org/software/libiconv/"
+            TYPE REQUIRED
+        )
+    endif()
 endif()
 
-configure_file(qt-acconfig.h.cmake ${CMAKE_BINARY_DIR}/include/qt-acconfig.h)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+    add_definitions(-DUNICODE)
+endif()
+if(NOT CUPS_FOUND)
+    add_definitions(-DQT_NO_CUPS)
+endif()
+if(NOT GLIB2_FOUND)
+    add_definitions(-DQT_NO_GLIB)
+endif()
+if(NOT FREETYPE_FOUND)
+    add_definitions(-DQT_NO_FREETYPE)
+endif()
+if(NOT ZLIB_FOUND)
+    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/zlib)
+endif()
 
-add_subdirectory(src)
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/qt-acconfig.h.cmake
+    ${CMAKE_BINARY_DIR}/include/qt-acconfig.h
+)
+configure_file(
+    ${CMAKE_SOURCE_DIR}/src/core/global/cs_build_info.h.in
+    ${CMAKE_BINARY_DIR}/include/QtCore/cs_build_info.h
+)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     foreach(library pthread)
         if(NOT ${library}_FOUND)
             message(SEND_ERROR "${library} not found")
@@ -203,5 +265,34 @@ add_feature_info(MySQL WITH_MYSQL_PLUGIN "the world's most popular open source d
 
 option(WITH_WEBKIT "Build WebKit component" ON)
 add_feature_info(WebKit WITH_WEBKIT "an open source web browser engine")
+
+# XXX: as bad as this can be it is neccessary for building properly when Qt4 is
+# installed on the system because they have the same headers names with the
+# difference being that CopperSpice does not install non-fancy headers into
+# <prefix>/include.
+set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
+
+add_subdirectory(src/core)
+# out for now add_subdirectory(declarative)
+add_subdirectory(src/gui)
+add_subdirectory(src/multimedia)
+add_subdirectory(src/network)
+add_subdirectory(src/opengl)
+add_subdirectory(src/phonon)
+add_subdirectory(src/script)
+# out for now add_subdirectory(scripttools)
+add_subdirectory(src/sql)
+add_subdirectory(src/svg)
+add_subdirectory(src/tools/shared)
+add_subdirectory(src/tools/lconvert)
+add_subdirectory(src/tools/lrelease)
+add_subdirectory(src/tools/lupdate)
+add_subdirectory(src/tools/rcc)
+add_subdirectory(src/tools/uic)
+if(WITH_WEBKIT)
+    add_subdirectory(src/webkit)
+endif()
+add_subdirectory(src/xml)
+add_subdirectory(src/xmlpatterns)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

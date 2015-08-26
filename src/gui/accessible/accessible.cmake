@@ -76,7 +76,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessible_unix.cpp

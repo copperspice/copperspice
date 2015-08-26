@@ -40,17 +40,17 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qfontlaocodec.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|Darwin|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qiconvcodec.cpp
     )
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        set(EXTRA_CORE_LIBS
+            ${EXTRA_CORE_LIBS}
+            ${ICONV_LIBRARIES}
+            pthread
+        )
+        include_directories(${ICONV_INCLUDE_DIR})
+    endif()
 endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CORE_SOURCES
-        ${CORE_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qiconvcodec.cpp
-    )
-endif()
-

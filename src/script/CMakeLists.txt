@@ -550,12 +550,19 @@ endif()
 add_library(CsScript${BUILD_MAJOR} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
 target_link_libraries(CsScript${BUILD_MAJOR} ${EXTRA_SCRIPT_LIBS})
 set_target_properties(CsScript${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SCRIPT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_SCRIPT_LDFLAGS}
 )
 
 macro_generate_resources("${SCRIPT_SOURCES}")
+macro_generate_package(
+    CsScript${BUILD_MAJOR}
+    "${EXTRA_SCRIPT_CXXFLAGS}"
+    "${EXTRA_SCRIPT_LIBS}"
+    "CsCore${BUILD_MAJOR}"
+)
 
 install(TARGETS CsScript${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript DESTINATION include)

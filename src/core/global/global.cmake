@@ -42,7 +42,6 @@ set(CORE_PUBLIC_INCLUDES
 
 set(CORE_INCLUDES
     ${CORE_INCLUDES}
-    # ${CMAKE_CURRENT_SOURCE_DIR}/cs_build_info.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int32.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int64.h

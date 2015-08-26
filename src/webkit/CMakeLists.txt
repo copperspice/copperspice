@@ -1,5 +1,7 @@
-add_definitions(-DBUILDING_WEBKIT
+add_definitions(
+    -DWTF_CHANGES
     -UHAVE_CONFIG_H
+    -DBUILDING_WEBKIT
     -DBUILDING_QT__=1
     -DWTF_PLATFORM_QT=1
     -DENABLE_WORKERS=1
@@ -107,6 +109,8 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
+    ${CMAKE_BINARY_DIR}/include/QtWebKit
+    ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore
@@ -5173,7 +5177,7 @@ set(WEBKIT_INTERNAL_INCLUDES
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/win)
-    add_definitions(-DUNICODE)
+    add_definitions(-DUNICODE -DQT_MAKEDLL)
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorWin.cpp
@@ -5187,9 +5191,20 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/win/BitmapInfo.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/win/WebCoreInstanceHandle.cpp
     )
+    set(EXTRA_WEBKIT_LIBS
+        ${EXTRA_WEBKIT_LIBS
+        gdi32
+        winmm
+        shlwapi
+        version
+    )
+    set(EXTRA_WEBKIT_LDFLAGS
+        ${EXTRA_WEBKIT_LDFLAGS}
+        -Wl,-s
+    )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     add_definitions(-DXP_UNIX
         -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1
         -DENABLE_NETSCAPE_PLUGIN_API=1
@@ -5222,22 +5237,6 @@ endif()
 
 set(WEBKIT_INCLUDES ${WEBKIT_API_INCLUDES} ${WEBKIT_MAIN_INCLUDES})
 
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
-    add_definitions(-DQT_MAKEDLL)
-    set(EXTRA_WEBKIT_LIBS
-        ${EXTRA_WEBKIT_LIBS
-        gdi32
-        winmm
-        shlwapi
-        version
-    )
-    set(EXTRA_WEBKIT_LDFLAGS
-        ${EXTRA_WEBKIT_LDFLAGS}
-        -Wl,-s
-    )
-endif()
-
 macro_generate_public("${WEBKIT_PUBLIC_INCLUDES}" QtWebKit)
 # macro_generate_private("${WEBKIT_PRIVATE_INCLUDES}" QtWebKit)
 macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
@@ -5245,12 +5244,19 @@ macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
 add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES})
 target_link_libraries(CsWebKit${BUILD_MAJOR} ${EXTRA_WEBKIT_LIBS})
 set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}
 )
 
 macro_generate_resources("${WEBKIT_SOURCES}")
+macro_generate_package(
+    CsWebKit${BUILD_MAJOR}
+    "${EXTRA_WEBKIT_CXXFLAGS}"
+    "${EXTRA_WEBKIT_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
+)
 
 install(TARGETS CsWebKit${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtWebKit DESTINATION include)

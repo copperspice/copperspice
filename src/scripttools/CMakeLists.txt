@@ -25,12 +25,19 @@ include_directories(
 add_library(CsScriptTools${BUILD_MAJOR} SHARED ${SCRIPTTOOLS_SOURCES} ${SCRIPTTOOLS_INCLUDES})
 target_link_libraries(CsScriptTools${BUILD_MAJOR} ${EXTRA_SCRIPTTOOLS_LIBS})
 set_target_properties(CsScriptTools${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SCRIPTTOOLS_CXXFLAGS}
     LINK_FLAGS ${EXTRA_SCRIPTTOOLS_LDFLAGS}
 )
 
 macro_generate_resources("${SCRIPTTOOLS_SOURCES}")
+macro_generate_package(
+    CsScriptTools${BUILD_MAJOR}
+    "${EXTRA_SCRIPTTOOLS_CXXFLAGS}"
+    "${EXTRA_SCRIPTTOOLS_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+)
 
 install(TARGETS CsScriptTools${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScriptTools DESTINATION include)

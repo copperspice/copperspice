@@ -40,12 +40,19 @@ include_directories(
 add_library(CsDeclarative${BUILD_MAJOR} SHARED ${DECLARATIVE_SOURCES} ${DECLARATIVE_INCLUDES})
 target_link_libraries(CsDeclarative${BUILD_MAJOR} ${EXTRA_DECLARATIVE_LIBS})
 set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_DECLARATIVE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_DECLARATIVE_LDFLAGS}
 )
 
 macro_generate_resources("${DECLARATIVE_SOURCES}")
+macro_generate_package(
+    CsDeclarative${BUILD_MAJOR}
+    "${EXTRA_DECLARATIVE_CXXFLAGS}"
+    "${EXTRA_DECLARATIVE_LIBS}"
+    "CsCore${BUILD_MAJOR} QtGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
+)
 
 install(TARGETS CsDeclarative${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtDeclarative DESTINATION include)

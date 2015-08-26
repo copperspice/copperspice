@@ -15,22 +15,8 @@ include_directories(
 )
 
 set(LRELEASE_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qph.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/po.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/xliff.cpp
     ${CMAKE_SOURCE_DIR}/src/tools/shared/ioutils.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lrelease/main.cpp
-)
-
-set(LRELEASE_INCLUDES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/ioutils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
@@ -40,7 +26,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-add_executable(lrelease ${LRELEASE_SOURCES} ${LRELEASE_INCLUDES})
+add_executable(lrelease ${LRELEASE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
 target_link_libraries(lrelease ${EXTRA_LRELEASE_LIBS})
 set_target_properties(lrelease PROPERTIES
     COMPILE_FLAGS ${EXTRA_LRELEASE_CXXFLAGS}

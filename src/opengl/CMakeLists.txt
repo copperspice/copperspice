@@ -167,12 +167,19 @@ endif()
 add_library(CsOpenGL${BUILD_MAJOR} SHARED ${OPENGL_SOURCES} ${OPENGL_INCLUDES})
 target_link_libraries(CsOpenGL${BUILD_MAJOR} ${EXTRA_OPENGL_LIBS})
 set_target_properties(CsOpenGL${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_OPENGL_CXXFLAGS}
     LINK_FLAGS ${EXTRA_OPENGL_LDFLAGS}
 )
 
 macro_generate_resources("${OPENGL_SOURCES}")
+macro_generate_package(
+    CsOpenGL${BUILD_MAJOR}
+    "${EXTRA_CORE_CXXFLAGS}"
+    "${EXTRA_CORE_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+)
 
 install(TARGETS CsOpenGL${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtOpenGL DESTINATION include)

@@ -45,16 +45,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|Darwin|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_unix.cpp
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CORE_SOURCES
-        ${CORE_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_unix.cpp
-    )
-endif()

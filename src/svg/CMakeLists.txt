@@ -70,12 +70,19 @@ endif()
 add_library(CsSvg${BUILD_MAJOR} SHARED ${SVG_SOURCES} ${SVG_INCLUDES})
 target_link_libraries(CsSvg${BUILD_MAJOR} ${EXTRA_SVG_LIBS})
 set_target_properties(CsSvg${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SVG_CXXFLAGS}
     LINK_FLAGS ${EXTRA_SVG_LDFLAGS}
 )
 
 macro_generate_resources("${SVG_SOURCES}")
+macro_generate_package(
+    CsSvg${BUILD_MAJOR}
+    "${EXTRA_SVG_CXXFLAGS}"
+    "${EXTRA_SVG_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+)
 
 install(TARGETS CsSvg${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSvg DESTINATION include)

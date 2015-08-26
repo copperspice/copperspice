@@ -128,6 +128,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qexplicitlyshareddatapointer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhash.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdummynode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdummyvalue.h
@@ -283,7 +284,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_unix.cpp
@@ -302,35 +303,3 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src)
 
-
-set(EXTRA_DIST
-    ${EXTRA_DIST}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/md5/md5.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/md4/md4.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/sha1/sha1.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/easing/easing.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qchar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringmatcher.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetables.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-indic.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-arabic.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-buffer.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-dump.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-dump-main.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gdef.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gpos.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-greek.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gsub.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-hangul.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-impl.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-khmer.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-myanmar.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-open.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-stream.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-thai.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-tibetan.c
-)

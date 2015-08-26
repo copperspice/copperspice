@@ -45,7 +45,7 @@ set(NETWORK_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qnativesocketengine.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(NETWORK_SOURCES
         ${NETWORK_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qnativesocketengine_unix.cpp

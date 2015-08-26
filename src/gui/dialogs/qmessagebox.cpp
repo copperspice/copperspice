@@ -1564,6 +1564,8 @@ QPixmap QMessageBox::standardIcon(Icon icon)
    return QMessageBoxPrivate::standardIcon(icon, 0);
 }
 
+#include <qrc_qmessagebox.cpp>
+
 QT_END_NAMESPACE
 
 #endif // QT_NO_MESSAGEBOX

@@ -76,48 +76,8 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qsidebar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog.ui
-    # ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qmessagebox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.qrc
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog.qrc
-)
-
-set(EXTRA_DIST
-    ${EXTRA_DIST}
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qmessagebox.qrc
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog.qrc
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/cslogo-64.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-page-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-page-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-width-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/fit-width-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-first-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-first-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-last-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-last-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-next-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-next-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-previous-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/go-previous-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-landscape-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-landscape-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-portrait-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/layout-portrait-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/page-setup-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/page-setup-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/print-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/print-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-multi-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-multi-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-one-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-one-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-sided-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/view-page-sided-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-in-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-in-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-out-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/zoom-out-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/status-color.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/images/status-gray-scale.png
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
@@ -127,7 +87,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qprintdialog.cpp
     )
 endif()
 
@@ -153,6 +112,5 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupdialog_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qcolordialog_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qrc_qprintdialog.cpp
     )
 endif()

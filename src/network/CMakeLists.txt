@@ -47,12 +47,19 @@ endif()
 add_library(CsNetwork${BUILD_MAJOR} SHARED ${NETWORK_SOURCES} ${NETWORK_INCLUDES})
 target_link_libraries(CsNetwork${BUILD_MAJOR} ${EXTRA_NETWORK_LIBS})
 set_target_properties(CsNetwork${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_NETWORK_CXXFLAGS}
     LINK_FLAGS ${EXTRA_NETWORK_LDFLAGS}
 )
 
 macro_generate_resources("${NETWORK_SOURCES}")
+macro_generate_package(
+    CsNetwork${BUILD_MAJOR}
+    "${EXTRA_CORE_CXXFLAGS}"
+    "${EXTRA_CORE_LIBS}"
+    "CsCore${BUILD_MAJOR}"
+)
 
 install(TARGETS CsNetwork${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtNetwork DESTINATION include)

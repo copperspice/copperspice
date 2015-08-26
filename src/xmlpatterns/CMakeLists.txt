@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_XMLPATTERNS_LIB -DQT_SHARED -DQT_MAKEDLL)
 # BROOM (enable OpenSSL)
 add_definitions(-DQT_NO_OPENSSL)
-set(EXTRA_XMLPATTERNS_LIBS "")
+set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
 set(EXTRA_XMLPATTERNS_CXXFLAGS " ") # whitespace is required!
 set(EXTRA_XMLPATTERNS_LDFLAGS "-Wl,--no-undefined")
 
@@ -52,12 +52,19 @@ include_directories(
 add_library(CsXmlPatterns${BUILD_MAJOR} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
 target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XMLPATTERNS_LIBS})
 set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}
     LINK_FLAGS ${EXTRA_XMLPATTERNS_LDFLAGS}
 )
 
 macro_generate_resources("${XMLPATTERNS_SOURCES}")
+macro_generate_package(
+    CsXmlPatterns${BUILD_MAJOR}
+    "${EXTRA_XMLPATTERNS_CXXFLAGS}"
+    "${EXTRA_XMLPATTERNS_LIBS}"
+    "CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
+)
 
 install(TARGETS CsXmlPatterns${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtXmlPatterns DESTINATION include)

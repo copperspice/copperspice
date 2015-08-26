@@ -318,14 +318,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
 )
 
-set(EXTRA_DIST
-    ${EXTRA_DIST}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/wintab/wintab.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/wintab/pktdef.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11_p.cpp
-)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(GUI_SOURCES
         ${GUI_SOURCES}

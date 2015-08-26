@@ -3,6 +3,7 @@
 #   MACRO_GENERATE_PRIVATE()
 #   MACRO_GENERATE_MISC()
 #   MACRO_GENERATE_RESOURCES()
+#   MACRO_GENERATE_PACKAGE()
 #
 # Usage:
 #   MACRO_GENERATE_PUBLIC(<FancyHeaderName> [<FancyHeaderName2>] ... <subdir>)
@@ -12,6 +13,8 @@
 #   MACRO_GENERATE_MISC(<someheader.h> [<someheader2.h>] ... <subdir>)
 #
 #   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
+#
+#   MACRO_GENERATE_PACKAGE(<target> <cxxflags> <libraries> <requires>)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
@@ -62,10 +65,40 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
             add_custom_command(
                 OUTPUT ${rscout}
-                COMMAND rcc "${resource}" -o "${rscout}"
+                COMMAND rcc "${resource}" -o "${rscout}" -name ${rscname}
                 MAIN_DEPENDENCY ${resource}
             )
             set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})
+        elseif(${rscext} STREQUAL ".manifest")
+            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname})
+            string(REPLACE ".exe" "" trgname ${rscname})
+            add_custom_command(
+                OUTPUT ${rscout}
+                COMMAND mt -nologo -manifest ${resource} -outputresource:${rscout}
+                DEPENDS ${trgname}
+            )
         endif()
     endforeach()
+endmacro()
+
+macro(MACRO_GENERATE_PACKAGE FORTARGET CXXFLAGS LIBRARIES REQUIRES)
+    if(UNIX)
+        # the list must be adjusted
+        string(REPLACE ";" " -l" modlibs "${LIBRARIES}")
+        if(NOT "${modlibs}" STREQUAL "")
+            set(modlibs "-l${modlibs}")
+        endif()
+        set(PC_NAME ${FORTARGET})
+        set(PC_CFLAGS ${CXXFLAGS})
+        set(PC_LIBRARIES ${modlibs})
+        set(PC_REQUIRES ${REQUIRES})
+        configure_file(
+            ${CMAKE_SOURCE_DIR}/cmake/pkgconfig.cmake
+            ${CMAKE_BINARY_DIR}/pkgconfig/${FORTARGET}.pc
+        )
+        install(
+            FILES ${CMAKE_BINARY_DIR}/pkgconfig/${FORTARGET}.pc
+            DESTINATION lib/pkgconfig
+        )
+    endif()
 endmacro()

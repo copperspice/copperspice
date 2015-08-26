@@ -236,64 +236,6 @@ set(GUI_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
 )
 
-set(EXTRA_DIST
-    ${EXTRA_DIST}
-    src/3rdparty/libtiff/libtiff/t4.h
-    src/3rdparty/libtiff/libtiff/tif_config.h
-    src/3rdparty/libtiff/libtiff/tif_config.vc.h
-    src/3rdparty/libtiff/libtiff/tif_dir.h
-    src/3rdparty/libtiff/libtiff/tif_fax3.h
-    src/3rdparty/libtiff/libtiff/tif_predict.h
-    src/3rdparty/libtiff/libtiff/tiff.h
-    src/3rdparty/libtiff/libtiff/tiffconf.h
-    src/3rdparty/libtiff/libtiff/tiffconf.vc.h
-    src/3rdparty/libtiff/libtiff/tiffio.h
-    src/3rdparty/libtiff/libtiff/tiffiop.h
-    src/3rdparty/libtiff/libtiff/tiffvers.h
-    src/3rdparty/libtiff/libtiff/uvcode.h
-    src/3rdparty/libmng/libmng_chunk_descr.h
-    src/3rdparty/libmng/libmng_chunk_io.h
-    src/3rdparty/libmng/libmng_chunk_prc.h
-    src/3rdparty/libmng/libmng_chunks.h
-    src/3rdparty/libmng/libmng_cms.h
-    src/3rdparty/libmng/libmng_conf.h
-    src/3rdparty/libmng/libmng_data.h
-    src/3rdparty/libmng/libmng_display.h
-    src/3rdparty/libmng/libmng_dither.h
-    src/3rdparty/libmng/libmng_error.h
-    src/3rdparty/libmng/libmng_filter.h
-    src/3rdparty/libmng/libmng.h
-    src/3rdparty/libmng/libmng_jpeg.h
-    src/3rdparty/libmng/libmng_memory.h
-    src/3rdparty/libmng/libmng_object_prc.h
-    src/3rdparty/libmng/libmng_objects.h
-    src/3rdparty/libmng/libmng_pixels.h
-    src/3rdparty/libmng/libmng_read.h
-    src/3rdparty/libmng/libmng_trace.h
-    src/3rdparty/libmng/libmng_types.h
-    src/3rdparty/libmng/libmng_write.h
-    src/3rdparty/libmng/libmng_zlib.h
-    src/3rdparty/libjpeg/cderror.h
-    src/3rdparty/libjpeg/cdjpeg.h
-    src/3rdparty/libjpeg/jconfig.h
-    src/3rdparty/libjpeg/jdct.h
-    src/3rdparty/libjpeg/jerror.h
-    src/3rdparty/libjpeg/jinclude.h
-    src/3rdparty/libjpeg/jmemsys.h
-    src/3rdparty/libjpeg/jmorecfg.h
-    src/3rdparty/libjpeg/jpegint.h
-    src/3rdparty/libjpeg/jpeglib.h
-    src/3rdparty/libjpeg/jversion.h
-    src/3rdparty/libjpeg/transupp.h
-    src/3rdparty/libpng/pngconf.h
-    src/3rdparty/libpng/pngdebug.h
-    src/3rdparty/libpng/png.h
-    src/3rdparty/libpng/pnginfo.h
-    src/3rdparty/libpng/pnglibconf.h
-    src/3rdparty/libpng/pngpriv.h
-    src/3rdparty/libpng/pngstruct.h
-)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(GUI_SOURCES
         ${GUI_SOURCES}

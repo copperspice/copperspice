@@ -148,144 +148,10 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle_default.cpp
-    # ${CMAKE_CURRENT_SOURCE_DIR}/styles/qrc_qstyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qplastiquestyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcdestyle.cpp
-)
-
-set(EXTRA_DIST
-    ${EXTRA_DIST}
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.qrc
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filelink-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filelink-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filelink-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/file-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/file-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/file-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/newdirectory-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/newdirectory-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/newdirectory-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/parentdir-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/parentdir-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/parentdir-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dvd-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dvd-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dvd-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/cdr-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/cdr-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/cdr-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/floppy-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/floppy-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/floppy-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/harddrive-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/harddrive-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/harddrive-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/trash-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/trash-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/trash-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/networkdrive-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/networkdrive-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/networkdrive-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/computer-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/computer-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/desktop-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/desktop-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirclosed-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirclosed-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirclosed-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirlink-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirlink-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dirlink-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/diropen-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/diropen-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/diropen-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/left-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/left-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/left-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/right-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/right-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/right-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/up-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/up-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/up-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/down-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/down-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/down-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filecontents-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filecontents-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/filecontents-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/fileinfo-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/fileinfo-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/fileinfo-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewdetailed-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewdetailed-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewdetailed-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewlist-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewlist-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/viewlist-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/fontbitmap-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/fonttruetype-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-apply-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-apply-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-apply-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-cancel-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-cancel-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-cancel-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-clear-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-clear-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-clear-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-close-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-close-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-close-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-delete-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-delete-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-delete-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-help-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-help-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-help-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-no-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-no-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-no-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-ok-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-ok-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-ok-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-open-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-open-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-open-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-save-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-save-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-save-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-yes-128.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-yes-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-yes-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-closetab-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-closetab-down-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/standardbutton-closetab-hover-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/refresh-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/refresh-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/stop-24.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/stop-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-stop-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-stop-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-play-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-play-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-pause-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-pause-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-seek-forward-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-seek-forward-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-seek-backward-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-seek-backward-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-skip-forward-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-skip-forward-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-skip-backward-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-skip-backward-32.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-volume-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/media-volume-muted-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/closedock-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/closedock-down-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dockdock-16.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/images/dockdock-down-16.png
 )
 
 if(X11_FOUND)
@@ -330,4 +196,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.mm
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+    add_definitions(-DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP)
 endif()

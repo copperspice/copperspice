@@ -64,35 +64,24 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
 )
 
-set(EXTRA_DIST
-    src/gui/mac/macresources.qrc
-    src/gui/mac/images/copyarrowcursor.png
-    src/gui/mac/images/forbiddencursor.png
-    src/gui/mac/images/leopard-unified-toolbar-on.png
-    src/gui/mac/images/pluscursor.png
-    src/gui/mac/images/spincursor.png
-    src/gui/mac/images/waitcursor.png
-)
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
+        ${FREETYPE_LIBRARIES}
         # ${X11_LIBRARIES} should contain all of them but it does not sadly
         ${X11_X11_LIB}
         ${X11_Xrender_LIB}
         ${X11_Xrandr_LIB}
         ${X11_Xcursor_LIB}
         ${X11_Xinerama_LIB}
+        ${X11_Xext_LIB}
+        ${X11_Xfixes_LIB}
         ${X11_SM_LIB}
         ${X11_ICE_LIB}
         ${NAS_LIBRARIES}
         pthread
         rt
-    )
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-         -Wl,-luuid --export-all-symbols
     )
     add_definitions(
         -DQT_NO_XINPUT
@@ -100,17 +89,29 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         -DQT_NO_STYLE_WINDOWSXP
         -DQT_NO_STYLE_WINDOWSVISTA
         -DQT_NO_TABLET
+        ${FONTCONFIG_DEFINITIONS}
     )
     include_directories(
+        ${FONTCONFIG_INCLUDE_DIR}
+        ${FREETYPE_INCLUDE_DIRS}
         # ${X11_INCLUDE_DIR} should contain all of them but it does not sadly
         ${X11_X11_INCLUDE_PATH}
         ${X11_Xrender_INCLUDE_PATH}
         ${X11_Xrandr_INCLUDE_PATH}
         ${X11_Xcursor_INCLUDE_PATH}
         ${X11_Xinerama_INCLUDE_PATH}
+        ${X11_Xext_INCLUDE_PATH}
+        ${X11_Xfixes_INCLUDE_PATH}
         ${X11_SM_INCLUDE_PATH}
         ${X11_ICE_INCLUDE_PATH}
         ${NAS_INCLUDES}
+    )
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(EXTRA_GUI_LDFLAGS
+        ${EXTRA_GUI_LDFLAGS}
+         -Wl,-luuid --export-all-symbols
     )
 endif()
 
@@ -140,11 +141,11 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/mac/qrc_macresources.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/mac/macresources.qrc
     )
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
-        ObjC
+        objc
     )
     set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS
@@ -160,16 +161,22 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 #         src/gui/mac/qt_menu.nib/keyedobjects.nib
 endif()
 
-
 add_library(CsGui${BUILD_MAJOR} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
 target_link_libraries(CsGui${BUILD_MAJOR} ${EXTRA_GUI_LIBS})
 set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
 
 macro_generate_resources("${GUI_SOURCES}")
+macro_generate_package(
+    CsGui${BUILD_MAJOR}
+    "${EXTRA_GUI_CXXFLAGS}"
+    "${EXTRA_GUI_LIBS}"
+    "CsCore${BUILD_MAJOR}"
+)
 
 install(TARGETS CsGui${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui DESTINATION include)

@@ -15,20 +15,8 @@ include_directories(
 )
 
 set(LCONVERT_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qph.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/po.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/xliff.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lconvert/main.cpp
-)
-
-set(LCONVERT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.h
+    $<TARGET_OBJECTS:sharedtools>
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
@@ -38,7 +26,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
 endif()
 
-add_executable(lconvert ${LCONVERT_SOURCES} ${LCONVERT_INCLUDES})
+add_executable(lconvert ${LCONVERT_SOURCES} $<TARGET_OBJECTS:sharedtools>)
 target_link_libraries(lconvert ${EXTRA_LCONVERT_LIBS})
 set_target_properties(lconvert PROPERTIES
     COMPILE_FLAGS ${EXTRA_LCONVERT_CXXFLAGS}

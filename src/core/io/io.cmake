@@ -180,6 +180,18 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     )
 endif()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+    set(CORE_SOURCES
+        ${CORE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qfsfileengine_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qprocess_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemengine_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemwatcher_kqueue.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemiterator_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_unix.cpp
+    )
+endif()
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}

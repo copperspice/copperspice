@@ -15,31 +15,16 @@ include_directories(
 )
 
 set(LUPDATE_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qph.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/po.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/xliff.cpp
     ${CMAKE_SOURCE_DIR}/src/tools/shared/ioutils.cpp
     ${CMAKE_SOURCE_DIR}/src/tools/shared/simtexth.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/main.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/merge.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/cpp.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/java.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/qscript.cpp
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/ui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/merge.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/java.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/qscript.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui.cpp
 
-#   ${CMAKE_SOURCE_DIR}/src/tools/lupdate/qdeclarative.cpp
-)
-
-set(LUPDATE_INCLUDES
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/simtexth.h
-    ${CMAKE_SOURCE_DIR}/src/tools/lupdate/lupdate.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/qdeclarative.cpp
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
@@ -47,19 +32,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${EXTRA_LUPDATE_LIBS}
         uuid
     )
-    # TODO: bin_SCRIPTS = src/tools/lupdate/lupdate.exe.manifest
+    set(LUPDATE_SOURCES
+        ${LUPDATE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/lupdate.exe.manifest
+    )
 endif()
 
-set(EXTRA_DIST
-    ${EXTRA_DIST}
-    src/tools/lupdate/lupdate.exe.manifest
-)
-
-add_executable(lupdate ${LUPDATE_SOURCES} ${LUPDATE_INCLUDES})
+add_executable(lupdate ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
 target_link_libraries(lupdate ${EXTRA_LUPDATE_LIBS})
 set_target_properties(lupdate PROPERTIES
     COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LUPDATE_LDFLAGS}
 )
+
+macro_generate_resources("${LUPDATE_SOURCES}")
 
 install(TARGETS lupdate RUNTIME DESTINATION bin)

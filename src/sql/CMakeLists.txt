@@ -7,14 +7,10 @@ include(kernel/kernel.cmake)
 include(models/models.cmake)
 include(drivers/db2/db2.cmake)
 include(drivers/ibase/ibase.cmake)
-if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
-    include(drivers/mysql/mysql.cmake)
-endif()
+include(drivers/mysql/mysql.cmake)
 include(drivers/oci/oci.cmake)
 include(drivers/odbc/odbc.cmake)
-if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
-    include(drivers/psql/psql.cmake)
-endif()
+include(drivers/psql/psql.cmake)
 include(drivers/sqlite/sqlite.cmake)
 
 macro_generate_public("${SQL_PUBLIC_INCLUDES}" QtSql)
@@ -54,12 +50,19 @@ endif()
 add_library(CsSql${BUILD_MAJOR} SHARED ${SQL_SOURCES} ${SQL_INCLUDES})
 target_link_libraries(CsSql${BUILD_MAJOR} ${EXTRA_SQL_LIBS})
 set_target_properties(CsSql${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SQL_CXXFLAGS}
     LINK_FLAGS ${EXTRA_SQL_LDFLAGS}
 )
 
 macro_generate_resources("${SQL_SOURCES}")
+macro_generate_package(
+    CsSql${BUILD_MAJOR}
+    "${EXTRA_SQL_CXXFLAGS}"
+    "${EXTRA_SQL_LIBS}"
+    "CsCore${BUILD_MAJOR}"
+)
 
 install(TARGETS CsSql${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSql DESTINATION include)

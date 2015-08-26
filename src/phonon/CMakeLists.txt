@@ -2,7 +2,7 @@ add_definitions(-DMAKE_PHONON_LIB -DQT_NO_DBUS -DQT_BUILD_PHONON_LIB -DQT_MAKEDL
 set(EXTRA_PHONON_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
 set(EXTRA_PHONON_CXXFLAGS " ") # whitespace is required!
 set(EXTRA_PHONON_LDFLAGS "-Wl,--no-undefined")
-set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
+set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR})
 set(EXTRA_PHONON2_CXXFLAGS " ") # whitespace is required!
 set(EXTRA_PHONON2_LDFLAGS "-Wl,--no-undefined")
 set(PHONON2_SUFFIX)
@@ -262,10 +262,6 @@ set(PHONON_SOURCES
 
 set(PHONON_INCLUDES ${PHONON_3RDPARTY_INCLUDES} ${PHONON_MAIN_INCLUDES})
 
-set(EXTRA_DIST
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/videoeffect.h
-)
-
 macro_generate_public("${PHONON_PUBLIC_INCLUDES}" phonon)
 macro_generate_private("${PHONON_PRIVATE_INCLUDES}" phonon)
 macro_generate_misc("${PHONON_INCLUDES}" phonon)
@@ -317,7 +313,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     )
     set(EXTRA_PHONON2_LDFLAGS
         ${EXTRA_PHONON2_LDFLAGS}
-        -module
         -Wl,-lstrmiids
         -Wl,-ldmoguids
         -Wl,-luuid
@@ -333,7 +328,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
     set(PHONON2_SUFFIX "ds9")
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/abstractrenderer.cpp
@@ -362,6 +357,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(EXTRA_PHONON2_LIBS
         ${EXTRA_PHONON2_LIBS}
         ${GSTREAMER_LIBRARIES}
+        ${GSTREAMER_BASE_LIBRARY}
+        ${GSTREAMER_AUDIO_LIBRARY}
+        ${GSTREAMER_VIDEO_LIBRARY}
+        ${GSTREAMER_INTERFACE_LIBRARY}
         # ${LIBXML2_LIBRARIES}
     )
     add_definitions(
@@ -418,7 +417,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     set(EXTRA_PHONON2_LDFLAGS
         ${EXTRA_PHONON2_LDFLAGS}
-        -module -Xarch_i386
+        -Xarch_i386
         -framework QuickTime
         -Xarch_x86_64
         -framework QTKit
@@ -444,12 +443,13 @@ endif()
 add_library(CsPhonon${BUILD_MAJOR} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(CsPhonon${BUILD_MAJOR} ${EXTRA_PHONON_LIBS})
 set_target_properties(CsPhonon${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON_LDFLAGS}
 )
 
-add_library(phonon_${PHONON2_SUFFIX} SHARED ${PHONON2_SOURCES} ${PHONON_INCLUDES})
+add_library(phonon_${PHONON2_SUFFIX} MODULE ${PHONON2_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
 set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
@@ -458,6 +458,18 @@ set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
 
 macro_generate_resources("${PHONON_SOURCES}")
 macro_generate_resources("${PHONON2_SOURCES}")
+macro_generate_package(
+    CsPhonon${BUILD_MAJOR}
+    "${EXTRA_PHONON_CXXFLAGS}"
+    "${EXTRA_PHONON_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
+)
+macro_generate_package(
+    phonon_${PHONON2_SUFFIX}
+    "${EXTRA_PHONON2_CXXFLAGS}"
+    "${EXTRA_PHONON2_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR}"
+)
 
 install(TARGETS CsPhonon${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(TARGETS phonon_${PHONON2_SUFFIX} LIBRARY DESTINATION lib)

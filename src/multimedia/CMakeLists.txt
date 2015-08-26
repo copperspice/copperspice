@@ -26,12 +26,19 @@ include_directories(
 add_library(CsMultimedia${BUILD_MAJOR} SHARED ${MULTIMEDIA_SOURCES} ${MULTIMEDIA_INCLUDES})
 target_link_libraries(CsMultimedia${BUILD_MAJOR} ${EXTRA_MULTIMEDIA_LIBS})
 set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
+    VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
     LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
 )
 
 macro_generate_resources("${MULTIMEDIA_SOURCES}")
+macro_generate_package(
+    CsMultimedia${BUILD_MAJOR}
+    "${EXTRA_MULTIMEDIA_CXXFLAGS}"
+    "${EXTRA_MULTIMEDIA_LIBS}"
+    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+)
 
 install(TARGETS CsMultimedia${BUILD_MAJOR} LIBRARY DESTINATION lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtMultimedia DESTINATION include)
