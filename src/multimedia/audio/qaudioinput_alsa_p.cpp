@@ -61,7 +61,7 @@ QAudioInputPrivate::QAudioInputPrivate(const QByteArray &device, const QAudioFor
 QAudioInputPrivate::~QAudioInputPrivate()
 {
    close();
-   disconnect(timer, SIGNAL(timeout()));
+   disconnect(timer, SIGNAL(timeout()), 0, 0);
    QCoreApplication::processEvents();
    delete timer;
 }

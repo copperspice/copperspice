@@ -1,0 +1,9 @@
+set(DECLARATIVE_PRIVATE_INCLUDES
+    ${DECLARATIVE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qml/rewriter/textwriter_p.h
+)
+
+set(DECLARATIVE_SOURCES
+    ${DECLARATIVE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/qml/rewriter/textwriter.cpp
+)

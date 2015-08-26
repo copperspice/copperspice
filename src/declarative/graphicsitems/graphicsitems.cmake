@@ -1,0 +1,103 @@
+set(DECLARATIVE_PUBLIC_INCLUDES
+    ${DECLARATIVE_PUBLIC_INCLUDES}
+    QDeclarativeItem
+)
+
+set(DECLARATIVE_INCLUDES
+    ${DECLARATIVE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitem.h
+)
+
+set(DECLARATIVE_PRIVATE_INCLUDES
+    ${DECLARATIVE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitemsmodule_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanchors_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanchors_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeevents_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeflickable_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeflickable_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeflipable_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativegridview_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimagebase_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeborderimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepainteditem_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepainteditem_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimage_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeborderimage_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimagebase_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanimatedimage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanimatedimage_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitem_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativefocuspanel_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativefocusscope_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepositioners_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepositioners_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeloader_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeloader_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativemousearea_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativemousearea_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepath_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepath_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepathview_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepathview_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerectangle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerectangle_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerepeater_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerepeater_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativescalegrid_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetranslate_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextinput_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextinput_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextedit_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextedit_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetext_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetext_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativevisualitemmodel_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativelistview_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativelayoutitem_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitemchangelistener_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativegraphicswidget_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextlayout_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepincharea_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepincharea_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimplicitsizeitem_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimplicitsizeitem_p_p.h
+)
+
+set(DECLARATIVE_SOURCES
+    ${DECLARATIVE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitemsmodule.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanchors.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeevents.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeflickable.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeflipable.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativegridview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeborderimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimagebase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeanimatedimage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepainteditem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativefocuspanel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativefocusscope.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepositioners.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativemousearea.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepath.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepathview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerectangle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativerepeater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativescalegrid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetranslate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextinput.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextedit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativevisualitemmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativelistview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativelayoutitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativegraphicswidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativetextlayout.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativepincharea.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems/qdeclarativeimplicitsizeitem.cpp
+)
