@@ -1,4 +1,4 @@
-AC_INIT([copperspice], [1.2.0], [ansel@copperspice.com])
+AC_INIT([copperspice], [1.2.1], [ansel@copperspice.com])
 
 # derive CS hex version from "@PACKAGE_VERSION@"
 HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
