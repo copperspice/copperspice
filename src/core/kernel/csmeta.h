@@ -291,23 +291,35 @@ bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 }
 
 // **
+// cs_typeName_internal is a templated class
 template <class T, class = void>
 class Q_CORE_EXPORT cs_typeName_internal
 {
- public:
-   static const char *typeName();
+   public:
+      static const char *typeName();
 };
 
 
 // three macros
+
+// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
 #define CS_REGISTER_CLASS(dataType) \
    class dataType; \
-   template <>  \
    Q_CORE_EXPORT const char * cs_typeName_internal<dataType, void>::typeName() \
    { \
       return #dataType; \
    } \
-   template const char *cs_typeName_internal<dataType,void>::typeName();
+   
+
+// cs_typeName_internal<dataType> is specialization of a templated class
+#define CS_DECLARE_CLASS(dataType) \
+   class dataType; \
+   template <>  \
+   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
+   { \
+      public: \
+         static const char *typeName(); \
+   };
 
 
 #define CS_REGISTER_TYPE(dataType) \
@@ -465,8 +477,69 @@ class QDeclarativeListProperty;
 template<class T1, class T2>
 class QPair;
 
-// cs_register_class 
+// declare here, register in csObject_private.cpp
+CS_DECLARE_CLASS(QAbstractState)
+CS_DECLARE_CLASS(QColor)
+CS_DECLARE_CLASS(QChar)
+CS_DECLARE_CLASS(QCursor)
+CS_DECLARE_CLASS(QBitmap)
+CS_DECLARE_CLASS(QBrush)
+CS_DECLARE_CLASS(QBitArray)
+CS_DECLARE_CLASS(QByteArray)
+CS_DECLARE_CLASS(QDate)
+CS_DECLARE_CLASS(QDateTime)
+CS_DECLARE_CLASS(QEasingCurve)
+CS_DECLARE_CLASS(QFont)
+CS_DECLARE_CLASS(QGraphicsEffect)
+CS_DECLARE_CLASS(QGraphicsLayout)
+CS_DECLARE_CLASS(QIcon)
+CS_DECLARE_CLASS(QImage)
+CS_DECLARE_CLASS(QJsonValue)
+CS_DECLARE_CLASS(QJsonObject)
+CS_DECLARE_CLASS(QJsonArray)
+CS_DECLARE_CLASS(QJsonDocument)
+CS_DECLARE_CLASS(QKeySequence)
+CS_DECLARE_CLASS(QLine)
+CS_DECLARE_CLASS(QLineF)
+CS_DECLARE_CLASS(QLocale)  
+CS_DECLARE_CLASS(QMatrix)
+CS_DECLARE_CLASS(QMatrix4x4)
+CS_DECLARE_CLASS(QModelIndex)
+CS_DECLARE_CLASS(QPalette)
+CS_DECLARE_CLASS(QPen)
+CS_DECLARE_CLASS(QPoint)
+CS_DECLARE_CLASS(QPointF)
+CS_DECLARE_CLASS(QPolygon)
+CS_DECLARE_CLASS(QPolygonF)
+CS_DECLARE_CLASS(QPixmap)
+CS_DECLARE_CLASS(QRect)
+CS_DECLARE_CLASS(QRectF)
+CS_DECLARE_CLASS(QRegion)
+CS_DECLARE_CLASS(QRegExp)
+CS_DECLARE_CLASS(QRegularExpression)
+CS_DECLARE_CLASS(QSize)
+CS_DECLARE_CLASS(QSizeF)
+CS_DECLARE_CLASS(QSizePolicy)
+CS_DECLARE_CLASS(QState)
+CS_DECLARE_CLASS(QString)
+CS_DECLARE_CLASS(QStringList)
+CS_DECLARE_CLASS(QStyleOption)
+CS_DECLARE_CLASS(QStyleOptionViewItem)
+CS_DECLARE_CLASS(QTextCursor)
+CS_DECLARE_CLASS(QTextFormat)
+CS_DECLARE_CLASS(QTextLength)
+CS_DECLARE_CLASS(QTextOption)
+CS_DECLARE_CLASS(QTime)
+CS_DECLARE_CLASS(QTransform)
+CS_DECLARE_CLASS(QQuaternion)
+CS_DECLARE_CLASS(QUrl)
+CS_DECLARE_CLASS(QUuid)
+CS_DECLARE_CLASS(QVariant)
+CS_DECLARE_CLASS(QVector2D)
+CS_DECLARE_CLASS(QVector3D)
+CS_DECLARE_CLASS(QVector4D)
 
+//
 CS_REGISTER_TEMPLATE(QHash)
 CS_REGISTER_TEMPLATE(QMultiHash)
 CS_REGISTER_TEMPLATE(QLinkedList)
