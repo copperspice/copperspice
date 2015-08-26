@@ -48,7 +48,7 @@ class Q_CORE_EXPORT QDataStream
 {
  public:
 
-#if CS_VERSION >= 0x010200
+#if CS_VERSION >= 0x010300
 #error (CS compile issue in qdatastream.h) Verify CopperSpice Version is listed in the following enum
 #endif
 
@@ -75,7 +75,8 @@ class Q_CORE_EXPORT QDataStream
       Qt_5_3 = Qt_5_2,
  
       CS_1_0 = 128,
-      CS_1_1 = CS_1_0
+      CS_1_1 = CS_1_0,
+      CS_1_2 = CS_1_1
    };
  
    enum ByteOrder {

@@ -30,6 +30,8 @@
 #ifndef QSHAREDPOINTER_IMPL_H
 #define QSHAREDPOINTER_IMPL_H
 
+#include <qhashfwd.h>
+
 #include <new>
 #include <qatomic.h>
 #include <utility>
@@ -70,9 +72,6 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
-
-template <class T> 
-uint qHash(const T *key, uint seed = 0);
 
 namespace QtSharedPointer {
 template <class T> class InternalRefCount;

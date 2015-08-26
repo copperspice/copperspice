@@ -26,6 +26,7 @@
 #ifndef QHASH_H
 #define QHASH_H
 
+#include <qhashfwd.h>
 #include <qchar.h>
 #include <qlist.h>
 #include <qpair.h>
@@ -108,7 +109,7 @@ Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
 
 Q_CORE_EXPORT uint qt_hash(const QString &key);
 
-template <class T> inline uint qHash(const T *key, uint seed = 0)
+template <class T> inline uint qHash(const T *key, uint seed)
 {
    return qHash(reinterpret_cast<quintptr>(key), seed);
 }
