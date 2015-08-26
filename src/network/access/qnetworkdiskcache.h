@@ -36,7 +36,7 @@ class QNetworkDiskCachePrivate;
 
 class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
 {
-   CS_OBJECT(QNetworkDiskCache)
+   NET_CS_OBJECT(QNetworkDiskCache)
 
  public:
    explicit QNetworkDiskCache(QObject *parent = 0);

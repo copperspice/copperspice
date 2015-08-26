@@ -39,7 +39,7 @@ class QAbstractStatePrivate;
 
 class Q_CORE_EXPORT QAbstractState : public QObject
 {
-   CS_OBJECT(QAbstractState)
+   CORE_CS_OBJECT(QAbstractState)
 
  public:
    ~QAbstractState();

@@ -42,7 +42,7 @@ namespace WebCore {
 // This class provides a implementation of a GeolocationService for qtWebkit.
 // It uses QtMobility (v1.0.0) location service to get positions
 class GeolocationClientQt : public QObject, public GeolocationClient {
-    CS_OBJECT(GeolocationClientQt)
+    WEB_CS_OBJECT(GeolocationClientQt)
 
 public:
     GeolocationClientQt(const QWebPage*);

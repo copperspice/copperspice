@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
 {
-   CS_OBJECT(QStringListModel)
+   GUI_CS_OBJECT(QStringListModel)
 
  public:
    explicit QStringListModel(QObject *parent = 0);

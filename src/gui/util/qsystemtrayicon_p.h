@@ -72,7 +72,7 @@ class QSystemTrayIconPrivate
 
 class QBalloonTip : public QWidget
 {
-   CS_OBJECT(QBalloonTip)
+   GUI_CS_OBJECT(QBalloonTip)
 
  public:
    static void showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,

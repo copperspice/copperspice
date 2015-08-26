@@ -34,22 +34,22 @@ class QDeclarativeLoaderPrivate;
 
 class QDeclarativeLoader : public QDeclarativeImplicitSizeItem
 {
-   CS_OBJECT(QDeclarativeLoader)
-   CS_ENUM(Status)
+   DECL_CS_OBJECT(QDeclarativeLoader)
+   DECL_CS_ENUM(Status)
 
-   CS_PROPERTY_READ(source, source)
-   CS_PROPERTY_WRITE(source, setSource)
-   CS_PROPERTY_NOTIFY(source, sourceChanged)
-   CS_PROPERTY_READ(*sourceComponent, sourceComponent)
-   CS_PROPERTY_WRITE(*sourceComponent, setSourceComponent)
-   CS_PROPERTY_RESET(*sourceComponent, resetSourceComponent)
-   CS_PROPERTY_NOTIFY(*sourceComponent, sourceChanged)
-   CS_PROPERTY_READ(*item, item)
-   CS_PROPERTY_NOTIFY(*item, itemChanged)
-   CS_PROPERTY_READ(status, status)
-   CS_PROPERTY_NOTIFY(status, statusChanged)
-   CS_PROPERTY_READ(progress, progress)
-   CS_PROPERTY_NOTIFY(progress, progressChanged)
+   DECL_CS_PROPERTY_READ(source, source)
+   DECL_CS_PROPERTY_WRITE(source, setSource)
+   DECL_CS_PROPERTY_NOTIFY(source, sourceChanged)
+   DECL_CS_PROPERTY_READ(*sourceComponent, sourceComponent)
+   DECL_CS_PROPERTY_WRITE(*sourceComponent, setSourceComponent)
+   DECL_CS_PROPERTY_RESET(*sourceComponent, resetSourceComponent)
+   DECL_CS_PROPERTY_NOTIFY(*sourceComponent, sourceChanged)
+   DECL_CS_PROPERTY_READ(*item, item)
+   DECL_CS_PROPERTY_NOTIFY(*item, itemChanged)
+   DECL_CS_PROPERTY_READ(status, status)
+   DECL_CS_PROPERTY_NOTIFY(status, statusChanged)
+   DECL_CS_PROPERTY_READ(progress, progress)
+   DECL_CS_PROPERTY_NOTIFY(progress, progressChanged)
 
  public:
    QDeclarativeLoader(QDeclarativeItem *parent = 0);
@@ -68,16 +68,16 @@ class QDeclarativeLoader : public QDeclarativeImplicitSizeItem
 
    QGraphicsObject *item() const;
 
-   CS_SIGNAL_1(Public, void itemChanged())
-   CS_SIGNAL_2(itemChanged)
-   CS_SIGNAL_1(Public, void sourceChanged())
-   CS_SIGNAL_2(sourceChanged)
-   CS_SIGNAL_1(Public, void statusChanged())
-   CS_SIGNAL_2(statusChanged)
-   CS_SIGNAL_1(Public, void progressChanged())
-   CS_SIGNAL_2(progressChanged)
-   CS_SIGNAL_1(Public, void loaded())
-   CS_SIGNAL_2(loaded)
+   DECL_CS_SIGNAL_1(Public, void itemChanged())
+   DECL_CS_SIGNAL_2(itemChanged)
+   DECL_CS_SIGNAL_1(Public, void sourceChanged())
+   DECL_CS_SIGNAL_2(sourceChanged)
+   DECL_CS_SIGNAL_1(Public, void statusChanged())
+   DECL_CS_SIGNAL_2(statusChanged)
+   DECL_CS_SIGNAL_1(Public, void progressChanged())
+   DECL_CS_SIGNAL_2(progressChanged)
+   DECL_CS_SIGNAL_1(Public, void loaded())
+   DECL_CS_SIGNAL_2(loaded)
 
  protected:
    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -89,11 +89,11 @@ class QDeclarativeLoader : public QDeclarativeImplicitSizeItem
    Q_DISABLE_COPY(QDeclarativeLoader)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeLoader)
 
-   CS_SLOT_1(Private, void _q_sourceLoaded())
-   CS_SLOT_2(_q_sourceLoaded)
+   DECL_CS_SLOT_1(Private, void _q_sourceLoaded())
+   DECL_CS_SLOT_2(_q_sourceLoaded)
 
-   CS_SLOT_1(Private, void _q_updateSize())
-   CS_SLOT_2(_q_updateSize)
+   DECL_CS_SLOT_1(Private, void _q_updateSize())
+   DECL_CS_SLOT_2(_q_updateSize)
 };
 
 QT_END_NAMESPACE

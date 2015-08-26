@@ -40,7 +40,7 @@ class QPacketProtocolPrivate;
 
 class Q_DECLARATIVE_EXPORT QPacketProtocol : public QObject
 {
-   CS_OBJECT(QPacketProtocol)
+   DECL_CS_OBJECT(QPacketProtocol)
  public:
    explicit QPacketProtocol(QIODevice *dev, QObject *parent = 0);
    virtual ~QPacketProtocol();
@@ -61,12 +61,12 @@ class Q_DECLARATIVE_EXPORT QPacketProtocol : public QObject
    QIODevice *device();
 
  public:
-   CS_SIGNAL_1(Public, void readyRead())
-   CS_SIGNAL_2(readyRead)
-   CS_SIGNAL_1(Public, void invalidPacket())
-   CS_SIGNAL_2(invalidPacket)
-   CS_SIGNAL_1(Public, void packetWritten())
-   CS_SIGNAL_2(packetWritten)
+   DECL_CS_SIGNAL_1(Public, void readyRead())
+   DECL_CS_SIGNAL_2(readyRead)
+   DECL_CS_SIGNAL_1(Public, void invalidPacket())
+   DECL_CS_SIGNAL_2(invalidPacket)
+   DECL_CS_SIGNAL_1(Public, void packetWritten())
+   DECL_CS_SIGNAL_2(packetWritten)
 
  private:
    QPacketProtocolPrivate *d;

@@ -37,7 +37,7 @@ class QPainterPath;
 
 class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
 {
-   CS_OBJECT(QMouseEventTransition)
+   GUI_CS_OBJECT(QMouseEventTransition)
 
    GUI_CS_PROPERTY_READ(button, button)
    GUI_CS_PROPERTY_WRITE(button, setButton)

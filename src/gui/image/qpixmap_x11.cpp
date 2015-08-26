@@ -308,7 +308,7 @@ static int defaultScreen = -1;
   QPixmap member functions
  *****************************************************************************/
 
-QBasicAtomicInt qt_pixmap_serial = Q_BASIC_ATOMIC_INITIALIZER(0);
+QAtomicInt qt_pixmap_serial = 0;
 int Q_GUI_EXPORT qt_x11_preferred_pixmap_depth = 0;
 
 QX11PixmapData::QX11PixmapData(PixelType type)

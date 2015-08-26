@@ -59,7 +59,7 @@ namespace QT7
 
     class AudioEffect : public MediaNode, Phonon::EffectInterface
     {
-        CS_OBJECT(AudioEffect)
+        QT7_CS_OBJECT(AudioEffect)
         CS_INTERFACES(Phonon::EffectInterface)
 
         public:

@@ -34,18 +34,18 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeLayoutItem : public QDeclarativeItem, public QGraphicsLayoutItem
 {
-   CS_OBJECT(QDeclarativeLayoutItem)
+   DECL_CS_OBJECT(QDeclarativeLayoutItem)
 
    CS_INTERFACES(QGraphicsLayoutItem)
-   CS_PROPERTY_READ(maximumSize, maximumSize)
-   CS_PROPERTY_WRITE(maximumSize, setMaximumSize)
-   CS_PROPERTY_NOTIFY(maximumSize, maximumSizeChanged)
-   CS_PROPERTY_READ(minimumSize, minimumSize)
-   CS_PROPERTY_WRITE(minimumSize, setMinimumSize)
-   CS_PROPERTY_NOTIFY(minimumSize, minimumSizeChanged)
-   CS_PROPERTY_READ(preferredSize, preferredSize)
-   CS_PROPERTY_WRITE(preferredSize, setPreferredSize)
-   CS_PROPERTY_NOTIFY(preferredSize, preferredSizeChanged)
+   DECL_CS_PROPERTY_READ(maximumSize, maximumSize)
+   DECL_CS_PROPERTY_WRITE(maximumSize, setMaximumSize)
+   DECL_CS_PROPERTY_NOTIFY(maximumSize, maximumSizeChanged)
+   DECL_CS_PROPERTY_READ(minimumSize, minimumSize)
+   DECL_CS_PROPERTY_WRITE(minimumSize, setMinimumSize)
+   DECL_CS_PROPERTY_NOTIFY(minimumSize, minimumSizeChanged)
+   DECL_CS_PROPERTY_READ(preferredSize, preferredSize)
+   DECL_CS_PROPERTY_WRITE(preferredSize, setPreferredSize)
+   DECL_CS_PROPERTY_NOTIFY(preferredSize, preferredSizeChanged)
 
  public:
    QDeclarativeLayoutItem(QDeclarativeItem *parent = 0);
@@ -85,12 +85,12 @@ class QDeclarativeLayoutItem : public QDeclarativeItem, public QGraphicsLayoutIt
 
    virtual void setGeometry(const QRectF &rect);
 
-   CS_SIGNAL_1(Public, void maximumSizeChanged())
-   CS_SIGNAL_2(maximumSizeChanged)
-   CS_SIGNAL_1(Public, void minimumSizeChanged())
-   CS_SIGNAL_2(minimumSizeChanged)
-   CS_SIGNAL_1(Public, void preferredSizeChanged())
-   CS_SIGNAL_2(preferredSizeChanged)
+   DECL_CS_SIGNAL_1(Public, void maximumSizeChanged())
+   DECL_CS_SIGNAL_2(maximumSizeChanged)
+   DECL_CS_SIGNAL_1(Public, void minimumSizeChanged())
+   DECL_CS_SIGNAL_2(minimumSizeChanged)
+   DECL_CS_SIGNAL_1(Public, void preferredSizeChanged())
+   DECL_CS_SIGNAL_2(preferredSizeChanged)
 
  protected:
    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;

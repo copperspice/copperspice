@@ -37,7 +37,7 @@ class QStyleOptionSlider;
 
 class Q_GUI_EXPORT QDial: public QAbstractSlider
 {
-   CS_OBJECT(QDial)
+   GUI_CS_OBJECT(QDial)
 
    GUI_CS_PROPERTY_READ(wrapping, wrapping)
    GUI_CS_PROPERTY_WRITE(wrapping, setWrapping)

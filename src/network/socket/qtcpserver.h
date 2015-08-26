@@ -42,7 +42,7 @@ class QNetworkProxy;
 
 class Q_NETWORK_EXPORT QTcpServer : public QObject
 {
-   CS_OBJECT(QTcpServer)
+   NET_CS_OBJECT(QTcpServer)
 
  public:
    explicit QTcpServer(QObject *parent = 0);

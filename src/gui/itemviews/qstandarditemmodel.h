@@ -336,7 +336,7 @@ inline void QStandardItem::appendRow(QStandardItem *aitem)
 
 class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
 {
-   CS_OBJECT(QStandardItemModel)
+   GUI_CS_OBJECT(QStandardItemModel)
 
    GUI_CS_PROPERTY_READ(sortRole, sortRole)
    GUI_CS_PROPERTY_WRITE(sortRole, setSortRole)

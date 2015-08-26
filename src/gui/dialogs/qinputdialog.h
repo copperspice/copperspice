@@ -38,7 +38,7 @@ class QInputDialogPrivate;
 
 class Q_GUI_EXPORT QInputDialog : public QDialog
 {
-   CS_OBJECT(QInputDialog)
+   GUI_CS_OBJECT(QInputDialog)
    Q_DECLARE_PRIVATE(QInputDialog)
 
    //  Q_ENUMS(InputMode InputDialogOption) commented out by Qt

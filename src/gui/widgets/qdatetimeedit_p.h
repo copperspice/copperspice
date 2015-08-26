@@ -135,7 +135,7 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
 
 class QCalendarPopup : public QWidget
 {
-   CS_OBJECT(QCalendarPopup)
+   GUI_CS_OBJECT(QCalendarPopup)
 
  public:
    QCalendarPopup(QWidget *parent = 0, QCalendarWidget *cw = 0);

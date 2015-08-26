@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 class QMacNativeWidgetPrivate;
 class Q_GUI_EXPORT QMacNativeWidget : public QWidget
 {
-   CS_OBJECT(QMacNativeWidget)
+   GUI_CS_OBJECT(QMacNativeWidget)
 
  public:
    QMacNativeWidget(void *parentRef = 0);

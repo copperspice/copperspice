@@ -735,7 +735,7 @@ bool QUnixSocketMessage::isValid() const
 
 class QUnixSocketPrivate : public QObject
 {
-   CS_OBJECT(QUnixSocketPrivate)
+   GUI_CS_OBJECT(QUnixSocketPrivate)
 
  public:
    QUnixSocketPrivate(QUnixSocket *_me)

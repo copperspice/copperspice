@@ -48,7 +48,7 @@ namespace Gstreamer
 
 class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public MediaNode
 {
-    CS_OBJECT(VideoWidget)
+    GSTRM_CS_OBJECT(VideoWidget)
     CS_INTERFACES(Phonon::VideoWidgetInterface, Phonon::Gstreamer::MediaNode)
    
 public:

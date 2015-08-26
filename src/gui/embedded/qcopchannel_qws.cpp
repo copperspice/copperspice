@@ -370,7 +370,7 @@ bool QCopChannel::flush()
 
 class QWSServerSignalBridge : public QObject
 {
-   CS_OBJECT(QWSServerSignalBridge)
+   GUI_CS_OBJECT(QWSServerSignalBridge)
 
  public:
    void emitNewChannel(const QString &channel);

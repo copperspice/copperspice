@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QListModelInterface : public QObject
 {
-   CS_OBJECT(QListModelInterface)
+   DECL_CS_OBJECT(QListModelInterface)
 
  public:
    QListModelInterface(QObject *parent = 0) : QObject(parent) {}
@@ -46,17 +46,17 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QListModelInterface : public QObject
    virtual QList<int> roles() const = 0;
    virtual QString toString(int role) const = 0;
 
-   CS_SIGNAL_1(Public, void itemsInserted(int index, int count))
-   CS_SIGNAL_2(itemsInserted, index, count)
+   DECL_CS_SIGNAL_1(Public, void itemsInserted(int index, int count))
+   DECL_CS_SIGNAL_2(itemsInserted, index, count)
 
-   CS_SIGNAL_1(Public, void itemsRemoved(int index, int count))
-   CS_SIGNAL_2(itemsRemoved, index, count)
+   DECL_CS_SIGNAL_1(Public, void itemsRemoved(int index, int count))
+   DECL_CS_SIGNAL_2(itemsRemoved, index, count)
 
-   CS_SIGNAL_1(Public, void itemsMoved(int from, int to, int count))
-   CS_SIGNAL_2(itemsMoved, from, to, count)
+   DECL_CS_SIGNAL_1(Public, void itemsMoved(int from, int to, int count))
+   DECL_CS_SIGNAL_2(itemsMoved, from, to, count)
 
-   CS_SIGNAL_1(Public, void itemsChanged(int index, int count, const QList <int> &roles))
-   CS_SIGNAL_2(itemsChanged, index, count, roles)
+   DECL_CS_SIGNAL_1(Public, void itemsChanged(int index, int count, const QList <int> &roles))
+   DECL_CS_SIGNAL_2(itemsChanged, index, count, roles)
 
  protected:
    QListModelInterface(QObject *parent)

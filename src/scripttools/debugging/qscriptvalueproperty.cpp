@@ -40,7 +40,7 @@ class QScriptValuePropertyPrivate
    QScriptValue value;
    QScriptValue::PropertyFlags flags;
 
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 QScriptValuePropertyPrivate::QScriptValuePropertyPrivate()

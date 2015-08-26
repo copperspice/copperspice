@@ -39,7 +39,7 @@ class QCalendarWidgetPrivate;
 
 class Q_GUI_EXPORT QCalendarWidget : public QWidget
 {
-   CS_OBJECT(QCalendarWidget)
+   GUI_CS_OBJECT(QCalendarWidget)
 
    GUI_CS_ENUM(Qt::DayOfWeek)
    GUI_CS_ENUM(HorizontalHeaderFormat)

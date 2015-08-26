@@ -41,10 +41,10 @@ class QDeclarativeVisualDataModelPrivate;
 
 class QDeclarativeVisualModel : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualModel)
+   DECL_CS_OBJECT(QDeclarativeVisualModel)
 
-   CS_PROPERTY_READ(count, count)
-   CS_PROPERTY_NOTIFY(count, countChanged)
+   DECL_CS_PROPERTY_READ(count, count)
+   DECL_CS_PROPERTY_NOTIFY(count, countChanged)
 
  public:
    virtual ~QDeclarativeVisualModel() {}
@@ -63,22 +63,22 @@ class QDeclarativeVisualModel : public QObject
 
    virtual int indexOf(QDeclarativeItem *item, QObject *objectContext) const = 0;
 
-   CS_SIGNAL_1(Public, void countChanged())
-   CS_SIGNAL_2(countChanged)
-   CS_SIGNAL_1(Public, void itemsInserted(int index, int count))
-   CS_SIGNAL_2(itemsInserted, index, count)
-   CS_SIGNAL_1(Public, void itemsRemoved(int index, int count))
-   CS_SIGNAL_2(itemsRemoved, index, count)
-   CS_SIGNAL_1(Public, void itemsMoved(int from, int to, int count))
-   CS_SIGNAL_2(itemsMoved, from, to, count)
-   CS_SIGNAL_1(Public, void itemsChanged(int index, int count))
-   CS_SIGNAL_2(itemsChanged, index, count)
-   CS_SIGNAL_1(Public, void modelReset())
-   CS_SIGNAL_2(modelReset)
-   CS_SIGNAL_1(Public, void createdItem(int index, QDeclarativeItem *item))
-   CS_SIGNAL_2(createdItem, index, item)
-   CS_SIGNAL_1(Public, void destroyingItem(QDeclarativeItem *item))
-   CS_SIGNAL_2(destroyingItem, item)
+   DECL_CS_SIGNAL_1(Public, void countChanged())
+   DECL_CS_SIGNAL_2(countChanged)
+   DECL_CS_SIGNAL_1(Public, void itemsInserted(int index, int count))
+   DECL_CS_SIGNAL_2(itemsInserted, index, count)
+   DECL_CS_SIGNAL_1(Public, void itemsRemoved(int index, int count))
+   DECL_CS_SIGNAL_2(itemsRemoved, index, count)
+   DECL_CS_SIGNAL_1(Public, void itemsMoved(int from, int to, int count))
+   DECL_CS_SIGNAL_2(itemsMoved, from, to, count)
+   DECL_CS_SIGNAL_1(Public, void itemsChanged(int index, int count))
+   DECL_CS_SIGNAL_2(itemsChanged, index, count)
+   DECL_CS_SIGNAL_1(Public, void modelReset())
+   DECL_CS_SIGNAL_2(modelReset)
+   DECL_CS_SIGNAL_1(Public, void createdItem(int index, QDeclarativeItem *item))
+   DECL_CS_SIGNAL_2(createdItem, index, item)
+   DECL_CS_SIGNAL_1(Public, void destroyingItem(QDeclarativeItem *item))
+   DECL_CS_SIGNAL_2(destroyingItem, item)
 
  protected:
    QDeclarativeVisualModel(QObject *parent = 0)
@@ -93,13 +93,13 @@ class QDeclarativeVisualItemModelPrivate;
 
 class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
 {
-   CS_OBJECT(QDeclarativeVisualItemModel)
+   DECL_CS_OBJECT(QDeclarativeVisualItemModel)
    Q_DECLARE_PRIVATE(QDeclarativeVisualItemModel)
 
-   CS_PROPERTY_READ(children, children)
-   CS_PROPERTY_NOTIFY(children, childrenChanged)
-   CS_PROPERTY_DESIGNABLE(children, false)
-   CS_CLASSINFO("DefaultProperty", "children")
+   DECL_CS_PROPERTY_READ(children, children)
+   DECL_CS_PROPERTY_NOTIFY(children, childrenChanged)
+   DECL_CS_PROPERTY_DESIGNABLE(children, false)
+   DECL_CS_CLASSINFO("DefaultProperty", "children")
 
  public:
    QDeclarativeVisualItemModel(QObject *parent = 0);
@@ -121,8 +121,8 @@ class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
    static QDeclarativeVisualItemModelAttached *qmlAttachedProperties(QObject *obj);
 
  public:
-   CS_SIGNAL_1(Public, void childrenChanged())
-   CS_SIGNAL_2(childrenChanged)
+   DECL_CS_SIGNAL_1(Public, void childrenChanged())
+   DECL_CS_SIGNAL_2(childrenChanged)
 
  private:
    Q_DISABLE_COPY(QDeclarativeVisualItemModel)
@@ -131,22 +131,22 @@ class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
 
 class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
 {
-   CS_OBJECT(QDeclarativeVisualDataModel)
+   DECL_CS_OBJECT(QDeclarativeVisualDataModel)
    Q_DECLARE_PRIVATE(QDeclarativeVisualDataModel)
 
-   CS_PROPERTY_READ(model, model)
-   CS_PROPERTY_WRITE(model, setModel)
-   CS_PROPERTY_READ(*delegate, delegate)
-   CS_PROPERTY_WRITE(*delegate, setDelegate)
-   CS_PROPERTY_READ(part, part)
-   CS_PROPERTY_WRITE(part, setPart)
-   CS_PROPERTY_READ(*parts, parts)
-   CS_PROPERTY_CONSTANT(*parts)
-   CS_PROPERTY_READ(rootIndex, rootIndex)
-   CS_PROPERTY_WRITE(rootIndex, setRootIndex)
-   CS_PROPERTY_NOTIFY(rootIndex, rootIndexChanged)
+   DECL_CS_PROPERTY_READ(model, model)
+   DECL_CS_PROPERTY_WRITE(model, setModel)
+   DECL_CS_PROPERTY_READ(*delegate, delegate)
+   DECL_CS_PROPERTY_WRITE(*delegate, setDelegate)
+   DECL_CS_PROPERTY_READ(part, part)
+   DECL_CS_PROPERTY_WRITE(part, setPart)
+   DECL_CS_PROPERTY_READ(*parts, parts)
+   DECL_CS_PROPERTY_CONSTANT(*parts)
+   DECL_CS_PROPERTY_READ(rootIndex, rootIndex)
+   DECL_CS_PROPERTY_WRITE(rootIndex, setRootIndex)
+   DECL_CS_PROPERTY_NOTIFY(rootIndex, rootIndexChanged)
 
-   CS_CLASSINFO("DefaultProperty", "delegate")
+   DECL_CS_CLASSINFO("DefaultProperty", "delegate")
 
  public:
    QDeclarativeVisualDataModel();
@@ -188,39 +188,39 @@ class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
    QObject *parts();
 
  public:
-   CS_SIGNAL_1(Public, void createdPackage(int index, QDeclarativePackage *package))
-   CS_SIGNAL_2(createdPackage, index, package)
-   CS_SIGNAL_1(Public, void destroyingPackage(QDeclarativePackage *package))
-   CS_SIGNAL_2(destroyingPackage, package)
-   CS_SIGNAL_1(Public, void rootIndexChanged())
-   CS_SIGNAL_2(rootIndexChanged)
+   DECL_CS_SIGNAL_1(Public, void createdPackage(int index, QDeclarativePackage *package))
+   DECL_CS_SIGNAL_2(createdPackage, index, package)
+   DECL_CS_SIGNAL_1(Public, void destroyingPackage(QDeclarativePackage *package))
+   DECL_CS_SIGNAL_2(destroyingPackage, package)
+   DECL_CS_SIGNAL_1(Public, void rootIndexChanged())
+   DECL_CS_SIGNAL_2(rootIndexChanged)
 
  private :
-   CS_SLOT_1(Private, void _q_itemsChanged(int un_named_arg1, int un_named_arg2, const QList <int> &un_named_arg3))
-   CS_SLOT_2(_q_itemsChanged)
-   CS_SLOT_1(Private, void _q_itemsInserted(int index, int count))
-   CS_SLOT_2(_q_itemsInserted)
-   CS_SLOT_1(Private, void _q_itemsRemoved(int index, int count))
-   CS_SLOT_2(_q_itemsRemoved)
-   CS_SLOT_1(Private, void _q_itemsMoved(int from, int to, int count))
-   CS_SLOT_2(_q_itemsMoved)
-   CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
-   CS_SLOT_2(_q_rowsInserted)
-   CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
-   CS_SLOT_2(_q_rowsRemoved)
-   CS_SLOT_1(Private, void _q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
+   DECL_CS_SLOT_1(Private, void _q_itemsChanged(int un_named_arg1, int un_named_arg2, const QList <int> &un_named_arg3))
+   DECL_CS_SLOT_2(_q_itemsChanged)
+   DECL_CS_SLOT_1(Private, void _q_itemsInserted(int index, int count))
+   DECL_CS_SLOT_2(_q_itemsInserted)
+   DECL_CS_SLOT_1(Private, void _q_itemsRemoved(int index, int count))
+   DECL_CS_SLOT_2(_q_itemsRemoved)
+   DECL_CS_SLOT_1(Private, void _q_itemsMoved(int from, int to, int count))
+   DECL_CS_SLOT_2(_q_itemsMoved)
+   DECL_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   DECL_CS_SLOT_2(_q_rowsInserted)
+   DECL_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   DECL_CS_SLOT_2(_q_rowsRemoved)
+   DECL_CS_SLOT_1(Private, void _q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
                                         const QModelIndex &un_named_arg4, int un_named_arg5))
-   CS_SLOT_2(_q_rowsMoved)
-   CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
-   CS_SLOT_2(_q_dataChanged)
-   CS_SLOT_1(Private, void _q_layoutChanged())
-   CS_SLOT_2(_q_layoutChanged)
-   CS_SLOT_1(Private, void _q_modelReset())
-   CS_SLOT_2(_q_modelReset)
-   CS_SLOT_1(Private, void _q_createdPackage(int index, QDeclarativePackage *package))
-   CS_SLOT_2(_q_createdPackage)
-   CS_SLOT_1(Private, void _q_destroyingPackage(QDeclarativePackage *package))
-   CS_SLOT_2(_q_destroyingPackage)
+   DECL_CS_SLOT_2(_q_rowsMoved)
+   DECL_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
+   DECL_CS_SLOT_2(_q_dataChanged)
+   DECL_CS_SLOT_1(Private, void _q_layoutChanged())
+   DECL_CS_SLOT_2(_q_layoutChanged)
+   DECL_CS_SLOT_1(Private, void _q_modelReset())
+   DECL_CS_SLOT_2(_q_modelReset)
+   DECL_CS_SLOT_1(Private, void _q_createdPackage(int index, QDeclarativePackage *package))
+   DECL_CS_SLOT_2(_q_createdPackage)
+   DECL_CS_SLOT_1(Private, void _q_destroyingPackage(QDeclarativePackage *package))
+   DECL_CS_SLOT_2(_q_destroyingPackage)
 
  private:
    Q_DISABLE_COPY(QDeclarativeVisualDataModel)
@@ -228,7 +228,7 @@ class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
 
 class QDeclarativeVisualItemModelAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualItemModelAttached)
+   DECL_CS_OBJECT(QDeclarativeVisualItemModelAttached)
 
  public:
    QDeclarativeVisualItemModelAttached(QObject *parent)
@@ -237,8 +237,8 @@ class QDeclarativeVisualItemModelAttached : public QObject
       attachedProperties.remove(parent());
    }
 
-   CS_PROPERTY_READ(index, index)
-   CS_PROPERTY_NOTIFY(index, indexChanged)
+   DECL_CS_PROPERTY_READ(index, index)
+   DECL_CS_PROPERTY_NOTIFY(index, indexChanged)
    int index() const {
       return m_index;
    }
@@ -259,8 +259,8 @@ class QDeclarativeVisualItemModelAttached : public QObject
    }
 
 
-   CS_SIGNAL_1(Public, void indexChanged())
-   CS_SIGNAL_2(indexChanged)
+   DECL_CS_SIGNAL_1(Public, void indexChanged())
+   DECL_CS_SIGNAL_2(indexChanged)
 
    int m_index;
    static QHash<QObject *, QDeclarativeVisualItemModelAttached *> attachedProperties;

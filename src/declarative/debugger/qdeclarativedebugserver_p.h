@@ -37,7 +37,7 @@ class QDeclarativeDebugServerPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeDebugServer : public QObject
 {
-   CS_OBJECT(QDeclarativeDebugServer)
+   DECL_CS_OBJECT(QDeclarativeDebugServer)
 
    Q_DECLARE_PRIVATE(QDeclarativeDebugServer)
    Q_DISABLE_COPY(QDeclarativeDebugServer)
@@ -68,8 +68,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeDebugServer : public QObject
 
    QDeclarativeDebugServer();
 
-   CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1, QByteArray un_named_arg2))
-   CS_SLOT_2(_q_deliverMessage)
+   DECL_CS_SLOT_1(Private, void _q_deliverMessage(QString un_named_arg1, QByteArray un_named_arg2))
+   DECL_CS_SLOT_2(_q_deliverMessage)
 
  protected:
    QScopedPointer<QDeclarativeDebugServerPrivate> d_ptr;

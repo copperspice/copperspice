@@ -36,7 +36,7 @@ class QSplashScreenPrivate;
 
 class Q_GUI_EXPORT QSplashScreen : public QWidget
 {
-   CS_OBJECT(QSplashScreen)
+   GUI_CS_OBJECT(QSplashScreen)
 
  public:
    explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);

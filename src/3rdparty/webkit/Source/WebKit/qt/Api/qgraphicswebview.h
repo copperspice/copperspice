@@ -39,7 +39,7 @@ class QGraphicsWebViewPrivate;
 
 class QWEBKIT_EXPORT QGraphicsWebView : public QGraphicsWidget
 {
-    CS_OBJECT(QGraphicsWebView)
+    WEB_CS_OBJECT(QGraphicsWebView)
 
     WEB_CS_PROPERTY_READ(title, title)
     WEB_CS_PROPERTY_NOTIFY(title, titleChanged)

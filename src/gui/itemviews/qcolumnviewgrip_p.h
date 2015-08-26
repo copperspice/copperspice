@@ -36,7 +36,7 @@ class QColumnViewGripPrivate;
 
 class QColumnViewGrip : public QWidget
 {
-   CS_OBJECT(QColumnViewGrip)
+   GUI_CS_OBJECT(QColumnViewGrip)
 
  public:
    GUI_CS_SIGNAL_1(Public, void gripMoved(int offset))

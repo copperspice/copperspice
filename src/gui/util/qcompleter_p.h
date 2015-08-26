@@ -220,7 +220,7 @@ class QCompleterItemDelegate : public QItemDelegate
 
 class QCompletionModel : public QAbstractProxyModel
 {
-   CS_OBJECT(QCompletionModel)
+   GUI_CS_OBJECT(QCompletionModel)
 
  public:
    QCompletionModel(QCompleterPrivate *c, QObject *parent);

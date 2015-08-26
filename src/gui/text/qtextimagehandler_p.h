@@ -35,7 +35,7 @@ class QTextImageFormat;
 
 class QTextImageHandler : public QObject, public QTextObjectInterface
 {
-   CS_OBJECT(QTextImageHandler)
+   GUI_CS_OBJECT(QTextImageHandler)
    CS_INTERFACES(QTextObjectInterface)
 
  public:

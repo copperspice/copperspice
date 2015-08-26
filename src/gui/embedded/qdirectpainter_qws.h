@@ -37,7 +37,7 @@ struct QWSEmbedEvent;
 
 class Q_GUI_EXPORT QDirectPainter : public QObject
 {
-   CS_OBJECT(QDirectPainter)
+   GUI_CS_OBJECT(QDirectPainter)
    Q_DECLARE_PRIVATE(QDirectPainter)
 
  public:

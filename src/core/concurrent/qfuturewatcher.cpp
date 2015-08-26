@@ -311,6 +311,7 @@ void QFutureWatcherBase::disconnectOutputInterface(bool pendingAssignment)
 {
    if (pendingAssignment) {
       Q_D(QFutureWatcherBase);
+
       d->pendingResultsReady = 0;
       qDeleteAll(d->pendingCallOutEvents);
       d->pendingCallOutEvents.clear();

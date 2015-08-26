@@ -55,7 +55,7 @@ class QNetworkConfiguration;
 
 class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
 {
-   CS_OBJECT(QNetworkAccessManager)
+   NET_CS_OBJECT(QNetworkAccessManager)
 
 #ifndef QT_NO_BEARERMANAGEMENT
    NET_CS_PROPERTY_READ(networkAccessible, networkAccessible)

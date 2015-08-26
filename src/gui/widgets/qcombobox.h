@@ -42,7 +42,7 @@ class QCompleter;
 
 class Q_GUI_EXPORT QComboBox : public QWidget
 {
-   CS_OBJECT(QComboBox)
+   GUI_CS_OBJECT(QComboBox)
 
    GUI_CS_ENUM(InsertPolicy)
    GUI_CS_ENUM(SizeAdjustPolicy)

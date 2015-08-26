@@ -39,17 +39,17 @@ class QDeclarativeBehaviorPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBehavior : public QObject, public QDeclarativePropertyValueInterceptor
 {
-   CS_OBJECT(QDeclarativeBehavior)
+   DECL_CS_OBJECT(QDeclarativeBehavior)
    Q_DECLARE_PRIVATE(QDeclarativeBehavior)
 
    CS_INTERFACES(QDeclarativePropertyValueInterceptor)
-   CS_CLASSINFO("DefaultProperty", "animation")
-   CS_PROPERTY_READ(*animation, animation)
-   CS_PROPERTY_WRITE(*animation, setAnimation)
-   CS_PROPERTY_READ(enabled, enabled)
-   CS_PROPERTY_WRITE(enabled, setEnabled)
-   CS_PROPERTY_NOTIFY(enabled, enabledChanged)
-   CS_CLASSINFO("DeferredPropertyNames", "animation")
+   DECL_CS_CLASSINFO("DefaultProperty", "animation")
+   DECL_CS_PROPERTY_READ(*animation, animation)
+   DECL_CS_PROPERTY_WRITE(*animation, setAnimation)
+   DECL_CS_PROPERTY_READ(enabled, enabled)
+   DECL_CS_PROPERTY_WRITE(enabled, setEnabled)
+   DECL_CS_PROPERTY_NOTIFY(enabled, enabledChanged)
+   DECL_CS_CLASSINFO("DeferredPropertyNames", "animation")
 
  public:
    QDeclarativeBehavior(QObject *parent = 0);
@@ -64,15 +64,15 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBehavior : public QObject, public
    bool enabled() const;
    void setEnabled(bool enabled);
 
-   CS_SIGNAL_1(Public, void enabledChanged())
-   CS_SIGNAL_2(enabledChanged)
+   DECL_CS_SIGNAL_1(Public, void enabledChanged())
+   DECL_CS_SIGNAL_2(enabledChanged)
 
  private :
-   CS_SLOT_1(Private, void componentFinalized())
-   CS_SLOT_2(componentFinalized)
-   CS_SLOT_1(Private, void qtAnimationStateChanged(QAbstractAnimation::State un_named_arg1,
+   DECL_CS_SLOT_1(Private, void componentFinalized())
+   DECL_CS_SLOT_2(componentFinalized)
+   DECL_CS_SLOT_1(Private, void qtAnimationStateChanged(QAbstractAnimation::State un_named_arg1,
              QAbstractAnimation::State un_named_arg2))
-   CS_SLOT_2(qtAnimationStateChanged)
+   DECL_CS_SLOT_2(qtAnimationStateChanged)
 };
 
 QT_END_NAMESPACE

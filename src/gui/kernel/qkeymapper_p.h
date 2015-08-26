@@ -47,7 +47,7 @@ struct KeyboardLayoutItem;
 
 class QKeyMapper : public QObject
 {
-   CS_OBJECT(QKeyMapper)
+   GUI_CS_OBJECT(QKeyMapper)
 
  public:
    explicit QKeyMapper();

@@ -51,7 +51,7 @@ class QGraphicsOpacityEffectPrivate;
 
 class Q_GUI_EXPORT QGraphicsEffect : public QObject
 {
-   CS_OBJECT(QGraphicsEffect)
+   GUI_CS_OBJECT(QGraphicsEffect)
 
    GUI_CS_FLAG(ChangeFlag, ChangeFlags)
    GUI_CS_PROPERTY_READ(enabled, isEnabled)
@@ -122,7 +122,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsEffect::ChangeFlags)
 
 class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
 {
-   CS_OBJECT(QGraphicsColorizeEffect)
+   GUI_CS_OBJECT(QGraphicsColorizeEffect)
 
    GUI_CS_PROPERTY_READ(color, color)
    GUI_CS_PROPERTY_WRITE(color, setColor)
@@ -158,7 +158,7 @@ class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
 
 class Q_GUI_EXPORT QGraphicsBlurEffect: public QGraphicsEffect
 {
-   CS_OBJECT(QGraphicsBlurEffect)
+   GUI_CS_OBJECT(QGraphicsBlurEffect)
 
    GUI_CS_FLAG(BlurHint, BlurHints)
    GUI_CS_PROPERTY_READ(blurRadius, blurRadius)
@@ -205,7 +205,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsBlurEffect::BlurHints)
 
 class Q_GUI_EXPORT QGraphicsDropShadowEffect: public QGraphicsEffect
 {
-   CS_OBJECT(QGraphicsDropShadowEffect)
+   GUI_CS_OBJECT(QGraphicsDropShadowEffect)
 
    GUI_CS_PROPERTY_READ(offset, offset)
    GUI_CS_PROPERTY_WRITE(offset, cs_setOffset)
@@ -280,7 +280,7 @@ class Q_GUI_EXPORT QGraphicsDropShadowEffect: public QGraphicsEffect
 
 class Q_GUI_EXPORT QGraphicsOpacityEffect: public QGraphicsEffect
 {
-   CS_OBJECT(QGraphicsOpacityEffect)
+   GUI_CS_OBJECT(QGraphicsOpacityEffect)
 
    GUI_CS_PROPERTY_READ(opacity, opacity)
    GUI_CS_PROPERTY_WRITE(opacity, setOpacity)

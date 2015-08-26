@@ -36,11 +36,11 @@ class QDeclarativeApplicationPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeApplication : public QObject
 {
-   CS_OBJECT(QDeclarativeApplication)
-   CS_PROPERTY_READ(active, active)
-   CS_PROPERTY_NOTIFY(active, activeChanged)
-   CS_PROPERTY_READ(layoutDirection, layoutDirection)
-   CS_PROPERTY_NOTIFY(layoutDirection, layoutDirectionChanged)
+   DECL_CS_OBJECT(QDeclarativeApplication)
+   DECL_CS_PROPERTY_READ(active, active)
+   DECL_CS_PROPERTY_NOTIFY(active, activeChanged)
+   DECL_CS_PROPERTY_READ(layoutDirection, layoutDirection)
+   DECL_CS_PROPERTY_NOTIFY(layoutDirection, layoutDirectionChanged)
 
  public:
    explicit QDeclarativeApplication(QObject *parent = 0);
@@ -48,10 +48,10 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeApplication : public QObject
    bool active() const;
    Qt::LayoutDirection layoutDirection() const;
 
-   CS_SIGNAL_1(Public, void activeChanged())
-   CS_SIGNAL_2(activeChanged)
-   CS_SIGNAL_1(Public, void layoutDirectionChanged())
-   CS_SIGNAL_2(layoutDirectionChanged)
+   DECL_CS_SIGNAL_1(Public, void activeChanged())
+   DECL_CS_SIGNAL_2(activeChanged)
+   DECL_CS_SIGNAL_1(Public, void layoutDirectionChanged())
+   DECL_CS_SIGNAL_2(layoutDirectionChanged)
 
  protected:
    bool eventFilter(QObject *obj, QEvent *event);

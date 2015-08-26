@@ -42,7 +42,7 @@ class QSplitterHandle;
 
 class Q_GUI_EXPORT QSplitter : public QFrame
 {
-   CS_OBJECT(QSplitter)
+   GUI_CS_OBJECT(QSplitter)
 
    GUI_CS_PROPERTY_READ(orientation, orientation)
    GUI_CS_PROPERTY_WRITE(orientation, setOrientation)
@@ -122,7 +122,7 @@ Q_GUI_EXPORT QTextStream &operator>>(QTextStream &, QSplitter &);
 
 class Q_GUI_EXPORT QSplitterHandle : public QWidget
 {
-   CS_OBJECT(QSplitterHandle)
+   GUI_CS_OBJECT(QSplitterHandle)
 
  public:
    QSplitterHandle(Qt::Orientation o, QSplitter *parent);

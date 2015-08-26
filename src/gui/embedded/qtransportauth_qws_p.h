@@ -95,7 +95,7 @@ class QUnixSocketMessage;
 
 class SxeRegistryLocker : public QObject
 {
-   CS_OBJECT(SxeRegistryLocker)
+   GUI_CS_OBJECT(SxeRegistryLocker)
 
  public:
    SxeRegistryLocker( QObject *);

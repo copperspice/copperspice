@@ -26,7 +26,8 @@
 #ifndef QCONTIGUOUSCACHE_H
 #define QCONTIGUOUSCACHE_H
 
-#include <QtCore/qatomic.h>
+#include <qglobal.h>
+#include <qatomic.h>
 #include <limits.h>
 #include <new>
 
@@ -35,7 +36,7 @@ QT_BEGIN_NAMESPACE
 #undef QT_QCONTIGUOUSCACHE_DEBUG
 
 struct Q_CORE_EXPORT QContiguousCacheData {
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
    int alloc;
    int count;
    int start;

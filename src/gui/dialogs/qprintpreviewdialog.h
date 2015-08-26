@@ -37,7 +37,7 @@ class QPrintPreviewDialogPrivate;
 
 class Q_GUI_EXPORT QPrintPreviewDialog : public QDialog
 {
-   CS_OBJECT(QPrintPreviewDialog)
+   GUI_CS_OBJECT(QPrintPreviewDialog)
    Q_DECLARE_PRIVATE(QPrintPreviewDialog)
 
  public:

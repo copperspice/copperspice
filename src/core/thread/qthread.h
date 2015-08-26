@@ -39,7 +39,7 @@ class QThreadPrivate;
 
 class Q_CORE_EXPORT QThread : public QObject
 {
-   CS_OBJECT(QThread)
+   CORE_CS_OBJECT(QThread)
 
  public:
    static Qt::HANDLE currentThreadId();

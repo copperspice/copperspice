@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QTextTableCell
 
 class Q_GUI_EXPORT QTextTable : public QTextFrame
 {
-   CS_OBJECT(QTextTable)
+   GUI_CS_OBJECT(QTextTable)
 
  public:
    explicit QTextTable(QTextDocument *doc);

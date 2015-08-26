@@ -33,7 +33,7 @@ namespace WebCore {
 class DeviceOrientationProviderQt;
 
 class DeviceMotionProviderQt : public QObject, public QAccelerometerFilter {
-    CS_OBJECT(DeviceMotionProviderQt)
+    WEB_CS_OBJECT(DeviceMotionProviderQt)
 public:
     DeviceMotionProviderQt();
     ~DeviceMotionProviderQt();

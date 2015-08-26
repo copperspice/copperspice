@@ -849,7 +849,7 @@ class QCalendarView;
 
 class QCalendarModel : public QAbstractTableModel
 {
-   CS_OBJECT(QCalendarModel)
+   GUI_CS_OBJECT(QCalendarModel)
 
  public:
    QCalendarModel(QObject *parent = 0);
@@ -933,7 +933,7 @@ class QCalendarModel : public QAbstractTableModel
 
 class QCalendarView : public QTableView
 {
-   CS_OBJECT(QCalendarView)
+   GUI_CS_OBJECT(QCalendarView)
 
  public:
    QCalendarView(QWidget *parent = 0);
@@ -1622,7 +1622,7 @@ void QCalendarView::mouseReleaseEvent(QMouseEvent *event)
 
 class QCalendarDelegate : public QItemDelegate
 {
-   CS_OBJECT(QCalendarDelegate)
+   GUI_CS_OBJECT(QCalendarDelegate)
 
  public:
    QCalendarDelegate(QCalendarWidgetPrivate *w, QObject *parent = 0)
@@ -1668,7 +1668,7 @@ class QCalToolButton: public QToolButton
 
 class QPrevNextCalButton : public QToolButton
 {
-   CS_OBJECT(QPrevNextCalButton)
+   GUI_CS_OBJECT(QPrevNextCalButton)
 
  public:
    QPrevNextCalButton(QWidget *parent) : QToolButton(parent) {}

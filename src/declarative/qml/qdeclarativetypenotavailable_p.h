@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeTypeNotAvailable
    : public QObject
 {
-   CS_OBJECT(QDeclarativeTypeNotAvailable)
+   DECL_CS_OBJECT(QDeclarativeTypeNotAvailable)
 
  public:
    QDeclarativeTypeNotAvailable();

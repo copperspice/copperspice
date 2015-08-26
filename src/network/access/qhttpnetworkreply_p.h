@@ -70,7 +70,7 @@ class QHttpNetworkReplyPrivate;
 
 class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
 {
-   CS_OBJECT_MULTIPLE(QHttpNetworkReply, QObject)
+   NET_CS_OBJECT_MULTIPLE(QHttpNetworkReply, QObject)
 
  public:
    explicit QHttpNetworkReply(const QUrl &url = QUrl(), QObject *parent = 0);

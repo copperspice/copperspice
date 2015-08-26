@@ -97,7 +97,7 @@ void ThreadPrivate::run()
 }
 
 class ThreadMonitor : public QObject {
-    CS_OBJECT(ThreadMonitor)
+    SCRIPT_CS_OBJECT(ThreadMonitor)
 
 public:
     static ThreadMonitor * instance()

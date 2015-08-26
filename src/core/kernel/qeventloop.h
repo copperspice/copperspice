@@ -37,7 +37,7 @@ class QEventLoopPrivate;
 
 class Q_CORE_EXPORT QEventLoop : public QObject
 {
-   CS_OBJECT(QEventLoop)
+   CORE_CS_OBJECT(QEventLoop)
    Q_DECLARE_PRIVATE(QEventLoop)
 
  public:

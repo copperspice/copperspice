@@ -58,7 +58,8 @@ GUI_PRIVATE_INCLUDES += $(GUI_DIALOGS_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/gui/dialogs/%,$(GUI_DIALOGS_INCLUDES)) \
 		$(patsubst %,src/gui/dialogs/%,$(GUI_DIALOGS_PRIVATE_INCLUDES)) \
-		src/gui/dialogs/qpagesetupwidget.ui
+		src/gui/dialogs/qpagesetupwidget.ui \
+		src/gui/dialogs/qfiledialog.ui
 
 
 lib_libCsGui1_la_SOURCES += \
@@ -77,8 +78,9 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qprintpreviewdialog.cpp \
 	src/gui/dialogs/qprogressdialog.cpp \
 	src/gui/dialogs/qsidebar.cpp \
-	src/gui/dialogs/qwizard.cpp \
-	src/gui/dialogs/qfiledialog.ui \
+	src/gui/dialogs/qwizard.cpp
+
+nodist_lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qrc_qmessagebox.cpp
 
 EXTRA_DIST+=\
@@ -118,32 +120,39 @@ EXTRA_DIST+=\
 	src/gui/dialogs/images/status-color.png \
 	src/gui/dialogs/images/status-gray-scale.png
 
-$(top_srcdir)/src/gui/dialogs/qfiledialog.cpp: | src/gui/dialogs/ui_qfiledialog.h
-$(top_srcdir)/src/gui/dialogs/qpagesetupdialog_unix_p.h: | src/gui/dialogs/ui_qpagesetupwidget.h
-
-$(top_srcdir)/src/gui/dialogs/qprintdialog_unix.cpp: | \
-	  src/gui/dialogs/ui_qprintpropertieswidget.h \
-	  src/gui/dialogs/ui_qprintsettingsoutput.h \
-	  src/gui/dialogs/ui_qprintwidget.h \
-	  src/gui/dialogs/qrc_qprintdialog.cpp
+$(lib_libCsGui1_la_OBJECTS): src/gui/dialogs/ui_qfiledialog.h \
+	src/gui/dialogs/ui_qpagesetupwidget.h \
+	src/gui/dialogs/ui_qprintpropertieswidget.h \
+	src/gui/dialogs/ui_qprintsettingsoutput.h \
+	src/gui/dialogs/ui_qprintwidget.h \
+	src/gui/dialogs/qrc_qprintdialog.cpp
 
 if OSTYPE_WIN
 lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qfiledialog_win.cpp \
 	src/gui/dialogs/qpagesetupdialog_win.cpp \
 	src/gui/dialogs/qprintdialog_win.cpp \
-	src/gui/dialogs/qwizard_win.cpp \
+	src/gui/dialogs/qwizard_win.cpp 
+nodist_lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qrc_qprintdialog.cpp
 endif
 
 if OSTYPE_LINUX
 lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qprintdialog_unix.cpp \
-	src/gui/dialogs/qpagesetupdialog_unix.cpp \
+	src/gui/dialogs/qpagesetupdialog_unix.cpp 
+endif
+
+if OSTYPE_BSD
+lib_libCsGui1_la_SOURCES += \
+        src/gui/dialogs/qprintdialog_unix.cpp \
+        src/gui/dialogs/qpagesetupdialog_unix.cpp
+endif
+
+EXTRA_DIST += \
 	src/gui/dialogs/qprintsettingsoutput.ui \
 	src/gui/dialogs/qprintwidget.ui \
 	src/gui/dialogs/qprintpropertieswidget.ui
-endif
 
 if COCOA
 lib_libCsGui1_la_SOURCES += \
@@ -152,6 +161,7 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qnspanelproxy_mac.mm \
 	src/gui/dialogs/qpagesetupdialog_mac.mm \
 	src/gui/dialogs/qprintdialog_mac.mm \
-	src/gui/dialogs/qcolordialog_mac.mm \
+	src/gui/dialogs/qcolordialog_mac.mm 
+nodist_lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qrc_qprintdialog.cpp
 endif

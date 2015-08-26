@@ -45,7 +45,7 @@ namespace Phonon
 
         class BackendNode : public QObject
         {
-            CS_OBJECT(BackendNode)
+            DS9_CS_OBJECT(BackendNode)
 
         public:
             BackendNode(QObject *parent);

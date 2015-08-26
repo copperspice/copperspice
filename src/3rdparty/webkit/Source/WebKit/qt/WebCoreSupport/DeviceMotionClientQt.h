@@ -32,7 +32,7 @@ namespace WebCore {
 class DeviceMotionProviderQt;
 
 class DeviceMotionClientQt : public QObject, public DeviceMotionClient {
-    CS_OBJECT(DeviceMotionClientQt)
+    WEB_CS_OBJECT(DeviceMotionClientQt)
 
 public:
     DeviceMotionClientQt(QWebPage*);

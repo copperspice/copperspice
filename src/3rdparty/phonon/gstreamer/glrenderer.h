@@ -60,7 +60,7 @@ private:
 
 class GLRenderWidgetImplementation : public QGLWidget
 {
-    CS_OBJECT(GLRenderWidgetImplementation)
+    GSTRM_CS_OBJECT(GLRenderWidgetImplementation)
 
     // ARB_fragment_program
     typedef void (*_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLvoid *);

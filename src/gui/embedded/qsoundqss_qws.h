@@ -46,7 +46,7 @@ class QWSSoundServerPrivate;
 
 class Q_GUI_EXPORT QWSSoundServer : public QObject
 {
-   CS_OBJECT(QWSSoundServer)
+   GUI_CS_OBJECT(QWSSoundServer)
 
  public:
    explicit QWSSoundServer(QObject *parent = 0);
@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QWSSoundServer : public QObject
 #ifndef QT_NO_QWS_SOUNDSERVER
 class Q_GUI_EXPORT QWSSoundClient : public QWSSocket
 {
-   CS_OBJECT(QWSSoundClient)
+   GUI_CS_OBJECT(QWSSoundClient)
 
  public:
 
@@ -122,7 +122,7 @@ class Q_GUI_EXPORT QWSSoundClient : public QWSSocket
 
 class QWSSoundServerSocket : public QWSServerSocket
 {
-   CS_OBJECT(QWSSoundServerSocket)
+   GUI_CS_OBJECT(QWSSoundServerSocket)
 
  public:
    explicit QWSSoundServerSocket(QObject *parent = 0);

@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeValueType : public QObject
 {
-   CS_OBJECT(QDeclarativeValueType)
+   DECL_CS_OBJECT(QDeclarativeValueType)
  public:
    QDeclarativeValueType(QObject *parent = 0);
    virtual void read(QObject *, int) = 0;
@@ -78,11 +78,11 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeValueTypeFactory
 
 class QDeclarativePointFValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativePointFValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_OBJECT(QDeclarativePointFValueType)
  public:
    QDeclarativePointFValueType(QObject *parent = 0);
 
@@ -102,11 +102,11 @@ class QDeclarativePointFValueType : public QDeclarativeValueType
 
 class QDeclarativePointValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativePointValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_OBJECT(QDeclarativePointValueType)
  public:
    QDeclarativePointValueType(QObject *parent = 0);
 
@@ -126,11 +126,11 @@ class QDeclarativePointValueType : public QDeclarativeValueType
 
 class QDeclarativeSizeFValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_READ(height, height)
-   CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeSizeFValueType)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_READ(height, height)
+   DECL_CS_PROPERTY_WRITE(height, setHeight)
+   DECL_CS_OBJECT(QDeclarativeSizeFValueType)
  public:
    QDeclarativeSizeFValueType(QObject *parent = 0);
 
@@ -150,11 +150,11 @@ class QDeclarativeSizeFValueType : public QDeclarativeValueType
 
 class QDeclarativeSizeValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_READ(height, height)
-   CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeSizeValueType)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_READ(height, height)
+   DECL_CS_PROPERTY_WRITE(height, setHeight)
+   DECL_CS_OBJECT(QDeclarativeSizeValueType)
  public:
    QDeclarativeSizeValueType(QObject *parent = 0);
 
@@ -174,15 +174,15 @@ class QDeclarativeSizeValueType : public QDeclarativeValueType
 
 class QDeclarativeRectFValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_READ(height, height)
-   CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeRectFValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_READ(height, height)
+   DECL_CS_PROPERTY_WRITE(height, setHeight)
+   DECL_CS_OBJECT(QDeclarativeRectFValueType)
  public:
    QDeclarativeRectFValueType(QObject *parent = 0);
 
@@ -207,15 +207,15 @@ class QDeclarativeRectFValueType : public QDeclarativeValueType
 
 class QDeclarativeRectValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_READ(height, height)
-   CS_PROPERTY_WRITE(height, setHeight)
-   CS_OBJECT(QDeclarativeRectValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_READ(height, height)
+   DECL_CS_PROPERTY_WRITE(height, setHeight)
+   DECL_CS_OBJECT(QDeclarativeRectValueType)
  public:
    QDeclarativeRectValueType(QObject *parent = 0);
 
@@ -240,11 +240,11 @@ class QDeclarativeRectValueType : public QDeclarativeValueType
 
 class QDeclarativeVector2DValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_OBJECT(QDeclarativeVector2DValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_OBJECT(QDeclarativeVector2DValueType)
  public:
    QDeclarativeVector2DValueType(QObject *parent = 0);
 
@@ -264,13 +264,13 @@ class QDeclarativeVector2DValueType : public QDeclarativeValueType
 
 class QDeclarativeVector3DValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(z, z)
-   CS_PROPERTY_WRITE(z, setZ)
-   CS_OBJECT(QDeclarativeVector3DValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(z, z)
+   DECL_CS_PROPERTY_WRITE(z, setZ)
+   DECL_CS_OBJECT(QDeclarativeVector3DValueType)
  public:
    QDeclarativeVector3DValueType(QObject *parent = 0);
 
@@ -292,15 +292,15 @@ class QDeclarativeVector3DValueType : public QDeclarativeValueType
 
 class QDeclarativeVector4DValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(z, z)
-   CS_PROPERTY_WRITE(z, setZ)
-   CS_PROPERTY_READ(w, w)
-   CS_PROPERTY_WRITE(w, setW)
-   CS_OBJECT(QDeclarativeVector4DValueType)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(z, z)
+   DECL_CS_PROPERTY_WRITE(z, setZ)
+   DECL_CS_PROPERTY_READ(w, w)
+   DECL_CS_PROPERTY_WRITE(w, setW)
+   DECL_CS_OBJECT(QDeclarativeVector4DValueType)
  public:
    QDeclarativeVector4DValueType(QObject *parent = 0);
 
@@ -324,15 +324,15 @@ class QDeclarativeVector4DValueType : public QDeclarativeValueType
 
 class QDeclarativeQuaternionValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(scalar, scalar)
-   CS_PROPERTY_WRITE(scalar, setScalar)
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(z, z)
-   CS_PROPERTY_WRITE(z, setZ)
-   CS_OBJECT(QDeclarativeQuaternionValueType)
+   DECL_CS_PROPERTY_READ(scalar, scalar)
+   DECL_CS_PROPERTY_WRITE(scalar, setScalar)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(z, z)
+   DECL_CS_PROPERTY_WRITE(z, setZ)
+   DECL_CS_OBJECT(QDeclarativeQuaternionValueType)
  public:
    QDeclarativeQuaternionValueType(QObject *parent = 0);
 
@@ -356,39 +356,39 @@ class QDeclarativeQuaternionValueType : public QDeclarativeValueType
 
 class QDeclarativeMatrix4x4ValueType : public QDeclarativeValueType
 {
-   CS_PROPERTY_READ(m11, m11)
-   CS_PROPERTY_WRITE(m11, setM11)
-   CS_PROPERTY_READ(m12, m12)
-   CS_PROPERTY_WRITE(m12, setM12)
-   CS_PROPERTY_READ(m13, m13)
-   CS_PROPERTY_WRITE(m13, setM13)
-   CS_PROPERTY_READ(m14, m14)
-   CS_PROPERTY_WRITE(m14, setM14)
-   CS_PROPERTY_READ(m21, m21)
-   CS_PROPERTY_WRITE(m21, setM21)
-   CS_PROPERTY_READ(m22, m22)
-   CS_PROPERTY_WRITE(m22, setM22)
-   CS_PROPERTY_READ(m23, m23)
-   CS_PROPERTY_WRITE(m23, setM23)
-   CS_PROPERTY_READ(m24, m24)
-   CS_PROPERTY_WRITE(m24, setM24)
-   CS_PROPERTY_READ(m31, m31)
-   CS_PROPERTY_WRITE(m31, setM31)
-   CS_PROPERTY_READ(m32, m32)
-   CS_PROPERTY_WRITE(m32, setM32)
-   CS_PROPERTY_READ(m33, m33)
-   CS_PROPERTY_WRITE(m33, setM33)
-   CS_PROPERTY_READ(m34, m34)
-   CS_PROPERTY_WRITE(m34, setM34)
-   CS_PROPERTY_READ(m41, m41)
-   CS_PROPERTY_WRITE(m41, setM41)
-   CS_PROPERTY_READ(m42, m42)
-   CS_PROPERTY_WRITE(m42, setM42)
-   CS_PROPERTY_READ(m43, m43)
-   CS_PROPERTY_WRITE(m43, setM43)
-   CS_PROPERTY_READ(m44, m44)
-   CS_PROPERTY_WRITE(m44, setM44)
-   CS_OBJECT(QDeclarativeMatrix4x4ValueType)
+   DECL_CS_PROPERTY_READ(m11, m11)
+   DECL_CS_PROPERTY_WRITE(m11, setM11)
+   DECL_CS_PROPERTY_READ(m12, m12)
+   DECL_CS_PROPERTY_WRITE(m12, setM12)
+   DECL_CS_PROPERTY_READ(m13, m13)
+   DECL_CS_PROPERTY_WRITE(m13, setM13)
+   DECL_CS_PROPERTY_READ(m14, m14)
+   DECL_CS_PROPERTY_WRITE(m14, setM14)
+   DECL_CS_PROPERTY_READ(m21, m21)
+   DECL_CS_PROPERTY_WRITE(m21, setM21)
+   DECL_CS_PROPERTY_READ(m22, m22)
+   DECL_CS_PROPERTY_WRITE(m22, setM22)
+   DECL_CS_PROPERTY_READ(m23, m23)
+   DECL_CS_PROPERTY_WRITE(m23, setM23)
+   DECL_CS_PROPERTY_READ(m24, m24)
+   DECL_CS_PROPERTY_WRITE(m24, setM24)
+   DECL_CS_PROPERTY_READ(m31, m31)
+   DECL_CS_PROPERTY_WRITE(m31, setM31)
+   DECL_CS_PROPERTY_READ(m32, m32)
+   DECL_CS_PROPERTY_WRITE(m32, setM32)
+   DECL_CS_PROPERTY_READ(m33, m33)
+   DECL_CS_PROPERTY_WRITE(m33, setM33)
+   DECL_CS_PROPERTY_READ(m34, m34)
+   DECL_CS_PROPERTY_WRITE(m34, setM34)
+   DECL_CS_PROPERTY_READ(m41, m41)
+   DECL_CS_PROPERTY_WRITE(m41, setM41)
+   DECL_CS_PROPERTY_READ(m42, m42)
+   DECL_CS_PROPERTY_WRITE(m42, setM42)
+   DECL_CS_PROPERTY_READ(m43, m43)
+   DECL_CS_PROPERTY_WRITE(m43, setM43)
+   DECL_CS_PROPERTY_READ(m44, m44)
+   DECL_CS_PROPERTY_WRITE(m44, setM44)
+   DECL_CS_OBJECT(QDeclarativeMatrix4x4ValueType)
  public:
    QDeclarativeMatrix4x4ValueType(QObject *parent = 0);
 
@@ -501,17 +501,17 @@ class QDeclarativeMatrix4x4ValueType : public QDeclarativeValueType
 
 class QDeclarativeEasingValueType : public QDeclarativeValueType
 {
-   CS_OBJECT(QDeclarativeEasingValueType)
+   DECL_CS_OBJECT(QDeclarativeEasingValueType)
    CS_ENUM(Type)
 
-   CS_PROPERTY_READ(type, type)
-   CS_PROPERTY_WRITE(type, setType)
-   CS_PROPERTY_READ(amplitude, amplitude)
-   CS_PROPERTY_WRITE(amplitude, setAmplitude)
-   CS_PROPERTY_READ(overshoot, overshoot)
-   CS_PROPERTY_WRITE(overshoot, setOvershoot)
-   CS_PROPERTY_READ(period, period)
-   CS_PROPERTY_WRITE(period, setPeriod)
+   DECL_CS_PROPERTY_READ(type, type)
+   DECL_CS_PROPERTY_WRITE(type, setType)
+   DECL_CS_PROPERTY_READ(amplitude, amplitude)
+   DECL_CS_PROPERTY_WRITE(amplitude, setAmplitude)
+   DECL_CS_PROPERTY_READ(overshoot, overshoot)
+   DECL_CS_PROPERTY_WRITE(overshoot, setOvershoot)
+   DECL_CS_PROPERTY_READ(period, period)
+   DECL_CS_PROPERTY_WRITE(period, setPeriod)
  public:
    enum Type {
       Linear = QEasingCurve::Linear,
@@ -561,34 +561,34 @@ class QDeclarativeEasingValueType : public QDeclarativeValueType
 
 class QDeclarativeFontValueType : public QDeclarativeValueType
 {
-   CS_OBJECT(QDeclarativeFontValueType)
+   DECL_CS_OBJECT(QDeclarativeFontValueType)
    CS_ENUM(FontWeight)
    CS_ENUM(Capitalization)
 
-   CS_PROPERTY_READ(family, family)
-   CS_PROPERTY_WRITE(family, setFamily)
-   CS_PROPERTY_READ(bold, bold)
-   CS_PROPERTY_WRITE(bold, setBold)
-   CS_PROPERTY_READ(weight, weight)
-   CS_PROPERTY_WRITE(weight, setWeight)
-   CS_PROPERTY_READ(italic, italic)
-   CS_PROPERTY_WRITE(italic, setItalic)
-   CS_PROPERTY_READ(underline, underline)
-   CS_PROPERTY_WRITE(underline, setUnderline)
-   CS_PROPERTY_READ(overline, overline)
-   CS_PROPERTY_WRITE(overline, setOverline)
-   CS_PROPERTY_READ(strikeout, strikeout)
-   CS_PROPERTY_WRITE(strikeout, setStrikeout)
-   CS_PROPERTY_READ(pointSize, pointSize)
-   CS_PROPERTY_WRITE(pointSize, setPointSize)
-   CS_PROPERTY_READ(pixelSize, pixelSize)
-   CS_PROPERTY_WRITE(pixelSize, setPixelSize)
-   CS_PROPERTY_READ(capitalization, capitalization)
-   CS_PROPERTY_WRITE(capitalization, setCapitalization)
-   CS_PROPERTY_READ(letterSpacing, letterSpacing)
-   CS_PROPERTY_WRITE(letterSpacing, setLetterSpacing)
-   CS_PROPERTY_READ(wordSpacing, wordSpacing)
-   CS_PROPERTY_WRITE(wordSpacing, setWordSpacing)
+   DECL_CS_PROPERTY_READ(family, family)
+   DECL_CS_PROPERTY_WRITE(family, setFamily)
+   DECL_CS_PROPERTY_READ(bold, bold)
+   DECL_CS_PROPERTY_WRITE(bold, setBold)
+   DECL_CS_PROPERTY_READ(weight, weight)
+   DECL_CS_PROPERTY_WRITE(weight, setWeight)
+   DECL_CS_PROPERTY_READ(italic, italic)
+   DECL_CS_PROPERTY_WRITE(italic, setItalic)
+   DECL_CS_PROPERTY_READ(underline, underline)
+   DECL_CS_PROPERTY_WRITE(underline, setUnderline)
+   DECL_CS_PROPERTY_READ(overline, overline)
+   DECL_CS_PROPERTY_WRITE(overline, setOverline)
+   DECL_CS_PROPERTY_READ(strikeout, strikeout)
+   DECL_CS_PROPERTY_WRITE(strikeout, setStrikeout)
+   DECL_CS_PROPERTY_READ(pointSize, pointSize)
+   DECL_CS_PROPERTY_WRITE(pointSize, setPointSize)
+   DECL_CS_PROPERTY_READ(pixelSize, pixelSize)
+   DECL_CS_PROPERTY_WRITE(pixelSize, setPixelSize)
+   DECL_CS_PROPERTY_READ(capitalization, capitalization)
+   DECL_CS_PROPERTY_WRITE(capitalization, setCapitalization)
+   DECL_CS_PROPERTY_READ(letterSpacing, letterSpacing)
+   DECL_CS_PROPERTY_WRITE(letterSpacing, setLetterSpacing)
+   DECL_CS_PROPERTY_READ(wordSpacing, wordSpacing)
+   DECL_CS_PROPERTY_WRITE(wordSpacing, setWordSpacing)
 
  public:
    enum FontWeight { Light = QFont::Light,

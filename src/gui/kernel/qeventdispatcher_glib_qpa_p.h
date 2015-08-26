@@ -35,7 +35,7 @@ class QPAEventDispatcherGlibPrivate;
 
 class QPAEventDispatcherGlib : public QEventDispatcherGlib
 {
-   CS_OBJECT(QPAEventDispatcherGlib)
+   GUI_CS_OBJECT(QPAEventDispatcherGlib)
    Q_DECLARE_PRIVATE(QPAEventDispatcherGlib)
 
  public:

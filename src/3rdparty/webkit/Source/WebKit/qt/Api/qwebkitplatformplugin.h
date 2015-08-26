@@ -53,7 +53,7 @@ public:
 };
 
 class QWebSelectMethod : public QObject {
-    CS_OBJECT(QWebSelectMethod)
+    WEB_CS_OBJECT(QWebSelectMethod)
 public:
     virtual ~QWebSelectMethod() {}
 
@@ -78,7 +78,7 @@ public:
 };
 
 class QWebNotificationPresenter : public QObject {
-    CS_OBJECT(QWebNotificationPresenter)
+    WEB_CS_OBJECT(QWebNotificationPresenter)
 
 public:
     QWebNotificationPresenter() {}
@@ -93,7 +93,7 @@ public:
 };
 
 class QWebHapticFeedbackPlayer: public QObject {
-    CS_OBJECT(QWebHapticFeedbackPlayer)
+    WEB_CS_OBJECT(QWebHapticFeedbackPlayer)
 
 public:
     QWebHapticFeedbackPlayer() {}
@@ -111,7 +111,7 @@ public:
 };
 
 class QWebTouchModifier : public QObject {
-    CS_OBJECT(QWebTouchModifier)
+    WEB_CS_OBJECT(QWebTouchModifier)
 public:
     virtual ~QWebTouchModifier() {}
 
@@ -124,7 +124,7 @@ public:
 
 #if defined(WTF_USE_QT_MULTIMEDIA) && WTF_USE_QT_MULTIMEDIA
 class QWebFullScreenVideoHandler : public QObject {
-    CS_OBJECT(QWebFullScreenVideoHandler)
+    WEB_CS_OBJECT(QWebFullScreenVideoHandler)
 public:
     QWebFullScreenVideoHandler() {}
     virtual ~QWebFullScreenVideoHandler() {}

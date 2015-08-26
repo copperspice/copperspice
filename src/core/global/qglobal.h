@@ -34,7 +34,7 @@
 
 #include <qconfig.h>
 
-#ifdef __cplusplus  // block a
+#ifdef __cplusplus     // block a
 #include <algorithm>
 
 class QByteArray;
@@ -43,7 +43,7 @@ class QDebug;
 class QNoDebug;
 class QString;
 
-#ifdef QT_NAMESPACE   // block b
+#ifdef QT_NAMESPACE    // block b
 
 #define QT_PREPEND_NAMESPACE(name)   ::QT_NAMESPACE::name
 
@@ -451,7 +451,7 @@ QT_USE_NAMESPACE
 #  if defined(Q_OS_MAC) && ! defined(__USE_WS_X11__) && ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
 #    define Q_OS_MAC
 
-#  elif ! defined(Q_WS_QWS) && !defined(Q_WS_QPA)
+#  elif ! defined(Q_WS_QWS) && ! defined(Q_WS_QPA)
 #    define Q_WS_X11
 #  endif
 
@@ -493,6 +493,7 @@ typedef quint64                qulonglong;
    do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
    QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
 
+
 #if defined(__cplusplus)
 
 /*
@@ -501,31 +502,32 @@ quintptr and qptrdiff are guaranteed to be the same size as a pointer
       && sizeof(void *) == sizeof(qptrdiff)
 */
 
+
 template<int>
 struct QIntegerForSize;
 
 template <>
 struct QIntegerForSize<1> {
    typedef quint8  Unsigned;
-   typedef qint8  Signed;
+   typedef qint8   Signed;
 };
 
 template <>
 struct QIntegerForSize<2> {
    typedef quint16 Unsigned;
-   typedef qint16 Signed;
+   typedef qint16  Signed;
 };
 
 template <>
 struct QIntegerForSize<4> {
    typedef quint32 Unsigned;
-   typedef qint32 Signed;
+   typedef qint32  Signed;
 };
 
 template <>
 struct QIntegerForSize<8> {
    typedef quint64 Unsigned;
-   typedef qint64 Signed;
+   typedef qint64  Signed;
 };
 
 template <class T>
@@ -1080,16 +1082,15 @@ using QtMsgHandler = void (*)(QtMsgType, const char*);
 Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
 
 
-// forward declaration since qatomic.h needs qglobal.h
+// * * 
 template <typename T> 
-class QBasicAtomicPointer;
+class QAtomicPointer;
 
-// ****
 template <typename T>
 class QGlobalStatic
 {
  public:
-   QBasicAtomicPointer<T> pointer;
+   QAtomicPointer<T> pointer;
    bool destroyed;
 };
 
@@ -1111,7 +1112,7 @@ class QGlobalStaticDeleter
 };
 
 #define Q_GLOBAL_STATIC_INIT(TYPE, NAME)   \
-   static QGlobalStatic<TYPE> this_ ## NAME = { QBasicAtomicPointer<TYPE>(0), false }
+   static QGlobalStatic<TYPE> this_ ## NAME = { QAtomicPointer<TYPE>(0), false }
 
 #define Q_GLOBAL_STATIC(TYPE, NAME)                                       \
    static TYPE *NAME()                                                    \
@@ -1198,24 +1199,24 @@ inline bool operator!=(QBool b1, QBool b2)
    return !b1 != !b2;
 }
 
-constexpr static inline bool qFuzzyCompare(double p1, double p2)
+constexpr inline bool qFuzzyCompare(double p1, double p2)
 {
    return (qAbs(p1 - p2) <= 0.000000000001 * qMin(qAbs(p1), qAbs(p2)));
 }
 
-constexpr static inline bool qFuzzyCompare(float p1, float p2)
+constexpr inline bool qFuzzyCompare(float p1, float p2)
 {
    return (qAbs(p1 - p2) <= 0.00001f * qMin(qAbs(p1), qAbs(p2)));
 }
 
 // internal
-constexpr static inline bool qFuzzyIsNull(double d)
+constexpr inline bool qFuzzyIsNull(double d)
 {
    return qAbs(d) <= 0.000000000001;
 }
 
 // internal
-constexpr static inline bool qFuzzyIsNull(float f)
+constexpr inline bool qFuzzyIsNull(float f)
 {
    return qAbs(f) <= 0.00001f;
 }

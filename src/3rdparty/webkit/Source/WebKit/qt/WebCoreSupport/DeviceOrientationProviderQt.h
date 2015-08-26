@@ -33,7 +33,7 @@ namespace WebCore {
 class DeviceOrientationClientQt;
 
 class DeviceOrientationProviderQt : public QObject, public QRotationFilter {
-    CS_OBJECT(DeviceOrientationProviderQt)
+    WEB_CS_OBJECT(DeviceOrientationProviderQt)
 
 public:
     DeviceOrientationProviderQt();

@@ -54,7 +54,7 @@ QT_BEGIN_NAMESPACE
 
 class QWSTtyKbPrivate : public QObject
 {
-   CS_OBJECT(QWSTtyKbPrivate)
+   GUI_CS_OBJECT(QWSTtyKbPrivate)
 
  public:
    QWSTtyKbPrivate(QWSTtyKeyboardHandler *handler, const QString &device);

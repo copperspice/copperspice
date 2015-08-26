@@ -42,7 +42,7 @@ class QMetaProperty;
 
 class QDeclarativeWatcher : public QObject
 {
-   CS_OBJECT(QDeclarativeWatcher)
+   DECL_CS_OBJECT(QDeclarativeWatcher)
  public:
    QDeclarativeWatcher(QObject * = 0);
 
@@ -53,8 +53,8 @@ class QDeclarativeWatcher : public QObject
    void removeWatch(int id);
 
  public:
-   CS_SIGNAL_1(Public, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
-   CS_SIGNAL_2(propertyChanged, id, objectId, property, value)
+   DECL_CS_SIGNAL_1(Public, void propertyChanged(int id, int objectId, const QMetaProperty &property, const QVariant &value))
+   DECL_CS_SIGNAL_2(propertyChanged, id, objectId, property, value)
 
  private:
    friend class QDeclarativeWatchProxy;

@@ -91,7 +91,7 @@ namespace Phonon
 
         class WorkerThread : public QThread
         {
-            CS_OBJECT(WorkerThread)
+            DS9_CS_OBJECT(WorkerThread)
 
         public:
             WorkerThread();

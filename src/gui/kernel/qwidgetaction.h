@@ -36,7 +36,7 @@ class QWidgetActionPrivate;
 
 class Q_GUI_EXPORT QWidgetAction : public QAction
 {
-   CS_OBJECT(QWidgetAction)
+   GUI_CS_OBJECT(QWidgetAction)
    Q_DECLARE_PRIVATE(QWidgetAction)
 
  public:

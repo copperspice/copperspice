@@ -118,7 +118,7 @@ inline bool operator ==(QHostAddress::SpecialAddress address1, const QHostAddres
 }
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);
-Q_NETWORK_EXPORT uint qHash(const QHostAddress &key);
+Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 
 #ifndef QT_NO_DATASTREAM
 Q_NETWORK_EXPORT QDataStream &operator<<(QDataStream &, const QHostAddress &);

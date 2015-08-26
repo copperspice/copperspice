@@ -38,7 +38,7 @@ class QWSIMInitEvent;
 
 class QWSInputContext : public QInputContext
 {
-   CS_OBJECT(QWSInputContext)
+   GUI_CS_OBJECT(QWSInputContext)
 
  public:
    explicit QWSInputContext(QObject *parent = 0);

@@ -50,7 +50,7 @@ class VolumeSliderPrivate;
  */
 class PHONON_EXPORT VolumeSlider : public QWidget
 {
-    CS_OBJECT(VolumeSlider)
+    PHN_CS_OBJECT(VolumeSlider)
     K_DECLARE_PRIVATE(VolumeSlider)
    
     PHN_CS_PROPERTY_READ(maximumVolume, maximumVolume)

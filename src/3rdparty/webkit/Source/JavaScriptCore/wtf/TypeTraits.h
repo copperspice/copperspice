@@ -56,6 +56,7 @@ namespace WTF {
     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
     template<> struct IsInteger<long long>          { static const bool value = true; };
     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
+
 #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
 #endif
@@ -179,10 +180,7 @@ namespace WTF {
 
 } // namespace WTF
 
-
-
 namespace WTF {
-
 
 template<typename T>
   struct HasTrivialConstructor : public std::false_type

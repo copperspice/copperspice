@@ -212,7 +212,8 @@ QWidget *QWindowsXPStylePrivate::limboWidget = 0;
 QPixmap *QWindowsXPStylePrivate::tabbody = 0;
 QMap<QString, HTHEME> *QWindowsXPStylePrivate::handleMap = 0;
 bool QWindowsXPStylePrivate::use_xp = false;
-QBasicAtomicInt QWindowsXPStylePrivate::ref = Q_BASIC_ATOMIC_INITIALIZER(-1); // -1 based refcounting
+
+QAtomicInt QWindowsXPStylePrivate::ref = -1; 
 
 /* \internal
     Checks if the theme engine can/should be used, or if we should

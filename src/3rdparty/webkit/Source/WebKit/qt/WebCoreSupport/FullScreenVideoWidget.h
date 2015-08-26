@@ -38,7 +38,7 @@ QT_END_NAMESPACE
 namespace WebCore {
 
 class FullScreenVideoWidget : public QVideoWidget {
-    CS_OBJECT(FullScreenVideoWidget)
+    WEB_CS_OBJECT(FullScreenVideoWidget)
 public:
     FullScreenVideoWidget();
     virtual ~FullScreenVideoWidget();

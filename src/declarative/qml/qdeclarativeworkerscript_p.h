@@ -39,7 +39,7 @@ class QDeclarativeWorkerScriptEnginePrivate;
 
 class QDeclarativeWorkerScriptEngine : public QThread
 {
-   CS_OBJECT(QDeclarativeWorkerScriptEngine)
+   DECL_CS_OBJECT(QDeclarativeWorkerScriptEngine)
 
  public:
    QDeclarativeWorkerScriptEngine(QDeclarativeEngine *parent = 0);
@@ -59,10 +59,10 @@ class QDeclarativeWorkerScriptEngine : public QThread
 
 class QDeclarativeWorkerScript : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeWorkerScript)
-   CS_PROPERTY_READ(source, source)
-   CS_PROPERTY_WRITE(source, setSource)
-   CS_PROPERTY_NOTIFY(source, sourceChanged)
+   DECL_CS_OBJECT(QDeclarativeWorkerScript)
+   DECL_CS_PROPERTY_READ(source, source)
+   DECL_CS_PROPERTY_WRITE(source, setSource)
+   DECL_CS_PROPERTY_NOTIFY(source, sourceChanged)
 
    CS_INTERFACES(QDeclarativeParserStatus)
  public:
@@ -72,13 +72,13 @@ class QDeclarativeWorkerScript : public QObject, public QDeclarativeParserStatus
    QUrl source() const;
    void setSource(const QUrl &);
 
-   CS_SLOT_1(Public, void sendMessage(const QScriptValue &un_named_arg1))
-   CS_SLOT_2(sendMessage)
+   DECL_CS_SLOT_1(Public, void sendMessage(const QScriptValue &un_named_arg1))
+   DECL_CS_SLOT_2(sendMessage)
 
-   CS_SIGNAL_1(Public, void sourceChanged())
-   CS_SIGNAL_2(sourceChanged)
-   CS_SIGNAL_1(Public, void message(const QScriptValue &messageObject))
-   CS_SIGNAL_2(message, messageObject)
+   DECL_CS_SIGNAL_1(Public, void sourceChanged())
+   DECL_CS_SIGNAL_2(sourceChanged)
+   DECL_CS_SIGNAL_1(Public, void message(const QScriptValue &messageObject))
+   DECL_CS_SIGNAL_2(message, messageObject)
 
  protected:
    virtual void classBegin();

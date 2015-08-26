@@ -80,7 +80,7 @@ private:
 
 class EffectManager : public QObject
 {
-    CS_OBJECT(EffectManager)
+    GSTRM_CS_OBJECT(EffectManager)
 public:
     EffectManager(Backend *parent);
     virtual ~EffectManager();

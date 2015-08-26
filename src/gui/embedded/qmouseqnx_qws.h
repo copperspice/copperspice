@@ -35,7 +35,7 @@ class QSocketNotifier;
 
 class Q_GUI_EXPORT QQnxMouseHandler : public QObject, public QWSMouseHandler
 {
-   CS_OBJECT(QQnxMouseHandler)
+   GUI_CS_OBJECT(QQnxMouseHandler)
 
  public:
    explicit QQnxMouseHandler(const QString &driver = QString(), const QString &device = QString());

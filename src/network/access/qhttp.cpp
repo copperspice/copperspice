@@ -73,7 +73,7 @@ class QHttpRequest
    bool finished;
 
  private:
-   static QBasicAtomicInt idCounter;
+   static QAtomicInt idCounter;
 };
 
 class QHttpPrivate
@@ -171,7 +171,7 @@ class QHttpPrivate
 
 };
 
-QBasicAtomicInt QHttpRequest::idCounter = Q_BASIC_ATOMIC_INITIALIZER(1);
+QAtomicInt QHttpRequest::idCounter = 1;
 
 bool QHttpRequest::hasRequestHeader()
 {

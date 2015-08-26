@@ -38,7 +38,7 @@ class QGraphicsEffectSourcePrivate;
 
 class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
 {
-   CS_OBJECT(QGraphicsEffectSource)
+   GUI_CS_OBJECT(QGraphicsEffectSource)
 
  public:
    ~QGraphicsEffectSource();

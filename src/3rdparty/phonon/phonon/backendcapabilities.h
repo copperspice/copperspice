@@ -46,7 +46,7 @@ namespace BackendCapabilities
 {   
     class Notifier : public QObject
     {
-        CS_OBJECT(Notifier)
+        PHN_CS_OBJECT(Notifier)
 
         public:           
             PHN_CS_SIGNAL_1(Public, void capabilitiesChanged())

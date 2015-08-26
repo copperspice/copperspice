@@ -32,7 +32,7 @@ QT_END_NAMESPACE
 class QWebPluginFactoryPrivate;
 
 class QWEBKIT_EXPORT QWebPluginFactory : public QObject {
-    CS_OBJECT(QWebPluginFactory)
+    WEB_CS_OBJECT(QWebPluginFactory)
 public:
     struct QWEBKIT_EXPORT MimeType {
         QString name;

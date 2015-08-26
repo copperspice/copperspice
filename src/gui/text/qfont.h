@@ -43,7 +43,7 @@ class QVariant;
 
 class Q_GUI_EXPORT QFont
 {
-   CS_GADGET(QFont)
+   GUI_CS_GADGET(QFont)
 
    GUI_CS_ENUM(StyleStrategy)
 

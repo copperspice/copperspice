@@ -40,7 +40,7 @@ class QValidatorPrivate;
 
 class Q_GUI_EXPORT QValidator : public QObject
 {
-   CS_OBJECT(QValidator)
+   GUI_CS_OBJECT(QValidator)
 
  public:
    explicit QValidator(QObject *parent = 0);
@@ -73,7 +73,7 @@ class Q_GUI_EXPORT QValidator : public QObject
 
 class Q_GUI_EXPORT QIntValidator : public QValidator
 {
-   CS_OBJECT(QIntValidator)
+   GUI_CS_OBJECT(QIntValidator)
 
    GUI_CS_PROPERTY_READ(bottom, bottom)
    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
@@ -128,7 +128,7 @@ class QRegularExpressionValidatorPrivate;
 
 class Q_GUI_EXPORT QDoubleValidator : public QValidator
 {
-   CS_OBJECT(QDoubleValidator)
+   GUI_CS_OBJECT(QDoubleValidator)
 
    GUI_CS_PROPERTY_READ(bottom, bottom)
    GUI_CS_PROPERTY_WRITE(bottom, setBottom)
@@ -187,7 +187,7 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
 
 class Q_GUI_EXPORT QRegExpValidator : public QValidator
 {
-   CS_OBJECT(QRegExpValidator)
+   GUI_CS_OBJECT(QRegExpValidator)
 
    GUI_CS_PROPERTY_READ(regExp, regExp)
    GUI_CS_PROPERTY_WRITE(regExp, setRegExp)
@@ -214,7 +214,7 @@ class Q_GUI_EXPORT QRegExpValidator : public QValidator
 
 class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
 {
-   CS_OBJECT(QRegularExpressionValidator)
+   GUI_CS_OBJECT(QRegularExpressionValidator)
 
    GUI_CS_PROPERTY_READ(regularExpression, regularExpression)
    GUI_CS_PROPERTY_WRITE(regularExpression, setRegularExpression)

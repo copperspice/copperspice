@@ -79,7 +79,7 @@ class QTDSResult : public QSqlCachedResult
 
 class Q_EXPORT_SQLDRIVER_TDS QTDSDriver : public QSqlDriver
 {
-   CS_OBJECT(QTDSDriver)
+   SQL_CS_OBJECT(QTDSDriver)
    friend class QTDSResult;
 
  public:

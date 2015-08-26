@@ -43,7 +43,7 @@ class QNetworkReplyPrivate;
 
 class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
 {
-   CS_OBJECT(QNetworkReply)
+   NET_CS_OBJECT(QNetworkReply)
 
    NET_CS_ENUM(NetworkError)
 

@@ -129,7 +129,7 @@ class QDeclarativeDataBlob : public QDeclarativeRefCount
 
 class QDeclarativeDataLoader : public QObject
 {
-   CS_OBJECT(QDeclarativeDataLoader)
+   DECL_CS_OBJECT(QDeclarativeDataLoader)
 
  public:
    QDeclarativeDataLoader(QDeclarativeEngine *);
@@ -141,11 +141,11 @@ class QDeclarativeDataLoader : public QObject
    QDeclarativeEngine *engine() const;
 
  private :
-   CS_SLOT_1(Private, void networkReplyFinished())
-   CS_SLOT_OVERLOAD(networkReplyFinished, ())
+   DECL_CS_SLOT_1(Private, void networkReplyFinished())
+   DECL_CS_SLOT_OVERLOAD(networkReplyFinished, ())
 
-   CS_SLOT_1(Private, void networkReplyProgress(qint64 un_named_arg1, qint64 un_named_arg2))
-   CS_SLOT_OVERLOAD(networkReplyProgress, (qint64, qint64))
+   DECL_CS_SLOT_1(Private, void networkReplyProgress(qint64 un_named_arg1, qint64 un_named_arg2))
+   DECL_CS_SLOT_OVERLOAD(networkReplyProgress, (qint64, qint64))
 
    void setData(QDeclarativeDataBlob *, const QByteArray &);
    void networkReplyFinished(QNetworkReply *);
@@ -159,7 +159,7 @@ class QDeclarativeDataLoader : public QObject
 
 class QDeclarativeTypeLoader : public QDeclarativeDataLoader
 {
-   CS_OBJECT(QDeclarativeTypeLoader)
+   DECL_CS_OBJECT(QDeclarativeTypeLoader)
 
  public:
    QDeclarativeTypeLoader(QDeclarativeEngine *);

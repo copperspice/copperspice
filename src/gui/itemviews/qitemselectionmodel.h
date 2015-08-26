@@ -156,7 +156,7 @@ inline QItemSelectionRange::QItemSelectionRange(const QModelIndex &atopLeft,
 
 class Q_GUI_EXPORT QItemSelectionModel : public QObject
 {
-   CS_OBJECT(QItemSelectionModel)
+   GUI_CS_OBJECT(QItemSelectionModel)
    Q_DECLARE_PRIVATE(QItemSelectionModel)
 
    GUI_CS_FLAG(SelectionFlag, SelectionFlags)

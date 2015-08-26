@@ -48,7 +48,7 @@ class QStylePrivate;
 
 class Q_GUI_EXPORT QStyle : public QObject
 {
-   CS_OBJECT(QStyle)
+   GUI_CS_OBJECT(QStyle)
    Q_DECLARE_PRIVATE(QStyle)
 
    GUI_CS_ENUM(StandardPixmap)

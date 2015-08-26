@@ -39,7 +39,7 @@ class QWizardPagePrivate;
 
 class Q_GUI_EXPORT QWizard : public QDialog
 {
-   CS_OBJECT(QWizard)
+   GUI_CS_OBJECT(QWizard)
 
    GUI_CS_ENUM(WizardStyle)
    GUI_CS_ENUM(WizardOption)
@@ -213,7 +213,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QWizard::WizardOptions)
 
 class Q_GUI_EXPORT QWizardPage : public QWidget
 {
-   CS_OBJECT(QWizardPage)
+   GUI_CS_OBJECT(QWizardPage)
 
    GUI_CS_PROPERTY_READ(title, title)
    GUI_CS_PROPERTY_WRITE(title, setTitle)

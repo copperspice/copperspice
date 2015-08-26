@@ -72,7 +72,7 @@ class QUndoStackPrivate
 #ifndef QT_NO_ACTION
 class QUndoAction : public QAction
 {
-   CS_OBJECT(QUndoAction)
+   GUI_CS_OBJECT(QUndoAction)
 
  public:
    QUndoAction(const QString &prefix, QObject *parent = 0);

@@ -220,7 +220,7 @@ class QListWidgetPrivate;
 
 class Q_GUI_EXPORT QListWidget : public QListView
 {
-   CS_OBJECT(QListWidget)
+   GUI_CS_OBJECT(QListWidget)
 
    GUI_CS_PROPERTY_READ(count, count)
 

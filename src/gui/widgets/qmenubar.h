@@ -38,7 +38,7 @@ class QWindowsStyle;
 
 class Q_GUI_EXPORT QMenuBar : public QWidget
 {
-   CS_OBJECT(QMenuBar)
+   GUI_CS_OBJECT(QMenuBar)
 
    GUI_CS_PROPERTY_READ(defaultUp, isDefaultUp)
    GUI_CS_PROPERTY_WRITE(defaultUp, setDefaultUp)

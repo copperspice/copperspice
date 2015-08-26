@@ -246,10 +246,10 @@ class CleanUpGlobalStatic
  *
  * @ingroup KDEMacros
  */
-#define PHONON_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                            \
-static QBasicAtomicPointer<TYPE > _k_static_##NAME{0};		\
+#define PHONON_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                       \
+static QAtomicPointer<TYPE > _k_static_##NAME{0};		                         \
 static bool _k_static_##NAME##_destroyed;                                      \
-static struct PHONON_GLOBAL_STATIC_STRUCT_NAME(NAME)                                \
+static struct PHONON_GLOBAL_STATIC_STRUCT_NAME(NAME)                           \
 {                                                                              \
     bool isDestroyed()                                                         \
     {                                                                          \

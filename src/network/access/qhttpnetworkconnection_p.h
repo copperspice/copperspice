@@ -58,7 +58,7 @@ class QHttpNetworkConnectionPrivate;
 
 class QHttpNetworkConnection : public QObject
 {
-   CS_OBJECT(QHttpNetworkConnection)
+   NET_CS_OBJECT(QHttpNetworkConnection)
 
  public:
 

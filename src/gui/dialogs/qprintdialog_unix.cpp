@@ -60,7 +60,7 @@ class QPPDOptionsModel;
 
 class QPrintPropertiesDialog : public QDialog
 {
-   CS_OBJECT(QPrintPropertiesDialog)
+   GUI_CS_OBJECT(QPrintPropertiesDialog)
 
  public:
    QPrintPropertiesDialog(QAbstractPrintDialog *parent = 0);
@@ -232,7 +232,7 @@ class QPPDOptionsModel : public QAbstractItemModel
 
 class QPPDOptionsEditor : public QStyledItemDelegate
 {
-   CS_OBJECT(QPPDOptionsEditor)
+   GUI_CS_OBJECT(QPPDOptionsEditor)
 
  public:
    QPPDOptionsEditor(QObject *parent = 0) : QStyledItemDelegate(parent) {}

@@ -78,7 +78,7 @@
 
 QT_BEGIN_NAMESPACE
 
-QGLColormap::QGLColormapData QGLColormap::shared_null = { Q_BASIC_ATOMIC_INITIALIZER(1), 0, 0 };
+QGLColormap::QGLColormapData QGLColormap::shared_null = { 1, 0, 0 };
 
 /*!
     Construct a QGLColormap.

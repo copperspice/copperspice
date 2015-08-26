@@ -37,7 +37,7 @@ class QSocks5SocketEnginePrivate;
 
 class QSocks5SocketEngine : public QAbstractSocketEngine
 {
-   CS_OBJECT(QSocks5SocketEngine)
+   NET_CS_OBJECT(QSocks5SocketEngine)
 
  public:
    QSocks5SocketEngine(QObject *parent = 0);

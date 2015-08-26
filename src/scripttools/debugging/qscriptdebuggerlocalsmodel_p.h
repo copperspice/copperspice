@@ -37,7 +37,7 @@ class QScriptDebuggerLocalsModelPrivate;
 
 class QScriptDebuggerLocalsModel : public QAbstractItemModel
 {
-   CS_OBJECT(QScriptDebuggerLocalsModel)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerLocalsModel)
 
  public:
    QScriptDebuggerLocalsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,

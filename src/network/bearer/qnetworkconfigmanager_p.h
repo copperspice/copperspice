@@ -40,7 +40,7 @@ class QTimer;
 
 class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
 {
-   CS_OBJECT(QNetworkConfigurationManagerPrivate)
+   NET_CS_OBJECT(QNetworkConfigurationManagerPrivate)
 
  public:
    QNetworkConfigurationManagerPrivate();

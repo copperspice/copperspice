@@ -36,20 +36,20 @@ class QHistoryStatePrivate;
 
 class Q_CORE_EXPORT QHistoryState : public QAbstractState
 {
-   CS_OBJECT(QHistoryState)
+   CORE_CS_OBJECT(QHistoryState)
 
    CORE_CS_PROPERTY_READ(defaultState, defaultState)
    CORE_CS_PROPERTY_WRITE(defaultState, setDefaultState)
    CORE_CS_PROPERTY_READ(historyType, historyType)
    CORE_CS_PROPERTY_WRITE(historyType, setHistoryType)
-
-   CORE_CS_ENUM(HistoryType)
-
+   
  public:
    enum HistoryType {
       ShallowHistory,
       DeepHistory
    };
+
+   CORE_CS_ENUM(HistoryType)
 
    QHistoryState(QState *parent = 0);
    QHistoryState(HistoryType type, QState *parent = 0);

@@ -43,7 +43,7 @@ namespace Phonon
  
     class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
     {
-        CS_OBJECT(AudioDataOutput)
+        PHN_CS_OBJECT(AudioDataOutput)
         K_DECLARE_PRIVATE(AudioDataOutput)
 
         PHN_CS_ENUM(Channel)

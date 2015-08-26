@@ -44,7 +44,7 @@ class QGraphicsWidget;
 
 class Q_GUI_EXPORT QAction : public QObject
 {
-   CS_OBJECT(QAction)
+   GUI_CS_OBJECT(QAction)
    Q_DECLARE_PRIVATE(QAction)
 
    GUI_CS_ENUM(MenuRole)

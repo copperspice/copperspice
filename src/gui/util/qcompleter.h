@@ -45,7 +45,7 @@ class QWidget;
 
 class Q_GUI_EXPORT QCompleter : public QObject
 {
-   CS_OBJECT(QCompleter)
+   GUI_CS_OBJECT(QCompleter)
 
    GUI_CS_PROPERTY_READ(completionPrefix, completionPrefix)
    GUI_CS_PROPERTY_WRITE(completionPrefix, setCompletionPrefix)

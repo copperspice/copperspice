@@ -38,7 +38,7 @@ class QKeyEvent;
 
 class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 {
-   CS_OBJECT(QWidgetResizeHandler)
+   GUI_CS_OBJECT(QWidgetResizeHandler)
 
  public:
    enum Action {

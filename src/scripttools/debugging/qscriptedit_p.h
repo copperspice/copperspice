@@ -36,7 +36,7 @@ class QScriptEditExtraArea;
 
 class QScriptEdit : public QPlainTextEdit
 {
-   CS_OBJECT(QScriptEdit)
+   SCRIPT_T_CS_OBJECT(QScriptEdit)
  public:
    QScriptEdit(QWidget *parent = 0);
    ~QScriptEdit();

@@ -27,7 +27,7 @@
 #include "qwebkitglobal.h"
 
 class QWEBKIT_EXPORT QWebHistoryInterface : public QObject {
-    CS_OBJECT(QWebHistoryInterface)
+    WEB_CS_OBJECT(QWebHistoryInterface)
 public:
     QWebHistoryInterface(QObject *parent = 0);
     ~QWebHistoryInterface();

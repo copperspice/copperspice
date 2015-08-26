@@ -71,6 +71,9 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
+template <class T> 
+uint qHash(const T *key, uint seed = 0);
+
 namespace QtSharedPointer {
 template <class T> class InternalRefCount;
 template <class T> class ExternalRefCount;
@@ -81,8 +84,8 @@ template <class X, class Y> QSharedPointer<X> copyAndSetPointer(X *ptr, const QS
 Q_CORE_EXPORT void internalSafetyCheckAdd(const void *, const volatile void *);
 Q_CORE_EXPORT void internalSafetyCheckRemove(const void *);
 
-template <class T, typename Klass, typename RetVal>
-inline void executeDeleter(T *t, RetVal (Klass:: *memberDeleter)())
+template <class T, typename Class, typename RetVal>
+inline void executeDeleter(T *t, RetVal (Class:: *memberDeleter)())
 {
    (t->*memberDeleter)();
 }
@@ -115,10 +118,13 @@ template <class T> struct RemovePointer<QWeakPointer<T> > {
 // The deleter is stored in the destroyer member and is always a pointer to
 // a static function in ExternalRefCountWithCustomDeleter or in
 // ExternalRefCountWithContiguousData
+
 struct ExternalRefCountData {
    typedef void (*DestroyerFn)(ExternalRefCountData *);
-   QBasicAtomicInt weakref;
-   QBasicAtomicInt strongref;
+
+   QAtomicInt weakref;
+   QAtomicInt strongref;
+
    DestroyerFn destroyer;
 
    inline ExternalRefCountData(DestroyerFn d)
@@ -129,7 +135,7 @@ struct ExternalRefCountData {
 
    inline ExternalRefCountData(Qt::Initialization) { }
    ~ExternalRefCountData() {
-      Q_ASSERT(!weakref.load());
+      Q_ASSERT(! weakref.load());
       Q_ASSERT(strongref.load() <= 0);
    }
 
@@ -502,7 +508,7 @@ template <class T> class QSharedPointer
       if (o) {
          // increase the strongref, but never up from zero
          // or less (-1 is used by QWeakPointer on untracked QObject)
-         register int tmp = o->strongref.load();
+         int tmp = o->strongref.load();
          while (tmp > 0) {
             // try to increment from "tmp" to "tmp + 1"
             if (o->strongref.testAndSetRelaxed(tmp, tmp + 1)) {

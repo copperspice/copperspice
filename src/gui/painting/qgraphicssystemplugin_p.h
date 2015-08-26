@@ -43,7 +43,7 @@ CS_DECLARE_INTERFACE(QGraphicsSystemFactoryInterface, QGraphicsSystemFactoryInte
 
 class Q_GUI_EXPORT QGraphicsSystemPlugin : public QObject, public QGraphicsSystemFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QGraphicsSystemPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QGraphicsSystemPlugin, QObject)
    CS_INTERFACES(QGraphicsSystemFactoryInterface, QFactoryInterface)
 
  public:

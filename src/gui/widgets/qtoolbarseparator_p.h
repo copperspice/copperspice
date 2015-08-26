@@ -37,7 +37,7 @@ class QToolBar;
 
 class QToolBarSeparator : public QWidget
 {
-   CS_OBJECT(QToolBarSeparator)
+   GUI_CS_OBJECT(QToolBarSeparator)
    Qt::Orientation orient;
 
  public:

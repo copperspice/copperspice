@@ -75,7 +75,7 @@ QT_BEGIN_NAMESPACE
 */
 class QInputDialogSpinBox : public QSpinBox
 {
-   CS_OBJECT(QInputDialogSpinBox)
+   GUI_CS_OBJECT(QInputDialogSpinBox)
 
  public:
    QInputDialogSpinBox(QWidget *parent)
@@ -115,7 +115,7 @@ void QInputDialogSpinBox::notifyTextChanged()
 
 class QInputDialogDoubleSpinBox : public QDoubleSpinBox
 {
-   CS_OBJECT(QInputDialogDoubleSpinBox)
+   GUI_CS_OBJECT(QInputDialogDoubleSpinBox)
 
  public:
    QInputDialogDoubleSpinBox(QWidget *parent = 0)

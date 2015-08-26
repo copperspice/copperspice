@@ -39,7 +39,7 @@ class QBasicMouseEventTransitionPrivate;
 
 class QBasicMouseEventTransition : public QAbstractTransition
 {
-   CS_OBJECT(QBasicMouseEventTransition)
+   GUI_CS_OBJECT(QBasicMouseEventTransition)
 
  public:
    QBasicMouseEventTransition(QState *sourceState = 0);

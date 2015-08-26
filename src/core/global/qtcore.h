@@ -47,7 +47,6 @@
 #include <qtextstream.h>
 #include <qurl.h>
 #include <qatomic.h>
-#include <qbasicatomic.h>
 #include <qmutex.h>
 #include <qreadwritelock.h>
 #include <qsemaphore.h>

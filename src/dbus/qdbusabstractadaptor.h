@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 class QDBusAbstractAdaptorPrivate;
 class Q_DBUS_EXPORT QDBusAbstractAdaptor: public QObject
 {
-    Q_OBJECT
+    CS_OBJECT(QDBusAbstractAdaptor)
 
 protected:
     QDBusAbstractAdaptor(QObject *parent);

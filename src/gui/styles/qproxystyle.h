@@ -36,7 +36,7 @@ class QProxyStylePrivate;
 
 class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
 {
-   CS_OBJECT(QProxyStyle)
+   GUI_CS_OBJECT(QProxyStyle)
 
  public:
    QProxyStyle(QStyle *baseStyle = 0);

@@ -36,7 +36,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QMacInputContext : public QInputContext
 {
-   CS_OBJECT(QMacInputContext)
+   GUI_CS_OBJECT(QMacInputContext)
 
    void createTextDocument();
 

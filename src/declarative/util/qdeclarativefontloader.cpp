@@ -49,12 +49,12 @@ class QDeclarativeFontObject : public QObject
    void download(const QUrl &url, QNetworkAccessManager *manager);
    int id;
 
-   CS_SIGNAL_1(Public, void fontDownloaded(const QString &un_named_arg1, QDeclarativeFontLoader::Status un_named_arg2))
-   CS_SIGNAL_2(fontDownloaded, un_named_arg1, un_named_arg2)
+   DECL_CS_SIGNAL_1(Public, void fontDownloaded(const QString &un_named_arg1, QDeclarativeFontLoader::Status un_named_arg2))
+   DECL_CS_SIGNAL_2(fontDownloaded, un_named_arg1, un_named_arg2)
 
  private:
-   CS_SLOT_1(Private, void replyFinished())
-   CS_SLOT_2(replyFinished)
+   DECL_CS_SLOT_1(Private, void replyFinished())
+   DECL_CS_SLOT_2(replyFinished)
 
 
  private:

@@ -133,7 +133,7 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 class GraphicsView : public QGraphicsView
 {
-   CS_OBJECT(GraphicsView)
+   GUI_CS_OBJECT(GraphicsView)
 
  public:
    GraphicsView(QWidget *parent = 0)

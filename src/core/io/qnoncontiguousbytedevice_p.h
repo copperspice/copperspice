@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
 {
-   CS_OBJECT(QNonContiguousByteDevice)
+   CORE_CS_OBJECT(QNonContiguousByteDevice)
 
  public:
    virtual const char *readPointer(qint64 maximumLength, qint64 &len) = 0;
@@ -115,7 +115,7 @@ class QNonContiguousByteDeviceRingBufferImpl : public QNonContiguousByteDevice
 
 class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
 {
-  CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
+  CORE_CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
 
  public:
    QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d);
@@ -140,7 +140,7 @@ class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
 
 class QNonContiguousByteDeviceBufferImpl : public QNonContiguousByteDevice
 {
-   CS_OBJECT(QNonContiguousByteDeviceBufferImpl)
+   CORE_CS_OBJECT(QNonContiguousByteDeviceBufferImpl)
 
  public:
    QNonContiguousByteDeviceBufferImpl(QBuffer *b);

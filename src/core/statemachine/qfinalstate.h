@@ -36,7 +36,7 @@ class QFinalStatePrivate;
 
 class Q_CORE_EXPORT QFinalState : public QAbstractState
 {
-   CS_OBJECT(QFinalState)
+   CORE_CS_OBJECT(QFinalState)
 
  public:
    QFinalState(QState *parent = 0);

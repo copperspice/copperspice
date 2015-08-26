@@ -36,7 +36,7 @@ class QDeclarativeTextPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeText : public QDeclarativeImplicitSizeItem
 {
-   CS_OBJECT(QDeclarativeText)
+   DECL_CS_OBJECT(QDeclarativeText)
 
    DECL_CS_ENUM(HAlignment)
    DECL_CS_ENUM(VAlignment)

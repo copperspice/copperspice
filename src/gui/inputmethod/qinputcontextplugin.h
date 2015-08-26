@@ -49,7 +49,7 @@ CS_DECLARE_INTERFACE(QInputContextFactoryInterface, QInputContextFactoryInterfac
 
 class Q_GUI_EXPORT QInputContextPlugin : public QObject, public QInputContextFactoryInterface
 {
-   CS_OBJECT(QInputContextPlugin)
+   GUI_CS_OBJECT(QInputContextPlugin)
    CS_INTERFACES(QInputContextFactoryInterface, QFactoryInterface)
 
  public:

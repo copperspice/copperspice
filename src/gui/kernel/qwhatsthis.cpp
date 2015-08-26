@@ -133,7 +133,7 @@ QT_BEGIN_NAMESPACE
 
 class QWhatsThat : public QWidget
 {
-   CS_OBJECT(QWhatsThat)
+   GUI_CS_OBJECT(QWhatsThat)
 
  public:
    QWhatsThat(const QString &txt, QWidget *parent, QWidget *showTextFor);
@@ -514,7 +514,7 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
 
 class QWhatsThisAction: public QAction
 {
-   CS_OBJECT(QWhatsThisAction)
+   GUI_CS_OBJECT(QWhatsThisAction)
 
  public:
    explicit QWhatsThisAction(QObject *parent = 0);

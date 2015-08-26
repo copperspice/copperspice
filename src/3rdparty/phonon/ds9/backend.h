@@ -49,7 +49,7 @@ namespace Phonon
 
         class Backend : public QObject, public Phonon::BackendInterface
         {
-            CS_OBJECT(Backend)
+            DS9_CS_OBJECT(Backend)
             CS_INTERFACES(Phonon::BackendInterface)
 
         public:

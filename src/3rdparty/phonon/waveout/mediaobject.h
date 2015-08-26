@@ -56,12 +56,12 @@ namespace Phonon
         class WorkerThread;
         class AudioOutput;
 
-        class MediaObject : public QObject, public Phonon::MediaObjectInterface
-        {
-        CS_OBJECT(MediaObject)
-        CS_INTERFACES(Phonon::MediaObjectInterface)
+        class MediaObject : public QObject, public Phonon::MediaObjectInterface {
 
-        public:
+           PHN_CS_OBJECT_MULTIPLE(MediaObject, QObject)
+           CS_INTERFACES(Phonon::MediaObjectInterface)
+
+         public:
             MediaObject(QObject *parent);
             ~MediaObject();
             Phonon::State state() const;

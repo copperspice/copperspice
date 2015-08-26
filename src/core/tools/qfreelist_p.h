@@ -26,7 +26,8 @@
 #ifndef QFREELIST_P_H
 #define QFREELIST_P_H
 
-#include <QtCore/qatomic.h>
+#include <qglobal.h>
+#include <qatomic.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -424,7 +424,7 @@ class QDeclarativeVisualDataModelDataMetaObject : public QDeclarativeOpenMetaObj
 
 class QDeclarativeVisualDataModelData : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualDataModelData)
+   DECL_CS_OBJECT(QDeclarativeVisualDataModelData)
 
  public:
    QDeclarativeVisualDataModelData(int index, QDeclarativeVisualDataModel *model);
@@ -447,8 +447,8 @@ class QDeclarativeVisualDataModelData : public QObject
 
    void ensureProperties();
 
-   CS_SIGNAL_1(Public, void indexChanged())
-   CS_SIGNAL_2(indexChanged)
+   DECL_CS_SIGNAL_1(Public, void indexChanged())
+   DECL_CS_SIGNAL_2(indexChanged)
 
  private:
    friend class QDeclarativeVisualDataModelDataMetaObject;
@@ -601,7 +601,7 @@ class QDeclarativeVisualDataModelPartsMetaObject : public QDeclarativeOpenMetaOb
 
 class QDeclarativeVisualDataModelParts : public QObject
 {
-   CS_OBJECT(QDeclarativeVisualDataModelParts)
+   DECL_CS_OBJECT(QDeclarativeVisualDataModelParts)
 
  public:
    QDeclarativeVisualDataModelParts(QDeclarativeVisualDataModel *parent);

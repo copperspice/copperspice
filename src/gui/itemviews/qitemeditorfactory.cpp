@@ -46,7 +46,7 @@ QT_BEGIN_NAMESPACE
 
 class QBooleanComboBox : public QComboBox
 {
-   CS_OBJECT(QBooleanComboBox)
+   GUI_CS_OBJECT(QBooleanComboBox)
 
    GUI_CS_PROPERTY_READ(value, value)
    GUI_CS_PROPERTY_WRITE(value, setValue)

@@ -51,10 +51,10 @@ class QDeclarativeNetworkAccessManagerFactory;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeEngine : public QObject
 {
-   CS_OBJECT(QDeclarativeEngine)
+   DECL_CS_OBJECT(QDeclarativeEngine)
 
-   CS_PROPERTY_READ(offlineStoragePath, offlineStoragePath)
-   CS_PROPERTY_WRITE(offlineStoragePath, setOfflineStoragePath)
+   DECL_CS_PROPERTY_READ(offlineStoragePath, offlineStoragePath)
+   DECL_CS_PROPERTY_WRITE(offlineStoragePath, setOfflineStoragePath)
 
  public:
    QDeclarativeEngine(QObject *p = 0);
@@ -100,10 +100,10 @@ class Q_DECLARATIVE_EXPORT QDeclarativeEngine : public QObject
    static ObjectOwnership objectOwnership(QObject *);
 
  public:
-   CS_SIGNAL_1(Public, void quit())
-   CS_SIGNAL_2(quit)
-   CS_SIGNAL_1(Public, void warnings(const QList <QDeclarativeError> &warnings))
-   CS_SIGNAL_2(warnings, warnings)
+   DECL_CS_SIGNAL_1(Public, void quit())
+   DECL_CS_SIGNAL_2(quit)
+   DECL_CS_SIGNAL_1(Public, void warnings(const QList <QDeclarativeError> &warnings))
+   DECL_CS_SIGNAL_2(warnings, warnings)
 
  private:
    Q_DISABLE_COPY(QDeclarativeEngine)

@@ -47,7 +47,7 @@ namespace Phonon
 class MediaSourcePrivate;
 class AbstractMediaStream;
 
-/** \class MediaSource mediasource.h Phonon/MediaSource
+/* \class MediaSource mediasource.h Phonon/MediaSource
  * Note that all constructors of this class are implicit, so that you can simply write
  * \code
  * MediaObject m;
@@ -68,30 +68,30 @@ class PHONON_EXPORT MediaSource
 {
     friend class StreamInterface;
     public:
-        /**
+        /*
          * Identifies the type of media described by the MediaSource object.
          *
          * \see MediaSource::type()
          */
         enum Type {
-            /**
+            /*
              * The MediaSource object does not describe any valid source.
              */
             Invalid = -1,
-            /**
+            /*
              * The MediaSource object describes a local file.
              */
             LocalFile,
-            /**
+            /*
              * The MediaSource object describes a URL, which can be both a local file and a file on
              * the network.
              */
             Url,
-            /**
+            /*
              * The MediaSource object describes a disc.
              */
             Disc,
-            /**
+            /*
              * The MediaSource object describes a data stream.
              *
              * This is also the type used for QIODevices.
@@ -99,7 +99,7 @@ class PHONON_EXPORT MediaSource
              * \see AbstractMediaStream
              */
             Stream,
-            /**
+            /*
              * An empty MediaSource.
              *
              * It can be used to unload the current media from a MediaObject.
@@ -115,7 +115,7 @@ class PHONON_EXPORT MediaSource
 */
         };
 
-        /**
+        /*
          * Creates an empty MediaSource.
          *
          * An empty MediaSource is considered valid and can be set on a MediaObject to unload its
@@ -125,21 +125,21 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource();
 
-        /**
+        /*
          * Creates a MediaSource object for a local file or a Qt resource.
          *
          * \param fileName file name of a local media file or a Qt resource that was compiled in.
          */
         MediaSource(const QString &fileName); //krazy:exclude=explicit
 
-        /**
+        /*
          * Creates a MediaSource object for a URL.
          *
          * \param url URL to a media file or stream.
          */
         MediaSource(const QUrl &url); //krazy:exclude=explicit
 
-        /**
+        /*
          * Creates a MediaSource object for discs.
          *
          * \param discType See \ref DiscType
@@ -150,7 +150,7 @@ class PHONON_EXPORT MediaSource
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        /**
+        /*
          * Creates a MediaSource object for a data stream.
          *
          * Your application can provide the media data by subclassing AbstractMediaStream and
@@ -162,7 +162,7 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(AbstractMediaStream *stream); //krazy:exclude=explicit
 
-        /**
+        /*
          * Creates a MediaSource object for a QIODevice.
          *
          * This constructor can be very handy in the combination of QByteArray and QBuffer.
@@ -176,36 +176,36 @@ class PHONON_EXPORT MediaSource
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
 #endif
 
-        /**
+        /*
          * Creates a MediaSource object for capture devices.
          */
         //MediaSource(const AudioCaptureDevice &, const VideoCaptureDevice &);
 
-        /**
+        /*
          * Destroys the MediaSource object.
          */
         ~MediaSource();
 
-        /**
+        /*
          * Constructs a copy of \p rhs.
          *
          * This constructor is fast thanks to explicit sharing.
          */
         MediaSource(const MediaSource &rhs);
 
-        /**
+        /*
          * Assigns \p rhs to this MediaSource and returns a reference to this MediaSource.
          *
          * This operation is fast thanks to explicit sharing.
          */
         MediaSource &operator=(const MediaSource &rhs);
 
-        /**
+        /*
          * Returns \p true if this MediaSource is equal to \p rhs; otherwise returns \p false.
          */
         bool operator==(const MediaSource &rhs) const;
 
-        /**
+        /*
          * Tell the MediaSource to take ownership of the AbstractMediaStream or QIODevice that was
          * passed in the constructor.
          *
@@ -218,46 +218,46 @@ class PHONON_EXPORT MediaSource
          */
         void setAutoDelete(bool enable);
 
-        /**
+        /*
          * Returns the setting of the auto-delete option. The default is \p false.
          *
          * \see setAutoDelete
          */
         bool autoDelete() const;
 
-        /**
+        /*
          * Returns the type of the MediaSource (depends on the constructor that was used).
          *
          * \see Type
          */
         Type type() const;
 
-        /**
+        /*
          * Returns the file name of the MediaSource if type() == LocalFile; otherwise returns
          * QString().
          */
         QString fileName() const;
 
-        /**
+        /*
          * Returns the url of the MediaSource if type() == URL or type() == LocalFile; otherwise
          * returns QUrl().
          */
         QUrl url() const;
 
-        /**
+        /*
          * Returns the disc type of the MediaSource if type() == Disc; otherwise returns \ref
          * NoDisc.
          */
         Phonon::DiscType discType() const;
 
-        /**
+        /*
          * Returns the device name of the MediaSource if type() == Disc; otherwise returns
          * QString().
          */
         QString deviceName() const;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        /**
+        /*
          * Returns the media stream of the MediaSource if type() == Stream; otherwise returns 0.
          * QIODevices are handled as streams, too.
          */

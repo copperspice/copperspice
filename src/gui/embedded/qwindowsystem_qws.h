@@ -181,7 +181,7 @@ class QWSSoundServerData;
 
 class Q_GUI_EXPORT QWSSoundServer : public QObject
 {
-   CS_OBJECT(QWSSoundServer)
+   GUI_CS_OBJECT(QWSSoundServer)
  public:
    QWSSoundServer(QObject *parent);
    ~QWSSoundServer();
@@ -211,7 +211,7 @@ extern Q_GUI_EXPORT QWSServer *qwsServer;
 
 class Q_GUI_EXPORT QWSServer : public QObject
 {
-   CS_OBJECT(QWSServer)
+   GUI_CS_OBJECT(QWSServer)
    Q_DECLARE_PRIVATE(QWSServer)
 
    friend class QCopChannel;
@@ -384,7 +384,7 @@ class Q_GUI_EXPORT QWSServer : public QObject
 #ifndef QT_NO_QWS_INPUTMETHODS
 class Q_GUI_EXPORT QWSInputMethod : public QObject
 {
-   CS_OBJECT(QWSInputMethod)
+   GUI_CS_OBJECT(QWSInputMethod)
 
  public:
    QWSInputMethod();
@@ -448,7 +448,7 @@ class QWSConvertSelectionCommand;
 
 class Q_GUI_EXPORT QWSClient : public QObject
 {
-   CS_OBJECT(QWSClient)
+   GUI_CS_OBJECT(QWSClient)
    Q_DECLARE_PRIVATE(QWSClient)
 
  public:

@@ -36,7 +36,7 @@ class QStyleOptionButton;
 
 class Q_GUI_EXPORT QPushButton : public QAbstractButton
 {
-   CS_OBJECT(QPushButton)
+   GUI_CS_OBJECT(QPushButton)
 
    GUI_CS_PROPERTY_READ(autoDefault, autoDefault)
    GUI_CS_PROPERTY_WRITE(autoDefault, setAutoDefault)

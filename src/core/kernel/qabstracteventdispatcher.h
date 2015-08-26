@@ -40,7 +40,7 @@ class QPair;
 
 class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 {
-   CS_OBJECT(QAbstractEventDispatcher)
+   CORE_CS_OBJECT(QAbstractEventDispatcher)
    Q_DECLARE_PRIVATE(QAbstractEventDispatcher)
 
  public:

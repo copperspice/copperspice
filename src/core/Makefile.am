@@ -20,13 +20,17 @@ if OSTYPE_LINUX
 lib_libCsCore1_la_LDFLAGS += -ldl -lpthread
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv 
+endif
+
 if OSTYPE_WIN
 lib_libCsCore1_la_CFLAGS += -DQT_MAKEDLL
 lib_libCsCore1_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lObjC
+lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lobjc
 endif
 
 if ZLIB
@@ -59,7 +63,6 @@ CORE_PUBLIC_INCLUDES =
 CORE_PRIVATE_INCLUDES =
 CORE_DIRS =
 
-include src/core/arch/Makefile.am
 include src/core/animation/Makefile.am
 include src/core/codecs/Makefile.am
 include src/core/concurrent/Makefile.am

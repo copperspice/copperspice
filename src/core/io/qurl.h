@@ -221,9 +221,9 @@ class Q_CORE_EXPORT QUrl
    }
 };
 
-inline uint qHash(const QUrl &url)
+inline uint qHash(const QUrl &url, uint seed)
 {
-   return qHash(url.toEncoded(QUrl::FormattingOption(0x100)));
+   return qHash(url.toEncoded(QUrl::FormattingOption(0x100)), seed);
 }
 
 Q_DECLARE_TYPEINFO(QUrl, Q_MOVABLE_TYPE);

@@ -71,7 +71,7 @@ class Q_GUI_EXPORT QUndoCommand
 
 class Q_GUI_EXPORT QUndoStack : public QObject
 {
-   CS_OBJECT(QUndoStack)
+   GUI_CS_OBJECT(QUndoStack)
    Q_DECLARE_PRIVATE(QUndoStack)
 
    GUI_CS_PROPERTY_READ(active, isActive)

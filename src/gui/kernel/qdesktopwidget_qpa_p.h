@@ -31,7 +31,7 @@
 
 class QDesktopScreenWidget : public QWidget
 {
-   CS_OBJECT(QDesktopScreenWidget)
+   GUI_CS_OBJECT(QDesktopScreenWidget)
 
  public:
    QDesktopScreenWidget(int screenNumber = -1) {

@@ -29,7 +29,7 @@ QT_END_NAMESPACE
 
 class QtMIMETypeSniffer : public QObject
 {
-    CS_OBJECT(QtMIMETypeSniffer)
+    WEB_CS_OBJECT(QtMIMETypeSniffer)
 
 public:
     QtMIMETypeSniffer(QNetworkReply*, const QString& advertisedMimeType, bool isSupportedImageType);

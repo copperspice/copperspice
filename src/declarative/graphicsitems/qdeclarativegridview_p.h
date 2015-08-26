@@ -37,7 +37,7 @@ class QDeclarativeGridViewPrivate;
 
 class QDeclarativeGridView : public QDeclarativeFlickable
 {
-   CS_OBJECT(QDeclarativeGridView)
+   DECL_CS_OBJECT(QDeclarativeGridView)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeGridView)
 
    DECL_CS_PROPERTY_READ(model, model)
@@ -113,7 +113,7 @@ class QDeclarativeGridView : public QDeclarativeFlickable
    DECL_CS_ENUM(Flow)
    DECL_CS_ENUM(PositionMode)
 
-   CS_CLASSINFO("DefaultProperty", "data")
+   DECL_CS_CLASSINFO("DefaultProperty", "data")
 
  public:
    QDeclarativeGridView(QDeclarativeItem *parent = 0);
@@ -291,7 +291,7 @@ class QDeclarativeGridView : public QDeclarativeFlickable
 
 class QDeclarativeGridViewAttached : public QObject
 {
-   CS_OBJECT(QDeclarativeGridViewAttached)
+   DECL_CS_OBJECT(QDeclarativeGridViewAttached)
 
  public:
    QDeclarativeGridViewAttached(QObject *parent)

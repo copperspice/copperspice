@@ -37,7 +37,7 @@ class QScriptDebuggerCodeViewInterfacePrivate;
 class QScriptDebuggerCodeViewInterface:
    public QWidget
 {
-   CS_OBJECT(QScriptDebuggerCodeViewInterface)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerCodeViewInterface)
  public:
    ~QScriptDebuggerCodeViewInterface();
 

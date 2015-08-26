@@ -34,7 +34,7 @@ class QScriptErrorLogWidgetPrivate;
 class QScriptErrorLogWidget:
    public QScriptErrorLogWidgetInterface
 {
-   CS_OBJECT(QScriptErrorLogWidget)
+   SCRIPT_T_CS_OBJECT(QScriptErrorLogWidget)
  public:
    QScriptErrorLogWidget(QWidget *parent = 0);
    ~QScriptErrorLogWidget();

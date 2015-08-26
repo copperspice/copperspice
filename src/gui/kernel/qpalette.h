@@ -37,7 +37,7 @@ class QVariant;
 
 class Q_GUI_EXPORT QPalette
 {
-   CS_GADGET(QPalette)
+   GUI_CS_GADGET(QPalette)
 
    GUI_CS_ENUM(ColorGroup)
    GUI_CS_ENUM(ColorRole)

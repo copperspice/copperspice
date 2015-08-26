@@ -50,7 +50,7 @@ class QString;
 
 class QXIMInputContext : public QInputContext
 {
-   CS_OBJECT(QXIMInputContext)
+   GUI_CS_OBJECT(QXIMInputContext)
 
  public:
    struct ICData {

@@ -44,7 +44,7 @@ class QScriptDebuggerConsoleGlobalObjectPrivate;
 
 class QScriptDebuggerConsoleGlobalObject : public QObject
 {
-   CS_OBJECT(QScriptDebuggerConsoleGlobalObject)
+   SCRIPT_T_CS_OBJECT(QScriptDebuggerConsoleGlobalObject)
 
  public:
    QScriptDebuggerConsoleGlobalObject(QObject *parent = 0);

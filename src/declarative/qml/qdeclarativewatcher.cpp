@@ -37,7 +37,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeWatchProxy : public QObject
 {
-   CS_OBJECT(QDeclarativeWatchProxy)
+   DECL_CS_OBJECT(QDeclarativeWatchProxy)
 
  public:
    QDeclarativeWatchProxy(int id, QObject *object, int debugId,
@@ -47,8 +47,8 @@ class QDeclarativeWatchProxy : public QObject
                           int debugId, QDeclarativeWatcher *parent = 0);
 
  private:
-   CS_SLOT_1(Private, void notifyValueChanged())
-   CS_SLOT_2(notifyValueChanged)
+   DECL_CS_SLOT_1(Private, void notifyValueChanged())
+   DECL_CS_SLOT_2(notifyValueChanged)
 
 
    friend class QDeclarativeWatcher;

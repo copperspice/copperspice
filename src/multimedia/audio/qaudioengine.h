@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioDeviceInfo : public QObject
 {
-   CS_OBJECT(QAbstractAudioDeviceInfo)
+   MULTI_CS_OBJECT(QAbstractAudioDeviceInfo)
 
  public:
    virtual QAudioFormat preferredFormat() const = 0;
@@ -52,7 +52,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractAudioDeviceInfo : public QObject
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioOutput : public QObject
 {
-   CS_OBJECT(QAbstractAudioOutput)
+   MULTI_CS_OBJECT(QAbstractAudioOutput)
 
  public:
    virtual QIODevice *start(QIODevice *device) = 0;
@@ -81,7 +81,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractAudioOutput : public QObject
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioInput : public QObject
 {
-   CS_OBJECT(QAbstractAudioInput)
+   MULTI_CS_OBJECT(QAbstractAudioInput)
 
  public:
    virtual QIODevice *start(QIODevice *device) = 0;

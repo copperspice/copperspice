@@ -229,7 +229,8 @@ class QGLEngineShaderProg;
 
 class Q_OPENGL_EXPORT QGLEngineSharedShaders
 {
-   CS_GADGET(QGLEngineSharedShaders)
+   OPENGL_CS_GADGET(QGLEngineSharedShaders)
+
  public:
 
    enum SnippetName {
@@ -389,7 +390,7 @@ class QGLEngineShaderProg
 
 class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
 {
-   CS_OBJECT(QGLEngineShaderManager)
+   OPENGL_CS_OBJECT(QGLEngineShaderManager)
  public:
    QGLEngineShaderManager(QGLContext *context);
    ~QGLEngineShaderManager();

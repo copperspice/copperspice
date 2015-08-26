@@ -50,7 +50,7 @@ class QTapGesturePrivate;
 
 class Q_GUI_EXPORT QGesture : public QObject
 {
-   CS_OBJECT(QGesture)
+   GUI_CS_OBJECT(QGesture)
    Q_DECLARE_PRIVATE(QGesture)
 
    GUI_CS_PROPERTY_READ(state, state)
@@ -97,7 +97,7 @@ class Q_GUI_EXPORT QGesture : public QObject
 
 class Q_GUI_EXPORT QPanGesture : public QGesture
 {
-   CS_OBJECT(QPanGesture)
+   GUI_CS_OBJECT(QPanGesture)
    Q_DECLARE_PRIVATE(QPanGesture)
 
    GUI_CS_PROPERTY_READ(lastOffset, lastOffset)
@@ -150,7 +150,7 @@ class Q_GUI_EXPORT QPanGesture : public QGesture
 
 class Q_GUI_EXPORT QPinchGesture : public QGesture
 {
-   CS_OBJECT(QPinchGesture)
+   GUI_CS_OBJECT(QPinchGesture)
    Q_DECLARE_PRIVATE(QPinchGesture)
 
    GUI_CS_FLAG(ChangeFlags, ChangeFlag)
@@ -231,7 +231,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QSwipeGesture : public QGesture
 {
-   CS_OBJECT(QSwipeGesture)
+   GUI_CS_OBJECT(QSwipeGesture)
    Q_DECLARE_PRIVATE(QSwipeGesture)
 
    GUI_CS_ENUM(SwipeDirection)
@@ -270,7 +270,7 @@ class Q_GUI_EXPORT QSwipeGesture : public QGesture
 
 class Q_GUI_EXPORT QTapGesture : public QGesture
 {
-   CS_OBJECT(QTapGesture)
+   GUI_CS_OBJECT(QTapGesture)
    Q_DECLARE_PRIVATE(QTapGesture)
 
    GUI_CS_PROPERTY_READ(position, position)
@@ -287,7 +287,7 @@ class Q_GUI_EXPORT QTapGesture : public QGesture
 
 class Q_GUI_EXPORT QTapAndHoldGesture : public QGesture
 {
-   CS_OBJECT(QTapAndHoldGesture)
+   GUI_CS_OBJECT(QTapAndHoldGesture)
    Q_DECLARE_PRIVATE(QTapAndHoldGesture)
 
    GUI_CS_PROPERTY_READ(position, position)

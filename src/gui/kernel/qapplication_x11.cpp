@@ -5680,7 +5680,7 @@ class QSessionManagerPrivate
 
 class QSmSocketReceiver : public QObject
 {
-   CS_OBJECT(QSmSocketReceiver)
+   GUI_CS_OBJECT(QSmSocketReceiver)
 
  public:
    QSmSocketReceiver(int socket) {

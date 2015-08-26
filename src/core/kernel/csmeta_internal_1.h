@@ -494,9 +494,7 @@ class Index_Sequence_For
 template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes, size_t ...Ks>
 FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(FunctionArgTypes...),
       const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{
-   // BROOM (unpack, recheck forward)
-   // return functionPtr(std::forward<typename std::tuple_element<Ks, std::tuple<FunctionArgTypes...> >::type > (std::get<Ks>(data))...);
+{   
    return functionPtr(std::get<Ks>(data)...);
 }
 
@@ -524,9 +522,7 @@ CSVoidReturn cs_unpack_function_args(void (*functionPtr)(FunctionArgTypes...), c
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
       const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...> dummy)
-{
-   // BROOM (unpack, recheck forward)
-   // return (obj->*methodPtr)(std::forward<typename std::tuple_element<Ks, std::tuple<MethodArgTypes...> >::type > (std::get<Ks>(data))...);
+{  
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
 
@@ -536,8 +532,6 @@ MethodReturn cs_unpack_method_args_internal(const MethodClass *obj,
       MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
       const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...> dummy)
 {
-   // BROOM (unpack, recheck forward)
-   // return (obj->*methodPtr)(std::forward<typename std::tuple_element<Ks, std::tuple<MethodArgTypes...> >::type > (std::get<Ks>(data))...);
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
 
@@ -637,6 +631,8 @@ class removeLast
    static type doRemove(const std::tuple<Ts...> &);
 };
 
+
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 
 // **
 template<unsigned int ...Vs>
@@ -750,11 +746,12 @@ class TeaCup< std::tuple<Ts...> >: public TeaCup<Ts...>
 
 template<class ...Ts>
 template<class T>
-TeaCup<std::tuple<Ts...>>::TeaCup(T lambda)
-                          : TeaCup<Ts...>(lambda)
+TeaCup<std::tuple<Ts...>>::TeaCup(T lambda) 
+   : TeaCup<Ts...>(lambda)
 {
 }
 
+/**   \endcond   */
 
 
 // ** next two functions use Index_Sequence Class to convert a tuple to

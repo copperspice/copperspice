@@ -51,7 +51,7 @@ class QNonContiguousByteDevice;
 // - KIO uses a pull mechanism too (data/dataReq signals)
 class QNetworkAccessBackend : public QObject
 {
-   CS_OBJECT(QNetworkAccessBackend)
+   NET_CS_OBJECT(QNetworkAccessBackend)
 
  public:
    QNetworkAccessBackend();

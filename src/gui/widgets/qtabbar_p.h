@@ -242,7 +242,7 @@ class QTabBarPrivate  : public QWidgetPrivate
 
 class CloseButton : public QAbstractButton
 {
-   CS_OBJECT(CloseButton)
+   GUI_CS_OBJECT(CloseButton)
 
  public:
    CloseButton(QWidget *parent = 0);

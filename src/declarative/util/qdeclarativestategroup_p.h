@@ -39,13 +39,13 @@ class Q_DECLARATIVE_EXPORT QDeclarativeStateGroup : public QObject, public QDecl
    CS_INTERFACES(QDeclarativeParserStatus)
    Q_DECLARE_PRIVATE(QDeclarativeStateGroup)
 
-   CS_PROPERTY_READ(state, state)
-   CS_PROPERTY_WRITE(state, setState)
-   CS_PROPERTY_NOTIFY(state, stateChanged)
-   CS_PROPERTY_READ(states, statesProperty)
-   CS_PROPERTY_DESIGNABLE(states, false)
-   CS_PROPERTY_READ(transitions, transitionsProperty)
-   CS_PROPERTY_DESIGNABLE(transitions, false)
+   DECL_CS_PROPERTY_READ(state, state)
+   DECL_CS_PROPERTY_WRITE(state, setState)
+   DECL_CS_PROPERTY_NOTIFY(state, stateChanged)
+   DECL_CS_PROPERTY_READ(states, statesProperty)
+   DECL_CS_PROPERTY_DESIGNABLE(states, false)
+   DECL_CS_PROPERTY_READ(transitions, transitionsProperty)
+   DECL_CS_PROPERTY_DESIGNABLE(transitions, false)
 
  public:
    QDeclarativeStateGroup(QObject * = 0);
@@ -64,8 +64,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeStateGroup : public QObject, public QDecl
    virtual void classBegin();
    virtual void componentComplete();
 
-   CS_SIGNAL_1(Public, void stateChanged(const QString &un_named_arg1))
-   CS_SIGNAL_2(stateChanged, un_named_arg1)
+   DECL_CS_SIGNAL_1(Public, void stateChanged(const QString &un_named_arg1))
+   DECL_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
  private:
    friend class QDeclarativeState;

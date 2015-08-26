@@ -129,7 +129,7 @@ class GraphicsLayerQtImpl : public QGraphicsObject
 , public virtual TiledBackingStoreClient
 #endif
 {
-    CS_OBJECT(GraphicsLayerQtImpl)
+    WEB_CS_OBJECT(GraphicsLayerQtImpl)
 
 public:
     // This set of flags help us defer which properties of the layer have been

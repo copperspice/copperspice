@@ -56,7 +56,7 @@ static const QLatin1String settingStoragePrefix("Qt/QtWebKit/QWebInspector/");
 static const QLatin1String settingStorageTypeSuffix(".type");
 
 class InspectorClientWebPage : public QWebPage {
-    CS_OBJECT(InspectorClientWebPage)
+    WEB_CS_OBJECT(InspectorClientWebPage)
     friend class InspectorClientQt;
 
 public:

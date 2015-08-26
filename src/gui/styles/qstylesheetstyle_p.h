@@ -49,7 +49,7 @@ class QStyleSheetStyle : public QWindowsStyle
 {
    typedef QWindowsStyle ParentStyle;
 
-   CS_OBJECT(QStyleSheetStyle)
+   GUI_CS_OBJECT(QStyleSheetStyle)
 
  public:
    QStyleSheetStyle(QStyle *baseStyle);
@@ -155,7 +155,7 @@ class QStyleSheetStyle : public QWindowsStyle
 
 class QStyleSheetStyleCaches : public QObject
 {
-   CS_OBJECT(QStyleSheetStyleCaches)
+   GUI_CS_OBJECT(QStyleSheetStyleCaches)
 
  public :
    GUI_CS_SLOT_1(Public, void widgetDestroyed(QObject *un_named_arg1))

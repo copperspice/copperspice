@@ -73,7 +73,7 @@ class QAuServerQWS;
 
 class QAuBucketQWS : public QObject, public QAuBucket
 {
-   CS_OBJECT(QAuBucketQWS)
+   GUI_CS_OBJECT(QAuBucketQWS)
 
  public:
    QAuBucketQWS( QAuServerQWS *, QSound *, QObject *parent = 0 );
@@ -122,7 +122,7 @@ int QAuBucketQWS::next = 0;
 
 class QAuServerQWS : public QAuServer
 {
-   CS_OBJECT(QAuServerQWS)
+   GUI_CS_OBJECT(QAuServerQWS)
 
  public:
    QAuServerQWS( QObject *parent );

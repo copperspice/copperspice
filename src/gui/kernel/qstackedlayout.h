@@ -34,7 +34,7 @@ class QStackedLayoutPrivate;
 
 class Q_GUI_EXPORT QStackedLayout : public QLayout
 {
-   CS_OBJECT(QStackedLayout)
+   GUI_CS_OBJECT(QStackedLayout)
    Q_DECLARE_PRIVATE(QStackedLayout)
 
    GUI_CS_ENUM(StackingMode)

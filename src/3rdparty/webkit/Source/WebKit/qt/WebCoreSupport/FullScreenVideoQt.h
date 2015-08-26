@@ -46,7 +46,7 @@ class QTKitFullScreenVideoHandler;
 class FullScreenVideoWindow;
 
 class GStreamerFullScreenVideoHandler : public QObject {
-    CS_OBJECT(GStreamerFullScreenVideoHandler)
+    WEB_CS_OBJECT(GStreamerFullScreenVideoHandler)
 public:
     GStreamerFullScreenVideoHandler();
     ~GStreamerFullScreenVideoHandler() { }
@@ -66,7 +66,7 @@ private:
 
 #if defined(WTF_USE_QT_MULTIMEDIA) && WTF_USE_QT_MULTIMEDIA
 class DefaultFullScreenVideoHandler : public QWebFullScreenVideoHandler {
-    CS_OBJECT(DefaultFullScreenVideoHandler)
+    WEB_CS_OBJECT(DefaultFullScreenVideoHandler)
 
 public:
     DefaultFullScreenVideoHandler();
@@ -86,7 +86,7 @@ private:
 #endif
 
 class FullScreenVideoQt : public QObject {
-    CS_OBJECT(FullScreenVideoQt)
+    WEB_CS_OBJECT(FullScreenVideoQt)
 
 public:
     FullScreenVideoQt(ChromeClientQt*);

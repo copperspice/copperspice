@@ -42,7 +42,7 @@ class QNetworkAccessCachedFtpConnection;
 
 class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 {
-   CS_OBJECT(QNetworkAccessFtpBackend)
+   NET_CS_OBJECT(QNetworkAccessFtpBackend)
 
  public:
    enum State {

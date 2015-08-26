@@ -38,7 +38,7 @@ class QAbstractButton;
 
 class Q_GUI_EXPORT QMessageBox : public QDialog
 {
-   CS_OBJECT(QMessageBox)
+   GUI_CS_OBJECT(QMessageBox)
 
    GUI_CS_ENUM(Icon)
    GUI_CS_FLAG(StandardButton, StandardButtons)

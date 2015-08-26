@@ -43,7 +43,7 @@ namespace Gstreamer
 {
     class VolumeFaderEffect : public Effect, public VolumeFaderInterface
     {
-        CS_OBJECT(VolumeFaderEffect)
+        GSTRM_CS_OBJECT(VolumeFaderEffect)
         CS_INTERFACES(Phonon::VolumeFaderInterface)
 
         public:

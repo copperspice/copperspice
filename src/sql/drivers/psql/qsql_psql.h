@@ -77,7 +77,7 @@ class QPSQLResult : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
 {
-   CS_OBJECT(QPSQLDriver)
+   SQL_CS_OBJECT(QPSQLDriver)
 
  public:
    enum Protocol {

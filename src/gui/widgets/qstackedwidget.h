@@ -36,7 +36,7 @@ class QStackedWidgetPrivate;
 
 class Q_GUI_EXPORT QStackedWidget : public QFrame
 {
-   CS_OBJECT(QStackedWidget)
+   GUI_CS_OBJECT(QStackedWidget)
 
    GUI_CS_PROPERTY_READ(currentIndex, currentIndex)
    GUI_CS_PROPERTY_WRITE(currentIndex, setCurrentIndex)

@@ -35,7 +35,7 @@ class QDesktopWidgetPrivate;
 
 class Q_GUI_EXPORT QDesktopWidget : public QWidget
 {
-   CS_OBJECT(QDesktopWidget)
+   GUI_CS_OBJECT(QDesktopWidget)
 
    GUI_CS_PROPERTY_READ(virtualDesktop, isVirtualDesktop)
    GUI_CS_PROPERTY_READ(screenCount, screenCount)

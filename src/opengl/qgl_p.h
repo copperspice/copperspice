@@ -480,7 +480,7 @@ class Q_OPENGL_EXPORT QGLShareContextScope
 
 class QGLTextureDestroyer : public QObject
 {
-   CS_OBJECT(QGLTextureDestroyer)
+   OPENGL_CS_OBJECT(QGLTextureDestroyer)
 
  public:
    QGLTextureDestroyer() : QObject() {
@@ -506,7 +506,7 @@ class QGLTextureDestroyer : public QObject
 // ### make QGLContext a QObject in 5.0 and remove the proxy stuff
 class Q_OPENGL_EXPORT QGLSignalProxy : public QObject
 {
-   CS_OBJECT(QGLSignalProxy)
+   OPENGL_CS_OBJECT(QGLSignalProxy)
 
  public:
    void emitAboutToDestroyContext(const QGLContext *context) {

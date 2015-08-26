@@ -38,16 +38,18 @@ class QDBusServiceWatcherPrivate;
 
 class Q_DBUS_EXPORT QDBusServiceWatcher: public QObject
 {
-    Q_OBJECT
-    Q_PROPERTY(QStringList watchedServices READ watchedServices WRITE setWatchedServices)
-    Q_PROPERTY(WatchMode watchMode READ watchMode WRITE setWatchMode)
+    CS_OBJECT(QDBusServiceWatcher)
+    CS_PROPERTY_READ(watchedServices, watchedServices)
+    CS_PROPERTY_WRITE(watchedServices, setWatchedServices)
+    CS_PROPERTY_READ(watchMode, watchMode)
+    CS_PROPERTY_WRITE(watchMode, setWatchMode)
 public:
     enum WatchModeFlag {
         WatchForRegistration = 0x01,
         WatchForUnregistration = 0x02,
         WatchForOwnerChange = 0x03
     };
-    Q_DECLARE_FLAGS(WatchMode, WatchModeFlag)
+    using WatchMode = QFlags<WatchModeFlag>;
 
     explicit QDBusServiceWatcher(QObject *parent = 0);
     QDBusServiceWatcher(const QString &service, const QDBusConnection &connection,
@@ -65,13 +67,25 @@ public:
     QDBusConnection connection() const;
     void setConnection(const QDBusConnection &connection);
 
-Q_SIGNALS:
-    void serviceRegistered(const QString &service);
-    void serviceUnregistered(const QString &service);
-    void serviceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
+public:
+    CS_SIGNAL_1(Public, void serviceRegistered(const QString & service))
+    CS_SIGNAL_2(serviceRegistered,service) 
+    CS_SIGNAL_1(Public, void serviceUnregistered(const QString & service))
+    CS_SIGNAL_2(serviceUnregistered,service) 
+    CS_SIGNAL_1(Public, void serviceOwnerChanged(const QString & service,const QString & oldOwner,const QString & newOwner))
+    CS_SIGNAL_2(serviceOwnerChanged,service,oldOwner,newOwner) 
 
 private:
-    Q_PRIVATE_SLOT(d_func(), void _q_serviceOwnerChanged(QString,QString,QString))
+    CS_SLOT_1(Private, void _q_serviceOwnerChanged(QString un_named_arg1,QString un_named_arg2,QString un_named_arg3))
+    CS_SLOT_2(_q_serviceOwnerChanged)
+
+/*  PRIVATE_SLOT
+void _q_serviceOwnerChanged(QString un_named_arg1,QString un_named_arg2,QString un_named_arg3)
+{
+	Q_D(QDBusServiceWatcher);
+	d->_q_serviceOwnerChanged();
+}
+*/
     Q_DISABLE_COPY(QDBusServiceWatcher)
     Q_DECLARE_PRIVATE(QDBusServiceWatcher)
 };

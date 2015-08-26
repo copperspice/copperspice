@@ -34,15 +34,13 @@ class QLibraryPrivate;
 
 class Q_CORE_EXPORT QLibrary : public QObject
 {
-   CS_OBJECT(QLibrary)
+   CORE_CS_OBJECT(QLibrary)
 
    CORE_CS_PROPERTY_READ(fileName, fileName)
    CORE_CS_PROPERTY_WRITE(fileName, setFileName)
 
    CORE_CS_PROPERTY_READ(loadHints, loadHints)
    CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
-
-   CORE_CS_FLAG(LoadHint, LoadHints)
 
  public:
    enum LoadHint {
@@ -52,6 +50,8 @@ class Q_CORE_EXPORT QLibrary : public QObject
       ImprovedSearchHeuristics = 0x08
    };
    using LoadHints = QFlags<LoadHint>;
+
+   CORE_CS_FLAG(LoadHint, LoadHints)
 
    explicit QLibrary(QObject *parent = 0);
    explicit QLibrary(const QString &fileName, QObject *parent = 0);

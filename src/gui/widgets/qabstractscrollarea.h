@@ -38,7 +38,7 @@ class QAbstractScrollAreaPrivate;
 
 class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 {
-   CS_OBJECT(QAbstractScrollArea)
+   GUI_CS_OBJECT(QAbstractScrollArea)
 
    GUI_CS_PROPERTY_READ(verticalScrollBarPolicy, verticalScrollBarPolicy)
    GUI_CS_PROPERTY_WRITE(verticalScrollBarPolicy, setVerticalScrollBarPolicy)

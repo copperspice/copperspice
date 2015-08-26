@@ -42,7 +42,7 @@ class QMenu;
 
 class Q_GUI_EXPORT QMainWindow : public QWidget
 {
-   CS_OBJECT(QMainWindow)
+   GUI_CS_OBJECT(QMainWindow)
 
    GUI_CS_ENUM(DockOption)
    GUI_CS_FLAG(DockOption, DockOptions)

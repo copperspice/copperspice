@@ -34,7 +34,7 @@ class QDeclarativeImageBasePrivate;
 
 class QDeclarativeImageBase : public QDeclarativeImplicitSizeItem
 {
-   CS_OBJECT(QDeclarativeImageBase)
+   DECL_CS_OBJECT(QDeclarativeImageBase)
 
    DECL_CS_ENUM(Status)
 

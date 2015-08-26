@@ -37,7 +37,7 @@ class QStyleOptionHeader;
 
 class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 {
-   CS_OBJECT(QHeaderView)
+   GUI_CS_OBJECT(QHeaderView)
 
    GUI_CS_PROPERTY_READ(showSortIndicator, isSortIndicatorShown)
    GUI_CS_PROPERTY_WRITE(showSortIndicator, setSortIndicatorShown)

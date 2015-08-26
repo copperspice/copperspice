@@ -35,7 +35,7 @@ class QX11EmbedContainerPrivate;
 
 class Q_GUI_EXPORT QX11EmbedWidget : public QWidget
 {
-   CS_OBJECT(QX11EmbedWidget)
+   GUI_CS_OBJECT(QX11EmbedWidget)
 
  public:
    QX11EmbedWidget(QWidget *parent = 0);
@@ -72,7 +72,7 @@ class Q_GUI_EXPORT QX11EmbedWidget : public QWidget
 
 class Q_GUI_EXPORT QX11EmbedContainer : public QWidget
 {
-   CS_OBJECT(QX11EmbedContainer)
+   GUI_CS_OBJECT(QX11EmbedContainer)
 
  public:
    QX11EmbedContainer(QWidget *parent = 0);

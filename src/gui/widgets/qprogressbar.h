@@ -37,7 +37,7 @@ class QStyleOptionProgressBar;
 
 class Q_GUI_EXPORT QProgressBar : public QWidget
 {
-   CS_OBJECT(QProgressBar)
+   GUI_CS_OBJECT(QProgressBar)
 
    GUI_CS_ENUM(Direction)
 

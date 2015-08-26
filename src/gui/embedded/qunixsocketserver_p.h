@@ -34,7 +34,7 @@ class QUnixSocketServerPrivate;
 
 class Q_GUI_EXPORT QUnixSocketServer : public QObject
 {
-   CS_OBJECT(QUnixSocketServer)
+   GUI_CS_OBJECT(QUnixSocketServer)
 
  public:
    enum ServerError { NoError, InvalidPath, ResourceError, BindError, ListenError };

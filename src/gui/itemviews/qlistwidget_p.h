@@ -55,7 +55,7 @@ class QListModelGreaterThan
 
 class QListModel : public QAbstractListModel
 {
-   CS_OBJECT(QListModel)
+   GUI_CS_OBJECT(QListModel)
 
  public:
    QListModel(QListWidget *parent);

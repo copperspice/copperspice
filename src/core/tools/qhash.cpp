@@ -22,6 +22,13 @@
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
+// for rand_s, _CRT_RAND_S must be #defined before #including stdlib.h.
+// put it at the beginning so some indirect inclusion doesn't break it
+#ifndef _CRT_RAND_S
+#define _CRT_RAND_S
+#endif
+#include <stdlib.h>
+
 
 #include <qhash.h>
 
@@ -31,57 +38,63 @@
 
 #include <qbitarray.h>
 #include <qstring.h>
-#include <stdlib.h>
+#include <qglobal.h>
+#include <qbytearray.h>
+#include <qdatetime.h>
 
-#ifdef QT_QHASH_DEBUG
-#include <qstring.h>
-#endif
+#include <qcoreapplication.h>
+
+#ifdef Q_OS_UNIX
+#include <stdio.h>
+#include "private/qcore_unix_p.h"
+#endif 
+
+#include <limits.h>
+
 
 QT_BEGIN_NAMESPACE
 
-static uint hash(const uchar *p, int n)
+static inline uint hash(const uchar *p, int len, uint seed)
 {
-   uint h = 0;
+   uint h = seed;
 
-   while (n--) {
-      h = (h << 4) + *p++;
-      h ^= (h & 0xf0000000) >> 23;
-      h &= 0x0fffffff;
+   for (int i = 0; i < len; ++i) {
+      h = 31 * h + p[i];
    }
+
    return h;
 }
 
-static uint hash(const QChar *p, int n)
+static inline uint hash(const QChar *p, int len, uint seed)
 {
-   uint h = 0;
+   uint h = seed;
 
-   while (n--) {
-      h = (h << 4) + (*p++).unicode();
-      h ^= (h & 0xf0000000) >> 23;
-      h &= 0x0fffffff;
+   for (int i = 0; i < len; ++i) {
+      h = 31 * h + p[i].unicode();
    }
+
    return h;
 }
 
-uint qHash(const QByteArray &key)
+uint qHash(const QByteArray &key, uint seed)
 {
-   return hash(reinterpret_cast<const uchar *>(key.constData()), key.size());
+   return hash(reinterpret_cast<const uchar *>(key.constData()), key.size(), seed);
 }
 
-uint qHash(const QString &key)
+uint qHash(const QString &key, uint seed)
 {
-   return hash(key.unicode(), key.size());
+   return hash(key.unicode(), key.size(), seed);
 }
 
-uint qHash(const QStringRef &key)
+uint qHash(const QStringRef &key, uint seed)
 {
-   return hash(key.unicode(), key.size());
+   return hash(key.unicode(), key.size(), seed);
 }
 
-uint qHash(const QBitArray &bitArray)
+uint qHash(const QBitArray &bitArray, uint seed)
 {
    int m = bitArray.d.size() - 1;
-   uint result = hash(reinterpret_cast<const uchar *>(bitArray.d.constData()), qMax(0, m));
+   uint result = hash(reinterpret_cast<const uchar *>(bitArray.d.constData()), qMax(0, m), seed);
 
    // deal with the last 0 to 7 bits manually, because we can't trust that
    // the padding is initialized to 0 in bitArray.d
@@ -90,6 +103,89 @@ uint qHash(const QBitArray &bitArray)
       result = ((result << 4) + bitArray.d.at(m)) & ((1 << n) - 1);
    }
    return result;
+}
+
+uint qHash(const QLatin1String &key, uint seed)
+{
+   return hash(reinterpret_cast<const uchar *>(key.data()), key.size(), seed);
+} 
+
+static uint qt_create_qhash_seed()
+{
+   uint seed = 0;
+	
+#if defined(Q_OS_UNIX)
+   int randomfd = qt_safe_open("/dev/urandom", O_RDONLY);
+   if (randomfd == -1) {
+       randomfd = qt_safe_open("/dev/random", O_RDONLY | O_NONBLOCK);
+   }
+   if (randomfd != -1) {
+       if (qt_safe_read(randomfd, reinterpret_cast<char *>(&seed), sizeof(seed)) == sizeof(seed)) {
+	   qt_safe_close(randomfd);
+	   return seed;
+       }
+       qt_safe_close(randomfd);
+   }
+#endif 
+   
+   // general fallback: initialize from the current timestamp, pid,
+   // and address of a stack-local variable
+   quint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+   seed ^= timestamp;
+   seed ^= (timestamp >> 32);
+   
+   quint64 pid = QCoreApplication::applicationPid();
+   seed ^= pid;
+   seed ^= (pid >> 32);
+   
+   quintptr seedPtr = reinterpret_cast<quintptr>(&seed);
+   seed ^= seedPtr;
+   if(sizeof(int*) == 8) {
+       seed ^= (seedPtr >> 32);
+   }
+   
+   return seed;
+}
+
+
+uint qt_hash(const QString &key)
+{
+   const QChar *p = key.unicode();
+   int n = key.size();
+   uint h = 0;
+   
+   while (n--) {
+       h = (h << 4) + (*p++).unicode();
+       h ^= (h & 0xf0000000) >> 23;
+       h &= 0x0fffffff;
+   }
+   return h;
+}
+
+std::atomic<uint> qt_qhash_seed{0};
+
+uint QHashData::hashSeed()
+{
+    uint value = qt_qhash_seed.load(std::memory_order_relaxed);
+    if (value != 0) {
+	// Already initialized
+	return value;
+    }
+
+    value = qt_create_qhash_seed();
+    if(value == 0) {
+	// Prevent 0 from ever being a valid seed value
+	value = 1;
+    }
+    
+    uint expectedValue = 0;
+    if(qt_qhash_seed.compare_exchange_strong(expectedValue, value, std::memory_order_relaxed)) {
+	// We succeeded, value is correct
+	return value;
+    } else {
+	// We failed, someone else has filled in the value
+	return expectedValue;
+    }
 }
 
 /*
@@ -143,7 +239,7 @@ const int MinNumBits = 4;
 QHashData *QHashData::sharedNull()
 {
    static const QHashData shared_null = {
-      0, 0, Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, MinNumBits, 0, 0, true, false, 0
+       0, 0, Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, MinNumBits, 0, 0, true, false, 0
    };
 
    return const_cast<QHashData *>(&shared_null);
@@ -174,6 +270,7 @@ QHashData *QHashData::detach_helper(void (*node_duplicate)(Node *, void *),
       QHashData *d;
       Node *e;
    };
+
    d = new QHashData;
    d->fakeNext = 0;
    d->buckets = 0;

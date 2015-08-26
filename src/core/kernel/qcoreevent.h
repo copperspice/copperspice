@@ -37,16 +37,15 @@ class QEventPrivate;
 
 class Q_CORE_EXPORT QEvent           // event base class
 {
-   CS_GADGET(QEvent)
-   CORE_CS_ENUM(Type)
-
+   CORE_CS_GADGET(QEvent)
+   
  public:
    enum Type {
       /*
         If you get a strange compiler error on the line with None,
         it's probably because you're also including X11 headers,
         which #define the symbol None. Put the X11 includes after
-        the Qt includes to solve this problem.
+        the CS includes to solve this problem.
       */
       None = 0,                               // invalid event
       Timer = 1,                              // timer event
@@ -258,11 +257,14 @@ class Q_CORE_EXPORT QEvent           // event base class
       MaxUser = 65535                         // last user event id
    };
 
+   CORE_CS_ENUM(Type)
+
    QEvent(Type type);
    virtual ~QEvent();
    inline Type type() const {
       return static_cast<Type>(t);
    }
+
    inline bool spontaneous() const {
       return spont;
    }
@@ -270,6 +272,7 @@ class Q_CORE_EXPORT QEvent           // event base class
    inline void setAccepted(bool accepted) {
       m_accept = accepted;
    }
+
    inline bool isAccepted() const {
       return m_accept;
    }
@@ -277,6 +280,7 @@ class Q_CORE_EXPORT QEvent           // event base class
    inline void accept() {
       m_accept = true;
    }
+
    inline void ignore() {
       m_accept = false;
    }

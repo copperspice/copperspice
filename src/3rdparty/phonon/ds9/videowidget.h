@@ -49,7 +49,7 @@ namespace Phonon
                 NonNative = 1
             };
 
-            CS_OBJECT(VideoWidget)
+            DS9_CS_OBJECT(VideoWidget)
                 CS_INTERFACES(Phonon::VideoWidgetInterface)
         public:
             VideoWidget(QWidget *parent = 0);

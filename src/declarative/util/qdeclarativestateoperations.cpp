@@ -478,7 +478,7 @@ QDeclarativeStateOperation::ActionList QDeclarativeParentChange::actions()
 
 class AccessibleFxItem : public QDeclarativeItem
 {
-   CS_OBJECT(AccessibleFxItem)
+   DECL_CS_OBJECT(AccessibleFxItem)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeItem)
 
  public:

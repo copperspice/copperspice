@@ -33,21 +33,21 @@ QT_BEGIN_NAMESPACE
 class QDeclarativePaintedItemPrivate;
 class QDeclarativePaintedItem : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativePaintedItem)
+   DECL_CS_OBJECT(QDeclarativePaintedItem)
 
-   CS_PROPERTY_READ(contentsSize, contentsSize)
-   CS_PROPERTY_WRITE(contentsSize, setContentsSize)
-   CS_PROPERTY_NOTIFY(contentsSize, contentsSizeChanged)
-   CS_PROPERTY_READ(fillColor, fillColor)
-   CS_PROPERTY_WRITE(fillColor, setFillColor)
-   CS_PROPERTY_NOTIFY(fillColor, fillColorChanged)
-   CS_PROPERTY_READ(pixelCacheSize, pixelCacheSize)
-   CS_PROPERTY_WRITE(pixelCacheSize, setPixelCacheSize)
-   CS_PROPERTY_READ(smoothCache, smoothCache)
-   CS_PROPERTY_WRITE(smoothCache, setSmoothCache)
-   CS_PROPERTY_READ(contentsScale, contentsScale)
-   CS_PROPERTY_WRITE(contentsScale, setContentsScale)
-   CS_PROPERTY_NOTIFY(contentsScale, contentsScaleChanged)
+   DECL_CS_PROPERTY_READ(contentsSize, contentsSize)
+   DECL_CS_PROPERTY_WRITE(contentsSize, setContentsSize)
+   DECL_CS_PROPERTY_NOTIFY(contentsSize, contentsSizeChanged)
+   DECL_CS_PROPERTY_READ(fillColor, fillColor)
+   DECL_CS_PROPERTY_WRITE(fillColor, setFillColor)
+   DECL_CS_PROPERTY_NOTIFY(fillColor, fillColorChanged)
+   DECL_CS_PROPERTY_READ(pixelCacheSize, pixelCacheSize)
+   DECL_CS_PROPERTY_WRITE(pixelCacheSize, setPixelCacheSize)
+   DECL_CS_PROPERTY_READ(smoothCache, smoothCache)
+   DECL_CS_PROPERTY_WRITE(smoothCache, setSmoothCache)
+   DECL_CS_PROPERTY_READ(contentsScale, contentsScale)
+   DECL_CS_PROPERTY_WRITE(contentsScale, setContentsScale)
+   DECL_CS_PROPERTY_NOTIFY(contentsScale, contentsScaleChanged)
 
  public:
    QDeclarativePaintedItem(QDeclarativeItem *parent = 0);
@@ -70,12 +70,12 @@ class QDeclarativePaintedItem : public QDeclarativeItem
 
    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
-   CS_SIGNAL_1(Public, void fillColorChanged())
-   CS_SIGNAL_2(fillColorChanged)
-   CS_SIGNAL_1(Public, void contentsSizeChanged())
-   CS_SIGNAL_2(contentsSizeChanged)
-   CS_SIGNAL_1(Public, void contentsScaleChanged())
-   CS_SIGNAL_2(contentsScaleChanged)
+   DECL_CS_SIGNAL_1(Public, void fillColorChanged())
+   DECL_CS_SIGNAL_2(fillColorChanged)
+   DECL_CS_SIGNAL_1(Public, void contentsSizeChanged())
+   DECL_CS_SIGNAL_2(contentsSizeChanged)
+   DECL_CS_SIGNAL_1(Public, void contentsScaleChanged())
+   DECL_CS_SIGNAL_2(contentsScaleChanged)
 
  protected:
    QDeclarativePaintedItem(QDeclarativePaintedItemPrivate &dd, QDeclarativeItem *parent);
@@ -87,10 +87,10 @@ class QDeclarativePaintedItem : public QDeclarativeItem
    void setCacheFrozen(bool);
    QRectF boundingRect() const;
 
-   CS_SLOT_1(Protected, void dirtyCache(const QRect &un_named_arg1))
-   CS_SLOT_2(dirtyCache)
-   CS_SLOT_1(Protected, void clearCache())
-   CS_SLOT_2(clearCache)
+   DECL_CS_SLOT_1(Protected, void dirtyCache(const QRect &un_named_arg1))
+   DECL_CS_SLOT_2(dirtyCache)
+   DECL_CS_SLOT_1(Protected, void clearCache())
+   DECL_CS_SLOT_2(clearCache)
 
  private:
    Q_DISABLE_COPY(QDeclarativePaintedItem)

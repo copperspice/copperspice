@@ -127,7 +127,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeviceClosedNotifier : public QObject
 {
-   CS_OBJECT(QDeviceClosedNotifier)
+   CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
    inline QDeviceClosedNotifier() {
@@ -135,6 +135,7 @@ class QDeviceClosedNotifier : public QObject
 
    inline void setupDevice(QTextStream *stream, QIODevice *device) {
       disconnect();
+
       if (device) {
          connect(device, SIGNAL(aboutToClose()), this, SLOT(flushStream()));
       }

@@ -40,7 +40,7 @@ QT_BEGIN_NAMESPACE
 
 class QFontEngineDirectWrite : public QFontEngine
 {
-   CS_OBJECT(QFontEngineDirectWrite)
+   GUI_CS_OBJECT(QFontEngineDirectWrite)
 
  public:
    explicit QFontEngineDirectWrite(IDWriteFactory *directWriteFactory,

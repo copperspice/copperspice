@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
 {
-   CS_OBJECT(QObjectCleanupHandler)
+   CORE_CS_OBJECT(QObjectCleanupHandler)
 
  public:
    QObjectCleanupHandler();

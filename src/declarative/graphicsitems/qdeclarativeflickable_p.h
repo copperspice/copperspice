@@ -35,7 +35,7 @@ class QDeclarativeFlickableVisibleArea;
 
 class QDeclarativeFlickable : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeFlickable)
+   DECL_CS_OBJECT(QDeclarativeFlickable)
 
    DECL_CS_PROPERTY_READ(contentWidth, contentWidth)
    DECL_CS_PROPERTY_WRITE(contentWidth, setContentWidth)
@@ -104,7 +104,7 @@ class QDeclarativeFlickable : public QDeclarativeItem
    DECL_CS_PROPERTY_READ(flickableData, flickableData)
    DECL_CS_PROPERTY_READ(flickableChildren, flickableChildren)
 
-   CS_CLASSINFO("DefaultProperty", "flickableData")
+   DECL_CS_CLASSINFO("DefaultProperty", "flickableData")
 
    DECL_CS_ENUM(FlickableDirection)
    DECL_CS_ENUM(BoundsBehavior)

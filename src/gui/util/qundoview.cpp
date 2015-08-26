@@ -38,7 +38,7 @@ QT_BEGIN_NAMESPACE
 
 class QUndoModel : public QAbstractItemModel
 {
-   CS_OBJECT(QUndoModel)
+   GUI_CS_OBJECT(QUndoModel)
 
  public:
    QUndoModel(QObject *parent = 0);

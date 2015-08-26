@@ -36,9 +36,9 @@
 
 QT_BEGIN_NAMESPACE
 
-static QBasicAtomicPointer<QNetworkConfigurationManagerPrivate> connManager_ptr;
+static QAtomicPointer<QNetworkConfigurationManagerPrivate> connManager_ptr;
 Q_GLOBAL_STATIC(QMutex, connManager_mutex)
-static QBasicAtomicInt appShutdown;
+static QAtomicInt appShutdown;
 
 static void connManager_cleanup()
 {

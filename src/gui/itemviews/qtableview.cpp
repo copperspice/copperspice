@@ -571,7 +571,7 @@ void QSpanCollection::updateRemovedColumns(int start, int end)
 
 class QTableCornerButton : public QAbstractButton
 {
-   CS_OBJECT(QTableCornerButton)
+   GUI_CS_OBJECT(QTableCornerButton)
 
  public:
    QTableCornerButton(QWidget *parent) : QAbstractButton(parent) {}

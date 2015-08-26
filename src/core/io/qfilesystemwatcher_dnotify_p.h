@@ -39,7 +39,7 @@ QT_BEGIN_NAMESPACE
 
 class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QDnotifyFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QDnotifyFileSystemWatcherEngine)
 
  public:
    virtual ~QDnotifyFileSystemWatcherEngine();

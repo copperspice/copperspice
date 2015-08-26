@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QWSQnxKeyboardHandler : public QObject, public QWSKeyboardHandler
 {
-   CS_OBJECT_MULTIPLE(QWSQnxKeyboardHandler, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QWSQnxKeyboardHandler, QObject)
 
  public:
    QWSQnxKeyboardHandler(const QString &device);

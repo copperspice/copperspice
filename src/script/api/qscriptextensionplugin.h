@@ -35,7 +35,7 @@ class QScriptValue;
 
 class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject, public QScriptExtensionInterface
 {
-   CS_OBJECT_MULTIPLE(QScriptExtensionPlugin, QObject)
+   SCRIPT_CS_OBJECT_MULTIPLE(QScriptExtensionPlugin, QObject)
    CS_INTERFACES(QScriptExtensionInterface, QFactoryInterface)
 
  public:

@@ -45,7 +45,7 @@ struct QFileDialogArgs;
 
 class Q_GUI_EXPORT QFileDialog : public QDialog
 {
-   CS_OBJECT(QFileDialog)
+   GUI_CS_OBJECT(QFileDialog)
 
    GUI_CS_ENUM(ViewMode)
    GUI_CS_ENUM(FileMode)

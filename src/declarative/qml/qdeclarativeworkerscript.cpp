@@ -103,7 +103,7 @@ class WorkerErrorEvent : public QEvent
 
 class QDeclarativeWorkerScriptEnginePrivate : public QObject
 {
-   CS_OBJECT(QDeclarativeWorkerScriptEnginePrivate)
+   DECL_CS_OBJECT(QDeclarativeWorkerScriptEnginePrivate)
 
  public:
    enum WorkerEventTypes {
@@ -165,8 +165,8 @@ class QDeclarativeWorkerScriptEnginePrivate : public QObject
    static QScriptValue onMessage(QScriptContext *ctxt, QScriptEngine *engine);
    static QScriptValue sendMessage(QScriptContext *ctxt, QScriptEngine *engine);
 
-   CS_SIGNAL_1(Public, void stopThread())
-   CS_SIGNAL_2(stopThread)
+   DECL_CS_SIGNAL_1(Public, void stopThread())
+   DECL_CS_SIGNAL_2(stopThread)
 
  protected:
    virtual bool event(QEvent *);

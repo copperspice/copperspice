@@ -31,15 +31,13 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qstring.h>
 #include <QtDBus/qdbusmacros.h>
+#include <QtCore/qhash.h>
 
 #ifndef QT_NO_DBUS
 
 QT_BEGIN_NAMESPACE
 
-// defined in qhash.cpp
-Q_CORE_EXPORT uint qHash(const QString &key);
-
-class Q_DBUS_EXPORT QDBusObjectPath : private QString
+class Q_DBUS_EXPORT QDBusObjectPath
 {
 public:
     inline QDBusObjectPath() { }
@@ -85,8 +83,8 @@ inline bool operator!=(const QDBusObjectPath &lhs, const QDBusObjectPath &rhs)
 inline bool operator<(const QDBusObjectPath &lhs, const QDBusObjectPath &rhs)
 { return lhs.path() < rhs.path(); }
 
-inline uint qHash(const QDBusObjectPath &objectPath)
-{ return qHash(objectPath.path()); }
+inline uint qHash(const QDBusObjectPath &objectPath, uint seed)
+{ return qHash(objectPath.path(), seed); }
 
 
 class Q_DBUS_EXPORT QDBusSignature : private QString
@@ -135,8 +133,8 @@ inline bool operator!=(const QDBusSignature &lhs, const QDBusSignature &rhs)
 inline bool operator<(const QDBusSignature &lhs, const QDBusSignature &rhs)
 { return lhs.signature() < rhs.signature(); }
 
-inline uint qHash(const QDBusSignature &signature)
-{ return qHash(signature.signature()); }
+inline uint qHash(const QDBusSignature &signature, uint seed)
+{ return qHash(signature.signature(), seed); }
 
 class QDBusVariant : private QVariant
 {

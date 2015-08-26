@@ -38,7 +38,7 @@ class QSoftKeyManagerPrivate;
 
 class QSoftKeyManager : public QObject
 {
-   CS_OBJECT(QSoftKeyManager)
+   GUI_CS_OBJECT(QSoftKeyManager)
    Q_DECLARE_PRIVATE(QSoftKeyManager)
 
  public:

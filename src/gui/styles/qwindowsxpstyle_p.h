@@ -317,7 +317,7 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate
    void showProperties(XPThemeData &themeData);
 #endif
 
-   static QBasicAtomicInt ref;
+   static QAtomicInt ref;
    static bool use_xp;
    static QWidget *limboWidget;
    static QPixmap *tabbody;

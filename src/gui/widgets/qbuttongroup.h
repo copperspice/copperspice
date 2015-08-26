@@ -39,7 +39,7 @@ class QButtonGroupPrivate;
 
 class Q_GUI_EXPORT QButtonGroup : public QObject
 {
-   CS_OBJECT(QButtonGroup)
+   GUI_CS_OBJECT(QButtonGroup)
 
    GUI_CS_PROPERTY_READ(exclusive, exclusive)
    GUI_CS_PROPERTY_WRITE(exclusive, setExclusive)

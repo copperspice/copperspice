@@ -37,17 +37,17 @@ class QDeclarativeFlipablePrivate;
 
 class QDeclarativeFlipable : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeFlipable)
+   DECL_CS_OBJECT(QDeclarativeFlipable)
 
-   CS_ENUM(Side)
-   CS_PROPERTY_READ(*front, front)
-   CS_PROPERTY_WRITE(*front, setFront)
-   CS_PROPERTY_NOTIFY(*front, frontChanged)
-   CS_PROPERTY_READ(*back, back)
-   CS_PROPERTY_WRITE(*back, setBack)
-   CS_PROPERTY_NOTIFY(*back, backChanged)
-   CS_PROPERTY_READ(side, side)
-   CS_PROPERTY_NOTIFY(side, sideChanged)
+   DECL_CS_ENUM(Side)
+   DECL_CS_PROPERTY_READ(*front, front)
+   DECL_CS_PROPERTY_WRITE(*front, setFront)
+   DECL_CS_PROPERTY_NOTIFY(*front, frontChanged)
+   DECL_CS_PROPERTY_READ(*back, back)
+   DECL_CS_PROPERTY_WRITE(*back, setBack)
+   DECL_CS_PROPERTY_NOTIFY(*back, backChanged)
+   DECL_CS_PROPERTY_READ(side, side)
+   DECL_CS_PROPERTY_NOTIFY(side, sideChanged)
    //### flipAxis
    //### flipRotation
 
@@ -64,16 +64,16 @@ class QDeclarativeFlipable : public QDeclarativeItem
    enum Side { Front, Back };
    Side side() const;
 
-   CS_SIGNAL_1(Public, void frontChanged())
-   CS_SIGNAL_2(frontChanged)
-   CS_SIGNAL_1(Public, void backChanged())
-   CS_SIGNAL_2(backChanged)
-   CS_SIGNAL_1(Public, void sideChanged())
-   CS_SIGNAL_2(sideChanged)
+   DECL_CS_SIGNAL_1(Public, void frontChanged())
+   DECL_CS_SIGNAL_2(frontChanged)
+   DECL_CS_SIGNAL_1(Public, void backChanged())
+   DECL_CS_SIGNAL_2(backChanged)
+   DECL_CS_SIGNAL_1(Public, void sideChanged())
+   DECL_CS_SIGNAL_2(sideChanged)
 
  private :
-   CS_SLOT_1(Private, void retransformBack())
-   CS_SLOT_2(retransformBack)
+   DECL_CS_SLOT_1(Private, void retransformBack())
+   DECL_CS_SLOT_2(retransformBack)
 
    Q_DISABLE_COPY(QDeclarativeFlipable)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QDeclarativeFlipable)

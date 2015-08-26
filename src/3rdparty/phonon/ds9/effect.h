@@ -42,7 +42,7 @@ namespace Phonon
 
         class Effect : public BackendNode, public Phonon::EffectInterface
         {
-            CS_OBJECT(Effect)
+            DS9_CS_OBJECT(Effect)
                 CS_INTERFACES(Phonon::EffectInterface)
         public:
             Effect(CLSID effectClass, QObject *parent);

@@ -1,5 +1,6 @@
 lib_LTLIBRARIES += lib/libCsGui1.la
 lib_libCsGui1_la_SOURCES =
+nodist_lib_libCsGui1_la_SOURCES = 
 
 lib_libCsGui1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui -Iinclude/QtCore     \
     -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private -Iprivateinclude -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
@@ -31,16 +32,23 @@ lib_libCsGui1_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WIND
 lib_libCsGui1_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
 endif
 
+if OSTYPE_BSD
+lib_libCsGui1_la_CXXFLAGS += -DQT_NO_XINPUT -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_WINDOWSVISTA \
+    -DQT_NO_TABLET $(FONTCONFIG_CFLAGS)
+
+lib_libCsGui1_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrandr -lXcursor -lXinerama -lSM -lICE -laudio -lpthread -lrt
+endif
+
 if OSTYPE_WIN
 lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE -DQT_MAKEDLL
 lib_libCsGui1_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid --export-all-symbols
 endif
 
 if OSTYPE_DARWIN
-lib_libCsGui1_la_SOURCES += src/gui/mac/qrc_macresources.cpp
+nodist_lib_libCsGui1_la_SOURCES += src/gui/mac/qrc_macresources.cpp
 lib_libCsGui1_la_OBJCXXFLAGS += $(lib_libCsGui1_la_CXXFLAGS)
 lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSVISTA
-lib_libCsGui1_la_LDFLAGS += -lObjC -framework Carbon
+lib_libCsGui1_la_LDFLAGS += -lobjc -framework Carbon
 endif
 
 EXTRA_DIST += src/gui/mac/macresources.qrc \

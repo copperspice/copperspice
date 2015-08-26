@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 class Q_GUI_EXPORT QCDEStyle : public QMotifStyle
 {
-   CS_OBJECT(QCDEStyle)
+   GUI_CS_OBJECT(QCDEStyle)
 
  public:
    explicit QCDEStyle(bool useHighlightCols = false);

@@ -33,7 +33,7 @@ class FrameView;
 class PopupMenuClient;
 
 class PopupMenuQt : public QObject, public PopupMenu {
-    CS_OBJECT(PopupMenuQt)
+    WEB_CS_OBJECT(PopupMenuQt)
 public:
     PopupMenuQt(PopupMenuClient*, const ChromeClientQt*);
     ~PopupMenuQt();

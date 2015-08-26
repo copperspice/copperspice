@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 class QDeclarativeRepeaterPrivate;
 class QDeclarativeRepeater : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeRepeater)
+   DECL_CS_OBJECT(QDeclarativeRepeater)
 
    DECL_CS_PROPERTY_READ(model, model)
    DECL_CS_PROPERTY_WRITE(model, setModel)
@@ -44,7 +44,7 @@ class QDeclarativeRepeater : public QDeclarativeItem
    DECL_CS_PROPERTY_READ(count, count)
    DECL_CS_PROPERTY_NOTIFY(count, countChanged)
 
-   CS_CLASSINFO("DefaultProperty", "delegate")
+   DECL_CS_CLASSINFO("DefaultProperty", "delegate")
 
  public:
    QDeclarativeRepeater(QDeclarativeItem *parent = 0);

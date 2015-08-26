@@ -280,14 +280,14 @@ template<class R, class ...Ts>
 bool QMetaMethod::invoke(QObject *object, CSReturnArgument<R> retval, Ts &&...Vs) const
 {
    // calls first overload
-   return this->invoke(object, Qt::AutoConnection, retval, std::forward(Vs)...);
+   return this->invoke(object, Qt::AutoConnection, retval, std::forward<Ts>(Vs)...);
 }
 
 template<class ...Ts>
 bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 {
    // calls third overload, no return value from the invoked method
-   return this->invoke(object, Qt::AutoConnection, std::forward(Vs)...);
+   return this->invoke(object, Qt::AutoConnection, std::forward<Ts>(Vs)...);
 }
 
 // **
@@ -465,11 +465,21 @@ class QDeclarativeListProperty;
 template<class T1, class T2>
 class QPair;
 
+// cs_register_class 
+
 CS_REGISTER_TEMPLATE(QHash)
+CS_REGISTER_TEMPLATE(QMultiHash)
+CS_REGISTER_TEMPLATE(QLinkedList)
 CS_REGISTER_TEMPLATE(QList)
 CS_REGISTER_TEMPLATE(QMap)
+CS_REGISTER_TEMPLATE(QMultiMap)
 CS_REGISTER_TEMPLATE(QPair)
+CS_REGISTER_TEMPLATE(QQueue)
+CS_REGISTER_TEMPLATE(QSet)
+CS_REGISTER_TEMPLATE(QStack)
+CS_REGISTER_TEMPLATE(QVector)
 CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
+CS_REGISTER_TEMPLATE(qMapCompare)
 CS_REGISTER_TEMPLATE(std::tuple)
 CS_REGISTER_TEMPLATE(std::pair)
 

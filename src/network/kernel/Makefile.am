@@ -57,6 +57,13 @@ lib_libCsNetwork1_la_SOURCES += \
 	src/network/kernel/qnetworkproxy_generic.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsNetwork1_la_SOURCES += \
+        src/network/kernel/qhostinfo_unix.cpp \
+        src/network/kernel/qnetworkinterface_unix.cpp \
+        src/network/kernel/qnetworkproxy_generic.cpp
+endif
+
 if OSTYPE_DARWIN
 lib_libCsNetwork1_la_SOURCES += \
 	src/network/kernel/qhostinfo_unix.cpp \

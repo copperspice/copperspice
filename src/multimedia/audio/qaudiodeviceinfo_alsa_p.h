@@ -45,7 +45,7 @@ const unsigned int SAMPLE_RATES[] =
 
 class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
 {
-   CS_OBJECT(QAudioDeviceInfoInternal)
+   MULTI_CS_OBJECT(QAudioDeviceInfoInternal)
  public:
    QAudioDeviceInfoInternal(QByteArray dev, QAudio::Mode mode);
    ~QAudioDeviceInfoInternal();

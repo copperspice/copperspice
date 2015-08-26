@@ -38,7 +38,7 @@ class QSvgRenderer;
 
 class Q_SVG_EXPORT QSvgWidget : public QWidget
 {
-   CS_OBJECT(QSvgWidget)
+   SVG_CS_OBJECT(QSvgWidget)
 
  public:
    QSvgWidget(QWidget *parent = 0);

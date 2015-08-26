@@ -43,7 +43,7 @@ CS_DECLARE_INTERFACE(QPlatformIntegrationFactoryInterface, QPlatformIntegrationF
 
 class Q_GUI_EXPORT QPlatformIntegrationPlugin : public QObject, public QPlatformIntegrationFactoryInterface
 {
-   CS_OBJECT_MULTIPLE(QPlatformIntegrationPlugin, QObject)
+   GUI_CS_OBJECT_MULTIPLE(QPlatformIntegrationPlugin, QObject)
    CS_INTERFACES(QPlatformIntegrationFactoryInterface, QFactoryInterface)
 
  public:

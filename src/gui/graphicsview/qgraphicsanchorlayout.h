@@ -40,7 +40,7 @@ class QGraphicsAnchorLayoutPrivate;
 
 class Q_GUI_EXPORT QGraphicsAnchor : public QObject
 {
-   CS_OBJECT(QGraphicsAnchor)
+   GUI_CS_OBJECT(QGraphicsAnchor)
 
    GUI_CS_PROPERTY_READ(spacing, spacing)
    GUI_CS_PROPERTY_WRITE(spacing, setSpacing)

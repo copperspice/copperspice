@@ -290,7 +290,7 @@ class QTreeWidgetPrivate;
 
 class Q_GUI_EXPORT QTreeWidget : public QTreeView
 {
-   CS_OBJECT(QTreeWidget)
+   GUI_CS_OBJECT(QTreeWidget)
 
    GUI_CS_PROPERTY_READ(columnCount, columnCount)
    GUI_CS_PROPERTY_WRITE(columnCount, setColumnCount)

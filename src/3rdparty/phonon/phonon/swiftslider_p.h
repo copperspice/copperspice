@@ -41,7 +41,7 @@ namespace Phonon
 
 class SwiftSlider : public QSlider
 {
-	CS_OBJECT(SwiftSlider)
+	PHN_CS_OBJECT(SwiftSlider)
 public:
 	SwiftSlider(Qt::Orientation orientation, QWidget * parent);
 	~SwiftSlider();

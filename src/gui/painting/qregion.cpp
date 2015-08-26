@@ -1604,7 +1604,7 @@ QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
 static QRegionPrivate qrp;
-QRegion::QRegionData QRegion::shared_empty = {Q_BASIC_ATOMIC_INITIALIZER(1), &qrp};
+QRegion::QRegionData QRegion::shared_empty = {1, &qrp};
 
 #endif
 

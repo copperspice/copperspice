@@ -52,7 +52,7 @@ CS_DECLARE_INTERFACE(QAccessibleBridgeFactoryInterface, QAccessibleBridgeFactory
 
 class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject, public QAccessibleBridgeFactoryInterface
 {
-   CS_OBJECT(QAccessibleBridgePlugin)
+   GUI_CS_OBJECT(QAccessibleBridgePlugin)
    CS_INTERFACES(QAccessibleBridgeFactoryInterface, QFactoryInterface)
 
  public:

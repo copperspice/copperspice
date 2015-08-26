@@ -37,20 +37,20 @@ class QDeclarativeSmoothedAnimationPrivate;
 
 class QDeclarativeSmoothedAnimation : public QDeclarativeNumberAnimation
 {
-   CS_OBJECT(QDeclarativeSmoothedAnimation)
+   DECL_CS_OBJECT(QDeclarativeSmoothedAnimation)
 
    Q_DECLARE_PRIVATE(QDeclarativeSmoothedAnimation)
    CS_ENUM(ReversingMode)
 
-   CS_PROPERTY_READ(velocity, velocity)
-   CS_PROPERTY_WRITE(velocity, setVelocity)
-   CS_PROPERTY_NOTIFY(velocity, velocityChanged)
-   CS_PROPERTY_READ(reversingMode, reversingMode)
-   CS_PROPERTY_WRITE(reversingMode, setReversingMode)
-   CS_PROPERTY_NOTIFY(reversingMode, reversingModeChanged)
-   CS_PROPERTY_READ(maximumEasingTime, maximumEasingTime)
-   CS_PROPERTY_WRITE(maximumEasingTime, setMaximumEasingTime)
-   CS_PROPERTY_NOTIFY(maximumEasingTime, maximumEasingTimeChanged)
+   DECL_CS_PROPERTY_READ(velocity, velocity)
+   DECL_CS_PROPERTY_WRITE(velocity, setVelocity)
+   DECL_CS_PROPERTY_NOTIFY(velocity, velocityChanged)
+   DECL_CS_PROPERTY_READ(reversingMode, reversingMode)
+   DECL_CS_PROPERTY_WRITE(reversingMode, setReversingMode)
+   DECL_CS_PROPERTY_NOTIFY(reversingMode, reversingModeChanged)
+   DECL_CS_PROPERTY_READ(maximumEasingTime, maximumEasingTime)
+   DECL_CS_PROPERTY_WRITE(maximumEasingTime, setMaximumEasingTime)
+   DECL_CS_PROPERTY_NOTIFY(maximumEasingTime, maximumEasingTimeChanged)
 
  public:
    enum ReversingMode { Eased, Immediate, Sync };
@@ -74,12 +74,12 @@ class QDeclarativeSmoothedAnimation : public QDeclarativeNumberAnimation
                            TransitionDirection direction);
    QAbstractAnimation *qtAnimation();
 
-   CS_SIGNAL_1(Public, void velocityChanged())
-   CS_SIGNAL_2(velocityChanged)
-   CS_SIGNAL_1(Public, void reversingModeChanged())
-   CS_SIGNAL_2(reversingModeChanged)
-   CS_SIGNAL_1(Public, void maximumEasingTimeChanged())
-   CS_SIGNAL_2(maximumEasingTimeChanged)
+   DECL_CS_SIGNAL_1(Public, void velocityChanged())
+   DECL_CS_SIGNAL_2(velocityChanged)
+   DECL_CS_SIGNAL_1(Public, void reversingModeChanged())
+   DECL_CS_SIGNAL_2(reversingModeChanged)
+   DECL_CS_SIGNAL_1(Public, void maximumEasingTimeChanged())
+   DECL_CS_SIGNAL_2(maximumEasingTimeChanged)
 };
 
 QT_END_NAMESPACE

@@ -37,7 +37,7 @@ class QSharedMemoryPrivate;
 
 class Q_CORE_EXPORT QSharedMemory : public QObject
 {
-   CS_OBJECT(QSharedMemory)
+   CORE_CS_OBJECT(QSharedMemory)
    Q_DECLARE_PRIVATE(QSharedMemory)
 
  public:

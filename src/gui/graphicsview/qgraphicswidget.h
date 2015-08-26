@@ -48,7 +48,7 @@ class QGraphicsWidgetPrivate;
 
 class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLayoutItem
 {
-   CS_OBJECT_MULTIPLE(QGraphicsWidget, QGraphicsObject)
+   GUI_CS_OBJECT_MULTIPLE(QGraphicsWidget, QGraphicsObject)
    CS_INTERFACES(QGraphicsItem, QGraphicsLayoutItem)
 
    GUI_CS_PROPERTY_READ(palette, palette)

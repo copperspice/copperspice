@@ -40,149 +40,69 @@ class QMetaObject_T;
 
 class Q_CORE_EXPORT Qt
 {
+   private:
 
- private:
-   struct cs_classname {
-      static constexpr const char *value = "Qt";
-   };
+      struct cs_classname {
+         static constexpr const char *value = "Qt";
+      };
+   
+      ~Qt();
 
-   ~Qt();
+   public:
+      using cs_parent = CSGadget_Fake_Parent;
+      using cs_class = Qt;
+   
+      static const char *cs_className();
+      static const QMetaObject_T<Qt> &staticMetaObject();
+      virtual const QMetaObject *metaObject() const;
+       
+      template<int N> 
+      static void cs_regTrigger(cs_number<N>) 
+      { } 
 
- public:
-   using cs_parent = CSGadget_Fake_Parent;
-   using cs_class = Qt;
+      static constexpr cs_number<0> cs_counter(cs_number<0>)  
+      { 
+         return cs_number<0>{};   
+      } 
 
-   static const char *cs_className();
-   static const QMetaObject_T<Qt> &staticMetaObject();
-   virtual const QMetaObject *metaObject() const;
+      // implemented in QString.h
+      static QString escape(const QString &plain);
+    
+      enum GlobalColor {
+         color0,
+         color1,
+         black,
+         white,
+         darkGray,
+         gray,
+         lightGray,
+         red,
+         green,
+         blue,
+         cyan,
+         magenta,
+         yellow,
+         darkRed,
+         darkGreen,
+         darkBlue,
+         darkCyan,
+         darkMagenta,
+         darkYellow,
+         transparent
+      };
 
-   // implemented in QString.h
-   static QString escape(const QString &plain);
-
-   // NOTE: Generally, do not add Q_ENUMS if a corresponding Q_FLAGS exists.
-   CORE_CS_ENUM(ScrollBarPolicy)
-   CORE_CS_ENUM(FocusPolicy)
-   CORE_CS_ENUM(ContextMenuPolicy)
-   CORE_CS_ENUM(ArrowType)
-   CORE_CS_ENUM(ToolButtonStyle)
-   CORE_CS_ENUM(PenStyle)
-   CORE_CS_ENUM(PenCapStyle)
-   CORE_CS_ENUM(PenJoinStyle)
-   CORE_CS_ENUM(BrushStyle)
-   CORE_CS_ENUM(FillRule)
-   CORE_CS_ENUM(MaskMode)
-   CORE_CS_ENUM(BGMode)
-   CORE_CS_ENUM(ClipOperation)
-   CORE_CS_ENUM(SizeMode)
-   CORE_CS_ENUM(Axis)
-   CORE_CS_ENUM(Corner)
-   CORE_CS_ENUM(LayoutDirection)
-   CORE_CS_ENUM(SizeHint)
-   CORE_CS_ENUM(TextFormat)
-   CORE_CS_ENUM(TextElideMode)
-   CORE_CS_ENUM(DateFormat)
-   CORE_CS_ENUM(TimeSpec)
-   CORE_CS_ENUM(DayOfWeek)
-   CORE_CS_ENUM(CursorShape)
-   CORE_CS_ENUM(GlobalColor)
-   CORE_CS_ENUM(AspectRatioMode)
-   CORE_CS_ENUM(TransformationMode)
-   CORE_CS_ENUM(Key)
-   CORE_CS_ENUM(ShortcutContext)
-   CORE_CS_ENUM(ItemSelectionMode)
-   CORE_CS_ENUM(CheckState)
-   CORE_CS_ENUM(SortOrder)
-   CORE_CS_ENUM(CaseSensitivity)
-   CORE_CS_ENUM(WindowModality)
-   CORE_CS_ENUM(WidgetAttribute)
-   CORE_CS_ENUM(ApplicationAttribute)
-   CORE_CS_ENUM(ConnectionType)
-   CORE_CS_ENUM(CursorMoveStyle)
-
-   //
-   CORE_CS_ENUM(TextInteractionFlag)
-   CORE_CS_FLAG(TextInteractionFlag, TextInteractionFlags)
-
-   CORE_CS_ENUM(Orientation)
-   CORE_CS_FLAG(Orientation, Orientations)
-
-   CORE_CS_ENUM(AlignmentFlag)
-   CORE_CS_FLAG(AlignmentFlag, Alignment)
-
-   CORE_CS_ENUM(DropAction)
-   CORE_CS_FLAG(DropAction, DropActions)
-
-   CORE_CS_ENUM(DockWidgetArea)
-   CORE_CS_FLAG(DockWidgetArea, DockWidgetAreas)
-
-   CORE_CS_ENUM(ToolBarArea)
-   CORE_CS_FLAG(ToolBarArea, ToolBarAreas)
-
-   CORE_CS_ENUM(ImageConversionFlag)
-   CORE_CS_FLAG(ImageConversionFlag, ImageConversionFlags)
-
-   CORE_CS_ENUM(ItemFlag)
-   CORE_CS_FLAG(ItemFlag, ItemFlags)
-
-   CORE_CS_ENUM(MatchFlag)
-   CORE_CS_FLAG(MatchFlag, MatchFlags)
-
-   CORE_CS_ENUM(KeyboardModifier)
-   CORE_CS_FLAG(KeyboardModifier, KeyboardModifiers)
-
-   CORE_CS_ENUM(MouseButton)
-   CORE_CS_FLAG(MouseButton, MouseButtons)
-
-   CORE_CS_ENUM(InputMethodHint)
-   CORE_CS_FLAG(InputMethodHint, InputMethodHints)
-
-   CORE_CS_ENUM(WindowType)
-   CORE_CS_FLAG(WindowType, WindowFlags)
-
-   CORE_CS_ENUM(WindowState)
-   CORE_CS_FLAG(WindowState, WindowStates)
-
-
-#ifndef QT_NO_GESTURES
-   CORE_CS_ENUM(GestureState)
-   CORE_CS_ENUM(GestureType)
-#endif
-
-   enum GlobalColor {
-      color0,
-      color1,
-      black,
-      white,
-      darkGray,
-      gray,
-      lightGray,
-      red,
-      green,
-      blue,
-      cyan,
-      magenta,
-      yellow,
-      darkRed,
-      darkGreen,
-      darkBlue,
-      darkCyan,
-      darkMagenta,
-      darkYellow,
-      transparent
-   };
-
-   enum KeyboardModifier {
-      NoModifier           = 0x00000000,
-      ShiftModifier        = 0x02000000,
-      ControlModifier      = 0x04000000,
-      AltModifier          = 0x08000000,
-      MetaModifier         = 0x10000000,
-      KeypadModifier       = 0x20000000,
-      GroupSwitchModifier  = 0x40000000,
-      // Do not extend the mask to include 0x01000000
-      KeyboardModifierMask = 0xfe000000
-   };
-   using KeyboardModifiers = QFlags<KeyboardModifier>;
+      enum KeyboardModifier {
+         NoModifier           = 0x00000000,
+         ShiftModifier        = 0x02000000,
+         ControlModifier      = 0x04000000,
+         AltModifier          = 0x08000000,
+         MetaModifier         = 0x10000000,
+         KeypadModifier       = 0x20000000,
+         GroupSwitchModifier  = 0x40000000,
+         // Do not extend the mask to include 0x01000000
+         KeyboardModifierMask = 0xfe000000
+      };
+      using KeyboardModifiers = QFlags<KeyboardModifier>;
 
    //shorter names for shortcuts
    // The use of all-caps identifiers has the potential for clashing with
@@ -499,7 +419,6 @@ class Q_CORE_EXPORT Qt
       AA_AttributeCount
    };
 
-
    // Image conversion flags.  The unusual ordering is caused by
    // compatibility and default requirements.
 
@@ -550,7 +469,7 @@ class Q_CORE_EXPORT Qt
       Key_Print = 0x01000009,
       Key_SysReq = 0x0100000a,
       Key_Clear = 0x0100000b,
-      Key_Home = 0x01000010,                // cursor movement
+      Key_Home = 0x01000010,                 // cursor movement
       Key_End = 0x01000011,
       Key_Left = 0x01000012,
       Key_Up = 0x01000013,
@@ -565,7 +484,7 @@ class Q_CORE_EXPORT Qt
       Key_CapsLock = 0x01000024,
       Key_NumLock = 0x01000025,
       Key_ScrollLock = 0x01000026,
-      Key_F1 = 0x01000030,                // function keys
+      Key_F1 = 0x01000030,                   // function keys
       Key_F2 = 0x01000031,
       Key_F3 = 0x01000032,
       Key_F4 = 0x01000033,
@@ -1536,6 +1455,93 @@ class Q_CORE_EXPORT Qt
    static QTextCodec *codecForHtml(const QByteArray &ba);
 #endif
 
+   CORE_CS_ENUM(ScrollBarPolicy)
+   CORE_CS_ENUM(FocusPolicy)
+   CORE_CS_ENUM(ContextMenuPolicy)
+   CORE_CS_ENUM(ArrowType)
+   CORE_CS_ENUM(ToolButtonStyle)
+   CORE_CS_ENUM(PenStyle)
+   CORE_CS_ENUM(PenCapStyle)
+   CORE_CS_ENUM(PenJoinStyle)
+   CORE_CS_ENUM(BrushStyle)
+   CORE_CS_ENUM(FillRule)
+   CORE_CS_ENUM(MaskMode)
+   CORE_CS_ENUM(BGMode)
+   CORE_CS_ENUM(ClipOperation)
+   CORE_CS_ENUM(SizeMode)
+   CORE_CS_ENUM(Axis)
+   CORE_CS_ENUM(Corner)
+   CORE_CS_ENUM(LayoutDirection)
+   CORE_CS_ENUM(SizeHint)
+   CORE_CS_ENUM(TextFormat)
+   CORE_CS_ENUM(TextElideMode)
+   CORE_CS_ENUM(DateFormat)
+   CORE_CS_ENUM(TimeSpec)
+   CORE_CS_ENUM(DayOfWeek)
+   CORE_CS_ENUM(CursorShape)
+   CORE_CS_ENUM(GlobalColor)
+   CORE_CS_ENUM(AspectRatioMode)
+   CORE_CS_ENUM(TransformationMode)
+   CORE_CS_ENUM(Key)
+   CORE_CS_ENUM(ShortcutContext)
+   CORE_CS_ENUM(ItemSelectionMode)
+   CORE_CS_ENUM(CheckState)
+   CORE_CS_ENUM(SortOrder)
+   CORE_CS_ENUM(CaseSensitivity)
+   CORE_CS_ENUM(WindowModality)
+   CORE_CS_ENUM(WidgetAttribute)
+   CORE_CS_ENUM(ApplicationAttribute)
+   CORE_CS_ENUM(ConnectionType)
+   CORE_CS_ENUM(CursorMoveStyle)
+
+   //
+   CORE_CS_ENUM(TextInteractionFlag)
+   CORE_CS_FLAG(TextInteractionFlag, TextInteractionFlags)
+
+   CORE_CS_ENUM(Orientation)
+   CORE_CS_FLAG(Orientation, Orientations)
+
+   CORE_CS_ENUM(AlignmentFlag)
+   CORE_CS_FLAG(AlignmentFlag, Alignment)
+
+   CORE_CS_ENUM(DropAction)
+   CORE_CS_FLAG(DropAction, DropActions)
+
+   CORE_CS_ENUM(DockWidgetArea)
+   CORE_CS_FLAG(DockWidgetArea, DockWidgetAreas)
+
+   CORE_CS_ENUM(ToolBarArea)
+   CORE_CS_FLAG(ToolBarArea, ToolBarAreas)
+
+   CORE_CS_ENUM(ImageConversionFlag)
+   CORE_CS_FLAG(ImageConversionFlag, ImageConversionFlags)
+
+   CORE_CS_ENUM(ItemFlag)
+   CORE_CS_FLAG(ItemFlag, ItemFlags)
+
+   CORE_CS_ENUM(MatchFlag)
+   CORE_CS_FLAG(MatchFlag, MatchFlags)
+
+   CORE_CS_ENUM(KeyboardModifier)
+   CORE_CS_FLAG(KeyboardModifier, KeyboardModifiers)
+
+   CORE_CS_ENUM(MouseButton)
+   CORE_CS_FLAG(MouseButton, MouseButtons)
+
+   CORE_CS_ENUM(InputMethodHint)
+   CORE_CS_FLAG(InputMethodHint, InputMethodHints)
+
+   CORE_CS_ENUM(WindowType)
+   CORE_CS_FLAG(WindowType, WindowFlags)
+
+   CORE_CS_ENUM(WindowState)
+   CORE_CS_FLAG(WindowState, WindowStates)
+
+#ifndef QT_NO_GESTURES
+   CORE_CS_ENUM(GestureState)
+   CORE_CS_ENUM(GestureType)
+#endif
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseButtons)
@@ -1570,8 +1576,8 @@ class Q_CORE_EXPORT QInternal
       Image         = 0x03,
       Printer       = 0x04,
       Picture       = 0x05,
-      Pbuffer       = 0x06,    // GL pbuffer
-      FramebufferObject = 0x07, // GL framebuffer object
+      Pbuffer       = 0x06,      // GL pbuffer
+      FramebufferObject = 0x07,  // GL framebuffer object
       CustomRaster  = 0x08,
       MacQuartz     = 0x09,
       PaintBuffer   = 0x0a,

@@ -43,7 +43,7 @@ QT_BEGIN_NAMESPACE
 //#define QHOSTINFO_DEBUG
 Q_GLOBAL_STATIC(QHostInfoLookupManager, theHostInfoLookupManager)
 
-static QBasicAtomicInt theIdCounter = Q_BASIC_ATOMIC_INITIALIZER(1);
+static QAtomicInt theIdCounter = 1;
 
 int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *member)
 {

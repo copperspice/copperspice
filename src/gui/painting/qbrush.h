@@ -176,7 +176,7 @@ typedef QVector<QGradientStop> QGradientStops;
 
 class Q_GUI_EXPORT QGradient
 {
-   CS_GADGET(QGradient)
+   GUI_CS_GADGET(QGradient)
 
    GUI_CS_ENUM(Type)
    GUI_CS_ENUM(Spread)

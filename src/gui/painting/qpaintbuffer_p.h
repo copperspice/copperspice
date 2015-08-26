@@ -406,7 +406,7 @@ class QPaintBufferEngine : public QPaintEngineEx
 
 class Q_GUI_EXPORT QPaintBufferSignalProxy : public QObject
 {
-   CS_OBJECT(QPaintBufferSignalProxy)
+   GUI_CS_OBJECT(QPaintBufferSignalProxy)
 
  public:
    QPaintBufferSignalProxy() : QObject() {}
@@ -422,7 +422,7 @@ class Q_GUI_EXPORT QPaintBufferSignalProxy : public QObject
 // One resource per paint buffer and vice versa.
 class Q_GUI_EXPORT QPaintBufferResource : public QObject
 {
-   CS_OBJECT(QPaintBufferResource)
+   GUI_CS_OBJECT(QPaintBufferResource)
 
  public:
    typedef void (*FreeFunc)(void *);

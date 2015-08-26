@@ -84,7 +84,7 @@ class QNetworkInterface;
 
 class QNativeSocketEngine : public QAbstractSocketEngine
 {
-   CS_OBJECT(QNativeSocketEngine)
+   NET_CS_OBJECT(QNativeSocketEngine)
 
  public:
    QNativeSocketEngine(QObject *parent = 0);

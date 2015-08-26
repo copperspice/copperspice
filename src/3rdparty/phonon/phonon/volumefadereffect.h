@@ -43,7 +43,7 @@ namespace Phonon
    
     class PHONON_EXPORT VolumeFaderEffect : public Effect
     {
-        CS_OBJECT(VolumeFaderEffect)
+        PHN_CS_OBJECT(VolumeFaderEffect)
         K_DECLARE_PRIVATE(VolumeFaderEffect)
         PHONON_HEIR(VolumeFaderEffect)
 

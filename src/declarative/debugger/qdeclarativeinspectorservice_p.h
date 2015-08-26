@@ -37,7 +37,7 @@ class QDeclarativeInspectorInterface;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeInspectorService : public QDeclarativeDebugService
 {
-   CS_OBJECT(QDeclarativeInspectorService)
+   DECL_CS_OBJECT(QDeclarativeInspectorService)
 
  public:
    QDeclarativeInspectorService();
@@ -51,8 +51,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeInspectorService : public QDeclarativeDeb
 
    void sendMessage(const QByteArray &message);
 
-   CS_SIGNAL_1(Public, void gotMessage(const QByteArray &message))
-   CS_SIGNAL_2(gotMessage, message)
+   DECL_CS_SIGNAL_1(Public, void gotMessage(const QByteArray &message))
+   DECL_CS_SIGNAL_2(gotMessage, message)
 
  protected:
    virtual void statusChanged(Status status);

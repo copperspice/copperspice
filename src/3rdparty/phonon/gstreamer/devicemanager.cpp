@@ -95,7 +95,7 @@ DeviceManager::DeviceManager(Backend *backend)
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
 
     if (m_audioSink.isEmpty()) {
-        m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
+        m_audioSink = settings.value(QLatin1String("audiosink"), QString("Auto")).toByteArray().toLower();
         if (m_audioSink == "auto" && pulse->isActive())
             m_audioSink = "pulsesink";
     }
@@ -104,7 +104,7 @@ DeviceManager::DeviceManager(Backend *backend)
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
     if (m_videoSinkWidget.isEmpty()) {
-        m_videoSinkWidget = settings.value(QLatin1String("videomode"), "Auto").toByteArray().toLower();
+        m_videoSinkWidget = settings.value(QLatin1String("videomode"), QString("Auto")).toByteArray().toLower();
     }
 
     if (m_backend->isValid())

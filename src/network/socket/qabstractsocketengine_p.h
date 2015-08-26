@@ -60,7 +60,7 @@ class QAbstractSocketEngineReceiver
 
 class QAbstractSocketEngine : public QObject
 {
-   CS_OBJECT(QAbstractSocketEngine)
+   NET_CS_OBJECT(QAbstractSocketEngine)
 
  public:
    static QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,

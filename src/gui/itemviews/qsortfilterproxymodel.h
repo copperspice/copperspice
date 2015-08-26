@@ -40,7 +40,7 @@ class QSortFilterProxyModelGreaterThan;
 
 class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 {
-   CS_OBJECT(QSortFilterProxyModel)
+   GUI_CS_OBJECT(QSortFilterProxyModel)
 
    GUI_CS_PROPERTY_READ(filterRegExp, filterRegExp)
    GUI_CS_PROPERTY_WRITE(filterRegExp, cs_setFilterRegExp)

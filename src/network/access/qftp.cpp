@@ -52,7 +52,7 @@ class QFtpPI;
 */
 class QFtpDTP : public QObject
 {
-   CS_OBJECT(QFtpDTP)
+   NET_CS_OBJECT(QFtpDTP)
 
  public:
    enum ConnectState {
@@ -152,7 +152,7 @@ class QFtpDTP : public QObject
 
 class QFtpPI : public QObject
 {
-   CS_OBJECT(QFtpPI)
+   NET_CS_OBJECT(QFtpPI)
 
  public:
    QFtpPI(QObject *parent = 0);
@@ -268,12 +268,13 @@ class QFtpCommand
       QByteArray *ba;
       QIODevice *dev;
    } data;
+
    bool is_ba;
 
-   static QBasicAtomicInt idCounter;
+   static QAtomicInt idCounter;
 };
 
-QBasicAtomicInt QFtpCommand::idCounter = Q_BASIC_ATOMIC_INITIALIZER(1);
+QAtomicInt QFtpCommand::idCounter = 1;
 
 QFtpCommand::QFtpCommand(QFtp::Command cmd, QStringList raw, const QByteArray &ba)
    : command(cmd), rawCmds(raw), is_ba(true)

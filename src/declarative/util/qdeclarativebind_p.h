@@ -35,17 +35,17 @@ class QDeclarativeBindPrivate;
 
 class QDeclarativeBind : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeBind)
+   DECL_CS_OBJECT(QDeclarativeBind)
    Q_DECLARE_PRIVATE(QDeclarativeBind)
    CS_INTERFACES(QDeclarativeParserStatus)
-   CS_PROPERTY_READ(*target, object)
-   CS_PROPERTY_WRITE(*target, setObject)
-   CS_PROPERTY_READ(property, property)
-   CS_PROPERTY_WRITE(property, setProperty)
-   CS_PROPERTY_READ(value, value)
-   CS_PROPERTY_WRITE(value, setValue)
-   CS_PROPERTY_READ(when, when)
-   CS_PROPERTY_WRITE(when, setWhen)
+   DECL_CS_PROPERTY_READ(*target, object)
+   DECL_CS_PROPERTY_WRITE(*target, setObject)
+   DECL_CS_PROPERTY_READ(property, property)
+   DECL_CS_PROPERTY_WRITE(property, setProperty)
+   DECL_CS_PROPERTY_READ(value, value)
+   DECL_CS_PROPERTY_WRITE(value, setValue)
+   DECL_CS_PROPERTY_READ(when, when)
+   DECL_CS_PROPERTY_WRITE(when, setWhen)
 
  public:
    QDeclarativeBind(QObject *parent = 0);

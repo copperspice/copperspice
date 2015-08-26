@@ -39,7 +39,7 @@ class QStatePrivate;
 
 class Q_CORE_EXPORT QState : public QAbstractState
 {
-   CS_OBJECT(QState)
+   CORE_CS_OBJECT(QState)
 
    CORE_CS_PROPERTY_READ(initialState, initialState)
    CORE_CS_PROPERTY_WRITE(initialState, setInitialState)
@@ -49,14 +49,14 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    CORE_CS_PROPERTY_READ(childMode, childMode)
    CORE_CS_PROPERTY_WRITE(childMode, setChildMode)
-
-   CORE_CS_ENUM(ChildMode)
-
+ 
  public:
    enum ChildMode {
       ExclusiveStates,
       ParallelStates
    };
+
+   CORE_CS_ENUM(ChildMode)
 
    QState(QState *parent = 0);
    QState(ChildMode childMode, QState *parent = 0);

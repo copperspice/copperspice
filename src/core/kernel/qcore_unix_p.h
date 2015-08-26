@@ -140,11 +140,12 @@ inline void qt_ignore_sigpipe()
 {
 #ifndef Q_NO_POSIX_SIGNALS
    // Set to ignore SIGPIPE once only.
-   static QBasicAtomicInt atom = QBasicAtomicInt {Q_BASIC_ATOMIC_INITIALIZER(0)};
-   if (!atom.load()) {
+   static QAtomicInt atom = QAtomicInt { 0 };
+
+   if (! atom.load()) {
       // More than one thread could turn off SIGPIPE at the same time
-      // But that's acceptable because they all would be doing the same
-      // action
+      // But that's acceptable because they all would be doing the same action
+
       struct sigaction noaction;
       memset(&noaction, 0, sizeof(noaction));
       noaction.sa_handler = SIG_IGN;

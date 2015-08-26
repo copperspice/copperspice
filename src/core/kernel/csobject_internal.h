@@ -34,12 +34,16 @@
 #include <qthread.h>
 
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+
 // 1
 template<class T, class U, class = void>
 class cs_check_connect_args
    : public cs_check_connect_args<T, decltype(&U::operator())>
 {
 };
+
+/**   \endcond   */
 
 
 // 2 slot is a func ptr, first signal and first slot parameters match
@@ -100,7 +104,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
    Bento<void (SignalClass::*)(SignalArgTypes...)> signal_Bento(signal);
 
    if (sender->m_declarativeData && CSAbstractDeclarativeData::signalEmitted) {
-      // BROOM (on hold, declarative)
+      // broom (on hold, declarative)
       // CSAbstractDeclarativeData::signalEmitted(sender->m_declarativeData, sender, methodOffset, Vs...);
    }
 
@@ -160,8 +164,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
 
          // store the signal data, true indicates the data will be copied into a TeaCup Object (stored on the heap)
          CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento, new TeaCup_Data<SignalArgTypes...>(true,
-               std::forward<Ts>(Vs)... ),
-               sender, signal_index);
+               std::forward<Ts>(Vs)... ), sender, signal_index);
 
          QCoreApplication::postEvent(receiver, event);
 
@@ -180,8 +183,7 @@ void QMetaObject::activate(QObject *sender, void (SignalClass::*signal)(SignalAr
 
          // store the signal data, false indicates the data will not be copied
          CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento, new TeaCup_Data<SignalArgTypes...>(false,
-               std::forward<Ts>(Vs)... ),
-               sender, signal_index, &semaphore);
+               std::forward<Ts>(Vs)... ), sender, signal_index, &semaphore);
 
          QCoreApplication::postEvent(receiver, event);
 
@@ -763,8 +765,8 @@ bool cs_factory_interface_query(const char *data)
 */
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, CSReturnArgument<R> retval,
-                               CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, 
+               CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    if (! object) {
       return false;
@@ -948,7 +950,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
    }
 
    // store the signal data, false indicates the data will not be copied
-   TeaCup_Data<Ts...> dataPack(false, std::forward<Ts>(Vs)...);
+   TeaCup_Data<typename std::remove_reference<Ts>::type...> dataPack(false, std::forward<Ts>(Vs)...);    
 
    if (type == Qt::DirectConnection) {
       // retval is passed by pointer
@@ -975,12 +977,12 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       QSemaphore semaphore;
 
-      // BROOM (on hold, ok)
+      // broom (on hold, ok)
       // add &retval to QMetaCallEvent so we can return a value
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 0, -1,
-            &semaphore);
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 
+            0, -1, &semaphore);
       QCoreApplication::postEvent(object, event);
 
       semaphore.acquire();

@@ -54,7 +54,7 @@ struct QWellArrayData;
 
 class QWellArray : public QWidget
 {
-   CS_OBJECT(QWellArray)
+   GUI_CS_OBJECT(QWellArray)
 
    GUI_CS_PROPERTY_READ(selectedColumn, selectedColumn)
    GUI_CS_PROPERTY_READ(selectedRow, selectedRow)
@@ -642,7 +642,7 @@ void QColorWell::mouseReleaseEvent(QMouseEvent *e)
 
 class QColorPicker : public QFrame
 {
-   CS_OBJECT(QColorPicker)
+   GUI_CS_OBJECT(QColorPicker)
 
  public:
    QColorPicker(QWidget *parent);
@@ -678,7 +678,7 @@ static int pHeight = 200;
 
 class QColorLuminancePicker : public QWidget
 {
-   CS_OBJECT(QColorLuminancePicker)
+   GUI_CS_OBJECT(QColorLuminancePicker)
 
  public:
    QColorLuminancePicker(QWidget *parent = 0);
@@ -947,7 +947,7 @@ class QColorShowLabel;
 
 class QColorShower : public QWidget
 {
-   CS_OBJECT(QColorShower)
+   GUI_CS_OBJECT(QColorShower)
 
  public:
    QColorShower(QColorDialog *parent);
@@ -1019,7 +1019,7 @@ class QColorShower : public QWidget
 
 class QColorShowLabel : public QFrame
 {
-   CS_OBJECT(QColorShowLabel)
+   GUI_CS_OBJECT(QColorShowLabel)
 
  public:
    QColorShowLabel(QWidget *parent) : QFrame(parent) {

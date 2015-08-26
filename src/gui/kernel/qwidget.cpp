@@ -61,7 +61,7 @@
 #if defined(Q_WS_QWS)
 # include <qwsdisplay_qws.h>
 # include <qwsmanager_qws.h>
-# include <qpaintengine.h>             // for PorterDuff
+# include <qpaintengine.h>             
 # include <qwindowsurface_qws_p.h>
 #endif
 

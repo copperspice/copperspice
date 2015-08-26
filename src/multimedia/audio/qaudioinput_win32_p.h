@@ -46,7 +46,7 @@ QT_BEGIN_NAMESPACE
 
 class QAudioInputPrivate : public QAbstractAudioInput
 {
-   CS_OBJECT(QAudioInputPrivate)
+   MULTI_CS_OBJECT(QAudioInputPrivate)
  public:
    QAudioInputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
    ~QAudioInputPrivate();
@@ -118,7 +118,7 @@ class QAudioInputPrivate : public QAbstractAudioInput
 
 class InputPrivate : public QIODevice
 {
-   CS_OBJECT(InputPrivate)
+   MULTI_CS_OBJECT(InputPrivate)
 
  public:
    InputPrivate(QAudioInputPrivate *audio);

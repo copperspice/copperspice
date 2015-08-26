@@ -39,7 +39,7 @@ class QEventDispatcherGlibPrivate;
 
 class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
 {
-   CS_OBJECT(QEventDispatcherGlib)
+   CORE_CS_OBJECT(QEventDispatcherGlib)
    Q_DECLARE_PRIVATE(QEventDispatcherGlib)
 
  public:

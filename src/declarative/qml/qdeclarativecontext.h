@@ -43,7 +43,7 @@ class QDeclarativeContextData;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeContext : public QObject
 {
-   CS_OBJECT(QDeclarativeContext)
+   DECL_CS_OBJECT(QDeclarativeContext)
    Q_DECLARE_PRIVATE(QDeclarativeContext)
 
  public:

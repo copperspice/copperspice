@@ -37,7 +37,7 @@ class QSequentialAnimationGroupPrivate;
 
 class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
 {
-   CS_OBJECT(QSequentialAnimationGroup)
+   CORE_CS_OBJECT(QSequentialAnimationGroup)
 
    CORE_CS_PROPERTY_READ(currentAnimation, currentAnimation)
    CORE_CS_PROPERTY_NOTIFY(currentAnimation, currentAnimationChanged)

@@ -41,7 +41,7 @@ class QDeclarativeWebView;
 class QDeclarativeWebViewPrivate;
 
 class QDeclarativeWebPage : public QWebPage {
-    CS_OBJECT(QDeclarativeWebPage)
+    WEB_CS_OBJECT(QDeclarativeWebPage)
 
 public:
     explicit QDeclarativeWebPage(QDeclarativeWebView *parent);
@@ -59,7 +59,7 @@ private:
 };
 
 class GraphicsWebView : public QGraphicsWebView {
-    CS_OBJECT(GraphicsWebView)
+    WEB_CS_OBJECT(GraphicsWebView)
 
 public:
     GraphicsWebView(QDeclarativeWebView* parent = 0);
@@ -89,7 +89,7 @@ class QDeclarativeWebViewAttached;
 // TODO: browser plugins
 
 class QDeclarativeWebView : public QDeclarativeItem {
-    CS_OBJECT(QDeclarativeWebView)
+    WEB_CS_OBJECT(QDeclarativeWebView)
 
     WEB_CS_ENUM(Status)
     WEB_CS_ENUM(SelectionMode)
@@ -325,7 +325,7 @@ private :
 };
 
 class QDeclarativeWebViewAttached : public QObject {
-    CS_OBJECT(QDeclarativeWebViewAttached)
+    WEB_CS_OBJECT(QDeclarativeWebViewAttached)
     
     WEB_CS_PROPERTY_READ(windowObjectName, windowObjectName)
     WEB_CS_PROPERTY_WRITE(windowObjectName, setWindowObjectName)
@@ -351,7 +351,7 @@ private:
 };
 
 class QDeclarativeWebSettings : public QObject {
-    CS_OBJECT(QDeclarativeWebSettings)
+    WEB_CS_OBJECT(QDeclarativeWebSettings)
 
     WEB_CS_PROPERTY_READ(standardFontFamily, standardFontFamily)
     WEB_CS_PROPERTY_WRITE(standardFontFamily, setStandardFontFamily)

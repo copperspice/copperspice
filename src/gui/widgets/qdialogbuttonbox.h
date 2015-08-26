@@ -36,7 +36,7 @@ class QDialogButtonBoxPrivate;
 
 class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 {
-   CS_OBJECT(QDialogButtonBox)
+   GUI_CS_OBJECT(QDialogButtonBox)
 
    GUI_CS_FLAG(StandardButton, StandardButtons)
 

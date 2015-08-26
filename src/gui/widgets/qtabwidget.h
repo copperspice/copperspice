@@ -39,7 +39,7 @@ class QStyleOptionTabWidgetFrame;
 
 class Q_GUI_EXPORT QTabWidget : public QWidget
 {
-   CS_OBJECT(QTabWidget)
+   GUI_CS_OBJECT(QTabWidget)
 
    GUI_CS_ENUM(TabPosition)
    GUI_CS_ENUM(TabShape)

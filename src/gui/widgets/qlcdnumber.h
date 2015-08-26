@@ -37,7 +37,7 @@ class QLCDNumberPrivate;
 
 class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
 {
-   CS_OBJECT(QLCDNumber)
+   GUI_CS_OBJECT(QLCDNumber)
 
    GUI_CS_ENUM(Mode)
    GUI_CS_ENUM(SegmentStyle)

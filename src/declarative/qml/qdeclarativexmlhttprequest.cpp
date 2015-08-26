@@ -1051,7 +1051,7 @@ QScriptValue Document::xmlEncoding(QScriptContext *context, QScriptEngine *engin
 
 class QDeclarativeXMLHttpRequest : public QObject
 {
-   CS_OBJECT(QDeclarativeXMLHttpRequest)
+   DECL_CS_OBJECT(QDeclarativeXMLHttpRequest)
 
  public:
    enum State { Unsent = 0,
@@ -1081,14 +1081,14 @@ class QDeclarativeXMLHttpRequest : public QObject
    bool receivedXml() const;
 
  private:
-   CS_SLOT_1(Private, void downloadProgress(qint64 un_named_arg1))
-   CS_SLOT_2(downloadProgress)
+   DECL_CS_SLOT_1(Private, void downloadProgress(qint64 un_named_arg1))
+   DECL_CS_SLOT_2(downloadProgress)
 
-   CS_SLOT_1(Private, void error(QNetworkReply::NetworkError un_named_arg1))
-   CS_SLOT_2(error)
+   DECL_CS_SLOT_1(Private, void error(QNetworkReply::NetworkError un_named_arg1))
+   DECL_CS_SLOT_2(error)
 
-   CS_SLOT_1(Private, void finished())
-   CS_SLOT_2(finished)
+   DECL_CS_SLOT_1(Private, void finished())
+   DECL_CS_SLOT_2(finished)
 
    void requestFromUrl(const QUrl &url);
 

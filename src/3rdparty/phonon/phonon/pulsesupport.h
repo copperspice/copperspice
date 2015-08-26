@@ -42,7 +42,7 @@ namespace Phonon
 {
     class PHONON_EXPORT PulseSupport : public QObject
     {
-        CS_OBJECT(PulseSupport)
+        PHN_CS_OBJECT(PulseSupport)
 
         public:
             static PulseSupport* getInstance();

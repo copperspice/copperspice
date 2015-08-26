@@ -59,7 +59,7 @@ enum { PollingInterval = 1000 };
 
 class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QPollingFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QPollingFileSystemWatcherEngine)
 
    class FileInfo
    {

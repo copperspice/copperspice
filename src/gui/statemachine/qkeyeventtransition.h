@@ -36,7 +36,7 @@ class QKeyEventTransitionPrivate;
 
 class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
 {
-   CS_OBJECT(QKeyEventTransition)
+   GUI_CS_OBJECT(QKeyEventTransition)
 
    GUI_CS_PROPERTY_READ(key, key)
    GUI_CS_PROPERTY_WRITE(key, setKey)

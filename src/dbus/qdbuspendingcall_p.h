@@ -99,7 +99,7 @@ public:
 
 class QDBusPendingCallWatcherHelper: public QObject
 {
-    Q_OBJECT
+    CS_OBJECT(QDBusPendingCallWatcherHelper)
 public:
     void add(QDBusPendingCallWatcher *watcher);
 
@@ -112,10 +112,13 @@ public:
         emit finished();
     }
 
-Q_SIGNALS:
-    void finished();
-    void reply(const QDBusMessage &msg);
-    void error(const QDBusError &error, const QDBusMessage &msg);
+public:
+    CS_SIGNAL_1(Public, void finished())
+    CS_SIGNAL_2(finished) 
+    CS_SIGNAL_1(Public, void reply(const QDBusMessage & msg))
+    CS_SIGNAL_2(reply,msg) 
+    CS_SIGNAL_1(Public, void error(const QDBusError & error,const QDBusMessage & msg))
+    CS_SIGNAL_2(error,error,msg) 
 };
 
 QT_END_NAMESPACE

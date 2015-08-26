@@ -100,7 +100,7 @@ class Q_GUI_EXPORT QUnixSocketMessage
 
 class Q_GUI_EXPORT QUnixSocket : public QIODevice
 {
-   CS_OBJECT(QUnixSocket)
+   GUI_CS_OBJECT(QUnixSocket)
 
  public:
    QUnixSocket(QObject * = 0);

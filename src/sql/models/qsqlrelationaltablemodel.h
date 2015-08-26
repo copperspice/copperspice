@@ -63,7 +63,7 @@ class Q_SQL_EXPORT QSqlRelation
 
 class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
 {
-   CS_OBJECT(QSqlRelationalTableModel)
+   SQL_CS_OBJECT(QSqlRelationalTableModel)
 
  public:
    enum JoinMode {

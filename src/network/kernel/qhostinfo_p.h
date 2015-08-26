@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 
 class QHostInfoResult : public QObject
 {
-   CS_OBJECT(QHostInfoResult)
+   NET_CS_OBJECT(QHostInfoResult)
 
  public :
    NET_CS_SLOT_1(Public, void emitResultsReady(const QHostInfo &info) {
@@ -63,7 +63,7 @@ class QHostInfoResult : public QObject
 // needs to be QObject because fromName calls tr()
 class QHostInfoAgent : public QObject
 {
-   CS_OBJECT(QHostInfoAgent)
+   NET_CS_OBJECT(QHostInfoAgent)
 
  public:
    static QHostInfo fromName(const QString &hostName);
@@ -140,7 +140,7 @@ class QHostInfoRunnable : public QRunnable
 
 class QAbstractHostInfoLookupManager : public QObject
 {
-   CS_OBJECT(QAbstractHostInfoLookupManager)
+   NET_CS_OBJECT(QAbstractHostInfoLookupManager)
 
  public:
    ~QAbstractHostInfoLookupManager() {}
@@ -157,7 +157,7 @@ class QAbstractHostInfoLookupManager : public QObject
 
 class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
 {
-   CS_OBJECT(QHostInfoLookupManager)
+   NET_CS_OBJECT(QHostInfoLookupManager)
 
  public:
    QHostInfoLookupManager();

@@ -38,7 +38,7 @@ class QUdpSocketPrivate;
 
 class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 {
-   CS_OBJECT(QUdpSocket)
+   NET_CS_OBJECT(QUdpSocket)
 
  public:
    enum BindFlag {

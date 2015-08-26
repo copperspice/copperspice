@@ -36,7 +36,7 @@ class QScrollAreaPrivate;
 
 class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
 {
-   CS_OBJECT(QScrollArea)
+   GUI_CS_OBJECT(QScrollArea)
 
    GUI_CS_PROPERTY_READ(widgetResizable, widgetResizable)
    GUI_CS_PROPERTY_WRITE(widgetResizable, setWidgetResizable)

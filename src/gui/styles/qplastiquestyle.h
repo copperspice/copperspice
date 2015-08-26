@@ -36,7 +36,7 @@ class QPlastiqueStylePrivate;
 
 class Q_GUI_EXPORT QPlastiqueStyle : public QWindowsStyle
 {
-   CS_OBJECT(QPlastiqueStyle)
+   GUI_CS_OBJECT(QPlastiqueStyle)
    Q_DECLARE_PRIVATE(QPlastiqueStyle)
 
  public:

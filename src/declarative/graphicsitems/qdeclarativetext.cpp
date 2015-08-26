@@ -45,7 +45,7 @@ extern Q_GUI_EXPORT bool qt_applefontsmoothing_enabled;
 
 class QTextDocumentWithImageResources : public QTextDocument
 {
-   CS_OBJECT(QTextDocumentWithImageResources)
+   DECL_CS_OBJECT(QTextDocumentWithImageResources)
 
  public:
    QTextDocumentWithImageResources(QDeclarativeText *parent);
@@ -60,8 +60,8 @@ class QTextDocumentWithImageResources : public QTextDocument
    QVariant loadResource(int type, const QUrl &name);
 
  private:
-   CS_SLOT_1(Private, void requestFinished())
-   CS_SLOT_2(requestFinished)
+   DECL_CS_SLOT_1(Private, void requestFinished())
+   DECL_CS_SLOT_2(requestFinished)
 
    QHash<QUrl, QDeclarativePixmap *> m_resources;
 

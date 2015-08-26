@@ -32,18 +32,18 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeFocusPanel : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeFocusPanel)
+   DECL_CS_OBJECT(QDeclarativeFocusPanel)
 
-   CS_PROPERTY_READ(active, isActive)
-   CS_PROPERTY_WRITE(active, setActive)
-   CS_PROPERTY_NOTIFY(active, activeChanged)
+   DECL_CS_PROPERTY_READ(active, isActive)
+   DECL_CS_PROPERTY_WRITE(active, setActive)
+   DECL_CS_PROPERTY_NOTIFY(active, activeChanged)
 
  public:
    QDeclarativeFocusPanel(QDeclarativeItem *parent = 0);
    virtual ~QDeclarativeFocusPanel();
 
-   CS_SIGNAL_1(Public, void activeChanged())
-   CS_SIGNAL_2(activeChanged)
+   DECL_CS_SIGNAL_1(Public, void activeChanged())
+   DECL_CS_SIGNAL_2(activeChanged)
 
  protected:
    bool sceneEvent(QEvent *event);

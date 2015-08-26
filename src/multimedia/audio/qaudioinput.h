@@ -38,7 +38,7 @@ class QAbstractAudioInput;
 
 class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
 {
-   CS_OBJECT(QAudioInput)
+   MULTI_CS_OBJECT(QAudioInput)
 
  public:
    explicit QAudioInput(const QAudioFormat &format = QAudioFormat(), QObject *parent = 0);

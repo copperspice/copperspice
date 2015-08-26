@@ -40,7 +40,7 @@ class QIcon;
 
 class Q_GUI_EXPORT QUndoView : public QListView
 {
-   CS_OBJECT(QUndoView)
+   GUI_CS_OBJECT(QUndoView)
    Q_DECLARE_PRIVATE(QUndoView)
 
    GUI_CS_PROPERTY_READ(emptyLabel, emptyLabel)

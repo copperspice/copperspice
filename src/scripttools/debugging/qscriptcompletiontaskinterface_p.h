@@ -35,7 +35,7 @@ class QScriptCompletionTaskInterfacePrivate;
 
 class QScriptCompletionTaskInterface : public QObject
 {
-   CS_OBJECT(QScriptCompletionTaskInterface)
+   SCRIPT_T_CS_OBJECT(QScriptCompletionTaskInterface)
 
  public:
    enum CompletionType {

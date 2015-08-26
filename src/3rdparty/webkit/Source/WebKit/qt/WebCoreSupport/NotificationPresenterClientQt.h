@@ -52,7 +52,7 @@ class Frame;
 class ScriptExecutionContext;
 
 class NotificationWrapper : public QObject, public QWebNotificationData {
-    CS_OBJECT(NotificationWrapper)
+    WEB_CS_OBJECT(NotificationWrapper)
 
 public:
     NotificationWrapper();

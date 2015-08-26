@@ -48,7 +48,7 @@ namespace Gstreamer
 
     class AudioEffect : public Effect
     {
-        CS_OBJECT(AudioEffect)
+        GSTRM_CS_OBJECT(AudioEffect)
         public:
             AudioEffect (Backend *backend, int effectId, QObject *parent);
         protected:

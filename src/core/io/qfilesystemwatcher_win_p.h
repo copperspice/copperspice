@@ -48,7 +48,7 @@ class QWindowsFileSystemWatcherEngineThread;
 // to do the actually watching.
 class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
-   CS_OBJECT(QWindowsFileSystemWatcherEngine)
+   CORE_CS_OBJECT(QWindowsFileSystemWatcherEngine)
 
  public:
    QWindowsFileSystemWatcherEngine();
@@ -110,7 +110,7 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
 class QWindowsFileSystemWatcherEngineThread : public QThread
 {
-   CS_OBJECT(QWindowsFileSystemWatcherEngineThread)
+   CORE_CS_OBJECT(QWindowsFileSystemWatcherEngineThread)
 
  public:
    QWindowsFileSystemWatcherEngineThread();

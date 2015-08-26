@@ -210,6 +210,8 @@ QObject *QMetaObject::newInstance(Ts... Vs) const
    return retval;
 }
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+
 // **
 class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 {
@@ -236,8 +238,9 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    //
    int  register_enum(const char *name, std::type_index id, const char *scope);
    int  register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id);
-   void register_method(const char *name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
    void register_tag(const char *name, const char *method);
+
+   void register_method_s1(const char *name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
 
    // properties
    int register_property_read(const char *name, const char *dataType, JarReadAbstract *readJar);
@@ -259,26 +262,49 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 template<class T>
 class QMetaObject_T : public QMetaObject_X
 {
- public:
-   const char *className() const;
-   const char *getInterface_iid() const;
-   const QMetaObject *superClass() const;
+   public:
+      QMetaObject_T();
+      
+      void postConstruct();
+   
+      const char *className() const;
+      const char *getInterface_iid() const;
+      const QMetaObject *superClass() const;
+   
+      // revision
+      template<class U>
+      void register_method_rev(U method, int revision);
+   
+      // signals
+      template<class U>
+      void register_method_s2(const char *name, U method, QMetaMethod::MethodType kind);
 
-   // revision
-   template<class U>
-   void register_method_rev(U method, int revision);
-
-   // signals, slots, invokables
-   template<class U>
-   void register_method_ptr(const char *name, U method, QMetaMethod::MethodType kind);
-
-   // properties
-   template<class U>
-   void register_property_notify(const char *name, U method);
-
-   template<class U>
-   void register_property_reset(const char *name, U method);
+      // slots, invokables
+      template<class U>
+      void register_method(const char *name, U method, QMetaMethod::MethodType kind, 
+                  const char *va_args, QMetaMethod::Access access);
+   
+      // properties
+      template<class U>
+      void register_property_notify(const char *name, U method);
+   
+      template<class U>
+      void register_property_reset(const char *name, U method);
 };
+
+/**   \endcond   */
+
+template<class T>
+QMetaObject_T<T>::QMetaObject_T()
+{
+}
+
+template<class T>
+void QMetaObject_T<T>::postConstruct()
+{
+   // calls the overloaded version to ensure the other overloads are processed
+   T::cs_regTrigger(cs_number<0>());
+}
 
 template<class T>
 const char *QMetaObject_T<T>::className() const
@@ -339,16 +365,16 @@ void QMetaObject_T<T>::register_method_rev(U method, int revision)
 }
 
 
+
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method_ptr(const char *name, U method, QMetaMethod::MethodType kind)
+void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMethod::MethodType kind)
 {
    if (! name || ! name[0] ) {
       return;
    }
-
-   //
+   
    QMap<QString, QMetaMethod> *map;
 
    if (kind == QMetaMethod::Constructor) {
@@ -425,6 +451,69 @@ void QMetaObject_T<T>::register_method_ptr(const char *name, U method, QMetaMeth
       }
    }
 }
+
+ 
+// **
+template<class T>
+template<class U>
+void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::MethodType kind, 
+                  const char *va_args, QMetaMethod::Access access)
+{
+   if (! name || ! name[0] || ! va_args || ! va_args[0]) {
+      return;
+   }
+  
+   // declare first
+   std::vector<const char *> signatures;
+   const char *typeReturn;
+   QList<QByteArray> paramNames;
+
+   std::tie(signatures, typeReturn, paramNames) = this->getSignatures(va_args);
+
+   //
+   QMetaMethod::Attributes attr = QMetaMethod::Attributes();
+   int size = signatures.size();
+
+   QList<QByteArray> tempNames = paramNames;
+
+   for ( int k = 0; k < size; ++k )  {
+
+      if (size > 1) {
+         // adjust the number of parameter names
+         int howMany = paramNames.size() - ((size - 1) - k);
+         tempNames   = paramNames.mid(0, howMany);
+
+         attr = QMetaMethod::Cloned;
+
+         if (k == size - 1) {
+            attr = QMetaMethod::Attributes();
+         }
+      }
+
+      // remove spacing from the key
+      QString tokenKey = signatures[k];
+      tokenKey.remove(QChar(32));
+
+      // adjust spacing in the value
+      QString tokenValue = signatures[k];
+      tokenValue.remove(QChar(32));
+
+      QByteArray tokenData = tokenValue.toLatin1();
+
+      // save the key/value into the master map
+      QMetaMethod data(typeReturn, tokenData, tempNames, access, kind, attr, this);
+
+      Bento<U> *temp = new Bento<U>(method);
+      data.setBentoBox(temp);
+
+      if (kind == QMetaMethod::Constructor) {
+         m_constructor.insert(tokenKey, data);
+      } else  {
+         m_methods.insert(tokenKey, data);
+      }
+   }
+}
+
 
 // **
 template<class T>

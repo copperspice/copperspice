@@ -39,7 +39,7 @@ QT_BEGIN_NAMESPACE
 
 class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
 {
-   CS_OBJECT(QGraphicsSceneLinearIndex)
+   GUI_CS_OBJECT(QGraphicsSceneLinearIndex)
 
  public:
    QGraphicsSceneLinearIndex(QGraphicsScene *scene = 0) : QGraphicsSceneIndex(scene) {

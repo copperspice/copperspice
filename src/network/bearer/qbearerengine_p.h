@@ -46,7 +46,7 @@ class QNetworkConfiguration;
 
 class Q_NETWORK_EXPORT QBearerEngine : public QObject
 {
-   CS_OBJECT(QBearerEngine)
+   NET_CS_OBJECT(QBearerEngine)
 
    friend class QNetworkConfigurationManagerPrivate;
 

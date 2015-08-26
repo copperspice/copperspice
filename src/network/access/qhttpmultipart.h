@@ -64,7 +64,7 @@ class Q_NETWORK_EXPORT QHttpPart
 
 class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 {
-   CS_OBJECT(QHttpMultiPart)
+   NET_CS_OBJECT(QHttpMultiPart)
 
  public:
 

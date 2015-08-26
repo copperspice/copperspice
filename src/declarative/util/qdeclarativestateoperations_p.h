@@ -38,25 +38,25 @@ class QDeclarativeParentChangePrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeParentChange : public QDeclarativeStateOperation,
    public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeParentChange)
+   DECL_CS_OBJECT(QDeclarativeParentChange)
    Q_DECLARE_PRIVATE(QDeclarativeParentChange)
 
-   CS_PROPERTY_READ(*target, object)
-   CS_PROPERTY_WRITE(*target, setObject)
-   CS_PROPERTY_READ(*parent, parent)
-   CS_PROPERTY_WRITE(*parent, setParent)
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_READ(width, width)
-   CS_PROPERTY_WRITE(width, setWidth)
-   CS_PROPERTY_READ(height, height)
-   CS_PROPERTY_WRITE(height, setHeight)
-   CS_PROPERTY_READ(scale, scale)
-   CS_PROPERTY_WRITE(scale, setScale)
-   CS_PROPERTY_READ(rotation, rotation)
-   CS_PROPERTY_WRITE(rotation, setRotation)
+   DECL_CS_PROPERTY_READ(*target, object)
+   DECL_CS_PROPERTY_WRITE(*target, setObject)
+   DECL_CS_PROPERTY_READ(*parent, parent)
+   DECL_CS_PROPERTY_WRITE(*parent, setParent)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_READ(width, width)
+   DECL_CS_PROPERTY_WRITE(width, setWidth)
+   DECL_CS_PROPERTY_READ(height, height)
+   DECL_CS_PROPERTY_WRITE(height, setHeight)
+   DECL_CS_PROPERTY_READ(scale, scale)
+   DECL_CS_PROPERTY_WRITE(scale, setScale)
+   DECL_CS_PROPERTY_READ(rotation, rotation)
+   DECL_CS_PROPERTY_WRITE(rotation, setRotation)
  public:
    QDeclarativeParentChange(QObject *parent = 0);
    ~QDeclarativeParentChange();
@@ -109,13 +109,13 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeParentChange : public QDeclarativ
 class QDeclarativeStateChangeScriptPrivate;
 class QDeclarativeStateChangeScript : public QDeclarativeStateOperation, public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeStateChangeScript)
+   DECL_CS_OBJECT(QDeclarativeStateChangeScript)
    Q_DECLARE_PRIVATE(QDeclarativeStateChangeScript)
 
-   CS_PROPERTY_READ(script, script)
-   CS_PROPERTY_WRITE(script, setScript)
-   CS_PROPERTY_READ(name, name)
-   CS_PROPERTY_WRITE(name, setName)
+   DECL_CS_PROPERTY_READ(script, script)
+   DECL_CS_PROPERTY_WRITE(script, setScript)
+   DECL_CS_PROPERTY_READ(name, name)
+   DECL_CS_PROPERTY_WRITE(name, setName)
 
  public:
    QDeclarativeStateChangeScript(QObject *parent = 0);
@@ -138,29 +138,29 @@ class QDeclarativeAnchorChanges;
 class QDeclarativeAnchorSetPrivate;
 class QDeclarativeAnchorSet : public QObject
 {
-   CS_OBJECT(QDeclarativeAnchorSet)
+   DECL_CS_OBJECT(QDeclarativeAnchorSet)
 
-   CS_PROPERTY_READ(left, left)
-   CS_PROPERTY_WRITE(left, setLeft)
-   CS_PROPERTY_RESET(left, resetLeft)
-   CS_PROPERTY_READ(right, right)
-   CS_PROPERTY_WRITE(right, setRight)
-   CS_PROPERTY_RESET(right, resetRight)
-   CS_PROPERTY_READ(horizontalCenter, horizontalCenter)
-   CS_PROPERTY_WRITE(horizontalCenter, setHorizontalCenter)
-   CS_PROPERTY_RESET(horizontalCenter, resetHorizontalCenter)
-   CS_PROPERTY_READ(top, top)
-   CS_PROPERTY_WRITE(top, setTop)
-   CS_PROPERTY_RESET(top, resetTop)
-   CS_PROPERTY_READ(bottom, bottom)
-   CS_PROPERTY_WRITE(bottom, setBottom)
-   CS_PROPERTY_RESET(bottom, resetBottom)
-   CS_PROPERTY_READ(verticalCenter, verticalCenter)
-   CS_PROPERTY_WRITE(verticalCenter, setVerticalCenter)
-   CS_PROPERTY_RESET(verticalCenter, resetVerticalCenter)
-   CS_PROPERTY_READ(baseline, baseline)
-   CS_PROPERTY_WRITE(baseline, setBaseline)
-   CS_PROPERTY_RESET(baseline, resetBaseline)
+   DECL_CS_PROPERTY_READ(left, left)
+   DECL_CS_PROPERTY_WRITE(left, setLeft)
+   DECL_CS_PROPERTY_RESET(left, resetLeft)
+   DECL_CS_PROPERTY_READ(right, right)
+   DECL_CS_PROPERTY_WRITE(right, setRight)
+   DECL_CS_PROPERTY_RESET(right, resetRight)
+   DECL_CS_PROPERTY_READ(horizontalCenter, horizontalCenter)
+   DECL_CS_PROPERTY_WRITE(horizontalCenter, setHorizontalCenter)
+   DECL_CS_PROPERTY_RESET(horizontalCenter, resetHorizontalCenter)
+   DECL_CS_PROPERTY_READ(top, top)
+   DECL_CS_PROPERTY_WRITE(top, setTop)
+   DECL_CS_PROPERTY_RESET(top, resetTop)
+   DECL_CS_PROPERTY_READ(bottom, bottom)
+   DECL_CS_PROPERTY_WRITE(bottom, setBottom)
+   DECL_CS_PROPERTY_RESET(bottom, resetBottom)
+   DECL_CS_PROPERTY_READ(verticalCenter, verticalCenter)
+   DECL_CS_PROPERTY_WRITE(verticalCenter, setVerticalCenter)
+   DECL_CS_PROPERTY_RESET(verticalCenter, resetVerticalCenter)
+   DECL_CS_PROPERTY_READ(baseline, baseline)
+   DECL_CS_PROPERTY_WRITE(baseline, setBaseline)
+   DECL_CS_PROPERTY_RESET(baseline, resetBaseline)
    //Q_PROPERTY(QDeclarativeItem *fill READ fill WRITE setFill RESET resetFill)
    //Q_PROPERTY(QDeclarativeItem *centerIn READ centerIn WRITE setCenterIn RESET resetCenterIn)
 
@@ -259,13 +259,13 @@ class QDeclarativeAnchorChangesPrivate;
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAnchorChanges : public QDeclarativeStateOperation,
    public QDeclarativeActionEvent
 {
-   CS_OBJECT(QDeclarativeAnchorChanges)
+   DECL_CS_OBJECT(QDeclarativeAnchorChanges)
    Q_DECLARE_PRIVATE(QDeclarativeAnchorChanges)
 
-   CS_PROPERTY_READ(*target, object)
-   CS_PROPERTY_WRITE(*target, setObject)
-   CS_PROPERTY_READ(*anchors, anchors)
-   CS_PROPERTY_CONSTANT(*anchors)
+   DECL_CS_PROPERTY_READ(*target, object)
+   DECL_CS_PROPERTY_WRITE(*target, setObject)
+   DECL_CS_PROPERTY_READ(*anchors, anchors)
+   DECL_CS_PROPERTY_CONSTANT(*anchors)
 
  public:
    QDeclarativeAnchorChanges(QObject *parent = 0);

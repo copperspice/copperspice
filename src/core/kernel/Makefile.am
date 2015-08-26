@@ -190,6 +190,16 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/kernel/qeventdispatcher_glib.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_SOURCES += \
+        src/core/kernel/qcore_unix.cpp \
+        src/core/kernel/qcrashhandler.cpp \
+        src/core/kernel/qsharedmemory_unix.cpp \
+        src/core/kernel/qsystemsemaphore_unix.cpp \
+	src/core/kernel/qeventdispatcher_unix.cpp \
+	src/core/kernel/qeventdispatcher_glib.cpp
+endif
+
 if OSTYPE_DARWIN
 lib_libCsCore1_la_SOURCES += \
 	src/core/kernel/qcore_mac.cpp \

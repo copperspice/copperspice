@@ -159,7 +159,7 @@ struct QProcessInfo {
 
 class QProcessManager : public QThread
 {
-   CS_OBJECT(QProcessManager)
+   CORE_CS_OBJECT(QProcessManager)
 
  public:
    QProcessManager();
@@ -297,7 +297,7 @@ void QProcessManager::catchDeadChildren()
    }
 }
 
-static QBasicAtomicInt idCounter = QBasicAtomicInt {Q_BASIC_ATOMIC_INITIALIZER(1)};
+static QAtomicInt idCounter = QAtomicInt { 1 };
 
 void QProcessManager::add(pid_t pid, QProcess *process)
 {

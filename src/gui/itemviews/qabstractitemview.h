@@ -42,7 +42,7 @@ class QAbstractItemViewPrivate;
 
 class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 {
-   CS_OBJECT(QAbstractItemView)
+   GUI_CS_OBJECT(QAbstractItemView)
 
    GUI_CS_ENUM(SelectionMode)
    GUI_CS_ENUM(SelectionBehavior)

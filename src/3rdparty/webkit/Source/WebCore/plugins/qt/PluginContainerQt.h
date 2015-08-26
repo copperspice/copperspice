@@ -27,7 +27,7 @@ namespace WebCore {
 
     class PluginContainerQt : public QX11EmbedContainer
     {
-        CS_OBJECT(PluginContainerQt)
+        WEB_CS_OBJECT(PluginContainerQt)
 
     public:
         PluginContainerQt(PluginView*, QWidget* parent);

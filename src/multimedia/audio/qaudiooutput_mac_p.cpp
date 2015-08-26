@@ -47,7 +47,7 @@ static const int default_buffer_size = 8 * 1024;
 
 class QAudioOutputBuffer : public QObject
 {
-   CS_OBJECT(QAudioOutputBuffer)
+   MULTI_CS_OBJECT(QAudioOutputBuffer)
 
  public:
    QAudioOutputBuffer(int bufferSize, int maxPeriodSize, QAudioFormat const &audioFormat):
@@ -199,7 +199,7 @@ class QAudioOutputBuffer : public QObject
 
 class MacOutputDevice : public QIODevice
 {
-   CS_OBJECT(MacOutputDevice)
+   MULTI_CS_OBJECT(MacOutputDevice)
 
  public:
    MacOutputDevice(QtMultimediaInternal::QAudioOutputBuffer *audioBuffer, QObject *parent):

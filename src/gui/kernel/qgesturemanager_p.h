@@ -39,7 +39,7 @@ class QBasicTimer;
 class QGraphicsObject;
 class QGestureManager : public QObject
 {
-   CS_OBJECT(QGestureManager)
+   GUI_CS_OBJECT(QGestureManager)
 
  public:
    QGestureManager(QObject *parent);

@@ -37,7 +37,7 @@ class QWindowsVistaStylePrivate;
 
 class Q_GUI_EXPORT QWindowsVistaStyle : public QWindowsXPStyle
 {
-   CS_OBJECT(QWindowsVistaStyle)
+   GUI_CS_OBJECT(QWindowsVistaStyle)
 
  public:
    QWindowsVistaStyle();

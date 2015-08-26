@@ -56,7 +56,7 @@ class QStandardItemModel;
 
 class QComboBoxListView : public QListView
 {
-   CS_OBJECT(QComboBoxListView)
+   GUI_CS_OBJECT(QComboBoxListView)
 
  public:
    QComboBoxListView(QComboBox *cmb = 0) : combo(cmb) {}
@@ -104,7 +104,7 @@ class QComboBoxListView : public QListView
 
 class QComboBoxPrivateScroller : public QWidget
 {
-   CS_OBJECT(QComboBoxPrivateScroller)
+   GUI_CS_OBJECT(QComboBoxPrivateScroller)
 
  public:
    QComboBoxPrivateScroller(QAbstractSlider::SliderAction action, QWidget *parent)
@@ -186,7 +186,7 @@ class QComboBoxPrivateScroller : public QWidget
 
 class QComboBoxPrivateContainer : public QFrame
 {
-   CS_OBJECT(QComboBoxPrivateContainer)
+   GUI_CS_OBJECT(QComboBoxPrivateContainer)
 
  public:
    QComboBoxPrivateContainer(QAbstractItemView *itemView, QComboBox *parent);
@@ -237,7 +237,7 @@ class QComboBoxPrivateContainer : public QFrame
 
 class QComboMenuDelegate : public QAbstractItemDelegate
 {
-   CS_OBJECT(QComboMenuDelegate)
+   GUI_CS_OBJECT(QComboMenuDelegate)
 
  public:
    QComboMenuDelegate(QObject *parent, QComboBox *cmb) : QAbstractItemDelegate(parent), mCombo(cmb) {}
@@ -268,7 +268,7 @@ class QComboMenuDelegate : public QAbstractItemDelegate
 // be other side effects from using the new class
 class QComboBoxDelegate : public QItemDelegate
 {
-   CS_OBJECT(QComboBoxDelegate)
+   GUI_CS_OBJECT(QComboBoxDelegate)
 
  public:
    QComboBoxDelegate(QObject *parent, QComboBox *cmb) : QItemDelegate(parent), mCombo(cmb) {}

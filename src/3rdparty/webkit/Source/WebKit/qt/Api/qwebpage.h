@@ -69,7 +69,7 @@ namespace WebCore {
 
 class QWEBKIT_EXPORT QWebPage : public QObject
 {
-    CS_OBJECT(QWebPage)
+    WEB_CS_OBJECT(QWebPage)
 
     WEB_CS_PROPERTY_READ(modified, isModified)
     WEB_CS_PROPERTY_READ(selectedText, selectedText)

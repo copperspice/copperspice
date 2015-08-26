@@ -178,7 +178,7 @@ class NestedListModel
 class ModelNodeMetaObject;
 class ModelObject : public QObject
 {
-   CS_OBJECT(ModelObject)
+   DECL_CS_OBJECT(ModelObject)
  public:
    ModelObject(ModelNode *node, NestedListModel *model, QScriptEngine *seng);
    void setValue(const QByteArray &name, const QVariant &val);

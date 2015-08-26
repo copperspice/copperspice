@@ -208,7 +208,7 @@ class Q_GUI_EXPORT QFontPrivate
 
 class QFontCache : public QObject
 {
-   CS_OBJECT(QFontCache)
+   GUI_CS_OBJECT(QFontCache)
 
  public:
    // note: these static functions work on a per-thread basis

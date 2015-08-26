@@ -40,7 +40,7 @@ CS_DECLARE_INTERFACE(QGenericPluginFactoryInterface, QGenericPluginFactoryInterf
 
 class Q_GUI_EXPORT QGenericPlugin : public QObject, public QGenericPluginFactoryInterface
 {
-   CS_OBJECT(QGenericPlugin)
+   GUI_CS_OBJECT(QGenericPlugin)
    CS_INTERFACES(QGenericPluginFactoryInterface, QFactoryInterface)
 
  public:

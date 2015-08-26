@@ -30,7 +30,7 @@
 namespace WebCore {
 
     class DnsPrefetchHelper : public QObject {
-        CS_OBJECT(DnsPrefetchHelper)
+        WEB_CS_OBJECT(DnsPrefetchHelper)
 
     public:
         DnsPrefetchHelper() : QObject(), currentLookups(0) { }

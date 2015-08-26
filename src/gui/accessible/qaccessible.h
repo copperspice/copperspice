@@ -46,7 +46,7 @@ class QAccessibleInterface;
 
 class Q_GUI_EXPORT QAccessible
 {
-   CS_GADGET(QAccessible)
+   GUI_CS_GADGET(QAccessible)
 
    GUI_CS_ENUM(Role)
    GUI_CS_ENUM(Event)

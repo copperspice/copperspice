@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 
 class QToolBoxButton : public QAbstractButton
 {
-   CS_OBJECT(QToolBoxButton)
+   GUI_CS_OBJECT(QToolBoxButton)
 
  public:
    QToolBoxButton(QWidget *parent)

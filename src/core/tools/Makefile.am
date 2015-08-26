@@ -288,6 +288,13 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/tools/qlocale_unix.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_SOURCES += \
+        src/core/tools/qelapsedtimer_unix.cpp \
+        src/core/tools/qlocale_unix.cpp
+endif
+
+
 if OSTYPE_DARWIN
 lib_libCsCore1_la_SOURCES += \
 	src/core/tools/qelapsedtimer_mac.cpp \

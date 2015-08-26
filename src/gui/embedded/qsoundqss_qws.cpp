@@ -98,7 +98,7 @@ static const bool sound_16bit = false;
 #ifndef QT_NO_QWS_SOUNDSERVER
 class QWSSoundServerClient : public QObject
 {
-   CS_OBJECT(QWSSoundServerClient)
+   GUI_CS_OBJECT(QWSSoundServerClient)
 
  public:
    QWSSoundServerClient(QWS_SOCK_BASE *s, QObject *parent);
@@ -769,7 +769,7 @@ void QWSSoundServerSocket::newConnection()
 
 class QWSSoundServerPrivate : public QObject
 {
-   CS_OBJECT(QWSSoundServerPrivate)
+   GUI_CS_OBJECT(QWSSoundServerPrivate)
 
  public:
    QWSSoundServerPrivate(QObject *parent = 0, const char *name = 0) : QObject(parent) {

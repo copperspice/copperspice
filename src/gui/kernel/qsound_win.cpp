@@ -39,7 +39,7 @@ QT_BEGIN_NAMESPACE
 
 class QAuServerWindows : public QAuServer
 {
-   CS_OBJECT(QAuServerWindows)
+   GUI_CS_OBJECT(QAuServerWindows)
 
  public:
    QAuServerWindows(QObject *parent);

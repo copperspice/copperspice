@@ -4205,7 +4205,7 @@ qint64 QString::toLongLong(bool *ok, int base) const
 {
 #if defined(QT_CHECK_RANGE)
    if (base != 0 && (base < 2 || base > 36)) {
-      qWarning("QString::toLongLong: Invalid base (%d)", base);
+      qWarning("Warning: QString::toLongLong() Invalid base (%d)", base);
       base = 10;
    }
 #endif
@@ -4240,7 +4240,7 @@ quint64 QString::toULongLong(bool *ok, int base) const
 {
 #if defined(QT_CHECK_RANGE)
    if (base != 0 && (base < 2 || base > 36)) {
-      qWarning("QString::toULongLong: Invalid base (%d)", base);
+      qWarning("Warning: QString::toULongLong() Invalid base (%d)", base);
       base = 10;
    }
 #endif
@@ -4565,10 +4565,11 @@ QString &QString::setNum(qlonglong n, int base)
 {
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
-      qWarning("QString::setNum: Invalid base (%d)", base);
+      qWarning("Warning: QString::setNum() Invalid base (%d)", base);
       base = 10;
    }
 #endif
+
    QLocale locale(QLocale::C);
    *this = locale.d()->longLongToString(n, -1, base);
    return *this;
@@ -4581,7 +4582,7 @@ QString &QString::setNum(qulonglong n, int base)
 {
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
-      qWarning("QString::setNum: Invalid base (%d)", base);
+      qWarning("Warning: QString::setNum() Invalid base (%d)", base);
       base = 10;
    }
 #endif
@@ -4638,7 +4639,7 @@ QString &QString::setNum(double n, char f, int prec)
          break;
       default:
 #if defined(QT_CHECK_RANGE)
-         qWarning("QString::setNum: Invalid format char '%c'", f);
+         qWarning("Warning: QString::setNum() Invalid format char '%c'", f);
 #endif
          break;
    }
@@ -5212,8 +5213,9 @@ QString QString::arg(const QString &a, int fieldWidth, QChar fillChar) const
    ArgEscapeData d = findArgEscapes(*this);
 
    if (d.occurrences == 0) {
-      qWarning("QString::arg: Argument missing: %s, %s", toLocal8Bit().data(),
-               a.toLocal8Bit().data());
+      qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
+         "Format String: %s     Argument Value: %s\n", this->toLocal8Bit().data(), a.toLocal8Bit().data());
+
       return *this;
    }
    return replaceArgEscapes(*this, d, fieldWidth, a, a, fillChar);
@@ -5396,8 +5398,10 @@ QString QString::arg(qlonglong a, int fieldWidth, int base, QChar fillChar) cons
 {
    ArgEscapeData d = findArgEscapes(*this);
 
-   if (d.occurrences == 0) {
-      qWarning() << "QString::arg: Argument missing:" << *this << ',' << a;
+   if (d.occurrences == 0) { 
+      qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
+               "Format String: %s     Argument Value: %lld\n", this->toLocal8Bit().data(), a);
+
       return *this;
    }
 
@@ -5443,8 +5447,10 @@ QString QString::arg(qulonglong a, int fieldWidth, int base, QChar fillChar) con
 {
    ArgEscapeData d = findArgEscapes(*this);
 
-   if (d.occurrences == 0) {
-      qWarning() << "QString::arg: Argument missing:" << *this << ',' << a;
+   if (d.occurrences == 0) {    
+      qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
+               "Format String: %s     Argument Value: %llu\n", this->toLocal8Bit().data(), a);
+
       return *this;
    }
 
@@ -5534,7 +5540,8 @@ QString QString::arg(double a, int fieldWidth, char fmt, int prec, QChar fillCha
    ArgEscapeData d = findArgEscapes(*this);
 
    if (d.occurrences == 0) {
-      qWarning("QString::arg: Argument missing: %s, %g", toLocal8Bit().data(), a);
+      qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
+               "Format String: %s     Argument Value: %f\n", this->toLocal8Bit().data(), a);
       return *this;
    }
 
@@ -5561,7 +5568,7 @@ QString QString::arg(double a, int fieldWidth, char fmt, int prec, QChar fillCha
          break;
       default:
 #if defined(QT_CHECK_RANGE)
-         qWarning("QString::arg: Invalid format char '%c'", fmt);
+         qWarning("Warning: QString::arg() Invalid format char '%c'", fmt);
 #endif
          break;
    }
@@ -5647,7 +5654,8 @@ QString QString::multiArg(int numArgs, const QString **args) const
 
    // sanity
    if (numArgs > arg) {
-      qWarning("QString::arg: %d argument(s) missing in %s", numArgs - arg, toLocal8Bit().data());
+      qWarning("Warning: QString::multiArg() Missing place marker '%%n'\n"
+               "Format String: %s\n", this->toLocal8Bit().data());
       numArgs = arg;
    }
 

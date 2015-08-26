@@ -38,7 +38,7 @@ class QBasicKeyEventTransitionPrivate;
 
 class QBasicKeyEventTransition : public QAbstractTransition
 {
-   CS_OBJECT(QBasicKeyEventTransition)
+   GUI_CS_OBJECT(QBasicKeyEventTransition)
 
  public:
    QBasicKeyEventTransition(QState *sourceState = 0);

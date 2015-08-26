@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 
 class QAlphaWidget: public QWidget, private QEffects
 {
-   CS_OBJECT(QAlphaWidget)
+   GUI_CS_OBJECT(QAlphaWidget)
 
  public:
    QAlphaWidget(QWidget *w, Qt::WindowFlags f = 0);
@@ -334,7 +334,7 @@ void QAlphaWidget::alphaBlend()
 
 class QRollEffect : public QWidget, private QEffects
 {
-   CS_OBJECT(QRollEffect)
+   GUI_CS_OBJECT(QRollEffect)
 
  public:
    QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient);

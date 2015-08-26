@@ -110,7 +110,7 @@ class QEventDispatcherUNIXPrivate;
 
 class Q_CORE_EXPORT QEventDispatcherUNIX : public QAbstractEventDispatcher
 {
-   CS_OBJECT(QEventDispatcherUNIX)
+   CORE_CS_OBJECT(QEventDispatcherUNIX)
    Q_DECLARE_PRIVATE(QEventDispatcherUNIX)
 
  public:

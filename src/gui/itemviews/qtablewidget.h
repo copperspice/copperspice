@@ -252,7 +252,7 @@ class QTableWidgetPrivate;
 
 class Q_GUI_EXPORT QTableWidget : public QTableView
 {
-   CS_OBJECT(QTableWidget)
+   GUI_CS_OBJECT(QTableWidget)
 
    GUI_CS_PROPERTY_READ(rowCount, rowCount)
    GUI_CS_PROPERTY_WRITE(rowCount, setRowCount)

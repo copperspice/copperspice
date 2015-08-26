@@ -47,7 +47,7 @@ class QPlainTextDocumentLayoutPrivate;
 
 class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 {
-   CS_OBJECT(QPlainTextEdit)
+   GUI_CS_OBJECT(QPlainTextEdit)
    Q_DECLARE_PRIVATE(QPlainTextEdit)
 
    GUI_CS_ENUM(LineWrapMode)
@@ -299,7 +299,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
 class Q_GUI_EXPORT QPlainTextDocumentLayout : public QAbstractTextDocumentLayout
 {
-   CS_OBJECT(QPlainTextDocumentLayout)
+   GUI_CS_OBJECT(QPlainTextDocumentLayout)
    Q_DECLARE_PRIVATE(QPlainTextDocumentLayout)
 
    GUI_CS_PROPERTY_READ(cursorWidth, cursorWidth)

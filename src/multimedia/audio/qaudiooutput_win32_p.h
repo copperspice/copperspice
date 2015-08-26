@@ -45,7 +45,7 @@ QT_BEGIN_NAMESPACE
 
 class QAudioOutputPrivate : public QAbstractAudioOutput
 {
-   CS_OBJECT(QAudioOutputPrivate)
+   MULTI_CS_OBJECT(QAudioOutputPrivate)
  public:
    QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
    ~QAudioOutputPrivate();
@@ -115,7 +115,7 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
 
 class OutputPrivate : public QIODevice
 {
-   CS_OBJECT(OutputPrivate)
+   MULTI_CS_OBJECT(OutputPrivate)
  public:
    OutputPrivate(QAudioOutputPrivate *audio);
    ~OutputPrivate();

@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class QDeclarativeDrag : public QObject
 {
-   CS_OBJECT(QDeclarativeDrag)
+   DECL_CS_OBJECT(QDeclarativeDrag)
 
    DECL_CS_ENUM(Axis)
    DECL_CS_PROPERTY_READ(*target, target)
@@ -122,7 +122,7 @@ class QDeclarativeMouseAreaPrivate;
 
 class QDeclarativeMouseArea : public QDeclarativeItem
 {
-   CS_OBJECT(QDeclarativeMouseArea)
+   DECL_CS_OBJECT(QDeclarativeMouseArea)
 
    DECL_CS_PROPERTY_READ(mouseX, mouseX)
    DECL_CS_PROPERTY_NOTIFY(mouseX, mousePositionChanged)

@@ -42,7 +42,7 @@ CS_DECLARE_INTERFACE(QScreenDriverFactoryInterface, QScreenDriverFactoryInterfac
 
 class Q_GUI_EXPORT QScreenDriverPlugin : public QObject, public QScreenDriverFactoryInterface
 {
-   CS_OBJECT(QScreenDriverPlugin)
+   GUI_CS_OBJECT(QScreenDriverPlugin)
    CS_INTERFACES(QScreenDriverFactoryInterface, QFactoryInterface)
 
  public:

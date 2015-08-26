@@ -40,7 +40,7 @@ namespace QT7
 {
     class AudioOutputAudioPart : public QObject, AudioNode
     {
-        CS_OBJECT(AudioOutputAudioPart)
+        QT7_CS_OBJECT(AudioOutputAudioPart)
 
         public:
             AudioOutputAudioPart();
@@ -67,7 +67,7 @@ namespace QT7
 
     class AudioOutput : public MediaNode, public AudioOutputInterface
     {
-        CS_OBJECT(AudioOutput)
+        QT7_CS_OBJECT(AudioOutput)
         CS_INTERFACES(Phonon::AudioOutputInterface)
 
         public:

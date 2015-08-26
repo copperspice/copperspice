@@ -32,7 +32,7 @@ class DeviceOrientationClientMock;
 class DeviceOrientationController;
 
 class DeviceOrientationClientMockQt : public QObject, public DeviceOrientationClient {
-    CS_OBJECT(DeviceOrientationClientMockQt)
+    WEB_CS_OBJECT(DeviceOrientationClientMockQt)
 public:
     static DeviceOrientationClientMockQt* client();
     virtual ~DeviceOrientationClientMockQt();

@@ -176,6 +176,17 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/io/qstandardpaths_unix.cpp
 endif
 
+if OSTYPE_BSD
+lib_libCsCore1_la_SOURCES += \
+        src/core/io/qfsfileengine_unix.cpp \
+        src/core/io/qprocess_unix.cpp \
+        src/core/io/qfilesystemengine_unix.cpp \
+        src/core/io/qfilesystemwatcher_kqueue.cpp \
+        src/core/io/qfilesystemiterator_unix.cpp \
+        src/core/io/qstandardpaths_unix.cpp
+endif
+
+
 if OSTYPE_DARWIN
 lib_libCsCore1_la_SOURCES += \
 	src/core/io/qfilesystemengine_unix.cpp \

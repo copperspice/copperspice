@@ -37,25 +37,25 @@ class QDeclarativeTimerPrivate;
 
 class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeTimer : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT(QDeclarativeTimer)
+   DECL_CS_OBJECT(QDeclarativeTimer)
 
    Q_DECLARE_PRIVATE(QDeclarativeTimer)
 
    CS_INTERFACES(QDeclarativeParserStatus)
-   CS_PROPERTY_READ(interval, interval)
-   CS_PROPERTY_WRITE(interval, setInterval)
-   CS_PROPERTY_NOTIFY(interval, intervalChanged)
-   CS_PROPERTY_READ(running, isRunning)
-   CS_PROPERTY_WRITE(running, setRunning)
-   CS_PROPERTY_NOTIFY(running, runningChanged)
-   CS_PROPERTY_READ(repeat, isRepeating)
-   CS_PROPERTY_WRITE(repeat, setRepeating)
-   CS_PROPERTY_NOTIFY(repeat, repeatChanged)
-   CS_PROPERTY_READ(triggeredOnStart, triggeredOnStart)
-   CS_PROPERTY_WRITE(triggeredOnStart, setTriggeredOnStart)
-   CS_PROPERTY_NOTIFY(triggeredOnStart, triggeredOnStartChanged)
-   CS_PROPERTY_READ(*parent, parent)
-   CS_PROPERTY_CONSTANT(*parent)
+   DECL_CS_PROPERTY_READ(interval, interval)
+   DECL_CS_PROPERTY_WRITE(interval, setInterval)
+   DECL_CS_PROPERTY_NOTIFY(interval, intervalChanged)
+   DECL_CS_PROPERTY_READ(running, isRunning)
+   DECL_CS_PROPERTY_WRITE(running, setRunning)
+   DECL_CS_PROPERTY_NOTIFY(running, runningChanged)
+   DECL_CS_PROPERTY_READ(repeat, isRepeating)
+   DECL_CS_PROPERTY_WRITE(repeat, setRepeating)
+   DECL_CS_PROPERTY_NOTIFY(repeat, repeatChanged)
+   DECL_CS_PROPERTY_READ(triggeredOnStart, triggeredOnStart)
+   DECL_CS_PROPERTY_WRITE(triggeredOnStart, setTriggeredOnStart)
+   DECL_CS_PROPERTY_NOTIFY(triggeredOnStart, triggeredOnStartChanged)
+   DECL_CS_PROPERTY_READ(*parent, parent)
+   DECL_CS_PROPERTY_CONSTANT(*parent)
 
  public:
    QDeclarativeTimer(QObject *parent = 0);
@@ -72,23 +72,23 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeTimer : public QObject, public QD
    bool triggeredOnStart() const;
    void setTriggeredOnStart(bool triggeredOnStart);
 
-   CS_SLOT_1(Public, void start())
-   CS_SLOT_2(start)
-   CS_SLOT_1(Public, void stop())
-   CS_SLOT_2(stop)
-   CS_SLOT_1(Public, void restart())
-   CS_SLOT_2(restart)
+   DECL_CS_SLOT_1(Public, void start())
+   DECL_CS_SLOT_2(start)
+   DECL_CS_SLOT_1(Public, void stop())
+   DECL_CS_SLOT_2(stop)
+   DECL_CS_SLOT_1(Public, void restart())
+   DECL_CS_SLOT_2(restart)
 
-   CS_SIGNAL_1(Public, void triggered())
-   CS_SIGNAL_2(triggered)
-   CS_SIGNAL_1(Public, void runningChanged())
-   CS_SIGNAL_2(runningChanged)
-   CS_SIGNAL_1(Public, void intervalChanged())
-   CS_SIGNAL_2(intervalChanged)
-   CS_SIGNAL_1(Public, void repeatChanged())
-   CS_SIGNAL_2(repeatChanged)
-   CS_SIGNAL_1(Public, void triggeredOnStartChanged())
-   CS_SIGNAL_2(triggeredOnStartChanged)
+   DECL_CS_SIGNAL_1(Public, void triggered())
+   DECL_CS_SIGNAL_2(triggered)
+   DECL_CS_SIGNAL_1(Public, void runningChanged())
+   DECL_CS_SIGNAL_2(runningChanged)
+   DECL_CS_SIGNAL_1(Public, void intervalChanged())
+   DECL_CS_SIGNAL_2(intervalChanged)
+   DECL_CS_SIGNAL_1(Public, void repeatChanged())
+   DECL_CS_SIGNAL_2(repeatChanged)
+   DECL_CS_SIGNAL_1(Public, void triggeredOnStartChanged())
+   DECL_CS_SIGNAL_2(triggeredOnStartChanged)
 
  protected:
    void classBegin();
@@ -97,10 +97,10 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeTimer : public QObject, public QD
  private:
    void update();
 
-   CS_SLOT_1(Private, void ticked())
-   CS_SLOT_2(ticked)
-   CS_SLOT_1(Private, void finished())
-   CS_SLOT_2(finished)
+   DECL_CS_SLOT_1(Private, void ticked())
+   DECL_CS_SLOT_2(ticked)
+   DECL_CS_SLOT_1(Private, void finished())
+   DECL_CS_SLOT_2(finished)
 };
 
 QT_END_NAMESPACE

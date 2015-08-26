@@ -39,7 +39,7 @@ class QFtpPrivate;
 
 class Q_NETWORK_EXPORT QFtp : public QObject
 {
-   CS_OBJECT(QFtp)
+   NET_CS_OBJECT(QFtp)
 
  public:
    explicit QFtp(QObject *parent = 0);

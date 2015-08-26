@@ -51,7 +51,7 @@ class QEventLoop;
 
 class Q_GUI_EXPORT QInternalMimeData : public QMimeData
 {
-   CS_OBJECT(QInternalMimeData)
+   GUI_CS_OBJECT(QInternalMimeData)
 
  public:
    QInternalMimeData();
@@ -162,7 +162,7 @@ class QDragPrivate
 
 class QDropData : public QInternalMimeData
 {
-   CS_OBJECT(QDropData)
+   GUI_CS_OBJECT(QDropData)
 
  public:
    QDropData();
@@ -181,7 +181,7 @@ class QDropData : public QInternalMimeData
 
 class QDragManager: public QObject
 {
-   CS_OBJECT(QDragManager)
+   GUI_CS_OBJECT(QDragManager)
 
    QDragManager();
    ~QDragManager();
@@ -298,7 +298,7 @@ class QOleDropTarget : public IDropTarget
 #if defined (Q_OS_MAC)
 class QCocoaDropData : public QInternalMimeData
 {
-   CS_OBJECT(QCocoaDropData)
+   GUI_CS_OBJECT(QCocoaDropData)
 
  public:
    QCocoaDropData(CFStringRef pasteboard);

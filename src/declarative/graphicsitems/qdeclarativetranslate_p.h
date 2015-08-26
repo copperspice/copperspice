@@ -34,14 +34,14 @@ class QDeclarativeTranslatePrivate;
 
 class QDeclarativeTranslate : public QGraphicsTransform
 {
-   CS_OBJECT(QDeclarativeTranslate)
+   DECL_CS_OBJECT(QDeclarativeTranslate)
 
-   CS_PROPERTY_READ(x, x)
-   CS_PROPERTY_WRITE(x, setX)
-   CS_PROPERTY_NOTIFY(x, xChanged)
-   CS_PROPERTY_READ(y, y)
-   CS_PROPERTY_WRITE(y, setY)
-   CS_PROPERTY_NOTIFY(y, yChanged)
+   DECL_CS_PROPERTY_READ(x, x)
+   DECL_CS_PROPERTY_WRITE(x, setX)
+   DECL_CS_PROPERTY_NOTIFY(x, xChanged)
+   DECL_CS_PROPERTY_READ(y, y)
+   DECL_CS_PROPERTY_WRITE(y, setY)
+   DECL_CS_PROPERTY_NOTIFY(y, yChanged)
 
  public:
    QDeclarativeTranslate(QObject *parent = 0);
@@ -55,10 +55,10 @@ class QDeclarativeTranslate : public QGraphicsTransform
 
    void applyTo(QMatrix4x4 *matrix) const;
 
-   CS_SIGNAL_1(Public, void xChanged())
-   CS_SIGNAL_2(xChanged)
-   CS_SIGNAL_1(Public, void yChanged())
-   CS_SIGNAL_2(yChanged)
+   DECL_CS_SIGNAL_1(Public, void xChanged())
+   DECL_CS_SIGNAL_2(xChanged)
+   DECL_CS_SIGNAL_1(Public, void yChanged())
+   DECL_CS_SIGNAL_2(yChanged)
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativeTranslate)

@@ -41,7 +41,7 @@ struct QFontDef;
 
 class Q_GUI_EXPORT QFontDatabase
 {
-   CS_GADGET(QFontDatabase)
+   GUI_CS_GADGET(QFontDatabase)
 
    GUI_CS_ENUM(WritingSystem)
 

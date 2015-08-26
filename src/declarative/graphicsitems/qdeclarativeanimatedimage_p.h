@@ -37,22 +37,22 @@ class QDeclarativeAnimatedImagePrivate;
 
 class QDeclarativeAnimatedImage : public QDeclarativeImage
 {
-   CS_OBJECT(QDeclarativeAnimatedImage)
+   DECL_CS_OBJECT(QDeclarativeAnimatedImage)
 
-   CS_PROPERTY_READ(playing, isPlaying)
-   CS_PROPERTY_WRITE(playing, setPlaying)
-   CS_PROPERTY_NOTIFY(playing, playingChanged)
-   CS_PROPERTY_READ(paused, isPaused)
-   CS_PROPERTY_WRITE(paused, setPaused)
-   CS_PROPERTY_NOTIFY(paused, pausedChanged)
-   CS_PROPERTY_READ(currentFrame, currentFrame)
-   CS_PROPERTY_WRITE(currentFrame, setCurrentFrame)
-   CS_PROPERTY_NOTIFY(currentFrame, frameChanged)
-   CS_PROPERTY_READ(frameCount, frameCount)
+   DECL_CS_PROPERTY_READ(playing, isPlaying)
+   DECL_CS_PROPERTY_WRITE(playing, setPlaying)
+   DECL_CS_PROPERTY_NOTIFY(playing, playingChanged)
+   DECL_CS_PROPERTY_READ(paused, isPaused)
+   DECL_CS_PROPERTY_WRITE(paused, setPaused)
+   DECL_CS_PROPERTY_NOTIFY(paused, pausedChanged)
+   DECL_CS_PROPERTY_READ(currentFrame, currentFrame)
+   DECL_CS_PROPERTY_WRITE(currentFrame, setCurrentFrame)
+   DECL_CS_PROPERTY_NOTIFY(currentFrame, frameChanged)
+   DECL_CS_PROPERTY_READ(frameCount, frameCount)
 
    // read-only for AnimatedImage
-   CS_PROPERTY_READ(sourceSize, sourceSize)
-   CS_PROPERTY_NOTIFY(sourceSize, sourceSizeChanged)
+   DECL_CS_PROPERTY_READ(sourceSize, sourceSize)
+   DECL_CS_PROPERTY_NOTIFY(sourceSize, sourceSizeChanged)
 
  public:
    QDeclarativeAnimatedImage(QDeclarativeItem *parent = 0);
@@ -73,22 +73,22 @@ class QDeclarativeAnimatedImage : public QDeclarativeImage
    virtual void setSource(const QUrl &);
 
  public:
-   CS_SIGNAL_1(Public, void playingChanged())
-   CS_SIGNAL_2(playingChanged)
-   CS_SIGNAL_1(Public, void pausedChanged())
-   CS_SIGNAL_2(pausedChanged)
-   CS_SIGNAL_1(Public, void frameChanged())
-   CS_SIGNAL_2(frameChanged)
-   CS_SIGNAL_1(Public, void sourceSizeChanged())
-   CS_SIGNAL_2(sourceSizeChanged)
+   DECL_CS_SIGNAL_1(Public, void playingChanged())
+   DECL_CS_SIGNAL_2(playingChanged)
+   DECL_CS_SIGNAL_1(Public, void pausedChanged())
+   DECL_CS_SIGNAL_2(pausedChanged)
+   DECL_CS_SIGNAL_1(Public, void frameChanged())
+   DECL_CS_SIGNAL_2(frameChanged)
+   DECL_CS_SIGNAL_1(Public, void sourceSizeChanged())
+   DECL_CS_SIGNAL_2(sourceSizeChanged)
 
  private :
-   CS_SLOT_1(Private, void movieUpdate())
-   CS_SLOT_2(movieUpdate)
-   CS_SLOT_1(Private, void movieRequestFinished())
-   CS_SLOT_2(movieRequestFinished)
-   CS_SLOT_1(Private, void playingStatusChanged())
-   CS_SLOT_2(playingStatusChanged)
+   DECL_CS_SLOT_1(Private, void movieUpdate())
+   DECL_CS_SLOT_2(movieUpdate)
+   DECL_CS_SLOT_1(Private, void movieRequestFinished())
+   DECL_CS_SLOT_2(movieRequestFinished)
+   DECL_CS_SLOT_1(Private, void playingStatusChanged())
+   DECL_CS_SLOT_2(playingStatusChanged)
 
  protected:
    virtual void load();

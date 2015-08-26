@@ -48,7 +48,7 @@ QTM_BEGIN_NAMESPACE
 class QNetworkConfigurationManagerPrivate;
 class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public QObject
 {
-   CS_OBJECT(QNetworkConfigurationManager)
+   NET_CS_OBJECT(QNetworkConfigurationManager)
 
  public:
    enum Capability {

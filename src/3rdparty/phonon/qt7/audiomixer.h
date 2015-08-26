@@ -60,7 +60,7 @@ namespace QT7
 
     class AudioMixer : public MediaNode, Phonon::EffectInterface, Phonon::VolumeFaderInterface
     {
-        CS_OBJECT(AudioMixer)
+        QT7_CS_OBJECT(AudioMixer)
 
         CS_INTERFACES(Phonon::EffectInterface, Phonon::VolumeFaderInterface)
   

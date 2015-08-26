@@ -35,7 +35,7 @@ class QDialogPrivate;
 
 class Q_GUI_EXPORT QDialog : public QWidget
 {
-   CS_OBJECT(QDialog)
+   GUI_CS_OBJECT(QDialog)
    friend class QPushButton;
 
    GUI_CS_PROPERTY_READ(sizeGripEnabled, isSizeGripEnabled)

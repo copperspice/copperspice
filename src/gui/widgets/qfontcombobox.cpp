@@ -87,7 +87,7 @@ static QFontDatabase::WritingSystem writingSystemForFont(const QFont &font, bool
 
 class QFontFamilyDelegate : public QAbstractItemDelegate
 {
-   CS_OBJECT(QFontFamilyDelegate)
+   GUI_CS_OBJECT(QFontFamilyDelegate)
 
  public:
    explicit QFontFamilyDelegate(QObject *parent);

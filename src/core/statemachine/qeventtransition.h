@@ -37,7 +37,7 @@ class QEventTransitionPrivate;
 
 class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
 {
-   CS_OBJECT(QEventTransition)
+   CORE_CS_OBJECT(QEventTransition)
 
    CORE_CS_PROPERTY_READ(eventSource, eventSource)
    CORE_CS_PROPERTY_WRITE(eventSource, setEventSource)

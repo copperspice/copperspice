@@ -43,7 +43,7 @@ class QGraphicsViewPrivate;
 
 class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 {
-   CS_OBJECT(QGraphicsView)
+   GUI_CS_OBJECT(QGraphicsView)
 
    GUI_CS_FLAG(OptimizationFlag, OptimizationFlags)
    GUI_CS_FLAG(CacheModeFlag, CacheMode)

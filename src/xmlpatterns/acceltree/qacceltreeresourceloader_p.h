@@ -45,11 +45,10 @@ namespace QPatternist {
 
 class NetworkLoop : public QEventLoop
 {
-   CS_OBJECT(NetworkLoop)
+   XMLP_CS_OBJECT(NetworkLoop)
 
  public:
-   NetworkLoop() : m_hasReceivedError(false) {
-   }
+   NetworkLoop() : m_hasReceivedError(false) { }
 
    XMLP_CS_SLOT_1(Public, void error(QNetworkReply::NetworkError code))
    XMLP_CS_SLOT_2(error)

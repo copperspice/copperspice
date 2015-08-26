@@ -1322,7 +1322,7 @@ QGLTemporaryContext::~QGLTemporaryContext()
 
 class QGLOverlayWidget : public QGLWidget
 {
-   CS_OBJECT(QGLOverlayWidget)
+   OPENGL_CS_OBJECT(QGLOverlayWidget)
 
  public:
    QGLOverlayWidget(const QGLFormat &format, QGLWidget *parent, const QGLWidget *shareWidget = 0);

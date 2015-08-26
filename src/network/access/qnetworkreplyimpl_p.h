@@ -45,7 +45,7 @@ class QNetworkReplyImplPrivate;
 
 class QNetworkReplyImpl: public QNetworkReply
 {
-   CS_OBJECT(QNetworkReplyImpl)
+   NET_CS_OBJECT(QNetworkReplyImpl)
 
  public:
    QNetworkReplyImpl(QObject *parent = 0);
@@ -219,7 +219,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
 #ifndef QT_NO_BEARERMANAGEMENT
 class QDisabledNetworkReply : public QNetworkReply
 {
-   CS_OBJECT(QDisabledNetworkReply)
+   NET_CS_OBJECT(QDisabledNetworkReply)
 
  public:
    QDisabledNetworkReply(QObject *parent, const QNetworkRequest &req, QNetworkAccessManager::Operation op);

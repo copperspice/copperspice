@@ -36,7 +36,7 @@ class QSignalMapperPrivate;
 
 class Q_CORE_EXPORT QSignalMapper : public QObject
 {
-   CS_OBJECT(QSignalMapper)
+   CORE_CS_OBJECT(QSignalMapper)
    Q_DECLARE_PRIVATE(QSignalMapper)
 
  public:

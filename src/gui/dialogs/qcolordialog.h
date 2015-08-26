@@ -36,7 +36,7 @@ class QColorDialogPrivate;
 
 class Q_GUI_EXPORT QColorDialog : public QDialog
 {
-   CS_OBJECT(QColorDialog)
+   GUI_CS_OBJECT(QColorDialog)
    Q_DECLARE_PRIVATE(QColorDialog)
 
    GUI_CS_ENUM(ColorDialogOption)

@@ -37,7 +37,7 @@ class QNetworkCookieJarPrivate;
 
 class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject
 {
-   CS_OBJECT(QNetworkCookieJar)
+   NET_CS_OBJECT(QNetworkCookieJar)
 
  public:
    QNetworkCookieJar(QObject *parent = 0);

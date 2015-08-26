@@ -336,7 +336,7 @@ class QScriptSyntaxCheckResultPrivate
    int errorColumnNumber;
    int errorLineNumber;
    QString errorMessage;
-   QBasicAtomicInt ref;
+   QAtomicInt ref;
 };
 
 class QScriptTypeInfo

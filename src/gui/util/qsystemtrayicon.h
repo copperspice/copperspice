@@ -44,7 +44,7 @@ class QPoint;
 
 class Q_GUI_EXPORT QSystemTrayIcon : public QObject
 {
-   CS_OBJECT(QSystemTrayIcon)
+   GUI_CS_OBJECT(QSystemTrayIcon)
 
    GUI_CS_PROPERTY_READ(toolTip, toolTip)
    GUI_CS_PROPERTY_WRITE(toolTip, setToolTip)

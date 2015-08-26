@@ -39,7 +39,7 @@ class QWebViewPrivate;
 class QWebNetworkRequest;
 
 class QWEBKIT_EXPORT QWebView : public QWidget {
-    CS_OBJECT(QWebView)
+    WEB_CS_OBJECT(QWebView)
 
     WEB_CS_PROPERTY_READ(title, title)
     WEB_CS_PROPERTY_READ(url, url)

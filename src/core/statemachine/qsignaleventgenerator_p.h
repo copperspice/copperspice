@@ -34,7 +34,7 @@ class QStateMachine;
 
 class QSignalEventGenerator : public QObject
 {
-   CS_OBJECT(QSignalEventGenerator)
+   CORE_CS_OBJECT(QSignalEventGenerator)
 
  public:
    QSignalEventGenerator(QStateMachine *parent);

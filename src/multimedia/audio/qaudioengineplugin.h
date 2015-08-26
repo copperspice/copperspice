@@ -47,7 +47,7 @@ CS_DECLARE_INTERFACE(QAudioEngineFactoryInterface, QAudioEngineFactoryInterface_
 
 class Q_MULTIMEDIA_EXPORT QAudioEnginePlugin : public QObject, public QAudioEngineFactoryInterface
 {
-   CS_OBJECT(QAudioEnginePlugin)
+   MULTI_CS_OBJECT(QAudioEnginePlugin)
    CS_INTERFACES(QAudioEngineFactoryInterface, QFactoryInterface)
 
  public:

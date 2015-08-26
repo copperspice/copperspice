@@ -46,7 +46,7 @@ class QTextFramePrivate;
 
 class Q_GUI_EXPORT QTextObject : public QObject
 {
-   CS_OBJECT(QTextObject)
+   GUI_CS_OBJECT(QTextObject)
 
  public:
    QTextFormat format() const;
@@ -77,7 +77,7 @@ class Q_GUI_EXPORT QTextObject : public QObject
 
 class Q_GUI_EXPORT QTextBlockGroup : public QTextObject
 {
-   CS_OBJECT(QTextBlockGroup)
+   GUI_CS_OBJECT(QTextBlockGroup)
 
  protected:
    explicit QTextBlockGroup(QTextDocument *doc);
@@ -106,7 +106,7 @@ class Q_GUI_EXPORT QTextFrameLayoutData
 
 class Q_GUI_EXPORT QTextFrame : public QTextObject
 {
-   CS_OBJECT(QTextFrame)
+   GUI_CS_OBJECT(QTextFrame)
 
  public:
    explicit QTextFrame(QTextDocument *doc);

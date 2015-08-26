@@ -375,6 +375,43 @@ lib_phonon_gstreamer_la_LIBADD=lib/libCsCore1.la lib/libCsGui1.la lib/libCsPhono
 
 endif
 
+if OSTYPE_BSD
+lib_LTLIBRARIES += lib/phonon_gstreamer.la
+        
+lib_phonon_gstreamer_la_SOURCES= \
+        src/3rdparty/phonon/gstreamer/abstractrenderer.cpp \
+        src/3rdparty/phonon/gstreamer/artssink.cpp \
+        src/3rdparty/phonon/gstreamer/audiodataoutput.cpp \
+        src/3rdparty/phonon/gstreamer/audioeffect.cpp \
+        src/3rdparty/phonon/gstreamer/audiooutput.cpp \
+        src/3rdparty/phonon/gstreamer/backend.cpp \
+        src/3rdparty/phonon/gstreamer/devicemanager.cpp \
+        src/3rdparty/phonon/gstreamer/effect.cpp \
+        src/3rdparty/phonon/gstreamer/effectmanager.cpp \
+        src/3rdparty/phonon/gstreamer/glrenderer.cpp \
+        src/3rdparty/phonon/gstreamer/gsthelper.cpp \
+        src/3rdparty/phonon/gstreamer/medianode.cpp \
+        src/3rdparty/phonon/gstreamer/medianodeevent.cpp \
+        src/3rdparty/phonon/gstreamer/mediaobject.cpp \
+        src/3rdparty/phonon/gstreamer/message.cpp \
+        src/3rdparty/phonon/gstreamer/phononsrc.cpp \
+        src/3rdparty/phonon/gstreamer/qwidgetvideosink.cpp \
+        src/3rdparty/phonon/gstreamer/streamreader.cpp \
+        src/3rdparty/phonon/gstreamer/videowidget.cpp \
+        src/3rdparty/phonon/gstreamer/volumefadereffect.cpp \
+        src/3rdparty/phonon/gstreamer/widgetrenderer.cpp \
+        src/3rdparty/phonon/gstreamer/x11renderer.cpp
+        
+lib_phonon_gstreamer_la_CXXFLAGS=$(AM_CXXFLAGS) -DQT_NO_OPENGL $(GSTREAMER_CFLAGS) $(GSTREAMER_AUDIO_CFLAGS) \
+      -I$(top_srcdir)/src/3rdparty/phonon/gstreamer -Iinclude -Iinclude/QtCore -Iinclude/QtGui -Iinclude/phonon \
+      -Isrc/3rdparty/phonon/gstreamer -DQT_BUILD_GSTREAMER_LIB -DQT_SHARED  -DQT_MAKEDLL
+
+lib_phonon_gstreamer_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -no-undefined -module $(GSTREAMER_LIBS) $(GSTREAMER_AUDIO_LIBS)
+lib_phonon_gstreamer_la_LIBADD=lib/libCsCore1.la lib/libCsGui1.la lib/libCsPhonon1.la
+
+endif
+
+
 EXTRA_DIST+= \
 	src/3rdparty/phonon/qt7/videoeffect.h
 

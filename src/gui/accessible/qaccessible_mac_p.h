@@ -397,7 +397,7 @@ class QInterfaceFactory
 */
 class QAccessibleHierarchyManager : public QObject
 {
-   CS_OBJECT(QAccessibleHierarchyManager)
+   GUI_CS_OBJECT(QAccessibleHierarchyManager)
 
  public:
    ~QAccessibleHierarchyManager() {

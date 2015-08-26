@@ -41,7 +41,7 @@ namespace Phonon
     {
         class AudioOutput : public BackendNode, public Phonon::AudioOutputInterface
         {
-            CS_OBJECT(AudioOutput)
+            DS9_CS_OBJECT(AudioOutput)
             CS_INTERFACES(Phonon::AudioOutputInterface)
 
         public:

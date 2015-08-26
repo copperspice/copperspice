@@ -37,7 +37,7 @@ class QSqlIndex;
 
 class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
 {
-   CS_OBJECT(QSqlTableModel)
+   SQL_CS_OBJECT(QSqlTableModel)
    Q_DECLARE_PRIVATE(QSqlTableModel)
 
  public:
