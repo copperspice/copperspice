@@ -19,7 +19,7 @@ set(LRELEASE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_LRELEASE_LIBS
         ${EXTRA_LRELEASE_LIBS}
         uuid
@@ -33,4 +33,4 @@ set_target_properties(lrelease PROPERTIES
     LINK_FLAGS ${EXTRA_LRELEASE_LDFLAGS}
 )
 
-install(TARGETS lrelease RUNTIME DESTINATION bin)
+install(TARGETS lrelease DESTINATION ${CMAKE_INSTALL_BINDIR})

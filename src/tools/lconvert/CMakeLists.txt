@@ -19,7 +19,7 @@ set(LCONVERT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_LCONVERT_LIBS
         ${EXTRA_LCONVERT_LIBS}
         uuid
@@ -33,4 +33,4 @@ set_target_properties(lconvert PROPERTIES
     LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
 )
 
-install(TARGETS lconvert RUNTIME DESTINATION bin)
+install(TARGETS lconvert DESTINATION ${CMAKE_INSTALL_BINDIR})

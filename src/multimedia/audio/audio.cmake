@@ -48,7 +48,7 @@ set(MULTIMEDIA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudioformat.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(MULTIMEDIA_SOURCES
         ${MULTIMEDIA_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiodeviceinfo_win32_p.cpp

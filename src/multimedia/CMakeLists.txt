@@ -40,5 +40,15 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
 )
 
-install(TARGETS CsMultimedia${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtMultimedia DESTINATION include)
+
+install(
+    TARGETS CsMultimedia${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtMultimedia
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

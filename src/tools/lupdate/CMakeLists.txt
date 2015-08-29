@@ -27,7 +27,7 @@ set(LUPDATE_SOURCES
 #   ${CMAKE_CURRENT_SOURCE_DIR}/qdeclarative.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_LUPDATE_LIBS
         ${EXTRA_LUPDATE_LIBS}
         uuid
@@ -47,4 +47,4 @@ set_target_properties(lupdate PROPERTIES
 
 macro_generate_resources("${LUPDATE_SOURCES}")
 
-install(TARGETS lupdate RUNTIME DESTINATION bin)
+install(TARGETS lupdate DESTINATION ${CMAKE_INSTALL_BINDIR})

@@ -179,7 +179,7 @@ else()
 endif()
 
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp

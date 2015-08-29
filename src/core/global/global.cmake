@@ -1,8 +1,3 @@
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/cs_build_info.h.in
-    ${CMAKE_BINARY_DIR}/include/cs_build_info.h
-)
-
 set(CORE_PUBLIC_INCLUDES
     ${CORE_PUBLIC_INCLUDES}
     QBool

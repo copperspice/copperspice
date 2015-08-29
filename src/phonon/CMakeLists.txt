@@ -1,9 +1,9 @@
 add_definitions(-DMAKE_PHONON_LIB -DQT_NO_DBUS -DQT_BUILD_PHONON_LIB -DQT_MAKEDLL)
 set(EXTRA_PHONON_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
-set(EXTRA_PHONON_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON_CXXFLAGS "")
 set(EXTRA_PHONON_LDFLAGS "-Wl,--no-undefined")
 set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR})
-set(EXTRA_PHONON2_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_PHONON2_CXXFLAGS "")
 set(EXTRA_PHONON2_LDFLAGS "-Wl,--no-undefined")
 set(PHONON2_SUFFIX)
 
@@ -280,7 +280,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9/abstractvideorenderer.cpp
@@ -405,16 +405,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audionode.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/videowidget.mm
     )
-    set(EXTRA_PHONON2_LIBS
-        ${EXTRA_PHONON2_LIBS}
-        gdi32
-        winmm
-        ole32
-        winspool
-        oleaut32
-        comdlg32
-        imm32
-    )
     set(EXTRA_PHONON2_LDFLAGS
         ${EXTRA_PHONON2_LDFLAGS}
         -Xarch_i386
@@ -435,10 +425,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7
-        ${CMAKE_SOURCE_DIR}/privateInclude/OpenGL # TODO: whaat?
+         # TODO: is that a typo? is it neccessary?
+        ${CMAKE_SOURCE_DIR}/privateInclude/OpenGL
     )
     set(PHONON2_SUFFIX "qt7")
 endif()
+
+function_variable_fixup("${EXTRA_PHONON_CXXFLAGS}" EXTRA_PHONON_CXXFLAGS)
+function_variable_fixup("${EXTRA_PHONON_LDFLAGS}" EXTRA_PHONON_LDFLAGS)
 
 add_library(CsPhonon${BUILD_MAJOR} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(CsPhonon${BUILD_MAJOR} ${EXTRA_PHONON_LIBS})
@@ -448,6 +442,9 @@ set_target_properties(CsPhonon${BUILD_MAJOR} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON_LDFLAGS}
 )
+
+function_variable_fixup("${EXTRA_PHONON2_CXXFLAGS}" EXTRA_PHONON2_CXXFLAGS)
+function_variable_fixup("${EXTRA_PHONON2_LDFLAGS}" EXTRA_PHONON2_LDFLAGS)
 
 add_library(phonon_${PHONON2_SUFFIX} MODULE ${PHONON2_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
@@ -471,6 +468,17 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR}"
 )
 
-install(TARGETS CsPhonon${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(TARGETS phonon_${PHONON2_SUFFIX} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/phonon DESTINATION include)
+
+install(
+    TARGETS CsPhonon${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/phonon
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)
+
+install(TARGETS phonon_${PHONON2_SUFFIX} DESTINATION ${CMAKE_INSTALL_LIBDIR})

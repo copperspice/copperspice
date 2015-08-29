@@ -51,7 +51,7 @@ set(UIC_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/validator.h
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_UIC_LIBS
         ${EXTRA_UIC_LIBS}
         uuid
@@ -65,5 +65,4 @@ set_target_properties(uic PROPERTIES
     LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
 )
 
-install(TARGETS uic RUNTIME DESTINATION bin)
-
+install(TARGETS uic DESTINATION ${CMAKE_INSTALL_BINDIR})

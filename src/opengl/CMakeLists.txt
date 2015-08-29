@@ -129,7 +129,7 @@ endif()
 
 # TODO: if ${OPENGL_LIBRARIES} is sufficient for all platforms drop
 # hardcoded additions to ${EXTRA_OPENGL_LIBS} and ${EXTRA_OPENGL_LDFLAGS}
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/qgl_win.cpp
@@ -181,5 +181,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
 )
 
-install(TARGETS CsOpenGL${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtOpenGL DESTINATION include)
+install(
+    TARGETS CsOpenGL${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtOpenGL
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

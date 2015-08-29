@@ -1,5 +1,6 @@
-# NOTE: to find all FIXME/TODO related to the CMake build system execute the
-# following in the top-level directory of the source tree:
+# NOTE: to find all FIXME/TODO related to the CMake build system (and those
+# inherited from the autotools build system) execute the following in the
+# top-level directory of the source tree:
 #
 # find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
 # find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
@@ -10,13 +11,6 @@ cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 # cmake_policy(VERSION 2.8.11)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-install(
-    FILES
-    cmake/modules/FindCopperSpice.cmake
-    cmake/modules/CopperSpiceMacros.cmake
-    DESTINATION
-    share/cmake/modules
-)
 
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
@@ -26,6 +20,22 @@ include(CheckTypeSize)
 include(FeatureSummary)
 include(TestLargeFiles)
 include(MacroCopperSpice)
+if(UNIX)
+    include(GNUInstallDirs)
+else()
+    set(CMAKE_INSTALL_BINDIR ${CMAKE_INSTALL_PREFIX})
+    set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX})
+    set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX})
+    set(CMAKE_INSTALL_DATAROOTDIR ${CMAKE_INSTALL_PREFIX})
+endif()
+
+install(
+    FILES
+    ${CMAKE_SOURCE_DIR}/cmake/modules/FindCopperSpice.cmake
+    ${CMAKE_SOURCE_DIR}/cmake/modules/CopperSpiceMacros.cmake
+    DESTINATION
+    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/modules
+)
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
@@ -54,7 +64,10 @@ set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${BUILD_MICRO})
 include(CPack)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
+# TODO: cleanup include dirs now that this is turned on
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
 
 check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
@@ -156,7 +169,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
 
     find_package(NAS)
     set_package_properties(NAS PROPERTIES
-        PURPOSE "Basic audio support over wire"
+        PURPOSE "Required for basic audio support over wire"
         DESCRIPTION "Network transparent, client/server audio transport system"
         URL "http://www.radscan.com/nas.html"
         TYPE REQUIRED
@@ -164,7 +177,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
 
     find_package(OpenGL)
     set_package_properties(OpenGL PROPERTIES
-        PURPOSE "Required OpenGL support"
+        PURPOSE "Required for OpenGL support"
         DESCRIPTION "The Mesa 3D Graphics Library"
         URL "http://www.mesa3d.org/"
         TYPE REQUIRED
@@ -224,7 +237,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     endif()
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     add_definitions(-DUNICODE)
 endif()
 if(NOT CUPS_FOUND)
@@ -266,12 +279,6 @@ add_feature_info(MySQL WITH_MYSQL_PLUGIN "the world's most popular open source d
 option(WITH_WEBKIT "Build WebKit component" ON)
 add_feature_info(WebKit WITH_WEBKIT "an open source web browser engine")
 
-# XXX: as bad as this can be it is neccessary for building properly when Qt4 is
-# installed on the system because they have the same headers names with the
-# difference being that CopperSpice does not install non-fancy headers into
-# <prefix>/include.
-set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
-
 add_subdirectory(src/core)
 # out for now add_subdirectory(declarative)
 add_subdirectory(src/gui)
@@ -283,6 +290,7 @@ add_subdirectory(src/script)
 # out for now add_subdirectory(scripttools)
 add_subdirectory(src/sql)
 add_subdirectory(src/svg)
+# TODO: support suffixed tools, after that export them
 add_subdirectory(src/tools/shared)
 add_subdirectory(src/tools/lconvert)
 add_subdirectory(src/tools/lrelease)
@@ -294,5 +302,31 @@ if(WITH_WEBKIT)
 endif()
 add_subdirectory(src/xml)
 add_subdirectory(src/xmlpatterns)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfig.cmake
+    ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
+    @ONLY
+)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfigVersion.cmake
+    ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
+    @ONLY
+)
+
+install(
+    FILES
+    ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
+    ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
+    DESTINATION
+    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+)
+
+install(
+    EXPORT CopperSpiceLibraryTargets
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    FILE CopperSpiceLibraryTargets.cmake
+)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -60,7 +60,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SVG_LIBS
         ${EXTRA_SVG_LIBS}
         ws2_32
@@ -84,5 +84,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
 )
 
-install(TARGETS CsSvg${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSvg DESTINATION include)
+install(
+    TARGETS CsSvg${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSvg
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

@@ -12,12 +12,10 @@ set(SQL_INCLUDES
 )
 
 if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
-    # TODO: those should probably apply to a single object
-    set(EXTRA_SQL_LDFLAGS
-        ${EXTRA_SQL_LDFLAGS}
+    set(EXTRA_MYSQL_LDFLAGS
+        ${EXTRA_MYSQL_LDFLAGS}
         -avoid-version
         -no-undefined
-        # -module
     )
 
     set(EXTRA_SQL_LIBS
@@ -26,11 +24,20 @@ if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
         ${ZLIB_LIBRARIES}
     )
 
-    set(SQL_SOURCES
-        ${SQL_SOURCES}
+    set(MYSQL_SOURCES
+        ${MYSQL_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/drivers/mysql/qsql_mysql.cpp
         ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/mysql/main.cpp
     )
 
+    function_variable_fixup("${EXTRA_MYSQL_LDFLAGS}" EXTRA_MYSQL_LDFLAGS)
+
     include_directories(${MYSQL_INCLUDE_DIR})
+    add_library(qsqlmysql4 MODULE ${MYSQL_SOURCES})
+    set_target_properties(qsqlmysql4 PROPERTIES
+        LINK_FLAGS ${EXTRA_MYSQL_LDFLAGS}
+    )
+
+    install(TARGETS qsqlmysql4 DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
+

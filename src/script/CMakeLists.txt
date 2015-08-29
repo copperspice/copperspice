@@ -26,7 +26,7 @@ add_definitions(
 )
 
 set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_SCRIPT_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_SCRIPT_CXXFLAGS "")
 set(EXTRA_SCRIPT_LDFLAGS "-Wl,--no-undefined")
 
 include(api/api.cmake)
@@ -527,9 +527,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SCRIPT_LIBS
-        ${EXTRA_SCRIPT_LIBS
+        ${EXTRA_SCRIPT_LIBS}
         winmm
     )
     set(EXTRA_SCRIPT_LDFLAGS
@@ -546,6 +546,9 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
 endif()
+
+function_variable_fixup("${EXTRA_SCRIPT_CXXFLAGS}" EXTRA_SCRIPT_CXXFLAGS)
+function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}" EXTRA_SCRIPT_LDFLAGS)
 
 add_library(CsScript${BUILD_MAJOR} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
 target_link_libraries(CsScript${BUILD_MAJOR} ${EXTRA_SCRIPT_LIBS})
@@ -564,5 +567,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR}"
 )
 
-install(TARGETS CsScript${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript DESTINATION include)
+install(
+    TARGETS CsScript${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtScript
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

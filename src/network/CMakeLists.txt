@@ -31,7 +31,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_NETWORK_LIBS
         ${EXTRA_NETWORK_LIBS} lws2_32
     )
@@ -61,5 +61,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR}"
 )
 
-install(TARGETS CsNetwork${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtNetwork DESTINATION include)
+install(
+    TARGETS CsNetwork${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtNetwork
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

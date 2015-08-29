@@ -36,9 +36,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers/sqlite
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SQL_LIBS
-        ${EXTRA_SQL_LIBS
+        ${EXTRA_SQL_LIBS}
         ws2_32
     )
 endif()
@@ -46,6 +46,9 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
 endif()
+
+function_variable_fixup("${EXTRA_SQL_CXXFLAGS}" EXTRA_SQL_CXXFLAGS)
+function_variable_fixup("${EXTRA_SQL_LDFLAGS}" EXTRA_SQL_LDFLAGS)
 
 add_library(CsSql${BUILD_MAJOR} SHARED ${SQL_SOURCES} ${SQL_INCLUDES})
 target_link_libraries(CsSql${BUILD_MAJOR} ${EXTRA_SQL_LIBS})
@@ -64,5 +67,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR}"
 )
 
-install(TARGETS CsSql${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSql DESTINATION include)
+install(
+    TARGETS CsSql${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtSql
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

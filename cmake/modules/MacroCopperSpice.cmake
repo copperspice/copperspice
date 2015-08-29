@@ -4,6 +4,7 @@
 #   MACRO_GENERATE_MISC()
 #   MACRO_GENERATE_RESOURCES()
 #   MACRO_GENERATE_PACKAGE()
+#   FUNCTION_VARIABLE_FIXUP()
 #
 # Usage:
 #   MACRO_GENERATE_PUBLIC(<FancyHeaderName> [<FancyHeaderName2>] ... <subdir>)
@@ -15,6 +16,8 @@
 #   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
 #
 #   MACRO_GENERATE_PACKAGE(<target> <cxxflags> <libraries> <requires>)
+#
+#   FUNCION_VARIABLE_FIXUP(<string|list> <varname>)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
@@ -60,7 +63,7 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
                 OUTPUT ${rscout}
                 COMMAND uic "${resource}" -o "${rscout}"
                 MAIN_DEPENDENCY "${resource}"
-                )
+            )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
             add_custom_command(
@@ -98,7 +101,17 @@ macro(MACRO_GENERATE_PACKAGE FORTARGET CXXFLAGS LIBRARIES REQUIRES)
         )
         install(
             FILES ${CMAKE_BINARY_DIR}/pkgconfig/${FORTARGET}.pc
-            DESTINATION lib/pkgconfig
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+            COMPONENT Devel
         )
     endif()
 endmacro()
+
+function(FUNCTION_VARIABLE_FIXUP INSTR OUTSTR)
+    if(NOT "${INTSTR}")
+        set(${OUTSTR} " " PARENT_SCOPE)
+    else()
+        string(REPLACE ";" " " modstring "${INSTR}")
+        set(${OUTSTR} "${modstring}" PARENT_SCOPE)
+    endif()
+endfunction()

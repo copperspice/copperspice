@@ -153,7 +153,7 @@ set(CORE_SOURCES
 # qfilesystemwatcher_kqueue.cpp
 # qfilesystemwatcher_kqueue_p.h
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qwindowspipewriter.cpp

@@ -236,7 +236,7 @@ set(GUI_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_win32.c

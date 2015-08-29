@@ -63,7 +63,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(NETWORK_SOURCES
         ${NETWORK_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qnativesocketengine_win.cpp

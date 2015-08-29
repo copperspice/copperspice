@@ -12,12 +12,10 @@ set(SQL_INCLUDES
 )
 
 if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
-    # TODO: those should probably apply to a single object
-    set(EXTRA_SQL_LDFLAGS
-        ${EXTRA_SQL_LDFLAGS}
+    set(EXTRA_PSQL_LDFLAGS
+        ${EXTRA_PSQL_LDFLAGS}
         -avoid-version
         -no-undefined
-        # -module
     )
 
     set(EXTRA_SQL_LIBS
@@ -25,12 +23,25 @@ if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
         ${PostgreSQL_LIBRARIES}
     )
 
-    set(SQL_SOURCES
-        ${SQL_SOURCES}
+    set(PSQL_SOURCES
+        ${PSQL_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/drivers/psql/qsql_psql.cpp
         ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/psql/main.cpp
     )
 
+    function_variable_fixup("${EXTRA_PSQL_LDFLAGS}" EXTRA_PSQL_LDFLAGS)
+
     include_directories(${PostgreSQL_INCLUDE_DIRS})
-    add_definitions(-DIN_TRUE)
+    add_library(qsqlpsql4 MODULE ${PSQL_SOURCES})
+    target_compile_definitions(qsqlpsql4 PRIVATE -DIN_TRUE)
+    set_target_properties(qsqlpsql4 PROPERTIES
+        LINK_FLAGS ${EXTRA_PSQL_LDFLAGS}
+    )
+
+    set(EXTRA_SQL_DRIVERS
+        ${EXTRA_SQL_DRIVERS}
+        qsqlpsql4
+    )
+
+    install(TARGETS qsqlpsql4 DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()

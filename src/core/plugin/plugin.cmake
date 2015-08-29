@@ -37,7 +37,7 @@ set(CORE_SOURCES
 
 ## FIXME platform-dependent
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_win.cpp

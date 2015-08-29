@@ -1,6 +1,6 @@
 add_definitions(-DQT_BUILD_CORE_LIB)
 set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES})
-set(EXTRA_CORE_CXXFLAGS " ") # whitespace is required!
+set(EXTRA_CORE_CXXFLAGS "")
 set(EXTRA_CORE_LDFLAGS "-Wl,--no-undefined")
 
 include(animation/animation.cmake)
@@ -76,7 +76,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_CORE_LIBS
         ${EXTRA_CORE_LIBS}
         ole32
@@ -97,10 +97,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         -framework ApplicationServices
         -lobjc
     )
-    # FIXME: where does this go? some variables must be replaced too
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/global/Info.plist.app DESTINATION mac)
 endif()
 
+function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
+function_variable_fixup("${EXTRA_CORE_LDFLAGS}" EXTRA_CORE_LDFLAGS)
 
 add_library(CsCore${BUILD_MAJOR} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
 target_link_libraries(CsCore${BUILD_MAJOR} ${EXTRA_CORE_LIBS})
@@ -119,5 +120,14 @@ macro_generate_package(
     ""
 )
 
-install(TARGETS CsCore${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore DESTINATION include)
+install(
+    TARGETS CsCore${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtCore
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

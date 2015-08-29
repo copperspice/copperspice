@@ -227,6 +227,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtgui.h
 )
 
 set(GUI_PRIVATE_INCLUDES
@@ -274,7 +275,6 @@ set(GUI_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtgui.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win_p.h
@@ -318,7 +318,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_win.cpp

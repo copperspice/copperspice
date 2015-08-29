@@ -22,7 +22,7 @@ set(RCC_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/rcc.h
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_RCC_LIBS
         ${EXTRA_RCC_LIBS}
         uuid
@@ -36,5 +36,5 @@ set_target_properties(rcc PROPERTIES
     LINK_FLAGS ${EXTRA_RCC_LDFLAGS}
 )
 
-install(TARGETS rcc RUNTIME DESTINATION bin)
+install(TARGETS rcc DESTINATION ${CMAKE_INSTALL_BINDIR})
 

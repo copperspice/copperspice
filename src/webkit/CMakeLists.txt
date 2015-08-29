@@ -5175,7 +5175,7 @@ set(WEBKIT_INTERNAL_INCLUDES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore/npruntime_internal.h 
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/win)
     add_definitions(-DUNICODE -DQT_MAKEDLL)
     set(WEBKIT_SOURCES
@@ -5192,7 +5192,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/win/WebCoreInstanceHandle.cpp
     )
     set(EXTRA_WEBKIT_LIBS
-        ${EXTRA_WEBKIT_LIBS
+        ${EXTRA_WEBKIT_LIBS}
         gdi32
         winmm
         shlwapi
@@ -5241,6 +5241,9 @@ macro_generate_public("${WEBKIT_PUBLIC_INCLUDES}" QtWebKit)
 # macro_generate_private("${WEBKIT_PRIVATE_INCLUDES}" QtWebKit)
 macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
 
+function_variable_fixup("${EXTRA_WEBKIT_CXXFLAGS}" EXTRA_WEBKIT_CXXFLAGS)
+function_variable_fixup("${EXTRA_WEBKIT_LDFLAGS}" EXTRA_WEBKIT_LDFLAGS)
+
 add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES})
 target_link_libraries(CsWebKit${BUILD_MAJOR} ${EXTRA_WEBKIT_LIBS})
 set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
@@ -5258,5 +5261,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
 )
 
-install(TARGETS CsWebKit${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtWebKit DESTINATION include)
+install(
+    TARGETS CsWebKit${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtWebKit
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

@@ -115,7 +115,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         gdi32
@@ -127,7 +127,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
         imm32
     )
     set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS
+        ${EXTRA_GUI_LDFLAGS}
          -Wl,-luuid --export-all-symbols
     )
     add_definitions(
@@ -178,5 +178,14 @@ macro_generate_package(
     "CsCore${BUILD_MAJOR}"
 )
 
-install(TARGETS CsGui${BUILD_MAJOR} LIBRARY DESTINATION lib)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui DESTINATION include)
+install(
+    TARGETS CsGui${BUILD_MAJOR}
+    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/include/QtGui
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Devel
+)

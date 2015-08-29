@@ -52,7 +52,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadstorage.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Win32")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_win.cpp

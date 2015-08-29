@@ -38,19 +38,17 @@ else(WIN32)
 endif(WIN32)
 
 if(WIN32)
-   string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER)
-
    # path suffix for debug/release mode
    # binary_dist: mysql binary distribution
    # build_dist: custom build
-   if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug")
+   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       set(binary_dist debug)
       set(build_dist Debug)
-   else(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug")
+   else()
       ADD_DEFINITIONS(-DDBUG_OFF)
       set(binary_dist opt)
       set(build_dist Release)
-   endif(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug")
+   endif()
 
 #   find_library(MYSQL_LIBRARIES NAMES mysqlclient
    find_library(MYSQL_LIBRARIES NAMES libmysql
