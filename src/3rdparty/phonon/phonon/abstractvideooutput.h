@@ -52,23 +52,12 @@ namespace Experimental
 
     class AbstractVideoOutputPrivate;
 
-    /** \class AbstractVideoOutput abstractvideooutput.h Phonon/AbstractVideoOutput
-     * \brief Common base class for all video outputs.
-     *
-     * \see VideoWidget
-     */
     class PHONON_EXPORT AbstractVideoOutput : public MediaNode
     {
         friend class Experimental::Visualization;
         friend class Experimental::VisualizationPrivate;
         K_DECLARE_PRIVATE(AbstractVideoOutput)
         protected:
-            /**
-             * \internal
-             * Constructor that is called from derived classes.
-             *
-             * \param d the private object
-             */
             AbstractVideoOutput(AbstractVideoOutputPrivate &d);
     };
 } //namespace Phonon

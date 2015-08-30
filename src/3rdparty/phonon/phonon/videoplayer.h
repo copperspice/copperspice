@@ -46,27 +46,6 @@ class MediaObject;
 class AudioOutput;
 class VideoWidget;
 
-/** \class VideoPlayer videoplayer.h Phonon/VideoPlayer
- * \short Playback class for simple tasks.
- *
- * With %VideoPlayer you can get results quickly and easily. You can do the standard
- * playback tasks like play, pause and stop, but also set a playback volume and
- * seek (there's no guarantee that the seek will work, though).
- *
- * Keep in mind that when the %VideoPlayer instance is deleted the playback will
- * stop.
- *
- * A play and forget code example:
- * \code
- * VideoPlayer *player = new VideoPlayer(parentWidget);
- * connect(player, SIGNAL(finished()), player, SLOT(deleteLater()));
- * player->play(url);
- * \endcode
- *
- * \ingroup Playback
- * \ingroup PhononVideo
- * \author Matthias Kretz <kretz@kde.org>
- */
 class PHONON_EXPORT VideoPlayer : public QWidget
 {
     PHN_CS_OBJECT(VideoPlayer)

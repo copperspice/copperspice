@@ -269,7 +269,7 @@ template <int N> struct QGlyphLayoutArray : public QGlyphLayout {
 };
 
 struct QScriptItem;
-/// Internal QTextItem
+// Internal QTextItem
 class QTextItemInt : public QTextItem
 {
  public:
@@ -281,8 +281,8 @@ class QTextItemInt : public QTextItem
    QTextItemInt(const QGlyphLayout &g, QFont *font, const QChar *chars, int numChars, QFontEngine *fe,
                 const QTextCharFormat &format = QTextCharFormat());
 
-   /// copy the structure items, adjusting the glyphs arrays to the right subarrays.
-   /// the width of the returned QTextItemInt is not adjusted, for speed reasons
+   // copy the structure items, adjusting the glyphs arrays to the right subarrays.
+   // the width of the returned QTextItemInt is not adjusted, for speed reasons
    QTextItemInt midItem(QFontEngine *fontEngine, int firstGlyphIndex, int numGlyphs) const;
    void initWithScriptItem(const QScriptItem &si);
 
@@ -474,7 +474,7 @@ class Q_GUI_EXPORT QTextEngine
       return fnt;
    }
 
-   /**
+   /*
     * Returns a pointer to an array of log clusters, offset at the script item.
     * Each item in the array is a unsigned short.  For each character in the original string there is an entry in the table
     * so there is a one to one correlation in indexes between the original text and the index in the logcluster.
@@ -485,7 +485,8 @@ class Q_GUI_EXPORT QTextEngine
    inline unsigned short *logClusters(const QScriptItem *si) const {
       return layoutData->logClustersPtr + si->position;
    }
-   /**
+
+   /*
     * Returns an array of QGlyphLayout items, offset at the script item.
     * Each item in the array matches one glyph in the text, storing the advance, position etc.
     * The returned item's length equals to the number of available glyphs. This may be more
@@ -495,7 +496,8 @@ class Q_GUI_EXPORT QTextEngine
    inline QGlyphLayout availableGlyphs(const QScriptItem *si) const {
       return layoutData->glyphLayout.mid(si->glyph_data_offset);
    }
-   /**
+
+   /*
     * Returns an array of QGlyphLayout items, offset at the script item.
     * Each item in the array matches one glyph in the text, storing the advance, position etc.
     * The returned item's length equals to the number of shaped glyphs.
@@ -527,7 +529,7 @@ class Q_GUI_EXPORT QTextEngine
    }
    int formatIndex(const QScriptItem *si) const;
 
-   /// returns the width of tab at index (in the tabs array) with the tab-start at position x
+   // returns the width of tab at index (in the tabs array) with the tab-start at position x
    QFixed calculateTabWidth(int index, QFixed x) const;
 
    mutable QScriptLineArray lines;

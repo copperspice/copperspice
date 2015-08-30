@@ -41,11 +41,6 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-/** \class AddonInterface addoninterface.h Phonon/AddonInterface
- * \short Interface for Menu, Chapter, Angle and Title/Track control.
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
 class AddonInterface
 {
     public:

@@ -45,21 +45,6 @@ namespace Phonon
 {
 class AbstractVideoOutput;
     class VideoWidgetPrivate;
-    /** \class VideoWidget videowidget.h Phonon/VideoWidget
-     * \short Widget to display video.
-     *
-     * This widget shows the video signal.
-     *
-     * \code
-     * MediaObject *media = new MediaObject(parent);
-     * VideoWidget *vwidget = new VideoWidget(parent);
-     * Phonon::createPath(media, vwidget);
-     * \endcode
-     *
-     * \ingroup PhononVideo
-     * \ingroup PhononWidgets
-     * \author Matthias Kretz <kretz@kde.org>
-     */
     class PHONON_EXPORT VideoWidget : public QWidget, public Phonon::AbstractVideoOutput
     {
         PHN_CS_OBJECT(VideoWidget)
@@ -97,12 +82,6 @@ class AbstractVideoOutput;
                 AspectRatioWidget = 1,                
                 AspectRatio4_3 = 2,                
                 AspectRatio16_9 = 3
-//X                 /**
-//X                  * Assume that every pixel of the video image needs to be displayed with the same
-//X                  * physical width and height. (1:1 image pixels, not imagewidth
-//X                  * = imageheight)
-//X                  */
-//X                 AspectRatioSquare = 4,
             };
 
             enum ScaleMode {
@@ -148,12 +127,6 @@ class AbstractVideoOutput;
             PHN_CS_SLOT_2(setSaturation) 
 
         protected:
-            /**
-             * \internal
-             *
-             * Constructs a new video widget with private data pointer \p d and
-             * a \p parent.
-             */
             VideoWidget(VideoWidgetPrivate &d, QWidget *parent);
 
             void mouseMoveEvent(QMouseEvent *);

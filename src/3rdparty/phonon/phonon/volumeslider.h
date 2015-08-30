@@ -42,12 +42,6 @@ namespace Phonon
 class AudioOutput;
 class VolumeSliderPrivate;
 
-/** \class VolumeSlider volumeslider.h Phonon/VolumeSlider
- * \short Widget providing a slider to control the volume of an AudioOutput.
- *
- * \ingroup PhononWidgets
- * \author Matthias Kretz <kretz@kde.org>
- */
 class PHONON_EXPORT VolumeSlider : public QWidget
 {
     PHN_CS_OBJECT(VolumeSlider)
