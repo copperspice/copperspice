@@ -1139,7 +1139,7 @@ QXmlQuery XsdValidatingInstanceReader::createXQuery(const QList<QXmlName> &names
    QXmlQueryPrivate *queryPrivate = query.d;
 
    for (int i = 0; i < namespaceBindings.count(); ++i) {
-      if (!namespaceBindings.at(i).prefix() == StandardPrefixes::empty) {
+      if (namespaceBindings.at(i).prefix() != StandardPrefixes::empty) {
          queryPrivate->addAdditionalNamespaceBinding(namespaceBindings.at(i));
       }
    }
