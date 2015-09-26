@@ -90,7 +90,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_unix.cpp
