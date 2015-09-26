@@ -34,11 +34,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
     set(LUPDATE_SOURCES
         ${LUPDATE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/winmanifest.rc
         ${CMAKE_CURRENT_SOURCE_DIR}/lupdate.exe.manifest
     )
 endif()
 
-add_executable(lupdate ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
+macro_window_resources("${LUPDATE_SOURCES}" lupdate_manifest)
+
+add_executable(lupdate ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools> ${lupdate_manifest})
 target_link_libraries(lupdate ${EXTRA_LUPDATE_LIBS})
 set_target_properties(lupdate PROPERTIES
     COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}

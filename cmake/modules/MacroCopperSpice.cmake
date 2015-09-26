@@ -3,6 +3,7 @@
 #   MACRO_GENERATE_PRIVATE()
 #   MACRO_GENERATE_MISC()
 #   MACRO_GENERATE_RESOURCES()
+#   MACRO_WINDOW_RESOURCES()
 #   MACRO_GENERATE_PACKAGE()
 #   FUNCTION_VARIABLE_FIXUP()
 #
@@ -15,6 +16,8 @@
 #
 #   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
 #
+#   MACRO_WINDOW_RESOURCES(<somemanifest.manifest> [<someresources.rc>] ...)
+#
 #   MACRO_GENERATE_PACKAGE(<target> <cxxflags> <libraries> <requires>)
 #
 #   FUNCION_VARIABLE_FIXUP(<string|list> <varname>)
@@ -22,6 +25,14 @@
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
+
+# could be set by a toolchain file
+if(NOT MT_EXECUTABLE)
+    set(MT_EXECUTABLE mt)
+endif()
+if(NOT WINDRES_EXECUTABLE)
+    set(WINDRES_EXECUTABLE windres)
+endif()
 
 macro(MACRO_GENERATE_PUBLIC PUBLIC_INCLUDES SUBDIR)
     foreach(pubheader ${PUBLIC_INCLUDES})
@@ -72,14 +83,46 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
                 MAIN_DEPENDENCY ${resource}
             )
             set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})
-        elseif(${rscext} STREQUAL ".manifest")
+        endif()
+    endforeach()
+endmacro()
+
+macro(MACRO_WINDOW_RESOURCES RESOURCES RSCNAME)
+    foreach(resource ${RESOURCES})
+        get_filename_component(rscext ${resource} EXT)
+        get_filename_component(rscname ${resource} NAME_WE)
+        if(${rscext} MATCHES ".manifest" AND NOT MINGW)
             set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname})
-            string(REPLACE ".exe" "" trgname ${rscname})
-            add_custom_command(
-                OUTPUT ${rscout}
-                COMMAND mt -nologo -manifest ${resource} -outputresource:${rscout}
-                DEPENDS ${trgname}
+            execute_process(
+                COMMAND ${MT_EXECUTABLE} -nologo -manifest ${resource} -outputresource:${rscout}
+                RESULT_VARIABLE ${rscname}_ERROR
             )
+            if(NOT ${rscname}_ERROR EQUAL 0)
+                message(SEND_ERROR "running mt on ${resource} failed")
+            endif()
+            set(${RSCNAME} ${rscout})
+        elseif(${rscext} STREQUAL ".rc" AND MSVC)
+            # MinGW, manifest alternative on Windows host
+            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.res)
+            execute_process(
+                COMMAND ${WINDRES_EXECUTABLE} --input ${resource} --output ${rscout}
+                RESULT_VARIABLE ${rscname}_ERROR
+            )
+            if(NOT ${rscname}_ERROR EQUAL 0)
+                message(SEND_ERROR "running ${WINDRES_EXECUTABLE} on ${resource} failed")
+            endif()
+            set(${RSCNAME} ${rscout})
+        elseif(${rscext} STREQUAL ".rc")
+            # MinGW, manifest alternative on GNU host
+            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.o)
+            execute_process(
+                COMMAND ${WINDRES_EXECUTABLE} --input ${resource} --output ${rscout}
+                RESULT_VARIABLE ${rscname}_ERROR
+            )
+            if(NOT ${rscname}_ERROR EQUAL 0)
+                message(SEND_ERROR "running ${WINDRES_EXECUTABLE} on ${resource} failed")
+            endif()
+            set(${RSCNAME} ${rscout})
         endif()
     endforeach()
 endmacro()
