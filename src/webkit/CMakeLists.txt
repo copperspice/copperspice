@@ -2391,6 +2391,12 @@ add_library(webkitb OBJECT ${WEBKITB_SOURCES})
 add_library(webkitc OBJECT ${WEBKITC_SOURCES})
 add_library(webkitd OBJECT ${WEBKITD_SOURCES})
 add_library(webkite OBJECT ${WEBKITE_SOURCES})
+foreach(lib a b c d e)
+    set_target_properties(webkit${lib} PROPERTIES
+        COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
+        LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}
+    )
+endforeach()
 
 add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES}
     $<TARGET_OBJECTS:webkita> $<TARGET_OBJECTS:webkitb>
