@@ -61,10 +61,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_linux.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
+    )
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+    set(CORE_SOURCES
+        ${CORE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
     )
