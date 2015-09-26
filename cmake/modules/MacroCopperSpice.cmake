@@ -98,7 +98,7 @@ macro(MACRO_WINDOW_RESOURCES RESOURCES RSCNAME)
                 RESULT_VARIABLE ${rscname}_ERROR
             )
             if(NOT ${rscname}_ERROR EQUAL 0)
-                message(SEND_ERROR "running mt on ${resource} failed")
+                message(SEND_ERROR "running ${MT_EXECUTABLE} on ${resource} failed")
             endif()
             set(${RSCNAME} ${rscout})
         elseif(${rscext} STREQUAL ".rc" AND MSVC)
