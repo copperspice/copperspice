@@ -2354,6 +2354,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1
         -DENABLE_NETSCAPE_PLUGIN_API=1
     )
+    if(HAVE_PTHREAD_NP_H)
+        add_definitions(-DHAVE_PTHREAD_NP_H)
+    endif()
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorPosix.cpp
