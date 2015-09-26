@@ -5216,6 +5216,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
     )
+    include_directories(${X11_X11_INCLUDE_PATH})
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
