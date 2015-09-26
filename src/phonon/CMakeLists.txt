@@ -452,6 +452,13 @@ set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
 )
+# NOTE: it seems required on BSD but only in the private scope, including
+# x11 paths in the global scope breaks the build so here goes a workaround.
+# strange thing is that it does not require to be linked to any X11 librarise
+# which may be because CsGui is linked to X11 but a "bad" linker may bail out.
+if(${PHONON2_SUFFIX} STREQUAL "gstreamer")
+    target_include_directories(phonon_${PHONON2_SUFFIX} PRIVATE ${X11_X11_INCLUDE_PATH})
+endif()
 
 macro_generate_resources("${PHONON_SOURCES}")
 macro_generate_resources("${PHONON2_SOURCES}")
