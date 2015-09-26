@@ -8,19 +8,19 @@
 #   FUNCTION_VARIABLE_FIXUP()
 #
 # Usage:
-#   MACRO_GENERATE_PUBLIC(<FancyHeaderName> [<FancyHeaderName2>] ... <subdir>)
+#   MACRO_GENERATE_PUBLIC(<FancyHeaderName> [<FancyHeaderName2>] ... <component>)
 #
-#   MACRO_GENERATE_PRIVATE(<someheader.h> [<someheader2.h>] ... <subdir>)
+#   MACRO_GENERATE_PRIVATE(<header.h> [<header2.h>] ... <component>)
 #
-#   MACRO_GENERATE_MISC(<someheader.h> [<someheader2.h>] ... <subdir>)
+#   MACRO_GENERATE_MISC(<header.h> [<header2.h>] ... <component>)
 #
-#   MACRO_GENERATE_RESOURCES(<someui.ui> [<someqrc.qrc>] ...)
+#   MACRO_GENERATE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
 #
-#   MACRO_WINDOW_RESOURCES(<somemanifest.manifest> [<someresources.rc>] ...)
+#   MACRO_WINDOW_RESOURCES(<windowsmanifest.manifest> [<resource.rc>] ...)
 #
 #   MACRO_GENERATE_PACKAGE(<target> <cxxflags> <libraries> <requires>)
 #
-#   FUNCION_VARIABLE_FIXUP(<string|list> <varname>)
+#   FUNCTION_VARIABLE_FIXUP(<string|list> <variablename>)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
