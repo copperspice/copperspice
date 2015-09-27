@@ -26,16 +26,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-add_executable(lrelease ${LRELEASE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
-target_link_libraries(lrelease ${EXTRA_LRELEASE_LIBS})
-set_target_properties(lrelease PROPERTIES
+add_executable(lrelease${TOOLS_SUFFIX} ${LRELEASE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
+target_link_libraries(lrelease${TOOLS_SUFFIX} ${EXTRA_LRELEASE_LIBS})
+set_target_properties(lrelease${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LRELEASE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LRELEASE_LDFLAGS}
 )
 
 install(
-    TARGETS lrelease
+    TARGETS lrelease${TOOLS_SUFFIX}
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME lrelease${TOOLS_SUFFIX}
 )

@@ -29,16 +29,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-add_executable(rcc ${RCC_SOURCES} ${RCC_INCLUDES})
-target_link_libraries(rcc ${EXTRA_RCC_LIBS})
-set_target_properties(rcc PROPERTIES
+add_executable(rcc${TOOLS_SUFFIX} ${RCC_SOURCES} ${RCC_INCLUDES})
+target_link_libraries(rcc${TOOLS_SUFFIX} ${EXTRA_RCC_LIBS})
+set_target_properties(rcc${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_RCC_CXXFLAGS}
     LINK_FLAGS ${EXTRA_RCC_LDFLAGS}
 )
 
 install(
-    TARGETS rcc
+    TARGETS rcc${TOOLS_SUFFIX}
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME rcc${TOOLS_SUFFIX}
 )

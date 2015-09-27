@@ -58,16 +58,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-add_executable(uic ${UIC_SOURCES} ${UIC_INCLUDES})
-target_link_libraries(uic ${EXTRA_UIC_LIBS})
-set_target_properties(uic PROPERTIES
+add_executable(uic${TOOLS_SUFFIX} ${UIC_SOURCES} ${UIC_INCLUDES})
+target_link_libraries(uic${TOOLS_SUFFIX} ${EXTRA_UIC_LIBS})
+set_target_properties(uic${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_UIC_CXXFLAGS}
     LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
 )
 
 install(
-    TARGETS uic
+    TARGETS uic${TOOLS_SUFFIX}
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME uic${TOOLS_SUFFIX}
 )

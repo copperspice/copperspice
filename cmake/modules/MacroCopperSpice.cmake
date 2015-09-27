@@ -72,14 +72,14 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
             set(rscout ${CMAKE_BINARY_DIR}/include/ui_${rscname}.h)
             add_custom_command(
                 OUTPUT ${rscout}
-                COMMAND uic "${resource}" -o "${rscout}"
+                COMMAND uic${TOOLS_SUFFIX} "${resource}" -o "${rscout}"
                 MAIN_DEPENDENCY "${resource}"
             )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_BINARY_DIR}/include/qrc_${rscname}.cpp)
             add_custom_command(
                 OUTPUT ${rscout}
-                COMMAND rcc "${resource}" -o "${rscout}" -name ${rscname}
+                COMMAND rcc${TOOLS_SUFFIX} "${resource}" -o "${rscout}" -name ${rscname}
                 MAIN_DEPENDENCY ${resource}
             )
             set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})

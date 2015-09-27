@@ -41,9 +41,9 @@ endif()
 
 macro_window_resources("${LUPDATE_SOURCES}" lupdate_manifest)
 
-add_executable(lupdate ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools> ${lupdate_manifest})
-target_link_libraries(lupdate ${EXTRA_LUPDATE_LIBS})
-set_target_properties(lupdate PROPERTIES
+add_executable(lupdate${TOOLS_SUFFIX} ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools> ${lupdate_manifest})
+target_link_libraries(lupdate${TOOLS_SUFFIX} ${EXTRA_LUPDATE_LIBS})
+set_target_properties(lupdate${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LUPDATE_LDFLAGS}
 )
@@ -51,8 +51,7 @@ set_target_properties(lupdate PROPERTIES
 macro_generate_resources("${LUPDATE_SOURCES}")
 
 install(
-    TARGETS lupdate
+    TARGETS lupdate${TOOLS_SUFFIX}
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME lupdate${TOOLS_SUFFIX}
 )

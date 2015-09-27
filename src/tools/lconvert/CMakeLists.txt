@@ -26,16 +26,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-add_executable(lconvert ${LCONVERT_SOURCES} $<TARGET_OBJECTS:sharedtools>)
-target_link_libraries(lconvert ${EXTRA_LCONVERT_LIBS})
-set_target_properties(lconvert PROPERTIES
+add_executable(lconvert${TOOLS_SUFFIX} ${LCONVERT_SOURCES} $<TARGET_OBJECTS:sharedtools>)
+target_link_libraries(lconvert${TOOLS_SUFFIX} ${EXTRA_LCONVERT_LIBS})
+set_target_properties(lconvert${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LCONVERT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
 )
 
 install(
-    TARGETS lconvert
+    TARGETS lconvert${TOOLS_SUFFIX}
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME lconvert${TOOLS_SUFFIX}
 )
