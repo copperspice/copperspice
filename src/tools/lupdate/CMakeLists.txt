@@ -50,4 +50,9 @@ set_target_properties(lupdate PROPERTIES
 
 macro_generate_resources("${LUPDATE_SOURCES}")
 
-install(TARGETS lupdate DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(
+    TARGETS lupdate
+    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RENAME lupdate${TOOLS_SUFFIX}
+)

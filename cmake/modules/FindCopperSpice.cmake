@@ -39,7 +39,7 @@ foreach(tool ${COPPERSPICETOOLS})
     string(TOUPPER ${tool} uppertool)
     find_program(COPPERSPICE_${uppertool}_EXECUTABLE
         NAMES
-        ${tool} ${tool}-cs
+        ${tool}@TOOLS_SUFFIX@
         HINTS
         /bin
         /usr/bin

@@ -36,5 +36,9 @@ set_target_properties(rcc PROPERTIES
     LINK_FLAGS ${EXTRA_RCC_LDFLAGS}
 )
 
-install(TARGETS rcc DESTINATION ${CMAKE_INSTALL_BINDIR})
-
+install(
+    TARGETS rcc
+    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RENAME rcc${TOOLS_SUFFIX}
+)

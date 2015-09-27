@@ -33,4 +33,9 @@ set_target_properties(lrelease PROPERTIES
     LINK_FLAGS ${EXTRA_LRELEASE_LDFLAGS}
 )
 
-install(TARGETS lrelease DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(
+    TARGETS lrelease
+    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RENAME lrelease${TOOLS_SUFFIX}
+)

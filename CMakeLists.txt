@@ -29,14 +29,6 @@ else()
     set(CMAKE_INSTALL_DATAROOTDIR ${CMAKE_INSTALL_PREFIX})
 endif()
 
-install(
-    FILES
-    ${CMAKE_SOURCE_DIR}/cmake/modules/FindCopperSpice.cmake
-    ${CMAKE_SOURCE_DIR}/cmake/modules/CopperSpiceMacros.cmake
-    DESTINATION
-    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/modules
-)
-
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "2")
@@ -69,6 +61,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
+
+set(TOOLS_SUFFIX)
 
 check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
 check_include_file(features.h HAVE_FEATURES_H)
@@ -291,7 +285,6 @@ add_subdirectory(src/script)
 # out for now add_subdirectory(scripttools)
 add_subdirectory(src/sql)
 add_subdirectory(src/svg)
-# TODO: support suffixed tools, after that export them
 add_subdirectory(src/tools/shared)
 add_subdirectory(src/tools/lconvert)
 add_subdirectory(src/tools/lrelease)
@@ -305,6 +298,12 @@ add_subdirectory(src/xml)
 add_subdirectory(src/xmlpatterns)
 
 configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/modules/FindCopperSpice.cmake
+    ${CMAKE_BINARY_DIR}/FindCopperSpice.cmake
+    @ONLY
+)
+
+configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfig.cmake
     ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
     @ONLY
@@ -314,6 +313,15 @@ configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfigVersion.cmake
     ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
     @ONLY
+)
+
+
+install(
+    FILES
+    ${CMAKE_BINARY_DIR}/FindCopperSpice.cmake
+    ${CMAKE_SOURCE_DIR}/cmake/modules/CopperSpiceMacros.cmake
+    DESTINATION
+    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/modules
 )
 
 install(
@@ -328,6 +336,12 @@ install(
     EXPORT CopperSpiceLibraryTargets
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
     FILE CopperSpiceLibraryTargets.cmake
+)
+
+install(
+    EXPORT CopperSpiceBinaryTargets
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    FILE CopperSpiceBinaryTargets.cmake
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

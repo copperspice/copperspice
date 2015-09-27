@@ -33,4 +33,9 @@ set_target_properties(lconvert PROPERTIES
     LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
 )
 
-install(TARGETS lconvert DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(
+    TARGETS lconvert
+    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RENAME lconvert${TOOLS_SUFFIX}
+)

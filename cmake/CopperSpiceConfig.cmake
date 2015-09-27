@@ -11,8 +11,9 @@ set(COPPERSPICE_FOUND true)
 get_filename_component(COPPERSPICE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
 get_filename_component(COPPERSPICE_PREFIX ${COPPERSPICE_CMAKE_DIR}/ ABSOLUTE)
 
-# Our library dependencies (contains definitions for IMPORTED targets)
+# Our library and binary dependencies (contains definitions for IMPORTED targets)
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceLibraryTargets.cmake")
+include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceBinaryTargets.cmake")
 
 # These are IMPORTED targets
 set(COPPERSPICE_INCLUDES "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
