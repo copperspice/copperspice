@@ -46,6 +46,7 @@ target_link_libraries(lupdate${TOOLS_SUFFIX} ${EXTRA_LUPDATE_LIBS})
 set_target_properties(lupdate${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LUPDATE_LDFLAGS}
+    EXPORT_NAME lupdate
 )
 
 macro_generate_resources("${LUPDATE_SOURCES}")

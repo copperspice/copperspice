@@ -63,6 +63,7 @@ target_link_libraries(uic${TOOLS_SUFFIX} ${EXTRA_UIC_LIBS})
 set_target_properties(uic${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_UIC_CXXFLAGS}
     LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
+    EXPORT_NAME uic
 )
 
 install(

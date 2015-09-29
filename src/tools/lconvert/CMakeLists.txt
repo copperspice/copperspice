@@ -31,6 +31,7 @@ target_link_libraries(lconvert${TOOLS_SUFFIX} ${EXTRA_LCONVERT_LIBS})
 set_target_properties(lconvert${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LCONVERT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
+    EXPORT_NAME lconvert
 )
 
 install(

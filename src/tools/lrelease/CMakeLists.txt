@@ -31,6 +31,7 @@ target_link_libraries(lrelease${TOOLS_SUFFIX} ${EXTRA_LRELEASE_LIBS})
 set_target_properties(lrelease${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LRELEASE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LRELEASE_LDFLAGS}
+    EXPORT_NAME lrelease
 )
 
 install(
