@@ -1,7 +1,7 @@
 add_definitions(-DQT_BUILD_CORE_LIB)
-set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GLOBAL_LIBRARIES})
-set(EXTRA_CORE_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_CORE_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES})
+set(EXTRA_CORE_CXXFLAGS)
+set(EXTRA_CORE_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -22,6 +22,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/tools
     ${CMAKE_CURRENT_SOURCE_DIR}/xml
     ${GLIB2_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
 include(animation/animation.cmake)
@@ -72,11 +73,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(EXTRA_CORE_LIBS
         ${EXTRA_CORE_LIBS}
         dl
-        pthread
+        ${CMAKE_THREAD_LIBS_INIT}
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_CORE_LIBS
         ${EXTRA_CORE_LIBS}
         ole32
@@ -87,9 +86,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         -Wl,-luuid
     )
     add_definitions(-DQT_MAKEDLL)
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(EXTRA_CORE_LDFLAGS
         ${EXTRA_CORE_LDFLAGS}
         -framework CoreFoundation

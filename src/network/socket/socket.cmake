@@ -52,18 +52,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver_unix.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(NETWORK_SOURCES
         ${NETWORK_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qnativesocketengine_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver_unix.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(NETWORK_SOURCES
         ${NETWORK_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/socket/qnativesocketengine_win.cpp

@@ -59,27 +59,21 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_win.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_linux.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex_mac.cpp

@@ -2,9 +2,9 @@ add_definitions(
     -DQT_BUILD_NETWORK_LIB
     -DQT_MAKEDLL
 )
-set(EXTRA_NETWORK_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
-set(EXTRA_NETWORK_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_NETWORK_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_NETWORK_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_NETWORK_CXXFLAGS)
+set(EXTRA_NETWORK_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -46,6 +46,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         -framework CoreServices
     )
 endif()
+
+function_variable_fixup("${EXTRA_NETWORK_CXXFLAGS}" EXTRA_NETWORK_CXXFLAGS)
+function_variable_fixup("${EXTRA_NETWORK_LDFLAGS}" EXTRA_NETWORK_LDFLAGS)
 
 add_library(CsNetwork${BUILD_MAJOR} SHARED ${NETWORK_SOURCES} ${NETWORK_INCLUDES})
 target_link_libraries(CsNetwork${BUILD_MAJOR} ${EXTRA_NETWORK_LIBS})

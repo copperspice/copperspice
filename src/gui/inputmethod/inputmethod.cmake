@@ -36,15 +36,13 @@ if(X11_FOUND)
     )
 endif()
 
-# FIXME: COCOA?
+# FIXME: check for COCOA instead?
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/inputmethod/qmacinputcontext_mac.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/inputmethod/qwininputcontext_win.cpp

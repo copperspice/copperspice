@@ -25,4 +25,3 @@ set(SCRIPT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeobject.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/qscriptdeclarativeclass.cpp
 )
- 

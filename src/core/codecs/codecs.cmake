@@ -49,7 +49,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|Darwin|OpenBSD|FreeBSD|NetBSD)")
         set(EXTRA_CORE_LIBS
             ${EXTRA_CORE_LIBS}
             ${ICONV_LIBRARIES}
-            pthread
+            ${CMAKE_THREAD_LIBS_INIT}
         )
         include_directories(${ICONV_INCLUDE_DIR})
     endif()

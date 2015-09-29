@@ -74,18 +74,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessible_win.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessible_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessiblebridge.cpp
     )
-endif()
-
-# FIXME: COCOCA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/accessible/qaccessible_mac.mm

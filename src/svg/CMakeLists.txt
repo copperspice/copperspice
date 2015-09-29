@@ -3,13 +3,9 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_SVG_LIBS
-    CsCore${BUILD_MAJOR}
-    CsGui${BUILD_MAJOR}
-    ${GLOBAL_LIBRARIES}
-)
-set(EXTRA_SVG_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_SVG_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_SVG_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
+set(EXTRA_SVG_CXXFLAGS)
+set(EXTRA_SVG_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -74,6 +70,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ws2_32
     )
 endif()
+
+function_variable_fixup("${EXTRA_SVG_CXXFLAGS}" EXTRA_SVG_CXXFLAGS)
+function_variable_fixup("${EXTRA_SVG_LDFLAGS}" EXTRA_SVG_LDFLAGS)
 
 add_library(CsSvg${BUILD_MAJOR} SHARED ${SVG_SOURCES} ${SVG_INCLUDES})
 target_link_libraries(CsSvg${BUILD_MAJOR} ${EXTRA_SVG_LIBS})

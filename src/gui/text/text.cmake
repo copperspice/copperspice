@@ -193,10 +193,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontenginedirectwrite.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_win.cpp
     )
-endif()
-
-# FIXME: COCOA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_mac.cpp

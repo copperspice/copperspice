@@ -5,14 +5,9 @@ add_definitions(
     # BROOM (enable OpenSSL)
     -DQT_NO_OPENSSL
 )
-
-set(EXTRA_XMLPATTERNS_LIBS
-    CsCore${BUILD_MAJOR}
-    CsNetwork${BUILD_MAJOR}
-    ${GLOBAL_LIBRARIES}
-)
-set(EXTRA_XMLPATTERNS_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_XMLPATTERNS_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
+set(EXTRA_XMLPATTERNS_CXXFLAGS)
+set(EXTRA_XMLPATTERNS_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -23,7 +18,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
     ${CMAKE_BINARY_DIR}/include/QtXmlPatterns
     ${CMAKE_BINARY_DIR}/privateinclude/QtXmlPatterns
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/acceltree
     ${CMAKE_CURRENT_SOURCE_DIR}/api
     ${CMAKE_CURRENT_SOURCE_DIR}/data
@@ -57,6 +51,9 @@ include(utils/utils.cmake)
 macro_generate_public("${XMLPATTERNS_PUBLIC_INCLUDES}" QtXmlPatterns)
 macro_generate_private("${XMLPATTERNS_PRIVATE_INCLUDES}" QtXmlPatterns)
 macro_generate_misc("${XMLPATTERNS_INCLUDES}" QtXmlPatterns)
+
+function_variable_fixup("${EXTRA_XMLPATTERNS_CXXFLAGS}" EXTRA_XMLPATTERNS_CXXFLAGS)
+function_variable_fixup("${EXTRA_XMLPATTERNS_LDFLAGS}" EXTRA_XMLPATTERNS_LDFLAGS)
 
 add_library(CsXmlPatterns${BUILD_MAJOR} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
 target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XMLPATTERNS_LIBS})

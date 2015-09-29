@@ -48,19 +48,6 @@ set(MULTIMEDIA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudioformat.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(MULTIMEDIA_SOURCES
-        ${MULTIMEDIA_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiodeviceinfo_win32_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiooutput_win32_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudioinput_win32_p.cpp
-    )
-    set(EXTRA_MULTIMEDIA_LIBS
-        ${EXTRA_MULTIMEDIA_LIBS}
-        winmm
-    )
-endif()
-
 if(ALSA_FOUND)
     set(MULTIMEDIA_SOURCES
         ${MULTIMEDIA_SOURCES}
@@ -73,4 +60,17 @@ if(ALSA_FOUND)
         ${ALSA_LIBRARIES}
     )
     include_directories(${ALSA_INCLUDE_DIRS})
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(MULTIMEDIA_SOURCES
+        ${MULTIMEDIA_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiodeviceinfo_win32_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudiooutput_win32_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/audio/qaudioinput_win32_p.cpp
+    )
+    set(EXTRA_MULTIMEDIA_LIBS
+        ${EXTRA_MULTIMEDIA_LIBS}
+        winmm
+    )
 endif()

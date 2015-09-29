@@ -257,7 +257,7 @@ if(X11_FOUND)
     )
 endif()
 
-# FIXME: COCOA?
+# FIXME: check for COCOA instead?
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}

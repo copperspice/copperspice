@@ -190,20 +190,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_raster.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_win.cpp
-    )
-    set(EXTRA_GUI_LIBS
-        ${EXTRA_GUI_LIBS}
-        msimg32
-    )
-endif()
-
 if(X11_FOUND)
     set(GUI_SOURCES
         ${GUI_SOURCES}
@@ -216,8 +202,29 @@ if(X11_FOUND)
     )
 endif()
 
-# FIXME: COCOCA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(QPA_FOUND)
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_qpa.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_qpa.cpp
+    )
+endif()
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprinterinfo_win.cpp
+    )
+    set(EXTRA_GUI_LIBS
+        ${EXTRA_GUI_LIBS}
+        msimg32
+    )
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcups.cpp
@@ -229,13 +236,5 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qprintengine_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwindowsurface_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/painting/qunifiedtoolbarsurface_mac.cpp
-    )
-endif()
-
-if(QPA_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_qpa.cpp
     )
 endif()

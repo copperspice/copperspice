@@ -8,10 +8,9 @@ set(EXTRA_OPENGL_LIBS
     CsCore${BUILD_MAJOR}
     CsGui${BUILD_MAJOR}
     ${OPENGL_LIBRARIES}
-    ${GLOBAL_LIBRARIES}
 )
-set(EXTRA_OPENGL_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_OPENGL_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_OPENGL_CXXFLAGS)
+set(EXTRA_OPENGL_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -157,10 +156,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         -DQT_NO_STYLE_WINDOWSVISTA
         -DQT_MAKEDLL
         -DQT_BUILD_OPENGL_LIB)
-endif()
-
-# FIXME: COCOA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/qgl_mac.mm
@@ -173,6 +170,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         -framework OpenGL
     )
 endif()
+
+function_variable_fixup("${EXTRA_OPENGL_CXXFLAGS}" EXTRA_OPENGL_CXXFLAGS)
+function_variable_fixup("${EXTRA_OPENGL_LDFLAGS}" EXTRA_OPENGL_LDFLAGS)
 
 add_library(CsOpenGL${BUILD_MAJOR} SHARED ${OPENGL_SOURCES} ${OPENGL_INCLUDES})
 target_link_libraries(CsOpenGL${BUILD_MAJOR} ${EXTRA_OPENGL_LIBS})

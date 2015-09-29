@@ -53,10 +53,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_win.cpp
     )
-endif()
-
-# FIXME: COCOA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_mac.mm

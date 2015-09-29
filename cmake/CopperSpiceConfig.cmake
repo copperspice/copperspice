@@ -2,8 +2,11 @@
 #
 # It defines the following variables:
 #
-#  COPPERSPICE_INCLUDES - include directories for CopperSpice
-#  COPPERSPICE_LIBRARIES    - libraries to link against
+#  COPPERSPICE_INCLUDES               - all include directories
+#  COPPERSPICE_LIBRARIES              - all libraries to link against
+#  COPPERSPICE_<COMPONENT>_INCLUDES   - component linclude directories for e.g. CsCore
+#  COPPERSPICE_<COMPONENT>_LIBRARIES  - component libraries to link against e.g. CsCore
+#
 
 set(COPPERSPICE_FOUND true)
 
@@ -18,15 +21,23 @@ include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceBinaryTargets.cmake")
 # These are IMPORTED targets
 set(COPPERSPICE_INCLUDES "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
 set(COPPERSPICE_LIBRARIES)
-# TODO: add DBus, Declarative and ScriptTools once they build
-set(COPPERSPICE_COMPONENTS Core Gui Network OpenGL Sql Svg Xml XmlPatterns Script WebKit)
+set(COPPERSPICE_COMPONENTS @BUILD_COMPONENTS@)
 foreach(component ${COPPERSPICE_COMPONENTS})
     string(TOUPPER ${component} uppercomp)
-    set(COPPERSPICE_INCLUDES
-        ${COPPERSPICE_INCLUDES}
-        @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
-    )
-    set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component})
+    string(TOLOWER ${component} lowercomp)
+    if(${lowercomp} STREQUAL "phonon")
+        set(COPPERSPICE_INCLUDES
+            ${COPPERSPICE_INCLUDES}
+            @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon
+        )
+        set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon)
+    else()
+        set(COPPERSPICE_INCLUDES
+            ${COPPERSPICE_INCLUDES}
+            @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
+        )
+        set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component})
+    endif()
 
     set(COPPERSPICE_LIBRARIES
         ${COPPERSPICE_LIBRARIES}
@@ -34,3 +45,11 @@ foreach(component ${COPPERSPICE_COMPONENTS})
     )
     set(COPPERSPICE_${uppercomp}_LIBRARIES Cs${component}@BUILD_MAJOR@)
 endforeach()
+
+# Set compiler standard to C++ 11
+if(CMAKE_MAJOR_VERSION VERSION_EQUAL 3 AND CMAKE_MINOR_VERSION VERSION_GREATER 0)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_STANDARD 11)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()

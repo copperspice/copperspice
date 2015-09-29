@@ -1,9 +1,36 @@
-# NOTE: to find all FIXME/TODO related to the CMake build system (and those
-# inherited from the autotools build system) execute the following in the
-# top-level directory of the source tree:
+# Editors notes:
 #
-# find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
-# find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
+# * To find all FIXME/TODO related to the CMake build system (and those
+#   inherited from the autotools build system) execute the following in the
+#   top-level directory of the source tree:
+#
+#     find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
+#     find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
+#
+# * Should we support CMake v2.8.12 and newer only, COMPILE_OPTIONS can be used
+#   instead of COMPILE_FLAGS
+#
+# * Component libraries should probably be exported without the major build
+#   version in their names, e.g. CopperSpice::CsCore instead of
+#   CopperSpice::CsCore1 for consistency. The only problem can be for projects
+#   not checking (or requesting) for specifiec CopperSpice version requirement
+#   from their build systems leading to build failures on their side as things
+#   tend to break between major releases (usually).
+#
+# * Definitions used on components (e.g. -DQT_NO_FREETYPE) should probably be
+#   set as interface definitions of some sort, also exposing them will make it
+#   possibly for projects to check for the features that CopperSpice was build
+#   with before attempting to compile any code which is nice to have. The file
+#   to record the features in should be cs_build_info.h I guess.
+#
+# * A lot of Windows libraries are hardcoded and linking may fail with newer
+#   versions of the OS, those will have to be abstracted in some way via use
+#   of CMake module(s).
+#
+# * Proper RPATH handling, required for running rcc and uic during build, on
+#   Mac OSX most likely requires CMake version 2.8.12, see
+#   http://www.cmake.org/pipermail/cmake/2013-October/056020.html.
+#
 
 project(copperspice)
 
@@ -19,7 +46,7 @@ include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
 include(TestLargeFiles)
-include(MacroCopperSpice)
+include(CopperSpiceBuildMacros)
 if(UNIX)
     include(GNUInstallDirs)
 else()
@@ -33,6 +60,8 @@ string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "2")
 set(BUILD_MICRO "0")
+# TODO: add DBus, Declarative and ScriptTools once they build
+set(BUILD_COMPONENTS "Core Gui Network OpenGL Sql Svg Xml XmlPatterns Script Phonon Multimedia")
 set(PACKAGE "copperspice")
 set(PACKAGE_NAME "copperspice")
 set(PACKAGE_VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
@@ -43,7 +72,27 @@ set(PACKAGE_URL "http://www.copperspice.com/") # empty leaves it undefined
 set(VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(target "${CMAKE_SYSTEM_NAME}")
+if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
+    execute_process(
+        COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
+        OUTPUT_VARIABLE DUMPMACHINE_OUTPUT
+        RESULT_VARIABLE DUMPMACHINE_EXITCODE
+    )
+    if(NOT DUMPMACHINE_EXITCODE EQUAL 0)
+        message(SEND_ERROR "failed to obtain machine from ${CMAKE_CXX_COMPILER}")
+    endif()
+    string(STRIP "${DUMPMACHINE_OUTPUT}" dumpstripped)
+    set(target "${dumpstripped}")
+else()
+    message(WARNING
+        "Your compiler (${CMAKE_CXX_COMPILER}) is not yet handled properly. "
+        "If it supports -dumpmachine argument or alternative let use know. "
+        "This affects binary compatibility with plugins, the key that will be "
+        "used is: ${CMAKE_SYSTEM}"
+    )
+    # TODO: more compiler handlers are required, check CMake docs for CMAKE_LANG_COMPILER_ID
+    set(target "${CMAKE_SYSTEM}")
+endif()
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ library derived from the existing Qt 4.8 framework")
 set(CPACK_PACKAGE_VENDOR "copperspice")
@@ -59,13 +108,16 @@ include(CPack)
 # TODO: cleanup include dirs now that this is turned on
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
-# packagers set the regular cmake alternatives, we add additions here.
-# TODO: component additions would be nice to have
-set(GLOBAL_LIBRARIES " ")
-set(GLOBAL_CXXFLAGS "-std=c++11")
-set(GLOBAL_LDFLAGS "-Wl,--no-undefined")
+if(CMAKE_MAJOR_VERSION VERSION_EQUAL 3 AND CMAKE_MINOR_VERSION VERSION_GREATER 0)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_STANDARD 11)
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
 add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
-
 set(TOOLS_SUFFIX)
 
 check_include_file(cups/cups.h HAVE_CUPS_CUPS_H)
@@ -151,7 +203,8 @@ set_package_properties(MySQL PROPERTIES
     TYPE RECOMMENDED
 )
 
-# find_package(QPA) TODO: what is QPA?
+# TODO: need a module for Qt Platform Abstraction
+# find_package(QPA)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     find_package(GTK2)
@@ -164,7 +217,13 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
-    find_library(pthread_FOUND pthread) # pthread_create
+    find_package(Threads)
+    set_package_properties(Threads PROPERTIES
+        PURPOSE "Required for threading support"
+        DESCRIPTION "Platform dependant threading library"
+        URL ""
+        TYPE REQUIRED
+    )
 
     find_package(NAS)
     set_package_properties(NAS PROPERTIES
@@ -251,6 +310,17 @@ endif()
 if(NOT ZLIB_FOUND)
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/zlib)
 endif()
+if(HAVE_LARGEFILESUPPORT)
+    if(_FILE_OFFSET_BITS)
+        add_definitions(-D_FILE_OFFSET_BITS=64)
+    endif()
+    if(_LARGE_FILES)
+        add_definitions(-D_LARGE_FILES)
+    endif()
+    if(_LARGEFILE_SOURCE)
+        add_definitions(-D_LARGEFILE_SOURCE)
+    endif()
+endif()
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/qt-acconfig.h.cmake
@@ -260,14 +330,6 @@ configure_file(
     ${CMAKE_SOURCE_DIR}/src/core/global/cs_build_info.h.in
     ${CMAKE_BINARY_DIR}/include/QtCore/cs_build_info.h
 )
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
-    foreach(library pthread)
-        if(NOT ${library}_FOUND)
-            message(SEND_ERROR "${library} not found")
-        endif()
-    endforeach()
-endif()
 
 option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
 add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "the world's most advanced open source database")
@@ -297,6 +359,7 @@ add_subdirectory(src/tools/rcc)
 add_subdirectory(src/tools/uic)
 if(WITH_WEBKIT)
     add_subdirectory(src/webkit)
+    set(BUILD_COMPONENTS "${BUILD_COMPONENTS} WebKit")
 endif()
 add_subdirectory(src/xml)
 add_subdirectory(src/xmlpatterns)
@@ -338,14 +401,16 @@ install(
 
 install(
     EXPORT CopperSpiceLibraryTargets
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    NAMESPACE CopperSpice::
     FILE CopperSpiceLibraryTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
 )
 
 install(
     EXPORT CopperSpiceBinaryTargets
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    NAMESPACE CopperSpice::
     FILE CopperSpiceBinaryTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

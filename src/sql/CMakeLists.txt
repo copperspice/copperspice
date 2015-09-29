@@ -4,9 +4,9 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
-set(EXTRA_SQL_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_SQL_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_SQL_CXXFLAGS)
+set(EXTRA_SQL_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -46,9 +46,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_SQL_LIBS}
         ws2_32
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
 endif()
 

@@ -282,24 +282,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_win.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_unix.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_mac.mm
     )
 endif()
-
-
-include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src)
-

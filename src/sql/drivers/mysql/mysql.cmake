@@ -1,3 +1,5 @@
+set(EXTRA_MYSQL_LIBS CsCore${BUILD_MAJOR} CsSql${BUILD_MAJOR})
+
 set(SQL_PUBLIC_INCLUDES
     ${SQL_PUBLIC_INCLUDES}
     QMYSQLDriver
@@ -12,14 +14,8 @@ set(SQL_INCLUDES
 )
 
 if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
-    set(EXTRA_MYSQL_LDFLAGS
-        ${EXTRA_MYSQL_LDFLAGS}
-        -avoid-version
-        -no-undefined
-    )
-
-    set(EXTRA_SQL_LIBS
-        ${EXTRA_SQL_LIBS}
+    set(EXTRA_MYSQL_LIBS
+        ${EXTRA_MYSQL_LIBS}
         ${MYSQL_LIBRARIES}
         ${ZLIB_LIBRARIES}
     )
@@ -30,14 +26,9 @@ if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
         ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/mysql/main.cpp
     )
 
-    function_variable_fixup("${EXTRA_MYSQL_LDFLAGS}" EXTRA_MYSQL_LDFLAGS)
-
     include_directories(${MYSQL_INCLUDE_DIR})
     add_library(qsqlmysql4 MODULE ${MYSQL_SOURCES})
-    set_target_properties(qsqlmysql4 PROPERTIES
-        LINK_FLAGS ${EXTRA_MYSQL_LDFLAGS}
-    )
+    target_link_libraries(qsqlmysql4 ${EXTRA_MYSQL_LIBS})
 
     install(TARGETS qsqlmysql4 DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
-

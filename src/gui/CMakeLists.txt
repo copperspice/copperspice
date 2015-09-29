@@ -5,10 +5,9 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DPNG_NO_CONFIG_H
     -DMNG_BUILD_SO
 )
-
-set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
-set(EXTRA_GUI_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_GUI_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_GUI_CXXFLAGS)
+set(EXTRA_GUI_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -80,7 +79,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${X11_SM_LIB}
         ${X11_ICE_LIB}
         ${NAS_LIBRARIES}
-        pthread
+        ${CMAKE_THREAD_LIBS_INIT}
         rt
     )
     add_definitions(
@@ -108,13 +107,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-         -Wl,-luuid --export-all-symbols
-    )
-endif()
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
@@ -125,10 +117,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         oleaut32
         comdlg32
         imm32
+        uuid
     )
     set(EXTRA_GUI_LDFLAGS
         ${EXTRA_GUI_LDFLAGS}
-         -Wl,-luuid --export-all-symbols
+         -Wl,--export-all-symbols
     )
     add_definitions(
         -DQT_NO_STYLE_MAC
@@ -152,14 +145,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         -framework Carbon
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
-
-    # FIXME: what the heck?
-#     macnibdir=$(prefix)/mac/qt_menu.nib
-#     dist_macnib_DATA +=
-#         src/gui/mac/qt_menu.nib/classes.nib
-#         src/gui/mac/qt_menu.nib/info.nib
-#         src/gui/mac/qt_menu.nib/keyedobjects.nib
 endif()
+
+function_variable_fixup("${EXTRA_GUI_CXXFLAGS}" EXTRA_GUI_CXXFLAGS)
+function_variable_fixup("${EXTRA_GUI_LDFLAGS}" EXTRA_GUI_LDFLAGS)
 
 add_library(CsGui${BUILD_MAJOR} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
 target_link_libraries(CsGui${BUILD_MAJOR} ${EXTRA_GUI_LIBS})
@@ -168,6 +157,11 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
+    # FIXME: need to put those in resource prefix $(prefix)/mac/qt_menu.nib
+    RESOURCE
+    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/classes.nib
+    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/info.nib
+    ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/keyedobjects.nib
 )
 
 macro_generate_resources("${GUI_SOURCES}")

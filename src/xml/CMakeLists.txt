@@ -3,9 +3,9 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
-set(EXTRA_XML_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_XML_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_XML_CXXFLAGS)
+set(EXTRA_XML_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -27,6 +27,9 @@ include(stream/stream.cmake)
 macro_generate_public("${XML_PUBLIC_INCLUDES}" QtXml)
 macro_generate_private("${XML_PRIVATE_INCLUDES}" QtXml)
 macro_generate_misc("${XML_INCLUDES}" QtXml)
+
+function_variable_fixup("${EXTRA_XML_CXXFLAGS}" EXTRA_XML_CXXFLAGS)
+function_variable_fixup("${EXTRA_XML_LDFLAGS}" EXTRA_XML_LDFLAGS)
 
 add_library(CsXml${BUILD_MAJOR} SHARED ${XML_SOURCES} ${XML_INCLUDES})
 target_link_libraries(CsXml${BUILD_MAJOR} ${EXTRA_XML_LIBS})

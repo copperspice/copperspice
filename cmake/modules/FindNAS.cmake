@@ -10,27 +10,27 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 if (NAS_INCLUDES AND NAS_LIBRARIES)
-  set(NAS_FIND_QUIETLY TRUE)
+    set(NAS_FIND_QUIETLY TRUE)
 endif (NAS_INCLUDES AND NAS_LIBRARIES)
 
 find_path(NAS_INCLUDES
-  NAMES
-  audio.h
-  PATH_SUFFIXES audio
-  HINTS
-  $ENV{NASDIR}/include
-  /usr/include
-  /usr/local/include
-  ${INCLUDE_INSTALL_DIR}
+    NAMES
+    audio.h
+    PATH_SUFFIXES audio
+    HINTS
+    $ENV{NASDIR}/include
+    /usr/include
+    /usr/local/include
+    ${INCLUDE_INSTALL_DIR}
 )
 
 find_library(NAS_LIBRARIES
-  audio
-  HINTS
-  $ENV{NASDIR}/lib
-  /usr/lib
-  /usr/local/lib
-  ${LIB_INSTALL_DIR}
+    audio
+    HINTS
+    $ENV{NASDIR}/lib
+    /usr/lib
+    /usr/local/lib
+    ${LIB_INSTALL_DIR}
 )
 
 include(FindPackageHandleStandardArgs)

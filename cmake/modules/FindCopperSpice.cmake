@@ -20,14 +20,13 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 if(COPPERSPICE_INCLUDES AND COPPERSPICE_LIBRARIES)
-  set(COPPERSPICE_FIND_QUIETLY TRUE)
+    set(COPPERSPICE_FIND_QUIETLY TRUE)
 endif()
 
 if(CopperSpice_FIND_COMPONENTS)
     set(COPPERSPICECOMPONENTS ${CopperSpice_FIND_COMPONENTS})
 else()
-    # TODO: add DBus, Declarative and ScriptTools once they build
-    set(COPPERSPICECOMPONENTS Core Gui Network OpenGL Sql Svg Xml XmlPatterns Script WebKit)
+    set(COPPERSPICECOMPONENTS @BUILD_COMPONENTS@)
 endif()
 set(COPPERSPICETOOLS uic rcc lupdate lrelease lconvert)
 

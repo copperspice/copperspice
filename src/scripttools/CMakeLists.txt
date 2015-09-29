@@ -3,9 +3,9 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_SCRIPTTOOLS_LIBS ${GLOBAL_LIBRARIES})
-set(EXTRA_SCRIPTTOOLS_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_SCRIPTTOOLS_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_SCRIPTTOOLS_LIBS)
+set(EXTRA_SCRIPTTOOLS_CXXFLAGS)
+set(EXTRA_SCRIPTTOOLS_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -25,6 +25,9 @@ include(debugging/debugging.cmake)
 macro_generate_public("${SCRIPTTOOLS_PUBLIC_INCLUDES}" QtScriptTools)
 macro_generate_private("${SCRIPTTOOLS_PRIVATE_INCLUDES}" QtScriptTools)
 macro_generate_misc("${SCRIPTTOOLS_INCLUDES}" QtScriptTools)
+
+function_variable_fixup("${EXTRA_SCRIPTTOOLS_CXXFLAGS}" EXTRA_SCRIPTTOOLS_CXXFLAGS)
+function_variable_fixup("${EXTRA_SCRIPTTOOLS_LDFLAGS}" EXTRA_SCRIPTTOOLS_LDFLAGS)
 
 add_library(CsScriptTools${BUILD_MAJOR} SHARED ${SCRIPTTOOLS_SOURCES} ${SCRIPTTOOLS_INCLUDES})
 target_link_libraries(CsScriptTools${BUILD_MAJOR} ${EXTRA_SCRIPTTOOLS_LIBS})

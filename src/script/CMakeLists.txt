@@ -24,9 +24,9 @@ add_definitions(
 #   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE="" -DQT_MAKEDLL
 #   -DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 )
-set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
-set(EXTRA_SCRIPT_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_SCRIPT_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_SCRIPT_CXXFLAGS)
+set(EXTRA_SCRIPT_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -35,7 +35,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/api
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
@@ -540,9 +539,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdbool.h
         ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/os-win32/stdint.h
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
 endif()
 

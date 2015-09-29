@@ -318,24 +318,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qole_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win.cpp
-    )
-    add_definitions(-DQT_NO_DIRECTDRAW)
-endif()
-
 if(X11_FOUND)
     set(GUI_SOURCES
         ${GUI_SOURCES}
@@ -354,41 +336,6 @@ if(X11_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib.cpp
-    )
-endif()
-
-# FIXME: COCOA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_mac.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoapanel_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaview_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindow_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowdelegate_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoamenuloader_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplication_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplicationdelegate_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowcustomthemeframe_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaintrospection_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.mm
-    )
-    set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS}
-        -framework AppKit
     )
 endif()
 
@@ -424,5 +371,56 @@ else()
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
+    )
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qole_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_win.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwinnativepangesturerecognizer_win.cpp
+    )
+    add_definitions(-DQT_NO_DIRECTDRAW)
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmime_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoapanel_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaview_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindow_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowdelegate_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoamenuloader_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplication_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaapplicationdelegate_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_cocoa_helpers_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoawindowcustomthemeframe_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmacgesturerecognizer_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultitouch_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcocoaintrospection_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/cs_carbon_wrapper.mm
+    )
+    set(EXTRA_GUI_LDFLAGS
+        ${EXTRA_GUI_LDFLAGS}
+        -framework AppKit
     )
 endif()

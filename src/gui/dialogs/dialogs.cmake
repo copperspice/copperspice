@@ -88,9 +88,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qwizard_win.cpp
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintdialog_unix.cpp
@@ -100,10 +98,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qprintpropertieswidget.ui
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qpagesetupwidget.ui
     )
-endif()
-
-# FIXME: COCOCA?
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# FIXME: check for COCOA instead?
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/qfiledialog_mac.mm

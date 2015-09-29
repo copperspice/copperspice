@@ -1,11 +1,7 @@
 # add_definitions()
-set(EXTRA_LRELEASE_LIBS
-    CsCore${BUILD_MAJOR}
-    CsXml${BUILD_MAJOR}
-    ${GLOBAL_LIBRARIES}
-)
-set(EXTRA_LRELEASE_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_LRELEASE_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_LRELEASE_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR})
+set(EXTRA_LRELEASE_CXXFLAGS)
+set(EXTRA_LRELEASE_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -29,6 +25,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         uuid
     )
 endif()
+
+function_variable_fixup("${EXTRA_LRELEASE_CXXFLAGS}" EXTRA_LRELEASE_CXXFLAGS)
+function_variable_fixup("${EXTRA_LRELEASE_LDFLAGS}" EXTRA_LRELEASE_LDFLAGS)
 
 add_executable(lrelease${TOOLS_SUFFIX} ${LRELEASE_SOURCES} $<TARGET_OBJECTS:sharedtools>)
 target_link_libraries(lrelease${TOOLS_SUFFIX} ${EXTRA_LRELEASE_LIBS})

@@ -8,13 +8,12 @@ set(EXTRA_PHONON_LIBS
     CsCore${BUILD_MAJOR}
     CsGui${BUILD_MAJOR}
     CsNetwork${BUILD_MAJOR}
-    ${GLOBAL_LIBRARIES}
 )
-set(EXTRA_PHONON_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_PHONON_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_PHONON_CXXFLAGS)
+set(EXTRA_PHONON_LDFLAGS)
 set(EXTRA_PHONON2_LIBS ${EXTRA_PHONON_LIBS} CsPhonon${BUILD_MAJOR})
-set(EXTRA_PHONON2_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_PHONON2_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_PHONON2_CXXFLAGS)
+set(EXTRA_PHONON2_LDFLAGS)
 set(PHONON2_SUFFIX)
 
 include_directories(
@@ -336,9 +335,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9
     )
     set(PHONON2_SUFFIX "ds9")
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/abstractrenderer.cpp
@@ -387,9 +384,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${LIBXML2_INCLUDE_DIR}
     )
     set(PHONON2_SUFFIX "gstreamer")
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimevideoplayer.mm
@@ -462,10 +457,11 @@ set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
 )
-# NOTE: it seems required on BSD but only in the private scope, including
+# TODO: this seems required on BSD but only in the private scope, including
 # x11 paths in the global scope breaks the build so here goes a workaround.
 # strange thing is that it does not require to be linked to any X11 librarise
-# which may be because CsGui is linked to X11 but a "bad" linker may bail out.
+# which may be because CsGui is linked to X11 but a "bad" linker may bail out,
+# needs testing with lld and older versions of CMake.
 if(${PHONON2_SUFFIX} STREQUAL "gstreamer")
     target_include_directories(phonon_${PHONON2_SUFFIX} PRIVATE ${X11_X11_INCLUDE_PATH})
 endif()

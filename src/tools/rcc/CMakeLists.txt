@@ -2,11 +2,10 @@ add_definitions(-UQT_BUILD_CORE_LIB)
 set(EXTRA_RCC_LIBS
     CsCore${BUILD_MAJOR}
     CsXml${BUILD_MAJOR}
-    pthread
-    ${GLOBAL_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
-set(EXTRA_RCC_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_RCC_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_RCC_CXXFLAGS)
+set(EXTRA_RCC_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -33,6 +32,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         uuid
     )
 endif()
+
+function_variable_fixup("${EXTRA_RCC_CXXFLAGS}" EXTRA_RCC_CXXFLAGS)
+function_variable_fixup("${EXTRA_RCC_LDFLAGS}" EXTRA_RCC_LDFLAGS)
 
 add_executable(rcc${TOOLS_SUFFIX} ${RCC_SOURCES} ${RCC_INCLUDES})
 target_link_libraries(rcc${TOOLS_SUFFIX} ${EXTRA_RCC_LIBS})

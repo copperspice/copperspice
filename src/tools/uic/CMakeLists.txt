@@ -3,13 +3,9 @@ add_definitions(
     -DQT_UIC_CPP_GENERATOR
     -UQT_BUILD_CORE_LIB
 )
-set(EXTRA_UIC_LIBS
-    CsCore${BUILD_MAJOR}
-    pthread
-    ${GLOBAL_LIBRARIES}
-)
-set(EXTRA_UIC_CXXFLAGS ${GLOBAL_CXXFLAGS})
-set(EXTRA_UIC_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_UIC_LIBS CsCore${BUILD_MAJOR} ${CMAKE_THREAD_LIBS_INIT})
+set(EXTRA_UIC_CXXFLAGS)
+set(EXTRA_UIC_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -65,6 +61,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         uuid
     )
 endif()
+
+function_variable_fixup("${EXTRA_UIC_CXXFLAGS}" EXTRA_UIC_CXXFLAGS)
+function_variable_fixup("${EXTRA_UIC_LDFLAGS}" EXTRA_UIC_LDFLAGS)
 
 add_executable(uic${TOOLS_SUFFIX} ${UIC_SOURCES} ${UIC_INCLUDES})
 target_link_libraries(uic${TOOLS_SUFFIX} ${EXTRA_UIC_LIBS})

@@ -31,10 +31,9 @@ set(EXTRA_WEBKIT_LIBS
     CsGui${BUILD_MAJOR}
     CsNetwork${BUILD_MAJOR}
     CsScript${BUILD_MAJOR}
-    ${GLOBAL_LIBRARIES}
 )
-set(EXTRA_WEBKIT_CXXFLAGS -O2 ${GLOBAL_CXXFLAGS})
-set(EXTRA_WEBKIT_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_WEBKIT_CXXFLAGS -O2) # that's not always wanted!
+set(EXTRA_WEBKIT_LDFLAGS)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -2353,13 +2352,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_WEBKIT_LDFLAGS}
         -Wl,-s
     )
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     add_definitions(-DXP_UNIX
         -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1
         -DENABLE_NETSCAPE_PLUGIN_API=1
     )
+    # TODO: move this to global scope as noted in the top-level CMake file?
     if(HAVE_PTHREAD_NP_H)
         add_definitions(-DHAVE_PTHREAD_NP_H)
     endif()
@@ -2371,9 +2369,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
     )
     include_directories(${X11_X11_INCLUDE_PATH})
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/mac)
 
 #   add_definitions(-DENABLE_NETSCAPE_PLUGIN_API=1)

@@ -186,18 +186,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle.cpp
     )
-endif()
-
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.mm
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
-endif()
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
     add_definitions(-DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP)
 endif()
