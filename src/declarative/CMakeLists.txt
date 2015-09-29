@@ -1,18 +1,12 @@
-add_definitions(-DQT_NO_OPENSSL -DQT_BUILD_DECLARATIVE_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_DECLARATIVE_LIBS "")
-set(EXTRA_DECLARATIVE_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_DECLARATIVE_LDFLAGS "-Wl,--no-undefined")
-
-include(debugger/debugger.cmake)
-include(graphicsitems/graphicsitems.cmake)
-include(qml/qml.cmake)
-include(qml/parser/parser.cmake)
-include(qml/rewriter/rewriter.cmake)
-include(util/util.cmake)
-
-macro_generate_public("${DECLARATIVE_PUBLIC_INCLUDES}" QtDeclarative)
-macro_generate_private("${DECLARATIVE_PRIVATE_INCLUDES}" QtDeclarative)
-macro_generate_misc("${DECLARATIVE_INCLUDES}" QtDeclarative)
+add_definitions(
+    -DQT_NO_OPENSSL
+    -DQT_BUILD_DECLARATIVE_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+)
+set(EXTRA_DECLARATIVE_LIBS ${GLOBAL_LIBRARIES})
+set(EXTRA_DECLARATIVE_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_DECLARATIVE_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -37,6 +31,17 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
+include(debugger/debugger.cmake)
+include(graphicsitems/graphicsitems.cmake)
+include(qml/qml.cmake)
+include(qml/parser/parser.cmake)
+include(qml/rewriter/rewriter.cmake)
+include(util/util.cmake)
+
+macro_generate_public("${DECLARATIVE_PUBLIC_INCLUDES}" QtDeclarative)
+macro_generate_private("${DECLARATIVE_PRIVATE_INCLUDES}" QtDeclarative)
+macro_generate_misc("${DECLARATIVE_INCLUDES}" QtDeclarative)
+
 add_library(CsDeclarative${BUILD_MAJOR} SHARED ${DECLARATIVE_SOURCES} ${DECLARATIVE_INCLUDES})
 target_link_libraries(CsDeclarative${BUILD_MAJOR} ${EXTRA_DECLARATIVE_LIBS})
 set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
@@ -49,6 +54,7 @@ set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${DECLARATIVE_SOURCES}")
 macro_generate_package(
     CsDeclarative${BUILD_MAJOR}
+    QtDeclarative
     "${EXTRA_DECLARATIVE_CXXFLAGS}"
     "${EXTRA_DECLARATIVE_LIBS}"
     "CsCore${BUILD_MAJOR} QtGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"

@@ -59,7 +59,11 @@ include(CPack)
 # TODO: cleanup include dirs now that this is turned on
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# packagers set the regular cmake alternatives, we add additions here.
+# TODO: component additions would be nice to have
+set(GLOBAL_LIBRARIES " ")
+set(GLOBAL_CXXFLAGS "-std=c++11")
+set(GLOBAL_LDFLAGS "-Wl,--no-undefined")
 add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
 
 set(TOOLS_SUFFIX)

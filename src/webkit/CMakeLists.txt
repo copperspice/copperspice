@@ -26,73 +26,15 @@ add_definitions(
     -DENABLE_SVG_FOREIGN_OBJECT=1
     -DENABLE_DATALIST=1
 )
-set(EXTRA_WEBKIT_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR})
-set(EXTRA_WEBKIT_CXXFLAGS "-O2")
-set(EXTRA_WEBKIT_LDFLAGS "-Wl,--no-undefined")
-
-if(NOT OPENSSL_FOUND)
-    add_definitions(-DQT_NO_OPENSSL)
-endif()
-
-set(WEBKIT_PUBLIC_INCLUDES
-    ${WEBKIT_PUBLIC_INCLUDES}
-    QtWebKit
-    QGraphicsWebView
-    QWebDatabase
-    QWebElement
-    QWebFrame
-    QWebHistory
-    QWebHistoryInterface
-    QWebInspector
-    QWebKitPlatformPlugin
-    QWebPage
-    QWebPluginFactory
-    QWebSecurityOrigin
-    QWebSettings
-    QWebView
-    QWebElementCollection
-    QWebFullScreenVideoHandler
-    QWebHapticFeedbackPlayer
-    QWebHistoryItem
-    QWebHitTestResult
-    QWebNotificationData
-    QWebNotificationPresenter
-    QWebSelectData
-    QWebSelectMethod
-    QWebTouchModifier
-    QWebScriptWorld
+set(EXTRA_WEBKIT_LIBS
+    CsCore${BUILD_MAJOR}
+    CsGui${BUILD_MAJOR}
+    CsNetwork${BUILD_MAJOR}
+    CsScript${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
 )
-
-set(WEBKIT_INCLUDES
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebelementcollection.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebfullscreenvideohandler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhapticfeedbackplayer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhistoryitem.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhittestresult.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebnotificationdata.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebnotificationpresenter.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebselectdata.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebselectmethod.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qwebtouchmodifier.h
-
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qgraphicswebview.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebdatabase.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebframe.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebhistory.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebhistoryinterface.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebinspector.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitglobal.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitplatformplugin.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitversion.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebpage.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebpluginfactory.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebscriptworld.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsecurityorigin.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebview.h
-)
+set(EXTRA_WEBKIT_CXXFLAGS -O2 ${GLOBAL_CXXFLAGS})
+set(EXTRA_WEBKIT_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -211,6 +153,70 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/network/qt
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/qt
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/qt
+)
+
+if(NOT OPENSSL_FOUND)
+    add_definitions(-DQT_NO_OPENSSL)
+endif()
+
+set(WEBKIT_PUBLIC_INCLUDES
+    ${WEBKIT_PUBLIC_INCLUDES}
+    QtWebKit
+    QGraphicsWebView
+    QWebDatabase
+    QWebElement
+    QWebFrame
+    QWebHistory
+    QWebHistoryInterface
+    QWebInspector
+    QWebKitPlatformPlugin
+    QWebPage
+    QWebPluginFactory
+    QWebSecurityOrigin
+    QWebSettings
+    QWebView
+    QWebElementCollection
+    QWebFullScreenVideoHandler
+    QWebHapticFeedbackPlayer
+    QWebHistoryItem
+    QWebHitTestResult
+    QWebNotificationData
+    QWebNotificationPresenter
+    QWebSelectData
+    QWebSelectMethod
+    QWebTouchModifier
+    QWebScriptWorld
+)
+
+set(WEBKIT_INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebelementcollection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebfullscreenvideohandler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhapticfeedbackplayer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhistoryitem.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebhittestresult.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebnotificationdata.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebnotificationpresenter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebselectdata.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebselectmethod.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/qwebtouchmodifier.h
+
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qgraphicswebview.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebdatabase.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebelement.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebframe.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebhistory.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebhistoryinterface.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebinspector.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitglobal.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitplatformplugin.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebkitversion.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebpage.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebpluginfactory.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebscriptworld.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsecurityorigin.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebsettings.h
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebKit/qt/Api/qwebview.h
 )
 
 set(WEBKIT_SOURCES)
@@ -2418,6 +2424,7 @@ set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${WEBKIT_SOURCES}")
 macro_generate_package(
     CsWebKit${BUILD_MAJOR}
+    QtWebKit
     "${EXTRA_WEBKIT_CXXFLAGS}"
     "${EXTRA_WEBKIT_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"

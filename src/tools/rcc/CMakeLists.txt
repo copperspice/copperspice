@@ -1,7 +1,12 @@
 add_definitions(-UQT_BUILD_CORE_LIB)
-set(EXTRA_RCC_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR} pthread)
-set(EXTRA_RCC_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_RCC_LDFLAGS "-Wl,--no-undefined")
+set(EXTRA_RCC_LIBS
+    CsCore${BUILD_MAJOR}
+    CsXml${BUILD_MAJOR}
+    pthread
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_RCC_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_RCC_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include

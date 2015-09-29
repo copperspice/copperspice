@@ -1,21 +1,12 @@
-add_definitions(-DQT_SQL_SQLITE -DQT_BUILD_SQL_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_SQL_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_SQL_LDFLAGS "-Wl,--no-undefined")
-
-include(kernel/kernel.cmake)
-include(models/models.cmake)
-include(drivers/db2/db2.cmake)
-include(drivers/ibase/ibase.cmake)
-include(drivers/mysql/mysql.cmake)
-include(drivers/oci/oci.cmake)
-include(drivers/odbc/odbc.cmake)
-include(drivers/psql/psql.cmake)
-include(drivers/sqlite/sqlite.cmake)
-
-macro_generate_public("${SQL_PUBLIC_INCLUDES}" QtSql)
-macro_generate_private("${SQL_PRIVATE_INCLUDES}" QtSql)
-macro_generate_misc("${SQL_INCLUDES}" QtSql)
+add_definitions(
+    -DQT_SQL_SQLITE
+    -DQT_BUILD_SQL_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+)
+set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
+set(EXTRA_SQL_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_SQL_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -35,6 +26,20 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers/psql
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers/sqlite
 )
+
+include(kernel/kernel.cmake)
+include(models/models.cmake)
+include(drivers/db2/db2.cmake)
+include(drivers/ibase/ibase.cmake)
+include(drivers/mysql/mysql.cmake)
+include(drivers/oci/oci.cmake)
+include(drivers/odbc/odbc.cmake)
+include(drivers/psql/psql.cmake)
+include(drivers/sqlite/sqlite.cmake)
+
+macro_generate_public("${SQL_PUBLIC_INCLUDES}" QtSql)
+macro_generate_private("${SQL_PRIVATE_INCLUDES}" QtSql)
+macro_generate_misc("${SQL_INCLUDES}" QtSql)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SQL_LIBS
@@ -62,6 +67,7 @@ set_target_properties(CsSql${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${SQL_SOURCES}")
 macro_generate_package(
     CsSql${BUILD_MAJOR}
+    QtSql
     "${EXTRA_SQL_CXXFLAGS}"
     "${EXTRA_SQL_LIBS}"
     "CsCore${BUILD_MAJOR}"

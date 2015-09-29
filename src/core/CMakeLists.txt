@@ -1,7 +1,28 @@
 add_definitions(-DQT_BUILD_CORE_LIB)
-set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES})
-set(EXTRA_CORE_CXXFLAGS "")
-set(EXTRA_CORE_LDFLAGS "-Wl,--no-undefined")
+set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GLOBAL_LIBRARIES})
+set(EXTRA_CORE_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_CORE_LDFLAGS ${GLOBAL_LDFLAGS})
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
+    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_CURRENT_SOURCE_DIR}/animation
+    ${CMAKE_CURRENT_SOURCE_DIR}/arch
+    ${CMAKE_CURRENT_SOURCE_DIR}/codecs
+    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent
+    ${CMAKE_CURRENT_SOURCE_DIR}/global
+    ${CMAKE_CURRENT_SOURCE_DIR}/io
+    ${CMAKE_CURRENT_SOURCE_DIR}/json
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
+    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
+    ${CMAKE_CURRENT_SOURCE_DIR}/thread
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools
+    ${CMAKE_CURRENT_SOURCE_DIR}/xml
+    ${GLIB2_INCLUDE_DIR}
+)
 
 include(animation/animation.cmake)
 include(codecs/codecs.cmake)
@@ -46,27 +67,6 @@ else(ZLIB_FOUND)
     )
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty)
 endif(ZLIB_FOUND)
-
-include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_CURRENT_SOURCE_DIR}/animation
-    ${CMAKE_CURRENT_SOURCE_DIR}/arch
-    ${CMAKE_CURRENT_SOURCE_DIR}/codecs
-    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent
-    ${CMAKE_CURRENT_SOURCE_DIR}/global
-    ${CMAKE_CURRENT_SOURCE_DIR}/io
-    ${CMAKE_CURRENT_SOURCE_DIR}/json
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
-    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
-    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools
-    ${CMAKE_CURRENT_SOURCE_DIR}/xml
-    ${GLIB2_INCLUDE_DIR}
-)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(EXTRA_CORE_LIBS
@@ -115,6 +115,7 @@ set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${CORE_SOURCES}")
 macro_generate_package(
     CsCore${BUILD_MAJOR}
+    QtCore
     "${EXTRA_CORE_CXXFLAGS}"
     "${EXTRA_CORE_LIBS}"
     ""

@@ -1,27 +1,18 @@
-add_definitions(-DQT_BUILD_XMLPATTERNS_LIB -DQT_SHARED -DQT_MAKEDLL)
-# BROOM (enable OpenSSL)
-add_definitions(-DQT_NO_OPENSSL)
-set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
-set(EXTRA_XMLPATTERNS_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_XMLPATTERNS_LDFLAGS "-Wl,--no-undefined")
+add_definitions(
+    -DQT_BUILD_XMLPATTERNS_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+    # BROOM (enable OpenSSL)
+    -DQT_NO_OPENSSL
+)
 
-include(acceltree/acceltree.cmake)
-include(api/api.cmake)
-include(data/data.cmake)
-include(environment/environment.cmake)
-include(expr/expr.cmake)
-include(functions/functions.cmake)
-include(iterators/iterators.cmake)
-include(janitors/janitors.cmake)
-include(parser/parser.cmake)
-include(projection/projection.cmake)
-include(schema/schema.cmake)
-include(type/type.cmake)
-include(utils/utils.cmake)
-
-macro_generate_public("${XMLPATTERNS_PUBLIC_INCLUDES}" QtXmlPatterns)
-macro_generate_private("${XMLPATTERNS_PRIVATE_INCLUDES}" QtXmlPatterns)
-macro_generate_misc("${XMLPATTERNS_INCLUDES}" QtXmlPatterns)
+set(EXTRA_XMLPATTERNS_LIBS
+    CsCore${BUILD_MAJOR}
+    CsNetwork${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_XMLPATTERNS_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_XMLPATTERNS_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -49,6 +40,24 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
 )
 
+include(acceltree/acceltree.cmake)
+include(api/api.cmake)
+include(data/data.cmake)
+include(environment/environment.cmake)
+include(expr/expr.cmake)
+include(functions/functions.cmake)
+include(iterators/iterators.cmake)
+include(janitors/janitors.cmake)
+include(parser/parser.cmake)
+include(projection/projection.cmake)
+include(schema/schema.cmake)
+include(type/type.cmake)
+include(utils/utils.cmake)
+
+macro_generate_public("${XMLPATTERNS_PUBLIC_INCLUDES}" QtXmlPatterns)
+macro_generate_private("${XMLPATTERNS_PRIVATE_INCLUDES}" QtXmlPatterns)
+macro_generate_misc("${XMLPATTERNS_INCLUDES}" QtXmlPatterns)
+
 add_library(CsXmlPatterns${BUILD_MAJOR} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
 target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XMLPATTERNS_LIBS})
 set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
@@ -61,6 +70,7 @@ set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${XMLPATTERNS_SOURCES}")
 macro_generate_package(
     CsXmlPatterns${BUILD_MAJOR}
+    QtXmlPatterns
     "${EXTRA_XMLPATTERNS_CXXFLAGS}"
     "${EXTRA_XMLPATTERNS_LIBS}"
     "CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"

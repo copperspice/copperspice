@@ -1,7 +1,11 @@
 # add_definitions()
-set(EXTRA_LUPDATE_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR})
-set(EXTRA_LUPDATE_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_LUPDATE_LDFLAGS "-Wl,--no-undefined")
+set(EXTRA_LUPDATE_LIBS
+    CsCore${BUILD_MAJOR}
+    CsXml${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_LUPDATE_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_LUPDATE_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -39,7 +43,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 endif()
 
-macro_window_resources("${LUPDATE_SOURCES}" lupdate_manifest)
+macro_windows_resources("${LUPDATE_SOURCES}" lupdate_manifest)
 
 add_executable(lupdate${TOOLS_SUFFIX} ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools> ${lupdate_manifest})
 target_link_libraries(lupdate${TOOLS_SUFFIX} ${EXTRA_LUPDATE_LIBS})

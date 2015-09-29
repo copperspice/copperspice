@@ -1,14 +1,14 @@
-add_definitions(-DQT_BUILD_MULTIMEDIA_LIB -DQT_MAKEDLL)
-set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
-set(EXTRA_MULTIMEDIA_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_MULTIMEDIA_LDFLAGS "-Wl,--no-undefined")
-
-include(audio/audio.cmake)
-include(video/video.cmake)
-
-macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
-macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
-macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
+add_definitions(
+    -DQT_BUILD_MULTIMEDIA_LIB
+    -DQT_MAKEDLL
+)
+set(EXTRA_MULTIMEDIA_LIBS
+    CsCore${BUILD_MAJOR}
+    CsGui${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_MULTIMEDIA_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_MULTIMEDIA_LDFLAGS ${GLOBAL_LDFLAG})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -23,6 +23,16 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/video
 )
 
+include(audio/audio.cmake)
+include(video/video.cmake)
+
+macro_generate_public("${MULTIMEDIA_PUBLIC_INCLUDES}" QtMultimedia)
+macro_generate_private("${MULTIMEDIA_PRIVATE_INCLUDES}" QtMultimedia)
+macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
+
+function_variable_fixup("${EXTRA_MULTIMEDIA_CXXFLAGS}" EXTRA_MULTIMEDIA_CXXFLAGS)
+function_variable_fixup("${EXTRA_MULTIMEDIA_LDFLAGS}" EXTRA_MULTIMEDIA_LDFLAGS)
+
 add_library(CsMultimedia${BUILD_MAJOR} SHARED ${MULTIMEDIA_SOURCES} ${MULTIMEDIA_INCLUDES})
 target_link_libraries(CsMultimedia${BUILD_MAJOR} ${EXTRA_MULTIMEDIA_LIBS})
 set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
@@ -35,6 +45,7 @@ set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${MULTIMEDIA_SOURCES}")
 macro_generate_package(
     CsMultimedia${BUILD_MAJOR}
+    QtMultimedia
     "${EXTRA_MULTIMEDIA_CXXFLAGS}"
     "${EXTRA_MULTIMEDIA_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"

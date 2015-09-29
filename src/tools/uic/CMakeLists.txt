@@ -1,7 +1,15 @@
-add_definitions(-DQT_UIC -DQT_UIC_CPP_GENERATOR -UQT_BUILD_CORE_LIB)
-set(EXTRA_UIC_LIBS CsCore${BUILD_MAJOR} pthread)
-set(EXTRA_UIC_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_UIC_LDFLAGS "-Wl,--no-undefined")
+add_definitions(
+    -DQT_UIC
+    -DQT_UIC_CPP_GENERATOR
+    -UQT_BUILD_CORE_LIB
+)
+set(EXTRA_UIC_LIBS
+    CsCore${BUILD_MAJOR}
+    pthread
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_UIC_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_UIC_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include

@@ -1,7 +1,28 @@
-add_definitions(-DQT_BUILD_SVG_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_SVG_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
-set(EXTRA_SVG_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_SVG_LDFLAGS "-Wl,--no-undefined")
+add_definitions(
+    -DQT_BUILD_SVG_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+)
+set(EXTRA_SVG_LIBS
+    CsCore${BUILD_MAJOR}
+    CsGui${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_SVG_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_SVG_LDFLAGS ${GLOBAL_LDFLAGS})
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
+    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/include/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/include/QtSvg
+    ${CMAKE_BINARY_DIR}/privateinclude/QtSvg
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+)
 
 set(SVG_PUBLIC_INCLUDES
     QtSvg
@@ -47,19 +68,6 @@ macro_generate_public("${SVG_PUBLIC_INCLUDES}" QtSvg)
 macro_generate_private("${SVG_PRIVATE_INCLUDES}" QtSvg)
 macro_generate_misc("${SVG_INCLUDES}" QtSvg)
 
-include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_BINARY_DIR}/include/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
-    ${CMAKE_BINARY_DIR}/include/QtSvg
-    ${CMAKE_BINARY_DIR}/privateinclude/QtSvg
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
-)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SVG_LIBS
         ${EXTRA_SVG_LIBS}
@@ -79,6 +87,7 @@ set_target_properties(CsSvg${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${SVG_SOURCES}")
 macro_generate_package(
     CsSvg${BUILD_MAJOR}
+    QtSvg
     "${EXTRA_SVG_CXXFLAGS}"
     "${EXTRA_SVG_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"

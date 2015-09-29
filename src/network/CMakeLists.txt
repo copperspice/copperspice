@@ -1,21 +1,10 @@
-add_definitions(-DQT_BUILD_NETWORK_LIB -DQT_MAKEDLL)
-set(EXTRA_NETWORK_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_NETWORK_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_NETWORK_LDFLAGS "-Wl,--no-undefined")
-
-if(NOT OPENSSL_FOUND)
-    add_definitions(-DQT_NO_OPENSSL)
-endif()
-
-include(access/access.cmake)
-include(bearer/bearer.cmake)
-include(kernel/kernel.cmake)
-include(socket/socket.cmake)
-include(ssl/ssl.cmake)
-
-macro_generate_public("${NETWORK_PUBLIC_INCLUDES}" QtNetwork)
-macro_generate_private("${NETWORK_PRIVATE_INCLUDES}" QtNetwork)
-macro_generate_misc("${NETWORK_INCLUDES}" QtNetwork)
+add_definitions(
+    -DQT_BUILD_NETWORK_LIB
+    -DQT_MAKEDLL
+)
+set(EXTRA_NETWORK_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
+set(EXTRA_NETWORK_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_NETWORK_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -30,6 +19,20 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/socket
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl
 )
+
+if(NOT OPENSSL_FOUND)
+    add_definitions(-DQT_NO_OPENSSL)
+endif()
+
+include(access/access.cmake)
+include(bearer/bearer.cmake)
+include(kernel/kernel.cmake)
+include(socket/socket.cmake)
+include(ssl/ssl.cmake)
+
+macro_generate_public("${NETWORK_PUBLIC_INCLUDES}" QtNetwork)
+macro_generate_private("${NETWORK_PRIVATE_INCLUDES}" QtNetwork)
+macro_generate_misc("${NETWORK_INCLUDES}" QtNetwork)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_NETWORK_LIBS
@@ -56,6 +59,7 @@ set_target_properties(CsNetwork${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${NETWORK_SOURCES}")
 macro_generate_package(
     CsNetwork${BUILD_MAJOR}
+    QtNetwork
     "${EXTRA_CORE_CXXFLAGS}"
     "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_MAJOR}"

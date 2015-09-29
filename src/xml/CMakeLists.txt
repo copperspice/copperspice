@@ -1,15 +1,11 @@
-add_definitions(-DQT_BUILD_XML_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_XML_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_XML_LDFLAGS "-Wl,--no-undefined")
-
-include(dom/dom.cmake)
-include(sax/sax.cmake)
-include(stream/stream.cmake)
-
-macro_generate_public("${XML_PUBLIC_INCLUDES}" QtXml)
-macro_generate_private("${XML_PRIVATE_INCLUDES}" QtXml)
-macro_generate_misc("${XML_INCLUDES}" QtXml)
+add_definitions(
+    -DQT_BUILD_XML_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+)
+set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
+set(EXTRA_XML_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_XML_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -24,6 +20,14 @@ include_directories(
     ${GLIB2_INCLUDE_DIR}
 )
 
+include(dom/dom.cmake)
+include(sax/sax.cmake)
+include(stream/stream.cmake)
+
+macro_generate_public("${XML_PUBLIC_INCLUDES}" QtXml)
+macro_generate_private("${XML_PRIVATE_INCLUDES}" QtXml)
+macro_generate_misc("${XML_INCLUDES}" QtXml)
+
 add_library(CsXml${BUILD_MAJOR} SHARED ${XML_SOURCES} ${XML_INCLUDES})
 target_link_libraries(CsXml${BUILD_MAJOR} ${EXTRA_XML_LIBS})
 set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
@@ -36,6 +40,7 @@ set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${XML_SOURCES}")
 macro_generate_package(
     CsXml${BUILD_MAJOR}
+    QtXml
     "${EXTRA_XML_CXXFLAGS}"
     "${EXTRA_XML_LIBS}"
     "CsCore${BUILD_MAJOR}"

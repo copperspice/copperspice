@@ -1,7 +1,34 @@
-add_definitions(-DQT_NO_EGL -DQT_BUILD_OPENGL_LIB -DQT_SHARED -DQT_MAKEDLL)
-set(EXTRA_OPENGL_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} ${OPENGL_LIBRARIES})
-set(EXTRA_OPENGL_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_OPENGL_LDFLAGS "-Wl,--no-undefined")
+add_definitions(
+    -DQT_NO_EGL
+    -DQT_BUILD_OPENGL_LIB
+    -DQT_SHARED
+    -DQT_MAKEDLL
+)
+set(EXTRA_OPENGL_LIBS
+    CsCore${BUILD_MAJOR}
+    CsGui${BUILD_MAJOR}
+    ${OPENGL_LIBRARIES}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_OPENGL_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_OPENGL_LDFLAGS ${GLOBAL_LDFLAGS})
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
+    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/include/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/include/QtOpenGL
+    ${CMAKE_BINARY_DIR}/privateinclude/QtOpenGL
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/gl2paintengineex
+    ${CMAKE_CURRENT_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+    ${FREETYPE_INCLUDE_DIRS}
+    ${OPENGL_INCLUDE_DIR}
+)
 
 set(OPENGL_PUBLIC_INCLUDES
     QGLBuffer
@@ -102,23 +129,6 @@ macro_generate_public("${OPENGL_PUBLIC_INCLUDES}" QtOpenGL)
 macro_generate_private("${OPENGL_PRIVATE_INCLUDES}" QtOpenGL)
 macro_generate_misc("${OPENGL_INCLUDES}" QtOpenGL)
 
-include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_BINARY_DIR}/include/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
-    ${CMAKE_BINARY_DIR}/include/QtOpenGL
-    ${CMAKE_BINARY_DIR}/privateinclude/QtOpenGL
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/gl2paintengineex
-    ${CMAKE_CURRENT_SOURCE_DIR}/util
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
-    ${FREETYPE_INCLUDE_DIRS}
-    ${OPENGL_INCLUDE_DIR}
-)
-
 if(X11_FOUND)
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
@@ -176,6 +186,7 @@ set_target_properties(CsOpenGL${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${OPENGL_SOURCES}")
 macro_generate_package(
     CsOpenGL${BUILD_MAJOR}
+    QtOpenGL
     "${EXTRA_CORE_CXXFLAGS}"
     "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"

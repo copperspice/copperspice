@@ -24,10 +24,43 @@ add_definitions(
 #   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE="" -DQT_MAKEDLL
 #   -DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 )
+set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
+set(EXTRA_SCRIPT_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_SCRIPT_LDFLAGS ${GLOBAL_LDFLAGS})
 
-set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_SCRIPT_CXXFLAGS "")
-set(EXTRA_SCRIPT_LDFLAGS "-Wl,--no-undefined")
+include_directories(
+    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
+    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/include/QtScript
+    ${CMAKE_BINARY_DIR}/privateinclude/QtScript
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/api
+    ${CMAKE_CURRENT_SOURCE_DIR}/bridge
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/heap
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/unicode
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wrec
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/ForwardingHeaders
+    ${CMAKE_SOURCE_DIR}src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt
+)
 
 include(api/api.cmake)
 include(bridge/bridge.cmake)
@@ -493,40 +526,6 @@ macro_generate_public("${SCRIPT_PUBLIC_INCLUDES}" QtScript)
 macro_generate_private("${SCRIPT_PRIVATE_INCLUDES}" QtScript)
 macro_generate_misc("${SCRIPT_INCLUDES}" QtScript)
 
-include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_BINARY_DIR}/include/QtScript
-    ${CMAKE_BINARY_DIR}/privateinclude/QtScript
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/api
-    ${CMAKE_CURRENT_SOURCE_DIR}/bridge
-    ${CMAKE_CURRENT_SOURCE_DIR}/parser
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/API
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/assembler
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecode
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/bytecompiler
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/debugger
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/generated
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/heap
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/interpreter
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/jit
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/parser
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/pcre
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/profiler
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/runtime
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/unicode
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wrec
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/javascriptcore/JavaScriptCore/ForwardingHeaders
-    ${CMAKE_SOURCE_DIR}src/3rdparty/javascriptcore/JavaScriptCore/wtf/qt
-)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_SCRIPT_LIBS
         ${EXTRA_SCRIPT_LIBS}
@@ -562,6 +561,7 @@ set_target_properties(CsScript${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${SCRIPT_SOURCES}")
 macro_generate_package(
     CsScript${BUILD_MAJOR}
+    QtScript
     "${EXTRA_SCRIPT_CXXFLAGS}"
     "${EXTRA_SCRIPT_LIBS}"
     "CsCore${BUILD_MAJOR}"

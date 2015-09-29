@@ -1,11 +1,35 @@
-add_definitions(-DMAKE_PHONON_LIB -DQT_NO_DBUS -DQT_BUILD_PHONON_LIB -DQT_MAKEDLL)
-set(EXTRA_PHONON_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
-set(EXTRA_PHONON_CXXFLAGS "")
-set(EXTRA_PHONON_LDFLAGS "-Wl,--no-undefined")
-set(EXTRA_PHONON2_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR})
-set(EXTRA_PHONON2_CXXFLAGS "")
-set(EXTRA_PHONON2_LDFLAGS "-Wl,--no-undefined")
+add_definitions(
+    -DMAKE_PHONON_LIB
+    -DQT_NO_DBUS
+    -DQT_BUILD_PHONON_LIB
+    -DQT_MAKEDLL
+)
+set(EXTRA_PHONON_LIBS
+    CsCore${BUILD_MAJOR}
+    CsGui${BUILD_MAJOR}
+    CsNetwork${BUILD_MAJOR}
+    ${GLOBAL_LIBRARIES}
+)
+set(EXTRA_PHONON_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_PHONON_LDFLAGS ${GLOBAL_LDFLAGS})
+set(EXTRA_PHONON2_LIBS ${EXTRA_PHONON_LIBS} CsPhonon${BUILD_MAJOR})
+set(EXTRA_PHONON2_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_PHONON2_LDFLAGS ${GLOBAL_LDFLAGS})
 set(PHONON2_SUFFIX)
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/privateinclude
+    ${CMAKE_BINARY_DIR}/include/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/include/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/include/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/include/phonon
+    ${CMAKE_BINARY_DIR}/privateinclude/phonon
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 set(PHONON_PUBLIC_INCLUDES
     AbstractAudioOutput
@@ -266,20 +290,6 @@ macro_generate_public("${PHONON_PUBLIC_INCLUDES}" phonon)
 macro_generate_private("${PHONON_PRIVATE_INCLUDES}" phonon)
 macro_generate_misc("${PHONON_INCLUDES}" phonon)
 
-include_directories(
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/privateinclude
-    ${CMAKE_BINARY_DIR}/include/QtCore
-    ${CMAKE_BINARY_DIR}/privateinclude/QtCore
-    ${CMAKE_BINARY_DIR}/include/QtGui
-    ${CMAKE_BINARY_DIR}/privateinclude/QtGui
-    ${CMAKE_BINARY_DIR}/include/QtNetwork
-    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
-    ${CMAKE_BINARY_DIR}/include/phonon
-    ${CMAKE_BINARY_DIR}/privateinclude/phonon
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
@@ -464,12 +474,14 @@ macro_generate_resources("${PHONON_SOURCES}")
 macro_generate_resources("${PHONON2_SOURCES}")
 macro_generate_package(
     CsPhonon${BUILD_MAJOR}
+    phonon
     "${EXTRA_PHONON_CXXFLAGS}"
     "${EXTRA_PHONON_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
 )
 macro_generate_package(
     phonon_${PHONON2_SUFFIX}
+    phonon
     "${EXTRA_PHONON2_CXXFLAGS}"
     "${EXTRA_PHONON2_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR}"

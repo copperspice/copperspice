@@ -6,31 +6,9 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DMNG_BUILD_SO
 )
 
-set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
-set(EXTRA_GUI_CXXFLAGS " ") # whitespace is required!
-set(EXTRA_GUI_LDFLAGS "-Wl,--no-undefined")
-
-include(accessible/accessible.cmake)
-include(animation/animation.cmake)
-include(dialogs/dialogs.cmake)
-include(effects/effects.cmake)
-# include(embedded/embedded.cmake) # currently unused
-include(graphicsview/graphicsview.cmake)
-include(image/image.cmake)
-include(inputmethod/inputmethod.cmake)
-include(itemviews/itemviews.cmake)
-include(kernel/kernel.cmake)
-include(math3d/math3d.cmake)
-include(painting/painting.cmake)
-include(statemachine/statemachine.cmake)
-include(styles/styles.cmake)
-include(text/text.cmake)
-include(util/util.cmake)
-include(widgets/widgets.cmake)
-
-macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
-macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
-macro_generate_misc("${GUI_INCLUDES}" QtGui)
+set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR} ${GLOBAL_LIBRARIES})
+set(EXTRA_GUI_CXXFLAGS ${GLOBAL_CXXFLAGS})
+set(EXTRA_GUI_LDFLAGS ${GLOBAL_LDFLAGS})
 
 include_directories(
     ${CMAKE_BINARY_DIR}/include
@@ -63,6 +41,28 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg
     ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
 )
+
+include(accessible/accessible.cmake)
+include(animation/animation.cmake)
+include(dialogs/dialogs.cmake)
+include(effects/effects.cmake)
+# include(embedded/embedded.cmake) # currently unused
+include(graphicsview/graphicsview.cmake)
+include(image/image.cmake)
+include(inputmethod/inputmethod.cmake)
+include(itemviews/itemviews.cmake)
+include(kernel/kernel.cmake)
+include(math3d/math3d.cmake)
+include(painting/painting.cmake)
+include(statemachine/statemachine.cmake)
+include(styles/styles.cmake)
+include(text/text.cmake)
+include(util/util.cmake)
+include(widgets/widgets.cmake)
+
+macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
+macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
+macro_generate_misc("${GUI_INCLUDES}" QtGui)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     set(EXTRA_GUI_LIBS
@@ -173,6 +173,7 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
 macro_generate_resources("${GUI_SOURCES}")
 macro_generate_package(
     CsGui${BUILD_MAJOR}
+    QtGui
     "${EXTRA_GUI_CXXFLAGS}"
     "${EXTRA_GUI_LIBS}"
     "CsCore${BUILD_MAJOR}"

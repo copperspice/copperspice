@@ -3,7 +3,7 @@
 #   MACRO_GENERATE_PRIVATE()
 #   MACRO_GENERATE_MISC()
 #   MACRO_GENERATE_RESOURCES()
-#   MACRO_WINDOW_RESOURCES()
+#   MACRO_WINDOWS_RESOURCES()
 #   MACRO_GENERATE_PACKAGE()
 #   FUNCTION_VARIABLE_FIXUP()
 #
@@ -16,9 +16,9 @@
 #
 #   MACRO_GENERATE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
 #
-#   MACRO_WINDOW_RESOURCES(<windowsmanifest.manifest> [<resource.rc>] ...)
+#   MACRO_WINDOWS_RESOURCES(<windowsmanifest.manifest> [<resource.rc>] ...)
 #
-#   MACRO_GENERATE_PACKAGE(<target> <cxxflags> <libraries> <requires>)
+#   MACRO_GENERATE_PACKAGE(<name> <realname> <cxxflags> <libraries> <requires>)
 #
 #   FUNCTION_VARIABLE_FIXUP(<string|list> <variablename>)
 #
@@ -87,7 +87,7 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
     endforeach()
 endmacro()
 
-macro(MACRO_WINDOW_RESOURCES RESOURCES RSCNAME)
+macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
     foreach(resource ${RESOURCES})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
@@ -127,23 +127,25 @@ macro(MACRO_WINDOW_RESOURCES RESOURCES RSCNAME)
     endforeach()
 endmacro()
 
-macro(MACRO_GENERATE_PACKAGE FORTARGET CXXFLAGS LIBRARIES REQUIRES)
+macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS LIBRARIES PC_REQUIRES)
     if(UNIX)
         # the list must be adjusted
         string(REPLACE ";" " -l" modlibs "${LIBRARIES}")
         if(NOT "${modlibs}" STREQUAL "")
             set(modlibs "-l${modlibs}")
         endif()
-        set(PC_NAME ${FORTARGET})
-        set(PC_CFLAGS ${CXXFLAGS})
+        # set again, otherwise the behaviour is undefined
+        set(PC_NAME ${PC_NAME})
+        set(PC_REALNAME ${PC_REALNAME})
+        set(PC_CFLAGS ${PC_CFLAGS})
         set(PC_LIBRARIES ${modlibs})
-        set(PC_REQUIRES ${REQUIRES})
+        set(PC_REQUIRES ${PC_REQUIRES})
         configure_file(
             ${CMAKE_SOURCE_DIR}/cmake/pkgconfig.cmake
-            ${CMAKE_BINARY_DIR}/pkgconfig/${FORTARGET}.pc
+            ${CMAKE_BINARY_DIR}/pkgconfig/${PC_NAME}.pc
         )
         install(
-            FILES ${CMAKE_BINARY_DIR}/pkgconfig/${FORTARGET}.pc
+            FILES ${CMAKE_BINARY_DIR}/pkgconfig/${PC_NAME}.pc
             DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
             COMPONENT Devel
         )
@@ -151,7 +153,7 @@ macro(MACRO_GENERATE_PACKAGE FORTARGET CXXFLAGS LIBRARIES REQUIRES)
 endmacro()
 
 function(FUNCTION_VARIABLE_FIXUP INSTR OUTSTR)
-    if(NOT "${INTSTR}")
+    if("${INSTR}" STREQUAL "")
         set(${OUTSTR} " " PARENT_SCOPE)
     else()
         string(REPLACE ";" " " modstring "${INSTR}")
