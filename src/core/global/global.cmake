@@ -1,0 +1,96 @@
+set(CORE_PUBLIC_INCLUDES
+    ${CORE_PUBLIC_INCLUDES}
+    QBool
+    QCOORD
+    QFlag
+    QFlags
+    QForeachContainer
+    QForeachContainerBase
+    QGlobalStatic
+    QGlobalStaticDeleter
+    QIncompatibleFlag
+    QIntegerForSize
+    QInternal
+    QLibraryInfo
+    QNoImplicitBoolCast
+    QSysInfo
+    QTypeInfo
+    Q_INT16
+    Q_INT32
+    Q_INT64
+    Q_INT8
+    Q_LLONG
+    Q_LONG
+    Q_UINT16
+    Q_UINT32
+    Q_UINT64
+    Q_UINT8
+    Q_ULLONG
+    Q_ULONG
+    Qt
+    QtConfig
+    QtCore
+    QtEndian
+    QtGlobal
+    QtNamespace
+)
+
+set(CORE_INCLUDES
+    ${CORE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int16.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int64.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_int8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_llong.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_long.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint16.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint64.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ullong.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ulong.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qbool.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qconfig.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qcoord.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qendian.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qfeatures.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflag.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflags.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qforeachcontainer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qforeachcontainerbase.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstatic.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstaticdeleter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qincompatibleflag.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qintegerforsize.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qinternal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnoimplicitboolcast.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformdefs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtconfig.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtendian.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtglobal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtnamespace.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtypeinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt_windows.h
+)
+
+set(CORE_PRIVATE_INCLUDES
+    ${CORE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric_p.h
+)
+
+set(CORE_SOURCES
+    ${CORE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qmalloc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.cpp
+)

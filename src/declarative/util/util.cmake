@@ -1,0 +1,80 @@
+set(DECLARATIVE_PUBLIC_INCLUDES
+    ${DECLARATIVE_PUBLIC_INCLUDES}
+    QDeclarativeView
+    QDeclarativePropertyMap
+)
+
+set(DECLARATIVE_INCLUDES
+    ${DECLARATIVE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeview.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepropertymap.h
+)
+
+set(DECLARATIVE_PRIVATE_INCLUDES
+    ${DECLARATIVE_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeapplication_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeutilmodule_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeconnections_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepackage_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeanimation_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeanimation_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativesystempalette_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativespringanimation_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativesmoothedanimation_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativesmoothedanimation_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestate_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestateoperations_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepropertychanges_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestate_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetransitionmanager_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestategroup_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetransition_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistmodel_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistmodel_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistaccessor_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeopenmetaobject_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativenullablevalue_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetimeline_p_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetimer_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativebind_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepixmapcache_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativebehavior_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativefontloader_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestyledtext_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistmodelworkeragent_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativexmllistmodel_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qlistmodelinterface_p.h
+)
+
+set(DECLARATIVE_SOURCES
+    ${DECLARATIVE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeapplication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeutilmodule.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeconnections.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepackage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativesystempalette.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativespringanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativesmoothedanimation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetransitionmanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestateoperations.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepropertychanges.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestategroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetransition.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistaccessor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativeopenmetaobject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetimeline.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativetimer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativebind.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepropertymap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativepixmapcache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativebehavior.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativefontloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativestyledtext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativelistmodelworkeragent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qlistmodelinterface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdeclarativexmllistmodel.cpp
+)

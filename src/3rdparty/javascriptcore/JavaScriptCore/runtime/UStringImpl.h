@@ -79,7 +79,7 @@ public:
             return &empty();
         }
 
-        if (length > ((std::numeric_limits<size_t>::max() - sizeof(UStringImpl)) / sizeof(UChar)))
+        if (length > (unsigned)((std::numeric_limits<size_t>::max() - sizeof(UStringImpl)) / sizeof(UChar)))
             CRASH();
         UStringImpl* resultImpl = static_cast<UStringImpl*>(fastMalloc(sizeof(UChar) * length + sizeof(UStringImpl)));
         output = reinterpret_cast<UChar*>(resultImpl + 1);
@@ -93,7 +93,7 @@ public:
             return &empty();
         }
 
-        if (length > ((std::numeric_limits<size_t>::max() - sizeof(UStringImpl)) / sizeof(UChar)))
+        if (length > (unsigned)((std::numeric_limits<size_t>::max() - sizeof(UStringImpl)) / sizeof(UChar)))
             return 0;
         UStringImpl* resultImpl;
         if (!tryFastMalloc(sizeof(UChar) * length + sizeof(UStringImpl)).getValue(resultImpl))
