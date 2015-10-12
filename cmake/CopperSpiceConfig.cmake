@@ -39,11 +39,8 @@ foreach(component ${COPPERSPICE_COMPONENTS})
         set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component})
     endif()
 
-    set(COPPERSPICE_LIBRARIES
-        ${COPPERSPICE_LIBRARIES}
-        Cs${component}@BUILD_MAJOR@
-    )
-    set(COPPERSPICE_${uppercomp}_LIBRARIES Cs${component}@BUILD_MAJOR@)
+    set(COPPERSPICE_LIBRARIES ${COPPERSPICE_LIBRARIES} CopperSpice::Cs${component}@BUILD_MAJOR@)
+    set(COPPERSPICE_${uppercomp}_LIBRARIES CopperSpice::Cs${component}@BUILD_MAJOR@)
 endforeach()
 
 # Set compiler standard to C++ 11
