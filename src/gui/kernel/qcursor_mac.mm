@@ -245,7 +245,7 @@ void QCursor::setPos(int x, int y)
    pos.x = x;
    pos.y = y;
 
-   CGEventRef e = CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, 0);
+   CGEventRef e = CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, kCGMouseButtonLeft);
    CGEventPost(kCGHIDEventTap, e);
    CFRelease(e);
 }

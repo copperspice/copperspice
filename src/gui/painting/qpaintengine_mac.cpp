@@ -322,13 +322,7 @@ CGColorSpaceRef QCoreGraphicsPaintEngine::macDisplayColorSpace(const QWidget *wi
    }
 
    // Get the color space from the display profile.
-   CGColorSpaceRef colorSpace = 0;
-   CMProfileRef displayProfile = 0;
-   CMError err = CMGetProfileByAVID((CMDisplayIDType)displayID, &displayProfile);
-   if (err == noErr) {
-      colorSpace = CGColorSpaceCreateWithPlatformColorSpace(displayProfile);
-      CMCloseProfile(displayProfile);
-   }
+   CGColorSpaceRef colorSpace = CGDisplayCopyColorSpace(displayID);
 
    // Fallback: use generic DeviceRGB
    if (colorSpace == 0) {
