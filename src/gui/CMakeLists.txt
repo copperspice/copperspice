@@ -141,7 +141,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         objc
     )
     set(EXTRA_GUI_LDFLAGS
-        ${EXTRA_GUI_LDFLAGS
+        ${EXTRA_GUI_LDFLAGS}
         -framework Carbon
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSVISTA)
