@@ -8,7 +8,10 @@
 #  COPPERSPICE_<COMPONENT>_LIBRARIES  - component libraries to link against e.g. CsCore
 #
 
-set(COPPERSPICE_FOUND true)
+if(COPPERSPICE_FOUND)
+    return()
+endif()
+set(COPPERSPICE_FOUND TRUE)
 
 # Compute paths
 get_filename_component(COPPERSPICE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
@@ -17,9 +20,11 @@ get_filename_component(COPPERSPICE_PREFIX ${COPPERSPICE_CMAKE_DIR}/ ABSOLUTE)
 # Our library and binary dependencies (contains definitions for IMPORTED targets)
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceLibraryTargets.cmake")
 include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceBinaryTargets.cmake")
+# Usefull macros that most people will need to build software that uses CopperSpice
+include("${COPPERSPICE_CMAKE_DIR}/CopperSpiceMacros.cmake")
 
 # These are IMPORTED targets
-set(COPPERSPICE_INCLUDES "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+set(COPPERSPICE_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@)
 set(COPPERSPICE_LIBRARIES)
 set(COPPERSPICE_COMPONENTS @BUILD_COMPONENTS@)
 foreach(component ${COPPERSPICE_COMPONENTS})
@@ -30,17 +35,26 @@ foreach(component ${COPPERSPICE_COMPONENTS})
             ${COPPERSPICE_INCLUDES}
             @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon
         )
-        set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon)
+        set(COPPERSPICE_${uppercomp}_INCLUDES
+            @CMAKE_INSTALL_FULL_INCLUDEDIR@/phonon
+        )
     else()
         set(COPPERSPICE_INCLUDES
             ${COPPERSPICE_INCLUDES}
             @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
         )
-        set(COPPERSPICE_${uppercomp}_INCLUDES @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component})
+        set(COPPERSPICE_${uppercomp}_INCLUDES
+            @CMAKE_INSTALL_FULL_INCLUDEDIR@/Qt${component}
+        )
     endif()
 
-    set(COPPERSPICE_LIBRARIES ${COPPERSPICE_LIBRARIES} CopperSpice::Cs${component}@BUILD_MAJOR@)
-    set(COPPERSPICE_${uppercomp}_LIBRARIES CopperSpice::Cs${component}@BUILD_MAJOR@)
+    set(COPPERSPICE_LIBRARIES
+        ${COPPERSPICE_LIBRARIES}
+        CopperSpice::Cs${component}@BUILD_MAJOR@
+    )
+    set(COPPERSPICE_${uppercomp}_LIBRARIES
+        CopperSpice::Cs${component}@BUILD_MAJOR@
+    )
 endforeach()
 
 # Set compiler standard to C++ 11

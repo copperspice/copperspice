@@ -1,16 +1,16 @@
 # This module defines the following macros:
 #
-#   MACRO_GENERATE_RESOURCES()
+#   COPPERSPICE_RESOURCES()
 #
 # Usage:
 #
-#   MACRO_GENERATE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
+#   COPPERSPICE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-macro(MACRO_GENERATE_RESOURCES RESOURCES)
+macro(COPPERSPICE_RESOURCES RESOURCES)
     foreach(resource ${RESOURCES})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)

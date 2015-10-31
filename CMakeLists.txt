@@ -77,12 +77,12 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
         COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
         OUTPUT_VARIABLE DUMPMACHINE_OUTPUT
         RESULT_VARIABLE DUMPMACHINE_EXITCODE
+        OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if(NOT DUMPMACHINE_EXITCODE EQUAL 0)
         message(SEND_ERROR "failed to obtain machine from ${CMAKE_CXX_COMPILER}")
     endif()
-    string(STRIP "${DUMPMACHINE_OUTPUT}" dumpstripped)
-    set(target "${dumpstripped}")
+    set(target "${DUMPMACHINE_OUTPUT}")
 else()
     message(WARNING
         "Your compiler (${CMAKE_CXX_COMPILER}) is not yet handled properly. "
@@ -365,12 +365,6 @@ add_subdirectory(src/xml)
 add_subdirectory(src/xmlpatterns)
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/modules/FindCopperSpice.cmake
-    ${CMAKE_BINARY_DIR}/FindCopperSpice.cmake
-    @ONLY
-)
-
-configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfig.cmake
     ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
     @ONLY
@@ -382,19 +376,11 @@ configure_file(
     @ONLY
 )
 
-
-install(
-    FILES
-    ${CMAKE_BINARY_DIR}/FindCopperSpice.cmake
-    ${CMAKE_SOURCE_DIR}/cmake/modules/CopperSpiceMacros.cmake
-    DESTINATION
-    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/modules
-)
-
 install(
     FILES
     ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
     ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
+    ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
     DESTINATION
     ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
 )
