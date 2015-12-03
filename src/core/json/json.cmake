@@ -4,7 +4,7 @@ set(CORE_PUBLIC_INCLUDES
     QJsonDocument
     QJsonObject
     QJsonParseError
-    QJsonValue 
+    QJsonValue
 )
 
 set(CORE_INCLUDES

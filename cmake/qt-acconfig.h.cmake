@@ -119,4 +119,4 @@
 #cmakedefine STDC_HEADERS 1
 
 /* Version number of package */
-#cmakedefine VERSION "@VERSION@"
+#cmakedefine VERSION "@PACKAGE_VERSION@"

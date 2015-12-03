@@ -11,7 +11,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 macro(COPPERSPICE_RESOURCES RESOURCES)
-    foreach(resource ${RESOURCES})
+    foreach(resource ${RESOURCES} ${ARGN})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
         if(${rscext} STREQUAL ".ui")

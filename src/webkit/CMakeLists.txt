@@ -2391,13 +2391,10 @@ macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
 function_variable_fixup("${EXTRA_WEBKIT_CXXFLAGS}" EXTRA_WEBKIT_CXXFLAGS)
 function_variable_fixup("${EXTRA_WEBKIT_LDFLAGS}" EXTRA_WEBKIT_LDFLAGS)
 
-# XXX: build those as static libraries?
-add_library(webkita OBJECT ${WEBKITA_SOURCES})
-add_library(webkitb OBJECT ${WEBKITB_SOURCES})
-add_library(webkitc OBJECT ${WEBKITC_SOURCES})
-add_library(webkitd OBJECT ${WEBKITD_SOURCES})
-add_library(webkite OBJECT ${WEBKITE_SOURCES})
 foreach(lib a b c d e)
+    string(TOUPPER ${lib} upperalpha)
+    # XXX: build those as static libraries?
+    add_library(webkit${lib} OBJECT ${WEBKIT${upperalpha}_SOURCES})
     set_target_properties(webkit${lib} PROPERTIES
         COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
         LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}

@@ -9,9 +9,9 @@
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-if (NAS_INCLUDES AND NAS_LIBRARIES)
+if(NAS_INCLUDES AND NAS_LIBRARIES)
     set(NAS_FIND_QUIETLY TRUE)
-endif (NAS_INCLUDES AND NAS_LIBRARIES)
+endif()
 
 find_path(NAS_INCLUDES
     NAMES

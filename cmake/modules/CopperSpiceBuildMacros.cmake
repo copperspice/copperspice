@@ -17,7 +17,7 @@
 #
 #   MACRO_GENERATE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
 #
-#   MACRO_WINDOWS_RESOURCES(<windowsmanifest.manifest> [<resource.rc>] ...)
+#   MACRO_WINDOWS_RESOURCES(<windowsmanifest.manifest> [<windowsresource.rc>] ...)
 #
 #   MACRO_GENERATE_PACKAGE(<name> <realname> <cxxflags> <libraries> <requires>)
 #
@@ -66,7 +66,7 @@ macro(MACRO_GENERATE_MISC MISC_INCLUDES SUBDIR)
 endmacro()
 
 macro(MACRO_GENERATE_RESOURCES RESOURCES)
-    foreach(resource ${RESOURCES})
+    foreach(resource ${RESOURCES} ${ARGN})
         get_filename_component(rscext ${resource} EXT)
         get_filename_component(rscname ${resource} NAME_WE)
         if(${rscext} STREQUAL ".ui")
