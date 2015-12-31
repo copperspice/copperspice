@@ -88,10 +88,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         -DQT_NO_STYLE_WINDOWSXP
         -DQT_NO_STYLE_WINDOWSVISTA
         -DQT_NO_TABLET
-        ${FONTCONFIG_DEFINITIONS}
     )
     include_directories(
-        ${FONTCONFIG_INCLUDE_DIR}
+        ${FONTCONFIG_INCLUDES}
         ${FREETYPE_INCLUDE_DIRS}
         # ${X11_INCLUDE_DIR} should contain all of them but it does not sadly
         ${X11_X11_INCLUDE_PATH}

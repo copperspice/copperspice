@@ -26,7 +26,7 @@ if(WITH_MYSQL_PLUGIN AND MYSQL_FOUND)
         ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/mysql/main.cpp
     )
 
-    include_directories(${MYSQL_INCLUDE_DIR})
+    include_directories(${MYSQL_INCLUDES})
     add_library(qsqlmysql4 MODULE ${MYSQL_SOURCES})
     target_link_libraries(qsqlmysql4 ${EXTRA_MYSQL_LIBS})
 

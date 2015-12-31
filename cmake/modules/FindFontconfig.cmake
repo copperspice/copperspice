@@ -1,50 +1,38 @@
-# - Try to find the  Fontconfig
+# - Try to find Fontconfig
 # Once done this will define
 #
 #  FONTCONFIG_FOUND - system has Fontconfig
-#  FONTCONFIG_INCLUDE_DIR - The include directory to use for the fontconfig headers
-#  FONTCONFIG_LIBRARIES - Link these to use FONTCONFIG
-#  FONTCONFIG_DEFINITIONS - Compiler switches required for using FONTCONFIG
-
-# Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
+#  FONTCONFIG_INCLUDES - the Fontconfig include directory
+#  FONTCONFIG_LIBRARIES - The libraries needed to use Fontconfig
+#
+# Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+if(FONTCONFIG_INCLUDES AND FONTCONFIG_LIBRARIES)
+    set(FONTCONFIG_FIND_QUIETLY TRUE)
+endif()
 
-if (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
+find_path(FONTCONFIG_INCLUDES
+    NAMES
+    fontconfig/fontconfig.h
+    HINTS
+    $ENV{FONTCONFIGDIR}/include
+    /usr/include
+    /usr/local/include
+    ${INCLUDE_INSTALL_DIR}
+)
 
-  # in cache already
-  set(FONTCONFIG_FOUND TRUE)
+find_library(FONTCONFIG_LIBRARIES
+    fontconfig
+    HINTS
+    $ENV{FONTCONFIGDIR}/lib
+    /usr/lib
+    /usr/local/lib
+    ${LIB_INSTALL_DIR}
+)
 
-else (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Fontconfig DEFAULT_MSG FONTCONFIG_INCLUDES FONTCONFIG_LIBRARIES)
 
-  if (NOT WIN32)
-    # use pkg-config to get the directories and then use these values
-    # in the FIND_PATH() and FIND_LIBRARY() calls
-    find_package(PkgConfig)
-    pkg_check_modules(PC_FONTCONFIG QUIET fontconfig)
-
-    set(FONTCONFIG_DEFINITIONS ${PC_FONTCONFIG_CFLAGS_OTHER})
-  endif (NOT WIN32)
-
-  find_path(FONTCONFIG_INCLUDE_DIR fontconfig/fontconfig.h
-    PATHS
-    ${PC_FONTCONFIG_INCLUDEDIR}
-    ${PC_FONTCONFIG_INCLUDE_DIRS}
-    /usr/X11/include
-  )
-
-  find_library(FONTCONFIG_LIBRARIES NAMES fontconfig
-    PATHS
-    ${PC_FONTCONFIG_LIBDIR}
-    ${PC_FONTCONFIG_LIBRARY_DIRS}
-  )
-
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(Fontconfig DEFAULT_MSG FONTCONFIG_LIBRARIES FONTCONFIG_INCLUDE_DIR )
-
-  mark_as_advanced(FONTCONFIG_LIBRARIES FONTCONFIG_INCLUDE_DIR)
-
-endif (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
-
+mark_as_advanced(FONTCONFIG_INCLUDES FONTCONFIG_LIBRARIES)
