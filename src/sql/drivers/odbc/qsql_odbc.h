@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2015 Barbara Geller
-* Copyright (c) 2012-2015 Ansel Sermersheim
+* Copyright (c) 2012-2016 Barbara Geller
+* Copyright (c) 2012-2016 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
@@ -87,7 +87,7 @@ class QODBCResult : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QODBCDriver)
+   CS_OBJECT(QODBCDriver)
 
  public:
    explicit QODBCDriver(QObject *parent = 0);

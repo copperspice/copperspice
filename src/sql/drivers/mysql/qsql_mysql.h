@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2015 Barbara Geller
-* Copyright (c) 2012-2015 Ansel Sermersheim
+* Copyright (c) 2012-2016 Barbara Geller
+* Copyright (c) 2012-2016 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
@@ -84,7 +84,7 @@ class QMYSQLResult : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QMYSQLDriver)
+   CS_OBJECT(QMYSQLDriver)
    friend class QMYSQLResult;
 
  public:

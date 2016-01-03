@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2015 Barbara Geller
-* Copyright (c) 2012-2015 Ansel Sermersheim
+* Copyright (c) 2012-2016 Barbara Geller
+* Copyright (c) 2012-2016 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
@@ -72,7 +72,7 @@ class QDB2Result : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_DB2 QDB2Driver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QDB2Driver)
+   CS_OBJECT(QDB2Driver)
 
  public:
    explicit QDB2Driver(QObject *parent = 0);

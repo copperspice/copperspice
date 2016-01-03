@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2015 Barbara Geller
-* Copyright (c) 2012-2015 Ansel Sermersheim
+* Copyright (c) 2012-2016 Barbara Geller
+* Copyright (c) 2012-2016 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
@@ -1089,7 +1089,7 @@ void QMessageBox::aboutCs(QWidget *parent)
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText(tr("Copyright (C) 2012-2015 Ansel Sermersheim & Barbara Geller\n"
+   msg3->setText(tr("Copyright (C) 2012-2016 Ansel Sermersheim & Barbara Geller\n"
                     "Copyright (C) 2012-2014 Digia Plc and/or its subsidiary(-ies)\n"
                     "Copyright (C) 2008-2012 Nokia Corporation and/or its subsidiary(-ies)"));
 
