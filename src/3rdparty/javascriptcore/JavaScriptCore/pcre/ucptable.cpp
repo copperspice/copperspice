@@ -1,6 +1,8 @@
 /* This source module is automatically generated from the Unicode
 property table. See ucpinternal.h for a description of the layout. */
 
+#include "ucpinternal.h"
+
 static const cnode ucp_table[] = {
   { 0x09800000, 0x0000001f },
   { 0x09000020, 0x74000000 },

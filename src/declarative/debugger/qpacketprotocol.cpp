@@ -23,7 +23,7 @@
 *
 ***********************************************************************/
 
-#include "private/qpacketprotocol_p.h"
+#include "qpacketprotocol_p.h"
 
 #include <QBuffer>
 #include <QElapsedTimer>

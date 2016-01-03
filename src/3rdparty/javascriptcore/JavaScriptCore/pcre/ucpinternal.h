@@ -44,6 +44,9 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Internal header file defining the layout of the bits in each pair of 32-bit
 words that form a data item in the table. */
 
+#ifndef UCPINTERNAL_H
+#define UCPINTERNAL_H
+
 typedef struct cnode {
   unsigned f0;
   unsigned f1;
@@ -122,5 +125,7 @@ When searching the data, proceed as follows:
 (7) Otherwise, set the bottom to one element past the current point and goto
     (2).
 */
+
+#endif // UCPINTERNAL_H
 
 /* End of ucpinternal.h */

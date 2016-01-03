@@ -30,6 +30,7 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qvector.h>
 #include <QtGui/qitemselectionmodel.h>
+#include <QtGui/qevent.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -6124,7 +6124,7 @@ QString XsdSchemaParser::readXPathAttribute(const QString &attributeName, XPathT
 
    const QList<QXmlName> namespaceBindings = m_namespaceSupport.namespaceBindings();
    for (int i = 0; i < namespaceBindings.count(); ++i) {
-      if (!namespaceBindings.at(i).prefix() == StandardPrefixes::empty) {
+      if (namespaceBindings.at(i).prefix() != StandardPrefixes::empty) {
          queryPrivate->addAdditionalNamespaceBinding(namespaceBindings.at(i));
       }
    }

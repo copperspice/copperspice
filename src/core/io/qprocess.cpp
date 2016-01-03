@@ -2360,7 +2360,7 @@ QT_BEGIN_INCLUDE_NAMESPACE
 static char *qt_empty_environ[] = { 0 };
 #define environ qt_empty_environ
 #elif !defined(Q_OS_WIN)
-extern char **environ;
+extern "C" { char **environ; }
 #endif
 QT_END_INCLUDE_NAMESPACE
 

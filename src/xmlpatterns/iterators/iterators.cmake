@@ -1,0 +1,35 @@
+set(XMLPATTERNS_PRIVATE_INCLUDES
+    ${XMLPATTERNS_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qcachingiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdeduplicateiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdistinctiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qemptyiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qexceptiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qindexofiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qinsertioniterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qintersectiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qitemmappingiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qrangeiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qremovaliterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsequencemappingiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsingletoniterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsubsequenceiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qtocodepointsiterator_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qunioniterator_p.h
+)
+
+set(XMLPATTERNS_SOURCES
+    ${XMLPATTERNS_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qcachingiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdeduplicateiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qdistinctiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qexceptiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qindexofiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qinsertioniterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qintersectiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qrangeiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qremovaliterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qsubsequenceiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qtocodepointsiterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/iterators/qunioniterator.cpp
+)

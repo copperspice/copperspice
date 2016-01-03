@@ -1,0 +1,198 @@
+set(GUI_PUBLIC_INCLUDES
+    ${GUI_PUBLIC_INCLUDES}
+    QCDEStyle
+    QCleanlooksStyle
+    QCommonStyle
+    QGtkStyle
+    QMacStyle
+    QMotifStyle
+    QPlastiqueStyle
+    QProxyStyle
+    QStyle
+    QStyleFactory
+    QStyleFactoryInterface
+    QStyleHintReturn
+    QStyleHintReturnMask
+    QStyleHintReturnVariant
+    QStyleOption
+    QStyleOptionButton
+    QStyleOptionComboBox
+    QStyleOptionComplex
+    QStyleOptionDockWidget
+    QStyleOptionDockWidgetV2
+    QStyleOptionFocusRect
+    QStyleOptionFrame
+    QStyleOptionFrameV2
+    QStyleOptionFrameV3
+    QStyleOptionGraphicsItem
+    QStyleOptionGroupBox
+    QStyleOptionHeader
+    QStyleOptionMenuItem
+    QStyleOptionProgressBar
+    QStyleOptionProgressBarV2
+    QStyleOptionRubberBand
+    QStyleOptionSizeGrip
+    QStyleOptionSlider
+    QStyleOptionSpinBox
+    QStyleOptionTab
+    QStyleOptionTabBarBase
+    QStyleOptionTabBarBaseV2
+    QStyleOptionTabV2
+    QStyleOptionTabV3
+    QStyleOptionTabWidgetFrame
+    QStyleOptionTabWidgetFrameV2
+    QStyleOptionTitleBar
+    QStyleOptionToolBar
+    QStyleOptionToolBoxV2
+    QStyleOptionToolBox
+    QStyleOptionToolBarV2
+    QStyleOptionToolButton
+    QStyleOptionViewItem
+    QStyleOptionViewItemV2
+    QStyleOptionViewItemV3
+    QStyleOptionViewItemV4
+    QStylePlugin
+    QWindowsStyle
+    QWindowsVistaStyle
+    QWindowsXPStyle
+)
+
+set(GUI_INCLUDES
+    ${GUI_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcdestyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmotifstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qplastiquestyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylefactory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylefactoryinterface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehintreturn.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehintreturnmask.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehintreturnvariant.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoption.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptioncombobox.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptioncomplex.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiondockwidget.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiondockwidgetv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionfocusrect.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionframe.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionframev2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionframev3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiongraphicsitem.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiongroupbox.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionheader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionmenuitem.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionprogressbar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionprogressbarv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionrubberband.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionsizegrip.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionslider.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionspinbox.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontab.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabbarbase.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabbarbasev2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabv3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabwidgetframe.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontabwidgetframev2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontitlebar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontoolbar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontoolbox.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontoolboxv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontoolbarv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptiontoolbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionviewitem.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionviewitemv2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionviewitemv3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoptionviewitemv4.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleplugin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle.h
+)
+
+set(GUI_PRIVATE_INCLUDES
+    ${GUI_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstylepixmaps_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmotifstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkpainter_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstylepixmaps_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehelper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle_p.h
+)
+
+set(GUI_SOURCES
+    ${GUI_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmotifstyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylefactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyleplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle_default.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qplastiquestyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcdestyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.qrc
+)
+
+if(X11_FOUND)
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp
+    )
+endif()
+
+if(GTK2_FOUND)
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkpainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle_p.cpp
+    )
+    set(EXTRA_GUI_LIBS
+        ${EXTRA_GUI_LIBS}
+        ${GTK2_LIBRARIES}
+    )
+    include_directories(${GTK2_INCLUDE_DIRS})
+    add_definitions(${GTK2_DEFINITIONS})
+else()
+    add_definitions(-DQT_NO_STYLE_GTK)
+endif()
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle.cpp
+    )
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(GUI_SOURCES
+        ${GUI_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.mm
+    )
+    add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
+    add_definitions(-DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP)
+endif()
