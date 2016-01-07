@@ -15,7 +15,7 @@
 #   CopperSpice::CsCore1 for consistency. The only problem can be for projects
 #   not checking (or requesting) for specifiec CopperSpice version requirement
 #   from their build systems leading to build failures on their side as things
-#   tend to break between major releases (usually).
+#   tend to break between major releases.
 #
 # * Definitions used on components (e.g. -DQT_NO_FREETYPE) should probably be
 #   set as interface definitions of some sort, also exposing them will make it
@@ -59,15 +59,15 @@ endif()
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "2")
-set(BUILD_MICRO "0")
+set(BUILD_MICRO "1")
 # TODO: add DBus, Declarative and ScriptTools once they build
-set(BUILD_COMPONENTS "Core Gui Network OpenGL Sql Svg Xml XmlPatterns Script Phonon Multimedia")
+set(BUILD_COMPONENTS "Core Gui Multimedia Network Phonon OpenGL Script Sql Svg Xml XmlPatterns")
 set(PACKAGE "copperspice")
 set(PACKAGE_NAME "copperspice")
 set(PACKAGE_VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
 set(PACKAGE_STRING "copperspice ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
 set(PACKAGE_TARNAME "copperspice")
-set(PACKAGE_BUGREPORT "ansel@copperspice.com")
+set(PACKAGE_BUGREPORT "info@copperspice.com")
 set(PACKAGE_URL "http://www.copperspice.com/") # empty leaves it undefined
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION "${PACKAGE_VERSION}")
@@ -94,8 +94,8 @@ else()
     set(target "${CMAKE_SYSTEM}")
 endif()
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ library derived from the existing Qt 4.8 framework")
-set(CPACK_PACKAGE_VENDOR "copperspice")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ GUI library")
+set(CPACK_PACKAGE_VENDOR "CopperSpice")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license/LICENSE.LGPL")
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/.git;${CPACK_SOURCE_IGNORE_FILES}")
@@ -165,7 +165,7 @@ set_package_properties(OpenSSL PROPERTIES
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     PURPOSE "Required for compression support"
-    DESCRIPTION "A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
+    DESCRIPTION "A compression Library"
     URL "http://zlib.net"
     TYPE RECOMMENDED
 )
@@ -173,7 +173,7 @@ set_package_properties(ZLIB PROPERTIES
 find_package(Cups)
 set_package_properties(Cups PROPERTIES
     PURPOSE "Required for printing support"
-    DESCRIPTION "CUPS is the standards-based, open source printing system"
+    DESCRIPTION "CUPS is the standards-based open source printing system"
     URL "http://www.cups.org"
     TYPE RECOMMENDED
 )
@@ -189,7 +189,7 @@ set_package_properties(ALSA PROPERTIES
 find_package(PostgreSQL)
 set_package_properties(PostgreSQL PROPERTIES
     PURPOSE "Required for PostgreSQL database support"
-    DESCRIPTION "The world's most advanced open source database"
+    DESCRIPTION "Popular open source database"
     URL "http://www.postgresql.org"
     TYPE RECOMMENDED
 )
@@ -197,7 +197,7 @@ set_package_properties(PostgreSQL PROPERTIES
 find_package(MySQL)
 set_package_properties(MySQL PROPERTIES
     PURPOSE "Required for MySQL database support"
-    DESCRIPTION "The world's most popular open source database"
+    DESCRIPTION "Popular open source database"
     URL "http://www.mysql.com"
     TYPE RECOMMENDED
 )
@@ -273,6 +273,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     )
     include_directories(${GLIB2_INCLUDE_DIR})
 
+    find_package(GOBJECT2)
+    set_package_properties(GOBJECT2 PROPERTIES
+        PURPOSE "Required for glib mainloop support"
+        DESCRIPTION "Core application building blocks for libraries and applications written in C"
+        URL "https://developer.gnome.org/glib"
+        TYPE REQUIRED
+    )
+    include_directories(${GOBJECT2_INCLUDE_DIR})
+
     find_package(GStreamer)
     set_package_properties(GStreamer PROPERTIES
         PURPOSE "Required for multimedia support"
@@ -287,7 +296,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         find_package(Iconv)
         set_package_properties(Iconv PROPERTIES
             PURPOSE "Iconv support"
-            DESCRIPTION "iconv() implementation, for use on systems which don't have one or lack Unicode support"
+            DESCRIPTION "iconv() implementation, for use on systems which do not have one or lack Unicode support"
             URL "http://www.gnu.org/software/libiconv/"
             TYPE REQUIRED
         )
@@ -331,14 +340,25 @@ configure_file(
 )
 
 option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
-add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "the world's most advanced open source database")
+add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")
 
 option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
-add_feature_info(MySQL WITH_MYSQL_PLUGIN "the world's most popular open source database")
+add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
 
 option(WITH_WEBKIT "Build WebKit component" ON)
-add_feature_info(WebKit WITH_WEBKIT "an open source web browser engine")
+add_feature_info(WebKit WITH_WEBKIT "Open source web browser engine")
 
+# static libs, libs, exe    src/core/lib
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# The Ninja generator does not yet know how to build archives in pieces, and so response
+# files must be used to deal with very long linker command lines.
+# See https://bugs.webkit.org/show_bug.cgi?id=129771
+set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
+
+#
 add_subdirectory(src/core)
 # out for now add_subdirectory(declarative)
 add_subdirectory(src/gui)

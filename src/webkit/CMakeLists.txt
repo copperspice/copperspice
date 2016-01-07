@@ -32,7 +32,7 @@ set(EXTRA_WEBKIT_LIBS
     CsNetwork${BUILD_MAJOR}
     CsScript${BUILD_MAJOR}
 )
-set(EXTRA_WEBKIT_CXXFLAGS -O2) # that's not always wanted!
+set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC) # that's not always wanted!
 set(EXTRA_WEBKIT_LDFLAGS)
 
 include_directories(

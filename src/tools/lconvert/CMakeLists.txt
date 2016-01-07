@@ -18,7 +18,6 @@ include_directories(
 )
 
 set(LCONVERT_SOURCES
-    $<TARGET_OBJECTS:sharedtools>
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
