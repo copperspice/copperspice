@@ -145,8 +145,8 @@
 #define QT_FT_BEGIN_HEADER
 #define QT_FT_END_HEADER
 
-#include <qrasterdefs_p.h>
-#include <qgrayraster_p.h>
+#include <private/qrasterdefs_p.h>
+#include <private/qgrayraster_p.h>
 
 #include <stdlib.h>
 #include <stdio.h>

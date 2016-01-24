@@ -1,29 +1,25 @@
-CopperSpice is a C++ library derived from the existing Qt 4.8 framework. Our
-goal was to change the core design of the libraries, leveraging template
-functionality and C++11 capabilities.
+CopperSpice is a C++ library derived from the Qt framework. Our goal
+was to change the core design of the libraries leveraging template
+functionality and modern C++11 capabilities.
 
-The redesign allowed us to completely remove the Qt Meta-Object Compiler (moc)
-system. Moc is a code generator and did not support many aspects of C++
-including templates, complex data types, static type checking, and relies
-heavily on string comparisons. Removing moc improves run time performance,
-reduces the complexity of the build process, and allows more issues to be
-detected at compile time.
+The redesign allowed us to completely remove the Qt Meta-Object
+Compiler (moc) system. Moc is a code generator and did not support
+many aspects of C++ including templates, complex data types, static
+type checking, and relies heavily on string comparisons. Removing moc
+improves run time performance, reduces the complexity of the build
+process, and allows more issues to be detected at compile time.
 
-CopperSpice library key features:
-
- * The CopperSpice libraries are a fork of Nokia LGPL Qt 4.8.2
- * New classes and methods have been added which exceed what is available in
-   Qt 4 or Qt 5
+ * New classes, methods, and functionality have been added which
+   exceeds what was previously available
+ * CopperSpice can be linked directly into any standard C++ application
  * Qt Meta-Object Compiler (moc) is fully obsolete
- * Our libraries can be linked directly into any standard C++ application
  * A template class can inherit from QObject
  * CopperSpice includes several existing Qt 5 classes
- * The CopperSpice libraries were built using GNU Autotools
- * CopperSpice makes extensive use of C++11 features like variadic templates,
+ * The CS libraries can be built using GNU Autotools or CMake
+ * CS makes extensive use of C++11 features like variadic templates,
    constexpr, lambdas, atomics, and many others
 
-CopperSpice currently consists of the libraries listed below. Additional
-libraries will be added as development continues.
+CopperSpice currently consists of the libraries listed below.
 
  * CsCore
  * CsGui
@@ -38,9 +34,6 @@ libraries will be added as development continues.
  * CsXml
  * CsXmlPatterns
 
-We have made the process of converting to CopperSpice simple and straight
-forward. Simply convert your Qt application header files one time using our
-PepperMill utility. The Makefiles from our sample KitchenSink and Diamond
-Editor applications can be used as a guide to create your project files.
 
-For additional information email: info [at] copperspice.net
+Website: copperspice.com
+Email: info@copperspice.com

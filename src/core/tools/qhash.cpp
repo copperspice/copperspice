@@ -46,7 +46,7 @@
 
 #ifdef Q_OS_UNIX
 #include <stdio.h>
-#include "qcore_unix_p.h"
+#include "private/qcore_unix_p.h"
 #endif 
 
 #include <limits.h>

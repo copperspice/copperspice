@@ -126,6 +126,6 @@ When searching the data, proceed as follows:
     (2).
 */
 
-#endif // UCPINTERNAL_H
+#endif
 
 /* End of ucpinternal.h */
