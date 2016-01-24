@@ -415,13 +415,13 @@ QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
          continue;
       }
 
-      if (!ReadProcessMemory(trayProcess, (LPVOID) buttonData.dwData, appData, sizeof(AppData), &numBytes)) {
+      if (!ReadProcessMemory(trayProcess, (LPVOID) buttonData.dwData, &appData, sizeof(AppData), &numBytes)) {
          continue;
       }
 
       bool isHidden = buttonData.fsState & TBSTATE_HIDDEN;
 
-      if (m_hWnd == appData.hwnd &&
+      if (winId() == appData.hwnd &&
 	  iconId == appData.uID && !isHidden) {
          SendMessage(trayHandle, TB_GETITEMRECT, toolbarButton , (LPARAM)data);
          RECT iconRect = {0, 0, 0, 0};
