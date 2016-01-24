@@ -201,15 +201,15 @@ clean-cs:
 	find . -name 'ui_*.h' -exec rm -f \{\} \;	
 
 install-data-hook: webkit-headers
-	mkdir -p $(includedir)
-	cp -r include/Qt* include/phonon $(includedir)
+	mkdir -p $(DESTDIR)$(includedir)
+	cp -r include/Qt* include/phonon $(DESTDIR)$(includedir)
 
 uninstall-hook:
 	for i in `cd include; find Qt* -type f`; do \
-		rm  $(includedir)/$$i; \
+		rm  $(DESTDIR)$(includedir)/$$i; \
 	done
 	for i in `cd include; find Qt* -type f`; do \
-		rmdir $(includedir); \
+		rmdir $(DESTDIR)$(includedir); \
 	done
 
 .PHONY: clean-qrc
