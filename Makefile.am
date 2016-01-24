@@ -167,7 +167,7 @@ distdir: $(DISTFILES) DISTFILES.list
 	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
 	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
 	|| chmod -R a+r "$(distdir)"
-	-rm -f DISTFILES.list
+	-rm -f DISTFILES.list $(distdir)/README
 	find $(distdir) -exec touch -r $(distdir) \{\} \;
 
 
