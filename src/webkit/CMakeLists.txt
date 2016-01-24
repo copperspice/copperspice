@@ -40,14 +40,19 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
     ${CMAKE_BINARY_DIR}/include/QtNetwork
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
+    ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
     ${CMAKE_BINARY_DIR}/include/QtWebKit
     ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit
+    ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit/private
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore

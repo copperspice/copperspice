@@ -13,14 +13,19 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
     ${CMAKE_BINARY_DIR}/include/QtNetwork
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
     ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript
+    ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
     ${CMAKE_BINARY_DIR}/include/QtDeclarative
     ${CMAKE_BINARY_DIR}/privateinclude/QtDeclarative
+    ${CMAKE_BINARY_DIR}/privateinclude/QtDeclarative/private
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/debugger
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsitems

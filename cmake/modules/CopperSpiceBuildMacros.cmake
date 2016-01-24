@@ -50,7 +50,7 @@ endmacro()
 macro(MACRO_GENERATE_PRIVATE PRIVATE_INCLUDES SUBDIR)
     foreach(privheader ${PRIVATE_INCLUDES})
         get_filename_component(privname ${privheader} NAME)
-        set(privout ${CMAKE_BINARY_DIR}/privateinclude/${SUBDIR}/${privname})
+        set(privout ${CMAKE_BINARY_DIR}/privateinclude/${SUBDIR}/private/${privname})
         # message(STATUS "Writing private: ${privout}")
         configure_file(${privheader} ${privout} COPYONLY)
     endforeach(privheader)
@@ -78,6 +78,7 @@ macro(MACRO_GENERATE_RESOURCES RESOURCES)
             )
         elseif(${rscext} STREQUAL ".qrc")
             set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qrc_${rscname}.cpp)
+	    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/qrc_{$rscname}.cpp PROPERTIES GENERATED 1)
             add_custom_command(
                 OUTPUT ${rscout}
                 COMMAND rcc${TOOLS_SUFFIX} "${resource}" -o "${rscout}" -name ${rscname}

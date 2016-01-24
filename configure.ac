@@ -95,6 +95,7 @@ PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", 
 
 # not mandatory
 PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
+PKG_CHECK_MODULES(ALSA, alsa, ALSA="yes", true)
 
 # verify dependencies
 AC_SEARCH_LIBS([IceOpenConnection], [ICE], [], missing="$missing ICE")
@@ -148,9 +149,9 @@ AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 
-# turns zlib and alsa off always
+# turns zlib off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)
-AM_CONDITIONAL(ALSA, test "x" = x""yes)
+AM_CONDITIONAL(ALSA, test "x$ALSA" = x""yes)
 
 AC_ARG_ENABLE([webkit],	AS_HELP_STRING([--disable-webkit], [Do not build WebKit]))
 AM_CONDITIONAL(WEBKIT, test "x$enable_webkit" != "xno")

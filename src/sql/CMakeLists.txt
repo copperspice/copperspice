@@ -13,8 +13,10 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
     ${CMAKE_BINARY_DIR}/include/QtSql
     ${CMAKE_BINARY_DIR}/privateinclude/QtSql
+    ${CMAKE_BINARY_DIR}/privateinclude/QtSql/private
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel
     ${CMAKE_CURRENT_SOURCE_DIR}/models

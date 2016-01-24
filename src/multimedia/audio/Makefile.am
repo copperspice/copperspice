@@ -63,5 +63,5 @@ lib_libCsMultimedia1_la_SOURCES += \
 	src/multimedia/audio/qaudiooutput_alsa_p.cpp \
 	src/multimedia/audio/qaudioinput_alsa_p.cpp
 
-lib_libCsMultimedia1_la_LIBADD+= -lasound
+lib_libCsMultimedia1_la_LIBADD+= $(ALSA_LIBS)
 endif

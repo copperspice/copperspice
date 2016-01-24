@@ -11,8 +11,10 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
     ${CMAKE_BINARY_DIR}/include/QtNetwork
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
     ${CMAKE_CURRENT_SOURCE_DIR}/access
     ${CMAKE_CURRENT_SOURCE_DIR}/bearer
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel

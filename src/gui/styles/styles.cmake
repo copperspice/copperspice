@@ -152,6 +152,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcdestyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle.qrc
+    ${CMAKE_CURRENT_BINARY_DIR}/qrc_qstyle.cpp
 )
 
 if(X11_FOUND)

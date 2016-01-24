@@ -21,12 +21,16 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore
+    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/privateinclude/QtGui
+    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
     ${CMAKE_BINARY_DIR}/include/QtNetwork
     ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork
+    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
     ${CMAKE_BINARY_DIR}/include/phonon
     ${CMAKE_BINARY_DIR}/privateinclude/phonon
+    ${CMAKE_BINARY_DIR}/privateinclude/phonon/private
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
