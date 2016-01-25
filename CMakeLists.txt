@@ -276,8 +276,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     find_package(GOBJECT2)
     set_package_properties(GOBJECT2 PROPERTIES
         PURPOSE "Required for glib mainloop support"
-        DESCRIPTION "Core application building blocks for libraries and applications written in C"
-        URL "https://developer.gnome.org/glib"
+        DESCRIPTION "The object system used for Pango and GTK+"
+        URL "https://developer.gnome.org/gobject"
         TYPE REQUIRED
     )
     include_directories(${GOBJECT2_INCLUDE_DIR})
