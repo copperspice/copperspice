@@ -162,9 +162,6 @@ add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")
 option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
 add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
 
-option(WITH_WEBKIT "Build WebKit component" ON)
-add_feature_info(WebKit WITH_WEBKIT "Open source web browser engine")
-
 foreach(component ${_OPTIONAL_COMPONENTS})
     string(TOUPPER ${component} uppercomp)
     option(WITH_${uppercomp} "Build ${component} component" ON)
