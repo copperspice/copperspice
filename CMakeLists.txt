@@ -60,8 +60,10 @@ string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "2")
 set(BUILD_MICRO "1")
+# everything is optional except core
+set(BUILD_COMPONENTS "Core")
 # TODO: add DBus, Declarative and ScriptTools once they build
-set(BUILD_COMPONENTS "Core Gui Multimedia Network Phonon OpenGL Script Sql Svg Xml XmlPatterns")
+set(_OPTIONAL_COMPONENTS Gui Multimedia Network Phonon OpenGL Script Sql Svg Xml XmlPatterns WebKit)
 set(PACKAGE "copperspice")
 set(PACKAGE_NAME "copperspice")
 set(PACKAGE_VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
@@ -154,6 +156,21 @@ check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;str
 check_type_size(size_t SIZEOF_SIZE_T)
 opj_test_large_files(HAVE_LARGEFILESUPPORT)
 
+option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
+add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")
+
+option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
+add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
+
+option(WITH_WEBKIT "Build WebKit component" ON)
+add_feature_info(WebKit WITH_WEBKIT "Open source web browser engine")
+
+foreach(component ${_OPTIONAL_COMPONENTS})
+    string(TOUPPER ${component} uppercomp)
+    option(WITH_${uppercomp} "Build ${component} component" ON)
+    add_feature_info(${component} WITH_${uppercomp} "")
+endforeach()
+
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Required for HTTPS support"
@@ -216,51 +233,12 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+    # required by core component
     find_package(Threads)
     set_package_properties(Threads PROPERTIES
         PURPOSE "Required for threading support"
         DESCRIPTION "Platform dependant threading library"
         URL ""
-        TYPE REQUIRED
-    )
-
-    find_package(NAS)
-    set_package_properties(NAS PROPERTIES
-        PURPOSE "Required for basic audio support over wire"
-        DESCRIPTION "Network transparent, client/server audio transport system"
-        URL "http://www.radscan.com/nas.html"
-        TYPE REQUIRED
-    )
-
-    find_package(OpenGL)
-    set_package_properties(OpenGL PROPERTIES
-        PURPOSE "Required for OpenGL support"
-        DESCRIPTION "The Mesa 3D Graphics Library"
-        URL "http://www.mesa3d.org/"
-        TYPE REQUIRED
-    )
-
-    find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
-    set_package_properties(X11 PROPERTIES
-        PURPOSE "Required for X11/X.Org integration support"
-        DESCRIPTION "Open source implementation of the X Window System"
-        URL "http://www.x.org"
-        TYPE REQUIRED
-    )
-
-    find_package(Fontconfig)
-    set_package_properties(Fontconfig PROPERTIES
-        PURPOSE "Required for fonts configuration support"
-        DESCRIPTION "Library for configuring and customizing font access"
-        URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
-        TYPE REQUIRED
-    )
-
-    find_package(Freetype)
-    set_package_properties(Freetype PROPERTIES
-        PURPOSE "Required for fonts configuration support"
-        DESCRIPTION "Freely available software library to render fonts"
-        URL "http://www.freetype.org"
         TYPE REQUIRED
     )
 
@@ -282,22 +260,76 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
     )
     include_directories(${GOBJECT2_INCLUDE_DIR})
 
-    find_package(GStreamer)
-    set_package_properties(GStreamer PROPERTIES
-        PURPOSE "Required for multimedia support"
-        DESCRIPTION "Open source multimedia framework"
-        URL "http://gstreamer.freedesktop.org"
-        TYPE REQUIRED
-    )
-
-    find_package(LibXml2 REQUIRED)
-
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         find_package(Iconv)
         set_package_properties(Iconv PROPERTIES
             PURPOSE "Iconv support"
             DESCRIPTION "iconv() implementation, for use on systems which do not have one or lack Unicode support"
             URL "http://www.gnu.org/software/libiconv/"
+            TYPE REQUIRED
+        )
+    endif()
+
+    if(WITH_GUI)
+        find_package(NAS)
+        set_package_properties(NAS PROPERTIES
+            PURPOSE "Required for basic audio support over wire"
+            DESCRIPTION "Network transparent, client/server audio transport system"
+            URL "http://www.radscan.com/nas.html"
+            TYPE REQUIRED
+        )
+
+        find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender X11)
+        set_package_properties(X11 PROPERTIES
+            PURPOSE "Required for X11/X.Org integration support"
+            DESCRIPTION "Open source implementation of the X Window System"
+            URL "http://www.x.org"
+            TYPE REQUIRED
+        )
+
+        find_package(Fontconfig)
+        set_package_properties(Fontconfig PROPERTIES
+            PURPOSE "Required for fonts configuration support"
+            DESCRIPTION "Library for configuring and customizing font access"
+            URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
+            TYPE REQUIRED
+        )
+
+        find_package(Freetype)
+        set_package_properties(Freetype PROPERTIES
+            PURPOSE "Required for fonts configuration support"
+            DESCRIPTION "Freely available software library to render fonts"
+            URL "http://www.freetype.org"
+            TYPE REQUIRED
+        )
+    endif()
+
+    if(WITH_OPENGL)
+        find_package(OpenGL)
+        set_package_properties(OpenGL PROPERTIES
+            PURPOSE "Required for OpenGL support"
+            DESCRIPTION "The Mesa 3D Graphics Library"
+            URL "http://www.mesa3d.org/"
+            TYPE REQUIRED
+        )
+    endif()
+
+    if(WITH_MULTIMEDIA)
+        find_package(GStreamer)
+        set_package_properties(GStreamer PROPERTIES
+            PURPOSE "Required for multimedia support"
+            DESCRIPTION "Open source multimedia framework"
+            URL "http://gstreamer.freedesktop.org"
+            TYPE REQUIRED
+        )
+    endif()
+
+    if(WITH_WEBKIT)
+        find_package(LibXml2)
+        set_package_properties(LibXml2 PROPERTIES
+            PURPOSE "Required for XML support in WebKit"
+            DESCRIPTION "XML C parser and toolkit developed for the Gnome project"
+            URL "http://www.xmlsoft.org/"
             TYPE REQUIRED
         )
     endif()
@@ -339,15 +371,6 @@ configure_file(
     ${CMAKE_BINARY_DIR}/include/QtCore/cs_build_info.h
 )
 
-option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
-add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")
-
-option(WITH_MYSQL_PLUGIN "Build MySQL database plugin (if possible)" ON)
-add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
-
-option(WITH_WEBKIT "Build WebKit component" ON)
-add_feature_info(WebKit WITH_WEBKIT "Open source web browser engine")
-
 # static libs, libs, exe    src/core/lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -358,30 +381,41 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # See https://bugs.webkit.org/show_bug.cgi?id=129771
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
-#
-add_subdirectory(src/core)
-# out for now add_subdirectory(declarative)
-add_subdirectory(src/gui)
-add_subdirectory(src/multimedia)
-add_subdirectory(src/network)
-add_subdirectory(src/opengl)
-add_subdirectory(src/phonon)
-add_subdirectory(src/script)
-# out for now add_subdirectory(scripttools)
-add_subdirectory(src/sql)
-add_subdirectory(src/svg)
-add_subdirectory(src/tools/shared)
-add_subdirectory(src/tools/lconvert)
-add_subdirectory(src/tools/lrelease)
-add_subdirectory(src/tools/lupdate)
-add_subdirectory(src/tools/rcc)
-add_subdirectory(src/tools/uic)
-if(WITH_WEBKIT)
-    add_subdirectory(src/webkit)
-    set(BUILD_COMPONENTS "${BUILD_COMPONENTS} WebKit")
+# check components dependencies
+# TODO: revisit once _OPTIONAL_COMPONENTS has changed
+if(WITH_MULTIMEDIA AND NOT WITH_GUI)
+    message(SEND_ERROR "Multimedia component requires Gui component")
+elseif(WITH_PHONON AND NOT (WITH_GUI AND WITH_NETWORK))
+    message(SEND_ERROR "Phonon component requires Gui and Network components")
+elseif(WITH_OPENGL AND NOT WITH_GUI)
+    message(SEND_ERROR "OpenGL component requires Gui component")
+elseif(WITH_SVG AND NOT WITH_GUI)
+    message(SEND_ERROR "Svg component requires Gui component")
+elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
+    message(SEND_ERROR "XmlPatterns component requires Network component")
+elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
+    message(SEND_ERROR "WebKit component requires Network component")
 endif()
-add_subdirectory(src/xml)
-add_subdirectory(src/xmlpatterns)
+
+add_subdirectory(src/core)
+foreach(component ${_OPTIONAL_COMPONENTS})
+    string(TOUPPER ${component} uppercomp)
+    if(WITH_${uppercomp})
+        string(TOLOWER ${component} lowercomp)
+        add_subdirectory(src/${lowercomp})
+        set(BUILD_COMPONENTS "${BUILD_COMPONENTS} ${component}")
+    endif()
+endforeach()
+if(WITH_XML)
+    add_subdirectory(src/tools/shared)
+    add_subdirectory(src/tools/lconvert)
+    add_subdirectory(src/tools/lrelease)
+    add_subdirectory(src/tools/lupdate)
+endif()
+if(WITH_XML AND WITH_GUI)
+    add_subdirectory(src/tools/rcc)
+    add_subdirectory(src/tools/uic)
+endif()
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceConfig.cmake
