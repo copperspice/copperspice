@@ -391,7 +391,7 @@ elseif(WITH_SVG AND NOT WITH_GUI)
 elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
     message(SEND_ERROR "XmlPatterns component requires Network component")
 elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
-    message(SEND_ERROR "WebKit component requires Network component")
+    message(SEND_ERROR "WebKit component requires Gui, Network and script components")
 endif()
 
 add_subdirectory(src/core)
