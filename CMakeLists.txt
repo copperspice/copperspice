@@ -167,7 +167,6 @@ add_feature_info(MySQL WITH_MYSQL_PLUGIN "Popular open source database")
 foreach(component ${_OPTIONAL_COMPONENTS})
     string(TOUPPER ${component} uppercomp)
     option(WITH_${uppercomp} "Build ${component} component" ON)
-    add_feature_info(${component} WITH_${uppercomp} "")
 endforeach()
 
 find_package(OpenSSL)
@@ -393,7 +392,7 @@ elseif(WITH_SVG AND NOT WITH_GUI)
 elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
     message(SEND_ERROR "XmlPatterns component requires Network component")
 elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
-    message(SEND_ERROR "WebKit component requires Gui, Network and script components")
+    message(SEND_ERROR "WebKit component requires Gui, Network and Script components")
 endif()
 
 add_subdirectory(src/core)
@@ -451,4 +450,6 @@ install(
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
 )
 
+message(STATUS "The following components will be build:")
+message("\n * ${BUILD_COMPONENTS}\n")
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
