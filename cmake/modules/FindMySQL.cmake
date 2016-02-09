@@ -13,6 +13,8 @@ if(MYSQL_INCLUDES AND MYSQL_LIBRARIES)
     set(MYSQL_FIND_QUIETLY TRUE)
 endif()
 
+# Neither MySQL nor MariaDB provide pkg-config files
+
 find_path(MYSQL_INCLUDES
     NAMES
     mysql.h
