@@ -13,11 +13,17 @@ if(FONTCONFIG_INCLUDES AND FONTCONFIG_LIBRARIES)
     set(FONTCONFIG_FIND_QUIETLY TRUE)
 endif()
 
+if(NOT WIN32)
+    include(FindPkgConfig)
+    pkg_check_modules(PC_FONTCONFIG QUIET fontconfig)
+endif()
+
 find_path(FONTCONFIG_INCLUDES
     NAMES
     fontconfig/fontconfig.h
     HINTS
     $ENV{FONTCONFIGDIR}/include
+    ${PC_FONTCONFIG_INCLUDEDIR}
     /usr/include
     /usr/local/include
     ${INCLUDE_INSTALL_DIR}
@@ -27,6 +33,7 @@ find_library(FONTCONFIG_LIBRARIES
     fontconfig
     HINTS
     $ENV{FONTCONFIGDIR}/lib
+    ${PC_FONTCONFIG_LIBDIR}
     /usr/lib
     /usr/local/lib
     ${LIB_INSTALL_DIR}

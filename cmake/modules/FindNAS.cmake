@@ -13,6 +13,8 @@ if(NAS_INCLUDES AND NAS_LIBRARIES)
     set(NAS_FIND_QUIETLY TRUE)
 endif()
 
+# NAS does not provide pkg-config files
+
 find_path(NAS_INCLUDES
     NAMES
     audio.h
@@ -34,7 +36,6 @@ find_library(NAS_LIBRARIES
 )
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(NAS DEFAULT_MSG 
-                                  NAS_INCLUDES NAS_LIBRARIES)
+find_package_handle_standard_args(NAS DEFAULT_MSG NAS_INCLUDES NAS_LIBRARIES)
 
 mark_as_advanced(NAS_INCLUDES NAS_LIBRARIES)
