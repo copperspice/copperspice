@@ -21,8 +21,6 @@ DIST_SUBDIRS = src/webkit
 
 # Do not alter lines above this comment
 
-csincludedir=$(includedir)/Cs1
-
 if OSTYPE_WIN
 AM_CFLAGS += -DUNICODE
 endif
