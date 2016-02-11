@@ -714,7 +714,7 @@ char *QNetworkReplyImplPrivate::getDownloadBuffer(qint64 size)
          downloadBufferPointer = QSharedPointer<char>(downloadBuffer, downloadBufferDeleter);
 
          q->setAttribute(QNetworkRequest::DownloadBufferAttribute,
-                         qVariantFromValue<QSharedPointer<char> > (downloadBufferPointer));
+                         QVariant::fromValue<QSharedPointer<char> >(downloadBufferPointer));
       }
    }
 
@@ -730,7 +730,7 @@ void QNetworkReplyImplPrivate::setDownloadBuffer(QSharedPointer<char> sp, qint64
    downloadBufferCurrentSize = 0;
    downloadBufferMaximumSize = size;
    q->setAttribute(QNetworkRequest::DownloadBufferAttribute,
-                   qVariantFromValue<QSharedPointer<char> > (downloadBufferPointer));
+                   QVariant::fromValue<QSharedPointer<char> > (downloadBufferPointer));
 }
 
 

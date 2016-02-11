@@ -593,7 +593,7 @@ QSize ValueExtractor::sizeValue(const Declaration &decl)
       x[1] = x[0];
    }
    QList<QVariant> v;
-   v << QVariant::fromValue<LengthData>(x[0]) << qVariantFromValue<LengthData>(x[1]);
+   v << QVariant::fromValue<LengthData>(x[0]) << QVariant::fromValue<LengthData>(x[1]);
    decl.d->parsed = v;
    return QSize(lengthValueFromData(x[0], f), lengthValueFromData(x[1], f));
 }
