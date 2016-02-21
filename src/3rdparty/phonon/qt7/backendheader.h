@@ -60,7 +60,7 @@ void gClearError();
         Phonon::QT7::gSetErrorLocation(ERROR_LOCATION); }
 
 #define BACKEND_ASSERT(test, string, type)      \
-    bool fail = !test;                          \
+    bool fail = !(test);                        \
     if (fail)                                   \
         SET_ERROR(QLatin1String(string), type)  \
     if (fail)
