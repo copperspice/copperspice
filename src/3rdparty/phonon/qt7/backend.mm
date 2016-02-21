@@ -85,9 +85,9 @@ bool Backend::quickTime7Available()
 
         if (!messageWritten && qgetenv("PHONON_DEBUG") == "1"){
             messageWritten = true;
-            QString str("WARNING: Phonon backend plugin need QuickTime 7 or newer to work.");
-            str += " This computer has version " + BackendInfo::quickTimeVersionString() + " installed.";
-            qWarning(str.toAscii().data());
+            qWarning("WARNING: Phonon backend plugin need QuickTime 7 or newer to work."
+                     " This computer has version %s installed.",
+                     BackendInfo::quickTimeVersionString().toAscii().data());
         }
         return false;
     }
