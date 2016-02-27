@@ -8,6 +8,7 @@ set(EXTRA_PHONON_LIBS
     CsCore${BUILD_MAJOR}
     CsGui${BUILD_MAJOR}
     CsNetwork${BUILD_MAJOR}
+    CsOpenGL${BUILD_MAJOR}
 )
 set(EXTRA_PHONON_CXXFLAGS)
 set(EXTRA_PHONON_LDFLAGS)
@@ -416,16 +417,24 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     set(EXTRA_PHONON2_LDFLAGS
         ${EXTRA_PHONON2_LDFLAGS}
-        -Xarch_i386
-        -framework QuickTime
-        -Xarch_x86_64
-        -framework QTKit
         -framework AppKit
         -framework AudioUnit
         -framework AudioToolbox
         -framework CoreAudio
         -framework QuartzCore
+        -framework OpenGL
     )
+    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+        set(EXTRA_PHONON2_LDFLAGS
+            ${EXTRA_PHONON2_LDFLAGS}
+            -framework QTKit
+        )
+    elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i386")
+        set(EXTRA_PHONON2_LDFLAGS
+            ${EXTRA_PHONON2_LDFLAGS}
+            -framework QuickTime
+        )
+    endif()
     add_definitions(
         -DQT_NO_OPENGL
         -DQT_BUILD_QT7_LIB
@@ -434,8 +443,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7
-         # TODO: is that a typo? is it neccessary?
-        ${CMAKE_SOURCE_DIR}/privateInclude/OpenGL
+        ${CMAKE_BINARY_DIR}/include/QtOpenGL
     )
     set(PHONON2_SUFFIX "qt7")
 endif()

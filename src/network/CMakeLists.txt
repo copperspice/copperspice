@@ -24,6 +24,8 @@ include_directories(
 
 if(NOT OPENSSL_FOUND)
     add_definitions(-DQT_NO_OPENSSL)
+else()
+    include_directories(${OPENSSL_INCLUDE_DIR})
 endif()
 
 include(access/access.cmake)

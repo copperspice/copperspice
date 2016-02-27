@@ -543,6 +543,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
+    set(EXTRA_SCRIPT_LDFLAGS ${EXTRA_SCRIPT_LDFLAGS} -framework CoreFoundation)
 endif()
 
 function_variable_fixup("${EXTRA_SCRIPT_CXXFLAGS}" EXTRA_SCRIPT_CXXFLAGS)
