@@ -32,14 +32,18 @@
 #   http://www.cmake.org/pipermail/cmake/2013-October/056020.html.
 #
 
-project(copperspice)
-
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 # cmake_policy(VERSION 2.8.11)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+# Silence a warning about rpath on OS X.
+cmake_policy(SET CMP0042 OLD)
+
 # old versions of CMake ship bogus module, always use the custom one
 cmake_policy(SET CMP0017 OLD)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+project(copperspice)
 
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
