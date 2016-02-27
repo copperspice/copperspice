@@ -566,7 +566,7 @@ class Q_CORE_EXPORT CSInternalRefCount
 
    friend class QGraphicsItem;
    friend class QtFriendlyLayoutWidget;
-   friend class QtSharedPointer::ExternalRefCountData;
+   friend struct QtSharedPointer::ExternalRefCountData;
 
 };
 

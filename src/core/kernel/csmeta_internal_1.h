@@ -31,6 +31,7 @@
 #include <qstring.h>
 
 #include <initializer_list>
+#include <functional>
 #include <memory>
 #include <stdexcept>
 #include <tuple>

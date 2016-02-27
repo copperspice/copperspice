@@ -36,7 +36,7 @@ class QAbstractEventDispatcherPrivate;
 class QSocketNotifier;
 
 template <class T1, class T2>
-class QPair;
+struct QPair;
 
 class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 {

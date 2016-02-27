@@ -475,7 +475,7 @@ template<class T1>
 class QDeclarativeListProperty;
 
 template<class T1, class T2>
-class QPair;
+struct QPair;
 
 // declare here, register in csObject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
