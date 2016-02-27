@@ -1193,17 +1193,6 @@ class Q_CORE_EXPORT QCharRef
    inline void setCell(uchar cell);
    inline void setRow(uchar row);
 
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-   const char toAscii() const {
-      return QChar(*this).toAscii();
-   }
-   const char toLatin1() const {
-      return QChar(*this).toLatin1();
-   }
-   const ushort unicode() const {
-      return QChar(*this).unicode();
-   }
-#else
    char toAscii() const {
       return QChar(*this).toAscii();
    }
@@ -1213,7 +1202,6 @@ class Q_CORE_EXPORT QCharRef
    ushort unicode() const {
       return QChar(*this).unicode();
    }
-#endif
 
    ushort &unicode() {
       return s.data()[i].unicode();

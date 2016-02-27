@@ -196,15 +196,9 @@ class Q_CORE_EXPORT QByteArray
    }
    void clear();
 
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-   const char at(int i) const;
-   const char operator[](int i) const;
-   const char operator[](uint i) const;
-#else
    char at(int i) const;
    char operator[](int i) const;
    char operator[](uint i) const;
-#endif
 
    QByteRef operator[](int i);
    QByteRef operator[](uint i);
@@ -488,15 +482,9 @@ class Q_CORE_EXPORT QByteRef
 
  public:
 
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-   inline operator const char() const {
-      return i < a.d->size ? a.d->data[i] : char(0);
-   }
-#else
    inline operator char() const {
       return i < a.d->size ? a.d->data()[i] : char(0);
    }
-#endif
 
    inline QByteRef &operator=(char c) {
       if (i >= a.d->size) {
