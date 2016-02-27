@@ -446,7 +446,7 @@ bool QObject::connect(const QObject *sender, BentoAbstract *signalMethod_Bento,
    Bento<void (SlotClass::*)(SlotArgs...)> *slotMethod_Bento = new Bento<void (SlotClass::*)(SlotArgs...)>(slotMethod);
 
    std::unique_lock<std::mutex> senderLock {sender->m_mutex_ToReceiver};
-   std::unique_lock<std::mutex> receiverLokc {receiver->m_mutex_FromSender};
+   std::unique_lock<std::mutex> receiverLock {receiver->m_mutex_FromSender};
 
    if (type & Qt::UniqueConnection) {
       // user passed enum to ensure the connection is not added twice
@@ -593,7 +593,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    Bento<T> *slotLambda_Bento = new Bento<T>(slotLambda);
 
    std::unique_lock<std::mutex> senderLock {sender->m_mutex_ToReceiver};
-   std::unique_lock<std::mutex> receiverLokc {receiver->m_mutex_FromSender};
+   std::unique_lock<std::mutex> receiverLock {receiver->m_mutex_FromSender};
 
    if (type & Qt::UniqueConnection) {
       // user passed enum to ensure the connection is not added twice
