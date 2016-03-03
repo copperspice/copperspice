@@ -109,10 +109,10 @@ QT_USE_NAMESPACE
 
 
 // detect target architecture
-#if defined(__x86_64__)
+#if defined(__x86_64__) || defined(_M_X64)
 #define QT_ARCH_X86_64
 
-#elif defined(__i386__)
+#elif defined(__i386__) || defined(_M_IX86)
 #define QT_ARCH_I386
 
 #else
@@ -128,7 +128,7 @@ QT_USE_NAMESPACE
 #define Q_BIG_ENDIAN       __ORDER_BIG_ENDIAN__
 #define Q_LITTLE_ENDIAN    __ORDER_LITTLE_ENDIAN__
 
-#elif defined (__LITTLE_ENDIAN__)
+#elif defined (__LITTLE_ENDIAN__) || defined(_WIN32)
 #define Q_BIG_ENDIAN 1234
 #define Q_LITTLE_ENDIAN 4321
 #define Q_BYTE_ORDER Q_LITTLE_ENDIAN
@@ -385,6 +385,27 @@ QT_USE_NAMESPACE
 
 #  endif
 
+#elif defined(_MSC_VER)
+//  **
+
+#  if ( _MSC_VER >= 1900  )
+#    define Q_CC_MSVC
+#    define Q_OUTOFLINE_TEMPLATE inline
+
+#    define Q_ALIGNOF(type)   __alignof(type)
+
+#    if defined(_M_X64)
+#      undef QT_HAVE_SSE
+#      undef QT_HAVE_MMX
+#      undef QT_HAVE_3DNOW
+#    endif
+
+#  else
+#    error "CopperSpice requires MSVC 2015 (14) or greater"
+
+#  endif
+
+
 #else
 //  **
 
@@ -546,6 +567,8 @@ QT_END_INCLUDE_NAMESPACE
 
 #  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
 #    define QT_DEPRECATED       __attribute__ ((__deprecated__))
+#  elif defined(Q_CC_MSVC)
+#    define QT_DEPRECATED       __declspec(deprecated)
 #  else
 #    define QT_DEPRECATED
 #  endif
@@ -565,6 +588,8 @@ QT_END_INCLUDE_NAMESPACE
 #       define QT_FASTCALL
 #    endif
 
+#  elif defined(Q_CC_MSVC)
+#     define QT_FASTCALL        __fastcall
 #  else
 #     define QT_FASTCALL
 #  endif
@@ -1047,7 +1072,8 @@ inline T *q_check_ptr(T *p)
 
 #if (defined(Q_CC_GNU) && !defined(Q_OS_SOLARIS)) || defined(Q_CC_HPACC)
 #  define Q_FUNC_INFO            __PRETTY_FUNCTION__
-
+#elif defined(Q_CC_MSVC)
+#  define Q_FUNC_INFO            __FUNCSIG__
 #else
 #   if defined(Q_OS_SOLARIS) || defined(Q_CC_XLC)
 #      define Q_FUNC_INFO        __FILE__ "(line number unavailable)"
