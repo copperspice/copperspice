@@ -1618,5 +1618,13 @@ QMap<std::type_index, QMetaObject *> &CSGadget_Fake_Parent::m_metaObjectsAll()
    return metaObjects;
 }
 
+void QObject::destroyed(QObject *obj) {
+  QMetaObject::activate(this, &cs_class::destroyed, obj);
+}
+
+void QObject::objectNameChanged(const QString &objectName) {
+  QMetaObject::activate(this, &cs_class::objectNameChanged, objectName);
+}
+
 
 QT_END_NAMESPACE

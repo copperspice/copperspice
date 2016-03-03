@@ -89,12 +89,12 @@ class Q_CORE_EXPORT QThread : public QObject
    static void msleep(unsigned long);
    static void usleep(unsigned long);
 
-   CORE_CS_SIGNAL_1(Public, void started())
-   CORE_CS_SIGNAL_2(started)
-   CORE_CS_SIGNAL_1(Public, void finished())
-   CORE_CS_SIGNAL_2(finished)
-   CORE_CS_SIGNAL_1(Public, void terminated())
-   CORE_CS_SIGNAL_2(terminated)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void started())
+   CORE_CS_SIGNAL_DECLARE_2(started)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void finished())
+   CORE_CS_SIGNAL_DECLARE_2(finished)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void terminated())
+   CORE_CS_SIGNAL_DECLARE_2(terminated)
 
  protected:
    virtual void run();

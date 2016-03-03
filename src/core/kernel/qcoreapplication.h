@@ -164,11 +164,11 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    CORE_CS_SLOT_1(Public, static void quit())
    CORE_CS_SLOT_2(quit)
 
-   CORE_CS_SIGNAL_1(Public, void aboutToQuit())
-   CORE_CS_SIGNAL_2(aboutToQuit)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void aboutToQuit())
+   CORE_CS_SIGNAL_DECLARE_2(aboutToQuit)
 
-   CORE_CS_SIGNAL_1(Public, void unixSignal(int un_named_arg1))
-   CORE_CS_SIGNAL_2(unixSignal, un_named_arg1)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void unixSignal(int un_named_arg1))
+   CORE_CS_SIGNAL_DECLARE_2(unixSignal, un_named_arg1)
 
  protected:
    bool event(QEvent *);

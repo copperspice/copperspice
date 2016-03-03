@@ -202,11 +202,11 @@ class Q_CORE_EXPORT QObject
    template<class T>
    T property(const char *name) const;
 
-   CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = 0))
-   CORE_CS_SIGNAL_2(destroyed, obj)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void destroyed(QObject *obj = 0))
+   CORE_CS_SIGNAL_DECLARE_2(destroyed, obj)
 
-   CORE_CS_SIGNAL_1(Public, void objectNameChanged(const QString &objectName))
-   CORE_CS_SIGNAL_2(objectNameChanged, objectName)
+   CORE_CS_SIGNAL_DECLARE_1(Public, void objectNameChanged(const QString &objectName))
+   CORE_CS_SIGNAL_DECLARE_2(objectNameChanged, objectName)
 
    CORE_CS_SLOT_1(Public, void deleteLater())
    CORE_CS_SLOT_2(deleteLater)
