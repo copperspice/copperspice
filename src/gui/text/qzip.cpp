@@ -60,12 +60,24 @@
 #  ifndef S_IXUSR
 #    define S_IXUSR 0100
 #  endif
-#  define S_IRGRP 0040
-#  define S_IWGRP 0020
-#  define S_IXGRP 0010
-#  define S_IROTH 0004
-#  define S_IWOTH 0002
-#  define S_IXOTH 0001
+#  ifndef S_IRGRP
+#    define S_IRGRP 0040
+#  endif
+#  ifndef S_IWGRP
+#    define S_IWGRP 0020
+#  endif
+#  ifndef S_IXGRP
+#    define S_IXGRP 0010
+#  endif
+#  ifndef S_IROTH
+#    define S_IROTH 0004
+#  endif
+#  ifndef S_IWOTH
+#    define S_IWOTH 0002
+#  endif
+#  ifndef S_IXOTH
+#    define S_IXOTH 0001
+#  endif
 #endif
 
 #if 0
