@@ -75,7 +75,7 @@ OSType CS_GetEventClass(EventRef event)
 
 EventTime CS_GetCurrentEventTime()
 {
-   return CS_GetCurrentEventTime();
+   return GetCurrentEventTime();
 }
 
 EventTime CS_GetEventTime(EventRef event)
