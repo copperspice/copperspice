@@ -259,8 +259,6 @@ QT_USE_NAMESPACE
 #    define Q_C_CALLBACKS
 
 #    define Q_ALIGNOF(type)   __alignof__(type)
-#    define Q_TYPEOF(expr)    __typeof__(expr)
-#    define Q_DECL_ALIGN(n)   __attribute__((__aligned__(n)))
 #    define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #    define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 #    define Q_PACKED          __attribute__ ((__packed__))
@@ -297,8 +295,6 @@ QT_USE_NAMESPACE
 #  endif
 
 #  define Q_ALIGNOF(type)   __alignof__(type)
-#  define Q_TYPEOF(expr)    __typeof__(expr)
-#  define Q_DECL_ALIGN(n)   __attribute__((__aligned__(n)))
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
@@ -322,8 +318,6 @@ QT_USE_NAMESPACE
 
 #  elif __xlC__ >= 0x0600
 #    define Q_ALIGNOF(type)     __alignof__(type)
-#    define Q_TYPEOF(expr)      __typeof__(expr)
-#    define Q_DECL_ALIGN(n)     __attribute__((__aligned__(n)))
 #    define Q_PACKED            __attribute__((__packed__))
 #  endif
 
@@ -378,10 +372,6 @@ QT_USE_NAMESPACE
 #    if __HP_aCC-0 < 060000
 #      define Q_DECL_EXPORT     __declspec(dllexport)
 #      define Q_DECL_IMPORT     __declspec(dllimport)
-#    endif
-
-#    if __HP_aCC-0 >= 061200
-#      define Q_DECL_ALIGN(n)   __attribute__((aligned(n)))
 #    endif
 
 #    if __HP_aCC-0 >= 062000
