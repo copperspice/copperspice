@@ -907,7 +907,7 @@ void QObject::installEventFilter(QObject *obj)
       return;
    }
 
-   if (m_threadData != obj->m_threadData) {
+   if (m_threadData.load() != obj->m_threadData.load()) {
       qWarning("QObject::installEventFilter() Can not filter events for objects in a different thread");
       return;
    }
@@ -1393,7 +1393,7 @@ void QObject::setParent(QObject *newParent)
    if (m_parent) {
       // object hierarchies are constrained to a single thread
 
-      if (m_threadData != m_parent->m_threadData) {
+      if (m_threadData.load() != m_parent->m_threadData.load()) {
          qWarning("QObject::setParent() Can not set parent, new parent is in a different thread");
          m_parent = 0;
          return;
