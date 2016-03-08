@@ -111,7 +111,7 @@ class cs_number<0>
          return cs_number<0>{};  \
       } \
       friend QMetaObject_T<classNameX>; \
-      static const QMetaObject_T<classNameX> & staticMetaObject()   \
+      Q_DECL_EXPORT static const QMetaObject_T<classNameX> & staticMetaObject()   \
       { \
          QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
          auto index = temp.find(typeid(cs_class));    \
@@ -124,7 +124,7 @@ class cs_number<0>
             return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
          } \
       } \
-      virtual const QMetaObject *metaObject() const \
+      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const \
       { \
          return &staticMetaObject(); \
       } \
@@ -461,7 +461,7 @@ class cs_number<0>
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }  \
-   __VA_ARGS__ {
+   Q_DECL_EXPORT __VA_ARGS__ {
 // do not remove the "{", this is required for part two of the macro
 
 
