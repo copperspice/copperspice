@@ -2388,6 +2388,13 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/mac/PluginPackageMac.cpp
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/plugins/mac/PluginViewMac.mm
     )
+    set(EXTRA_WEBKIT_LDFLAGS
+        ${EXTRA_WEBKIT_LDFLAGS}
+        -framework CoreFoundation
+        -framework Foundation
+        -framework CoreGraphics
+        -framework Carbon
+    )
 endif()
 
 macro_generate_public("${WEBKIT_PUBLIC_INCLUDES}" QtWebKit)
