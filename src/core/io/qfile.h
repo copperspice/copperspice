@@ -52,7 +52,7 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    QFile(const QString &name, QObject *parent);
    ~QFile();
 
-   QString fileName() const;
+   QString fileName() const override;
    void setFileName(const QString &name);
 
    typedef QByteArray (*EncoderFn)(const QString &fileName);
@@ -91,18 +91,18 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    bool copy(const QString &newName);
    static bool copy(const QString &fileName, const QString &newName);
 
-   bool open(OpenMode flags);
+   bool open(OpenMode flags) override;
    bool open(FILE *f, OpenMode ioFlags, FileHandleFlags handleFlags = DontCloseHandle);
    bool open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = DontCloseHandle);
 
-   qint64 size() const;
+   qint64 size() const override;
 
-   bool resize(qint64 sz);
+   bool resize(qint64 sz) override;
    static bool resize(const QString &filename, qint64 sz);
 
-   Permissions permissions() const;
+   Permissions permissions() const override;
    static Permissions permissions(const QString &filename);
-   bool setPermissions(Permissions permissionSpec);
+   bool setPermissions(Permissions permissionSpec) override;
    static bool setPermissions(const QString &filename, Permissions permissionSpec);
 
  protected:

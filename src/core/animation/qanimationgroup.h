@@ -53,7 +53,7 @@ class Q_CORE_EXPORT QAnimationGroup : public QAbstractAnimation
 
  protected:
    QAnimationGroup(QAnimationGroupPrivate &dd, QObject *parent);
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QAnimationGroup)

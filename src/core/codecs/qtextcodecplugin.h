@@ -63,8 +63,8 @@ class Q_CORE_EXPORT QTextCodecPlugin : public QObject, public QTextCodecFactoryI
    virtual QTextCodec *createForMib(int mib) = 0;
 
  private:
-   QStringList keys() const;
-   QTextCodec *create(const QString &name);
+   QStringList keys() const override;
+   QTextCodec *create(const QString &name) override;
 };
 
 #endif // QT_NO_TEXTCODECPLUGIN

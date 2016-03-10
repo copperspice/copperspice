@@ -59,7 +59,7 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 
    void setPendingResultsLimit(int limit);
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  public:
    CORE_CS_SIGNAL_1(Public, void started())
