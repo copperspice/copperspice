@@ -682,11 +682,27 @@ constexpr inline const T &qBound(const T &min, const T &val, const T &max)
 
 #endif
 
+#ifndef Q_DECL_EXPORT_INLINE
+#  if defined(Q_CC_MSVC)
+#    define Q_DECL_EXPORT_INLINE
+#  else
+#    define Q_DECL_EXPORT_INLINE    Q_DECL_EXPORT
+#  endif
+#endif
+
 #ifndef Q_DECL_IMPORT
 #  if defined(Q_OS_WIN)
 #    define Q_DECL_IMPORT    __declspec(dllimport)
 #  else
 #    define Q_DECL_IMPORT
+#  endif
+#endif
+
+#ifndef Q_DECL_IMPORT_INLINE
+#  if defined(Q_CC_MSVC)
+#    define Q_DECL_IMPORT_INLINE
+#  else
+#    define Q_DECL_IMPORT_INLINE    Q_DECL_IMPORT
 #  endif
 #endif
 
