@@ -78,13 +78,13 @@ class QMDIControl : public QWidget
    QMDIControl(QWidget *widget);
 
  private:
-   QSize sizeHint() const;
-   void paintEvent(QPaintEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void leaveEvent(QEvent *event);
-   bool event(QEvent *event);
+   QSize sizeHint() const override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   bool event(QEvent *event) override;
    void initStyleOption(QStyleOptionComplex *option) const;
 
    QStyle::SubControl activeControl; //control locked by pressing and holding the mouse
@@ -255,7 +255,7 @@ class QWorkspaceTitleBar : public QWidget
    QWidget *window() const;
    bool isTool() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
    void initStyleOption(QStyleOptionTitleBar *option) const;
 
  public:
@@ -291,19 +291,19 @@ class QWorkspaceTitleBar : public QWidget
    GUI_CS_SLOT_2(setActive)
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *);
+   void contextMenuEvent(QContextMenuEvent *) override;
 #endif
 
-   void mousePressEvent(QMouseEvent *);
-   void mouseDoubleClickEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void enterEvent(QEvent *e);
-   void leaveEvent(QEvent *e);
-   void paintEvent(QPaintEvent *p);
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseDoubleClickEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void enterEvent(QEvent *e) override;
+   void leaveEvent(QEvent *e) override;
+   void paintEvent(QPaintEvent *p) override;
 
  private:
    Q_DISABLE_COPY(QWorkspaceTitleBar)
@@ -970,8 +970,8 @@ class QWorkspaceChild : public QWidget
    void doResize();
    void doMove();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    QSize baseSize() const;
 
@@ -1010,15 +1010,15 @@ class QWorkspaceChild : public QWidget
 
 
  protected:
-   void enterEvent(QEvent *);
-   void leaveEvent(QEvent *);
-   void childEvent(QChildEvent *);
-   void resizeEvent(QResizeEvent *);
-   void moveEvent(QMoveEvent *);
-   bool eventFilter(QObject *, QEvent *);
+   void enterEvent(QEvent *) override;
+   void leaveEvent(QEvent *) override;
+   void childEvent(QChildEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void moveEvent(QMoveEvent *) override;
+   bool eventFilter(QObject *, QEvent *) override;
 
-   void paintEvent(QPaintEvent *);
-   void changeEvent(QEvent *);
+   void paintEvent(QPaintEvent *) override;
+   void changeEvent(QEvent *) override;
 
  private:
    void updateMask();

@@ -83,7 +83,7 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    void setCancelButton(QPushButton *button);
    void setCancelButtonCentered(bool value = true);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    int minimum() const;
    int maximum() const;
@@ -130,9 +130,9 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    GUI_CS_SIGNAL_2(canceled)
 
  protected:
-   void closeEvent(QCloseEvent *event);
-   void changeEvent(QEvent *event);
-   void showEvent(QShowEvent *event);
+   void closeEvent(QCloseEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void showEvent(QShowEvent *event) override;
 
    GUI_CS_SLOT_1(Protected, void forceShow())
    GUI_CS_SLOT_2(forceShow)

@@ -84,11 +84,11 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_SIGNAL_2(currentChanged, index)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
    virtual void itemInserted(int index);
    virtual void itemRemoved(int index);
-   void showEvent(QShowEvent *e);
-   void changeEvent(QEvent *);
+   void showEvent(QShowEvent *e) override;
+   void changeEvent(QEvent *) override;
 
  private:
    Q_DECLARE_PRIVATE(QToolBox)

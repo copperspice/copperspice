@@ -134,8 +134,8 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
    GUI_CS_SIGNAL_2(rejected)
 
  protected:
-   void changeEvent(QEvent *event);
-   bool event(QEvent *event);
+   void changeEvent(QEvent *event) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QDialogButtonBox)

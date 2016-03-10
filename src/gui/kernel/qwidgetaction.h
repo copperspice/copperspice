@@ -50,8 +50,8 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
    void releaseWidget(QWidget *widget);
 
  protected:
-   virtual bool event(QEvent *);
-   virtual bool eventFilter(QObject *, QEvent *);
+   virtual bool event(QEvent *) override;
+   virtual bool eventFilter(QObject *, QEvent *) override;
    virtual QWidget *createWidget(QWidget *parent);
    virtual void deleteWidget(QWidget *widget);
    QList<QWidget *> createdWidgets() const;

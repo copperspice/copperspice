@@ -67,18 +67,18 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
 
    using QLayout::widget;
    QWidget *widget(int) const;
-   int count() const;
+   int count() const override;
 
    StackingMode stackingMode() const;
    void setStackingMode(StackingMode stackingMode);
 
    // abstract virtual functions:
-   void addItem(QLayoutItem *item);
-   QSize sizeHint() const;
-   QSize minimumSize() const;
-   QLayoutItem *itemAt(int) const;
-   QLayoutItem *takeAt(int);
-   void setGeometry(const QRect &rect);
+   void addItem(QLayoutItem *item) override;
+   QSize sizeHint() const override;
+   QSize minimumSize() const override;
+   QLayoutItem *itemAt(int) const override;
+   QLayoutItem *takeAt(int) override;
+   void setGeometry(const QRect &rect) override;
 
    GUI_CS_SIGNAL_1(Public, void widgetRemoved(int index))
    GUI_CS_SIGNAL_2(widgetRemoved, index)

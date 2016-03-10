@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QShortcut : public QObject
    GUI_CS_SIGNAL_2(activatedAmbiguously)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
    QScopedPointer<QShortcutPrivate> d_ptr;
 
 };

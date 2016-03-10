@@ -65,14 +65,14 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
    GUI_CS_SIGNAL_2(messageChanged, text)
 
  protected:
-   void showEvent(QShowEvent *);
-   void paintEvent(QPaintEvent *);
-   void resizeEvent(QResizeEvent *);
+   void showEvent(QShowEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
 
    // ### Qt5/consider making reformat() and hideOrShow() private
    void reformat();
    void hideOrShow();
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
  private:
    Q_DISABLE_COPY(QStatusBar)

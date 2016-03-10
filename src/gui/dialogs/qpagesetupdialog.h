@@ -67,10 +67,10 @@ class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
    PageSetupDialogOptions options() const;
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-   virtual void setVisible(bool visible);
+   virtual void setVisible(bool visible) override;
 #endif
 
-   virtual int exec();
+   virtual int exec() override;
    using QDialog::open;
 
    void open(QObject *receiver, const char *member);

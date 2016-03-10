@@ -125,7 +125,7 @@ class QTornOffMenu : public QMenu
          removeAction(act->action());
       }
    }
-   void actionEvent(QActionEvent *e) {
+   void actionEvent(QActionEvent *e) override {
       QMenu::actionEvent(e);
       setFixedSize(sizeHint());
    }

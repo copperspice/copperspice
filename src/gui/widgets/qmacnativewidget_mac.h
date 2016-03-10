@@ -39,10 +39,10 @@ class Q_GUI_EXPORT QMacNativeWidget : public QWidget
    QMacNativeWidget(void *parentRef = 0);
    ~QMacNativeWidget();
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
  protected:
-   bool event(QEvent *ev);
+   bool event(QEvent *ev) override;
 
  private:
    Q_DECLARE_PRIVATE(QMacNativeWidget)

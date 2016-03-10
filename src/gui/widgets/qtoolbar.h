@@ -139,10 +139,10 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    GUI_CS_SIGNAL_2(visibilityChanged, visible)
 
  protected:
-   void actionEvent(QActionEvent *event);
-   void changeEvent(QEvent *event);
-   void paintEvent(QPaintEvent *event);
-   bool event(QEvent *event);
+   void actionEvent(QActionEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   bool event(QEvent *event) override;
    void initStyleOption(QStyleOptionToolBar *option) const;
 
  private:

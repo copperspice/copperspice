@@ -51,8 +51,8 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
    QPushButton(const QIcon &icon, const QString &text, QWidget *parent = 0);
    ~QPushButton();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    bool autoDefault() const;
    void setAutoDefault(bool);
@@ -71,16 +71,16 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
 #endif
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
 #ifdef Q_OS_MAC
-   bool hitButton(const QPoint &pos) const;
+   bool hitButton(const QPoint &pos) const override;
 #endif
 
-   void paintEvent(QPaintEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void focusInEvent(QFocusEvent *);
-   void focusOutEvent(QFocusEvent *);
+   void paintEvent(QPaintEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void focusInEvent(QFocusEvent *) override;
+   void focusOutEvent(QFocusEvent *) override;
    void initStyleOption(QStyleOptionButton *option) const;
    QPushButton(QPushButtonPrivate &dd, QWidget *parent = 0);
 

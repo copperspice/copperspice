@@ -94,8 +94,8 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    explicit QCalendarWidget(QWidget *parent = 0);
    ~QCalendarWidget();
 
-   virtual QSize sizeHint() const;
-   virtual QSize minimumSizeHint() const;
+   virtual QSize sizeHint() const override;
+   virtual QSize minimumSizeHint() const override;
 
    QDate selectedDate() const;
 
@@ -177,11 +177,11 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    GUI_CS_SIGNAL_2(currentPageChanged, year, month)
 
  protected:
-   bool event(QEvent *event);
-   bool eventFilter(QObject *watched, QEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void keyPressEvent(QKeyEvent *event);
+   bool event(QEvent *event) override;
+   bool eventFilter(QObject *watched, QEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
 
    virtual void paintCell(QPainter *painter, const QRect &rect, const QDate &date) const;
    void updateCell(const QDate &date);

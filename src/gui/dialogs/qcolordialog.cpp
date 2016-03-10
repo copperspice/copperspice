@@ -71,7 +71,7 @@ class QWellArray : public QWidget
    virtual void setCurrent(int row, int col);
    virtual void setSelected(int row, int col);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    virtual void setCellBrush(int row, int col, const QBrush &);
    QBrush cellBrush(int row, int col);
@@ -141,12 +141,12 @@ class QWellArray : public QWidget
    virtual void paintCell(QPainter *, int row, int col, const QRect &);
    virtual void paintCellContents(QPainter *, int row, int col, const QRect &);
 
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void focusInEvent(QFocusEvent *);
-   void focusOutEvent(QFocusEvent *);
-   void paintEvent(QPaintEvent *);
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void focusInEvent(QFocusEvent *) override;
+   void focusOutEvent(QFocusEvent *) override;
+   void paintEvent(QPaintEvent *) override;
 
  private:
    Q_DISABLE_COPY(QWellArray)
@@ -655,11 +655,11 @@ class QColorPicker : public QFrame
    GUI_CS_SLOT_OVERLOAD(setCol, (int, int))
 
  protected:
-   QSize sizeHint() const;
-   void paintEvent(QPaintEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void mousePressEvent(QMouseEvent *);
-   void resizeEvent(QResizeEvent *);
+   QSize sizeHint() const override;
+   void paintEvent(QPaintEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
 
  private:
    int hue;
@@ -694,9 +694,9 @@ class QColorLuminancePicker : public QWidget
    GUI_CS_SLOT_OVERLOAD(setCol, (int, int))
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void mousePressEvent(QMouseEvent *);
+   void paintEvent(QPaintEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
 
  private:
    enum { foff = 3, coff = 4 }; //frame and contents offset
@@ -1035,15 +1035,15 @@ class QColorShowLabel : public QFrame
    GUI_CS_SIGNAL_2(colorDropped, un_named_arg1)
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void mousePressEvent(QMouseEvent *e);
-   void mouseMoveEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *e);
+   void paintEvent(QPaintEvent *) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseMoveEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *e) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragEnterEvent(QDragEnterEvent *e);
-   void dragLeaveEvent(QDragLeaveEvent *e);
-   void dropEvent(QDropEvent *e);
+   void dragEnterEvent(QDragEnterEvent *e) override;
+   void dragLeaveEvent(QDragLeaveEvent *e) override;
+   void dropEvent(QDropEvent *e) override;
 #endif
 
  private:

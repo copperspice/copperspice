@@ -64,12 +64,12 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
    }
 
  protected:
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *);
-   void changeEvent(QEvent *);
-   void showEvent(QShowEvent *);
-   void resizeEvent(QResizeEvent *);
-   void moveEvent(QMoveEvent *);
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *) override;
+   void changeEvent(QEvent *) override;
+   void showEvent(QShowEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void moveEvent(QMoveEvent *) override;
    void initStyleOption(QStyleOptionRubberBand *option) const;
 
  private:

@@ -98,7 +98,7 @@ class Q_GUI_EXPORT QGraphicsScale : public QGraphicsTransform
    qreal zScale() const;
    void setZScale(qreal);
 
-   void applyTo(QMatrix4x4 *matrix) const;
+   void applyTo(QMatrix4x4 *matrix) const override;
 
    GUI_CS_SIGNAL_1(Public, void originChanged())
    GUI_CS_SIGNAL_2(originChanged)
@@ -145,7 +145,7 @@ class Q_GUI_EXPORT QGraphicsRotation : public QGraphicsTransform
    void setAxis(const QVector3D &axis);
    void setAxis(Qt::Axis axis);
 
-   void applyTo(QMatrix4x4 *matrix) const;
+   void applyTo(QMatrix4x4 *matrix) const override;
 
    GUI_CS_SIGNAL_1(Public, void originChanged())
    GUI_CS_SIGNAL_2(originChanged)

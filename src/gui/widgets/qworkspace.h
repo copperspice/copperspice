@@ -57,7 +57,7 @@ class Q_GUI_EXPORT QWorkspace : public QWidget
 
    QWidget *addWindow(QWidget *w, Qt::WindowFlags flags = 0);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    bool scrollBarsEnabled() const;
    void setScrollBarsEnabled(bool enable);
@@ -86,17 +86,17 @@ class Q_GUI_EXPORT QWorkspace : public QWidget
    GUI_CS_SLOT_2(activatePreviousWindow)
 
  protected:
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *e);
-   void changeEvent(QEvent *);
-   void childEvent(QChildEvent *);
-   void resizeEvent(QResizeEvent *);
-   bool eventFilter(QObject *, QEvent *);
-   void showEvent(QShowEvent *e);
-   void hideEvent(QHideEvent *e);
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *e) override;
+   void changeEvent(QEvent *) override;
+   void childEvent(QChildEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   bool eventFilter(QObject *, QEvent *) override;
+   void showEvent(QShowEvent *e) override;
+   void hideEvent(QHideEvent *e) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *e);
+   void wheelEvent(QWheelEvent *e) override;
 #endif
 
  private:

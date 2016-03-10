@@ -854,31 +854,31 @@ class QCalendarModel : public QAbstractTableModel
  public:
    QCalendarModel(QObject *parent = 0);
 
-   int rowCount(const QModelIndex &) const {
+   int rowCount(const QModelIndex &) const override {
       return RowCount + m_firstRow;
    }
-   int columnCount(const QModelIndex &) const {
+   int columnCount(const QModelIndex &) const override {
       return ColumnCount + m_firstColumn;
    }
-   QVariant data(const QModelIndex &index, int role) const;
-   Qt::ItemFlags flags(const QModelIndex &index) const;
+   QVariant data(const QModelIndex &index, int role) const override;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) {
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override {
       beginInsertRows(parent, row, row + count - 1);
       endInsertRows();
       return true;
    }
-   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) {
+   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override {
       beginInsertColumns(parent, column, column + count - 1);
       endInsertColumns();
       return true;
    }
-   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) {
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override {
       beginRemoveRows(parent, row, row + count - 1);
       endRemoveRows();
       return true;
    }
-   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) {
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override {
       beginRemoveColumns(parent, column, column + count - 1);
       endRemoveColumns();
       return true;
@@ -942,7 +942,7 @@ class QCalendarView : public QTableView
       updateGeometries();
    }
    void setReadOnly(bool enable);
-   virtual void keyboardSearch(const QString &search) {
+   virtual void keyboardSearch(const QString &search) override {
       Q_UNUSED(search)
    }
 
@@ -959,18 +959,18 @@ class QCalendarView : public QTableView
    GUI_CS_SIGNAL_2(editingFinished)
 
  protected:
-   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
-   void mouseDoubleClickEvent(QMouseEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
+   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void keyPressEvent(QKeyEvent *event);
-   bool event(QEvent *event);
+   void keyPressEvent(QKeyEvent *event) override;
+   bool event(QEvent *event) override;
 
    QDate handleMouseEvent(QMouseEvent *event);
 
@@ -1629,7 +1629,7 @@ class QCalendarDelegate : public QItemDelegate
       : QItemDelegate(parent), calendarWidgetPrivate(w) {
    }
    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                      const QModelIndex &index) const;
+                      const QModelIndex &index) const override;
    void paintCell(QPainter *painter, const QRect &rect, const QDate &date) const;
 
  private:
@@ -1674,7 +1674,7 @@ class QPrevNextCalButton : public QToolButton
    QPrevNextCalButton(QWidget *parent) : QToolButton(parent) {}
 
  protected:
-   void paintEvent(QPaintEvent *) {
+   void paintEvent(QPaintEvent *) override {
       QStylePainter painter(this);
       QStyleOptionToolButton opt;
       initStyleOption(&opt);

@@ -56,8 +56,8 @@ class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
    void setModifierMask(Qt::KeyboardModifiers modifiers);
 
  protected:
-   void onTransition(QEvent *event);
-   bool eventTest(QEvent *event);
+   void onTransition(QEvent *event) override;
+   bool eventTest(QEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QKeyEventTransition)

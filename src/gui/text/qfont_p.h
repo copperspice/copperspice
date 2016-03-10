@@ -279,7 +279,7 @@ class QFontCache : public QObject
  private:
    void increaseCost(uint cost);
    void decreaseCost(uint cost);
-   void timerEvent(QTimerEvent *event);
+   void timerEvent(QTimerEvent *event) override;
 
    static const uint min_cost;
    uint total_cost, max_cost;

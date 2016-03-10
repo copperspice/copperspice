@@ -191,7 +191,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    static void aboutCs(QWidget *parent);
    static void aboutQt(QWidget *parent);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    // the following functions are obsolete:
 
@@ -265,12 +265,12 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    GUI_CS_SIGNAL_2(buttonClicked, button)
 
  protected:
-   bool event(QEvent *e);
-   void resizeEvent(QResizeEvent *event);
-   void showEvent(QShowEvent *event);
-   void closeEvent(QCloseEvent *event);
-   void keyPressEvent(QKeyEvent *event);
-   void changeEvent(QEvent *event);
+   bool event(QEvent *e) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void closeEvent(QCloseEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void changeEvent(QEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QMessageBox)

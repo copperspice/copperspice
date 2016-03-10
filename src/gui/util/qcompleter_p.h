@@ -236,18 +236,18 @@ class QCompletionModel : public QAbstractProxyModel
    QModelIndex currentIndex(bool) const;
    void resetModel();
 
-   QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const;
-   int rowCount(const QModelIndex &index = QModelIndex()) const;
-   int columnCount(const QModelIndex &index = QModelIndex()) const;
-   bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
-   QModelIndex parent(const QModelIndex & = QModelIndex()) const {
+   QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const override;
+   int rowCount(const QModelIndex &index = QModelIndex()) const override;
+   int columnCount(const QModelIndex &index = QModelIndex()) const override;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex parent(const QModelIndex & = QModelIndex()) const override {
       return QModelIndex();
    }
-   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-   void setSourceModel(QAbstractItemModel *sourceModel);
-   QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
-   QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+   void setSourceModel(QAbstractItemModel *sourceModel) override;
+   QModelIndex mapToSource(const QModelIndex &proxyIndex) const override;
+   QModelIndex mapFromSource(const QModelIndex &sourceIndex) const override;
 
    QCompleterPrivate *c;
    QScopedPointer<QCompletionEngine> engine;

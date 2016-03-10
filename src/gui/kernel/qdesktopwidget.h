@@ -77,7 +77,7 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
    GUI_CS_SIGNAL_2(screenCountChanged, un_named_arg1)
 
  protected:
-   void resizeEvent(QResizeEvent *e);
+   void resizeEvent(QResizeEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QDesktopWidget)

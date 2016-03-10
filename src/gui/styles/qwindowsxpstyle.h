@@ -43,30 +43,30 @@ class Q_GUI_EXPORT QWindowsXPStyle : public QWindowsStyle
    QWindowsXPStyle(QWindowsXPStylePrivate &dd);
    ~QWindowsXPStyle();
 
-   void unpolish(QApplication *);
-   void polish(QApplication *);
-   void polish(QWidget *);
-   void polish(QPalette &);
-   void unpolish(QWidget *);
+   void unpolish(QApplication *) override;
+   void polish(QApplication *) override;
+   void polish(QWidget *) override;
+   void polish(QPalette &) override;
+   void unpolish(QWidget *) override;
 
-   void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p, const QWidget *widget = 0) const;
-   void drawControl(ControlElement element, const QStyleOption *option, QPainter *p, const QWidget *wwidget = 0) const;
+   void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p, const QWidget *widget = 0) const override;
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *p, const QWidget *wwidget = 0) const override;
 
-   QRect subElementRect(SubElement r, const QStyleOption *option, const QWidget *widget = 0) const;
-   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *option, SubControl sc, const QWidget *widget = 0) const;
+   QRect subElementRect(SubElement r, const QStyleOption *option, const QWidget *widget = 0) const override;
+   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *option, SubControl sc, const QWidget *widget = 0) const override;
 
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *option, QPainter *p, const QWidget *widget = 0) const;
+   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *option, QPainter *p, const QWidget *widget = 0) const override;
 
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *option, const QSize &contentsSize, const QWidget *widget = 0) const;
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *option, const QSize &contentsSize, const QWidget *widget = 0) const override;
 
-   int pixelMetric(PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0) const;
-   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const;
+   int pixelMetric(PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const override;
 
-   QPalette standardPalette() const;
-   QPixmap standardPixmap(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const;
+   QPalette standardPalette() const override;
+   QPixmap standardPixmap(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const override;
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const;
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget = 0) const override;
 
  private:
    Q_DISABLE_COPY(QWindowsXPStyle)

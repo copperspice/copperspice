@@ -125,7 +125,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    QGraphicsView(QGraphicsScene *scene, QWidget *parent = 0);
    ~QGraphicsView();
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    QPainter::RenderHints renderHints() const;
    void setRenderHint(QPainter::RenderHint hint, bool enabled = true);
@@ -225,7 +225,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    inline QPoint mapFromScene(qreal x, qreal y) const;
    inline QPolygon mapFromScene(qreal x, qreal y, qreal w, qreal h) const;
 
-   QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
    QBrush backgroundBrush() const;
    void setBackgroundBrush(const QBrush &brush);
@@ -249,36 +249,36 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    GUI_CS_SLOT_2(setupViewport)
 
    QGraphicsView(QGraphicsViewPrivate &, QWidget *parent = 0);
-   bool event(QEvent *event);
-   bool viewportEvent(QEvent *event);
+   bool event(QEvent *event) override;
+   bool viewportEvent(QEvent *event) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *event);
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
-   void dragEnterEvent(QDragEnterEvent *event);
-   void dragLeaveEvent(QDragLeaveEvent *event);
-   void dragMoveEvent(QDragMoveEvent *event);
-   void dropEvent(QDropEvent *event);
-   void focusInEvent(QFocusEvent *event);
-   bool focusNextPrevChild(bool next);
-   void focusOutEvent(QFocusEvent *event);
-   void keyPressEvent(QKeyEvent *event);
-   void keyReleaseEvent(QKeyEvent *event);
-   void mouseDoubleClickEvent(QMouseEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
+   void dragEnterEvent(QDragEnterEvent *event) override;
+   void dragLeaveEvent(QDragLeaveEvent *event) override;
+   void dragMoveEvent(QDragMoveEvent *event) override;
+   void dropEvent(QDropEvent *event) override;
+   void focusInEvent(QFocusEvent *event) override;
+   bool focusNextPrevChild(bool next) override;
+   void focusOutEvent(QFocusEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void keyReleaseEvent(QKeyEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void paintEvent(QPaintEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void scrollContentsBy(int dx, int dy);
-   void showEvent(QShowEvent *event);
-   void inputMethodEvent(QInputMethodEvent *event);
+   void paintEvent(QPaintEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void scrollContentsBy(int dx, int dy) override;
+   void showEvent(QShowEvent *event) override;
+   void inputMethodEvent(QInputMethodEvent *event) override;
 
    virtual void drawBackground(QPainter *painter, const QRectF &rect);
    virtual void drawForeground(QPainter *painter, const QRectF &rect);

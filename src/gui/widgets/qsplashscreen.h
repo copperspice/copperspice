@@ -59,9 +59,9 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    GUI_CS_SIGNAL_2(messageChanged, message)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
    virtual void drawContents(QPainter *painter);
-   void mousePressEvent(QMouseEvent *);
+   void mousePressEvent(QMouseEvent *) override;
 
  private:
    Q_DISABLE_COPY(QSplashScreen)

@@ -45,9 +45,9 @@ class QToolBarSeparator : public QWidget
 
    Qt::Orientation orientation() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
-   void paintEvent(QPaintEvent *);
+   void paintEvent(QPaintEvent *) override;
    void initStyleOption(QStyleOption *option) const;
 
    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation orientation))
