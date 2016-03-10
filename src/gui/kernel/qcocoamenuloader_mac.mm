@@ -255,12 +255,6 @@ QT_USE_NAMESPACE
    }
 }
 
-QThreadData *internal_get_ThreadData(QObject *object)
-{
-   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(object);
-   return threadData;
-}
-
 - (void)orderFrontCharacterPalette: (id)sender
 {
    [[NSApplication sharedApplication] orderFrontCharacterPalette: sender];

@@ -522,7 +522,7 @@ CSVoidReturn cs_unpack_function_args(void (*functionPtr)(FunctionArgTypes...), c
 // ** function uses Index_Sequence Class to unpack a tuple into arguments to a method
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...> dummy)
+      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
 {  
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
@@ -531,7 +531,7 @@ MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (Meth
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(const MethodClass *obj,
       MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...> dummy)
+      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
 {
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
@@ -725,7 +725,7 @@ class TeaCup<>: public TeaCupAbstract
 };
 
 template<class T>
-TeaCup<>::TeaCup(T lambda)
+TeaCup<>::TeaCup(T)
 {
 }
 
@@ -757,7 +757,7 @@ TeaCup<std::tuple<Ts...>>::TeaCup(T lambda)
 
 // ** next two functions use Index_Sequence Class to convert a tuple to
 template<class R, class T, size_t ...Ks>
-R convert_tuple_internal(T &data, Index_Sequence<Ks...> dummy)
+R convert_tuple_internal(T &data, Index_Sequence<Ks...>)
 {
    return R {std::get<Ks>(data)...};
 }
@@ -980,7 +980,7 @@ bool Bento<FunctionReturn (*)(FunctionArgs...)>::operator ==(const BentoAbstract
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
-void Bento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *receiver, const TeaCupAbstract *dataPack,
+void Bento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *, const TeaCupAbstract *dataPack,
       CSGenericReturnArgument *retval) const
 {
    // no need to verify receiver since it is not used

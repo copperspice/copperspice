@@ -554,7 +554,7 @@ void QRawFontPrivate::platformLoadFromData(const QByteArray &fontData,
 
       QString actualFontName = font.changeFamilyName(uniqueFamilyName);
       if (actualFontName.isEmpty()) {
-         qWarning("QRawFont::platformLoadFromData: Can't change family name of font");
+         qWarning("QRawFont::platformLoadFromData: Can not change family name of font");
          return;
       }
 

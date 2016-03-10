@@ -2487,9 +2487,7 @@ bool QTextEdit::find(const QString &exp, QTextDocument::FindFlags options)
     \sa toPlainText(), toHtml()
 */
 void QTextEdit::setText(const QString &text)
-{
-   Q_D(QTextEdit);
-
+{  
    Qt::TextFormat format = Qt::mightBeRichText(text) ? Qt::RichText : Qt::PlainText;
 
 #ifndef QT_NO_TEXTHTMLPARSER

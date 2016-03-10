@@ -786,12 +786,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
 
    const DomPropertyMap attributes = propertyMap(node->elementAttribute());
    const QString pageDefaultString = QLatin1String("Page");
-   int id = -1;
-
-   if (const DomProperty *pid = attributes.value(QLatin1String("id"))) {
-      id = pid->elementNumber();
-   }
-
+   
    if (m_uic->customWidgetsInfo()->extends(parentClass, QLatin1String("QMainWindow"))) {
 
       if (m_uic->customWidgetsInfo()->extends(className, QLatin1String("QMenuBar"))) {

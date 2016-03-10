@@ -472,7 +472,7 @@ void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::
 
    //
    QMetaMethod::Attributes attr = QMetaMethod::Attributes();
-   int size = signatures.size();
+   auto size = signatures.size();
 
    QList<QByteArray> tempNames = paramNames;
 

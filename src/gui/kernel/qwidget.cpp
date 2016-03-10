@@ -2515,14 +2515,13 @@ QRect QWidget::normalGeometry() const
 }
 
 QRect QWidget::childrenRect() const
-{
-   Q_D(const QWidget);
+{   
    QRect r(0, 0, 0, 0);
 
    for (int i = 0; i < children().size(); ++i) {
       QWidget *w = qobject_cast<QWidget *>(children().at(i));
 
-      if (w && !w->isWindow() && !w->isHidden()) {
+      if (w && ! w->isWindow() && !w->isHidden()) {
          r |= w->geometry();
       }
    }
@@ -2530,14 +2529,13 @@ QRect QWidget::childrenRect() const
 }
 
 QRegion QWidget::childrenRegion() const
-{
-   Q_D(const QWidget);
+{   
    QRegion r;
 
    for (int i = 0; i < children().size(); ++i) {
       QWidget *w = qobject_cast<QWidget *>(children().at(i));
 
-      if (w && !w->isWindow() && !w->isHidden()) {
+      if (w && !w->isWindow() && ! w->isHidden()) {
          QRegion mask = w->mask();
          if (mask.isEmpty()) {
             r |= w->geometry();

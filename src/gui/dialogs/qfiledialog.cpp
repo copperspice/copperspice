@@ -746,9 +746,13 @@ QString qt_tildeExpansion(const QString &path, bool *expanded = 0)
   */
 QStringList QFileDialogPrivate::typedFiles() const
 {
+#ifdef Q_OS_UNIX
    Q_Q(const QFileDialog);
+#endif
+
    QStringList files;
    QString editText = lineEdit()->text();
+
    if (!editText.contains(QLatin1Char('"'))) {
 #ifdef Q_OS_UNIX
       const QString prefix = q->directory().absolutePath() + QDir::separator();
@@ -760,6 +764,7 @@ QStringList QFileDialogPrivate::typedFiles() const
 #else
       files << editText;
 #endif
+
    } else {
       // " is used to separate files like so: "file1" "file2" "file3" ...
       // ### need escape character for filenames with quotes (")

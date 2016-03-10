@@ -80,14 +80,15 @@ class Q_CORE_EXPORT QVariant
  public:
    enum Type {
       Invalid = QMetaType::UnknownType,
+
       Bool = QMetaType::Bool,
       Int = QMetaType::Int,
       UInt = QMetaType::UInt,
       LongLong = QMetaType::LongLong,
       ULongLong = QMetaType::ULongLong,
       Double = QMetaType::Double,
-      Char = QMetaType::QChar,
 
+      Char = QMetaType::QChar,
       Map = QMetaType::QVariantMap,
       List = QMetaType::QVariantList,
 
@@ -112,6 +113,7 @@ class Q_CORE_EXPORT QVariant
       RegExp = QMetaType::QRegExp,
       Hash = QMetaType::QVariantHash,
       EasingCurve = QMetaType::QEasingCurve,
+
       Uuid = QMetaType::QUuid,
       ModelIndex = QMetaType::QModelIndex,
 
@@ -120,11 +122,13 @@ class Q_CORE_EXPORT QVariant
       Brush = QMetaType::QBrush,
       Color = QMetaType::QColor,
       Palette = QMetaType::QPalette,
+      Icon = QMetaType::QIcon,
       Image = QMetaType::QImage,
       Polygon = QMetaType::QPolygon,
       Region = QMetaType::QRegion,
       Bitmap = QMetaType::QBitmap,
       Cursor = QMetaType::QCursor,
+      SizePolicy = QMetaType::QSizePolicy,
       KeySequence = QMetaType::QKeySequence,
       Pen = QMetaType::QPen,
       TextLength = QMetaType::QTextLength,
@@ -136,9 +140,7 @@ class Q_CORE_EXPORT QVariant
       Vector3D = QMetaType::QVector3D,
       Vector4D = QMetaType::QVector4D,
       Quaternion = QMetaType::QQuaternion,
-      PolygonF = QMetaType::QPolygonF,
-      Icon = QMetaType::QIcon,
-      SizePolicy = QMetaType::QSizePolicy,
+      PolygonF = QMetaType::QPolygonF,         
 
       // the UserType must always be after all declared types
       UserType = QMetaType::User,

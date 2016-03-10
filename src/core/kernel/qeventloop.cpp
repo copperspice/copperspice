@@ -71,8 +71,7 @@ QEventLoop::~QEventLoop()
 { }
 
 bool QEventLoop::processEvents(ProcessEventsFlags flags)
-{
-   Q_D(QEventLoop);
+{  
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {
@@ -188,8 +187,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
     \endlist
 */
 void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
-{
-   Q_D(QEventLoop);
+{  
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {
@@ -261,8 +259,7 @@ bool QEventLoop::isRunning() const
     \sa QAbstractEventDispatcher::wakeUp()
 */
 void QEventLoop::wakeUp()
-{
-   Q_D(QEventLoop);
+{  
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! threadData->eventDispatcher) {

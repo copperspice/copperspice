@@ -43,7 +43,7 @@ QT_BEGIN_NAMESPACE
 
 #define PMDEBUG if(0) qDebug
 
-#  define QT_INIT_TEXTUNDOCOMMAND(c, a1, a2, a3, a4, a5, a6, a7, a8) \
+#define QT_INIT_TEXTUNDOCOMMAND(c, a1, a2, a3, a4, a5, a6, a7, a8) \
           QTextUndoCommand c = { a1, a2, 0, 0, quint8(a3), a4, a5, a6, { a7 }, a8 }
 
 
@@ -305,7 +305,7 @@ void QTextDocumentPrivate::setLayout(QAbstractTextDocumentLayout *layout)
 }
 
 
-void QTextDocumentPrivate::insert_string(int pos, uint strPos, uint length, int format, QTextUndoCommand::Operation op)
+void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int format, QTextUndoCommand::Operation op)
 {
    // ##### optimize when only appending to the fragment!
    Q_ASSERT(noBlockInString(text.mid(strPos, length)));
@@ -334,7 +334,7 @@ void QTextDocumentPrivate::insert_string(int pos, uint strPos, uint length, int 
    adjustDocumentChangesAndCursors(pos, length, op);
 }
 
-int QTextDocumentPrivate::insert_block(quint32 pos, uint strPos, int format, int blockFormat,
+int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int blockFormat,
                                        QTextUndoCommand::Operation op, int command)
 {
    split(pos);
@@ -384,7 +384,7 @@ int QTextDocumentPrivate::insert_block(quint32 pos, uint strPos, int format, int
 }
 
 int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
-                                      quint32 pos, int blockFormat, int charFormat, QTextUndoCommand::Operation op)
+                                      int pos, int blockFormat, int charFormat, QTextUndoCommand::Operation op)
 {
    Q_ASSERT(formats.format(blockFormat).isBlockFormat());
    Q_ASSERT(formats.format(charFormat).isCharFormat());
@@ -393,13 +393,14 @@ int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
 
    beginEditBlock();
 
-   quint32 strPos = text.length();
+   int strPos = text.length();
    text.append(blockSeparator);
 
    int ob = blocks.findNode(pos);
    bool atBlockEnd = true;
    bool atBlockStart = true;
    int oldRevision = 0;
+
    if (ob) {
       atBlockEnd = (pos - blocks.position(ob) == blocks.size(ob) - 1);
       atBlockStart = ((int)blocks.position(ob) == pos);
@@ -436,12 +437,12 @@ int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
    return fragment;
 }
 
-int QTextDocumentPrivate::insertBlock(quint32 pos, int blockFormat, int charFormat, QTextUndoCommand::Operation op)
+int QTextDocumentPrivate::insertBlock(int pos, int blockFormat, int charFormat, QTextUndoCommand::Operation op)
 {
    return insertBlock(QChar::ParagraphSeparator, pos, blockFormat, charFormat, op);
 }
 
-void QTextDocumentPrivate::insert(quint32 pos, quint32 strPos, int strLength, int format)
+void QTextDocumentPrivate::insert(int pos, int strPos, int strLength, int format)
 {
    if (strLength <= 0) {
       return;
@@ -604,27 +605,28 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
    split(pos);
    split(pos + length);
 
-   uint dst = needsInsert ? fragments.findNode(to) : 0;
-   uint dstKey = needsInsert ? fragments.position(dst) : 0;
+   int dst    = needsInsert ? fragments.findNode(to) : 0;
+   int dstKey = needsInsert ? fragments.position(dst) : 0;
 
-   uint x = fragments.findNode(pos);
+   uint x   = fragments.findNode(pos);
    uint end = fragments.findNode(pos + length);
+   uint w   = 0;
 
-   uint w = 0;
    while (x != end) {
-      uint n = fragments.next(x);
-
+      uint n   = fragments.next(x);
       uint key = fragments.position(x);
-      uint b = blocks.findNode(key + 1);
+      uint b   = blocks.findNode(key + 1);
+
       QTextBlockData *B = blocks.fragment(b);
       quint32 blockRevision = static_cast<quint32>(B->revision);
 
       QTextFragmentData *X = fragments.fragment(x);
       QT_INIT_TEXTUNDOCOMMAND(c, QTextUndoCommand::Removed, (editBlock != 0),
-                              op, X->format, static_cast<quint32>(X->stringPosition), key, static_cast<int>(X->size_array[0]),
+                              op, X->format, X->stringPosition, static_cast<int>(key), static_cast<int>(X->size_array[0]),
                               blockRevision);
+
       QT_INIT_TEXTUNDOCOMMAND(cInsert, QTextUndoCommand::Inserted, (editBlock != 0),
-                              op, X->format, static_cast<quint32>(X->stringPosition), dstKey, static_cast<int>(X->size_array[0]),
+                              op, X->format, X->stringPosition, dstKey, static_cast<int>(X->size_array[0]),
                               blockRevision);
 
       if (key + 1 != blocks.position(b)) {
@@ -636,6 +638,7 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
             insert_string(dstKey, X->stringPosition, X->size_array[0], X->format, op);
             dstKey += X->size_array[0];
          }
+
       } else {
          //	    qDebug("remove_block at %d", key);
          Q_ASSERT(X->size_array[0] == 1 && isValidBlockSeparator(text.at(X->stringPosition)));
@@ -687,7 +690,7 @@ void QTextDocumentPrivate::remove(int pos, int length, QTextUndoCommand::Operati
    finishEdit();
 }
 
-void QTextDocumentPrivate::setCharFormat(quint32 pos, int length, const QTextCharFormat &newFormat,
+void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFormat &newFormat,
       FormatChangeMode mode)
 {
    beginEditBlock();
@@ -699,6 +702,7 @@ void QTextDocumentPrivate::setCharFormat(quint32 pos, int length, const QTextCha
       QTextCharFormat cleanFormat = newFormat;
       cleanFormat.clearProperty(QTextFormat::ObjectIndex);
       newFormatIdx = formats.indexForFormat(cleanFormat);
+
    } else if (mode == SetFormat) {
       newFormatIdx = formats.indexForFormat(newFormat);
    }
@@ -708,11 +712,13 @@ void QTextDocumentPrivate::setCharFormat(quint32 pos, int length, const QTextCha
          QTextFormat format = formats.format(initialBlockCharFormatIndex);
          format.merge(newFormat);
          initialBlockCharFormatIndex = formats.indexForFormat(format);
+
       } else if (mode == SetFormatAndPreserveObjectIndices
                  && formats.format(initialBlockCharFormatIndex).objectIndex() != -1) {
          QTextCharFormat f = newFormat;
          f.setObjectIndex(formats.format(initialBlockCharFormatIndex).objectIndex());
          initialBlockCharFormatIndex = formats.indexForFormat(f);
+
       } else {
          initialBlockCharFormatIndex = newFormatIdx;
       }
@@ -819,7 +825,7 @@ void QTextDocumentPrivate::setBlockFormat(const QTextBlock &from, const QTextBlo
       block(it)->invalidate();
 
       QT_INIT_TEXTUNDOCOMMAND(c, QTextUndoCommand::BlockFormatChanged, true, QTextUndoCommand::MoveCursor, oldFormat,
-                              0, static_cast<quint32>(it.position()), 1, 0);
+                              0, it.position(), 1, 0);
       appendUndoItem(c);
 
       if (group != oldGroup) {
@@ -1093,10 +1099,11 @@ void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
    }
 
    if (editBlock != 0 && editBlockCursorPosition >= 0) { // we had a beginEditBlock() with a cursor position
-      if (c.pos != (quint32) editBlockCursorPosition) { // and that cursor position is different from the command
+
+      if (c.pos != editBlockCursorPosition) {  // and that cursor position is different from the command
          // generate a CursorMoved undo item
          QT_INIT_TEXTUNDOCOMMAND(cc, QTextUndoCommand::CursorMoved, true, QTextUndoCommand::MoveCursor,
-                                 0, 0, static_cast<quint32>(editBlockCursorPosition), 0, 0);
+                                 0, 0, editBlockCursorPosition, 0, 0);
          undoStack.append(cc);
          undoState++;
          editBlockCursorPosition = -1;
@@ -1104,7 +1111,7 @@ void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
    }
 
 
-   if (!undoStack.isEmpty() && modified) {
+   if (! undoStack.isEmpty() && modified) {
       QTextUndoCommand &last = undoStack[undoState - 1];
 
       if ( (last.block_part && c.block_part && !last.block_end) // part of the same block => can merge

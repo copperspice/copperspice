@@ -265,12 +265,6 @@ static void cleanupCocoaWindowDelegate()
    return qt_widget_private(qwidget)->close_helper(QWidgetPrivate::CloseWithSpontaneousEvent);
 }
 
-QThreadData *internal_get_ThreadData(QObject *object)
-{
-   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(object);
-   return threadData;
-}
-
 -(void)windowDidDeminiaturize: (NSNotification *)notification
 {
    QWidget *qwidget = m_windowHash->value([notification object]);

@@ -30,7 +30,7 @@
 CSMetaCallEvent::CSMetaCallEvent(const BentoAbstract *bento, const TeaCupAbstract *dataPack,
                                  const QObject *sender, int signal_index, QSemaphore *semaphore)
    : QEvent(MetaCall), m_bento(bento), m_dataPack(dataPack), m_sender(sender),
-     m_signal_index(signal_index), m_semaphore(semaphore)
+     m_semaphore(semaphore), m_signal_index(signal_index)
 {
 }
 

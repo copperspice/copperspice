@@ -31,7 +31,7 @@
 // **
 // template<class T, class=void, class=typename std::enable_if<!std::is_constructible<QVariant, T>::value>::type>
 template<class T, class unused_1, class unused_2>
-QVariant cs_convertToQVariant(T data)
+QVariant cs_convertToQVariant(T)
 {
    return QVariant();
 }
@@ -47,7 +47,7 @@ QVariant cs_convertToQVariant(T data)
 // **
 // template<class T, class=void, class=void, class=typename std::enable_if< (! is_enum_or_flag<T>::value) && ! QMetaTypeId2<T>::Defined>::type>
 template<class T, class unused_1, class unused_2, class unused_3>
-std::pair<T, bool> convertFromQVariant(QVariant data)
+std::pair<T, bool> convertFromQVariant(QVariant)
 {
    // T is not an enum, flag, or built in data type
    return std::make_pair(T {}, false);

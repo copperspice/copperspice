@@ -196,6 +196,8 @@ class QCocoaPostMessageArgs
 };
 void qt_cocoaPostMessage(id target, SEL selector, int argCount = 0, id arg1 = 0, id arg2 = 0);
 void qt_cocoaPostMessageAfterEventLoopExit(id target, SEL selector, int argCount = 0, id arg1 = 0, id arg2 = 0);
+
+QThreadData *internal_get_ThreadData(QObject *object);
 #endif
 
 class QMacScrollOptimization

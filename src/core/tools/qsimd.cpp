@@ -357,11 +357,10 @@ const int features_count = (sizeof features_indices - 1) / (sizeof features_indi
 
 uint qDetectCPUFeatures()
 {
-   static QAtomicInt features = QAtomicInt { -1 };
+   static std::atomic<uint> features(std::numeric_limits<uint>::max());
+   uint f = features.load(std::memory_order_acquire);
 
-   uint f = features.loadAcquire();
-
-   if (f != -1) {
+   if (f != std::numeric_limits<uint>::max()) {
       return f;
    }
 
@@ -370,6 +369,7 @@ uint qDetectCPUFeatures()
 
    if (! disable.isEmpty()) {
       disable.prepend(' ');
+
       for (int i = 0; i < features_count; ++i) {
          if (disable.contains(features_string + features_indices[i])) {
             f &= ~(1 << i);
@@ -377,7 +377,7 @@ uint qDetectCPUFeatures()
       }
    }
 
-   features.testAndSetRelease(-1, f);
+   features.store(f, std::memory_order_release);
 
    return f;
 }

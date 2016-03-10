@@ -174,12 +174,6 @@ static void cleanupCocoaApplicationDelegate()
    return NSTerminateCancel;
 }
 
-QThreadData *internal_get_ThreadData(QObject *object)
-{
-   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(object);
-   return threadData;
-}
-
 - (void)applicationDidFinishLaunching: (NSNotification *)aNotification
 {
    Q_UNUSED(aNotification);

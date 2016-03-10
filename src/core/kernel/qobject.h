@@ -580,10 +580,6 @@ class Q_CORE_EXPORT CSInternalSender
    friend class QACConnectionObject;
 };
 
-#ifdef QT_BUILD_GUI_LIB
-static QThreadData *internal_get_ThreadData(QObject *object);
-#endif
-
 class Q_CORE_EXPORT CSInternalThreadData
 {
  private:

@@ -503,12 +503,12 @@ bool QObject::connect(const QObject *sender, const char *signalMethod, const cha
    return QObject::connect(sender, signalMethod, this, slotMethod, type);
 }
 
-void QObject::connectNotify(const char *signal) const
+void QObject::connectNotify(const char *) const
 {
    // no code is suppose to appear here
 }
 
-void QObject::connectNotify(const QMetaMethod &signal) const
+void QObject::connectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }
@@ -782,7 +782,7 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetho
    return true;
 }
 
-bool QObject::disconnect(const QObject *sender,   const char *signalMethod, const char *location,
+bool QObject::disconnect(const QObject *sender,   const char *signalMethod, const char *,
                          const QObject *receiver, const char *slotMethod)
 {
    return QObject::disconnect(sender, signalMethod, receiver, slotMethod);
@@ -793,7 +793,7 @@ bool QObject::disconnect(const char *signalMethod, const QObject *receiver, cons
    return QObject::disconnect(this, signalMethod, receiver, slotMethod);
 }
 
-bool QObject::disconnect(const char *signalMethod, const char *lineNumber, const QObject *receiver,
+bool QObject::disconnect(const char *signalMethod, const char *, const QObject *receiver,
                          const char *slotMethod) const
 {
    return QObject::disconnect(this, signalMethod, receiver, slotMethod);
@@ -804,12 +804,12 @@ bool QObject::disconnect(const QObject *receiver, const char *slotMethod) const
    return QObject::disconnect(this, 0, receiver, slotMethod);
 }
 
-void QObject::disconnectNotify(const char *signal) const
+void QObject::disconnectNotify(const char *) const
 {
    // no code is suppose to appear here
 }
 
-void QObject::disconnectNotify(const QMetaMethod &signal) const
+void QObject::disconnectNotify(const QMetaMethod &) const
 {
    // no code is suppose to appear here
 }
@@ -895,7 +895,7 @@ bool QObject::event(QEvent *e)
    return true;
 }
 
-bool QObject::eventFilter(QObject *watched, QEvent *event)
+bool QObject::eventFilter(QObject *, QEvent *)
 {
    // no code is suppose to appear here
    return false;
@@ -1585,7 +1585,7 @@ bool QObject::cs_InstanceOf(const char *iid)
    return false;
 }
 
-bool QObject::cs_interface_query(const char *data) const
+bool QObject::cs_interface_query(const char *) const
 {
    return false;
 }
