@@ -2357,7 +2357,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_WEBKIT_LDFLAGS}
         -Wl,-s
     )
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     add_definitions(-DXP_UNIX
         -DENABLE_NETSCAPE_PLUGIN_METADATA_CACHE=1
         -DENABLE_NETSCAPE_PLUGIN_API=1

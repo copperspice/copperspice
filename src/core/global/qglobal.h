@@ -178,6 +178,10 @@ QT_USE_NAMESPACE
 #elif defined(__linux__) || defined(__linux)
 #  define Q_OS_LINUX
 
+#elif defined(__DragonFly__)
+#  define Q_OS_DRAGONFLY
+#  define Q_OS_BSD4
+
 #elif defined(__FreeBSD__)
 #  define Q_OS_FREEBSD
 #  define Q_OS_BSD4
@@ -1665,7 +1669,7 @@ Q_CORE_EXPORT int qrand();
 
 
 #if defined (__ELF__)
-#  if defined (Q_OS_LINUX) || defined (Q_OS_SOLARIS) || defined (Q_OS_FREEBSD) || defined (Q_OS_OPENBSD)
+#  if defined (Q_OS_LINUX) || defined (Q_OS_SOLARIS) || defined (Q_OS_FREEBSD) || defined (Q_OS_OPENBSD) || defined (Q_OS_DRAGONFLY)
 #    define Q_OF_ELF
 #  endif
 #endif

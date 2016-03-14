@@ -340,7 +340,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9
     )
     set(PHONON2_SUFFIX "ds9")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/gstreamer/abstractrenderer.cpp
