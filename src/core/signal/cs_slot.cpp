@@ -26,9 +26,13 @@ CsSignal::SlotBase::~SlotBase()
 {
    try {
       // clean up possible sender connections
-      std::lock_guard<std::mutex> receiverLock {m_mutex_possibleSenders};
+      std::unique_lock<std::mutex> receiverLock {m_mutex_possibleSenders};
+
+      std::vector<const SignalBase *> tmp_possibleSenders;   
+      swap(tmp_possibleSenders, m_possibleSenders);
+      receiverLock.unlock();
    
-      for (auto sender : m_possibleSenders) {
+      for (auto sender : tmp_possibleSenders) {
          std::lock_guard<std::mutex> senderLock {sender->m_mutex_connectList}; 
 
          if (sender->m_activateBusy > 0)  {

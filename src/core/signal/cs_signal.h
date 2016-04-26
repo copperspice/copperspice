@@ -492,6 +492,11 @@ bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *si
    for (int k = 0; k < sender.m_connectList.size(); ++k) {
       SignalBase::ConnectStruct &temp = sender.m_connectList[k];
 
+      if (temp.type == ConnectionKind::InternalDisconnected) {
+         // already marked as disconnected
+         continue;
+      }
+ 
       bool isMatch = false;
 
       if (signalBento == nullptr && receiver == nullptr) {
