@@ -1308,6 +1308,11 @@ QMap<std::type_index, QMetaObject *> &QObject::m_metaObjectsAll()
    return metaObjects;
 }
 
+std::recursive_mutex &QObject::m_metaObjectMutex()
+{
+   static std::recursive_mutex metaObjectMutex;
+   return metaObjectMutex;
+}
 
 // **
 void (*CSAbstractDeclarativeData::destroyed)(CSAbstractDeclarativeData *, QObject *) = 0;
@@ -1315,12 +1320,10 @@ void (*CSAbstractDeclarativeData::parentChanged)(CSAbstractDeclarativeData *, QO
 void (*CSAbstractDeclarativeData::signalEmitted)(CSAbstractDeclarativeData *, QObject *, int, void **) = 0;
 int  (*CSAbstractDeclarativeData::receivers)(CSAbstractDeclarativeData *, const QObject *, int) = 0;
 
-
-
 // **
 const QMetaObject &CSGadget_Fake_Parent::staticMetaObject()
 {
-   const QMetaObject *retval = 0;
+   const QMetaObject *retval = nullptr;
    return *retval;
 }
 
@@ -1330,5 +1333,10 @@ QMap<std::type_index, QMetaObject *> &CSGadget_Fake_Parent::m_metaObjectsAll()
    return metaObjects;
 }
 
+std::recursive_mutex &CSGadget_Fake_Parent::m_metaObjectMutex()
+{
+   static std::recursive_mutex metaObjectMutex;
+   return metaObjectMutex;
+}
 
 QT_END_NAMESPACE

@@ -223,6 +223,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    int senderSignalIndex() const;
 
    static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
+   static std::recursive_mutex &m_metaObjectMutex();
 
  private:  
    QObject *m_parent;
@@ -438,6 +439,7 @@ class Q_CORE_EXPORT CSGadget_Fake_Parent
  public:
    static const QMetaObject &staticMetaObject();
    static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
+   static std::recursive_mutex &m_metaObjectMutex();
 };
 
 
