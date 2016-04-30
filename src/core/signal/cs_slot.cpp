@@ -58,7 +58,11 @@ CsSignal::SlotBase::~SlotBase()
 
 CsSignal::SignalBase *&CsSignal::SlotBase::get_threadLocal_currentSender()
 {
+#ifdef __APPLE__ 
+   static __thread CsSignal::SignalBase *threadLocal_currentSender = nullptr;
+#else
    static thread_local CsSignal::SignalBase *threadLocal_currentSender = nullptr;
+#endif
 
    return threadLocal_currentSender;
 }

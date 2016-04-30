@@ -47,7 +47,12 @@ CsSignal::SignalBase::~SignalBase()
 
 CsSignal::Internal::BentoAbstract *&CsSignal::SignalBase::get_threadLocal_currentSignal()
 {
+
+#ifdef __APPLE__ 
+   static __thread CsSignal::Internal::BentoAbstract *threadLocal_currentSignal = nullptr;
+#else
    static thread_local CsSignal::Internal::BentoAbstract *threadLocal_currentSignal = nullptr;
+#endif
 
    return threadLocal_currentSignal;
 }

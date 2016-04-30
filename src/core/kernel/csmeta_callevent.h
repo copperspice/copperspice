@@ -26,10 +26,6 @@
 #ifndef CSMETA_CALLEVENT_H
 #define CSMETA_CALLEVENT_H
 
-#include <QEvent>
-
-#include <cs_internal.h>
-
 class QObject;
 class QSemaphore;
 

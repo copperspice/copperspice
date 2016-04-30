@@ -26,12 +26,12 @@
 #ifndef CSOBJECT_INTERNAL_H
 #define CSOBJECT_INTERNAL_H
 
-#include <csmeta_callevent.h>
-#include <qthread.h>
-
 #include <QCoreApplication>
 #include <QThread>
 #include <QSemaphore>
+
+#include <csmeta_callevent.h>
+#include <qthread.h>
 
 // signal & slot method ptr
 template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
