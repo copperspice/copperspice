@@ -252,8 +252,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
         TYPE REQUIRED
     )
 
-    find_package(GLIB2)
-    set_package_properties(GLIB2 PROPERTIES
+    find_package(GLib2)
+    set_package_properties(GLib2 PROPERTIES
         PURPOSE "Required for glib mainloop support"
         DESCRIPTION "Core application building blocks for libraries and applications written in C"
         URL "https://developer.gnome.org/glib"
