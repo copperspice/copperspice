@@ -26,6 +26,8 @@
 #ifndef CSOBJECT_MACRO_H
 #define CSOBJECT_MACRO_H
 
+#include <cs_signal.h>
+#include <cs_slot.h>
 #include <qglobal.h>
 
 #ifndef csPrintable
@@ -72,14 +74,14 @@ class cs_number<0>
    public: \
       typedef cs_class cs_parent; \
       typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      CS_OBJECT_INTERNAL(classNameX, override) \
    private:
 
 #define CS_OBJECT_MULTIPLE(classNameX,parentX) \
    public: \
       typedef parentX cs_parent; \
       typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      CS_OBJECT_INTERNAL(classNameX, override) \
    private:
 
 #define CS_OBJECT_OUTSIDE(classNameX) \
@@ -96,7 +98,7 @@ class cs_number<0>
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    private:
 
-#define CS_OBJECT_INTERNAL(classNameX) \
+#define CS_OBJECT_INTERNAL(classNameX, overrideX) \
    public: \
       static const char *cs_className() \
       { \
@@ -108,23 +110,38 @@ class cs_number<0>
       } \
       static constexpr cs_number<0> cs_counter(cs_number<0>)   \
       { \
-         return cs_number<0>{};  \
+         return cs_number<0>{};   \
       } \
       friend QMetaObject_T<classNameX>; \
       Q_DECL_EXPORT static const QMetaObject_T<classNameX> & staticMetaObject()   \
       { \
+         static std::atomic<bool> isCreated(false);                               \
+         static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);     \
+         if (isCreated) {         \
+            return *createdObj;   \
+         } \
+         std::lock_guard<std::recursive_mutex> lock(m_metaObjectMutex());   \
+         if (createdObj != nullptr) { \
+            return *createdObj;       \
+         } \
          QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
          auto index = temp.find(typeid(cs_class));    \
-         if (index == temp.end()) {             \
-            QMetaObject_T<classNameX> *xx = new QMetaObject_T<classNameX>;  \
-            temp.insert(typeid(cs_class), xx);  \
-            xx->postConstruct(); \
-            return *xx; \
-         } else {      \
-            return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+         QMetaObject_T<classNameX> *newMeta;          \
+         if (index == temp.end()) {     \
+            newMeta = new QMetaObject_T<classNameX>;  \
+            temp.insert(typeid(cs_class), newMeta);   \
+            createdObj.store(newMeta);  \
+            newMeta->postConstruct();   \
+            isCreated = true;    \
+            return *newMeta;     \
+         } else {  \
+            newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+            createdObj.store(newMeta);  \
+            isCreated = true;    \
+            return *newMeta;     \
          } \
       } \
-      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const \
+      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const overrideX \
       { \
          return &staticMetaObject(); \
       } \
@@ -237,7 +254,7 @@ class cs_number<0>
 
 #define CS_INTERFACES(...)    \
    public: \
-      bool cs_interface_query(const char *data) const    \
+      bool cs_interface_query(const char *data) const override \
       {  \
          if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
             return true;   \
@@ -450,9 +467,9 @@ class cs_number<0>
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
             decltype(cs_counter(cs_number<255>{}))::value; \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>) \
+            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>)   \
       {  \
-         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};      \
+         return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{};        \
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
@@ -461,16 +478,19 @@ class cs_number<0>
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }  \
-   Q_DECL_EXPORT __VA_ARGS__ {
+   Q_DECL_EXPORT __VA_ARGS__ {   \
+      if (this->signalsBlocked()) {          \
+         return;                 \
+      }
 // do not remove the "{", this is required for part two of the macro
 
 
 #define CS_SIGNAL_2(signalName, ...) \
-      QMetaObject::activate(this, &cs_class::signalName, ##__VA_ARGS__); \
+      CsSignal::activate(*this, &cs_class::signalName, ##__VA_ARGS__); \
    }  \
    static constexpr int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
             decltype(cs_counter(cs_number<255>{}))::value; \
-   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>     \
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>) \
       {  \
          return cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) +1 >{};      \
@@ -485,7 +505,7 @@ class cs_number<0>
 
 
 #define CS_SIGNAL_OVERLOAD(signalName, argTypes, ...) \
-      QMetaObject::activate(this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
+      CsSignal::activate(*this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
    }  \
    static constexpr int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
             decltype(cs_counter(cs_number<255>{}))::value; \
@@ -870,7 +890,7 @@ class cs_number<0>
 
 #define CORE_CS_OBJECT(className)                              CS_OBJECT(className)
 #define CORE_CS_OBJECT_MULTIPLE(className, parentX)            CS_OBJECT_MULTIPLE(className, parentX)
-#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL(className)
+#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL(className,)
 #define CORE_CS_GADGET(className)                              CS_GADGET(className)
 
 #define CORE_CS_SLOT_1(access, ...)                            CS_SLOT_1(access, __VA_ARGS__)
@@ -984,7 +1004,7 @@ class cs_number<0>
 #define GUI_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
 #define GUI_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define GUI_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
-#define GUI_CS_CLASSINFO(name, data)                              
+#define GUI_CS_CLASSINFO(name, data)
 
 #define GUI_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define GUI_CS_SLOT_2(slotName)
@@ -1193,7 +1213,7 @@ class cs_number<0>
 #define PHN_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
 #define PHN_CS_OBJECT_MULTIPLE(className, parentX)                CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define PHN_CS_GADGET(className)                                  CS_GADGET_OUTSIDE(className)
-#define PHN_CS_CLASSINFO(name, data)                             
+#define PHN_CS_CLASSINFO(name, data)
 
 #define PHN_CS_SLOT_1(access, ...)                                __VA_ARGS__;
 #define PHN_CS_SLOT_2(slotName)
@@ -1533,7 +1553,7 @@ class cs_number<0>
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT_OUTSIDE(className)
 #define DECL_CS_OBJECT_MULTIPLE(className, parentX)               CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
 #define DECL_CS_GADGET(className)                                 CS_GADGET_OUTSIDE(className)
-#define DECL_CS_CLASSINFO(name, data)                             
+#define DECL_CS_CLASSINFO(name, data)
 
 #define DECL_CS_SLOT_1(access, ...)                               __VA_ARGS__;
 #define DECL_CS_SLOT_2(slotName)

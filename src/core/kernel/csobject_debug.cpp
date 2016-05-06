@@ -68,56 +68,80 @@ void QObject::dumpObjectInfo()
 {
 
 #if defined(QT_DEBUG)
-
    qDebug("\n--  dumpObjectInfo  --\n");
 
    qDebug("  OBJECT %s::%s", this->metaObject()->className(),
           objectName().isEmpty() ? "unnamed" : objectName().toLocal8Bit().data());
 
-   std::unique_lock<std::mutex> senderLock {this->m_mutex_ToReceiver};
-   std::unique_lock<std::mutex> receiverLock {this->m_mutex_FromSender};
+   qDebug("  SIGNAL LIST - CONNECTED TO WHICH RECEIVERS");
+  
+   const QMetaObject *metaObject = this->metaObject();
 
-   // look for connections where this object is the sender
-   qDebug("  SIGNALS OUT");
+   for (int index = 0; index < metaObject->methodCount(); ++index)  {
+      // iterate over the signals in "this"
 
-   for (auto k = this->m_connectList_ToReceiver.begin(); k != this->m_connectList_ToReceiver.end(); ++k) {
-      const ConnectStruct &temp = *k;
+      QMetaMethod signalMetaMethod = metaObject->method(index);
 
-      if (temp.sender == 0) {
-         // connection is marked for deletion
+      if (signalMetaMethod.methodType() != QMetaMethod::Signal)  {
          continue;
       }
 
-      const QMetaMethod signal = metaObject()->method(*temp.signalMethod);
+      const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
+      std::set<SlotBase *> receiverList = internal_receiverList(*signalMethod_Bento);
 
-      qDebug("        signal: %s", signal.methodSignature().constData());
+      // look for connections where "this" object is the sender     
+      for (auto receiver : receiverList) {           
+         qDebug("        signal name: %s", signalMetaMethod.methodSignature().constData());
 
-      if (! temp.receiver) {
-         qDebug("          <Null receiver>");
-         continue;
+         QObject *obj = dynamic_cast<QObject *>(receiver);
+              
+         if (obj) {
+            const QMetaObject *receiverMetaObject = obj->metaObject();
+
+            // broom - review again (can wait)
+            // const QMetaMethod slotMetaMethod      = receiverMetaObject->method(*temp.slotMethod);
+   
+            qDebug("          --> %s::%s",
+                receiverMetaObject->className(),
+                obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );
+
+            //    qDebug("          --> %s::%s %s",
+            //    slotMetaMethod.methodSignature().constData());
+
+         } else {
+            // receiver does not inherit from QObject
+            qDebug("          --> %s", typeid (*receiver).name() );
+         }
       }
-
-      const QMetaObject *receiverMetaObject = temp.receiver->metaObject();
-      const QMetaMethod method = receiverMetaObject->method(*temp.slotMethod);
-
-      qDebug("          --> %s::%s %s",
-             receiverMetaObject->className(),
-             temp.receiver->objectName().isEmpty() ? "unnamed" : qPrintable(temp.receiver->objectName()),
-             method.methodSignature().constData());
    }
 
    // look for connections where this object is the receiver
-   qDebug("\n  SIGNALS IN");
+   qDebug("\n  SIGNAL LIST - RECEIVER HAS CONNECTION TO WHICH SENDERS");
 
-   for (auto k = this->m_connectList_FromSender.begin(); k != this->m_connectList_FromSender.end(); ++k) {
-      const ConnectStruct &temp = *k;
+   std::set<SignalBase *> senderList = internal_senderList();
 
-      const QMetaMethod slot = metaObject()->method(*temp.slotMethod);
+   for (auto sender : senderList) {
+    
+      // review again (can wait)
+      // const QMetaMethod slot = metaObject()->method(*temp.slotMethod);
 
-      qDebug("          <-- %s::%s  %s",
-             temp.sender->metaObject()->className(),
-             temp.sender->objectName().isEmpty() ? "unnamed" : qPrintable(temp.sender->objectName()),
-             slot.methodSignature().constData());
+      QObject *obj = dynamic_cast<QObject *>(sender);
+              
+      if (obj) {
+         const QMetaObject *senderMetaObject = obj->metaObject();
+
+         qDebug("          <-- %s::%s",
+                senderMetaObject->className(),
+                obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
+   
+         //   qDebug("          <-- %s::%s  %s",
+         //   slot.methodSignature().constData());
+
+      } else {
+         // sender does not inherit from QObject
+         qDebug("          --> %s", typeid (*sender).name() );
+
+      }
    }
 
    qDebug("--\n");

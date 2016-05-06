@@ -9,6 +9,7 @@ lib_libCsCore1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivate
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_BUILD_CORE_LIB  \
+   -DBUILDING_LIB_CS_SIGNAL  \
    -DQT_SHARED   \
    -DQT_MAKEDLL
 
@@ -71,6 +72,7 @@ include src/core/io/Makefile.am
 include src/core/json/Makefile.am
 include src/core/kernel/Makefile.am
 include src/core/plugin/Makefile.am
+include src/core/signal/Makefile.am
 include src/core/statemachine/Makefile.am
 include src/core/thread/Makefile.am
 include src/core/tools/Makefile.am
