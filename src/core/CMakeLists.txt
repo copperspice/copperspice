@@ -23,7 +23,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/tools
     ${CMAKE_CURRENT_SOURCE_DIR}/xml
     ${GLIB2_INCLUDES}
-    ${GOBJECT2_INCLUDE_DIR}
+    ${GOBJECT2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
