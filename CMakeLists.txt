@@ -67,7 +67,7 @@ endif()
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "2")
-set(BUILD_MICRO "1")
+set(BUILD_MICRO "2")
 # everything is optional except core
 set(BUILD_COMPONENTS "Core")
 # TODO: add DBus, Declarative and ScriptTools once they build
