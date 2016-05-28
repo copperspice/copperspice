@@ -3,7 +3,7 @@
 #
 #  GLIB2_FOUND - system has GLib2
 #  GLIB2_INCLUDES - the GLib2 include directory
-#  GLIB2_CONFIG_INCLUDES - the D-Bus message bus architecture include directory
+#  GLIB2_CONFIG_INCLUDES - the GLib2 config include directory
 #  GLIB2_LIBRARIES - The libraries needed to use GLib2
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
