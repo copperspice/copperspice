@@ -170,7 +170,6 @@ macro_generate_package(
     CsGui${BUILD_MAJOR}
     QtGui
     "${EXTRA_GUI_CXXFLAGS}"
-    "${EXTRA_GUI_LIBS}"
     "CsCore${BUILD_MAJOR}"
 )
 

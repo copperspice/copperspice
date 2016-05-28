@@ -46,7 +46,6 @@ macro_generate_package(
     CsScriptTools${BUILD_MAJOR}
     QtScriptTools
     "${EXTRA_SCRIPTTOOLS_CXXFLAGS}"
-    "${EXTRA_SCRIPTTOOLS_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
 )
 

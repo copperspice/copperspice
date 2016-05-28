@@ -563,7 +563,6 @@ macro_generate_package(
     CsScript${BUILD_MAJOR}
     QtScript
     "${EXTRA_SCRIPT_CXXFLAGS}"
-    "${EXTRA_SCRIPT_LIBS}"
     "CsCore${BUILD_MAJOR}"
 )
 

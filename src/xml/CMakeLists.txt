@@ -47,7 +47,6 @@ macro_generate_package(
     CsXml${BUILD_MAJOR}
     QtXml
     "${EXTRA_XML_CXXFLAGS}"
-    "${EXTRA_XML_LIBS}"
     "CsCore${BUILD_MAJOR}"
 )
 

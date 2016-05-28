@@ -68,7 +68,6 @@ macro_generate_package(
     CsNetwork${BUILD_MAJOR}
     QtNetwork
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_MAJOR}"
 )
 

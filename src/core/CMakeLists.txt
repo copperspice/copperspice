@@ -116,7 +116,6 @@ macro_generate_package(
     CsCore${BUILD_MAJOR}
     QtCore
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     ""
 )
 

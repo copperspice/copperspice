@@ -2431,7 +2431,6 @@ macro_generate_package(
     CsWebKit${BUILD_MAJOR}
     QtWebKit
     "${EXTRA_WEBKIT_CXXFLAGS}"
-    "${EXTRA_WEBKIT_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
 )
 

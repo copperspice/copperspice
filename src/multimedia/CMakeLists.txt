@@ -46,7 +46,6 @@ macro_generate_package(
     CsMultimedia${BUILD_MAJOR}
     QtMultimedia
     "${EXTRA_MULTIMEDIA_CXXFLAGS}"
-    "${EXTRA_MULTIMEDIA_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
 )
 

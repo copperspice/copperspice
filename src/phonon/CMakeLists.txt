@@ -484,14 +484,12 @@ macro_generate_package(
     CsPhonon${BUILD_MAJOR}
     phonon
     "${EXTRA_PHONON_CXXFLAGS}"
-    "${EXTRA_PHONON_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
 )
 macro_generate_package(
     phonon_${PHONON2_SUFFIX}
     phonon
     "${EXTRA_PHONON2_CXXFLAGS}"
-    "${EXTRA_PHONON2_LIBS}"
     "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR}"
 )
 

@@ -61,7 +61,6 @@ macro_generate_package(
     CsDeclarative${BUILD_MAJOR}
     QtDeclarative
     "${EXTRA_DECLARATIVE_CXXFLAGS}"
-    "${EXTRA_DECLARATIVE_LIBS}"
     "CsCore${BUILD_MAJOR} QtGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
 )
 
