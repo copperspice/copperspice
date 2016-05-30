@@ -15,6 +15,11 @@ MULTIMEDIA_PUBLIC_INCLUDES =
 MULTIMEDIA_PRIVATE_INCLUDES =
 MULTIMEDIA_DIRS =
 
+EXTRA_DIST += \
+	src/multimedia/CMakeLists.txt \
+	src/multimedia/audio/audio.cmake \
+	src/multimedia/video/video.cmake
+
 include src/multimedia/audio/Makefile.am
 include src/multimedia/video/Makefile.am
 

@@ -14,7 +14,34 @@ noinst_HEADERS =
 noinst_LTLIBRARIES =
 lib_LTLIBRARIES =
 EXTRA_LTLIBRARIES =
-EXTRA_DIST=
+EXTRA_DIST= \
+	README \
+	CMakeLists.txt \
+	cmake/modules/FindGLIB2.cmake \
+	cmake/modules/TestLargeFiles.cmake \
+	cmake/modules/FindIconv.cmake \
+	cmake/modules/FindNAS.cmake \
+	cmake/modules/FindMySQL.cmake \
+	cmake/modules/FindGStreamer.cmake \
+	cmake/modules/CopperSpiceBuildMacros.cmake \
+	cmake/modules/FindFontconfig.cmake \
+	cmake/modules/FindGOBJECT2.cmake \
+	cmake/modules/FindFreetype.cmake \
+	cmake/CopperSpiceMacros.cmake \
+	cmake/archlinux-mingw.cmake \
+	cmake/CopperSpiceConfig.cmake \
+	cmake/CopperSpiceConfigVersion.cmake \
+	cmake/pkgconfig.cmake \
+	cmake/qt-acconfig.h.cmake \
+	src/tools/lconvert/CMakeLists.txt \
+	src/tools/lrelease/CMakeLists.txt \
+	src/tools/lupdate/CMakeLists.txt \
+	src/tools/rcc/CMakeLists.txt \
+	src/tools/shared/CMakeLists.txt \
+	src/tools/uic/CMakeLists.txt \
+	src/webkit/CMakeLists.txt
+
+
 
 SUBDIRS = . src/webkit
 DIST_SUBDIRS = src/webkit
@@ -165,7 +192,6 @@ distdir: $(DISTFILES) DISTFILES.list
 	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
 	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
 	|| chmod -R a+r "$(distdir)"
-	-rm -f DISTFILES.list $(distdir)/README
 	find $(distdir) -exec touch -r $(distdir) \{\} \;
 
 

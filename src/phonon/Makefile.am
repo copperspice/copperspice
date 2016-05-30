@@ -15,6 +15,9 @@ lib_libCsPhonon1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/phonon -Ipriv
 lib_libCsPhonon1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsPhonon1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la lib/libCsNetwork1.la
 
+EXTRA_DIST += \
+	src/phonon/CMakeLists.txt
+
 PHONON_PUBLIC_INCLUDES = \
 	AbstractAudioOutput \
 	AbstractMediaStream \

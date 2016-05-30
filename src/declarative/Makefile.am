@@ -22,6 +22,15 @@ DECLARATIVE_PUBLIC_INCLUDES =
 DECLARATIVE_PRIVATE_INCLUDES =
 DECLARATIVE_DIRS =
 
+EXTRA_DIST += \
+	src/declarative/CMakeLists.txt \
+	src/declarative/debugger/debugger.cmake \
+	src/declarative/graphicsitems/graphicsitems.cmake \
+	src/declarative/qml/parser/parser.cmake \
+	src/declarative/qml/qml.cmake \
+	src/declarative/qml/rewriter/rewriter.cmake \
+	src/declarative/util/util.cmake
+
 include src/declarative/debugger/Makefile.am
 include src/declarative/graphicsitems/Makefile.am
 include src/declarative/qml/Makefile.am

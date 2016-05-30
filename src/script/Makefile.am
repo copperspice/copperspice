@@ -70,6 +70,12 @@ SCRIPT_PUBLIC_INCLUDES =
 SCRIPT_PRIVATE_INCLUDES =
 SCRIPT_DIRS =
 
+EXTRA_DIST += \
+	src/script/CMakeLists.txt \
+	src/script/api/api.cmake \
+	src/script/bridge/bridge.cmake \
+	src/script/parser/parser.cmake
+
 include src/script/api/Makefile.am
 include src/script/bridge/Makefile.am
 include src/script/parser/Makefile.am

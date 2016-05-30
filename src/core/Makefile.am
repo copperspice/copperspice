@@ -78,6 +78,23 @@ include src/core/thread/Makefile.am
 include src/core/tools/Makefile.am
 include src/core/xml/Makefile.am
 
+EXTRA_DIST+= \
+	src/core/CMakeLists.txt \
+	src/core/animation/animation.cmake \
+	src/core/codecs/codecs.cmake \
+	src/core/concurrent/concurrent.cmake \
+	src/core/global/global.cmake \
+	src/core/io/io.cmake \
+	src/core/json/json.cmake \
+	src/core/kernel/kernel.cmake \
+	src/core/plugin/plugin.cmake \
+	src/core/signal/signal.cmake \
+	src/core/statemachine/statemachine.cmake \
+	src/core/thread/thread.cmake \
+	src/core/tools/tools.cmake \
+	src/core/xml/xml.cmake
+
+
 CORE_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtCore/%,$(CORE_INCLUDES)) \
 	$(patsubst %,include/QtCore/%,$(CORE_PUBLIC_INCLUDES)) \
