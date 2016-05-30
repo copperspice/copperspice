@@ -32,9 +32,9 @@ macro_generate_misc("${SCRIPTTOOLS_INCLUDES}" QtScriptTools)
 function_variable_fixup("${EXTRA_SCRIPTTOOLS_CXXFLAGS}" EXTRA_SCRIPTTOOLS_CXXFLAGS)
 function_variable_fixup("${EXTRA_SCRIPTTOOLS_LDFLAGS}" EXTRA_SCRIPTTOOLS_LDFLAGS)
 
-add_library(CsScriptTools${BUILD_MAJOR} SHARED ${SCRIPTTOOLS_SOURCES} ${SCRIPTTOOLS_INCLUDES})
-target_link_libraries(CsScriptTools${BUILD_MAJOR} ${EXTRA_SCRIPTTOOLS_LIBS})
-set_target_properties(CsScriptTools${BUILD_MAJOR} PROPERTIES
+add_library(CsScriptTools${BUILD_ABI} SHARED ${SCRIPTTOOLS_SOURCES} ${SCRIPTTOOLS_INCLUDES})
+target_link_libraries(CsScriptTools${BUILD_ABI} ${EXTRA_SCRIPTTOOLS_LIBS})
+set_target_properties(CsScriptTools${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SCRIPTTOOLS_CXXFLAGS}
@@ -43,17 +43,19 @@ set_target_properties(CsScriptTools${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${SCRIPTTOOLS_SOURCES}")
 macro_generate_package(
-    CsScriptTools${BUILD_MAJOR}
+    CsScriptTools${BUILD_ABI}
     QtScriptTools
     "${EXTRA_SCRIPTTOOLS_CXXFLAGS}"
     "${EXTRA_SCRIPTTOOLS_LIBS}"
-    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsScriptTools${BUILD_MAJOR}
+    TARGETS CsScriptTools${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

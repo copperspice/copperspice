@@ -21,7 +21,7 @@ endif()
 find_path(FREETYPE_INCLUDES
     NAMES
     freetype.h
-    PATH_SUFFIXES freetype2
+    PATH_SUFFIXES freetype2 freetype2/freetype
     HINTS
     $ENV{FREETYPEDIR}/include
     ${PC_FREETYPE_INCLUDEDIR}

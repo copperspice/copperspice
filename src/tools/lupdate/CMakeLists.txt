@@ -1,5 +1,5 @@
 # add_definitions()
-set(EXTRA_LUPDATE_LIBS CsCore${BUILD_MAJOR} CsXml${BUILD_MAJOR})
+set(EXTRA_LUPDATE_LIBS CsCore${BUILD_ABI} CsXml${BUILD_ABI})
 set(EXTRA_LUPDATE_CXXFLAGS)
 set(EXTRA_LUPDATE_LDFLAGS)
 
@@ -36,7 +36,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
     set(LUPDATE_SOURCES
         ${LUPDATE_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/winmanifest.rc
         ${CMAKE_CURRENT_SOURCE_DIR}/lupdate.exe.manifest
     )
 endif()

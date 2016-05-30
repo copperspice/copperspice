@@ -24,7 +24,7 @@ add_definitions(
 #   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE="" -DQT_MAKEDLL
 #   -DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 )
-set(EXTRA_SCRIPT_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_SCRIPT_LIBS CsCore${BUILD_ABI})
 set(EXTRA_SCRIPT_CXXFLAGS)
 set(EXTRA_SCRIPT_LDFLAGS)
 
@@ -549,9 +549,9 @@ endif()
 function_variable_fixup("${EXTRA_SCRIPT_CXXFLAGS}" EXTRA_SCRIPT_CXXFLAGS)
 function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}" EXTRA_SCRIPT_LDFLAGS)
 
-add_library(CsScript${BUILD_MAJOR} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
-target_link_libraries(CsScript${BUILD_MAJOR} ${EXTRA_SCRIPT_LIBS})
-set_target_properties(CsScript${BUILD_MAJOR} PROPERTIES
+add_library(CsScript${BUILD_ABI} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
+target_link_libraries(CsScript${BUILD_ABI} ${EXTRA_SCRIPT_LIBS})
+set_target_properties(CsScript${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SCRIPT_CXXFLAGS}
@@ -560,17 +560,19 @@ set_target_properties(CsScript${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${SCRIPT_SOURCES}")
 macro_generate_package(
-    CsScript${BUILD_MAJOR}
+    CsScript${BUILD_ABI}
     QtScript
     "${EXTRA_SCRIPT_CXXFLAGS}"
     "${EXTRA_SCRIPT_LIBS}"
-    "CsCore${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsScript${BUILD_MAJOR}
+    TARGETS CsScript${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

@@ -3,7 +3,7 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_XML_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_XML_LIBS CsCore${BUILD_ABI})
 set(EXTRA_XML_CXXFLAGS)
 set(EXTRA_XML_LDFLAGS)
 
@@ -33,9 +33,9 @@ macro_generate_misc("${XML_INCLUDES}" QtXml)
 function_variable_fixup("${EXTRA_XML_CXXFLAGS}" EXTRA_XML_CXXFLAGS)
 function_variable_fixup("${EXTRA_XML_LDFLAGS}" EXTRA_XML_LDFLAGS)
 
-add_library(CsXml${BUILD_MAJOR} SHARED ${XML_SOURCES} ${XML_INCLUDES})
-target_link_libraries(CsXml${BUILD_MAJOR} ${EXTRA_XML_LIBS})
-set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
+add_library(CsXml${BUILD_ABI} SHARED ${XML_SOURCES} ${XML_INCLUDES})
+target_link_libraries(CsXml${BUILD_ABI} ${EXTRA_XML_LIBS})
+set_target_properties(CsXml${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_XML_CXXFLAGS}
@@ -44,17 +44,19 @@ set_target_properties(CsXml${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${XML_SOURCES}")
 macro_generate_package(
-    CsXml${BUILD_MAJOR}
+    CsXml${BUILD_ABI}
     QtXml
     "${EXTRA_XML_CXXFLAGS}"
     "${EXTRA_XML_LIBS}"
-    "CsCore${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsXml${BUILD_MAJOR}
+    TARGETS CsXml${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

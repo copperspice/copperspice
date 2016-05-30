@@ -5,7 +5,7 @@ add_definitions(
     # BROOM (enable OpenSSL)
     -DQT_NO_OPENSSL
 )
-set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR})
+set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_ABI} CsNetwork${BUILD_ABI})
 set(EXTRA_XMLPATTERNS_CXXFLAGS)
 set(EXTRA_XMLPATTERNS_LDFLAGS)
 
@@ -58,9 +58,9 @@ macro_generate_misc("${XMLPATTERNS_INCLUDES}" QtXmlPatterns)
 function_variable_fixup("${EXTRA_XMLPATTERNS_CXXFLAGS}" EXTRA_XMLPATTERNS_CXXFLAGS)
 function_variable_fixup("${EXTRA_XMLPATTERNS_LDFLAGS}" EXTRA_XMLPATTERNS_LDFLAGS)
 
-add_library(CsXmlPatterns${BUILD_MAJOR} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
-target_link_libraries(CsXmlPatterns${BUILD_MAJOR} ${EXTRA_XMLPATTERNS_LIBS})
-set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
+add_library(CsXmlPatterns${BUILD_ABI} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
+target_link_libraries(CsXmlPatterns${BUILD_ABI} ${EXTRA_XMLPATTERNS_LIBS})
+set_target_properties(CsXmlPatterns${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}
@@ -69,17 +69,19 @@ set_target_properties(CsXmlPatterns${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${XMLPATTERNS_SOURCES}")
 macro_generate_package(
-    CsXmlPatterns${BUILD_MAJOR}
+    CsXmlPatterns${BUILD_ABI}
     QtXmlPatterns
     "${EXTRA_XMLPATTERNS_CXXFLAGS}"
     "${EXTRA_XMLPATTERNS_LIBS}"
-    "CsCore${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsNetwork${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsXmlPatterns${BUILD_MAJOR}
+    TARGETS CsXmlPatterns${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

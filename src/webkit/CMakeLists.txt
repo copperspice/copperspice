@@ -27,10 +27,10 @@ add_definitions(
     -DENABLE_DATALIST=1
 )
 set(EXTRA_WEBKIT_LIBS
-    CsCore${BUILD_MAJOR}
-    CsGui${BUILD_MAJOR}
-    CsNetwork${BUILD_MAJOR}
-    CsScript${BUILD_MAJOR}
+    CsCore${BUILD_ABI}
+    CsGui${BUILD_ABI}
+    CsNetwork${BUILD_ABI}
+    CsScript${BUILD_ABI}
 )
 set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC) # that's not always wanted!
 set(EXTRA_WEBKIT_LDFLAGS)
@@ -2413,13 +2413,13 @@ foreach(lib a b c d e)
     )
 endforeach()
 
-add_library(CsWebKit${BUILD_MAJOR} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES}
+add_library(CsWebKit${BUILD_ABI} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES}
     $<TARGET_OBJECTS:webkita> $<TARGET_OBJECTS:webkitb>
     $<TARGET_OBJECTS:webkitc> $<TARGET_OBJECTS:webkitd>
     $<TARGET_OBJECTS:webkite>
 )
-target_link_libraries(CsWebKit${BUILD_MAJOR} ${EXTRA_WEBKIT_LIBS})
-set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
+target_link_libraries(CsWebKit${BUILD_ABI} ${EXTRA_WEBKIT_LIBS})
+set_target_properties(CsWebKit${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
@@ -2428,17 +2428,19 @@ set_target_properties(CsWebKit${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${WEBKIT_SOURCES}")
 macro_generate_package(
-    CsWebKit${BUILD_MAJOR}
+    CsWebKit${BUILD_ABI}
     QtWebKit
     "${EXTRA_WEBKIT_CXXFLAGS}"
     "${EXTRA_WEBKIT_LIBS}"
-    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsScript${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsWebKit${BUILD_MAJOR}
+    TARGETS CsWebKit${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

@@ -47,9 +47,9 @@ macro_generate_public("${DECLARATIVE_PUBLIC_INCLUDES}" QtDeclarative)
 macro_generate_private("${DECLARATIVE_PRIVATE_INCLUDES}" QtDeclarative)
 macro_generate_misc("${DECLARATIVE_INCLUDES}" QtDeclarative)
 
-add_library(CsDeclarative${BUILD_MAJOR} SHARED ${DECLARATIVE_SOURCES} ${DECLARATIVE_INCLUDES})
-target_link_libraries(CsDeclarative${BUILD_MAJOR} ${EXTRA_DECLARATIVE_LIBS})
-set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
+add_library(CsDeclarative${BUILD_ABI} SHARED ${DECLARATIVE_SOURCES} ${DECLARATIVE_INCLUDES})
+target_link_libraries(CsDeclarative${BUILD_ABI} ${EXTRA_DECLARATIVE_LIBS})
+set_target_properties(CsDeclarative${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_DECLARATIVE_CXXFLAGS}
@@ -58,17 +58,19 @@ set_target_properties(CsDeclarative${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${DECLARATIVE_SOURCES}")
 macro_generate_package(
-    CsDeclarative${BUILD_MAJOR}
+    CsDeclarative${BUILD_ABI}
     QtDeclarative
     "${EXTRA_DECLARATIVE_CXXFLAGS}"
     "${EXTRA_DECLARATIVE_LIBS}"
-    "CsCore${BUILD_MAJOR} QtGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsScript${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} QtGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsScript${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsDeclarative${BUILD_MAJOR}
+    TARGETS CsDeclarative${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

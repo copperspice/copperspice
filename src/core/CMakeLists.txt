@@ -103,9 +103,9 @@ endif()
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
 function_variable_fixup("${EXTRA_CORE_LDFLAGS}" EXTRA_CORE_LDFLAGS)
 
-add_library(CsCore${BUILD_MAJOR} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
-target_link_libraries(CsCore${BUILD_MAJOR} ${EXTRA_CORE_LIBS})
-set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
+add_library(CsCore${BUILD_ABI} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
+target_link_libraries(CsCore${BUILD_ABI} ${EXTRA_CORE_LIBS})
+set_target_properties(CsCore${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
@@ -114,7 +114,7 @@ set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${CORE_SOURCES}")
 macro_generate_package(
-    CsCore${BUILD_MAJOR}
+    CsCore${BUILD_ABI}
     QtCore
     "${EXTRA_CORE_CXXFLAGS}"
     "${EXTRA_CORE_LIBS}"
@@ -122,9 +122,11 @@ macro_generate_package(
 )
 
 install(
-    TARGETS CsCore${BUILD_MAJOR}
+    TARGETS CsCore${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

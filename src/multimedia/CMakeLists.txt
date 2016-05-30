@@ -2,7 +2,7 @@ add_definitions(
     -DQT_BUILD_MULTIMEDIA_LIB
     -DQT_MAKEDLL
 )
-set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR})
+set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
 set(EXTRA_MULTIMEDIA_LDFLAGS)
 
@@ -32,9 +32,9 @@ macro_generate_misc("${MULTIMEDIA_INCLUDES}" QtMultimedia)
 function_variable_fixup("${EXTRA_MULTIMEDIA_CXXFLAGS}" EXTRA_MULTIMEDIA_CXXFLAGS)
 function_variable_fixup("${EXTRA_MULTIMEDIA_LDFLAGS}" EXTRA_MULTIMEDIA_LDFLAGS)
 
-add_library(CsMultimedia${BUILD_MAJOR} SHARED ${MULTIMEDIA_SOURCES} ${MULTIMEDIA_INCLUDES})
-target_link_libraries(CsMultimedia${BUILD_MAJOR} ${EXTRA_MULTIMEDIA_LIBS})
-set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
+add_library(CsMultimedia${BUILD_ABI} SHARED ${MULTIMEDIA_SOURCES} ${MULTIMEDIA_INCLUDES})
+target_link_libraries(CsMultimedia${BUILD_ABI} ${EXTRA_MULTIMEDIA_LIBS})
+set_target_properties(CsMultimedia${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
@@ -43,18 +43,20 @@ set_target_properties(CsMultimedia${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${MULTIMEDIA_SOURCES}")
 macro_generate_package(
-    CsMultimedia${BUILD_MAJOR}
+    CsMultimedia${BUILD_ABI}
     QtMultimedia
     "${EXTRA_MULTIMEDIA_CXXFLAGS}"
     "${EXTRA_MULTIMEDIA_LIBS}"
-    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 
 
 install(
-    TARGETS CsMultimedia${BUILD_MAJOR}
+    TARGETS CsMultimedia${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

@@ -5,7 +5,7 @@ add_definitions(-DQT_BUILD_GUI_LIB
     -DPNG_NO_CONFIG_H
     -DMNG_BUILD_SO
 )
-set(EXTRA_GUI_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_GUI_LIBS CsCore${BUILD_ABI})
 set(EXTRA_GUI_CXXFLAGS)
 set(EXTRA_GUI_LDFLAGS)
 
@@ -151,9 +151,9 @@ endif()
 function_variable_fixup("${EXTRA_GUI_CXXFLAGS}" EXTRA_GUI_CXXFLAGS)
 function_variable_fixup("${EXTRA_GUI_LDFLAGS}" EXTRA_GUI_LDFLAGS)
 
-add_library(CsGui${BUILD_MAJOR} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
-target_link_libraries(CsGui${BUILD_MAJOR} ${EXTRA_GUI_LIBS})
-set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
+add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
+target_link_libraries(CsGui${BUILD_ABI} ${EXTRA_GUI_LIBS})
+set_target_properties(CsGui${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
@@ -167,17 +167,19 @@ set_target_properties(CsGui${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${GUI_SOURCES}")
 macro_generate_package(
-    CsGui${BUILD_MAJOR}
+    CsGui${BUILD_ABI}
     QtGui
     "${EXTRA_GUI_CXXFLAGS}"
     "${EXTRA_GUI_LIBS}"
-    "CsCore${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsGui${BUILD_MAJOR}
+    TARGETS CsGui${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

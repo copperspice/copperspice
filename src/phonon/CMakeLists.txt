@@ -5,14 +5,14 @@ add_definitions(
     -DQT_MAKEDLL
 )
 set(EXTRA_PHONON_LIBS
-    CsCore${BUILD_MAJOR}
-    CsGui${BUILD_MAJOR}
-    CsNetwork${BUILD_MAJOR}
-    CsOpenGL${BUILD_MAJOR}
+    CsCore${BUILD_ABI}
+    CsGui${BUILD_ABI}
+    CsNetwork${BUILD_ABI}
+    CsOpenGL${BUILD_ABI}
 )
 set(EXTRA_PHONON_CXXFLAGS)
 set(EXTRA_PHONON_LDFLAGS)
-set(EXTRA_PHONON2_LIBS ${EXTRA_PHONON_LIBS} CsPhonon${BUILD_MAJOR})
+set(EXTRA_PHONON2_LIBS ${EXTRA_PHONON_LIBS} CsPhonon${BUILD_ABI})
 set(EXTRA_PHONON2_CXXFLAGS)
 set(EXTRA_PHONON2_LDFLAGS)
 set(PHONON2_SUFFIX)
@@ -320,16 +320,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_PHONON2_LIBS
         ${EXTRA_PHONON2_LIBS}
         opengl32
-        lmsdmo
+        strmiids
+        dmoguids
+        uuid
+        msdmo
         ole32
         oleaut32
         gdi32
-    )
-    set(EXTRA_PHONON2_LDFLAGS
-        ${EXTRA_PHONON2_LDFLAGS}
-        -Wl,-lstrmiids
-        -Wl,-ldmoguids
-        -Wl,-luuid
     )
     add_definitions(
         -DQT_BUILD_DS9_LIB
@@ -451,9 +448,9 @@ endif()
 function_variable_fixup("${EXTRA_PHONON_CXXFLAGS}" EXTRA_PHONON_CXXFLAGS)
 function_variable_fixup("${EXTRA_PHONON_LDFLAGS}" EXTRA_PHONON_LDFLAGS)
 
-add_library(CsPhonon${BUILD_MAJOR} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
-target_link_libraries(CsPhonon${BUILD_MAJOR} ${EXTRA_PHONON_LIBS})
-set_target_properties(CsPhonon${BUILD_MAJOR} PROPERTIES
+add_library(CsPhonon${BUILD_ABI} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
+target_link_libraries(CsPhonon${BUILD_ABI} ${EXTRA_PHONON_LIBS})
+set_target_properties(CsPhonon${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
@@ -468,7 +465,9 @@ target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
 set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
-)
+    PREFIX ""
+    )
+
 # TODO: this seems required on BSD but only in the private scope, including
 # x11 paths in the global scope breaks the build so here goes a workaround.
 # strange thing is that it does not require to be linked to any X11 librarise
@@ -481,25 +480,27 @@ endif()
 macro_generate_resources("${PHONON_SOURCES}")
 macro_generate_resources("${PHONON2_SOURCES}")
 macro_generate_package(
-    CsPhonon${BUILD_MAJOR}
+    CsPhonon${BUILD_ABI}
     phonon
     "${EXTRA_PHONON_CXXFLAGS}"
     "${EXTRA_PHONON_LIBS}"
-    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI}"
 )
 macro_generate_package(
     phonon_${PHONON2_SUFFIX}
     phonon
     "${EXTRA_PHONON2_CXXFLAGS}"
     "${EXTRA_PHONON2_LIBS}"
-    "CsCore${BUILD_MAJOR} CsGui${BUILD_MAJOR} CsNetwork${BUILD_MAJOR} CsPhonon${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsPhonon${BUILD_ABI}"
 )
 
 
 install(
-    TARGETS CsPhonon${BUILD_MAJOR}
+    TARGETS CsPhonon${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

@@ -4,7 +4,7 @@ add_definitions(
     -DQT_SHARED
     -DQT_MAKEDLL
 )
-set(EXTRA_SQL_LIBS CsCore${BUILD_MAJOR})
+set(EXTRA_SQL_LIBS CsCore${BUILD_ABI})
 set(EXTRA_SQL_CXXFLAGS)
 set(EXTRA_SQL_LDFLAGS)
 
@@ -55,9 +55,9 @@ endif()
 function_variable_fixup("${EXTRA_SQL_CXXFLAGS}" EXTRA_SQL_CXXFLAGS)
 function_variable_fixup("${EXTRA_SQL_LDFLAGS}" EXTRA_SQL_LDFLAGS)
 
-add_library(CsSql${BUILD_MAJOR} SHARED ${SQL_SOURCES} ${SQL_INCLUDES})
-target_link_libraries(CsSql${BUILD_MAJOR} ${EXTRA_SQL_LIBS})
-set_target_properties(CsSql${BUILD_MAJOR} PROPERTIES
+add_library(CsSql${BUILD_ABI} SHARED ${SQL_SOURCES} ${SQL_INCLUDES})
+target_link_libraries(CsSql${BUILD_ABI} ${EXTRA_SQL_LIBS})
+set_target_properties(CsSql${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_SQL_CXXFLAGS}
@@ -66,17 +66,19 @@ set_target_properties(CsSql${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${SQL_SOURCES}")
 macro_generate_package(
-    CsSql${BUILD_MAJOR}
+    CsSql${BUILD_ABI}
     QtSql
     "${EXTRA_SQL_CXXFLAGS}"
     "${EXTRA_SQL_LIBS}"
-    "CsCore${BUILD_MAJOR}"
+    "CsCore${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsSql${BUILD_MAJOR}
+    TARGETS CsSql${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(
