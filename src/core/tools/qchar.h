@@ -36,21 +36,12 @@ struct QLatin1Char {
  public:
    inline explicit QLatin1Char(char c) : ch(c) {}
 
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-   inline const char toLatin1() const {
-      return ch;
-   }
-   inline const ushort unicode() const {
-      return ushort(uchar(ch));
-   }
-#else
    inline char toLatin1() const {
       return ch;
    }
    inline ushort unicode() const {
       return ushort(uchar(ch));
    }
-#endif
 
  private:
    char ch;
