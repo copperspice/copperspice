@@ -26,15 +26,13 @@
 #ifndef CSMETA_CALLEVENT_H
 #define CSMETA_CALLEVENT_H
 
-class BentoAbstract;
 class QObject;
-class TeaCupAbstract;
 class QSemaphore;
 
 class Q_CORE_EXPORT CSMetaCallEvent : public QEvent
 {
  public:
-   CSMetaCallEvent(const BentoAbstract *bento, const TeaCupAbstract *dataPack,
+   CSMetaCallEvent(const CsSignal::Internal::BentoAbstract *bento, const CsSignal::Internal::TeaCupAbstract *dataPack,
                    const QObject *sender, int signal_index, QSemaphore *semaphore = 0);
 
    ~CSMetaCallEvent();
@@ -44,8 +42,9 @@ class Q_CORE_EXPORT CSMetaCallEvent : public QEvent
    int signal_index() const;
 
  private:
-   const BentoAbstract *m_bento;
-   const TeaCupAbstract *m_dataPack;
+   const CsSignal::Internal::BentoAbstract *m_bento;
+   const CsSignal::Internal::TeaCupAbstract *m_dataPack;
+
    const QObject *m_sender;
    QSemaphore *m_semaphore;
    int m_signal_index;

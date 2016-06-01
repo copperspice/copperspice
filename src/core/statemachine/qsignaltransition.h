@@ -36,7 +36,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 {
    CORE_CS_OBJECT(QSignalTransition)
 
-   CORE_CS_PROPERTY_READ(senderObject, senderObject)
+   CORE_CS_PROPERTY_READ(senderObject,  senderObject)
    CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)
 
  public:
@@ -50,7 +50,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    QObject *senderObject() const;
    void setSenderObject(QObject *sender);
 
-   BentoAbstract *get_signalBento() const;
+   CsSignal::Internal::BentoAbstract *get_signalBento() const;
 
    void unregister();
    void maybeRegister();
@@ -66,7 +66,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    Q_DISABLE_COPY(QSignalTransition)
 
    QObject *m_sender;
-   QScopedPointer<BentoAbstract> m_signalBento;
+   QScopedPointer<CsSignal::Internal::BentoAbstract> m_signalBento;
 };
 
 
@@ -76,8 +76,8 @@ QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal
 {
    m_sender = sender;
 
-   // store the signal method pointer in a CS Bento object
-   m_signalBento.reset(new Bento<void (SignalClass::*)(SignalArgs...)> {signal});
+   // store the signal method pointer in a CSBento
+   m_signalBento.reset(new CSBento<void (SignalClass::*)(SignalArgs...)> {signal});
 }
 
 #endif //QT_NO_STATEMACHINE

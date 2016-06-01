@@ -14,6 +14,12 @@ XML_PUBLIC_INCLUDES =
 XML_PRIVATE_INCLUDES =
 XML_DIRS =
 
+EXTRA_DIST += \
+	src/xml/CMakeLists.txt \
+	src/xml/dom/dom.cmake \
+	src/xml/sax/sax.cmake \
+	src/xml/stream/stream.cmake
+
 include src/xml/dom/Makefile.am
 include src/xml/sax/Makefile.am
 include src/xml/stream/Makefile.am

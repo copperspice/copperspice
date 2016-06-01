@@ -1,7 +1,7 @@
 add_definitions(-UQT_BUILD_CORE_LIB)
 set(EXTRA_RCC_LIBS
-    CsCore${BUILD_MAJOR}
-    CsXml${BUILD_MAJOR}
+    CsCore${BUILD_ABI}
+    CsXml${BUILD_ABI}
     ${CMAKE_THREAD_LIBS_INIT}
 )
 set(EXTRA_RCC_CXXFLAGS)

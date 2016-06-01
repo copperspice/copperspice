@@ -21,6 +21,22 @@ XMLPATTERNS_PUBLIC_INCLUDES =
 XMLPATTERNS_PRIVATE_INCLUDES =
 XMLPATTERNS_DIRS =
 
+EXTRA_DIST += \
+	src/xmlpatterns/CMakeLists.txt \
+	src/xmlpatterns/acceltree/acceltree.cmake \
+	src/xmlpatterns/api/api.cmake \
+	src/xmlpatterns/data/data.cmake \
+	src/xmlpatterns/environment/environment.cmake \
+	src/xmlpatterns/expr/expr.cmake \
+	src/xmlpatterns/functions/functions.cmake \
+	src/xmlpatterns/iterators/iterators.cmake \
+	src/xmlpatterns/janitors/janitors.cmake \
+	src/xmlpatterns/parser/parser.cmake \
+	src/xmlpatterns/projection/projection.cmake \
+	src/xmlpatterns/schema/schema.cmake \
+	src/xmlpatterns/type/type.cmake \
+	src/xmlpatterns/utils/utils.cmake
+
 include src/xmlpatterns/acceltree/Makefile.am
 include src/xmlpatterns/api/Makefile.am
 include src/xmlpatterns/data/Makefile.am

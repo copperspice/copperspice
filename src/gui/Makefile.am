@@ -57,8 +57,24 @@ EXTRA_DIST += src/gui/mac/macresources.qrc \
 	src/gui/mac/images/leopard-unified-toolbar-on.png \
 	src/gui/mac/images/pluscursor.png \
 	src/gui/mac/images/spincursor.png \
-	src/gui/mac/images/waitcursor.png
-
+	src/gui/mac/images/waitcursor.png \
+	src/gui/CMakeLists.txt \
+	src/gui/accessible/accessible.cmake \
+	src/gui/animation/animation.cmake \
+	src/gui/dialogs/dialogs.cmake \
+	src/gui/effects/effects.cmake \
+	src/gui/graphicsview/graphicsview.cmake \
+	src/gui/image/image.cmake \
+	src/gui/inputmethod/inputmethod.cmake \
+	src/gui/itemviews/itemviews.cmake \
+	src/gui/kernel/kernel.cmake \
+	src/gui/math3d/math3d.cmake \
+	src/gui/painting/painting.cmake \
+	src/gui/statemachine/statemachine.cmake \
+	src/gui/styles/styles.cmake \
+	src/gui/text/text.cmake \
+	src/gui/util/util.cmake \
+	src/gui/widgets/widgets.cmake
 
 GUI_INCLUDES =
 GUI_PUBLIC_INCLUDES =

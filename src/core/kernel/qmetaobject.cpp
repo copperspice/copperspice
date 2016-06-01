@@ -104,11 +104,6 @@ bool QMetaObject::checkConnectArgs(const QMetaMethod &signal, const QMetaMethod 
    return retval;
 }
 
-bool QMetaObject::compareThreads(Qt::HANDLE currentThreadId, QObject *receiver)
-{
-   return (currentThreadId == receiver->m_threadData.load()->threadId);
-}
-
 void QMetaObject::connectSlotsByName(QObject *receiver)
 {
    if (! receiver)  {
@@ -285,7 +280,7 @@ int QMetaObject::indexOfMethod(const char *method) const
    return retval;
 }
 
-int QMetaObject::indexOfMethod(const BentoAbstract &temp) const
+int QMetaObject::indexOfMethod(const CsSignal::Internal::BentoAbstract &temp) const
 {
    int retval = -1;
 
@@ -374,7 +369,7 @@ QMap<std::type_index, std::pair<QMetaObject *, QString> > &QMetaObject::m_enumsA
    return enums_All;
 }
 
-QMetaMethod QMetaObject::method(const BentoAbstract &temp) const
+QMetaMethod QMetaObject::method(const CSBentoAbstract &temp) const
 {
    QMetaMethod retval;
    const int count = methodCount();

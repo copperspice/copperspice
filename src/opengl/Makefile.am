@@ -18,6 +18,9 @@ OPENGL_PUBLIC_INCLUDES =
 OPENGL_PRIVATE_INCLUDES =
 OPENGL_DIRS = src/opengl src/opengl/gl2paintengineex  src/opengl/util
 
+EXTRA_DIST += \
+	src/opengl/CMakeLists.txt
+
 OPENGL_PUBLIC_INCLUDES += \
 	QGLBuffer \
 	QGLColormap \

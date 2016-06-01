@@ -16,6 +16,10 @@ SCRIPTTOOLS_PUBLIC_INCLUDES =
 SCRIPTTOOLS_PRIVATE_INCLUDES =
 SCRIPTTOOLS_DIRS =
 
+EXTRA_DIST += \
+	src/scripttools/CMakeLists.txt \
+	src/scripttools/debugging/debugging.cmake
+
 include src/scripttools/debugging/Makefile.am
 
 SCRIPTTOOLS_HEADERS_INSTALLED= \

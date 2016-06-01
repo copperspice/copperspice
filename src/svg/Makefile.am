@@ -67,6 +67,9 @@ BUILT_SOURCES+=.svg-header-deps.mk
 
 $(lib_libCsSvg1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(SVG_HEADERS_INSTALLED)
 
+EXTRA_DIST += \
+	src/svg/CMakeLists.txt
+
 
 -include .svg-header-deps.mk
 

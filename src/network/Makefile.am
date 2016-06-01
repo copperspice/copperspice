@@ -30,6 +30,14 @@ NETWORK_PUBLIC_INCLUDES =
 NETWORK_PRIVATE_INCLUDES =
 NETWORK_DIRS =
 
+EXTRA_DIST += \
+	src/network/CMakeLists.txt \
+	src/network/access/access.cmake \
+	src/network/bearer/bearer.cmake \
+	src/network/kernel/kernel.cmake \
+	src/network/socket/socket.cmake \
+	src/network/ssl/ssl.cmake
+
 include src/network/access/Makefile.am
 include src/network/bearer/Makefile.am
 include src/network/kernel/Makefile.am

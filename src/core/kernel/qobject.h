@@ -74,7 +74,7 @@ class QTimerEvent;
 class QThread;
 class QThreadData;
 
-class Q_CORE_EXPORT QObject
+class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtual CsSignal::SlotBase
 {
  protected:
    // used in the CS_OBJECT macro to define cs_parent (ex:QObject) and cs_class (ex:MyClass)
@@ -89,7 +89,7 @@ class Q_CORE_EXPORT QObject
    Q_DISABLE_COPY(QObject)
 
  public:
-   CORE_CS_INVOKABLE_CONSTRUCTOR_1(Public, explicit QObject(QObject *parent = 0) )
+   CORE_CS_INVOKABLE_CONSTRUCTOR_1(Public, explicit QObject(QObject *parent = nullptr) )
    CORE_CS_INVOKABLE_CONSTRUCTOR_2(QObject, QObject *)
 
    virtual ~QObject();
@@ -98,34 +98,36 @@ class Q_CORE_EXPORT QObject
    const QList<QObject *> &children() const;
 
    bool connect(const QObject *sender, const char *signalMethod, const char *location,
-                const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+                  const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    static bool connect(const QObject *sender, const char *signalMethod, const char *location,
-                       const QObject *receiver, const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+                  const QObject *receiver, const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    static bool connect(const QObject *sender, const char *signalMethod,
-                       const QObject *receiver, const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
-                       const char *location = 0);
+                  const QObject *receiver, const char *slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
+                  const char *location = nullptr);
 
    static bool connect(const QObject *sender, const QMetaMethod &signalMethod,
-                       const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+                  const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    bool connect(const QObject *sender, const char *signalMethod, const char *slotMethod,
-                Qt::ConnectionType type = Qt::AutoConnection);
+                  Qt::ConnectionType type = Qt::AutoConnection);
 
    static bool disconnect(const QObject *sender, const char *signalMethod,
-                          const QObject *receiver, const char *slotMethod );
+                  const QObject *receiver, const char *slotMethod );
 
    static bool disconnect(const QObject *sender, const QMetaMethod &signalMethod,
-                          const QObject *receiver, const QMetaMethod &slotMethod );
+                  const QObject *receiver, const QMetaMethod &slotMethod );
 
    static bool disconnect(const QObject *sender, const char *signalMethod, const char *location,
-                          const QObject *receiver, const char *slotMethod );
+                  const QObject *receiver, const char *slotMethod );
 
-   bool disconnect(const char *signalMethod = 0, const QObject *receiver = 0, const char *slotMethod = 0) const;
-   bool disconnect(const char *signalMethod, const char *lineNumber, const QObject *receiver = 0,
-                   const char *slotMethod = 0) const;
-   bool disconnect(const QObject *receiver, const char *slotMethod = 0) const;
+   bool disconnect(const char *signalMethod = nullptr, const QObject *receiver = nullptr, const char *slotMethod = nullptr) const;
+
+   bool disconnect(const char *signalMethod, const char *lineNumber, const QObject *receiver = nullptr,
+                   const char *slotMethod = nullptr) const;
+
+   bool disconnect(const QObject *receiver, const char *slotMethod = nullptr) const;
 
    void dumpObjectTree();
    void dumpObjectInfo();
@@ -158,34 +160,23 @@ class Q_CORE_EXPORT QObject
 
    QThread *thread() const;
 
-   // method ptr
+   // signal & slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                        const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...),
                        Qt::ConnectionType type = Qt::AutoConnection);
 
-   // bento signal, method ptr slot
-   template<class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
-   static bool connect(const QObject *sender, BentoAbstract *signalBento,
-                       const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...),
-                       Qt::ConnectionType type = Qt::AutoConnection);
-
-   // function ptr or lamda
+   // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                        const Receiver *receiver, T slot, Qt::ConnectionType type = Qt::AutoConnection);
 
-   // method ptr
+   // signal * slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                           const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...));
 
-   // bento signal, method ptr slot
-   template<class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
-   static bool disconnect(const QObject *sender, BentoAbstract *signalBento,
-                          const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...));
-
-   // function ptr only
+   // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                           const Receiver *receiver, T slot);
@@ -202,7 +193,7 @@ class Q_CORE_EXPORT QObject
    template<class T>
    T property(const char *name) const;
 
-   CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = 0))
+   CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = nullptr))
    CORE_CS_SIGNAL_2(destroyed, obj)
 
    CORE_CS_SIGNAL_1(Public, void objectNameChanged(const QString &objectName))
@@ -216,116 +207,68 @@ class Q_CORE_EXPORT QObject
    void cs_forceRemoveChild();
 
    virtual void childEvent(QChildEvent *event);
-
-   virtual void connectNotify(const char *signalMethod) const;
    virtual void connectNotify(const QMetaMethod &signalMethod) const;
-
    virtual void customEvent(QEvent *event);
-
-   virtual void disconnectNotify(const char *signal) const;
    virtual void disconnectNotify(const QMetaMethod &signal) const;
-
    virtual void timerEvent(QTimerEvent *event);
-
+   
+   virtual void connectNotify(const char *signal) const; 
+   virtual void disconnectNotify(const char *signal) const; 
+   
    bool isSignalConnected(const QMetaMethod &signalMethod) const;
+
    int receivers(const char *signal) const;
+
    QObject *sender() const;
    int senderSignalIndex() const;
 
    static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
+   static std::recursive_mutex &m_metaObjectMutex();
 
- private:
-   struct ConnectStruct {
-      const QObject *sender;
-      const BentoAbstract *signalMethod;
-      const QObject *receiver;
-      const BentoAbstract *slotMethod;
-      Qt::ConnectionType type;
-   };
-
-   struct SenderStruct {
-      QObject *sender;
-      int signal_index;
-      int ref;
-   };
-
-   enum DisconnectType { DisconnectAll, DisconnectOne };
-
-   //
+ private:  
    QObject *m_parent;
-   QList<QObject *> m_children;
-
-   SenderStruct *m_currentSender;   // object currently sending a signal
-
-   // list of connections from my Signal to some Receiver
-   mutable QList<ConnectStruct> m_connectList_ToReceiver;
-
-   // list of connections from some Sender to my Slots
-   mutable QList<ConnectStruct> m_connectList_FromSender;
-
-   mutable std::mutex m_mutex_ToReceiver;
-   mutable std::mutex m_mutex_FromSender;
-
-   mutable int m_activateBusy;
-   mutable int m_raceCount;
+   QList<QObject *> m_children;  
 
    QObject *m_currentChildBeingDeleted;
    CSAbstractDeclarativeData *m_declarativeData;
 
    QList< QPointer<QObject> > m_eventFilters;
 
-   static std::atomic<int> m_objectCount;
    QString m_objectName;
    int m_postedEvents;
 
    mutable std::atomic<QtSharedPointer::ExternalRefCountData *> m_sharedRefCount;
 
-   uint m_pendTimer           : 1;
-   uint m_blockSig            : 1;
+   uint m_pendTimer           : 1;   
    uint m_wasDeleted          : 1;
-
    uint m_sentChildRemoved    : 1;
    uint m_sendChildEvents     : 1;
    uint m_receiveChildEvents  : 1;
 
    std::atomic<bool> m_inThreadChangeEvent;
+   std::atomic<bool> m_blockSig;
 
    // id of the thread which owns the object
    std::atomic<QThreadData *> m_threadData;
 
    QList<QByteArray> m_extra_propertyNames;
-   QList<QVariant> m_extra_propertyValues;
-
-   //
-   void addConnection(const BentoAbstract *signalMethod, const QObject *receiver,
-                      const BentoAbstract *slotMethod, Qt::ConnectionType type) const;
-
-   void addObject();
-
-   static bool check_parent_thread(QObject *parent, QThreadData *parentThreadData, QThreadData *currentThreadData);
-
-   void deleteChildren();
-
-   static bool internal_disconnect(const QObject *sender,  const BentoAbstract *signalBento,
-                                   const QObject *receiver, const BentoAbstract *slotBento);
-
-   bool isSender(const QObject *receiver, const char *signal) const;
-   bool isSignalConnected(const BentoAbstract &signalMethod_Bento) const;
-
+   QList<QVariant> m_extra_propertyValues;    
+ 
+   void deleteChildren();  
+   bool isSender(const QObject *receiver, const char *signal) const;  
    void moveToThread_helper();
-
-   QList<QObject *> receiverList(const char *signal) const;
-
-   static void resetCurrentSender(QObject *receiver, SenderStruct *currentSender, SenderStruct *previousSender);
    void removeObject();
 
-   static SenderStruct *setCurrentSender(QObject *receiver, SenderStruct *sender);
-   void setThreadData_helper(QThreadData *currentData, QThreadData *targetData);
+   bool compareThreads() const override;
+   void queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind) override;
+
+   QList<QObject *> receiverList(const char *signal) const;
    QList<QObject *> senderList() const;
-
-   static int *queuedConnectionTypes(const QList<QByteArray> &typeNames);
-
-   //
+    
+   void setThreadData_helper(QThreadData *currentData, QThreadData *targetData);
+   
+   static bool check_parent_thread(QObject *parent, QThreadData *parentThreadData, QThreadData *currentThreadData);
+  
    template<class T>
    void findChildren_helper(const QString &name, const QRegExp *regExp, QList<T> &list) const;
 
@@ -496,6 +439,7 @@ class Q_CORE_EXPORT CSGadget_Fake_Parent
  public:
    static const QMetaObject &staticMetaObject();
    static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
+   static std::recursive_mutex &m_metaObjectMutex();
 };
 
 

@@ -9,6 +9,7 @@ lib_libCsCore1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivate
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_BUILD_CORE_LIB  \
+   -DBUILDING_LIB_CS_SIGNAL  \
    -DQT_SHARED   \
    -DQT_MAKEDLL
 
@@ -71,10 +72,28 @@ include src/core/io/Makefile.am
 include src/core/json/Makefile.am
 include src/core/kernel/Makefile.am
 include src/core/plugin/Makefile.am
+include src/core/signal/Makefile.am
 include src/core/statemachine/Makefile.am
 include src/core/thread/Makefile.am
 include src/core/tools/Makefile.am
 include src/core/xml/Makefile.am
+
+EXTRA_DIST+= \
+	src/core/CMakeLists.txt \
+	src/core/animation/animation.cmake \
+	src/core/codecs/codecs.cmake \
+	src/core/concurrent/concurrent.cmake \
+	src/core/global/global.cmake \
+	src/core/io/io.cmake \
+	src/core/json/json.cmake \
+	src/core/kernel/kernel.cmake \
+	src/core/plugin/plugin.cmake \
+	src/core/signal/signal.cmake \
+	src/core/statemachine/statemachine.cmake \
+	src/core/thread/thread.cmake \
+	src/core/tools/tools.cmake \
+	src/core/xml/xml.cmake
+
 
 CORE_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtCore/%,$(CORE_INCLUDES)) \

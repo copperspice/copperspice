@@ -1,4 +1,4 @@
-add_definitions(-DQT_BUILD_CORE_LIB)
+add_definitions(-DQT_BUILD_CORE_LIB -DBUILDING_LIB_CS_SIGNAL)
 set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
 set(EXTRA_CORE_CXXFLAGS)
 set(EXTRA_CORE_LDFLAGS)
@@ -35,6 +35,7 @@ include(io/io.cmake)
 include(json/json.cmake)
 include(kernel/kernel.cmake)
 include(plugin/plugin.cmake)
+include(signal/signal.cmake)
 include(statemachine/statemachine.cmake)
 include(thread/thread.cmake)
 include(tools/tools.cmake)
@@ -102,9 +103,9 @@ endif()
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
 function_variable_fixup("${EXTRA_CORE_LDFLAGS}" EXTRA_CORE_LDFLAGS)
 
-add_library(CsCore${BUILD_MAJOR} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
-target_link_libraries(CsCore${BUILD_MAJOR} ${EXTRA_CORE_LIBS})
-set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
+add_library(CsCore${BUILD_ABI} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
+target_link_libraries(CsCore${BUILD_ABI} ${EXTRA_CORE_LIBS})
+set_target_properties(CsCore${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
@@ -113,16 +114,18 @@ set_target_properties(CsCore${BUILD_MAJOR} PROPERTIES
 
 macro_generate_resources("${CORE_SOURCES}")
 macro_generate_package(
-    CsCore${BUILD_MAJOR}
+    CsCore${BUILD_ABI}
     QtCore
     "${EXTRA_CORE_CXXFLAGS}"
     ""
 )
 
 install(
-    TARGETS CsCore${BUILD_MAJOR}
+    TARGETS CsCore${BUILD_ABI}
     EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

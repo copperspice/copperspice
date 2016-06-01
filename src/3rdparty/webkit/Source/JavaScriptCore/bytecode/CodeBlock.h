@@ -127,7 +127,6 @@ namespace JSC {
 
         bool seenOnce()
         {
-            ASSERT(!cachedStructure);
             return cachedPrototypeStructure;
         }
 
