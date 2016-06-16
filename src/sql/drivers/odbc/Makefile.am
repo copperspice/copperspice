@@ -18,5 +18,5 @@ SQL_INCLUDES += $(SQL_ODBC_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/sql/drivers/odbc/%,$(SQL_ODBC_INCLUDES)) \
 		$(patsubst %,src/sql/drivers/odbc/%,$(SQL_ODBC_PRIVATE_INCLUDES))
 
-#lib_libCsSql1_la_SOURCES += \
+#lib_libCsSql@BUILD_ABI@_la_SOURCES += \
 #	src/sql/drivers/odbc/qsql_odbc.cpp

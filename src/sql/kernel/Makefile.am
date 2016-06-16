@@ -42,7 +42,7 @@ SQL_PRIVATE_INCLUDES += $(SQL_KERNEL_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/sql/kernel/%,$(SQL_KERNEL_INCLUDES)) \
 		$(patsubst %,src/sql/kernel/%,$(SQL_KERNEL_PRIVATE_INCLUDES))
 
-lib_libCsSql1_la_SOURCES += \
+lib_libCsSql@BUILD_ABI@_la_SOURCES += \
 	src/sql/kernel/qsqlquery.cpp \
 	src/sql/kernel/qsqldatabase.cpp \
 	src/sql/kernel/qsqlfield.cpp \

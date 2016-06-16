@@ -63,7 +63,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_FUNCTIONS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/functions/%,$(XMLPATTERNS_FUNCTIONS_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/functions/%,$(XMLPATTERNS_FUNCTIONS_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/functions/qabstractfunctionfactory.cpp        \
 	src/xmlpatterns/functions/qaccessorfns.cpp                    \
 	src/xmlpatterns/functions/qaggregatefns.cpp                   \

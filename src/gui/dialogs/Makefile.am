@@ -62,7 +62,7 @@ noinst_HEADERS+=$(patsubst %,src/gui/dialogs/%,$(GUI_DIALOGS_INCLUDES)) \
 		src/gui/dialogs/qfiledialog.ui
 
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qabstractpagesetupdialog.cpp \
 	src/gui/dialogs/qabstractprintdialog.cpp \
 	src/gui/dialogs/qcolordialog.cpp \
@@ -80,7 +80,7 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/dialogs/qsidebar.cpp \
 	src/gui/dialogs/qwizard.cpp
 
-nodist_lib_libCsGui1_la_SOURCES += \
+nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qrc_qmessagebox.cpp
 
 EXTRA_DIST+=\
@@ -120,7 +120,7 @@ EXTRA_DIST+=\
 	src/gui/dialogs/images/status-color.png \
 	src/gui/dialogs/images/status-gray-scale.png
 
-$(lib_libCsGui1_la_OBJECTS): src/gui/dialogs/ui_qfiledialog.h \
+$(lib_libCsGui@BUILD_ABI@_la_OBJECTS): src/gui/dialogs/ui_qfiledialog.h \
 	src/gui/dialogs/ui_qpagesetupwidget.h \
 	src/gui/dialogs/ui_qprintpropertieswidget.h \
 	src/gui/dialogs/ui_qprintsettingsoutput.h \
@@ -128,23 +128,23 @@ $(lib_libCsGui1_la_OBJECTS): src/gui/dialogs/ui_qfiledialog.h \
 	src/gui/dialogs/qrc_qprintdialog.cpp
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qfiledialog_win.cpp \
 	src/gui/dialogs/qpagesetupdialog_win.cpp \
 	src/gui/dialogs/qprintdialog_win.cpp \
 	src/gui/dialogs/qwizard_win.cpp 
-nodist_lib_libCsGui1_la_SOURCES += \
+nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qrc_qprintdialog.cpp
 endif
 
 if OSTYPE_LINUX
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qprintdialog_unix.cpp \
 	src/gui/dialogs/qpagesetupdialog_unix.cpp 
 endif
 
 if OSTYPE_BSD
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
         src/gui/dialogs/qprintdialog_unix.cpp \
         src/gui/dialogs/qpagesetupdialog_unix.cpp
 endif
@@ -155,13 +155,13 @@ EXTRA_DIST += \
 	src/gui/dialogs/qprintpropertieswidget.ui
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qfiledialog_mac.mm \
 	src/gui/dialogs/qfontdialog_mac.mm \
 	src/gui/dialogs/qnspanelproxy_mac.mm \
 	src/gui/dialogs/qpagesetupdialog_mac.mm \
 	src/gui/dialogs/qprintdialog_mac.mm \
 	src/gui/dialogs/qcolordialog_mac.mm 
-nodist_lib_libCsGui1_la_SOURCES += \
+nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/dialogs/qrc_qprintdialog.cpp
 endif

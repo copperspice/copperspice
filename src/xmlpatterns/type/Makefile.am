@@ -56,7 +56,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_TYPE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/type/%,$(XMLPATTERNS_TYPE_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/type/%,$(XMLPATTERNS_TYPE_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/type/qabstractnodetest.cpp            \
 	src/xmlpatterns/type/qanyitemtype.cpp                 \
 	src/xmlpatterns/type/qanynodetype.cpp                 \

@@ -18,5 +18,5 @@ SQL_INCLUDES += $(SQL_DB2_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/sql/drivers/db2/%,$(SQL_DB2_INCLUDES)) \
 		$(patsubst %,src/sql/drivers/db2/%,$(SQL_DB2_PRIVATE_INCLUDES))
 
-#lib_libCsSql1_la_SOURCES += \
+#lib_libCsSql@BUILD_ABI@_la_SOURCES += \
 #	src/sql/drivers/db2/qsql_db2.cpp

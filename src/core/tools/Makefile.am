@@ -225,7 +225,7 @@ CORE_PUBLIC_INCLUDES += $(CORE_TOOLS_PUBLIC_INCLUDES)
 CORE_INCLUDES += $(CORE_TOOLS_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_TOOLS_PRIVATE_INCLUDES)
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qarraydata.cpp \
 	src/core/tools/qbitarray.cpp \
 	src/core/tools/qbytearray.cpp \
@@ -278,26 +278,26 @@ lib_libCsCore1_la_SOURCES += \
 #  qelapsedtimer_generic.cpp
 
 if OSTYPE_WIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qelapsedtimer_win.cpp \
 	src/core/tools/qlocale_win.cpp
 endif
 
 if OSTYPE_LINUX
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qelapsedtimer_unix.cpp \
 	src/core/tools/qlocale_unix.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
         src/core/tools/qelapsedtimer_unix.cpp \
         src/core/tools/qlocale_unix.cpp
 endif
 
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qelapsedtimer_mac.cpp \
 	src/core/tools/qlocale_mac.mm
 endif

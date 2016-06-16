@@ -25,7 +25,7 @@ SQL_PRIVATE_INCLUDES += $(SQL_MODELS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/sql/models/%,$(SQL_MODELS_INCLUDES)) \
 		$(patsubst %,src/sql/models/%,$(SQL_MODELS_PRIVATE_INCLUDES))
 
-lib_libCsSql1_la_SOURCES += \
+lib_libCsSql@BUILD_ABI@_la_SOURCES += \
 	src/sql/models/qsqlquerymodel.cpp \
 	src/sql/models/qsqltablemodel.cpp \
 	src/sql/models/qsqlrelationaldelegate.cpp \

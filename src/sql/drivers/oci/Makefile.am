@@ -18,5 +18,5 @@ SQL_INCLUDES += $(SQL_OCI_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/sql/drivers/oci/%,$(SQL_OCI_INCLUDES)) \
 		$(patsubst %,src/sql/drivers/oci/%,$(SQL_OCI_PRIVATE_INCLUDES))
 
-#lib_libCsSql1_la_SOURCES += \
+#lib_libCsSql@BUILD_ABI@_la_SOURCES += \
 #	src/sql/drivers/oci/qsql_oci.cpp

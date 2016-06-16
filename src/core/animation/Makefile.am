@@ -36,7 +36,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_ANIMATION_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/animation/%,$(CORE_ANIMATION_INCLUDES)) \
 		$(patsubst %,src/core/animation/%,$(CORE_ANIMATION_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/animation/qabstractanimation.cpp \
 	src/core/animation/qvariantanimation.cpp \
 	src/core/animation/qpropertyanimation.cpp \

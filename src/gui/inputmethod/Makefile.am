@@ -24,22 +24,22 @@ GUI_PRIVATE_INCLUDES += $(GUI_INPUTMETHOD_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/inputmethod/%,$(GUI_INPUTMETHOD_INCLUDES)) \
 		$(patsubst %,src/gui/inputmethod/%,$(GUI_INPUTMETHOD_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/inputmethod/qinputcontextfactory.cpp \
 	src/gui/inputmethod/qinputcontextplugin.cpp \
 	src/gui/inputmethod/qinputcontext.cpp
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/inputmethod/qximinputcontext_x11.cpp
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/inputmethod/qmacinputcontext_mac.cpp
 endif
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/inputmethod/qwininputcontext_win.cpp
 endif

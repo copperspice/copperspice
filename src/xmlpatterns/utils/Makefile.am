@@ -24,7 +24,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_UTILS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/utils/%,$(XMLPATTERNS_UTILS_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/utils/%,$(XMLPATTERNS_UTILS_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/utils/qgenericnamespaceresolver.cpp   \
 	src/xmlpatterns/utils/qpatternistlocale.cpp                  \
 	src/xmlpatterns/utils/qnamepool.cpp                          \

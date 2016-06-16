@@ -18,6 +18,6 @@ CORE_PRIVATE_INCLUDES += $(CORE_SIGNAL_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/signal/%,$(CORE_SIGNAL_INCLUDES)) \
 		$(patsubst %,src/core/signal/%,$(CORE_SIGNAL_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/signal/cs_signal.cpp \
 	src/core/signal/cs_slot.cpp

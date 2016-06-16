@@ -46,7 +46,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_THREAD_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/thread/%,$(CORE_THREAD_INCLUDES)) \
 		$(patsubst %,src/core/thread/%,$(CORE_THREAD_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/thread/qmutex.cpp \
 	src/core/thread/qmutexpool.cpp \
 	src/core/thread/qreadwritelock.cpp \
@@ -55,28 +55,28 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/thread/qthreadstorage.cpp
 
 if OSTYPE_WIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/thread/qmutex_win.cpp \
 	src/core/thread/qthread_win.cpp \
 	src/core/thread/qwaitcondition_win.cpp
 endif
 
 if OSTYPE_LINUX
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/thread/qmutex_linux.cpp \
 	src/core/thread/qthread_unix.cpp \
 	src/core/thread/qwaitcondition_unix.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
         src/core/thread/qmutex_unix.cpp \
         src/core/thread/qthread_unix.cpp \
         src/core/thread/qwaitcondition_unix.cpp
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/thread/qmutex_mac.cpp \
 	src/core/thread/qthread_unix.cpp \
 	src/core/thread/qwaitcondition_unix.cpp

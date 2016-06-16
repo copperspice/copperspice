@@ -19,7 +19,7 @@ SCRIPT_PRIVATE_INCLUDES += $(SCRIPT_PARSER_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/script/parser/%,$(SCRIPT_PARSER_INCLUDES)) \
 		$(patsubst %,src/script/parser/%,$(SCRIPT_PARSER_PRIVATE_INCLUDES))
 
-lib_libCsScript1_la_SOURCES += \
+lib_libCsScript@BUILD_ABI@_la_SOURCES += \
 	src/script/parser/qscriptast.cpp \
 	src/script/parser/qscriptastvisitor.cpp \
 	src/script/parser/qscriptgrammar.cpp \

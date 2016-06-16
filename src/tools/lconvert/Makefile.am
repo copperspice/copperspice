@@ -18,12 +18,12 @@ bin_lconvert_SOURCES = \
 
 $(bin_lconvert_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
 
-bin_lconvert_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)   \
+bin_lconvert_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)   \
    -DPROEVALUATOR_CUMULATIVE -DPROEVALUATOR_INIT_PROPS  \
    -Iinclude/QtCore  -Iinclude/QtXml -I$(top_srcdir)/src/tools/shared   \
    -Iprivateinclude/QtCore/private
 
-bin_lconvert_LDADD = lib/libCsCore1.la lib/libCsXml1.la
+bin_lconvert_LDADD = lib/libCsCore@BUILD_ABI@.la lib/libCsXml@BUILD_ABI@.la
 
 if OSTYPE_WIN
    bin_lconvert_LDADD += -luuid

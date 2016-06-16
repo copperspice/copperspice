@@ -55,7 +55,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_CONCURRENT_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/concurrent/%,$(CORE_CONCURRENT_INCLUDES)) \
 		$(patsubst %,src/core/concurrent/%,$(CORE_CONCURRENT_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/concurrent/qfuture.cpp \
 	src/core/concurrent/qfutureinterface.cpp \
 	src/core/concurrent/qfuturesynchronizer.cpp \

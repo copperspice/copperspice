@@ -206,8 +206,8 @@ windows-zip: distdir
 webkit-headers:
 	-cd src/webkit && $(MAKE) create-webkit-headers
 
-lib/libCsWebKit1.la: webkit-headers
-	-cd src/webkit && $(MAKE) ../../lib/libCsWebKit1.la
+lib/libCsWebKit@BUILD_ABI@.la: webkit-headers
+	-cd src/webkit && $(MAKE) ../../lib/libCsWebKit@BUILD_ABI@.la
 
 
 # Stamp the build with the correct version

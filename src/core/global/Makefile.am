@@ -90,7 +90,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_GLOBAL_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/global/%,$(CORE_GLOBAL_INCLUDES)) \
 		$(patsubst %,src/core/global/%,$(CORE_GLOBAL_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/global/qglobal.cpp \
 	src/core/global/qlibraryinfo.cpp \
 	src/core/global/qmalloc.cpp \

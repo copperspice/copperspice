@@ -22,7 +22,7 @@ SCRIPT_PRIVATE_INCLUDES += $(SCRIPT_BRIDGE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/script/bridge/%,$(SCRIPT_BRIDGE_INCLUDES)) \
 		$(patsubst %,src/script/bridge/%,$(SCRIPT_BRIDGE_PRIVATE_INCLUDES))
 
-lib_libCsScript1_la_SOURCES += \
+lib_libCsScript@BUILD_ABI@_la_SOURCES += \
 	src/script/bridge/qscriptfunction.cpp \
 	src/script/bridge/qscriptobject.cpp \
 	src/script/bridge/qscriptclassobject.cpp \

@@ -134,7 +134,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_TEXT_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/text/%,$(GUI_TEXT_INCLUDES)) \
 		$(patsubst %,src/gui/text/%,$(GUI_TEXT_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont.cpp \
 	src/gui/text/qfontengine.cpp \
 	src/gui/text/qfontsubset.cpp \
@@ -166,7 +166,7 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/text/qglyphrun.cpp
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont_win.cpp \
 	src/gui/text/qfontengine_win.cpp \
 	src/gui/text/qfontenginedirectwrite.cpp \
@@ -174,7 +174,7 @@ lib_libCsGui1_la_SOURCES += \
 endif
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont_x11.cpp \
 	src/gui/text/qfontengine_x11.cpp \
 	src/gui/text/qfontengine_ft.cpp \
@@ -182,7 +182,7 @@ lib_libCsGui1_la_SOURCES += \
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont_mac.cpp \
 	src/gui/text/qrawfont_mac.cpp \
 	src/gui/text/qfontengine_mac.mm \
@@ -190,12 +190,12 @@ lib_libCsGui1_la_SOURCES += \
 endif
 
 if QPA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfont_qpa.cpp \
 	src/gui/text/qfontengine_qpa.cpp \
 	src/gui/text/qplatformfontdatabase_qpa.cpp \
 	src/gui/text/qrawfont_qpa.cpp
-lib_libCsGui1_la_CXXFLAGS += -DQT_NO_FONTCONFIG -DQT_NO_FREETYPE
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_FONTCONFIG -DQT_NO_FREETYPE
 endif
 
 

@@ -21,11 +21,11 @@ bin_lrelease_SOURCES = \
 $(bin_lrelease_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
 
 
-bin_lrelease_CXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS) \
+bin_lrelease_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS) \
    -Iinclude/QtCore -Iinclude/QtXml \
    -Iprivateinclude/QtCore/private  -I$(top_srcdir)/src/tools/shared
 
-bin_lrelease_LDADD = lib/libCsCore1.la lib/libCsXml1.la
+bin_lrelease_LDADD = lib/libCsCore@BUILD_ABI@.la lib/libCsXml@BUILD_ABI@.la
 
 if OSTYPE_WIN
    bin_lrelease_LDADD += -luuid

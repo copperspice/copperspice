@@ -32,7 +32,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_UTIL_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/util/%,$(GUI_UTIL_INCLUDES)) \
 		$(patsubst %,src/gui/util/%,$(GUI_UTIL_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/util/qsystemtrayicon.cpp \
 	src/gui/util/qcompleter.cpp \
 	src/gui/util/qdesktopservices.cpp \
@@ -41,16 +41,16 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/util/qundoview.cpp
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/util/qsystemtrayicon_win.cpp
 endif
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/util/qsystemtrayicon_x11.cpp
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/util/qsystemtrayicon_mac.mm
 endif

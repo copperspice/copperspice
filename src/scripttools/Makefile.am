@@ -9,7 +9,7 @@ lib_libCsScriptTools1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -I
 	-DQT_MAKEDLL
 
 lib_libCsScriptTools1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsScriptTools1_la_LIBADD = lib/libCsCore1.la lib/libCsScript1.la lib/libCsGui1.la
+lib_libCsScriptTools1_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsScript@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
 
 SCRIPTTOOLS_INCLUDES =
 SCRIPTTOOLS_PUBLIC_INCLUDES =

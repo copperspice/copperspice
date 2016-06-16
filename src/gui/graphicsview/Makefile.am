@@ -98,7 +98,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_GRAPHICSVIEW_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/graphicsview/%,$(GUI_GRAPHICSVIEW_INCLUDES)) \
 		$(patsubst %,src/gui/graphicsview/%,$(GUI_GRAPHICSVIEW_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/graphicsview/qgraphicsanchorlayout.cpp \
 	src/gui/graphicsview/qgraphicsanchorlayout_p.cpp \
 	src/gui/graphicsview/qgraphicsgridlayout.cpp \

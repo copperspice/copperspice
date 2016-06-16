@@ -138,7 +138,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_STYLES_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/styles/%,$(GUI_STYLES_INCLUDES)) \
 		$(patsubst %,src/gui/styles/%,$(GUI_STYLES_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qstyle.cpp \
 	src/gui/styles/qmotifstyle.cpp \
 	src/gui/styles/qstylefactory.cpp \
@@ -153,7 +153,7 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/styles/qcleanlooksstyle.cpp \
 	src/gui/styles/qcdestyle.cpp
 
-nodist_lib_libCsGui1_la_SOURCES += \
+nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qrc_qstyle.cpp 
 
 EXTRA_DIST+=\
@@ -290,36 +290,36 @@ EXTRA_DIST+=\
 
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qwindowsstyle.cpp \
 	src/gui/styles/qwindowsxpstyle.cpp  \
    src/gui/styles/qwindowsvistastyle.cpp
 endif
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qwindowsstyle.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_STYLE_WINDOWSXP
 endif
 
 if OSTYPE_DARWIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qwindowsstyle.cpp  \
 	src/gui/styles/qmacstyle_mac.mm
-lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK
 
 endif
 
 if GTK
-lib_libCsGui1_la_CXXFLAGS += $(GTK_CFLAGS)
-lib_libCsGui1_la_LDFLAGS += $(GTK_LIBS)
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += $(GTK_CFLAGS)
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(GTK_LIBS)
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qgtkstyle.cpp \
 	src/gui/styles/qgtkpainter.cpp \
 	src/gui/styles/qgtkstyle_p.cpp
 else
-lib_libCsGui1_la_CXXFLAGS += -DQT_NO_STYLE_GTK
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK
 endif

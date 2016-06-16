@@ -34,7 +34,7 @@ noinst_HEADERS+=$(patsubst %,src/network/ssl/%,$(NETWORK_SSL_INCLUDES)) \
 		$(patsubst %,src/network/ssl/%,$(NETWORK_SSL_PRIVATE_INCLUDES))
 
 if SSL
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/ssl/qssl.cpp \
 	src/network/ssl/qsslcertificate.cpp \
 	src/network/ssl/qsslconfiguration.cpp \

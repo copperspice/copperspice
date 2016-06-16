@@ -29,7 +29,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_ENVIRONMENT_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/environment/%,$(XMLPATTERNS_ENVIRONMENT_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/environment/%,$(XMLPATTERNS_ENVIRONMENT_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/environment/qcurrentitemcontext.cpp            \
 	src/xmlpatterns/environment/qdelegatingdynamiccontext.cpp      \
 	src/xmlpatterns/environment/qdelegatingstaticcontext.cpp       \

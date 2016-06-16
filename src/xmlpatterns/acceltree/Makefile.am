@@ -18,7 +18,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_ACCELTREE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/acceltree/%,$(XMLPATTERNS_ACCELTREE_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/acceltree/%,$(XMLPATTERNS_ACCELTREE_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/acceltree/qacceltree.cpp \
 	src/xmlpatterns/acceltree/qacceltreeresourceloader.cpp \
 	src/xmlpatterns/acceltree/qacceliterators.cpp \

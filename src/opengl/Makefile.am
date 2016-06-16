@@ -1,7 +1,7 @@
-lib_LTLIBRARIES += lib/libCsOpenGL1.la
-lib_libCsOpenGL1_la_SOURCES =
+lib_LTLIBRARIES += lib/libCsOpenGL@BUILD_ABI@.la
+lib_libCsOpenGL@BUILD_ABI@_la_SOURCES =
 
-lib_libCsOpenGL1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui  -Iinclude/QtOpenGL  \
+lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui  -Iinclude/QtOpenGL  \
    -Iprivateinclude/QtCore/private -Iprivateinclude/QtGui/private  -Iprivateinclude/QtOpenGL/private \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src -Isrc/opengl   \
    -DQT_NO_EGL   \
@@ -9,9 +9,9 @@ lib_libCsOpenGL1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclu
 	-DQT_SHARED   \
 	-DQT_MAKEDLL
 
-lib_libCsOpenGL1_la_OBJCXXFLAGS = $(lib_libCsOpenGL1_la_CXXFLAGS)
-lib_libCsOpenGL1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsOpenGL1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la
+lib_libCsOpenGL@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS)
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsOpenGL@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
 
 OPENGL_INCLUDES =
 OPENGL_PUBLIC_INCLUDES =
@@ -91,7 +91,7 @@ OPENGL_UTIL_PRIVATE_INCLUDES = fragmentprograms_p.h
 
 OPENGL_PRIVATE_INCLUDES += $(OPENGL_ROOT_PRIVATE_INCLUDES)
 
-lib_libCsOpenGL1_la_SOURCES += \
+lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/gl2paintengineex/qgl2pexvertexarray.cpp \
 	src/opengl/gl2paintengineex/qglcustomshaderstage.cpp \
 	src/opengl/gl2paintengineex/qglengineshadermanager.cpp \
@@ -118,24 +118,24 @@ lib_libCsOpenGL1_la_SOURCES += \
 
 
 if X11
-lib_libCsOpenGL1_la_SOURCES += \
+lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/qgl_x11.cpp \
 	src/opengl/qglpixelbuffer_x11.cpp
 endif
 
 if COCOA
-lib_libCsOpenGL1_la_SOURCES += \
+lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/qgl_mac.mm \
 	src/opengl/qglpixelbuffer_mac.mm
-lib_libCsOpenGL1_la_LDFLAGS+= -framework AppKit -framework Carbon -framework OpenGL
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -framework AppKit -framework Carbon -framework OpenGL
 endif
 
 if OSTYPE_WIN
-lib_libCsOpenGL1_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_MAKEDLL -DQT_BUILD_OPENGL_LIB
-lib_libCsOpenGL1_la_SOURCES += \
+lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_MAKEDLL -DQT_BUILD_OPENGL_LIB
+lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/qgl_win.cpp \
 	src/opengl/qglpixelbuffer_win.cpp
-lib_libCsOpenGL1_la_LDFLAGS+= -lopengl32 -lgdi32 -lkernel32 -luser32
+lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -lopengl32 -lgdi32 -lkernel32 -luser32
 endif
 
 noinst_HEADERS+=$(patsubst %,src/opengl/%,$(OPENGL_INCLUDES)) \
@@ -154,7 +154,7 @@ OPENGL_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.opengl-header-deps.mk
 
-$(lib_libCsOpenGL1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(OPENGL_HEADERS_INSTALLED) 
+$(lib_libCsOpenGL@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(OPENGL_HEADERS_INSTALLED) 
 
 -include .opengl-header-deps.mk
 

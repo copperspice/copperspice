@@ -66,7 +66,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_API_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/api/%,$(XMLPATTERNS_API_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/api/%,$(XMLPATTERNS_API_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/api/qvariableloader.cpp \
 	src/xmlpatterns/api/qabstractmessagehandler.cpp \
 	src/xmlpatterns/api/qabstracturiresolver.cpp \

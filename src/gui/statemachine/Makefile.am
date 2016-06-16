@@ -18,7 +18,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_STATEMACHINE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/statemachine/%,$(GUI_STATEMACHINE_INCLUDES)) \
 		$(patsubst %,src/gui/statemachine/%,$(GUI_STATEMACHINE_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/statemachine/qkeyeventtransition.cpp \
 	src/gui/statemachine/qmouseeventtransition.cpp \
 	src/gui/statemachine/qbasickeyeventtransition.cpp \

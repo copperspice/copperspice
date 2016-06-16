@@ -58,7 +58,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_DATA_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/data/%,$(XMLPATTERNS_DATA_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/data/%,$(XMLPATTERNS_DATA_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/data/qabstractdatetime.cpp        \
 	src/xmlpatterns/data/qabstractduration.cpp        \
 	src/xmlpatterns/data/qanyuri.cpp                  \

@@ -63,7 +63,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_ACCESSIBLE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/accessible/%,$(GUI_ACCESSIBLE_INCLUDES)) \
 		$(patsubst %,src/gui/accessible/%,$(GUI_ACCESSIBLE_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessible.cpp \
 	src/gui/accessible/qaccessible2.cpp \
 	src/gui/accessible/qaccessibleobject.cpp \
@@ -71,24 +71,24 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/accessible/qaccessibleplugin.cpp
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessible_win.cpp
 endif
 
 if OSTYPE_LINUX
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessible_unix.cpp \
 	src/gui/accessible/qaccessiblebridge.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
         src/gui/accessible/qaccessible_unix.cpp \
         src/gui/accessible/qaccessiblebridge.cpp
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/accessible/qaccessible_mac.mm \
 	src/gui/accessible/qaccessible_mac_cocoa.mm
 endif

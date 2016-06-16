@@ -66,7 +66,7 @@ NETWORK_PRIVATE_INCLUDES += $(NETWORK_ACCESS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/network/access/%,$(NETWORK_ACCESS_INCLUDES)) \
 		$(patsubst %,src/network/access/%,$(NETWORK_ACCESS_PRIVATE_INCLUDES))
 
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/access/qftp.cpp \
 	src/network/access/qhttp.cpp \
 	src/network/access/qhttpnetworkheader.cpp \

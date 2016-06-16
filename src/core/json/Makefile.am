@@ -25,7 +25,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_JSON_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/json/%,$(CORE_JSON_INCLUDES)) \
 		$(patsubst %,src/core/json/%,$(CORE_JSON_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/json/qjson.cpp \
 	src/core/json/qjsonarray.cpp \
 	src/core/json/qjsondocument.cpp \

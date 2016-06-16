@@ -1,7 +1,7 @@
-lib_LTLIBRARIES += lib/libCsSvg1.la
-lib_libCsSvg1_la_SOURCES =
+lib_LTLIBRARIES += lib/libCsSvg@BUILD_ABI@.la
+lib_libCsSvg@BUILD_ABI@_la_SOURCES =
 
-lib_libCsSvg1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude/QtGui -Iinclude/QtSvg \
+lib_libCsSvg@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude/QtGui -Iinclude/QtSvg \
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtGui/private  -Iprivateinclude/QtSvg/private   \
    -Isrc/svg  -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
@@ -9,11 +9,11 @@ lib_libCsSvg1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore  -Iinclude
 	-DQT_SHARED   \
 	-DQT_MAKEDLL
 
-lib_libCsSvg1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsSvg1_la_LIBADD = lib/libCsCore1.la lib/libCsGui1.la
+lib_libCsSvg@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsSvg@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la
 
 if OSTYPE_WIN
-lib_libCsSvg1_la_LDFLAGS += -lws2_32
+lib_libCsSvg@BUILD_ABI@_la_LDFLAGS += -lws2_32
 endif
 
 
@@ -41,7 +41,7 @@ SVG_PRIVATE_INCLUDES = \
 	qsvgtinydocument_p.h
 
 SVG_DIRS = src/svg
-lib_libCsSvg1_la_SOURCES+= \
+lib_libCsSvg@BUILD_ABI@_la_SOURCES+= \
 	src/svg/qsvggraphics.cpp        \
 	src/svg/qsvghandler.cpp         \
 	src/svg/qsvgnode.cpp            \
@@ -65,7 +65,7 @@ SVG_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.svg-header-deps.mk
 
-$(lib_libCsSvg1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(SVG_HEADERS_INSTALLED)
+$(lib_libCsSvg@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(SVG_HEADERS_INSTALLED)
 
 EXTRA_DIST += \
 	src/svg/CMakeLists.txt

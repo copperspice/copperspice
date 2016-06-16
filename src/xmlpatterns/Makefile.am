@@ -1,7 +1,7 @@
-lib_LTLIBRARIES += lib/libCsXmlPatterns1.la
-lib_libCsXmlPatterns1_la_SOURCES =
+lib_LTLIBRARIES += lib/libCsXmlPatterns@BUILD_ABI@.la
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES =
 
-lib_libCsXmlPatterns1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtXmlPatterns   \
+lib_libCsXmlPatterns@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtXmlPatterns   \
    -Iprivateinclude/QtCore/private -Iprivateinclude/QtXmlPatterns/private \
    -Iinclude/QtNetwork   -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
@@ -9,12 +9,12 @@ lib_libCsXmlPatterns1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -I
 	-DQT_SHARED   \
 	-DQT_MAKEDLL
 
-lib_libCsXmlPatterns1_la_CFLAGS = $(AM_CFLAGS)
-lib_libCsXmlPatterns1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsXmlPatterns1_la_LIBADD = lib/libCsCore1.la lib/libCsNetwork1.la
+lib_libCsXmlPatterns@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
+lib_libCsXmlPatterns@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsXmlPatterns@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsNetwork@BUILD_ABI@.la
 
 # BROOM (enable OpenSSL)
-lib_libCsXmlPatterns1_la_CXXFLAGS += -DQT_NO_OPENSSL
+lib_libCsXmlPatterns@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
 
 XMLPATTERNS_INCLUDES =
 XMLPATTERNS_PUBLIC_INCLUDES =
@@ -59,7 +59,7 @@ XMLPATTERNS_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.xmlpatterns-header-deps.mk
 
-$(lib_libCsXmlPatterns1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) \
+$(lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) \
                  $(XML_HEADERS_INSTALLED) $(XMLPATTERNS_HEADERS_INSTALLED)
 
 -include .xmlpatterns-header-deps.mk

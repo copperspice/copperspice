@@ -60,13 +60,13 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_SCHEMA_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/schema/%,$(XMLPATTERNS_SCHEMA_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/schema/%,$(XMLPATTERNS_SCHEMA_PRIVATE_INCLUDES))
 
-nodist_lib_libCsXmlPatterns1_la_SOURCES = \
+nodist_lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES = \
 	src/xmlpatterns/schema/qrc_builtinschemas.cpp
 
 EXTRA_DIST += \
 	src/xmlpatterns/schema/schemas/xml.xsd
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/schema/qnamespacesupport.cpp            \
 	src/xmlpatterns/schema/qxsdalternative.cpp              \
 	src/xmlpatterns/schema/qxsdannotated.cpp                \

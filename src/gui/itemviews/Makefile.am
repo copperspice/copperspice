@@ -99,7 +99,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_ITEMVIEWS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/itemviews/%,$(GUI_ITEMVIEWS_INCLUDES)) \
 		$(patsubst %,src/gui/itemviews/%,$(GUI_ITEMVIEWS_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/itemviews/qabstractitemdelegate.cpp \
 	src/gui/itemviews/qabstractitemview.cpp \
 	src/gui/itemviews/qabstractproxymodel.cpp \

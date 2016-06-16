@@ -1,8 +1,8 @@
-lib_LTLIBRARIES += lib/libCsCore1.la
-lib_libCsCore1_la_SOURCES =
-lib_libCsCore1_la_LIB = lib/core/libkernel.la
+lib_LTLIBRARIES += lib/libCsCore@BUILD_ABI@.la
+lib_libCsCore@BUILD_ABI@_la_SOURCES =
+lib_libCsCore@BUILD_ABI@_la_LIB = lib/core/libkernel.la
 
-lib_libCsCore1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivateinclude/QtCore \
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivateinclude/QtCore \
    -Iprivateinclude/QtCore/private \
    -I$(top_srcdir)/src/core/io -Isrc/core/animation -Isrc/core/kernel \
    -Isrc/core/io -Isrc/core/statemachine \
@@ -13,34 +13,34 @@ lib_libCsCore1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iprivate
    -DQT_SHARED   \
    -DQT_MAKEDLL
 
-lib_libCsCore1_la_CFLAGS = $(AM_CFLAGS)
-lib_libCsCore1_la_OBJCXXFLAGS = $(lib_libCsCore1_la_CXXFLAGS)
-lib_libCsCore1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
+lib_libCsCore@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 
 if OSTYPE_LINUX
-lib_libCsCore1_la_LDFLAGS += -ldl -lpthread
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -ldl -lpthread
 endif
 
 if OSTYPE_BSD
-lib_libCsCore1_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv 
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv 
 endif
 
 if OSTYPE_WIN
-lib_libCsCore1_la_CFLAGS += -DQT_MAKEDLL
-lib_libCsCore1_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
+lib_libCsCore@BUILD_ABI@_la_CFLAGS += -DQT_MAKEDLL
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lobjc
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lobjc
 endif
 
 if ZLIB
-lib_libCsCore1_la_CXXFLAGS += $(ZLIB_CFLAGS)
-lib_libCsCore1_la_LDFLAGS += $(ZLIB_LIBS)
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += $(ZLIB_CFLAGS)
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += $(ZLIB_LIBS)
 else
-lib_libCsCore1_la_CXXFLAGS +=  -I$(top_srcdir)/src/3rdparty/zlib
-lib_libCsCore1_la_CFLAGS += -Iinclude/QtCore -I$(top_srcdir)/src/3rdparty/zlib
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS +=  -I$(top_srcdir)/src/3rdparty/zlib
+lib_libCsCore@BUILD_ABI@_la_CFLAGS += -Iinclude/QtCore -I$(top_srcdir)/src/3rdparty/zlib
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/zlib/adler32.c \
 	src/3rdparty/zlib/compress.c \
 	src/3rdparty/zlib/crc32.c \
@@ -104,7 +104,7 @@ CORE_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.core-header-deps.mk
 
-$(lib_libCsCore1_la_SOURCES): $(CORE_HEADERS_INSTALLED)
+$(lib_libCsCore@BUILD_ABI@_la_SOURCES): $(CORE_HEADERS_INSTALLED)
 
 -include .core-header-deps.mk
 

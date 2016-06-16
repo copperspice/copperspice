@@ -25,5 +25,5 @@ GUI_PRIVATE_INCLUDES += $(GUI_EFFECTS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/effects/%,$(GUI_EFFECTS_INCLUDES)) \
 		$(patsubst %,src/gui/effects/%,$(GUI_EFFECTS_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/effects/qgraphicseffect.cpp

@@ -26,7 +26,7 @@ lib_qsqlpsql4_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtSql -Iprivatei
 
 lib_qsqlpsql4_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module -lpq
 
-lib_qsqlpsql4_la_LIBADD=lib/libCsCore1.la lib/libCsSql1.la
+lib_qsqlpsql4_la_LIBADD=lib/libCsCore@BUILD_ABI@.la lib/libCsSql@BUILD_ABI@.la
 
 lib_qsqlpsql4_la_SOURCES = \
 	src/sql/drivers/psql/qsql_psql.cpp \

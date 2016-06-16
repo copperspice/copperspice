@@ -23,7 +23,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_PARSER_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/parser/%,$(XMLPATTERNS_PARSER_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/parser/%,$(XMLPATTERNS_PARSER_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/parser/qquerytransformparser.cpp  \
 	src/xmlpatterns/parser/qparsercontext.cpp         \
 	src/xmlpatterns/parser/qtokenrevealer.cpp         \

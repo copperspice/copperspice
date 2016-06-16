@@ -27,7 +27,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_ITERATORS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/iterators/%,$(XMLPATTERNS_ITERATORS_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/iterators/%,$(XMLPATTERNS_ITERATORS_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/iterators/qcachingiterator.cpp        \
 	src/xmlpatterns/iterators/qdeduplicateiterator.cpp    \
 	src/xmlpatterns/iterators/qdistinctiterator.cpp       \

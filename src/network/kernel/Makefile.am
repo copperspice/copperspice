@@ -42,7 +42,7 @@ NETWORK_PRIVATE_INCLUDES += $(NETWORK_KERNEL_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/network/kernel/%,$(NETWORK_KERNEL_INCLUDES)) \
 		$(patsubst %,src/network/kernel/%,$(NETWORK_KERNEL_PRIVATE_INCLUDES))
 
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qauthenticator.cpp \
 	src/network/kernel/qhostaddress.cpp \
 	src/network/kernel/qhostinfo.cpp \
@@ -51,28 +51,28 @@ lib_libCsNetwork1_la_SOURCES += \
 	src/network/kernel/qnetworkinterface.cpp 
 
 if OSTYPE_LINUX
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qhostinfo_unix.cpp \
 	src/network/kernel/qnetworkinterface_unix.cpp \
 	src/network/kernel/qnetworkproxy_generic.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
         src/network/kernel/qhostinfo_unix.cpp \
         src/network/kernel/qnetworkinterface_unix.cpp \
         src/network/kernel/qnetworkproxy_generic.cpp
 endif
 
 if OSTYPE_DARWIN
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qhostinfo_unix.cpp \
 	src/network/kernel/qnetworkinterface_unix.cpp \
 	src/network/kernel/qnetworkproxy_generic.cpp
 endif
 
 if OSTYPE_WIN
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/kernel/qhostinfo_win.cpp \
 	src/network/kernel/qnetworkinterface_win.cpp \
 	src/network/kernel/qnetworkproxy_generic.cpp

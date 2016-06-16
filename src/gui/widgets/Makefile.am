@@ -173,7 +173,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_WIDGETS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/widgets/%,$(GUI_WIDGETS_INCLUDES)) \
 		$(patsubst %,src/gui/widgets/%,$(GUI_WIDGETS_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qabstractbutton.cpp \
 	src/gui/widgets/qabstractslider.cpp \
 	src/gui/widgets/qabstractspinbox.cpp \
@@ -236,7 +236,7 @@ lib_libCsGui1_la_SOURCES += \
 
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qcocoamenu_mac.mm \
 	src/gui/widgets/qcocoatoolbardelegate_mac.mm \
 	src/gui/widgets/qmaccocoaviewcontainer_mac.mm \
@@ -247,7 +247,7 @@ endif
 
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/widgets/qmenubar_x11.cpp
 endif
 

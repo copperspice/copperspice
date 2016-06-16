@@ -106,7 +106,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_EXPR_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/expr/%,$(XMLPATTERNS_EXPR_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/expr/%,$(XMLPATTERNS_EXPR_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/expr/qandexpression.cpp                       \
 	src/xmlpatterns/expr/qapplytemplate.cpp                       \
 	src/xmlpatterns/expr/qargumentreference.cpp                   \

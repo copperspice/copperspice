@@ -1,7 +1,7 @@
-lib_LTLIBRARIES += lib/libCsScript1.la
-lib_libCsScript1_la_SOURCES =
+lib_LTLIBRARIES += lib/libCsScript@BUILD_ABI@.la
+lib_libCsScript@BUILD_ABI@_la_SOURCES =
 
-lib_libCsScript1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtScript \
+lib_libCsScript@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtScript \
 	-Iprivateinclude/QtCore \
 	-Iprivateinclude/QtScript \
 	-Iprivateinclude/QtScript/private \
@@ -53,16 +53,16 @@ lib_libCsScript1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclu
 #	-Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE="" -DQT_MAKEDLL
 #	-DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 
-lib_libCsScript1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsScript1_la_LIBADD = lib/libCsCore1.la
+lib_libCsScript@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsScript@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
 
 
 if OSTYPE_WIN
-lib_libCsScript1_la_LDFLAGS += -lwinmm
+lib_libCsScript@BUILD_ABI@_la_LDFLAGS += -lwinmm
 endif
 
 if OSTYPE_DARWIN
-lib_libCsScript1_la_CXXFLAGS += -DENABLE_JSC_MULTIPLE_THREADS=0
+lib_libCsScript@BUILD_ABI@_la_CXXFLAGS += -DENABLE_JSC_MULTIPLE_THREADS=0
 endif
 
 SCRIPT_INCLUDES =
@@ -380,7 +380,7 @@ noinst_HEADERS += \
 	src/3rdparty/javascriptcore/JavaScriptCore/pcre/ucptable.cpp
 
 
-lib_libCsScript1_la_SOURCES += \
+lib_libCsScript@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/javascriptcore/JavaScriptCore/API/JSBase.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackConstructor.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/API/JSCallbackFunction.cpp \
@@ -542,7 +542,7 @@ SCRIPT_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.script-header-deps.mk
 
-$(lib_libCsScript1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INSTALLED) 
+$(lib_libCsScript@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(SCRIPT_HEADERS_INSTALLED) 
 
 -include .script-header-deps.mk
 

@@ -1,7 +1,7 @@
-lib_LTLIBRARIES += lib/libCsNetwork1.la
-lib_libCsNetwork1_la_SOURCES =
+lib_LTLIBRARIES += lib/libCsNetwork@BUILD_ABI@.la
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES =
 
-lib_libCsNetwork1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtNetwork  \
+lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtNetwork  \
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtNetwork/private    \
 	-Isrc/network/access -Isrc/network/bearer   \
 	-Isrc/network/socket     \
@@ -10,19 +10,19 @@ lib_libCsNetwork1_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iincl
 	-DQT_SHARED  \
 	-DQT_MAKEDLL
 
-lib_libCsNetwork1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
-lib_libCsNetwork1_la_LIBADD = lib/libCsCore1.la
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
+lib_libCsNetwork@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
 
 if !SSL
-lib_libCsNetwork1_la_CXXFLAGS += -DQT_NO_OPENSSL
+lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
 endif
 
 if OSTYPE_WIN
-lib_libCsNetwork1_la_LDFLAGS += -lws2_32
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32
 endif
 
 if OSTYPE_DARWIN
-lib_libCsNetwork1_la_LDFLAGS += -framework CoreServices
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -framework CoreServices
 endif
 
 NETWORK_INCLUDES =
@@ -52,7 +52,7 @@ NETWORK_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.network-header-deps.mk
 
-$(lib_libCsNetwork1_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) 
+$(lib_libCsNetwork@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) 
 
 -include .network-header-deps.mk
 

@@ -53,7 +53,7 @@ SCRIPT_PRIVATE_INCLUDES += $(SCRIPT_API_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/script/api/%,$(SCRIPT_API_INCLUDES)) \
 		$(patsubst %,src/script/api/%,$(SCRIPT_API_PRIVATE_INCLUDES))
 
-lib_libCsScript1_la_SOURCES += \
+lib_libCsScript@BUILD_ABI@_la_SOURCES += \
 	src/script/api/qscriptclass.cpp \
 	src/script/api/qscriptclasspropertyiterator.cpp \
 	src/script/api/qscriptcontext.cpp \

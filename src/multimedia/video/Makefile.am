@@ -27,7 +27,7 @@ MULTIMEDIA_PRIVATE_INCLUDES += $(MULTIMEDIA_VIDEO_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/multimedia/video/%,$(MULTIMEDIA_VIDEO_INCLUDES)) \
 		$(patsubst %,src/multimedia/video/%,$(MULTIMEDIA_VIDEO_PRIVATE_INCLUDES))
 
-lib_libCsMultimedia1_la_SOURCES += \
+lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/video/qabstractvideobuffer.cpp \
 	src/multimedia/video/qabstractvideosurface.cpp \
 	src/multimedia/video/qimagevideobuffer.cpp \

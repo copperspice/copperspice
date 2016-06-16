@@ -40,7 +40,7 @@ GUI_INCLUDES += $(GUI_MATH3D_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/math3d/%,$(GUI_MATH3D_INCLUDES)) \
 		$(patsubst %,src/gui/math3d/%,$(GUI_MATH3D_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/math3d/qgenericmatrix.cpp \
 	src/gui/math3d/qmatrix4x4.cpp \
 	src/gui/math3d/qquaternion.cpp \

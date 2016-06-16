@@ -18,7 +18,7 @@ XMLPATTERNS_PRIVATE_INCLUDES += $(XMLPATTERNS_JANITORS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xmlpatterns/janitors/%,$(XMLPATTERNS_JANITORS_INCLUDES)) \
 		$(patsubst %,src/xmlpatterns/janitors/%,$(XMLPATTERNS_JANITORS_PRIVATE_INCLUDES))
 
-lib_libCsXmlPatterns1_la_SOURCES += \
+lib_libCsXmlPatterns@BUILD_ABI@_la_SOURCES += \
 	src/xmlpatterns/janitors/qargumentconverter.cpp     \
 	src/xmlpatterns/janitors/qatomizer.cpp              \
 	src/xmlpatterns/janitors/qcardinalityverifier.cpp   \

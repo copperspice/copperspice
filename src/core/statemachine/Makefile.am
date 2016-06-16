@@ -38,7 +38,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_STATEMACHINE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/statemachine/%,$(CORE_STATEMACHINE_INCLUDES)) \
 		$(patsubst %,src/core/statemachine/%,$(CORE_STATEMACHINE_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/statemachine/qstatemachine.cpp \
 	src/core/statemachine/qabstractstate.cpp \
 	src/core/statemachine/qeventtransition.cpp \

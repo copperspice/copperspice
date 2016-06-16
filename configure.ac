@@ -2,7 +2,9 @@ AC_INIT([copperspice], [1.3.0], [info@copperspice.com])
 
 # derive CS hex version from "@PACKAGE_VERSION@"
 HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
+BUILD_ABI=$(echo $PACKAGE_VERSION | cut -d. -f1-2)
 AC_SUBST([HEX_VERSION])
+AC_SUBST([BUILD_ABI])
 
 AC_CONFIG_AUX_DIR([autotools/build-aux])
 

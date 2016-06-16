@@ -25,7 +25,7 @@ lib_LTLIBRARIES += lib/qsqlmysql4.la
 
 lib_qsqlmysql4_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined -module -lmysqlclient -lz 
 
-lib_qsqlmysql4_la_LIBADD=lib/libCsCore1.la lib/libCsSql1.la
+lib_qsqlmysql4_la_LIBADD=lib/libCsCore@BUILD_ABI@.la lib/libCsSql@BUILD_ABI@.la
 
 lib_qsqlmysql4_la_SOURCES = \
 	src/sql/drivers/mysql/qsql_mysql.cpp \

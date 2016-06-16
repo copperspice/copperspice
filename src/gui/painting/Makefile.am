@@ -140,7 +140,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_PAINTING_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/painting/%,$(GUI_PAINTING_INCLUDES)) \
 		$(patsubst %,src/gui/painting/%,$(GUI_PAINTING_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qbezier.cpp \
 	src/gui/painting/qblendfunctions.cpp \
 	src/gui/painting/qbrush.cpp \
@@ -192,17 +192,17 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/painting/qwindowsurface_raster.cpp
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_win.cpp \
 	src/gui/painting/qpaintdevice_win.cpp \
 	src/gui/painting/qprintengine_win.cpp \
 	src/gui/painting/qprinterinfo_win.cpp
 
-lib_libCsGui1_la_LDFLAGS += -lmsimg32
+lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lmsimg32
 endif
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_x11.cpp \
 	src/gui/painting/qpaintdevice_x11.cpp \
 	src/gui/painting/qpaintengine_x11.cpp \
@@ -212,7 +212,7 @@ lib_libCsGui1_la_SOURCES += \
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcups.cpp \
 	src/gui/painting/qcolormap_mac.cpp \
 	src/gui/painting/qpaintdevice_mac.cpp \
@@ -225,7 +225,7 @@ lib_libCsGui1_la_SOURCES += \
 endif
 
 if QPA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qcolormap_qpa.cpp \
 	src/gui/painting/qpaintdevice_qpa.cpp
 endif

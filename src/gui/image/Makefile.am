@@ -86,7 +86,7 @@ GUI_PRIVATE_INCLUDES += $(GUI_IMAGE_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/gui/image/%,$(GUI_IMAGE_INCLUDES)) \
 		$(patsubst %,src/gui/image/%,$(GUI_IMAGE_PRIVATE_INCLUDES))
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qbmphandler.cpp \
 	src/gui/image/qbitmap.cpp \
 	src/gui/image/qicon.cpp \
@@ -122,7 +122,7 @@ lib_libCsGui1_la_SOURCES += \
 	src/gui/image/qmnghandler.cpp \
 	src/gui/image/qvolatileimagedata.cpp
 
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/libjpeg/jaricom.c \
 	src/3rdparty/libjpeg/jcapimin.c \
 	src/3rdparty/libjpeg/jcapistd.c \
@@ -238,17 +238,17 @@ lib_libCsGui1_la_SOURCES += \
 	src/3rdparty/libtiff/libtiff/tif_zip.c
 
 
-lib_libCsGui1_la_CFLAGS += -DMNG_BUILD_SO -DMNG_NO_INCLUDE_JNG
-lib_libCsGui1_la_CFLAGS += -Iinclude/QtCore
-lib_libCsGui1_la_CFLAGS += -I$(top_srcdir)/src/3rdparty/libpng -I$(top_srcdir)/src/3rdparty/zlib
-lib_libCsGui1_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/libpng
+lib_libCsGui@BUILD_ABI@_la_CFLAGS += -DMNG_BUILD_SO -DMNG_NO_INCLUDE_JNG
+lib_libCsGui@BUILD_ABI@_la_CFLAGS += -Iinclude/QtCore
+lib_libCsGui@BUILD_ABI@_la_CFLAGS += -I$(top_srcdir)/src/3rdparty/libpng -I$(top_srcdir)/src/3rdparty/zlib
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/libpng
 
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/libtiff/libtiff/tif_win32.c
 else
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/libtiff/libtiff/tif_unix.c
 endif
 
@@ -310,20 +310,20 @@ EXTRA_DIST += \
 	src/3rdparty/libpng/pngstruct.h
 
 if OSTYPE_WIN
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_win.cpp
 endif
 
 if X11
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_x11.cpp
 endif
 
 if COCOA
-lib_libCsGui1_la_SOURCES += \
+lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_mac.cpp
 endif
 
 if QPA
-lib_libCsGui1_la_SOURCES +=
+lib_libCsGui@BUILD_ABI@_la_SOURCES +=
 endif

@@ -32,7 +32,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_CODECS_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/codecs/%,$(CORE_CODECS_INCLUDES)) \
 		$(patsubst %,src/core/codecs/%,$(CORE_CODECS_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/codecs/qisciicodec.cpp \
 	src/core/codecs/qlatincodec.cpp \
 	src/core/codecs/qsimplecodec.cpp \
@@ -43,17 +43,17 @@ lib_libCsCore1_la_SOURCES += \
 	src/core/codecs/qfontlaocodec.cpp
 
 if OSTYPE_LINUX
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/codecs/qiconvcodec.cpp
 endif
 
 if OSTYPE_BSD
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
         src/core/codecs/qiconvcodec.cpp
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/codecs/qiconvcodec.cpp
 endif
 

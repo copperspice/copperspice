@@ -42,6 +42,6 @@ XML_INCLUDES += $(XML_SAX_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/xml/sax/%,$(XML_SAX_INCLUDES)) \
 		$(patsubst %,src/xml/sax/%,$(XML_SAX_PRIVATE_INCLUDES))
 
-lib_libCsXml1_la_SOURCES += \
+lib_libCsXml@BUILD_ABI@_la_SOURCES += \
 	src/xml/sax/qxml.cpp
 

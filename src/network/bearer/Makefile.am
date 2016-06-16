@@ -25,7 +25,7 @@ NETWORK_PRIVATE_INCLUDES += $(NETWORK_BEARER_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/network/bearer/%,$(NETWORK_BEARER_INCLUDES)) \
 		$(patsubst %,src/network/bearer/%,$(NETWORK_BEARER_PRIVATE_INCLUDES))
 
-lib_libCsNetwork1_la_SOURCES += \
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/bearer/qnetworksession.cpp \
 	src/network/bearer/qnetworkconfigmanager.cpp \
 	src/network/bearer/qnetworkconfiguration.cpp \

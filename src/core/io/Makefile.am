@@ -111,7 +111,7 @@ CORE_PRIVATE_INCLUDES += $(CORE_IO_PRIVATE_INCLUDES)
 noinst_HEADERS+=$(patsubst %,src/core/io/%,$(CORE_IO_INCLUDES)) \
 		$(patsubst %,src/core/io/%,$(CORE_IO_PRIVATE_INCLUDES))
 
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qabstractfileengine.cpp \
 	src/core/io/qbuffer.cpp \
 	src/core/io/qdatastream.cpp \
@@ -154,7 +154,7 @@ lib_libCsCore1_la_SOURCES += \
 # qfilesystemwatcher_kqueue_p.h
 
 if OSTYPE_WIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qwindowspipewriter.cpp \
 	src/core/io/qfilesystemiterator_win.cpp \
 	src/core/io/qsettings_win.cpp \
@@ -166,7 +166,7 @@ lib_libCsCore1_la_SOURCES += \
 endif
 
 if OSTYPE_LINUX
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfsfileengine_unix.cpp \
 	src/core/io/qprocess_unix.cpp \
 	src/core/io/qfilesystemengine_unix.cpp \
@@ -177,7 +177,7 @@ lib_libCsCore1_la_SOURCES += \
 endif
 
 if OSTYPE_BSD
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
         src/core/io/qfsfileengine_unix.cpp \
         src/core/io/qprocess_unix.cpp \
         src/core/io/qfilesystemengine_unix.cpp \
@@ -188,7 +188,7 @@ endif
 
 
 if OSTYPE_DARWIN
-lib_libCsCore1_la_SOURCES += \
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfilesystemengine_unix.cpp \
 	src/core/io/qfilesystemiterator_unix.cpp \
 	src/core/io/qfilesystemwatcher_fsevents.cpp \
