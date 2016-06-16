@@ -35,9 +35,14 @@ bin_lupdate_CXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS) \
 
 bin_lupdate_LDADD = lib/libCsCore@BUILD_ABI@.la lib/libCsXml@BUILD_ABI@.la
 
-EXTRA_DIST+=src/tools/lupdate/lupdate.exe.manifest
+EXTRA_DIST+= \
+	src/tools/lupdate/lupdate.exe.manifest \
+	src/tools/lupdate/lupdate.rc
+
+.rc.lo:
+	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --tag=RC --mode=compile $(RC) $(RCFLAGS) -c $< -o $@
 
 if OSTYPE_WIN
    bin_lupdate_LDADD += -luuid
-   bin_SCRIPTS = src/tools/lupdate/lupdate.exe.manifest
+   bin_lupdate_SOURCES += src/tools/lupdate/lupdate.rc
 endif

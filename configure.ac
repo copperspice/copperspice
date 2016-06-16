@@ -17,6 +17,7 @@ AC_CONFIG_SRCDIR([src/core/kernel/qobject.cpp])
 AM_INIT_AUTOMAKE([foreign tar-pax 1.12.1])
 
 LT_INIT([win32-dll disable-static])
+LT_PROG_RC
 
 AC_PROG_INSTALL
 AC_PROG_CC_C99
