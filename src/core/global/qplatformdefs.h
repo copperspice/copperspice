@@ -280,7 +280,7 @@ typedef enum {
 
 
 // ***********
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY)
 
 #include <qplatformposix.h>
 

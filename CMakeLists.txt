@@ -237,7 +237,7 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     # required by core component
     find_package(Threads)
     set_package_properties(Threads PROPERTIES

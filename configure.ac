@@ -37,7 +37,7 @@ case "$target" in
 	OSTYPE=LINUX ;;
 *-*-darwin*)
 	OSTYPE=DARWIN ;;
-*-*-*bsd*)
+*-*-*bsd*|*-*-dragonfly*)
 	OSTYPE=BSD ;;
 esac
 

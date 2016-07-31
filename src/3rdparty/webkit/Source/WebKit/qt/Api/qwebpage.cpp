@@ -3781,6 +3781,8 @@ QString QWebPage::userAgentForUrl(const QUrl&) const
 
 #elif defined Q_OS_BSD4
         firstPartTemp += QString::fromLatin1("BSD Four");
+#elif defined Q_OS_DRAGONFLY
+        firstPartTemp += QString::fromLatin1("DragonFly");
 #elif defined Q_OS_FREEBSD
         firstPartTemp += QString::fromLatin1("FreeBSD");
 #elif defined Q_OS_HPUX

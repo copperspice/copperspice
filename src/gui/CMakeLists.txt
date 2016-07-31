@@ -65,7 +65,7 @@ macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)
 macro_generate_private("${GUI_PRIVATE_INCLUDES}" QtGui)
 macro_generate_misc("${GUI_INCLUDES}" QtGui)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
