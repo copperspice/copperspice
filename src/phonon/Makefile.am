@@ -18,6 +18,16 @@ lib_libCsPhonon@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@
 EXTRA_DIST += \
 	src/phonon/CMakeLists.txt
 
+if GLIB
+if PULSEAUDIO_MAINLOOP_GLIB
+lib_libCsPhonon1_la_CXXFLAGS += -DHAVE_PULSEAUDIO $(PULSEAUDIO_MAINLOOP_GLIB_CFLAGS) $(PULSEAUDIO_CFLAGS)
+lib_libCsPhonon1_la_LDFLAGS += $(PULSEAUDIO_LIBS) $(PULSEAUDIO_MAINLOOP_GLIB_LIBS)
+if PULSEAUDIO_DEVICE_MANAGER
+lib_libCsPhonon1_la_CXXFLAGS += -DHAVE_PULSEAUDIO_DEVICE_MANAGER
+endif
+endif
+endif
+
 PHONON_PUBLIC_INCLUDES = \
 	AbstractAudioOutput \
 	AbstractMediaStream \

@@ -95,6 +95,10 @@ PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeTyp
 PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
 PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
 PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
+PKG_CHECK_MODULES(ALSA, alsa, ALSA="yes", missing="$missing Alsa")
+PKG_CHECK_MODULES(PULSEAUDIO, libpulse >= 0.9.15, PULSEAUDIO="yes", missing="$missing PulseAudio")
+PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21, PULSEAUDIO_DEVICE_MANAGER="yes", missing="$missing PulseAudioDeviceManager")
+PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB, libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes", missing="$missing PulseAudio Mainloop Glib")
 
 # not mandatory
 PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
@@ -151,10 +155,13 @@ AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 #AM_CONDITIONAL(FREETYPE, test "x$FREETYPE" = x""yes)
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
+AM_CONDITIONAL(ALSA, test "$ALSA" = "yes")
+AM_CONDITIONAL(PULSEAUDIO, test "$PULSEAUDIO" = "yes")
+AM_CONDITIONAL(PULSEAUDIO_DEVICE_MANAGER, test "$PULSEAUDIO_DEVICE_MANAGER" = "yes")
+AM_CONDITIONAL(PULSEAUDIO_MAINLOOP_GLIB, test "$PULSEAUDIO_MAINLOOP_GLIB" = "yes")
 
 # turns zlib off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)
-AM_CONDITIONAL(ALSA, test "x$ALSA" = x""yes)
 
 AC_ARG_ENABLE([webkit],	AS_HELP_STRING([--disable-webkit], [Do not build WebKit]))
 AM_CONDITIONAL(WEBKIT, test "x$enable_webkit" != "xno")

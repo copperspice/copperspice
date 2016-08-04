@@ -46,7 +46,13 @@ noinst_HEADERS+=$(patsubst %,src/multimedia/audio/%,$(MULTIMEDIA_AUDIO_INCLUDES)
 
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qaudio.cpp \
-	src/multimedia/audio/qaudioformat.cpp
+	src/multimedia/audio/qaudioengine.cpp \
+	src/multimedia/audio/qaudiodevicefactory.cpp \
+	src/multimedia/audio/qaudiodeviceinfo.cpp \
+	src/multimedia/audio/qaudioengineplugin.cpp \
+	src/multimedia/audio/qaudioformat.cpp \
+	src/multimedia/audio/qaudioinput.cpp \
+	src/multimedia/audio/qaudiooutput.cpp
 
 if OSTYPE_WIN
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
@@ -58,6 +64,8 @@ lib_libCsMultimedia@BUILD_ABI@_la_LIBADD+= -lwinmm
 endif
 
 if ALSA
+lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS += \
+	-DHAS_ALSA $(ALSA_CFLAGS)
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 	src/multimedia/audio/qaudiodeviceinfo_alsa_p.cpp \
 	src/multimedia/audio/qaudiooutput_alsa_p.cpp \

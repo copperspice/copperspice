@@ -75,6 +75,12 @@ class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
    MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
    MULTI_CS_SIGNAL_1(Public, void notify())
    MULTI_CS_SIGNAL_2(notify)
+   //
+   MULTI_CS_SLOT_1(Public, void emitStateChanged(QAudio::State un_named_arg1) {emit stateChanged(un_named_arg1);})
+   MULTI_CS_SLOT_2(emitStateChanged)
+   MULTI_CS_SLOT_1(Public, void emitNotify() {emit notify();})
+   MULTI_CS_SLOT_2(emitNotify)
+   //
 
  private:
    Q_DISABLE_COPY(QAudioOutput)
