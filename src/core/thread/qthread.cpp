@@ -651,5 +651,17 @@ QThreadPrivate *QThreadPrivate::cs_getPrivate(QThread *object)
    return object->d_ptr.data();
 }
 
+void QThread::started() {
+  QMetaObject::activate(this, &cs_class::started);
+}
+
+void QThread::finished() {
+  QMetaObject::activate(this, &cs_class::finished);
+}
+
+void QThread::terminated() {
+  QMetaObject::activate(this, &cs_class::terminated);
+}
+
 
 QT_END_NAMESPACE

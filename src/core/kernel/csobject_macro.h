@@ -446,7 +446,7 @@ class cs_number<0>
 
 
 // ** signals
-#define CS_SIGNAL_1(access, ...) \
+#define CS_SIGNAL_INTERNAL_1(access, ...) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
             decltype(cs_counter(cs_number<255>{}))::value; \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
@@ -461,13 +461,13 @@ class cs_number<0>
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }  \
-   Q_DECL_EXPORT __VA_ARGS__ {
+   Q_DECL_EXPORT __VA_ARGS__
+
 // do not remove the "{", this is required for part two of the macro
+#define CS_SIGNAL_1(access, ...) CS_SIGNAL_INTERNAL_1(access, __VA_ARGS__) {
+#define CS_SIGNAL_DECLARE_1(access, ...) CS_SIGNAL_INTERNAL_1(access, __VA_ARGS__);
 
-
-#define CS_SIGNAL_2(signalName, ...) \
-      QMetaObject::activate(this, &cs_class::signalName, ##__VA_ARGS__); \
-   }  \
+#define CS_SIGNAL_INTERNAL_2(signalName) \
    static constexpr int CS_TOKENPASTE2(cs_counter_value, __LINE__) =  \
             decltype(cs_counter(cs_number<255>{}))::value; \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>  \
@@ -483,6 +483,13 @@ class cs_number<0>
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }  \
 
+#define CS_SIGNAL_2(signalName, ...) \
+      QMetaObject::activate(this, &cs_class::signalName, ##__VA_ARGS__); \
+   }  \
+   CS_SIGNAL_INTERNAL_2(signalName)
+
+#define CS_SIGNAL_DECLARE_2(signalName, ...) \
+   CS_SIGNAL_INTERNAL_2(signalName)
 
 #define CS_SIGNAL_OVERLOAD(signalName, argTypes, ...) \
       QMetaObject::activate(this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
@@ -879,6 +886,8 @@ class cs_number<0>
 
 #define CORE_CS_SIGNAL_1(access, ...)                          CS_SIGNAL_1(access, __VA_ARGS__)
 #define CORE_CS_SIGNAL_2(signalName, ...)                      CS_SIGNAL_2(signalName, ## __VA_ARGS__)
+#define CORE_CS_SIGNAL_DECLARE_1(access, ...)                  CS_SIGNAL_DECLARE_1(access, __VA_ARGS__)
+#define CORE_CS_SIGNAL_DECLARE_2(signalName, ...)              CS_SIGNAL_DECLARE_2(signalName, ## __VA_ARGS__)
 #define CORE_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)     CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
 
 #define CORE_CS_INVOKABLE_CONSTRUCTOR_1(access, ...)           CS_INVOKABLE_CONSTRUCTOR_1(access, __VA_ARGS__)
@@ -916,6 +925,8 @@ class cs_number<0>
 
 #define CORE_CS_SIGNAL_1(access, ...)                          Q_DECL_IMPORT __VA_ARGS__;
 #define CORE_CS_SIGNAL_2(signalName, ...)
+#define CORE_CS_SIGNAL_DECLARE_1(access, ...)                  __VA_ARGS__;
+#define CORE_CS_SIGNAL_DECLARE_2(signalName, ...)
 #define CORE_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #define CORE_CS_INVOKABLE_CONSTRUCTOR_1(access, ...)           __VA_ARGS__;

@@ -2293,5 +2293,13 @@ bool QCoreApplication::hasPendingEvents()
    return false;
 }
 
+void QCoreApplication::aboutToQuit() {
+  QMetaObject::activate(this, &cs_class::aboutToQuit);
+}
+
+void QCoreApplication::unixSignal(int un_named_arg1) {
+  QMetaObject::activate(this, &cs_class::unixSignal, un_named_arg1);
+}
+
 
 QT_END_NAMESPACE
