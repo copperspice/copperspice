@@ -1147,79 +1147,23 @@ int QGLFormat::majorVersion() const
    return d->majorVersion;
 }
 
-/*!
-    \since 4.7
-
-    Returns the OpenGL minor version.
-
-    \sa setVersion(), majorVersion()
-*/
 int QGLFormat::minorVersion() const
 {
    return d->minorVersion;
 }
 
-/*!
-    \enum QGLFormat::OpenGLContextProfile
-    \since 4.7
 
-    This enum describes the OpenGL context profiles that can be
-    specified for contexts implementing OpenGL version 3.2 or
-    higher. These profiles are different from OpenGL ES profiles.
-
-    \value NoProfile            OpenGL version is lower than 3.2.
-    \value CoreProfile          Functionality deprecated in OpenGL version 3.0 is not available.
-    \value CompatibilityProfile Functionality from earlier OpenGL versions is available.
-*/
-
-/*!
-    \since 4.7
-
-    Set the OpenGL context profile to \a profile. The \a profile is
-    ignored if the requested OpenGL version is less than 3.2.
-
-    \sa profile()
-*/
 void QGLFormat::setProfile(OpenGLContextProfile profile)
 {
    detach();
    d->profile = profile;
 }
 
-/*!
-    \since 4.7
-
-    Returns the OpenGL context profile.
-
-    \sa setProfile()
-*/
 QGLFormat::OpenGLContextProfile QGLFormat::profile() const
 {
    return d->profile;
 }
 
-
-/*!
-    \fn bool QGLFormat::hasOpenGL()
-
-    Returns true if the window system has any OpenGL support;
-    otherwise returns false.
-
-    \warning This function must not be called until the QApplication
-    object has been created.
-*/
-
-
-
-/*!
-    \fn bool QGLFormat::hasOpenGLOverlays()
-
-    Returns true if the window system supports OpenGL overlays;
-    otherwise returns false.
-
-    \warning This function must not be called until the QApplication
-    object has been created.
-*/
 
 QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versionString)
 {
@@ -1332,81 +1276,6 @@ QGLFormat::OpenGLVersionFlags qOpenGLVersionFlagsFromString(const QString &versi
    return versionFlags;
 }
 
-/*!
-    \enum QGLFormat::OpenGLVersionFlag
-    \since 4.2
-
-    This enum describes the various OpenGL versions that are
-    recognized by Qt. Use the QGLFormat::openGLVersionFlags() function
-    to identify which versions that are supported at runtime.
-
-    \value OpenGL_Version_None  If no OpenGL is present or if no OpenGL context is current.
-
-    \value OpenGL_Version_1_1  OpenGL version 1.1 or higher is present.
-
-    \value OpenGL_Version_1_2  OpenGL version 1.2 or higher is present.
-
-    \value OpenGL_Version_1_3  OpenGL version 1.3 or higher is present.
-
-    \value OpenGL_Version_1_4  OpenGL version 1.4 or higher is present.
-
-    \value OpenGL_Version_1_5  OpenGL version 1.5 or higher is present.
-
-    \value OpenGL_Version_2_0  OpenGL version 2.0 or higher is present.
-    Note that version 2.0 supports all the functionality of version 1.5.
-
-    \value OpenGL_Version_2_1  OpenGL version 2.1 or higher is present.
-
-    \value OpenGL_Version_3_0  OpenGL version 3.0 or higher is present.
-
-    \value OpenGL_Version_3_1  OpenGL version 3.1 or higher is present.
-    Note that OpenGL version 3.1 or higher does not necessarily support all the features of
-    version 3.0 and lower.
-
-    \value OpenGL_Version_3_2  OpenGL version 3.2 or higher is present.
-
-    \value OpenGL_Version_3_3  OpenGL version 3.3 or higher is present.
-
-    \value OpenGL_Version_4_0  OpenGL version 4.0 or higher is present.
-
-    \value OpenGL_ES_CommonLite_Version_1_0  OpenGL ES version 1.0 Common Lite or higher is present.
-
-    \value OpenGL_ES_Common_Version_1_0  OpenGL ES version 1.0 Common or higher is present.
-    The Common profile supports all the features of Common Lite.
-
-    \value OpenGL_ES_CommonLite_Version_1_1  OpenGL ES version 1.1 Common Lite or higher is present.
-
-    \value OpenGL_ES_Common_Version_1_1  OpenGL ES version 1.1 Common or higher is present.
-    The Common profile supports all the features of Common Lite.
-
-    \value OpenGL_ES_Version_2_0  OpenGL ES version 2.0 or higher is present.
-    Note that OpenGL ES version 2.0 does not support all the features of OpenGL ES 1.x.
-    So if OpenGL_ES_Version_2_0 is returned, none of the ES 1.x flags are returned.
-
-    See also \l{http://www.opengl.org} for more information about the different
-    revisions of OpenGL.
-
-    \sa openGLVersionFlags()
-*/
-
-/*!
-    \since 4.2
-
-    Identifies, at runtime, which OpenGL versions that are supported
-    by the current platform.
-
-    Note that if OpenGL version 1.5 is supported, its predecessors
-    (i.e., version 1.4 and lower) are also supported. To identify the
-    support of a particular feature, like multi texturing, test for
-    the version in which the feature was first introduced (i.e.,
-    version 1.3 in the case of multi texturing) to adapt to the largest
-    possible group of runtime platforms.
-
-    This function needs a valid current OpenGL context to work;
-    otherwise it will return OpenGL_Version_None.
-
-    \sa hasOpenGL(), hasOpenGLOverlays()
-*/
 QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
 {
    static bool cachedDefault = false;

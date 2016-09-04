@@ -236,60 +236,6 @@ QStyleOptionViewItemV2 &QStyleOptionViewItemV2::operator=(const QStyleOptionView
 }
 
 /*!
-    \enum QStyleOptionViewItemV2::ViewItemFeature
-
-    This enum describes the different types of features an item can have.
-
-    \value None      Indicates a normal item.
-    \value WrapText  Indicates an item with wrapped text.
-    \value Alternate Indicates that the item's background is rendered using alternateBase.
-    \value HasCheckIndicator Indicates that the item has a check state indicator.
-    \value HasDisplay        Indicates that the item has a display role.
-    \value HasDecoration     Indicates that the item has a decoration role.
-*/
-
-
-
-/*!
-    \class QStyleOptionViewItemV3
-    \brief The QStyleOptionViewItemV3 class is used to describe the
-    parameters necessary for drawing a frame in Qt 4.3 or above.
-    \since 4.3
-
-    QStyleOptionViewItemV3 inherits QStyleOptionViewItem.
-
-    An instance of the QStyleOptionViewItemV3 class has
-    \l{QStyleOption::type} {type} SO_ViewItem and \l{QStyleOption::version}
-    {version} 3. The type is used internally by QStyleOption, its subclasses,
-    and qstyleoption_cast() to determine the type of style option. In general
-    you do not need to worry about this unless you want to create your own
-    QStyleOption subclass and your own styles. The version is used by
-    QStyleOption subclasses to implement extensions without breaking
-    compatibility. If you use qstyleoption_cast(), you normally do not need to
-    check it.
-
-    See QStyleOptionFrameV2's detailed description for a discussion
-    of how to handle "V2" and other versioned classes.
-
-    \sa QStyleOptionViewItem, QStyleOption
-*/
-
-/*!
-    \enum QStyleOptionViewItemV3::StyleOptionVersion
-
-    This enum is used to hold information about the version of the
-    style option, and is defined for each QStyleOption subclass.
-
-    \value Version 3
-
-    The version is used by QStyleOption subclasses to implement
-    extensions without breaking compatibility. If you use
-    qstyleoption_cast(), you normally do not need to check it.
-
-    \sa StyleOptionType
-*/
-
-/*!
     Constructs a QStyleOptionViewItemV3 object.
 */
 QStyleOptionViewItemV3::QStyleOptionViewItemV3()
@@ -1341,78 +1287,6 @@ QStyleOptionTabV2 &QStyleOptionTabV2::operator=(const QStyleOptionTab &other)
    }
    return *this;
 }
-
-/*!
-    \class QStyleOptionTabV3
-    \brief The QStyleOptionTabV3 class is used to describe the
-    parameters necessary for drawing a tabs in Qt 4.5 or above.
-
-    \since 4.5
-
-    An instance of the QStyleOptionTabV3 class has
-    \l{QStyleOption::type} {type} \l SO_Tab and
-    \l{QStyleOption::version} {version} 3. The type is used internally
-    by QStyleOption, its subclasses, and qstyleoption_cast() to
-    determine the type of style option. In general you do not need to
-    worry about this unless you want to create your own QStyleOption
-    subclass and your own styles. The version is used by QStyleOption
-    subclasses to implement extensions without breaking
-    compatibility. If you use qstyleoption_cast(), you normally do not
-    need to check it.
-
-    If you create your own QStyle subclass, you should handle both
-    QStyleOptionTab, QStyleOptionTabV2 and QStyleOptionTabV3.
-    One way to achieve this is to use the QStyleOptionTabV3 copy
-    constructor. For example:
-
-    \snippet doc/src/snippets/qstyleoption/main.cpp 3
-
-    In the example above: If \c tabOption's version is 1, the extra
-    member (\l{QStyleOptionTabV2::iconSize}{iconSize}) will be set to
-    an invalid size for \c tabV2.  If \c tabOption's version is 2, the
-    constructor will simply copy the \c tab's iconSize.
-
-    For an example demonstrating how style options can be used, see
-    the \l {widgets/styles}{Styles} example.
-
-    \sa QStyleOptionTab, QStyleOption
-*/
-
-/*!
-    \enum QStyleOptionTabV3::StyleOptionVersion
-
-    This enum is used to hold information about the version of the style option, and
-    is defined for each QStyleOption subclass.
-
-    \value Version 3
-
-    The version is used by QStyleOption subclasses to implement
-    extensions without breaking compatibility. If you use
-    qstyleoption_cast(), you normally do not need to check it.
-
-    \sa StyleOptionType
-*/
-
-/*!
-    \variable QStyleOptionTabV3::documentMode
-    \brief whether the tabbar is in document mode.
-
-    The default value is false;
-*/
-
-/*!
-    \variable QStyleOptionTabV3::leftButtonSize
-    \brief the size for the left widget on the tab.
-
-    The default value is QSize(-1, -1), i.e. an invalid size;
-*/
-
-/*!
-    \variable QStyleOptionTabV3::rightButtonSize
-    \brief the size for the right widget on the tab.
-
-    The default value is QSize(-1, -1), i.e. an invalid size;
-*/
 
 /*!
     Constructs a QStyleOptionTabV3.

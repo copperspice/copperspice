@@ -44,9 +44,6 @@ QT_BEGIN_NAMESPACE
 #define QT_QSETTINGS_ALWAYS_CASE_SENSITIVE_AND_FORGET_ORIGINAL_KEY_ORDER
 #endif
 
-// used in testing framework
-#define QSETTINGS_P_H_VERSION 3
-
 #ifdef QT_QSETTINGS_ALWAYS_CASE_SENSITIVE_AND_FORGET_ORIGINAL_KEY_ORDER
 static const Qt::CaseSensitivity IniCaseSensitivity = Qt::CaseSensitive;
 

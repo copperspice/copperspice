@@ -1082,7 +1082,7 @@ void QMessageBox::aboutCs(QWidget *parent)
 
    QLabel *msg2 = new QLabel;
    msg2->setText(tr("CopperSpice is a C++ toolkit for cross platform applications on X11, Windows, and OS X\n"
-                    "CopperSpice is licensed under the GNU LGPL version 2.1 or the GNU GPL version 3.0"));
+                    "CopperSpice is licensed under the GNU LGPL version 2.1"));
 
    font = msg2->font();
    font.setPointSize(10);
