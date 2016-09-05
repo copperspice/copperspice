@@ -26,7 +26,13 @@
 namespace CsSignal {
 
 class SignalBase;
+class SlotBase;
 enum class ConnectionKind;
+
+namespace Internal {
+   class BentoAbstract;
+   class TeaCupAbstract;
+}
 
 class LIB_SIG_EXPORT PendingSlot
 {
