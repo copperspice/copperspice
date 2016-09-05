@@ -63,6 +63,16 @@ lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
 lib_libCsMultimedia@BUILD_ABI@_la_LIBADD+= -lwinmm
 endif
 
+if OSTYPE_DARWIN
+lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS += -framework AudioUnit -framework CoreAudio -framework AudioToolbox
+lib_libCsMultimedia@BUILD_ABI@_la_SOURCES += \
+        src/multimedia/audio/qaudio_mac.cpp \
+        src/multimedia/audio/qaudiodeviceinfo_mac_p.cpp \
+        src/multimedia/audio/qaudioinput_mac_p.cpp \
+        src/multimedia/audio/qaudiooutput_mac_p.cpp
+endif
+
+
 if ALSA
 lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS += \
 	-DHAS_ALSA $(ALSA_CFLAGS)

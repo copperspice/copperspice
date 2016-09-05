@@ -113,12 +113,12 @@ QAudioRingBuffer::~QAudioRingBuffer()
 
 int QAudioRingBuffer::used() const
 {
-   return m_bufferUsed;
+   return m_bufferUsed.load();
 }
 
 int QAudioRingBuffer::free() const
 {
-   return m_bufferSize - m_bufferUsed;
+    return m_bufferSize - m_bufferUsed.load();
 }
 
 int QAudioRingBuffer::size() const
@@ -130,7 +130,7 @@ void QAudioRingBuffer::reset()
 {
    m_readPos = 0;
    m_writePos = 0;
-   m_bufferUsed = 0;
+   m_bufferUsed.store(0);
 }
 
 QT_END_NAMESPACE

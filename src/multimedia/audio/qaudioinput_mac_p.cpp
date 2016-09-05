@@ -201,7 +201,7 @@ class QAudioInputBuffer : public QObject
       m_inputBufferList = new QAudioBufferList(m_inputFormat);
 
       m_flushTimer = new QTimer(this);
-      connect(m_flushTimer, SIGNAL(timeout()), SLOT(flushBuffer()));
+      connect(m_flushTimer, SIGNAL(timeout()), this, SLOT(flushBuffer()));
 
       if (toQAudioFormat(inputFormat) != toQAudioFormat(outputFormat)) {
          if (AudioConverterNew(&m_inputFormat, &m_outputFormat, &m_audioConverter) != noErr) {
@@ -378,15 +378,15 @@ class QAudioInputBuffer : public QObject
       return m_buffer->used();
    }
 
- signals:
-   void readyRead();
-
- private slots:
-   void flushBuffer() {
-      flush();
-   }
+   MULTI_CS_SIGNAL_1(Public, void readyRead())
+   MULTI_CS_SIGNAL_2(readyRead)
 
  private:
+   MULTI_CS_SLOT_1(Private, void flushBuffer() {
+      flush();
+       })
+   MULTI_CS_SLOT_2(flushBuffer)
+
    bool        m_deviceError;
    int         m_maxPeriodSize;
    int         m_periodTime;
@@ -429,7 +429,7 @@ class MacInputDevice : public QIODevice
       QIODevice(parent),
       m_audioBuffer(audioBuffer) {
       open(QIODevice::ReadOnly | QIODevice::Unbuffered);
-      connect(m_audioBuffer, SIGNAL(readyRead()), SIGNAL(readyRead()));
+      connect(m_audioBuffer, SIGNAL(readyRead()), this, SLOT(readyRead()));
    }
 
    qint64 readData(char *data, qint64 len) {
@@ -479,7 +479,7 @@ QAudioInputPrivate::QAudioInputPrivate(const QByteArray &device, QAudioFormat co
 
       intervalTimer = new QTimer(this);
       intervalTimer->setInterval(1000);
-      connect(intervalTimer, SIGNAL(timeout()), SIGNAL(notify()));
+      connect(intervalTimer, SIGNAL(timeout()), this, SLOT(notify()));
    }
 }
 

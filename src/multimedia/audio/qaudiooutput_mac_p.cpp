@@ -60,7 +60,7 @@ class QAudioOutputBuffer : public QObject
       m_periodTime = m_maxPeriodSize / m_bytesPerFrame * 1000 / audioFormat.frequency();
 
       m_fillTimer = new QTimer(this);
-      connect(m_fillTimer, SIGNAL(timeout()), SLOT(fillBuffer()));
+      connect(m_fillTimer, &QTimer::timeout, this, &QAudioOutputBuffer::fillBuffer);
    }
 
    ~QAudioOutputBuffer() {
@@ -145,10 +145,11 @@ class QAudioOutputBuffer : public QObject
       m_fillTimer->stop();
    }
 
- signals:
-   void readyRead();
 
- private slots:
+   MULTI_CS_SIGNAL_1(Private, void readyRead())
+   MULTI_CS_SIGNAL_2(readyRead);
+
+ private:
    void fillBuffer() {
       const int free = m_buffer->free();
       const int writeSize = free - (free % m_maxPeriodSize);
@@ -255,7 +256,7 @@ QAudioOutputPrivate::QAudioOutputPrivate(const QByteArray &device, const QAudioF
 
       intervalTimer = new QTimer(this);
       intervalTimer->setInterval(1000);
-      connect(intervalTimer, SIGNAL(timeout()), SIGNAL(notify()));
+      connect(intervalTimer, SIGNAL(timeout()), this, SLOT(notify()));
    }
 }
 
@@ -355,7 +356,7 @@ bool QAudioOutputPrivate::open()
    }
 
    audioBuffer = new QtMultimediaInternal::QAudioOutputBuffer(internalBufferSize, periodSizeBytes, audioFormat);
-   connect(audioBuffer, SIGNAL(readyRead()), SLOT(inputReady()));  // Pull
+   connect(audioBuffer, SIGNAL(readyRead()), this, SLOT(inputReady()));  // Pull
 
    audioIO = new MacOutputDevice(audioBuffer, this);
 
