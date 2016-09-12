@@ -20,6 +20,22 @@ EXTRA_DIST=
 
 ## Do not alter lines above this comment
 
+if OSTYPE_LINUX
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_BSD
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_WIN
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_DARWIN
+AM_LDFLAGS += -avoid-version
+endif
+
 if WEBKIT
 lib_LTLIBRARIES += ../../lib/libCsWebKit@BUILD_ABI@.la
 endif

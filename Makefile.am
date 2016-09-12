@@ -42,12 +42,28 @@ EXTRA_DIST= \
 	src/webkit/CMakeLists.txt
 
 
-
 SUBDIRS = . src/webkit
 DIST_SUBDIRS = src/webkit
 
 # Do not alter lines above this comment
 
+if OSTYPE_LINUX
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_BSD
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_WIN
+AM_LDFLAGS += -avoid-version
+endif
+
+if OSTYPE_DARWIN
+AM_LDFLAGS += -avoid-version
+endif
+
+# set other flags
 if OSTYPE_WIN
 AM_CFLAGS += -DUNICODE
 endif

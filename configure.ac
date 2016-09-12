@@ -1,4 +1,4 @@
-AC_INIT([copperspice], [1.3.1], [info@copperspice.com])
+AC_INIT([copperspice], [1.3.2], [info@copperspice.com])
 
 # derive CS hex version from "@PACKAGE_VERSION@"
 HEX_VERSION=$(printf "0x%02x%02x%02x" `echo $PACKAGE_VERSION | tr '.' ' '`)
@@ -95,14 +95,13 @@ PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeTyp
 PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
 PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
 PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
-PKG_CHECK_MODULES(ALSA, alsa, ALSA="yes", missing="$missing Alsa")
-PKG_CHECK_MODULES(PULSEAUDIO, libpulse >= 0.9.15, PULSEAUDIO="yes", missing="$missing PulseAudio")
-PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21, PULSEAUDIO_DEVICE_MANAGER="yes", missing="$missing PulseAudioDeviceManager")
-PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB, libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes", missing="$missing PulseAudio Mainloop Glib")
 
 # not mandatory
 PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
 PKG_CHECK_MODULES(ALSA, alsa, ALSA="yes", true)
+PKG_CHECK_MODULES(PULSEAUDIO, libpulse >= 0.9.15, PULSEAUDIO="yes", true)
+PKG_CHECK_MODULES(PULSEAUDIO_DEVICE_MANAGER, libpulse >= 0.9.21, PULSEAUDIO_DEVICE_MANAGER="yes", true)
+PKG_CHECK_MODULES(PULSEAUDIO_MAINLOOP_GLIB, libpulse-mainloop-glib, PULSEAUDIO_MAINLOOP_GLIB="yes", true)
 
 # verify dependencies
 AC_SEARCH_LIBS([IceOpenConnection], [ICE], [], missing="$missing ICE")
