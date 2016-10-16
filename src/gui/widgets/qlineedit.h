@@ -133,8 +133,8 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    QCompleter *completer() const;
 #endif
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    int cursorPosition() const;
    void setCursorPosition(int);
@@ -229,32 +229,32 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
 
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const;
-   bool event(QEvent *);
+   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+   bool event(QEvent *) override;
 
  protected:
-   void mousePressEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mouseDoubleClickEvent(QMouseEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void focusInEvent(QFocusEvent *);
-   void focusOutEvent(QFocusEvent *);
-   void paintEvent(QPaintEvent *);
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseDoubleClickEvent(QMouseEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void focusInEvent(QFocusEvent *) override;
+   void focusOutEvent(QFocusEvent *) override;
+   void paintEvent(QPaintEvent *) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragEnterEvent(QDragEnterEvent *);
-   void dragMoveEvent(QDragMoveEvent *e);
-   void dragLeaveEvent(QDragLeaveEvent *e);
-   void dropEvent(QDropEvent *);
+   void dragEnterEvent(QDragEnterEvent *) override;
+   void dragMoveEvent(QDragMoveEvent *e) override;
+   void dragLeaveEvent(QDragLeaveEvent *e) override;
+   void dropEvent(QDropEvent *) override;
 #endif
-   void changeEvent(QEvent *);
+   void changeEvent(QEvent *) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *);
+   void contextMenuEvent(QContextMenuEvent *) override;
 #endif
 
-   void inputMethodEvent(QInputMethodEvent *);
+   void inputMethodEvent(QInputMethodEvent *) override;
    void initStyleOption(QStyleOptionFrame *option) const;
 
    QRect cursorRect() const;

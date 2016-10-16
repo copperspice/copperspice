@@ -117,9 +117,9 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    TabShape tabShape() const;
    void setTabShape(TabShape s);
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
-   int heightForWidth(int width) const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
+   int heightForWidth(int width) const override;
 
    void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
@@ -152,14 +152,14 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    virtual void tabInserted(int index);
    virtual void tabRemoved(int index);
 
-   void showEvent(QShowEvent *);
-   void resizeEvent(QResizeEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void paintEvent(QPaintEvent *);
+   void showEvent(QShowEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void paintEvent(QPaintEvent *) override;
    void setTabBar(QTabBar *);
    QTabBar *tabBar() const;
-   void changeEvent(QEvent *);
-   bool event(QEvent *);
+   void changeEvent(QEvent *) override;
+   bool event(QEvent *) override;
    void initStyleOption(QStyleOptionTabWidgetFrame *option) const;
 
  private:

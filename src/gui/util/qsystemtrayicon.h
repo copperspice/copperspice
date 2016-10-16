@@ -107,7 +107,7 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    GUI_CS_SIGNAL_2(messageClicked)
 
  protected:
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
    QScopedPointer<QSystemTrayIconPrivate> d_ptr;
 

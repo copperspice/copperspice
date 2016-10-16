@@ -247,15 +247,15 @@ class CloseButton : public QAbstractButton
  public:
    CloseButton(QWidget *parent = 0);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
-   inline QSize minimumSizeHint() const {
+   inline QSize minimumSizeHint() const override {
       return sizeHint();
    }
 
-   void enterEvent(QEvent *event);
-   void leaveEvent(QEvent *event);
-   void paintEvent(QPaintEvent *event);
+   void enterEvent(QEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 };
 
 QT_END_NAMESPACE

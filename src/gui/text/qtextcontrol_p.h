@@ -278,8 +278,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
    bool findNextPrevAnchor(const QTextCursor &from, bool next, QTextCursor &newAnchor);
 
  protected:
-   virtual void timerEvent(QTimerEvent *e);
-   virtual bool event(QEvent *e);
+   virtual void timerEvent(QTimerEvent *e) override;
+   virtual bool event(QEvent *e) override;
 
    QScopedPointer<QTextControlPrivate> d_ptr;
  

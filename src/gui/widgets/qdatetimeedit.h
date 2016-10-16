@@ -168,12 +168,12 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    Qt::TimeSpec timeSpec() const;
    void setTimeSpec(Qt::TimeSpec spec);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
-   virtual void clear();
-   virtual void stepBy(int steps);
+   virtual void clear() override;
+   virtual void stepBy(int steps) override;
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
    GUI_CS_SIGNAL_1(Public, void dateTimeChanged(const QDateTime &date))
    GUI_CS_SIGNAL_2(dateTimeChanged, date)
@@ -190,22 +190,22 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    GUI_CS_SLOT_2(setTime)
 
  protected:
-   virtual void keyPressEvent(QKeyEvent *event);
+   virtual void keyPressEvent(QKeyEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   virtual void wheelEvent(QWheelEvent *event);
+   virtual void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   virtual void focusInEvent(QFocusEvent *event);
-   virtual bool focusNextPrevChild(bool next);
-   virtual QValidator::State validate(QString &input, int &pos) const;
-   virtual void fixup(QString &input) const;
+   virtual void focusInEvent(QFocusEvent *event) override;
+   virtual bool focusNextPrevChild(bool next) override;
+   virtual QValidator::State validate(QString &input, int &pos) const override;
+   virtual void fixup(QString &input) const override;
 
    virtual QDateTime dateTimeFromText(const QString &text) const;
    virtual QString textFromDateTime(const QDateTime &dt) const;
-   virtual StepEnabled stepEnabled() const;
-   virtual void mousePressEvent(QMouseEvent *event);
-   virtual void paintEvent(QPaintEvent *event);
+   virtual StepEnabled stepEnabled() const override;
+   virtual void mousePressEvent(QMouseEvent *event) override;
+   virtual void paintEvent(QPaintEvent *event) override;
    void initStyleOption(QStyleOptionSpinBox *option) const;
 
    QDateTimeEdit(const QVariant &val, QVariant::Type parserType, QWidget *parent = 0);

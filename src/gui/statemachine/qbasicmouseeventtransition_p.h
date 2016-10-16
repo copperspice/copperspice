@@ -59,8 +59,8 @@ class QBasicMouseEventTransition : public QAbstractTransition
    void setHitTestPath(const QPainterPath &path);
 
  protected:
-   bool eventTest(QEvent *event);
-   void onTransition(QEvent *);
+   bool eventTest(QEvent *event) override;
+   void onTransition(QEvent *) override;
 
  private:
    Q_DISABLE_COPY(QBasicMouseEventTransition)

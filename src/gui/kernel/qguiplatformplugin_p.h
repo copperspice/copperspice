@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPlugi
    explicit QGuiPlatformPlugin(QObject *parent = 0);
    ~QGuiPlatformPlugin();
 
-   virtual QStringList keys() const {
+   virtual QStringList keys() const override {
       return QStringList() << QLatin1String("default");
    };
 

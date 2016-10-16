@@ -87,8 +87,8 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    QMdiArea(QWidget *parent = 0);
    ~QMdiArea();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    QMdiSubWindow *currentSubWindow() const;
    QMdiSubWindow *activeSubWindow() const;
@@ -150,15 +150,15 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport))
    GUI_CS_SLOT_2(setupViewport)
 
-   bool event(QEvent *event);
-   bool eventFilter(QObject *object, QEvent *event);
-   void paintEvent(QPaintEvent *paintEvent);
-   void childEvent(QChildEvent *childEvent);
-   void resizeEvent(QResizeEvent *resizeEvent);
-   void timerEvent(QTimerEvent *timerEvent);
-   void showEvent(QShowEvent *showEvent);
-   bool viewportEvent(QEvent *event);
-   void scrollContentsBy(int dx, int dy);
+   bool event(QEvent *event) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
+   void paintEvent(QPaintEvent *paintEvent) override;
+   void childEvent(QChildEvent *childEvent) override;
+   void resizeEvent(QResizeEvent *resizeEvent) override;
+   void timerEvent(QTimerEvent *timerEvent) override;
+   void showEvent(QShowEvent *showEvent) override;
+   bool viewportEvent(QEvent *event) override;
+   void scrollContentsBy(int dx, int dy) override;
 
  private:
    Q_DISABLE_COPY(QMdiArea)

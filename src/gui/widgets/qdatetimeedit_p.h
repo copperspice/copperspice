@@ -165,10 +165,10 @@ class QCalendarPopup : public QWidget
    GUI_CS_SIGNAL_2(resetButton)
 
  protected:
-   void hideEvent(QHideEvent *);
-   void mousePressEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *);
-   bool event(QEvent *e);
+   void hideEvent(QHideEvent *) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   bool event(QEvent *e) override;
 
  private :
    GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))

@@ -336,7 +336,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static Qt::LayoutDirection keyboardInputDirection();
 
    static int exec();
-   bool notify(QObject *, QEvent *);
+   bool notify(QObject *, QEvent *) override;
 
    static void setQuitOnLastWindowClosed(bool quit);
    static bool quitOnLastWindowClosed();
@@ -397,8 +397,8 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    void setArgs(int, char **);
 #endif
 
-   bool event(QEvent *);
-   bool compressEvent(QEvent *, QObject *receiver, QPostEventList *);
+   bool event(QEvent *) override;
+   bool compressEvent(QEvent *, QObject *receiver, QPostEventList *) override;
 
  private:
    Q_DISABLE_COPY(QApplication)

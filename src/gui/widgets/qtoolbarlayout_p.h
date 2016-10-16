@@ -56,22 +56,22 @@ class QToolBarLayout : public QLayout
    QToolBarLayout(QWidget *parent = 0);
    ~QToolBarLayout();
 
-   void addItem(QLayoutItem *item);
-   QLayoutItem *itemAt(int index) const;
-   QLayoutItem *takeAt(int index);
-   int count() const;
+   void addItem(QLayoutItem *item) override;
+   QLayoutItem *itemAt(int index) const override;
+   QLayoutItem *takeAt(int index) override;
+   int count() const override;
 
-   bool isEmpty() const;
-   void invalidate();
-   Qt::Orientations expandingDirections() const;
+   bool isEmpty() const override;
+   void invalidate() override;
+   Qt::Orientations expandingDirections() const override;
 
-   void setGeometry(const QRect &r);
-   QSize minimumSize() const;
-   QSize sizeHint() const;
+   void setGeometry(const QRect &r) override;
+   QSize minimumSize() const override;
+   QSize sizeHint() const override;
 
    void insertAction(int index, QAction *action);
    int indexOf(QAction *action) const;
-   int indexOf(QWidget *widget) const {
+   int indexOf(QWidget *widget) const override {
       return QLayout::indexOf(widget);
    }
 

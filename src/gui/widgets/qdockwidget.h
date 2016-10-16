@@ -109,10 +109,10 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    GUI_CS_SIGNAL_2(dockLocationChanged, area)
 
  protected:
-   void changeEvent(QEvent *event);
-   void closeEvent(QCloseEvent *event);
-   void paintEvent(QPaintEvent *event);
-   bool event(QEvent *event);
+   void changeEvent(QEvent *event) override;
+   void closeEvent(QCloseEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   bool event(QEvent *event) override;
    void initStyleOption(QStyleOptionDockWidget *option) const;
 
  private:

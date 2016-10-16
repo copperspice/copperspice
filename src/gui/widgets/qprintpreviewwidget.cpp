@@ -147,12 +147,12 @@ class GraphicsView : public QGraphicsView
    GUI_CS_SIGNAL_2(resized)
 
  protected:
-   void resizeEvent(QResizeEvent *e) {
+   void resizeEvent(QResizeEvent *e) override {
       QGraphicsView::resizeEvent(e);
       emit resized();
    }
 
-   void showEvent(QShowEvent *e) {
+   void showEvent(QShowEvent *e) override {
       QGraphicsView::showEvent(e);
       emit resized();
    }

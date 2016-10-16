@@ -316,8 +316,8 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    GUI_CS_SIGNAL_2(selectionChanged)
 
  protected:
-   bool event(QEvent *event);
-   bool eventFilter(QObject *watched, QEvent *event);
+   bool event(QEvent *event) override;
+   bool eventFilter(QObject *watched, QEvent *event) override;
 
    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

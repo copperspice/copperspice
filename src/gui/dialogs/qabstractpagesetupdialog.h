@@ -48,7 +48,7 @@ class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
    ~QAbstractPageSetupDialog();
 
    virtual int exec() = 0;
-   void done(int result);
+   void done(int result) override;
 
    QPrinter *printer();
 };

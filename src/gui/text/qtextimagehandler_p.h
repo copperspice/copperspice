@@ -41,9 +41,9 @@ class QTextImageHandler : public QObject, public QTextObjectInterface
  public:
    explicit QTextImageHandler(QObject *parent = 0);
 
-   virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
+   virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) override;
    virtual void drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument,
-                           const QTextFormat &format);
+                           const QTextFormat &format) override;
 
    typedef QImage (*ExternalImageLoaderFunction)(const QString &name, const QString &context);
 

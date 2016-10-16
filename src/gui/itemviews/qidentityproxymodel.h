@@ -42,24 +42,24 @@ class Q_GUI_EXPORT QIdentityProxyModel : public QAbstractProxyModel
    explicit QIdentityProxyModel(QObject *parent = 0);
    ~QIdentityProxyModel();
 
-   int columnCount(const QModelIndex &parent = QModelIndex()) const;
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-   QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
-   QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
-   QModelIndex parent(const QModelIndex &child) const;
-   int rowCount(const QModelIndex &parent = QModelIndex()) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex mapFromSource(const QModelIndex &sourceIndex) const override;
+   QModelIndex mapToSource(const QModelIndex &proxyIndex) const override;
+   QModelIndex parent(const QModelIndex &child) const override;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
-   QItemSelection mapSelectionFromSource(const QItemSelection &selection) const;
-   QItemSelection mapSelectionToSource(const QItemSelection &selection) const;
+   QItemSelection mapSelectionFromSource(const QItemSelection &selection) const override;
+   QItemSelection mapSelectionToSource(const QItemSelection &selection) const override;
    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value,
-                         int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const;
-   void setSourceModel(QAbstractItemModel *sourceModel);
+                         int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
+   void setSourceModel(QAbstractItemModel *sourceModel) override;
 
-   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
  protected:
    QIdentityProxyModel(QIdentityProxyModelPrivate &dd, QObject *parent);

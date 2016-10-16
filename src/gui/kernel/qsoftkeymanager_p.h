@@ -59,7 +59,7 @@ class QSoftKeyManager : public QObject
    static bool isForceEnabledInSofkeys(QAction *action);
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
    QScopedPointer<QSoftKeyManagerPrivate> d_ptr;
 
  private:

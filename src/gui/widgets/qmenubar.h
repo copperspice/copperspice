@@ -72,9 +72,9 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    void setDefaultUp(bool);
    bool isDefaultUp() const;
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
-   int heightForWidth(int) const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
+   int heightForWidth(int) const override;
 
    QRect actionGeometry(QAction *) const;
    QAction *actionAt(const QPoint &) const;
@@ -90,7 +90,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    bool isNativeMenuBar() const;
    void setNativeMenuBar(bool nativeMenuBar);
 
-   GUI_CS_SLOT_1(Public, virtual void setVisible(bool visible))
+   GUI_CS_SLOT_1(Public, virtual void setVisible(bool visible) override)
    GUI_CS_SLOT_2(setVisible)
 
    GUI_CS_SIGNAL_1(Public, void triggered(QAction *action))
@@ -99,20 +99,20 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    GUI_CS_SIGNAL_2(hovered, action)
 
  protected:
-   void changeEvent(QEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mousePressEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void leaveEvent(QEvent *);
-   void paintEvent(QPaintEvent *);
-   void resizeEvent(QResizeEvent *);
-   void actionEvent(QActionEvent *);
-   void focusOutEvent(QFocusEvent *);
-   void focusInEvent(QFocusEvent *);
-   void timerEvent(QTimerEvent *);
-   bool eventFilter(QObject *, QEvent *);
-   bool event(QEvent *);
+   void changeEvent(QEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void leaveEvent(QEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void actionEvent(QActionEvent *) override;
+   void focusOutEvent(QFocusEvent *) override;
+   void focusInEvent(QFocusEvent *) override;
+   void timerEvent(QTimerEvent *) override;
+   bool eventFilter(QObject *, QEvent *) override;
+   bool event(QEvent *) override;
    void initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const;
 
  private:

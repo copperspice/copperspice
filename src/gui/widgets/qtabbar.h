@@ -132,8 +132,8 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    int currentIndex() const;
    int count() const;
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    void setDrawBase(bool drawTheBase);
    bool drawBase() const;
@@ -178,21 +178,21 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    virtual void tabRemoved(int index);
    virtual void tabLayoutChange();
 
-   bool event(QEvent *);
-   void resizeEvent(QResizeEvent *);
-   void showEvent(QShowEvent *);
-   void hideEvent(QHideEvent *);
-   void paintEvent(QPaintEvent *);
-   void mousePressEvent (QMouseEvent *);
-   void mouseMoveEvent (QMouseEvent *);
-   void mouseReleaseEvent (QMouseEvent *);
+   bool event(QEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void showEvent(QShowEvent *) override;
+   void hideEvent(QHideEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+   void mousePressEvent (QMouseEvent *) override;
+   void mouseMoveEvent (QMouseEvent *) override;
+   void mouseReleaseEvent (QMouseEvent *) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *event);
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void keyPressEvent(QKeyEvent *);
-   void changeEvent(QEvent *);
+   void keyPressEvent(QKeyEvent *) override;
+   void changeEvent(QEvent *) override;
    void initStyleOption(QStyleOptionTab *option, int tabIndex) const;
 
    friend class QAccessibleTabBar;

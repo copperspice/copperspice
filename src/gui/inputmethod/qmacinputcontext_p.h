@@ -44,14 +44,14 @@ class Q_GUI_EXPORT QMacInputContext : public QInputContext
    explicit QMacInputContext(QObject *parent = 0);
    virtual ~QMacInputContext();
 
-   virtual void setFocusWidget(QWidget *w);
-   virtual QString identifierName() {
+   virtual void setFocusWidget(QWidget *w) override;
+   virtual QString identifierName() override {
       return QLatin1String("mac");
    }
-   virtual QString language();
+   virtual QString language() override;
 
-   virtual void reset();
-   virtual bool isComposing() const;
+   virtual void reset() override;
+   virtual bool isComposing() const override;
 
    static void initialize();
    static void cleanup();
@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QMacInputContext : public QInputContext
    }
 
  protected:
-   void mouseHandler(int pos, QMouseEvent *);
+   void mouseHandler(int pos, QMouseEvent *) override;
 
  private:
    bool composing;

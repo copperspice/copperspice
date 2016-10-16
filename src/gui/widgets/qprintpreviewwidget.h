@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
 #endif
 
    int pageCount() const;
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 
    GUI_CS_SLOT_1(Public, void print())
    GUI_CS_SLOT_2(print)

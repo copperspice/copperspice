@@ -194,8 +194,8 @@ class QMacStylePrivate : public QObject
    bool mouseDown;
 
  protected:
-   bool eventFilter(QObject *, QEvent *);
-   void timerEvent(QTimerEvent *);
+   bool eventFilter(QObject *, QEvent *) override;
+   void timerEvent(QTimerEvent *) override;
 
  private :
    GUI_CS_SLOT_1(Private, void startAnimationTimer())

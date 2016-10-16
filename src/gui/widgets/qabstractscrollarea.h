@@ -69,8 +69,8 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    void setViewport(QWidget *widget);
    QSize maximumViewportSize() const;
 
-   QSize minimumSizeHint() const;
-   QSize sizeHint() const;
+   QSize minimumSizeHint() const override;
+   QSize sizeHint() const override;
 
  protected :
    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *viewport))
@@ -80,32 +80,32 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    void setViewportMargins(int left, int top, int right, int bottom);
    void setViewportMargins(const QMargins &margins);
 
-   bool event(QEvent *);
+   bool event(QEvent *) override;
    virtual bool viewportEvent(QEvent *);
 
-   void resizeEvent(QResizeEvent *);
-   void paintEvent(QPaintEvent *);
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mouseDoubleClickEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
+   void resizeEvent(QResizeEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseDoubleClickEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *);
+   void wheelEvent(QWheelEvent *) override;
 #endif
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *);
+   void contextMenuEvent(QContextMenuEvent *) override;
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragEnterEvent(QDragEnterEvent *);
-   void dragMoveEvent(QDragMoveEvent *);
-   void dragLeaveEvent(QDragLeaveEvent *);
-   void dropEvent(QDropEvent *);
+   void dragEnterEvent(QDragEnterEvent *) override;
+   void dragMoveEvent(QDragMoveEvent *) override;
+   void dragLeaveEvent(QDragLeaveEvent *) override;
+   void dropEvent(QDropEvent *) override;
 #endif
 
-   void keyPressEvent(QKeyEvent *);
+   void keyPressEvent(QKeyEvent *) override;
 
    virtual void scrollContentsBy(int dx, int dy);
 

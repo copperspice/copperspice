@@ -61,8 +61,8 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
 
    ~QSlider();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    void setTickPosition(TickPosition position);
    TickPosition tickPosition() const;
@@ -70,13 +70,13 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
    void setTickInterval(int ti);
    int tickInterval() const;
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  protected:
-   void paintEvent(QPaintEvent *ev);
-   void mousePressEvent(QMouseEvent *ev);
-   void mouseReleaseEvent(QMouseEvent *ev);
-   void mouseMoveEvent(QMouseEvent *ev);
+   void paintEvent(QPaintEvent *ev) override;
+   void mousePressEvent(QMouseEvent *ev) override;
+   void mouseReleaseEvent(QMouseEvent *ev) override;
+   void mouseMoveEvent(QMouseEvent *ev) override;
    void initStyleOption(QStyleOptionSlider *option) const;
 
  private:
