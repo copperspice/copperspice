@@ -62,10 +62,10 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
    void setHistoryType(HistoryType type);
 
  protected:
-   void onEntry(QEvent *event);
-   void onExit(QEvent *event);
+   void onEntry(QEvent *event) override;
+   void onExit(QEvent *event) override;
 
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QHistoryState)

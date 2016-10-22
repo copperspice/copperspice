@@ -68,7 +68,7 @@ class Q_CORE_EXPORT QTimer : public QObject
    CORE_CS_SIGNAL_2(timeout)
 
  protected:
-   void timerEvent(QTimerEvent *);
+   void timerEvent(QTimerEvent *) override;
 
  private:
    Q_DISABLE_COPY(QTimer)

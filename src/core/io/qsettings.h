@@ -148,7 +148,7 @@ class Q_CORE_EXPORT QSettings : public QObject
                                 Qt::CaseSensitivity caseSensitivity = Qt::CaseSensitive);
 
  protected:
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
    QScopedPointer<QSettingsPrivate> d_ptr;
 
  private:

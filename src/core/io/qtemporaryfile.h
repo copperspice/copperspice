@@ -62,7 +62,7 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
       return open(QIODevice::ReadWrite);
    }
 
-   QString fileName() const;
+   QString fileName() const override;
    QString fileTemplate() const;
    void setFileTemplate(const QString &name);
 
@@ -73,7 +73,7 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    static QTemporaryFile *createLocalFile(QFile &file);
 
  protected:
-   bool open(OpenMode flags);
+   bool open(OpenMode flags) override;
 
  private:
    friend class QFile;

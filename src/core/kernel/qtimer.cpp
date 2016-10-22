@@ -89,7 +89,7 @@ class QSingleShotTimer : public QObject
    CORE_CS_SIGNAL_2(timeout)
 
  protected:
-   void timerEvent(QTimerEvent *);
+   void timerEvent(QTimerEvent *) override;
 };
 
 QSingleShotTimer::QSingleShotTimer(int msec, QObject *receiver, const char *member)

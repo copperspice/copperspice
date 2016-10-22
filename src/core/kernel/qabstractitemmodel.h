@@ -395,16 +395,16 @@ class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
    explicit QAbstractTableModel(QObject *parent = 0);
    ~QAbstractTableModel();
 
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
  protected:
    QAbstractTableModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
  private:
    Q_DISABLE_COPY(QAbstractTableModel)
-   QModelIndex parent(const QModelIndex &child) const;
-   bool hasChildren(const QModelIndex &parent) const;
+   QModelIndex parent(const QModelIndex &child) const override;
+   bool hasChildren(const QModelIndex &parent) const override;
 };
 
 class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
@@ -415,17 +415,17 @@ class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
    explicit QAbstractListModel(QObject *parent = 0);
    ~QAbstractListModel();
 
-   QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
-   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+   QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
  protected:
    QAbstractListModel(QAbstractItemModelPrivate &dd, QObject *parent);
 
  private:
    Q_DISABLE_COPY(QAbstractListModel)
-   QModelIndex parent(const QModelIndex &child) const;
-   int columnCount(const QModelIndex &parent) const;
-   bool hasChildren(const QModelIndex &parent) const;
+   QModelIndex parent(const QModelIndex &child) const override;
+   int columnCount(const QModelIndex &parent) const override;
+   bool hasChildren(const QModelIndex &parent) const override;
 };
 
 // inline implementations

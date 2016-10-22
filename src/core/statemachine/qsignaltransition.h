@@ -58,9 +58,9 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    virtual void callOnTransition(QEvent *e);
 
  protected:
-   bool eventTest(QEvent *event);
-   void onTransition(QEvent *event);
-   bool event(QEvent *e);
+   bool eventTest(QEvent *event) override;
+   void onTransition(QEvent *event) override;
+   bool event(QEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QSignalTransition)

@@ -57,10 +57,10 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
    explicit QSaveFile(const QString &name, QObject *parent);
    ~QSaveFile();
 
-   QString fileName() const;
+   QString fileName() const override;
    void setFileName(const QString &name);
 
-   bool open(OpenMode flags);
+   bool open(OpenMode flags) override;
    bool commit();
 
    void cancelWriting();
@@ -69,10 +69,10 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
    bool directWriteFallback() const;
 
  protected:
-   qint64 writeData(const char *data, qint64 len);
+   qint64 writeData(const char *data, qint64 len) override;
 
  private:
-   void close();
+   void close() override;
    Q_DISABLE_COPY(QSaveFile)
 };
 

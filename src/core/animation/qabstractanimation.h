@@ -125,7 +125,7 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
 
  protected:
    QAbstractAnimation(QAbstractAnimationPrivate &dd, QObject *parent = 0);
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
    virtual void updateCurrentTime(int currentTime) = 0;
    virtual void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);

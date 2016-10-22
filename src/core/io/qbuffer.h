@@ -52,21 +52,21 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    inline void setData(const char *data, int len);
    const QByteArray &data() const;
 
-   bool open(OpenMode openMode);
+   bool open(OpenMode openMode) override;
 
-   void close();
-   qint64 size() const;
-   qint64 pos() const;
-   bool seek(qint64 off);
-   bool atEnd() const;
-   bool canReadLine() const;
+   void close() override;
+   qint64 size() const override;
+   qint64 pos() const override;
+   bool seek(qint64 off) override;
+   bool atEnd() const override;
+   bool canReadLine() const override;
 
  protected:
    void connectNotify(const char *);
    void disconnectNotify(const char *);
 
-   qint64 readData(char *data, qint64 maxlen);
-   qint64 writeData(const char *data, qint64 len);
+   qint64 readData(char *data, qint64 maxlen) override;
+   qint64 writeData(const char *data, qint64 len) override;
 
  private:
    Q_DECLARE_PRIVATE(QBuffer)
