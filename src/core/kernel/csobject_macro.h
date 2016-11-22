@@ -74,14 +74,14 @@ class cs_number<0>
    public: \
       typedef cs_class cs_parent; \
       typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      CS_OBJECT_INTERNAL(classNameX, override) \
    private:
 
 #define CS_OBJECT_MULTIPLE(classNameX,parentX) \
    public: \
       typedef parentX cs_parent; \
       typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      CS_OBJECT_INTERNAL(classNameX, override) \
    private:
 
 #define CS_OBJECT_OUTSIDE(classNameX) \
@@ -98,7 +98,7 @@ class cs_number<0>
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    private:
 
-#define CS_OBJECT_INTERNAL(classNameX) \
+#define CS_OBJECT_INTERNAL(classNameX, overrideX) \
    public: \
       static const char *cs_className() \
       { \
@@ -141,7 +141,7 @@ class cs_number<0>
             return *newMeta;     \
          } \
       } \
-      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const \
+      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const overrideX \
       { \
          return &staticMetaObject(); \
       } \
@@ -254,7 +254,7 @@ class cs_number<0>
 
 #define CS_INTERFACES(...)    \
    public: \
-      bool cs_interface_query(const char *data) const    \
+      bool cs_interface_query(const char *data) const override \
       {  \
          if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
             return true;   \
@@ -890,7 +890,7 @@ class cs_number<0>
 
 #define CORE_CS_OBJECT(className)                              CS_OBJECT(className)
 #define CORE_CS_OBJECT_MULTIPLE(className, parentX)            CS_OBJECT_MULTIPLE(className, parentX)
-#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL(className)
+#define CORE_CS_OBJECT_INTERNAL(className)                     CS_OBJECT_INTERNAL(className,)
 #define CORE_CS_GADGET(className)                              CS_GADGET(className)
 
 #define CORE_CS_SLOT_1(access, ...)                            CS_SLOT_1(access, __VA_ARGS__)
