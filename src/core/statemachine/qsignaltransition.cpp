@@ -80,7 +80,7 @@ void QSignalTransition::setSenderObject(QObject *sender)
    maybeRegister();
 }
 
-BentoAbstract *QSignalTransition::get_signalBento() const
+CsSignal::Internal::BentoAbstract *QSignalTransition::get_signalBento() const
 {
    return m_signalBento.data();
 }

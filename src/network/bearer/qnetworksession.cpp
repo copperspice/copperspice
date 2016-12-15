@@ -676,7 +676,7 @@ void QNetworkSession::connectNotify(const char *signal)
 {
    QObject::connectNotify(signal);
 
-   if (!d) {
+   if (! d) {
       return;
    }
 
@@ -700,12 +700,13 @@ void QNetworkSession::disconnectNotify(const char *signal)
 {
    QObject::disconnectNotify(signal);
 
-   if (!d) {
+   if (! d) {
       return;
    }
 
    //check for preferredConfigurationChanged() signal disconnect notification
    //This is not required on all platforms
+
    if (qstrcmp(signal, "preferredConfigurationChanged(QNetworkConfiguration,bool)") == 0) {
       d->setALREnabled(false);
    }
