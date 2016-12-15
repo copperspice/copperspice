@@ -39,12 +39,10 @@
 class QObject;
 class QMetaObject;
 
-
-// ***********
-
 template<class T1>
 const char *cs_typeName();
 
+// csArgument
 template <typename T>
 class CSArgument
 {
@@ -102,9 +100,7 @@ const char *cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &data2,
    return temp.constData();
 }
 
-
-
-// ***********
+// csGeneric
 class CSGenericReturnArgument
 {
  public:
@@ -115,7 +111,6 @@ inline CSGenericReturnArgument::~CSGenericReturnArgument()
 {
 }
 
-//
 template <typename T>
 class CSReturnArgument : public CSGenericReturnArgument
 {
@@ -146,31 +141,23 @@ void CSReturnArgument<T>::setData(const T &data)
    m_data = data;
 }
 
-// specialization
-class CSVoidReturn
-{
-};
-
 template <>
 class CSReturnArgument<void> : public CSGenericReturnArgument
 {
  public:
    CSReturnArgument();
-   void setData(CSVoidReturn data);
+   void setData(CsSignal::Internal::CSVoidReturn data);
 };
 
 inline CSReturnArgument<void>::CSReturnArgument()
 {
 }
 
-inline void CSReturnArgument<void>::setData(CSVoidReturn)
+inline void CSReturnArgument<void>::setData(CsSignal::Internal::CSVoidReturn)
 {
 }
 
-
-
-// ***********
-
+// registration of enums and flags
 template<class T>
 struct is_enum_or_flag: public std::is_enum<T> {
 };
@@ -187,6 +174,7 @@ template<class T>
 struct cs_underlying_type<QFlags<T>>: public std::underlying_type<T> {
 };
 
+// QVarient
 template < class T, class = void, class = typename std::enable_if < !std::is_constructible<QVariant, T>::value >::type >
 QVariant cs_convertToQVariant(T data);
 
@@ -436,143 +424,6 @@ bool SpiceJarReset<T>::runV(QObject *obj) const
    return true;
 }
 
-
-
-// ***********
-
-
-// ** index sequence (available in C++14)   (1)
-
-// ** generate list of integers corresponding to the number of data types in a parameter pack
-template<size_t...Ks>
-class Index_Sequence
-{
-};
-
-template<size_t S, class K1, class K2>
-class Concat_Sequence;
-
-template<size_t S, size_t ...M, size_t ...N>
-class Concat_Sequence<S, Index_Sequence<M...>, Index_Sequence<N...>>
-{
- public:
-   using type = Index_Sequence < M... , (N + S)... >;
-};
-
-template<size_t N>
-class Make_Index_Sequence
-{
- public:
-   using type = typename Concat_Sequence < (N / 2), typename Make_Index_Sequence < (N / 2) >::type,
-         typename Make_Index_Sequence < (N - (N / 2)) >::type >::type;
-};
-
-template<>
-class Make_Index_Sequence<0>
-{
- public:
-   using type = Index_Sequence<>;
-};
-
-template<>
-class Make_Index_Sequence<1>
-{
- public:
-   using type = Index_Sequence<0>;
-};
-
-template<class ...Ts>
-class Index_Sequence_For
-{
- public:
-   using type = typename Make_Index_Sequence<sizeof ...(Ts)>::type;
-};
-
-
-// ** function ptr   (2)
-
-// ** function uses Index_Sequence Class to unpack a tuple into arguments to a function
-template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes, size_t ...Ks>
-FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(FunctionArgTypes...),
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{   
-   return functionPtr(std::get<Ks>(data)...);
-}
-
-// (api) function pointer unpack tuple
-template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes>
-FunctionReturn cs_unpack_function_args(FunctionReturn (*functionPtr)(FunctionArgTypes...),
-                                       const std::tuple<TupleTypes...> &data)
-{
-   return cs_unpack_function_args_internal(functionPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-}
-
-// specialization when FunctionReturn as type void, force to CSVoidReturn
-template<typename ...FunctionArgTypes, typename ...TupleTypes>
-CSVoidReturn cs_unpack_function_args(void (*functionPtr)(FunctionArgTypes...), const std::tuple<TupleTypes...> &data)
-{
-   cs_unpack_function_args_internal(functionPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-   return CSVoidReturn {};
-}
-
-
-
-// ** method pointer  (3)
-
-// ** function uses Index_Sequence Class to unpack a tuple into arguments to a method
-template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
-MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{  
-   return (obj->*methodPtr)(std::get<Ks>(data)...);
-}
-
-// ** function uses Index_Sequence Class to unpack a tuple into arguments to a method  (duplicate for const)
-template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
-MethodReturn cs_unpack_method_args_internal(const MethodClass *obj,
-      MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
-      const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{
-   return (obj->*methodPtr)(std::get<Ks>(data)...);
-}
-
-// (api) method pointer unpack tuple
-template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes>
-MethodReturn cs_unpack_method_args(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
-                                   const std::tuple<TupleTypes...> &data)
-{
-   return cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-}
-
-// specialization when MethodReturn as type void, force to CSVoidReturn
-template<typename MethodClass, typename ...MethodArgTypes, typename ...TupleTypes>
-CSVoidReturn cs_unpack_method_args(MethodClass *obj, void (MethodClass::*methodPtr)(MethodArgTypes...),
-                                   const std::tuple<TupleTypes...> &data)
-{
-   cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-   return CSVoidReturn {};
-}
-
-// (api) method pointer unpack tuple   (duplicate for const)
-template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes>
-MethodReturn cs_unpack_method_args(const MethodClass *obj,
-                                   MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...) const,
-                                   const std::tuple<TupleTypes...> &data)
-{
-   return cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-}
-
-// specialization when MethodReturn as type void, force to CSVoidReturn  (duplicate for const)
-template<typename MethodClass, typename ...MethodArgTypes, typename ...TupleTypes>
-CSVoidReturn cs_unpack_method_args(const MethodClass *obj, void (MethodClass::*methodPtr)(MethodArgTypes...) const,
-                                   const std::tuple<TupleTypes...> &data)
-{
-   cs_unpack_method_args_internal(obj, methodPtr, data, typename Index_Sequence_For<TupleTypes...>::type {} );
-   return CSVoidReturn {};
-}
-
-
-
 /*
 
 QMetaObject::activate() creates a TeaCup_Data object to store the slot data
@@ -592,309 +443,99 @@ class Teacup_Data<int,bool>      inherits from Teacup<int,bool>
 
 */
 
-
-// ***********
-
-template <class T1, class T2>
-class prePend
-{
-   // required dummy class to utilze a specialization
-};
-
-template <class T, class ...Ts>
-class prePend<T, std::tuple<Ts...>>
-{
- public:
-   using type = typename std::tuple<T, Ts...>;
-};
-
-template <class T1>
-class strip
-{
- public:
-   // contains nothing
-   using type = typename std::tuple<>;
-};
-
-template <class T1, class T2, class ...Ts>
-class strip<std::tuple<T1, T2, Ts...>>
-{
- public:
-   using type = typename prePend<T1, typename strip<std::tuple<T2, Ts...> >::type>::type;
-   static type doRemove(const std::tuple<T1, T2, Ts...> &);
-};
-
-template <class ...Ts>
-class removeLast
-{
- public:
-   using type = typename strip< std::tuple<Ts...> >::type;
-   static type doRemove(const std::tuple<Ts...> &);
-};
-
-
-/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
-
-// **
-template<unsigned int ...Vs>
-class intValues
-{
- public:
-   using type = intValues<Vs...>;
-};
-
-template<unsigned int Max, unsigned int ...Vs>
-class makeIntValues : public makeIntValues < Max - 1, Max - 1, Vs... >
-{
-};
-
-template<unsigned int...Vs>
-class makeIntValues<0, Vs...> : public intValues<Vs...>
-{
-};
-
-template<unsigned int ...Vs, class ...Ts>
-typename removeLast<Ts...>::type newFunc(intValues<Vs...>, std::tuple<Ts...> tupleValue)
-{
-   return std::forward_as_tuple(std::get<Vs>(tupleValue)...);
-}
-
-template<class ...Ts>
-typename removeLast<Ts...>::type funcRemove(std::tuple<Ts...> tupleValue )
-{
-   return newFunc(makeIntValues < sizeof...(Ts) - 1 > (), tupleValue);
-}
-
-template<class Last, class ...Ts>
-std::tuple<Ts...> funcRemove(std::tuple<Ts..., Last> tupleValue, Ts...Vs )
-{
-   return std::forward_as_tuple(Vs...);
-}
-
-
-// ***********
-
-// ** store slot data in tuple
-class TeaCupAbstract
-{
- public:
-   virtual ~TeaCupAbstract() {}
-   //    virtual QList<QVariant> toVariantList() const = 0;
-};
-
-// 1
-template<class ...Ts>
-class TeaCup: public TeaCup< typename removeLast<Ts...>::type >
-{
- public:
-   template<class T>
-   explicit TeaCup(T lambda);
-
-   std::tuple<Ts...> getData() const;
-
- private:
-   std::function<std::tuple<Ts...> ()> m_lambda;
-};
-
-template<class ...Ts>
-template<class T>
-TeaCup<Ts...>::TeaCup(T lambda)
-   : TeaCup< typename removeLast<Ts...>::type >( [this]()
-{
-   return funcRemove(m_lambda());
-} ),
-m_lambda {lambda} {
-}
-
-template<class ...Ts>
-std::tuple<Ts...> TeaCup<Ts...>::getData() const
-{
-   return m_lambda();
-}
-
-
-// 2  specialization, empty data
-template<>
-class TeaCup<>: public TeaCupAbstract
-{
- public:
-   template<class T>
-   explicit TeaCup(T lambda);
-
-   std::tuple<> getData() const;
-};
-
-template<class T>
-TeaCup<>::TeaCup(T)
-{
-}
-
-inline std::tuple<> TeaCup<>::getData() const
-{
-   // empty tuple
-   return std::tuple<> {};
-}
-
-
-// 3  specialization, tuple
-template<class ...Ts>
-class TeaCup< std::tuple<Ts...> >: public TeaCup<Ts...>
-{
- public:
-   template<class T>
-   explicit TeaCup(T lambda);
-};
-
-template<class ...Ts>
-template<class T>
-TeaCup<std::tuple<Ts...>>::TeaCup(T lambda) 
-   : TeaCup<Ts...>(lambda)
-{
-}
-
-/**   \endcond   */
-
-
-// ** next two functions use Index_Sequence Class to convert a tuple to
-template<class R, class T, size_t ...Ks>
-R convert_tuple_internal(T &data, Index_Sequence<Ks...>)
-{
-   return R {std::get<Ks>(data)...};
-}
-
-template<class R, class ...Ts>
-R convert_tuple(std::tuple<Ts...> &data)
-{
-   return convert_tuple_internal<R> (data, typename Index_Sequence_For<Ts...>::type {} );
-}
-
-
-// ** TeaCup Class used to store data for signal activation
-template<class ...Ts>
-class TeaCup_Data: public TeaCup<Ts...>
-{
- public:
-   TeaCup_Data(bool needs_Copying, Ts...);
-   std::tuple<Ts...> getData() const;
-   //    virtual QList<QVariant> toVariantList() const;
-
- private:
-   std::shared_ptr< std::tuple<typename std::remove_reference<Ts>::type...> > m_copyOfData;
-   std::tuple<Ts...> m_data;
-};
-
-template<class ...Ts>
-TeaCup_Data<Ts...>::TeaCup_Data(bool needs_Copying, Ts...Vs)
-   : TeaCup<Ts...>( [this]()
-{
-   return m_data;
-} ),
-m_copyOfData(needs_Copying ? new std::tuple<typename std::remove_reference<Ts>::type...> (Vs...) : nullptr ),
-m_data(needs_Copying ? convert_tuple<std::tuple<Ts...>> (*m_copyOfData) : std::tuple<Ts...> (Vs...) )
-{
-}
-
-template<class ...Ts>
-std::tuple<Ts...> TeaCup_Data<Ts...>::getData() const
-{
-   return m_data;
-}
-
-
-// ***********
-
 // ** store method pointer for signals and slots
-class BentoAbstract
+class CSBentoAbstract : public virtual CsSignal::Internal::BentoAbstract
 {
- public:
-   virtual ~BentoAbstract() {}
+   public:
+      using CsSignal::Internal::BentoAbstract::invoke;
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const = 0;
 
-   virtual bool operator ==(const BentoAbstract &right) const = 0;
-   bool operator !=(const BentoAbstract &right) const;
-   virtual void invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval = 0) const = 0;
-   virtual bool checkReturnType(CSGenericReturnArgument &retval) const = 0;
+      virtual bool checkReturnType(CSGenericReturnArgument &retval) const = 0;
 };
 
-inline bool BentoAbstract::operator !=(const BentoAbstract &right) const
-{
-   return ! (*this == right);
-}
-
-
 template<class T>
-class Bento : public BentoAbstract
+class CSBento : public CSBentoAbstract, public CsSignal::Internal::Bento<T>
 {
- public:
-   Bento(T ptr);
-   virtual bool operator ==(const BentoAbstract &right) const;
-   virtual void invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval = 0) const;
-   virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+   public:
+      CSBento(T ptr);   
 
-   template<class MethodReturn, class ...MethodArgs>
-   void invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...) const) const;
+      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      
+      using CsSignal::Internal::Bento<T>::invoke;
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const;
 
-   template<class MethodReturn, class ...MethodArgs>
-   void invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...)) const;
-
-   T m_lambda;
+      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
 };
 
 template<class FunctionReturn, class ...FunctionArgs>
-class Bento<FunctionReturn (*)(FunctionArgs...)> : public BentoAbstract
+class CSBento<FunctionReturn (*)(FunctionArgs...)> : public CSBentoAbstract, 
+                  public CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>
 {
- public:
-   Bento(FunctionReturn (*ptr)(FunctionArgs...));
-   virtual bool operator ==(const BentoAbstract &right) const;
-   virtual void invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval = 0) const;
-   virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+   public:
+      CSBento(FunctionReturn (*ptr)(FunctionArgs...));
 
-   FunctionReturn (*m_methodPtr)(FunctionArgs...);
+      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+
+      using CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>::invoke;
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const;
+
+      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;      
 };
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-class Bento<MethodReturn(MethodClass::*)(MethodArgs...)>: public BentoAbstract
+class CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>: public CSBentoAbstract, 
+                  public CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>
 {
- public:
-   Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
-   virtual bool operator ==(const BentoAbstract &right) const;
-   virtual void invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval = 0) const;
-   virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+   public:
+      CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
 
-   MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...);
+      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+
+      using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke;
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const;
+
+      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
 };
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-class Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public BentoAbstract
+class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBentoAbstract, 
+                  public CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>
 {
    // specialization, pointer to const method
 
- public:
-   Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
-   virtual bool operator ==(const BentoAbstract &right) const;
-   virtual void invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval = 0) const;
-   virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+   public:
+      CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
 
-   MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...) const;
+      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      
+      using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke;
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                     CSGenericReturnArgument *retval = 0) const;
+      
+      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
 };
-
 
 
 // (1) lambda
 template<class T>
-Bento<T>::Bento(T lambda)
-   : m_lambda(lambda)
+CSBento<T>::CSBento(T lambda)
+   : CsSignal::Internal::Bento<T>(lambda)
 {
 }
 
 template<class T>
-bool Bento<T>::operator ==(const BentoAbstract &) const
+std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<T>::clone() const
 {
-   // can not compare two lambdas
-   return false;
+   return CsSignal::Internal::make_unique<CSBento<T>>(*this); 
 }
 
 template<class T>
-void Bento<T>::invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
+void CSBento<T>::invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval) const
 {
    // T must be a class, will be a compiler error otherwise
    auto methodPtr = &T::operator();
@@ -903,7 +544,7 @@ void Bento<T>::invoke(QObject *receiver, const TeaCupAbstract *dataPack, CSGener
 }
 
 template<class T>
-bool Bento<T>::checkReturnType(CSGenericReturnArgument &retval) const
+bool CSBento<T>::checkReturnType(CSGenericReturnArgument &retval) const
 {
    // return type of a lambda is not required
 
@@ -915,79 +556,28 @@ bool Bento<T>::checkReturnType(CSGenericReturnArgument &retval) const
    return false;
 }
 
-template<class T>
-template<class MethodReturn, class ...MethodArgs>
-void Bento<T>::invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...) const) const
-{
-   // handles non-mutable, captures variables are const
-
-   // dynamic cast will return a valid ptr if the slot has equal or less parameters
-   // retrieve ptr to teaCup object, which contains the data
-   const TeaCup<MethodArgs...> *teaCup = dynamic_cast<const TeaCup<MethodArgs...> *>(dataPack);
-
-   if (teaCup) {
-      // expand arguments
-      std::tuple<MethodArgs...> args = teaCup->getData();
-
-      // unpacks the tuple, then calls the method or slot
-      cs_unpack_method_args(&m_lambda, methodPtr, args);
-   }
-}
-
-template<class T>
-template<class MethodReturn, class ...MethodArgs>
-void Bento<T>::invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...)) const
-{
-   // handles mutable, captures variables are non-const
-
-   // dynamic cast will return a valid ptr if the slot has equal or less parameters
-   // retrieve ptr to teaCup object, which contains the data
-   const TeaCup<MethodArgs...> *teaCup = dynamic_cast<const TeaCup<MethodArgs...> *>(dataPack);
-
-   if (teaCup) {
-      // expand arguments
-      std::tuple<MethodArgs...> args = teaCup->getData();
-
-      // prep m_lambda
-      auto object = const_cast<typename std::remove_const<T>::type *>(&m_lambda);
-
-      // unpacks the tuple, then calls the method or slot
-      cs_unpack_method_args(object, methodPtr, args);
-   }
-}
-
-
 // (2) specialization, function pointer
 template<class FunctionReturn, class ...FunctionArgs>
-Bento<FunctionReturn (*)(FunctionArgs...)>::Bento(FunctionReturn (*ptr)(FunctionArgs...)) :
-   m_methodPtr(ptr)
+CSBento<FunctionReturn (*)(FunctionArgs...)>::CSBento(FunctionReturn (*ptr)(FunctionArgs...)) 
+   : CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>(ptr)
 {
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
-bool Bento<FunctionReturn (*)(FunctionArgs...)>::operator ==(const BentoAbstract &right) const
+std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<FunctionReturn (*)(FunctionArgs...)>::clone() const
 {
-   bool retval = false;
-
-   const Bento<FunctionReturn (*)(FunctionArgs...)> *temp;
-   temp = dynamic_cast<const Bento <FunctionReturn (*)(FunctionArgs...)> *> (&right);
-
-   if (temp) {
-      retval = (this->m_methodPtr == temp->m_methodPtr);
-   }
-
-   return retval;
+   return CsSignal::Internal::make_unique<CSBento<FunctionReturn (*)(FunctionArgs...)>>(*this); 
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
-void Bento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *, const TeaCupAbstract *dataPack,
-      CSGenericReturnArgument *retval) const
+void CSBento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *, 
+                  const CsSignal::Internal::TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
 {
    // no need to verify receiver since it is not used
 
    // dynamic cast will return a valid ptr if the slot has equal or less parameters
    // retrieve ptr to teaCup object, which contains the data
-   const TeaCup<FunctionArgs...> *teaCup = dynamic_cast<const TeaCup<FunctionArgs...> *>(dataPack);
+   const CsSignal::Internal::TeaCup<FunctionArgs...> *teaCup = dynamic_cast<const CsSignal::Internal::TeaCup<FunctionArgs...> *>(dataPack);
 
    if (teaCup) {
       // expand arguments
@@ -997,21 +587,20 @@ void Bento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *, const TeaCupA
 
       if (returnData) {
          // unpack the tuple, then call the method or slot
-         returnData->setData(cs_unpack_function_args(m_methodPtr, args));
+         returnData->setData(CsSignal::Internal::cs_unpack_function_args(this->m_methodPtr, args));
 
       } else {
-         // returnData is a null pointer, therefore retval was null or the wrong type
+         // returnData is a nullptr, therefore retval was null or the wrong type
          // assume user does not want a return value
 
          // unpack the tuple, then call the method or slot
-         cs_unpack_function_args(m_methodPtr, args);
+         CsSignal::Internal::cs_unpack_function_args(this->m_methodPtr, args);
       }
    }
-
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
-bool Bento<FunctionReturn (*)(FunctionArgs...)>::checkReturnType(CSGenericReturnArgument &retval) const
+bool CSBento<FunctionReturn (*)(FunctionArgs...)>::checkReturnType(CSGenericReturnArgument &retval) const
 {
    if (dynamic_cast<CSReturnArgument<FunctionReturn> *>(&retval)) {
       return true;
@@ -1027,29 +616,20 @@ bool Bento<FunctionReturn (*)(FunctionArgs...)>::checkReturnType(CSGenericReturn
 
 // (3) specialization, method pointer
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...)) :
-   m_methodPtr(ptr)
+CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...)) 
+   : CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>(ptr)
 {
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-bool Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::operator ==(const BentoAbstract &right) const
+std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::clone() const
 {
-   bool retval = false;
-
-   const Bento<MethodReturn(MethodClass::*)(MethodArgs...)> *temp;
-   temp = dynamic_cast<const Bento <MethodReturn(MethodClass::*)(MethodArgs...)> *> (&right);
-
-   if (temp) {
-      retval = (this->m_methodPtr == temp->m_methodPtr);
-   }
-
-   return retval;
+   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this); 
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
-void Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receiver,
-      const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
+void CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receiver,
+      const CsSignal::Internal::TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
 {
    if (! receiver)  {
       return;
@@ -1060,7 +640,7 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receive
    if (t_receiver) {
       // dynamic cast will return a valid ptr if the slot has equal or less parameters
       // retrieve ptr to teaCup object, which contains the data
-      const TeaCup<MethodArgs...> *teaCup = dynamic_cast<const TeaCup<MethodArgs...> *>(dataPack);
+      const CsSignal::Internal::TeaCup<MethodArgs...> *teaCup = dynamic_cast<const CsSignal::Internal::TeaCup<MethodArgs...> *>(dataPack);
 
       if (teaCup) {
          // expand arguments
@@ -1070,14 +650,14 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receive
 
          if (returnData) {
             // unpacks the tuple, then calls the method or slot
-            returnData->setData(cs_unpack_method_args(t_receiver, m_methodPtr, args));
+            returnData->setData(CsSignal::Internal::cs_unpack_method_args(t_receiver, this->m_methodPtr, args));
 
          } else {
             // returnData is a null pointer, therefore retval was null or the wrong type
             // assume user does not want a return value
 
             // unpacks the tuple, then calls the method or slot
-            cs_unpack_method_args(t_receiver, m_methodPtr, args);
+            CsSignal::Internal::cs_unpack_method_args(t_receiver, this->m_methodPtr, args);
 
          }
 
@@ -1086,7 +666,7 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(QObject *receive
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
-bool Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::checkReturnType(CSGenericReturnArgument &retval) const
+bool CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::checkReturnType(CSGenericReturnArgument &retval) const
 {
    if (dynamic_cast<CSReturnArgument<MethodReturn> *>(&retval)) {
       return true;
@@ -1102,29 +682,20 @@ bool Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::checkReturnType(CSGener
 
 // (4) specialization, pointer to const method
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const) :
-   m_methodPtr(ptr)
+CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const)
+   : CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>(ptr)
 {
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-bool Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::operator ==(const BentoAbstract &right) const
+std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::clone() const
 {
-   bool retval = false;
-
-   const Bento<MethodReturn(MethodClass::*)(MethodArgs...) const> *temp;
-   temp = dynamic_cast<const Bento <MethodReturn(MethodClass::*)(MethodArgs...) const> *> (&right);
-
-   if (temp) {
-      retval = (this->m_methodPtr == temp->m_methodPtr);
-   }
-
-   return retval;
+   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this); 
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
-void Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(QObject *receiver,
-      const TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
+void CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(QObject *receiver,
+      const CsSignal::Internal::TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
 {
    if (! receiver)  {
       return;
@@ -1136,7 +707,7 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(QObject *r
       // dynamic cast will return a valid ptr if the slot has equal or less parameters
 
       // retrieve ptr to teaCup object, which contains the data
-      const TeaCup<MethodArgs...> *teaCup = dynamic_cast<const TeaCup<MethodArgs...> *>(dataPack);
+      const CsSignal::Internal::TeaCup<MethodArgs...> *teaCup = dynamic_cast<const CsSignal::Internal::TeaCup<MethodArgs...> *>(dataPack);
 
       if (teaCup) {
          // expand arguments
@@ -1146,23 +717,22 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(QObject *r
 
          if (returnData) {
             // unpacks the tuple, then calls the method or slot
-            returnData->setData(cs_unpack_method_args(t_receiver, m_methodPtr, args));
+            returnData->setData(CsSignal::Internal::cs_unpack_method_args(t_receiver, this->m_methodPtr, args));
 
          } else {
             // returnData is a null pointer, therefore retval was null or the wrong type
             // assume user does not want a return value
 
             // unpacks the tuple, then calls the method or slot
-            cs_unpack_method_args(t_receiver, m_methodPtr, args);
+            CsSignal::Internal::cs_unpack_method_args(t_receiver, this->m_methodPtr, args);
 
          }
-
       }
    }
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
-bool Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::checkReturnType(CSGenericReturnArgument &retval) const
+bool CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::checkReturnType(CSGenericReturnArgument &retval) const
 {
    if (dynamic_cast<CSReturnArgument<MethodReturn> *>(&retval)) {
       return true;
