@@ -58,7 +58,7 @@ class Q_CORE_EXPORT QSocketNotifier : public QObject
    CORE_CS_SIGNAL_2(activated, socket)
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
  private:
    Q_DISABLE_COPY(QSocketNotifier)

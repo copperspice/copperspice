@@ -120,12 +120,12 @@ class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
  public:
    QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d);
    ~QNonContiguousByteDeviceIoDeviceImpl();
-   const char *readPointer(qint64 maximumLength, qint64 &len);
-   bool advanceReadPointer(qint64 amount);
-   bool atEnd();
-   bool reset();
-   qint64 size();
-   qint64 pos();
+   const char *readPointer(qint64 maximumLength, qint64 &len) override;
+   bool advanceReadPointer(qint64 amount) override;
+   bool atEnd() override;
+   bool reset() override;
+   qint64 size() override;
+   qint64 pos() override;
 
  protected:
    QIODevice *device;
@@ -145,11 +145,11 @@ class QNonContiguousByteDeviceBufferImpl : public QNonContiguousByteDevice
  public:
    QNonContiguousByteDeviceBufferImpl(QBuffer *b);
    ~QNonContiguousByteDeviceBufferImpl();
-   const char *readPointer(qint64 maximumLength, qint64 &len);
-   bool advanceReadPointer(qint64 amount);
-   bool atEnd();
-   bool reset();
-   qint64 size();
+   const char *readPointer(qint64 maximumLength, qint64 &len) override;
+   bool advanceReadPointer(qint64 amount) override;
+   bool atEnd() override;
+   bool reset() override;
+   qint64 size() override;
 
  protected:
    QBuffer *buffer;

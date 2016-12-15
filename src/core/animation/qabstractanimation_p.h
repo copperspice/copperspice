@@ -97,10 +97,10 @@ class QDefaultAnimationDriver : public QAnimationDriver
 
  public:
    QDefaultAnimationDriver(QUnifiedTimer *timer);
-   void timerEvent(QTimerEvent *e);
+   void timerEvent(QTimerEvent *e) override;
 
-   void started();
-   void stopped();
+   void started() override;
+   void stopped() override;
 
  private:
    QBasicTimer m_timer;

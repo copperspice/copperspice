@@ -156,8 +156,8 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    Q_PID pid() const;
 
    bool waitForStarted(int msecs = 30000);
-   bool waitForReadyRead(int msecs = 30000);
-   bool waitForBytesWritten(int msecs = 30000);
+   bool waitForReadyRead(int msecs = 30000) override;
+   bool waitForBytesWritten(int msecs = 30000) override;
    bool waitForFinished(int msecs = 30000);
 
    QByteArray readAllStandardOutput();
@@ -167,12 +167,12 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    QProcess::ExitStatus exitStatus() const;
 
    // QIODevice
-   qint64 bytesAvailable() const;
-   qint64 bytesToWrite() const;
-   bool isSequential() const;
-   bool canReadLine() const;
-   void close();
-   bool atEnd() const;
+   qint64 bytesAvailable() const override;
+   qint64 bytesToWrite() const override;
+   bool isSequential() const override;
+   bool canReadLine() const override;
+   void close() override;
+   bool atEnd() const override;
 
    static int execute(const QString &program, const QStringList &arguments);
    static int execute(const QString &program);
@@ -218,8 +218,8 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    virtual void setupChildProcess();
 
    // QIODevice
-   qint64 readData(char *data, qint64 maxlen);
-   qint64 writeData(const char *data, qint64 len);
+   qint64 readData(char *data, qint64 maxlen) override;
+   qint64 writeData(const char *data, qint64 len) override;
 
  private:
    Q_DECLARE_PRIVATE(QProcess)

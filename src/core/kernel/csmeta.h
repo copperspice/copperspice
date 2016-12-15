@@ -105,8 +105,9 @@ class Q_CORE_EXPORT QMetaMethod
    Access access() const;
    Attributes attributes() const;
 
-   bool compare(const BentoAbstract &method) const;
-   const BentoAbstract *getBentoBox() const;
+   bool compare(const CsSignal::Internal::BentoAbstract &method) const;
+   const CSBentoAbstract *getBentoBox() const;
+
    const QMetaObject *getMetaObject() const;
 
    QByteArray name() const;
@@ -126,7 +127,7 @@ class Q_CORE_EXPORT QMetaMethod
    int revision() const;
    void setRevision(int revision);
 
-   void setBentoBox(const BentoAbstract *method);
+   void setBentoBox(const CSBentoAbstract *method);
    void setTag(const char *data);
    const char *tag() const;
 
@@ -151,7 +152,7 @@ class Q_CORE_EXPORT QMetaMethod
    Attributes m_attributes;
    QMetaObject *m_metaObject;
    const char *m_tag;
-   const BentoAbstract *m_bento;
+   const CSBentoAbstract *m_bento;
    int m_revision;
 
    friend bool operator==(const QMetaMethod &m1, const QMetaMethod &m2);
@@ -267,7 +268,7 @@ class Q_CORE_EXPORT QMetaProperty
    JarWriteAbstract *m_writeJar;
    JarResetAbstract *m_resetJar;
 
-   BentoAbstract *m_notifyBento;
+   CSBentoAbstract *m_notifyBento;
 };
 
 // **
@@ -350,16 +351,14 @@ template<class E>
 class cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
-   static const char *typeName();
-   \
+   static const char *typeName();   
 };
 
 template<class E>
 class cs_typeName_internal< QFlags<E> >
 {
  public:
-   static const char *typeName();
-   \
+   static const char *typeName();   
 };
 
 
@@ -369,8 +368,7 @@ class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObj
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
-   static const char *typeName();
-   \
+   static const char *typeName();   
 };
 
 template<class T>
@@ -574,7 +572,7 @@ void QMetaProperty::setNotifyMethod(T method)
       return;
    }
 
-   Bento<T> *temp = new Bento<T>(method);
+   CSBento<T> *temp = new CSBento<T>(method);
    m_notifyBento  = temp;
 
    m_notify_able = true;
