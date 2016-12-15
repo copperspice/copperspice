@@ -92,7 +92,7 @@ class QAbstractScrollAreaFilter : public QObject
    QAbstractScrollAreaFilter(QAbstractScrollAreaPrivate *p) : d(p) {
       setObjectName(QLatin1String("qt_abstractscrollarea_filter"));
    }
-   bool eventFilter(QObject *o, QEvent *e) {
+   bool eventFilter(QObject *o, QEvent *e) override {
       return (o == d->viewport ? d->viewportEvent(e) : false);
    }
 

@@ -125,13 +125,13 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void setSelectionRectVisible(bool show);
    bool isSelectionRectVisible() const;
 
-   QRect visualRect(const QModelIndex &index) const;
-   void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
-   QModelIndex indexAt(const QPoint &p) const;
+   QRect visualRect(const QModelIndex &index) const override;
+   void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
+   QModelIndex indexAt(const QPoint &p) const override;
 
-   void doItemsLayout();
-   void reset();
-   void setRootIndex(const QModelIndex &index);
+   void doItemsLayout() override;
+   void reset() override;
+   void setRootIndex(const QModelIndex &index) override;
 
    GUI_CS_SIGNAL_1(Public, void indexesMoved(const QModelIndexList &indexes))
    GUI_CS_SIGNAL_2(indexesMoved, indexes)
@@ -139,52 +139,52 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
  protected:
    QListView(QListViewPrivate &, QWidget *parent = 0);
 
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
-   void scrollContentsBy(int dx, int dy);
+   void scrollContentsBy(int dx, int dy) override;
 
    void resizeContents(int width, int height);
    QSize contentsSize() const;
 
-   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-   void rowsInserted(const QModelIndex &parent, int start, int end);
-   void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) override;
+   void rowsInserted(const QModelIndex &parent, int start, int end) override;
+   void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
 
-   void mouseMoveEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *e);
+   void mouseMoveEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *e) override;
 
-   void timerEvent(QTimerEvent *e);
-   void resizeEvent(QResizeEvent *e);
+   void timerEvent(QTimerEvent *e) override;
+   void resizeEvent(QResizeEvent *e) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragMoveEvent(QDragMoveEvent *e);
-   void dragLeaveEvent(QDragLeaveEvent *e);
-   void dropEvent(QDropEvent *e);
-   void startDrag(Qt::DropActions supportedActions);
+   void dragMoveEvent(QDragMoveEvent *e) override;
+   void dragLeaveEvent(QDragLeaveEvent *e) override;
+   void dropEvent(QDropEvent *e) override;
+   void startDrag(Qt::DropActions supportedActions) override;
 
    void internalDrop(QDropEvent *e);
    void internalDrag(Qt::DropActions supportedActions);
 #endif
 
-   QStyleOptionViewItem viewOptions() const;
-   void paintEvent(QPaintEvent *e);
+   QStyleOptionViewItem viewOptions() const override;
+   void paintEvent(QPaintEvent *e) override;
 
-   int horizontalOffset() const;
-   int verticalOffset() const;
-   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+   int horizontalOffset() const override;
+   int verticalOffset() const override;
+   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
    QRect rectForIndex(const QModelIndex &index) const;
    void setPositionForIndex(const QPoint &position, const QModelIndex &index);
 
-   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
-   QRegion visualRegionForSelection(const QItemSelection &selection) const;
-   QModelIndexList selectedIndexes() const;
+   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+   QRegion visualRegionForSelection(const QItemSelection &selection) const override;
+   QModelIndexList selectedIndexes() const override;
 
-   void updateGeometries();
+   void updateGeometries() override;
 
-   bool isIndexHidden(const QModelIndex &index) const;
+   bool isIndexHidden(const QModelIndex &index) const override;
 
-   void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-   void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+   void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
+   void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
  private:
    friend class QAccessibleItemView;

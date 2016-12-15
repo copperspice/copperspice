@@ -225,7 +225,13 @@ QNetworkReplyWrapper::~QNetworkReplyWrapper()
 {
     if (m_reply)
         m_reply->deleteLater();
-    m_queue->clear();
+
+    QObject* tmp = parent();
+    QNetworkReply* tmp2 = dynamic_cast<QNetworkReply*>(tmp);
+    if(tmp2) {
+        QueueLocker lock(m_queue);
+	m_queue->clear();
+    }
 }
 
 QNetworkReply* QNetworkReplyWrapper::release()
@@ -405,10 +411,13 @@ QNetworkReplyHandler::QNetworkReplyHandler(ResourceHandle* handle, LoadType load
 void QNetworkReplyHandler::abort()
 {
     m_resourceHandle = 0;
-    if (QNetworkReply* reply = release()) {
-        reply->abort();
-        reply->deleteLater();
+
+    if(m_replyWrapper && m_replyWrapper->reply()) {
+	m_queue.clear();
+        m_replyWrapper->reply()->abort();
+	m_replyWrapper.reset();
     }
+    
     deleteLater();
 }
 
@@ -437,7 +446,9 @@ static bool shouldIgnoreHttpError(QNetworkReply* reply, bool receivedData)
 
 void QNetworkReplyHandler::finish()
 {
-    ASSERT(m_replyWrapper && m_replyWrapper->reply() && !wasAborted());
+    if(! m_replyWrapper || !m_replyWrapper->reply() || wasAborted()) {
+	return;
+    }
 
     ResourceHandleClient* client = m_resourceHandle->client();
     if (!client) {
@@ -471,7 +482,10 @@ void QNetworkReplyHandler::finish()
 
 void QNetworkReplyHandler::sendResponseIfNeeded()
 {
-    ASSERT(m_replyWrapper && m_replyWrapper->reply() && !wasAborted());
+    if(! m_replyWrapper || !m_replyWrapper->reply() || wasAborted()) {
+	return;
+    }
+
 
     if (m_replyWrapper->reply()->error() && m_replyWrapper->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).isNull())
         return;
@@ -673,12 +687,16 @@ void QNetworkReplyHandler::start()
     if (!reply)
         return;
 
-    m_replyWrapper = new QNetworkReplyWrapper(&m_queue, reply, m_resourceHandle->shouldContentSniff() && d->m_context->mimeSniffingEnabled(), this);
+    m_replyWrapper.reset(new QNetworkReplyWrapper(&m_queue, reply,
+                                 m_resourceHandle->shouldContentSniff() &&
+                                     d->m_context->mimeSniffingEnabled(),
+						  this));
 
     if (m_loadType == SynchronousLoad) {
-        m_replyWrapper->synchronousLoad();
-        // If supported, a synchronous request will be finished at this point, no need to hook up the signals.
-        return;
+      m_replyWrapper->synchronousLoad();
+      // If supported, a synchronous request will be finished at this point, no
+      // need to hook up the signals.
+      return;
     }
 
     if (m_resourceHandle->firstRequest().reportUploadProgress())

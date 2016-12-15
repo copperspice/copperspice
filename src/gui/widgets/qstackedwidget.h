@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
    GUI_CS_SIGNAL_2(widgetRemoved, index)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QStackedWidget)

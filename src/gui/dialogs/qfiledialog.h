@@ -183,7 +183,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    using QDialog::open;
 
    void open(QObject *receiver, const char *member);
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 
    GUI_CS_SIGNAL_1(Public, void fileSelected(const QString &file))
    GUI_CS_SIGNAL_2(fileSelected, file)
@@ -225,9 +225,9 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
 
  protected:
    QFileDialog(const QFileDialogArgs &args);
-   void done(int result);
-   void accept();
-   void changeEvent(QEvent *e);
+   void done(int result) override;
+   void accept() override;
+   void changeEvent(QEvent *e) override;
 
  private:
    Q_DECLARE_PRIVATE(QFileDialog)

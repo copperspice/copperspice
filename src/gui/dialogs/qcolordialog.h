@@ -73,7 +73,7 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
 
    void open(QObject *receiver, const char *member);
 
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 
    // ### Qt5/merge overloads with title = QString()
    static QColor getColor(const QColor &initial, QWidget *parent, const QString &title,
@@ -96,8 +96,8 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    GUI_CS_SIGNAL_2(colorSelected, color)
 
  protected:
-   void changeEvent(QEvent *event);
-   void done(int result);
+   void changeEvent(QEvent *event) override;
+   void done(int result) override;
 
  private:
    Q_DISABLE_COPY(QColorDialog)

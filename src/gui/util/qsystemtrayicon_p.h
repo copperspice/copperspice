@@ -90,10 +90,10 @@ class QBalloonTip : public QWidget
    void balloon(const QPoint &, int, bool);
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void resizeEvent(QResizeEvent *);
-   void mousePressEvent(QMouseEvent *e);
-   void timerEvent(QTimerEvent *e);
+   void paintEvent(QPaintEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void timerEvent(QTimerEvent *e) override;
 
  private:
    QSystemTrayIcon *trayIcon;

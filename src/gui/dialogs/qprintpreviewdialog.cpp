@@ -104,12 +104,12 @@ class LineEdit : public QLineEdit
    }
 
  protected:
-   void focusInEvent(QFocusEvent *e) {
+   void focusInEvent(QFocusEvent *e) override {
       origText = text();
       QLineEdit::focusInEvent(e);
    }
 
-   void focusOutEvent(QFocusEvent *e) {
+   void focusOutEvent(QFocusEvent *e) override {
       if (isModified() && !hasAcceptableInput()) {
          setText(origText);
       }

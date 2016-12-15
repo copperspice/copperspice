@@ -187,9 +187,9 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
  protected:
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *event);
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QMainWindow)

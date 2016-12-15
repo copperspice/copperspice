@@ -443,7 +443,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
 #endif
 
  protected:
-   virtual void timerEvent(QTimerEvent *event);
+   virtual void timerEvent(QTimerEvent *event) override;
 
  private:
    void init(const QString &txt);

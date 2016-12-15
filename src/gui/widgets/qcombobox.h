@@ -210,13 +210,13 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    QAbstractItemView *view() const;
    void setView(QAbstractItemView *itemView);
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    virtual void showPopup();
    virtual void hidePopup();
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
  
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
@@ -252,25 +252,25 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SIGNAL_2(cs_currentIndexChanged, index)
 
  protected:
-   void focusInEvent(QFocusEvent *e);
-   void focusOutEvent(QFocusEvent *e);
-   void changeEvent(QEvent *e);
-   void resizeEvent(QResizeEvent *e);
-   void paintEvent(QPaintEvent *e);
-   void showEvent(QShowEvent *e);
-   void hideEvent(QHideEvent *e);
-   void mousePressEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *e);
-   void keyPressEvent(QKeyEvent *e);
-   void keyReleaseEvent(QKeyEvent *e);
+   void focusInEvent(QFocusEvent *e) override;
+   void focusOutEvent(QFocusEvent *e) override;
+   void changeEvent(QEvent *e) override;
+   void resizeEvent(QResizeEvent *e) override;
+   void paintEvent(QPaintEvent *e) override;
+   void showEvent(QShowEvent *e) override;
+   void hideEvent(QHideEvent *e) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *e) override;
+   void keyPressEvent(QKeyEvent *e) override;
+   void keyReleaseEvent(QKeyEvent *e) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *e);
+   void wheelEvent(QWheelEvent *e) override;
 #endif
 
-   void contextMenuEvent(QContextMenuEvent *e);
-   void inputMethodEvent(QInputMethodEvent *);
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const;
+   void contextMenuEvent(QContextMenuEvent *e) override;
+   void inputMethodEvent(QInputMethodEvent *) override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
    void initStyleOption(QStyleOptionComboBox *option) const;
  
    QComboBox(QComboBoxPrivate &, QWidget *);

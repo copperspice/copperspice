@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
    double value() const;
    int intValue() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    // wrapper for overloaded method
    inline void cs_displayD(double num);
@@ -130,8 +130,8 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
    GUI_CS_SIGNAL_2(overflow)
 
  protected:
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *);
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *) override;
 
  private:
    Q_DISABLE_COPY(QLCDNumber)

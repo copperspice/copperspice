@@ -45,27 +45,27 @@ class QGraphicsSceneLinearIndex : public QGraphicsSceneIndex
    QGraphicsSceneLinearIndex(QGraphicsScene *scene = 0) : QGraphicsSceneIndex(scene) {
    }
 
-   QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const {
+   QList<QGraphicsItem *> items(Qt::SortOrder order = Qt::DescendingOrder) const override {
       Q_UNUSED(order);
       return m_items;
    }
 
-   virtual QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const {
+   virtual QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const override {
       Q_UNUSED(rect);
       Q_UNUSED(order);
       return m_items;
    }
 
  protected :
-   virtual void clear() {
+   virtual void clear() override {
       m_items.clear();
    }
 
-   virtual void addItem(QGraphicsItem *item) {
+   virtual void addItem(QGraphicsItem *item) override {
       m_items << item;
    }
 
-   virtual void removeItem(QGraphicsItem *item) {
+   virtual void removeItem(QGraphicsItem *item) override {
       m_items.removeOne(item);
    }
 

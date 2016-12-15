@@ -73,8 +73,8 @@ class Q_GUI_EXPORT QSplitter : public QFrame
    bool opaqueResize() const;
    void refresh();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    QList<int> sizes() const;
    void setSizes(const QList<int> &list);
@@ -100,12 +100,12 @@ class Q_GUI_EXPORT QSplitter : public QFrame
  protected:
    virtual QSplitterHandle *createHandle();
 
-   void childEvent(QChildEvent *);
+   void childEvent(QChildEvent *) override;
 
-   bool event(QEvent *);
-   void resizeEvent(QResizeEvent *);
+   bool event(QEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
 
-   void changeEvent(QEvent *);
+   void changeEvent(QEvent *) override;
    void moveSplitter(int pos, int index);
    void setRubberBand(int position);
    int closestLegalPosition(int, int);
@@ -131,15 +131,15 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
    bool opaqueResize() const;
    QSplitter *splitter() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void resizeEvent(QResizeEvent *);
-   bool event(QEvent *);
+   void paintEvent(QPaintEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
+   bool event(QEvent *) override;
 
    void moveSplitter(int p);
    int closestLegalPosition(int p);

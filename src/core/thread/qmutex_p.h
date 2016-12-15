@@ -108,7 +108,7 @@ class QRecursiveMutexPrivate : public QMutexData
  public:
    QRecursiveMutexPrivate()
       : QMutexData(QMutex::Recursive), owner(0), count(0) {}
-   Qt::HANDLE owner;
+   std::atomic<Qt::HANDLE> owner;
    uint count;
    QMutex mutex;
 

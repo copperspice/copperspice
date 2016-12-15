@@ -56,11 +56,11 @@ class Q_GUI_EXPORT QInputContextPlugin : public QObject, public QInputContextFac
    explicit QInputContextPlugin(QObject *parent = 0);
    ~QInputContextPlugin();
 
-   virtual QStringList keys() const = 0;
-   virtual QInputContext *create( const QString &key ) = 0;
-   virtual QStringList languages( const QString &key ) = 0;
-   virtual QString displayName( const QString &key ) = 0;
-   virtual QString description( const QString &key ) = 0;
+   virtual QStringList keys() const override = 0;
+   virtual QInputContext *create( const QString &key ) override = 0;
+   virtual QStringList languages( const QString &key ) override = 0;
+   virtual QString displayName( const QString &key ) override = 0;
+   virtual QString description( const QString &key ) override = 0;
 };
 
 #endif // QT_NO_IM

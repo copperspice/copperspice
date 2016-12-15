@@ -151,8 +151,8 @@ class Q_GUI_EXPORT QCompleter : public QObject
    GUI_CS_SIGNAL_OVERLOAD(highlighted, (const QModelIndex &), index)
 
  protected:
-   bool eventFilter(QObject *o, QEvent *e);
-   bool event(QEvent *);
+   bool eventFilter(QObject *o, QEvent *e) override;
+   bool event(QEvent *) override;
    QScopedPointer<QCompleterPrivate> d_ptr;
 
  private:

@@ -80,13 +80,13 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
    explicit QPrintDialog(QWidget *parent = 0);
    ~QPrintDialog();
 
-   int exec();
+   int exec() override;
 
 #if defined (Q_OS_UNIX) && !defined(Q_OS_MAC)
    virtual void accept();
 #endif
 
-   void done(int result);
+   void done(int result) override;
    void setOption(PrintDialogOption option, bool on = true);
    bool testOption(PrintDialogOption option) const;
    void setOptions(PrintDialogOptions options);
@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
    PrintDialogOptions options() const;
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC) || defined(Q_OS_WIN)
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 #endif
 
    using QDialog::open;

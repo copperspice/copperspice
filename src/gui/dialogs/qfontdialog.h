@@ -74,7 +74,7 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
 
    void open(QObject *receiver, const char *member);
 
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 
    // ### Qt5/merge overloads
    static QFont getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title,
@@ -89,12 +89,12 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    GUI_CS_SIGNAL_2(fontSelected, font)
 
  protected:
-   void changeEvent(QEvent *event);
-   void done(int result);
+   void changeEvent(QEvent *event) override;
+   void done(int result) override;
 
  private:
    // ### Qt5/make protected
-   bool eventFilter(QObject *object, QEvent *event);
+   bool eventFilter(QObject *object, QEvent *event) override;
 
    Q_DISABLE_COPY(QFontDialog)
 

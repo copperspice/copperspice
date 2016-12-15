@@ -129,19 +129,19 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    QWidget *labelForField(QLayout *field) const;
 
    // reimplemented from QLayout
-   void addItem(QLayoutItem *item);
-   QLayoutItem *itemAt(int index) const;
-   QLayoutItem *takeAt(int index);
+   void addItem(QLayoutItem *item) override;
+   QLayoutItem *itemAt(int index) const override;
+   QLayoutItem *takeAt(int index) override;
 
-   void setGeometry(const QRect &rect);
-   QSize minimumSize() const;
-   QSize sizeHint() const;
-   void invalidate();
+   void setGeometry(const QRect &rect) override;
+   QSize minimumSize() const override;
+   QSize sizeHint() const override;
+   void invalidate() override;
 
-   bool hasHeightForWidth() const;
-   int heightForWidth(int width) const;
-   Qt::Orientations expandingDirections() const;
-   int count() const;
+   bool hasHeightForWidth() const override;
+   int heightForWidth(int width) const override;
+   Qt::Orientations expandingDirections() const override;
+   int count() const override;
 
    int rowCount() const;
 

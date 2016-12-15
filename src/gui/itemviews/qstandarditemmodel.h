@@ -346,36 +346,36 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    QStandardItemModel(int rows, int columns, QObject *parent = 0);
    ~QStandardItemModel();
 
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-   QModelIndex parent(const QModelIndex &child) const;
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+   QModelIndex parent(const QModelIndex &child) const override;
 
-   int rowCount(const QModelIndex &parent = QModelIndex()) const;
-   int columnCount(const QModelIndex &parent = QModelIndex()) const;
-   bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
-   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
    QVariant headerData(int section, Qt::Orientation orientation,
-                       int role = Qt::DisplayRole) const;
+                       int role = Qt::DisplayRole) const override;
    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                      int role = Qt::EditRole);
+                      int role = Qt::EditRole) override;
 
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-   Qt::ItemFlags flags(const QModelIndex &index) const;
-   Qt::DropActions supportedDropActions() const;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
+   Qt::DropActions supportedDropActions() const override;
 
-   QMap<int, QVariant> itemData(const QModelIndex &index) const;
-   bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+   QMap<int, QVariant> itemData(const QModelIndex &index) const override;
+   bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
 
    void clear();
    using QObject::parent;
 
-   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
    QStandardItem *itemFromIndex(const QModelIndex &index) const;
    QModelIndex indexFromItem(const QStandardItem *item) const;
@@ -422,9 +422,9 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    int sortRole() const;
    void setSortRole(int role);
 
-   QStringList mimeTypes() const;
-   QMimeData *mimeData(const QModelIndexList &indexes) const;
-   bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+   QStringList mimeTypes() const override;
+   QMimeData *mimeData(const QModelIndexList &indexes) const override;
+   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
    GUI_CS_SIGNAL_1(Public, void itemChanged(QStandardItem *item))
    GUI_CS_SIGNAL_2(itemChanged, item)

@@ -68,11 +68,12 @@ QMetaMethod::Attributes QMetaMethod::attributes() const
    return m_attributes;
 }
 
-bool QMetaMethod::compare(const BentoAbstract &method) const
+bool QMetaMethod::compare(const CsSignal::Internal::BentoAbstract &method) const
 {
    bool ok = false;
 
    if (m_bento) {
+
       if (*m_bento == method) {
          ok = true;
       }
@@ -81,7 +82,7 @@ bool QMetaMethod::compare(const BentoAbstract &method) const
    return ok;
 }
 
-const BentoAbstract *QMetaMethod::getBentoBox() const
+const CSBentoAbstract *QMetaMethod::getBentoBox() const
 {
    return m_bento;
 }
@@ -213,7 +214,7 @@ int QMetaMethod::revision() const
    return m_revision;
 }
 
-void QMetaMethod::setBentoBox(const BentoAbstract *method)
+void QMetaMethod::setBentoBox(const CSBentoAbstract *method)
 {
    m_bento = method;
 }

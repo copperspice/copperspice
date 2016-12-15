@@ -45,19 +45,19 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    explicit QScrollBar(Qt::Orientation, QWidget *parent = 0);
    ~QScrollBar();
 
-   QSize sizeHint() const;
-   bool event(QEvent *event);
+   QSize sizeHint() const override;
+   bool event(QEvent *event) override;
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void hideEvent(QHideEvent *);
-   void sliderChange(SliderChange change);
+   void paintEvent(QPaintEvent *) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void hideEvent(QHideEvent *) override;
+   void sliderChange(SliderChange change) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *);
+   void contextMenuEvent(QContextMenuEvent *) override;
 #endif
 
    void initStyleOption(QStyleOptionSlider *option) const;

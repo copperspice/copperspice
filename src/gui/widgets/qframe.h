@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
 
    int frameWidth() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    enum Shape {
       NoFrame  = 0, // no frame
@@ -98,9 +98,9 @@ class Q_GUI_EXPORT QFrame : public QWidget
    void setFrameRect(const QRect &);
 
  protected:
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *);
-   void changeEvent(QEvent *);
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *) override;
+   void changeEvent(QEvent *) override;
    void drawFrame(QPainter *);
 
    QFrame(QFramePrivate &dd, QWidget *parent = 0, Qt::WindowFlags f = 0);

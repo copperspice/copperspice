@@ -1114,8 +1114,7 @@ class Q_CORE_EXPORT Qt
    enum ConnectionType {
       AutoConnection,
       DirectConnection,
-      QueuedConnection,
-      AutoCompatConnection,
+      QueuedConnection,     
       BlockingQueuedConnection,
       UniqueConnection =  0x80
    };

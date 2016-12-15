@@ -54,10 +54,10 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    explicit QTableView(QWidget *parent = 0);
    ~QTableView();
 
-   void setModel(QAbstractItemModel *model);
-   void setRootIndex(const QModelIndex &index);
-   void setSelectionModel(QItemSelectionModel *selectionModel);
-   void doItemsLayout();
+   void setModel(QAbstractItemModel *model) override;
+   void setRootIndex(const QModelIndex &index) override;
+   void setSelectionModel(QItemSelectionModel *selectionModel) override;
+   void doItemsLayout() override;
 
    QHeaderView *horizontalHeader() const;
    QHeaderView *verticalHeader() const;
@@ -96,9 +96,9 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    void setCornerButtonEnabled(bool enable);
    bool isCornerButtonEnabled() const;
 
-   QRect visualRect(const QModelIndex &index) const;
-   void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
-   QModelIndex indexAt(const QPoint &p) const;
+   QRect visualRect(const QModelIndex &index) const override;
+   void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
+   QModelIndex indexAt(const QPoint &p) const override;
 
    void setSpan(int row, int column, int rowSpan, int columnSpan);
    int rowSpan(int row, int column) const;
@@ -158,33 +158,33 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    GUI_CS_SLOT_2(columnCountChanged)
 
    QTableView(QTableViewPrivate &, QWidget *parent);
-   void scrollContentsBy(int dx, int dy);
+   void scrollContentsBy(int dx, int dy) override;
 
-   QStyleOptionViewItem viewOptions() const;
-   void paintEvent(QPaintEvent *e);
+   QStyleOptionViewItem viewOptions() const override;
+   void paintEvent(QPaintEvent *e) override;
 
-   void timerEvent(QTimerEvent *event);
+   void timerEvent(QTimerEvent *event) override;
 
-   int horizontalOffset() const;
-   int verticalOffset() const;
-   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+   int horizontalOffset() const override;
+   int verticalOffset() const override;
+   QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
 
-   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
-   QRegion visualRegionForSelection(const QItemSelection &selection) const;
-   QModelIndexList selectedIndexes() const;
+   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+   QRegion visualRegionForSelection(const QItemSelection &selection) const override;
+   QModelIndexList selectedIndexes() const override;
 
-   void updateGeometries();
+   void updateGeometries() override;
 
-   int sizeHintForRow(int row) const;
-   int sizeHintForColumn(int column) const;
+   int sizeHintForRow(int row) const override;
+   int sizeHintForColumn(int column) const override;
 
-   void verticalScrollbarAction(int action);
-   void horizontalScrollbarAction(int action);
+   void verticalScrollbarAction(int action) override;
+   void horizontalScrollbarAction(int action) override;
 
-   bool isIndexHidden(const QModelIndex &index) const;
+   bool isIndexHidden(const QModelIndex &index) const override;
 
-   void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-   void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+   void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
+   void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
  private:
    friend class QAccessibleItemView;
