@@ -145,7 +145,18 @@ private :
     bool wasAborted() const { return !m_resourceHandle; }
     QNetworkReply* sendNetworkRequest(QNetworkAccessManager*, const ResourceRequest&);
 
-    OwnPtr<QNetworkReplyWrapper> m_replyWrapper;
+    class Deleter {
+    public:
+	void operator()(QNetworkReplyWrapper* data)
+	{
+	    if(data != nullptr) {
+  		data->deleteLater();
+		
+	    }
+	}
+    };
+    
+    std::unique_ptr<QNetworkReplyWrapper, Deleter> m_replyWrapper;
     ResourceHandle* m_resourceHandle;
     LoadType m_loadType;
     QNetworkAccessManager::Operation m_method;

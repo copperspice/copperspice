@@ -3139,6 +3139,21 @@ static inline uint msecsFromDecomposed(int hour, int minute, int sec, int msec =
    return MSECS_PER_HOUR * hour + MSECS_PER_MIN * minute + 1000 * sec + msec;
 }
 
+static void internal_tzset()
+{
+   static std::atomic<bool> setTimeZone(false);
+
+   if (! setTimeZone)  {
+      static std::mutex timeZoneMutex;
+      std::lock_guard<std::mutex> lock(timeZoneMutex);
+      
+      if (! setTimeZone) {
+         tzset();       
+         setTimeZone = true;
+      }
+   } 
+}
+
 #if defined(Q_OS_WIN)
 QDate QDate::currentDate()
 {
@@ -3199,6 +3214,7 @@ qint64 QDateTime::currentMSecsSinceEpoch()
 }
 
 #elif defined(Q_OS_UNIX)
+
 QDate QDate::currentDate()
 {
    QDate d;
@@ -3209,7 +3225,8 @@ QDate QDate::currentDate()
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
    // use the reentrant version of localtime() where available
-   tzset();
+   internal_tzset();
+     
    struct tm res;
    t = localtime_r(&ltime, &res);
 #else
@@ -3231,7 +3248,7 @@ QTime QTime::currentTime()
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
    // use the reentrant version of localtime() where available
-   tzset();
+   internal_tzset();
    struct tm res;
    t = localtime_r(&ltime, &res);
 #else
@@ -3254,7 +3271,7 @@ QDateTime QDateTime::currentDateTime()
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
    // use the reentrant version of localtime() where available
-   tzset();
+   internal_tzset();
    struct tm res;
    t = localtime_r(&ltime, &res);
 #else
@@ -4221,13 +4238,14 @@ static QDateTimePrivate::Spec utcToLocal(QDate &date, QTime &time)
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
    // use the reentrant version of localtime() where available
-   tzset();
+   internal_tzset();
    tm res;
    brokenDown = localtime_r(&secsSince1Jan1970UTC, &res);
 #else
    brokenDown = localtime(&secsSince1Jan1970UTC);
 #endif
-   if (!brokenDown) {
+
+   if (! brokenDown) {
       date = QDate(1970, 1, 1);
       time = QTime();
       return QDateTimePrivate::LocalUnknown;
@@ -4279,7 +4297,7 @@ static void localToUtc(QDate &date, QTime &time, int isdst)
    brokenDown = gmtime(&secsSince1Jan1970UTC);
 #endif // _POSIX_THREAD_SAFE_FUNCTIONS
 
-   if (!brokenDown) {
+   if (! brokenDown) {
       date = QDate(1970, 1, 1);
       time = QTime();
    } else {
