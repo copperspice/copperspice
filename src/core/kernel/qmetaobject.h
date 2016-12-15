@@ -69,13 +69,13 @@ class Q_CORE_EXPORT QMetaObject
    int indexOfConstructor(const char *constructor) const;
    int indexOfEnumerator(const char *name) const;
    int indexOfMethod(const char *method) const;
-   int indexOfMethod(const BentoAbstract &temp) const;
+   int indexOfMethod(const CsSignal::Internal::BentoAbstract &temp) const;
    int indexOfProperty(const char *name) const;
    int indexOfSignal(const char *signal) const;
    int indexOfSlot(const char *slot) const;
 
    virtual QMetaMethod method(int index) const = 0;
-   QMetaMethod method(const BentoAbstract &temp) const;
+   QMetaMethod method(const CSBentoAbstract &temp) const;
 
    virtual int methodCount() const = 0;
    int methodOffset() const;
@@ -96,11 +96,7 @@ class Q_CORE_EXPORT QMetaObject
    static bool checkConnectArgs(const QMetaMethod &signal, const QMetaMethod &method);
    static QByteArray normalizedSignature(const char *method);
    static QByteArray normalizedType(const char *type);
-
-   //
-   template<class SignalClass, class ...SignalArgTypes, class ...Ts>
-   static void activate(QObject *sender, void (SignalClass::*signal)(SignalArgTypes...), Ts &&...  Vs);
-
+     
    template<class T>
    static QMetaEnum findEnum();
 
@@ -132,8 +128,7 @@ class Q_CORE_EXPORT QMetaObject
    int enum_calculate(QString enumData, QMap<QByteArray, int> valueMap);
 
  private:
-   static QByteArray getType(const char *fullName);
-   static bool compareThreads(Qt::HANDLE currentThreadId, QObject *receiver);
+   static QByteArray getType(const char *fullName);   
 };
 
 template<class T>
@@ -168,7 +163,7 @@ QMetaMethod QMetaObject::method( void (MethodClass::*methodPtr)(MethodArgs...) )
    QMetaMethod retval;
    const int count = methodCount();
 
-   Bento<void (MethodClass::*)(MethodArgs...)> temp = methodPtr;
+   CSBento<void (MethodClass::*)(MethodArgs...)> temp = methodPtr;
 
    for (int index = 0; index < count; ++index)  {
       QMetaMethod metaMethod = method(index);
@@ -338,7 +333,7 @@ template<class T>
 template<class U>
 void QMetaObject_T<T>::register_method_rev(U method, int revision)
 {
-   Bento<U> temp = Bento<U>(method);
+   CSBento<U> temp = CSBento<U>(method);
 
    QString tokenName;
    QMetaMethod data;
@@ -413,7 +408,7 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
          data = item.value();
       }
 
-      Bento<U> *temp = new Bento<U>(method);
+      CSBento<U> *temp = new CSBento<U>(method);
       data.setBentoBox(temp);
 
       // update master map
@@ -443,7 +438,7 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
          data = index.value();
 
          //
-         Bento<U> *temp = new Bento<U>(method);
+         CSBento<U> *temp = new CSBento<U>(method);
          data.setBentoBox(temp);
 
          // update existing obj
@@ -503,7 +498,7 @@ void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::
       // save the key/value into the master map
       QMetaMethod data(typeReturn, tokenData, tempNames, access, kind, attr, this);
 
-      Bento<U> *temp = new Bento<U>(method);
+      CSBento<U> *temp = new CSBento<U>(method);
       data.setBentoBox(temp);
 
       if (kind == QMetaMethod::Constructor) {

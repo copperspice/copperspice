@@ -47,8 +47,8 @@ class QAnimationGroupPrivate : public QAbstractAnimationPrivate
    virtual void animationRemoved(int, QAbstractAnimation *);
 
    void disconnectUncontrolledAnimation(QAbstractAnimation *anim) {
-      //0 for the signal here because we might be called from the animation destructor
-      QObject::disconnect(anim, 0, q_func(), SLOT(_q_uncontrolledAnimationFinished()));
+      // nullptr as the signal, might be called from the animation destructor
+      QObject::disconnect(anim, nullptr, q_func(), SLOT(_q_uncontrolledAnimationFinished()));
    }
 
    void connectUncontrolledAnimation(QAbstractAnimation *anim) {
