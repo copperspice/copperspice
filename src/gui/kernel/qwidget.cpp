@@ -311,10 +311,12 @@ class QDummyWindowSurface : public QWindowSurface
 {
  public:
    QDummyWindowSurface(QWidget *window) : QWindowSurface(window) {}
-   QPaintDevice *paintDevice() {
+
+   QPaintDevice *paintDevice() override {
       return window();
    }
-   void flush(QWidget *, const QRegion &, const QPoint &) {}
+
+   void flush(QWidget *, const QRegion &, const QPoint &) override {}
 };
 
 QWindowSurface *QWidgetPrivate::createDefaultWindowSurface()
@@ -322,6 +324,7 @@ QWindowSurface *QWidgetPrivate::createDefaultWindowSurface()
    Q_Q(QWidget);
 
    QWindowSurface *surface;
+
 #ifndef QT_NO_PROPERTIES
    if (q->property("_q_DummyWindowSurface").toBool()) {
       surface = new QDummyWindowSurface(q);

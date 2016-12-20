@@ -56,8 +56,8 @@ class QBasicKeyEventTransition : public QAbstractTransition
    void setModifierMask(Qt::KeyboardModifiers modifiers);
 
  protected:
-   bool eventTest(QEvent *event);
-   void onTransition(QEvent *);
+   bool eventTest(QEvent *event) override;
+   void onTransition(QEvent *) override;
 
  private:
    Q_DISABLE_COPY(QBasicKeyEventTransition)

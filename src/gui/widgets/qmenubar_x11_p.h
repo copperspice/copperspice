@@ -39,23 +39,19 @@ class QX11MenuBar : public QAbstractPlatformMenuBar
  public:
    ~QX11MenuBar();
 
-   virtual void init(QMenuBar *);
+   void init(QMenuBar *) override;
 
-   virtual void setVisible(bool visible);
+   void setVisible(bool visible) override;
+   void actionEvent(QActionEvent *e) override;
+   void handleReparent(QWidget *oldParent, QWidget *newParent, QWidget *oldWindow, QWidget *newWindow) override;
+   bool allowCornerWidgets() const override;
+   void popupAction(QAction *) override;
 
-   virtual void actionEvent(QActionEvent *e);
+   void setNativeMenuBar(bool) override;
+   bool isNativeMenuBar() const override;
 
-   virtual void handleReparent(QWidget *oldParent, QWidget *newParent, QWidget *oldWindow, QWidget *newWindow);
-
-   virtual bool allowCornerWidgets() const;
-
-   virtual void popupAction(QAction *);
-
-   virtual void setNativeMenuBar(bool);
-   virtual bool isNativeMenuBar() const;
-
-   virtual bool shortcutsHandledByNativeMenuBar() const;
-   virtual bool menuBarEventFilter(QObject *, QEvent *event);
+   bool shortcutsHandledByNativeMenuBar() const override;
+   bool menuBarEventFilter(QObject *, QEvent *event) override;
 
  private:
    QMenuBar *menuBar;

@@ -179,7 +179,7 @@ class QTabWidgetPrivate : public QWidgetPrivate
    void _q_removeTab(int);
    void _q_tabMoved(int from, int to);
    void init();
-   bool hasHeightForWidth() const;
+   bool hasHeightForWidth() const override;
 
    QTabBar *tabs;
    QStackedWidget *stack;

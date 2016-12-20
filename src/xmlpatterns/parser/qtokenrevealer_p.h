@@ -35,15 +35,13 @@ namespace QPatternist {
 class TokenRevealer : public Tokenizer
 {
  public:
-   TokenRevealer(const QUrl &uri,
-                 const Tokenizer::Ptr &other);
-
+   TokenRevealer(const QUrl &uri, const Tokenizer::Ptr &other); 
    virtual ~TokenRevealer();
 
-   virtual Token nextToken(YYLTYPE *const sourceLocator);
-   virtual int commenceScanOnly();
-   virtual void resumeTokenizationFrom(const int position);
-   virtual void setParserContext(const ParserContext::Ptr &parseInfo);
+   Token nextToken(YYLTYPE *const sourceLocator) override;
+   int commenceScanOnly() override;
+   void resumeTokenizationFrom(const int position) override;
+   void setParserContext(const ParserContext::Ptr &parseInfo) override;
 
  private:
    const Tokenizer::Ptr    m_tokenizer;

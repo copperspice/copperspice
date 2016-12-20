@@ -49,12 +49,12 @@ class XsdSchemaTypesFactory : public SchemaTypeFactory
     *
     * @note This does not handle user defined types, only builtin types.
     */
-   virtual SchemaType::Ptr createSchemaType(const QXmlName) const;
+   SchemaType::Ptr createSchemaType(const QXmlName) const override;
 
    /**
     * Returns a hash of all available types.
     */
-   virtual SchemaType::Hash types() const;
+   SchemaType::Hash types() const override;
 
  private:
    /**

@@ -35,15 +35,13 @@ namespace QPatternist {
 class TripleContainer : public Expression
 {
  public:
-   virtual Expression::List operands() const;
-   virtual void setOperands(const Expression::List &operands);
+   Expression::List operands() const override;
+   void setOperands(const Expression::List &operands) override;
 
-   virtual bool compressOperands(const StaticContext::Ptr &);
+   bool compressOperands(const StaticContext::Ptr &) override;
 
  protected:
-   TripleContainer(const Expression::Ptr &operand1,
-                   const Expression::Ptr &operand2,
-                   const Expression::Ptr &operand3);
+   TripleContainer(const Expression::Ptr &operand1, const Expression::Ptr &operand2, const Expression::Ptr &operand3);
 
    Expression::Ptr m_operand1;
    Expression::Ptr m_operand2;

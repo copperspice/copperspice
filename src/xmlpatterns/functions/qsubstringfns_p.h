@@ -34,32 +34,32 @@ namespace QPatternist {
 class ContainsFN : public ComparesCaseAware
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class StartsWithFN : public ComparesCaseAware
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class EndsWithFN : public ComparesCaseAware
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
 class SubstringBeforeFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class SubstringAfterFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 }
 

@@ -99,15 +99,15 @@ namespace Phonon
             ~QAudioCDReader();
 
             //reimplementation from IUnknown
-            STDMETHODIMP_(ULONG) AddRef();
-            STDMETHODIMP_(ULONG) Release();
+            STDMETHODIMP_(ULONG) AddRef() override;
+            STDMETHODIMP_(ULONG) Release() override;
 
-            STDMETHODIMP Length(LONGLONG *,LONGLONG *);
-            STDMETHODIMP QueryInterface(REFIID iid, void** out);
-            QList<qint64> titles() const;
+            STDMETHODIMP Length(LONGLONG *,LONGLONG *) override;
+            STDMETHODIMP QueryInterface(REFIID iid, void** out) override;
+            QList<qint64> titles() const override;
 
         protected:
-            HRESULT read(LONGLONG pos, LONG length, BYTE *buffer, LONG *actual);
+            HRESULT read(LONGLONG pos, LONG length, BYTE *buffer, LONG *actual) override;
 
         private:
             HANDLE m_cddrive;

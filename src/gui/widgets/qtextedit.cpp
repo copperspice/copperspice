@@ -66,21 +66,23 @@ class QTextEditControl : public QTextControl
  public:
    inline QTextEditControl(QObject *parent) : QTextControl(parent) {}
 
-   virtual QMimeData *createMimeDataFromSelection() const {
+   QMimeData *createMimeDataFromSelection() const override {
       QTextEdit *ed = qobject_cast<QTextEdit *>(parent());
       if (!ed) {
          return QTextControl::createMimeDataFromSelection();
       }
       return ed->createMimeDataFromSelection();
    }
-   virtual bool canInsertFromMimeData(const QMimeData *source) const {
+
+   bool canInsertFromMimeData(const QMimeData *source) const override {
       QTextEdit *ed = qobject_cast<QTextEdit *>(parent());
       if (!ed) {
          return QTextControl::canInsertFromMimeData(source);
       }
       return ed->canInsertFromMimeData(source);
    }
-   virtual void insertFromMimeData(const QMimeData *source) {
+
+   void insertFromMimeData(const QMimeData *source) override {
       QTextEdit *ed = qobject_cast<QTextEdit *>(parent());
       if (!ed) {
          QTextControl::insertFromMimeData(source);

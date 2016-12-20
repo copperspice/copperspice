@@ -36,11 +36,11 @@ class AttributeNameValidator : public SingleContainer
  public:
    AttributeNameValidator(const Expression::Ptr &source);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

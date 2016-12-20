@@ -32,8 +32,6 @@
 
 QT_BEGIN_NAMESPACE
 
-// #define QFIXED_IS_26_6
-
 #if defined QFIXED_IS_26_6
 typedef int qfixed;
 
@@ -50,6 +48,7 @@ struct qfixed2d {
       return x == other.x && y == other.y;
    }
 };
+
 #elif defined QFIXED_IS_32_32
 typedef qint64 qfixed;
 #define qt_real_to_fixed(real) qfixed(real * double(qint64(1) << 32))
@@ -253,7 +252,7 @@ class Q_GUI_EXPORT QStroker : public QStrokerOps
    static Qt::PenJoinStyle joinForJoinMode(LineJoinMode mode);
    static LineJoinMode joinModeForJoin(Qt::PenJoinStyle joinStyle);
 
-   virtual void processCurrentSubpath();
+   void processCurrentSubpath() override;
 
    qfixed m_strokeWidth;
    qfixed m_miterLimit;
@@ -293,18 +292,19 @@ class Q_GUI_EXPORT QDashStroker : public QStrokerOps
       return m_dashOffset;
    }
 
-   virtual void begin(void *data);
-   virtual void end();
+   void begin(void *data) override;
+   void end() override;
 
    inline void setStrokeWidth(qreal width) {
       m_stroke_width = width;
    }
+
    inline void setMiterLimit(qreal limit) {
       m_miter_limit = limit;
    }
 
  protected:
-   virtual void processCurrentSubpath();
+   void processCurrentSubpath() override;
 
    QStroker *m_stroker;
    QVector<qfixed> m_dashPattern;
@@ -313,11 +313,6 @@ class Q_GUI_EXPORT QDashStroker : public QStrokerOps
    qreal m_stroke_width;
    qreal m_miter_limit;
 };
-
-
-/*******************************************************************************
- * QStrokerOps inline membmers
- */
 
 inline void QStrokerOps::emitMoveTo(qfixed x, qfixed y)
 {

@@ -62,9 +62,9 @@ namespace Phonon
                 setAutoFillBackground(false);
             }
 
-            QPaintEngine* paintEngine() const
+            QPaintEngine* paintEngine() const override
             {
-                return 0;
+                return nullptr;
             }
 
             bool isEmbedded() const
@@ -78,7 +78,7 @@ namespace Phonon
                 return (dev && dev != this);
             }
 
-            void resizeEvent(QResizeEvent *e)
+            void resizeEvent(QResizeEvent *e) override
             {
                 m_node->updateVideoSize();
                 QWidget::resizeEvent(e);
@@ -98,7 +98,7 @@ namespace Phonon
                 m_flickerFreeTimer.start(20, this);
             }
 
-            void timerEvent(QTimerEvent *e)
+            void timerEvent(QTimerEvent *e) override
             {
                 if (e->timerId() == m_flickerFreeTimer.timerId()) {
                     m_flickerFreeTimer.stop();
@@ -107,27 +107,29 @@ namespace Phonon
                 QWidget::timerEvent(e);
             }
 
-            QSize sizeHint() const
+            QSize sizeHint() const override
             {
                 return m_currentRenderer->sizeHint().expandedTo(QWidget::sizeHint());
             }
 
-            void changeEvent(QEvent *e)
+            void changeEvent(QEvent *e) override
             {
                 checkCurrentRenderingMode();
                 QWidget::changeEvent(e);
             }
 
-            void setVisible(bool visible)
+            void setVisible(bool visible) override
             {
                 checkCurrentRenderingMode();
                 QWidget::setVisible(visible);
             }
 
-            void paintEvent(QPaintEvent *e)
+            void paintEvent(QPaintEvent *e) override
             {
-                if (!updatesEnabled())
+                if (! updatesEnabled()) {
                     return; //this avoids repaint from native events
+                }
+
                 checkCurrentRenderingMode();
                 m_currentRenderer->repaintCurrentFrame(this, e->rect());
             }

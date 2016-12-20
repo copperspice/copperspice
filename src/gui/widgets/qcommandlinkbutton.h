@@ -50,11 +50,11 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    void setDescription(const QString &description);
 
  protected:
-   QSize sizeHint() const;
-   int heightForWidth(int) const;
-   QSize minimumSizeHint() const;
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *);
+   QSize sizeHint() const override;
+   int heightForWidth(int) const override;
+   QSize minimumSizeHint() const override;
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *) override;
 
  private:
    Q_DISABLE_COPY(QCommandLinkButton)

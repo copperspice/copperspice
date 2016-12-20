@@ -38,11 +38,11 @@ class StaticBaseUriContainer : public FunctionCall
    inline StaticBaseUriContainer() {
    }
 
-   inline void prepareStaticBaseURI(const StaticContext::Ptr &context) {
+   void prepareStaticBaseURI(const StaticContext::Ptr &context) {
       m_staticBaseURI = context->baseURI();
    }
 
-   inline const QUrl &staticBaseURI() const {
+   const QUrl &staticBaseURI() const {
       return m_staticBaseURI;
    }
 
@@ -50,8 +50,7 @@ class StaticBaseUriContainer : public FunctionCall
     * Calls prepareStaticBaseURI(), and return the return value of
     * FunctionCall::typeCheck(), forwarding the arguments.
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType) {
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override {
       prepareStaticBaseURI(context);
       return FunctionCall::typeCheck(context, reqType);
    }

@@ -35,25 +35,22 @@ namespace QPatternist {
 class ElementConstructor : public PairContainer
 {
  public:
-   ElementConstructor(const Expression::Ptr &operand1,
-                      const Expression::Ptr &operand2,
-                      const bool isXSLT);
+   ElementConstructor(const Expression::Ptr &operand1, const Expression::Ptr &operand2, const bool isXSLT);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * The first operand must be exactly one @c xs:QName, and the second
     * argument can be zero or more items.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual Properties properties() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   Properties properties() const override;
 
  private:
    QUrl m_staticBaseURI;

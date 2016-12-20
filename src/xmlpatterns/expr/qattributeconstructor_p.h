@@ -36,25 +36,25 @@ class AttributeConstructor : public PairContainer
  public:
    AttributeConstructor(const Expression::Ptr &operand1, const Expression::Ptr &operand2);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * The first operand must be exactly one @c xs:QName, and the second
     * argument can be zero or more items.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * @returns always IDAttributeConstructor.
     */
-   virtual ID id() const;
+   ID id() const override;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
  private:
    static inline QString processValue(const QXmlName name, const Item &value);

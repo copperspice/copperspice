@@ -181,7 +181,7 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SLOT_2(iconProvider)
 
  protected:
-   void run();
+   void run() override;
    void getFileInfos(const QString &path, const QStringList &files);
 
  private:

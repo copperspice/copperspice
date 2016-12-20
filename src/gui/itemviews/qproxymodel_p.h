@@ -37,22 +37,28 @@ class QEmptyModel : public QAbstractItemModel
 {
  public:
    explicit QEmptyModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
-   QModelIndex index(int, int, const QModelIndex &) const {
+
+   QModelIndex index(int, int, const QModelIndex &) const override {
       return QModelIndex();
    }
-   QModelIndex parent(const QModelIndex &) const {
+
+   QModelIndex parent(const QModelIndex &) const override {
       return QModelIndex();
    }
-   int rowCount(const QModelIndex &) const {
+
+   int rowCount(const QModelIndex &) const override {
       return 0;
    }
-   int columnCount(const QModelIndex &) const {
+
+   int columnCount(const QModelIndex &) const override {
       return 0;
    }
-   bool hasChildren(const QModelIndex &) const {
+
+   bool hasChildren(const QModelIndex &) const override {
       return false;
    }
-   QVariant data(const QModelIndex &, int) const {
+
+   QVariant data(const QModelIndex &, int) const override {
       return QVariant();
    }
 };

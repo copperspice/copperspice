@@ -95,8 +95,8 @@ class Q_SVG_EXPORT QSvgGenerator : public QPaintDevice
    int resolution() const;
 
  protected:
-   QPaintEngine *paintEngine() const;
-   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   QPaintEngine *paintEngine() const override;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
 
  private:
    QScopedPointer<QSvgGeneratorPrivate> d_ptr;

@@ -44,11 +44,11 @@ class QFSFileEngineIterator : public QAbstractFileEngineIterator
    QFSFileEngineIterator(QDir::Filters filters, const QStringList &filterNames);
    ~QFSFileEngineIterator();
 
-   QString next();
-   bool hasNext() const;
+   QString next() override;
+   bool hasNext() const override;
 
-   QString currentFileName() const;
-   QFileInfo currentFileInfo() const;
+   QString currentFileName() const override;
+   QFileInfo currentFileInfo() const override;
 
  private:
    void advance() const;

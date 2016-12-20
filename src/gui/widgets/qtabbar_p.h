@@ -47,11 +47,11 @@ class QTabBarPrivate  : public QWidgetPrivate
 
  public:
    QTabBarPrivate()
-      : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false),
-        drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false), expanding(true),
-        closeButtonOnTabs(false),
-        selectionBehaviorOnRemove(QTabBar::SelectRightTab), paintWithOffsets(true), movable(false),
-        dragInProgress(false), documentMode(false), movingTab(0)
+                  : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false), 
+                  drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false), 
+                  expanding(true), closeButtonOnTabs(false), selectionBehaviorOnRemove(QTabBar::SelectRightTab), 
+                  paintWithOffsets(true), movable(false), dragInProgress(false), documentMode(false), movingTab(0)
+
 #ifdef Q_OS_MAC
         , previousPressedIndex(-1)
 #endif
@@ -66,8 +66,9 @@ class QTabBarPrivate  : public QWidgetPrivate
 
    struct Tab {
       inline Tab(const QIcon &ico, const QString &txt)
-         : enabled(true) , shortcutId(0), text(txt), icon(ico),
-           leftWidget(0), rightWidget(0), lastTab(-1), dragOffset(0)
+                  : enabled(true) , shortcutId(0), text(txt), icon(ico), leftWidget(0), rightWidget(0), 
+                  lastTab(-1), dragOffset(0)
+
 #ifndef QT_NO_ANIMATION
            , animation(0)
 #endif
@@ -76,6 +77,7 @@ class QTabBarPrivate  : public QWidgetPrivate
       bool operator==(const Tab &other) const {
          return &other == this;
       }
+
       bool enabled;
       int shortcutId;
       QString text;
@@ -109,11 +111,11 @@ class QTabBarPrivate  : public QWidgetPrivate
             setEasingCurve(QEasingCurve::InOutQuad);
          }
 
-         inline void updateCurrentValue(const QVariant &current) {
+         void updateCurrentValue(const QVariant &current) override {
             priv->moveTab(priv->tabList.indexOf(*tab), current.toInt());
          }
 
-         inline void updateState(State, State newState) {
+         void updateState(State, State newState) override {
             if (newState == Stopped) {
                priv->moveTabFinished(priv->tabList.indexOf(*tab));
             }
@@ -126,7 +128,7 @@ class QTabBarPrivate  : public QWidgetPrivate
 
       } *animation;
 
-      inline void startAnimation(QTabBarPrivate *priv, int duration) {
+      void startAnimation(QTabBarPrivate *priv, int duration) {
          if (!animation) {
             animation = new TabBarAnimation(this, priv);
          }
@@ -137,7 +139,7 @@ class QTabBarPrivate  : public QWidgetPrivate
          animation->start();
       }
 #else
-      inline void startAnimation(QTabBarPrivate *priv, int duration) {
+      void startAnimation(QTabBarPrivate *priv, int duration) {
          Q_UNUSED(duration);
          priv->moveTabFinished(priv->tabList.indexOf(*this));
       }
@@ -247,15 +249,15 @@ class CloseButton : public QAbstractButton
  public:
    CloseButton(QWidget *parent = 0);
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
-   inline QSize minimumSizeHint() const {
+   inline QSize minimumSizeHint() const override {
       return sizeHint();
    }
 
-   void enterEvent(QEvent *event);
-   void leaveEvent(QEvent *event);
-   void paintEvent(QPaintEvent *event);
+   void enterEvent(QEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 };
 
 QT_END_NAMESPACE

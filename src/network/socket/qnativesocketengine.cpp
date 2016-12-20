@@ -24,62 +24,6 @@
 ***********************************************************************/
 
 //#define QNATIVESOCKETENGINE_DEBUG
-
-/*! \class QNativeSocketEngine
-    \internal
-
-    \brief The QNativeSocketEngine class provides low level access to a socket.
-
-    \reentrant
-    \ingroup network
-    \inmodule QtNetwork
-
-    QtSocketLayer provides basic socket functionality provided by the
-    operating system. It also keeps track of what state the socket is
-    in, and which errors that occur.
-
-    The classes QTcpSocket, QUdpSocket and QTcpServer provide a
-    higher level API, and are in general more useful for the common
-    application.
-
-    There are two main ways of initializing the a QNativeSocketEngine; either
-    create a new socket by passing the socket type (TcpSocket or
-    UdpSocket) and network layer protocol (IPv4Protocol or
-    IPv6Protocol) to initialize(), or pass an existing socket
-    descriptor and have QNativeSocketEngine determine the type and protocol
-    itself. The native socket descriptor can later be fetched by
-    calling socketDescriptor(). The socket is made non-blocking, but
-    blocking behavior can still be achieved by calling waitForRead()
-    and waitForWrite(). isValid() can be called to check if the socket
-    has been successfully initialized and is ready to use.
-
-    To connect to a host, determine its address and pass this and the
-    port number to connectToHost(). The socket can then be used as a
-    TCP or UDP client. Otherwise; bind(), listen() and accept() are
-    used to have the socket function as a TCP or UDP server. Call
-    close() to close the socket.
-
-    bytesAvailable() is called to determine how much data is available
-    for reading. read() and write() are used by both TCP and UDP
-    clients to exchange data with the connected peer. UDP clients can
-    also call hasMoreDatagrams(), nextDatagramSize(),
-    readDatagram(), and writeDatagram().
-
-    Call state() to determine the state of the socket, for
-    example, ListeningState or ConnectedState. socketType() tells
-    whether the socket is a TCP socket or a UDP socket, or if the
-    socket type is unknown. protocol() is used to determine the
-    socket's network layer protocol.
-
-    localAddress(), localPort() are called to find the address and
-    port that are currently bound to the socket. If the socket is
-    connected, peerAddress() and peerPort() determine the address and
-    port of the connected peer.
-
-    Finally, if any function should fail, error() and
-    errorString() can be called to determine the cause of the error.
-*/
-
 #include <qabstracteventdispatcher.h>
 #include <qsocketnotifier.h>
 #include <qnetworkinterface.h>
@@ -1129,7 +1073,7 @@ class QReadNotifier : public QSocketNotifier
    }
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
    QNativeSocketEngine *engine;
 };
@@ -1160,7 +1104,7 @@ class QWriteNotifier : public QSocketNotifier
    }
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
    QNativeSocketEngine *engine;
 };
@@ -1187,7 +1131,7 @@ class QExceptionNotifier : public QSocketNotifier
    }
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
    QNativeSocketEngine *engine;
 };

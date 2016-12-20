@@ -45,7 +45,7 @@ namespace Phonon
        PHONON_PRIVATEABSTRACTCLASS
    
        public:
-           virtual QObject *qObject() { return q_func(); }
+           QObject *qObject() override { return q_func(); }
    
        protected:
            AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)

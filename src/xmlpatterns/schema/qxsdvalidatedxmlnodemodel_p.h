@@ -52,28 +52,35 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
     */
    virtual ~XsdValidatedXmlNodeModel();
 
-   virtual QUrl baseUri(const QXmlNodeModelIndex &ni) const;
-   virtual QUrl documentUri(const QXmlNodeModelIndex &ni) const;
-   virtual QXmlNodeModelIndex::NodeKind kind(const QXmlNodeModelIndex &ni) const;
-   virtual QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &ni1,
-         const QXmlNodeModelIndex &ni2) const;
-   virtual QXmlNodeModelIndex root(const QXmlNodeModelIndex &n) const;
-   virtual QXmlName name(const QXmlNodeModelIndex &ni) const;
-   virtual QString stringValue(const QXmlNodeModelIndex &n) const;
-   virtual QVariant typedValue(const QXmlNodeModelIndex &n) const;
-   virtual QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > iterate(
-      const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
-   virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const;
-   virtual QPatternist::ItemTypePtr type(const QXmlNodeModelIndex &ni) const;
-   virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
-         const QXmlName::PrefixCode prefix) const;
-   virtual bool isDeepEqual(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const;
-   virtual void sendNamespaces(const QXmlNodeModelIndex &n, QAbstractXmlReceiver *const receiver) const;
-   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &n) const;
-   virtual QXmlNodeModelIndex elementById(const QXmlName &NCName) const;
-   virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &NCName) const;
-   virtual void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver,
-                           const NodeCopySettings &) const;
+   QUrl baseUri(const QXmlNodeModelIndex &ni) const override;
+   QUrl documentUri(const QXmlNodeModelIndex &ni) const override;
+   QXmlNodeModelIndex::NodeKind kind(const QXmlNodeModelIndex &ni) const override;
+
+   QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &ni1,
+                  const QXmlNodeModelIndex &ni2) const override;
+
+   QXmlNodeModelIndex root(const QXmlNodeModelIndex &n) const override;
+   QXmlName name(const QXmlNodeModelIndex &ni) const override;
+   QString stringValue(const QXmlNodeModelIndex &n) const override;
+   QVariant typedValue(const QXmlNodeModelIndex &n) const override;
+
+   QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > 
+                  iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const override;
+
+   QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const override;
+   QPatternist::ItemTypePtr type(const QXmlNodeModelIndex &ni) const override;
+
+   QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
+                  const QXmlName::PrefixCode prefix) const override;
+
+   bool isDeepEqual(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const override;
+   void sendNamespaces(const QXmlNodeModelIndex &n, QAbstractXmlReceiver *const receiver) const override;
+   QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &n) const override;
+   QXmlNodeModelIndex elementById(const QXmlName &NCName) const override;
+   QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &NCName) const override;
+
+   void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver,
+                  const NodeCopySettings &) const override;
 
    /**
     * Sets the @p element that is assigned to the xml node at @p index.
@@ -125,8 +132,8 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    QSet<NamedSchemaComponent::Ptr> idIdRefBindings(const QString &id) const;
 
  protected:
-   virtual QXmlNodeModelIndex nextFromSimpleAxis(SimpleAxis axis, const QXmlNodeModelIndex &origin) const;
-   virtual QVector<QXmlNodeModelIndex> attributes(const QXmlNodeModelIndex &element) const;
+   QXmlNodeModelIndex nextFromSimpleAxis(SimpleAxis axis, const QXmlNodeModelIndex &origin) const override;
+   QVector<QXmlNodeModelIndex> attributes(const QXmlNodeModelIndex &element) const override;
 
  private:
    QExplicitlySharedDataPointer<const QAbstractXmlNodeModel> m_internalModel;

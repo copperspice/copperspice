@@ -87,7 +87,7 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
    QImage toImage() const;
    Attachment attachment() const;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
    GLuint handle() const;
 
    static bool bindDefault();
@@ -108,8 +108,8 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
                                GLenum filter = GL_NEAREST);
 
  protected:
-   int metric(PaintDeviceMetric metric) const;
-   int devType() const {
+   int metric(PaintDeviceMetric metric) const override;
+   int devType() const override {
       return QInternal::FramebufferObject;
    }
 

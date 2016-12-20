@@ -42,31 +42,30 @@ class ForClause : public PairContainer
              const Expression::Ptr &returnExpression,
              const VariableSlotID positionSlot);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override; 
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
-   inline Item mapToItem(const Item &item,
-                         const DynamicContext::Ptr &context) const;
-   virtual ID id() const;
-   inline Item::Iterator::Ptr mapToSequence(const Item &item,
-         const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const;
+   ID id() const override;
+
+   inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
 
    /**
     * Sets m_allowsMany properly.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
    inline void riggPositionalVariable(const DynamicContext::Ptr &context,
                                       const Item::Iterator::Ptr &source) const;
+
    typedef QExplicitlySharedDataPointer<const ForClause> ConstPtr;
    const VariableSlotID m_varSlot;
    const VariableSlotID m_positionSlot;

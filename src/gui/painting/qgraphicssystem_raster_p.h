@@ -33,8 +33,8 @@ QT_BEGIN_NAMESPACE
 class QRasterGraphicsSystem : public QGraphicsSystem
 {
  public:
-   QPixmapData *createPixmapData(QPixmapData::PixelType type) const;
-   QWindowSurface *createWindowSurface(QWidget *widget) const;
+   QPixmapData *createPixmapData(QPixmapData::PixelType type) const override;
+   QWindowSurface *createWindowSurface(QWidget *widget) const override;
 };
 
 QT_END_NAMESPACE

@@ -304,15 +304,15 @@ class ReflectYYLTYPE : public SourceLocationReflection
       , m_parseInfo(pi) {
    }
 
-   virtual const SourceLocationReflection *actualReflection() const {
+   const SourceLocationReflection *actualReflection() const  override {
       return this;
    }
 
-   virtual QSourceLocation sourceLocation() const {
+   QSourceLocation sourceLocation() const  override {
       return fromYYLTYPE(m_sl, m_parseInfo);
    }
 
-   virtual QString description() const {
+   QString description() const override {
       Q_ASSERT(false);
       return QString();
    }

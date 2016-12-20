@@ -86,14 +86,14 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
    void changeSize(int w, int h, QSizePolicy::Policy hData = QSizePolicy::Minimum,
                    QSizePolicy::Policy vData = QSizePolicy::Minimum);
 
-   QSize sizeHint() const;
-   QSize minimumSize() const;
-   QSize maximumSize() const;
-   Qt::Orientations expandingDirections() const;
-   bool isEmpty() const;
-   void setGeometry(const QRect &);
-   QRect geometry() const;
-   QSpacerItem *spacerItem();
+   QSize sizeHint() const override;
+   QSize minimumSize() const override;
+   QSize maximumSize() const override;
+   Qt::Orientations expandingDirections() const override;
+   bool isEmpty() const override;
+   void setGeometry(const QRect &) override;
+   QRect geometry() const override;
+   QSpacerItem *spacerItem() override;
 
  private:
    int width;
@@ -111,17 +111,17 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
       : wid(w) {
    }
 
-   QSize sizeHint() const;
-   QSize minimumSize() const;
-   QSize maximumSize() const;
-   Qt::Orientations expandingDirections() const;
-   bool isEmpty() const;
-   void setGeometry(const QRect &);
-   QRect geometry() const;
-   virtual QWidget *widget();
+   QSize sizeHint() const override;
+   QSize minimumSize() const override;
+   QSize maximumSize() const override;
+   Qt::Orientations expandingDirections() const override;
+   bool isEmpty() const override;
+   void setGeometry(const QRect &) override;
+   QRect geometry() const override;
+   virtual QWidget *widget() override;
 
-   bool hasHeightForWidth() const;
-   int heightForWidth(int) const;
+   bool hasHeightForWidth() const override;
+   int heightForWidth(int) const override;
 
  protected:
    QWidget *wid;
@@ -135,10 +135,10 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
    explicit QWidgetItemV2(QWidget *widget);
    ~QWidgetItemV2();
 
-   QSize sizeHint() const;
-   QSize minimumSize() const;
-   QSize maximumSize() const;
-   int heightForWidth(int width) const;
+   QSize sizeHint() const override;
+   QSize minimumSize() const override;
+   QSize maximumSize() const override;
+   int heightForWidth(int width) const override;
 
  private:
    enum { Dirty = -123, HfwCacheMaxSize = 3 };

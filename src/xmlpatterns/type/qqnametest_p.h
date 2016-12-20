@@ -44,16 +44,16 @@ class QNameTest : public AbstractNodeTest
    /**
     * @note This function assumes that @p item is a QXmlNodeModelIndex.
     */
-   virtual bool itemMatches(const Item &item) const;
+   bool itemMatches(const Item &item) const override;
 
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
-   virtual bool operator==(const ItemType &other) const;
+   bool operator==(const ItemType &other) const override;
 
-   virtual PatternPriority patternPriority() const;
+   PatternPriority patternPriority() const override;
 
  protected:
-   virtual InstanceOf instanceOf() const;
+   InstanceOf instanceOf() const override;
 
  private:
    QNameTest(const ItemType::Ptr &primaryType, const QXmlName qName);

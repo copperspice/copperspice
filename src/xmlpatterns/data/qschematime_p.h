@@ -42,9 +42,9 @@ class SchemaTime : public AbstractDateTime
    static SchemaTime::Ptr fromLexical(const QString &string);
    static SchemaTime::Ptr fromDateTime(const QDateTime &dt);
 
-   virtual ItemType::Ptr type() const;
-   virtual QString stringValue() const;
-   virtual Item fromValue(const QDateTime &dt) const;
+   ItemType::Ptr type() const override;
+   QString stringValue() const override;
+   Item fromValue(const QDateTime &dt) const override;
 
  protected:
    friend class CommonValues;

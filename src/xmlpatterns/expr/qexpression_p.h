@@ -637,12 +637,12 @@ class Expression : public QSharedData, public CppCastingHelper<Expression>, publ
    /**
     * @short Returns @c this.
     */
-   virtual const SourceLocationReflection *actualReflection() const;
+   const SourceLocationReflection *actualReflection() const override;
 
    /**
     * Reimplementation of SourceLocationReflection::description().
     */
-   virtual QString description() const;
+   virtual QString description() const override;
 
    /**
     * When this function is called, it signals that the parent will create

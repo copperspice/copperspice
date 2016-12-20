@@ -46,15 +46,15 @@ class QX11GLPixmapData : public QX11PixmapData, public QGLPaintDevice
    virtual ~QX11GLPixmapData();
 
    // Re-implemented from QX11PixmapData:
-   void fill(const QColor &color);
-   void copy(const QPixmapData *data, const QRect &rect);
-   bool scroll(int dx, int dy, const QRect &rect);
+   void fill(const QColor &color) override;
+   void copy(const QPixmapData *data, const QRect &rect) override;
+   bool scroll(int dx, int dy, const QRect &rect) override;
 
    // Re-implemented from QGLPaintDevice
-   QPaintEngine *paintEngine() const; // Also re-implements QX11PixmapData::paintEngine
-   void beginPaint();
-   QGLContext *context() const;
-   QSize size() const;
+   QPaintEngine *paintEngine() const override;       // Also re-implements QX11PixmapData::paintEngine
+   void beginPaint() override;
+   QGLContext *context() const override;
+   QSize size() const override;
 
    static bool hasX11GLPixmaps();
    static QGLFormat glFormat();

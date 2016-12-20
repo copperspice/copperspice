@@ -36,43 +36,43 @@ class NumericType : public AtomicType
  public:
    virtual ~NumericType();
 
-   virtual bool itemMatches(const Item &item) const;
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   bool itemMatches(const Item &item) const override;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
    /**
     * @returns always "numeric". That is, no namespace prefix
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always @c true
     */
-   virtual bool isAbstract() const;
+   bool isAbstract() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isNodeType() const;
+   bool isNodeType() const override;
 
    /**
     * @returns always @c true
     */
-   virtual bool isAtomicType() const;
+   bool isAtomicType() const override;
 
    /**
     * @returns always xs:anyAtomicType
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   SchemaType::Ptr wxsSuperType() const override;
 
    /**
     * @returns always xs:anyAtomicType
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
    /**
     * @returns @c null. It makes no sense to atomize the abstract type @c fs:numeric.
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
    /**
     * NumericType cannot be visited. This function is only implemented
@@ -80,8 +80,8 @@ class NumericType : public AtomicType
     *
     * @returns always a @c null pointer
     */
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const) const override;
 
    /**
     * NumericType cannot be visited. This function is only implemented
@@ -89,9 +89,8 @@ class NumericType : public AtomicType
     *
     * @returns always a @c null pointer
     */
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const) const;
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+                  const qint16 op, const SourceLocationReflection *const) const override;
 
    /**
     * The type @c fs:numeric is an abstract type which therefore
@@ -101,7 +100,7 @@ class NumericType : public AtomicType
     *
     * @returns always a @c null pointer
     */
-   virtual AtomicComparatorLocator::Ptr comparatorLocator() const;
+   AtomicComparatorLocator::Ptr comparatorLocator() const override;
 
    /**
     * The type @c fs:numeric is an abstract type which therefore
@@ -111,7 +110,7 @@ class NumericType : public AtomicType
     *
     * @returns always a @c null pointer
     */
-   virtual AtomicMathematicianLocator::Ptr mathematicianLocator() const;
+   AtomicMathematicianLocator::Ptr mathematicianLocator() const override;
 
 
    /**
@@ -122,7 +121,7 @@ class NumericType : public AtomicType
     *
     * @returns always a @c null pointer
     */
-   virtual AtomicCasterLocator::Ptr casterLocator() const;
+   AtomicCasterLocator::Ptr casterLocator() const override;
 
  protected:
    friend class BuiltinTypes;

@@ -118,54 +118,41 @@ struct WriteInitialization : public TreeWalker {
 
    WriteInitialization(Uic *uic, bool activateScripts);
 
-   //
    // widgets
-   //
-   void acceptUI(DomUI *node);
-   void acceptWidget(DomWidget *node);
-   void acceptWidgetScripts(const DomScripts &, DomWidget *node, const  DomWidgets &childWidgets);
+   void acceptUI(DomUI *node) override;
+   void acceptWidget(DomWidget *node) override;
+   void acceptWidgetScripts(const DomScripts &, DomWidget *node, const  DomWidgets &childWidgets) override;
 
-   void acceptLayout(DomLayout *node);
-   void acceptSpacer(DomSpacer *node);
-   void acceptLayoutItem(DomLayoutItem *node);
+   void acceptLayout(DomLayout *node) override;
+   void acceptSpacer(DomSpacer *node) override;
+   void acceptLayoutItem(DomLayoutItem *node) override;
 
-   //
    // actions
-   //
-   void acceptActionGroup(DomActionGroup *node);
-   void acceptAction(DomAction *node);
-   void acceptActionRef(DomActionRef *node);
+   void acceptActionGroup(DomActionGroup *node) override;
+   void acceptAction(DomAction *node) override;
+   void acceptActionRef(DomActionRef *node) override;
 
-   //
    // tab stops
-   //
-   void acceptTabStops(DomTabStops *tabStops);
+   void acceptTabStops(DomTabStops *tabStops) override;
 
-   //
    // custom widgets
-   //
-   void acceptCustomWidgets(DomCustomWidgets *node);
-   void acceptCustomWidget(DomCustomWidget *node);
+   void acceptCustomWidgets(DomCustomWidgets *node) override;
+   void acceptCustomWidget(DomCustomWidget *node) override;
 
-   //
    // layout defaults/functions
-   //
-   void acceptLayoutDefault(DomLayoutDefault *node)   {
+   void acceptLayoutDefault(DomLayoutDefault *node) override {
       m_LayoutDefaultHandler.acceptLayoutDefault(node);
    }
-   void acceptLayoutFunction(DomLayoutFunction *node) {
+
+   void acceptLayoutFunction(DomLayoutFunction *node)  override{
       m_LayoutDefaultHandler.acceptLayoutFunction(node);
    }
 
-   //
    // signal/slot connections
-   //
-   void acceptConnection(DomConnection *connection);
+   void acceptConnection(DomConnection *connection) override;
 
-   //
    // images
-   //
-   void acceptImage(DomImage *image);
+   void acceptImage(DomImage *image) override;
 
    enum {
       Use43UiFile = 0,
@@ -185,6 +172,7 @@ struct WriteInitialization : public TreeWalker {
    QString noTrCall(DomString *str, const QString &defaultString = QString()) const;
    QString autoTrCall(DomString *str, const QString &defaultString = QString()) const;
    QTextStream &autoTrOutput(DomString *str, const QString &defaultString = QString());
+
    // Apply a comma-separated list of values using a function "setSomething(int idx, value)"
    void writePropertyList(const QString &varName, const QString &setFunction, const QString &value,
                           const QString &defaultValue);
@@ -194,9 +182,7 @@ struct WriteInitialization : public TreeWalker {
    void writeColorGroup(DomColorGroup *colorGroup, const QString &group, const QString &paletteName);
    void writeBrush(const DomBrush *brush, const QString &brushName);
 
-   //
    // special initialization
-   //
    class Item
    {
     public:
@@ -208,23 +194,28 @@ struct WriteInitialization : public TreeWalker {
          ConstructItemOnly,
          ConstructItemAndVariable
       };
+
       QString writeSetupUi(const QString &parent, EmptyItemPolicy emptyItemPolicy = ConstructItemOnly);
       void writeRetranslateUi(const QString &parentPath);
+
       void addSetter(const QString &setter, const QString &directive = QString(),
-                     bool translatable = false); // don't call it if you already added *this as a child of another Item
+                     bool translatable = false); // do not call it if you already added *this as a child of another Item
+
       void addChild(Item *child); // all setters should already been added
+
       int setupUiCount() const {
          return m_setupUiData.setters.count();
       }
       int retranslateUiCount() const {
          return m_retranslateUiData.setters.count();
       }
+
     private:
       struct ItemData {
          ItemData() : policy(DontGenerate) {}
-         QMultiMap<QString, QString> setters; // directive to setter
+         QMultiMap<QString, QString> setters;       // directive to setter
          QSet<QString> directives;
-         enum TemporaryVariableGeneratorPolicy { // policies with priority, number describes the priority
+         enum TemporaryVariableGeneratorPolicy {   // policies with priority, number describes the priority
             DontGenerate = 1,
             GenerateWithMultiDirective = 2,
             Generate = 3

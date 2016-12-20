@@ -709,7 +709,7 @@ class QOpenGLPaintEnginePrivate : public QPaintEngineExPrivate
    void strokeLines(const QPainterPath &path);
 
    void updateDepthClip();
-   void systemStateChanged();
+   void systemStateChanged() override;
 
    void cleanupGLContextRefs(const QGLContext *context) {
       if (context == shader_ctx) {
@@ -1746,7 +1746,7 @@ QGLTrapezoid QOpenGLTessellator::toGLTrapezoid(const Trapezoid &trap)
 class QOpenGLImmediateModeTessellator : public QOpenGLTessellator
 {
  public:
-   void addTrap(const Trapezoid &trap);
+   void addTrap(const Trapezoid &trap) override;
    void tessellate(const QPointF *points, int nPoints, bool winding) {
       trapezoids.reserve(trapezoids.size() + nPoints);
       setWinding(winding);
@@ -1833,7 +1833,8 @@ class QOpenGLTrapezoidToArrayTessellator : public QOpenGLTessellator
    int allocated;
    int size;
    QRectF bounds;
-   void addTrap(const Trapezoid &trap);
+
+   void addTrap(const Trapezoid &trap) override;
    void tessellate(const QPointF *points, int nPoints, bool winding) {
       size = 0;
       setWinding(winding);
@@ -3116,8 +3117,8 @@ class QGLTrapezoidMaskGenerator : public QGLMaskGenerator
    QGLTrapezoidMaskGenerator(const QPainterPath &path, const QTransform &matrix, QGLOffscreen &offscreen,
                              GLuint maskFragmentProgram, qreal strokeWidth = -1.0);
 
-   QRect screenRect();
-   void drawMask(const QRect &rect);
+   QRect screenRect() override;
+   void drawMask(const QRect &rect) override;
 
  private:
    QRect screen_rect;
@@ -3138,8 +3139,8 @@ class QGLPathMaskGenerator : public QGLTrapezoidMaskGenerator
                         GLuint maskFragmentProgram);
 
  private:
-   QVector<QGLTrapezoid> generateTrapezoids();
-   QRect computeScreenRect();
+   QVector<QGLTrapezoid> generateTrapezoids() override;
+   QRect computeScreenRect() override;
 
    QPolygonF poly;
 };
@@ -3151,8 +3152,8 @@ class QGLLineMaskGenerator : public QGLTrapezoidMaskGenerator
                         GLuint maskFragmentProgram);
 
  private:
-   QVector<QGLTrapezoid> generateTrapezoids();
-   QRect computeScreenRect();
+   QVector<QGLTrapezoid> generateTrapezoids() override;
+   QRect computeScreenRect() override;
 
    QPainterPath transformedPath;
 };
@@ -3164,8 +3165,8 @@ class QGLRectMaskGenerator : public QGLTrapezoidMaskGenerator
                         GLuint maskFragmentProgram);
 
  private:
-   QVector<QGLTrapezoid> generateTrapezoids();
-   QRect computeScreenRect();
+   QVector<QGLTrapezoid> generateTrapezoids() override;
+   QRect computeScreenRect() override;
 
    QPainterPath transformedPath;
 };
@@ -3176,8 +3177,8 @@ class QGLEllipseMaskGenerator : public QGLMaskGenerator
    QGLEllipseMaskGenerator(const QRectF &rect, const QTransform &matrix, QGLOffscreen &offscreen,
                            GLuint maskFragmentProgram, int *maskVariableLocations);
 
-   QRect screenRect();
-   void drawMask(const QRect &rect);
+   QRect screenRect() override;
+   void drawMask(const QRect &rect) override;
 
  private:
    QRect screen_rect;

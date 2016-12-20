@@ -54,11 +54,10 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QWindowsFileSystemWatcherEngine();
    ~QWindowsFileSystemWatcherEngine();
 
-   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
 
-   void stop();
-
+   void stop() override;
 
    class Handle
    {
@@ -115,7 +114,7 @@ class QWindowsFileSystemWatcherEngineThread : public QThread
  public:
    QWindowsFileSystemWatcherEngineThread();
    ~QWindowsFileSystemWatcherEngineThread();
-   void run();
+   void run() override;
    void stop();
    void wakeup();
 

@@ -38,8 +38,7 @@ QT_BEGIN_NAMESPACE
 namespace QPatternist {
 
 class DistinctIterator : public Item::Iterator
-   , public ComparisonPlatform<DistinctIterator, false>
-   , public SourceLocationReflection
+   , public ComparisonPlatform<DistinctIterator, false>, public SourceLocationReflection
 {
  public:
    /**
@@ -52,18 +51,16 @@ class DistinctIterator : public Item::Iterator
     * evaluating for. It is used for error reporting, via
     * actualReflection().
     */
-   DistinctIterator(const Item::Iterator::Ptr &seq,
-                    const AtomicComparator::Ptr &comp,
-                    const Expression::ConstPtr &expression,
-                    const DynamicContext::Ptr &context);
+   DistinctIterator(const Item::Iterator::Ptr &seq, const AtomicComparator::Ptr &comp,
+                    const Expression::ConstPtr &expression, const DynamicContext::Ptr &context);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual Item::Iterator::Ptr copy() const;
-   virtual const SourceLocationReflection *actualReflection() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   Item::Iterator::Ptr copy() const override;
+   const SourceLocationReflection *actualReflection() const override;
 
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return AtomicComparator::OperatorEqual;
    }
 

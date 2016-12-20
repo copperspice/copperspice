@@ -78,16 +78,16 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
    virtual ~QGraphicsAnchorLayout();
 
    QGraphicsAnchor *addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                              QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
+                  QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
 
    QGraphicsAnchor *anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
-                           QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
+                  QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge);
 
    void addCornerAnchors(QGraphicsLayoutItem *firstItem, Qt::Corner firstCorner,
-                         QGraphicsLayoutItem *secondItem, Qt::Corner secondCorner);
+                  QGraphicsLayoutItem *secondItem, Qt::Corner secondCorner);
 
    void addAnchors(QGraphicsLayoutItem *firstItem, QGraphicsLayoutItem *secondItem,
-                   Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
+                  Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
 
    void setHorizontalSpacing(qreal spacing);
    void setVerticalSpacing(qreal spacing);
@@ -95,15 +95,15 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
    qreal horizontalSpacing() const;
    qreal verticalSpacing() const;
 
-   void removeAt(int index);
-   void setGeometry(const QRectF &rect);
-   int count() const;
-   QGraphicsLayoutItem *itemAt(int index) const;
+   void removeAt(int index) override;
+   void setGeometry(const QRectF &rect) override;
+   int count() const override;
+   QGraphicsLayoutItem *itemAt(int index) const override;
 
-   void invalidate();
+   void invalidate() override;
 
  protected:
-   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
 
  private:
    Q_DISABLE_COPY(QGraphicsAnchorLayout)

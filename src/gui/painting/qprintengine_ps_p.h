@@ -49,28 +49,27 @@ class QPSPrintEngine : public QPdfBaseEngine
    explicit QPSPrintEngine(QPrinter::PrinterMode m);
    ~QPSPrintEngine();
 
+   bool begin(QPaintDevice *pdev) override;
+   bool end() override;
 
-   virtual bool begin(QPaintDevice *pdev);
-   virtual bool end();
+   void setBrush() override;
 
-   void setBrush();
+   void drawImage(const QRectF &r, const QImage &img, const QRectF &sr, Qt::ImageConversionFlags) override;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
-   virtual void drawImage(const QRectF &r, const QImage &img, const QRectF &sr, Qt::ImageConversionFlags);
-   virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
+   void drawImageInternal(const QRectF &r, QImage img, bool bitmap);
 
-   virtual void drawImageInternal(const QRectF &r, QImage img, bool bitmap);
-
-   virtual QPaintEngine::Type type() const {
+   QPaintEngine::Type type() const override {
       return QPaintEngine::PostScript;
    }
 
-   virtual bool newPage();
-   virtual bool abort();
+   bool newPage() override;
+   bool abort() override;
 
-   virtual QPrinter::PrinterState printerState() const;
+   QPrinter::PrinterState printerState() const override;
 
-   virtual Qt::HANDLE handle() const {
+   Qt::HANDLE handle() const {
       return 0;
    }
 

@@ -66,19 +66,19 @@ public:
     DeviceManager* deviceManager() const;
     EffectManager* effectManager() const;
 
-    QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
+    QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args) override;
 
     bool isValid() const;
     bool supportsVideo() const;
-    QStringList availableMimeTypes() const;
+    QStringList availableMimeTypes() const override;
 
-    QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
-    QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
+    QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const override;
+    QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const override;
 
-    bool startConnectionChange(QSet<QObject *>);
-    bool connectNodes(QObject *, QObject *);
-    bool disconnectNodes(QObject *, QObject *);
-    bool endConnectionChange(QSet<QObject *>);
+    bool startConnectionChange(QSet<QObject *>) override;
+    bool connectNodes(QObject *, QObject *) override;
+    bool disconnectNodes(QObject *, QObject *) override;
+    bool endConnectionChange(QSet<QObject *>) override;
 
     DebugLevel debugLevel() const;
 

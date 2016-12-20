@@ -44,9 +44,9 @@ class ExtractImages : public TreeWalker
  public:
    ExtractImages(const Option &opt);
 
-   void acceptUI(DomUI *node);
-   void acceptImages(DomImages *images);
-   void acceptImage(DomImage *image);
+   void acceptUI(DomUI *node) override;
+   void acceptImages(DomImages *images) override;
+   void acceptImage(DomImage *image) override;
 
  private:
    QTextStream *m_output;

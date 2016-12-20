@@ -34,43 +34,43 @@ namespace QPatternist {
 class QNameFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class ResolveQNameFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class PrefixFromQNameFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class LocalNameFromQNameFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class NamespaceURIFromQNameFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class NamespaceURIForPrefixFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class InScopePrefixesFN : public FunctionCall
 {
  public:
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 };
 }
 

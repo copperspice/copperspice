@@ -55,26 +55,25 @@ class DayTimeDuration : public AbstractDuration
     * whether this DayTimeDuration is positive or negative. @p msecs must always
     * be positive.
     */
-   static DayTimeDuration::Ptr fromSeconds(const SecondCountProperty secs,
-                                           const MSecondProperty msecs = 0);
+   static DayTimeDuration::Ptr fromSeconds(const SecondCountProperty secs, const MSecondProperty msecs = 0);
 
-   virtual ItemType::Ptr type() const;
-   virtual QString stringValue() const;
-
-   /**
-    * @returns always 0.
-    */
-   virtual YearProperty years() const;
+   ItemType::Ptr type() const override;
+   QString stringValue() const override;
 
    /**
     * @returns always 0.
     */
-   virtual MonthProperty months() const;
-   virtual DayCountProperty days() const;
-   virtual HourProperty hours() const;
-   virtual MinuteProperty minutes() const;
-   virtual MSecondProperty mseconds() const;
-   virtual SecondProperty seconds() const;
+   YearProperty years() const override;
+
+   /**
+    * @returns always 0.
+    */
+   MonthProperty months() const override;
+   DayCountProperty days() const override;
+   HourProperty hours() const override;
+   MinuteProperty minutes() const override;
+   MSecondProperty mseconds() const override;
+   SecondProperty seconds() const override;
 
    /**
     * @returns the value of this xs:dayTimeDuration
@@ -83,7 +82,7 @@ class DayTimeDuration : public AbstractDuration
     * and XPath 2.0 Functions and Operators, 10.3.2.2 Calculating the value of a
     * xs:dayTimeDuration from the lexical representation</a>
     */
-   virtual Value value() const;
+   Value value() const override;
 
    /**
     * Creates a DayTimeDuration containing the value @p val. @p val is
@@ -91,17 +90,13 @@ class DayTimeDuration : public AbstractDuration
     *
     * If @p val is zero, is CommonValues::DayTimeDurationZero returned.
     */
-   virtual Item fromValue(const Value val) const;
+   Item fromValue(const Value val) const override;
 
  protected:
    friend class CommonValues;
 
-   DayTimeDuration(const bool isPositive,
-                   const DayCountProperty days,
-                   const HourProperty hours,
-                   const MinuteProperty minutes,
-                   const SecondProperty seconds,
-                   const MSecondProperty mseconds);
+   DayTimeDuration(const bool isPositive, const DayCountProperty days, const HourProperty hours,
+                  const MinuteProperty minutes, const SecondProperty seconds, const MSecondProperty mseconds);
 
  private:
    const DayCountProperty  m_days;

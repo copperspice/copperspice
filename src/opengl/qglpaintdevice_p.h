@@ -37,7 +37,7 @@ class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
    QGLPaintDevice();
    virtual ~QGLPaintDevice();
 
-   int devType() const {
+   int devType() const override {
       return QInternal::OpenGL;
    }
 
@@ -55,7 +55,7 @@ class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
    static QGLPaintDevice *getDevice(QPaintDevice *);
 
  protected:
-   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
    GLuint m_previousFBO;
    GLuint m_thisFBO;
 };
@@ -68,13 +68,13 @@ class QGLWidgetGLPaintDevice : public QGLPaintDevice
  public:
    QGLWidgetGLPaintDevice();
 
-   virtual QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    // QGLWidgets need to do swapBufers in endPaint:
-   virtual void beginPaint();
-   virtual void endPaint();
-   virtual QSize size() const;
-   virtual QGLContext *context() const;
+   void beginPaint() override;
+   void endPaint() override;
+   QSize size() const override;
+   QGLContext *context() const override;
 
    void setWidget(QGLWidget *);
 

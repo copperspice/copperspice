@@ -205,7 +205,7 @@ void QDataWidgetMapperPrivate::_q_commitData(QWidget *w)
 class QFocusHelper: public QWidget
 {
  public:
-   bool focusNextPrevChild(bool next) {
+   bool focusNextPrevChild(bool next) override{
       return QWidget::focusNextPrevChild(next);
    }
 

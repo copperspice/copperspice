@@ -40,28 +40,26 @@ template<bool IsForGlobal>
 class EvaluationCache : public SingleContainer
 {
  public:
-   EvaluationCache(const Expression::Ptr &operand,
-                   const VariableDeclaration *varDecl,
-                   const VariableSlotID slot);
+   EvaluationCache(const Expression::Ptr &operand, const VariableDeclaration *varDecl, const VariableSlotID slot);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * The first operand must be exactly one @c xs:string.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual const SourceLocationReflection *actualReflection() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
 
-   inline VariableSlotID slot() const {
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   const SourceLocationReflection *actualReflection() const override;
+
+   VariableSlotID slot() const {
       return m_varSlot;
    }
 
@@ -77,7 +75,7 @@ class EvaluationCache : public SingleContainer
     * Note that this is the cache slot, and is disjoint to any variable's
     * regular slot.
     */
-   const VariableSlotID            m_varSlot;
+   const VariableSlotID m_varSlot;
 };
 
 #include "qevaluationcache.cpp"

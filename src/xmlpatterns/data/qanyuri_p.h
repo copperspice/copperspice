@@ -131,10 +131,9 @@ class AnyURI : public AtomicString
     * @see <a href ="http://www.w3.org/TR/xpath-functions/#func-resolve-uri">XQuery 1.0
     * and XPath 2.0 Functions and Operators, 8.1 fn:resolve-uri</a>
     */
-   static AnyURI::Ptr resolveURI(const QString &relative,
-                                 const QString &base);
+   static AnyURI::Ptr resolveURI(const QString &relative, const QString &base);
 
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
    /**
     * @short Returns this @c xs:anyURI value in a QUrl.
@@ -144,6 +143,7 @@ class AnyURI : public AtomicString
                  qPrintable(QString::fromLatin1("%1 is apparently not ok for QUrl.").arg(m_value)));
       return QUrl(m_value);
    }
+
  protected:
    friend class CommonValues;
 

@@ -51,7 +51,7 @@ protected:
    QRingBuffer writeBuffer;
    inline bool ensureFlushed() const;
 
-   bool putCharHelper(char c);
+   bool putCharHelper(char c) override;
 
    QFileDevice::FileError error;
    void setError(QFileDevice::FileError err);

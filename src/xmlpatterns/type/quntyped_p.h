@@ -42,9 +42,9 @@ class Untyped : public AnyType
    /**
     * @returns always BuiltinTypes::xsAnyType.
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   SchemaType::Ptr wxsSuperType() const override;
 
-   virtual QXmlName name(const NamePool::Ptr &np) const;
+   QXmlName name(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always <tt>xs:untypedAtomic</tt>
@@ -54,12 +54,12 @@ class Untyped : public AnyType
    /**
     * @returns always SchemaType::ComplexType
     */
-   virtual TypeCategory category() const;
+   TypeCategory category() const override;
 
    /**
     * @returns always NoDerivation
     */
-   virtual DerivationMethod derivationMethod() const;
+   DerivationMethod derivationMethod() const override;
 
  protected:
    friend class BuiltinTypes;

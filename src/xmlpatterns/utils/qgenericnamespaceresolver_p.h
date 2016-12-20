@@ -36,9 +36,9 @@ class GenericNamespaceResolver : public NamespaceResolver
 {
  public:
    GenericNamespaceResolver(const Bindings &list);
-   virtual void addBinding(const QXmlName nb);
+   void addBinding(const QXmlName nb) override;
 
-   virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
+   QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const override;
 
    /**
     * Returns a GenericNamespaceResolver containing the following bindings:
@@ -60,7 +60,7 @@ class GenericNamespaceResolver : public NamespaceResolver
     */
    static NamespaceResolver::Ptr defaultXSLTBindings();
 
-   virtual Bindings bindings() const;
+   Bindings bindings() const override;
 
  private:
    /**

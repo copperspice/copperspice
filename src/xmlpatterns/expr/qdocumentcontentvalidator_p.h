@@ -37,31 +37,26 @@ class DocumentContentValidator : public QAbstractXmlReceiver
 {
  public:
 
-   DocumentContentValidator(QAbstractXmlReceiver *const receiver,
-                            const DynamicContext::Ptr &context,
-                            const Expression::ConstPtr &expr);
+   DocumentContentValidator(QAbstractXmlReceiver *const receiver, const DynamicContext::Ptr &context, const Expression::ConstPtr &expr);
 
-   virtual void namespaceBinding(const QXmlName &nb);
-   virtual void characters(const QStringRef &value);
-   virtual void comment(const QString &value);
+   void namespaceBinding(const QXmlName &nb) override;
+   void characters(const QStringRef &value) override;
+   void comment(const QString &value) override;
 
-   virtual void startElement(const QXmlName &name);
+   void startElement(const QXmlName &name) override;
+   void endElement() override;
 
-   virtual void endElement();
+   void attribute(const QXmlName &name, const QStringRef &value) override;
 
-   virtual void attribute(const QXmlName &name,
-                          const QStringRef &value);
+   void processingInstruction(const QXmlName &name, const QString &value) override;
 
-   virtual void processingInstruction(const QXmlName &name,
-                                      const QString &value);
+   void item(const Item &item) override;
 
-   virtual void item(const Item &item);
-
-   virtual void startDocument();
-   virtual void endDocument();
-   virtual void atomicValue(const QVariant &value);
-   virtual void startOfSequence();
-   virtual void endOfSequence();
+   void startDocument() override;
+   void endDocument() override;
+   void atomicValue(const QVariant &value) override;
+   void startOfSequence() override;
+   void endOfSequence() override;
 
  private:
    QAbstractXmlReceiver *const      m_receiver;

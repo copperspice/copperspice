@@ -36,35 +36,29 @@ namespace QPatternist {
 class ResourceDelegator : public DeviceResourceLoader
 {
  public:
-   ResourceDelegator(const QSet<QUrl> &needsOverride,
-                     const ResourceLoader::Ptr &parentLoader,
-                     const ResourceLoader::Ptr &forDeviceLoader) : m_needsOverride(needsOverride)
-      , m_parentLoader(parentLoader)
-      , m_forDeviceLoader(forDeviceLoader)
-
+   ResourceDelegator(const QSet<QUrl> &needsOverride, const ResourceLoader::Ptr &parentLoader,
+                  const ResourceLoader::Ptr &forDeviceLoader) : m_needsOverride(needsOverride),
+                  m_parentLoader(parentLoader), m_forDeviceLoader(forDeviceLoader)
    {
       Q_ASSERT(m_parentLoader);
    }
 
-   virtual bool isUnparsedTextAvailable(const QUrl &uri,
-                                        const QString &encoding);
-   virtual ItemType::Ptr announceUnparsedText(const QUrl &uri);
-   virtual Item openUnparsedText(const QUrl &uri,
-                                 const QString &encoding,
-                                 const ReportContext::Ptr &context,
-                                 const SourceLocationReflection *const where);
-   virtual Item openDocument(const QUrl &uri,
-                             const ReportContext::Ptr &context);
-   virtual SequenceType::Ptr announceDocument(const QUrl &uri, const Usage usageHint);
-   virtual bool isDocumentAvailable(const QUrl &uri);
-   virtual Item::Iterator::Ptr openCollection(const QUrl &uri);
-   virtual SequenceType::Ptr announceCollection(const QUrl &uri);
+   bool isUnparsedTextAvailable(const QUrl &uri, const QString &encoding) override;
+   ItemType::Ptr announceUnparsedText(const QUrl &uri) override;
+   Item openUnparsedText(const QUrl &uri, const QString &encoding, const ReportContext::Ptr &context,
+                  const SourceLocationReflection *const where) override;
+
+   Item openDocument(const QUrl &uri, const ReportContext::Ptr &context) override;
+   SequenceType::Ptr announceDocument(const QUrl &uri, const Usage usageHint) override;
+   bool isDocumentAvailable(const QUrl &uri) override;
+   Item::Iterator::Ptr openCollection(const QUrl &uri) override;
+   SequenceType::Ptr announceCollection(const QUrl &uri) override;
 
    /**
     * Returns the union of the deviceURIs() that ResourceDelegator's two
     * resource loaders has.
     */
-   virtual QSet<QUrl> deviceURIs() const;
+   QSet<QUrl> deviceURIs() const override;
 
  private:
    const QSet<QUrl> m_needsOverride;

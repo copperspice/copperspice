@@ -47,20 +47,20 @@ class Q_CORE_EXPORT QEventDispatcherGlib : public QAbstractEventDispatcher
    explicit QEventDispatcherGlib(GMainContext *context, QObject *parent = 0);
    ~QEventDispatcherGlib();
 
-   bool processEvents(QEventLoop::ProcessEventsFlags flags);
-   bool hasPendingEvents();
+   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
+   bool hasPendingEvents() override;
 
-   void registerSocketNotifier(QSocketNotifier *socketNotifier);
-   void unregisterSocketNotifier(QSocketNotifier *socketNotifier);
+   void registerSocketNotifier(QSocketNotifier *socketNotifier) override;
+   void unregisterSocketNotifier(QSocketNotifier *socketNotifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object);
-   bool unregisterTimer(int timerId);
-   bool unregisterTimers(QObject *object);
-   QList<TimerInfo> registeredTimers(QObject *object) const;
+   void registerTimer(int timerId, int interval, QObject *object) override;
+   bool unregisterTimer(int timerId) override;
+   bool unregisterTimers(QObject *object) override;
+   QList<TimerInfo> registeredTimers(QObject *object) const override;
 
-   void wakeUp();
-   void interrupt();
-   void flush();
+   void wakeUp() override;
+   void interrupt() override;
+   void flush() override;
 
    static bool versionSupported();
 

@@ -48,17 +48,17 @@ class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
    qint64 maximumCacheSize() const;
    void setMaximumCacheSize(qint64 size);
 
-   qint64 cacheSize() const;
-   QNetworkCacheMetaData metaData(const QUrl &url);
-   void updateMetaData(const QNetworkCacheMetaData &metaData);
-   QIODevice *data(const QUrl &url);
-   bool remove(const QUrl &url);
-   QIODevice *prepare(const QNetworkCacheMetaData &metaData);
-   void insert(QIODevice *device);
+   qint64 cacheSize() const override;
+   QNetworkCacheMetaData metaData(const QUrl &url) override;
+   void updateMetaData(const QNetworkCacheMetaData &metaData) override;
+   QIODevice *data(const QUrl &url) override;
+   bool remove(const QUrl &url) override;
+   QIODevice *prepare(const QNetworkCacheMetaData &metaData) override;
+   void insert(QIODevice *device) override;
 
    QNetworkCacheMetaData fileMetaData(const QString &fileName) const;
 
-   NET_CS_SLOT_1(Public, void clear())
+   NET_CS_SLOT_1(Public, void clear() override)
    NET_CS_SLOT_2(clear)
 
  protected:

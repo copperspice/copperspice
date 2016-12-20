@@ -44,13 +44,12 @@ namespace Phonon
                 CS_INTERFACES(Phonon::VolumeFaderInterface)
         public:
             VolumeEffect(QObject *parent);
-
-            //reimplementation
-            virtual float volume() const;
-            virtual void setVolume(float);
-            virtual Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
-            virtual void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve);
-            virtual void fadeTo(float, int);
+            
+            float volume() const override;
+            void setVolume(float) override;
+            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const override;
+            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve) override;
+            void fadeTo(float, int) override;
 
         private:
             float m_volume;
@@ -58,7 +57,7 @@ namespace Phonon
             //paramaters used to fade
             Phonon::VolumeFaderEffect::FadeCurve m_fadeCurve;
 
-            bool m_fading; //determines if we should be fading.
+            bool m_fading;                //determines if we should be fading.
             float m_initialVolume;  
             float m_targetVolume;
             int m_fadeDuration;

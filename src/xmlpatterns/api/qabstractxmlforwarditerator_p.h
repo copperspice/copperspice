@@ -96,10 +96,7 @@ class QAbstractXmlForwardIterator : public QSharedData
 namespace QPatternist {
 class DeduplicateIterator;
 
-template<typename InputType,
-         typename OutputType,
-         typename Derived,
-         typename ListType = QList<InputType> >
+template<typename InputType, typename OutputType, typename Derived, typename ListType = QList<InputType> >
 class ListIteratorPlatform : public QAbstractXmlForwardIterator<OutputType>
 {
    /* This declaration is a workaround for a set of GCC versions on OS X,
@@ -108,7 +105,7 @@ class ListIteratorPlatform : public QAbstractXmlForwardIterator<OutputType>
    friend class DeduplicateIterator;
 
  public:
-   virtual OutputType next() {
+   OutputType next() override {
       if (m_position == -1) {
          return OutputType();
       }
@@ -124,35 +121,32 @@ class ListIteratorPlatform : public QAbstractXmlForwardIterator<OutputType>
       return m_current;
    }
 
-   virtual OutputType current() const {
+   OutputType current() const override {
       return m_current;
    }
 
-   virtual qint64 position() const {
+   qint64 position() const override {
       return m_position;
    }
 
-   virtual qint64 count() {
+   qint64 count() override {
       return m_list.count();
    }
 
-   virtual typename QAbstractXmlForwardIterator<OutputType>::Ptr copy() const {
+   typename QAbstractXmlForwardIterator<OutputType>::Ptr copy() const  override {
       return QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<OutputType> >(new
              ListIteratorPlatform<InputType, OutputType, Derived, ListType>(m_list));
    }
 
  protected:
-   inline ListIteratorPlatform(const ListType &list) : m_list(list)
-      , m_position(0) {
-   }
+   inline ListIteratorPlatform(const ListType &list) : m_list(list), m_position(0) { }
 
    const ListType  m_list;
    qint64          m_position;
    OutputType      m_current;
 };
 
-template<typename T,
-         typename ListType = QList<T> >
+template<typename T, typename ListType = QList<T> >
 class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>
 {
    /*
@@ -162,19 +156,19 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
 
    using ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>::m_list;
 
-   static inline QVector<T> toVector(const QVector<T> &vector) {
+   static QVector<T> toVector(const QVector<T> &vector) {
       return vector;
    }
 
-   static inline QVector<T> toVector(const QList<T> &list) {
+   static QVector<T> toVector(const QList<T> &list) {
       return list.toVector();
    }
 
-   static inline QList<T> toList(const QVector<T> &vector) {
+   static QList<T> toList(const QVector<T> &vector) {
       return vector.toList();
    }
 
-   static inline QList<T> toList(const QList<T> &list) {
+   static QList<T> toList(const QList<T> &list) {
       return list;
    }
 
@@ -182,7 +176,7 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
    inline ListIterator(const ListType &list) : ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>(list) {
    }
 
-   virtual QList<T> toList() {
+   virtual QList<T> toList() override {
       return toList(m_list);
    }
 
@@ -201,20 +195,19 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
 };
 
 template<typename T>
-inline
-typename QAbstractXmlForwardIterator<T>::Ptr
+inline typename QAbstractXmlForwardIterator<T>::Ptr
 makeListIterator(const QList<T> &list)
 {
    return typename ListIterator<T>::Ptr(new ListIterator<T>(list));
 }
 
 template<typename T>
-inline
-typename QAbstractXmlForwardIterator<T>::Ptr
+inline typename QAbstractXmlForwardIterator<T>::Ptr
 makeVectorIterator(const QVector<T> &vector)
 {
    return typename ListIterator<T, QVector<T> >::Ptr(new ListIterator<T, QVector<T> >(vector));
 }
+
 }
 
 template<typename T>

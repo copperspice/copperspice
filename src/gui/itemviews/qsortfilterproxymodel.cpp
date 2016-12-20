@@ -229,30 +229,33 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
       QVector<int> &source_to_proxy, QVector<int> &proxy_to_source,
       int proxy_start, int proxy_end, const QModelIndex &proxy_parent,
       Qt::Orientation orient, bool emit_signal = true);
+
    void build_source_to_proxy_mapping(
       const QVector<int> &proxy_to_source, QVector<int> &source_to_proxy) const;
+
    void source_items_inserted(const QModelIndex &source_parent,
-                              int start, int end, Qt::Orientation orient);
+                  int start, int end, Qt::Orientation orient);
+
    void source_items_about_to_be_removed(const QModelIndex &source_parent,
-                                         int start, int end, Qt::Orientation orient);
+                  int start, int end, Qt::Orientation orient);
+
    void source_items_removed(const QModelIndex &source_parent,
-                             int start, int end, Qt::Orientation orient);
-   void proxy_item_range(
-      const QVector<int> &source_to_proxy, const QVector<int> &source_items,
-      int &proxy_low, int &proxy_high) const;
+                  int start, int end, Qt::Orientation orient);
+
+   void proxy_item_range(const QVector<int> &source_to_proxy, const QVector<int> &source_items,
+                  int &proxy_low, int &proxy_high) const;
 
    QModelIndexPairList store_persistent_indexes();
    void update_persistent_indexes(const QModelIndexPairList &source_indexes);
 
    void filter_changed(const QModelIndex &source_parent = QModelIndex());
-   QSet<int> handle_filter_changed(
-      QVector<int> &source_to_proxy, QVector<int> &proxy_to_source,
-      const QModelIndex &source_parent, Qt::Orientation orient);
+   QSet<int> handle_filter_changed(QVector<int> &source_to_proxy, QVector<int> &proxy_to_source,
+                  const QModelIndex &source_parent, Qt::Orientation orient);
 
    void updateChildrenMapping(const QModelIndex &source_parent, Mapping *parent_mapping,
                               Qt::Orientation orient, int start, int end, int delta_item_count, bool remove);
 
-   virtual void _q_sourceModelDestroyed();
+   void _q_sourceModelDestroyed() override;
 };
 
 typedef QHash<QModelIndex, QSortFilterProxyModelPrivate::Mapping *> IndexMap;

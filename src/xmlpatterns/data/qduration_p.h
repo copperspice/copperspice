@@ -41,49 +41,39 @@ class Duration : public AbstractDuration
     * Creates an instance from the lexical representation @p string.
     */
    static Duration::Ptr fromLexical(const QString &string);
-   static Duration::Ptr fromComponents(const bool isPositive,
-                                       const YearProperty years,
-                                       const MonthProperty months,
-                                       const DayCountProperty days,
-                                       const HourProperty hours,
-                                       const MinuteProperty minutes,
-                                       const SecondProperty seconds,
-                                       const MSecondProperty mseconds);
+   static Duration::Ptr fromComponents(const bool isPositive, const YearProperty years,
+                  const MonthProperty months, const DayCountProperty days, const HourProperty hours,
+                  const MinuteProperty minutes, const SecondProperty seconds, const MSecondProperty mseconds);
 
-   virtual ItemType::Ptr type() const;
-   virtual QString stringValue() const;
+   ItemType::Ptr type() const override;
+   QString stringValue() const override;
 
    /**
     * Always results in an assert crash. Calling this function makes no
     * sense due to that the value space of xs:duration is not well defined.
     */
-   virtual Value value() const;
+   Value value() const override;
 
    /**
     * Always results in an assert crash. Calling this function makes no
     * sense due to that the value space of xs:duration is not well defined.
     */
-   virtual Item fromValue(const Value val) const;
+   Item fromValue(const Value val) const override;
 
-   virtual YearProperty years() const;
-   virtual MonthProperty months() const;
-   virtual DayCountProperty days() const;
-   virtual HourProperty hours() const;
-   virtual MinuteProperty minutes() const;
-   virtual SecondProperty seconds() const;
-   virtual MSecondProperty mseconds() const;
+   YearProperty years() const override;
+   MonthProperty months() const override;
+   DayCountProperty days() const override;
+   HourProperty hours() const override;
+   MinuteProperty minutes() const override;
+   SecondProperty seconds() const override;
+   MSecondProperty mseconds() const override;
 
  protected:
    friend class CommonValues;
 
-   Duration(const bool isPositive,
-            const YearProperty years,
-            const MonthProperty months,
-            const DayCountProperty days,
-            const HourProperty hours,
-            const MinuteProperty minutes,
-            const SecondProperty seconds,
-            const MSecondProperty mseconds);
+   Duration(const bool isPositive, const YearProperty years, const MonthProperty months,
+                  const DayCountProperty days, const HourProperty hours, const MinuteProperty minutes,
+                  const SecondProperty seconds, const MSecondProperty mseconds);
  private:
    const YearProperty      m_years;
    const MonthProperty     m_months;

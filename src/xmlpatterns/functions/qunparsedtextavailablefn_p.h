@@ -34,7 +34,7 @@ namespace QPatternist {
 class UnparsedTextAvailableFN : public StaticBaseUriContainer
 {
  public:
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 };
 }
 

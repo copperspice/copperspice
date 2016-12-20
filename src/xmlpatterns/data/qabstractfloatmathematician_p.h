@@ -38,17 +38,15 @@ QT_BEGIN_NAMESPACE
 namespace QPatternist {
 
 template <const bool isDouble>
-class AbstractFloatMathematician : public AtomicMathematician
-   , public DelegatingSourceLocationReflection
+class AbstractFloatMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
+
    inline AbstractFloatMathematician(const SourceLocationReflection *const r) : DelegatingSourceLocationReflection(r) {
    }
 
-   virtual Item calculate(const Item &o1,
-                          const Operator op,
-                          const Item &o2,
-                          const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+   Item calculate(const Item &o1, const Operator op, const Item &o2,
+                          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
 #include "qabstractfloatmathematician.cpp"

@@ -85,7 +85,8 @@ namespace Phonon
         class VolumeMemInputPin : public QMemInputPin
         {
         public:
-            VolumeMemInputPin(QBaseFilter *parent, const QVector<AM_MEDIA_TYPE> &mt, QPin *output) : QMemInputPin(parent, mt, true /*transform*/, output)
+            VolumeMemInputPin(QBaseFilter *parent, const QVector<AM_MEDIA_TYPE> &mt, QPin *output) 
+                  : QMemInputPin(parent, mt, true /*transform*/, output)
             {
             }
 
@@ -93,8 +94,7 @@ namespace Phonon
             {
             }
 
-            STDMETHODIMP NotifyAllocator(IMemAllocator *alloc, BOOL b)
-            {
+            STDMETHODIMP NotifyAllocator(IMemAllocator *alloc, BOOL b) override {
                 ALLOCATOR_PROPERTIES prop;
                 HRESULT hr = alloc->GetProperties(&prop);
                 if (SUCCEEDED(hr) && prop.cBuffers > 1) {
@@ -128,7 +128,7 @@ namespace Phonon
             VolumeEffectFilter(VolumeEffect *);
 
             //reimplementation
-            virtual HRESULT processSample(IMediaSample *);
+            HRESULT processSample(IMediaSample *) override;
 
         private:
             void treatOneSamplePerChannel(BYTE **buffer, int sampleSize, int channelCount, int frequency);

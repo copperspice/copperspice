@@ -39,12 +39,13 @@ class QNetworkAccessCacheBackend : public QNetworkAccessBackend
    QNetworkAccessCacheBackend();
    ~QNetworkAccessCacheBackend();
 
-   void open();
-   void closeDownstreamChannel();
-   void closeUpstreamChannel();
+   void open() override;
+   void closeDownstreamChannel() override;
 
+   void closeUpstreamChannel();
    void upstreamReadyRead();
-   void downstreamReadyWrite();
+
+   void downstreamReadyWrite() override;
 
  private:
    bool sendCacheContents();

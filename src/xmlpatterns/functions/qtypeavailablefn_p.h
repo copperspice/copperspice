@@ -35,9 +35,9 @@ namespace QPatternist {
 class TypeAvailableFN : public StaticNamespacesContainer
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
  private:
    SchemaTypeFactory::Ptr m_schemaTypeFactory;

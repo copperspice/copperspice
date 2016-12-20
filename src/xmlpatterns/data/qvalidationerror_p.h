@@ -48,17 +48,17 @@ class ValidationError : public AtomicValue
    /**
     * @returns always @c true
     */
-   virtual bool hasError() const;
+   bool hasError() const override;
 
    /**
     * Always results in an assert crash.
     */
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
    /**
     * Always results in an assert crash.
     */
-   virtual QString stringValue() const;
+   QString stringValue() const override;
 
    /**
     * @returns the error code this ValidationError represents. Typically, this

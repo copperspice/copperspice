@@ -39,28 +39,25 @@ class NCNameConstructor : public SingleContainer
 
    NCNameConstructor(const Expression::Ptr &source);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     *  Validates @p lexicalNCName as a processing instruction's target
     *  name, and raise an error if it's not an @c  NCName.
     */
-   template<typename TReportContext,
-            const ReportContext::ErrorCode NameIsXML,
+   template<typename TReportContext, const ReportContext::ErrorCode NameIsXML,
             const ReportContext::ErrorCode LexicallyInvalid>
-   static inline
-   void validateTargetName(const QString &lexicalNCName,
-                           const TReportContext &context,
-                           const SourceLocationReflection *const r);
+
+   static inline void validateTargetName(const QString &lexicalNCName,
+                 const TReportContext &context, const SourceLocationReflection *const r);
  private:
 
    /**
@@ -76,12 +73,8 @@ class NCNameConstructor : public SingleContainer
    }
 };
 
-template<typename TReportContext,
-         const ReportContext::ErrorCode NameIsXML,
-         const ReportContext::ErrorCode LexicallyInvalid>
-inline
-void NCNameConstructor::validateTargetName(const QString &lexicalTarget,
-      const TReportContext &context,
+template<typename TReportContext, const ReportContext::ErrorCode NameIsXML, const ReportContext::ErrorCode LexicallyInvalid>
+inline void NCNameConstructor::validateTargetName(const QString &lexicalTarget, const TReportContext &context,
       const SourceLocationReflection *const r)
 {
    Q_ASSERT(context);
@@ -90,6 +83,7 @@ void NCNameConstructor::validateTargetName(const QString &lexicalTarget,
       if (QString::compare(QLatin1String("xml"), lexicalTarget, Qt::CaseInsensitive) == 0) {
          context->error(nameIsXML(lexicalTarget), NameIsXML, r);
       }
+
    } else {
       context->error(QtXmlPatterns::tr("%1 is not a valid target name in "
                                        "a processing instruction. It "

@@ -152,19 +152,25 @@ class QWindowsVistaTransition : public QWindowsVistaAnimation
  public :
    QWindowsVistaTransition() : QWindowsVistaAnimation() {}
    virtual ~QWindowsVistaTransition() { }
+
    void setDuration(int duration) {
       _duration = duration;
    }
+
    void setStartImage(const QImage &image) {
       _primaryImage = image;
    }
+
    void setEndImage(const QImage &image) {
       _secondaryImage = image;
    }
-   virtual void paint(QPainter *painter, const QStyleOption *option);
+
+   virtual void paint(QPainter *painter, const QStyleOption *option) override;
+
    int duration() const {
       return _duration;
    }
+
    int _duration; //set time in ms to complete a state transition
 };
 
@@ -175,19 +181,25 @@ class QWindowsVistaPulse: public QWindowsVistaAnimation
  public :
    QWindowsVistaPulse() : QWindowsVistaAnimation() {}
    virtual ~QWindowsVistaPulse() { }
+
    void setDuration(int duration) {
       _duration = duration;
    }
+
    void setPrimaryImage(const QImage &image) {
       _primaryImage = image;
    }
+
    void setAlternateImage(const QImage &image) {
       _secondaryImage = image;
    }
-   virtual void paint(QPainter *painter, const QStyleOption *option);
+
+   virtual void paint(QPainter *painter, const QStyleOption *option) override;
+
    int duration() const {
       return _duration;
    }
+
    int _duration; //time in ms to complete a pulse cycle
 };
 

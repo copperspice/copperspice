@@ -278,8 +278,8 @@ class Q_GUI_EXPORT QTextControl : public QObject
    bool findNextPrevAnchor(const QTextCursor &from, bool next, QTextCursor &newAnchor);
 
  protected:
-   virtual void timerEvent(QTimerEvent *e);
-   virtual bool event(QEvent *e);
+   void timerEvent(QTimerEvent *e) override;
+   bool event(QEvent *e) override;
 
    QScopedPointer<QTextControlPrivate> d_ptr;
  
@@ -330,10 +330,10 @@ class QTextEditMimeData : public QMimeData
  public:
    inline QTextEditMimeData(const QTextDocumentFragment &aFragment) : fragment(aFragment) {}
 
-   virtual QStringList formats() const;
+   virtual QStringList formats() const override;
 
  protected:
-   virtual QVariant retrieveData(const QString &mimeType, QVariant::Type type) const;
+   virtual QVariant retrieveData(const QString &mimeType, QVariant::Type type) const override;
 
  private:
    void setup() const;

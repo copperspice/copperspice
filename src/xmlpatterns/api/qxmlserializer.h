@@ -40,25 +40,25 @@ class Q_XMLPATTERNS_EXPORT QXmlSerializer : public QAbstractXmlReceiver
  public:
    QXmlSerializer(const QXmlQuery &query, QIODevice *outputDevice);
 
-   virtual void namespaceBinding(const QXmlName &nb);
+   void namespaceBinding(const QXmlName &nb) override;
 
-   virtual void characters(const QStringRef &value);
-   virtual void comment(const QString &value);
+   void characters(const QStringRef &value) override;
+   void comment(const QString &value) override;
 
-   virtual void startElement(const QXmlName &name);
+   void startElement(const QXmlName &name) override;
 
-   virtual void endElement();
+   void endElement() override;
 
-   virtual void attribute(const QXmlName &name, const QStringRef &value);
+   void attribute(const QXmlName &name, const QStringRef &value) override;
 
-   virtual void processingInstruction(const QXmlName &name, const QString &value);
+   void processingInstruction(const QXmlName &name, const QString &value) override;
 
-   virtual void atomicValue(const QVariant &value);
+   void atomicValue(const QVariant &value) override;
 
-   virtual void startDocument();
-   virtual void endDocument();
-   virtual void startOfSequence();
-   virtual void endOfSequence();
+   void startDocument() override;
+   void endDocument() override;
+   void startOfSequence() override;
+   void endOfSequence() override;
 
    QIODevice *outputDevice() const;
 
@@ -67,7 +67,7 @@ class Q_XMLPATTERNS_EXPORT QXmlSerializer : public QAbstractXmlReceiver
 
    /* The members below are internal, not part of the public API, and
     * unsupported. Using them leads to undefined behavior. */
-   virtual void item(const QPatternist::Item &item);
+   void item(const QPatternist::Item &item) override;
 
  protected:
    QXmlSerializer(QAbstractXmlReceiverPrivate *d);

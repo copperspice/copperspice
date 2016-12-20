@@ -98,7 +98,7 @@ class QMessageBoxDetailsText : public QWidget
     public:
       TextEdit(QWidget *parent = 0) : QTextEdit(parent) { }
 
-      void contextMenuEvent(QContextMenuEvent *e) {
+      void contextMenuEvent(QContextMenuEvent *e)  override {
 
 #ifndef QT_NO_CONTEXTMENU
          QMenu *menu = createStandardContextMenu();
@@ -154,7 +154,7 @@ class DetailButton : public QPushButton
       setText(label(lbl));
    }
 
-   QSize sizeHint() const {
+   QSize sizeHint() const override {
       ensurePolished();
       QStyleOptionButton opt;
       initStyleOption(&opt);

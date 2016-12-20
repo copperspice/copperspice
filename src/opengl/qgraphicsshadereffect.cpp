@@ -48,14 +48,12 @@ static const char qglslDefaultImageFragmentShader[] =
 class QGLCustomShaderEffectStage : public QGLCustomShaderStage
 {
  public:
-   QGLCustomShaderEffectStage
-   (QGraphicsShaderEffect *e, const QByteArray &source)
-      : QGLCustomShaderStage(),
-        effect(e) {
+   QGLCustomShaderEffectStage(QGraphicsShaderEffect *e, const QByteArray &source)
+      : QGLCustomShaderStage(), effect(e) {
       setSource(source);
    }
 
-   void setUniforms(QGLShaderProgram *program);
+   void setUniforms(QGLShaderProgram *program)  override;
 
    QGraphicsShaderEffect *effect;
 };

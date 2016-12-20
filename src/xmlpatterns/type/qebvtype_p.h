@@ -40,10 +40,10 @@ class EBVType : public ItemType, public SequenceType
    /**
     * @todo docs if it's an ebvable type, etc.
     */
-   virtual bool itemMatches(const Item &item) const;
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   bool itemMatches(const Item &item) const override;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @note The semantical meaning of this type's item type can
@@ -52,7 +52,7 @@ class EBVType : public ItemType, public SequenceType
     *
     * @returns always 'this' since EBVType is also an ItemType
     */
-   virtual ItemType::Ptr itemType() const;
+   ItemType::Ptr itemType() const override;
 
    /**
     * @note The semantical meaning of this type's cardinality
@@ -61,24 +61,24 @@ class EBVType : public ItemType, public SequenceType
     *
     * @returns always Cardinality::zeroOrMore()
     */
-   virtual Cardinality cardinality() const;
+   Cardinality cardinality() const override;
 
-   virtual bool isAtomicType() const;
+   bool isAtomicType() const override;
 
    /**
     * @returns always @c null
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
    /**
     * @returns always BuiltinTypes::item
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isNodeType() const;
+   bool isNodeType() const override;
 
  protected:
    friend class CommonSequenceTypes;

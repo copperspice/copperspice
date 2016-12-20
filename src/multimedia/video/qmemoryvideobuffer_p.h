@@ -40,10 +40,9 @@ class Q_MULTIMEDIA_EXPORT QMemoryVideoBuffer : public QAbstractVideoBuffer
    QMemoryVideoBuffer(const QByteArray &data, int bytesPerLine);
    ~QMemoryVideoBuffer();
 
-   MapMode mapMode() const;
-
-   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
-   void unmap();
+   MapMode mapMode() const override;
+   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
+   void unmap() override;
 };
 
 QT_END_NAMESPACE

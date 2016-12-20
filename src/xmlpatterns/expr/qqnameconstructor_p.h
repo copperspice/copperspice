@@ -38,16 +38,12 @@ class QNameConstructor : public SingleContainer
 {
  public:
 
-   QNameConstructor(const Expression::Ptr &source,
-                    const NamespaceResolver::Ptr &nsResolver);
+   QNameConstructor(const Expression::Ptr &source, const NamespaceResolver::Ptr &nsResolver);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-
-   virtual SequenceType::List expectedOperandTypes() const;
-
-   virtual SequenceType::Ptr staticType() const;
-
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * Expands @p lexicalQName, which is a lexical representation of a QName such as "x:body", into
@@ -67,11 +63,10 @@ class QNameConstructor : public SingleContainer
     * @see QQNameValue
     * @see QXmlUtils
     */
-   template<typename TReportContext,
-            const ReportContext::ErrorCode InvalidQName,
+   template<typename TReportContext, const ReportContext::ErrorCode InvalidQName,
             const ReportContext::ErrorCode NoBinding>
-   static
-   QXmlName expandQName(const QString &lexicalQName,
+
+   static QXmlName expandQName(const QString &lexicalQName,
                         const TReportContext &context,
                         const NamespaceResolver::Ptr &nsResolver,
                         const SourceLocationReflection *const r,
@@ -87,7 +82,7 @@ class QNameConstructor : public SingleContainer
          const StaticContext::Ptr &context,
          const SourceLocationReflection *const r);
 
-   virtual const SourceLocationReflection *actualReflection() const;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    const NamespaceResolver::Ptr m_nsResolver;

@@ -47,7 +47,7 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
 
    QSvgRenderer *renderer() const;
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    SVG_CS_SLOT_1(Public, void load(const QString &file))
    SVG_CS_SLOT_OVERLOAD(load, (const QString &))
@@ -56,7 +56,7 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
    SVG_CS_SLOT_OVERLOAD(load, (const QByteArray &))
 
  protected:
-   void paintEvent(QPaintEvent *event);
+   void paintEvent(QPaintEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QSvgWidget)

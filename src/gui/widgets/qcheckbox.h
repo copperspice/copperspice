@@ -44,8 +44,8 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    explicit QCheckBox(QWidget *parent = 0);
    explicit QCheckBox(const QString &text, QWidget *parent = 0);
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    void setTristate(bool y = true);
    bool isTristate() const;
@@ -57,12 +57,12 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    GUI_CS_SIGNAL_2(stateChanged, un_named_arg1)
 
  protected:
-   bool event(QEvent *e);
-   bool hitButton(const QPoint &pos) const;
-   void checkStateSet();
-   void nextCheckState();
-   void paintEvent(QPaintEvent *);
-   void mouseMoveEvent(QMouseEvent *);
+   bool event(QEvent *e) override;
+   bool hitButton(const QPoint &pos) const override;
+   void checkStateSet() override;
+   void nextCheckState() override;
+   void paintEvent(QPaintEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
    void initStyleOption(QStyleOptionButton *option) const;
 
  private:

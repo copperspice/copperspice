@@ -43,7 +43,7 @@ class VariableReference : public EmptyContainer
 
    inline VariableSlotID slot() const;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
  private:
    const VariableSlotID m_varSlot;

@@ -42,57 +42,54 @@ class GenericDynamicContext : public StackContextBase<DynamicContext>
  public:
    typedef QExplicitlySharedDataPointer<GenericDynamicContext> Ptr;
 
-   GenericDynamicContext(const NamePool::Ptr &np,
-                         QAbstractMessageHandler *const messageHandler,
-                         const LocationHash &locations);
+   GenericDynamicContext(const NamePool::Ptr &np, QAbstractMessageHandler *const messageHandler, const LocationHash &locations);
 
-   virtual xsInteger contextPosition() const;
+   xsInteger contextPosition() const override;
    /**
     * @returns always @c null, the focus is always undefined when an GenericDynamicContext
     * is used.
     */
-   virtual Item contextItem() const;
-   virtual xsInteger contextSize();
+   Item contextItem() const override;
+   xsInteger contextSize() override;
 
-   virtual void setFocusIterator(const Item::Iterator::Ptr &it);
-   virtual Item::Iterator::Ptr focusIterator() const;
+   void setFocusIterator(const Item::Iterator::Ptr &it) override;
+   Item::Iterator::Ptr focusIterator() const override;
 
-   virtual QAbstractMessageHandler *messageHandler() const;
-   virtual QExplicitlySharedDataPointer<DayTimeDuration> implicitTimezone() const;
-   virtual QDateTime currentDateTime() const;
+   QAbstractMessageHandler *messageHandler() const override;
+   QExplicitlySharedDataPointer<DayTimeDuration> implicitTimezone() const override;
+   QDateTime currentDateTime() const override;
 
-   virtual QAbstractXmlReceiver *outputReceiver() const;
+   QAbstractXmlReceiver *outputReceiver() const override;
    void setOutputReceiver(QAbstractXmlReceiver *const receiver);
 
-   virtual NodeBuilder::Ptr nodeBuilder(const QUrl &baseURI) const;
+   NodeBuilder::Ptr nodeBuilder(const QUrl &baseURI) const override;
    void setNodeBuilder(NodeBuilder::Ptr &builder);
 
-   virtual ResourceLoader::Ptr resourceLoader() const;
+   ResourceLoader::Ptr resourceLoader() const override;
    void setResourceLoader(const ResourceLoader::Ptr &loader);
 
-   virtual ExternalVariableLoader::Ptr externalVariableLoader() const;
+   ExternalVariableLoader::Ptr externalVariableLoader() const override;
    void setExternalVariableLoader(const ExternalVariableLoader::Ptr &loader);
-   virtual NamePool::Ptr namePool() const;
-   virtual QSourceLocation locationFor(const SourceLocationReflection *const reflection) const;
-   virtual void addNodeModel(const QAbstractXmlNodeModel::Ptr &nm);
-   virtual const QAbstractUriResolver *uriResolver() const;
-   virtual ItemCacheCell &globalItemCacheCell(const VariableSlotID slot);
-   virtual ItemSequenceCacheCell::Vector &globalItemSequenceCacheCells(const VariableSlotID slot);
+   NamePool::Ptr namePool() const override;
+   QSourceLocation locationFor(const SourceLocationReflection *const reflection) const override;
+   void addNodeModel(const QAbstractXmlNodeModel::Ptr &nm) override;
+   const QAbstractUriResolver *uriResolver() const override;
+   ItemCacheCell &globalItemCacheCell(const VariableSlotID slot) override;
+   ItemSequenceCacheCell::Vector &globalItemSequenceCacheCells(const VariableSlotID slot) override;
 
    void setUriResolver(const QAbstractUriResolver *const resolver);
 
    /**
     * We return a null item, we have no focus.
     */
-   virtual Item currentItem() const;
+   Item currentItem() const override;
 
    /**
-    * @short Returns always @c null, since we're always
-    * a top-level context.
+    * @short Returns always @c null, since we are always a top-level context.
     */
-   virtual DynamicContext::Ptr previousContext() const;
+   DynamicContext::Ptr previousContext() const override;
 
-   virtual QExplicitlySharedDataPointer<TemplateMode> currentTemplateMode() const;
+   QExplicitlySharedDataPointer<TemplateMode> currentTemplateMode() const override;
 
  private:
    QAbstractMessageHandler        *m_messageHandler;

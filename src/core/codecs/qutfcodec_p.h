@@ -61,12 +61,12 @@ class QUtf8Codec : public QTextCodec
  public:
    ~QUtf8Codec();
 
-   QByteArray name() const;
-   int mibEnum() const;
-
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
    void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
+
+   QByteArray name() const override;
+   int mibEnum() const override;
 };
 
 class QUtf16Codec : public QTextCodec
@@ -78,12 +78,12 @@ class QUtf16Codec : public QTextCodec
    }
    ~QUtf16Codec();
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
 
  protected:
    DataEndianness e;
@@ -96,9 +96,9 @@ class QUtf16BECodec : public QUtf16Codec
       e = BigEndianness;
    }
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 };
 
 class QUtf16LECodec : public QUtf16Codec
@@ -108,9 +108,9 @@ class QUtf16LECodec : public QUtf16Codec
       e = LittleEndianness;
    }
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 };
 
 class QUtf32Codec : public QTextCodec
@@ -122,12 +122,12 @@ class QUtf32Codec : public QTextCodec
 
    ~QUtf32Codec();
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
 
  protected:
    DataEndianness e;
@@ -140,9 +140,9 @@ class QUtf32BECodec : public QUtf32Codec
       e = BigEndianness;
    }
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 };
 
 class QUtf32LECodec : public QUtf32Codec
@@ -152,9 +152,9 @@ class QUtf32LECodec : public QUtf32Codec
       e = LittleEndianness;
    }
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 };
 
 

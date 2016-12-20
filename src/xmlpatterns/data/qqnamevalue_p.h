@@ -42,11 +42,10 @@ class QNameValue : public AtomicValue
 
    static QNameValue::Ptr fromValue(const NamePool::Ptr &np, const QXmlName name);
 
-   virtual QString stringValue() const;
+   QString stringValue() const override;
+   ItemType::Ptr type() const override;
 
-   virtual ItemType::Ptr type() const;
-
-   inline QXmlName qName() const {
+   QXmlName qName() const {
       return m_qName;
    }
 

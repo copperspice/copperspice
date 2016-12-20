@@ -83,7 +83,7 @@ class QNetworkAccessCache: public QObject
    NET_CS_SIGNAL_2(entryReady, un_named_arg1)
 
  protected:
-   void timerEvent(QTimerEvent *);
+   void timerEvent(QTimerEvent *) override;
 
  private:
    // idea copied from qcache.h

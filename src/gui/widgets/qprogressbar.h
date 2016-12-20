@@ -88,8 +88,8 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    Qt::Alignment alignment() const;
    void setAlignment(Qt::Alignment alignment);
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    Qt::Orientation orientation() const;
 
@@ -124,8 +124,8 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    GUI_CS_SIGNAL_2(valueChanged, value)
 
  protected:
-   bool event(QEvent *e);
-   void paintEvent(QPaintEvent *);
+   bool event(QEvent *e) override;
+   void paintEvent(QPaintEvent *) override;
    void initStyleOption(QStyleOptionProgressBar *option) const;
 
  private:

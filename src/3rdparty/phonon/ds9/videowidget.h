@@ -28,7 +28,7 @@
 
 #include <QtGui/QWidget>
 #include <phonon/videowidgetinterface.h>
-#include "backendnode.h"
+#include <backendnode.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -55,22 +55,22 @@ namespace Phonon
             VideoWidget(QWidget *parent = 0);
             ~VideoWidget();
 
-            Phonon::VideoWidget::AspectRatio aspectRatio() const;
-            void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio);
-            Phonon::VideoWidget::ScaleMode scaleMode() const;
-            void setScaleMode(Phonon::VideoWidget::ScaleMode);
-            qreal brightness() const;
-            void setBrightness(qreal);
-            qreal contrast() const;
-            void setContrast(qreal);
-            qreal hue() const;
-            void setHue(qreal);
-            qreal saturation() const;
-            void setSaturation(qreal);
+            Phonon::VideoWidget::AspectRatio aspectRatio() const override;
+            void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio) override;
+            Phonon::VideoWidget::ScaleMode scaleMode() const override;
+            void setScaleMode(Phonon::VideoWidget::ScaleMode) override;
+            qreal brightness() const override;
+            void setBrightness(qreal) override;
+            qreal contrast() const override;
+            void setContrast(qreal) override;
+            qreal hue() const override;
+            void setHue(qreal) override;
+            qreal saturation() const override;
+            void setSaturation(qreal) override;
 
             void setCurrentGraph(int index);
 
-            QWidget *widget();
+            QWidget *widget() override;
 
             void notifyVideoLoaded();
             AbstractVideoRenderer *switchRendering(AbstractVideoRenderer *current);
@@ -81,7 +81,7 @@ namespace Phonon
             void updateVideoSize() const;
 
         protected:
-            virtual void connected(BackendNode *, const InputPin& inpin);
+            void connected(BackendNode *, const InputPin& inpin) override;
 
         private:
             AbstractVideoRenderer *getRenderer(int graphIndex, RendererType type, bool autoCreate = false);

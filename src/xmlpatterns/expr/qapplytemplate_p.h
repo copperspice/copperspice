@@ -39,23 +39,22 @@ class ApplyTemplate : public TemplateInvoker
 
    ApplyTemplate(const TemplateMode::Ptr &mode, const WithParam::Hash &withParams, const TemplateMode::Ptr &defaultMode);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
-
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
 
    inline Item mapToItem(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context) const;
    inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
 
    inline TemplateMode::Ptr mode() const;
 
-   virtual bool configureRecursion(const CallTargetDescription::Ptr &sign);
-   virtual Expression::Ptr body() const;
-   virtual CallTargetDescription::Ptr callTargetDescription() const;
+   bool configureRecursion(const CallTargetDescription::Ptr &sign) override;
+   Expression::Ptr body() const override;
+   CallTargetDescription::Ptr callTargetDescription() const override;
 
-   Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
    typedef QExplicitlySharedDataPointer<const ApplyTemplate> ConstPtr;

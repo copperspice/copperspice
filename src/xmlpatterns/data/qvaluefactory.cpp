@@ -55,7 +55,7 @@ class PerformValueConstruction : public CastingPlatform<PerformValueConstruction
       return AtomicValue::Ptr(const_cast<AtomicValue *>(cast(lexicalValue, context).asAtomicValue()));
    }
 
-   const SourceLocationReflection *actualReflection() const {
+   const SourceLocationReflection *actualReflection() const  override {
       return m_sourceReflection;
    }
 

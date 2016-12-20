@@ -67,26 +67,26 @@ class QXIMInputContext : public QInputContext
    QXIMInputContext();
    ~QXIMInputContext();
 
-   QString identifierName();
-   QString language();
+   QString identifierName() override;
+   QString language() override;
 
-   void reset();
+   void reset() override;
 
-   void mouseHandler( int x, QMouseEvent *event);
-   bool isComposing() const;
+   void mouseHandler( int x, QMouseEvent *event) override;
+   bool isComposing() const override;
 
-   void setFocusWidget( QWidget *w );
-   void widgetDestroyed(QWidget *w);
+   void setFocusWidget( QWidget *w ) override;
+   void widgetDestroyed(QWidget *w) override;
 
    void create_xim();
    void close_xim();
 
-   void update();
+   void update() override;
 
    ICData *icData() const;
 
  protected:
-   bool x11FilterEvent( QWidget *keywidget, XEvent *event );
+   bool x11FilterEvent( QWidget *keywidget, XEvent *event ) override;
 
  private:
    static XIMStyle xim_style;

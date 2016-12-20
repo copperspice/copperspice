@@ -160,8 +160,8 @@ class Q_GUI_EXPORT QWizard : public QDialog
 
    void setDefaultProperty(const char *className, const char *property, const char *changedSignal);
 
-   void setVisible(bool visible);
-   QSize sizeHint() const;
+   void setVisible(bool visible) override;
+   QSize sizeHint() const override;
 
    GUI_CS_SIGNAL_1(Public, void currentIdChanged(int id))
    GUI_CS_SIGNAL_2(currentIdChanged, id)
@@ -182,14 +182,14 @@ class Q_GUI_EXPORT QWizard : public QDialog
    GUI_CS_SLOT_2(restart)
 
  protected:
-   bool event(QEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void paintEvent(QPaintEvent *event);
+   bool event(QEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
 #if defined(Q_OS_WIN)
-   bool winEvent(MSG *message, long *result);
+   bool winEvent(MSG *message, long *result) override;
 #endif
-   void done(int result);
+   void done(int result) override;
    virtual void initializePage(int id);
    virtual void cleanupPage(int id);
 

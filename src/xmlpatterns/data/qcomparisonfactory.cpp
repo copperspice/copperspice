@@ -80,7 +80,7 @@ class PerformComparison : public ComparisonPlatform<PerformComparison, true>
       return flexibleCompare(operand1, operand2, context);
    }
 
-   const SourceLocationReflection *actualReflection() const {
+   const SourceLocationReflection *actualReflection() const override {
       return m_sourceReflection;
    }
 

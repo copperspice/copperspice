@@ -470,7 +470,7 @@ class IteratorVector : public
       ListIterator<QXmlNodeModelIndexIteratorPointer, QVector<QXmlNodeModelIndexIteratorPointer> >(in) {
    }
 
-   virtual QAbstractXmlForwardIterator<QXmlNodeModelIndexIteratorPointer>::Ptr copy() const {
+   QAbstractXmlForwardIterator<QXmlNodeModelIndexIteratorPointer>::Ptr copy() const override {
       ItVector result;
 
       for (int i = 0; i < m_list.count(); ++i) {

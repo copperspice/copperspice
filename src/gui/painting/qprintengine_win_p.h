@@ -47,40 +47,41 @@ class QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
    QWin32PrintEngine(QPrinter::PrinterMode mode);
 
    // override QWin32PaintEngine
-   bool begin(QPaintDevice *dev);
-   bool end();
+   bool begin(QPaintDevice *dev) override;
+   bool end() override;
 
-   void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state) override;
 
    void updateMatrix(const QTransform &matrix);
    void updateClipPath(const QPainterPath &clip, Qt::ClipOperation op);
 
-   void drawPath(const QPainterPath &path);
-   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   void drawTextItem(const QPointF &p, const QTextItem &textItem);
+   void drawPath(const QPainterPath &path) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
 
-   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &p);
-   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
-   QVariant property(PrintEnginePropertyKey key) const;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &p) override;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
+   QVariant property(PrintEnginePropertyKey key) const override;
 
-   bool newPage();
-   bool abort();
-   int metric(QPaintDevice::PaintDeviceMetric) const;
+   bool newPage() override;
+   bool abort() override;
+   int metric(QPaintDevice::PaintDeviceMetric) const override;
 
-   QPrinter::PrinterState printerState() const;
+   QPrinter::PrinterState printerState() const override;
 
-   QPaintEngine::Type type() const {
+   QPaintEngine::Type type() const override {
       return Windows;
    }
 
-   HDC getDC() const;
-   void releaseDC(HDC) const;
+   HDC getDC() const override;
+   void releaseDC(HDC) const override;
 
-   HDC getPrinterDC() const {
+   HDC getPrinterDC() const override {
       return getDC();
    }
-   void releasePrinterDC(HDC dc) const {
+
+   void releasePrinterDC(HDC dc) const override {
       releaseDC(dc);
    }
 

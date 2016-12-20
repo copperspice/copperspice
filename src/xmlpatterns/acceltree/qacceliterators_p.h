@@ -35,8 +35,8 @@ namespace QPatternist {
 class AccelIterator : public QXmlNodeModelIndex::Iterator
 {
  public:
-   virtual xsInteger position() const;
-   virtual QXmlNodeModelIndex current() const;
+   xsInteger position() const override;
+   QXmlNodeModelIndex current() const override;
 
  protected:
    inline AccelIterator(const AccelTree *const doc,
@@ -87,7 +87,7 @@ class AncestorIterator : public AccelIterator
       Q_ASSERT(IncludeSelf || m_document->hasParent(pre));
    }
 
-   virtual QXmlNodeModelIndex next() {
+   QXmlNodeModelIndex next() override {
       if (m_currentPre == -1) {
          return closedExit();
       } else {
@@ -99,7 +99,7 @@ class AncestorIterator : public AccelIterator
       }
    }
 
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const {
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override {
       return QXmlNodeModelIndex::Iterator::Ptr(new AncestorIterator<IncludeSelf>(m_document, m_preNumber));
    }
 };
@@ -128,8 +128,8 @@ class ChildIterator : public AccelIterator
       }
    }
 
-   virtual QXmlNodeModelIndex next();
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const;
+   QXmlNodeModelIndex next() override;
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 
  private:
    const AccelTree::Depth m_depth;
@@ -148,7 +148,7 @@ class SiblingIterator : public AccelIterator
                  "When being following-sibling, the context node cannot be the last node in the document.");
    }
 
-   virtual QXmlNodeModelIndex next() {
+   virtual QXmlNodeModelIndex next()  override {
       if (m_currentPre == -1) {
          return QXmlNodeModelIndex();
       }
@@ -186,7 +186,7 @@ class SiblingIterator : public AccelIterator
       }
    }
 
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const {
+   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const  override {
       return QXmlNodeModelIndex::Iterator::Ptr(new SiblingIterator<IsFollowing>(m_document, m_preNumber));
    }
 
@@ -222,7 +222,7 @@ class DescendantIterator : public AccelIterator
       }
    }
 
-   virtual QXmlNodeModelIndex next() {
+   QXmlNodeModelIndex next() override {
       if (m_currentPre == -1) {
          return closedExit();
       }
@@ -252,7 +252,7 @@ class DescendantIterator : public AccelIterator
       return m_current;
    }
 
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const {
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override {
       return QXmlNodeModelIndex::Iterator::Ptr(new DescendantIterator<IncludeSelf>(m_document, m_preNumber));
    }
 
@@ -270,8 +270,8 @@ class FollowingIterator : public AccelIterator
                             const AccelTree::PreNumber pre) : AccelIterator(doc, pre, pre) {
    }
 
-   virtual QXmlNodeModelIndex next();
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const;
+   QXmlNodeModelIndex next() override;
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 };
 
 class PrecedingIterator : public AccelIterator
@@ -280,14 +280,13 @@ class PrecedingIterator : public AccelIterator
    /**
     * @ pre must have at least one child.
     */
-   inline PrecedingIterator(const AccelTree *const doc,
-                            const AccelTree::PreNumber pre) : AccelIterator(doc, pre,
-                                     pre - 1 /* currentPre */)
-      , m_postNumber(m_document->postNumber(m_preNumber)) {
+   PrecedingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)  
+                  : AccelIterator(doc, pre, pre - 1 /* currentPre */), 
+                  m_postNumber(m_document->postNumber(m_preNumber)) {
    }
 
-   virtual QXmlNodeModelIndex next();
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const;
+   QXmlNodeModelIndex next() override;
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 
  private:
    const AccelTree::PreNumber  m_postNumber;
@@ -299,14 +298,15 @@ class AttributeIterator : public AccelIterator
    /**
     * @p pre must have at least one child.
     */
-   inline AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre) : AccelIterator(doc, pre,
-            pre + 1) {
+   inline AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre) 
+                  : AccelIterator(doc, pre, pre + 1) {
+
       Q_ASSERT(m_document->hasChildren(pre));
       Q_ASSERT(m_document->kind(m_currentPre) == QXmlNodeModelIndex::Attribute);
    }
 
-   virtual QXmlNodeModelIndex next();
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const;
+   QXmlNodeModelIndex next() override;
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 };
 }
 

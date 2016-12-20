@@ -126,7 +126,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    bool isNull() const;
 
-   int devType() const;
+   int devType() const override;
 
    bool operator==(const QImage &) const;
    bool operator!=(const QImage &) const;
@@ -252,7 +252,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    int serialNumber() const;
    qint64 cacheKey() const;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    // Auxiliary data
    int dotsPerMeterX() const;
@@ -282,7 +282,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    }
 
  protected:
-   virtual int metric(PaintDeviceMetric metric) const;
+   virtual int metric(PaintDeviceMetric metric) const override;
 
  private:
    friend class QWSOnScreenSurface;

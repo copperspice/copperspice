@@ -39,15 +39,16 @@ class ItemVerifier : public SingleContainer
                 const ItemType::Ptr &reqType,
                 const ReportContext::ErrorCode errorCode);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
    inline Item mapToItem(const Item &, const DynamicContext::Ptr &) const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual const SourceLocationReflection *actualReflection() const;
+
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    typedef QExplicitlySharedDataPointer<const ItemVerifier> ConstPtr;

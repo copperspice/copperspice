@@ -35,17 +35,17 @@ namespace QPatternist {
 class RangeVariableReference : public VariableReference
 {
  public:
-   RangeVariableReference(const Expression::Ptr &sourceExpression,
-                          const VariableSlotID slot);
+   RangeVariableReference(const Expression::Ptr &sourceExpression, const VariableSlotID slot);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ID id() const;
+   ID id() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
+
  private:
    const Expression::Ptr m_sourceExpression;
 };

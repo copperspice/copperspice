@@ -35,17 +35,15 @@ namespace QPatternist {
 class TemplateInvoker : public CallSite
 {
  public:
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    inline const WithParam::Hash &withParams() const;
    WithParam::Hash m_withParams;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
  protected:
-
-   TemplateInvoker(const WithParam::Hash &withParams,
-                   const QXmlName &name = QXmlName());
+   TemplateInvoker(const WithParam::Hash &withParams, const QXmlName &name = QXmlName());
 
  private:
    Q_DISABLE_COPY(TemplateInvoker)

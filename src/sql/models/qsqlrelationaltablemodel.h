@@ -71,31 +71,30 @@ class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
       LeftJoin
    };
 
-   explicit QSqlRelationalTableModel(QObject *parent = 0,
-                                     QSqlDatabase db = QSqlDatabase());
+   explicit QSqlRelationalTableModel(QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
    virtual ~QSqlRelationalTableModel();
 
-   QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;
-   bool setData(const QModelIndex &item, const QVariant &value, int role = Qt::EditRole);
-   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+   QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const override;
+   bool setData(const QModelIndex &item, const QVariant &value, int role = Qt::EditRole) override;
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-   void clear();
-   bool select();
+   void clear() override;
+   bool select() override;
 
-   void setTable(const QString &tableName);
+   void setTable(const QString &tableName) override;
    virtual void setRelation(int column, const QSqlRelation &relation);
    QSqlRelation relation(int column) const;
    virtual QSqlTableModel *relationModel(int column) const;
    void setJoinMode( QSqlRelationalTableModel::JoinMode joinMode );
 
-   SQL_CS_SLOT_1(Public, void revertRow(int row))
+   SQL_CS_SLOT_1(Public, void revertRow(int row) override)
    SQL_CS_SLOT_2(revertRow)
 
  protected:
-   QString selectStatement() const;
-   bool updateRowInTable(int row, const QSqlRecord &values);
-   bool insertRowIntoTable(const QSqlRecord &values);
-   QString orderByClause() const;
+   QString selectStatement() const override;
+   bool updateRowInTable(int row, const QSqlRecord &values) override;
+   bool insertRowIntoTable(const QSqlRecord &values) override;
+   QString orderByClause() const override;
 
  private:
    Q_DECLARE_PRIVATE(QSqlRelationalTableModel)

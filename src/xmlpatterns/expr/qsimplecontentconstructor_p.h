@@ -36,14 +36,14 @@ class SimpleContentConstructor : public SingleContainer
  public:
    SimpleContentConstructor(const Expression::Ptr &operand);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

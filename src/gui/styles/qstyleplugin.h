@@ -50,10 +50,8 @@ class Q_GUI_EXPORT QStylePlugin : public QObject, public QStyleFactoryInterface
    explicit QStylePlugin(QObject *parent = 0);
    ~QStylePlugin();
 
-   virtual QStringList keys() const = 0;
-   virtual QStyle *create(const QString &key) = 0;
 };
 
 QT_END_NAMESPACE
 
-#endif // QSTYLEPLUGIN_H
+#endif

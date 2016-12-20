@@ -35,10 +35,10 @@ namespace QPatternist {
 class XSLTNodeTest : public AnyNodeType
 {
  public:
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
-   virtual bool itemMatches(const Item &item) const;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
+   bool itemMatches(const Item &item) const override;
 
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
  protected:
    friend class BuiltinTypes;

@@ -53,9 +53,9 @@ namespace Phonon
         public:
             QAudioCDPlayer();
             ~QAudioCDPlayer();
-            STDMETHODIMP QueryInterface(REFIID iid, void** out);
-        };
 
+            STDMETHODIMP QueryInterface(REFIID iid, void** out) override;
+        };
     }
 }
 

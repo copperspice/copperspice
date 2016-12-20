@@ -261,15 +261,15 @@ class DerivedString : public AtomicValue
       }
    }
 
-   virtual QString stringValue() const {
+   QString stringValue() const override {
       return m_value;
    }
 
-   virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const {
+   bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const  override {
       return m_value.length() > 0;
    }
 
-   virtual ItemType::Ptr type() const {
+   ItemType::Ptr type() const override {
       return itemType();
    }
 };

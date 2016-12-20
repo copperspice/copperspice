@@ -99,11 +99,11 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    GUI_CS_SIGNAL_2(cs_valueChanged, un_named_arg1)
 
  protected:
-   bool event(QEvent *event);
-   virtual QValidator::State validate(QString &input, int &pos) const;
+   bool event(QEvent *event) override;
+   QValidator::State validate(QString &input, int &pos) const override;
    virtual int valueFromText(const QString &text) const;
    virtual QString textFromValue(int val) const;
-   virtual void fixup(QString &str) const;
+   void fixup(QString &str) const override;
 
  private:
    Q_DISABLE_COPY(QSpinBox)
@@ -167,10 +167,10 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    int decimals() const;
    void setDecimals(int prec);
 
-   virtual QValidator::State validate(QString &input, int &pos) const;
+   QValidator::State validate(QString &input, int &pos) const override;
    virtual double valueFromText(const QString &text) const;
    virtual QString textFromValue(double val) const;
-   virtual void fixup(QString &str) const;
+   void fixup(QString &str) const override;
 
    GUI_CS_SLOT_1(Public, void setValue(double val))
    GUI_CS_SLOT_2(setValue)

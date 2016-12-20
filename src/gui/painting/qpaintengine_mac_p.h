@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -46,12 +46,13 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    QCoreGraphicsPaintEngine();
    ~QCoreGraphicsPaintEngine();
 
-   bool begin(QPaintDevice *pdev);
-   bool end();
+   bool begin(QPaintDevice *pdev) override;
+   bool end() override;
+
    static CGColorSpaceRef macGenericColorSpace();
    static CGColorSpaceRef macDisplayColorSpace(const QWidget *widget = 0);
 
-   void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state) override;
 
    void updatePen(const QPen &pen);
    void updateBrush(const QBrush &brush, const QPointF &pt);
@@ -64,21 +65,21 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    void updateCompositionMode(QPainter::CompositionMode mode);
    void updateRenderHints(QPainter::RenderHints hints);
 
-   void drawLines(const QLineF *lines, int lineCount);
-   void drawRects(const QRectF *rects, int rectCount);
-   void drawPoints(const QPointF *p, int pointCount);
-   void drawEllipse(const QRectF &r);
-   void drawPath(const QPainterPath &path);
+   void drawLines(const QLineF *lines, int lineCount) override;
+   void drawRects(const QRectF *rects, int rectCount) override;
+   void drawPoints(const QPointF *p, int pointCount) override;
+   void drawEllipse(const QRectF &r) override;
+   void drawPath(const QPainterPath &path) override;
 
-   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
-   void drawTextItem(const QPointF &pos, const QTextItem &item);
+   void drawTextItem(const QPointF &pos, const QTextItem &item) override;
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor);
+                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
-   Type type() const {
+   Type type() const override {
       return QPaintEngine::CoreGraphics;
    }
 
@@ -89,27 +90,16 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    static void clearColorSpace(QWidget *w);
 
    QPainter::RenderHints supportedRenderHints() const;
-
-   //avoid partial shadowed overload warnings...
-   void drawLines(const QLine *lines, int lineCount) {
-      QPaintEngine::drawLines(lines, lineCount);
-   }
-   void drawRects(const QRect *rects, int rectCount) {
-      QPaintEngine::drawRects(rects, rectCount);
-   }
-   void drawPoints(const QPoint *p, int pointCount) {
-      QPaintEngine::drawPoints(p, pointCount);
-   }
-   void drawEllipse(const QRect &r) {
-      QPaintEngine::drawEllipse(r);
-   }
-   void drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode) {
-      QPaintEngine::drawPolygon(points, pointCount, mode);
-   }
+ 
+   using QPaintEngine::drawLines;
+   using QPaintEngine::drawRects;
+   using QPaintEngine::drawPoints;
+   using QPaintEngine::drawEllipse;
+   using QPaintEngine::drawPolygon;
 
    bool supportsTransformations(qreal, const QTransform &) const {
       return true;
-   };
+   }
 
  protected:
    friend class QMacPrintEngine;

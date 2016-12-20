@@ -37,8 +37,8 @@ class Q_OPENGL_EXPORT QGLGraphicsSystem : public QGraphicsSystem
  public:
    QGLGraphicsSystem(bool useX11GL);
 
-   QPixmapData *createPixmapData(QPixmapData::PixelType type) const;
-   QWindowSurface *createWindowSurface(QWidget *widget) const;
+   QPixmapData *createPixmapData(QPixmapData::PixelType type) const override;
+   QWindowSurface *createWindowSurface(QWidget *widget) const override;
 
  private:
    bool m_useX11GL;

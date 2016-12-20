@@ -40,22 +40,22 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject
  public:
    explicit QAccessibleWidget(QWidget *o, Role r = Client, const QString &name = QString());
 
-   int childCount() const;
-   int indexOfChild(const QAccessibleInterface *child) const;
-   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const;
+   int childCount() const override;
+   int indexOfChild(const QAccessibleInterface *child) const override;
+   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const override;
 
-   int childAt(int x, int y) const;
-   QRect rect(int child) const;
-   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const;
+   int childAt(int x, int y) const override;
+   QRect rect(int child) const override;
+   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const override;
 
-   QString text(Text t, int child) const;
-   Role role(int child) const;
-   State state(int child) const;
+   QString text(Text t, int child) const override;
+   Role role(int child) const override;
+   State state(int child) const override;
 
 #ifndef QT_NO_ACTION
-   int userActionCount(int child) const;
-   QString actionText(int action, Text t, int child) const;
-   bool doAction(int action, int child, const QVariantList &params);
+   int userActionCount(int child) const override;
+   QString actionText(int action, Text t, int child) const override;
+   bool doAction(int action, int child, const QVariantList &params) override;
 #endif
 
  protected:
@@ -80,22 +80,22 @@ class Q_GUI_EXPORT QAccessibleWidgetEx : public QAccessibleObjectEx
  public:
    explicit QAccessibleWidgetEx(QWidget *o, Role r = Client, const QString &name = QString());
 
-   int childCount() const;
-   int indexOfChild(const QAccessibleInterface *child) const;
-   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const;
+   int childCount() const override;
+   int indexOfChild(const QAccessibleInterface *child) const override;
+   Relation relationTo(int child, const QAccessibleInterface *other, int otherChild) const override;
 
-   int childAt(int x, int y) const;
-   QRect rect(int child) const;
-   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const;
+   int childAt(int x, int y) const override;
+   QRect rect(int child) const override;
+   int navigate(RelationFlag rel, int entry, QAccessibleInterface **target) const override;
 
-   QString text(Text t, int child) const;
-   Role role(int child) const;
-   State state(int child) const;
+   QString text(Text t, int child) const override;
+   Role role(int child) const override;
+   State state(int child) const override;
 
-   QString actionText(int action, Text t, int child) const;
-   bool doAction(int action, int child, const QVariantList &params);
+   QString actionText(int action, Text t, int child) const override;
+   bool doAction(int action, int child, const QVariantList &params) override;
 
-   QVariant invokeMethodEx(Method method, int child, const QVariantList &params);
+   QVariant invokeMethodEx(Method method, int child, const QVariantList &params) override;
 
  protected:
    ~QAccessibleWidgetEx();
@@ -113,7 +113,7 @@ class Q_GUI_EXPORT QAccessibleWidgetEx : public QAccessibleObjectEx
    Q_DISABLE_COPY(QAccessibleWidgetEx)
 };
 
-#endif // QT_NO_ACCESSIBILITY
+#endif
 
 QT_END_NAMESPACE
 

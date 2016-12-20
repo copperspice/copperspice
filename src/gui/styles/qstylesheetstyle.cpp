@@ -1549,16 +1549,19 @@ class QStyleSheetStyleSelector : public StyleSelector
  public:
    QStyleSheetStyleSelector() { }
 
-   QStringList nodeNames(NodePtr node) const {
+   QStringList nodeNames(NodePtr node) const override {
       if (isNullNode(node)) {
          return QStringList();
       }
+
       const QMetaObject *metaObject = WIDGET(node)->metaObject();
+
 #ifndef QT_NO_TOOLTIP
       if (qstrcmp(metaObject->className(), "QTipLabel") == 0) {
          return QStringList(QLatin1String("QToolTip"));
       }
 #endif
+
       QStringList result;
       do {
          result += QString::fromLatin1(metaObject->className()).replace(QLatin1Char(':'), QLatin1Char('-'));
@@ -1566,19 +1569,21 @@ class QStyleSheetStyleSelector : public StyleSelector
       } while (metaObject != 0);
       return result;
    }
-   QString attribute(NodePtr node, const QString &name) const {
+
+   QString attribute(NodePtr node, const QString &name) const override {
       if (isNullNode(node)) {
          return QString();
       }
 
       QHash<QString, QString> &cache = m_attributeCache[WIDGET(node)];
       QHash<QString, QString>::const_iterator cacheIt = cache.constFind(name);
+
       if (cacheIt != cache.constEnd()) {
          return cacheIt.value();
       }
 
       QVariant value = WIDGET(node)->property(name.toLatin1());
-      if (!value.isValid()) {
+      if (! value.isValid()) {
          if (name == QLatin1String("class")) {
             QString className = QString::fromLatin1(WIDGET(node)->metaObject()->className());
             if (className.contains(QLatin1Char(':'))) {
@@ -1604,16 +1609,19 @@ class QStyleSheetStyleSelector : public StyleSelector
       cache[name] = valueStr;
       return valueStr;
    }
-   bool nodeNameEquals(NodePtr node, const QString &nodeName) const {
+
+   bool nodeNameEquals(NodePtr node, const QString &nodeName) const override {
       if (isNullNode(node)) {
          return false;
       }
       const QMetaObject *metaObject = WIDGET(node)->metaObject();
+
 #ifndef QT_NO_TOOLTIP
       if (qstrcmp(metaObject->className(), "QTipLabel") == 0) {
          return nodeName == QLatin1String("QToolTip");
       }
 #endif
+
       do {
          const ushort *uc = (const ushort *)nodeName.constData();
          const ushort *e = uc + nodeName.length();
@@ -1629,29 +1637,36 @@ class QStyleSheetStyleSelector : public StyleSelector
       } while (metaObject != 0);
       return false;
    }
-   bool hasAttributes(NodePtr) const {
+
+   bool hasAttributes(NodePtr) const override {
       return true;
    }
-   QStringList nodeIds(NodePtr node) const {
+
+   QStringList nodeIds(NodePtr node) const override {
       return isNullNode(node) ? QStringList() : QStringList(WIDGET(node)->objectName());
    }
-   bool isNullNode(NodePtr node) const {
+
+   bool isNullNode(NodePtr node) const override {
       return node.ptr == 0;
    }
-   NodePtr parentNode(NodePtr node) const {
+
+   NodePtr parentNode(NodePtr node) const override {
       NodePtr n;
       n.ptr = isNullNode(node) ? 0 : parentWidget(WIDGET(node));
       return n;
    }
-   NodePtr previousSiblingNode(NodePtr) const {
+
+   NodePtr previousSiblingNode(NodePtr) const override {
       NodePtr n;
       n.ptr = 0;
       return n;
    }
-   NodePtr duplicateNode(NodePtr node) const {
+
+   NodePtr duplicateNode(NodePtr node) const override {
       return node;
    }
-   void freeNode(NodePtr) const {
+
+   void freeNode(NodePtr) const override {
    }
 
  private:

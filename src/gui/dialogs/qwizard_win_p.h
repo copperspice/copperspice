@@ -43,14 +43,14 @@ class QVistaBackButton : public QAbstractButton
  public:
    QVistaBackButton(QWidget *widget);
 
-   QSize sizeHint() const;
-   inline QSize minimumSizeHint() const {
+   QSize sizeHint() const override;
+   inline QSize minimumSizeHint() const override{
       return sizeHint();
    }
 
-   void enterEvent(QEvent *event);
-   void leaveEvent(QEvent *event);
-   void paintEvent(QPaintEvent *event);
+   void enterEvent(QEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 };
 
 class QWizard;
@@ -128,7 +128,7 @@ class QVistaHelper : public QObject
    void mouseMoveEvent(QMouseEvent *event);
    void mousePressEvent(QMouseEvent *event);
    void mouseReleaseEvent(QMouseEvent *event);
-   bool eventFilter(QObject *obj, QEvent *event);
+   bool eventFilter(QObject *obj, QEvent *event) override;
 
    static int instanceCount;
    static bool is_vista;

@@ -36,10 +36,9 @@ class TruthPredicate : public GenericPredicate
 {
  public:
 
-   TruthPredicate(const Expression::Ptr &sourceExpression,
-                  const Expression::Ptr &predicate);
+   TruthPredicate(const Expression::Ptr &sourceExpression, const Expression::Ptr &predicate);
 
-   inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const {
+   Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const {
       Q_ASSERT_X(false, Q_FUNC_INFO, "This is practically dead code because it never gets called in GenericPredicate, "
                  "which binds to its own mapToItem for completely legitime reasons.");
       if (m_operand2->evaluateEBV(context)) {
@@ -49,7 +48,7 @@ class TruthPredicate : public GenericPredicate
       }
    }
 
-   inline Item::Iterator::Ptr map(const Item &item,
+   Item::Iterator::Ptr map(const Item &item,
                                   const DynamicContext::Ptr &context) const {
       Q_ASSERT_X(false, Q_FUNC_INFO, "I don't expect this function to be called, for the same reasons as above.");
       if (m_operand2->evaluateEBV(context)) {
@@ -59,8 +58,8 @@ class TruthPredicate : public GenericPredicate
       }
    }
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   SequenceType::List expectedOperandTypes() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

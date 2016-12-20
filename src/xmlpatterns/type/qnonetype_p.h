@@ -38,13 +38,13 @@ class NoneType : public ItemType, public SequenceType
  public:
    typedef QExplicitlySharedDataPointer<NoneType> Ptr;
 
-   virtual bool itemMatches(const Item &item) const;
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   bool itemMatches(const Item &item) const override;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
    /**
     * @returns always "none". That is, no namespace prefix
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @note The semantical meaning of this type's item type can
@@ -53,7 +53,7 @@ class NoneType : public ItemType, public SequenceType
     *
     * @returns always 'this' since NoneType is also an ItemType
     */
-   virtual ItemType::Ptr itemType() const;
+   ItemType::Ptr itemType() const override;
 
    /**
     * @note The semantical meaning of this type's cardinality
@@ -62,12 +62,12 @@ class NoneType : public ItemType, public SequenceType
     *
     * @returns always Cardinality::zeroOrMore()
     */
-   virtual Cardinality cardinality() const;
+   Cardinality cardinality() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isAtomicType() const;
+   bool isAtomicType() const override;
 
    /**
     * This can be thought to be a weird function for this type(none). There
@@ -82,24 +82,24 @@ class NoneType : public ItemType, public SequenceType
     * static operator lookup is postponed to runtime. Subsequently, expressions like error()
     * works properly with other XPath expressions.
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isNodeType() const;
+   bool isNodeType() const override;
 
    /**
     * @returns always item()
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
    /**
     * @returns always @p other. The none type can be thought as
     * disappearing when attempting to find the union of it and
     * another type.
     */
-   virtual const ItemType &operator|(const ItemType &other) const;
+   const ItemType &operator|(const ItemType &other) const override;
 
  protected:
 

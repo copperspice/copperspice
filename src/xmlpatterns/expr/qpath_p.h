@@ -41,40 +41,32 @@ class Path : public PairContainer
       ForApplyTemplate
    };
 
-   Path(const Expression::Ptr &operand1,
-        const Expression::Ptr &operand2,
-        const Kind kind = RegularPath);
+   Path(const Expression::Ptr &operand1, const Expression::Ptr &operand2, const Kind kind = RegularPath);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
-   inline Item::Iterator::Ptr mapToSequence(const Item &item,
-         const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-
-   virtual SequenceType::Ptr staticType() const;
-
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-
-   virtual Properties properties() const;
-
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    /**
     * @returns the item type of the last step's static type.
     */
-   virtual ItemType::Ptr newFocusType() const;
+   ItemType::Ptr newFocusType() const override;
 
-   virtual ID id() const;
+   ID id() const override;
 
    inline void setLast();
 
-   inline Kind kind() const {
+   Kind kind() const {
       return m_kind;
    }
 

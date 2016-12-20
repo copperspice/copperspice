@@ -48,9 +48,6 @@ class Q_SQL_EXPORT QSqlDriverPlugin : public QObject, public QSqlDriverFactoryIn
  public:
    explicit QSqlDriverPlugin(QObject *parent = 0);
    ~QSqlDriverPlugin();
-
-   virtual QStringList keys() const = 0;
-   virtual QSqlDriver *create(const QString &key) = 0;
 };
 
 QT_END_NAMESPACE

@@ -53,23 +53,23 @@ class AtomicType : public ItemType, public AnySimpleType
     * @returns @c true depending on if @p item is an atomic type, and that
     * AtomicValue::itemType()'s SequenceType::itemType() matches this type.
     */
-   virtual bool itemMatches(const Item &item) const;
+   bool itemMatches(const Item &item) const override;
 
    /**
     * @returns the result of SharedQXmlName::displayName(), of the SharedQName
     * object returned from the name() function.
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * returns always @c false
     */
-   virtual bool isNodeType() const;
+   bool isNodeType() const override;
 
    /**
     * returns always @c true
     */
-   virtual bool isAtomicType() const;
+   bool isAtomicType() const override;
 
    /**
     * Determines whether @p other is equal to this type, or is a
@@ -78,31 +78,30 @@ class AtomicType : public ItemType, public AnySimpleType
     * The implementation is generic, relying on operator==()
     * and xdtSuperType().
     */
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
    /**
     * @returns always 'this'
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
    /**
     * @returns always SchemaType::SimpleTypeAtomic
     */
-   virtual TypeCategory category() const;
+   TypeCategory category() const override;
 
    /**
     * @returns DerivationRestriction
     */
-   virtual DerivationMethod derivationMethod() const;
+   DerivationMethod derivationMethod() const override;
 
    virtual AtomicTypeVisitorResult::Ptr
    accept(const QExplicitlySharedDataPointer<AtomicTypeVisitor> &visitor,
-          const SourceLocationReflection *const) const = 0;
+                  const SourceLocationReflection *const) const = 0;
 
    virtual AtomicTypeVisitorResult::Ptr
-   accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-          const qint16 param,
-          const SourceLocationReflection *const) const = 0;
+   accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor, const qint16 param,
+                  const SourceLocationReflection *const) const = 0;
 
    virtual AtomicComparatorLocator::Ptr comparatorLocator() const = 0;
    virtual AtomicMathematicianLocator::Ptr mathematicianLocator() const = 0;

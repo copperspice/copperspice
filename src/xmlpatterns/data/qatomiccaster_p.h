@@ -38,9 +38,9 @@ class AtomicCaster : public AtomicTypeVisitorResult
 {
  public:
    typedef QExplicitlySharedDataPointer<AtomicCaster> Ptr;
+
    AtomicCaster();
    virtual ~AtomicCaster();
-
 
    virtual Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const = 0;
 };

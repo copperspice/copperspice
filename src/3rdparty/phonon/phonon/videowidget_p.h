@@ -49,21 +49,20 @@ namespace Phonon
 class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
     Q_DECLARE_PUBLIC(VideoWidget)
+
     public:
-        virtual QObject *qObject() { return q_func(); }
+        QObject *qObject() override { return q_func(); }
+
     protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
+        bool aboutToDeleteBackendObject() override;
+        void createBackendObject() override;
+
         void setupBackendObject();
 
         VideoWidgetPrivate(VideoWidget *parent)
-            : layout(parent),
-              aspectRatio(VideoWidget::AspectRatioAuto),
-              scaleMode(VideoWidget::FitInView),
-              brightness(0),
-              contrast(0),
-              hue(0),
-              saturation(0)
+            : layout(parent), aspectRatio(VideoWidget::AspectRatioAuto),
+              scaleMode(VideoWidget::FitInView), brightness(0),
+              contrast(0), hue(0), saturation(0)
         {
             layout.setMargin(0);
         }

@@ -283,10 +283,12 @@ class QFileDialogLineEdit : public QLineEdit
 {
  public:
    QFileDialogLineEdit(QWidget *parent = 0) : QLineEdit(parent), hideOnEsc(false), d_ptr(0) {}
+
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer) {
       d_ptr = d_pointer;
    }
-   void keyPressEvent(QKeyEvent *e);
+
+   void keyPressEvent(QKeyEvent *e) override;
    bool hideOnEsc;
 
  private:
@@ -298,12 +300,14 @@ class QFileDialogComboBox : public QComboBox
  public:
    QFileDialogComboBox(QWidget *parent = 0) : QComboBox(parent), urlModel(0) {}
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
-   void showPopup();
+   void showPopup() override;
    void setHistory(const QStringList &paths);
+
    QStringList history() const {
       return m_history;
    }
-   void paintEvent(QPaintEvent *);
+
+   void paintEvent(QPaintEvent *) override;
 
  private:
    QUrlModel *urlModel;
@@ -316,10 +320,10 @@ class QFileDialogListView : public QListView
  public:
    QFileDialogListView(QWidget *parent = 0);
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
  protected:
-   void keyPressEvent(QKeyEvent *e);
+   void keyPressEvent(QKeyEvent *e) override;
 
  private:
    QFileDialogPrivate *d_ptr;
@@ -330,10 +334,10 @@ class QFileDialogTreeView : public QTreeView
  public:
    QFileDialogTreeView(QWidget *parent);
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
  protected:
-   void keyPressEvent(QKeyEvent *e);
+   void keyPressEvent(QKeyEvent *e) override;
 
  private:
    QFileDialogPrivate *d_ptr;

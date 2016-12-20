@@ -133,21 +133,21 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    GUI_CS_SIGNAL_2(toggled, checked)
 
  protected:
-   virtual void paintEvent(QPaintEvent *e) = 0;
+   void paintEvent(QPaintEvent *e) override = 0;
    virtual bool hitButton(const QPoint &pos) const;
    virtual void checkStateSet();
    virtual void nextCheckState();
 
-   bool event(QEvent *e);
-   void keyPressEvent(QKeyEvent *e);
-   void keyReleaseEvent(QKeyEvent *e);
-   void mousePressEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *e);
-   void mouseMoveEvent(QMouseEvent *e);
-   void focusInEvent(QFocusEvent *e);
-   void focusOutEvent(QFocusEvent *e);
-   void changeEvent(QEvent *e);
-   void timerEvent(QTimerEvent *e);
+   bool event(QEvent *e) override;
+   void keyPressEvent(QKeyEvent *e) override;
+   void keyReleaseEvent(QKeyEvent *e) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *e) override;
+   void mouseMoveEvent(QMouseEvent *e) override;
+   void focusInEvent(QFocusEvent *e) override;
+   void focusOutEvent(QFocusEvent *e) override;
+   void changeEvent(QEvent *e) override;
+   void timerEvent(QTimerEvent *e) override;
 
    QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent = 0);
 

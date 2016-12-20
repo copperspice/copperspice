@@ -37,18 +37,18 @@ class Focus : public DelegatingDynamicContext
  public:
    Focus(const DynamicContext::Ptr &prevContext);
 
-   virtual xsInteger contextPosition() const;
-   virtual Item contextItem() const;
-   virtual xsInteger contextSize();
+   xsInteger contextPosition() const override;
+   Item contextItem() const override;
+   xsInteger contextSize() override;
 
-   virtual void setFocusIterator(const Item::Iterator::Ptr &it);
-   virtual Item::Iterator::Ptr focusIterator() const;
+   void setFocusIterator(const Item::Iterator::Ptr &it) override;
+   Item::Iterator::Ptr focusIterator() const override;
 
    /**
     * If there is no top level expression that sets the current item,
     * the focus should be used. This implementation ensures that.
     */
-   virtual Item currentItem() const;
+   Item currentItem() const override;
 
  private:
    Item::Iterator::Ptr m_focusIterator;

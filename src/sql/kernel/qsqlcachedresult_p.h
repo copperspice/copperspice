@@ -51,18 +51,19 @@ class Q_SQL_EXPORT QSqlCachedResult: public QSqlResult
 
    virtual bool gotoNext(ValueCache &values, int index) = 0;
 
-   QVariant data(int i);
-   bool isNull(int i);
-   bool fetch(int i);
-   bool fetchNext();
-   bool fetchPrevious();
-   bool fetchFirst();
-   bool fetchLast();
+   QVariant data(int i) override;
+   bool isNull(int i) override;
+   bool fetch(int i) override;
+   bool fetchNext() override;
+   bool fetchPrevious() override;
+   bool fetchFirst() override;
+   bool fetchLast() override;
 
    int colCount() const;
    ValueCache &cache();
 
-   void virtual_hook(int id, void *data);
+   void virtual_hook(int id, void *data) override;
+
  private:
    bool cacheNext();
    QSqlCachedResultPrivate *d;

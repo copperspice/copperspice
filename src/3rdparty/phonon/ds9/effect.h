@@ -48,10 +48,9 @@ namespace Phonon
             Effect(CLSID effectClass, QObject *parent);
             ~Effect();
 
-            QList<Phonon::EffectParameter> parameters() const;
-            QVariant parameterValue(const Phonon::EffectParameter &) const;
-            void setParameterValue(const Phonon::EffectParameter &, const QVariant &);
-
+            QList<Phonon::EffectParameter> parameters() const override;
+            QVariant parameterValue(const Phonon::EffectParameter &) const override;
+            void setParameterValue(const Phonon::EffectParameter &, const QVariant &) override;
 
         protected:
             //this is the constructor called by the explicit subclasses of effect

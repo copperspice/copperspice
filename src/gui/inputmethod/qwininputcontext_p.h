@@ -56,18 +56,18 @@ class QWinInputContext : public QInputContext
    explicit QWinInputContext(QObject *parent = 0);
    virtual ~QWinInputContext();
 
-   virtual QString identifierName() {
+   QString identifierName() override {
       return QLatin1String("win");
    }
-   virtual QString language();
+   QString language() override;
 
-   virtual void reset();
-   virtual void update();
+   void reset() override;
+   void update() override;
 
-   virtual void mouseHandler(int x, QMouseEvent *event);
-   virtual bool isComposing() const;
+   void mouseHandler(int x, QMouseEvent *event) override;
+   bool isComposing() const override;
 
-   virtual void setFocusWidget(QWidget *w);
+   void setFocusWidget(QWidget *w) override;
 
    bool startComposition();
    bool endComposition();

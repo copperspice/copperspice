@@ -81,6 +81,7 @@ class QTornOffMenu : public QMenu
    class QTornOffMenuPrivate : public QMenuPrivate
    {
       Q_DECLARE_PUBLIC(QMenu)
+
     public:
       QTornOffMenuPrivate(QMenu *p) : causedMenu(p) {
          tornoff = 1;
@@ -88,32 +89,40 @@ class QTornOffMenu : public QMenu
          causedPopup.action = ((QTornOffMenu *)p)->d_func()->causedPopup.action;
          causedStack = ((QTornOffMenu *)p)->d_func()->calcCausedStack();
       }
-      QList<QPointer<QWidget> > calcCausedStack() const {
+
+      QList<QPointer<QWidget> > calcCausedStack() const override {
          return causedStack;
       }
+
       QPointer<QMenu> causedMenu;
       QList<QPointer<QWidget> > causedStack;
    };
+
  public:
    QTornOffMenu(QMenu *p) : QMenu(*(new QTornOffMenuPrivate(p))) {
       Q_D(QTornOffMenu);
+
       // make the torn-off menu a sibling of p (instead of a child)
       QWidget *parentWidget = d->causedStack.isEmpty() ? p : d->causedStack.last();
       if (parentWidget->parentWidget()) {
          parentWidget = parentWidget->parentWidget();
       }
+
       setParent(parentWidget, Qt::Window | Qt::Tool);
       setAttribute(Qt::WA_DeleteOnClose, true);
       setAttribute(Qt::WA_X11NetWmWindowTypeMenu, true);
       setWindowTitle(p->windowTitle());
       setEnabled(p->isEnabled());
+
       //QObject::connect(this, SIGNAL(triggered(QAction*)), this, SLOT(onTrigger(QAction*)));
       //QObject::connect(this, SIGNAL(hovered(QAction*)), this, SLOT(onHovered(QAction*)));
+
       QList<QAction *> items = p->actions();
       for (int i = 0; i < items.count(); i++) {
          addAction(items.at(i));
       }
    }
+
    void syncWithMenu(QMenu *menu, QActionEvent *act) {
       Q_D(QTornOffMenu);
       if (menu != d->causedMenu) {
@@ -125,7 +134,8 @@ class QTornOffMenu : public QMenu
          removeAction(act->action());
       }
    }
-   void actionEvent(QActionEvent *e) {
+
+   void actionEvent(QActionEvent *e)  override {
       QMenu::actionEvent(e);
       setFixedSize(sizeHint());
    }

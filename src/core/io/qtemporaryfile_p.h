@@ -65,14 +65,14 @@ class QTemporaryFileEngine : public QFSFileEngine
    ~QTemporaryFileEngine();
 
    bool isReallyOpen();
-   void setFileName(const QString &file);
+   void setFileName(const QString &file) override;
    void setFileTemplate(const QString &fileTemplate);
 
-   bool open(QIODevice::OpenMode flags);
-   bool remove();
-   bool rename(const QString &newName);
-   bool renameOverwrite(const QString &newName);
-   bool close();
+   bool open(QIODevice::OpenMode flags) override;
+   bool remove() override;
+   bool rename(const QString &newName) override;
+   bool renameOverwrite(const QString &newName) override;
+   bool close() override;
 
    bool filePathIsTemplate;
    bool filePathWasTemplate;

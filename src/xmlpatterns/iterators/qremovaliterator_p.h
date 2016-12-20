@@ -47,17 +47,17 @@ class RemovalIterator : public Item::Iterator
    RemovalIterator(const Item::Iterator::Ptr &target,
                    const xsInteger position);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
 
    /**
     * The QAbstractXmlForwardIterator's count is computed by subtracting one from the source
     * QAbstractXmlForwardIterator's count.
     */
-   virtual xsInteger count();
+   xsInteger count() override;
 
-   virtual Item::Iterator::Ptr copy() const;
+   Item::Iterator::Ptr copy() const override;
 
  private:
    const Item::Iterator::Ptr m_target;

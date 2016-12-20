@@ -339,7 +339,7 @@ class QSocks5BindStore : public QObject
    QSocks5BindData *retrieve(int socketDescriptor);
 
  protected:
-   void timerEvent(QTimerEvent *event);
+   void timerEvent(QTimerEvent *event) override;
 
    QMutex mutex;
    int sweepTimerId;

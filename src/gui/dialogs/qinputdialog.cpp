@@ -91,7 +91,7 @@ class QInputDialogSpinBox : public QSpinBox
    GUI_CS_SLOT_1(Private, void notifyTextChanged())
    GUI_CS_SLOT_2(notifyTextChanged)
 
-   void keyPressEvent(QKeyEvent *event) {
+   void keyPressEvent(QKeyEvent *event) override {
       if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && !hasAcceptableInput()) {
 #ifndef QT_NO_PROPERTIES
          setProperty("value", property("value"));
@@ -102,7 +102,7 @@ class QInputDialogSpinBox : public QSpinBox
       notifyTextChanged();
    }
 
-   void mousePressEvent(QMouseEvent *event) {
+   void mousePressEvent(QMouseEvent *event) override {
       QSpinBox::mousePressEvent(event);
       notifyTextChanged();
    }
@@ -131,7 +131,7 @@ class QInputDialogDoubleSpinBox : public QDoubleSpinBox
    GUI_CS_SLOT_2(notifyTextChanged)
 
  private:
-   void keyPressEvent(QKeyEvent *event) {
+   void keyPressEvent(QKeyEvent *event) override {
       if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && !hasAcceptableInput()) {
 #ifndef QT_NO_PROPERTIES
          setProperty("value", property("value"));
@@ -142,7 +142,7 @@ class QInputDialogDoubleSpinBox : public QDoubleSpinBox
       notifyTextChanged();
    }
 
-   void mousePressEvent(QMouseEvent *event) {
+   void mousePressEvent(QMouseEvent *event)  override {
       QDoubleSpinBox::mousePressEvent(event);
       notifyTextChanged();
    }

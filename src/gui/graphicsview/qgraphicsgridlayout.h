@@ -91,20 +91,20 @@ class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
    QGraphicsLayoutItem *itemAt(int row, int column) const;
 
    // inherited from QGraphicsLayout
-   int count() const;
-   QGraphicsLayoutItem *itemAt(int index) const;
-   void removeAt(int index);
+   int count() const override;
+   QGraphicsLayoutItem *itemAt(int index) const override;
+   void removeAt(int index) override;
    void removeItem(QGraphicsLayoutItem *item);
 
-   void invalidate();
+   void invalidate() override;
 
    // inherited from QGraphicsLayoutItem
-   void setGeometry(const QRectF &rect);
-   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+   void setGeometry(const QRectF &rect) override;
+   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
 
    // ####
-   //QRect cellRect(int row, int column, int rowSpan = 1, int columnSpan = 1) const;
-   //QSizePolicy::ControlTypes controlTypes(LayoutSide side) const;
+   // QRect cellRect(int row, int column, int rowSpan = 1, int columnSpan = 1) const;
+   // QSizePolicy::ControlTypes controlTypes(LayoutSide side) const;
 
  private:
    Q_DISABLE_COPY(QGraphicsGridLayout)

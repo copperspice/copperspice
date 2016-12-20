@@ -35,11 +35,10 @@ namespace QPatternist {
 class UnaryExpression : public ArithmeticExpression
 {
  public:
-   UnaryExpression(const AtomicMathematician::Operator op,
-                   const Expression::Ptr &operand,
+   UnaryExpression(const AtomicMathematician::Operator op, const Expression::Ptr &operand,
                    const StaticContext::Ptr &context);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
  private:
    Q_DISABLE_COPY(UnaryExpression)

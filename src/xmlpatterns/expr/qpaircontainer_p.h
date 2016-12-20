@@ -35,9 +35,9 @@ namespace QPatternist {
 class PairContainer : public Expression
 {
  public:
-   virtual Expression::List operands() const;
-   virtual void setOperands(const Expression::List &operands);
-   virtual bool compressOperands(const StaticContext::Ptr &);
+   Expression::List operands() const override;
+   void setOperands(const Expression::List &operands) override;
+   bool compressOperands(const StaticContext::Ptr &) override;
 
  protected:
    PairContainer(const Expression::Ptr &operand1, const Expression::Ptr &operand2);

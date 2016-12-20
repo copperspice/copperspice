@@ -55,8 +55,7 @@ namespace Phonon
                 m_pin->Release();
             }
 
-            STDMETHODIMP QueryInterface(const IID &iid,void **out)
-            {
+            STDMETHODIMP QueryInterface(const IID &iid,void **out) override {
                 if (!out) {
                     return E_POINTER;
                 }
@@ -77,12 +76,12 @@ namespace Phonon
                 return hr;
             }
 
-            STDMETHODIMP_(ULONG) AddRef()
+            STDMETHODIMP_(ULONG) AddRef() override
             {
                 return InterlockedIncrement(&m_refCount);
             }
 
-            STDMETHODIMP_(ULONG) Release()
+            STDMETHODIMP_(ULONG) Release() override
             {
                 ULONG refCount = InterlockedDecrement(&m_refCount);
                 if (refCount == 0) {
@@ -92,7 +91,7 @@ namespace Phonon
                 return refCount;
             }
 
-            STDMETHODIMP Next(ULONG count, AM_MEDIA_TYPE **out, ULONG *fetched)
+            STDMETHODIMP Next(ULONG count, AM_MEDIA_TYPE **out, ULONG *fetched) override
             {
                 QMutexLocker locker(&m_mutex);
                 if (!out) {
@@ -121,21 +120,21 @@ namespace Phonon
                 return nbFetched == count ? S_OK : S_FALSE;
             }
 
-            STDMETHODIMP Skip(ULONG count)
+            STDMETHODIMP Skip(ULONG count) override
             {
                 QMutexLocker locker(&m_mutex);
                 m_index = qMin(m_index + int(count), m_pin->mediaTypes().count());
                 return  (m_index == m_pin->mediaTypes().count()) ? S_FALSE : S_OK;
             }
 
-            STDMETHODIMP Reset()
+            STDMETHODIMP Reset() override
             {
                 QMutexLocker locker(&m_mutex);
                 m_index = 0;
                 return S_OK;
             }
 
-            STDMETHODIMP Clone(IEnumMediaTypes **out)
+            STDMETHODIMP Clone(IEnumMediaTypes **out) override
             {
                 QMutexLocker locker(&m_mutex);
                 if (!out) {

@@ -240,15 +240,13 @@ namespace Phonon
                 }
             }
 
-            STDMETHODIMP Stop()
-            {
+            STDMETHODIMP Stop() override {
                 HRESULT hr = QBaseFilter::Stop();
                 beginFlush();
                 return hr;
             }
 
-            STDMETHODIMP Pause()
-            {
+            STDMETHODIMP Pause() override {
                 HRESULT hr = QBaseFilter::Pause();
                 if (m_inputPin->connected() == 0) {
                     ::SetEvent(m_receiveCanWait); //unblock the flow in receive
@@ -258,8 +256,7 @@ namespace Phonon
                 return hr;
             }
 
-            STDMETHODIMP Run(REFERENCE_TIME start)
-            {
+            STDMETHODIMP Run(REFERENCE_TIME start) override {
                 HRESULT hr = QBaseFilter::Run(start);
                 m_start = start;
 
@@ -278,7 +275,7 @@ namespace Phonon
                 return hr;
             }
 
-            HRESULT processSample(IMediaSample *sample);
+            HRESULT processSample(IMediaSample *sample) override;
 
             void applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation)
             {
@@ -378,34 +375,28 @@ namespace Phonon
               {
               }
 
-              STDMETHODIMP EndOfStream()
-              {
+              STDMETHODIMP EndOfStream() override {
                   m_renderer->endOfStream();
                   return QMemInputPin::EndOfStream();
               }
 
-              STDMETHODIMP ReceiveCanBlock()
-              {
+              STDMETHODIMP ReceiveCanBlock() override {
                   //yes, it can block
                   return S_OK;
               }
 
-              STDMETHODIMP BeginFlush()
-              {
+              STDMETHODIMP BeginFlush() override {
                   m_renderer->beginFlush();
                   return QMemInputPin::BeginFlush();
               }
 
-              STDMETHODIMP EndFlush()
-              {
+              STDMETHODIMP EndFlush() override {
                   m_renderer->endFlush();
                   return QMemInputPin::EndFlush();
               }
 
-
-              STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *prop)
-              {
-                  if (!prop) {
+              STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *prop) override {
+                  if (! prop) {
                       return E_POINTER;
                   }
 
@@ -414,12 +405,11 @@ namespace Phonon
                   return S_OK;
               }
 
-
-              STDMETHODIMP NotifyAllocator(IMemAllocator *alloc, BOOL readonly)
-              {
+              STDMETHODIMP NotifyAllocator(IMemAllocator *alloc, BOOL readonly) override {
                   if (!alloc) {
                       return E_POINTER;
                   }
+
                   ALLOCATOR_PROPERTIES prop;
                   HRESULT hr = alloc->GetProperties(&prop);
                   if (SUCCEEDED(hr) && prop.cBuffers == 1) {
@@ -432,8 +422,6 @@ namespace Phonon
 
                   return QMemInputPin::NotifyAllocator(alloc, readonly);
               }
-
-
 
         private:
             VideoRendererSoftFilter * const m_renderer;

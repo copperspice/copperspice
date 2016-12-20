@@ -71,27 +71,28 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    QString fullServerName() const;
 
    void abort();
-   virtual bool isSequential() const;
-   virtual qint64 bytesAvailable() const;
-   virtual qint64 bytesToWrite() const;
-   virtual bool canReadLine() const;
-   virtual void close();
+   bool isSequential() const override;
+   qint64 bytesAvailable() const override;
+   qint64 bytesToWrite() const override;
+   bool canReadLine() const override;
+   void close() override;
+
    LocalSocketError error() const;
    bool flush();
    bool isValid() const;
    qint64 readBufferSize() const;
    void setReadBufferSize(qint64 size);
 
-   bool setSocketDescriptor(quintptr socketDescriptor,
-                            LocalSocketState socketState = ConnectedState,
-                            OpenMode openMode = ReadWrite);
+   bool setSocketDescriptor(quintptr socketDescriptor, LocalSocketState socketState = ConnectedState,
+                  OpenMode openMode = ReadWrite);
+
    quintptr socketDescriptor() const;
 
    LocalSocketState state() const;
-   bool waitForBytesWritten(int msecs = 30000);
-   bool waitForConnected(int msecs = 30000);
+   bool waitForBytesWritten(int msecs = 30000) override;
+   bool waitForConnected(int msecs = 30000) ;
    bool waitForDisconnected(int msecs = 30000);
-   bool waitForReadyRead(int msecs = 30000);
+   bool waitForReadyRead(int msecs = 30000) override;
 
    NET_CS_SIGNAL_1(Public, void connected())
    NET_CS_SIGNAL_2(connected)
@@ -106,8 +107,8 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SIGNAL_2(stateChanged, socketState)
 
  protected:
-   virtual qint64 readData(char *, qint64);
-   virtual qint64 writeData(const char *, qint64);
+   qint64 readData(char *, qint64) override;
+   qint64 writeData(const char *, qint64) override;
 
  private:
    Q_DISABLE_COPY(QLocalSocket)

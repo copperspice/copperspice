@@ -34,11 +34,10 @@ namespace QPatternist {
 class TraceFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 
-
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 };
 }
 

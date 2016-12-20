@@ -36,15 +36,13 @@ class UnresolvedVariableReference : public EmptyContainer
  public:
    UnresolvedVariableReference(const QXmlName &name);
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual ID id() const;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   ID id() const override;
 
    inline void bindTo(const Expression::Ptr &body);
-
    inline Expression::Ptr replacement() const;
 
  private:

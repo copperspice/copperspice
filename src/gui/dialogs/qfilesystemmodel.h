@@ -69,31 +69,33 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    explicit QFileSystemModel(QObject *parent = 0);
    ~QFileSystemModel();
 
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex index(const QString &path, int column = 0) const;
-   QModelIndex parent(const QModelIndex &child) const;
-   bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
-   bool canFetchMore(const QModelIndex &parent) const;
-   void fetchMore(const QModelIndex &parent);
+   QModelIndex parent(const QModelIndex &child) const override;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
+   bool canFetchMore(const QModelIndex &parent) const override;
+   void fetchMore(const QModelIndex &parent) override;
 
-   int rowCount(const QModelIndex &parent = QModelIndex()) const;
-   int columnCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
    QVariant myComputer(int role = Qt::DisplayRole) const;
-   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-   Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
-   QStringList mimeTypes() const;
-   QMimeData *mimeData(const QModelIndexList &indexes) const;
+   QStringList mimeTypes() const override;
+   QMimeData *mimeData(const QModelIndexList &indexes) const override;
+
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                     int row, int column, const QModelIndex &parent);
-   Qt::DropActions supportedDropActions() const;
+                  int row, int column, const QModelIndex &parent) override;
+
+   Qt::DropActions supportedDropActions() const override;
 
    // QFileSystemModel specific API
    QModelIndex setRootPath(const QString &path);
@@ -135,8 +137,8 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
  protected:
    QFileSystemModel(QFileSystemModelPrivate &, QObject *parent = 0);
-   void timerEvent(QTimerEvent *event);
-   bool event(QEvent *event);
+   void timerEvent(QTimerEvent *event) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QFileSystemModel)

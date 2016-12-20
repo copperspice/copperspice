@@ -39,34 +39,35 @@ class AnyAtomicType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<AnyAtomicType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * Overridden to return <tt>item()</tt>.
     *
     * @returns BuiltinTypes::item
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
    /**
     * Overridden to return @c xs:anySimpleType.
     *
     * @returns BuiltinTypes::xsAnySimpleType
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   SchemaType::Ptr wxsSuperType() const override;
 
    /**
     * Overridden to return @c true, @c xs:anyAtomicType is abstract.
     *
     * @returns always @c true
     */
-   virtual bool isAbstract() const;
+   bool isAbstract() const override;
 
  protected:
    friend class BuiltinTypes;
@@ -78,13 +79,14 @@ class UntypedAtomicType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<UntypedAtomicType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -96,14 +98,15 @@ class DateTimeType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DateTimeType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
 
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor, 
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
+
  protected:
    friend class BuiltinTypes;
    DateTimeType();
@@ -114,13 +117,14 @@ class DateType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DateType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -132,14 +136,14 @@ class SchemaTimeType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<SchemaTimeType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
 
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -151,13 +155,14 @@ class DurationType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DurationType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -169,13 +174,14 @@ class YearMonthDurationType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<YearMonthDurationType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -187,13 +193,14 @@ class DayTimeDurationType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DayTimeDurationType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -206,13 +213,14 @@ class DoubleType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DoubleType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -224,13 +232,14 @@ class FloatType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<FloatType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override; 
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    FloatType();
@@ -243,13 +252,14 @@ class DecimalType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<DecimalType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -261,13 +271,14 @@ class IntegerType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<IntegerType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -281,12 +292,12 @@ class DerivedIntegerType : public IntegerType
  public:
    using IntegerType::accept;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &v,
-         const SourceLocationReflection *const r) const {
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &v,
+         const SourceLocationReflection *const r) const  override {
       return v->visit(this, r);
    }
 
-   virtual QXmlName name(const NamePool::Ptr &np) const {
+   QXmlName name(const NamePool::Ptr &np) const override {
       switch (derivedType) {
          case TypeByte:
             return np->allocateQName(StandardNamespaces::xs, QLatin1String("byte"));
@@ -318,7 +329,7 @@ class DerivedIntegerType : public IntegerType
       return QXmlName();
    }
 
-   virtual QString displayName(const NamePool::Ptr &np) const {
+   QString displayName(const NamePool::Ptr &np) const  override {
       return np->displayName(name(np));
    }
 
@@ -336,13 +347,14 @@ class GYearMonthType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<GYearMonthType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -354,13 +366,14 @@ class GYearType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<GYearType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -372,13 +385,14 @@ class GMonthDayType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<GMonthDayType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -390,13 +404,14 @@ class GDayType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<GDayType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -408,13 +423,14 @@ class GMonthType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<GMonthType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -426,13 +442,14 @@ class BooleanType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<BooleanType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -444,13 +461,14 @@ class Base64BinaryType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<Base64BinaryType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -462,13 +480,14 @@ class HexBinaryType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<HexBinaryType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -480,13 +499,14 @@ class AnyURIType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<AnyURIType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -498,13 +518,14 @@ class QNameType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<QNameType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
@@ -516,18 +537,18 @@ class StringType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<StringType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
  protected:
    friend class BuiltinTypes;
-   StringType(const AtomicType::Ptr &parentType,
-              const AtomicCasterLocator::Ptr &casterLoc);
+   StringType(const AtomicType::Ptr &parentType, const AtomicCasterLocator::Ptr &casterLoc);
 };
 
 template<TypeOfDerivedString derivedType>
@@ -536,12 +557,12 @@ class DerivedStringType : public StringType
  public:
    using StringType::accept;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &v,
-         const SourceLocationReflection *const r) const {
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &v,
+         const SourceLocationReflection *const r) const  override {
       return v->visit(this, r);
    }
 
-   virtual QXmlName name(const NamePool::Ptr &np) const {
+   QXmlName name(const NamePool::Ptr &np) const  override {
       switch (derivedType) {
          case TypeString:
             return np->allocateQName(StandardNamespaces::xs, QLatin1String("string"));
@@ -569,7 +590,7 @@ class DerivedStringType : public StringType
       return QXmlName();
    }
 
-   virtual QString displayName(const NamePool::Ptr &np) const {
+   QString displayName(const NamePool::Ptr &np) const  override {
       return np->displayName(name(np));
    }
 
@@ -588,20 +609,21 @@ class NOTATIONType : public BuiltinAtomicType
  public:
    typedef QExplicitlySharedDataPointer<NOTATIONType> Ptr;
 
-   virtual AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const;
-   virtual AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-         const qint16 op,
-         const SourceLocationReflection *const reflection) const;
-   virtual QXmlName name(const NamePool::Ptr &np) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
+         const SourceLocationReflection *const reflection) const override;
+
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
+         const qint16 op, const SourceLocationReflection *const reflection) const override;
+
+   QXmlName name(const NamePool::Ptr &np) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * Overridden to return @c true, xs:NOTATION is abstract.
     *
     * @returns always @c true
     */
-   virtual bool isAbstract() const;
+   bool isAbstract() const override;
 
  protected:
    friend class BuiltinTypes;

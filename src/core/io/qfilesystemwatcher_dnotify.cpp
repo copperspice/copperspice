@@ -64,6 +64,7 @@ QT_BEGIN_NAMESPACE
 static int qfswd_fileChanged_pipe[2];
 static void (*qfswd_old_sigio_handler)(int) = 0;
 static void (*qfswd_old_sigio_action)(int, siginfo_t *, void *) = 0;
+
 static void qfswd_sigio_monitor(int signum, siginfo_t *i, void *v)
 {
    qt_safe_write(qfswd_fileChanged_pipe[1], reinterpret_cast<char *>(&i->si_fd), sizeof(int));
@@ -71,6 +72,7 @@ static void qfswd_sigio_monitor(int signum, siginfo_t *i, void *v)
    if (qfswd_old_sigio_handler && qfswd_old_sigio_handler != SIG_IGN) {
       qfswd_old_sigio_handler(signum);
    }
+
    if (qfswd_old_sigio_action) {
       qfswd_old_sigio_action(signum, i, v);
    }
@@ -86,7 +88,7 @@ class QDnotifySignalThread : public QThread
 
    void startNotify();
 
-   virtual void run();
+   void run() override;
 
    CORE_CS_SIGNAL_1(Public, void fdChanged(int data))
    CORE_CS_SIGNAL_2(fdChanged, data)
@@ -100,7 +102,7 @@ class QDnotifySignalThread : public QThread
    CORE_CS_SLOT_2(readFromDnotify)
 
  protected:
-   virtual bool event(QEvent *);
+   bool event(QEvent *) override;
 
 };
 

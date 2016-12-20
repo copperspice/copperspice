@@ -56,28 +56,28 @@ public:
     ~VideoWidget();
 
     void setupVideoBin();
-    void paintEvent(QPaintEvent *event);
-    void mediaNodeEvent(const MediaNodeEvent *event);
-    void setVisible(bool);
+    void paintEvent(QPaintEvent *event) override;
+    void mediaNodeEvent(const MediaNodeEvent *event) override;
+    void setVisible(bool) override;
 
-    Phonon::VideoWidget::AspectRatio aspectRatio() const;
-    void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio);
-    Phonon::VideoWidget::ScaleMode scaleMode() const;
-    void setScaleMode(Phonon::VideoWidget::ScaleMode);
-    qreal brightness() const;
-    void setBrightness(qreal);
-    qreal contrast() const;
-    void setContrast(qreal);
-    qreal hue() const;
-    void setHue(qreal);
-    qreal saturation() const;
-    void setSaturation(qreal);
+    Phonon::VideoWidget::AspectRatio aspectRatio() const override;
+    void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio) override;
+    Phonon::VideoWidget::ScaleMode scaleMode() const override;
+    void setScaleMode(Phonon::VideoWidget::ScaleMode) override;
+    qreal brightness() const override;
+    void setBrightness(qreal) override;
+    qreal contrast() const override;
+    void setContrast(qreal) override;
+    qreal hue() const override;
+    void setHue(qreal) override;
+    qreal saturation() const override;
+    void setSaturation(qreal) override;
     void setMovieSize(const QSize &size);
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
     QRect scaleToAspect(QRect srcRect, int w, int h) const;
     QRect calculateDrawFrameRect() const;
 
-    GstElement *videoElement()
+    GstElement *videoElement() override
     {
         Q_ASSERT(m_videoBin);
         return m_videoBin;
@@ -87,9 +87,9 @@ public:
         return m_movieSize;
     }
 
-    bool event(QEvent *);
+    bool event(QEvent *) override;
 
-    QWidget *widget() {
+    QWidget *widget() override {
         return this;
     }
 

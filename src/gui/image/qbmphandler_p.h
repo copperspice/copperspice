@@ -58,26 +58,28 @@ class QBmpHandler : public QImageIOHandler
 {
  public:
    QBmpHandler();
-   bool canRead() const;
-   bool read(QImage *image);
-   bool write(const QImage &image);
+   bool canRead() const override;
+   bool read(QImage *image) override;
+   bool write(const QImage &image) override;
 
-   QByteArray name() const;
+   QByteArray name() const override;
 
    static bool canRead(QIODevice *device);
 
-   QVariant option(ImageOption option) const;
-   void setOption(ImageOption option, const QVariant &value);
-   bool supportsOption(ImageOption option) const;
+   QVariant option(ImageOption option) const override;
+   void setOption(ImageOption option, const QVariant &value) override;
+   bool supportsOption(ImageOption option) const override;
 
  private:
    bool readHeader();
+
    enum State {
       Ready,
       ReadHeader,
       Error
    };
    State state;
+
    BMP_FILEHDR fileHeader;
    BMP_INFOHDR infoHeader;
    int startpos;

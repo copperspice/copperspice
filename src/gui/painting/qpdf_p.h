@@ -168,26 +168,25 @@ class QPdfBaseEngine : public QAlphaPaintEngine, public QPrintEngine
    ~QPdfBaseEngine() {}
 
    // reimplementations QPaintEngine
-   bool begin(QPaintDevice *pdev);
-   bool end();
+   bool begin(QPaintDevice *pdev) override;
+   bool end() override;
 
-   void drawPoints(const QPointF *points, int pointCount);
-   void drawLines(const QLineF *lines, int lineCount);
-   void drawRects(const QRectF *rects, int rectCount);
-   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   void drawPath (const QPainterPath &path);
+   void drawPoints(const QPointF *points, int pointCount) override;
+   void drawLines(const QLineF *lines, int lineCount) override;
+   void drawRects(const QRectF *rects, int rectCount) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawPath (const QPainterPath &path) override;
 
-   void drawTextItem(const QPointF &p, const QTextItem &textItem);
+   void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
 
-   void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state) override;
 
-   int metric(QPaintDevice::PaintDeviceMetric metricType) const;
-   // end reimplementations QPaintEngine
-
-   // Printer stuff...
-   bool newPage();
-   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
-   QVariant property(PrintEnginePropertyKey key) const;
+   int metric(QPaintDevice::PaintDeviceMetric metricType) const override;
+  
+   // printer stuff
+   bool newPage() override;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
+   QVariant property(PrintEnginePropertyKey key) const override;
 
    void setPen();
    virtual void setBrush() = 0;

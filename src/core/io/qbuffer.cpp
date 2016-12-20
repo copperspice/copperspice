@@ -44,10 +44,9 @@ class QBufferPrivate : public QIODevicePrivate
    QByteArray defaultBuf;
    int ioIndex;
 
-   virtual qint64 peek(char *data, qint64 maxSize);
-   virtual QByteArray peek(qint64 maxSize);
-
-   // private slots
+   qint64 peek(char *data, qint64 maxSize) override;
+   QByteArray peek(qint64 maxSize) override;
+   
    void _q_emitSignals();
 
    qint64 writtenSinceLastEmit;

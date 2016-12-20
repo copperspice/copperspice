@@ -49,29 +49,29 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    explicit QEventDispatcherWin32(QObject *parent = 0);
    ~QEventDispatcherWin32();
 
-   bool QT_ENSURE_STACK_ALIGNED_FOR_SSE processEvents(QEventLoop::ProcessEventsFlags flags);
-   bool hasPendingEvents();
+   bool QT_ENSURE_STACK_ALIGNED_FOR_SSE processEvents(QEventLoop::ProcessEventsFlags flags) override;
+   bool hasPendingEvents() override;
 
-   void registerSocketNotifier(QSocketNotifier *notifier);
-   void unregisterSocketNotifier(QSocketNotifier *notifier);
+   void registerSocketNotifier(QSocketNotifier *notifier) override;
+   void unregisterSocketNotifier(QSocketNotifier *notifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object);
-   bool unregisterTimer(int timerId);
-   bool unregisterTimers(QObject *object);
-   QList<TimerInfo> registeredTimers(QObject *object) const;
+   void registerTimer(int timerId, int interval, QObject *object) override;
+   bool unregisterTimer(int timerId) override;
+   bool unregisterTimers(QObject *object) override;
+   QList<TimerInfo> registeredTimers(QObject *object) const override;
 
    bool registerEventNotifier(QWinEventNotifier *notifier);
    void unregisterEventNotifier(QWinEventNotifier *notifier);
    void activateEventNotifiers();
 
-   void wakeUp();
-   void interrupt();
-   void flush();
+   void wakeUp() override;
+   void interrupt() override;
+   void flush() override;
 
-   void startingUp();
-   void closingDown();
+   void startingUp() override;
+   void closingDown() override;
 
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
  private:
    friend LRESULT QT_WIN_CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPARAM lp);

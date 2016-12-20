@@ -142,12 +142,12 @@ class QWhatsThat : public QWidget
    static QWhatsThat *instance;
 
  protected:
-   void showEvent(QShowEvent *e);
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void mouseMoveEvent(QMouseEvent *);
-   void keyPressEvent(QKeyEvent *);
-   void paintEvent(QPaintEvent *);
+   void showEvent(QShowEvent *e) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void mouseMoveEvent(QMouseEvent *) override;
+   void keyPressEvent(QKeyEvent *) override;
+   void paintEvent(QPaintEvent *) override;
 
  private:
    QPointer<QWidget>widget;
@@ -386,7 +386,8 @@ class QWhatsThisPrivate : public QObject
    QWhatsThisPrivate();
    ~QWhatsThisPrivate();
    static QWhatsThisPrivate *instance;
-   bool eventFilter(QObject *, QEvent *);
+
+   bool eventFilter(QObject *, QEvent *) override;
    QPointer<QAction> action;
 
    static void say(QWidget *, const QString &, int x = 0, int y = 0);

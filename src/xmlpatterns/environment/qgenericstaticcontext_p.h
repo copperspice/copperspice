@@ -51,85 +51,82 @@ class GenericStaticContext : public StaticContext
     * @param aBaseURI the base URI in the static context. Must be absolute
     * and valid.
     */
-   GenericStaticContext(const NamePool::Ptr &np,
-                        QAbstractMessageHandler *const errorHandler,
-                        const QUrl &aBaseURI,
-                        const FunctionFactory::Ptr &factory,
-                        const QXmlQuery::QueryLanguage lang);
+   GenericStaticContext(const NamePool::Ptr &np, QAbstractMessageHandler *const errorHandler,
+                  const QUrl &aBaseURI, const FunctionFactory::Ptr &factory, const QXmlQuery::QueryLanguage lang);
 
-   virtual NamespaceResolver::Ptr namespaceBindings() const;
-   virtual void setNamespaceBindings(const NamespaceResolver::Ptr &);
+   NamespaceResolver::Ptr namespaceBindings() const override;
+   void setNamespaceBindings(const NamespaceResolver::Ptr &) override;
 
-   virtual FunctionFactory::Ptr functionSignatures() const;
-   virtual SchemaTypeFactory::Ptr schemaDefinitions() const;
+   FunctionFactory::Ptr functionSignatures() const override;
+   SchemaTypeFactory::Ptr schemaDefinitions() const override;
 
    /**
     * Returns a DynamicContext used for evaluation at compile time.
     *
     * @bug The DynamicContext isn't stable. It should be cached privately.
     */
-   virtual DynamicContext::Ptr dynamicContext() const;
+   DynamicContext::Ptr dynamicContext() const override;
 
-   virtual QUrl baseURI() const;
-   virtual void setBaseURI(const QUrl &uri);
+   QUrl baseURI() const override;
+   void setBaseURI(const QUrl &uri) override;
 
-   virtual bool compatModeEnabled() const;
-   virtual void setCompatModeEnabled(const bool newVal);
+   bool compatModeEnabled() const override;
+   void setCompatModeEnabled(const bool newVal) override;
 
    /**
     * @returns always the Unicode codepoint collation URI
     */
-   virtual QUrl defaultCollation() const;
+   QUrl defaultCollation() const override;
 
-   virtual QAbstractMessageHandler *messageHandler() const;
+   QAbstractMessageHandler *messageHandler() const override;
 
-   virtual void setDefaultCollation(const QUrl &uri);
+   void setDefaultCollation(const QUrl &uri) override;
 
-   virtual BoundarySpacePolicy boundarySpacePolicy() const;
-   virtual void setBoundarySpacePolicy(const BoundarySpacePolicy policy);
+   BoundarySpacePolicy boundarySpacePolicy() const override;
+   void setBoundarySpacePolicy(const BoundarySpacePolicy policy) override;
 
-   virtual ConstructionMode constructionMode() const;
-   virtual void setConstructionMode(const ConstructionMode mode);
+   ConstructionMode constructionMode() const override;
+   void setConstructionMode(const ConstructionMode mode) override;
 
-   virtual OrderingMode orderingMode() const;
-   virtual void setOrderingMode(const OrderingMode mode);
-   virtual OrderingEmptySequence orderingEmptySequence() const;
-   virtual void setOrderingEmptySequence(const OrderingEmptySequence ordering);
+   OrderingMode orderingMode() const override;
+   void setOrderingMode(const OrderingMode mode) override;
+   OrderingEmptySequence orderingEmptySequence() const override;
+   void setOrderingEmptySequence(const OrderingEmptySequence ordering) override;
 
-   virtual QString defaultFunctionNamespace() const;
-   virtual void setDefaultFunctionNamespace(const QString &ns);
+   QString defaultFunctionNamespace() const override;
+   void setDefaultFunctionNamespace(const QString &ns) override;
 
-   virtual QString defaultElementNamespace() const;
-   virtual void setDefaultElementNamespace(const QString &ns);
+   QString defaultElementNamespace() const override;
+   void setDefaultElementNamespace(const QString &ns) override;
 
-   virtual InheritMode inheritMode() const;
-   virtual void setInheritMode(const InheritMode mode);
+   InheritMode inheritMode() const override;
+   void setInheritMode(const InheritMode mode) override;
 
-   virtual PreserveMode preserveMode() const;
-   virtual void setPreserveMode(const PreserveMode mode);
+   PreserveMode preserveMode() const override;
+   void setPreserveMode(const PreserveMode mode) override;
 
-   virtual ItemType::Ptr contextItemType() const;
+   ItemType::Ptr contextItemType() const override;
    void setContextItemType(const ItemType::Ptr &type);
-   virtual ItemType::Ptr currentItemType() const;
 
-   virtual StaticContext::Ptr copy() const;
+   ItemType::Ptr currentItemType() const override;
 
-   virtual ResourceLoader::Ptr resourceLoader() const;
+   StaticContext::Ptr copy() const override;
+
+   ResourceLoader::Ptr resourceLoader() const override;
    void setResourceLoader(const ResourceLoader::Ptr &loader);
 
-   virtual ExternalVariableLoader::Ptr externalVariableLoader() const;
+   ExternalVariableLoader::Ptr externalVariableLoader() const override;
    void setExternalVariableLoader(const ExternalVariableLoader::Ptr &loader);
-   virtual NamePool::Ptr namePool() const;
+   NamePool::Ptr namePool() const override;
 
-   virtual void addLocation(const SourceLocationReflection *const reflection,
-                            const QSourceLocation &location);
-   virtual QSourceLocation locationFor(const SourceLocationReflection *const reflection) const;
+   void addLocation(const SourceLocationReflection *const reflection, const QSourceLocation &location) override;
+   QSourceLocation locationFor(const SourceLocationReflection *const reflection) const override;
 
-   virtual LocationHash sourceLocations() const;
-   virtual QAbstractUriResolver *uriResolver() const;
+   LocationHash sourceLocations() const override;
+   QAbstractUriResolver *uriResolver() const override;
 
-   virtual VariableSlotID currentRangeSlot() const;
-   virtual VariableSlotID allocateRangeSlot();
+   VariableSlotID currentRangeSlot() const override;
+   VariableSlotID allocateRangeSlot() override;
 
  private:
    BoundarySpacePolicy         m_boundarySpacePolicy;

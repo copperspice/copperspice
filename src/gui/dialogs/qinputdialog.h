@@ -160,10 +160,10 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 
    void open(QObject *receiver, const char *member);
 
-   QSize minimumSizeHint() const;
-   QSize sizeHint() const;
+   QSize minimumSizeHint() const override;
+   QSize sizeHint() const override;
 
-   void setVisible(bool visible);
+   void setVisible(bool visible) override;
 
    static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo = QLineEdit::Normal,
                           const QString &text = QString(), bool *ok = 0, Qt::WindowFlags flags = 0);
@@ -201,7 +201,7 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    GUI_CS_SIGNAL_1(Public, void doubleValueSelected(double value))
    GUI_CS_SIGNAL_2(doubleValueSelected, value)
 
-   void done(int result); // ### Qt5/Make protected
+   void done(int result)override;       // ### Qt5/Make protected
 
  private:
    Q_DISABLE_COPY(QInputDialog)

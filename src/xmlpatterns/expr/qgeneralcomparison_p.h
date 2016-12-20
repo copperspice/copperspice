@@ -43,40 +43,38 @@ class GeneralComparison : public PairContainer, public ComparisonPlatform<Genera
                      const Expression::Ptr &op2,
                      const bool isBackwardsCompat = false);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   bool evaluateEBV(const DynamicContext::Ptr &) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * @returns always IDGeneralComparison
     */
-   virtual ID id() const;
+   ID id() const override;
 
-   virtual QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const;
+   QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
    /**
     * @returns the operator that this GeneralComparison is using.
     */
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return m_operator;
    }
 
    /**
     * Overridden to optimize case-insensitive compares.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
-   static inline void updateType(ItemType::Ptr &type,
-                                 const Expression::Ptr &source);
+   static inline void updateType(ItemType::Ptr &type, const Expression::Ptr &source);
+
    AtomicComparator::Ptr fetchGeneralComparator(Expression::Ptr &op1,
-         Expression::Ptr &op2,
-         const ReportContext::Ptr &context) const;
+         Expression::Ptr &op2, const ReportContext::Ptr &context) const;
 
    bool generalCompare(const Item &op1, const Item &op2, const DynamicContext::Ptr &context) const;
 

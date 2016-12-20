@@ -35,13 +35,12 @@ namespace QPatternist {
 class StaticNamespaceContext : public DelegatingStaticContext
 {
  public:
-   StaticNamespaceContext(const NamespaceResolver::Ptr &resolver,
-                          const StaticContext::Ptr &context);
+   StaticNamespaceContext(const NamespaceResolver::Ptr &resolver, const StaticContext::Ptr &context);
 
    /**
     * @returns the resolver passed in the constructor.
     */
-   virtual NamespaceResolver::Ptr namespaceBindings() const;
+   NamespaceResolver::Ptr namespaceBindings() const override;
 
  private:
    const NamespaceResolver::Ptr m_namespaceBindings;

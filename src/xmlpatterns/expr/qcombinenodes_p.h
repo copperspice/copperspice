@@ -40,20 +40,17 @@ class CombineNodes : public PairContainer
       Except      = 4
    };
 
-   CombineNodes(const Expression::Ptr &operand1,
-                const Operator op,
-                const Expression::Ptr &operand2);
+   CombineNodes(const Expression::Ptr &operand1, const Operator op, const Expression::Ptr &operand2);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    Operator operatorID() const;
-   virtual ID id() const;
+   ID id() const override;
 
    /**
     * Determines the string representation for operator @p op.
@@ -63,7 +60,7 @@ class CombineNodes : public PairContainer
     */
    static QString displayName(const Operator op);
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
  private:
    const Operator m_operator;

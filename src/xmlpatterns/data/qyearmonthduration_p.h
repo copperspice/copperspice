@@ -42,11 +42,10 @@ class YearMonthDuration : public AbstractDuration
    static YearMonthDuration::Ptr fromLexical(const QString &string);
 
    static YearMonthDuration::Ptr fromComponents(const bool isPositive,
-         const YearProperty years,
-         const MonthProperty months);
+         const YearProperty years, const MonthProperty months);
 
-   virtual ItemType::Ptr type() const;
-   virtual QString stringValue() const;
+   ItemType::Ptr type() const override;
+   QString stringValue() const override;
 
    /**
     * @returns the value of this @c xs:yearMonthDuration in months.
@@ -54,54 +53,52 @@ class YearMonthDuration : public AbstractDuration
     * and XPath 2.0 Functions and Operators, 10.3.2.2 Calculating the value of a
     * xs:dayTimeDuration from the lexical representation</a>
     */
-   virtual Value value() const;
+   Value value() const override;
 
    /**
     * If @p val is zero, is CommonValues::YearMonthDurationZero returned.
     */
-   virtual Item fromValue(const Value val) const;
+   Item fromValue(const Value val) const override;
 
    /**
     * @returns the years component. Always positive.
     */
-   virtual YearProperty years() const;
+   YearProperty years() const override;
 
    /**
     * @returns the months component. Always positive.
     */
-   virtual MonthProperty months() const;
+   MonthProperty months() const override;
 
    /**
     * @returns always 0.
     */
-   virtual DayCountProperty days() const;
+   DayCountProperty days() const override;
 
    /**
     * @returns always 0.
     */
-   virtual HourProperty hours() const;
+   HourProperty hours() const override;
 
    /**
     * @returns always 0.
     */
-   virtual MinuteProperty minutes() const;
+   MinuteProperty minutes() const override;
 
    /**
     * @returns always 0.
     */
-   virtual SecondProperty seconds() const;
+   SecondProperty seconds() const override;
 
    /**
     * @returns always 0.
     */
-   virtual MSecondProperty mseconds() const;
+   MSecondProperty mseconds() const override;
 
  protected:
    friend class CommonValues;
 
-   YearMonthDuration(const bool isPositive,
-                     const YearProperty years,
-                     const MonthProperty months);
+   YearMonthDuration(const bool isPositive, const YearProperty years, const MonthProperty months);
 
  private:
    const YearProperty  m_years;

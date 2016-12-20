@@ -51,15 +51,16 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    QNetworkAccessHttpBackend();
    virtual ~QNetworkAccessHttpBackend();
 
-   virtual void open();
-   virtual void closeDownstreamChannel();
+   void open() override;
+   void closeDownstreamChannel() override;
 
-   virtual void downstreamReadyWrite();
-   virtual void setDownstreamLimited(bool b);
-   virtual void setReadBufferSize(qint64 size);
-   virtual void emitReadBufferFreed(qint64 size);
+   void downstreamReadyWrite() override;
+   void setDownstreamLimited(bool b) override;
+   void setReadBufferSize(qint64 size) override;
+   void emitReadBufferFreed(qint64 size) override;
 
-   virtual void copyFinished(QIODevice *);
+   void copyFinished(QIODevice *) override;
+
 #ifndef QT_NO_OPENSSL
    virtual void ignoreSslErrors();
    virtual void ignoreSslErrors(const QList<QSslError> &errors);
@@ -67,15 +68,16 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
    virtual void fetchSslConfiguration(QSslConfiguration &configuration) const;
    virtual void setSslConfiguration(const QSslConfiguration &configuration);
 #endif
-   QNetworkCacheMetaData fetchCacheMetaData(const QNetworkCacheMetaData &metaData) const;
+
+   QNetworkCacheMetaData fetchCacheMetaData(const QNetworkCacheMetaData &metaData) const override;
 
    // we return true since HTTP needs to send PUT/POST data again after having authenticated
-   bool needsResetableUploadData() {
+   bool needsResetableUploadData() override  {
       return true;
    }
 
-   bool canResume() const;
-   void setResumeOffset(quint64 offset);
+   bool canResume() const override;
+   void setResumeOffset(quint64 offset) override;
 
    // To HTTP thread:
    NET_CS_SIGNAL_1(Public, void startHttpRequest())
@@ -162,7 +164,7 @@ class QNetworkAccessHttpBackend: public QNetworkAccessBackend
 class QNetworkAccessHttpBackendFactory : public QNetworkAccessBackendFactory
 {
  public:
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const;
+   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
 
 QT_END_NAMESPACE

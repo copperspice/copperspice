@@ -36,12 +36,12 @@ class NodeSortExpression : public SingleContainer
  public:
    NodeSortExpression(const Expression::Ptr &operand);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
 
    /**
     * Ensures that result delivered from @p operand, is in document order.

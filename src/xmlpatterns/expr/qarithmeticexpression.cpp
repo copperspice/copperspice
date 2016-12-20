@@ -71,7 +71,7 @@ class DelegatingReflectionExpression : public Literal
       , m_reflection(reflection) {
    }
 
-   virtual const SourceLocationReflection *actualReflection() const {
+   const SourceLocationReflection *actualReflection() const override {
       return m_reflection;
    }
 
@@ -98,10 +98,8 @@ Item ArithmeticExpression::flexiblyCalculate(const Item &op1,
 
    const AtomicMathematician::Ptr ingela(fetchMathematician(a1, a2, op, true, context, reflection, code, isCompat));
 
-   return ingela->calculate(a1->evaluateSingleton(context),
-                            op,
-                            a2->evaluateSingleton(context),
-                            context);
+   return ingela->calculate(a1->evaluateSingleton(context), op, 
+                            a2->evaluateSingleton(context), context);
 }
 
 Expression::Ptr ArithmeticExpression::typeCheck(const StaticContext::Ptr &context,

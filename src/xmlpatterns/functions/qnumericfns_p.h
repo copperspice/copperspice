@@ -34,35 +34,35 @@ namespace QPatternist {
 class FloorFN : public Aggregator
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
 class AbsFN : public Aggregator
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
 class RoundFN : public Aggregator
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
 class CeilingFN : public Aggregator
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
 class RoundHalfToEvenFN : public Aggregator
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 }
 

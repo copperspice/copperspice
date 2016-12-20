@@ -218,7 +218,7 @@ class QAdoptedThread : public QThread
    void init();
 
  private:
-   void run();
+   void run() override;
 };
 
 QT_END_NAMESPACE

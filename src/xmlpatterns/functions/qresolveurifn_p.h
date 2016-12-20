@@ -35,8 +35,8 @@ namespace QPatternist {
 class ResolveURIFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 };
 }
 

@@ -39,13 +39,11 @@ class IdFN : public ContextNodeChecker
    IdFN();
    typedef QPair<DynamicContext::Ptr, const QAbstractXmlNodeModel *> IDContext;
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 
-   inline Item mapToItem(const QString &id,
-                         const IDContext &context) const;
+   inline Item mapToItem(const QString &id, const IDContext &context) const;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
  private:
    typedef QExplicitlySharedDataPointer<const IdFN> ConstPtr;
@@ -55,15 +53,15 @@ class IdFN : public ContextNodeChecker
 class IdrefFN : public ContextNodeChecker
 {
  public:
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 };
 
 class DocFN : public StaticBaseUriContainer
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
-   virtual SequenceType::Ptr staticType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   SequenceType::Ptr staticType() const override;
 
  private:
    SequenceType::Ptr m_type;
@@ -72,14 +70,14 @@ class DocFN : public StaticBaseUriContainer
 class DocAvailableFN : public StaticBaseUriContainer
 {
  public:
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 };
 
 
 class CollectionFN : public FunctionCall
 {
  public:
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 };
 }
 

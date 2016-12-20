@@ -38,20 +38,20 @@ template <const QXmlNodeModelIndex::NodeKind kind>
 class BuiltinNodeType : public AnyNodeType
 {
  public:
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
-   virtual bool itemMatches(const Item &item) const;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
+   bool itemMatches(const Item &item) const override;
 
    /**
     * @returns for example "text()", depending on what the constructor was passed
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
-   virtual ItemType::Ptr xdtSuperType() const;
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr xdtSuperType() const override;
+   ItemType::Ptr atomizedType() const override;
 
-   QXmlNodeModelIndex::NodeKind nodeKind() const;
+   QXmlNodeModelIndex::NodeKind nodeKind() const override;
 
-   PatternPriority patternPriority() const;
+   PatternPriority patternPriority() const override;
 
  protected:
    friend class BuiltinTypes;

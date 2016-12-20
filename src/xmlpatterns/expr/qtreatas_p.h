@@ -39,29 +39,27 @@ class TreatAs : public SingleContainer
     * Creats a TreatAs where it is checked that the expression @p operand conforms
     * to the type @p reqType.
     */
-   TreatAs(const Expression::Ptr &operand,
-           const SequenceType::Ptr &reqType);
+   TreatAs(const Expression::Ptr &operand, const SequenceType::Ptr &reqType);
 
    /**
     * This function rewrites always. First the type that this TreatAs expression tests for
     * is verified. Then, the type the <tt>treat as</tt> expression itself must match, @p reqType,
     * is verified.
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    /**
     * @returns always the SequenceType passed in the constructor to this class. That is, the
     * SequenceType that the operand must conform to.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
  private:
    const SequenceType::Ptr m_reqType;

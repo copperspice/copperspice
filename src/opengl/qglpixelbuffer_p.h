@@ -104,23 +104,26 @@ DECLARE_HANDLE(HPBUFFERARB);
 #elif !defined(QT_NO_EGL)
 #include <qegl_p.h>
 #endif
+
 QT_END_INCLUDE_NAMESPACE
 
 class QEglContext;
 
-
 class QGLPBufferGLPaintDevice : public QGLPaintDevice
 {
  public:
-   virtual QPaintEngine *paintEngine() const {
+   QPaintEngine *paintEngine() const override {
       return pbuf->paintEngine();
    }
-   virtual QSize size() const {
+
+   QSize size() const override {
       return pbuf->size();
    }
-   virtual QGLContext *context() const;
-   virtual void endPaint();
+
+   QGLContext *context() const override;
+   void endPaint() override;
    void setPBuffer(QGLPixelBuffer *pb);
+
  private:
    QGLPixelBuffer *pbuf;
 };
@@ -128,14 +131,17 @@ class QGLPBufferGLPaintDevice : public QGLPaintDevice
 class QGLPixelBufferPrivate
 {
    Q_DECLARE_PUBLIC(QGLPixelBuffer)
+
  public:
    QGLPixelBufferPrivate(QGLPixelBuffer *q) : q_ptr(q), invalid(true), qctx(0), pbuf(0), ctx(0) {
+
 #ifdef Q_OS_WIN
       dc = 0;
 #elif defined(Q_OS_MAC)
       share_ctx = 0;
 #endif
    }
+
    bool init(const QSize &size, const QGLFormat &f, QGLWidget *shareWidget);
    void common_init(const QSize &size, const QGLFormat &f, QGLWidget *shareWidget);
    bool cleanup();

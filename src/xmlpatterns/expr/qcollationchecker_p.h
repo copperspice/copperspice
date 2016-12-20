@@ -37,19 +37,19 @@ class CollationChecker : public SingleContainer
  public:
    CollationChecker(const Expression::Ptr &source);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
    /**
     * Expects exactly one string.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * @returns its operand's static type.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

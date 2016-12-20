@@ -33,15 +33,13 @@ QT_BEGIN_NAMESPACE
 
 class QFreetypeFace;
 
-// --------------------------------------------------------------------------
-
 class QFontEngineMultiXLFD : public QFontEngineMulti
 {
  public:
    QFontEngineMultiXLFD(const QFontDef &r, const QList<int> &l, int s);
    ~QFontEngineMultiXLFD();
 
-   void loadEngine(int at);
+   void loadEngine(int at) override;
 
  private:
    QList<int> encodings;
@@ -58,34 +56,34 @@ class QFontEngineXLFD : public QFontEngine
    QFontEngineXLFD(XFontStruct *f, const QByteArray &name, int mib);
    ~QFontEngineXLFD();
 
-   virtual QFontEngine::FaceId faceId() const;
-   QFontEngine::Properties properties() const;
-   virtual void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics);
-   virtual bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
-   virtual int synthesized() const;
+   QFontEngine::FaceId faceId() const override;
+   QFontEngine::Properties properties() const override;
+   void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
+   bool getSfntTableData(uint tag, uchar *buffer, uint *length) const override;
+   int synthesized() const override;
 
-   virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const;
-   virtual void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const;
+   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+                             QTextEngine::ShaperFlags flags) const override;
+   void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const override;
 
-   virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
-   virtual glyph_metrics_t boundingBox(glyph_t glyph);
+   glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
+   glyph_metrics_t boundingBox(glyph_t glyph) override;
 
-   virtual void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path, QTextItem::RenderFlags);
-   virtual QFixed ascent() const;
-   virtual QFixed descent() const;
-   virtual QFixed leading() const;
-   virtual qreal maxCharWidth() const;
-   virtual qreal minLeftBearing() const;
-   virtual qreal minRightBearing() const;
-   virtual QImage alphaMapForGlyph(glyph_t);
+   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path, QTextItem::RenderFlags) override;
+   QFixed ascent() const override;
+   QFixed descent() const override;
+   QFixed leading() const override;
+   qreal maxCharWidth() const override;
+   qreal minLeftBearing() const override;
+   qreal minRightBearing() const override;
+   QImage alphaMapForGlyph(glyph_t) override;
 
-   virtual inline Type type() const {
+   Type type() const override {
       return QFontEngine::XLFD;
    }
 
-   virtual bool canRender(const QChar *string, int len);
-   virtual const char *name() const;
+   bool canRender(const QChar *string, int len) override;
+   const char *name() const override;
 
    inline XFontStruct *fontStruct() const {
       return _fs;
@@ -118,7 +116,7 @@ class Q_GUI_EXPORT QFontEngineMultiFT : public QFontEngineMulti
    QFontEngineMultiFT(QFontEngine *fe, FcPattern *firstEnginePattern, FcPattern *p, int s, const QFontDef &request);
    ~QFontEngineMultiFT();
 
-   void loadEngine(int at);
+   void loadEngine(int at) override;
 
  private:
    QFontDef request;
@@ -136,16 +134,16 @@ class Q_GUI_EXPORT QFontEngineX11FT : public QFontEngineFT
    explicit QFontEngineX11FT(FcPattern *pattern, const QFontDef &fd, int screen);
    ~QFontEngineX11FT();
 
-   QFontEngine *cloneWithSize(qreal pixelSize) const;
+   QFontEngine *cloneWithSize(qreal pixelSize) const override;
 
 #ifndef QT_NO_XRENDER
    int xglyph_format;
 #endif
 
  protected:
-   virtual bool uploadGlyphToServer(QGlyphSet *set, uint glyphid, Glyph *g, GlyphInfo *info, int glyphDataSize) const;
-   virtual unsigned long allocateServerGlyphSet();
-   virtual void freeServerGlyphSet(unsigned long id);
+   bool uploadGlyphToServer(QGlyphSet *set, uint glyphid, Glyph *g, GlyphInfo *info, int glyphDataSize) const override;
+   unsigned long allocateServerGlyphSet() override;
+   void freeServerGlyphSet(unsigned long id) override;
 };
 
 #endif // QT_NO_FONTCONFIG

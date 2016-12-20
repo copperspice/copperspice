@@ -1118,8 +1118,8 @@ class StartState : public QState
    StartState(QState *parent)
       : QState(parent) {}
  protected:
-   void onEntry(QEvent *) {}
-   void onExit(QEvent *) {}
+   void onEntry(QEvent *) override {}
+   void onExit(QEvent *) override {}
 };
 
 class InitialTransition : public QAbstractTransition
@@ -1130,10 +1130,11 @@ class InitialTransition : public QAbstractTransition
       setTargetState(target);
    }
  protected:
-   virtual bool eventTest(QEvent *) {
+   virtual bool eventTest(QEvent *) override {
       return true;
    }
-   virtual void onTransition(QEvent *) {}
+
+   virtual void onTransition(QEvent *) override {}
 };
 
 } // namespace
@@ -1418,15 +1419,17 @@ class GoToStateTransition : public QAbstractTransition
       setTargetState(target);
    }
  protected:
-   void onTransition(QEvent *) {
+   void onTransition(QEvent *) override {
       deleteLater();
    }
-   bool eventTest(QEvent *) {
+
+   bool eventTest(QEvent *) override {
       return true;
    }
 };
 
 } // namespace
+
 // mingw compiler tries to export QObject::findChild<GoToStateTransition>(),
 // which doesn't work if its in an anonymous namespace.
 using namespace _QStateMachine_Internal;

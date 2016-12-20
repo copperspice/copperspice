@@ -39,9 +39,9 @@ class QWinNativePanGestureRecognizer : public QGestureRecognizer
  public:
    QWinNativePanGestureRecognizer();
 
-   QGesture *create(QObject *target);
-   QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event);
-   void reset(QGesture *state);
+   QGesture *create(QObject *target) override;
+   QGestureRecognizer::Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
+   void reset(QGesture *state) override;
 };
 
 #endif // QT_NO_NATIVE_GESTURES

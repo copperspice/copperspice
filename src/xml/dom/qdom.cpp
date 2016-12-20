@@ -122,14 +122,17 @@ class QDomNodePrivate
  public:
    QDomNodePrivate(QDomDocumentPrivate *, QDomNodePrivate *parent = 0);
    QDomNodePrivate(QDomNodePrivate *n, bool deep);
+
    virtual ~QDomNodePrivate();
 
    QString nodeName() const {
       return name;
    }
+
    QString nodeValue() const {
       return value;
    }
+
    virtual void setNodeValue(const QString &v) {
       value = v;
    }
@@ -152,6 +155,7 @@ class QDomNodePrivate
    inline QDomNodePrivate *parent() const {
       return hasParent ? ownerNode : 0;
    }
+
    inline void setParent(QDomNodePrivate *p) {
       ownerNode = p;
       hasParent = true;
@@ -211,7 +215,6 @@ class QDomNodePrivate
 
    void setLocation(int lineNumber, int columnNumber);
 
-   // Variables
    QAtomicInt ref;
    QDomNodePrivate *prev;
    QDomNodePrivate *next;
@@ -246,9 +249,8 @@ class QDomNodeListPrivate
    uint length() const;
 
    QAtomicInt ref;
-   /*
-     This list contains the children of this node.
-    */
+   
+   // This list contains the children of this node   
    QDomNodePrivate *node_impl;
    QString tagname;
    QString nsURI;
@@ -268,6 +270,7 @@ class QDomNamedNodeMapPrivate
    QDomNodePrivate *setNamedItemNS(QDomNodePrivate *arg);
    QDomNodePrivate *removeNamedItem(const QString &name);
    QDomNodePrivate *item(int index) const;
+
    uint length() const;
    bool contains(const QString &name) const;
    bool containsNS(const QString &nsURI, const QString &localName) const;
@@ -276,15 +279,19 @@ class QDomNamedNodeMapPrivate
     * Remove all children from the map.
     */
    void clearMap();
+
    bool isReadOnly() {
       return readonly;
    }
+
    void setReadOnly(bool r) {
       readonly = r;
    }
+
    bool isAppendToParent() {
       return appendToParent;
    }
+
    /**
     * If true, then the node will redirect insert/remove calls
     * to its parent by calling QDomNodePrivate::appendChild or removeChild.
@@ -303,8 +310,7 @@ class QDomNamedNodeMapPrivate
     * that means that all children are cloned.
     */
    QDomNamedNodeMapPrivate *clone(QDomNodePrivate *parent);
-
-   // Variables
+ 
    QAtomicInt ref;
    QHash<QString, QDomNodePrivate *> map;
    QDomNodePrivate *parent;
@@ -321,23 +327,23 @@ class QDomDocumentTypePrivate : public QDomNodePrivate
    void init();
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   QDomNodePrivate *insertBefore(QDomNodePrivate *newChild, QDomNodePrivate *refChild);
-   QDomNodePrivate *insertAfter(QDomNodePrivate *newChild, QDomNodePrivate *refChild);
-   QDomNodePrivate *replaceChild(QDomNodePrivate *newChild, QDomNodePrivate *oldChild);
-   QDomNodePrivate *removeChild(QDomNodePrivate *oldChild);
-   QDomNodePrivate *appendChild(QDomNodePrivate *newChild);
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+   QDomNodePrivate *insertBefore(QDomNodePrivate *newChild, QDomNodePrivate *refChild) override;
+   QDomNodePrivate *insertAfter(QDomNodePrivate *newChild, QDomNodePrivate *refChild) override;
+   QDomNodePrivate *replaceChild(QDomNodePrivate *newChild, QDomNodePrivate *oldChild) override;
+   QDomNodePrivate *removeChild(QDomNodePrivate *oldChild) override;
+   QDomNodePrivate *appendChild(QDomNodePrivate *newChild) override;
 
-   virtual bool isDocumentType() const {
+   bool isDocumentType() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::DocumentTypeNode;
    }
 
-   void save(QTextStream &s, int, int) const;
+   void save(QTextStream &s, int, int) const override;
 
-   // Variables
    QDomNamedNodeMapPrivate *entities;
    QDomNamedNodeMapPrivate *notations;
    QString publicId;
@@ -352,11 +358,13 @@ class QDomDocumentFragmentPrivate : public QDomNodePrivate
    QDomDocumentFragmentPrivate(QDomNodePrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   virtual QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isDocumentFragment() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isDocumentFragment() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::DocumentFragmentNode;
    }
 };
@@ -375,13 +383,15 @@ class QDomCharacterDataPrivate : public QDomNodePrivate
    void replaceData(unsigned long offset, unsigned long count, const QString &arg);
 
    // Reimplemented from QDomNodePrivate
-   virtual bool isCharacterData() const {
+   bool isCharacterData() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::CharacterDataNode;
    }
-   QDomNodePrivate *cloneNode(bool deep = true);
+
+   QDomNodePrivate *cloneNode(bool deep = true) override;
 };
 
 class QDomTextPrivate : public QDomCharacterDataPrivate
@@ -393,14 +403,17 @@ class QDomTextPrivate : public QDomCharacterDataPrivate
    QDomTextPrivate *splitText(int offset);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isText() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isText() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::TextNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
+
+   void save(QTextStream &s, int, int) const override;
 };
 
 class QDomAttrPrivate : public QDomNodePrivate
@@ -413,17 +426,19 @@ class QDomAttrPrivate : public QDomNodePrivate
    bool specified() const;
 
    // Reimplemented from QDomNodePrivate
-   void setNodeValue(const QString &v);
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isAttr() const {
+   void setNodeValue(const QString &v) override;
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isAttr() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::AttributeNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
 
-   // Variables
+   void save(QTextStream &s, int, int) const override;
+   
    bool m_specified;
 };
 
@@ -454,19 +469,22 @@ class QDomElementPrivate : public QDomNodePrivate
    QDomNamedNodeMapPrivate *attributes() {
       return m_attr;
    }
+
    bool hasAttributes() {
       return (m_attr->length() > 0);
    }
-   virtual bool isElement() const {
+
+   bool isElement() const override{
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override{
       return QDomNode::ElementNode;
    }
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual void save(QTextStream &s, int, int) const;
 
-   // Variables
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+   void save(QTextStream &s, int, int) const override;
+ 
    QDomNamedNodeMapPrivate *m_attr;
 };
 
@@ -478,14 +496,17 @@ class QDomCommentPrivate : public QDomCharacterDataPrivate
    QDomCommentPrivate(QDomCommentPrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isComment() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isComment() const  override{
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::CommentNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
+
+   void save(QTextStream &s, int, int) const override;
 };
 
 class QDomCDATASectionPrivate : public QDomTextPrivate
@@ -495,14 +516,17 @@ class QDomCDATASectionPrivate : public QDomTextPrivate
    QDomCDATASectionPrivate(QDomCDATASectionPrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isCDATASection() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isCDATASection() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::CDATASectionNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
+
+   void save(QTextStream &s, int, int) const override;
 };
 
 class QDomNotationPrivate : public QDomNodePrivate
@@ -510,19 +534,22 @@ class QDomNotationPrivate : public QDomNodePrivate
  public:
    QDomNotationPrivate(QDomDocumentPrivate *, QDomNodePrivate *parent, const QString &name,
                        const QString &pub, const QString &sys);
+
    QDomNotationPrivate(QDomNotationPrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isNotation() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isNotation() const override{
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::NotationNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
 
-   // Variables
+   void save(QTextStream &s, int, int) const override;
+ 
    QString m_sys;
    QString m_pub;
 };
@@ -535,16 +562,18 @@ class QDomEntityPrivate : public QDomNodePrivate
    QDomEntityPrivate(QDomEntityPrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isEntity() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isEntity() const override{
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::EntityNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
 
-   // Variables
+   void save(QTextStream &s, int, int) const override;
+  
    QString m_sys;
    QString m_pub;
    QString m_notationName;
@@ -557,14 +586,17 @@ class QDomEntityReferencePrivate : public QDomNodePrivate
    QDomEntityReferencePrivate(QDomNodePrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   bool isEntityReference() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isEntityReference() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override {
       return QDomNode::EntityReferenceNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
+
+   void save(QTextStream &s, int, int) const override;
 };
 
 class QDomProcessingInstructionPrivate : public QDomNodePrivate
@@ -575,14 +607,17 @@ class QDomProcessingInstructionPrivate : public QDomNodePrivate
    QDomProcessingInstructionPrivate(QDomProcessingInstructionPrivate *n, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   virtual bool isProcessingInstruction() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isProcessingInstruction() const  override{
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const  override {
       return QDomNode::ProcessingInstructionNode;
    }
-   virtual void save(QTextStream &s, int, int) const;
+
+   void save(QTextStream &s, int, int) const override;
 };
 
 class QDomDocumentPrivate : public QDomNodePrivate
@@ -601,9 +636,11 @@ class QDomDocumentPrivate : public QDomNodePrivate
    QDomDocumentTypePrivate *doctype() {
       return type.data();
    }
+
    QDomImplementationPrivate *implementation() {
       return impl.data();
    }
+
    QDomElementPrivate *documentElement();
 
    // Factories
@@ -621,48 +658,24 @@ class QDomDocumentPrivate : public QDomNodePrivate
    QDomNodePrivate *importNode(const QDomNodePrivate *importedNode, bool deep);
 
    // Reimplemented from QDomNodePrivate
-   QDomNodePrivate *cloneNode(bool deep = true);
-   bool isDocument() const {
+   QDomNodePrivate *cloneNode(bool deep = true) override;
+
+   bool isDocument() const override {
       return true;
    }
-   QDomNode::NodeType nodeType() const {
+
+   QDomNode::NodeType nodeType() const override{
       return QDomNode::DocumentNode;
    }
-   void clear();
+
+   void clear() override;
 
    // Variables
    QExplicitlySharedDataPointer<QDomImplementationPrivate> impl;
    QExplicitlySharedDataPointer<QDomDocumentTypePrivate> type;
 
    void saveDocument(QTextStream &stream, const int indent, QDomNode::EncodingPolicy encUsed) const;
-
-   /* \internal
-      Counter for the QDomNodeListPrivate timestamps.
-
-      This is a cache optimization, that might in some cases be effective. The
-      dilemma is that QDomNode::childNodes() returns a list, but the
-      implementation stores the children in a linked list. Hence, in order to
-      get the children out through childNodes(), a list must be populated each
-      time, which is O(N).
-
-      DOM has the requirement of node references being live, see DOM Core
-      Level 3, 1.1.1 The DOM Structure Model, which means that changes to the
-      underlying documents must be reflected in node lists.
-
-      This mechanism, nodeListTime, is a caching optimization that reduces the
-      amount of times the node list is rebuilt, by only doing so when the
-      document actually changes. However, a change to anywhere in any document
-      invalidate all lists, since no dependency tracking is done.
-
-      It functions by that all modifying functions(insertBefore() and so on)
-      increment the count; each QDomNodeListPrivate copies nodeListTime on
-      construction, and compares its own value to nodeListTime in order to
-      determine whether it needs to rebuild.
-
-      This is reentrant. The nodeListTime may overflow, but that's ok since we
-      check for equalness, not whether nodeListTime is smaller than the list's
-      stored timestamp.
-   */
+ 
    long nodeListTime;
 };
 
@@ -679,33 +692,35 @@ class QDomHandler : public QXmlDefaultHandler
    ~QDomHandler();
 
    // content handler
-   bool endDocument();
-   bool startElement(const QString &nsURI, const QString &localName, const QString &qName, const QXmlAttributes &atts);
-   bool endElement(const QString &nsURI, const QString &localName, const QString &qName);
-   bool characters(const QString &ch);
-   bool processingInstruction(const QString &target, const QString &data);
-   bool skippedEntity(const QString &name);
+   bool endDocument() override;
+   bool startElement(const QString &nsURI, const QString &localName, const QString &qName, 
+                  const QXmlAttributes &atts) override;
+
+   bool endElement(const QString &nsURI, const QString &localName, const QString &qName) override;
+   bool characters(const QString &ch) override;
+   bool processingInstruction(const QString &target, const QString &data) override;
+   bool skippedEntity(const QString &name) override;
 
    // error handler
-   bool fatalError(const QXmlParseException &exception);
+   bool fatalError(const QXmlParseException &exception) override;
 
    // lexical handler
-   bool startCDATA();
-   bool endCDATA();
-   bool startEntity(const QString &);
-   bool endEntity(const QString &);
-   bool startDTD(const QString &name, const QString &publicId, const QString &systemId);
-   bool comment(const QString &ch);
+   bool startCDATA() override;
+   bool endCDATA() override;
+   bool startEntity(const QString &) override;
+   bool endEntity(const QString &) override;
+   bool startDTD(const QString &name, const QString &publicId, const QString &systemId) override;
+   bool comment(const QString &ch) override;
 
    // decl handler
-   bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) ;
+   bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) override;
 
    // DTD handler
-   bool notationDecl(const QString &name, const QString &publicId, const QString &systemId);
+   bool notationDecl(const QString &name, const QString &publicId, const QString &systemId) override;
    bool unparsedEntityDecl(const QString &name, const QString &publicId, const QString &systemId,
-                           const QString &notationName) ;
+                           const QString &notationName) override;
 
-   void setDocumentLocator(QXmlLocator *locator);
+   void setDocumentLocator(QXmlLocator *locator) override;
 
    QString errorMsg;
    int errorLine;

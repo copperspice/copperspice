@@ -41,10 +41,10 @@ class QNetworkAccessFileBackend: public QNetworkAccessBackend
    QNetworkAccessFileBackend();
    virtual ~QNetworkAccessFileBackend();
 
-   virtual void open();
-   virtual void closeDownstreamChannel();
+   void open() override;
+   void closeDownstreamChannel() override;
 
-   virtual void downstreamReadyWrite();
+   void downstreamReadyWrite() override;
 
    NET_CS_SLOT_1(Public, void uploadReadyReadSlot())
    NET_CS_SLOT_2(uploadReadyReadSlot)
@@ -64,7 +64,7 @@ class QNetworkAccessFileBackend: public QNetworkAccessBackend
 class QNetworkAccessFileBackendFactory: public QNetworkAccessBackendFactory
 {
  public:
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const;
+   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
 
 QT_END_NAMESPACE

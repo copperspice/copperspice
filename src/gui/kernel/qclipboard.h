@@ -82,7 +82,7 @@ class Q_GUI_EXPORT QClipboard : public QObject
 
  protected:
    void connectNotify(const char *);
-   bool event(QEvent *);
+   bool event(QEvent *) override;
 
    QScopedPointer<QClipboardPrivate> d_ptr;
 

@@ -76,14 +76,15 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    Qt::HANDLE handle() const;
    QImage toImage() const;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
    QGLFormat format() const;
 
    static bool hasOpenGLPbuffers();
 
  protected:
-   int metric(PaintDeviceMetric metric) const;
-   int devType() const {
+   int metric(PaintDeviceMetric metric) const override;
+
+   int devType() const override{
       return QInternal::Pbuffer;
    }
 

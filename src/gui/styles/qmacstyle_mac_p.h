@@ -160,7 +160,7 @@ class QMacStylePrivate : public QObject
    HIRect pushButtonContentBounds(const QStyleOptionButton *btn, const HIThemeButtonDrawInfo *bdi) const;
 
    void initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
-         const QWidget *widget, const ThemeDrawState &tds);
+                  const QWidget *widget, const ThemeDrawState &tds);
 
    static HIRect comboboxInnerBounds(const HIRect &outerBounds, int buttonKind);
 
@@ -168,13 +168,13 @@ class QMacStylePrivate : public QObject
 
    static void drawCombobox(const HIRect &outerBounds, const HIThemeButtonDrawInfo &bdi, QPainter *p);
    static void drawTableHeader(const HIRect &outerBounds, bool drawTopBorder, bool drawLeftBorder,
-         const HIThemeButtonDrawInfo &bdi, QPainter *p);
+                  const HIThemeButtonDrawInfo &bdi, QPainter *p);
 
    bool contentFitsInPushButton(const QStyleOptionButton *btn, HIThemeButtonDrawInfo *bdi,
-         ThemeButtonKind buttonKindToCheck) const;
+                  ThemeButtonKind buttonKindToCheck) const;
 
    void initHIThemePushButton(const QStyleOptionButton *btn, const QWidget *widget,
-         const ThemeDrawState tds,HIThemeButtonDrawInfo *bdi) const;
+                  const ThemeDrawState tds,HIThemeButtonDrawInfo *bdi) const;
 
    QPixmap generateBackgroundPattern() const;
 
@@ -194,8 +194,8 @@ class QMacStylePrivate : public QObject
    bool mouseDown;
 
  protected:
-   bool eventFilter(QObject *, QEvent *);
-   void timerEvent(QTimerEvent *);
+   bool eventFilter(QObject *, QEvent *) override;
+   void timerEvent(QTimerEvent *) override;
 
  private :
    GUI_CS_SLOT_1(Private, void startAnimationTimer())

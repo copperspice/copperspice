@@ -224,7 +224,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    QAbstractItemDelegate *itemDelegate(const QModelIndex &index) const;
 
-   virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
    GUI_CS_SLOT_1(Public, virtual void reset())
    GUI_CS_SLOT_2(reset)
@@ -379,27 +379,27 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void stopAutoScroll();
    void doAutoScroll();
 
-   bool focusNextPrevChild(bool next);
-   bool event(QEvent *event);
-   bool viewportEvent(QEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
-   void mouseDoubleClickEvent(QMouseEvent *event);
+   bool focusNextPrevChild(bool next) override;
+   bool event(QEvent *event) override;
+   bool viewportEvent(QEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragEnterEvent(QDragEnterEvent *event);
-   void dragMoveEvent(QDragMoveEvent *event);
-   void dragLeaveEvent(QDragLeaveEvent *event);
-   void dropEvent(QDropEvent *event);
+   void dragEnterEvent(QDragEnterEvent *event) override;
+   void dragMoveEvent(QDragMoveEvent *event) override;
+   void dragLeaveEvent(QDragLeaveEvent *event) override;
+   void dropEvent(QDropEvent *event) override;
 #endif
 
-   void focusInEvent(QFocusEvent *event);
-   void focusOutEvent(QFocusEvent *event);
-   void keyPressEvent(QKeyEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void timerEvent(QTimerEvent *event);
-   void inputMethodEvent(QInputMethodEvent *event);
+   void focusInEvent(QFocusEvent *event) override;
+   void focusOutEvent(QFocusEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
+   void inputMethodEvent(QInputMethodEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP
    enum DropIndicatorPosition { OnItem, AboveItem, BelowItem, OnViewport };

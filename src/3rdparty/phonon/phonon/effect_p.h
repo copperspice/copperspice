@@ -47,14 +47,13 @@ class EffectPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(Effect)
     PHONON_PRIVATECLASS
-    public:
-        virtual QObject *qObject() { return q_func(); }
-    protected:
-        EffectPrivate()
-        {
-        }
 
-//X         Effect::Type type;
+    public:
+        QObject *qObject() override { return q_func(); }
+
+    protected:
+        EffectPrivate() { }
+
         EffectDescription description;
         QHash<EffectParameter, QVariant> parameterValues;
 };

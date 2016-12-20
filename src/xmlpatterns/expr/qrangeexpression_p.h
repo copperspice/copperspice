@@ -37,20 +37,20 @@ class RangeExpression : public PairContainer
  public:
    RangeExpression(const Expression::Ptr &operand1, const Expression::Ptr &operand2);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
    /**
     * It's likely that this function gets called if staticType() inferred
     * the cardinality to an exact number. In that case, we know that the
     * first arguments is the same as the second argument.
     */
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * @returns always CommonSequenceTypes::ZeroOrMoreIntegers
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * Disables compression for optimization reasons. For example, the
@@ -59,9 +59,9 @@ class RangeExpression : public PairContainer
     *
     * @returns Expression::DisableElimination
     */
-   virtual Expression::Properties properties() const;
+   Expression::Properties properties() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

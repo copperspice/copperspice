@@ -56,10 +56,11 @@ class QAuServerMac : public QAuServer
 
  public:
    QAuServerMac(QObject *parent) : QAuServer(parent) { }
-   void play(const QString &filename);
-   void play(QSound *s);
-   void stop(QSound *);
-   bool okay() {
+
+   void play(const QString &filename) override;
+   void play(QSound *s) override;
+   void stop(QSound *) override;
+   bool okay() override {
       return true;
    }
 

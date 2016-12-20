@@ -38,8 +38,8 @@ class QMimeDataWrapper : public QMimeSource
  public:
    QMimeDataWrapper() {}
 
-   const char *format(int n) const;
-   QByteArray encodedData(const char *) const;
+   const char *format(int n) const override;
+   QByteArray encodedData(const char *) const override;
 
    mutable QList<QByteArray> formats;
    const QMimeData *data;
@@ -51,11 +51,11 @@ class QMimeSourceWrapper : public QMimeData
    QMimeSourceWrapper(QClipboardPrivate *priv, QClipboard::Mode m);
    ~QMimeSourceWrapper();
 
-   bool hasFormat(const QString &mimetype) const;
-   QStringList formats() const;
+   bool hasFormat(const QString &mimetype) const override;
+   QStringList formats() const override;
 
  protected:
-   QVariant retrieveData(const QString &mimetype, QVariant::Type) const;
+   QVariant retrieveData(const QString &mimetype, QVariant::Type) const override;
 
  private:
    QClipboardPrivate *d;

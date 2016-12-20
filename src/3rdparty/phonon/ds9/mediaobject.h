@@ -97,7 +97,7 @@ namespace Phonon
             WorkerThread();
             ~WorkerThread();
 
-            virtual void run();
+            void run() override;
 
             //wants to know as soon as the state is set
             void addStateChangeRequest(Graph graph, OAFilterState, QList<Filter> = QList<Filter>());
@@ -188,39 +188,40 @@ namespace Phonon
         public:
             MediaObject(QObject *parent);
             ~MediaObject();
-            Phonon::State state() const;
-            bool hasVideo() const;
-            bool isSeekable() const;
-            qint64 currentTime() const;
-            qint32 tickInterval() const;
 
-            void setTickInterval(qint32 newTickInterval);
-            void play();
-            void pause();
-            void stop();
+            Phonon::State state() const override;
+            bool hasVideo() const override;
+            bool isSeekable() const override;
+            qint64 currentTime() const override;
+            qint32 tickInterval() const override;
+
+            void setTickInterval(qint32 newTickInterval) override;
+            void play() override;
+            void pause() override;
+            void stop() override;
             void ensureStopped();
-            void seek(qint64 time);
+            void seek(qint64 time) override;
 
-            QString errorString() const;
-            Phonon::ErrorType errorType() const;
+            QString errorString() const override;
+            Phonon::ErrorType errorType() const override;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            bool hasInterface(Interface) const;
-            QVariant interfaceCall(Interface iface, int command, const QList<QVariant> &params);
+            bool hasInterface(Interface) const override;
+            QVariant interfaceCall(Interface iface, int command, const QList<QVariant> &params) override;
 #endif
 
-            qint64 totalTime() const;
-            qint32 prefinishMark() const;
-            void setPrefinishMark(qint32 newPrefinishMark);
+            qint64 totalTime() const override;
+            qint32 prefinishMark() const override;
+            void setPrefinishMark(qint32 newPrefinishMark) override;
 
-            qint32 transitionTime() const;
-            void setTransitionTime(qint32);
+            qint32 transitionTime() const override;
+            void setTransitionTime(qint32) override;
 
-            qint64 remainingTime() const;
+            qint64 remainingTime() const override;
 
-            MediaSource source() const;
-            void setSource(const MediaSource &source);
-            void setNextSource(const MediaSource &source);
+            MediaSource source() const override;
+            void setSource(const MediaSource &source) override;
+            void setNextSource(const MediaSource &source) override;
 
             //COM error management
             bool catchComError(HRESULT hr);
@@ -310,7 +311,7 @@ namespace Phonon
 
         protected:
             void setState(Phonon::State);
-            void timerEvent(QTimerEvent *e);
+            void timerEvent(QTimerEvent *e) override;
 
         private:
 #ifndef QT_NO_PHONON_VIDEO

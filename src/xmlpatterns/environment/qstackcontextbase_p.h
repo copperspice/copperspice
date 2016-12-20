@@ -45,21 +45,18 @@ class StackContextBase : public TSuperClass
     */
    StackContextBase(const DynamicContext::Ptr &prevContext);
 
-   virtual void setRangeVariable(const VariableSlotID slotNumber,
-                                 const Item &newValue);
-   virtual Item rangeVariable(const VariableSlotID slotNumber) const;
+   void setRangeVariable(const VariableSlotID slotNumber, const Item &newValue) override;
+   Item rangeVariable(const VariableSlotID slotNumber) const override;
 
-   virtual void setExpressionVariable(const VariableSlotID slotNumber,
-                                      const Expression::Ptr &newValue);
-   virtual Expression::Ptr expressionVariable(const VariableSlotID slotNumber) const;
+   void setExpressionVariable(const VariableSlotID slotNumber, const Expression::Ptr &newValue) override;
+   Expression::Ptr expressionVariable(const VariableSlotID slotNumber) const override;
 
-   virtual Item::Iterator::Ptr positionIterator(const VariableSlotID slot) const;
-   virtual void setPositionIterator(const VariableSlotID slot,
-                                    const Item::Iterator::Ptr &newValue);
-   virtual ItemCacheCell &itemCacheCell(const VariableSlotID slot);
-   virtual ItemSequenceCacheCell::Vector &itemSequenceCacheCells(const VariableSlotID slot);
+   Item::Iterator::Ptr positionIterator(const VariableSlotID slot) const override;
+   void setPositionIterator(const VariableSlotID slot, const Item::Iterator::Ptr &newValue) override;
+   ItemCacheCell &itemCacheCell(const VariableSlotID slot) override;
+   ItemSequenceCacheCell::Vector &itemSequenceCacheCells(const VariableSlotID slot) override;
 
-   virtual DynamicContext::TemplateParameterHash &templateParameterStore();
+   DynamicContext::TemplateParameterHash &templateParameterStore() override;
 
  protected:
    /**
@@ -67,10 +64,7 @@ class StackContextBase : public TSuperClass
     * know why it has to be, but it won't compile when private.
     */
    template<typename VectorType, typename UnitType>
-   inline
-   void setSlotVariable(const VariableSlotID slot,
-                        const UnitType &newValue,
-                        VectorType &container) const;
+   inline void setSlotVariable(const VariableSlotID slot, const UnitType &newValue, VectorType &container) const;
 
  private:
    Item::Vector                            m_rangeVariables;

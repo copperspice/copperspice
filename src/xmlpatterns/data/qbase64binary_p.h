@@ -46,9 +46,10 @@ class Base64Binary : public AtomicValue
 
    static Base64Binary::Ptr fromValue(const QByteArray &data);
 
-   virtual QString stringValue() const;
-   virtual ItemType::Ptr type() const;
-   inline const QByteArray &asByteArray() const {
+   QString stringValue() const override;
+   ItemType::Ptr type() const override;
+
+   const QByteArray &asByteArray() const {
       return m_value;
    }
 

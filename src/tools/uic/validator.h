@@ -39,14 +39,14 @@ struct Option;
 struct Validator : public TreeWalker {
    Validator(Uic *uic);
 
-   void acceptUI(DomUI *node);
-   void acceptWidget(DomWidget *node);
+   void acceptUI(DomUI *node) override;
+   void acceptWidget(DomWidget *node) override;
 
-   void acceptLayoutItem(DomLayoutItem *node);
-   void acceptLayout(DomLayout *node);
+   void acceptLayoutItem(DomLayoutItem *node) override;
+   void acceptLayout(DomLayout *node) override;
 
-   void acceptActionGroup(DomActionGroup *node);
-   void acceptAction(DomAction *node);
+   void acceptActionGroup(DomActionGroup *node) override;
+   void acceptAction(DomAction *node) override;
 
  private:
    Driver *m_driver;
@@ -54,4 +54,4 @@ struct Validator : public TreeWalker {
 
 QT_END_NAMESPACE
 
-#endif // VALIDATOR_H
+#endif

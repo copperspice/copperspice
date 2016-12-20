@@ -230,48 +230,48 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    GUI_CS_SIGNAL_2(modificationChanged, un_named_arg1)
 
  protected:
-   virtual bool event(QEvent *e);
-   virtual void timerEvent(QTimerEvent *e);
-   virtual void keyPressEvent(QKeyEvent *e);
-   virtual void keyReleaseEvent(QKeyEvent *e);
-   virtual void resizeEvent(QResizeEvent *e);
-   virtual void paintEvent(QPaintEvent *e);
-   virtual void mousePressEvent(QMouseEvent *e);
-   virtual void mouseMoveEvent(QMouseEvent *e);
-   virtual void mouseReleaseEvent(QMouseEvent *e);
-   virtual void mouseDoubleClickEvent(QMouseEvent *e);
-   virtual bool focusNextPrevChild(bool next);
+   bool event(QEvent *e) override;
+   void timerEvent(QTimerEvent *e) override;
+   void keyPressEvent(QKeyEvent *e) override;
+   void keyReleaseEvent(QKeyEvent *e) override;
+   void resizeEvent(QResizeEvent *e) override;
+   void paintEvent(QPaintEvent *e) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseMoveEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *e) override;
+   void mouseDoubleClickEvent(QMouseEvent *e) override;
+   bool focusNextPrevChild(bool next) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   virtual void contextMenuEvent(QContextMenuEvent *e);
+   void contextMenuEvent(QContextMenuEvent *e) override;
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
-   virtual void dragEnterEvent(QDragEnterEvent *e);
-   virtual void dragLeaveEvent(QDragLeaveEvent *e);
-   virtual void dragMoveEvent(QDragMoveEvent *e);
-   virtual void dropEvent(QDropEvent *e);
+   void dragEnterEvent(QDragEnterEvent *e) override;
+   void dragLeaveEvent(QDragLeaveEvent *e) override;
+   void dragMoveEvent(QDragMoveEvent *e) override;
+   void dropEvent(QDropEvent *e) override;
 #endif
 
-   virtual void focusInEvent(QFocusEvent *e);
-   virtual void focusOutEvent(QFocusEvent *e);
-   virtual void showEvent(QShowEvent *);
-   virtual void changeEvent(QEvent *e);
+   void focusInEvent(QFocusEvent *e) override;
+   void focusOutEvent(QFocusEvent *e) override;
+   void showEvent(QShowEvent *) override;
+   void changeEvent(QEvent *e) override;
 
 #ifndef QT_NO_WHEELEVENT
-   virtual void wheelEvent(QWheelEvent *e);
+   void wheelEvent(QWheelEvent *e) override;
 #endif
 
-   virtual QMimeData *createMimeDataFromSelection() const;
-   virtual bool canInsertFromMimeData(const QMimeData *source) const;
-   virtual void insertFromMimeData(const QMimeData *source);
+   QMimeData *createMimeDataFromSelection() const;
+   bool canInsertFromMimeData(const QMimeData *source) const;
+   void insertFromMimeData(const QMimeData *source);
 
-   virtual void inputMethodEvent(QInputMethodEvent *);
-   QVariant inputMethodQuery(Qt::InputMethodQuery property) const;
+   void inputMethodEvent(QInputMethodEvent *) override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery property) const override;
 
    QPlainTextEdit(QPlainTextEditPrivate &dd, QWidget *parent);
 
-   virtual void scrollContentsBy(int dx, int dy);
+   void scrollContentsBy(int dx, int dy) override;
 
    QTextBlock firstVisibleBlock() const;
    QPointF contentOffset() const;
@@ -309,14 +309,14 @@ class Q_GUI_EXPORT QPlainTextDocumentLayout : public QAbstractTextDocumentLayout
    QPlainTextDocumentLayout(QTextDocument *document);
    ~QPlainTextDocumentLayout();
 
-   void draw(QPainter *, const PaintContext &);
-   int hitTest(const QPointF &, Qt::HitTestAccuracy ) const;
+   void draw(QPainter *, const PaintContext &) override;
+   int hitTest(const QPointF &, Qt::HitTestAccuracy ) const override;
 
-   int pageCount() const;
-   QSizeF documentSize() const;
+   int pageCount() const override;
+   QSizeF documentSize() const override;
 
-   QRectF frameBoundingRect(QTextFrame *) const;
-   QRectF blockBoundingRect(const QTextBlock &block) const;
+   QRectF frameBoundingRect(QTextFrame *) const override;
+   QRectF blockBoundingRect(const QTextBlock &block) const override;
 
    void ensureBlockLayout(const QTextBlock &block) const;
 
@@ -326,7 +326,7 @@ class Q_GUI_EXPORT QPlainTextDocumentLayout : public QAbstractTextDocumentLayout
    void requestUpdate();
 
  protected:
-   void documentChanged(int from, int /*charsRemoved*/, int charsAdded);
+   void documentChanged(int from, int /*charsRemoved*/, int charsAdded) override;
 
  private:
    void setTextWidth(qreal newWidth);

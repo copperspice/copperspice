@@ -81,17 +81,21 @@ class QGLFramebufferObjectFormatPrivate
 class QGLFBOGLPaintDevice : public QGLPaintDevice
 {
  public:
-   virtual QPaintEngine *paintEngine() const {
+   QPaintEngine *paintEngine() const override {
       return fbo->paintEngine();
    }
-   virtual QSize size() const {
+
+   QSize size() const override {
       return fbo->size();
    }
-   virtual QGLContext *context() const;
-   virtual QGLFormat format() const {
+
+   QGLContext *context() const override;
+
+   QGLFormat format() const override {
       return fboFormat;
    }
-   virtual bool alphaRequested() const {
+
+   bool alphaRequested() const override {
       return reqAlpha;
    }
 

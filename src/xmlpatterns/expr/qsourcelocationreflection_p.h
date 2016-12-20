@@ -63,8 +63,8 @@ class DelegatingSourceLocationReflection : public SourceLocationReflection
       Q_ASSERT(r);
    }
 
-   virtual const SourceLocationReflection *actualReflection() const;
-   virtual QString description() const;
+   const SourceLocationReflection *actualReflection() const override;
+   QString description() const override;
 
  private:
    const SourceLocationReflection *const m_r;

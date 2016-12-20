@@ -63,27 +63,28 @@ class QPdfEngine : public QPdfBaseEngine
    virtual ~QPdfEngine();
 
    // reimplementations QPaintEngine
-   bool begin(QPaintDevice *pdev);
-   bool end();
-   void drawPixmap (const QRectF &rectangle, const QPixmap &pixmap, const QRectF &sr);
-   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                  Qt::ImageConversionFlags flags = Qt::AutoColor);
-   void drawTiledPixmap (const QRectF &rectangle, const QPixmap &pixmap, const QPointF &point);
+   bool begin(QPaintDevice *pdev) override;
+   bool end() override;
+   void drawPixmap (const QRectF &rectangle, const QPixmap &pixmap, const QRectF &sr) override;
 
-   Type type() const;
-   // end reimplementations QPaintEngine
+   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
+                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
+
+   void drawTiledPixmap (const QRectF &rectangle, const QPixmap &pixmap, const QPointF &point) override;
+   Type type() const override;
+
 
    // reimplementations QPrintEngine
-   bool abort() {
+   bool abort() override {
       return false;
    }
-   bool newPage();
-   QPrinter::PrinterState printerState() const {
+
+   bool newPage() override;
+   QPrinter::PrinterState printerState() const override {
       return state;
    }
-   // end reimplementations QPrintEngine
 
-   void setBrush();
+   void setBrush() override;
 
    // ### unused, should have something for this in QPrintEngine
    void setAuthor(const QString &author);
@@ -111,6 +112,7 @@ class QPdfEnginePrivate : public QPdfBaseEnginePrivate
       QRect r = paperRect();
       return qRound(r.width() * 72. / resolution);
    }
+
    int height() const {
       QRect r = paperRect();
       return qRound(r.height() * 72. / resolution);
@@ -123,7 +125,7 @@ class QPdfEnginePrivate : public QPdfBaseEnginePrivate
    int addConstantAlphaObject(int brushAlpha, int penAlpha = 255);
    int addBrushPattern(const QTransform &matrix, bool *specifyColor, int *gStateObject);
 
-   void drawTextItem(const QPointF &p, const QTextItemInt &ti);
+   void drawTextItem(const QPointF &p, const QTextItemInt &ti) override;
 
    QTransform pageMatrix() const;
 

@@ -39,12 +39,12 @@ class Q_XMLPATTERNS_EXPORT QSimpleXmlNodeModel : public QAbstractXmlNodeModel
    QSimpleXmlNodeModel(const QXmlNamePool &namePool);
    virtual ~QSimpleXmlNodeModel();
 
-   virtual QUrl baseUri(const QXmlNodeModelIndex &node) const;
+   QUrl baseUri(const QXmlNodeModelIndex &node) const override;
    QXmlNamePool &namePool() const;
-   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &) const;
-   virtual QString stringValue(const QXmlNodeModelIndex &node) const;
-   virtual QXmlNodeModelIndex elementById(const QXmlName &id) const;
-   virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &idref) const;
+   QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &) const override;
+   QString stringValue(const QXmlNodeModelIndex &node) const override;
+   QXmlNodeModelIndex elementById(const QXmlName &id) const override;
+   QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &idref) const override;
 
  private:
    Q_DECLARE_PRIVATE(QSimpleXmlNodeModel)

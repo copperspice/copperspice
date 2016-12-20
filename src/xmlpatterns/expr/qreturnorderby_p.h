@@ -39,23 +39,22 @@ class ReturnOrderBy : public UnlimitedContainer
     * In @p operands the first item is the return expression, and the
     * rest, which is at least one, are the sort keys.
     */
-   ReturnOrderBy(const OrderBy::Stability stability,
-                 const OrderBy::OrderSpec::Vector &oSpecs,
-                 const Expression::List &operands);
+   ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs, 
+                  const Expression::List &operands);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual ID id() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   ID id() const override;
 
-   inline OrderBy::OrderSpec::Vector orderSpecs() const {
+   OrderBy::OrderSpec::Vector orderSpecs() const {
       return m_orderSpecs;
    }
 
-   inline OrderBy::Stability stability() const {
+   OrderBy::Stability stability() const {
       return m_stability;
    }
 
@@ -66,11 +65,12 @@ class ReturnOrderBy : public UnlimitedContainer
     * this function is called. The associated ForClause will call it
     * during typeCheck(), if it exists.
     */
-   inline void setStay(const bool a) {
+   void setStay(const bool a) {
       m_flyAway = !a;
    }
 
-   virtual Properties properties() const;
+   Properties properties() const override;
+
  private:
    /**
     * This variable is unfortunately only used at compile time. However,

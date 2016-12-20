@@ -52,15 +52,9 @@ class Q_MULTIMEDIA_EXPORT QAudioEnginePlugin : public QObject, public QAudioEngi
 
  public:
    QAudioEnginePlugin(QObject *parent = 0);
-   ~QAudioEnginePlugin();
-
-   virtual QStringList keys() const = 0;
-   virtual QList<QByteArray> availableDevices(QAudio::Mode) const = 0;
-   virtual QAbstractAudioInput *createInput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
-   virtual QAbstractAudioOutput *createOutput(const QByteArray &device, const QAudioFormat &format = QAudioFormat()) = 0;
-   virtual QAbstractAudioDeviceInfo *createDeviceInfo(const QByteArray &device, QAudio::Mode mode) = 0;
+   ~QAudioEnginePlugin();   
 };
 
 QT_END_NAMESPACE
 
-#endif // QAUDIOENGINEPLUGIN_H
+#endif

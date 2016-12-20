@@ -38,24 +38,21 @@ template <const bool isDouble>
 class NumericToAbstractFloatCaster : public AtomicCaster
 {
  public:
-   virtual Item castFrom(const Item &from,
-                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+   Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
 template <const bool isDouble>
 class StringToAbstractFloatCaster : public AtomicCaster
 {
  public:
-   virtual Item castFrom(const Item &from,
-                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+   Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
 template <const bool isDouble>
 class BooleanToAbstractFloatCaster : public AtomicCaster
 {
  public:
-   virtual Item castFrom(const Item &from,
-                         const QExplicitlySharedDataPointer<DynamicContext> &context) const;
+   Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
 #include "qabstractfloatcasters.cpp"

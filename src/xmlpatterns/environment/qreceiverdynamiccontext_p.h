@@ -41,7 +41,7 @@ class ReceiverDynamicContext : public DelegatingDynamicContext
    ReceiverDynamicContext(const DynamicContext::Ptr &prevContext,
                           QAbstractXmlReceiver *const receiver);
 
-   virtual QAbstractXmlReceiver *outputReceiver() const;
+   QAbstractXmlReceiver *outputReceiver() const override;
 
  private:
    QAbstractXmlReceiver *const m_receiver;

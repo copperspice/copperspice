@@ -59,7 +59,7 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
     * @returns the next item in the sequence, or
     * @c null if the end have been reached.
     */
-   virtual TResult next() {
+   TResult next() override {
       const TSource sourceItem(m_it->next());
 
       if (qIsForwardIteratorEnd(sourceItem)) {
@@ -77,15 +77,15 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
       }
    }
 
-   virtual TResult current() const {
+   TResult current() const  override {
       return m_current;
    }
 
-   virtual xsInteger position() const {
+   xsInteger position() const override {
       return m_position;
    }
 
-   virtual typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const {
+   typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const  override {
       return typename QAbstractXmlForwardIterator<TResult>::Ptr
              (new ItemMappingIterator<TResult, TSource, TMapper, Context>(m_mapper, m_it->copy(), m_context));
    }
@@ -108,11 +108,10 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
  * @relates ItemMappingIterator
  */
 template<typename TResult, typename TSource, typename TMapper, typename Context>
-static inline
-typename QAbstractXmlForwardIterator<TResult>::Ptr
-makeItemMappingIterator(const TMapper &mapper,
-                        const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
-                        const Context &context)
+static inline typename QAbstractXmlForwardIterator<TResult>::Ptr makeItemMappingIterator(
+                  const TMapper &mapper,
+                  const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
+                  const Context &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new ItemMappingIterator<TResult, TSource, TMapper, Context>(mapper, source, context));

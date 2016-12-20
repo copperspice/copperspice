@@ -52,7 +52,7 @@ QBlittablePixmapData::~QBlittablePixmapData()
 #ifdef QT_BLITTER_RASTEROVERLAY
    delete m_rasterOverlay;
    delete m_unmergedCopy;
-#endif //QT_BLITTER_RASTEROVERLAY
+#endif
 }
 
 QBlittable *QBlittablePixmapData::blittable() const

@@ -35,20 +35,20 @@ namespace QPatternist {
 class TrueFN : public FunctionCall
 {
  public:
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 };
 
 class FalseFN : public FunctionCall
 {
  public:
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 };
 
 class NotFN : public FunctionCall
 {
  public:
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 };
 }
 

@@ -51,15 +51,15 @@ class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
    virtual void setTable(const QString &tableName);
    QString tableName() const;
 
-   Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-   QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const;
-   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const override;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
    bool isDirty(const QModelIndex &index) const;
-   void clear();
+   void clear() override;
 
    virtual void setEditStrategy(EditStrategy strategy);
    EditStrategy editStrategy() const;
@@ -68,26 +68,26 @@ class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
    QSqlDatabase database() const;
    int fieldIndex(const QString &fieldName) const;
 
-   void sort(int column, Qt::SortOrder order);
+   void sort(int column, Qt::SortOrder order) override;
    virtual void setSort(int column, Qt::SortOrder order);
 
    QString filter() const;
    virtual void setFilter(const QString &filter);
 
-   int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
    bool insertRecord(int row, const QSqlRecord &record);
    bool setRecord(int row, const QSqlRecord &record);
 
    virtual void revertRow(int row);
 
-   SQL_CS_SLOT_1(Public, bool submit())
+   SQL_CS_SLOT_1(Public, bool submit() override)
    SQL_CS_SLOT_2(submit)
-   SQL_CS_SLOT_1(Public, void revert())
+   SQL_CS_SLOT_1(Public, void revert() override)
    SQL_CS_SLOT_2(revert)
 
    SQL_CS_SLOT_1(Public, bool submitAll())

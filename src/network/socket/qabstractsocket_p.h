@@ -48,17 +48,19 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
    virtual ~QAbstractSocketPrivate();
 
    // from QAbstractSocketEngineReceiver
-   inline void readNotification() {
+   inline void readNotification() override {
       canReadNotification();
    }
-   inline void writeNotification() {
+
+   inline void writeNotification() override {
       canWriteNotification();
    }
-   inline void exceptionNotification() {}
-   void connectionNotification();
+
+   inline void exceptionNotification() override {}
+   void connectionNotification() override;
 
 #ifndef QT_NO_NETWORKPROXY
-   inline void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator) {
+   inline void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator) override {
       Q_Q(QAbstractSocket);
       q->proxyAuthenticationRequired(proxy, authenticator);
    }

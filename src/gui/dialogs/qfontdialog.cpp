@@ -72,7 +72,7 @@ class QFontListView : public QListView
       int row = QListView::currentIndex().row();
       return row < 0 ? QString() : model()->stringList().at(row);
    }
-   void currentChanged(const QModelIndex &current, const QModelIndex &previous) {
+   void currentChanged(const QModelIndex &current, const QModelIndex &previous)  override {
       QListView::currentChanged(current, previous);
       if (current.isValid()) {
          emit highlighted(current.row());

@@ -49,20 +49,19 @@ class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
                            const typename QAbstractXmlForwardIterator<TSource>::Ptr &sourceIterator,
                            const DynamicContext::Ptr &context);
 
-   virtual TResult next();
-   virtual xsInteger count();
-   virtual TResult current() const;
-   virtual xsInteger position() const;
+   TResult next() override;
+   xsInteger count() override;
+   TResult current() const override;
+   xsInteger position() const override;
 
    /**
     * The reason the implementation is placed in line here, is due to a bug
     * in MSVC-2005 version 14.00.50727.762. Note that it works with version 14.00.50727.42.
     */
-   virtual typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const {
+   typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const override {
       return typename QAbstractXmlForwardIterator<TResult>::Ptr
              (new SequenceMappingIterator<TResult, TSource, TMapper>(m_mapper,
-                   m_mainIterator->copy(),
-                   m_context));
+                   m_mainIterator->copy(), m_context));
    }
 
  private:
@@ -76,13 +75,9 @@ class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
 
 template<typename TResult, typename TSource, typename TMapper>
 SequenceMappingIterator<TResult, TSource, TMapper>::SequenceMappingIterator(
-   const TMapper &mapper,
-   const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator,
+   const TMapper &mapper, const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator,
    const DynamicContext::Ptr &context)
-   : m_position(0),
-     m_mainIterator(iterator),
-     m_context(context),
-     m_mapper(mapper)
+   : m_position(0), m_mainIterator(iterator), m_context(context), m_mapper(mapper)
 {
    Q_ASSERT(mapper);
    Q_ASSERT(iterator);
@@ -94,7 +89,7 @@ TResult SequenceMappingIterator<TResult, TSource, TMapper>::next()
    /* This was once implemented with a recursive function, but the stack
     * got blown for some inputs by that approach. */
    while (true) {
-      while (!m_currentIterator) {
+      while (! m_currentIterator) {
          const TSource mainItem(m_mainIterator->next());
 
          if (qIsForwardIteratorEnd(mainItem)) { /* We've reached the very end. */
@@ -145,13 +140,11 @@ xsInteger SequenceMappingIterator<TResult, TSource, TMapper>::position() const
    return m_position;
 }
 
-
 template<typename TResult, typename TSource, typename TMapper>
-static inline
-typename QAbstractXmlForwardIterator<TResult>::Ptr
-makeSequenceMappingIterator(const TMapper &mapper,
-                            const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
-                            const DynamicContext::Ptr &context)
+static inline typename QAbstractXmlForwardIterator<TResult>::Ptr
+makeSequenceMappingIterator(const TMapper &mapper, 
+                  const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
+                  const DynamicContext::Ptr &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new SequenceMappingIterator<TResult, TSource, TMapper>(mapper, source, context));

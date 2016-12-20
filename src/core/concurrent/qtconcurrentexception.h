@@ -44,8 +44,8 @@ class Q_CORE_EXPORT Exception : public std::exception
 class Q_CORE_EXPORT UnhandledException : public Exception
 {
  public:
-   void raise() const;
-   Exception *clone() const;
+   void raise() const override;
+   Exception *clone() const override;
 };
 
 namespace internal {

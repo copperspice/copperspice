@@ -43,15 +43,15 @@ class NamespaceNameTest : public AbstractNodeTest
    /**
     * @note This function assumes that @p item is a QXmlNodeModelIndex.
     */
-   virtual bool itemMatches(const Item &item) const;
+   bool itemMatches(const Item &item) const override;
 
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
-   virtual bool operator==(const ItemType &other) const;
-   PatternPriority patternPriority() const;
+   bool operator==(const ItemType &other) const override;
+   PatternPriority patternPriority() const override;
 
  protected:
-   virtual InstanceOf instanceOf() const;
+   InstanceOf instanceOf() const override;
 
  private:
    NamespaceNameTest(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);

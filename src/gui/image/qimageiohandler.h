@@ -121,8 +121,6 @@ class Q_GUI_EXPORT QImageIOPlugin : public QObject, public QImageIOHandlerFactor
    using Capabilities = QFlags<Capability>;
 
    virtual Capabilities capabilities(QIODevice *device, const QByteArray &format) const = 0;
-   virtual QStringList keys() const = 0;
-   virtual QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const = 0;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QImageIOPlugin::Capabilities)

@@ -50,17 +50,17 @@ namespace Gstreamer
             VolumeFaderEffect(Backend *backend, QObject *parent = 0);
             ~VolumeFaderEffect();
 
-            GstElement* createEffectBin();
-            GstElement *audioElement() { return m_effectBin; }
-            bool event(QEvent *);
+            GstElement* createEffectBin() override;
+            GstElement *audioElement() override { return m_effectBin; }
+            bool event(QEvent *) override;
             void updateFade();
 
             // VolumeFaderInterface:
-            float volume() const;
-            void setVolume(float volume);
-            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
-            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve);
-            void fadeTo(float volume, int fadeTime);
+            float volume() const override;
+            void setVolume(float volume) override;
+            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const override;
+            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve) override;
+            void fadeTo(float volume, int fadeTime) override;
 
             Phonon::VolumeFaderEffect::FadeCurve m_fadeCurve;
             int m_fadeTimer;

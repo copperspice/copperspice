@@ -93,12 +93,8 @@ class QFontFamilyDelegate : public QAbstractItemDelegate
    explicit QFontFamilyDelegate(QObject *parent);
 
    // painting
-   void paint(QPainter *painter,
-              const QStyleOptionViewItem &option,
-              const QModelIndex &index) const;
-
-   QSize sizeHint(const QStyleOptionViewItem &option,
-                  const QModelIndex &index) const;
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
    QIcon truetype;
    QIcon bitmap;

@@ -34,11 +34,11 @@ namespace QPatternist {
 class ParentNodeAxis : public EmptyContainer
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Properties properties() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual ItemType::Ptr expectedContextItemType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Properties properties() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   SequenceType::Ptr staticType() const override;
+   ItemType::Ptr expectedContextItemType() const override;
 };
 }
 

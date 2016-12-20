@@ -55,7 +55,7 @@ namespace Phonon
                 return m_buffer.size();
             }
 
-            void writeData(const QByteArray &data) {
+            void writeData(const QByteArray &data) override {
                 m_pos += data.size();
                 m_buffer += data;
             }
@@ -74,9 +74,9 @@ namespace Phonon
 
             bool read(quint64 offset, int length, char * buffer);
 
-            void endOfData() {}
+            void endOfData() override {}
 
-            void setStreamSize(qint64 newSize) {
+            void setStreamSize(qint64 newSize) override {
                 m_size = newSize;
             }
 
@@ -84,7 +84,7 @@ namespace Phonon
                 return m_size;
             }
 
-            void setStreamSeekable(bool s) {
+            void setStreamSeekable(bool s) override {
                 m_seekable = s;
             }
 
@@ -92,7 +92,7 @@ namespace Phonon
                 return m_seekable;
             }
 
-private:
+   private:
             QByteArray m_buffer;
             quint64 m_pos;
             quint64 m_size;

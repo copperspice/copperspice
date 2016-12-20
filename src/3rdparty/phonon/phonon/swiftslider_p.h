@@ -42,12 +42,13 @@ namespace Phonon
 class SwiftSlider : public QSlider
 {
 	PHN_CS_OBJECT(SwiftSlider)
+
 public:
 	SwiftSlider(Qt::Orientation orientation, QWidget * parent);
 	~SwiftSlider();
 
 private:
-	void mousePressEvent(QMouseEvent *event);
+	void mousePressEvent(QMouseEvent *event) override;
 	inline int pick(const QPoint &pt) const;
 	int pixelPosToRangeValue(int pos) const;
 };

@@ -42,37 +42,37 @@ class EmptySequenceType : public ItemType, public SequenceType
     *
     * @returns @c true if @p other is NoneType or EmptySequenceType, otherwise @c false.
     */
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool itemMatches(const Item &item) const;
+   bool itemMatches(const Item &item) const override;
 
    /**
     * @returns always "empty-sequence()"
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
-   virtual bool isNodeType() const;
-   virtual bool isAtomicType() const;
+   bool isNodeType() const override;
+   bool isAtomicType() const override;
 
    /**
     * @return always Cardinality::empty()
     */
-   virtual Cardinality cardinality() const;
+   Cardinality cardinality() const override;
 
    /**
     * @returns always 'this' since it is also an ItemType
     */
-   virtual ItemType::Ptr itemType() const;
+   ItemType::Ptr itemType() const override;
 
    /**
     * @returns always @c xs:anyAtomicType
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
  protected:
    friend class CommonSequenceTypes;

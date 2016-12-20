@@ -84,11 +84,11 @@ class QAuServerNAS : public QAuServer
    QAuServerNAS(QObject *parent);
    ~QAuServerNAS();
 
-   void init(QSound *);
-   void play(const QString &filename);
-   void play(QSound *);
-   void stop(QSound *);
-   bool okay();
+   void init(QSound *) override;
+   void play(const QString &filename) override;
+   void play(QSound *) override;
+   void stop(QSound *) override;
+   bool okay() override;
    void setDone(QSound *);
 
    GUI_CS_SLOT_1(Public, void dataReceived())
@@ -253,12 +253,12 @@ class QAuServerNull : public QAuServer
  public:
    QAuServerNull(QObject *parent);
 
-   void play(const QString &) { }
-   void play(QSound *s) {
+   void play(const QString &) override { }
+   void play(QSound *s) override {
       while (decLoop(s) > 0) /* nothing */ ;
    }
-   void stop(QSound *) { }
-   bool okay() {
+   void stop(QSound *) override { }
+   bool okay() override {
       return false;
    }
 };

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2016 Barbara Geller
+* Copyright (c) 2012-2017 Barbara Geller
 * Copyright (c) 2012-2016 Ansel Sermersheim
 * Copyright (c) 2012-2014 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).

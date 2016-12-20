@@ -76,7 +76,7 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
       }
    }
 
-   virtual void dispose() {
+   virtual void dispose() override {
       delete this;
    }
 };

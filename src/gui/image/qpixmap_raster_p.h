@@ -41,27 +41,27 @@ class Q_GUI_EXPORT QRasterPixmapData : public QPixmapData
    QRasterPixmapData(PixelType type);
    ~QRasterPixmapData();
 
-   QPixmapData *createCompatiblePixmapData() const;
+   QPixmapData *createCompatiblePixmapData() const override;
 
-   void resize(int width, int height);
+   void resize(int width, int height) override;
    void fromFile(const QString &filename, Qt::ImageConversionFlags flags);
-   bool fromData(const uchar *buffer, uint len, const char *format, Qt::ImageConversionFlags flags);
-   void fromImage(const QImage &image, Qt::ImageConversionFlags flags);
-   void fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags);
+   bool fromData(const uchar *buffer, uint len, const char *format, Qt::ImageConversionFlags flags) override;
+   void fromImage(const QImage &image, Qt::ImageConversionFlags flags) override;
+   void fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags) override;
 
-   void copy(const QPixmapData *data, const QRect &rect);
-   bool scroll(int dx, int dy, const QRect &rect);
-   void fill(const QColor &color);
-   void setMask(const QBitmap &mask);
-   bool hasAlphaChannel() const;
-   void setAlphaChannel(const QPixmap &alphaChannel);
-   QImage toImage() const;
-   QImage toImage(const QRect &rect) const;
-   QPaintEngine *paintEngine() const;
-   QImage *buffer();
+   void copy(const QPixmapData *data, const QRect &rect) override;
+   bool scroll(int dx, int dy, const QRect &rect) override;
+   void fill(const QColor &color) override;
+   void setMask(const QBitmap &mask) override;
+   bool hasAlphaChannel() const override;
+   void setAlphaChannel(const QPixmap &alphaChannel) override;
+   QImage toImage() const override;
+   QImage toImage(const QRect &rect) const override;
+   QPaintEngine *paintEngine() const override;
+   QImage *buffer() override;
 
  protected:
-   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
    void createPixmapForImage(QImage &sourceImage, Qt::ImageConversionFlags flags, bool inPlace);
    void setImage(const QImage &image);
    QImage image;

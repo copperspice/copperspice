@@ -42,12 +42,12 @@ class QSimpleTextCodec: public QTextCodec
    explicit QSimpleTextCodec(int);
    ~QSimpleTextCodec();
 
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
 
-   QByteArray name() const;
-   QList<QByteArray> aliases() const;
-   int mibEnum() const;
+   QByteArray name() const override;
+   QList<QByteArray> aliases() const override;
+   int mibEnum() const override;
 
  private:
    int forwardIndex;

@@ -80,8 +80,9 @@ class QXmlStreamStrategy : public QOutputStrategy
          contentStream->close();
       }
    }
-   virtual void addFile(const QString &, const QString &, const QByteArray &) {
-      // we ignore this...
+
+   void addFile(const QString &, const QString &, const QByteArray &) override {
+      // ignore this
    }
 };
 
@@ -121,7 +122,7 @@ class QZipStreamStrategy : public QOutputStrategy
       zip.close();
    }
 
-   virtual void addFile(const QString &fileName, const QString &mimeType, const QByteArray &bytes) {
+   void addFile(const QString &fileName, const QString &mimeType, const QByteArray &bytes) override {
       zip.addFile(fileName, bytes);
       addFile(fileName, mimeType);
    }

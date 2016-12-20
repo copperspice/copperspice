@@ -108,7 +108,7 @@ class QTextBrowserPrivate : public QTextEditPrivate
 
    QString findFile(const QUrl &name) const;
 
-   inline void _q_documentModified() {
+   void _q_documentModified() {
       textOrSourceChanged = true;
       forceLoadOnSourceChange = !currentURL.path().isEmpty();
    }
@@ -119,8 +119,9 @@ class QTextBrowserPrivate : public QTextEditPrivate
    void setSource(const QUrl &url);
 
    // re-imlemented from QTextEditPrivate
-   virtual QUrl resolveUrl(const QUrl &url) const;
-   inline QUrl resolveUrl(const QString &url) const {
+   QUrl resolveUrl(const QUrl &url) const override;
+
+   QUrl resolveUrl(const QString &url) const {
       return resolveUrl(QUrl::fromEncoded(url.toUtf8()));
    }
 
@@ -145,10 +146,10 @@ QString QTextBrowserPrivate::findFile(const QUrl &name) const
    if (QFileInfo(fileName).isAbsolute()) {
       return fileName;
    }
+   
+   for (QString path : searchPaths) {
 
-   foreach (QString path, searchPaths) {
-
-      if (!path.endsWith(QLatin1Char('/'))) {
+      if (! path.endsWith(QLatin1Char('/'))) {
          path.append(QLatin1Char('/'));
       }
 

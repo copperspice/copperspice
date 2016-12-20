@@ -46,37 +46,40 @@ class OutputPrivate;
 
 class QAudioOutputPrivate : public QAbstractAudioOutput
 {
-   friend class OutputPrivate;
    MULTI_CS_OBJECT(QAudioOutputPrivate)
+
  public:
    QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
    ~QAudioOutputPrivate();
 
    qint64 write( const char *data, qint64 len );
 
-   QIODevice *start(QIODevice *device = 0);
-   void stop();
-   void reset();
-   void suspend();
-   void resume();
-   int bytesFree() const;
-   int periodSize() const;
-   void setBufferSize(int value);
-   int bufferSize() const;
-   void setNotifyInterval(int milliSeconds);
-   int notifyInterval() const;
-   qint64 processedUSecs() const;
-   qint64 elapsedUSecs() const;
-   QAudio::Error error() const;
-   QAudio::State state() const;
-   QAudioFormat format() const;
+   QIODevice *start(QIODevice *device = 0) override;
+   void stop() override;
+   void reset() override;
+   void suspend() override;
+   void resume() override;
+   int bytesFree() const override;
+   int periodSize() const override;
+   void setBufferSize(int value) override;
+   int bufferSize() const override;
+   void setNotifyInterval(int milliSeconds) override;
+   int notifyInterval() const override;
+   qint64 processedUSecs() const override;
+   qint64 elapsedUSecs() const override;
+   QAudio::Error error() const override;
+   QAudio::State state() const override;
+   QAudioFormat format() const override;
 
    QIODevice *audioSource;
    QAudioFormat settings;
    QAudio::Error errorState;
    QAudio::State deviceState;
 
- private :
+   MULTI_CS_SIGNAL_1(Public, void processMore())
+   MULTI_CS_SIGNAL_2(processMore)
+
+ private:
    MULTI_CS_SLOT_1(Private, void userFeed())
    MULTI_CS_SLOT_2(userFeed)
    MULTI_CS_SLOT_1(Private, void feedback())
@@ -86,11 +89,8 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    MULTI_CS_SLOT_1(Private, bool deviceReady())
    MULTI_CS_SLOT_2(deviceReady)
 
- public:
-   MULTI_CS_SIGNAL_1(Public, void processMore())
-   MULTI_CS_SIGNAL_2(processMore)
+   friend class OutputPrivate;
 
- private:
    bool opened;
    bool pullMode;
    bool resuming;
@@ -133,8 +133,8 @@ class OutputPrivate : public QIODevice
    OutputPrivate(QAudioOutputPrivate *audio);
    ~OutputPrivate();
 
-   qint64 readData( char *data, qint64 len);
-   qint64 writeData(const char *data, qint64 len);
+   qint64 readData( char *data, qint64 len) override;
+   qint64 writeData(const char *data, qint64 len) override;
 
  private:
    QAudioOutputPrivate *audioDevice;

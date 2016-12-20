@@ -45,13 +45,16 @@ class QSvgStructureNode : public QSvgNode
  public:
    QSvgStructureNode(QSvgNode *parent);
    ~QSvgStructureNode();
+
    QSvgNode *scopeNode(const QString &id) const;
    void addChild(QSvgNode *child, const QString &id);
-   virtual QRectF bounds(QPainter *p, QSvgExtraStates &states) const;
+   QRectF bounds(QPainter *p, QSvgExtraStates &states) const override;
    QSvgNode *previousSiblingNode(QSvgNode *n) const;
+
    QList<QSvgNode *> renderers() const {
       return m_renderers;
    }
+
  protected:
    QList<QSvgNode *>          m_renderers;
    QHash<QString, QSvgNode *> m_scope;
@@ -62,27 +65,30 @@ class QSvgG : public QSvgStructureNode
 {
  public:
    QSvgG(QSvgNode *parent);
-   virtual void draw(QPainter *p, QSvgExtraStates &states);
-   Type type() const;
+
+   void draw(QPainter *p, QSvgExtraStates &states) override;
+   Type type() const override;
 };
 
 class QSvgDefs : public QSvgStructureNode
 {
  public:
    QSvgDefs(QSvgNode *parent);
-   virtual void draw(QPainter *p, QSvgExtraStates &states);
-   Type type() const;
+
+   void draw(QPainter *p, QSvgExtraStates &states) override;
+   Type type() const override;
 };
 
 class QSvgSwitch : public QSvgStructureNode
 {
  public:
    QSvgSwitch(QSvgNode *parent);
-   virtual void draw(QPainter *p, QSvgExtraStates &states);
-   Type type() const;
+
+   void draw(QPainter *p, QSvgExtraStates &states) override;
+   Type type() const override;
+
  private:
-   void init();
- private:
+   void init(); 
    QString m_systemLanguage;
    QString m_systemLanguagePrefix;
 };

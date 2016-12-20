@@ -37,8 +37,8 @@ class AxisStep : public EmptyContainer
  public:
    AxisStep(const QXmlNodeModelIndex::Axis axis, const ItemType::Ptr &nodeTest);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
    /**
     * Returns @p node if it matches the node test this step is using, otherwise @c null.
@@ -46,22 +46,22 @@ class AxisStep : public EmptyContainer
    inline Item mapToItem(const QXmlNodeModelIndex &node,
                          const DynamicContext::Ptr &context) const;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * Rewrites to ParentNodeAxis, if possible.
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    /**
     * @returns always BuiltinTypes::node;
     */
-   virtual ItemType::Ptr expectedContextItemType() const;
+   ItemType::Ptr expectedContextItemType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
    /**
     * @returns the axis this step is using.
@@ -78,8 +78,8 @@ class AxisStep : public EmptyContainer
 
    static QString axisName(const QXmlNodeModelIndex::Axis axis);
 
-   virtual ID id() const;
-   virtual PatternPriority patternPriority() const;
+   ID id() const override;
+   PatternPriority patternPriority() const override;
 
    inline void setAxis(const QXmlNodeModelIndex::Axis newAxis);
 

@@ -487,7 +487,7 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
                    const QFont &fnt = QFont(), int listBase = 2000);
    void renderText(double x, double y, double z, const QString &str,
                    const QFont &fnt = QFont(), int listBase = 2000);
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    GLuint bindTexture(const QImage &image, GLenum target, GLint format,
                       QGLContext::BindOptions options);
@@ -529,7 +529,7 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    OPENGL_CS_SLOT_2(updateOverlayGL)
 
  protected:
-   bool event(QEvent *);
+   bool event(QEvent *) override;
    virtual void initializeGL();
    virtual void resizeGL(int w, int h);
    virtual void paintGL();
@@ -541,8 +541,8 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    void setAutoBufferSwap(bool on);
    bool autoBufferSwap() const;
 
-   void paintEvent(QPaintEvent *);
-   void resizeEvent(QResizeEvent *);
+   void paintEvent(QPaintEvent *) override;
+   void resizeEvent(QResizeEvent *) override;
 
    virtual void glInit();
    virtual void glDraw();

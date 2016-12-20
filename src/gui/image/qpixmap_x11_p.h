@@ -43,24 +43,23 @@ class Q_GUI_EXPORT QX11PixmapData : public QPixmapData
    //     QX11PixmapData(PixelType type, const QImage &image,Qt::ImageConversionFlags flags);
    ~QX11PixmapData();
 
-   QPixmapData *createCompatiblePixmapData() const;
+   QPixmapData *createCompatiblePixmapData() const override;
 
-   void resize(int width, int height);
-   void fromImage(const QImage &image, Qt::ImageConversionFlags flags);
-   void copy(const QPixmapData *data, const QRect &rect);
-   bool scroll(int dx, int dy, const QRect &rect);
+   void resize(int width, int height) override;
+   void fromImage(const QImage &image, Qt::ImageConversionFlags flags) override;
+   void copy(const QPixmapData *data, const QRect &rect) override;
+   bool scroll(int dx, int dy, const QRect &rect) override;
 
-   void fill(const QColor &color);
-   QBitmap mask() const;
-   void setMask(const QBitmap &mask);
-   bool hasAlphaChannel() const;
-   void setAlphaChannel(const QPixmap &alphaChannel);
-   QPixmap alphaChannel() const;
-   QPixmap transformed(const QTransform &transform,
-                       Qt::TransformationMode mode) const;
-   QImage toImage() const;
-   QImage toImage(const QRect &rect) const;
-   QPaintEngine *paintEngine() const;
+   void fill(const QColor &color) override;
+   QBitmap mask() const override;
+   void setMask(const QBitmap &mask) override;
+   bool hasAlphaChannel() const override;
+   void setAlphaChannel(const QPixmap &alphaChannel) override;
+   QPixmap alphaChannel() const override;
+   QPixmap transformed(const QTransform &transform, Qt::TransformationMode mode) const override;
+   QImage toImage() const override;
+   QImage toImage(const QRect &rect) const override;
+   QPaintEngine *paintEngine() const override;
 
    Qt::HANDLE handle() const {
       return hd;
@@ -76,7 +75,7 @@ class Q_GUI_EXPORT QX11PixmapData : public QPixmapData
 #endif
 
  protected:
-   int metric(QPaintDevice::PaintDeviceMetric metric) const;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
 
  private:
    friend class QPixmap;

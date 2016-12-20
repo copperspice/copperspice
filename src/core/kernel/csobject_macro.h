@@ -98,6 +98,8 @@ class cs_number<0>
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    private:
 
+#define CS_OVERRIDE override
+
 #define CS_OBJECT_INTERNAL(classNameX) \
    public: \
       static const char *cs_className() \
@@ -141,7 +143,7 @@ class cs_number<0>
             return *newMeta;     \
          } \
       } \
-      Q_DECL_EXPORT virtual const QMetaObject *metaObject() const \
+      virtual Q_DECL_EXPORT const QMetaObject *metaObject() const CS_OVERRIDE \
       { \
          return &staticMetaObject(); \
       } \
@@ -160,7 +162,7 @@ class cs_number<0>
          return #classNameX; \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
-      virtual const QMetaObject *metaObject() const; \
+      virtual const QMetaObject *metaObject() const CS_OVERRIDE; \
       CS_TR_FUNCTIONS \
    private: \
       struct cs_classname \
@@ -254,7 +256,7 @@ class cs_number<0>
 
 #define CS_INTERFACES(...)    \
    public: \
-      bool cs_interface_query(const char *data) const    \
+      bool cs_interface_query(const char *data) const override \
       {  \
          if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
             return true;   \

@@ -131,7 +131,7 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    CORE_CS_SIGNAL_2(finished)
 
  protected:
-   void timerEvent(QTimerEvent *event);
+   void timerEvent(QTimerEvent *event) override;
 
    QScopedPointer<QTimeLinePrivate> d_ptr;
 

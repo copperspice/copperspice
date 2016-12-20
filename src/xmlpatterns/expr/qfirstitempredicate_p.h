@@ -42,30 +42,30 @@ class FirstItemPredicate : public SingleContainer
    /**
     * @returns the first item, if any, from evaluating the source expression.
     */
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
    /**
     * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems instance.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * @returns a SequenceType where the item type is the same as the source expression
     * and where the cardinality is either Cardinality::zeroOrOne() or Cardinality::exactlyOne(),
     * depending on the source expression.
     */
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * Rewrites <tt>expression[1][1]</tt> into <tt>expression[1]</tt>.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    /**
     * @returns always IDFirstItemPredicate.
     */
-   virtual ID id() const;
+   ID id() const override;
 };
 }
 

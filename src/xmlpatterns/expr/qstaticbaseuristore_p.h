@@ -36,13 +36,12 @@ class StaticBaseURIStore : public SingleContainer
 {
  public:
 
-   StaticBaseURIStore(const QUrl &baseURI,
-                      const Expression::Ptr &operand);
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   StaticBaseURIStore(const QUrl &baseURI,const Expression::Ptr &operand);
+
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
  private:
    const QUrl m_baseURI;

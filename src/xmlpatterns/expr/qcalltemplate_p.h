@@ -38,17 +38,16 @@ class CallTemplate : public TemplateInvoker
  public:
    typedef QExplicitlySharedDataPointer<CallTemplate> Ptr;
 
-   CallTemplate(const QXmlName &name,
-                const WithParam::Hash &withParams);
+   CallTemplate(const QXmlName &name, const WithParam::Hash &withParams);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
-   virtual Properties dependencies() const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
+   Properties dependencies() const override;
 
    /**
     * This is a bit complicated by that we have two required types, one
@@ -59,16 +58,16 @@ class CallTemplate : public TemplateInvoker
     * @see <a href="http://www.w3.org/TR/xslt20/#with-param">XSL
     * Transformations (XSLT) Version 2.0, 10.1.1 Passing Parameters to Templates</a>
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
 
-   inline void setTemplate(const Template::Ptr &templ) {
+   void setTemplate(const Template::Ptr &templ) {
       m_template = templ;
    }
 
-   virtual bool configureRecursion(const CallTargetDescription::Ptr &sign);
-   virtual Expression::Ptr body() const;
-   virtual CallTargetDescription::Ptr callTargetDescription() const;
+   bool configureRecursion(const CallTargetDescription::Ptr &sign) override;
+   Expression::Ptr body() const override;
+   CallTargetDescription::Ptr callTargetDescription() const override;
 
  private:
    Template::Ptr   m_template;

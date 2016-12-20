@@ -41,7 +41,6 @@ class QStringList;
 struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface {
    virtual bool loadPicture(const QString &format, const QString &filename, QPicture *) = 0;
    virtual bool savePicture(const QString &format, const QString &filename, const QPicture &) = 0;
-
    virtual bool installIOHandler(const QString &) = 0;
 };
 
@@ -58,11 +57,8 @@ class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatI
    explicit QPictureFormatPlugin(QObject *parent = 0);
    ~QPictureFormatPlugin();
 
-   virtual QStringList keys() const = 0;
-   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *pic);
-   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &pic);
-   virtual bool installIOHandler(const QString &format) = 0;
-
+   bool loadPicture(const QString &format, const QString &filename, QPicture *pic) override;
+   bool savePicture(const QString &format, const QString &filename, const QPicture &pic) override;
 };
 
 #endif // QT_NO_PICTURE

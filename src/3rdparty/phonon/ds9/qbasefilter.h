@@ -46,66 +46,66 @@ namespace Phonon
             virtual ~QBaseFilter();
 
             //implementation from IUnknown
-            STDMETHODIMP QueryInterface(REFIID iid, void** out);
-            STDMETHODIMP_(ULONG) AddRef();
-            STDMETHODIMP_(ULONG) Release();
+            STDMETHODIMP QueryInterface(REFIID iid, void** out) override;
+            STDMETHODIMP_(ULONG) AddRef() override;
+            STDMETHODIMP_(ULONG) Release() override;
 
             //implementation from IPersist
-            STDMETHODIMP GetClassID(CLSID *);
+            STDMETHODIMP GetClassID(CLSID *) override;
 
             //implementation from IMediaFilter
-            STDMETHODIMP Stop();
-            STDMETHODIMP Pause();
-            STDMETHODIMP Run(REFERENCE_TIME);
-            STDMETHODIMP GetState(DWORD, FILTER_STATE*);
-            STDMETHODIMP SetSyncSource(IReferenceClock*);
-            STDMETHODIMP GetSyncSource(IReferenceClock**);
+            STDMETHODIMP Stop() override;
+            STDMETHODIMP Pause() override;
+            STDMETHODIMP Run(REFERENCE_TIME) override;
+            STDMETHODIMP GetState(DWORD, FILTER_STATE*) override;
+            STDMETHODIMP SetSyncSource(IReferenceClock*) override;
+            STDMETHODIMP GetSyncSource(IReferenceClock**) override;
 
             //implementation from IBaseFilter
-            STDMETHODIMP EnumPins(IEnumPins**);
-            STDMETHODIMP FindPin(LPCWSTR, IPin**);
-            STDMETHODIMP QueryFilterInfo(FILTER_INFO*);
-            STDMETHODIMP JoinFilterGraph(IFilterGraph*, LPCWSTR);
-            STDMETHODIMP QueryVendorInfo(LPWSTR*);
+            STDMETHODIMP EnumPins(IEnumPins**) override;
+            STDMETHODIMP FindPin(LPCWSTR, IPin**) override;
+            STDMETHODIMP QueryFilterInfo(FILTER_INFO*) override;
+            STDMETHODIMP JoinFilterGraph(IFilterGraph*, LPCWSTR) override;
+            STDMETHODIMP QueryVendorInfo(LPWSTR*) override;
 
             //implementation from IMediaSeeking
-            STDMETHODIMP GetCapabilities(DWORD *pCapabilities);
-            STDMETHODIMP CheckCapabilities(DWORD *pCapabilities);
-            STDMETHODIMP IsFormatSupported(const GUID *pFormat);
-            STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
+            STDMETHODIMP GetCapabilities(DWORD *pCapabilities) override;
+            STDMETHODIMP CheckCapabilities(DWORD *pCapabilities) override;
+            STDMETHODIMP IsFormatSupported(const GUID *pFormat) override;
+            STDMETHODIMP QueryPreferredFormat(GUID *pFormat) override;
             STDMETHODIMP GetTimeFormat(GUID *pFormat);
-            STDMETHODIMP IsUsingTimeFormat(const GUID *pFormat);
-            STDMETHODIMP SetTimeFormat(const GUID *pFormat);
-            STDMETHODIMP GetDuration(LONGLONG *pDuration);
-            STDMETHODIMP GetStopPosition(LONGLONG *pStop);
-            STDMETHODIMP GetCurrentPosition(LONGLONG *pCurrent);
-            STDMETHODIMP ConvertTimeFormat(LONGLONG *pTarget, const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat);
-            STDMETHODIMP SetPositions(LONGLONG *pCurrent, DWORD dwCurrentFlags, LONGLONG *pStop, DWORD dwStopFlags);
-            STDMETHODIMP GetPositions(LONGLONG *pCurrent, LONGLONG *pStop);
-            STDMETHODIMP GetAvailable(LONGLONG *pEarliest, LONGLONG *pLatest);
-            STDMETHODIMP SetRate(double dRate);
-            STDMETHODIMP GetRate(double *dRate);
-            STDMETHODIMP GetPreroll(LONGLONG *pllPreroll);
+            STDMETHODIMP IsUsingTimeFormat(const GUID *pFormat) override;
+            STDMETHODIMP SetTimeFormat(const GUID *pFormat) override;
+            STDMETHODIMP GetDuration(LONGLONG *pDuration) override;
+            STDMETHODIMP GetStopPosition(LONGLONG *pStop) override;
+            STDMETHODIMP GetCurrentPosition(LONGLONG *pCurrent) override;
+            STDMETHODIMP ConvertTimeFormat(LONGLONG *pTarget, const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat) override;
+            STDMETHODIMP SetPositions(LONGLONG *pCurrent, DWORD dwCurrentFlags, LONGLONG *pStop, DWORD dwStopFlags) override;
+            STDMETHODIMP GetPositions(LONGLONG *pCurrent, LONGLONG *pStop) override;
+            STDMETHODIMP GetAvailable(LONGLONG *pEarliest, LONGLONG *pLatest) override;
+            STDMETHODIMP SetRate(double dRate) override;
+            STDMETHODIMP GetRate(double *dRate) override;
+            STDMETHODIMP GetPreroll(LONGLONG *pllPreroll) override;
 
             //implementation from IMediaPosition
-            STDMETHODIMP get_Duration(REFTIME *plength);
-            STDMETHODIMP put_CurrentPosition(REFTIME llTime);
-            STDMETHODIMP get_CurrentPosition(REFTIME *pllTime);
-            STDMETHODIMP get_StopTime(REFTIME *pllTime);
-            STDMETHODIMP put_StopTime(REFTIME llTime);
-            STDMETHODIMP get_PrerollTime(REFTIME *pllTime);
-            STDMETHODIMP put_PrerollTime(REFTIME llTime);
-            STDMETHODIMP put_Rate(double dRate);
-            STDMETHODIMP get_Rate(double *pdRate);
-            STDMETHODIMP CanSeekForward(LONG *pCanSeekForward);
-            STDMETHODIMP CanSeekBackward(LONG *pCanSeekBackward);
+            STDMETHODIMP get_Duration(REFTIME *plength) override;
+            STDMETHODIMP put_CurrentPosition(REFTIME llTime) override;
+            STDMETHODIMP get_CurrentPosition(REFTIME *pllTime) override;
+            STDMETHODIMP get_StopTime(REFTIME *pllTime) override;
+            STDMETHODIMP put_StopTime(REFTIME llTime) override;
+            STDMETHODIMP get_PrerollTime(REFTIME *pllTime) override;
+            STDMETHODIMP put_PrerollTime(REFTIME llTime) override;
+            STDMETHODIMP put_Rate(double dRate) override;
+            STDMETHODIMP get_Rate(double *pdRate) override;
+            STDMETHODIMP CanSeekForward(LONG *pCanSeekForward) override;
+            STDMETHODIMP CanSeekBackward(LONG *pCanSeekBackward) override;
 
             //implementation from IDispatch (coming from IMediaPosition)
-            STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
-            STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo);
-            STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId);
+            STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) override;
+            STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo) override;
+            STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) override;
             STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, 
-                VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr);
+                VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr) override;
 
             //own methods
             const QList<QPin *> pins() const;

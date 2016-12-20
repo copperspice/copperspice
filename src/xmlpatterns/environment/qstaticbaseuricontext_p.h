@@ -38,10 +38,9 @@ class StaticBaseURIContext : public DelegatingStaticContext
     * The @p bURI is the new static base URI, and it must be valid
     * and absolute.
     */
-   StaticBaseURIContext(const QUrl &bURI,
-                        const StaticContext::Ptr &prevContext);
+   StaticBaseURIContext(const QUrl &bURI, const StaticContext::Ptr &prevContext);
 
-   virtual QUrl baseURI() const;
+   QUrl baseURI() const override;
 
  private:
    const QUrl m_baseURI;

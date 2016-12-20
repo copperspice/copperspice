@@ -42,11 +42,11 @@ class ToCodepointsIterator : public Item::Iterator
     * empty.
     */
    ToCodepointsIterator(const QString &string);
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual xsInteger count();
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   xsInteger count() override;
+   Item::Iterator::Ptr copy() const override;
 
  private:
    const QString m_string;

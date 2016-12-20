@@ -421,12 +421,12 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &ma
    return in;
 }
 
-template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, T> &map)
+template <class Key, class Val, class C>
+Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
-   typename QMap<Key, T>::ConstIterator it = map.end();
-   typename QMap<Key, T>::ConstIterator begin = map.begin();
+   typename QMap<Key, Val, C>::ConstIterator it = map.end();
+   typename QMap<Key, Val, C>::ConstIterator begin = map.begin();
    while (it != begin) {
       --it;
       out << it.key() << it.value();

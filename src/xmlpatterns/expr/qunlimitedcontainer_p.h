@@ -37,13 +37,11 @@ namespace QPatternist {
 class UnlimitedContainer : public Expression
 {
  public:
-
    UnlimitedContainer(const Expression::List &operands = Expression::List());
 
-   virtual void setOperands(const Expression::List &list);
-   virtual Expression::List operands() const;
-   virtual bool compressOperands(const StaticContext::Ptr &);
-
+   void setOperands(const Expression::List &list) override;
+   Expression::List operands() const override;
+   bool compressOperands(const StaticContext::Ptr &) override;
 
    enum CardinalityComputation {
       ProductOfCardinality,
@@ -51,7 +49,6 @@ class UnlimitedContainer : public Expression
    };
 
  protected:
-
    template<CardinalityComputation suppliedCard>
    inline
    SequenceType::Ptr operandsUnionType() const {

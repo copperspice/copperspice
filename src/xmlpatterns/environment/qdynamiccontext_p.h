@@ -49,6 +49,8 @@ class TemplateMode;
 class DynamicContext : public ReportContext
 {
  public:
+   virtual ~DynamicContext() { }
+
    /**
     * @short Carries template parameters at runtime.
     *
@@ -58,8 +60,6 @@ class DynamicContext : public ReportContext
    typedef QHash<QXmlName, QExplicitlySharedDataPointer<Expression> > TemplateParameterHash;
    typedef QExplicitlySharedDataPointer<DynamicContext> Ptr;
 
-   virtual ~DynamicContext() {
-   }
 
    /**
     * This function intentionally returns by reference.
@@ -79,17 +79,17 @@ class DynamicContext : public ReportContext
    virtual Item contextItem() const = 0;
    virtual xsInteger contextSize() = 0;
 
-   virtual void setRangeVariable(const VariableSlotID slot,
-                                 const Item &newValue) = 0;
+   virtual void setRangeVariable(const VariableSlotID slot, const Item &newValue) = 0;
    virtual Item rangeVariable(const VariableSlotID slot) const = 0;
+
    virtual void setExpressionVariable(const VariableSlotID slot,
-                                      const QExplicitlySharedDataPointer<Expression> &newValue) = 0;
+                  const QExplicitlySharedDataPointer<Expression> &newValue) = 0;
+
    virtual QExplicitlySharedDataPointer<Expression>
    expressionVariable(const VariableSlotID slot) const = 0;
 
    virtual Item::Iterator::Ptr positionIterator(const VariableSlotID slot) const = 0;
-   virtual void setPositionIterator(const VariableSlotID slot,
-                                    const Item::Iterator::Ptr &newValue) = 0;
+   virtual void setPositionIterator(const VariableSlotID slot, const Item::Iterator::Ptr &newValue) = 0;
 
    virtual void setFocusIterator(const Item::Iterator::Ptr &it) = 0;
    virtual Item::Iterator::Ptr focusIterator() const = 0;
@@ -101,8 +101,7 @@ class DynamicContext : public ReportContext
    virtual NodeBuilder::Ptr nodeBuilder(const QUrl &baseURI) const = 0;
    virtual ResourceLoader::Ptr resourceLoader() const = 0;
    virtual ExternalVariableLoader::Ptr externalVariableLoader() const = 0;
-   virtual NamePool::Ptr namePool() const = 0;
-
+   
    /**
     * @short Returns the item that @c fn:current() returns.
     *

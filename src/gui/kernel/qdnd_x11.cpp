@@ -299,7 +299,7 @@ class QShapedPixmapWidget : public QWidget
 
  protected:
    QPixmap pixmap;
-   void paintEvent(QPaintEvent *) {
+   void paintEvent(QPaintEvent *) override {
       QPainter p(this);
       p.drawPixmap(0, 0, pixmap);
    }

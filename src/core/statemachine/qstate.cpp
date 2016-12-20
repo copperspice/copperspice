@@ -234,8 +234,8 @@ class UnconditionalTransition : public QAbstractTransition
       setTargetState(target);
    }
  protected:
-   void onTransition(QEvent *) {}
-   bool eventTest(QEvent *) {
+   void onTransition(QEvent *) override {}
+   bool eventTest(QEvent *) override {
       return true;
    }
 };

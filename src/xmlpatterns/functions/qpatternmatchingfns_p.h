@@ -35,18 +35,18 @@ class MatchesFN : public PatternPlatform
 {
  public:
    MatchesFN();
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 class ReplaceFN : public PatternPlatform
 {
  public:
    ReplaceFN();
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    /**
     * Overridden to attempt to pre-compile the replacement string.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
    /**
@@ -68,7 +68,7 @@ class TokenizeFN : public PatternPlatform
  public:
    TokenizeFN();
    inline Item mapToItem(const QString &subject, const DynamicContext::Ptr &) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 
  private:
    typedef QExplicitlySharedDataPointer<const TokenizeFN> ConstPtr;

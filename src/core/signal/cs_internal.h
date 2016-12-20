@@ -460,18 +460,17 @@ inline bool BentoAbstract::operator !=(const BentoAbstract &right) const
    return ! (*this == right);
 }
 
-
 template<class T>
 class Bento : public virtual BentoAbstract
 {
    public:
       Bento(T ptr);
 
-      virtual std::unique_ptr<BentoAbstract> clone() const override;  
-      virtual bool operator ==(const BentoAbstract &right) const override;
+      bool operator ==(const BentoAbstract &right) const override;
 
-      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const;
-       
+      void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
+      std::unique_ptr<BentoAbstract> clone() const override;
+                
       template<class MethodReturn, class ...MethodArgs>
       void invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...) const) const;
 
@@ -487,9 +486,10 @@ class Bento<FunctionReturn (*)(FunctionArgs...)> : public virtual BentoAbstract
    public:
       Bento(FunctionReturn (*ptr)(FunctionArgs...));
 
-      virtual std::unique_ptr<BentoAbstract> clone() const override;
-      virtual bool operator ==(const BentoAbstract &right) const;
-      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const;
+      bool operator ==(const BentoAbstract &right) const override;
+
+      std::unique_ptr<BentoAbstract> clone() const override;      
+      void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
  
       FunctionReturn (*m_methodPtr)(FunctionArgs...);
 };
@@ -500,10 +500,10 @@ class Bento<MethodReturn(MethodClass::*)(MethodArgs...)>: public virtual BentoAb
    public:
       Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
 
-      virtual std::unique_ptr<BentoAbstract> clone() const override;
-      virtual bool operator ==(const BentoAbstract &right) const;
-      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const;
-  
+      bool operator ==(const BentoAbstract &right) const override ;
+      void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
+      std::unique_ptr<BentoAbstract> clone() const override;
+          
       MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...);
 };
 
@@ -514,10 +514,11 @@ class Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public virtual B
    public:
       Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
 
-      virtual std::unique_ptr<BentoAbstract> clone() const override;
-      virtual bool operator ==(const BentoAbstract &right) const;
-      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const;
-  
+      bool operator ==(const BentoAbstract &right) const override;
+
+      void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
+      std::unique_ptr<BentoAbstract> clone() const override;
+            
       MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...) const;
 };
 

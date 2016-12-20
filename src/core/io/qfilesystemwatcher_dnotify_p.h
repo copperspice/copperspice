@@ -46,12 +46,12 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
    static QDnotifyFileSystemWatcherEngine *create();
 
-   void run();
+   void run() override;
 
-   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
 
-   void stop();
+   void stop() override;
 
  private :
    CORE_CS_SLOT_1(Private, void refresh(int un_named_arg1))

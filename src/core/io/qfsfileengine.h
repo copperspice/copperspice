@@ -43,46 +43,48 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    explicit QFSFileEngine(const QString &file);
    ~QFSFileEngine();
 
-   bool open(QIODevice::OpenMode openMode);
+   bool open(QIODevice::OpenMode openMode) override;
    bool open(QIODevice::OpenMode flags, FILE *fh);
-   bool close();
-   bool flush();
-   bool syncToDisk();
-   qint64 size() const;
-   qint64 pos() const;
-   bool seek(qint64);
-   bool isSequential() const;
-   bool remove();
-   bool copy(const QString &newName);
-   bool rename(const QString &newName);
-   bool renameOverwrite(const QString &newName);
-   bool link(const QString &newName);
-   bool mkdir(const QString &dirName, bool createParentDirectories) const;
-   bool rmdir(const QString &dirName, bool recurseParentDirectories) const;
-   bool setSize(qint64 size);
-   bool caseSensitive() const;
-   bool isRelativePath() const;
-   QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const;
-   FileFlags fileFlags(FileFlags type) const;
-   bool setPermissions(uint perms);
-   QString fileName(FileName file) const;
-   uint ownerId(FileOwner) const;
-   QString owner(FileOwner) const;
-   QDateTime fileTime(FileTime time) const;
-   void setFileName(const QString &file);
-   int handle() const;
+   bool close() override;
+   bool flush() override;
+   bool syncToDisk() override;
+   qint64 size() const override;
+   qint64 pos() const override;
+   bool seek(qint64) override;
+   bool isSequential() const override;
+   bool remove() override;
+   bool copy(const QString &newName) override;
+   bool rename(const QString &newName) override;
+   bool renameOverwrite(const QString &newName) override;
+   bool link(const QString &newName) override;
+
+   bool mkdir(const QString &dirName, bool createParentDirectories) const override;
+   bool rmdir(const QString &dirName, bool recurseParentDirectories) const override;
+   bool setSize(qint64 size) override;
+   bool caseSensitive() const override;
+   bool isRelativePath() const override;
+
+   QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const override;
+   FileFlags fileFlags(FileFlags type) const override;
+   bool setPermissions(uint perms) override;
+   QString fileName(FileName file) const override;
+   uint ownerId(FileOwner) const override;
+   QString owner(FileOwner) const override;
+   QDateTime fileTime(FileTime time) const override;
+   void setFileName(const QString &file) override;
+   int handle() const override;
 
 #ifndef QT_NO_FILESYSTEMITERATOR
-   Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames);
-   Iterator *endEntryList();
+   Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
+   Iterator *endEntryList() override;
 #endif
 
-   qint64 read(char *data, qint64 maxlen);
-   qint64 readLine(char *data, qint64 maxlen);
-   qint64 write(const char *data, qint64 len);
+   qint64 read(char *data, qint64 maxlen) override;
+   qint64 readLine(char *data, qint64 maxlen) override;
+   qint64 write(const char *data, qint64 len) override;
 
-   bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0);
-   bool supportsExtension(Extension extension) const;
+   bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0) override;
+   bool supportsExtension(Extension extension) const override;
 
    //FS only!!
    bool open(QIODevice::OpenMode flags, int fd);

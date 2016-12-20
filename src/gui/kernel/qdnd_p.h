@@ -57,8 +57,8 @@ class Q_GUI_EXPORT QInternalMimeData : public QMimeData
    QInternalMimeData();
    ~QInternalMimeData();
 
-   bool hasFormat(const QString &mimeType) const;
-   QStringList formats() const;
+   bool hasFormat(const QString &mimeType) const override;
+   QStringList formats() const override;
    static bool canReadData(const QString &mimeType);
 
 
@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QInternalMimeData : public QMimeData
    static QByteArray renderDataHelper(const QString &mimeType, const QMimeData *data);
 
  protected:
-   QVariant retrieveData(const QString &mimeType, QVariant::Type type) const;
+   QVariant retrieveData(const QString &mimeType, QVariant::Type type) const override;
 
    virtual bool hasFormat_sys(const QString &mimeType) const = 0;
    virtual QStringList formats_sys() const = 0;
@@ -86,20 +86,20 @@ class QOleDataObject : public IDataObject
    DWORD reportedPerformedEffect() const;
 
    // IUnknown methods
-   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
-   STDMETHOD_(ULONG, AddRef)(void);
-   STDMETHOD_(ULONG, Release)(void);
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj) override;
+   STDMETHOD_(ULONG, AddRef)(void) override;
+   STDMETHOD_(ULONG, Release)(void) override;
 
    // IDataObject methods
-   STDMETHOD(GetData)(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium);
-   STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
-   STDMETHOD(QueryGetData)(LPFORMATETC pformatetc);
-   STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut);
-   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium, BOOL fRelease);
-   STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc);
-   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
-   STDMETHOD(DUnadvise)(DWORD dwConnection);
-   STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR *ppenumAdvise);
+   STDMETHOD(GetData)(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium) override;
+   STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium) override;
+   STDMETHOD(QueryGetData)(LPFORMATETC pformatetc) override;
+   STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut) override;
+   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium, BOOL fRelease) override;
+   STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc) override;
+   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD FAR *pdwConnection) override;
+   STDMETHOD(DUnadvise)(DWORD dwConnection) override;
+   STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR *ppenumAdvise) override;
 
  private:
    ULONG m_refs;
@@ -118,15 +118,15 @@ class QOleEnumFmtEtc : public IEnumFORMATETC
    bool isNull() const;
 
    // IUnknown methods
-   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
-   STDMETHOD_(ULONG, AddRef)(void);
-   STDMETHOD_(ULONG, Release)(void);
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj) override;
+   STDMETHOD_(ULONG, AddRef)(void) override;
+   STDMETHOD_(ULONG, Release)(void) override;
 
    // IEnumFORMATETC methods
-   STDMETHOD(Next)(ULONG celt, LPFORMATETC rgelt, ULONG FAR *pceltFetched);
-   STDMETHOD(Skip)(ULONG celt);
-   STDMETHOD(Reset)(void);
-   STDMETHOD(Clone)(LPENUMFORMATETC FAR *newEnum);
+   STDMETHOD(Next)(ULONG celt, LPFORMATETC rgelt, ULONG FAR *pceltFetched) override;
+   STDMETHOD(Skip)(ULONG celt) override;
+   STDMETHOD(Reset)(void) override;
+   STDMETHOD(Clone)(LPENUMFORMATETC FAR *newEnum) override;
 
  private:
    bool copyFormatEtc(LPFORMATETC dest, LPFORMATETC src) const;
@@ -169,9 +169,9 @@ class QDropData : public QInternalMimeData
    ~QDropData();
 
  protected:
-   bool hasFormat_sys(const QString &mimeType) const;
-   QStringList formats_sys() const;
-   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
+   bool hasFormat_sys(const QString &mimeType) const override;
+   QStringList formats_sys() const override;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const override;
 
 #if defined(Q_OS_WIN)
  public:
@@ -195,8 +195,8 @@ class QDragManager: public QObject
    friend class QWidgetPrivate; //dnd is implemented here
 #endif
 
-   bool eventFilter(QObject *, QEvent *);
-   void timerEvent(QTimerEvent *);
+   bool eventFilter(QObject *, QEvent *) override;
+   void timerEvent(QTimerEvent *) override;
 
  public:
    Qt::DropAction drag(QDrag *);
@@ -271,15 +271,15 @@ class QOleDropTarget : public IDropTarget
    void releaseQt();
 
    // IUnknown methods
-   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj);
-   STDMETHOD_(ULONG, AddRef)(void);
-   STDMETHOD_(ULONG, Release)(void);
+   STDMETHOD(QueryInterface)(REFIID riid, void FAR *FAR *ppvObj) override;
+   STDMETHOD_(ULONG, AddRef)(void) override;
+   STDMETHOD_(ULONG, Release)(void) override;
 
    // IDropTarget methods
-   STDMETHOD(DragEnter)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
-   STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
-   STDMETHOD(DragLeave)();
-   STDMETHOD(Drop)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
+   STDMETHOD(DragEnter)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect) override;
+   STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect) override;
+   STDMETHOD(DragLeave)() override;
+   STDMETHOD(Drop)(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect) override;
 
  private:
    ULONG m_refs;
@@ -307,9 +307,9 @@ class QCocoaDropData : public QInternalMimeData
    CFStringRef dropPasteboard;
 
  protected:
-   bool hasFormat_sys(const QString &mimeType) const;
-   QStringList formats_sys() const;
-   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;   
+   bool hasFormat_sys(const QString &mimeType) const override;
+   QStringList formats_sys() const override;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const override;
 };
 #endif
 

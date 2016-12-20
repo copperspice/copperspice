@@ -42,14 +42,14 @@ class LiteralSequence : public EmptyContainer
     */
    LiteralSequence(const Item::List &list);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   virtual ID id() const;
+   ID id() const override;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
  private:
    const Item::List m_list;

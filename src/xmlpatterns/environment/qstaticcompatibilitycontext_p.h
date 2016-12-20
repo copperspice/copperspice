@@ -39,7 +39,7 @@ class StaticCompatibilityContext : public DelegatingStaticContext
    /**
     * Returns always @c true.
     */
-   virtual bool compatModeEnabled() const;
+   bool compatModeEnabled() const override;
 };
 }
 

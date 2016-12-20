@@ -61,16 +61,16 @@ class IndexOfIterator : public Item::Iterator
                    const DynamicContext::Ptr &context,
                    const Expression::ConstPtr &expr);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   Item::Iterator::Ptr copy() const override;
 
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return AtomicComparator::OperatorEqual;
    }
 
-   virtual const SourceLocationReflection *actualReflection() const;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    const Item::Iterator::Ptr   m_seq;

@@ -60,38 +60,35 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    /**
     * @param context may be @c null.
     */
-   AccelTreeBuilder(const QUrl &docURI,
-                    const QUrl &baseURI,
-                    const NamePool::Ptr &np,
-                    ReportContext *const context,
-                    Features features = NoneFeature);
-   virtual void startDocument();
-   virtual void endDocument();
-   virtual void startElement(const QXmlName &name);
-   void startElement(const QXmlName &name, qint64 line, qint64 column);
-   virtual void endElement();
-   virtual void attribute(const QXmlName &name, const QStringRef &value);
-   virtual void characters(const QStringRef &ch);
-   virtual void whitespaceOnly(const QStringRef &ch);
-   virtual void processingInstruction(const QXmlName &target,
-                                      const QString &data);
-   virtual void namespaceBinding(const QXmlName &nb);
-   virtual void comment(const QString &content);
-   virtual void item(const Item &it);
+   AccelTreeBuilder(const QUrl &docURI, const QUrl &baseURI, const NamePool::Ptr &np,
+                  ReportContext *const context, Features features = NoneFeature);
 
-   virtual QAbstractXmlNodeModel::Ptr builtDocument();
-   virtual NodeBuilder::Ptr create(const QUrl &baseURI) const;
-   virtual void startOfSequence();
-   virtual void endOfSequence();
+   void startDocument() override;
+   void endDocument() override;
+   void startElement(const QXmlName &name) override;
+   void startElement(const QXmlName &name, qint64 line, qint64 column);
+   void endElement() override;
+   void attribute(const QXmlName &name, const QStringRef &value) override;
+   void characters(const QStringRef &ch) override;
+   void whitespaceOnly(const QStringRef &ch) override; 
+   void processingInstruction(const QXmlName &target, const QString &data) override;
+   void namespaceBinding(const QXmlName &nb) override;
+   void comment(const QString &content) override;
+   void item(const Item &it) override;
+
+   QAbstractXmlNodeModel::Ptr builtDocument() override;
+   NodeBuilder::Ptr create(const QUrl &baseURI) const override;
+   void startOfSequence() override;
+   void endOfSequence() override;
 
    inline AccelTree::Ptr builtDocument() const {
       return m_document;
    }
 
-   virtual void atomicValue(const QVariant &value);
+   void atomicValue(const QVariant &value) override;
 
-   virtual const SourceLocationReflection *actualReflection() const;
-   virtual QSourceLocation sourceLocation() const;
+   const SourceLocationReflection *actualReflection() const override;
+   QSourceLocation sourceLocation() const override;
 
  private:
    inline void startStructure();
@@ -112,9 +109,9 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    AccelTree::PreNumber            m_preNumber;
    bool                            m_isPreviousAtomic;
    bool                            m_hasCharacters;
+
    /**
-    * Whether m_characters has been run through
-    * CompressedWhitespace::compress().
+    * Whether m_characters has been run through CompressedWhitespace::compress().
     */
    bool                            m_isCharactersCompressed;
    QString                         m_characters;
@@ -125,8 +122,8 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
 
    /** If we have already commenced a document, we don't want to
     * add more document nodes. We keep track of them with this
-    * counter, which ensures that startDocument() and endDocument()
-    * are skipped consistently. */
+    * counter, which ensures that startDocument() and endDocument() are skipped consistently. 
+   */
    AccelTree::PreNumber            m_skippedDocumentNodes;
 
    /**
@@ -135,13 +132,12 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
     */
    QSet<QString>                   m_attributeCompress;
    const QUrl                      m_documentURI;
+
    /**
-    * We don't store a reference pointer here because then we get a
-    * circular reference with GenericDynamicContext, when it stores us as
-    * a member.
+    * We do not store a reference pointer here because then we get a
+    * circular reference with GenericDynamicContext, when it stores us as a member.
     */
    ReportContext *const            m_context;
-
    Features                        m_features;
 };
 

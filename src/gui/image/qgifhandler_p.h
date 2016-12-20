@@ -40,22 +40,22 @@ class QGifHandler : public QImageIOHandler
    QGifHandler();
    ~QGifHandler();
 
-   bool canRead() const;
-   bool read(QImage *image);
-   bool write(const QImage &image);
+   bool canRead() const override;
+   bool read(QImage *image) override;
+   bool write(const QImage &image) override;
 
-   QByteArray name() const;
+   QByteArray name() const override;
 
    static bool canRead(QIODevice *device);
 
-   QVariant option(ImageOption option) const;
-   void setOption(ImageOption option, const QVariant &value);
-   bool supportsOption(ImageOption option) const;
+   QVariant option(ImageOption option) const override;
+   void setOption(ImageOption option, const QVariant &value) override;
+   bool supportsOption(ImageOption option) const override;
 
-   int imageCount() const;
-   int loopCount() const;
-   int nextImageDelay() const;
-   int currentImageNumber() const;
+   int imageCount() const override;
+   int loopCount() const override;
+   int nextImageDelay() const override;
+   int currentImageNumber() const override;
 
  private:
    bool imageIsComing() const;

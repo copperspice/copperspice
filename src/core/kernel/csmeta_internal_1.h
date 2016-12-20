@@ -237,8 +237,8 @@ class SpiceJarRead : public JarRead<R>
    SpiceJarRead(R (*func)());
    SpiceJarRead(R (T::*method)() const);
 
-   QVariant runV(const QObject *) const;
-   R call(const QObject *) const;
+   QVariant runV(const QObject *) const override;
+   R call(const QObject *) const override;
 
  private:
    R (T::*m_method)() const;
@@ -324,8 +324,8 @@ class SpiceJarWrite : public JarWrite<V>
  public:
    SpiceJarWrite(void (T::*method)(V));
 
-   bool runV(QObject *, QVariant data) const;
-   bool call(QObject *, V data) const;
+   bool runV(QObject *, QVariant data) const override;
+   bool call(QObject *, V data) const override;
 
  private:
    void (T::*m_method)(V);
@@ -397,7 +397,7 @@ class SpiceJarReset : public JarReset
  public:
    SpiceJarReset(void (T::*method)());
 
-   bool runV(QObject *) const;
+   bool runV(QObject *) const override;
 
  private:
    void (T::*m_method)();
@@ -460,13 +460,13 @@ class CSBento : public CSBentoAbstract, public CsSignal::Internal::Bento<T>
    public:
       CSBento(T ptr);   
 
-      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
       
       using CsSignal::Internal::Bento<T>::invoke;
-      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                  CSGenericReturnArgument *retval = 0) const;
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const override;
 
-      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+      bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
 template<class FunctionReturn, class ...FunctionArgs>
@@ -476,13 +476,13 @@ class CSBento<FunctionReturn (*)(FunctionArgs...)> : public CSBentoAbstract,
    public:
       CSBento(FunctionReturn (*ptr)(FunctionArgs...));
 
-      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
 
       using CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>::invoke;
-      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                  CSGenericReturnArgument *retval = 0) const;
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const override;
 
-      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;      
+      bool checkReturnType(CSGenericReturnArgument &retval) const override;      
 };
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
@@ -492,13 +492,13 @@ class CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>: public CSBentoAbstra
    public:
       CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
 
-      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
 
       using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke;
-      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                  CSGenericReturnArgument *retval = 0) const;
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                  CSGenericReturnArgument *retval = 0) const override;
 
-      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+      bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
@@ -510,13 +510,13 @@ class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBento
    public:
       CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
 
-      virtual std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
       
       using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke;
-      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                     CSGenericReturnArgument *retval = 0) const;
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+                     CSGenericReturnArgument *retval = 0) const override; 
       
-      virtual bool checkReturnType(CSGenericReturnArgument &retval) const;
+      bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
 

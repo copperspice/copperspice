@@ -461,9 +461,10 @@ class QMdiAreaTabBar : public QTabBar
    QMdiAreaTabBar(QWidget *parent) : QTabBar(parent) {}
 
  protected:
-   void mousePressEvent(QMouseEvent *event);
+   void mousePressEvent(QMouseEvent *event) override;
+
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *event);
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
  private:

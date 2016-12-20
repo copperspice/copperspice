@@ -48,12 +48,9 @@ class Q_GUI_EXPORT QGraphicsSystemPlugin : public QObject, public QGraphicsSyste
 
  public:
    explicit QGraphicsSystemPlugin(QObject *parent = 0);
-   ~QGraphicsSystemPlugin();
-
-   virtual QStringList keys() const = 0;
-   virtual QGraphicsSystem *create(const QString &key) = 0;
+   ~QGraphicsSystemPlugin();   
 };
 
 QT_END_NAMESPACE
 
-#endif // QGRAPHICSSYSTEMEPLUGIN_H
+#endif

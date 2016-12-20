@@ -212,23 +212,23 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 {
  public:
    void register_classInfo(const char *name, const char *value);
-   virtual QMetaClassInfo classInfo(int index) const;
+   QMetaClassInfo classInfo(int index) const override;
 
-   virtual int classInfoCount() const;
+   int classInfoCount() const override;
 
-   virtual QMetaMethod constructor(int index) const;
-   virtual int constructorCount() const;
+   QMetaMethod constructor(int index) const override;
+   int constructorCount() const override;
 
    void register_enum_data(const char *args, const char *scope);
 
-   virtual QMetaEnum enumerator(int index) const;
-   virtual int enumeratorCount() const;
+   QMetaEnum enumerator(int index) const override;
+   int enumeratorCount() const override;
 
-   virtual QMetaMethod method(int index) const;
-   virtual int methodCount() const;
+   QMetaMethod method(int index) const override;
+   int methodCount() const override;
 
-   virtual QMetaProperty property(int index) const;
-   virtual int propertyCount() const;
+   QMetaProperty property(int index) const override;
+   int propertyCount() const override;
 
    //
    int  register_enum(const char *name, std::type_index id, const char *scope);
@@ -262,9 +262,9 @@ class QMetaObject_T : public QMetaObject_X
       
       void postConstruct();
    
-      const char *className() const;
-      const char *getInterface_iid() const;
-      const QMetaObject *superClass() const;
+      const char *className() const override;
+      const char *getInterface_iid() const override;
+      const QMetaObject *superClass() const override;
    
       // revision
       template<class U>

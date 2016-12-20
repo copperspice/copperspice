@@ -38,6 +38,7 @@
 #include <gst/gst.h>
 
 #ifndef QT_NO_PHONON_EFFECT
+
 QT_BEGIN_NAMESPACE
 namespace Phonon
 {
@@ -49,14 +50,21 @@ namespace Gstreamer
     class AudioEffect : public Effect
     {
         GSTRM_CS_OBJECT(AudioEffect)
+
         public:
             AudioEffect (Backend *backend, int effectId, QObject *parent);
+
         protected:
-            GstElement* createEffectBin();
-            GstElement* audioElement() { return m_effectBin; }
+            GstElement* createEffectBin() override;
+
+            GstElement* audioElement() override 
+               { return m_effectBin; }
+
             QString m_effectName;
     };
+
 }} //namespace Phonon::Gstreamer
+
 QT_END_NAMESPACE
 #endif //QT_NO_PHONON_EFFECT
 

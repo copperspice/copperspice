@@ -105,17 +105,15 @@ class OrderBy : public SingleContainer
            const Expression::Ptr &operand,
            ReturnOrderBy *const returnOrderBy);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   SequenceType::List expectedOperandTypes() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   inline Item::Iterator::Ptr mapToSequence(const Item &i,
-         const DynamicContext::Ptr &context) const;
-   virtual Properties properties() const;
+   inline Item::Iterator::Ptr mapToSequence(const Item &i, const DynamicContext::Ptr &context) const;
+   Properties properties() const override;
 
  private:
    /**

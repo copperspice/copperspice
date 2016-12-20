@@ -104,9 +104,13 @@ class XsdWildcard : public XsdTerm
     * Describes the <a href="http://www.w3.org/TR/xmlschema11-1/#w-process_contents">type of content processing</a> of the wildcard.
     */
    enum ProcessContents {
-      Strict,      ///< There must be a top-level declaration for the item available, or the item must have an xsi:type, and the item must be valid as appropriate.
-      Lax,         ///< If the item has a uniquely determined declaration available, it must be valid with respect to that definition.
-      Skip         ///< No constraints at all: the item must simply be well-formed XML.
+      Strict,      // There must be a top-level declaration for the item available
+                   // or the item must have an xsi:type, and the item must be valid as appropriate.
+
+      Lax,         // If the item has a uniquely determined declaration available, it must be valid with
+                   // respect to that definition.
+
+      Skip         // No constraints at all: the item must simply be well-formed XML.
    };
 
    /**
@@ -117,7 +121,7 @@ class XsdWildcard : public XsdTerm
    /**
     * Returns always @c true, used to avoid dynamic casts.
     */
-   virtual bool isWildcard() const;
+   bool isWildcard() const override;
 
    /**
     * Sets the namespace @p constraint of the wildcard.

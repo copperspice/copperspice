@@ -57,10 +57,10 @@ class QAlphaWidget: public QWidget, private QEffects
    void run(int time);
 
  protected:
-   void paintEvent(QPaintEvent *e);
-   void closeEvent(QCloseEvent *);
+   void paintEvent(QPaintEvent *e)  override;
+   void closeEvent(QCloseEvent *)  override;
    void alphaBlend();
-   bool eventFilter(QObject *, QEvent *);
+   bool eventFilter(QObject *, QEvent *)  override;
 
    GUI_CS_SLOT_1(Protected, void render())
    GUI_CS_SLOT_2(render)
@@ -342,8 +342,8 @@ class QRollEffect : public QWidget, private QEffects
    void run(int time);
 
  protected:
-   void paintEvent(QPaintEvent *);
-   void closeEvent(QCloseEvent *);
+   void paintEvent(QPaintEvent *)  override;
+   void closeEvent(QCloseEvent *)  override;
 
  private:
    GUI_CS_SLOT_1(Private, void scroll())

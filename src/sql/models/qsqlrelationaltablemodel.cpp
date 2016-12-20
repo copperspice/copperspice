@@ -69,7 +69,8 @@ class QRelatedTableModel : public QSqlTableModel
 {
  public:
    QRelatedTableModel(QRelation *rel, QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
-   bool select();
+   bool select() override;
+
  private:
    bool firstSelect;
    QRelation *relation;
@@ -168,11 +169,13 @@ bool QRelatedTableModel::select()
       firstSelect = false;
       return QSqlTableModel::select();
    }
+
    relation->clearDictionary();
    bool res = QSqlTableModel::select();
    if (res) {
       relation->populateDictionary();
    }
+
    return res;
 }
 
@@ -180,6 +183,7 @@ bool QRelatedTableModel::select()
 class QSqlRelationalTableModelPrivate: public QSqlTableModelPrivate
 {
    Q_DECLARE_PUBLIC(QSqlRelationalTableModel)
+
  public:
    QSqlRelationalTableModelPrivate()
       : QSqlTableModelPrivate(),
@@ -187,13 +191,13 @@ class QSqlRelationalTableModelPrivate: public QSqlTableModelPrivate
    }
    QString relationField(const QString &tableName, const QString &fieldName) const;
 
-   int nameToIndex(const QString &name) const;
+   int nameToIndex(const QString &name) const override;
    mutable QVector<QRelation> relations;
-   QSqlRecord baseRec; // the record without relations
+   QSqlRecord baseRec;                   // the record without relations
    void clearChanges();
-   void clearEditBuffer();
-   void clearCache();
-   void revertCachedRow(int row);
+   void clearEditBuffer() override;
+   void clearCache() override;
+   void revertCachedRow(int row) override;
 
    void translateFieldNames(int row, QSqlRecord &values) const;
    QSqlRelationalTableModel::JoinMode joinMode;
@@ -204,12 +208,15 @@ static void qAppendWhereClause(QString &query, const QString &clause1, const QSt
    if (clause1.isEmpty() && clause2.isEmpty()) {
       return;
    }
+
    if (clause1.isEmpty() || clause2.isEmpty()) {
       query.append(QLatin1String(" WHERE (")).append(clause1).append(clause2);
+
    } else
       query.append(QLatin1String(" WHERE (")).append(clause1).append(
          QLatin1String(") AND (")).append(clause2);
-   query.append(QLatin1String(") "));
+
+      query.append(QLatin1String(") "));
 }
 
 void QSqlRelationalTableModelPrivate::clearChanges()

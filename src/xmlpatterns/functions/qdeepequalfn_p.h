@@ -40,11 +40,10 @@ class DeepEqualFN : public FunctionCall, public ComparisonPlatform<DeepEqualFN, 
    inline DeepEqualFN() : ComparisonPlatform<DeepEqualFN, false>() {
    }
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return AtomicComparator::OperatorEqual;
    }
 };

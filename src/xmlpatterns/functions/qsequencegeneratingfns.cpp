@@ -55,9 +55,10 @@ class StringSplitter : public QAbstractXmlForwardIterator<QString>
 {
  public:
    StringSplitter(const Item::Iterator::Ptr &source);
-   virtual QString next();
-   virtual QString current() const;
-   virtual qint64 position() const;
+   QString next() override;
+   QString current() const override;
+   qint64 position() const override;
+
  private:
    QString loadNext();
    const Item::Iterator::Ptr   m_source;
@@ -68,8 +69,7 @@ class StringSplitter : public QAbstractXmlForwardIterator<QString>
 };
 
 StringSplitter::StringSplitter(const Item::Iterator::Ptr &source) : m_source(source)
-   , m_position(0)
-   , m_sourceAtEnd(false)
+   , m_position(0), m_sourceAtEnd(false)
 {
    Q_ASSERT(m_source);
    m_buffer.push(loadNext());

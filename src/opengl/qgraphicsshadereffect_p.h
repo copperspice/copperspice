@@ -37,6 +37,7 @@ class QGraphicsShaderEffectPrivate;
 class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 {
    OPENGL_CS_OBJECT(QGraphicsShaderEffect)
+
  public:
    QGraphicsShaderEffect(QObject *parent = 0);
    virtual ~QGraphicsShaderEffect();
@@ -45,7 +46,7 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
    void setPixelShaderFragment(const QByteArray &code);
 
  protected:
-   void draw(QPainter *painter);
+   void draw(QPainter *painter) override;
    void setUniformsDirty();
    virtual void setUniforms(QGLShaderProgram *program);
 

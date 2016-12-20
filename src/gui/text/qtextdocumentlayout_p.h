@@ -49,11 +49,11 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    explicit QTextDocumentLayout(QTextDocument *doc);
 
    // from the abstract layout
-   void draw(QPainter *painter, const PaintContext &context);
-   int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+   void draw(QPainter *painter, const PaintContext &context) override;
+   int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const override;
 
-   int pageCount() const;
-   QSizeF documentSize() const;
+   int pageCount() const override;
+   QSizeF documentSize() const override;
 
    void setCursorWidth(int width);
    int cursorWidth() const;
@@ -64,8 +64,8 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    // internal for QTextEdit's NoWrap mode
    void setViewport(const QRectF &viewport);
 
-   virtual QRectF frameBoundingRect(QTextFrame *frame) const;
-   virtual QRectF blockBoundingRect(const QTextBlock &block) const;
+   QRectF frameBoundingRect(QTextFrame *frame) const override;
+   QRectF blockBoundingRect(const QTextBlock &block) const override;
 
    // ####
    int layoutStatus() const;
@@ -78,13 +78,14 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    bool contentHasAlignment() const;
 
  protected:
-   void documentChanged(int from, int oldLength, int length);
-   void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
-   void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format);
+   void documentChanged(int from, int oldLength, int length) override;
+   void resizeInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format) override;
+   void positionInlineObject(QTextInlineObject item, int posInDocument, const QTextFormat &format) override;
 
    void drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
-                         int posInDocument, const QTextFormat &format);
-   virtual void timerEvent(QTimerEvent *e);
+                         int posInDocument, const QTextFormat &format) override;
+
+   void timerEvent(QTimerEvent *e) override;
 
  private:
    QRectF doLayout(int from, int oldLength, int length);

@@ -76,7 +76,7 @@ class QNetworkAccessCachedFtpConnection: public QFtp, public QNetworkAccessCache
       setShareable(false);
    }
 
-   void dispose() {
+   void dispose() override {
       connect(this, SIGNAL(done(bool)), this, SLOT(deleteLater()));
       close();
    }

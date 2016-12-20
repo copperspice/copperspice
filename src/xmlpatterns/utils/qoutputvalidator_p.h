@@ -38,31 +38,26 @@ namespace QPatternist {
 class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLocationReflection
 {
  public:
-   OutputValidator(QAbstractXmlReceiver *const receiver,
-                   const DynamicContext::Ptr &context,
-                   const SourceLocationReflection *const r,
-                   const bool isXSLT);
+   OutputValidator(QAbstractXmlReceiver *const receiver, const DynamicContext::Ptr &context,
+                  const SourceLocationReflection *const r, const bool isXSLT);
 
-   virtual void namespaceBinding(const QXmlName &nb);
+   void namespaceBinding(const QXmlName &nb) override;
 
-   virtual void characters(const QStringRef &value);
-   virtual void comment(const QString &value);
+   void characters(const QStringRef &value) override;
+   void comment(const QString &value) override;
 
-   virtual void startElement(const QXmlName &name);
+   void startElement(const QXmlName &name) override;
+   void endElement() override;
 
-   virtual void endElement();
+   void attribute(const QXmlName &name, const QStringRef &value) override;
+   void processingInstruction(const QXmlName &name, const QString &value) override;
+   void item(const Item &item) override;
 
-   virtual void attribute(const QXmlName &name, const QStringRef &value);
-
-   virtual void processingInstruction(const QXmlName &name, const QString &value);
-
-   virtual void item(const Item &item);
-
-   virtual void startDocument();
-   virtual void endDocument();
-   virtual void atomicValue(const QVariant &value);
-   virtual void endOfSequence();
-   virtual void startOfSequence();
+   void startDocument() override;
+   void endDocument() override;
+   void atomicValue(const QVariant &value) override;
+   void endOfSequence() override;
+   void startOfSequence() override;
 
  private:
    bool m_hasReceivedChildren;

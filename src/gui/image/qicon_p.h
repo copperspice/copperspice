@@ -82,27 +82,26 @@ struct QPixmapIconEngineEntry {
    }
 };
 
-
-
 class QPixmapIconEngine : public QIconEngineV2
 {
  public:
    QPixmapIconEngine();
    QPixmapIconEngine(const QPixmapIconEngine &);
    ~QPixmapIconEngine();
-   void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state);
-   QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state);
+
+   void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+   QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
    QPixmapIconEngineEntry *bestMatch(const QSize &size, QIcon::Mode mode, QIcon::State state, bool sizeOnly);
-   QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state);
-   void addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state);
-   void addFile(const QString &fileName, const QSize &size, QIcon::Mode mode, QIcon::State state);
+   QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
+   void addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state) override;
+   void addFile(const QString &fileName, const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
    // v2 functions
-   QString key() const;
-   QIconEngineV2 *clone() const;
-   bool read(QDataStream &in);
-   bool write(QDataStream &out) const;
-   void virtual_hook(int id, void *data);
+   QString key() const override;
+   QIconEngineV2 *clone() const override;
+   bool read(QDataStream &in) override;
+   bool write(QDataStream &out) const override;
+   void virtual_hook(int id, void *data) override;
 
  private:
    QPixmapIconEngineEntry *tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state);

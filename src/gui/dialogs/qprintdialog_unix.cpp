@@ -82,13 +82,13 @@ class QPrintPropertiesDialog : public QDialog
    void setupPrinter() const;
 
  protected:
-   void showEvent(QShowEvent *event);
+   void showEvent(QShowEvent *event) override;
 
  private:
    Ui::QPrintPropertiesWidget widget;
    QDialogButtonBox *m_buttons;
 
-#if !defined(QT_NO_CUPS)
+#if ! defined(QT_NO_CUPS)
    QCUPSSupport *m_cups;
    QPPDOptionsModel *m_cupsOptionsModel;
 #endif
@@ -122,7 +122,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
    void setupPrinter();
    void updateWidgets();
 
-   virtual void setTabs(const QList<QWidget *> &tabs);
+   void setTabs(const QList<QWidget *> &tabs) override;
 
    Ui::QPrintSettingsOutput options;
    QUnixPrintWidget *top;

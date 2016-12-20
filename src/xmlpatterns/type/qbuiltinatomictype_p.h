@@ -40,22 +40,22 @@ class BuiltinAtomicType : public AtomicType
    /**
     * @returns always @c false
     */
-   virtual bool isAbstract() const;
+   bool isAbstract() const override;
 
    /**
     * @returns the base type as specified in the constructors baseType argument.
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   SchemaType::Ptr wxsSuperType() const override;
 
    /**
     * @returns the same type as wxsSuperType(), except for the type @c xs:anyAtomicType, which
     * returns item()
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
-   virtual AtomicComparatorLocator::Ptr comparatorLocator() const;
-   virtual AtomicMathematicianLocator::Ptr mathematicianLocator() const;
-   virtual AtomicCasterLocator::Ptr casterLocator() const;
+   AtomicComparatorLocator::Ptr comparatorLocator() const override;
+   AtomicMathematicianLocator::Ptr mathematicianLocator() const override;
+   AtomicCasterLocator::Ptr casterLocator() const override;
 
  protected:
    friend class BuiltinTypes;

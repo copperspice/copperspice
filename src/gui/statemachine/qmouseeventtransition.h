@@ -60,8 +60,8 @@ class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
    void setHitTestPath(const QPainterPath &path);
 
  protected:
-   void onTransition(QEvent *event);
-   bool eventTest(QEvent *event);
+   void onTransition(QEvent *event) override;
+   bool eventTest(QEvent *event) override;
 
  private:
    Q_DISABLE_COPY(QMouseEventTransition)

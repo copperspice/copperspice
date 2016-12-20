@@ -46,19 +46,19 @@ namespace Phonon
             ~QAsyncReader();
 
             //reimplementation from IUnknown
-            STDMETHODIMP QueryInterface(REFIID iid, void** out);
-            STDMETHODIMP_(ULONG) AddRef();
-            STDMETHODIMP_(ULONG) Release();
+            STDMETHODIMP QueryInterface(REFIID iid, void** out) override;
+            STDMETHODIMP_(ULONG) AddRef() override;
+            STDMETHODIMP_(ULONG) Release() override;
 
             //reimplementation from IAsyncReader
-            STDMETHODIMP RequestAllocator(IMemAllocator *,ALLOCATOR_PROPERTIES *,IMemAllocator **);
-            STDMETHODIMP Request(IMediaSample *,DWORD_PTR);
-            STDMETHODIMP WaitForNext(DWORD,IMediaSample **,DWORD_PTR *);
-            STDMETHODIMP SyncReadAligned(IMediaSample *);
-            STDMETHODIMP SyncRead(LONGLONG,LONG,BYTE *);
-            STDMETHODIMP Length(LONGLONG *,LONGLONG *) = 0;
-            STDMETHODIMP BeginFlush();
-            STDMETHODIMP EndFlush();
+            STDMETHODIMP RequestAllocator(IMemAllocator *,ALLOCATOR_PROPERTIES *,IMemAllocator **) override;
+            STDMETHODIMP Request(IMediaSample *,DWORD_PTR) override;
+            STDMETHODIMP WaitForNext(DWORD,IMediaSample **,DWORD_PTR *) override;
+            STDMETHODIMP SyncReadAligned(IMediaSample *) override;
+            STDMETHODIMP SyncRead(LONGLONG,LONG,BYTE *) override;
+            STDMETHODIMP Length(LONGLONG *,LONGLONG *) override  = 0;
+            STDMETHODIMP BeginFlush() override;
+            STDMETHODIMP EndFlush() override;
 
         protected:
             STDMETHODIMP syncReadAlignedUnlocked(IMediaSample *);

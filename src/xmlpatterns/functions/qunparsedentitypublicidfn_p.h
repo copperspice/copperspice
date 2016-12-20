@@ -34,7 +34,7 @@ namespace QPatternist {
 class UnparsedEntityPublicIDFN : public ContextNodeChecker
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 }
 

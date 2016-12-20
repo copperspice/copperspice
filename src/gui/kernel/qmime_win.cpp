@@ -408,12 +408,12 @@ QStringList QWindowsMime::allMimesForFormats(IDataObject *pDataObj)
 class QWindowsMimeText : public QWindowsMime
 {
  public:
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 };
 
 bool QWindowsMimeText::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
@@ -569,12 +569,13 @@ class QWindowsMimeURI : public QWindowsMime
 {
  public:
    QWindowsMimeURI();
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
+
  private:
    int CF_INETURL_W; // wide char version
    int CF_INETURL;
@@ -747,14 +748,14 @@ class QWindowsMimeHtml : public QWindowsMime
    QWindowsMimeHtml();
 
    // for converting from Qt
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 
    // for converting to Qt
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
 
  private:
    int CF_HTML;
@@ -890,14 +891,15 @@ class QWindowsMimeImage : public QWindowsMime
  public:
    QWindowsMimeImage();
    // for converting from Qt
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 
    // for converting to Qt
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
+
  private:
    bool hasOriginalDIBV5(IDataObject *pDataObj) const;
    UINT CF_PNG;
@@ -1055,14 +1057,14 @@ class QBuiltInMimes : public QWindowsMime
    QBuiltInMimes();
 
    // for converting from Qt
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 
    // for converting to Qt
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
 
  private:
    QMap<int, QString> outFormats;
@@ -1182,14 +1184,14 @@ class QLastResortMimes : public QWindowsMime
 
    QLastResortMimes();
    // for converting from Qt
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 
    // for converting to Qt
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
 
  private:
    QMap<int, QString> formats;
@@ -1214,6 +1216,7 @@ QLastResortMimes::QLastResortMimes()
       ianaTypes.append(QLatin1String("text/"));
       ianaTypes.append(QLatin1String("video/"));
    }
+
    //Types handled by other classes
    if (!excludeList.size()) {
       excludeList.append(QLatin1String("HTML Format"));

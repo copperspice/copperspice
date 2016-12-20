@@ -53,7 +53,8 @@ class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode
  public:
    QSvgTinyDocument();
    ~QSvgTinyDocument();
-   Type type() const;
+
+   Type type() const override;
 
    QSize size() const;
    void setWidth(int len, bool percent);
@@ -68,12 +69,11 @@ class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode
    QRectF viewBox() const;
    void setViewBox(const QRectF &rect);
 
-   virtual void draw(QPainter *p, QSvgExtraStates &);//from the QSvgNode
+   void draw(QPainter *p, QSvgExtraStates &) override;      //from the QSvgNode
 
    void draw(QPainter *p);
    void draw(QPainter *p, const QRectF &bounds);
-   void draw(QPainter *p, const QString &id,
-             const QRectF &bounds = QRectF());
+   void draw(QPainter *p, const QString &id, const QRectF &bounds = QRectF());
 
    QMatrix matrixForElement(const QString &id) const;
    QRectF boundsOnElement(const QString &id) const;
@@ -94,9 +94,10 @@ class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode
    int currentFrame() const;
    void setCurrentFrame(int);
    void setFramesPerSecond(int num);
+
  private:
    void mapSourceToTarget(QPainter *p, const QRectF &targetRect, const QRectF &sourceRect = QRectF());
- private:
+ 
    QSize  m_size;
    bool   m_widthPercent;
    bool   m_heightPercent;

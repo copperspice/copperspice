@@ -41,15 +41,14 @@ class FunctionFactoryCollection: public FunctionFactory, public FunctionFactory:
    /**
     * Creates a function call node.
     */
-   virtual Expression::Ptr createFunctionCall(const QXmlName,
-         const Expression::List &arguments,
-         const StaticContext::Ptr &context,
-         const SourceLocationReflection *const r);
-   virtual bool isAvailable(const NamePool::Ptr &np, const QXmlName name, const xsInteger arity);
+   Expression::Ptr createFunctionCall(const QXmlName, const Expression::List &arguments, 
+                  const StaticContext::Ptr &context, const SourceLocationReflection *const r) override;
 
-   virtual FunctionSignature::Hash functionSignatures() const;
+   bool isAvailable(const NamePool::Ptr &np, const QXmlName name, const xsInteger arity) override;
 
-   virtual FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name);
+   FunctionSignature::Hash functionSignatures() const override;
+
+   FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) override;
 
    /**
     * @return a FunctionFactory containing all core functions and constructor

@@ -57,20 +57,20 @@ class QEventDispatcherMac : public QAbstractEventDispatcher
    explicit QEventDispatcherMac(QObject *parent = 0);
    ~QEventDispatcherMac();
 
-   bool processEvents(QEventLoop::ProcessEventsFlags flags);
-   bool hasPendingEvents();
+   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
+   bool hasPendingEvents() override;
 
-   void registerSocketNotifier(QSocketNotifier *notifier);
-   void unregisterSocketNotifier(QSocketNotifier *notifier);
+   void registerSocketNotifier(QSocketNotifier *notifier) override;
+   void unregisterSocketNotifier(QSocketNotifier *notifier) override;
 
-   void registerTimer(int timerId, int interval, QObject *object);
-   bool unregisterTimer(int timerId);
-   bool unregisterTimers(QObject *object);
-   QList<TimerInfo> registeredTimers(QObject *object) const;
+   void registerTimer(int timerId, int interval, QObject *object) override;
+   bool unregisterTimer(int timerId) override;
+   bool unregisterTimers(QObject *object) override;
+   QList<TimerInfo> registeredTimers(QObject *object) const override;
 
-   void wakeUp();
-   void flush();
-   void interrupt();
+   void wakeUp() override;
+   void flush() override;
+   void interrupt() override;
 
  private:
    friend class QApplicationPrivate;

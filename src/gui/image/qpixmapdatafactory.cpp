@@ -56,7 +56,7 @@ class QSimplePixmapDataFactory : public QPixmapDataFactory
 {
  public:
    ~QSimplePixmapDataFactory() {}
-   QPixmapData *create(QPixmapData::PixelType type);
+   QPixmapData *create(QPixmapData::PixelType type) override;
 };
 
 QPixmapData *QSimplePixmapDataFactory::create(QPixmapData::PixelType type)

@@ -37,10 +37,9 @@ class UntypedAtomic : public AtomicString
  public:
    friend class CommonValues;
 
-
    static UntypedAtomic::Ptr fromValue(const QString &value);
 
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
  protected:
    UntypedAtomic(const QString &value);

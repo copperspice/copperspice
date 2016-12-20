@@ -44,39 +44,38 @@ class ContextItem : public EmptyContainer
    inline ContextItem(const Expression::Ptr &expr = Expression::Ptr()) : m_expr(expr) {
    }
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::Ptr staticType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * @returns always DisableElimination and RequiresContextItem
     */
-   virtual Expression::Properties properties() const;
+   Expression::Properties properties() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-
-   /**
-    * Overridden to store a pointer to StaticContext::contextItemType().
-    */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * Overridden to store a pointer to StaticContext::contextItemType().
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+
+   /**
+    * Overridden to store a pointer to StaticContext::contextItemType().
+    */
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    /**
     * @returns always IDContextItem
     */
-   virtual ID id() const;
+   ID id() const override;
 
    /**
     * @returns always BuiltinTypes::item;
     */
-   virtual ItemType::Ptr expectedContextItemType() const;
+   ItemType::Ptr expectedContextItemType() const override;
 
-   virtual const SourceLocationReflection *actualReflection() const;
-   virtual void announceFocusType(const ItemType::Ptr &type);
+   const SourceLocationReflection *actualReflection() const override;
+   void announceFocusType(const ItemType::Ptr &type) override;
 
  private:
    ItemType::Ptr           m_itemType;

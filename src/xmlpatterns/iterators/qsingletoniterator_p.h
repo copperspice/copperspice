@@ -48,7 +48,7 @@ class SingletonIterator : public QAbstractXmlForwardIterator<T>
       Q_ASSERT(!qIsForwardIteratorEnd(item));
    }
 
-   virtual T next() {
+   T next() override {
       switch (m_position) {
          case 0: {
             ++m_position;
@@ -65,7 +65,7 @@ class SingletonIterator : public QAbstractXmlForwardIterator<T>
       }
    }
 
-   virtual T current() const {
+   T current() const override {
       if (m_position == 1) {
          return m_item;
       } else {
@@ -73,25 +73,25 @@ class SingletonIterator : public QAbstractXmlForwardIterator<T>
       }
    }
 
-   virtual xsInteger position() const {
+   xsInteger position() const override {
       return m_position;
    }
 
    /**
     * @returns a copy of this instance, rewinded to the beginning.
     */
-   virtual typename QAbstractXmlForwardIterator<T>::Ptr toReversed() {
+   typename QAbstractXmlForwardIterator<T>::Ptr toReversed() override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(new SingletonIterator<T>(m_item));
    }
 
    /**
     * @returns always 1
     */
-   virtual xsInteger count() {
+   xsInteger count() override {
       return 1;
    }
 
-   virtual typename QAbstractXmlForwardIterator<T>::Ptr copy() const {
+   typename QAbstractXmlForwardIterator<T>::Ptr copy() const  override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(new SingletonIterator(m_item));
    }
 
@@ -110,9 +110,7 @@ class SingletonIterator : public QAbstractXmlForwardIterator<T>
  * @relates SingletonIterator
  */
 template<typename T>
-inline
-typename SingletonIterator<T>::Ptr
-makeSingletonIterator(const T &item)
+inline typename SingletonIterator<T>::Ptr makeSingletonIterator(const T &item)
 {
    return typename SingletonIterator<T>::Ptr(new SingletonIterator<T>(item));
 }

@@ -43,9 +43,9 @@ class Date : public AbstractDateTime
    static Date::Ptr fromLexical(const QString &string);
    static Date::Ptr fromDateTime(const QDateTime &date);
 
-   virtual ItemType::Ptr type() const;
-   virtual QString stringValue() const;
-   virtual Item fromValue(const QDateTime &dt) const;
+   ItemType::Ptr type() const override;
+   QString stringValue() const override;
+   Item fromValue(const QDateTime &dt) const override;
 
  protected:
    friend class CommonValues;

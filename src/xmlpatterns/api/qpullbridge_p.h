@@ -44,16 +44,16 @@ class PullBridge : public AbstractXmlPullProvider
       m_iterators.push(qMakePair(StartOfInput, it));
    }
 
-   virtual Event next();
-   virtual Event current() const;
-   virtual QXmlName name() const;
+   Event next() override;
+   Event current() const override;
+   QXmlName name() const override;
    /**
     * Returns always an empty QVariant.
     */
-   virtual QVariant atomicValue() const;
-   virtual QString stringValue() const;
-   virtual QHash<QXmlName, QString> attributes();
-   virtual QHash<QXmlName, QXmlItem> attributeItems();
+   QVariant atomicValue() const override;
+   QString stringValue() const override;
+   QHash<QXmlName, QString> attributes() override;
+   QHash<QXmlName, QXmlItem> attributeItems() override;
 
    QXmlNodeModelIndex index() const;
    QSourceLocation sourceLocation() const;

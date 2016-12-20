@@ -38,38 +38,38 @@ class AnyItemType : public ItemType
    /**
     * @returns always "item()"
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always @c true
     */
-   virtual bool itemMatches(const Item &item) const;
+   bool itemMatches(const Item &item) const override;
 
    /**
     * @returns always 0, item() is the super type in the
     * XPath Data Model hierarchy
     */
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isNodeType() const;
+   bool isNodeType() const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isAtomicType() const;
+   bool isAtomicType() const override;
 
    /**
     * @returns always @c true
     */
-   virtual bool xdtTypeMatches(const ItemType::Ptr &type) const;
+   bool xdtTypeMatches(const ItemType::Ptr &type) const override;
 
    /**
     * @returns xs:anyAtomicType
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
  protected:
    friend class BuiltinTypes;

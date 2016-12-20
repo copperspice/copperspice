@@ -42,29 +42,29 @@ class AnyType : public SchemaType
 
    virtual ~AnyType();
 
-   virtual QXmlName name(const NamePool::Ptr &np) const;
+   virtual QXmlName name(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always "xs:anyType"
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   virtual QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always @c false
     */
-   virtual bool isAbstract() const;
+   virtual bool isAbstract() const override;
 
    /**
     * @returns @c null, since <tt>xs:anyType</tt> has no base type, it is the ur-type.
     *
     * @returns always @c null
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   virtual SchemaType::Ptr wxsSuperType() const override;
 
    /**
     * @returns @c true only if @p other is xsAnyType.
     */
-   virtual bool wxsTypeMatches(const SchemaType::Ptr &other) const;
+   virtual bool wxsTypeMatches(const SchemaType::Ptr &other) const override;
 
    /**
     * <tt>xs:anyType</tt> is the "ur-type" and special. Therefore, this function
@@ -72,22 +72,22 @@ class AnyType : public SchemaType
     *
     * @returns SchemaType::None
     */
-   virtual TypeCategory category() const;
+   virtual TypeCategory category() const override;
 
    /**
     * @returns always NoDerivation.
     */
-   virtual DerivationMethod derivationMethod() const;
+   virtual DerivationMethod derivationMethod() const override;
 
    /**
     * @returns an empty set of derivation constraint flags.
     */
-   virtual DerivationConstraints derivationConstraints() const;
+   virtual DerivationConstraints derivationConstraints() const override;
 
    /**
     * Always returns @c true.
     */
-   virtual bool isComplexType() const;
+   virtual bool isComplexType() const override;
 
  protected:
    /**

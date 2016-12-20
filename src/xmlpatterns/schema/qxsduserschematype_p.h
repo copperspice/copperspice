@@ -52,14 +52,14 @@ class XsdUserSchemaType : public TSuperClass, public NamedSchemaComponent, publi
     *
     * @param namePool The pool the name belongs to.
     */
-   virtual QXmlName name(const NamePool::Ptr &namePool) const;
+   QXmlName name(const NamePool::Ptr &namePool) const override;
 
    /**
     * Returns the display name of the type.
     *
     * @param namePool The pool the name belongs to.
     */
-   virtual QString displayName(const NamePool::Ptr &namePool) const;
+   QString displayName(const NamePool::Ptr &namePool) const override;
 
    /**
     * Sets the derivation @p constraints of the type.
@@ -69,7 +69,7 @@ class XsdUserSchemaType : public TSuperClass, public NamedSchemaComponent, publi
    /**
     * Returns the derivation constraints of the type.
     */
-   SchemaType::DerivationConstraints derivationConstraints() const;
+   SchemaType::DerivationConstraints derivationConstraints() const override;
 
  private:
    QXmlName m_name;

@@ -36,12 +36,12 @@ class NamespaceConstructor : public EmptyContainer
  public:
    NamespaceConstructor(const QXmlName nb);
 
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    /**
     * @returns a list containing one CommonSequenceTypes::ExactlyOneString instance.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * The static type is exactly one attribute node. It's unclear what
@@ -50,16 +50,17 @@ class NamespaceConstructor : public EmptyContainer
     * conceptually correct, since a namespace node isn't an attribute
     * node.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Expression::Properties properties() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Expression::Properties properties() const override;
 
-   inline const QXmlName &namespaceBinding() const {
+   const QXmlName &namespaceBinding() const {
       return m_binding;
    }
 
-   virtual ID id() const;
+   ID id() const override;
+
  private:
    const QXmlName m_binding;
 };

@@ -51,12 +51,11 @@ class QSpinBoxPrivate : public QAbstractSpinBoxPrivate
 
  public:
    QSpinBoxPrivate();
-   void emitSignals(EmitPolicy ep, const QVariant &);
+   void emitSignals(EmitPolicy ep, const QVariant &) override;
 
-   virtual QVariant valueFromText(const QString &n) const;
-   virtual QString textFromValue(const QVariant &n) const;
-   QVariant validateAndInterpret(QString &input, int &pos,
-                                 QValidator::State &state) const;
+   QVariant valueFromText(const QString &n) const override;
+   QString textFromValue(const QVariant &n) const override;
+   QVariant validateAndInterpret(QString &input, int &pos, QValidator::State &state) const;
 
    inline void init() {
       Q_Q(QSpinBox);
@@ -71,13 +70,14 @@ class QDoubleSpinBoxPrivate : public QAbstractSpinBoxPrivate
 
  public:
    QDoubleSpinBoxPrivate();
-   void emitSignals(EmitPolicy ep, const QVariant &);
 
-   virtual QVariant valueFromText(const QString &n) const;
-   virtual QString textFromValue(const QVariant &n) const;
-   QVariant validateAndInterpret(QString &input, int &pos,
-                                 QValidator::State &state) const;
+   void emitSignals(EmitPolicy ep, const QVariant &) override;
+
+   QVariant valueFromText(const QString &n) const override;
+   QString textFromValue(const QVariant &n) const override;
+   QVariant validateAndInterpret(QString &input, int &pos, QValidator::State &state) const;
    double round(double input) const;
+
    // variables
    int decimals;
 

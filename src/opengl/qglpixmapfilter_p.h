@@ -50,8 +50,9 @@ template <typename Filter>
 class QGLPixmapFilter : public Filter, public QGLPixmapFilterBase
 {
  public:
-   void draw(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF())  const {
+   void draw(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &srcRect = QRectF()) const  override{
       const QRectF source = srcRect.isNull() ? QRectF(src.rect()) : srcRect;
+
       if (painter) {
          drawImpl(painter, pos, src, source);
       }

@@ -43,11 +43,11 @@ namespace Phonon
 
 class MediaControllerPrivate : public FrontendInterfacePrivate
 {
-    public:
-        MediaControllerPrivate(MediaObject *mp) : FrontendInterfacePrivate(mp) {}
+   public:
+      MediaControllerPrivate(MediaObject *mp) : FrontendInterfacePrivate(mp) {}
 
-        virtual void backendObjectChanged(QObject *);
-        MediaController *q;
+      void backendObjectChanged(QObject *) override;
+      MediaController *q;
 };
 
 MediaController::MediaController(MediaObject *mp)

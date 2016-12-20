@@ -68,8 +68,8 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    explicit QToolButton(QWidget *parent = 0);
    ~QToolButton();
 
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
    Qt::ToolButtonStyle toolButtonStyle() const;
 
@@ -105,19 +105,20 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
 
  protected:
    QToolButton(QToolButtonPrivate &, QWidget *parent);
-   bool event(QEvent *e);
-   void mousePressEvent(QMouseEvent *);
-   void mouseReleaseEvent(QMouseEvent *);
-   void paintEvent(QPaintEvent *);
-   void actionEvent(QActionEvent *);
 
-   void enterEvent(QEvent *);
-   void leaveEvent(QEvent *);
-   void timerEvent(QTimerEvent *);
-   void changeEvent(QEvent *);
+   bool event(QEvent *e) override;
+   void mousePressEvent(QMouseEvent *) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   void paintEvent(QPaintEvent *) override;
+   void actionEvent(QActionEvent *) override;
 
-   bool hitButton(const QPoint &pos) const;
-   void nextCheckState();
+   void enterEvent(QEvent *) override;
+   void leaveEvent(QEvent *) override;
+   void timerEvent(QTimerEvent *) override;
+   void changeEvent(QEvent *) override;
+
+   bool hitButton(const QPoint &pos) const override;
+   void nextCheckState() override;
    void initStyleOption(QStyleOptionToolButton *option) const;
 
  private:

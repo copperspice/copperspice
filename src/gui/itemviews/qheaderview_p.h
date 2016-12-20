@@ -73,7 +73,6 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
         globalResizeMode(QHeaderView::Interactive) {
    }
 
-
    int lastVisibleVisualIndex() const;
    int sectionHandleAt(int position);
    void setupSectionIndicator(int section, int position);
@@ -82,7 +81,7 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    void resizeSections(QHeaderView::ResizeMode globalMode, bool useGlobalMode = false);
    void _q_sectionsRemoved(const QModelIndex &, int, int);
    void _q_layoutAboutToBeChanged();
-   void _q_layoutChanged();
+   void _q_layoutChanged() override;
 
    bool isSectionSelected(int section) const;
 

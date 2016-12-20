@@ -91,40 +91,39 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    ~QNativeSocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type,
-                   QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol);
-   bool initialize(int socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState);
+                   QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol) override;
 
-   int socketDescriptor() const;
+   bool initialize(int socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState) override;
 
-   bool isValid() const;
+   int socketDescriptor() const override;
 
-   bool connectToHost(const QHostAddress &address, quint16 port);
-   bool connectToHostByName(const QString &name, quint16 port);
-   bool bind(const QHostAddress &address, quint16 port);
-   bool listen();
-   int accept();
-   void close();
+   bool isValid() const override;
+
+   bool connectToHost(const QHostAddress &address, quint16 port) override;
+   bool connectToHostByName(const QString &name, quint16 port) override;
+   bool bind(const QHostAddress &address, quint16 port) override;
+   bool listen() override;
+   int accept() override;
+   void close() override;
 
 #ifndef QT_NO_NETWORKINTERFACE
-   bool joinMulticastGroup(const QHostAddress &groupAddress,
-                           const QNetworkInterface &iface);
-   bool leaveMulticastGroup(const QHostAddress &groupAddress,
-                            const QNetworkInterface &iface);
-   QNetworkInterface multicastInterface() const;
-   bool setMulticastInterface(const QNetworkInterface &iface);
+   bool joinMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface) override;
+   bool leaveMulticastGroup(const QHostAddress &groupAddress, const QNetworkInterface &iface) override;
+   QNetworkInterface multicastInterface() const override;
+   bool setMulticastInterface(const QNetworkInterface &iface) override;
 #endif
 
-   qint64 bytesAvailable() const;
+   qint64 bytesAvailable() const override;
 
-   qint64 read(char *data, qint64 maxlen);
-   qint64 write(const char *data, qint64 len);
+   qint64 read(char *data, qint64 maxlen) override;
+   qint64 write(const char *data, qint64 len) override;
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,quint16 *port = 0);
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,quint16 port);
-   bool hasPendingDatagrams() const;
-   qint64 pendingDatagramSize() const;
+   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,quint16 *port = 0) override;
+   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr,quint16 port) override;
+   bool hasPendingDatagrams() const override;
+   qint64 pendingDatagramSize() const override;
 
-   qint64 bytesToWrite() const;
+   qint64 bytesToWrite() const override;
 
    qint64 receiveBufferSize() const;
    void setReceiveBufferSize(qint64 bufferSize);
@@ -132,20 +131,20 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    qint64 sendBufferSize() const;
    void setSendBufferSize(qint64 bufferSize);
 
-   int option(SocketOption option) const;
-   bool setOption(SocketOption option, int value);
+   int option(SocketOption option) const override;
+   bool setOption(SocketOption option, int value) override;
 
-   bool waitForRead(int msecs = 30000, bool *timedOut = 0);
-   bool waitForWrite(int msecs = 30000, bool *timedOut = 0);
+   bool waitForRead(int msecs = 30000, bool *timedOut = 0) override;
+   bool waitForWrite(int msecs = 30000, bool *timedOut = 0) override;
    bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite, 
-                           int msecs = 30000, bool *timedOut = 0);
+                           int msecs = 30000, bool *timedOut = 0) override;
 
-   bool isReadNotificationEnabled() const;
-   void setReadNotificationEnabled(bool enable);
-   bool isWriteNotificationEnabled() const;
-   void setWriteNotificationEnabled(bool enable);
-   bool isExceptionNotificationEnabled() const;
-   void setExceptionNotificationEnabled(bool enable);
+   bool isReadNotificationEnabled() const override;
+   void setReadNotificationEnabled(bool enable) override;
+   bool isWriteNotificationEnabled() const override;
+   void setWriteNotificationEnabled(bool enable) override;
+   bool isExceptionNotificationEnabled() const override;
+   void setExceptionNotificationEnabled(bool enable) override;
 
    NET_CS_SLOT_1(Public, void connectionNotification())
    NET_CS_SLOT_2(connectionNotification)

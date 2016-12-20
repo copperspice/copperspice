@@ -63,16 +63,14 @@ class RangeIterator : public Item::Iterator
     * @note @p start must be smaller than @p end, not larger
     * or equal. This is not checked.
     */
-   RangeIterator(const xsInteger start,
-                 const Direction direction,
-                 const xsInteger end);
+   RangeIterator(const xsInteger start, const Direction direction, const xsInteger end); 
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual xsInteger count();
-   virtual Item::Iterator::Ptr toReversed();
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   xsInteger count() override;
+   Item::Iterator::Ptr toReversed() override;
+   Item::Iterator::Ptr copy() const override;
 
  private:
    xsInteger m_start;

@@ -71,18 +71,16 @@ class XQueryTokenizer : public Tokenizer
       XQueryVersion
    };
 
-   XQueryTokenizer(const QString &query,
-                   const QUrl &location,
-                   const State startingState = Default);
+   XQueryTokenizer(const QString &query, const QUrl &location, const State startingState = Default);
 
-   virtual Token nextToken(YYLTYPE *const sourceLocator);
-   virtual int commenceScanOnly();
-   virtual void resumeTokenizationFrom(const int position);
+   Token nextToken(YYLTYPE *const sourceLocator) override;
+   int commenceScanOnly() override;
+   void resumeTokenizationFrom(const int position) override;
 
    /**
     * Does nothing.
     */
-   virtual void setParserContext(const ParserContext::Ptr &parseInfo);
+   void setParserContext(const ParserContext::Ptr &parseInfo) override;
 
  private:
 

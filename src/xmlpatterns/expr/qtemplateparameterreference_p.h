@@ -37,13 +37,13 @@ class TemplateParameterReference : public EmptyContainer
  public:
    TemplateParameterReference(const VariableDeclaration *varDecl);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Properties properties() const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Properties properties() const override;
 
    inline const Expression::Ptr &sourceExpression() const;
    inline const VariableDeclaration *variableDeclaration() const;

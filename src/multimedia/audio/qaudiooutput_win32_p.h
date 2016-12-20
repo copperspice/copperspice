@@ -46,28 +46,29 @@ QT_BEGIN_NAMESPACE
 class QAudioOutputPrivate : public QAbstractAudioOutput
 {
    MULTI_CS_OBJECT(QAudioOutputPrivate)
+
  public:
    QAudioOutputPrivate(const QByteArray &device, const QAudioFormat &audioFormat);
    ~QAudioOutputPrivate();
 
    qint64 write( const char *data, qint64 len );
 
-   QAudioFormat format() const;
-   QIODevice *start(QIODevice *device = 0);
-   void stop();
-   void reset();
-   void suspend();
-   void resume();
-   int bytesFree() const;
-   int periodSize() const;
-   void setBufferSize(int value);
-   int bufferSize() const;
-   void setNotifyInterval(int milliSeconds);
-   int notifyInterval() const;
-   qint64 processedUSecs() const;
-   qint64 elapsedUSecs() const;
-   QAudio::Error error() const;
-   QAudio::State state() const;
+   QAudioFormat format() const override;
+   QIODevice *start(QIODevice *device = 0)  override;
+   void stop()  override;
+   void reset()  override;
+   void suspend()  override;
+   void resume()  override;
+   int bytesFree() const  override;
+   int periodSize() const  override;
+   void setBufferSize(int value)  override;
+   int bufferSize() const  override;
+   void setNotifyInterval(int milliSeconds)  override;
+   int notifyInterval() const  override;
+   qint64 processedUSecs() const  override;
+   qint64 elapsedUSecs() const  override;
+   QAudio::Error error() const  override;
+   QAudio::State state() const  override; 
 
    QIODevice *audioSource;
    QAudioFormat settings;
@@ -80,7 +81,6 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    MULTI_CS_SLOT_1(Private, bool deviceReady())
    MULTI_CS_SLOT_2(deviceReady)
 
- private:
    QByteArray m_device;
    bool resuming;
    int bytesAvailable;
@@ -116,12 +116,13 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
 class OutputPrivate : public QIODevice
 {
    MULTI_CS_OBJECT(OutputPrivate)
+
  public:
    OutputPrivate(QAudioOutputPrivate *audio);
    ~OutputPrivate();
 
-   qint64 readData( char *data, qint64 len);
-   qint64 writeData(const char *data, qint64 len);
+   qint64 readData( char *data, qint64 len)  override;
+   qint64 writeData(const char *data, qint64 len)  override;
 
  private:
    QAudioOutputPrivate *audioDevice;

@@ -40,36 +40,33 @@ class Q_GUI_EXPORT QRuntimePixmapData : public QPixmapData
    QRuntimePixmapData(const QRuntimeGraphicsSystem *gs, PixelType type);
    ~QRuntimePixmapData();
 
-   virtual QPixmapData *createCompatiblePixmapData() const;
-   virtual void resize(int width, int height);
-   virtual void fromImage(const QImage &image, Qt::ImageConversionFlags flags);
+   QPixmapData *createCompatiblePixmapData() const override;
+   void resize(int width, int height) override;
+   void fromImage(const QImage &image, Qt::ImageConversionFlags flags) override;
 
-   virtual bool fromFile(const QString &filename, const char *format,
-                         Qt::ImageConversionFlags flags);
+   bool fromFile(const QString &filename, const char *format, Qt::ImageConversionFlags flags) override;
+   bool fromData(const uchar *buffer, uint len, const char *format, Qt::ImageConversionFlags flags) override;
 
-   virtual bool fromData(const uchar *buffer, uint len, const char *format,
-                         Qt::ImageConversionFlags flags);
+   void copy(const QPixmapData *data, const QRect &rect) override;
+   bool scroll(int dx, int dy, const QRect &rect) override;
 
-   virtual void copy(const QPixmapData *data, const QRect &rect);
-   virtual bool scroll(int dx, int dy, const QRect &rect);
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
+   void fill(const QColor &color) override;
+   QBitmap mask() const override;
+   void setMask(const QBitmap &mask) override;
+   bool hasAlphaChannel() const override;
+   QPixmap transformed(const QTransform &matrix, Qt::TransformationMode mode) const override;
+   void setAlphaChannel(const QPixmap &alphaChannel) override;
+   QPixmap alphaChannel() const override;
+   QImage toImage() const override;
+   QPaintEngine *paintEngine() const override;
 
-   virtual int metric(QPaintDevice::PaintDeviceMetric metric) const;
-   virtual void fill(const QColor &color);
-   virtual QBitmap mask() const;
-   virtual void setMask(const QBitmap &mask);
-   virtual bool hasAlphaChannel() const;
-   virtual QPixmap transformed(const QTransform &matrix, Qt::TransformationMode mode) const;
-   virtual void setAlphaChannel(const QPixmap &alphaChannel);
-   virtual QPixmap alphaChannel() const;
-   virtual QImage toImage() const;
-   virtual QPaintEngine *paintEngine() const;
-
-   virtual QImage *buffer();
+   QImage *buffer() override;
 
    void readBackInfo();
 
    QPixmapData *m_data;
-   virtual QPixmapData *runtimeData() const;
+   virtual QPixmapData *runtimeData() const override;
 
  private:
    const QRuntimeGraphicsSystem *m_graphicsSystem;
@@ -82,21 +79,20 @@ class QRuntimeWindowSurface : public QWindowSurface
    QRuntimeWindowSurface(const QRuntimeGraphicsSystem *gs, QWidget *window);
    ~QRuntimeWindowSurface();
 
-   virtual QPaintDevice *paintDevice();
-   virtual void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
-   virtual void setGeometry(const QRect &rect);
+   QPaintDevice *paintDevice() override;
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset) override;
+   void setGeometry(const QRect &rect) override;
 
-   virtual bool scroll(const QRegion &area, int dx, int dy);
+   bool scroll(const QRegion &area, int dx, int dy) override;
 
-   virtual void beginPaint(const QRegion &);
-   virtual void endPaint(const QRegion &);
+   void beginPaint(const QRegion &) override;
+   void endPaint(const QRegion &) override;
 
-   virtual QImage *buffer(const QWidget *widget);
-   virtual QPixmap grabWidget(const QWidget *widget, const QRect &rectangle = QRect()) const;
+   QImage *buffer(const QWidget *widget) override;
+   QPixmap grabWidget(const QWidget *widget, const QRect &rectangle = QRect()) const override;
 
-   virtual QPoint offset(const QWidget *widget) const;
-
-   virtual WindowSurfaceFeatures features() const;
+   QPoint offset(const QWidget *widget) const override;
+   WindowSurfaceFeatures features() const override;
 
    QScopedPointer<QWindowSurface> m_windowSurface;
    QScopedPointer<QWindowSurface> m_pendingWindowSurface;
@@ -113,12 +109,11 @@ class QRuntimeGraphicsSystem : public QGraphicsSystem
       DestroyImmediately,
       DestroyAfterFirstFlush
    };
-
- public:
+ 
    QRuntimeGraphicsSystem();
 
-   QPixmapData *createPixmapData(QPixmapData::PixelType type) const;
-   QWindowSurface *createWindowSurface(QWidget *widget) const;
+   QPixmapData *createPixmapData(QPixmapData::PixelType type) const override;
+   QWindowSurface *createWindowSurface(QWidget *widget) const override;
 
    void removePixmapData(QRuntimePixmapData *pixmapData) const;
    void removeWindowSurface(QRuntimeWindowSurface *windowSurface) const;
@@ -135,7 +130,6 @@ class QRuntimeGraphicsSystem : public QGraphicsSystem
    int windowSurfaceDestroyPolicy() const {
       return m_windowSurfaceDestroyPolicy;
    }
-
 
  private:
    int m_windowSurfaceDestroyPolicy;

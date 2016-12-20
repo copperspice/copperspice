@@ -63,7 +63,7 @@ class RunFunctionTaskBase : public QFutureInterface<T> , public QRunnable
       return future;
    }
 
-   void run() {}
+   void run() override {}
    virtual void runFunctor() = 0;
 };
 
@@ -96,7 +96,7 @@ template <>
 class RunFunctionTask<void> : public RunFunctionTaskBase<void>
 {
  public:
-   void run() {
+   void run() override {
       if (this->isCanceled()) {
          this->reportFinished();
          return;

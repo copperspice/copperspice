@@ -45,9 +45,9 @@ class BasicTypesFactory : public SchemaTypeFactory
     * @note This does not handle user defined types, only builtin types.
     * @todo Update documentation, proportionally with progress.
     */
-   virtual SchemaType::Ptr createSchemaType(const QXmlName ) const;
+   SchemaType::Ptr createSchemaType(const QXmlName ) const override;
 
-   virtual SchemaType::Hash types() const;
+   SchemaType::Hash types() const override;
 
    /**
     * @returns the singleton instance of BasicTypesFactory.

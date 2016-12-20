@@ -59,7 +59,7 @@ class XsdSchemaContext : public ReportContext
    /**
     * Returns the name pool of the schema context.
     */
-   virtual NamePool::Ptr namePool() const;
+   NamePool::Ptr namePool() const override;
 
    /**
     * Sets the base URI for the main schema.
@@ -95,12 +95,12 @@ class XsdSchemaContext : public ReportContext
     * Returns the message handler used by the context for
     * error reporting.
     */
-   virtual QAbstractMessageHandler *messageHandler() const;
+   QAbstractMessageHandler *messageHandler() const override;
 
    /**
     * Always returns an empty source location.
     */
-   virtual QSourceLocation locationFor(const SourceLocationReflection *const reflection) const;
+   QSourceLocation locationFor(const SourceLocationReflection *const reflection) const override;
 
    /**
     * Sets the uri @p resolver that is used for resolving URIs in the
@@ -112,7 +112,7 @@ class XsdSchemaContext : public ReportContext
     * Returns the uri resolver that is used for resolving URIs in the
     * schema parser.
     */
-   virtual const QAbstractUriResolver *uriResolver() const;
+   const QAbstractUriResolver *uriResolver() const override;
 
    /**
     * Returns the list of facets for the given simple @p type.

@@ -53,12 +53,12 @@ namespace Gstreamer
 class OverlayWidget : public QWidget
 {
 public:
-    OverlayWidget(VideoWidget *videoWidget, X11Renderer *renderer) : 
-                  QWidget(videoWidget), 
-                  m_videoWidget(videoWidget), 
-                  m_renderer(renderer) { }
-    void paintEvent(QPaintEvent *) {
+    OverlayWidget(VideoWidget *videoWidget, X11Renderer *renderer) 
+                  : QWidget(videoWidget), m_videoWidget(videoWidget),  m_renderer(renderer) { }
+
+    void paintEvent(QPaintEvent *) override {
         Phonon::State state = m_videoWidget->root() ? m_videoWidget->root()->state() : Phonon::LoadingState;
+
         if (state == Phonon::PlayingState || state == Phonon::PausedState) {
             m_renderer->windowExposed();
         } else {
@@ -66,6 +66,7 @@ public:
             painter.fillRect(m_videoWidget->rect(), m_videoWidget->palette().background());
         }
     }
+
 private:
     VideoWidget *m_videoWidget;
     X11Renderer *m_renderer;

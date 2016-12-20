@@ -52,9 +52,9 @@ class QClipboardWatcher : public QInternalMimeData
       : QInternalMimeData() {
    }
 
-   bool hasFormat_sys(const QString &mimetype) const;
-   QStringList formats_sys() const;
-   QVariant retrieveData_sys(const QString &mimetype, QVariant::Type preferredType) const;
+   bool hasFormat_sys(const QString &mimetype) const override;
+   QStringList formats_sys() const override;
+   QVariant retrieveData_sys(const QString &mimetype, QVariant::Type preferredType) const override;
 };
 
 

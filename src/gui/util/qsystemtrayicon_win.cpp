@@ -91,15 +91,18 @@ class QSystemTrayIconSys : QWidget
  public:
    QSystemTrayIconSys(QSystemTrayIcon *object);
    ~QSystemTrayIconSys();
-   bool winEvent( MSG *m, long *result );
+
+   bool winEvent( MSG *m, long *result)  override;
    bool trayMessage(DWORD msg);
    void setIconContents(NOTIFYICONDATA &data);
    bool showMessage(const QString &title, const QString &message, QSystemTrayIcon::MessageIcon type, uint uSecs);
    QRect findIconGeometry(UINT a_iButtonID);
    void createIcon();
+
    HICON hIcon;
    QPoint globalPos;
    QSystemTrayIcon *q;
+
  private:
    uint notifyIconSize;
    int maxTipLength;

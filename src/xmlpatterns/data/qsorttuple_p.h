@@ -56,7 +56,7 @@ class SortTuple : public AtomicValue
     * This function is sometimes called by Literal::description().
     * This function simply returns "SortTuple".
     */
-   virtual QString stringValue() const;
+   QString stringValue() const override;
 
    /**
     * @short Always asserts.
@@ -76,15 +76,15 @@ class SortTuple : public AtomicValue
    /**
     * @short Always asserts.
     */
-   virtual bool hasError() const;
+   bool hasError() const override;
 
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
-   inline const Item::Vector &sortKeys() const {
+   const Item::Vector &sortKeys() const {
       return m_sortKeys;
    }
 
-   inline const Item::Iterator::Ptr &value() const {
+   const Item::Iterator::Ptr &value() const {
       return m_value;
    }
 

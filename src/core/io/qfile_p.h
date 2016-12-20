@@ -44,7 +44,7 @@ class QFilePrivate : public QFileDevicePrivate
    bool openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags);
    bool openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags);
 
-   virtual QAbstractFileEngine *engine() const;
+   QAbstractFileEngine *engine() const override;
 
    QString fileName;
 

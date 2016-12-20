@@ -272,7 +272,7 @@ class QWizardHeader : public QWidget
               Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat);
 
  protected:
-   void paintEvent(QPaintEvent *event);
+   void paintEvent(QPaintEvent *event) override;
 
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
  private:
@@ -433,7 +433,7 @@ class QWatermarkLabel : public QLabel
       }
    }
 
-   QSize minimumSizeHint() const {
+   QSize minimumSizeHint() const  override {
       if (!pixmap() && !pixmap()->isNull()) {
          return pixmap()->size();
       }
@@ -514,14 +514,15 @@ class QWizardAntiFlickerWidget : public QWidget
 {
    QWizard *wizard;
    QWizardPrivate *wizardPrivate;
+
  public:
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *wizardPrivate)
       : QWidget(wizard)
       , wizard(wizard)
       , wizardPrivate(wizardPrivate) {}
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
  protected:
-   void paintEvent(QPaintEvent *);
+   void paintEvent(QPaintEvent *) override;
 #endif
 };
 

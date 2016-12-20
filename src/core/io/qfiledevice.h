@@ -76,19 +76,18 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    FileError error() const;
    void unsetError();
 
-   virtual void close();
-
-   bool isSequential() const;
+   void close() override;
+   bool isSequential() const override;
 
    int handle() const;
    virtual QString fileName() const;
 
-   qint64 pos() const;
-   bool seek(qint64 offset);
-   bool atEnd() const;
+   qint64 pos() const override;
+   bool seek(qint64 offset) override;
+   bool atEnd() const override;
    bool flush();
 
-   qint64 size() const;
+   qint64 size() const override;
 
    virtual bool resize(qint64 sz);
    virtual Permissions permissions() const;
@@ -107,9 +106,9 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    explicit QFileDevice(QObject *parent);
    QFileDevice(QFileDevicePrivate &dd, QObject *parent = 0);
 
-   qint64 readData(char *data, qint64 maxlen);
-   qint64 writeData(const char *data, qint64 len);
-   qint64 readLineData(char *data, qint64 maxlen);
+   qint64 readData(char *data, qint64 maxlen) override;
+   qint64 writeData(const char *data, qint64 len) override;
+   qint64 readLineData(char *data, qint64 maxlen) override;
 
  private:
    Q_DISABLE_COPY(QFileDevice)

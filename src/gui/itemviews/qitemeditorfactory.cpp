@@ -178,8 +178,9 @@ class QDefaultItemEditorFactory : public QItemEditorFactory
 {
  public:
    inline QDefaultItemEditorFactory() {}
-   QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
-   QByteArray valuePropertyName(QVariant::Type) const;
+
+   QWidget *createEditor(QVariant::Type type, QWidget *parent) const override;
+   QByteArray valuePropertyName(QVariant::Type) const override;
 };
 
 QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const

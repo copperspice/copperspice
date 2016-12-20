@@ -71,7 +71,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
    FontFilters fontFilters() const;
 
    QFont currentFont() const;
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
 
    GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont &f))
    GUI_CS_SLOT_2(setCurrentFont)
@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
    GUI_CS_SIGNAL_2(currentFontChanged, f)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QFontComboBox)

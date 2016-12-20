@@ -36,19 +36,19 @@ class CommentConstructor : public SingleContainer
  public:
    CommentConstructor(const Expression::Ptr &operand);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * The first operand must be exactly one @c xs:string.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
  private:
    inline QString evaluateContent(const DynamicContext::Ptr &context) const;

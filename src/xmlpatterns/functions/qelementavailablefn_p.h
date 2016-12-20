@@ -35,7 +35,7 @@ class ElementAvailableFN : public StaticNamespacesContainer
 {
  public:
    ElementAvailableFN();
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 
  private:
    static QSet<QString> allXSLTInstructions();

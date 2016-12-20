@@ -230,11 +230,11 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
    ~QNonContiguousByteDeviceThreadForwardImpl() {
    }
 
-   qint64 pos() {
+   qint64 pos() override {
       return m_pos;
    }
 
-   const char *readPointer(qint64 maximumLength, qint64 &len) {
+   const char *readPointer(qint64 maximumLength, qint64 &len) override {
       if (m_amount > 0) {
          len = m_amount;
          return m_data;
@@ -253,7 +253,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       return 0;
    }
 
-   bool advanceReadPointer(qint64 a) {
+   bool advanceReadPointer(qint64 a) override {
       if (m_data == 0) {
          return false;
       }
@@ -268,7 +268,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       return true;
    }
 
-   bool atEnd() {
+   bool atEnd() override {
       if (m_amount > 0) {
          return false;
       } else {
@@ -276,7 +276,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       }
    }
 
-   bool reset() {
+   bool reset() override {
       m_amount = 0;
       m_data = 0;
       m_dataArray.clear();
@@ -299,7 +299,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       return b;
    }
 
-   qint64 size() {
+   qint64 size() override {
       return m_size;
    }
 

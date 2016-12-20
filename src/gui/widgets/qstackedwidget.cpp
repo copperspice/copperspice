@@ -44,8 +44,9 @@ class QStackedLayoutHFW : public QStackedLayout
 {
  public:
    QStackedLayoutHFW(QWidget *parent = 0) : QStackedLayout(parent) {}
-   bool hasHeightForWidth() const;
-   int heightForWidth(int width) const;
+
+   bool hasHeightForWidth() const  override;
+   int heightForWidth(int width) const  override;
 };
 
 bool QStackedLayoutHFW::hasHeightForWidth() const

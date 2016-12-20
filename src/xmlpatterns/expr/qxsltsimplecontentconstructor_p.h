@@ -35,10 +35,10 @@ class XSLTSimpleContentConstructor : public SimpleContentConstructor
 {
  public:
    XSLTSimpleContentConstructor(const Expression::Ptr &source);
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
  private:
    static inline QString processItem(const Item &item, bool &discard, bool &isText);

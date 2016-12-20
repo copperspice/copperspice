@@ -85,13 +85,13 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    QPalette palette;
    uint inheritedPaletteResolveMask;
    void setPalette_helper(const QPalette &palette);
-   void resolvePalette(uint inheritedMask);
+   void resolvePalette(uint inheritedMask) override;
    void updatePalette(const QPalette &palette);
    QPalette naturalWidgetPalette() const;
    QFont font;
    uint inheritedFontResolveMask;
    void setFont_helper(const QFont &font);
-   void resolveFont(uint inheritedMask);
+   void resolveFont(uint inheritedMask) override;
    void updateFont(const QFont &font);
    QFont naturalWidgetFont() const;
 
@@ -106,13 +106,13 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    bool hasDecoration() const;
 
    // Private Properties
-   qreal width() const;
-   void setWidth(qreal);
-   void resetWidth();
+   qreal width() const override;
+   void setWidth(qreal) override;
+   void resetWidth() override;
 
-   qreal height() const;
-   void setHeight(qreal);
-   void resetHeight();
+   qreal height() const override;
+   void setHeight(qreal) override;
+   void resetHeight() override;
    void setGeometryFromSetPos();
 
    // State

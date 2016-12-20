@@ -61,12 +61,11 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    void setMaximumCacheSize(const QSize &size);
    QSize maximumCacheSize() const;
 
-   virtual QRectF boundingRect() const;
-
-   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+   QRectF boundingRect() const override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
    enum { Type = 13 };
-   virtual int type() const;
+   int type() const override;
 
  private:
    Q_DISABLE_COPY(QGraphicsSvgItem)

@@ -130,7 +130,7 @@ class QHostInfoRunnable : public QRunnable
 {
  public:
    QHostInfoRunnable (QString hn, int i);
-   void run();
+   void run() override;
 
    QString toBeLookedUp;
    int id;
@@ -163,7 +163,7 @@ class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
    QHostInfoLookupManager();
    ~QHostInfoLookupManager();
 
-   void clear();
+   void clear() override;
    void work();
 
    // called from QHostInfo

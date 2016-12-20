@@ -49,7 +49,7 @@ class Boolean : public AtomicValue
    static bool evaluateEBV(const Item &item,
                            const QExplicitlySharedDataPointer<DynamicContext> &context);
 
-   virtual QString stringValue() const;
+   QString stringValue() const override;
 
    /**
     * @returns a Boolean object instantiating @p value. Use True() or False()
@@ -67,11 +67,11 @@ class Boolean : public AtomicValue
     * Get the Effective %Boolean Value of this boolean value. For <tt>xs:boolean</tt>, this
     * is simply the value.
     */
-   virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
+   bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const override;
 
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
-   inline bool value() const {
+   bool value() const {
       return m_value;
    }
 

@@ -42,10 +42,10 @@ namespace QPatternist {
 class SingleTokenContainer : public TokenSource
 {
  public:
-   inline SingleTokenContainer(const Tokenizer::Token &token,
-                               const YYLTYPE &location);
+   inline SingleTokenContainer(const Tokenizer::Token &token, const YYLTYPE &location);
 
-   virtual Tokenizer::Token nextToken(YYLTYPE *const sourceLocator);
+   Tokenizer::Token nextToken(YYLTYPE *const sourceLocator) override;
+
  private:
    const Tokenizer::Token m_token;
    const YYLTYPE          m_location;
@@ -53,44 +53,39 @@ class SingleTokenContainer : public TokenSource
 };
 
 SingleTokenContainer::SingleTokenContainer(const Tokenizer::Token &token,
-      const YYLTYPE &location) : m_token(token)
-   , m_location(location)
-   , m_hasDelivered(false)
+      const YYLTYPE &location) : m_token(token), m_location(location), m_hasDelivered(false)
 {
 }
 
-class XSLTTokenizer : public Tokenizer
-   , private MaintainingReader<XSLTTokenLookup>
+class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLookup>
 {
  public:
    /**
     * XSLTTokenizer do not own @p queryDevice.
     */
-   XSLTTokenizer(QIODevice *const queryDevice,
-                 const QUrl &location,
-                 const ReportContext::Ptr &context,
+   XSLTTokenizer(QIODevice *const queryDevice, const QUrl &location, const ReportContext::Ptr &context,
                  const NamePool::Ptr &np);
 
-   virtual Token nextToken(YYLTYPE *const sourceLocator);
+   Token nextToken(YYLTYPE *const sourceLocator) override;
 
    /**
     * For XSLT we don't need this mechanism, so we do nothing.
     */
-   virtual int commenceScanOnly();
+   int commenceScanOnly() override;
 
    /**
     * For XSLT we don't need this mechanism, so we do nothing.
     */
-   virtual void resumeTokenizationFrom(const int position);
+   void resumeTokenizationFrom(const int position) override;
 
-   virtual void setParserContext(const ParserContext::Ptr &parseInfo);
+   void setParserContext(const ParserContext::Ptr &parseInfo) override;
 
-   virtual QUrl documentURI() const {
+   QUrl documentURI() const override {
       return queryURI();
    }
 
  protected:
-   virtual bool isAnyAttributeAllowed() const;
+   bool isAnyAttributeAllowed() const override;
 
  private:
    inline void validateElement() const;
@@ -112,12 +107,10 @@ class XSLTTokenizer : public Tokenizer
       WithParamVariable
    };
 
-   void queueNamespaceDeclarations(TokenSource::Queue *const ts,
-                                   QStack<Token> *const target,
-                                   const bool isDeclaration = false);
+   void queueNamespaceDeclarations(TokenSource::Queue *const ts, QStack<Token> *const target,
+                  const bool isDeclaration = false);
 
-   inline void queueToken(const Token &token,
-                          TokenSource::Queue *const ts);
+   inline void queueToken(const Token &token, TokenSource::Queue *const ts);
    void queueEmptySequence(TokenSource::Queue *const to);
    void queueSequenceType(const QString &expr);
    /**
@@ -125,19 +118,15 @@ class XSLTTokenizer : public Tokenizer
     * be empty while there also is no sequence constructor.
     */
    void queueSimpleContentConstructor(const ReportContext::ErrorCode code,
-                                      const bool emptynessAllowed,
-                                      TokenSource::Queue *const to,
-                                      const bool selectOnlyFirst = false);
+                  const bool emptynessAllowed, TokenSource::Queue *const to, const bool selectOnlyFirst = false);
    /**
     * Tokenizes and queues @p expr as if it was an attribute value
     * template.
     */
-   void queueAVT(const QString &expr,
-                 TokenSource::Queue *const to);
+   void queueAVT(const QString &expr, TokenSource::Queue *const to);
 
    void hasWrittenExpression(bool &beacon);
-   void commencingExpression(bool &hasWrittenExpression,
-                             TokenSource::Queue *const to);
+   void commencingExpression(bool &hasWrittenExpression, TokenSource::Queue *const to);
 
    void outsideDocumentElement();
    void insideChoose(TokenSource::Queue *const to);

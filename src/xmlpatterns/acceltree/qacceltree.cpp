@@ -49,8 +49,8 @@ class AccelTreePrivate : public QAbstractXmlNodeModelPrivate
       : m_accelTree(accelTree) {
    }
 
-   virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const {
-      return m_accelTree->sourceLocation(index);
+   QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const override {
+      return m_accelTree->sourceLocation(index) ;
    }
 
  private:
@@ -59,9 +59,7 @@ class AccelTreePrivate : public QAbstractXmlNodeModelPrivate
 }
 
 AccelTree::AccelTree(const QUrl &docURI, const QUrl &bURI)
-   : QAbstractXmlNodeModel(new AccelTreePrivate(this))
-   , m_documentURI(docURI)
-   , m_baseURI(bURI)
+   : QAbstractXmlNodeModel(new AccelTreePrivate(this)), m_documentURI(docURI), m_baseURI(bURI)
 {
    /* Pre-allocate at least a little bit. */
    // TODO. Do it according to what an average 4 KB doc contains.
@@ -72,8 +70,10 @@ AccelTree::AccelTree(const QUrl &docURI, const QUrl &bURI)
 void AccelTree::printStats(const NamePool::Ptr &np) const
 {
    Q_ASSERT(np);
+
 #ifdef QT_NO_DEBUG
    Q_UNUSED(np); /* Needed when compiling in release mode. */
+
 #else
    const int len = basicData.count();
 
@@ -665,7 +665,6 @@ void AccelTree::copyNodeTo(const QXmlNodeModelIndex &node,
       default:
          receiver->item(node);
    }
-
 }
 
 QSourceLocation AccelTree::sourceLocation(const QXmlNodeModelIndex &index) const

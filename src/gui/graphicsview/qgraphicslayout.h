@@ -43,12 +43,12 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
    ~QGraphicsLayout();
 
    void setContentsMargins(qreal left, qreal top, qreal right, qreal bottom);
-   void getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const;
+   void getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const override;
 
    void activate();
    bool isActivated() const;
    virtual void invalidate();
-   virtual void updateGeometry();
+   void updateGeometry() override;
 
    virtual void widgetEvent(QEvent *e);
 

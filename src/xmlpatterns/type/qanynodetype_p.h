@@ -38,20 +38,20 @@ class AnyNodeType : public ItemType
 
    typedef QExplicitlySharedDataPointer<AnyNodeType> Ptr;
 
-   virtual bool xdtTypeMatches(const ItemType::Ptr &other) const;
-   virtual bool itemMatches(const Item &item) const;
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   bool xdtTypeMatches(const ItemType::Ptr &other) const override;
+   bool itemMatches(const Item &item) const override;
+   QString displayName(const NamePool::Ptr &np) const override;
 
-   virtual ItemType::Ptr xdtSuperType() const;
+   ItemType::Ptr xdtSuperType() const override;
 
-   virtual bool isNodeType() const;
-   virtual bool isAtomicType() const;
+   bool isNodeType() const override;
+   bool isAtomicType() const override;
 
    /**
     * @see <a href="http://www.w3.org/TR/xpath-datamodel/#acc-summ-typed-value">XQuery 1.0
     * and XPath 2.0 Data Model, G.15 dm:typed-value Accessor</a>
     */
-   virtual ItemType::Ptr atomizedType() const;
+   ItemType::Ptr atomizedType() const override;
 
    /**
     * @returns the node kind this node ItemType tests for. If it matches any node, zero is returned.

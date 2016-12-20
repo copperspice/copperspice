@@ -57,7 +57,7 @@ namespace Phonon
               }
 
 
-              STDMETHODIMP Disconnect()
+              STDMETHODIMP Disconnect() override
               {
                   HRESULT hr = QPin::Disconnect();
                   if (SUCCEEDED(hr)) {
@@ -67,7 +67,7 @@ namespace Phonon
               }
 
 
-              STDMETHODIMP Connect(IPin *pin, const AM_MEDIA_TYPE *type)
+              STDMETHODIMP Connect(IPin *pin, const AM_MEDIA_TYPE *type) override
               {
                   HRESULT hr = QPin::Connect(pin, type);
                   if (SUCCEEDED(hr)) {

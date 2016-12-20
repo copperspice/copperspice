@@ -37,14 +37,14 @@ class StaticNamespacesContainer : public FunctionCall
    /**
     * Reimplemented to store data from the @p context.
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
  protected:
    /**
     * Before typeCheck(), behavior of this function is undefined. After
     * typeCheck(), this function guarantees to return a valid pointer.
     */
-   inline const NamespaceResolver::Ptr &staticNamespaces() const {
+   const NamespaceResolver::Ptr &staticNamespaces() const {
       Q_ASSERT(m_resolver);
       return m_resolver;
    }
@@ -52,7 +52,7 @@ class StaticNamespacesContainer : public FunctionCall
    /**
     * This constructor only exists to ensure this class is subclassed.
     */
-   inline StaticNamespacesContainer() {
+   StaticNamespacesContainer() {
    }
 
  private:

@@ -83,62 +83,65 @@ class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
    QGL2PaintEngineEx();
    ~QGL2PaintEngineEx();
 
-   bool begin(QPaintDevice *device);
+   bool begin(QPaintDevice *device) override;
    void ensureActive();
-   bool end();
+   bool end() override;
 
-   virtual void clipEnabledChanged();
-   virtual void penChanged();
-   virtual void brushChanged();
-   virtual void brushOriginChanged();
-   virtual void opacityChanged();
-   virtual void compositionModeChanged();
-   virtual void renderHintsChanged();
-   virtual void transformChanged();
+   void clipEnabledChanged() override;
+   void penChanged() override;
+   void brushChanged() override;
+   void brushOriginChanged() override;
+   void opacityChanged() override;
+   void compositionModeChanged() override;
+   void renderHintsChanged() override;
+   void transformChanged() override;
 
-   virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   virtual void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                                    QPainter::PixmapFragmentHints hints);
-   virtual void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-                                    const QPixmap &pixmap,
-                                    QPainter::PixmapFragmentHints hints);
-   virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                          Qt::ImageConversionFlags flags = Qt::AutoColor);
-   virtual void drawTextItem(const QPointF &p, const QTextItem &textItem);
-   virtual void fill(const QVectorPath &path, const QBrush &brush);
-   virtual void stroke(const QVectorPath &path, const QPen &pen);
-   virtual void clip(const QVectorPath &path, Qt::ClipOperation op);
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
+                  QPainter::PixmapFragmentHints hints) override;
+   void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
+                  const QPixmap &pixmap, QPainter::PixmapFragmentHints hints) override;
+   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
+                  Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
-   virtual void drawStaticTextItem(QStaticTextItem *textItem);
+   void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
+   void fill(const QVectorPath &path, const QBrush &brush) override;
+   void stroke(const QVectorPath &path, const QPen &pen) override;
+   void clip(const QVectorPath &path, Qt::ClipOperation op) override;
+
+   void drawStaticTextItem(QStaticTextItem *textItem) override;
 
    bool drawTexture(const QRectF &r, GLuint textureId, const QSize &size, const QRectF &sr);
 
-   Type type() const {
+   Type type() const override {
       return OpenGL2;
    }
 
-   virtual void setState(QPainterState *s);
-   virtual QPainterState *createState(QPainterState *orig) const;
-   inline QOpenGL2PaintEngineState *state() {
+   void setState(QPainterState *s) override;
+   QPainterState *createState(QPainterState *orig) const override;
+
+   QOpenGL2PaintEngineState *state() {
       return static_cast<QOpenGL2PaintEngineState *>(QPaintEngineEx::state());
    }
-   inline const QOpenGL2PaintEngineState *state() const {
+
+   const QOpenGL2PaintEngineState *state() const {
       return static_cast<const QOpenGL2PaintEngineState *>(QPaintEngineEx::state());
    }
 
-   void beginNativePainting();
-   void endNativePainting();
+   void beginNativePainting() override;
+   void endNativePainting() override;
 
    void invalidateState();
 
-   QPixmapFilter *pixmapFilter(int type, const QPixmapFilter *prototype);
+   QPixmapFilter *pixmapFilter(int type, const QPixmapFilter *prototype) override;
 
    void setRenderTextActive(bool);
 
    bool isNativePaintingActive() const;
-   bool supportsTransformations(qreal, const QTransform &) const {
+   bool supportsTransformations(qreal, const QTransform &) const override{
       return true;
    }
+
  private:
    Q_DISABLE_COPY(QGL2PaintEngineEx)
 };
@@ -146,6 +149,7 @@ class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
 class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate
 {
    Q_DECLARE_PUBLIC(QGL2PaintEngineEx)
+
  public:
    enum StencilFillMode {
       OddEvenFillMode,
@@ -227,17 +231,17 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate
    void updateClipScissorTest();
    void setScissor(const QRect &rect);
    void regenerateClip();
-   void systemStateChanged();
-
+   void systemStateChanged() override;
 
    static QGLEngineShaderManager *shaderManagerForEngine(QGL2PaintEngineEx *engine) {
       return engine->d_func()->shaderManager;
    }
+
    static QGL2PaintEngineExPrivate *getData(QGL2PaintEngineEx *engine) {
       return engine->d_func();
    }
-   static void cleanupVectorPath(QPaintEngineEx *engine, void *data);
 
+   static void cleanupVectorPath(QPaintEngineEx *engine, void *data);
 
    QGL2PaintEngineEx *q;
    QGLEngineShaderManager *shaderManager;

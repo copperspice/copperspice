@@ -38,39 +38,35 @@ class ValueComparison : public PairContainer,
    public ComparisonPlatform<ValueComparison, true>
 {
  public:
-   ValueComparison(const Expression::Ptr &op1,
-                   const AtomicComparator::Operator op,
-                   const Expression::Ptr &op2);
+   ValueComparison(const Expression::Ptr &op1, const AtomicComparator::Operator op, const Expression::Ptr &op2);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    /**
     * @returns always CommonSequenceTypes::ExactlyOneBoolean
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * @returns IDValueComparison
     */
-   virtual ID id() const;
+   ID id() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
    /**
     * Overridden to optimize case-insensitive compares.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    /**
     * @returns the operator that this ValueComparison is using.
     */
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return m_operator;
    }
 

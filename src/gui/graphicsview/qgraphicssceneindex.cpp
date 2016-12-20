@@ -39,7 +39,7 @@ class QGraphicsSceneIndexRectIntersector : public QGraphicsSceneIndexIntersector
 {
  public:
    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                  const QTransform &deviceTransform) const {
+                  const QTransform &deviceTransform) const override {
       QRectF brect = item->boundingRect();
       _q_adjustRect(&brect);
 
@@ -62,6 +62,7 @@ class QGraphicsSceneIndexRectIntersector : public QGraphicsSceneIndexIntersector
             itemPath.addRect(itemRect);
             keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, itemPath, mode);
          }
+
       } else {
          Q_ASSERT(!itemd->dirtySceneTransform);
          const QRectF itemSceneBoundingRect = itemd->sceneTransformTranslateOnly
@@ -94,7 +95,7 @@ class QGraphicsSceneIndexPointIntersector : public QGraphicsSceneIndexIntersecto
 {
  public:
    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                  const QTransform &deviceTransform) const {
+                  const QTransform &deviceTransform) const override {
       QRectF brect = item->boundingRect();
       _q_adjustRect(&brect);
 
@@ -113,6 +114,7 @@ class QGraphicsSceneIndexPointIntersector : public QGraphicsSceneIndexIntersecto
             pointPath.addRect(QRectF(itemPoint, QSizeF(1, 1)));
             keep = QGraphicsSceneIndexPrivate::itemCollidesWithPath(item, pointPath, mode);
          }
+
       } else {
          Q_ASSERT(!itemd->dirtySceneTransform);
          QRectF sceneBoundingRect = itemd->sceneTransformTranslateOnly
@@ -139,7 +141,7 @@ class QGraphicsSceneIndexPathIntersector : public QGraphicsSceneIndexIntersector
 {
  public:
    bool intersect(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
-                  const QTransform &deviceTransform) const {
+                  const QTransform &deviceTransform) const override {
       QRectF brect = item->boundingRect();
       _q_adjustRect(&brect);
 

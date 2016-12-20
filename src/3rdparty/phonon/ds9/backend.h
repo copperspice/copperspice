@@ -56,20 +56,20 @@ namespace Phonon
             Backend(QObject *parent = 0, const QVariantList & = QVariantList());
             virtual ~Backend();
 
-            QObject *createObject(Phonon::BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
+            QObject *createObject(Phonon::BackendInterface::Class, QObject *parent, const QList<QVariant> &args) override;
 
             bool supportsVideo() const;
-            QStringList availableMimeTypes() const;
+            QStringList availableMimeTypes() const override;
 
-            QList<int> objectDescriptionIndexes(Phonon::ObjectDescriptionType type) const;
-            QHash<QByteArray, QVariant> objectDescriptionProperties(Phonon::ObjectDescriptionType type, int index) const;
+            QList<int> objectDescriptionIndexes(Phonon::ObjectDescriptionType type) const override;
+            QHash<QByteArray, QVariant> objectDescriptionProperties(Phonon::ObjectDescriptionType type, int index) const override;
 
-            bool connectNodes(QObject *, QObject *);
-            bool disconnectNodes(QObject *, QObject *);
+            bool connectNodes(QObject *, QObject *) override;
+            bool disconnectNodes(QObject *, QObject *) override;
 
             //transaction management
-            bool startConnectionChange(QSet<QObject *>);
-            bool endConnectionChange(QSet<QObject *>);
+            bool startConnectionChange(QSet<QObject *>) override;
+            bool endConnectionChange(QSet<QObject *>) override;
 
             Filter getAudioOutputFilter(int index) const;
 

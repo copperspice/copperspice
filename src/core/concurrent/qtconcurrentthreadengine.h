@@ -110,7 +110,7 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    void startThreads();
    void threadExit();
    bool threadThrottleExit();
-   void run();
+   void run() override;
    virtual void asynchronousFinish() = 0;
    void handleException(const QtConcurrent::Exception &exception);
 
@@ -162,7 +162,7 @@ class ThreadEngine : public virtual ThreadEngineBase
       return future;
    }
 
-   void asynchronousFinish() {
+   void asynchronousFinish() override {
       finish();
       futureInterfaceTyped()->reportFinished(result());
       delete futureInterfaceTyped();

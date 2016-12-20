@@ -50,9 +50,6 @@ class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngin
  public:
    explicit QBearerEnginePlugin(QObject *parent = 0);
    virtual ~QBearerEnginePlugin();
-
-   virtual QStringList keys() const = 0;
-   virtual QBearerEngine *create(const QString &key) const = 0;
 };
 
 QT_END_NAMESPACE

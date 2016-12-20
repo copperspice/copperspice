@@ -43,20 +43,24 @@ class QMngHandler : public QImageIOHandler
  public:
    QMngHandler();
    ~QMngHandler();
-   virtual bool canRead() const;
-   virtual QByteArray name() const;
-   virtual bool read(QImage *image);
-   virtual bool write(const QImage &image);
-   virtual int currentImageNumber() const;
-   virtual int imageCount() const;
-   virtual bool jumpToImage(int imageNumber);
-   virtual bool jumpToNextImage();
-   virtual int loopCount() const;
-   virtual int nextImageDelay() const;
+
+   bool canRead() const override;
+   QByteArray name() const override;
+   bool read(QImage *image) override;
+   bool write(const QImage &image) override;
+   int currentImageNumber() const override;
+   int imageCount() const override;
+
+   bool jumpToImage(int imageNumber) override;
+   bool jumpToNextImage() override;
+   int loopCount() const override;
+   int nextImageDelay() const override;
+
    static bool canRead(QIODevice *device);
-   virtual QVariant option(ImageOption option) const;
-   virtual void setOption(ImageOption option, const QVariant &value);
-   virtual bool supportsOption(ImageOption option) const;
+
+   QVariant option(ImageOption option) const override;
+   void setOption(ImageOption option, const QVariant &value) override;
+   bool supportsOption(ImageOption option) const override;
 
  private:
    Q_DECLARE_PRIVATE(QMngHandler)

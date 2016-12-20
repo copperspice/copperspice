@@ -36,10 +36,10 @@ class IntersectIterator : public Item::Iterator
  public:
    IntersectIterator(const Item::Iterator::Ptr &it1,                           const Item::Iterator::Ptr &it2);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   Item::Iterator::Ptr copy() const override;
 
  private:
    inline Item closedExit() {

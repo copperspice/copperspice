@@ -44,8 +44,8 @@ class QTextTablePrivate : public QTextFramePrivate
    static QTextTable *createTable(QTextDocumentPrivate *, int pos, int rows, int cols,
                                   const QTextTableFormat &tableFormat);
 
-   void fragmentAdded(const QChar &type, uint fragment);
-   void fragmentRemoved(const QChar &type, uint fragment);
+   void fragmentAdded(const QChar &type, uint fragment)  override;
+   void fragmentRemoved(const QChar &type, uint fragment)  override;
 
    void update() const;
 

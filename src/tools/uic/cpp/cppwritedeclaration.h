@@ -41,13 +41,13 @@ namespace CPP {
 struct WriteDeclaration : public TreeWalker {
    WriteDeclaration(Uic *uic, bool activateScripts);
 
-   void acceptUI(DomUI *node);
-   void acceptWidget(DomWidget *node);
-   void acceptSpacer(DomSpacer *node);
-   void acceptLayout(DomLayout *node);
-   void acceptActionGroup(DomActionGroup *node);
-   void acceptAction(DomAction *node);
-   void acceptButtonGroup(const DomButtonGroup *buttonGroup);
+   void acceptUI(DomUI *node) override;
+   void acceptWidget(DomWidget *node) override;
+   void acceptSpacer(DomSpacer *node) override;
+   void acceptLayout(DomLayout *node) override;
+   void acceptActionGroup(DomActionGroup *node) override;
+   void acceptAction(DomAction *node) override;
+   void acceptButtonGroup(const DomButtonGroup *buttonGroup) override;
 
  private:
    Uic *m_uic;

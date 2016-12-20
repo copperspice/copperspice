@@ -181,13 +181,13 @@ class Q_GUI_EXPORT QAccessibleSimpleEditableTextInterface: public QAccessibleEdi
  public:
    QAccessibleSimpleEditableTextInterface(QAccessibleInterface *accessibleInterface);
 
-   void copyText(int startOffset, int endOffset);
-   void deleteText(int startOffset, int endOffset);
-   void insertText(int offset, const QString &text);
-   void cutText(int startOffset, int endOffset);
-   void pasteText(int offset);
-   void replaceText(int startOffset, int endOffset, const QString &text);
-   inline void setAttributes(int, int, const QString &) {}
+   void copyText(int startOffset, int endOffset) override;
+   void deleteText(int startOffset, int endOffset) override;
+   void insertText(int offset, const QString &text) override;
+   void cutText(int startOffset, int endOffset) override;
+   void pasteText(int offset) override;
+   void replaceText(int startOffset, int endOffset, const QString &text) override;
+   inline void setAttributes(int, int, const QString &) override {}
 
  private:
    QAccessibleInterface *iface;

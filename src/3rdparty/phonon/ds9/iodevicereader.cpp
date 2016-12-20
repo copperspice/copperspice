@@ -62,41 +62,32 @@ namespace Phonon
         class StreamReader : public QAsyncReader, public Phonon::StreamInterface
         {
         public:
-            StreamReader(QBaseFilter *parent, const Phonon::MediaSource &source, const MediaGraph *mg) : 
-              QAsyncReader(parent, getMediaTypes()),
-                  m_seekable(false), m_pos(0), m_size(-1), m_mediaGraph(mg)
+            StreamReader(QBaseFilter *parent, const Phonon::MediaSource &source, const MediaGraph *mg) 
+                  :  QAsyncReader(parent, getMediaTypes()), m_seekable(false), m_pos(0), m_size(-1), m_mediaGraph(mg)
               {
                   connectToSource(source);
               }
 
-              //for Phonon::StreamInterface
-              void writeData(const QByteArray &data)
-              {
+              // for Phonon::StreamInterface
+              void writeData(const QByteArray &data) override               {
                   m_pos += data.size();
                   m_buffer += data;
               }
 
-              void endOfData()
-              {
-              }
+              void endOfData() override { }
 
-              void setStreamSize(qint64 newSize)
-              {
+              void setStreamSize(qint64 newSize) override {
                   QMutexLocker locker(&m_mutex);
                   m_size = newSize;
               }
-
-              void setStreamSeekable(bool s)
-              {
+ 
+              void setStreamSeekable(bool s) override {
                   QMutexLocker locker(&m_mutex);
                   m_seekable = s;
               }
-
-              //virtual pure members
-
-              //implementation from IAsyncReader
-              STDMETHODIMP Length(LONGLONG *total, LONGLONG *available)
-              {
+   
+              // implementation from IAsyncReader
+              STDMETHODIMP Length(LONGLONG *total, LONGLONG *available) override {
                   QMutexLocker locker(&m_mutex);
                   if (total) {
                       *total = m_size;
@@ -109,9 +100,7 @@ namespace Phonon
                   return S_OK;
               }
 
-
-              HRESULT read(LONGLONG pos, LONG length, BYTE *buffer, LONG *actual)
-              {
+              HRESULT read(LONGLONG pos, LONG length, BYTE *buffer, LONG *actual) override {
                   Q_ASSERT(!m_mutex.tryLock());
                   if (m_mediaGraph->isStopping()) {
                       return VFW_E_WRONG_STATE;

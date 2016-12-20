@@ -440,16 +440,20 @@ class QFakeDevice : public QPaintDevice
       dpi_x = qt_defaultDpiX();
       dpi_y = qt_defaultDpiY();
    }
+
    void setDpiX(int dpi) {
       dpi_x = dpi;
    }
+
    void setDpiY(int dpi) {
       dpi_y = dpi;
    }
-   QPaintEngine *paintEngine() const {
+
+   QPaintEngine *paintEngine() const override {
       return 0;
    }
-   int metric(PaintDeviceMetric m) const {
+
+   int metric(PaintDeviceMetric m) const override {
       switch (m) {
          case PdmPhysicalDpiX:
          case PdmDpiX:

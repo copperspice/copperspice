@@ -42,15 +42,15 @@ class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
    QParallelAnimationGroup(QObject *parent = 0);
    ~QParallelAnimationGroup();
 
-   int duration() const;
+   int duration() const override;
 
  protected:
    QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd, QObject *parent);
-   bool event(QEvent *event);
 
-   void updateCurrentTime(int currentTime);
-   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-   void updateDirection(QAbstractAnimation::Direction direction);
+   bool event(QEvent *event) override;
+   void updateCurrentTime(int currentTime) override;
+   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
+   void updateDirection(QAbstractAnimation::Direction direction) override;
 
  private:
    Q_DISABLE_COPY(QParallelAnimationGroup)

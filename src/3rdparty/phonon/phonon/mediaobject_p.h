@@ -47,13 +47,16 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
     Q_DECLARE_PUBLIC(MediaObject)
+
     public:
-        virtual QObject *qObject() { return q_func(); }
+        QObject *qObject() override { return q_func(); }
         QList<FrontendInterfacePrivate *> interfaceList;
+
     protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        virtual void phononObjectDestroyed(MediaNodePrivate *);
+        bool aboutToDeleteBackendObject() override;
+        void createBackendObject() override;
+        void phononObjectDestroyed(MediaNodePrivate *) override;
+
         PHONON_EXPORT void setupBackendObject();
 
         void _k_resumePlay();

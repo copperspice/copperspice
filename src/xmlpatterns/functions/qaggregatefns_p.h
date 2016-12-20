@@ -37,17 +37,17 @@ namespace QPatternist {
 class CountFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 };
 
 class AddingAggregate : public FunctionCall
 {
  public:
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+
  protected:
    AtomicMathematician::Ptr m_mather;
 };
@@ -55,10 +55,11 @@ class AddingAggregate : public FunctionCall
 class AvgFN : public AddingAggregate
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
+
  private:
    AtomicMathematician::Ptr m_adder;
    AtomicMathematician::Ptr m_divider;
@@ -67,9 +68,9 @@ class AvgFN : public AddingAggregate
 class SumFN : public AddingAggregate
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
-   virtual SequenceType::Ptr staticType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   SequenceType::Ptr staticType() const override;
 };
 }
 

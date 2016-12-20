@@ -51,11 +51,11 @@ class InsertionIterator : public Item::Iterator
                      const xsInteger position,
                      const Item::Iterator::Ptr &insertIterator);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual xsInteger count();
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   xsInteger count() override;
+   Item::Iterator::Ptr copy() const override;
 
  private:
    const Item::Iterator::Ptr m_target;

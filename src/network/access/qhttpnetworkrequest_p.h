@@ -62,18 +62,18 @@ class QHttpNetworkRequest: public QHttpNetworkHeader
    QHttpNetworkRequest &operator=(const QHttpNetworkRequest &other);
    bool operator==(const QHttpNetworkRequest &other) const;
 
-   QUrl url() const;
-   void setUrl(const QUrl &url);
+   QUrl url() const override;
+   void setUrl(const QUrl &url) override;
 
-   int majorVersion() const;
-   int minorVersion() const;
+   int majorVersion() const override;
+   int minorVersion() const override;
 
-   qint64 contentLength() const;
-   void setContentLength(qint64 length);
+   qint64 contentLength() const override;
+   void setContentLength(qint64 length) override;
 
-   QList<QPair<QByteArray, QByteArray> > header() const;
-   QByteArray headerField(const QByteArray &name, const QByteArray &defaultValue = QByteArray()) const;
-   void setHeaderField(const QByteArray &name, const QByteArray &data);
+   QList<QPair<QByteArray, QByteArray> > header() const override;
+   QByteArray headerField(const QByteArray &name, const QByteArray &defaultValue = QByteArray()) const override;
+   void setHeaderField(const QByteArray &name, const QByteArray &data) override;
 
    Operation operation() const;
    void setOperation(Operation operation);

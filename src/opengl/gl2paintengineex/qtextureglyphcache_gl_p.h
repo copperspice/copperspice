@@ -80,40 +80,41 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
    QGLTextureGlyphCache(const QGLContext *context, QFontEngineGlyphCache::Type type, const QTransform &matrix);
    ~QGLTextureGlyphCache();
 
-   virtual void createTextureData(int width, int height);
-   virtual void resizeTextureData(int width, int height);
-   virtual void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition);
-   virtual int glyphPadding() const;
-   virtual int maxTextureWidth() const;
-   virtual int maxTextureHeight() const;
+   void createTextureData(int width, int height) override;
+   void resizeTextureData(int width, int height) override;
+   void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition) override;
+   int glyphPadding() const override;
+   int maxTextureWidth() const override;
+   int maxTextureHeight() const override;
 
-   inline GLuint texture() const {
+   GLuint texture() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
       QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
       return glyphTexture ? glyphTexture->m_texture : 0;
    }
 
-   inline int width() const {
+   int width() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
       QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
       return glyphTexture ? glyphTexture->m_width : 0;
    }
-   inline int height() const {
+
+   int height() const {
       QGLTextureGlyphCache *that = const_cast<QGLTextureGlyphCache *>(this);
       QGLGlyphTexture *glyphTexture = that->m_textureResource.value(ctx);
       return glyphTexture ? glyphTexture->m_height : 0;
    }
 
-   inline void setPaintEnginePrivate(QGL2PaintEngineExPrivate *p) {
+   void setPaintEnginePrivate(QGL2PaintEngineExPrivate *p) {
       pex = p;
    }
 
-   void setContext(const QGLContext *context);
-   inline const QGLContext *context() const {
+   void setContext(const QGLContext *context) ;
+   const QGLContext *context() const {
       return ctx;
    }
 
-   inline int serialNumber() const {
+   int serialNumber() const {
       return m_serialNumber;
    }
 
@@ -121,6 +122,7 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
       Nearest,
       Linear
    };
+
    FilterMode filterMode() const {
       return m_filterMode;
    }
@@ -130,12 +132,13 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache, pub
 
    void clear();
 
-   void contextDeleted(const QGLContext *context) {
+   void contextDeleted(const QGLContext *context) override {
       if (ctx == context) {
          ctx = 0;
       }
    }
-   void freeResource(void *) {
+
+   void freeResource(void *) override{
       ctx = 0;
    }
 

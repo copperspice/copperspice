@@ -46,15 +46,14 @@ class ComparingAggregator : public Aggregator,
    public CastingPlatform<ComparingAggregator<oper, result>, true>
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       return oper;
    }
 
-   inline ItemType::Ptr targetType() const {
+   ItemType::Ptr targetType() const {
       return BuiltinTypes::xsDouble;
    }
 

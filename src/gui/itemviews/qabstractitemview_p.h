@@ -62,22 +62,28 @@ class QEmptyModel : public QAbstractItemModel
 {
  public:
    explicit QEmptyModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
-   QModelIndex index(int, int, const QModelIndex &) const {
+
+   QModelIndex index(int, int, const QModelIndex &) const override{
       return QModelIndex();
    }
-   QModelIndex parent(const QModelIndex &) const {
+
+   QModelIndex parent(const QModelIndex &) const override{
       return QModelIndex();
    }
-   int rowCount(const QModelIndex &) const {
+
+   int rowCount(const QModelIndex &) const override{
       return 0;
    }
-   int columnCount(const QModelIndex &) const {
+
+   int columnCount(const QModelIndex &) const override{
       return 0;
    }
-   bool hasChildren(const QModelIndex &) const {
+
+   bool hasChildren(const QModelIndex &) const override{
       return false;
    }
-   QVariant data(const QModelIndex &, int) const {
+
+   QVariant data(const QModelIndex &, int) const override {
       return QVariant();
    }
 };
@@ -99,6 +105,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    virtual void _q_columnsInserted(const QModelIndex &parent, int start, int end);
    virtual void _q_modelDestroyed();
    virtual void _q_layoutChanged();
+
    void _q_headerDataChanged() {
       doDelayedItemsLayout();
    }
@@ -296,7 +303,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    }
 
    // reimplemented from QAbstractScrollAreaPrivate
-   virtual QPoint contentsOffset() const {
+   QPoint contentsOffset() const  override {
       Q_Q(const QAbstractItemView);
       return QPoint(q->horizontalOffset(), q->verticalOffset());
    }

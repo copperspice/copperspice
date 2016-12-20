@@ -42,22 +42,22 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
    explicit QStringListModel(QObject *parent = 0);
    QStringListModel(const QStringList &strings, QObject *parent = 0);
 
-   int rowCount(const QModelIndex &parent = QModelIndex()) const;
+   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-   QVariant data(const QModelIndex &index, int role) const;
-   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   QVariant data(const QModelIndex &index, int role) const override;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-   Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+   void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
    QStringList stringList() const;
    void setStringList(const QStringList &strings);
 
-   Qt::DropActions supportedDropActions() const;
+   Qt::DropActions supportedDropActions() const override;
 
  private:
    Q_DISABLE_COPY(QStringListModel)

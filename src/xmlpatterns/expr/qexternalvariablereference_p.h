@@ -36,18 +36,18 @@ class ExternalVariableReference : public EmptyContainer
  public:
    ExternalVariableReference(const QXmlName &name, const SequenceType::Ptr &type);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * @returns always DisableElimination
     */
-   virtual Expression::Properties properties() const;
+   Expression::Properties properties() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
  private:
    const QXmlName             m_name;

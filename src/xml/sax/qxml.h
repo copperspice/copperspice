@@ -219,29 +219,29 @@ class Q_XML_EXPORT QXmlSimpleReader : public QXmlReader
    QXmlSimpleReader();
    virtual ~QXmlSimpleReader();
 
-   bool feature(const QString &name, bool *ok = 0) const;
-   void setFeature(const QString &name, bool value);
-   bool hasFeature(const QString &name) const;
+   bool feature(const QString &name, bool *ok = 0) const override;
+   void setFeature(const QString &name, bool value) override;
+   bool hasFeature(const QString &name) const override;
 
-   void *property(const QString &name, bool *ok = 0) const;
-   void setProperty(const QString &name, void *value);
-   bool hasProperty(const QString &name) const;
+   void *property(const QString &name, bool *ok = 0) const override;
+   void setProperty(const QString &name, void *value) override;
+   bool hasProperty(const QString &name) const override;
 
-   void setEntityResolver(QXmlEntityResolver *handler);
-   QXmlEntityResolver *entityResolver() const;
-   void setDTDHandler(QXmlDTDHandler *handler);
-   QXmlDTDHandler *DTDHandler() const;
-   void setContentHandler(QXmlContentHandler *handler);
-   QXmlContentHandler *contentHandler() const;
-   void setErrorHandler(QXmlErrorHandler *handler);
-   QXmlErrorHandler *errorHandler() const;
-   void setLexicalHandler(QXmlLexicalHandler *handler);
-   QXmlLexicalHandler *lexicalHandler() const;
-   void setDeclHandler(QXmlDeclHandler *handler);
-   QXmlDeclHandler *declHandler() const;
+   void setEntityResolver(QXmlEntityResolver *handler) override;
+   QXmlEntityResolver *entityResolver() const override;
+   void setDTDHandler(QXmlDTDHandler *handler) override;
+   QXmlDTDHandler *DTDHandler() const override;
+   void setContentHandler(QXmlContentHandler *handler) override;
+   QXmlContentHandler *contentHandler() const override;
+   void setErrorHandler(QXmlErrorHandler *handler) override;
+   QXmlErrorHandler *errorHandler() const override;
+   void setLexicalHandler(QXmlLexicalHandler *handler) override;
+   QXmlLexicalHandler *lexicalHandler() const override;
+   void setDeclHandler(QXmlDeclHandler *handler) override;
+   QXmlDeclHandler *declHandler() const override;
 
-   bool parse(const QXmlInputSource &input);
-   bool parse(const QXmlInputSource *input);
+   bool parse(const QXmlInputSource &input) override;
+   bool parse(const QXmlInputSource *input) override;
    virtual bool parse(const QXmlInputSource *input, bool incremental);
    virtual bool parseContinue();
 
@@ -354,43 +354,44 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
    QXmlDefaultHandler() { }
    virtual ~QXmlDefaultHandler() { }
 
-   void setDocumentLocator(QXmlLocator *locator);
-   bool startDocument();
-   bool endDocument();
-   bool startPrefixMapping(const QString &prefix, const QString &uri);
-   bool endPrefixMapping(const QString &prefix);
+   void setDocumentLocator(QXmlLocator *locator) override;
+   bool startDocument() override;
+   bool endDocument() override;
+   bool startPrefixMapping(const QString &prefix, const QString &uri) override;
+   bool endPrefixMapping(const QString &prefix) override;
    bool startElement(const QString &namespaceURI, const QString &localName, const QString &qName,
-                     const QXmlAttributes &atts);
-   bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
-   bool characters(const QString &ch);
-   bool ignorableWhitespace(const QString &ch);
-   bool processingInstruction(const QString &target, const QString &data);
-   bool skippedEntity(const QString &name);
+                     const QXmlAttributes &atts) override;
+   bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName) override;
+   bool characters(const QString &ch) override;
+   bool ignorableWhitespace(const QString &ch) override;
+   bool processingInstruction(const QString &target, const QString &data) override ;
+   bool skippedEntity(const QString &name) override;
 
-   bool warning(const QXmlParseException &exception);
-   bool error(const QXmlParseException &exception);
-   bool fatalError(const QXmlParseException &exception);
+   bool warning(const QXmlParseException &exception) override;
+   bool error(const QXmlParseException &exception) override;
+   bool fatalError(const QXmlParseException &exception) override;
 
-   bool notationDecl(const QString &name, const QString &publicId, const QString &systemId);
+   bool notationDecl(const QString &name, const QString &publicId, const QString &systemId) override;
    bool unparsedEntityDecl(const QString &name, const QString &publicId, const QString &systemId,
-                           const QString &notationName);
+                           const QString &notationName) override;
 
-   bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&ret);
+   bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&ret) override;
 
-   bool startDTD(const QString &name, const QString &publicId, const QString &systemId);
-   bool endDTD();
-   bool startEntity(const QString &name);
-   bool endEntity(const QString &name);
-   bool startCDATA();
-   bool endCDATA();
-   bool comment(const QString &ch);
+   bool startDTD(const QString &name, const QString &publicId, const QString &systemId) override;
+   bool endDTD() override;
+   bool startEntity(const QString &name) override;
+   bool endEntity(const QString &name) override;
+   bool startCDATA() override;
+   bool endCDATA() override;
+   bool comment(const QString &ch) override;
 
    bool attributeDecl(const QString &eName, const QString &aName, const QString &type, const QString &valueDefault,
-                      const QString &value);
-   bool internalEntityDecl(const QString &name, const QString &value);
-   bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId);
+                      const QString &value) override;
 
-   QString errorString() const;
+   bool internalEntityDecl(const QString &name, const QString &value) override;
+   bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) override;
+
+   QString errorString() const override;
 
  private:
    QXmlDefaultHandlerPrivate *d;

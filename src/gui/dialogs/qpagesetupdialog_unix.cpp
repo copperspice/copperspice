@@ -141,7 +141,7 @@ class QPagePreview : public QWidget
    }
 
  protected:
-   void paintEvent(QPaintEvent *) {
+   void paintEvent(QPaintEvent *) override {
       QRect pageRect;
       QSizeF adjustedSize(m_size);
       adjustedSize.scale(width() - 10, height() - 10, Qt::KeepAspectRatio);

@@ -42,17 +42,17 @@ class AnySimpleType : public AnyType
 
    virtual ~AnySimpleType();
 
-   virtual QXmlName name(const NamePool::Ptr &np) const;
+   QXmlName name(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always @c xs:anySimpleType
     */
-   virtual QString displayName(const NamePool::Ptr &np) const;
+   QString displayName(const NamePool::Ptr &np) const override;
 
    /**
     * @returns always BuiltinTypes::xsAnyType
     */
-   virtual SchemaType::Ptr wxsSuperType() const;
+   SchemaType::Ptr wxsSuperType() const override;
 
    /**
     * xs:anySimpleType is the special "simple ur-type". Therefore this function
@@ -60,7 +60,7 @@ class AnySimpleType : public AnyType
     *
     * @returns SchemaType::None
     */
-   virtual TypeCategory category() const;
+   TypeCategory category() const override;
 
    /**
     * The simple ur-type is a "special restriction of the ur-type definition",
@@ -68,22 +68,23 @@ class AnySimpleType : public AnyType
     *
     * @returns DERIVATION_RESTRICTION
     */
-   virtual SchemaType::DerivationMethod derivationMethod() const;
+   SchemaType::DerivationMethod derivationMethod() const override;
 
    /**
     * Always returns @c true.
     */
-   virtual bool isSimpleType() const;
+   bool isSimpleType() const override;
 
    /**
     * Always returns @c false.
     */
-   virtual bool isComplexType() const;
+   bool isComplexType() const override;
 
  protected:
    AnySimpleType();
 
 };
+
 }
 
 QT_END_NAMESPACE

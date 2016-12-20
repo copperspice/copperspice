@@ -42,24 +42,24 @@ class QIODeviceDelegate : public QNetworkReply
  public:
    QIODeviceDelegate(QIODevice *const source);
 
-   virtual void abort();
+   void abort() override;
 
-   virtual bool atEnd() const;
-   virtual qint64 bytesAvailable() const;
-   virtual qint64 bytesToWrite() const;
-   virtual bool canReadLine() const;
-   virtual void close();
-   virtual bool isSequential() const;
-   virtual bool open(OpenMode mode);
-   virtual qint64 pos() const;
-   virtual bool reset();
-   virtual bool seek(qint64 pos);
-   virtual qint64 size() const;
-   virtual bool waitForBytesWritten(int msecs);
-   virtual bool waitForReadyRead(int msecs);
+   bool atEnd() const override;
+   qint64 bytesAvailable() const override;
+   qint64 bytesToWrite() const override;
+   bool canReadLine() const override;
+   void close() override;
+   bool isSequential() const override;
+   bool open(OpenMode mode) override;
+   qint64 pos() const override;
+   bool reset() override;
+   bool seek(qint64 pos) override;
+   qint64 size() const override;
+   bool waitForBytesWritten(int msecs) override;
+   bool waitForReadyRead(int msecs) override;
 
  protected:
-   virtual qint64 readData(char *data, qint64 maxSize);
+   qint64 readData(char *data, qint64 maxSize) override;
 
  private :
    XMLP_CS_SLOT_1(Private, void networkTimeout())

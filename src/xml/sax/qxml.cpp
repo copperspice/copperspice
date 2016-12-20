@@ -669,12 +669,14 @@ class QXmlSimpleReaderLocator : public QXmlLocator
    ~QXmlSimpleReaderLocator() {
    }
 
-   int columnNumber() const {
+   int columnNumber() const override {
       return (reader->d_ptr->columnNr == -1 ? -1 : reader->d_ptr->columnNr + 1);
    }
-   int lineNumber() const {
+
+   int lineNumber() const override {
       return (reader->d_ptr->lineNr == -1 ? -1 : reader->d_ptr->lineNr + 1);
    }
+
    //    QString getPublicId()
    //    QString getSystemId()
 

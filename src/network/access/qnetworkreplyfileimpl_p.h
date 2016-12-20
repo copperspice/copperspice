@@ -43,15 +43,16 @@ class QNetworkReplyFileImpl: public QNetworkReply
  public:
    QNetworkReplyFileImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
    ~QNetworkReplyFileImpl();
-   virtual void abort();
+
+   virtual void abort() override;
 
    // reimplemented from QNetworkReply
-   virtual void close();
-   virtual qint64 bytesAvailable() const;
-   virtual bool isSequential () const;
-   qint64 size() const;
+   virtual void close() override;
+   virtual qint64 bytesAvailable() const override;
+   virtual bool isSequential () const override;
+   qint64 size() const override;
 
-   virtual qint64 readData(char *data, qint64 maxlen);
+   virtual qint64 readData(char *data, qint64 maxlen) override;
 
    Q_DECLARE_PRIVATE(QNetworkReplyFileImpl)
 };

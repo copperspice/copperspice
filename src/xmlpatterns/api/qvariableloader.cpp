@@ -78,13 +78,12 @@ class StringListIterator : public ListIteratorPlatform<QString, Item, StringList
 class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
 {
  public:
-   TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other,
-                                    const DynamicContext::Ptr &modelStorage) : DelegatingDynamicContext(other)
-      , m_modelStorage(modelStorage) {
+   TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other, const DynamicContext::Ptr &modelStorage) 
+                  : DelegatingDynamicContext(other), m_modelStorage(modelStorage) {
       Q_ASSERT(m_modelStorage);
    }
 
-   virtual void addNodeModel(const QAbstractXmlNodeModel::Ptr &nodeModel) {
+   void addNodeModel(const QAbstractXmlNodeModel::Ptr &nodeModel) override {
       m_modelStorage->addNodeModel(nodeModel);
    }
 

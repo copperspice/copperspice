@@ -53,7 +53,7 @@ class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
    void connectUncontrolledAnimations();
    void disconnectUncontrolledAnimations();
 
-   void animationRemoved(int index, QAbstractAnimation *);
+   void animationRemoved(int index, QAbstractAnimation *) override;
 
    void _q_uncontrolledAnimationFinished();
 };

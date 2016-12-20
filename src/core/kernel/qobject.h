@@ -81,7 +81,14 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    typedef QObject cs_class;
 
  private:
+
+#undef  CS_OVERRIDE
+#define CS_OVERRIDE
+
    CORE_CS_OBJECT_INTERNAL(QObject)
+
+#undef  CS_OVERRIDE
+#define CS_OVERRIDE override
 
    CORE_CS_PROPERTY_READ(objectName,  objectName)
    CORE_CS_PROPERTY_WRITE(objectName, setObjectName)

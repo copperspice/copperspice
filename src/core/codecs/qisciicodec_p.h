@@ -38,17 +38,17 @@ class QIsciiCodec : public QTextCodec
    explicit QIsciiCodec(int i) : idx(i) {}
    ~QIsciiCodec();
 
-   QByteArray name() const;
-   int mibEnum() const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
 
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QByteArray name() const override;
+   int mibEnum() const override;
 
  private:
    int idx;
 };
 
-#endif // QT_NO_CODECS
+#endif
 
 QT_END_NAMESPACE
 

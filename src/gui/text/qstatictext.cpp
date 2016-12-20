@@ -416,7 +416,7 @@ class DrawTextItemRecorder: public QPaintEngine
         m_untransformedCoordinates(untransformedCoordinates), m_currentColor(Qt::black) {
    }
 
-   virtual void updateState(const QPaintEngineState &newState) {
+   void updateState(const QPaintEngineState &newState) override {
       if (newState.state() & QPaintEngine::DirtyPen
             && newState.pen().color() != m_currentColor) {
          m_dirtyPen = true;
@@ -424,7 +424,7 @@ class DrawTextItemRecorder: public QPaintEngine
       }
    }
 
-   virtual void drawTextItem(const QPointF &position, const QTextItem &textItem) {
+   void drawTextItem(const QPointF &position, const QTextItem &textItem) override {
       const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
 
       QStaticTextItem currentItem;
@@ -466,18 +466,21 @@ class DrawTextItemRecorder: public QPaintEngine
       m_items.append(currentItem);
    }
 
-   virtual void drawPolygon(const QPointF *, int , PolygonDrawMode ) {
+   void drawPolygon(const QPointF *, int , PolygonDrawMode)  override {
       /* intentionally empty */
    }
 
-   virtual bool begin(QPaintDevice *)  {
+   bool begin(QPaintDevice *)  override {
       return true;
    }
-   virtual bool end() {
+
+   bool end()  override {
       return true;
    }
-   virtual void drawPixmap(const QRectF &, const QPixmap &, const QRectF &) {}
-   virtual Type type() const {
+
+   void drawPixmap(const QRectF &, const QPixmap &, const QRectF &)  override {}
+
+   Type type() const  override {
       return User;
    }
 
@@ -521,7 +524,7 @@ class DrawTextItemDevice: public QPaintDevice
       delete m_paintEngine;
    }
 
-   int metric(PaintDeviceMetric m) const {
+   int metric(PaintDeviceMetric m) const  override {
       int val;
       switch (m) {
          case PdmWidth:
@@ -551,7 +554,7 @@ class DrawTextItemDevice: public QPaintDevice
       return val;
    }
 
-   virtual QPaintEngine *paintEngine() const {
+   virtual QPaintEngine *paintEngine() const  override {
       return m_paintEngine;
    }
 

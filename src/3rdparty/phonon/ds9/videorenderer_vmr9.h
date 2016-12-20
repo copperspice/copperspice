@@ -43,12 +43,13 @@ namespace Phonon
             ~VideoRendererVMR9();
 
             //Implementation from AbstractVideoRenderer
-            void repaintCurrentFrame(QWidget *target, const QRect &rect);
-            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
-            QSize videoSize() const;
-            QImage snapshot() const;
-            void applyMixerSettings(qreal brightness, qreal contrast, qreal m_hue, qreal saturation);
-            bool isNative() const;
+            void repaintCurrentFrame(QWidget *target, const QRect &rect) override;
+            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode) override;
+            QSize videoSize() const override;
+            QImage snapshot() const override;
+            void applyMixerSettings(qreal brightness, qreal contrast, qreal m_hue, qreal saturation) override;
+            bool isNative() const override;
+
         private:
             QWidget *m_target;
         };

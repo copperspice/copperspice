@@ -147,11 +147,7 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
       setShareable(true);
    }
 
-   virtual void dispose() {
-
-#if 0  // sample code; do this right with the API
-      Q_ASSERT(!isWorking());
-#endif
+   virtual void dispose() override {
       delete this;
    }
 };

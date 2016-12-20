@@ -68,13 +68,13 @@ class QTcpServerPrivate : public QAbstractSocketEngineReceiver
 #endif
 
    // from QAbstractSocketEngineReceiver
-   void readNotification();
-   inline void writeNotification() {}
-   inline void exceptionNotification() {}
-   inline void connectionNotification() {}
+   void readNotification() override;
+   void writeNotification() override {}
+   void exceptionNotification() override {}
+   void connectionNotification() override {}
 
 #ifndef QT_NO_NETWORKPROXY
-   inline void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) {}
+   void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) override {}
 #endif
 
  protected:

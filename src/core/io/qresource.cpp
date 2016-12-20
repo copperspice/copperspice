@@ -906,10 +906,12 @@ class QDynamicBufferResourceRoot: public QResourceRoot
    inline const uchar *mappingBuffer() const {
       return buffer;
    }
-   virtual QString mappingRoot() const {
+
+   virtual QString mappingRoot() const override{
       return root;
    }
-   virtual ResourceRootType type() const {
+
+   virtual ResourceRootType type() const override {
       return Resource_Buffer;
    }
 
@@ -987,10 +989,12 @@ class QDynamicFileResourceRoot: public QDynamicBufferResourceRoot
          delete [] (uchar *)mappingBuffer();
       }
    }
+
    QString mappingFile() const {
       return fileName;
    }
-   virtual ResourceRootType type() const {
+
+   virtual ResourceRootType type() const override {
       return Resource_File;
    }
 

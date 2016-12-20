@@ -34,8 +34,7 @@ namespace QPatternist {
 class Aggregator : public FunctionCall
 {
  public:
-
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 };
 }
 

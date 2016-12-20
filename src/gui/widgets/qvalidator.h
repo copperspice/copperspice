@@ -87,8 +87,8 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
    QIntValidator(int bottom, int top, QObject *parent = 0);
    ~QIntValidator();
 
-   QValidator::State validate(QString &, int &) const;
-   void fixup(QString &input) const;
+   QValidator::State validate(QString &, int &) const override;
+   void fixup(QString &input) const override;
 
    void setBottom(int);
    void setTop(int);
@@ -154,7 +154,7 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
       StandardNotation,
       ScientificNotation
    };
-   QValidator::State validate(QString &, int &) const;
+   QValidator::State validate(QString &, int &) const override;
 
    virtual void setRange(double bottom, double top, int decimals = 0);
    void setBottom(double);
@@ -198,7 +198,7 @@ class Q_GUI_EXPORT QRegExpValidator : public QValidator
    QRegExpValidator(const QRegExp &rx, QObject *parent = 0);
    ~QRegExpValidator();
 
-   virtual QValidator::State validate(QString &input, int &pos) const;
+   QValidator::State validate(QString &input, int &pos) const override;
 
    void setRegExp(const QRegExp &rx);
    inline const QRegExp &regExp() const;
@@ -225,7 +225,7 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
    explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = 0);
    ~QRegularExpressionValidator();
 
-   virtual QValidator::State validate(QString &input, int &pos) const;
+   QValidator::State validate(QString &input, int &pos) const override;
 
    QRegExp regularExpression() const;
 

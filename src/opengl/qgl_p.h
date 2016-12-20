@@ -152,7 +152,8 @@ class QGLWidgetPrivate : public QWidgetPrivate
    void initContext(QGLContext *context, const QGLWidget *shareWidget);
    bool renderCxPm(QPixmap *pixmap);
    void cleanupColormaps();
-   void aboutToDestroy() {
+
+   void aboutToDestroy() override{
       if (glcx) {
          glcx->reset();
       }
@@ -711,7 +712,7 @@ class QGLContextGroupResource : public QGLContextGroupResourceBase
    }
 
  protected:
-   void freeResource(void *resource) {
+   void freeResource(void *resource) override {
       delete reinterpret_cast<T *>(resource);
    }
 };

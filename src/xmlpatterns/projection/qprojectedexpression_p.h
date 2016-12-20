@@ -36,6 +36,7 @@ class ProjectedExpression
  public:
    typedef ProjectedExpression *Ptr;
    typedef QVector<ProjectedExpression::Ptr> Vector;
+
    virtual ~ProjectedExpression() {
    }
 
@@ -46,8 +47,7 @@ class ProjectedExpression
       KeepSubtree = 4 | Keep
    };
 
-   virtual Action actionForElement(const QXmlName name,
-                                   ProjectedExpression::Ptr &next) const {
+   virtual Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const {
       Q_UNUSED(name);
       Q_UNUSED(next);
       return Skip;
@@ -77,8 +77,7 @@ class ProjectedStep : public ProjectedExpression
       Q_ASSERT(m_test);
    }
 
-   virtual Action actionForElement(const QXmlName name,
-                                   ProjectedExpression::Ptr &next) const {
+   Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const override {
       Q_UNUSED(name);
       Q_UNUSED(next);
       // TODO
@@ -87,21 +86,19 @@ class ProjectedStep : public ProjectedExpression
 
  private:
    const ProjectedNodeTest::Ptr    m_test;
-   const QXmlNodeModelIndex::Axis                m_axis;
+   const QXmlNodeModelIndex::Axis  m_axis;
 };
 
 class ProjectedPath : public ProjectedExpression
 {
  public:
-   ProjectedPath(const ProjectedExpression::Ptr left,
-                 const ProjectedExpression::Ptr right) : m_left(left),
+   ProjectedPath(const ProjectedExpression::Ptr left, const ProjectedExpression::Ptr right) : m_left(left),
       m_right(right) {
       Q_ASSERT(m_left);
       Q_ASSERT(m_right);
    }
 
-   virtual Action actionForElement(const QXmlName name,
-                                   ProjectedExpression::Ptr &next) const {
+   Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const override {
       ProjectedExpression::Ptr &candidateNext = next;
       const Action a = m_left->actionForElement(name, candidateNext);
 

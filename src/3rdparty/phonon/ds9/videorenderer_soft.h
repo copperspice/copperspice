@@ -46,17 +46,17 @@ namespace Phonon
             ~VideoRendererSoft();
 
             //Implementation from AbstractVideoRenderer
-            void repaintCurrentFrame(QWidget *target, const QRect &rect);
-            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
-            QSize videoSize() const;
-            void applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation);
-            bool isNative() const;
+            void repaintCurrentFrame(QWidget *target, const QRect &rect) override;
+            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode) override;
+            QSize videoSize() const override;
+            void applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation) override;
+            bool isNative() const override;
 
-            QImage snapshot() const;
+            QImage snapshot() const override;
             void setSnapshot(const QImage &); 
 
         protected:
-            bool event(QEvent *);
+            bool event(QEvent *) override;
 
         private:
             VideoRendererSoftFilter *m_renderer;

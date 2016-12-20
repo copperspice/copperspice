@@ -54,16 +54,16 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
    void setClipping(bool clip);
 
    // painting
-   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
    // editing
-   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-   void setEditorData(QWidget *editor, const QModelIndex &index) const; 
-   void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+   void setEditorData(QWidget *editor, const QModelIndex &index) const override;
+   void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
 
-   void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
    // editor factory
    QItemEditorFactory *itemEditorFactory() const;
@@ -82,8 +82,8 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 
    QRect rect(const QStyleOptionViewItem &option, const QModelIndex &index, int role) const;
 
-   bool eventFilter(QObject *object, QEvent *event);
-   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index);
+   bool eventFilter(QObject *object, QEvent *event) override;
+   bool editorEvent(QEvent *event, QAbstractItemModel *model,const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
    QStyleOptionViewItem setOptions(const QModelIndex &index, const QStyleOptionViewItem &option) const;
 

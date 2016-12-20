@@ -49,7 +49,7 @@ class QExpandingLineEdit : public QLineEdit
    GUI_CS_SLOT_2(resizeToContents)
 
  protected:
-   void changeEvent(QEvent *e);
+   void changeEvent(QEvent *e) override;
  
  private:
    void updateMinimumWidth();

@@ -37,15 +37,15 @@ class Q_CORE_EXPORT QFontLaoCodec : public QTextCodec
  public:
    ~QFontLaoCodec();
 
-   QByteArray name() const;
-   int mibEnum() const;
+   QString convertToUnicode(const char *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
 
-   QString convertToUnicode(const char *, int, ConverterState *) const;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const;
+   QByteArray name() const override;
+   int mibEnum() const override;
 };
 
-#endif // QT_NO_CODECS
+#endif
 
 QT_END_NAMESPACE
 
-#endif // QFONTLAOCODEC_P_H
+#endif

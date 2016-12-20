@@ -46,22 +46,24 @@ const unsigned int SAMPLE_RATES[] =
 class QAudioDeviceInfoInternal : public QAbstractAudioDeviceInfo
 {
    MULTI_CS_OBJECT(QAudioDeviceInfoInternal)
+
  public:
    QAudioDeviceInfoInternal(QByteArray dev, QAudio::Mode mode);
    ~QAudioDeviceInfoInternal();
 
    bool testSettings(const QAudioFormat &format) const;
    void updateLists();
-   QAudioFormat preferredFormat() const;
-   bool isFormatSupported(const QAudioFormat &format) const;
-   QAudioFormat nearestFormat(const QAudioFormat &format) const;
-   QString deviceName() const;
-   QStringList codecList();
-   QList<int> frequencyList();
-   QList<int> channelsList();
-   QList<int> sampleSizeList();
-   QList<QAudioFormat::Endian> byteOrderList();
-   QList<QAudioFormat::SampleType> sampleTypeList();
+   QAudioFormat preferredFormat() const override;
+   bool isFormatSupported(const QAudioFormat &format) const override;
+   QAudioFormat nearestFormat(const QAudioFormat &format) const override;
+   QString deviceName() const override;
+   QStringList codecList() override;
+   QList<int> frequencyList() override;
+   QList<int> channelsList() override;
+   QList<int> sampleSizeList() override;
+   QList<QAudioFormat::Endian> byteOrderList() override;
+   QList<QAudioFormat::SampleType> sampleTypeList() override;
+
    static QByteArray defaultInputDevice();
    static QByteArray defaultOutputDevice();
    static QList<QByteArray> availableDevices(QAudio::Mode);

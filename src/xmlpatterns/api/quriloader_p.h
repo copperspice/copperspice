@@ -37,18 +37,14 @@ namespace QPatternist {
 class URILoader : public QNetworkAccessManager
 {
  public:
-   URILoader(QObject *const parent,
-             const NamePool::Ptr &np,
-             const VariableLoader::Ptr &variableLoader);
+   URILoader(QObject *const parent, const NamePool::Ptr &np, const VariableLoader::Ptr &variableLoader);
 
-   virtual QNetworkReply *createRequest(Operation op,
-                                        const QNetworkRequest &req,
-                                        QIODevice *outgoingData = 0);
+   QNetworkReply *createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0) override;
 
  private:
-   const QString               m_variableNS;
-   const NamePool::Ptr         m_namePool;
-   const VariableLoader::Ptr   m_variableLoader;
+   const QString             m_variableNS;
+   const NamePool::Ptr       m_namePool;
+   const VariableLoader::Ptr m_variableLoader;
 
 };
 }

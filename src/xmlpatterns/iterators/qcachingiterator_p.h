@@ -46,18 +46,16 @@ class CachingIterator : public Item::Iterator
     *
     * We intentionally pass in a non-const reference here.
     */
-   CachingIterator(ItemSequenceCacheCell::Vector &cacheCells,
-                   const VariableSlotID slot,
-                   const DynamicContext::Ptr &context);
+   CachingIterator(ItemSequenceCacheCell::Vector &cacheCells, const VariableSlotID slot, const DynamicContext::Ptr &context);
 
-   virtual Item next();
-   virtual Item current() const;
-   virtual xsInteger position() const;
-   virtual Item::Iterator::Ptr copy() const;
+   Item next() override;
+   Item current() const override;
+   xsInteger position() const override;
+   Item::Iterator::Ptr copy() const override;
 
  private:
-   Item                        m_current;
-   xsInteger                   m_position;
+   Item      m_current;
+   xsInteger m_position;
 
    /**
     * This variable cannot be called m_slot, because

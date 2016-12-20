@@ -50,18 +50,18 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
    QPauseAnimation *insertPause(int index, int msecs);
 
    QAbstractAnimation *currentAnimation() const;
-   int duration() const;
+   int duration() const override;
 
    CORE_CS_SIGNAL_1(Public, void currentAnimationChanged(QAbstractAnimation *current))
    CORE_CS_SIGNAL_2(currentAnimationChanged, current)
 
  protected:
    QSequentialAnimationGroup(QSequentialAnimationGroupPrivate &dd, QObject *parent);
-   bool event(QEvent *event);
 
-   void updateCurrentTime(int);
-   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState);
-   void updateDirection(QAbstractAnimation::Direction direction);
+   bool event(QEvent *event) override;
+   void updateCurrentTime(int) override;
+   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
+   void updateDirection(QAbstractAnimation::Direction direction) override;
 
  private:
    Q_DISABLE_COPY(QSequentialAnimationGroup)

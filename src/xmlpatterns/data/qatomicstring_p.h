@@ -57,14 +57,14 @@ class AtomicString : public AtomicValue
     *
     * @returns @c false if the contained string has a zero-length, otherwise @c true.
     */
-   virtual bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const;
+   bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const override;
 
    /**
     * The string value of a AtomicString instance is the value space.
     */
-   virtual QString stringValue() const;
+   QString stringValue() const override;
 
-   virtual ItemType::Ptr type() const;
+   ItemType::Ptr type() const override;
 
  protected:
    friend class StringComparator;

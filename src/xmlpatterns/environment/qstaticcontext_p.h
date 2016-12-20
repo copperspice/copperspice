@@ -212,8 +212,7 @@ class StaticContext : public ReportContext
 
    virtual ExternalVariableLoader::Ptr externalVariableLoader() const = 0;
    virtual ResourceLoader::Ptr resourceLoader() const = 0;
-   virtual NamePool::Ptr namePool() const = 0;
-
+ 
    /**
     * @short Adds @p location for @p reflection.
     */

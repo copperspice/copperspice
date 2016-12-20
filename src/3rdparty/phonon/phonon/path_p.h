@@ -66,7 +66,7 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
         MediaNode *sinkNode;
 
     protected:
-        void phononObjectDestroyed(MediaNodePrivate *);
+        void phononObjectDestroyed(MediaNodePrivate *) override;
 
 #ifndef QT_NO_PHONON_EFFECT
         QObject *effectsParent; // used as parent for Effects created in insertEffect

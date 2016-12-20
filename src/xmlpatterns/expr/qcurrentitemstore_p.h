@@ -37,23 +37,22 @@ class CurrentItemStore : public SingleContainer
  public:
    CurrentItemStore(const Expression::Ptr &operand);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   bool evaluateEBV(const DynamicContext::Ptr &) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual Properties properties() const;
+   Properties properties() const override;
 
    /**
     * @returns the staticType() of its operand.
     */
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual const SourceLocationReflection *actualReflection() const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    static inline StaticContext::Ptr newStaticContext(const StaticContext::Ptr &context);

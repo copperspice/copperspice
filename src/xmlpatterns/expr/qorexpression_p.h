@@ -35,13 +35,11 @@ namespace QPatternist {
 class OrExpression : public AndExpression
 {
  public:
-   OrExpression(const Expression::Ptr &operand1,
-                const Expression::Ptr &operand2);
+   OrExpression(const Expression::Ptr &operand1, const Expression::Ptr &operand2);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

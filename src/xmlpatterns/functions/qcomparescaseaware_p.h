@@ -35,13 +35,11 @@ namespace QPatternist {
 class ComparesCaseAware : public FunctionCall
 {
  public:
-
    ComparesCaseAware();
 
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-
-   inline Qt::CaseSensitivity caseSensitivity() const {
+   Qt::CaseSensitivity caseSensitivity() const {
       return m_caseSensitivity;
    }
 

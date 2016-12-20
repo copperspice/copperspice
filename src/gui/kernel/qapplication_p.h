@@ -283,8 +283,8 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    }
 #endif
 
-   void createEventDispatcher();
-   QString appName() const;
+   void createEventDispatcher() override;
+   QString appName() const override;
    static void dispatchEnterLeave(QWidget *enter, QWidget *leave);
 
    //modality

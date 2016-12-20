@@ -51,9 +51,9 @@ namespace Gstreamer
             Effect (Backend *backend, QObject *parent, NodeDescription description);
             virtual ~Effect ();
 
-            virtual QList<EffectParameter> parameters() const;
-            virtual QVariant parameterValue(const EffectParameter &) const;
-            virtual void setParameterValue(const EffectParameter &, const QVariant &);
+            QList<EffectParameter> parameters() const override;
+            QVariant parameterValue(const EffectParameter &) const override;
+            void setParameterValue(const EffectParameter &, const QVariant &) override;
 
             virtual GstElement* createEffectBin() = 0;
             virtual void init();

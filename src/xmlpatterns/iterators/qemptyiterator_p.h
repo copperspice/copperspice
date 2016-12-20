@@ -33,48 +33,49 @@ QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
-template<typename T> class EmptyIterator : public QAbstractXmlForwardIterator<T>
+template<typename T> 
+class EmptyIterator : public QAbstractXmlForwardIterator<T>
 {
  public:
    /**
     * @returns always a default constructed value, T().
     */
-   virtual T next() {
+   T next() override {
       return T();
    }
 
    /**
     * @returns always a default constructed value, T().
     */
-   virtual T current() const {
+   T current() const override {
       return T();
    }
 
    /**
     * @returns always 0.
     */
-   virtual xsInteger position() const {
+   xsInteger position() const override {
       return 0;
    }
 
    /**
     * @returns always @c this, the reverse of <tt>()</tt> is <tt>()</tt>.
     */
-   virtual typename QAbstractXmlForwardIterator<T>::Ptr toReversed() {
+   typename QAbstractXmlForwardIterator<T>::Ptr toReversed() override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator<T> *>(this));
    }
 
    /**
     * @returns always 0
     */
-   virtual xsInteger count() {
+   xsInteger count() override {
       return 0;
    }
 
    /**
     * @returns @c this
     */
-   virtual typename QAbstractXmlForwardIterator<T>::Ptr copy() const {
+   typename QAbstractXmlForwardIterator<T>::Ptr copy() const override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator *>(this));
    }
 
@@ -83,9 +84,7 @@ template<typename T> class EmptyIterator : public QAbstractXmlForwardIterator<T>
 };
 
 template<typename T>
-static inline
-typename QAbstractXmlForwardIterator<T>::Ptr
-makeEmptyIterator()
+static inline typename QAbstractXmlForwardIterator<T>::Ptr makeEmptyIterator()
 {
    return typename QAbstractXmlForwardIterator<T>::Ptr(new EmptyIterator<T>());
 }

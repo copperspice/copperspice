@@ -49,23 +49,20 @@ public:
     AudioOutput(Backend *backend, QObject *parent);
     ~AudioOutput();
 
-    qreal volume() const;
-    int outputDevice() const;
-    void setVolume(qreal newVolume);
-    bool setOutputDevice(int newDevice);
+    qreal volume() const override;
+    int outputDevice() const override;
+    void setVolume(qreal newVolume) override;
 
-#if (PHONON_VERSION >= PHONON_VERSION_CHECK(4, 2, 0))
+    bool setOutputDevice(int newDevice) override;
     bool setOutputDevice(const AudioOutputDevice &newDevice);
-#endif
 
-
-    GstElement *audioElement()
+    GstElement *audioElement() override
     {
         Q_ASSERT(m_audioBin);
         return m_audioBin;
     }
 
-    void mediaNodeEvent(const MediaNodeEvent *event);
+    void mediaNodeEvent(const MediaNodeEvent *event) override;
 
     GSTRM_CS_SIGNAL_1(Public, void volumeChanged(qreal newVolume))
     GSTRM_CS_SIGNAL_2(volumeChanged,newVolume) 
@@ -74,7 +71,6 @@ public:
     GSTRM_CS_SIGNAL_2(audioDeviceFailed) 
 
 private:
-
     qreal m_volumeLevel;
     int m_device;
 

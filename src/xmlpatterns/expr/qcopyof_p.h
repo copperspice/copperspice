@@ -43,28 +43,27 @@ class CopyOf : public SingleContainer
           const bool inheritNSS,
           const bool preserveNSS);
 
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    /**
     * @returns always the SequenceType passed in the constructor to this class. That is, the
     * SequenceType that the operand must conform to.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   inline Item mapToItem(const Item &source,
-                         const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const Item &source, const DynamicContext::Ptr &context) const;
 
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   virtual Properties properties() const;
-   virtual ItemType::Ptr expectedContextItemType() const;
+   Properties properties() const override;
+   ItemType::Ptr expectedContextItemType() const override;
 
  private:
    typedef QExplicitlySharedDataPointer<const CopyOf> ConstPtr;

@@ -38,20 +38,19 @@ class DocumentConstructor : public SingleContainer
  public:
    DocumentConstructor(const Expression::Ptr &operand);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    /**
     * The first operand must be exactly one @c xs:string.
     */
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual Properties properties() const;
-   virtual SequenceType::Ptr staticType() const;
+   Properties properties() const override;
+   SequenceType::Ptr staticType() const override;
 
  private:
    QUrl m_staticBaseURI;

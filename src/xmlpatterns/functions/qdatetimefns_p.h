@@ -46,7 +46,7 @@ class ExtractFromDurationFN : public FunctionCall
     * Takes care of the argument handling, and, if applicable,
     * calls extract() with the value of the operand.
     */
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 
@@ -99,7 +99,7 @@ class ExtractFromDateTimeFN : public FunctionCall
     * Takes care of the argument handling, and, if applicable,
     * calls extract() with the value of the operand.
     */
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
 

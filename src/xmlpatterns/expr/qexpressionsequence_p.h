@@ -40,15 +40,15 @@ class ExpressionSequence : public UnlimitedContainer
     */
    ExpressionSequence(const Expression::List &operands);
 
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
 
    /**
     * Forwards the call to its children.
     */
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * Removes any empty sequences, typically "()", from its list of children. If
@@ -59,19 +59,21 @@ class ExpressionSequence : public UnlimitedContainer
     * optimizations have rewritten themselves into empty sequences. Thus,
     * saving memory consumption and runtime overhead.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    inline Item::Iterator::Ptr mapToSequence(const Expression::Ptr &, const DynamicContext::Ptr &) const;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+
    /**
     * @returns Expression::DisableElimination, plus the union
     * of all this ExpressionSequence's children's properties. If any child
     * does not have IsEvaluated, it is removed from the result.
     */
-   virtual Expression::Properties properties() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual ID id() const;
+   Expression::Properties properties() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   ID id() const override;
+
  private:
    typedef QExplicitlySharedDataPointer<const ExpressionSequence> ConstPtr;
 };

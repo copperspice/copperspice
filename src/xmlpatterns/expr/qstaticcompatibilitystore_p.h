@@ -40,11 +40,11 @@ class StaticCompatibilityStore : public SingleContainer
     * absolute.
     */
    StaticCompatibilityStore(const Expression::Ptr &operand);
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType) override;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
 

@@ -46,10 +46,10 @@ bool qt_initializing_gl_share_widget();
 class QGLWindowSurfaceGLPaintDevice : public QGLPaintDevice
 {
  public:
-   QPaintEngine *paintEngine() const;
-   QSize size() const;
-   int metric(PaintDeviceMetric m) const;
-   QGLContext *context() const;
+   QPaintEngine *paintEngine() const override;
+   QSize size() const override;
+   int metric(PaintDeviceMetric m) const override;
+   QGLContext *context() const override;
    QGLWindowSurfacePrivate *d;
 };
 
@@ -60,24 +60,24 @@ class Q_OPENGL_EXPORT QGLWindowSurface : public QObject, public QWindowSurface /
    QGLWindowSurface(QWidget *window);
    ~QGLWindowSurface();
 
-   QPaintDevice *paintDevice();
-   void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
+   QPaintDevice *paintDevice() override;
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset) override;
 
 #if !defined(Q_WS_QPA)
-   void setGeometry(const QRect &rect);
+   void setGeometry(const QRect &rect) override;
 #else
    virtual void resize(const QSize &size);
 #endif
 
    void updateGeometry();
-   bool scroll(const QRegion &area, int dx, int dy);
+   bool scroll(const QRegion &area, int dx, int dy) override;
 
-   void beginPaint(const QRegion &region);
-   void endPaint(const QRegion &region);
+   void beginPaint(const QRegion &region) override;
+   void endPaint(const QRegion &region) override;
 
-   QImage *buffer(const QWidget *widget);
+   QImage *buffer(const QWidget *widget) override;
 
-   WindowSurfaceFeatures features() const;
+   WindowSurfaceFeatures features() const override;
 
    QGLContext *context() const;
 

@@ -38,20 +38,19 @@ class FunctionCall : public UnlimitedContainer
  public:
    typedef QExplicitlySharedDataPointer<FunctionCall> Ptr;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::List expectedOperandTypes() const override;
+   SequenceType::Ptr staticType() const override;
 
    virtual void setSignature(const FunctionSignature::Ptr &sign);
    virtual FunctionSignature::Ptr signature() const;
 
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   virtual Expression::Properties properties() const;
+   Expression::Properties properties() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   virtual ID id() const;
+   ID id() const override;
 
  private:
    FunctionSignature::Ptr m_signature;

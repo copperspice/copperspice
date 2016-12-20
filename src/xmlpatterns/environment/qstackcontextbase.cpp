@@ -104,8 +104,7 @@ void StackContextBase<TSuperClass>::setSlotVariable(const VariableSlotID slot,
 }
 
 template<typename TSuperClass>
-void StackContextBase<TSuperClass>::setRangeVariable(const VariableSlotID slot,
-      const Item &newValue)
+void StackContextBase<TSuperClass>::setRangeVariable(const VariableSlotID slot, const Item &newValue)
 {
    setSlotVariable(slot, newValue, m_rangeVariables);
 }

@@ -892,29 +892,29 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
       : QGraphicsEffectSourcePrivate(), m_widget(widget), context(0), updateDueToGraphicsEffect(false) {
    }
 
-   inline void detach() {
+   inline void detach() override {
       m_widget->d_func()->graphicsEffect = 0;
    }
 
-   inline const QGraphicsItem *graphicsItem() const {
+   inline const QGraphicsItem *graphicsItem() const override {
       return 0;
    }
 
-   inline const QWidget *widget() const {
+   inline const QWidget *widget() const override {
       return m_widget;
    }
 
-   inline void update() {
+   inline void update() override {
       updateDueToGraphicsEffect = true;
       m_widget->update();
       updateDueToGraphicsEffect = false;
    }
 
-   inline bool isPixmap() const {
+   inline bool isPixmap() const override {
       return false;
    }
 
-   inline void effectBoundingRectChanged() {
+   inline void effectBoundingRectChanged() override {
       // ### This function should take a rect parameter; then we can avoid
       // updating too much on the parent widget.
       if (QWidget *parent = m_widget->parentWidget()) {
@@ -924,18 +924,18 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
       }
    }
 
-   inline const QStyleOption *styleOption() const {
+   inline const QStyleOption *styleOption() const override {
       return 0;
    }
 
-   inline QRect deviceRect() const {
+   inline QRect deviceRect() const override {
       return m_widget->window()->rect();
    }
 
-   QRectF boundingRect(Qt::CoordinateSystem system) const;
-   void draw(QPainter *p);
-   QPixmap pixmap(Qt::CoordinateSystem system, QPoint *offset,
-                  QGraphicsEffect::PixmapPadMode mode) const;
+   QRectF boundingRect(Qt::CoordinateSystem system) const override;
+   void draw(QPainter *p) override;
+
+   QPixmap pixmap(Qt::CoordinateSystem system, QPoint *offset, QGraphicsEffect::PixmapPadMode mode) const override;
 
    QWidget *m_widget;
    QWidgetPaintContext *context;

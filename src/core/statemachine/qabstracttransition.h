@@ -80,7 +80,7 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
 
    virtual void onTransition(QEvent *event) = 0;
 
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
    QAbstractTransition(QAbstractTransitionPrivate &dd, QState *parent);
 

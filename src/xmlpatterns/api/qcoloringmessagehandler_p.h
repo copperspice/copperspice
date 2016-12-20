@@ -39,10 +39,8 @@ class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutp
    ColoringMessageHandler(QObject *parent = 0);
 
  protected:
-   virtual void handleMessage(QtMsgType type,
-                              const QString &description,
-                              const QUrl &identifier,
-                              const QSourceLocation &sourceLocation);
+   void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier,
+                  const QSourceLocation &sourceLocation) override;
 
  private:
    QString colorifyDescription(const QString &in) const;

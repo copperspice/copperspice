@@ -37,10 +37,10 @@ class QX11GLWindowSurface : public QWindowSurface
    virtual ~QX11GLWindowSurface();
 
    // Inherreted from QWindowSurface
-   QPaintDevice *paintDevice();
-   void flush(QWidget *widget, const QRegion &region, const QPoint &offset);
-   void setGeometry(const QRect &rect);
-   bool scroll(const QRegion &area, int dx, int dy);
+   QPaintDevice *paintDevice() override;
+   void flush(QWidget *widget, const QRegion &region, const QPoint &offset) override;
+   void setGeometry(const QRect &rect) override;
+   bool scroll(const QRegion &area, int dx, int dy) override;
    QPixmap grabWidget(const QWidget *widget, const QRect &rectangle = QRect()) const;
 
  private:

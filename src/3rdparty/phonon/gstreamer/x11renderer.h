@@ -26,8 +26,8 @@
 #ifndef GSTREAMER_X11RENDERER_H
 #define GSTREAMER_X11RENDERER_H
 
-#include "videowidget.h"
-#include "common.h"
+#include <videowidget.h>
+#include <common.h>
 #include <QtGui/QWidget>
 #include <gst/gst.h>
 
@@ -46,17 +46,20 @@ class X11Renderer : public AbstractRenderer
 public:
     X11Renderer(VideoWidget *videoWidget);
     ~X11Renderer();
-    void handlePaint(QPaintEvent *event);
-    void aspectRatioChanged(Phonon::VideoWidget::AspectRatio aspectRatio);
-    void scaleModeChanged(Phonon::VideoWidget::ScaleMode scaleMode);
-    void movieSizeChanged(const QSize &movieSize);
-    void handleMediaNodeEvent(const MediaNodeEvent *event);
-    bool eventFilter(QEvent *);
-    bool paintsOnWidget() { return false; }
+
+    void handlePaint(QPaintEvent *event) override;
+    void aspectRatioChanged(Phonon::VideoWidget::AspectRatio aspectRatio) override;
+    void scaleModeChanged(Phonon::VideoWidget::ScaleMode scaleMode) override;
+    void movieSizeChanged(const QSize &movieSize) override;
+    void handleMediaNodeEvent(const MediaNodeEvent *event) override;
+    bool eventFilter(QEvent *) override;
+    bool paintsOnWidget() override { return false; }
+
     bool overlaySet() const { return m_overlaySet; }
     void setOverlay();
     void windowExposed();
     GstElement *createVideoSink();
+
 private:
     OverlayWidget *m_renderWidget;
     bool m_overlaySet;

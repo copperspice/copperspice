@@ -210,15 +210,15 @@ class QHttpNormalRequest : public QHttpRequest
       }
    }
 
-   void start(QHttp *);
-   bool hasRequestHeader();
-   QHttpRequestHeader requestHeader();
+   void start(QHttp *) override;
+   bool hasRequestHeader() override;
+   QHttpRequestHeader requestHeader() override;
    inline void setRequestHeader(const QHttpRequestHeader &h) {
       header = h;
    }
 
-   QIODevice *sourceDevice();
-   QIODevice *destinationDevice();
+   QIODevice *sourceDevice() override;
+   QIODevice *destinationDevice() override;
 
  protected:
    QHttpRequestHeader header;
@@ -316,7 +316,7 @@ class QHttpPGHRequest : public QHttpNormalRequest
    ~QHttpPGHRequest() {
    }
 
-   void start(QHttp *);
+   void start(QHttp *) override;
 };
 
 void QHttpPGHRequest::start(QHttp *http)
@@ -343,12 +343,12 @@ class QHttpSetHostRequest : public QHttpRequest
       : hostName(h), port(p), mode(m) {
    }
 
-   void start(QHttp *);
+   void start(QHttp *) override;
 
-   QIODevice *sourceDevice() {
+   QIODevice *sourceDevice() override {
       return 0;
    }
-   QIODevice *destinationDevice() {
+   QIODevice *destinationDevice() override {
       return 0;
    }
 
@@ -390,12 +390,12 @@ class QHttpSetUserRequest : public QHttpRequest
       user(userName), pass(password) {
    }
 
-   void start(QHttp *);
+   void start(QHttp *) override;
 
-   QIODevice *sourceDevice() {
+   QIODevice *sourceDevice() override {
       return 0;
    }
-   QIODevice *destinationDevice() {
+   QIODevice *destinationDevice() override {
       return 0;
    }
 
@@ -426,7 +426,7 @@ class QHttpSetProxyRequest : public QHttpRequest
       this->proxy = proxy;
    }
 
-   inline void start(QHttp *http) {
+   inline void start(QHttp *http) override {
       http->d_func()->proxy = proxy;
       QString user = proxy.user();
       if (!user.isEmpty()) {
@@ -439,10 +439,10 @@ class QHttpSetProxyRequest : public QHttpRequest
       http->d_func()->finishedWithSuccess();
    }
 
-   inline QIODevice *sourceDevice() {
+   inline QIODevice *sourceDevice() override {
       return 0;
    }
-   inline QIODevice *destinationDevice() {
+   inline QIODevice *destinationDevice() override {
       return 0;
    }
  private:
@@ -463,12 +463,12 @@ class QHttpSetSocketRequest : public QHttpRequest
    QHttpSetSocketRequest(QTcpSocket *s) : socket(s) {
    }
 
-   void start(QHttp *);
+   void start(QHttp *) override;
 
-   QIODevice *sourceDevice() {
+   QIODevice *sourceDevice() override {
       return 0;
    }
-   QIODevice *destinationDevice() {
+   QIODevice *destinationDevice() override {
       return 0;
    }
 
@@ -493,12 +493,13 @@ class QHttpCloseRequest : public QHttpRequest
  public:
    QHttpCloseRequest() {
    }
-   void start(QHttp *);
+   void start(QHttp *) override;
 
-   QIODevice *sourceDevice() {
+   QIODevice *sourceDevice() override {
       return 0;
    }
-   QIODevice *destinationDevice() {
+
+   QIODevice *destinationDevice() override {
       return 0;
    }
 };

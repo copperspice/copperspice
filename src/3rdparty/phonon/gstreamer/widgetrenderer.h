@@ -48,14 +48,17 @@ class WidgetRenderer : public AbstractRenderer
 {
 public:
     WidgetRenderer(VideoWidget *videoWidget);
-    bool eventFilter(QEvent * event);
-    void handlePaint(QPaintEvent *paintEvent);
-    void handleMediaNodeEvent(const MediaNodeEvent *event);
+
+    bool eventFilter(QEvent * event) override;
+    void handlePaint(QPaintEvent *paintEvent) override;
+    void handleMediaNodeEvent(const MediaNodeEvent *event) override;
+
     const QImage& currentFrame() const;
     QRect drawFrameRect() const { return m_drawFrameRect; }
     void setNextFrame(const QByteArray &array, int width, int height);
     bool frameIsSet() { return !m_array.isNull(); }
     void clearFrame();
+
 private:
     mutable QImage m_frame;
     QByteArray m_array;

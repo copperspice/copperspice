@@ -301,6 +301,13 @@ template <class T> class QSharedPointer
       return *data();
    }
 
+/*
+   // method ptr call
+   inline T &operator->*() const {
+      return *data();
+   }
+*/
+
    inline T *operator->() const {
       return data();
    }

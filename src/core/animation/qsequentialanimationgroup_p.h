@@ -57,8 +57,8 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
    void setCurrentAnimation(int index, bool intermediate = false);
    void activateCurrentAnimation(bool intermediate = false);
 
-   void animationInsertedAt(int index);
-   void animationRemoved(int index, QAbstractAnimation *anim);
+   void animationInsertedAt(int index) override;
+   void animationRemoved(int index, QAbstractAnimation *anim) override;
 
    bool atEnd() const;
 

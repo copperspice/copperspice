@@ -55,13 +55,14 @@ class QColumnViewPreviewColumn : public QAbstractItemView
       setMinimumWidth(previewWidget->minimumWidth());
    }
 
-   void resizeEvent(QResizeEvent *event) {
-      if (!previewWidget) {
+   void resizeEvent(QResizeEvent *event) override {
+      if (! previewWidget) {
          return;
       }
-      previewWidget->resize(
-         qMax(previewWidget->minimumWidth(), event->size().width()),
+
+      previewWidget->resize( qMax(previewWidget->minimumWidth(), event->size().width()),
          previewWidget->height());
+
       QSize p = viewport()->size();
       QSize v = previewWidget->size();
       horizontalScrollBar()->setRange(0, v.width() - p.width());
@@ -72,31 +73,38 @@ class QColumnViewPreviewColumn : public QAbstractItemView
       QAbstractScrollArea::resizeEvent(event);
    }
 
-   QRect visualRect(const QModelIndex &) const {
+   QRect visualRect(const QModelIndex &) const override {
       return QRect();
    }
-   void scrollTo(const QModelIndex &, ScrollHint) {
+
+   void scrollTo(const QModelIndex &, ScrollHint)  override{
    }
-   QModelIndex indexAt(const QPoint &) const {
+
+   QModelIndex indexAt(const QPoint &) const override{
       return QModelIndex();
    }
-   QModelIndex moveCursor(CursorAction, Qt::KeyboardModifiers) {
+
+   QModelIndex moveCursor(CursorAction, Qt::KeyboardModifiers) override{
       return QModelIndex();
    }
-   int horizontalOffset () const {
+
+   int horizontalOffset () const override{
       return 0;
    }
-   int verticalOffset () const {
+   int verticalOffset () const override {
       return 0;
    }
-   QRegion visualRegionForSelection(const QItemSelection &) const {
+
+   QRegion visualRegionForSelection(const QItemSelection &) const override {
       return QRegion();
    }
-   bool isIndexHidden(const QModelIndex &) const {
+
+   bool isIndexHidden(const QModelIndex &) const override {
       return false;
    }
-   void setSelection(const QRect &, QItemSelectionModel::SelectionFlags) {
-   }
+
+   void setSelection(const QRect &, QItemSelectionModel::SelectionFlags) override { }
+
  private:
    QWidget *previewWidget;
 };
@@ -108,6 +116,7 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
  public:
    QColumnViewPrivate();
    ~QColumnViewPrivate();
+
    void initialize();
 
    QAbstractItemView *createColumn(const QModelIndex &index, bool show);
@@ -118,11 +127,10 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
    void setPreviewWidget(QWidget *widget);
    void checkColumnCreation(const QModelIndex &parent);
 
-
    void _q_gripMoved(int offset);
    void _q_changeCurrentColumn();
    void _q_clicked(const QModelIndex &index);
-   void _q_columnsInserted(const QModelIndex &parent, int start, int end);
+   void _q_columnsInserted(const QModelIndex &parent, int start, int end) override;
 
    QList<QAbstractItemView *> columns;
    QVector<int> columnSizes; // used during init and corner moving
@@ -147,7 +155,7 @@ class QColumnViewDelegate : public QItemDelegate
    explicit QColumnViewDelegate(QObject *parent = 0) : QItemDelegate(parent) {}
    ~QColumnViewDelegate() {}
 
-   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 #endif // QT_NO_QCOLUMNVIEW
 

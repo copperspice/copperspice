@@ -58,23 +58,23 @@ class QLocalUnixSocket : public QTcpSocket
    QLocalUnixSocket() : QTcpSocket() {
    };
 
-   inline void setSocketState(QAbstractSocket::SocketState state) {
+   void setSocketState(QAbstractSocket::SocketState state) {
       QTcpSocket::setSocketState(state);
    };
 
-   inline void setErrorString(const QString &string) {
+   void setErrorString(const QString &string) {
       QTcpSocket::setErrorString(string);
    }
 
-   inline void setSocketError(QAbstractSocket::SocketError error) {
+   void setSocketError(QAbstractSocket::SocketError error) {
       QTcpSocket::setSocketError(error);
    }
 
-   inline qint64 readData(char *data, qint64 maxSize) {
+   qint64 readData(char *data, qint64 maxSize) override {
       return QTcpSocket::readData(data, maxSize);
    }
 
-   inline qint64 writeData(const char *data, qint64 maxSize) {
+   qint64 writeData(const char *data, qint64 maxSize) override{
       return QTcpSocket::writeData(data, maxSize);
    }
 };

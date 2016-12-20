@@ -38,15 +38,14 @@ class StaticFocusContext : public DelegatingStaticContext
    /**
     * @p contextItemType may be @c null.
     */
-   StaticFocusContext(const ItemType::Ptr &contextItemType,
-                      const StaticContext::Ptr &context);
+   StaticFocusContext(const ItemType::Ptr &contextItemType, const StaticContext::Ptr &context);
    /**
     * @returns the type passed in the constructor.
     */
-   virtual ItemType::Ptr contextItemType() const;
+   ItemType::Ptr contextItemType() const override;
 
  private:
-   const ItemType::Ptr         m_contextItemType;
+   const ItemType::Ptr m_contextItemType;
 };
 }
 

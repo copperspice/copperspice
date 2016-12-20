@@ -35,11 +35,10 @@ namespace QPatternist {
 class CurrentFN : public FunctionCall
 {
  public:
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
-   virtual SequenceType::Ptr staticType() const;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   SequenceType::Ptr staticType() const override;
 
  private:
    ItemType::Ptr m_itemType;

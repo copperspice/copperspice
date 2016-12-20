@@ -43,10 +43,10 @@ class QVolatileImagePaintEngine : public QRasterPaintEngine
 
  public:
    QVolatileImagePaintEngine(QPaintDevice *device, QVolatileImage *img);
-   bool begin(QPaintDevice *device);
-   bool end();
-   void drawPixmap(const QPointF &p, const QPixmap &pm);
-   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
+   bool begin(QPaintDevice *device) override;
+   bool end() override;
+   void drawPixmap(const QPointF &p, const QPixmap &pm) override;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
 };
 
 QVolatileImage::QVolatileImage()

@@ -35,28 +35,26 @@ namespace QPatternist {
 class NodeComparison : public PairContainer
 {
  public:
-   NodeComparison(const Expression::Ptr &operand1,
-                  const QXmlNodeModelIndex::DocumentOrder op,
-                  const Expression::Ptr &operand2);
+   NodeComparison(const Expression::Ptr &operand1, const QXmlNodeModelIndex::DocumentOrder op, const Expression::Ptr &operand2);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-   virtual bool evaluateEBV(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   bool evaluateEBV(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    virtual QXmlNodeModelIndex::DocumentOrder operatorID() const;
    /**
     * If any operator is the empty sequence, the NodeComparison rewrites
     * into that, since the empty sequence is always the result in that case.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    /**
     * @returns either CommonSequenceTypes::ZeroOrOneBoolean or
     * CommonSequenceTypes::ExactlyOneBoolean depending on the static
     * cardinality of its operands.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * Determines the string representation for a node comparison operator.
@@ -68,7 +66,8 @@ class NodeComparison : public PairContainer
     */
    static QString displayName(const QXmlNodeModelIndex::DocumentOrder op);
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+
  private:
    enum Result {
       Empty,

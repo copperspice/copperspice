@@ -44,15 +44,15 @@ class Q_GUI_EXPORT  QBlittablePixmapData : public QPixmapData
    QBlittable *blittable() const;
    void setBlittable(QBlittable *blittable);
 
-   void resize(int width, int height);
-   int metric(QPaintDevice::PaintDeviceMetric metric) const;
-   void fill(const QColor &color);
-   QImage *buffer();
-   QImage toImage() const;
-   bool hasAlphaChannel() const;
-   void fromImage(const QImage &image, Qt::ImageConversionFlags flags);
+   void resize(int width, int height) override;
+   int metric(QPaintDevice::PaintDeviceMetric metric) const override;
+   void fill(const QColor &color) override;
+   QImage *buffer() override;
+   QImage toImage() const override;
+   bool hasAlphaChannel() const override;
+   void fromImage(const QImage &image, Qt::ImageConversionFlags flags) override;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    void markRasterOverlay(const QRectF &);
    void markRasterOverlay(const QPointF &, const QTextItem &);

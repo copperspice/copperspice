@@ -37,7 +37,8 @@ class ByIDIdentifier : public ExpressionIdentifier
 {
  public:
    ByIDIdentifier(const Expression::ID id);
-   virtual bool matches(const Expression::Ptr &expr) const;
+   bool matches(const Expression::Ptr &expr) const override;
+
  private:
    const Expression::ID m_id;
 };
@@ -52,7 +53,7 @@ class BySequenceTypeIdentifier : public ExpressionIdentifier
     * the SequenceType passed in the BySequenceTypeIdentifier()
     * constructor, otherwise @c false.
     */
-   virtual bool matches(const Expression::Ptr &expr) const;
+   bool matches(const Expression::Ptr &expr) const override;
 
  private:
    const SequenceType::Ptr m_seqType;
@@ -62,10 +63,9 @@ class ComparisonIdentifier : public ExpressionIdentifier
 {
  public:
 
-   ComparisonIdentifier(const QVector<Expression::ID> comparatorHosts,
-                        const AtomicComparator::Operator op);
+   ComparisonIdentifier(const QVector<Expression::ID> comparatorHosts, const AtomicComparator::Operator op);
 
-   virtual bool matches(const Expression::Ptr &expr) const;
+   bool matches(const Expression::Ptr &expr) const override;
 
  private:
    const QVector<Expression::ID> m_hosts;
@@ -77,7 +77,7 @@ class IntegerIdentifier : public ExpressionIdentifier
 {
  public:
    IntegerIdentifier(const xsInteger num);
-   virtual bool matches(const Expression::Ptr &expr) const;
+   bool matches(const Expression::Ptr &expr) const override;
 
  private:
    const xsInteger m_num;
@@ -87,7 +87,7 @@ class BooleanIdentifier : public ExpressionIdentifier
 {
  public:
    BooleanIdentifier(const bool value);
-   virtual bool matches(const Expression::Ptr &expr) const;
+   bool matches(const Expression::Ptr &expr) const override;
 
  private:
    const bool m_value;
@@ -101,17 +101,14 @@ class ByIDCreator : public ExpressionCreator
     * of the type that @p id identifies.
     */
    ByIDCreator(const Expression::ID id);
-   virtual Expression::Ptr create(const Expression::List &operands,
-                                  const StaticContext::Ptr &context,
-                                  const SourceLocationReflection *const r) const;
+   Expression::Ptr create(const Expression::List &operands, const StaticContext::Ptr &context,
+                  const SourceLocationReflection *const r) const override;
 
    /**
     * Creates an expression by id @p id with the arguments @p operands.
     */
-   static Expression::Ptr create(const Expression::ID id,
-                                 const Expression::List &operands,
-                                 const StaticContext::Ptr &context,
-                                 const SourceLocationReflection *const r);
+   static Expression::Ptr create(const Expression::ID id, const Expression::List &operands,
+                  const StaticContext::Ptr &context, const SourceLocationReflection *const r);
 
  private:
    const Expression::ID m_id;

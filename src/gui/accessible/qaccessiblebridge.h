@@ -58,9 +58,6 @@ class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject, public QAccessibleB
  public:
    explicit QAccessibleBridgePlugin(QObject *parent = 0);
    ~QAccessibleBridgePlugin();
-
-   virtual QStringList keys() const = 0;
-   virtual QAccessibleBridge *create(const QString &key) = 0;
 };
 
 #endif // QT_NO_ACCESSIBILITY

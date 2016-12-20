@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
    Qt::Alignment alignment() const;
    void setAlignment(int alignment);
 
-   QSize minimumSizeHint() const;
+   QSize minimumSizeHint() const override;
 
    bool isFlat() const;
    void setFlat(bool flat);
@@ -82,15 +82,15 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
    GUI_CS_SIGNAL_2(toggled, un_named_arg1)
 
  protected:
-   bool event(QEvent *event);
-   void childEvent(QChildEvent *event);
-   void resizeEvent(QResizeEvent *event);
-   void paintEvent(QPaintEvent *event);
-   void focusInEvent(QFocusEvent *event);
-   void changeEvent(QEvent *event);
-   void mousePressEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
+   bool event(QEvent *event) override;
+   void childEvent(QChildEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void focusInEvent(QFocusEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
    void initStyleOption(QStyleOptionGroupBox *option) const;
 
  private:
@@ -99,7 +99,6 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
 
    GUI_CS_SLOT_1(Private, void _q_setChildrenEnabled(bool b))
    GUI_CS_SLOT_2(_q_setChildrenEnabled)
-
 };
 
 #endif // QT_NO_GROUPBOX

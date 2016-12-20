@@ -48,11 +48,11 @@ class QColumnViewGrip : public QWidget
 
  protected:
    QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = 0, Qt::WFlags f = 0);
-   void paintEvent(QPaintEvent *event);
-   void mouseDoubleClickEvent(QMouseEvent *event);
-   void mouseMoveEvent(QMouseEvent *event);
-   void mouseReleaseEvent(QMouseEvent *event);
-   void mousePressEvent(QMouseEvent *event);
+   void paintEvent(QPaintEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QColumnViewGrip)

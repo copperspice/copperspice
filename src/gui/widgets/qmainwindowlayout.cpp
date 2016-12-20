@@ -1328,8 +1328,9 @@ class QMainWindowTabBar : public QTabBar
 {
  public:
    QMainWindowTabBar(QWidget *parent);
+
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 };
 
 QMainWindowTabBar::QMainWindowTabBar(QWidget *parent)
@@ -1345,6 +1346,7 @@ bool QMainWindowTabBar::event(QEvent *e)
    if (e->type() != QEvent::ToolTip) {
       return QTabBar::event(e);
    }
+
    QSize size = this->size();
    QSize hint = sizeHint();
    if (shape() == QTabBar::RoundedWest || shape() == QTabBar::RoundedEast) {

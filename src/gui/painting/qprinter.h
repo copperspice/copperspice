@@ -54,7 +54,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    explicit QPrinter(const QPrinterInfo &printer, PrinterMode mode = ScreenResolution);
    ~QPrinter();
 
-   int devType() const;
+   int devType() const override;
 
    enum Orientation { Portrait, Landscape };
 
@@ -212,12 +212,12 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
 
    PrinterState printerState() const;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
    QPrintEngine *printEngine() const;
 
 #ifdef Q_OS_WIN
-   HDC getDC() const;
-   void releaseDC(HDC hdc) const;
+   HDC getDC() const override;
+   void releaseDC(HDC hdc) const override;
 #endif
 
    void setFromTo(int fromPage, int toPage);
@@ -231,7 +231,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    void getPageMargins(qreal *left, qreal *top, qreal *right, qreal *bottom, Unit unit) const;
 
  protected:
-   int metric(PaintDeviceMetric) const;
+   int metric(PaintDeviceMetric) const override;
    void setEngines(QPrintEngine *printEngine, QPaintEngine *paintEngine);
 
  private:

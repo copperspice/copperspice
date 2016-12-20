@@ -112,8 +112,7 @@ Expression::Ptr ExpressionSequence::compress(const StaticContext::Ptr &context)
    }
 }
 
-Expression::Ptr ExpressionSequence::typeCheck(const StaticContext::Ptr &context,
-      const SequenceType::Ptr &reqType)
+Expression::Ptr ExpressionSequence::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    Q_ASSERT(reqType);
    Expression::List::iterator it(m_operands.begin());

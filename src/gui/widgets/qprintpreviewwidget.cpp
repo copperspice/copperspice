@@ -43,23 +43,23 @@ class PageItem : public QGraphicsItem
 {
  public:
    PageItem(int _pageNum, const QPicture *_pagePicture, QSize _paperSize, QRect _pageRect)
-      : pageNum(_pageNum), pagePicture(_pagePicture),
-        paperSize(_paperSize), pageRect(_pageRect) {
+      : pageNum(_pageNum), pagePicture(_pagePicture), paperSize(_paperSize), pageRect(_pageRect) {
+
       qreal border = qMax(paperSize.height(), paperSize.width()) / 25;
-      brect = QRectF(QPointF(-border, -border),
-                     QSizeF(paperSize) + QSizeF(2 * border, 2 * border));
+
+      brect = QRectF(QPointF(-border, -border), QSizeF(paperSize) + QSizeF(2 * border, 2 * border));
       setCacheMode(DeviceCoordinateCache);
    }
 
-   inline QRectF boundingRect() const {
+   QRectF boundingRect() const override {
       return brect;
    }
 
-   inline int pageNumber() const {
+   int pageNumber() const {
       return pageNum;
    }
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
 
  private:
    int pageNum;
@@ -73,15 +73,6 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
    Q_UNUSED(widget);
 
-#if 0
-   // Draw item bounding rect, for debugging
-   painter->save();
-   painter->setPen(QPen(Qt::red, 0));
-   painter->setBrush(Qt::NoBrush);
-   painter->drawRect(QRectF(-border() + 1.0, -border() + 1.0, boundingRect().width() - 2, boundingRect().height() - 2));
-   painter->restore();
-#endif
-
    QRectF paperRect(0, 0, paperSize.width(), paperSize.height());
 
    // Draw shadow
@@ -89,6 +80,7 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
    qreal shWidth = paperRect.width() / 100;
    QRectF rshadow(paperRect.topRight() + QPointF(0, shWidth),
                   paperRect.bottomRight() + QPointF(shWidth, 0));
+
    QLinearGradient rgrad(rshadow.topLeft(), rshadow.topRight());
    rgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
    rgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
@@ -108,7 +100,7 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
    painter->setClipRect(paperRect & option->exposedRect);
    painter->fillRect(paperRect, Qt::white);
-   if (!pagePicture) {
+   if (! pagePicture) {
       return;
    }
    painter->drawPicture(pageRect.topLeft(), *pagePicture);
@@ -121,13 +113,6 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
    painter->setBrush(QColor(255, 255, 255, 180));
    painter->drawPath(path);
 
-#if 0
-   // Draw frame around paper.
-   painter->setPen(QPen(Qt::black, 0));
-   painter->setBrush(Qt::NoBrush);
-   painter->drawRect(paperRect);
-#endif
-
    // todo: drawtext "Page N" below paper
 }
 
@@ -138,21 +123,23 @@ class GraphicsView : public QGraphicsView
  public:
    GraphicsView(QWidget *parent = 0)
       : QGraphicsView(parent) {
+
 #ifdef Q_OS_MAC
       setFrameStyle(QFrame::NoFrame);
 #endif
+
    }
 
    GUI_CS_SIGNAL_1(Public, void resized())
    GUI_CS_SIGNAL_2(resized)
 
  protected:
-   void resizeEvent(QResizeEvent *e) {
+   void resizeEvent(QResizeEvent *e) override {
       QGraphicsView::resizeEvent(e);
       emit resized();
    }
 
-   void showEvent(QShowEvent *e) {
+   void showEvent(QShowEvent *e) override {
       QGraphicsView::showEvent(e);
       emit resized();
    }
@@ -163,6 +150,7 @@ class GraphicsView : public QGraphicsView
 class QPrintPreviewWidgetPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QPrintPreviewWidget)
+
  public:
    QPrintPreviewWidgetPrivate()
       : scene(0), curPage(1),

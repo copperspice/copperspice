@@ -59,7 +59,7 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 
    void setPendingResultsLimit(int limit);
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  public:
    CORE_CS_SIGNAL_1(Public, void started())
@@ -175,10 +175,11 @@ class QFutureWatcher<void> : public QFutureWatcherBase
 
  private:
    QFuture<void> m_future;
-   const QFutureInterfaceBase &futureInterface() const {
+   const QFutureInterfaceBase &futureInterface() const override {
       return m_future.d;
    }
-   QFutureInterfaceBase &futureInterface() {
+
+   QFutureInterfaceBase &futureInterface() override {
       return m_future.d;
    }
 };

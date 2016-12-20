@@ -327,7 +327,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    explicit QWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
    ~QWidget();
 
-   int devType() const;
+   int devType() const override;
 
    WId winId() const;
    void createWinId(); // internal, going away
@@ -762,8 +762,8 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 #endif
 
 #if defined(Q_OS_WIN)
-   HDC getDC() const;
-   void releaseDC(HDC) const;
+   HDC getDC() const override;
+   void releaseDC(HDC) const override;
 #else
    Qt::HANDLE handle() const;
 #endif
@@ -771,7 +771,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setAttribute(Qt::WidgetAttribute, bool on = true);
    inline bool testAttribute(Qt::WidgetAttribute) const;
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    void ensurePolished() const;
 #ifndef QT_NO_IM
@@ -811,7 +811,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
  protected:
    // Event handlers
-   bool event(QEvent *);
+   bool event(QEvent *) override;
    virtual void mousePressEvent(QMouseEvent *);
    virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void mouseDoubleClickEvent(QMouseEvent *);
@@ -870,11 +870,11 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 #endif
 
    virtual void changeEvent(QEvent *);
-   int metric(PaintDeviceMetric) const;
+   int metric(PaintDeviceMetric) const override;
    virtual void inputMethodEvent(QInputMethodEvent *);
 
  protected:
-   virtual bool cs_isWidgetType() const override;
+   bool cs_isWidgetType() const override;
 
    void resetInputContext();
 

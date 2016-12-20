@@ -34,17 +34,16 @@ namespace QPatternist {
 class ComputedNamespaceConstructor : public PairContainer
 {
  public:
-   ComputedNamespaceConstructor(const Expression::Ptr &prefix,
-                                const Expression::Ptr &namespaceURI);
+   ComputedNamespaceConstructor(const Expression::Ptr &prefix, const Expression::Ptr &namespaceURI);
 
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::List expectedOperandTypes() const;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
+   SequenceType::List expectedOperandTypes() const override;
 
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual Expression::Properties properties() const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   Expression::Properties properties() const override;
 };
 }
 

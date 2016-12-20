@@ -70,12 +70,16 @@ namespace Gstreamer
             /// callback function for handling new audio data
             static void processBuffer(GstPad*, GstBuffer*, gpointer);
 
-            Phonon::AudioDataOutput* frontendObject() const { return m_frontend; }
-            void setFrontendObject(Phonon::AudioDataOutput *frontend) { m_frontend = frontend; }
+            Phonon::AudioDataOutput* frontendObject() const override 
+                  {  return m_frontend; }
 
-            GstElement *audioElement() { return m_queue; }
+            void setFrontendObject(Phonon::AudioDataOutput *frontend) override
+                  { m_frontend = frontend; }
 
-            void mediaNodeEvent(const MediaNodeEvent *event);
+            GstElement *audioElement() override
+                  { return m_queue; }
+
+            void mediaNodeEvent(const MediaNodeEvent *event) override;
         
             GSTRM_CS_SIGNAL_1(Public, void dataReady(const QMap <Phonon::AudioDataOutput::Channel,QVector <qint16>> & data))
             GSTRM_CS_SIGNAL_OVERLOAD(dataReady,(const QMap <Phonon::AudioDataOutput::Channel,QVector <qint16>> &), data) 

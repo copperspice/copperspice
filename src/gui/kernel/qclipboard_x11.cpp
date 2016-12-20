@@ -130,11 +130,13 @@ class QClipboardWatcher : public QInternalMimeData
  public:
    QClipboardWatcher(QClipboard::Mode mode);
    ~QClipboardWatcher();
-   bool empty() const;
-   virtual bool hasFormat_sys(const QString &mimetype) const;
-   virtual QStringList formats_sys() const;
 
-   QVariant retrieveData_sys(const QString &mimetype, QVariant::Type type) const;
+   bool empty() const;
+
+   bool hasFormat_sys(const QString &mimetype) const override;
+   QStringList formats_sys() const override;
+
+   QVariant retrieveData_sys(const QString &mimetype, QVariant::Type type) const override;
    QByteArray getDataInFormat(Atom fmtatom) const;
 
    Atom atom;

@@ -40,13 +40,12 @@ class DelegatingNamespaceResolver : public NamespaceResolver
    DelegatingNamespaceResolver(const NamespaceResolver::Ptr &ns,
                                const Bindings &overrides);
 
-   virtual void addBinding(const QXmlName nb);
-
-   virtual QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const;
-   virtual Bindings bindings() const;
+   void addBinding(const QXmlName nb) override;
+   QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const override;
+   Bindings bindings() const override;
 
  private:
-   const NamespaceResolver::Ptr    m_nsResolver;
+   const NamespaceResolver::Ptr m_nsResolver;
    Bindings m_bindings;
 };
 }

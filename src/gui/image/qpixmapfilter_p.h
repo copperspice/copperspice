@@ -84,8 +84,8 @@ class Q_GUI_EXPORT QPixmapConvolutionFilter : public QPixmapFilter
 
    void setConvolutionKernel(const qreal *matrix, int rows, int columns);
 
-   QRectF boundingRectFor(const QRectF &rect) const;
-   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const;
+   QRectF boundingRectFor(const QRectF &rect) const override;
+   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const override;
 
  private:
    friend class QGLPixmapConvolutionFilter;
@@ -110,8 +110,8 @@ class Q_GUI_EXPORT QPixmapBlurFilter : public QPixmapFilter
    qreal radius() const;
    QGraphicsBlurEffect::BlurHints blurHints() const;
 
-   QRectF boundingRectFor(const QRectF &rect) const;
-   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const;
+   QRectF boundingRectFor(const QRectF &rect) const override;
+   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const override;
 
  private:
    friend class QGLPixmapBlurFilter;
@@ -131,7 +131,7 @@ class Q_GUI_EXPORT QPixmapColorizeFilter : public QPixmapFilter
    void setStrength(qreal strength);
    qreal strength() const;
 
-   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const;
+   void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const override;
 };
 
 class Q_GUI_EXPORT QPixmapDropShadowFilter : public QPixmapFilter
@@ -143,8 +143,8 @@ class Q_GUI_EXPORT QPixmapDropShadowFilter : public QPixmapFilter
    QPixmapDropShadowFilter(QObject *parent = 0);
    ~QPixmapDropShadowFilter();
 
-   QRectF boundingRectFor(const QRectF &rect) const;
-   void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const;
+   QRectF boundingRectFor(const QRectF &rect) const override;
+   void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const override;
 
    qreal blurRadius() const;
    void setBlurRadius(qreal radius);

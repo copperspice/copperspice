@@ -53,23 +53,23 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    void init(const QVariant &var);
    void readLocaleSettings();
 
-   void emitSignals(EmitPolicy ep, const QVariant &old);
-   QString textFromValue(const QVariant &f) const;
-   QVariant valueFromText(const QString &f) const;
-   virtual void _q_editorCursorPositionChanged(int oldpos, int newpos);
-   virtual void interpret(EmitPolicy ep);
-   virtual void clearCache() const;
+   void emitSignals(EmitPolicy ep, const QVariant &old) override;
+   QString textFromValue(const QVariant &f) const override;
+   QVariant valueFromText(const QString &f) const override;
+   void _q_editorCursorPositionChanged(int oldpos, int newpos) override;
+   void interpret(EmitPolicy ep) override;
+   void clearCache() const override;
 
-   QDateTime validateAndInterpret(QString &input, int &, QValidator::State &state,
-                                  bool fixup = false) const;
+   QDateTime validateAndInterpret(QString &input, int &, QValidator::State &state, bool fixup = false) const;
    void clearSection(int index);
-   virtual QString displayText() const {
+
+   QString displayText() const override {
       return edit->text();   // this is from QDateTimeParser
    }
 
    int absoluteIndex(QDateTimeEdit::Section s, int index) const;
    int absoluteIndex(const SectionNode &s) const;
-   void updateEdit();
+   void updateEdit() override;
    QDateTime stepBy(int index, int steps, bool test = false) const;
    int sectionAt(int pos) const;
    int closestSection(int index, bool forward) const;
@@ -79,15 +79,15 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    void updateCache(const QVariant &val, const QString &str) const;
 
    void updateTimeSpec();
-   virtual QDateTime getMinimum() const {
+   QDateTime getMinimum() const override {
       return minimum.toDateTime();
    }
 
-   virtual QDateTime getMaximum() const {
+   QDateTime getMaximum() const override {
       return maximum.toDateTime();
    }
  
-   virtual QLocale locale() const {
+   QLocale locale() const override {
       return q_func()->locale();
    }
 
@@ -95,15 +95,15 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
       return textFromValue(var);
    }
   
-   QString getAmPmText(AmPm ap, Case cs) const;
-   int cursorPosition() const {
+   QString getAmPmText(AmPm ap, Case cs) const override;
+   int cursorPosition() const override {
       return edit ? edit->cursorPosition() : -1;
    }
 
-   virtual QStyle::SubControl newHoverControl(const QPoint &pos);
-   virtual void updateEditFieldGeometry();
-   virtual QVariant getZeroVariant() const;
-   virtual void setRange(const QVariant &min, const QVariant &max);
+   QStyle::SubControl newHoverControl(const QPoint &pos) override;
+   void updateEditFieldGeometry() override;
+   QVariant getZeroVariant() const override;
+   void setRange(const QVariant &min, const QVariant &max) override;
 
    void _q_resetButton();
    void updateArrow(QStyle::StateFlag state);
@@ -165,10 +165,10 @@ class QCalendarPopup : public QWidget
    GUI_CS_SIGNAL_2(resetButton)
 
  protected:
-   void hideEvent(QHideEvent *);
-   void mousePressEvent(QMouseEvent *e);
-   void mouseReleaseEvent(QMouseEvent *);
-   bool event(QEvent *e);
+   void hideEvent(QHideEvent *) override;
+   void mousePressEvent(QMouseEvent *e) override;
+   void mouseReleaseEvent(QMouseEvent *) override;
+   bool event(QEvent *e) override;
 
  private :
    GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))

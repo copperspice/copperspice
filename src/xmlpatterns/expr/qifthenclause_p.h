@@ -35,25 +35,24 @@ namespace QPatternist {
 class IfThenClause : public TripleContainer
 {
  public:
-   IfThenClause(const Expression::Ptr &test,
-                const Expression::Ptr &then,
-                const Expression::Ptr &el);
+   IfThenClause(const Expression::Ptr &test, const Expression::Ptr &then, const Expression::Ptr &el);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &context) const;
-   virtual void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+   void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
+   SequenceType::List expectedOperandTypes() const override;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+
    /**
     * @returns IDIfThenClause
     */
-   virtual ID id() const;
-   virtual QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const;
+   ID id() const override;
+   QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
    //virtual Properties properties() const;
 };
 }

@@ -37,32 +37,29 @@ namespace QPatternist {
 class UntypedAtomicConverter : public SingleContainer, public CastingPlatform<UntypedAtomicConverter, true>
 {
  public:
-   UntypedAtomicConverter(const Expression::Ptr &operand,
-                          const ItemType::Ptr &reqType,
-                          const ReportContext::ErrorCode code = ReportContext::FORG0001);
+   UntypedAtomicConverter(const Expression::Ptr &operand, const ItemType::Ptr &reqType,
+                  const ReportContext::ErrorCode code = ReportContext::FORG0001);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::Ptr staticType() const;
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::Ptr staticType() const override;
+   SequenceType::List expectedOperandTypes() const override;
 
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    /**
     * Overridden to call CastingPlatform::typeCheck()
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   inline Item mapToItem(const Item &item,
-                         const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const;
 
-   inline ItemType::Ptr targetType() const {
+   ItemType::Ptr targetType() const {
       return m_reqType;
    }
 
-   virtual const SourceLocationReflection *actualReflection() const;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    typedef QExplicitlySharedDataPointer<const UntypedAtomicConverter> ConstPtr;

@@ -106,7 +106,7 @@ class Q_CORE_EXPORT QWindowsPipeWriter : public QThread
    }
 
  protected:
-   void run();
+   void run() override;
 
  private:
    QByteArray data;

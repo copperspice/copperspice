@@ -139,24 +139,23 @@ class QSvgPaintEngine : public QPaintEngine
  public:
 
    QSvgPaintEngine()
-      : QPaintEngine(*new QSvgPaintEnginePrivate,
-                     svgEngineFeatures()) {
-   }
+      : QPaintEngine(*new QSvgPaintEnginePrivate, svgEngineFeatures()) { }
 
-   bool begin(QPaintDevice *device);
-   bool end();
+   bool begin(QPaintDevice *device) override;
+   bool end() override;
 
-   void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state) override;
    void popGroup();
 
-   void drawPath(const QPainterPath &path);
-   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   void drawTextItem(const QPointF &pt, const QTextItem &item);
+   void drawPath(const QPainterPath &path) override;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawTextItem(const QPointF &pt, const QTextItem &item) override;
+
    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
                   Qt::ImageConversionFlag = Qt::AutoColor);
 
-   QPaintEngine::Type type() const {
+   QPaintEngine::Type type() const override {
       return QPaintEngine::SVG;
    }
 

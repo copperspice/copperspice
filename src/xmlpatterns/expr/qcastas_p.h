@@ -47,12 +47,11 @@ class CastAs : public SingleContainer, public CastingPlatform<CastAs, true /* is
     * @param targetType the type which the CastAs should cast to
     * @param source the operand to evaluate and then cast from
     */
-   CastAs(const Expression::Ptr &source,
-          const SequenceType::Ptr &targetType);
+   CastAs(const Expression::Ptr &source, const SequenceType::Ptr &targetType);
 
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
 
    /**
     * @returns a SequenceType where the ItemType is this CastAs's
@@ -60,27 +59,26 @@ class CastAs : public SingleContainer, public CastingPlatform<CastAs, true /* is
     * source operand to reflect whether this CastAs always will evaluate to
     * exactly-one or zero-or-one values.
     */
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    /**
     * Overridden in order to check that casting to an abstract type
     * is not attempted.
     */
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType);
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    /**
     * If the target type is the same as the source type, it is rewritten
     * to the operand.
     */
-   virtual Expression::Ptr compress(const StaticContext::Ptr &context);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   Expression::Ptr compress(const StaticContext::Ptr &context) override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   inline ItemType::Ptr targetType() const {
+   ItemType::Ptr targetType() const {
       return m_targetType->itemType();
    }
 
-   inline SequenceType::Ptr targetSequenceType() const {
+   SequenceType::Ptr targetSequenceType() const {
       return m_targetType;
    }
 

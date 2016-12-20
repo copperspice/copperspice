@@ -78,7 +78,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    operator QVariant() const;
 
    bool isNull() const; // ### Qt5/make inline
-   int devType() const;
+   int devType() const override;
 
    int width() const; // ### Qt5/make inline
    int height() const; // ### Qt5/make inline
@@ -210,7 +210,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    Qt::HANDLE handle() const;
 #endif
 
-   QPaintEngine *paintEngine() const;
+   QPaintEngine *paintEngine() const override;
 
    inline bool operator!() const {
       return isNull();
@@ -224,7 +224,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    }
 
  protected:
-   int metric(PaintDeviceMetric) const;
+   int metric(PaintDeviceMetric) const override;
 
  private:
    QExplicitlySharedDataPointer<QPixmapData> data;

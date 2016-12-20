@@ -47,10 +47,10 @@ class QAuServerWindows : public QAuServer
 
    void playHelper(const QString &filename, int loop, QSound *snd);
    void play(const QString &filename, int loop);
-   void play(QSound *);
+   void play(QSound *) override;
 
-   void stop(QSound *);
-   bool okay();
+   void stop(QSound *) override;
+   bool okay() override;
 
    int decLoop(QSound *snd) {
       return QAuServer::decLoop(snd);

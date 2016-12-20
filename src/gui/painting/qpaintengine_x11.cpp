@@ -248,10 +248,11 @@ class QXRenderTessellator : public QTessellator
    ~QXRenderTessellator() {
       free(traps);
    }
+
    XTrapezoid *traps;
    int allocated;
    int size;
-   void addTrap(const Trapezoid &trap);
+   void addTrap(const Trapezoid &trap) override;
    QRect tessellate(const QPointF *points, int nPoints, bool winding) {
       size = 0;
       setWinding(winding);

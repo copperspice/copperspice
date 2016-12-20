@@ -38,56 +38,57 @@ class QFontEngineWin : public QFontEngine
    QFontEngineWin(const QString &name, HFONT, bool, LOGFONT);
    ~QFontEngineWin();
 
-   virtual QFixed lineThickness() const;
-   virtual Properties properties() const;
-   virtual void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics);
-   virtual FaceId faceId() const;
-   virtual bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
-   virtual int synthesized() const;
-   virtual QFixed emSquareSize() const;
+   QFixed lineThickness() const override;
+   Properties properties() const override;
+   void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
+   FaceId faceId() const override;
+   bool getSfntTableData(uint tag, uchar *buffer, uint *length) const override;
+   int synthesized() const override;
+   QFixed emSquareSize() const override;
 
-   virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-         QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+         QTextEngine::ShaperFlags flags) const override;
 
-   virtual void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const;
+   void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const override;
 
-   virtual void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
-         QTextItem::RenderFlags flags);
+   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
+         QTextItem::RenderFlags flags) override;
 
-   virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
-         QTextItem::RenderFlags flags);
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
+         QTextItem::RenderFlags flags) override;
 
    HGDIOBJ selectDesignFont() const;
 
-   virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
-   virtual glyph_metrics_t boundingBox(glyph_t g) {
+   glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
+   glyph_metrics_t boundingBox(glyph_t g) override {
       return boundingBox(g, QTransform());
    }
-   virtual glyph_metrics_t boundingBox(glyph_t g, const QTransform &t);
 
+   glyph_metrics_t boundingBox(glyph_t g, const QTransform &t) override;
 
-   virtual QFixed ascent() const;
-   virtual QFixed descent() const;
-   virtual QFixed leading() const;
-   virtual QFixed xHeight() const;
-   virtual QFixed averageCharWidth() const;
-   virtual qreal maxCharWidth() const;
-   virtual qreal minLeftBearing() const;
-   virtual qreal minRightBearing() const;
+   QFixed ascent() const override;
+   QFixed descent() const override;
+   QFixed leading() const override;
+   QFixed xHeight() const override;
+   QFixed averageCharWidth() const override;
+   qreal maxCharWidth() const override;
+   qreal minLeftBearing() const override;
+   qreal minRightBearing() const override;
 
-   virtual const char *name() const;
+   const char *name() const override;
 
-   bool canRender(const QChar *string, int len);
+   bool canRender(const QChar *string, int len) override;
 
-   Type type() const;
+   Type type() const override;
 
-   virtual QImage alphaMapForGlyph(glyph_t t) {
+   QImage alphaMapForGlyph(glyph_t t) override {
       return alphaMapForGlyph(t, QTransform());
    }
-   virtual QImage alphaMapForGlyph(glyph_t, const QTransform &xform);
-   virtual QImage alphaRGBMapForGlyph(glyph_t t, QFixed subPixelPosition, int margin, const QTransform &xform);
 
-   virtual QFontEngine *cloneWithSize(qreal pixelSize) const;
+   QImage alphaMapForGlyph(glyph_t, const QTransform &xform) override;
+   QImage alphaRGBMapForGlyph(glyph_t t, QFixed subPixelPosition, int margin, const QTransform &xform) override;
+
+   QFontEngine *cloneWithSize(qreal pixelSize) const override;
 
 #ifndef Q_CC_MINGW
    virtual void getGlyphBearings(glyph_t glyph, qreal *leftBearing = 0, qreal *rightBearing = 0);
@@ -135,7 +136,7 @@ class QFontEngineMultiWin : public QFontEngineMulti
 {
  public:
    QFontEngineMultiWin(QFontEngine *first, const QStringList &fallbacks);
-   void loadEngine(int at);
+   void loadEngine(int at) override;
 
    QStringList fallbacks;
 };

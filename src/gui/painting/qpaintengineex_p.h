@@ -137,39 +137,38 @@ class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
 
    virtual void drawRoundedRect(const QRectF &rect, qreal xrad, qreal yrad, Qt::SizeMode mode);
 
-   virtual void drawRects(const QRect *rects, int rectCount);
-   virtual void drawRects(const QRectF *rects, int rectCount);
+   void drawRects(const QRect *rects, int rectCount) override;
+   void drawRects(const QRectF *rects, int rectCount) override;
 
-   virtual void drawLines(const QLine *lines, int lineCount);
-   virtual void drawLines(const QLineF *lines, int lineCount);
+   void drawLines(const QLine *lines, int lineCount) override;
+   void drawLines(const QLineF *lines, int lineCount) override;
 
-   virtual void drawEllipse(const QRectF &r);
-   virtual void drawEllipse(const QRect &r);
+   void drawEllipse(const QRectF &r) override;
+   void drawEllipse(const QRect &r) override;
 
-   virtual void drawPath(const QPainterPath &path);
+   void drawPath(const QPainterPath &path) override;
 
-   virtual void drawPoints(const QPointF *points, int pointCount);
-   virtual void drawPoints(const QPoint *points, int pointCount);
+   void drawPoints(const QPointF *points, int pointCount) override;
+   void drawPoints(const QPoint *points, int pointCount) override;
 
-   virtual void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   virtual void drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode);
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode) override;
 
-   virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) = 0;
+   using QPaintEngine::drawPixmap;
    virtual void drawPixmap(const QPointF &pos, const QPixmap &pm);
 
-   virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                          Qt::ImageConversionFlags flags = Qt::AutoColor) = 0;
-   virtual void drawImage(const QPointF &pos, const QImage &image);
+   using QPaintEngine::drawImage;                 
+   void drawImage(const QPointF &pos, const QImage &image);
 
-   virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
+   void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
    virtual void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                                    QPainter::PixmapFragmentHints hints);
+                  QPainter::PixmapFragmentHints hints);
 
    virtual void drawPixmapFragments(const QRectF *targetRects, const QRectF *sourceRects, int fragmentCount,
-                                    const QPixmap &pixmap, QPainter::PixmapFragmentHints hints);
+                  const QPixmap &pixmap, QPainter::PixmapFragmentHints hints);
 
-   virtual void updateState(const QPaintEngineState &state);
+   void updateState(const QPaintEngineState &state) override;
 
    virtual void drawStaticTextItem(QStaticTextItem *);
 

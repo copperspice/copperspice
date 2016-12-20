@@ -398,21 +398,27 @@ class QETWidget : public QWidget                // event translator widget
    void syncBackingStore() {
       d_func()->syncBackingStore();
    }
+  
    QWidgetData *dataPtr() {
       return data;
    }
+
    QWidgetPrivate *dptr() {
       return d_func();
    }
+
    QRect frameStrut() const {
       return d_func()->frameStrut();
    }
-   bool        winEvent(MSG *m, long *r)        {
+
+   bool winEvent(MSG *m, long *r) override {
       return QWidget::winEvent(m, r);
    }
-   void        markFrameStrutDirty()        {
+
+   void markFrameStrutDirty() {
       data->fstrut_dirty = 1;
    }
+
    bool        translateMouseEvent(const MSG &msg);
    bool        translateWheelEvent(const MSG &msg);
    bool        translatePaintEvent(const MSG &msg);
@@ -1099,9 +1105,10 @@ static void qWinProcessConfigRequests()                // perform requests in qu
 class QGuiEventDispatcherWin32 : public QEventDispatcherWin32
 {
    Q_DECLARE_PRIVATE(QEventDispatcherWin32)
+
  public:
    QGuiEventDispatcherWin32(QObject *parent = 0);
-   bool processEvents(QEventLoop::ProcessEventsFlags flags);
+   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
 };
 
 QGuiEventDispatcherWin32::QGuiEventDispatcherWin32(QObject *parent)
@@ -1112,7 +1119,7 @@ QGuiEventDispatcherWin32::QGuiEventDispatcherWin32(QObject *parent)
 
 bool QGuiEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
-   if (!QEventDispatcherWin32::processEvents(flags)) {
+   if (! QEventDispatcherWin32::processEvents(flags)) {
       return false;
    }
 

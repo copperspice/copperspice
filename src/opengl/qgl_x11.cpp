@@ -1328,10 +1328,11 @@ class QGLOverlayWidget : public QGLWidget
    QGLOverlayWidget(const QGLFormat &format, QGLWidget *parent, const QGLWidget *shareWidget = 0);
 
  protected:
-   void  initializeGL();
-   void  paintGL();
-   void  resizeGL(int w, int h);
-   bool  x11Event(XEvent *e) {
+   void  initializeGL() override;
+   void  paintGL() override;
+   void  resizeGL(int w, int h) override;
+
+   bool  x11Event(XEvent *e) override {
       return realWidget->x11Event(e);
    }
 

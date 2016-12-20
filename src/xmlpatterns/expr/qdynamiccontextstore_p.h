@@ -34,20 +34,19 @@ namespace QPatternist {
 class DynamicContextStore : public SingleContainer
 {
  public:
-   DynamicContextStore(const Expression::Ptr &operand,
-                       const DynamicContext::Ptr &context);
+   DynamicContextStore(const Expression::Ptr &operand, const DynamicContext::Ptr &context);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &) const;
-   virtual Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const;
-   virtual Item evaluateSingleton(const DynamicContext::Ptr &) const;
+   bool evaluateEBV(const DynamicContext::Ptr &) const override;
+   Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
+   Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   virtual SequenceType::List expectedOperandTypes() const;
+   SequenceType::List expectedOperandTypes() const override;
    /**
     * @returns the staticType() of its operand.
     */
-   virtual SequenceType::Ptr staticType() const;
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
-   virtual const SourceLocationReflection *actualReflection() const;
+   SequenceType::Ptr staticType() const override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
+   const SourceLocationReflection *actualReflection() const override;
 
  private:
    DynamicContext *m_context;

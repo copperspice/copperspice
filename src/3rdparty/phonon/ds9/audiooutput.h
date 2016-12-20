@@ -49,10 +49,10 @@ namespace Phonon
             ~AudioOutput();
 
             // Attributes Getters:
-            qreal volume() const;
-            int outputDevice() const;
-            void setVolume(qreal newVolume);
-            bool setOutputDevice(int newDevice);
+            qreal volume() const override;
+            int outputDevice() const override;
+            void setVolume(qreal newVolume) override;
+            bool setOutputDevice(int newDevice) override;
             bool setOutputDevice(const AudioOutputDevice & newDevice);
             void setCrossFadingProgress(short currentIndex, qreal progress);
        

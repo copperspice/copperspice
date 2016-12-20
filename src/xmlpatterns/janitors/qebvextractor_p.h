@@ -37,18 +37,18 @@ class EBVExtractor : public SingleContainer
  public:
    EBVExtractor(const Expression::Ptr &operand);
 
-   virtual bool evaluateEBV(const DynamicContext::Ptr &context) const;
-   virtual SequenceType::List expectedOperandTypes() const;
-   virtual const SourceLocationReflection *actualReflection() const;
-   virtual Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
-   virtual ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const;
+   bool evaluateEBV(const DynamicContext::Ptr &context) const override;
+   SequenceType::List expectedOperandTypes() const override;
+   const SourceLocationReflection *actualReflection() const override;
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
+   ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   virtual SequenceType::Ptr staticType() const;
+   SequenceType::Ptr staticType() const override;
 
    template<typename TSubClass, typename ThisType>
-   static Expression::Ptr typeCheck(const StaticContext::Ptr &context,
-                                    const SequenceType::Ptr &reqType,
-                                    ThisType *const caller) {
+   static Expression::Ptr typeCheck(const StaticContext::Ptr &context, 
+                  const SequenceType::Ptr &reqType, ThisType *const caller) {
+
       if (*CommonSequenceTypes::EBV->itemType() == *reqType->itemType()) {
          return caller->operands().first()->typeCheck(context, reqType);
       } else {

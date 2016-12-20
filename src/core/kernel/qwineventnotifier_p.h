@@ -52,7 +52,7 @@ class Q_CORE_EXPORT QWinEventNotifier : public QObject
    CORE_CS_SIGNAL_2(activated, hEvent)
 
  protected:
-   bool event(QEvent *e);
+   bool event(QEvent *e) override;
 
  private:
    Q_DISABLE_COPY(QWinEventNotifier)
