@@ -87,7 +87,7 @@ bool QLibraryPrivate::load_sys()
       }
    }
 
-   Q_FOREACH (const QString & attempt, attempts) {
+   for (const QString & attempt : attempts) {
       pHnd = LoadLibrary((wchar_t *)QDir::toNativeSeparators(attempt).utf16());
 
       // If we have a handle or the last error is something other than "unable

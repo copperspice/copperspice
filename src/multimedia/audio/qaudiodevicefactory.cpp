@@ -207,19 +207,22 @@ QList<QAudioDeviceInfo> QAudioDeviceFactory::availableDevices(QAudio::Mode mode)
 
 #ifndef QT_NO_AUDIO_BACKEND
 #if (defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(HAS_ALSA))
-   foreach (const QByteArray & handle, QAudioDeviceInfoInternal::availableDevices(mode))
-   devices << QAudioDeviceInfo(QLatin1String("builtin"), handle, mode);
+   for (const QByteArray & handle : QAudioDeviceInfoInternal::availableDevices(mode)) {
+      devices << QAudioDeviceInfo(QLatin1String("builtin"), handle, mode);
+   }
 #endif
 #endif
 
 #if !defined(QT_NO_SETTINGS)
    QFactoryLoader *l = loader();
 
-   foreach (QString const & key, l->keys()) {
+   for (QString const & key : l->keys()) {
       QAudioEngineFactoryInterface *plugin = qobject_cast<QAudioEngineFactoryInterface *>(l->instance(key));
+
       if (plugin) {
-         foreach (QByteArray const & handle, plugin->availableDevices(mode))
-         devices << QAudioDeviceInfo(key, handle, mode);
+         for (QByteArray const & handle : plugin->availableDevices(mode)) {
+            devices << QAudioDeviceInfo(key, handle, mode);
+         }
       }
 
       delete plugin;

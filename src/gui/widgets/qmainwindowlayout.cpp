@@ -1179,10 +1179,13 @@ void QMainWindowLayout::setDocumentMode(bool enabled)
    _documentMode = enabled;
 
    // Update the document mode for all tab bars
-   foreach (QTabBar * bar, usedTabBars)
-   bar->setDocumentMode(_documentMode);
-   foreach (QTabBar * bar, unusedTabBars)
-   bar->setDocumentMode(_documentMode);
+   for (QTabBar * bar: usedTabBars) {
+      bar->setDocumentMode(_documentMode);
+   }
+
+   for (QTabBar * bar : unusedTabBars) {
+      bar->setDocumentMode(_documentMode);
+   }
 }
 #endif // QT_NO_TABBAR
 
@@ -1580,7 +1583,8 @@ QSize QMainWindowLayout::minimumSize() const
 #ifdef Q_OS_MAC
       const QSize storedSize = minSize;
       int minWidth = 0;
-      foreach (QToolBar * toolbar, qtoolbarsInUnifiedToolbarList) {
+
+      for (QToolBar * toolbar : qtoolbarsInUnifiedToolbarList) {
          minWidth += toolbar->sizeHint().width() + 20;
       }
       minSize = QSize(qMax(minWidth, storedSize.width()), storedSize.height());
@@ -1748,10 +1752,13 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
       //all animations are finished
 #ifndef QT_NO_DOCKWIDGET
       parentWidget()->update(layoutState.dockAreaLayout.separatorRegion());
+
 #ifndef QT_NO_TABBAR
-      foreach (QTabBar * tab_bar, usedTabBars)
-      tab_bar->show();
-#endif // QT_NO_TABBAR
+      for (QTabBar * tab_bar : usedTabBars) {
+         tab_bar->show();
+      }
+#endif
+
 #endif // QT_NO_DOCKWIDGET
    }
 
@@ -2031,8 +2038,9 @@ void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animat
    QSet<QTabBar *> retired = usedTabBars - used;
    usedTabBars = used;
 
-   foreach (QTabBar * tab_bar, retired) {
+   for (QTabBar * tab_bar : retired) {
       tab_bar->hide();
+
       while (tab_bar->count() > 0) {
          tab_bar->removeTab(0);
       }
@@ -2044,7 +2052,7 @@ void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animat
       QSet<QWidget *> retiredSeps = usedSeparatorWidgets - usedSeps;
       usedSeparatorWidgets = usedSeps;
 
-      foreach (QWidget * sepWidget, retiredSeps) {
+      for (QWidget * sepWidget : retiredSeps) {
          unusedSeparatorWidgets.append(sepWidget);
       }
    }
@@ -2085,12 +2093,15 @@ bool QMainWindowLayout::restoreState(QDataStream &stream)
 
 #ifndef QT_NO_DOCKWIDGET
    if (parentWidget()->isVisible()) {
-#ifndef QT_NO_TABBAR
-      foreach (QTabBar * tab_bar, usedTabBars)
-      tab_bar->show();
 
+#ifndef QT_NO_TABBAR
+      for (QTabBar * tab_bar : usedTabBars) {
+         tab_bar->show();
+      }
 #endif
+
    }
+
 #endif // QT_NO_DOCKWIDGET
 
    return true;

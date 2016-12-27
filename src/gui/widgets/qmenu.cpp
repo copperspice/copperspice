@@ -1946,7 +1946,7 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
          atAction = d->defaultAction;
          // TODO: This works for first level menus, not yet sub menus
       } else {
-         foreach (QAction * action, d->actions)
+         for (QAction * action : d->actions)   // broom check
          if (action->isEnabled()) {
             atAction = action;
             break;

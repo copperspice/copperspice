@@ -440,7 +440,8 @@ int QGtkStyle::pixelMetric(PixelMetric metric,
          QStringList values = QString(QLS(icon_sizes)).split(QLatin1Char(':'));
          g_free(icon_sizes);
          QChar splitChar(QLatin1Char(','));
-         foreach (const QString & value, values) {
+
+         for (const QString & value : values) {
             if (value.startsWith(QLS("gtk-button="))) {
                QString iconSize = value.right(value.size() - 11);
 

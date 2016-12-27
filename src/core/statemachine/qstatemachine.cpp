@@ -407,7 +407,8 @@ QList<QAbstractState *> QStateMachinePrivate::enterStates(QEvent *event,
             addStatesToEnter(s, lca, statesToEnter, statesForDefaultEntry);
             if (isParallel(lca)) {
                QList<QAbstractState *> lcac = QStatePrivate::get(lca)->childStates();
-               foreach (QAbstractState * child, lcac) {
+
+               for (QAbstractState * child : lcac) {
                   if (!statesToEnter.contains(child)) {
                      addStatesToEnter(child, lca, statesToEnter, statesForDefaultEntry);
                   }

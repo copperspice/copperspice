@@ -150,13 +150,17 @@ void QWindowsStyle::timerEvent(QTimerEvent *event)
 {
 #ifndef QT_NO_PROGRESSBAR
    Q_D(QWindowsStyle);
+
    if (event->timerId() == d->animateTimer) {
       Q_ASSERT(d->animationFps > 0);
       d->animateStep = d->startTime.elapsed() / (1000 / d->animationFps);
-      foreach (QProgressBar * bar, d->animatedProgressBars)
-      bar->update();
+
+      for (QProgressBar * bar : d->animatedProgressBars) {
+         bar->update();
+      }
    }
-#endif // QT_NO_PROGRESSBAR
+#endif
+
    event->ignore();
 }
 

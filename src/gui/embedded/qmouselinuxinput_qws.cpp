@@ -85,7 +85,7 @@ QWSLinuxInputMousePrivate::QWSLinuxInputMousePrivate(QWSLinuxInputMouseHandler *
    int grab = 0;
 
    QStringList args = device.split(QLatin1Char(':'));
-   foreach (const QString & arg, args) {
+   for (const QString & arg : args) {
       if (arg.startsWith(QLatin1String("grab="))) {
          grab = arg.mid(5).toInt();
       } else if (arg.startsWith(QLatin1String("/dev/"))) {

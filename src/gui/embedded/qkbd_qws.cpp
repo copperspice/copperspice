@@ -69,7 +69,7 @@ class QWSKbPrivate : public QObject
 
       QString keymap;
       QStringList args = device.split(QLatin1Char(':'));
-      foreach (const QString & arg, args) {
+      for (const QString & arg : args) {
          if (arg.startsWith(QLatin1String("keymap="))) {
             keymap = arg.mid(7);
          } else if (arg == QLatin1String("disable-zap")) {

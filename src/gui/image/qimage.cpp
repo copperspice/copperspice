@@ -3485,7 +3485,8 @@ static QImage convertWithPalette(const QImage &src, QImage::Format format,
 #if !defined(QT_NO_IMAGE_TEXT)
    QString textsKeys = src.text();
    QStringList textKeyList = textsKeys.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-   foreach (const QString & textKey, textKeyList) {
+
+   for (const QString & textKey : textKeyList) {
       QStringList textKeySplitted = textKey.split(QLatin1String(": "));
       dest.setText(textKeySplitted[0], textKeySplitted[1]);
    }
@@ -5060,7 +5061,7 @@ QString QImage::text(const QString &key) const
    }
 
    QString tmp;
-   foreach (const QString & key, d->text.keys()) {
+   for (const QString & key : d->text.keys()) {
       if (!tmp.isEmpty()) {
          tmp += QLatin1String("\n\n");
       }

@@ -661,7 +661,8 @@ QString QGtkStylePrivate::getThemeName()
    QString rcPaths = QString::fromLocal8Bit(qgetenv("GTK2_RC_FILES"));
    if (!rcPaths.isEmpty()) {
       QStringList paths = rcPaths.split(QLS(":"));
-      foreach (const QString & rcPath, paths) {
+
+      for (const QString & rcPath : paths) {
          if (!rcPath.isEmpty()) {
             QFile rcFile(rcPath);
             if (rcFile.exists() && rcFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -855,7 +856,7 @@ void QGtkStyleUpdateScheduler::updateTheme()
       }
       QList<QWidget *> widgets = QApplication::allWidgets();
       // Notify all widgets that size metrics might have changed
-      foreach (QWidget * widget, widgets) {
+      for (QWidget * widget : widgets) {
          QEvent e(QEvent::StyleChange);
          QApplication::sendEvent(widget, &e);
       }
@@ -939,13 +940,13 @@ void QGtkStylePrivate::setupGtkFileChooser(GtkWidget *gtkFileChooser, QWidget *p
    g_object_set(gtkFileChooser, "local_only", gboolean(true), NULL);
    if (!filter.isEmpty()) {
       QStringList filters = qt_make_filter_list(filter);
-      foreach (const QString & rawfilter, filters) {
+      for (const QString & rawfilter : filters) {
          GtkFileFilter *gtkFilter = QGtkStylePrivate::gtk_file_filter_new ();
          QString name = rawfilter.left(rawfilter.indexOf(QLatin1Char('(')));
          QStringList extensions = extract_filter(rawfilter);
          QGtkStylePrivate::gtk_file_filter_set_name(gtkFilter, qPrintable(name.isEmpty() ? extensions.join(QLS(", ")) : name));
 
-         foreach (const QString & fileExtension, extensions) {
+         for (const QString & fileExtension : extensions) {
             // Note Gtk file dialogs are by default case sensitive
             // and only supports basic glob syntax so we
             // rewrite .xyz to .[xX][yY][zZ]

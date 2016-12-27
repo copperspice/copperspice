@@ -301,7 +301,7 @@ bool QLinuxFbScreen::connect(const QString &displaySpec)
 #endif
 
    QString dev = QLatin1String("/dev/fb0");
-   foreach(QString d, args) {
+   for (QString d : args) {
       if (d.startsWith(QLatin1Char('/'))) {
          dev = d;
          break;

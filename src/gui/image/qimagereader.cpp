@@ -584,9 +584,11 @@ void QImageReaderPrivate::getText()
    if (!text.isEmpty() || (!handler && !initHandler()) || !handler->supportsOption(QImageIOHandler::Description)) {
       return;
    }
-   foreach (QString pair, handler->option(QImageIOHandler::Description).toString().split(
+
+   for (QString pair : handler->option(QImageIOHandler::Description).toString().split(
                QLatin1String("\n\n"))) {
       int index = pair.indexOf(QLatin1Char(':'));
+
       if (index >= 0 && pair.indexOf(QLatin1Char(' ')) < index) {
          text.insert(QLatin1String("Description"), pair.simplified());
       } else {

@@ -318,7 +318,8 @@ init_context:
    if (ciphers.isEmpty()) {
       ciphers = defaultCiphers();
    }
-   foreach (const QSslCipher & cipher, ciphers) {
+
+   for (const QSslCipher & cipher : ciphers) {
       if (first) {
          first = false;
       } else {
@@ -336,7 +337,7 @@ init_context:
    }
 
    // Add all our CAs to this store.
-   foreach (const QSslCertificate & caCertificate, q->caCertificates()) {
+   for (const QSslCertificate & caCertificate : q->caCertificates()) {
        // From https://www.openssl.org/docs/ssl/SSL_CTX_load_verify_locations.html:
        //
        // If several CA certificates matching the name, key identifier, and
@@ -1141,7 +1142,7 @@ bool QSslSocketBackendPrivate::startHandshake()
    QList<QSslError> errors;
 
    // check the whole chain for blacklisting (including root, as we check for subjectInfo and issuer)
-   foreach (const QSslCertificate & cert, configuration.peerCertificateChain) {
+   for (const QSslCertificate & cert : configuration.peerCertificateChain) {
       if (QSslCertificatePrivate::isBlacklisted(cert)) {
          QSslError error(QSslError::CertificateBlacklisted, cert);
          errors << error;
@@ -1168,8 +1169,10 @@ bool QSslSocketBackendPrivate::startHandshake()
 
          if (!isMatchingHostname(commonName.toLower(), peerName.toLower())) {
             bool matched = false;
-            foreach (const QString & altName, configuration.peerCertificate
+
+            for (const QString & altName : configuration.peerCertificate
                      .alternateSubjectNames().values(QSsl::DnsEntry)) {
+
                if (isMatchingHostname(altName.toLower(), peerName.toLower())) {
                   matched = true;
                   break;

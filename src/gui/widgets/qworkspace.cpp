@@ -1186,19 +1186,22 @@ QWorkspacePrivate::init()
 #ifndef QT_NO_SHORTCUT
    // Set up shortcut bindings (id -> slot), most used first
    QList <QKeySequence> shortcuts = QKeySequence::keyBindings(QKeySequence::NextChild);
-   foreach (const QKeySequence & seq, shortcuts)
-   shortcutMap.insert(q->grabShortcut(seq), "activateNextWindow");
+   for (const QKeySequence & seq : shortcuts) {
+      shortcutMap.insert(q->grabShortcut(seq), "activateNextWindow");
+   }
 
    shortcuts = QKeySequence::keyBindings(QKeySequence::PreviousChild);
-   foreach (const QKeySequence & seq, shortcuts)
-   shortcutMap.insert(q->grabShortcut(seq), "activatePreviousWindow");
+   for (const QKeySequence & seq : shortcuts) {
+      shortcutMap.insert(q->grabShortcut(seq), "activatePreviousWindow");
+   }
 
    shortcuts = QKeySequence::keyBindings(QKeySequence::Close);
-   foreach (const QKeySequence & seq, shortcuts)
-   shortcutMap.insert(q->grabShortcut(seq), "closeActiveWindow");
+   for (const QKeySequence & seq : shortcuts) {
+      shortcutMap.insert(q->grabShortcut(seq), "closeActiveWindow");
+   }
 
    shortcutMap.insert(q->grabShortcut(QKeySequence(QLatin1String("ALT+-"))), "_q_showOperationMenu");
-#endif // QT_NO_SHORTCUT
+#endif
 
    q->setBackgroundRole(QPalette::Dark);
    q->setAutoFillBackground(true);

@@ -6079,7 +6079,8 @@ void QPlastiqueStyle::timerEvent(QTimerEvent *event)
    if (event->timerId() == d->progressBarAnimateTimer) {
       Q_ASSERT(ProgressBarFps > 0);
       d->animateStep = d->timer.elapsed() / (1000 / ProgressBarFps);
-      foreach (QProgressBar * bar, d->bars) {
+
+      for (QProgressBar * bar : d->bars) {
          if (AnimateProgressBar || (bar->minimum() == 0 && bar->maximum() == 0)) {
             bar->update();
          }

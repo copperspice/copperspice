@@ -39,8 +39,9 @@ QT_BEGIN_NAMESPACE
 
 void QWindowsFileSystemWatcherEngine::stop()
 {
-   foreach(QWindowsFileSystemWatcherEngineThread * thread, threads)
-   thread->stop();
+   for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
+      thread->stop();
+   }
 }
 
 QWindowsFileSystemWatcherEngine::QWindowsFileSystemWatcherEngine()
@@ -54,7 +55,7 @@ QWindowsFileSystemWatcherEngine::~QWindowsFileSystemWatcherEngine()
       return;
    }
 
-   foreach(QWindowsFileSystemWatcherEngineThread * thread, threads) {
+   for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
       thread->stop();
       thread->wait();
       delete thread;
@@ -160,7 +161,8 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
 
          // now look for a thread to insert
          bool found = false;
-         foreach(QWindowsFileSystemWatcherEngineThread * thread, threads) {
+
+         for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
             QMutexLocker(&(thread->mutex));
             if (thread->handles.count() < MAXIMUM_WAIT_OBJECTS) {
                // qDebug() << "  Added handle" << handle.handle << "for" << absolutePath << "to watch" << fileInfo.absoluteFilePath();
@@ -317,7 +319,7 @@ QWindowsFileSystemWatcherEngineThread::~QWindowsFileSystemWatcherEngineThread()
    CloseHandle(handles.at(0));
    handles[0] = INVALID_HANDLE_VALUE;
 
-   foreach (HANDLE h, handles) {
+   for (HANDLE h : handles) {
       if (h == INVALID_HANDLE_VALUE) {
          continue;
       }

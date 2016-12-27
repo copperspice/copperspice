@@ -154,7 +154,7 @@ bool DeviceManager::canOpenDevice(GstElement *element) const
         return true;
 
     const QList<QByteArray> &list = GstHelper::extractProperties(element, "device");
-    foreach (const QByteArray &gstId, list) {
+    for (const QByteArray &gstId : list) {
         GstHelper::setProperty(element, "device", gstId);
         if (gst_element_set_state(element, GST_STATE_READY) == GST_STATE_CHANGE_SUCCESS) {
             return true;

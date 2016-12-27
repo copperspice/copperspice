@@ -90,7 +90,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    }
 
    inline void invalidatePersistentIndexes() {
-      foreach (QPersistentModelIndexData * data, persistent.indexes) {
+      for (QPersistentModelIndexData * data : persistent.indexes) {
          data->index = QModelIndex();
          data->model = 0;
       }

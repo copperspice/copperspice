@@ -1294,6 +1294,7 @@ void MediaObject::handleBusMessage(const Message &message)
             gst_message_parse_tag(gstMessage, &tag_list);
             if (tag_list) {
                 TagMap newTags;
+
                 gst_tag_list_foreach (tag_list, &foreach_tag_function, &newTags);
                 gst_tag_list_free(tag_list);
 

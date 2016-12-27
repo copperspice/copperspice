@@ -320,10 +320,12 @@ static inline QString searchExecutable(const QStringList &searchPaths,
                                        const QString &executableName)
 {
    const QDir currentDir = QDir::current();
-   foreach (const QString & searchPath, searchPaths) {
+
+   for (const QString & searchPath : searchPaths) {
       const QString candidate = currentDir.absoluteFilePath(searchPath + QLatin1Char('/') + executableName);
       const QString absPath = checkExecutable(candidate);
-      if (!absPath.isEmpty()) {
+
+      if (! absPath.isEmpty()) {
          return absPath;
       }
    }
@@ -340,11 +342,14 @@ searchExecutableAppendSuffix(const QStringList &searchPaths,
                              const QStringList &suffixes)
 {
    const QDir currentDir = QDir::current();
-   foreach (const QString & searchPath, searchPaths) {
+
+   for (const QString & searchPath : searchPaths) {
       const QString candidateRoot = currentDir.absoluteFilePath(searchPath + QLatin1Char('/') + executableName);
-      foreach (const QString & suffix, suffixes) {
+
+      for (const QString & suffix : suffixes) {
          const QString absPath = checkExecutable(candidateRoot + suffix);
-         if (!absPath.isEmpty()) {
+
+         if (! absPath.isEmpty()) {
             return absPath;
          }
       }
@@ -390,11 +395,14 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
       // Remove trailing slashes, which occur on Windows.
       const QStringList rawPaths = QString::fromLocal8Bit(pEnv.constData()).split(pathSep, QString::SkipEmptyParts);
       searchPaths.reserve(rawPaths.size());
-      foreach (const QString & rawPath, rawPaths) {
+
+      for (const QString & rawPath : rawPaths) {
          QString cleanPath = QDir::cleanPath(rawPath);
+
          if (cleanPath.size() > 1 && cleanPath.endsWith(QLatin1Char('/'))) {
             cleanPath.truncate(cleanPath.size() - 1);
          }
+
          searchPaths.push_back(cleanPath);
       }
    }

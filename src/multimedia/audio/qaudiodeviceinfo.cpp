@@ -66,61 +66,6 @@ class QAudioDeviceInfoPrivate : public QSharedData
    QAbstractAudioDeviceInfo   *info;
 };
 
-
-/*!
-    \class QAudioDeviceInfo
-    \brief The QAudioDeviceInfo class provides an interface to query audio devices and their functionality.
-    \inmodule QtMultimedia
-    \ingroup multimedia
-
-    \since 4.6
-
-    QAudioDeviceInfo lets you query for audio devices--such as sound
-    cards and USB headsets--that are currently available on the system.
-    The audio devices available are dependent on the platform or audio plugins installed.
-
-    You can also query each device for the formats it supports. A
-    format in this context is a set consisting of a specific byte
-    order, channel, codec, frequency, sample rate, and sample type.  A
-    format is represented by the QAudioFormat class.
-
-    The values supported by the the device for each of these
-    parameters can be fetched with
-    supportedByteOrders(), supportedChannelCounts(), supportedCodecs(),
-    supportedSampleRates(), supportedSampleSizes(), and
-    supportedSampleTypes(). The combinations supported are dependent on the platform,
-    audio plugins installed and the audio device capabilities. If you need a specific format, you can check if
-    the device supports it with isFormatSupported(), or fetch a
-    supported format that is as close as possible to the format with
-    nearestFormat(). For instance:
-
-    \snippet doc/src/snippets/audio/main.cpp 6
-    \dots 8
-    \snippet doc/src/snippets/audio/main.cpp 7
-
-    A QAudioDeviceInfo is used by Qt to construct
-    classes that communicate with the device--such as
-    QAudioInput, and QAudioOutput. The static
-    functions defaultInputDevice(), defaultOutputDevice(), and
-    availableDevices() let you get a list of all available
-    devices. Devices are fetch according to the value of mode
-    this is specified by the QAudio::Mode enum.
-    The QAudioDeviceInfo returned are only valid for the QAudio::Mode.
-
-    For instance:
-
-    \code
-    foreach(const QAudioDeviceInfo &deviceInfo, QAudioDeviceInfo::availableDevices(QAudio::AudioOutput))
-        qDebug() << "Device name: " << deviceInfo.deviceName();
-    \endcode
-
-    In this code sample, we loop through all devices that are able to output
-    sound, i.e., play an audio stream in a supported format. For each device we
-    find, we simply print the deviceName().
-
-    \sa QAudioOutput, QAudioInput
-*/
-
 /*!
     Constructs an empty QAudioDeviceInfo object.
 */
@@ -242,7 +187,7 @@ QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
       testSampleSizes.insert(0, settings.sampleSize());
    }
    sampleSizesAvailable.removeAll(settings.sampleSize());
-   foreach (int size, sampleSizesAvailable) {
+   for (int size : sampleSizesAvailable) {
       int larger  = (size > settings.sampleSize()) ? size : settings.sampleSize();
       int smaller = (size > settings.sampleSize()) ? settings.sampleSize() : size;
       if (size >= settings.sampleSize()) {
@@ -255,8 +200,9 @@ QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
    if (frequenciesAvailable.contains(settings.frequency())) {
       testFrequencies.insert(0, settings.frequency());
    }
+
    frequenciesAvailable.removeAll(settings.frequency());
-   foreach (int frequency, frequenciesAvailable) {
+   for (int frequency : frequenciesAvailable) {
       int larger  = (frequency > settings.frequency()) ? frequency : settings.frequency();
       int smaller = (frequency > settings.frequency()) ? settings.frequency() : frequency;
       if (frequency >= settings.frequency()) {

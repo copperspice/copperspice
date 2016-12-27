@@ -1523,69 +1523,12 @@ typedef uint Flags;
 #endif
 
 
-#if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
-template <typename T>
-class QForeachContainer
-{
- public:
-   inline QForeachContainer(const T &t) : c(t), brk(0), i(c.begin()), e(c.end()) { }
-   const T c;
-   int brk;
-   typename T::const_iterator i, e;
-};
-
-#define Q_FOREACH(variable, container)                                \
-for (QForeachContainer<__typeof__(container)> _container_(container); \
-     !_container_.brk && _container_.i != _container_.e;              \
-     __extension__  ({ ++_container_.brk; ++_container_.i; }))        \
-    for (variable = *_container_.i;; __extension__ ({--_container_.brk; break;}))
-
-#else
-
-struct QForeachContainerBase {};
-
-template <typename T>
-class QForeachContainer : public QForeachContainerBase
-{
- public:
-   inline QForeachContainer(const T &t): c(t), brk(0), i(c.begin()), e(c.end()) {};
-   const T c;
-   mutable int brk;
-   mutable typename T::const_iterator i, e;
-   inline bool condition() const {
-      return (!brk++ && i != e);
-   }
-};
-
-template <typename T>
-inline T *qForeachPointer(const T &)
-{
-   return 0;
-}
-
-template <typename T>
-inline QForeachContainer<T> qForeachContainerNew(const T &t)
-{
-   return QForeachContainer<T>(t);
-}
-
-template <typename T>
-inline const QForeachContainer<T> *qForeachContainer(const QForeachContainerBase *base, const T *)
-{
-   return static_cast<const QForeachContainer<T> *>(base);
-}
-
-#define Q_FOREACH(variable, container) \
-    for (const QForeachContainerBase &_container_ = qForeachContainerNew(container);            \
-    qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->condition();        \
-    ++qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i)                \
-    for (variable = *qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->i; \
-        qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk;            \
-        --qForeachContainer(&_container_, true ? 0 : qForeachPointer(container))->brk)
-#endif
-
+// expands to a C++11 range based for
+#define Q_FOREACH(variable, container)  \
+for (variable : container)
 
 #define Q_FOREVER for(;;)
+
 #ifndef QT_NO_KEYWORDS
 #  ifndef foreach
 #    define foreach Q_FOREACH

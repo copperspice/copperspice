@@ -215,7 +215,7 @@ QNetworkSession::QNetworkSession(const QNetworkConfiguration &connectionConfig, 
 {
    // invalid configuration
    if (!connectionConfig.identifier().isEmpty()) {
-      foreach (QBearerEngine * engine, qNetworkConfigurationManagerPrivate()->engines()) {
+      for (QBearerEngine * engine : qNetworkConfigurationManagerPrivate()->engines()) {
          if (engine->hasIdentifier(connectionConfig.identifier())) {
             d = engine->createSessionBackend();
             d->q = this;

@@ -541,7 +541,7 @@ void QAbstractItemView::reset()
 
    d->delayedReset.stop(); //make sure we stop the timer
 
-   foreach (const QEditorInfo & info, d->indexEditorHash) {
+   for (const QEditorInfo & info : d->indexEditorHash) {
       if (info.widget) {
          d->releaseEditor(info.widget.data());
       }

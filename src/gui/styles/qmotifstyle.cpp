@@ -186,7 +186,7 @@ void QMotifStyle::timerEvent(QTimerEvent *event)
    if (event->timerId() == d->animateTimer) {
       Q_ASSERT(d->animationFps > 0);
       d->animateStep = d->startTime.elapsed() / (1000 / d->animationFps);
-      foreach (QProgressBar * bar, d->bars) {
+      for (QProgressBar * bar : d->bars) {
          if ((bar->minimum() == 0 && bar->maximum() == 0)) {
             bar->update();
          }

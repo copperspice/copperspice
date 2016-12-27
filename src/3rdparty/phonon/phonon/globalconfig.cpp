@@ -207,12 +207,15 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
 
     /*QString sb;
     sb = QString("(Size %1)").arg(currentList.size());
-    foreach (int i, currentList)
-    sb += QString("%1, ").arg(i);
+    for (int i : currentList) {
+       sb += QString("%1, ").arg(i);
+    }
     fprintf(stderr, "=== Reindex Current: %s\n", sb.toUtf8().constData());
+
     sb = QString("(Size %1)").arg(newOrder.size());
-    foreach (int i, newOrder)
-    sb += QString("%1, ").arg(i);
+    for (int i : newOrder) {
+       sb += QString("%1, ").arg(i);
+    }  
     fprintf(stderr, "=== Reindex Before : %s\n", sb.toUtf8().constData());*/
 
     QList<int> currentList;
@@ -225,7 +228,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
 
     QList<int> newList;
 
-    foreach (int i, newOrder) {
+    for (int i : newOrder) {
         int found = currentList.indexOf(i);
         if (found < 0) {
             // It's not in the list, so something is odd (e.g. client error). Ignore it.
@@ -255,8 +258,9 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
         newList += currentList;
 
     /*sb = QString("(Size %1)").arg(newList.size());
-    foreach (int i, newList)
-    sb += QString("%1, ").arg(i);
+    for (int i : newList) {
+       sb += QString("%1, ").arg(i);
+    }  
     fprintf(stderr, "=== Reindex After  : %s\n", sb.toUtf8().constData());*/
     return newList;
 }

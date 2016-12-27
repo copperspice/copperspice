@@ -122,7 +122,7 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
    }
 
    // return the first that we can use
-   foreach (const QNetworkProxy & p, proxies) {
+   for (const QNetworkProxy & p : proxies) {
       if (p.capabilities() & QNetworkProxy::ListeningCapability) {
          return p;
       }

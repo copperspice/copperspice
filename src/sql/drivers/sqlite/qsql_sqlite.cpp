@@ -560,7 +560,8 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
    bool sharedCache = false;
    int openMode = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, timeOut = 5000;
    QStringList opts = QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
-   foreach(const QString & option, opts) {
+  
+   for (const QString & option : opts) {
       if (option.startsWith(QLatin1String("QSQLITE_BUSY_TIMEOUT="))) {
          bool ok;
          int nt = option.mid(21).toInt(&ok);
@@ -599,12 +600,13 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
 void QSQLiteDriver::close()
 {
    if (isOpen()) {
-      foreach (QSQLiteResult * result, d->results)
-      result->d->finalize();
+      for (QSQLiteResult * result : d->results) {
+         result->d->finalize();
+      }
 
       if (sqlite3_close(d->access) != SQLITE_OK)
-         setLastError(qMakeError(d->access, tr("Error closing database"),
-                                 QSqlError::ConnectionError));
+         setLastError(qMakeError(d->access, tr("Error closing database"), QSqlError::ConnectionError));
+
       d->access = 0;
       setOpen(false);
       setOpenError(false);

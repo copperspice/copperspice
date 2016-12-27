@@ -214,8 +214,9 @@ void MediaNode::notify(const MediaNodeEvent *event, bool propagate)
     switch(event->type()){
     case MediaNodeEvent::AudioGraphAboutToBeDeleted:
         if (m_audioNode){
-            foreach(AudioConnection *connection, m_audioSinkList)
+            for (AudioConnection *connection : m_audioSinkList) {
                 connection->invalidate();
+            }
         }
         break;
     case MediaNodeEvent::NewAudioGraph:

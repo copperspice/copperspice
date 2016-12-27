@@ -1032,8 +1032,9 @@ void QMdiSubWindowPrivate::updateDirtyRegions()
       return;
    }
 
-   foreach (Operation operation, operationMap.keys())
-   operationMap.find(operation).value().region = getRegion(operation);
+   for (Operation operation : operationMap.keys()) {
+      operationMap.find(operation).value().region = getRegion(operation);
+   }   
 }
 
 /*!
@@ -2243,8 +2244,9 @@ void QMdiSubWindowPrivate::setSizeGripVisible(bool visible) const
 {
    // See if we can find any size grips
    QList<QSizeGrip *> sizeGrips = q_func()->findChildren<QSizeGrip *>();
-   foreach (QSizeGrip * grip, sizeGrips)
-   grip->setVisible(visible);
+   for  (QSizeGrip * grip : sizeGrips) {
+      grip->setVisible(visible);
+   }
 }
 
 #endif // QT_NO_SIZEGRIP

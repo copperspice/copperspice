@@ -678,8 +678,9 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
    dbg.nospace() << ", pixelAspectRatio=" << f.pixelAspectRatio();
    dbg.nospace() << ")";
 
-   foreach(const QByteArray & propertyName, f.propertyNames())
-   dbg << "\n    " << propertyName.data() << " = " << f.property(propertyName.data());
+   for (const QByteArray & propertyName : f.propertyNames()) {
+      dbg << "\n    " << propertyName.data() << " = " << f.property(propertyName.data());
+   }   
 
    return dbg.space();
 }

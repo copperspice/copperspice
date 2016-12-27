@@ -126,7 +126,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
    HDC hdc = widget->getDC();
 
    const QVector<QRect> &rects = region.rects();
-   foreach (QRect rect, rects) {
+   for (QRect rect : rects) {
       RECT winRect;
       SetRect(&winRect, rect.left(), rect.top(), rect.right(), rect.bottom());
       FillRect(hdc, &winRect, brush);

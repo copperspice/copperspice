@@ -565,7 +565,7 @@ static QString find_translation(const QLocale &locale,
 #endif
 
    // try explicit locales names first
-   foreach (QString localeName, languages) {
+   for (QString localeName : languages) {
       localeName.replace(QLatin1Char('-'), QLatin1Char('_'));
 
       realname = path + filename + prefix + localeName + (suffix.isNull() ? QLatin1String(".qm") : suffix);
@@ -584,8 +584,8 @@ static QString find_translation(const QLocale &locale,
    }
 
    // start guessing
-   foreach (QString localeName, fuzzyLocales) {
-      for (;;) {
+   for (QString localeName : fuzzyLocales) {
+      while (true) {
          int rightmost = localeName.lastIndexOf(QLatin1Char('_'));
          // no truncations? fail
          if (rightmost <= 0) {
@@ -607,7 +607,7 @@ static QString find_translation(const QLocale &locale,
       }
    }
 
-   if (!suffix.isNull()) {
+   if (! suffix.isNull()) {
       realname = path + filename + suffix;
       fi.setFile(realname);
       if (fi.isReadable() && fi.isFile()) {

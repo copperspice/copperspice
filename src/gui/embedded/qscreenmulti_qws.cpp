@@ -224,7 +224,7 @@ bool QMultiScreen::connect(const QString &displaySpec)
    }
 
    QStringList specs = dSpec.split(QLatin1Char(' '), QString::SkipEmptyParts);
-   foreach (QString spec, specs) {
+   for (QString spec : specs) {
       const int id = getDisplayId(spec);
       if (spec.startsWith("vnc:", Qt::CaseInsensitive)) {
          spec.append(":noDisablePainting");

@@ -2637,7 +2637,8 @@ QWindowsVistaAnimation *QWindowsVistaStylePrivate::widgetAnimation(const QWidget
    if (!widget) {
       return 0;
    }
-   foreach (QWindowsVistaAnimation * a, animations) {
+
+   for (QWindowsVistaAnimation * a : animations) {
       if (a->widget() == widget) {
          return a;
       }

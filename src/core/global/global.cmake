@@ -4,8 +4,6 @@ set(CORE_PUBLIC_INCLUDES
     QCOORD
     QFlag
     QFlags
-    QForeachContainer
-    QForeachContainerBase
     QGlobalStatic
     QGlobalStaticDeleter
     QIncompatibleFlag
@@ -56,8 +54,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qfeatures.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qflag.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qflags.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/qforeachcontainer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/qforeachcontainerbase.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstatic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobalstaticdeleter.h

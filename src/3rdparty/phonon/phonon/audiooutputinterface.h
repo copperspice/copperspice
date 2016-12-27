@@ -115,7 +115,7 @@ class AudioOutputInterface42 : public AudioOutputInterface40
          * \code
            typedef QPair<QByteArray, QString> PhononDeviceAccess;
            const QList<PhononDeviceAccess> &deviceAccessList = deviceAccessListFor(deviceDesc);
-           foreach (const PhononDeviceAccess &access, deviceAccessList) {
+           for (const PhononDeviceAccess &access : deviceAccessList) {
                const QByteArray &driver = access.first;
                const QString &handle = access.second;
                if (openDevice(driver, handle)) {

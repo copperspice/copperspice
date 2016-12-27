@@ -237,7 +237,8 @@ QList<QByteArray> QFontEngineQPF::cleanUpAfterClientCrash(const QList<int> &cras
 {
    QList<QByteArray> removedFonts;
    QDir dir(qws_fontCacheDir(), QLatin1String(" *.qsf"));
-   foreach (const QFileInfo &fi, dir.entryInfoList()) {
+
+   for (const QFileInfo &fi : dir.entryInfoList()) {
       const QByteArray fileName = QFile::encodeName(fi.absoluteFilePath());
 
       int fd = QT_OPEN(fileName.constData(), O_RDONLY, 0);

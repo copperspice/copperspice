@@ -143,8 +143,11 @@
         m_usingWindow = true;
         [self setDelegate:self];
         [self waitForFrame];
-        foreach(QWidget *w, *m_parents)
+
+        for (QWidget *w : *m_parents) {
             w->repaint();
+        } 
+
         qApp->processEvents();
         [self removeFromSuperview];
         [(NSView *)m_window->winId() addSubview:self];

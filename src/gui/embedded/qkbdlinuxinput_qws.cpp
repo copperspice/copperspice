@@ -87,7 +87,7 @@ QWSLinuxInputKbPrivate::QWSLinuxInputKbPrivate(QWSLinuxInputKeyboardHandler *h, 
    int grab = 0;
 
    QStringList args = device.split(QLatin1Char(':'));
-   foreach (const QString & arg, args) {
+   for (const QString & arg : args) {
       if (arg.startsWith(QLatin1String("repeat-delay="))) {
          repeat_delay = arg.mid(13).toInt();
       } else if (arg.startsWith(QLatin1String("repeat-rate="))) {

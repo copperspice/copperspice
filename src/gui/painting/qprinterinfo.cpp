@@ -48,7 +48,7 @@ QPrinterInfo::QPrinterInfo(const QPrinterInfo &other)
 QPrinterInfo::QPrinterInfo(const QPrinter &printer)
    : d_ptr(&QPrinterInfoPrivate::shared_null)
 {
-   foreach (const QPrinterInfo & printerInfo, availablePrinters()) {
+   for (const QPrinterInfo & printerInfo : availablePrinters()) {
       if (printerInfo.printerName() == printer.printerName()) {
          d_ptr.reset(new QPrinterInfoPrivate(*printerInfo.d_ptr));
          break;

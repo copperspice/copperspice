@@ -648,7 +648,7 @@ void QWidgetPrivate::setParent_sys(QWidget *parent, Qt::WindowFlags f)
    if (QWidget *nativeParent = q->internalWinId() ? q : q->nativeParentWidget()) {
 
       if (const QWExtra *extra = nativeParent->d_func()->extra) {
-         foreach (QWidget * w, extra->oleDropWidgets) {
+         for (QWidget * w : extra->oleDropWidgets) {
             if (w && q->isAncestorOf(w)) {
                registeredDropChildren.push_back(w);
                w->setAttribute(Qt::WA_DropSiteRegistered, false);
@@ -728,7 +728,7 @@ void QWidgetPrivate::setParent_sys(QWidget *parent, Qt::WindowFlags f)
       q->setAttribute(Qt::WA_DropSiteRegistered, true);
    }
 
-   foreach (QWidget * w, registeredDropChildren)
+   for (QWidget * w : registeredDropChildren)
    w->setAttribute(Qt::WA_DropSiteRegistered, true);
 
    invalidateBuffer(q->rect());

@@ -395,7 +395,7 @@ void QGLBlurTextureCache::insertBlurTextureInfo(const QPixmap &pixmap, QGLBlurTe
 
 void QGLBlurTextureCache::pixmapDestroyed(QPixmapData *pmd)
 {
-   foreach (QGLBlurTextureCache * cache, blurTextureCaches) {
+   for (QGLBlurTextureCache * cache : blurTextureCaches) {
       if (cache->hasBlurTextureInfo(pmd->cacheKey())) {
          cache->clearBlurTextureInfo(pmd->cacheKey());
       }

@@ -166,13 +166,16 @@ QCocoaTouch::getCurrentTouchPointList(NSEvent *event, bool acceptSingleTouch)
    if (_touchCount != _currentTouches.size()) {
       // Remove all instances, and basically start from scratch:
       touchPoints.clear();
-      foreach (QCocoaTouch * qcocoaTouch, _currentTouches.values()) {
+
+      for (QCocoaTouch * qcocoaTouch : _currentTouches.values()) {
          if (!_updateInternalStateOnly) {
             qcocoaTouch->_touchPoint.setState(Qt::TouchPointReleased);
             touchPoints.insert(qcocoaTouch->_touchPoint.id(), qcocoaTouch->_touchPoint);
          }
+
          delete qcocoaTouch;
       }
+
       _currentTouches.clear();
       _updateInternalStateOnly = !acceptSingleTouch;
       return touchPoints.values();

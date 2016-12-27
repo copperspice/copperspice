@@ -1293,7 +1293,8 @@ void QDirModelPrivate::savePersistentIndexes()
 {
    Q_Q(QDirModel);
    savedPersistent.clear();
-   foreach (QPersistentModelIndexData * data, persistent.indexes) {
+
+   for (QPersistentModelIndexData * data : persistent.indexes) {
       SavedPersistent saved;
       QModelIndex index = data->index;
       saved.path = q->filePath(index);

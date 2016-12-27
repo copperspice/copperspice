@@ -107,7 +107,7 @@ void QTextOption::setTabArray(QList<qreal> tabStops) // Qt5/const ref
    }
    QList<QTextOption::Tab> tabs;
    QTextOption::Tab tab;
-   foreach (qreal pos, tabStops) {
+   for (qreal pos : tabStops) {
       tab.position = pos;
       tabs.append(tab);
    }

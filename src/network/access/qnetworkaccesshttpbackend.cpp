@@ -423,7 +423,7 @@ void QNetworkAccessHttpBackend::postRequest()
 #ifndef QT_NO_NETWORKPROXY
    QNetworkProxy transparentProxy, cacheProxy;
 
-   foreach (const QNetworkProxy & p, proxyList()) {
+   for (const QNetworkProxy & p : proxyList()) {
       // use the first proxy that works
       // for non-encrypted connections, any transparent or HTTP proxy
       // for encrypted, only transparent proxies
@@ -531,7 +531,7 @@ void QNetworkAccessHttpBackend::postRequest()
       }
    }
 
-   foreach (const QByteArray & header, headers)
+   for (const QByteArray & header : headers)
    httpRequest.setHeaderField(header, request().rawHeader(header));
 
    if (request().attribute(QNetworkRequest::HttpPipeliningAllowedAttribute).toBool() == true) {
@@ -1110,7 +1110,7 @@ QNetworkCacheMetaData QNetworkAccessHttpBackend::fetchCacheMetaData(const QNetwo
    QNetworkHeadersPrivate::RawHeadersList::ConstIterator it;
 
    QList<QByteArray> newHeaders = rawHeaderList();
-   foreach (QByteArray header, newHeaders) {
+   for (QByteArray header : newHeaders) {
       QByteArray originalHeader = header;
       header = header.toLower();
       bool hop_by_hop =

@@ -155,9 +155,9 @@ bool QSoftKeyManager::appendSoftkeys(const QWidget &source, int level)
 {
    Q_D(QSoftKeyManager);
    bool ret = false;
-   foreach(QAction * action, source.actions()) {
-      if (action->softKeyRole() != QAction::NoSoftKey
-            && (action->isVisible() || isForceEnabledInSofkeys(action))) {
+
+   for (QAction * action : source.actions()) {
+      if (action->softKeyRole() != QAction::NoSoftKey && (action->isVisible() || isForceEnabledInSofkeys(action))) {
          d->requestedSoftKeyActions.insert(level, action);
          ret = true;
       }

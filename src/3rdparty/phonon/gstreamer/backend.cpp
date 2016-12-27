@@ -350,7 +350,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
  */
 bool Backend::startConnectionChange(QSet<QObject *> objects)
 {
-    foreach (QObject *object, objects) {
+    for (QObject *object : objects) {
         MediaNode *sourceNode = qobject_cast<MediaNode *>(object);
         MediaObject *media = sourceNode->root();
         if (media) {
@@ -400,7 +400,7 @@ bool Backend::disconnectNodes(QObject *source, QObject *sink)
  */
 bool Backend::endConnectionChange(QSet<QObject *> objects)
 {
-    foreach (QObject *object, objects) {
+    for (QObject *object : objects) {
         MediaNode *sourceNode = qobject_cast<MediaNode *>(object);
         MediaObject *media = sourceNode->root();
         if (media) {

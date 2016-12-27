@@ -1008,7 +1008,8 @@ QModelIndexPairList QSortFilterProxyModelPrivate::store_persistent_indexes()
 {
    Q_Q(QSortFilterProxyModel);
    QModelIndexPairList source_indexes;
-   foreach (QPersistentModelIndexData * data, persistent.indexes) {
+
+   for (QPersistentModelIndexData * data : persistent.indexes) {
       QModelIndex proxy_index = data->index;
       QModelIndex source_index = q->mapToSource(proxy_index);
       source_indexes.append(qMakePair(proxy_index, QPersistentModelIndex(source_index)));

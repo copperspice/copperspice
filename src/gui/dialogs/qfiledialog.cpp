@@ -1835,8 +1835,9 @@ QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent,
    QList<QUrl> urls;
 
    const QStringList fileNames = getOpenFileNames(parent, caption, dir.toLocalFile(), filter, selectedFilter, options);
-   foreach (const QString & fileName, fileNames)
-   urls << QUrl::fromLocalFile(fileName);
+   for (const QString & fileName : fileNames) {
+      urls << QUrl::fromLocalFile(fileName);
+   }
 
    return urls;
 }

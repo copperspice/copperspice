@@ -202,7 +202,7 @@ void QWidgetBackingStoreTracker::unregisterWidget(QWidget *w)
 void QWidgetBackingStoreTracker::unregisterWidgetSubtree(QWidget *widget)
 {
    unregisterWidget(widget);
-   foreach (QObject * child, widget->children())  {
+   for (QObject * child : widget->children())  {
       if (QWidget *childWidget = qobject_cast<QWidget *>(child)) {
          unregisterWidgetSubtree(childWidget);
       }
@@ -905,7 +905,7 @@ QWidget::~QWidget()
 #endif
 
 #ifndef QT_NO_GESTURES
-   foreach (Qt::GestureType type, d->gestureContext.keys())
+   for (Qt::GestureType type : d->gestureContext.keys())
    ungrabGesture(type);
 #endif
 
@@ -7231,13 +7231,16 @@ void QWidget::scroll(int dx, int dy)
       // until we can connect item updates directly to the view, we must
       // separately add a translated dirty region.
       if (!d->dirty.isEmpty()) {
-         foreach (const QRect & rect, (d->dirty.translated(dx, dy)).rects())
-         proxy->update(rect);
+         for (const QRect & rect : (d->dirty.translated(dx, dy)).rects()) {
+            proxy->update(rect);
+         }
       }
+
       proxy->scroll(dx, dy, proxy->subWidgetRect(this));
       return;
    }
 #endif
+
    d->setDirtyOpaqueRegion();
    d->scroll_sys(dx, dy);
 }
@@ -7259,8 +7262,9 @@ void QWidget::scroll(int dx, int dy, const QRect &r)
       // until we can connect item updates directly to the view, we must
       // separately add a translated dirty region.
       if (!d->dirty.isEmpty()) {
-         foreach (const QRect & rect, (d->dirty.translated(dx, dy) & r).rects())
-         proxy->update(rect);
+         for (const QRect & rect : (d->dirty.translated(dx, dy) & r).rects()) {
+            proxy->update(rect);
+         }
       }
       proxy->scroll(dx, dy, r.translated(proxy->subWidgetRect(this).topLeft().toPoint()));
       return;
@@ -8215,7 +8219,8 @@ QWidget *QWidgetPrivate::widgetInNavigationDirection(Direction direction)
 
    QWidget *targetWidget = 0;
    int shortestDistance = INT_MAX;
-   foreach(QWidget * targetCandidate, QApplication::allWidgets()) {
+
+   for (QWidget * targetCandidate : QApplication::allWidgets()) {
 
       const QRect targetCandidateRect = targetCandidate->rect().translated(targetCandidate->mapToGlobal(QPoint()));
 

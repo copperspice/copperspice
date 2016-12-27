@@ -131,7 +131,7 @@ MediaSource::MediaSource(const QList<MediaSource> &mediaList)
     : d(new MediaSourcePrivate(Link))
 {
     d->linkedSources = mediaList;
-    foreach (MediaSource ms, mediaList) {
+    for (MediaSource ms : mediaList) {
         Q_ASSERT(ms.type() != Link);
     }
 }

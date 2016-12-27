@@ -531,7 +531,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::items(Qt::SortOrder order) co
    } else {
       // Rebuild the list of items to avoid holes. ### We could also just
       // compress the item lists at this point.
-      foreach (QGraphicsItem * item, d->indexedItems + d->unindexedItems) {
+      for (QGraphicsItem * item : d->indexedItems + d->unindexedItems) {
          if (item) {
             itemList << item;
          }

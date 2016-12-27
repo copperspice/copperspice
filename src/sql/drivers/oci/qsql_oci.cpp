@@ -2434,8 +2434,11 @@ QStringList QOCIDriver::tables(QSql::TableType type) const
    if (type & QSql::Tables) {
       QString query = QLatin1String("select owner, table_name from all_tables where ");
       QStringList whereList;
-      foreach(const QString & sysUserName, sysUsers)
-      whereList << QLatin1String("owner != '") + sysUserName + QLatin1String("' ");
+
+      for (const QString & sysUserName : sysUsers) {
+         whereList << QLatin1String("owner != '") + sysUserName + QLatin1String("' ");
+      }
+
       t.exec(query + whereList.join(QLatin1String(" and ")));
 
       while (t.next()) {
@@ -2460,8 +2463,11 @@ QStringList QOCIDriver::tables(QSql::TableType type) const
    if (type & QSql::Views) {
       QString query = QLatin1String("select owner, view_name from all_views where ");
       QStringList whereList;
-      foreach(const QString & sysUserName, sysUsers)
-      whereList << QLatin1String("owner != '") + sysUserName + QLatin1String("' ");
+
+      for (const QString & sysUserName : sysUsers) {
+         whereList << QLatin1String("owner != '") + sysUserName + QLatin1String("' ");
+      }
+
       t.exec(query + whereList.join(QLatin1String(" and ")));
       while (t.next()) {
          if (t.value(0).toString().toUpper() != d->user.toUpper()) {
@@ -2478,8 +2484,11 @@ QStringList QOCIDriver::tables(QSql::TableType type) const
       }
       QString query = QLatin1String("select owner, table_name from all_tables where ");
       QStringList whereList;
-      foreach(const QString & sysUserName, sysUsers)
-      whereList << QLatin1String("owner = '") + sysUserName + QLatin1String("' ");
+
+      for (const QString & sysUserName : sysUsers) {
+         whereList << QLatin1String("owner = '") + sysUserName + QLatin1String("' ");
+      }
+
       t.exec(query + whereList.join(QLatin1String(" or ")));
 
       while (t.next()) {

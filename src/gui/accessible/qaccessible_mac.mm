@@ -917,13 +917,15 @@ QList<QAElement> lookup(const QList<QAInterface> &interfaces)
 {
    QList<QAElement> elements;
 
-   foreach (const QAInterface & interface, interfaces)
-   if (interface.isValid()) {
-      const QAElement element = accessibleHierarchyManager()->lookup(interface);
-      if (element.isValid()) {
-         elements.append(element);
+   for (const QAInterface & interface : interfaces) {
+      if (interface.isValid()) {
+         const QAElement element = accessibleHierarchyManager()->lookup(interface);
+         if (element.isValid()) {
+            elements.append(element);
+         }
       }
    }
+
    return elements;
 }
 

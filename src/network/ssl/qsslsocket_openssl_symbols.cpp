@@ -384,13 +384,14 @@ static QStringList findAllLibSsl()
    QStringList paths = libraryPathList();
    QStringList foundSsls;
 
-   foreach (const QString & path, paths) {
+   for (const QString & path : paths) {
       QDir dir(path);
       QStringList entryList = dir.entryList(QStringList() << QLatin1String("libssl.*"), QDir::Files);
 
       qSort(entryList.begin(), entryList.end(), libGreaterThan);
-      foreach (const QString & entry, entryList)
-      foundSsls << path + QLatin1Char('/') + entry;
+      for (const QString & entry : entryList) {
+         foundSsls << path + QLatin1Char('/') + entry;
+      }
    }
 
    return foundSsls;
@@ -401,13 +402,14 @@ static QStringList findAllLibCrypto()
    QStringList paths = libraryPathList();
 
    QStringList foundCryptos;
-   foreach (const QString & path, paths) {
+   for (const QString & path : paths) {
       QDir dir(path);
       QStringList entryList = dir.entryList(QStringList() << QLatin1String("libcrypto.*"), QDir::Files);
 
       qSort(entryList.begin(), entryList.end(), libGreaterThan);
-      foreach (const QString & entry, entryList)
-      foundCryptos << path + QLatin1Char('/') + entry;
+      for (const QString & entry : entryList) {
+         foundCryptos << path + QLatin1Char('/') + entry;
+      }   
    }
 
    return foundCryptos;
@@ -528,13 +530,13 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
    QStringList sslList = findAllLibSsl();
    QStringList cryptoList = findAllLibCrypto();
 
-   foreach (const QString & crypto, cryptoList) {
+   for (const QString & crypto : cryptoList) {
       libcrypto->setFileNameAndVersion(crypto, -1);
       if (libcrypto->load()) {
          QFileInfo fi(crypto);
          QString version = fi.completeSuffix();
 
-         foreach (const QString & ssl, sslList) {
+         for (const QString & ssl : sslList) {
             if (!ssl.endsWith(version)) {
                continue;
             }

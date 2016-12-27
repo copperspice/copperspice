@@ -182,9 +182,9 @@ void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
    if (nameList.isEmpty()) {
       qWarning("QCommandLineOption: Options must have at least one name");
    }
-   foreach (const QString & name, nameList) {
+   for (const QString & name : nameList) {
       if (name.isEmpty()) {
-         qWarning("QCommandLineOption: Option names cannot be empty");
+         qWarning("QCommandLineOption: Option names can not be empty");
       } else {
          const QChar c = name.at(0);
          if (c == QLatin1Char('-')) {

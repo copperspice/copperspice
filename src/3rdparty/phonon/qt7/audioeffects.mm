@@ -56,7 +56,8 @@ void AudioEffectAudioNode::initializeAudioUnit()
 {
     if (!m_audioUnit)
         return;
-    foreach(int id, m_alteredParameters.keys()){
+
+    for (int id : m_alteredParameters.keys()) {
         Float32 value = m_alteredParameters.value(id);
         ComponentResult res = AudioUnitSetParameter(m_audioUnit, id, kAudioUnitScope_Global, 0, value, 0);
         BACKEND_ASSERT2(res == noErr, "Could not initialize audio effect.", NORMAL_ERROR)

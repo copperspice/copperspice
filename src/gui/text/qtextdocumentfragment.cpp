@@ -881,72 +881,79 @@ QTextHtmlImporter::Table QTextHtmlImporter::scanTable(int tableNodeIdx)
    int tableHeaderRowCount = 0;
    QVector<int> rowNodes;
    rowNodes.reserve(at(tableNodeIdx).children.count());
-   foreach (int row, at(tableNodeIdx).children)
-   switch (at(row).id) {
-      case Html_tr:
-         rowNodes += row;
-         break;
-      case Html_thead:
-      case Html_tbody:
-      case Html_tfoot:
-         foreach (int potentialRow, at(row).children)
-         if (at(potentialRow).id == Html_tr) {
-            rowNodes += potentialRow;
-            if (at(row).id == Html_thead) {
-               ++tableHeaderRowCount;
+
+   for (int row : at(tableNodeIdx).children) {
+      switch (at(row).id) {
+         case Html_tr:
+            rowNodes += row;
+            break;
+         case Html_thead:
+         case Html_tbody:
+         case Html_tfoot:
+            for (int potentialRow : at(row).children) {
+               if (at(potentialRow).id == Html_tr) {
+                  rowNodes += potentialRow;
+                  if (at(row).id == Html_thead) {
+                     ++tableHeaderRowCount;
+                  }
+               }
             }
-         }
-         break;
-      default:
-         break;
+
+            break;
+         default:
+            break;
+      }
    }
 
    QVector<RowColSpanInfo> rowColSpans;
    QVector<RowColSpanInfo> rowColSpanForColumn;
 
    int effectiveRow = 0;
-   foreach (int row, rowNodes) {
+   for (int row : rowNodes) {
       int colsInRow = 0;
 
-      foreach (int cell, at(row).children)
-      if (at(cell).isTableCell()) {
-         // skip all columns with spans from previous rows
-         while (colsInRow < rowColSpanForColumn.size()) {
-            const RowColSpanInfo &spanInfo = rowColSpanForColumn[colsInRow];
+      for (int cell : at(row).children) {
 
-            if (spanInfo.row + spanInfo.rowSpan > effectiveRow) {
-               Q_ASSERT(spanInfo.col == colsInRow);
-               colsInRow += spanInfo.colSpan;
-            } else {
-               break;
-            }
-         }
-
-         const QTextHtmlParserNode &c = at(cell);
-         const int currentColumn = colsInRow;
-         colsInRow += c.tableCellColSpan;
-
-         RowColSpanInfo spanInfo;
-         spanInfo.row = effectiveRow;
-         spanInfo.col = currentColumn;
-         spanInfo.colSpan = c.tableCellColSpan;
-         spanInfo.rowSpan = c.tableCellRowSpan;
-         if (spanInfo.colSpan > 1 || spanInfo.rowSpan > 1) {
-            rowColSpans.append(spanInfo);
-         }
-
-         columnWidths.resize(qMax(columnWidths.count(), colsInRow));
-         rowColSpanForColumn.resize(columnWidths.size());
-         for (int i = currentColumn; i < currentColumn + c.tableCellColSpan; ++i) {
-            if (columnWidths.at(i).type() == QTextLength::VariableLength) {
-               QTextLength w = c.width;
-               if (c.tableCellColSpan > 1 && w.type() != QTextLength::VariableLength) {
-                  w = QTextLength(w.type(), w.value(100.) / c.tableCellColSpan);
+         if (at(cell).isTableCell()) {
+            // skip all columns with spans from previous rows
+            while (colsInRow < rowColSpanForColumn.size()) {
+               const RowColSpanInfo &spanInfo = rowColSpanForColumn[colsInRow];
+   
+               if (spanInfo.row + spanInfo.rowSpan > effectiveRow) {
+                  Q_ASSERT(spanInfo.col == colsInRow);
+                  colsInRow += spanInfo.colSpan;
+               } else {
+                  break;
                }
-               columnWidths[i] = w;
             }
-            rowColSpanForColumn[i] = spanInfo;
+   
+            const QTextHtmlParserNode &c = at(cell);
+            const int currentColumn = colsInRow;
+            colsInRow += c.tableCellColSpan;
+   
+            RowColSpanInfo spanInfo;
+            spanInfo.row = effectiveRow;
+            spanInfo.col = currentColumn;
+            spanInfo.colSpan = c.tableCellColSpan;
+            spanInfo.rowSpan = c.tableCellRowSpan;
+            if (spanInfo.colSpan > 1 || spanInfo.rowSpan > 1) {
+               rowColSpans.append(spanInfo);
+            }
+   
+            columnWidths.resize(qMax(columnWidths.count(), colsInRow));
+            rowColSpanForColumn.resize(columnWidths.size());
+            for (int i = currentColumn; i < currentColumn + c.tableCellColSpan; ++i) {
+               if (columnWidths.at(i).type() == QTextLength::VariableLength) {
+                  QTextLength w = c.width;
+                  if (c.tableCellColSpan > 1 && w.type() != QTextLength::VariableLength) {
+                     w = QTextLength(w.type(), w.value(100.) / c.tableCellColSpan);
+                  }
+                  columnWidths[i] = w;
+               }
+               rowColSpanForColumn[i] = spanInfo;
+            }
          }
+
       }
 
       table.columns = qMax(table.columns, colsInRow);

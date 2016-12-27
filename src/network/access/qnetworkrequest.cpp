@@ -610,7 +610,7 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
          QByteArray result;
          bool first = true;
-         foreach (const QNetworkCookie & cookie, cookies) {
+         for (const QNetworkCookie & cookie : cookies) {
             if (!first) {
                result += "; ";
             }
@@ -628,7 +628,7 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
          QByteArray result;
          bool first = true;
-         foreach (const QNetworkCookie & cookie, cookies) {
+         for (const QNetworkCookie & cookie : cookies) {
             if (!first) {
                result += ", ";
             }
@@ -699,7 +699,8 @@ static QVariant parseCookieHeader(const QByteArray &raw)
 {
    QList<QNetworkCookie> result;
    QList<QByteArray> cookieList = raw.split(';');
-   foreach (const QByteArray & cookie, cookieList) {
+
+   for (const QByteArray & cookie : cookieList) {
       QList<QNetworkCookie> parsed = QNetworkCookie::parseCookies(cookie.trimmed());
       if (parsed.count() != 1) {
          return QVariant();   // invalid Cookie: header

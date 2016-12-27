@@ -1272,7 +1272,7 @@ bool QDialogButtonBox::event(QEvent *event)
          }
       }
 
-      foreach (QPushButton * pb, (dialog ? dialog : this)->findChildren<QPushButton *>()) {
+      for (QPushButton * pb : (dialog ? dialog : this)->findChildren<QPushButton *>()) {
          if (pb->isDefault() && pb != firstAcceptButton) {
             hasDefault = true;
             break;
@@ -1305,8 +1305,11 @@ bool QDialogButtonBox::event(QEvent *event)
             it != d->softKeyActions.constEnd(); ++it) {
          QAction *current = it.value();
          QList<QWidget *> widgets = current->associatedWidgets();
-         foreach (QWidget * w, widgets)
-         w->removeAction(current);
+
+         for (QWidget * w : widgets) {
+            w->removeAction(current); 
+         }
+
          if (dialog) {
             dialog->addAction(current);
          } else {

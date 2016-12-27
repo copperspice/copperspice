@@ -833,7 +833,7 @@ void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 port)
    }
 
    // return the first that we can use
-   foreach (const QNetworkProxy & p, proxies) {
+   for (const QNetworkProxy & p : proxies) {
       if (socketType == QAbstractSocket::UdpSocket &&
             (p.capabilities() & QNetworkProxy::UdpTunnelingCapability) == 0) {
          continue;

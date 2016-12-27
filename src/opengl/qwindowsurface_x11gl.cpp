@@ -141,7 +141,7 @@ bool QX11GLWindowSurface::scroll(const QRegion &area, int dx, int dy)
       m_pixmapGC = XCreateGC(X11->display, m_backBuffer.handle(), 0, 0);
    }
 
-   foreach (const QRect & rect, area.rects()) {
+   for (const QRect & rect : area.rects()) {
       XCopyArea(X11->display, m_backBuffer.handle(), m_backBuffer.handle(), m_pixmapGC,
                 rect.x(), rect.y(), rect.width(), rect.height(),
                 rect.x() + dx, rect.y() + dy);

@@ -138,9 +138,9 @@ bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieLis
 
    int added = 0;
    QDateTime now = QDateTime::currentDateTime();
-   foreach (QNetworkCookie cookie, cookieList) {
-      bool isDeletion = !cookie.isSessionCookie() &&
-                        cookie.expirationDate() < now;
+
+   for (QNetworkCookie cookie : cookieList) {
+      bool isDeletion = !cookie.isSessionCookie() && cookie.expirationDate() < now;
 
       // validate the cookie & set the defaults if unset
       if (cookie.path().isEmpty()) {

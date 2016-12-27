@@ -95,8 +95,9 @@ QKqueueFileSystemWatcherEngine::~QKqueueFileSystemWatcherEngine()
    close(kqpipe[0]);
    close(kqpipe[1]);
 
-   foreach (int id, pathToID)
-   ::close(id < 0 ? -id : id);
+   for (int id : pathToID) {
+      ::close(id < 0 ? -id : id);
+   }
 }
 
 QStringList QKqueueFileSystemWatcherEngine::addPaths(const QStringList &paths,

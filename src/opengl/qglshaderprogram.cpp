@@ -475,11 +475,12 @@ QGLShaderProgramPrivate::~QGLShaderProgramPrivate()
 
 bool QGLShaderProgramPrivate::hasShader(QGLShader::ShaderType type) const
 {
-   foreach (QGLShader * shader, shaders) {
+   for (QGLShader * shader : shaders) {
       if (shader->shaderType() == type) {
          return true;
       }
    }
+
    return false;
 }
 
@@ -733,15 +734,18 @@ void QGLShaderProgram::removeAllShaders()
 {
    Q_D(QGLShaderProgram);
    d->removingShaders = true;
-   foreach (QGLShader * shader, d->shaders) {
+
+   for (QGLShader * shader : d->shaders) {
       if (d->programGuard.id() && shader && shader->d_func()->shaderGuard.id()) {
          glDetachShader(d->programGuard.id(), shader->d_func()->shaderGuard.id());
       }
    }
-   foreach (QGLShader * shader, d->anonShaders) {
+
+   for (QGLShader * shader : d->anonShaders) {
       // Delete shader objects that were created anonymously.
       delete shader;
    }
+
    d->shaders.clear();
    d->anonShaders.clear();
    d->linked = false;  // Program needs to be relinked.
@@ -786,14 +790,12 @@ bool QGLShaderProgram::link()
 
    // Set up the geometry shader parameters
    if (glProgramParameteriEXT) {
-      foreach (QGLShader * shader, d->shaders) {
+
+      for (QGLShader * shader : d->shaders) {
          if (shader->shaderType() & QGLShader::Geometry) {
-            glProgramParameteriEXT(program, GL_GEOMETRY_INPUT_TYPE_EXT,
-                                   d->geometryInputType);
-            glProgramParameteriEXT(program, GL_GEOMETRY_OUTPUT_TYPE_EXT,
-                                   d->geometryOutputType);
-            glProgramParameteriEXT(program, GL_GEOMETRY_VERTICES_OUT_EXT,
-                                   d->geometryVertexCount);
+            glProgramParameteriEXT(program, GL_GEOMETRY_INPUT_TYPE_EXT, d->geometryInputType);
+            glProgramParameteriEXT(program, GL_GEOMETRY_OUTPUT_TYPE_EXT, d->geometryOutputType);
+            glProgramParameteriEXT(program, GL_GEOMETRY_VERTICES_OUT_EXT, d->geometryVertexCount);
             break;
          }
       }

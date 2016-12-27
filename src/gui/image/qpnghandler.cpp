@@ -631,13 +631,15 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
                      const QString &description)
 {
    QMap<QString, QString> text;
-   foreach (const QString & key, image.textKeys()) {
+   for (const QString & key : image.textKeys()) {
       if (!key.isEmpty()) {
          text.insert(key, image.text(key));
       }
    }
-   foreach (const QString & pair, description.split(QLatin1String("\n\n"))) {
+
+   for (const QString & pair : description.split(QLatin1String("\n\n"))) {
       int index = pair.indexOf(QLatin1Char(':'));
+
       if (index >= 0 && pair.indexOf(QLatin1Char(' ')) < index) {
          QString s = pair.simplified();
          if (!s.isEmpty()) {
@@ -666,7 +668,8 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
 
 #ifdef PNG_iTXt_SUPPORTED
       bool needsItxt = false;
-      foreach(const QChar c, it.value()) {
+
+      for (const QChar c : it.value()) {
          uchar ch = c.cell();
          if (c.row() || (ch < 0x20 && ch != '\n') || (ch > 0x7e && ch < 0xa0)) {
             needsItxt = true;

@@ -5,9 +5,7 @@ CORE_PUBLIC_INCLUDES += \
 	QBool \
 	QCOORD \
 	QFlag \
-	QFlags \
-	QForeachContainer \
-	QForeachContainerBase \
+	QFlags \	
 	QGlobalStatic \
 	QGlobalStaticDeleter \
 	QIncompatibleFlag \
@@ -57,8 +55,6 @@ CORE_GLOBAL_INCLUDES = \
 	qfeatures.h \
 	qflag.h \
 	qflags.h \
-	qforeachcontainer.h \
-	qforeachcontainerbase.h \
 	qglobal.h \
 	qglobalstatic.h \
 	qglobalstaticdeleter.h \

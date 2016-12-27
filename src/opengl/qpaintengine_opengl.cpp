@@ -29,9 +29,9 @@
 #include <qmath_p.h>
 #include <qdrawhelper_p.h>
 #include <qpaintengine_p.h>
-#include "qapplication.h"
-#include "qbrush.h"
-#include "qgl.h"
+#include <qapplication.h>
+#include <qbrush.h>
+#include <qgl.h>
 #include <qgl_p.h>
 #include <qglpaintdevice_p.h>
 #include <qpainter_p.h>
@@ -2005,7 +2005,8 @@ void QOpenGLPaintEnginePrivate::drawVertexArrays()
    glEnableClientState(GL_VERTEX_ARRAY);
    glVertexPointer(2, GL_DOUBLE, 0, tess_points.data());
    int previous_stop = 0;
-   foreach(int stop, tess_points_stops) {
+
+   for (int stop : tess_points_stops) {
       glDrawArrays(GL_TRIANGLE_FAN, previous_stop, stop - previous_stop);
       previous_stop = stop;
    }
@@ -5470,7 +5471,7 @@ void QOpenGLPaintEnginePrivate::cacheItemErased(int channel, const QRect &rect)
 {
    bool isInDrawQueue = false;
 
-   foreach (const QDrawQueueItem & item, drawQueue) {
+   for (const QDrawQueueItem & item : drawQueue) {
       if (item.location.channel == channel && item.location.rect == rect) {
          isInDrawQueue = true;
          break;
@@ -5531,8 +5532,9 @@ void QOpenGLPaintEnginePrivate::flushDrawQueue()
 
       high_quality_antialiasing = true;
 
-      foreach (const QDrawQueueItem & item, drawQueue)
-      drawItem(item);
+      for (const QDrawQueueItem & item : drawQueue) {
+         drawItem(item);
+      }
 
       opacity = old_opacity;
       brush_origin = old_brush_origin;

@@ -224,7 +224,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
     }
 
     // We test if the device can be opened by checking if it can go from NULL to READY state
-    foreach (const QString &deviceId, deviceIds) {
+    for (const QString &deviceId : deviceIds) {
         gst_element_set_state(m_audioSink, GST_STATE_NULL);
         if (GstHelper::setProperty(m_audioSink, "device", deviceId.toUtf8())) {
             m_backend->logMessage(Q_FUNC_INFO + QLatin1String("setProperty(device,") +
