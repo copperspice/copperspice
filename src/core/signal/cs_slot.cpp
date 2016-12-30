@@ -45,7 +45,8 @@ CsSignal::SlotBase::~SlotBase()
    
          } else {             
             sender->m_connectList.erase(std::remove_if(sender->m_connectList.begin(), sender->m_connectList.end(), 
-                  [this](const SignalBase::ConnectStruct & tmp){ return tmp.receiver == this; } ));   
+                  [this](const SignalBase::ConnectStruct & tmp){ return tmp.receiver == this; } ), 
+                  sender->m_connectList.end() );   
          }
       }
 
