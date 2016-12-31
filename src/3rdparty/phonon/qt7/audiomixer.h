@@ -28,7 +28,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QTime>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <phonon/effectinterface.h>
 #include <phonon/effectparameter.h>
 #include <phonon/volumefaderinterface.h>

@@ -11,7 +11,6 @@ CORE_PUBLIC_INCLUDES += \
 	QCoreApplication \
 	QCustomEvent \
 	QDynamicPropertyChangeEvent \
-	QEvent \
 	QEventLoop \
 	QGenericArgument \
 	QGenericReturnArgument \
@@ -64,7 +63,6 @@ CORE_KERNEL_INCLUDES = \
 	qcustomevent.h \
 	qdynamicpropertychangeevent.h \
 	qeventloop.h \
-	qevent.h \
 	qgenericargument.h \
 	qgenericreturnargument.h \
 	qmath.h \

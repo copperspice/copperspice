@@ -28,7 +28,7 @@
 ********************************************************/
 
 #include "videowidget.h"
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QPalette>
 #include <QtGui/QImage>

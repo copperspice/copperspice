@@ -40,7 +40,7 @@
 
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QTime>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtCore/QCoreApplication>
 
 #import <AppKit/NSImage.h>

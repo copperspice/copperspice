@@ -28,7 +28,7 @@
 
 #include <QtCore/QTime>
 #include <QtGui/qwindowdefs.h>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtGui/QWidget>
 #include <QtCore/QWeakPointer>
 #include <QtCore/QMutex>

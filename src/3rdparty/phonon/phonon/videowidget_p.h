@@ -33,7 +33,7 @@
 #include "videowidget.h"
 #include "abstractvideooutput_p.h"
 #include <QtGui/QBoxLayout>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtCore/QCoreApplication>
 #include <QtGui/QPalette>
 #include <QtGui/QKeyEvent>

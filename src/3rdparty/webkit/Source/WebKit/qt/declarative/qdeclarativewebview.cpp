@@ -21,7 +21,7 @@
 #include "qdeclarativewebview_p.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtCore/QFile>
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeEngine>

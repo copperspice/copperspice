@@ -29,7 +29,7 @@
 #include "common.h"
 #include "qwidgetvideosink.h"
 #include <QtCore/QByteArray>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <gst/video/gstvideosink.h>
 
 QT_BEGIN_NAMESPACE

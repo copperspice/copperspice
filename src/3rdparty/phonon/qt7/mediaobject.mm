@@ -27,7 +27,7 @@
 **  This file is part of the KDE project.
 ********************************************************/
 
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include "mediaobject.h"
 #include "backendheader.h"
 #include "videowidget.h"

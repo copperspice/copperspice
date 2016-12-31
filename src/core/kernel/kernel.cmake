@@ -10,7 +10,6 @@ set(CORE_PUBLIC_INCLUDES
     QCoreApplication
     QCustomEvent
     QDynamicPropertyChangeEvent
-    QEvent
     QEventLoop
     QGenericArgument
     QGenericReturnArgument
@@ -65,7 +64,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcustomevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdynamicpropertychangeevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventloop.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericargument.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericreturnargument.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmath.h

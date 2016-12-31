@@ -37,8 +37,8 @@
 #include <QtCore/QVariant>
 #include <QtCore/QObject>
 #include <QtCore/QDate>
-#include <QtCore/QEvent>
 #include <QtCore/QUrl>
+#include <qcoreevent.h>
 #include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE

@@ -34,11 +34,11 @@
 // actual widget pointers for details that are not covered by the
 // state flags
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_STYLE_GTK)
 
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>

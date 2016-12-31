@@ -43,7 +43,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QByteRef>
 #include <QtCore/QStringList>
-#include <QtCore/QEvent>
+#include <qcoreevent.h>
 #include <QApplication>
 
 #define ABOUT_TO_FINNISH_TIME 2000

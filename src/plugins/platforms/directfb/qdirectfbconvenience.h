@@ -26,9 +26,9 @@
 #ifndef QDIRECTFBCONVENIENCE_H
 #define QDIRECTFBCONVENIENCE_H
 
-#include <QtGui/qimage.h>
+#include <qcoreevent.h>
+#include <qimage.h>
 #include <QtCore/QHash>
-#include <QtCore/QEvent>
 #include <QtGui/QPixmap>
 
 #include <directfb.h>
