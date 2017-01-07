@@ -110,20 +110,17 @@ uint qHash(const QLatin1String &key, uint seed)
    return hash(reinterpret_cast<const uchar *>(key.data()), key.size(), seed);
 } 
 
-template<int size> uint foldSeed(quintptr val);
-
-template<>
-uint foldSeed<4>(quintptr val)
+#if defined(QT_ARCH_I386)
+inline uint foldSeed(quintptr val)
 {
     return val;
 }
-
-template<>
-uint foldSeed<8>(quintptr val)
+#elif defined(QT_ARCH_X86_64)
+inline uint foldSeed(quintptr val)
 {
     return uint(val) ^ (val >> 32);
 }
-
+#endif
 
 static uint qt_create_qhash_seed()
 {
@@ -154,7 +151,7 @@ static uint qt_create_qhash_seed()
    seed ^= (pid >> 32);
    
    quintptr seedPtr = reinterpret_cast<quintptr>(&seed);
-   seed ^= foldSeed<sizeof(quintptr)>(seedPtr);
+   seed ^= foldSeed(seedPtr);
    
    return seed;
 }
