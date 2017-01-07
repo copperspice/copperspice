@@ -483,14 +483,12 @@ macro_generate_package(
     CsPhonon${BUILD_ABI}
     phonon
     "${EXTRA_PHONON_CXXFLAGS}"
-    "${EXTRA_PHONON_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI}"
 )
 macro_generate_package(
     phonon_${PHONON2_SUFFIX}
     phonon
     "${EXTRA_PHONON2_CXXFLAGS}"
-    "${EXTRA_PHONON2_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsPhonon${BUILD_ABI}"
 )
 

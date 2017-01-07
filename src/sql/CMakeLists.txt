@@ -69,7 +69,6 @@ macro_generate_package(
     CsSql${BUILD_ABI}
     QtSql
     "${EXTRA_SQL_CXXFLAGS}"
-    "${EXTRA_SQL_LIBS}"
     "CsCore${BUILD_ABI}"
 )
 

@@ -247,14 +247,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         TYPE REQUIRED
     )
 
-    find_package(GLIB2)
-    set_package_properties(GLIB2 PROPERTIES
+    find_package(GLib2)
+    set_package_properties(GLib2 PROPERTIES
         PURPOSE "Required for glib mainloop support"
         DESCRIPTION "Core application building blocks for libraries and applications written in C"
         URL "https://developer.gnome.org/glib"
         TYPE REQUIRED
     )
-    include_directories(${GLIB2_INCLUDE_DIR})
 
     find_package(GOBJECT2)
     set_package_properties(GOBJECT2 PROPERTIES
@@ -263,7 +262,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         URL "https://developer.gnome.org/gobject"
         TYPE REQUIRED
     )
-    include_directories(${GOBJECT2_INCLUDE_DIR})
 
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         find_package(Iconv)

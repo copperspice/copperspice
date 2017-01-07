@@ -191,7 +191,6 @@ macro_generate_package(
     CsOpenGL${BUILD_ABI}
     QtOpenGL
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 

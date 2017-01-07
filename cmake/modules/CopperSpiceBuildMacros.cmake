@@ -129,18 +129,12 @@ macro(MACRO_WINDOWS_RESOURCES RESOURCES RSCNAME)
     endforeach()
 endmacro()
 
-macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS LIBRARIES PC_REQUIRES)
+macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS PC_REQUIRES)
     if(UNIX)
-        # the list must be adjusted
-        string(REPLACE ";" " -l" modlibs "${LIBRARIES}")
-        if(NOT "${modlibs}" STREQUAL "")
-            set(modlibs "-l${modlibs}")
-        endif()
         # set again, otherwise the behaviour is undefined
         set(PC_NAME ${PC_NAME})
         set(PC_REALNAME ${PC_REALNAME})
         set(PC_CFLAGS ${PC_CFLAGS})
-        set(PC_LIBRARIES ${modlibs})
         set(PC_REQUIRES ${PC_REQUIRES})
         configure_file(
             ${CMAKE_SOURCE_DIR}/cmake/pkgconfig.cmake

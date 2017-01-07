@@ -51,6 +51,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|Darwin|OpenBSD|FreeBSD|NetBSD)")
             ${ICONV_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
         )
-        include_directories(${ICONV_INCLUDE_DIR})
+        include_directories(${ICONV_INCLUDES})
     endif()
 endif()

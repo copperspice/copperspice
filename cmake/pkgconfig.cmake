@@ -6,6 +6,6 @@ includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@PC_REALNAME@
 Name: @PC_NAME@
 Description: @PC_NAME@ library
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} @PC_LIBRARIES@
+Libs: -L${libdir} -l@PC_NAME@
 Cflags: @PC_CFLAGS@ -I@CMAKE_INSTALL_FULL_INCLUDEDIR@ -I${includedir}
 Requires: @PC_REQUIRES@

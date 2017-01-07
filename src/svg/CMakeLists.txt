@@ -91,7 +91,6 @@ macro_generate_package(
     CsSvg${BUILD_ABI}
     QtSvg
     "${EXTRA_SVG_CXXFLAGS}"
-    "${EXTRA_SVG_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 
