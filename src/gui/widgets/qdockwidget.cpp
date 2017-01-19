@@ -693,9 +693,6 @@ void QDockWidgetPrivate::updateButtons()
    button->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, &opt, q));
    button->setVisible(canClose && !hideButtons);
 
-   q->setAttribute(Qt::WA_ContentsPropagated,
-                   (canFloat || canClose) && !hideButtons);
-
    layout->invalidate();
 }
 

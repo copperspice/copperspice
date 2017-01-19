@@ -1498,7 +1498,7 @@ HRESULT WINAPI QAxClientSite::SetActiveObject(IOleInPlaceActiveObject *pActiveOb
     return S_OK;
 }
 
-//**** IOleDocumentSite
+// IOleDocumentSite
 HRESULT WINAPI QAxClientSite::ActivateMe(IOleDocumentView *pViewToActivate)
 {
     AX_DEBUG(QAxClientSite::ActivateMe);
@@ -1568,12 +1568,11 @@ void QAxClientSite::windowActivationChange()
 }
 
 
-//**** QWidget
+// QWidget
 
 QAxHostWidget::QAxHostWidget(QWidget *parent, QAxClientSite *ax)
 : QWidget(parent), setFocusTimer(0), hasFocus(false), axhost(ax)
 {
-    setAttribute(Qt::WA_NoBackground);
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_PaintOnScreen);

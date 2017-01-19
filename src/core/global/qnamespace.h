@@ -258,9 +258,7 @@ class Q_CORE_EXPORT Qt
       WA_Disabled = 0,
       WA_UnderMouse = 1,
       WA_MouseTracking = 2,
-      WA_ContentsPropagated = 3, // ## deprecated
-      WA_OpaquePaintEvent = 4,
-      WA_NoBackground = WA_OpaquePaintEvent, // ## deprecated
+      WA_OpaquePaintEvent = 4,     
       WA_StaticContents = 5,
       WA_LaidOut = 7,
       WA_PaintOnScreen = 8,
@@ -287,7 +285,6 @@ class Q_CORE_EXPORT Qt
       WA_PendingUpdate = 44,
       WA_InvalidSize = 45,
       WA_MacBrushedMetal = 46, // Mac only
-      WA_MacMetalStyle = WA_MacBrushedMetal, // obsolete
       WA_CustomWhatsThis = 47,
       WA_LayoutOnEntireRect = 48,
       WA_OutsideWSRange = 49,
@@ -308,7 +305,6 @@ class Q_CORE_EXPORT Qt
       WA_WState_Reparented = 63,
       WA_WState_ConfigPending = 64,
       WA_WState_Polished = 66,
-      WA_WState_DND = 67, // ## deprecated
       WA_WState_OwnSizePolicy = 68,
       WA_WState_ExplicitShowHide = 69,
 
@@ -324,8 +320,7 @@ class Q_CORE_EXPORT Qt
 
       WA_AcceptDrops = 78,
       WA_DropSiteRegistered = 79, // internal
-      WA_ForceAcceptDrops = WA_DropSiteRegistered, // ## deprecated
-
+ 
       WA_WindowPropagation = 80,
 
       WA_NoX11EventCompression = 81,
@@ -1066,11 +1061,11 @@ class Q_CORE_EXPORT Qt
    using ToolBarAreas = QFlags<ToolBarArea>;
 
    enum DateFormat {
-      TextDate,      // default Qt
-      ISODate,       // ISO 8601
-      SystemLocaleDate, // deprecated
-      LocalDate = SystemLocaleDate, // deprecated
-      LocaleDate,     // deprecated
+      TextDate,                      // default Qt
+      ISODate,                       // ISO 8601
+      SystemLocaleDate,              // deprecated
+      LocalDate = SystemLocaleDate,  // deprecated
+      LocaleDate,                    // deprecated
       SystemLocaleShortDate,
       SystemLocaleLongDate,
       DefaultLocaleShortDate,
