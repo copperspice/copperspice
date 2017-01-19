@@ -2802,7 +2802,7 @@ static void convert_Indexed8_to_X32(QImageData *dest, const QImageData *src, Qt:
       uint *end = p + w;
 
       while (p < end) {
-         *p++ = colorTable.at(qMin<int>(tableSize, *b++));
+         *p++ = colorTable.at(qMin(tableSize, *b++));
       }
 
       src_data += src->bytes_per_line;

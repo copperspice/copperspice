@@ -29,6 +29,8 @@
 #include <qjsondocument.h>
 #include <qvarlengtharray.h>
 
+#include <stdlib.h>
+
 QT_BEGIN_NAMESPACE
 
 namespace QJsonPrivate {

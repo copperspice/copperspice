@@ -2110,11 +2110,12 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                }
                qint32 maxw = (x->maxw >= x->minw) ? x->maxw : x->minw;
                qint32 maxh = (x->maxh >= x->minh) ? x->maxh : x->minh;
+
                if ( maxw < QWIDGETSIZE_MAX ) {
                   mmi->ptMaxTrackSize.x = maxw + fs.right() + fs.left();
                   // windows with title bar have an implicit size limit of 112 pixels
                   if (widget->windowFlags() & Qt::WindowTitleHint) {
-                     mmi->ptMaxTrackSize.x = qMax<long>(mmi->ptMaxTrackSize.x, 112);
+                     mmi->ptMaxTrackSize.x = qMax(mmi->ptMaxTrackSize.x, 112);
                   }
                }
                if ( maxh < QWIDGETSIZE_MAX ) {
@@ -2258,7 +2259,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                   if (text.isEmpty()) {
                      text = widget->objectName();
                   }
-                  ret = qMin<int>(wParam - 1, text.size());
+                  ret = qMin(wParam - 1, text.size());
                   text.resize(ret);
                   memcpy((void *)lParam, text.utf16(), (text.size() + 1) * sizeof(ushort));
                   delete acc;
@@ -3661,6 +3662,7 @@ bool QETWidget::translatePaintEvent(const MSG &msg)
       if (d_func()->usesDoubleBufferedGLContext) {
          InvalidateRect(internalWinId(), 0, false);
       }
+
    } else {
       const QRegion dirtyInBackingStore(qt_dirtyRegion(this));
       // Make sure the invalidated region contains the region we're about to repaint.
@@ -3671,6 +3673,7 @@ bool QETWidget::translatePaintEvent(const MSG &msg)
          InvalidateRgn(internalWinId(), dirtyInBackingStore.handle(), false);
       }
    }
+
    PAINTSTRUCT ps;
    d_func()->hd = BeginPaint(internalWinId(), &ps);
 

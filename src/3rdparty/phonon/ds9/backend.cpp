@@ -50,7 +50,7 @@ namespace Phonon
     {
         QMutex *Backend::directShowMutex = 0;
 
-        bool Backend::AudioMoniker::operator==(const AudioMoniker &other)
+        bool Backend::AudioMoniker::operator==(const AudioMoniker &other) const
         {
             return other->IsEqual(*this) == S_OK;
         }

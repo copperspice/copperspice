@@ -234,9 +234,11 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
       case QDir::Time:
          r = f1->item.lastModified().secsTo(f2->item.lastModified());
          break;
+
       case QDir::Size:
-         r = int(qBound<qint64>(-1, f2->item.size() - f1->item.size(), 1));
+         r = int(qBound(-1, f2->item.size() - f1->item.size(), 1));
          break;
+
       case QDir::Type: {
          bool ic = qt_cmp_si_sort_flags & QDir::IgnoreCase;
 

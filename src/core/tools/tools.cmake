@@ -39,7 +39,6 @@ set(CORE_PUBLIC_INCLUDES
     QLinkedListIterator
     QLinkedListNode
     QList
-    QListData
     QListIterator
     QLocale
     QMap
@@ -144,7 +143,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinkedlistiterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinkedlistnode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlist.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlistdata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlistiterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmap.h

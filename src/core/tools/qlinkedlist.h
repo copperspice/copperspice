@@ -26,541 +26,363 @@
 #ifndef QLINKEDLIST_H
 #define QLINKEDLIST_H
 
-#include <QtCore/qrefcount.h>
+#include <qalgorithms.h>
 
 #include <iterator>
 #include <list>
 
 QT_BEGIN_NAMESPACE
 
-struct Q_CORE_EXPORT QLinkedListData {
-   QLinkedListData *n, *p;
-   QtPrivate::RefCount ref;
-   int size;
-   uint sharable : 1;
+template <class T>
+class QLinkedListIterator;
 
-   static QLinkedListData *sharedNull();
-};
-
-template <typename T>
-struct QLinkedListNode {
-   inline QLinkedListNode(const T &arg): t(arg) { }
-   QLinkedListNode *n, *p;
-   T t;
-};
+template <class T>
+class QMutableLinkedListIterator;
 
 template <class T>
 class QLinkedList
 {
-   typedef QLinkedListNode<T> Node;
-   union {
-      QLinkedListData *d;
-      QLinkedListNode<T> *e;
-   };
-
+   
  public:
-   inline QLinkedList() : d(const_cast<QLinkedListData *>(QLinkedListData::sharedNull())) { }
-   inline QLinkedList(const QLinkedList<T> &l) : d(l.d) {
-      d->ref.ref();
-      if (!d->sharable) {
-         detach();
-      }
-   }
-   ~QLinkedList();
-   QLinkedList<T> &operator=(const QLinkedList<T> &);
+   using iterator        = typename std::list<T>::iterator;
+   using const_iterator  = typename std::list<T>::const_iterator;
 
-   inline QLinkedList<T> &operator=(QLinkedList<T> && other) {
-      qSwap(d, other.d);
-      return *this;
-   }
+   // legacy
+   using Iterator        = iterator;
+   using ConstIterator   = const_iterator;
 
-   inline void swap(QLinkedList<T> &other) {
-      qSwap(d, other.d);
-   }
-   bool operator==(const QLinkedList<T> &l) const;
-   inline bool operator!=(const QLinkedList<T> &l) const {
-      return !(*this == l);
-   }
+   using const_pointer   = typename std::list<T>::const_pointer;
+   using const_reference = typename std::list<T>::const_reference;
+   using difference_type = typename std::list<T>::difference_type;
+   using pointer         = typename std::list<T>::pointer;
+   using reference       = typename std::list<T>::reference;
+   using size_type       = typename std::list<T>::difference_type;      // makes this signed instead of unsigned
+   using value_type      = typename std::list<T>::value_type;
 
-   inline int size() const {
-      return d->size;
-   }
+   // from std
+   using allocator_type         = typename std::list<T>::allocator_type;
+   using reverse_iterator       = typename std::list<T>::reverse_iterator;
+   using const_reverse_iterator = typename std::list<T>::const_reverse_iterator;
 
-   inline void detach() {
-      if (d->ref.isShared()) {
-         detach_helper();
-      }
-   }
+   // java   
+   using Java_Iterator          = QLinkedListIterator<T>;
+   using Java_MutableIterator   = QMutableLinkedListIterator<T>;
 
-   inline bool isDetached() const {
-      return !d->ref.isShared();
-   }
+   QLinkedList() = default;
+   QLinkedList(const QLinkedList<T> &other) = default;
+   QLinkedList(QLinkedList<T> &&other)      = default;
 
-   inline void setSharable(bool sharable) {
-      if (!sharable) {
-         detach();
-      }
-      if (d != QLinkedListData::sharedNull()) {
-         d->sharable = sharable;
-      }
+   QLinkedList(std::initializer_list<T> args)
+      : m_data(args) {}
+
+   template<class Input_Iterator>
+   QLinkedList(Input_Iterator first, Input_Iterator last)
+      : m_data(first, last) {}
+
+   ~QLinkedList() = default;
+
+   // methods
+   void append(const T &value) {
+      m_data.push_back(value);
    }
 
-   inline bool isSharedWith(const QLinkedList<T> &other) const {
-      return d == other.d;
+   void append(T &&value) {
+      m_data.push_back(std::move(value));
    }
 
-   inline bool isEmpty() const {
-      return d->size == 0;
+   void append(const QLinkedList<T> &other) {
+      m_data.insert(m_data.end(), other.m_data.begin(), other.m_data.end());
+   }
+  
+   reference back() {
+      return m_data.back();
    }
 
-   void clear();
+   const_reference back() const {
+      return m_data.back();
+   }
 
-   void append(const T &);
-   void prepend(const T &);
-   T takeFirst();
-   T takeLast();
-   int removeAll(const T &t);
-   bool removeOne(const T &t);
-   bool contains(const T &t) const;
-   int count(const T &t) const;
+   void clear() {
+      m_data.clear();
+   }
 
-   class const_iterator;
+   bool contains(const T &value) const;  
 
-   class iterator
-   {
-    public:
-      typedef std::bidirectional_iterator_tag  iterator_category;
-      typedef qptrdiff difference_type;
-      typedef T value_type;
-      typedef T *pointer;
-      typedef T &reference;
-      Node *i;
-      inline iterator() : i(0) {}
-      inline iterator(Node *n) : i(n) {}
-      inline iterator(const iterator &o) : i(o.i) {}
-      inline iterator &operator=(const iterator &o) {
-         i = o.i;
-         return *this;
-      }
-      inline T &operator*() const {
-         return i->t;
-      }
-      inline T *operator->() const {
-         return &i->t;
-      }
-      inline bool operator==(const iterator &o) const {
-         return i == o.i;
-      }
-      inline bool operator!=(const iterator &o) const {
-         return i != o.i;
-      }
-      inline bool operator==(const const_iterator &o) const {
-         return i == o.i;
-      }
-      inline bool operator!=(const const_iterator &o) const {
-         return i != o.i;
-      }
-      inline iterator &operator++() {
-         i = i->n;
-         return *this;
-      }
-      inline iterator operator++(int) {
-         Node *n = i;
-         i = i->n;
-         return n;
-      }
-      inline iterator &operator--() {
-         i = i->p;
-         return *this;
-      }
-      inline iterator operator--(int) {
-         Node *n = i;
-         i = i->p;
-         return n;
-      }
-      inline iterator operator+(int j) const {
-         Node *n = i;
-         if (j > 0) while (j--) {
-               n = n->n;
-            }
-         else while (j++) {
-               n = n->p;
-            }
-         return n;
-      }
-      inline iterator operator-(int j) const {
-         return operator+(-j);
-      }
-      inline iterator &operator+=(int j) {
-         return *this = *this + j;
-      }
-      inline iterator &operator-=(int j) {
-         return *this = *this - j;
-      }
-   };
-   friend class iterator;
+   size_type count() const {
+      return size();
+   }
 
-   class const_iterator
-   {
-    public:
-      typedef std::bidirectional_iterator_tag  iterator_category;
-      typedef qptrdiff difference_type;
-      typedef T value_type;
-      typedef const T *pointer;
-      typedef const T &reference;
-      Node *i;
-      inline const_iterator() : i(0) {}
-      inline const_iterator(Node *n) : i(n) {}
-      inline const_iterator(const const_iterator &o) : i(o.i) {}
-      inline const_iterator(iterator ci) : i(ci.i) {}
-      inline const_iterator &operator=(const const_iterator &o) {
-         i = o.i;
-         return *this;
-      }
-      inline const T &operator*() const {
-         return i->t;
-      }
-      inline const T *operator->() const {
-         return &i->t;
-      }
-      inline bool operator==(const const_iterator &o) const {
-         return i == o.i;
-      }
-      inline bool operator!=(const const_iterator &o) const {
-         return i != o.i;
-      }
-      inline const_iterator &operator++() {
-         i = i->n;
-         return *this;
-      }
-      inline const_iterator operator++(int) {
-         Node *n = i;
-         i = i->n;
-         return n;
-      }
-      inline const_iterator &operator--() {
-         i = i->p;
-         return *this;
-      }
-      inline const_iterator operator--(int) {
-         Node *n = i;
-         i = i->p;
-         return n;
-      }
-      inline const_iterator operator+(int j) const {
-         Node *n = i;
-         if (j > 0) while (j--) {
-               n = n->n;
-            }
-         else while (j++) {
-               n = n->p;
-            }
-         return n;
-      }
-      inline const_iterator operator-(int j) const {
-         return operator+(-j);
-      }
-      inline const_iterator &operator+=(int j) {
-         return *this = *this + j;
-      }
-      inline const_iterator &operator-=(int j) {
-         return *this = *this - j;
-      }
-   };
-   friend class const_iterator;
+   size_type count(const T &value) const;
 
-   // stl style
-   inline iterator begin() {
-      detach();
-      return e->n;
+   bool empty() const {
+      return m_data.empty();
    }
-   inline const_iterator begin() const {
-      return e->n;
+ 
+   bool isEmpty() const {
+      return m_data.empty();
    }
-   inline const_iterator cbegin() const {
-      return e->n;
-   }
-   inline const_iterator constBegin() const {
-      return e->n;
-   }
-   inline iterator end() {
-      detach();
-      return e;
-   }
-   inline const_iterator end() const {
-      return e;
-   }
-   inline const_iterator cend() const {
-      return e;
-   }
-   inline const_iterator constEnd() const {
-      return e;
-   }
-   iterator insert(iterator before, const T &t);
-   iterator erase(iterator pos);
-   iterator erase(iterator first, iterator last);
 
-   // more Qt
-   typedef iterator Iterator;
-   typedef const_iterator ConstIterator;
-   inline int count() const {
-      return d->size;
+   bool endsWith(const T &value) const {
+      return ! isEmpty() && m_data.back()== value;
    }
-   inline T &first() {
-      Q_ASSERT(!isEmpty());
+
+   reference first() {
+      Q_ASSERT(! isEmpty());
       return *begin();
    }
-   inline const T &first() const {
-      Q_ASSERT(!isEmpty());
+
+   const_reference first() const {
+      Q_ASSERT(! isEmpty());
       return *begin();
    }
-   T &last() {
-      Q_ASSERT(!isEmpty());
-      return *(--end());
+
+   reference front() {
+      return m_data.first();
    }
-   const T &last() const {
-      Q_ASSERT(!isEmpty());
-      return *(--end());
+
+   const_reference front() const {
+      return m_data.first();
    }
-   inline void removeFirst() {
-      Q_ASSERT(!isEmpty());
+
+   reference last() {
+      Q_ASSERT(! isEmpty());
+      return *(--m_data.end());
+   }
+
+   const_reference last() const {
+      Q_ASSERT(! isEmpty());
+      return *(--m_data.end());
+   }
+
+   void pop_front() {
+      Q_ASSERT(! isEmpty());
+      m_data.pop_front();
+   }
+
+   void pop_back() {
+       Q_ASSERT(! isEmpty());
+       m_data.pop_back();
+   }
+
+   void prepend(const T &value) {
+      insert(m_data.begin(), 1, value);
+   }
+
+   void push_back(const T &value) {
+      m_data.push_back(value);
+   }
+
+   void push_front(const T &value) {
+      m_data.push_front(value);
+   }
+
+   size_type removeAll(const T &value);
+   bool removeOne(const T &value);
+
+   void removeFirst() {
+      Q_ASSERT(! isEmpty());
       erase(begin());
    }
-   inline void removeLast() {
-      Q_ASSERT(!isEmpty());
+
+   void removeLast() {
+      Q_ASSERT(! isEmpty());
       erase(--end());
    }
-   inline bool startsWith(const T &t) const {
-      return !isEmpty() && first() == t;
-   }
-   inline bool endsWith(const T &t) const {
-      return !isEmpty() && last() == t;
+
+   size_type size() const {
+      // returns unsigned, must convert to signed
+      return static_cast<size_type>(m_data.size());
    }
 
-   // stl compatibility
-   inline void push_back(const T &t) {
-      append(t);
+   bool startsWith(const T &value) const {
+      return !isEmpty() && m_data.first() == value;
    }
-   inline void push_front(const T &t) {
-      prepend(t);
-   }
-   inline T &front() {
-      return first();
-   }
-   inline const T &front() const {
-      return first();
-   }
-   inline T &back() {
-      return last();
-   }
-   inline const T &back() const {
-      return last();
-   }
-   inline void pop_front() {
-      removeFirst();
-   }
-   inline void pop_back() {
-      removeLast();
-   }
-   inline bool empty() const {
-      return isEmpty();
-   }
-   typedef int size_type;
-   typedef T value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef value_type &reference;
-   typedef const value_type &const_reference;
-   typedef qptrdiff difference_type;
 
-   static inline QLinkedList<T> fromStdList(const std::list<T> &list) {
-      QLinkedList<T> tmp;
-      qCopy(list.begin(), list.end(), std::back_inserter(tmp));
+   void swap(QLinkedList<T> &other) {
+      qSwap(m_data, other.m_data);
+   }
+
+   T takeFirst();
+   T takeLast(); 
+   
+
+   // iterators
+   iterator begin() {     
+      return m_data.begin();
+   }
+
+   const_iterator begin() const {
+      return m_data.begin();
+   }
+
+   const_iterator constBegin() const {
+      return m_data.begin();
+   }
+
+   const_iterator cbegin() const {
+      return m_data.begin();
+   }
+
+   iterator end() {      
+      return m_data.end();
+   }
+   
+   const_iterator end() const {
+      return m_data.end();
+   }
+
+   const_iterator constEnd() const {
+      return m_data.end();
+   }
+
+   const_iterator cend() const {
+      return m_data.end();
+   }
+
+   // reverse iterators
+   reverse_iterator rbegin() {
+      return m_data.rbegin();
+   }
+
+   const_reverse_iterator rbegin() const {
+      return m_data.rbegin();
+   }
+
+   const_reverse_iterator crbegin() const {
+      return m_data.rbegin();
+   }
+
+   reverse_iterator rend() {
+      return m_data.rend();
+   }
+
+   const_reverse_iterator rend() const {
+      return m_data.rend();
+   }
+
+   const_reverse_iterator crend() const {
+      return m_data.rend();
+   }
+
+   iterator erase(iterator begin, iterator end) {
+      return m_data.erase(begin, end);
+   }
+
+   iterator erase(iterator pos) {
+      return  m_data.erase(pos);
+   }
+
+   iterator insert(iterator before, size_type n, const T &value) {
+      return m_data.insert(before, n, value);
+   }
+
+   iterator insert(iterator before, const T &value) {
+      return m_data.insert(before, value);
+   }
+
+   // operators
+   QLinkedList<T> &operator=(const QLinkedList<T> &)  = default;
+   QLinkedList<T> &operator=(QLinkedList<T> && other) = default;
+
+   bool operator==(const QLinkedList<T> &other) const {
+      return (m_data == other.m_data);
+   }
+
+   bool operator!=(const QLinkedList<T> &other) const {
+      return (m_data != other.m_data);
+   }
+
+   QLinkedList<T> operator+(const QLinkedList<T> &other) const {
+      QLinkedList n = *this;
+      n += other;
+      return n;
+   }
+
+   QLinkedList<T> &operator+=(const QLinkedList<T> &other);
+
+   QLinkedList<T> &operator+=(const T &value) {
+      m_data.push_back(value);
+      return *this;
+   }
+
+   QLinkedList<T> &operator<< (const T &value) {
+      m_data.push_back(value);
+      return *this;
+   }
+
+   QLinkedList<T> &operator<<(const QLinkedList<T> &other) {
+      *this += other;
+      return *this;
+   }
+  
+   // to from
+   static QLinkedList<T> fromStdList(const std::list<T> &other) {
+      QLinkedList<T> tmp(other.begin(), other.end());
       return tmp;
    }
-   inline std::list<T> toStdList() const {
-      std::list<T> tmp;
-      qCopy(constBegin(), constEnd(), std::back_inserter(tmp));
-      return tmp;
-   }
 
-   // comfort
-   QLinkedList<T> &operator+=(const QLinkedList<T> &l);
-   QLinkedList<T> operator+(const QLinkedList<T> &l) const;
-   inline QLinkedList<T> &operator+=(const T &t) {
-      append(t);
-      return *this;
-   }
-   inline QLinkedList<T> &operator<< (const T &t) {
-      append(t);
-      return *this;
-   }
-   inline QLinkedList<T> &operator<<(const QLinkedList<T> &l) {
-      *this += l;
-      return *this;
-   }
-
+   std::list<T> toStdList() const {     
+      return m_data;
+   }  
+   
  private:
-   void detach_helper();
-   void free(QLinkedListData *);
+   std::list<T> m_data;
+   
 };
 
+// methods
 template <typename T>
-inline QLinkedList<T>::~QLinkedList()
+bool QLinkedList<T>::contains(const T &value) const
 {
-   if (!d->ref.deref()) {
-      free(d);
-   }
-}
-
-template <typename T>
-void QLinkedList<T>::detach_helper()
-{
-   union {
-      QLinkedListData *d;
-      Node *e;
-   } x;
-   x.d = new QLinkedListData;
-   x.d->ref.initializeOwned();
-   x.d->size = d->size;
-   x.d->sharable = true;
-   Node *original = e->n;
-   Node *copy = x.e;
-   while (original != e) {
-      QT_TRY {
-         copy->n = new Node(original->t);
-         copy->n->p = copy;
-         original = original->n;
-         copy = copy->n;
-      } QT_CATCH(...) {
-         copy->n = x.e;
-         free(x.d);
-         QT_RETHROW;
+   for (const auto &item : m_data) {
+      if (item == value) {
+         return true;
       }
    }
-   copy->n = x.e;
-   x.e->p = copy;
-   if (!d->ref.deref()) {
-      free(d);
-   }
-   d = x.d;
+
+   return false;
 }
 
 template <typename T>
-void QLinkedList<T>::free(QLinkedListData *x)
+typename QLinkedList<T>::size_type QLinkedList<T>::count(const T &value) const
 {
-   Node *y = reinterpret_cast<Node *>(x);
-   Node *i = y->n;
-   if (x->ref == 0) {
-      while (i != y) {
-         Node *n = i;
-         i = i->n;
-         delete n;
-      }
-      delete x;
-   }
-}
+  size_type retval = 0;
 
-template <typename T>
-void QLinkedList<T>::clear()
-{
-   *this = QLinkedList<T>();
-}
-
-template <typename T>
-QLinkedList<T> &QLinkedList<T>::operator=(const QLinkedList<T> &l)
-{
-   if (d != l.d) {
-      QLinkedListData *o = l.d;
-      o->ref.ref();
-      if (!d->ref.deref()) {
-         free(d);
-      }
-      d = o;
-      if (!d->sharable) {
-         detach_helper();
+   for (const auto &item : m_data) {
+      if (item == value) {
+         ++retval;
       }
    }
-   return *this;
+
+   return retval;
 }
 
 template <typename T>
-bool QLinkedList<T>::operator== (const QLinkedList<T> &l) const
+typename QLinkedList<T>::size_type QLinkedList<T>::removeAll(const T &value)
 {
-   if (d->size != l.d->size) {
-      return false;
-   }
-   if (e == l.e) {
-      return true;
-   }
-   Node *i = e->n;
-   Node *il = l.e->n;
-   while (i != e) {
-      if (! (i->t == il->t)) {
-         return false;
+   auto iter = std::remove(m_data.begin(), m_data.end(), value);
+
+   size_type retval = m_data.end() - iter;
+   m_data.erase(iter, m_data.end());
+
+   return retval;  
+}
+
+template <typename T>
+bool QLinkedList<T>::removeOne(const T &value)
+{
+   auto iter = m_data.begin();
+  
+   while (iter != m_data.end()) {
+
+      if (*iter == value) {
+         m_data.erase(iter);
+         return true;
       }
-      i = i->n;
-      il = il->n;
+
+      ++iter;
    }
-   return true;
-}
 
-template <typename T>
-void QLinkedList<T>::append(const T &t)
-{
-   detach();
-   Node *i = new Node(t);
-   i->n = e;
-   i->p = e->p;
-   i->p->n = i;
-   e->p = i;
-   d->size++;
-}
-
-template <typename T>
-void QLinkedList<T>::prepend(const T &t)
-{
-   detach();
-   Node *i = new Node(t);
-   i->n = e->n;
-   i->p = e;
-   i->n->p = i;
-   e->n = i;
-   d->size++;
-}
-
-template <typename T>
-int QLinkedList<T>::removeAll(const T &_t)
-{
-   detach();
-   const T t = _t;
-   Node *i = e->n;
-   int c = 0;
-   while (i != e) {
-      if (i->t == t) {
-         Node *n = i;
-         i->n->p = i->p;
-         i->p->n = i->n;
-         i = i->n;
-         delete n;
-         c++;
-      } else {
-         i = i->n;
-      }
-   }
-   d->size -= c;
-   return c;
-}
-
-template <typename T>
-bool QLinkedList<T>::removeOne(const T &_t)
-{
-   detach();
-   iterator it = qFind(begin(), end(), _t);
-   if (it != end()) {
-      erase(it);
-      return true;
-   }
    return false;
 }
 
@@ -580,102 +402,12 @@ inline T QLinkedList<T>::takeLast()
    return t;
 }
 
+// operators
 template <typename T>
-bool QLinkedList<T>::contains(const T &t) const
-{
-   Node *i = e;
-   while ((i = i->n) != e)
-      if (i->t == t) {
-         return true;
-      }
-   return false;
-}
-
-template <typename T>
-int QLinkedList<T>::count(const T &t) const
-{
-   Node *i = e;
-   int c = 0;
-   while ((i = i->n) != e)
-      if (i->t == t) {
-         c++;
-      }
-   return c;
-}
-
-
-template <typename T>
-typename QLinkedList<T>::iterator QLinkedList<T>::insert(iterator before, const T &t)
-{
-   Node *i = before.i;
-   Node *m = new Node(t);
-   m->n = i;
-   m->p = i->p;
-   m->p->n = m;
-   i->p = m;
-   d->size++;
-   return m;
-}
-
-template <typename T>
-typename QLinkedList<T>::iterator QLinkedList<T>::erase(typename QLinkedList<T>::iterator afirst,
-      typename QLinkedList<T>::iterator alast)
-{
-   while (afirst != alast) {
-      erase(afirst++);
-   }
-   return alast;
-}
-
-
-template <typename T>
-typename QLinkedList<T>::iterator QLinkedList<T>::erase(iterator pos)
-{
-   detach();
-   Node *i = pos.i;
-   if (i != e) {
-      Node *n = i;
-      i->n->p = i->p;
-      i->p->n = i->n;
-      i = i->n;
-      delete n;
-      d->size--;
-   }
-   return i;
-}
-
-template <typename T>
-QLinkedList<T> &QLinkedList<T>::operator+=(const QLinkedList<T> &l)
-{
-   detach();
-   int n = l.d->size;
-   d->size += n;
-   Node *original = l.e->n;
-   while (n--) {
-      QT_TRY {
-         Node *copy = new Node(original->t);
-         original = original->n;
-         copy->n = e;
-         copy->p = e->p;
-         copy->p->n = copy;
-         e->p = copy;
-      } QT_CATCH(...) {
-         // restore the original list
-         while (n++ < d->size) {
-            removeLast();
-         }
-         QT_RETHROW;
-      }
-   }
+QLinkedList<T> &QLinkedList<T>::operator+=(const QLinkedList<T> &other)
+{  
+   m_data.insert(m_data.end(), other.m_data.begin(), other.m_data.end());
    return *this;
-}
-
-template <typename T>
-QLinkedList<T> QLinkedList<T>::operator+(const QLinkedList<T> &l) const
-{
-   QLinkedList<T> n = *this;
-   n += l;
-   return n;
 }
 
 template <class T>
@@ -732,15 +464,15 @@ class QMutableLinkedListIterator
    public:
       inline QMutableLinkedListIterator(QLinkedList<T> &container)
          : c(&container)
-      { c->setSharable(false); i = c->begin(); n = c->end(); } 
+      { i = c->begin(); n = c->end(); } 
       
       inline ~QMutableLinkedListIterator()
-         { c->setSharable(true); }
+         { }
 
       inline QMutableLinkedListIterator &operator=(QLinkedList<T> &container)
-         { c->setSharable(true); c = &container; c->setSharable(false);
+         {  c = &container; ;
+            i = c->begin(); n = c->end(); return *this; }
 
-      i = c->begin(); n = c->end(); return *this; }
       inline void toFront() { i = c->begin(); n = c->end(); }
       inline void toBack() { i = c->end(); n = i; }
       inline bool hasNext() const { return c->constEnd() != const_iterator(i); }
@@ -769,4 +501,4 @@ class QMutableLinkedListIterator
 
 QT_END_NAMESPACE
 
-#endif // QLINKEDLIST_H
+#endif

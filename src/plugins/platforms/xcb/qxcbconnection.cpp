@@ -367,8 +367,8 @@ void QXcbConnection::log(const char *file, int line, int sequence)
 
 void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
 {
-    uint clamped_error_code = qMin<uint>(error->error_code, (sizeof(xcb_errors) / sizeof(xcb_errors[0])) - 1);
-    uint clamped_major_code = qMin<uint>(error->major_code, (sizeof(xcb_protocol_request_codes) / sizeof(xcb_protocol_request_codes[0])) - 1);
+    uint clamped_error_code = qMin(error->error_code, (sizeof(xcb_errors) / sizeof(xcb_errors[0])) - 1);
+    uint clamped_major_code = qMin(error->major_code, (sizeof(xcb_protocol_request_codes) / sizeof(xcb_protocol_request_codes[0])) - 1);
 
     printf("XCB error: %d (%s), sequence: %d, resource id: %d, major code: %d (%s), minor code: %d\n",
            int(error->error_code), xcb_errors[clamped_error_code],

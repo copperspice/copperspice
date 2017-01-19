@@ -1865,7 +1865,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             bool act = menuitem->state & State_Selected;
 
             // windows always has a check column, regardless whether we have an icon or not
-            int checkcol = qMax<int>(menuitem->maxIconWidth, QWindowsStylePrivate::windowsCheckMarkWidth);
+            int checkcol = qMax(menuitem->maxIconWidth, QWindowsStylePrivate::windowsCheckMarkWidth);
 
             QBrush fill = menuitem->palette.brush(act ? QPalette::Highlight : QPalette::Button);
             p->fillRect(menuitem->rect.adjusted(0, 0, -1, 0), fill);
@@ -3119,7 +3119,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
                w += fmBold.width(mi->text) - fm.width(mi->text);
             }
 
-            int checkcol = qMax<int>(maxpmw, QWindowsStylePrivate::windowsCheckMarkWidth); // Windows always shows a check column
+            int checkcol = qMax(maxpmw, QWindowsStylePrivate::windowsCheckMarkWidth); // Windows always shows a check column
             w += checkcol;
             w += int(QWindowsStylePrivate::windowsRightBorder) + 10;
             sz.setWidth(w);

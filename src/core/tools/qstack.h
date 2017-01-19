@@ -26,51 +26,59 @@
 #ifndef QSTACK_H
 #define QSTACK_H
 
-#include <QtCore/qvector.h>
+#include <qvector.h>
 
 QT_BEGIN_NAMESPACE
 
 template<class T>
 class QStack : public QVector<T>
 {
- public:
-   inline QStack() {}
-   inline ~QStack() {}
-   inline void swap(QStack<T> &other) {
-      QVector<T>::swap(other);   // prevent QVector<->QStack swaps
-   }
-   inline void push(const T &t) {
-      QVector<T>::append(t);
-   }
-   T pop();
-   T &top();
-   const T &top() const;
+   public:
+      using const_reference = typename QVector<T>::const_reference;
+      using reference       = typename QVector<T>::reference;
+      
+      QStack() = default;
+      ~QStack () = default;
+      
+      void swap(QStack<T> &other) {
+         QVector<T>::swap(other);
+      }
+   
+      void push(const T &value) {
+         QVector<T>::append(value);
+      }
+   
+      T pop();
+   
+      reference top();
+      const_reference top() const;
 };
 
 template<class T>
 inline T QStack<T>::pop()
 {
-   Q_ASSERT(!this->isEmpty());
-   T t = this->data()[this->size() - 1];
-   this->resize(this->size() - 1);
-   return t;
+   Q_ASSERT(! this->isEmpty());
+
+   T value = this->last();
+   this->pop_back();
+
+   return value;
 }
 
 template<class T>
-inline T &QStack<T>::top()
+inline typename QStack<T>::reference QStack<T>::top()
 {
-   Q_ASSERT(!this->isEmpty());
-   this->detach();
-   return this->data()[this->size() - 1];
+   Q_ASSERT(! this->isEmpty());
+   return this->last();
 }
 
 template<class T>
-inline const T &QStack<T>::top() const
+inline typename QStack<T>::const_reference QStack<T>::top() const
 {
-   Q_ASSERT(!this->isEmpty());
-   return this->data()[this->size() - 1];
+   Q_ASSERT(! this->isEmpty());
+   return this->last();
 }
 
 QT_END_NAMESPACE
 
-#endif // QSTACK_H
+#endif

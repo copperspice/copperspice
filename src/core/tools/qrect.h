@@ -39,9 +39,13 @@ class Q_CORE_EXPORT QRect
 {
  public:
    QRect() {
-      x1 = y1 = 0;
-      x2 = y2 = -1;
+      x1 = 0;
+      y1 = 0;
+
+      x2 = -1;
+      y2 = -1;
    }
+
    QRect(const QPoint &topleft, const QPoint &bottomright);
    QRect(const QPoint &topleft, const QSize &size);
    QRect(int left, int top, int width, int height);
@@ -58,6 +62,7 @@ class Q_CORE_EXPORT QRect
 
    int x() const;
    int y() const;
+
    void setLeft(int pos);
    void setTop(int pos);
    void setRight(int pos);

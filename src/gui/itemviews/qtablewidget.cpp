@@ -35,9 +35,9 @@ QT_BEGIN_NAMESPACE
 QTableModel::QTableModel(int rows, int columns, QTableWidget *parent)
    : QAbstractTableModel(parent),
      prototype(0),
-     tableItems(rows *columns, 0),
-     verticalHeaderItems(rows, 0),
-     horizontalHeaderItems(columns, 0)
+     tableItems(rows * columns, nullptr),
+     verticalHeaderItems(rows, nullptr),
+     horizontalHeaderItems(columns, nullptr)
 {}
 
 QTableModel::~QTableModel()

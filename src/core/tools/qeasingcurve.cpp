@@ -561,13 +561,17 @@ QEasingCurve::EasingFunction QEasingCurve::customType() const
  */
 qreal QEasingCurve::valueForProgress(qreal progress) const
 {
-   progress = qBound<qreal>(0, progress, 1);
+   progress = qBound(0, progress, 1);
+
    if (d_ptr->func) {
       return d_ptr->func(progress);
+
    } else if (d_ptr->config) {
       return d_ptr->config->value(progress);
+
    } else {
       return progress;
+
    }
 }
 

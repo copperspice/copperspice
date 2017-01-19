@@ -120,10 +120,11 @@ static QSize qt_mac_desktopSize()
    QVector<CGDirectDisplayID> displays(cg_count);
    CGGetActiveDisplayList(cg_count, displays.data(), &cg_count);
    Q_ASSERT(cg_count == (CGDisplayCount)displays.size());
+
    for (int i = 0; i < (int)cg_count; ++i) {
       CGRect r = CGDisplayBounds(displays.at(i));
-      w = qMax<int>(w, qRound(r.origin.x + r.size.width));
-      h = qMax<int>(h, qRound(r.origin.y + r.size.height));
+      w = qMax(w, qRound(r.origin.x + r.size.width));
+      h = qMax(h, qRound(r.origin.y + r.size.height));
    }
    return QSize(w, h);
 }

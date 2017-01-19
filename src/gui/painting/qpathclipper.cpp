@@ -992,7 +992,7 @@ void QPathSegments::addPath(const QPainterPath &path)
                QRectF bounds = bezier.bounds();
 
                // threshold based on similar algorithm as in qtriangulatingstroker.cpp
-               int threshold = qMin<float>(64, qMax(bounds.width(), bounds.height()) * (2 * qreal(3.14) / 6));
+               int threshold = qMin(64, qMax(bounds.width(), bounds.height()) * (2 * qreal(M_PI) / 6));
 
                if (threshold < 3) {
                   threshold = 3;

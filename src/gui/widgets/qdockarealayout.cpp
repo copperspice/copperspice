@@ -593,12 +593,13 @@ void QDockAreaLayoutInfo::fitItems()
             min_size -= item.size;
             min_size += pick(o, item.minimumSize());
             min_size = qMax(0, min_size);
+
          } else if (size > max_size) {
             // There is too much space to keep this widget's size
             item.flags &= ~QDockAreaLayoutItem::KeepSize;
             max_size -= item.size;
             max_size += pick(o, item.maximumSize());
-            max_size = qMin<int>(QWIDGETSIZE_MAX, max_size);
+            max_size = qMin(QWIDGETSIZE_MAX, max_size);
          }
       }
 

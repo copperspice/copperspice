@@ -5297,7 +5297,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
          }
          pos += qMax(0, used);
 
-         state = qMin<State>(state, tmpstate);
+         state = qMin(state, tmpstate);
          if (state == Intermediate && context == FromString) {
             state = Invalid;
             break;
@@ -5338,7 +5338,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
                   break;
                case DaySection:
                   current = &day;
-                  num = qMax<int>(1, num);
+                  num = qMax(1, num);
                   break;
                case AmPmSection:
                   current = &ampm;
@@ -5433,7 +5433,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
                   goto end;
                }
                if (state == Acceptable && fixday) {
-                  day = qMin<int>(day, QDate(year, month, 1).daysInMonth());
+                  day = qMin(day, QDate(year, month, 1).daysInMonth());
 
                   const QLocale loc = locale();
                   for (int i = 0; i < sectionNodesCount; ++i) {

@@ -32,6 +32,8 @@
 #include <qx11info_x11.h>
 #include <limits.h>
 
+#include <stdlib.h>
+
 QT_BEGIN_NAMESPACE
 
 // defined in qwidget_x11.cpp

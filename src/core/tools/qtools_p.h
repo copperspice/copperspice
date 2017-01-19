@@ -26,7 +26,7 @@
 #ifndef QTOOLS_P_H
 #define QTOOLS_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,4 +35,4 @@ int Q_CORE_EXPORT qAllocMore(int alloc, int extra);
 
 QT_END_NAMESPACE
 
-#endif // QTOOLS_P_H
+#endif

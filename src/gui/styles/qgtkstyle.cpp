@@ -428,7 +428,7 @@ int QGtkStyle::pixelMetric(PixelMetric metric,
          if (!d->gtk_check_version(2, 10, 0)) {
             d->gtk_widget_style_get(gtkMenu, "horizontal-padding", &horizontal_padding, NULL);
          }
-         int padding = qMax<int>(gtkMenu->style->xthickness, horizontal_padding);
+         int padding = qMax(gtkMenu->style->xthickness, horizontal_padding);
          return padding;
       }
 

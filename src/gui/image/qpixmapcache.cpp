@@ -24,10 +24,13 @@
 ***********************************************************************/
 
 #define Q_TEST_QPIXMAPCACHE
+
 #include <qpixmapcache.h>
 #include <qobject.h>
 #include <qdebug.h>
 #include <qpixmapcache_p.h>
+
+#include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 

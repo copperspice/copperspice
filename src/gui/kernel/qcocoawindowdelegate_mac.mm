@@ -350,10 +350,12 @@ static void cleanupCocoaWindowDelegate()
    QSizeF size = qwidget->maximumSize();
    NSRect windowFrameRect = [window frame];
    NSRect viewFrameRect = [[window contentView] frame];
+
    // consider additional size required for titlebar & frame
-   frameToReturn.size.width = qMin<CGFloat>(frameToReturn.size.width,
+   frameToReturn.size.width = qMin(frameToReturn.size.width,
                               size.width() + (windowFrameRect.size.width - viewFrameRect.size.width));
-   frameToReturn.size.height = qMin<CGFloat>(frameToReturn.size.height,
+
+   frameToReturn.size.height = qMin(frameToReturn.size.height,
                                size.height() + (windowFrameRect.size.height - viewFrameRect.size.height));
    return frameToReturn;
 }

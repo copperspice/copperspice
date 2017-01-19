@@ -4755,7 +4755,7 @@ static void qt_gl_draw_text(QPainter *p, int x, int y, const QString &str,
    \l{Overpainting Example}{Overpaint} with QPainter::drawText() instead.
 */
 
-void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font, int)
+void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font)
 {
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);
@@ -4854,7 +4854,7 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font, 
 
     \l{Overpainting Example}{Overpaint} with QPainter::drawText() instead.
 */
-void QGLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font, int)
+void QGLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font)
 {
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);

@@ -639,20 +639,22 @@ constexpr inline qint64 qRound64(qreal d)
 
 #endif
 
-template <typename T>
-constexpr inline const T &qMin(const T &a, const T &b)
+// enhanced to support size_type which can be 32 bit or 64 bit
+// the larger data type size will be returned
+template <typename T1, typename T2>
+constexpr inline auto qMin(const T1 &a, const T2 &b) -> decltype((a < b) ? a : b)
 {
    return (a < b) ? a : b;
 }
 
-template <typename T>
-constexpr inline const T &qMax(const T &a, const T &b)
+template <typename T1, typename T2>
+constexpr inline auto qMax(const T1 &a, const T2 &b) -> decltype((a < b) ? b : a)
 {
    return (a < b) ? b : a;
 }
 
-template <typename T>
-constexpr inline const T &qBound(const T &min, const T &val, const T &max)
+template <typename T1, typename T2, typename T3>
+constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> decltype(qMax(min, qMin(max, val)))
 {
    return qMax(min, qMin(max, val));
 }
@@ -1522,8 +1524,7 @@ typedef uint Flags;
 
 #endif
 
-
-// expands to a C++11 range based for
+// expands to a C++11 range based for (undocumented)
 #define Q_FOREACH(variable, container)  \
 for (variable : container)
 

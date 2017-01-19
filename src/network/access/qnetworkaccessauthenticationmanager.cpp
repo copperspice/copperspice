@@ -58,10 +58,12 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
 
    void insert(const QString &domain, const QString &user, const QString &password) {
       QNetworkAuthenticationCredential *closestMatch = findClosestMatch(domain);
+
       if (closestMatch && closestMatch->domain == domain) {
-         // we're overriding the current credentials
+         // overriding the current credentials
          closestMatch->user = user;
          closestMatch->password = password;
+
       } else {
          QNetworkAuthenticationCredential newCredential;
          newCredential.domain = domain;
@@ -69,7 +71,8 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
          newCredential.password = password;
 
          if (closestMatch) {
-            QVector<QNetworkAuthenticationCredential>::insert(++closestMatch, newCredential);
+            auto tmp = begin() + (++closestMatch - data());
+            QVector<QNetworkAuthenticationCredential>::insert(tmp, newCredential);
          } else {
             QVector<QNetworkAuthenticationCredential>::insert(end(), newCredential);
          }
@@ -204,14 +207,13 @@ QNetworkAccessAuthenticationManager::fetchCachedProxyCredentials(const QNetworkP
       return QNetworkAuthenticationCredential();
    }
 
-   QNetworkAuthenticationCache *auth =
-      static_cast<QNetworkAuthenticationCache *>(authenticationCache.requestEntryNow(cacheKey));
+   QNetworkAuthenticationCache *auth     = static_cast<QNetworkAuthenticationCache *>(authenticationCache.requestEntryNow(cacheKey));
    QNetworkAuthenticationCredential cred = *auth->findClosestMatch(QString());
    authenticationCache.releaseEntry(cacheKey);
 
    // proxy cache credentials always have exactly one item
    Q_ASSERT_X(!cred.isNull(), "QNetworkAccessManager",
-              "Internal inconsistency: found a cache key for a proxy, but it's empty");
+              "Internal inconsistency: found a cache key for a proxy, but it is empty");
    return cred;
 }
 
@@ -281,13 +283,14 @@ QNetworkAccessAuthenticationManager::fetchCachedCredentials(const QUrl &url,
       return QNetworkAuthenticationCredential();
    }
 
-   QNetworkAuthenticationCache *auth =
-      static_cast<QNetworkAuthenticationCache *>(authenticationCache.requestEntryNow(cacheKey));
+   QNetworkAuthenticationCache *auth      = static_cast<QNetworkAuthenticationCache *>(authenticationCache.requestEntryNow(cacheKey));
    QNetworkAuthenticationCredential *cred = auth->findClosestMatch(url.path());
    QNetworkAuthenticationCredential ret;
+
    if (cred) {
       ret = *cred;
    }
+
    authenticationCache.releaseEntry(cacheKey);
    return ret;
 }

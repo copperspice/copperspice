@@ -26,19 +26,27 @@
 #ifndef QPAIR_H
 #define QPAIR_H
 
-#include <QtCore/qdatastream.h>
+#include <qdatastream.h>
 
 QT_BEGIN_NAMESPACE
 
 template <class T1, class T2>
 struct QPair {
-   typedef T1 first_type;
-   typedef T2 second_type;
+   using first_type  = T1;
+   using second_type = T2;
 
-   QPair() : first(), second() {}
-   QPair(const T1 &t1, const T2 &t2) : first(t1), second(t2) {}
-   // compiler-generated copy/move ctor/assignment operators are fine!
+   QPair() 
+      : first(), second() {}
 
+   QPair(const T1 &t1, const T2 &t2) 
+      : first(t1), second(t2) {}
+
+   QPair(const QPair & other) = default; 
+   QPair(QPair && other)      = default;
+
+   QPair<T1, T2> & operator= ( const QPair<T1, T2> & other ) = default;
+   QPair<T1, T2> & operator= ( QPair<T1, T2> && other )      = default;
+ 
    T1 first;
    T2 second;
 };
@@ -103,4 +111,4 @@ inline QDataStream &operator<<(QDataStream &s, const QPair<T1, T2> &p)
 
 QT_END_NAMESPACE
 
-#endif // QPAIR_H
+#endif

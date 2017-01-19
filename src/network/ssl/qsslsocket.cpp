@@ -1824,13 +1824,15 @@ qint64 QSslSocket::readData(char *data, qint64 maxlen)
 
    if (d->mode == UnencryptedMode && !d->autoStartHandshake) {
       readBytes = d->plainSocket->read(data, maxlen);
+
    } else {
       do {
          const char *readPtr = d->readBuffer.readPointer();
-         int bytesToRead = qMin<int>(maxlen - readBytes, d->readBuffer.nextDataBlockSize());
+         int bytesToRead = qMin(maxlen - readBytes, d->readBuffer.nextDataBlockSize());
          ::memcpy(data + readBytes, readPtr, bytesToRead);
          readBytes += bytesToRead;
          d->readBuffer.free(bytesToRead);
+
       } while (!d->readBuffer.isEmpty() && readBytes < maxlen);
    }
 #ifdef QSSLSOCKET_DEBUG

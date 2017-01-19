@@ -250,10 +250,10 @@ class QHash
 
 #ifdef Q_ALIGNOF
    static inline int alignOfNode() {
-      return qMax<int>(sizeof(void *), Q_ALIGNOF(Node));
+      return qMax(sizeof(void *), Q_ALIGNOF(Node));
    }
    static inline int alignOfDummyNode() {
-      return qMax<int>(sizeof(void *), Q_ALIGNOF(DummyNode));
+      return qMax(sizeof(void *), Q_ALIGNOF(DummyNode));
    }
 #else
    static inline int alignOfNode() {

@@ -488,16 +488,17 @@ qint64 QAudioInputPrivate::read(char *data, qint64 len)
       if (bytesToRead < 0) {
          // recovery failed must stop and set error.
          close();
-         errorState = QAudio::IOError;
+         errorState  = QAudio::IOError;
          deviceState = QAudio::StoppedState;
          emit stateChanged(deviceState);
          return 0;
       }
    }
 
-   bytesToRead = qMin<qint64>(len, bytesToRead);
+   bytesToRead = qMin(len, bytesToRead);
    bytesToRead -= bytesToRead % period_size;
    int count = 0, err = 0;
+
    while (count < 5) {
       int chunks = bytesToRead / period_size;
       int frames = chunks * period_frames;

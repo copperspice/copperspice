@@ -296,7 +296,7 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
       hasCheckableItems |= action->isCheckable();
       QIcon is = action->icon();
       if (!is.isNull()) {
-         maxIconWidth = qMax<uint>(maxIconWidth, icone + 4);
+         maxIconWidth = qMax(maxIconWidth, icone + 4);
       }
    }
 
@@ -1946,10 +1946,11 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
          atAction = d->defaultAction;
          // TODO: This works for first level menus, not yet sub menus
       } else {
-         for (QAction * action : d->actions)   // broom check
-         if (action->isEnabled()) {
-            atAction = action;
-            break;
+         for (QAction * action : d->actions) {
+            if (action->isEnabled()) {
+               atAction = action;
+               break;
+            }
          }
       }
       d->currentAction = atAction;

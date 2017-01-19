@@ -2985,8 +2985,8 @@ void QIconModeViewBase::doDynamicLayout(const QListViewLayoutInfo &info)
                deltaFlowPosition = item->h + info.spacing;
             }
          } else {
-            item->w = qMin<int>(info.grid.width(), item->w);
-            item->h = qMin<int>(info.grid.height(), item->h);
+            item->w = qMin(info.grid.width(), item->w);
+            item->h = qMin(info.grid.height(), item->h);
          }
 
          // create new segment

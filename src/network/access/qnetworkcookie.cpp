@@ -36,6 +36,8 @@
 #include <QtCore/qstringlist.h>
 #include <QtCore/qurl.h>
 
+#include <stdlib.h>
+
 QT_BEGIN_NAMESPACE
 
 /*!

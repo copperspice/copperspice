@@ -3966,11 +3966,13 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                }
             } else if (hasStyleRule(w, PseudoElement_MenuCheckMark) || hasStyleRule(w, PseudoElement_MenuRightArrow)) {
                QWindowsStyle::drawControl(ce, &mi, p, w);
+
                if (mi.checkType != QStyleOptionMenuItem::NotCheckable && !mi.checked) {
                   // We have a style defined, but QWindowsStyle won't draw anything if not checked.
                   // So we mimick what QWindowsStyle would do.
-                  int checkcol = qMax<int>(mi.maxIconWidth, QWindowsStylePrivate::windowsCheckMarkWidth);
+                  int checkcol = qMax(mi.maxIconWidth, QWindowsStylePrivate::windowsCheckMarkWidth);
                   QRect vCheckRect = visualRect(opt->direction, mi.rect, QRect(mi.rect.x(), mi.rect.y(), checkcol, mi.rect.height()));
+
                   if (mi.state.testFlag(State_Enabled) && mi.state.testFlag(State_Selected)) {
                      qDrawShadePanel(p, vCheckRect, mi.palette, true, 1, &mi.palette.brush(QPalette::Button));
                   } else {

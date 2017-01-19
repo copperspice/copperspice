@@ -87,30 +87,36 @@ class Q_GUI_EXPORT QRegion
       return translated(p.x(), p.y());
    }
 
-   // ### Qt5 - make these four functions QT4_SUPPORT
+   // ### Qt5 - make these four functions
    QRegion unite(const QRegion &r) const;
    QRegion unite(const QRect &r) const;
    QRegion intersect(const QRegion &r) const;
    QRegion intersect(const QRect &r) const;
+
    QRegion subtract(const QRegion &r) const;
    QRegion eor(const QRegion &r) const;
 
-   inline QRegion united(const QRegion &r) const {
+   QRegion united(const QRegion &r) const {
       return unite(r);
    }
-   inline QRegion united(const QRect &r) const {
+
+   QRegion united(const QRect &r) const {
       return unite(r);
    }
-   inline QRegion intersected(const QRegion &r) const {
+
+   QRegion intersected(const QRegion &r) const {
       return intersect(r);
    }
-   inline QRegion intersected(const QRect &r) const {
+   
+   QRegion intersected(const QRect &r) const {
       return intersect(r);
    }
-   inline QRegion subtracted(const QRegion &r) const {
+
+   QRegion subtracted(const QRegion &r) const {
       return subtract(r);
    }
-   inline QRegion xored(const QRegion &r) const {
+
+   QRegion xored(const QRegion &r) const {
       return eor(r);
    }
 
@@ -119,12 +125,8 @@ class Q_GUI_EXPORT QRegion
 
    QRect boundingRect() const;
    QVector<QRect> rects() const;
+
    void setRects(const QRect *rect, int num);
-
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED int numRects() const;
-#endif
-
    int rectCount() const;
 
    const QRegion operator|(const QRegion &r) const;

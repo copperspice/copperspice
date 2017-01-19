@@ -7315,8 +7315,8 @@ static void qt_alphamapblit_quint32(QRasterBuffer *rasterBuffer,
          for (int i = 0; i < line.count; ++i) {
             const QSpan &clip = line.spans[i];
 
-            int start = qMax<int>(x, clip.x);
-            int end = qMin<int>(x + mapWidth, clip.x + clip.len);
+            int start = qMax(x, clip.x);
+            int end   = qMin(x + mapWidth, clip.x + clip.len);
 
             for (int xp = start; xp < end; ++xp) {
                const int coverage = map[xp - x];
@@ -7396,11 +7396,12 @@ static void qt_alphargbblit_quint32(QRasterBuffer *rasterBuffer,
          for (int i = 0; i < line.count; ++i) {
             const QSpan &clip = line.spans[i];
 
-            int start = qMax<int>(x, clip.x);
-            int end = qMin<int>(x + mapWidth, clip.x + clip.len);
+            int start = qMax(x, clip.x);
+            int end   = qMin(x + mapWidth, clip.x + clip.len);
 
             for (int xp = start; xp < end; ++xp) {
                const uint coverage = src[xp - x];
+
                if (coverage == 0xffffffff) {
                   dst[xp] = c;
                } else if (coverage != 0xff000000) {

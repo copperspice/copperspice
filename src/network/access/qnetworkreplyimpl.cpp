@@ -146,7 +146,8 @@ void QNetworkReplyImplPrivate::_q_copyReadyRead()
          break;
       }
 
-      bytesToRead = qBound<qint64>(1, bytesToRead, copyDevice->bytesAvailable());
+      bytesToRead = qBound(1, bytesToRead, copyDevice->bytesAvailable());
+
       QByteArray byteData;
       byteData.resize(bytesToRead);
       qint64 bytesActuallyRead = copyDevice->read(byteData.data(), byteData.size());
@@ -558,7 +559,7 @@ qint64 QNetworkReplyImplPrivate::nextDownstreamBlockSize() const
       return DesiredBufferSize;
    }
 
-   return qMax<qint64>(0, readBufferMaxSize - readBuffer.byteAmount());
+   return qMax(0, readBufferMaxSize - readBuffer.byteAmount());
 }
 
 void QNetworkReplyImplPrivate::initCacheSaveDevice()
@@ -1048,7 +1049,7 @@ qint64 QNetworkReplyImpl::readData(char *data, qint64 maxlen)
 
    // Special case code if we have the "zero copy" download buffer
    if (d->downloadBuffer) {
-      qint64 maxAvail = qMin<qint64>(d->downloadBufferCurrentSize - d->downloadBufferReadPosition, maxlen);
+      qint64 maxAvail = qMin(d->downloadBufferCurrentSize - d->downloadBufferReadPosition, maxlen);
       if (maxAvail == 0) {
          return d->state == QNetworkReplyImplPrivate::Finished ? -1 : 0;
       }
@@ -1074,7 +1075,7 @@ qint64 QNetworkReplyImpl::readData(char *data, qint64 maxlen)
       return 1;
    }
 
-   maxlen = qMin<qint64>(maxlen, d->readBuffer.byteAmount());
+   maxlen = qMin(maxlen, d->readBuffer.byteAmount());
    qint64 bytesRead = d->readBuffer.read(data, maxlen);
    if (d->backend && readBufferSize()) {
       d->backend->emitReadBufferFreed(bytesRead);

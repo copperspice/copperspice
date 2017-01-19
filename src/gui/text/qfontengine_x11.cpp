@@ -542,8 +542,9 @@ QFixed QFontEngineXLFD::descent() const
 
 QFixed QFontEngineXLFD::leading() const
 {
-   QFixed l = QFixed(qMin<int>(_fs->ascent, _fs->max_bounds.ascent)
-                     + qMin<int>(_fs->descent, _fs->max_bounds.descent)) * QFixed::fromReal(0.15);
+   QFixed l = QFixed(qMin(_fs->ascent, _fs->max_bounds.ascent)
+                     + qMin(_fs->descent, _fs->max_bounds.descent)) * QFixed::fromReal(0.15);
+
    return l.ceil();
 }
 

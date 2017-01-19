@@ -81,9 +81,10 @@ namespace Phonon
         private:
             class AudioMoniker : public ComPointer<IMoniker>
             {
-            public:
-                bool operator==(const AudioMoniker &other);
+               public:
+                   bool operator==(const AudioMoniker &other) const;
             };
+
             mutable QVector<AudioMoniker> m_audioOutputs;
             mutable QVector<CLSID> m_audioEffects;
             mutable QMutex m_directShowMutex;

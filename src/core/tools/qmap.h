@@ -182,7 +182,7 @@ class QMap
        : d( QMapData::sharedNull() ), m_compare(compare)
    { }
 
-   inline QMap(const QMap<Key, Val, C> &other) 
+   QMap(const QMap<Key, Val, C> &other) 
       : d(other.d), m_compare(other.m_compare) 
    {
       d->ref.ref();
@@ -191,7 +191,7 @@ class QMap
       }
    }
 
-   inline QMap(std::initializer_list<std::pair<Key, Val> > list)
+   QMap(std::initializer_list<std::pair<Key, Val> > list)
       : d(QMapData::sharedNull() ) 
    {
       for (typename std::initializer_list<std::pair<Key, Val> >::const_iterator it = list.begin(); it != list.end(); ++it) {
@@ -199,9 +199,9 @@ class QMap
       }
    }
 
-   explicit QMap(const typename std::map<Key, Val> &other);
+   explicit QMap(const std::map<Key, Val> &other);
 
-   inline ~QMap() {
+   ~QMap() {
       if (! d->ref.deref()) {
          freeData(d);
       }
@@ -209,13 +209,13 @@ class QMap
 
    QMap<Key, Val, C> &operator=(const QMap<Key, Val, C> &other);
 
-   inline QMap<Key, Val, C> &operator=(QMap<Key, Val, C> && other) {
+   QMap<Key, Val, C> &operator=(QMap<Key, Val, C> && other) {
       qSwap(d, other.d);
       m_compare = std::move(other.m_compare);
       return *this;
    }
 
-   inline void swap(QMap<Key, Val, C> &other) {
+   void swap(QMap<Key, Val, C> &other) {
       qSwap(d, other.d);
       swap(m_compare, other.m_compare);
    }

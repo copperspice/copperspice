@@ -38,6 +38,7 @@
 #include <qfunctions_p.h>
 
 #include <limits.h>
+#include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 

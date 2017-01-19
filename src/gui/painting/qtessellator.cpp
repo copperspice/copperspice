@@ -23,14 +23,14 @@
 *
 ***********************************************************************/
 
-#include "qtessellator_p.h"
-
+#include <qtessellator_p.h>
 #include <QRect>
 #include <QList>
 #include <QDebug>
 
-#include <qmath.h>
 #include <limits.h>
+#include <qmath.h>
+#include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 

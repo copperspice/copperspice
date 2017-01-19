@@ -969,13 +969,15 @@ QSize QDateTimeEdit::sizeHint() const
       int h = d->edit->sizeHint().height();
       int w = 0;
       QString s;
+
       s = d->textFromValue(d->minimum) + QLatin1String("   ");
-      w = qMax<int>(w, fm.width(s));
+      w = qMax(w, fm.width(s));
       s = d->textFromValue(d->maximum) + QLatin1String("   ");
-      w = qMax<int>(w, fm.width(s));
+      w = qMax(w, fm.width(s));
+
       if (d->specialValueText.size()) {
          s = d->specialValueText;
-         w = qMax<int>(w, fm.width(s));
+         w = qMax(w, fm.width(s));
       }
       w += 2; // cursor blinking space
 
@@ -2069,7 +2071,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
    }
    if (!test && oldDay != v.date().day() && !(sn.type & (DaySection | DayOfWeekSection))) {
       // this should not happen when called from stepEnabled
-      cachedDay = qMax<int>(oldDay, cachedDay);
+      cachedDay = qMax(oldDay, cachedDay);
    }
 
    if (v < minimumDateTime) {
@@ -2183,7 +2185,7 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
          c = -1;
       } else {
          int closest = closestSection(newpos, forward);
-         c = sectionPos(closest) + (forward ? 0 : qMax<int>(0, sectionSize(closest)));
+         c = sectionPos(closest) + (forward ? 0 : qMax(0, sectionSize(closest)));
 
          if (allowChange) {
             edit->setCursorPosition(c);

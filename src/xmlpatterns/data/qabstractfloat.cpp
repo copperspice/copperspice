@@ -23,6 +23,8 @@
 *
 ***********************************************************************/
 
+#include <stdlib.h>
+
 template <const bool isDouble>
 AbstractFloat<isDouble>::AbstractFloat(const xsDouble num) : m_value(num)
 {

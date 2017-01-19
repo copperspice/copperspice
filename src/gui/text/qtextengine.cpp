@@ -2644,14 +2644,18 @@ void QTextEngine::setBoundary(int strPos) const
       return;
    }
 
-   const QScriptItem *it = qUpperBound(layoutData->items.constBegin(), layoutData->items.constEnd(),
-                                       strPos, QScriptItemComparator());
+   auto it = qUpperBound(layoutData->items.constBegin(),
+                  layoutData->items.constEnd(), strPos, QScriptItemComparator());
+
    Q_ASSERT(it > layoutData->items.constBegin());
+
    --it;
+
    if (it->position == strPos) {
       // already a split at the requested position
       return;
    }
+
    splitItem(it - layoutData->items.constBegin(), strPos - it->position);
 }
 

@@ -246,14 +246,13 @@ void QGLCmap::detach()
 {
    if (d->count != 1) {
       d->deref();
+
       QGLCmapPrivate *newd = new QGLCmapPrivate;
-      newd->maxSize = d->maxSize;
-      newd->colorArray = d->colorArray;
-      newd->allocArray = d->allocArray;
+      newd->maxSize      = d->maxSize;
+      newd->colorArray   = d->colorArray;
+      newd->allocArray   = d->allocArray;
       newd->contextArray = d->contextArray;
-      newd->colorArray.detach();
-      newd->allocArray.detach();
-      newd->contextArray.detach();
+
       newd->colorMap = d->colorMap;
       d = newd;
    }

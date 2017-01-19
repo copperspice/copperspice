@@ -128,8 +128,10 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
                                                points[i + 1],
                                                points[i + 2]);
                QRectF bounds = b.bounds();
+
                // threshold based on same algorithm as in qtriangulatingstroker.cpp
-               int threshold = qMin<float>(64, qMax(bounds.width(), bounds.height()) * 3.14f / (curveInverseScale * 6));
+               int threshold = qMin(64, qMax(bounds.width(), bounds.height()) * M_PI / (curveInverseScale * 6));
+
                if (threshold < 3) {
                   threshold = 3;
                }

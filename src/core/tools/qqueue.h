@@ -26,7 +26,7 @@
 #ifndef QQUEUE_H
 #define QQUEUE_H
 
-#include <QtCore/qlist.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -34,30 +34,37 @@ template <class T>
 class QQueue : public QList<T>
 {
  public:
-   inline QQueue() {}
-   inline ~QQueue() {}
-
-   inline void swap(QQueue<T> &other) {
-      QList<T>::swap(other);   // prevent QList<->QQueue swaps
-   }
-
-   inline void enqueue(const T &t) {
-      QList<T>::append(t);
-   }
-
-   inline T dequeue() {
+   QQueue()  = default;
+   ~QQueue() = default;
+   
+   // methods
+   T dequeue() {
       return QList<T>::takeFirst();
    }
 
-   inline T &head() {
+   void enqueue(const T &value) {
+      QList<T>::append(value);
+   }
+
+   void enqueue(T &&value) {
+      QList<T>::append(std::move(value));
+   }
+  
+   T &head() {
       return QList<T>::first();
    }
 
-   inline const T &head() const {
+   const T &head() const {
       return QList<T>::first();
    }
+
+   void swap(QQueue<T> &other) {
+      // prevent QList / QQueue swaps, must be a QQueue / QQueue swap
+      QList<T>::swap(other);   
+   }
+
 };
 
 QT_END_NAMESPACE
 
-#endif // QQUEUE_H
+#endif

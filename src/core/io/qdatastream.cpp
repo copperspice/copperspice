@@ -565,16 +565,25 @@ QDataStream &QDataStream::operator>>(double &f)
    return *this;
 }
 
+QDataStream &QDataStream::operator>>(long &i)
+{
+   qint64 tmp;
 
-/*!
-    \overload
+   *this >> tmp;
+   i = tmp;
 
-    Reads the '\0'-terminated string \a s from the stream and returns
-    a reference to the stream.
+   return *this;
+}
 
-    Space for the string is allocated using \c new -- the caller must
-    destroy it with \c{delete[]}.
-*/
+QDataStream &QDataStream::operator>>(unsigned long &i)
+{
+   quint64 tmp;
+
+   *this >> tmp;
+   i = tmp;
+
+   return *this;
+}
 
 QDataStream &QDataStream::operator>>(char *&s)
 {
@@ -892,15 +901,17 @@ QDataStream &QDataStream::operator<<(double f)
    return *this;
 }
 
+QDataStream &QDataStream::operator<<(long i)
+{
+   *this << static_cast<qint64>(i);
+   return *this;
+}
 
-/*!
-    \overload
-
-    Writes the '\0'-terminated string \a s to the stream and returns a
-    reference to the stream.
-
-    The string is serialized using writeBytes().
-*/
+QDataStream &QDataStream::operator<<(unsigned long i)
+{
+   *this << static_cast<quint64>(i);
+   return *this;
+}
 
 QDataStream &QDataStream::operator<<(const char *s)
 {

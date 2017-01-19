@@ -1279,7 +1279,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    qDebug("QNativeSocketEnginePrivate::nativeReceiveDatagram(%p \"%s\", %li, %s, %i) == %li",
-          data, qt_prettyDebug(data, qMin<qint64>(ret, 16), ret).data(), maxLength,
+          data, qt_prettyDebug(data, qMin(ret, 16), ret).data(), maxLength,
           address ? address->toString().toLatin1().constData() : "(nil)",
           port ? *port : 0, ret);
 #endif
@@ -1324,7 +1324,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    qDebug("QNativeSocketEnginePrivate::nativeSendDatagram(%p \"%s\", %li, \"%s\", %i) == %li", data,
-          qt_prettyDebug(data, qMin<qint64>(len, 16), len).data(), 0, address.toString().toLatin1().constData(),
+          qt_prettyDebug(data, qMin(len, 16), len).data(), 0, address.toString().toLatin1().constData(),
           port, ret);
 #endif
 
@@ -1380,7 +1380,7 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
       }
 
       // for next send:
-      bytesToSend = qMin<qint64>(49152, len - ret);
+      bytesToSend = qMin(49152, len - ret);
    }
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)

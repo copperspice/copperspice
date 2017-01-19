@@ -1916,10 +1916,11 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
 
    qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
    qint64 readSoFar = 0;
+
    while (readSoFar < bytesToRead) {
       const char *ptr = readBuffer->readPointer();
-      int bytesToReadFromThisBlock = qMin<qint64>(bytesToRead - readSoFar,
-                                     readBuffer->nextDataBlockSize());
+      int bytesToReadFromThisBlock = qMin(bytesToRead - readSoFar, readBuffer->nextDataBlockSize());
+
       memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
       readSoFar += bytesToReadFromThisBlock;
       readBuffer->free(bytesToReadFromThisBlock);

@@ -29,6 +29,8 @@
 #include <qimage.h>
 #include <qglobal.h>
 
+#include <stdlib.h>
+
 extern "C" {
 #include <tiffio.h>
 }

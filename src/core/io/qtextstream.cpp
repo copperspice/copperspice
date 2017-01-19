@@ -354,7 +354,7 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 
    if (device->isSequential() && (file = qobject_cast<QFile *>(device)) && file->handle() == 0 ) {
       if (maxBytes != -1) {
-         bytesRead = device->readLine(buf, qMin<qint64>(sizeof(buf), maxBytes));
+         bytesRead = device->readLine(buf, qMin(sizeof(buf), maxBytes));
       } else {
          bytesRead = device->readLine(buf, sizeof(buf));
       }
@@ -362,7 +362,7 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 #endif
    {
       if (maxBytes != -1) {
-         bytesRead = device->read(buf, qMin<qint64>(sizeof(buf), maxBytes));
+         bytesRead = device->read(buf, qMin(sizeof(buf), maxBytes));
       } else {
          bytesRead = device->read(buf, sizeof(buf));
       }

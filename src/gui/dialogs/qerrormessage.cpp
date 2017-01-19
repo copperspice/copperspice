@@ -184,44 +184,46 @@ static void jump(QtMsgType t, const char *m)
 
 
 /*!
-    Constructs and installs an error handler window with the given \a
-    parent.
+    Constructs and installs an error handler window with the given parent.
 */
 
 QErrorMessage::QErrorMessage(QWidget *parent)
    : QDialog(*new QErrorMessagePrivate, parent)
 {
    Q_D(QErrorMessage);
+
    QGridLayout *grid = new QGridLayout(this);
-   d->icon = new QLabel(this);
+
+   d->icon   = new QLabel(this);
+   d->errors = new QErrorMessageTextView(this);
+   d->again  = new QCheckBox(this);
+   d->ok     = new QPushButton(this);
+
 #ifndef QT_NO_MESSAGEBOX
    d->icon->setPixmap(QMessageBox::standardIcon(QMessageBox::Information));
    d->icon->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-#endif
+#endif    
 
-   const int preferredIconColumn = 0;
-   const int preferredTextColumn = 1;
+   grid->addWidget(d->icon,   0,  0, Qt::AlignTop);   
+   grid->addWidget(d->errors, 0,  1);    
+   grid->addWidget(d->again,  1,  1, Qt::AlignTop);
+   grid->addWidget(d->ok,     2, 0, 1, 2, Qt::AlignCenter);
 
-   grid->addWidget(d->icon, 0, preferredIconColumn, Qt::AlignTop);
-   d->errors = new QErrorMessageTextView(this);
-   grid->addWidget(d->errors, 0, preferredTextColumn);
-   d->again = new QCheckBox(this);
-   d->again->setChecked(true);
-   grid->addWidget(d->again, 1, preferredTextColumn, Qt::AlignTop);
-   d->ok = new QPushButton(this);
+   grid->setColumnStretch(1, 42);
+   grid->setRowStretch(0, 42);  
 
 #ifdef QT_SOFTKEYS_ENABLED
    d->okAction = new QAction(d->ok);
    d->okAction->setSoftKeyRole(QAction::PositiveSoftKey);
+
    connect(d->okAction, SIGNAL(triggered()), this, SLOT(accept()));
    addAction(d->okAction);
 #endif
 
    connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
+
+   d->again->setChecked(true);
    d->ok->setFocus();
-   grid->addWidget(d->ok, 2, 0, 1, 2, Qt::AlignCenter);
-   grid->setColumnStretch(preferredTextColumn, 42);
-   grid->setRowStretch(0, 42);
    d->retranslateStrings();
 }
 

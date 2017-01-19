@@ -41,7 +41,6 @@ CORE_PUBLIC_INCLUDES += \
 	QLinkedListIterator \
 	QLinkedListNode \
 	QList \
-	QListData \
 	QListIterator \
 	QLocale \
 	QMap \
@@ -144,7 +143,6 @@ CORE_TOOLS_INCLUDES = \
 	qlinkedlistiterator.h \
 	qlinkedlistnode.h \
 	qlist.h \
-	qlistdata.h \
 	qlistiterator.h \
 	qlocale.h \
 	qmap.h \

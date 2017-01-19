@@ -1171,7 +1171,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
                   painter->restore();
                }
             } else {
-               qint64 progress = qMax<qint64>(bar->progress, bar->minimum); // workaround for bug in QProgressBar
+               qint64 progress = qMax(bar->progress, bar->minimum); // workaround for bug in QProgressBar
 
                if (vertical) {
                   int maxHeight = option->rect.height();
@@ -1993,7 +1993,7 @@ QSize QWindowsVistaStyle::sizeFromContents(ContentsType type, const QStyleOption
             XPThemeData theme(widget, 0, QLatin1String("MENU"), MENU_POPUPCHECKBACKGROUND, MBI_HOT);
             pGetThemePartSize(theme.handle(), NULL, MENU_POPUPCHECK, 0, NULL, TS_TRUE, &size);
             pGetThemeMargins(theme.handle(), NULL, MENU_POPUPCHECK, 0, TMT_CONTENTMARGINS, NULL, &margins);
-            minimumHeight = qMax<qint32>(size.cy + margins.cyBottomHeight + margins.cyTopHeight, sz.height());
+            minimumHeight = qMax(size.cy + margins.cyBottomHeight + margins.cyTopHeight, sz.height());
             sz.rwidth() += size.cx + margins.cxLeftWidth + margins.cxRightWidth;
          }
 

@@ -24,19 +24,3 @@
 ***********************************************************************/
 
 #include <qlinkedlist.h>
-
-QT_BEGIN_NAMESPACE
-
-QLinkedListData *QLinkedListData::sharedNull()
-{
-   static const QLinkedListData shared_null = {
-      const_cast<QLinkedListData *>(&shared_null),
-      const_cast<QLinkedListData *>(&shared_null),
-      Q_REFCOUNT_INITIALIZE_STATIC, 0, true
-   };
-
-   return const_cast<QLinkedListData *>(&shared_null);
-}
-
-
-QT_END_NAMESPACE

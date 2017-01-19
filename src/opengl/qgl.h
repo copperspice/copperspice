@@ -482,11 +482,9 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    const QGLColormap &colormap() const;
    void  setColormap(const QGLColormap &map);
 
-   // BROOM remove listBase parameter in 1.3
-   void renderText(int x, int y, const QString &str,
-                   const QFont &fnt = QFont(), int listBase = 2000);
-   void renderText(double x, double y, double z, const QString &str,
-                   const QFont &fnt = QFont(), int listBase = 2000);
+   void renderText(int x, int y, const QString &str, const QFont &fnt = QFont());
+   void renderText(double x, double y, double z, const QString &str, const QFont &fnt = QFont());
+
    QPaintEngine *paintEngine() const override;
 
    GLuint bindTexture(const QImage &image, GLenum target, GLint format,

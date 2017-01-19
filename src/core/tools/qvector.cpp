@@ -24,9 +24,3 @@
 ***********************************************************************/
 
 #include <qvector.h>
-#include <qtools_p.h>
-#include <string.h>
-#include <stdlib.h>
-
-QT_BEGIN_NAMESPACE
-QT_END_NAMESPACE

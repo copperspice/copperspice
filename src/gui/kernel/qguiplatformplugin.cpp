@@ -40,6 +40,8 @@
 #include <qt_x11_p.h>
 #endif
 
+#include <stdlib.h>
+
 QT_BEGIN_NAMESPACE
 
 

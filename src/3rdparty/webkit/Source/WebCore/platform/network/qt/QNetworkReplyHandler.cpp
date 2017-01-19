@@ -120,7 +120,7 @@ qint64 FormDataIODevice::readData(char* destination, qint64 size)
         const qint64 available = size-copied;
 
         if (element.m_type == FormDataElement::data) {
-            const qint64 toCopy = qMin<qint64>(available, element.m_data.size() - m_currentDelta);
+            const qint64 toCopy = qMin(available, element.m_data.size() - m_currentDelta);
             memcpy(destination+copied, element.m_data.data()+m_currentDelta, toCopy); 
             m_currentDelta += toCopy;
             copied += toCopy;

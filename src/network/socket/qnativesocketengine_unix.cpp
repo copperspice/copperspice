@@ -882,7 +882,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
 
 #if defined (QNATIVESOCKETENGINE_DEBUG)
    qDebug("QNativeSocketEngine::sendDatagram(%p \"%s\", %lli, \"%s\", %i) == %lli", data,
-          qt_prettyDebug(data, qMin<int>(len, 16), len).data(), len, host.toString().toLatin1().constData(),
+          qt_prettyDebug(data, qMin(len, 16), len).data(), len, host.toString().toLatin1().constData(),
           port, (qint64) sentBytes);
 #endif
 

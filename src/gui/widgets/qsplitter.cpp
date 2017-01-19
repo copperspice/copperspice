@@ -354,8 +354,9 @@ void QSplitterPrivate::recalc(bool update)
          maxl = QWIDGETSIZE_MAX;
       }
    } else {
-      maxl = qMin<int>(maxl, QWIDGETSIZE_MAX);
+      maxl = qMin(maxl, QWIDGETSIZE_MAX);
    }
+
    if (maxt < mint) {
       maxt = mint;
    }

@@ -866,7 +866,8 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
          elidedIndex = j;
          break;
       }
-      width = qMax<qreal>(width, line.width());
+
+      width = qMax(width, line.width());
       height += line.height();
    }
 

@@ -771,15 +771,17 @@ qint64 QHttpNetworkReplyPrivate::readReplyBodyRaw(QAbstractSocket *socket, QByte
    Q_ASSERT(socket);
    Q_ASSERT(out);
 
-   int toBeRead = qMin<qint64>(128 * 1024, qMin<qint64>(size, socket->bytesAvailable()));
+   int toBeRead = qMin(128 * 1024, qMin(size, socket->bytesAvailable()));
+
    if (readBufferMaxSize) {
-      toBeRead = qMin<qint64>(toBeRead, readBufferMaxSize);
+      toBeRead = qMin(toBeRead, readBufferMaxSize);
    }
 
    while (toBeRead > 0) {
       QByteArray byteData;
       byteData.resize(toBeRead);
       qint64 haveRead = socket->read(byteData.data(), byteData.size());
+
       if (haveRead <= 0) {
          // ### error checking here
          byteData.clear();
@@ -791,7 +793,7 @@ qint64 QHttpNetworkReplyPrivate::readReplyBodyRaw(QAbstractSocket *socket, QByte
       bytes += haveRead;
       size -= haveRead;
 
-      toBeRead = qMin<qint64>(128 * 1024, qMin<qint64>(size, socket->bytesAvailable()));
+      toBeRead = qMin(128 * 1024, qMin(size, socket->bytesAvailable()));
    }
    return bytes;
 

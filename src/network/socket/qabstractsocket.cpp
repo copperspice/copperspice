@@ -2323,7 +2323,7 @@ qint64 QAbstractSocket::readData(char *data, qint64 maxSize)
 
 #if defined (QABSTRACTSOCKET_DEBUG)
    qDebug("QAbstractSocket::readData(%p \"%s\", %lli) == %lld [unreachable]",
-          data, qt_prettyDebug(data, qMin<qint64>(32, readSoFar), readSoFar).data(),
+          data, qt_prettyDebug(data, qMin(32, readSoFar), readSoFar).data(),
           maxSize, readSoFar);
 #endif
    return readSoFar;

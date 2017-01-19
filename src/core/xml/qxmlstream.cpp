@@ -43,6 +43,8 @@
 #include <qbuffer.h>
 #include <qcoreapplication.h>
 
+#include "stdlib.h"
+
 QT_BEGIN_NAMESPACE
 
 #include <qxmlstream_p.h>

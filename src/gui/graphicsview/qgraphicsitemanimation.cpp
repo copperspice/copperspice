@@ -83,7 +83,7 @@ qreal QGraphicsItemAnimationPrivate::linearValueForStep(qreal step, QList<Pair> 
    if (source->isEmpty()) {
       return defaultValue;
    }
-   step = qMin<qreal>(qMax<qreal>(step, 0), 1);
+   step = qMin(qMax(step, 0), 1);
 
    if (step == 1) {
       return source->last().value;

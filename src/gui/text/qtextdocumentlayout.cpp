@@ -2789,7 +2789,7 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
                } else {
                   right -= text_indent;
                }
-               line.setLineWidth(qMax<qreal>(line.naturalTextWidth(), (right - left).toReal()));
+               line.setLineWidth(qMax(line.naturalTextWidth(), (right - left).toReal()));
 
                if (haveWordOrAnyWrapMode) {
                   option.setWrapMode(QTextOption::WordWrap);
@@ -2808,8 +2808,9 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
             layoutStruct->newPage();
 
             floatMargins(layoutStruct->y, layoutStruct, &left, &right);
-            left = qMax(left, l);
+            left  = qMax(left, l);
             right = qMin(right, r);
+
             if (dir == Qt::LeftToRight) {
                left += text_indent;
             } else {
@@ -2819,8 +2820,9 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
 
          line.setPosition(QPointF((left - layoutStruct->x_left).toReal(), (layoutStruct->y - cy - lineAdjustment).toReal()));
          layoutStruct->y += lineHeight;
-         layoutStruct->contentsWidth
-            = qMax<QFixed>(layoutStruct->contentsWidth, QFixed::fromReal(line.x() + line.naturalTextWidth()) + totalRightMargin);
+
+         layoutStruct->contentsWidth = qMax(layoutStruct->contentsWidth, QFixed::fromReal(line.x() + 
+                  line.naturalTextWidth()) + totalRightMargin);
 
          // position floats
          for (int i = 0; i < layoutStruct->pendingFloats.size(); ++i) {

@@ -30,6 +30,8 @@
 #include <qdatabuffer_p.h>
 #include <qdrawhelper_p.h>
 
+#include <stdlib.h>
+
 QT_BEGIN_NAMESPACE
 
 typedef int Q16Dot16;

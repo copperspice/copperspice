@@ -131,10 +131,11 @@ class Q_CORE_EXPORT QDataStream
    QDataStream &operator>>(quint32 &i);
    QDataStream &operator>>(qint64 &i);
    QDataStream &operator>>(quint64 &i);
-
    QDataStream &operator>>(bool &i);
    QDataStream &operator>>(float &f);
    QDataStream &operator>>(double &f);
+   QDataStream &operator>>(long &i);
+   QDataStream &operator>>(unsigned long &i);
    QDataStream &operator>>(char *&str);
 
    QDataStream &operator<<(qint8 i);
@@ -148,6 +149,8 @@ class Q_CORE_EXPORT QDataStream
    QDataStream &operator<<(bool i);
    QDataStream &operator<<(float f);
    QDataStream &operator<<(double f);
+   QDataStream &operator<<(long i);
+   QDataStream &operator<<(unsigned long i);
    QDataStream &operator<<(const char *str);
 
    QDataStream &readBytes(char *&, uint &len);

@@ -378,7 +378,8 @@ qint64 QAudioInputPrivate::read(char *data, qint64 len)
                resuming = false;
             }
          } else {
-            l = qMin<qint64>(len, waveBlocks[header].dwBytesRecorded);
+            l = qMin(len, waveBlocks[header].dwBytesRecorded);
+
             // push mode
             memcpy(p, waveBlocks[header].lpData, l);
 

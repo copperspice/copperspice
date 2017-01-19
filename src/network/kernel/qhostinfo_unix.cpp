@@ -37,9 +37,10 @@
 #include <qnet_unix_p.h>
 
 #include <sys/types.h>
-#include <netdb.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <resolv.h>
+#include <stdlib.h>
 
 #if defined (QT_NO_GETADDRINFO)
 #include <qmutex.h>
@@ -58,7 +59,7 @@ QT_BEGIN_NAMESPACE
 // HP-UXi has a bug in getaddrinfo(3) that makes it thread-unsafe
 // with this flag. So disable it in that platform.
 #if defined(AI_ADDRCONFIG) && !defined(Q_OS_HPUX)
-#  define Q_ADDRCONFIG          AI_ADDRCONFIG
+#  define Q_ADDRCONFIG  AI_ADDRCONFIG
 #endif
 
 typedef struct __res_state *res_state_ptr;

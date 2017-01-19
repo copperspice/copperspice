@@ -25,6 +25,8 @@
 
 #include <qglobal.h>
 
+#include <stdlib.h>
+
 #ifndef QT_NO_SYSTEMLOCALE
 
 QT_BEGIN_NAMESPACE
@@ -32,9 +34,10 @@ QT_BEGIN_NAMESPACE
 class QSystemLocale;
 static QSystemLocale *QSystemLocale_globalSystemLocale();
 QT_END_NAMESPACE
+
 #endif
 
-#if !defined(QWS) && defined(Q_OS_MAC)
+#if ! defined(QWS) && defined(Q_OS_MAC)
 #include <qcore_mac_p.h>
 #include <CoreFoundation/CoreFoundation.h>
 #endif
@@ -78,9 +81,8 @@ extern bool qt_u_strToUpper(const QString &str, QString *out, const QLocale &loc
 extern bool qt_u_strToLower(const QString &str, QString *out, const QLocale &locale);
 #endif
 
-/******************************************************************************
-** Helpers for accessing Qt locale database
-*/
+
+// Helpers for accessing locale database
 
 QT_BEGIN_INCLUDE_NAMESPACE
 #include <qlocale_data_p.h>

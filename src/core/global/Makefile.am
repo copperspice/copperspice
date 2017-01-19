@@ -5,7 +5,7 @@ CORE_PUBLIC_INCLUDES += \
 	QBool \
 	QCOORD \
 	QFlag \
-	QFlags \	
+	QFlags \
 	QGlobalStatic \
 	QGlobalStaticDeleter \
 	QIncompatibleFlag \
