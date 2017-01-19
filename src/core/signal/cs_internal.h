@@ -17,6 +17,8 @@
 #include <memory>
 #include <tuple>
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+
 namespace CsSignal {
 
 class SlotBase;
@@ -746,5 +748,7 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(SlotBase *
 }
 
 } }
+
+/**   \endcond   */
 
 #endif

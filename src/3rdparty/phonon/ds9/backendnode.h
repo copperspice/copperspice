@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -38,6 +38,7 @@ namespace Phonon
     namespace DS9
     {
         class MediaObject;
+
         typedef ComPointer<IPin> InputPin;
         typedef ComPointer<IPin> OutputPin;
         typedef ComPointer<IBaseFilter> Filter;
@@ -55,20 +56,23 @@ namespace Phonon
 
             static QList<InputPin> pins(const Filter &, PIN_DIRECTION);
 
-            Filter filter(int index) const { return m_filters[index]; }
+            Filter filter(int index) const {
+               return m_filters[index];
+            }
+
             //add a pointer to the base Media Object (giving access to the graph and error management)
             void setMediaObject(MediaObject *mo);
 
             //called by the connections to tell the node that it's been connection to anothe one through its 'inpin' input port
             virtual void connected(BackendNode *, const InputPin& inpin) {}
-        
+
          protected:
             Filter m_filters[FILTER_COUNT];
             MediaObject *m_mediaObject;
 
          private :
             DS9_CS_SLOT_1(Private, void mediaObjectDestroyed())
-            DS9_CS_SLOT_2(mediaObjectDestroyed) 
+            DS9_CS_SLOT_2(mediaObjectDestroyed)
 
         };
     }

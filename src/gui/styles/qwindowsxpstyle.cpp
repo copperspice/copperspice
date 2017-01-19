@@ -1169,10 +1169,6 @@ void QWindowsXPStyle::polish(QWidget *widget)
    }
 #endif
 
-   if (qobject_cast<QStackedWidget *>(widget) && qobject_cast<QTabWidget *>(widget->parent())) {
-      widget->parentWidget()->setAttribute(Qt::WA_ContentsPropagated);
-   }
-
    Q_D(QWindowsXPStyle);
    if (!d->hasInitColors) {
       // Get text color for group box labels

@@ -179,14 +179,17 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
 {
    Q_Q(QStandardItem);
 
-   //let's build the vector of new values
+   // build the vector of new values
    QVector<QWidgetItemData> newValues;
    QMap<int, QVariant>::const_iterator it;
+
    for (it = roles.begin(); it != roles.end(); ++it) {
       QVariant value = it.value();
+
       if (value.isValid()) {
          int role = it.key();
          role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
+
          QWidgetItemData wid(role, it.value());
          newValues.append(wid);
       }
@@ -194,6 +197,7 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
 
    if (values != newValues) {
       values = newValues;
+
       if (model) {
          model->d_func()->itemChanged(q);
       }

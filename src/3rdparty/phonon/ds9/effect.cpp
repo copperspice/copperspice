@@ -40,13 +40,16 @@ namespace Phonon
         Effect::Effect(CLSID effectClass, QObject *parent)
             : BackendNode(parent)
         {
-            //creation of the filter
-            for(int i = 0; i < FILTER_COUNT; ++i) {
+            // creation of the filter
+            for (int i = 0; i < FILTER_COUNT; ++i) {
                 Filter &filter = m_filters[i];
+
                 filter = Filter(CLSID_DMOWrapperFilter, IID_IBaseFilter);
                 Q_ASSERT(filter);
+
                 ComPointer<IDMOWrapperFilter> wrapper(filter, IID_IDMOWrapperFilter);
                 Q_ASSERT(wrapper);
+
                 wrapper->Init(effectClass, DMOCATEGORY_AUDIO_EFFECT);
             }
         }

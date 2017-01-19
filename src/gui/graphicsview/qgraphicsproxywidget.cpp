@@ -49,129 +49,6 @@ QT_BEGIN_NAMESPACE
 
 //#define GRAPHICSPROXYWIDGET_DEBUG
 
-/*!
-    \class QGraphicsProxyWidget
-    \brief The QGraphicsProxyWidget class provides a proxy layer for embedding
-    a QWidget in a QGraphicsScene.
-    \since 4.4
-    \ingroup graphicsview-api
-
-    QGraphicsProxyWidget embeds QWidget-based widgets, for example, a
-    QPushButton, QFontComboBox, or even QFileDialog, into
-    QGraphicsScene. It forwards events between the two objects and
-    translates between QWidget's integer-based geometry and
-    QGraphicsWidget's qreal-based geometry. QGraphicsProxyWidget
-    supports all core features of QWidget, including tab focus,
-    keyboard input, Drag & Drop, and popups.  You can also embed
-    complex widgets, e.g., widgets with subwidgets.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsproxywidget.cpp 0
-
-    QGraphicsProxyWidget takes care of automatically embedding popup children
-    of embedded widgets through creating a child proxy for each popup. This
-    means that when an embedded QComboBox shows its popup list, a new
-    QGraphicsProxyWidget is created automatically, embedding the popup, and
-    positioning it correctly. This only works if the popup is child of the
-    embedded widget (for example QToolButton::setMenu() requires the QMenu instance
-    to be child of the QToolButton).
-
-    \section1 Embedding a Widget with QGraphicsProxyWidget
-
-    There are two ways to embed a widget using QGraphicsProxyWidget. The most
-    common way is to pass a widget pointer to QGraphicsScene::addWidget()
-    together with any relevant \l Qt::WindowFlags. This function returns a
-    pointer to a QGraphicsProxyWidget. You can then choose to reparent or
-    position either the proxy, or the embedded widget itself.
-
-    For example, in the code snippet below, we embed a group box into the proxy:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsproxywidget.cpp 1
-
-    The image below is the output obtained with its contents margin and
-    contents rect labeled.
-
-    \image qgraphicsproxywidget-embed.png
-
-    Alternatively, you can start by creating a new QGraphicsProxyWidget item,
-    and then call setWidget() to embed a QWidget later. The widget() function
-    returns a pointer to the embedded widget. QGraphicsProxyWidget shares
-    ownership with QWidget, so if either of the two widgets are destroyed, the
-    other widget will be automatically destroyed as well.
-
-    \section1 Synchronizing Widget States
-
-    QGraphicsProxyWidget keeps its state in sync with the embedded widget. For
-    example, if the proxy is hidden or disabled, the embedded widget will be
-    hidden or disabled as well, and vice versa. When the widget is embedded by
-    calling addWidget(), QGraphicsProxyWidget copies the state from the widget
-    into the proxy, and after that, the two will stay synchronized where
-    possible. By default, when you embed a widget into a proxy, both the widget
-    and the proxy will be visible because a QGraphicsWidget is visible when
-    created (you do not have to call show()). If you explicitly hide the
-    embedded widget, the proxy will also become invisible.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsproxywidget.cpp 2
-
-    QGraphicsProxyWidget maintains symmetry for the following states:
-
-    \table
-    \header \o QWidget state       \o QGraphicsProxyWidget state      \o Notes
-    \row     \o QWidget::enabled
-                    \o QGraphicsProxyWidget::enabled
-                        \o
-    \row    \o QWidget::visible
-                    \o QGraphicsProxyWidget::visible
-                        \o The explicit state is also symmetric.
-    \row    \o QWidget::geometry
-                    \o QGraphicsProxyWidget::geometry
-                        \o Geometry is only guaranteed to be symmetric while
-                            the embedded widget is visible.
-    \row    \o QWidget::layoutDirection
-                    \o QGraphicsProxyWidget::layoutDirection
-                        \o
-    \row    \o QWidget::style
-                    \o QGraphicsProxyWidget::style
-                        \o
-    \row    \o QWidget::palette
-                    \o QGraphicsProxyWidget::palette
-                        \o
-    \row    \o QWidget::font
-                    \o QGraphicsProxyWidget::font
-                        \o
-    \row    \o QWidget::cursor
-                    \o QGraphicsProxyWidget::cursor
-                        \o The embedded widget overrides the proxy widget
-                            cursor. The proxy cursor changes depending on
-                            which embedded subwidget is currently under the
-                            mouse.
-    \row    \o QWidget::sizeHint()
-                    \o QGraphicsProxyWidget::sizeHint()
-                        \o All size hint functionality from the embedded
-                            widget is forwarded by the proxy.
-    \row    \o QWidget::getContentsMargins()
-                    \o QGraphicsProxyWidget::getContentsMargins()
-                        \o Updated once by setWidget().
-    \row    \o QWidget::windowTitle
-                    \o QGraphicsProxyWidget::windowTitle
-                        \o Updated once by setWidget().
-    \endtable
-
-    \note QGraphicsScene keeps the embedded widget in a special state that
-    prevents it from disturbing other widgets (both embedded and not embedded)
-    while the widget is embedded. In this state, the widget may differ slightly
-    in behavior from when it is not embedded.
-
-    \warning This class is provided for convenience when bridging
-    QWidgets and QGraphicsItems, it should not be used for
-    high-performance scenarios.
-
-    \sa QGraphicsScene::addWidget(), QGraphicsWidget
-*/
-
 extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
 Q_GUI_EXPORT extern bool qt_tab_all_widgets;
 
@@ -545,7 +422,7 @@ QPointF QGraphicsProxyWidgetPrivate::mapToReceiver(const QPointF &pos, const QWi
     to QGraphicsItem's constructor.
 */
 QGraphicsProxyWidget::QGraphicsProxyWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
-   : QGraphicsWidget(*new QGraphicsProxyWidgetPrivate, parent, 0, wFlags)
+   : QGraphicsWidget(*new QGraphicsProxyWidgetPrivate, parent, wFlags)
 {
    Q_D(QGraphicsProxyWidget);
    d->init();
@@ -1562,20 +1439,6 @@ int QGraphicsProxyWidget::type() const
    return Type;
 }
 
-/*!
-  \since 4.5
-
-  Creates a proxy widget for the given \a child of the widget
-  contained in this proxy.
-
-  This function makes it possible to acquire proxies for
-  non top-level widgets. For instance, you can embed a dialog,
-  and then transform only one of its widgets.
-
-  If the widget is already embedded, return the existing proxy widget.
-
-  \sa newProxyWidget(), QGraphicsScene::addWidget()
-*/
 QGraphicsProxyWidget *QGraphicsProxyWidget::createProxyForChildWidget(QWidget *child)
 {
    QGraphicsProxyWidget *proxy = child->graphicsProxyWidget();
@@ -1603,25 +1466,7 @@ QGraphicsProxyWidget *QGraphicsProxyWidget::createProxyForChildWidget(QWidget *c
    return proxy;
 }
 
-/*!
-  \fn QGraphicsProxyWidget *QGraphicsProxyWidget::newProxyWidget(const QWidget *child)
-  \since 4.5
-
-  Creates a proxy widget for the given \a child of the widget contained in this
-  proxy.
-
-  You should not call this function directly; use
-  QGraphicsProxyWidget::createProxyForChildWidget() instead.
-
-  This function is a fake virtual slot that you can reimplement in
-  your subclass in order to control how new proxy widgets are
-  created. The default implementation returns a proxy created with
-  the QGraphicsProxyWidget() constructor with this proxy widget as
-  the parent.
-
-  \sa createProxyForChildWidget()
-*/
-QGraphicsProxyWidget *QGraphicsProxyWidget::newProxyWidget(const QWidget *)
+QGraphicsProxyWidget * QGraphicsProxyWidget::newProxyWidget(const QWidget *)
 {
    return new QGraphicsProxyWidget(this);
 }

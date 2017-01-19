@@ -532,7 +532,7 @@ namespace Phonon
             for (int i = 0; i < m_videoWidgets.count(); ++i) {
                 m_videoWidgets.at(i)->setCurrentGraph(currentGraph()->index());
             }
-#endif //QT_NO_PHONON_VIDEO
+#endif 
 
             emit currentSourceChanged(currentGraph()->mediaSource());
             emit metaDataChanged(currentGraph()->metadata());
@@ -546,7 +546,7 @@ namespace Phonon
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
             setTitles(currentGraph()->titles());
-#endif //QT_NO_PHONON_MEDIACONTROLLER
+#endif
         }
 
         Phonon::State MediaObject::state() const
@@ -889,19 +889,25 @@ namespace Phonon
         bool MediaObject::connectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
+
             for (int i = 0; i < FILTER_COUNT; ++i) {
                 ret = ret && m_graphs[i]->connectNodes(source, sink);
             }
+
             if (ret) {
+
 #ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
                     m_videoWidgets += video;
+
                 } else
-#endif //QT_NO_PHONON_VIDEO
+#endif
+
                     if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
-                    m_audioOutputs += audio;
-                }
+                       m_audioOutputs += audio;
+                   }
             }
+
             return ret;
         }
 
@@ -911,15 +917,17 @@ namespace Phonon
             for (int i = 0; i < FILTER_COUNT; ++i) {
                 ret = ret && m_graphs[i]->disconnectNodes(source, sink);
             }
+
             if (ret) {
+
 #ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
                     m_videoWidgets.removeOne(video);
                 } else
-#endif //QT_NO_PHONON_VIDEO
+#endif
                     if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
                         m_audioOutputs.removeOne(audio);
-                }
+                   }
             }
             return ret;
         }
@@ -1192,10 +1200,11 @@ namespace Phonon
                 currentGraph()->setStopPosition(-1);
             }
         }
-#endif //QT_NO_PHONON_QT_NO_PHONON_MEDIACONTROLLER
+#endif
 
         void MediaObject::switchFilters(int index, Filter oldFilter, Filter newFilter)
         {
+
             if (currentGraph()->index() == index) {
                 currentGraph()->switchFilters(oldFilter, newFilter);
             } else {

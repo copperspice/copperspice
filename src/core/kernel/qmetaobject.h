@@ -287,7 +287,6 @@ class QMetaObject_T : public QMetaObject_X
       void register_property_reset(const char *name, U method);
 };
 
-/**   \endcond   */
 
 template<class T>
 QMetaObject_T<T>::QMetaObject_T()
@@ -573,6 +572,8 @@ void QMetaObject_T<T>::register_property_reset(const char *name, U method)
 
 // best way to handle declarations
 #include <csmeta_internal_2.h>
+
+/**   \endcond   */
 
 QT_END_NAMESPACE
 

@@ -49,6 +49,7 @@ public:
     {
         return adoptRef(new WebPreferences);
     }
+
     static PassRefPtr<WebPreferences> create(const String& identifier)
     {
         return adoptRef(new WebPreferences(identifier));
@@ -59,15 +60,12 @@ public:
     void addPageGroup(WebPageGroup*);
     void removePageGroup(WebPageGroup*);
 
-    const WebPreferencesStore& store() const { return m_store; }
-
-#define DECLARE_PREFERENCE_GETTER_AND_SETTERS(KeyUpper, KeyLower, TypeName, Type, DefaultValue) \
-    void set##KeyUpper(const Type& value); \
-    Type KeyLower() const; \
+    const WebPreferencesStore& store() const 
+    {    
+      return m_store; 
+    }
 
     FOR_EACH_WEBKIT_PREFERENCE(DECLARE_PREFERENCE_GETTER_AND_SETTERS)
-
-#undef DECLARE_PREFERENCE_GETTER_AND_SETTERS
 
 private:
     WebPreferences();
@@ -92,6 +90,8 @@ private:
     WebPreferencesStore m_store;
     String m_identifier;
 };
+
+#undef DECLARE_PREFERENCE_GETTER_AND_SETTERS
 
 } // namespace WebKit
 

@@ -42,8 +42,8 @@ class Q_CORE_EXPORT QPluginLoader : public QObject
    CORE_CS_PROPERTY_WRITE(loadHints, setLoadHints)
 
  public:
-   explicit QPluginLoader(QObject *parent = 0);
-   explicit QPluginLoader(const QString &fileName, QObject *parent = 0);
+   explicit QPluginLoader(QObject *parent = nullptr);
+   explicit QPluginLoader(const QString &fileName, QObject *parent = nullptr);
    ~QPluginLoader();
 
    QObject *instance();

@@ -1211,8 +1211,7 @@ QAbstractButton *QMessageBoxPrivate::abstractButtonForId(int id) const
 }
 
 int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon icon,
-      const QString &title, const QString &text,
-      int button0, int button1, int button2)
+      const QString &title, const QString &text, int button0, int button1, int button2)
 {
    QMessageBox messageBox(icon, title, text, QMessageBox::NoButton, parent);
    messageBox.d_func()->addOldButtons(button0, button1, button2);
@@ -1220,11 +1219,8 @@ int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon ico
 }
 
 int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon icon,
-      const QString &title, const QString &text,
-      const QString &button0Text,
-      const QString &button1Text,
-      const QString &button2Text,
-      int defaultButtonNumber,
+      const QString &title, const QString &text, const QString &button0Text,
+      const QString &button1Text, const QString &button2Text, int defaultButtonNumber,
       int escapeButtonNumber)
 {
    QMessageBox messageBox(icon, title, text, QMessageBox::NoButton, parent);

@@ -124,17 +124,18 @@ namespace JSC {
 
         // Numbers
         JSValue(EncodeAsDoubleTag, double);
-        explicit JSValue(double);
-        explicit JSValue(char);
-        explicit JSValue(unsigned char);
-        explicit JSValue(short);
-        explicit JSValue(unsigned short);
-        explicit JSValue(int);
-        explicit JSValue(unsigned);
-        explicit JSValue(long);
-        explicit JSValue(unsigned long);
-        explicit JSValue(long long);
-        explicit JSValue(unsigned long long);
+
+        inline explicit JSValue(double);
+        inline explicit JSValue(char);
+        inline explicit JSValue(unsigned char i);
+        inline explicit JSValue(short);
+        inline explicit JSValue(unsigned short i);
+        inline explicit JSValue(int);
+        inline explicit JSValue(unsigned);
+        inline explicit JSValue(long);
+        inline explicit JSValue(unsigned long i);
+        inline explicit JSValue(long long i);
+        inline explicit JSValue(unsigned long long i);
 
         operator bool() const;
         bool operator==(const JSValue& other) const;

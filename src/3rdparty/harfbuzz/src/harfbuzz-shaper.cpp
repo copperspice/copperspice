@@ -258,12 +258,11 @@ static inline void positionCluster(HB_ShaperItem *item, int gfrom,  int glast)
 
     HB_Fixed size = item->font->klass->getFontMetric(item->font, HB_FontAscent) / 10;
     HB_Fixed offsetBase = HB_FIXED_CONSTANT(1) + (size - HB_FIXED_CONSTANT(4)) / 4;
+
     if (size > HB_FIXED_CONSTANT(4))
         offsetBase += HB_FIXED_CONSTANT(4);
     else
         offsetBase += size;
-    //qreal offsetBase = (size - 4) / 4 + qMin<qreal>(size, 4) + 1;
-//     qDebug("offset = %f", offsetBase);
 
     // To fix some Thai character heights check for two above glyphs
     if (nmarks == 2 && (attributes[gfrom+1].combiningClass == HB_Combining_AboveRight ||

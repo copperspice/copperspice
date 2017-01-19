@@ -766,46 +766,21 @@ void QGraphicsItemCache::purge()
 
     \sa QGraphicsScene::addItem(), setParentItem()
 */
-QGraphicsItem::QGraphicsItem(QGraphicsItem *parent
-                             // Qt 5  obsolete argument
-                             , QGraphicsScene *scene
-                            )
-
+QGraphicsItem::QGraphicsItem(QGraphicsItem *parent)                                                     
    : d_ptr(new QGraphicsItemPrivate)
 {
    d_ptr->q_ptr = this;
-   setParentItem(parent);
-
-   if (scene && parent && parent->scene() != scene) {
-      qWarning("QGraphicsItem::QGraphicsItem: ignoring scene (%p), which is"
-               " different from parent's scene (%p)",
-               scene, parent->scene());
-      return;
-   }
-   if (scene && !parent) {
-      scene->addItem(this);
-   }
+   setParentItem(parent);  
 }
 
 /*!
     \internal
 */
-QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent,
-                             QGraphicsScene *scene)
+QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent)                             
    : d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
    setParentItem(parent);
-
-   if (scene && parent && parent->scene() != scene) {
-      qWarning("QGraphicsItem::QGraphicsItem: ignoring scene (%p), which is"
-               " different from parent's scene (%p)",
-               scene, parent->scene());
-      return;
-   }
-   if (scene && !parent) {
-      scene->addItem(this);
-   }
 }
 
 /*!
@@ -7181,8 +7156,8 @@ QGraphicsObject::QGraphicsObject(QGraphicsItem *parent)
 /*!
   \internal
 */
-QGraphicsObject::QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene)
-   : QGraphicsItem(dd, parent, scene)
+QGraphicsObject::QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent)
+   : QGraphicsItem(dd, parent)
 {
    QGraphicsItem::d_ptr->isObject = true;
 }
@@ -7356,255 +7331,6 @@ void QGraphicsItemPrivate::resetHeight()
 {
 }
 
-/*!
-    \property QGraphicsObject::children
-    \since 4.7
-    \internal
-*/
-
-/*!
-    \property QGraphicsObject::width
-    \since 4.7
-    \internal
-*/
-
-/*!
-    \property QGraphicsObject::height
-    \since 4.7
-    \internal
-*/
-
-/*!
-  \property QGraphicsObject::parent
-  \brief the parent of the item
-
-  \note The item's parent is set independently of the parent object returned
-  by QObject::parent().
-
-  \sa QGraphicsItem::setParentItem(), QGraphicsItem::parentObject()
-*/
-
-/*!
-  \property QGraphicsObject::opacity
-  \brief the opacity of the item
-
-  \sa QGraphicsItem::setOpacity(), QGraphicsItem::opacity()
-*/
-
-/*!
-  \fn QGraphicsObject::opacityChanged()
-
-  This signal gets emitted whenever the opacity of the item changes
-
-  \sa QGraphicsItem::opacity()
-*/
-
-/*!
-  \fn QGraphicsObject::parentChanged()
-
-  This signal gets emitted whenever the parent of the item changes
-*/
-
-/*!
-  \property QGraphicsObject::pos
-  \brief the position of the item
-
-  Describes the items position.
-
-  \sa QGraphicsItem::setPos(), QGraphicsItem::pos()
-*/
-
-/*!
-  \property QGraphicsObject::x
-  \brief the x position of the item
-
-  Describes the items x position.
-
-  \sa QGraphicsItem::setX(), setPos(), xChanged()
-*/
-
-/*!
-  \fn QGraphicsObject::xChanged()
-
-  This signal gets emitted whenever the x position of the item changes
-
-  \sa pos()
-*/
-
-/*!
-  \property QGraphicsObject::y
-  \brief the y position of the item
-
-  Describes the items y position.
-
-  \sa QGraphicsItem::setY(), setPos(), yChanged()
-*/
-
-/*!
-  \fn QGraphicsObject::yChanged()
-
-  This signal gets emitted whenever the y position of the item changes.
-
-  \sa pos()
-*/
-
-/*!
-  \property QGraphicsObject::z
-  \brief the z value of the item
-
-  Describes the items z value.
-
-  \sa QGraphicsItem::setZValue(), zValue(), zChanged()
-*/
-
-/*!
-  \fn QGraphicsObject::zChanged()
-
-  This signal gets emitted whenever the z value of the item changes.
-
-  \sa pos()
-*/
-
-/*!
-  \property QGraphicsObject::rotation
-  This property holds the rotation of the item in degrees.
-
-  This specifies how many degrees to rotate the item around its transformOrigin.
-  The default rotation is 0 degrees (i.e. not rotated at all).
-*/
-
-/*!
-  \fn QGraphicsObject::rotationChanged()
-
-  This signal gets emitted whenever the roation of the item changes.
-*/
-
-/*!
-  \property QGraphicsObject::scale
-  This property holds the scale of the item.
-
-  A scale of less than 1 means the item will be displayed smaller than
-  normal, and a scale of greater than 1 means the item will be
-  displayed larger than normal.  A negative scale means the item will
-  be mirrored.
-
-  By default, items are displayed at a scale of 1 (i.e. at their
-  normal size).
-
-  Scaling is from the item's transformOrigin.
-*/
-
-/*!
-  \fn void QGraphicsObject::scaleChanged()
-
-  This signal is emitted when the scale of the item changes.
-*/
-
-
-/*!
-  \property QGraphicsObject::enabled
-  \brief whether the item is enabled or not
-
-  This property is declared in QGraphicsItem.
-
-  By default, this property is true.
-
-  \sa QGraphicsItem::isEnabled(), QGraphicsItem::setEnabled()
-  \sa QGraphicsObject::enabledChanged()
-*/
-
-/*!
-  \fn void QGraphicsObject::enabledChanged()
-
-  This signal gets emitted whenever the item get's enabled or disabled.
-
-  \sa isEnabled()
-*/
-
-/*!
-  \property QGraphicsObject::visible
-  \brief whether the item is visible or not
-
-  This property is declared in QGraphicsItem.
-
-  By default, this property is true.
-
-  \sa QGraphicsItem::isVisible(), QGraphicsItem::setVisible(), visibleChanged()
-*/
-
-/*!
-  \fn QGraphicsObject::visibleChanged()
-
-  This signal gets emitted whenever the visibility of the item changes
-
-  \sa visible
-*/
-
-/*!
-  \fn const QObjectList &QGraphicsObject::children() const
-  \internal
-
-  This function returns the same value as QObject::children(). It's
-  provided to differentiate between the obsolete member
-  QGraphicsItem::children() and QObject::children(). QGraphicsItem now
-  provides childItems() instead.
-*/
-
-/*!
-  \property QGraphicsObject::transformOriginPoint
-  \brief the transformation origin
-
-  This property sets a specific point in the items coordiante system as the
-  origin for scale and rotation.
-
-  \sa scale, rotation, QGraphicsItem::transformOriginPoint()
-*/
-
-/*!
-    \fn void QGraphicsObject::widthChanged()
-    \internal
-*/
-
-/*!
-    \fn void QGraphicsObject::heightChanged()
-    \internal
-*/
-
-/*!
-
-  \fn QGraphicsObject::childrenChanged()
-
-  This signal gets emitted whenever the children list changes
-  \internal
-*/
-
-/*!
-  \property QGraphicsObject::effect
-  \since 4.7
-  \brief the effect attached to this item
-
-  \sa QGraphicsItem::setGraphicsEffect(), QGraphicsItem::graphicsEffect()
-*/
-
-/*!
-    \class QAbstractGraphicsShapeItem
-    \brief The QAbstractGraphicsShapeItem class provides a common base for
-    all path items.
-    \since 4.2
-    \ingroup graphicsview-api
-
-    This class does not fully implement an item by itself; in particular, it
-    does not implement boundingRect() and paint(), which are inherited by
-    QGraphicsItem.
-
-    You can subclass this item to provide a simple base implementation of
-    accessors for the item's pen and brush.
-
-    \sa QGraphicsRectItem, QGraphicsEllipseItem, QGraphicsPathItem,
-    QGraphicsPolygonItem, QGraphicsTextItem, QGraphicsLineItem,
-    QGraphicsPixmapItem, {Graphics View Framework}
-*/
-
 class QAbstractGraphicsShapeItemPrivate : public QGraphicsItemPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractGraphicsShapeItem)
@@ -7621,21 +7347,16 @@ class QAbstractGraphicsShapeItemPrivate : public QGraphicsItemPrivate
     Constructs a QAbstractGraphicsShapeItem. \a parent is passed to
     QGraphicsItem's constructor.
 */
-QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-                                                      )
-   : QGraphicsItem(*new QAbstractGraphicsShapeItemPrivate, parent, scene)
+QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QGraphicsItem *parent)
+                  : QGraphicsItem(*new QAbstractGraphicsShapeItemPrivate, parent)
 {
 }
 
 /*!
     \internal
 */
-QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd,
-      QGraphicsItem *parent,
-      QGraphicsScene *scene)
-   : QGraphicsItem(dd, parent, scene)
+QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd, QGraphicsItem *parent)
+                  : QGraphicsItem(dd, parent)
 {
 }
 
@@ -7763,13 +7484,8 @@ class QGraphicsPathItemPrivate : public QAbstractGraphicsShapeItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPathItem::QGraphicsPathItem(const QPainterPath &path,
-                                     QGraphicsItem *parent
-
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QAbstractGraphicsShapeItem(*new QGraphicsPathItemPrivate, parent, scene)
+QGraphicsPathItem::QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsPathItemPrivate, parent)
 {
    if (!path.isEmpty()) {
       setPath(path);
@@ -7782,11 +7498,8 @@ QGraphicsPathItem::QGraphicsPathItem(const QPainterPath &path,
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPathItem::QGraphicsPathItem(QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QAbstractGraphicsShapeItem(*new QGraphicsPathItemPrivate, parent, scene)
+QGraphicsPathItem::QGraphicsPathItem(QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsPathItemPrivate, parent)
 {
 }
 
@@ -7972,11 +7685,8 @@ class QGraphicsRectItemPrivate : public QAbstractGraphicsShapeItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsRectItem::QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent, scene)
+QGraphicsRectItem::QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent)
 {
    setRect(rect);
 }
@@ -7992,12 +7702,8 @@ QGraphicsRectItem::QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h,
-                                     QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent, scene)
+QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent)
 {
    setRect(QRectF(x, y, w, h));
 }
@@ -8008,12 +7714,8 @@ QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h,
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsRectItem::QGraphicsRectItem(QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-
-                                    )
-   : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent, scene)
+QGraphicsRectItem::QGraphicsRectItem(QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent)
 {
 }
 
@@ -8220,12 +7922,8 @@ class QGraphicsEllipseItemPrivate : public QAbstractGraphicsShapeItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsEllipseItem::QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                          )
-   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent, scene)
+QGraphicsEllipseItem::QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
    setRect(rect);
 }
@@ -8240,16 +7938,11 @@ QGraphicsEllipseItem::QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *pa
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h,
-      QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-                                          )
-   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent, scene)
+QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
    setRect(x, y, w, h);
 }
-
 
 
 /*!
@@ -8258,12 +7951,8 @@ QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h,
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsEllipseItem::QGraphicsEllipseItem(QGraphicsItem *parent
-
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-                                          )
-   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent, scene)
+QGraphicsEllipseItem::QGraphicsEllipseItem(QGraphicsItem *parent)                                          
+                  : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
 }
 
@@ -8529,14 +8218,8 @@ class QGraphicsPolygonItemPrivate : public QAbstractGraphicsShapeItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPolygonItem::QGraphicsPolygonItem(const QPolygonF &polygon,
-      QGraphicsItem *parent
-
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                          )
-   : QAbstractGraphicsShapeItem(*new QGraphicsPolygonItemPrivate, parent, scene)
+QGraphicsPolygonItem::QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsPolygonItemPrivate, parent)
 {
    setPolygon(polygon);
 }
@@ -8547,13 +8230,8 @@ QGraphicsPolygonItem::QGraphicsPolygonItem(const QPolygonF &polygon,
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPolygonItem::QGraphicsPolygonItem(QGraphicsItem *parent
-
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                          )
-   : QAbstractGraphicsShapeItem(*new QGraphicsPolygonItemPrivate, parent, scene)
+QGraphicsPolygonItem::QGraphicsPolygonItem(QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsPolygonItemPrivate, parent)
 {
 }
 
@@ -8760,13 +8438,8 @@ class QGraphicsLineItemPrivate : public QGraphicsItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsLineItem::QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent
-
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-
-                                    )
-   : QGraphicsItem(*new QGraphicsLineItemPrivate, parent, scene)
+QGraphicsLineItem::QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsLineItemPrivate, parent)
 {
    setLine(line);
 }
@@ -8778,13 +8451,8 @@ QGraphicsLineItem::QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsLineItem::QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent
-
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-
-                                    )
-   : QGraphicsItem(*new QGraphicsLineItemPrivate, parent, scene)
+QGraphicsLineItem::QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsLineItemPrivate, parent)
 {
    setLine(x1, y1, x2, y2);
 }
@@ -8797,12 +8465,8 @@ QGraphicsLineItem::QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGr
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsLineItem::QGraphicsLineItem(QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-
-                                    )
-   : QGraphicsItem(*new QGraphicsLineItemPrivate, parent, scene)
+QGraphicsLineItem::QGraphicsLineItem(QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsLineItemPrivate, parent)
 {
 }
 
@@ -9092,13 +8756,8 @@ class QGraphicsPixmapItemPrivate : public QGraphicsItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPixmapItem::QGraphicsPixmapItem(const QPixmap &pixmap,
-      QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                        )
-   : QGraphicsItem(*new QGraphicsPixmapItemPrivate, parent, scene)
+QGraphicsPixmapItem::QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsPixmapItemPrivate, parent)
 {
    setPixmap(pixmap);
 }
@@ -9109,12 +8768,8 @@ QGraphicsPixmapItem::QGraphicsPixmapItem(const QPixmap &pixmap,
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsPixmapItem::QGraphicsPixmapItem(QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                        )
-   : QGraphicsItem(*new QGraphicsPixmapItemPrivate, parent, scene)
+QGraphicsPixmapItem::QGraphicsPixmapItem(QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsPixmapItemPrivate, parent)
 {
 }
 
@@ -9434,15 +9089,12 @@ class QGraphicsTextItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsTextItem::QGraphicsTextItem(const QString &text, QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QGraphicsObject(*new QGraphicsItemPrivate, parent, scene), dd(new QGraphicsTextItemPrivate)
+QGraphicsTextItem::QGraphicsTextItem(const QString &text, QGraphicsItem *parent)
+                  : QGraphicsObject(*new QGraphicsItemPrivate, parent), dd(new QGraphicsTextItemPrivate)
 {
    dd->qq = this;
 
-   if (!text.isEmpty()) {
+   if (! text.isEmpty()) {
       setPlainText(text);
    }
 
@@ -9457,11 +9109,8 @@ QGraphicsTextItem::QGraphicsTextItem(const QString &text, QGraphicsItem *parent
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsTextItem::QGraphicsTextItem(QGraphicsItem *parent
-                                     // Qt 5 obsolete argument
-                                     , QGraphicsScene *scene
-                                    )
-   : QGraphicsObject(*new QGraphicsItemPrivate, parent, scene), dd(new QGraphicsTextItemPrivate)
+QGraphicsTextItem::QGraphicsTextItem(QGraphicsItem *parent)
+                  : QGraphicsObject(*new QGraphicsItemPrivate, parent), dd(new QGraphicsTextItemPrivate)
 {
    dd->qq = this;
 
@@ -10340,12 +9989,8 @@ void QGraphicsSimpleTextItemPrivate::updateBoundingRect()
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(QGraphicsItem *parent
-      // Qt 5 obsolete argument
-      , QGraphicsScene *scene
-
-                                                )
-   : QAbstractGraphicsShapeItem(*new QGraphicsSimpleTextItemPrivate, parent, scene)
+QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsSimpleTextItemPrivate, parent)
 {
 }
 
@@ -10356,12 +10001,8 @@ QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(QGraphicsItem *parent
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent
-      // Qt 5  obsolete argument
-      , QGraphicsScene *scene
-
-                                                )
-   : QAbstractGraphicsShapeItem(*new QGraphicsSimpleTextItemPrivate, parent, scene)
+QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent)
+                  : QAbstractGraphicsShapeItem(*new QGraphicsSimpleTextItemPrivate, parent)
 {
    setText(text);
 }
@@ -10606,11 +10247,8 @@ class QGraphicsItemGroupPrivate : public QGraphicsItemPrivate
 
     \sa QGraphicsScene::addItem()
 */
-QGraphicsItemGroup::QGraphicsItemGroup(QGraphicsItem *parent
-                                       // Qt 5 obsolete argument
-                                       , QGraphicsScene *scene
-                                      )
-   : QGraphicsItem(*new QGraphicsItemGroupPrivate, parent, scene)
+QGraphicsItemGroup::QGraphicsItemGroup(QGraphicsItem *parent)
+                  : QGraphicsItem(*new QGraphicsItemGroupPrivate, parent)
 {
    setHandlesChildEvents(true);
 }

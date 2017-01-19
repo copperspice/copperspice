@@ -257,8 +257,10 @@ QWidgetPrivate::QWidgetPrivate()
 
 #elif defined(Q_OS_WIN)
    , noPaintOnScreen(0)
+
 #ifndef QT_NO_GESTURES
    , nativeGesturePanEnabled(0)
+
 #endif
 
 #elif defined(Q_OS_MAC)
@@ -359,6 +361,7 @@ void QWidgetPrivate::scrollChildren(int dx, int dy)
             QPoint oldp = w->pos();
             QRect  r(w->pos() + pd, w->size());
             w->data->crect = r;
+
 #ifndef Q_WS_QWS
             if (w->testAttribute(Qt::WA_WState_Created)) {
                w->d_func()->setWSGeometry();
@@ -721,7 +724,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
 
    q->setAttribute(Qt::WA_WState_Hidden);
 
-   //give potential windows a bigger "pre-initial" size; create_sys() will give them a new size later
+   // give potential windows a bigger "pre-initial" size; create_sys() will give them a new size later
    data.crect = parentWidget ? QRect(0, 0, 100, 30) : QRect(0, 0, 640, 480);
 
    focus_next = focus_prev = q;
@@ -1224,6 +1227,7 @@ bool QWidgetPrivate::isOverlapped(const QRect &rect) const
 
          if (qRectIntersects(sibling->d_func()->effectiveRectFor(sibling->data->crect), r)) {
             const QWExtra *siblingExtra = sibling->d_func()->extra;
+
             if (siblingExtra && siblingExtra->hasMask && !sibling->d_func()->graphicsEffect
                   && !siblingExtra->mask.translated(sibling->data->crect.topLeft()).intersects(r)) {
                continue;
@@ -1251,6 +1255,7 @@ void QWidgetPrivate::syncBackingStore(const QRegion &region)
 {
    if (paintOnScreen()) {
       repaint_sys(region);
+
    } else if (QWidgetBackingStore *bs = maybeBackingStore()) {
       bs->sync(q_func(), region);
    }
@@ -1322,22 +1327,24 @@ void QWidgetPrivate::propagatePaletteChange()
 QRect QWidgetPrivate::clipRect() const
 {
    Q_Q(const QWidget);
+
    const QWidget *w = q;
-   if (!w->isVisible()) {
+
+   if (! w->isVisible()) {
       return QRect();
    }
+
    QRect r = effectiveRectFor(q->rect());
-   int ox = 0;
-   int oy = 0;
-   while (w
-          && w->isVisible()
-          && !w->isWindow()
-          && w->parentWidget()) {
+   int ox  = 0;
+   int oy  = 0;
+
+   while (w && w->isVisible() && ! w->isWindow() && w->parentWidget()) {
       ox -= w->x();
       oy -= w->y();
-      w = w->parentWidget();
-      r &= QRect(ox, oy, w->width(), w->height());
+      w   = w->parentWidget();
+      r  &= QRect(ox, oy, w->width(), w->height());
    }
+
    return r;
 }
 
@@ -2464,13 +2471,16 @@ void QWidget::setDisabled(bool disable)
 QRect QWidget::frameGeometry() const
 {
    Q_D(const QWidget);
+
    if (isWindow() && ! (windowType() == Qt::Popup)) {
       QRect fs = d->frameStrut();
+
       return QRect(data->crect.x() - fs.left(),
                    data->crect.y() - fs.top(),
                    data->crect.width() + fs.left() + fs.right(),
                    data->crect.height() + fs.top() + fs.bottom());
    }
+
    return data->crect;
 }
 
@@ -2606,25 +2616,29 @@ bool QWidgetPrivate::setMinimumSize_helper(int &minw, int &minh)
    if (mh == QWIDGETSIZE_MAX) {
       mh = 0;
    }
+
    if (minw > QWIDGETSIZE_MAX || minh > QWIDGETSIZE_MAX) {
-      qWarning("QWidget::setMinimumSize: (%s/%s) "
-               "The largest allowed size is (%d,%d)",
+      qWarning("QWidget::setMinimumSize: (%s/%s) The largest allowed size is (%d,%d)",
                q->objectName().toLocal8Bit().data(), q->metaObject()->className(), QWIDGETSIZE_MAX,
                QWIDGETSIZE_MAX);
-      minw = mw = qMin<int>(minw, QWIDGETSIZE_MAX);
-      minh = mh = qMin<int>(minh, QWIDGETSIZE_MAX);
+
+      minw = mw = qMin(minw, QWIDGETSIZE_MAX);
+      minh = mh = qMin(minh, QWIDGETSIZE_MAX);
    }
+
    if (minw < 0 || minh < 0) {
-      qWarning("QWidget::setMinimumSize: (%s/%s) Negative sizes (%d,%d) "
-               "are not possible",
+      qWarning("QWidget::setMinimumSize: (%s/%s) Negative sizes (%d,%d) are not possible",
                q->objectName().toLocal8Bit().data(), q->metaObject()->className(), minw, minh);
+
       minw = mw = qMax(minw, 0);
       minh = mh = qMax(minh, 0);
    }
+
    createExtra();
    if (extra->minw == mw && extra->minh == mh) {
       return false;
    }
+
    extra->minw = mw;
    extra->minh = mh;
    extra->explicitMinSize = (mw ? Qt::Horizontal : 0) | (mh ? Qt::Vertical : 0);
@@ -2666,20 +2680,22 @@ bool QWidgetPrivate::setMaximumSize_helper(int &maxw, int &maxh)
 {
    Q_Q(QWidget);
    if (maxw > QWIDGETSIZE_MAX || maxh > QWIDGETSIZE_MAX) {
-      qWarning("QWidget::setMaximumSize: (%s/%s) "
-               "The largest allowed size is (%d,%d)",
+      qWarning("QWidget::setMaximumSize: (%s/%s) The largest allowed size is (%d,%d)",
                q->objectName().toLocal8Bit().data(), q->metaObject()->className(), QWIDGETSIZE_MAX,
                QWIDGETSIZE_MAX);
-      maxw = qMin<int>(maxw, QWIDGETSIZE_MAX);
-      maxh = qMin<int>(maxh, QWIDGETSIZE_MAX);
+
+      maxw = qMin(maxw, QWIDGETSIZE_MAX);
+      maxh = qMin(maxh, QWIDGETSIZE_MAX);
    }
+
    if (maxw < 0 || maxh < 0) {
-      qWarning("QWidget::setMaximumSize: (%s/%s) Negative sizes (%d,%d) "
-               "are not possible",
+      qWarning("QWidget::setMaximumSize: (%s/%s) Negative sizes (%d,%d) are not possible",
                q->objectName().toLocal8Bit().data(), q->metaObject()->className(), maxw, maxh);
+
       maxw = qMax(maxw, 0);
       maxh = qMax(maxh, 0);
    }
+
    createExtra();
    if (extra->maxw == maxw && extra->maxh == maxh) {
       return false;
@@ -3323,13 +3339,13 @@ void QWidget::render(QPaintDevice *target, const QPoint &targetOffset,
 void QWidget::render(QPainter *painter, const QPoint &targetOffset,
                      const QRegion &sourceRegion, RenderFlags renderFlags)
 {
-   if (!painter) {
+   if (! painter) {
       qWarning("QWidget::render: Null pointer to painter");
       return;
    }
 
-   if (!painter->isActive()) {
-      qWarning("QWidget::render: Cannot render with an inactive painter");
+   if (! painter->isActive()) {
+      qWarning("QWidget::render: Can not render with an inactive painter");
       return;
    }
 
@@ -3340,13 +3356,14 @@ void QWidget::render(QPainter *painter, const QPoint &targetOffset,
 
    Q_D(QWidget);
    const bool inRenderWithPainter = d->extra && d->extra->inRenderWithPainter;
-   const QRegion toBePainted = !inRenderWithPainter ? d->prepareToRender(sourceRegion, renderFlags)
-                               : sourceRegion;
+   const QRegion toBePainted = ! inRenderWithPainter ? 
+            d->prepareToRender(sourceRegion, renderFlags) : sourceRegion;
+
    if (toBePainted.isEmpty()) {
       return;
    }
 
-   if (!d->extra) {
+   if (! d->extra) {
       d->createExtra();
    }
    d->extra->inRenderWithPainter = true;
@@ -3375,8 +3392,8 @@ void QWidget::render(QPainter *painter, const QPoint &targetOffset,
    d->setSharedPainter(painter);
 
    // Save current system clip, viewport and transform,
-   const QTransform oldTransform = enginePriv->systemTransform;
-   const QRegion oldSystemClip = enginePriv->systemClip;
+   const QTransform oldTransform   = enginePriv->systemTransform;
+   const QRegion oldSystemClip     = enginePriv->systemClip;
    const QRegion oldSystemViewport = enginePriv->systemViewport;
 
    // This ensures that all painting triggered by render() is clipped to the current engine clip.
@@ -3506,9 +3523,11 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
 
    // Calculate the region to be painted.
    QRegion toBePainted = !region.isEmpty() ? region : QRegion(q->rect());
+
    if (!(renderFlags & QWidget::IgnoreMask) && extra && extra->hasMask) {
       toBePainted &= extra->mask;
    }
+
    return toBePainted;
 }
 
@@ -3523,7 +3542,8 @@ void QWidgetPrivate::render_helper(QPainter *painter, const QPoint &targetOffset
 #ifndef Q_OS_MAC
    const QTransform originalTransform = painter->worldTransform();
    const bool useDeviceCoordinates = originalTransform.isScaling();
-   if (!useDeviceCoordinates) {
+
+   if ( !useDeviceCoordinates) {
 #endif
       // Render via a pixmap.
       const QRect rect = toBePainted.boundingRect();
@@ -3607,9 +3627,11 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
       QGraphicsEffectSource *source = graphicsEffect->d_func()->source;
       QWidgetEffectSourcePrivate *sourced = static_cast<QWidgetEffectSourcePrivate *>
                                             (source->d_func());
+
       if (!sourced->context) {
          QWidgetPaintContext context(pdev, rgn, offset, flags, sharedPainter, backingStore);
          sourced->context = &context;
+
          if (!sharedPainter) {
             QPaintEngine *paintEngine = pdev->paintEngine();
             paintEngine->d_func()->systemClip = rgn.translated(offset);
@@ -3618,6 +3640,7 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
             context.painter = &p;
             graphicsEffect->draw(&p);
             paintEngine->d_func()->systemClip = QRegion();
+
          } else {
             context.painter = sharedPainter;
             if (sharedPainter->worldTransform() != sourced->lastEffectTransform) {
@@ -3686,7 +3709,7 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
                paintEngine->d_func()->systemRect = q->data->crect;
             }
 
-            //paint the background
+            // paint the background
             if ((asRoot || q->autoFillBackground() || onScreen || q->testAttribute(Qt::WA_StyledBackground))
                   && !q->testAttribute(Qt::WA_OpaquePaintEvent) && !q->testAttribute(Qt::WA_NoSystemBackground)) {
                QPainter p(q);
@@ -3705,7 +3728,7 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
             }
          }
 
-         //actually send the paint event
+         // actually send the paint event
          QPaintEvent e(toBePainted);
          QCoreApplication::sendSpontaneousEvent(q, &e);
 
@@ -3782,9 +3805,15 @@ void QWidgetPrivate::render(QPaintDevice *target, const QPoint &targetOffset,
    }
 
    const bool inRenderWithPainter = extra && extra->inRenderWithPainter;
-   QRegion paintRegion = !inRenderWithPainter && !readyToRender
-                         ? prepareToRender(sourceRegion, renderFlags)
-                         : sourceRegion;
+
+   QRegion paintRegion; 
+
+   if (! inRenderWithPainter && ! readyToRender)  {
+      paintRegion = prepareToRender(sourceRegion, renderFlags);
+   } else {
+      paintRegion = sourceRegion;
+   }
+
    if (paintRegion.isEmpty()) {
       return;
    }
@@ -3825,9 +3854,11 @@ void QWidgetPrivate::render(QPaintDevice *target, const QPoint &targetOffset,
       offset -= redirectionOffset;
    }
 
-   if (!inRenderWithPainter) { // Clip handled by shared painter (in qpainter.cpp).
+   if (! inRenderWithPainter) { // Clip handled by shared painter (in qpainter.cpp).
+
       if (QPaintEngine *targetEngine = target->paintEngine()) {
          const QRegion targetSystemClip = targetEngine->systemClip();
+
          if (!targetSystemClip.isEmpty()) {
             paintRegion &= targetSystemClip.translated(-offset);
          }
@@ -3871,8 +3902,8 @@ void QWidgetPrivate::render(QPaintDevice *target, const QPoint &targetOffset,
 }
 
 void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectList &siblings, int index,
-      const QRegion &rgn,
-      const QPoint &offset, int flags
+      const QRegion &rgn, const QPoint &offset, int flags
+
 #ifdef Q_BACKINGSTORE_SUBSURFACES
       , const QWindowSurface *currentSurface
 #endif
@@ -3887,6 +3918,7 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
 
    do {
       QWidget *x =  qobject_cast<QWidget *>(siblings.at(index));
+
       if (x && !(exludeOpaqueChildren && x->d_func()->isOpaque) && !x->isHidden() && !x->isWindow()
             && !(excludeNativeChildren && x->internalWinId())) {
 
@@ -3896,6 +3928,7 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
          }
 
          if (qRectIntersects(boundingRect, x->d_func()->effectiveRectFor(x->data->crect))) {
+
 #ifdef Q_BACKINGSTORE_SUBSURFACES
             if (x->windowSurface() == currentSurface)
 #endif
@@ -3906,40 +3939,47 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
          }
       }
       --index;
+
    } while (index >= 0);
 
-   if (!w) {
+   if (! w) {
       return;
    }
 
    QWidgetPrivate *wd = w->d_func();
    const QPoint widgetPos(w->data->crect.topLeft());
    const bool hasMask = wd->extra && wd->extra->hasMask && !wd->graphicsEffect;
+
    if (index > 0) {
       QRegion wr(rgn);
+
       if (wd->isOpaque) {
          wr -= hasMask ? wd->extra->mask.translated(widgetPos) : w->data->crect;
       }
-      paintSiblingsRecursive(pdev, siblings, --index, wr, offset, flags
+     
 #ifdef Q_BACKINGSTORE_SUBSURFACES
-                             , currentSurface
+      paintSiblingsRecursive(pdev, siblings, --index, wr, offset, flags, currentSurface, sharedPainter, backingStore);
+#else
+      paintSiblingsRecursive(pdev, siblings, --index, wr, offset, flags, sharedPainter, backingStore);
 #endif
-                             , sharedPainter, backingStore);
+                             
    }
 
-   if (w->updatesEnabled()
-
-#ifndef QT_NO_GRAPHICSVIEW
-         && (!w->d_func()->extra || !w->d_func()->extra->proxyWidget)
+#ifdef QT_NO_GRAPHICSVIEW
+   if (w->updatesEnabled()) {
+#else
+   if (w->updatesEnabled() && (!w->d_func()->extra || ! w->d_func()->extra->proxyWidget)) {
 #endif
 
-      ) {
-      QRegion wRegion(rgn);
+      QRegion wRegion(rgn);     
       wRegion &= wd->effectiveRectFor(w->data->crect);
+
       wRegion.translate(-widgetPos);
+
       if (hasMask) {
          wRegion &= wd->extra->mask;
       }
+
       wd->drawWidget(pdev, wRegion, offset + widgetPos, flags, sharedPainter, backingStore);
    }
 }
@@ -3962,7 +4002,7 @@ QRectF QWidgetEffectSourcePrivate::boundingRect(Qt::CoordinateSystem system) con
 
 void QWidgetEffectSourcePrivate::draw(QPainter *painter)
 {
-   if (!context || context->painter != painter) {
+   if (! context || context->painter != painter) {
       m_widget->render(painter);
       return;
    }
@@ -3971,7 +4011,9 @@ void QWidgetEffectSourcePrivate::draw(QPainter *painter)
    // nor the mask, so we have to clip it here before calling drawWidget.
    QRegion toBePainted = context->rgn;
    toBePainted &= m_widget->rect();
+
    QWidgetPrivate *wd = qt_widget_private(m_widget);
+
    if (wd->extra && wd->extra->hasMask) {
       toBePainted &= wd->extra->mask;
    }
@@ -4796,9 +4838,11 @@ QSize QWidget::frameSize() const
    Q_D(const QWidget);
    if (isWindow() && !(windowType() == Qt::Popup)) {
       QRect fs = d->frameStrut();
+
       return QSize(data->crect.width() + fs.left() + fs.right(),
                    data->crect.height() + fs.top() + fs.bottom());
    }
+
    return data->crect.size();
 }
 
@@ -4816,6 +4860,7 @@ void QWidget::move(const QPoint &p)
                          p.y() + geometry().y() - QWidget::y(),
                          width(), height(), true);
       d->setDirtyOpaqueRegion();
+
    } else {
       data->crect.moveTopLeft(p); // no frame yet
       setAttribute(Qt::WA_PendingMoveEvent);
@@ -4826,12 +4871,15 @@ void QWidget::resize(const QSize &s)
 {
    Q_D(QWidget);
    setAttribute(Qt::WA_Resized);
+
    if (testAttribute(Qt::WA_WState_Created)) {
       d->setGeometry_sys(geometry().x(), geometry().y(), s.width(), s.height(), false);
       d->setDirtyOpaqueRegion();
+
    } else {
       data->crect.setSize(s.boundedTo(maximumSize()).expandedTo(minimumSize()));
       setAttribute(Qt::WA_PendingResizeEvent);
+
    }
 }
 
@@ -4840,15 +4888,20 @@ void QWidget::setGeometry(const QRect &r)
    Q_D(QWidget);
    setAttribute(Qt::WA_Resized);
    setAttribute(Qt::WA_Moved);
+
    if (isWindow()) {
       d->topData()->posFromMove = false;
    }
+
    if (testAttribute(Qt::WA_WState_Created)) {
       d->setGeometry_sys(r.x(), r.y(), r.width(), r.height(), true);
       d->setDirtyOpaqueRegion();
+
    } else {
+
       data->crect.setTopLeft(r.topLeft());
       data->crect.setSize(r.size().boundedTo(maximumSize()).expandedTo(minimumSize()));
+
       setAttribute(Qt::WA_PendingMoveEvent);
       setAttribute(Qt::WA_PendingResizeEvent);
    }
@@ -4864,6 +4917,7 @@ QByteArray QWidget::saveGeometry() const
    Q_D(const QWidget);
    QRect newFramePosition = frameGeometry();
    QRect newNormalPosition = normalGeometry();
+
    if (d->topData()->wasMaximized && !(windowState() & Qt::WindowMaximized)) {
       // Change the starting position
       newFramePosition.moveTo(0, 0);
@@ -5098,9 +5152,10 @@ QMargins QWidget::contentsMargins() const
 QRect QWidget::contentsRect() const
 {
    Q_D(const QWidget);
+
    return QRect(QPoint(d->leftmargin, d->topmargin),
-                QPoint(data->crect.width() - 1 - d->rightmargin,
-                       data->crect.height() - 1 - d->bottommargin));
+                QPoint(data->crect.width() - 1 - d->rightmargin, 
+                data->crect.height() - 1 - d->bottommargin));
 
 }
 
@@ -5404,7 +5459,9 @@ void QWidgetPrivate::hide_helper()
 
 void QWidget::setVisible(bool visible)
 {
-   if (visible) { // show
+   if (visible) { 
+      // show
+
       if (testAttribute(Qt::WA_WState_ExplicitShowHide) && !testAttribute(Qt::WA_WState_Hidden)) {
          return;
       }
@@ -5444,8 +5501,10 @@ void QWidget::setVisible(bool visible)
 
       // remember that show was called explicitly
       setAttribute(Qt::WA_WState_ExplicitShowHide);
+
       // whether we need to inform the parent widget immediately
       bool needUpdateGeometry = !isWindow() && testAttribute(Qt::WA_WState_Hidden);
+
       // we are no longer hidden
       setAttribute(Qt::WA_WState_Hidden, false);
 
@@ -6087,9 +6146,9 @@ bool QWidget::event(QEvent *event)
          break;
 
       case QEvent::Paint:
-         // At this point the event has to be delivered, regardless
-         // whether the widget isVisible() or not because it
-         // already went through the filters
+         // At this point the event has to be delivered, regardless whether the widget
+         // isVisible() or not because it already went through the filters
+
          paintEvent((QPaintEvent *)event);
          break;
 

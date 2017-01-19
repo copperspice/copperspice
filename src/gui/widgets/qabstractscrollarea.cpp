@@ -547,11 +547,13 @@ QAbstractScrollArea::~QAbstractScrollArea()
 void QAbstractScrollArea::setViewport(QWidget *widget)
 {
    Q_D(QAbstractScrollArea);
+
    if (widget != d->viewport) {
       QWidget *oldViewport = d->viewport;
       if (!widget) {
          widget = new QWidget;
       }
+
       d->viewport = widget;
       d->viewport->setParent(this);
       d->viewport->setFocusProxy(this);
@@ -562,9 +564,11 @@ void QAbstractScrollArea::setViewport(QWidget *widget)
 #endif
 #endif
       d->layoutChildren();
+
       if (isVisible()) {
          d->viewport->show();
       }
+
       QMetaObject::invokeMethod(this, "setupViewport", Q_ARG(QWidget *, widget));
       delete oldViewport;
    }
@@ -850,7 +854,6 @@ void QAbstractScrollArea::setViewportMargins(int left, int top, int right, int b
    d->layoutChildren();
 }
 
-
 void QAbstractScrollArea::setViewportMargins(const QMargins &margins)
 {
    setViewportMargins(margins.left(), margins.top(), margins.right(), margins.bottom());
@@ -862,29 +865,35 @@ bool QAbstractScrollArea::event(QEvent *e)
 
    switch (e->type()) {
       case QEvent::AcceptDropsChange:
-         // There was a chance that with accessibility client we get an
-         // event before the viewport was created.
+         // There was a chance with accessibility client we get an vent before the viewport was created.
          // Also, in some cases we might get here from QWidget::event() virtual function which is (indirectly) called
          // from the viewport constructor at the time when the d->viewport is not yet initialized even without any
          // accessibility client. See qabstractscrollarea autotest for a test case.
+
          if (d->viewport) {
             d->viewport->setAcceptDrops(acceptDrops());
          }
          break;
+
       case QEvent::MouseTrackingChange:
          d->viewport->setMouseTracking(hasMouseTracking());
          break;
+
       case QEvent::Resize:
          d->layoutChildren();
          break;
+
       case QEvent::Paint: {
          QStyleOption option;
          option.initFrom(this);
+
          if (d->cornerPaintingRect.isValid()) {
             option.rect = d->cornerPaintingRect;
+
             QPainter p(this);
             style()->drawPrimitive(QStyle::PE_PanelScrollAreaCorner, &option, &p, this);
          }
+
 #ifdef Q_OS_MAC
          if (d->reverseCornerPaintingRect.isValid()) {
             option.rect = d->reverseCornerPaintingRect;
@@ -892,9 +901,10 @@ bool QAbstractScrollArea::event(QEvent *e)
             style()->drawPrimitive(QStyle::PE_PanelScrollAreaCorner, &option, &p, this);
          }
 #endif
-      }
-      QFrame::paintEvent((QPaintEvent *)e);
-      break;
+         }
+
+         QFrame::paintEvent((QPaintEvent *)e);
+         break;
 
 #ifndef QT_NO_CONTEXTMENU
       case QEvent::ContextMenu:
@@ -923,6 +933,7 @@ bool QAbstractScrollArea::event(QEvent *e)
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd:
          return false;
+
 #ifndef QT_NO_GESTURES
       case QEvent::Gesture: {
          QGestureEvent *ge = static_cast<QGestureEvent *>(e);
@@ -945,15 +956,19 @@ bool QAbstractScrollArea::event(QEvent *e)
          return false;
       }
 #endif // QT_NO_GESTURES
+
       case QEvent::StyleChange:
       case QEvent::LayoutDirectionChange:
       case QEvent::ApplicationLayoutDirectionChange:
       case QEvent::LayoutRequest:
          d->layoutChildren();
-      // fall through
+
+         // fall through
+      
       default:
          return QFrame::event(e);
    }
+
    return true;
 }
 
@@ -984,11 +999,13 @@ bool QAbstractScrollArea::viewportEvent(QEvent *e)
          return QFrame::event(e);
 
       case QEvent::LayoutRequest:
+
 #ifndef QT_NO_GESTURES
       case QEvent::Gesture:
       case QEvent::GestureOverride:
          return event(e);
 #endif
+
       default:
          break;
    }
@@ -1086,13 +1103,16 @@ void QAbstractScrollArea::contextMenuEvent(QContextMenuEvent *e)
 void QAbstractScrollArea::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QAbstractScrollArea);
+
    if (false) {
+
 #ifndef QT_NO_SHORTCUT
    } else if (e == QKeySequence::MoveToPreviousPage) {
       d->vbar->triggerAction(QScrollBar::SliderPageStepSub);
    } else if (e == QKeySequence::MoveToNextPage) {
       d->vbar->triggerAction(QScrollBar::SliderPageStepAdd);
 #endif
+
    } else {
 #ifdef QT_KEYPAD_NAVIGATION
       if (QApplication::keypadNavigationEnabled() && !hasEditFocus()) {

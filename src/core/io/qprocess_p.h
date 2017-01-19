@@ -288,7 +288,8 @@ inline uint qHash(const QProcessEnvironmentPrivate::Key &key)
 }
 #endif
 
-template<> Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
+template<>
+Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {
       return;

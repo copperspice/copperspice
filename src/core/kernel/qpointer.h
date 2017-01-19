@@ -52,7 +52,9 @@ class QPointer
    inline QPointer() { }
    inline QPointer(T *p) : wp(p, true) { }
 
-   // compiler-generated copy/move ctor/assignment operators are fine!
+   ~QPointer () = default;
+
+   // compiler-generated copy/move ctor/assignment operators are fine
 
    inline QPointer<T> &operator=(T *p) {
       wp.assign(static_cast<QObjectType *>(p));

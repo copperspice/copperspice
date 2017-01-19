@@ -30,12 +30,13 @@
 #ifndef PHONON_PATH_P_H
 #define PHONON_PATH_P_H
 
-#include "path.h"
+#include <path.h>
+
 #include <QtCore/QPair>
 #include <QtCore/QList>
 #include <QtCore/QSharedData>
-#include "effect.h"
-#include "medianodedestructionhandler_p.h"
+#include <effect.h>
+#include <medianodedestructionhandler_p.h>
 
 QT_BEGIN_NAMESPACE
 

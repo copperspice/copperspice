@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -40,7 +40,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
     class AudioDataOutputPrivate;
- 
+
     class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
     {
         PHN_CS_OBJECT(AudioDataOutput)
@@ -54,7 +54,7 @@ namespace Phonon
         PHONON_HEIR(AudioDataOutput)
 
         public:
-           
+
             enum Channel
             {
                 LeftChannel,
@@ -64,18 +64,18 @@ namespace Phonon
                 RightSurroundChannel,
                 SubwooferChannel
             };
-           
+
             int dataSize() const;
             int sampleRate() const;
-              
+
             PHN_CS_SLOT_1(Public, void setDataSize(int size))
-            PHN_CS_SLOT_2(setDataSize) 
-        
-            PHN_CS_SIGNAL_1(Public, void dataReady(const QMap <Phonon::AudioDataOutput::Channel,QVector <qint16>> & data))
-            PHN_CS_SIGNAL_2(dataReady,data) 
-           
+            PHN_CS_SLOT_2(setDataSize)
+
+            PHN_CS_SIGNAL_1(Public, void dataReady(const QMap <Phonon::AudioDataOutput::Channel, QVector <qint16>> & data))
+            PHN_CS_SIGNAL_2(dataReady,data)
+
             PHN_CS_SIGNAL_1(Public, void endOfMedia(int remainingSamples))
-            PHN_CS_SIGNAL_2(endOfMedia,remainingSamples) 
+            PHN_CS_SIGNAL_2(endOfMedia,remainingSamples)
     };
 } // namespace Phonon
 

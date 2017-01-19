@@ -55,26 +55,33 @@ namespace Phonon
 static inline bool callSetOutputDevice(AudioOutputPrivate *const d, int index)
 {
     PulseSupport *pulse = PulseSupport::getInstance();
+
     if (pulse->isActive())
         return pulse->setOutputDevice(d->getStreamUuid(), index);
 
     Iface<IFACES2> iface(d);
+
     if (iface) {
-        return iface->setOutputDevice(AudioOutputDevice::fromIndex(index));
+       return iface->setOutputDevice(AudioOutputDevice::fromIndex(index));
     }
+
     return Iface<IFACES0>::cast(d)->setOutputDevice(index);
 }
 
 static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioOutputDevice &dev)
 {
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        return pulse->setOutputDevice(d->getStreamUuid(), dev.index());
+
+    if (pulse->isActive()) {
+      return pulse->setOutputDevice(d->getStreamUuid(), dev.index());
+    }
 
     Iface<IFACES2> iface(d);
+
     if (iface) {
-        return iface->setOutputDevice(dev);
+      return iface->setOutputDevice(dev);
     }
+
     return Iface<IFACES0>::cast(d)->setOutputDevice(dev.index());
 }
 
@@ -130,13 +137,19 @@ QString AudioOutputPrivate::getStreamUuid()
 
 void AudioOutputPrivate::createBackendObject()
 {
-    if (m_backendObject)
+    if (m_backendObject) {
         return;
+    }
+
     Q_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
+
     if (m_backendObject) {
-	device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
-        setupBackendObject();
+
+      device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, 
+                  GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
+
+      setupBackendObject();
     }
 }
 
@@ -280,38 +293,45 @@ void AudioOutputPrivate::setupBackendObject()
 {
     Q_Q(AudioOutput);
     Q_ASSERT(m_backendObject);
+
     AbstractAudioOutputPrivate::setupBackendObject();
 
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
-    QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
+    QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()),  q, SLOT(_k_audioDeviceFailed()));
 
     // set up attributes
     pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
-    // if the output device is not available and the device was not explicitly set
-    // There is no need to set the output device initially if PA is used as
-    // we know it will not work (stream doesn't exist yet) and that this will be
-    // handled by _k_deviceChanged()
-    if (!PulseSupport::getInstance()->isActive() && !callSetOutputDevice(this, device) && !outputDeviceOverridden) {
+    // if the output device is not available and the device was not explicitly set 
+    // There is no need to set the output device initially if PA is used as as we
+    // know it will not work (stream doesn't exist yet) and that this will be handled by _k_deviceChanged()
+
+    if (! PulseSupport::getInstance()->isActive() && ! callSetOutputDevice(this, device) && ! outputDeviceOverridden) {
         // fall back in the preference list of output devices
-        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
+        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, 
+                  GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
+
         if (deviceList.isEmpty()) {
             return;
         }
+
         for (int i = 0; i < deviceList.count(); ++i) {
             const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
             if (callSetOutputDevice(this, dev)) {
                 handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
+
                 return; // found one that works
             }
         }
+
         // if we get here there is no working output device. Tell the backend.
         const AudioOutputDevice none;
         callSetOutputDevice(this, none);
         handleAutomaticDeviceChange(none, FallbackChange);
     }
-#endif //QT_NO_PHONON_SETTINGSGROUP
+
+#endif 
 }
 
 void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)

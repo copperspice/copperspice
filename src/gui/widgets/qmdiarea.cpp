@@ -514,6 +514,7 @@ void QMdiAreaTabBar::contextMenuEvent(QContextMenuEvent *event)
 
    // We don't want these actions to show up in the system menu when the
    // current sub-window is maximized, i.e. covers the entire viewport.
+
    if (currentSubWindow->isMaximized()) {
       subWindowPrivate->setVisible(QMdiSubWindowPrivate::MoveAction, false);
       subWindowPrivate->setVisible(QMdiSubWindowPrivate::ResizeAction, false);
@@ -1128,8 +1129,8 @@ void QMdiAreaPrivate::updateScrollBars()
       vbarExtent.rwidth() += doubleFrameWidth;
    }
 
-   const QRect childrenRect = active && active->isMaximized()
-                              ? active->geometry() : viewport->childrenRect();
+   const QRect childrenRect = active && active->isMaximized() ? active->geometry() : viewport->childrenRect();
+
    bool useHorizontalScrollBar = useScrollBar(childrenRect, maxSize, Qt::Horizontal);
    bool useVerticalScrollBar = useScrollBar(childrenRect, maxSize, Qt::Vertical);
 
@@ -1151,16 +1152,15 @@ void QMdiAreaPrivate::updateScrollBars()
    }
 
    QRect viewportRect(QPoint(0, 0), maxSize);
-   const int startX = q->isLeftToRight() ? childrenRect.left() : viewportRect.right()
-                      - childrenRect.right();
+   const int startX = q->isLeftToRight() ? childrenRect.left() : viewportRect.right() - childrenRect.right();
 
    // Horizontal scroll bar.
    if (isSubWindowsTiled && hbar->value() != 0) {
       hbar->setValue(0);
    }
+
    const int xOffset = startX + hbar->value();
-   hbar->setRange(qMin(0, xOffset),
-                  qMax(0, xOffset + childrenRect.width() - viewportRect.width()));
+   hbar->setRange(qMin(0, xOffset), qMax(0, xOffset + childrenRect.width() - viewportRect.width()));
    hbar->setPageStep(childrenRect.width());
    hbar->setSingleStep(childrenRect.width() / 20);
 
@@ -1169,8 +1169,7 @@ void QMdiAreaPrivate::updateScrollBars()
       vbar->setValue(0);
    }
    const int yOffset = childrenRect.top() + vbar->value();
-   vbar->setRange(qMin(0, yOffset),
-                  qMax(0, yOffset + childrenRect.height() - viewportRect.height()));
+   vbar->setRange(qMin(0, yOffset), qMax(0, yOffset + childrenRect.height() - viewportRect.height()));
    vbar->setPageStep(childrenRect.height());
    vbar->setSingleStep(childrenRect.height() / 20);
 }
@@ -1185,12 +1184,14 @@ void QMdiAreaPrivate::internalRaise(QMdiSubWindow *mdiChild) const
    }
 
    QMdiSubWindow *stackUnderChild = 0;
-   if (!windowStaysOnTop(mdiChild)) {
+   if (! windowStaysOnTop(mdiChild)) {
       foreach (QObject * object, viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
-         if (!child || !childWindows.contains(child)) {
+
+         if (! child || ! childWindows.contains(child)) {
             continue;
          }
+
          if (!child->isHidden() && windowStaysOnTop(child)) {
             if (stackUnderChild) {
                child->stackUnder(stackUnderChild);
@@ -1231,20 +1232,25 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
       while (topLevel && !topLevel->isWindow() && topLevel->windowType() != Qt::SubWindow) {
          topLevel = topLevel->parentWidget();
       }
+
       // We don't want sub-subwindows to be placed at the edge, thus add 2 pixels.
       int minAreaWidth = minWidth + left + right + 2;
       int minAreaHeight = minHeight + top + bottom + 2;
+
       if (hbar->isVisible()) {
          minAreaHeight += hbar->height();
       }
+
       if (vbar->isVisible()) {
          minAreaWidth += vbar->width();
       }
+
       if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, 0, q)) {
          const int frame = q->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, q);
          minAreaWidth += 2 * frame;
          minAreaHeight += 2 * frame;
       }
+
       const QSize diff = QSize(minAreaWidth, minAreaHeight).expandedTo(q->size()) - q->size();
       topLevel->resize(topLevel->size() + diff);
    }
@@ -1254,6 +1260,7 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
    // Adjust domain width and provide horizontal scroll bar.
    if (domain.width() < minWidth) {
       domain.setWidth(minWidth);
+
       if (hbarpolicy == Qt::ScrollBarAlwaysOff) {
          q->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
       } else {
@@ -1359,6 +1366,7 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
             list.prepend(child);
          }
       }
+
    } else if (order == QMdiArea::StackingOrder) {
       foreach (QObject * object, viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
@@ -1679,6 +1687,7 @@ QMdiArea::QMdiArea(QWidget *parent)
    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
    setViewport(0);
    setFocusPolicy(Qt::NoFocus);
+
    QApplication::instance()->installEventFilter(this);
 }
 
@@ -1955,6 +1964,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
    }
 
    Q_D(QMdiArea);
+
    // QWidget::setParent clears focusWidget so store it
    QWidget *childFocus = widget->focusWidget();
    QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(widget);
@@ -1977,6 +1987,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
    if (childFocus) {
       childFocus->setFocus();
    }
+
    d->appendChild(child);
    return child;
 }
@@ -2051,6 +2062,7 @@ QBrush QMdiArea::background() const
 void QMdiArea::setBackground(const QBrush &brush)
 {
    Q_D(QMdiArea);
+
    if (d->background != brush) {
       d->background = brush;
       d->viewport->setAttribute(Qt::WA_OpaquePaintEvent, brush.isOpaque());
@@ -2184,15 +2196,6 @@ void QMdiArea::setTabsClosable(bool closable)
    d->refreshTabBar();
 }
 
-/*!
-    \property QMdiArea::tabsMovable
-    \brief whether the user can move the tabs within the tabbar area in tabbed view mode.
-    \since 4.8
-
-    Tabs are not movable by default.
-
-    \sa QTabBar::movable, setViewMode()
-*/
 bool QMdiArea::tabsMovable() const
 {
    Q_D(const QMdiArea);
@@ -2451,9 +2454,11 @@ bool QMdiArea::viewportEvent(QEvent *event)
          d->childWindows.clear();
          qWarning("QMdiArea: Deleting the view port is undefined, use setViewport instead.");
          break;
+
       default:
          break;
    }
+
    return QAbstractScrollArea::viewportEvent(event);
 }
 
@@ -2574,11 +2579,13 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
    }
 
    Q_D(QMdiArea);
+
    // Global key events with Ctrl modifier.
    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
 
       QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
       // Ingore key events without a Ctrl modifier (except for press/release on the modifier itself).
+
 #ifdef Q_OS_MAC
       if (!(keyEvent->modifiers() & Qt::MetaModifier) && keyEvent->key() != Qt::Key_Meta)
 #else
@@ -2598,6 +2605,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
       // 2) Ctrl-Tab (Tab, Tab, ...) -> iterate through all windows (activateNextSubWindow()).
       // 3) Ctrl-Shift-Tab (Tab, Tab, ...) -> iterate through all windows in the opposite
       //    direction (activatePreviousSubWindow())
+
       switch (keyEvent->key()) {
 #ifdef Q_OS_MAC
          case Qt::Key_Meta:
@@ -2629,13 +2637,15 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
 
    QMdiSubWindow *subWindow = qobject_cast<QMdiSubWindow *>(object);
 
-   if (!subWindow) {
+   if (! subWindow) {
       // QApplication events:
       if (event->type() == QEvent::ApplicationActivate && !d->active
             && isVisible() && !window()->isMinimized()) {
          d->activateCurrentWindow();
+
       } else if (event->type() == QEvent::ApplicationDeactivate && d->active) {
          d->setActive(d->active, false, false);
+
       }
       return QAbstractScrollArea::eventFilter(object, event);
    }
@@ -2656,6 +2666,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
             d->isSubWindowsTiled = false;
          }
          break;
+
       case QEvent::Show:
 #ifndef QT_NO_TABBAR
          if (d->tabBar) {
@@ -2665,17 +2676,20 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
             }
          }
 #endif // QT_NO_TABBAR
+
       // fall through
       case QEvent::Hide:
          d->isSubWindowsTiled = false;
          break;
 #ifndef QT_NO_RUBBERBAND
+
       case QEvent::Close:
          if (d->childWindows.indexOf(subWindow) == d->indexToHighlighted) {
             d->hideRubberBand();
          }
          break;
 #endif
+
 #ifndef QT_NO_TABBAR
       case QEvent::WindowTitleChange:
       case QEvent::ModifiedChange:
@@ -2689,9 +2703,11 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
          }
          break;
 #endif // QT_NO_TABBAR
+
       default:
          break;
    }
+
    return QAbstractScrollArea::eventFilter(object, event);
 }
 
@@ -2702,7 +2718,9 @@ void QMdiArea::paintEvent(QPaintEvent *paintEvent)
 {
    Q_D(QMdiArea);
    QPainter painter(d->viewport);
+
    const QVector<QRect> &exposedRects = paintEvent->region().rects();
+
    for (int i = 0; i < exposedRects.size(); ++i) {
       painter.fillRect(exposedRects.at(i), d->background);
    }
@@ -2718,13 +2736,16 @@ void QMdiArea::paintEvent(QPaintEvent *paintEvent)
 void QMdiArea::setupViewport(QWidget *viewport)
 {
    Q_D(QMdiArea);
+
    if (viewport) {
       viewport->setAttribute(Qt::WA_OpaquePaintEvent, d->background.isOpaque());
    }
+
    foreach (QMdiSubWindow * child, d->childWindows) {
-      if (!sanityCheck(child, "QMdiArea::setupViewport")) {
+      if (! sanityCheck(child, "QMdiArea::setupViewport")) {
          continue;
       }
+
       child->setParent(viewport, child->windowFlags());
    }
 }

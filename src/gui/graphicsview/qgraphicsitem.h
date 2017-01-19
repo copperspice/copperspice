@@ -154,9 +154,7 @@ class Q_GUI_EXPORT QGraphicsItem
       SceneModal
    };
 
-   // ### Qt5/check if 2nd argument is obsolete
-   QGraphicsItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
+   QGraphicsItem(QGraphicsItem *parent = nullptr);
    virtual ~QGraphicsItem();
 
    QGraphicsScene *scene() const;
@@ -475,7 +473,7 @@ class Q_GUI_EXPORT QGraphicsItem
    virtual void setExtension(Extension extension, const QVariant &variant);
    virtual QVariant extension(const QVariant &variant) const;
  
-   QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene);
+   QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
    QScopedPointer<QGraphicsItemPrivate> d_ptr;
 
    void addToIndex();
@@ -685,7 +683,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    CS_INTERFACES(QGraphicsItem)
 
  public:
-   QGraphicsObject(QGraphicsItem *parent = 0);
+   QGraphicsObject(QGraphicsItem *parent = nullptr);
    using QObject::children;
 
 #ifndef QT_NO_GESTURES
@@ -722,7 +720,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    GUI_CS_SLOT_1(Protected, void updateMicroFocus())
    GUI_CS_SLOT_2(updateMicroFocus)
 
-   QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene);
+   QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
 
  private:
    friend class QGraphicsItem;
@@ -754,10 +752,7 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
 class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
 {
  public:
-
-   // ### Qt5, check if obsolete argument
-   QAbstractGraphicsShapeItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0 );
-
+   QAbstractGraphicsShapeItem(QGraphicsItem *parent = nullptr);
    ~QAbstractGraphicsShapeItem();
 
    QPen pen() const;
@@ -770,7 +765,7 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
    QPainterPath opaqueArea() const override;
 
  protected:
-   QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene);
+   QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd, QGraphicsItem *parent);
 
  private:
    Q_DISABLE_COPY(QAbstractGraphicsShapeItem)
@@ -780,12 +775,8 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
 class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
 {
  public:
-
-   // ### Qt5 obsolete argument
-   QGraphicsPathItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsPathItem(QGraphicsItem *parent = nullptr);
+   QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPathItem();
 
@@ -817,15 +808,9 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
 {
  public:
-
-   // ### Qt5 obsolete argument
-   QGraphicsRectItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsRectItem(QGraphicsItem *parent = nullptr);
+   QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
+   QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsRectItem();
 
@@ -837,7 +822,7 @@ class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
    QPainterPath shape() const override;
    bool contains(const QPointF &point) const override;
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
@@ -863,14 +848,9 @@ inline void QGraphicsRectItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
 class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
 {
  public:
-   // ### Qt5 obsolete argument
-   QGraphicsEllipseItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsEllipseItem(QGraphicsItem *parent = nullptr);
+   QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
+   QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsEllipseItem();
 
@@ -913,12 +893,9 @@ inline void QGraphicsEllipseItem::setRect(qreal ax, qreal ay, qreal w, qreal h)
 
 class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
 {
- public:
-   // ### Qt5 obsolete argument
-   QGraphicsPolygonItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+ public:  
+   QGraphicsPolygonItem(QGraphicsItem *parent = nullptr);
+   QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPolygonItem();
 
@@ -953,14 +930,9 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
 {
  public:
-   // ### Qt5 obsolete argument
-   QGraphicsLineItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = 0 , QGraphicsScene *scene = 0);
+   QGraphicsLineItem(QGraphicsItem *parent = nullptr);
+   QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent = nullptr);
+   QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsLineItem();
 
@@ -1004,11 +976,8 @@ class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
       HeuristicMaskShape
    };
 
-   // ### Qt5 obsolete argument
-   QGraphicsPixmapItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsPixmapItem(QGraphicsItem *parent = nullptr);
+   QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsPixmapItem();
 
@@ -1063,12 +1032,8 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    GUI_CS_PROPERTY_WRITE(textCursor, setTextCursor)
 
  public:
-
-   // ### Qt5 obsolete argument
-   QGraphicsTextItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsTextItem(const QString &text, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsTextItem(QGraphicsItem *parent = nullptr);
+   QGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsTextItem();
 
@@ -1171,11 +1136,8 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
 {
 
  public:
-   // ### Qt5 obsolete argument
-   QGraphicsSimpleTextItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
-   // ### Qt5 obsolete argument
-   QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+   QGraphicsSimpleTextItem(QGraphicsItem *parent = nullptr);
+   QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 
    ~QGraphicsSimpleTextItem();
 
@@ -1210,16 +1172,14 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
 class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
 {
  public:
-   // ### Qt 5 obsolete argument
-   QGraphicsItemGroup(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
-
+   QGraphicsItemGroup(QGraphicsItem *parent = nullptr);
    ~QGraphicsItemGroup();
 
    void addToGroup(QGraphicsItem *item);
    void removeFromGroup(QGraphicsItem *item);
 
    QRectF boundingRect() const override;
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;

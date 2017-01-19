@@ -56,15 +56,14 @@ namespace Phonon
 class PlatformPlugin;
 
 class FactoryPrivate : public Phonon::Factory::Sender
-{
-   
+{  
     PHN_CS_OBJECT(FactoryPrivate)
-
-   friend QObject *Factory::backend(bool);
+    friend QObject *Factory::backend(bool);
 
     public:
         FactoryPrivate();
         ~FactoryPrivate();
+
         bool createBackend();
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
@@ -102,11 +101,11 @@ static inline void ensureLibraryPathSet()
 #ifdef PHONON_LIBRARY_PATH
     static bool done = false;
 
-    if (!done) {
+    if (! done) {
         done = true;
         QCoreApplication::addLibraryPath(QLatin1String(PHONON_LIBRARY_PATH));
     }
-#endif // PHONON_LIBRARY_PATH
+#endif
 }
 
 void Factory::setBackend(QObject *b)
@@ -115,27 +114,19 @@ void Factory::setBackend(QObject *b)
     globalFactory->m_backendObject = b;
 }
 
-/*void Factory::createBackend(const QString &library, const QString &version)
-{
-    Q_ASSERT(globalFactory->m_backendObject == 0);
-    PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f) {
-        globalFactory->m_backendObject = f->createBackend(library, version);
-    }
-}*/
-
 bool FactoryPrivate::createBackend()
 {
     Q_ASSERT(m_backendObject == 0);
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
+
     if (f) {
         m_backendObject = f->createBackend();
     }
 #endif 
 
-    if (!m_backendObject) {
+    if (! m_backendObject) {
         ensureLibraryPathSet();
 
         // could not load a backend through the platform plugin. Falling back to the default
@@ -147,7 +138,7 @@ bool FactoryPrivate::createBackend()
             const QString libPath = paths.at(i) + suffix;
             const QDir dir(libPath);
 
-            if (!dir.exists()) {
+            if (! dir.exists()) {
                 pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
                 continue;
             }
@@ -155,6 +146,7 @@ bool FactoryPrivate::createBackend()
             QStringList plugins(dir.entryList(QDir::Files));
 
             const QStringList files = dir.entryList(QDir::Files);
+
             for (int i = 0; i < plugins.count(); ++i) {
                 QPluginLoader pluginLoader(libPath + plugins.at(i));
 
@@ -170,7 +162,7 @@ bool FactoryPrivate::createBackend()
                     break;
                 }
 
-                // no backend found, don't leave an unused plugin in memory
+                // no backend found, do not leave an unused plugin in memory
                 pluginLoader.unload();
             }
 
@@ -178,14 +170,15 @@ bool FactoryPrivate::createBackend()
                 break;
             }
         }
-        if (!m_backendObject) {
+
+        if (! m_backendObject) {
             pWarning() << Q_FUNC_INFO << "phonon backend plugin could not be loaded";
             return false;
         }
     }
 
     connect(m_backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
-            this, SLOT(objectDescriptionChanged(ObjectDescriptionType)));
+                  this, SLOT(objectDescriptionChanged(ObjectDescriptionType)));
 
     return true;
 }
@@ -193,19 +186,21 @@ bool FactoryPrivate::createBackend()
 FactoryPrivate::FactoryPrivate()
     :
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    m_platformPlugin(0),
+    m_platformPlugin(nullptr),
     m_noPlatformPlugin(false),
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    m_backendObject(0)
+#endif
+    m_backendObject(nullptr)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
+
 #ifndef QT_NO_DBUS
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
         QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
 #endif
+
 }
 
 FactoryPrivate::~FactoryPrivate()
@@ -213,18 +208,22 @@ FactoryPrivate::~FactoryPrivate()
     for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
         mediaNodePrivateList.at(i)->deleteBackendObject();
     }
+
     if (objects.size() > 0) {
         pError() << "The backend objects are not deleted as was requested.";
         qDeleteAll(objects);
     }
+
     delete m_backendObject;
+
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     delete m_platformPlugin;
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+#endif
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
 {
+
 #ifdef PHONON_METHODTEST
     Q_UNUSED(type);
 #else
@@ -239,8 +238,10 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
     default:
         break;
     }
+
     //emit capabilitiesChanged();
-#endif // PHONON_METHODTEST
+
+#endif 
 }
 
 Factory::Sender *Factory::sender()
@@ -252,12 +253,14 @@ bool Factory::isMimeTypeAvailable(const QString &mimeType)
 {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
+
     if (f) {
         return f->isMimeTypeAvailable(mimeType);
     }
 #else
     Q_UNUSED(mimeType);
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+#endif
+
     return true; // the MIME type might be supported, let BackendCapabilities find out
 }
 
@@ -287,8 +290,8 @@ void FactoryPrivate::phononBackendChanged()
                 "not free all references to objects created by the factory. Therefore we can not\n"
                 "change the backend without crashing. Now we have to wait for a restart to make\n"
                 "backendswitching possible.";
-            // in case there were objects deleted give 'em a chance to recreate
-            // them now
+
+            // in case there were objects deleted give them a chance to recreate them now
             for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
                 mediaNodePrivateList.at(i)->createBackendObject();
             }
@@ -297,13 +300,15 @@ void FactoryPrivate::phononBackendChanged()
         delete m_backendObject;
         m_backendObject = 0;
     }
+
     createBackend();
     for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
         mediaNodePrivateList.at(i)->createBackendObject();
     }
+
     emit backendChanged();
 }
-#endif //QT_NO_DBUS
+#endif
 
 //X void Factory::freeSoundcardDevices()
 //X {
@@ -358,12 +363,12 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     }
 
     if (m_noPlatformPlugin) {
-        return 0;
+        return nullptr;
     }
 
 #ifndef QT_NO_DBUS
     if (! QCoreApplication::instance() || QCoreApplication::applicationName().isEmpty()) {
-        pWarning() << "Phonon needs QCoreApplication::applicationName to be set to export audio output names through the DBUS interface";
+        pWarning() << "Phonon needs QCoreApplication::applicationName set in order to export audio output names through the DBUS interface";
     }
 #endif
 
@@ -386,30 +391,27 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     ensureLibraryPathSet();
     QDir dir;
 
-    dir.setNameFilters(
-            !qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList(QLatin1String("kde.*")) :
-            (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList(QLatin1String("gnome.*")) :
-             QStringList())
-            );
+    dir.setNameFilters(! qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList(QLatin1String("kde.*")) :
+            (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList(QLatin1String("gnome.*")) : QStringList())  );
 
     dir.setFilter(QDir::Files);
     const QStringList libPaths = QCoreApplication::libraryPaths();
 
-    forever {
+    while (true) {
         for (int i = 0; i < libPaths.count(); ++i) {
             const QString libPath = libPaths.at(i) + suffix;
             dir.setPath(libPath);
 
-            if (!dir.exists()) {
+            if (! dir.exists()) {
                 continue;
             }
 
             const QStringList files = dir.entryList(QDir::Files);
             for (int i = 0; i < files.count(); ++i) {
                 QPluginLoader pluginLoader(libPath + files.at(i));
-                if (!pluginLoader.load()) {
-                    pDebug() << Q_FUNC_INFO << "  platform plugin load failed:"
-                        << pluginLoader.errorString();
+
+                if (! pluginLoader.load()) {
+                    pDebug() << Q_FUNC_INFO << "  platform plugin load failed:" << pluginLoader.errorString();
                     continue;
                 }
 
@@ -433,14 +435,18 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
                 }
             }
         }
+
         if (dir.nameFilters().isEmpty()) {
-            break;
+           break;
         }
+
         dir.setNameFilters(QStringList());
     }
+
     pDebug() << Q_FUNC_INFO << "platform plugin could not be loaded";
     m_noPlatformPlugin = true;
-    return 0;
+
+    return nullptr;
 }
 
 PlatformPlugin *Factory::platformPlugin()
@@ -454,11 +460,13 @@ QObject *Factory::backend(bool createWhenNull)
     if (globalFactory.isDestroyed()) {
         return 0;
     }
+
     if (createWhenNull && globalFactory->m_backendObject == 0) {
         globalFactory->createBackend();
+
         // XXX: might create "reentrancy" problems:
-        // a method calls this method and is called again because the
-        // backendChanged signal is emitted
+        // a method calls this method and is called again because the 
+        
         emit globalFactory->backendChanged();
     }
     return globalFactory->m_backendObject;

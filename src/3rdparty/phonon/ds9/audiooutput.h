@@ -26,9 +26,9 @@
 #ifndef DS9_AUDIOOUTPUT_H
 #define DS9_AUDIOOUTPUT_H
 
-#include "backendnode.h"
+#include <backendnode.h>
+#include <backend.h>
 #include <phonon/audiooutputinterface.h>
-#include "backend.h"
 
 struct IBaseFilter;
 struct IBasicAudio;

@@ -162,40 +162,49 @@ QList<Effect *> Path::effects() const
 
 bool Path::reconnect(MediaNode *source, MediaNode *sink)
 {
-    if (!source || !sink || !source->k_ptr->backendObject() || !sink->k_ptr->backendObject()) {
+    if (! source || ! sink || ! source->k_ptr->backendObject() || !sink->k_ptr->backendObject()) {
         return false;
     }
 
     QList<QObjectPair> disconnections, connections;
 
     //backend objects
-    QObject *bnewSource = source->k_ptr->backendObject();
-    QObject *bnewSink = sink->k_ptr->backendObject();
+    QObject *bnewSource     = source->k_ptr->backendObject();
+    QObject *bnewSink       = sink->k_ptr->backendObject();
     QObject *bcurrentSource = d->sourceNode ? d->sourceNode->k_ptr->backendObject() : 0;
-    QObject *bcurrentSink = d->sinkNode ? d->sinkNode->k_ptr->backendObject() : 0;
+    QObject *bcurrentSink   = d->sinkNode ? d->sinkNode->k_ptr->backendObject() : 0;
 
     if (bnewSource != bcurrentSource) {
-        //we need to change the source
+        // we need to change the source
+
 #ifndef QT_NO_PHONON_EFFECT
         MediaNode *next = d->effects.isEmpty() ? sink : d->effects.first();
 #else
         MediaNode *next = sink;
-#endif //QT_NO_PHONON_EFFECT
+#endif
+
         QObject *bnext = next->k_ptr->backendObject();
-        if (bcurrentSource)
+
+        if (bcurrentSource) {
             disconnections << QObjectPair(bcurrentSource, bnext);
+        } 
         connections << QObjectPair(bnewSource, bnext);
     }
 
     if (bnewSink != bcurrentSink) {
+
 #ifndef QT_NO_PHONON_EFFECT
         MediaNode *previous = d->effects.isEmpty() ? source : d->effects.last();
 #else
         MediaNode *previous = source;
-#endif //QT_NO_PHONON_EFFECT
+#endif
+
         QObject *bprevious = previous->k_ptr->backendObject();
-        if (bcurrentSink)
+
+        if (bcurrentSink) {
             disconnections << QObjectPair(bprevious, bcurrentSink);
+        } 
+
         QObjectPair pair(bprevious, bnewSink);
         if (!connections.contains(pair)) //avoid connecting twice
             connections << pair;
@@ -203,7 +212,8 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
     if (d->executeTransaction(disconnections, connections)) {
 
-        //everything went well: let's update the path and the sink node
+        //everything went well,  update the path and the sink node
+
         if (d->sinkNode != sink) {
             if (d->sinkNode) {
                 d->sinkNode->k_ptr->removeInputPath(*this);
@@ -214,7 +224,7 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
             d->sinkNode->k_ptr->addDestructionHandler(d.data());
         }
 
-        //everything went well: let's update the path and the source node
+        //everything went well, update the path and the source node
         if (d->sourceNode != source) {
             source->k_ptr->addOutputPath(*this);
             if (d->sourceNode) {
@@ -224,7 +234,9 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
             d->sourceNode = source;
             d->sourceNode->k_ptr->addDestructionHandler(d.data());
         }
+
         return true;
+
     } else {
         return false;
     }
@@ -232,18 +244,21 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
 bool Path::disconnect()
 {
-    if (!isValid()) {
+    if (! isValid()) {
         return false;
     }
 
     QObjectList list;
+
     if (d->sourceNode)
         list << d->sourceNode->k_ptr->backendObject();
+
 #ifndef QT_NO_PHONON_EFFECT
     for (int i = 0; i < d->effects.count(); ++i) {
         list << d->effects.at(i)->k_ptr->backendObject();
     }
 #endif
+
     if (d->sinkNode) {
         list << d->sinkNode->k_ptr->backendObject();
     }
@@ -299,46 +314,58 @@ MediaNode *Path::sink() const
 bool PathPrivate::executeTransaction( const QList<QObjectPair> &disconnections, const QList<QObjectPair> &connections)
 {
     QSet<QObject*> nodesForTransaction;
+
     for (int i = 0; i < disconnections.count(); ++i) {
         const QObjectPair &pair = disconnections.at(i);
         nodesForTransaction << pair.first;
         nodesForTransaction << pair.second;
     }
+
     for (int i = 0; i < connections.count(); ++i) {
         const QObjectPair &pair = connections.at(i);
         nodesForTransaction << pair.first;
         nodesForTransaction << pair.second;
     }
+
     BackendInterface *backend = qobject_cast<BackendInterface *>(Factory::backend());
-    if (!backend)
+    if (! backend) {
         return false;
+    }
 
     ConnectionTransaction transaction(backend, nodesForTransaction);
-    if (!transaction)
+    if (! transaction) {
         return false;
+    }
 
     QList<QObjectPair>::const_iterator it = disconnections.begin();
+
     for(;it != disconnections.end();++it) {
         const QObjectPair &pair = *it;
-        if (!backend->disconnectNodes(pair.first, pair.second)) {
 
-            //Error: a disconnection failed
+        if (! backend->disconnectNodes(pair.first, pair.second)) {
+            // Error: a disconnection failed
             QList<QObjectPair>::const_iterator it2 = disconnections.begin();
+
+            // reconnect the nodes that were disconnected
             for(; it2 != it; ++it2) {
                 const QObjectPair &pair = *it2;
                 bool success = backend->connectNodes(pair.first, pair.second);
+
                 Q_ASSERT(success); //a failure here means it is impossible to reestablish the connection
                 Q_UNUSED(success);
             }
+
             return false;
         }
     }
 
     for(it = connections.begin(); it != connections.end();++it) {
         const QObjectPair &pair = *it;
-        if (!backend->connectNodes(pair.first, pair.second)) {
-            //Error: a connection failed
+
+        if (! backend->connectNodes(pair.first, pair.second)) {
+            // Error: a connection failed
             QList<QObjectPair>::const_iterator it2 = connections.begin();
+
             for(; it2 != it; ++it2) {
                 const QObjectPair &pair = *it2;
                 bool success = backend->disconnectNodes(pair.first, pair.second);
@@ -346,18 +373,19 @@ bool PathPrivate::executeTransaction( const QList<QObjectPair> &disconnections, 
                 Q_UNUSED(success);
             }
 
-            //and now let's reconnect the nodes that were disconnected: rollback
+            // reconnect the nodes that were disconnected
             for (int i = 0; i < disconnections.count(); ++i) {
                 const QObjectPair &pair = disconnections.at(i);
                 bool success = backend->connectNodes(pair.first, pair.second);
+
                 Q_ASSERT(success); //a failure here means it is impossible to reestablish the connection
                 Q_UNUSED(success);
             }
 
             return false;
-
         }
     }
+
     return true;
 }
 
@@ -445,12 +473,12 @@ Path createPath(MediaNode *source, MediaNode *sink)
     if (! p.reconnect(source, sink)) {
 
         const QObject *const src = source ? (source->k_ptr->qObject()
-                ? source->k_ptr->qObject() : dynamic_cast<QObject *>(source) ) : 0;
+                ? source->k_ptr->qObject() : dynamic_cast<QObject *>(source) ) : nullptr;
 
         const QObject *const snk = sink ? (sink->k_ptr->qObject()
-                ? sink->k_ptr->qObject() : dynamic_cast<QObject *>(sink) ) : 0;
+                ? sink->k_ptr->qObject() : dynamic_cast<QObject *>(sink) ) : nullptr;
 
-        pWarning() << "Phonon::createPath: Cannot connect "
+        pWarning() << "Phonon::createPath: Can not connect "
             << (src ? src->metaObject()->className() : "")
             << '(' << (src ? (src->objectName().isEmpty() ? "no objectName" : qPrintable(src->objectName())) : "null") << ") to "
             << (snk ? snk->metaObject()->className() : "")

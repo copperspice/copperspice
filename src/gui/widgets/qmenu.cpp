@@ -1659,29 +1659,11 @@ void QMenu::setDefaultAction(QAction *act)
    d_func()->defaultAction = act;
 }
 
-/*!
-  Returns the current default action.
-
-  \sa setDefaultAction()
-*/
-QAction *QMenu::defaultAction() const
+QAction * QMenu::defaultAction() const
 {
    return d_func()->defaultAction;
 }
 
-/*!
-    \property QMenu::tearOffEnabled
-    \brief whether the menu supports being torn off
-
-    When true, the menu contains a special tear-off item (often shown as a dashed
-    line at the top of the menu) that creates a copy of the menu when it is
-    triggered.
-
-    This "torn-off" copy lives in a separate window. It contains the same menu
-    items as the original menu, with the exception of the tear-off handle.
-
-    By default, this property is false.
-*/
 void QMenu::setTearOffEnabled(bool b)
 {
    Q_D(QMenu);

@@ -40,13 +40,15 @@ namespace Phonon
     {
         class MediaObject;
 
-        //in the end we should probably have no more inheritance here: everything should be in the interface of the class
-        //could be nice to then remove all the "*this" in the code of this class
+        // in the end we should probably have no more inheritance here, everything should be in the interface
+        //  of the class, would be nice to then remove all the "*this" in the code of this class
+
         class MediaGraph : public QObject
         {
         public:
             MediaGraph(MediaObject *mo, short index);
             ~MediaGraph();
+
             bool isSeekable() const;
             qint64 absoluteTotalTime() const;
             qint64 absoluteCurrentTime() const;
@@ -80,12 +82,11 @@ namespace Phonon
 
             Filter realSource() const;
 
-
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
             QList<qint64> titles() const;
             void setStopPosition(qint64 time);
             qint64 stopPosition() const;
-#endif //QT_NO_PHONON_MEDIACONTROLLER
+#endif
 
             void switchFilters(Filter oldFilter, Filter newFilter);
             OAFilterState syncGetRealState() const;
@@ -103,10 +104,10 @@ namespace Phonon
             bool isSourceFilter(const Filter &filter) const;
             bool isDemuxerFilter(const Filter &filter) const;
             bool isDecoderFilter(const Filter &filter);
+
             static QList<Filter> getFilterChain(const Filter &source, const Filter &sink);
 
             HRESULT reallyFinishLoading(HRESULT, const Graph &graph);
-
 
             //utility functions
             void ensureSourceConnectedTo(bool force = false);
@@ -124,6 +125,7 @@ namespace Phonon
             ComPointer<IMediaSeeking> m_mediaSeeking;
             Filter m_fakeSource, m_realSource;
             Filter m_demux;
+
             QList<OutputPin> m_decoderPins;
             QList<Filter> m_decoders;
 

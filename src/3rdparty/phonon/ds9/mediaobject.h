@@ -336,7 +336,7 @@ namespace Phonon
             qint32 m_tickInterval;
 
             //the graph(s)
-            MediaGraph* m_graphs[FILTER_COUNT];
+            MediaGraph *m_graphs[FILTER_COUNT];
 
             //...the videowidgets in the graph
             QList<VideoWidget*> m_videoWidgets;

@@ -31,6 +31,7 @@
 #define PHONON_OBJECTDESCRIPTION_H
 
 #include "phonon_export.h"
+
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QtDebug>
 #include <QtCore/QList>
@@ -61,7 +62,7 @@ namespace Phonon
     };
 
 
-class PHONON_EXPORT ObjectDescriptionData : public QSharedData //krazy:exclude=dpointer (it's protected, which should be fine for this type of class)
+class PHONON_EXPORT ObjectDescriptionData : public QSharedData
 {
     public:
         /**
@@ -165,13 +166,15 @@ class ObjectDescription
        
         inline bool isValid() const 
             { return d->isValid(); } 
-
       
         inline int index() const 
             { return d->index(); } 
 
-        ObjectDescription() : d(new ObjectDescriptionData(0)) {}
-        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties) : d(new ObjectDescriptionData(index, properties)) {}
+        ObjectDescription() 
+                  : d(new ObjectDescriptionData(0)) {}
+
+        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties) 
+                  : d(new ObjectDescriptionData(index, properties)) {}
 
     protected:
         friend class ObjectDescriptionModel<T>;

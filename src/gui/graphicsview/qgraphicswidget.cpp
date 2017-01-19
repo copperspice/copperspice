@@ -161,7 +161,7 @@ QT_BEGIN_NAMESPACE
     window, a tool, a popup, etc).
 */
 QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
-   : QGraphicsObject(*new QGraphicsWidgetPrivate, 0, 0), QGraphicsLayoutItem(0, false)
+   : QGraphicsObject(*new QGraphicsWidgetPrivate, nullptr), QGraphicsLayoutItem(0, false)
 {
    Q_D(QGraphicsWidget);
    d->init(parent, wFlags);
@@ -172,9 +172,8 @@ QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
     Constructs a new QGraphicsWidget, using \a dd as parent.
 */
-QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *parent, QGraphicsScene *scene,
-                                 Qt::WindowFlags wFlags)
-   : QGraphicsObject(dd, 0, scene), QGraphicsLayoutItem(0, false)
+QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+   : QGraphicsObject(dd, nullptr), QGraphicsLayoutItem(0, false)
 {
    Q_D(QGraphicsWidget);
    d->init(parent, wFlags);

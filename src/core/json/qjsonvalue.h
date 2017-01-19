@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -128,13 +128,12 @@ class Q_CORE_EXPORT QJsonValue
       quint64 ui;
       bool b;
       double dbl;
-      /* Qt 5 Beta 1
-           QStringData *stringData;
-      */
+
       // Temporary for QStringData:
       QString *stringData;
       QJsonPrivate::Base *base;
    };
+
    QJsonPrivate::Data *d; // needed for Objects and Arrays
    Type t;
 };
@@ -215,11 +214,11 @@ class Q_CORE_EXPORT QJsonValueRefPtr {
  public:
     template<typename T1, typename T2>
     QJsonValueRefPtr(T1 a, T2 b)
-	: m_ref(a, b) { 
+        : m_ref(a, b) {
     };
-    
+
     QJsonValueRef* operator->() const { return &m_ref; };
-    
+
  private:
     mutable QJsonValueRef m_ref;
 };
@@ -228,11 +227,11 @@ class Q_CORE_EXPORT QJsonValuePtr {
  public:
 
     QJsonValuePtr(QJsonValue val)
-	: m_value(val) { 
+   : m_value(val) {
     };
-    
+
     const QJsonValue * operator->() const { return &m_value; };
-    
+
  private:
     const QJsonValue m_value;
 };

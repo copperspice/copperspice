@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -70,7 +70,7 @@ namespace Phonon
             }
             return ret;
         }
-                
+
 
 /*
         static HRESULT saveToFile(Graph graph, const QString &filepath)
@@ -113,7 +113,7 @@ namespace Phonon
         MediaGraph::MediaGraph(MediaObject *mo, short index) :
             m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
             m_fakeSource(new FakeSource()),
-            m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false), 
+            m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false),
             m_isStopping(false), m_isSeekable(false), m_result(S_OK),
             m_index(index), m_renderId(0), m_seekId(0),
             m_currentTime(0), m_totalTime(0), m_mediaObject(mo)
@@ -355,7 +355,7 @@ namespace Phonon
             m_isStopping = true;
             //special case here because we want stopped to be synchronous
             m_graph->Abort();
-            m_mediaControl->Stop(); 
+            m_mediaControl->Stop();
             OAFilterState dummy;
             //this will wait until the change is effective
             m_mediaControl->GetState(INFINITE, &dummy);
@@ -619,25 +619,27 @@ namespace Phonon
         bool MediaGraph::connectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = false;
+
             const QList<InputPin> inputs = BackendNode::pins(sink->filter(m_index), PINDIR_INPUT);
-            QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
-            
+
+            QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource :
+                              source->filter(m_index), PINDIR_OUTPUT);
+
             if (source == m_mediaObject) {
                 grabFilter(m_fakeSource);
             }
 
-#ifdef GRAPH_DEBUG
-            qDebug() << Q_FUNC_INFO << source << sink << this;
-#endif
+            for (auto  outItem : outputs) {
 
-            for (int o = 0; o < outputs.count(); o++) {
-                InputPin p;
-                for (int i = 0; i < inputs.count(); i++) {
-                    const InputPin &inPin = inputs.at(i);
-                    if (tryConnect(outputs.at(o), inPin)) {
+                for (auto inItem : inputs) {
+                    const InputPin &inPin = inItem;
+
+
+                    if (tryConnect(outItem, inPin)) {
                         //tell the sink node that it just got a new input
                         sink->connected(source, inPin);
                         ret = true;
+
                         if (source == m_mediaObject) {
                             m_connectionsDirty = true;
                             m_sinkConnections += sink;
@@ -673,11 +675,11 @@ namespace Phonon
             case Phonon::MediaSource::Disc:
                 if (source.discType() == Phonon::Dvd) {
                     m_result = E_NOTIMPL;
-               
+
  #ifndef QT_NO_PHONON_MEDIACONTROLLER
                } else if (source.discType() == Phonon::Cd) {
                     m_realSource = Filter(new QAudioCDPlayer);
-#endif 
+#endif
                 } else {
                     m_result = E_NOTIMPL;
 
@@ -704,7 +706,7 @@ namespace Phonon
                         url = source.url().toString();
 
                     }
-                   
+
                     m_renderId = m_mediaObject->workerThread()->addUrlToRender(url);
                 }
                 break;
@@ -998,7 +1000,7 @@ namespace Phonon
                 QAMMediaType type;
                 //for now we support only video and audio
                 hr = outputs.at(i)->ConnectionMediaType(&type);
-                if (SUCCEEDED(hr) && 
+                if (SUCCEEDED(hr) &&
                     type.majortype != MEDIATYPE_Video && type.majortype != MEDIATYPE_Audio) {
                         return false;
                 }
@@ -1081,10 +1083,10 @@ namespace Phonon
             }
 
             if (shouldSeek) {
-                m_mediaSeeking->SetPositions(&current, AM_SEEKING_AbsolutePositioning, 
+                m_mediaSeeking->SetPositions(&current, AM_SEEKING_AbsolutePositioning,
                     &time, AM_SEEKING_AbsolutePositioning);
             } else {
-                m_mediaSeeking->SetPositions(0, AM_SEEKING_NoPositioning, 
+                m_mediaSeeking->SetPositions(0, AM_SEEKING_NoPositioning,
                     &time, AM_SEEKING_AbsolutePositioning);
             }
         }

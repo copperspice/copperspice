@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -55,6 +55,7 @@ namespace Phonon
         {
             for(int i = 0; i < FILTER_COUNT; ++i) {
                 ComPointer<IBasicAudio> audio(m_filters[i], IID_IBasicAudio);
+
                 if (audio) {
                     const qreal currentVolume = newVolume * (m_currentIndex == i ? m_crossfadeProgress : 1-m_crossfadeProgress);
                     const qreal newDbVolume = (qMax(0., 1.-::log(::pow(currentVolume, -log10over20)))-1.) * 10000;
@@ -88,11 +89,12 @@ namespace Phonon
 
         bool AudioOutput::setOutputDevice(int newDevice)
         {
+
             if (newDevice == m_device) {
                 return true;
             }
 
-            //free the previous one if it was already set
+            // free the previous one if it was already set
             for(int i = 0; i < FILTER_COUNT; ++i) {
                 const Filter &oldFilter = m_filters[i];
 
@@ -102,9 +104,7 @@ namespace Phonon
                     m_mediaObject->switchFilters(i, oldFilter, newFilter);
                 }
 
-                m_filters[i] = newFilter; 
-
-
+                m_filters[i] = newFilter;
             }
 
             m_device = newDevice;

@@ -511,10 +511,12 @@ template <class T> class QSharedPointer
    }
 
    inline void internalSet(Data *o, T *actual) {
+
       if (o) {
          // increase the strongref, but never up from zero
          // or less (-1 is used by QWeakPointer on untracked QObject)
          int tmp = o->strongref.load();
+
          while (tmp > 0) {
             // try to increment from "tmp" to "tmp + 1"
             if (o->strongref.testAndSetRelaxed(tmp, tmp + 1)) {
@@ -564,6 +566,7 @@ class QWeakPointer
    inline bool isNull() const {
       return d == 0 || d->strongref.load() == 0 || value == 0;
    }
+
    inline operator RestrictedBool() const {
       return isNull() ? 0 : &QWeakPointer::value;
    }
@@ -571,6 +574,7 @@ class QWeakPointer
    inline bool operator !() const {
       return isNull();
    }
+
    inline T *data() const {
       return d == 0 || d->strongref.load() == 0 ? 0 : value;
    }
@@ -582,20 +586,24 @@ class QWeakPointer
       }
    }
 
-   // special constructor that is enabled only if X derives from QObject
+
+   // special constructor that is enabled only if X derives from QObject (Broom - can wait)
+   template <class X> 
+   inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr)
+   { }
+
    template <class X>
-   inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr) {
-   }
-   template <class X>
-   inline QWeakPointer &operator=(X *ptr) {
-      return *this = QWeakPointer(ptr);
-   }
+   inline QWeakPointer &operator=(X *ptr)
+   { return *this = QWeakPointer(ptr); }
+
+
 
    inline QWeakPointer(const QWeakPointer<T> &o) : d(o.d), value(o.value) {
       if (d) {
          d->weakref.ref();
       }
    }
+
    inline QWeakPointer<T> &operator=(const QWeakPointer<T> &o) {
       internalSet(o.d, o.value);
       return *this;
@@ -606,6 +614,7 @@ class QWeakPointer
          d->weakref.ref();
       }
    }
+
    inline QWeakPointer<T> &operator=(const QSharedPointer<T> &o) {
       internalSet(o.d, o.value);
       return *this;

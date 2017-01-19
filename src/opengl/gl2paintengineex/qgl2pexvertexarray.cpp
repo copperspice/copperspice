@@ -23,8 +23,10 @@
 *
 ***********************************************************************/
 
-#include "qgl2pexvertexarray_p.h"
+#include <qgl2pexvertexarray_p.h>
 #include <qbezier_p.h>
+
+#include <qmath.h>
 
 QT_BEGIN_NAMESPACE
 

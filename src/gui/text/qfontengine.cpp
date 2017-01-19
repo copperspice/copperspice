@@ -756,6 +756,7 @@ void QFontEngine::setGlyphCache(void *key, QFontEngineGlyphCache *data)
    GlyphCacheEntry entry;
    entry.context = key;
    entry.cache = data;
+
    if (m_glyphCaches.contains(entry)) {
       return;
    }

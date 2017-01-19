@@ -37,6 +37,10 @@ typedef QMap<QString, QVariant> QVariantMap;
 class Q_CORE_EXPORT QJsonObject
 {
  public:
+   typedef QJsonValue mapped_type;
+   typedef QString key_type;
+   typedef int size_type;
+
    QJsonObject();
    ~QJsonObject();
 
@@ -48,10 +52,12 @@ class Q_CORE_EXPORT QJsonObject
 
    QStringList keys() const;
    int size() const;
-   inline int count() const {
+
+   int count() const {
       return size();
    }
-   inline int length() const {
+
+   int length() const {
       return size();
    }
    bool isEmpty() const;
@@ -89,15 +95,19 @@ class Q_CORE_EXPORT QJsonObject
       inline QString key() const {
          return o->keyAt(i);
       }
+
       inline QJsonValueRef value() const {
          return QJsonValueRef(o, i);
       }
+
       inline QJsonValueRef operator*() const {
          return QJsonValueRef(o, i);
       }
+
       inline QJsonValueRefPtr operator->() const { 
-	  return QJsonValueRefPtr(o, i); 
+        return QJsonValueRefPtr(o, i); 
       }
+
       inline bool operator==(const iterator &other) const {
          return i == other.i;
       }
@@ -141,10 +151,11 @@ class Q_CORE_EXPORT QJsonObject
       }
 
     public:
-      inline bool operator==(const const_iterator &other) const {
+      bool operator==(const const_iterator &other) const {
          return i == other.i;
       }
-      inline bool operator!=(const const_iterator &other) const {
+
+      bool operator!=(const const_iterator &other) const {
          return i != other.i;
       }
    };
@@ -159,74 +170,89 @@ class Q_CORE_EXPORT QJsonObject
     public:
       typedef std::bidirectional_iterator_tag iterator_category;
       typedef int difference_type;
-      typedef QJsonValue* value_type;
+      typedef QJsonValue*   value_type;
       typedef QJsonValuePtr pointer;
-      typedef QJsonValue reference;
+      typedef QJsonValue    reference;
 
-      constexpr inline const_iterator() : o(0), i(0) {}
-      constexpr inline const_iterator(const QJsonObject *obj, int index)
-         : o(obj), i(index) {}
-      inline const_iterator(const iterator &other)
-         : o(other.o), i(other.i) {}
+      constexpr const_iterator() : o(0), i(0) {}
 
-      inline QString key() const {
+      constexpr const_iterator(const QJsonObject *obj, int index)
+         : o(obj), i(index) { }
+
+      const_iterator(const iterator &other)
+         : o(other.o), i(other.i) { }
+
+      QString key() const {
          return o->keyAt(i);
       }
-      inline QJsonValue value() const {
+
+      QJsonValue value() const {
          return o->valueAt(i);
       }
-      inline QJsonValue operator*() const {
+
+      QJsonValue operator*() const {
          return o->valueAt(i);
       }
-      inline QJsonValuePtr operator->() const { 
-	  return  QJsonValuePtr(o->valueAt(i));
+
+      QJsonValuePtr operator->() const { 
+         return  QJsonValuePtr(o->valueAt(i));
       }
-      inline bool operator==(const const_iterator &other) const {
+
+      bool operator==(const const_iterator &other) const {
          return i == other.i;
       }
-      inline bool operator!=(const const_iterator &other) const {
+
+      bool operator!=(const const_iterator &other) const {
          return i != other.i;
       }
 
-      inline const_iterator &operator++() {
+      const_iterator &operator++() {
          ++i;
          return *this;
       }
-      inline const_iterator operator++(int) {
+
+      const_iterator operator++(int) {
          const_iterator r = *this;
          ++i;
          return r;
       }
-      inline const_iterator &operator--() {
+
+      const_iterator &operator--() {
          --i;
          return *this;
       }
-      inline const_iterator operator--(int) {
+
+      const_iterator operator--(int) {
          const_iterator r = *this;
          --i;
          return r;
       }
-      inline const_iterator operator+(int j) const {
+
+      const_iterator operator+(int j) const {
          const_iterator r = *this;
          r.i += j;
          return r;
       }
-      inline const_iterator operator-(int j) const {
+
+      const_iterator operator-(int j) const {
          return operator+(-j);
       }
-      inline const_iterator &operator+=(int j) {
+
+      const_iterator &operator+=(int j) {
          i += j;
          return *this;
       }
-      inline const_iterator &operator-=(int j) {
+
+      const_iterator &operator-=(int j) {
          i -= j;
          return *this;
       }
 
-      inline bool operator==(const iterator &other) const {
+      bool operator==(const iterator &other) const {
          return i == other.i;
       }
-      inline bool operator!=(const iterator &other) const {
+
+      bool operator!=(const iterator &other) const {
          return i != other.i;
       }
    };
@@ -237,6 +263,7 @@ class Q_CORE_EXPORT QJsonObject
       detach();
       return iterator(this, 0);
    }
+
    inline const_iterator begin() const {
       return const_iterator(this, 0);
    }
@@ -254,21 +281,18 @@ class Q_CORE_EXPORT QJsonObject
       return const_iterator(this, size());
    }
    iterator erase(iterator it);
-
-   // more Qt
+   
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
+
    iterator find(const QString &key);
+
    const_iterator find(const QString &key) const {
       return constFind(key);
    }
-   const_iterator constFind(const QString &key) const;
-   iterator insert(const QString &key, const QJsonValue &value);
 
-   // STL compatibility
-   typedef QJsonValue mapped_type;
-   typedef QString key_type;
-   typedef int size_type;
+   const_iterator constFind(const QString &key) const;
+   iterator insert(const QString &key, const QJsonValue &value); 
 
    inline bool empty() const {
       return isEmpty();

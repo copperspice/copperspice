@@ -138,54 +138,34 @@ void QDialogPrivate::hideDefault()
 void QDialogPrivate::resetModalitySetByOpen()
 {
    Q_Q(QDialog);
+
    if (resetModalityTo != -1 && !q->testAttribute(Qt::WA_SetWindowModality)) {
       // open() changed the window modality and the user didn't touch it afterwards; restore it
       q->setWindowModality(Qt::WindowModality(resetModalityTo));
       q->setAttribute(Qt::WA_SetWindowModality, wasModalitySet);
+
 #ifdef Q_OS_MAC
       Q_ASSERT(resetModalityTo != Qt::WindowModal);
       q->setParent(q->parentWidget(), Qt::Dialog);
 #endif
+
    }
+
    resetModalityTo = -1;
 }
 
-/*!
-  In general returns the modal dialog's result code, \c Accepted or \c Rejected.
-
-  \note When used from QMessageBox instance the result code type is \l QMessageBox::StandardButton
-
-  Do not call this function if the dialog was constructed with the
-  Qt::WA_DeleteOnClose attribute.
-*/
 int QDialog::result() const
 {
    Q_D(const QDialog);
    return d->rescode;
 }
 
-/*!
-  \fn void QDialog::setResult(int i)
-
-  Sets the modal dialog's result code to \a i.
-
-  \note We recommend that you use one of the values defined by
-  QDialog::DialogCode.
-*/
 void QDialog::setResult(int r)
 {
    Q_D(QDialog);
    d->rescode = r;
 }
 
-/*!
-    \since 4.5
-
-    Shows the dialog as a \l{QDialog#Modal Dialogs}{window modal dialog},
-    returning immediately.
-
-    \sa exec(), show(), result(), setWindowModality()
-*/
 void QDialog::open()
 {
    Q_D(QDialog);

@@ -314,27 +314,27 @@ class Q_GUI_EXPORT QGraphicsOpacityEffect: public QGraphicsEffect
    Q_DISABLE_COPY(QGraphicsOpacityEffect)
 };
 
-qreal QGraphicsDropShadowEffect::xOffset() const
+inline qreal QGraphicsDropShadowEffect::xOffset() const
 {
    return offset().x();
 }
 
-qreal QGraphicsDropShadowEffect::yOffset() const
+inline qreal QGraphicsDropShadowEffect::yOffset() const
 {
    return offset().y();
 }
 
-void QGraphicsDropShadowEffect::setXOffset(qreal dx)
+inline void QGraphicsDropShadowEffect::setXOffset(qreal dx)
 {
    setOffset(QPointF(dx, yOffset()));
 }
 
-void QGraphicsDropShadowEffect::setYOffset(qreal dy)
+inline void QGraphicsDropShadowEffect::setYOffset(qreal dy)
 {
    setOffset(QPointF(xOffset(), dy));
 }
 
-void QGraphicsDropShadowEffect::cs_setOffset(const QPointF &ofs)
+inline void QGraphicsDropShadowEffect::cs_setOffset(const QPointF &ofs)
 {
    setOffset(ofs);
 }

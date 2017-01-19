@@ -53,6 +53,7 @@ class Q_GUI_EXPORT QInputEvent : public QEvent
  public:
    QInputEvent(Type type, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
    ~QInputEvent();
+
    inline Qt::KeyboardModifiers modifiers() const {
       return modState;
    }

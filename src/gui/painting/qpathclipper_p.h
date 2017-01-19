@@ -181,7 +181,7 @@ class QPathSegments
    const QPointF &pointAt(int vertex) const;
    int addPoint(const QPointF &point);
 
-   const Intersection *intersectionAt(int index) const;
+   inline const Intersection *intersectionAt(int index) const;
    void addIntersection(int index, const Intersection &intersection);
 
    void mergePoints();

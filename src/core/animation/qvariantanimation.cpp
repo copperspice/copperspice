@@ -286,6 +286,7 @@ QVariant QVariantAnimationPrivate::valueAt(qreal step) const
 {
    QVariantAnimation::KeyValues::const_iterator result =
       qBinaryFind(keyValues.begin(), keyValues.end(), qMakePair(step, QVariant()), animationValueLessThan);
+
    if (result != keyValues.constEnd()) {
       return result->second;
    }

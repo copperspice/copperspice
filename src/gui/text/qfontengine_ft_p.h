@@ -163,10 +163,12 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
 
       void removeGlyphFromCache(glyph_t index, QFixed subPixelPosition);
       void clear();
+
       inline bool useFastGlyphData(glyph_t index, QFixed subPixelPosition) const {
          return (index < 256 && subPixelPosition == 0);
       }
-      inline Glyph *getGlyph(glyph_t index, QFixed subPixelPosition = 0) const;
+
+      inline QFontEngineFT::Glyph *getGlyph(glyph_t index, QFixed subPixelPosition = 0) const;
       void setGlyph(glyph_t index, QFixed spp, Glyph *glyph);
 
     private:

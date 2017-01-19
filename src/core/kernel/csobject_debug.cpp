@@ -98,7 +98,7 @@ void QObject::dumpObjectInfo()
          if (obj) {
             const QMetaObject *receiverMetaObject = obj->metaObject();
 
-            // broom - review again (can wait)
+            // broom - review again (on hold, ok)
             // const QMetaMethod slotMetaMethod      = receiverMetaObject->method(*temp.slotMethod);
    
             qDebug("          --> %s::%s",

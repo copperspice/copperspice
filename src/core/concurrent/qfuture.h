@@ -55,10 +55,12 @@ class QFuture
    ~QFuture() {
    }
 
-   inline QFuture &operator=(const QFuture &other);
+   inline QFuture<T> &operator=(const QFuture &other);
+
    bool operator==(const QFuture &other) const {
       return (d == other.d);
    }
+
    bool operator!=(const QFuture &other) const {
       return (d != other.d);
    }
@@ -226,7 +228,7 @@ class QFuture
 };
 
 template <typename T>
-inline QFuture<T> &QFuture<T>::operator=(const QFuture<T> &other)
+inline QFuture<T> & QFuture<T>::operator=(const QFuture<T> &other)
 {
    d = other.d;
    return *this;
@@ -310,7 +312,8 @@ class QFuture<void>
    ~QFuture() {
    }
 
-   QFuture &operator=(const QFuture &other);
+   QFuture<void> &operator=(const QFuture<void> &other);
+
    bool operator==(const QFuture &other) const {
       return (d == other.d);
    }

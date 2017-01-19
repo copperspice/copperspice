@@ -98,8 +98,9 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_PROPERTY_NOTIFY(layout, layoutChanged)
 
  public:
-   QGraphicsWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+   QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = 0);
    ~QGraphicsWidget();
+
    QGraphicsLayout *layout() const;
    void setLayout(QGraphicsLayout *layout);
    void adjustSize();
@@ -217,6 +218,8 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_SLOT_2(close)
 
  protected:
+   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, Qt::WindowFlags wFlags = 0);
+
    virtual void initStyleOption(QStyleOption *option) const;
 
    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
@@ -261,7 +264,6 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    virtual void ungrabMouseEvent(QEvent *event);
    virtual void grabKeyboardEvent(QEvent *event);
    virtual void ungrabKeyboardEvent(QEvent *event);
-   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, QGraphicsScene *, Qt::WindowFlags wFlags = 0);
 
  private:
    Q_DISABLE_COPY(QGraphicsWidget)
