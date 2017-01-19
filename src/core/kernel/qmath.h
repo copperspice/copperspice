@@ -186,7 +186,7 @@ inline qreal qPow(qreal x, qreal y)
 }
 
 #ifndef M_PI
-#define M_PI (3.14159265358979323846)
+#define M_PI (3.14159265358979323846L)
 #endif
 
 inline qreal qFastSin(qreal x)

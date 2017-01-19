@@ -31,26 +31,16 @@
 
 #ifndef QT_NO_PHONON_VIDEO
 
-#include "qmeminputpin.h"
-#include "qbasefilter.h"
+#include <qmeminputpin.h>
+#include <qbasefilter.h>
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>
 #include <QtGui/QApplication>
 #include <QtCore/QTime>
 
-#define _USE_MATH_DEFINES //for pi
-#include <QtCore/qmath.h> //for sin and cos
-/* M_PI is a #define that may or may not be handled in <cmath> */
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288419717
-#endif
-
-#include <dvdmedia.h> //for VIDEOINFOHEADER2
-
-//this will make a display every second of how many frames were pocessed and actually displayed
-//#define FPS_COUNTER
-
+#include <qmath.h>          //for pi, sin, cos
+#include <dvdmedia.h>       //for VIDEOINFOHEADER2
 
 #ifndef QT_NO_OPENGL
 #include <GL/gl.h>

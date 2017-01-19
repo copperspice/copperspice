@@ -221,7 +221,7 @@ typedef struct tagGESTURECONFIG {
    DWORD dwBlock;
 } GESTURECONFIG;
 
-#  define GID_ROTATE_ANGLE_FROM_ARGUMENT(arg) ((((double)(arg) / 65535.0) * 4.0 * 3.14159265) - 2.0*3.14159265)
+#  define GID_ROTATE_ANGLE_FROM_ARGUMENT(arg) ((((double)(arg) / 65535.0) * 4.0 * M_PI) - 2.0 * M_PI)
 
 #endif // WM_GESTURE
 
