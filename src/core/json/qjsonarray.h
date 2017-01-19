@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -39,6 +39,15 @@ typedef QList<QVariant> QVariantList;
 class Q_CORE_EXPORT QJsonArray
 {
  public:
+
+   using size_type       = int;
+   using value_type      = QJsonValue;
+   using pointer         = value_type *;  
+   using const_pointer   = const value_type *;
+   using reference       = QJsonValueRef ;
+   using const_reference = QJsonValue;
+   using difference_type = int;
+
    QJsonArray();
    ~QJsonArray();
 
@@ -50,7 +59,7 @@ class Q_CORE_EXPORT QJsonArray
    QVariantList toVariantList() const;
 
    int size() const;
-   inline int count() const {
+   int count() const {
       return size();
    }
 
@@ -63,10 +72,12 @@ class Q_CORE_EXPORT QJsonArray
    void append(const QJsonValue &value);
    void removeAt(int i);
    QJsonValue takeAt(int i);
-   inline void removeFirst() {
+
+   void removeFirst() {
       removeAt(0);
    }
-   inline void removeLast() {
+
+   void removeLast() {
       removeAt(size() - 1);
    }
 
@@ -74,11 +85,30 @@ class Q_CORE_EXPORT QJsonArray
    void replace(int i, const QJsonValue &value);
 
    bool contains(const QJsonValue &element) const;
+
    QJsonValueRef operator[](int i);
    QJsonValue operator[](int i) const;
 
    bool operator==(const QJsonArray &other) const;
    bool operator!=(const QJsonArray &other) const;
+
+   QJsonArray operator+(const QJsonValue &v) const
+   {
+      QJsonArray n = *this;
+      n += v; return n;
+   }
+
+   QJsonArray &operator+=(const QJsonValue &v)
+   {
+      append(v);
+      return *this;
+   }
+
+   QJsonArray &operator<< (const QJsonValue &v)
+   {
+      append(v);
+      return *this;
+   }
 
    class const_iterator;
 
@@ -87,6 +117,7 @@ class Q_CORE_EXPORT QJsonArray
     public:
       QJsonArray *a;
       int i;
+
       typedef std::random_access_iterator_tag  iterator_category;
       typedef int difference_type;
       typedef QJsonValue value_type;
@@ -99,9 +130,11 @@ class Q_CORE_EXPORT QJsonArray
       inline QJsonValueRef operator*() const {
          return QJsonValueRef(a, i);
       }
-      inline QJsonValueRefPtr operator->() const { 
-	  return QJsonValueRefPtr(a, i); 
+
+      inline QJsonValueRefPtr operator->() const {
+         return QJsonValueRefPtr(a, i);
       }
+
       inline QJsonValueRef operator[](int j) const {
          return QJsonValueRef(a, i + j);
       }
@@ -199,9 +232,11 @@ class Q_CORE_EXPORT QJsonArray
       inline QJsonValue operator*() const {
          return a->at(i);
       }
-      inline QJsonValuePtr operator->() const { 
-	  return QJsonValuePtr(a->at(i));
+
+      inline QJsonValuePtr operator->() const {
+         return QJsonValuePtr(a->at(i));
       }
+
       inline QJsonValue operator[](int j) const {
          return a->at(i + j);
       }
@@ -266,58 +301,60 @@ class Q_CORE_EXPORT QJsonArray
       detach();
       return iterator(this, 0);
    }
+
    inline const_iterator begin() const {
       return const_iterator(this, 0);
    }
+
    inline const_iterator constBegin() const {
       return const_iterator(this, 0);
    }
+
    inline iterator end() {
       detach();
       return iterator(this, size());
    }
+
    inline const_iterator end() const {
       return const_iterator(this, size());
    }
+
    inline const_iterator constEnd() const {
       return const_iterator(this, size());
    }
+
    iterator insert(iterator before, const QJsonValue &value) {
       insert(before.i, value);
       return before;
    }
+
    iterator erase(iterator it) {
       removeAt(it.i);
       return it;
    }
 
-   // more Qt
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
 
    // stl compatibility
-   inline void push_back(const QJsonValue &t) {
+   void push_back(const QJsonValue &t) {
       append(t);
    }
-   inline void push_front(const QJsonValue &t) {
+   void push_front(const QJsonValue &t) {
       prepend(t);
    }
-   inline void pop_front() {
+   
+   void pop_front() {
       removeFirst();
    }
-   inline void pop_back() {
+
+   void pop_back() {
       removeLast();
    }
-   inline bool empty() const {
+
+   bool empty() const {
       return isEmpty();
    }
-   typedef int size_type;
-   typedef QJsonValue value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef QJsonValueRef reference;
-   typedef QJsonValue const_reference;
-   typedef int difference_type;
 
  private:
    friend class QJsonPrivate::Data;
