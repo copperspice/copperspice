@@ -51,14 +51,14 @@ namespace QT7
             VideoEffect(int effectId, QObject *parent);
             virtual ~VideoEffect();
 
-            QList<EffectParameter> parameters() const;
-            QVariant parameterValue(const EffectParameter &) const;
-            void setParameterValue(const EffectParameter &, const QVariant &newValue);
+            QList<EffectParameter> parameters() const override;
+            QVariant parameterValue(const EffectParameter &) const override;
+            void setParameterValue(const EffectParameter &, const QVariant &newValue) override;
 
-            void updateVideo(VideoFrame &frame);
+            void updateVideo(VideoFrame &frame) override;
 
         protected:
-            void mediaNodeEvent(const MediaNodeEvent *event);
+            void mediaNodeEvent(const MediaNodeEvent *event) override;
 
         private:
             int effectId;

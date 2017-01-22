@@ -48,16 +48,15 @@ namespace QT7
             void setVolume(float volume);
             float volume();
 
-        protected:
-            ComponentDescription getAudioNodeDescription() const;
-            void initializeAudioUnit();
-
-        public:
             QT7_CS_SIGNAL_1(Public, void volumeChanged(qreal newVolume))
             QT7_CS_SIGNAL_2(volumeChanged,newVolume) 
             QT7_CS_SIGNAL_1(Public, void audioDeviceFailed())
             QT7_CS_SIGNAL_2(audioDeviceFailed) 
 
+        protected:
+            ComponentDescription getAudioNodeDescription() const override;
+            void initializeAudioUnit() override; 
+          
         private:
             friend class AudioOutput;
             qreal m_volume;
@@ -74,19 +73,18 @@ namespace QT7
             AudioOutput(QObject *parent = 0);
             ~AudioOutput();
 
-            qreal volume() const;
-            void setVolume(qreal);
-            int outputDevice() const;
-            bool setOutputDevice(int);
-
-        public:
+            qreal volume() const override;
+            void setVolume(qreal) override;
+            int outputDevice() const override;
+            bool setOutputDevice(int) override;
+       
             QT7_CS_SIGNAL_1(Public, void volumeChanged(qreal newVolume))
             QT7_CS_SIGNAL_2(volumeChanged,newVolume) 
             QT7_CS_SIGNAL_1(Public, void audioDeviceFailed())
             QT7_CS_SIGNAL_2(audioDeviceFailed) 
 
         protected:
-            void mediaNodeEvent(const MediaNodeEvent *event);
+            void mediaNodeEvent(const MediaNodeEvent *event) override;
 
         private:
             AudioOutputAudioPart *m_audioOutput;

@@ -74,7 +74,7 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
    bool event(QEvent *e) override;
 
 #ifdef Q_OS_MAC
-   bool hitButton(const QPoint &pos) const;
+   bool hitButton(const QPoint &pos) const override;
 #endif
 
    void paintEvent(QPaintEvent *) override;

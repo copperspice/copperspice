@@ -432,18 +432,18 @@ class MacInputDevice : public QIODevice
       connect(m_audioBuffer, SIGNAL(readyRead()), this, SLOT(readyRead()));
    }
 
-   qint64 readData(char *data, qint64 len) {
+   qint64 readData(char *data, qint64 len) override {
       return m_audioBuffer->readBytes(data, len);
    }
 
-   qint64 writeData(const char *data, qint64 len) {
+   qint64 writeData(const char *data, qint64 len) override {
       Q_UNUSED(data);
       Q_UNUSED(len);
 
       return 0;
    }
 
-   bool isSequential() const {
+   bool isSequential() const override {
       return true;
    }
 

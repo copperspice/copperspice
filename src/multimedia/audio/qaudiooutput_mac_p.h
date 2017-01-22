@@ -83,28 +83,28 @@ class QAudioOutputPrivate : public QAbstractAudioOutput
    bool open();
    void close();
 
-   QAudioFormat format() const;
+   QAudioFormat format() const override;
 
-   QIODevice *start(QIODevice *device);
-   void stop();
-   void reset();
-   void suspend();
-   void resume();
+   QIODevice *start(QIODevice *device) override;
+   void stop() override;
+   void reset() override;
+   void suspend() override;
+   void resume() override;
 
-   int bytesFree() const;
-   int periodSize() const;
+   int bytesFree() const override;
+   int periodSize() const override;
 
-   void setBufferSize(int value);
-   int bufferSize() const;
+   void setBufferSize(int value) override;
+   int bufferSize() const override;
 
-   void setNotifyInterval(int milliSeconds);
-   int notifyInterval() const;
+   void setNotifyInterval(int milliSeconds) override;
+   int notifyInterval() const override;
 
-   qint64 processedUSecs() const;
-   qint64 elapsedUSecs() const;
+   qint64 processedUSecs() const override;
+   qint64 elapsedUSecs() const override;
 
-   QAudio::Error error() const;
-   QAudio::State state() const;
+   QAudio::Error error() const override;
+   QAudio::State state() const override;
 
    void audioThreadStart();
    void audioThreadStop();

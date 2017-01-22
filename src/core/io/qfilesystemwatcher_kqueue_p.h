@@ -46,15 +46,15 @@ class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
    static QKqueueFileSystemWatcherEngine *create();
 
-   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
 
-   void stop();
+   void stop() override;
 
  private:
    QKqueueFileSystemWatcherEngine(int kqfd);
 
-   void run();
+   void run() override;
 
    int kqfd;
    int kqpipe[2];

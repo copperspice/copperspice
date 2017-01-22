@@ -47,15 +47,15 @@ namespace QT7
             Backend(QObject *parent, const QStringList &args);
             virtual ~Backend();
 
-            QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
-            QStringList availableMimeTypes() const;
-            QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
-            QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
+            QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args) override;
+            QStringList availableMimeTypes() const override;
+            QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const override;
+            QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const override;
 
-            bool startConnectionChange(QSet<QObject *> nodes);
-            bool connectNodes(QObject *source, QObject *sink);
-            bool disconnectNodes(QObject *source, QObject *sink);
-            bool endConnectionChange(QSet<QObject *> nodes);
+            bool startConnectionChange(QSet<QObject *> nodes) override;
+            bool connectNodes(QObject *source, QObject *sink) override;
+            bool disconnectNodes(QObject *source, QObject *sink) override;
+            bool endConnectionChange(QSet<QObject *> nodes) override;
         
             QT7_CS_SIGNAL_1(Public, void objectDescriptionChanged(ObjectDescriptionType un_named_arg1))
             QT7_CS_SIGNAL_2(objectDescriptionChanged,un_named_arg1) 

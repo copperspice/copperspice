@@ -48,16 +48,15 @@ namespace QT7
         int readData(long offset, long size, void *data);
         bool readAllData();
         QByteArray *pointerToData();
-        void writeData(const QByteArray &data);
-        void endOfData();
-        void setStreamSize(qint64 newSize);
+        void writeData(const QByteArray &data) override;
+        void endOfData() override;
+        void setStreamSize(qint64 newSize) override;
         qint64 streamSize() const;
-        void setStreamSeekable(bool s);
+        void setStreamSeekable(bool s) override;
         bool streamSeekable() const;
         void setCurrentPos(qint64 pos);
         qint64 currentPos() const;
-        int currentBufferSize() const;
-        
+        int currentBufferSize() const;        
 
         QByteArray m_buffer;
         mutable QReadWriteLock m_lock;

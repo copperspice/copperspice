@@ -70,9 +70,9 @@ namespace QT7
             QString description();
          
             // EffectInterface:
-            virtual QList<Phonon::EffectParameter> parameters() const;
-            virtual QVariant parameterValue(const Phonon::EffectParameter &parameter) const;
-            virtual void setParameterValue(const Phonon::EffectParameter &parameter, const QVariant &newValue);
+            QList<Phonon::EffectParameter> parameters() const override;
+            QVariant parameterValue(const Phonon::EffectParameter &parameter) const override;
+            void setParameterValue(const Phonon::EffectParameter &parameter, const QVariant &newValue) override;
 
             static QList<int> effectList();
 

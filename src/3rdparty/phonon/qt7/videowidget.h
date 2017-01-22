@@ -48,25 +48,25 @@ namespace QT7
         VideoWidget(QObject *parent);
         virtual ~VideoWidget();
 
-        Phonon::VideoWidget::AspectRatio aspectRatio() const;
-        void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio);
-        qreal brightness() const;
-        void setBrightness(qreal);
-        Phonon::VideoWidget::ScaleMode scaleMode() const;
-        void setScaleMode(Phonon::VideoWidget::ScaleMode scaleMode);
-        qreal contrast() const;
-        void setContrast(qreal);
-        qreal hue() const;
-        void setHue(qreal);
-        qreal saturation() const;
-        void setSaturation(qreal);
+        Phonon::VideoWidget::AspectRatio aspectRatio() const override;
+        void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio) override;
+        qreal brightness() const override;
+        void setBrightness(qreal) override;
+        Phonon::VideoWidget::ScaleMode scaleMode() const override;
+        void setScaleMode(Phonon::VideoWidget::ScaleMode scaleMode) override;
+        qreal contrast() const override;
+        void setContrast(qreal) override;
+        qreal hue() const override;
+        void setHue(qreal) override;
+        qreal saturation() const override;
+        void setSaturation(qreal) override;
 
-        QWidget *widget();
+        QWidget *widget() override;
 
-        void updateVideo(VideoFrame &frame);
+        void updateVideo(VideoFrame &frame) override;
 
     protected:
-        void mediaNodeEvent(const MediaNodeEvent *event);
+        void mediaNodeEvent(const MediaNodeEvent *event) override;
 
     private:
         VideoRenderWidget *m_videoRenderWidget;

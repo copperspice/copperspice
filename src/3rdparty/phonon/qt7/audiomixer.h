@@ -77,20 +77,20 @@ namespace QT7
             QTime m_fadeStartTime;
 
             // EffectInterface:
-            QList<Phonon::EffectParameter> parameters() const;
-            QVariant parameterValue(const Phonon::EffectParameter &parameter) const;
-            void setParameterValue(const Phonon::EffectParameter &parameter, const QVariant &newValue);
+            QList<Phonon::EffectParameter> parameters() const override;
+            QVariant parameterValue(const Phonon::EffectParameter &parameter) const override;
+            void setParameterValue(const Phonon::EffectParameter &parameter, const QVariant &newValue) override;
 
             // VolumeFaderInterface:
-            float volume() const;
-            void setVolume(float volume);
-            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
-            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve);
-            void fadeTo(float volume, int fadeTime);
+            float volume() const override;
+            void setVolume(float volume) override;
+            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const override;
+            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve) override;
+            void fadeTo(float volume, int fadeTime) override;
             void updateFade();
 
         protected:
-            bool event(QEvent *event);
+            bool event(QEvent *event) override;
     };
 
 }} //namespace Phonon::QT7

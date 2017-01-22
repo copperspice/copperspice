@@ -65,7 +65,7 @@ class QMacPrintEngine : public QPaintEngine, public QPrintEngine
    void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
    QVariant property(PrintEnginePropertyKey key) const override;
 
-   QPrinter::PrinterState printerState() const;
+   QPrinter::PrinterState printerState() const override;
 
    bool newPage() override;
    bool abort() override;

@@ -99,11 +99,11 @@ class Q_GUI_EXPORT_STYLE_MAC QMacStyle : public QWindowsStyle
 
    bool event(QEvent *e) override;
 
- protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const;
+ protected:
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const override;
 
    int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation, 
-         const QStyleOption *option = 0, const QWidget *widget = 0) const;
+         const QStyleOption *option = 0, const QWidget *widget = 0) const override;
 
  private:
    Q_DISABLE_COPY(QMacStyle)

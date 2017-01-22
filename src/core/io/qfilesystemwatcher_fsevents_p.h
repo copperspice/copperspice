@@ -74,10 +74,10 @@ class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
    static QFSEventsFileSystemWatcherEngine *create();
 
-   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories);
-   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories);
+   QStringList addPaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
+   QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories) override;
 
-   void stop();
+   void stop() override;
 
  private:
    QFSEventsFileSystemWatcherEngine();
@@ -87,7 +87,7 @@ class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
    static void fseventsCallback(ConstFSEventStreamRef streamRef, void *clientCallBackInfo, size_t numEvents,
                                 void *eventPaths, const FSEventStreamEventFlags eventFlags[],
                                 const FSEventStreamEventId eventIds[]);
-   void run();
+   void run() override;
    FSEventStreamRef fsStream;
    CFArrayRef pathsToWatch;
    CFRunLoopRef threadsRunLoop;

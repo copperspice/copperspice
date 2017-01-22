@@ -209,18 +209,18 @@ class MacOutputDevice : public QIODevice
       open(QIODevice::WriteOnly | QIODevice::Unbuffered);
    }
 
-   qint64 readData(char *data, qint64 len) {
+   qint64 readData(char *data, qint64 len) override {
       Q_UNUSED(data);
       Q_UNUSED(len);
 
       return 0;
    }
 
-   qint64 writeData(const char *data, qint64 len) {
+   qint64 writeData(const char *data, qint64 len) override {
       return m_audioBuffer->writeBytes(data, len);
    }
 
-   bool isSequential() const {
+   bool isSequential() const override {
       return true;
    }
 
