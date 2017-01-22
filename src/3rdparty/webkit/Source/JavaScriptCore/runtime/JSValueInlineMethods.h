@@ -529,4 +529,4 @@ namespace JSC {
 
 } // namespace JSC
 
-#endif // JSValueInlineMethods_h
+#endif

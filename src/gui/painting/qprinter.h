@@ -202,7 +202,7 @@ class Q_GUI_EXPORT QPrinter : public QPaintDevice
    QRectF paperRect(Unit) const;
    QRectF pageRect(Unit) const;
 
-#if !defined(Q_OS_WIN)
+#if ! defined(Q_OS_WIN) || defined (CS_DOXYPRESS)
    QString printerSelectionOption() const;
    void setPrinterSelectionOption(const QString &);
 #endif

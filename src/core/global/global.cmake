@@ -1,6 +1,5 @@
 set(CORE_PUBLIC_INCLUDES
-    ${CORE_PUBLIC_INCLUDES}
-    QBool
+    ${CORE_PUBLIC_INCLUDES}   
     QCOORD
     QFlag
     QFlags
@@ -47,7 +46,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ullong.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ulong.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/qbool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qconfig.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qcoord.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qendian.h

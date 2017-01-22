@@ -475,13 +475,16 @@ QPlatformNativeInterface *QApplication::platformNativeInterface()
 static void init_platform(const QString &name, const QString &platformPluginPath)
 {
    QApplicationPrivate::platform_integration = QPlatformIntegrationFactory::create(name, platformPluginPath);
+
    if (!QApplicationPrivate::platform_integration) {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
-      QString fatalMessage =
-         QString::fromLatin1("Failed to load platform plugin \"%1\". Available platforms are: \n").arg(name);
-      foreach(QString key, keys) {
+
+      QString fatalMessage = QString::fromLatin1("Failed to load platform plugin \"%1\". Available platforms are: \n").arg(name);
+
+      for(QString key : keys) {
          fatalMessage.append(key + QString::fromLatin1("\n"));
       }
+
       qFatal("%s", fatalMessage.toLocal8Bit().constData());
 
    }
@@ -763,7 +766,7 @@ void QApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mouse
    QMouseEvent ev(type, localPoint, globalPoint, button, buttons, QApplication::keyboardModifiers());
 
    QList<QWeakPointer<QPlatformCursor> > cursors = QPlatformCursorPrivate::getInstances();
-   foreach (QWeakPointer<QPlatformCursor> cursor, cursors) {
+   for (QWeakPointer<QPlatformCursor> cursor : cursors) {
       if (cursor) {
          cursor.data()->pointerEvent(ev);
       }

@@ -267,10 +267,11 @@ static TransformFunc getTransformationFunction()
 
       // symbol is not built into the library, search for the plugin
       const QStringList paths = QApplication::libraryPaths();
-      foreach (const QString & path, paths) {
+
+      for (const QString & path : paths) {
          const QString file = path + QLatin1String("/gfxdrivers/libqgfxtransformed");
-         func = (TransformFunc)QLibrary::resolve(file,
-                                                 "qws_setScreenTransformation");
+         func = (TransformFunc)QLibrary::resolve(file, "qws_setScreenTransformation");
+
          if (func) {
             break;
          }

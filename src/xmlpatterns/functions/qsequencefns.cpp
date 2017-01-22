@@ -290,9 +290,8 @@ SequenceType::Ptr SubsequenceFN::staticType() const
 Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
                                  const SequenceType::Ptr &reqType)
 {
-   /* See the doxygen documentation for this function for the explanation
-    * to why this implementation is here, as opposed to in
-    * qsequencegeneratingfns.cpp. */
+   /* See the documentation for this function to explain why this 
+    * this implementation is here, as opposed to in qsequencegeneratingfns.cpp. */
 
    Q_ASSERT(context);
 

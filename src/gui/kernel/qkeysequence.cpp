@@ -1710,20 +1710,12 @@ QKeySequence QKeySequence::fromString(const QString &str, SequenceFormat format)
    return QKeySequence(str, format);
 }
 
-/*!
-    \since 5.1
-
-    Return a list of QKeySequence from the string \a str based on \a format.
-
-    \sa fromString()
-    \sa listToString()
-*/
 QList<QKeySequence> QKeySequence::listFromString(const QString &str, SequenceFormat format)
 {
    QList<QKeySequence> result;
 
    QStringList strings = str.split(QLatin1String("; "));
-   foreach (const QString & string, strings) {
+   for (const QString & string : strings) {
       result << fromString(string, format);
    }
 
@@ -1742,7 +1734,7 @@ QString QKeySequence::listToString(const QList<QKeySequence> &list, SequenceForm
 {
    QString result;
 
-   foreach (const QKeySequence & sequence, list) {
+   for (const QKeySequence & sequence : list) {
       result += sequence.toString(format);
       result += QLatin1String("; ");
    }

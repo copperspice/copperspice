@@ -180,6 +180,12 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
 
    bool isQBitmap() const;
 
+
+#if defined(CS_DOXYPRESS)
+   const QX11Info &x11Info() const;
+   Qt::HANDLE x11PictureHandle() const;
+#endif
+
 #if defined(Q_WS_QWS)
    const uchar *qwsBits() const;
    int qwsBytesPerLine() const;

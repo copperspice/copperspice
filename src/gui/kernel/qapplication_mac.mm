@@ -191,8 +191,10 @@ void qt_mac_loadMenuNib(QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *qtMenuLoader)
       qWarning("qt_mac_loadMenuNib() Could not load nib from resources");
       return;
    }
-   foreach (const QFileInfo & file, nibResource.entryInfoList())
-   QFile::copy(file.absoluteFilePath(), nibDir + QLatin1String("/") + file.fileName());
+
+   for (const QFileInfo & file : nibResource.entryInfoList()) {
+      QFile::copy(file.absoluteFilePath(), nibDir + QLatin1String("/") + file.fileName());
+   }
 
    // Load and instantiate nib file from temp
    NSURL *nibUrl = [NSURL fileURLWithPath: const_cast<NSString *>(reinterpret_cast<const NSString *>

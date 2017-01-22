@@ -48,10 +48,12 @@ class QDesktopWidgetPrivate : public QWidgetPrivate
 
  public:
    ~QDesktopWidgetPrivate() {
-      foreach(QDesktopScreenWidget * s, screens) delete s;
+      for (QDesktopScreenWidget * s : screens) {
+         delete s;
+      }   
    }
-   void updateScreenList();
 
+   void updateScreenList();
    QList<QDesktopScreenWidget *> screens;
 };
 

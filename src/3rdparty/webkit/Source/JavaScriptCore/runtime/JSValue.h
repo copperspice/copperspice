@@ -24,7 +24,7 @@
 #define JSValue_h
 
 #include <math.h>
-#include <stddef.h> // for size_t
+#include <stddef.h>          // for size_t
 #include <stdint.h>
 #include <wtf/AlwaysInline.h>
 #include <wtf/Assertions.h>
@@ -468,5 +468,8 @@ namespace JSC {
     bool isZombie(const JSCell*);
 
 } // namespace JSC
+
+// easier to do here
+#include <runtime/JSValueInlineMethods.h>
 
 #endif // JSValue_h

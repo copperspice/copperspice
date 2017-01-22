@@ -245,9 +245,11 @@ void QGraphicsItemPrivate::setIsMemberOfGroup(bool enabled)
 {
    Q_Q(QGraphicsItem);
    isMemberOfGroup = enabled;
-   if (!qgraphicsitem_cast<QGraphicsItemGroup *>(q)) {
-      foreach (QGraphicsItem * child, children)
-      child->d_func()->setIsMemberOfGroup(enabled);
+
+   if (! qgraphicsitem_cast<QGraphicsItemGroup *>(q)) {
+      for (QGraphicsItem * child : children) {
+         child->d_func()->setIsMemberOfGroup(enabled);
+      }
    }
 }
 
@@ -812,9 +814,11 @@ QGraphicsItem::~QGraphicsItem()
 #ifndef QT_NO_GESTURES
    if (d_ptr->isObject && !d_ptr->gestureContext.isEmpty()) {
       QGraphicsObject *o = static_cast<QGraphicsObject *>(this);
+
       if (QGestureManager *manager = QGestureManager::instance()) {
-         foreach (Qt::GestureType type, d_ptr->gestureContext.keys())
-         manager->cleanupCachedGestures(o, type);
+         for (Qt::GestureType type : d_ptr->gestureContext.keys()) {
+            manager->cleanupCachedGestures(o, type);
+         }
       }
    }
 #endif
@@ -1184,9 +1188,11 @@ static void _q_qgraphicsItemSetFlag(QGraphicsItem *item, QGraphicsItem::Graphics
       // propagate it.
       return;
    }
+
    item->setFlag(flag, enabled);
-   foreach (QGraphicsItem * child, item->children())
-   _q_qgraphicsItemSetFlag(child, flag, enabled);
+   for (QGraphicsItem * child : item->children()) {
+      _q_qgraphicsItemSetFlag(child, flag, enabled);
+   }
 }
 
 /*!
@@ -1548,13 +1554,13 @@ void QGraphicsItem::setCursor(const QCursor &cursor)
    if (d_ptr->scene) {
       d_ptr->scene->d_func()->allItemsUseDefaultCursor = false;
 
-      foreach (QGraphicsView * view, d_ptr->scene->views()) {
+      for (QGraphicsView * view : d_ptr->scene->views()) {
          view->viewport()->setMouseTracking(true);
 
          // Note: Some of this logic is duplicated in QGraphicsView's mouse events.
          if (view->underMouse()) {
 
-            foreach (QGraphicsItem * itemUnderCursor, view->items(view->mapFromGlobal(QCursor::pos()))) {
+            for (QGraphicsItem * itemUnderCursor : view->items(view->mapFromGlobal(QCursor::pos()))) {
                if (itemUnderCursor->hasCursor()) {
                   QMetaObject::invokeMethod(view, "_q_setViewportCursor", Q_ARG(QCursor, itemUnderCursor->cursor()));
                   break;
@@ -1590,7 +1596,7 @@ void QGraphicsItem::unsetCursor()
    d_ptr->unsetExtra(QGraphicsItemPrivate::ExtraCursor);
    d_ptr->hasCursor = 0;
    if (d_ptr->scene) {
-      foreach (QGraphicsView * view, d_ptr->scene->views()) {
+      for (QGraphicsView * view : d_ptr->scene->views()) {
          if (view->underMouse() && view->itemAt(view->mapFromGlobal(QCursor::pos())) == this) {
             QMetaObject::invokeMethod(view, "_q_unsetViewportCursor");
             break;
@@ -1744,7 +1750,7 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly, bo
    // Update children with explicitly = false.
    const bool updateChildren = update && !((flags & QGraphicsItem::ItemClipsChildrenToShape)
                                            && !(flags & QGraphicsItem::ItemHasNoContents));
-   foreach (QGraphicsItem * child, children) {
+   for (QGraphicsItem * child : children) {
       if (!newVisible || !child->d_ptr->explicitlyHidden) {
          child->d_ptr->setVisibleHelper(newVisible, false, updateChildren);
       }
@@ -1820,63 +1826,11 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly, bo
    }
 }
 
-/*!
-    If \a visible is true, the item is made visible. Otherwise, the item is
-    made invisible. Invisible items are not painted, nor do they receive any
-    events. In particular, mouse events pass right through invisible items,
-    and are delivered to any item that may be behind. Invisible items are also
-    unselectable, they cannot take input focus, and are not detected by
-    QGraphicsScene's item location functions.
-
-    If an item becomes invisible while grabbing the mouse, (i.e., while it is
-    receiving mouse events,) it will automatically lose the mouse grab, and
-    the grab is not regained by making the item visible again; it must receive
-    a new mouse press to regain the mouse grab.
-
-    Similarly, an invisible item cannot have focus, so if the item has focus
-    when it becomes invisible, it will lose focus, and the focus is not
-    regained by simply making the item visible again.
-
-    If you hide a parent item, all its children will also be hidden. If you
-    show a parent item, all children will be shown, unless they have been
-    explicitly hidden (i.e., if you call setVisible(false) on a child, it will
-    not be reshown even if its parent is hidden, and then shown again).
-
-    Items are visible by default; it is unnecessary to call
-    setVisible() on a new item.
-
-    \sa isVisible(), show(), hide()
-*/
 void QGraphicsItem::setVisible(bool visible)
 {
    d_ptr->setVisibleHelper(visible, /* explicit = */ true);
 }
 
-/*!
-    \fn void QGraphicsItem::hide()
-
-    Hides the item. (Items are visible by default.)
-
-    This convenience function is equivalent to calling \c setVisible(false).
-
-    \sa show(), setVisible()
-*/
-
-/*!
-    \fn void QGraphicsItem::show()
-
-    Shows the item. (Items are visible by default.)
-
-    This convenience function is equivalent to calling \c setVisible(true).
-
-    \sa hide(), setVisible()
-*/
-
-/*!
-    Returns true if the item is enabled; otherwise, false is returned.
-
-    \sa setEnabled()
-*/
 bool QGraphicsItem::isEnabled() const
 {
    return d_ptr->enabled;
@@ -1937,7 +1891,7 @@ void QGraphicsItemPrivate::setEnabledHelper(bool newEnabled, bool explicitly, bo
       q_ptr->update();
    }
 
-   foreach (QGraphicsItem * child, children) {
+   for (QGraphicsItem * child : children) {
       if (!newEnabled || !child->d_ptr->explicitlyDisabled) {
          child->d_ptr->setEnabledHelper(newEnabled, /* explicitly = */ false);
       }
@@ -2247,9 +2201,11 @@ QRectF QGraphicsItemPrivate::effectiveBoundingRect(const QRectF &rect) const
       if (scene->d_func()->views.isEmpty()) {
          return effect->boundingRectFor(rect);
       }
+
       QRectF sceneRect = q->mapRectToScene(rect);
       QRectF sceneEffectRect;
-      foreach (QGraphicsView * view, scene->views()) {
+
+      for (QGraphicsView * view : scene->views()) {
          QRectF deviceRect = view->d_func()->mapRectFromScene(sceneRect);
          QRect deviceEffectRect = effect->boundingRectFor(deviceRect).toAlignedRect();
          sceneEffectRect |= view->d_func()->mapRectToScene(deviceEffectRect);
@@ -3035,40 +2991,11 @@ void QGraphicsItem::ungrabKeyboard()
    d_ptr->scene->d_func()->ungrabKeyboard(this);
 }
 
-/*!
-    Returns the position of the item in parent coordinates. If the item has no
-    parent, its position is given in scene coordinates.
-
-    The position of the item describes its origin (local coordinate
-    (0, 0)) in parent coordinates; this function returns the same as
-    mapToParent(0, 0).
-
-    For convenience, you can also call scenePos() to determine the
-    item's position in scene coordinates, regardless of its parent.
-
-    \sa x(), y(), setPos(), transform(), {The Graphics View Coordinate System}
-*/
 QPointF QGraphicsItem::pos() const
 {
    return d_ptr->pos;
 }
 
-/*!
-    \fn QGraphicsItem::x() const
-
-    This convenience function is equivalent to calling pos().x().
-
-    \sa y()
-*/
-
-/*!
-    \since 4.6
-
-    Set's the \a x coordinate of the item's position. Equivalent to
-    calling setPos(x, y()).
-
-    \sa x(), setPos()
-*/
 void QGraphicsItem::setX(qreal x)
 {
    if (d_ptr->inDestructor) {
@@ -3082,22 +3009,6 @@ void QGraphicsItem::setX(qreal x)
    setPos(QPointF(x, d_ptr->pos.y()));
 }
 
-/*!
-    \fn QGraphicsItem::y() const
-
-    This convenience function is equivalent to calling pos().y().
-
-    \sa x()
-*/
-
-/*!
-    \since 4.6
-
-    Set's the \a y coordinate of the item's position. Equivalent to
-    calling setPos(x(), y).
-
-    \sa x(), setPos()
-*/
 void QGraphicsItem::setY(qreal y)
 {
    if (d_ptr->inDestructor) {
@@ -3111,12 +3022,6 @@ void QGraphicsItem::setY(qreal y)
    setPos(QPointF(d_ptr->pos.x(), y));
 }
 
-/*!
-    Returns the item's position in scene coordinates. This is
-    equivalent to calling \c mapToScene(0, 0).
-
-    \sa pos(), sceneTransform(), {The Graphics View Coordinate System}
-*/
 QPointF QGraphicsItem::scenePos() const
 {
    return mapToScene(0, 0);
@@ -3208,36 +3113,6 @@ void QGraphicsItem::setPos(const QPointF &pos)
    d_ptr->sendScenePosChange();
 }
 
-/*!
-    \fn void QGraphicsItem::setPos(qreal x, qreal y)
-    \overload
-
-    This convenience function is equivalent to calling setPos(QPointF(\a x, \a
-    y)).
-*/
-
-/*!
-    \fn void QGraphicsItem::moveBy(qreal dx, qreal dy)
-
-    Moves the item by \a dx points horizontally, and \a dy point
-    vertically. This function is equivalent to calling setPos(pos() +
-    QPointF(\a dx, \a dy)).
-*/
-
-/*!
-    If this item is part of a scene that is viewed by a QGraphicsView, this
-    convenience function will attempt to scroll the view to ensure that \a
-    rect is visible inside the view's viewport. If \a rect is a null rect (the
-    default), QGraphicsItem will default to the item's bounding rect. \a xmargin
-    and \a ymargin are the number of pixels the view should use for margins.
-
-    If the specified rect cannot be reached, the contents are scrolled to the
-    nearest valid position.
-
-    If this item is not viewed by a QGraphicsView, this function does nothing.
-
-    \sa QGraphicsView::ensureVisible()
-*/
 void QGraphicsItem::ensureVisible(const QRectF &rect, int xmargin, int ymargin)
 {
    if (d_ptr->scene) {
@@ -3247,18 +3122,12 @@ void QGraphicsItem::ensureVisible(const QRectF &rect, int xmargin, int ymargin)
       } else {
          sceneRect = sceneBoundingRect();
       }
-      foreach (QGraphicsView * view, d_ptr->scene->d_func()->views)
-      view->ensureVisible(sceneRect, xmargin, ymargin);
+
+      for (QGraphicsView * view : d_ptr->scene->d_func()->views) {
+         view->ensureVisible(sceneRect, xmargin, ymargin);
+      }
    }
 }
-
-/*!
-    \fn void QGraphicsItem::ensureVisible(qreal x, qreal y, qreal w, qreal h,
-    int xmargin = 50, int ymargin = 50)
-
-    This convenience function is equivalent to calling
-    ensureVisible(QRectF(\a x, \a y, \a w, \a h), \a xmargin, \a ymargin):
-*/
 
 /*!
     \obsolete
@@ -3276,18 +3145,6 @@ QMatrix QGraphicsItem::matrix() const
    return transform().toAffine();
 }
 
-/*!
-    \since 4.3
-
-    Returns this item's transformation matrix.
-
-    The transformation matrix is combined with the item's rotation(), scale()
-    and transformations() into a combined transformations for the item.
-
-    The default transformation matrix is an identity matrix.
-
-    \sa setTransform(), sceneTransform()
-*/
 QTransform QGraphicsItem::transform() const
 {
    if (!d_ptr->transformData) {
@@ -3594,24 +3451,9 @@ void QGraphicsItem::setTransformOriginPoint(const QPointF &origin)
 }
 
 /*!
-    \fn void QGraphicsItem::setTransformOriginPoint(qreal x, qreal y)
-
-    \since 4.6
-    \overload
-
-    Sets the origin point for the transformation in item coordinates.
-    This is equivalent to calling setTransformOriginPoint(QPointF(\a x, \a y)).
-
-    \sa setTransformOriginPoint(), {Transformations}
-*/
-
-
-/*!
     \obsolete
-
     Use sceneTransform() instead.
 
-    \sa transform(), setTransform(), scenePos(), {The Graphics View Coordinate System}
 */
 QMatrix QGraphicsItem::sceneMatrix() const
 {
@@ -3619,53 +3461,12 @@ QMatrix QGraphicsItem::sceneMatrix() const
    return d_ptr->sceneTransform.toAffine();
 }
 
-
-/*!
-    \since 4.3
-
-    Returns this item's scene transformation matrix. This matrix can be used
-    to map coordinates and geometrical shapes from this item's local
-    coordinate system to the scene's coordinate system. To map coordinates
-    from the scene, you must first invert the returned matrix.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 4
-
-    Unlike transform(), which returns only an item's local transformation, this
-    function includes the item's (and any parents') position, and all the transfomation properties.
-
-    \sa transform(), setTransform(), scenePos(), {The Graphics View Coordinate System}, {Transformations}
-*/
 QTransform QGraphicsItem::sceneTransform() const
 {
    d_ptr->ensureSceneTransform();
    return d_ptr->sceneTransform;
 }
 
-/*!
-    \since 4.3
-
-    Returns this item's device transformation matrix, using \a
-    viewportTransform to map from scene to device coordinates. This matrix can
-    be used to map coordinates and geometrical shapes from this item's local
-    coordinate system to the viewport's (or any device's) coordinate
-    system. To map coordinates from the viewport, you must first invert the
-    returned matrix.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 5
-
-    This function is the same as combining this item's scene transform with
-    the view's viewport transform, but it also understands the
-    ItemIgnoresTransformations flag. The device transform can be used to do
-    accurate coordinate mapping (and collision detection) for untransformable
-    items.
-
-    \sa transform(), setTransform(), scenePos(), {The Graphics View Coordinate
-    System}, itemTransform()
-*/
 QTransform QGraphicsItem::deviceTransform(const QTransform &viewportTransform) const
 {
    // Ensure we return the standard transform if we're not untransformable.
@@ -4076,7 +3877,7 @@ inline void QGraphicsItemPrivate::sendScenePosChange()
          q->itemChange(QGraphicsItem::ItemScenePositionHasChanged, q->scenePos());
       }
       if (scenePosDescendants) {
-         foreach (QGraphicsItem * item, scene->d_func()->scenePosItems) {
+         for (QGraphicsItem * item : scene->d_func()->scenePosItems) {
             if (q->isAncestorOf(item)) {
                item->itemChange(QGraphicsItem::ItemScenePositionHasChanged, item->scenePos());
             }
@@ -4085,22 +3886,6 @@ inline void QGraphicsItemPrivate::sendScenePosChange()
    }
 }
 
-/*!
-    \since 4.6
-
-    Stacks this item before \a sibling, which must be a sibling item (i.e., the
-    two items must share the same parent item, or must both be toplevel items).
-    The \a sibling must have the same Z value as this item, otherwise calling
-    this function will have no effect.
-
-    By default, all sibling items are stacked by insertion order (i.e., the
-    first item you add is drawn before the next item you add). If two items' Z
-    values are different, then the item with the highest Z value is drawn on
-    top. When the Z values are the same, the insertion order will decide the
-    stacking order.
-
-    \sa setZValue(), ItemStacksBehindParent, {QGraphicsItem#Sorting}{Sorting}
-*/
 void QGraphicsItem::stackBefore(const QGraphicsItem *sibling)
 {
    if (sibling == this) {
@@ -4178,45 +3963,6 @@ QRectF QGraphicsItem::childrenBoundingRect() const
    return d_ptr->childrenBoundingRect;
 }
 
-/*!
-    \fn virtual QRectF QGraphicsItem::boundingRect() const = 0
-
-    This pure virtual function defines the outer bounds of the item as
-    a rectangle; all painting must be restricted to inside an item's
-    bounding rect. QGraphicsView uses this to determine whether the
-    item requires redrawing.
-
-    Although the item's shape can be arbitrary, the bounding rect is
-    always rectangular, and it is unaffected by the items'
-    transformation.
-
-    If you want to change the item's bounding rectangle, you must first call
-    prepareGeometryChange(). This notifies the scene of the imminent change,
-    so that its can update its item geometry index; otherwise, the scene will
-    be unaware of the item's new geometry, and the results are undefined
-    (typically, rendering artifacts are left around in the view).
-
-    Reimplement this function to let QGraphicsView determine what
-    parts of the widget, if any, need to be redrawn.
-
-    Note: For shapes that paint an outline / stroke, it is important
-    to include half the pen width in the bounding rect. It is not
-    necessary to compensate for antialiasing, though.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 8
-
-    \sa boundingRegion(), shape(), contains(), {The Graphics View Coordinate
-    System}, prepareGeometryChange()
-*/
-
-/*!
-    Returns the bounding rect of this item in scene coordinates, by combining
-    sceneTransform() with boundingRect().
-
-    \sa boundingRect(), {The Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::sceneBoundingRect() const
 {
    // Find translate-only offset
@@ -4244,28 +3990,6 @@ QRectF QGraphicsItem::sceneBoundingRect() const
    return parentItem->d_ptr->sceneTransform.mapRect(br);
 }
 
-/*!
-    Returns the shape of this item as a QPainterPath in local
-    coordinates. The shape is used for many things, including collision
-    detection, hit tests, and for the QGraphicsScene::items() functions.
-
-    The default implementation calls boundingRect() to return a simple
-    rectangular shape, but subclasses can reimplement this function to return
-    a more accurate shape for non-rectangular items. For example, a round item
-    may choose to return an elliptic shape for better collision detection. For
-    example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 9
-
-    The outline of a shape can vary depending on the width and style of the
-    pen used when drawing. If you want to include this outline in the item's
-    shape, you can create a shape from the stroke using QPainterPathStroker.
-
-    This function is called by the default implementations of contains() and
-    collidesWithPath().
-
-    \sa boundingRect(), contains(), prepareGeometryChange(), QPainterPathStroker
-*/
 QPainterPath QGraphicsItem::shape() const
 {
    QPainterPath path;
@@ -4273,16 +3997,6 @@ QPainterPath QGraphicsItem::shape() const
    return path;
 }
 
-/*!
-    Returns true if this item is clipped. An item is clipped if it has either
-    set the \l ItemClipsToShape flag, or if it or any of its ancestors has set
-    the \l ItemClipsChildrenToShape flag.
-
-    Clipping affects the item's appearance (i.e., painting), as well as mouse
-    and hover event delivery.
-
-    \sa clipPath(), shape(), setFlags()
-*/
 bool QGraphicsItem::isClipped() const
 {
    Q_D(const QGraphicsItem);
@@ -4290,26 +4004,6 @@ bool QGraphicsItem::isClipped() const
           || (d->flags & QGraphicsItem::ItemClipsToShape);
 }
 
-/*!
-    \since 4.5
-
-    Returns this item's clip path, or an empty QPainterPath if this item is
-    not clipped. The clip path constrains the item's appearance and
-    interaction (i.e., restricts the area the item can draw, and it also
-    restricts the area that the item receives events).
-
-    You can enable clipping by setting the ItemClipsToShape or
-    ItemClipsChildrenToShape flags. The item's clip path is calculated by
-    intersecting all clipping ancestors' shapes. If the item sets
-    ItemClipsToShape, the final clip is intersected with the item's own shape.
-
-    \note Clipping introduces a performance penalty for all items involved;
-    you should generally avoid using clipping if you can (e.g., if your items
-    always draw inside boundingRect() or shape() boundaries, clipping is not
-    necessary).
-
-    \sa isClipped(), shape(), setFlags()
-*/
 QPainterPath QGraphicsItem::clipPath() const
 {
    Q_D(const QGraphicsItem);
@@ -4541,18 +4235,6 @@ static bool qt_QGraphicsItem_isObscured(const QGraphicsItem *item,
    return other->mapToItem(item, other->opaqueArea()).contains(rect);
 }
 
-/*!
-    \overload
-    \since 4.3
-
-    Returns true if \a rect is completely obscured by the opaque shape of any
-    of colliding items above it (i.e., with a higher Z value than this item).
-
-    Unlike the default isObscured() function, this function does not call
-    isObscuredBy().
-
-    \sa opaqueArea()
-*/
 bool QGraphicsItem::isObscured(const QRectF &rect) const
 {
    Q_D(const QGraphicsItem);
@@ -4563,7 +4245,7 @@ bool QGraphicsItem::isObscured(const QRectF &rect) const
    QRectF br = boundingRect();
    QRectF testRect = rect.isNull() ? br : rect;
 
-   foreach (QGraphicsItem * item, d->scene->items(mapToScene(br), Qt::IntersectsItemBoundingRect)) {
+   for (QGraphicsItem * item : d->scene->items(mapToScene(br), Qt::IntersectsItemBoundingRect)) {
       if (item == this) {
          break;
       }
@@ -4574,26 +4256,6 @@ bool QGraphicsItem::isObscured(const QRectF &rect) const
    return false;
 }
 
-/*!
-    \fn bool QGraphicsItem::isObscured(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling isObscured(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Returns true if this item's bounding rect is completely obscured by the
-    opaque shape of \a item.
-
-    The base implementation maps \a item's opaqueArea() to this item's
-    coordinate system, and then checks if this item's boundingRect() is fully
-    contained within the mapped shape.
-
-    You can reimplement this function to provide a custom algorithm for
-    determining whether this item is obscured by \a item.
-
-    \sa opaqueArea(), isObscured()
-*/
 bool QGraphicsItem::isObscuredBy(const QGraphicsItem *item) const
 {
    if (!item) {
@@ -4603,47 +4265,11 @@ bool QGraphicsItem::isObscuredBy(const QGraphicsItem *item) const
           && qt_QGraphicsItem_isObscured(this, item, boundingRect());
 }
 
-/*!
-    This virtual function returns a shape representing the area where this
-    item is opaque. An area is opaque if it is filled using an opaque brush or
-    color (i.e., not transparent).
-
-    This function is used by isObscuredBy(), which is called by underlying
-    items to determine if they are obscured by this item.
-
-    The default implementation returns an empty QPainterPath, indicating that
-    this item is completely transparent and does not obscure any other items.
-
-    \sa isObscuredBy(), isObscured(), shape()
-*/
 QPainterPath QGraphicsItem::opaqueArea() const
 {
    return QPainterPath();
 }
 
-/*!
-    \since 4.4
-
-    Returns the bounding region for this item. The coordinate space of the
-    returned region depends on \a itemToDeviceTransform. If you pass an
-    identity QTransform as a parameter, this function will return a local
-    coordinate region.
-
-    The bounding region describes a coarse outline of the item's visual
-    contents. Although it's expensive to calculate, it's also more precise
-    than boundingRect(), and it can help to avoid unnecessary repainting when
-    an item is updated. This is particularly efficient for thin items (e.g.,
-    lines or simple polygons). You can tune the granularity for the bounding
-    region by calling setBoundingRegionGranularity(). The default granularity
-    is 0; in which the item's bounding region is the same as its bounding
-    rect.
-
-    \a itemToDeviceTransform is the transformation from item coordinates to
-    device coordinates. If you want this function to return a QRegion in scene
-    coordinates, you can pass sceneTransform() as an argument.
-
-    \sa boundingRegionGranularity()
-*/
 QRegion QGraphicsItem::boundingRegion(const QTransform &itemToDeviceTransform) const
 {
    // ### Ideally we would have a better way to generate this region,
@@ -4688,7 +4314,8 @@ QRegion QGraphicsItem::boundingRegion(const QTransform &itemToDeviceTransform) c
    QTransform unscale = QTransform::fromScale(1 / granularity, 1 / granularity);
    QRegion r;
    QBitmap colorMask = QBitmap::fromImage(mask.createMaskFromColor(0));
-   foreach (const QRect & rect, QRegion( colorMask ).rects()) {
+
+   for (const QRect & rect : QRegion( colorMask ).rects()) {
       QRect xrect = unscale.mapRect(rect).translated(deviceRect.topLeft() - QPoint(pad, pad));
       r += xrect.adjusted(-1, -1, 1, 1) & deviceRect;
    }
@@ -4749,40 +4376,6 @@ void QGraphicsItem::setBoundingRegionGranularity(qreal granularity)
    d_ptr->setExtra(QGraphicsItemPrivate::ExtraBoundingRegionGranularity,
                    QVariant::fromValue<qreal>(granularity));
 }
-
-/*!
-    \fn virtual void QGraphicsItem::paint(QPainter *painter, const
-    QStyleOptionGraphicsItem *option, QWidget *widget = 0) = 0
-
-    This function, which is usually called by QGraphicsView, paints the
-    contents of an item in local coordinates.
-
-    Reimplement this function in a QGraphicsItem subclass to provide the
-    item's painting implementation, using \a painter. The \a option parameter
-    provides style options for the item, such as its state, exposed area and
-    its level-of-detail hints. The \a widget argument is optional. If
-    provided, it points to the widget that is being painted on; otherwise, it
-    is 0. For cached painting, \a widget is always 0.
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 10
-
-    The painter's pen is 0-width by default, and its pen is initialized to the
-    QPalette::Text brush from the paint device's palette. The brush is
-    initialized to QPalette::Window.
-
-    Make sure to constrain all painting inside the boundaries of
-    boundingRect() to avoid rendering artifacts (as QGraphicsView does not
-    clip the painter for you). In particular, when QPainter renders the
-    outline of a shape using an assigned QPen, half of the outline will be
-    drawn outside, and half inside, the shape you're rendering (e.g., with a
-    pen width of 2 units, you must draw outlines 1 unit inside
-    boundingRect()). QGraphicsItem does not support use of cosmetic pens with
-    a non-zero width.
-
-    All painting is done in local coordinates.
-
-    \sa setCacheMode(), QPen::width(), {Item Coordinates}, ItemUsesExtendedStyleOption
-*/
 
 /*!
     \internal
@@ -5277,23 +4870,6 @@ void QGraphicsItem::scroll(qreal dx, qreal dy, const QRectF &rect)
    d->scene->d_func()->markDirty(this, rect);
 }
 
-/*!
-    \fn void QGraphicsItem::update(qreal x, qreal y, qreal width, qreal height)
-    \overload
-
-    This convenience function is equivalent to calling update(QRectF(\a x, \a
-    y, \a width, \a height)).
-*/
-
-/*!
-    Maps the point \a point, which is in this item's coordinate system, to \a
-    item's coordinate system, and returns the mapped coordinate.
-
-    If \a item is 0, this function returns the same as mapToScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), transform(), mapFromItem(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPointF &point) const
 {
    if (item) {
@@ -5302,22 +4878,6 @@ QPointF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPointF &point
    return mapToScene(point);
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapToItem(const QGraphicsItem *item, qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling mapToItem(\a item,
-    QPointF(\a x, \a y)).
-*/
-
-/*!
-    Maps the point \a point, which is in this item's coordinate system, to its
-    parent's coordinate system, and returns the mapped coordinate. If the item
-    has no parent, \a point will be mapped to the scene's coordinate system.
-
-    \sa mapToItem(), mapToScene(), transform(), mapFromParent(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapToParent(const QPointF &point) const
 {
    // COMBINE
@@ -5327,21 +4887,6 @@ QPointF QGraphicsItem::mapToParent(const QPointF &point) const
    return d_ptr->transformToParent().map(point);
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapToParent(qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling mapToParent(QPointF(\a
-    x, \a y)).
-*/
-
-/*!
-    Maps the point \a point, which is in this item's coordinate system, to the
-    scene's coordinate system, and returns the mapped coordinate.
-
-    \sa mapToItem(), mapToParent(), transform(), mapFromScene(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapToScene(const QPointF &point) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5350,23 +4895,6 @@ QPointF QGraphicsItem::mapToScene(const QPointF &point) const
    return d_ptr->sceneTransform.map(point);
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapToScene(qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling mapToScene(QPointF(\a
-    x, \a y)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    \a item's coordinate system, and returns the mapped rectangle as a polygon.
-
-    If \a item is 0, this function returns the same as mapToScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QRectF &rect) const
 {
    if (item) {
@@ -5375,22 +4903,6 @@ QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QRectF &rect
    return mapToScene(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapToItem(item, QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    its parent's coordinate system, and returns the mapped rectangle as a
-    polygon. If the item has no parent, \a rect will be mapped to the scene's
-    coordinate system.
-
-    \sa mapToScene(), mapToItem(), mapFromParent(), {The Graphics View
-    Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToParent(const QRectF &rect) const
 {
    // COMBINE
@@ -5400,20 +4912,6 @@ QPolygonF QGraphicsItem::mapToParent(const QRectF &rect) const
    return d_ptr->transformToParent().map(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapToParent(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapToParent(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    the scene's coordinate system, and returns the mapped rectangle as a polygon.
-
-    \sa mapToParent(), mapToItem(), mapFromScene(), {The Graphics View
-    Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToScene(const QRectF &rect) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5422,25 +4920,6 @@ QPolygonF QGraphicsItem::mapToScene(const QRectF &rect) const
    return d_ptr->sceneTransform.map(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapToScene(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapToScene(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    \a item's coordinate system, and returns the mapped rectangle as a new
-    rectangle (i.e., the bounding rectangle of the resulting polygon).
-
-    If \a item is 0, this function returns the same as mapRectToScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem *item, const QRectF &rect) const
 {
    if (item) {
@@ -5449,23 +4928,6 @@ QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem *item, const QRectF &rec
    return mapRectToScene(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem *item, qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectToItem(item, QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    its parent's coordinate system, and returns the mapped rectangle as a new
-    rectangle (i.e., the bounding rectangle of the resulting polygon).
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectToParent(const QRectF &rect) const
 {
    // COMBINE
@@ -5475,23 +4937,6 @@ QRectF QGraphicsItem::mapRectToParent(const QRectF &rect) const
    return d_ptr->transformToParent().mapRect(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectToParent(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectToParent(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in this item's coordinate system, to
-    the scene coordinate system, and returns the mapped rectangle as a new
-    rectangle (i.e., the bounding rectangle of the resulting polygon).
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectToScene(const QRectF &rect) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5500,25 +4945,6 @@ QRectF QGraphicsItem::mapRectToScene(const QRectF &rect) const
    return d_ptr->sceneTransform.mapRect(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectToScene(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectToScene(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in \a item's coordinate system, to
-    this item's coordinate system, and returns the mapped rectangle as a new
-    rectangle (i.e., the bounding rectangle of the resulting polygon).
-
-    If \a item is 0, this function returns the same as mapRectFromScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem *item, const QRectF &rect) const
 {
    if (item) {
@@ -5527,24 +4953,6 @@ QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem *item, const QRectF &r
    return mapRectFromScene(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem *item, qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectFromItem(item, QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in this item's parent's coordinate
-    system, to this item's coordinate system, and returns the mapped rectangle
-    as a new rectangle (i.e., the bounding rectangle of the resulting
-    polygon).
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectFromParent(const QRectF &rect) const
 {
    // COMBINE
@@ -5554,23 +4962,6 @@ QRectF QGraphicsItem::mapRectFromParent(const QRectF &rect) const
    return d_ptr->transformToParent().inverted().mapRect(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectFromParent(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectFromParent(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    \since 4.5
-
-    Maps the rectangle \a rect, which is in scene coordinates, to this item's
-    coordinate system, and returns the mapped rectangle as a new rectangle
-    (i.e., the bounding rectangle of the resulting polygon).
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QRectF QGraphicsItem::mapRectFromScene(const QRectF &rect) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5579,22 +4970,6 @@ QRectF QGraphicsItem::mapRectFromScene(const QRectF &rect) const
    return d_ptr->sceneTransform.inverted().mapRect(rect);
 }
 
-/*!
-    \fn QRectF QGraphicsItem::mapRectFromScene(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.5
-
-    This convenience function is equivalent to calling mapRectFromScene(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the polygon \a polygon, which is in this item's coordinate system, to
-    \a item's coordinate system, and returns the mapped polygon.
-
-    If \a item is 0, this function returns the same as mapToScene().
-
-    \sa itemTransform(), mapToParent(), mapToScene(), mapFromItem(), {The
-    Graphics View Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, const QPolygonF &polygon) const
 {
    if (item) {
@@ -5671,13 +5046,6 @@ QPainterPath QGraphicsItem::mapToParent(const QPainterPath &path) const
    return d_ptr->transformToParent().map(path);
 }
 
-/*!
-    Maps the path \a path, which is in this item's coordinate system, to
-    the scene's coordinate system, and returns the mapped path.
-
-    \sa mapToParent(), mapToItem(), mapFromScene(), {The Graphics View
-    Coordinate System}
-*/
 QPainterPath QGraphicsItem::mapToScene(const QPainterPath &path) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5686,15 +5054,6 @@ QPainterPath QGraphicsItem::mapToScene(const QPainterPath &path) const
    return d_ptr->sceneTransform.map(path);
 }
 
-/*!
-    Maps the point \a point, which is in \a item's coordinate system, to this
-    item's coordinate system, and returns the mapped coordinate.
-
-    If \a item is 0, this function returns the same as mapFromScene().
-
-    \sa itemTransform(), mapFromParent(), mapFromScene(), transform(), mapToItem(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPointF &point) const
 {
    if (item) {
@@ -5703,22 +5062,6 @@ QPointF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPointF &poi
    return mapFromScene(point);
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapFromItem(const QGraphicsItem *item, qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling mapFromItem(\a item,
-    QPointF(\a x, \a y)).
-*/
-
-/*!
-    Maps the point \a point, which is in this item's parent's coordinate
-    system, to this item's coordinate system, and returns the mapped
-    coordinate.
-
-    \sa mapFromItem(), mapFromScene(), transform(), mapToParent(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapFromParent(const QPointF &point) const
 {
    // COMBINE
@@ -5728,22 +5071,6 @@ QPointF QGraphicsItem::mapFromParent(const QPointF &point) const
    return point - d_ptr->pos;
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapFromParent(qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling
-    mapFromParent(QPointF(\a x, \a y)).
-*/
-
-/*!
-    Maps the point \a point, which is in this item's scene's coordinate
-    system, to this item's coordinate system, and returns the mapped
-    coordinate.
-
-    \sa mapFromItem(), mapFromParent(), transform(), mapToScene(), {The Graphics
-    View Coordinate System}
-*/
 QPointF QGraphicsItem::mapFromScene(const QPointF &point) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5752,24 +5079,6 @@ QPointF QGraphicsItem::mapFromScene(const QPointF &point) const
    return d_ptr->sceneTransform.inverted().map(point);
 }
 
-/*!
-    \fn QPointF QGraphicsItem::mapFromScene(qreal x, qreal y) const
-    \overload
-
-    This convenience function is equivalent to calling mapFromScene(QPointF(\a
-    x, \a y)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in \a item's coordinate system, to
-    this item's coordinate system, and returns the mapped rectangle as a
-    polygon.
-
-    If \a item is 0, this function returns the same as mapFromScene()
-
-    \sa itemTransform(), mapToItem(), mapFromParent(), transform(), {The Graphics View Coordinate
-    System}
-*/
 QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QRectF &rect) const
 {
    if (item) {
@@ -5778,21 +5087,6 @@ QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QRectF &re
    return mapFromScene(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapFromItem(item, QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in this item's parent's coordinate
-    system, to this item's coordinate system, and returns the mapped rectangle
-    as a polygon.
-
-    \sa mapToParent(), mapFromItem(), transform(), {The Graphics View Coordinate
-    System}
-*/
 QPolygonF QGraphicsItem::mapFromParent(const QRectF &rect) const
 {
    // COMBINE
@@ -5802,21 +5096,6 @@ QPolygonF QGraphicsItem::mapFromParent(const QRectF &rect) const
    return d_ptr->transformToParent().inverted().map(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapFromParent(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapFromItem(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the rectangle \a rect, which is in this item's scene's coordinate
-    system, to this item's coordinate system, and returns the mapped rectangle
-    as a polygon.
-
-    \sa mapToScene(), mapFromItem(), transform(), {The Graphics View Coordinate
-    System}
-*/
 QPolygonF QGraphicsItem::mapFromScene(const QRectF &rect) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5825,22 +5104,6 @@ QPolygonF QGraphicsItem::mapFromScene(const QRectF &rect) const
    return d_ptr->sceneTransform.inverted().map(rect);
 }
 
-/*!
-    \fn QPolygonF QGraphicsItem::mapFromScene(qreal x, qreal y, qreal w, qreal h) const
-    \since 4.3
-
-    This convenience function is equivalent to calling mapFromScene(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Maps the polygon \a polygon, which is in \a item's coordinate system, to
-    this item's coordinate system, and returns the mapped polygon.
-
-    If \a item is 0, this function returns the same as mapFromScene().
-
-    \sa itemTransform(), mapToItem(), mapFromParent(), transform(), {The
-    Graphics View Coordinate System}
-*/
 QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPolygonF &polygon) const
 {
    if (item) {
@@ -5849,13 +5112,6 @@ QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPolygonF 
    return mapFromScene(polygon);
 }
 
-/*!
-    Maps the polygon \a polygon, which is in this item's parent's coordinate
-    system, to this item's coordinate system, and returns the mapped polygon.
-
-    \sa mapToParent(), mapToItem(), transform(), {The Graphics View Coordinate
-    System}
-*/
 QPolygonF QGraphicsItem::mapFromParent(const QPolygonF &polygon) const
 {
    // COMBINE
@@ -5865,13 +5121,6 @@ QPolygonF QGraphicsItem::mapFromParent(const QPolygonF &polygon) const
    return d_ptr->transformToParent().inverted().map(polygon);
 }
 
-/*!
-    Maps the polygon \a polygon, which is in this item's scene's coordinate
-    system, to this item's coordinate system, and returns the mapped polygon.
-
-    \sa mapToScene(), mapFromParent(), transform(), {The Graphics View Coordinate
-    System}
-*/
 QPolygonF QGraphicsItem::mapFromScene(const QPolygonF &polygon) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5880,15 +5129,6 @@ QPolygonF QGraphicsItem::mapFromScene(const QPolygonF &polygon) const
    return d_ptr->sceneTransform.inverted().map(polygon);
 }
 
-/*!
-    Maps the path \a path, which is in \a item's coordinate system, to
-    this item's coordinate system, and returns the mapped path.
-
-    If \a item is 0, this function returns the same as mapFromScene().
-
-    \sa itemTransform(), mapFromParent(), mapFromScene(), mapToItem(), {The
-    Graphics View Coordinate System}
-*/
 QPainterPath QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPainterPath &path) const
 {
    if (item) {
@@ -5897,13 +5137,6 @@ QPainterPath QGraphicsItem::mapFromItem(const QGraphicsItem *item, const QPainte
    return mapFromScene(path);
 }
 
-/*!
-    Maps the path \a path, which is in this item's parent's coordinate
-    system, to this item's coordinate system, and returns the mapped path.
-
-    \sa mapFromScene(), mapFromItem(), mapToParent(), {The Graphics View
-    Coordinate System}
-*/
 QPainterPath QGraphicsItem::mapFromParent(const QPainterPath &path) const
 {
    // COMBINE
@@ -5913,13 +5146,6 @@ QPainterPath QGraphicsItem::mapFromParent(const QPainterPath &path) const
    return d_ptr->transformToParent().inverted().map(path);
 }
 
-/*!
-    Maps the path \a path, which is in this item's scene's coordinate
-    system, to this item's coordinate system, and returns the mapped path.
-
-    \sa mapFromParent(), mapFromItem(), mapToScene(), {The Graphics View
-    Coordinate System}
-*/
 QPainterPath QGraphicsItem::mapFromScene(const QPainterPath &path) const
 {
    if (d_ptr->hasTranslateOnlySceneTransform()) {
@@ -5928,12 +5154,6 @@ QPainterPath QGraphicsItem::mapFromScene(const QPainterPath &path) const
    return d_ptr->sceneTransform.inverted().map(path);
 }
 
-/*!
-    Returns true if this item is an ancestor of \a child (i.e., if this item
-    is \a child's parent, or one of \a child's parent's ancestors).
-
-    \sa parentItem()
-*/
 bool QGraphicsItem::isAncestorOf(const QGraphicsItem *child) const
 {
    if (!child || child == this) {
@@ -5951,14 +5171,6 @@ bool QGraphicsItem::isAncestorOf(const QGraphicsItem *child) const
    return false;
 }
 
-/*!
-    \since 4.4
-
-    Returns the closest common ancestor item of this item and \a other, or 0
-    if either \a other is 0, or there is no common ancestor.
-
-    \sa isAncestorOf()
-*/
 QGraphicsItem *QGraphicsItem::commonAncestorItem(const QGraphicsItem *other) const
 {
    if (!other) {
@@ -5986,13 +5198,6 @@ QGraphicsItem *QGraphicsItem::commonAncestorItem(const QGraphicsItem *other) con
    return const_cast<QGraphicsItem *>(thisw);
 }
 
-/*!
-    \since 4,4
-    Returns true if this item is currently under the mouse cursor in one of
-    the views; otherwise, false is returned.
-
-    \sa QGraphicsScene::views(), QCursor::pos()
-*/
 bool QGraphicsItem::isUnderMouse() const
 {
    Q_D(const QGraphicsItem);
@@ -6001,7 +5206,7 @@ bool QGraphicsItem::isUnderMouse() const
    }
 
    QPoint cursorPos = QCursor::pos();
-   foreach (QGraphicsView * view, d->scene->views()) {
+   for (QGraphicsView * view : d->scene->views()) {
       if (contains(mapFromScene(view->mapToScene(view->mapFromGlobal(cursorPos))))) {
          return true;
       }
@@ -6009,19 +5214,6 @@ bool QGraphicsItem::isUnderMouse() const
    return false;
 }
 
-/*!
-    Returns this item's custom data for the key \a key as a QVariant.
-
-    Custom item data is useful for storing arbitrary properties in any
-    item. Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 11
-
-    Qt does not use this feature for storing data; it is provided solely
-    for the convenience of the user.
-
-    \sa setData()
-*/
 QVariant QGraphicsItem::data(int key) const
 {
    QGraphicsItemCustomDataStore *store = qt_dataStore();
@@ -6031,76 +5223,16 @@ QVariant QGraphicsItem::data(int key) const
    return store->data.value(this).value(key);
 }
 
-/*!
-    Sets this item's custom data for the key \a key to \a value.
-
-    Custom item data is useful for storing arbitrary properties for any
-    item. Qt does not use this feature for storing data; it is provided solely
-    for the convenience of the user.
-
-    \sa data()
-*/
 void QGraphicsItem::setData(int key, const QVariant &value)
 {
    qt_dataStore()->data[this][key] = value;
 }
 
-/*!
-    \fn T qgraphicsitem_cast(QGraphicsItem *item)
-    \relates QGraphicsItem
-    \since 4.2
-
-    Returns the given \a item cast to type T if \a item is of type T;
-    otherwise, 0 is returned.
-
-    \note To make this function work correctly with custom items, reimplement
-    the \l{QGraphicsItem::}{type()} function for each custom QGraphicsItem
-    subclass.
-
-    \sa QGraphicsItem::type(), QGraphicsItem::UserType
-*/
-
-/*!
-    Returns the type of an item as an int. All standard graphicsitem classes
-    are associated with a unique value; see QGraphicsItem::Type. This type
-    information is used by qgraphicsitem_cast() to distinguish between types.
-
-    The default implementation (in QGraphicsItem) returns UserType.
-
-    To enable use of qgraphicsitem_cast() with a custom item, reimplement this
-    function and declare a Type enum value equal to your custom item's type.
-    Custom items must return a value larger than or equal to UserType (65536).
-
-    For example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp QGraphicsItem type
-
-    \sa UserType
-*/
 int QGraphicsItem::type() const
 {
    return (int)UserType;
 }
 
-/*!
-    Installs an event filter for this item on \a filterItem, causing
-    all events for this item to first pass through \a filterItem's
-    sceneEventFilter() function.
-
-    To filter another item's events, install this item as an event filter
-    for the other item. Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 12
-
-    An item can only filter events for other items in the same
-    scene. Also, an item cannot filter its own events; instead, you
-    can reimplement sceneEvent() directly.
-
-    Items must belong to a scene for scene event filters to be installed and
-    used.
-
-    \sa removeSceneEventFilter(), sceneEventFilter(), sceneEvent()
-*/
 void QGraphicsItem::installSceneEventFilter(QGraphicsItem *filterItem)
 {
    if (!d_ptr->scene) {
@@ -6129,22 +5261,6 @@ void QGraphicsItem::removeSceneEventFilter(QGraphicsItem *filterItem)
    d_ptr->scene->d_func()->removeSceneEventFilter(this, filterItem);
 }
 
-/*!
-    Filters events for the item \a watched. \a event is the filtered
-    event.
-
-    Reimplementing this function in a subclass makes it possible
-    for the item to be used as an event filter for other items,
-    intercepting all the events send to those items before they are
-    able to respond.
-
-    Reimplementations must return true to prevent further processing of
-    a given event, ensuring that it will not be delivered to the watched
-    item, or return false to indicate that the event should be propagated
-    further by the event system.
-
-    \sa installSceneEventFilter()
-*/
 bool QGraphicsItem::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
    Q_UNUSED(watched);
@@ -6152,20 +5268,6 @@ bool QGraphicsItem::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
    return false;
 }
 
-/*!
-    This virtual function receives events to this item. Reimplement
-    this function to intercept events before they are dispatched to
-    the specialized event handlers contextMenuEvent(), focusInEvent(),
-    focusOutEvent(), hoverEnterEvent(), hoverMoveEvent(),
-    hoverLeaveEvent(), keyPressEvent(), keyReleaseEvent(),
-    mousePressEvent(), mouseReleaseEvent(), mouseMoveEvent(), and
-    mouseDoubleClickEvent().
-
-    Returns true if the event was recognized and handled; otherwise, (e.g., if
-    the event type was not recognized,) false is returned.
-
-    \a event is the intercepted event.
-*/
 bool QGraphicsItem::sceneEvent(QEvent *event)
 {
    if (d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorHandlesChildEvents) {
@@ -6565,41 +5667,25 @@ bool QGraphicsItemPrivate::movableAncestorIsSelected(const QGraphicsItem *item)
                      _qt_movableAncestorIsSelected(parent));
 }
 
-/*!
-    This event handler, for event \a event, can be reimplemented to
-    receive mouse move events for this item. If you do receive this
-    event, you can be certain that this item also received a mouse
-    press event, and that this item is the current mouse grabber.
-
-    Calling QEvent::ignore() or QEvent::accept() on \a event has no
-    effect.
-
-    The default implementation handles basic item interaction, such as
-    selection and moving. If you want to keep the base implementation
-    when reimplementing this function, call
-    QGraphicsItem::mouseMoveEvent() in your reimplementation.
-
-    Please note that mousePressEvent() decides which graphics item it
-    is that receives mouse events. See the mousePressEvent()
-    description for details.
-
-    \sa mousePressEvent(), mouseReleaseEvent(),
-    mouseDoubleClickEvent(), sceneEvent()
-*/
 void QGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
    if ((event->buttons() & Qt::LeftButton) && (flags() & ItemIsMovable)) {
       // Determine the list of items that need to be moved.
       QList<QGraphicsItem *> selectedItems;
       QMap<QGraphicsItem *, QPointF> initialPositions;
+
       if (d_ptr->scene) {
-         selectedItems = d_ptr->scene->selectedItems();
+         selectedItems    = d_ptr->scene->selectedItems();
          initialPositions = d_ptr->scene->d_func()->movingItemsInitialPositions;
+
          if (initialPositions.isEmpty()) {
-            foreach (QGraphicsItem * item, selectedItems)
-            initialPositions[item] = item->pos();
+            for (QGraphicsItem * item : selectedItems) {
+               initialPositions[item] = item->pos();
+            }
+
             initialPositions[this] = pos();
          }
+
          d_ptr->scene->d_func()->movingItemsInitialPositions = initialPositions;
       }
 
@@ -6710,9 +5796,10 @@ void QGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                // Clear everything but this item. Bypass
                // QGraphicsScene::clearSelection()'s default behavior by
                // temporarily removing this item from the selection list.
+
                if (d_ptr->selected) {
                   scene->d_func()->selectedItems.remove(this);
-                  foreach (QGraphicsItem * item, scene->d_func()->selectedItems) {
+                  for (QGraphicsItem * item : scene->d_func()->selectedItems) {
                      if (item->isSelected()) {
                         selectionChanged = true;
                         break;
@@ -7691,59 +6778,28 @@ QGraphicsRectItem::QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent)
    setRect(rect);
 }
 
-/*!
-    \fn QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal width, qreal height,
-                                     QGraphicsItem *parent)
-
-    Constructs a QGraphicsRectItem with a default rectangle defined
-    by (\a x, \a y) and the given \a width and \a height.
-
-    \a parent is passed to QAbstractGraphicsShapeItem's constructor.
-
-    \sa QGraphicsScene::addItem()
-*/
 QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
                   : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent)
 {
    setRect(QRectF(x, y, w, h));
 }
 
-/*!
-    Constructs a QGraphicsRectItem. \a parent is passed to
-    QAbstractGraphicsShapeItem's constructor.
-
-    \sa QGraphicsScene::addItem()
-*/
 QGraphicsRectItem::QGraphicsRectItem(QGraphicsItem *parent)
                   : QAbstractGraphicsShapeItem(*new QGraphicsRectItemPrivate, parent)
 {
 }
 
-/*!
-    Destroys the QGraphicsRectItem.
-*/
+
 QGraphicsRectItem::~QGraphicsRectItem()
 {
 }
 
-/*!
-    Returns the item's rectangle.
-
-    \sa setRect()
-*/
 QRectF QGraphicsRectItem::rect() const
 {
    Q_D(const QGraphicsRectItem);
    return d->rect;
 }
 
-/*!
-    \fn void QGraphicsRectItem::setRect(const QRectF &rectangle)
-
-    Sets the item's rectangle to be the given \a rectangle.
-
-    \sa rect()
-*/
 void QGraphicsRectItem::setRect(const QRectF &rect)
 {
    Q_D(QGraphicsRectItem);
@@ -7755,19 +6811,6 @@ void QGraphicsRectItem::setRect(const QRectF &rect)
    d->boundingRect = QRectF();
    update();
 }
-
-/*!
-    \fn void QGraphicsRectItem::setRect(qreal x, qreal y, qreal width, qreal height)
-    \fn void QGraphicsEllipseItem::setRect(qreal x, qreal y, qreal width, qreal height)
-
-    Sets the item's rectangle to the rectangle defined by (\a x, \a y)
-    and the given \a width and \a height.
-
-    This convenience function is equivalent to calling \c
-    {setRect(QRectF(x, y, width, height))}
-
-    \sa rect()
-*/
 
 /*!
     \reimp
@@ -7807,8 +6850,7 @@ bool QGraphicsRectItem::contains(const QPointF &point) const
 /*!
     \reimp
 */
-void QGraphicsRectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                              QWidget *widget)
+void QGraphicsRectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    Q_D(QGraphicsRectItem);
    Q_UNUSED(widget);
@@ -7916,72 +6958,33 @@ class QGraphicsEllipseItemPrivate : public QAbstractGraphicsShapeItemPrivate
    int spanAngle;
 };
 
-/*!
-    Constructs a QGraphicsEllipseItem using \a rect as the default rectangle.
-    \a parent is passed to QAbstractGraphicsShapeItem's constructor.
-
-    \sa QGraphicsScene::addItem()
-*/
 QGraphicsEllipseItem::QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent)
                   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
    setRect(rect);
 }
 
-/*!
-    \fn QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent)
-    \since 4.3
-
-    Constructs a QGraphicsEllipseItem using the rectangle defined by (\a x, \a
-    y) and the given \a width and \a height, as the default rectangle. \a
-    parent is passed to QAbstractGraphicsShapeItem's constructor.
-
-    \sa QGraphicsScene::addItem()
-*/
 QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
                   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
    setRect(x, y, w, h);
 }
 
-
-/*!
-    Constructs a QGraphicsEllipseItem. \a parent is passed to
-    QAbstractGraphicsShapeItem's constructor.
-
-    \sa QGraphicsScene::addItem()
-*/
 QGraphicsEllipseItem::QGraphicsEllipseItem(QGraphicsItem *parent)                                          
                   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
 }
 
-/*!
-    Destroys the QGraphicsEllipseItem.
-*/
 QGraphicsEllipseItem::~QGraphicsEllipseItem()
 {
 }
 
-/*!
-    Returns the item's ellipse geometry as a QRectF.
-
-    \sa setRect(), QPainter::drawEllipse()
-*/
 QRectF QGraphicsEllipseItem::rect() const
 {
    Q_D(const QGraphicsEllipseItem);
    return d->rect;
 }
 
-/*!
-    Sets the item's ellipse geometry to \a rect. The rectangle's left edge
-    defines the left edge of the ellipse, and the rectangle's top edge
-    describes the top of the ellipse. The height and width of the rectangle
-    describe the height and width of the ellipse.
-
-    \sa rect(), QPainter::drawEllipse()
-*/
 void QGraphicsEllipseItem::setRect(const QRectF &rect)
 {
    Q_D(QGraphicsEllipseItem);
@@ -7994,26 +6997,12 @@ void QGraphicsEllipseItem::setRect(const QRectF &rect)
    update();
 }
 
-/*!
-    Returns the start angle for an ellipse segment in 16ths of a degree. This
-    angle is used together with spanAngle() for representing an ellipse
-    segment (a pie). By default, the start angle is 0.
-
-    \sa setStartAngle(), spanAngle()
-*/
 int QGraphicsEllipseItem::startAngle() const
 {
    Q_D(const QGraphicsEllipseItem);
    return d->startAngle;
 }
 
-/*!
-    Sets the start angle for an ellipse segment to \a angle, which is in 16ths
-    of a degree. This angle is used together with spanAngle() for representing
-    an ellipse segment (a pie). By default, the start angle is 0.
-
-    \sa startAngle(), setSpanAngle(), QPainter::drawPie()
-*/
 void QGraphicsEllipseItem::setStartAngle(int angle)
 {
    Q_D(QGraphicsEllipseItem);
@@ -8025,28 +7014,12 @@ void QGraphicsEllipseItem::setStartAngle(int angle)
    }
 }
 
-/*!
-    Returns the span angle of an ellipse segment in 16ths of a degree. This
-    angle is used together with startAngle() for representing an ellipse
-    segment (a pie). By default, this function returns 5760 (360 * 16, a full
-    ellipse).
-
-    \sa setSpanAngle(), startAngle()
-*/
 int QGraphicsEllipseItem::spanAngle() const
 {
    Q_D(const QGraphicsEllipseItem);
    return d->spanAngle;
 }
 
-/*!
-    Sets the span angle for an ellipse segment to \a angle, which is in 16ths
-    of a degree. This angle is used together with startAngle() to represent an
-    ellipse segment (a pie). By default, the span angle is 5760 (360 * 16, a
-    full ellipse).
-
-    \sa spanAngle(), setStartAngle(), QPainter::drawPie()
-*/
 void QGraphicsEllipseItem::setSpanAngle(int angle)
 {
    Q_D(QGraphicsEllipseItem);
@@ -8106,8 +7079,7 @@ bool QGraphicsEllipseItem::contains(const QPointF &point) const
 /*!
     \reimp
 */
-void QGraphicsEllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                                 QWidget *widget)
+void QGraphicsEllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    Q_D(QGraphicsEllipseItem);
    Q_UNUSED(widget);
@@ -8506,22 +7478,12 @@ void QGraphicsLineItem::setPen(const QPen &pen)
    update();
 }
 
-/*!
-    Returns the item's line, or a null line if no line has been set.
-
-    \sa setLine()
-*/
 QLineF QGraphicsLineItem::line() const
 {
    Q_D(const QGraphicsLineItem);
    return d->line;
 }
 
-/*!
-    Sets the item's line to be the given \a line.
-
-    \sa line()
-*/
 void QGraphicsLineItem::setLine(const QLineF &line)
 {
    Q_D(QGraphicsLineItem);
@@ -8532,16 +7494,6 @@ void QGraphicsLineItem::setLine(const QLineF &line)
    d->line = line;
    update();
 }
-
-/*!
-    \fn void QGraphicsLineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
-    \overload
-
-    Sets the item's line to be the line between (\a x1, \a y1) and (\a
-    x2, \a y2).
-
-    This is the same as calling \c {setLine(QLineF(x1, y1, x2, y2))}.
-*/
 
 /*!
     \reimp
@@ -8806,30 +7758,12 @@ QPixmap QGraphicsPixmapItem::pixmap() const
    return d->pixmap;
 }
 
-/*!
-    Returns the transformation mode of the pixmap. The default mode is
-    Qt::FastTransformation, which provides quick transformation with no
-    smoothing.
-
-    \sa setTransformationMode()
-*/
 Qt::TransformationMode QGraphicsPixmapItem::transformationMode() const
 {
    Q_D(const QGraphicsPixmapItem);
    return d->transformationMode;
 }
 
-/*!
-    Sets the pixmap item's transformation mode to \a mode, and toggles an
-    update of the item. The default mode is Qt::FastTransformation, which
-    provides quick transformation with no smoothing.
-
-    Qt::SmoothTransformation enables QPainter::SmoothPixmapTransform on the
-    painter, and the quality depends on the platform and viewport. The result
-    is usually not as good as calling QPixmap::scale() directly.
-
-    \sa transformationMode()
-*/
 void QGraphicsPixmapItem::setTransformationMode(Qt::TransformationMode mode)
 {
    Q_D(QGraphicsPixmapItem);
@@ -8839,24 +7773,12 @@ void QGraphicsPixmapItem::setTransformationMode(Qt::TransformationMode mode)
    }
 }
 
-/*!
-    Returns the pixmap item's \e offset, which defines the point of the
-    top-left corner of the pixmap, in local coordinates.
-
-    \sa setOffset()
-*/
 QPointF QGraphicsPixmapItem::offset() const
 {
    Q_D(const QGraphicsPixmapItem);
    return d->offset;
 }
 
-/*!
-    Sets the pixmap item's offset to \a offset. QGraphicsPixmapItem will draw
-    its pixmap using \a offset for its top-left corner.
-
-    \sa offset()
-*/
 void QGraphicsPixmapItem::setOffset(const QPointF &offset)
 {
    Q_D(QGraphicsPixmapItem);
@@ -8868,13 +7790,6 @@ void QGraphicsPixmapItem::setOffset(const QPointF &offset)
    d->hasShape = false;
    update();
 }
-
-/*!
-    \fn void QGraphicsPixmapItem::setOffset(qreal x, qreal y)
-    \since 4.3
-
-    This convenience function is equivalent to calling setOffset(QPointF(\a x, \a y)).
-*/
 
 /*!
     \reimp
@@ -9765,37 +8680,6 @@ bool QGraphicsTextItemPrivate::_q_mouseOnEdge(QGraphicsSceneMouseEvent *event)
    return path.subtracted(docPath).contains(event->pos());
 }
 
-/*!
-    \fn QGraphicsTextItem::linkActivated(const QString &link)
-
-    This signal is emitted when the user clicks on a link on a text item
-    that enables Qt::LinksAccessibleByMouse or Qt::LinksAccessibleByKeyboard.
-    \a link is the link that was clicked.
-
-    \sa setTextInteractionFlags()
-*/
-
-/*!
-    \fn QGraphicsTextItem::linkHovered(const QString &link)
-
-    This signal is emitted when the user hovers over a link on a text item
-    that enables Qt::LinksAccessibleByMouse. \a link is
-    the link that was hovered over.
-
-    \sa setTextInteractionFlags()
-*/
-
-/*!
-    Sets the flags \a flags to specify how the text item should react to user
-    input.
-
-    The default for a QGraphicsTextItem is Qt::NoTextInteraction. This function
-    also affects the ItemIsFocusable QGraphicsItem flag by setting it if \a flags
-    is different from Qt::NoTextInteraction and clearing it otherwise.
-
-    By default, the text is read-only. To transform the item into an editor,
-    set the Qt::TextEditable flag.
-*/
 void QGraphicsTextItem::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
    if (flags == Qt::NoTextInteraction) {
@@ -9807,11 +8691,6 @@ void QGraphicsTextItem::setTextInteractionFlags(Qt::TextInteractionFlags flags)
    dd->textControl()->setTextInteractionFlags(flags);
 }
 
-/*!
-    Returns the current text interaction flags.
-
-    \sa setTextInteractionFlags()
-*/
 Qt::TextInteractionFlags QGraphicsTextItem::textInteractionFlags() const
 {
    if (! dd->control) {
@@ -9820,47 +8699,16 @@ Qt::TextInteractionFlags QGraphicsTextItem::textInteractionFlags() const
    return dd->control->textInteractionFlags();
 }
 
-/*!
-    \since 4.5
-
-    If \a b is true, the \gui Tab key will cause the widget to change focus;
-    otherwise, the tab key will insert a tab into the document.
-
-    In some occasions text edits should not allow the user to input tabulators
-    or change indentation using the \gui Tab key, as this breaks the focus
-    chain. The default is false.
-
-    \sa tabChangesFocus(), ItemIsFocusable, textInteractionFlags()
-*/
 void QGraphicsTextItem::setTabChangesFocus(bool b)
 {
    dd->tabChangesFocus = b;
 }
 
-/*!
-    \since 4.5
-
-    Returns true if the \gui Tab key will cause the widget to change focus;
-    otherwise, false is returned.
-
-    By default, this behavior is disabled, and this function will return false.
-
-    \sa setTabChangesFocus()
-*/
 bool QGraphicsTextItem::tabChangesFocus() const
 {
    return dd->tabChangesFocus;
 }
 
-/*!
-    \property QGraphicsTextItem::openExternalLinks
-
-    Specifies whether QGraphicsTextItem should automatically open links using
-    QDesktopServices::openUrl() instead of emitting the
-    linkActivated signal.
-
-    The default value is false.
-*/
 void QGraphicsTextItem::setOpenExternalLinks(bool open)
 {
    dd->textControl()->setOpenExternalLinks(open);
@@ -9874,16 +8722,6 @@ bool QGraphicsTextItem::openExternalLinks() const
    return dd->control->openExternalLinks();
 }
 
-/*!
-    \property QGraphicsTextItem::textCursor
-
-    This property represents the visible text cursor in an editable
-    text item.
-
-    By default, if the item's text has not been set, this property
-    contains a null text cursor; otherwise it contains a text cursor
-    placed at the start of the item's document.
-*/
 void QGraphicsTextItem::setTextCursor(const QTextCursor &cursor)
 {
    dd->textControl()->setTextCursor(cursor);
@@ -9900,6 +8738,7 @@ QTextCursor QGraphicsTextItem::textCursor() const
 class QGraphicsSimpleTextItemPrivate : public QAbstractGraphicsShapeItemPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSimpleTextItem)
+
  public:
    inline QGraphicsSimpleTextItemPrivate() {
       pen.setStyle(Qt::NoPen);

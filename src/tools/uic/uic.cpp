@@ -86,7 +86,7 @@ bool Uic::printDependencies()
    }
 
    if (DomIncludes *includes = ui->elementIncludes()) {
-      foreach (DomInclude * incl, includes->elementInclude()) {
+      for (DomInclude * incl : includes->elementInclude()) {
          QString file = incl->text();
          if (file.isEmpty()) {
             continue;
@@ -97,7 +97,7 @@ bool Uic::printDependencies()
    }
 
    if (DomCustomWidgets *customWidgets = ui->elementCustomWidgets()) {
-      foreach (DomCustomWidget * customWidget, customWidgets->elementCustomWidget()) {
+      for (DomCustomWidget * customWidget : customWidgets->elementCustomWidget()) {
          if (DomHeader *header = customWidget->elementHeader()) {
             QString file = header->text();
             if (file.isEmpty()) {

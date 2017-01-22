@@ -155,7 +155,7 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator>>(QByteArray &array);
    QTextStream &operator>>(char *c);
 
-   QTextStream &operator<<(QBool b);
+   QTextStream &operator<<(bool b);
    QTextStream &operator<<(QChar ch);
    QTextStream &operator<<(char ch);
    QTextStream &operator<<(signed short i);

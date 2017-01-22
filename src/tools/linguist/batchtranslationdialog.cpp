@@ -113,9 +113,11 @@ void BatchTranslationDialog::startTranslation()
             for (int b = 0; b < m_model.rowCount(); ++b) {
                QModelIndex idx(m_model.index(b, 0));
                QVariant checkState = m_model.data(idx, Qt::CheckStateRole);
+
                if (checkState == Qt::Checked) {
                   PhraseBook *pb = m_phrasebooks[m_model.data(idx, Qt::UserRole).toInt()];
-                  foreach (const Phrase * ph, pb->phrases()) {
+
+                  for (const Phrase * ph : pb->phrases()) {
                      if (ph->source() == m->text()) {
                         m_dataModel->setTranslation(it, ph->target());
                         m_dataModel->setFinished(it, m_ui.ckMarkFinished->isChecked());

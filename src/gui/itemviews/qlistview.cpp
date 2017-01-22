@@ -2563,8 +2563,10 @@ int QListModeViewBase::perItemScrollingPageSteps(int length, int bounds, bool wr
       positions = segmentPositions;
    } else if (!flowPositions.isEmpty()) {
       positions.reserve(scrollValueMap.size());
-      foreach (int itemShown, scrollValueMap)
-      positions.append(flowPositions.at(itemShown));
+
+      for (int itemShown : scrollValueMap) {
+         positions.append(flowPositions.at(itemShown));
+      }
    }
    if (positions.isEmpty() || bounds <= length) {
       return positions.count();
@@ -2756,9 +2758,11 @@ bool QIconModeViewBase::filterDropEvent(QDropEvent *e)
    if (qq->acceptDrops()) {
       const Qt::ItemFlags dropableFlags = Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
       const QVector<QModelIndex> &dropIndices = intersectingSet(QRect(end, QSize(1, 1)));
-      foreach (const QModelIndex & index, dropIndices)
-      if ((index.flags() & dropableFlags) == dropableFlags) {
-         return false;
+
+      for (const QModelIndex & index : dropIndices) {
+         if ((index.flags() & dropableFlags) == dropableFlags) {
+            return false;
+         }
       }
    }
    QPoint start = dd->pressedPosition;

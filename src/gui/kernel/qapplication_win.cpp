@@ -1508,7 +1508,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
 
          if (wParam == SPI_SETFONTSMOOTHINGTYPE) {
             qt_win_read_cleartype_settings();
-            foreach (QWidget * w, QApplication::topLevelWidgets()) {
+            for (QWidget * w : QApplication::topLevelWidgets()) {
                if (!w->isVisible()) {
                   continue;
                }

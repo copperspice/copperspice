@@ -74,12 +74,10 @@ namespace WebKit {
     macro(WebSecurityEnabled, webSecurityEnabled, Bool, bool, true) \
     macro(AllowUniversalAccessFromFileURLs, allowUniversalAccessFromFileURLs, Bool, bool, false) \
     macro(AllowFileAccessFromFileURLs, allowFileAccessFromFileURLs, Bool, bool, false) \
-    macro(AVFoundationEnabled, isAVFoundationEnabled, Bool, bool, true) \
-    \
+    macro(AVFoundationEnabled, isAVFoundationEnabled, Bool, bool, true)
 
 #define FOR_EACH_WEBKIT_DOUBLE_PREFERENCE(macro) \
-    macro(PDFScaleFactor, pdfScaleFactor, Double, double, 0) \
-    \
+    macro(PDFScaleFactor, pdfScaleFactor, Double, double, 0)
 
 #define FOR_EACH_WEBKIT_UINT32_PREFERENCE(macro) \
     macro(FontSmoothingLevel, fontSmoothingLevel, UInt32, uint32_t, FontSmoothingLevelMedium) \
@@ -88,8 +86,7 @@ namespace WebKit {
     macro(DefaultFontSize, defaultFontSize, UInt32, uint32_t, 16) \
     macro(DefaultFixedFontSize, defaultFixedFontSize, UInt32, uint32_t, 13) \
     macro(PDFDisplayMode, pdfDisplayMode, UInt32, uint32_t, 1) \
-    macro(EditableLinkBehavior, editableLinkBehavior, UInt32, uint32_t, WebCore::EditableLinkNeverLive) \
-    \
+    macro(EditableLinkBehavior, editableLinkBehavior, UInt32, uint32_t, WebCore::EditableLinkNeverLive)
 
 #if PLATFORM(WIN)
 
@@ -99,8 +96,7 @@ namespace WebKit {
     macro(FantasyFontFamily, fantasyFontFamily, String, String, "Comic Sans MS") \
     macro(FixedFontFamily, fixedFontFamily, String, String, "Courier New") \
     macro(SansSerifFontFamily, sansSerifFontFamily, String, String, "Arial") \
-    macro(SerifFontFamily, serifFontFamily, String, String, "Times New Roman") \
-    \
+    macro(SerifFontFamily, serifFontFamily, String, String, "Times New Roman")
 
 #elif PLATFORM(MAC)
 
@@ -110,9 +106,8 @@ namespace WebKit {
     macro(FantasyFontFamily, fantasyFontFamily, String, String, "Papyrus") \
     macro(FixedFontFamily, fixedFontFamily, String, String, "Courier") \
     macro(SansSerifFontFamily, sansSerifFontFamily, String, String, "Helvetica") \
-    macro(SerifFontFamily, serifFontFamily, String, String, "Times") \
-    \
-
+    macro(SerifFontFamily, serifFontFamily, String, String, "Times") 
+  
 #elif PLATFORM(QT) || PLATFORM(GTK)
 
 #define FOR_EACH_WEBKIT_FONT_FAMILY_PREFERENCE(macro) \
@@ -121,24 +116,20 @@ namespace WebKit {
     macro(FantasyFontFamily, fantasyFontFamily, String, String, "Impact") \
     macro(FixedFontFamily, fixedFontFamily, String, String, "Courier New") \
     macro(SansSerifFontFamily, sansSerifFontFamily, String, String, "Helvetica") \
-    macro(SerifFontFamily, serifFontFamily, String, String, "Times") \
-    \
+    macro(SerifFontFamily, serifFontFamily, String, String, "Times") 
 
 #endif
 
 #define FOR_EACH_WEBKIT_STRING_PREFERENCE(macro) \
     FOR_EACH_WEBKIT_FONT_FAMILY_PREFERENCE(macro) \
     macro(DefaultTextEncodingName, defaultTextEncodingName, String, String, "ISO-8859-1") \
-    macro(FTPDirectoryTemplatePath, ftpDirectoryTemplatePath, String, String, "") \
-    \
-
-
+    macro(FTPDirectoryTemplatePath, ftpDirectoryTemplatePath, String, String, "")
+   
 #define FOR_EACH_WEBKIT_PREFERENCE(macro) \
     FOR_EACH_WEBKIT_BOOL_PREFERENCE(macro) \
     FOR_EACH_WEBKIT_DOUBLE_PREFERENCE(macro) \
     FOR_EACH_WEBKIT_UINT32_PREFERENCE(macro) \
-    FOR_EACH_WEBKIT_STRING_PREFERENCE(macro) \
-    \
+    FOR_EACH_WEBKIT_STRING_PREFERENCE(macro)    
 
 namespace WebPreferencesKey {
 

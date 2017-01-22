@@ -1153,48 +1153,6 @@ class QGlobalStaticDeleter
    return this__StaticVar_.pointer.load();                                \
    }
 
-
-class QBool
-{
-   bool b;
-
- public:
-   inline explicit QBool(bool B) : b(B) {}
-   inline operator const void *() const {
-      return b ? static_cast<const void *>(this) : static_cast<const void *>(0);
-   }
-};
-
-inline bool operator==(QBool b1, bool b2)
-{
-   return !b1 == !b2;
-}
-
-inline bool operator==(bool b1, QBool b2)
-{
-   return !b1 == !b2;
-}
-
-inline bool operator==(QBool b1, QBool b2)
-{
-   return !b1 == !b2;
-}
-
-inline bool operator!=(QBool b1, bool b2)
-{
-   return !b1 != !b2;
-}
-
-inline bool operator!=(bool b1, QBool b2)
-{
-   return !b1 != !b2;
-}
-
-inline bool operator!=(QBool b1, QBool b2)
-{
-   return !b1 != !b2;
-}
-
 constexpr inline bool qFuzzyCompare(double p1, double p2)
 {
    return (qAbs(p1 - p2) <= 0.000000000001 * qMin(qAbs(p1), qAbs(p2)));

@@ -28,7 +28,7 @@
 #include "ConstructData.h"
 #include "Heap.h"
 #include "JSLock.h"
-#include "JSValueInlineMethods.h"
+#include "JSValue.h"
 #include "MarkStack.h"
 #include <wtf/Noncopyable.h>
 

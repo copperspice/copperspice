@@ -58,7 +58,7 @@ QList<QPrinterInfo> QPrinterInfo::availablePrinters()
 QPrinterInfo QPrinterInfo::defaultPrinter()
 {
    QList<QPrinterInfo> printers = availablePrinters();
-   foreach (const QPrinterInfo & printerInfo, printers) {
+   for (const QPrinterInfo & printerInfo : printers) {
       if (printerInfo.isDefault()) {
          return printerInfo;
       }

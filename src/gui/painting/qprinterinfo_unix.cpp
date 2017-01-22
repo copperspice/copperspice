@@ -453,8 +453,7 @@ char *qt_parsePrintersConf(QList<QPrinterDescription> *printers, bool *found)
 extern "C" {
 #endif
 
-   int qt_pd_foreach(int /*status */, char * /*key */, int /*keyLen */,
-                     char *val, int valLen, char *data)
+   int qt_pd_foreach(int /*status */, char * /*key */, int /*keyLen */, char *val, int valLen, char *data)
    {
       qt_parsePrinterDesc(QString::fromLatin1(val, valLen), (QList<QPrinterDescription> *)data);
       return 0;
@@ -912,8 +911,10 @@ QList<QPrinterInfo> QPrinterInfo::availablePrinters()
       QList<QPrinterDescription> lprPrinters;
       int defprn = qt_getLprPrinters(lprPrinters);
       // populating printer combo
-      foreach (const QPrinterDescription & description, lprPrinters)
-      printers.append(QPrinterInfo(description.name));
+      for (const QPrinterDescription & description : lprPrinters) {
+         printers.append(QPrinterInfo(description.name));
+      }
+
       if (defprn >= 0 && defprn < printers.size()) {
          printers[defprn].d_ptr->isDefault = true;
       }
@@ -925,7 +926,7 @@ QList<QPrinterInfo> QPrinterInfo::availablePrinters()
 QPrinterInfo QPrinterInfo::defaultPrinter()
 {
    QList<QPrinterInfo> printers = availablePrinters();
-   foreach (const QPrinterInfo & printerInfo, printers) {
+   for (const QPrinterInfo & printerInfo : printers) {
       if (printerInfo.isDefault()) {
          return printerInfo;
       }

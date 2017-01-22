@@ -209,23 +209,26 @@ class Q_GUI_EXPORT QGraphicsDropShadowEffect: public QGraphicsEffect
 
    GUI_CS_PROPERTY_READ(offset, offset)
    GUI_CS_PROPERTY_WRITE(offset, cs_setOffset)
-
    GUI_CS_PROPERTY_NOTIFY(offset, offsetChanged)
+
    GUI_CS_PROPERTY_READ(xOffset, xOffset)
    GUI_CS_PROPERTY_WRITE(xOffset, setXOffset)
    GUI_CS_PROPERTY_NOTIFY(xOffset, offsetChanged)
+
    GUI_CS_PROPERTY_READ(yOffset, yOffset)
    GUI_CS_PROPERTY_WRITE(yOffset, setYOffset)
    GUI_CS_PROPERTY_NOTIFY(yOffset, offsetChanged)
+
    GUI_CS_PROPERTY_READ(blurRadius, blurRadius)
    GUI_CS_PROPERTY_WRITE(blurRadius, setBlurRadius)
    GUI_CS_PROPERTY_NOTIFY(blurRadius, blurRadiusChanged)
+
    GUI_CS_PROPERTY_READ(color, color)
    GUI_CS_PROPERTY_WRITE(color, setColor)
    GUI_CS_PROPERTY_NOTIFY(color, colorChanged)
 
  public:
-   QGraphicsDropShadowEffect(QObject *parent = 0);
+   QGraphicsDropShadowEffect(QObject *parent = nullptr);
    ~QGraphicsDropShadowEffect();
 
    QRectF boundingRectFor(const QRectF &rect) const override;
@@ -285,6 +288,7 @@ class Q_GUI_EXPORT QGraphicsOpacityEffect: public QGraphicsEffect
    GUI_CS_PROPERTY_READ(opacity, opacity)
    GUI_CS_PROPERTY_WRITE(opacity, setOpacity)
    GUI_CS_PROPERTY_NOTIFY(opacity, opacityChanged)
+
    GUI_CS_PROPERTY_READ(opacityMask, opacityMask)
    GUI_CS_PROPERTY_WRITE(opacityMask, setOpacityMask)
    GUI_CS_PROPERTY_NOTIFY(opacityMask, opacityMaskChanged)

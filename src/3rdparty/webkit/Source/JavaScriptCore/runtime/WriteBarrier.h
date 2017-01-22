@@ -26,7 +26,7 @@
 #ifndef WriteBarrier_h
 #define WriteBarrier_h
 
-#include "JSValue.h"
+#include <JSValue.h>
 
 namespace JSC {
 class JSCell;

@@ -43,7 +43,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeInfo : public QDebug
       QDebug::operator<<(t);
       return *this;
    }
-   inline QDeclarativeInfo &operator<<(QBool t) {
+   inline QDeclarativeInfo &operator<<(bool t) {
       QDebug::operator<<(t);
       return *this;
    }

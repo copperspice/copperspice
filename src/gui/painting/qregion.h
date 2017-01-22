@@ -151,8 +151,11 @@ class Q_GUI_EXPORT QRegion
    }
    operator QVariant() const;
 
-#if defined(Q_OS_WIN)
-   inline HRGN    handle() const {
+#if defined (CS_DOXYPRESS)
+   inline Handle handle() const;
+   
+#elif defined(Q_OS_WIN)
+   inline HRGN  handle() const {
       ensureHandle();
       return d->rgn;
    }

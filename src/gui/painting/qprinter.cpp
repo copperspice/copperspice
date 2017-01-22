@@ -31,7 +31,7 @@
 #include <qcoreapplication.h>
 #include <qfileinfo.h>
 
-#if !defined(QT_NO_CUPS)
+#if ! defined(QT_NO_CUPS)
 #include <qcups_p.h>
 #endif
 
@@ -921,34 +921,12 @@ void QPrinter::setOutputFileName(const QString &fileName)
    d->addToManualSetList(QPrintEngine::PPK_OutputFileName);
 }
 
-
-/*!
-  Returns the name of the program that sends the print output to the
-  printer.
-
-  The default is to return an empty string; meaning that QPrinter will try to
-  be smart in a system-dependent way. On X11 only, you can set it to something
-  different to use a specific print program. On the other platforms, this
-  returns an empty string.
-
-  \sa setPrintProgram(), setPrinterSelectionOption()
-*/
 QString QPrinter::printProgram() const
 {
    Q_D(const QPrinter);
    return d->printEngine->property(QPrintEngine::PPK_PrinterProgram).toString();
 }
 
-
-/*!
-  Sets the name of the program that should do the print job to \a
-  printProg.
-
-  On X11, this function sets the program to call with the PostScript
-  output. On other platforms, it has no effect.
-
-  \sa printProgram()
-*/
 void QPrinter::setPrintProgram(const QString &printProg)
 {
    Q_D(QPrinter);
@@ -957,12 +935,6 @@ void QPrinter::setPrintProgram(const QString &printProg)
    d->addToManualSetList(QPrintEngine::PPK_PrinterProgram);
 }
 
-
-/*!
-  Returns the document name.
-
-  \sa setDocName(), QPrintEngine::PrintEnginePropertyKey
-*/
 QString QPrinter::docName() const
 {
    Q_D(const QPrinter);
@@ -970,16 +942,6 @@ QString QPrinter::docName() const
 }
 
 
-/*!
-  Sets the document name to \a name.
-
-  On X11, the document name is for example used as the default
-  output filename in QPrintDialog. Note that the document name does
-  not affect the file name if the printer is printing to a file.
-  Use the setOutputFile() function for this.
-
-  \sa docName(), QPrintEngine::PrintEnginePropertyKey
-*/
 void QPrinter::setDocName(const QString &name)
 {
    Q_D(QPrinter);
@@ -988,29 +950,12 @@ void QPrinter::setDocName(const QString &name)
    d->addToManualSetList(QPrintEngine::PPK_DocumentName);
 }
 
-
-/*!
-  Returns the name of the application that created the document.
-
-  \sa setCreator()
-*/
 QString QPrinter::creator() const
 {
    Q_D(const QPrinter);
    return d->printEngine->property(QPrintEngine::PPK_Creator).toString();
 }
 
-
-/*!
-  Sets the name of the application that created the document to \a
-  creator.
-
-  This function is only applicable to the X11 version of Qt. If no
-  creator name is specified, the creator will be set to "Qt"
-  followed by some version number.
-
-  \sa creator()
-*/
 void QPrinter::setCreator(const QString &creator)
 {
    Q_D(QPrinter);
@@ -1886,39 +1831,7 @@ QList<QPrinter::PaperSource> QPrinter::supportedPaperSources() const
 
 #endif
 
-/*!
-    \fn QString QPrinter::printerSelectionOption() const
-
-    Returns the printer options selection string. This is useful only
-    if the print command has been explicitly set.
-
-    The default value (an empty string) implies that the printer should
-    be selected in a system-dependent manner.
-
-    Any other value implies that the given value should be used.
-
-    \warning This function is not available on Windows.
-
-    \sa setPrinterSelectionOption()
-*/
-
-/*!
-    \fn void QPrinter::setPrinterSelectionOption(const QString &option)
-
-    Sets the printer to use \a option to select the printer. \a option
-    is null by default (which implies that Qt should be smart enough
-    to guess correctly), but it can be set to other values to use a
-    specific printer selection option.
-
-    If the printer selection option is changed while the printer is
-    active, the current print job may or may not be affected.
-
-    \warning This function is not available on Windows.
-
-    \sa printerSelectionOption()
-*/
-
-#ifndef Q_OS_WIN
+#if ! defined(Q_OS_WIN)
 QString QPrinter::printerSelectionOption() const
 {
    Q_D(const QPrinter);
@@ -1933,70 +1846,17 @@ void QPrinter::setPrinterSelectionOption(const QString &option)
 }
 #endif
 
-/*!
-    \since 4.1
-    \fn int QPrinter::fromPage() const
-
-    Returns the number of the first page in a range of pages to be printed
-    (the "from page" setting). Pages in a document are numbered according to
-    the convention that the first page is page 1.
-
-    By default, this function returns a special value of 0, meaning that
-    the "from page" setting is unset.
-
-    \note If fromPage() and toPage() both return 0, this indicates that
-    \e{the whole document will be printed}.
-
-    \sa setFromTo(), toPage()
-*/
-
 int QPrinter::fromPage() const
 {
    Q_D(const QPrinter);
    return d->fromPage;
 }
 
-/*!
-    \since 4.1
-
-    Returns the number of the last page in a range of pages to be printed
-    (the "to page" setting). Pages in a document are numbered according to
-    the convention that the first page is page 1.
-
-    By default, this function returns a special value of 0, meaning that
-    the "to page" setting is unset.
-
-    \note If fromPage() and toPage() both return 0, this indicates that
-    \e{the whole document will be printed}.
-
-    The programmer is responsible for reading this setting and
-    printing accordingly.
-
-    \sa setFromTo(), fromPage()
-*/
-
 int QPrinter::toPage() const
 {
    Q_D(const QPrinter);
    return d->toPage;
 }
-
-/*!
-    \since 4.1
-
-    Sets the range of pages to be printed to cover the pages with numbers
-    specified by \a from and \a to, where \a from corresponds to the first
-    page in the range and \a to corresponds to the last.
-
-    \note Pages in a document are numbered according to the convention that
-    the first page is page 1. However, if \a from and \a to are both set to 0,
-    the \e{whole document will be printed}.
-
-    This function is mostly used to set a default value that the user can
-    override in the print dialog when you call setup().
-
-    \sa fromPage(), toPage()
-*/
 
 void QPrinter::setFromTo(int from, int to)
 {
@@ -2014,193 +1874,18 @@ void QPrinter::setFromTo(int from, int to)
    }
 }
 
-/*!
-    \since 4.1
-
-    Sets the print range option in to be \a range.
-*/
 void QPrinter::setPrintRange( PrintRange range )
 {
    Q_D(QPrinter);
    d->printRange = range;
 }
 
-/*!
-    \since 4.1
-
-    Returns the page range of the QPrinter. After the print setup
-    dialog has been opened, this function returns the value selected
-    by the user.
-
-    \sa setPrintRange()
-*/
 QPrinter::PrintRange QPrinter::printRange() const
 {
    Q_D(const QPrinter);
    return d->printRange;
 }
 
-/*!
-    \class QPrintEngine
-    \reentrant
-
-    \ingroup printing
-
-    \brief The QPrintEngine class defines an interface for how QPrinter
-    interacts with a given printing subsystem.
-
-    The common case when creating your own print engine is to derive from both
-    QPaintEngine and QPrintEngine. Various properties of a print engine are
-    given with property() and set with setProperty().
-
-    \sa QPaintEngine
-*/
-
-/*!
-    \enum QPrintEngine::PrintEnginePropertyKey
-
-    This enum is used to communicate properties between the print
-    engine and QPrinter. A property may or may not be supported by a
-    given print engine.
-
-    \value PPK_CollateCopies A boolean value indicating whether the
-    printout should be collated or not.
-
-    \value PPK_ColorMode Refers to QPrinter::ColorMode, either color or
-    monochrome.
-
-    \value PPK_Creator A string describing the document's creator.
-
-    \value PPK_Duplex A boolean value indicating whether both sides of
-    the printer paper should be used for the printout.
-
-    \value PPK_DocumentName A string describing the document name in
-    the spooler.
-
-    \value PPK_FontEmbedding A boolean value indicating whether data for
-    the document's fonts should be embedded in the data sent to the
-    printer.
-
-    \value PPK_FullPage A boolean describing if the printer should be
-    full page or not.
-
-    \value PPK_NumberOfCopies Obsolete. An integer specifying the number of
-    copies. Use PPK_CopyCount instead.
-
-    \value PPK_Orientation Specifies a QPrinter::Orientation value.
-
-    \value PPK_OutputFileName The output file name as a string. An
-    empty file name indicates that the printer should not print to a file.
-
-    \value PPK_PageOrder Specifies a QPrinter::PageOrder value.
-
-    \value PPK_PageRect A QRect specifying the page rectangle
-
-    \value PPK_PageSize Obsolete. Use PPK_PaperSize instead.
-
-    \value PPK_PaperRect A QRect specifying the paper rectangle.
-
-    \value PPK_PaperSource Specifies a QPrinter::PaperSource value.
-
-    \value PPK_PaperSources Specifies more than one QPrinter::PaperSource value.
-
-    \value PPK_PaperSize Specifies a QPrinter::PaperSize value.
-
-    \value PPK_PrinterName A string specifying the name of the printer.
-
-    \value PPK_PrinterProgram A string specifying the name of the
-    printer program used for printing,
-
-    \value PPK_Resolution An integer describing the dots per inch for
-    this printer.
-
-    \value PPK_SelectionOption
-
-    \value PPK_SupportedResolutions A list of integer QVariants
-    describing the set of supported resolutions that the printer has.
-
-    \value PPK_SuppressSystemPrintStatus Suppress the built-in dialog for showing
-    printing progress. As of 4.1 this only has effect on Mac OS X where, by default,
-    a status dialog is shown.
-
-    \value PPK_WindowsPageSize An integer specifying a DM_PAPER entry
-    on Windows.
-
-    \value PPK_CustomPaperSize A QSizeF specifying a custom paper size
-    in the QPrinter::Point unit.
-
-    \value PPK_PageMargins A QList<QVariant> containing the left, top,
-    right and bottom margin values.
-
-    \value PPK_CopyCount An integer specifying the number of copies to print.
-
-    \value PPK_SupportsMultipleCopies A boolean value indicating whether or not
-    the printer supports printing multiple copies in one job.
-
-    \value PPK_CustomBase Basis for extension.
-*/
-
-/*!
-    \fn QPrintEngine::~QPrintEngine()
-
-    Destroys the print engine.
-*/
-
-/*!
-    \fn void QPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &value)
-
-    Sets the print engine's property specified by \a key to the given \a value.
-
-    \sa property()
-*/
-
-/*!
-    \fn void QPrintEngine::property(PrintEnginePropertyKey key) const
-
-    Returns the print engine's property specified by \a key.
-
-    \sa setProperty()
-*/
-
-/*!
-    \fn bool QPrintEngine::newPage()
-
-    Instructs the print engine to start a new page. Returns true if
-    the printer was able to create the new page; otherwise returns false.
-*/
-
-/*!
-    \fn bool QPrintEngine::abort()
-
-    Instructs the print engine to abort the printing process. Returns
-    true if successful; otherwise returns false.
-*/
-
-/*!
-    \fn int QPrintEngine::metric(QPaintDevice::PaintDeviceMetric id) const
-
-    Returns the metric for the given \a id.
-*/
-
-/*!
-    \fn QPrinter::PrinterState QPrintEngine::printerState() const
-
-    Returns the current state of the printer being used by the print engine.
-*/
-
-/*!
-    \fn HDC QPrintEngine::getPrinterDC() const
-    \internal
-*/
-
-/*!
-    \fn void QPrintEngine::releasePrinterDC(HDC) const
-    \internal
-*/
-
-/*
-    Returns the dimensions for the given paper size, \a size, in millimeters.
-*/
 QSizeF qt_paperSizeToQSizeF(QPrinter::PaperSize size)
 {
    if (size == QPrinter::Custom) {
@@ -2209,14 +1894,6 @@ QSizeF qt_paperSizeToQSizeF(QPrinter::PaperSize size)
    return QSizeF(qt_paperSizes[size][0], qt_paperSizes[size][1]);
 }
 
-/*
-    Returns the PaperSize type that matches \a size, where \a size
-    is in millimeters.
-
-    Because dimensions may not always be completely accurate (for
-    example when converting between units), a particular PaperSize
-    will be returned if it matches within -1/+1 millimeters.
-*/
 QPrinter::PaperSize qSizeFTopaperSize(const QSizeF &size)
 {
    for (int i = 0; i < static_cast<int>(QPrinter::NPaperSize); ++i) {

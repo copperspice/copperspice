@@ -210,9 +210,9 @@ class Q_CORE_EXPORT QByteArray
    int lastIndexOf(const char *c, int from = -1) const;
    int lastIndexOf(const QByteArray &a, int from = -1) const;
 
-   QBool contains(char c) const;
-   QBool contains(const char *a) const;
-   QBool contains(const QByteArray &a) const;
+   bool contains(char c) const;
+   bool contains(const char *a) const;
+   bool contains(const QByteArray &a) const;
    int count(char c) const;
    int count(const char *a) const;
    int count(const QByteArray &a) const;
@@ -630,14 +630,14 @@ inline void QByteArray::push_front(const QByteArray &a)
    prepend(a);
 }
 
-inline QBool QByteArray::contains(const QByteArray &a) const
+inline bool QByteArray::contains(const QByteArray &a) const
 {
-   return QBool(indexOf(a) != -1);
+   return bool(indexOf(a) != -1);
 }
 
-inline QBool QByteArray::contains(char c) const
+inline bool QByteArray::contains(char c) const
 {
-   return QBool(indexOf(c) != -1);
+   return bool(indexOf(c) != -1);
 }
 
 inline bool operator==(const QByteArray &a1, const QByteArray &a2)
@@ -760,9 +760,9 @@ inline const QByteArray operator+(char a1, const QByteArray &a2)
 
 #endif // QT_USE_QSTRINGBUILDER
 
-inline QBool QByteArray::contains(const char *c) const
+inline bool QByteArray::contains(const char *c) const
 {
-   return QBool(indexOf(c) != -1);
+   return bool(indexOf(c) != -1);
 }
 
 inline QByteArray &QByteArray::replace(char before, const char *c)

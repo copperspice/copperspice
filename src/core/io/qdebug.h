@@ -109,11 +109,6 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(QBool t) {
-      stream->ts << (bool(t != 0) ? "true" : "false");
-      return maybeSpace();
-   }
-
    inline QDebug &operator<<(bool t) {
       stream->ts << (t ? "true" : "false");
       return maybeSpace();

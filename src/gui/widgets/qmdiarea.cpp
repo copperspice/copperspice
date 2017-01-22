@@ -313,7 +313,7 @@ void IconTiler::rearrange(QList<QWidget *> &widgets, const QRect &domain) const
 int MinOverlapPlacer::accumulatedOverlap(const QRect &source, const QList<QRect> &rects)
 {
    int accOverlap = 0;
-   foreach (const QRect & rect, rects) {
+   for (const QRect & rect : rects) {
       QRect intersection = source.intersected(rect);
       accOverlap += intersection.width() * intersection.height();
    }
@@ -330,8 +330,9 @@ QRect MinOverlapPlacer::findMinOverlapRect(const QList<QRect> &source, const QLi
 {
    int minAccOverlap = -1;
    QRect minAccOverlapRect;
-   foreach (const QRect & srcRect, source) {
+   for (const QRect & srcRect : source) {
       const int accOverlap = accumulatedOverlap(srcRect, rects);
+
       if (accOverlap < minAccOverlap || minAccOverlap == -1) {
          minAccOverlap = accOverlap;
          minAccOverlapRect = srcRect;
@@ -354,7 +355,7 @@ void MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QList<QRe
    if (domain.bottom() - size.height() + 1 >= 0) {
       yset << domain.bottom() - size.height() + 1;
    }
-   foreach (const QRect & rect, rects) {
+   for (const QRect & rect : rects) {
       xset << rect.right() + 1;
       yset << rect.bottom() + 1;
    }
@@ -364,9 +365,11 @@ void MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QList<QRe
    QList<int> ylist = yset.values();
    qSort(ylist.begin(), ylist.end());
 
-   foreach (int y, ylist)
-   foreach (int x, xlist)
-   candidates << QRect(QPoint(x, y), size);
+   for (int y : ylist) {
+      for (int x : xlist) {
+         candidates << QRect(QPoint(x, y), size);
+      }
+   }
 }
 
 /*!
@@ -396,9 +399,10 @@ void MinOverlapPlacer::findMaxOverlappers(const QRect &domain, const QList<QRect
       QList<QRect> &result)
 {
    int maxOverlap = -1;
-   foreach (const QRect & srcRect, source) {
+   for (const QRect &srcRect : source) {
       QRect intersection = domain.intersected(srcRect);
       const int overlap = intersection.width() * intersection.height();
+
       if (overlap >= maxOverlap || maxOverlap == -1) {
          if (overlap > maxOverlap) {
             maxOverlap = overlap;
@@ -443,7 +447,8 @@ QPoint MinOverlapPlacer::place(const QSize &size, const QList<QRect> &rects,
    if (size.isEmpty() || !domain.isValid()) {
       return QPoint();
    }
-   foreach (const QRect & rect, rects) {
+
+   for (const QRect & rect : rects) {
       if (!rect.isValid()) {
          return QPoint();
       }
@@ -617,11 +622,12 @@ void QMdiAreaPrivate::_q_deactivateAllWindows(QMdiSubWindow *aboutToActivate)
    }
    Q_ASSERT(aboutToBecomeActive);
 
-   foreach (QMdiSubWindow * child, childWindows) {
+   for (QMdiSubWindow * child : childWindows) {
       if (!sanityCheck(child, "QMdiArea::deactivateAllWindows") || aboutToBecomeActive == child) {
          continue;
       }
-      // We don't want to handle signals caused by child->showNormal().
+
+      // We do not want to handle signals caused by child->showNormal().
       ignoreWindowStateChange = true;
       if (!(options & QMdiArea::DontMaximizeSubWindowOnActivation) && !showActiveWindowMaximized) {
          showActiveWindowMaximized = child->isMaximized() && child->isVisible();
@@ -808,7 +814,7 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
 
    QList<QRect> rects;
    QRect parentRect = q->rect();
-   foreach (QMdiSubWindow * window, childWindows) {
+   for (QMdiSubWindow * window : childWindows) {
       if (!sanityCheck(window, "QMdiArea::place") || window == child || !window->isVisibleTo(q)
             || !window->testAttribute(Qt::WA_Moved)) {
          continue;
@@ -852,7 +858,7 @@ void QMdiAreaPrivate::rearrange(Rearranger *rearranger)
    const bool reverseList = rearranger->type() == Rearranger::RegularTiler;
    const QList<QMdiSubWindow *> subWindows = subWindowList(activationOrder, reverseList);
    QSize minSubWindowSize;
-   foreach (QMdiSubWindow * child, subWindows) {
+   for (QMdiSubWindow * child : subWindows) {
       if (!sanityCheck(child, "QMdiArea::rearrange") || !child->isVisible()) {
          continue;
       }
@@ -1185,7 +1191,7 @@ void QMdiAreaPrivate::internalRaise(QMdiSubWindow *mdiChild) const
 
    QMdiSubWindow *stackUnderChild = 0;
    if (! windowStaysOnTop(mdiChild)) {
-      foreach (QObject * object, viewport->children()) {
+      for (QObject * object : viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
 
          if (! child || ! childWindows.contains(child)) {
@@ -1313,7 +1319,7 @@ bool QMdiAreaPrivate::lastWindowAboutToBeDestroyed() const
 */
 void QMdiAreaPrivate::setChildActivationEnabled(bool enable, bool onlyNextActivationEvent) const
 {
-   foreach (QMdiSubWindow * subWindow, childWindows) {
+   for (QMdiSubWindow * subWindow : childWindows) {
       if (!subWindow || !subWindow->isVisible()) {
          continue;
       }
@@ -1337,8 +1343,9 @@ void QMdiAreaPrivate::scrollBarPolicyChanged(Qt::Orientation orientation, Qt::Sc
 
    const QMdiSubWindow::SubWindowOption option = orientation == Qt::Horizontal ?
          QMdiSubWindow::AllowOutsideAreaHorizontally : QMdiSubWindow::AllowOutsideAreaVertically;
+
    const bool enable = policy != Qt::ScrollBarAlwaysOff;
-   foreach (QMdiSubWindow * child, childWindows) {
+   for (QMdiSubWindow * child : childWindows) {
       if (!sanityCheck(child, "QMdiArea::scrollBarPolicyChanged")) {
          continue;
       }
@@ -1356,7 +1363,7 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
    }
 
    if (order == QMdiArea::CreationOrder) {
-      foreach (QMdiSubWindow * child, childWindows) {
+      for (QMdiSubWindow * child : childWindows) {
          if (!child) {
             continue;
          }
@@ -1368,7 +1375,7 @@ QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder order, bool reversed) const
       }
 
    } else if (order == QMdiArea::StackingOrder) {
-      foreach (QObject * object, viewport->children()) {
+      for (QObject * object : viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
          if (!child || !childWindows.contains(child)) {
             continue;
@@ -1542,8 +1549,9 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
 
       isSubWindowsTiled = false;
 
-      foreach (QMdiSubWindow * subWindow, childWindows)
-      tabBar->addTab(subWindow->windowIcon(), tabTextFor(subWindow));
+      for (QMdiSubWindow * subWindow : childWindows) {
+         tabBar->addTab(subWindow->windowIcon(), tabTextFor(subWindow));
+      }
 
       QMdiSubWindow *current = q->currentSubWindow();
       if (current) {
@@ -1729,8 +1737,9 @@ QSize QMdiArea::sizeHint() const
 
    QSize desktopSize = QApplication::desktop()->size();
    QSize size(desktopSize.width() * 2 / scaleFactor, desktopSize.height() * 2 / scaleFactor);
-   foreach (QMdiSubWindow * child, d_func()->childWindows) {
-      if (!sanityCheck(child, "QMdiArea::sizeHint")) {
+
+   for (QMdiSubWindow * child : d_func()->childWindows) {
+      if (! sanityCheck(child, "QMdiArea::sizeHint")) {
          continue;
       }
       size = size.expandedTo(child->sizeHint());
@@ -1748,7 +1757,7 @@ QSize QMdiArea::minimumSizeHint() const
               style()->pixelMetric(QStyle::PM_TitleBarHeight, 0, this));
    size = size.expandedTo(QAbstractScrollArea::minimumSizeHint());
    if (!d->scrollBarsEnabled()) {
-      foreach (QMdiSubWindow * child, d->childWindows) {
+      for (QMdiSubWindow * child : d->childWindows) {
          if (!sanityCheck(child, "QMdiArea::sizeHint")) {
             continue;
          }
@@ -1883,7 +1892,7 @@ void QMdiArea::closeAllSubWindows()
    }
 
    d->isSubWindowsTiled = false;
-   foreach (QMdiSubWindow * child, d->childWindows) {
+   for (QMdiSubWindow * child : d->childWindows) {
       if (!sanityCheck(child, "QMdiArea::closeAllSubWindows")) {
          continue;
       }
@@ -2029,7 +2038,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
    }
 
    bool found = false;
-   foreach (QMdiSubWindow * child, d->childWindows) {
+   for (QMdiSubWindow * child : d->childWindows) {
       if (!sanityCheck(child, "QMdiArea::removeSubWindow")) {
          continue;
       }
@@ -2315,7 +2324,7 @@ void QMdiArea::resizeEvent(QResizeEvent *resizeEvent)
 
    // Resize maximized views.
    bool hasMaximizedSubWindow = false;
-   foreach (QMdiSubWindow * child, d->childWindows) {
+   for (QMdiSubWindow * child : d->childWindows) {
       if (sanityCheck(child, "QMdiArea::resizeEvent") && child->isMaximized()
             && child->size() != resizeEvent->size()) {
          child->resize(resizeEvent->size());
@@ -2370,7 +2379,7 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
    Q_D(QMdiArea);
    if (!d->pendingRearrangements.isEmpty()) {
       bool skipPlacement = false;
-      foreach (Rearranger * rearranger, d->pendingRearrangements) {
+      for (Rearranger * rearranger : d->pendingRearrangements) {
          // If this is the case, we don't have to lay out pending child windows
          // since the rearranger will find a placement for them.
          if (rearranger->type() != Rearranger::IconTiler && !skipPlacement) {
@@ -2386,7 +2395,7 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
    }
 
    if (!d->pendingPlacements.isEmpty()) {
-      foreach (QMdiSubWindow * window, d->pendingPlacements) {
+      for (QMdiSubWindow * window : d->pendingPlacements) {
          if (!window) {
             continue;
          }
@@ -2548,7 +2557,7 @@ bool QMdiArea::event(QEvent *event)
          }
          break;
       case QEvent::WindowIconChange:
-         foreach (QMdiSubWindow * window, d->childWindows) {
+         for (QMdiSubWindow * window : d->childWindows) {
             if (sanityCheck(window, "QMdiArea::WindowIconChange")) {
                QApplication::sendEvent(window, event);
             }
@@ -2741,7 +2750,7 @@ void QMdiArea::setupViewport(QWidget *viewport)
       viewport->setAttribute(Qt::WA_OpaquePaintEvent, d->background.isOpaque());
    }
 
-   foreach (QMdiSubWindow * child, d->childWindows) {
+   for (QMdiSubWindow * child : d->childWindows) {
       if (! sanityCheck(child, "QMdiArea::setupViewport")) {
          continue;
       }

@@ -3967,9 +3967,12 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   }
                   w = w->parentWidget();
                }
-               foreach (QGesture * g, allGestures)
-               gestureEvent->setAccepted(g, false);
+               for (QGesture * g : allGestures) {
+                  gestureEvent->setAccepted(g, false);
+               }
+
                gestureEvent->m_accept = false; // to make sure we check individual gestures
+
             } else {
                res = d->notify_helper(receiver, e);
             }
@@ -4554,7 +4557,8 @@ int QApplicationPrivate::findClosestTouchPointId(const QPointF &screenPos)
 {
    int closestTouchPointId = -1;
    qreal closestDistance = qreal(0.);
-   foreach (const QTouchEvent::TouchPoint & touchPoint, appCurrentTouchPoints) {
+
+   for (const QTouchEvent::TouchPoint & touchPoint : appCurrentTouchPoints) {
       qreal distance = QLineF(screenPos, touchPoint.screenPos()).length();
       if (closestTouchPointId == -1 || distance < closestDistance) {
          closestTouchPointId = touchPoint.id();

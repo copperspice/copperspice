@@ -456,7 +456,7 @@ void QGraphicsViewPrivate::mouseMoveEventHandler(QMouseEvent *event)
             mouseEvent.widget());
    }
    // Find the topmost item under the mouse with a cursor.
-   foreach (QGraphicsItem * item, scene->d_func()->cachedItemsUnderMouse) {
+   for (QGraphicsItem * item : scene->d_func()->cachedItemsUnderMouse) {
       if (item->hasCursor()) {
          _q_setViewportCursor(item->cursor());
          return;
@@ -515,7 +515,7 @@ void QGraphicsViewPrivate::_q_setViewportCursor(const QCursor &cursor)
 void QGraphicsViewPrivate::_q_unsetViewportCursor()
 {
    Q_Q(QGraphicsView);
-   foreach (QGraphicsItem * item, q->items(lastMouseEvent.pos())) {
+   for (QGraphicsItem * item : q->items(lastMouseEvent.pos())) {
       if (item->hasCursor()) {
          _q_setViewportCursor(item->cursor());
          return;
@@ -876,7 +876,7 @@ QList<QGraphicsItem *> QGraphicsViewPrivate::findItems(const QRegion &exposedReg
    // the expose region, convert it to a path, and then search for items
    // using QGraphicsScene::items(QPainterPath);
    QRegion adjustedRegion;
-   foreach (const QRect & r, exposedRegion.rects())
+   for (const QRect & r : exposedRegion.rects())
    adjustedRegion += r.adjusted(-1, -1, 1, 1);
 
    const QPainterPath exposedScenePath(q->mapToScene(qt_regionToPath(adjustedRegion)));
@@ -2218,8 +2218,10 @@ QPolygonF QGraphicsView::mapToScene(const QRect &rect) const
 QPolygonF QGraphicsView::mapToScene(const QPolygon &polygon) const
 {
    QPolygonF poly;
-   foreach (const QPoint & point, polygon)
-   poly << mapToScene(point);
+
+   for (const QPoint & point : polygon) {
+      poly << mapToScene(point);
+   }
    return poly;
 }
 
@@ -2313,8 +2315,9 @@ QPolygon QGraphicsView::mapFromScene(const QRectF &rect) const
 QPolygon QGraphicsView::mapFromScene(const QPolygonF &polygon) const
 {
    QPolygon poly;
-   foreach (const QPointF & point, polygon)
-   poly << mapFromScene(point);
+   for (const QPointF & point : polygon) {
+      poly << mapFromScene(point);
+   }
    return poly;
 }
 
@@ -2448,7 +2451,7 @@ void QGraphicsView::updateScene(const QList<QRectF> &rects)
    QTransform transform = viewportTransform();
 
    // Convert scene rects to viewport rects.
-   foreach (const QRectF & rect, rects) {
+   for (const QRectF & rect : rects) {
       QRect xrect = transform.mapRect(rect).toAlignedRect();
       if (!(d->optimizationFlags & DontAdjustForAntialiasing)) {
          xrect.adjust(-2, -2, 2, 2);
@@ -2461,7 +2464,7 @@ void QGraphicsView::updateScene(const QList<QRectF> &rects)
       dirtyViewportRects << xrect;
    }
 
-   foreach (const QRect & rect, dirtyViewportRects) {
+   for (const QRect & rect : dirtyViewportRects) {
       // Add the exposed rect to the update region. In rect update
       // mode, we only count the bounding rect of items.
       if (!boundingRectUpdate) {
@@ -2550,7 +2553,7 @@ void QGraphicsView::setupViewport(QWidget *widget)
 
 #ifndef QT_NO_GESTURES
    if (d->scene) {
-      foreach (Qt::GestureType gesture, d->scene->d_func()->grabbedGestures.keys())
+      for (Qt::GestureType gesture : d->scene->d_func()->grabbedGestures.keys())
       widget->grabGesture(gesture);
    }
 #endif

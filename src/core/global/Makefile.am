@@ -2,7 +2,6 @@
 CORE_DIRS += src/core/global
 
 CORE_PUBLIC_INCLUDES += \
-	QBool \
 	QCOORD \
 	QFlag \
 	QFlags \
@@ -48,7 +47,6 @@ CORE_GLOBAL_INCLUDES = \
 	q_uint8.h \
 	q_ullong.h \
 	q_ulong.h \
-	qbool.h \
 	qconfig.h \
 	qcoord.h \
 	qendian.h \
