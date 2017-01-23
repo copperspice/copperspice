@@ -428,7 +428,7 @@ inline const T &QList<T>::at(size_type i) const
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE bool QList<T>::contains(const T &value) const
+bool QList<T>::contains(const T &value) const
 {
    for (const auto &item : m_data) {
       if (item == value) {
@@ -440,7 +440,7 @@ Q_OUTOFLINE_TEMPLATE bool QList<T>::contains(const T &value) const
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE typename QList<T>::size_type QList<T>::count(const T &value) const
+typename QList<T>::size_type QList<T>::count(const T &value) const
 {
    size_type retval = 0;
 
@@ -461,7 +461,7 @@ inline void QList<T>::insert(size_type i, const T &value)
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE QList<T> QList<T>::mid(size_type pos, size_type alength) const
+QList<T> QList<T>::mid(size_type pos, size_type alength) const
 {
    Q_ASSERT_X(pos < size(), "QList<T>::mid", "pos out of range");
 
@@ -499,7 +499,7 @@ inline void QList<T>::move(size_type from, size_type to)
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE typename QList<T>::size_type QList<T>::removeAll(const T &value)
+typename QList<T>::size_type QList<T>::removeAll(const T &value)
 {
    auto iter  = std::remove(m_data.begin(), m_data.end(), value);
    int retval = m_data.end() - iter;
@@ -517,7 +517,7 @@ inline void QList<T>::replace(size_type i, const T &value)
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE bool QList<T>::removeOne(const T &value)
+bool QList<T>::removeOne(const T &value)
 {
    size_type index = indexOf(value);
 
@@ -571,7 +571,7 @@ inline T QList<T>::takeLast()
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE T QList<T>::value(size_type i) const
+T QList<T>::value(size_type i) const
 {
    if (i < 0 || i >= size()) {
       return T();
@@ -581,7 +581,7 @@ Q_OUTOFLINE_TEMPLATE T QList<T>::value(size_type i) const
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE T QList<T>::value(size_type i, const T &defaultValue) const
+T QList<T>::value(size_type i, const T &defaultValue) const
 {
    return ((i < 0 || i >= size()) ? defaultValue : m_data[i]);
 }

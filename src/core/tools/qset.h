@@ -304,14 +304,14 @@ class QSet
 };
 
 template <class T>
-Q_INLINE_TEMPLATE QSet<T> &QSet<T>::unite(const QSet<T> &other)
+inline QSet<T> &QSet<T>::unite(const QSet<T> &other)
 {
    m_data.insert(other.m_data.begin(), other.m_data.end());
    return *this;
 }
 
 template <class T>
-Q_INLINE_TEMPLATE QSet<T> &QSet<T>::intersect(const QSet<T> &other)
+inline QSet<T> &QSet<T>::intersect(const QSet<T> &other)
 {
    auto iter = m_data.cbegin();
 
@@ -329,7 +329,7 @@ Q_INLINE_TEMPLATE QSet<T> &QSet<T>::intersect(const QSet<T> &other)
 }
 
 template <class T>
-Q_INLINE_TEMPLATE bool QSet<T>::intersects(const QSet<T> &other)
+inline bool QSet<T>::intersects(const QSet<T> &other)
 {
    for (const auto &item : m_data) {      
       if (other.contains(item)) {
@@ -341,7 +341,7 @@ Q_INLINE_TEMPLATE bool QSet<T>::intersects(const QSet<T> &other)
 }
 
 template <class T>
-Q_INLINE_TEMPLATE QSet<T> &QSet<T>::subtract(const QSet<T> &other)
+inline QSet<T> &QSet<T>::subtract(const QSet<T> &other)
 { 
    auto iter = m_data.cbegin();
 
@@ -359,7 +359,7 @@ Q_INLINE_TEMPLATE QSet<T> &QSet<T>::subtract(const QSet<T> &other)
 }
 
 template <class T>
-Q_INLINE_TEMPLATE bool QSet<T>::contains(const QSet<T> &other) const
+inline bool QSet<T>::contains(const QSet<T> &other) const
 { 
    for (const auto &item : m_data) {
       if (! contains(item)) {
@@ -371,7 +371,7 @@ Q_INLINE_TEMPLATE bool QSet<T>::contains(const QSet<T> &other) const
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE QList<T> QSet<T>::toList() const
+QList<T> QSet<T>::toList() const
 {
    QList<T> result;
    result.reserve(size());
@@ -384,7 +384,7 @@ Q_OUTOFLINE_TEMPLATE QList<T> QSet<T>::toList() const
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE QSet<T> QList<T>::toSet() const
+QSet<T> QList<T>::toSet() const
 {
    QSet<T> result;
    result.reserve(size());

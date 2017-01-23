@@ -8,7 +8,7 @@
 *
 * This file is part of CopperSpice.
 *
-* CopperSpice is free software: you can redistribute it and/or 
+* CopperSpice is free software: you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public License
 * version 2.1 as published by the Free Software Foundation.
 *
@@ -18,7 +18,7 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public
-* License along with CopperSpice.  If not, see 
+* License along with CopperSpice.  If not, see
 * <http://www.gnu.org/licenses/>.
 *
 ***********************************************************************/
@@ -45,15 +45,15 @@ class QString;
 
 #ifdef QT_NAMESPACE    // block b
 
-#define QT_PREPEND_NAMESPACE(name)   ::QT_NAMESPACE::name
+#define QT_PREPEND_NAMESPACE(name) ::QT_NAMESPACE::name
 
-#define QT_USE_NAMESPACE             using namespace ::QT_NAMESPACE;
+#define QT_USE_NAMESPACE    using namespace ::QT_NAMESPACE;
 
-#define QT_BEGIN_NAMESPACE           namespace QT_NAMESPACE { 
-#define QT_END_NAMESPACE             }
+#define QT_BEGIN_NAMESPACE  namespace QT_NAMESPACE {
+#define QT_END_NAMESPACE    }
 
-#define QT_BEGIN_INCLUDE_NAMESPACE   }
-#define QT_END_INCLUDE_NAMESPACE     namespace QT_NAMESPACE {
+#define QT_BEGIN_INCLUDE_NAMESPACE  }
+#define QT_END_INCLUDE_NAMESPACE    namespace QT_NAMESPACE {
 
 #define QT_FORWARD_DECLARE_CLASS(name)  \
    QT_BEGIN_NAMESPACE class name;  \
@@ -79,7 +79,7 @@ QT_USE_NAMESPACE
 
 #else  // block b
 
-# define QT_PREPEND_NAMESPACE(name)        ::name
+# define QT_PREPEND_NAMESPACE(name) ::name
 
 # define QT_USE_NAMESPACE
 
@@ -89,10 +89,10 @@ QT_USE_NAMESPACE
 # define QT_BEGIN_INCLUDE_NAMESPACE
 # define QT_END_INCLUDE_NAMESPACE
 
-# define QT_FORWARD_DECLARE_CLASS(name)    class name;
-# define QT_FORWARD_DECLARE_STRUCT(name)   struct name;
+# define QT_FORWARD_DECLARE_CLASS(name)  class name;
+# define QT_FORWARD_DECLARE_STRUCT(name) struct name;
 
-# define QT_MANGLE_NAMESPACE(name)         name
+# define QT_MANGLE_NAMESPACE(name)       name
 
 #endif  // block b
 
@@ -146,31 +146,25 @@ QT_USE_NAMESPACE
 // ******
 #if defined(Q_OS_MAC) && ! defined(Q_CC_INTEL)
 #define QT_BEGIN_INCLUDE_HEADER     }
-#define QT_END_INCLUDE_HEADER       extern "C++" {
+#define QT_END_INCLUDE_HEADER     extern "C++" {
 
 #else
 #define QT_BEGIN_INCLUDE_HEADER
-#define QT_END_INCLUDE_HEADER       extern "C++"
+#define QT_END_INCLUDE_HEADER     extern "C++"
 
 #endif
 
 // ******
-#if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
+#if defined(__APPLE__) && defined(__GNUC__)
 #  define Q_OS_DARWIN
 #  define Q_OS_BSD4
 
-#elif !defined(SAG_COM) && (defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
+#elif ! defined(SAG_COM) && (defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
 #  define Q_OS_WIN32
 #  define Q_OS_WIN64
 
 #elif !defined(SAG_COM) && (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
 #  define Q_OS_WIN32
-
-#elif defined(__sun) || defined(sun)
-#  define Q_OS_SOLARIS
-
-#elif defined(hpux) || defined(__hpux)
-#  define Q_OS_HPUX
 
 #elif defined(__native_client__)
 #  define Q_OS_NACL
@@ -226,19 +220,23 @@ QT_USE_NAMESPACE
 #    undef MAC_OS_X_VERSION_MIN_REQUIRED
 #  endif
 
-#  define MAC_OS_X_VERSION_MIN_REQUIRED   MAC_OS_X_VERSION_10_7
+#  define MAC_OS_X_VERSION_MIN_REQUIRED   MAC_OS_X_VERSION_10_8
 #  include <AvailabilityMacros.h>
 
-#  if !defined(MAC_OS_X_VERSION_10_8)
-#       define MAC_OS_X_VERSION_10_8 MAC_OS_X_VERSION_10_7 + 10
-#  endif
-
 #  if !defined(MAC_OS_X_VERSION_10_9)
-#       define MAC_OS_X_VERSION_10_9 MAC_OS_X_VERSION_10_8 + 10
+#     define MAC_OS_X_VERSION_10_9    MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
-#  if !defined(MAC_OS_X_VERSION_10_10)
-#       define MAC_OS_X_VERSION_10_10 101000
+#  if ! defined(MAC_OS_X_VERSION_10_10)
+#     define MAC_OS_X_VERSION_10_10 101000
+#  endif
+
+#  if ! defined(MAC_OS_X_VERSION_10_11)
+#     define MAC_OS_X_VERSION_10_11 101100
+#  endif
+
+#  if ! defined(MAC_OS_X_VERSION_10_12)
+#     define MAC_OS_X_VERSION_10_12 101200
 #  endif
 
 #endif
@@ -257,7 +255,7 @@ QT_USE_NAMESPACE
 // ******
 #if defined(__clang__)
 
-#  if ( __clang_major__ == 3  &&  __clang_minor__ >= 2 ) ||  ( __clang_major__  >= 4  )
+#  if ( __clang_major__ == 3  &&  __clang_minor__ >= 2 ) || ( __clang_major__  >= 4  )
 #    define Q_CC_CLANG
 #    define Q_CC_GNU
 #    define Q_C_CALLBACKS
@@ -282,8 +280,8 @@ QT_USE_NAMESPACE
 #elif defined(__GNUC__)
 //  **
 
-#  if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 6)
-#    error "CopperSpice requires GCC 4.7 or greater"
+#  if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 8)
+#    error "CopperSpice requires GCC 4.9 or greater"
 #  endif
 
 #  define Q_CC_GNU
@@ -309,20 +307,6 @@ QT_USE_NAMESPACE
 #    ifndef __ARM_EABI__
 #      define QT_NO_ARM_EABI
 #    endif
-#  endif
-     
-
-#elif defined(__xlC__)
-//  **
-
-#  define Q_CC_XLC
-
-#  if __xlC__ < 0x400
-#    error "CopperSpice requires GCC 4.7 or greater"
-
-#  elif __xlC__ >= 0x0600
-#    define Q_ALIGNOF(type)     __alignof__(type)
-#    define Q_PACKED            __attribute__((__packed__))
 #  endif
 
 
@@ -367,28 +351,6 @@ QT_USE_NAMESPACE
 #  endif
 
 
-#elif defined(Q_OS_HPUX)
-//  **
-
-#  if defined(__HP_aCC) || __cplusplus >= 199707L
-#    define Q_CC_HPACC
-
-#    if __HP_aCC-0 < 060000
-#      define Q_DECL_EXPORT     __declspec(dllexport)
-#      define Q_DECL_IMPORT     __declspec(dllimport)
-#    endif
-
-#    if __HP_aCC-0 >= 062000
-#      define Q_DECL_EXPORT     __attribute__((visibility("default")))
-#      define Q_DECL_HIDDEN     __attribute__((visibility("hidden")))
-#      define Q_DECL_IMPORT     Q_DECL_EXPORT
-#    endif
-
-#  else
-#    define Q_CC_HP    
-
-#  endif
-
 #else
 //  **
 
@@ -427,8 +389,8 @@ QT_USE_NAMESPACE
 
 
 // *****
-#ifndef Q_REQUIRED_RESULT            
-#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
+#ifndef Q_REQUIRED_RESULT
+#  if defined(Q_CC_GNU) && ! defined(Q_CC_INTEL)
 #    define Q_REQUIRED_RESULT              __attribute__ ((warn_unused_result))
 #  else
 #    define Q_REQUIRED_RESULT
@@ -928,6 +890,8 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_8  = 0x000A,
       MV_10_9  = 0x000B,
       MV_10_10 = 0x000C,
+      MV_10_11 = 0x000D,
+      MV_10_12 = 0x000E,
 
       MV_CHEETAH      = MV_10_0,
       MV_PUMA         = MV_10_1,
@@ -940,6 +904,8 @@ class Q_CORE_EXPORT QSysInfo
       MV_MOUNTAINLION = MV_10_8,
       MV_MAVERICKS    = MV_10_9,
       MV_YOSEMITE     = MV_10_10
+      MV_EL_CAPITAN   = MV_10_11
+      MV_SIERRA       = MV_10_12
    };
    static const MacVersion MacintoshVersion;
 #endif
@@ -960,7 +926,7 @@ inline int qMacVersion()
 #  define Q_OUTOFLINE_TEMPLATE
 #endif
 
-// not needed, used over 400 times 
+// not needed, used over 400 times
 #ifndef Q_INLINE_TEMPLATE
 #  define Q_INLINE_TEMPLATE inline
 #endif
@@ -1058,7 +1024,7 @@ inline T *q_check_ptr(T *p)
 #   if defined(Q_OS_SOLARIS) || defined(Q_CC_XLC)
 #      define Q_FUNC_INFO        __FILE__ "(line number unavailable)"
 
-#   else 
+#   else
 #       define QT_STRINGIFY2(x)  #x
 #       define QT_STRINGIFY1(x)  QT_STRINGIFY2(x)
 
@@ -1067,7 +1033,7 @@ inline T *q_check_ptr(T *p)
 #       undef QT_STRINGIFY2
 #       undef QT_STRINGIFY1
 #   endif
-   
+
 #endif
 
 enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMsg = QtCriticalMsg };
@@ -1078,8 +1044,8 @@ using QtMsgHandler = void (*)(QtMsgType, const char*);
 Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
 
 
-// * * 
-template <typename T> 
+// * *
+template <typename T>
 class QAtomicPointer;
 
 template <typename T>
@@ -1576,12 +1542,12 @@ Q_CORE_EXPORT int qrand();
 #  endif
 #endif
 
-#if ! defined(Q_OS_WIN) && ! defined(Q_OS_MAC) && ! (defined(Q_WS_X11) && !defined(QT_NO_FREETYPE)) && !(defined(Q_WS_QPA))
+#if ! defined(Q_OS_WIN) && ! defined(Q_OS_MAC) && ! (defined(Q_WS_X11) && ! defined(QT_NO_FREETYPE)) && ! (defined(Q_WS_QPA))
 #  define QT_NO_RAWFONT
 #endif
 
 QT_END_NAMESPACE
 
-#endif 
+#endif
 
 #endif

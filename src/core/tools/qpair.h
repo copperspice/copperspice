@@ -52,43 +52,43 @@ struct QPair {
 };
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator==(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator==(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return p1.first == p2.first && p1.second == p2.second;
 }
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator!=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator!=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return !(p1 == p2);
 }
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator<(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator<(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return p1.first < p2.first || (!(p2.first < p1.first) && p1.second < p2.second);
 }
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator>(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator>(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return p2 < p1;
 }
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator<=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator<=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return !(p2 < p1);
 }
 
 template <class T1, class T2>
-Q_INLINE_TEMPLATE bool operator>=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
+inline bool operator>=(const QPair<T1, T2> &p1, const QPair<T1, T2> &p2)
 {
    return !(p1 < p2);
 }
 
 template <class T1, class T2>
-Q_OUTOFLINE_TEMPLATE QPair<T1, T2> qMakePair(const T1 &x, const T2 &y)
+QPair<T1, T2> qMakePair(const T1 &x, const T2 &y)
 {
    return QPair<T1, T2>(x, y);
 }

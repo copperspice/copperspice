@@ -51,7 +51,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
 // Static operator overloading so for the sake of some convieniece.
 // They only live in this compilation unit to avoid polluting Qt in general.
 static bool operator==(const struct ::timespec &left, const struct ::timespec &right)
@@ -143,7 +143,7 @@ QFSEventsFileSystemWatcherEngine::QFSEventsFileSystemWatcherEngine()
 
 QFSEventsFileSystemWatcherEngine::~QFSEventsFileSystemWatcherEngine()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    // I assume that at this point, QFileSystemWatcher has already called stop
    // on me, so I don't need to invalidate or stop my stream, simply
    // release it.
@@ -163,7 +163,7 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QStringList *files,
       QStringList *directories)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    stop();
    wait();
    QMutexLocker locker(&mutex);
@@ -249,7 +249,7 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
 
 void QFSEventsFileSystemWatcherEngine::warmUpFSEvents()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    // This function assumes that the mutex has already been grabbed before calling it.
    // It exits with the mutex still locked (Q_ASSERT(mutex.isLocked()) ;-).
    start();
@@ -261,7 +261,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
       QStringList *files,
       QStringList *directories)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    stop();
    wait();
    QMutexLocker locker(&mutex);
@@ -329,7 +329,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
 #endif
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
 void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool directory, bool emitSignals)
 {
    PathInfoList::iterator End = list.end();
@@ -392,14 +392,15 @@ void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef ,
       const FSEventStreamEventFlags eventFlags[],
       const FSEventStreamEventId [])
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    QFSEventsFileSystemWatcherEngine *watcher = static_cast<QFSEventsFileSystemWatcherEngine *>(clientCallBackInfo);
    QMutexLocker locker(&watcher->mutex);
    CFArrayRef paths = static_cast<CFArrayRef>(eventPaths);
+
    for (size_t i = 0; i < numEvents; ++i) {
-      const QString path = QCFString::toQString(
-                              static_cast<CFStringRef>(CFArrayGetValueAtIndex(paths, i)));
+      const QString path = QCFString::toQString(static_cast<CFStringRef>(CFArrayGetValueAtIndex(paths, i)));
       const FSEventStreamEventFlags pathFlags = eventFlags[i];
+
       // There are several flags that may be passed, but we really don't care about them ATM.
       // Here they are and why we don't care.
       // kFSEventStreamEventFlagHistoryDone--(very unlikely to be gotten, but even then, not much changes).
@@ -429,7 +430,7 @@ void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef ,
 
 void QFSEventsFileSystemWatcherEngine::stop()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    QMutexLocker locker(&mutex);
    stopFSStream(fsStream);
    if (threadsRunLoop) {
@@ -441,13 +442,15 @@ void QFSEventsFileSystemWatcherEngine::stop()
 
 void QFSEventsFileSystemWatcherEngine::updateFiles()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    QMutexLocker locker(&mutex);
    updateHash(filePathInfoHash);
    updateHash(dirPathInfoHash);
+
    if (filePathInfoHash.isEmpty() && dirPathInfoHash.isEmpty()) {
       // Everything disappeared before we got to start, don't bother.
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+
+#if ! defined(Q_OS_IOS)
       // Code duplicated from stop(), with the exception that we
       // don't wait on waitForStop here. Doing this will lead to
       // a deadlock since this function is called from the worker
@@ -466,7 +469,7 @@ void QFSEventsFileSystemWatcherEngine::updateFiles()
 
 void QFSEventsFileSystemWatcherEngine::run()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    threadsRunLoop = CFRunLoopGetCurrent();
    FSEventStreamScheduleWithRunLoop(fsStream, threadsRunLoop, kCFRunLoopDefaultMode);
    bool startedOK = FSEventStreamStart(fsStream);

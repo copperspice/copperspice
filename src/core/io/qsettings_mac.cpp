@@ -31,10 +31,8 @@
 #include <qcore_mac_p.h>
 #include <qcoreapplication.h>
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 #include <Security/SecCode.h>
 #include <Security/SecRequirement.h>
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -599,12 +597,13 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
    if (!initialized) {
       bool inSandbox = false;
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
       // If we are running on at least 10.7.0 and have the com.apple.security.app-sandbox
       // entitlement, we are in a sandbox
+
       SInt32 version = 0;
       Gestalt(gestaltSystemVersion, &version);
       SecCodeRef secCodeSelf;
+
       if (version >= 0x1070 && SecCodeCopySelf(kSecCSDefaultFlags, &secCodeSelf) == errSecSuccess) {
          SecRequirementRef sandboxReq;
          CFStringRef entitlement = CFSTR("entitlement [\"com.apple.security.app-sandbox\"]");
@@ -616,7 +615,6 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
          }
          CFRelease(secCodeSelf);
       }
-#endif
 
       bool forAppStore = false;
       if (!inSandbox) {

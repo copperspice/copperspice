@@ -52,10 +52,9 @@ QCocoaWindow::QCocoaWindow(QWidget *tlw)
     [m_nsWindow makeKeyAndOrderFront:nil];
     [m_nsWindow setAcceptsMouseMovedEvents:YES];
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
     if ([m_nsWindow respondsToSelector:@selector(setRestorable:)])
         [m_nsWindow setRestorable: NO];
-#endif
+
 }
 
 QCocoaWindow::~QCocoaWindow()

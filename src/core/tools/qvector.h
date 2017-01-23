@@ -515,7 +515,7 @@ inline void QVector<T>::insert(size_type i, size_type n, const T &value)
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE QVector<T> QVector<T>::mid(size_type pos, size_type length) const
+QVector<T> QVector<T>::mid(size_type pos, size_type length) const
 {
    if (length < 0) {
       length = size() - pos;
@@ -560,7 +560,7 @@ inline void QVector<T>::move(size_type from, size_type to)
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE typename QVector<T>::size_type QVector<T>::removeAll(const T &value)
+typename QVector<T>::size_type QVector<T>::removeAll(const T &value)
 {
    auto iter  = std::remove(m_data.begin(), m_data.end(), value);
    int retval = m_data.end() - iter;
@@ -613,7 +613,7 @@ inline T QVector<T>::takeLast()
 
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE T QVector<T>::value(size_type i) const
+T QVector<T>::value(size_type i) const
 {
    if (i < 0 || i >= size()) {
       return T();
@@ -623,7 +623,7 @@ Q_OUTOFLINE_TEMPLATE T QVector<T>::value(size_type i) const
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE T QVector<T>::value(size_type i, const T &defaultValue) const
+T QVector<T>::value(size_type i, const T &defaultValue) const
 {
    return ((i < 0 || i >= size()) ? defaultValue : m_data[i]);
 }
@@ -651,7 +651,7 @@ QVector<T> &QVector<T>::operator+=(const QVector &other)
 }
 
 template <typename T>
-Q_OUTOFLINE_TEMPLATE QList<T> QVector<T>::toList() const
+QList<T> QVector<T>::toList() const
 {
    QList<T> result;
    result.reserve(size());
@@ -665,7 +665,7 @@ Q_OUTOFLINE_TEMPLATE QList<T> QVector<T>::toList() const
 
 // methods declared in QList
 template <typename T>
-Q_OUTOFLINE_TEMPLATE QVector<T> QList<T>::toVector() const
+QVector<T> QList<T>::toVector() const
 {
    QVector<T> result( m_data.begin(), m_data.end() );
    return result;

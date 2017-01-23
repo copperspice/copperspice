@@ -386,7 +386,7 @@ static QString macFormatCurrency(const QSystemLocale::CurrencyToStringArgument &
 
 static QVariant macQuoteString(QSystemLocale::QueryType type, const QStringRef &str)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6 && !defined(Q_OS_IOS)
+#if ! defined(Q_OS_IOS)
    if (QSysInfo::MacintoshVersion < QSysInfo::MV_10_6) {
       return QVariant();
    }

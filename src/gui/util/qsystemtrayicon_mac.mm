@@ -53,10 +53,7 @@ QT_USE_NAMESPACE
 @class QT_MANGLE_NAMESPACE(QNSMenu);
 @class QT_MANGLE_NAMESPACE(QNSImageView);
 
-@interface QT_MANGLE_NAMESPACE(QNSStatusItem) : NSObject
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    <NSUserNotificationCenterDelegate>
-#endif
+@interface QT_MANGLE_NAMESPACE(QNSStatusItem) : NSObject <NSUserNotificationCenterDelegate>
 {
    NSStatusItem *item;
    QSystemTrayIcon *icon;
@@ -71,10 +68,9 @@ QT_USE_NAMESPACE
 - (void)triggerSelector: (id)sender button: (Qt::MouseButton)mouseButton;
 - (void)doubleClickSelector: (id)sender;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification;
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification;
-#endif
+
 
 @end
 
@@ -107,22 +103,18 @@ class QSystemTrayIconSys
       QMacCocoaAutoReleasePool pool;
       item = [[QT_MANGLE_NAMESPACE(QNSStatusItem) alloc] initWithIcon: icon iconPrivate: d];
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
       if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
          [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:item];
       }
-#endif
-
    }
+
    ~QSystemTrayIconSys() {
       QMacCocoaAutoReleasePool pool;
       [[[item item] view] setHidden: YES];
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
         if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:nil];
         }
-#endif
 
       [item release];
    }
@@ -213,7 +205,6 @@ void QSystemTrayIconPrivate::showMessage_sys(const QString &title, const QString
     if (!sys)
         return;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_8) {
         NSUserNotification *notification = [[NSUserNotification alloc] init];
         notification.title = [NSString stringWithUTF8String:title.toUtf8().data()];
@@ -223,7 +214,7 @@ void QSystemTrayIconPrivate::showMessage_sys(const QString &title, const QString
 
         return;
     }
-#endif
+
 
 #ifdef QT_MAC_SYSTEMTRAY_USE_GROWL
     // Make sure that we have Growl installed on the machine we are running on.
@@ -468,7 +459,7 @@ QT_END_NAMESPACE
    qtsystray_sendActivated(icon, QSystemTrayIcon::DoubleClick);
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
+
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
     Q_UNUSED(center);
     Q_UNUSED(notification);
@@ -480,7 +471,7 @@ QT_END_NAMESPACE
     Q_UNUSED(notification);
     emit iconPrivate->sys->emitMessageClicked();
 }
-#endif
+
 
 @end
 

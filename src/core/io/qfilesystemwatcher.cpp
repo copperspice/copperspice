@@ -45,7 +45,7 @@
 
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
 
-#  if (defined Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#  if (defined Q_OS_MAC)
 #  include <qfilesystemwatcher_fsevents_p.h>
 #  endif
 

@@ -236,15 +236,17 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
    data->eventDispatcher->startingUp();
 }
 
-#if (defined(Q_OS_LINUX) || (defined(Q_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6))
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) 
 static void setCurrentThreadName(pthread_t threadId, const char *name)
+
 {
-#  if defined(Q_OS_LINUX) && !defined(QT_LINUXBASE)
+#  if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
    Q_UNUSED(threadId);
    prctl(PR_SET_NAME, (unsigned long)name, 0, 0, 0);
 
-#  elif (defined(Q_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#  elif defined(Q_OS_MAC) 
    Q_UNUSED(threadId);
+
    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_6) {
       pthread_setname_np(name);
    }
@@ -278,7 +280,7 @@ void *QThreadPrivate::start(void *arg)
    // ### TODO: allow the user to create a custom event dispatcher
    createEventDispatcher(data);
 
-#if (defined(Q_OS_LINUX) || (defined(Q_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6))
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) 
    // sets the name of the current thread.
    QString objectName = thr->objectName();
 
