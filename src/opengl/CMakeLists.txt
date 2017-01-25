@@ -2,7 +2,6 @@ add_definitions(
     -DQT_NO_EGL
     -DQT_BUILD_OPENGL_LIB
     -DQT_SHARED
-    -DQT_MAKEDLL
 )
 set(EXTRA_OPENGL_LIBS
     CsCore${BUILD_ABI}
@@ -191,7 +190,6 @@ macro_generate_package(
     CsOpenGL${BUILD_ABI}
     QtOpenGL
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 

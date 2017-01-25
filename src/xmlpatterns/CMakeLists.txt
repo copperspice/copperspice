@@ -72,7 +72,6 @@ macro_generate_package(
     CsXmlPatterns${BUILD_ABI}
     QtXmlPatterns
     "${EXTRA_XMLPATTERNS_CXXFLAGS}"
-    "${EXTRA_XMLPATTERNS_LIBS}"
     "CsCore${BUILD_ABI} CsNetwork${BUILD_ABI}"
 )
 

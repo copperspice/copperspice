@@ -1,6 +1,5 @@
 add_definitions(
     -DQT_BUILD_NETWORK_LIB
-    -DQT_MAKEDLL
 )
 set(EXTRA_NETWORK_LIBS CsCore${BUILD_ABI})
 set(EXTRA_NETWORK_CXXFLAGS)
@@ -42,6 +41,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_NETWORK_LIBS
         ${EXTRA_NETWORK_LIBS} ws2_32
     )
+    add_definitions(-DQT_MAKEDLL)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -68,7 +68,6 @@ macro_generate_package(
     CsNetwork${BUILD_ABI}
     QtNetwork
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     "CsCore${BUILD_ABI}"
 )
 

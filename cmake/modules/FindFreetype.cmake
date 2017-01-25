@@ -20,7 +20,7 @@ endif()
 
 find_path(FREETYPE_INCLUDES
     NAMES
-    freetype.h
+    ft2build.h
     PATH_SUFFIXES freetype2 freetype2/freetype
     HINTS
     $ENV{FREETYPEDIR}/include

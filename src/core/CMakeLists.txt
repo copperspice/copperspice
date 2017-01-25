@@ -1,4 +1,8 @@
-add_definitions(-DQT_BUILD_CORE_LIB -DBUILDING_LIB_CS_SIGNAL)
+add_definitions(
+   -DQT_BUILD_CORE_LIB
+   -DBUILDING_LIB_CS_SIGNAL
+)
+
 set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
 set(EXTRA_CORE_CXXFLAGS)
 set(EXTRA_CORE_LDFLAGS)
@@ -22,8 +26,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/thread
     ${CMAKE_CURRENT_SOURCE_DIR}/tools
     ${CMAKE_CURRENT_SOURCE_DIR}/xml
-    ${GLIB2_INCLUDE_DIR}
-    ${GOBJECT2_INCLUDE_DIR}
+    ${GLIB2_INCLUDES}
+    ${GOBJECT2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
@@ -117,7 +121,6 @@ macro_generate_package(
     CsCore${BUILD_ABI}
     QtCore
     "${EXTRA_CORE_CXXFLAGS}"
-    "${EXTRA_CORE_LIBS}"
     ""
 )
 

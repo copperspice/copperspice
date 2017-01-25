@@ -903,8 +903,8 @@ class Q_CORE_EXPORT QSysInfo
       MV_LION         = MV_10_7,
       MV_MOUNTAINLION = MV_10_8,
       MV_MAVERICKS    = MV_10_9,
-      MV_YOSEMITE     = MV_10_10
-      MV_EL_CAPITAN   = MV_10_11
+      MV_YOSEMITE     = MV_10_10,
+      MV_EL_CAPITAN   = MV_10_11,
       MV_SIERRA       = MV_10_12
    };
    static const MacVersion MacintoshVersion;

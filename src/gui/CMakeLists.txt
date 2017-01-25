@@ -1,4 +1,5 @@
-add_definitions(-DQT_BUILD_GUI_LIB
+add_definitions(
+    -DQT_BUILD_GUI_LIB
     -DQT_BUILTIN_GIF_READER
     -DMNG_BUILD_SO
     -DMNG_NO_INCLUDE_JNG
@@ -34,6 +35,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/text
     ${CMAKE_CURRENT_SOURCE_DIR}/util
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+    ${GLIB2_INCLUDES}
+    ${GOBJECT2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
     ${CMAKE_SOURCE_DIR}/src/3rdparty/wintab
     ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
@@ -170,7 +173,6 @@ macro_generate_package(
     CsGui${BUILD_ABI}
     QtGui
     "${EXTRA_GUI_CXXFLAGS}"
-    "${EXTRA_GUI_LIBS}"
     "CsCore${BUILD_ABI}"
 )
 

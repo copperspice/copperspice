@@ -2,7 +2,6 @@ add_definitions(
     -DQT_SQL_SQLITE
     -DQT_BUILD_SQL_LIB
     -DQT_SHARED
-    -DQT_MAKEDLL
 )
 set(EXTRA_SQL_LIBS CsCore${BUILD_ABI})
 set(EXTRA_SQL_CXXFLAGS)
@@ -48,8 +47,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_SQL_LIBS}
         ws2_32
     )
+    add_definitions(-DQT_MAKEDLL)
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-DENABLE_JSC_MULTIPLE_THREADS=0)
+
 endif()
 
 function_variable_fixup("${EXTRA_SQL_CXXFLAGS}" EXTRA_SQL_CXXFLAGS)
@@ -69,7 +71,6 @@ macro_generate_package(
     CsSql${BUILD_ABI}
     QtSql
     "${EXTRA_SQL_CXXFLAGS}"
-    "${EXTRA_SQL_LIBS}"
     "CsCore${BUILD_ABI}"
 )
 

@@ -19,7 +19,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/dom
     ${CMAKE_CURRENT_SOURCE_DIR}/sax
     ${CMAKE_CURRENT_SOURCE_DIR}/stream
-    ${GLIB2_INCLUDE_DIR}
+    ${GLIB2_INCLUDES}
 )
 
 include(dom/dom.cmake)
@@ -47,7 +47,6 @@ macro_generate_package(
     CsXml${BUILD_ABI}
     QtXml
     "${EXTRA_XML_CXXFLAGS}"
-    "${EXTRA_XML_LIBS}"
     "CsCore${BUILD_ABI}"
 )
 

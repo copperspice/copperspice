@@ -17,7 +17,7 @@ EXTRA_LTLIBRARIES =
 EXTRA_DIST= \
 	README \
 	CMakeLists.txt \
-	cmake/modules/FindGLIB2.cmake \
+	cmake/modules/FindGLib2.cmake \
 	cmake/modules/TestLargeFiles.cmake \
 	cmake/modules/FindIconv.cmake \
 	cmake/modules/FindNAS.cmake \

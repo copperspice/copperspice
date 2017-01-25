@@ -60,8 +60,7 @@ macro_generate_resources("${DECLARATIVE_SOURCES}")
 macro_generate_package(
     CsDeclarative${BUILD_ABI}
     QtDeclarative
-    "${EXTRA_DECLARATIVE_CXXFLAGS}"
-    "${EXTRA_DECLARATIVE_LIBS}"
+    "${EXTRA_DECLARATIVE_CXXFLAGS}"    
     "CsCore${BUILD_ABI} QtGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsScript${BUILD_ABI}"
 )
 

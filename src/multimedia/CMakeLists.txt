@@ -1,6 +1,5 @@
 add_definitions(
-    -DQT_BUILD_MULTIMEDIA_LIB
-    -DQT_MAKEDLL
+    -DQT_BUILD_MULTIMEDIA_LIB    
 )
 set(EXTRA_MULTIMEDIA_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
@@ -46,10 +45,12 @@ macro_generate_package(
     CsMultimedia${BUILD_ABI}
     QtMultimedia
     "${EXTRA_MULTIMEDIA_CXXFLAGS}"
-    "${EXTRA_MULTIMEDIA_LIBS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")  
+    add_definitions(-DQT_MAKEDLL)
+endif()
 
 install(
     TARGETS CsMultimedia${BUILD_ABI}
