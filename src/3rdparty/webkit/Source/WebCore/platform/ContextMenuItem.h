@@ -174,21 +174,7 @@ namespace WebCore {
 #if PLATFORM(MAC)
     typedef NSMenuItem* PlatformMenuItemDescription;
 #elif PLATFORM(QT)
-    struct PlatformMenuItemDescription {
-        PlatformMenuItemDescription()
-            : type(ActionType),
-              action(ContextMenuItemTagNoAction),
-              checked(false),
-              enabled(true)
-        {}
-
-        ContextMenuItemType type;
-        ContextMenuAction action;
-        String title;
-        QList<ContextMenuItem> subMenuItems;
-        bool checked;
-        bool enabled;
-    };
+    struct PlatformMenuItemDescription;
 #elif PLATFORM(GTK)
     typedef GtkMenuItem* PlatformMenuItemDescription;
 #elif PLATFORM(WX)
@@ -270,6 +256,11 @@ namespace WebCore {
         ContextMenuItem(PlatformMenuItemDescription);
         ContextMenuItem(ContextMenu* subMenu = 0);
         ContextMenuItem(ContextMenuAction, const String&, bool enabled, bool checked, Vector<ContextMenuItem>& submenuItems);
+#if PLATFORM(QT)
+	ContextMenuItem(const ContextMenuItem & other);
+	ContextMenuItem& operator=(const ContextMenuItem & other);
+	ContextMenuItem& operator=(ContextMenuItem && other);
+#endif
 
         PlatformMenuItemDescription releasePlatformDescription();
 
@@ -292,11 +283,32 @@ namespace WebCore {
 #if PLATFORM(MAC)
         RetainPtr<NSMenuItem> m_platformDescription;
 #else
-        PlatformMenuItemDescription m_platformDescription;
+	mutable std::unique_ptr<PlatformMenuItemDescription> m_platformDescription;
 #endif
+	PlatformMenuItemDescription& platformDescription();
+	const PlatformMenuItemDescription& platformDescription() const;
 #endif // USE(CROSS_PLATFORM_CONTEXT_MENUS)
     };
 
+#if PLATFORM(QT)
+    struct PlatformMenuItemDescription {
+        PlatformMenuItemDescription()
+	    : type(ActionType),
+	    action(ContextMenuItemTagNoAction),
+	    checked(false),
+	    enabled(true)
+	{}
+
+	ContextMenuItemType type;
+	ContextMenuAction action;
+	String title;
+	QList<ContextMenuItem> subMenuItems;
+        bool checked;
+        bool enabled;
+    };
+#else
+#endif
+    
 }
 
 #endif // ContextMenuItem_h

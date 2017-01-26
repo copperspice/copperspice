@@ -33,8 +33,9 @@ namespace WebCore {
 
 ContextMenuItem::ContextMenuItem(ContextMenu* subMenu)
 {
-    m_platformDescription.type = SubmenuType;
-    m_platformDescription.action = ContextMenuItemTagNoAction;
+    platformDescription().type = SubmenuType;
+    platformDescription().action = ContextMenuItemTagNoAction;
+
     if (subMenu)
         setSubMenu(subMenu);
 }
@@ -42,9 +43,10 @@ ContextMenuItem::ContextMenuItem(ContextMenu* subMenu)
 ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction action,
                                  const String& title, ContextMenu* subMenu)
 {
-    m_platformDescription.type = type;
-    m_platformDescription.action = action;
-    m_platformDescription.title = title;
+    platformDescription().type = type;
+    platformDescription().action = action;
+    platformDescription().title = title;
+
     if (subMenu)
         setSubMenu(subMenu);
 }
@@ -62,51 +64,71 @@ ContextMenuItem::ContextMenuItem(ContextMenuAction, const String&, bool, bool, V
 ContextMenuItem::~ContextMenuItem()
 {
 }
+    
+#if PLATFORM(QT)
+
+ContextMenuItem::ContextMenuItem(const ContextMenuItem & other)
+{
+    m_platformDescription.reset(new PlatformMenuItemDescription(*other.m_platformDescription));
+}
+
+ContextMenuItem& ContextMenuItem::operator=(const ContextMenuItem & other)
+{
+    m_platformDescription.reset(new PlatformMenuItemDescription(*other.m_platformDescription));
+}
+
+ContextMenuItem& ContextMenuItem::operator=(ContextMenuItem && other)
+{
+    m_platformDescription.swap(other.m_platformDescription);
+    other.m_platformDescription.reset();
+}
+
+#endif
 
 PlatformMenuItemDescription ContextMenuItem::releasePlatformDescription()
 {
-    return m_platformDescription;
+    return platformDescription();
 }
 
 ContextMenuItemType ContextMenuItem::type() const
 {
-    return m_platformDescription.type;
+    return platformDescription().type;
 }
 
 void ContextMenuItem::setType(ContextMenuItemType type)
 {
-    m_platformDescription.type = type;
+    platformDescription().type = type;
 }
 
 ContextMenuAction ContextMenuItem::action() const
 {
-    return m_platformDescription.action;
+    return platformDescription().action;
 }
 
 void ContextMenuItem::setAction(ContextMenuAction action)
 {
-    m_platformDescription.action = action;
+    platformDescription().action = action;
 }
 
 String ContextMenuItem::title() const
 {
-    return m_platformDescription.title;
+    return platformDescription().title;
 }
 
 void ContextMenuItem::setTitle(const String& title)
 {
-    m_platformDescription.title = title;
+    platformDescription().title = title;
 }
 
 
 PlatformMenuDescription ContextMenuItem::platformSubMenu() const
 {
-    return &m_platformDescription.subMenuItems;
+    return &platformDescription().subMenuItems;
 }
 
 void ContextMenuItem::setSubMenu(ContextMenu* menu)
 {
-    m_platformDescription.subMenuItems = *menu->platformDescription();
+    platformDescription().subMenuItems = *menu->platformDescription();
 }
 
 void ContextMenuItem::setSubMenu(Vector<ContextMenuItem>&)
@@ -116,7 +138,7 @@ void ContextMenuItem::setSubMenu(Vector<ContextMenuItem>&)
 
 void ContextMenuItem::setChecked(bool on)
 {
-    m_platformDescription.checked = on;
+    platformDescription().checked = on;
 }
 
 bool ContextMenuItem::checked() const
@@ -127,12 +149,36 @@ bool ContextMenuItem::checked() const
 
 void ContextMenuItem::setEnabled(bool on)
 {
-    m_platformDescription.enabled = on;
+    platformDescription().enabled = on;
 }
 
 bool ContextMenuItem::enabled() const
 {
-    return m_platformDescription.enabled;
+    return platformDescription().enabled;
+}
+
+PlatformMenuItemDescription& ContextMenuItem::platformDescription()
+{
+#if PLATFORM(QT)
+    if(!m_platformDescription) {
+	m_platformDescription.reset(new PlatformMenuItemDescription());
+    }
+    return *m_platformDescription;
+#else
+    return m_platformDescription;
+#endif
+}
+
+const PlatformMenuItemDescription& ContextMenuItem::platformDescription() const
+{
+#if PLATFORM(QT)
+    if(!m_platformDescription) {
+	m_platformDescription.reset(new PlatformMenuItemDescription());
+    }
+    return *m_platformDescription;
+#else
+    return m_platformDescription;
+#endif
 }
 
 }
