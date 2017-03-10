@@ -1,6 +1,12 @@
-# - Config file for the CopperSpice package
 #
-# It defines the following variables:
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.
+#
+
+#  Config file for the CopperSpice package
+#
+#  defines the following variables:
 #
 #  COPPERSPICE_INCLUDES               - all include directories
 #  COPPERSPICE_LIBRARIES              - all libraries to link against

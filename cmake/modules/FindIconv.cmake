@@ -1,20 +1,24 @@
-# - Try to find Iconv
-# Once done this will define
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Copyright (c) 2016, Ivailo Monev, <xakepa10@gmail.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+
+#  Find Iconv, will define
 #
 #  ICONV_FOUND - system has Iconv
 #  ICONV_INCLUDES - the Iconv include directory
 #  ICONV_LIBRARIES - The libraries needed to use Iconv
 #
-# Copyright (c) 2016, Ivailo Monev, <xakepa10@gmail.com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
+
 
 if(ICONV_INCLUDES AND ICONV_LIBRARIES)
     set(ICONV_FIND_QUIETLY TRUE)
 endif()
 
 # Iconv does not provide pkg-config files
-
 find_path(ICONV_INCLUDES
     NAMES
     iconv.h

@@ -1,4 +1,11 @@
-# use like this: cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/archlinux-mingw.cmake
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.
+#
+
+# Usage:  cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/archlinux-mingw.cmake
+
 
 set(CMAKE_SYSTEM_NAME Windows)
 if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "(x86_64|amd64)")
@@ -16,7 +23,7 @@ set(CMAKE_RC_COMPILER ${mingwtriplet}-windres)
 set(CMAKE_FIND_ROOT_PATH /usr/${mingwtriplet})
 
 # adjust the default behaviour of the FIND_XXX() commands:
-# search headers and libraries in the target environment, search 
+# search headers and libraries in the target environment, search
 # programs in the host environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)

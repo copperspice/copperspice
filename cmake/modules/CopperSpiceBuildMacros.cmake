@@ -1,3 +1,11 @@
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+
 # This module defines the following macros:
 #
 #   MACRO_GENERATE_PUBLIC()
@@ -22,10 +30,7 @@
 #   MACRO_GENERATE_PACKAGE(<name> <realname> <cxxflags> <libraries> <requires>)
 #
 #   FUNCTION_VARIABLE_FIXUP(<string|list> <variablename>)
-#
-# Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
+
 
 # could be set by a toolchain file
 if(NOT MT_EXECUTABLE)

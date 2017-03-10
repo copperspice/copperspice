@@ -1,4 +1,12 @@
-# - Define macro to check large file support
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Adapted from Gromacs project (http://www.gromacs.org/) by Julien Malik
+
+
+#  Define macro to check large file support
 #
 #  OPJ_TEST_LARGE_FILES(VARIABLE)
 #
@@ -9,25 +17,25 @@
 #  _FILE_OFFSET_BITS 64
 #  HAVE_FSEEKO
 #
-#  However, it is YOUR job to make sure these defines are set in a #cmakedefine so they
-#  end up in a config.h file that is included in your source if necessary!
-#
-#  Adapted from Gromacs project (http://www.gromacs.org/)
-#  by Julien Malik
-#
+#  It is your job to make sure these defines are set in a #cmakedefine so they
+#  end up in a config.h file that is included in your source if necessary
+
 
 macro(OPJ_TEST_LARGE_FILES VARIABLE)
-    set(TestFileOffsetBits
-        "#include <sys/types.h>
 
-int main(int argc, char **argv)
+set(TestFileOffsetBits 
+
+"#include <sys/types.h>
+
+int main(int argc, char **argv) 
 {
   /* Cause a compile-time error if off_t is smaller than 64 bits */
-#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+
+  #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[ (LARGE_OFF_T % 2147483629 == 721 && LARGE_OFF_T % 2147483647 == 1) ? 1 : -1 ];  
   return 0;
 }"
-    )
+)
 
     if(${VARIABLE} MATCHES "^${VARIABLE}$")
 
@@ -130,6 +138,3 @@ int main(int argc, char **argv)
 
     endif()
 endmacro()
-
-
-

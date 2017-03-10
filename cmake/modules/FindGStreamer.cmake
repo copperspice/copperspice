@@ -1,17 +1,21 @@
-# - Try to find GStreamer
-# Once done this will define
 #
-#  GSTREAMER_FOUND - system has GStreamer
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Copyright (c) 2006, Tim Beaulen <tbscope@gmail.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+
+#  Find GStreamer, will define
+#
+#  GSTREAMER_FOUND       - system has GStreamer
 #  GSTREAMER_INCLUDE_DIR - the GStreamer include directory
-#  GSTREAMER_LIBRARIES - the libraries needed to use GStreamer
+#  GSTREAMER_LIBRARIES   - the libraries needed to use GStreamer
 #  GSTREAMER_DEFINITIONS - Compiler switches required for using GStreamer
 
-# Copyright (c) 2006, Tim Beaulen <tbscope@gmail.com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# TODO: may want to look for other versions of GStreamer
+#     GSTREAMER_X_Y_FOUND (Example: GSTREAMER_0_8_FOUND and GSTREAMER_0_10_FOUND etc)
 
-# TODO: Other versions --> GSTREAMER_X_Y_FOUND (Example: GSTREAMER_0_8_FOUND and GSTREAMER_0_10_FOUND etc)
 
 IF (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND GSTREAMER_BASE_LIBRARY AND GSTREAMER_AUDIO_LIBRARY AND GSTREAMER_VIDEO_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY)
    # in cache already

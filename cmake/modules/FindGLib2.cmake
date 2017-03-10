@@ -1,14 +1,18 @@
-# - Try to find GLib2 core application building
-# Once done this will define
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>#
+# Redistribution and use is allowed according to the terms of the BSD license.
+
+#  Find GLib2 core application building,  will define
 #
 #  GLIB2_FOUND - system has GLib2
 #  GLIB2_INCLUDES - the GLib2 include directory
 #  GLIB2_CONFIG_INCLUDES - the GLib2 config include directory
 #  GLIB2_LIBRARIES - The libraries needed to use GLib2
 #
-# Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
 
 if(GLIB2_INCLUDES AND GLIB2_LIBRARIES)
     set(GLIB2_FIND_QUIETLY TRUE)

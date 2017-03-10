@@ -1,20 +1,22 @@
-# - Try to find the GOBJECT2 libraries
-# Once done this will define
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.    
+#
+# Copyright (c) 2008 Laurent Montel, <montel@kde.org>
+# Redistribution and use is allowed according to the terms of the BSD license.
+
+#  Find the GOBJECT2 libraries, will define
 #
 #  GOBJECT2_FOUND - system has gobject2
 #  GOBJECT2_INCLUDE_DIR - the gobject2 include directory
 #  GOBJECT2_LIBRARIES - gobject2 library
 
-# Copyright (c) 2008 Laurent Montel, <montel@kde.org>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
 
 if(GOBJECT2_INCLUDE_DIR AND GOBJECT2_LIBRARIES)
     # Already in cache, be silent
     set(GOBJECT2_FIND_QUIETLY TRUE)
-endif(GOBJECT2_INCLUDE_DIR AND GOBJECT2_LIBRARIES)
+endif()
 
 find_package(PkgConfig)
 pkg_check_modules(PC_LibGOBJECT2 QUIET gobject-2.0)
@@ -25,8 +27,8 @@ find_path(GOBJECT2_MAIN_INCLUDE_DIR
           PATH_SUFFIXES glib-2.0/gobject/)
 
 find_library(GOBJECT2_LIBRARY 
-             NAMES gobject-2.0 
-             HINTS ${PC_LibGOBJECT2_LIBDIR}
+          NAMES gobject-2.0 
+          HINTS ${PC_LibGOBJECT2_LIBDIR}
 )
 
 set(GOBJECT2_LIBRARIES ${GOBJECT2_LIBRARY})

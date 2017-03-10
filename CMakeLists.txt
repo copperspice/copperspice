@@ -52,10 +52,9 @@ else()
     set(CMAKE_INSTALL_DATAROOTDIR ${CMAKE_INSTALL_PREFIX})
 endif()
 
-string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 set(BUILD_MAJOR "1")
-set(BUILD_MINOR "3")
-set(BUILD_MICRO "3")
+set(BUILD_MINOR "4")
+set(BUILD_MICRO "0")
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
 # required
@@ -124,6 +123,7 @@ else()
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
 endif()
 
+string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
 add_definitions(-DQT_SHARED -DHAVE_CONFIG_H -DBUILD_DATE="${BUILD_DATE}")
 set(TOOLS_SUFFIX)
 

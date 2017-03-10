@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.
+#
+
 set(COPPERSPICE_VERSION_MAJOR "@BUILD_MAJOR@")
 set(COPPERSPICE_VERSION_MINOR "@BUILD_MINOR@")
 set(COPPERSPICE_VERSION_PATCH "@BUILD_MICRO@")

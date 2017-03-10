@@ -1,14 +1,14 @@
-# This module defines the following macros:
 #
-#   COPPERSPICE_RESOURCES()
-#
-# Usage:
-#
-#   COPPERSPICE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
+# Copyright (C) 2012-2017 Barbara Geller
+# Copyright (C) 2012-2017 Ansel Sermersheim
+# All rights reserved.
 #
 # Copyright (c) 2015, Ivailo Monev, <xakepa10@gmail.com>
-#
 # Redistribution and use is allowed according to the terms of the BSD license.
+
+# Usage:
+#   COPPERSPICE_RESOURCES(<userinterface.ui> [<resource.qrc>] ...)
+
 
 macro(COPPERSPICE_RESOURCES RESOURCES)
     foreach(resource ${RESOURCES} ${ARGN})
