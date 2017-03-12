@@ -24,6 +24,8 @@
 #define QTCONCURRENTFUNCTIONWRAPPERS_H
 
 #include <QtCore/qglobal.h>
+#include <qtconcurrentcompilertest.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 

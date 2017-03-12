@@ -31,6 +31,9 @@
 #include <qmetaobject.h>
 #include <csregister2.h>
 
+// must be after csregister2.h>
+#include <csmeta.h>
+
 #include <QList>
 #include <QRegExp>
 #include <QPointer>

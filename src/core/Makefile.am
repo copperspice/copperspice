@@ -22,7 +22,7 @@ lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -ldl -lpthread
 endif
 
 if OSTYPE_BSD
-lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv 
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv
 endif
 
 if OSTYPE_WIN
@@ -100,7 +100,9 @@ CORE_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtCore/%,$(CORE_PUBLIC_INCLUDES)) \
 	$(patsubst %,privateinclude/QtCore/private/%,$(CORE_PRIVATE_INCLUDES)) \
 	include/QtCore \
-	privateinclude/QtCore/private
+	privateinclude/QtCore/private \
+	include/qt-acconfig.h
+
 
 BUILT_SOURCES+=.core-header-deps.mk
 
@@ -110,12 +112,12 @@ $(lib_libCsCore@BUILD_ABI@_la_SOURCES): $(CORE_HEADERS_INSTALLED)
 
 .core-header-deps.mk: Makefile
 	@- rm -rf $@
-	echo "include/QtCore:" >> $@; \
+	echo "include/QtCore:" >> $@ ; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	echo "privateinclude/QtCore/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(CORE_PUBLIC_INCLUDES); do \
-		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h | include/QtCore" >> $@; \
+		echo "include/QtCore/$$i: include/QtCore/$$(echo $$i | tr A-Z a-z).h | include/QtCore" >> $@ ; \
 		echo "	\$$(INSTALL) \$$< \$$@" >> $@ ; \
 	done; \
 	for i in $(CORE_DIRS); do \

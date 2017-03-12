@@ -23,11 +23,14 @@
 #ifndef QFUTUREINTERFACE_P_H
 #define QFUTUREINTERFACE_P_H
 
-#include <QtCore/qelapsedtimer.h>
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qrunnable.h>
+#include <qelapsedtimer.h>
+#include <qcoreevent.h>
+#include <qlist.h>
+#include <qwaitcondition.h>
+#include <qrunnable.h>
+#include <qfutureinterface.h>
+#include <qtconcurrentresultstore.h>
+#include <qtconcurrentexception.h>
 
 QT_BEGIN_NAMESPACE
 
