@@ -16,7 +16,7 @@
 CsSignal::SignalBase::~SignalBase()
 {
    try {
-      std::lock_guard<std::mutex> lock(m_mutex_connectList);
+      auto senderListHandle = m_connectList.lock_read();
 
       if (m_activateBusy > 0)  {
          // activate() called a slot which then destroys this sender
@@ -24,16 +24,22 @@ CsSignal::SignalBase::~SignalBase()
          get_beingDestroyed().insert(this);
       }
 
-      for (auto &item : m_connectList) {
-         if (item.type != ConnectionKind::InternalDisconnected) {
-            const SlotBase *receiver = item.receiver;
+      for (auto &item : *senderListHandle) {
+         const SlotBase *receiver = item.receiver;
 
-            if (receiver != nullptr) {
-               std::lock_guard<std::mutex> lock{receiver->m_mutex_possibleSenders};
+         if (receiver != nullptr) {
+            auto receiverListHandle = receiver->m_possibleSenders.lock_write();
 
-               auto &senderList = receiver->m_possibleSenders;
-               senderList.erase(std::remove_if(senderList.begin(), senderList.end(),
-                     [this](const SignalBase *tmp){ return tmp == this; } ), senderList.end() );
+            auto iter = receiverListHandle->begin();
+
+            while (iter != receiverListHandle->end())   {
+
+               if (*iter == this) {
+                  iter = receiverListHandle->erase(iter);
+               } else {
+                  ++iter;
+               }
+
             }
          }
       }
@@ -48,7 +54,7 @@ CsSignal::SignalBase::~SignalBase()
 CsSignal::Internal::BentoAbstract *&CsSignal::SignalBase::get_threadLocal_currentSignal()
 {
 
-#ifdef __APPLE__ 
+#ifdef __APPLE__
    static __thread CsSignal::Internal::BentoAbstract *threadLocal_currentSignal = nullptr;
 #else
    static thread_local CsSignal::Internal::BentoAbstract *threadLocal_currentSignal = nullptr;
@@ -72,7 +78,8 @@ std::unordered_set<const CsSignal::SignalBase *> &CsSignal::SignalBase::get_bein
 }
 
 void CsSignal::SignalBase::addConnection(std::unique_ptr<const Internal::BentoAbstract> signalMethod, const SlotBase *receiver,
-                  std::unique_ptr<const Internal::BentoAbstract> slotMethod, ConnectionKind type) const
+                  std::unique_ptr<const Internal::BentoAbstract> slotMethod, ConnectionKind type,
+                  LibG::SharedList<ConnectStruct>::write_handle senderListHandle) const
 {
    struct ConnectStruct tempStruct;
 
@@ -81,18 +88,13 @@ void CsSignal::SignalBase::addConnection(std::unique_ptr<const Internal::BentoAb
    tempStruct.slotMethod   = std::move(slotMethod);
    tempStruct.type         = type;
 
-   // list is in sender
-   this->m_connectList.push_back(std::move(tempStruct));
+   senderListHandle->push_back(std::move(tempStruct));
 
-   if (m_activateBusy) {
-      // warns activate the connectList has changed
-      this->m_raceCount++;
-   }
+   // broom - should unlock  senderListHandle->unlock()
 
    if (receiver != nullptr)  {
-      // list is in receiver
-      std::unique_lock<std::mutex> receiverLock {receiver->m_mutex_possibleSenders};
-      receiver->m_possibleSenders.push_back(this);
+      auto receiverListHandle = receiver->m_possibleSenders.lock_write();
+      receiverListHandle->push_back(this);
    }
 }
 
@@ -105,14 +107,9 @@ int CsSignal::SignalBase::internal_cntConnections(const SlotBase *receiver,
 {
    int retval = 0;
 
-   std::unique_lock<std::mutex> senderLock {this->m_mutex_connectList};
+   auto senderListHandle = m_connectList.lock_read();
 
-   for (auto &item : this->m_connectList) {
-
-      if (item.type == ConnectionKind::InternalDisconnected) {
-         // connection is marked for deletion
-         continue;
-      }
+   for (auto &item : *senderListHandle) {
 
       if (receiver && item.receiver != receiver) {
          continue;
@@ -133,14 +130,9 @@ std::set<CsSignal::SlotBase *> CsSignal::SignalBase::internal_receiverList(
 {
    std::set<SlotBase *> retval;
 
-   std::unique_lock<std::mutex> senderLock {this->m_mutex_connectList};
+   auto senderListHandle = m_connectList.lock_read();
 
-   for (auto &item : this->m_connectList) {
-
-      if (item.type == ConnectionKind::InternalDisconnected) {
-         // connection is marked for deletion
-         continue;
-      }
+   for (auto &item : *senderListHandle) {
 
       if (*(item.signalMethod) != signalMethod_Bento)  {
          continue;
@@ -151,5 +143,4 @@ std::set<CsSignal::SlotBase *> CsSignal::SignalBase::internal_receiverList(
 
    return retval;
 }
-
 

@@ -7,7 +7,9 @@ CORE_SIGNAL_INCLUDES = \
 	cs_signal.h \
 	cs_slot.h \
 	cs_internal.h  \
-	cs_macro.h
+	cs_macro.h  \
+	rcu_guarded.hpp \
+	rcu_list.hpp
 
 CORE_SIGNAL_PRIVATE_INCLUDES =
 

@@ -16,12 +16,13 @@
 
 #include <atomic>
 #include <memory>
-#include <mutex>
 #include <set>
 #include <thread>
 #include <vector>
 
 #include "cs_macro.h"
+#include "rcu_guarded.hpp"
+#include "rcu_list.hpp"
 
 namespace CsSignal {
 
@@ -80,7 +81,7 @@ class LIB_SIG_EXPORT SlotBase
       // SlotBase(SlotBase &&);
       // operator=(const SlotBase &);
       // operator=(SlotBase &&);
-     
+
       SignalBase *sender() const;
 
    protected:
@@ -88,11 +89,9 @@ class LIB_SIG_EXPORT SlotBase
 
    private:
       static SignalBase *&get_threadLocal_currentSender();
-     
-      // list of possible Senders for this Receiver
-      mutable std::vector<const SignalBase *> m_possibleSenders;
 
-      mutable std::mutex m_mutex_possibleSenders;
+      // list of possible Senders for this Receiver
+      mutable LibG::SharedList<const SignalBase *> m_possibleSenders;
 
       virtual bool compareThreads() const;
       virtual void queueSlot(PendingSlot data, ConnectionKind type);
@@ -103,8 +102,8 @@ class LIB_SIG_EXPORT SlotBase
       friend void activate(Sender &sender, void (SignalClass::*signal)(SignalArgTypes...), Ts &&... Vs);
 
       template<class Sender, class Receiver>
-      friend bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *signalBento, 
-                  const Receiver *receiver, const Internal::BentoAbstract *slotBento); 
+      friend bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *signalBento,
+                  const Receiver *receiver, const Internal::BentoAbstract *slotBento);
 };
 
 
