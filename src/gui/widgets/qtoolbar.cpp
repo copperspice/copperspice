@@ -410,142 +410,6 @@ void QToolBarPrivate::plug(const QRect &r)
    setWindowState(false, false, r);
 }
 
-/******************************************************************************
-** QToolBar
-*/
-
-/*!
-    \class QToolBar
-
-    \brief The QToolBar class provides a movable panel that contains a
-    set of controls.
-
-    \ingroup mainwindow-classes
-
-
-    Toolbar buttons are added by adding \e actions, using addAction()
-    or insertAction(). Groups of buttons can be separated using
-    addSeparator() or insertSeparator(). If a toolbar button is not
-    appropriate, a widget can be inserted instead using addWidget() or
-    insertWidget(); examples of suitable widgets are QSpinBox,
-    QDoubleSpinBox, and QComboBox. When a toolbar button is pressed it
-    emits the actionTriggered() signal.
-
-    A toolbar can be fixed in place in a particular area (e.g. at the
-    top of the window), or it can be movable (isMovable()) between
-    toolbar areas; see allowedAreas() and isAreaAllowed().
-
-    When a toolbar is resized in such a way that it is too small to
-    show all the items it contains, an extension button will appear as
-    the last item in the toolbar. Pressing the extension button will
-    pop up a menu containing the items that does not currently fit in
-    the toolbar.
-
-    When a QToolBar is not a child of a QMainWindow, it loses the ability
-    to populate the extension pop up with widgets added to the toolbar using
-    addWidget(). Please use widget actions created by inheriting QWidgetAction
-    and implementing QWidgetAction::createWidget() instead.
-
-    \sa QToolButton, QMenu, QAction, {Application Example}
-*/
-
-/*!
-    \fn bool QToolBar::isAreaAllowed(Qt::ToolBarArea area) const
-
-    Returns true if this toolbar is dockable in the given \a area;
-    otherwise returns false.
-*/
-
-/*!
-    \fn void QToolBar::addAction(QAction *action)
-    \overload
-
-    Appends the action \a action to the toolbar's list of actions.
-
-    \sa QMenu::addAction(), QWidget::addAction()
-*/
-
-/*!
-    \fn void QToolBar::actionTriggered(QAction *action)
-
-    This signal is emitted when an action in this toolbar is triggered.
-    This happens when the action's tool button is pressed, or when the
-    action is triggered in some other way outside the tool bar. The parameter
-    holds the triggered \a action.
-*/
-
-/*!
-    \fn void QToolBar::allowedAreasChanged(Qt::ToolBarAreas allowedAreas)
-
-    This signal is emitted when the collection of allowed areas for the
-    toolbar is changed. The new areas in which the toolbar can be positioned
-    are specified by \a allowedAreas.
-
-    \sa allowedAreas
-*/
-
-/*!
-    \fn void QToolBar::iconSizeChanged(const QSize &iconSize)
-
-    This signal is emitted when the icon size is changed.  The \a
-    iconSize parameter holds the toolbar's new icon size.
-
-    \sa iconSize QMainWindow::iconSize
-*/
-
-/*!
-    \fn void QToolBar::movableChanged(bool movable)
-
-    This signal is emitted when the toolbar becomes movable or fixed.
-    If the toolbar can be moved, \a movable is true; otherwise it is
-    false.
-
-    \sa movable
-*/
-
-/*!
-    \fn void QToolBar::orientationChanged(Qt::Orientation orientation)
-
-    This signal is emitted when the orientation of the toolbar changes.
-    The new orientation is specified by the \a orientation given.
-
-    \sa orientation
-*/
-
-/*!
-    \fn void QToolBar::toolButtonStyleChanged(Qt::ToolButtonStyle toolButtonStyle)
-
-    This signal is emitted when the tool button style is changed. The
-    \a toolButtonStyle parameter holds the toolbar's new tool button
-    style.
-
-    \sa toolButtonStyle QMainWindow::toolButtonStyle
-*/
-
-/*!
-    \since 4.6
-
-    \fn void QToolBar::topLevelChanged(bool topLevel)
-
-    This signal is emitted when the \l floating property changes.
-    The \a topLevel parameter is true if the toolbar is now floating;
-    otherwise it is false.
-
-    \sa isWindow()
-*/
-
-
-/*!
-    \fn void QToolBar::visibilityChanged(bool visible)
-    \since 4.7
-
-    This signal is emitted when the toolbar becomes \a visible (or
-    invisible). This happens when the widget is hidden or shown.
-*/
-
-/*!
-    Constructs a QToolBar with the given \a parent.
-*/
 QToolBar::QToolBar(QWidget *parent)
    : QWidget(*new QToolBarPrivate, parent, 0)
 {
@@ -553,14 +417,6 @@ QToolBar::QToolBar(QWidget *parent)
    d->init();
 }
 
-/*!
-    Constructs a QToolBar with the given \a parent.
-
-    The given window \a title identifies the toolbar and is shown in
-    the context menu provided by QMainWindow.
-
-    \sa setWindowTitle()
-*/
 QToolBar::QToolBar(const QString &title, QWidget *parent)
    : QWidget(*new QToolBarPrivate, parent, 0)
 {
@@ -569,17 +425,15 @@ QToolBar::QToolBar(const QString &title, QWidget *parent)
    setWindowTitle(title);
 }
 
-
-/*!
-    Destroys the toolbar.
-*/
 QToolBar::~QToolBar()
 {
    // Remove the toolbar button if there is nothing left.
    QMainWindow *mainwindow = qobject_cast<QMainWindow *>(parentWidget());
+
    if (mainwindow) {
 #ifdef Q_OS_MAC
       QMainWindowLayout *mainwin_layout = qt_mainwindow_layout(mainwindow);
+
       if (mainwin_layout && mainwin_layout->layoutState.toolBarAreaLayout.isEmpty()
             && mainwindow->testAttribute(Qt::WA_WState_Created)) {
          macWindowToolbarShow(mainwindow, false);
@@ -588,24 +442,14 @@ QToolBar::~QToolBar()
    }
 }
 
-/*! \property QToolBar::movable
-    \brief whether the user can move the toolbar within the toolbar area,
-    or between toolbar areas
-
-    By default, this property is true.
-
-    This property only makes sense if the toolbar is in a
-    QMainWindow.
-
-    \sa allowedAreas
-*/
-
 void QToolBar::setMovable(bool movable)
 {
    Q_D(QToolBar);
+
    if (!movable == !d->movable) {
       return;
    }
+
    d->movable = movable;
    d->layout->invalidate();
    emit movableChanged(d->movable);
@@ -617,12 +461,6 @@ bool QToolBar::isMovable() const
    return d->movable;
 }
 
-/*!
-    \property QToolBar::floatable
-    \brief whether the toolbar can be dragged and dropped as an independent window.
-
-    The default is true.
-*/
 bool QToolBar::isFloatable() const
 {
    Q_D(const QToolBar);
@@ -635,30 +473,10 @@ void QToolBar::setFloatable(bool floatable)
    d->floatable = floatable;
 }
 
-/*!
-    \property QToolBar::floating
-    \brief whether the toolbar is an independent window.
-
-    By default, this property is true.
-
-    \sa QWidget::isWindow()
-*/
 bool QToolBar::isFloating() const
 {
    return isWindow();
 }
-
-/*!
-    \property QToolBar::allowedAreas
-    \brief areas where the toolbar may be placed
-
-    The default is Qt::AllToolBarAreas.
-
-    This property only makes sense if the toolbar is in a
-    QMainWindow.
-
-    \sa movable
-*/
 
 void QToolBar::setAllowedAreas(Qt::ToolBarAreas areas)
 {
@@ -674,6 +492,7 @@ void QToolBar::setAllowedAreas(Qt::ToolBarAreas areas)
 Qt::ToolBarAreas QToolBar::allowedAreas() const
 {
    Q_D(const QToolBar);
+
 #ifdef Q_OS_MAC
    if (QMainWindow *window = qobject_cast<QMainWindow *>(parentWidget())) {
       if (window->unifiedTitleAndToolBarOnMac()) { // Don't allow drags to the top (for now).
@@ -681,19 +500,9 @@ Qt::ToolBarAreas QToolBar::allowedAreas() const
       }
    }
 #endif
+
    return d->allowedAreas;
 }
-
-/*! \property QToolBar::orientation
-    \brief orientation of the toolbar
-
-    The default is Qt::Horizontal.
-
-    This function should not be used when the toolbar is managed
-    by QMainWindow. You can use QMainWindow::addToolBar() or
-    QMainWindow::insertToolBar() if you wish to move a toolbar (that
-    is already added to a main window) to another Qt::ToolBarArea.
-*/
 
 void QToolBar::setOrientation(Qt::Orientation orientation)
 {
@@ -721,16 +530,6 @@ Qt::Orientation QToolBar::orientation() const
    Q_D(const QToolBar);
    return d->orientation;
 }
-
-/*!
-    \property QToolBar::iconSize
-    \brief size of icons in the toolbar.
-
-    The default size is determined by the application's style and is
-    derived from the QStyle::PM_ToolBarIconSize pixel metric. It is
-    the maximum size an icon can have. Icons of smaller size will not
-    be scaled up.
-*/
 
 QSize QToolBar::iconSize() const
 {
@@ -770,17 +569,6 @@ void QToolBar::setIconSize(const QSize &iconSize)
    d->layout->invalidate();
 }
 
-/*!
-    \property QToolBar::toolButtonStyle
-    \brief the style of toolbar buttons
-
-    This property defines the style of all tool buttons that are added
-    as \l{QAction}s. Note that if you add a QToolButton with the
-    addWidget() method, it will not get this button style.
-
-    The default is Qt::ToolButtonIconOnly.
-*/
-
 Qt::ToolButtonStyle QToolBar::toolButtonStyle() const
 {
    Q_D(const QToolBar);
@@ -791,33 +579,25 @@ void QToolBar::setToolButtonStyle(Qt::ToolButtonStyle toolButtonStyle)
 {
    Q_D(QToolBar);
    d->explicitToolButtonStyle = true;
+
    if (d->toolButtonStyle == toolButtonStyle) {
       return;
    }
+
    d->toolButtonStyle = toolButtonStyle;
    setMinimumSize(0, 0);
    emit toolButtonStyleChanged(d->toolButtonStyle);
 }
 
-/*!
-    Removes all actions from the toolbar.
-
-    \sa removeAction()
-*/
 void QToolBar::clear()
 {
    QList<QAction *> actions = this->actions();
+
    for (int i = 0; i < actions.size(); i++) {
       removeAction(actions.at(i));
    }
 }
 
-/*!
-    \overload
-
-    Creates a new action with the given \a text. This action is added to
-    the end of the toolbar.
-*/
 QAction *QToolBar::addAction(const QString &text)
 {
    QAction *action = new QAction(text, this);
@@ -825,12 +605,6 @@ QAction *QToolBar::addAction(const QString &text)
    return action;
 }
 
-/*!
-    \overload
-
-    Creates a new action with the given \a icon and \a text. This
-    action is added to the end of the toolbar.
-*/
 QAction *QToolBar::addAction(const QIcon &icon, const QString &text)
 {
    QAction *action = new QAction(icon, text, this);
@@ -838,16 +612,7 @@ QAction *QToolBar::addAction(const QIcon &icon, const QString &text)
    return action;
 }
 
-/*!
-    \overload
-
-    Creates a new action with the given \a text. This action is added to
-    the end of the toolbar. The action's \link QAction::triggered()
-    triggered()\endlink signal is connected to \a member in \a
-    receiver.
-*/
-QAction *QToolBar::addAction(const QString &text,
-                             const QObject *receiver, const char *member)
+QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const char *member)
 {
    QAction *action = new QAction(text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
@@ -855,14 +620,6 @@ QAction *QToolBar::addAction(const QString &text,
    return action;
 }
 
-/*!
-    \overload
-
-    Creates a new action with the icon \a icon and text \a text. This
-    action is added to the end of the toolbar. The action's \link
-    QAction::triggered() triggered()\endlink signal is connected to \a
-    member in \a receiver.
-*/
 QAction *QToolBar::addAction(const QIcon &icon, const QString &text,
                              const QObject *receiver, const char *member)
 {
@@ -872,11 +629,6 @@ QAction *QToolBar::addAction(const QIcon &icon, const QString &text,
    return action;
 }
 
-/*!
-     Adds a separator to the end of the toolbar.
-
-     \sa insertSeparator()
-*/
 QAction *QToolBar::addSeparator()
 {
    QAction *action = new QAction(this);
@@ -885,12 +637,6 @@ QAction *QToolBar::addSeparator()
    return action;
 }
 
-/*!
-    Inserts a separator into the toolbar in front of the toolbar
-    item associated with the \a before action.
-
-    \sa addSeparator()
-*/
 QAction *QToolBar::insertSeparator(QAction *before)
 {
    QAction *action = new QAction(this);
@@ -899,21 +645,6 @@ QAction *QToolBar::insertSeparator(QAction *before)
    return action;
 }
 
-/*!
-    Adds the given \a widget to the toolbar as the toolbar's last
-    item.
-
-    The toolbar takes ownership of \a widget.
-
-    If you add a QToolButton with this method, the tools bar's
-    Qt::ToolButtonStyle will not be respected.
-
-    \note You should use QAction::setVisible() to change the
-    visibility of the widget. Using QWidget::setVisible(),
-    QWidget::show() and QWidget::hide() does not work.
-
-    \sa insertWidget()
-*/
 QAction *QToolBar::addWidget(QWidget *widget)
 {
    QWidgetAction *action = new QWidgetAction(this);
@@ -923,16 +654,6 @@ QAction *QToolBar::addWidget(QWidget *widget)
    return action;
 }
 
-/*!
-    Inserts the given \a widget in front of the toolbar item
-    associated with the \a before action.
-
-    Note: You should use QAction::setVisible() to change the
-    visibility of the widget. Using QWidget::setVisible(),
-    QWidget::show() and QWidget::hide() does not work.
-
-    \sa addWidget()
-*/
 QAction *QToolBar::insertWidget(QAction *before, QWidget *widget)
 {
    QWidgetAction *action = new QWidgetAction(this);
@@ -942,12 +663,6 @@ QAction *QToolBar::insertWidget(QAction *before, QWidget *widget)
    return action;
 }
 
-/*!
-    \internal
-
-    Returns the geometry of the toolbar item associated with the given
-    \a action, or an invalid QRect if no matching item is found.
-*/
 QRect QToolBar::actionGeometry(QAction *action) const
 {
    Q_D(const QToolBar);
@@ -959,12 +674,6 @@ QRect QToolBar::actionGeometry(QAction *action) const
    return d->layout->itemAt(index)->widget()->geometry();
 }
 
-/*!
-    Returns the action at point \a p. This function returns zero if no
-    action was found.
-
-    \sa QWidget::childAt()
-*/
 QAction *QToolBar::actionAt(const QPoint &p) const
 {
    Q_D(const QToolBar);
@@ -977,13 +686,6 @@ QAction *QToolBar::actionAt(const QPoint &p) const
    return static_cast<QToolBarItem *>(item)->action;
 }
 
-/*! \fn QAction *QToolBar::actionAt(int x, int y) const
-    \overload
-
-    Returns the action at the point \a x, \a y. This function returns
-    zero if no action was found.
-*/
-
 /*! \reimp */
 void QToolBar::actionEvent(QActionEvent *event)
 {
@@ -994,7 +696,7 @@ void QToolBar::actionEvent(QActionEvent *event)
    switch (event->type()) {
       case QEvent::ActionAdded: {
          Q_ASSERT_X(widgetAction == 0 || d->layout->indexOf(widgetAction) == -1,
-                    "QToolBar", "widgets cannot be inserted multiple times");
+                    "QToolBar", "Widgets can not be inserted multiple times");
 
          // reparent the action to this toolbar if it has been created
          // using the addAction(text) etc. convenience functions, to
@@ -1108,6 +810,7 @@ static bool waitForPopup(QToolBar *tb, QWidget *popup)
 
    QAction *action = menu->menuAction();
    QList<QWidget *> widgets = action->associatedWidgets();
+
    for (int i = 0; i < widgets.count(); ++i) {
       if (waitForPopup(tb, widgets.at(i))) {
          return true;
@@ -1285,13 +988,16 @@ void QToolBar::initStyleOption(QStyleOptionToolBar *option) const
    }
 
    option->initFrom(this);
+
    if (orientation() == Qt::Horizontal) {
       option->state |= QStyle::State_Horizontal;
    }
+
    option->lineWidth = style()->pixelMetric(QStyle::PM_ToolBarFrameWidth, 0, this);
    option->features = d->layout->movable()
                       ? QStyleOptionToolBar::Movable
                       : QStyleOptionToolBar::None;
+
    // if the tool bar is not in a QMainWindow, this will make the painting right
    option->toolBarArea = Qt::NoToolBarArea;
 

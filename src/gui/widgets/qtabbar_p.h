@@ -44,9 +44,9 @@ class QTabBarPrivate  : public QWidgetPrivate
 
  public:
    QTabBarPrivate()
-                  : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false), 
-                  drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false), 
-                  expanding(true), closeButtonOnTabs(false), selectionBehaviorOnRemove(QTabBar::SelectRightTab), 
+                  : currentIndex(-1), pressedIndex(-1), shape(QTabBar::RoundedNorth), layoutDirty(false),
+                  drawBase(true), scrollOffset(0), elideModeSetByUser(false), useScrollButtonsSetByUser(false),
+                  expanding(true), closeButtonOnTabs(false), selectionBehaviorOnRemove(QTabBar::SelectRightTab),
                   paintWithOffsets(true), movable(false), dragInProgress(false), documentMode(false), movingTab(0)
 
 #ifdef Q_OS_MAC
@@ -61,19 +61,14 @@ class QTabBarPrivate  : public QWidgetPrivate
    bool drawBase;
    int scrollOffset;
 
-   struct Tab {
-      inline Tab(const QIcon &ico, const QString &txt)
-                  : enabled(true) , shortcutId(0), text(txt), icon(ico), leftWidget(0), rightWidget(0), 
-                  lastTab(-1), dragOffset(0)
+   struct Tab : public QEnableSharedFromThis<Tab> {
+      Tab(const QIcon &ico, const QString &txt)
+          : enabled(true) , shortcutId(0), text(txt), icon(ico), leftWidget(0), rightWidget(0), lastTab(-1), dragOffset(0)
 
 #ifndef QT_NO_ANIMATION
            , animation(0)
 #endif
       {}
-
-      bool operator==(const Tab &other) const {
-         return &other == this;
-      }
 
       bool enabled;
       int shortcutId;
@@ -86,6 +81,7 @@ class QTabBarPrivate  : public QWidgetPrivate
 #ifndef QT_NO_WHATSTHIS
       QString whatsThis;
 #endif
+
       QIcon icon;
       QRect rect;
       QRect minRect;
@@ -99,35 +95,36 @@ class QTabBarPrivate  : public QWidgetPrivate
       int dragOffset;
 
 #ifndef QT_NO_ANIMATION
+
       ~Tab() {
          delete animation;
       }
 
       struct TabBarAnimation : public QVariantAnimation {
-         TabBarAnimation(Tab *t, QTabBarPrivate *_priv) : tab(t), priv(_priv) {
+         TabBarAnimation(QSharedPointer<Tab> t, QTabBarPrivate *_priv) : tab(t), priv(_priv) {
             setEasingCurve(QEasingCurve::InOutQuad);
          }
 
          void updateCurrentValue(const QVariant &current) override {
-            priv->moveTab(priv->tabList.indexOf(*tab), current.toInt());
+            priv->moveTab(priv->tabList.indexOf(tab), current.toInt());
          }
 
          void updateState(State, State newState) override {
             if (newState == Stopped) {
-               priv->moveTabFinished(priv->tabList.indexOf(*tab));
+               priv->moveTabFinished(priv->tabList.indexOf(tab));
             }
          }
 
        private:
-         //these are needed for the callbacks
-         Tab *tab;
+         // these are needed for the callbacks
+         QSharedPointer<Tab> tab;
          QTabBarPrivate *priv;
 
       } *animation;
 
       void startAnimation(QTabBarPrivate *priv, int duration) {
-         if (!animation) {
-            animation = new TabBarAnimation(this, priv);
+         if (! animation) {
+            animation = new TabBarAnimation(sharedFromThis(), priv);
          }
 
          animation->setStartValue(dragOffset);
@@ -138,25 +135,26 @@ class QTabBarPrivate  : public QWidgetPrivate
 #else
       void startAnimation(QTabBarPrivate *priv, int duration) {
          Q_UNUSED(duration);
-         priv->moveTabFinished(priv->tabList.indexOf(*this));
+         priv->moveTabFinished(priv->tabList.indexOf(sharedFromThis()));
       }
 
 #endif //QT_NO_ANIMATION
+
    }; //struct Tab
 
-   QList<Tab> tabList;
+   QList<QSharedPointer<Tab>> tabList;
 
    int calculateNewPosition(int from, int to, int index) const;
    void slide(int from, int to);
    void init();
    int extraWidth() const;
 
-   Tab *at(int index);
-   const Tab *at(int index) const;
+   QSharedPointer<Tab> at(int index);
+   QSharedPointer<const Tab> at(int index) const;
 
    int indexAtPos(const QPoint &p) const;
 
-   inline bool validIndex(int index) const {
+   bool validIndex(int index) const {
       return index >= 0 && index < tabList.count();
    }
 
@@ -164,8 +162,8 @@ class QTabBarPrivate  : public QWidgetPrivate
 
    QSize minimumTabSizeHint(int index);
 
-   QToolButton *rightB; // right or bottom
-   QToolButton *leftB;  // left or top
+   QToolButton *rightB;    // right or bottom
+   QToolButton *leftB;     // left or top
 
    void _q_scrollTabs();
    void _q_closeTab();
@@ -207,32 +205,39 @@ class QTabBarPrivate  : public QWidgetPrivate
    static void initStyleBaseOption(QStyleOptionTabBarBaseV2 *optTabBase, QTabBar *tabbar, QSize size) {
       QStyleOptionTab tabOverlap;
       tabOverlap.shape = tabbar->shape();
+
       int overlap = tabbar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, tabbar);
       QWidget *theParent = tabbar->parentWidget();
+
       optTabBase->init(tabbar);
       optTabBase->shape = tabbar->shape();
       optTabBase->documentMode = tabbar->documentMode();
 
       if (theParent && overlap > 0) {
          QRect rect;
+
          switch (tabOverlap.shape) {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
                rect.setRect(0, size.height() - overlap, size.width(), overlap);
                break;
+
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
                rect.setRect(0, 0, size.width(), overlap);
                break;
+
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
                rect.setRect(0, 0, overlap, size.height());
                break;
+
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
                rect.setRect(size.width() - overlap, 0, overlap, size.height());
                break;
          }
+
          optTabBase->rect = rect;
       }
    }
@@ -248,7 +253,7 @@ class CloseButton : public QAbstractButton
 
    QSize sizeHint() const override;
 
-   inline QSize minimumSizeHint() const override {
+   QSize minimumSizeHint() const override {
       return sizeHint();
    }
 
