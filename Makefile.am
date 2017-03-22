@@ -242,7 +242,8 @@ clean-cs:
 
 install-data-hook: webkit-headers
 	mkdir -p $(DESTDIR)$(includedir)
-	cp -r include/Qt* include/phonon $(DESTDIR)$(includedir)
+	cp -r include/Qt* include/qt-acconfig.h include/phonon $(DESTDIR)$(includedir)
+
 
 uninstall-hook:
 	for i in `cd include; find Qt* -type f`; do \

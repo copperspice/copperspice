@@ -100,8 +100,8 @@ CORE_HEADERS_INSTALLED= \
 	$(patsubst %,include/QtCore/%,$(CORE_PUBLIC_INCLUDES)) \
 	$(patsubst %,privateinclude/QtCore/private/%,$(CORE_PRIVATE_INCLUDES)) \
 	include/QtCore \
-	privateinclude/QtCore/private \
-	include/qt-acconfig.h
+	include/qt-acconfig.h \
+	privateinclude/QtCore/private
 
 
 BUILT_SOURCES+=.core-header-deps.mk

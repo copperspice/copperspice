@@ -139,4 +139,4 @@ install(
 )
 
 # one file
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt-acconfig.h   DESTINATION .)
+install(FILES ${CMAKE_BINARY_DIR}/include/qt-acconfig.h   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
