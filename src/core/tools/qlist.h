@@ -490,7 +490,7 @@ inline void QList<T>::move(size_type from, size_type to)
 
    } else {
       // reverse
-      std::rotate(m_data.rend() - from - 1, m_data.rend() - from, m_data.rend() - to - 1);
+      std::rotate(m_data.rend() - from - 1, m_data.rend() - from, m_data.rend() - to);
 
    }  
 }
