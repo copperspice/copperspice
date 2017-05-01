@@ -19,7 +19,7 @@
 #ifdef BUILDING_LIB_CS_SIGNAL
 # define LIB_SIG_EXPORT     __declspec(dllexport)
 #else
-# define LIB_SIG_EXPORT     __declspec(dllimport) 
+# define LIB_SIG_EXPORT     __declspec(dllimport)
 #endif
 
 #else

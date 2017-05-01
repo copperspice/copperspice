@@ -18,7 +18,15 @@
 
 namespace libguarded
 {
+/**
+   \headerfile rcu_guarded.hpp <libguarded/rcu_guarded.hpp>
 
+   This templated class implements a mechanism which controls access
+   to an RCU data structure. The only way to access the underlying
+   data structure is to use either the lock_read or lock_write methods
+   to receive a read-only or writable handle to the data structure,
+   respectively.
+*/
 template <typename T>
 class rcu_guarded
 {
@@ -41,9 +49,7 @@ class rcu_guarded
         using pointer      = T *;
         using element_type = T;
 
-        write_handle(T * ptr) : m_ptr(ptr), m_accessed(false)
-        {
-        }
+        write_handle(T *ptr);
 
         ~write_handle()
         {
@@ -84,7 +90,8 @@ class rcu_guarded
         using pointer      = const T *;
         using element_type = const T;
 
-        read_handle(const T * ptr) : m_ptr(ptr), m_accessed(false)
+        read_handle(const T * ptr)
+            : m_ptr(ptr), m_accessed(false)
         {
         }
 
@@ -142,6 +149,12 @@ template <typename T>
 auto rcu_guarded<T>::lock_read() const -> read_handle
 {
     return read_handle(&m_obj);
+}
+
+template <typename T>
+rcu_guarded<T>::write_handle::write_handle(T *ptr)
+    : m_ptr(ptr), m_accessed(false)
+{
 }
 }
 

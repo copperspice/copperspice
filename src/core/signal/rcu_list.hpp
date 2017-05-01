@@ -18,8 +18,30 @@
 #include <memory>
 #include <mutex>
 
+#include "rcu_guarded.hpp"
+
 namespace libguarded
 {
+
+/**
+   \headerfile rcu_list.hpp <libguarded/rcu_list.hpp>
+
+   This templated class implements a linked list which is maintained
+   using the RCU algorithm. Only one thread at a time may modify the
+   linked list, but any number of threads may read
+   simultaneously. Ongoing writes will not block readers. As a reader
+   traverses the list while mutating operations are ongoing, the
+   reader may see the old state or the new state.
+
+   Since the RCU algorithm does not reap nodes until all readers who
+   could have seen the node have completed, iterators are never
+   invalidated by any list operation.
+
+   This class will use std::mutex for the internal locking mechanism
+   by default. Other classes which are useful for the mutex type are
+   std::recursive_mutex, std::timed_mutex, and
+   std::recursive_timed_mutex.
+*/
 template <typename T, typename M = std::mutex, typename Alloc = std::allocator<T>>
 class rcu_list
 {
@@ -31,7 +53,7 @@ class rcu_list
     using const_reference = const value_type &;
     using pointer         = typename std::allocator_traits<Alloc>::pointer;
     using const_pointer   = typename std::allocator_traits<Alloc>::const_pointer;
-   
+
     class iterator;
     class const_iterator;
     class reverse_iterator;
@@ -173,7 +195,7 @@ void rcu_list<T, M, Alloc>::rcu_guard::rcu_read_lock(const rcu_list<T, M, Alloc>
 }
 
 template <typename T, typename M, typename Alloc>
-void rcu_list<T, M, Alloc>::rcu_guard::rcu_read_unlock(const rcu_list<T, M, Alloc> &list)
+void rcu_list<T, M, Alloc>::rcu_guard::rcu_read_unlock(const rcu_list<T, M, Alloc> &)
 {
     unlock();
 };
@@ -184,17 +206,28 @@ void rcu_list<T, M, Alloc>::rcu_guard::unlock()
     zombie_list_node *n = m_list->m_zombie_head.load();
     n                   = m_zombie->next.load();
 
+    bool last = true;
+
     while (n) {
         if (n->owner.load() != nullptr) {
+            last = false;
             break;
         }
 
-        node *deadNode = n->zombie_node;
-        delete deadNode;
+        n = n->next.load();
+    }
 
-        zombie_list_node *oldnode = n;
-        n                         = n->next.load();
-        delete oldnode;
+    n = m_zombie->next.load();
+
+    if (last) {
+        while (n) {
+            node *deadNode = n->zombie_node;
+            delete deadNode;
+
+            zombie_list_node *oldnode = n;
+            n                         = n->next.load();
+            delete oldnode;
+        }
     }
 
     m_zombie->next.store(n);

@@ -109,7 +109,7 @@ void cs_testConnect_SignalSlotArgs_2()
                   "Incompatible signal/slot arguments");
 }
 
-// available in C++14 
+// available in C++14
 template <class T, class... Args>
 std::unique_ptr<T> make_unique(Args &&... args) {
    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
@@ -173,7 +173,7 @@ class Index_Sequence_For
 template<typename ...FunctionArgTypes, typename FunctionReturn, typename ...TupleTypes, size_t ...Ks>
 FunctionReturn cs_unpack_function_args_internal(FunctionReturn (*functionPtr)(FunctionArgTypes...),
       const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{   
+{
    return functionPtr(std::get<Ks>(data)...);
 }
 
@@ -200,7 +200,7 @@ CSVoidReturn cs_unpack_function_args(void (*functionPtr)(FunctionArgTypes...), c
 template<typename MethodClass, class MethodReturn, typename ...MethodArgTypes, typename ...TupleTypes, size_t ...Ks>
 MethodReturn cs_unpack_method_args_internal(MethodClass *obj, MethodReturn (MethodClass::*methodPtr)(MethodArgTypes...),
                   const std::tuple<TupleTypes...> &data, Index_Sequence<Ks...>)
-{  
+{
    return (obj->*methodPtr)(std::get<Ks>(data)...);
 }
 
@@ -277,7 +277,7 @@ template <class T1, class T2, class ...Ts>
 class strip<std::tuple<T1, T2, Ts...>>
 {
    public:
-      using type = typename prePend<T1, typename strip<std::tuple<T2, Ts...> >::type>::type;      
+      using type = typename prePend<T1, typename strip<std::tuple<T2, Ts...> >::type>::type;
 };
 
 
@@ -304,7 +304,7 @@ template <class ...Ts>
 class removeLastType
 {
    public:
-      using type = typename strip< std::tuple<Ts...> >::type;     
+      using type = typename strip< std::tuple<Ts...> >::type;
 };
 
 
@@ -329,7 +329,7 @@ typename removeLastType<Ts...>::type funcRemoveData(std::tuple<Ts...> tupleValue
 class TeaCupAbstract
 {
    public:
-      virtual ~TeaCupAbstract() {}      
+      virtual ~TeaCupAbstract() {}
 };
 
 // 1
@@ -339,9 +339,9 @@ class TeaCup : public TeaCup< typename removeLastType<Ts...>::type>
    public:
       template<class T>
       explicit TeaCup(T lambda);
-      
+
       std::tuple<Ts...> getData() const;
-   
+
    private:
       std::function<std::tuple<Ts...> ()> m_lambda;
 };
@@ -349,8 +349,8 @@ class TeaCup : public TeaCup< typename removeLastType<Ts...>::type>
 template<class ...Ts>
 template<class T>
 TeaCup<Ts...>::TeaCup(T lambda)
-   : TeaCup< typename removeLastType<Ts...>::type >( [this]() { return funcRemoveData(m_lambda()); } ), 
-     m_lambda(std::move(lambda)) 
+   : TeaCup< typename removeLastType<Ts...>::type >( [this]() { return funcRemoveData(m_lambda()); } ),
+     m_lambda(std::move(lambda))
 {
 }
 
@@ -393,7 +393,7 @@ class TeaCup< std::tuple<Ts...> >: public TeaCup<Ts...>
 
 template<class ...Ts>
 template<class T>
-TeaCup<std::tuple<Ts...>>::TeaCup(T lambda) 
+TeaCup<std::tuple<Ts...>>::TeaCup(T lambda)
    : TeaCup<Ts...>(std::move(lambda))
 {
 }
@@ -421,8 +421,8 @@ class TeaCup_Data: public TeaCup<Ts...>
 {
    public:
       TeaCup_Data(bool needs_copying, Ts...);
-      std::tuple<Ts...> getData() const;     
-   
+      std::tuple<Ts...> getData() const;
+
    private:
       std::shared_ptr< std::tuple<typename std::remove_reference<Ts>::type...> > m_copyOfData;
       std::tuple<Ts...> m_data;
@@ -449,12 +449,12 @@ class BentoAbstract
 {
    public:
       virtual ~BentoAbstract() {}
-   
+
       virtual bool operator ==(const BentoAbstract &right) const = 0;
       bool operator !=(const BentoAbstract &right) const;
 
-      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const = 0; 
-      virtual std::unique_ptr<BentoAbstract> clone() const = 0;  
+      virtual void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const = 0;
+      virtual std::unique_ptr<BentoAbstract> clone() const = 0;
 };
 
 inline bool BentoAbstract::operator !=(const BentoAbstract &right) const
@@ -472,7 +472,7 @@ class Bento : public virtual BentoAbstract
 
       void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
       std::unique_ptr<BentoAbstract> clone() const override;
-                
+
       template<class MethodReturn, class ...MethodArgs>
       void invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::*methodPtr)(MethodArgs...) const) const;
 
@@ -490,9 +490,9 @@ class Bento<FunctionReturn (*)(FunctionArgs...)> : public virtual BentoAbstract
 
       bool operator ==(const BentoAbstract &right) const override;
 
-      std::unique_ptr<BentoAbstract> clone() const override;      
+      std::unique_ptr<BentoAbstract> clone() const override;
       void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
- 
+
       FunctionReturn (*m_methodPtr)(FunctionArgs...);
 };
 
@@ -505,14 +505,14 @@ class Bento<MethodReturn(MethodClass::*)(MethodArgs...)>: public virtual BentoAb
       bool operator ==(const BentoAbstract &right) const override ;
       void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
       std::unique_ptr<BentoAbstract> clone() const override;
-          
+
       MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...);
 };
 
 // specialization, const method pointer
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 class Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public virtual BentoAbstract
-{ 
+{
    public:
       Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
 
@@ -520,7 +520,7 @@ class Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public virtual B
 
       void invoke(SlotBase *receiver, const TeaCupAbstract *dataPack) const override;
       std::unique_ptr<BentoAbstract> clone() const override;
-            
+
       MethodReturn(MethodClass::*m_methodPtr)(MethodArgs...) const;
 };
 
@@ -535,7 +535,7 @@ Bento<T>::Bento(T lambda)
 template<class T>
 std::unique_ptr<BentoAbstract> Bento<T>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<T>>(*this);   
+   return CsSignal::Internal::make_unique<Bento<T>>(*this);
 }
 
 template<class T>
@@ -586,7 +586,7 @@ void Bento<T>::invoke_internal(const TeaCupAbstract *dataPack, MethodReturn (T::
    if (teaCup) {
       // expand arguments
       std::tuple<MethodArgs...> &&args = teaCup->getData();
-     
+
       auto object = const_cast<typename std::remove_const<T>::type *>(&m_lambda);
 
       // unpack the tuple, then call the methodPtr
@@ -604,7 +604,7 @@ Bento<FunctionReturn (*)(FunctionArgs...)>::Bento(FunctionReturn (*ptr)(Function
 template<class FunctionReturn, class ...FunctionArgs>
 std::unique_ptr<BentoAbstract> Bento<FunctionReturn (*)(FunctionArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<FunctionReturn (*)(FunctionArgs...)>>(*this);  
+   return CsSignal::Internal::make_unique<Bento<FunctionReturn (*)(FunctionArgs...)>>(*this);
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
@@ -634,16 +634,16 @@ void Bento<FunctionReturn (*)(FunctionArgs...)>::invoke(SlotBase *, const TeaCup
    if (teaCup) {
       // expand arguments
       std::tuple<FunctionArgs...> &&args = teaCup->getData();
-   
+
       // unpack the tuple, then call the methodPtr
-      cs_unpack_function_args(m_methodPtr, args);      
+      cs_unpack_function_args(m_methodPtr, args);
    }
 }
 
 
 // (3) specialization, method pointer
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...)) 
+Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::Bento(MethodReturn(MethodClass::*ptr)(MethodArgs...))
    : m_methodPtr(ptr)
 {
 }
@@ -651,7 +651,7 @@ Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::Bento(MethodReturn(MethodCla
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<BentoAbstract> Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this); 
+   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
@@ -685,7 +685,7 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke(SlotBase *receiv
 
       if (teaCup) {
          // expand arguments
-         std::tuple<MethodArgs...> &&args = teaCup->getData();       
+         std::tuple<MethodArgs...> &&args = teaCup->getData();
 
          // unpacks the tuple, then calls the methodPtr
          cs_unpack_method_args(t_receiver, m_methodPtr, args);
@@ -704,7 +704,7 @@ Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::Bento(MethodReturn(Met
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<BentoAbstract> Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::clone() const
 {
-   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this); 
+   return CsSignal::Internal::make_unique<Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
@@ -739,10 +739,10 @@ void Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke(SlotBase *
 
       if (teaCup) {
          // expand arguments
-         std::tuple<MethodArgs...> &&args = teaCup->getData();      
+         std::tuple<MethodArgs...> &&args = teaCup->getData();
 
          // unpacks the tuple, then calls the methodPtr
-         cs_unpack_method_args(t_receiver, m_methodPtr, args);        
+         cs_unpack_method_args(t_receiver, m_methodPtr, args);
       }
    }
 }
