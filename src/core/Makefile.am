@@ -74,6 +74,7 @@ include src/core/kernel/Makefile.am
 include src/core/plugin/Makefile.am
 include src/core/signal/Makefile.am
 include src/core/statemachine/Makefile.am
+include src/core/string/Makefile.am
 include src/core/thread/Makefile.am
 include src/core/tools/Makefile.am
 include src/core/xml/Makefile.am
@@ -90,6 +91,7 @@ EXTRA_DIST+= \
 	src/core/plugin/plugin.cmake \
 	src/core/signal/signal.cmake \
 	src/core/statemachine/statemachine.cmake \
+	src/core/string/string.cmake \
 	src/core/thread/thread.cmake \
 	src/core/tools/tools.cmake \
 	src/core/xml/xml.cmake
