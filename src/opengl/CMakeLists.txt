@@ -140,6 +140,7 @@ endif()
 
 # TODO: if ${OPENGL_LIBRARIES} is sufficient for all platforms drop
 # hardcoded additions to ${EXTRA_OPENGL_LIBS} and ${EXTRA_OPENGL_LDFLAGS}
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
@@ -158,7 +159,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         -DQT_NO_STYLE_WINDOWSVISTA
         -DQT_MAKEDLL
         -DQT_BUILD_OPENGL_LIB)
-# FIXME: check for COCOA instead?
+
+# TODO: check for COCOA instead?
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(OPENGL_SOURCES
         ${OPENGL_SOURCES}
@@ -178,6 +180,12 @@ function_variable_fixup("${EXTRA_OPENGL_LDFLAGS}" EXTRA_OPENGL_LDFLAGS)
 
 add_library(CsOpenGL${BUILD_ABI} SHARED ${OPENGL_SOURCES} ${OPENGL_INCLUDES})
 target_link_libraries(CsOpenGL${BUILD_ABI} ${EXTRA_OPENGL_LIBS})
+
+target_include_directories(CsOpenGL${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtOpenGL>
+)
+
 set_target_properties(CsOpenGL${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

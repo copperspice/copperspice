@@ -60,6 +60,12 @@ function_variable_fixup("${EXTRA_XMLPATTERNS_LDFLAGS}" EXTRA_XMLPATTERNS_LDFLAGS
 
 add_library(CsXmlPatterns${BUILD_ABI} SHARED ${XMLPATTERNS_SOURCES} ${XMLPATTERNS_INCLUDES})
 target_link_libraries(CsXmlPatterns${BUILD_ABI} ${EXTRA_XMLPATTERNS_LIBS})
+
+target_include_directories(CsXmlPatterns${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtXmlPatterns>
+)
+
 set_target_properties(CsXmlPatterns${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

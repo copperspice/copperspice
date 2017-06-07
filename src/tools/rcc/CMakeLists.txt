@@ -40,6 +40,7 @@ function_variable_fixup("${EXTRA_RCC_LDFLAGS}" EXTRA_RCC_LDFLAGS)
 
 add_executable(rcc${TOOLS_SUFFIX} ${RCC_SOURCES} ${RCC_INCLUDES})
 target_link_libraries(rcc${TOOLS_SUFFIX} ${EXTRA_RCC_LIBS})
+
 set_target_properties(rcc${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_RCC_CXXFLAGS}
     LINK_FLAGS ${EXTRA_RCC_LDFLAGS}
@@ -51,3 +52,5 @@ install(
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+add_executable(CopperSpice::rcc ALIAS rcc${TOOLS_SUFFIX})

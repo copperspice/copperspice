@@ -3,11 +3,10 @@
 # Copyright (C) 2012-2017 Ansel Sermersheim
 # All rights reserved.
 #
-
 # Usage:  cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/archlinux-mingw.cmake
 
-
 set(CMAKE_SYSTEM_NAME Windows)
+
 if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "(x86_64|amd64)")
     set(mingwtriplet "x86_64-w64-mingw32")
 else()
@@ -19,7 +18,7 @@ set(CMAKE_C_COMPILER ${mingwtriplet}-gcc)
 set(CMAKE_CXX_COMPILER ${mingwtriplet}-g++)
 set(CMAKE_RC_COMPILER ${mingwtriplet}-windres)
 
-# here is the target environment located
+# target environment located
 set(CMAKE_FIND_ROOT_PATH /usr/${mingwtriplet})
 
 # adjust the default behaviour of the FIND_XXX() commands:

@@ -35,6 +35,7 @@ function_variable_fixup("${EXTRA_LCONVERT_LDFLAGS}" EXTRA_LCONVERT_LDFLAGS)
 
 add_executable(lconvert${TOOLS_SUFFIX} ${LCONVERT_SOURCES} $<TARGET_OBJECTS:sharedtools>)
 target_link_libraries(lconvert${TOOLS_SUFFIX} ${EXTRA_LCONVERT_LIBS})
+
 set_target_properties(lconvert${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LCONVERT_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
@@ -46,3 +47,5 @@ install(
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+add_executable(CopperSpice::lconvert ALIAS lconvert${TOOLS_SUFFIX})

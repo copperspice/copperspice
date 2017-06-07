@@ -551,6 +551,12 @@ function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}" EXTRA_SCRIPT_LDFLAGS)
 
 add_library(CsScript${BUILD_ABI} SHARED ${SCRIPT_SOURCES} ${SCRIPT_INCLUDES})
 target_link_libraries(CsScript${BUILD_ABI} ${EXTRA_SCRIPT_LIBS})
+
+target_include_directories(CsScript${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtScript>
+)
+
 set_target_properties(CsScript${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

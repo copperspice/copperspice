@@ -339,6 +339,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9
     )
     set(PHONON2_SUFFIX "ds9")
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
@@ -388,6 +389,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         ${LIBXML2_INCLUDE_DIR}
     )
     set(PHONON2_SUFFIX "gstreamer")
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(PHONON2_SOURCES
         ${PHONON2_SOURCES}
@@ -452,6 +454,12 @@ function_variable_fixup("${EXTRA_PHONON_LDFLAGS}" EXTRA_PHONON_LDFLAGS)
 
 add_library(CsPhonon${BUILD_ABI} SHARED ${PHONON_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(CsPhonon${BUILD_ABI} ${EXTRA_PHONON_LIBS})
+
+target_include_directories(CsPhonon${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtPhonon>
+)
+
 set_target_properties(CsPhonon${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
@@ -464,6 +472,7 @@ function_variable_fixup("${EXTRA_PHONON2_LDFLAGS}" EXTRA_PHONON2_LDFLAGS)
 
 add_library(phonon_${PHONON2_SUFFIX} MODULE ${PHONON2_SOURCES} ${PHONON_INCLUDES})
 target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
+
 set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
     LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
@@ -475,6 +484,7 @@ set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
 # strange thing is that it does not require to be linked to any X11 librarise
 # which may be because CsGui is linked to X11 but a "bad" linker may bail out,
 # needs testing with lld and older versions of CMake.
+
 if(${PHONON2_SUFFIX} STREQUAL "gstreamer")
     target_include_directories(phonon_${PHONON2_SUFFIX} PRIVATE ${X11_X11_INCLUDE_PATH})
 endif()
@@ -493,7 +503,6 @@ macro_generate_package(
     "${EXTRA_PHONON2_CXXFLAGS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsPhonon${BUILD_ABI}"
 )
-
 
 install(
     TARGETS CsPhonon${BUILD_ABI}

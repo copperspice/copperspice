@@ -79,6 +79,12 @@ function_variable_fixup("${EXTRA_SVG_LDFLAGS}" EXTRA_SVG_LDFLAGS)
 
 add_library(CsSvg${BUILD_ABI} SHARED ${SVG_SOURCES} ${SVG_INCLUDES})
 target_link_libraries(CsSvg${BUILD_ABI} ${EXTRA_SVG_LIBS})
+
+target_include_directories(CsSvg${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtSvg>
+)
+
 set_target_properties(CsSvg${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

@@ -50,7 +50,10 @@ include(accessible/accessible.cmake)
 include(animation/animation.cmake)
 include(dialogs/dialogs.cmake)
 include(effects/effects.cmake)
-# include(embedded/embedded.cmake) # currently unused
+
+# unused
+# include(embedded/embedded.cmake)
+
 include(graphicsview/graphicsview.cmake)
 include(image/image.cmake)
 include(inputmethod/inputmethod.cmake)
@@ -72,8 +75,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
-        ${FREETYPE_LIBRARIES}
-        # ${X11_LIBRARIES} should contain all of them but it does not sadly
+        ${FREETYPE_LIBRARIES}        
         ${X11_X11_LIB}
         ${X11_Xrender_LIB}
         ${X11_Xrandr_LIB}
@@ -96,8 +98,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     )
     include_directories(
         ${FONTCONFIG_INCLUDES}
-        ${FREETYPE_INCLUDE_DIRS}
-        # ${X11_INCLUDE_DIR} should contain all of them but it does not sadly
+        ${FREETYPE_INCLUDE_DIRS}      
         ${X11_X11_INCLUDE_PATH}
         ${X11_Xrender_INCLUDE_PATH}
         ${X11_Xrandr_INCLUDE_PATH}
@@ -156,12 +157,19 @@ function_variable_fixup("${EXTRA_GUI_LDFLAGS}" EXTRA_GUI_LDFLAGS)
 
 add_library(CsGui${BUILD_ABI} SHARED ${GUI_SOURCES} ${GUI_INCLUDES})
 target_link_libraries(CsGui${BUILD_ABI} ${EXTRA_GUI_LIBS})
+
+target_include_directories(CsGui${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtGui>
+)
+
 set_target_properties(CsGui${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat
     COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
     LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
-    # FIXME: need to put those in resource prefix $(prefix)/mac/qt_menu.nib
+
+    # TODO: put those in resource prefix $(prefix)/mac/qt_menu.nib
     RESOURCE
     ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/classes.nib
     ${CMAKE_SOURCE_DIR}/src/gui/mac/qt_menu.nib/info.nib

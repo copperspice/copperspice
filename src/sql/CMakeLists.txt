@@ -59,6 +59,12 @@ function_variable_fixup("${EXTRA_SQL_LDFLAGS}" EXTRA_SQL_LDFLAGS)
 
 add_library(CsSql${BUILD_ABI} SHARED ${SQL_SOURCES} ${SQL_INCLUDES})
 target_link_libraries(CsSql${BUILD_ABI} ${EXTRA_SQL_LIBS})
+
+target_include_directories(CsSql${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtSql>
+)
+
 set_target_properties(CsSql${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

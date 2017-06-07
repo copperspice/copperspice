@@ -68,6 +68,7 @@ function_variable_fixup("${EXTRA_UIC_LDFLAGS}" EXTRA_UIC_LDFLAGS)
 
 add_executable(uic${TOOLS_SUFFIX} ${UIC_SOURCES} ${UIC_INCLUDES})
 target_link_libraries(uic${TOOLS_SUFFIX} ${EXTRA_UIC_LIBS})
+
 set_target_properties(uic${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_UIC_CXXFLAGS}
     LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
@@ -79,3 +80,5 @@ install(
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+add_executable(CopperSpice::uic ALIAS uic${TOOLS_SUFFIX})

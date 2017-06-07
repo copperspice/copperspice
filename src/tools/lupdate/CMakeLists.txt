@@ -47,6 +47,7 @@ function_variable_fixup("${EXTRA_LUPDATE_LDFLAGS}" EXTRA_LUPDATE_LDFLAGS)
 
 add_executable(lupdate${TOOLS_SUFFIX} ${LUPDATE_SOURCES} $<TARGET_OBJECTS:sharedtools> ${lupdate_manifest})
 target_link_libraries(lupdate${TOOLS_SUFFIX} ${EXTRA_LUPDATE_LIBS})
+
 set_target_properties(lupdate${TOOLS_SUFFIX} PROPERTIES
     COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}
     LINK_FLAGS ${EXTRA_LUPDATE_LDFLAGS}
@@ -60,3 +61,5 @@ install(
     EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+add_executable(CopperSpice::lupdate ALIAS lupdate${TOOLS_SUFFIX})

@@ -18,5 +18,5 @@ set(CORE_PRIVATE_INCLUDES
 
 set(CORE_SOURCES
     ${CORE_SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/signal/qstring8.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
 )

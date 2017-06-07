@@ -2405,7 +2405,6 @@ function_variable_fixup("${EXTRA_WEBKIT_LDFLAGS}" EXTRA_WEBKIT_LDFLAGS)
 
 foreach(lib a b c d e)
     string(TOUPPER ${lib} upperalpha)
-    # XXX: build those as static libraries?
     add_library(webkit${lib} OBJECT ${WEBKIT${upperalpha}_SOURCES})
     set_target_properties(webkit${lib} PROPERTIES
         COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
@@ -2419,6 +2418,12 @@ add_library(CsWebKit${BUILD_ABI} SHARED ${WEBKIT_SOURCES} ${WEBKIT_INCLUDES}
     $<TARGET_OBJECTS:webkite>
 )
 target_link_libraries(CsWebKit${BUILD_ABI} ${EXTRA_WEBKIT_LIBS})
+
+target_include_directories(CsWebKit${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtWebKit>
+)
+
 set_target_properties(CsWebKit${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

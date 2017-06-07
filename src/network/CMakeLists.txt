@@ -56,6 +56,12 @@ function_variable_fixup("${EXTRA_NETWORK_LDFLAGS}" EXTRA_NETWORK_LDFLAGS)
 
 add_library(CsNetwork${BUILD_ABI} SHARED ${NETWORK_SOURCES} ${NETWORK_INCLUDES})
 target_link_libraries(CsNetwork${BUILD_ABI} ${EXTRA_NETWORK_LIBS})
+
+target_include_directories(CsNetwork${BUILD_ABI}
+   PUBLIC
+   $<INSTALL_INTERFACE:include/QtNetwork>
+)
+
 set_target_properties(CsNetwork${BUILD_ABI} PROPERTIES
     VERSION "0" # for compat
     SOVERSION "0.0.0" # for compat

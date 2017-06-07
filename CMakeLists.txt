@@ -11,7 +11,7 @@
 #
 # * Component libraries should probably be exported without the major build
 #   version in their names, e.g. CopperSpice::CsCore instead of
-#   CopperSpice::CsCore1.3 for consistency. 
+#   CopperSpice::CsCore1.3 for consistency.
 #
 # * Definitions used on components (e.g. -DQT_NO_FREETYPE) should probably be
 #   set as interface definitions of some sort, also exposing them will make it
@@ -26,7 +26,7 @@
 
 cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
-# Silence a warning about rpath on OS X.
+# silence a warning about rpath on OS X
 cmake_policy(SET CMP0042 OLD)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -46,10 +46,9 @@ include(CopperSpiceBuildMacros)
 if(UNIX)
     include(GNUInstallDirs)
 else()
-    set(CMAKE_INSTALL_BINDIR ${CMAKE_INSTALL_PREFIX}/bin)
-    set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
-    set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/include)
-    set(CMAKE_INSTALL_DATAROOTDIR ${CMAKE_INSTALL_PREFIX})
+    set(CMAKE_INSTALL_BINDIR bin)
+    set(CMAKE_INSTALL_LIBDIR lib)
+    set(CMAKE_INSTALL_INCLUDEDIR include)
 endif()
 
 set(BUILD_MAJOR "1")
@@ -60,7 +59,7 @@ set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 # required
 set(BUILD_COMPONENTS "Core")
 
-# TODO: add DBus, Declarative and ScriptTools once they build
+# may add DBus, Declarative and ScriptTools
 set(_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Phonon Script Sql Svg WebKit Xml XmlPatterns)
 
 set(PACKAGE "copperspice")
@@ -82,17 +81,15 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if(NOT DUMPMACHINE_EXITCODE EQUAL 0)
-        message(SEND_ERROR "failed to obtain machine from ${CMAKE_CXX_COMPILER}")
+        message(SEND_ERROR "Failed to obtain machine from ${CMAKE_CXX_COMPILER}")
     endif()
     set(target "${DUMPMACHINE_OUTPUT}")
 else()
     message(WARNING
-        "Your compiler (${CMAKE_CXX_COMPILER}) is not yet handled properly. "
-        "If it supports -dumpmachine argument or alternative let use know. "
-        "This affects binary compatibility with plugins, the key that will be "
-        "used is: ${CMAKE_SYSTEM}"
+        "Your compiler (${CMAKE_CXX_COMPILER}) may not be supported. "
+        "The plugin key which will be used is: ${CMAKE_SYSTEM}"
     )
-    # TODO: more compiler handlers are required, check CMake docs for CMAKE_LANG_COMPILER_ID
+    # more compiler handlers may be required, review CMAKE_LANG_COMPILER_ID
     set(target "${CMAKE_SYSTEM}")
 endif()
 
@@ -103,16 +100,18 @@ set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${BUILD_MICRO})
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ GUI library")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
+
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/.git;${CPACK_SOURCE_IGNORE_FILES}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CMAKE_INSTALL_PREFIX})
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 include(CPack)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
-  
+
 if(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-undefined,error")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-undefined,error")
@@ -254,7 +253,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
         URL "https://developer.gnome.org/glib"
         TYPE REQUIRED
     )
-    
+
     find_package(GOBJECT2)
     set_package_properties(GOBJECT2 PROPERTIES
         PURPOSE "Required for glib mainloop support"
@@ -433,26 +432,24 @@ configure_file(
 )
 
 install(
-    FILES
-    ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
-    ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
-    ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
-    DESTINATION
-    ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+   FILES
+      ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
+      ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
+      ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
+   DESTINATION cmake/CopperSpice
 )
 
-install(
-    EXPORT CopperSpiceLibraryTargets
+install(EXPORT CopperSpiceLibraryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceLibraryTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    DESTINATION cmake/CopperSpice
 )
 
 install(
     EXPORT CopperSpiceBinaryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceBinaryTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/CopperSpice
+    DESTINATION cmake/CopperSpice
 )
 
 message("")

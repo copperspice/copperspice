@@ -47,6 +47,7 @@ function_variable_fixup("${SHAREDTOOLS_EXTRA_LDFLAGS}" SHAREDTOOLS_EXTRA_LDFLAGS
 add_library(sharedtools OBJECT ${SHAREDTOOLS_SOURCES})
 target_compile_definitions(sharedtools PRIVATE ${SHAREDTOOLS_DEFINITIONS})
 target_include_directories(sharedtools PRIVATE ${SHAREDTOOLS_INCLUDES})
+
 set_target_properties(sharedtools PROPERTIES
     COMPILE_FLAGS ${SHAREDTOOLS_EXTRA_CXXFLAGS}
     LINK_FLAGS ${SHAREDTOOLS_EXTRA_LDFLAGS}
