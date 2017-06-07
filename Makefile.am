@@ -15,7 +15,7 @@ noinst_LTLIBRARIES =
 lib_LTLIBRARIES =
 EXTRA_LTLIBRARIES =
 EXTRA_DIST= \
-	README \
+	README.md \
 	CMakeLists.txt \
 	cmake/modules/FindGLib2.cmake \
 	cmake/modules/TestLargeFiles.cmake \

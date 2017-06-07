@@ -81,6 +81,8 @@ www.copperspice.com/presentations.html
 
 * **Ansel Sermersheim**
 * **Barbara Geller**
+* **Robin Mills**
+* **Ivailo Monev**
 
 
 ### License
