@@ -254,23 +254,21 @@ void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile v
 void QtSharedPointer::internalSafetyCheckRemove(const void *d_ptr)
 {
    KnownPointers *const kp = knownPointers();
-   if (!kp) {
-      return;   // end-game: the application is being destroyed already
+   if (! kp) {
+      return;   // end-game, the application is being destroyed already
    }
 
    QMutexLocker lock(&kp->mutex);
 
    QHash<const void *, Data>::iterator it = kp->dPointers.find(d_ptr);
+
    if (it == kp->dPointers.end()) {
-      qFatal("QSharedPointer: internal self-check inconsistency: pointer %p was not tracked. "
-             "To use QT_SHAREDPOINTER_TRACK_POINTERS, you have to enable it throughout "
-             "in your code.", d_ptr);
+      qFatal("QSharedPointer: internal self check inconsistency: Pointer %p was not valid. "
+             "To use QT_SHAREDPOINTER_TRACK_POINTERS enable it in your application", d_ptr);
    }
 
    QHash<const volatile void *, const void *>::iterator it2 = kp->dataPointers.find(it->pointer);
    Q_ASSERT(it2 != kp->dataPointers.end());
-
-   //qDebug("Removing d=%p value=%p", d_ptr, it->pointer);
 
    // remove entries
    kp->dataPointers.erase(it2);
