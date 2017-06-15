@@ -84,6 +84,8 @@ class CsBasicString
       template <int N>
       CsBasicString(const char (&str)[N], size_type size, const A &a = A());
 
+      CsBasicString(const char32_t *str, const A &a = A());
+
       // substring constructors
       CsBasicString(const CsBasicString &str, size_type indexStart, const A &a = A());
       CsBasicString(const CsBasicString &str, size_type indexStart, size_type size, const A &a = A());
@@ -405,7 +407,7 @@ class CsBasicString
 
       iterator insert(const_iterator posStart, CsChar c);
       iterator insert(const_iterator posStart, size_type count, CsChar c);
-      iterator insert(const_iterator posStart, const CsString &str);
+      iterator insert(const_iterator posStart, const CsBasicString &str);
 
       // for a const char * and char *
       template <typename T,  typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
@@ -621,11 +623,29 @@ CsBasicString<E, A>::CsBasicString(const char (&str)[N], size_type size, const A
 }
 
 template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char32_t *str, const A &a)
+   : m_string(1, 0, a)
+{
+   const char32_t *c = str;
+
+   while (*c != 0) {
+      E::insert(m_string, m_string.end() - 1, *c);
+      ++c;
+   }
+}
+
+template <typename E, typename A>
 CsBasicString<E, A>::CsBasicString(const CsBasicString &str, size_type indexStart, const A &a)
    : m_string(1, 0, a)
 {
-   auto iter1 = begin() + indexStart;
-   auto iter2 = end();
+   size_type stringLen = str.size();
+
+   if (indexStart > stringLen)  {
+      indexStart = stringLen;
+   }
+
+   auto iter1 = str.begin() + indexStart;
+   auto iter2 = str.end();
 
    append(iter1, iter2);
 }
@@ -634,7 +654,17 @@ template <typename E, typename A>
 CsBasicString<E, A>::CsBasicString(const CsBasicString &str, size_type indexStart, size_type size, const A &a)
    : m_string(1, 0, a)
 {
-   auto iter1 = begin() + indexStart;
+   size_type stringLen = str.size();
+
+   if (indexStart > stringLen)  {
+      indexStart = stringLen;
+   }
+
+   if (size < 0 || indexStart + size > stringLen)  {
+      size = stringLen - indexStart;
+   }
+
+   auto iter1 = str.begin() + indexStart;
    auto iter2 = iter1 + size;
 
    append(iter1, iter2);
@@ -721,14 +751,16 @@ CsChar CsBasicString<E, A>::operator[](size_type index) const
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const CsBasicString &str)
 {
-   E::append(m_string, str.m_string);
+   insert(end(), str);
    return *this;
 }
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const CsBasicString &str, size_type indexStart, size_type size)
 {
-   E::append(m_string, str.m_string, indexStart, size);
+   size_type stringLen = this->size();
+
+   insert(stringLen, str, indexStart, size);
    return *this;
 }
 
@@ -940,6 +972,16 @@ bool CsBasicString<E, A>::empty() const
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::erase(size_type indexStart, size_type size)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      indexStart = stringLen;
+   }
+
+   if (size < 0 || indexStart + size > stringLen)  {
+      size = stringLen - indexStart;
+   }
+
    auto iter1 = begin() + indexStart;
    auto iter2 = iter1 + size;
 
@@ -2655,6 +2697,12 @@ A CsBasicString<E, A>::getAllocator() const
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, size_type count, CsChar c)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
    const_iterator iter = begin() + indexStart;
    E::insert(m_string, iter.codePointBegin(), c, count);
 
@@ -2672,6 +2720,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const T &
    // str is a const char *
    if (str == nullptr || *str == '\0') {
       return *this;
+   }
+
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
    }
 
    const_iterator iter = begin() + indexStart;
@@ -2694,6 +2748,12 @@ template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const char (&str)[N])
 {
    // make this safe
+
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
 
    const_iterator iter = begin() + indexStart;
    const char *c = str;
@@ -2723,6 +2783,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const T &
       return *this;
    }
 
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
    const_iterator iter = begin() + indexStart;
    const char *c = str;
 
@@ -2747,6 +2813,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const cha
 {
    // make this safe
 
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
    const_iterator iter = begin() + indexStart;
    const char *c = str;
 
@@ -2768,6 +2840,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const cha
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const CsBasicString &str)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
    const_iterator iter = begin() + indexStart;
 
    for (CsChar c : str) {
@@ -2784,6 +2862,12 @@ template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const CsBasicString &str,
                   size_type srcStart, size_type srcSize)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
    const_iterator iter = begin() + indexStart;
 
    const_iterator srcIter_begin = str.begin() + srcStart;
@@ -2815,7 +2899,7 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart, const CsString &str)
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart, const CsBasicString &str)
 {
    const_iterator iter = posStart;
    int count = 0;
@@ -2934,6 +3018,12 @@ void CsBasicString<E, A>::push_back(CsChar c)
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size, const CsBasicString &str)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -2956,6 +3046,12 @@ template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size, const CsBasicString &str,
                   size_type srcStart, size_type srcSize)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin    = begin() + indexStart;
    const_iterator iter_end      = iter_begin + size;
 
@@ -2986,6 +3082,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    // str is a const char *
 
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -3001,6 +3103,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
                   const char (&str)[N], size_type srcSize)
 {
    // make this safe
+
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
 
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
@@ -3043,6 +3151,12 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 {
    // str is a const char *
 
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -3056,6 +3170,12 @@ template <typename E, typename A>
 template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size, const char (&str)[N])
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -3092,6 +3212,12 @@ template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size,
                   size_type count, CsChar c)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -3116,6 +3242,12 @@ template <class T>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size, const T &str,
                   size_type srcStart, size_type srcSize)
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::replace index out of range");
+   }
+
    const_iterator iter_begin = begin() + indexStart;
    const_iterator iter_end   = iter_begin + size;
 
@@ -3222,6 +3354,16 @@ void CsBasicString<E, A>::shrink_to_fit()
 template <typename E, typename A>
 CsBasicString<E, A> CsBasicString<E, A>::substr(size_type indexStart, size_type size) const
 {
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      indexStart = stringLen;
+   }
+
+   if (size < 0 || indexStart + size > stringLen)  {
+      size = stringLen - indexStart;
+   }
+
    auto iter1 = begin() + indexStart;
    auto iter2 = iter1 + size;
 

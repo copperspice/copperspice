@@ -46,7 +46,7 @@ class CsChar
 
       template <typename T = int>
       CsChar(char c)
-         : m_char(c)
+         : m_char(static_cast<unsigned char>(c))
       {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<T, T>::value, "Unsafe operations not allowed, unknown encoding for this operation");

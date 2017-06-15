@@ -26,49 +26,13 @@ class LIB_CS_STRING_EXPORT utf8
    public:
       using storage_unit = uint8_t;
 
-      static void append(std::vector<storage_unit> &str1, const std::vector<storage_unit> &str2,
-                  int posStart = 0, int length = -1)
-      {
-         // may need to verify if some prefix needs to be ignored from str2
-
-         auto iter_begin = str2.begin();
-         auto iter_end   = str2.end() - 1;
-
-         for (int x = 0; x < posStart && iter_begin != str2.end(); ++x) {
-           uint8_t value = *iter_begin;
-           int count     = numOfBytes(value);
-
-            for (int y = 0; y < count && iter_begin != str2.end(); ++y) {
-               ++iter_begin;
-            }
-         }
-
-         if (length != -1) {
-            iter_end   = iter_begin;
-
-            for (int x = 0; x < length && iter_end != str2.end(); ++x) {
-               uint8_t value = *iter_end;
-               int count     = numOfBytes(value);
-
-               for (int y = 0; y < count && iter_end != str2.end(); ++y) {
-                  ++iter_end;
-               }
-
-            }
-         }
-
-         // watch out for the null terminator
-         str1.insert(str1.end() - 1, iter_begin, iter_end);
-      }
-
-
       template <typename Container>
       static typename Container::const_iterator insert(Container &str1,
-                  typename Container::const_iterator iter, CsChar c, int size = 1)
+                  typename Container::const_iterator iter, CsChar c, int count = 1)
       {
          uint32_t value = c.unicode();
 
-         for (int x = 0; x < size; ++x)  {
+         for (int x = 0; x < count; ++x)  {
             if (value <= 0x007F)  {
                iter = str1.insert(iter, value);
 
@@ -201,49 +165,13 @@ class LIB_CS_STRING_EXPORT utf16
    public:
       using storage_unit = uint16_t;
 
-      static void append(std::vector<storage_unit> &str1, const std::vector<storage_unit> &str2,
-                  int posStart = 0, int length = -1)
-      {
-         // may need to verify if some prefix needs to be ignored from str2
-
-         auto iter_begin = str2.begin();
-         auto iter_end   = str2.end() - 1;
-
-         for (int x = 0; x < posStart && iter_begin != str2.end(); ++x) {
-           uint16_t value = *iter_begin;
-           int count     = numOfBytes(value);
-
-            for (int y = 0; y < count && iter_begin != str2.end(); ++y) {
-               ++iter_begin;
-            }
-         }
-
-         if (length != -1) {
-            iter_end   = iter_begin;
-
-            for (int x = 0; x < length && iter_end != str2.end(); ++x) {
-               uint16_t value = *iter_end;
-               int count      = numOfBytes(value);
-
-               for (int y = 0; y < count && iter_end != str2.end(); ++y) {
-                  ++iter_end;
-               }
-
-            }
-         }
-
-         // watch out for the null terminator
-         str1.insert(str1.end() - 1, iter_begin, iter_end);
-
-      };
-
       template <typename Container>
       static typename Container::const_iterator insert(Container &str1,
-                  typename Container::const_iterator iter, CsChar c, int size = 1)
+                  typename Container::const_iterator iter, CsChar c, int count = 1)
       {
          uint32_t value = c.unicode();
 
-         for (int x = 0; x < size; ++x)  {
+         for (int x = 0; x < count; ++x)  {
 
             if ((value <= 0xD7FF) || ((value >= 0xE000) && (value <= 0xFFFF)))  {
                iter = str1.insert(iter, value);
