@@ -23,7 +23,7 @@
 #ifndef XML_QDOM_H
 #define XML_QDOM_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -238,19 +238,22 @@ class Q_XML_EXPORT QDomNodeList
    // DOM functions
    QDomNode item(int index) const;
    inline QDomNode at(int index) const {
-      return item(index);   // Qt API consistency
+      return item(index);
    }
 
    // DOM read only attributes
-   uint length() const;
+   int length() const;
+
    inline int count() const {
-      return length();   // Qt API consitancy
+      return length();
    }
+
    inline int size() const {
-      return length();   // Qt API consistency
+      return length();
    }
+
    inline bool isEmpty() const {
-      return length() == 0;   // Qt API consistency
+      return length() == 0;
    }
 
  private:
@@ -371,7 +374,7 @@ class Q_XML_EXPORT QDomNamedNodeMap
    QDomNode removeNamedItemNS(const QString &nsURI, const QString &localName);
 
    // DOM read only attributes
-   uint length() const;
+   int length() const;
    int count() const {
       return length();   // Qt API consitancy
    }
@@ -428,7 +431,7 @@ class Q_XML_EXPORT QDomCharacterData : public QDomNode
    void replaceData(unsigned long offset, unsigned long count, const QString &arg);
 
    // DOM read only attributes
-   uint length() const;
+   int length() const;
 
    // DOM attributes
    QString data() const;

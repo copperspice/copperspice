@@ -35,10 +35,12 @@ QT_BEGIN_NAMESPACE
 
 void showHelp(const QString &argv0, const QString &error)
 {
-   fprintf(stderr, "Qt resource compiler\n");
-   if (!error.isEmpty()) {
+   fprintf(stderr, "CopperSpice resource compiler\n");
+
+   if (! error.isEmpty()) {
       fprintf(stderr, "%s: %s\n", qPrintable(argv0), qPrintable(error));
    }
+
    fprintf(stderr, "Usage: %s  [options] <inputs>\n\n"
            "Options:\n"
            "  -o file              write output to file rather than stdout\n"
@@ -59,8 +61,10 @@ void showHelp(const QString &argv0, const QString &error)
 void dumpRecursive(const QDir &dir, QTextStream &out)
 {
    QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot
-                           | QDir::NoSymLinks);
-   foreach (QFileInfo entry, entries) {
+                  | QDir::NoSymLinks);
+
+   for (QFileInfo entry : entries) {
+
       if (entry.isDir()) {
          dumpRecursive(entry.filePath(), out);
       } else {
@@ -75,34 +79,34 @@ int createProject(const QString &outFileName)
 {
    QDir currentDir = QDir::current();
    QString currentDirName = currentDir.dirName();
+
    if (currentDirName.isEmpty()) {
       currentDirName = QLatin1String("root");
    }
 
    QFile file;
    bool isOk = false;
+
    if (outFileName.isEmpty()) {
       isOk = file.open(stdout, QFile::WriteOnly | QFile::Text);
    } else {
       file.setFileName(outFileName);
       isOk = file.open(QFile::WriteOnly | QFile::Text);
    }
-   if (!isOk) {
+   if (! isOk) {
       fprintf(stderr, "Unable to open %s: %s\n",
-              outFileName.isEmpty() ? qPrintable(outFileName) : "standard output",
-              qPrintable(file.errorString()));
+              outFileName.isEmpty() ? csPrintable(outFileName) : "standard output",
+              csPrintable(file.errorString()));
       return 1;
    }
 
    QTextStream out(&file);
-   out << QLatin1String("<!DOCTYPE RCC><RCC version=\"1.0\">\n"
-                        "<qresource>\n");
+   out << QLatin1String("<!DOCTYPE RCC><RCC version=\"1.0\">\n" "<qresource>\n");
 
    // use "." as dir to get relative file pathes
    dumpRecursive(QDir(QLatin1String(".")), out);
 
-   out << QLatin1String("</qresource>\n"
-                        "</RCC>\n");
+   out << QLatin1String("</qresource>\n" "</RCC>\n");
 
    return 0;
 }
@@ -125,14 +129,18 @@ int runRcc(int argc, char *argv[])
       if (args[i].isEmpty()) {
          continue;
       }
-      if (args[i][0] == QLatin1Char('-')) {   // option
+
+      if (args[i][0] == QLatin1Char('-')) {
+         // option
          QString opt = args[i];
+
          if (opt == QLatin1String("-o")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing output name");
                break;
             }
             outFilename = args[++i];
+
          } else if (opt == QLatin1String("-name")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing target name");
@@ -161,19 +169,26 @@ int runRcc(int argc, char *argv[])
                break;
             }
             library.setCompressThreshold(args[++i].toInt());
+
          } else if (opt == QLatin1String("-binary")) {
             library.setFormat(RCCResourceLibrary::Binary);
+
          } else if (opt == QLatin1String("-namespace")) {
             library.setUseNameSpace(!library.useNameSpace());
+
          } else if (opt == QLatin1String("-verbose")) {
             library.setVerbose(true);
+
          } else if (opt == QLatin1String("-list")) {
             list = true;
+
          } else if (opt == QLatin1String("-version") || opt == QLatin1String("-v")) {
             fprintf(stderr, "CopperSpice Resource Compiler version %s\n", RCC_VERSION_STR);
             return 1;
+
          } else if (opt == QLatin1String("-help") || opt == QLatin1String("-h")) {
             helpRequested = true;
+
          } else if (opt == QLatin1String("-no-compress")) {
             library.setCompressLevel(-2);
          } else if (opt == QLatin1String("-project")) {
@@ -181,12 +196,13 @@ int runRcc(int argc, char *argv[])
          } else {
             errorMsg = QString::fromLatin1("Unknown option: '%1'").arg(args[i]);
          }
+
       } else {
          if (!QFile::exists(args[i])) {
-            qWarning("%s: File does not exist '%s'",
-                     qPrintable(args[0]), qPrintable(args[i]));
+            qWarning("%s: File does not exist '%s'", csPrintable(args[0]), qPrintable(args[i]));
             return 1;
          }
+
          filenamesIn.append(args[i]);
       }
    }
@@ -199,11 +215,12 @@ int runRcc(int argc, char *argv[])
       showHelp(args[0], errorMsg);
       return 1;
    }
+
    QFile errorDevice;
    errorDevice.open(stderr, QIODevice::WriteOnly | QIODevice::Text);
 
    if (library.verbose()) {
-      errorDevice.write("Qt resource compiler\n");
+      errorDevice.write("CopperSpice resource compiler\n");
    }
 
    library.setInputFiles(filenamesIn);
@@ -222,11 +239,13 @@ int runRcc(int argc, char *argv[])
    if (outFilename.isEmpty() || outFilename == QLatin1String("-")) {
       // using this overload close() only flushes.
       out.open(stdout, mode);
+
    } else {
       out.setFileName(outFilename);
-      if (!out.open(mode)) {
+      if (! out.open(mode)) {
          const QString msg = QString::fromUtf8("Unable to open %1 for writing: %2\n").arg(outFilename).arg(out.errorString());
          errorDevice.write(msg.toUtf8());
+
          return 1;
       }
    }

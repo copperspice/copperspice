@@ -126,11 +126,15 @@ class RCCResourceLibrary
       const QString ATTRIBUTE_THRESHOLD;
       const QString ATTRIBUTE_COMPRESS;
    };
+
    friend class RCCFileInfo;
+
    void reset();
    bool addFile(const QString &alias, const RCCFileInfo &file);
+
    bool interpretResourceFile(QIODevice *inputDevice, const QString &file,
-                              QString currentPath = QString(), bool ignoreErrors = false);
+                  QString currentPath = QString(), bool ignoreErrors = false);
+
    bool writeHeader();
    bool writeDataBlobs();
    bool writeDataNames();
@@ -141,9 +145,11 @@ class RCCResourceLibrary
    void writeHex(quint8 number);
    void writeNumber2(quint16 number);
    void writeNumber4(quint32 number);
+
    void writeChar(char c) {
       m_out.append(c);
    }
+
    void writeByteArray(const QByteArray &);
    void write(const char *, int len);
 
@@ -167,4 +173,4 @@ class RCCResourceLibrary
 
 QT_END_NAMESPACE
 
-#endif // RCC_H
+#endif

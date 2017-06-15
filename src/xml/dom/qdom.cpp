@@ -28,7 +28,6 @@
 
 #include <qatomic.h>
 #include <qbuffer.h>
-#include <qhash.h>
 #include <qiodevice.h>
 #include <qlist.h>
 #include <qregexp.h>
@@ -37,6 +36,7 @@
 #include <qxml.h>
 #include <qvariant.h>
 #include <qmap.h>
+#include <qmultimap.h>
 #include <qshareddata.h>
 #include <qdebug.h>
 #include <stdio.h>
@@ -243,11 +243,11 @@ class QDomNodeListPrivate
 
    void createList();
    QDomNodePrivate *item(int index);
-   uint length() const;
+   int length() const;
 
    QAtomicInt ref;
-   
-   // This list contains the children of this node   
+
+   // This list contains the children of this node
    QDomNodePrivate *node_impl;
    QString tagname;
    QString nsURI;
@@ -268,12 +268,12 @@ class QDomNamedNodeMapPrivate
    QDomNodePrivate *removeNamedItem(const QString &name);
    QDomNodePrivate *item(int index) const;
 
-   uint length() const;
+   int length() const;
    bool contains(const QString &name) const;
    bool containsNS(const QString &nsURI, const QString &localName) const;
 
    /**
-    * Remove all children from the map.
+    * Remove all children from m_nodeMap
     */
    void clearMap();
 
@@ -303,14 +303,15 @@ class QDomNamedNodeMapPrivate
    }
 
    /**
-    * Creates a copy of the map. It is a deep copy
+    * Creates a copy of the m_nodeMap It is a deep copy
     * that means that all children are cloned.
     */
    QDomNamedNodeMapPrivate *clone(QDomNodePrivate *parent);
- 
+
    QAtomicInt ref;
-   QHash<QString, QDomNodePrivate *> map;
+   QMultiMap<QString, QDomNodePrivate *> m_nodeMap;
    QDomNodePrivate *parent;
+
    bool readonly;
    bool appendToParent;
 };
@@ -372,7 +373,7 @@ class QDomCharacterDataPrivate : public QDomNodePrivate
    QDomCharacterDataPrivate(QDomDocumentPrivate *, QDomNodePrivate *parent, const QString &data);
    QDomCharacterDataPrivate(QDomCharacterDataPrivate *n, bool deep);
 
-   uint dataLength() const;
+   int dataLength() const;
    QString substringData(unsigned long offset, unsigned long count) const;
    void appendData(const QString &arg);
    void insertData(unsigned long offset, const QString &arg);
@@ -435,7 +436,7 @@ class QDomAttrPrivate : public QDomNodePrivate
    }
 
    void save(QTextStream &s, int, int) const override;
-   
+
    bool m_specified;
 };
 
@@ -481,7 +482,7 @@ class QDomElementPrivate : public QDomNodePrivate
 
    QDomNodePrivate *cloneNode(bool deep = true) override;
    void save(QTextStream &s, int, int) const override;
- 
+
    QDomNamedNodeMapPrivate *m_attr;
 };
 
@@ -546,7 +547,7 @@ class QDomNotationPrivate : public QDomNodePrivate
    }
 
    void save(QTextStream &s, int, int) const override;
- 
+
    QString m_sys;
    QString m_pub;
 };
@@ -570,7 +571,7 @@ class QDomEntityPrivate : public QDomNodePrivate
    }
 
    void save(QTextStream &s, int, int) const override;
-  
+
    QString m_sys;
    QString m_pub;
    QString m_notationName;
@@ -672,7 +673,7 @@ class QDomDocumentPrivate : public QDomNodePrivate
    QExplicitlySharedDataPointer<QDomDocumentTypePrivate> type;
 
    void saveDocument(QTextStream &stream, const int indent, QDomNode::EncodingPolicy encUsed) const;
- 
+
    long nodeListTime;
 };
 
@@ -690,7 +691,7 @@ class QDomHandler : public QXmlDefaultHandler
 
    // content handler
    bool endDocument() override;
-   bool startElement(const QString &nsURI, const QString &localName, const QString &qName, 
+   bool startElement(const QString &nsURI, const QString &localName, const QString &qName,
                   const QXmlAttributes &atts) override;
 
    bool endElement(const QString &nsURI, const QString &localName, const QString &qName) override;
@@ -1401,7 +1402,7 @@ QDomNodePrivate *QDomNodeListPrivate::item(int index)
    return list.at(index);
 }
 
-uint QDomNodeListPrivate::length() const
+int QDomNodeListPrivate::length() const
 {
    if (!node_impl) {
       return 0;
@@ -1541,7 +1542,7 @@ QDomNode QDomNodeList::item(int index) const
 /*!
     Returns the number of nodes in the list.
 */
-uint QDomNodeList::length() const
+int QDomNodeList::length() const
 {
    if (!impl) {
       return 0;
@@ -3320,8 +3321,9 @@ QDomNamedNodeMapPrivate *QDomNamedNodeMapPrivate::clone(QDomNodePrivate *p)
    m->readonly = readonly;
    m->appendToParent = appendToParent;
 
-   QHash<QString, QDomNodePrivate *>::const_iterator it = map.constBegin();
-   for (; it != map.constEnd(); ++it) {
+   QMultiMap<QString, QDomNodePrivate *>::const_iterator it = m_nodeMap.constBegin();
+
+   for (; it != m_nodeMap.constEnd(); ++it) {
       QDomNodePrivate *new_node = (*it)->cloneNode();
       new_node->setParent(p);
       m->setNamedItem(new_node);
@@ -3335,35 +3337,42 @@ QDomNamedNodeMapPrivate *QDomNamedNodeMapPrivate::clone(QDomNodePrivate *p)
 void QDomNamedNodeMapPrivate::clearMap()
 {
    // Dereference all of our children if we took references
-   if (!appendToParent) {
-      QHash<QString, QDomNodePrivate *>::const_iterator it = map.constBegin();
-      for (; it != map.constEnd(); ++it)
+
+   if (! appendToParent) {
+      QMultiMap<QString, QDomNodePrivate *>::const_iterator it = m_nodeMap.constBegin();
+
+      for (; it != m_nodeMap.constEnd(); ++it)
          if (!(*it)->ref.deref()) {
             delete *it;
          }
    }
-   map.clear();
+
+   m_nodeMap.clear();
 }
 
 QDomNodePrivate *QDomNamedNodeMapPrivate::namedItem(const QString &name) const
 {
-   QDomNodePrivate *p = map[name];
+   // multiple nodes with the same key, result is the last one in the file
+   QDomNodePrivate *p = m_nodeMap.value(name);
    return p;
 }
 
 QDomNodePrivate *QDomNamedNodeMapPrivate::namedItemNS(const QString &nsURI, const QString &localName) const
 {
-   QHash<QString, QDomNodePrivate *>::const_iterator it = map.constBegin();
+   QMultiMap<QString, QDomNodePrivate *>::const_iterator it = m_nodeMap.constBegin();
    QDomNodePrivate *n;
-   for (; it != map.constEnd(); ++it) {
+
+   for (; it != m_nodeMap.constEnd(); ++it) {
       n = *it;
-      if (!n->prefix.isNull()) {
+
+      if (! n->prefix.isNull()) {
          // node has a namespace
          if (n->namespaceURI == nsURI && n->name == localName) {
             return n;
          }
       }
    }
+
    return 0;
 }
 
@@ -3377,10 +3386,10 @@ QDomNodePrivate *QDomNamedNodeMapPrivate::setNamedItem(QDomNodePrivate *arg)
       return parent->appendChild(arg);
    }
 
-   QDomNodePrivate *n = map.value(arg->nodeName());
-   // We take a reference
+   QDomNodePrivate *n = m_nodeMap.value(arg->nodeName());
    arg->ref.ref();
-   map.insertMulti(arg->nodeName(), arg);
+   m_nodeMap.insertMulti(arg->nodeName(), arg);
+
    return n;
 }
 
@@ -3397,12 +3406,13 @@ QDomNodePrivate *QDomNamedNodeMapPrivate::setNamedItemNS(QDomNodePrivate *arg)
    if (!arg->prefix.isNull()) {
       // node has a namespace
       QDomNodePrivate *n = namedItemNS(arg->namespaceURI, arg->name);
-      // We take a reference
+
       arg->ref.ref();
-      map.insertMulti(arg->nodeName(), arg);
+      m_nodeMap.insertMulti(arg->nodeName(), arg);
       return n;
+
    } else {
-      // ### check the following code if it is ok
+      // check the following code, is it ok?
       return setNamedItem(arg);
    }
 }
@@ -3421,29 +3431,29 @@ QDomNodePrivate *QDomNamedNodeMapPrivate::removeNamedItem(const QString &name)
       return parent->removeChild(p);
    }
 
-   map.remove(p->nodeName());
-   // We took a reference, so we have to free one here
+   m_nodeMap.remove(p->nodeName());
    p->ref.deref();
+
    return p;
 }
 
 QDomNodePrivate *QDomNamedNodeMapPrivate::item(int index) const
 {
-   if ((uint)index >= length()) {
+   if (index >= length()) {
       return 0;
    }
-   return *(map.constBegin() + index);
+
+   return *(m_nodeMap.constBegin() + index);
 }
 
-// ### Qt 5: convert all length/size() functions in QDom to use int instead of uint.
-uint QDomNamedNodeMapPrivate::length() const
+int QDomNamedNodeMapPrivate::length() const
 {
-   return map.count();
+   return m_nodeMap.count();
 }
 
 bool QDomNamedNodeMapPrivate::contains(const QString &name) const
 {
-   return map.value(name) != 0;
+   return m_nodeMap.value(name) != 0;
 }
 
 bool QDomNamedNodeMapPrivate::containsNS(const QString &nsURI, const QString &localName) const
@@ -3459,47 +3469,6 @@ bool QDomNamedNodeMapPrivate::containsNS(const QString &nsURI, const QString &lo
 
 #define IMPL ((QDomNamedNodeMapPrivate*)impl)
 
-/*!
-    \class QDomNamedNodeMap
-    \reentrant
-    \brief The QDomNamedNodeMap class contains a collection of nodes
-    that can be accessed by name.
-
-    \inmodule QtXml
-    \ingroup xml-tools
-
-    Note that QDomNamedNodeMap does not inherit from QDomNodeList.
-    QDomNamedNodeMaps do not provide any specific node ordering.
-    Although nodes in a QDomNamedNodeMap may be accessed by an ordinal
-    index, this is simply to allow a convenient enumeration of the
-    contents of a QDomNamedNodeMap, and does not imply that the DOM
-    specifies an ordering of the nodes.
-
-    The QDomNamedNodeMap is used in three places:
-    \list 1
-    \i QDomDocumentType::entities() returns a map of all entities
-        described in the DTD.
-    \i QDomDocumentType::notations() returns a map of all notations
-        described in the DTD.
-    \i QDomNode::attributes() returns a map of all attributes of an
-        element.
-    \endlist
-
-    Items in the map are identified by the name which QDomNode::name()
-    returns. Nodes are retrieved using namedItem(), namedItemNS() or
-    item(). New nodes are inserted with setNamedItem() or
-    setNamedItemNS() and removed with removeNamedItem() or
-    removeNamedItemNS(). Use contains() to see if an item with the
-    given name is in the named node map. The number of items is
-    returned by length().
-
-    Terminology: in this class we use "item" and "node"
-    interchangeably.
-*/
-
-/*!
-    Constructs an empty named node map.
-*/
 QDomNamedNodeMap::QDomNamedNodeMap()
 {
    impl = 0;
@@ -3532,34 +3501,26 @@ QDomNamedNodeMap &QDomNamedNodeMap::operator=(const QDomNamedNodeMap &n)
    if (n.impl) {
       n.impl->ref.ref();
    }
+
    if (impl && !impl->ref.deref()) {
       delete impl;
    }
+
    impl = n.impl;
+
    return *this;
 }
 
-/*!
-    Returns true if \a n and this named node map are equal; otherwise
-    returns false.
-*/
 bool QDomNamedNodeMap::operator== (const QDomNamedNodeMap &n) const
 {
    return (impl == n.impl);
 }
 
-/*!
-    Returns true if \a n and this named node map are not equal;
-    otherwise returns false.
-*/
 bool QDomNamedNodeMap::operator!= (const QDomNamedNodeMap &n) const
 {
    return (impl != n.impl);
 }
 
-/*!
-    Destroys the object and frees its resources.
-*/
 QDomNamedNodeMap::~QDomNamedNodeMap()
 {
    if (impl && !impl->ref.deref()) {
@@ -3567,15 +3528,6 @@ QDomNamedNodeMap::~QDomNamedNodeMap()
    }
 }
 
-/*!
-    Returns the node called \a name.
-
-    If the named node map does not contain such a node, a \link
-    QDomNode::isNull() null node\endlink is returned. A node's name is
-    the name returned by QDomNode::nodeName().
-
-    \sa setNamedItem() namedItemNS()
-*/
 QDomNode QDomNamedNodeMap::namedItem(const QString &name) const
 {
    if (!impl) {
@@ -3584,16 +3536,7 @@ QDomNode QDomNamedNodeMap::namedItem(const QString &name) const
    return QDomNode(IMPL->namedItem(name));
 }
 
-/*!
-    Inserts the node \a newNode into the named node map. The name used
-    by the map is the node name of \a newNode as returned by
-    QDomNode::nodeName().
 
-    If the new node replaces an existing node, i.e. the map contains a
-    node with the same name, the replaced node is returned.
-
-    \sa namedItem() removeNamedItem() setNamedItemNS()
-*/
 QDomNode QDomNamedNodeMap::setNamedItem(const QDomNode &newNode)
 {
    if (!impl) {
@@ -3602,64 +3545,33 @@ QDomNode QDomNamedNodeMap::setNamedItem(const QDomNode &newNode)
    return QDomNode(IMPL->setNamedItem((QDomNodePrivate *)newNode.impl));
 }
 
-/*!
-    Removes the node called \a name from the map.
-
-    The function returns the removed node or a \link
-    QDomNode::isNull() null node\endlink if the map did not contain a
-    node called \a name.
-
-    \sa setNamedItem() namedItem() removeNamedItemNS()
-*/
 QDomNode QDomNamedNodeMap::removeNamedItem(const QString &name)
 {
-   if (!impl) {
+   if (! impl) {
       return QDomNode();
    }
    return QDomNode(IMPL->removeNamedItem(name));
 }
 
-/*!
-    Retrieves the node at position \a index.
-
-    This can be used to iterate over the map. Note that the nodes in
-    the map are ordered arbitrarily.
-
-    \sa length()
-*/
 QDomNode QDomNamedNodeMap::item(int index) const
 {
-   if (!impl) {
+   if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->item(index));
 }
 
-/*!
-    Returns the node associated with the local name \a localName and
-    the namespace URI \a nsURI.
 
-    If the map does not contain such a node, a \link
-    QDomNode::isNull() null node\endlink is returned.
-
-    \sa setNamedItemNS() namedItem()
-*/
 QDomNode QDomNamedNodeMap::namedItemNS(const QString &nsURI, const QString &localName) const
 {
-   if (!impl) {
+   if (! impl) {
       return QDomNode();
    }
    return QDomNode(IMPL->namedItemNS(nsURI, localName));
 }
 
-/*!
-    Inserts the node \a newNode in the map. If a node with the same
-    namespace URI and the same local name already exists in the map,
-    it is replaced by \a newNode. If the new node replaces an existing
-    node, the replaced node is returned.
 
-    \sa namedItemNS() removeNamedItemNS() setNamedItem()
-*/
 QDomNode QDomNamedNodeMap::setNamedItemNS(const QDomNode &newNode)
 {
    if (!impl) {
@@ -3668,39 +3580,26 @@ QDomNode QDomNamedNodeMap::setNamedItemNS(const QDomNode &newNode)
    return QDomNode(IMPL->setNamedItemNS((QDomNodePrivate *)newNode.impl));
 }
 
-/*!
-    Removes the node with the local name \a localName and the
-    namespace URI \a nsURI from the map.
-
-    The function returns the removed node or a \link
-    QDomNode::isNull() null node\endlink if the map did not contain a
-    node with the local name \a localName and the namespace URI \a
-    nsURI.
-
-    \sa setNamedItemNS() namedItemNS() removeNamedItem()
-*/
 QDomNode QDomNamedNodeMap::removeNamedItemNS(const QString &nsURI, const QString &localName)
 {
    if (!impl) {
       return QDomNode();
    }
+
    QDomNodePrivate *n = IMPL->namedItemNS(nsURI, localName);
    if (!n) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->removeNamedItem(n->name));
 }
 
-/*!
-    Returns the number of nodes in the map.
-
-    \sa item()
-*/
-uint QDomNamedNodeMap::length() const
+int QDomNamedNodeMap::length() const
 {
    if (!impl) {
       return 0;
    }
+
    return IMPL->length();
 }
 
@@ -3757,19 +3656,22 @@ QDomDocumentTypePrivate::QDomDocumentTypePrivate(QDomDocumentTypePrivate *n, boo
    : QDomNodePrivate(n, deep)
 {
    init();
+
    // Refill the maps with our new children
    QDomNodePrivate *p = first;
+
    while (p) {
-      if (p->isEntity())
-         // Don't use normal insert function since we would create infinite recursion
-      {
-         entities->map.insertMulti(p->nodeName(), p);
+      if (p->isEntity()) {
+         // do not use normal insert function since we would create infinite recursion
+
+         entities->m_nodeMap.insertMulti(p->nodeName(), p);
       }
-      if (p->isNotation())
-         // Don't use normal insert function since we would create infinite recursion
-      {
-         notations->map.insertMulti(p->nodeName(), p);
+
+      if (p->isNotation()) {
+         // Do not use normal insert function since we would create infinite recursion
+         notations->m_nodeMap.insertMulti(p->nodeName(), p);
       }
+
       p = p->next;
    }
 }
@@ -3813,11 +3715,12 @@ QDomNodePrivate *QDomDocumentTypePrivate::insertBefore(QDomNodePrivate *newChild
 {
    // Call the origianl implementation
    QDomNodePrivate *p = QDomNodePrivate::insertBefore(newChild, refChild);
+
    // Update the maps
    if (p && p->isEntity()) {
-      entities->map.insertMulti(p->nodeName(), p);
+      entities->m_nodeMap.insertMulti(p->nodeName(), p);
    } else if (p && p->isNotation()) {
-      notations->map.insertMulti(p->nodeName(), p);
+      notations->m_nodeMap.insertMulti(p->nodeName(), p);
    }
 
    return p;
@@ -3827,11 +3730,12 @@ QDomNodePrivate *QDomDocumentTypePrivate::insertAfter(QDomNodePrivate *newChild,
 {
    // Call the origianl implementation
    QDomNodePrivate *p = QDomNodePrivate::insertAfter(newChild, refChild);
+
    // Update the maps
    if (p && p->isEntity()) {
-      entities->map.insertMulti(p->nodeName(), p);
+      entities->m_nodeMap.insertMulti(p->nodeName(), p);
    } else if (p && p->isNotation()) {
-      notations->map.insertMulti(p->nodeName(), p);
+      notations->m_nodeMap.insertMulti(p->nodeName(), p);
    }
 
    return p;
@@ -3841,18 +3745,19 @@ QDomNodePrivate *QDomDocumentTypePrivate::replaceChild(QDomNodePrivate *newChild
 {
    // Call the origianl implementation
    QDomNodePrivate *p = QDomNodePrivate::replaceChild(newChild, oldChild);
+
    // Update the maps
    if (p) {
       if (oldChild && oldChild->isEntity()) {
-         entities->map.remove(oldChild->nodeName());
+         entities->m_nodeMap.remove(oldChild->nodeName());
       } else if (oldChild && oldChild->isNotation()) {
-         notations->map.remove(oldChild->nodeName());
+         notations->m_nodeMap.remove(oldChild->nodeName());
       }
 
       if (p->isEntity()) {
-         entities->map.insertMulti(p->nodeName(), p);
+         entities->m_nodeMap.insertMulti(p->nodeName(), p);
       } else if (p->isNotation()) {
-         notations->map.insertMulti(p->nodeName(), p);
+         notations->m_nodeMap.insertMulti(p->nodeName(), p);
       }
    }
 
@@ -3863,11 +3768,12 @@ QDomNodePrivate *QDomDocumentTypePrivate::removeChild(QDomNodePrivate *oldChild)
 {
    // Call the origianl implementation
    QDomNodePrivate *p = QDomNodePrivate::removeChild( oldChild);
+
    // Update the maps
    if (p && p->isEntity()) {
-      entities->map.remove(p->nodeName());
+      entities->m_nodeMap.remove(p->nodeName());
    } else if (p && p->isNotation()) {
-      notations->map.remove(p ->nodeName());
+      notations->m_nodeMap.remove(p ->nodeName());
    }
 
    return p;
@@ -3894,25 +3800,26 @@ void QDomDocumentTypePrivate::save(QTextStream &s, int, int indent) const
 
    s << "<!DOCTYPE " << name;
 
-   if (!publicId.isNull()) {
+   if (! publicId.isNull()) {
       s << " PUBLIC " << quotedValue(publicId);
       if (!systemId.isNull()) {
          s << ' ' << quotedValue(systemId);
       }
-   } else if (!systemId.isNull()) {
+
+   } else if (! systemId.isNull()) {
       s << " SYSTEM " << quotedValue(systemId);
    }
 
    if (entities->length() > 0 || notations->length() > 0) {
       s << " [" << endl;
 
-      QHash<QString, QDomNodePrivate *>::const_iterator it2 = notations->map.constBegin();
-      for (; it2 != notations->map.constEnd(); ++it2) {
+      QMultiMap<QString, QDomNodePrivate *>::const_iterator it2 = notations->m_nodeMap.constBegin();
+      for (; it2 != notations->m_nodeMap.constEnd(); ++it2) {
          (*it2)->save(s, 0, indent);
       }
 
-      QHash<QString, QDomNodePrivate *>::const_iterator it = entities->map.constBegin();
-      for (; it != entities->map.constEnd(); ++it) {
+      QMultiMap<QString, QDomNodePrivate *>::const_iterator it = entities->m_nodeMap.constBegin();
+      for (; it != entities->m_nodeMap.constEnd(); ++it) {
          (*it)->save(s, 0, indent);
       }
 
@@ -4206,7 +4113,7 @@ QDomNodePrivate *QDomCharacterDataPrivate::cloneNode(bool deep)
    return p;
 }
 
-uint QDomCharacterDataPrivate::dataLength() const
+int QDomCharacterDataPrivate::dataLength() const
 {
    return value.length();
 }
@@ -4332,7 +4239,7 @@ void QDomCharacterData::setData(const QString &v)
 /*!
     Returns the length of the stored string.
 */
-uint QDomCharacterData::length() const
+int QDomCharacterData::length() const
 {
    if (impl) {
       return IMPL->dataLength();
@@ -4901,6 +4808,7 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
 
    QString qName(name);
    QString nsDecl(QLatin1String(""));
+
    if (!namespaceURI.isNull()) {
       /** ### Qt 5:
        *
@@ -4909,9 +4817,8 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
        * the information that we get from startPrefixMapping()/endPrefixMapping() and use them.
        * Modifications becomes more complex then, however.
        *
-       * We cannot do this during the Qt 4 series because it would require too invasive changes, and
-       * hence possibly behavioral changes.
        */
+
       if (prefix.isEmpty()) {
          nsDecl = QLatin1String(" xmlns");
       } else {
@@ -4925,10 +4832,13 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
    QSet<QString> outputtedPrefixes;
 
    /* Write out attributes. */
-   if (!m_attr->map.isEmpty()) {
-      QHash<QString, QDomNodePrivate *>::const_iterator it = m_attr->map.constBegin();
-      for (; it != m_attr->map.constEnd(); ++it) {
+   if (! m_attr->m_nodeMap.isEmpty()) {
+
+      QMultiMap<QString, QDomNodePrivate *>::const_iterator it = m_attr->m_nodeMap.constBegin();
+
+      for (; it != m_attr->m_nodeMap.constEnd(); ++it) {
          s << ' ';
+
          if (it.value()->namespaceURI.isNull()) {
             s << it.value()->name << "=\"" << encodeText(it.value()->value, s, true, true) << '\"';
          } else {
@@ -5139,13 +5049,6 @@ QString QDomElement::attribute(const QString &name, const QString &defValue) con
    return IMPL->attribute(name, defValue);
 }
 
-/*!
-    Adds an attribute called \a name with value \a value. If an
-    attribute with the same name exists, its value is replaced by \a
-    value.
-
-    \sa attribute() setAttributeNode() setAttributeNS()
-*/
 void QDomElement::setAttribute(const QString &name, const QString &value)
 {
    if (!impl) {
@@ -5154,25 +5057,6 @@ void QDomElement::setAttribute(const QString &name, const QString &value)
    IMPL->setAttribute(name, value);
 }
 
-/*!
-  \fn void QDomElement::setAttribute(const QString& name, int value)
-
-    \overload
-    The number is formatted according to the current locale.
-*/
-
-/*!
-  \fn void QDomElement::setAttribute(const QString& name, uint value)
-
-    \overload
-    The number is formatted according to the current locale.
-*/
-
-/*!
-    \overload
-
-    The number is formatted according to the current locale.
-*/
 void QDomElement::setAttribute(const QString &name, qlonglong value)
 {
    if (!impl) {
@@ -5183,11 +5067,6 @@ void QDomElement::setAttribute(const QString &name, qlonglong value)
    IMPL->setAttribute(name, x);
 }
 
-/*!
-    \overload
-
-    The number is formatted according to the current locale.
-*/
 void QDomElement::setAttribute(const QString &name, qulonglong value)
 {
    if (!impl) {
@@ -5198,11 +5077,6 @@ void QDomElement::setAttribute(const QString &name, qulonglong value)
    IMPL->setAttribute(name, x);
 }
 
-/*!
-    \overload
-
-    The number is formatted according to the current locale.
-*/
 void QDomElement::setAttribute(const QString &name, float value)
 {
    if (!impl) {
@@ -5342,18 +5216,6 @@ QString QDomElement::attributeNS(const QString nsURI, const QString &localName, 
    return IMPL->attributeNS(nsURI, localName, defValue);
 }
 
-/*!
-    Adds an attribute with the qualified name \a qName and the
-    namespace URI \a nsURI with the value \a value. If an attribute
-    with the same local name and namespace URI exists, its prefix is
-    replaced by the prefix of \a qName and its value is repaced by \a
-    value.
-
-    Although \a qName is the qualified name, the local name is used to
-    decide if an existing attribute's value should be replaced.
-
-    \sa attributeNS() setAttributeNodeNS() setAttribute()
-*/
 void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, const QString &value)
 {
    if (!impl) {
@@ -5362,21 +5224,7 @@ void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, cons
    IMPL->setAttributeNS(nsURI, qName, value);
 }
 
-/*!
-  \fn void QDomElement::setAttributeNS(const QString nsURI, const QString& qName, int value)
 
-    \overload
-*/
-
-/*!
-  \fn void QDomElement::setAttributeNS(const QString nsURI, const QString& qName, uint value)
-
-    \overload
-*/
-
-/*!
-    \overload
-*/
 void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, qlonglong value)
 {
    if (!impl) {

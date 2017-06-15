@@ -26,16 +26,14 @@
 #ifndef QVARIANT_H
 #define QVARIANT_H
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlist.h>
+#include <qatomic.h>
+#include <qbytearray.h>
+#include <qlist.h>
 #include <qmetatype.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qstring.h>
+#include <qmap.h>
+#include <qstring.h>
 #include <qnamespace.h>
-
-template <class Key, class T>
-class QHash;
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -137,7 +135,7 @@ class Q_CORE_EXPORT QVariant
       Vector3D = QMetaType::QVector3D,
       Vector4D = QMetaType::QVector4D,
       Quaternion = QMetaType::QQuaternion,
-      PolygonF = QMetaType::QPolygonF,         
+      PolygonF = QMetaType::QPolygonF,
 
       // the UserType must always be after all declared types
       UserType = QMetaType::User,
@@ -298,7 +296,7 @@ class Q_CORE_EXPORT QVariant
 
    template<typename T>
    inline void setValue(const T &value);
-   
+
    inline void setValue(const QVariant &value);
 
    template<typename T>

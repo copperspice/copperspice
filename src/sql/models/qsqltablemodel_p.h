@@ -46,8 +46,7 @@ class QSqlTableModelPrivate: public QSqlQueryModelPrivate
    static void setGeneratedValue(QSqlRecord &rec, int c, QVariant v);
    QSqlRecord record(const QVector<QVariant> &values) const;
 
-   bool exec(const QString &stmt, bool prepStatement,
-             const QSqlRecord &rec, const QSqlRecord &whereValues);
+   bool exec(const QString &stmt, bool prepStatement, const QSqlRecord &rec, const QSqlRecord &whereValues);
    virtual void revertCachedRow(int row);
    void revertInsertedRow();
    bool setRecord(int row, const QSqlRecord &record);
@@ -71,10 +70,13 @@ class QSqlTableModelPrivate: public QSqlQueryModelPrivate
    enum Op { None, Insert, Update, Delete };
 
    struct ModifiedRow {
-      ModifiedRow(Op o = None, const QSqlRecord &r = QSqlRecord()): op(o), rec(r) {
+      ModifiedRow(Op o = None, const QSqlRecord &r = QSqlRecord())
+         : op(o), rec(r) {
          clearGenerated(rec);
       }
+
       ModifiedRow(const ModifiedRow &other): op(other.op), rec(other.rec), primaryValues(other.primaryValues) {}
+
       Op op;
       QSqlRecord rec;
       QSqlRecord primaryValues;
@@ -82,7 +84,7 @@ class QSqlTableModelPrivate: public QSqlQueryModelPrivate
 
    QSqlRecord editBuffer;
 
-   typedef QMap<int, ModifiedRow> CacheMap;
+   using CacheMap = QMap<int, ModifiedRow>;
    CacheMap cache;
 };
 

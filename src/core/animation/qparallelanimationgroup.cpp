@@ -177,8 +177,10 @@ void QParallelAnimationGroupPrivate::_q_uncontrolledAnimationFinished()
    Q_ASSERT(animation);
 
    int uncontrolledRunningCount = 0;
+
    if (animation->duration() == -1 || animation->loopCount() < 0) {
       QHash<QAbstractAnimation *, int>::iterator it = uncontrolledFinishTime.begin();
+
       while (it != uncontrolledFinishTime.end()) {
          if (it.key() == animation) {
             *it = animation->currentTime();

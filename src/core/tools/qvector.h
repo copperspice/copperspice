@@ -60,7 +60,7 @@ class QVector
    using reverse_iterator       = typename std::vector<T>::reverse_iterator;
    using const_reverse_iterator = typename std::vector<T>::const_reverse_iterator;
 
-   // java   
+   // java
    using Java_Iterator          = QVectorIterator<T>;
    using Java_MutableIterator   = QMutableVectorIterator<T>;
 
@@ -133,11 +133,11 @@ class QVector
       return &m_data[0];
    }
 
-   bool isEmpty() const {
+   bool empty() const {
       return m_data.empty();
    }
 
-   bool empty() const {
+   bool isEmpty() const {
       return m_data.empty();
    }
 
@@ -149,8 +149,8 @@ class QVector
 
    const_reference constFirst() const {
       Q_ASSERT(! isEmpty());
-      return m_data.front();   
-   }   
+      return m_data.front();
+   }
 
    reference first() {
       Q_ASSERT(! isEmpty());
@@ -201,7 +201,7 @@ class QVector
    }
 
    size_type length() {
-      return size();  
+      return size();
    }
 
    size_type lastIndexOf(const T &value, size_type from = -1) const {
@@ -223,7 +223,7 @@ class QVector
 
    QVector<T> mid(size_type pos, size_type length = -1) const;
    void move(size_type from, size_type to);
-  
+
    void pop_back() {
       Q_ASSERT(! isEmpty());
       m_data.pop_back();
@@ -261,16 +261,16 @@ class QVector
 
    void remove(size_type i, size_type n)  {
       Q_ASSERT_X(i >= 0 && n >= 0 && i + n <= size(), "QVector<T>::remove", "index out of range");
-      m_data.erase(m_data.begin() + i, m_data.begin() + i + n);   
+      m_data.erase(m_data.begin() + i, m_data.begin() + i + n);
    }
 
-   size_type removeAll(const T &value); 
-       
+   size_type removeAll(const T &value);
+
    void removeAt(size_type i) {
-      Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::removeAt", "index out of range"); 
+      Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::removeAt", "index out of range");
       m_data.erase(m_data.begin() + i);
    }
- 
+
    void removeFirst() {
       Q_ASSERT(! isEmpty());
       m_data.erase(m_data.begin());
@@ -281,8 +281,8 @@ class QVector
      m_data.pop_back();
    }
 
-   bool removeOne(const T &value); 
-   void replace(size_type i, const T &value); 
+   bool removeOne(const T &value);
+   void replace(size_type i, const T &value);
 
    void reserve(size_type size) {
       m_data.reserve(size);
@@ -309,7 +309,7 @@ class QVector
       qSwap(m_data, other.m_data);
    }
 
-   T takeAt(size_type i);  
+   T takeAt(size_type i);
    T takeFirst();
    T takeLast();
 
@@ -317,7 +317,7 @@ class QVector
    T value(size_type i, const T &defaultValue) const;
 
    // to from
-     static QVector<T> fromList(const QList<T> &list) {
+   static QVector<T> fromList(const QList<T> &list) {
       return list.toVector();
    }
 
@@ -545,7 +545,7 @@ inline void QVector<T>::move(size_type from, size_type to)
    if (to == from) {
       // do nothing
 
-   } else if (to > from) {   
+   } else if (to > from) {
       // forward
       std::rotate(m_data.begin() + from, m_data.begin() + from + 1, m_data.begin() + to + 1);
 
@@ -553,7 +553,7 @@ inline void QVector<T>::move(size_type from, size_type to)
        // reverse
       std::rotate(m_data.rend() - from - 1, m_data.rend() - from, m_data.rend() - to);
 
-   }  
+   }
 }
 
 template <typename T>

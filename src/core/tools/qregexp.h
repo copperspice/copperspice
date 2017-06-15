@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_REGEXP
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,7 +48,9 @@ class Q_CORE_EXPORT QRegExp
    QRegExp();
    explicit QRegExp(const QString &pattern, Qt::CaseSensitivity cs = Qt::CaseSensitive, PatternSyntax syntax = RegExp);
    QRegExp(const QRegExp &rx);
+
    ~QRegExp();
+
    QRegExp &operator=(const QRegExp &rx);
 
    inline QRegExp &operator=(QRegExp && other) {

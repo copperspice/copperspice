@@ -3150,7 +3150,8 @@ struct QRegExpPrivate {
       : eng(0), engineKey(key), minimal(false) {}
 };
 
-#if !defined(QT_NO_REGEXP_OPTIM)
+#if ! defined(QT_NO_REGEXP_OPTIM)
+
 uint qHash(const QRegExpEngineKey &key, uint seed)
 {
    return qHash(key.pattern, seed);
@@ -3159,20 +3160,25 @@ uint qHash(const QRegExpEngineKey &key, uint seed)
 typedef QCache<QRegExpEngineKey, QRegExpEngine> EngineCache;
 Q_GLOBAL_STATIC(EngineCache, globalEngineCache)
 Q_GLOBAL_STATIC(QMutex, mutex)
+
 #endif // QT_NO_REGEXP_OPTIM
 
 static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
 {
-   if (!eng->ref.deref()) {
-#if !defined(QT_NO_REGEXP_OPTIM)
+   if (! eng->ref.deref()) {
+
+#if ! defined(QT_NO_REGEXP_OPTIM)
       if (globalEngineCache()) {
          QMutexLocker locker(mutex());
+
          QT_TRY {
             globalEngineCache()->insert(key, eng, 4 + key.pattern.length() / 4);
+
          } QT_CATCH(const std::bad_alloc &) {
             // in case of an exception (e.g. oom), just delete the engine
             delete eng;
          }
+
       } else {
          delete eng;
       }
@@ -3180,6 +3186,7 @@ static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
       Q_UNUSED(key);
       delete eng;
 #endif
+
    }
 }
 

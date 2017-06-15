@@ -39,13 +39,13 @@ class QMutableSetIterator;
 template <class T>
 class QSet
 {
-   class Hash  
+   class Hash
    {
       public:
          size_t operator()(const T &data) const {
             return qHash(data);
          }
-   }; 
+   };
 
  public:
    using iterator        = typename std::unordered_set<T, Hash>::iterator;
@@ -68,22 +68,22 @@ class QSet
    using hasher          = typename std::unordered_set<T, Hash>::hasher;
 
    // from std
-   using allocator_type  = typename std::unordered_set<T, Hash>::allocator_type;  
+   using allocator_type  = typename std::unordered_set<T, Hash>::allocator_type;
 
-   // java   
+   // java
    using Java_Iterator        = QSetIterator<T>;
    using Java_MutableIterator = QMutableSetIterator<T>;
-  
+
    QSet() = default;
    QSet(const QSet<T> &other) = default;
    QSet(QSet<T> &&other) = default;
 
-   QSet(std::initializer_list<T> args) 
+   QSet(std::initializer_list<T> args)
       : m_data(args)  {}
 
    template<class Input_Iterator>
    QSet(Input_Iterator first, Input_Iterator last);
-     
+
    // methods
    size_type capacity() const {
       return m_data.capacity();
@@ -146,8 +146,8 @@ class QSet
    QList<T> values() const {
       return toList();
    }
-      
-   // iterators   
+
+   // iterators
    iterator begin() {
       return m_data.begin();
    }
@@ -179,7 +179,7 @@ class QSet
    const_iterator constEnd() const {
       return m_data.end();
    }
-    
+
    iterator erase(const_iterator pos) {
       return m_data.erase(pos);
    }
@@ -204,9 +204,9 @@ class QSet
       return m_data.insert(value).first;
    }
 
-   // reverse iterators - do not apply 
+   // reverse iterators - do not apply
 
-   // operators 
+   // operators
    QSet<T> &operator=(const QSet<T> &other)  = default;
    QSet<T> &operator=(QSet<T> && other)  = default;
 
@@ -217,7 +217,7 @@ class QSet
    bool operator!=(const QSet<T> &other) const {
       return m_data != other.m_data;
    }
- 
+
    QSet<T> &operator<<(const T &value) {
       insert(value);
       return *this;
@@ -227,7 +227,7 @@ class QSet
       unite(other);
       return *this;
    }
-   
+
    QSet<T> &operator|=(const T &value) {
       insert(value);
       return *this;
@@ -291,7 +291,7 @@ class QSet
       return result;
    }
 
-   // to from 
+   // to from
    QList<T> toList() const;
 
    static QSet<T> fromList(const QList<T> &list);
@@ -313,7 +313,7 @@ inline QSet<T> &QSet<T>::intersect(const QSet<T> &other)
    auto iter = m_data.cbegin();
 
    while (iter != m_data.cend()) {
-      
+
       if (! other.contains(*iter)) {
          iter = m_data.erase(iter);
 
@@ -328,7 +328,7 @@ inline QSet<T> &QSet<T>::intersect(const QSet<T> &other)
 template <class T>
 inline bool QSet<T>::intersects(const QSet<T> &other)
 {
-   for (const auto &item : m_data) {      
+   for (const auto &item : m_data) {
       if (other.contains(item)) {
          return true;
       }
@@ -339,11 +339,11 @@ inline bool QSet<T>::intersects(const QSet<T> &other)
 
 template <class T>
 inline QSet<T> &QSet<T>::subtract(const QSet<T> &other)
-{ 
+{
    auto iter = m_data.cbegin();
 
    while (iter != m_data.cend()) {
-      
+
       if (other.contains(*iter)) {
          iter = m_data.erase(iter);
 
@@ -357,11 +357,11 @@ inline QSet<T> &QSet<T>::subtract(const QSet<T> &other)
 
 template <class T>
 inline bool QSet<T>::contains(const QSet<T> &other) const
-{ 
+{
    for (const auto &item : m_data) {
       if (! contains(item)) {
          return false;
-      }     
+      }
    }
 
    return true;
@@ -407,44 +407,44 @@ QList<T> QList<T>::fromSet(const QSet<T> &set)
 
 template <class T>
 class QSetIterator
-{ 
+{
    typedef typename QSet<T>::const_iterator const_iterator;
 
    QSet<T> c;
    const_iterator i;
-   
+
    public:
       inline QSetIterator(const QSet<T> &container)
          : c(container), i(c.constBegin()) {}
-   
+
       inline QSetIterator &operator=(const QSet<T> &container)
          { c = container; i = c.constBegin(); return *this; }
-      
-      inline void toFront() { i = c.constBegin(); } 
-      inline void toBack() { i = c.constEnd(); } 
-      inline bool hasNext() const { return i != c.constEnd(); } 
-      inline const T &next() { return *i++; } 
-      inline const T &peekNext() const { return *i; } 
-      inline bool hasPrevious() const { return i != c.constBegin(); } 
-      inline const T &previous() { return *--i; } 
-      inline const T &peekPrevious() const { const_iterator p = i; return *--p; } 
-      
-      inline bool findNext(const T &t)  { 
+
+      inline void toFront() { i = c.constBegin(); }
+      inline void toBack() { i = c.constEnd(); }
+      inline bool hasNext() const { return i != c.constEnd(); }
+      inline const T &next() { return *i++; }
+      inline const T &peekNext() const { return *i; }
+      inline bool hasPrevious() const { return i != c.constBegin(); }
+      inline const T &previous() { return *--i; }
+      inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
+
+      inline bool findNext(const T &t)  {
          while (i != c.constEnd()) {
             if (*i++ == t) {
-               return true; 
+               return true;
             }
          }
-         return false;           
+         return false;
       }
-      
-      inline bool findPrevious(const T &t)   { 
+
+      inline bool findPrevious(const T &t)   {
          while (i != c.constBegin()) {
             if (*(--i) == t)  {
-               return true; 
+               return true;
             }
-         }  
-         return false;                 
+         }
+         return false;
       }
 };
 
@@ -452,28 +452,28 @@ template <typename T>
 class QMutableSetIterator
 {
    typedef typename QSet<T>::iterator iterator;
+
    QSet<T> *c;
    iterator i, n;
+
    inline bool item_exists() const {
       return c->constEnd() != n;
    }
 
  public:
    inline QMutableSetIterator(QSet<T> &container)
-      : c(&container) 
-   {      
+      : c(&container)
+   {
       i = c->begin();
       n = c->end();
    }
 
    inline ~QMutableSetIterator() {
-      c->setSharable(true);
    }
 
-   inline QMutableSetIterator &operator=(QSet<T> &container) 
+   inline QMutableSetIterator &operator=(QSet<T> &container)
    {
-    
-      c = &container;    
+      c = &container;
       i = c->begin();
       n = c->end();
       return *this;
@@ -537,4 +537,4 @@ class QMutableSetIterator
 
 QT_END_NAMESPACE
 
-#endif 
+#endif
