@@ -26,11 +26,7 @@ CORE_PUBLIC_INCLUDES += \
 	QElapsedTimer \
 	QExplicitlySharedDataPointer \
 	QHash \
-	QHashData \
-	QHashDummyNode \
-	QHashDummyValue \
 	QHashIterator \
-	QHashNode \
 	QLatin1Char \
 	QLatin1Literal \
 	QLatin1String \
@@ -127,12 +123,9 @@ CORE_TOOLS_INCLUDES = \
 	qelapsedtimer.h \
 	qexplicitlyshareddatapointer.h \
 	qhash.h \
-	qhashdata.h \
-	qhashdummynode.h \
-	qhashdummyvalue.h \
+	qhashfunc.h \
 	qhashfwd.h \
 	qhashiterator.h \
-	qhashnode.h \
 	qlatin1char.h \
 	qlatin1literal.h \
 	qlatin1string.h \

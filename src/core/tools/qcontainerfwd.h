@@ -27,24 +27,27 @@
 
 QT_BEGIN_NAMESPACE
 
-template <class Key, class T> class QCache;
-template <class Key, class T> class QHash;
+template <typename Key> class qHashFunc;
+template <typename Key> class qHashEqual;
+template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>> class QHash;
+template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>> class QMultiHash;
 
-template <class T> class QList;
-template <class T> class QLinkedList;
+template <typename Key> class qMapCompare;
+template <typename Key, typename Val, typename Compare = qMapCompare<Key>> class QMap;
+template <typename Key, typename Val, typename Compare = qMapCompare<Key>> class QMultiMap;
 
-template <class Key> class qMapCompare;
-template <class Key, class T, class Compare = qMapCompare<Key>> class QMap;
-template <class Key, class T, class Compare = qMapCompare<Key>> class QMultiMap;
+template <typename Val> class QList;
+template <typename Val> class QLinkedList;
+template <typename Val> class QQueue;
+template <typename Val> class QSet;
+template <typename Val> class QStack;
+template <typename Val> class QVector;
 
-template <class Key, class T> class QMultiHash;
-template <class T1, class T2> struct QPair;
-template <class T> class QQueue;
-template <class T> class QSet;
-template <class T> class QStack;
-template<class T, int Prealloc = 256> class QVarLengthArray;
-template <class T> class QVector;
+template <typename Key, typename Val> class  QCache;
+template <typename T1,  typename T2>  struct QPair;
+
+template <typename Val, int Prealloc = 256> class QVarLengthArray;
 
 QT_END_NAMESPACE
 
-#endif // QCONTAINERFWD_H
+#endif

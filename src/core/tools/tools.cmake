@@ -24,11 +24,7 @@ set(CORE_PUBLIC_INCLUDES
     QElapsedTimer
     QExplicitlySharedDataPointer
     QHash
-    QHashData
-    QHashDummyNode
-    QHashDummyValue
     QHashIterator
-    QHashNode
     QLatin1Char
     QLatin1Literal
     QLatin1String
@@ -127,12 +123,9 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qexplicitlyshareddatapointer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhash.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfunc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfwd.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdata.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdummynode.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashdummyvalue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashnode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1char.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1literal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1string.h
