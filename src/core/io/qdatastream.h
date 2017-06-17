@@ -23,10 +23,10 @@
 #ifndef QDATASTREAM_H
 #define QDATASTREAM_H
 
-#include <QtCore/qscopedpointer.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qcontainerfwd.h>
+#include <qscopedpointer.h>
+#include <qiodevice.h>
+#include <qglobal.h>
+#include <qcontainerfwd.h>
 
 #ifdef Status
 #error qdatastream.h must be included before any header file that defines Status
@@ -70,14 +70,14 @@ class Q_CORE_EXPORT QDataStream
       Qt_5_1 = 14,
       Qt_5_2 = 15,
       Qt_5_3 = Qt_5_2,
- 
+
       CS_1_0 = 128,
       CS_1_1 = CS_1_0,
       CS_1_2 = CS_1_1,
       CS_1_3 = CS_1_2,
       CS_1_4 = CS_1_3
    };
- 
+
    enum ByteOrder {
       BigEndian = QSysInfo::BigEndian,
       LittleEndian = QSysInfo::LittleEndian
@@ -244,6 +244,7 @@ QDataStream &operator>>(QDataStream &s, QList<T> &l)
    quint32 c;
    s >> c;
    l.reserve(c);
+
    for (quint32 i = 0; i < c; ++i) {
       T t;
       s >> t;
@@ -270,7 +271,9 @@ QDataStream &operator>>(QDataStream &s, QLinkedList<T> &l)
 {
    l.clear();
    quint32 c;
+
    s >> c;
+
    for (quint32 i = 0; i < c; ++i) {
       T t;
       s >> t;
@@ -287,6 +290,7 @@ QDataStream &operator<<(QDataStream &s, const QLinkedList<T> &l)
 {
    s << quint32(l.size());
    typename QLinkedList<T>::ConstIterator it = l.constBegin();
+
    for (; it != l.constEnd(); ++it) {
       s << *it;
    }
@@ -298,8 +302,10 @@ QDataStream &operator>>(QDataStream &s, QVector<T> &v)
 {
    v.clear();
    quint32 c;
+
    s >> c;
    v.resize(c);
+
    for (quint32 i = 0; i < c; ++i) {
       T t;
       s >> t;
@@ -340,6 +346,7 @@ QDataStream &operator<<(QDataStream &out, const QSet<T> &set)
 {
    out << quint32(set.size());
    typename QSet<T>::const_iterator i = set.constBegin();
+
    while (i != set.constEnd()) {
       out << *i;
       ++i;
@@ -352,6 +359,56 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QHash<Key, T> &has
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
+
+   hash.clear();
+
+   quint32 n;
+   in >> n;
+
+   for (quint32 i = 0; i < n; ++i) {
+      if (in.status() != QDataStream::Ok) {
+         break;
+      }
+
+      Key k;
+      T t;
+      in >> k >> t;
+      hash.insert(k, t);
+   }
+
+   if (in.status() != QDataStream::Ok) {
+      hash.clear();
+   }
+
+   if (oldStatus != QDataStream::Ok) {
+      in.setStatus(oldStatus);
+   }
+
+   return in;
+}
+
+template <class Key, class T>
+Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
+{
+   out << quint32(hash.size());
+
+   typename QHash<Key, T>::ConstIterator iter = hash.begin();
+   typename QHash<Key, T>::ConstIterator end  = hash.end();
+
+   while (iter != end) {
+      out << iter.key() << iter.value();
+      ++iter;
+   }
+
+   return out;
+}
+
+template <class Key, class T>
+Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiHash<Key, T> &hash)
+{
+   QDataStream::Status oldStatus = in.status();
+   in.resetStatus();
+
    hash.clear();
 
    quint32 n;
@@ -371,22 +428,27 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QHash<Key, T> &has
    if (in.status() != QDataStream::Ok) {
       hash.clear();
    }
+
    if (oldStatus != QDataStream::Ok) {
       in.setStatus(oldStatus);
    }
+
    return in;
 }
 
 template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
+Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiHash<Key, T> &hash)
 {
    out << quint32(hash.size());
-   typename QHash<Key, T>::ConstIterator it = hash.end();
-   typename QHash<Key, T>::ConstIterator begin = hash.begin();
-   while (it != begin) {
-      --it;
-      out << it.key() << it.value();
+
+   typename QMultiHash<Key, T>::ConstIterator iter = hash.begin();
+   typename QMultiHash<Key, T>::ConstIterator end  = hash.end();
+
+   while (iter != end) {
+      out << iter.key() << iter.value();
+      ++iter;
    }
+
    return out;
 }
 
@@ -395,13 +457,60 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &ma
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
+
    map.clear();
 
    quint32 n;
    in >> n;
 
-   map.detach();
-   map.setInsertInOrder(true);
+   for (quint32 i = 0; i < n; ++i) {
+      if (in.status() != QDataStream::Ok) {
+         break;
+      }
+
+      aKey key;
+      aT value;
+      in >> key >> value;
+      map.insert(key, value);
+   }
+
+   if (in.status() != QDataStream::Ok) {
+      map.clear();
+   }
+
+   if (oldStatus != QDataStream::Ok) {
+      in.setStatus(oldStatus);
+   }
+
+   return in;
+}
+
+template <class Key, class Val, class C>
+Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
+{
+   out << quint32(map.size());
+   typename QMap<Key, Val, C>::ConstIterator it = map.end();
+   typename QMap<Key, Val, C>::ConstIterator begin = map.begin();
+
+   while (it != begin) {
+      --it;
+      out << it.key() << it.value();
+   }
+
+   return out;
+}
+
+template <class aKey, class aT>
+Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiMap<aKey, aT> &map)
+{
+   QDataStream::Status oldStatus = in.status();
+   in.resetStatus();
+
+   map.clear();
+
+   quint32 n;
+   in >> n;
+
    for (quint32 i = 0; i < n; ++i) {
       if (in.status() != QDataStream::Ok) {
          break;
@@ -412,26 +521,31 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &ma
       in >> key >> value;
       map.insertMulti(key, value);
    }
-   map.setInsertInOrder(false);
+
    if (in.status() != QDataStream::Ok) {
       map.clear();
    }
+
    if (oldStatus != QDataStream::Ok) {
       in.setStatus(oldStatus);
    }
+
    return in;
 }
 
 template <class Key, class Val, class C>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
+Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
-   typename QMap<Key, Val, C>::ConstIterator it = map.end();
-   typename QMap<Key, Val, C>::ConstIterator begin = map.begin();
+
+   typename QMultiMap<Key, Val, C>::ConstIterator it    = map.end();
+   typename QMultiMap<Key, Val, C>::ConstIterator begin = map.begin();
+
    while (it != begin) {
       --it;
       out << it.key() << it.value();
    }
+
    return out;
 }
 
