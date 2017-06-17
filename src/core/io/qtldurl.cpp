@@ -30,15 +30,19 @@ QT_BEGIN_NAMESPACE
 
 static bool containsTLDEntry(const QString &entry)
 {
-   int index = qt_hash(entry) % tldCount;
+   int index = cs_stable_hash(entry) % tldCount;
    int currentDomainIndex = tldIndices[index];
+
    while (currentDomainIndex < tldIndices[index + 1]) {
       QString currentEntry = QString::fromUtf8(tldData + currentDomainIndex);
+
       if (currentEntry == entry) {
          return true;
       }
+
       currentDomainIndex += qstrlen(tldData + currentDomainIndex) + 1; // +1 for the ending \0
    }
+
    return false;
 }
 

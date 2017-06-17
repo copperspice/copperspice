@@ -666,6 +666,7 @@ int QResourceRoot::findNode(const QString &_path, const QLocale &locale) const
    int node = -1;
 
    QStringSplitter splitter(path);
+
    while (child_count && splitter.hasNext()) {
       QStringRef segment = splitter.next();
 
@@ -675,11 +676,12 @@ int QResourceRoot::findNode(const QString &_path, const QLocale &locale) const
          qDebug() << "   " << child + j << " :: " << name(child + j);
       }
 #endif
-      const int h = qt_hash(segment.toString());
+      const int h = cs_stable_hash(segment.toString());
 
       //do the binary search for the hash
       int l = 0, r = child_count - 1;
       int sub_node = (l + r + 1) / 2;
+
       while (r != l) {
          const int sub_node_hash = hash(child + sub_node);
          if (h == sub_node_hash) {
