@@ -23,11 +23,13 @@
 #ifndef QNETWORKACCESSCACHE_P_H
 #define QNETWORKACCESSCACHE_P_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qmetatype.h>
+#include <qobject.h>
+#include <qbasictimer.h>
+#include <qbytearray.h>
+#include <qdatetime.h>
+#include <qhash.h>
+#include <qmetatype.h>
+#include <qqueue.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,31 +38,57 @@ class QUrl;
 
 // this class is not about caching files, but rather about caching objects used by
 // QNetworkAccessManager, e.g. existing TCP connections or credentials.
-class QNetworkAccessCache: public QObject
+
+class QNetworkAccessCache : public QObject
 {
    NET_CS_OBJECT(QNetworkAccessCache)
 
  public:
-   struct Node;
-   typedef QHash<QByteArray, Node> NodeHash;
+   // idea copied from qcache.h
 
    class CacheableObject
    {
-      friend class QNetworkAccessCache;
-      QByteArray key;
-      bool expires;
-      bool shareable;
     public:
-      CacheableObject();
-      virtual ~CacheableObject();
-      virtual void dispose() = 0;
-      inline QByteArray cacheKey() const {
-         return key;
-      }
+       CacheableObject();
+       virtual ~CacheableObject();
+
+       virtual void dispose() = 0;
+
+       inline QByteArray cacheKey() const {
+          return key;
+       }
 
     protected:
       void setExpires(bool enable);
       void setShareable(bool enable);
+
+    private:
+      QByteArray key;
+      bool expires;
+      bool shareable;
+
+      friend class QNetworkAccessCache;
+   };
+
+   struct Receiver {
+      QPointer<QObject> object;
+      const char *member;
+   };
+
+   struct Node {
+      QDateTime timestamp;
+      QQueue<Receiver> receiverQueue;
+      QByteArray key;
+
+      Node *older;
+      Node *newer;
+      CacheableObject *object;
+
+      int useCount;
+
+      Node()
+         : older(nullptr), newer(nullptr), object(nullptr), useCount(0) {
+      }
    };
 
    QNetworkAccessCache();
@@ -71,11 +99,11 @@ class QNetworkAccessCache: public QObject
    void addEntry(const QByteArray &key, CacheableObject *entry);
    bool hasEntry(const QByteArray &key) const;
    bool requestEntry(const QByteArray &key, QObject *target, const char *member);
- 
+
    CacheableObject *requestEntryNow(const QByteArray &key);
    void releaseEntry(const QByteArray &key);
    void removeEntry(const QByteArray &key);
- 
+
    NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject *un_named_arg1))
    NET_CS_SIGNAL_2(entryReady, un_named_arg1)
 
@@ -84,7 +112,7 @@ class QNetworkAccessCache: public QObject
 
  private:
    // idea copied from qcache.h
-   NodeHash hash;
+   QHash<QByteArray, Node> hash;
    Node *oldest;
    Node *newest;
 
