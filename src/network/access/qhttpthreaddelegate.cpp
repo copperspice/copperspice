@@ -86,11 +86,12 @@ static QNetworkReply::NetworkError statusCodeFromHttp(int httpStatusCode, const 
 static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
 {
    QByteArray result;
+
    QUrl copy = url;
    bool isEncrypted = copy.scheme().toLower() == QLatin1String("https");
+
    copy.setPort(copy.port(isEncrypted ? 443 : 80));
-   result = copy.toEncoded(QUrl::RemoveUserInfo | QUrl::RemovePath |
-                           QUrl::RemoveQuery | QUrl::RemoveFragment);
+   result = copy.toEncoded(QUrl::RemoveUserInfo | QUrl::RemovePath | QUrl::RemoveQuery | QUrl::RemoveFragment);
 
 #ifndef QT_NO_NETWORKPROXY
    if (proxy && proxy->type() != QNetworkProxy::NoProxy) {
@@ -127,7 +128,6 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
 
 class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public QNetworkAccessCache::CacheableObject
 {
-
  public:
 
 #ifdef QT_NO_BEARERMANAGEMENT
@@ -135,8 +135,8 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
       : QHttpNetworkConnection(hostName, port, encrypt)
 #else
    QNetworkAccessCachedHttpConnection(const QString &hostName, quint16 port, bool encrypt,
-                                      QSharedPointer<QNetworkSession> networkSession)
-      : QHttpNetworkConnection(hostName, port, encrypt, /*parent=*/0, networkSession)
+                  QSharedPointer<QNetworkSession> networkSession)
+      : QHttpNetworkConnection(hostName, port, encrypt, nullptr, networkSession)
 #endif
 
    {
@@ -151,7 +151,6 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
 
 
 QThreadStorage<QNetworkAccessCache *> QHttpThreadDelegate::connections;
-
 
 QHttpThreadDelegate::~QHttpThreadDelegate()
 {

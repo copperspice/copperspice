@@ -45,95 +45,49 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QNetworkDiskCache
-    \since 4.5
-    \inmodule QtNetwork
-
-    \brief The QNetworkDiskCache class provides a very basic disk cache.
-
-    QNetworkDiskCache stores each url in its own file inside of the
-    cacheDirectory using QDataStream.  Files with a text MimeType
-    are compressed using qCompress.  Each cache file starts with "cache_"
-    and ends in ".cache".  Data is written to disk only in insert()
-    and updateMetaData().
-
-    Currently you can not share the same cache files with more then
-    one disk cache.
-
-    QNetworkDiskCache by default limits the amount of space that the cache will
-    use on the system to 50MB.
-
-    Note you have to set the cache directory before it will work.
-
-    A network disk cache can be enabled by:
-
-    \snippet doc/src/snippets/code/src_network_access_qnetworkdiskcache.cpp 0
-
-    When sending requests, to control the preference of when to use the cache
-    and when to use the network, consider the following:
-
-    \snippet doc/src/snippets/code/src_network_access_qnetworkdiskcache.cpp 1
-
-    To check whether the response came from the cache or from the network, the
-    following can be applied:
-
-    \snippet doc/src/snippets/code/src_network_access_qnetworkdiskcache.cpp 2
-*/
-
-/*!
-    Creates a new disk cache. The \a parent argument is passed to
-    QAbstractNetworkCache's constructor.
- */
 QNetworkDiskCache::QNetworkDiskCache(QObject *parent)
    : QAbstractNetworkCache(*new QNetworkDiskCachePrivate, parent)
 {
 }
 
-/*!
-    Destroys the cache object.  This does not clear the disk cache.
- */
+
 QNetworkDiskCache::~QNetworkDiskCache()
 {
    Q_D(QNetworkDiskCache);
+
    QHashIterator<QIODevice *, QCacheItem *> it(d->inserting);
+
    while (it.hasNext()) {
       it.next();
       delete it.value();
    }
 }
 
-/*!
-    Returns the location where cached files will be stored.
-*/
+
 QString QNetworkDiskCache::cacheDirectory() const
 {
    Q_D(const QNetworkDiskCache);
    return d->cacheDirectory;
 }
 
-/*!
-    Sets the directory where cached files will be stored to \a cacheDir
-
-    QNetworkDiskCache will create this directory if it does not exists.
-
-    Prepared cache items will be stored in the new cache directory when
-    they are inserted.
-
-    \sa QDesktopServices::CacheLocation
-*/
 void QNetworkDiskCache::setCacheDirectory(const QString &cacheDir)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
    qDebug() << "QNetworkDiskCache::setCacheDirectory()" << cacheDir;
 #endif
+
    Q_D(QNetworkDiskCache);
+
    if (cacheDir.isEmpty()) {
       return;
    }
+
    d->cacheDirectory = cacheDir;
+
    QDir dir(d->cacheDirectory);
+
    d->cacheDirectory = dir.absolutePath();
+
    if (!d->cacheDirectory.endsWith(QLatin1Char('/'))) {
       d->cacheDirectory += QLatin1Char('/');
    }
@@ -148,7 +102,8 @@ void QNetworkDiskCache::setCacheDirectory(const QString &cacheDir)
 qint64 QNetworkDiskCache::cacheSize() const
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
-   qDebug() << "QNetworkDiskCache::cacheSize()";
+   qDebug(
+) << "QNetworkDiskCache::cacheSize()";
 #endif
    Q_D(const QNetworkDiskCache);
    if (d->cacheDirectory.isEmpty()) {

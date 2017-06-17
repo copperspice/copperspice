@@ -32,8 +32,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredential>,
-   public QNetworkAccessCache::CacheableObject
+class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredential>, public QNetworkAccessCache::CacheableObject
 {
  public:
    QNetworkAuthenticationCache() {
@@ -44,10 +43,12 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
 
    QNetworkAuthenticationCredential *findClosestMatch(const QString &domain) {
       iterator it = qLowerBound(begin(), end(), domain);
+
       if (it == end() && !isEmpty()) {
          --it;
       }
-      if (it == end() || !domain.startsWith(it->domain)) {
+
+      if (it == end() || ! domain.startsWith(it->domain)) {
          return 0;
       }
       return &*it;

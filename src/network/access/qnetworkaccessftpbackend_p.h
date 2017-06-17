@@ -77,13 +77,14 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
    NET_CS_SLOT_2(ftpRawCommandReply)
 
  private:
-   friend class QNetworkAccessFtpIODevice;
    QPointer<QNetworkAccessCachedFtpConnection> ftp;
    QIODevice *uploadDevice;
    qint64 totalBytes;
    int helpId, sizeId, mdtmId;
    bool supportsSize, supportsMdtm;
    State state;
+
+   friend class QNetworkAccessFtpIODevice;
 };
 
 class QNetworkAccessFtpBackendFactory: public QNetworkAccessBackendFactory

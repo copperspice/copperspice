@@ -37,14 +37,13 @@ static QByteArray makeCacheKey(const QUrl &url)
 {
    QUrl copy = url;
    copy.setPort(url.port(DefaultFtpPort));
+
    return "ftp-connection:" +
-          copy.toEncoded(QUrl::RemovePassword | QUrl::RemovePath | QUrl::RemoveQuery |
-                         QUrl::RemoveFragment);
+          copy.toEncoded(QUrl::RemovePassword | QUrl::RemovePath | QUrl::RemoveQuery | QUrl::RemoveFragment);
 }
 
 QNetworkAccessBackend *
-QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op,
-                                        const QNetworkRequest &request) const
+QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const
 {
    // is it an operation we know of?
    switch (op) {
@@ -64,9 +63,8 @@ QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op,
    return 0;
 }
 
-class QNetworkAccessCachedFtpConnection: public QFtp, public QNetworkAccessCache::CacheableObject
+class QNetworkAccessCachedFtpConnection : public QFtp, public QNetworkAccessCache::CacheableObject
 {
-
  public:
    QNetworkAccessCachedFtpConnection() {
       setExpires(true);
@@ -98,11 +96,11 @@ void QNetworkAccessFtpBackend::open()
 {
 #ifndef QT_NO_NETWORKPROXY
    QNetworkProxy proxy;
+
    for (const QNetworkProxy & p : proxyList()) {
       // use the first FTP proxy
       // or no proxy at all
-      if (p.type() == QNetworkProxy::FtpCachingProxy
-            || p.type() == QNetworkProxy::NoProxy) {
+      if (p.type() == QNetworkProxy::FtpCachingProxy || p.type() == QNetworkProxy::NoProxy) {
          proxy = p;
          break;
       }
@@ -111,8 +109,7 @@ void QNetworkAccessFtpBackend::open()
    // did we find an FTP proxy or a NoProxy?
    if (proxy.type() == QNetworkProxy::DefaultProxy) {
       // unsuitable proxies
-      error(QNetworkReply::ProxyNotFoundError,
-            tr("No suitable proxy found"));
+      error(QNetworkReply::ProxyNotFoundError, tr("No suitable proxy found"));
       finished();
       return;
    }
@@ -120,32 +117,37 @@ void QNetworkAccessFtpBackend::open()
 #endif
 
    QUrl url = this->url();
+
    if (url.path().isEmpty()) {
       url.setPath(QLatin1String("/"));
       setUrl(url);
    }
+
    if (url.path().endsWith(QLatin1Char('/'))) {
-      error(QNetworkReply::ContentOperationNotPermittedError,
-            tr("Cannot open %1: is a directory").arg(url.toString()));
+      error(QNetworkReply::ContentOperationNotPermittedError, tr("Cannot open %1: is a directory").arg(url.toString()));
       finished();
       return;
    }
+
    state = LoggingIn;
 
    QNetworkAccessCache *objectCache = QNetworkAccessManagerPrivate::getObjectCache(this);
    QByteArray cacheKey = makeCacheKey(url);
-   if (!objectCache->requestEntry(cacheKey, this,
-                                  SLOT(ftpConnectionReady(QNetworkAccessCache::CacheableObject *)))) {
+
+   if (! objectCache->requestEntry(cacheKey, this, SLOT(ftpConnectionReady(QNetworkAccessCache::CacheableObject *)))) {
       ftp = new QNetworkAccessCachedFtpConnection;
+
 #ifndef QT_NO_BEARERMANAGEMENT
-      //copy network session down to the QFtp
+      // copy network session down to the QFtp
       ftp->setProperty("_q_networksession", property("_q_networksession"));
 #endif
+
 #ifndef QT_NO_NETWORKPROXY
       if (proxy.type() == QNetworkProxy::FtpCachingProxy) {
          ftp->setProxy(proxy.hostName(), proxy.port());
       }
 #endif
+
       ftp->connectToHost(url.host(), url.port(DefaultFtpPort));
       ftp->login(url.userName(), url.password());
 
@@ -198,6 +200,7 @@ void QNetworkAccessFtpBackend::disconnectFromFtp(CacheCleanupMode mode)
       disconnect(ftp, 0, this, 0);
 
       QByteArray key = makeCacheKey(url());
+
       if (mode == RemoveCachedConnection) {
          QNetworkAccessManagerPrivate::getObjectCache(this)->removeEntry(key);
          ftp->dispose();

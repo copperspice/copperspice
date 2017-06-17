@@ -36,223 +36,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QNetworkRequest
-    \brief The QNetworkRequest class holds a request to be sent with QNetworkAccessManager.
-    \since 4.4
-
-    \ingroup network
-    \inmodule QtNetwork
-
-    QNetworkRequest is part of the Network Access API and is the class
-    holding the information necessary to send a request over the
-    network. It contains a URL and some ancillary information that can
-    be used to modify the request.
-
-    \sa QNetworkReply, QNetworkAccessManager
-*/
-
-/*!
-    \enum QNetworkRequest::KnownHeaders
-
-    List of known header types that QNetworkRequest parses. Each known
-    header is also represented in raw form with its full HTTP name.
-
-    \value ContentTypeHeader    corresponds to the HTTP Content-Type
-    header and contains a string containing the media (MIME) type and
-    any auxiliary data (for instance, charset)
-
-    \value ContentLengthHeader  corresponds to the HTTP Content-Length
-    header and contains the length in bytes of the data transmitted.
-
-    \value LocationHeader       corresponds to the HTTP Location
-    header and contains a URL representing the actual location of the
-    data, including the destination URL in case of redirections.
-
-    \value LastModifiedHeader   corresponds to the HTTP Last-Modified
-    header and contains a QDateTime representing the last modification
-    date of the contents
-
-    \value CookieHeader         corresponds to the HTTP Cookie header
-    and contains a QList<QNetworkCookie> representing the cookies to
-    be sent back to the server
-
-    \value SetCookieHeader      corresponds to the HTTP Set-Cookie
-    header and contains a QList<QNetworkCookie> representing the
-    cookies sent by the server to be stored locally
-
-    \sa header(), setHeader(), rawHeader(), setRawHeader()
-*/
-
-/*!
-    \enum QNetworkRequest::Attribute
-    \since 4.7
-
-    Attribute codes for the QNetworkRequest and QNetworkReply.
-
-    Attributes are extra meta-data that are used to control the
-    behavior of the request and to pass further information from the
-    reply back to the application. Attributes are also extensible,
-    allowing custom implementations to pass custom values.
-
-    The following table explains what the default attribute codes are,
-    the QVariant types associated, the default value if said attribute
-    is missing and whether it's used in requests or replies.
-
-    \value HttpStatusCodeAttribute
-        Replies only, type: QVariant::Int (no default)
-        Indicates the HTTP status code received from the HTTP server
-        (like 200, 304, 404, 401, etc.). If the connection was not
-        HTTP-based, this attribute will not be present.
-
-    \value HttpReasonPhraseAttribute
-        Replies only, type: QVariant::ByteArray (no default)
-        Indicates the HTTP reason phrase as received from the HTTP
-        server (like "Ok", "Found", "Not Found", "Access Denied",
-        etc.) This is the human-readable representation of the status
-        code (see above). If the connection was not HTTP-based, this
-        attribute will not be present.
-
-    \value RedirectionTargetAttribute
-        Replies only, type: QVariant::Url (no default)
-        If present, it indicates that the server is redirecting the
-        request to a different URL. The Network Access API does not by
-        default follow redirections: it's up to the application to
-        determine if the requested redirection should be allowed,
-        according to its security policies.
-        The returned URL might be relative. Use QUrl::resolved()
-        to create an absolute URL out of it.
-
-    \value ConnectionEncryptedAttribute
-        Replies only, type: QVariant::Bool (default: false)
-        Indicates whether the data was obtained through an encrypted
-        (secure) connection.
-
-    \value CacheLoadControlAttribute
-        Requests only, type: QVariant::Int (default: QNetworkRequest::PreferNetwork)
-        Controls how the cache should be accessed. The possible values
-        are those of QNetworkRequest::CacheLoadControl. Note that the
-        default QNetworkAccessManager implementation does not support
-        caching. However, this attribute may be used by certain
-        backends to modify their requests (for example, for caching proxies).
-
-    \value CacheSaveControlAttribute
-        Requests only, type: QVariant::Bool (default: true)
-        Controls if the data obtained should be saved to cache for
-        future uses. If the value is false, the data obtained will not
-        be automatically cached. If true, data may be cached, provided
-        it is cacheable (what is cacheable depends on the protocol
-        being used).
-
-    \value SourceIsFromCacheAttribute
-        Replies only, type: QVariant::Bool (default: false)
-        Indicates whether the data was obtained from cache
-        or not.
-
-    \value DoNotBufferUploadDataAttribute
-        Requests only, type: QVariant::Bool (default: false)
-        Indicates whether the QNetworkAccessManager code is
-        allowed to buffer the upload data, e.g. when doing a HTTP POST.
-        When using this flag with sequential upload data, the ContentLengthHeader
-        header must be set.
-
-    \value HttpPipeliningAllowedAttribute
-        Requests only, type: QVariant::Bool (default: false)
-        Indicates whether the QNetworkAccessManager code is
-        allowed to use HTTP pipelining with this request.
-
-    \value HttpPipeliningWasUsedAttribute
-        Replies only, type: QVariant::Bool
-        Indicates whether the HTTP pipelining was used for receiving
-        this reply.
-
-    \value CustomVerbAttribute
-       Requests only, type: QVariant::ByteArray
-       Holds the value for the custom HTTP verb to send (destined for usage
-       of other verbs than GET, POST, PUT and DELETE). This verb is set
-       when calling QNetworkAccessManager::sendCustomRequest().
-
-    \value CookieLoadControlAttribute
-        Requests only, type: QVariant::Int (default: QNetworkRequest::Automatic)
-        Indicates whether to send 'Cookie' headers in the request.
-        This attribute is set to false by QtWebKit when creating a cross-origin
-        XMLHttpRequest where withCredentials has not been set explicitly to true by the
-        Javascript that created the request.
-        See \l{http://www.w3.org/TR/XMLHttpRequest2/#credentials-flag}{here} for more information.
-        (This value was introduced in 4.7.)
-
-    \value CookieSaveControlAttribute
-        Requests only, type: QVariant::Int (default: QNetworkRequest::Automatic)
-        Indicates whether to save 'Cookie' headers received from the server in reply
-        to the request.
-        This attribute is set to false by QtWebKit when creating a cross-origin
-        XMLHttpRequest where withCredentials has not been set explicitly to true by the
-        Javascript that created the request.
-        See \l{http://www.w3.org/TR/XMLHttpRequest2/#credentials-flag} {here} for more information.
-        (This value was introduced in 4.7.)
-
-    \value AuthenticationReuseAttribute
-        Requests only, type: QVariant::Int (default: QNetworkRequest::Automatic)
-        Indicates whether to use cached authorization credentials in the request,
-        if available. If this is set to QNetworkRequest::Manual and the authentication
-        mechanism is 'Basic' or 'Digest', Qt will not send an an 'Authorization' HTTP
-        header with any cached credentials it may have for the request's URL.
-        This attribute is set to QNetworkRequest::Manual by QtWebKit when creating a cross-origin
-        XMLHttpRequest where withCredentials has not been set explicitly to true by the
-        Javascript that created the request.
-        See \l{http://www.w3.org/TR/XMLHttpRequest2/#credentials-flag} {here} for more information.
-        (This value was introduced in 4.7.)
-
-    \omitvalue MaximumDownloadBufferSizeAttribute
-
-    \omitvalue DownloadBufferAttribute
-
-    \omitvalue SynchronousRequestAttribute
-
-    \value User
-        Special type. Additional information can be passed in
-        QVariants with types ranging from User to UserMax. The default
-        implementation of Network Access will ignore any request
-        attributes in this range and it will not produce any
-        attributes in this range in replies. The range is reserved for
-        extensions of QNetworkAccessManager.
-
-    \value UserMax
-        Special type. See User.
-*/
-
-/*!
-    \enum QNetworkRequest::CacheLoadControl
-
-    Controls the caching mechanism of QNetworkAccessManager.
-
-    \value AlwaysNetwork        always load from network and do not
-    check if the cache has a valid entry (similar to the
-    "Reload" feature in browsers)
-
-    \value PreferNetwork        default value; load from the network
-    if the cached entry is older than the network entry
-
-    \value PreferCache          load from cache if available,
-    otherwise load from network. Note that this can return possibly
-    stale (but not expired) items from cache.
-
-    \value AlwaysCache          only load from cache, indicating error
-    if the item was not cached (i.e., off-line mode)
-*/
-
-/*!
-    \enum QNetworkRequest::LoadControl
-    \since 4.7
-
-    Indicates if an aspect of the request's loading mechanism has been
-    manually overridden, e.g. by QtWebKit.
-
-    \value Automatic            default value: indicates default behaviour.
-
-    \value Manual               indicates behaviour has been manually overridden.
-*/
-
 class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
  public:
@@ -264,12 +47,12 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
    {
       qRegisterMetaType<QNetworkRequest>();
    }
+
    ~QNetworkRequestPrivate() {
 #ifndef QT_NO_OPENSSL
       delete sslConfiguration;
 #endif
    }
-
 
    QNetworkRequestPrivate(const QNetworkRequestPrivate &other)
       : QSharedData(other), QNetworkHeadersPrivate(other) {
@@ -294,83 +77,47 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 
    QUrl url;
    QNetworkRequest::Priority priority;
+
 #ifndef QT_NO_OPENSSL
    mutable QSslConfiguration *sslConfiguration;
 #endif
 };
 
-/*!
-    Constructs a QNetworkRequest object with \a url as the URL to be
-    requested.
 
-    \sa url(), setUrl()
-*/
 QNetworkRequest::QNetworkRequest(const QUrl &url)
    : d(new QNetworkRequestPrivate)
 {
    d->url = url;
 }
 
-/*!
-    Creates a copy of \a other.
-*/
 QNetworkRequest::QNetworkRequest(const QNetworkRequest &other)
    : d(other.d)
 {
 }
 
-/*!
-    Disposes of the QNetworkRequest object.
-*/
 QNetworkRequest::~QNetworkRequest()
 {
    // QSharedDataPointer auto deletes
    d = 0;
 }
 
-/*!
-    Returns true if this object is the same as \a other (i.e., if they
-    have the same URL, same headers and same meta-data settings).
-
-    \sa operator!=()
-*/
 bool QNetworkRequest::operator==(const QNetworkRequest &other) const
 {
    return d == other.d || *d == *other.d;
 }
 
-/*!
-    \fn bool QNetworkRequest::operator!=(const QNetworkRequest &other) const
-
-    Returns false if this object is not the same as \a other.
-
-    \sa operator==()
-*/
-
-/*!
-    Creates a copy of \a other
-*/
 QNetworkRequest &QNetworkRequest::operator=(const QNetworkRequest &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    Returns the URL this network request is referring to.
 
-    \sa setUrl()
-*/
 QUrl QNetworkRequest::url() const
 {
    return d->url;
 }
 
-/*!
-    Sets the URL this network request is referring to to be \a url.
-
-    \sa url()
-*/
 void QNetworkRequest::setUrl(const QUrl &url)
 {
    d->url = url;
@@ -417,14 +164,6 @@ QVariant QNetworkRequest::attribute(Attribute code, const QVariant &defaultValue
    return d->attributes.value(code, defaultValue);
 }
 
-/*!
-    Sets the attribute associated with code \a code to be value \a
-    value. If the attribute is already set, the previous value is
-    discarded. In special, if \a value is an invalid QVariant, the
-    attribute is unset.
-
-    \sa attribute(), QNetworkRequest::Attribute
-*/
 void QNetworkRequest::setAttribute(Attribute code, const QVariant &value)
 {
    if (value.isValid()) {
@@ -435,12 +174,7 @@ void QNetworkRequest::setAttribute(Attribute code, const QVariant &value)
 }
 
 #ifndef QT_NO_OPENSSL
-/*!
-    Returns this network request's SSL configuration. By default, no
-    SSL settings are specified.
 
-    \sa setSslConfiguration()
-*/
 QSslConfiguration QNetworkRequest::sslConfiguration() const
 {
    if (!d->sslConfiguration) {
@@ -449,18 +183,6 @@ QSslConfiguration QNetworkRequest::sslConfiguration() const
    return *d->sslConfiguration;
 }
 
-/*!
-    Sets this network request's SSL configuration to be \a config. The
-    settings that apply are the private key, the local certificate,
-    the SSL protocol (SSLv2, SSLv3, TLSv1 where applicable), the CA
-    certificates and the ciphers that the SSL backend is allowed to
-    use.
-
-    By default, no SSL configuration is set, which allows the backends
-    to choose freely what configuration is best for them.
-
-    \sa sslConfiguration(), QSslConfiguration::defaultConfiguration()
-*/
 void QNetworkRequest::setSslConfiguration(const QSslConfiguration &config)
 {
    if (!d->sslConfiguration) {
@@ -471,70 +193,21 @@ void QNetworkRequest::setSslConfiguration(const QSslConfiguration &config)
 }
 #endif
 
-/*!
-    \since 4.6
-
-    Allows setting a reference to the \a object initiating
-    the request.
-
-    For example QtWebKit sets the originating object to the
-    QWebFrame that initiated the request.
-
-    \sa originatingObject()
-*/
 void QNetworkRequest::setOriginatingObject(QObject *object)
 {
    d->originatingObject = object;
 }
 
-/*!
-    \since 4.6
-
-    Returns a reference to the object that initiated this
-    network request; returns 0 if not set or the object has
-    been destroyed.
-
-    \sa setOriginatingObject()
-*/
 QObject *QNetworkRequest::originatingObject() const
 {
    return d->originatingObject.data();
 }
 
-/*!
-    \since 4.7
-
-    Return the priority of this request.
-
-    \sa setPriority()
-*/
 QNetworkRequest::Priority QNetworkRequest::priority() const
 {
    return d->priority;
 }
 
-/*! \enum QNetworkRequest::Priority
-
-  \since 4.7
-
-  This enum lists the possible network request priorities.
-
-  \value HighPriority   High priority
-  \value NormalPriority Normal priority
-  \value LowPriority    Low priority
- */
-
-/*!
-    \since 4.7
-
-    Set the priority of this request to \a priority.
-
-    \note The \a priority is only a hint to the network access
-    manager.  It can use it or not. Currently it is used for HTTP to
-    decide which request should be sent first to a server.
-
-    \sa priority()
-*/
 void QNetworkRequest::setPriority(Priority priority)
 {
    d->priority = priority;

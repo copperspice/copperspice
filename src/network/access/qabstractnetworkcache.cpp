@@ -32,11 +32,9 @@ QT_BEGIN_NAMESPACE
 
 class QNetworkCacheMetaDataPrivate : public QSharedData
 {
-
  public:
    QNetworkCacheMetaDataPrivate()
-      : QSharedData()
-      , saveToDisk(true) {
+      : QSharedData(), saveToDisk(true) {
    }
 
    bool operator==(const QNetworkCacheMetaDataPrivate &other) const {
@@ -51,8 +49,8 @@ class QNetworkCacheMetaDataPrivate : public QSharedData
    QUrl url;
    QDateTime lastModified;
    QDateTime expirationDate;
-   QNetworkCacheMetaData::RawHeaderList headers;
-   QNetworkCacheMetaData::AttributesMap attributes;
+   QNetworkCacheMetaData::RawHeaderList headers;            // QList
+   QNetworkCacheMetaData::AttributesMap attributes;         // QHash
    bool saveToDisk;
 
    static void save(QDataStream &out, const QNetworkCacheMetaData &metaData);
@@ -60,59 +58,18 @@ class QNetworkCacheMetaDataPrivate : public QSharedData
 };
 Q_GLOBAL_STATIC(QNetworkCacheMetaDataPrivate, metadata_shared_invalid)
 
-/*!
-    \class QNetworkCacheMetaData
-    \since 4.5
-    \inmodule QtNetwork
 
-    \brief The QNetworkCacheMetaData class provides cache information.
-
-    QNetworkCacheMetaData provides information about a cache file including
-    the url, when it was last modified, when the cache file was created, headers
-    for file and if the file should be saved onto a disk.
-
-    \sa QAbstractNetworkCache
-*/
-
-/*!
-    \typedef QNetworkCacheMetaData::RawHeader
-
-    Synonym for QPair<QByteArray, QByteArray>
-*/
-
-/*!
-    \typedef QNetworkCacheMetaData::RawHeaderList
-
-    Synonym for QList<RawHeader>
-*/
-
-/*!
-  \typedef  QNetworkCacheMetaData::AttributesMap
-
-  Synonym for QHash<QNetworkRequest::Attribute, QVariant>
-*/
-
-/*!
-    Constructs an invalid network cache meta data.
-
-    \sa isValid()
- */
 QNetworkCacheMetaData::QNetworkCacheMetaData()
    : d(new QNetworkCacheMetaDataPrivate)
 {
 }
 
-/*!
-    Destroys the network cache meta data.
- */
+
 QNetworkCacheMetaData::~QNetworkCacheMetaData()
 {
    // QSharedDataPointer takes care of freeing d
 }
 
-/*!
-    Constructs a copy of the \a other QNetworkCacheMetaData.
- */
 QNetworkCacheMetaData::QNetworkCacheMetaData(const QNetworkCacheMetaData &other)
    : d(other.d)
 {
@@ -305,12 +262,11 @@ QDataStream &operator<<(QDataStream &out, const QNetworkCacheMetaData &metaData)
 static inline QDataStream &operator<<(QDataStream &out, const QNetworkCacheMetaData::AttributesMap &hash)
 {
    out << quint32(hash.size());
-   QNetworkCacheMetaData::AttributesMap::ConstIterator it = hash.end();
-   QNetworkCacheMetaData::AttributesMap::ConstIterator begin = hash.begin();
-   while (it != begin) {
-      --it;
-      out << int(it.key()) << it.value();
+
+   for (auto iter = hash.begin(); iter != hash.end(); ++iter) {
+      out << int(iter.key()) << iter.value();
    }
+
    return out;
 }
 
@@ -318,6 +274,7 @@ void QNetworkCacheMetaDataPrivate::save(QDataStream &out, const QNetworkCacheMet
 {
    // note: if you change the contents of the meta data here
    // remember to bump the cache version in qnetworkdiskcache.cpp CurrentCacheVersion
+
    out << metaData.url();
    out << metaData.expirationDate();
    out << metaData.lastModified();
@@ -326,14 +283,6 @@ void QNetworkCacheMetaDataPrivate::save(QDataStream &out, const QNetworkCacheMet
    out << metaData.rawHeaders();
 }
 
-/*!
-    \relates QNetworkCacheMetaData
-    \since 4.5
-
-    Reads a QNetworkCacheMetaData from the stream \a in into \a metaData.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData &metaData)
 {
    QNetworkCacheMetaDataPrivate::load(in, metaData);
@@ -343,9 +292,9 @@ QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData &metaData)
 static inline QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData::AttributesMap &hash)
 {
    hash.clear();
+
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
-   hash.clear();
 
    quint32 n;
    in >> n;
@@ -355,18 +304,23 @@ static inline QDataStream &operator>>(QDataStream &in, QNetworkCacheMetaData::At
          break;
       }
 
-      int k;
-      QVariant t;
-      in >> k >> t;
-      hash.insertMulti(QNetworkRequest::Attribute(k), t);
+      int key;
+      QVariant value;
+
+      in >> key;
+      in >> value;
+
+      hash.insert(QNetworkRequest::Attribute(key), value);
    }
 
    if (in.status() != QDataStream::Ok) {
       hash.clear();
    }
+
    if (oldStatus != QDataStream::Ok) {
       in.setStatus(oldStatus);
    }
+
    return in;
 }
 
@@ -376,147 +330,23 @@ void QNetworkCacheMetaDataPrivate::load(QDataStream &in, QNetworkCacheMetaData &
    in >> metaData.d->expirationDate;
    in >> metaData.d->lastModified;
    in >> metaData.d->saveToDisk;
-   in >> metaData.d->attributes;
+   in >> metaData.d->attributes;         // QHash
    in >> metaData.d->headers;
 }
 
-/*!
-    \class QAbstractNetworkCache
-    \since 4.5
-    \inmodule QtNetwork
-
-    \brief The QAbstractNetworkCache class provides the interface for cache implementations.
-
-    QAbstractNetworkCache is the base class for every standard cache that is used be
-    QNetworkAccessManager.  QAbstractNetworkCache is an abstract class and cannot be
-    instantiated.
-
-    \sa QNetworkDiskCache
-*/
-
-/*!
-    Constructs an abstract network cache with the given \a parent.
-*/
 QAbstractNetworkCache::QAbstractNetworkCache(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractNetworkCachePrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    \internal
-*/
 QAbstractNetworkCache::QAbstractNetworkCache(QAbstractNetworkCachePrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
 }
 
-/*!
-    Destroys the cache.
-
-    Any operations that have not been inserted are discarded.
-
-    \sa insert()
- */
 QAbstractNetworkCache::~QAbstractNetworkCache()
 {
 }
-
-/*!
-    \fn QNetworkCacheMetaData QAbstractNetworkCache::metaData(const QUrl &url) = 0
-    Returns the meta data for the url \a url.
-
-    If the url is valid and the cache contains the data for url,
-    a valid QNetworkCacheMetaData is returned.
-
-    In the base class this is a pure virtual function.
-
-    \sa updateMetaData(), data()
-*/
-
-/*!
-    \fn void QAbstractNetworkCache::updateMetaData(const QNetworkCacheMetaData &metaData) = 0
-    Updates the cache meta date for the metaData's url to \a metaData
-
-    If the cache does not contains a cache item for the url then no action is taken.
-
-    In the base class this is a pure virtual function.
-
-    \sa metaData(), prepare()
-*/
-
-/*!
-    \fn QIODevice *QAbstractNetworkCache::data(const QUrl &url) = 0
-    Returns the data associated with \a url.
-
-    It is up to the application that requests the data to delete
-    the QIODevice when done with it.
-
-    If there is no cache for \a url, the url is invalid, or if there
-    is an internal cache error 0 is returned.
-
-    In the base class this is a pure virtual function.
-
-    \sa metaData(), prepare()
-*/
-
-/*!
-    \fn bool QAbstractNetworkCache::remove(const QUrl &url) = 0
-    Removes the cache entry for \a url, returning true if success otherwise false.
-
-    In the base class this is a pure virtual function.
-
-    \sa clear(), prepare()
-*/
-
-/*!
-    \fn QIODevice *QAbstractNetworkCache::prepare(const QNetworkCacheMetaData &metaData) = 0
-    Returns the device that should be populated with the data for
-    the cache item \a metaData.  When all of the data has been written
-    insert() should be called.  If metaData is invalid or the url in
-    the metadata is invalid 0 is returned.
-
-    The cache owns the device and will take care of deleting it when
-    it is inserted or removed.
-
-    To cancel a prepared inserted call remove() on the metadata's url.
-
-    In the base class this is a pure virtual function.
-
-    \sa remove(), updateMetaData(), insert()
-*/
-
-/*!
-    \fn void QAbstractNetworkCache::insert(QIODevice *device) = 0
-    Inserts the data in \a device and the prepared meta data into the cache.
-    After this function is called the data and meta data should be retrievable
-    using data() and metaData().
-
-    To cancel a prepared inserted call remove() on the metadata's url.
-
-    In the base class this is a pure virtual function.
-
-    \sa prepare(), remove()
-*/
-
-/*!
-    \fn qint64 QAbstractNetworkCache::cacheSize() const = 0
-    Returns the current size taken up by the cache.  Depending upon
-    the cache implementation this might be disk or memory size.
-
-    In the base class this is a pure virtual function.
-
-    \sa clear()
-*/
-
-/*!
-    \fn void QAbstractNetworkCache::clear() = 0
-    Removes all items from the cache.  Unless there was failures
-    clearing the cache cacheSize() should return 0 after a call to clear.
-
-    In the base class this is a pure virtual function.
-
-    \sa cacheSize(), remove()
-*/
 
 QT_END_NAMESPACE

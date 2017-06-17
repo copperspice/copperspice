@@ -39,7 +39,6 @@ class QNetworkCookieJar;
 
 class QNetworkAccessManagerPrivate
 {
-
  public:
    QNetworkAccessManagerPrivate()
       : networkCache(0), cookieJar(0),
@@ -67,15 +66,12 @@ class QNetworkAccessManagerPrivate
 
    void authenticationRequired(QNetworkAccessBackend *backend, QAuthenticator *authenticator);
    void cacheCredentials(const QUrl &url, const QAuthenticator *auth);
-   QNetworkAuthenticationCredential *fetchCachedCredentials(const QUrl &url,
-         const QAuthenticator *auth = 0);
+   QNetworkAuthenticationCredential *fetchCachedCredentials(const QUrl &url, const QAuthenticator *auth = 0);
 
 #ifndef QT_NO_NETWORKPROXY
-   void proxyAuthenticationRequired(QNetworkAccessBackend *backend, const QNetworkProxy &proxy,
-                                    QAuthenticator *authenticator);
+   void proxyAuthenticationRequired(QNetworkAccessBackend *backend, const QNetworkProxy &proxy, QAuthenticator *authenticator);
    void cacheProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth);
-   QNetworkAuthenticationCredential *fetchCachedProxyCredentials(const QNetworkProxy &proxy,
-         const QAuthenticator *auth = 0);
+   QNetworkAuthenticationCredential *fetchCachedProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth = 0);
    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query);
 #endif
 
@@ -87,8 +83,7 @@ class QNetworkAccessManagerPrivate
 
    void _q_networkSessionClosed();
    void _q_networkSessionNewConfigurationActivated();
-   void _q_networkSessionPreferredConfigurationChanged(const QNetworkConfiguration &config,
-         bool isSeamless);
+   void _q_networkSessionPreferredConfigurationChanged(const QNetworkConfiguration &config, bool isSeamless);
    void _q_networkSessionStateChanged(QNetworkSession::State state);
 #endif
 
@@ -123,18 +118,19 @@ class QNetworkAccessManagerPrivate
    QSharedPointer<QNetworkAccessAuthenticationManager> authenticationManager;
 
    // this cache can be used by individual backends to cache e.g. their TCP connections to a server
-   // and use the connections for multiple requests.
+   // and use the connections for multiple requests
    QNetworkAccessCache objectCache;
+
    static inline QNetworkAccessCache *getObjectCache(QNetworkAccessBackend *backend) {
       return &backend->manager->objectCache;
    }
+
    static void clearCache(QNetworkAccessManager *manager);
 
    Q_DECLARE_PUBLIC(QNetworkAccessManager)
 
  protected:
    QNetworkAccessManager *q_ptr;
-
 };
 
 QT_END_NAMESPACE

@@ -67,6 +67,7 @@ class QHttpThreadDelegate : public QObject
    qint64 downloadBufferMaximumSize;
    qint64 readBufferMaxSize;
    qint64 bytesEmitted;
+
    // From backend, modified by us for signal compression
    QSharedPointer<QAtomicInt> pendingDownloadData;
    QSharedPointer<QAtomicInt> pendingDownloadProgress;
@@ -96,6 +97,7 @@ class QHttpThreadDelegate : public QObject
  protected:
    // The zerocopy download buffer, if used:
    QSharedPointer<char> downloadBuffer;
+
    // The QHttpNetworkConnection that is used
    QNetworkAccessCachedHttpConnection *httpConnection;
    QByteArray cacheKey;
@@ -109,14 +111,12 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SIGNAL_2(authenticationRequired, request, un_named_arg2)
 
 #ifndef QT_NO_NETWORKPROXY
-   NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &un_named_arg1,
-                   QAuthenticator *un_named_arg2))
+   NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &un_named_arg1, QAuthenticator *un_named_arg2))
    NET_CS_SIGNAL_2(proxyAuthenticationRequired, un_named_arg1, un_named_arg2)
 #endif
 
 #ifndef QT_NO_OPENSSL
-   NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &un_named_arg1, bool *un_named_arg2,
-                                          QList <QSslError> *un_named_arg3))
+   NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &un_named_arg1, bool *un_named_arg2, QList <QSslError> *un_named_arg3))
    NET_CS_SIGNAL_2(sslErrors, un_named_arg1, un_named_arg2, un_named_arg3)
 
    NET_CS_SIGNAL_1(Public, void sslConfigurationChanged(const QSslConfiguration &un_named_arg1))
@@ -124,11 +124,10 @@ class QHttpThreadDelegate : public QObject
 #endif
 
    NET_CS_SIGNAL_1(Public, void downloadMetaData(const QList <QPair <QByteArray, QByteArray>> &un_named_arg1,
-                   int un_named_arg2, const QString &un_named_arg3, bool un_named_arg4, 
+                   int un_named_arg2, const QString &un_named_arg3, bool un_named_arg4,
                    QSharedPointer <char> un_named_arg5, qint64 un_named_arg6))
 
-   NET_CS_SIGNAL_2(downloadMetaData, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5,
-                   un_named_arg6)
+   NET_CS_SIGNAL_2(downloadMetaData, un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5,un_named_arg6)
 
    NET_CS_SIGNAL_1(Public, void downloadProgress(qint64 un_named_arg1, qint64 un_named_arg2))
    NET_CS_SIGNAL_2(downloadProgress, un_named_arg1, un_named_arg2)
@@ -162,13 +161,12 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SLOT_2(readyReadSlot)
    NET_CS_SLOT_1(Protected, void finishedSlot())
    NET_CS_SLOT_2(finishedSlot)
-   NET_CS_SLOT_1(Protected, void finishedWithErrorSlot(QNetworkReply::NetworkError errorCode,
-                 const QString &detail = QString()))
+   NET_CS_SLOT_1(Protected, void finishedWithErrorSlot(QNetworkReply::NetworkError errorCode, const QString &detail = QString()))
    NET_CS_SLOT_2(finishedWithErrorSlot)
    NET_CS_SLOT_1(Protected, void synchronousFinishedSlot())
    NET_CS_SLOT_2(synchronousFinishedSlot)
-   NET_CS_SLOT_1(Protected, void synchronousFinishedWithErrorSlot(QNetworkReply::NetworkError errorCode,
-                 const QString &detail = QString()))
+
+   NET_CS_SLOT_1(Protected, void synchronousFinishedWithErrorSlot(QNetworkReply::NetworkError errorCode, const QString &detail = QString()))
    NET_CS_SLOT_2(synchronousFinishedWithErrorSlot)
    NET_CS_SLOT_1(Protected, void headerChangedSlot())
    NET_CS_SLOT_2(headerChangedSlot)
@@ -178,23 +176,22 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SLOT_2(dataReadProgressSlot)
    NET_CS_SLOT_1(Protected, void cacheCredentialsSlot(const QHttpNetworkRequest &request, QAuthenticator *authenticator))
    NET_CS_SLOT_2(cacheCredentialsSlot)
+
 #ifndef QT_NO_OPENSSL
    NET_CS_SLOT_1(Protected, void sslErrorsSlot(const QList <QSslError> &errors))
    NET_CS_SLOT_2(sslErrorsSlot)
 #endif
 
-   NET_CS_SLOT_1(Protected, void synchronousAuthenticationRequiredSlot(const QHttpNetworkRequest &request,
-                 QAuthenticator  *un_named_arg2))
+   NET_CS_SLOT_1(Protected, void synchronousAuthenticationRequiredSlot(const QHttpNetworkRequest &request, QAuthenticator  *un_named_arg2))
    NET_CS_SLOT_2(synchronousAuthenticationRequiredSlot)
+
 #ifndef QT_NO_NETWORKPROXY
-   NET_CS_SLOT_1(Protected, void synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &un_named_arg1,
-                 QAuthenticator *un_named_arg2))
+   NET_CS_SLOT_1(Protected, void synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &un_named_arg1, QAuthenticator *un_named_arg2))
    NET_CS_SLOT_2(synchronousProxyAuthenticationRequiredSlot)
 #endif
 
  protected:
-   // Cache for all the QHttpNetworkConnection objects.
-   // This is per thread.
+   // Cache for all the QHttpNetworkConnection objects. This is per thread.
    static QThreadStorage<QNetworkAccessCache *> connections;
 };
 
