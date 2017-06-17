@@ -38,10 +38,7 @@ set(CORE_PUBLIC_INCLUDES
     QListIterator
     QLocale
     QMap
-    QMapData
     QMapIterator
-    QMapNode
-    QMapPayloadNode
     QMargins
     QMultiHash
     QMultiMap
@@ -139,10 +136,8 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlistiterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmap.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapdata.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapfunc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapnode.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmappayloadnode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmultihash.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmultimap.h

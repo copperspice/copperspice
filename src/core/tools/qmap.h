@@ -24,6 +24,7 @@
 #define QMAP_H
 
 #include <qcontainerfwd.h>
+#include <qmapfunc.h>
 
 #include <qlist.h>
 #include <qrefcount.h>
@@ -37,37 +38,11 @@ class QMapIterator;
 template <typename Key, typename Val, typename C>
 class QMutableMapIterator;
 
-template <typename Key> inline bool qMapLessThanKey(const Key &key1, const Key &key2)
-{
-   return key1 < key2;
-}
-
-template <typename Ptr> inline bool qMapLessThanKey(Ptr *key1, Ptr *key2)
-{
-   static_assert(sizeof(quintptr) == sizeof(Ptr *), "qMapLessThanKey: quintptr is not large enough to contain a ptr");
-   return quintptr(key1) < quintptr(key2);
-}
-
-template <typename Ptr> inline bool qMapLessThanKey(const Ptr *key1, const Ptr *key2)
-{
-   static_assert(sizeof(quintptr) == sizeof(const Ptr *), "qMapLessThanKey: quintptr is not large enough to contain a ptr");
-   return quintptr(key1) < quintptr(key2);
-}
-
-template <typename Key>
-class qMapCompare
-{
- public:
-   bool operator()(const Key &a, const Key &b)  const {
-      return qMapLessThanKey(a, b);
-   }
-};
-
 template <typename Key, typename Val, typename C>
 class QMap
 {
  public:
-   class iterator : private std::multimap<Key, Val, C>::iterator
+   class iterator : private std::map<Key, Val, C>::iterator
    {
     public:
       using iterator_category = std::bidirectional_iterator_tag;
@@ -75,28 +50,28 @@ class QMap
       using pointer           = Val *;
       using reference         = Val &;
 
-      using difference_type   = typename std::multimap<Key, Val, C>::difference_type;
-      using size_type         = typename std::multimap<Key, Val, C>::difference_type;
+      using difference_type   = typename std::map<Key, Val, C>::difference_type;
+      using size_type         = typename std::map<Key, Val, C>::difference_type;
       using value_type        = Val;
 
       iterator() = default;
 
-      iterator(typename std::multimap<Key, Val, C>::iterator iter)
-         : std::multimap<Key, Val, C>::iterator(std::move(iter)) {
+      iterator(typename std::map<Key, Val, C>::iterator iter)
+         : std::map<Key, Val, C>::iterator(std::move(iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::multimap<Key, Val, C>::iterator::operator*().first;
+         const Key &retval = std::map<Key, Val, C>::iterator::operator*().first;
          return retval;
       }
 
       Val &value() const {
-         Val &retval = std::multimap<Key, Val, C>::iterator::operator*().second;
+         Val &retval = std::map<Key, Val, C>::iterator::operator*().second;
          return retval;
       }
 
       std::pair<const Key, Val> &pair() const {
-         return std::multimap<Key, Val, C>::iterator::operator*();
+         return std::map<Key, Val, C>::iterator::operator*();
       }
 
       // operators
@@ -109,11 +84,11 @@ class QMap
       }
 
       bool operator==(iterator other) const {
-         return std::multimap<Key, Val, C>::iterator::operator==(other);
+         return std::map<Key, Val, C>::iterator::operator==(other);
       }
 
       bool operator!=(iterator other) const {
-         return std::multimap<Key, Val, C>::iterator::operator!=(other);
+         return std::map<Key, Val, C>::iterator::operator!=(other);
       }
 
       iterator &operator+=(size_type n) {
@@ -137,27 +112,27 @@ class QMap
       }
 
       iterator &operator++() {
-         std::multimap<Key, Val, C>::iterator::operator++();
+         std::map<Key, Val, C>::iterator::operator++();
          return *this;
       }
 
       iterator operator++(int n) {
-         return std::multimap<Key, Val, C>::iterator::operator++(n);
+         return std::map<Key, Val, C>::iterator::operator++(n);
       }
 
       iterator &operator--() {
-         std::multimap<Key, Val, C>::iterator::operator--();
+         std::map<Key, Val, C>::iterator::operator--();
          return *this;
       }
 
       iterator operator--(int n) {
-         return std::multimap<Key, Val, C>::iterator::operator--(n);
+         return std::map<Key, Val, C>::iterator::operator--(n);
       }
 
       friend class QMap<Key, Val, C>;
    };
 
-   class const_iterator : private std::multimap<Key, Val, C>::const_iterator
+   class const_iterator : private std::map<Key, Val, C>::const_iterator
    {
     public:
       using iterator_category = std::bidirectional_iterator_tag;
@@ -165,32 +140,32 @@ class QMap
       using pointer         = const Val *;
       using reference       = const Val &;
 
-      using difference_type = typename std::multimap<Key, Val, C>::difference_type;
-      using size_type       = typename std::multimap<Key, Val, C>::difference_type;
+      using difference_type = typename std::map<Key, Val, C>::difference_type;
+      using size_type       = typename std::map<Key, Val, C>::difference_type;
       using value_type      = Val;
 
       const_iterator() = default;
 
-      const_iterator(typename std::multimap<Key, Val, C>::const_iterator iter)
-         : std::multimap<Key, Val, C>::const_iterator(std::move(iter)) {
+      const_iterator(typename std::map<Key, Val, C>::const_iterator iter)
+         : std::map<Key, Val, C>::const_iterator(std::move(iter)) {
       }
 
       const_iterator(iterator iter)
-         : std::multimap<Key, Val, C>::const_iterator(std::move(iter)) {
+         : std::map<Key, Val, C>::const_iterator(std::move(iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::multimap<Key, Val, C>::const_iterator::operator*().first;
+         const Key &retval = std::map<Key, Val, C>::const_iterator::operator*().first;
          return retval;
       }
 
       const Val &value() const {
-         const Val &retval = std::multimap<Key, Val, C>::const_iterator::operator*().second;
+         const Val &retval = std::map<Key, Val, C>::const_iterator::operator*().second;
          return retval;
       }
 
       const std::pair<const Key, Val> &pair() const {
-         return std::multimap<Key, Val, C>::const_iterator::operator*();
+         return std::map<Key, Val, C>::const_iterator::operator*();
       }
 
       // operators
@@ -203,11 +178,11 @@ class QMap
       }
 
       bool operator==(const_iterator other) const {
-         return std::multimap<Key, Val, C>::const_iterator::operator==(other);
+         return std::map<Key, Val, C>::const_iterator::operator==(other);
       }
 
       bool operator!=(const_iterator other) const {
-         return std::multimap<Key, Val, C>::const_iterator::operator!=(other);
+         return std::map<Key, Val, C>::const_iterator::operator!=(other);
       }
 
       const_iterator &operator+=(size_type n) {
@@ -231,21 +206,21 @@ class QMap
       }
 
       const_iterator &operator++() {
-         std::multimap<Key, Val, C>::const_iterator::operator++();
+         std::map<Key, Val, C>::const_iterator::operator++();
          return *this;
       }
 
       const_iterator operator++(int n) {
-         return std::multimap<Key, Val, C>::const_iterator::operator++(n);
+         return std::map<Key, Val, C>::const_iterator::operator++(n);
       }
 
       const_iterator &operator--() {
-         std::multimap<Key, Val, C>::const_iterator::operator--();
+         std::map<Key, Val, C>::const_iterator::operator--();
          return *this;
       }
 
       const_iterator operator--(int n) {
-         return std::multimap<Key, Val, C>::const_iterator::operator--(n);
+         return std::map<Key, Val, C>::const_iterator::operator--(n);
       }
 
       friend class QMap<Key, Val, C>;
@@ -260,17 +235,17 @@ class QMap
    using pointer         = Val *;
    using reference       = Val &;
 
-   using difference_type = typename std::multimap<Key, Val, C>::difference_type;
-   using size_type       = typename std::multimap<Key, Val, C>::difference_type;   // signed instead of unsigned
+   using difference_type = typename std::map<Key, Val, C>::difference_type;
+   using size_type       = typename std::map<Key, Val, C>::difference_type;   // signed instead of unsigned
    using value_type      = Val;
 
-   using key_type        = typename std::multimap<Key, Val, C>::key_type;
-   using mapped_type     = typename std::multimap<Key, Val, C>::mapped_type;
+   using key_type        = typename std::map<Key, Val, C>::key_type;
+   using mapped_type     = typename std::map<Key, Val, C>::mapped_type;
 
-   using key_compare     = typename std::multimap<Key, Val, C>::key_compare;
+   using key_compare     = typename std::map<Key, Val, C>::key_compare;
 
    // from std
-   using allocator_type         = typename std::multimap<Key, Val, C>::allocator_type;
+   using allocator_type         = typename std::map<Key, Val, C>::allocator_type;
    using reverse_iterator       = std::reverse_iterator<iterator>;
    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -341,22 +316,17 @@ class QMap
    }
 
    iterator insert(const Key &key, const Val &value) {
-      auto range = m_data.equal_range(key);
+      auto iter = m_data.find(key);
 
-      if (range.first == range.second) {
+      if (iter == m_data.end()) {
          // add new element
-         return m_data.emplace(key, value);
+         return m_data.emplace(key, value).first;
       }
 
-      // get last key in the range, update value
-      auto iter = --range.second;
+      // update value
       iter->second = value;
 
       return iter;
-   }
-
-   iterator insertMulti(const Key &key, const Val &value)  {
-      return m_data.emplace(key, value);
    }
 
    const Key key(const Val &value) const;
@@ -487,7 +457,7 @@ class QMap
    const Val operator[](const Key &key) const;
 
  private:
-   std::multimap<Key, Val, C> m_data;
+   std::map<Key, Val, C> m_data;
 };
 
 // methods
@@ -626,7 +596,7 @@ Val &QMap<Key, Val, C>::operator[](const Key &key)
 
    if (range.first == range.second) {
       // default constructed element
-      auto iter = m_data.emplace(key, Val());
+      auto iter = m_data.emplace(key, Val()).first;
 
       return iter->second;
    }
@@ -635,150 +605,6 @@ Val &QMap<Key, Val, C>::operator[](const Key &key)
    auto iter = --range.second;
 
    return iter->second;
-}
-
-
-// QMultiMap
-
-template <typename Key, typename Val, typename C>
-class QMultiMap : public QMap<Key, Val, C>
-{
- public:
-   using QMap<Key, Val, C>::contains;
-   using QMap<Key, Val, C>::count;
-   using QMap<Key, Val, C>::find;
-   using QMap<Key, Val, C>::constFind;
-   using QMap<Key, Val, C>::remove;
-
-   // makes this signed instead of unsigned
-   using size_type = typename std::multimap<Key, Val, C>::difference_type;
-
-   QMultiMap() = default;
-
-   QMultiMap(const QMap<Key, Val, C> &other)
-      : QMap<Key, Val, C>(other) {}
-
-   QMultiMap(std::initializer_list<std::pair<Key, Val>> list) {
-      this->reserve(list.size());
-
-      for (typename std::initializer_list<std::pair<Key, Val>>::const_iterator it = list.begin(); it != list.end(); ++it) {
-         insert(it->first, it->second);
-      }
-   }
-
-   // methods
-   bool contains(const Key &key, const Val &value)   const;
-   size_type count(const Key &key, const Val &value) const;
-
-   typename QMap<Key, Val, C>::const_iterator find(const Key &key, const Val &value) const {
-      typename QMap<Key, Val, C>::const_iterator iter(constFind(key));
-      typename QMap<Key, Val, C>::const_iterator end(QMap<Key, Val, C>::constEnd());
-
-      while (iter != end && ! this->m_compare(key, iter.key())) {
-         if (iter.value() == value) {
-            return iter;
-         }
-
-         ++iter;
-      }
-
-      return end;
-   }
-
-   typename QMap<Key, Val, C>::iterator find(const Key &key, const Val &value) {
-      typename QMap<Key, Val, C>::iterator iter(find(key));
-      typename QMap<Key, Val, C>::iterator end(this->end());
-
-      while (iter != end && ! this->m_compare(key, iter.key())) {
-         if (iter.value() == value) {
-            return iter;
-         }
-
-         ++iter;
-      }
-
-      return end;
-   }
-
-   typename QMap<Key, Val, C>::const_iterator constFind(const Key &key, const Val &value) const {
-      return find(key, value);
-   }
-
-   typename QMap<Key, Val, C>::iterator insert(const Key &key, const Val &value) {
-      return QMap<Key, Val, C>::insertMulti(key, value);
-   }
-
-   void swap(QMultiMap<Key, Val, C> &other) {
-      QMap<Key, Val, C>::swap(other);
-   }
-
-   size_type remove(const Key &key, const Val &value);
-
-   typename QMap<Key, Val, C>::iterator replace(const Key &key, const Val &value) {
-      return QMap<Key, Val, C>::insert(key, value);
-   }
-
-   // operators
-   QMultiMap &operator+=(const QMultiMap &other) {
-      this->unite(other);
-      return *this;
-   }
-
-   QMultiMap operator+(const QMultiMap &other) const {
-      QMultiMap result = *this;
-      result += other;
-      return result;
-   }
-
- private:
-   Val &operator[](const Key &key);
-   const Val operator[](const Key &key) const;
-};
-
-
-template <class Key, class Val, class C>
-bool QMultiMap<Key, Val, C>::contains(const Key &key, const Val &value) const
-{
-   return constFind(key, value) != QMap<Key, Val, C>::constEnd();
-}
-
-template <class Key, class Val, class C>
-typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const Key &key, const Val &value) const
-{
-   int retval = 0;
-
-   typename QMap<Key, Val, C>::const_iterator iter(constFind(key));
-   typename QMap<Key, Val, C>::const_iterator end(QMap<Key, Val, C>::constEnd());
-
-   while (iter != end && ! this->m_compare(key, iter.key())) {
-      if (iter.value() == value) {
-         ++retval;
-      }
-
-      ++iter;
-   }
-
-   return retval;
-}
-
-template <class Key, class Val, class C>
-typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const Key &key, const Val &value)
-{
-   int retval = 0;
-
-   typename QMap<Key, Val, C>::iterator iter(find(key));
-   typename QMap<Key, Val, C>::iterator end(QMap<Key, Val, C>::end());
-
-   while (iter != end && ! this->m_compare(key, iter.key())) {
-      if (iter.value() == value) {
-         iter = this->erase(iter);
-         ++retval;
-      } else {
-         ++iter;
-      }
-   }
-
-   return retval;
 }
 
 
@@ -806,47 +632,53 @@ class QMapIterator
    typedef typename QMap<Key, Val, C>::const_iterator const_iterator;
    typedef const_iterator Item;
 
-   QMap<Key, Val, C> c;
-
+   const QMap<Key, Val, C> *c;
    const_iterator i;
    const_iterator n;
 
    inline bool item_exists() const {
-      return n != c.constEnd();
+      return n != c->constEnd();
    }
 
  public:
    inline QMapIterator(const QMap<Key, Val, C> &container)
-      : c(container), i(c.constBegin()), n(c.constEnd()) {}
+      : c(&container), i(c->constBegin()), n(c->constEnd()) {}
 
    inline QMapIterator &operator=(const QMap<Key, Val, C> &container) {
       c = container;
-      i = c.constBegin();
-      n = c.constEnd();
+      i = c->constBegin();
+      n = c->constEnd();
+
       return *this;
    }
 
    inline void toFront() {
-      i = c.constBegin();
-      n = c.constEnd();
+      i = c->constBegin();
+      n = c->constEnd();
    }
+
    inline void toBack() {
-      i = c.constEnd();
-      n = c.constEnd();
+      i = c->constEnd();
+      n = c->constEnd();
    }
+
    inline bool hasNext() const {
-      return i != c.constEnd();
+      return i != c->constEnd();
    }
+
    inline Item next() {
       n = i++;
       return n;
    }
+
    inline Item peekNext() const {
       return i;
    }
+
    inline bool hasPrevious() const {
-      return i != c.constBegin();
+      return i != c->constBegin();
    }
+
    inline Item previous() {
       n = --i;
       return n;
@@ -855,27 +687,34 @@ class QMapIterator
       const_iterator p = i;
       return --p;
    }
+
    inline const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
+
    inline const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
    }
 
    inline bool findNext(const Val &t) {
-      while ((n = i) != c.constEnd()) if (*i++ == t) {
+      while ((n = i) != c->constEnd()) {
+         if (*i++ == t) {
             return true;
          }
+      }
       return false;
    }
 
    inline bool findPrevious(const Val &t) {
-      while (i != c.constBegin()) if (*(n = --i) == t) {
+      while (i != c.constBegin()) {
+         if (*(n = --i) == t) {
             return true;
          }
-      n = c.constEnd();
+      }
+
+      n = c->constEnd();
       return false;
    }
 };
@@ -888,18 +727,16 @@ class QMutableMapIterator
    typedef iterator Item;
 
    QMap<Key, Val, C> *c;
+   iterator i;
+   iterator n;
 
-   iterator i, n;
    bool item_exists() const {
       return const_iterator(n) != c->constEnd();
    }
 
  public:
    inline QMutableMapIterator(QMap<Key, Val, C> &container)
-      : c(&container) {
-      i = c->begin();
-      n = c->end();
-   }
+      : c(&container), i(c->begin()), n(c->end()) {}
 
    inline ~QMutableMapIterator() {
    }
@@ -916,27 +753,34 @@ class QMutableMapIterator
       i = c->begin();
       n = c->end();
    }
+
    inline void toBack() {
       i = c->end();
       n = i;
    }
+
    inline bool hasNext() const {
       return c->constEnd() != const_iterator(i);
    }
+
    inline Item next() {
       n = i++;
       return n;
    }
+
    inline Item peekNext() const {
       return i;
    }
+
    inline bool hasPrevious() const {
       return c->constBegin() != const_iterator(i);
    }
+
    inline Item previous() {
       n = --i;
       return n;
    }
+
    inline Item peekPrevious() const {
       iterator p = i;
       return --p;
@@ -954,14 +798,17 @@ class QMutableMapIterator
          *n = t;
       }
    }
+
    inline Val &value() {
       Q_ASSERT(item_exists());
       return *n;
    }
+
    inline const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
+
    inline const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
@@ -987,6 +834,7 @@ class QMutableMapIterator
       n = c->end();
       return false;
    }
+
 };
 
 #endif

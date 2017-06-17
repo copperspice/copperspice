@@ -27,10 +27,11 @@
 #define QMETAOBJECT_H
 
 #include <csmeta.h>
-#include <QMap>
-#include <QMutex>
-#include <QString>
-#include <QVector>
+#include <qmap.h>
+#include <qmultimap.h>
+#include <qmutex.h>
+#include <qstring.h>
+#include <qvector.h>
 
 #include <utility>
 #include <stdexcept>
@@ -93,7 +94,7 @@ class Q_CORE_EXPORT QMetaObject
    static bool checkConnectArgs(const QMetaMethod &signal, const QMetaMethod &method);
    static QByteArray normalizedSignature(const char *method);
    static QByteArray normalizedType(const char *type);
-     
+
    template<class T>
    static QMetaEnum findEnum();
 
@@ -125,7 +126,7 @@ class Q_CORE_EXPORT QMetaObject
    int enum_calculate(QString enumData, QMap<QByteArray, int> valueMap);
 
  private:
-   static QByteArray getType(const char *fullName);   
+   static QByteArray getType(const char *fullName);
 };
 
 template<class T>
@@ -247,7 +248,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    QMap<QString, QMetaMethod> m_methods;             // methds, signals, slots
    QMap<QString, QMetaEnum> m_enums;
    QMap<QString, QMetaProperty> m_properties;
-   QMap<QString, QString> m_flag;
+   QMultiMap<QString, QString> m_flag;
 };
 
 // **
@@ -256,30 +257,30 @@ class QMetaObject_T : public QMetaObject_X
 {
    public:
       QMetaObject_T();
-      
+
       void postConstruct();
-   
+
       const char *className() const override;
       const char *getInterface_iid() const override;
       const QMetaObject *superClass() const override;
-   
+
       // revision
       template<class U>
       void register_method_rev(U method, int revision);
-   
+
       // signals
       template<class U>
       void register_method_s2(const char *name, U method, QMetaMethod::MethodType kind);
 
       // slots, invokables
       template<class U>
-      void register_method(const char *name, U method, QMetaMethod::MethodType kind, 
+      void register_method(const char *name, U method, QMetaMethod::MethodType kind,
                   const char *va_args, QMetaMethod::Access access);
-   
+
       // properties
       template<class U>
       void register_property_notify(const char *name, U method);
-   
+
       template<class U>
       void register_property_reset(const char *name, U method);
 };
@@ -365,7 +366,7 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
    if (! name || ! name[0] ) {
       return;
    }
-   
+
    QMap<QString, QMetaMethod> *map;
 
    if (kind == QMetaMethod::Constructor) {
@@ -443,17 +444,17 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
    }
 }
 
- 
+
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::MethodType kind, 
+void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::MethodType kind,
                   const char *va_args, QMetaMethod::Access access)
 {
    if (! name || ! name[0] || ! va_args || ! va_args[0]) {
       return;
    }
-  
+
    // declare first
    std::vector<const char *> signatures;
    const char *typeReturn;

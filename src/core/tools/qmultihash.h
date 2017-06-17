@@ -379,16 +379,12 @@ class QMultiHash
    }
 
    iterator replace(const Key &key, const Val &value) {
-       auto range = m_data.equal_range(key);
+      auto iter = m_data.find(key);
 
-      if (range.first == range.second) {
+      if (iter == m_data.end()) {
          // add new element
          return m_data.emplace(key, value);
       }
-
-      // get last key in the range, update value
-//    auto iter = --range.second;         BROOM
-      auto iter = range.first;
 
       iter->second = value;
 
@@ -430,17 +426,13 @@ class QMultiHash
       return *this;
    }
 
-   const Val value(const Key &key) const {
-      auto range = m_data.equal_range(key);
+   Val value(const Key &key) const {
+     auto iter = m_data.find(key);
 
-      if (range.first == range.second) {
+      if (iter == m_data.end()) {
          // key was not found
          return Val();
       }
-
-      // get last key in the range
-//    auto iter = --range.second;         BROOM
-      auto iter = range.first;
 
       return iter->second;
    }
@@ -577,17 +569,12 @@ QList<Val> QMultiHash<Key, Val, Hash, KeyEqual>::values() const
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 QList<Val> QMultiHash<Key, Val, Hash, KeyEqual>::values(const Key &key) const
 {
-
-   //  BROOM - write this
-
    QList<Val> retval;
-   retval.reserve(size());
 
-   const_iterator iter = begin();
+   auto range = m_data.equal_range(key);
 
-   while (iter != end()) {
-      retval.append(iter.value());
-      ++iter;
+   for (auto iter = range.first; iter != range.second; ++iter) {
+      retval.append(iter->second);
    }
 
    return retval;

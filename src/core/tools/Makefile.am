@@ -40,10 +40,7 @@ CORE_PUBLIC_INCLUDES += \
 	QListIterator \
 	QLocale \
 	QMap \
-	QMapData \
 	QMapIterator \
-	QMapNode \
-	QMapPayloadNode \
 	QMargins \
 	QMultiHash \
 	QMultiMap \
@@ -139,10 +136,8 @@ CORE_TOOLS_INCLUDES = \
 	qlistiterator.h \
 	qlocale.h \
 	qmap.h \
-	qmapdata.h \
+	qmapfunc.h \
 	qmapiterator.h \
-	qmapnode.h \
-	qmappayloadnode.h \
 	qmargins.h \
 	qmultihash.h \
 	qmultimap.h \
