@@ -2231,20 +2231,21 @@ bool StyleSelector::basicSelectorMatches(const BasicSelector &sel, NodePtr node)
 }
 
 void StyleSelector::matchRule(NodePtr node, const StyleRule &rule, StyleSheetOrigin origin,
-                              int depth, QMap<uint, StyleRule> *weightedRules)
+                              int depth, QMultiMap<uint, StyleRule> *weightedRules)
 {
    for (int j = 0; j < rule.selectors.count(); ++j) {
       const Selector &selector = rule.selectors.at(j);
+
       if (selectorMatches(selector, node)) {
-         uint weight = rule.order
-                       + selector.specificity() * 0x100
-                       + (uint(origin) + depth) * 0x100000;
+         uint weight = rule.order + selector.specificity() * 0x100 + (uint(origin) + depth) * 0x100000;
          StyleRule newRule = rule;
+
          if (rule.selectors.count() > 1) {
             newRule.selectors.resize(1);
             newRule.selectors[0] = selector;
          }
-         //We might have rules with the same weight if they came from a rule with several selectors
+
+         // We might have rules with the same weight if they came from a rule with several selectors
          weightedRules->insertMulti(weight, newRule);
       }
    }
@@ -2259,33 +2260,38 @@ QVector<StyleRule> StyleSelector::styleRulesForNode(NodePtr node)
       return rules;
    }
 
-   QMap<uint, StyleRule> weightedRules; // (spec, rule) that will be sorted below
+   QMultiMap<uint, StyleRule> weightedRules;       // (spec, rule) that will be sorted below
 
    //prune using indexed stylesheet
    for (int sheetIdx = 0; sheetIdx < styleSheets.count(); ++sheetIdx) {
       const StyleSheet &styleSheet = styleSheets.at(sheetIdx);
+
       for (int i = 0; i < styleSheet.styleRules.count(); ++i) {
          matchRule(node, styleSheet.styleRules.at(i), styleSheet.origin, styleSheet.depth, &weightedRules);
       }
 
       if (!styleSheet.idIndex.isEmpty()) {
          QStringList ids = nodeIds(node);
+
          for (int i = 0; i < ids.count(); i++) {
             const QString &key = ids.at(i);
             QMultiHash<QString, StyleRule>::const_iterator it = styleSheet.idIndex.constFind(key);
+
             while (it != styleSheet.idIndex.constEnd() && it.key() == key) {
                matchRule(node, it.value(), styleSheet.origin, styleSheet.depth, &weightedRules);
                ++it;
             }
          }
       }
-      if (!styleSheet.nameIndex.isEmpty()) {
+      if (! styleSheet.nameIndex.isEmpty()) {
          QStringList names = nodeNames(node);
          for (int i = 0; i < names.count(); i++) {
             QString name = names.at(i);
+
             if (nameCaseSensitivity == Qt::CaseInsensitive) {
                name = name.toLower();
             }
+
             QMultiHash<QString, StyleRule>::const_iterator it = styleSheet.nameIndex.constFind(name);
             while (it != styleSheet.nameIndex.constEnd() && it.key() == name) {
                matchRule(node, it.value(), styleSheet.origin, styleSheet.depth, &weightedRules);
@@ -2306,7 +2312,8 @@ QVector<StyleRule> StyleSelector::styleRulesForNode(NodePtr node)
    }
 
    rules.reserve(weightedRules.count());
-   QMap<uint, StyleRule>::const_iterator it = weightedRules.constBegin();
+   QMultiMap<uint, StyleRule>::const_iterator it = weightedRules.constBegin();
+
    for ( ; it != weightedRules.constEnd() ; ++it) {
       rules += *it;
    }
