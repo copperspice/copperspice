@@ -27,17 +27,17 @@
 
 #ifndef QT_NO_STYLE_STYLESHEET
 
-#include <QtGui/qstyleoption.h>
-#include <QtCore/qhash.h>
-#include <QtGui/qevent.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qapplication.h>
+#include <qstyleoption.h>
+#include <qhash.h>
+#include <qevent.h>
+#include <qvector.h>
+#include <qapplication.h>
 #include <qcssparser_p.h>
-#include <QtGui/qbrush.h>
+#include <qbrush.h>
+#include <qrenderrule_p.h>
 
 QT_BEGIN_NAMESPACE
 
-class QRenderRule;
 class QAbstractScrollArea;
 class QStyleSheetStylePrivate;
 class QStyleOptionTitleBar;
@@ -52,8 +52,7 @@ class QStyleSheetStyle : public QWindowsStyle
    QStyleSheetStyle(QStyle *baseStyle);
    ~QStyleSheetStyle();
 
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, 
-                  const QWidget *w = 0) const override;
+   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const override;
 
    void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,const QWidget *w = 0) const override;
    void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const override;
@@ -64,23 +63,23 @@ class QStyleSheetStyle : public QWindowsStyle
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,const QWidget *w = 0) const override;
 
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override;
-   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt, 
+   SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt,
                   const QWidget *w = 0) const override;
 
    QRect itemPixmapRect(const QRect &rect, int alignment, const QPixmap &pixmap) const override;
-   QRect itemTextRect(const QFontMetrics &metrics, const QRect &rect, int alignment, bool enabled, 
+   QRect itemTextRect(const QFontMetrics &metrics, const QRect &rect, int alignment, bool enabled,
                   const QString &text) const override;
 
    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
 
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, 
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize,
                   const QWidget *widget = 0) const override;
 
    QPalette standardPalette() const override;
 
    QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option = 0, const QWidget *w = 0 ) const override;
 
-   int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, 
+   int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
          Qt::Orientation orientation, const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
    int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const override;
@@ -120,7 +119,7 @@ class QStyleSheetStyle : public QWindowsStyle
    static int numinstances;
 
  protected :
-   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0, 
+   QIcon standardIconImplementation(StandardPixmap standardIcon, const QStyleOption *opt = 0,
                   const QWidget *widget = 0) const override;
 
    int layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
@@ -155,7 +154,7 @@ class QStyleSheetStyle : public QWindowsStyle
    static Qt::Alignment resolveAlignment(Qt::LayoutDirection, Qt::Alignment);
    static bool isNaturalChild(const QWidget *w);
    bool initWidget(const QWidget *w) const;
- 
+
    Q_DISABLE_COPY(QStyleSheetStyle)
    Q_DECLARE_PRIVATE(QStyleSheetStyle)
 };
@@ -172,7 +171,9 @@ class QStyleSheetStyleCaches : public QObject
 
    QHash<const QWidget *, QVector<QCss::StyleRule> > styleRulesCache;
    QHash<const QWidget *, QHash<int, bool> > hasStyleRuleCache;
+
    typedef QHash<int, QHash<quint64, QRenderRule> > QRenderRules;
+
    QHash<const QWidget *, QRenderRules> renderRulesCache;
    QHash<const QWidget *, QPalette> customPaletteWidgets; // widgets whose palette we tampered
    QHash<const void *, QCss::StyleSheet> styleSheetCache; // parsed style sheets

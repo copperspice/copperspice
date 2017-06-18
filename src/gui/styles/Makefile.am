@@ -117,18 +117,19 @@ GUI_STYLES_INCLUDES = \
 
 GUI_STYLES_PRIVATE_INCLUDES = \
 	qcommonstylepixmaps_p.h \
-	qcleanlooksstyle_p.h \
-	qwindowsstyle_p.h \
 	qcommonstyle_p.h \
-	qmotifstyle_p.h \
-	qstyle_p.h \
+	qcleanlooksstyle_p.h \
 	qgtkstyle_p.h \
 	qgtkpainter_p.h \
+	qmotifstyle_p.h \
 	qmacstyle_mac_p.h \
 	qmacstylepixmaps_mac_p.h \
+	qrenderrule_p.h \
+	qstyle_p.h \
 	qstylehelper_p.h \
 	qproxystyle_p.h \
 	qstylesheetstyle_p.h \
+	qwindowsstyle_p.h \
 	qwindowsxpstyle_p.h \
 	qwindowsvistastyle_p.h
 
@@ -154,7 +155,7 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/styles/qcdestyle.cpp
 
 nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/styles/qrc_qstyle.cpp 
+	src/gui/styles/qrc_qstyle.cpp
 
 EXTRA_DIST+=\
 	src/gui/styles/qstyle.qrc \

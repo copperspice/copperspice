@@ -121,17 +121,18 @@ set(GUI_PRIVATE_INCLUDES
     ${GUI_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstylepixmaps_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcleanlooksstyle_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qcommonstyle_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmotifstyle_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkpainter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstylepixmaps_mac_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehelper_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmotifstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qproxystyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qrenderrule_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylehelper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qstylesheetstyle_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle_p.h
 )
@@ -184,13 +185,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsxpstyle.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsvistastyle.cpp
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES
         ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindowsstyle.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/styles/qmacstyle_mac.mm
     )
     add_definitions(-DQT_NO_STYLE_WINDOWSXP -DQT_NO_STYLE_GTK)
