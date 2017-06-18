@@ -2357,7 +2357,8 @@ void QTextControl::setExtraSelections(const QList<QTextEdit::ExtraSelection> &se
 {
    Q_D(QTextControl);
 
-   QHash<int, int> hash;
+   QMultiHash<int, int> hash;
+
    for (int i = 0; i < d->extraSelections.count(); ++i) {
       const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(i);
       hash.insertMulti(esel.cursor.anchor(), i);
@@ -2365,26 +2366,39 @@ void QTextControl::setExtraSelections(const QList<QTextEdit::ExtraSelection> &se
 
    for (int i = 0; i < selections.count(); ++i) {
       const QTextEdit::ExtraSelection &sel = selections.at(i);
-      QHash<int, int>::iterator it = hash.find(sel.cursor.anchor());
-      if (it != hash.end()) {
-         const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(it.value());
-         if (esel.cursor.position() == sel.cursor.position()
-               && esel.format == sel.format) {
-            hash.erase(it);
-            continue;
+
+      int key = sel.cursor.anchor();
+      auto iter = hash.find(key);
+
+      bool okToAdd = true;
+
+      while (iter != hash.end() && iter.key() == key) {
+         // check each potetial match
+         const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(iter.value());
+
+         if (esel.cursor.position() == sel.cursor.position() && esel.format == sel.format) {
+            hash.erase(iter);
+            okToAdd = false;
          }
       }
-      QRectF r = selectionRect(sel.cursor);
-      if (sel.format.boolProperty(QTextFormat::FullWidthSelection)) {
-         r.setLeft(0);
-         r.setWidth(qreal(INT_MAX));
+
+      if (okToAdd) {
+         // new selection
+         QRectF r = selectionRect(sel.cursor);
+
+         if (sel.format.boolProperty(QTextFormat::FullWidthSelection)) {
+            r.setLeft(0);
+            r.setWidth(qreal(INT_MAX));
+         }
+
+         emit updateRequest(r);
       }
-      emit updateRequest(r);
    }
 
-   for (QHash<int, int>::iterator it = hash.begin(); it != hash.end(); ++it) {
-      const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(it.value());
+   for (auto &item : hash) {
+      const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(item);
       QRectF r = selectionRect(esel.cursor);
+
       if (esel.format.boolProperty(QTextFormat::FullWidthSelection)) {
          r.setLeft(0);
          r.setWidth(qreal(INT_MAX));
@@ -2393,6 +2407,7 @@ void QTextControl::setExtraSelections(const QList<QTextEdit::ExtraSelection> &se
    }
 
    d->extraSelections.resize(selections.count());
+
    for (int i = 0; i < selections.count(); ++i) {
       d->extraSelections[i].cursor = selections.at(i).cursor;
       d->extraSelections[i].format = selections.at(i).format;

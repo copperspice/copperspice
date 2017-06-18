@@ -237,18 +237,23 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
    // filter the event through recognizers
    typedef QMultiMap<QObject *, Qt::GestureType>::const_iterator ContextIterator;
    ContextIterator contextEnd = contexts.end();
+
    for (ContextIterator context = contexts.begin(); context != contextEnd; ++context) {
       Qt::GestureType gestureType = context.value();
-      QMap<Qt::GestureType, QGestureRecognizer *>::const_iterator
-      typeToRecognizerIterator = m_recognizers.lowerBound(gestureType),
-      typeToRecognizerEnd = m_recognizers.upperBound(gestureType);
+
+      QMultiMap<Qt::GestureType, QGestureRecognizer *>::const_iterator typeToRecognizerIterator = m_recognizers.lowerBound(gestureType);
+      QMultiMap<Qt::GestureType, QGestureRecognizer *>::const_iterator typeToRecognizerEnd      = m_recognizers.upperBound(gestureType);
+
       for (; typeToRecognizerIterator != typeToRecognizerEnd; ++typeToRecognizerIterator) {
          QGestureRecognizer *recognizer = typeToRecognizerIterator.value();
+
          QObject *target = context.key();
          QGesture *state = getState(target, recognizer, gestureType);
+
          if (!state) {
             continue;
          }
+
          QGestureRecognizer::Result recognizerResult = recognizer->recognize(state, target, event);
          QGestureRecognizer::Result recognizerState = recognizerResult & QGestureRecognizer::ResultState_Mask;
          QGestureRecognizer::Result resultHint = recognizerResult & QGestureRecognizer::ResultHint_Mask;
@@ -343,7 +348,7 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
 
       for (QGesture * gesture : canceledGestures) {
          gesture->d_func()->state = Qt::GestureCanceled;
-      }   
+      }
 
       for (QGesture * gesture : activeToMaybeGestures) {
          gesture->d_func()->state = Qt::GestureFinished;

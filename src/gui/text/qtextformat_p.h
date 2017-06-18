@@ -23,9 +23,9 @@
 #ifndef QTEXTFORMAT_P_H
 #define QTEXTFORMAT_P_H
 
-#include <QtGui/qtextformat.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qhash.h>
+#include <qtextformat.h>
+#include <qmultihash.h>
+#include <qvector.h>
 
 QT_BEGIN_NAMESPACE
 

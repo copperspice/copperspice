@@ -23,9 +23,8 @@
 #ifndef QWINDOWDEFS_H
 #define QWINDOWDEFS_H
 
-#include <QtCore/qnamespace.h>
-
-QT_BEGIN_NAMESPACE
+#include <qnamespace.h>
+#include <qcontainerfwd.h>
 
 class QPaintDevice;
 class QWidget;
@@ -58,55 +57,40 @@ class QString;
 class QByteArray;
 class QApplication;
 
-template<typename T> class QList;
-typedef QList<QWidget *> QWidgetList;
-
-QT_END_NAMESPACE
-
 // Window system dependent definitions
 
-#if defined(Q_OS_MAC) && !defined(Q_WS_QWS)
-#include <QtGui/qmacdefines_mac.h>
-
-typedef long WId;
-
+#if defined(Q_OS_MAC) && ! defined(Q_WS_QWS)
+#include <qmacdefines_mac.h>
+   typedef long WId;
 #endif
 
 #if defined(Q_OS_WIN)
-#include <QtGui/qwindowdefs_win.h>
+#include <qwindowdefs_win.h>
 #endif
 
 #if defined(Q_WS_X11)
-typedef struct _XDisplay Display;
-typedef union  _XEvent XEvent;
-typedef struct _XGC *GC;
-typedef struct _XRegion *Region;
-typedef unsigned long  WId;
+   typedef struct _XDisplay Display;
+   typedef union  _XEvent XEvent;
+   typedef struct _XGC *GC;
+   typedef struct _XRegion *Region;
+   typedef unsigned long  WId;
 #endif
 
 #if defined(Q_WS_QWS)
-typedef unsigned long  WId;
-QT_BEGIN_NAMESPACE
-struct QWSEvent;
-QT_END_NAMESPACE
+   typedef unsigned long  WId;
+   struct QWSEvent;
 #endif
 
 #if defined(Q_WS_QPA)
-typedef unsigned long  WId;
+   typedef unsigned long  WId;
 #endif
 
-QT_BEGIN_NAMESPACE
-
-template<class K, class V> class QHash;
-typedef QHash<WId, QWidget *> QWidgetMapper;
-
-template<class V> class QSet;
-typedef QSet<QWidget *> QWidgetSet;
-
-QT_END_NAMESPACE
+using QWidgetMapper = QHash<WId, QWidget *>;
+using QWidgetList   = QList<QWidget *>;
+using QWidgetSet    = QSet<QWidget *>;
 
 #if defined(QT_NEEDS_QMAIN)
 #define main qMain
 #endif
 
-#endif // QWINDOWDEFS_H
+#endif

@@ -118,7 +118,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QM
       return const_cast<QFileSystemNode *>(&root);
    }
 
-   QFileSystemModelPrivate::QFileSystemNode *indexNode = 
+   QFileSystemModelPrivate::QFileSystemNode *indexNode =
          static_cast<QFileSystemModelPrivate::QFileSystemNode *>(index.internalPointer());
 
    Q_ASSERT(indexNode);
@@ -138,7 +138,7 @@ static QString qt_GetLongPathName(const QString &strShortPath)
    }
 
    const QString absPath = QDir(strShortPath).absolutePath();
-   if (absPath.startsWith(QLatin1String("//")) || absPath.startsWith(QLatin1String("\\\\"))) { 
+   if (absPath.startsWith(QLatin1String("//")) || absPath.startsWith(QLatin1String("\\\\"))) {
       // unc
       return QDir::fromNativeSeparators(absPath);
    }
@@ -157,10 +157,10 @@ static QString qt_GetLongPathName(const QString &strShortPath)
    }
 
    if (result > 4) {
-      QString longPath = QString::fromWCharArray(buffer.data() + 4); 
+      QString longPath = QString::fromWCharArray(buffer.data() + 4);
 
       // ignoring prefix
-      longPath[0] = longPath.at(0).toUpper(); 
+      longPath[0] = longPath.at(0).toUpper();
 
       // capital drive letters
       return QDir::fromNativeSeparators(longPath);
@@ -197,23 +197,23 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
    }
 
    // ### TODO can we use bool QAbstractFileEngine::caseSensitive() const?
-   QStringList pathElements = absolutePath.split(QLatin1Char('/'), QString::SkipEmptyParts);   
+   QStringList pathElements = absolutePath.split(QLatin1Char('/'), QString::SkipEmptyParts);
 
-#if defined(Q_OS_WIN) 
+#if defined(Q_OS_WIN)
    if ((pathElements.isEmpty())) {
 
 #else
    if ((pathElements.isEmpty()) && QDir::fromNativeSeparators(longPath) != QLatin1String("/")) {
-   
+
 #endif
-     
+
       return const_cast<QFileSystemModelPrivate::QFileSystemNode *>(&root);
    }
 
    QModelIndex index = QModelIndex(); // start with "My Computer"
 
 #if defined(Q_OS_WIN)
-   if (absolutePath.startsWith(QLatin1String("//"))) { 
+   if (absolutePath.startsWith(QLatin1String("//"))) {
 
       // UNC path
       QString host = QLatin1String("\\\\") + pathElements.first();
@@ -235,7 +235,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
          }
 
          QFileInfo info(host);
-        
+
          if (! info.exists()) {
             return rootNode;
          }
@@ -323,7 +323,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
       Q_ASSERT(node);
 
       if (! node->isVisible) {
-         // It has been filtered out 
+         // It has been filtered out
          if (alreadyExisted && node->hasInformation() && ! fetch) {
             return const_cast<QFileSystemModelPrivate::QFileSystemNode *>(&root);
          }
@@ -364,7 +364,7 @@ void QFileSystemModel::timerEvent(QTimerEvent *event)
 
          if (! node->hasInformation()) {
             d->fileInfoGatherer.fetchExtendedInformation(d->toFetch.at(i).dir,
-                  QStringList(d->toFetch.at(i).file));        
+                  QStringList(d->toFetch.at(i).file));
          }
       }
 #endif
@@ -439,7 +439,7 @@ QModelIndex QFileSystemModel::parent(const QModelIndex &index) const
    QFileSystemModelPrivate::QFileSystemNode *grandParentNode = parentNode->parent;
    Q_ASSERT(grandParentNode->children.contains(parentNode->fileName));
 
-   int visualRow = d->translateVisibleLocation(grandParentNode, 
+   int visualRow = d->translateVisibleLocation(grandParentNode,
                    grandParentNode->visibleLocation(grandParentNode->children.value(parentNode->fileName)->fileName));
 
    if (visualRow == -1) {
@@ -478,7 +478,7 @@ bool QFileSystemModel::hasChildren(const QModelIndex &parent) const
       return false;
    }
 
-   if (! parent.isValid()) { 
+   if (! parent.isValid()) {
       // drives
       return true;
    }
@@ -516,11 +516,11 @@ void QFileSystemModel::fetchMore(const QModelIndex &parent)
 
 int QFileSystemModel::rowCount(const QModelIndex &parent) const
 {
-   Q_D(const QFileSystemModel); 
+   Q_D(const QFileSystemModel);
 
    if (parent.column() > 0) {
       return 0;
-   } 
+   }
 
    if (! parent.isValid()) {
       return d->root.visibleChildren.count();
@@ -744,7 +744,7 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
       return true;
    }
 
-   if (newName.isEmpty() || QDir::toNativeSeparators(newName).contains(QDir::separator()) 
+   if (newName.isEmpty() || QDir::toNativeSeparators(newName).contains(QDir::separator())
          || ! QDir(filePath(parent(idx))).rename(oldName, newName)) {
 
 #ifndef QT_NO_MESSAGEBOX
@@ -770,10 +770,10 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
 
       d->addNode(parentNode, newName, indexNode->info->fileInfo());
       parentNode->visibleChildren.removeAt(visibleLocation);
-    
+
       QFileSystemModelPrivate::QFileSystemNode *oldValue = parentNode->children.value(oldName);
       parentNode->children[newName] = oldValue;
-    
+
       QFileInfo info(d->rootDir, newName);
       oldValue->fileName = newName;
       oldValue->parent = parentNode;
@@ -824,14 +824,14 @@ QVariant QFileSystemModel::headerData(int section, Qt::Orientation orientation, 
          break;
 
       case 2:
-         
+
 #ifdef Q_OS_MAC
          returnValue = tr("Kind", "Match OS X Finder");
 #else
          returnValue = tr("Type", "All other platforms");
 #endif
          break;
-     
+
       case 3:
          returnValue = tr("Date Modified");
          break;
@@ -999,34 +999,34 @@ class QFileSystemModelSorter
                    r->fileName, Qt::CaseInsensitive) < 0;
          }
       case 1: {
-            // Directories go first	    
-	    bool left = l->isDir();
-	    bool right = r->isDir();
-	    if (left ^ right) {
-	       return left;
-	    }
-	    
-	    qint64 sizeDifference = l->size() - r->size();
-	    if (sizeDifference == 0) {
-	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
-	    }
-	    
-	    return sizeDifference < 0;
+            // Directories go first
+       bool left = l->isDir();
+       bool right = r->isDir();
+       if (left ^ right) {
+          return left;
+       }
+
+       qint64 sizeDifference = l->size() - r->size();
+       if (sizeDifference == 0) {
+          return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+       }
+
+       return sizeDifference < 0;
       }
 
          case 2: {
-	    int compare = QString::localeAwareCompare(l->type(), r->type());
-	    if (compare == 0) {
-	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
-	    }
-	    
-	    return compare < 0;
+       int compare = QString::localeAwareCompare(l->type(), r->type());
+       if (compare == 0) {
+          return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+       }
+
+       return compare < 0;
          }
 
          case 3:
-	    if (l->lastModified() == r->lastModified()) {
-	       return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
-	    }
+       if (l->lastModified() == r->lastModified()) {
+          return QFileSystemModelPrivate::naturalCompare(l->fileName, r->fileName, Qt::CaseInsensitive) < 0;
+       }
 
             return l->lastModified() < r->lastModified();
       }
@@ -1047,10 +1047,10 @@ class QFileSystemModelSorter
 
 void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent)
 {
-   Q_Q(QFileSystemModel); 
+   Q_Q(QFileSystemModel);
 
    QFileSystemModelPrivate::QFileSystemNode *indexNode = node(parent);
-   
+
    if (indexNode->children.count() == 0) {
       return;
    }
@@ -1061,7 +1061,7 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
    for (auto item: indexNode->children) {
 
       if (filtersAcceptsNode(item)) {
-         values.append(QPair<QFileSystemModelPrivate::QFileSystemNode *, int>(item, i)); 
+         values.append(QPair<QFileSystemModelPrivate::QFileSystemNode *, int>(item, i));
 
       } else {
          item->isVisible = false;
@@ -1078,10 +1078,10 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
 
    // No more dirty item we reset our internal dirty index
    indexNode->dirtyChildrenIndex = -1;
- 
+
    for (int i = 0; i < values.count(); ++i) {
       indexNode->visibleChildren.append(values.at(i).first->fileName);
-      values.at(i).first->isVisible = true;     
+      values.at(i).first->isVisible = true;
    }
 
    if (! disableRecursiveSort) {
@@ -1290,9 +1290,9 @@ QModelIndex QFileSystemModel::mkdir(const QModelIndex &parent, const QString &na
 
    QFileSystemModelPrivate::QFileSystemNode *parentNode = d->node(parent);
    d->addNode(parentNode, name, QFileInfo());
-  
+
    Q_ASSERT(parentNode->children.contains(name));
-  
+
    QFileSystemModelPrivate::QFileSystemNode *node = parentNode->children[name];
    node->populate(d->fileInfoGatherer.getInfo(QFileInfo(dir.absolutePath() + QDir::separator() + name)));
    d->addVisibleFiles(parentNode, QStringList(name));
@@ -1318,7 +1318,7 @@ QModelIndex QFileSystemModel::setRootPath(const QString &newPath)
 {
    Q_D(QFileSystemModel);
 
-#if defined(Q_OS_WIN32)  
+#if defined(Q_OS_WIN32)
    QString longNewPath = qt_GetLongPathName(newPath);
 
 #elif defined(Q_OS_WIN)
@@ -1339,7 +1339,7 @@ QModelIndex QFileSystemModel::setRootPath(const QString &newPath)
 
    d->setRootPath = true;
 
-   // newPath was not "" however longPath is "" 
+   // newPath was not "" however longPath is ""
    if (! newPath.isEmpty() && longNewPath.isEmpty()) {
       return d->index(rootPath());
    }
@@ -1668,14 +1668,14 @@ void QFileSystemModelPrivate::addVisibleFiles(QFileSystemNode *parentNode, const
 
    QModelIndex parent = index(parentNode);
    bool indexHidden   = isHiddenByFilter(parentNode, parent);
- 
+
    if (! indexHidden) {
       q->beginInsertRows(parent, parentNode->visibleChildren.count() ,
                          parentNode->visibleChildren.count() + newFiles.count() - 1);
    }
 
    if (parentNode->dirtyChildrenIndex == -1) {
-      parentNode->dirtyChildrenIndex = parentNode->visibleChildren.count();      
+      parentNode->dirtyChildrenIndex = parentNode->visibleChildren.count();
    }
 
    for (int i = 0; i < newFiles.count(); ++i) {
@@ -1710,7 +1710,7 @@ void QFileSystemModelPrivate::removeVisibleFile(QFileSystemNode *parentNode, int
       q->endRemoveRows();
    }
 }
-    
+
 void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QList<QPair<QString, QFileInfo> > &updates)
 {
    Q_Q(QFileSystemModel);
@@ -1720,7 +1720,7 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QL
 
    QFileSystemModelPrivate::QFileSystemNode *parentNode = node(path, false);
    QModelIndex parentIndex = index(parentNode);
- 
+
    for (int i = 0; i < updates.count(); ++i) {
       QString fileName = updates.at(i).first;
       Q_ASSERT(! fileName.isEmpty());
@@ -1729,7 +1729,7 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QL
       bool previouslyHere = parentNode->children.contains(fileName);
 
       if (! previouslyHere) {
-         addNode(parentNode, fileName, info.fileInfo()); 
+         addNode(parentNode, fileName, info.fileInfo());
       }
 
       QFileSystemModelPrivate::QFileSystemNode *node = parentNode->children.value(fileName);
@@ -1741,8 +1741,8 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QL
          }
 
       } else if (QString::compare(node->fileName, fileName, Qt::CaseInsensitive) != 0) {
-         continue;  
-       
+         continue;
+
       }
 
       if (isCaseSensitive) {
@@ -1855,7 +1855,8 @@ void QFileSystemModelPrivate::init()
    q->connect(&delayedSortTimer, SIGNAL(timeout()), q, SLOT(_q_performDelayedSort()), Qt::QueuedConnection);
 
    QHash<int, QByteArray> roles = q->roleNames();
-   roles.insertMulti(QFileSystemModel::FileIconRole, "fileIcon"); // == Qt::decoration
+   roles.insert(QFileSystemModel::FileIconRole, "fileIcon");       // == Qt::decoration
+
    roles.insert(QFileSystemModel::FilePathRole,      "filePath");
    roles.insert(QFileSystemModel::FileNameRole,      "fileName");
    roles.insert(QFileSystemModel::FilePermissions,   "filePermissions");
@@ -1869,19 +1870,19 @@ bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) co
    if (node->parent == &root || bypassFilters.contains(node)) {
       return true;
    }
-  
+
    // we do not know anything, so do not accept this node
    if (! node->hasInformation()) {
       return false;
    }
 
-   const bool filterPermissions = ( (filters & QDir::PermissionMask) && 
+   const bool filterPermissions = ( (filters & QDir::PermissionMask) &&
                                     (filters & QDir::PermissionMask) != QDir::PermissionMask);
 
    const bool hideHidden        = ! (filters & QDir::Hidden);
 
    const bool hideDirs          = ! (filters & (QDir::Dirs | QDir::AllDirs));
-   const bool hideFiles         = ! (filters & QDir::Files);  
+   const bool hideFiles         = ! (filters & QDir::Files);
    const bool hideSystem        = ! (filters & QDir::System);
 
    const bool hideReadable      = ! (! filterPermissions || (filters & QDir::Readable));
@@ -1891,22 +1892,22 @@ bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) co
    const bool hideSymlinks      = (filters & QDir::NoSymLinks);
 
    // ### Qt5 simplify (because NoDotAndDotDot=NoDot|NoDotDot)
-   const bool hideDot           = (filters & QDir::NoDot) || (filters & QDir::NoDotAndDotDot); 
+   const bool hideDot           = (filters & QDir::NoDot) || (filters & QDir::NoDotAndDotDot);
 
    // ### Qt5 simplify (because NoDotAndDotDot=NoDot|NoDotDot)
-   const bool hideDotDot        = (filters & QDir::NoDotDot) || (filters & QDir::NoDotAndDotDot); 
+   const bool hideDotDot        = (filters & QDir::NoDotDot) || (filters & QDir::NoDotAndDotDot);
 
    // we match the behavior of entryList and not QFileInfo on this
    // incompatibility will not be fixed until Qt5
 
    bool isDot    = (node->fileName == QLatin1String("."));
    bool isDotDot = (node->fileName == QLatin1String(".."));
- 
-   if ( ( hideHidden && ! (isDot || isDotDot) && node->isHidden() ) 
-          || (hideDirs  && node->isDir()) || (hideFiles && node->isFile())  || (hideSystem  && node->isSystem())  
+
+   if ( ( hideHidden && ! (isDot || isDotDot) && node->isHidden() )
+          || (hideDirs  && node->isDir()) || (hideFiles && node->isFile())  || (hideSystem  && node->isSystem())
           || (hideReadable  && node->isReadable()) || (hideWritable   && node->isWritable()) || (hideExecutable && node->isExecutable())
           || (hideSymlinks  && node->isSymLink()) || (hideDot && isDot) || (hideDotDot && isDotDot)) {
-      
+
       return false;
    }
 

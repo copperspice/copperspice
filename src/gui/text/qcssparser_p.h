@@ -23,16 +23,16 @@
 #ifndef QCSSPARSER_P_H
 #define QCSSPARSER_P_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QVector>
-#include <QtCore/QVariant>
-#include <QtCore/QPair>
-#include <QtCore/QSize>
-#include <QtCore/QMultiHash>
-#include <QtGui/QFont>
-#include <QtGui/QPalette>
-#include <QtGui/QIcon>
-#include <QtCore/QSharedData>
+#include <qstringlist.h>
+#include <qvector.h>
+#include <qvariant.h>
+#include <qpair.h>
+#include <qsize.h>
+#include <qmultihash.h>
+#include <qfont.h>
+#include <qpalette.h>
+#include <qicon.h>
+#include <qshareddata.h>
 
 #ifndef QT_NO_CSSPARSER
 
@@ -590,9 +590,11 @@ struct StyleSheet {
    QVector<PageRule> pageRules;
    QVector<ImportRule> importRules;
    StyleSheetOrigin origin;
+
    int depth; // applicable only for inline style sheets
    QMultiHash<QString, StyleRule> nameIndex;
    QMultiHash<QString, StyleRule> idIndex;
+
    void buildIndexes(Qt::CaseSensitivity nameCaseSensitivity = Qt::CaseSensitive);
 };
 

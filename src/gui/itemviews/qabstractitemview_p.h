@@ -317,10 +317,11 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
       for (int maps = 0; maps < 2; ++maps) {
          const QMap<int, QPointer<QAbstractItemDelegate> > *delegates = maps ? &columnDelegates : &rowDelegates;
-         for (QMap<int, QPointer<QAbstractItemDelegate> >::const_iterator it = delegates->begin();
-               it != delegates->end(); ++it) {
+
+         for (auto it = delegates->begin(); it != delegates->end(); ++it) {
             if (it.value() == delegate) {
                ++ref;
+
                // optimization, we are only interested in the ref count values 0, 1 or >=2
                if (ref >= 2) {
                   return ref;
@@ -335,7 +336,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
     * return true if the index is registered as a QPersistentModelIndex
     */
    inline bool isPersistent(const QModelIndex &index) const {
-      return static_cast<QAbstractItemModelPrivate *>(model->d_ptr.data())->persistent.indexes.contains(index);
+      return static_cast<QAbstractItemModelPrivate *>(model->d_ptr.data())->persistent.m_indexes.contains(index);
    }
 
    QModelIndexList selectedDraggableIndexes() const;

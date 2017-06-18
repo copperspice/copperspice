@@ -250,15 +250,16 @@ void QStandardItemPrivate::sortChildren(int column, Qt::SortOrder order)
    QModelIndexList changedPersistentIndexesFrom, changedPersistentIndexesTo;
    QVector<QStandardItem *> sorted_children(children.count());
    for (int i = 0; i < rowCount(); ++i) {
-      int r = (i < sortable.count()
-               ? sortable.at(i).second
-               : unsortable.at(i - sortable.count()));
+      int r = (i < sortable.count() ? sortable.at(i).second : unsortable.at(i - sortable.count()));
+
       for (int c = 0; c < columnCount(); ++c) {
          QStandardItem *itm = q->child(r, c);
          sorted_children[childIndex(i, c)] = itm;
+
          if (model) {
             QModelIndex from = model->createIndex(r, c, q);
-            if (model->d_func()->persistent.indexes.contains(from)) {
+
+            if (model->d_func()->persistent.m_indexes.contains(from)) {
                QModelIndex to = model->createIndex(i, c, q);
                changedPersistentIndexesFrom.append(from);
                changedPersistentIndexesTo.append(to);

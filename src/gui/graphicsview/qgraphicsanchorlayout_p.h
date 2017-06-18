@@ -23,6 +23,8 @@
 #ifndef QGRAPHICSANCHORLAYOUT_P_H
 #define QGRAPHICSANCHORLAYOUT_P_H
 
+#include <qmultihash.h>
+
 #include <QGraphicsWidget>
 #include <qgraphicslayout_p.h>
 #include <qgraphicsanchorlayout.h>

@@ -25,6 +25,11 @@
 
 #ifndef QT_NO_SOFTKEYMANAGER
 
+#include <qhash.h>
+#include <qmultihash.h>
+
+class QAction;
+
 QT_BEGIN_NAMESPACE
 
 class QSoftKeyManagerPrivate
@@ -37,9 +42,11 @@ class QSoftKeyManagerPrivate
 
  protected:
    static QScopedPointer<QSoftKeyManager> self;
+
    QHash<QAction *, Qt::Key> keyedActions;
    QMultiHash<int, QAction *> requestedSoftKeyActions;
    QWidget *initialSoftKeySource;
+
    bool pendingUpdate;
 
    QSoftKeyManager *q_ptr;

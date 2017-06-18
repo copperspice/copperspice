@@ -1006,7 +1006,7 @@ QModelIndexPairList QSortFilterProxyModelPrivate::store_persistent_indexes()
    Q_Q(QSortFilterProxyModel);
    QModelIndexPairList source_indexes;
 
-   for (QPersistentModelIndexData * data : persistent.indexes) {
+   for (QPersistentModelIndexData * data : persistent.m_indexes) {
       QModelIndex proxy_index = data->index;
       QModelIndex source_index = q->mapToSource(proxy_index);
       source_indexes.append(qMakePair(proxy_index, QPersistentModelIndex(source_index)));
@@ -1277,7 +1277,7 @@ void QSortFilterProxyModelPrivate::_q_sourceLayoutAboutToBeChanged()
    Q_Q(QSortFilterProxyModel);
    saved_persistent_indexes.clear();
    emit q->layoutAboutToBeChanged();
-   if (persistent.indexes.isEmpty()) {
+   if (persistent.m_indexes.isEmpty()) {
       return;
    }
 

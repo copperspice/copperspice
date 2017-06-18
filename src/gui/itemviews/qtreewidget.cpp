@@ -878,16 +878,21 @@ void QTreeModel::sortItems(QList<QTreeWidgetItem *> *items, int column, Qt::Sort
    QModelIndexList fromList;
    QModelIndexList toList;
    int colCount = columnCount();
+
    for (int r = 0; r < sorting.count(); ++r) {
       int oldRow = sorting.at(r).second;
+
       if (oldRow == r) {
          continue;
       }
+
       QTreeWidgetItem *item = sorting.at(r).first;
       items->replace(r, item);
+
       for (int c = 0; c < colCount; ++c) {
          QModelIndex from = createIndex(oldRow, c, item);
-         if (static_cast<QAbstractItemModelPrivate *>(d_ptr.data())->persistent.indexes.contains(from)) {
+
+         if (static_cast<QAbstractItemModelPrivate *>(d_ptr.data())->persistent.m_indexes.contains(from)) {
             QModelIndex to = createIndex(r, c, item);
             fromList << from;
             toList << to;

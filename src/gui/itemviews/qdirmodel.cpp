@@ -1206,14 +1206,17 @@ QFileInfo QDirModel::fileInfo(const QModelIndex &index) const
 void QDirModelPrivate::init()
 {
    Q_Q(QDirModel);
+
    filters = QDir::AllEntries | QDir::NoDotAndDotDot;
-   sort = QDir::Name;
+   sort    = QDir::Name;
    nameFilters << QLatin1String("*");
+
    root.parent = 0;
    root.info = QFileInfo();
    clear(&root);
+
    QHash<int, QByteArray> roles = q->roleNames();
-   roles.insertMulti(QDirModel::FileIconRole, "fileIcon"); // == Qt::decoration
+   roles.insert(QDirModel::FileIconRole, "fileIcon"); // == Qt::decoration
    roles.insert(QDirModel::FilePathRole, "filePath");
    roles.insert(QDirModel::FileNameRole, "fileName");
    q->setRoleNames(roles);
@@ -1291,8 +1294,9 @@ void QDirModelPrivate::savePersistentIndexes()
    Q_Q(QDirModel);
    savedPersistent.clear();
 
-   for (QPersistentModelIndexData * data : persistent.indexes) {
+   for (QPersistentModelIndexData * data : persistent.m_indexes) {
       SavedPersistent saved;
+
       QModelIndex index = data->index;
       saved.path = q->filePath(index);
       saved.column = index.column();
@@ -1307,18 +1311,22 @@ void QDirModelPrivate::restorePersistentIndexes()
    Q_Q(QDirModel);
    bool allow = allowAppendChild;
    allowAppendChild = false;
+
    for (int i = 0; i < savedPersistent.count(); ++i) {
       QPersistentModelIndexData *data = savedPersistent.at(i).data;
       QString path = savedPersistent.at(i).path;
-      int column = savedPersistent.at(i).column;
+      int column   = savedPersistent.at(i).column;
+
       QModelIndex idx = q->index(path, column);
       if (idx != data->index || data->model == 0) {
          //data->model may be equal to 0 if the model is getting destroyed
-         persistent.indexes.remove(data->index);
+         persistent.m_indexes.remove(data->index);
+
          data->index = idx;
          data->model = q;
+
          if (idx.isValid()) {
-            persistent.indexes.insert(idx, data);
+            persistent.m_indexes.insert(idx, data);
          }
       }
    }

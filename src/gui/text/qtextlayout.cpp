@@ -54,172 +54,57 @@ QT_BEGIN_NAMESPACE
 #define SuppressText 0x5012
 #define SuppressBackground 0x513
 
-/*!
-    \class QTextLayout::FormatRange
-    \reentrant
-
-    \brief The QTextLayout::FormatRange structure is used to apply extra formatting information
-    for a specified area in the text layout's content.
-
-    \sa QTextLayout::setAdditionalFormats(), QTextLayout::draw()
-*/
-
-/*!
-    \variable QTextLayout::FormatRange::start
-    Specifies the beginning of the format range within the text layout's text.
-*/
-
-/*!
-    \variable QTextLayout::FormatRange::length
-    Specifies the numer of characters the format range spans.
-*/
-
-/*!
-    \variable QTextLayout::FormatRange::format
-    Specifies the format to apply.
-*/
-
-/*!
-    \class QTextInlineObject
-    \reentrant
-
-    \brief The QTextInlineObject class represents an inline object in
-    a QTextLayout.
-
-    \ingroup richtext-processing
-
-    This class is only used if the text layout is used to lay out
-    parts of a QTextDocument.
-
-    The inline object has various attributes that can be set, for
-    example using, setWidth(), setAscent(), and setDescent(). The
-    rectangle it occupies is given by rect(), and its direction by
-    isRightToLeft(). Its position in the text layout is given by at(),
-    and its format is given by format().
-*/
-
-/*!
-    \fn QTextInlineObject::QTextInlineObject(int i, QTextEngine *e)
-
-    Creates a new inline object for the item at position \a i in the
-    text engine \a e.
-*/
-
-/*!
-    \fn QTextInlineObject::QTextInlineObject()
-
-    \internal
-*/
-
-/*!
-    \fn bool QTextInlineObject::isValid() const
-
-    Returns true if this inline object is valid; otherwise returns
-    false.
-*/
-
-/*!
-    Returns the inline object's rectangle.
-
-    \sa ascent(), descent(), width()
-*/
 QRectF QTextInlineObject::rect() const
 {
    QScriptItem &si = eng->layoutData->items[itm];
    return QRectF(0, -si.ascent.toReal(), si.width.toReal(), si.height().toReal());
 }
 
-/*!
-    Returns the inline object's width.
-
-    \sa ascent(), descent(), rect()
-*/
 qreal QTextInlineObject::width() const
 {
    return eng->layoutData->items[itm].width.toReal();
 }
 
-/*!
-    Returns the inline object's ascent.
-
-    \sa descent(), width(), rect()
-*/
 qreal QTextInlineObject::ascent() const
 {
    return eng->layoutData->items[itm].ascent.toReal();
 }
 
-/*!
-    Returns the inline object's descent.
-
-    \sa ascent(), width(), rect()
-*/
 qreal QTextInlineObject::descent() const
 {
    return eng->layoutData->items[itm].descent.toReal();
 }
 
-/*!
-    Returns the inline object's total height. This is equal to
-    ascent() + descent() + 1.
-
-    \sa ascent(), descent(), width(), rect()
-*/
 qreal QTextInlineObject::height() const
 {
    return eng->layoutData->items[itm].height().toReal();
 }
 
-/*!
-    Sets the inline object's width to \a w.
-
-    \sa width(), ascent(), descent(), rect()
-*/
 void QTextInlineObject::setWidth(qreal w)
 {
    eng->layoutData->items[itm].width = QFixed::fromReal(w);
 }
 
-/*!
-    Sets the inline object's ascent to \a a.
-
-    \sa ascent(), setDescent(), width(), rect()
-*/
 void QTextInlineObject::setAscent(qreal a)
 {
    eng->layoutData->items[itm].ascent = QFixed::fromReal(a);
 }
 
-/*!
-    Sets the inline object's decent to \a d.
-
-    \sa descent(), setAscent(), width(), rect()
-*/
 void QTextInlineObject::setDescent(qreal d)
 {
    eng->layoutData->items[itm].descent = QFixed::fromReal(d);
 }
 
-/*!
-    The position of the inline object within the text layout.
-*/
 int QTextInlineObject::textPosition() const
 {
    return eng->layoutData->items[itm].position;
 }
 
-/*!
-    Returns an integer describing the format of the inline object
-    within the text layout.
-*/
 int QTextInlineObject::formatIndex() const
 {
    return eng->formatIndex(&eng->layoutData->items[itm]);
 }
 
-/*!
-    Returns format of the inline object within the text layout.
-*/
 QTextFormat QTextInlineObject::format() const
 {
    if (!eng->block.docHandle()) {
@@ -228,102 +113,22 @@ QTextFormat QTextInlineObject::format() const
    return eng->formats()->format(eng->formatIndex(&eng->layoutData->items[itm]));
 }
 
-/*!
-    Returns if the object should be laid out right-to-left or left-to-right.
-*/
 Qt::LayoutDirection QTextInlineObject::textDirection() const
 {
    return (eng->layoutData->items[itm].analysis.bidiLevel % 2 ? Qt::RightToLeft : Qt::LeftToRight);
 }
 
-/*!
-    \class QTextLayout
-    \reentrant
-
-    \brief The QTextLayout class is used to lay out and render text.
-
-    \ingroup richtext-processing
-
-    It offers many features expected from a modern text layout
-    engine, including Unicode compliant rendering, line breaking and
-    handling of cursor positioning. It can also produce and render
-    device independent layout, something that is important for WYSIWYG
-    applications.
-
-    The class has a rather low level API and unless you intend to
-    implement your own text rendering for some specialized widget, you
-    probably won't need to use it directly.
-
-    QTextLayout can be used with both plain and rich text.
-
-    QTextLayout can be used to create a sequence of QTextLine
-    instances with given widths and can position them independently
-    on the screen. Once the layout is done, these lines can be drawn
-    on a paint device.
-
-    The text to be laid out can be provided in the constructor or set with
-    setText().
-
-    The layout can be seen as a sequence of QTextLine objects; use createLine()
-    to create a QTextLine instance, and lineAt() or lineForTextPosition() to retrieve
-    created lines.
-
-    Here is a code snippet that demonstrates the layout phase:
-    \snippet doc/src/snippets/code/src_gui_text_qtextlayout.cpp 0
-
-    The text can then be rendered by calling the layout's draw() function:
-    \snippet doc/src/snippets/code/src_gui_text_qtextlayout.cpp 1
-
-    For a given position in the text you can find a valid cursor position with
-    isValidCursorPosition(), nextCursorPosition(), and previousCursorPosition().
-
-    The QTextLayout itself can be positioned with setPosition(); it has a
-    boundingRect(), and a minimumWidth() and a maximumWidth().
-
-    \sa QStaticText
-*/
-
-/*!
-    \enum QTextLayout::CursorMode
-
-    \value SkipCharacters
-    \value SkipWords
-*/
-
-/*!
-    \fn QTextEngine *QTextLayout::engine() const
-    \internal
-
-    Returns the text engine used to render the text layout.
-*/
-
-/*!
-    Constructs an empty text layout.
-
-    \sa setText()
-*/
 QTextLayout::QTextLayout()
 {
    d = new QTextEngine();
 }
 
-/*!
-    Constructs a text layout to lay out the given \a text.
-*/
 QTextLayout::QTextLayout(const QString &text)
 {
    d = new QTextEngine();
    d->text = text;
 }
 
-/*!
-    Constructs a text layout to lay out the given \a text with the specified
-    \a font.
-
-    All the metric and layout calculations will be done in terms of
-    the paint device, \a paintdevice. If \a paintdevice is 0 the
-    calculations will be done in screen metrics.
-*/
 QTextLayout::QTextLayout(const QString &text, const QFont &font, QPaintDevice *paintdevice)
 {
    QFont f(font);
@@ -333,19 +138,12 @@ QTextLayout::QTextLayout(const QString &text, const QFont &font, QPaintDevice *p
    d = new QTextEngine((text.isNull() ? (const QString &)QString::fromLatin1("") : text), f.d.data());
 }
 
-/*!
-    \internal
-    Constructs a text layout to lay out the given \a block.
-*/
 QTextLayout::QTextLayout(const QTextBlock &block)
 {
    d = new QTextEngine();
    d->block = block;
 }
 
-/*!
-    Destructs the layout.
-*/
 QTextLayout::~QTextLayout()
 {
    if (!d->stackEngine) {
@@ -353,38 +151,17 @@ QTextLayout::~QTextLayout()
    }
 }
 
-/*!
-    Sets the layout's font to the given \a font. The layout is
-    invalidated and must be laid out again.
-
-    \sa font()
-*/
 void QTextLayout::setFont(const QFont &font)
 {
    d->fnt = font;
    d->resetFontEngineCache();
 }
 
-/*!
-    Returns the current font that is used for the layout, or a default
-    font if none is set.
-
-    \sa setFont()
-*/
 QFont QTextLayout::font() const
 {
    return d->font();
 }
 
-/*!
-    Sets the layout's text to the given \a string. The layout is
-    invalidated and must be laid out again.
-
-    Notice that when using this QTextLayout as part of a QTextDocument this
-    method will have no effect.
-
-    \sa text()
-*/
 void QTextLayout::setText(const QString &string)
 {
    d->invalidate();
@@ -392,43 +169,21 @@ void QTextLayout::setText(const QString &string)
    d->text = string;
 }
 
-/*!
-    Returns the layout's text.
-
-    \sa setText()
-*/
 QString QTextLayout::text() const
 {
    return d->text;
 }
 
-/*!
-    Sets the text option structure that controls the layout process to the
-    given \a option.
-
-    \sa textOption()
-*/
 void QTextLayout::setTextOption(const QTextOption &option)
 {
    d->option = option;
 }
 
-/*!
-    Returns the current text option used to control the layout process.
-
-    \sa setTextOption()
-*/
 QTextOption QTextLayout::textOption() const
 {
    return d->option;
 }
 
-/*!
-    Sets the \a position and \a text of the area in the layout that is
-    processed before editing occurs.
-
-    \sa preeditAreaPosition(), preeditAreaText()
-*/
 void QTextLayout::setPreeditArea(int position, const QString &text)
 {
    if (text.isEmpty()) {
@@ -456,33 +211,16 @@ void QTextLayout::setPreeditArea(int position, const QString &text)
    }
 }
 
-/*!
-    Returns the position of the area in the text layout that will be
-    processed before editing occurs.
-
-    \sa preeditAreaText()
-*/
 int QTextLayout::preeditAreaPosition() const
 {
    return d->specialData ? d->specialData->preeditPosition : -1;
 }
 
-/*!
-    Returns the text that is inserted in the layout before editing occurs.
-
-    \sa preeditAreaPosition()
-*/
 QString QTextLayout::preeditAreaText() const
 {
    return d->specialData ? d->specialData->preeditText : QString();
 }
 
-
-/*!
-    Sets the additional formats supported by the text layout to \a formatList.
-
-    \sa additionalFormats(), clearAdditionalFormats()
-*/
 void QTextLayout::setAdditionalFormats(const QList<FormatRange> &formatList)
 {
    if (formatList.isEmpty()) {
@@ -510,11 +248,6 @@ void QTextLayout::setAdditionalFormats(const QList<FormatRange> &formatList)
    d->resetFontEngineCache();
 }
 
-/*!
-    Returns the list of additional formats supported by the text layout.
-
-    \sa setAdditionalFormats(), clearAdditionalFormats()
-*/
 QList<QTextLayout::FormatRange> QTextLayout::additionalFormats() const
 {
    QList<FormatRange> formats;
@@ -537,75 +270,32 @@ QList<QTextLayout::FormatRange> QTextLayout::additionalFormats() const
    return formats;
 }
 
-/*!
-    Clears the list of additional formats supported by the text layout.
 
-    \sa additionalFormats(), setAdditionalFormats()
-*/
 void QTextLayout::clearAdditionalFormats()
 {
    setAdditionalFormats(QList<FormatRange>());
 }
 
-/*!
-    Enables caching of the complete layout information if \a enable is
-    true; otherwise disables layout caching. Usually
-    QTextLayout throws most of the layouting information away after a
-    call to endLayout() to reduce memory consumption. If you however
-    want to draw the laid out text directly afterwards enabling caching
-    might speed up drawing significantly.
-
-    \sa cacheEnabled()
-*/
 void QTextLayout::setCacheEnabled(bool enable)
 {
    d->cacheGlyphs = enable;
 }
 
-/*!
-    Returns true if the complete layout information is cached; otherwise
-    returns false.
-
-    \sa setCacheEnabled()
-*/
 bool QTextLayout::cacheEnabled() const
 {
    return d->cacheGlyphs;
 }
 
-/*!
-    \since 4.8
-
-    Set the cursor movement style. If the QTextLayout is backed by
-    a document, you can ignore this and use the option in QTextDocument,
-    this option is for widgets like QLineEdit or custom widgets without
-    a QTextDocument. Default value is Qt::LogicalMoveStyle.
-
-    \sa cursorMoveStyle()
-*/
 void QTextLayout::setCursorMoveStyle(Qt::CursorMoveStyle style)
 {
    d->visualMovement = style == Qt::VisualMoveStyle ? true : false;
 }
 
-/*!
-    \since 4.8
-
-    The cursor movement style of this QTextLayout. The default is
-    Qt::LogicalMoveStyle.
-
-    \sa setCursorMoveStyle()
-*/
 Qt::CursorMoveStyle QTextLayout::cursorMoveStyle() const
 {
    return d->visualMovement ? Qt::VisualMoveStyle : Qt::LogicalMoveStyle;
 }
 
-/*!
-    Begins the layout process.
-
-    \sa endLayout()
-*/
 void QTextLayout::beginLayout()
 {
 #ifndef QT_NO_DEBUG
@@ -620,11 +310,6 @@ void QTextLayout::beginLayout()
    d->layoutData->layoutState = QTextEngine::InLayout;
 }
 
-/*!
-    Ends the layout process.
-
-    \sa beginLayout()
-*/
 void QTextLayout::endLayout()
 {
 #ifndef QT_NO_DEBUG
@@ -643,24 +328,11 @@ void QTextLayout::endLayout()
    }
 }
 
-/*!
-    \since 4.4
-
-    Clears the line information in the layout. After having called
-    this function, lineCount() returns 0.
-*/
 void QTextLayout::clearLayout()
 {
    d->clearLineData();
 }
 
-/*!
-    Returns the next valid cursor position after \a oldPos that
-    respects the given cursor \a mode.
-    Returns value of \a oldPos, if \a oldPos is not a valid cursor position.
-
-    \sa isValidCursorPosition(), previousCursorPosition()
-*/
 int QTextLayout::nextCursorPosition(int oldPos, CursorMode mode) const
 {
    const HB_CharAttributes *attributes = d->attributes();
@@ -695,13 +367,6 @@ int QTextLayout::nextCursorPosition(int oldPos, CursorMode mode) const
    return oldPos;
 }
 
-/*!
-    Returns the first valid cursor position before \a oldPos that
-    respects the given cursor \a mode.
-    Returns value of \a oldPos, if \a oldPos is not a valid cursor position.
-
-    \sa isValidCursorPosition(), nextCursorPosition()
-*/
 int QTextLayout::previousCursorPosition(int oldPos, CursorMode mode) const
 {
    const HB_CharAttributes *attributes = d->attributes();
@@ -734,15 +399,6 @@ int QTextLayout::previousCursorPosition(int oldPos, CursorMode mode) const
    return oldPos;
 }
 
-/*!
-    \since 4.8
-
-    Returns the cursor position to the right of \a oldPos, next to it.
-    The position is dependent on the visual position of characters, after
-    bi-directional reordering.
-
-    \sa leftCursorPosition(), nextCursorPosition()
-*/
 int QTextLayout::rightCursorPosition(int oldPos) const
 {
    int newPos = d->positionAfterVisualMovement(oldPos, QTextCursor::Right);
@@ -750,15 +406,6 @@ int QTextLayout::rightCursorPosition(int oldPos) const
    return newPos;
 }
 
-/*!
-    \since 4.8
-
-    Returns the cursor position to the left of \a oldPos, next to it.
-    The position is dependent on the visual position of characters, after
-    bi-directional reordering.
-
-    \sa rightCursorPosition(), previousCursorPosition()
-*/
 int QTextLayout::leftCursorPosition(int oldPos) const
 {
    int newPos = d->positionAfterVisualMovement(oldPos, QTextCursor::Left);
@@ -766,21 +413,6 @@ int QTextLayout::leftCursorPosition(int oldPos) const
    return newPos;
 }
 
-/*!/
-    Returns true if position \a pos is a valid cursor position.
-
-    In a Unicode context some positions in the text are not valid
-    cursor positions, because the position is inside a Unicode
-    surrogate or a grapheme cluster.
-
-    A grapheme cluster is a sequence of two or more Unicode characters
-    that form one indivisible entity on the screen. For example the
-    latin character `\Auml' can be represented in Unicode by two
-    characters, `A' (0x41), and the combining diaresis (0x308). A text
-    cursor can only validly be positioned before or after these two
-    characters, never between them since that wouldn't make sense. In
-    indic languages every syllable forms a grapheme cluster.
-*/
 bool QTextLayout::isValidCursorPosition(int pos) const
 {
    const HB_CharAttributes *attributes = d->attributes();
@@ -790,22 +422,6 @@ bool QTextLayout::isValidCursorPosition(int pos) const
    return attributes[pos].charStop;
 }
 
-/*!
-    Returns a new text line to be laid out if there is text to be
-    inserted into the layout; otherwise returns an invalid text line.
-
-    The text layout creates a new line object that starts after the
-    last line in the layout, or at the beginning if the layout is empty.
-    The layout maintains an internal cursor, and each line is filled
-    with text from the cursor position onwards when the
-    QTextLine::setLineWidth() function is called.
-
-    Once QTextLine::setLineWidth() is called, a new line can be created and
-    filled with text. Repeating this process will lay out the whole block
-    of text contained in the QTextLayout. If there is no text left to be
-    inserted into the layout, the QTextLine returned will not be valid
-    (isValid() will return false).
-*/
 QTextLine QTextLayout::createLine()
 {
 #ifndef QT_NO_DEBUG
@@ -840,63 +456,33 @@ QTextLine QTextLayout::createLine()
    return QTextLine(l, d);
 }
 
-/*!
-    Returns the number of lines in this text layout.
 
-    \sa lineAt()
-*/
 int QTextLayout::lineCount() const
 {
    return d->lines.size();
 }
 
-/*!
-    Returns the \a{i}-th line of text in this text layout.
-
-    \sa lineCount(), lineForTextPosition()
-*/
 QTextLine QTextLayout::lineAt(int i) const
 {
    return QTextLine(i, d);
 }
 
-/*!
-    Returns the line that contains the cursor position specified by \a pos.
-
-    \sa isValidCursorPosition(), lineAt()
-*/
 QTextLine QTextLayout::lineForTextPosition(int pos) const
 {
    int lineNum = d->lineNumberForTextPosition(pos);
    return lineNum >= 0 ? lineAt(lineNum) : QTextLine();
 }
 
-/*!
-    \since 4.2
-
-    The global position of the layout. This is independent of the
-    bounding rectangle and of the layout process.
-
-    \sa setPosition()
-*/
 QPointF QTextLayout::position() const
 {
    return d->position;
 }
 
-/*!
-    Moves the text layout to point \a p.
-
-    \sa position()
-*/
 void QTextLayout::setPosition(const QPointF &p)
 {
    d->position = p;
 }
 
-/*!
-    The smallest rectangle that contains all the lines in the layout.
-*/
 QRectF QTextLayout::boundingRect() const
 {
    if (d->lines.isEmpty()) {
@@ -919,38 +505,17 @@ QRectF QTextLayout::boundingRect() const
    return QRectF(xmin.toReal(), ymin.toReal(), (xmax - xmin).toReal(), (ymax - ymin).toReal());
 }
 
-/*!
-    The minimum width the layout needs. This is the width of the
-    layout's smallest non-breakable substring.
-
-    \warning This function only returns a valid value after the layout
-    has been done.
-
-    \sa maximumWidth()
-*/
 qreal QTextLayout::minimumWidth() const
 {
    return d->minWidth.toReal();
 }
 
-/*!
-    The maximum width the layout could expand to; this is essentially
-    the width of the entire text.
 
-    \warning This function only returns a valid value after the layout
-    has been done.
-
-    \sa minimumWidth()
-*/
 qreal QTextLayout::maximumWidth() const
 {
    return d->maxWidth.toReal();
 }
 
-
-/*!
-    \internal
-*/
 void QTextLayout::setFlags(int flags)
 {
    if (flags & Qt::TextJustificationForced) {
@@ -965,14 +530,11 @@ void QTextLayout::setFlags(int flags)
 }
 
 static void addSelectedRegionsToPath(QTextEngine *eng, int lineNumber, const QPointF &pos,
-                                     QTextLayout::FormatRange *selection,
-                                     QPainterPath *region, QRectF boundingRect)
+                  QTextLayout::FormatRange *selection, QPainterPath *region, QRectF boundingRect)
 {
    const QScriptLine &line = eng->lines[lineNumber];
 
    QTextLineItemIterator iterator(eng, lineNumber, pos, selection);
-
-
 
    const qreal selectionY = pos.y() + line.y.toReal();
    const qreal lineHeight = line.height().toReal();
@@ -1015,14 +577,6 @@ static inline QRectF clipIfValid(const QRectF &rect, const QRectF &clip)
 }
 
 
-/*!
-    Returns the glyph indexes and positions for all glyphs in this QTextLayout. This is an
-    expensive function, and should not be called in a time sensitive context.
-
-    \since 4.8
-
-    \sa draw(), QPainter::drawGlyphRun()
-*/
 #if !defined(QT_NO_RAWFONT)
 QList<QGlyphRun> QTextLayout::glyphRuns() const
 {
@@ -1035,11 +589,6 @@ QList<QGlyphRun> QTextLayout::glyphRuns() const
 }
 #endif // QT_NO_RAWFONT
 
-/*!
-    Draws the whole layout on the painter \a p at the position specified by \a pos.
-    The rendered layout includes the given \a selections and is clipped within
-    the rectangle specified by \a clip.
-*/
 void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRange> &selections,
                        const QRectF &clip) const
 {
@@ -1140,8 +689,6 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
          p->setBrush(oldBrush);
       }
 
-
-
       bool hasText = (selection.format.foreground().style() != Qt::NoBrush);
       bool hasBackground = (selection.format.background().style() != Qt::NoBrush);
 
@@ -1221,26 +768,11 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
    }
 }
 
-/*!
-    \fn void QTextLayout::drawCursor(QPainter *painter, const QPointF &position, int cursorPosition) const
-    \overload
-
-    Draws a text cursor with the current pen at the given \a position using the
-    \a painter specified.
-    The corresponding position within the text is specified by \a cursorPosition.
-*/
 void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition) const
 {
    drawCursor(p, pos, cursorPosition, 1);
 }
 
-/*!
-    \fn void QTextLayout::drawCursor(QPainter *painter, const QPointF &position, int cursorPosition, int width) const
-
-    Draws a text cursor with the current pen and the specified \a width at the given \a position using the
-    \a painter specified.
-    The corresponding position within the text is specified by \a cursorPosition.
-*/
 void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition, int width) const
 {
    if (d->lines.isEmpty()) {
@@ -1316,71 +848,7 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
    return;
 }
 
-/*!
-    \class QTextLine
-    \reentrant
 
-    \brief The QTextLine class represents a line of text inside a QTextLayout.
-
-    \ingroup richtext-processing
-
-    A text line is usually created by QTextLayout::createLine().
-
-    After being created, the line can be filled using the setLineWidth()
-    or setNumColumns() functions. A line has a number of attributes including the
-    rectangle it occupies, rect(), its coordinates, x() and y(), its
-    textLength(), width() and naturalTextWidth(), and its ascent() and decent()
-    relative to the text. The position of the cursor in terms of the
-    line is available from cursorToX() and its inverse from
-    xToCursor(). A line can be moved with setPosition().
-*/
-
-/*!
-    \enum QTextLine::Edge
-
-    \value Leading
-    \value Trailing
-*/
-
-/*!
-    \enum QTextLine::CursorPosition
-
-    \value CursorBetweenCharacters
-    \value CursorOnCharacter
-*/
-
-/*!
-    \fn QTextLine::QTextLine(int line, QTextEngine *e)
-    \internal
-
-    Constructs a new text line using the line at position \a line in
-    the text engine \a e.
-*/
-
-/*!
-    \fn QTextLine::QTextLine()
-
-    Creates an invalid line.
-*/
-
-/*!
-    \fn bool QTextLine::isValid() const
-
-    Returns true if this text line is valid; otherwise returns false.
-*/
-
-/*!
-    \fn int QTextLine::lineNumber() const
-
-    Returns the position of the line in the text engine.
-*/
-
-
-/*!
-    Returns the line's bounding rectangle.
-
-    \sa x(), y(), textLength(), width()
-*/
 QRectF QTextLine::rect() const
 {
    const QScriptLine &sl = eng->lines[i];
@@ -1403,148 +871,62 @@ QRectF QTextLine::naturalTextRect() const
    return QRectF(x.toReal(), sl.y.toReal(), width.toReal(), sl.height().toReal());
 }
 
-/*!
-    Returns the line's x position.
-
-    \sa rect(), y(), textLength(), width()
-*/
 qreal QTextLine::x() const
 {
    return eng->lines[i].x.toReal();
 }
 
-/*!
-    Returns the line's y position.
-
-    \sa x(), rect(), textLength(), width()
-*/
 qreal QTextLine::y() const
 {
    return eng->lines[i].y.toReal();
 }
 
-/*!
-    Returns the line's width as specified by the layout() function.
-
-    \sa naturalTextWidth(), x(), y(), textLength(), rect()
-*/
 qreal QTextLine::width() const
 {
    return eng->lines[i].width.toReal();
 }
 
-
-/*!
-    Returns the line's ascent.
-
-    \sa descent(), height()
-*/
 qreal QTextLine::ascent() const
 {
    return eng->lines[i].ascent.toReal();
 }
 
-/*!
-    Returns the line's descent.
-
-    \sa ascent(), height()
-*/
 qreal QTextLine::descent() const
 {
    return eng->lines[i].descent.toReal();
 }
 
-/*!
-    Returns the line's height. This is equal to ascent() + descent()
-    if leading is not included. If leading is included, this equals to
-    ascent() + descent() + leading().
-
-    \sa ascent(), descent(), leading(), setLeadingIncluded()
-*/
 qreal QTextLine::height() const
 {
    return eng->lines[i].height().toReal();
 }
 
-/*!
-    \since 4.6
-
-    Returns the line's leading.
-
-    \sa ascent(), descent(), height()
-*/
 qreal QTextLine::leading() const
 {
    return eng->lines[i].leading.toReal();
 }
 
-/*!
-    \since 4.6
-
-    Includes positive leading into the line's height if \a included is true;
-    otherwise does not include leading.
-
-    By default, leading is not included.
-
-    Note that negative leading is ignored, it must be handled
-    in the code using the text lines by letting the lines overlap.
-
-    \sa leadingIncluded()
-
-*/
 void QTextLine::setLeadingIncluded(bool included)
 {
    eng->lines[i].leadingIncluded = included;
 
 }
 
-/*!
-    \since 4.6
-
-    Returns true if positive leading is included into the line's height;
-    otherwise returns false.
-
-    By default, leading is not included.
-
-    \sa setLeadingIncluded()
-*/
 bool QTextLine::leadingIncluded() const
 {
    return eng->lines[i].leadingIncluded;
 }
 
-/*!
-    Returns the width of the line that is occupied by text. This is
-    always \<= to width(), and is the minimum width that could be used
-    by layout() without changing the line break position.
-*/
 qreal QTextLine::naturalTextWidth() const
 {
    return eng->lines[i].textWidth.toReal();
 }
 
-/*!
-    \since 4.7
-    Returns the horizontal advance of the text. The advance of the text
-    is the distance from its position to the next position at which
-    text would naturally be drawn.
-
-    By adding the advance to the position of the text line and using this
-    as the position of a second text line, you will be able to position
-    the two lines side-by-side without gaps in-between.
-*/
 qreal QTextLine::horizontalAdvance() const
 {
    return eng->lines[i].textAdvance.toReal();
 }
 
-/*!
-    Lays out the line with the given \a width. The line is filled from
-    its starting position with as many characters as will fit into
-    the line. In case the text cannot be split at the end of the line,
-    it will be filled with additional characters to the next whitespace
-    or end of the text.
-*/
 void QTextLine::setLineWidth(qreal width)
 {
    QScriptLine &line = eng->lines[i];
@@ -1572,13 +954,6 @@ void QTextLine::setLineWidth(qreal width)
    layout_helper(INT_MAX);
 }
 
-/*!
-    Lays out the line. The line is filled from its starting position
-    with as many characters as are specified by \a numColumns. In case
-    the text cannot be split until \a numColumns characters, the line
-    will be filled with as many characters to the next whitespace or
-    end of the text.
-*/
 void QTextLine::setNumColumns(int numColumns)
 {
    QScriptLine &line = eng->lines[i];
@@ -1588,14 +963,6 @@ void QTextLine::setNumColumns(int numColumns)
    layout_helper(numColumns);
 }
 
-/*!
-    Lays out the line. The line is filled from its starting position
-    with as many characters as are specified by \a numColumns. In case
-    the text cannot be split until \a numColumns characters, the line
-    will be filled with as many characters to the next whitespace or
-    end of the text. The provided \a alignmentWidth is used as reference
-    width for alignment.
-*/
 void QTextLine::setNumColumns(int numColumns, qreal alignmentWidth)
 {
    QScriptLine &line = eng->lines[i];
@@ -1618,7 +985,6 @@ struct LineBreakHelper {
       : glyphCount(0), maxGlyphs(0), currentPosition(0), fontEngine(0), logClusters(0),
         manualWrap(false), whiteSpaceOrObject(true) {
    }
-
 
    QScriptLine tmpData;
    QScriptLine spaceData;
@@ -1721,28 +1087,28 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 
 } // anonymous namespace
 
-
 static inline void addNextCluster(int &pos, int end, QScriptLine &line, int &glyphCount,
-                                  const QScriptItem &current, const unsigned short *logClusters,
-                                  const QGlyphLayout &glyphs)
+                  const QScriptItem &current, const unsigned short *logClusters, const QGlyphLayout &glyphs)
 {
    int glyphPosition = logClusters[pos];
    do { // got to the first next cluster
       ++pos;
       ++line.length;
    } while (pos < end && logClusters[pos] == glyphPosition);
+
    do { // calculate the textWidth for the rest of the current cluster.
       if (!glyphs.attributes[glyphPosition].dontPrint) {
          line.textWidth += glyphs.advances_x[glyphPosition];
       }
+
       ++glyphPosition;
+
    } while (glyphPosition < current.num_glyphs && !glyphs.attributes[glyphPosition].clusterStart);
 
    Q_ASSERT((pos == end && glyphPosition == current.num_glyphs) || logClusters[pos] == glyphPosition);
 
    ++glyphCount;
 }
-
 
 // fill QScriptLine
 void QTextLine::layout_helper(int maxGlyphs)
@@ -2039,6 +1405,7 @@ QPointF QTextLine::position() const
 // text of "This is a string", laid out into two lines (the second
 // starting at the word 'a'), layout.lineAt(0).from() == 0 and
 // layout.lineAt(1).from() == 8.
+
 /*!
     Returns the start of the line from the beginning of the string
     passed to the QTextLayout.
@@ -2048,11 +1415,6 @@ int QTextLine::textStart() const
    return eng->lines[i].from;
 }
 
-/*!
-    Returns the length of the text in the line.
-
-    \sa naturalTextWidth()
-*/
 int QTextLine::textLength() const
 {
    if (eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators
@@ -2062,8 +1424,8 @@ int QTextLine::textLength() const
    return eng->lines[i].length + eng->lines[i].trailingSpaces;
 }
 
-static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si, QTextItemInt &gf, QTextEngine *eng,
-                         int start, int glyph_start)
+static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si, QTextItemInt &gf,
+                  QTextEngine *eng, int start, int glyph_start)
 {
    int ge = glyph_start + gf.glyphs.numGlyphs;
    int gs = glyph_start;
@@ -2141,7 +1503,6 @@ static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si,
    gf.width = orig_width;
 }
 
-
 static void setPenAndDrawBackground(QPainter *p, const QPen &defaultPen, const QTextCharFormat &chf, const QRectF &r)
 {
    QBrush c = chf.foreground();
@@ -2179,12 +1540,8 @@ struct GlyphInfo {
     QScriptItems that overlap with the range defined by \a from and \a length. The arguments
     specify characters, relative to the text in the layout. Note that it is not possible to
     use this function to retrieve a subset of the glyphs in a QScriptItem.
-
-    \since 4.8
-
-    \sa QTextLayout::glyphRuns()
 */
-#if !defined(QT_NO_RAWFONT)
+#if ! defined(QT_NO_RAWFONT)
 QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
 {
    const QScriptLine &line = eng->lines[i];
@@ -2193,10 +1550,11 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
       return QList<QGlyphRun>();
    }
 
-   QHash<QFontEngine *, GlyphInfo> glyphLayoutHash;
+   QMultiHash<QFontEngine *, GlyphInfo> glyphLayoutHash;
 
    QTextLineItemIterator iterator(eng, i);
    qreal y = line.y.toReal() + line.base().toReal();
+
    while (!iterator.atEnd()) {
       QScriptItem &si = iterator.next();
       if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
@@ -2204,8 +1562,7 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
       }
 
       QPointF pos(iterator.x.toReal(), y);
-      if (from >= 0 && length >= 0 &&
-            (from >= si.position + eng->length(&si) || from + length <= si.position)) {
+      if (from >= 0 && length >= 0 && (from >= si.position + eng->length(&si) || from + length <= si.position)) {
          continue;
       }
 
@@ -2225,40 +1582,40 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
          flags |= QTextItem::RightToLeft;
       }
 
-      QGlyphLayout glyphLayout = eng->shapedGlyphs(&si).mid(iterator.glyphsStart,
-                                 iterator.glyphsEnd - iterator.glyphsStart);
+      QGlyphLayout glyphLayout = eng->shapedGlyphs(&si).mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart);
 
       if (glyphLayout.numGlyphs > 0) {
          QFontEngine *mainFontEngine = font.d->engineForScript(si.analysis.script);
+
          if (mainFontEngine->type() == QFontEngine::Multi) {
             QFontEngineMulti *multiFontEngine = static_cast<QFontEngineMulti *>(mainFontEngine);
+
             int start = 0;
             int end;
             int which = glyphLayout.glyphs[0] >> 24;
+
             for (end = 0; end < glyphLayout.numGlyphs; ++end) {
                const int e = glyphLayout.glyphs[end] >> 24;
+
                if (e == which) {
                   continue;
                }
 
                QGlyphLayout subLayout = glyphLayout.mid(start, end - start);
-               glyphLayoutHash.insertMulti(multiFontEngine->engine(which),
-                                           GlyphInfo(subLayout, pos, flags));
+               glyphLayoutHash.insertMulti(multiFontEngine->engine(which), GlyphInfo(subLayout, pos, flags));
+
                for (int i = 0; i < subLayout.numGlyphs; i++)
-                  pos += QPointF(subLayout.advances_x[i].toReal(),
-                                 subLayout.advances_y[i].toReal());
+                  pos += QPointF(subLayout.advances_x[i].toReal(), subLayout.advances_y[i].toReal());
 
                start = end;
                which = e;
             }
 
             QGlyphLayout subLayout = glyphLayout.mid(start, end - start);
-            glyphLayoutHash.insertMulti(multiFontEngine->engine(which),
-                                        GlyphInfo(subLayout, pos, flags));
+            glyphLayoutHash.insertMulti(multiFontEngine->engine(which), GlyphInfo(subLayout, pos, flags));
 
          } else {
-            glyphLayoutHash.insertMulti(mainFontEngine,
-                                        GlyphInfo(glyphLayout, pos, flags));
+            glyphLayoutHash.insertMulti(mainFontEngine, GlyphInfo(glyphLayout, pos, flags));
          }
       }
    }
@@ -2266,6 +1623,7 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
    QHash<QPair<QFontEngine *, int>, QGlyphRun> glyphsHash;
 
    QList<QFontEngine *> keys = glyphLayoutHash.uniqueKeys();
+
    for (int i = 0; i < keys.size(); ++i) {
       QFontEngine *fontEngine = keys.at(i);
 
@@ -2281,18 +1639,23 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
       } else {
          fontD->hintingPreference = QFont::PreferFullHinting;
       }
+
 #elif defined(Q_OS_MAC)
       fontD->hintingPreference = QFont::PreferNoHinting;
-#elif !defined(QT_NO_FREETYPE)
+
+#elif ! defined(QT_NO_FREETYPE)
       if (fontEngine->type() == QFontEngine::Freetype) {
          QFontEngineFT *freeTypeEngine = static_cast<QFontEngineFT *>(fontEngine);
+
          switch (freeTypeEngine->defaultHintStyle()) {
             case QFontEngineFT::HintNone:
                fontD->hintingPreference = QFont::PreferNoHinting;
                break;
+
             case QFontEngineFT::HintLight:
                fontD->hintingPreference = QFont::PreferVerticalHinting;
                break;
+
             case QFontEngineFT::HintMedium:
             case QFontEngineFT::HintFull:
                fontD->hintingPreference = QFont::PreferFullHinting;
@@ -2302,6 +1665,7 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
 #endif
 
       QList<GlyphInfo> glyphLayouts = glyphLayoutHash.values(fontEngine);
+
       for (int j = 0; j < glyphLayouts.size(); ++j) {
          const QPointF &pos = glyphLayouts.at(j).itemPosition;
          const QGlyphLayout &glyphLayout = glyphLayouts.at(j).glyphLayout;
@@ -2310,12 +1674,12 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
          QVarLengthArray<glyph_t> glyphsArray;
          QVarLengthArray<QFixedPoint> positionsArray;
 
-         fontEngine->getGlyphPositions(glyphLayout, QTransform(), flags, glyphsArray,
-                                       positionsArray);
+         fontEngine->getGlyphPositions(glyphLayout, QTransform(), flags, glyphsArray, positionsArray);
          Q_ASSERT(glyphsArray.size() == positionsArray.size());
 
          QVector<quint32> glyphs;
          QVector<QPointF> positions;
+
          for (int i = 0; i < glyphsArray.size(); ++i) {
             glyphs.append(glyphsArray.at(i) & 0xffffff);
             positions.append(positionsArray.at(i).toPointF() + pos);
@@ -2331,8 +1695,10 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
          glyphIndexes.setRawFont(font);
 
          QPair<QFontEngine *, int> key(fontEngine, int(flags));
-         if (!glyphsHash.contains(key)) {
+
+         if (! glyphsHash.contains(key)) {
             glyphsHash.insert(key, glyphIndexes);
+
          } else {
             QGlyphRun &glyphRun = glyphsHash[key];
 
@@ -2352,12 +1718,6 @@ QList<QGlyphRun> QTextLine::glyphs(int from, int length) const
 }
 #endif // QT_NO_RAWFONT
 
-/*!
-    \fn void QTextLine::draw(QPainter *painter, const QPointF &position, const QTextLayout::FormatRange *selection) const
-
-    Draws a line on the given \a painter at the specified \a position.
-    The \a selection is reserved for internal use.
-*/
 void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatRange *selection) const
 {
    const QScriptLine &line = eng->lines[i];
@@ -2373,12 +1733,12 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
          const qreal lineHeight = line.height().toReal();
          QRectF r(pos.x() + line.x.toReal(), pos.y() + line.y.toReal(),
                   lineHeight / 2, QFontMetrics(eng->font()).width(QLatin1Char(' ')));
+
          setPenAndDrawBackground(p, QPen(), selection->format, r);
          p->setPen(pen);
       }
       return;
    }
-
 
    QTextLineItemIterator iterator(eng, i, pos, selection);
    QFixed lineBase = line.base();
@@ -2561,22 +1921,6 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
    }
 }
 
-/*!
-    \fn int QTextLine::cursorToX(int cursorPos, Edge edge) const
-
-    \overload
-*/
-
-/*!
-    Converts the cursor position \a cursorPos to the corresponding x position
-    inside the line, taking account of the \a edge.
-
-    If \a cursorPos is not a valid cursor position, the nearest valid
-    cursor position will be used instead, and cpos will be modified to
-    point to this valid cursor position.
-
-    \sa xToCursor()
-*/
 qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
 {
    if (!eng->layoutData) {
@@ -2641,9 +1985,7 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
 
    bool reverse = eng->layoutData->items[itm].analysis.bidiLevel % 2;
 
-
    // add the items left of the cursor
-
    int firstItem = eng->findItem(line.from);
    int lastItem = eng->findItem(lineEnd - 1);
    int nItems = (firstItem >= 0 && lastItem >= firstItem) ? (lastItem - firstItem + 1) : 0;
@@ -2730,14 +2072,6 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
    return x.toReal();
 }
 
-/*!
-    \fn int QTextLine::xToCursor(qreal x, CursorPosition cpos) const
-
-    Converts the x-coordinate \a x, to the nearest matching cursor
-    position, depending on the cursor position type, \a cpos.
-
-    \sa cursorToX()
-*/
 int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 {
    QFixed x = QFixed::fromReal(_x);
@@ -2833,7 +2167,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
             nchars += end;
             continue;
          }
-         //             qDebug("      inside run");
+
          if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
             if (cpos == QTextLine::CursorOnCharacter) {
                return si.position;
@@ -2848,6 +2182,7 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
          int glyph_pos = -1;
          QFixed edge;
+
          // has to be inside run
          if (cpos == QTextLine::CursorOnCharacter) {
             if (si.analysis.bidiLevel % 2) {
@@ -2939,19 +2274,19 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
                      return insertionPoints[lastLine ? nchars : nchars - 1];
                   }
                }
-               return eng->positionInLigature(&si, end, x, pos, -1,
-                                              cpos == QTextLine::CursorOnCharacter);
+               return eng->positionInLigature(&si, end, x, pos, -1, cpos == QTextLine::CursorOnCharacter);
             }
          }
+
          Q_ASSERT(glyph_pos != -1);
-         return eng->positionInLigature(&si, end, x, edge, glyph_pos,
-                                        cpos == QTextLine::CursorOnCharacter);
+         return eng->positionInLigature(&si, end, x, edge, glyph_pos, cpos == QTextLine::CursorOnCharacter);
       }
    }
+
    // right of last item
-   //     qDebug() << "right of last";
    int item = visualOrder[nItems - 1] + firstItem;
    QScriptItem &si = eng->layoutData->items[item];
+
    if (!si.num_glyphs) {
       eng->shape(item);
    }
@@ -2963,10 +2298,9 @@ int QTextLine::xToCursor(qreal _x, CursorPosition cpos) const
 
    int maxPos = line.from + line_length;
 
-   // except for the last line we assume that the
-   // character between lines is a space and we want
-   // to position the cursor to the left of that
-   // character.
+   // except for the last line we assume that the character between lines is a space and we want
+   // to position the cursor to the left of that character.
+
    // ###### breaks with japanese for example
    if (this->i < eng->lines.count() - 1) {
       --maxPos;
