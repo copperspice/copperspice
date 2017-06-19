@@ -31,6 +31,15 @@ class QByteArray;
 class QString;
 class QStringRef;
 
+Q_CORE_EXPORT uint cs_getHashSeed();
+Q_CORE_EXPORT uint cs_stable_hash(const QString &key);
+
+Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QString    &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QStringRef &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
+
 inline uint qHash(char key, uint seed = 0)
 {
    return uint(key) ^ seed;
@@ -99,12 +108,6 @@ inline uint qHash(QChar key, uint seed = 0)
    return qHash(key.unicode(), seed);
 }
 
-Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QString    &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QStringRef &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
-
 template <typename Key>
 uint qHash(const Key *key, uint seed)
 {
@@ -126,8 +129,25 @@ uint qHash(const T &t, uint seed)
    return qHash(t) ^ seed;
 }
 
-//
-Q_CORE_EXPORT uint cs_getHashSeed();
-Q_CORE_EXPORT uint cs_stable_hash(const QString &key);
+// **
+template <typename Key>
+class qHashFunc
+{
+ public:
+   bool operator()(const Key &key) const {
+      return qHash(key, cs_getHashSeed());
+   }
+};
+
+template <typename Key>
+class qHashEqual
+{
+ public:
+   using result_type = bool;
+
+   bool operator()(const Key &a, const Key &b) const {
+      return a == b;
+   }
+};
 
 #endif

@@ -39,28 +39,7 @@ class QHashIterator;
 template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>>
 class QMutableHashIterator;
 
-template <typename Key>
-class qHashFunc
-{
- public:
-   bool operator()(const Key &key) const {
-      return qHash(key, cs_getHashSeed());
-   }
-};
-
-template <typename Key>
-class qHashEqual
-{
- public:
-   using result_type = bool;
-
-   bool operator()(const Key &a, const Key &b) const {
-      return a == b;
-   }
-};
-
 // **
-
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QHash
 {
@@ -396,11 +375,11 @@ class QHash
    QList<Key> uniqueKeys() const;
 
    QHash<Key, Val, Hash, KeyEqual> &unite(const QHash<Key, Val, Hash, KeyEqual> &other) {
-      m_data.insert(other.begin(), other.end());
+      m_data.insert(other.m_data.begin(), other.m_data.end());
       return *this;
    }
 
-   const Val value(const Key &key) const {
+   Val value(const Key &key) const {
       auto iter = m_data.find(key);
 
       if (iter == m_data.end()) {
@@ -411,7 +390,7 @@ class QHash
       return iter->second;
    }
 
-   const Val value(const Key &key, const Val &defaultValue) const {
+   Val value(const Key &key, const Val &defaultValue) const {
       auto iter = m_data.find(key);
 
       if (iter == m_data.end()) {
@@ -480,7 +459,6 @@ class QHash
  private:
    std::unordered_map<Key, Val, Hash, KeyEqual> m_data;
 };
-
 
 // methods
 

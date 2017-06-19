@@ -287,7 +287,9 @@ class QMultiHash
       return true;
    }
 
-   bool contains(const Key &key, const Val &value) const;
+   bool contains(const Key &key, const Val &value) const {
+      return constFind(key, value) != QMultiHash<Key, Val, Hash, KeyEqual>::constEnd();
+   }
 
    size_type count(const Key &key) const {
       return m_data.count(key);
@@ -422,7 +424,7 @@ class QMultiHash
    QList<Key> uniqueKeys() const;
 
    QMultiHash<Key, Val, Hash, KeyEqual> &unite(const QMultiHash<Key, Val, Hash, KeyEqual> &other) {
-      m_data.insert(other.begin(), other.end());
+      m_data.insert(other.m_data.begin(), other.m_data.end());
       return *this;
    }
 
@@ -437,7 +439,17 @@ class QMultiHash
       return iter->second;
    }
 
-   const Val value(const Key &key, const Val &defaultValue) const;
+   Val value(const Key &key, const Val &defaultValue) const {
+      auto iter = m_data.find(key);
+
+      if (iter == m_data.end()) {
+         // key was not found
+         return defaultValue;
+      }
+
+      return iter->second;
+   }
+
    QList<Val> values() const;
    QList<Val> values(const Key &key) const;
 
@@ -503,12 +515,7 @@ class QMultiHash
    std::unordered_multimap<Key, Val, Hash, KeyEqual> m_data;
 };
 
-
-template <typename Key, typename Val, typename Hash, typename KeyEqual>
-bool QMultiHash<Key, Val, Hash, KeyEqual>::contains(const Key &key, const Val &value) const
-{
-   return constFind(key, value) != QMultiHash<Key, Val, Hash, KeyEqual>::constEnd();
-}
+// methods
 
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 typename QMultiHash<Key, Val, Hash, KeyEqual>::size_type QMultiHash<Key, Val, Hash, KeyEqual>::count(const Key &key, const Val &value) const
@@ -521,6 +528,62 @@ typename QMultiHash<Key, Val, Hash, KeyEqual>::size_type QMultiHash<Key, Val, Ha
    while (iter != end && iter.key() == key) {
       if (iter.value() == value) {
          ++retval;
+      }
+
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+const Key QMultiHash<Key, Val, Hash, KeyEqual>::key(const Val &value) const
+{
+   return key(value, Key());
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+const Key QMultiHash<Key, Val, Hash, KeyEqual>::key(const Val &value, const Key &defaultValue) const
+{
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      if (iter.value() == value) {
+         return iter.key();
+      }
+
+      ++iter;
+   }
+
+   return defaultValue;
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+QList<Key> QMultiHash<Key, Val, Hash, KeyEqual>::keys() const
+{
+   QList<Key> retval;
+   retval.reserve(size());
+
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      retval.append(iter.key());
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+QList<Key> QMultiHash<Key, Val, Hash, KeyEqual>::keys(const Val &value) const
+{
+   QList<Key> retval;
+
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      if (iter.value() == value) {
+         retval.append(iter.key());
       }
 
       ++iter;
@@ -545,6 +608,24 @@ typename QMultiHash<Key, Val, Hash, KeyEqual>::size_type QMultiHash<Key, Val, Ha
       } else {
          ++iter;
       }
+   }
+
+   return retval;
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+QList<Key> QMultiHash<Key, Val, Hash, KeyEqual>::uniqueKeys() const
+{
+   QList<Key> retval;
+   retval.reserve(size());
+
+   for (const auto &item : m_data) {
+
+      if (! retval.empty() && retval.last() == item.first) {
+         continue;
+      }
+
+      retval.append(item.first);
    }
 
    return retval;

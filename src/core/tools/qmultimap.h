@@ -271,6 +271,8 @@ class QMultiMap
    QMultiMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
       : m_data(first, last, compare) {}
 
+  ~QMultiMap() = default;
+
    // methods
    void clear() {
       m_data.clear();
@@ -314,30 +316,24 @@ class QMultiMap
    }
 
    iterator find(const Key &key, const Val &value) {
-      iterator iter(find(key));
-      iterator end(this->end());
+      auto range = m_data.equal_range(key);
 
-      while (iter != end && ! this->m_compare(key, iter.key())) {
+      for (auto iter = range.first; iter != range.second; ++iter) {
          if (iter.value() == value) {
             return iter;
          }
-
-         ++iter;
       }
 
       return end;
    }
 
    const_iterator find(const Key &key, const Val &value) const {
-      const_iterator iter(constFind(key));
-      const_iterator end(this->constEnd());
+     auto range = m_data.equal_range(key);
 
-      while (iter != end && ! this->m_compare(key, iter.key())) {
+      for (auto iter = range.first; iter != range.second; ++iter) {
          if (iter.value() == value) {
             return iter;
          }
-
-         ++iter;
       }
 
       return end;
@@ -446,6 +442,7 @@ class QMultiMap
    }
 
    const Val value(const Key &key, const Val &defaultValue) const;
+
    QList<Val> values() const;
    QList<Val> values(const Key &key) const;
 
@@ -530,15 +527,12 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const K
 {
    int retval = 0;
 
-   const_iterator iter(constFind(key));
-   const_iterator end(QMultiMap<Key, Val, C>::constEnd());
+   auto range = m_data.equal_range(key);
 
-   while (iter != end && ! this->m_compare(key, iter.key())) {
+   for (auto iter = range.first; iter != range.second; ++iter) {
       if (iter.value() == value) {
          ++retval;
       }
-
-      ++iter;
    }
 
    return retval;
@@ -549,16 +543,46 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const 
 {
    int retval = 0;
 
-   iterator iter(find(key));
-   iterator end(QMultiMap<Key, Val, C>::end());
+   auto range = m_data.equal_range(key);
+   auto iter  = range.first;
 
-   while (iter != end && ! this->m_compare(key, iter.key())) {
+   while (iter != range.second) {
       if (iter.value() == value) {
          iter = this->erase(iter);
          ++retval;
       } else {
          ++iter;
       }
+   }
+
+   return retval;
+}
+
+template <class Key, class Val, class C>
+QList<Val> QMultiMap<Key, Val, C>::values() const
+{
+   QList<Val> retval;
+   retval.reserve(size());
+
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      retval.append(iter.value());
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <class Key, class Val, class C>
+QList<Val> QMultiMap<Key, Val, C>::values(const Key &key) const
+{
+   QList<Val> retval;
+
+   auto range = m_data.equal_range(key);
+
+   for (auto iter = range.first; iter != range.second; ++iter) {
+      retval.append(iter->second);
    }
 
    return retval;

@@ -302,6 +302,18 @@ class QMap
       return m_data.erase(iter);
    }
 
+   Val &first()  {
+      return begin().value();
+   }
+
+   const Val &first() const  {
+      return begin().value();
+   }
+
+   const Key &firstKey() const  {
+      return begin().key();
+   }
+
    iterator find(const Key &key) {
       // find returns an std::map::iterator, constructor will convert to QMap::iterator
       return m_data.find(key);
@@ -329,11 +341,35 @@ class QMap
       return iter;
    }
 
-   const Key key(const Val &value) const;
-   const Key key(const Val &value, const Key &defaultKey) const;
+   iterator insert(const_iterator hint, const Key &key, const Val &value) {
+      auto oldSize = m_data.size();
+
+      auto iter = m_data.emplace_hint(hint, key, value);
+
+      if (m_data.size() == oldSize) {
+         // add new element
+         iter->second = value;
+      }
+
+      return iter;
+   }
+
+   const Key key(const Val &value, const Key &defaultKey = Key()) const;
 
    QList<Key> keys() const;
    QList<Key> keys(const Val &value) const;
+
+   Val &last()  {
+      return (end()- 1).value();
+   }
+
+   const Val &last() const  {
+      return (end() - 1).value();
+   }
+
+   const Key &lastKey() const  {
+      return (end() - 1).key();
+   }
 
    iterator lowerBound(const Key &key) {
       return m_data.lower_bound(key);
@@ -384,23 +420,9 @@ class QMap
       return *this;
    }
 
-   const Val value(const Key &key) const {
-      auto range = m_data.equal_range(key);
+   const Val value(const Key &key, const Val &defaultValue = Val()) const;
 
-      if (range.first == range.second) {
-         // key was not found
-         return Val();
-      }
-
-      // get last key in the range
-      auto iter = --range.second;
-
-      return iter->second;
-   }
-
-   const Val value(const Key &key, const Val &defaultValue) const;
    QList<Val> values() const;
-   QList<Val> values(const Key &key) const;
 
    // to from
    std::map<Key, Val, C> toStdMap() const;
@@ -461,12 +483,6 @@ class QMap
 };
 
 // methods
-
-template <class Key, class Val, class C>
-const Key QMap<Key, Val, C>::key(const Val &value) const
-{
-   return key(value, Key());
-}
 
 template <class Key, class Val, class C>
 const Key QMap<Key, Val, C>::key(const Val &value, const Key &defaultKey) const
@@ -562,20 +578,6 @@ QList<Val> QMap<Key, Val, C>::values() const
    while (iter != end()) {
       retval.append(iter.value());
       ++iter;
-   }
-
-   return retval;
-}
-
-template <class Key, class Val, class C>
-QList<Val> QMap<Key, Val, C>::values(const Key &key) const
-{
-   QList<Val> retval;
-
-   auto range = m_data.equal_range(key);
-
-   for (auto iter = range.first; iter != range.second; ++iter) {
-      retval.append(iter->second);
    }
 
    return retval;
