@@ -319,24 +319,24 @@ class QMultiMap
       auto range = m_data.equal_range(key);
 
       for (auto iter = range.first; iter != range.second; ++iter) {
-         if (iter.value() == value) {
+         if (iter->second == value) {
             return iter;
          }
       }
 
-      return end;
+      return end();
    }
 
    const_iterator find(const Key &key, const Val &value) const {
      auto range = m_data.equal_range(key);
 
       for (auto iter = range.first; iter != range.second; ++iter) {
-         if (iter.value() == value) {
+         if (iter->second == value) {
             return iter;
          }
       }
 
-      return end;
+      return end();
    }
 
    const_iterator constFind(const Key &key) const {
@@ -348,11 +348,13 @@ class QMultiMap
    }
 
    iterator insert(const Key &key, const Val &value)  {
-      return m_data.emplace(key, value).first;
+      return insertMulti(key, value);
    }
 
    iterator insertMulti(const Key &key, const Val &value)  {
-      return m_data.emplace(key, value).first;
+      // ensure newest item is first
+      auto iter = m_data.lower_bound(key);
+      return m_data.emplace_hint(iter, key, value);
    }
 
    const Key key(const Val &value) const;
@@ -376,15 +378,13 @@ class QMultiMap
    size_type remove(const Key &key, const Val &value);
 
    iterator replace(const Key &key, const Val &value) {
-      auto range = m_data.equal_range(key);
+      auto iter = m_data.find(key);
 
-      if (range.first == range.second) {
+      if (iter == m_data.end()) {
          // add new element
          return m_data.emplace(key, value).first;
       }
 
-      // get last key in the range, update value
-      auto iter = --range.second;
       iter->second = value;
 
       return iter;
@@ -530,7 +530,7 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const K
    auto range = m_data.equal_range(key);
 
    for (auto iter = range.first; iter != range.second; ++iter) {
-      if (iter.value() == value) {
+      if (iter->second == value) {
          ++retval;
       }
    }
@@ -547,8 +547,8 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const 
    auto iter  = range.first;
 
    while (iter != range.second) {
-      if (iter.value() == value) {
-         iter = this->erase(iter);
+      if (iter->second == value) {
+         iter = m_data.erase(iter);
          ++retval;
       } else {
          ++iter;

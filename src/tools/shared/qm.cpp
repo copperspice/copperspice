@@ -386,7 +386,8 @@ void Releaser::squeeze(TranslatorSaveMode mode)
       t << quint16(0); // the entry at offset 0 cannot be used
       uint upto = 2;
 
-      QMap<int, QByteArray>::const_iterator entry = hashMap.constBegin();
+      auto entry = hashMap.constBegin();
+
       while (entry != hashMap.constEnd()) {
          int i = entry.key();
          hTable[i] = quint16(upto >> 1);

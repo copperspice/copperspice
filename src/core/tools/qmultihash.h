@@ -250,7 +250,8 @@ class QMultiHash
    QMultiHash(const QMultiHash<Key, Val, Hash, KeyEqual> &other) = default;
    QMultiHash(QMultiHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
-   QMultiHash(std::initializer_list<std::pair<Key, Val> > list, const Hash & hash = Hash(), const KeyEqual &key_equal = KeyEqual())
+   QMultiHash(std::initializer_list<std::pair<Key, Val> > list, const Hash & hash = Hash(),
+                  const KeyEqual &key_equal = KeyEqual())
       : m_data(list, hash, key_equal) {}
 
    explicit QMultiHash(const Hash & hash, const KeyEqual &key_equal = KeyEqual())
@@ -263,7 +264,8 @@ class QMultiHash
        : m_data(std::move(other)) {}
 
    template<typename Input_Iterator>
-   QMultiHash(Input_Iterator first, Input_Iterator last, const Hash & hash = Hash(), const KeyEqual &key_equal = KeyEqual())
+   QMultiHash(Input_Iterator first, Input_Iterator last, const Hash & hash = Hash(),
+                  const KeyEqual &key_equal = KeyEqual())
       : m_data(first, last, hash, key_equal) {}
 
    ~QMultiHash() = default;
@@ -327,31 +329,27 @@ class QMultiHash
    }
 
    iterator find(const Key &key, const Val &value) {
-      iterator i(find(key));
-      iterator end(this->end());
+      auto range = m_data.equal_range(key);
 
-      while (i != end && i.key() == key) {
-         if (i.value() == value) {
-            return i;
+      for (auto iter = range.first; iter != range.second; ++iter) {
+         if (iter->second == value) {
+            return iter;
          }
-         ++i;
       }
 
-      return end;
+      return end();
    }
 
    const_iterator find(const Key &key, const Val &value) const {
-      const_iterator i(constFind(key));
-      const_iterator end(QMultiHash<Key, Val, Hash, KeyEqual>::constEnd());
+      auto range = m_data.equal_range(key);
 
-      while (i != end && i.key() == key) {
-         if (i.value() == value) {
-            return i;
+      for (auto iter = range.first; iter != range.second; ++iter) {
+         if (iter->second == value) {
+            return iter;
          }
-         ++i;
       }
 
-      return end;
+      return end();
    }
 
    const_iterator constFind(const Key &key, const Val &value) const {
