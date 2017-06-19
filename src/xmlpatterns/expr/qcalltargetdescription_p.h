@@ -23,17 +23,15 @@
 #ifndef QCallTargetDescription_P_H
 #define QCallTargetDescription_P_H
 
-template<typename Key, typename Value> class QHash;
-template<typename T> class QList;
-
 #include <QSharedData>
 #include <qexpression_p.h>
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
-class CallSite;
 
+class CallSite;
 
 class CallTargetDescription : public QSharedData
 {

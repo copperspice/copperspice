@@ -24,9 +24,7 @@
 #define QQNameTest_P_H
 
 #include <qabstractnodetest_p.h>
-
-template<typename Key, typename Value>
-class QHash;
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 

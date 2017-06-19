@@ -233,29 +233,18 @@ class QProcessEnvironmentPrivate: public QSharedData
       MutexLocker(const QProcessEnvironmentPrivate *d) : QMutexLocker(&d->mutex) {}
    };
 
-   struct OrderedMutexLocker : public QOrderedMutexLocker {OrderedMutexLocker(const QProcessEnvironmentPrivate *d1, 
-                         const QProcessEnvironmentPrivate *d2) :
-
-         QOrderedMutexLocker(&d1->mutex, &d2->mutex) {
-      }
+   struct OrderedMutexLocker : public QOrderedMutexLocker {
+                  OrderedMutexLocker(const QProcessEnvironmentPrivate *d1, const QProcessEnvironmentPrivate *d2)
+      : QOrderedMutexLocker(&d1->mutex, &d2->mutex)  { }
    };
 
    QProcessEnvironmentPrivate() : QSharedData() {}
-   QProcessEnvironmentPrivate(const QProcessEnvironmentPrivate &other) :
-      QSharedData() {
-      // This being locked ensures that the functions that only assign
-      // d pointers don't need explicit locking.
-      // We don't need to lock our own mutex, as this object is new and
-      // consequently not shared. For the same reason, non-const methods
-      // do not need a lock, as they detach objects (however, we need to
-      // ensure that they really detach before using prepareName()).
+   QProcessEnvironmentPrivate(const QProcessEnvironmentPrivate &other)
+      : QSharedData()
+   {
       MutexLocker locker(&other);
-      hash = other.hash;
+      hash    = other.hash;
       nameMap = other.nameMap;
-      // We need to detach our members, so that our mutex can protect them.
-      // As we are being detached, they likely would be detached a moment later anyway.
-      hash.detach();
-      nameMap.detach();
    }
 #endif
 
@@ -291,9 +280,10 @@ Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
    if (d && d->ref.load() == 1) {
       return;
    }
-   QProcessEnvironmentPrivate *x = (d ? new QProcessEnvironmentPrivate(*d)
-                                    : new QProcessEnvironmentPrivate);
+
+   QProcessEnvironmentPrivate *x = (d ? new QProcessEnvironmentPrivate(*d) : new QProcessEnvironmentPrivate);
    x->ref.ref();
+
    if (d && !d->ref.deref()) {
       delete d;
    }
@@ -423,7 +413,7 @@ class QProcessPrivate : public QIODevicePrivate
    qint64 pipeWriterBytesToWrite() const;
 #endif
 
-   static bool startDetached(const QString &program, const QStringList &arguments, 
+   static bool startDetached(const QString &program, const QStringList &arguments,
                              const QString &workingDirectory = QString(), qint64 *pid = 0);
 
    int exitCode;

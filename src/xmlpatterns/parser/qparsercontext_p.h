@@ -37,6 +37,8 @@
 #include <quserfunctioncallsite_p.h>
 #include <quserfunction_p.h>
 #include <qvariabledeclaration_p.h>
+#include <qhash.h>
+#include <qmultihash.h>
 
 QT_BEGIN_NAMESPACE
 

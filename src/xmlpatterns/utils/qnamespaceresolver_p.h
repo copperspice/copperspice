@@ -25,10 +25,9 @@
 
 #include <QSharedData>
 #include <QXmlName>
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
-
-template<typename A, typename B> class QHash;
 
 namespace QPatternist {
 class NamespaceResolver : public QSharedData

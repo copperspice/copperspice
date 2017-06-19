@@ -24,6 +24,7 @@
 #define QABSTRACTXMLPULLPROVIDER_P_H
 
 #include <QtCore/QtGlobal>
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,7 +32,6 @@ class QXmlItem;
 class QXmlName;
 class QString;
 class QVariant;
-template<typename Key, typename Value> class QHash;
 
 namespace QPatternist {
 class AbstractXmlPullProviderPrivate;

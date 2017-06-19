@@ -29,13 +29,14 @@
 #include <qnamespaceresolver_p.h>
 #include <qreportcontext_p.h>
 #include <qresourceloader_p.h>
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 class QUrl;
-template<typename Key, typename T> class QHash;
 
 namespace QPatternist {
+
 class DynamicContext;
 class Expression;
 class FunctionFactory;
@@ -209,7 +210,7 @@ class StaticContext : public ReportContext
 
    virtual ExternalVariableLoader::Ptr externalVariableLoader() const = 0;
    virtual ResourceLoader::Ptr resourceLoader() const = 0;
- 
+
    /**
     * @short Adds @p location for @p reflection.
     */

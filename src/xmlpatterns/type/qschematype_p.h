@@ -26,12 +26,7 @@
 #include <qnamepool_p.h>
 #include <qschemacomponent_p.h>
 #include <qxmlname.h>
-
-template<typename N, typename M>
-class QHash;
-
-template<typename N>
-class QList;
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 

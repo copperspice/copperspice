@@ -26,9 +26,7 @@
 #include <qnamedschemacomponent_p.h>
 #include <qschematype_p.h>
 #include <qxsdannotated_p.h>
-
-template<typename N, typename M> class QHash;
-template<typename N> class QList;
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 

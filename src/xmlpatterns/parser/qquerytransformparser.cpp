@@ -3674,7 +3674,7 @@ yyreduce:
             /* In XSL-T, we can have dangling variable references, so resolve them
              * before we proceed with other steps, such as checking circularity. */
             if (parseInfo->isXSLT()) {
-               typedef QHash<QXmlName, Expression::Ptr> Hash;
+               typedef QMultiHash<QXmlName, Expression::Ptr> Hash;
                const Hash::const_iterator end(parseInfo->unresolvedVariableReferences.constEnd());
 
                for (Hash::const_iterator it(parseInfo->unresolvedVariableReferences.constBegin()); it != end; ++it) {

@@ -33,6 +33,7 @@
 
 #include <qdebug.h>
 #include <qhash.h>
+#include <qmultihash.h>
 #include <qmetaobject.h>
 #include <qmetatype.h>
 #include <qwebelement.h>
@@ -232,7 +233,7 @@ void QtInstance::getPropertyNames(ExecState *exec, PropertyNameArray &array)
             QMetaMethod method = meta->method(i);
 
             if (method.access() != QMetaMethod::Private)
-                array.add(Identifier(exec, method.methodSignature().constData() )); 
+                array.add(Identifier(exec, method.methodSignature().constData() ));
         }
     }
 }
@@ -266,7 +267,7 @@ JSValue QtInstance::stringValue(ExecState* exec) const
 
     if (! obj) {
       return jsNull();
-    }  
+    }
 
     //see if there is a toString defined
     QByteArray buf;
@@ -277,9 +278,9 @@ JSValue QtInstance::stringValue(ExecState* exec) const
     if (m_class) {
       QString ret;
 
-      if ( QMetaObject::invokeMethod(obj, "toString", Q_RETURN_ARG(QString, ret)) ) { 
+      if ( QMetaObject::invokeMethod(obj, "toString", Q_RETURN_ARG(QString, ret)) ) {
          buf = ret.toLatin1().constData();
-         useDefault = false; 
+         useDefault = false;
       }
     }
 
