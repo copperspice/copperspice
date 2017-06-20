@@ -1164,7 +1164,7 @@ QIcon QGtkStylePrivate::getFilesystemIcon(const QFileInfo &info)
 
 bool operator==(const QHashableLatin1Literal &l1, const QHashableLatin1Literal &l2)
 {
-   return l1.size() == l2.size() || qstrcmp(l1.data(), l2.data()) == 0;
+   return (l1.size() == l2.size()) && (qstrcmp(l1.data(), l2.data()) == 0);
 }
 
 // copied from qHash.cpp

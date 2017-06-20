@@ -2367,7 +2367,7 @@ void QTextControl::setExtraSelections(const QList<QTextEdit::ExtraSelection> &se
    for (int i = 0; i < selections.count(); ++i) {
       const QTextEdit::ExtraSelection &sel = selections.at(i);
 
-      int key = sel.cursor.anchor();
+      int key   = sel.cursor.anchor();
       auto iter = hash.find(key);
 
       bool okToAdd = true;
@@ -2377,8 +2377,11 @@ void QTextControl::setExtraSelections(const QList<QTextEdit::ExtraSelection> &se
          const QAbstractTextDocumentLayout::Selection &esel = d->extraSelections.at(iter.value());
 
          if (esel.cursor.position() == sel.cursor.position() && esel.format == sel.format) {
-            hash.erase(iter);
+            iter = hash.erase(iter);
             okToAdd = false;
+
+         } else {
+            ++iter;
          }
       }
 

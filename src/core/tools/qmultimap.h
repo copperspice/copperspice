@@ -672,7 +672,7 @@ class QMultiMapIterator
    }
 
    inline bool findPrevious(const Val &t) {
-      while (i != c.constBegin()) {
+      while (i != c->constBegin()) {
          if (*(n = --i) == t) {
             return true;
          }
