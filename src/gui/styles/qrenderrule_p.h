@@ -31,8 +31,6 @@
 #include <qvector.h>
 #include <qwidget.h>
 
-using namespace QCss;
-
 struct QStyleSheetBorderImageData : public QSharedData {
    QStyleSheetBorderImageData()
       : horizStretch(QCss::TileMode_Unknown), vertStretch(QCss::TileMode_Unknown) {
@@ -49,12 +47,12 @@ struct QStyleSheetBorderImageData : public QSharedData {
 
 struct QStyleSheetBackgroundData : public QSharedData {
    QStyleSheetBackgroundData(const QBrush &b, const QPixmap &p, QCss::Repeat r,
-                             Qt::Alignment a, QCss::Origin o, Attachment t, QCss::Origin c)
+                  Qt::Alignment a, QCss::Origin o, QCss::Attachment t, QCss::Origin c)
       : brush(b), pixmap(p), repeat(r), position(a), origin(o), attachment(t), clip(c) { }
 
    bool isTransparent() const {
       if (brush.style() != Qt::NoBrush) {
-         return !brush.isOpaque();
+         return ! brush.isOpaque();
       }
       return pixmap.isNull() ? false : pixmap.hasAlpha();
    }
@@ -104,20 +102,25 @@ struct QStyleSheetBorderData : public QSharedData {
          if (styles[i] == QCss::BorderStyle_Native || styles[i] == QCss::BorderStyle_None) {
             continue;
          }
+
          if (styles[i] >= QCss::BorderStyle_Dotted && styles[i] <= QCss::BorderStyle_DotDotDash
-               && styles[i] != BorderStyle_Solid) {
+               && styles[i] != QCss::BorderStyle_Solid) {
             return false;
          }
+
          if (!colors[i].isOpaque()) {
             return false;
          }
+
          if (!radii[i].isEmpty()) {
             return false;
          }
       }
+
       if (bi != 0 && bi->pixmap.hasAlpha()) {
          return false;
       }
+
       return true;
    }
 };
@@ -155,10 +158,8 @@ struct QStyleSheetBoxData : public QSharedData {
 };
 
 struct QStyleSheetPaletteData : public QSharedData {
-   QStyleSheetPaletteData(const QBrush &fg, const QBrush &sfg, const QBrush &sbg,
-                          const QBrush &abg)
-      : foreground(fg), selectionForeground(sfg), selectionBackground(sbg),
-        alternateBackground(abg) { }
+   QStyleSheetPaletteData(const QBrush &fg, const QBrush &sfg, const QBrush &sbg, const QBrush &abg)
+      : foreground(fg), selectionForeground(sfg), selectionBackground(sbg), alternateBackground(abg) { }
 
    QBrush foreground;
    QBrush selectionForeground;
@@ -174,12 +175,12 @@ struct QStyleSheetGeometryData : public QSharedData {
 };
 
 struct QStyleSheetPositionData : public QSharedData {
-   QStyleSheetPositionData(int l, int t, int r, int b, Origin o, Qt::Alignment p, QCss::PositionMode m,
-                           Qt::Alignment a = 0)
+   QStyleSheetPositionData(int l, int t, int r, int b, QCss::Origin o, Qt::Alignment p,
+                  QCss::PositionMode m, Qt::Alignment a = 0)
       : left(l), top(t), bottom(b), right(r), origin(o), position(p), mode(m), textAlignment(a) { }
 
    int left, top, bottom, right;
-   Origin origin;
+   QCss::Origin origin;
    Qt::Alignment position;
    QCss::PositionMode mode;
    Qt::Alignment textAlignment;
@@ -212,7 +213,7 @@ class QRenderRule
    enum { Margin = 1, Border = 2, Padding = 4, All = Margin | Border | Padding };
    QRect boxRect(const QRect &r, int flags = All) const;
    QSize boxSize(const QSize &s, int flags = All) const;
-   QRect originRect(const QRect &rect, Origin origin) const;
+   QRect originRect(const QRect &rect, QCss::Origin origin) const;
 
    QPainterPath borderClip(QRect rect);
    void drawBorder(QPainter *, const QRect &);
@@ -267,24 +268,26 @@ class QRenderRule
    }
 
    bool hasNativeBorder() const {
-      return bd == 0 || (!bd->hasBorderImage() && bd->styles[0] == BorderStyle_Native);
+      return bd == 0 || (! bd->hasBorderImage() && bd->styles[0] == QCss::BorderStyle_Native);
    }
 
    bool hasNativeOutline() const {
-      return (ou == 0 || (!ou->hasBorderImage() && ou->styles[0] == BorderStyle_Native));
+      return (ou == 0 || (! ou->hasBorderImage() && ou->styles[0] == QCss::BorderStyle_Native));
    }
 
    bool baseStyleCanDraw() const {
-      if (!hasBackground() || (background()->brush.style() == Qt::NoBrush && bg->pixmap.isNull())) {
+      if (! hasBackground() || (background()->brush.style() == Qt::NoBrush && bg->pixmap.isNull())) {
          return true;
       }
-      if (bg && !bg->pixmap.isNull()) {
+
+      if (bg && ! bg->pixmap.isNull()) {
          return false;
       }
+
       if (hasGradientBackground()) {
-         return features & StyleFeature_BackgroundGradient;
+         return features & QCss::StyleFeature_BackgroundGradient;
       }
-      return features & StyleFeature_BackgroundColor;
+      return features & QCss::StyleFeature_BackgroundColor;
    }
 
    bool hasBox() const {

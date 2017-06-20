@@ -137,8 +137,8 @@ bool operator==(const QGridLayoutBox &box1, const QGridLayoutBox &box2)
          return false;
       }
    }
-   return box1.q_minimumDescent == box2.q_minimumDescent
-          && box1.q_minimumAscent == box2.q_minimumAscent;
+
+   return box1.q_minimumDescent == box2.q_minimumDescent && box1.q_minimumAscent == box2.q_minimumAscent;
 }
 
 void QGridLayoutRowData::reset(int count)

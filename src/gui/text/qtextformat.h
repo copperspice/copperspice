@@ -87,8 +87,7 @@ class Q_GUI_EXPORT QTextLength
    }
 
    inline bool operator==(const QTextLength &other) const {
-      return lengthType == other.lengthType
-             && qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
+      return lengthType == other.lengthType && qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
    }
    inline bool operator!=(const QTextLength &other) const {
       return lengthType != other.lengthType
