@@ -3185,21 +3185,26 @@ void qPRCreate(const QWidget *widget, Window oldwin)
 void qPRCleanup(QWidget *widget)
 {
    QETWidget *etw = static_cast<QETWidget *>(const_cast<QWidget *>(widget));
+
    if (!(wPRmapper && widget->testAttribute(Qt::WA_WState_Reparented))) {
       return;   // not a reparented widget
    }
-   QWidgetMapper::Iterator it = wPRmapper->begin();
+
+   auto it = wPRmapper->constBegin();
+
    while (it != wPRmapper->constEnd()) {
       QWidget *w = *it;
+
       if (w == etw) {                       // found widget
          etw->setAttribute(Qt::WA_WState_Reparented, false); // clear flag
-         it = wPRmapper->erase(it);// old window no longer needed
+         it = wPRmapper->erase(it);         // old window no longer needed
       } else {
          ++it;
       }
    }
-   if (wPRmapper->size() == 0) {        // became empty
-      delete wPRmapper;                // then reset alt mapper
+
+   if (wPRmapper->size() == 0) {           // became empty
+      delete wPRmapper;                    // then reset alt mapper
       wPRmapper = 0;
    }
 }
