@@ -567,14 +567,19 @@ void QAbstractItemModelPrivate::rowsInserted(const QModelIndex &parent,
       QPersistentModelIndexData *data = *it;
       QModelIndex old = data->index;
 
-      persistent.m_indexes.erase(persistent.m_indexes.find(old));
+      auto iter = persistent.m_indexes.find(old);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = q_func()->index(old.row() + count, old.column(), parent);
 
       if (data->index.isValid()) {
          persistent.insertMultiAtEnd(data->index, data);
       } else {
-         qWarning() << "QAbstractItemModel::endInsertRows:  Invalid index (" << old.row() + count << ',' << old.column() <<
-                    ") in model" << q_func();
+         qWarning() << "QAbstractItemModel::endInsertRows:  Invalid index (" << old.row() + count << ','
+                  << old.column() << ") in model" << q_func();
       }
    }
 }
@@ -672,7 +677,12 @@ void QAbstractItemModelPrivate::movePersistentIndexes(QVector<QPersistentModelIn
          column += change;
       }
 
-      persistent.m_indexes.erase(persistent.m_indexes.find(data->index));
+      auto iter = persistent.m_indexes.find(data->index);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = q_func()->index(row, column, parent);
 
       if (data->index.isValid()) {
@@ -736,8 +746,7 @@ void QAbstractItemModelPrivate::rowsAboutToBeRemoved(const QModelIndex &parent, 
    persistent.invalidated.push(persistent_invalidated);
 }
 
-void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
-      int first, int last)
+void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent, int first, int last)
 {
    QVector<QPersistentModelIndexData *> persistent_moved = persistent.moved.pop();
    int count = (last - first) + 1; // it is important to only use the delta, because the change could be nested
@@ -746,14 +755,20 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
 
       QPersistentModelIndexData *data = *it;
       QModelIndex old = data->index;
-      persistent.m_indexes.erase(persistent.m_indexes.find(old));
+
+      auto iter = persistent.m_indexes.find(old);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = q_func()->index(old.row() - count, old.column(), parent);
 
       if (data->index.isValid()) {
          persistent.insertMultiAtEnd(data->index, data);
       } else {
-         qWarning() << "QAbstractItemModel::endRemoveRows:  Invalid index (" << old.row() - count << ',' << old.column() <<
-                    ") in model" << q_func();
+         qWarning() << "QAbstractItemModel::endRemoveRows: Invalid index ("
+                  << old.row() - count << ',' << old.column() << ") in model" << q_func();
       }
    }
 
@@ -761,7 +776,13 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
 
    for (auto it = persistent_invalidated.constBegin(); it != persistent_invalidated.constEnd(); ++it) {
       QPersistentModelIndexData *data = *it;
-      persistent.m_indexes.erase(persistent.m_indexes.find(data->index));
+
+      auto iter = persistent.m_indexes.find(data->index);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = QModelIndex();
       data->model = 0;
    }
@@ -799,7 +820,12 @@ void QAbstractItemModelPrivate::columnsInserted(const QModelIndex &parent, int f
       QPersistentModelIndexData *data = *it;
       QModelIndex old = data->index;
 
-      persistent.m_indexes.erase(persistent.m_indexes.find(old));
+      auto iter = persistent.m_indexes.find(old);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = q_func()->index(old.row(), old.column() + count, parent);
 
       if (data->index.isValid()) {
@@ -853,7 +879,13 @@ void QAbstractItemModelPrivate::columnsRemoved(const QModelIndex &parent, int fi
 
       QPersistentModelIndexData *data = *it;
       QModelIndex old = data->index;
-      persistent.m_indexes.erase(persistent.m_indexes.find(old));
+
+      auto iter = persistent.m_indexes.find(old);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = q_func()->index(old.row(), old.column() - count, parent);
 
       if (data->index.isValid()) {
@@ -868,7 +900,13 @@ void QAbstractItemModelPrivate::columnsRemoved(const QModelIndex &parent, int fi
 
    for (auto it = persistent_invalidated.constBegin();it != persistent_invalidated.constEnd(); ++it) {
       QPersistentModelIndexData *data = *it;
-      persistent.m_indexes.erase(persistent.m_indexes.find(data->index));
+
+      auto iter = persistent.m_indexes.find(data->index);
+
+      if (iter != persistent.m_indexes.end()) {
+         persistent.m_indexes.erase(iter);
+      }
+
       data->index = QModelIndex();
       data->model = 0;
    }
@@ -1035,17 +1073,6 @@ Qt::DropActions QAbstractItemModel::supportedDropActions() const
    return Qt::CopyAction;
 }
 
-/*!
-    Returns the actions supported by the data in this model.
-
-    The default implementation returns supportedDropActions() unless specific
-    values have been set with setSupportedDragActions().
-
-    supportedDragActions() is used by QAbstractItemView::startDrag() as the
-    default values when a drag occurs.
-
-    \sa Qt::DropActions, {Using drag and drop with item views}
-*/
 Qt::DropActions QAbstractItemModel::supportedDragActions() const
 {
    // ### Qt5 make this virtual or these properties
@@ -1058,13 +1085,6 @@ Qt::DropActions QAbstractItemModel::supportedDragActions() const
    return supportedDropActions();
 }
 
-/*!
-    \since 4.2
-
-    Sets the supported drag \a actions for the items in the model.
-
-    \sa supportedDragActions(), {Using drag and drop with item views}
-*/
 void QAbstractItemModel::setSupportedDragActions(Qt::DropActions actions)
 {
    Q_D(QAbstractItemModel);

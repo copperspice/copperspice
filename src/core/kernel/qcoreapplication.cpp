@@ -1324,13 +1324,14 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
       data->eventDispatcher->wakeUp();
    }
 
-   // clear the global list, i.e. remove everything that was
-   // delivered.
+   // clear the global list, i.e. remove everything that was delivered
    if (!event_type && !receiver && data->postEventList.startOffset >= 0) {
       const QPostEventList::iterator it = data->postEventList.begin();
       data->postEventList.erase(it, it + data->postEventList.startOffset);
       data->postEventList.insertionOffset -= data->postEventList.startOffset;
+
       Q_ASSERT(data->postEventList.insertionOffset >= 0);
+
       data->postEventList.startOffset = 0;
    }
 }
