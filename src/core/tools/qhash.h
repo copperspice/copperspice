@@ -303,6 +303,14 @@ class QHash
       return m_data.empty();
    }
 
+   QPair<iterator, iterator> equal_range(const Key &key) {
+      return m_data.equal_range(key);
+   }
+
+   QPair<const_iterator, const_iterator> equal_range(const Key &key) const {
+      return m_data.equal_range(key);
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter);
    }
@@ -329,6 +337,7 @@ class QHash
          return iter;
       }
 
+      // emplace returns an std::pair, first is the iterator
       return m_data.emplace(key, value).first;
    }
 

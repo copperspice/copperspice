@@ -298,6 +298,14 @@ class QMap
       return m_data.empty();
    }
 
+   QPair<iterator, iterator> equal_range(const Key &key) {
+      return m_data.equal_range(key);
+   }
+
+   QPair<const_iterator, const_iterator> equal_range(const Key &key) const {
+      return m_data.equal_range(key);
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter);
    }
@@ -331,7 +339,7 @@ class QMap
       auto iter = m_data.find(key);
 
       if (iter == m_data.end()) {
-         // add new element
+         // add new element, emplace returns an std::pair, first is the iterator
          return m_data.emplace(key, value).first;
       }
 
@@ -597,7 +605,7 @@ Val &QMap<Key, Val, C>::operator[](const Key &key)
    auto range = m_data.equal_range(key);
 
    if (range.first == range.second) {
-      // default constructed element
+      // default constructed element, emplace returns an std::pair, first is the iterator
       auto iter = m_data.emplace(key, Val()).first;
 
       return iter->second;

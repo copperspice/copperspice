@@ -302,6 +302,14 @@ class QMultiMap
       return m_data.empty();
    }
 
+   QPair<iterator, iterator> equal_range(const Key &key) {
+      return m_data.equal_range(key);
+   }
+
+   QPair<const_iterator, const_iterator> equal_range(const Key &key) const {
+      return m_data.equal_range(key);
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter);
    }
@@ -381,8 +389,8 @@ class QMultiMap
       auto iter = m_data.find(key);
 
       if (iter == m_data.end()) {
-         // add new element
-         return m_data.emplace(key, value).first;
+         // add new element, emplace returns the iterator
+         return m_data.emplace(key, value);
       }
 
       iter->second = value;
@@ -512,7 +520,7 @@ class QMultiMap
    const Val operator[](const Key &key) const;
 
  private:
-   std::map<Key, Val, C> m_data;
+   std::multimap<Key, Val, C> m_data;
 
 };
 
