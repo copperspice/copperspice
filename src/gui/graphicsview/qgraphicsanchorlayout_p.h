@@ -60,11 +60,9 @@ struct AnchorVertex {
    qreal distance;
 };
 
-/*!
-  \internal
+// internal
+// Represents an edge (anchor) in the internal graph.
 
-  Represents an edge (anchor) in the internal graph.
-*/
 struct AnchorData : public QSimplexVariable {
    enum Type {
       Normal = 0,
@@ -258,8 +256,8 @@ inline QString AnchorVertex::toString() const
 }
 #endif
 
-/*!
-  \internal
+/*
+  internal
 
   Representation of a valid path for a given vertex in the graph.
   In this struct, "positives" is the set of anchors that have been
@@ -283,9 +281,8 @@ class GraphPath
 };
 
 class QGraphicsAnchorLayoutPrivate;
-/*!
-    \internal
-*/
+
+// internal
 class QGraphicsAnchorPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsAnchor)
@@ -314,12 +311,6 @@ class QGraphicsAnchorPrivate
 
 };
 
-
-/*!
-  \internal
-
-  QGraphicsAnchorLayout private methods and attributes.
-*/
 class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsAnchorLayout)

@@ -47,9 +47,6 @@ struct QPlatformMenuBarFactoryInterface : public QFactoryInterface {
 #define QPlatformMenuBarFactoryInterface_iid "com.copperspice.QPlatformMenuBarFactoryInterface"
 CS_DECLARE_INTERFACE(QPlatformMenuBarFactoryInterface, QPlatformMenuBarFactoryInterface_iid)
 
-/*!
-    The platform-specific implementation of a menubar
-*/
 class QAbstractPlatformMenuBar
 {
  public:
@@ -71,11 +68,8 @@ class QAbstractPlatformMenuBar
 
    virtual bool isNativeMenuBar() const = 0;
 
-   /*!
-       Return true if the native menubar is capable of listening to the
-       shortcut keys. If false is returned, QMenuBar will trigger actions on
-       shortcut itself.
-   */
+   // Return true if the native menubar is capable of listening to the
+   // shortcut keys. If false is returned, QMenuBar will trigger actions on shortcut itself.
    virtual bool shortcutsHandledByNativeMenuBar() const = 0;
 
    virtual bool menuBarEventFilter(QObject *, QEvent *event) = 0;

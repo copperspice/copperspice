@@ -142,9 +142,6 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
    QAbstractItemView *previewColumn;
 };
 
-/*!
- * This is a delegate that will paint the triangle
- */
 class QColumnViewDelegate : public QItemDelegate
 {
 

@@ -123,12 +123,7 @@ class QSvgHandler
    };
    QStack<CurrentNode> m_skipNodes;
 
-   /*!
-       Follows the depths of elements. The top is current xml:space
-       value that applies for a given element.
-    */
-   QStack<QSvgText::WhitespaceMode> m_whitespaceMode;
-
+   QStack<QSvgText::WhitespaceMode>  m_whitespaceMode;
    QSvgRefCounter<QSvgStyleProperty> m_style;
 
    LengthType m_defaultCoords;

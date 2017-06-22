@@ -259,14 +259,6 @@ struct QWExtra {
 #endif
 };
 
-/*!
-    \internal
-
-    Returns true if \a p or any of its parents enable the
-    Qt::BypassGraphicsProxyWidget window flag. Used in QWidget::show() and
-    QWidget::setParent() to determine whether it's necessary to embed the
-    widget into a QGraphicsProxyWidget or not.
-*/
 static inline bool bypassGraphicsProxyWidget(const QWidget *p)
 {
    while (p) {

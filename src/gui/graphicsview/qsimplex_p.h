@@ -36,8 +36,8 @@ struct QSimplexVariable {
 };
 
 
-/*!
-  \internal
+/*
+  internal
 
   Representation of a LP constraint like:
 

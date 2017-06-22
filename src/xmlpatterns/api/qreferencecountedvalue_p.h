@@ -40,11 +40,12 @@ class ReferenceCountedValue : public QSharedData
    }
 
    T *const value;
+
  private:
-   /*!
-     Disabled, no implementation provided.
-    */
+
+   // Disabled, no implementation provided
    inline ReferenceCountedValue();
+
    Q_DISABLE_COPY(ReferenceCountedValue)
 };
 }

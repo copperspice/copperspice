@@ -42,9 +42,7 @@ const int QT_RASTER_COORD_LIMIT = 32767;
 
 //#define QT_DEBUG_CONVERT
 
-/********************************************************************************
- * class QOutlineMapper
- *
+/**
  * Used to map between QPainterPath and the QT_FT_Outline structure used by the
  * freetype scanconvertor.
  *
@@ -67,11 +65,8 @@ class QOutlineMapper
       m_in_clip_elements(false) {
    }
 
-   /*!
-     Sets up the matrix to be used for conversion. This also
-     sets up the qt_path_iterator function that is used as a callback
-     to get points.
-   */
+   //  Sets up the matrix to be used for conversion. This also
+   //  sets up the qt_path_iterator function that is used as a callback to get points.
    void setMatrix(const QTransform &m) {
       m_m11 = m.m11();
       m_m12 = m.m12();

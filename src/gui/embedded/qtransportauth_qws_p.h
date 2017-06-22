@@ -46,25 +46,17 @@ void hexstring( char *buf, const unsigned char *key, size_t sz );
 // proj id for ftok usage in sxe
 #define SXE_PROJ 10022
 
-/*!
-  \internal
-  memset for security purposes, guaranteed not to be optimized away
-  http://www.faqs.org/docs/Linux-HOWTO/Secure-Programs-HOWTO.html
-*/
+
 void *guaranteed_memset(void *v, int c, size_t n);
 
 class QUnixSocketMessage;
 
-/*!
-  \internal
-  \class AuthCookie
-  Struct to carry process authentication key and id
-*/
 #define QSXE_HEADER_LEN 24
 
-/*!
+/*
   \macro AUTH_ID
   Macro to manage authentication header.  Format of header is:
+
   \table
   \header \i BYTES  \i  CONTENT
      \row \i 0-3    \i  magic numbers
@@ -127,11 +119,6 @@ class QTransportAuthPrivate
    QMutex keyfileMutex;
 };
 
-/*!
-  \internal
-  Enforces the False Authentication Rate.  If more than 4 authentications
-  are received per minute the sxemonitor is notified that the FAR has been exceeded
-*/
 class FAREnforcer
 {
  public:

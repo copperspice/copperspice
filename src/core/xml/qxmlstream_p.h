@@ -802,9 +802,6 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
 #endif
    bool atEnd;
 
-   /*!
-     \sa setType()
-    */
    QXmlStreamReader::TokenType type;
    QXmlStreamReader::Error error;
    QString errorString;
@@ -1022,11 +1019,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    QXmlStreamEntityResolver *entityResolver;
 
  private:
-   /*! \internal
-      Never assign to variable type directly. Instead use this function.
 
-      This prevents errors from being ignored.
-    */
    inline void setType(const QXmlStreamReader::TokenType t) {
       if (type != QXmlStreamReader::Invalid) {
          type = t;

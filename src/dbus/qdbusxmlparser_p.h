@@ -32,9 +32,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \internal
-*/
 class QDBusXmlParser
 {
     QString m_service;

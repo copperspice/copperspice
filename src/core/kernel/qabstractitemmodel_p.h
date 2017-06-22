@@ -95,11 +95,6 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       persistent.m_indexes.clear();
    }
 
-   /*!
-     \internal
-     clean the QPersistentModelIndex relative to the index if there is one.
-     To be used before an index is invalided
-     */
    inline void invalidatePersistentIndex(const QModelIndex &index) {
       QMultiMap<QModelIndex, QPersistentModelIndexData *>::iterator it = persistent.m_indexes.find(index);
 

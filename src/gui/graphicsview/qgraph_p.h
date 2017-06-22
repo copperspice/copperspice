@@ -108,13 +108,6 @@ class Graph
       return const_iterator(this, false);
    }
 
-   /*!
-    * \internal
-    *
-    * If there is an edge between \a first and \a second, it will return a structure
-    * containing the data associated with the edge, otherwise it will return 0.
-    *
-    */
    EdgeData *edgeData(Vertex *first, Vertex *second) {
       QHash<Vertex *, EdgeData *> *row = m_graph.value(first);
       return row ? row->value(second) : 0;

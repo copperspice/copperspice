@@ -45,9 +45,7 @@ QString makePlatformSafeKey(const QString &key, const QString &prefix = QLatin1S
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-/*!
-  Helper class
-  */
+
 class QSharedMemoryLocker
 {
 
@@ -136,7 +134,7 @@ class QSharedMemoryPrivate
 #else
    key_t unix_key;
 #endif
- 
+
 };
 
 QT_END_NAMESPACE

@@ -29,23 +29,13 @@
 
 #if defined(Q_WS_X11)
 
-QT_BEGIN_NAMESPACE
-
-/*!\internal
-   This namespace contains helper function to help KDE integration
-   They are only used if we detect the use of KDE and the KDE platform plugin is not found (old KDE version)
-   Or if the detected KDE version is KDE3
-*/
 namespace QKde {
-QString kdeHome();
-QString kdeStyle();
-QPalette kdePalette();
-int kdeToolButtonStyle();
-int kdeToolBarIconSize();
+   QString kdeHome();
+   QString kdeStyle();
+   QPalette kdePalette();
+   int kdeToolButtonStyle();
+   int kdeToolBarIconSize();
 }
 
-
-QT_END_NAMESPACE
-
-#endif // Q_WS_X11
-#endif // QKDE_H
+#endif
+#endif

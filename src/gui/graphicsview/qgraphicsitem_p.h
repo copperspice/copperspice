@@ -642,12 +642,6 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
 };
 #endif //QT_NO_GRAPHICSEFFECT
 
-/*!
-    Returns true if \a item1 is on top of \a item2.
-    The items don't need to be siblings.
-
-    \internal
-*/
 inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem *item2)
 {
    // Siblings? Just check their z-values.
@@ -697,20 +691,11 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    return qt_closestLeaf(p1, p2);
 }
 
-/*!
-    Returns true if \a item2 is on top of \a item1.
-    The items don't need to be siblings.
-
-    \internal
-*/
 inline bool qt_closestItemLast(const QGraphicsItem *item1, const QGraphicsItem *item2)
 {
    return qt_closestItemFirst(item2, item1);
 }
 
-/*!
-    \internal
-*/
 inline bool qt_closestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item2)
 {
    // Return true if sibling item1 is on top of item2.
@@ -727,9 +712,7 @@ inline bool qt_closestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item
    return d1->siblingIndex > d2->siblingIndex;
 }
 
-/*!
-    \internal
-*/
+
 inline bool qt_notclosestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item2)
 {
    return qt_closestLeaf(item2, item1);
@@ -745,9 +728,7 @@ inline QTransform QGraphicsItemPrivate::transformToParent() const
    return matrix;
 }
 
-/*!
-    \internal
-*/
+// internal
 inline void QGraphicsItemPrivate::ensureSortedChildren()
 {
    if (needSortChildren) {
@@ -766,9 +747,7 @@ inline void QGraphicsItemPrivate::ensureSortedChildren()
    }
 }
 
-/*!
-    \internal
-*/
+// internal
 inline bool QGraphicsItemPrivate::insertionOrder(QGraphicsItem *a, QGraphicsItem *b)
 {
    return a->d_ptr->siblingIndex < b->d_ptr->siblingIndex;
