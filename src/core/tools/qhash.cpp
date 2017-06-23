@@ -63,30 +63,9 @@ static inline uint hash(const uchar *p, int len, uint seed)
    return h;
 }
 
-static inline uint hash(const QChar *p, int len, uint seed)
-{
-   uint h = seed;
-
-   for (int i = 0; i < len; ++i) {
-      h = 31 * h + p[i].unicode();
-   }
-
-   return h;
-}
-
 uint qHash(const QByteArray &key, uint seed)
 {
    return hash(reinterpret_cast<const uchar *>(key.constData()), key.size(), seed);
-}
-
-uint qHash(const QString &key, uint seed)
-{
-   return hash(key.unicode(), key.size(), seed);
-}
-
-uint qHash(const QStringRef &key, uint seed)
-{
-   return hash(key.unicode(), key.size(), seed);
 }
 
 uint qHash(const QBitArray &bitArray, uint seed)

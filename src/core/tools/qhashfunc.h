@@ -25,19 +25,27 @@
 
 #include <qchar.h>
 #include <qpair.h>
+#include <qstring.h>
 
 class QBitArray;
 class QByteArray;
-class QString;
-class QStringRef;
 
 Q_CORE_EXPORT uint cs_getHashSeed();
 Q_CORE_EXPORT uint cs_stable_hash(const QString &key);
 
+inline uint cs_hash_internal(const QChar *p, int len, uint seed)
+{
+   uint h = seed;
+
+   for (int i = 0; i < len; ++i) {
+      h = 31 * h + p[i].unicode();
+   }
+
+   return h;
+}
+
 Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QString    &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QStringRef &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
 
 inline uint qHash(char key, uint seed = 0)
@@ -108,6 +116,16 @@ inline uint qHash(QChar key, uint seed = 0)
    return qHash(key.unicode(), seed);
 }
 
+inline uint qHash(const QString &key, uint seed = 0)
+{
+   return cs_hash_internal(key.unicode(), key.size(), seed);
+}
+
+inline uint qHash(const QStringRef &key, uint seed = 0)
+{
+   return cs_hash_internal(key.unicode(), key.size(), seed);
+}
+
 template <typename Key>
 uint qHash(const Key *key, uint seed)
 {
@@ -134,7 +152,7 @@ template <typename Key>
 class qHashFunc
 {
  public:
-   bool operator()(const Key &key) const {
+   uint operator()(const Key &key) const {
       return qHash(key, cs_getHashSeed());
    }
 };
