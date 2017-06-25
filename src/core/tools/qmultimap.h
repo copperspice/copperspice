@@ -616,6 +616,9 @@ class QMultiMapIterator
    inline QMultiMapIterator(const QMultiMap<Key, Val, C> &container)
       : c(&container), i(c->constBegin()), n(c->constEnd()) {}
 
+   inline ~QMultiMapIterator() {
+   }
+
    inline QMultiMapIterator &operator=(const QMultiMap<Key, Val, C> &container) {
       c = container;
       i = c->constBegin();

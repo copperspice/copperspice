@@ -28,8 +28,8 @@
 QT_BEGIN_NAMESPACE
 
 /*
-    Warning: The contents of QAlgorithmsPrivate is not a part of the public Qt API
-    and may be changed from version to version or even be completely removed.
+    Warning: The functions in the QAlgorithmsPrivate namespace are not a part of the public API
+    and may be changed from version to version or completely removed.
 */
 namespace QAlgorithmsPrivate {
 
@@ -131,25 +131,6 @@ inline void qCount(const Container &container, const T &value, Size &n)
    qCount(container.constBegin(), container.constEnd(), value, n);
 }
 
-
-template <typename T>
-class qLess
-{
- public:
-   inline bool operator()(const T &t1, const T &t2) const {
-      return (t1 < t2);
-   }
-};
-
-template <typename T>
-class qGreater
-{
- public:
-   inline bool operator()(const T &t1, const T &t2) const {
-      return (t2 < t1);
-   }
-};
-
 template <typename RandomAccessIterator>
 inline void qSort(RandomAccessIterator start, RandomAccessIterator end)
 {
@@ -169,7 +150,7 @@ inline void qSort(RandomAccessIterator start, RandomAccessIterator end, LessThan
 template<typename Container>
 inline void qSort(Container &c)
 {
-   if (!c.empty()) {
+   if (! c.empty()) {
       QAlgorithmsPrivate::qSortHelper(c.begin(), c.end(), *c.begin());
    }
 }
@@ -232,7 +213,7 @@ Q_OUTOFLINE_TEMPLATE RandomAccessIterator qLowerBound(RandomAccessIterator begin
 template <typename Container, typename T>
 Q_OUTOFLINE_TEMPLATE typename Container::const_iterator qLowerBound(const Container &container, const T &value)
 {
-   return QAlgorithmsPrivate::qLowerBoundHelper(container.constBegin(), container.constEnd(), value, qLess<T>());
+   return QAlgorithmsPrivate::qLowerBoundHelper(container.constBegin(), container.constEnd(), value, std::less<T>());
 }
 
 template <typename RandomAccessIterator, typename T>
@@ -267,7 +248,7 @@ Q_OUTOFLINE_TEMPLATE RandomAccessIterator qUpperBound(RandomAccessIterator begin
 template <typename Container, typename T>
 Q_OUTOFLINE_TEMPLATE typename Container::const_iterator qUpperBound(const Container &container, const T &value)
 {
-   return QAlgorithmsPrivate::qUpperBoundHelper(container.constBegin(), container.constEnd(), value, qLess<T>());
+   return QAlgorithmsPrivate::qUpperBoundHelper(container.constBegin(), container.constEnd(), value, std::less<T>());
 }
 
 template <typename RandomAccessIterator, typename T>
@@ -294,7 +275,7 @@ Q_OUTOFLINE_TEMPLATE RandomAccessIterator qBinaryFind(RandomAccessIterator begin
 template <typename Container, typename T>
 Q_OUTOFLINE_TEMPLATE typename Container::const_iterator qBinaryFind(const Container &container, const T &value)
 {
-   return QAlgorithmsPrivate::qBinaryFindHelper(container.constBegin(), container.constEnd(), value, qLess<T>());
+   return QAlgorithmsPrivate::qBinaryFindHelper(container.constBegin(), container.constEnd(), value, std::less<T>());
 }
 
 template <typename ForwardIterator>
@@ -383,7 +364,7 @@ top:
 template <typename RandomAccessIterator, typename T>
 inline void qSortHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &dummy)
 {
-   qSortHelper(begin, end, dummy, qLess<T>());
+   qSortHelper(begin, end, dummy, std::less<T>());
 }
 
 template <typename RandomAccessIterator>
@@ -459,7 +440,7 @@ Q_OUTOFLINE_TEMPLATE void qStableSortHelper(RandomAccessIterator begin, RandomAc
 template <typename RandomAccessIterator, typename T>
 inline void qStableSortHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &dummy)
 {
-   qStableSortHelper(begin, end, dummy, qLess<T>());
+   qStableSortHelper(begin, end, dummy, std::less<T>());
 }
 
 template <typename RandomAccessIterator, typename T, typename LessThan>
@@ -547,7 +528,7 @@ constexpr inline uint qPopulationCount(quint8 v)
    return __builtin_popcount(v);
 
 #else
-   return 
+   return
       (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
 #endif
 }

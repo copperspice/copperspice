@@ -375,17 +375,19 @@ class Q_XML_EXPORT QDomNamedNodeMap
 
    // DOM read only attributes
    int length() const;
+
    int count() const {
-      return length();   // Qt API consitancy
+      return length();         // Qt API consitancy
    }
-   inline int size() const {
-      return length();   // Qt API consistency
+
+   int size() const {
+      return length();         // Qt API consistency
    }
-   inline bool isEmpty() const {
+
+   bool isEmpty() const {
       return length() == 0;   // Qt API consistency
    }
 
-   // Qt extension
    bool contains(const QString &name) const;
 
  private:

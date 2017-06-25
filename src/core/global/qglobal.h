@@ -1245,13 +1245,6 @@ inline void qSwap(T &value1, T &value2)
    swap(value1, value2);
 }
 
-/*
-   Specialize a shared type with: Q_DECLARE_SHARED(type);
-
-   where 'type' is the name of the type to specialize.  NOTE: shared
-   types must declare a 'bool isDetached(void) const;' member for this
-   to work.
-*/
 
 #define Q_DECLARE_SHARED_STL(TYPE) \
 QT_END_NAMESPACE \
@@ -1262,9 +1255,11 @@ namespace std { \
 QT_BEGIN_NAMESPACE
 
 
-#define Q_DECLARE_SHARED(TYPE)                                          \
-template <> inline bool qIsDetached<TYPE>(TYPE &t) { return t.isDetached(); } \
-template <> inline void qSwap<TYPE>(TYPE &value1, TYPE &value2) \
+#define Q_DECLARE_SHARED(TYPE)    \
+template <>                       \
+inline bool qIsDetached<TYPE>(TYPE &t) { return t.isDetached(); } \
+template <>                       \
+inline void qSwap<TYPE>(TYPE &value1, TYPE &value2) \
 { qSwap(value1.data_ptr(), value2.data_ptr()); } \
 Q_DECLARE_SHARED_STL(TYPE)
 

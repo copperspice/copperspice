@@ -47,23 +47,17 @@ OrderBy::OrderBy(const Stability stability,
    Q_ASSERT(m_returnOrderBy);
 }
 
-void OrderBy::OrderSpec::prepare(const Expression::Ptr &source,
-                                 const StaticContext::Ptr &context)
+void OrderBy::OrderSpec::prepare(const Expression::Ptr &source, const StaticContext::Ptr &context)
 {
    m_expr = source;
    const ItemType::Ptr t(source->staticType()->itemType());
    prepareComparison(fetchComparator(t, t, context));
 }
 
-/**
- * @short Functor used by Qt's qSort() and qStableSort(). Used for FLWOR's
- * <tt>order by</tt> expression.
- *
- * This must be in the global namespace, since it is specializing qLess(), which
- * is in the global namespace. Hence it can't be in QPatternist.
- */
+namespace std {
+
 template<>
-class qLess<Item::List>
+class less<Item::List>
 {
  private:
 
@@ -73,9 +67,9 @@ class qLess<Item::List>
    }
 
  public:
-   inline qLess(const OrderBy::OrderSpec::Vector &orderspecs,
-                const DynamicContext::Ptr &context) : m_orderSpecs(orderspecs)
-      , m_context(context) {
+   inline less(const OrderBy::OrderSpec::Vector &orderspecs, const DynamicContext::Ptr &context)
+      : m_orderSpecs(orderspecs), m_context(context) {
+
       Q_ASSERT(!m_orderSpecs.isEmpty());
       Q_ASSERT(context);
    }
@@ -139,6 +133,8 @@ class qLess<Item::List>
    const DynamicContext::Ptr &m_context;
 };
 
+}
+
 Item::Iterator::Ptr OrderBy::mapToSequence(const Item &i,
       const DynamicContext::Ptr &) const
 {
@@ -149,7 +145,7 @@ Item::Iterator::Ptr OrderBy::evaluateSequence(const DynamicContext::Ptr &context
 {
    Item::List tuples(m_operand->evaluateSequence(context)->toList());
 
-   const qLess<Item::List> sorter(m_orderSpecs, context);
+   const std::less<Item::List> sorter(m_orderSpecs, context);
 
    Q_ASSERT(m_stability == StableOrder || m_stability == UnstableOrder);
 
