@@ -42,7 +42,7 @@ template <typename Key, typename Val, typename C>
 class QMap
 {
  public:
-   class iterator : private std::map<Key, Val, C>::iterator
+   class iterator
    {
     public:
       using iterator_category = std::bidirectional_iterator_tag;
@@ -57,21 +57,19 @@ class QMap
       iterator() = default;
 
       iterator(typename std::map<Key, Val, C>::iterator iter)
-         : std::map<Key, Val, C>::iterator(std::move(iter)) {
+         : m_iter(std::move(iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::map<Key, Val, C>::iterator::operator*().first;
-         return retval;
+         return m_iter->first;
       }
 
       Val &value() const {
-         Val &retval = std::map<Key, Val, C>::iterator::operator*().second;
-         return retval;
+         return m_iter->second;
       }
 
       std::pair<const Key, Val> &pair() const {
-         return std::map<Key, Val, C>::iterator::operator*();
+         return *m_iter;
       }
 
       // operators
@@ -84,55 +82,58 @@ class QMap
       }
 
       bool operator==(iterator other) const {
-         return std::map<Key, Val, C>::iterator::operator==(other);
+         return m_iter == other.m_iter;
       }
 
       bool operator!=(iterator other) const {
-         return std::map<Key, Val, C>::iterator::operator!=(other);
+         return m_iter != other.m_iter;
       }
 
       iterator &operator+=(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       iterator &operator-=(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       iterator &operator+(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       iterator &operator-(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       iterator &operator++() {
-         std::map<Key, Val, C>::iterator::operator++();
+         ++m_iter;
          return *this;
       }
 
       iterator operator++(int n) {
-         return std::map<Key, Val, C>::iterator::operator++(n);
+         return m_iter++;
       }
 
       iterator &operator--() {
-         std::map<Key, Val, C>::iterator::operator--();
+         --m_iter;
          return *this;
       }
 
       iterator operator--(int n) {
-         return std::map<Key, Val, C>::iterator::operator--(n);
+         return m_iter--;
       }
 
       friend class QMap<Key, Val, C>;
+
+    private:
+      typename std::map<Key, Val, C>::iterator m_iter;
    };
 
-   class const_iterator : private std::map<Key, Val, C>::const_iterator
+   class const_iterator
    {
     public:
       using iterator_category = std::bidirectional_iterator_tag;
@@ -147,25 +148,23 @@ class QMap
       const_iterator() = default;
 
       const_iterator(typename std::map<Key, Val, C>::const_iterator iter)
-         : std::map<Key, Val, C>::const_iterator(std::move(iter)) {
+         : m_iter(std::move(iter)) {
       }
 
       const_iterator(iterator iter)
-         : std::map<Key, Val, C>::const_iterator(std::move(iter)) {
+         : m_iter(std::move(iter.m_iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::map<Key, Val, C>::const_iterator::operator*().first;
-         return retval;
+         return m_iter->first;
       }
 
       const Val &value() const {
-         const Val &retval = std::map<Key, Val, C>::const_iterator::operator*().second;
-         return retval;
+         return m_iter->second;
       }
 
       const std::pair<const Key, Val> &pair() const {
-         return std::map<Key, Val, C>::const_iterator::operator*();
+         return *m_iter;
       }
 
       // operators
@@ -178,52 +177,55 @@ class QMap
       }
 
       bool operator==(const_iterator other) const {
-         return std::map<Key, Val, C>::const_iterator::operator==(other);
+         return m_iter == other.m_iter;
       }
 
       bool operator!=(const_iterator other) const {
-         return std::map<Key, Val, C>::const_iterator::operator!=(other);
+         return m_iter != other.m_iter;
       }
 
       const_iterator &operator+=(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       const_iterator &operator-=(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       const_iterator &operator+(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       const_iterator &operator-(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       const_iterator &operator++() {
-         std::map<Key, Val, C>::const_iterator::operator++();
+         ++m_iter;
          return *this;
       }
 
       const_iterator operator++(int n) {
-         return std::map<Key, Val, C>::const_iterator::operator++(n);
+         return m_iter++;
       }
 
       const_iterator &operator--() {
-         std::map<Key, Val, C>::const_iterator::operator--();
+         --m_iter;
          return *this;
       }
 
       const_iterator operator--(int n) {
-         return std::map<Key, Val, C>::const_iterator::operator--(n);
+         return m_iter--;
       }
 
       friend class QMap<Key, Val, C>;
+
+    private:
+      typename std::map<Key, Val, C>::const_iterator m_iter;
    };
 
    // legacy
@@ -307,7 +309,7 @@ class QMap
    }
 
    iterator erase(const_iterator iter) {
-      return m_data.erase(iter);
+      return m_data.erase(iter.m_iter);
    }
 
    Val &first()  {
@@ -639,22 +641,17 @@ std::map<Key, Val, C> QMap<Key, Val, C>::toStdMap() const
 template <class Key, class Val, class C = qMapCompare<Key>>
 class QMapIterator
 {
-   typedef typename QMap<Key, Val, C>::const_iterator const_iterator;
-   typedef const_iterator Item;
-
-   const QMap<Key, Val, C> *c;
-   const_iterator i;
-   const_iterator n;
-
-   inline bool item_exists() const {
-      return n != c->constEnd();
-   }
+   using const_iterator = typename QMap<Key, Val, C>::const_iterator;
+   using Item           = const_iterator;
 
  public:
-   inline QMapIterator(const QMap<Key, Val, C> &container)
+   QMapIterator(const QMap<Key, Val, C> &container)
       : c(&container), i(c->constBegin()), n(c->constEnd()) {}
 
-   inline QMapIterator &operator=(const QMap<Key, Val, C> &container) {
+   ~QMapIterator() {
+   }
+
+   QMapIterator &operator=(const QMap<Key, Val, C> &container) {
       c = container;
       i = c->constBegin();
       n = c->constEnd();
@@ -662,53 +659,54 @@ class QMapIterator
       return *this;
    }
 
-   inline void toFront() {
+   void toFront() {
       i = c->constBegin();
       n = c->constEnd();
    }
 
-   inline void toBack() {
+   void toBack() {
       i = c->constEnd();
       n = c->constEnd();
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return i != c->constEnd();
    }
 
-   inline Item next() {
+   Item next() {
       n = i++;
       return n;
    }
 
-   inline Item peekNext() const {
+   Item peekNext() const {
       return i;
    }
 
-   inline bool hasPrevious() const {
+   bool hasPrevious() const {
       return i != c->constBegin();
    }
 
-   inline Item previous() {
+   Item previous() {
       n = --i;
       return n;
    }
-   inline Item peekPrevious() const {
+
+   Item peekPrevious() const {
       const_iterator p = i;
       return --p;
    }
 
-   inline const Val &value() const {
+   const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Key &key() const {
+   const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
    }
 
-   inline bool findNext(const Val &t) {
+   bool findNext(const Val &t) {
       while ((n = i) != c->constEnd()) {
          if (*i++ == t) {
             return true;
@@ -717,7 +715,7 @@ class QMapIterator
       return false;
    }
 
-   inline bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &t) {
       while (i != c->constBegin()) {
          if (*(n = --i) == t) {
             return true;
@@ -727,31 +725,32 @@ class QMapIterator
       n = c->constEnd();
       return false;
    }
+
+ private:
+   const QMap<Key, Val, C> *c;
+   const_iterator i;
+   const_iterator n;
+
+   inline bool item_exists() const {
+      return n != c->constEnd();
+   }
 };
 
 template <class Key, class Val, class C = qMapCompare<Key>>
 class QMutableMapIterator
 {
-   typedef typename QMap<Key, Val, C>::iterator iterator;
-   typedef typename QMap<Key, Val, C>::const_iterator const_iterator;
-   typedef iterator Item;
-
-   QMap<Key, Val, C> *c;
-   iterator i;
-   iterator n;
-
-   bool item_exists() const {
-      return const_iterator(n) != c->constEnd();
-   }
+   using iterator       = typename QMap<Key, Val, C>::iterator;
+   using const_iterator = typename QMap<Key, Val, C>::const_iterator;
+   using Item           = iterator;
 
  public:
-   inline QMutableMapIterator(QMap<Key, Val, C> &container)
+   QMutableMapIterator(QMap<Key, Val, C> &container)
       : c(&container), i(c->begin()), n(c->end()) {}
 
-   inline ~QMutableMapIterator() {
+   ~QMutableMapIterator() {
    }
 
-   inline QMutableMapIterator &operator=(QMap<Key, Val, C> &container) {
+   QMutableMapIterator &operator=(QMap<Key, Val, C> &container) {
       c = &container;
       i = c->begin();
       n = c->end();
@@ -759,72 +758,72 @@ class QMutableMapIterator
       return *this;
    }
 
-   inline void toFront() {
+   void toFront() {
       i = c->begin();
       n = c->end();
    }
 
-   inline void toBack() {
+   void toBack() {
       i = c->end();
       n = i;
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return c->constEnd() != const_iterator(i);
    }
 
-   inline Item next() {
+   Item next() {
       n = i++;
       return n;
    }
 
-   inline Item peekNext() const {
+   Item peekNext() const {
       return i;
    }
 
-   inline bool hasPrevious() const {
+   bool hasPrevious() const {
       return c->constBegin() != const_iterator(i);
    }
 
-   inline Item previous() {
+   Item previous() {
       n = --i;
       return n;
    }
 
-   inline Item peekPrevious() const {
+   Item peekPrevious() const {
       iterator p = i;
       return --p;
    }
 
-   inline void remove() {
+   void remove() {
       if (c->constEnd() != const_iterator(n)) {
          i = c->erase(n);
          n = c->end();
       }
    }
 
-   inline void setValue(const Val &t) const {
+   void setValue(const Val &t) const {
       if (c->constEnd() != const_iterator(n)) {
          *n = t;
       }
    }
 
-   inline Val &value() {
+   Val &value() {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Val &value() const {
+   const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Key &key() const {
+   const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
    }
 
-   inline bool findNext(const Val &t) {
+   bool findNext(const Val &t) {
       while (c->constEnd() != const_iterator(n = i)) {
          if (*i++ == t)  {
             return true;
@@ -834,7 +833,7 @@ class QMutableMapIterator
       return false;
    }
 
-   inline bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &t) {
       while (c->constBegin() != const_iterator(i)) {
          if (*(n = --i) == t) {
             return true;
@@ -845,6 +844,14 @@ class QMutableMapIterator
       return false;
    }
 
+ private:
+   QMap<Key, Val, C> *c;
+   iterator i;
+   iterator n;
+
+   bool item_exists() const {
+      return const_iterator(n) != c->constEnd();
+   }
 };
 
 #endif

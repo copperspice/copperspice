@@ -45,7 +45,7 @@ class QMultiHash
 {
  public:
 
-   class iterator : private std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator
+   class iterator
    {
     public:
       using iterator_category = std::forward_iterator_tag;
@@ -60,21 +60,19 @@ class QMultiHash
       iterator() = default;
 
       iterator(typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator iter)
-         : std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator(std::move(iter)) {
+         : m_iter(std::move(iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator::operator*().first;
-         return retval;
+         return m_iter->first;
       }
 
       Val &value() const {
-         Val &retval = std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator::operator*().second;
-         return retval;
+         return m_iter->second;
       }
 
       std::pair<const Key, Val> &pair() const {
-         return std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator::operator*();
+         return *m_iter;
       }
 
       // operators
@@ -87,46 +85,49 @@ class QMultiHash
       }
 
       bool operator==(iterator other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator>(*this) == other;
+         return m_iter == other.m_iter;
       }
 
       bool operator!=(iterator other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator>(*this) != other;
+         return m_iter != other.m_iter;
       }
 
       iterator &operator+=(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       iterator &operator-=(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       iterator &operator+(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       iterator &operator-(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       iterator &operator++() {
-         std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator::operator++();
+         ++m_iter;
          return *this;
       }
 
       iterator operator++(int n) {
-         return std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator::operator++(n);
+         return m_iter++;
       }
 
       friend class QMultiHash<Key, Val, Hash, KeyEqual>;
+
+    private:
+      typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::iterator m_iter;
    };
 
-   class const_iterator : private std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator
+   class const_iterator
    {
     public:
       using iterator_category = std::forward_iterator_tag;
@@ -141,25 +142,23 @@ class QMultiHash
       const_iterator() = default;
 
       const_iterator(typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator iter)
-         : std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator(std::move(iter)) {
+         : m_iter(std::move(iter)) {
       }
 
       const_iterator(iterator iter)
-         : std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator(std::move(iter)) {
+         : m_iter(std::move(iter.m_iter)) {
       }
 
       const Key &key() const {
-         const Key &retval = std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator::operator*().first;
-         return retval;
+         return m_iter->first;
       }
 
       const Val &value() const {
-         const Val &retval = std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator::operator*().second;
-         return retval;
+         return m_iter->second;
       }
 
       const std::pair<const Key, Val> &pair() const {
-         return std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator::operator*();
+         return *m_iter;
       }
 
       // operators
@@ -172,51 +171,54 @@ class QMultiHash
       }
 
       bool operator==(const iterator &other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator>(*this) == other;
+         return m_iter == other.m_iter;
       }
 
       bool operator==(const const_iterator &other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator>(*this) == other;
+         return m_iter == other.m_iter;
       }
 
       bool operator!=(const iterator & other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator>(*this) != other;
+         return m_iter != other.m_iter;
       }
 
       bool operator!=(const const_iterator &other) const {
-         return static_cast<typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator>(*this) != other;
+         return m_iter != other.m_iter;
       }
 
       const_iterator &operator+=(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       const_iterator &operator-=(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       const_iterator &operator+(size_type n) {
-         std::advance(*this, n);
+         std::advance(m_iter, n);
          return *this;
       }
 
       const_iterator &operator-(size_type n) {
-         std::advance(*this, -n);
+         std::advance(m_iter, -n);
          return *this;
       }
 
       const_iterator &operator++() {
-         std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator::operator++();
+         ++m_iter;
          return *this;
       }
 
       const_iterator operator++(int n) {
-         return std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator::operator++(n);
+         return m_iter++;
       }
 
       friend class QMultiHash<Key, Val, Hash, KeyEqual>;
+
+    private:
+      typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator m_iter;
    };
 
    // legacy
@@ -320,7 +322,7 @@ class QMultiHash
    }
 
    iterator erase(const_iterator iter) {
-      return m_data.erase(iter);
+      return m_data.erase(iter.m_iter);
    }
 
    iterator find(const Key &key) {
@@ -676,76 +678,68 @@ class QMultiHashIterator
    typedef typename QMultiHash<Key, Val, Hash, KeyEqual>::const_iterator const_iterator;
    typedef const_iterator Item;
 
-   const QMultiHash<Key, Val, Hash, KeyEqual> *c;
-   const_iterator i;
-   const_iterator n;
-
-   inline bool item_exists() const {
-      return n != c->constEnd();
-   }
-
  public:
-   inline QMultiHashIterator(const QMultiHash<Key, Val, Hash, KeyEqual> &container)
+   QMultiHashIterator(const QMultiHash<Key, Val, Hash, KeyEqual> &container)
       : c(&container), i(c->constBegin()), n(c->constEnd()) {}
 
-   inline ~QMultiHashIterator() {
-   }
+   ~QMultiHashIterator()
+   { }
 
-   inline QMultiHashIterator &operator=(const QMultiHash<Key, Val, Hash, KeyEqual> &container) {
+   QMultiHashIterator &operator=(const QMultiHash<Key, Val, Hash, KeyEqual> &container) {
       c = container;
       i = c->constBegin();
       n = c->constEnd();
       return *this;
    }
 
-   inline void toFront() {
+   void toFront() {
       i = c->constBegin();
       n = c->constEnd();
    }
 
-   inline void toBack() {
+   void toBack() {
       i = c->constEnd();
       n = c->constEnd();
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return i != c->constEnd();
    }
 
-   inline Item next() {
+   Item next() {
       n = i++;
       return n;
    }
 
-   inline Item peekNext() const {
+   Item peekNext() const {
       return i;
    }
 
-   inline bool hasPrevious() const {
+   bool hasPrevious() const {
       return i != c->constBegin();
    }
 
-   inline Item previous() {
+   Item previous() {
       n = --i;
       return n;
    }
 
-   inline Item peekPrevious() const {
+   Item peekPrevious() const {
       const_iterator p = i;
       return --p;
    }
 
-   inline const Val &value() const {
+   const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Key &key() const {
+   const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
    }
 
-   inline bool findNext(const Val &t) {
+   bool findNext(const Val &t) {
       while ((n = i) != c->constEnd()) {
          if (*i++ == t) {
             return true;
@@ -754,7 +748,7 @@ class QMultiHashIterator
       return false;
    }
 
-   inline bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &t) {
       while (i != c->constBegin()) {
          if (*(n = --i) == t) {
             return true;
@@ -763,6 +757,15 @@ class QMultiHashIterator
 
       n = c->constEnd();
       return false;
+   }
+
+ private:
+   const QMultiHash<Key, Val, Hash, KeyEqual> *c;
+   const_iterator i;
+   const_iterator n;
+
+   bool item_exists() const {
+      return n != c->constEnd();
    }
 };
 
@@ -773,22 +776,14 @@ class QMutableMultiHashIterator
    typedef typename QMultiHash<Key, Val, Hash, KeyEqual>::const_iterator const_iterator;
    typedef iterator Item;
 
-   QMultiHash<Key, Val, Hash, KeyEqual> *c;
-   iterator i;
-   iterator n;
-
-   bool item_exists() const {
-      return const_iterator(n) != c->constEnd();
-   }
-
  public:
-   inline QMutableMultiHashIterator(QMultiHash<Key, Val, Hash, KeyEqual> &container)
+   QMutableMultiHashIterator(QMultiHash<Key, Val, Hash, KeyEqual> &container)
       : c(&container), i(c->begin()), n(c->end())  { }
 
-   inline ~QMutableMultiHashIterator() {
-   }
+   ~QMutableMultiHashIterator()
+   { }
 
-   inline QMutableMultiHashIterator &operator=(QMultiHash<Key, Val, Hash, KeyEqual> &container) {
+   QMutableMultiHashIterator &operator=(QMultiHash<Key, Val, Hash, KeyEqual> &container) {
       c = & container;
       i = c->begin();
       n = c->end();
@@ -796,72 +791,72 @@ class QMutableMultiHashIterator
       return *this;
    }
 
-   inline void toFront() {
+   void toFront() {
       i = c->begin();
       n = c->end();
    }
 
-   inline void toBack() {
+   void toBack() {
       i = c->end();
       n = c->end();
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return const_iterator(i) != c->constEnd();
    }
 
-   inline Item next() {
+   Item next() {
       n = i++;
       return n;
    }
 
-   inline Item peekNext() const {
+   Item peekNext() const {
       return i;
    }
 
-   inline bool hasPrevious() const {
+   bool hasPrevious() const {
       return const_iterator(i) != c->constBegin();
    }
 
-   inline Item previous() {
+   Item previous() {
       n = --i;
       return n;
    }
 
-   inline Item peekPrevious() const {
+   Item peekPrevious() const {
       iterator p = i;
       return --p;
    }
 
-   inline void remove() {
+   void remove() {
       if (const_iterator(n) != c->constEnd()) {
          i = c->erase(n);
          n = c->end();
       }
    }
 
-   inline void setValue(const Val &t) {
+   void setValue(const Val &t) {
       if (const_iterator(n) != c->constEnd()) {
          *n = t;
       }
    }
 
-   inline Val &value() {
+   Val &value() {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Val &value() const {
+   const Val &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }
 
-   inline const Key &key() const {
+   const Key &key() const {
       Q_ASSERT(item_exists());
       return n.key();
    }
 
-   inline bool findNext(const Val &t) {
+   bool findNext(const Val &t) {
       while (const_iterator(n = i) != c->constEnd()) {
          if (*i++ == t) {
             return true;
@@ -871,7 +866,7 @@ class QMutableMultiHashIterator
       return false;
    }
 
-   inline bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &t) {
       while (const_iterator(i) != c->constBegin()) {
          if (*(n = --i) == t) {
             return true;
@@ -880,6 +875,15 @@ class QMutableMultiHashIterator
 
       n = c->end();
       return false;
+   }
+
+ private:
+   QMultiHash<Key, Val, Hash, KeyEqual> *c;
+   iterator i;
+   iterator n;
+
+   bool item_exists() const {
+      return const_iterator(n) != c->constEnd();
    }
 };
 
