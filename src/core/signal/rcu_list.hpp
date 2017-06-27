@@ -312,11 +312,13 @@ class rcu_list<T, M, Alloc>::iterator
     friend rcu_list<T, M, Alloc>;
     friend rcu_list<T, M, Alloc>::const_iterator;
 
-    explicit iterator(const rcu_list<T, M, Alloc>::const_iterator &it) : m_current(it.m_current)
+    explicit iterator(const rcu_list<T, M, Alloc>::const_iterator &it)
+       : m_current(it.m_current)
     {
     }
 
-    explicit iterator(node *n) : m_current(n)
+    explicit iterator(node *n)
+       : m_current(n)
     {
     }
 
@@ -335,17 +337,25 @@ class rcu_list<T, M, Alloc>::const_iterator
     using reference         = const T &;
     using difference_type   = size_t;
 
-    const_iterator() : m_current(nullptr){};
-    const_iterator(const rcu_list<T, M, Alloc>::iterator &it) : m_current(it.m_current){};
+    const_iterator()
+      : m_current(nullptr)
+    {
+    }
+
+    const_iterator(const rcu_list<T, M, Alloc>::iterator &it)
+      : m_current(it.m_current)
+    {
+    }
 
     const T &operator*() const
     {
         return m_current->data;
-    };
+    }
+
     const T *operator->() const
     {
         return &(m_current->data);
-    };
+    }
 
     bool operator==(const const_iterator &other) const
     {
@@ -386,7 +396,10 @@ class rcu_list<T, M, Alloc>::const_iterator
   private:
     friend rcu_list<T, M, Alloc>;
 
-    explicit const_iterator(node *n) : m_current(n){};
+    explicit const_iterator(node *n)
+       : m_current(n)
+    {
+    }
 
     node *m_current;
 };

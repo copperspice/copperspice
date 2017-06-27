@@ -25,11 +25,13 @@
 
 #include <QtCore/qglobal.h>
 
+#include <functional>
+
 QT_BEGIN_NAMESPACE
 
 /*
     Warning: The functions in the QAlgorithmsPrivate namespace are not a part of the public API
-    and may be changed from version to version or completely removed.
+    and may be changed in a future version or completely removed.
 */
 namespace QAlgorithmsPrivate {
 

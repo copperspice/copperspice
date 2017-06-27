@@ -26,14 +26,11 @@
 #include <qmacdefines_mac.h>
 #import  <Cocoa/Cocoa.h>
 
-QT_BEGIN_NAMESPACE
-template <class Key, class T> class QHash;
-QT_END_NAMESPACE
+#include <qcontainerfwd.h>
 
-using QT_PREPEND_NAMESPACE(QHash);
-QT_FORWARD_DECLARE_CLASS(QWidget)
-QT_FORWARD_DECLARE_CLASS(QSize)
-QT_FORWARD_DECLARE_CLASS(QWidgetData)
+class QWidget;
+class QSize;
+class QWidgetData;
 
 @interface QT_MANGLE_NAMESPACE(QCocoaWindowDelegate) : NSObject<NSWindowDelegate, NSDrawerDelegate>
 {
@@ -47,10 +44,10 @@ QT_FORWARD_DECLARE_CLASS(QWidgetData)
 - (void)resignDelegateForDrawer: (NSDrawer *)drawer;
 - (void)dumpMaximizedStateforWidget: (QWidget *)qwidget window: (NSWindow *)window;
 - (void)syncSizeForWidget: (QWidget *)qwidget
-                   toSize: (const QSize &)newSize
-                 fromSize: (const QSize &)oldSize;
+                  toSize: (const QSize &)newSize
+                  fromSize: (const QSize &)oldSize;
 - (NSSize)closestAcceptableSizeForWidget: (QWidget *)qwidget
-                                  window: (NSWindow *)window withNewSize: (NSSize)proposedSize;
+                  window: (NSWindow *)window withNewSize: (NSSize)proposedSize;
 - (QWidget *)qt_qwidgetForWindow: (NSWindow *)window;
 - (void)syncContentViewFrame: (NSNotification *)notification;
 @end

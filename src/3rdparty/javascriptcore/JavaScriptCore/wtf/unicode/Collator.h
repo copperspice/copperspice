@@ -47,7 +47,7 @@ namespace WTF {
         ~Collator();
         void setOrderLowerFirst(bool);
 
-        static std::auto_ptr<Collator> userDefault();
+        static std::unique_ptr<Collator> userDefault();
 
         Result collate(const ::UChar*, size_t, const ::UChar*, size_t) const;
 
