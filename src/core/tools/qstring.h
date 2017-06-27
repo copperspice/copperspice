@@ -62,14 +62,14 @@ typedef char16_t qunicodechar;
         { { Q_REFCOUNT_INITIALIZE_STATIC, Size, 0, 0, sizeof(QStringData) }, QT_UNICODE_LITERAL(str) }; \
         QStringDataPtr holder = { qstring_literal.data_ptr() }; \
         return holder; \
-    }()) 
+    }())
 #endif
 
 #define Q_STATIC_STRING_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, offset) \
-    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } 
+    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset }
 
 #define Q_STATIC_STRING_DATA_HEADER_INITIALIZER(size) \
-    Q_STATIC_STRING_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QStringData)) 
+    Q_STATIC_STRING_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QStringData))
 
 struct QStringDataPtr {
    QStringData *ptr;
@@ -90,12 +90,12 @@ class Q_CORE_EXPORT QString
 {
  public:
    typedef QStringData Data;
-  
+
    QString(QChar c);
    QString(int size, QChar c);
 
    explicit QString(const QChar *unicode, int size = -1);
-  
+
    inline QString();
    inline QString(const QLatin1String &latin1);
    inline QString(const QString &);
@@ -1652,12 +1652,6 @@ inline QString QString::fromStdWString(const std::wstring &s)
    return fromWCharArray(s.data(), int(s.size()));
 }
 # endif
-
-
-#if !defined(QT_NO_DATASTREAM)
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString &);
-#endif
 
 Q_DECLARE_TYPEINFO(QString, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QString)

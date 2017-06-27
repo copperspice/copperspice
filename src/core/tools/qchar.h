@@ -378,8 +378,8 @@ inline bool operator>(QChar c1, QChar c2)
 }
 
 #ifndef QT_NO_DATASTREAM
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QChar);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar &);
+   Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QChar);
+   Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar &);
 #endif
 
 QT_END_NAMESPACE

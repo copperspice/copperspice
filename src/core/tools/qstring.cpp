@@ -5391,7 +5391,7 @@ QString QString::arg(qlonglong a, int fieldWidth, int base, QChar fillChar) cons
 {
    ArgEscapeData d = findArgEscapes(*this);
 
-   if (d.occurrences == 0) { 
+   if (d.occurrences == 0) {
       qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
                "Format String: %s     Argument Value: %lld\n", this->toLocal8Bit().data(), a);
 
@@ -5440,7 +5440,7 @@ QString QString::arg(qulonglong a, int fieldWidth, int base, QChar fillChar) con
 {
    ArgEscapeData d = findArgEscapes(*this);
 
-   if (d.occurrences == 0) {    
+   if (d.occurrences == 0) {
       qWarning("Warning: QString::arg() Missing place marker '%%n'\n"
                "Format String: %s     Argument Value: %llu\n", this->toLocal8Bit().data(), a);
 
@@ -5867,14 +5867,6 @@ QString &QString::setRawData(const QChar *unicode, int size)
 }
 
 #if !defined(QT_NO_DATASTREAM)
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QString &string)
-    \relates QString
-
-    Writes the given \a string to the specified \a stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &out, const QString &str)
 {

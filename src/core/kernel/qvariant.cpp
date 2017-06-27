@@ -26,10 +26,13 @@
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qmap.h>
+#include <qmultihash.h>
 #include <qdatetime.h>
 #include <qeasingcurve.h>
 #include <qlist.h>
 #include <qstring.h>
+#include <qstring8.h>
+#include <qstring16.h>
 #include <qstringlist.h>
 #include <qurl.h>
 #include <qlocale.h>
@@ -92,8 +95,8 @@ static void construct(QVariant::Private *x, const void *copy)
          v_construct<QChar>(x, copy);
          break;
 
-      case QVariant::Map:
-         v_construct<QVariantMap>(x, copy);
+      case QVariant::Char32:
+         // broom (wait a bit) sv_construct<QChar32>(x, copy);
          break;
 
       case QVariant::List:
@@ -107,6 +110,14 @@ static void construct(QVariant::Private *x, const void *copy)
 
       case QVariant::String:
          v_construct<QString>(x, copy);
+         break;
+
+      case QVariant::String8:
+         v_construct<QString8>(x, copy);
+         break;
+
+      case QVariant::String16:
+         // broom (wait a bit) v_construct<QString16>(x, copy);
          break;
 
       case QVariant::StringList:
@@ -179,8 +190,20 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
 #endif
 
+      case QVariant::Map:
+         v_construct<QVariantMap>(x, copy);
+         break;
+
+      case QVariant::MultiMap:
+         v_construct<QVariantMultiMap>(x, copy);
+         break;
+
       case QVariant::Hash:
          v_construct<QVariantHash>(x, copy);
+         break;
+
+      case QVariant::MultiHash:
+         v_construct<QVariantMultiHash>(x, copy);
          break;
 
       case QVariant::EasingCurve:
@@ -223,12 +246,24 @@ static void construct(QVariant::Private *x, const void *copy)
 static void clear(QVariant::Private *d)
 {
    switch (d->type) {
+      case QVariant::Char:
+         v_clear<QChar>(d);
+         break;
+
+      case QVariant::Char32:
+         // broom (wait a bit) v_clear<QChar32>(d);
+         break;
+
       case QVariant::String:
          v_clear<QString>(d);
          break;
 
-      case QVariant::Char:
-         v_clear<QChar>(d);
+      case QVariant::String8:
+         v_clear<QString8>(d);
+         break;
+
+      case QVariant::String16:
+         // broom (wait a bit) v_clear<QString16>(d);
          break;
 
       case QVariant::StringList:
@@ -239,8 +274,16 @@ static void clear(QVariant::Private *d)
          v_clear<QVariantMap>(d);
          break;
 
+      case QVariant::MultiMap:
+         v_clear<QVariantMultiMap>(d);
+         break;
+
       case QVariant::Hash:
          v_clear<QVariantHash>(d);
+         break;
+
+      case QVariant::MultiHash:
+         v_clear<QVariantMultiHash>(d);
          break;
 
       case QVariant::List:
@@ -353,11 +396,22 @@ static void clear(QVariant::Private *d)
 static bool isNull(const QVariant::Private *d)
 {
    switch (d->type) {
-      case QVariant::String:
-         return v_cast<QString>(d)->isNull();
 
       case QVariant::Char:
          return v_cast<QChar>(d)->isNull();
+
+      case QVariant::Char32:
+         // broom (wait a bit) return v_cast<QChar32>(d)->isNull();
+         break;
+
+      case QVariant::String:
+         return v_cast<QString>(d)->isNull();
+
+      case QVariant::String8:
+         break;
+
+      case QVariant::String16:
+         break;
 
       case QVariant::Date:
          return v_cast<QDate>(d)->isNull();
@@ -405,8 +459,12 @@ static bool isNull(const QVariant::Private *d)
       case QVariant::Locale:
       case QVariant::RegExp:
       case QVariant::StringList:
+
       case QVariant::Map:
+      case QVariant::MultiMap:
       case QVariant::Hash:
+      case QVariant::MultiHash:
+
       case QVariant::List:
       case QVariant::Invalid:
       case QVariant::UserType:
@@ -416,6 +474,7 @@ static bool isNull(const QVariant::Private *d)
       case QVariant::ULongLong:
       case QVariant::Bool:
       case QVariant::Double:
+
       case QMetaType::Float:
       case QMetaType::QObjectStar:
          break;
@@ -435,40 +494,41 @@ inline bool compareNumericMetaType(const QVariant::Private *const a, const QVari
 static bool compare(const QVariant::Private *a, const QVariant::Private *b)
 {
    switch (a->type) {
-      case QVariant::List:
-         return *v_cast<QVariantList>(a) == *v_cast<QVariantList>(b);
-
-      case QVariant::Map: {
-         const QVariantMap *m1 = v_cast<QVariantMap>(a);
-         const QVariantMap *m2 = v_cast<QVariantMap>(b);
-         if (m1->count() != m2->count()) {
-            return false;
-         }
-
-         QVariantMap::ConstIterator it = m1->constBegin();
-         QVariantMap::ConstIterator it2 = m2->constBegin();
-
-         while (it != m1->constEnd()) {
-            if (*it != *it2 || it.key() != it2.key()) {
-               return false;
-            }
-            ++it;
-            ++it2;
-         }
-         return true;
-      }
-
-      case QVariant::Hash:
-         return *v_cast<QVariantHash>(a) == *v_cast<QVariantHash>(b);
-
-      case QVariant::String:
-         return *v_cast<QString>(a) == *v_cast<QString>(b);
 
       case QVariant::Char:
          return *v_cast<QChar>(a) == *v_cast<QChar>(b);
 
+      case QVariant::Char32:
+         // broom (wait a bit)  return *v_cast<QChar32>(a) == *v_cast<QChar32>(b);
+         return false;
+
+      case QVariant::String:
+         return *v_cast<QString>(a) == *v_cast<QString>(b);
+
+      case QVariant::String8:
+         return *v_cast<QString8>(a) == *v_cast<QString8>(b);
+
+      case QVariant::String16:
+         // broom (wait a bit) return *v_cast<QString16>(a) == *v_cast<QString16>(b);
+         return false;
+
       case QVariant::StringList:
          return *v_cast<QStringList>(a) == *v_cast<QStringList>(b);
+
+     case QVariant::List:
+         return *v_cast<QVariantList>(a) == *v_cast<QVariantList>(b);
+
+      case QVariant::Map:
+         return *v_cast<QVariantMap>(a) == *v_cast<QVariantMap>(b);
+
+      case QVariant::MultiMap:
+         return *v_cast<QVariantMultiMap>(a) == *v_cast<QVariantMultiMap>(b);
+
+      case QVariant::Hash:
+         return *v_cast<QVariantHash>(a) == *v_cast<QVariantHash>(b);
+
+      case QVariant::MultiHash:
+         return *v_cast<QVariantMultiHash>(a) == *v_cast<QVariantMultiHash>(b);
 
       case QVariant::Size:
          return *v_cast<QSize>(a) == *v_cast<QSize>(b);
@@ -658,11 +718,24 @@ static qlonglong qConvertToNumber(const QVariant::Private *d, bool *ok)
    *ok = true;
 
    switch (uint(d->type)) {
-      case QVariant::String:
-         return v_cast<QString>(d)->toLongLong(ok);
 
       case QVariant::Char:
          return v_cast<QChar>(d)->unicode();
+
+      case QVariant::Char32:
+         // broom (wait a bit)  return v_cast<QChar32>(d)->unicode();
+         return 0;
+
+      case QVariant::String:
+         return v_cast<QString>(d)->toLongLong(ok);
+
+      case QVariant::String8:
+         // broom (wait a bit) return v_cast<QString8>(d)->toLongLong(ok);
+         return 0;
+
+      case QVariant::String16:
+         // broom (wait a bit) return v_cast<QString16>(d)->toLongLong(ok);
+         return 0;
 
       case QVariant::ByteArray:
          return v_cast<QByteArray>(d)->toLongLong(ok);
@@ -696,11 +769,23 @@ static qulonglong qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
    *ok = true;
 
    switch (uint(d->type)) {
+      case QVariant::Char:
+         return v_cast<QChar>(d)->unicode();
+
+      case QVariant::Char32:
+         // broom (wait a bit) return v_cast<QChar32>(d)->unicode();
+         return 0;
+
       case QVariant::String:
          return v_cast<QString>(d)->toULongLong(ok);
 
-      case QVariant::Char:
-         return v_cast<QChar>(d)->unicode();
+      case QVariant::String8:
+         // broom (wait a bit) return v_cast<QString8>(d)->toULongLong(ok);
+         return 0;
+
+      case QVariant::String16:
+         // broom (wait a bit) return v_cast<QString16>(d)->toULongLong(ok);
+         return 0;
 
       case QVariant::ByteArray:
          return v_cast<QByteArray>(d)->toULongLong(ok);
@@ -1228,10 +1313,28 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
          }
          break;
 
+      case QVariant::MultiMap:
+         if (qstrcmp(QMetaType::typeName(d->type), "QMultiMap<QString, QVariant>") == 0) {
+            *static_cast<QVariantMultiMap *>(result) =
+               *static_cast<QMultiMap<QString, QVariant> *>(d->data.shared->ptr);
+         } else {
+            return false;
+         }
+         break;
+
       case QVariant::Hash:
          if (qstrcmp(QMetaType::typeName(d->type), "QHash<QString, QVariant>") == 0) {
             *static_cast<QVariantHash *>(result) =
                *static_cast<QHash<QString, QVariant> *>(d->data.shared->ptr);
+         } else {
+            return false;
+         }
+         break;
+
+      case QVariant::MultiHash:
+         if (qstrcmp(QMetaType::typeName(d->type), "QMultiHash<QString, QVariant>") == 0) {
+            *static_cast<QVariantMultiHash *>(result) =
+               *static_cast<QMultiHash<QString, QVariant> *>(d->data.shared->ptr);
          } else {
             return false;
          }
@@ -1321,8 +1424,16 @@ static void streamDebug(QDebug dbg, const QVariant &v)
          dbg.nospace() << v.toMap();
          break;
 
+      case QVariant::MultiMap:
+         dbg.nospace() << v.toMultiMap();
+         break;
+
       case QVariant::Hash:
          dbg.nospace() << v.toHash();
+         break;
+
+      case QVariant::MultiHash:
+         dbg.nospace() << v.toMultiHash();
          break;
 
       case QVariant::List:
@@ -1592,11 +1703,25 @@ QVariant::QVariant(const QMap<QString, QVariant> &map)
    v_construct<QVariantMap>(&d, map);
 }
 
+QVariant::QVariant(const QMultiMap<QString, QVariant> &map)
+{
+   d.is_null = false;
+   d.type = MultiMap;
+   v_construct<QVariantMultiMap>(&d, map);
+}
+
 QVariant::QVariant(const QHash<QString, QVariant> &hash)
 {
    d.is_null = false;
    d.type = Hash;
    v_construct<QVariantHash>(&d, hash);
+}
+
+QVariant::QVariant(const QMultiHash<QString, QVariant> &hash)
+{
+   d.is_null = false;
+   d.type = MultiHash;
+   v_construct<QVariantMultiHash>(&d, hash);
 }
 
 QVariant::QVariant(const QPoint &pt)
@@ -1957,9 +2082,15 @@ QString QVariant::toString() const
    return qVariantToHelper<QString>(d, String, handler);
 }
 
+// containers
 QVariantMap QVariant::toMap() const
 {
    return qVariantToHelper<QVariantMap>(d, Map, handler);
+}
+
+QVariantMultiMap QVariant::toMultiMap() const
+{
+   return qVariantToHelper<QVariantMultiMap>(d, MultiMap, handler);
 }
 
 QVariantHash QVariant::toHash() const
@@ -1967,11 +2098,16 @@ QVariantHash QVariant::toHash() const
    return qVariantToHelper<QVariantHash>(d, Hash, handler);
 }
 
+QVariantMultiHash QVariant::toMultiHash() const
+{
+   return qVariantToHelper<QVariantMultiHash>(d, MultiHash, handler);
+}
+
+//
 QDate QVariant::toDate() const
 {
    return qVariantToHelper<QDate>(d, Date, handler);
 }
-
 
 QTime QVariant::toTime() const
 {
@@ -2161,10 +2297,6 @@ static const quint32 qCanConvertMatrix[QMetaType::User + 1] = {
    /*QChar*/         1 << QVariant::Int        | 1 << QVariant::UInt       | 1 << QVariant::LongLong
    | 1 << QVariant::ULongLong,
 
-   /*QMap*/          0,
-
-   /*QList*/         1 << QVariant::StringList,
-
    /*QString*/       1 << QVariant::StringList | 1 << QVariant::ByteArray  | 1 << QVariant::Int
    | 1 << QVariant::UInt       | 1 << QVariant::Bool       | 1 << QVariant::Double
    | 1 << QVariant::Date       | 1 << QVariant::Time       | 1 << QVariant::DateTime
@@ -2177,6 +2309,33 @@ static const quint32 qCanConvertMatrix[QMetaType::User + 1] = {
    | 1 << QVariant::Double     | 1 << QVariant::LongLong   | 1 << QVariant::ULongLong,
 
    /*QBitArray*/     0,
+
+
+   /*QChar32*/       1 << QVariant::Int        | 1 << QVariant::UInt       | 1 << QVariant::LongLong
+   | 1 << QVariant::ULongLong,
+
+   /*QString8*/      1 << QVariant::StringList | 1 << QVariant::ByteArray  | 1 << QVariant::Int
+   | 1 << QVariant::UInt       | 1 << QVariant::Bool       | 1 << QVariant::Double
+   | 1 << QVariant::Date       | 1 << QVariant::Time       | 1 << QVariant::DateTime
+   | 1 << QVariant::LongLong   | 1 << QVariant::ULongLong  | 1 << QVariant::Char
+   | 1 << QVariant::Url,
+
+   /*QString16*/     1 << QVariant::StringList | 1 << QVariant::ByteArray  | 1 << QVariant::Int
+   | 1 << QVariant::UInt       | 1 << QVariant::Bool       | 1 << QVariant::Double
+   | 1 << QVariant::Date       | 1 << QVariant::Time       | 1 << QVariant::DateTime
+   | 1 << QVariant::LongLong   | 1 << QVariant::ULongLong  | 1 << QVariant::Char
+   | 1 << QVariant::Url,
+
+   /*QList*/         1 << QVariant::StringList,
+
+   /*QHash*/         0,
+
+   /*QMultiHash*/    0,
+
+   /*QMap*/          0,
+
+   /*QMultiMap*/     0,
+
 
    /*QDate*/         1 << QVariant::String     | 1 << QVariant::DateTime,
 
@@ -2200,15 +2359,15 @@ static const quint32 qCanConvertMatrix[QMetaType::User + 1] = {
 
    /*QLineF*/        1 << QVariant::Line,
 
-   /*QPoint*/        1 << QVariant::PointF,
+   /*QPoint*/        0,
 
-   /*QPointF*/       1 << QVariant::Point,
+   /*QPointF*/       0,
 
    /*QRegExp*/       0,
 
-   /*QHash*/         0,
+   /*QEasingCurve*/  0,
 
-   /*QEasingCurve*/  0
+   /*QUuid*/         1 << QVariant::String
 };
 
 bool QVariant::canConvert(Type t) const
@@ -2226,6 +2385,15 @@ bool QVariant::canConvert(Type t) const
       t = QVariant::Double;
    }
 
+   // same type of issue as above ( will be resolved a diffferent way in a future version )
+   if (currentType == QVariant::Point && uint(t) == uint(QVariant::PointF)) {
+      return true;
+   }
+
+   // same type of issue as above ( will be resolved a diffferent way in a future version )
+   if (currentType == QVariant::PointF && uint(t) == uint(QVariant::Point)) {
+      return true;
+   }
 
    // **
    if (currentType == uint(t)) {

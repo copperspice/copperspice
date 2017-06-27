@@ -21,15 +21,18 @@
 ***********************************************************************/
 
 #include <qmetatype.h>
-#include <qdatetime.h>
+
+#include <qbitarray.h>
 #include <qbytearray.h>
+#include <qdatetime.h>
+#include <qlocale.h>
 #include <qreadwritelock.h>
 #include <qstring.h>
+#include <qstring8.h>
+#include <qstring16.h>
 #include <qstringlist.h>
-#include <qvector.h>
-#include <qlocale.h>
+
 #include <qeasingcurve.h>
-#include <qbitarray.h>
 #include <qurl.h>
 #include <qvariant.h>
 #include <quuid.h>
@@ -38,6 +41,12 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include <qline.h>
+
+#include <qmap.h>
+#include <qmultimap.h>
+#include <qhash.h>
+#include <qmultihash.h>
+#include <qvector.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -75,11 +84,16 @@ types[] = {
 
    QT_ADD_STATIC_METATYPE("void*", QMetaType::VoidStar),
 
-   QT_ADD_STATIC_METATYPE("QChar", QMetaType::QChar),
-   QT_ADD_STATIC_METATYPE("QString", QMetaType::QString),
+   QT_ADD_STATIC_METATYPE("QChar",       QMetaType::QChar),
+   QT_ADD_STATIC_METATYPE("QString",     QMetaType::QString),
    QT_ADD_STATIC_METATYPE("QStringList", QMetaType::QStringList),
-   QT_ADD_STATIC_METATYPE("QByteArray", QMetaType::QByteArray),
-   QT_ADD_STATIC_METATYPE("QBitArray", QMetaType::QBitArray),
+   QT_ADD_STATIC_METATYPE("QByteArray",  QMetaType::QByteArray),
+   QT_ADD_STATIC_METATYPE("QBitArray",   QMetaType::QBitArray),
+
+   QT_ADD_STATIC_METATYPE("QChar32",   QMetaType::QChar32),
+   QT_ADD_STATIC_METATYPE("QString8",  QMetaType::QString8),
+   QT_ADD_STATIC_METATYPE("QString16", QMetaType::QString16),
+
    QT_ADD_STATIC_METATYPE("QDate", QMetaType::QDate),
    QT_ADD_STATIC_METATYPE("QTime", QMetaType::QTime),
    QT_ADD_STATIC_METATYPE("QDateTime", QMetaType::QDateTime),
@@ -107,9 +121,12 @@ types[] = {
    QT_ADD_STATIC_METATYPE("QJsonDocument", QMetaType::QJsonDocument),
 
    QT_ADD_STATIC_METATYPE("QObject*", QMetaType::QObjectStar),
-   QT_ADD_STATIC_METATYPE("QVariantMap", QMetaType::QVariantMap),
-   QT_ADD_STATIC_METATYPE("QVariantList", QMetaType::QVariantList),
-   QT_ADD_STATIC_METATYPE("QVariantHash", QMetaType::QVariantHash),
+
+   QT_ADD_STATIC_METATYPE("QVariantList",      QMetaType::QVariantList),
+   QT_ADD_STATIC_METATYPE("QVariantMap",       QMetaType::QVariantMap),
+   QT_ADD_STATIC_METATYPE("QVariantMultiMap",  QMetaType::QVariantMultiMap),
+   QT_ADD_STATIC_METATYPE("QVariantHash",      QMetaType::QVariantHash),
+   QT_ADD_STATIC_METATYPE("QVariantMultiHash", QMetaType::QVariantMultiHash),
 
    // GUI types
    QT_ADD_STATIC_METATYPE("QFont", QMetaType::QFont),
@@ -159,8 +176,10 @@ types[] = {
    QT_ADD_STATIC_METATYPE("quint64", QMetaType::ULongLong),
 
    QT_ADD_STATIC_METATYPE("QList<QVariant>", QMetaType::QVariantList),
-   QT_ADD_STATIC_METATYPE("QMap<QString,QVariant>", QMetaType::QVariantMap),
-   QT_ADD_STATIC_METATYPE("QHash<QString,QVariant>", QMetaType::QVariantHash),
+   QT_ADD_STATIC_METATYPE("QMap<QString,QVariant>",      QMetaType::QVariantMap),
+   QT_ADD_STATIC_METATYPE("QMultiMap<QString,QVariant>", QMetaType::QVariantMultiMap),
+   QT_ADD_STATIC_METATYPE("QHash<QString,QVariant>",     QMetaType::QVariantHash),
+   QT_ADD_STATIC_METATYPE("QMultiHash<QString,QVariant>", QMetaType::QVariantMultiHash),
 
    // let QMetaTypeId2 figure out the type at compile time
    QT_ADD_STATIC_METATYPE("qreal", QMetaTypeId2<qreal>::MetaType),
@@ -410,11 +429,20 @@ void *QMetaType::construct(int type, const void *copy)
          case QMetaType::QChar:
             return new NS(QChar)(*static_cast<const NS(QChar) *>(copy));
 
+         case QMetaType::QChar32:
+            return new NS(QChar32)(*static_cast<const NS(QChar32) *>(copy));
+
          case QMetaType::QVariantMap:
             return new NS(QVariantMap)(*static_cast<const NS(QVariantMap) *>(copy));
 
+         case QMetaType::QVariantMultiMap:
+            return new NS(QVariantMultiMap)(*static_cast<const NS(QVariantMultiMap) *>(copy));
+
          case QMetaType::QVariantHash:
             return new NS(QVariantHash)(*static_cast<const NS(QVariantHash) *>(copy));
+
+         case QMetaType::QVariantMultiHash:
+            return new NS(QVariantMultiHash)(*static_cast<const NS(QVariantMultiHash) *>(copy));
 
          case QMetaType::QVariantList:
             return new NS(QVariantList)(*static_cast<const NS(QVariantList) *>(copy));
@@ -427,6 +455,12 @@ void *QMetaType::construct(int type, const void *copy)
 
          case QMetaType::QString:
             return new NS(QString)(*static_cast<const NS(QString) *>(copy));
+
+         case QMetaType::QString8:
+            return new NS(QString8)(*static_cast<const NS(QString8) *>(copy));
+
+          case QMetaType::QString16:
+            return new NS(QString16)(*static_cast<const NS(QString16) *>(copy));
 
          case QMetaType::QStringList:
             return new NS(QStringList)(*static_cast<const NS(QStringList) *>(copy));
@@ -519,40 +553,73 @@ void *QMetaType::construct(int type, const void *copy)
 
          case QMetaType::UInt:
             return new uint;
+
          case QMetaType::LongLong:
             return new qlonglong;
+
          case QMetaType::ULongLong:
             return new qulonglong;
+
          case QMetaType::UShort:
             return new ushort;
+
          case QMetaType::UChar:
             return new uchar;
+
          case QMetaType::Bool:
             return new bool;
+
          case QMetaType::Float:
             return new float;
+
          case QMetaType::Double:
             return new double;
+
          case QMetaType::QChar:
             return new NS(QChar);
+
+         case QMetaType::QChar32:
+            return new NS(QChar32);
+
          case QMetaType::QVariantMap:
             return new NS(QVariantMap);
+
+         case QMetaType::QVariantMultiMap:
+            return new NS(QVariantMultiMap);
+
          case QMetaType::QVariantHash:
             return new NS(QVariantHash);
+
+         case QMetaType::QVariantMultiHash:
+            return new NS(QVariantMultiHash);
+
          case QMetaType::QVariantList:
             return new NS(QVariantList);
+
          case QMetaType::QVariant:
             return new NS(QVariant);
+
          case QMetaType::QByteArray:
             return new NS(QByteArray);
+
          case QMetaType::QString:
             return new NS(QString);
+
+         case QMetaType::QString8:
+            return new NS(QString8);
+
+         case QMetaType::QString16:
+            return new NS(QString16);
+
          case QMetaType::QStringList:
             return new NS(QStringList);
+
          case QMetaType::QBitArray:
             return new NS(QBitArray);
+
          case QMetaType::QDate:
             return new NS(QDate);
+
          case QMetaType::QTime:
             return new NS(QTime);
          case QMetaType::QDateTime:
@@ -677,46 +744,78 @@ void QMetaType::destroy(int type, void *data)
       case QMetaType::Bool:
          delete static_cast<bool *>(data);
          break;
+
       case QMetaType::Float:
          delete static_cast<float *>(data);
          break;
+
       case QMetaType::Double:
          delete static_cast<double *>(data);
          break;
+
       case QMetaType::QChar:
          delete static_cast< NS(QChar) * >(data);
+         break;
+
+      case QMetaType::QChar32:
+         delete static_cast< NS(QChar32) * >(data);
          break;
 
       case QMetaType::QVariantMap:
          delete static_cast< NS(QVariantMap) * >(data);
          break;
+
+      case QMetaType::QVariantMultiMap:
+         delete static_cast< NS(QVariantMultiMap) * >(data);
+         break;
+
       case QMetaType::QVariantHash:
          delete static_cast< NS(QVariantHash) * >(data);
          break;
+
+      case QMetaType::QVariantMultiHash:
+         delete static_cast< NS(QVariantMultiHash) * >(data);
+         break;
+
       case QMetaType::QVariantList:
          delete static_cast< NS(QVariantList) * >(data);
          break;
+
       case QMetaType::QVariant:
          delete static_cast< NS(QVariant) * >(data);
          break;
       case QMetaType::QByteArray:
          delete static_cast< NS(QByteArray) * >(data);
          break;
+
       case QMetaType::QString:
          delete static_cast< NS(QString) * >(data);
          break;
+
+      case QMetaType::QString8:
+         delete static_cast<NS(QString8) *>(data);
+         break;
+
+      case QMetaType::QString16:
+         delete static_cast< NS(QString16) * >(data);
+         break;
+
       case QMetaType::QStringList:
          delete static_cast< NS(QStringList) * >(data);
          break;
+
       case QMetaType::QBitArray:
          delete static_cast< NS(QBitArray) * >(data);
          break;
+
       case QMetaType::QDate:
          delete static_cast< NS(QDate) * >(data);
          break;
+
       case QMetaType::QTime:
          delete static_cast< NS(QTime) * >(data);
          break;
+
       case QMetaType::QDateTime:
          delete static_cast< NS(QDateTime) * >(data);
          break;
@@ -986,12 +1085,24 @@ bool QMetaType::save(QDataStream &stream, int type, const void *data)
          stream << *static_cast<const NS(QChar) *>(data);
          break;
 
+      case QMetaType::QChar32:
+         stream << *static_cast<const NS(QChar32) *>(data);
+         break;
+
       case QMetaType::QVariantMap:
          stream << *static_cast<const NS(QVariantMap) *>(data);
          break;
 
+      case QMetaType::QVariantMultiMap:
+         stream << *static_cast<const NS(QVariantMultiMap) *>(data);
+         break;
+
       case QMetaType::QVariantHash:
          stream << *static_cast<const NS(QVariantHash) *>(data);
+         break;
+
+      case QMetaType::QVariantMultiHash:
+         stream << *static_cast<const NS(QVariantMultiHash) *>(data);
          break;
 
       case QMetaType::QVariantList:
@@ -1008,6 +1119,14 @@ bool QMetaType::save(QDataStream &stream, int type, const void *data)
 
       case QMetaType::QString:
          stream << *static_cast<const NS(QString) *>(data);
+         break;
+
+      case QMetaType::QString8:
+         stream << *static_cast<const NS(QString8) *>(data);
+         break;
+
+      case QMetaType::QString16:
+         stream << *static_cast<const NS(QString16) *>(data);
          break;
 
       case QMetaType::QStringList:
@@ -1163,31 +1282,39 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
       case QMetaType::Short:
          stream >> *static_cast<short *>(data);
          break;
+
       case QMetaType::Char:
          // force a char to be signed
          stream >> *static_cast<signed char *>(data);
          break;
+
       case QMetaType::ULong: {
          qulonglong ul;
          stream >> ul;
          *static_cast<ulong *>(data) = ulong(ul);
          break;
       }
+
       case QMetaType::UInt:
          stream >> *static_cast<uint *>(data);
          break;
+
       case QMetaType::LongLong:
          stream >> *static_cast<qlonglong *>(data);
          break;
+
       case QMetaType::ULongLong:
          stream >> *static_cast<qulonglong *>(data);
          break;
+
       case QMetaType::UShort:
          stream >> *static_cast<ushort *>(data);
          break;
+
       case QMetaType::UChar:
          stream >> *static_cast<uchar *>(data);
          break;
+
       case QMetaType::Bool: {
          qint8 b;
          stream >> b;
@@ -1197,18 +1324,35 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
       case QMetaType::Float:
          stream >> *static_cast<float *>(data);
          break;
+
       case QMetaType::Double:
          stream >> *static_cast<double *>(data);
          break;
+
       case QMetaType::QChar:
          stream >> *static_cast< NS(QChar) *>(data);
          break;
+
+      case QMetaType::QChar32:
+         stream >> *static_cast< NS(QChar32) *>(data);
+         break;
+
       case QMetaType::QVariantMap:
          stream >> *static_cast< NS(QVariantMap) *>(data);
          break;
+
+      case QMetaType::QVariantMultiMap:
+         stream >> *static_cast< NS(QVariantMultiMap) *>(data);
+         break;
+
       case QMetaType::QVariantHash:
          stream >> *static_cast< NS(QVariantHash) *>(data);
          break;
+
+      case QMetaType::QVariantMultiHash:
+         stream >> *static_cast< NS(QVariantMultiHash) *>(data);
+         break;
+
       case QMetaType::QVariantList:
          stream >> *static_cast< NS(QVariantList) *>(data);
          break;
@@ -1218,9 +1362,19 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
       case QMetaType::QByteArray:
          stream >> *static_cast< NS(QByteArray) *>(data);
          break;
+
       case QMetaType::QString:
          stream >> *static_cast< NS(QString) *>(data);
          break;
+
+      case QMetaType::QString8:
+         stream >> *static_cast< NS(QString8) *>(data);
+         break;
+
+      case QMetaType::QString16:
+         stream >> *static_cast< NS(QString16) *>(data);
+         break;
+
       case QMetaType::QStringList:
          stream >> *static_cast< NS(QStringList) *>(data);
          break;

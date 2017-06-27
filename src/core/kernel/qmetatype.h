@@ -23,9 +23,9 @@
 #ifndef QMETATYPE_H
 #define QMETATYPE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <QMap>
+#include <qglobal.h>
+#include <qatomic.h>
+#include <qcontainerfwd.h>
 
 #ifdef Bool
 #error qmetatype.h must be included before any header file that defines Bool
@@ -41,23 +41,22 @@ class Q_CORE_EXPORT QMetaType
 
  public:
    enum Type {
-
       UnknownType = 0,
 
-      Bool = 1, Int = 2, UInt = 3, LongLong = 4, ULongLong = 5, Double = 6, 
+      Bool = 1, Int = 2, UInt = 3, LongLong = 4, ULongLong = 5, Double = 6,
 
-      QChar = 7, QVariantMap = 8, QVariantList = 9,
+      QChar = 7, QString = 8, QStringList = 9, QByteArray = 10, QBitArray = 11,
+      QChar32 = 12, QString8 = 13, QString16 = 14,
+      QVariantList = 15, QVariantHash = 16, QVariantMultiHash = 17, QVariantMap = 18, QVariantMultiMap = 19,
 
-      QString = 10, QStringList = 11, QByteArray = 12, QBitArray = 13, 
-
-      QDate = 14, QTime = 15, QDateTime = 16, QUrl = 17,
-      QLocale = 18, QRect = 19, QRectF = 20, QSize = 21, QSizeF = 22,
-      QLine = 23, QLineF = 24, QPoint = 25, QPointF = 26, QRegExp = 27,
-      QVariantHash = 28, QEasingCurve = 29, QUuid = 32, QModelIndex = 33,
+      QDate = 20, QTime = 21, QDateTime = 22, QUrl = 23,
+      QLocale = 24, QRect = 25, QRectF = 26, QSize = 27, QSizeF = 28,
+      QLine = 29, QLineF = 30, QPoint = 31, QPointF = 32, QRegExp = 33,
+      QEasingCurve = 34, QUuid = 35, QModelIndex = 36,
 
       // not part of QVariant::Type
-      Void = 30, SChar = 31,    
-      QJsonValue = 45, QJsonObject = 46, QJsonArray = 47, QJsonDocument = 48,
+      Void = 37, SChar = 38,
+      QJsonValue = 39, QJsonObject = 40, QJsonArray = 41, QJsonDocument = 42,
 
       //
       QFont = 64, QPixmap = 65, QBrush = 66, QColor = 67, QPalette = 68,
@@ -295,11 +294,16 @@ inline int qRegisterMetaTypeStreamOperators()
    QT_END_NAMESPACE
 
 
+class QChar;
 class QString;
 class QByteArray;
-class QChar;
 class QStringList;
 class QBitArray;
+
+class QChar32;
+class QString8;
+class QString16;
+
 class QDate;
 class QTime;
 class QDateTime;
@@ -356,13 +360,10 @@ class QVariant;
 
 QT_END_NAMESPACE
 
-Q_DECLARE_BUILTIN_METATYPE(QString, QString)
 Q_DECLARE_BUILTIN_METATYPE(int, Int)
 Q_DECLARE_BUILTIN_METATYPE(uint, UInt)
 Q_DECLARE_BUILTIN_METATYPE(bool, Bool)
 Q_DECLARE_BUILTIN_METATYPE(double, Double)
-Q_DECLARE_BUILTIN_METATYPE(QByteArray, QByteArray)
-Q_DECLARE_BUILTIN_METATYPE(QChar, QChar)
 Q_DECLARE_BUILTIN_METATYPE(long, Long)
 Q_DECLARE_BUILTIN_METATYPE(short, Short)
 Q_DECLARE_BUILTIN_METATYPE(char, Char)
@@ -370,13 +371,23 @@ Q_DECLARE_BUILTIN_METATYPE(ulong, ULong)
 Q_DECLARE_BUILTIN_METATYPE(ushort, UShort)
 Q_DECLARE_BUILTIN_METATYPE(uchar, UChar)
 Q_DECLARE_BUILTIN_METATYPE(float, Float)
+Q_DECLARE_BUILTIN_METATYPE(qlonglong, LongLong)
+Q_DECLARE_BUILTIN_METATYPE(qulonglong, ULongLong)
+
+Q_DECLARE_BUILTIN_METATYPE(QChar, QChar)
+Q_DECLARE_BUILTIN_METATYPE(QString, QString)
+Q_DECLARE_BUILTIN_METATYPE(QByteArray, QByteArray)
+Q_DECLARE_BUILTIN_METATYPE(QStringList, QStringList)
+Q_DECLARE_BUILTIN_METATYPE(QBitArray, QBitArray)
+
+Q_DECLARE_BUILTIN_METATYPE(QChar32, QChar32)
+Q_DECLARE_BUILTIN_METATYPE(QString8, QString8)
+Q_DECLARE_BUILTIN_METATYPE(QString16, QString16)
+
 Q_DECLARE_BUILTIN_METATYPE(QObject *, QObjectStar)
 Q_DECLARE_BUILTIN_METATYPE(QWidget *, QWidgetStar)
 Q_DECLARE_BUILTIN_METATYPE(void *, VoidStar)
-Q_DECLARE_BUILTIN_METATYPE(qlonglong, LongLong)
-Q_DECLARE_BUILTIN_METATYPE(qulonglong, ULongLong)
-Q_DECLARE_BUILTIN_METATYPE(QStringList, QStringList)
-Q_DECLARE_BUILTIN_METATYPE(QBitArray, QBitArray)
+
 Q_DECLARE_BUILTIN_METATYPE(QDate, QDate)
 Q_DECLARE_BUILTIN_METATYPE(QTime, QTime)
 Q_DECLARE_BUILTIN_METATYPE(QDateTime, QDateTime)
@@ -394,6 +405,7 @@ Q_DECLARE_BUILTIN_METATYPE(QPointF, QPointF)
 Q_DECLARE_BUILTIN_METATYPE(signed char, SChar);
 Q_DECLARE_BUILTIN_METATYPE(QUuid, QUuid);
 Q_DECLARE_BUILTIN_METATYPE(QModelIndex, QModelIndex);
+
 Q_DECLARE_BUILTIN_METATYPE(QJsonValue, QJsonValue);
 Q_DECLARE_BUILTIN_METATYPE(QJsonObject, QJsonObject);
 Q_DECLARE_BUILTIN_METATYPE(QJsonArray, QJsonArray);

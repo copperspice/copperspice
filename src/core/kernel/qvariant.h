@@ -29,8 +29,8 @@
 #include <qatomic.h>
 #include <qbytearray.h>
 #include <qlist.h>
-#include <qmetatype.h>
 #include <qmap.h>
+#include <qmetatype.h>
 #include <qstring.h>
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
@@ -83,11 +83,19 @@ class Q_CORE_EXPORT QVariant
       ULongLong = QMetaType::ULongLong,
       Double = QMetaType::Double,
 
-      Char = QMetaType::QChar,
-      Map = QMetaType::QVariantMap,
-      List = QMetaType::QVariantList,
+      Char   = QMetaType::QChar,
+      Char32 = QMetaType::QChar32,
 
-      String = QMetaType::QString,
+      List      = QMetaType::QVariantList,
+      Map       = QMetaType::QVariantMap,
+      MultiMap  = QMetaType::QVariantMultiMap,
+      Hash      = QMetaType::QVariantHash,
+      MultiHash = QMetaType::QVariantMultiHash,
+
+      String    = QMetaType::QString,
+      String8   = QMetaType::QString8,
+      String16  = QMetaType::QString16,
+
       StringList = QMetaType::QStringList,
       ByteArray = QMetaType::QByteArray,
       BitArray = QMetaType::QBitArray,
@@ -106,7 +114,6 @@ class Q_CORE_EXPORT QVariant
       Point = QMetaType::QPoint,
       PointF = QMetaType::QPointF,
       RegExp = QMetaType::QRegExp,
-      Hash = QMetaType::QVariantHash,
       EasingCurve = QMetaType::QEasingCurve,
 
       Uuid = QMetaType::QUuid,
@@ -140,7 +147,7 @@ class Q_CORE_EXPORT QVariant
       // the UserType must always be after all declared types
       UserType = QMetaType::User,
 
-      LastType = 0xffffffff // need this so that gcc >= 3.4 allocates 32 bits for Type
+      LastType = 0xffffffff    // need this so that gcc >= 3.4 allocates 32 bits for Type
    };
 
    QVariant();
@@ -181,8 +188,11 @@ class Q_CORE_EXPORT QVariant
    QVariant(const QTime &time);
    QVariant(const QDateTime &datetime);
    QVariant(const QList<QVariant> &list);
+
    QVariant(const QMap<QString, QVariant> &map);
    QVariant(const QHash<QString, QVariant> &hash);
+   QVariant(const QMultiMap<QString, QVariant> &map);
+   QVariant(const QMultiHash<QString, QVariant> &hash);
 
    QVariant(const QSize &size);
    QVariant(const QSizeF &size);
@@ -253,8 +263,11 @@ class Q_CORE_EXPORT QVariant
    QTime toTime() const;
    QDateTime toDateTime() const;
    QList<QVariant> toList() const;
+
    QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
+   QMultiMap<QString, QVariant> toMultiMap() const;
+   QMultiHash<QString, QVariant> toMultiHash() const;
 
    QPoint toPoint() const;
    QPointF toPointF() const;
@@ -411,13 +424,14 @@ class Q_CORE_EXPORT QVariant
    inline QVariant(bool, int) {
       Q_ASSERT(false);
    }
-
-
 };
 
 typedef QList<QVariant> QVariantList;
+
 typedef QMap<QString, QVariant> QVariantMap;
 typedef QHash<QString, QVariant> QVariantHash;
+typedef QMultiMap<QString, QVariant> QVariantMultiMap;
+typedef QMultiHash<QString, QVariant> QVariantMultiHash;
 
 inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr)
 {
@@ -435,17 +449,20 @@ inline bool QVariant::isValid() const
 template<typename T>
 inline void QVariant::setValue(const T &v)
 {
-   //if possible we reuse the current QVariant private
+   //i f possible we reuse the current QVariant private
    const uint type = qMetaTypeId<T>(reinterpret_cast<T *>(0));
    QVariant::Private &d = data_ptr();
+
    if (isDetached() && (type == d.type || (type <= uint(QVariant::Char) && d.type <= uint(QVariant::Char)))) {
       d.type = type;
       d.is_null = false;
       T *old = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
+
       if (QTypeInfo<T>::isComplex) {
          old->~T();
       }
       new (old) T(v); //call the copy constructor
+
    } else {
       *this = QVariant(type, &v, QTypeInfo<T>::isPointer);
    }

@@ -23,23 +23,37 @@
 #ifndef QDATASTREAM_H
 #define QDATASTREAM_H
 
+#include <qglobal.h>
 #include <qscopedpointer.h>
 #include <qiodevice.h>
-#include <qglobal.h>
 #include <qcontainerfwd.h>
 
 #ifdef Status
 #error qdatastream.h must be included before any header file that defines Status
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QByteArray;
+class QChar32;
 class QIODevice;
+class QString8;
+class QString16;
 
 #if ! defined(QT_NO_DATASTREAM)
 
+class QDataStream;
 class QDataStreamPrivate;
+
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString &);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString &);
+
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
+
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString16 &);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString16 &);
+
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QChar32 &);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar32 &);
 
 class Q_CORE_EXPORT QDataStream
 {
@@ -241,6 +255,7 @@ template <typename T>
 QDataStream &operator>>(QDataStream &s, QList<T> &l)
 {
    l.clear();
+
    quint32 c;
    s >> c;
    l.reserve(c);
@@ -249,10 +264,12 @@ QDataStream &operator>>(QDataStream &s, QList<T> &l)
       T t;
       s >> t;
       l.append(t);
+
       if (s.atEnd()) {
          break;
       }
    }
+
    return s;
 }
 
@@ -263,6 +280,7 @@ QDataStream &operator<<(QDataStream &s, const QList<T> &l)
    for (int i = 0; i < l.size(); ++i) {
       s << l.at(i);
    }
+
    return s;
 }
 
@@ -550,7 +568,5 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiMap<K
 }
 
 #endif // QT_NO_DATASTREAM
-
-QT_END_NAMESPACE
 
 #endif // QDATASTREAM_H
