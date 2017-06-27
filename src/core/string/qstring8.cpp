@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include <qstring8.h>
+#include <qdatastream.h>
 #include <qregexp.h>
 
 QString8::QString8(QChar32 c)
@@ -28,36 +29,37 @@ QString8::QString8(QChar32 c)
 {
 }
 
-QString8::QString8(int size, QChar32 c)
+QString8::QString8(size_type size, QChar32 c)
    : CsString::CsString(size, c)
 {
 }
 
-QString8::QString8(const CsString::CsString &str)
-   : CsString::CsString(str)
-{
-}
-
-QString8::QString8(CsString::CsString &&str)
-   : CsString::CsString(std::move(str))
-{
-}
-
-// operators
-
-
 // methods
-QChar32 QString8::at(int i) const
+QChar32 QString8::at(size_type index) const
 {
-   return CsString::CsString::operator[](i);
+   return CsString::CsString::operator[](index);
 }
 
-int QString8::count() const 
+void QString8::chop(size_type n)
 {
-   return size();
+   if (n > 0) {
+      auto iter = end() - n;
+      erase(iter, end());
+   }
 }
 
-QString8 QString8::left(int numOfChars) const
+QString8 &QString8::fill(QChar32 c, size_type newSize)
+{
+   if (newSize > 0) {
+      assign(newSize, c);
+   } else {
+      assign(size(), c);
+   }
+
+   return *this;
+}
+
+QString8 QString8::left(size_type numOfChars) const
 {
    if (numOfChars < 0) {
       return *this;
@@ -66,36 +68,74 @@ QString8 QString8::left(int numOfChars) const
    return QString8(substr(0, numOfChars));
 }
 
+QString8 QString8::mid(size_type index, size_type numOfChars) const
+{
+   return substr(index, numOfChars);
+}
+
 bool QString8::isEmpty() const
 {
    return empty();
 }
 
-QString8 &QString8::prepend(const QString8 &str) 
+QString8 &QString8::remove(size_type indexStart, size_type size)
 {
-   insert(0, str);
+   erase(indexStart, size);
    return *this;
 }
 
-QString8 &QString8::remove(int indexStart, int size)
+QString8 QString8::repeated(size_type count) const
 {
-   erase(indexStart, size);  
-   return *this;
+   if (count < 1 || empty()) {
+      return QString8();
+   }
+
+   if (count == 1) {
+      return *this;
+   }
+
+   QString8 retval;
+
+   for (size_type i = 0; i < count; ++i )  {
+      retval += *this;
+   }
+
+   return retval;
 }
 
-QString8 QString8::right(int numOfChars) const
+QString8 QString8::right(size_type numOfChars) const
 {
    if (numOfChars < 0) {
       return *this;
    }
 
-   int size = this->size();
+   auto iter = end() - numOfChars;
 
-   return QString8(substr(size - numOfChars, numOfChars));
+   return QString8(iter, end());
 }
 
-const uint8_t *QString8::utf8() const
+void QString8::truncate(size_type length)
 {
-   return constData();
+   if (length < size()) {
+      resize(length);
+   }
 }
 
+// operators
+
+#if ! defined(QT_NO_DATASTREAM)
+   QDataStream &operator>>(QDataStream &out, QString8 &str)
+   {
+      // broom - not implemented
+      return out;
+   }
+
+   QDataStream &operator<<(QDataStream &out, const QString8 &str)
+   {
+      // broom - not implemented
+      return out;
+   }
+#endif
+
+
+// functions

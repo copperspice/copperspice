@@ -43,7 +43,7 @@ class CsBasicString
       using iterator       = CsStringIterator<E, A>;
 
       using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-      using reverse_iterator        = std::reverse_iterator<iterator>;
+      using reverse_iterator       = std::reverse_iterator<iterator>;
 
       static constexpr const size_type npos = -1;
 
@@ -3317,7 +3317,7 @@ void CsBasicString<E, A>::resize(size_type size)
    size_type stringLen = this->size();
    size_type count     = size - stringLen;
 
-   CsChar c('\0');
+   CsChar c;
 
    if (count > 0) {
       append(count, c);
