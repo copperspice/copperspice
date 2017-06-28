@@ -53,9 +53,9 @@ bool AccelTreeResourceLoader::retrieveDocument(const QUrl &uri,
    Q_ASSERT(uri.isValid());
    AccelTreeBuilder<true> builder(uri, uri, m_namePool, context.data(), m_features);
 
-   const AutoPtr<QNetworkReply> reply(load(uri, m_networkAccessDelegator, context));
+   const std::unique_ptr<QNetworkReply> reply(load(uri, m_networkAccessDelegator, context));
 
-   if (!reply) {
+   if (! reply) {
       return false;
    }
 
@@ -293,7 +293,7 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
       const ReportContext::Ptr &context,
       const SourceLocationReflection *const where)
 {
-   const AutoPtr<QNetworkReply> reply(load(uri, m_networkAccessDelegator, context));
+   const std::unique_ptr<QNetworkReply> reply(load(uri, m_networkAccessDelegator, context));
 
    if (!reply) {
       return false;

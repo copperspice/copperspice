@@ -75,7 +75,7 @@ namespace JSC {
         OpRShift,
         OpURShift
     };
-    
+
     enum LogicalOperator {
         OpLogicalAnd,
         OpLogicalOr
@@ -143,7 +143,7 @@ namespace JSC {
         virtual bool isNumber() const { return false; }
         virtual bool isString() const { return false; }
         virtual bool isNull() const { return false; }
-        virtual bool isPure(BytecodeGenerator&) const { return false; }        
+        virtual bool isPure(BytecodeGenerator&) const { return false; }
         virtual bool isLocation() const { return false; }
         virtual bool isResolveNode() const { return false; }
         virtual bool isBracketAccessorNode() const { return false; }
@@ -231,12 +231,12 @@ namespace JSC {
         virtual bool isPure(BytecodeGenerator&) const { return true; }
 
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
-        
+
         virtual bool isString() const { return true; }
 
         const Identifier& m_value;
     };
-    
+
     class ThrowableExpressionData {
     public:
         ThrowableExpressionData()
@@ -245,14 +245,14 @@ namespace JSC {
             , m_endOffset(static_cast<uint16_t>(-1))
         {
         }
-        
+
         ThrowableExpressionData(unsigned divot, unsigned startOffset, unsigned endOffset)
             : m_divot(divot)
             , m_startOffset(startOffset)
             , m_endOffset(endOffset)
         {
         }
-        
+
         void setExceptionSourceCode(unsigned divot, unsigned startOffset, unsigned endOffset)
         {
             m_divot = divot;
@@ -303,7 +303,7 @@ namespace JSC {
         uint16_t m_subexpressionDivotOffset;
         uint16_t m_subexpressionEndOffset;
     };
-    
+
     class ThrowablePrefixedSubExpressionData : public ThrowableExpressionData {
     public:
         ThrowablePrefixedSubExpressionData()
@@ -440,7 +440,7 @@ namespace JSC {
 
         PropertyListNode* m_list;
     };
-    
+
     class BracketAccessorNode : public ExpressionNode, public ThrowableExpressionData {
     public:
         BracketAccessorNode(JSGlobalData*, ExpressionNode* base, ExpressionNode* subscript, bool subscriptHasAssignments);
@@ -541,7 +541,7 @@ namespace JSC {
         size_t m_index; // Used by LocalVarFunctionCallNode.
         size_t m_scopeDepth; // Used by ScopedVarFunctionCallNode and NonLocalVarFunctionCallNode
     };
-    
+
     class FunctionCallBracketNode : public ExpressionNode, public ThrowableSubExpressionData {
     public:
         FunctionCallBracketNode(JSGlobalData*, ExpressionNode* base, ExpressionNode* subscript, ArgumentsNode*, unsigned divot, unsigned startOffset, unsigned endOffset);
@@ -574,7 +574,7 @@ namespace JSC {
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
     };
-    
+
     class ApplyFunctionCallDotNode : public FunctionCallDotNode {
     public:
         ApplyFunctionCallDotNode(JSGlobalData*, ExpressionNode* base, const Identifier&, ArgumentsNode*, unsigned divot, unsigned startOffset, unsigned endOffset);
@@ -898,7 +898,7 @@ namespace JSC {
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
     };
-    
+
     class InstanceOfNode : public ThrowableBinaryOpNode {
     public:
         InstanceOfNode(JSGlobalData*, ExpressionNode* expr1, ExpressionNode* expr2, bool rightHasAssignments);
@@ -1075,7 +1075,7 @@ namespace JSC {
         Operator m_operator;
         ExpressionNode* m_right;
     };
-    
+
     typedef Vector<ExpressionNode*, 8> ExpressionVector;
 
     class CommaNode : public ExpressionNode, public ParserArenaDeletable {
@@ -1092,7 +1092,7 @@ namespace JSC {
 
         ExpressionVector m_expressions;
     };
-    
+
     class ConstDeclNode : public ExpressionNode {
     public:
         ConstDeclNode(JSGlobalData*, const Identifier&, ExpressionNode*);
@@ -1161,11 +1161,11 @@ namespace JSC {
 
         virtual bool isEmptyStatement() const { return true; }
     };
-    
+
     class DebuggerStatementNode : public StatementNode {
     public:
         DebuggerStatementNode(JSGlobalData*);
-        
+
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
     };
@@ -1186,7 +1186,7 @@ namespace JSC {
 
     class VarStatementNode : public StatementNode {
     public:
-        VarStatementNode(JSGlobalData*, ExpressionNode*);        
+        VarStatementNode(JSGlobalData*, ExpressionNode*);
 
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
@@ -1271,7 +1271,7 @@ namespace JSC {
     public:
         ContinueNode(JSGlobalData*);
         ContinueNode(JSGlobalData*, const Identifier&);
-        
+
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
 
@@ -1282,7 +1282,7 @@ namespace JSC {
     public:
         BreakNode(JSGlobalData*);
         BreakNode(JSGlobalData*, const Identifier&);
-        
+
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
 
@@ -1385,7 +1385,7 @@ namespace JSC {
 
         using ParserArenaRefCounted::operator new;
 
-        void adoptData(std::auto_ptr<ScopeNodeData> data)
+        void adoptData(std::unique_ptr<ScopeNodeData> data)
         {
             ASSERT(!data->m_arena.contains(this));
             ASSERT(!m_data);
@@ -1475,7 +1475,7 @@ namespace JSC {
 
         void finishParsing(const SourceCode&, ParameterNode*, const Identifier&);
         void finishParsing(PassRefPtr<FunctionParameters>, const Identifier&);
-        
+
         const Identifier& ident() { return m_ident; }
 
         static const bool scopeIsFunction = true;
@@ -1497,7 +1497,7 @@ namespace JSC {
     private:
         virtual RegisterID* emitBytecode(BytecodeGenerator&, RegisterID* = 0);
 
-        virtual bool isFuncExprNode() const { return true; } 
+        virtual bool isFuncExprNode() const { return true; }
 
         FunctionBodyNode* m_body;
     };

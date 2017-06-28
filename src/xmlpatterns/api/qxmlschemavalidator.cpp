@@ -137,9 +137,10 @@ bool QXmlSchemaValidator::validate(const QUrl &source) const
    d->m_context->setUriResolver(uriResolver());
    d->m_context->setNetworkAccessManager(networkAccessManager());
 
-   const QPatternist::AutoPtr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source,
+   const std::unique_ptr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source,
          d->m_context->networkAccessManager(),
          d->m_context, QPatternist::AccelTreeResourceLoader::ContinueOnError));
+
    if (reply) {
       return validate(reply.data(), source);
    } else {

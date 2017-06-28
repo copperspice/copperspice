@@ -153,9 +153,9 @@ class QXmlQueryPrivate
             statContext->messageHandler(),
             statContext->sourceLocations()));
 
-      QPatternist::AutoPtr<QPatternist::NodeBuilder> nodeBuilder(new QPatternist::AccelTreeBuilder<false>(QUrl(), QUrl(),
-            namePool.d,
-            dynContext.data()));
+      std::unique_ptr<QPatternist::NodeBuilder> nodeBuilder(new QPatternist::AccelTreeBuilder<false>(QUrl(), QUrl(),
+            namePool.d, dynContext.data()));
+
       dynContext->setNodeBuilder(nodeBuilder);
 
       dynContext->setResourceLoader(statContext->resourceLoader());

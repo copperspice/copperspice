@@ -175,9 +175,9 @@ void XsdValidatingInstanceReader::error(const QString &msg) const
 
 bool XsdValidatingInstanceReader::loadSchema(const QString &targetNamespace, const QUrl &location)
 {
-   const AutoPtr<QNetworkReply> reply(AccelTreeResourceLoader::load(location, m_context->networkAccessManager(),
+   const std::unique_ptr<QNetworkReply> reply(AccelTreeResourceLoader::load(location, m_context->networkAccessManager(),
                                       m_context, AccelTreeResourceLoader::ContinueOnError));
-   if (!reply) {
+   if (! reply) {
       return true;
    }
 

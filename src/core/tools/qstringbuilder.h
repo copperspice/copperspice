@@ -47,7 +47,7 @@ class QStringBuilder
 
  public:
    QStringBuilder(const A &a_, const B &b_) : a(a_), b(b_) {}
- 
+
    operator ConvertTo() const {
       return convertTo<ConvertTo>();
    }
@@ -376,9 +376,8 @@ operator%(const A &a, const B &b)
    return QStringBuilder<typename QConcatenable<A>::type, typename QConcatenable<B>::type>(a, b);
 }
 
-// QT_USE_FAST_OPERATOR_PLUS was introduced in 4.7, QT_USE_QSTRINGBUILDER is to be used from 4.8 onwards
-// QT_USE_FAST_OPERATOR_PLUS does not remove the normal operator+ for QByteArray
-#if defined(QT_USE_FAST_OPERATOR_PLUS) || defined(QT_USE_QSTRINGBUILDER)
+#if defined(QT_USE_QSTRINGBUILDER)
+
 template <typename A, typename B>
 QStringBuilder<typename QConcatenable<A>::type, typename QConcatenable<B>::type>
 operator+(const A &a, const B &b)
@@ -390,28 +389,33 @@ operator+(const A &a, const B &b)
 template <typename A, typename B>
 QByteArray &operator+=(QByteArray &a, const QStringBuilder<A, B> &b)
 {
-#ifndef QT_NO_CAST_TO_ASCII
    if (sizeof(typename QConcatenable< QStringBuilder<A, B> >::ConvertTo::value_type) == sizeof(QChar)) {
-      //it is not save to optimize as in utf8 it is not possible to compute the size
+      // safe but slower
       return a += QString(b);
    }
-#endif
+
    int len = a.size() + QConcatenable< QStringBuilder<A, B> >::size(b);
    a.reserve(len);
+
    char *it = a.data() + a.size();
    QConcatenable< QStringBuilder<A, B> >::appendTo(b, it);
-   a.resize(len); //we need to resize after the appendTo for the case str+=foo+str
+
+   a.resize(len); // need to resize after the appendTo for the case str+=foo+str
+
    return a;
 }
+
 
 template <typename A, typename B>
 QString &operator+=(QString &a, const QStringBuilder<A, B> &b)
 {
    int len = a.size() + QConcatenable< QStringBuilder<A, B> >::size(b);
    a.reserve(len);
+
    QChar *it = a.data() + a.size();
    QConcatenable< QStringBuilder<A, B> >::appendTo(b, it);
-   a.resize(it - a.constData()); //may be smaller than len if there was conversion from utf8
+   a.resize(it - a.constData());    // may be smaller than len if there was conversion from utf8
+
    return a;
 }
 

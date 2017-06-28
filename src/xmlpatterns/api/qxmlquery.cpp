@@ -459,11 +459,12 @@ void QXmlQuery::setQuery(const QUrl &queryURI, const QUrl &baseURI)
 
    d->queryURI = QPatternist::XPathHelper::normalizeQueryURI(baseURI.isEmpty() ? queryURI : baseURI);
 
-   QPatternist::AutoPtr<QIODevice> result;
+   std::unique_ptr<QIODevice> result;
 
    try {
       result.reset(QPatternist::AccelTreeResourceLoader::load(canonicalURI, d->m_networkAccessDelegator,
                    d->staticContext()));
+
    } catch (const QPatternist::Exception) {
       /* We do nothing, result will be 0. */
    }

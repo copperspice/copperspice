@@ -34,7 +34,7 @@ namespace QPatternist {
 class NodeBuilder : public QAbstractXmlReceiver
 {
  public:
-   typedef AutoPtr<NodeBuilder> Ptr;
+   using Ptr = std::unique_ptr<NodeBuilder>;
 
    inline NodeBuilder() {
    }

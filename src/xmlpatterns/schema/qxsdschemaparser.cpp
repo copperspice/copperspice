@@ -586,7 +586,7 @@ void XsdSchemaParser::parseInclude()
    } else {
       m_includedSchemas.insert(url);
 
-      const AutoPtr<QNetworkReply> reply(AccelTreeResourceLoader::load(url, m_context->networkAccessManager(),
+      const std::unique_ptr<QNetworkReply> reply(AccelTreeResourceLoader::load(url, m_context->networkAccessManager(),
                                          XsdSchemaContext::Ptr(m_context), AccelTreeResourceLoader::ContinueOnError));
       if (reply) {
          // parse the included schema by a different parser but with the same context
@@ -683,7 +683,7 @@ void XsdSchemaParser::parseImport()
          // namespace we should add it as well
          m_importedSchemas.insert(importNamespace);
 
-         AutoPtr<QNetworkReply> reply(AccelTreeResourceLoader::load(url, m_context->networkAccessManager(),
+         std::unique_ptr<QNetworkReply> reply(AccelTreeResourceLoader::load(url, m_context->networkAccessManager(),
                                       XsdSchemaContext::Ptr(m_context), AccelTreeResourceLoader::ContinueOnError));
          if (reply) {
             // parse the included schema by a different parser but with the same context

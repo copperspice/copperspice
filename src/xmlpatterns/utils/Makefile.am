@@ -5,7 +5,6 @@ XMLPATTERNS_DIRS += src/xmlpatterns/utils
 #XMLPATTERNS_UTILS_INCLUDES =
 
 XMLPATTERNS_UTILS_PRIVATE_INCLUDES = \
-	qautoptr_p.h                       \
 	qcommonnamespaces_p.h              \
 	qcppcastinghelper_p.h              \
 	qdebug_p.h                         \

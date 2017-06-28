@@ -82,9 +82,10 @@ void QXmlSchemaPrivate::load(const QUrl &source, const QString &targetNamespace)
    m_schemaContext->setUriResolver(uriResolver());
    m_schemaContext->setNetworkAccessManager(networkAccessManager());
 
-   const QPatternist::AutoPtr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source,
+   const std::unique_ptr<QNetworkReply> reply(QPatternist::AccelTreeResourceLoader::load(source,
          m_schemaContext->networkAccessManager(),
          m_schemaContext, QPatternist::AccelTreeResourceLoader::ContinueOnError));
+
    if (reply) {
       load(reply.data(), source, targetNamespace);
    }

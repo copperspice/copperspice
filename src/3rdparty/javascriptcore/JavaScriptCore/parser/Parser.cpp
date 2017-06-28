@@ -29,8 +29,6 @@
 #include <wtf/Vector.h>
 #include <memory>
 
-using std::auto_ptr;
-
 #ifndef yyparse
 extern int jscyyparse(void*);
 #endif
@@ -67,7 +65,7 @@ void Parser::parse(JSGlobalData* globalData, int* errLine, UString* errMsg)
     }
 }
 
-void Parser::didFinishParsing(SourceElements* sourceElements, ParserArenaData<DeclarationStacks::VarStack>* varStack, 
+void Parser::didFinishParsing(SourceElements* sourceElements, ParserArenaData<DeclarationStacks::VarStack>* varStack,
                               ParserArenaData<DeclarationStacks::FunctionStack>* funcStack, CodeFeatures features, int lastLine, int numConstants)
 {
     m_sourceElements = sourceElements;
