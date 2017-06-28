@@ -317,6 +317,18 @@ class QMultiMap
       return m_data.erase(iter.m_iter);
    }
 
+   Val &first()  {
+      return begin().value();
+   }
+
+   const Val &first() const  {
+      return begin().value();
+   }
+
+   const Key &firstKey() const  {
+      return begin().key();
+   }
+
    iterator find(const Key &key) {
       // find returns an std::map::iterator, constructor will convert to QMultiMap::iterator
       return m_data.find(key);
@@ -362,10 +374,20 @@ class QMultiMap
       return insertMulti(key, value);
    }
 
+   iterator insert(const_iterator hint, const Key &key, const Val &value) {
+      auto iter = m_data.emplace_hint(hint, key, value);
+      return iter;
+   }
+
    iterator insertMulti(const Key &key, const Val &value)  {
       // ensure newest item is first
       auto iter = m_data.lower_bound(key);
       return m_data.emplace_hint(iter, key, value);
+   }
+
+   iterator insertMulti(const_iterator hint, const Key &key, const Val &value) {
+      auto iter = m_data.emplace_hint(hint, key, value);
+      return iter;
    }
 
    const Key key(const Val &value) const;

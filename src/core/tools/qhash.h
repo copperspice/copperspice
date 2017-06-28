@@ -306,14 +306,6 @@ class QHash
       return m_data.empty();
    }
 
-   QPair<iterator, iterator> equal_range(const Key &key) {
-      return m_data.equal_range(key);
-   }
-
-   QPair<const_iterator, const_iterator> equal_range(const Key &key) const {
-      return m_data.equal_range(key);
-   }
-
    iterator erase(const_iterator iter) {
       return m_data.erase(iter.m_iter);
    }
@@ -383,8 +375,6 @@ class QHash
 
       return retval;
    }
-
-   QList<Key> uniqueKeys() const;
 
    QHash<Key, Val, Hash, KeyEqual> &unite(const QHash<Key, Val, Hash, KeyEqual> &other) {
       m_data.insert(other.m_data.begin(), other.m_data.end());
@@ -525,24 +515,6 @@ QList<Key> QHash<Key, Val, Hash, KeyEqual>::keys(const Val &value) const
       }
 
       ++iter;
-   }
-
-   return retval;
-}
-
-template <typename Key, typename Val, typename Hash, typename KeyEqual>
-QList<Key> QHash<Key, Val, Hash, KeyEqual>::uniqueKeys() const
-{
-   QList<Key> retval;
-   retval.reserve(size());
-
-   for (const auto &item : m_data) {
-
-      if (! retval.empty() && retval.last() == item.first) {
-         continue;
-      }
-
-      retval.append(item.first);
    }
 
    return retval;

@@ -39,9 +39,16 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using Iterator        = iterator;
       using ConstIterator   = const_iterator;
 
-      // broom, following two iterators need to return an iterator to a QChar32
+      using difference_type = ssize_t;
+      using size_type       = ssize_t;
+      using value_type      = QChar32;
+
+      // broom, following four iterators need to return an iterator to a QChar32
       using iterator        = CsString::CsString::iterator;
       using const_iterator  = CsString::CsString::const_iterator;
+
+      using reverse_iterator        = CsString::CsString::reverse_iterator;
+      using const_reverse_iterator  = CsString::CsString::const_reverse_iterator;
 
       QString8() = default;
       QString8(const QString8 &other) = default;
@@ -49,6 +56,23 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8(QChar32 c);
       QString8(size_type size, QChar32 c);
+
+      QString8(const QChar32 *data, size_type size = -1)  {
+
+         if (size == -1) {
+            const QChar32 *p = data;
+
+            while (p->unicode() != 0) {
+               ++p;
+            }
+
+            CsString::CsString::append(data, p);
+
+         } else {
+            CsString::CsString::append(data, data + size);
+
+         }
+      }
 
       QString8(const CsString::CsString &other)
          : CsString::CsString(other)
@@ -105,8 +129,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &fill(QChar32 c, size_type size = -1);
 
-
-      QString8 &insert ( size_type index, const QString8 & other )  {
+      QString8 &insert (size_type index, const QString8 & other)  {
          CsString::CsString::insert(index, other);
          return *this;
       }
@@ -138,6 +161,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &prepend(QChar32 c) {
          CsString::CsString::insert(begin(), c);
+         return *this;
+      }
+
+      QString8 &prepend(const QChar32 *data, size_type size)  {
+         CsString::CsString::insert(begin(), data, data + size);
          return *this;
       }
 
@@ -175,10 +203,18 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::resize(size);
       }
 
+      void resize(size_type size, QChar32 c) {
+         return CsString::CsString::resize(size, c);
+      }
+
       QString8 right(size_type numOfChars) const Q_REQUIRED_RESULT;
 
       size_type size() const {
          return CsString::CsString::size();
+      }
+
+      void squeeze() {
+         return CsString::CsString::shrink_to_fit();
       }
 
 /*
@@ -251,8 +287,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
       // operators
-      using CsString::CsString::operator=;
-      using CsString::CsString::operator+=;
+      using CsString::CsString::operator=;      // check QString doc if in
+      using CsString::CsString::operator+=;     // check QString doc if in
 
       QString8 &operator=(const QString8 &other) = default;
       QString8 &operator=(QString8 && other) = default;
