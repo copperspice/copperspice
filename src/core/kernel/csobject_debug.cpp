@@ -35,11 +35,7 @@ static void dumpRecursive(int level, QObject *object)
          buffer += "    ";
       }
 
-      QString name   = object->objectName();
-      QString flags  = QLatin1String("");
-
-      qDebug("%s%s::%s %s", (const char *)buffer, object->metaObject()->className(),
-             name.toLocal8Bit().data(), flags.toLatin1().data());
+      qDebug("%s%s::%s", buffer.constData(), object->metaObject()->className(), csPrintable(object->objectName()));
 
       QList<QObject *> children = object->children();
 
@@ -71,7 +67,7 @@ void QObject::dumpObjectInfo()
           objectName().isEmpty() ? "unnamed" : objectName().toLocal8Bit().data());
 
    qDebug("  SIGNAL LIST - CONNECTED TO WHICH RECEIVERS");
-  
+
    const QMetaObject *metaObject = this->metaObject();
 
    for (int index = 0; index < metaObject->methodCount(); ++index)  {
@@ -86,18 +82,18 @@ void QObject::dumpObjectInfo()
       const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
       std::set<SlotBase *> receiverList = internal_receiverList(*signalMethod_Bento);
 
-      // look for connections where "this" object is the sender     
-      for (auto receiver : receiverList) {           
+      // look for connections where "this" object is the sender
+      for (auto receiver : receiverList) {
          qDebug("        signal name: %s", signalMetaMethod.methodSignature().constData());
 
          QObject *obj = dynamic_cast<QObject *>(receiver);
-              
+
          if (obj) {
             const QMetaObject *receiverMetaObject = obj->metaObject();
 
             // broom - review again (on hold, ok)
             // const QMetaMethod slotMetaMethod      = receiverMetaObject->method(*temp.slotMethod);
-   
+
             qDebug("          --> %s::%s",
                 receiverMetaObject->className(),
                 obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );
@@ -118,19 +114,19 @@ void QObject::dumpObjectInfo()
    std::set<SignalBase *> senderList = internal_senderList();
 
    for (auto sender : senderList) {
-    
+
       // review again (can wait)
       // const QMetaMethod slot = metaObject()->method(*temp.slotMethod);
 
       QObject *obj = dynamic_cast<QObject *>(sender);
-              
+
       if (obj) {
          const QMetaObject *senderMetaObject = obj->metaObject();
 
          qDebug("          <-- %s::%s",
                 senderMetaObject->className(),
                 obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
-   
+
          //   qDebug("          <-- %s::%s  %s",
          //   slot.methodSignature().constData());
 

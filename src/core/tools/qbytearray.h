@@ -34,17 +34,6 @@
 #error qbytearray.h must be included before any header file that defines truncate
 #endif
 
-#if defined(Q_CC_GNU) && (__GNUC__ == 4 && __GNUC_MINOR__ == 0)
-//There is a bug in GCC 4.0 that tries to instantiate template of annonymous enum
-#  ifdef QT_USE_FAST_OPERATOR_PLUS
-#    undef QT_USE_FAST_OPERATOR_PLUS
-#  endif
-#  ifdef QT_USE_QSTRINGBUILDER
-#    undef QT_USE_QSTRINGBUILDER
-#  endif
-
-#endif
-
 QT_BEGIN_NAMESPACE
 
 /*****************************************************************************
@@ -119,10 +108,10 @@ struct QByteArrayDataPtr {
 };
 
 #define Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, offset) \
-    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } 
+    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset }
 
 #define Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER(size) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QByteArrayData)) 
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QByteArrayData))
 
 #define QByteArrayLiteral(str) \
     ([]() -> QByteArrayDataPtr { \
@@ -174,20 +163,12 @@ class Q_CORE_EXPORT QByteArray
    void reserve(int size);
    void squeeze();
 
-#ifndef QT_NO_CAST_FROM_BYTEARRAY
-   operator const char *() const {
-      return constData();
-   }
-   operator const void *() const {
-      return constData();
-   }
-#endif
-
    char *data();
    const char *data() const;
    inline const char *constData() const;
    inline void detach();
    bool isDetached() const;
+
    inline bool isSharedWith(const QByteArray &other) const {
       return d == other.d;
    }
@@ -376,7 +357,7 @@ class Q_CORE_EXPORT QByteArray
 
    friend class QByteRef;
    friend class QString;
-   friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes); 
+   friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
 };
 
 inline int QByteArray::size() const

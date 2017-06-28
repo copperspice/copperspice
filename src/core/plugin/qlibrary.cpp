@@ -752,13 +752,13 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
    if ((cs_version & 0x00ff00) > (CS_VERSION & 0x00ff00) || (cs_version & 0xff0000) != (CS_VERSION & 0xff0000)) {
       if (qt_debug_component()) {
          qWarning("In %s:\n"
-                  "  Plugin uses incompatible CopperSpice library (%d.%d.%d) [%s]", (const char *) QFile::encodeName(fileName),
+                  "  Plugin uses incompatible CopperSpice library (%d.%d.%d) [%s]", QFile::encodeName(fileName).constData(),
                   (cs_version & 0xff0000) >> 16, (cs_version & 0xff00) >> 8, cs_version & 0xff, debug ? "debug" : "release");
       }
 
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library. (%2.%3.%4) [%5]")
-                    .arg(fileName).arg((cs_version & 0xff0000) >> 16).arg((cs_version & 0xff00) >> 8).arg(cs_version & 0xff)
-                    .arg(debug ? QLatin1String("debug") : QLatin1String("release"));
+                  .arg(fileName).arg((cs_version & 0xff0000) >> 16).arg((cs_version & 0xff00) >> 8).arg(cs_version & 0xff)
+                  .arg(debug ? "debug" : "release" );
 
    } else if (key != QT_BUILD_KEY
               // we may have some compatibility keys, try them too:
@@ -781,18 +781,19 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
          qWarning("In %s:\n"
                   "  Plugin uses incompatible CopperSpice library\n"
                   "  Expected build key \"%s\", got \"%s\"",
-                  (const char *) QFile::encodeName(fileName), QT_BUILD_KEY, key.isEmpty() ? "<null>" : (const char *) key);
+                  QFile::encodeName(fileName).constData(), QT_BUILD_KEY, key.isEmpty() ? "<null>" : key.constData());
       }
 
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library.\n"
-                                 " Expected build key \"%2\", got \"%3\"").arg(fileName).arg(QLatin1String(QT_BUILD_KEY))
-                    .arg(key.isEmpty() ? QLatin1String("<null>") : QLatin1String((const char *) key));
+                  " Expected build key \"%2\", got \"%3\"").arg(fileName).arg(QLatin1String(QT_BUILD_KEY))
+                  .arg(key.isEmpty() ? "<null>" : key.constData() );
 
 #ifndef QT_NO_DEBUG_PLUGIN_CHECK
    } else if (debug != QLIBRARY_AS_DEBUG) {
-      // do not issue a qWarning there may bea non-debug
+      // do not issue a qWarning since there may be no debug support
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library."
-                                 " (Can not mix debug and release libraries.)").arg(fileName);
+                  " (Can not mix debug and release libraries.)").arg(fileName);
+
 #endif
    } else {
       pluginState = IsAPlugin;

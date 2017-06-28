@@ -152,18 +152,18 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    void moveToThread(QThread *targetThread);
    QString objectName() const;
    QObject *parent() const;
-   QVariant property(const char *name) const;
+   QVariant property(const QString &name) const;
 
    void removeEventFilter(QObject *obj);
 
    void setObjectName(const QString &name);
    void setParent(QObject *parent);
-   bool setProperty(const char *name, const QVariant &value);
+   bool setProperty(const QString &name, const QVariant &value);
    bool signalsBlocked() const;
    int startTimer(int interval);
 
-   bool cs_InstanceOf(const char *iid);
-   virtual bool cs_interface_query(const char *data) const;
+   bool cs_InstanceOf(const QString &iid);
+   virtual bool cs_interface_query(const QString &data) const;
 
    QThread *thread() const;
 
@@ -198,7 +198,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    QList<T> findChildren(const QRegExp &regExp) const;
 
    template<class T>
-   T property(const char *name) const;
+   T property(const QString &name) const;
 
    CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = nullptr))
    CORE_CS_SIGNAL_2(destroyed, obj)
@@ -218,10 +218,10 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    virtual void customEvent(QEvent *event);
    virtual void disconnectNotify(const QMetaMethod &signal) const;
    virtual void timerEvent(QTimerEvent *event);
-   
-   virtual void connectNotify(const char *signal) const; 
-   virtual void disconnectNotify(const char *signal) const; 
-   
+
+   virtual void connectNotify(const char *signal) const;
+   virtual void disconnectNotify(const char *signal) const;
+
    bool isSignalConnected(const QMetaMethod &signalMethod) const;
 
    int receivers(const char *signal) const;
@@ -232,9 +232,9 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
    static std::recursive_mutex &m_metaObjectMutex();
 
- private:  
+ private:
    QObject *m_parent;
-   QList<QObject *> m_children;  
+   QList<QObject *> m_children;
 
    QObject *m_currentChildBeingDeleted;
    CSAbstractDeclarativeData *m_declarativeData;
@@ -246,7 +246,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    mutable std::atomic<QtSharedPointer::ExternalRefCountData *> m_sharedRefCount;
 
-   uint m_pendTimer           : 1;   
+   uint m_pendTimer           : 1;
    uint m_wasDeleted          : 1;
    uint m_sentChildRemoved    : 1;
    uint m_sendChildEvents     : 1;
@@ -259,10 +259,10 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    std::atomic<QThreadData *> m_threadData;
 
    QList<QByteArray> m_extra_propertyNames;
-   QList<QVariant> m_extra_propertyValues;    
- 
-   void deleteChildren();  
-   bool isSender(const QObject *receiver, const char *signal) const;  
+   QList<QVariant> m_extra_propertyValues;
+
+   void deleteChildren();
+   bool isSender(const QObject *receiver, const char *signal) const;
    void moveToThread_helper();
    void removeObject();
 
@@ -271,11 +271,11 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    QList<QObject *> receiverList(const char *signal) const;
    QList<QObject *> senderList() const;
-    
+
    void setThreadData_helper(QThreadData *currentData, QThreadData *targetData);
-   
+
    static bool check_parent_thread(QObject *parent, QThreadData *parentThreadData, QThreadData *currentThreadData);
-  
+
    template<class T>
    void findChildren_helper(const QString &name, const QRegExp *regExp, QList<T> &list) const;
 
@@ -368,22 +368,23 @@ void QObject::findChildren_helper(const QString &name, const QRegExp *regExp, QL
 }
 
 template<class T>
-T QObject::property(const char *name) const
+T QObject::property(const QString &name) const
 {
    const QMetaObject *meta = metaObject();
 
-   if (! name || ! meta) {
+   if (name.isEmpty() || ! meta) {
       throw std::logic_error("QObject::property() Invalid name or meta object");
    }
 
-   int id = meta->indexOfProperty(name);
+   int id = meta->indexOfProperty(name.toUtf8().constData());
 
    if (id < 0) {
       // dynamic property or does not exist
-      const int k = m_extra_propertyNames.indexOf(name);
+      const int k = m_extra_propertyNames.indexOf(name.toUtf8().constData());
 
       if (k < 0) {
-         std::string msg = std::string(meta->className()) + "::property() Property " + name + " is invalid or does not exist";
+         std::string msg = std::string(meta->className()) + "::property() Property " + csPrintable(name) +
+                  " is invalid or does not exist";
          throw std::invalid_argument(msg);
       }
 
@@ -393,7 +394,8 @@ T QObject::property(const char *name) const
          return data.value<T>();
 
       } else {
-         std::string msg = std::string(meta->className()) + "::property() Property " + name + " is not the correct type";
+         std::string msg = std::string(meta->className()) + "::property() Property " + csPrintable(name) +
+                  " is not the correct type";
          throw std::invalid_argument(msg);
       }
    }
@@ -401,7 +403,7 @@ T QObject::property(const char *name) const
    QMetaProperty p = meta->property(id);
 
    if (! p.isReadable()) {
-      qWarning("%s::property() Property \"%s\" is invalid or does not exist", meta->className(), name);
+      qWarning("%s::property() Property \"%s\" is invalid or does not exist", meta->className(), csPrintable(name));
    }
 
    return p.read<T>(this);

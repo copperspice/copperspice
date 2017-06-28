@@ -141,16 +141,19 @@ class Q_CORE_EXPORT QMetaMethod
    bool invoke(QObject *object, Ts &&... Vs) const;
 
  private:
+   int m_revision;
    const char *m_typeName;
+
    QByteArray m_signature;
    QList<QByteArray> m_paramNames;
-   Access m_access;
-   MethodType m_methodType;
-   Attributes m_attributes;
+
+   MethodType   m_methodType;
+   Attributes   m_attributes;
    QMetaObject *m_metaObject;
-   const char *m_tag;
+
+   Access       m_access;
+   const char  *m_tag;
    const CSBentoAbstract *m_bento;
-   int m_revision;
 
    friend bool operator==(const QMetaMethod &m1, const QMetaMethod &m2);
    friend bool operator!=(const QMetaMethod &m1, const QMetaMethod &m2);
@@ -164,7 +167,7 @@ inline bool operator==(const QMetaMethod &m1, const QMetaMethod &m2)
       return false;
    }
 
-   if ( strcmp(m1.m_signature, m2.m_signature) != 0) {
+   if (m1.m_signature != m2.m_signature) {
       return false;
    }
 
@@ -307,7 +310,7 @@ class Q_CORE_EXPORT cs_typeName_internal
    { \
       return #dataType; \
    } \
-   
+
 
 // cs_typeName_internal<dataType> is specialization of a templated class
 #define CS_DECLARE_CLASS(dataType) \
@@ -348,14 +351,14 @@ template<class E>
 class cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
-   static const char *typeName();   
+   static const char *typeName();
 };
 
 template<class E>
 class cs_typeName_internal< QFlags<E> >
 {
  public:
-   static const char *typeName();   
+   static const char *typeName();
 };
 
 
@@ -365,7 +368,7 @@ class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObj
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
-   static const char *typeName();   
+   static const char *typeName();
 };
 
 template<class T>
@@ -496,7 +499,7 @@ CS_DECLARE_CLASS(QJsonDocument)
 CS_DECLARE_CLASS(QKeySequence)
 CS_DECLARE_CLASS(QLine)
 CS_DECLARE_CLASS(QLineF)
-CS_DECLARE_CLASS(QLocale)  
+CS_DECLARE_CLASS(QLocale)
 CS_DECLARE_CLASS(QMatrix)
 CS_DECLARE_CLASS(QMatrix4x4)
 CS_DECLARE_CLASS(QModelIndex)

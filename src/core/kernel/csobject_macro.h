@@ -253,7 +253,7 @@ class cs_number<0>
 
 #define CS_INTERFACES(...)    \
    public: \
-      bool cs_interface_query(const char *data) const override \
+      bool cs_interface_query(const QString &data) const override \
       {  \
          if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
             return true;   \

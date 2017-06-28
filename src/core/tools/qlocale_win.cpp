@@ -922,15 +922,18 @@ static QString winIso639LangName(LCID id)
    // the language code
    QString lang_code;
    wchar_t out[256];
+
    if (GetLocaleInfo(id, LOCALE_ILANGUAGE, out, 255)) { // ### shouldn't use them according to msdn
       lang_code = QString::fromWCharArray(out);
    }
 
-   if (!lang_code.isEmpty()) {
+   if (! lang_code.isEmpty()) {
       const char *endptr;
       bool ok;
+
       QByteArray latin1_lang_code = lang_code.toLatin1();
-      int i = qstrtoull(latin1_lang_code, &endptr, 16, &ok);
+      int i = qstrtoull(latin1_lang_code.constData(), &endptr, 16, &ok);
+
       if (ok && *endptr == '\0') {
          switch (i) {
             case 0x814:

@@ -32,29 +32,32 @@ QT_BEGIN_NAMESPACE
 
 void QPropertyAnimationPrivate::updateMetaProperty()
 {
-   if (!target || propertyName.isEmpty()) {
+   if (! target || propertyName.isEmpty()) {
       propertyType = QVariant::Invalid;
       propertyIndex = -1;
       return;
    }
 
-   //propertyType will be set to a valid type only if there is a Q_PROPERTY
-   //otherwise it will be set to QVariant::Invalid at the end of this function
-   propertyType = targetValue->property(propertyName).userType();
-   propertyIndex = targetValue->metaObject()->indexOfProperty(propertyName);
+   // propertyType will be set to a valid type only if there is a Q_PROPERTY
+   // otherwise it will be set to QVariant::Invalid at the end of this function
+
+   propertyType  = targetValue->property(propertyName).userType();
+   propertyIndex = targetValue->metaObject()->indexOfProperty(propertyName.constData());
 
    if (propertyType != QVariant::Invalid) {
       convertValues(propertyType);
    }
+
    if (propertyIndex == -1) {
       //there is no Q_PROPERTY on the object
       propertyType = QVariant::Invalid;
       if (!targetValue->dynamicPropertyNames().contains(propertyName)) {
-         qWarning("QPropertyAnimation: you're trying to animate a non-existing property %s of your QObject",
+         qWarning("QPropertyAnimation: Trying to animate a non-existant property %s",
                   propertyName.constData());
       }
+
    } else if (!targetValue->metaObject()->property(propertyIndex).isWritable()) {
-      qWarning("QPropertyAnimation: you're trying to animate the non-writable property %s of your QObject",
+      qWarning("QPropertyAnimation: Trying to animate a read only property %s",
                propertyName.constData());
    }
 }

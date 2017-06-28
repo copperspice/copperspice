@@ -1482,22 +1482,22 @@ inline bool operator>=(const QLatin1String &s1, const QLatin1String &s2)
 
 inline bool QString::operator==(const QByteArray &s) const
 {
-   return qStringComparisonHelper(*this, s);
+   return qStringComparisonHelper(*this, s.constData());
 }
 
 inline bool QString::operator!=(const QByteArray &s) const
 {
-   return !qStringComparisonHelper(*this, s);
+   return !qStringComparisonHelper(*this, s.constData());
 }
 
 inline bool QByteArray::operator==(const QString &s) const
 {
-   return qStringComparisonHelper(s, *this);
+   return qStringComparisonHelper(s, this->constData());
 }
 
 inline bool QByteArray::operator!=(const QString &s) const
 {
-   return !qStringComparisonHelper(s, *this);
+   return !qStringComparisonHelper(s, this->constData());
 }
 
 inline bool QByteArray::operator<(const QString &s) const
@@ -1560,7 +1560,7 @@ inline int QByteArray::lastIndexOf(const QString &s, int from) const
    return lastIndexOf(s.toAscii(), from);
 }
 
-#if ! defined(QT_USE_FAST_OPERATOR_PLUS) && !defined(QT_USE_QSTRINGBUILDER)
+#if ! defined(QT_USE_QSTRINGBUILDER)
 inline const QString operator+(const QString &s1, const QString &s2)
 {
    QString t(s1);
@@ -1976,7 +1976,7 @@ inline QString Qt::escape(const QString &plain)
 
 QT_END_NAMESPACE
 
-#if defined(QT_USE_FAST_OPERATOR_PLUS) || defined(QT_USE_QSTRINGBUILDER)
+#if defined(QT_USE_QSTRINGBUILDER)
 #include <qstringbuilder.h>
 #endif
 

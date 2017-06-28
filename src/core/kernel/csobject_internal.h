@@ -34,7 +34,7 @@
 template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
 bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                       const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...), Qt::ConnectionType type)
-{      
+{
    if (sender == nullptr) {
       qWarning("QObject::connect() Can not connect, sender is null");
       return false;
@@ -56,7 +56,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    }
 
    // get signal MetaMethod
-   const QMetaObject *senderMetaObject = sender->metaObject();  
+   const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
    const char *senderClass = senderMetaObject->className();
@@ -73,7 +73,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
       qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::", signalName, "was not a valid signal");
       return false;
-   }  
+   }
 
    CsSignal::ConnectionKind kind;
    bool uniqueConnection = false;
@@ -85,7 +85,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    // untangle the type
    kind = static_cast<CsSignal::ConnectionKind>(type & ~Qt::UniqueConnection);
 
-   CsSignal::connect(*sender, signalMethod, *receiver, slotMethod, kind, uniqueConnection); 
+   CsSignal::connect(*sender, signalMethod, *receiver, slotMethod, kind, uniqueConnection);
    sender->connectNotify(signalMetaMethod);
 
    return true;
@@ -96,8 +96,8 @@ template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, c
 bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                       const Receiver *receiver, T slotLambda, Qt::ConnectionType type)
 {
-   static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");  
-   
+   static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");
+
    if (sender == nullptr) {
       qWarning("QObject::connect() Can not connect, sender is null");
       return false;
@@ -114,7 +114,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    }
 
    // get signal MetaMethod
-   const QMetaObject *senderMetaObject = sender->metaObject();  
+   const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
    const char *senderClass = senderMetaObject->className();
@@ -131,8 +131,8 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
       qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::", signalName, "was not a valid signal");
       return false;
-   }  
-   
+   }
+
    CsSignal::ConnectionKind kind;
    bool uniqueConnection = false;
 
@@ -143,7 +143,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    // untangle the type
    kind = static_cast<CsSignal::ConnectionKind>(type & ~Qt::UniqueConnection);
 
-   CsSignal::connect(*sender, signalMethod, *receiver, slotLambda, kind, uniqueConnection);         
+   CsSignal::connect(*sender, signalMethod, *receiver, slotLambda, kind, uniqueConnection);
    sender->connectNotify(signalMetaMethod);
 
    return true;
@@ -154,22 +154,22 @@ template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, c
 bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                          const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...))
 {
-   static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");  
+   static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");
 
    if (sender == nullptr || (receiver == nullptr && slotMethod != nullptr)) {
       qWarning("QObject::disconnect() Unexpected null parameter");
       return false;
    }
 
-   bool retval = CsSignal::disconnect(*sender, signalMethod, *receiver, slotMethod);          
-  
+   bool retval = CsSignal::disconnect(*sender, signalMethod, *receiver, slotMethod);
+
    if (retval) {
       const QMetaObject *senderMetaObject = sender->metaObject();
-      
+
       if (senderMetaObject) {
          QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
          const_cast<Sender *>(sender)->disconnectNotify(signalMetaMethod);
-      } 
+      }
    }
 
    return retval;
@@ -184,24 +184,24 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 
    if (retval) {
       const QMetaObject *senderMetaObject = sender->metaObject();
-      
+
       if (senderMetaObject) {
          QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
          const_cast<Sender *>(sender)->disconnectNotify(signalMetaMethod);
-      } 
+      }
    }
 
    return retval;
 }
 
 template<class ...Ts>
-bool cs_factory_interface_query(const char *data)
+bool cs_factory_interface_query(const QString &data)
 {
    std::vector<const char *> list = { qobject_interface_iid<Ts *>()... };
 
    for (unsigned int k = 0; k < list.size(); ++k) {
 
-      if (strcmp(data, list[k]) == 0) {
+      if (data == list[k]) {
          return true;
       }
    }
@@ -220,7 +220,7 @@ bool cs_factory_interface_query(const char *data)
 */
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, 
+bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type,
                CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    if (! object) {
@@ -405,7 +405,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
    }
 
    // store the signal data, false indicates the data will not be copied
-   CsSignal::Internal::TeaCup_Data<typename std::remove_reference<Ts>::type...> dataPack(false, std::forward<Ts>(Vs)...);    
+   CsSignal::Internal::TeaCup_Data<typename std::remove_reference<Ts>::type...> dataPack(false, std::forward<Ts>(Vs)...);
 
    if (type == Qt::DirectConnection) {
       // retval is passed by pointer
@@ -419,7 +419,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
       }
 
       // store the signal data, true indicates the data will be copied into a TeaCup Object (stored on the heap)
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, 
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
                   new CsSignal::Internal::TeaCup_Data<Ts...>(true, std::forward<Ts>(Vs)...), 0, -1);
 
       QCoreApplication::postEvent(object, event);
@@ -438,7 +438,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
       // add &retval to QMetaCallEvent so we can return a value
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, 
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
                   new CsSignal::Internal::TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 0, -1, &semaphore);
 
       QCoreApplication::postEvent(object, event);

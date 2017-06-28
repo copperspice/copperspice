@@ -287,7 +287,7 @@ QVariant::Type QMetaProperty::type() const
       // process enum
       QByteArray enumName = QByteArray(enumObj.scope()) + "::" + enumObj.name();
 
-      int enumMetaTypeId = QMetaType::type(enumName);
+      int enumMetaTypeId = QMetaType::type(enumName.constData());
 
       if (enumMetaTypeId == 0) {
          retval = QVariant::Int;
@@ -314,7 +314,7 @@ int QMetaProperty::userType() const
    if (enumObj.isValid()) {
       // process enum
       QByteArray enumName = QByteArray(enumObj.scope()) + "::" + enumObj.name();
-      retval = QMetaType::type(enumName);
+      retval = QMetaType::type(enumName.constData());
 
    } else if (m_typeName) {
       retval = QVariant::nameToType(m_typeName);

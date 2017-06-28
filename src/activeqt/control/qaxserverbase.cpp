@@ -38,8 +38,6 @@
 **
 ****************************************************************************/
 
-#define QT_NO_CAST_TO_ASCII
-
 #ifndef QT_NO_WIN_ACTIVEQT
 
 #include <qabstracteventdispatcher.h>
@@ -4449,13 +4447,13 @@ bool QAxServerBase::eventFilter(QObject *o, QEvent *e)
         m_spInPlaceFrame->EnableModeless(FALSE);
         MSG msg;
         // Visual Basic 6.0 posts the message WM_USER+3078 from the EnableModeless().
-        // While handling this message, VB will disable all current top-levels. After 
-        // this we have to re-enable the Qt modal widget to receive input events. 
+        // While handling this message, VB will disable all current top-levels. After
+        // this we have to re-enable the Qt modal widget to receive input events.
         if (PeekMessage(&msg, 0, WM_USER+3078, WM_USER+3078, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
             QWidget *modalWidget = QApplication::activeModalWidget();
-            if (modalWidget && modalWidget->isVisible() && modalWidget->isEnabled() 
+            if (modalWidget && modalWidget->isVisible() && modalWidget->isEnabled()
                 && !IsWindowEnabled(modalWidget->effectiveWinId()))
                 EnableWindow(modalWidget->effectiveWinId(), TRUE);
         }

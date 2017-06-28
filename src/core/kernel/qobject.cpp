@@ -38,10 +38,10 @@ QObject::QObject(QObject *t_parent)
 
    m_currentChildBeingDeleted = 0;
    m_declarativeData          = 0;
-   m_postedEvents             = 0;  
+   m_postedEvents             = 0;
    m_sharedRefCount           = 0;
-   
-   m_pendTimer                = false;    // no timers yet 
+
+   m_pendTimer                = false;    // no timers yet
    m_wasDeleted               = false;    // double delete flag
    m_sentChildRemoved         = false;
    m_sendChildEvents          = true;     // should send ChildInsert and ChildRemove events to parent
@@ -118,7 +118,7 @@ QObject::~QObject()
    //
    if (this->m_declarativeData) {
       CSAbstractDeclarativeData::destroyed(this->m_declarativeData, this);
-   }  
+   }
 
    if (! this->m_children.isEmpty()) {
       this->deleteChildren();
@@ -315,7 +315,7 @@ bool QObject::connect(const QObject *sender, const QMetaMethod &signalMetaMethod
                ": Incompatible signal/slot arguments ", receiverClass, "::", slotName);
       return false;
    }
-   
+
    //
    const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
    const CSBentoAbstract *slotMethod_Bento   = slotMetaMethod.getBentoBox();
@@ -336,7 +336,7 @@ bool QObject::connect(const QObject *sender, const QMetaMethod &signalMetaMethod
    bool uniqueConnection = false;
 
    if (type & Qt::UniqueConnection) {
-      uniqueConnection = true;  
+      uniqueConnection = true;
    }
 
    // untangle the type
@@ -345,7 +345,7 @@ bool QObject::connect(const QObject *sender, const QMetaMethod &signalMetaMethod
    std::unique_ptr<CsSignal::Internal::BentoAbstract> signalMethod_Bento2 = signalMethod_Bento->clone();
    std::unique_ptr<CsSignal::Internal::BentoAbstract> slotMethod_Bento2   = slotMethod_Bento->clone();
 
-   CsSignal::connect(*sender, std::move(signalMethod_Bento2), *receiver, std::move(slotMethod_Bento2), kind, uniqueConnection);    
+   CsSignal::connect(*sender, std::move(signalMethod_Bento2), *receiver, std::move(slotMethod_Bento2), kind, uniqueConnection);
    sender->connectNotify(signalMetaMethod);
 
    return true;
@@ -397,9 +397,9 @@ void QObject::deleteLater()
 }
 
 // signal & slot are strings
-bool QObject::disconnect(const QObject *sender,   const char *signalMethod, 
+bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
                          const QObject *receiver, const char *slotMethod)
-{ 
+{
    if (sender == nullptr) {
       qWarning("QObject::disconnect() Can not disconnect as sender is null");
       return false;
@@ -410,10 +410,10 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
 
    }
 
-   // normalize the signal and slot method names or signatures   
+   // normalize the signal and slot method names or signatures
 
    QByteArray signal_name;
-   
+
    if (signalMethod) {
 
       try {
@@ -430,7 +430,7 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
    }
 
    QByteArray slot_name;
-   
+
    if (slotMethod) {
 
       try {
@@ -443,7 +443,7 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
             throw;
          }
       }
-   }  
+   }
 
    const QMetaObject *senderMetaObject   = sender->metaObject();
    const QMetaObject *receiverMetaObject = nullptr;
@@ -452,11 +452,11 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
       receiverMetaObject = receiver->metaObject();
    }
 
-   // retrieve signal bento object from QMetaMethod  
+   // retrieve signal bento object from QMetaMethod
    int signal_index = -1;
 
    if (signalMethod) {
-      signal_index = senderMetaObject->indexOfSignal(signalMethod);     
+      signal_index = senderMetaObject->indexOfSignal(signalMethod);
    }
 
    const CSBentoAbstract *signalMethod_Bento = nullptr;
@@ -467,11 +467,11 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
       signalMethod_Bento = signalMetaMethod.getBentoBox();
    }
 
-   // retrieve slot bento object from QMetaMethod  
+   // retrieve slot bento object from QMetaMethod
    int slot_index = -1;
 
    if (slotMethod) {
-      slot_index = receiverMetaObject->indexOfSlot(slotMethod);     
+      slot_index = receiverMetaObject->indexOfSlot(slotMethod);
    }
 
    const CSBentoAbstract * slotMethod_Bento = nullptr;
@@ -480,26 +480,26 @@ bool QObject::disconnect(const QObject *sender,   const char *signalMethod,
       slotMethod_Bento = receiverMetaObject->method(slot_index).getBentoBox();
    }
 
-   bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);    
-           
+   bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);
+
    if (retval) {
       const QMetaObject *senderMetaObject = sender->metaObject();
-      
-      if (senderMetaObject) {        
+
+      if (senderMetaObject) {
          const_cast<QObject *>(sender)->disconnectNotify(signalMetaMethod);
-      } 
+      }
    }
 
    return retval;
 }
- 
+
 // signal & slot QMetaMethods
 bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetaMethod,
                          const QObject *receiver, const QMetaMethod &slotMetaMethod)
 {
    const QMetaObject *signalMetaObject = signalMetaMethod.getMetaObject();
    const QMetaObject *slotMetaObject   = slotMetaMethod.getMetaObject();
-  
+
    if (sender == nullptr) {
       qWarning("QObject::disconnect() Can not disconnect as sender is null");
       return false;
@@ -550,14 +550,14 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetaM
    const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
    const CSBentoAbstract *slotMethod_Bento   = slotMetaMethod.getBentoBox();
 
-   bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);    
-           
+   bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);
+
    if (retval) {
       const QMetaObject *senderMetaObject = sender->metaObject();
-      
-      if (senderMetaObject) {        
+
+      if (senderMetaObject) {
          const_cast<QObject *>(sender)->disconnectNotify(signalMetaMethod);
-      } 
+      }
    }
 
    return true;
@@ -574,7 +574,7 @@ bool QObject::disconnect(const char *signalMethod, const QObject *receiver, cons
    return QObject::disconnect(this, signalMethod, receiver, slotMethod);
 }
 
-bool QObject::disconnect(const char *signalMethod, const char *, const QObject *receiver, 
+bool QObject::disconnect(const char *signalMethod, const char *, const QObject *receiver,
                          const char *slotMethod) const
 {
    return QObject::disconnect(this, signalMethod, receiver, slotMethod);
@@ -620,9 +620,9 @@ bool QObject::event(QEvent *e)
          break;
 
       case QEvent::MetaCall: {
-         CSMetaCallEvent *metaCallEvent = dynamic_cast<CSMetaCallEvent *>(e);          
-         metaCallEvent->placeMetaCall(this);       
-        
+         CSMetaCallEvent *metaCallEvent = dynamic_cast<CSMetaCallEvent *>(e);
+         metaCallEvent->placeMetaCall(this);
+
          break;
       }
 
@@ -710,12 +710,12 @@ bool QObject::inherits(const char *classname) const
 bool QObject::isSender(const QObject *receiver, const char *signalMethod) const
 {
    bool retval = false;
-   
+
    if (signalMethod) {
       QByteArray signal_name = QMetaObject::normalizedSignature(signalMethod);
       const QMetaObject *metaObj = this->metaObject();
 
-      int index = metaObj->indexOfSignal(signal_name);
+      int index = metaObj->indexOfSignal(signal_name.constData());
 
       if (index == -1)  {
          return false;
@@ -724,7 +724,7 @@ bool QObject::isSender(const QObject *receiver, const char *signalMethod) const
       QMetaMethod metaMethod = metaObj->method(index);
       const CSBentoAbstract *signalMethod_Bento = metaMethod.getBentoBox();
 
-      int count = CsSignal::SignalBase::internal_cntConnections(receiver, *signalMethod_Bento);     
+      int count = CsSignal::SignalBase::internal_cntConnections(receiver, *signalMethod_Bento);
 
       if (count > 0) {
          retval = true;
@@ -740,7 +740,7 @@ bool QObject::isSignalConnected(const QMetaMethod &signalMetaMethod) const
 
    const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
 
-   int count = CsSignal::SignalBase::internal_cntConnections(nullptr, *signalMethod_Bento);       
+   int count = CsSignal::SignalBase::internal_cntConnections(nullptr, *signalMethod_Bento);
 
    if (count > 0) {
       retval = true;
@@ -843,12 +843,12 @@ void QObject::moveToThread_helper()
 bool QObject::compareThreads() const
 {
    Qt::HANDLE currentThreadId = QThread::currentThreadId();
-   
-   return (currentThreadId == this->m_threadData.load()->threadId);   
+
+   return (currentThreadId == this->m_threadData.load()->threadId);
 }
 
 void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kind)
-{   
+{
    std::unique_ptr<CsSignal::Internal::BentoAbstract> slot_Bento = data.internal_moveSlotBento();
    std::unique_ptr<CsSignal::Internal::TeaCupAbstract> teaCup    = data.internal_moveTeaCup();
 
@@ -856,12 +856,12 @@ void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kin
    int signal_index = senderSignalIndex();
 
    if (kind == CsSignal::ConnectionKind::QueuedConnection)  {
-      CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento.release(), teaCup.release(), 
+      CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento.release(), teaCup.release(),
                   sender, signal_index);
 
       QCoreApplication::postEvent(this, event);
 
-   } else if (kind == CsSignal::ConnectionKind::BlockingQueuedConnection) { 
+   } else if (kind == CsSignal::ConnectionKind::BlockingQueuedConnection) {
       if (compareThreads()) {
 
          qWarning("QObject::activate() Dead lock detected while activating a BlockingQueuedConnection: "
@@ -872,14 +872,14 @@ void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kin
       QSemaphore semaphore;
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento.release(), teaCup.release(), 
+      CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento.release(), teaCup.release(),
                   sender, signal_index, &semaphore);
 
       QCoreApplication::postEvent(this, event);
 
       semaphore.acquire();
-   } 
-} 
+   }
+}
 
 QDebug operator<<(QDebug debug, const QObject *object)
 {
@@ -912,18 +912,18 @@ QObject *QObject::parent() const
    return m_parent;
 }
 
-QVariant QObject::property(const char *name) const
+QVariant QObject::property(const QString &name) const
 {
    const QMetaObject *metaObj = metaObject();
 
-   if (! name || ! metaObj) {
+   if (name.isEmpty() || ! metaObj) {
       return QVariant();
    }
 
-   int index = metaObj->indexOfProperty(name);
+   int index = metaObj->indexOfProperty(name.toUtf8().constData());
 
    if (index < 0) {
-      const int k = m_extra_propertyNames.indexOf(name);
+      const int k = m_extra_propertyNames.indexOf(name.toUtf8().constData());
 
       if (k == -1) {
          return QVariant();
@@ -935,7 +935,7 @@ QVariant QObject::property(const char *name) const
    QMetaProperty p = metaObj->property(index);
 
    if (! p.isReadable()) {
-      qWarning("%s::property() Property \"%s\" is invalid or does not exist", metaObj->className(), name);
+      qWarning("%s::property() Property \"%s\" is invalid or does not exist", metaObj->className(), csPrintable(name));
    }
 
    return p.read(this);
@@ -950,7 +950,7 @@ QList<QObject *> QObject::receiverList(const char *signalMethod) const
       QByteArray signal_name = QMetaObject::normalizedSignature(signalMethod);
       const QMetaObject *metaObj = this->metaObject();
 
-      int signal_index = metaObj->indexOfSignal(signal_name);
+      int signal_index = metaObj->indexOfSignal(signal_name.constData());
 
       if (signal_index == -1)  {
          return retval;
@@ -959,7 +959,7 @@ QList<QObject *> QObject::receiverList(const char *signalMethod) const
       const QMetaMethod signalMetaMethod = metaObj->method(signal_index);
       const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
 
-      std::set<SlotBase *> tempSet = CsSignal::SignalBase::internal_receiverList(*signalMethod_Bento); 
+      std::set<SlotBase *> tempSet = CsSignal::SignalBase::internal_receiverList(*signalMethod_Bento);
 
       for (auto item : tempSet)  {
          QObject *obj = dynamic_cast<QObject *>(item);
@@ -975,23 +975,23 @@ QList<QObject *> QObject::receiverList(const char *signalMethod) const
 
 int QObject::receivers(const char *signalMethod) const
 {
-   int receivers    = 0; 
+   int receivers    = 0;
    int signal_index = -1;
 
    if (signalMethod) {
       QByteArray signal_name = QMetaObject::normalizedSignature(signalMethod);
       const QMetaObject *metaObj = this->metaObject();
 
-      signal_index = metaObj->indexOfSignal(signal_name);
+      signal_index = metaObj->indexOfSignal(signal_name.constData());
 
       if (signal_index != -1)  {
          QMetaMethod signalMetaMethod = metaObj->method(signal_index);
          const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
 
-         receivers = CsSignal::SignalBase::internal_cntConnections(nullptr, *signalMethod_Bento); 
+         receivers = CsSignal::SignalBase::internal_cntConnections(nullptr, *signalMethod_Bento);
       }
    }
-   
+
    if (m_declarativeData && CSAbstractDeclarativeData::receivers) {
       receivers += CSAbstractDeclarativeData::receivers(m_declarativeData, this, signal_index);
    }
@@ -1023,7 +1023,7 @@ QList<QObject *> QObject::senderList() const
 {
    QList<QObject *> retval;
 
-   std::set<SignalBase *> tempSet = CsSignal::SlotBase::internal_senderList(); 
+   std::set<SignalBase *> tempSet = CsSignal::SlotBase::internal_senderList();
 
    for (auto item : tempSet)  {
       QObject *obj = dynamic_cast<QObject *>(item);
@@ -1041,14 +1041,14 @@ int QObject::senderSignalIndex() const
 {
    int retval = -1;
 
-   QObject *tempSender = sender();  
- 
+   QObject *tempSender = sender();
+
    if (tempSender == nullptr) {
       return retval;
-   }    
+   }
 
-   const CsSignal::Internal::BentoAbstract *signalBase = CsSignal::SignalBase::get_threadLocal_currentSignal();   
-        
+   const CsSignal::Internal::BentoAbstract *signalBase = CsSignal::SignalBase::get_threadLocal_currentSignal();
+
    if (signalBase != nullptr) {
       retval = tempSender->metaObject()->indexOfMethod(*signalBase);
    }
@@ -1131,24 +1131,24 @@ void QObject::setParent(QObject *newParent)
    }
 }
 
-bool QObject::setProperty(const char *name, const QVariant &value)
+bool QObject::setProperty(const QString &name, const QVariant &value)
 {
    const QMetaObject *metaObj = metaObject();
 
-   if (! name || ! metaObj) {
+   if (name.isEmpty() || ! metaObj) {
       return false;
    }
 
-   int index = metaObj->indexOfProperty(name);
+   int index = metaObj->indexOfProperty(name.toUtf8().constData());
 
    if (index < 0) {
-      const int k = m_extra_propertyNames.indexOf(name);
+      const int k = m_extra_propertyNames.indexOf(name.toUtf8().constData());
 
       if (value.isValid()) {
          // add or update dynamic property
 
          if (k == -1) {
-            m_extra_propertyNames.append(name);
+            m_extra_propertyNames.append(name.toUtf8());
             m_extra_propertyValues.append(value);
 
          } else {
@@ -1167,7 +1167,7 @@ bool QObject::setProperty(const char *name, const QVariant &value)
          m_extra_propertyValues.removeAt(k);
       }
 
-      QDynamicPropertyChangeEvent event(name);
+      QDynamicPropertyChangeEvent event(name.toUtf8());
       QCoreApplication::sendEvent(this, &event);
 
       return false;
@@ -1176,7 +1176,8 @@ bool QObject::setProperty(const char *name, const QVariant &value)
    QMetaProperty p = metaObj->property(index);
 
    if (! p.isWritable()) {
-      qWarning("%s::setProperty() Property \"%s\" is invalid, read only, or does not exist", metaObj->className(), name);
+      qWarning("%s::setProperty() Property \"%s\" is invalid, read only, or does not exist", metaObj->className(),
+                  csPrintable(name));
    }
 
    //
@@ -1184,7 +1185,7 @@ bool QObject::setProperty(const char *name, const QVariant &value)
 
    if (! retval) {
       qWarning("%s::setProperty() Set property \"%s\" failed. Passed value is of type %s, property is of type %s",
-               metaObj->className(), name, value.typeName(), p.typeName() );
+               metaObj->className(), csPrintable(name), value.typeName(), p.typeName() );
    }
 
    return retval;
@@ -1264,11 +1265,11 @@ void QObject::timerEvent(QTimerEvent *)
    // no code is suppose to appear here
 }
 
-bool QObject::cs_InstanceOf(const char *iid)
+bool QObject::cs_InstanceOf(const QString &iid)
 {
    // check if the iid is part of this class
 
-   if (! iid) {
+   if (iid.isEmpty()) {
       return false;
    }
 
@@ -1280,7 +1281,7 @@ bool QObject::cs_InstanceOf(const char *iid)
       const char *className = metaObject->className();
 
       // test 1
-      if (strcmp(iid, className) == 0) {
+      if (iid == className) {
          return true;
       }
 
@@ -1295,7 +1296,7 @@ bool QObject::cs_InstanceOf(const char *iid)
    return false;
 }
 
-bool QObject::cs_interface_query(const char *) const
+bool QObject::cs_interface_query(const QString &) const
 {
    return false;
 }

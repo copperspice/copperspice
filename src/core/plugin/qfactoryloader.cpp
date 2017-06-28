@@ -46,13 +46,17 @@ class QFactoryLoaderPrivate
    virtual ~QFactoryLoaderPrivate();
 
    mutable QMutex mutex;
-   QByteArray iid;
+
+   QString iid;
    QList<QLibraryPrivate *> libraryList;
-   QMap<QString, QLibraryPrivate *> keyMap;
+
    QStringList keyList;
    QString suffix;
-   Qt::CaseSensitivity cs;
+
    QStringList loadedPaths;
+
+   Qt::CaseSensitivity cs;
+   QMap<QString, QLibraryPrivate *> keyMap;
 
    void unloadPath(const QString &path);
 
@@ -68,8 +72,8 @@ QFactoryLoaderPrivate::~QFactoryLoaderPrivate()
    }
 }
 
-QFactoryLoader::QFactoryLoader(const char *iid, const QString &suffix, Qt::CaseSensitivity cs)
-   : QObject(0), d_ptr(new QFactoryLoaderPrivate)
+QFactoryLoader::QFactoryLoader(const QString &iid, const QString &suffix, Qt::CaseSensitivity cs)
+   : QObject(nullptr), d_ptr(new QFactoryLoaderPrivate)
 {
    d_ptr->q_ptr = this;
 
@@ -120,7 +124,7 @@ void QFactoryLoader::updateDir(const QString &pluginDir, QSettings &settings)
       QString regkey = QString::fromLatin1("CopperSpice Factory Cache %1.%2/%3:/%4")
                        .arg((CS_VERSION & 0xff0000) >> 16)
                        .arg((CS_VERSION & 0xff00) >> 8)
-                       .arg(QLatin1String(d->iid))
+                       .arg(d->iid)
                        .arg(fileName);
 
       QStringList reg, keys;
@@ -249,7 +253,6 @@ QStringList QFactoryLoader::keys() const
    QObjectList instances = QPluginLoader::staticInstances();
 
    for (int i = 0; i < instances.count(); ++i) {
-
       if (QFactoryInterface *factory = qobject_cast<QFactoryInterface *>(instances.at(i))) {
 
          if (instances.at(i)->cs_InstanceOf(d->iid))  {
