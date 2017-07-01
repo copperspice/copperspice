@@ -58,7 +58,7 @@
 #if defined(Q_WS_QWS)
 # include <qwsdisplay_qws.h>
 # include <qwsmanager_qws.h>
-# include <qpaintengine.h>             
+# include <qpaintengine.h>
 # include <qwindowsurface_qws_p.h>
 #endif
 
@@ -2525,7 +2525,7 @@ QRect QWidget::normalGeometry() const
 }
 
 QRect QWidget::childrenRect() const
-{   
+{
    QRect r(0, 0, 0, 0);
 
    for (int i = 0; i < children().size(); ++i) {
@@ -2539,7 +2539,7 @@ QRect QWidget::childrenRect() const
 }
 
 QRegion QWidget::childrenRegion() const
-{   
+{
    QRegion r;
 
    for (int i = 0; i < children().size(); ++i) {
@@ -3353,7 +3353,7 @@ void QWidget::render(QPainter *painter, const QPoint &targetOffset,
 
    Q_D(QWidget);
    const bool inRenderWithPainter = d->extra && d->extra->inRenderWithPainter;
-   const QRegion toBePainted = ! inRenderWithPainter ? 
+   const QRegion toBePainted = ! inRenderWithPainter ?
             d->prepareToRender(sourceRegion, renderFlags) : sourceRegion;
 
    if (toBePainted.isEmpty()) {
@@ -3803,7 +3803,7 @@ void QWidgetPrivate::render(QPaintDevice *target, const QPoint &targetOffset,
 
    const bool inRenderWithPainter = extra && extra->inRenderWithPainter;
 
-   QRegion paintRegion; 
+   QRegion paintRegion;
 
    if (! inRenderWithPainter && ! readyToRender)  {
       paintRegion = prepareToRender(sourceRegion, renderFlags);
@@ -3953,13 +3953,13 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
       if (wd->isOpaque) {
          wr -= hasMask ? wd->extra->mask.translated(widgetPos) : w->data->crect;
       }
-     
+
 #ifdef Q_BACKINGSTORE_SUBSURFACES
       paintSiblingsRecursive(pdev, siblings, --index, wr, offset, flags, currentSurface, sharedPainter, backingStore);
 #else
       paintSiblingsRecursive(pdev, siblings, --index, wr, offset, flags, sharedPainter, backingStore);
 #endif
-                             
+
    }
 
 #ifdef QT_NO_GRAPHICSVIEW
@@ -3968,7 +3968,7 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
    if (w->updatesEnabled() && (!w->d_func()->extra || ! w->d_func()->extra->proxyWidget)) {
 #endif
 
-      QRegion wRegion(rgn);     
+      QRegion wRegion(rgn);
       wRegion &= wd->effectiveRectFor(w->data->crect);
 
       wRegion.translate(-widgetPos);
@@ -5151,7 +5151,7 @@ QRect QWidget::contentsRect() const
    Q_D(const QWidget);
 
    return QRect(QPoint(d->leftmargin, d->topmargin),
-                QPoint(data->crect.width() - 1 - d->rightmargin, 
+                QPoint(data->crect.width() - 1 - d->rightmargin,
                 data->crect.height() - 1 - d->bottommargin));
 
 }
@@ -5456,7 +5456,7 @@ void QWidgetPrivate::hide_helper()
 
 void QWidget::setVisible(bool visible)
 {
-   if (visible) { 
+   if (visible) {
       // show
 
       if (testAttribute(Qt::WA_WState_ExplicitShowHide) && !testAttribute(Qt::WA_WState_Hidden)) {
@@ -6481,12 +6481,16 @@ bool QWidget::event(QEvent *event)
 #ifndef QT_NO_PROPERTIES
       case QEvent::DynamicPropertyChange: {
          const QByteArray &propName = static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName();
-         if (!qstrncmp(propName, "_q_customDpi", 12) && propName.length() == 13) {
+
+         if (! propName.startsWith("_q_customDpi") && propName.length() == 13) {
             uint value = property(propName.constData()).toUInt();
+
             if (!d->extra) {
                d->createExtra();
             }
+
             const char axis = propName.at(12);
+
             if (axis == 'X') {
                d->extra->customDpiX = value;
             } else if (axis == 'Y') {

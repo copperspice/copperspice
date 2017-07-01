@@ -66,7 +66,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
     static bool first = true;
     if (first) {
         first = false;
-        g_set_application_name(qApp->applicationName().toUtf8());
+        g_set_application_name(qApp->applicationName().toUtf8().constData());
     }
     GError *err = 0;
     bool wasInit = gst_init_check(0, 0, &err);  //init gstreamer: must be called before any gst-related functions
@@ -102,7 +102,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
     m_effectManager = new EffectManager(this);
 }
 
-Backend::~Backend() 
+Backend::~Backend()
 {
     delete m_effectManager;
     delete m_deviceManager;
@@ -214,7 +214,7 @@ QStringList Backend::availableMimeTypes() const
 
     GstElementFactory *mpegFactory;
     // Add mp3 as a separate mime type as people are likely to look for it.
-    if ((mpegFactory = gst_element_factory_find ("ffmpeg")) || 
+    if ((mpegFactory = gst_element_factory_find ("ffmpeg")) ||
         (mpegFactory = gst_element_factory_find ("mad"))) {
         availableMimeTypes << QLatin1String("audio/x-mp3");
         gst_object_unref(GST_OBJECT(mpegFactory));
@@ -226,14 +226,14 @@ QStringList Backend::availableMimeTypes() const
         GstPluginFeature *feature = GST_PLUGIN_FEATURE(iter->data);
         QString klass = gst_element_factory_get_klass(GST_ELEMENT_FACTORY(feature));
 
-        if (klass == QLatin1String("Codec/Decoder") || 
-            klass == QLatin1String("Codec/Decoder/Audio") || 
-            klass == QLatin1String("Codec/Decoder/Video") || 
-            klass == QLatin1String("Codec/Demuxer") || 
-            klass == QLatin1String("Codec/Demuxer/Audio") || 
-            klass == QLatin1String("Codec/Demuxer/Video") || 
-            klass == QLatin1String("Codec/Parser") || 
-            klass == QLatin1String("Codec/Parser/Audio") || 
+        if (klass == QLatin1String("Codec/Decoder") ||
+            klass == QLatin1String("Codec/Decoder/Audio") ||
+            klass == QLatin1String("Codec/Decoder/Video") ||
+            klass == QLatin1String("Codec/Demuxer") ||
+            klass == QLatin1String("Codec/Demuxer/Audio") ||
+            klass == QLatin1String("Codec/Demuxer/Video") ||
+            klass == QLatin1String("Codec/Parser") ||
+            klass == QLatin1String("Codec/Parser/Audio") ||
             klass == QLatin1String("Codec/Parser/Video")) {
 
             const GList *static_templates;
@@ -476,8 +476,8 @@ void Backend::logMessage(const QString &message, int priority, QObject *obj) con
             QString className(obj->metaObject()->className());
             int nameLength = className.length() - className.lastIndexOf(':') - 1;
             className = className.right(nameLength);
-            output.sprintf("%s %s (%s %p)", message.toLatin1().constData(), 
-                                          obj->objectName().toLatin1().constData(), 
+            output.sprintf("%s %s (%s %p)", message.toLatin1().constData(),
+                                          obj->objectName().toLatin1().constData(),
                                           className.toLatin1().constData(), obj);
         }
         else {

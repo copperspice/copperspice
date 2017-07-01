@@ -1021,7 +1021,7 @@ void QFontDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, SIGNAL(fontSelected(const QFont &)),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
 
       d->receiverToDisconnectOnClose = 0;
    }

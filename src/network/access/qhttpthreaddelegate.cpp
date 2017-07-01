@@ -420,7 +420,7 @@ void QHttpThreadDelegate::finishedSlot()
       // it's an error reply
       QString msg = QLatin1String(QT_TRANSLATE_NOOP("QNetworkReply",
                                   "Error downloading %1 - server replied: %2"));
-      msg = msg.arg(QString::fromAscii(httpRequest.url().toEncoded()), httpReply->reasonPhrase());
+      msg = msg.arg(QString::fromLatin1(httpRequest.url().toEncoded()), httpReply->reasonPhrase());
       emit error(statusCodeFromHttp(httpReply->statusCode(), httpRequest.url()), msg);
    }
 
@@ -445,7 +445,7 @@ void QHttpThreadDelegate::synchronousFinishedSlot()
       // it's an error reply
       QString msg = QLatin1String(QT_TRANSLATE_NOOP("QNetworkReply",
                                   "Error downloading %1 - server replied: %2"));
-      incomingErrorDetail = msg.arg(QString::fromAscii(httpRequest.url().toEncoded()), httpReply->reasonPhrase());
+      incomingErrorDetail = msg.arg(QString::fromLatin1(httpRequest.url().toEncoded()), httpReply->reasonPhrase());
       incomingErrorCode = statusCodeFromHttp(httpReply->statusCode(), httpRequest.url());
    }
 

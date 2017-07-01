@@ -222,17 +222,21 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
             }
             newFreetype->fontData = file.readAll();
          }
+
       } else {
          newFreetype->fontData = fontData;
       }
+
       if (!newFreetype->fontData.isEmpty()) {
          if (FT_New_Memory_Face(freetypeData->library, (const FT_Byte *)newFreetype->fontData.constData(),
                                 newFreetype->fontData.size(), face_id.index, &face)) {
             return 0;
          }
-      } else if (FT_New_Face(freetypeData->library, face_id.filename, face_id.index, &face)) {
+
+      } else if (FT_New_Face(freetypeData->library, face_id.filename.constData(), face_id.index, &face)) {
          return 0;
       }
+
       newFreetype->face = face;
 
       newFreetype->hbFace = qHBNewFace(face, hb_getSFntTable);

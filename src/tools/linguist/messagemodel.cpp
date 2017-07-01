@@ -410,8 +410,10 @@ bool DataModel::setLanguageAndCountry(QLocale::Language lang, QLocale::Country c
    }
    QByteArray rules;
    bool ok = getNumerusInfo(lang, country, &rules, &m_numerusForms, 0);
-   m_localizedLanguage = QCoreApplication::translate("MessageEditor", QLocale::languageToString(lang).toAscii());
+
+   m_localizedLanguage = QCoreApplication::translate("MessageEditor", QLocale::languageToString(lang).toLatin1());
    m_countRefNeeds.clear();
+
    for (int i = 0; i < rules.size(); ++i) {
       m_countRefNeeds.append(!(rules.at(i) == Q_EQ && (i == (rules.size() - 2) || rules.at(i + 2) == (char)Q_NEWRULE)));
       while (++i < rules.size() && rules.at(i) != (char)Q_NEWRULE) {}

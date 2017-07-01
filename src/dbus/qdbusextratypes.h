@@ -104,7 +104,7 @@ private:
 };
 
 inline QDBusSignature::QDBusSignature(const char *dBusSignature)
-    : QString(QString::fromAscii(dBusSignature))
+    : QString(QString::fromLatin1(dBusSignature))
 { check(); }
 
 inline QDBusSignature::QDBusSignature(const QLatin1String &dBusSignature)

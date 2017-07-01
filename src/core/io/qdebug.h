@@ -167,7 +167,7 @@ class Q_CORE_EXPORT QDebug
    }
 
    inline QDebug &operator<<(const char *t) {
-      stream->ts << QString::fromAscii(t);
+      stream->ts << QString::fromLatin1(t);
       return maybeSpace();
    }
 
@@ -188,7 +188,7 @@ class Q_CORE_EXPORT QDebug
       stream->ts  << '\"' << t << '\"';
       return maybeSpace();
    }
- 
+
    inline QDebug &operator<<(const void *t) {
       stream->ts << t;
       return maybeSpace();

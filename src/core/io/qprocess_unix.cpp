@@ -417,11 +417,13 @@ bool QProcessPrivate::createChannel(Channel &channel)
       if (&channel == &stdinChannel) {
          // try to open in read-only mode
          channel.pipe[1] = -1;
-         if ( (channel.pipe[0] = qt_safe_open(fname, O_RDONLY)) != -1) {
+
+         if ( (channel.pipe[0] = qt_safe_open(fname.constData(), O_RDONLY)) != -1) {
             return true;   // success
          }
 
          q->setErrorString(QProcess::tr("Could not open input redirection for reading"));
+
       } else {
          int mode = O_WRONLY | O_CREAT;
          if (channel.append) {
@@ -431,7 +433,7 @@ bool QProcessPrivate::createChannel(Channel &channel)
          }
 
          channel.pipe[0] = -1;
-         if ( (channel.pipe[1] = qt_safe_open(fname, mode, 0666)) != -1) {
+         if ( (channel.pipe[1] = qt_safe_open(fname.constData(), mode, 0666)) != -1) {
             return true;   // success
          }
 
@@ -442,7 +444,9 @@ bool QProcessPrivate::createChannel(Channel &channel)
       processError = QProcess::FailedToStart;
       emit q->error(processError);
       cleanup();
+
       return false;
+
    } else {
       Q_ASSERT_X(channel.process, "QProcess::start", "Internal error");
 

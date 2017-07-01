@@ -224,7 +224,7 @@ void QScriptSyntaxHighlighter::highlightBlock(const QString &text)
       if (lastWasBackSlash) {
          input = InputSep;
       } else {
-         switch (c.toAscii()) {
+         switch (c.toLatin1()) {
             case '*':
                input = InputAsterix;
                break;

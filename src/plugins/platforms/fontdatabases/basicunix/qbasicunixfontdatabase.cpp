@@ -291,7 +291,7 @@ QStringList QBasicUnixFontDatabase::addTTFile(const QByteArray &fontData, const 
             writingSystems = determineWritingSystemsFromTrueTypeBits(unicodeRange, codePageRange);
         }
 
-        QString family = QString::fromAscii(face->family_name);
+        QString family = QString::fromLatin1(face->family_name);
         FontFile *fontFile = new FontFile;
         fontFile->fileName = file;
         fontFile->indexValue = index;

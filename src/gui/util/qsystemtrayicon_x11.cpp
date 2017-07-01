@@ -50,7 +50,7 @@ Window QSystemTrayIconSys::locateSystemTray()
    if (sysTraySelection == XNone) {
       int screen = QX11Info::appScreen();
       QString net_sys_tray = QString::fromLatin1("_NET_SYSTEM_TRAY_S%1").arg(screen);
-      sysTraySelection = XInternAtom(display, net_sys_tray.toLatin1(), False);
+      sysTraySelection = XInternAtom(display, net_sys_tray.toLatin1().constData(), False);
    }
 
    return XGetSelectionOwner(QX11Info::display(), sysTraySelection);

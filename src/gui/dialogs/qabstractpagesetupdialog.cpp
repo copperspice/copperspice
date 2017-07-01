@@ -110,11 +110,11 @@ void QAbstractPageSetupDialog::done(int result)
    QDialog::done(result);
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(accepted()), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, SIGNAL(accepted()), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
       d->receiverToDisconnectOnClose = 0;
    }
-   d->memberToDisconnectOnClose.clear();
 
+   d->memberToDisconnectOnClose.clear();
 }
 
 QT_END_NAMESPACE

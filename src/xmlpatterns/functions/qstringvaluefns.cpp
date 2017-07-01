@@ -337,7 +337,7 @@ Item EncodeString::evaluateSingleton(const DynamicContext::Ptr &context) const
       return CommonValues::EmptyString;
    }
 
-   return AtomicString::fromValue(QString::fromAscii(QUrl::toPercentEncoding(item.stringValue(),
+   return AtomicString::fromValue(QString::fromLatin1(QUrl::toPercentEncoding(item.stringValue(),
                                   m_excludeChars,
                                   m_includeChars).constData()));
 }

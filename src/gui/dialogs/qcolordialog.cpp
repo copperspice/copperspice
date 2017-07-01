@@ -2121,7 +2121,7 @@ void QColorDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, SIGNAL(colorSelected(const QColor &)),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
 
       d->receiverToDisconnectOnClose = 0;
    }

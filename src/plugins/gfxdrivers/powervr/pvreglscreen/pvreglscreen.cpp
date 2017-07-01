@@ -268,7 +268,7 @@ void PvrEglScreen::openTty()
                 break;
         }
     } else {
-        ttyfd = ::open(ttyDevice.toAscii().constData(), O_RDWR);
+        ttyfd = ::open(ttyDevice.toLatin1().constData(), O_RDWR);
     }
 
     if (ttyfd == -1)

@@ -22,21 +22,26 @@
 
 #include <qmime.h>
 
-QT_BEGIN_NAMESPACE
-
 QMimeSource::~QMimeSource()
 {
 }
 
-bool QMimeSource::provides(const char *mimeType) const
+bool QMimeSource::provides(const QString &mimeType) const
 {
-   const char *fmt;
-   for (int i = 0; (fmt = format(i)); i++) {
-      if (!qstricmp(mimeType, fmt)) {
-         return true;
-      }
-   }
-   return false;
-}
+   QString fmt;
+   int i = 0;
 
-QT_END_NAMESPACE
+   while (true) {
+      fmt = format(i);
+
+      if (fmt.isEmpty()) {
+         return false;
+
+      } else if (mimeType == fmt)  {
+         return true;
+
+      }
+
+      ++i;
+   }
+}

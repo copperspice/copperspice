@@ -23,7 +23,6 @@
 #ifndef QDynamicContext_P_H
 #define QDynamicContext_P_H
 
-#include <qautoptr_p.h>
 #include <qcachecells_p.h>
 #include <qexternalvariableloader_p.h>
 #include <qitem_p.h>
@@ -98,7 +97,7 @@ class DynamicContext : public ReportContext
    virtual NodeBuilder::Ptr nodeBuilder(const QUrl &baseURI) const = 0;
    virtual ResourceLoader::Ptr resourceLoader() const = 0;
    virtual ExternalVariableLoader::Ptr externalVariableLoader() const = 0;
-   
+
    /**
     * @short Returns the item that @c fn:current() returns.
     *

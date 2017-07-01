@@ -478,11 +478,12 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
             buf.open(QBuffer::WriteOnly);
             // would there not be PNG ??
             image.save(&buf, "PNG");
+
          } else if (mimeType.startsWith(QLatin1String("image/")) && data->hasImage()) {
             QImage image = qvariant_cast<QImage>(data->imageData());
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
-            image.save(&buf, mimeType.mid(mimeType.indexOf(QLatin1Char('/')) + 1).toLatin1().toUpper());
+            image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toLatin1().toUpper().constData());
          }
       }
    }

@@ -600,11 +600,11 @@ QString GraphPath::toString() const
    QString string(QLatin1String("Path: "));
 
    for (AnchorData * edge : positives) {
-      string += QString::fromAscii(" (+++) %1").arg(edge->toString());
+      string += QString::fromLatin1(" (+++) %1").arg(edge->toString());
    }
 
    for (AnchorData * edge : negatives) {
-      string += QString::fromAscii(" (---) %1").arg(edge->toString());
+      string += QString::fromLatin1(" (---) %1").arg(edge->toString());
    }
 
    return string;
@@ -874,7 +874,7 @@ bool QGraphicsAnchorLayoutPrivate::replaceVertex(Orientation orientation, Anchor
       AnchorVertex *otherV = replaceVertex_helper(ad, oldV, newV);
 
 #if defined(QT_DEBUG)
-      ad->name = QString::fromAscii("%1 --to--> %2").arg(ad->from->toString()).arg(ad->to->toString());
+      ad->name = QString::fromLatin1("%1 --to--> %2").arg(ad->from->toString()).arg(ad->to->toString());
 #endif
 
       bool newFeasible;
@@ -1742,7 +1742,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
    data->from = v1;
    data->to = v2;
 #ifdef QT_DEBUG
-   data->name = QString::fromAscii("%1 --to--> %2").arg(v1->toString()).arg(v2->toString());
+   data->name = QString::fromLatin1("%1 --to--> %2").arg(v1->toString()).arg(v2->toString());
 #endif
    // ### bit to track internal anchors, since inside AnchorData methods
    // we don't have access to the 'q' pointer.
@@ -3007,12 +3007,12 @@ bool QGraphicsAnchorLayoutPrivate::hasConflicts() const
 #ifdef QT_DEBUG
 void QGraphicsAnchorLayoutPrivate::dumpGraph(const QString &name)
 {
-   QFile file(QString::fromAscii("anchorlayout.%1.dot").arg(name));
+   QFile file(QString::fromLatin1("anchorlayout.%1.dot").arg(name));
    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
       qWarning("Could not write to %s", file.fileName().toLocal8Bit().constData());
    }
 
-   QString str = QString::fromAscii("digraph anchorlayout {\nnode [shape=\"rect\"]\n%1}");
+   QString str = QString::fromLatin1("digraph anchorlayout {\nnode [shape=\"rect\"]\n%1}");
    QString dotContents = graph[0].serializeToDot();
    dotContents += graph[1].serializeToDot();
    file.write(str.arg(dotContents).toLocal8Bit());

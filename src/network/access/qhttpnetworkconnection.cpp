@@ -225,22 +225,25 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
 #endif
    }
 
-   // some websites mandate an accept-language header and fail
-   // if it is not sent. This is a problem with the website and
-   // not with us, but we work around this by setting
-   // one always.
+   // some websites mandate an accept-language header and fail if it is not sent.
+   // this is a problem with the website, work around this by setting one always
    value = request.headerField("accept-language");
+
    if (value.isEmpty()) {
-      QString systemLocale = QLocale::system().name().replace(QChar::fromAscii('_'), QChar::fromAscii('-'));
+      QString systemLocale = QLocale::system().name().replace(QChar::fromLatin1('_'), QChar::fromLatin1('-'));
       QString acceptLanguage;
-      if (systemLocale == QLatin1String("C")) {
-         acceptLanguage = QString::fromAscii("en,*");
-      } else if (systemLocale.startsWith(QLatin1String("en-"))) {
-         acceptLanguage = QString::fromAscii("%1,*").arg(systemLocale);
+
+      if (systemLocale == "C") {
+         acceptLanguage = "en,*";
+
+      } else if (systemLocale.startsWith("en-")) {
+         acceptLanguage = QString("%1,*").arg(systemLocale);
+
       } else {
-         acceptLanguage = QString::fromAscii("%1,en,*").arg(systemLocale);
+         acceptLanguage = QString("%1,en,*").arg(systemLocale);
       }
-      request.setHeaderField("Accept-Language", acceptLanguage.toAscii());
+
+      request.setHeaderField("Accept-Language", acceptLanguage.toLatin1());
    }
 
    // set the User Agent
@@ -248,6 +251,7 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
    if (value.isEmpty()) {
       request.setHeaderField("User-Agent", "Mozilla/5.0");
    }
+
    // set the host
    value = request.headerField("host");
    if (value.isEmpty()) {
@@ -255,7 +259,7 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
       QByteArray host;
       if (add.setAddress(hostName)) {
          if (add.protocol() == QAbstractSocket::IPv6Protocol) {
-            host = "[" + hostName.toAscii() + "]";//format the ipv6 in the standard way
+            host = "[" + hostName.toLatin1() + "]";//format the ipv6 in the standard way
          } else {
             host = QUrl::toAce(hostName);
          }

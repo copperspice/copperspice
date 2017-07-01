@@ -660,30 +660,24 @@ void QGtkPainter::paintExtention(GtkWidget *gtkWidget,
    m_painter->drawPixmap(rect.topLeft(), cache);
 }
 
-void QGtkPainter::paintOption(GtkWidget *gtkWidget, const QRect &radiorect,
-                              GtkStateType state, GtkShadowType shadow,
-                              GtkStyle *style, const QString &detail)
-
+void QGtkPainter::paintOption(GtkWidget *gtkWidget, const QRect &radiorect, GtkStateType state,
+                  GtkShadowType shadow, GtkStyle *style, const QString &detail)
 {
    QRect rect = m_cliprect.isValid() ? m_cliprect : radiorect;
-   if (!rect.isValid()) {
+   if (! rect.isValid()) {
       return;
    }
 
    QPixmap cache;
    QString pixmapName = uniqueName(detail, state, shadow, rect.size());
+
    GdkRectangle gtkCliprect = {0, 0, rect.width(), rect.height()};
    int xOffset = m_cliprect.isValid() ? radiorect.x() - m_cliprect.x() : 0;
    int yOffset = m_cliprect.isValid() ? radiorect.y() - m_cliprect.y() : 0;
+
    if (!m_usePixmapCache || !QPixmapCache::find(pixmapName, cache)) {
-      DRAW_TO_CACHE(QGtkStylePrivate::gtk_paint_option(style, pixmap,
-                    state, shadow,
-                    &gtkCliprect,
-                    gtkWidget,
-                    detail.toLatin1(),
-                    xOffset, yOffset,
-                    radiorect.width(),
-                    radiorect.height()));
+      DRAW_TO_CACHE(QGtkStylePrivate::gtk_paint_option(style, pixmap, state, shadow, &gtkCliprect, gtkWidget,
+                  detail.toLatin1().constData(), xOffset, yOffset, radiorect.width(), radiorect.height()));
 
       if (m_usePixmapCache) {
          QPixmapCache::insert(pixmapName, cache);
@@ -693,10 +687,8 @@ void QGtkPainter::paintOption(GtkWidget *gtkWidget, const QRect &radiorect,
    m_painter->drawPixmap(rect.topLeft(), cache);
 }
 
-void QGtkPainter::paintCheckbox(GtkWidget *gtkWidget, const QRect &checkrect,
-                                GtkStateType state, GtkShadowType shadow,
-                                GtkStyle *style, const QString &detail)
-
+void QGtkPainter::paintCheckbox(GtkWidget *gtkWidget, const QRect &checkrect, GtkStateType state, GtkShadowType shadow,
+                  GtkStyle *style, const QString &detail)
 {
    QRect rect = m_cliprect.isValid() ? m_cliprect : checkrect;
    if (!rect.isValid()) {
@@ -708,17 +700,11 @@ void QGtkPainter::paintCheckbox(GtkWidget *gtkWidget, const QRect &checkrect,
    GdkRectangle gtkCliprect = {0, 0, rect.width(), rect.height()};
    int xOffset = m_cliprect.isValid() ? checkrect.x() - m_cliprect.x() : 0;
    int yOffset = m_cliprect.isValid() ? checkrect.y() - m_cliprect.y() : 0;
+
    if (!m_usePixmapCache || !QPixmapCache::find(pixmapName, cache)) {
-      DRAW_TO_CACHE(QGtkStylePrivate::gtk_paint_check (style,
-                    pixmap,
-                    state,
-                    shadow,
-                    &gtkCliprect,
-                    gtkWidget,
-                    detail.toLatin1(),
-                    xOffset, yOffset,
-                    checkrect.width(),
-                    checkrect.height()));
+      DRAW_TO_CACHE(QGtkStylePrivate::gtk_paint_check (style, pixmap, state, shadow, &gtkCliprect,
+                  gtkWidget, detail.toLatin1().constData(), xOffset, yOffset, checkrect.width(), checkrect.height()));
+
       if (m_usePixmapCache) {
          QPixmapCache::insert(pixmapName, cache);
       }

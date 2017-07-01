@@ -54,7 +54,7 @@ QList<QByteArray> GstHelper::extractProperties(GstElement *elem, const QByteArra
         const GParamSpec *devspec = 0;
         GValueArray *array = NULL;
 
-        if ((devspec = gst_property_probe_get_property (probe, value))) {
+        if ((devspec = gst_property_probe_get_property (probe, value.constData()))) {
             if ((array = gst_property_probe_probe_and_get_values (probe, devspec))) {
                 for (unsigned int device = 0; device < array->n_values; device++) {
                     GValue *deviceId = g_value_array_get_nth (array, device);

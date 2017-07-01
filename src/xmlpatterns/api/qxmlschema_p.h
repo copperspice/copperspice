@@ -25,7 +25,6 @@
 
 #include "qabstractmessagehandler.h"
 #include "qabstracturiresolver.h"
-#include "qautoptr_p.h"
 #include "qcoloringmessagehandler_p.h"
 #include "qreferencecountedvalue_p.h"
 #include "qxsdschemacontext_p.h"

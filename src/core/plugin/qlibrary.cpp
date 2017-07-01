@@ -239,7 +239,7 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QB
       }
 
       if (qt_debug_component()) {
-         qWarning("%s: %s", (const char *) QFile::encodeName(library), qPrintable(qt_error_string(errno)));
+         qWarning("%s: %s", QFile::encodeName(library).constData(), csPrintable(qt_error_string(errno)));
       }
       return false;
    }

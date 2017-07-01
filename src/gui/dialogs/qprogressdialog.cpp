@@ -149,7 +149,7 @@ void QProgressDialog::cancel()
 void QProgressDialog::disconnectOnClose()
 {
    if (receiverToDisconnectOnClose) {
-      QObject::disconnect(this, SIGNAL(canceled()), receiverToDisconnectOnClose, memberToDisconnectOnClose);
+      QObject::disconnect(this, SIGNAL(canceled()), receiverToDisconnectOnClose, memberToDisconnectOnClose.constData());
       receiverToDisconnectOnClose = 0;
    }
 

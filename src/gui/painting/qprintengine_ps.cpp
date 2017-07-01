@@ -385,10 +385,13 @@ void QPSPrintEnginePrivate::drawImageHelper(qreal x, qreal y, qreal w, qreal h, 
       int format;
       out = compressHelper(mask, true, &format);
       size = (width + 7) / 8 * height;
+
       *currentPage << "/mask currentfile/ASCII85Decode filter"
                    << filters[format]
                    << size << " string readstring\n";
-      ps_r7(*currentPage, out, out.size());
+
+      ps_r7(*currentPage, out.constData(), out.size());
+
       *currentPage << " pop def\n";
    }
    if (img.depth() == 1) {
@@ -407,18 +410,19 @@ void QPSPrintEnginePrivate::drawImageHelper(qreal x, qreal y, qreal w, qreal h, 
    *currentPage << "/sl currentfile/ASCII85Decode filter"
                 << filters[format]
                 << size << " string readstring\n";
-   ps_r7(*currentPage, out, out.size());
+
+   ps_r7(*currentPage, out.constData(), out.size());
+
    *currentPage << " pop def\n";
    *currentPage << width << ' ' << height << '[' << scaleX << " 0 0 " << scaleY << " 0 0]sl "
                 << bits << (!mask.isNull() ? "mask " : "false ")
                 << x << ' ' << y << " di\n";
 }
 
-
 void QPSPrintEnginePrivate::drawImage(qreal x, qreal y, qreal w, qreal h,
                                       const QImage &image, const QImage &msk)
 {
-   if (!w || !h || image.isNull()) {
+   if (! w || !h || image.isNull()) {
       return;
    }
 

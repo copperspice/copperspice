@@ -129,7 +129,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
          const QObject *element = list.at(j);
 
          // name of the element
-         QByteArray objName = element->objectName().toAscii();
+         QByteArray objName = element->objectName().toLatin1();
          int len = objName.length();
 
          if (! len || qstrncmp(slotName + 3, objName.data(), len) || slotName[len + 3] != '_') {
@@ -1879,7 +1879,7 @@ void QMetaObject_X::register_method_s1(const char *name, QMetaMethod::Access acc
       if (kind == QMetaMethod::Constructor) {
          m_constructor.insert(tokenKey, data);
       } else  {
-         m_methods.insert(tokenKey, data);        
+         m_methods.insert(tokenKey, data);
       }
    }
 }
@@ -1893,11 +1893,11 @@ void QMetaObject_X::register_tag(const char *name, const char *method)
    auto item = m_methods.find(method);
 
    if ( item == m_methods.end() )  {
-      // entry not found 
+      // entry not found
       throw std::logic_error("Unable to register method tag, verify signal/slot macros");
 
 
-   } else { 
+   } else {
       // retrieve existing obj
       QMetaMethod obj = item.value();
       obj.setTag(name);

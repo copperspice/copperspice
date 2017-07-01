@@ -191,7 +191,7 @@ class Graph
             EdgeData *data = edgeData(v, v1);
             bool forward = data->from == v;
             if (forward) {
-               edges += QString::fromAscii("\"%1\"->\"%2\" [label=\"[%3,%4,%5,%6,%7]\" color=\"#000000\"] \n")
+               edges += QString::fromLatin1("\"%1\"->\"%2\" [label=\"[%3,%4,%5,%6,%7]\" color=\"#000000\"] \n")
                         .arg(v->toString())
                         .arg(v1->toString())
                         .arg(data->minSize)
@@ -202,9 +202,9 @@ class Graph
                         ;
             }
          }
-         strVertices += QString::fromAscii("\"%1\" [label=\"%2\"]\n").arg(v->toString()).arg(v->toString());
+         strVertices += QString::fromLatin1("\"%1\" [label=\"%2\"]\n").arg(v->toString()).arg(v->toString());
       }
-      return QString::fromAscii("%1\n%2\n").arg(strVertices).arg(edges);
+      return QString::fromLatin1("%1\n%2\n").arg(strVertices).arg(edges);
    }
 #endif
 

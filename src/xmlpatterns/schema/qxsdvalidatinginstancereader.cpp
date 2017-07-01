@@ -186,7 +186,8 @@ bool XsdValidatingInstanceReader::loadSchema(const QString &targetNamespace, con
    context->m_schemaTypeFactory = m_context->m_schemaTypeFactory;
 
    QXmlSchemaPrivate schema(context);
-   schema.load(reply.data(), location, targetNamespace);
+   schema.load(reply.get(), location, targetNamespace);
+
    if (!schema.isValid()) {
       error(QtXmlPatterns::tr("Loaded schema file is invalid."));
       return false;

@@ -24,7 +24,7 @@
 #include <qdatastream.h>
 #include <qtextcodec.h>
 #include <qunicodetables_p.h>
-#include "qunicodetables.cpp"         // do not change to < > 
+#include "qunicodetables.cpp"         // do not change to < >
 
 QT_BEGIN_NAMESPACE
 
@@ -722,75 +722,15 @@ ushort QChar::toCaseFolded(ushort ucs2)
 }
 
 
-/*!
-    \fn char QChar::latin1() const
-
-    Use toLatin1() instead.
-*/
-
-/*!
-    \fn char QChar::ascii() const
-
-    Use toAscii() instead.
-*/
-
-/*!
-    \fn char QChar::toLatin1() const
-
-    Returns the Latin-1 character equivalent to the QChar, or 0. This
-    is mainly useful for non-internationalized software.
-
-    \sa toAscii(), unicode()
-*/
-
-/*!
-    \fn char QChar::toAscii() const
-
-    Returns the Latin-1 character value of the QChar, or 0 if the character is not
-    representable.
-
-    The main purpose of this function is to preserve ASCII characters used
-    in C strings. This is mainly useful for developers of non-internationalized
-    software.
-
-    \note It is not possible to distinguish a non-Latin 1 character from an ASCII 0
-    (NUL) character. Prefer to use unicode(), which does not have this ambiguity.
-
-    \sa toLatin1(), unicode()
-*/
-
-/*!
-    \fn QChar QChar::fromAscii(char)
-
-    Converts the ASCII character \a c to it's equivalent QChar. This
-    is mainly useful for non-internationalized software.
-
-    An alternative is to use QLatin1Char.
-
-    \sa fromLatin1(), unicode()
-*/
-
 #ifndef QT_NO_DATASTREAM
-/*!
-    \relates QChar
 
-    Writes the char \a chr to the stream \a out.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, QChar chr)
 {
    out << quint16(chr.unicode());
    return out;
 }
 
-/*!
-    \relates QChar
 
-    Reads a char from the stream \a in into char \a chr.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &in, QChar &chr)
 {
    quint16 u;
@@ -799,100 +739,6 @@ QDataStream &operator>>(QDataStream &in, QChar &chr)
    return in;
 }
 #endif // QT_NO_DATASTREAM
-
-/*!
-    \fn ushort & QChar::unicode()
-
-    Returns a reference to the numeric Unicode value of the QChar.
-*/
-
-/*!
-    \fn ushort QChar::unicode() const
-
-    \overload
-*/
-
-/*****************************************************************************
-  Documentation of QChar related functions
- *****************************************************************************/
-
-/*!
-    \fn bool operator==(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if \a c1 and \a c2 are the same Unicode character;
-    otherwise returns false.
-*/
-
-/*!
-    \fn int operator!=(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if \a c1 and \a c2 are not the same Unicode
-    character; otherwise returns false.
-*/
-
-/*!
-    \fn int operator<=(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if the numeric Unicode value of \a c1 is less than
-    or equal to that of \a c2; otherwise returns false.
-*/
-
-/*!
-    \fn int operator>=(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if the numeric Unicode value of \a c1 is greater than
-    or equal to that of \a c2; otherwise returns false.
-*/
-
-/*!
-    \fn int operator<(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if the numeric Unicode value of \a c1 is less than
-    that of \a c2; otherwise returns false.
-*/
-
-/*!
-    \fn int operator>(QChar c1, QChar c2)
-
-    \relates QChar
-
-    Returns true if the numeric Unicode value of \a c1 is greater than
-    that of \a c2; otherwise returns false.
-*/
-
-/*!
-    \fn bool QChar::mirrored() const
-
-    Use hasMirrored() instead.
-*/
-
-/*!
-    \fn QChar QChar::lower() const
-
-    Use toLower() instead.
-*/
-
-/*!
-    \fn QChar QChar::upper() const
-
-    Use toUpper() instead.
-*/
-
-/*!
-    \fn bool QChar::networkOrdered()
-
-    See if QSysInfo::ByteOrder == QSysInfo::BigEndian instead.
-*/
 
 
 // ---------------------------------------------------------------------------

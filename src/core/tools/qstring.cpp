@@ -2416,30 +2416,6 @@ bool QString::endsWith(QChar c, Qt::CaseSensitivity cs) const
               : foldCase(d->data()[d->size - 1]) == foldCase(c.unicode()));
 }
 
-/*! \fn const char *QString::ascii() const
-    \nonreentrant
-
-    Use toAscii() instead.
-*/
-
-/*! \fn const char *QString::latin1() const
-    \nonreentrant
-
-    Use toLatin1() instead.
-*/
-
-/*! \fn const char *QString::utf8() const
-    \nonreentrant
-
-    Use toUtf8() instead.
-*/
-
-/*! \fn const char *QString::local8Bit() const
-    \nonreentrant
-
-    Use toLocal8Bit() instead.
-*/
-
 #if defined(QT_ALWAYS_HAVE_SSE2)
 static inline __m128i mergeQuestionMarks(__m128i chunk)
 {
@@ -2555,30 +2531,11 @@ static QByteArray toLatin1_helper(const QChar *data, int length)
    return ba;
 }
 
-/*!
-    Returns a Latin-1 representation of the string as a QByteArray.
-
-    The returned byte array is undefined if the string contains non-Latin1
-    characters. Those characters may be suppressed or replaced with a
-    question mark.
-
-    \sa fromLatin1(), toAscii(), toUtf8(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QString::toLatin1() const
 {
    return toLatin1_helper(unicode(), length());
 }
 
-/*!
-    Returns an 8-bit representation of the string as a QByteArray.
-
-    This function does the same as toLatin1().
-
-    Note that, despite the name, this function does not necessarily return an US-ASCII
-    (ANSI X3.4-1986) string and its result may not be US-ASCII compatible.
-
-    \sa fromAscii(), toLatin1(), toUtf8(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QString::toAscii() const
 {
    return toLatin1();
@@ -2596,21 +2553,6 @@ static QByteArray toLocal8Bit_helper(const QChar *data, int length)
 }
 #endif
 
-/*!
-    Returns the local 8-bit representation of the string as a
-    QByteArray. The returned byte array is undefined if the string
-    contains characters not supported by the local 8-bit encoding.
-
-    QTextCodec::codecForLocale() is used to perform the conversion from
-    Unicode. If the locale encoding could not be determined, this function
-    does the same as toLatin1().
-
-    If this string contains any characters that cannot be encoded in the
-    locale, the returned byte array is undefined. Those characters may be
-    suppressed or replaced by another.
-
-    \sa fromLocal8Bit(), toAscii(), toLatin1(), toUtf8(), QTextCodec
-*/
 QByteArray QString::toLocal8Bit() const
 {
 
@@ -2624,22 +2566,6 @@ QByteArray QString::toLocal8Bit() const
    return toLatin1();
 }
 
-/*!
-    Returns a UTF-8 representation of the string as a QByteArray.
-
-    UTF-8 is a Unicode codec and can represent all characters in a Unicode
-    string like QString.
-
-    However, in the Unicode range, there are certain codepoints that are not
-    considered characters. The Unicode standard reserves the last two
-    codepoints in each Unicode Plane (U+FFFE, U+FFFF, U+1FFFE, U+1FFFF,
-    U+2FFFE, etc.), as well as 16 codepoints in the range U+FDD0..U+FDDF,
-    inclusive, as non-characters. If any of those appear in the string, they
-    may be discarded and will not appear in the UTF-8 representation, or they
-    may be replaced by one or more replacement characters.
-
-    \sa fromUtf8(), toAscii(), toLatin1(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QString::toUtf8() const
 {
    if (isNull()) {
@@ -2649,16 +2575,6 @@ QByteArray QString::toUtf8() const
    return QUtf8::convertFromUnicode(constData(), length(), 0);
 }
 
-/*!
-    \since 4.2
-
-    Returns a UCS-4/UTF-32 representation of the string as a QVector<uint>.
-
-    UCS-4 is a Unicode codec and is lossless. All characters from this string
-    can be encoded in UCS-4. The vector is not null terminated.
-
-    \sa fromUtf8(), toAscii(), toLatin1(), toLocal8Bit(), QTextCodec, fromUcs4(), toWCharArray()
-*/
 QVector<uint> QString::toUcs4() const
 {
    QVector<uint> v(length());
@@ -2764,39 +2680,6 @@ QString QString::fromLocal8Bit_helper(const char *str, int size)
    return fromLatin1(str, size);
 }
 
-/*! \fn QString QString::fromAscii(const char *, int size);
-    Returns a QString initialized with the first \a size characters
-    from the string \a str.
-
-    If \a size is -1 (default), it is taken to be strlen(\a
-    str).
-
-    This function does the same as fromLatin1().
-
-    \sa toAscii(), fromLatin1(), fromUtf8(), fromLocal8Bit()
-*/
-
-/*! \fn QString QString::fromUtf8(const char *str, int size)
-    Returns a QString initialized with the first \a size bytes
-    of the UTF-8 string \a str.
-
-    If \a size is -1 (default), it is taken to be strlen(\a
-    str).
-
-    UTF-8 is a Unicode codec and can represent all characters in a Unicode
-    string like QString. However, invalid sequences are possible with UTF-8
-    and, if any such are found, they will be replaced with one or more
-    "replacement characters", or suppressed. These include non-Unicode
-    sequences, non-characters, overlong sequences or surrogate codepoints
-    encoded into UTF-8.
-
-    Non-characters are codepoints that the Unicode standard reserves and must
-    not be used in text interchange. They are the last two codepoints in each
-    Unicode Plane (U+FFFE, U+FFFF, U+1FFFE, U+1FFFF, U+2FFFE, etc.), as well
-    as 16 codepoints in the range U+FDD0..U+FDDF, inclusive.
-
-    \sa toUtf8(), fromAscii(), fromLatin1(), fromLocal8Bit()
-*/
 QString QString::fromUtf8_helper(const char *str, int size)
 {
    if (!str) {
@@ -2807,23 +2690,6 @@ QString QString::fromUtf8_helper(const char *str, int size)
    return QUtf8::convertToUnicode(str, size, 0);
 }
 
-/*!
-    Returns a QString initialized with the first \a size characters
-    of the Unicode string \a unicode (ISO-10646-UTF-16 encoded).
-
-    If \a size is -1 (default), \a unicode must be terminated
-    with a 0.
-
-    This function checks for a Byte Order Mark (BOM). If it is missing,
-    host byte order is assumed.
-
-    This function is slow compared to the other Unicode conversions.
-    Use QString(const QChar *, int) or QString(const QChar *) if possible.
-
-    QString makes a deep copy of the Unicode data.
-
-    \sa utf16(), setUtf16()
-*/
 QString QString::fromUtf16(const ushort *unicode, int size)
 {
    if (!unicode) {
@@ -2838,18 +2704,6 @@ QString QString::fromUtf16(const ushort *unicode, int size)
    return QUtf16::convertToUnicode((const char *)unicode, size * 2, 0);
 }
 
-
-/*!
-    \since 4.2
-
-    Returns a QString initialized with the first \a size characters
-    of the Unicode string \a unicode (ISO-10646-UCS-4 encoded).
-
-    If \a size is -1 (default), \a unicode must be terminated
-    with a 0.
-
-    \sa toUcs4(), fromUtf16(), utf16(), setUtf16(), fromWCharArray()
-*/
 QString QString::fromUcs4(const uint *unicode, int size)
 {
    if (!unicode) {
@@ -2864,15 +2718,6 @@ QString QString::fromUcs4(const uint *unicode, int size)
    return QUtf32::convertToUnicode((const char *)unicode, size * 4, 0);
 }
 
-/*!
-    Resizes the string to \a size characters and copies \a unicode
-    into the string.
-
-    If \a unicode is 0, nothing is copied, but the string is still
-    resized to \a size.
-
-    \sa unicode(), setUtf16()
-*/
 QString &QString::setUnicode(const QChar *unicode, int size)
 {
    resize(size);
@@ -2882,36 +2727,6 @@ QString &QString::setUnicode(const QChar *unicode, int size)
    return *this;
 }
 
-/*!
-    \fn QString &QString::setUtf16(const ushort *unicode, int size)
-
-    Resizes the string to \a size characters and copies \a unicode
-    into the string.
-
-    If \a unicode is 0, nothing is copied, but the string is still
-    resized to \a size.
-
-    Note that unlike fromUtf16(), this function does not consider BOMs and
-    possibly differing byte ordering.
-
-    \sa utf16(), setUnicode()
-*/
-
-/*!
-    Returns a string that has whitespace removed from the start
-    and the end, and that has each sequence of internal whitespace
-    replaced with a single space.
-
-    Whitespace means any character for which QChar::isSpace() returns
-    true. This includes the ASCII characters '\\t', '\\n', '\\v',
-    '\\f', '\\r', and ' '.
-
-    Example:
-
-    \snippet doc/src/snippets/qstring/main.cpp 57
-
-    \sa trimmed()
-*/
 QString QString::simplified() const
 {
    if (d->size == 0) {
@@ -5711,116 +5526,6 @@ bool QString::isRightToLeft() const
    return false;
 }
 
-/*! \fn QChar *QString::data()
-
-    Returns a pointer to the data stored in the QString. The pointer
-    can be used to access and modify the characters that compose the
-    string. For convenience, the data is '\\0'-terminated.
-
-    Example:
-
-    \snippet doc/src/snippets/qstring/main.cpp 19
-
-    Note that the pointer remains valid only as long as the string is
-    not modified by other means. For read-only access, constData() is
-    faster because it never causes a \l{deep copy} to occur.
-
-    \sa constData(), operator[]()
-*/
-
-/*! \fn const QChar *QString::data() const
-
-    \overload
-*/
-
-/*! \fn const QChar *QString::constData() const
-
-    Returns a pointer to the data stored in the QString. The pointer
-    can be used to access the characters that compose the string. For
-    convenience, the data is '\\0'-terminated.
-
-    Note that the pointer remains valid only as long as the string is
-    not modified.
-
-    \sa data(), operator[]()
-*/
-
-/*! \fn void QString::push_front(const QString &other)
-
-    This function is provided for STL compatibility, prepending the
-    given \a other string to the beginning of this string. It is
-    equivalent to \c prepend(other).
-
-    \sa prepend()
-*/
-
-/*! \fn void QString::push_front(QChar ch)
-
-    \overload
-
-    Prepends the given \a ch character to the beginning of this string.
-*/
-
-/*! \fn void QString::push_back(const QString &other)
-
-    This function is provided for STL compatibility, appending the
-    given \a other string onto the end of this string. It is
-    equivalent to \c append(other).
-
-    \sa append()
-*/
-
-/*! \fn void QString::push_back(QChar ch)
-
-    \overload
-
-    Appends the given \a ch character onto the end of this string.
-*/
-
-/*!
-    \fn std::string QString::toStdString() const
-
-    Returns a std::string object with the data contained in this
-    QString. The Unicode data is converted into 8-bit characters using
-    the toAscii() function.
-
-    This operator is mostly useful to pass a QString to a function
-    that accepts a std::string object.
-
-    If the QString contains non-Latin1 Unicode characters, using this
-    can lead to loss of information.
-
-    This operator is only available if Qt is configured with STL
-    compatibility enabled.
-
-    \sa toAscii(), toLatin1(), toUtf8(), toLocal8Bit()
-*/
-
-/*!
-    Constructs a QString that uses the first \a size Unicode characters
-    in the array \a unicode. The data in \a unicode is \e not
-    copied. The caller must be able to guarantee that \a unicode will
-    not be deleted or modified as long as the QString (or an
-    unmodified copy of it) exists.
-
-    Any attempts to modify the QString or copies of it will cause it
-    to create a deep copy of the data, ensuring that the raw data
-    isn't modified.
-
-    Here's an example of how we can use a QRegExp on raw data in
-    memory without requiring to copy the data into a QString:
-
-    \snippet doc/src/snippets/qstring/main.cpp 22
-    \snippet doc/src/snippets/qstring/main.cpp 23
-
-    \warning A string created with fromRawData() is \e not
-    '\\0'-terminated, unless the raw data contains a '\\0' character
-    at position \a size. This means unicode() will \e not return a
-    '\\0'-terminated string (although utf16() does, at the cost of
-    copying the raw data).
-
-    \sa fromUtf16(), setRawData()
-*/
 QString QString::fromRawData(const QChar *unicode, int size)
 {
    Data *x;
@@ -5836,20 +5541,6 @@ QString QString::fromRawData(const QChar *unicode, int size)
    return QString(dataPtr);
 }
 
-/*!
-    \since 4.7
-
-    Resets the QString to use the first \a size Unicode characters
-    in the array \a unicode. The data in \a unicode is \e not
-    copied. The caller must be able to guarantee that \a unicode will
-    not be deleted or modified as long as the QString (or an
-    unmodified copy of it) exists.
-
-    This function can be used instead of fromRawData() to re-use
-    existings QString objects to save memory re-allocations.
-
-    \sa fromRawData()
-*/
 QString &QString::setRawData(const QChar *unicode, int size)
 {
    if (d->ref.isShared() || d->alloc) {
@@ -7031,56 +6722,16 @@ static inline bool qt_ends_with(const QChar *haystack, int haystackLen,
    return true;
 }
 
-/*!
-    \since 4.8
-
-    Returns a Latin-1 representation of the string as a QByteArray.
-
-    The returned byte array is undefined if the string contains non-Latin1
-    characters. Those characters may be suppressed or replaced with a
-    question mark.
-
-    \sa toAscii(), toUtf8(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QStringRef::toLatin1() const
 {
    return toLatin1_helper(unicode(), length());
 }
 
-/*!
-    \since 4.8
-
-    Returns an 8-bit representation of the string as a QByteArray.
-
-    This function does the same as toLatin1().
-
-    Note that, despite the name, this function does not necessarily return an US-ASCII
-    (ANSI X3.4-1986) string and its result may not be US-ASCII compatible.
-
-    \sa toLatin1(), toUtf8(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QStringRef::toAscii() const
 {
    return toLatin1();
 }
 
-/*!
-    \since 4.8
-
-    Returns the local 8-bit representation of the string as a
-    QByteArray. The returned byte array is undefined if the string
-    contains characters not supported by the local 8-bit encoding.
-
-    QTextCodec::codecForLocale() is used to perform the conversion from
-    Unicode. If the locale encoding could not be determined, this function
-    does the same as toLatin1().
-
-    If this string contains any characters that cannot be encoded in the
-    locale, the returned byte array is undefined. Those characters may be
-    suppressed or replaced by another.
-
-    \sa toAscii(), toLatin1(), toUtf8(), QTextCodec
-*/
 QByteArray QStringRef::toLocal8Bit() const
 {
 #ifndef QT_NO_TEXTCODEC
@@ -7091,24 +6742,6 @@ QByteArray QStringRef::toLocal8Bit() const
    return toLatin1();
 }
 
-/*!
-    \since 4.8
-
-    Returns a UTF-8 representation of the string as a QByteArray.
-
-    UTF-8 is a Unicode codec and can represent all characters in a Unicode
-    string like QString.
-
-    However, in the Unicode range, there are certain codepoints that are not
-    considered characters. The Unicode standard reserves the last two
-    codepoints in each Unicode Plane (U+FFFE, U+FFFF, U+1FFFE, U+1FFFF,
-    U+2FFFE, etc.), as well as 16 codepoints in the range U+FDD0..U+FDDF,
-    inclusive, as non-characters. If any of those appear in the string, they
-    may be discarded and will not appear in the UTF-8 representation, or they
-    may be replaced by one or more replacement characters.
-
-    \sa toAscii(), toLatin1(), toLocal8Bit(), QTextCodec
-*/
 QByteArray QStringRef::toUtf8() const
 {
    if (isNull()) {
@@ -7118,16 +6751,6 @@ QByteArray QStringRef::toUtf8() const
    return QUtf8::convertFromUnicode(constData(), length(), 0);
 }
 
-/*!
-    \since 4.8
-
-    Returns a UCS-4/UTF-32 representation of the string as a QVector<uint>.
-
-    UCS-4 is a Unicode codec and is lossless. All characters from this string
-    can be encoded in UCS-4.
-
-    \sa toAscii(), toLatin1(), toLocal8Bit(), QTextCodec
-*/
 QVector<uint> QStringRef::toUcs4() const
 {
    QVector<uint> v(length());

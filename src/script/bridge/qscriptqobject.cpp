@@ -215,21 +215,25 @@ static inline bool methodNameEquals(const QMetaMethod &method, const char *signa
 static QVariant variantFromValue(JSC::ExecState *exec, int targetType, JSC::JSValue value)
 {
    QVariant v(targetType, (void *)0);
+
    if (QScriptEnginePrivate::convertValue(exec, value, targetType, v.data())) {
       return v;
    }
+
    if (uint(targetType) == QVariant::LastType) {
       return QScriptEnginePrivate::toVariant(exec, value);
    }
+
    if (QScriptEnginePrivate::isVariant(value)) {
       v = QScriptEnginePrivate::variantValue(value);
       if (v.canConvert(QVariant::Type(targetType))) {
          v.convert(QVariant::Type(targetType));
          return v;
       }
+
       QByteArray typeName = v.typeName();
       if (typeName.endsWith('*')
-            && (QMetaType::type(typeName.left(typeName.size() - 1)) == targetType)) {
+            && (QMetaType::type(typeName.left(typeName.size() - 1).constData()) == targetType)) {
          return QVariant(targetType, *reinterpret_cast<void **>(v.data()));
       }
    }
@@ -601,17 +605,22 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
 
       QVector<QScriptMetaType> types;
       types.resize(1 + parameterTypeNames.size());
+
       QScriptMetaType *typesData = types.data();
+
       // resolve return type
       QByteArray returnTypeName = method.typeName();
-      int rtype = QMetaType::type(returnTypeName);
+      int rtype = QMetaType::type(returnTypeName.constData());
+
       if ((rtype == 0) && !returnTypeName.isEmpty()) {
          int enumIndex = indexOfMetaEnum(meta, returnTypeName);
+
          if (enumIndex != -1) {
             typesData[0] = QScriptMetaType::metaEnum(enumIndex, returnTypeName);
          } else {
             typesData[0] = QScriptMetaType::unresolved(returnTypeName);
          }
+
       } else {
          if (callType == QMetaMethod::Constructor) {
             typesData[0] = QScriptMetaType::metaType(QMetaType::QObjectStar, "QObject*");
@@ -625,14 +634,17 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
       // resolve argument types
       for (int i = 0; i < parameterTypeNames.count(); ++i) {
          QByteArray argTypeName = parameterTypeNames.at(i);
-         int atype = QMetaType::type(argTypeName);
+         int atype = QMetaType::type(argTypeName.constData());
+
          if (atype == 0) {
             int enumIndex = indexOfMetaEnum(meta, argTypeName);
+
             if (enumIndex != -1) {
                typesData[1 + i] = QScriptMetaType::metaEnum(enumIndex, argTypeName);
             } else {
                typesData[1 + i] = QScriptMetaType::unresolved(argTypeName);
             }
+
          } else if (atype == QMetaType::QVariant) {
             typesData[1 + i] = QScriptMetaType::variant();
          } else {
@@ -649,8 +661,8 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
 
       if (!mtd.fullyResolved()) {
          // remember it so we can give an error message later, if necessary
-         unresolved.append(QScriptMetaArguments(/*matchDistance=*/INT_MAX, index,
-                           mtd, QVarLengthArray<QVariant, 9>()));
+         unresolved.append(QScriptMetaArguments(INT_MAX, index, mtd, QVarLengthArray<QVariant, 9>()));
+
          if (mtd.hasUnresolvedReturnType()) {
             continue;
          }
@@ -731,14 +743,17 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
                if (m.isValid()) {
                   if (actual.isNumber()) {
                      int ival = QScriptEnginePrivate::toInt32(exec, actual);
+
                      if (m.valueToKey(ival) != 0) {
                         v.setValue(ival);
                         converted = true;
                         matchDistance += 10;
                      }
+
                   } else {
                      JSC::UString sval = QScriptEnginePrivate::toString(exec, actual);
-                     int ival = m.keyToValue(convertToLatin1(sval));
+                     int ival = m.keyToValue(convertToLatin1(sval).constData());
+
                      if (ival != -1) {
                         v.setValue(ival);
                         converted = true;
@@ -747,6 +762,7 @@ static JSC::JSValue callQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType c
                   }
                }
             }
+
          } else {
             // determine how well the conversion matched
             if (actual.isNumber()) {
@@ -1312,6 +1328,7 @@ bool QObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::ExecState *
 #ifndef QT_NO_PROPERTIES
    QByteArray name = convertToLatin1(propertyName.ustring());
    QObject *qobject = data->value;
+
    if (!qobject) {
       QString message = QString::fromLatin1("cannot access member `%0' of deleted QObject")
                         .arg(QString::fromLatin1(name));
@@ -1322,12 +1339,14 @@ bool QObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::ExecState *
    const QMetaObject *meta = qobject->metaObject();
    {
       QHash<QByteArray, JSC::JSValue>::const_iterator it = data->cachedMembers.constFind(name);
+
       if (it != data->cachedMembers.constEnd()) {
-         if (GeneratePropertyFunctions && (meta->indexOfProperty(name) != -1)) {
+         if (GeneratePropertyFunctions && (meta->indexOfProperty(name.constData()) != -1)) {
             slot.setGetterSlot(JSC::asObject(it.value()));
          } else {
             slot.setValue(it.value());
          }
+
          return true;
       }
    }
@@ -1335,45 +1354,52 @@ bool QObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::ExecState *
    const QScriptEngine::QObjectWrapOptions &opt = data->options;
    QScriptEnginePrivate *eng = scriptEngineFromExec(exec);
    int index = -1;
+
    if (name.contains('(')) {
-      QByteArray normalized = QMetaObject::normalizedSignature(name);
-      if (-1 != (index = meta->indexOfMethod(normalized))) {
+      QByteArray normalized = QMetaObject::normalizedSignature(name.constData());
+
+      if (-1 != (index = meta->indexOfMethod(normalized.constData()))) {
          QMetaMethod method = meta->method(index);
+
          if (hasMethodAccess(method, index, opt)) {
-            if (!(opt & QScriptEngine::ExcludeSuperClassMethods)
-                  || (index >= meta->methodOffset())) {
-               QtFunction *fun = new (exec)QtFunction(
-                  object, index, /*maybeOverloaded=*/false,
-                  &exec->globalData(), eng->originalGlobalObject()->functionStructure(),
-                  propertyName);
+            if (!(opt & QScriptEngine::ExcludeSuperClassMethods) || (index >= meta->methodOffset())) {
+
+               QtFunction *fun = new (exec)QtFunction(object, index, false,
+                  &exec->globalData(), eng->originalGlobalObject()->functionStructure(), propertyName);
+
                slot.setValue(fun);
                data->cachedMembers.insert(name, fun);
+
                return true;
             }
          }
       }
    }
 
-   index = meta->indexOfProperty(name);
+   index = meta->indexOfProperty(name.constData());
+
    if (index != -1) {
       QMetaProperty prop = meta->property(index);
+
       if (prop.isScriptable()) {
-         if (!(opt & QScriptEngine::ExcludeSuperClassProperties)
-               || (index >= meta->propertyOffset())) {
+         if (! (opt & QScriptEngine::ExcludeSuperClassProperties) || (index >= meta->propertyOffset())) {
+
             if (GeneratePropertyFunctions) {
-               QtPropertyFunction *fun = new (exec)QtPropertyFunction(
-                  meta, index, &exec->globalData(),
-                  eng->originalGlobalObject()->functionStructure(),
-                  propertyName);
+               QtPropertyFunction *fun = new (exec)QtPropertyFunction(meta, index, &exec->globalData(),
+                  eng->originalGlobalObject()->functionStructure(), propertyName);
+
                data->cachedMembers.insert(name, fun);
                slot.setGetterSlot(fun);
+
             } else {
                JSC::JSValue val;
-               if (!prop.isValid()) {
+
+               if (! prop.isValid()) {
                   val = JSC::jsUndefined();
                } else {
                   val = QScriptEnginePrivate::jscValueFromVariant(exec, prop.read(qobject));
                }
+
                slot.setValue(val);
             }
             return true;
@@ -1445,12 +1471,15 @@ bool QObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object, JSC::ExecS
       QHash<QByteArray, JSC::JSValue>::const_iterator it = data->cachedMembers.constFind(name);
       if (it != data->cachedMembers.constEnd()) {
          int index;
-         if (GeneratePropertyFunctions && ((index = meta->indexOfProperty(name)) != -1)) {
+
+         if (GeneratePropertyFunctions && ((index = meta->indexOfProperty(name.constData())) != -1)) {
             QMetaProperty prop = meta->property(index);
             descriptor.setAccessorDescriptor(it.value(), it.value(), flagsForMetaProperty(prop));
-            if (!prop.isWritable()) {
+
+            if (! prop.isWritable()) {
                descriptor.setWritable(false);
             }
+
          } else {
             unsigned attributes = QObjectMemberAttribute;
             if (opt & QScriptEngine::SkipMethodsInEnumeration) {
@@ -1464,19 +1493,21 @@ bool QObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object, JSC::ExecS
 
    QScriptEnginePrivate *eng = scriptEngineFromExec(exec);
    int index = -1;
+
    if (name.contains('(')) {
-      QByteArray normalized = QMetaObject::normalizedSignature(name);
-      if (-1 != (index = meta->indexOfMethod(normalized))) {
+      QByteArray normalized = QMetaObject::normalizedSignature(name.constData());
+
+      if (-1 != (index = meta->indexOfMethod(normalized.constData()))) {
          QMetaMethod method = meta->method(index);
+
          if (hasMethodAccess(method, index, opt)) {
-            if (!(opt & QScriptEngine::ExcludeSuperClassMethods)
-                  || (index >= meta->methodOffset())) {
-               QtFunction *fun = new (exec)QtFunction(
-                  object, index, /*maybeOverloaded=*/false,
-                  &exec->globalData(), eng->originalGlobalObject()->functionStructure(),
-                  propertyName);
+            if (!(opt & QScriptEngine::ExcludeSuperClassMethods) || (index >= meta->methodOffset())) {
+               QtFunction *fun = new (exec)QtFunction(object, index, false,
+                  &exec->globalData(), eng->originalGlobalObject()->functionStructure(), propertyName);
+
                data->cachedMembers.insert(name, fun);
                unsigned attributes = QObjectMemberAttribute;
+
                if (opt & QScriptEngine::SkipMethodsInEnumeration) {
                   attributes |= JSC::DontEnum;
                }
@@ -1487,23 +1518,26 @@ bool QObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object, JSC::ExecS
       }
    }
 
-   index = meta->indexOfProperty(name);
+   index = meta->indexOfProperty(name.constData());
+
    if (index != -1) {
       QMetaProperty prop = meta->property(index);
+
       if (prop.isScriptable()) {
-         if (!(opt & QScriptEngine::ExcludeSuperClassProperties)
-               || (index >= meta->propertyOffset())) {
+         if (! (opt & QScriptEngine::ExcludeSuperClassProperties) || (index >= meta->propertyOffset())) {
             unsigned attributes = flagsForMetaProperty(prop);
+
             if (GeneratePropertyFunctions) {
-               QtPropertyFunction *fun = new (exec)QtPropertyFunction(
-                  meta, index, &exec->globalData(),
-                  eng->originalGlobalObject()->functionStructure(),
-                  propertyName);
+               QtPropertyFunction *fun = new (exec)QtPropertyFunction(meta, index, &exec->globalData(),
+                  eng->originalGlobalObject()->functionStructure(), propertyName);
+
                data->cachedMembers.insert(name, fun);
                descriptor.setAccessorDescriptor(fun, fun, attributes);
+
                if (attributes & JSC::ReadOnly) {
                   descriptor.setWritable(false);
                }
+
             } else {
                JSC::JSValue val;
                if (!prop.isValid()) {
@@ -1561,17 +1595,18 @@ bool QObjectDelegate::getOwnPropertyDescriptor(QScriptObject *object, JSC::ExecS
    return QScriptObjectDelegate::getOwnPropertyDescriptor(object, exec, propertyName, descriptor);
 #else //QT_NO_PROPERTIES
    return false;
+
 #endif //QT_NO_PROPERTIES
 }
 
 void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
-                          const JSC::Identifier &propertyName,
-                          JSC::JSValue value, JSC::PutPropertySlot &slot)
+                  const JSC::Identifier &propertyName, JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
 #ifndef QT_NO_PROPERTIES
    QByteArray name = convertToLatin1(propertyName.ustring());
    QObject *qobject = data->value;
-   if (!qobject) {
+
+   if (! qobject) {
       QString message = QString::fromLatin1("cannot access member `%0' of deleted QObject")
                         .arg(QString::fromLatin1(name));
       JSC::throwError(exec, JSC::GeneralError, message);
@@ -1580,15 +1615,17 @@ void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 
    const QScriptEngine::QObjectWrapOptions &opt = data->options;
    const QMetaObject *meta = qobject->metaObject();
+
    QScriptEnginePrivate *eng = scriptEngineFromExec(exec);
    int index = -1;
+
    if (name.contains('(')) {
-      QByteArray normalized = QMetaObject::normalizedSignature(name);
-      if (-1 != (index = meta->indexOfMethod(normalized))) {
+      QByteArray normalized = QMetaObject::normalizedSignature(name.constData());
+      if (-1 != (index = meta->indexOfMethod(normalized.constData()))) {
          QMetaMethod method = meta->method(index);
+
          if (hasMethodAccess(method, index, opt)) {
-            if (!(opt & QScriptEngine::ExcludeSuperClassMethods)
-                  || (index >= meta->methodOffset())) {
+            if (!(opt & QScriptEngine::ExcludeSuperClassMethods) || (index >= meta->methodOffset())) {
                data->cachedMembers.insert(name, value);
                return;
             }
@@ -1596,26 +1633,30 @@ void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
       }
    }
 
-   index = meta->indexOfProperty(name);
+   index = meta->indexOfProperty(name.constData());
+
    if (index != -1) {
       QMetaProperty prop = meta->property(index);
+
       if (prop.isScriptable()) {
-         if (!(opt & QScriptEngine::ExcludeSuperClassProperties)
-               || (index >= meta->propertyOffset())) {
+
+         if (!(opt & QScriptEngine::ExcludeSuperClassProperties) || (index >= meta->propertyOffset())) {
             if (GeneratePropertyFunctions) {
                // ### ideally JSC would do this for us already, i.e. find out
                // that the property is a setter and call the setter.
                // Maybe QtPropertyFunction needs to inherit JSC::GetterSetter.
                JSC::JSValue fun;
+
                QHash<QByteArray, JSC::JSValue>::const_iterator it;
                it = data->cachedMembers.constFind(name);
+
                if (it != data->cachedMembers.constEnd()) {
                   fun = it.value();
+
                } else {
-                  fun = new (exec)QtPropertyFunction(
-                     meta, index, &exec->globalData(),
-                     eng->originalGlobalObject()->functionStructure(),
-                     propertyName);
+                  fun = new (exec)QtPropertyFunction(meta, index, &exec->globalData(),
+                     eng->originalGlobalObject()->functionStructure(), propertyName);
+
                   data->cachedMembers.insert(name, fun);
                }
                JSC::CallData callData;
@@ -1623,16 +1664,19 @@ void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
                JSC::JSValue argv[1] = { value };
                JSC::ArgList args(argv, 1);
                (void)JSC::call(exec, fun, callType, callData, object, args);
+
             } else {
                QVariant v;
-               if (prop.isEnumType() && value.isString()
-                     && !eng->hasDemarshalFunction(prop.userType())) {
+
+               if (prop.isEnumType() && value.isString() && !eng->hasDemarshalFunction(prop.userType())) {
                   // give QMetaProperty::write() a chance to convert from
                   // string to enum value
                   v = (QString)value.toString(exec);
+
                } else {
                   v = QScriptEnginePrivate::jscValueToVariant(exec, value, prop.userType());
                }
+
                (void)prop.write(qobject, v);
             }
             return;
@@ -1640,12 +1684,12 @@ void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
       }
    }
 
-   const int offset = (opt & QScriptEngine::ExcludeSuperClassMethods)
-                      ? meta->methodOffset() : 0;
+   const int offset = (opt & QScriptEngine::ExcludeSuperClassMethods) ? meta->methodOffset() : 0;
+
    for (index = meta->methodCount() - 1; index >= offset; --index) {
       QMetaMethod method = meta->method(index);
-      if (hasMethodAccess(method, index, opt)
-            && methodNameEquals(method, name.constData(), name.length())) {
+
+      if (hasMethodAccess(method, index, opt) && methodNameEquals(method, name.constData(), name.length())) {
          data->cachedMembers.insert(name, value);
          return;
       }
@@ -1663,11 +1707,12 @@ void QObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 }
 
 bool QObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec,
-                                     const JSC::Identifier &propertyName)
+                  const JSC::Identifier &propertyName)
 {
 #ifndef QT_NO_PROPERTIES
    QByteArray name = convertToLatin1(propertyName.ustring());
    QObject *qobject = data->value;
+
    if (!qobject) {
       QString message = QString::fromLatin1("cannot access member `%0' of deleted QObject")
                         .arg(QString::fromLatin1(name));
@@ -1679,32 +1724,36 @@ bool QObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec
    {
       QHash<QByteArray, JSC::JSValue>::iterator it = data->cachedMembers.find(name);
       if (it != data->cachedMembers.end()) {
-         if (GeneratePropertyFunctions && (meta->indexOfProperty(name) != -1)) {
+         if (GeneratePropertyFunctions && (meta->indexOfProperty(name.constData()) != -1)) {
             return false;
          }
+
          data->cachedMembers.erase(it);
          return true;
       }
    }
 
    const QScriptEngine::QObjectWrapOptions &opt = data->options;
-   int index = meta->indexOfProperty(name);
+   int index = meta->indexOfProperty(name.constData());
+
    if (index != -1) {
       QMetaProperty prop = meta->property(index);
+
       if (prop.isScriptable() &&
-            (!(opt & QScriptEngine::ExcludeSuperClassProperties)
-             || (index >= meta->propertyOffset()))) {
+            (! (opt & QScriptEngine::ExcludeSuperClassProperties) || (index >= meta->propertyOffset()))) {
          return false;
       }
    }
 
    index = qobject->dynamicPropertyNames().indexOf(name);
+
    if (index != -1) {
       (void)qobject->setProperty(name, QVariant());
       return true;
    }
 
    return QScriptObjectDelegate::deleteProperty(object, exec, propertyName);
+
 #else //QT_NO_PROPERTIES
    return false;
 #endif //QT_NO_PROPERTIES
@@ -1716,19 +1765,22 @@ void QObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState 
 {
 #ifndef QT_NO_PROPERTIES
    QObject *qobject = data->value;
+
    if (!qobject) {
-      QString message = QString::fromLatin1("cannot get property names of deleted QObject");
+      QString message = QString::fromLatin1("Can not access property names of deleted QObject");
       JSC::throwError(exec, JSC::GeneralError, message);
       return;
    }
 
    const QScriptEngine::QObjectWrapOptions &opt = data->options;
    const QMetaObject *meta = qobject->metaObject();
+
    {
       int i = (opt & QScriptEngine::ExcludeSuperClassProperties) ? meta->propertyOffset() : 0;
 
       for ( ; i < meta->propertyCount(); ++i) {
          QMetaProperty prop = meta->property(i);
+
          if (isEnumerableMetaProperty(prop, meta, i)) {
             QString name = QString::fromLatin1(prop.name());
             propertyNames.add(JSC::Identifier(exec, name));
@@ -1766,8 +1818,10 @@ void QObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState 
 void QObjectDelegate::markChildren(QScriptObject *object, JSC::MarkStack &markStack)
 {
    QHash<QByteArray, JSC::JSValue>::const_iterator it;
+
    for (it = data->cachedMembers.constBegin(); it != data->cachedMembers.constEnd(); ++it) {
       JSC::JSValue val = it.value();
+
       if (val) {
          markStack.append(val);
       }
@@ -1781,11 +1835,14 @@ bool QObjectDelegate::compareToObject(QScriptObject *, JSC::ExecState *exec, JSC
    if (!o2->inherits(&QScriptObject::info)) {
       return false;
    }
+
    QScriptObject *object = static_cast<QScriptObject *>(o2);
    QScriptObjectDelegate *delegate = object->delegate();
+
    if (!delegate || (delegate->type() != QScriptObjectDelegate::QtObject)) {
       return false;
    }
+
    return value() == static_cast<QObjectDelegate *>(delegate)->value();
 }
 
@@ -1797,16 +1854,19 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChild(JSC::ExecState *exec
    if (!thisValue.inherits(&QScriptObject::info)) {
       return throwError(exec, JSC::TypeError, "this object is not a QObject");
    }
+
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(thisValue));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::QtObject)) {
       return throwError(exec, JSC::TypeError, "this object is not a QObject");
    }
+
    QObject *obj = static_cast<QObjectDelegate *>(delegate)->value();
    QString name;
    if (args.size() != 0) {
       name = args.at(0).toString(exec);
    }
+
    QObject *child = obj->findChild<QObject *>(name);
    QScriptEngine::QObjectWrapOptions opt = QScriptEngine::PreferExistingWrapperObject;
    return engine->newQObject(child, QScriptEngine::QtOwnership, opt);
@@ -1817,10 +1877,12 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChildren(JSC::ExecState *e
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    thisValue = engine->toUsableValue(thisValue);
+
    // extract the QObject
    if (!thisValue.inherits(&QScriptObject::info)) {
       return throwError(exec, JSC::TypeError, "this object is not a QObject");
    }
+
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(thisValue));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::QtObject)) {
@@ -1832,6 +1894,7 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChildren(JSC::ExecState *e
    QList<QObject *> children;
    if (args.size() != 0) {
       const JSC::JSValue arg = args.at(0);
+
       if (arg.inherits(&JSC::RegExpObject::info)) {
          const QObjectList allChildren = obj->children();
 
@@ -1842,8 +1905,10 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChildren(JSC::ExecState *e
             QObject *const child = allChildren.at(i);
             const JSC::UString childName = child->objectName();
             JSC::RegExpConstructor *regExpConstructor = engine->originalGlobalObject()->regExpConstructor();
+
             int position;
             int length;
+
             regExpConstructor->performMatch(regexp->regExp(), childName, 0, position, length);
             if (position >= 0) {
                children.append(child);
@@ -1853,9 +1918,11 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChildren(JSC::ExecState *e
          const QString name(args.at(0).toString(exec));
          children = obj->findChildren<QObject *>(name);
       }
+
    } else {
       children = obj->findChildren<QObject *>(QString());
    }
+
    // create the result array with the children
    const int length = children.size();
    JSC::JSArray *const result = JSC::constructEmptyArray(exec, length);
@@ -1865,6 +1932,7 @@ static JSC::JSValue JSC_HOST_CALL qobjectProtoFuncFindChildren(JSC::ExecState *e
       QObject *const child = children.at(i);
       result->put(exec, i, engine->newQObject(child, QScriptEngine::QtOwnership, opt));
    }
+
    return JSC::JSValue(result);
 }
 
@@ -2271,7 +2339,7 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
    }
 #endif
 
-   const QMetaObject *meta = sender()->metaObject();
+   const QMetaObject *meta  = sender()->metaObject();
    const QMetaMethod method = meta->method(signalIndex);
 
    QList<QByteArray> parameterTypes = method.parameterTypes();
@@ -2283,10 +2351,11 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
    for (int i = 0; i < argc; ++i) {
       JSC::JSValue actual;
       void *arg = argv[i + 1];
-      QByteArray typeName = parameterTypes.at(i);
-      int argType = QMetaType::type(parameterTypes.at(i));
 
-      if (!argType) {
+      QByteArray typeName = parameterTypes.at(i);
+      int argType = QMetaType::type(parameterTypes.at(i).constData());
+
+      if (! argType) {
          qWarning("QScriptEngine: Unable to handle unregistered datatype '%s' "
                   "when invoking handler of signal %s::%s",
                   typeName.constData(), meta->className(), method.methodSignature().constData());

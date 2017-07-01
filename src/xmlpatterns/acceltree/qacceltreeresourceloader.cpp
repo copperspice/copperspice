@@ -28,7 +28,6 @@
 #include <QtNetwork/QNetworkRequest>
 
 #include "qatomicstring_p.h"
-#include "qautoptr_p.h"
 #include "qcommonsequencetypes_p.h"
 #include "qacceltreeresourceloader_p.h"
 
@@ -39,9 +38,7 @@ using namespace QPatternist;
 AccelTreeResourceLoader::AccelTreeResourceLoader(const NamePool::Ptr &np,
       const NetworkAccessDelegator::Ptr &manager,
       AccelTreeBuilder<true>::Features features)
-   : m_namePool(np)
-   , m_networkAccessDelegator(manager)
-   , m_features(features)
+   : m_namePool(np), m_networkAccessDelegator(manager), m_features(features)
 {
    Q_ASSERT(m_namePool);
    Q_ASSERT(m_networkAccessDelegator);
@@ -60,7 +57,7 @@ bool AccelTreeResourceLoader::retrieveDocument(const QUrl &uri,
    }
 
    bool success = false;
-   success = streamToReceiver(reply.data(), &builder, m_namePool, context, uri);
+   success = streamToReceiver(reply.get(), &builder, m_namePool, context, uri);
 
    m_loadedDocuments.insert(uri, builder.builtDocument());
    return success;

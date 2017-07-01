@@ -23,8 +23,9 @@
 #ifndef QCLIPBOARD_P_H
 #define QCLIPBOARD_P_H
 
-#include <QtGui/qmime.h>
-#include <QtGui/qclipboard.h>
+#include <qmime.h>
+#include <qclipboard.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,10 +36,10 @@ class QMimeDataWrapper : public QMimeSource
  public:
    QMimeDataWrapper() {}
 
-   const char *format(int n) const override;
-   QByteArray encodedData(const char *) const override;
+   QString format(int n) const override;
+   QByteArray encodedData(const QString &format) const override;
 
-   mutable QList<QByteArray> formats;
+   mutable QStringList m_formats;
    const QMimeData *data;
 };
 

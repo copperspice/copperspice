@@ -136,7 +136,7 @@ void *QLibraryPrivate::resolve_sys(const char *symbol)
 
    if (! address) {
       errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
-                       QString::fromAscii(symbol)).arg(fileName).arg(qt_error_string());
+                       QString::fromLatin1(symbol)).arg(fileName).arg(qt_error_string());
 
    } else {
       errorString.clear();

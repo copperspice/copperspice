@@ -269,88 +269,6 @@ void QAbstractPrintDialogPrivate::setPrinter(QPrinter *newPrinter)
    pd = printer->d_func();
 }
 
-/*!
-    \fn int QAbstractPrintDialog::exec()
-
-    This virtual function is called to pop up the dialog. It must be
-    reimplemented in subclasses.
-*/
-
-/*!
-    \class QPrintDialog
-
-    \brief The QPrintDialog class provides a dialog for specifying
-    the printer's configuration.
-
-    \ingroup standard-dialogs
-    \ingroup printing
-
-    The dialog allows users to change document-related settings, such
-    as the paper size and orientation, type of print (color or
-    grayscale), range of pages, and number of copies to print.
-
-    Controls are also provided to enable users to choose from the
-    printers available, including any configured network printers.
-
-    Typically, QPrintDialog objects are constructed with a QPrinter
-    object, and executed using the exec() function.
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qabstractprintdialog.cpp 0
-
-    If the dialog is accepted by the user, the QPrinter object is
-    correctly configured for printing.
-
-    \table
-    \row
-    \o \inlineimage plastique-printdialog.png
-    \o \inlineimage plastique-printdialog-properties.png
-    \endtable
-
-    The printer dialog (shown above in Plastique style) enables access to common
-    printing properties. On X11 platforms that use the CUPS printing system, the
-    settings for each available printer can be modified via the dialog's
-    \gui{Properties} push button.
-
-    On Windows and Mac OS X, the native print dialog is used, which means that
-    some QWidget and QDialog properties set on the dialog won't be respected.
-    The native print dialog on Mac OS X does not support setting printer options,
-    i.e. setOptions() and setOption() have no effect.
-
-    In Qt 4.4, it was possible to use the static functions to show a sheet on
-    Mac OS X. This is no longer supported in Qt 4.5. If you want this
-    functionality, use QPrintDialog::open().
-
-    \sa QPageSetupDialog, QPrinter, {Pixelator Example}, {Order Form Example},
-        {Image Viewer Example}, {Scribble Example}
-*/
-
-/*!
-    \fn QPrintDialog::QPrintDialog(QPrinter *printer, QWidget *parent)
-
-    Constructs a new modal printer dialog for the given \a printer
-    with the given \a parent.
-*/
-
-/*!
-    \fn QPrintDialog::~QPrintDialog()
-
-    Destroys the print dialog.
-*/
-
-/*!
-    \fn int QPrintDialog::exec()
-    \reimp
-*/
-
-/*!
-    \since 4.4
-
-    Set a list of widgets as \a tabs to be shown on the print dialog, if supported.
-
-    Currently this option is only supported on X11.
-
-    Setting the option tabs will transfer their ownership to the print dialog.
-*/
 void QAbstractPrintDialog::setOptionTabs(const QList<QWidget *> &tabs)
 {
    Q_D(QAbstractPrintDialog);
@@ -361,14 +279,17 @@ void QPrintDialog::done(int result)
 {
    Q_D(QPrintDialog);
    QDialog::done(result);
+
    if (result == Accepted) {
       emit accepted(printer());
    }
+
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(accepted(QPrinter *)),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, SIGNAL(accepted(QPrinter *)), d->receiverToDisconnectOnClose,
+                  d->memberToDisconnectOnClose.constData());
       d->receiverToDisconnectOnClose = 0;
    }
+
    d->memberToDisconnectOnClose.clear();
 }
 

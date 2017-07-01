@@ -240,7 +240,7 @@ GstElement *DeviceManager::createAudioSink(Category category)
         } else if (m_audioSink == "artssink") {
             sink = GST_ELEMENT(g_object_new(arts_sink_get_type(), NULL));
         } else if (!m_audioSink.isEmpty()) { //Use a custom sink
-            sink = gst_element_factory_make (m_audioSink, NULL);
+            sink = gst_element_factory_make (m_audioSink.constData(), NULL);
             if (canOpenDevice(sink))
                 m_backend->logMessage(QString("AudioOutput using %0").arg(QString::fromUtf8(m_audioSink)));
             else if (sink) {

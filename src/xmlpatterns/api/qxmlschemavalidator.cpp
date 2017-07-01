@@ -142,7 +142,7 @@ bool QXmlSchemaValidator::validate(const QUrl &source) const
          d->m_context, QPatternist::AccelTreeResourceLoader::ContinueOnError));
 
    if (reply) {
-      return validate(reply.data(), source);
+      return validate(reply.get(), source);
    } else {
       return false;
    }

@@ -688,8 +688,9 @@ void QPrintPreviewDialog::done(int result)
 {
    Q_D(QPrintPreviewDialog);
    QDialog::done(result);
+
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(finished(int)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, SIGNAL(finished(int)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
       d->receiverToDisconnectOnClose = 0;
    }
    d->memberToDisconnectOnClose.clear();

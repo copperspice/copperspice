@@ -23,7 +23,6 @@
 #include "qxsdschemaparser_p.h"
 #include "qxmlutils_p.h"
 #include "qacceltreeresourceloader_p.h"
-#include "qautoptr_p.h"
 #include "qboolean_p.h"
 #include "qcommonnamespaces_p.h"
 #include "qderivedinteger_p.h"
@@ -590,7 +589,7 @@ void XsdSchemaParser::parseInclude()
                                          XsdSchemaContext::Ptr(m_context), AccelTreeResourceLoader::ContinueOnError));
       if (reply) {
          // parse the included schema by a different parser but with the same context
-         XsdSchemaParser parser(XsdSchemaContext::Ptr(m_context), XsdSchemaParserContext::Ptr(m_parserContext), reply.data());
+         XsdSchemaParser parser(XsdSchemaContext::Ptr(m_context), XsdSchemaParserContext::Ptr(m_parserContext), reply.get());
          parser.setDocumentURI(url);
          parser.setTargetNamespaceExtended(m_targetNamespace);
          parser.setIncludedSchemas(m_includedSchemas);
@@ -687,7 +686,9 @@ void XsdSchemaParser::parseImport()
                                       XsdSchemaContext::Ptr(m_context), AccelTreeResourceLoader::ContinueOnError));
          if (reply) {
             // parse the included schema by a different parser but with the same context
-            XsdSchemaParser parser(XsdSchemaContext::Ptr(m_context), XsdSchemaParserContext::Ptr(m_parserContext), reply.data());
+            XsdSchemaParser parser(XsdSchemaContext::Ptr(m_context),
+                  XsdSchemaParserContext::Ptr(m_parserContext), reply.get());
+
             parser.setDocumentURI(url);
             parser.setTargetNamespace(importNamespace);
             parser.setIncludedSchemas(m_includedSchemas);
@@ -5879,8 +5880,8 @@ QString XsdSchemaParser::readNameAttribute(const char *elementName)
 QString XsdSchemaParser::readQNameAttribute(const QString &typeAttribute, const char *elementName)
 {
    const QString value = readAttribute(typeAttribute).simplified();
-   if (!XPathHelper::isQName(value)) {
-      attributeContentError(typeAttribute.toLatin1(), elementName, value, BuiltinTypes::xsQName);
+   if (! XPathHelper::isQName(value)) {
+      attributeContentError(csPrintable(typeAttribute), elementName, value, BuiltinTypes::xsQName);
       return QString();
    } else {
       return value;
@@ -5891,7 +5892,7 @@ QString XsdSchemaParser::readNamespaceAttribute(const QString &attributeName, co
 {
    const QString value = readAttribute(attributeName);
    if (value.isEmpty()) {
-      attributeContentError(attributeName.toLatin1(), elementName, value, BuiltinTypes::xsAnyURI);
+      attributeContentError(csPrintable(attributeName), elementName, value, BuiltinTypes::xsAnyURI);
       return QString();
    }
 
@@ -6074,6 +6075,7 @@ XsdXPathExpression::Ptr XsdSchemaParser::readXPathExpression(const char *element
       if (!m_targetNamespace.isEmpty()) {
          namespaceURI = AnyURI::fromLexical(m_targetNamespace);
       }
+
    } else if (xpathDefaultNamespace == QString::fromLatin1("##local")) {
       // it is absent
    } else {
@@ -6096,8 +6098,9 @@ XsdXPathExpression::Ptr XsdSchemaParser::readXPathExpression(const char *element
 QString XsdSchemaParser::readXPathAttribute(const QString &attributeName, XPathType type,  const char *elementName)
 {
    const QString value = readAttribute(attributeName);
-   if (value.isEmpty() || value.startsWith(QLatin1Char('/'))) {
-      attributeContentError(attributeName.toLatin1(), elementName, value);
+
+   if (value.isEmpty() || value.startsWith('/')) {
+      attributeContentError(csPrintable(attributeName), elementName, value);
       return QString();
    }
 
@@ -6128,7 +6131,7 @@ QString XsdSchemaParser::readXPathAttribute(const QString &attributeName, XPathT
 
    query.setQuery(value, m_documentURI);
    if (!query.isValid()) {
-      attributeContentError(attributeName.toLatin1(), elementName, value);
+      attributeContentError(csPrintable(attributeName), elementName, value);
       return QString();
    }
 
@@ -6140,6 +6143,7 @@ void XsdSchemaParser::validateIdAttribute(const char *elementName)
    if (hasAttribute(QString::fromLatin1("id"))) {
       const QString value = readAttribute(QString::fromLatin1("id"));
       DerivedString<TypeID>::Ptr id = DerivedString<TypeID>::fromLexical(NamePool::Ptr(m_namePool), value);
+
       if (id->hasError()) {
          attributeContentError("id", elementName, value, BuiltinTypes::xsID);
       } else {

@@ -191,7 +191,7 @@ bool QLibraryPrivate::load_sys()
 #if defined(QT_HPUX_LD)
          pHnd = (void *)shl_load(QFile::encodeName(attempt), dlFlags, 0);
 #else
-         pHnd = dlopen(QFile::encodeName(attempt), dlFlags);
+         pHnd = dlopen(QFile::encodeName(attempt).constData(), dlFlags);
 #endif
 
          if (!pHnd && fileName.startsWith(QLatin1Char('/')) && QFile::exists(attempt)) {
@@ -210,13 +210,17 @@ bool QLibraryPrivate::load_sys()
       QByteArray utf8Bundle = fileName.toUtf8();
       QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(NULL,
                                     reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
+
       QCFType<CFBundleRef> bundle = CFBundleCreate(NULL, bundleUrl);
+
       if (bundle) {
          QCFType<CFURLRef> url = CFBundleCopyExecutableURL(bundle);
          char executableFile[FILENAME_MAX];
+
          CFURLGetFileSystemRepresentation(url, true, reinterpret_cast<UInt8 *>(executableFile), FILENAME_MAX);
+
          attempt = QString::fromUtf8(executableFile);
-         pHnd = dlopen(QFile::encodeName(attempt), dlFlags);
+         pHnd = dlopen(QFile::encodeName(attempt).constData(), dlFlags);
       }
    }
 #endif
@@ -226,7 +230,7 @@ bool QLibraryPrivate::load_sys()
       qualifiedFileName = attempt;
       errorString.clear();
    } else {
-      errorString = QLibrary::tr("Cannot load library %1: %2").arg(fileName).arg(qdlerror());
+      errorString = QLibrary::tr("Can not load library %1: %2").arg(fileName).arg(qdlerror());
    }
    return (pHnd != 0);
 }
@@ -273,7 +277,7 @@ void *QLibraryPrivate::resolve_sys(const char *symbol)
 
    if (!address) {
       errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
-                       QString::fromAscii(symbol)).arg(fileName).arg(qdlerror());
+                       QString::fromLatin1(symbol)).arg(fileName).arg(qdlerror());
    } else {
       errorString.clear();
    }

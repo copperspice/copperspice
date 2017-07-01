@@ -5120,9 +5120,9 @@ QString QImage::text(const char *key, const char *lang) const
    if (!d) {
       return QString();
    }
-   QString k = QString::fromAscii(key);
+   QString k = QString::fromLatin1(key);
    if (lang && *lang) {
-      k += QLatin1Char('/') + QString::fromAscii(lang);
+      k += QLatin1Char('/') + QString::fromLatin1(lang);
    }
    return d->text.value(k);
 }
@@ -5144,9 +5144,9 @@ QString QImage::text(const QImageTextKeyLang &kl) const
    if (!d) {
       return QString();
    }
-   QString k = QString::fromAscii(kl.key);
+   QString k = QString::fromLatin1(kl.key);
    if (!kl.lang.isEmpty()) {
-      k += QLatin1Char('/') + QString::fromAscii(kl.lang);
+      k += QLatin1Char('/') + QString::fromLatin1(kl.lang);
    }
    return d->text.value(k);
 }
@@ -5200,8 +5200,8 @@ QList<QImageTextKeyLang> QImage::textList() const
       int index = keys.at(i).indexOf(QLatin1Char('/'));
       if (index > 0) {
          QImageTextKeyLang tkl;
-         tkl.key = keys.at(i).left(index).toAscii();
-         tkl.lang = keys.at(i).mid(index + 1).toAscii();
+         tkl.key = keys.at(i).left(index).toLatin1();
+         tkl.lang = keys.at(i).mid(index + 1).toLatin1();
          imageTextKeys += tkl;
       }
    }
@@ -5244,9 +5244,9 @@ void QImage::setText(const char *key, const char *lang, const QString &s)
       return;
    }
 
-   QString k = QString::fromAscii(key);
+   QString k = QString::fromLatin1(key);
    if (lang && *lang) {
-      k += QLatin1Char('/') + QString::fromAscii(lang);
+      k += QLatin1Char('/') + QString::fromLatin1(lang);
    }
    d->text.insert(k, s);
 }

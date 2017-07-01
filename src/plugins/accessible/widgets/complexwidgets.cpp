@@ -293,7 +293,7 @@ QString QAccessibleItemRow::text(Text t, int child) const
             int totalChildren = m->rowCount(row);   // JAWS does not report child count, so we do
                                                     // this simple and efficient.
                                                     // (don't check if they are all visible).
-            value = QString::fromAscii("L%1, %2 of %3 with %4").arg(level).arg(itemIndex).arg(totalSiblings).arg(totalChildren);
+            value = QString::fromLatin1("L%1, %2 of %3 with %4").arg(level).arg(itemIndex).arg(totalSiblings).arg(totalChildren);
         } else
 #endif // QT_NO_TREEVIEW
         {

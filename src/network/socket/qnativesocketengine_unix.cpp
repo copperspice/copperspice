@@ -365,7 +365,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16
       sockAddrIPv6.sin6_scope_id = scopeid.toInt(&ok);
 #ifndef QT_NO_IPV6IFNAME
       if (!ok) {
-         sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1());
+         sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1().constData());
       }
 #endif
       Q_IPV6ADDR ip6 = addr.toIPv6Address();
@@ -849,7 +849,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
       bool ok;
       sockAddrIPv6.sin6_scope_id = scopeid.toInt(&ok);
       if (!ok) {
-         sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1());
+         sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1().constData());
       }
       sockAddrSize = sizeof(sockAddrIPv6);
       sockAddrPtr = (struct sockaddr *)&sockAddrIPv6;

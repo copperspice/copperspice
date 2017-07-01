@@ -98,26 +98,29 @@ QKqueueFileSystemWatcherEngine::~QKqueueFileSystemWatcherEngine()
 }
 
 QStringList QKqueueFileSystemWatcherEngine::addPaths(const QStringList &paths,
-      QStringList *files,
-      QStringList *directories)
+                  QStringList *files, QStringList *directories)
 {
    QStringList p = paths;
    {
       QMutexLocker locker(&mutex);
 
       QMutableListIterator<QString> it(p);
+
       while (it.hasNext()) {
          QString path = it.next();
          int fd;
+
 #if defined(O_EVTONLY)
-         fd = qt_safe_open(QFile::encodeName(path), O_EVTONLY);
+         fd = qt_safe_open(QFile::encodeName(path).constData(), O_EVTONLY);
 #else
-         fd = qt_safe_open(QFile::encodeName(path), O_RDONLY);
+         fd = qt_safe_open(QFile::encodeName(path).constData(), O_RDONLY);
 #endif
+
          if (fd == -1) {
             perror("QKqueueFileSystemWatcherEngine::addPaths: open");
             continue;
          }
+
          if (fd >= (int)FD_SETSIZE / 2 && fd < (int)FD_SETSIZE) {
             int fddup = fcntl(fd, F_DUPFD, FD_SETSIZE);
             if (fddup != -1) {

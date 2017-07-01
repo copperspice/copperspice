@@ -87,7 +87,7 @@ void QXmlSchemaPrivate::load(const QUrl &source, const QString &targetNamespace)
          m_schemaContext, QPatternist::AccelTreeResourceLoader::ContinueOnError));
 
    if (reply) {
-      load(reply.data(), source, targetNamespace);
+      load(reply.get(), source, targetNamespace);
    }
 }
 

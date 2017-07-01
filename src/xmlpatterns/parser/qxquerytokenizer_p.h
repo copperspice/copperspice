@@ -126,16 +126,6 @@ class XQueryTokenizer : public Tokenizer
    static inline Token error();
    inline TokenType consumeWhitespace();
 
-   /**
-    * @short Returns the character at the current position, converted to
-    * @c ASCII.
-    *
-    * Equivalent to calling:
-    *
-    * @code
-    * current().toAscii();
-    * @endcode
-    */
    inline char peekCurrent() const;
 
    /**

@@ -57,6 +57,7 @@ QString QClipboard::text(QString &subtype, Mode mode) const
    }
 
    const QStringList formats = data->formats();
+
    if (subtype.isEmpty()) {
       if (formats.contains(QLatin1String("text/plain"))) {
          subtype = QLatin1String("plain");
@@ -176,55 +177,66 @@ void QClipboard::emitChanged(Mode mode)
    emit changed(mode);
 }
 
-const char *QMimeDataWrapper::format(int n) const
+QString QMimeDataWrapper::format(int n) const
 {
-   if (formats.isEmpty()) {
-      QStringList fmts = data->formats();
-      for (int i = 0; i < fmts.size(); ++i) {
-         formats.append(fmts.at(i).toLatin1());
-      }
+   if (m_formats.isEmpty()) {
+      m_formats = data->formats();
    }
-   if (n < 0 || n >= formats.size()) {
-      return 0;
+
+   if (n < 0 || n >= m_formats.size()) {
+      return QString();
    }
-   return formats.at(n).data();
+
+   return m_formats.at(n);
 }
 
-QByteArray QMimeDataWrapper::encodedData(const char *format) const
+QByteArray QMimeDataWrapper::encodedData(const QString &format) const
 {
-   if (QLatin1String(format) != QLatin1String("application/x-qt-image")) {
-      return data->data(QLatin1String(format));
+   if (format != "application/x-qt-image") {
+      return data->data(format);
+
    } else {
       QVariant variant = data->imageData();
       QImage img = qvariant_cast<QImage>(variant);
       QByteArray ba;
       QBuffer buffer(&ba);
+
       buffer.open(QIODevice::WriteOnly);
       img.save(&buffer, "PNG");
+
       return ba;
    }
 }
 
 QVariant QMimeSourceWrapper::retrieveData(const QString &mimetype, QVariant::Type) const
 {
-   return source->encodedData(mimetype.toLatin1());
+   return source->encodedData(mimetype);
 }
 
 bool QMimeSourceWrapper::hasFormat(const QString &mimetype) const
 {
-   return source->provides(mimetype.toLatin1());
+   return source->provides(mimetype);
 }
 
 QStringList QMimeSourceWrapper::formats() const
 {
-   QStringList fmts;
+   QStringList retval;
+   QString fmt;
+
    int i = 0;
-   const char *fmt;
-   while ((fmt = source->format(i))) {
-      fmts.append(QLatin1String(fmt));
+
+   while (true) {
+      fmt = source->format(i);
+
+      if (fmt.isEmpty()) {
+         break;
+      }
+
+      retval.append(fmt);
       ++i;
    }
-   return fmts;
+
+   return retval;
 }
 
 #endif // QT_NO_CLIPBOARD

@@ -2218,7 +2218,7 @@ QTextStream &QTextStream::operator<<(char c)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putString(QString(QChar::fromAscii(c)));
+   d->putString(QString(QChar::fromLatin1(c)));
    return *this;
 }
 
@@ -2407,33 +2407,14 @@ QTextStream &QTextStream::operator<<(const QString &string)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes \a array to the stream. The contents of \a array are
-    converted with QString::fromAscii().
-*/
 QTextStream &QTextStream::operator<<(const QByteArray &array)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putString(QString::fromAscii(array.constData(), array.length()));
+   d->putString(QString::fromLatin1(array.constData(), array.length()));
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the constant string pointed to by \a string to the stream. \a
-    string is assumed to be in ISO-8859-1 encoding. This operator
-    is convenient when working with constant string data. Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qtextstream.cpp 8
-
-    Warning: QTextStream assumes that \a string points to a string of
-    text, terminated by a '\0' character. If there is no terminating
-    '\0' character, your application may crash.
-*/
 QTextStream &QTextStream::operator<<(const char *string)
 {
    Q_D(QTextStream);

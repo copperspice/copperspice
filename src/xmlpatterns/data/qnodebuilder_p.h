@@ -25,7 +25,6 @@
 
 #include <qitem_p.h>
 #include <qabstractxmlreceiver.h>
-#include <qautoptr_p.h>
 
 QT_BEGIN_NAMESPACE
 

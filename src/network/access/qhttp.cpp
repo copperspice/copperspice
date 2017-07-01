@@ -2382,7 +2382,7 @@ void QHttpPrivate::_q_slotSendRequest()
       if (port && port != 80) {
          proxyUrl.setPort(port);
       }
-      QString request = QString::fromAscii(proxyUrl.resolved(QUrl::fromEncoded(header.path().toLatin1())).toEncoded());
+      QString request = QString::fromLatin1(proxyUrl.resolved(QUrl::fromEncoded(header.path().toLatin1())).toEncoded());
 
       header.setRequest(header.method(), request, header.majorVersion(), header.minorVersion());
       header.setValue(QLatin1String("Proxy-Connection"), QLatin1String("keep-alive"));
@@ -2532,25 +2532,30 @@ void QHttpPrivate::_q_slotConnected()
       setState(QHttp::Sending);
    }
 
-   QString str = header.toString();
-   bytesTotal = str.length();
-   socket->write(str.toLatin1(), bytesTotal);
+   QString str    = header.toString();
+   QByteArray tmp = str.toLatin1();
+   bytesTotal     = tmp.length();
+
+   socket->write(tmp.constData(), bytesTotal);
+
 #if defined(QHTTP_DEBUG)
-   qDebug("QHttp: write request header %p:\n---{\n%s}---", &header, str.toLatin1().constData());
+   qDebug("QHttp: write request header %p:\n---{\n%s}---", &header, csPrintable(str));
 #endif
 
    if (postDevice) {
       postDevice->seek(0);    // reposition the device
       bytesTotal += postDevice->size();
+
       //check for 100-continue
       if (header.value(QLatin1String("expect")).contains(QLatin1String("100-continue"), Qt::CaseInsensitive)) {
          //create a time out for 2 secs.
          pendingPost = true;
          post100ContinueTimer.start(2000);
       }
+
    } else {
       bytesTotal += buffer.size();
-      socket->write(buffer, buffer.size());
+      socket->write(buffer.constData(), buffer.size());
    }
 }
 
@@ -2630,7 +2635,9 @@ void QHttpPrivate::postMoreData()
 #else
    if (socket->bytesToWrite() == 0) {
 #endif
+
       int max = qMin(4096, postDevice->size() - postDevice->pos());
+
       QByteArray arr;
       arr.resize(max);
 
@@ -2644,7 +2651,7 @@ void QHttpPrivate::postMoreData()
          postDevice = 0;
       }
 
-      socket->write(arr, n);
+      socket->write(arr.constData(), n);
    }
 }
 
@@ -2665,7 +2672,7 @@ void QHttpPrivate::_q_slotReadyRead()
       bool end = false;
       QString tmp;
       while (!end && socket->canReadLine()) {
-         tmp = QString::fromAscii(socket->readLine());
+         tmp = QString::fromLatin1(socket->readLine());
          if (tmp == QLatin1String("\r\n") || tmp == QLatin1String("\n") || tmp.isEmpty()) {
             end = true;
          } else {
@@ -2807,7 +2814,7 @@ void QHttpPrivate::_q_slotReadyRead()
                if (!socket->canReadLine()) {
                   break;
                }
-               QString sizeString = QString::fromAscii(socket->readLine());
+               QString sizeString = QString::fromLatin1(socket->readLine());
                int tPos = sizeString.indexOf(QLatin1Char(';'));
                if (tPos != -1) {
                   sizeString.truncate(tPos);
@@ -2828,7 +2835,7 @@ void QHttpPrivate::_q_slotReadyRead()
 
             // read trailer
             while (chunkedSize == -2 && socket->canReadLine()) {
-               QString read = QString::fromAscii(socket->readLine());
+               QString read = QString::fromLatin1(socket->readLine());
                if (read == QLatin1String("\r\n") || read == QLatin1String("\n")) {
                   chunkedSize = -1;
                }
@@ -2882,6 +2889,7 @@ void QHttpPrivate::_q_slotReadyRead()
             // if repost is required, the content is ignored
             return;
          }
+
          n = qMin(qint64(response.contentLength() - bytesDone), n);
          if (n > 0) {
             arr = new QByteArray;
@@ -2889,41 +2897,53 @@ void QHttpPrivate::_q_slotReadyRead()
             qint64 read = socket->read(arr->data(), n);
             arr->resize(read);
          }
+
          if (bytesDone + q->bytesAvailable() + n == response.contentLength()) {
             everythingRead = true;
          }
+
       } else if (n > 0) {
          // workaround for VC++ bug
          QByteArray temp = socket->readAll();
          arr = new QByteArray(temp);
       }
 
-      if (arr && !repost) {
+      if (arr && ! repost) {
          n = arr->size();
+
          if (toDevice) {
             qint64 bytesWritten;
-            bytesWritten = toDevice->write(*arr, n);
+            bytesWritten = toDevice->write(arr->constData(), n);
+
             delete arr;
             arr = 0;
+
             // if writing to the device does not succeed, quit with error
             if (bytesWritten == -1 || bytesWritten < n) {
-               finishedWithError(QLatin1String(QT_TRANSLATE_NOOP("QHttp", "Error writing response to device")), QHttp::UnknownError);
+               finishedWithError(QLatin1String(QT_TRANSLATE_NOOP("QHttp", "Error writing response to device")),
+                  QHttp::UnknownError);
+
             } else {
                bytesDone += bytesWritten;
+
 #if defined(QHTTP_DEBUG)
                qDebug("QHttp::_q_slotReadyRead(): read %lld bytes (%lld bytes done)", n, bytesDone);
 #endif
             }
+
             if (response.hasContentLength()) {
                emit q->dataReadProgress(bytesDone, response.contentLength());
             } else {
                emit q->dataReadProgress(bytesDone, 0);
             }
+
          } else {
             char *ptr = rba.reserve(arr->size());
             memcpy(ptr, arr->data(), arr->size());
+
             delete arr;
             arr = 0;
+
 #if defined(QHTTP_DEBUG)
             qDebug("QHttp::_q_slotReadyRead(): read %lld bytes (%lld bytes done)", n, bytesDone + q->bytesAvailable());
 #endif

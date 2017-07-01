@@ -34,10 +34,8 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-ElementConstructor::ElementConstructor(const Expression::Ptr &op1,
-                                       const Expression::Ptr &op2,
-                                       const bool isXSLT) : PairContainer(op1, op2)
-   , m_isXSLT(isXSLT)
+ElementConstructor::ElementConstructor(const Expression::Ptr &op1, const Expression::Ptr &op2, const bool isXSLT)
+   : PairContainer(op1, op2), m_isXSLT(isXSLT)
 {
 }
 
@@ -46,7 +44,7 @@ Item ElementConstructor::evaluateSingleton(const DynamicContext::Ptr &context) c
    const Item name(m_operand1->evaluateSingleton(context));
 
    const NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(m_staticBaseURI));
-   OutputValidator validator(nodeBuilder.data(), context, this, m_isXSLT);
+   OutputValidator validator(nodeBuilder.get(), context, this, m_isXSLT);
 
    const DynamicContext::Ptr receiverContext(context->createReceiverContext(&validator));
 

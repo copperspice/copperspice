@@ -254,9 +254,10 @@ void qt_parseEtcLpPrinters(QList<QPrinterDescription> *printers)
    QString tmp;
    for (int i = 0; i < dirs.size(); ++i) {
       QFileInfo printer = dirs.at(i);
+
       if (printer.isDir()) {
-         tmp.sprintf("/etc/lp/printers/%s/configuration",
-                     printer.fileName().toAscii().data());
+         tmp.sprintf("/etc/lp/printers/%s/configuration", printer.fileName().toLatin1().data());
+
          QFile configuration(tmp);
          char *line = new char[1025];
          QString remote(QLatin1String("Remote:"));
@@ -376,11 +377,12 @@ char *qt_parsePrintersConf(QList<QPrinterDescription> *printers, bool *found)
                       printerDesc[j] != QLatin1Char(':') && printerDesc[j] != QLatin1Char(',')) {
                   j++;
                }
+
                // that's our default printer
-               defaultPrinter =
-                  qstrdup(printerDesc.mid(i, j - i).toAscii().data());
+               defaultPrinter = qstrdup(printerDesc.mid(i, j - i).toLatin1().data());
                printerName = QString();
                printerDesc = QString();
+
             } else if (printerName == QLatin1String("_all")) {
                // skip it.. any other cases we want to skip?
                printerName = QString();
@@ -799,7 +801,7 @@ int qt_getLprPrinters(QList<QPrinterDescription> &printers)
          if (def.readLine(etcLpDefault.data(), 1024) > 0) {
             QRegExp rx(QLatin1String("^(\\S+)"));
             if (rx.indexIn(QString::fromLatin1(etcLpDefault)) != -1) {
-               etcLpDefault = rx.cap(1).toAscii();
+               etcLpDefault = rx.cap(1).toLatin1();
             }
          }
       }

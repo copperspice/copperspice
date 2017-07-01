@@ -61,7 +61,7 @@ static const char *TrollTsNamespaceURI = "urn:trolltech:names:ts:document:1.0";
 
 static QString dataType(const TranslatorMessage &m)
 {
-   QByteArray fileName = m.fileName().toAscii();
+   QByteArray fileName = m.fileName().toLatin1();
    unsigned int extHash = 0;
    int pos = fileName.count() - 1;
    for (int pass = 0; pass < 4 && pos >= 0; ++pass, --pos) {
@@ -129,7 +129,7 @@ static QString numericEntity(int ch, bool makePhs)
 {
    // ### This needs to be reviewed, to reflect the updated XLIFF-PO spec.
    if (!makePhs || ch < 7 || ch > 0x0d) {
-      return QString::fromAscii("&#x%1;").arg(QString::number(ch, 16));
+      return QString::fromLatin1("&#x%1;").arg(QString::number(ch, 16));
    }
 
    CharMnemonic cm = charCodeMnemonics[int(ch) - 7];
@@ -137,7 +137,7 @@ static QString numericEntity(int ch, bool makePhs)
    char escapechar = cm.escape;
 
    static int id = 0;
-   return QString::fromAscii("<ph id=\"ph%1\" ctype=\"x-ch-%2\">\\%3</ph>")
+   return QString::fromLatin1("<ph id=\"ph%1\" ctype=\"x-ch-%2\">\\%3</ph>")
           .arg(++id) .arg(name) .arg(escapechar);
 }
 
@@ -237,7 +237,7 @@ static void writeComment(QTextStream &ts, const TranslatorMessage &msg, const QR
 static void writeTransUnits(QTextStream &ts, const TranslatorMessage &msg, const QRegExp &drops, int indent)
 {
    static int msgid;
-   QString msgidstr = !msg.id().isEmpty() ? msg.id() : QString::fromAscii("_msg%1").arg(++msgid);
+   QString msgidstr = !msg.id().isEmpty() ? msg.id() : QString::fromLatin1("_msg%1").arg(++msgid);
 
    QStringList translns = msg.translations();
    QHash<QString, QString>::const_iterator it;
@@ -689,7 +689,7 @@ bool XLIFFHandler::characters(const QString &ch)
       for (int i = 0; i < ch.count(); ++i) {
          QChar chr = ch.at(i);
          if (accum.endsWith(QLatin1Char('\\'))) {
-            accum[accum.size() - 1] = QLatin1Char(charFromEscape(chr.toAscii()));
+            accum[accum.size() - 1] = QLatin1Char(charFromEscape(chr.toLatin1()));
          } else {
             accum.append(chr);
          }

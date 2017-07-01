@@ -1011,7 +1011,7 @@ class QDynamicFileResourceRoot: public QDynamicBufferResourceRoot
 #define MAP_FAILED -1
 #endif
 
-      int fd = QT_OPEN(QFile::encodeName(f), O_RDONLY,
+      int fd = QT_OPEN(QFile::encodeName(f).constData(), O_RDONLY,
 #if defined(Q_OS_WIN)
                        _S_IREAD | _S_IWRITE
 #else

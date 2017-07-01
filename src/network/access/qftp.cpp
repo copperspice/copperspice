@@ -1014,7 +1014,7 @@ void QFtpPI::readyRead()
 
    while (commandSocket.canReadLine()) {
       // read line with respect to line continuation
-      QString line = QString::fromAscii(commandSocket.readLine());
+      QString line = QString::fromLatin1(commandSocket.readLine());
       if (replyText.isEmpty()) {
          if (line.length() < 3) {
             // protocol error
@@ -1048,7 +1048,7 @@ void QFtpPI::readyRead()
          if (!commandSocket.canReadLine()) {
             return;
          }
-         line = QString::fromAscii(commandSocket.readLine());
+         line = QString::fromLatin1(commandSocket.readLine());
          lineLeft4 = line.left(4);
       }
       replyText += line.mid(4); // strip reply code 'xyz '

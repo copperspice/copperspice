@@ -980,7 +980,7 @@ QStyle *QApplication::style()
 
    if (!QApplicationPrivate::app_style) {
       // Compile-time search for default style
-      
+
       QString style;
       QString envStyle;
 
@@ -1323,32 +1323,24 @@ QPalette QApplication::palette()
    return *QApplicationPrivate::app_pal;
 }
 
-/*!
-    \fn QPalette QApplication::palette(const QWidget* widget)
-    \overload
-
-    If a \a widget is passed, the default palette for the widget's class is
-    returned. This may or may not be the application palette. In most cases
-    there is no special palette for certain types of widgets, but one notable
-    exception is the popup menu under Windows, if the user has defined a
-    special background color for menus in the display settings.
-
-    \sa setPalette(), QWidget::palette()
-*/
 QPalette QApplication::palette(const QWidget *w)
 {
    PaletteHash *hash = app_palettes();
+
    if (w && hash && hash->size()) {
       QHash<QByteArray, QPalette>::ConstIterator it = hash->constFind(w->metaObject()->className());
+
       if (it != hash->constEnd()) {
          return *it;
       }
+
       for (it = hash->constBegin(); it != hash->constEnd(); ++it) {
-         if (w->inherits(it.key())) {
+         if (w->inherits(it.key().constData())) {
             return it.value();
          }
       }
    }
+
    return palette();
 }
 
@@ -1541,7 +1533,7 @@ QFont QApplication::font(const QWidget *widget)
 
       for (it = hash->constBegin(); it != hash->constEnd(); ++it) {
 
-         if (widget->inherits(it.key())) {
+         if (widget->inherits(it.key().constData())) {
             return it.value();
          }
       }
@@ -1796,7 +1788,7 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
             qic->setFocusWidget(0);
          }
       }
-#endif 
+#endif
 
       if (focus_widget) {
          focus_widget->d_func()->setFocus_sys();

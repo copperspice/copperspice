@@ -1213,14 +1213,18 @@ static int findMethodIndex(ExecState* exec,
 
         // resolve return type
         QByteArray returnTypeName = method.typeName();
-        int rtype = QMetaType::type(returnTypeName);
+        int rtype = QMetaType::type(returnTypeName.constData());
+
         if ((rtype == 0) && !returnTypeName.isEmpty()) {
             if (returnTypeName == "QVariant") {
                 types.append(QtMethodMatchType::variant());
+
             } else if (returnTypeName.endsWith('*')) {
                 types.append(QtMethodMatchType::metaType(QMetaType::VoidStar, returnTypeName));
+
             } else {
                 int enumIndex = indexOfMetaEnum(meta, returnTypeName);
+
                 if (enumIndex != -1)
                     types.append(QtMethodMatchType::metaEnum(enumIndex, returnTypeName));
                 else {
@@ -1228,6 +1232,7 @@ static int findMethodIndex(ExecState* exec,
                     types.append(QtMethodMatchType::unresolved(returnTypeName));
                 }
             }
+
         } else {
             if (returnTypeName == "QVariant")
                 types.append(QtMethodMatchType::variant());
@@ -1237,9 +1242,11 @@ static int findMethodIndex(ExecState* exec,
 
         // resolve argument types
         QList<QByteArray> parameterTypeNames = method.parameterTypes();
+
         for (int i = 0; i < parameterTypeNames.count(); ++i) {
             QByteArray argTypeName = parameterTypeNames.at(i);
-            int atype = QMetaType::type(argTypeName);
+            int atype = QMetaType::type(argTypeName.constData());
+
             if (atype == 0) {
                 if (argTypeName == "QVariant") {
                     types.append(QtMethodMatchType::variant());
@@ -1298,7 +1305,7 @@ static int findMethodIndex(ExecState* exec,
             }
         }
 
-        qMatchDebug() << "Match: " << method.methodSignature().constData() << (converted ? "converted":"failed to convert") 
+        qMatchDebug() << "Match: " << method.methodSignature().constData() << (converted ? "converted":"failed to convert")
                   << "distance " << matchDistance;
 
         if (converted) {
@@ -1441,7 +1448,7 @@ void QtRuntimeMetaMethod::visitChildren(SlotVisitor& visitor)
 }
 
 EncodedJSValue QtRuntimeMetaMethod::call(ExecState* exec)
-{   
+{
    // BROOM (on hold, ok)
    qWarning("(CopperSpice) QtRuntimeMetaMethod::call, Not implemented");
 
@@ -1672,7 +1679,7 @@ EncodedJSValue QtRuntimeConnectionMethod::call(ExecState *exec)
 */
                 // CopperSpice Test 03/21/2014
                 bool ok = false;
-                         
+
                 if (!ok) {
                     delete conn;
                     QString msg = QString(QLatin1String("QtMetaMethod.connect: failed to connect to %1::%2()"))
@@ -1698,7 +1705,7 @@ EncodedJSValue QtRuntimeConnectionMethod::call(ExecState *exec)
 /*  CopperSpice Test 03/21/2014
                         // yes, disconnect it
                         QMetaObject::disconnect(sender, signalIndex, conn, conn->metaObject()->methodOffset());
-*/                         
+*/
                         delete conn; // this will also remove it from the map
                         ret = true;
                         break;

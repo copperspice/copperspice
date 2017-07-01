@@ -331,9 +331,11 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
 {
    PathInfoList::iterator End = list.end();
    PathInfoList::iterator it = list.begin();
+
    while (it != End) {
       struct ::stat newInfo;
-      if (::stat(it->absolutePath, &newInfo) == 0) {
+      if (::stat(it->absolutePath.constData(), &newInfo) == 0) {
+
          if (emitSignals) {
             if (newInfo != it->savedInfo) {
                it->savedInfo = newInfo;

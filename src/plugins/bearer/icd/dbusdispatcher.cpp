@@ -71,7 +71,7 @@ static bool constantVariantList(const QVariantList& variantList) {
     // Special case, empty list == empty struct
     if (variantList.isEmpty()) {
         return false;
-    } else {        
+    } else {
         QVariant::Type type = variantList[0].type();
         // Iterate items in the list and check if they are same type
         foreach(QVariant variant, variantList) {
@@ -147,7 +147,7 @@ static bool appendVariantToDBusMessage(const QVariant& argument,
 
         case QVariant::Bool:
             bool_data = argument.toBool();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_BOOLEAN, 
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_BOOLEAN,
                                            &bool_data);
             break;
 
@@ -163,54 +163,46 @@ static bool appendVariantToDBusMessage(const QVariant& argument,
             break;
 
         case QVariant::Char:
-            char_data = argument.toChar().toAscii();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_BYTE, 
-                                           &char_data);
+            char_data = argument.toChar().toLatin1();
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_BYTE, &char_data);
             break;
 
         case QVariant::Int:
             int32_data = argument.toInt();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_INT32, 
-                                           &int32_data);
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_INT32, &int32_data);
             break;
 
         case QVariant::String: {
             QByteArray data = argument.toString().toUtf8();
             str_data = data.data();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_STRING,
-                                           &str_data);
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_STRING,&str_data);
             break;
         }
 
         case QVariant::StringList:
             str_list = argument.toStringList();
-            dbus_message_iter_open_container(dbus_iter, DBUS_TYPE_ARRAY,
-                                             "s", &array_iter);
+            dbus_message_iter_open_container(dbus_iter, DBUS_TYPE_ARRAY, "s", &array_iter);
             for (idx = 0; idx < str_list.size(); idx++) {
                 QByteArray data = str_list.at(idx).toLatin1();
                 str_data = data.data();
-                dbus_message_iter_append_basic(&array_iter,
-                                               DBUS_TYPE_STRING,
-                                               &str_data);
+                dbus_message_iter_append_basic(&array_iter, DBUS_TYPE_STRING, &str_data);
             }
             dbus_message_iter_close_container(dbus_iter, &array_iter);
             break;
 
         case QVariant::UInt:
             uint32_data = argument.toUInt();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_UINT32, 
-                                           &uint32_data);
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_UINT32, &uint32_data);
             break;
 
         case QVariant::ULongLong:
             uint64_data = argument.toULongLong();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_UINT64, 
-                                           &uint64_data);
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_UINT64, &uint64_data);
             break;
 
         case QVariant::LongLong:
             int64_data = argument.toLongLong();
-            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_INT64, 
+            dbus_message_iter_append_basic(dbus_iter, DBUS_TYPE_INT64,
                                            &int64_data);
             break;
 
@@ -232,9 +224,7 @@ static bool appendVariantToDBusMessage(const QVariant& argument,
                 }
 
                 // Mapped as DBUS array
-                dbus_message_iter_open_container(dbus_iter, DBUS_TYPE_ARRAY,
-                                                 signature.toAscii(),
-                                                 &array_iter);
+                dbus_message_iter_open_container(dbus_iter, DBUS_TYPE_ARRAY, signature.toLatin1(), &array_iter);
 
                 foreach(QVariant listItem, variantList) {
                     appendVariantToDBusMessage(listItem, &array_iter);
@@ -394,7 +384,7 @@ static DBusHandlerResult signalHandler (DBusConnection *connection,
     if (dbus_message_get_type(message) == DBUS_MESSAGE_TYPE_SIGNAL) {
         interface = dbus_message_get_interface(message);
         signal = dbus_message_get_member(message);
-        
+
         QList<QVariant> arglist;
         DBusMessageIter dbus_iter;
 
@@ -452,7 +442,7 @@ void DBusDispatcher::setupDBus()
 
 	dbus_connection_set_exit_on_disconnect(d_ptr->connection, FALSE);
         dbus_connection_setup_with_g_main(d_ptr->connection, g_main_context_get_thread_default());
-        dbus_connection_register_object_path(d_ptr->connection, 
+        dbus_connection_register_object_path(d_ptr->connection,
                                              d_ptr->signalPath.toLatin1(),
                                              &d_ptr->signal_vtable,
                                              this);
@@ -462,7 +452,7 @@ void DBusDispatcher::setupDBus()
 static DBusMessage *prepareDBusCall(const QString& service,
                                     const QString& path,
                                     const QString& interface,
-                                    const QString& method, 
+                                    const QString& method,
                                     const QVariant& arg1 = QVariant(),
                                     const QVariant& arg2 = QVariant(),
                                     const QVariant& arg3 = QVariant(),
@@ -470,7 +460,7 @@ static DBusMessage *prepareDBusCall(const QString& service,
                                     const QVariant& arg5 = QVariant(),
                                     const QVariant& arg6 = QVariant(),
                                     const QVariant& arg7 = QVariant(),
-                                    const QVariant& arg8 = QVariant()) 
+                                    const QVariant& arg8 = QVariant())
 {
     DBusMessage *message = dbus_message_new_method_call(service.toLatin1(),
                                                         path.toLatin1(),
@@ -490,7 +480,7 @@ static DBusMessage *prepareDBusCall(const QString& service,
     if (arg8.isValid()) arglist << arg8;
 
     dbus_message_iter_init_append (message, &dbus_iter);
-    
+
     while (!arglist.isEmpty()) {
         QVariant argument = arglist.takeFirst();
         appendVariantToDBusMessage(argument, &dbus_iter);
@@ -499,7 +489,7 @@ static DBusMessage *prepareDBusCall(const QString& service,
     return message;
 }
 
-QList<QVariant> DBusDispatcher::call(const QString& method, 
+QList<QVariant> DBusDispatcher::call(const QString& method,
                                      const QVariant& arg1,
                                      const QVariant& arg2,
                                      const QVariant& arg3,
@@ -569,7 +559,7 @@ static void pendingCallFunction (DBusPendingCall *pending,
     dbus_pending_call_unref(pending);
 }
 
-bool DBusDispatcher::callAsynchronous(const QString& method, 
+bool DBusDispatcher::callAsynchronous(const QString& method,
                                       const QVariant& arg1,
                                       const QVariant& arg2,
                                       const QVariant& arg3,
@@ -595,7 +585,7 @@ bool DBusDispatcher::callAsynchronous(const QString& method,
     return (bool)ret;
 }
 
-void DBusDispatcher::emitSignalReceived(const QString& interface, 
+void DBusDispatcher::emitSignalReceived(const QString& interface,
                                         const QString& signal,
                                         const QList<QVariant>& args) {
     emit signalReceived(interface, signal, args); }

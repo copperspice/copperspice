@@ -1100,24 +1100,29 @@ QScriptEnginePrivate::~QScriptEnginePrivate()
 QVariant QScriptEnginePrivate::jscValueToVariant(JSC::ExecState *exec, JSC::JSValue value, int targetType)
 {
    QVariant v(targetType, (void *)0);
+
    if (convertValue(exec, value, targetType, v.data())) {
       return v;
    }
+
    if (uint(targetType) == QVariant::LastType) {
       return toVariant(exec, value);
    }
+
    if (isVariant(value)) {
       v = variantValue(value);
+
       if (v.canConvert(QVariant::Type(targetType))) {
          v.convert(QVariant::Type(targetType));
          return v;
       }
+
       QByteArray typeName = v.typeName();
-      if (typeName.endsWith('*')
-            && (QMetaType::type(typeName.left(typeName.size() - 1)) == targetType)) {
+      if (typeName.endsWith('*') && (QMetaType::type(typeName.left(typeName.size() - 1).constData()) == targetType)) {
          return QVariant(targetType, *reinterpret_cast<void **>(v.data()));
       }
    }
+
    return QVariant();
 }
 
@@ -1533,15 +1538,22 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
    if (preferExisting) {
       data->registerWrapper(result, ownership, opt);
    }
+
    result->setDelegate(new QScript::QObjectDelegate(object, ownership, options));
-   /*if (setDefaultPrototype)*/ {
+
+   /*if (setDefaultPrototype)*/
+   {
       const QMetaObject *meta = object->metaObject();
+
       while (meta) {
          QByteArray typeString = meta->className();
          typeString.append('*');
-         int typeId = QMetaType::type(typeString);
+
+         int typeId = QMetaType::type(typeString.constData());
+
          if (typeId != 0) {
             JSC::JSValue proto = defaultPrototype(typeId);
+
             if (proto) {
                result->setPrototype(proto);
                break;
@@ -1550,6 +1562,7 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
          meta = meta->superClass();
       }
    }
+
    return result;
 }
 
@@ -1639,11 +1652,14 @@ bool QScriptEnginePrivate::scriptConnect(QObject *sender, const char *signal,
 {
    Q_ASSERT(sender);
    Q_ASSERT(signal);
+
    const QMetaObject *meta = sender->metaObject();
-   int index = meta->indexOfSignal(QMetaObject::normalizedSignature(signal + 1));
+   int index = meta->indexOfSignal(QMetaObject::normalizedSignature(signal + 1).constData());
+
    if (index == -1) {
       return false;
    }
+
    return scriptConnect(sender, index, receiver, function, /*wrapper=*/JSC::JSValue(), type);
 }
 
@@ -1652,11 +1668,14 @@ bool QScriptEnginePrivate::scriptDisconnect(QObject *sender, const char *signal,
 {
    Q_ASSERT(sender);
    Q_ASSERT(signal);
+
    const QMetaObject *meta = sender->metaObject();
-   int index = meta->indexOfSignal(QMetaObject::normalizedSignature(signal + 1));
+   int index = meta->indexOfSignal(QMetaObject::normalizedSignature(signal + 1).constData());
+
    if (index == -1) {
       return false;
    }
+
    return scriptDisconnect(sender, index, receiver, function);
 }
 
@@ -3389,8 +3408,9 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
    }
 
    if (isVariant(value) && name.endsWith('*')) {
-      int valueType = QMetaType::type(name.left(name.size() - 1));
+      int valueType = QMetaType::type(name.left(name.size() - 1).constData());
       QVariant &var = variantValue(value);
+
       if (valueType == var.userType()) {
          *reinterpret_cast<void **>(ptr) = var.data();
          return true;

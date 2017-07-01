@@ -856,7 +856,7 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
 
             case QMetaType::Char:
             case QMetaType::UChar:
-               *str = QChar::fromAscii(*static_cast<char *>(d->data.shared->ptr));
+               *str = QChar::fromLatin1(*static_cast<char *>(d->data.shared->ptr));
                break;
 
             case QMetaType::Short:
@@ -900,7 +900,7 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
                break;
 
             case QVariant::ByteArray:
-               *str = QString::fromAscii(v_cast<QByteArray>(d)->constData());
+               *str = QString::fromLatin1(v_cast<QByteArray>(d)->constData());
                break;
 
             case QVariant::StringList:
@@ -1081,7 +1081,7 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
 
          switch (d->type) {
             case QVariant::String:
-               *ba = v_cast<QString>(d)->toAscii();
+               *ba = v_cast<QString>(d)->toLatin1();
                break;
 
             case QVariant::Double:

@@ -470,8 +470,9 @@ void QXmlQuery::setQuery(const QUrl &queryURI, const QUrl &baseURI)
    }
 
    if (result) {
-      setQuery(result.data(), d->queryURI);
+      setQuery(result.get(), d->queryURI);
       result->close();
+
    } else {
       d->recompileRequired();
    }

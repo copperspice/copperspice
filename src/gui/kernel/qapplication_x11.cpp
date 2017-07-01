@@ -834,9 +834,10 @@ static void qt_x11_create_intern_atoms()
 
    QByteArray settings_atom_name("_QT_SETTINGS_TIMESTAMP_");
    settings_atom_name += XDisplayName(X11->displayName);
-   names[i++] = settings_atom_name;
+   names[i++] = settings_atom_name.constData();
 
    Q_ASSERT(i == QX11Data::NAtoms);
+
 #if defined(XlibSpecificationRelease) && (XlibSpecificationRelease >= 6)
    XInternAtoms(X11->display, (char **)names, i, False, X11->atoms);
 #else

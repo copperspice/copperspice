@@ -71,23 +71,30 @@ JSValue QtClass::fallbackObject(ExecState* exec, Instance* inst, const Identifie
     QtInstance* qtinst = static_cast<QtInstance*>(inst);
 
     const UString& ustring = identifier.ustring();
-    const QByteArray name = QString(reinterpret_cast<const QChar*>(ustring.characters()), ustring.length()).toAscii();
+    const QByteArray name = QString(reinterpret_cast<const QChar*>(ustring.characters()), ustring.length()).toLatin1();
 
     // First see if we have a cache hit
     JSObject* val = qtinst->m_methods.value(name).get();
-    if (val)
+    if (val) {
         return val;
+    }
 
     // Nope, create an entry
     const QByteArray normal = QMetaObject::normalizedSignature(name.constData());
 
     // See if there is an exact match
     int index = -1;
-    if (normal.contains('(') && (index = m_metaObject->indexOfMethod(normal)) != -1) {
+
+    if (normal.contains('(') && (index = m_metaObject->indexOfMethod(normal.constData())) != -1) {
+
         QMetaMethod m = m_metaObject->method(index);
         if (m.access() != QMetaMethod::Private) {
-            QtRuntimeMetaMethod* val = new (exec) QtRuntimeMetaMethod(exec, identifier, static_cast<QtInstance*>(inst), index, normal, false);
-            qtinst->m_methods.insert(name, WriteBarrier<JSObject>(exec->globalData(), qtinst->createRuntimeObject(exec), val));
+            QtRuntimeMetaMethod* val = new (exec) QtRuntimeMetaMethod(exec, identifier,
+                  static_cast<QtInstance*>(inst), index, normal, false);
+
+            qtinst->m_methods.insert(name, WriteBarrier<JSObject>(exec->globalData(),
+                  qtinst->createRuntimeObject(exec), val));
+
             return val;
         }
     }
@@ -95,21 +102,29 @@ JSValue QtClass::fallbackObject(ExecState* exec, Instance* inst, const Identifie
     // Nope.. try a basename match
     const int count = m_metaObject->methodCount();
     for (index = count - 1; index >= 0; --index) {
+
         const QMetaMethod m = m_metaObject->method(index);
-        if (m.access() == QMetaMethod::Private)
+
+        if (m.access() == QMetaMethod::Private) {
             continue;
+        }
 
         int iter = 0;
 
         QByteArray tempSignature = m.methodSignature();
-        const char *signature    = tempSignature.constData(); 
+        const char *signature    = tempSignature.constData();
 
-        while (signature[iter] && signature[iter] != '(')
+        while (signature[iter] && signature[iter] != '(') {
             ++iter;
+        }
 
         if (normal == QByteArray::fromRawData(signature, iter)) {
-            QtRuntimeMetaMethod* val = new (exec) QtRuntimeMetaMethod(exec, identifier, static_cast<QtInstance*>(inst), index, normal, false);
-            qtinst->m_methods.insert(name, WriteBarrier<JSObject>(exec->globalData(), qtinst->createRuntimeObject(exec), val));
+            QtRuntimeMetaMethod* val = new (exec) QtRuntimeMetaMethod(exec, identifier,
+                  static_cast<QtInstance*>(inst), index, normal, false);
+
+            qtinst->m_methods.insert(name, WriteBarrier<JSObject>(exec->globalData(),
+                  qtinst->createRuntimeObject(exec), val));
+
             return val;
         }
     }
@@ -134,7 +149,7 @@ Field* QtClass::fieldNamed(const Identifier& identifier, Instance* instance) con
     QObject* obj = qtinst->getObject();
     const UString& ustring = identifier.ustring();
     const QString name(reinterpret_cast<const QChar*>(ustring.characters()), ustring.length());
-    const QByteArray ascii = name.toAscii();
+    const QByteArray ascii = name.toLatin1();
 
     // First check for a cached field
     QtField* f = qtinst->m_fields.value(name);
@@ -145,10 +160,14 @@ Field* QtClass::fieldNamed(const Identifier& identifier, Instance* instance) con
             // other types so we can delete them later
             if (f->fieldType() == QtField::MetaProperty)
                 return f;
+
 #ifndef QT_NO_PROPERTIES
             if (f->fieldType() == QtField::DynamicProperty) {
-                if (obj->dynamicPropertyNames().indexOf(ascii) >= 0)
+
+                if (obj->dynamicPropertyNames().indexOf(ascii) >= 0) {
                     return f;
+                }
+
                 // Dynamic property that disappeared
                 qtinst->m_fields.remove(name);
                 delete f;
@@ -157,19 +176,23 @@ Field* QtClass::fieldNamed(const Identifier& identifier, Instance* instance) con
             else {
                 const QList<QObject*>& children = obj->children();
                 const int count = children.size();
+
                 for (int index = 0; index < count; ++index) {
                     QObject* child = children.at(index);
-                    if (child->objectName() == name)
+
+                    if (child->objectName() == name) {
                         return f;
+                    }
                 }
 
-                // Didn't find it, delete it from the cache
+                // Did not find it, delete it from the cache
                 qtinst->m_fields.remove(name);
                 delete f;
             }
         }
 
-        int index = m_metaObject->indexOfProperty(ascii);
+        int index = m_metaObject->indexOfProperty(ascii.constData());
+
         if (index >= 0) {
             const QMetaProperty prop = m_metaObject->property(index);
 
@@ -194,6 +217,7 @@ Field* QtClass::fieldNamed(const Identifier& identifier, Instance* instance) con
 
         const QList<QObject*>& children = obj->children();
         const int count = children.count();
+
         for (index = 0; index < count; ++index) {
             QObject* child = children.at(index);
             if (child->objectName() == name) {

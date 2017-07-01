@@ -697,12 +697,7 @@ static void loadXlfds(const char *reqFamily, int encoding_id)
    xlfd_pattern += "-*-*-*-*-*-*-*-*-*-*-";
    xlfd_pattern += xlfd_for_id(encoding_id);
 
-   char **fontList = XListFonts(QX11Info::display(),
-                                xlfd_pattern,
-                                0xffff, &fontCount);
-   // qDebug("requesting xlfd='%s', got %d fonts", xlfd_pattern.data(), fontCount);
-
-
+   char **fontList = XListFonts(QX11Info::display(), xlfd_pattern.constData(), 0xffff, &fontCount);
    char *tokens[NFontFields];
 
    for (int i = 0 ; i < fontCount ; i++) {
@@ -1362,15 +1357,15 @@ static void load(const QString &family = QString(), int script = -1, bool forceX
          QtFontFamily *f = privateDb()->family(family);
          // could reduce this further with some more magic:
          // would need to remember the encodings loaded for the family.
+
          if (!f || !f->xlfdLoaded) {
-            loadXlfds(family.toLatin1(), -1);
+            loadXlfds(family.toLatin1().constData(), -1);
          }
       }
    }
 
 #ifdef QFONTDATABASE_DEBUG
-   FD_DEBUG("QFontDatabase: load(%s, %d) took %d ms",
-            family.toLatin1().constData(), script, t.elapsed());
+   FD_DEBUG("QFontDatabase: load(%s, %d) took %d ms", family.toLatin1().constData(), script, t.elapsed());
 #endif
 }
 
@@ -1379,7 +1374,7 @@ static void checkSymbolFont(QtFontFamily *family)
    if (!family || family->symbol_checked || family->fontFilename.isEmpty()) {
       return;
    }
-   //     qDebug() << "checking " << family->rawName;
+
    family->symbol_checked = true;
 
    QFontEngine::FaceId id;
@@ -2005,9 +2000,11 @@ QFontEngine *QFontDatabase::loadXlfd(int screen, int script, const QFontDef &req
 
          const int mib = xlfd_encoding[desc.encoding->encoding].mib;
          XFontStruct *xfs;
-         if ((xfs = XLoadQueryFont(QX11Info::display(), xlfd))) {
+
+         if ((xfs = XLoadQueryFont(QX11Info::display(), xlfd.constData()))) {
             fe = new QFontEngineXLFD(xfs, xlfd, mib);
             const int dpi = QX11Info::appDpiY();
+
             if (!qt_fillFontDef(xfs, &fe->fontDef, dpi, &desc)
                   && !qt_fillFontDef(xlfd, &fe->fontDef, dpi, &desc)) {
                initFontDef(desc, request, &fe->fontDef);
@@ -2018,6 +2015,7 @@ QFontEngine *QFontDatabase::loadXlfd(int screen, int script, const QFontDef &req
          fe = new QFontEngineBox(request.pixelSize);
          fe->fontDef = QFontDef();
       }
+
    } else {
       QList<int> encodings;
       if (desc.encoding) {

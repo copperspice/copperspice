@@ -720,7 +720,7 @@ QVariant QX11Data::motifdndObtainData(const char *mimeType)
       conversion_type = ATOM(TEXT);
    } else if (f.startsWith("x-motif-dnd/")) {
       // strip off the "x-motif-dnd/" prefix
-      conversion_type = X11->xdndStringToAtom(f.remove(0, 12));
+      conversion_type = X11->xdndStringToAtom(f.remove(0, 12).constData());
    }
 
    if (XGetSelectionOwner(X11->display, Dnd_selection) == XNone) {

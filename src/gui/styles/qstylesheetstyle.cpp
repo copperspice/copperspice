@@ -383,7 +383,7 @@ static QList<QVariant> subControlLayout(const QString &layout)
 {
    QList<QVariant> buttons;
    for (int i = 0; i < layout.count(); i++) {
-      int button = layout[i].toAscii();
+      int button = layout[i].toLatin1();
       switch (button) {
          case 'm':
             buttons.append(PseudoElement_MdiMinButton);
@@ -2521,9 +2521,11 @@ void QStyleSheetStyle::setProperties(QWidget *w)
       }
 
       property.remove(0, 10); // strip "qproperty-"
+
       const QVariant value = w->property(property.toLatin1());
       const QMetaObject *metaObject = w->metaObject();
-      int index = metaObject->indexOfProperty(property.toLatin1());
+      int index = metaObject->indexOfProperty(property.toLatin1().constData());
+
       if (index == -1) {
          qWarning() << w << " does not have a property named " << property;
          continue;

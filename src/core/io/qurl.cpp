@@ -3254,7 +3254,7 @@ static QString qt_ACE_do(const QString &domain, AceOperation op)
          return QString(); // two delimiters in a row -- empty label not allowed
       }
 
-      // RFC 3490 says, about the ToASCII operation:
+      // RFC 3490 says, about the To ASCII operation:
       //   3. If the UseSTD3ASCIIRules flag is set, then perform these checks:
       //
       //     (a) Verify the absence of non-LDH ASCII code points; that is, the
@@ -4001,7 +4001,7 @@ QByteArray QUrlPrivate::toEncoded(QUrl::FormattingOptions options) const
       }
       if (!(options & QUrl::RemovePort) && port != -1) {
          url += ':';
-         url += QString::number(port).toAscii();
+         url += QString::number(port).toLatin1();
       }
    }
 

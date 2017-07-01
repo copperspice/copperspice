@@ -266,23 +266,10 @@ QStringList QInotifyFileSystemWatcherEngine::addPaths(const QStringList &paths,
          }
       }
 
-      int wd = inotify_add_watch(inotifyFd,
-                                 QFile::encodeName(path),
-                                 (isDir
-                                  ? (0
-                                     | IN_ATTRIB
-                                     | IN_MOVE
-                                     | IN_CREATE
-                                     | IN_DELETE
-                                     | IN_DELETE_SELF
-                                    )
-                                  : (0
-                                     | IN_ATTRIB
-                                     | IN_MODIFY
-                                     | IN_MOVE
-                                     | IN_MOVE_SELF
-                                     | IN_DELETE_SELF
-                                    )));
+      int wd = inotify_add_watch(inotifyFd, QFile::encodeName(path).constData(),
+                  (isDir ? (0 | IN_ATTRIB | IN_MOVE | IN_CREATE | IN_DELETE | IN_DELETE_SELF)
+                         : (0 | IN_ATTRIB | IN_MODIFY | IN_MOVE | IN_MOVE_SELF | IN_DELETE_SELF)));
+
       if (wd <= 0) {
          perror("QInotifyFileSystemWatcherEngine::addPaths: inotify_add_watch failed");
          continue;

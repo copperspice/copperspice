@@ -616,7 +616,7 @@ static QString get_network_interface()
     if (addr_results.first().ip_info.isEmpty())
         return QString();
 
-    QByteArray data = addr_results.first().ip_info.first().address.toAscii();
+    QByteArray data = addr_results.first().ip_info.first().address.toLatin1();
     struct in_addr addr;
     if (inet_aton(data.constData(), &addr) == 0) {
 #ifdef BEARER_MANAGEMENT_DEBUG
@@ -752,11 +752,11 @@ void QNetworkSessionPrivateImpl::do_open()
 #ifdef BEARER_MANAGEMENT_DEBUG
     qDebug("connecting to %s/%s/0x%x/%s/0x%x/%s",
         icd2.networkId.data(),
-        icd2.networkType.toAscii().constData(),
+        icd2.networkType.toLatin1().constData(),
         icd2.networkAttributes,
-        icd2.serviceType.toAscii().constData(),
+        icd2.serviceType.toLatin1().constData(),
         icd2.serviceAttributes,
-        icd2.setviceId.toAscii().constData());
+        icd2.setviceId.toLatin1().constData());
 #endif
 
         ICd2DetailsList paramArray;

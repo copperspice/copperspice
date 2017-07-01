@@ -101,7 +101,7 @@ void QLinuxFbIntegrationPrivate::openTty()
                 break;
         }
     } else {
-        ttyfd = QT_OPEN(ttyDevice.toAscii().constData(), O_RDWR);
+        ttyfd = QT_OPEN(ttyDevice.toLatin1().constData(), O_RDWR);
     }
 
     if (ttyfd == -1)
@@ -634,7 +634,7 @@ void QLinuxFbIntegration::createPalette(fb_cmap &cmap, fb_var_screeninfo &vinfo,
                     screenclut[idx]=qRgb(val, val, val);
                 }
             } else {
-                // Default 16 colour palette               
+                // Default 16 colour palette
                 //                             black  d_gray l_gray white  red  green  blue cyan magenta yellow
 
                 unsigned char reds[16]   = { 0x00, 0x7F, 0xBF, 0xFF, 0xFF, 0xA2, 0x00, 0xFF, 0xFF, 0x00, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x82 };

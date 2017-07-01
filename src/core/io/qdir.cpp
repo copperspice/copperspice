@@ -54,11 +54,12 @@ static QString driveSpec(const QString &path)
    if (path.size() < 2) {
       return QString();
    }
-   char c = path.at(0).toAscii();
+   char c = path.at(0).toLatin1();
    if (c < 'a' && c > 'z' && c < 'A' && c > 'Z') {
       return QString();
    }
-   if (path.at(1).toAscii() != ':') {
+
+   if (path.at(1).toLatin1() != ':') {
       return QString();
    }
    return path.mid(0, 2);
@@ -68,18 +69,17 @@ static QString driveSpec(const QString &path)
 #endif
 }
 
-QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,  QDir::Filters filters_)
-   : QSharedData()
-   , nameFilters(nameFilters_)
-   , sort(sort_)
-   , filters(filters_)
-   , fileListsInitialized(false)
+QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,
+                  QDir::Filters filters_)
+   : QSharedData(), nameFilters(nameFilters_), sort(sort_), filters(filters_), fileListsInitialized(false)
 {
    setPath(path.isEmpty() ? QString::fromLatin1(".") : path);
 
    bool empty = nameFilters.isEmpty();
+
    if (!empty) {
       empty = true;
+
       for (int i = 0; i < nameFilters.size(); ++i) {
          if (!nameFilters.at(i).isEmpty()) {
             empty = false;
@@ -87,6 +87,7 @@ QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, Q
          }
       }
    }
+
    if (empty) {
       nameFilters = QStringList(QString::fromLatin1("*"));
    }

@@ -827,9 +827,8 @@ static bool is_xpm_color_spec_prefix(const QByteArray &prefix)
 
 // Reads XPM header.
 
-static bool read_xpm_header(
-   QIODevice *device, const char *const *source, int &index, QByteArray &state,
-   int *cpp, int *ncols, int *w, int *h)
+static bool read_xpm_header(QIODevice *device, const char *const *source, int &index,
+                  QByteArray &state, int *cpp, int *ncols, int *w, int *h)
 {
    QByteArray buf(200, 0);
 
@@ -837,7 +836,7 @@ static bool read_xpm_header(
       return false;
    }
 
-   if (sscanf(buf, "%d %d %d %d", w, h, ncols, cpp) < 4) {
+   if (sscanf(buf.constData(), "%d %d %d %d", w, h, ncols, cpp) < 4) {
       return false;
    }
 
@@ -922,9 +921,9 @@ static bool read_xpm_body(
             buf.truncate(((buf.length() - 1) / 4 * 3) + 1); // remove alpha channel left by imagemagick
          }
          if (buf[0] == '#') {
-            qt_get_hex_rgb(buf, &c_rgb);
+            qt_get_hex_rgb(buf.constData(), &c_rgb);
          } else {
-            qt_get_named_xpm_rgb(buf, &c_rgb);
+            qt_get_named_xpm_rgb(buf.constData(), &c_rgb);
          }
          if (ncols <= 256) {
             image.setColor(currentColor, 0xff000000 | c_rgb);

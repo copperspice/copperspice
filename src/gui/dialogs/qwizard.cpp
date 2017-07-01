@@ -801,7 +801,7 @@ void QWizardPrivate::addField(const QWizardField &field)
    fields += myField;
 
    if (myField.mandatory && !myField.changedSignal.isEmpty()) {
-      QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::connect(myField.object, myField.changedSignal.constData(), myField.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
    QObject::connect(myField.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));
@@ -815,7 +815,7 @@ void QWizardPrivate::removeFieldAt(int index)
    fieldIndexMap.remove(field.name);
 
    if (field.mandatory && !field.changedSignal.isEmpty()) {
-      QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::disconnect(field.object, field.changedSignal.constData(), field.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
    QObject::disconnect(field.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));

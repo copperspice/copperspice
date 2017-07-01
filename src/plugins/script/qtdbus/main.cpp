@@ -103,7 +103,7 @@ static QScriptValue setupDBusInterface(QScriptEngine *engine, QDBusAbstractInter
                 continue;
 
             QScriptValue callWrapper = engine->newFunction(do_dbus_call);
-            const QString nameString = QString::fromAscii(name);
+            const QString nameString = QString::fromLatin1(name);
             callWrapper.setProperty(QLatin1String("functionName"), QScriptValue(engine, nameString));
             v.setProperty(nameString, callWrapper);
         }

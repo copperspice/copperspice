@@ -131,7 +131,7 @@ void QSQLite2ResultPrivate::finalize()
    int res = sqlite_finalize(currentMachine, &err);
    if (err) {
       q->setLastError(QSqlError(QCoreApplication::translate("QSQLite2Result",
-                                "Unable to fetch results"), QString::fromAscii(err),
+                                "Unable to fetch results"), QString::fromLatin1(err),
                                 QSqlError::StatementError, res));
       sqlite_freemem(err);
    }
@@ -156,14 +156,14 @@ void QSQLite2ResultPrivate::init(const char **cnames, int numCols)
       const char *fieldName = lastDot ? lastDot + 1 : cnames[i];
 
       //remove quotations around the field name if any
-      QString fieldStr = QString::fromAscii(fieldName);
+      QString fieldStr = QString::fromLatin1(fieldName);
       QLatin1Char quote('\"');
       if ( fieldStr.length() > 2 && fieldStr.startsWith(quote) && fieldStr.endsWith(quote)) {
          fieldStr = fieldStr.mid(1);
          fieldStr.chop(1);
       }
       rInf.append(QSqlField(fieldStr,
-                            nameToType(QString::fromAscii(cnames[i + numCols]))));
+                            nameToType(QString::fromLatin1(cnames[i + numCols]))));
    }
 }
 
@@ -223,7 +223,7 @@ bool QSQLite2ResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int 
             return true;
          }
          for (i = 0; i < colNum; ++i) {
-            values[i + idx] = utf8 ? QString::fromUtf8(fvals[i]) : QString::fromAscii(fvals[i]);
+            values[i + idx] = utf8 ? QString::fromUtf8(fvals[i]) : QString::fromLatin1(fvals[i]);
          }
          return true;
       case SQLITE_DONE:
@@ -290,13 +290,13 @@ bool QSQLite2Result::reset (const QString &query)
    char *err = 0;
    int res = sqlite_compile(d->access,
                             d->utf8 ? query.toUtf8().constData()
-                            : query.toAscii().constData(),
+                            : query.toLatin1().constData(),
                             &(d->currentTail),
                             &(d->currentMachine),
                             &err);
    if (res != SQLITE_OK || err) {
       setLastError(QSqlError(QCoreApplication::translate("QSQLite2Result",
-                             "Unable to execute statement"), QString::fromAscii(err),
+                             "Unable to execute statement"), QString::fromLatin1(err),
                              QSqlError::StatementError, res));
       sqlite_freemem(err);
    }
@@ -399,7 +399,7 @@ bool QSQLite2Driver::open(const QString &db, const QString &, const QString &, c
    char *err = 0;
    d->access = sqlite_open(QFile::encodeName(db), 0, &err);
    if (err) {
-      setLastError(QSqlError(tr("Error opening database"), QString::fromAscii(err),
+      setLastError(QSqlError(tr("Error opening database"), QString::fromLatin1(err),
                              QSqlError::ConnectionError));
       sqlite_freemem(err);
       err = 0;
@@ -443,7 +443,7 @@ bool QSQLite2Driver::beginTransaction()
    }
 
    setLastError(QSqlError(tr("Unable to begin transaction"),
-                          QString::fromAscii(err), QSqlError::TransactionError, res));
+                          QString::fromLatin1(err), QSqlError::TransactionError, res));
    sqlite_freemem(err);
    return false;
 }
@@ -462,7 +462,7 @@ bool QSQLite2Driver::commitTransaction()
    }
 
    setLastError(QSqlError(tr("Unable to commit transaction"),
-                          QString::fromAscii(err), QSqlError::TransactionError, res));
+                          QString::fromLatin1(err), QSqlError::TransactionError, res));
    sqlite_freemem(err);
    return false;
 }
@@ -481,7 +481,7 @@ bool QSQLite2Driver::rollbackTransaction()
    }
 
    setLastError(QSqlError(tr("Unable to rollback transaction"),
-                          QString::fromAscii(err), QSqlError::TransactionError, res));
+                          QString::fromLatin1(err), QSqlError::TransactionError, res));
    sqlite_freemem(err);
    return false;
 }

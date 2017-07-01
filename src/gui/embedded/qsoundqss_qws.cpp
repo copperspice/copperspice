@@ -215,7 +215,7 @@ static int getNumTok(QString &in)
 void QWSSoundServerClient::tryReadCommand()
 {
    while ( socket->canReadLine() ) {
-      QString l = QString::fromAscii(socket->readLine());
+      QString l = QString::fromLatin1(socket->readLine());
       l.truncate(l.length() - 1); // chomp
       QString functionName = getStringTok(l);
       int soundid = getNumTok(l);
@@ -773,7 +773,7 @@ class QWSSoundServerPrivate : public QObject
       timerId = 0;
 
       if (name) {
-         setObjectName(QString::fromAscii(name));
+         setObjectName(QString::fromLatin1(name));
       }
 
 #ifndef QT_NO_QWS_SOUNDSERVER
@@ -1552,7 +1552,7 @@ void QWSSoundClient::setSilent( bool enable )
 void QWSSoundClient::tryReadCommand()
 {
    while ( canReadLine() ) {
-      QString l = QString::fromAscii(readLine());
+      QString l = QString::fromLatin1(readLine());
       l.truncate(l.length() - 1); // chomp
       QStringList token = l.split(QLatin1Char(' '));
       if (token[0] == QLatin1String("SOUNDCOMPLETED")) {

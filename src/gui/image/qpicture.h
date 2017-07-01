@@ -46,15 +46,16 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
    int devType() const override;
    uint size() const;
+
    const char *data() const;
    virtual void setData(const char *data, uint size);
 
    bool play(QPainter *p);
 
-   bool load(QIODevice *dev, const char *format = 0);
-   bool load(const QString &fileName, const char *format = 0);
-   bool save(QIODevice *dev, const char *format = 0);
-   bool save(const QString &fileName, const char *format = 0);
+   bool load(QIODevice *dev, const QString &format = QString());
+   bool load(const QString &fileName, const QString &format = QString());
+   bool save(QIODevice *dev, const QString &format = QString());
+   bool save(const QString &fileName, const QString &format = QString());
 
    QRect boundingRect() const;
    void setBoundingRect(const QRect &r);
@@ -75,9 +76,10 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QPicture &p);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QPicture &p);
 
-   static const char *pictureFormat(const QString &fileName);
-   static QList<QByteArray> inputFormats();
-   static QList<QByteArray> outputFormats();
+   static QString pictureFormat(const QString &fileName);
+
+   static QStringList inputFormats();
+   static QStringList outputFormats();
    static QStringList inputFormatList();
    static QStringList outputFormatList();
 
@@ -119,13 +121,13 @@ class Q_GUI_EXPORT QPictureIO
 
  public:
    QPictureIO();
-   QPictureIO(QIODevice *ioDevice, const char *format);
-   QPictureIO(const QString &fileName, const char *format);
+   QPictureIO(QIODevice *ioDevice, const QString &format);
+   QPictureIO(const QString &fileName, const QString &format);
    ~QPictureIO();
 
    const QPicture &picture() const;
    int status() const;
-   const char *format() const;
+   QString format() const;
    QIODevice *ioDevice() const;
    QString fileName() const;
    int quality() const;
@@ -135,7 +137,7 @@ class Q_GUI_EXPORT QPictureIO
 
    void setPicture(const QPicture &);
    void setStatus(int);
-   void setFormat(const char *);
+   void setFormat(const QString &);
    void setIODevice(QIODevice *);
    void setFileName(const QString &);
    void setQuality(int);
@@ -146,17 +148,16 @@ class Q_GUI_EXPORT QPictureIO
    bool read();
    bool write();
 
-   static QByteArray pictureFormat(const QString &fileName);
-   static QByteArray pictureFormat(QIODevice *);
-   static QList<QByteArray> inputFormats();
-   static QList<QByteArray> outputFormats();
+   static QString pictureFormat(const QString &fileName);
+   static QString pictureFormat(QIODevice *);
+   static QStringList inputFormats();
+   static QStringList outputFormats();
 
-   static void defineIOHandler(const char *format, const char *header, const char *flags, picture_io_handler read_picture,
-                               picture_io_handler write_picture);
+   static void defineIOHandler(const QString &format, const QString &header, const char *flags,
+                  picture_io_handler read_picture, picture_io_handler write_picture);
 
  private:
    Q_DISABLE_COPY(QPictureIO)
-
    void init();
 
    QPictureIOData *d;

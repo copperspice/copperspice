@@ -58,14 +58,13 @@ static QString qwsClipboardText()
 {
    char *data;
    int len;
-   qwsInitClipboard();
-   if ( !QPaintDevice::qwsDisplay()->getProperty(0, TextClipboard, data, len) ) {
-      //        qDebug("Property received: %d bytes", len);
-   }
 
+   qwsInitClipboard();
+
+   QPaintDevice::qwsDisplay()->getProperty(0, TextClipboard, data, len);
    QString s((const QChar *)data, len / sizeof(QChar));
-   //       qDebug("Property received: '%s'", s.toAscii().constData());
    delete[] data;
+
    return s;
 }
 
@@ -73,12 +72,10 @@ static QString qwsClipboardText()
 static void qwsSetClipboardText(const QString &s)
 {
    qwsInitClipboard();
-   //  qDebug("qwsSetClipboardText( %s )", s.toAscii().data());
+
    int len =  s.length() * sizeof(QChar);
    QByteArray ba((const char *)s.unicode(), len);
-   QPaintDevice::qwsDisplay()->
-   setProperty(0, TextClipboard, QWSPropertyManager::PropReplace, ba);
-
+   QPaintDevice::qwsDisplay()->setProperty(0, TextClipboard, QWSPropertyManager::PropReplace, ba);
 }
 
 class QClipboardData

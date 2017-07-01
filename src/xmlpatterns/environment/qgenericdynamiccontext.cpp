@@ -98,7 +98,7 @@ void GenericDynamicContext::setOutputReceiver(QAbstractXmlReceiver *const receiv
 
 void GenericDynamicContext::setNodeBuilder(NodeBuilder::Ptr &builder)
 {
-   m_nodeBuilder = builder;
+   m_nodeBuilder = std::move(builder);
 }
 
 NodeBuilder::Ptr GenericDynamicContext::nodeBuilder(const QUrl &baseURI) const

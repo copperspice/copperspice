@@ -2183,7 +2183,7 @@ void QWSServerPrivate::sendMaxWindowRectEvents(const QRect &rect)
 */
 void QWSServer::setDefaultMouse(const char *m)
 {
-   *defaultMouse() = QString::fromAscii(m);
+   *defaultMouse() = QString::fromLatin1(m);
 }
 
 /*!
@@ -2200,7 +2200,7 @@ void QWSServer::setDefaultMouse(const char *m)
 */
 void QWSServer::setDefaultKeyboard(const char *k)
 {
-   *defaultKeyboard() = QString::fromAscii(k);
+   *defaultKeyboard() = QString::fromLatin1(k);
 }
 
 #ifndef QT_NO_QWS_CURSOR

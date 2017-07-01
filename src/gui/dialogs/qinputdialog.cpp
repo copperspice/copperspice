@@ -54,7 +54,7 @@ static const char *signalForMember(const char *member)
 
    int i = 0;
    while (i < NumCandidates - 1) { // sic
-      if (QMetaObject::checkConnectArgs(candidateSignals[i], normalizedMember)) {
+      if (QMetaObject::checkConnectArgs(candidateSignals[i], normalizedMember.constData())) {
          break;
       }
       ++i;
@@ -1125,43 +1125,13 @@ void QInputDialog::done(int result)
    }
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, signalForMember(d->memberToDisconnectOnClose),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, signalForMember(d->memberToDisconnectOnClose.constData()),
+                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
 
       d->receiverToDisconnectOnClose = 0;
    }
    d->memberToDisconnectOnClose.clear();
 }
-
-/*!
-    Static convenience function to get a string from the user.
-
-    \a title is the text which is displayed in the title bar of the dialog.
-    \a label is the text which is shown to the user (it should say what should
-    be entered).
-    \a text is the default text which is placed in the line edit.
-    \a mode is the echo mode the line edit will use.
-    \a inputMethodHints is the input method hints that will be used in the
-    edit widget if an input method is active.
-
-    If \a ok is nonnull \e *\a ok will be set to true if the user pressed
-    \gui OK and to false if the user pressed \gui Cancel. The dialog's parent
-    is \a parent. The dialog will be modal and uses the specified widget
-    \a flags.
-
-    If the dialog is accepted, this function returns the text in the dialog's
-    line edit. If the dialog is rejected, a null QString is returned.
-
-    Use this static function like this:
-
-    \snippet examples/dialogs/standarddialogs/dialog.cpp 3
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QInputDialog constructors.
-
-    \sa getInt(), getDouble(), getItem()
-*/
 
 QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
                               QLineEdit::EchoMode mode, const QString &text, bool *ok,
@@ -1195,37 +1165,6 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
 {
    return getText(parent, title, label, mode, text, ok, flags, Qt::ImhNone);
 }
-
-/*!
-    \since 4.5
-
-    Static convenience function to get an integer input from the user.
-
-    \a title is the text which is displayed in the title bar of the dialog.
-    \a label is the text which is shown to the user (it should say what should
-    be entered).
-    \a value is the default integer which the spinbox will be set to.
-    \a min and \a max are the minimum and maximum values the user may choose.
-    \a step is the amount by which the values change as the user presses the
-    arrow buttons to increment or decrement the value.
-
-    If \a ok is nonnull *\a ok will be set to true if the user pressed \gui OK
-    and to false if the user pressed \gui Cancel. The dialog's parent is
-    \a parent. The dialog will be modal and uses the widget \a flags.
-
-    On success, this function returns the integer which has been entered by the
-    user; on failure, it returns the initial \a value.
-
-    Use this static function like this:
-
-    \snippet examples/dialogs/standarddialogs/dialog.cpp 0
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QInputDialog constructors.
-
-    \sa getText(), getDouble(), getItem()
-*/
 
 int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &label, int value,
                          int min, int max, int step, bool *ok, Qt::WindowFlags flags)

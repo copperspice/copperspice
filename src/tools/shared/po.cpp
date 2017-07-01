@@ -748,10 +748,18 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
    bool ok = true;
    QTextStream out(&dev);
-   out.setCodec(cd.m_outputCodec.isEmpty() ? QByteArray("UTF-8") : cd.m_outputCodec);
+
+   if (cd.m_outputCodec.isEmpty()) {
+      out.setCodec("UTF-8");
+
+   } else {
+      out.setCodec(cd.m_outputCodec.constData());
+
+   }
 
    bool qtContexts = false;
    foreach (const TranslatorMessage & msg, translator.messages())
+
    if (!msg.context().isEmpty()) {
       qtContexts = true;
       break;
@@ -761,15 +769,18 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
    if (!cmt.isEmpty()) {
       out << cmt << '\n';
    }
+
    out << "msgid \"\"\n";
    Translator::ExtraData headers = translator.extras();
-   QStringList hdrOrder = translator.extra(QLatin1String("po-headers")).split(
-                             QLatin1Char(','), QString::SkipEmptyParts);
+   QStringList hdrOrder = translator.extra(QLatin1String("po-headers"))
+                  .split(QLatin1Char(','), QString::SkipEmptyParts);
+
    // Keep in sync with loadPO
    addPoHeader(headers, hdrOrder, "MIME-Version", QLatin1String("1.0"));
    addPoHeader(headers, hdrOrder, "Content-Type",
                QLatin1String("text/plain; charset=" + out.codec()->name()));
    addPoHeader(headers, hdrOrder, "Content-Transfer-Encoding", QLatin1String("8bit"));
+
    if (!translator.languageCode().isEmpty()) {
       QLocale::Language l;
       QLocale::Country c;
@@ -780,12 +791,15 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
       }
       addPoHeader(headers, hdrOrder, "X-Language", translator.languageCode());
    }
+
    if (!translator.sourceLanguageCode().isEmpty()) {
       addPoHeader(headers, hdrOrder, "X-Source-Language", translator.sourceLanguageCode());
    }
+
    if (qtContexts) {
       addPoHeader(headers, hdrOrder, "X-Qt-Contexts", QLatin1String("true"));
    }
+
    QString hdrStr;
    foreach (const QString & hdr, hdrOrder) {
       hdrStr += hdr;

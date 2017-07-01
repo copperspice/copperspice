@@ -2392,53 +2392,6 @@ QDragResponseEvent::~QDragResponseEvent()
 {
 }
 
-/*!
-    \class QDragMoveEvent
-    \brief The QDragMoveEvent class provides an event which is sent while a drag and drop action is in progress.
-
-    \ingroup events
-    \ingroup draganddrop
-
-    A widget will receive drag move events repeatedly while the drag
-    is within its boundaries, if it accepts
-    \l{QWidget::setAcceptDrops()}{drop events} and \l
-    {QWidget::dragEnterEvent()}{enter events}. The widget should
-    examine the event to see what kind of data it
-    \l{QDragMoveEvent::provides()}{provides}, and call the accept()
-    function to accept the drop if appropriate.
-
-    The rectangle supplied by the answerRect() function can be used to restrict
-    drops to certain parts of the widget. For example, we can check whether the
-    rectangle intersects with the geometry of a certain child widget and only
-    call \l{QDropEvent::acceptProposedAction()}{acceptProposedAction()} if that
-    is the case.
-
-    Note that this class inherits most of its functionality from
-    QDropEvent.
-
-    \sa QDragEnterEvent, QDragLeaveEvent, QDropEvent
-*/
-
-/*!
-    \class QDragLeaveEvent
-    \brief The QDragLeaveEvent class provides an event that is sent to a widget when a drag and drop action leaves it.
-
-    \ingroup events
-    \ingroup draganddrop
-
-    This event is always preceded by a QDragEnterEvent and a series
-    of \l{QDragMoveEvent}s. It is not sent if a QDropEvent is sent
-    instead.
-
-    \sa QDragEnterEvent, QDragMoveEvent, QDropEvent
-*/
-
-/*!
-    Constructs a QDragLeaveEvent.
-
-    \warning Do not create a QDragLeaveEvent yourself since these
-    objects rely on Qt's internal state.
-*/
 QDragLeaveEvent::QDragLeaveEvent()
    : QEvent(DragLeave)
 {}

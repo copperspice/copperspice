@@ -36,8 +36,9 @@
 #include <qcoreapplication_p.h>
 #include <qshortcutmap_p.h>
 #include <qthread_p.h>
-#include <QtCore/qpoint.h>
-#include <QTime>
+#include <qpoint.h>
+#include <qtime.h>
+#include <qstringlist.h>
 
 #ifdef Q_WS_QWS
 #include <QtGui/qscreen_qws.h>
@@ -47,7 +48,7 @@
 #ifdef Q_WS_QPA
 #include <QWindowSystemInterface>
 #include <qwindowsysteminterface_qpa_p.h>
-#include <QtGui/qplatformintegration_qpa.h>
+#include <qplatformintegration_qpa.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -551,7 +552,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    PtrBeginPanningFeedback BeginPanningFeedback;
    PtrUpdatePanningFeedback UpdatePanningFeedback;
    PtrEndPanningFeedback EndPanningFeedback;
-#endif 
+#endif
 
 #endif
 

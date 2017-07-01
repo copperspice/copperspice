@@ -64,7 +64,7 @@ Backend::Backend(QObject *parent, const QStringList &) : QObject(parent)
 {
     IMPLEMENTED << "Creating backend QT7";
     setProperty("identifier",     QLatin1String("Mac OS X/QuickTime7"));
-    setProperty("backendName",    QLatin1String("Mac OS X/QuickTime7"));   
+    setProperty("backendName",    QLatin1String("Mac OS X/QuickTime7"));
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String(""));
     setProperty("backendWebsite", QLatin1String("http://copperspice.com/"));
@@ -84,7 +84,7 @@ bool Backend::quickTime7Available()
             messageWritten = true;
             qWarning("WARNING: Phonon backend plugin need QuickTime 7 or newer to work."
                      " This computer has version %s installed.",
-                     BackendInfo::quickTimeVersionString().toAscii().data());
+                     BackendInfo::quickTimeVersionString().toLatin1().data());
         }
         return false;
     }
@@ -95,7 +95,7 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
 {
     if (!quickTime7Available())
         return 0;
-        
+
     switch (c) {
     case MediaObjectClass:
         IMPLEMENTED << "Creating new MediaObjectClass.";
@@ -143,7 +143,7 @@ bool Backend::startConnectionChange(QSet<QObject *> objects)
             node->m_audioGraph->notify(&event);
             notifiedGraphs << node->m_audioGraph;
         }
-    }        
+    }
     return true;
 }
 
@@ -214,7 +214,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
         if (QuickTimeAudioPlayer::soundPlayerIsAwailable())
             ret = AudioEffect::effectList();
         break; }
-        
+
 #if 0 // will be awailable in a later version of phonon.
     case AudioCaptureDeviceType:{
         IMPLEMENTED_SILENT << "Creating index set for type: AudioCaptureDeviceType";
@@ -253,7 +253,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
         ret.insert("name", e.name());
         ret.insert("description", e.description());
         break; }
-        
+
 #if 0 // will be awailable in a later version of phonon.
     case VideoEffectType:{
         // Get list of effects, pick out filter at index, and return its name:

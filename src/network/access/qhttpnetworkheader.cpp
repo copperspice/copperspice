@@ -43,21 +43,25 @@ qint64 QHttpNetworkHeaderPrivate::contentLength() const
    bool ok = false;
 
    // We are not using the headerField() method here because servers might send us multiple content-length
-   // headers which is crap (see QTBUG-15311). Therefore just take the first content-length header field.
+   // headers, just take the first content-length header field
 
    QByteArray value;
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it = fields.constBegin(), end = fields.constEnd();
+
+   QList<QPair<QByteArray, QByteArray> >::ConstIterator it  = fields.constBegin();
+   QList<QPair<QByteArray, QByteArray> >::ConstIterator end = fields.constEnd();
 
    for ( ; it != end; ++it)
-      if (qstricmp("content-length", it->first) == 0) {
+      if ( qstricmp("content-length", it->first.constData() ) == 0) {
          value = it->second;
          break;
       }
 
    qint64 length = value.toULongLong(&ok);
+
    if (ok) {
       return length;
    }
+
    return -1; // the header field is not set
 }
 
@@ -77,22 +81,25 @@ QByteArray QHttpNetworkHeaderPrivate::headerField(const QByteArray &name, const 
    bool first = true;
 
    for (const QByteArray & value : allValues) {
-      if (!first) {
+      if (! first) {
          result += ", ";
       }
+
       first = false;
       result += value;
    }
+
    return result;
 }
 
 QList<QByteArray> QHttpNetworkHeaderPrivate::headerFieldValues(const QByteArray &name) const
 {
    QList<QByteArray> result;
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it = fields.constBegin(),
-                                                        end = fields.constEnd();
+   QList<QPair<QByteArray, QByteArray> >::ConstIterator it  = fields.constBegin();
+   QList<QPair<QByteArray, QByteArray> >::ConstIterator end = fields.constEnd();
+
    for ( ; it != end; ++it)
-      if (qstricmp(name.constData(), it->first) == 0) {
+      if (qstricmp(name.constData(), it->first.constData()) == 0) {
          result += it->second;
       }
 
@@ -102,8 +109,9 @@ QList<QByteArray> QHttpNetworkHeaderPrivate::headerFieldValues(const QByteArray 
 void QHttpNetworkHeaderPrivate::setHeaderField(const QByteArray &name, const QByteArray &data)
 {
    QList<QPair<QByteArray, QByteArray> >::Iterator it = fields.begin();
+
    while (it != fields.end()) {
-      if (qstricmp(name.constData(), it->first) == 0) {
+      if (qstricmp(name.constData(), it->first.constData()) == 0) {
          it = fields.erase(it);
       } else {
          ++it;

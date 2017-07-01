@@ -623,7 +623,7 @@ qreal QFontEngineXLFD::minRightBearing() const
 
 const char *QFontEngineXLFD::name() const
 {
-   return _name;
+   return _name.constData();
 }
 
 bool QFontEngineXLFD::canRender(const QChar *string, int len)

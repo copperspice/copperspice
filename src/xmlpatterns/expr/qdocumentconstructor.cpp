@@ -38,7 +38,7 @@ Item DocumentConstructor::evaluateSingleton(const DynamicContext::Ptr &context) 
 {
    NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(m_staticBaseURI));
 
-   DocumentContentValidator validator(nodeBuilder.data(), context, ConstPtr(this));
+   DocumentContentValidator validator(nodeBuilder.get(), context, ConstPtr(this));
    const DynamicContext::Ptr receiverContext(context->createReceiverContext(&validator));
 
    validator.startDocument();

@@ -267,9 +267,9 @@ class QACConnectionObject : public QObject
 
 void QAccessibleWidget::addControllingSignal(const QString &signal)
 {
-   QByteArray s = QMetaObject::normalizedSignature(signal.toAscii());
+   QByteArray s = QMetaObject::normalizedSignature(signal.toUtf8().constData());
 
-   if (object()->metaObject()->indexOfSignal(s) < 0) {
+   if (object()->metaObject()->indexOfSignal(s.constData()) < 0) {
       qWarning("Signal %s unknown in %s", s.constData(), object()->metaObject()->className());
    }
 
@@ -314,7 +314,7 @@ QAccessible::Relation QAccessibleWidget::relationTo(int child,
 {
    Relation relation = Unrelated;
 
-   if (d->asking == this) { 
+   if (d->asking == this) {
       // recursive call
       return relation;
    }
@@ -332,7 +332,7 @@ QAccessible::Relation QAccessibleWidget::relationTo(int child,
    QACConnectionObject *connectionObject = (QACConnectionObject *)object();
 
    for (int sig = 0; sig < d->primarySignals.count(); ++sig) {
-      if (connectionObject->isSender(obj, d->primarySignals.at(sig).toAscii())) {
+      if (connectionObject->isSender(obj, d->primarySignals.at(sig).toUtf8().constData())) {
          relation |= Controller;
          break;
       }
@@ -767,19 +767,23 @@ int QAccessibleWidget::navigate(RelationFlag relation, int entry, QAccessibleInt
             }
          }
          break;
+
       case Controlled:
          if (entry > 0) {
             QObjectList allReceivers;
             QACConnectionObject *connectionObject = (QACConnectionObject *)object();
+
             for (int sig = 0; sig < d->primarySignals.count(); ++sig) {
-               QObjectList receivers = connectionObject->receiverList(d->primarySignals.at(sig).toAscii());
+               QObjectList receivers = connectionObject->receiverList(d->primarySignals.at(sig).toUtf8().constData());
                allReceivers += receivers;
             }
+
             if (entry <= allReceivers.size()) {
                targetObject = allReceivers.at(entry - 1);
             }
          }
          break;
+
       default:
          break;
    }

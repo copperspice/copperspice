@@ -307,7 +307,7 @@ static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QBy
    switch (image.depth()) {
       case 1: {
          str.insert(1, '4');
-         if (out->write(str, str.length()) != str.length()) {
+         if (out->write(str.constData(), str.length()) != str.length()) {
             return false;
          }
          w = (w + 7) / 8;
@@ -323,7 +323,7 @@ static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QBy
       case 8: {
          str.insert(1, gray ? '5' : '6');
          str.append("255\n");
-         if (out->write(str, str.length()) != str.length()) {
+         if (out->write(str.constData(), str.length()) != str.length()) {
             return false;
          }
          QVector<QRgb> color = image.colorTable();
@@ -357,7 +357,7 @@ static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QBy
       case 32: {
          str.insert(1, gray ? '5' : '6');
          str.append("255\n");
-         if (out->write(str, str.length()) != str.length()) {
+         if (out->write(str.constData(), str.length()) != str.length()) {
             return false;
          }
          uint bpl = w * (gray ? 1 : 3);

@@ -228,7 +228,7 @@ static int getToken()
                            if ( yyCh.isDigit() ) {
                               unicode += yyCh.digitValue();
                            } else {
-                              int sub(yyCh.toLower().toAscii() - 87);
+                              int sub(yyCh.toLower().toLatin1() - 87);
                               if ( sub > 15 || sub < 10) {
                                  yyMsg() << qPrintable(LU::tr("Invalid Unicode value.\n"));
                                  break;
@@ -241,7 +241,7 @@ static int getToken()
                      } else if ( yyCh == QLatin1Char('\n') ) {
                         yyCh = getChar();
                      } else {
-                        yyString.append( QLatin1Char(backTab[strchr( tab, yyCh.toAscii() ) - tab]) );
+                        yyString.append( QLatin1Char(backTab[strchr( tab, yyCh.toLatin1() ) - tab]) );
                         yyCh = getChar();
                      }
                   } else {

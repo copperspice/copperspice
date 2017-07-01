@@ -2334,9 +2334,10 @@ to make a dynamically loadable driver.
 
 Q_GUI_EXPORT QScreen *qt_get_screen(int display_id, const char *spec)
 {
-   QString displaySpec = QString::fromAscii(spec);
+   QString displaySpec = QString::fromLatin1(spec);
    QString driver = displaySpec;
    int colon = displaySpec.indexOf(QLatin1Char(':'));
+
    if (colon >= 0) {
       driver.truncate(colon);
    }

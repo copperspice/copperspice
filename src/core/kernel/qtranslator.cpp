@@ -478,7 +478,7 @@ bool QTranslatorPrivate::do_load(const QString &realname)
 #endif
 
    else {
-      int fd = QT_OPEN(QFile::encodeName(realname), O_RDONLY,
+      int fd = QT_OPEN(QFile::encodeName(realname).constData(), O_RDONLY,
 #if defined(Q_OS_WIN)
                        _S_IREAD | _S_IWRITE
 #else

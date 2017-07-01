@@ -163,7 +163,7 @@ InspectorServerRequestHandlerQt::InspectorServerRequestHandlerQt(QTcpSocket* tcp
     , m_server(server)
     , m_inspectorClient(0)
 {
-    m_endOfHeaders = false;    
+    m_endOfHeaders = false;
     m_contentLength = 0;
 
     connect(m_tcpConnection, SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
@@ -261,7 +261,7 @@ void InspectorServerRequestHandlerQt::tcpReadyRead()
         if (m_path.isEmpty() || (m_path == QString(QLatin1Char('/')))) {
             QString indexHtml = QLatin1String("<html><head><title>Remote Web Inspector</title></head><body><ul>\n");
             for (QMap<int, InspectorClientQt* >::const_iterator it = m_server->m_inspectorClients.begin();
-                 it != m_server->m_inspectorClients.end(); 
+                 it != m_server->m_inspectorClients.end();
                  ++it) {
                 indexHtml.append(QString::fromLatin1("<li><a href=\"/webkit/inspector/inspector.html?page=%1\">%2</li>\n")
                                  .arg(it.key())
@@ -289,7 +289,7 @@ void InspectorServerRequestHandlerQt::tcpReadyRead()
         if (!m_contentType.isEmpty())
             responseHeader.setContentType(QString::fromLatin1(m_contentType));
 
-        QByteArray asciiHeader = responseHeader.toString().toAscii();
+        QByteArray asciiHeader = responseHeader.toString().toLatin1();
         m_tcpConnection->write(asciiHeader);
 
         m_tcpConnection->write(response);

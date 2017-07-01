@@ -82,11 +82,12 @@ static QByteArray qt_fixXLFD(const QByteArray &xlfd)
 {
    QByteArray ret = xlfd;
    int count = 0;
-   char **fontNames =
-      XListFonts(QX11Info::display(), xlfd, 32768, &count);
+   char **fontNames = XListFonts(QX11Info::display(), xlfd.constData(), 32768, &count);
+
    if (count > 0) {
       ret = fontNames[0];
    }
+
    XFreeFontNames(fontNames);
    return ret ;
 }

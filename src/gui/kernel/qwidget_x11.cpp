@@ -1511,7 +1511,7 @@ qstring_to_xtp(const QString &s)
    }
    if (!mapper || errCode < 0) {
       static QByteArray qcs;
-      qcs = s.toAscii();
+      qcs = s.toLatin1();
       tp.value = (uchar *)qcs.data();
       tp.encoding = XA_STRING;
       tp.format = 8;
