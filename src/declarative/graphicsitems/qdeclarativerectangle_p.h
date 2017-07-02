@@ -41,7 +41,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativePen : public QObject
    DECL_CS_PROPERTY_NOTIFY(color, penChanged)
 
  public:
-   QDeclarativePen(QObject *parent = 0)
+   QDeclarativePen(QObject *parent = nullptr)
       : QObject(parent), _width(1), _color("#000000"), _valid(false) {
    }
 
@@ -79,7 +79,7 @@ class QDeclarativeGradientStop : public QObject
    DECL_CS_PROPERTY_WRITE(color, setColor)
 
  public:
-   QDeclarativeGradientStop(QObject *parent = 0) : QObject(parent) {}
+   QDeclarativeGradientStop(QObject *parent = nullptr) : QObject(parent) {}
 
    qreal position() const {
       return m_position;
@@ -113,7 +113,7 @@ class QDeclarativeGradient : public QObject
    DECL_CS_CLASSINFO("DefaultProperty", "stops")
 
  public:
-   QDeclarativeGradient(QObject *parent = 0) : QObject(parent), m_gradient(0) {}
+   QDeclarativeGradient(QObject *parent = nullptr) : QObject(parent), m_gradient(0) {}
    ~QDeclarativeGradient() {
       delete m_gradient;
    }

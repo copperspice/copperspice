@@ -39,7 +39,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeDebugService : public QObject
    Q_DISABLE_COPY(QDeclarativeDebugService)
 
  public:
-   explicit QDeclarativeDebugService(const QString &, QObject *parent = 0);
+   explicit QDeclarativeDebugService(const QString &, QObject *parent = nullptr);
    ~QDeclarativeDebugService();
 
    QString name() const;

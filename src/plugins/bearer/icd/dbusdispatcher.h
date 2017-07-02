@@ -37,12 +37,12 @@ public:
     DBusDispatcher(const QString& service,
                    const QString& path,
                    const QString& interface,
-                   QObject *parent = 0);
+                   QObject *parent = nullptr);
     DBusDispatcher(const QString& service,
                    const QString& path,
                    const QString& interface,
                    const QString& signalPath,
-                   QObject *parent = 0);
+                   QObject *parent = nullptr);
     ~DBusDispatcher();
 
     QList<QVariant> call(const QString& method, 

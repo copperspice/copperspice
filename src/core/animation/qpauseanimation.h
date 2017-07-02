@@ -39,8 +39,8 @@ class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
    CORE_CS_PROPERTY_WRITE(duration, setDuration)
 
  public:
-   QPauseAnimation(QObject *parent = 0);
-   QPauseAnimation(int msecs, QObject *parent = 0);
+   QPauseAnimation(QObject *parent = nullptr);
+   QPauseAnimation(int msecs, QObject *parent = nullptr);
    ~QPauseAnimation();
 
    int duration() const override;

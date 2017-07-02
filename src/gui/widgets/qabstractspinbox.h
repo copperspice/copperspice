@@ -63,7 +63,7 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    GUI_CS_PROPERTY_WRITE(keyboardTracking, setKeyboardTracking)
 
  public:
-   explicit QAbstractSpinBox(QWidget *parent = 0);
+   explicit QAbstractSpinBox(QWidget *parent = nullptr);
    ~QAbstractSpinBox();
 
    enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01,
@@ -157,7 +157,7 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 
    virtual StepEnabled stepEnabled() const;
 
-   QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent = 0);
+   QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent = nullptr);
 
  private:
    Q_DECLARE_PRIVATE(QAbstractSpinBox)

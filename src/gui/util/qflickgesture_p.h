@@ -42,7 +42,7 @@ class Q_GUI_EXPORT QFlickGesture : public QGesture
    Q_DECLARE_PRIVATE(QFlickGesture)
 
  public:
-   QFlickGesture(QObject *receiver, Qt::MouseButton button, QObject *parent = 0);
+   QFlickGesture(QObject *receiver, Qt::MouseButton button, QObject *parent = nullptr);
    ~QFlickGesture();
 
    friend class QFlickGestureRecognizer;

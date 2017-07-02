@@ -147,7 +147,7 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    NET_CS_SIGNAL_2(downloadProgress, bytesReceived, bytesTotal)
 
  protected:
-   QNetworkReply(QObject *parent = 0);
+   QNetworkReply(QObject *parent = nullptr);
    QNetworkReply(QNetworkReplyPrivate &dd, QObject *parent);
    qint64 writeData(const char *data, qint64 len) override;
 

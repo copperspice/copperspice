@@ -73,7 +73,7 @@ class QAuBucketQWS : public QObject, public QAuBucket
    GUI_CS_OBJECT(QAuBucketQWS)
 
  public:
-   QAuBucketQWS( QAuServerQWS *, QSound *, QObject *parent = 0 );
+   QAuBucketQWS( QAuServerQWS *, QSound *, QObject *parent = nullptr );
 
    ~QAuBucketQWS();
 

@@ -55,7 +55,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeTimer : public QObject, public QD
    DECL_CS_PROPERTY_CONSTANT(*parent)
 
  public:
-   QDeclarativeTimer(QObject *parent = 0);
+   QDeclarativeTimer(QObject *parent = nullptr);
 
    void setInterval(int interval);
    int interval() const;

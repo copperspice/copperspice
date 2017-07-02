@@ -199,15 +199,15 @@ QErrorMessage::QErrorMessage(QWidget *parent)
 #ifndef QT_NO_MESSAGEBOX
    d->icon->setPixmap(QMessageBox::standardIcon(QMessageBox::Information));
    d->icon->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-#endif    
+#endif
 
-   grid->addWidget(d->icon,   0,  0, Qt::AlignTop);   
-   grid->addWidget(d->errors, 0,  1);    
+   grid->addWidget(d->icon,   0,  0, Qt::AlignTop);
+   grid->addWidget(d->errors, 0,  1);
    grid->addWidget(d->again,  1,  1, Qt::AlignTop);
    grid->addWidget(d->ok,     2, 0, 1, 2, Qt::AlignCenter);
 
    grid->setColumnStretch(1, 42);
-   grid->setRowStretch(0, 42);  
+   grid->setRowStretch(0, 42);
 
 #ifdef QT_SOFTKEYS_ENABLED
    d->okAction = new QAction(d->ok);
@@ -240,9 +240,6 @@ QErrorMessage::~QErrorMessage()
       }
    }
 }
-
-
-/*! \reimp */
 
 void QErrorMessage::done(int a)
 {

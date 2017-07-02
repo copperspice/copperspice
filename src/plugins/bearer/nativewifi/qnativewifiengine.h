@@ -38,7 +38,7 @@ class QNativeWifiEngine : public QBearerEngineImpl
     Q_OBJECT
 
 public:
-    QNativeWifiEngine(QObject *parent = 0);
+    QNativeWifiEngine(QObject *parent = nullptr);
     ~QNativeWifiEngine();
 
     QString getInterfaceFromId(const QString &id);

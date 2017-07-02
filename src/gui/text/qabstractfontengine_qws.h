@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QFontEnginePlugin : public QObject, public QFontEngineFactory
    CS_INTERFACES(QFontEngineFactoryInterface, QFactoryInterface)
 
  public:
-   QFontEnginePlugin(const QString &foundry, QObject *parent = 0);
+   QFontEnginePlugin(const QString &foundry, QObject *parent = nullptr);
    ~QFontEnginePlugin();
 
    virtual QStringList keys() const;
@@ -108,7 +108,7 @@ class Q_GUI_EXPORT QAbstractFontEngine : public QObject
    };
    using Capabilities = QFlags<Capability>;
 
-   explicit QAbstractFontEngine(QObject *parent = 0);
+   explicit QAbstractFontEngine(QObject *parent = nullptr);
    ~QAbstractFontEngine();
 
    typedef int Fixed; // 26.6

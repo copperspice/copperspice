@@ -121,32 +121,25 @@ QObject *QAccessibleObject::object() const
    return d->object;
 }
 
-/*!
-    \reimp
-*/
 bool QAccessibleObject::isValid() const
 {
    return !d->object.isNull();
 }
 
-/*! \reimp */
 QRect QAccessibleObject::rect(int) const
 {
    return QRect();
 }
 
-/*! \reimp */
 void QAccessibleObject::setText(Text, int, const QString &)
 {
 }
 
-/*! \reimp */
 int QAccessibleObject::userActionCount(int) const
 {
    return 0;
 }
 
-/*! \reimp */
 bool QAccessibleObject::doAction(int, int, const QVariantList &)
 {
    return false;
@@ -167,7 +160,6 @@ static const char *const action_text[][5] = {
    { "AddToSelection", "", "", "", "" }
 };
 
-/*! \reimp */
 QString QAccessibleObject::actionText(int action, Text t, int child) const
 {
    if (child || action > FirstStandardAction || action < LastStandardAction || t > Accelerator) {
@@ -210,13 +202,11 @@ static QWidgetList topLevelWidgets()
    return list;
 }
 
-/*! \reimp */
 int QAccessibleApplication::childCount() const
 {
    return topLevelWidgets().count();
 }
 
-/*! \reimp */
 int QAccessibleApplication::indexOfChild(const QAccessibleInterface *child) const
 {
    if (!child->object()->isWidgetType()) {
@@ -231,7 +221,6 @@ int QAccessibleApplication::indexOfChild(const QAccessibleInterface *child) cons
    return index;
 }
 
-/*! \reimp */
 int QAccessibleApplication::childAt(int x, int y) const
 {
    const QWidgetList tlw(topLevelWidgets());
@@ -244,7 +233,6 @@ int QAccessibleApplication::childAt(int x, int y) const
    return -1;
 }
 
-/*! \reimp */
 QAccessible::Relation QAccessibleApplication::relationTo(int child, const
       QAccessibleInterface *other, int otherChild) const
 {
@@ -281,7 +269,6 @@ QAccessible::Relation QAccessibleApplication::relationTo(int child, const
    return Unrelated;
 }
 
-/*! \reimp */
 int QAccessibleApplication::navigate(RelationFlag relation, int entry,
                                      QAccessibleInterface **target) const
 {
@@ -316,7 +303,6 @@ int QAccessibleApplication::navigate(RelationFlag relation, int entry,
    return *target ? 0 : -1;
 }
 
-/*! \reimp */
 QString QAccessibleApplication::text(Text t, int) const
 {
    switch (t) {
@@ -330,25 +316,21 @@ QString QAccessibleApplication::text(Text t, int) const
    return QString();
 }
 
-/*! \reimp */
 QAccessible::Role QAccessibleApplication::role(int) const
 {
    return Application;
 }
 
-/*! \reimp */
 QAccessible::State QAccessibleApplication::state(int) const
 {
    return QApplication::activeWindow() ? Focused : Normal;
 }
 
-/*! \reimp */
 int QAccessibleApplication::userActionCount(int) const
 {
    return 1;
 }
 
-/*! \reimp */
 bool QAccessibleApplication::doAction(int action, int child, const QVariantList &param)
 {
    if (action == 0 || action == 1) {
@@ -366,7 +348,6 @@ bool QAccessibleApplication::doAction(int action, int child, const QVariantList 
    return QAccessibleObject::doAction(action, child, param);
 }
 
-/*! \reimp */
 QString QAccessibleApplication::actionText(int action, Text text, int child) const
 {
    QString str;

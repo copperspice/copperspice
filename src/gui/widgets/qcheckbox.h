@@ -38,8 +38,8 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    GUI_CS_PROPERTY_WRITE(tristate, setTristate)
 
  public:
-   explicit QCheckBox(QWidget *parent = 0);
-   explicit QCheckBox(const QString &text, QWidget *parent = 0);
+   explicit QCheckBox(QWidget *parent = nullptr);
+   explicit QCheckBox(const QString &text, QWidget *parent = nullptr);
 
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;

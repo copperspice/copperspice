@@ -160,9 +160,9 @@ class Q_NETWORK_EXPORT QHttp : public QObject
       ConnectionModeHttps
    };
 
-   explicit QHttp(QObject *parent = 0);
-   QHttp(const QString &hostname, quint16 port = 80, QObject *parent = 0);
-   QHttp(const QString &hostname, ConnectionMode mode, quint16 port = 0, QObject *parent = 0);
+   explicit QHttp(QObject *parent = nullptr);
+   QHttp(const QString &hostname, quint16 port = 80, QObject *parent = nullptr);
+   QHttp(const QString &hostname, ConnectionMode mode, quint16 port = 0, QObject *parent = nullptr);
    virtual ~QHttp();
 
    enum State {

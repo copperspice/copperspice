@@ -54,7 +54,7 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    typedef QPair<qreal, QVariant> KeyValue;
    typedef QVector<KeyValue> KeyValues;
 
-   QVariantAnimation(QObject *parent = 0);
+   QVariantAnimation(QObject *parent = nullptr);
    ~QVariantAnimation();
 
    QVariant startValue() const;
@@ -83,7 +83,7 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    CORE_CS_SIGNAL_2(valueChanged, value)
 
  protected:
-   QVariantAnimation(QVariantAnimationPrivate &dd, QObject *parent = 0);
+   QVariantAnimation(QVariantAnimationPrivate &dd, QObject *parent = nullptr);
    bool event(QEvent *event) override;
 
    void updateCurrentTime(int) override;

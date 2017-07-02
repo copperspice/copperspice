@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
    GUI_CS_PROPERTY_WRITE(clipping, setClipping)
 
  public:
-   explicit QItemDelegate(QObject *parent = 0);
+   explicit QItemDelegate(QObject *parent = nullptr);
    ~QItemDelegate();
 
    bool hasClipping() const;

@@ -113,7 +113,7 @@ public: \
     /**
      * Constructs an object with the given \p parent.
      */ \
-    classname(QObject *parent = 0); \
+    classname(QObject *parent = nullptr); \
 private:
 
 /**
@@ -144,7 +144,7 @@ public: \
     /**
      * Constructs an object with the given \p parent.
      */ \
-    classname(QObject *parent = 0); \
+    classname(QObject *parent = nullptr); \
 
 QT_END_NAMESPACE
 

@@ -297,7 +297,7 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    friend class QTreeWidgetItem;
 
  public:
-   explicit QTreeWidget(QWidget *parent = 0);
+   explicit QTreeWidget(QWidget *parent = nullptr);
    ~QTreeWidget();
 
    int columnCount() const;

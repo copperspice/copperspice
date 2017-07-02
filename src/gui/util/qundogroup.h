@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
    Q_DECLARE_PRIVATE(QUndoGroup)
 
  public:
-   explicit QUndoGroup(QObject *parent = 0);
+   explicit QUndoGroup(QObject *parent = nullptr);
    ~QUndoGroup();
 
    void addStack(QUndoStack *stack);

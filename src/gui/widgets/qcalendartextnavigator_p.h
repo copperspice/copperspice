@@ -40,7 +40,7 @@ class QCalendarTextNavigator: public QObject
    GUI_CS_OBJECT(QCalendarTextNavigator)
 
  public:
-   QCalendarTextNavigator(QObject *parent = 0)
+   QCalendarTextNavigator(QObject *parent = nullptr)
       : QObject(parent), m_dateText(0), m_dateFrame(0), m_dateValidator(0), m_widget(0), m_editDelay(1500),
         m_date(QDate::currentDate()) { }
 

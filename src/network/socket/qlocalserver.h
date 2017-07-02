@@ -42,7 +42,7 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    NET_CS_SIGNAL_1(Public, void newConnection())
    NET_CS_SIGNAL_2(newConnection)
 
-   QLocalServer(QObject *parent = 0);
+   QLocalServer(QObject *parent = nullptr);
    ~QLocalServer();
 
    void close();

@@ -55,7 +55,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeParentChange : public QDeclarativ
    DECL_CS_PROPERTY_READ(rotation, rotation)
    DECL_CS_PROPERTY_WRITE(rotation, setRotation)
  public:
-   QDeclarativeParentChange(QObject *parent = 0);
+   QDeclarativeParentChange(QObject *parent = nullptr);
    ~QDeclarativeParentChange();
 
    QDeclarativeItem *object() const;
@@ -115,7 +115,7 @@ class QDeclarativeStateChangeScript : public QDeclarativeStateOperation, public 
    DECL_CS_PROPERTY_WRITE(name, setName)
 
  public:
-   QDeclarativeStateChangeScript(QObject *parent = 0);
+   QDeclarativeStateChangeScript(QObject *parent = nullptr);
    ~QDeclarativeStateChangeScript();
 
    virtual ActionList actions();
@@ -171,7 +171,7 @@ class QDeclarativeAnchorSet : public QObject
    Q_PROPERTY(qreal baselineOffset READ baselineOffset WRITE setBaselineOffset NOTIFY baselineOffsetChanged())*/
 
  public:
-   QDeclarativeAnchorSet(QObject *parent = 0);
+   QDeclarativeAnchorSet(QObject *parent = nullptr);
    virtual ~QDeclarativeAnchorSet();
 
    QDeclarativeScriptString left() const;
@@ -265,7 +265,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAnchorChanges : public QDeclarati
    DECL_CS_PROPERTY_CONSTANT(*anchors)
 
  public:
-   QDeclarativeAnchorChanges(QObject *parent = 0);
+   QDeclarativeAnchorChanges(QObject *parent = nullptr);
    ~QDeclarativeAnchorChanges();
 
    virtual ActionList actions();

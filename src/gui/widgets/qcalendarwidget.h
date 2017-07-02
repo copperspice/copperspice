@@ -88,7 +88,7 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
       SingleSelection
    };
 
-   explicit QCalendarWidget(QWidget *parent = 0);
+   explicit QCalendarWidget(QWidget *parent = nullptr);
    ~QCalendarWidget();
 
    QSize sizeHint() const override;

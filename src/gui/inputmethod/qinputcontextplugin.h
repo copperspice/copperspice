@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QInputContextPlugin : public QObject, public QInputContextFac
    CS_INTERFACES(QInputContextFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QInputContextPlugin(QObject *parent = 0);
+   explicit QInputContextPlugin(QObject *parent = nullptr);
    ~QInputContextPlugin();
 };
 

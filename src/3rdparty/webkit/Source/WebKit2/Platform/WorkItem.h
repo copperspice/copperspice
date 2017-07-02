@@ -30,7 +30,7 @@
 
 class WorkItem {
 public:
-    template<typename C> 
+    template<typename C>
     static PassOwnPtr<WorkItem> create(C*, void (C::*)());
 
     template<typename C, typename T0>
@@ -39,7 +39,7 @@ public:
     template<typename C, typename T0, typename T1>
     static PassOwnPtr<WorkItem> create(C*, void (C::*)(T0, T1), T0, T1);
 
-    static PassOwnPtr<WorkItem> create(void (*)());
+    static PassOwnPtr<WorkItem> create(void (*function)());
 
     virtual ~WorkItem() { }
     virtual void execute() = 0;
@@ -58,7 +58,7 @@ class MemberFunctionWorkItem0 : private WorkItem {
     friend class WorkItem;
 
     typedef void (C::*FunctionType)();
-    
+
     MemberFunctionWorkItem0(C* ptr, FunctionType function)
         : m_ptr(ptr)
         , m_function(function)
@@ -84,9 +84,9 @@ template<typename C, typename T0>
 class MemberFunctionWorkItem1 : private WorkItem {
     // We only allow WorkItem to create this.
     friend class WorkItem;
-    
+
     typedef void (C::*FunctionType)(T0);
-    
+
     MemberFunctionWorkItem1(C* ptr, FunctionType function, T0 t0)
         : m_ptr(ptr)
         , m_function(function)
@@ -94,7 +94,7 @@ class MemberFunctionWorkItem1 : private WorkItem {
     {
         m_ptr->ref();
     }
-    
+
     ~MemberFunctionWorkItem1()
     {
         m_ptr->deref();
@@ -104,7 +104,7 @@ class MemberFunctionWorkItem1 : private WorkItem {
     {
         (m_ptr->*m_function)(m_t0);
     }
-    
+
     C* m_ptr;
     FunctionType m_function;
     T0 m_t0;
@@ -114,9 +114,9 @@ template<typename C, typename T0, typename T1>
 class MemberFunctionWorkItem2 : private WorkItem {
     // We only allow WorkItem to create this.
     friend class WorkItem;
-    
+
     typedef void (C::*FunctionType)(T0, T1);
-    
+
     MemberFunctionWorkItem2(C* ptr, FunctionType function, T0 t0, T1 t1)
         : m_ptr(ptr)
         , m_function(function)
@@ -125,7 +125,7 @@ class MemberFunctionWorkItem2 : private WorkItem {
     {
         m_ptr->ref();
     }
-    
+
     ~MemberFunctionWorkItem2()
     {
         m_ptr->deref();
@@ -135,7 +135,7 @@ class MemberFunctionWorkItem2 : private WorkItem {
     {
         (m_ptr->*m_function)(m_t0, m_t1);
     }
-    
+
     C* m_ptr;
     FunctionType m_function;
     T0 m_t0;
@@ -165,7 +165,7 @@ class FunctionWorkItem0 : private WorkItem {
     friend class WorkItem;
 
     typedef void (*FunctionType)();
-    
+
     FunctionWorkItem0(FunctionType function)
         : m_function(function)
     {

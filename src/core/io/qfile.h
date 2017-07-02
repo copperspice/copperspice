@@ -103,7 +103,7 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    static bool setPermissions(const QString &filename, Permissions permissionSpec);
 
  protected:
-   QFile(QFilePrivate &dd, QObject *parent = 0);
+   QFile(QFilePrivate &dd, QObject *parent = nullptr);
 
  private:
    friend class QTemporaryFile;

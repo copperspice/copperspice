@@ -65,7 +65,7 @@ class QAbstractSocketEngine : public QObject
 
    static QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent);
 
-   QAbstractSocketEngine(QObject *parent = 0);
+   QAbstractSocketEngine(QObject *parent = nullptr);
    ~QAbstractSocketEngine();
 
    enum SocketOption {
@@ -166,7 +166,7 @@ class QAbstractSocketEngine : public QObject
    void setReceiver(QAbstractSocketEngineReceiver *receiver);
 
  protected:
-   QAbstractSocketEngine(QAbstractSocketEnginePrivate &dd, QObject *parent = 0);
+   QAbstractSocketEngine(QAbstractSocketEnginePrivate &dd, QObject *parent = nullptr);
 
    void setError(QAbstractSocket::SocketError error, const QString &errorString) const;
    void setState(QAbstractSocket::SocketState state);

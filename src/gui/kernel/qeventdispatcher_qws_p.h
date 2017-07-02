@@ -35,7 +35,7 @@ class QEventDispatcherQWS : public QEventDispatcherUNIX
    Q_DECLARE_PRIVATE(QEventDispatcherQWS)
 
  public:
-   explicit QEventDispatcherQWS(QObject *parent = 0);
+   explicit QEventDispatcherQWS(QObject *parent = nullptr);
    ~QEventDispatcherQWS();
 
    bool processEvents(QEventLoop::ProcessEventsFlags flags);

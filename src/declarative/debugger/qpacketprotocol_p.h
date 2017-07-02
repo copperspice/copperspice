@@ -39,7 +39,7 @@ class Q_DECLARATIVE_EXPORT QPacketProtocol : public QObject
 {
    DECL_CS_OBJECT(QPacketProtocol)
  public:
-   explicit QPacketProtocol(QIODevice *dev, QObject *parent = 0);
+   explicit QPacketProtocol(QIODevice *dev, QObject *parent = nullptr);
    virtual ~QPacketProtocol();
 
    qint32 maximumPacketSize() const;

@@ -35,7 +35,7 @@ class QEventDispatcherX11 : public QEventDispatcherUNIX
    Q_DECLARE_PRIVATE(QEventDispatcherX11)
 
  public:
-   explicit QEventDispatcherX11(QObject *parent = 0);
+   explicit QEventDispatcherX11(QObject *parent = nullptr);
    ~QEventDispatcherX11();
 
    bool processEvents(QEventLoop::ProcessEventsFlags flags) override;

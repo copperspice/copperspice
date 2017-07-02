@@ -51,7 +51,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScaleGrid : public QObject
    DECL_CS_PROPERTY_NOTIFY(bottom, borderChanged)
 
  public:
-   QDeclarativeScaleGrid(QObject *parent = 0);
+   QDeclarativeScaleGrid(QObject *parent = nullptr);
    ~QDeclarativeScaleGrid();
 
    bool isNull() const;

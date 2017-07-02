@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    GUI_CS_PROPERTY_WRITE(documentMode, setDocumentMode)
 
  public:
-   explicit QTabBar(QWidget *parent = 0);
+   explicit QTabBar(QWidget *parent = nullptr);
    ~QTabBar();
 
    enum Shape { RoundedNorth, RoundedSouth, RoundedWest, RoundedEast,

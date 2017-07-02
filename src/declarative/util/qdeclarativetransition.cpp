@@ -38,7 +38,7 @@ class ParallelAnimationWrapper : public QParallelAnimationGroup
    DECL_CS_OBJECT(ParallelAnimationWrapper)
 
  public:
-   ParallelAnimationWrapper(QObject *parent = 0) : QParallelAnimationGroup(parent) {}
+   ParallelAnimationWrapper(QObject *parent = nullptr) : QParallelAnimationGroup(parent) {}
    QDeclarativeTransitionPrivate *trans;
 
  protected:

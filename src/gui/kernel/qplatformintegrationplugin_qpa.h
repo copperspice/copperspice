@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QPlatformIntegrationPlugin : public QObject, public QPlatform
    CS_INTERFACES(QPlatformIntegrationFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QPlatformIntegrationPlugin(QObject *parent = 0);
+   explicit QPlatformIntegrationPlugin(QObject *parent = nullptr);
    ~QPlatformIntegrationPlugin();
 
    virtual QStringList keys() const = 0;

@@ -435,13 +435,13 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    Q_DECLARE_PRIVATE(QGLWidget)
 
  public:
-   explicit QGLWidget(QWidget *parent = 0,
+   explicit QGLWidget(QWidget *parent = nullptr,
                       const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
 
-   explicit QGLWidget(QGLContext *context, QWidget *parent = 0,
+   explicit QGLWidget(QGLContext *context, QWidget *parent = nullptr,
                       const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
 
-   explicit QGLWidget(const QGLFormat &format, QWidget *parent = 0,
+   explicit QGLWidget(const QGLFormat &format, QWidget *parent = nullptr,
                       const QGLWidget *shareWidget = 0, Qt::WindowFlags f = 0);
 
    ~QGLWidget();

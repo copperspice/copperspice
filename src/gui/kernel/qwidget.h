@@ -321,7 +321,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    };
    using RenderFlags = QFlags<RenderFlag>;
 
-   explicit QWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+   explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
    ~QWidget();
 
    int devType() const override;

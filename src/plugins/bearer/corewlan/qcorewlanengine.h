@@ -43,7 +43,7 @@ class QCoreWlanEngine : public QBearerEngineImpl
     Q_OBJECT
 
 public:
-    QCoreWlanEngine(QObject *parent = 0);
+    QCoreWlanEngine(QObject *parent = nullptr);
     ~QCoreWlanEngine();
 
     QString getInterfaceFromId(const QString &id);
@@ -95,7 +95,7 @@ class QScanThread : public QThread
     Q_OBJECT
 
 public:
-    QScanThread(QObject *parent = 0);
+    QScanThread(QObject *parent = nullptr);
     ~QScanThread();
 
     void quit();

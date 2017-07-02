@@ -39,7 +39,7 @@ class QmlToolBar : public QToolBar
     Q_OBJECT
 
 public:
-    explicit QmlToolBar(QWidget *parent = 0);
+    explicit QmlToolBar(QWidget *parent = nullptr);
     ~QmlToolBar();
 
 public slots:

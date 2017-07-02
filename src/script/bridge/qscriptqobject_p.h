@@ -109,7 +109,7 @@ class QObjectPrototypeObject : public QObject
    SCRIPT_CS_OBJECT(QObjectPrototypeObject)
 
  public:
-   QObjectPrototypeObject(QObject *parent = 0) : QObject(parent) { }
+   QObjectPrototypeObject(QObject *parent = nullptr) : QObject(parent) { }
    ~QObjectPrototypeObject() { }
 };
 

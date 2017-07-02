@@ -33,7 +33,7 @@ namespace QPatternist {
 class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutput
 {
  public:
-   ColoringMessageHandler(QObject *parent = 0);
+   ColoringMessageHandler(QObject *parent = nullptr);
 
  protected:
    void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier,

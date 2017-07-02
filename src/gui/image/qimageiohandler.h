@@ -107,7 +107,7 @@ class Q_GUI_EXPORT QImageIOPlugin : public QObject, public QImageIOHandlerFactor
    CS_INTERFACES(QImageIOHandlerFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QImageIOPlugin(QObject *parent = 0);
+   explicit QImageIOPlugin(QObject *parent = nullptr);
    virtual ~QImageIOPlugin();
 
    enum Capability {

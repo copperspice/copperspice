@@ -57,7 +57,7 @@ class QWellArray : public QWidget
    GUI_CS_PROPERTY_READ(selectedRow, selectedRow)
 
  public:
-   QWellArray(int rows, int cols, QWidget *parent = 0);
+   QWellArray(int rows, int cols, QWidget *parent = nullptr);
    ~QWellArray() {}
 
    QString cellContent(int row, int col) const;
@@ -678,7 +678,7 @@ class QColorLuminancePicker : public QWidget
    GUI_CS_OBJECT(QColorLuminancePicker)
 
  public:
-   QColorLuminancePicker(QWidget *parent = 0);
+   QColorLuminancePicker(QWidget *parent = nullptr);
    ~QColorLuminancePicker();
 
    GUI_CS_SIGNAL_1(Public, void newHsv(int h, int s, int v))

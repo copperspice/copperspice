@@ -118,9 +118,9 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    };
    using SceneLayers = QFlags<SceneLayer>;
 
-   QGraphicsScene(QObject *parent = 0);
-   QGraphicsScene(const QRectF &sceneRect, QObject *parent = 0);
-   QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = 0);
+   QGraphicsScene(QObject *parent = nullptr);
+   QGraphicsScene(const QRectF &sceneRect, QObject *parent = nullptr);
+   QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
    virtual ~QGraphicsScene();
 
    QRectF sceneRect() const;

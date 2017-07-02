@@ -49,8 +49,8 @@ class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
 
    using PageSetupDialogOptions = QFlags<PageSetupDialogOption>;
 
-   explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
-   explicit QPageSetupDialog(QWidget *parent = 0);
+   explicit QPageSetupDialog(QPrinter *printer, QWidget *parent = nullptr);
+   explicit QPageSetupDialog(QWidget *parent = nullptr);
 
    // obsolete
    void addEnabledOption(PageSetupDialogOption option);
@@ -68,13 +68,17 @@ class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
 #endif
 
    int exec() override;
-   using QDialog::open;
 
+   using QDialog::open;
    void open(QObject *receiver, const char *member);
+
+   QPrinter *printer() {
+      return QAbstractPageSetupDialog::printer();
+   }
 };
 
-#endif // QT_NO_PRINTDIALOG
+#endif
 
 QT_END_NAMESPACE
 
-#endif // QPAGESETUPDIALOG_H
+#endif

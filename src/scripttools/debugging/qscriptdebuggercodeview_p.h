@@ -34,7 +34,7 @@ class QScriptDebuggerCodeView : public QScriptDebuggerCodeViewInterface
    SCRIPT_T_CS_OBJECT(QScriptDebuggerCodeView)
 
  public:
-   QScriptDebuggerCodeView(QWidget *parent = 0);
+   QScriptDebuggerCodeView(QWidget *parent = nullptr);
    ~QScriptDebuggerCodeView();
 
    QString text() const;

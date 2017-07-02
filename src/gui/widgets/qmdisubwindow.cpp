@@ -261,7 +261,7 @@ class ControlLabel : public QWidget
    GUI_CS_OBJECT(ControlLabel)
 
  public:
-   ControlLabel(QMdiSubWindow *subWindow, QWidget *parent = 0);
+   ControlLabel(QMdiSubWindow *subWindow, QWidget *parent = nullptr);
    QSize sizeHint() const override;
 
    GUI_CS_SIGNAL_1(Public, void _q_clicked())
@@ -393,7 +393,7 @@ class ControllerWidget : public QWidget
    GUI_CS_OBJECT(ControllerWidget)
 
  public:
-   ControllerWidget(QMdiSubWindow *subWindow, QWidget *parent = 0);
+   ControllerWidget(QMdiSubWindow *subWindow, QWidget *parent = nullptr);
    QSize sizeHint() const override;
    void setControlVisible(QMdiSubWindowPrivate::WindowStateAction action, bool visible);
 

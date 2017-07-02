@@ -40,7 +40,7 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
                     Down = TopToBottom, Up = BottomToTop
                   };
 
-   explicit QBoxLayout(Direction, QWidget *parent = 0);
+   explicit QBoxLayout(Direction, QWidget *parent = nullptr);
    ~QBoxLayout();
 
    Direction direction() const;

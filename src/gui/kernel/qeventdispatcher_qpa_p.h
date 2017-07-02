@@ -35,7 +35,7 @@ class QEventDispatcherQPA : public QEventDispatcherUNIX
    Q_DECLARE_PRIVATE(QEventDispatcherQPA)
 
  public:
-   explicit QEventDispatcherQPA(QObject *parent = 0);
+   explicit QEventDispatcherQPA(QObject *parent = nullptr);
    ~QEventDispatcherQPA();
 
    bool processEvents(QEventLoop::ProcessEventsFlags flags);

@@ -279,7 +279,7 @@ class QFileDialogPrivate : public QDialogPrivate
 class QFileDialogLineEdit : public QLineEdit
 {
  public:
-   QFileDialogLineEdit(QWidget *parent = 0) : QLineEdit(parent), hideOnEsc(false), d_ptr(0) {}
+   QFileDialogLineEdit(QWidget *parent = nullptr) : QLineEdit(parent), hideOnEsc(false), d_ptr(0) {}
 
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer) {
       d_ptr = d_pointer;
@@ -295,7 +295,7 @@ class QFileDialogLineEdit : public QLineEdit
 class QFileDialogComboBox : public QComboBox
 {
  public:
-   QFileDialogComboBox(QWidget *parent = 0) : QComboBox(parent), urlModel(0) {}
+   QFileDialogComboBox(QWidget *parent = nullptr) : QComboBox(parent), urlModel(0) {}
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
    void showPopup() override;
    void setHistory(const QStringList &paths);
@@ -315,7 +315,7 @@ class QFileDialogComboBox : public QComboBox
 class QFileDialogListView : public QListView
 {
  public:
-   QFileDialogListView(QWidget *parent = 0);
+   QFileDialogListView(QWidget *parent = nullptr);
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
    QSize sizeHint() const override;
 

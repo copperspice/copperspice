@@ -44,7 +44,7 @@ class QDeclarativeViewSection : public QObject
    DECL_CS_ENUM(SectionCriteria)
 
  public:
-   QDeclarativeViewSection(QObject *parent = 0) : QObject(parent), m_criteria(FullString), m_delegate(0) {}
+   QDeclarativeViewSection(QObject *parent = nullptr) : QObject(parent), m_criteria(FullString), m_delegate(0) {}
 
    QString property() const {
       return m_property;

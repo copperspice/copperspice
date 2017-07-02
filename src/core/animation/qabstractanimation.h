@@ -78,7 +78,7 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_ENUM(State)
    CORE_CS_ENUM(Direction)
 
-   QAbstractAnimation(QObject *parent = 0);
+   QAbstractAnimation(QObject *parent = nullptr);
    virtual ~QAbstractAnimation();
 
    State state() const;
@@ -121,7 +121,7 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_SLOT_2(setCurrentTime)
 
  protected:
-   QAbstractAnimation(QAbstractAnimationPrivate &dd, QObject *parent = 0);
+   QAbstractAnimation(QAbstractAnimationPrivate &dd, QObject *parent = nullptr);
    bool event(QEvent *event) override;
 
    virtual void updateCurrentTime(int currentTime) = 0;
@@ -141,7 +141,7 @@ class Q_CORE_EXPORT QAnimationDriver : public QObject
    Q_DECLARE_PRIVATE(QAnimationDriver)
 
  public:
-   QAnimationDriver(QObject *parent = 0);
+   QAnimationDriver(QObject *parent = nullptr);
    ~QAnimationDriver();
 
    void advance();
@@ -153,7 +153,7 @@ class Q_CORE_EXPORT QAnimationDriver : public QObject
    virtual void started() {}
    virtual void stopped() {}
 
-   QAnimationDriver(QAnimationDriverPrivate &dd, QObject *parent = 0);
+   QAnimationDriver(QAnimationDriverPrivate &dd, QObject *parent = nullptr);
    QScopedPointer<QAnimationDriverPrivate> d_ptr;
 
  private:

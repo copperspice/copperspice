@@ -39,7 +39,7 @@ class Q_CORE_EXPORT QTimer : public QObject
    CORE_CS_PROPERTY_READ(active, isActive)
 
  public:
-   explicit QTimer(QObject *parent = 0);
+   explicit QTimer(QObject *parent = nullptr);
    ~QTimer();
 
    inline bool isActive() const;

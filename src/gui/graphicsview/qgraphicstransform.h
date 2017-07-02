@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QGraphicsTransform : public QObject
    GUI_CS_OBJECT(QGraphicsTransform)
 
  public:
-   QGraphicsTransform(QObject *parent = 0);
+   QGraphicsTransform(QObject *parent = nullptr);
    ~QGraphicsTransform();
 
    virtual void applyTo(QMatrix4x4 *matrix) const = 0;
@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QGraphicsScale : public QGraphicsTransform
    GUI_CS_PROPERTY_NOTIFY(zScale, zScaleChanged)
 
  public:
-   QGraphicsScale(QObject *parent = 0);
+   QGraphicsScale(QObject *parent = nullptr);
    ~QGraphicsScale();
 
    QVector3D origin() const;
@@ -129,7 +129,7 @@ class Q_GUI_EXPORT QGraphicsRotation : public QGraphicsTransform
    GUI_CS_PROPERTY_NOTIFY(axis, axisChanged)
 
  public:
-   QGraphicsRotation(QObject *parent = 0);
+   QGraphicsRotation(QObject *parent = nullptr);
    ~QGraphicsRotation();
 
    QVector3D origin() const;

@@ -50,7 +50,7 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
  public:
 
    explicit QSaveFile(const QString &name);
-   explicit QSaveFile(QObject *parent = 0);
+   explicit QSaveFile(QObject *parent = nullptr);
    explicit QSaveFile(const QString &name, QObject *parent);
    ~QSaveFile();
 

@@ -35,7 +35,7 @@ class QScriptEdit : public QPlainTextEdit
 {
    SCRIPT_T_CS_OBJECT(QScriptEdit)
  public:
-   QScriptEdit(QWidget *parent = 0);
+   QScriptEdit(QWidget *parent = nullptr);
    ~QScriptEdit();
 
    int baseLineNumber() const;

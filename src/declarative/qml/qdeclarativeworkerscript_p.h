@@ -63,7 +63,7 @@ class QDeclarativeWorkerScript : public QObject, public QDeclarativeParserStatus
 
    CS_INTERFACES(QDeclarativeParserStatus)
  public:
-   QDeclarativeWorkerScript(QObject *parent = 0);
+   QDeclarativeWorkerScript(QObject *parent = nullptr);
    virtual ~QDeclarativeWorkerScript();
 
    QUrl source() const;

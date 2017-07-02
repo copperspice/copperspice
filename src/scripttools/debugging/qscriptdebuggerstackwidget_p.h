@@ -34,7 +34,7 @@ class QScriptDebuggerStackWidget: public QScriptDebuggerStackWidgetInterface
    SCRIPT_T_CS_OBJECT(QScriptDebuggerStackWidget)
 
  public:
-   QScriptDebuggerStackWidget(QWidget *parent = 0);
+   QScriptDebuggerStackWidget(QWidget *parent = nullptr);
    ~QScriptDebuggerStackWidget();
 
    QAbstractItemModel *stackModel() const;

@@ -100,10 +100,10 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
    using Sections = QFlags<Section>;
 
-   explicit QDateTimeEdit(QWidget *parent = 0);
-   explicit QDateTimeEdit(const QDateTime &dt, QWidget *parent = 0);
-   explicit QDateTimeEdit(const QDate &d, QWidget *parent = 0);
-   explicit QDateTimeEdit(const QTime &t, QWidget *parent = 0);
+   explicit QDateTimeEdit(QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QDateTime &dt, QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QDate &d, QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QTime &t, QWidget *parent = nullptr);
 
    QDateTime dateTime() const;
    QDate date() const;
@@ -206,7 +206,7 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    void paintEvent(QPaintEvent *event) override;
    void initStyleOption(QStyleOptionSpinBox *option) const;
 
-   QDateTimeEdit(const QVariant &val, QVariant::Type parserType, QWidget *parent = 0);
+   QDateTimeEdit(const QVariant &val, QVariant::Type parserType, QWidget *parent = nullptr);
 
  private:
    Q_DECLARE_PRIVATE(QDateTimeEdit)
@@ -221,8 +221,8 @@ class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
    GUI_CS_OBJECT(QTimeEdit)
 
  public:
-   QTimeEdit(QWidget *parent = 0);
-   QTimeEdit(const QTime &time, QWidget *parent = 0);
+   QTimeEdit(QWidget *parent = nullptr);
+   QTimeEdit(const QTime &time, QWidget *parent = nullptr);
 };
 
 class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
@@ -230,8 +230,8 @@ class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
    GUI_CS_OBJECT(QDateEdit)
 
  public:
-   QDateEdit(QWidget *parent = 0);
-   QDateEdit(const QDate &date, QWidget *parent = 0);
+   QDateEdit(QWidget *parent = nullptr);
+   QDateEdit(const QDate &date, QWidget *parent = nullptr);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeEdit::Sections)

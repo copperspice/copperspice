@@ -196,7 +196,6 @@ QObject *QAccessibleWidget::parentObject() const
    return parent;
 }
 
-/*! \reimp */
 int QAccessibleWidget::childAt(int x, int y) const
 {
    QWidget *w = widget();
@@ -231,7 +230,6 @@ int QAccessibleWidget::childAt(int x, int y) const
    return 0;
 }
 
-/*! \reimp */
 QRect QAccessibleWidget::rect(int child) const
 {
    if (child) {
@@ -792,14 +790,12 @@ int QAccessibleWidget::navigate(RelationFlag relation, int entry, QAccessibleInt
    return *target ? 0 : -1;
 }
 
-/*! \reimp */
 int QAccessibleWidget::childCount() const
 {
    QWidgetList cl = childWidgets(widget());
    return cl.size();
 }
 
-/*! \reimp */
 int QAccessibleWidget::indexOfChild(const QAccessibleInterface *child) const
 {
    QWidgetList cl = childWidgets(widget());
@@ -813,7 +809,6 @@ int QAccessibleWidget::indexOfChild(const QAccessibleInterface *child) const
 // from qwidget.cpp
 extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *);
 
-/*! \reimp */
 QString QAccessibleWidget::text(Text t, int child) const
 {
    QString str;
@@ -874,7 +869,6 @@ QString QAccessibleWidget::text(Text t, int child) const
 
 #ifndef QT_NO_ACTION
 
-/*! \reimp */
 int QAccessibleWidget::userActionCount(int child) const
 {
    if (child) {
@@ -883,7 +877,6 @@ int QAccessibleWidget::userActionCount(int child) const
    return widget()->actions().count();
 }
 
-/*! \reimp */
 QString QAccessibleWidget::actionText(int action, Text t, int child) const
 {
    if (action == DefaultAction) {
@@ -911,7 +904,6 @@ QString QAccessibleWidget::actionText(int action, Text t, int child) const
    return QAccessibleObject::actionText(action, t, child);
 }
 
-/*! \reimp */
 bool QAccessibleWidget::doAction(int action, int child, const QVariantList &params)
 {
    if (action == SetFocus || action == DefaultAction) {
@@ -941,7 +933,6 @@ bool QAccessibleWidget::doAction(int action, int child, const QVariantList &para
 
 #endif // QT_NO_ACTION
 
-/*! \reimp */
 QAccessible::Role QAccessibleWidget::role(int child) const
 {
    if (!child) {
@@ -962,7 +953,6 @@ QAccessible::Role QAccessibleWidget::role(int child) const
    return NoRole;
 }
 
-/*! \reimp */
 QAccessible::State QAccessibleWidget::state(int child) const
 {
    if (child) {

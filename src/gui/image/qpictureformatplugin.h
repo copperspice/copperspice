@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatI
    CS_INTERFACES(QPictureFormatInterface, QFactoryInterface)
 
  public:
-   explicit QPictureFormatPlugin(QObject *parent = 0);
+   explicit QPictureFormatPlugin(QObject *parent = nullptr);
    ~QPictureFormatPlugin();
 
    bool loadPicture(const QString &format, const QString &filename, QPicture *pic) override;

@@ -42,8 +42,8 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
    CORE_CS_PROPERTY_WRITE(targetObject, setTargetObject)
 
  public:
-   QPropertyAnimation(QObject *parent = 0);
-   QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = 0);
+   QPropertyAnimation(QObject *parent = nullptr);
+   QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = nullptr);
    ~QPropertyAnimation();
 
    QObject *targetObject() const;

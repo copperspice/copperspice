@@ -50,10 +50,10 @@ class Q_CORE_EXPORT QLibrary : public QObject
 
    CORE_CS_FLAG(LoadHint, LoadHints)
 
-   explicit QLibrary(QObject *parent = 0);
-   explicit QLibrary(const QString &fileName, QObject *parent = 0);
-   explicit QLibrary(const QString &fileName, int verNum, QObject *parent = 0);
-   explicit QLibrary(const QString &fileName, const QString &version, QObject *parent = 0);
+   explicit QLibrary(QObject *parent = nullptr);
+   explicit QLibrary(const QString &fileName, QObject *parent = nullptr);
+   explicit QLibrary(const QString &fileName, int verNum, QObject *parent = nullptr);
+   explicit QLibrary(const QString &fileName, const QString &version, QObject *parent = nullptr);
    ~QLibrary();
 
    void *resolve(const char *symbol);

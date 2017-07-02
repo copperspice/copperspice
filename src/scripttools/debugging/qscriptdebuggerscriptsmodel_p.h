@@ -36,7 +36,7 @@ class QScriptDebuggerScriptsModel : public QAbstractItemModel
    SCRIPT_T_CS_OBJECT(QScriptDebuggerScriptsModel)
 
  public:
-   QScriptDebuggerScriptsModel(QObject *parent = 0);
+   QScriptDebuggerScriptsModel(QObject *parent = nullptr);
    ~QScriptDebuggerScriptsModel();
 
    void removeScript(qint64 id);

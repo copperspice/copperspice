@@ -101,7 +101,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeStateOperation : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeStateOperation)
  public:
-   QDeclarativeStateOperation(QObject *parent = 0)
+   QDeclarativeStateOperation(QObject *parent = nullptr)
       : QObject(parent) {}
    typedef QList<QDeclarativeAction> ActionList;
 
@@ -111,7 +111,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeStateOperation : public QObject
    void setState(QDeclarativeState *state);
 
  protected:
-   QDeclarativeStateOperation(QObjectPrivate &dd, QObject *parent = 0);
+   QDeclarativeStateOperation(QObjectPrivate &dd, QObject *parent = nullptr);
 
  private:
    Q_DECLARE_PRIVATE(QDeclarativeStateOperation)
@@ -137,7 +137,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeState : public QObject
    DECL_CS_CLASSINFO("DeferredPropertyNames", "changes")
 
  public:
-   QDeclarativeState(QObject *parent = 0);
+   QDeclarativeState(QObject *parent = nullptr);
    virtual ~QDeclarativeState();
 
    QString name() const;

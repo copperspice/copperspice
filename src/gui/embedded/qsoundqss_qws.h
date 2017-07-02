@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QWSSoundServer : public QObject
    GUI_CS_OBJECT(QWSSoundServer)
 
  public:
-   explicit QWSSoundServer(QObject *parent = 0);
+   explicit QWSSoundServer(QObject *parent = nullptr);
    ~QWSSoundServer();
    void playFile( int id, const QString &filename );
    void stopFile( int id );
@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QWSSoundClient : public QWSSocket
       ErrOpeningFile = 0x02,
       ErrReadingFile = 0x04
    };
-   explicit QWSSoundClient(QObject *parent = 0);
+   explicit QWSSoundClient(QObject *parent = nullptr);
 
    ~QWSSoundClient( );
    void reconnect();
@@ -122,7 +122,7 @@ class QWSSoundServerSocket : public QWSServerSocket
    GUI_CS_OBJECT(QWSSoundServerSocket)
 
  public:
-   explicit QWSSoundServerSocket(QObject *parent = 0);
+   explicit QWSSoundServerSocket(QObject *parent = nullptr);
 
    GUI_CS_SLOT_1(Public, void newConnection())
    GUI_CS_SLOT_2(newConnection)

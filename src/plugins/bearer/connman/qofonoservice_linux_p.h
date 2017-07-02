@@ -75,7 +75,7 @@ class QOfonoManagerInterface : public  QDBusAbstractInterface
 
 public:
 
-    QOfonoManagerInterface( QObject *parent = 0);
+    QOfonoManagerInterface( QObject *parent = nullptr);
     ~QOfonoManagerInterface();
 
      QDBusObjectPath path() const;
@@ -100,7 +100,7 @@ class QOfonoDBusHelper: public QObject, protected QDBusContext
  {
      Q_OBJECT
  public:
-    QOfonoDBusHelper(QObject *parent = 0);
+    QOfonoDBusHelper(QObject *parent = nullptr);
     ~QOfonoDBusHelper();
 
  public slots:
@@ -115,7 +115,7 @@ class QOfonoModemInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoModemInterface(const QString &dbusModemPathName, QObject *parent = 0);
+    QOfonoModemInterface(const QString &dbusModemPathName, QObject *parent = nullptr);
     ~QOfonoModemInterface();
 
     QVariantMap getProperties();
@@ -148,7 +148,7 @@ class QOfonoNetworkRegistrationInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoNetworkRegistrationInterface(const QString &dbusModemPathName, QObject *parent = 0);
+    QOfonoNetworkRegistrationInterface(const QString &dbusModemPathName, QObject *parent = nullptr);
     ~QOfonoNetworkRegistrationInterface();
 
     QVariantMap getProperties();
@@ -179,7 +179,7 @@ class QOfonoNetworkOperatorInterface : public QDBusAbstractInterface
 
 public:
 //modem or operator paths
-    QOfonoNetworkOperatorInterface(const QString &dbusPathName, QObject *parent = 0);
+    QOfonoNetworkOperatorInterface(const QString &dbusPathName, QObject *parent = nullptr);
     ~QOfonoNetworkOperatorInterface();
 
     QVariantMap getProperties();
@@ -203,7 +203,7 @@ class QOfonoSimInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoSimInterface(const QString &dbusModemPathName, QObject *parent = 0);
+    QOfonoSimInterface(const QString &dbusModemPathName, QObject *parent = nullptr);
     ~QOfonoSimInterface();
 
     QVariantMap getProperties();
@@ -231,7 +231,7 @@ class QOfonoDataConnectionManagerInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoDataConnectionManagerInterface(const QString &dbusPathName, QObject *parent = 0);
+    QOfonoDataConnectionManagerInterface(const QString &dbusPathName, QObject *parent = nullptr);
     ~QOfonoDataConnectionManagerInterface();
 
     QVariantMap getProperties();
@@ -257,7 +257,7 @@ class QOfonoPrimaryDataContextInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoPrimaryDataContextInterface(const QString &dbusPathName, QObject *parent = 0);
+    QOfonoPrimaryDataContextInterface(const QString &dbusPathName, QObject *parent = nullptr);
     ~QOfonoPrimaryDataContextInterface();
 
     QVariantMap getProperties();
@@ -287,7 +287,7 @@ class QOfonoSmsInterface : public QDBusAbstractInterface
 
 public:
 
-    QOfonoSmsInterface(const QString &dbusModemPathName, QObject *parent = 0);
+    QOfonoSmsInterface(const QString &dbusModemPathName, QObject *parent = nullptr);
     ~QOfonoSmsInterface();
 
     QVariantMap getProperties();

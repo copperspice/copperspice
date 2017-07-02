@@ -46,7 +46,7 @@ class QScriptNewBreakpointWidget : public QWidget
    SCRIPT_T_CS_OBJECT(QScriptNewBreakpointWidge)
 
  public:
-   QScriptNewBreakpointWidget(QWidget *parent = 0)
+   QScriptNewBreakpointWidget(QWidget *parent = nullptr)
       : QWidget(parent) {
       QString system = QLatin1String("win");
       QHBoxLayout *hboxLayout = new QHBoxLayout(this);
@@ -183,7 +183,7 @@ class QScriptBreakpointsItemDelegate : public QStyledItemDelegate
    SCRIPT_T_CS_OBJECT(ScriptBreakpointsItemDelegate)
 
  public:
-   QScriptBreakpointsItemDelegate(QObject *parent = 0)
+   QScriptBreakpointsItemDelegate(QObject *parent = nullptr)
       : QStyledItemDelegate(parent) {}
 
    QWidget *createEditor(QWidget *parent,

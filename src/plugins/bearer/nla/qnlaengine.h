@@ -47,7 +47,7 @@ class QNlaEngine : public QBearerEngineImpl
     friend class QNlaThread;
 
 public:
-    QNlaEngine(QObject *parent = 0);
+    QNlaEngine(QObject *parent = nullptr);
     ~QNlaEngine();
 
     QString getInterfaceFromId(const QString &id);

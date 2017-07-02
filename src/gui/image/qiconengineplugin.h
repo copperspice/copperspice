@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QIconEnginePlugin : public QObject, public QIconEngineFactory
    CS_INTERFACES(QIconEngineFactoryInterface, QFactoryInterface)
 
  public:
-   QIconEnginePlugin(QObject *parent = 0);
+   QIconEnginePlugin(QObject *parent = nullptr);
    ~QIconEnginePlugin();
 };
 
@@ -62,7 +62,7 @@ class Q_GUI_EXPORT QIconEnginePluginV2 : public QObject, public QIconEngineFacto
    CS_INTERFACES(QIconEngineFactoryInterfaceV2, QFactoryInterface)
 
  public:
-   QIconEnginePluginV2(QObject *parent = 0);
+   QIconEnginePluginV2(QObject *parent = nullptr);
    ~QIconEnginePluginV2();
 };
 

@@ -114,8 +114,8 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 
    using AutoFormatting = QFlags<AutoFormattingFlag>;
 
-   explicit QTextEdit(QWidget *parent = 0);
-   explicit QTextEdit(const QString &text, QWidget *parent = 0);
+   explicit QTextEdit(QWidget *parent = nullptr);
+   explicit QTextEdit(const QString &text, QWidget *parent = nullptr);
    virtual ~QTextEdit();
 
    void setDocument(QTextDocument *document);

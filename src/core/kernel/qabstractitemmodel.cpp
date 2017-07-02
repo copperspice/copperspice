@@ -415,7 +415,7 @@ QDebug operator<<(QDebug dbg, const QPersistentModelIndex &idx)
 class QEmptyItemModel : public QAbstractItemModel
 {
  public:
-   explicit QEmptyItemModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
+   explicit QEmptyItemModel(QObject *parent = nullptr) : QAbstractItemModel(parent) {}
    QModelIndex index(int, int, const QModelIndex &) const override {
       return QModelIndex();
    }

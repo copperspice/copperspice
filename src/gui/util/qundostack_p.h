@@ -72,7 +72,7 @@ class QUndoAction : public QAction
    GUI_CS_OBJECT(QUndoAction)
 
  public:
-   QUndoAction(const QString &prefix, QObject *parent = 0);
+   QUndoAction(const QString &prefix, QObject *parent = nullptr);
    void setTextFormat(const QString &textFormat, const QString &defaultText);
 
    GUI_CS_SLOT_1(Public, void setPrefixedText(const QString &text))

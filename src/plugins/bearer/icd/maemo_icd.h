@@ -111,9 +111,9 @@ class Icd : public QObject
     Q_OBJECT
 
 public:
-    Icd(QObject *parent = 0);
-    Icd(unsigned int timeout, QObject *parent = 0);
-    Icd(unsigned int timeout, IcdDbusInterfaceVer ver, QObject *parent = 0);
+    Icd(QObject *parent = nullptr);
+    Icd(unsigned int timeout, QObject *parent = nullptr);
+    Icd(unsigned int timeout, IcdDbusInterfaceVer ver, QObject *parent = nullptr);
     ~Icd();
 
     /* Icd2 dbus API functions */

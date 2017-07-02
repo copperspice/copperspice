@@ -769,7 +769,7 @@ class QWSSoundServerPrivate : public QObject
    GUI_CS_OBJECT(QWSSoundServerPrivate)
 
  public:
-   QWSSoundServerPrivate(QObject *parent = 0, const char *name = 0) : QObject(parent) {
+   QWSSoundServerPrivate(QObject *parent = nullptr, const char *name = 0) : QObject(parent) {
       timerId = 0;
 
       if (name) {

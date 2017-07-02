@@ -34,7 +34,7 @@ class QScriptDebuggerScriptsWidget :  public QScriptDebuggerScriptsWidgetInterfa
    SCRIPT_T_CS_OBJECT(QScriptDebuggerScriptsWidget)
 
  public:
-   QScriptDebuggerScriptsWidget(QWidget *parent = 0);
+   QScriptDebuggerScriptsWidget(QWidget *parent = nullptr);
    ~QScriptDebuggerScriptsWidget();
 
    QScriptDebuggerScriptsModel *scriptsModel() const;

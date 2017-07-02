@@ -34,7 +34,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QListModelInterface : public QObject
    DECL_CS_OBJECT(QListModelInterface)
 
  public:
-   QListModelInterface(QObject *parent = 0) : QObject(parent) {}
+   QListModelInterface(QObject *parent = nullptr) : QObject(parent) {}
    virtual ~QListModelInterface() {}
 
    virtual int count() const = 0;

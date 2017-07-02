@@ -38,7 +38,7 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
    Q_DECLARE_PRIVATE(QFutureWatcherBase)
 
  public:
-   QFutureWatcherBase(QObject *parent = 0);
+   QFutureWatcherBase(QObject *parent = nullptr);
    ~QFutureWatcherBase();
 
    int progressValue() const;

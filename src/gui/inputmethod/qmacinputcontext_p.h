@@ -38,7 +38,7 @@ class Q_GUI_EXPORT QMacInputContext : public QInputContext
    void createTextDocument();
 
  public:
-   explicit QMacInputContext(QObject *parent = 0);
+   explicit QMacInputContext(QObject *parent = nullptr);
    virtual ~QMacInputContext();
 
    virtual void setFocusWidget(QWidget *w) override;

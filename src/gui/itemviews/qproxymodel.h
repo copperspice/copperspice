@@ -36,7 +36,7 @@ class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
    GUI_CS_OBJECT(QProxyModel)
 
  public:
-   explicit QProxyModel(QObject *parent = 0);
+   explicit QProxyModel(QObject *parent = nullptr);
    ~QProxyModel();
 
    virtual void setModel(QAbstractItemModel *model);
@@ -82,7 +82,7 @@ class Q_GUI_EXPORT QProxyModel : public QAbstractItemModel
    using QObject::parent;
 
  protected:
-   QProxyModel(QProxyModelPrivate &, QObject *parent = 0);
+   QProxyModel(QProxyModelPrivate &, QObject *parent = nullptr);
 
    QModelIndex setProxyModel(const QModelIndex &source_index) const;
    QModelIndex setSourceModel(const QModelIndex &proxy_index) const;

@@ -62,7 +62,7 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
       InstantPopup
    };
 
-   explicit QToolButton(QWidget *parent = 0);
+   explicit QToolButton(QWidget *parent = nullptr);
    ~QToolButton();
 
    QSize sizeHint() const override;

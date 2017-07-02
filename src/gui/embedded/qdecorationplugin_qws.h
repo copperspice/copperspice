@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QDecorationPlugin : public QObject, public QDecorationFactory
    CS_INTERFACES(QDecorationFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QDecorationPlugin(QObject *parent = 0);
+   explicit QDecorationPlugin(QObject *parent = nullptr);
    ~QDecorationPlugin();
 
    virtual QStringList keys() const = 0;

@@ -71,7 +71,7 @@ class QDeclarativeSystemPalette : public QObject
    DECL_CS_PROPERTY_NOTIFY(highlightedText, paletteChanged)
 
  public:
-   QDeclarativeSystemPalette(QObject *parent = 0);
+   QDeclarativeSystemPalette(QObject *parent = nullptr);
    ~QDeclarativeSystemPalette();
 
    enum ColorGroup { Active = QPalette::Active, Inactive = QPalette::Inactive, Disabled = QPalette::Disabled };

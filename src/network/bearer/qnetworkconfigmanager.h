@@ -60,7 +60,7 @@ class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public Q
 
    using Capabilities = QFlags<Capability>;
 
-   explicit QNetworkConfigurationManager(QObject *parent = 0);
+   explicit QNetworkConfigurationManager(QObject *parent = nullptr);
    virtual ~QNetworkConfigurationManager();
 
    QNetworkConfigurationManager::Capabilities capabilities() const;

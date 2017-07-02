@@ -35,7 +35,7 @@ class PhraseModel : public QAbstractTableModel
    Q_OBJECT
 
  public:
-   PhraseModel(QObject *parent = 0)
+   PhraseModel(QObject *parent = nullptr)
       : QAbstractTableModel(parent) {
    }
 

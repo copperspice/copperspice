@@ -246,7 +246,7 @@ class WidgetClosedNotifier : public QObject
    SCRIPT_T_CS_OBJECT(WidgetClosedNotifier)
 
  public:
-   WidgetClosedNotifier(QWidget *w, QObject *parent = 0)
+   WidgetClosedNotifier(QWidget *w, QObject *parent = nullptr)
       : QObject(parent), widget(w) {
       w->installEventFilter(this);
    }

@@ -40,7 +40,7 @@ class QDeclarativePackage : public QObject
    DECL_CS_PROPERTY_SCRIPTABLE(data, false)
 
  public:
-   QDeclarativePackage(QObject *parent = 0);
+   QDeclarativePackage(QObject *parent = nullptr);
    virtual ~QDeclarativePackage();
 
    QDeclarativeListProperty<QObject> data();

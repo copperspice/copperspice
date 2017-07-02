@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    friend class QSortFilterProxyModelGreaterThan;
 
  public:
-   QSortFilterProxyModel(QObject *parent = 0);
+   QSortFilterProxyModel(QObject *parent = nullptr);
    ~QSortFilterProxyModel();
 
    void setSourceModel(QAbstractItemModel *sourceModel) override;

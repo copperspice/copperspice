@@ -59,7 +59,7 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
       AutoVerifyPeer
    };
 
-   QSslSocket(QObject *parent = 0);
+   QSslSocket(QObject *parent = nullptr);
    ~QSslSocket();
 
    // Autostarting the SSL client handshake.

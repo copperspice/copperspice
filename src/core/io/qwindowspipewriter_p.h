@@ -87,7 +87,7 @@ class Q_CORE_EXPORT QWindowsPipeWriter : public QThread
    CORE_CS_SIGNAL_1(Public, void bytesWritten(qint64 bytes))
    CORE_CS_SIGNAL_2(bytesWritten, bytes)
 
-   QWindowsPipeWriter(HANDLE writePipe, QObject *parent = 0);
+   QWindowsPipeWriter(HANDLE writePipe, QObject *parent = nullptr);
    ~QWindowsPipeWriter();
 
    bool waitForWrite(int msecs);

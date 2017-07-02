@@ -37,7 +37,7 @@ class Q_GUI_EXPORT QCopChannel : public QObject
    GUI_CS_OBJECT(QCopChannel)
 
  public:
-   explicit QCopChannel(const QString &channel, QObject *parent = 0);
+   explicit QCopChannel(const QString &channel, QObject *parent = nullptr);
    virtual ~QCopChannel();
 
    QString channel() const;

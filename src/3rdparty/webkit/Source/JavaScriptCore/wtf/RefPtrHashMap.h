@@ -25,9 +25,9 @@ namespace WTF {
 
     // This specialization is a direct copy of HashMap, with overloaded functions
     // to allow for lookup by pointer instead of RefPtr, avoiding ref-count churn.
-    
+
     // FIXME: Find a better way that doesn't require an entire copy of the HashMap template.
-    
+
     template<typename RawKeyType, typename ValueType, typename ValueTraits, typename HashFunctions>
     struct RefPtrHashMapRawKeyTranslator {
         typedef typename ValueType::first_type KeyType;
@@ -47,6 +47,7 @@ namespace WTF {
     template<typename T, typename MappedArg, typename HashArg, typename KeyTraitsArg, typename MappedTraitsArg>
     class HashMap<RefPtr<T>, MappedArg, HashArg, KeyTraitsArg, MappedTraitsArg> {
         WTF_MAKE_FAST_ALLOCATED;
+
     private:
         typedef KeyTraitsArg KeyTraits;
         typedef MappedTraitsArg MappedTraits;
@@ -94,16 +95,16 @@ namespace WTF {
         MappedType inlineGet(RawKeyType) const;
 
         // replaces value but not key if key is already present
-        // return value is a pair of the iterator to the key location, 
+        // return value is a pair of the iterator to the key location,
         // and a boolean that's true if a new value was actually added
-        pair<iterator, bool> set(const KeyType&, const MappedType&); 
-        pair<iterator, bool> set(RawKeyType, const MappedType&); 
+        pair<iterator, bool> set(const KeyType&, const MappedType&);
+        pair<iterator, bool> set(RawKeyType, const MappedType&);
 
         // does nothing if key is already present
-        // return value is a pair of the iterator to the key location, 
+        // return value is a pair of the iterator to the key location,
         // and a boolean that's true if a new value was actually added
-        pair<iterator, bool> add(const KeyType&, const MappedType&); 
-        pair<iterator, bool> add(RawKeyType, const MappedType&); 
+        pair<iterator, bool> add(const KeyType&, const MappedType&);
+        pair<iterator, bool> add(RawKeyType, const MappedType&);
 
         void remove(const KeyType&);
         void remove(RawKeyType);
@@ -119,23 +120,23 @@ namespace WTF {
 
         HashTableType m_impl;
     };
-    
+
     template<typename T, typename U, typename V, typename W, typename X>
     inline void HashMap<RefPtr<T>, U, V, W, X>::swap(HashMap& other)
     {
-        m_impl.swap(other.m_impl); 
+        m_impl.swap(other.m_impl);
     }
 
     template<typename T, typename U, typename V, typename W, typename X>
     inline int HashMap<RefPtr<T>, U, V, W, X>::size() const
     {
-        return m_impl.size(); 
+        return m_impl.size();
     }
 
     template<typename T, typename U, typename V, typename W, typename X>
     inline int HashMap<RefPtr<T>, U, V, W, X>::capacity() const
-    { 
-        return m_impl.capacity(); 
+    {
+        return m_impl.capacity();
     }
 
     template<typename T, typename U, typename V, typename W, typename X>
@@ -206,7 +207,7 @@ namespace WTF {
 
     template<typename T, typename U, typename V, typename W, typename X>
     inline pair<typename HashMap<RefPtr<T>, U, V, W, X>::iterator, bool>
-    HashMap<RefPtr<T>, U, V, W, X>::inlineAdd(const KeyType& key, const MappedType& mapped) 
+    HashMap<RefPtr<T>, U, V, W, X>::inlineAdd(const KeyType& key, const MappedType& mapped)
     {
         typedef HashMapTranslator<ValueType, ValueTraits, HashFunctions> TranslatorType;
         return m_impl.template add<KeyType, MappedType, TranslatorType>(key, mapped);
@@ -214,14 +215,14 @@ namespace WTF {
 
     template<typename T, typename U, typename V, typename W, typename X>
     inline pair<typename HashMap<RefPtr<T>, U, V, W, X>::iterator, bool>
-    HashMap<RefPtr<T>, U, V, W, X>::inlineAdd(RawKeyType key, const MappedType& mapped) 
+    HashMap<RefPtr<T>, U, V, W, X>::inlineAdd(RawKeyType key, const MappedType& mapped)
     {
         return m_impl.template add<RawKeyType, MappedType, RawKeyTranslator>(key, mapped);
     }
 
     template<typename T, typename U, typename V, typename W, typename X>
     pair<typename HashMap<RefPtr<T>, U, V, W, X>::iterator, bool>
-    HashMap<RefPtr<T>, U, V, W, X>::set(const KeyType& key, const MappedType& mapped) 
+    HashMap<RefPtr<T>, U, V, W, X>::set(const KeyType& key, const MappedType& mapped)
     {
         pair<iterator, bool> result = inlineAdd(key, mapped);
         if (!result.second) {
@@ -233,7 +234,7 @@ namespace WTF {
 
     template<typename T, typename U, typename V, typename W, typename X>
     pair<typename HashMap<RefPtr<T>, U, V, W, X>::iterator, bool>
-    HashMap<RefPtr<T>, U, V, W, X>::set(RawKeyType key, const MappedType& mapped) 
+    HashMap<RefPtr<T>, U, V, W, X>::set(RawKeyType key, const MappedType& mapped)
     {
         pair<iterator, bool> result = inlineAdd(key, mapped);
         if (!result.second) {
@@ -267,13 +268,15 @@ namespace WTF {
         return entry->second;
     }
 
-    template<typename T, typename U, typename V, typename W, typename MappedTraits>
-    typename HashMap<RefPtr<T>, U, V, W, MappedTraits>::MappedType
-    inline HashMap<RefPtr<T>, U, V, W, MappedTraits>::inlineGet(RawKeyType key) const
+    template<typename T, typename MappedArg, typename HashArg, typename KeyTraitsArg, typename MappedTraitsArg>
+    typename HashMap<RefPtr<T>, MappedArg, HashArg, KeyTraitsArg, MappedTraitsArg>::MappedType
+    inline HashMap<RefPtr<T>, MappedArg, HashArg, KeyTraitsArg, MappedTraitsArg>::inlineGet(RawKeyType key) const
     {
         ValueType* entry = const_cast<HashTableType&>(m_impl).template lookup<RawKeyType, RawKeyTranslator>(key);
-        if (!entry)
+
+        if (!entry) {
             return MappedTraits::emptyValue();
+        }
         return entry->second;
     }
 
@@ -299,8 +302,8 @@ namespace WTF {
         remove(find(key));
     }
 
-    template<typename T, typename U, typename V, typename W, typename X>
-    inline void HashMap<RefPtr<T>, U, V, W, X>::remove(RawKeyType key)
+    template<typename T, typename MappedArg, typename HashArg, typename KeyTraitsArg, typename MappedTraitsArg>
+    inline void HashMap<RefPtr<T>, MappedArg, HashArg, KeyTraitsArg, MappedTraitsArg>::remove(RawKeyType key)
     {
         remove(find(key));
     }

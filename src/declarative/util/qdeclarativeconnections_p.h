@@ -48,7 +48,7 @@ class QDeclarativeConnections : public QObject, public QDeclarativeParserStatus
    DECL_CS_PROPERTY_WRITE(ignoreUnknownSignals, setIgnoreUnknownSignals)
 
  public:
-   QDeclarativeConnections(QObject *parent = 0);
+   QDeclarativeConnections(QObject *parent = nullptr);
    ~QDeclarativeConnections();
 
    QObject *target() const;

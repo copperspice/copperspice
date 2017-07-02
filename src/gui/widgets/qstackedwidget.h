@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
-   explicit QStackedWidget(QWidget *parent = 0);
+   explicit QStackedWidget(QWidget *parent = nullptr);
    ~QStackedWidget();
 
    int addWidget(QWidget *w);

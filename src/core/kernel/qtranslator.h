@@ -39,7 +39,7 @@ class Q_CORE_EXPORT QTranslator : public QObject
    CORE_CS_OBJECT(QTranslator)
 
  public:
-   explicit QTranslator(QObject *parent = 0);
+   explicit QTranslator(QObject *parent = nullptr);
    ~QTranslator();
 
    // ### Qt5/Merge (with "int n = -1")

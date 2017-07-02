@@ -40,7 +40,7 @@ class Q_GUI_EXPORT QSound : public QObject
    static bool isAvailable();
    static void play(const QString &filename);
 
-   explicit QSound(const QString &filename, QObject *parent = 0);
+   explicit QSound(const QString &filename, QObject *parent = nullptr);
    ~QSound();
 
    int loops() const;

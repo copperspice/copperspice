@@ -33,7 +33,7 @@ class SourceCodeView : public QPlainTextEdit
 {
    Q_OBJECT
  public:
-   SourceCodeView(QWidget *parent = 0);
+   SourceCodeView(QWidget *parent = nullptr);
    void setSourceContext(const QString &fileName, const int lineNum);
    void setCodecName(const QByteArray &codecName);
 

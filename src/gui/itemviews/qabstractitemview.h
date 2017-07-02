@@ -124,7 +124,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
       ScrollPerPixel
    };
 
-   explicit QAbstractItemView(QWidget *parent = 0);
+   explicit QAbstractItemView(QWidget *parent = nullptr);
    ~QAbstractItemView();
 
    virtual void setModel(QAbstractItemModel *model);
@@ -319,7 +319,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_1(Protected, virtual void editorDestroyed(QObject *editor))
    GUI_CS_SLOT_2(editorDestroyed)
 
-   QAbstractItemView(QAbstractItemViewPrivate &, QWidget *parent = 0);
+   QAbstractItemView(QAbstractItemViewPrivate &, QWidget *parent = nullptr);
 
    void setHorizontalStepsPerItem(int steps);
    int horizontalStepsPerItem() const;

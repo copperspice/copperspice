@@ -62,7 +62,7 @@ namespace QT7
         CS_INTERFACES(Phonon::EffectInterface, Phonon::VolumeFaderInterface)
   
         public:
-            AudioMixer(QObject *parent = 0);
+            AudioMixer(QObject *parent = nullptr);
             ~AudioMixer();
             AudioMixerAudioNode *m_audioNode;
             Phonon::VolumeFaderEffect::FadeCurve m_fadeCurve;

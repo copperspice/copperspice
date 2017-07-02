@@ -44,7 +44,7 @@ class QScriptCompletionTask : public QScriptCompletionTaskInterface
       QScriptDebuggerCommandSchedulerInterface *commandScheduler,
       QScriptDebuggerJobSchedulerInterface *jobScheduler,
       QScriptDebuggerConsole *console,
-      QObject *parent = 0);
+      QObject *parent = nullptr);
    ~QScriptCompletionTask();
 
    void start();

@@ -51,7 +51,7 @@ class QEventDispatcherMac : public QAbstractEventDispatcher
    Q_DECLARE_PRIVATE(QEventDispatcherMac)
 
  public:
-   explicit QEventDispatcherMac(QObject *parent = 0);
+   explicit QEventDispatcherMac(QObject *parent = nullptr);
    ~QEventDispatcherMac();
 
    bool processEvents(QEventLoop::ProcessEventsFlags flags) override;

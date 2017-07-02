@@ -72,8 +72,8 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
       AlternativeType
    };
 
-   QHttpMultiPart(QObject *parent = 0);
-   QHttpMultiPart(ContentType contentType, QObject *parent = 0);
+   QHttpMultiPart(QObject *parent = nullptr);
+   QHttpMultiPart(ContentType contentType, QObject *parent = nullptr);
    ~QHttpMultiPart();
 
    void append(const QHttpPart &httpPart);

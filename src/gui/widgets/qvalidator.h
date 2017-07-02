@@ -40,7 +40,7 @@ class Q_GUI_EXPORT QValidator : public QObject
    GUI_CS_OBJECT(QValidator)
 
  public:
-   explicit QValidator(QObject *parent = 0);
+   explicit QValidator(QObject *parent = nullptr);
    ~QValidator();
 
    enum State {
@@ -80,8 +80,8 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
    GUI_CS_PROPERTY_NOTIFY(top, topChanged)
 
  public:
-   explicit QIntValidator(QObject *parent = 0);
-   QIntValidator(int bottom, int top, QObject *parent = 0);
+   explicit QIntValidator(QObject *parent = nullptr);
+   QIntValidator(int bottom, int top, QObject *parent = nullptr);
    ~QIntValidator();
 
    QValidator::State validate(QString &, int &) const override;
@@ -143,8 +143,8 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
    GUI_CS_PROPERTY_NOTIFY(notation, notationChanged)
 
  public:
-   explicit QDoubleValidator(QObject *parent = 0);
-   QDoubleValidator(double bottom, double top, int decimals, QObject *parent = 0);
+   explicit QDoubleValidator(QObject *parent = nullptr);
+   QDoubleValidator(double bottom, double top, int decimals, QObject *parent = nullptr);
    ~QDoubleValidator();
 
    enum Notation {
@@ -191,8 +191,8 @@ class Q_GUI_EXPORT QRegExpValidator : public QValidator
    GUI_CS_PROPERTY_NOTIFY(regExp, regExpChanged)
 
  public:
-   explicit QRegExpValidator(QObject *parent = 0);
-   QRegExpValidator(const QRegExp &rx, QObject *parent = 0);
+   explicit QRegExpValidator(QObject *parent = nullptr);
+   QRegExpValidator(const QRegExp &rx, QObject *parent = nullptr);
    ~QRegExpValidator();
 
    QValidator::State validate(QString &input, int &pos) const override;
@@ -218,8 +218,8 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
    GUI_CS_PROPERTY_NOTIFY(regularExpression, regularExpressionChanged)
 
  public:
-   explicit QRegularExpressionValidator(QObject *parent = 0);
-   explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = 0);
+   explicit QRegularExpressionValidator(QObject *parent = nullptr);
+   explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = nullptr);
    ~QRegularExpressionValidator();
 
    QValidator::State validate(QString &input, int &pos) const override;

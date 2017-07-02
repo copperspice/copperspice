@@ -52,8 +52,8 @@ class Q_GUI_EXPORT QMenu : public QWidget
    GUI_CS_PROPERTY_WRITE(toolTipsVisible, setToolTipsVisible)
 
  public:
-   explicit QMenu(QWidget *parent = 0);
-   explicit QMenu(const QString &title, QWidget *parent = 0);
+   explicit QMenu(QWidget *parent = nullptr);
+   explicit QMenu(const QString &title, QWidget *parent = nullptr);
    ~QMenu();
 
    using QWidget::addAction;
@@ -154,7 +154,7 @@ class Q_GUI_EXPORT QMenu : public QWidget
    bool focusNextPrevChild(bool next) override;
    void initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const;
 
-   QMenu(QMenuPrivate &dd, QWidget *parent = 0);
+   QMenu(QMenuPrivate &dd, QWidget *parent = nullptr);
 
  private :
    GUI_CS_SLOT_1(Private, void internalSetSloppyAction())

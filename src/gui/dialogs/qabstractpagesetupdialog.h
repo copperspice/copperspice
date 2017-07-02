@@ -32,16 +32,16 @@ QT_BEGIN_NAMESPACE
 class QAbstractPageSetupDialogPrivate;
 class QPrinter;
 
-// ### Qt5/Remove this class
+// ### Qt5 - Remove this class
 class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
 {
    GUI_CS_OBJECT(QAbstractPageSetupDialog)
    Q_DECLARE_PRIVATE(QAbstractPageSetupDialog)
 
  public:
-   explicit QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent = 0);
+   explicit QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent = nullptr);
    QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr,
-                            QPrinter *printer, QWidget *parent = 0);
+                            QPrinter *printer, QWidget *parent = nullptr);
    ~QAbstractPageSetupDialog();
 
    virtual int exec() = 0;

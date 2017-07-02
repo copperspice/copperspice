@@ -53,7 +53,7 @@ class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
                   QPoint *offset = 0, QGraphicsEffect::PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect) const;
 
  protected:
-   QGraphicsEffectSource(QGraphicsEffectSourcePrivate &dd, QObject *parent = 0);
+   QGraphicsEffectSource(QGraphicsEffectSourcePrivate &dd, QObject *parent = nullptr);
 
    QScopedPointer<QGraphicsEffectSourcePrivate> d_ptr;
 

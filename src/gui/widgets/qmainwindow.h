@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    };
    using DockOptions = QFlags<DockOption>;
 
-   explicit QMainWindow(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   explicit QMainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
    ~QMainWindow();
 
    QSize iconSize() const;

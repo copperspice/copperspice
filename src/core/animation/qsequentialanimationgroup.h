@@ -40,7 +40,7 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
    CORE_CS_PROPERTY_NOTIFY(currentAnimation, currentAnimationChanged)
 
  public:
-   QSequentialAnimationGroup(QObject *parent = 0);
+   QSequentialAnimationGroup(QObject *parent = nullptr);
    ~QSequentialAnimationGroup();
 
    QPauseAnimation *addPause(int msecs);

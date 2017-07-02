@@ -419,7 +419,6 @@ void QWidgetPrivate::show_sys()
    }
 }
 
-
 void QWidgetPrivate::hide_sys()
 {
    Q_Q(QWidget);
@@ -714,15 +713,6 @@ int QWidget::metric(PaintDeviceMetric m) const
    return val;
 }
 
-/*!
-    \preliminary
-    \since 4.8
-
-    Sets the window to be the platform \a window specified.
-
-    The widget takes ownership of the \a window. Any platform window
-    previously set on the widget will be destroyed.
-*/
 void QWidget::setPlatformWindow(QPlatformWindow *window)
 {
    Q_D(QWidget);
@@ -736,12 +726,6 @@ void QWidget::setPlatformWindow(QPlatformWindow *window)
    topData->platformWindow = window;
 }
 
-/*!
-    \preliminary
-    \since 4.8
-
-    Returns the QPlatformWindow this widget will be drawn into.
-*/
 QPlatformWindow *QWidget::platformWindow() const
 {
    Q_D(const QWidget);
@@ -753,11 +737,6 @@ QPlatformWindow *QWidget::platformWindow() const
    return 0;
 }
 
-/*!
-    \since 4.8
-
-    Sets the platform window format for the widget to the \a format specified.
-*/
 void QWidget::setPlatformWindowFormat(const QPlatformWindowFormat &format)
 {
    if (isWindow() || testAttribute(Qt::WA_NativeWindow)) {
@@ -775,11 +754,6 @@ void QWidget::setPlatformWindowFormat(const QPlatformWindowFormat &format)
    }
 }
 
-/*!
-    \since 4.8
-
-    Returns the platform window format for the widget.
-*/
 QPlatformWindowFormat QWidget::platformWindowFormat() const
 {
    Q_D(const QWidget);
@@ -939,6 +913,6 @@ void qt_qpa_set_cursor(QWidget *w, bool force)
       }
    }
 }
-#endif //QT_NO_CURSOR 
+#endif //QT_NO_CURSOR
 
 QT_END_NAMESPACE

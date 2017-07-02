@@ -34,7 +34,7 @@ class Q_GUI_EXPORT QMacCocoaViewContainer : public QWidget
    GUI_CS_OBJECT(QMacCocoaViewContainer)
 
  public:
-   QMacCocoaViewContainer(void *cocoaViewToWrap, QWidget *parent = 0);
+   QMacCocoaViewContainer(void *cocoaViewToWrap, QWidget *parent = nullptr);
    virtual ~QMacCocoaViewContainer();
 
    void setCocoaView(void *cocoaViewToWrap);

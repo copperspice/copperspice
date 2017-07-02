@@ -60,7 +60,7 @@ class QFtpDTP : public QObject
       CsConnectionRefused
    };
 
-   QFtpDTP(QFtpPI *p, QObject *parent = 0);
+   QFtpDTP(QFtpPI *p, QObject *parent = nullptr);
 
    void setData(QByteArray *);
    void setDevice(QIODevice *);
@@ -152,7 +152,7 @@ class QFtpPI : public QObject
    NET_CS_OBJECT(QFtpPI)
 
  public:
-   QFtpPI(QObject *parent = 0);
+   QFtpPI(QObject *parent = nullptr);
 
    void connectToHost(const QString &host, quint16 port);
 

@@ -81,7 +81,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
       TabbedView
    };
 
-   QMdiArea(QWidget *parent = 0);
+   QMdiArea(QWidget *parent = nullptr);
    ~QMdiArea();
 
    QSize sizeHint() const override;

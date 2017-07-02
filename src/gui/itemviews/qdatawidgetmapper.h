@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QDataWidgetMapper: public QObject
    GUI_CS_PROPERTY_WRITE(submitPolicy, setSubmitPolicy)
 
  public:
-   QDataWidgetMapper(QObject *parent = 0);
+   QDataWidgetMapper(QObject *parent = nullptr);
    ~QDataWidgetMapper();
 
    void setModel(QAbstractItemModel *model);

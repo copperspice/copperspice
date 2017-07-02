@@ -92,8 +92,8 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
       Version9 = 16,
    };
 
-   explicit QPSQLDriver(QObject *parent = 0);
-   explicit QPSQLDriver(PGconn *conn, QObject *parent = 0);
+   explicit QPSQLDriver(QObject *parent = nullptr);
+   explicit QPSQLDriver(PGconn *conn, QObject *parent = nullptr);
    ~QPSQLDriver();
    bool hasFeature(DriverFeature f) const;
    bool open(const QString &db,

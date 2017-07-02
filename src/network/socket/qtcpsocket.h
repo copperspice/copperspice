@@ -35,11 +35,11 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
    NET_CS_OBJECT(QTcpSocket)
 
  public:
-   explicit QTcpSocket(QObject *parent = 0);
+   explicit QTcpSocket(QObject *parent = nullptr);
    virtual ~QTcpSocket();
 
  protected:
-   QTcpSocket(QTcpSocketPrivate &dd, QObject *parent = 0);
+   QTcpSocket(QTcpSocketPrivate &dd, QObject *parent = nullptr);
 
  private:
    Q_DISABLE_COPY(QTcpSocket)

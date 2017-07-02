@@ -54,8 +54,8 @@ class Q_DECLARATIVE_EXPORT QDeclarativeView : public QGraphicsView
    CS_ENUM(Status)
 
  public:
-   explicit QDeclarativeView(QWidget *parent = 0);
-   QDeclarativeView(const QUrl &source, QWidget *parent = 0);
+   explicit QDeclarativeView(QWidget *parent = nullptr);
+   QDeclarativeView(const QUrl &source, QWidget *parent = nullptr);
    virtual ~QDeclarativeView();
 
    QUrl source() const;

@@ -38,8 +38,8 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
    SVG_CS_OBJECT(QSvgWidget)
 
  public:
-   QSvgWidget(QWidget *parent = 0);
-   QSvgWidget(const QString &file, QWidget *parent = 0);
+   QSvgWidget(QWidget *parent = nullptr);
+   QSvgWidget(const QString &file, QWidget *parent = nullptr);
    ~QSvgWidget();
 
    QSvgRenderer *renderer() const;

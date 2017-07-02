@@ -48,7 +48,7 @@ class QHttpSocketEngine : public QAbstractSocketEngine
       ReadResponseContent
    };
 
-   QHttpSocketEngine(QObject *parent = 0);
+   QHttpSocketEngine(QObject *parent = nullptr);
    ~QHttpSocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type,

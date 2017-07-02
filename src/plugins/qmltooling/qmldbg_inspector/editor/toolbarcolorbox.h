@@ -37,7 +37,7 @@ class ToolBarColorBox : public QLabel
     Q_OBJECT
 
 public:
-    explicit ToolBarColorBox(QWidget *parent = 0);
+    explicit ToolBarColorBox(QWidget *parent = nullptr);
     void setColor(const QColor &color);
 
 protected:

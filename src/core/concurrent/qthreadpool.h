@@ -47,7 +47,7 @@ class Q_CORE_EXPORT QThreadPool : public QObject
    friend class QFutureInterfaceBase;
 
  public:
-   QThreadPool(QObject *parent = 0);
+   QThreadPool(QObject *parent = nullptr);
    ~QThreadPool();
 
    static QThreadPool *globalInstance();

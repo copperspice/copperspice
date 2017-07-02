@@ -36,7 +36,7 @@ class QTextImageHandler : public QObject, public QTextObjectInterface
    CS_INTERFACES(QTextObjectInterface)
 
  public:
-   explicit QTextImageHandler(QObject *parent = 0);
+   explicit QTextImageHandler(QObject *parent = nullptr);
 
    QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) override;
    void drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument,

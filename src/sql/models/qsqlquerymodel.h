@@ -39,7 +39,7 @@ class Q_SQL_EXPORT QSqlQueryModel: public QAbstractTableModel
    Q_DECLARE_PRIVATE(QSqlQueryModel)
 
  public:
-   explicit QSqlQueryModel(QObject *parent = 0);
+   explicit QSqlQueryModel(QObject *parent = nullptr);
    virtual ~QSqlQueryModel();
 
    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -70,7 +70,7 @@ class Q_SQL_EXPORT QSqlQueryModel: public QAbstractTableModel
 
    QModelIndex indexInQuery(const QModelIndex &item) const;
    void setLastError(const QSqlError &error);
-   QSqlQueryModel(QSqlQueryModelPrivate &dd, QObject *parent = 0);
+   QSqlQueryModel(QSqlQueryModelPrivate &dd, QObject *parent = nullptr);
 };
 
 QT_END_NAMESPACE

@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
       PadToEffectiveBoundingRect
    };
 
-   QGraphicsEffect(QObject *parent = 0);
+   QGraphicsEffect(QObject *parent = nullptr);
    virtual ~QGraphicsEffect();
 
    virtual QRectF boundingRectFor(const QRectF &sourceRect) const;
@@ -89,7 +89,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
    GUI_CS_SIGNAL_2(enabledChanged, enabled)
 
  protected:
-   QGraphicsEffect(QGraphicsEffectPrivate &d, QObject *parent = 0);
+   QGraphicsEffect(QGraphicsEffectPrivate &d, QObject *parent = nullptr);
    virtual void draw(QPainter *painter) = 0;
    virtual void sourceChanged(ChangeFlags flags);
    void updateBoundingRect();
@@ -129,7 +129,7 @@ class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
    GUI_CS_PROPERTY_NOTIFY(strength, strengthChanged)
 
  public:
-   QGraphicsColorizeEffect(QObject *parent = 0);
+   QGraphicsColorizeEffect(QObject *parent = nullptr);
    ~QGraphicsColorizeEffect();
 
    QColor color() const;
@@ -173,7 +173,7 @@ class Q_GUI_EXPORT QGraphicsBlurEffect: public QGraphicsEffect
    };
    using BlurHints = QFlags<BlurHint>;
 
-   QGraphicsBlurEffect(QObject *parent = 0);
+   QGraphicsBlurEffect(QObject *parent = nullptr);
    ~QGraphicsBlurEffect();
 
    QRectF boundingRectFor(const QRectF &rect) const override;
@@ -291,7 +291,7 @@ class Q_GUI_EXPORT QGraphicsOpacityEffect: public QGraphicsEffect
    GUI_CS_PROPERTY_NOTIFY(opacityMask, opacityMaskChanged)
 
  public:
-   QGraphicsOpacityEffect(QObject *parent = 0);
+   QGraphicsOpacityEffect(QObject *parent = nullptr);
    ~QGraphicsOpacityEffect();
 
    qreal opacity() const;

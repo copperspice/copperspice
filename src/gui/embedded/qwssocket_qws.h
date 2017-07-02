@@ -44,7 +44,7 @@ class QWSSocket : public QWS_SOCK_BASE
    GUI_CS_OBJECT(QWSSocket)
 
  public:
-   explicit QWSSocket(QObject *parent = 0);
+   explicit QWSSocket(QObject *parent = nullptr);
    ~QWSSocket();
 
    bool connectToLocalFile(const QString &file);
@@ -75,7 +75,7 @@ class QWSServerSocket : public QWS_SOCK_SERVER_BASE
    GUI_CS_OBJECT(QWSServerSocket)
 
  public:
-   QWSServerSocket(const QString &file, QObject *parent = 0);
+   QWSServerSocket(const QString &file, QObject *parent = nullptr);
    ~QWSServerSocket();
 
 #ifndef QT_NO_SXE

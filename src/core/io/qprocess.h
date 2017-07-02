@@ -109,7 +109,7 @@ class Q_CORE_EXPORT QProcess : public QIODevice
       CrashExit
    };
 
-   explicit QProcess(QObject *parent = 0);
+   explicit QProcess(QObject *parent = nullptr);
    virtual ~QProcess();
 
    void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);

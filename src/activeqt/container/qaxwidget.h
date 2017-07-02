@@ -62,8 +62,8 @@ public:
     const char *className() const;
     
     QAxWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
-    QAxWidget(const QString &c, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    QAxWidget(IUnknown *iface, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    QAxWidget(const QString &c, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+    QAxWidget(IUnknown *iface, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
     ~QAxWidget();
     
     void clear();

@@ -34,7 +34,7 @@ class QScriptDebuggerConsoleWidget : public QScriptDebuggerConsoleWidgetInterfac
    SCRIPT_T_CS_OBJECT(QScriptDebuggerConsoleWidget)
 
  public:
-   QScriptDebuggerConsoleWidget(QWidget *parent = 0);
+   QScriptDebuggerConsoleWidget(QWidget *parent = nullptr);
    ~QScriptDebuggerConsoleWidget();
 
    void message(QtMsgType type, const QString &text,

@@ -34,7 +34,7 @@ class QScriptDebuggerStackModelPrivate;
 class QScriptDebuggerStackModel : public QAbstractTableModel
 {
  public:
-   QScriptDebuggerStackModel(QObject *parent = 0);
+   QScriptDebuggerStackModel(QObject *parent = nullptr);
    ~QScriptDebuggerStackModel();
 
    QList<QScriptContextInfo> contextInfos() const;

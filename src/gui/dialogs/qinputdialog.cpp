@@ -115,7 +115,7 @@ class QInputDialogDoubleSpinBox : public QDoubleSpinBox
    GUI_CS_OBJECT(QInputDialogDoubleSpinBox)
 
  public:
-   QInputDialogDoubleSpinBox(QWidget *parent = 0)
+   QInputDialogDoubleSpinBox(QWidget *parent = nullptr)
       : QDoubleSpinBox(parent) {
       connect(lineEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(notifyTextChanged()));
       connect(this, SIGNAL(editingFinished()), this, SLOT(notifyTextChanged()));
@@ -1323,7 +1323,7 @@ int QInputDialog::getInteger(QWidget *parent, const QString &title, const QStrin
     \fn QString QInputDialog::getText(const QString &title, const QString &label,
                                       QLineEdit::EchoMode echo = QLineEdit::Normal,
                                       const QString &text = QString(), bool *ok = 0,
-                                      QWidget *parent = 0, const char *name = 0, Qt::WindowFlags flags = 0)
+                                      QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
 
     Call getText(\a parent, \a title, \a label, \a echo, \a text, \a
     ok, \a flags) instead.
@@ -1335,7 +1335,7 @@ int QInputDialog::getInteger(QWidget *parent, const QString &title, const QStrin
     \fn int QInputDialog::getInteger(const QString &title, const QString &label, int value = 0,
                                      int min = -2147483647, int max = 2147483647,
                                      int step = 1, bool *ok = 0,
-                                     QWidget *parent = 0, const char *name = 0, Qt::WindowFlags flags = 0)
+                                     QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
 
 
     Call getInteger(\a parent, \a title, \a label, \a value, \a
@@ -1348,7 +1348,7 @@ int QInputDialog::getInteger(QWidget *parent, const QString &title, const QStrin
     \fn double QInputDialog::getDouble(const QString &title, const QString &label, double value = 0,
                                        double min = -2147483647, double max = 2147483647,
                                        int decimals = 1, bool *ok = 0,
-                                       QWidget *parent = 0, const char *name = 0, Qt::WindowFlags flags = 0)
+                                       QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
 
     Call getDouble(\a parent, \a title, \a label, \a value, \a
     min, \a max, \a decimals, \a ok, \a flags).
@@ -1359,7 +1359,7 @@ int QInputDialog::getInteger(QWidget *parent, const QString &title, const QStrin
 /*!
     \fn QString QInputDialog::getItem(const QString &title, const QString &label, const QStringList &list,
                                       int current = 0, bool editable = true, bool *ok = 0,
-                                      QWidget *parent = 0, const char *name = 0, Qt::WindowFlags flags = 0)
+                                      QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
 
     Call getItem(\a parent, \a title, \a label, \a list, \a current,
     \a editable, \a ok, \a flags) instead.

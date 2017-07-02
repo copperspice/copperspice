@@ -49,7 +49,7 @@ namespace Phonon
             CS_INTERFACES(Phonon::BackendInterface)
 
         public:
-            Backend(QObject *parent = 0, const QVariantList & = QVariantList());
+            Backend(QObject *parent = nullptr, const QVariantList & = QVariantList());
             virtual ~Backend();
 
             QObject *createObject(Phonon::BackendInterface::Class, QObject *parent, const QList<QVariant> &args);

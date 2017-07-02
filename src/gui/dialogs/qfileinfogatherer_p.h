@@ -149,7 +149,7 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SIGNAL_1(Public, void directoryLoaded(const QString &path))
    GUI_CS_SIGNAL_2(directoryLoaded, path)
 
-   QFileInfoGatherer(QObject *parent = 0);
+   QFileInfoGatherer(QObject *parent = nullptr);
    ~QFileInfoGatherer();
 
    void clear();

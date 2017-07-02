@@ -48,9 +48,9 @@ class PHONON_EXPORT VideoPlayer : public QWidget
     PHN_CS_OBJECT(VideoPlayer)
 
     public:      
-        explicit VideoPlayer(Phonon::Category category, QWidget *parent = 0);
+        explicit VideoPlayer(Phonon::Category category, QWidget *parent = nullptr);
      
-        VideoPlayer(QWidget *parent = 0);      
+        VideoPlayer(QWidget *parent = nullptr);      
         ~VideoPlayer();
       
         qint64 totalTime() const;        

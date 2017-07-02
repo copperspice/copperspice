@@ -66,8 +66,8 @@ class PHONON_EXPORT SeekSlider : public QWidget
     PHN_CS_PROPERTY_WRITE(iconSize, setIconSize)
 
     public:       
-        explicit SeekSlider(QWidget *parent = 0);
-        explicit SeekSlider(MediaObject *media, QWidget *parent = 0);
+        explicit SeekSlider(QWidget *parent = nullptr);
+        explicit SeekSlider(MediaObject *media, QWidget *parent = nullptr);
        
         ~SeekSlider();
 

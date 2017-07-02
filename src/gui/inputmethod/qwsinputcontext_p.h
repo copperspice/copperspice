@@ -38,7 +38,7 @@ class QWSInputContext : public QInputContext
    GUI_CS_OBJECT(QWSInputContext)
 
  public:
-   explicit QWSInputContext(QObject *parent = 0);
+   explicit QWSInputContext(QObject *parent = nullptr);
    ~QWSInputContext() {}
 
    QString identifierName() {

@@ -93,7 +93,7 @@ class QMessageBoxDetailsText : public QWidget
    class TextEdit : public QTextEdit
    {
     public:
-      TextEdit(QWidget *parent = 0) : QTextEdit(parent) { }
+      TextEdit(QWidget *parent = nullptr) : QTextEdit(parent) { }
 
       void contextMenuEvent(QContextMenuEvent *e)  override {
 
@@ -107,7 +107,7 @@ class QMessageBoxDetailsText : public QWidget
       }
    };
 
-   QMessageBoxDetailsText(QWidget *parent = 0)
+   QMessageBoxDetailsText(QWidget *parent = nullptr)
       : QWidget(parent) {
       QVBoxLayout *layout = new QVBoxLayout;
       layout->setMargin(0);

@@ -46,7 +46,7 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
    };
    using BindMode = QFlags<BindFlag>;
 
-   explicit QUdpSocket(QObject *parent = 0);
+   explicit QUdpSocket(QObject *parent = nullptr);
    virtual ~QUdpSocket();
 
    bool bind(const QHostAddress &address, quint16 port);

@@ -41,7 +41,7 @@ class QDeclarativeTranslate : public QGraphicsTransform
    DECL_CS_PROPERTY_NOTIFY(y, yChanged)
 
  public:
-   QDeclarativeTranslate(QObject *parent = 0);
+   QDeclarativeTranslate(QObject *parent = nullptr);
    ~QDeclarativeTranslate();
 
    qreal x() const;

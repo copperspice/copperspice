@@ -101,7 +101,7 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    QFileDevice();
 
    explicit QFileDevice(QObject *parent);
-   QFileDevice(QFileDevicePrivate &dd, QObject *parent = 0);
+   QFileDevice(QFileDevicePrivate &dd, QObject *parent = nullptr);
 
    qint64 readData(char *data, qint64 maxlen) override;
    qint64 writeData(const char *data, qint64 len) override;

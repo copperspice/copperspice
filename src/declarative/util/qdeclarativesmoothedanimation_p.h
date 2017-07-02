@@ -52,7 +52,7 @@ class QDeclarativeSmoothedAnimation : public QDeclarativeNumberAnimation
  public:
    enum ReversingMode { Eased, Immediate, Sync };
 
-   QDeclarativeSmoothedAnimation(QObject *parent = 0);
+   QDeclarativeSmoothedAnimation(QObject *parent = nullptr);
    ~QDeclarativeSmoothedAnimation();
 
    ReversingMode reversingMode() const;

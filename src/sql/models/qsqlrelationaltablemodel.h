@@ -68,7 +68,7 @@ class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
       LeftJoin
    };
 
-   explicit QSqlRelationalTableModel(QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
+   explicit QSqlRelationalTableModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
    virtual ~QSqlRelationalTableModel();
 
    QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const override;

@@ -52,7 +52,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeTransition : public QObject
    DECL_CS_CLASSINFO("DeferredPropertyNames", "animations")
 
  public:
-   QDeclarativeTransition(QObject *parent = 0);
+   QDeclarativeTransition(QObject *parent = nullptr);
    ~QDeclarativeTransition();
 
    QString fromState() const;

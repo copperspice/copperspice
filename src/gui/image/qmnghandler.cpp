@@ -370,12 +370,11 @@ QMngHandler::~QMngHandler()
 {
 }
 
-/*! \reimp */
 bool QMngHandler::canRead() const
 {
    Q_D(const QMngHandler);
-   if ((!d->haveReadNone
-         && (!d->haveReadAll || (d->haveReadAll && (d->nextIndex < d->frameCount))))
+
+   if ((!d->haveReadNone && (!d->haveReadAll || (d->haveReadAll && (d->nextIndex < d->frameCount))))
          || canRead(device())) {
       setFormat("mng");
       return true;
@@ -383,7 +382,6 @@ bool QMngHandler::canRead() const
    return false;
 }
 
-/*! \internal */
 bool QMngHandler::canRead(QIODevice *device)
 {
    if (!device) {
@@ -394,55 +392,47 @@ bool QMngHandler::canRead(QIODevice *device)
    return device->peek(8) == "\x8A\x4D\x4E\x47\x0D\x0A\x1A\x0A";
 }
 
-/*! \reimp */
 QByteArray QMngHandler::name() const
 {
    return "mng";
 }
 
-/*! \reimp */
 bool QMngHandler::read(QImage *image)
 {
    Q_D(QMngHandler);
    return canRead() ? d->getNextImage(image) : false;
 }
 
-/*! \reimp */
 bool QMngHandler::write(const QImage &image)
 {
    Q_D(QMngHandler);
    return d->writeImage(image);
 }
 
-/*! \reimp */
 int QMngHandler::currentImageNumber() const
 {
    Q_D(const QMngHandler);
    return d->currentImageNumber();
 }
 
-/*! \reimp */
 int QMngHandler::imageCount() const
 {
    Q_D(const QMngHandler);
    return d->imageCount();
 }
 
-/*! \reimp */
 bool QMngHandler::jumpToImage(int imageNumber)
 {
    Q_D(QMngHandler);
    return d->jumpToImage(imageNumber);
 }
 
-/*! \reimp */
 bool QMngHandler::jumpToNextImage()
 {
    Q_D(QMngHandler);
    return d->jumpToNextImage();
 }
 
-/*! \reimp */
 int QMngHandler::loopCount() const
 {
    Q_D(const QMngHandler);
@@ -452,14 +442,12 @@ int QMngHandler::loopCount() const
    return d->iterCount - 1;
 }
 
-/*! \reimp */
 int QMngHandler::nextImageDelay() const
 {
    Q_D(const QMngHandler);
    return d->nextImageDelay();
 }
 
-/*! \reimp */
 QVariant QMngHandler::option(ImageOption option) const
 {
    Q_D(const QMngHandler);
@@ -471,7 +459,6 @@ QVariant QMngHandler::option(ImageOption option) const
    return QVariant();
 }
 
-/*! \reimp */
 void QMngHandler::setOption(ImageOption option, const QVariant &value)
 {
    Q_D(QMngHandler);
@@ -480,7 +467,6 @@ void QMngHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-/*! \reimp */
 bool QMngHandler::supportsOption(ImageOption option) const
 {
    if (option == QImageIOHandler::Animation) {

@@ -102,7 +102,7 @@ class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
    GUI_CS_OBJECT(QDockWidgetLayout)
 
  public:
-   QDockWidgetLayout(QWidget *parent = 0);
+   QDockWidgetLayout(QWidget *parent = nullptr);
    ~QDockWidgetLayout();
 
    void addItem(QLayoutItem *item)override;

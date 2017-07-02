@@ -67,7 +67,7 @@ namespace QT7
         CS_INTERFACES(Phonon::AudioOutputInterface)
 
         public:
-            AudioOutput(QObject *parent = 0);
+            AudioOutput(QObject *parent = nullptr);
             ~AudioOutput();
 
             qreal volume() const override;

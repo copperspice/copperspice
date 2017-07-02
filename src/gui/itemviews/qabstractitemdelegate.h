@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
       RevertModelCache
    };
 
-   explicit QAbstractItemDelegate(QObject *parent = 0);
+   explicit QAbstractItemDelegate(QObject *parent = nullptr);
    virtual ~QAbstractItemDelegate();
 
    // painting

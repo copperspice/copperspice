@@ -39,7 +39,7 @@ class QScriptDebuggerLocalsModel : public QAbstractItemModel
  public:
    QScriptDebuggerLocalsModel(QScriptDebuggerJobSchedulerInterface *jobScheduler,
                               QScriptDebuggerCommandSchedulerInterface *commandScheduler,
-                              QObject *parent = 0);
+                              QObject *parent = nullptr);
 
    ~QScriptDebuggerLocalsModel();
 

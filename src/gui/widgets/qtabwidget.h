@@ -63,7 +63,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    GUI_CS_PROPERTY_WRITE(movable, setMovable)
 
  public:
-   explicit QTabWidget(QWidget *parent = 0);
+   explicit QTabWidget(QWidget *parent = nullptr);
    ~QTabWidget();
 
    int addTab(QWidget *widget, const QString &);

@@ -36,7 +36,7 @@ class Q_XMLPATTERNS_EXPORT QAbstractMessageHandler : public QObject
    XMLP_CS_OBJECT(QAbstractMessageHandler)
 
  public:
-   QAbstractMessageHandler(QObject *parent = 0);
+   QAbstractMessageHandler(QObject *parent = nullptr);
    virtual ~QAbstractMessageHandler();
 
    void message(QtMsgType type,

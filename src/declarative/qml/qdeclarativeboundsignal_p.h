@@ -34,7 +34,7 @@ class QDeclarativeAbstractBoundSignal : public QObject
    DECL_CS_OBJECT(QDeclarativeAbstractBoundSignal)
 
  public:
-   QDeclarativeAbstractBoundSignal(QObject *parent = 0);
+   QDeclarativeAbstractBoundSignal(QObject *parent = nullptr);
    virtual ~QDeclarativeAbstractBoundSignal() = 0;
    virtual void disconnect() = 0;
 

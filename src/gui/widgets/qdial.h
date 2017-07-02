@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
    GUI_CS_PROPERTY_WRITE(notchesVisible, setNotchesVisible)
 
  public:
-   explicit QDial(QWidget *parent = 0);
+   explicit QDial(QWidget *parent = nullptr);
 
    ~QDial();
 

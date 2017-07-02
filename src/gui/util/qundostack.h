@@ -77,7 +77,7 @@ class Q_GUI_EXPORT QUndoStack : public QObject
    GUI_CS_PROPERTY_WRITE(undoLimit, setUndoLimit)
 
  public:
-   explicit QUndoStack(QObject *parent = 0);
+   explicit QUndoStack(QObject *parent = nullptr);
    ~QUndoStack();
    void clear();
 

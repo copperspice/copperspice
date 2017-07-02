@@ -38,9 +38,9 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    MULTI_CS_OBJECT(QAudioInput)
 
  public:
-   explicit QAudioInput(const QAudioFormat &format = QAudioFormat(), QObject *parent = 0);
+   explicit QAudioInput(const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
    explicit QAudioInput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(),
-                        QObject *parent = 0);
+                        QObject *parent = nullptr);
    ~QAudioInput();
 
    QAudioFormat format() const;

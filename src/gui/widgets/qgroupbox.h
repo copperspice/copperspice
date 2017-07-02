@@ -52,8 +52,8 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
    GUI_CS_PROPERTY_USER(checked, true)
 
  public:
-   explicit QGroupBox(QWidget *parent = 0);
-   explicit QGroupBox(const QString &title, QWidget *parent = 0);
+   explicit QGroupBox(QWidget *parent = nullptr);
+   explicit QGroupBox(const QString &title, QWidget *parent = nullptr);
    ~QGroupBox();
 
    QString title() const;

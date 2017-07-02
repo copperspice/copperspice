@@ -57,9 +57,9 @@ public:
     QObject* qObject() const { return (QObject*)this; }
     const char *className() const;
     
-    QAxObject(QObject *parent = 0);
-    QAxObject(const QString &c, QObject *parent = 0);
-    QAxObject(IUnknown *iface, QObject *parent = 0);
+    QAxObject(QObject *parent = nullptr);
+    QAxObject(const QString &c, QObject *parent = nullptr);
+    QAxObject(IUnknown *iface, QObject *parent = nullptr);
     ~QAxObject();
     
     bool doVerb(const QString &verb);

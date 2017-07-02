@@ -61,7 +61,7 @@ class PhraseView : public QTreeView
    Q_OBJECT
 
  public:
-   PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = 0);
+   PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = nullptr);
    ~PhraseView();
    void setSourceText(int model, const QString &sourceText);
 

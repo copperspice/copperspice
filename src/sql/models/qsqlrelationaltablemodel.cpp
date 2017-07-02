@@ -65,7 +65,7 @@ struct QRelation {
 class QRelatedTableModel : public QSqlTableModel
 {
  public:
-   QRelatedTableModel(QRelation *rel, QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
+   QRelatedTableModel(QRelation *rel, QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
    bool select() override;
 
  private:

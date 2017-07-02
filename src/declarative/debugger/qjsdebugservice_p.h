@@ -53,7 +53,7 @@ class QJSDebugService : public QDeclarativeDebugService
    DECL_CS_OBJECT(QJSDebugService)
 
  public:
-   QJSDebugService(QObject *parent = 0);
+   QJSDebugService(QObject *parent = nullptr);
    ~QJSDebugService();
 
    static QJSDebugService *instance();

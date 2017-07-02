@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    };
    using SubWindowOptions = QFlags<SubWindowOption>;
 
-   QMdiSubWindow(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
    ~QMdiSubWindow();
 
    QSize sizeHint() const override;

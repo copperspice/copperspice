@@ -105,7 +105,7 @@ class Q_NETWORK_EXPORT QAbstractNetworkCache : public QObject
    NET_CS_SLOT_2(clear)
 
  protected:
-   explicit QAbstractNetworkCache(QObject *parent = 0);
+   explicit QAbstractNetworkCache(QObject *parent = nullptr);
    QAbstractNetworkCache(QAbstractNetworkCachePrivate &dd, QObject *parent);
 
    QScopedPointer<QAbstractNetworkCachePrivate> d_ptr;

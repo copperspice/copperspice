@@ -38,7 +38,7 @@ class TranslationSettingsDialog : public QDialog
    Q_OBJECT
 
  public:
-   TranslationSettingsDialog(QWidget *parent = 0);
+   TranslationSettingsDialog(QWidget *parent = nullptr);
    void setDataModel(DataModel *model);
    void setPhraseBook(PhraseBook *phraseBook);
 

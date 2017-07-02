@@ -36,7 +36,7 @@ class QPAEventDispatcherGlib : public QEventDispatcherGlib
    Q_DECLARE_PRIVATE(QPAEventDispatcherGlib)
 
  public:
-   explicit QPAEventDispatcherGlib(QObject *parent = 0);
+   explicit QPAEventDispatcherGlib(QObject *parent = nullptr);
    ~QPAEventDispatcherGlib();
 
    bool processEvents(QEventLoop::ProcessEventsFlags flags);

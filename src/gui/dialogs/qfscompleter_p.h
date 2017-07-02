@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 class QFSCompleter :  public QCompleter
 {
  public:
-   QFSCompleter(QFileSystemModel *model, QObject *parent = 0)
+   QFSCompleter(QFileSystemModel *model, QObject *parent = nullptr)
       : QCompleter(model, parent), proxyModel(0), sourceModel(model) {
 #if defined(Q_OS_WIN)
       setCaseSensitivity(Qt::CaseInsensitive);

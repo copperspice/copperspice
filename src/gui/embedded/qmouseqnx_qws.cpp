@@ -64,7 +64,6 @@ QQnxMouseHandler::~QQnxMouseHandler()
    }
 }
 
-/*! \reimp */
 void QQnxMouseHandler::resume()
 {
    if (mouseNotifier) {
@@ -72,7 +71,6 @@ void QQnxMouseHandler::resume()
    }
 }
 
-/*! \reimp */
 void QQnxMouseHandler::suspend()
 {
    if (mouseNotifier) {

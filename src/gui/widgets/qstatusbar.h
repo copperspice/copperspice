@@ -39,7 +39,7 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
    GUI_CS_PROPERTY_WRITE(sizeGripEnabled, setSizeGripEnabled)
 
  public:
-   explicit QStatusBar(QWidget *parent = 0);
+   explicit QStatusBar(QWidget *parent = nullptr);
    virtual ~QStatusBar();
 
    void addWidget(QWidget *widget, int stretch = 0);

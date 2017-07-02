@@ -39,7 +39,7 @@ class QDeclarativeTimeLine : public QAbstractAnimation
    DECL_CS_OBJECT(QDeclarativeTimeLine)
 
  public:
-   QDeclarativeTimeLine(QObject *parent = 0);
+   QDeclarativeTimeLine(QObject *parent = nullptr);
    ~QDeclarativeTimeLine();
 
    enum SyncMode { LocalSync, GlobalSync };

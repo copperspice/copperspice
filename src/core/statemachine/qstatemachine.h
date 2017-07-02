@@ -113,7 +113,7 @@ class Q_CORE_EXPORT QStateMachine : public QState
 
    CORE_CS_ENUM(RestorePolicy)
 
-   QStateMachine(QObject *parent = 0);
+   QStateMachine(QObject *parent = nullptr);
    ~QStateMachine();
 
    void addState(QAbstractState *state);

@@ -50,7 +50,7 @@ class QToolBarLayout : public QLayout
    GUI_CS_OBJECT(QToolBarLayout)
 
  public:
-   QToolBarLayout(QWidget *parent = 0);
+   QToolBarLayout(QWidget *parent = nullptr);
    ~QToolBarLayout();
 
    void addItem(QLayoutItem *item) override;

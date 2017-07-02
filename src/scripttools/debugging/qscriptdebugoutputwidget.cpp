@@ -35,7 +35,7 @@ namespace {
 class QScriptDebugOutputWidgetOutputEdit : public QPlainTextEdit
 {
  public:
-   QScriptDebugOutputWidgetOutputEdit(QWidget *parent = 0)
+   QScriptDebugOutputWidgetOutputEdit(QWidget *parent = nullptr)
       : QPlainTextEdit(parent) {
       setReadOnly(true);
       //        setFocusPolicy(Qt::NoFocus);

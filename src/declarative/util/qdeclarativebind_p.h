@@ -45,7 +45,7 @@ class QDeclarativeBind : public QObject, public QDeclarativeParserStatus
    DECL_CS_PROPERTY_WRITE(when, setWhen)
 
  public:
-   QDeclarativeBind(QObject *parent = 0);
+   QDeclarativeBind(QObject *parent = nullptr);
    ~QDeclarativeBind();
 
    bool when() const;

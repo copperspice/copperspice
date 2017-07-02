@@ -1104,7 +1104,7 @@ class QGuiEventDispatcherWin32 : public QEventDispatcherWin32
    Q_DECLARE_PRIVATE(QEventDispatcherWin32)
 
  public:
-   QGuiEventDispatcherWin32(QObject *parent = 0);
+   QGuiEventDispatcherWin32(QObject *parent = nullptr);
    bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
 };
 

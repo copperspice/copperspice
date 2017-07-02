@@ -72,8 +72,8 @@ namespace Phonon
             // wrapper for overloaded method
             inline void cs_setOutputDevice(const Phonon::AudioOutputDevice & newAudioOutputDevice);               
             
-            explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
-            explicit AudioOutput(QObject *parent = 0);
+            explicit AudioOutput(Phonon::Category category, QObject *parent = nullptr);
+            explicit AudioOutput(QObject *parent = nullptr);
 
             QString name() const;
             qreal volume() const;

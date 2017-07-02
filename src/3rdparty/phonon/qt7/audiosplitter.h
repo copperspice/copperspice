@@ -43,7 +43,7 @@ namespace QT7
     class AudioSplitter : public MediaNode
     {
         public:
-            AudioSplitter(QObject *parent = 0);
+            AudioSplitter(QObject *parent = nullptr);
             ~AudioSplitter();
     };
 

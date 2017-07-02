@@ -34,7 +34,7 @@ class QScriptDebuggerCodeFinderWidget : public QScriptDebuggerCodeFinderWidgetIn
    SCRIPT_T_CS_OBJECT(QScriptDebuggerCodeFinderWidget)
 
  public:
-   QScriptDebuggerCodeFinderWidget(QWidget *parent = 0);
+   QScriptDebuggerCodeFinderWidget(QWidget *parent = nullptr);
    ~QScriptDebuggerCodeFinderWidget();
 
    int findOptions() const;

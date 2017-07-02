@@ -42,7 +42,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    GUI_CS_SIGNAL_1(Public, void updatePreviewWidget(const QModelIndex &index))
    GUI_CS_SIGNAL_2(updatePreviewWidget, index)
 
-   explicit QColumnView(QWidget *parent = 0);
+   explicit QColumnView(QWidget *parent = nullptr);
    ~QColumnView();
 
    // QAbstractItemView overloads
@@ -66,7 +66,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    QList<int> columnWidths() const;
 
  protected:
-   QColumnView(QColumnViewPrivate &dd, QWidget *parent = 0);
+   QColumnView(QColumnViewPrivate &dd, QWidget *parent = nullptr);
 
    // QAbstractItemView overloads
    bool isIndexHidden(const QModelIndex &index) const override;

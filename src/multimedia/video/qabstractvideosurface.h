@@ -46,7 +46,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
       ResourceError
    };
 
-   explicit QAbstractVideoSurface(QObject *parent = 0);
+   explicit QAbstractVideoSurface(QObject *parent = nullptr);
    ~QAbstractVideoSurface();
 
    virtual QList<QVideoFrame::PixelFormat> supportedPixelFormats(

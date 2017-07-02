@@ -49,8 +49,8 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
    };
    using ShaderType = QFlags<ShaderTypeBit>;
 
-   explicit QGLShader(QGLShader::ShaderType type, QObject *parent = 0);
-   QGLShader(QGLShader::ShaderType type, const QGLContext *context, QObject *parent = 0);
+   explicit QGLShader(QGLShader::ShaderType type, QObject *parent = nullptr);
+   QGLShader(QGLShader::ShaderType type, const QGLContext *context, QObject *parent = nullptr);
    virtual ~QGLShader();
 
    QGLShader::ShaderType shaderType() const;
@@ -98,8 +98,8 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    OPENGL_CS_OBJECT(QGLShaderProgram)
 
  public:
-   explicit QGLShaderProgram(QObject *parent = 0);
-   explicit QGLShaderProgram(const QGLContext *context, QObject *parent = 0);
+   explicit QGLShaderProgram(QObject *parent = nullptr);
+   explicit QGLShaderProgram(const QGLContext *context, QObject *parent = nullptr);
    virtual ~QGLShaderProgram();
 
    bool addShader(QGLShader *shader);

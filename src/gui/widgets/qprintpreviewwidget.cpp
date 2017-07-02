@@ -118,7 +118,7 @@ class GraphicsView : public QGraphicsView
    GUI_CS_OBJECT(GraphicsView)
 
  public:
-   GraphicsView(QWidget *parent = 0)
+   GraphicsView(QWidget *parent = nullptr)
       : QGraphicsView(parent) {
 
 #ifdef Q_OS_MAC

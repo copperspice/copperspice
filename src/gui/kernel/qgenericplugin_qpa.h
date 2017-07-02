@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QGenericPlugin : public QObject, public QGenericPluginFactory
    CS_INTERFACES(QGenericPluginFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QGenericPlugin(QObject *parent = 0);
+   explicit QGenericPlugin(QObject *parent = nullptr);
    ~QGenericPlugin();
 
    virtual QStringList keys() const = 0;

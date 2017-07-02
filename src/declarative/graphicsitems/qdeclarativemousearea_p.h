@@ -59,7 +59,7 @@ class QDeclarativeDrag : public QObject
    //### consider drag and drop
 
  public:
-   QDeclarativeDrag(QObject *parent = 0);
+   QDeclarativeDrag(QObject *parent = nullptr);
    ~QDeclarativeDrag();
 
    QGraphicsObject *target() const;

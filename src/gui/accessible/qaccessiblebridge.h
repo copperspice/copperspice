@@ -53,7 +53,7 @@ class Q_GUI_EXPORT QAccessibleBridgePlugin : public QObject, public QAccessibleB
    CS_INTERFACES(QAccessibleBridgeFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QAccessibleBridgePlugin(QObject *parent = 0);
+   explicit QAccessibleBridgePlugin(QObject *parent = nullptr);
    ~QAccessibleBridgePlugin();
 };
 

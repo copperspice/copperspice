@@ -44,7 +44,7 @@ class Q_CORE_EXPORT QThread : public QObject
    static int idealThreadCount();
    static void yieldCurrentThread();
 
-   explicit QThread(QObject *parent = 0);
+   explicit QThread(QObject *parent = nullptr);
    ~QThread();
 
    enum Priority {
@@ -99,7 +99,7 @@ class Q_CORE_EXPORT QThread : public QObject
 
    static void setTerminationEnabled(bool enabled = true);
 
-   QThread(QThreadPrivate &dd, QObject *parent = 0);
+   QThread(QThreadPrivate &dd, QObject *parent = nullptr);
    QScopedPointer<QThreadPrivate> d_ptr;
 
  private:

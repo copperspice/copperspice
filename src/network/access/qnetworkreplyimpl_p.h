@@ -45,7 +45,7 @@ class QNetworkReplyImpl: public QNetworkReply
    NET_CS_OBJECT(QNetworkReplyImpl)
 
  public:
-   QNetworkReplyImpl(QObject *parent = 0);
+   QNetworkReplyImpl(QObject *parent = nullptr);
    ~QNetworkReplyImpl();
 
    void abort() override;

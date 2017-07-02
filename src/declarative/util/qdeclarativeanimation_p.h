@@ -64,7 +64,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeAbstractAnimation
    DECL_CS_CLASSINFO("DefaultMethod", "start()")
 
  public:
-   QDeclarativeAbstractAnimation(QObject *parent = 0);
+   QDeclarativeAbstractAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeAbstractAnimation();
 
    enum Loops { Infinite = -2 };
@@ -153,7 +153,7 @@ class QDeclarativePauseAnimation : public QDeclarativeAbstractAnimation
    DECL_CS_PROPERTY_NOTIFY(duration, durationChanged)
 
  public:
-   QDeclarativePauseAnimation(QObject *parent = 0);
+   QDeclarativePauseAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativePauseAnimation();
 
    int duration() const;
@@ -179,7 +179,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeScriptAction : public QDeclarativ
    DECL_CS_PROPERTY_WRITE(scriptName, setStateChangeScriptName)
 
  public:
-   QDeclarativeScriptAction(QObject *parent = 0);
+   QDeclarativeScriptAction(QObject *parent = nullptr);
    virtual ~QDeclarativeScriptAction();
 
    QDeclarativeScriptString script() const;
@@ -217,7 +217,7 @@ class QDeclarativePropertyAction : public QDeclarativeAbstractAnimation
    DECL_CS_PROPERTY_NOTIFY(value, valueChanged)
 
  public:
-   QDeclarativePropertyAction(QObject *parent = 0);
+   QDeclarativePropertyAction(QObject *parent = nullptr);
    virtual ~QDeclarativePropertyAction();
 
    QObject *target() const;
@@ -284,7 +284,7 @@ class QDeclarativePropertyAnimation : public QDeclarativeAbstractAnimation
    DECL_CS_PROPERTY_READ(exclude, exclude)
 
  public:
-   QDeclarativePropertyAnimation(QObject *parent = 0);
+   QDeclarativePropertyAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativePropertyAnimation();
 
    virtual int duration() const;
@@ -345,7 +345,7 @@ class QDeclarativeColorAnimation : public QDeclarativePropertyAnimation
    DECL_CS_PROPERTY_WRITE(to, setTo)
 
  public:
-   QDeclarativeColorAnimation(QObject *parent = 0);
+   QDeclarativeColorAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeColorAnimation();
 
    QColor from() const;
@@ -366,7 +366,7 @@ class QDeclarativeNumberAnimation : public QDeclarativePropertyAnimation
    DECL_CS_PROPERTY_WRITE(to, setTo)
 
  public:
-   QDeclarativeNumberAnimation(QObject *parent = 0);
+   QDeclarativeNumberAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeNumberAnimation();
 
    qreal from() const;
@@ -393,7 +393,7 @@ class QDeclarativeVector3dAnimation : public QDeclarativePropertyAnimation
    DECL_CS_PROPERTY_WRITE(to, setTo)
 
  public:
-   QDeclarativeVector3dAnimation(QObject *parent = 0);
+   QDeclarativeVector3dAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeVector3dAnimation();
 
    QVector3D from() const;
@@ -419,7 +419,7 @@ class QDeclarativeRotationAnimation : public QDeclarativePropertyAnimation
    DECL_CS_PROPERTY_NOTIFY(direction, directionChanged)
 
  public:
-   QDeclarativeRotationAnimation(QObject *parent = 0);
+   QDeclarativeRotationAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeRotationAnimation();
 
    qreal from() const;
@@ -463,7 +463,7 @@ class QDeclarativeSequentialAnimation : public QDeclarativeAnimationGroup
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
  public:
-   QDeclarativeSequentialAnimation(QObject *parent = 0);
+   QDeclarativeSequentialAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeSequentialAnimation();
 
  protected:
@@ -479,7 +479,7 @@ class QDeclarativeParallelAnimation : public QDeclarativeAnimationGroup
    Q_DECLARE_PRIVATE(QDeclarativeAnimationGroup)
 
  public:
-   QDeclarativeParallelAnimation(QObject *parent = 0);
+   QDeclarativeParallelAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeParallelAnimation();
 
  protected:
@@ -506,7 +506,7 @@ class QDeclarativeParentAnimation : public QDeclarativeAnimationGroup
    DECL_CS_PROPERTY_NOTIFY(*via, viaChanged)
 
  public:
-   QDeclarativeParentAnimation(QObject *parent = 0);
+   QDeclarativeParentAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeParentAnimation();
 
    QDeclarativeItem *target() const;
@@ -547,7 +547,7 @@ class QDeclarativeAnchorAnimation : public QDeclarativeAbstractAnimation
    DECL_CS_PROPERTY_NOTIFY(easing, easingChanged)
 
  public:
-   QDeclarativeAnchorAnimation(QObject *parent = 0);
+   QDeclarativeAnchorAnimation(QObject *parent = nullptr);
    virtual ~QDeclarativeAnchorAnimation();
 
    QDeclarativeListProperty<QDeclarativeItem> targets();

@@ -43,7 +43,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeValueType : public QObject
 {
    DECL_CS_OBJECT(QDeclarativeValueType)
  public:
-   QDeclarativeValueType(QObject *parent = 0);
+   QDeclarativeValueType(QObject *parent = nullptr);
    virtual void read(QObject *, int) = 0;
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags flags) = 0;
    virtual QVariant value() = 0;
@@ -81,7 +81,7 @@ class QDeclarativePointFValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(y, setY)
    DECL_CS_OBJECT(QDeclarativePointFValueType)
  public:
-   QDeclarativePointFValueType(QObject *parent = 0);
+   QDeclarativePointFValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -105,7 +105,7 @@ class QDeclarativePointValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(y, setY)
    DECL_CS_OBJECT(QDeclarativePointValueType)
  public:
-   QDeclarativePointValueType(QObject *parent = 0);
+   QDeclarativePointValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -129,7 +129,7 @@ class QDeclarativeSizeFValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(height, setHeight)
    DECL_CS_OBJECT(QDeclarativeSizeFValueType)
  public:
-   QDeclarativeSizeFValueType(QObject *parent = 0);
+   QDeclarativeSizeFValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -153,7 +153,7 @@ class QDeclarativeSizeValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(height, setHeight)
    DECL_CS_OBJECT(QDeclarativeSizeValueType)
  public:
-   QDeclarativeSizeValueType(QObject *parent = 0);
+   QDeclarativeSizeValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -181,7 +181,7 @@ class QDeclarativeRectFValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(height, setHeight)
    DECL_CS_OBJECT(QDeclarativeRectFValueType)
  public:
-   QDeclarativeRectFValueType(QObject *parent = 0);
+   QDeclarativeRectFValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -214,7 +214,7 @@ class QDeclarativeRectValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(height, setHeight)
    DECL_CS_OBJECT(QDeclarativeRectValueType)
  public:
-   QDeclarativeRectValueType(QObject *parent = 0);
+   QDeclarativeRectValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -243,7 +243,7 @@ class QDeclarativeVector2DValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(y, setY)
    DECL_CS_OBJECT(QDeclarativeVector2DValueType)
  public:
-   QDeclarativeVector2DValueType(QObject *parent = 0);
+   QDeclarativeVector2DValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -269,7 +269,7 @@ class QDeclarativeVector3DValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(z, setZ)
    DECL_CS_OBJECT(QDeclarativeVector3DValueType)
  public:
-   QDeclarativeVector3DValueType(QObject *parent = 0);
+   QDeclarativeVector3DValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -299,7 +299,7 @@ class QDeclarativeVector4DValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(w, setW)
    DECL_CS_OBJECT(QDeclarativeVector4DValueType)
  public:
-   QDeclarativeVector4DValueType(QObject *parent = 0);
+   QDeclarativeVector4DValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -331,7 +331,7 @@ class QDeclarativeQuaternionValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(z, setZ)
    DECL_CS_OBJECT(QDeclarativeQuaternionValueType)
  public:
-   QDeclarativeQuaternionValueType(QObject *parent = 0);
+   QDeclarativeQuaternionValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -387,7 +387,7 @@ class QDeclarativeMatrix4x4ValueType : public QDeclarativeValueType
    DECL_CS_PROPERTY_WRITE(m44, setM44)
    DECL_CS_OBJECT(QDeclarativeMatrix4x4ValueType)
  public:
-   QDeclarativeMatrix4x4ValueType(QObject *parent = 0);
+   QDeclarativeMatrix4x4ValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -536,7 +536,7 @@ class QDeclarativeEasingValueType : public QDeclarativeValueType
       SineCurve = QEasingCurve::SineCurve, CosineCurve = QEasingCurve::CosineCurve
    };
 
-   QDeclarativeEasingValueType(QObject *parent = 0);
+   QDeclarativeEasingValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);
@@ -601,7 +601,7 @@ class QDeclarativeFontValueType : public QDeclarativeValueType
                          Capitalize = QFont::Capitalize
                        };
 
-   QDeclarativeFontValueType(QObject *parent = 0);
+   QDeclarativeFontValueType(QObject *parent = nullptr);
 
    virtual void read(QObject *, int);
    virtual void write(QObject *, int, QDeclarativePropertyPrivate::WriteFlags);

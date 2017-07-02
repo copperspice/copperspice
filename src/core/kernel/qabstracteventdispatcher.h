@@ -43,7 +43,7 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
  public:
    typedef std::pair<int, int> TimerInfo;
 
-   explicit QAbstractEventDispatcher(QObject *parent = 0);
+   explicit QAbstractEventDispatcher(QObject *parent = nullptr);
    ~QAbstractEventDispatcher();
 
    static QAbstractEventDispatcher *instance(QThread *thread = 0);

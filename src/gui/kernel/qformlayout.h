@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
       SpanningRole = 2
    };
 
-   explicit QFormLayout(QWidget *parent = 0);
+   explicit QFormLayout(QWidget *parent = nullptr);
    ~QFormLayout();
 
    void setFieldGrowthPolicy(FieldGrowthPolicy policy);

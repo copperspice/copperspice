@@ -58,8 +58,8 @@ class Q_GUI_EXPORT QLabel : public QFrame
    GUI_CS_PROPERTY_READ(selectedText, selectedText)
 
  public:
-   explicit QLabel(QWidget *parent = 0, Qt::WindowFlags f = 0);
-   explicit QLabel(const QString &text, QWidget *parent = 0, Qt::WindowFlags f = 0);
+   explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
    ~QLabel();
 
    QString text() const;

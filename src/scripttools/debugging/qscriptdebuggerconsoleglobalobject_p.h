@@ -44,7 +44,7 @@ class QScriptDebuggerConsoleGlobalObject : public QObject
    SCRIPT_T_CS_OBJECT(QScriptDebuggerConsoleGlobalObject)
 
  public:
-   QScriptDebuggerConsoleGlobalObject(QObject *parent = 0);
+   QScriptDebuggerConsoleGlobalObject(QObject *parent = nullptr);
    ~QScriptDebuggerConsoleGlobalObject();
 
    QScriptDebuggerCommandSchedulerInterface *scheduler() const;

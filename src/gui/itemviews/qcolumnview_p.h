@@ -146,7 +146,7 @@ class QColumnViewDelegate : public QItemDelegate
 {
 
  public:
-   explicit QColumnViewDelegate(QObject *parent = 0) : QItemDelegate(parent) {}
+   explicit QColumnViewDelegate(QObject *parent = nullptr) : QItemDelegate(parent) {}
    ~QColumnViewDelegate() {}
 
    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;

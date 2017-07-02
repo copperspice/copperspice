@@ -42,7 +42,7 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    NET_CS_OBJECT(QTcpServer)
 
  public:
-   explicit QTcpServer(QObject *parent = 0);
+   explicit QTcpServer(QObject *parent = nullptr);
    virtual ~QTcpServer();
 
    bool listen(const QHostAddress &address = QHostAddress::Any, quint16 port = 0);

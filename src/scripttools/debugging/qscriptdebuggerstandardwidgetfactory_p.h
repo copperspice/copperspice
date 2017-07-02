@@ -31,7 +31,7 @@ QT_BEGIN_NAMESPACE
 class QScriptDebuggerStandardWidgetFactory : public QObject, public QScriptDebuggerWidgetFactoryInterface
 {
  public:
-   QScriptDebuggerStandardWidgetFactory(QObject *parent = 0);
+   QScriptDebuggerStandardWidgetFactory(QObject *parent = nullptr);
    virtual ~QScriptDebuggerStandardWidgetFactory();
 
    QScriptDebugOutputWidgetInterface *createDebugOutputWidget();

@@ -56,7 +56,7 @@ DEFINE_BOOL_CONFIG_OPTION(frameRateDebug, QML_SHOW_FRAMERATE)
 class QDeclarativeScene : public QGraphicsScene
 {
  public:
-   QDeclarativeScene(QObject *parent = 0);
+   QDeclarativeScene(QObject *parent = nullptr);
 
  protected:
    virtual void keyPressEvent(QKeyEvent *);

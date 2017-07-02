@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(down, false)
 
  public:
-   explicit QAbstractButton(QWidget *parent = 0);
+   explicit QAbstractButton(QWidget *parent = nullptr);
    ~QAbstractButton();
 
    void setText(const QString &text);
@@ -146,7 +146,7 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    void changeEvent(QEvent *e) override;
    void timerEvent(QTimerEvent *e) override;
 
-   QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent = 0);
+   QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent = nullptr);
 
  private:
    Q_DECLARE_PRIVATE(QAbstractButton)

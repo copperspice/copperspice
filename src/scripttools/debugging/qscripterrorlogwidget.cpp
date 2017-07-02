@@ -36,7 +36,7 @@ namespace {
 class QScriptErrorLogWidgetOutputEdit : public QTextEdit
 {
  public:
-   QScriptErrorLogWidgetOutputEdit(QWidget *parent = 0)
+   QScriptErrorLogWidgetOutputEdit(QWidget *parent = nullptr)
       : QTextEdit(parent) {
       setReadOnly(true);
       //        setFocusPolicy(Qt::NoFocus);

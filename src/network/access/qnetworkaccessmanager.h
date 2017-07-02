@@ -80,7 +80,7 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    };
 #endif
 
-   explicit QNetworkAccessManager(QObject *parent = 0);
+   explicit QNetworkAccessManager(QObject *parent = nullptr);
    ~QNetworkAccessManager();
 
 #ifndef QT_NO_NETWORKPROXY

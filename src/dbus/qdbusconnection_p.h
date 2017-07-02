@@ -160,7 +160,7 @@ public:
 
 public:
     // public methods are entry points from other objects
-    explicit QDBusConnectionPrivate(QObject *parent = 0);
+    explicit QDBusConnectionPrivate(QObject *parent = nullptr);
     ~QDBusConnectionPrivate();
     void deleteYourself();
 

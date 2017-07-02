@@ -39,7 +39,7 @@ class QDeclarativeViewInspector : public AbstractViewInspector
     Q_OBJECT
 
 public:
-    explicit QDeclarativeViewInspector(QDeclarativeView *view, QObject *parent = 0);
+    explicit QDeclarativeViewInspector(QDeclarativeView *view, QObject *parent = nullptr);
     ~QDeclarativeViewInspector();
 
     // AbstractViewInspector

@@ -42,7 +42,7 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
-   explicit QToolBox(QWidget *parent = 0, Qt::WindowFlags f = 0);
+   explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
    ~QToolBox();
 
    int addItem(QWidget *widget, const QString &text);

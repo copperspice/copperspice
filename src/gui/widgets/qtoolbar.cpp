@@ -686,7 +686,6 @@ QAction *QToolBar::actionAt(const QPoint &p) const
    return static_cast<QToolBarItem *>(item)->action;
 }
 
-/*! \reimp */
 void QToolBar::actionEvent(QActionEvent *event)
 {
    Q_D(QToolBar);
@@ -733,7 +732,6 @@ void QToolBar::actionEvent(QActionEvent *event)
    }
 }
 
-/*! \reimp */
 void QToolBar::changeEvent(QEvent *event)
 {
    Q_D(QToolBar);
@@ -757,7 +755,6 @@ void QToolBar::changeEvent(QEvent *event)
    QWidget::changeEvent(event);
 }
 
-/*! \reimp */
 void QToolBar::paintEvent(QPaintEvent *)
 {
    Q_D(QToolBar);
@@ -829,7 +826,6 @@ static bool toolbarInUnifiedToolBar(QToolBar *toolbar)
 }
 #endif
 
-/*! \reimp */
 bool QToolBar::event(QEvent *event)
 {
    Q_D(QToolBar);

@@ -78,7 +78,7 @@ class QDeclarativeVisualModel : public QObject
    DECL_CS_SIGNAL_2(destroyingItem, item)
 
  protected:
-   QDeclarativeVisualModel(QObject *parent = 0)
+   QDeclarativeVisualModel(QObject *parent = nullptr)
       : QObject(parent) {}
 
  private:
@@ -99,7 +99,7 @@ class QDeclarativeVisualItemModel : public QDeclarativeVisualModel
    DECL_CS_CLASSINFO("DefaultProperty", "children")
 
  public:
-   QDeclarativeVisualItemModel(QObject *parent = 0);
+   QDeclarativeVisualItemModel(QObject *parent = nullptr);
    virtual ~QDeclarativeVisualItemModel() {}
 
    virtual int count() const;
@@ -147,7 +147,7 @@ class QDeclarativeVisualDataModel : public QDeclarativeVisualModel
 
  public:
    QDeclarativeVisualDataModel();
-   QDeclarativeVisualDataModel(QDeclarativeContext *, QObject *parent = 0);
+   QDeclarativeVisualDataModel(QDeclarativeContext *, QObject *parent = nullptr);
    virtual ~QDeclarativeVisualDataModel();
 
    QVariant model() const;

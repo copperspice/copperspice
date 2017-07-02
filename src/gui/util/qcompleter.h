@@ -74,11 +74,11 @@ class Q_GUI_EXPORT QCompleter : public QObject
       CaseInsensitivelySortedModel
    };
 
-   QCompleter(QObject *parent = 0);
-   QCompleter(QAbstractItemModel *model, QObject *parent = 0);
+   QCompleter(QObject *parent = nullptr);
+   QCompleter(QAbstractItemModel *model, QObject *parent = nullptr);
 
 #ifndef QT_NO_STRINGLISTMODEL
-   QCompleter(const QStringList &completions, QObject *parent = 0);
+   QCompleter(const QStringList &completions, QObject *parent = nullptr);
 #endif
 
    ~QCompleter();

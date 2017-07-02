@@ -34,7 +34,7 @@ class QScriptDebugOutputWidget: public QScriptDebugOutputWidgetInterface
    SCRIPT_T_CS_OBJECT(QScriptDebugOutputWidget)
 
  public:
-   QScriptDebugOutputWidget(QWidget *parent = 0);
+   QScriptDebugOutputWidget(QWidget *parent = nullptr);
    ~QScriptDebugOutputWidget();
 
    void message(QtMsgType type, const QString &text, const QString &fileName = QString(), int lineNumber = -1,

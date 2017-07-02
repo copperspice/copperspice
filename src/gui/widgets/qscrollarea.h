@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
 
  public:
-   explicit QScrollArea(QWidget *parent = 0);
+   explicit QScrollArea(QWidget *parent = nullptr);
    ~QScrollArea();
 
    QWidget *widget() const;
@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    void ensureWidgetVisible(QWidget *childWidget, int xmargin = 50, int ymargin = 50);
 
  protected:
-   QScrollArea(QScrollAreaPrivate &dd, QWidget *parent = 0);
+   QScrollArea(QScrollAreaPrivate &dd, QWidget *parent = nullptr);
    bool event(QEvent *) override;
    bool eventFilter(QObject *, QEvent *) override;
    void resizeEvent(QResizeEvent *) override;

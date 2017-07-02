@@ -237,7 +237,7 @@ class Q_SCRIPT_EXPORT QScriptEngine
    friend inline bool qscriptvalue_cast_helper(const QScriptValue &, int, void *);
 
  protected:
-   QScriptEngine(QScriptEnginePrivate &dd, QObject *parent = 0);
+   QScriptEngine(QScriptEnginePrivate &dd, QObject *parent = nullptr);
 
  private:
    Q_DECLARE_PRIVATE(QScriptEngine)

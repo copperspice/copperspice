@@ -48,7 +48,7 @@ class Q_MULTIMEDIA_EXPORT QAudioEnginePlugin : public QObject, public QAudioEngi
    CS_INTERFACES(QAudioEngineFactoryInterface, QFactoryInterface)
 
  public:
-   QAudioEnginePlugin(QObject *parent = 0);
+   QAudioEnginePlugin(QObject *parent = nullptr);
    ~QAudioEnginePlugin();   
 };
 

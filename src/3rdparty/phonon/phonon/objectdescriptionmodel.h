@@ -114,10 +114,10 @@ public:
    inline void moveUp(const QModelIndex &index) { d->moveUp(index); }           
    inline void moveDown(const QModelIndex &index) { d->moveDown(index); }
 
-   explicit inline ObjectDescriptionModel(QObject *parent = 0) : QAbstractListModel(parent), 
+   explicit inline ObjectDescriptionModel(QObject *parent = nullptr) : QAbstractListModel(parent), 
          d(new ObjectDescriptionModelData(this)) {} 
       
-   explicit inline ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = 0) :
+   explicit inline ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = nullptr) :
          QAbstractListModel(parent), d(new ObjectDescriptionModelData(this)) { setModelData(data); }
            
    inline void setModelData(const QList<ObjectDescription<type> > &data) 

@@ -34,7 +34,7 @@ class QScriptBreakpointsWidget : public QScriptBreakpointsWidgetInterface
    SCRIPT_T_CS_OBJECT(QScriptBreakpointsWidget)
 
  public:
-   QScriptBreakpointsWidget(QWidget *parent = 0);
+   QScriptBreakpointsWidget(QWidget *parent = nullptr);
    ~QScriptBreakpointsWidget();
 
    QScriptBreakpointsModel *breakpointsModel() const;

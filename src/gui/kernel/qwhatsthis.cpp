@@ -515,7 +515,7 @@ class QWhatsThisAction: public QAction
    GUI_CS_OBJECT(QWhatsThisAction)
 
  public:
-   explicit QWhatsThisAction(QObject *parent = 0);
+   explicit QWhatsThisAction(QObject *parent = nullptr);
 
  private:
    GUI_CS_SLOT_1(Private, void actionTriggered())

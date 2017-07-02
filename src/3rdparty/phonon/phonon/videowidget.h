@@ -86,7 +86,7 @@ class AbstractVideoOutput;
                 ScaleAndCrop = 1
             };
            
-            VideoWidget(QWidget *parent = 0);
+            VideoWidget(QWidget *parent = nullptr);
 
             AspectRatio aspectRatio() const;
             ScaleMode scaleMode() const;

@@ -58,7 +58,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
       ClosingState = QAbstractSocket::ClosingState
    };
 
-   QLocalSocket(QObject *parent = 0);
+   QLocalSocket(QObject *parent = nullptr);
    ~QLocalSocket();
 
    void connectToServer(const QString &name, OpenMode openMode = ReadWrite);

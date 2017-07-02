@@ -249,7 +249,7 @@ class CloseButton : public QAbstractButton
    GUI_CS_OBJECT(CloseButton)
 
  public:
-   CloseButton(QWidget *parent = 0);
+   CloseButton(QWidget *parent = nullptr);
 
    QSize sizeHint() const override;
 

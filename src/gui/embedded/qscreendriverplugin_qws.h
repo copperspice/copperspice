@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QScreenDriverPlugin : public QObject, public QScreenDriverFac
    CS_INTERFACES(QScreenDriverFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QScreenDriverPlugin(QObject *parent = 0);
+   explicit QScreenDriverPlugin(QObject *parent = nullptr);
    ~QScreenDriverPlugin();
 
    virtual QStringList keys() const = 0;

@@ -59,7 +59,7 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    GUI_CS_PROPERTY_USER(value, true)
 
  public:
-   explicit QSpinBox(QWidget *parent = 0);
+   explicit QSpinBox(QWidget *parent = nullptr);
 
    int value() const;
 
@@ -138,7 +138,7 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    GUI_CS_PROPERTY_USER(value, true)
 
  public:
-   explicit QDoubleSpinBox(QWidget *parent = 0);
+   explicit QDoubleSpinBox(QWidget *parent = nullptr);
 
    double value() const;
 

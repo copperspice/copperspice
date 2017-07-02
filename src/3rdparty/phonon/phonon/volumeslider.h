@@ -67,8 +67,8 @@ class PHONON_EXPORT VolumeSlider : public QWidget
 
     public:
      
-        explicit VolumeSlider(QWidget *parent = 0);
-        explicit VolumeSlider(AudioOutput *, QWidget *parent = 0);
+        explicit VolumeSlider(QWidget *parent = nullptr);
+        explicit VolumeSlider(AudioOutput *, QWidget *parent = nullptr);
         ~VolumeSlider();
 
         bool hasTracking() const;

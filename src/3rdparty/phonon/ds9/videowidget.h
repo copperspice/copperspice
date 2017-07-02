@@ -49,7 +49,7 @@ namespace Phonon
             DS9_CS_OBJECT(VideoWidget)
                 CS_INTERFACES(Phonon::VideoWidgetInterface)
         public:
-            VideoWidget(QWidget *parent = 0);
+            VideoWidget(QWidget *parent = nullptr);
             ~VideoWidget();
 
             Phonon::VideoWidget::AspectRatio aspectRatio() const override;

@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(frameRect, false)
 
  public:
-   explicit QFrame(QWidget *parent = 0, Qt::WindowFlags f = 0);
+   explicit QFrame(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
    ~QFrame();
 
    int frameStyle() const;
@@ -100,7 +100,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
    void changeEvent(QEvent *) override;
    void drawFrame(QPainter *);
 
-   QFrame(QFramePrivate &dd, QWidget *parent = 0, Qt::WindowFlags f = 0);
+   QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
 
  private:
    Q_DISABLE_COPY(QFrame)

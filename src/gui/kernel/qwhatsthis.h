@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QWhatsThis
    static void showText(const QPoint &pos, const QString &text, QWidget *w = 0);
    static void hideText();
 
-   static QAction *createAction(QObject *parent = 0);
+   static QAction *createAction(QObject *parent = nullptr);
 };
 
 #endif // QT_NO_WHATSTHIS

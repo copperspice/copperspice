@@ -49,7 +49,7 @@ class QDeclarativeFontLoader : public QObject
  public:
    enum Status { Null = 0, Ready, Loading, Error };
 
-   QDeclarativeFontLoader(QObject *parent = 0);
+   QDeclarativeFontLoader(QObject *parent = nullptr);
    ~QDeclarativeFontLoader();
 
    QUrl source() const;

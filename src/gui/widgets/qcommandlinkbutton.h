@@ -40,9 +40,9 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    GUI_CS_PROPERTY_DESIGNABLE(flat, false)
 
  public:
-   explicit QCommandLinkButton(QWidget *parent = 0);
-   explicit QCommandLinkButton(const QString &text, QWidget *parent = 0);
-   QCommandLinkButton(const QString &text, const QString &description, QWidget *parent = 0);
+   explicit QCommandLinkButton(QWidget *parent = nullptr);
+   explicit QCommandLinkButton(const QString &text, QWidget *parent = nullptr);
+   QCommandLinkButton(const QString &text, const QString &description, QWidget *parent = nullptr);
    QString description() const;
    void setDescription(const QString &description);
 

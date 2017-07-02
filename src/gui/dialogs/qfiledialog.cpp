@@ -1701,13 +1701,8 @@ QStringList QFileDialog::getOpenFileNames(QWidget *parent, const QString &captio
    return QStringList();
 }
 
-QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent,
-      const QString &caption,
-      const QUrl &dir,
-      const QString &filter,
-      QString *selectedFilter,
-      Options options,
-      const QStringList &supportedSchemes)
+QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent, const QString &caption, const QUrl &dir,
+      const QString &filter, QString *selectedFilter, Options options, const QStringList &supportedSchemes)
 {
    if (qt_filedialog_open_file_urls_hook && !(options & DontUseNativeDialog)) {
       return qt_filedialog_open_file_urls_hook(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);

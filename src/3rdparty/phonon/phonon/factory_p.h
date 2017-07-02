@@ -73,23 +73,23 @@ namespace Factory
    
     PHONON_EXPORT Sender *sender();
    
-    QObject *createMediaObject(QObject *parent = 0);
+    QObject *createMediaObject(QObject *parent = nullptr);
   
 #ifndef QT_NO_PHONON_EFFECT
-    QObject *createEffect(int effectId, QObject *parent = 0);
+    QObject *createEffect(int effectId, QObject *parent = nullptr);
 #endif 
    
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
-    QObject *createVolumeFaderEffect(QObject *parent = 0);
+    QObject *createVolumeFaderEffect(QObject *parent = nullptr);
 #endif 
 
-    QObject *createAudioOutput(QObject *parent = 0);
+    QObject *createAudioOutput(QObject *parent = nullptr);
   
 #ifndef QT_NO_PHONON_VIDEO
-    QObject *createVideoWidget(QObject *parent = 0);
+    QObject *createVideoWidget(QObject *parent = nullptr);
 #endif 
 
-    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = nullptr);
     PHONON_EXPORT QObject *backend(bool createWhenNull = true);
 
     QString identifier();

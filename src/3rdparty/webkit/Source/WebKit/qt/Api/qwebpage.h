@@ -261,7 +261,7 @@ public:
         friend class QWebPage;
     };
 
-    explicit QWebPage(QObject *parent = 0);
+    explicit QWebPage(QObject *parent = nullptr);
     ~QWebPage();
 
     QWebFrame *mainFrame() const;

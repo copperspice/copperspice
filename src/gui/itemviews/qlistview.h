@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    enum LayoutMode { SinglePass, Batched };
    enum ViewMode { ListMode, IconMode };
 
-   explicit QListView(QWidget *parent = 0);
+   explicit QListView(QWidget *parent = nullptr);
    ~QListView();
 
    void setMovement(Movement movement);
@@ -134,7 +134,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    GUI_CS_SIGNAL_2(indexesMoved, indexes)
 
  protected:
-   QListView(QListViewPrivate &, QWidget *parent = 0);
+   QListView(QListViewPrivate &, QWidget *parent = nullptr);
 
    bool event(QEvent *e) override;
 

@@ -84,7 +84,7 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    NET_CS_OBJECT(QNativeSocketEngine)
 
  public:
-   QNativeSocketEngine(QObject *parent = 0);
+   QNativeSocketEngine(QObject *parent = nullptr);
    ~QNativeSocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type,

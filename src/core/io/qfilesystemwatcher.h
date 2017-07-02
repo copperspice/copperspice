@@ -38,8 +38,8 @@ class Q_CORE_EXPORT QFileSystemWatcher : public QObject
    Q_DECLARE_PRIVATE(QFileSystemWatcher)
 
  public:
-   QFileSystemWatcher(QObject *parent = 0);
-   QFileSystemWatcher(const QStringList &paths, QObject *parent = 0);
+   QFileSystemWatcher(QObject *parent = nullptr);
+   QFileSystemWatcher(const QStringList &paths, QObject *parent = nullptr);
    ~QFileSystemWatcher();
 
    void addPath(const QString &file);

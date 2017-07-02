@@ -70,7 +70,7 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    NET_CS_OBJECT_MULTIPLE(QHttpNetworkReply, QObject)
 
  public:
-   explicit QHttpNetworkReply(const QUrl &url = QUrl(), QObject *parent = 0);
+   explicit QHttpNetworkReply(const QUrl &url = QUrl(), QObject *parent = nullptr);
    virtual ~QHttpNetworkReply();
 
    QUrl url() const override;

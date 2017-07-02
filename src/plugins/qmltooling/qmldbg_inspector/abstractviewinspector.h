@@ -51,7 +51,7 @@ class AbstractViewInspector : public QObject
     Q_OBJECT
 
 public:
-    explicit AbstractViewInspector(QObject *parent = 0);
+    explicit AbstractViewInspector(QObject *parent = nullptr);
 
     virtual void changeCurrentObjects(const QList<QObject*> &objects) = 0;
 

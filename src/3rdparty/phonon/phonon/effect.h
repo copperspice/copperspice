@@ -64,7 +64,7 @@ namespace Phonon
              * type of effect. See BackendCapabilities::availableAudioEffects().
              * \param parent QObject parent
              */
-            explicit Effect(const EffectDescription &description, QObject *parent = 0);
+            explicit Effect(const EffectDescription &description, QObject *parent = nullptr);
 
 //X             Type type() const;
 

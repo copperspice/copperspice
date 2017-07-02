@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
    GUI_CS_OBJECT(QGraphicsItemAnimation)
 
  public:
-   QGraphicsItemAnimation(QObject *parent = 0);
+   QGraphicsItemAnimation(QObject *parent = nullptr);
    virtual ~QGraphicsItemAnimation();
 
    QGraphicsItem *item() const;

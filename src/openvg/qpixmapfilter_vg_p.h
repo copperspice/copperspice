@@ -66,7 +66,7 @@ class QVGPixmapBlurFilter : public QPixmapBlurFilter
 {
     Q_OBJECT
 public:
-    QVGPixmapBlurFilter(QObject *parent = 0);
+    QVGPixmapBlurFilter(QObject *parent = nullptr);
     ~QVGPixmapBlurFilter();
 
     void draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect = QRectF()) const;

@@ -207,7 +207,7 @@ class QPPDOptionsModel : public QAbstractItemModel
    friend class QPPDOptionsEditor;
 
  public:
-   QPPDOptionsModel(QCUPSSupport *cups, QObject *parent = 0);
+   QPPDOptionsModel(QCUPSSupport *cups, QObject *parent = nullptr);
    ~QPPDOptionsModel();
 
    int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -232,7 +232,7 @@ class QPPDOptionsEditor : public QStyledItemDelegate
    GUI_CS_OBJECT(QPPDOptionsEditor)
 
  public:
-   QPPDOptionsEditor(QObject *parent = 0) : QStyledItemDelegate(parent) {}
+   QPPDOptionsEditor(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
    ~QPPDOptionsEditor() {}
 
    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;

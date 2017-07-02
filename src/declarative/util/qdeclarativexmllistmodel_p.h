@@ -73,7 +73,7 @@ class QDeclarativeXmlListModel : public QListModelInterface, public QDeclarative
    DECL_CS_CLASSINFO("DefaultProperty", "roles")
 
  public:
-   QDeclarativeXmlListModel(QObject *parent = 0);
+   QDeclarativeXmlListModel(QObject *parent = nullptr);
    ~QDeclarativeXmlListModel();
 
    virtual QHash<int, QVariant> data(int index, const QList<int> &roles = (QList<int>())) const;

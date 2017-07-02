@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QUnixPrintWidget : public QWidget
    GUI_CS_OBJECT(QUnixPrintWidget)
 
  public:
-   QUnixPrintWidget(QPrinter *printer, QWidget *parent = 0);
+   QUnixPrintWidget(QPrinter *printer, QWidget *parent = nullptr);
    ~QUnixPrintWidget();
    void updatePrinter();
 
@@ -73,8 +73,8 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
    GUI_CS_PROPERTY_WRITE(options, setOptions)
 
  public:
-   explicit QPrintDialog(QPrinter *printer, QWidget *parent = 0);
-   explicit QPrintDialog(QWidget *parent = 0);
+   explicit QPrintDialog(QPrinter *printer, QWidget *parent = nullptr);
+   explicit QPrintDialog(QWidget *parent = nullptr);
    ~QPrintDialog();
 
    int exec() override;

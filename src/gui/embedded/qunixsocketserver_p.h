@@ -36,7 +36,7 @@ class Q_GUI_EXPORT QUnixSocketServer : public QObject
  public:
    enum ServerError { NoError, InvalidPath, ResourceError, BindError, ListenError };
 
-   QUnixSocketServer(QObject *parent = 0);
+   QUnixSocketServer(QObject *parent = nullptr);
    virtual ~QUnixSocketServer();
 
    void close();

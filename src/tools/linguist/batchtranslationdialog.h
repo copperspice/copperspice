@@ -36,7 +36,7 @@ class MultiDataModel;
 class CheckableListModel : public QStandardItemModel
 {
  public:
-   CheckableListModel(QObject *parent = 0);
+   CheckableListModel(QObject *parent = nullptr);
    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 };
 

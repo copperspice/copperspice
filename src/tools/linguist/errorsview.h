@@ -44,7 +44,7 @@ class ErrorsView : public QListView
       NumerusMarkerMissing
    };
 
-   ErrorsView(MultiDataModel *dataModel, QWidget *parent = 0);
+   ErrorsView(MultiDataModel *dataModel, QWidget *parent = nullptr);
    void clear();
    void addError(int model, const ErrorType type, const QString &arg = QString());
    QString firstError();

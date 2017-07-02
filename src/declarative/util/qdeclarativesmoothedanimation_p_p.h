@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 class QSmoothedAnimation : public QAbstractAnimation
 {
  public:
-   QSmoothedAnimation(QObject *parent = 0);
+   QSmoothedAnimation(QObject *parent = nullptr);
 
    qreal to;
    qreal velocity;

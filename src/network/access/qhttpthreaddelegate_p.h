@@ -52,7 +52,7 @@ class QHttpThreadDelegate : public QObject
    NET_CS_OBJECT(QHttpThreadDelegate)
 
  public:
-   explicit QHttpThreadDelegate(QObject *parent = 0);
+   explicit QHttpThreadDelegate(QObject *parent = nullptr);
 
    ~QHttpThreadDelegate();
 

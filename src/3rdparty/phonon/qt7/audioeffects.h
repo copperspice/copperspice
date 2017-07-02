@@ -60,7 +60,7 @@ namespace QT7
         CS_INTERFACES(Phonon::EffectInterface)
 
         public:
-            AudioEffect(int effectType, QObject *parent = 0);
+            AudioEffect(int effectType, QObject *parent = nullptr);
             AudioEffectAudioNode *m_audioNode;
 
             QString name();

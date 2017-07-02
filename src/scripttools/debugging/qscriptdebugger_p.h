@@ -84,7 +84,7 @@ class QScriptDebugger : public QObject
       GoToLineAction
    };
 
-   QScriptDebugger(QObject *parent = 0);
+   QScriptDebugger(QObject *parent = nullptr);
    ~QScriptDebugger();
 
    QScriptDebuggerFrontend *frontend() const;

@@ -49,7 +49,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBehavior : public QObject, public
    DECL_CS_CLASSINFO("DeferredPropertyNames", "animation")
 
  public:
-   QDeclarativeBehavior(QObject *parent = 0);
+   QDeclarativeBehavior(QObject *parent = nullptr);
    ~QDeclarativeBehavior();
 
    virtual void setTarget(const QDeclarativeProperty &);

@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QKbdDriverPlugin : public QObject, public QWSKeyboardHandlerF
    CS_INTERFACES(QWSKeyboardHandlerFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QKbdDriverPlugin(QObject *parent = 0);
+   explicit QKbdDriverPlugin(QObject *parent = nullptr);
    ~QKbdDriverPlugin();
 
    virtual QStringList keys() const = 0;

@@ -36,7 +36,7 @@ class Q_SCRIPT_EXPORT QScriptExtensionPlugin : public QObject, public QScriptExt
    CS_INTERFACES(QScriptExtensionInterface, QFactoryInterface)
 
  public:
-   explicit QScriptExtensionPlugin(QObject *parent = 0);
+   explicit QScriptExtensionPlugin(QObject *parent = nullptr);
    ~QScriptExtensionPlugin();  
 
    QScriptValue setupPackage(const QString &key, QScriptEngine *engine) const;

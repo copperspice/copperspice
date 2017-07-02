@@ -151,7 +151,7 @@ class QAxScriptManager : public QObject
     Q_OBJECT
         
 public:
-    QAxScriptManager(QObject *parent = 0);
+    QAxScriptManager(QObject *parent = nullptr);
     ~QAxScriptManager();
     
     void addObject(QAxBase *object);

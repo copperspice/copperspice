@@ -33,7 +33,7 @@ class QScriptErrorLogWidget:
 {
    SCRIPT_T_CS_OBJECT(QScriptErrorLogWidget)
  public:
-   QScriptErrorLogWidget(QWidget *parent = 0);
+   QScriptErrorLogWidget(QWidget *parent = nullptr);
    ~QScriptErrorLogWidget();
 
    void message(QtMsgType type, const QString &text,

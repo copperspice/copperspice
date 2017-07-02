@@ -55,8 +55,8 @@ class Q_CORE_EXPORT QSharedMemory : public QObject
       UnknownError
    };
 
-   QSharedMemory(QObject *parent = 0);
-   QSharedMemory(const QString &key, QObject *parent = 0);
+   QSharedMemory(QObject *parent = nullptr);
+   QSharedMemory(const QString &key, QObject *parent = nullptr);
    ~QSharedMemory();
 
    void setKey(const QString &key);

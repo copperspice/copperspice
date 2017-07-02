@@ -162,11 +162,11 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpr
    enum EvaluateFlag { RequiresThisObject = 0x01 };
    using EvaluateFlags = QFlags<EvaluateFlag>;
 
-   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContext *, QObject *parent = 0);
-   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContextData *, QObject *parent = 0);
+   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContext *, QObject *parent = nullptr);
+   QDeclarativeBinding(const QString &, QObject *, QDeclarativeContextData *, QObject *parent = nullptr);
    QDeclarativeBinding(void *, QDeclarativeRefCount *, QObject *, QDeclarativeContextData *,
                        const QString &, int, QObject *parent);
-   QDeclarativeBinding(const QScriptValue &, QObject *, QDeclarativeContextData *, QObject *parent = 0);
+   QDeclarativeBinding(const QScriptValue &, QObject *, QDeclarativeContextData *, QObject *parent = nullptr);
 
    void setTarget(const QDeclarativeProperty &);
    QDeclarativeProperty property() const;
@@ -185,7 +185,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeBinding : public QDeclarativeExpr
    typedef int Identifier;
    static Identifier Invalid;
    static QDeclarativeBinding *createBinding(Identifier, QObject *, QDeclarativeContext *, const QString &, int,
-         QObject *parent = 0);
+         QObject *parent = nullptr);
 
  public :
    DECL_CS_SLOT_1(Public, void update())

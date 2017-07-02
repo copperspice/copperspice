@@ -218,7 +218,7 @@ class Q_GUI_EXPORT QWSServer : public QObject
    friend class QWSInputMethod;
 
  public:
-   explicit QWSServer(int flags = 0, QObject *parent = 0);
+   explicit QWSServer(int flags = 0, QObject *parent = nullptr);
 
    ~QWSServer();
    enum ServerFlags { DisableKeyboard = 0x01,

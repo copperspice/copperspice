@@ -37,7 +37,7 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    NET_CS_OBJECT(QSocks5SocketEngine)
 
  public:
-   QSocks5SocketEngine(QObject *parent = 0);
+   QSocks5SocketEngine(QObject *parent = nullptr);
    ~QSocks5SocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type, 

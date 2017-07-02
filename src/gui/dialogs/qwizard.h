@@ -110,7 +110,7 @@ class Q_GUI_EXPORT QWizard : public QDialog
 
    using WizardOptions = QFlags<WizardOption>;
 
-   explicit QWizard(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
    ~QWizard();
 
    int addPage(QWizardPage *page);
@@ -218,7 +218,7 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
    GUI_CS_PROPERTY_WRITE(subTitle, setSubTitle)
 
  public:
-   QWizardPage(QWidget *parent = 0);
+   QWizardPage(QWidget *parent = nullptr);
 
    void setTitle(const QString &title);
    QString title() const;

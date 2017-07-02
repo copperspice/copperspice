@@ -53,10 +53,10 @@ class Q_SVG_EXPORT QSvgRenderer : public QObject
    SVG_CS_PROPERTY_WRITE(currentFrame, setCurrentFrame)
 
  public:
-   QSvgRenderer(QObject *parent = 0);
-   QSvgRenderer(const QString &filename, QObject *parent = 0);
-   QSvgRenderer(const QByteArray &contents, QObject *parent = 0);
-   QSvgRenderer(QXmlStreamReader *contents, QObject *parent = 0);
+   QSvgRenderer(QObject *parent = nullptr);
+   QSvgRenderer(const QString &filename, QObject *parent = nullptr);
+   QSvgRenderer(const QByteArray &contents, QObject *parent = nullptr);
+   QSvgRenderer(QXmlStreamReader *contents, QObject *parent = nullptr);
    ~QSvgRenderer();
 
    bool isValid() const;

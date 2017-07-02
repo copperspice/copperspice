@@ -46,11 +46,11 @@ class Q_GUI_EXPORT QUndoView : public QListView
    GUI_CS_PROPERTY_WRITE(cleanIcon, setCleanIcon)
 
  public:
-   explicit QUndoView(QWidget *parent = 0);
-   explicit QUndoView(QUndoStack *stack, QWidget *parent = 0);
+   explicit QUndoView(QWidget *parent = nullptr);
+   explicit QUndoView(QUndoStack *stack, QWidget *parent = nullptr);
 
 #ifndef QT_NO_UNDOGROUP
-   explicit QUndoView(QUndoGroup *group, QWidget *parent = 0);
+   explicit QUndoView(QUndoGroup *group, QWidget *parent = nullptr);
 #endif
 
    ~QUndoView();

@@ -233,7 +233,7 @@ class Q_GUI_EXPORT QListWidget : public QListView
    friend class QListModel;
 
  public:
-   explicit QListWidget(QWidget *parent = 0);
+   explicit QListWidget(QWidget *parent = nullptr);
    ~QListWidget();
 
    QListWidgetItem *item(int row) const;

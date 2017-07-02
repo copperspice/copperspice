@@ -65,8 +65,8 @@ class QIBaseDriver : public QSqlDriver
    friend class QIBaseResultPrivate;
 
  public:
-   explicit QIBaseDriver(QObject *parent = 0);
-   explicit QIBaseDriver(isc_db_handle connection, QObject *parent = 0);
+   explicit QIBaseDriver(QObject *parent = nullptr);
+   explicit QIBaseDriver(isc_db_handle connection, QObject *parent = nullptr);
    virtual ~QIBaseDriver();
    bool hasFeature(DriverFeature f) const;
    bool open(const QString &db,

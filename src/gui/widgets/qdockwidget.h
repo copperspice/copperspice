@@ -53,8 +53,8 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(windowTitle, true)
 
  public:
-   explicit QDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0);
-   explicit QDockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+   explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+   explicit QDockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
    ~QDockWidget();
 
    QWidget *widget() const;

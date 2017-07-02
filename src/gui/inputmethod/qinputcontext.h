@@ -47,7 +47,7 @@ class Q_GUI_EXPORT QInputContext : public QObject
    Q_DECLARE_PRIVATE(QInputContext)
 
  public:
-   explicit QInputContext(QObject *parent = 0);
+   explicit QInputContext(QObject *parent = nullptr);
    virtual ~QInputContext();
 
    virtual QString identifierName() = 0;

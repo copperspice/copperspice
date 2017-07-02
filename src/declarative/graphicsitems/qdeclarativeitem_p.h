@@ -436,7 +436,7 @@ class QDeclarativeLayoutMirroringAttached : public QObject
    DECL_CS_PROPERTY_NOTIFY(childrenInherit, childrenInheritChanged)
 
  public:
-   explicit QDeclarativeLayoutMirroringAttached(QObject *parent = 0);
+   explicit QDeclarativeLayoutMirroringAttached(QObject *parent = nullptr);
 
    bool enabled() const;
    void setEnabled(bool);
@@ -503,7 +503,7 @@ class QDeclarativeKeysAttached : public QObject, public QDeclarativeItemKeyFilte
    DECL_CS_ENUM(Priority)
 
  public:
-   QDeclarativeKeysAttached(QObject *parent = 0);
+   QDeclarativeKeysAttached(QObject *parent = nullptr);
    ~QDeclarativeKeysAttached();
 
    bool enabled() const {

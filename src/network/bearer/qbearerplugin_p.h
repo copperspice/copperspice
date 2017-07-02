@@ -45,7 +45,7 @@ class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngin
    CS_INTERFACES(QBearerEngineFactoryInterface, QFactoryInterface)
 
  public:
-   explicit QBearerEnginePlugin(QObject *parent = 0);
+   explicit QBearerEnginePlugin(QObject *parent = nullptr);
    virtual ~QBearerEnginePlugin();
 };
 

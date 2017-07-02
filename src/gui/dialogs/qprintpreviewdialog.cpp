@@ -95,7 +95,7 @@ class LineEdit : public QLineEdit
    GUI_CS_OBJECT(LineEdit)
 
  public:
-   LineEdit(QWidget *parent = 0)
+   LineEdit(QWidget *parent = nullptr)
       : QLineEdit(parent) {
       setContextMenuPolicy(Qt::NoContextMenu);
       connect(this, SIGNAL(returnPressed()), this, SLOT(handleReturnPressed()));

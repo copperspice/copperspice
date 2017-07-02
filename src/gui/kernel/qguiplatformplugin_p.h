@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPlugi
    CS_INTERFACES(QGuiPlatformPluginInterface, QFactoryInterface)
 
  public:
-   explicit QGuiPlatformPlugin(QObject *parent = 0);
+   explicit QGuiPlatformPlugin(QObject *parent = nullptr);
    ~QGuiPlatformPlugin();
 
    QStringList keys() const override {

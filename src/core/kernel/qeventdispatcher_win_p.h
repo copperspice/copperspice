@@ -43,7 +43,7 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    friend class QGuiEventDispatcherWin32;
 
  public:
-   explicit QEventDispatcherWin32(QObject *parent = 0);
+   explicit QEventDispatcherWin32(QObject *parent = nullptr);
    ~QEventDispatcherWin32();
 
    bool QT_ENSURE_STACK_ALIGNED_FOR_SSE processEvents(QEventLoop::ProcessEventsFlags flags) override;

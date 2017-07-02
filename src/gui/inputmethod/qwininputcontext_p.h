@@ -50,7 +50,7 @@ class QWinInputContext : public QInputContext
    GUI_CS_OBJECT(QWinInputContext)
 
  public:
-   explicit QWinInputContext(QObject *parent = 0);
+   explicit QWinInputContext(QObject *parent = nullptr);
    virtual ~QWinInputContext();
 
    QString identifierName() override {

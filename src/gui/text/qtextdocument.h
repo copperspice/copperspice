@@ -102,11 +102,11 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_PROPERTY_WRITE(defaultTextOption, setDefaultTextOption)
 
  public:
-   explicit QTextDocument(QObject *parent = 0);
-   explicit QTextDocument(const QString &text, QObject *parent = 0);
+   explicit QTextDocument(QObject *parent = nullptr);
+   explicit QTextDocument(const QString &text, QObject *parent = nullptr);
    ~QTextDocument();
 
-   QTextDocument *clone(QObject *parent = 0) const;
+   QTextDocument *clone(QObject *parent = nullptr) const;
 
    bool isEmpty() const;
    virtual void clear();

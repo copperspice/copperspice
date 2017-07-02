@@ -135,7 +135,7 @@ class QCalendarPopup : public QWidget
    GUI_CS_OBJECT(QCalendarPopup)
 
  public:
-   QCalendarPopup(QWidget *parent = 0, QCalendarWidget *cw = 0);
+   QCalendarPopup(QWidget *parent = nullptr, QCalendarWidget *cw = 0);
    QDate selectedDate() {
       return verifyCalendarInstance()->selectedDate();
    }

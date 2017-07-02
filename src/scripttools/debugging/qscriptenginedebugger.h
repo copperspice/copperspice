@@ -80,7 +80,7 @@ class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
       SuspendedState
    };
 
-   QScriptEngineDebugger(QObject *parent = 0);
+   QScriptEngineDebugger(QObject *parent = nullptr);
    ~QScriptEngineDebugger();
 
    void attachTo(QScriptEngine *engine);
@@ -92,8 +92,8 @@ class Q_SCRIPTTOOLS_EXPORT QScriptEngineDebugger : public QObject
 #ifndef QT_NO_MAINWINDOW
    QMainWindow *standardWindow() const;
 #endif
-   QToolBar *createStandardToolBar(QWidget *parent = 0);
-   QMenu *createStandardMenu(QWidget *parent = 0);
+   QToolBar *createStandardToolBar(QWidget *parent = nullptr);
+   QMenu *createStandardMenu(QWidget *parent = nullptr);
 
    QWidget *widget(DebuggerWidget widget) const;
    QAction *action(DebuggerAction action) const;

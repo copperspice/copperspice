@@ -34,7 +34,7 @@ class QScriptDebuggerLocalsWidget : public QScriptDebuggerLocalsWidgetInterface
    SCRIPT_T_CS_OBJECT(QScriptDebuggerLocalsWidget)
 
  public:
-   QScriptDebuggerLocalsWidget(QWidget *parent = 0);
+   QScriptDebuggerLocalsWidget(QWidget *parent = nullptr);
    ~QScriptDebuggerLocalsWidget();
 
    QScriptDebuggerLocalsModel *localsModel() const;

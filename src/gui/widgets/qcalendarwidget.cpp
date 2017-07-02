@@ -851,7 +851,7 @@ class QCalendarModel : public QAbstractTableModel
    GUI_CS_OBJECT(QCalendarModel)
 
  public:
-   QCalendarModel(QObject *parent = 0);
+   QCalendarModel(QObject *parent = nullptr);
 
    int rowCount(const QModelIndex &) const override {
       return RowCount + m_firstRow;
@@ -940,7 +940,7 @@ class QCalendarView : public QTableView
    GUI_CS_OBJECT(QCalendarView)
 
  public:
-   QCalendarView(QWidget *parent = 0);
+   QCalendarView(QWidget *parent = nullptr);
 
    void internalUpdate() {
       updateGeometries();
@@ -1631,7 +1631,7 @@ class QCalendarDelegate : public QItemDelegate
    GUI_CS_OBJECT(QCalendarDelegate)
 
  public:
-   QCalendarDelegate(QCalendarWidgetPrivate *w, QObject *parent = 0)
+   QCalendarDelegate(QCalendarWidgetPrivate *w, QObject *parent = nullptr)
       : QItemDelegate(parent), calendarWidgetPrivate(w) { }
 
    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,

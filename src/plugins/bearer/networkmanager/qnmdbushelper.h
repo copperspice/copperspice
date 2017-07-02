@@ -35,7 +35,7 @@ class QNmDBusHelper: public QObject, protected QDBusContext
  {
      Q_OBJECT
  public:
-    QNmDBusHelper(QObject *parent = 0);
+    QNmDBusHelper(QObject *parent = nullptr);
     ~QNmDBusHelper();
 
  public slots:

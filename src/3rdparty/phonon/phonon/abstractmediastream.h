@@ -53,7 +53,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
         virtual ~AbstractMediaStream();
 
     protected:
-        explicit AbstractMediaStream(QObject *parent = 0);
+        explicit AbstractMediaStream(QObject *parent = nullptr);
 
         qint64 streamSize() const;
 

@@ -80,7 +80,7 @@ class QIcdEngine : public QBearerEngine
     Q_OBJECT
 
 public:
-    QIcdEngine(QObject *parent = 0);
+    QIcdEngine(QObject *parent = nullptr);
     ~QIcdEngine();
 
     bool hasIdentifier(const QString &id);

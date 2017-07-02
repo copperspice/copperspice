@@ -36,8 +36,8 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    CORE_CS_OBJECT(QBuffer)
 
  public:
-   explicit QBuffer(QObject *parent = 0);
-   QBuffer(QByteArray *buf, QObject *parent = 0);
+   explicit QBuffer(QObject *parent = nullptr);
+   QBuffer(QByteArray *buf, QObject *parent = nullptr);
 
    ~QBuffer();
 

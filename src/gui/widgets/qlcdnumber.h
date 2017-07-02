@@ -61,8 +61,8 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame // LCD number widget
    GUI_CS_PROPERTY_WRITE(intValue, cs_displayI)
 
  public:
-   explicit QLCDNumber(QWidget *parent = 0);
-   explicit QLCDNumber(uint numDigits, QWidget *parent = 0);
+   explicit QLCDNumber(QWidget *parent = nullptr);
+   explicit QLCDNumber(uint numDigits, QWidget *parent = nullptr);
    ~QLCDNumber();
 
    enum Mode { Hex, Dec, Oct, Bin };

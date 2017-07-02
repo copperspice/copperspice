@@ -120,7 +120,7 @@ class Q_CORE_EXPORT QIODevice : public QObject
    CORE_CS_SIGNAL_2(readChannelFinished)
 
  protected:
-   QIODevice(QIODevicePrivate &dd, QObject *parent = 0);
+   QIODevice(QIODevicePrivate &dd, QObject *parent = nullptr);
 
    virtual qint64 readData(char *data, qint64 maxlen) = 0;
    virtual qint64 readLineData(char *data, qint64 maxlen);

@@ -49,7 +49,7 @@ class Q_DECLARATIVE_PRIVATE_EXPORT QDeclarativeListModel : public QListModelInte
    DECL_CS_PROPERTY_NOTIFY(count, countChanged)
 
  public:
-   QDeclarativeListModel(QObject *parent = 0);
+   QDeclarativeListModel(QObject *parent = nullptr);
    ~QDeclarativeListModel();
 
    virtual QList<int> roles() const;

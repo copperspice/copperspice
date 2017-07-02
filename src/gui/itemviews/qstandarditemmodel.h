@@ -339,8 +339,8 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    GUI_CS_PROPERTY_WRITE(sortRole, setSortRole)
 
  public:
-   explicit QStandardItemModel(QObject *parent = 0);
-   QStandardItemModel(int rows, int columns, QObject *parent = 0);
+   explicit QStandardItemModel(QObject *parent = nullptr);
+   QStandardItemModel(int rows, int columns, QObject *parent = nullptr);
    ~QStandardItemModel();
 
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
@@ -428,7 +428,7 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    GUI_CS_SIGNAL_2(itemChanged, item)
 
  protected:
-   QStandardItemModel(QStandardItemModelPrivate &dd, QObject *parent = 0);
+   QStandardItemModel(QStandardItemModelPrivate &dd, QObject *parent = nullptr);
 
  private:
    friend class QStandardItemPrivate;

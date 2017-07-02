@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
    GUI_CS_OBJECT(QStyledItemDelegate)
 
  public:
-   explicit QStyledItemDelegate(QObject *parent = 0);
+   explicit QStyledItemDelegate(QObject *parent = nullptr);
    ~QStyledItemDelegate();
 
    // painting

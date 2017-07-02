@@ -515,7 +515,7 @@ static void init_plugins(const QList<QByteArray> pluginList)
 class QDummyInputContext : public QInputContext
 {
  public:
-   explicit QDummyInputContext(QObject *parent = 0) : QInputContext(parent) {}
+   explicit QDummyInputContext(QObject *parent = nullptr) : QInputContext(parent) {}
    ~QDummyInputContext() {}
    QString identifierName() {
       return QString();

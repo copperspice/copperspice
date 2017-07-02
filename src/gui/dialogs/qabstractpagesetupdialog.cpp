@@ -87,9 +87,10 @@ void QAbstractPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
       printer = new QPrinter;
       opts |= QPageSetupDialog::OwnsPrinter;
    }
+
 #ifndef Q_WS_X11
    if (printer->outputFormat() != QPrinter::NativeFormat) {
-      qWarning("QPageSetupDialog: Cannot be used on non-native printers");
+      qWarning("QPageSetupDialog: Can not be used on non-native printers");
    }
 #endif
 }

@@ -38,7 +38,7 @@ class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
 {
    Q_OBJECT
  public:
-   PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = 0);
+   PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = nullptr);
 
  protected:
    bool eventFilter(QObject *obj, QEvent *event);
