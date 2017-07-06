@@ -36,19 +36,28 @@ class QSourceLocation;
 class QUrl;
 class QXmlName;
 class QXmlNodeModelIndex;
-template<typename T> class QAbstractXmlForwardIterator;
-template<typename T> class QVector;
+
+template<typename T>
+class QAbstractXmlForwardIterator;
+
+template<typename T>
+class QVector;
 
 /* The members in the namespace QPatternist are internal, not part of the public API, and
  * unsupported. Using them leads to undefined behavior. */
 namespace QPatternist {
+
 class DynamicContext;
 class Item;
 class ItemType;
 class XsdValidatedXmlNodeModel;
-template<typename TResult, typename TSource, typename TMapper, typename Context> class ItemMappingIterator;
-template<typename TResult, typename TSource, typename TMapper> class SequenceMappingIterator;
-typedef QExplicitlySharedDataPointer<ItemType> ItemTypePtr;
+
+template<typename TResult, typename TSource, typename TMapper, typename Context>
+class ItemMappingIterator;
+
+template<typename TResult, typename TSource, typename TMapper>
+class SequenceMappingIterator;
+
 typedef QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<Item> > ItemIteratorPtr;
 typedef QVector<QXmlName> QXmlNameVector;
 
@@ -168,7 +177,9 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
 
    inline QXmlName name() const;
    inline QXmlNodeModelIndex root() const;
-   inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > iterate(const Axis axis) const;
+
+   inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex>> iterate(const Axis axis) const;
+
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QPatternist::Item> > sequencedTypedValue() const;
    inline QUrl documentUri() const;
    inline QUrl baseUri() const;
@@ -179,7 +190,7 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    inline QVector<QXmlName> namespaceBindings() const;
    inline QXmlName::NamespaceCode namespaceForPrefix(const QXmlName::PrefixCode prefix) const;
    inline QString stringValue() const;
-   inline QPatternist::ItemTypePtr type() const;
+   inline QPatternist::ItemType::Ptr type() const;
    inline bool is(const QXmlNodeModelIndex &other) const;
 
    inline void reset() {
@@ -187,8 +198,7 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    }
 
  private:
-   static inline QXmlNodeModelIndex create(const qint64 d,
-                                           const QAbstractXmlNodeModel *const nm) {
+   static inline QXmlNodeModelIndex create(const qint64 d, const QAbstractXmlNodeModel *const nm) {
       QXmlNodeModelIndex n;
       n.m_storage.data = d;
       n.m_storage.model = nm;
@@ -254,16 +264,16 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
     * unsupported. Using them leads to undefined behavior. */
    virtual QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > iterate(
       const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
-   virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const;
-   virtual QPatternist::ItemTypePtr type(const QXmlNodeModelIndex &ni) const;
-   virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
-         const QXmlName::PrefixCode prefix) const;
-   virtual bool isDeepEqual(const QXmlNodeModelIndex &ni1,
-                            const QXmlNodeModelIndex &ni2) const;
-   virtual void sendNamespaces(const QXmlNodeModelIndex &n,
-                               QAbstractXmlReceiver *const receiver) const;
-   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &n) const = 0;
 
+   virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const;
+   virtual QPatternist::ItemType::Ptr type(const QXmlNodeModelIndex &ni) const;
+
+   virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
+                  const QXmlName::PrefixCode prefix) const;
+
+   virtual bool isDeepEqual(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const;
+   virtual void sendNamespaces(const QXmlNodeModelIndex &n, QAbstractXmlReceiver *const receiver) const;
+   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &n) const = 0;
 
    virtual QXmlNodeModelIndex elementById(const QXmlName &NCName) const = 0;
    virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &NCName) const = 0;

@@ -28,21 +28,17 @@
 
 QT_BEGIN_NAMESPACE
 
-template<typename T> class QList;
+template<typename T>
+class QList;
 
 namespace QPatternist {
+
 class Item;
 
 class ItemType : public virtual QSharedData
 {
  public:
-   /**
-    * A smart pointer wrapping ItemType instances.
-    */
    typedef QExplicitlySharedDataPointer<ItemType> Ptr;
-   /**
-    * A list of ItemType instances, each wrapped in a smart pointer.
-    */
    typedef QList<ItemType::Ptr> List;
 
    virtual ~ItemType();

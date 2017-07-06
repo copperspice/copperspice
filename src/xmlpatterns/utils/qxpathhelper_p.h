@@ -81,7 +81,7 @@ class XPathHelper
       }
    }
 
-   static QPatternist::ItemTypePtr typeFromKind(const QXmlNodeModelIndex::NodeKind nodeKind);
+   static QPatternist::ItemType::Ptr typeFromKind(const QXmlNodeModelIndex::NodeKind nodeKind);
 
    /**
     * Normalizes an @p uri by resolving it to the application directory if empty.

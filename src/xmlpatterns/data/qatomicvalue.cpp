@@ -150,16 +150,15 @@ Item AtomicValue::toXDM(const QVariant &value)
          return Item(Double::fromValue(value.toFloat()));
       case QVariant::Double:
          return Item(Double::fromValue(value.toDouble()));
+
       default: {
          if (value.userType() == qMetaTypeId<float>()) {
             return Item(Float::fromValue(value.value<float>()));
+
          } else {
-            Q_ASSERT_X(false,
-                       Q_FUNC_INFO,
-                       qPrintable(QString::fromLatin1(
-                                     "QVariants of type %1 are not supported in "
-                                     "Patternist, see the documentation")
-                                  .arg(QLatin1String(value.typeName()))));
+            Q_ASSERT_X(false, Q_FUNC_INFO, csPrintable(QString::fromLatin1("QVariants of type %1 are not supported "
+                  "in Patternist").arg(QLatin1String(value.typeName()))));
+
             return AtomicValue::Ptr();
          }
       }

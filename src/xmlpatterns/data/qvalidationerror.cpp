@@ -45,7 +45,7 @@ bool ValidationError::hasError() const
 
 QString ValidationError::stringValue() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "stringValue() asked for ValidationError -- it makes no sense.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return QString();
 }
 
@@ -56,9 +56,7 @@ QString ValidationError::message() const
 
 ItemType::Ptr ValidationError::type() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "This function should never be called, the caller "
-              "didn't check whether the AtomicValue was an ValidationError.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return ItemType::Ptr();
 }
 

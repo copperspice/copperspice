@@ -58,8 +58,7 @@ Item ErrorFN::evaluateSingleton(const DynamicContext::Ptr &context) const
          return Item();
       }
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "Invalid number of arguments passed to fn:error.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid number of arguments passed to fn:error.");
          return Item();
       }
    }

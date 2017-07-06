@@ -44,11 +44,14 @@ class DynamicContext;
 class Item;
 class ItemType;
 class QObjectNodeModel;
-template<typename T> class EmptyIterator;
-template<typename T, typename ListType> class ListIterator;
 
-class AtomicValue : public QSharedData
-   , public CppCastingHelper<AtomicValue>
+template<typename T>
+class EmptyIterator;
+
+template<typename T, typename ListType>
+class ListIterator;
+
+class AtomicValue : public QSharedData, public CppCastingHelper<AtomicValue>
 {
  public:
    virtual ~AtomicValue();

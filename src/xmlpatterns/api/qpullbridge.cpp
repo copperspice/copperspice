@@ -113,8 +113,7 @@ AbstractXmlPullProvider::Event PullBridge::next()
                break;
             }
             default: {
-               Q_ASSERT_X(false, Q_FUNC_INFO,
-                          "Invalid value.");
+               Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid value.");
                m_current = EndOfInput;
             }
          }

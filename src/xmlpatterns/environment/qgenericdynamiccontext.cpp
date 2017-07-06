@@ -61,7 +61,7 @@ QDateTime GenericDynamicContext::currentDateTime() const
 
 xsInteger GenericDynamicContext::contextPosition() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "That this function is called makes no sense. A Focus should be used.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
 
@@ -72,13 +72,13 @@ Item GenericDynamicContext::contextItem() const
 
 xsInteger GenericDynamicContext::contextSize()
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "That this function is called makes no sense. A Focus should be used.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
 
 void GenericDynamicContext::setFocusIterator(const Item::Iterator::Ptr &)
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "That this function is called makes no sense. A Focus should be used.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
 }
 
 Item::Iterator::Ptr GenericDynamicContext::focusIterator() const

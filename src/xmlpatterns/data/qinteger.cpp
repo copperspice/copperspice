@@ -139,8 +139,7 @@ bool Integer::isSigned() const
 
 qulonglong Integer::toUnsignedInteger() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "It makes no sense to call this function, see Numeric::toUnsignedInteger().");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
 

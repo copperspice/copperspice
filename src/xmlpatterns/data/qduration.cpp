@@ -106,15 +106,13 @@ Duration::Ptr Duration::fromComponents(const bool isPositive,
 
 AbstractDuration::Value Duration::value() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "Calling Duration::value() makes no sense");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
 
 Item Duration::fromValue(const Value) const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "Calling Duration::fromValue() makes no sense");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return Item();
 }
 

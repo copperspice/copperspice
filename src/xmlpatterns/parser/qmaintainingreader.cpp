@@ -39,23 +39,18 @@ MaintainingReader<TokenLookupClass, LookupKey>::MaintainingReader(const typename
    m_stripWhitespace.push(true);
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 MaintainingReader<TokenLookupClass, LookupKey>::~MaintainingReader()
 {
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 QSourceLocation MaintainingReader<TokenLookupClass, LookupKey>::currentLocation() const
 {
-   return QSourceLocation(documentURI(),
-                          lineNumber(),
-                          columnNumber());
+   return QSourceLocation(documentURI(), lineNumber(), columnNumber());
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 QXmlStreamReader::TokenType MaintainingReader<TokenLookupClass, LookupKey>::readNext()
 {
    const TokenType retval = QXmlStreamReader::readNext();
@@ -86,13 +81,11 @@ template<typename TokenLookupClass,
          typename LookupKey>
 bool MaintainingReader<TokenLookupClass, LookupKey>::isWhitespace() const
 {
-   return QXmlStreamReader::isWhitespace()
-          || XPathHelper::isWhitespaceOnly(text());
+   return QXmlStreamReader::isWhitespace() || XPathHelper::isWhitespaceOnly(text());
 }
 
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 void MaintainingReader<TokenLookupClass, LookupKey>::error(const QString &message,
       const ReportContext::ErrorCode code) const
 {

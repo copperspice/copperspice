@@ -91,7 +91,7 @@ QPatternist::ItemIteratorPtr XsdValidatedXmlNodeModel::sequencedTypedValue(const
    return m_internalModel->sequencedTypedValue(index);
 }
 
-QPatternist::ItemTypePtr XsdValidatedXmlNodeModel::type(const QXmlNodeModelIndex &index) const
+QPatternist::ItemType::Ptr XsdValidatedXmlNodeModel::type(const QXmlNodeModelIndex &index) const
 {
    return m_internalModel->type(index);
 }

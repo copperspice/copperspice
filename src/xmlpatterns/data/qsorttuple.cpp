@@ -31,8 +31,7 @@ using namespace QPatternist;
 
 bool SortTuple::isAtomicValue() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "It makes no sense to call this function.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return false;
 }
 
@@ -43,22 +42,19 @@ QString SortTuple::stringValue() const
 
 bool SortTuple::isNode() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "It makes no sense to call this function.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return false;
 }
 
 bool SortTuple::hasError() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "It makes no sense to call this function.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return false;
 }
 
 Item::Iterator::Ptr SortTuple::typedValue() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "It makes no sense to call this function.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return Item::Iterator::Ptr();
 }
 

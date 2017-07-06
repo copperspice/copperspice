@@ -220,8 +220,7 @@ bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev,
             return false;
          }
          case QXmlStreamReader::NoToken: {
-            Q_ASSERT_X(false, Q_FUNC_INFO,
-                       "This token is never expected to be received.");
+            Q_ASSERT_X(false, Q_FUNC_INFO, "This token should never be received.");
             return false;
          }
       }

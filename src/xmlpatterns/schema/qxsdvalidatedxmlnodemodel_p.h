@@ -61,11 +61,11 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    QString stringValue(const QXmlNodeModelIndex &n) const override;
    QVariant typedValue(const QXmlNodeModelIndex &n) const override;
 
-   QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > 
+   QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> >
                   iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const override;
 
    QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const override;
-   QPatternist::ItemTypePtr type(const QXmlNodeModelIndex &ni) const override;
+   QPatternist::ItemType::Ptr type(const QXmlNodeModelIndex &ni) const override;
 
    QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
                   const QXmlName::PrefixCode prefix) const override;

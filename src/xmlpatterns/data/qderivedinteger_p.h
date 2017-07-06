@@ -540,9 +540,10 @@ class DerivedInteger : public Numeric
          case TypeNonNegativeInteger:
          case TypeNonPositiveInteger:
          case TypePositiveInteger:
+
          case TypeShort:
-            Q_ASSERT_X(false, Q_FUNC_INFO,
-                       "It makes no sense to call this function, see Numeric::toUnsignedInteger().");
+            Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
+
          /* Fallthrough all these. */
          case TypeUnsignedByte:
          case TypeUnsignedInt:

@@ -89,11 +89,12 @@ ItemType::Ptr XPathHelper::typeFromKind(const QXmlNodeModelIndex::NodeKind nodeK
          return BuiltinTypes::pi;
       case QXmlNodeModelIndex::Comment:
          return BuiltinTypes::comment;
+
       case QXmlNodeModelIndex::Document:
          return BuiltinTypes::document;
+
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "A node type that doesn't exist in the XPath Data Model was encountered.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "A node type that does not exist in the XPath Data Model was encountered.");
          return ItemType::Ptr(); /* Dummy, silence compiler warning. */
       }
    }

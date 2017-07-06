@@ -275,7 +275,7 @@ bool QAbstractXmlForwardIterator<T>::isEmpty()
 template<typename T>
 qint64 QAbstractXmlForwardIterator<T>::sizeHint() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is currently not expected to be used.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
    return -1;
 }
 

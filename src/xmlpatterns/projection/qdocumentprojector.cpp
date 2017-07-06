@@ -78,7 +78,7 @@ void DocumentProjector::startElement(const QXmlName name)
                   continue;
                }
                case ProjectedExpression::Move:
-                  Q_ASSERT_X(false, Q_FUNC_INFO, "The action functions can never return Move.");
+                  Q_ASSERT_X(false, Q_FUNC_INFO, "Move is not valid.");
             }
          }
 

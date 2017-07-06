@@ -33,15 +33,18 @@ CompressedWhitespace::CharIdentifier CompressedWhitespace::toIdentifier(const QC
    switch (ch.unicode()) {
       case ' ':
          return Space;
+
       case '\n':
          return LF;
+
       case '\r':
          return CR;
+
       case '\t':
          return Tab;
+
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "The caller must guarantee only whitespace is passed.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "Only whitespace should be passed.");
          return Tab;
       }
    }

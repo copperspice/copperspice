@@ -385,32 +385,12 @@ void QAbstractXmlReceiver::sendAsNode(const QPatternist::Item &outputItem)
          return;
       }
       case QXmlNodeModelIndex::Namespace:
-         Q_ASSERT_X(false, Q_FUNC_INFO, "Not implemented");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "QXmlNodeModelIndex::Namespace was not implemented");
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              QString::fromLatin1("Unknown node type: %1").arg(asNode.kind()).toUtf8().constData());
+   Q_ASSERT_X(false, Q_FUNC_INFO, QString::fromLatin1("Unknown node type: %1").arg(asNode.kind()).toUtf8().constData());
 }
 
-/*!
-  \internal
-
-   This function may be called instead of characters() if, and only if,
-   \a value consists only of whitespace.
-
-   The caller gurantees that \a value is not empty.
-
-   \e Whitespace refers to a sequence of characters that are either
-   spaces, tabs, or newlines, in any order. In other words, not all
-   the Unicode whitespace category is considered whitespace here.
-
-   However, there is no guarantee or requirement that whitespaceOnly()
-   is called for text nodes containing whitespace only. characters()
-   may be called just as well. This is why the default implementation
-   for whitespaceOnly() calls characters().
-
-   \sa characters()
- */
 void QAbstractXmlReceiver::whitespaceOnly(const QStringRef &value)
 {
    Q_ASSERT_X(value.toString().trimmed().isEmpty(), Q_FUNC_INFO,

@@ -53,9 +53,7 @@ ColoringMessageHandler::ColoringMessageHandler(QObject *parent) : QAbstractMessa
 }
 
 void ColoringMessageHandler::handleMessage(QtMsgType type,
-      const QString &description,
-      const QUrl &identifier,
-      const QSourceLocation &sourceLocation)
+      const QString &description, const QUrl &identifier, const QSourceLocation &sourceLocation)
 {
    const bool hasLine = sourceLocation.line() != -1;
 
@@ -63,13 +61,12 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
       case QtWarningMsg: {
          if (hasLine) {
             writeUncolored(QXmlPatternistCLI::tr("Warning in %1, at line %2, column %3: %4").arg(QString::fromLatin1(
-                              sourceLocation.uri().toEncoded()),
-                           QString::number(sourceLocation.line()),
-                           QString::number(sourceLocation.column()),
-                           colorifyDescription(description)));
+                  sourceLocation.uri().toEncoded()), QString::number(sourceLocation.line()),
+                  QString::number(sourceLocation.column()), colorifyDescription(description)));
+
          } else {
             writeUncolored(QXmlPatternistCLI::tr("Warning in %1: %2").arg(QString::fromLatin1(sourceLocation.uri().toEncoded()),
-                           colorifyDescription(description)));
+                  colorifyDescription(description)));
          }
 
          break;
@@ -89,8 +86,7 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
 
          QString errorId;
-         /* If it's a standard error code, we don't want to output the
-          * whole URI. */
+         /* If it's a standard error code, we do not want to output the whole URI. */
          if (uri.toString() == QLatin1String("http://www.w3.org/2005/xqt-errors")) {
             errorId = errorCode;
          } else {
@@ -110,11 +106,10 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
          break;
       }
+
       case QtCriticalMsg:
-      /* Fallthrough. */
       case QtDebugMsg: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "message() is not supposed to receive QtCriticalMsg or QtDebugMsg.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "QtCriticalMsg or QtDebugMsg are not supported.");
          return;
       }
    }
@@ -143,23 +138,22 @@ QString ColoringMessageHandler::colorifyDescription(const QString &in) const
             result.append(colorify(reader.text().toString(), currentColor));
             continue;
          }
+
          case QXmlStreamReader::EndElement: {
             currentColor = RunningText;
             continue;
          }
-         /* Fallthrough, */
+
          case QXmlStreamReader::StartDocument:
-         /* Fallthrough, */
          case QXmlStreamReader::EndDocument:
             continue;
+
          default:
-            Q_ASSERT_X(false, Q_FUNC_INFO,
-                       "Unexpected node.");
+            Q_ASSERT_X(false, Q_FUNC_INFO, "Unexpected node.");
       }
    }
 
-   Q_ASSERT_X(!reader.hasError(), Q_FUNC_INFO,
-              "The output from Patternist must be well-formed.");
+   Q_ASSERT_X(! reader.hasError(), Q_FUNC_INFO, "The output from Patternist is invalid.");
    return result;
 }
 

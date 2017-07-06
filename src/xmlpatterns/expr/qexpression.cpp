@@ -290,8 +290,7 @@ void Expression::evaluateToSequenceReceiver(const DynamicContext::Ptr &context) 
 
 ItemType::Ptr Expression::expectedContextItemType() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "expectedContextItemType() must be overridden when RequiresContextItem is set.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return ItemType::Ptr();
 }
 
@@ -350,8 +349,7 @@ OptimizationPass::List Expression::optimizationPasses() const
 
 ItemType::Ptr Expression::newFocusType() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "This function must be overridden when CreatesFocusForLast is set.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return ItemType::Ptr();
 }
 

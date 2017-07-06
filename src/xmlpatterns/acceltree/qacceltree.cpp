@@ -178,6 +178,7 @@ QUrl AccelTree::baseUri(const QXmlNodeModelIndex &ni) const
    }
 
    Q_ASSERT_X(false, Q_FUNC_INFO, "This line is never supposed to be reached.");
+
    return QUrl();
 }
 
@@ -343,13 +344,13 @@ QXmlNodeModelIndex::Iterator::Ptr AccelTree::iterate(const QXmlNodeModelIndex &n
 QXmlNodeModelIndex AccelTree::nextFromSimpleAxis(QAbstractXmlNodeModel::SimpleAxis,
       const QXmlNodeModelIndex &) const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is not supposed to be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return QXmlNodeModelIndex();
 }
 
 QVector<QXmlNodeModelIndex> AccelTree::attributes(const QXmlNodeModelIndex &element) const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is not supposed to be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    Q_UNUSED(element);
    return QVector<QXmlNodeModelIndex>();
 }
@@ -524,9 +525,9 @@ QString AccelTree::stringValue(const QXmlNodeModelIndex &ni) const
 
          return result;
       }
+
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "A node type that doesn't exist in the XPath Data Model was encountered.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "A node type which does not exist in the XPath Data Model was encountered.");
          return QString(); /* Dummy, silence compiler warning. */
       }
    }
@@ -562,30 +563,24 @@ Item::Iterator::Ptr AccelTree::sequencedTypedValue(const QXmlNodeModelIndex &n) 
 
    switch (kind(preNumber)) {
       case QXmlNodeModelIndex::Element:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Document:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Attribute:
          return makeSingletonIterator(Item(UntypedAtomic::fromValue(stringValue(n))));
 
       case QXmlNodeModelIndex::Text:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::ProcessingInstruction:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Comment:
          return makeSingletonIterator(Item(AtomicString::fromValue(stringValue(n))));
+
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    qPrintable(QString::fromLatin1("A node type that doesn't exist "
-                               "in the XPath Data Model was encountered.").arg(kind(preNumber))));
+         Q_ASSERT_X(false, Q_FUNC_INFO, "A node type which does not exist in the XPath Data Model was encountered.");
          return Item::Iterator::Ptr(); /* Dummy, silence compiler warning. */
       }
    }
 }
 
 void AccelTree::copyNodeTo(const QXmlNodeModelIndex &node,
-                           QAbstractXmlReceiver *const receiver,
-                           const NodeCopySettings &settings) const
+                  QAbstractXmlReceiver *const receiver, const NodeCopySettings &settings) const
 {
    /* This code piece can be seen as a customized version of
     * QAbstractXmlReceiver::item/sendAsNode(). */

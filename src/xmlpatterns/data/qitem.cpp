@@ -21,20 +21,14 @@
 ***********************************************************************/
 
 #include "qbuiltintypes_p.h"
-
 #include "qitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
-using namespace QPatternist;
-
-Item::Iterator::Ptr Item::sequencedTypedValue() const
+QPatternist::Item::Iterator::Ptr QPatternist::Item::sequencedTypedValue() const
 {
    if (isAtomicValue()) {
-      return makeSingletonIterator(Item(atomicValue));
+      return makeSingletonIterator(QPatternist::Item(atomicValue));
    } else {
       return asNode().sequencedTypedValue();
    }
 }
 
-QT_END_NAMESPACE

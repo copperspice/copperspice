@@ -136,8 +136,7 @@ Expression::Ptr ByIDCreator::create(const Expression::ID id,
          break;
       }
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "Cannot create an expression of requested type; m_id is wrong.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "Can not create an expression of requested type, m_id is invalid.");
          return Expression::Ptr();
       }
    }

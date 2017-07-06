@@ -97,8 +97,7 @@ bool EBVType::isNodeType() const
 
 ItemType::Ptr EBVType::atomizedType() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "That this function is called makes no sense.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return AtomicType::Ptr();
 }
 

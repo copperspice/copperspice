@@ -51,7 +51,7 @@ class EvaluationCache : public SingleContainer
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
-   Properties properties() const override;
+   Expression::Properties properties() const override;
 
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
    const SourceLocationReflection *actualReflection() const override;

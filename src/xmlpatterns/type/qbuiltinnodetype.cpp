@@ -61,8 +61,7 @@ ItemType::Ptr BuiltinNodeType<kind>::atomizedType() const
       case QXmlNodeModelIndex::Comment:
          return BuiltinTypes::xsString;
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "Encountered invalid XPath Data Model node type.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "Encountered invalid XPath Data Model node type.");
          return BuiltinTypes::xsUntypedAtomic;
       }
    }
@@ -85,8 +84,7 @@ QString BuiltinNodeType<kind>::displayName(const NamePool::Ptr &) const
       case QXmlNodeModelIndex::Comment:
          return QLatin1String("comment()");
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO,
-                    "Encountered invalid XPath Data Model node type.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "Encountered invalid XPath Data Model node type.");
          return QString();
       }
    }

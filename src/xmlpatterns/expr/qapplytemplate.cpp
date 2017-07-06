@@ -164,20 +164,20 @@ Expression::Properties ApplyTemplate::properties() const
 
 bool ApplyTemplate::configureRecursion(const CallTargetDescription::Ptr &sign)
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    Q_UNUSED(sign);
    return false;
 }
 
 Expression::Ptr ApplyTemplate::body() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return Expression::Ptr();
 }
 
 CallTargetDescription::Ptr ApplyTemplate::callTargetDescription() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "We're not expected to be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return CallTargetDescription::Ptr();
 }
 

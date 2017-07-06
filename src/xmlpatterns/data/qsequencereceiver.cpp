@@ -85,14 +85,14 @@ void QAbstractXmlReceiver::sendAsNode(const Item &outputItem)
          break;
       }
       case QXmlNodeModelIndex::Namespace:
-         Q_ASSERT_X(false, Q_FUNC_INFO, "Not implemented");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "QXmlNodeModelIndex::Namespace was not implemented");
    }
 }
 
 void QAbstractXmlReceiver::whitespaceOnly(const QStringRef &value)
 {
    Q_ASSERT_X(value.toString().trimmed().isEmpty(), Q_FUNC_INFO,
-              "The caller must guarantee only whitespace is passed. Use characters() in other cases.");
+              "Only whitespace should be passed, use characters() in other cases.");
    characters(value.toString());
 }
 

@@ -343,8 +343,7 @@ void AbstractDateTime::copyTimeSpec(const QDateTime &from,
 
 Item AbstractDateTime::fromValue(const QDateTime &) const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO,
-              "Calling AbstractDateTime::fromDateTime() makes no sense.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return Item();
 }
 QT_END_NAMESPACE

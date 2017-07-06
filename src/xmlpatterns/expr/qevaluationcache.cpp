@@ -210,8 +210,7 @@ Expression::Properties EvaluationCache<IsForGlobal>::properties() const
 }
 
 template<bool IsForGlobal>
-ExpressionVisitorResult::Ptr
-EvaluationCache<IsForGlobal>::accept(const ExpressionVisitor::Ptr &visitor) const
+ExpressionVisitorResult::Ptr EvaluationCache<IsForGlobal>::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }

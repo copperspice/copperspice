@@ -119,8 +119,9 @@ class less<Item::List>
                return orderSpec.direction != OrderBy::OrderSpec::Ascending;
             case AtomicComparator::Equal:
                continue;
+
             case AtomicComparator::Incomparable:
-               Q_ASSERT_X(false, Q_FUNC_INFO, "This code path assume values are always comparable.");
+               Q_ASSERT_X(false, Q_FUNC_INFO, "These values must be comparable.");
          }
       }
 

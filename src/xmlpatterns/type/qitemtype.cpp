@@ -61,7 +61,7 @@ const ItemType &ItemType::operator|(const ItemType &other) const
       ca = ca->xdtSuperType().data();
    } while (ca);
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "We should never reach this line.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This line should never be reached.");
    return *this;
 }
 

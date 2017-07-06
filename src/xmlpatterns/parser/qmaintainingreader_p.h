@@ -38,8 +38,7 @@ QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
-template<typename TokenLookupClass,
-         typename LookupKey = typename TokenLookupClass::NodeName>
+template<typename TokenLookupClass, typename LookupKey = typename TokenLookupClass::NodeName>
 class ElementDescription
 {
  public:
@@ -49,21 +48,18 @@ class ElementDescription
 };
 
 
-template<typename TokenLookupClass,
-         typename LookupKey = typename TokenLookupClass::NodeName>
-class MaintainingReader : public QXmlStreamReader
-   , protected TokenLookupClass
+template<typename TokenLookupClass, typename LookupKey = typename TokenLookupClass::NodeName>
+class MaintainingReader : public QXmlStreamReader, protected TokenLookupClass
 {
  protected:
 
    MaintainingReader(const typename ElementDescription<TokenLookupClass, LookupKey>::Hash &elementDescriptions,
                      const QSet<typename TokenLookupClass::NodeName> &standardAttributes,
-                     const ReportContext::Ptr &context,
-                     QIODevice *const queryDevice);
+                     const ReportContext::Ptr &context, QIODevice *const queryDevice);
 
    virtual ~MaintainingReader();
 
-   TokenType readNext();
+   QXmlStreamReader::TokenType readNext();
 
    /**
     * Returns the name of the current element.
@@ -73,8 +69,7 @@ class MaintainingReader : public QXmlStreamReader
    /**
     * @short Convenience function for calling ReportContext::error().
     */
-   void error(const QString &message,
-              const ReportContext::ErrorCode code) const;
+   void error(const QString &message, const ReportContext::ErrorCode code) const;
 
    /**
     * @short Convenience function for calling ReportContext::warning().

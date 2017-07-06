@@ -37,7 +37,7 @@ NodeNamespaceResolver::NodeNamespaceResolver(const Item &item) : m_node(item.asN
 void NodeNamespaceResolver::addBinding(const QXmlName nb)
 {
    Q_UNUSED(nb);
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Calling this function for this sub-class makes little sense.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
 }
 
 QXmlName::NamespaceCode NodeNamespaceResolver::lookupNamespaceURI(const QXmlName::PrefixCode prefix) const
@@ -57,7 +57,7 @@ QXmlName::NamespaceCode NodeNamespaceResolver::lookupNamespaceURI(const QXmlName
 
 NamespaceResolver::Bindings NodeNamespaceResolver::bindings() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Not implemented.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return NamespaceResolver::Bindings();
 }
 
