@@ -245,10 +245,6 @@ bool QFSFileEnginePrivate::nativeFlush()
    return fh ? flushFh() : fd != -1;
 }
 
-/*!
-    \internal
-    \since 5.1
-*/
 bool QFSFileEnginePrivate::nativeSyncToDisk()
 {
    Q_Q(QFSFileEngine);
@@ -263,9 +259,6 @@ bool QFSFileEnginePrivate::nativeSyncToDisk()
    return ret == 0;
 }
 
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::nativeRead(char *data, qint64 len)
 {
    Q_Q(QFSFileEngine);

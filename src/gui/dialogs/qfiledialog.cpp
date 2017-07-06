@@ -1757,40 +1757,8 @@ QString QFileDialog::getSaveFileName(QWidget *parent, const QString &caption, co
    return QString();
 }
 
-/*!
-    This is a convenience static function that returns a file selected by
-    the user. The file does not have to exist. If the user presses Cancel,
-    it returns an empty url.
-
-    The function is used similarly to QFileDialog::getSaveFileName(). In
-    particular \a parent, \a caption, \a dir, \a filter, \a selectedFilter
-    and \a options are used in the exact same way.
-
-    The main difference with QFileDialog::getSaveFileName() comes from
-    the ability offered to the user to select a remote file. That's why
-    the return type and the type of \a dir is QUrl.
-
-    The \a supportedSchemes argument allows to restrict the type of URLs the
-    user will be able to select. It is a way for the application to declare
-    the protocols it will support to save the file content. An empty list
-    means that no restriction is applied (the default).
-    Supported for local files ("file" scheme) is implicit and always enabled.
-    it is not necessary to include in the restriction.
-
-    When possible, this static function will use the native file dialog and
-    not a QFileDialog. On platforms which don't support selecting remote
-    files, Qt will allow to select only local files.
-
-    \sa getSaveFileName(), getOpenFileUrl(), getOpenFileUrls(), getExistingDirectoryUrl()
-    \since 5.2
-*/
-QUrl QFileDialog::getSaveFileUrl(QWidget *parent,
-                                 const QString &caption,
-                                 const QUrl &dir,
-                                 const QString &filter,
-                                 QString *selectedFilter,
-                                 Options options,
-                                 const QStringList &supportedSchemes)
+QUrl QFileDialog::getSaveFileUrl(QWidget *parent, const QString &caption, const QUrl &dir,
+                  const QString &filter, QString *selectedFilter, Options options, const QStringList &supportedSchemes)
 {
    if (qt_filedialog_save_file_url_hook && !(options & DontUseNativeDialog)) {
       return qt_filedialog_save_file_url_hook(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
@@ -1800,52 +1768,8 @@ QUrl QFileDialog::getSaveFileUrl(QWidget *parent,
    return QUrl::fromLocalFile(getSaveFileName(parent, caption, dir.toLocalFile(), filter, selectedFilter, options));
 }
 
-/*!
-    This is a convenience static function that will return an existing
-    directory selected by the user.
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qfiledialog.cpp 12
-
-    This function creates a modal file dialog with the given \a parent widget.
-    If \a parent is not 0, the dialog will be shown centered over the parent
-    widget.
-
-    The dialog's working directory is set to \a dir, and the caption is set to
-    \a caption. Either of these may be an empty string in which case the
-    current directory and a default caption will be used respectively.
-
-    The \a options argument holds various options about how to run the dialog,
-    see the QFileDialog::Option enum for more information on the flags you can
-    pass. To ensure a native file dialog, \l{QFileDialog::}{ShowDirsOnly} must
-    be set.
-
-    On Windows, Mac OS X and Symbian^3, this static function will use the
-    native file dialog and not a QFileDialog. On Windows CE, if the device has
-    no native file dialog, a QFileDialog will be used.
-
-    On Unix/X11, the normal behavior of the file dialog is to resolve and
-    follow symlinks. For example, if \c{/usr/tmp} is a symlink to \c{/var/tmp},
-    the file dialog will change to \c{/var/tmp} after entering \c{/usr/tmp}. If
-    \a options includes DontResolveSymlinks, the file dialog will treat
-    symlinks as regular directories.
-
-    On Windows the dialog will spin a blocking modal event loop that will not
-    dispatch any QTimers, and if \a parent is not 0 then it will position the
-    dialog just below the parent's title bar.
-
-    On Symbian^3 the \a options parameter is only used to define if the native
-    file dialog is used.
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QFileDialog constructors.
-
-    \sa getOpenFileName(), getOpenFileNames(), getSaveFileName()
-*/
 QString QFileDialog::getExistingDirectory(QWidget *parent,
-      const QString &caption,
-      const QString &dir,
-      Options options)
+      const QString &caption, const QString &dir, Options options)
 {
    if (qt_filedialog_existing_directory_hook && !(options & DontUseNativeDialog)) {
       return qt_filedialog_existing_directory_hook(parent, caption, dir, options);
@@ -1864,7 +1788,7 @@ QString QFileDialog::getExistingDirectory(QWidget *parent,
    }
 #endif
 
-   // create a qt dialog
+   // create a dialog
    QFileDialog dialog(args);
    if (dialog.exec() == QDialog::Accepted) {
       return dialog.selectedFiles().value(0);
@@ -1872,38 +1796,8 @@ QString QFileDialog::getExistingDirectory(QWidget *parent,
    return QString();
 }
 
-/*!
-    This is a convenience static function that will return an existing
-    directory selected by the user. If the user presses Cancel, it
-    returns an empty url.
-
-    The function is used similarly to QFileDialog::getExistingDirectory().
-    In particular \a parent, \a caption, \a dir and \a options are used
-    in the exact same way.
-
-    The main difference with QFileDialog::getExistingDirectory() comes from
-    the ability offered to the user to select a remote directory. That's why
-    the return type and the type of \a dir is QUrl.
-
-    The \a supportedSchemes argument allows to restrict the type of URLs the
-    user will be able to select. It is a way for the application to declare
-    the protocols it will support to fetch the file content. An empty list
-    means that no restriction is applied (the default).
-    Supported for local files ("file" scheme) is implicit and always enabled.
-    it is not necessary to include in the restriction.
-
-    When possible, this static function will use the native file dialog and
-    not a QFileDialog. On platforms which don't support selecting remote
-    files, Qt will allow to select only local files.
-
-    \sa getExistingDirectory(), getOpenFileUrl(), getOpenFileUrls(), getSaveFileUrl()
-    \since 5.2
-*/
-QUrl QFileDialog::getExistingDirectoryUrl(QWidget *parent,
-      const QString &caption,
-      const QUrl &dir,
-      Options options,
-      const QStringList &supportedSchemes)
+QUrl QFileDialog::getExistingDirectoryUrl(QWidget *parent, const QString &caption, const QUrl &dir,
+      Options options, const QStringList &supportedSchemes)
 {
    if (qt_filedialog_existing_directory_url_hook && !(options & DontUseNativeDialog)) {
       return qt_filedialog_existing_directory_url_hook(parent, caption, dir, options, supportedSchemes);

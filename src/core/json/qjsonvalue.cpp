@@ -32,44 +32,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*!
-    \class QJsonValue
-    \inmodule QtCore
-    \ingroup json
-    \reentrant
-    \since 5.0
-
-    \brief The QJsonValue class encapsulates a value in JSON.
-
-    A value in JSON can be one of 6 basic types:
-
-    JSON is a format to store structured data. It has 6 basic data types:
-
-    \list
-    \li bool QJsonValue::Bool
-    \li double QJsonValue::Double
-    \li string QJsonValue::String
-    \li array QJsonValue::Array
-    \li object QJsonValue::Object
-    \li null QJsonValue::Null
-    \endlist
-
-    A value can represent any of the above data types. In addition, QJsonValue has one special
-    flag to represent undefined values. This can be queried with isUndefined().
-
-    The type of the value can be queried with type() or accessors like isBool(), isString(), and so on.
-    Likewise, the value can be converted to the type stored in it using the toBool(), toString() and so on.
-
-    Values are strictly typed internally and contrary to QVariant will not attempt to do any implicit type
-    conversions. This implies that converting to a type that is not stored in the value will return a default
-    constructed return value.
-*/
-
-/*!
-    Creates a QJsonValue of type \a type.
-
-    The default is to create a Null value.
- */
 QJsonValue::QJsonValue(Type type)
    : ui(0), d(0), t(type)
 {
@@ -94,12 +56,6 @@ QJsonValue::QJsonValue(QJsonPrivate::Data *data, QJsonPrivate::Base *base, const
          dbl = v.toDouble(base);
          break;
       case String: {
-         /* Qt 5 Beta 1
-              QString s = v.toString(base);
-              stringData = s.data_ptr();
-              stringData->ref.ref();
-         */
-         // Temporary for QStringData
          QString *s = new QString(v.toString(base));
          stringData = s;
          break;
@@ -115,9 +71,6 @@ QJsonValue::QJsonValue(QJsonPrivate::Data *data, QJsonPrivate::Base *base, const
    }
 }
 
-/*!
-    Creates a value of type Bool, with value \a b.
- */
 QJsonValue::QJsonValue(bool b)
    : d(0), t(Bool)
 {

@@ -38,56 +38,21 @@ class QCommandLineOptionPrivate : public QSharedData
 
    void setNames(const QStringList &nameList);
 
-   //! The list of names used for this option.
+   // The list of names used for this option.
    QStringList names;
 
-   //! The documentation name for the value, if one is expected
-   //! Example: "-o <file>" means valueName == "file"
+   // The documentation name for the value, if one is expected
+   // Example: "-o <file>" means valueName == "file"
    QString valueName;
 
-   //! The description used for this option.
+   // The description used for this option.
    QString description;
 
-   //! The list of default values used for this option.
+   // The list of default values used for this option.
    QStringList defaultValues;
 };
 
-/*!
-    \since 5.2
-    \class QCommandLineOption
-    \brief The QCommandLineOption class defines a possible command-line option.
-    \inmodule QtCore
-    \ingroup shared
-    \ingroup tools
 
-    This class is used to describe an option on the command line. It allows
-    different ways of defining the same option with multiple aliases possible.
-    It is also used to describe how the option is used - it may be a flag (e.g. \c{-v})
-    or take an argument (e.g. \c{-o file}).
-
-    Examples:
-    \snippet code/src_corelib_tools_qcommandlineoption.cpp 0
-
-    \sa QCommandLineParser
-*/
-
-/*!
-    Constructs a command line option object with the given arguments.
-
-    The name of the option is set to \a name.
-    The name can be either short or long. If the name is one character in
-    length, it is considered a short name. Option names must not be empty,
-    must not start with a dash or a slash character, must not contain a \c{=}
-    and cannot be repeated.
-
-    The description is set to \a description. It is customary to add a "."
-    at the end of the description.
-
-    In addition, the \a valueName can be set if the option expects a value.
-    The default value for the option is set to \a defaultValue.
-
-    \sa setDescription(), setValueName(), setDefaultValues()
-*/
 QCommandLineOption::QCommandLineOption(const QString &name, const QString &description,
                                        const QString &valueName,
                                        const QString &defaultValue)
@@ -99,29 +64,9 @@ QCommandLineOption::QCommandLineOption(const QString &name, const QString &descr
    setDefaultValue(defaultValue);
 }
 
-/*!
-    Constructs a command line option object with the given arguments.
 
-    This overload allows to set multiple names for the option, for instance
-    \c{o} and \c{output}.
-
-    The names of the option are set to \a names.
-    The names can be either short or long. Any name in the list that is one
-    character in length is a short name. Option names must not be empty,
-    must not start with a dash or a slash character, must not contain a \c{=}
-    and cannot be repeated.
-
-    The description is set to \a description. It is customary to add a "."
-    at the end of the description.
-
-    In addition, the \a valueName can be set if the option expects a value.
-    The default value for the option is set to \a defaultValue.
-
-    \sa setDescription(), setValueName(), setDefaultValues()
-*/
 QCommandLineOption::QCommandLineOption(const QStringList &names, const QString &description,
-                                       const QString &valueName,
-                                       const QString &defaultValue)
+                                       const QString &valueName, const QString &defaultValue)
    : d(new QCommandLineOptionPrivate)
 {
    d->setNames(names);
@@ -130,44 +75,21 @@ QCommandLineOption::QCommandLineOption(const QStringList &names, const QString &
    setDefaultValue(defaultValue);
 }
 
-/*!
-    Constructs a QCommandLineOption object that is a copy of the QCommandLineOption
-    object \a other.
-
-    \sa operator=()
-*/
 QCommandLineOption::QCommandLineOption(const QCommandLineOption &other)
    : d(other.d)
 {
 }
 
-/*!
-    Destroys the command line option object.
-*/
 QCommandLineOption::~QCommandLineOption()
 {
 }
 
-/*!
-    Makes a copy of the \a other object and assigns it to this QCommandLineOption
-    object.
-*/
 QCommandLineOption &QCommandLineOption::operator=(const QCommandLineOption &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    \fn void QCommandLineOption::swap(QCommandLineOption &other)
-
-    Swaps option \a other with this option. This operation is very
-    fast and never fails.
-*/
-
-/*!
-    Returns the names set for this option.
- */
 QStringList QCommandLineOption::names() const
 {
    return d->names;
@@ -197,22 +119,6 @@ void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
    }
 }
 
-/*!
-    Sets the name of the expected value, for the documentation, to \a valueName.
-
-    Options without a value assigned have a boolean-like behavior:
-    either the user specifies --option or they don't.
-
-    Options with a value assigned need to set a name for the expected value,
-    for the documentation of the option in the help output. An option with names \c{o} and \c{output},
-    and a value name of \c{file} will appear as \c{-o, --output <file>}.
-
-    Call QCommandLineParser::argument() if you expect the option to be present
-    only once, and QCommandLineParser::arguments() if you expect that option
-    to be present multiple times.
-
-    \sa valueName()
- */
 void QCommandLineOption::setValueName(const QString &valueName)
 {
    d->valueName = valueName;

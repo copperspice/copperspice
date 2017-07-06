@@ -168,9 +168,6 @@ bool QFSFileEnginePrivate::nativeClose()
    return ok;
 }
 
-/*
-    \internal
-*/
 bool QFSFileEnginePrivate::nativeFlush()
 {
    if (fh) {
@@ -186,10 +183,6 @@ bool QFSFileEnginePrivate::nativeFlush()
    return true;
 }
 
-/*
-    \internal
-    \since 5.1
-*/
 bool QFSFileEnginePrivate::nativeSyncToDisk()
 {
    if (fh || fd != -1) {

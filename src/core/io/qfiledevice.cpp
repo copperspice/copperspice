@@ -68,166 +68,33 @@ void QFileDevicePrivate::setError(QFileDevice::FileError err, int errNum)
    errorString = qt_error_string(errNum);
 }
 
-/*!
-    \enum QFileDevice::FileError
 
-    This enum describes the errors that may be returned by the error()
-    function.
-
-    \value NoError          No error occurred.
-    \value ReadError        An error occurred when reading from the file.
-    \value WriteError       An error occurred when writing to the file.
-    \value FatalError       A fatal error occurred.
-    \value ResourceError
-    \value OpenError        The file could not be opened.
-    \value AbortError       The operation was aborted.
-    \value TimeOutError     A timeout occurred.
-    \value UnspecifiedError An unspecified error occurred.
-    \value RemoveError      The file could not be removed.
-    \value RenameError      The file could not be renamed.
-    \value PositionError    The position in the file could not be changed.
-    \value ResizeError      The file could not be resized.
-    \value PermissionsError The file could not be accessed.
-    \value CopyError        The file could not be copied.
-
-    \omitvalue ConnectError
-*/
-
-/*!
-    \enum QFileDevice::Permission
-
-    This enum is used by the permission() function to report the
-    permissions and ownership of a file. The values may be OR-ed
-    together to test multiple permissions and ownership values.
-
-    \value ReadOwner The file is readable by the owner of the file.
-    \value WriteOwner The file is writable by the owner of the file.
-    \value ExeOwner The file is executable by the owner of the file.
-    \value ReadUser The file is readable by the user.
-    \value WriteUser The file is writable by the user.
-    \value ExeUser The file is executable by the user.
-    \value ReadGroup The file is readable by the group.
-    \value WriteGroup The file is writable by the group.
-    \value ExeGroup The file is executable by the group.
-    \value ReadOther The file is readable by anyone.
-    \value WriteOther The file is writable by anyone.
-    \value ExeOther The file is executable by anyone.
-
-    \warning Because of differences in the platforms supported by Qt,
-    the semantics of ReadUser, WriteUser and ExeUser are
-    platform-dependent: On Unix, the rights of the owner of the file
-    are returned and on Windows the rights of the current user are
-    returned. This behavior might change in a future Qt version.
-
-    Note that Qt does not by default check for permissions on NTFS
-    file systems, as this may decrease the performance of file
-    handling considerably. It is possible to force permission checking
-    on NTFS by including the following code in your source:
-
-    \snippet doc/src/snippets/ntfsp.cpp 0
-
-    Permission checking is then turned on and off by incrementing and
-    decrementing \c qt_ntfs_permission_lookup by 1.
-
-    \snippet doc/src/snippets/ntfsp.cpp 1
-*/
-
-//************* QFileDevice
-
-/*!
-    \class QFileDevice
-    \since 5.0
-
-    \brief The QFileDevice class provides an interface for reading from and writing to open files.
-
-    \ingroup io
-
-    \reentrant
-
-    QFileDevice is the base class for I/O devices that can read and write text and binary files
-    and \l{The Qt Resource System}{resources}. QFile offers the main functionality,
-    QFileDevice serves as a base class for sharing functionality with other file devices such
-    as QTemporaryFile, by providing all the operations that can be done on files that have
-    been opened by QFile or QTemporaryFile.
-
-    \sa QFile, QTemporaryFile
-*/
-
-/*!
-    \enum QFileDevice::FileHandleFlag
-
-    This enum is used when opening a file to specify additional
-    options which only apply to files and not to a generic
-    QIODevice.
-
-    \value AutoCloseHandle The file handle passed into open() should be
-    closed by close(), the default behavior is that close just flushes
-    the file and the application is responsible for closing the file handle.
-    When opening a file by name, this flag is ignored as Qt always owns the
-    file handle and must close it.
-    \value DontCloseHandle If not explicitly closed, the underlying file
-    handle is left open when the QFile object is destroyed.
- */
-
-
-/*!
-    \internal
-*/
 QFileDevice::QFileDevice()
    : QIODevice(*new QFileDevicePrivate, 0)
 {
 }
-/*!
-    \internal
-*/
+
 QFileDevice::QFileDevice(QObject *parent)
    : QIODevice(*new QFileDevicePrivate, parent)
 {
 }
-/*!
-    \internal
-*/
+
 QFileDevice::QFileDevice(QFileDevicePrivate &dd, QObject *parent)
    : QIODevice(dd, parent)
 {
 }
 
-/*!
-    Destroys the file device, closing it if necessary.
-*/
 QFileDevice::~QFileDevice()
 {
    close();
 }
 
-/*!
-    Returns true if the file can only be manipulated sequentially;
-    otherwise returns false.
-
-    Most files support random-access, but some special files may not.
-
-    \sa QIODevice::isSequential()
-*/
 bool QFileDevice::isSequential() const
 {
    Q_D(const QFileDevice);
    return d->fileEngine && d->fileEngine->isSequential();
 }
 
-/*!
-  Returns the file handle of the file.
-
-  This is a small positive integer, suitable for use with C library
-  functions such as fdopen() and fcntl(). On systems that use file
-  descriptors for sockets (i.e. Unix systems, but not Windows) the handle
-  can be used with QSocketNotifier as well.
-
-  If the file is not open, or there is an error, handle() returns -1.
-
-  This function is not supported on Windows CE.
-
-  \sa QSocketNotifier
-*/
 int QFileDevice::handle() const
 {
    Q_D(const QFileDevice);

@@ -339,14 +339,6 @@ bool QAbstractFileEngine::close()
    return false;
 }
 
-/*!
-    \since 5.1
-
-    Flushes and syncs the file to disk.
-
-    Returns true if successful; otherwise returns false.
-    The default implementation always returns false.
-*/
 bool QAbstractFileEngine::syncToDisk()
 {
    return false;
@@ -448,48 +440,18 @@ bool QAbstractFileEngine::rename(const QString &newName)
    return false;
 }
 
-/*!
-    \since 5.1
-
-    Requests that the file be renamed to \a newName in the file
-    system. If the new name already exists, it must be overwritten.
-    If the operation succeeds, returns true; otherwise returns
-    false.
-
-    This virtual function must be reimplemented by all subclasses.
-
-    \sa setFileName()
- */
 bool QAbstractFileEngine::renameOverwrite(const QString &newName)
 {
    Q_UNUSED(newName);
    return false;
 }
 
-/*!
-    Creates a link from the file currently specified by fileName() to
-    \a newName. What a link is depends on the underlying filesystem
-    (be it a shortcut on Windows or a symbolic link on Unix). Returns
-    true if successful; otherwise returns false.
-*/
 bool QAbstractFileEngine::link(const QString &newName)
 {
    Q_UNUSED(newName);
    return false;
 }
 
-/*!
-    Requests that the directory \a dirName be created. If
-    \a createParentDirectories is true, then any sub-directories in \a dirName
-    that don't exist must be created. If \a createParentDirectories is false then
-    any sub-directories in \a dirName must already exist for the function to
-    succeed. If the operation succeeds return true; otherwise return
-    false.
-
-    This virtual function must be reimplemented by all subclasses.
-
-    \sa setFileName() rmdir() isRelativePath()
- */
 bool QAbstractFileEngine::mkdir(const QString &dirName, bool createParentDirectories) const
 {
    Q_UNUSED(dirName);

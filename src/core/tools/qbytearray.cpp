@@ -449,12 +449,6 @@ QByteArray::QByteArray(int size, char ch)
    }
 }
 
-/*!
-    \internal
-
-    Constructs a byte array of size \a size with uninitialized contents.
-*/
-
 QByteArray::QByteArray(int size, Qt::Initialization)
 {
    d = Data::allocate(uint(size) + 1u);
@@ -463,18 +457,6 @@ QByteArray::QByteArray(int size, Qt::Initialization)
    d->data()[size] = '\0';
 }
 
-/*!
-    Sets the size of the byte array to \a size bytes.
-
-    If \a size is greater than the current size, the byte array is
-    extended to make it \a size bytes with the extra bytes added to
-    the end. The new bytes are uninitialized.
-
-    If \a size is less than the current size, bytes are removed from
-    the end.
-
-    \sa size(), truncate()
-*/
 void QByteArray::resize(int size)
 {
    if (size < 0) {
@@ -518,7 +500,6 @@ void QByteArray::resize(int size)
       }
    }
 }
-
 
 QByteArray &QByteArray::fill(char ch, int size)
 {
@@ -1428,13 +1409,6 @@ QByteArray QByteArray::toUpper() const
    return s;
 }
 
-/*! \fn void QByteArray::clear()
-
-    Clears the contents of the byte array and makes it empty.
-
-    \sa resize(), isEmpty()
-*/
-
 void QByteArray::clear()
 {
    if (!d->ref.deref()) {
@@ -1445,14 +1419,6 @@ void QByteArray::clear()
 
 #if !defined(QT_NO_DATASTREAM)
 
-/*! \relates QByteArray
-
-    Writes byte array \a ba to the stream \a out and returns a reference
-    to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
 {
    if (ba.isNull() && out.version() >= 6) {
@@ -1461,14 +1427,6 @@ QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
    }
    return out.writeBytes(ba.constData(), ba.size());
 }
-
-/*! \relates QByteArray
-
-    Reads a byte array into \a ba from the stream \a in and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &in, QByteArray &ba)
 {
@@ -1496,9 +1454,6 @@ QDataStream &operator>>(QDataStream &in, QByteArray &ba)
    return in;
 }
 #endif
-
-
-
 
 QByteArray QByteArray::simplified() const
 {
@@ -1535,21 +1490,6 @@ QByteArray QByteArray::simplified() const
    return result;
 }
 
-/*!
-    Returns a byte array that has whitespace removed from the start
-    and the end.
-
-    Whitespace means any character for which the standard C++
-    isspace() function returns true. This includes the ASCII
-    characters '\\t', '\\n', '\\v', '\\f', '\\r', and ' '.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 33
-
-    Unlike simplified(), trimmed() leaves internal whitespace alone.
-
-    \sa simplified()
-*/
 QByteArray QByteArray::trimmed() const
 {
    if (d->size == 0) {
@@ -1577,24 +1517,6 @@ QByteArray QByteArray::trimmed() const
    return QByteArray(s + start, l);
 }
 
-/*!
-    Returns a byte array of size \a width that contains this byte
-    array padded by the \a fill character.
-
-    If \a truncate is false and the size() of the byte array is more
-    than \a width, then the returned byte array is a copy of this byte
-    array.
-
-    If \a truncate is true and the size() of the byte array is more
-    than \a width, then any bytes in a copy of the byte array
-    after position \a width are removed, and the copy is returned.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 34
-
-    \sa rightJustified()
-*/
-
 QByteArray QByteArray::leftJustified(int width, char fill, bool truncate) const
 {
    QByteArray result;
@@ -1615,24 +1537,6 @@ QByteArray QByteArray::leftJustified(int width, char fill, bool truncate) const
    }
    return result;
 }
-
-/*!
-    Returns a byte array of size \a width that contains the \a fill
-    character followed by this byte array.
-
-    If \a truncate is false and the size of the byte array is more
-    than \a width, then the returned byte array is a copy of this byte
-    array.
-
-    If \a truncate is true and the size of the byte array is more
-    than \a width, then the resulting byte array is truncated at
-    position \a width.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 35
-
-    \sa leftJustified()
-*/
 
 QByteArray QByteArray::rightJustified(int width, char fill, bool truncate) const
 {
@@ -1663,27 +1567,6 @@ bool QByteArray::isNull() const
    return d == Data::sharedNull();
 }
 
-
-/*!
-    Returns the byte array converted to a \c {long long} using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
-
 qlonglong QByteArray::toLongLong(bool *ok, int base) const
 {
 #if defined(QT_CHECK_RANGE)
@@ -1695,27 +1578,6 @@ qlonglong QByteArray::toLongLong(bool *ok, int base) const
 
    return QLocalePrivate::bytearrayToLongLong(nulTerminated().constData(), base, ok);
 }
-
-/*!
-    Returns the byte array converted to an \c {unsigned long long}
-    using base \a base, which is 10 by default and must be between 2
-    and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 
 qulonglong QByteArray::toULongLong(bool *ok, int base) const
 {
@@ -1729,29 +1591,6 @@ qulonglong QByteArray::toULongLong(bool *ok, int base) const
    return QLocalePrivate::bytearrayToUnsLongLong(nulTerminated().constData(), base, ok);
 }
 
-
-/*!
-    Returns the byte array converted to an \c int using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 36
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
-
 int QByteArray::toInt(bool *ok, int base) const
 {
    qlonglong v = toLongLong(ok, base);
@@ -1763,26 +1602,6 @@ int QByteArray::toInt(bool *ok, int base) const
    }
    return int(v);
 }
-
-/*!
-    Returns the byte array converted to an \c {unsigned int} using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 
 uint QByteArray::toUInt(bool *ok, int base) const
 {
@@ -1796,29 +1615,6 @@ uint QByteArray::toUInt(bool *ok, int base) const
    return uint(v);
 }
 
-/*!
-    \since 4.1
-
-    Returns the byte array converted to a \c long int using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 37
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 long QByteArray::toLong(bool *ok, int base) const
 {
    qlonglong v = toLongLong(ok, base);
@@ -1831,27 +1627,6 @@ long QByteArray::toLong(bool *ok, int base) const
    return long(v);
 }
 
-/*!
-    \since 4.1
-
-    Returns the byte array converted to an \c {unsigned long int} using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 ulong QByteArray::toULong(bool *ok, int base) const
 {
    qulonglong v = toULongLong(ok, base);
@@ -1863,26 +1638,6 @@ ulong QByteArray::toULong(bool *ok, int base) const
    }
    return ulong(v);
 }
-
-/*!
-    Returns the byte array converted to a \c short using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 
 short QByteArray::toShort(bool *ok, int base) const
 {
@@ -1896,26 +1651,6 @@ short QByteArray::toShort(bool *ok, int base) const
    return short(v);
 }
 
-/*!
-    Returns the byte array converted to an \c {unsigned short} using base \a
-    base, which is 10 by default and must be between 2 and 36, or 0.
-
-    If \a base is 0, the base is determined automatically using the
-    following rules: If the byte array begins with "0x", it is assumed to
-    be hexadecimal; if it begins with "0", it is assumed to be octal;
-    otherwise it is assumed to be decimal.
-
-    Returns 0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
-
 ushort QByteArray::toUShort(bool *ok, int base) const
 {
    qulonglong v = toULongLong(ok, base);
@@ -1928,56 +1663,16 @@ ushort QByteArray::toUShort(bool *ok, int base) const
    return ushort(v);
 }
 
-
-/*!
-    Returns the byte array converted to a \c double value.
-
-    Returns 0.0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 38
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
-
 double QByteArray::toDouble(bool *ok) const
 {
    return QLocalePrivate::bytearrayToDouble(nulTerminated().constData(), ok);
 }
-
-/*!
-    Returns the byte array converted to a \c float value.
-
-    Returns 0.0 if the conversion fails.
-
-    If \a ok is not 0: if a conversion error occurs, *\a{ok} is set to
-    false; otherwise *\a{ok} is set to true.
-
-    \note The conversion of the number is performed in the default C locale,
-    irrespective of the user's locale.
-
-    \sa number()
-*/
 
 float QByteArray::toFloat(bool *ok) const
 {
    return float(toDouble(ok));
 }
 
-/*!
-    Returns a copy of the byte array, encoded as Base64.
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 39
-
-    The algorithm used to encode Base64-encoded data is defined in \l{RFC 2045}.
-
-    \sa fromBase64()
-*/
 QByteArray QByteArray::toBase64() const
 {
    const char alphabet[] = "ABCDEFGH" "IJKLMNOP" "QRSTUVWX" "YZabcdef"
@@ -2025,50 +1720,6 @@ QByteArray QByteArray::toBase64() const
    return tmp;
 }
 
-/*!
-    \fn QByteArray &QByteArray::setNum(int n, int base)
-
-    Sets the byte array to the printed value of \a n in base \a base (10
-    by default) and returns a reference to the byte array. The \a base can
-    be any value between 2 and 36. For bases other than 10, n is treated
-    as an unsigned integer.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 40
-
-    \note The format of the number is not localized; the default C locale
-    is used irrespective of the user's locale.
-
-    \sa number(), toInt()
-*/
-
-/*!
-    \fn QByteArray &QByteArray::setNum(uint n, int base)
-    \overload
-
-    \sa toUInt()
-*/
-
-/*!
-    \fn QByteArray &QByteArray::setNum(short n, int base)
-    \overload
-
-    \sa toShort()
-*/
-
-/*!
-    \fn QByteArray &QByteArray::setNum(ushort n, int base)
-    \overload
-
-    \sa toUShort()
-*/
-
-/*!
-    \overload
-
-    \sa toLongLong()
-*/
-
 static char *qulltoa2(char *p, qulonglong n, int base)
 {
 #if defined(QT_CHECK_RANGE)
@@ -2105,12 +1756,6 @@ QByteArray &QByteArray::setNum(qlonglong n, int base)
    return *this;
 }
 
-/*!
-    \overload
-
-    \sa toULongLong()
-*/
-
 QByteArray &QByteArray::setNum(qulonglong n, int base)
 {
    const int buffsize = 66; // big enough for MAX_ULLONG in base 2
@@ -2121,34 +1766,6 @@ QByteArray &QByteArray::setNum(qulonglong n, int base)
    append(p, buffsize - (p - buff));
    return *this;
 }
-
-/*!
-    \overload
-
-    Sets the byte array to the printed value of \a n, formatted in format
-    \a f with precision \a prec, and returns a reference to the
-    byte array.
-
-    The format \a f can be any of the following:
-
-    \table
-    \header \i Format \i Meaning
-    \row \i \c e \i format as [-]9.9e[+|-]999
-    \row \i \c E \i format as [-]9.9E[+|-]999
-    \row \i \c f \i format as [-]9.9
-    \row \i \c g \i use \c e or \c f format, whichever is the most concise
-    \row \i \c G \i use \c E or \c f format, whichever is the most concise
-    \endtable
-
-    With 'e', 'E', and 'f', \a prec is the number of digits after the
-    decimal point. With 'g' and 'G', \a prec is the maximum number of
-    significant digits (trailing zeroes are omitted).
-
-    \note The format of the number is not localized; the default C locale
-    is used irrespective of the user's locale.
-
-    \sa toDouble()
-*/
 
 QByteArray &QByteArray::setNum(double n, char f, int prec)
 {
@@ -2182,33 +1799,6 @@ QByteArray &QByteArray::setNum(double n, char f, int prec)
    return *this;
 }
 
-/*!
-    \fn QByteArray &QByteArray::setNum(float n, char f, int prec)
-    \overload
-
-    Sets the byte array to the printed value of \a n, formatted in format
-    \a f with precision \a prec, and returns a reference to the
-    byte array.
-
-    \note The format of the number is not localized; the default C locale
-    is used irrespective of the user's locale.
-
-    \sa toFloat()
-*/
-
-/*!
-    Returns a byte array containing the string equivalent of the
-    number \a n to base \a base (10 by default). The \a base can be
-    any value between 2 and 36.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 41
-
-    \note The format of the number is not localized; the default C locale
-    is used irrespective of the user's locale.
-
-    \sa setNum(), toInt()
-*/
 QByteArray QByteArray::number(int n, int base)
 {
    QByteArray s;
@@ -2216,11 +1806,6 @@ QByteArray QByteArray::number(int n, int base)
    return s;
 }
 
-/*!
-    \overload
-
-    \sa toUInt()
-*/
 QByteArray QByteArray::number(uint n, int base)
 {
    QByteArray s;
@@ -2228,11 +1813,6 @@ QByteArray QByteArray::number(uint n, int base)
    return s;
 }
 
-/*!
-    \overload
-
-    \sa toLongLong()
-*/
 QByteArray QByteArray::number(qlonglong n, int base)
 {
    QByteArray s;
@@ -2240,11 +1820,6 @@ QByteArray QByteArray::number(qlonglong n, int base)
    return s;
 }
 
-/*!
-    \overload
-
-    \sa toULongLong()
-*/
 QByteArray QByteArray::number(qulonglong n, int base)
 {
    QByteArray s;
@@ -2252,76 +1827,12 @@ QByteArray QByteArray::number(qulonglong n, int base)
    return s;
 }
 
-/*!
-    \overload
-
-    Returns a byte array that contains the printed value of \a n,
-    formatted in format \a f with precision \a prec.
-
-    Argument \a n is formatted according to the \a f format specified,
-    which is \c g by default, and can be any of the following:
-
-    \table
-    \header \i Format \i Meaning
-    \row \i \c e \i format as [-]9.9e[+|-]999
-    \row \i \c E \i format as [-]9.9E[+|-]999
-    \row \i \c f \i format as [-]9.9
-    \row \i \c g \i use \c e or \c f format, whichever is the most concise
-    \row \i \c G \i use \c E or \c f format, whichever is the most concise
-    \endtable
-
-    With 'e', 'E', and 'f', \a prec is the number of digits after the
-    decimal point. With 'g' and 'G', \a prec is the maximum number of
-    significant digits (trailing zeroes are omitted).
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 42
-
-    \note The format of the number is not localized; the default C locale
-    is used irrespective of the user's locale.
-
-    \sa toDouble()
-*/
 QByteArray QByteArray::number(double n, char f, int prec)
 {
    QByteArray s;
    s.setNum(n, f, prec);
    return s;
 }
-
-/*!
-    Constructs a QByteArray that uses the first \a size bytes of the
-    \a data array. The bytes are \e not copied. The QByteArray will
-    contain the \a data pointer. The caller guarantees that \a data
-    will not be deleted or modified as long as this QByteArray and any
-    copies of it exist that have not been modified. In other words,
-    because QByteArray is an \l{implicitly shared} class and the
-    instance returned by this function contains the \a data pointer,
-    the caller must not delete \a data or modify it directly as long
-    as the returned QByteArray and any copies exist. However,
-    QByteArray does not take ownership of \a data, so the QByteArray
-    destructor will never delete the raw \a data, even when the
-    last QByteArray referring to \a data is destroyed.
-
-    A subsequent attempt to modify the contents of the returned
-    QByteArray or any copy made from it will cause it to create a deep
-    copy of the \a data array before doing the modification. This
-    ensures that the raw \a data array itself will never be modified
-    by QByteArray.
-
-    Here is an example of how to read data using a QDataStream on raw
-    data in memory without copying the raw data into a QByteArray:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 43
-
-    \warning A byte array created with fromRawData() is \e not
-    null-terminated, unless the raw data contains a 0 character at
-    position \a size. While that does not matter for QDataStream or
-    functions like indexOf(), passing the byte array to a function
-    accepting a \c{const char *} expected to be '\\0'-terminated will
-    fail.
-
-    \sa setRawData(), data(), constData()
-*/
 
 QByteArray QByteArray::fromRawData(const char *data, int size)
 {
@@ -2338,20 +1849,6 @@ QByteArray QByteArray::fromRawData(const char *data, int size)
    return QByteArray(dataPtr);
 }
 
-/*!
-    \since 4.7
-
-    Resets the QByteArray to use the first \a size bytes of the
-    \a data array. The bytes are \e not copied. The QByteArray will
-    contain the \a data pointer. The caller guarantees that \a data
-    will not be deleted or modified as long as this QByteArray and any
-    copies of it exist that have not been modified.
-
-    This function can be used instead of fromRawData() to re-use
-    existings QByteArray objects to save memory re-allocations.
-
-    \sa fromRawData(), data(), constData()
-*/
 QByteArray &QByteArray::setRawData(const char *data, uint size)
 {
    if (d->ref.isShared() || d->alloc) {
@@ -2369,19 +1866,6 @@ QByteArray &QByteArray::setRawData(const char *data, uint size)
    return *this;
 }
 
-/*!
-    Returns a decoded copy of the Base64 array \a base64. Input is not checked
-    for validity; invalid characters in the input are skipped, enabling the
-    decoding process to continue with subsequent characters.
-
-    For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 44
-
-    The algorithm used to decode Base64-encoded data is defined in \l{RFC 2045}.
-
-    \sa toBase64()
-*/
 QByteArray QByteArray::fromBase64(const QByteArray &base64)
 {
    unsigned int buf = 0;
@@ -2422,17 +1906,6 @@ QByteArray QByteArray::fromBase64(const QByteArray &base64)
    return tmp;
 }
 
-/*!
-    Returns a decoded copy of the hex encoded array \a hexEncoded. Input is not checked
-    for validity; invalid characters in the input are skipped, enabling the
-    decoding process to continue with subsequent characters.
-
-    For example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 45
-
-    \sa toHex()
-*/
 QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
 {
    QByteArray res((hexEncoded.size() + 1) / 2, Qt::Uninitialized);
@@ -2465,12 +1938,6 @@ QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
    return res;
 }
 
-/*!
-    Returns a hex encoded copy of the byte array. The hex encoding uses the numbers 0-9 and
-    the letters a-f.
-
-    \sa fromHex()
-*/
 QByteArray QByteArray::toHex() const
 {
    QByteArray hex(d->size * 2, Qt::Uninitialized);
@@ -2548,21 +2015,6 @@ void q_fromPercentEncoding(QByteArray *ba)
    q_fromPercentEncoding(ba, '%');
 }
 
-/*!
-    \since 4.4
-
-    Returns a decoded copy of the URI/URL-style percent-encoded \a input.
-    The \a percent parameter allows you to replace the '%' character for
-    another (for instance, '_' or '=').
-
-    For example:
-    \code
-        QByteArray text = QByteArray::fromPercentEncoding("Qt%20is%20great%33");
-        text.data();            // returns "Qt is great!"
-    \endcode
-
-    \sa toPercentEncoding(), QUrl::fromPercentEncoding()
-*/
 QByteArray QByteArray::fromPercentEncoding(const QByteArray &input, char percent)
 {
    if (input.isNull()) {
@@ -2652,47 +2104,19 @@ void q_normalizePercentEncoding(QByteArray *ba, const char *exclude)
    q_toPercentEncoding(ba, exclude, 0, '%');
 }
 
-/*!
-    \since 4.4
-
-    Returns a URI/URL-style percent-encoded copy of this byte array. The
-    \a percent parameter allows you to override the default '%'
-    character for another.
-
-    By default, this function will encode all characters that are not
-    one of the following:
-
-        ALPHA ("a" to "z" and "A" to "Z") / DIGIT (0 to 9) / "-" / "." / "_" / "~"
-
-    To prevent characters from being encoded pass them to \a
-    exclude. To force characters to be encoded pass them to \a
-    include. The \a percent character is always encoded.
-
-    Example:
-
-    \code
-         QByteArray text = "{a fishy string?}";
-         QByteArray ba = text.toPercentEncoding("{}", "s");
-         qDebug(ba.constData());
-         // prints "{a fi%73hy %73tring%3F}"
-    \endcode
-
-    The hex encoding uses the numbers 0-9 and the uppercase letters A-F.
-
-    \sa fromPercentEncoding(), QUrl::toPercentEncoding()
-*/
 QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteArray &include,
       char percent) const
 {
    if (isNull()) {
       return QByteArray();   // preserve null
    }
+
    if (isEmpty()) {
       return QByteArray(data(), 0);
    }
 
    QByteArray include2 = include;
-   if (percent != '%')                        // the default
+   if (percent != '%')                         // the default
       if ((percent >= 0x61 && percent <= 0x7A) // ALPHA
             || (percent >= 0x41 && percent <= 0x5A) // ALPHA
             || (percent >= 0x30 && percent <= 0x39) // DIGIT
@@ -2708,172 +2132,5 @@ QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteA
 
    return result;
 }
-
-/*! \typedef QByteArray::ConstIterator
-    \internal
-*/
-
-/*! \typedef QByteArray::Iterator
-    \internal
-*/
-
-/*! \typedef QByteArray::const_iterator
-    \internal
-*/
-
-/*! \typedef QByteArray::iterator
-    \internal
-*/
-
-/*! \typedef QByteArray::const_reference
-    \internal
-*/
-
-/*! \typedef QByteArray::reference
-    \internal
-*/
-
-/*! \typedef QByteArray::value_type
-  \internal
- */
-
-/*!
-    \fn QByteArray::QByteArray(int size)
-
-    Use QByteArray(int, char) instead.
-*/
-
-
-/*!
-    \fn QByteArray QByteArray::leftJustify(uint width, char fill, bool truncate) const
-
-    Use leftJustified() instead.
-*/
-
-/*!
-    \fn QByteArray QByteArray::rightJustify(uint width, char fill, bool truncate) const
-
-    Use rightJustified() instead.
-*/
-
-/*!
-    \fn QByteArray& QByteArray::duplicate(const QByteArray& a)
-
-    \oldcode
-        QByteArray bdata;
-        bdata.duplicate(original);
-    \newcode
-        QByteArray bdata;
-        bdata = original;
-    \endcode
-
-    \note QByteArray uses implicit sharing so if you modify a copy, only the
-    copy is changed.
-*/
-
-/*!
-    \fn QByteArray& QByteArray::duplicate(const char *a, uint n)
-
-    \overload
-
-    \oldcode
-        QByteArray bdata;
-        bdata.duplicate(ptr, size);
-    \newcode
-        QByteArray bdata;
-        bdata = QByteArray(ptr, size);
-    \endcode
-
-    \note QByteArray uses implicit sharing so if you modify a copy, only the
-    copy is changed.
-*/
-
-/*!
-    \fn void QByteArray::resetRawData(const char *data, uint n)
-
-    Use clear() instead.
-*/
-
-/*!
-    \fn QByteArray QByteArray::lower() const
-
-    Use toLower() instead.
-*/
-
-/*!
-    \fn QByteArray QByteArray::upper() const
-
-    Use toUpper() instead.
-*/
-
-/*!
-    \fn QByteArray QByteArray::stripWhiteSpace() const
-
-    Use trimmed() instead.
-*/
-
-/*!
-    \fn QByteArray QByteArray::simplifyWhiteSpace() const
-
-    Use simplified() instead.
-*/
-
-/*!
-    \fn int QByteArray::find(char c, int from = 0) const
-
-    Use indexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::find(const char *c, int from = 0) const
-
-    Use indexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::find(const QByteArray &ba, int from = 0) const
-
-    Use indexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::findRev(char c, int from = -1) const
-
-    Use lastIndexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::findRev(const char *c, int from = -1) const
-
-    Use lastIndexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::findRev(const QByteArray &ba, int from = -1) const
-
-    Use lastIndexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::find(const QString &s, int from = 0) const
-
-    Use indexOf() instead.
-*/
-
-/*!
-    \fn int QByteArray::findRev(const QString &s, int from = -1) const
-
-    Use lastIndexOf() instead.
-*/
-
-/*!
-    \fn DataPtr &QByteArray::data_ptr()
-    \internal
-*/
-
-/*!
-    \typedef QByteArray::DataPtr
-    \internal
-*/
 
 QT_END_NAMESPACE

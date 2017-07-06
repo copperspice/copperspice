@@ -1719,14 +1719,6 @@ QList<QKeySequence> QKeySequence::listFromString(const QString &str, SequenceFor
    return result;
 }
 
-/*!
-    \since 5.1
-
-    Return a string representation of \a list based on \a format.
-
-    \sa toString()
-    \sa listFromString()
-*/
 QString QKeySequence::listToString(const QList<QKeySequence> &list, SequenceFormat format)
 {
    QString result;
@@ -1740,18 +1732,8 @@ QString QKeySequence::listToString(const QList<QKeySequence> &list, SequenceForm
    return result;
 }
 
-/*****************************************************************************
-  QKeySequence stream functions
- *****************************************************************************/
 #if !defined(QT_NO_DATASTREAM)
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QKeySequence &sequence)
-    \relates QKeySequence
 
-    Writes the key \a sequence to the \a stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
 QDataStream &operator<<(QDataStream &s, const QKeySequence &keysequence)
 {
    QList<quint32> list;

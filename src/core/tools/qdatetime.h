@@ -36,7 +36,7 @@ class Q_CORE_EXPORT QDate
       DateFormat = 0,
       StandaloneFormat
    };
- 
+
    QDate() {
       jd = 0;
    }
@@ -242,6 +242,7 @@ class Q_CORE_EXPORT QDateTime
    QDateTime();
    explicit QDateTime(const QDate &);
    QDateTime(const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime);
+
    // ### Qt 6: Merge with above with default offsetSeconds = 0
    QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, int offsetSeconds);
    QDateTime(const QDateTime &other);
@@ -265,7 +266,7 @@ class Q_CORE_EXPORT QDateTime
    void setTimeSpec(Qt::TimeSpec spec);
    void setOffsetFromUtc(int offsetSeconds);
    void setMSecsSinceEpoch(qint64 msecs);
-   void setTime_t(uint secsSince1Jan1970UTC);
+   void setTime_t(uint secs);
 
 #ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
@@ -320,10 +321,10 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QDateTime fromString(const QString &s, const QString &format);
 #endif
-   static QDateTime fromTime_t(uint secsSince1Jan1970UTC);
+   static QDateTime fromTime_t(uint secs);
 
    // ### Qt 6: Merge with above with default spec = Qt::LocalTime
-   static QDateTime fromTime_t(uint secsSince1Jan1970UTC, Qt::TimeSpec spec, int offsetFromUtc = 0);
+   static QDateTime fromTime_t(uint secs, Qt::TimeSpec spec, int offsetFromUtc = 0);
    static QDateTime fromMSecsSinceEpoch(qint64 msecs);
 
    // ### Qt 6: Merge with above with default spec = Qt::LocalTime
