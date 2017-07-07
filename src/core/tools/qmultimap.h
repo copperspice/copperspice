@@ -518,6 +518,31 @@ class QMultiMap
       return m_data.end();
    }
 
+   reverse_iterator rbegin()  {
+      return reverse_iterator(end());
+   }
+
+   const_reverse_iterator rbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   reverse_iterator rend()  {
+      return reverse_iterator(begin());
+   }
+
+   const_reverse_iterator rend() const {
+      return const_reverse_iterator(begin());
+   }
+
+   const_reverse_iterator crbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   const_reverse_iterator crend() const {
+      return const_reverse_iterator(begin());
+   }
+
+   // operators
    QMultiMap &operator+=(const QMultiMap &other) {
       this->unite(other);
       return *this;
@@ -572,6 +597,62 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const K
 }
 
 template <class Key, class Val, class C>
+const Key QMultiMap<Key, Val, C>::key(const Val &value) const
+{
+   return key(value, Key());
+}
+
+template <class Key, class Val, class C>
+const Key QMultiMap<Key, Val, C>::key(const Val &value, const Key &defaultValue) const
+{
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      if (iter.value() == value) {
+         return iter.key();
+      }
+
+      ++iter;
+   }
+
+   return defaultValue;
+}
+
+template <class Key, class Val, class C>
+QList<Key> QMultiMap<Key, Val, C>::keys() const
+{
+   QList<Key> retval;
+   retval.reserve(size());
+
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      retval.append(iter.key());
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <class Key, class Val, class C>
+QList<Key> QMultiMap<Key, Val, C>::keys(const Val &value) const
+{
+   QList<Key> retval;
+
+   const_iterator iter = begin();
+
+   while (iter != end()) {
+      if (iter.value() == value) {
+         retval.append(iter.key());
+      }
+
+      ++iter;
+   }
+
+   return retval;
+}
+
+template <class Key, class Val, class C>
 typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const Key &key, const Val &value)
 {
    int retval = 0;
@@ -586,6 +667,24 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const 
       } else {
          ++iter;
       }
+   }
+
+   return retval;
+}
+
+template <class Key, class Val, class C>
+QList<Key> QMultiMap<Key, Val, C>::uniqueKeys() const
+{
+   QList<Key> retval;
+   retval.reserve(size());
+
+   for (const auto &item : m_data) {
+
+      if (! retval.empty() && retval.last() == item.first) {
+         continue;
+      }
+
+      retval.append(item.first);
    }
 
    return retval;

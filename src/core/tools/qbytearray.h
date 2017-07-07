@@ -23,22 +23,20 @@
 #ifndef QBYTEARRAY_H
 #define QBYTEARRAY_H
 
-#include <QtCore/qrefcount.h>
-#include <QtCore/qnamespace.h>
-#include <QtCore/qarraydata.h>
+#include <qrefcount.h>
+#include <qnamespace.h>
+#include <qarraydata.h>
 
 #include <string.h>
 #include <stdarg.h>
+
+#include <iterator>
 
 #ifdef truncate
 #error qbytearray.h must be included before any header file that defines truncate
 #endif
 
 QT_BEGIN_NAMESPACE
-
-/*****************************************************************************
-  Safe and portable C string functions; extensions to standard string.h
- *****************************************************************************/
 
 Q_CORE_EXPORT char *qstrdup(const char *);
 
@@ -124,11 +122,24 @@ struct QByteArrayDataPtr {
 
 class Q_CORE_EXPORT QByteArray
 {
-   typedef QTypedArrayData<char> Data;
+   using Data = QTypedArrayData<char>;
 
  public:
-   QByteArray() : d(Data::sharedNull()) {
-   }
+   using iterator         = char *;
+   using const_iterator   = const char *;
+   using Iterator         = iterator;
+   using ConstIterator    = const_iterator;
+
+   using reference        = char &;
+   using const_reference  = const char &;
+   using value_type       = char;
+   using DataPtr          = Data *;
+
+   using reverse_iterator       = std::reverse_iterator<iterator>;
+   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+   QByteArray() : d(Data::sharedNull())
+   { }
 
    QByteArray(const char *, int size = -1);
    QByteArray(int size, char c);
@@ -139,14 +150,6 @@ class Q_CORE_EXPORT QByteArray
       if (!d->ref.deref()) {
          Data::deallocate(d);
       }
-   }
-
-   QByteArray &operator=(const QByteArray &);
-   QByteArray &operator=(const char *str);
-
-   QByteArray &operator=(QByteArray && other) {
-      qSwap(d, other.d);
-      return *this;
    }
 
    void swap(QByteArray &other) {
@@ -175,11 +178,6 @@ class Q_CORE_EXPORT QByteArray
    void clear();
 
    char at(int i) const;
-   char operator[](int i) const;
-   char operator[](uint i) const;
-
-   QByteRef operator[](int i);
-   QByteRef operator[](uint i);
 
    int indexOf(char c, int from = 0) const;
    int indexOf(const char *c, int from = 0) const;
@@ -246,9 +244,6 @@ class Q_CORE_EXPORT QByteArray
    QByteArray &replace(const QByteArray &before, const char *after);
    QByteArray &replace(const char *before, const QByteArray &after);
    QByteArray &replace(char before, char after);
-   QByteArray &operator+=(char c);
-   QByteArray &operator+=(const char *s);
-   QByteArray &operator+=(const QByteArray &a);
 
    QList<QByteArray> split(char sep) const;
 
@@ -260,9 +255,63 @@ class Q_CORE_EXPORT QByteArray
    QByteArray &replace(char c, const QString &after);
    QByteArray &replace(const QString &before, const QByteArray &after);
 
-   QByteArray &operator+=(const QString &s);
    int indexOf(const QString &s, int from = 0) const;
    int lastIndexOf(const QString &s, int from = -1) const;
+
+   // iterators
+   inline iterator begin();
+   inline const_iterator begin() const;
+   inline const_iterator cbegin() const;
+   inline const_iterator constBegin() const;
+
+   inline iterator end();
+   inline const_iterator end() const;
+   inline const_iterator cend() const;
+   inline const_iterator constEnd() const;
+
+   reverse_iterator rbegin()  {
+      return reverse_iterator(end());
+   }
+
+   const_reverse_iterator rbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   reverse_iterator rend()  {
+      return reverse_iterator(begin());
+   }
+
+   const_reverse_iterator rend() const {
+      return const_reverse_iterator(begin());
+   }
+
+   const_reverse_iterator crbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   const_reverse_iterator crend() const {
+      return const_reverse_iterator(begin());
+   }
+
+   // operators
+   QByteArray &operator=(const QByteArray &);
+   QByteArray &operator=(const char *str);
+
+   QByteArray &operator=(QByteArray && other) {
+      qSwap(d, other.d);
+      return *this;
+   }
+   char operator[](int i) const;
+   char operator[](uint i) const;
+
+   QByteRef operator[](int i);
+   QByteRef operator[](uint i);
+
+   QByteArray &operator+=(const QString &s);
+
+   QByteArray &operator+=(char c);
+   QByteArray &operator+=(const char *s);
+   QByteArray &operator+=(const QByteArray &a);
 
    inline bool operator==(const QString &s2) const;
    inline bool operator!=(const QString &s2) const;
@@ -307,23 +356,6 @@ class Q_CORE_EXPORT QByteArray
    static QByteArray fromHex(const QByteArray &hexEncoded);
    static QByteArray fromPercentEncoding(const QByteArray &pctEncoded, char percent = '%');
 
-   typedef char *iterator;
-   typedef const char *const_iterator;
-   typedef iterator Iterator;
-   typedef const_iterator ConstIterator;
-   iterator begin();
-   const_iterator begin() const;
-   const_iterator cbegin() const;
-   const_iterator constBegin() const;
-   iterator end();
-   const_iterator end() const;
-   const_iterator cend() const;
-   const_iterator constEnd() const;
-
-   // stl compatibility
-   typedef const char &const_reference;
-   typedef char &reference;
-   typedef char value_type;
    void push_back(char c);
    void push_back(const char *c);
    void push_back(const QByteArray &a);
@@ -343,13 +375,13 @@ class Q_CORE_EXPORT QByteArray
       : d(static_cast<Data *>(dd.ptr)) {
    }
 
-  typedef Data *DataPtr;
    inline DataPtr &data_ptr() {
       return d;
    }
 
  private:
    operator QNoImplicitBoolCast() const;
+
    Data *d;
    void reallocData(uint alloc, Data::AllocationOptions options);
    void expand(int i);

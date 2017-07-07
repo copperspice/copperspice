@@ -473,6 +473,30 @@ class QMap
       return m_data.end();
    }
 
+   reverse_iterator rbegin()  {
+      return reverse_iterator(end());
+   }
+
+   const_reverse_iterator rbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   reverse_iterator rend()  {
+      return reverse_iterator(begin());
+   }
+
+   const_reverse_iterator rend() const {
+      return const_reverse_iterator(begin());
+   }
+
+   const_reverse_iterator crbegin() const {
+      return const_reverse_iterator(end());
+   }
+
+   const_reverse_iterator crend() const {
+      return const_reverse_iterator(begin());
+   }
+
    // operators
    QMap<Key, Val, C> &operator=(const QMap<Key, Val, C> &other) = default;
    QMap<Key, Val, C> &operator=(QMap<Key, Val, C> &&other)      = default;
