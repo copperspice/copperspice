@@ -24,6 +24,8 @@
 #define QABSTRACTXMLNODEMODEL_H
 
 #include <QtXmlPatterns/QXmlName>
+#include <qitemtype_p.h>
+
 #include <QtCore/QSharedData>
 #include <QtCore/QScopedPointer>
 
@@ -49,7 +51,6 @@ namespace QPatternist {
 
 class DynamicContext;
 class Item;
-class ItemType;
 class XsdValidatedXmlNodeModel;
 
 template<typename TResult, typename TSource, typename TMapper, typename Context>

@@ -23,10 +23,8 @@
 #ifndef QPICTUREFORMATPLUGIN_H
 #define QPICTUREFORMATPLUGIN_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
-
-QT_BEGIN_NAMESPACE
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 #if ! defined(QT_NO_PICTURE)
 
@@ -38,12 +36,11 @@ class QStringList;
 struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface {
    virtual bool loadPicture(const QString &format, const QString &filename, QPicture *) = 0;
    virtual bool savePicture(const QString &format, const QString &filename, const QPicture &) = 0;
-   virtual bool installIOHandler(const QString &) = 0;
+   virtual bool installIOHandler(const QString &format) = 0;
 };
 
 #define QPictureFormatInterface_iid "com.copperspice.QPictureFormatInterface"
 CS_DECLARE_INTERFACE(QPictureFormatInterface, QPictureFormatInterface_iid)
-
 
 class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatInterface
 {
@@ -58,8 +55,7 @@ class Q_GUI_EXPORT QPictureFormatPlugin : public QObject, public QPictureFormatI
    bool savePicture(const QString &format, const QString &filename, const QPicture &pic) override;
 };
 
-#endif // QT_NO_PICTURE
+#endif
 
-QT_END_NAMESPACE
 
-#endif // QPICTUREFORMATPLUGIN_H
+#endif
