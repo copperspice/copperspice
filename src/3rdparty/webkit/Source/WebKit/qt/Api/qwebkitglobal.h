@@ -28,21 +28,11 @@
 // Use: #if (QTWEBKIT_VERSION >= QTWEBKIT_VERSION_CHECK(2, 0, 0)). Similar to Qt.
 #define QTWEBKIT_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
-#if defined(QT_MAKEDLL)        /* create a Qt DLL library */
+#if ! defined(QT_STATIC)
 #  if defined(BUILDING_WEBKIT)
 #      define QWEBKIT_EXPORT Q_DECL_EXPORT
 #  else
 #      define QWEBKIT_EXPORT Q_DECL_IMPORT
-#  endif
-#elif defined(QT_DLL) /* use a Qt DLL library */
-#  define QWEBKIT_EXPORT Q_DECL_IMPORT
-#endif
-
-#if !defined(QWEBKIT_EXPORT)
-#  if defined(QT_SHARED)
-#    define QWEBKIT_EXPORT Q_DECL_EXPORT
-#  else
-#    define QWEBKIT_EXPORT
 #  endif
 #endif
 

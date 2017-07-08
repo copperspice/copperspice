@@ -1,7 +1,5 @@
 add_definitions(
     -DQT_BUILD_XMLPATTERNS_LIB
-    -DQT_SHARED
-    -DQT_MAKEDLL
     # BROOM (enable OpenSSL)
     -DQT_NO_OPENSSL
 )

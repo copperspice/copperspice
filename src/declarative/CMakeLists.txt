@@ -1,8 +1,6 @@
 add_definitions(
     -DQT_NO_OPENSSL
     -DQT_BUILD_DECLARATIVE_LIB
-    -DQT_SHARED
-    -DQT_MAKEDLL
 )
 set(EXTRA_DECLARATIVE_LIBS)
 set(EXTRA_DECLARATIVE_CXXFLAGS)
@@ -60,7 +58,7 @@ macro_generate_resources("${DECLARATIVE_SOURCES}")
 macro_generate_package(
     CsDeclarative${BUILD_ABI}
     QtDeclarative
-    "${EXTRA_DECLARATIVE_CXXFLAGS}"    
+    "${EXTRA_DECLARATIVE_CXXFLAGS}"
     "CsCore${BUILD_ABI} QtGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsScript${BUILD_ABI}"
 )
 

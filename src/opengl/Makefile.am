@@ -5,9 +5,7 @@ lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCo
    -Iprivateinclude/QtCore/private -Iprivateinclude/QtGui/private  -Iprivateinclude/QtOpenGL/private \
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src -Isrc/opengl   \
    -DQT_NO_EGL   \
-	-DQT_BUILD_OPENGL_LIB \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+	-DQT_BUILD_OPENGL_LIB
 
 lib_libCsOpenGL@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS)
 lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
@@ -131,7 +129,7 @@ lib_libCsOpenGL@BUILD_ABI@_la_LDFLAGS+= -framework AppKit -framework Carbon -fra
 endif
 
 if OSTYPE_WIN
-lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_MAKEDLL -DQT_BUILD_OPENGL_LIB
+lib_libCsOpenGL@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_GTK -DQT_NO_STYLE_WINDOWSVISTA -DQT_BUILD_OPENGL_LIB
 lib_libCsOpenGL@BUILD_ABI@_la_SOURCES += \
 	src/opengl/qgl_win.cpp \
 	src/opengl/qglpixelbuffer_win.cpp
@@ -154,7 +152,7 @@ OPENGL_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.opengl-header-deps.mk
 
-$(lib_libCsOpenGL@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(OPENGL_HEADERS_INSTALLED) 
+$(lib_libCsOpenGL@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(GUI_HEADERS_INSTALLED) $(OPENGL_HEADERS_INSTALLED)
 
 -include .opengl-header-deps.mk
 

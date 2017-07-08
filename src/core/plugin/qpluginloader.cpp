@@ -136,7 +136,7 @@ bool QPluginLoader::isLoaded() const
 
 void QPluginLoader::setFileName(const QString &fileName)
 {
-#if defined(QT_SHARED)
+#if ! defined(QT_STATIC)
    QLibrary::LoadHints lh;
 
    if (d) {
@@ -153,11 +153,13 @@ void QPluginLoader::setFileName(const QString &fileName)
    if (fn.isEmpty()) {
       d->errorString = QLibrary::tr("The shared library was not found.");
    }
+
 #else
    if (qt_debug_component()) {
       qWarning("Can not load %s into a statically linked CopperSpice library.",
-               (const char *)QFile::encodeName(fileName));
+               QFile::encodeName(fileName).constData() );
    }
+
    Q_UNUSED(fileName);
 #endif
 }

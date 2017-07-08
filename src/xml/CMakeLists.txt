@@ -1,7 +1,5 @@
 add_definitions(
    -DQT_BUILD_XML_LIB
-   -DQT_SHARED
-   -DQT_MAKEDLL
 )
 set(EXTRA_XML_LIBS CsCore${BUILD_ABI})
 set(EXTRA_XML_CXXFLAGS)

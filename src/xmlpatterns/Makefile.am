@@ -5,9 +5,7 @@ lib_libCsXmlPatterns@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude
    -Iprivateinclude/QtCore/private -Iprivateinclude/QtXmlPatterns/private \
    -Iinclude/QtNetwork   -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
-   -DQT_BUILD_XMLPATTERNS_LIB          \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+   -DQT_BUILD_XMLPATTERNS_LIB
 
 lib_libCsXmlPatterns@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
 lib_libCsXmlPatterns@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined

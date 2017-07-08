@@ -93,7 +93,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       ${EXTRA_CORE_LDFLAGS}
       -Wl,-luuid
    )
-   add_definitions(-DQT_MAKEDLL)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTRA_CORE_LDFLAGS
       ${EXTRA_CORE_LDFLAGS}

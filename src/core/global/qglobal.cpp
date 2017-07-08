@@ -53,10 +53,10 @@ const char *qVersion()
 
 bool qSharedBuild()
 {
-#ifdef QT_SHARED
-   return true;
-#else
+#ifdef QT_STATIC
    return false;
+#else
+   return true;
 #endif
 }
 
@@ -94,21 +94,21 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
    typedef WORD (WINAPI* PtrGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
    typedef BOOL (WINAPI* PtrVerQueryValueW)(LPCVOID, LPCWSTR, LPVOID, PUINT);
    typedef BOOL (WINAPI* PtrGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);
-   
+
    QSystemLibrary versionLib(QLatin1String("version"));
 
    if (! versionLib.load()) {
      return false;
-   }  
-   
+   }
+
    PtrGetFileVersionInfoSizeW getFileVersionInfoSizeW = (PtrGetFileVersionInfoSizeW)versionLib.resolve("GetFileVersionInfoSizeW");
    PtrVerQueryValueW verQueryValueW = (PtrVerQueryValueW)versionLib.resolve("VerQueryValueW");
    PtrGetFileVersionInfoW getFileVersionInfoW = (PtrGetFileVersionInfoW)versionLib.resolve("GetFileVersionInfoW");
-   
+
    if (! getFileVersionInfoSizeW || !verQueryValueW || !getFileVersionInfoW) {
      return false;
    }
-   
+
    const wchar_t kernel32Dll[] = L"kernel32.dll";
    DWORD handle;
 
@@ -146,38 +146,38 @@ static inline void determineWinOsVersionFallbackPost8(OSVERSIONINFO *result)
 {
    result->dwBuildNumber   = 0;
    DWORDLONG conditionMask = 0;
-   
+
    VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
    VER_SET_CONDITION(conditionMask, VER_PLATFORMID, VER_EQUAL);
-   
+
    OSVERSIONINFOEX checkVersion = { sizeof(OSVERSIONINFOEX), result->dwMajorVersion, 0,
                                   result->dwBuildNumber, result->dwPlatformId, {'\0'}, 0, 0, 0, 0, 0 };
-   
+
    while (VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_PLATFORMID, conditionMask)) {
      result->dwMajorVersion = checkVersion.dwMajorVersion;
 
      ++checkVersion.dwMajorVersion;
    }
-   
+
    conditionMask = 0;
    checkVersion.dwMajorVersion = result->dwMajorVersion;
    checkVersion.dwMinorVersion = 0;
-   
+
    VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_EQUAL);
    VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
    VER_SET_CONDITION(conditionMask, VER_PLATFORMID, VER_EQUAL);
-   
+
    while (VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, conditionMask)) {
      result->dwMinorVersion = checkVersion.dwMinorVersion;
 
      ++checkVersion.dwMinorVersion;
-   }   
+   }
 }
 
 static inline OSVERSIONINFO winOsVersion()
 {
    OSVERSIONINFO result = { sizeof(OSVERSIONINFO), 0, 0, 0, 0, {'\0'}};
-   
+
    // GetVersionEx() has been deprecated in Windows 8.1 and will return
    // only Windows 8 from that version on.
 
@@ -186,8 +186,8 @@ static inline OSVERSIONINFO winOsVersion()
    if (result.dwMajorVersion == 6 && result.dwMinorVersion == 2) {
 
       if (! determineWinOsVersionPost8(&result)) {
-         determineWinOsVersionFallbackPost8(&result); 
-      }  
+         determineWinOsVersionFallbackPost8(&result);
+      }
    }
 
    return result;
@@ -224,7 +224,7 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
          break;
 
-      default: 
+      default:
           // VER_PLATFORM_WIN32_NT
 
           if (osver.dwMajorVersion < 5) {
@@ -267,8 +267,8 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
       if (override.isEmpty()) {
          return winver;
-      }    
-    
+      }
+
       if (override == "NT") {
          winver = QSysInfo::WV_NT;
 

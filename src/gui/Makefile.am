@@ -1,6 +1,6 @@
 lib_LTLIBRARIES += lib/libCsGui@BUILD_ABI@.la
 lib_libCsGui@BUILD_ABI@_la_SOURCES =
-nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES = 
+nodist_lib_libCsGui@BUILD_ABI@_la_SOURCES =
 
 lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui -Iinclude/QtCore     \
     -Iprivateinclude/QtCore -Iprivateinclude/QtCore/private -Iprivateinclude -Iprivateinclude/QtGui/private  -Iprivateinclude/QtGui  \
@@ -14,7 +14,6 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui 
     -Isrc/gui/styles  -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets  -Isrc/gui/painting  \
     -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
     -DQT_BUILD_GUI_LIB  \
-    -DQT_SHARED         \
     -DQT_BUILTIN_GIF_READER      \
     -DMNG_BUILD_SO               \
     -DMNG_NO_INCLUDE_JNG         \
@@ -40,7 +39,7 @@ lib_libCsGui@BUILD_ABI@_la_LDFLAGS += $(FONTCONFIG_LIBS) -lX11 -lXrender -lXrand
 endif
 
 if OSTYPE_WIN
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE -DQT_MAKEDLL
+lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_STYLE_MAC -DQT_NO_LPR -DQT_NO_DIRECTWRITE
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lole32 -lwinspool -loleaut32 -lcomdlg32 -limm32 -Wl,-luuid --export-all-symbols
 endif
 

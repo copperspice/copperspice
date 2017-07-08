@@ -1,7 +1,6 @@
 add_definitions(
     -DQT_NO_EGL
     -DQT_BUILD_OPENGL_LIB
-    -DQT_SHARED
 )
 set(EXTRA_OPENGL_LIBS
     CsCore${BUILD_ABI}
@@ -57,7 +56,7 @@ set(OPENGL_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/qglcolormap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglcontext.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglformat.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qglframebufferobject.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/qglframebufferobject.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglframebufferobjectformat.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglfunctions.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglfunctionsprivate.h
@@ -75,10 +74,10 @@ set(OPENGL_INCLUDES
 set(OPENGL_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/qgl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglextensions_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qglframebufferobject_p.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/qglframebufferobject_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglpaintdevice_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qglpixelbuffer_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/qglpixmapfilter_p.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/qglpixmapfilter_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicsshadereffect_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qgraphicssystem_gl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/qpaintengine_opengl_p.h
@@ -157,7 +156,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     add_definitions(
         -DQT_NO_STYLE_GTK
         -DQT_NO_STYLE_WINDOWSVISTA
-        -DQT_MAKEDLL
         -DQT_BUILD_OPENGL_LIB)
 
 # TODO: check for COCOA instead?

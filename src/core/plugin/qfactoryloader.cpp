@@ -210,7 +210,7 @@ void QFactoryLoader::updateDir(const QString &pluginDir, QSettings &settings)
 
 void QFactoryLoader::update()
 {
-#ifdef QT_SHARED
+#if ! defined(QT_STATIC)
    Q_D(QFactoryLoader);
 
    QStringList paths = QCoreApplication::libraryPaths();

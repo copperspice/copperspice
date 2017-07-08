@@ -28,11 +28,10 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
+#if !defined(Q_OS_WIN32) || ! defined(QT_STATIC)
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QGenericPluginFactoryInterface_iid,
-                           QLatin1String("/generic"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QGenericPluginFactoryInterface_iid,
+                  QLatin1String("/generic"), Qt::CaseInsensitive))
 
 #endif
 
@@ -60,12 +59,13 @@ QObject *QGenericPluginFactory::create(const QString &key, const QString &specif
 {
    QString driver = key.toLower();
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-   if (QGenericPluginFactoryInterface *factory = qobject_cast<QGenericPluginFactoryInterface *>(loader()->instance(
-            driver))) {
+#if ! defined(Q_OS_WIN32) || ! defined(QT_STATIC)
+   if (QGenericPluginFactoryInterface *factory =
+            qobject_cast<QGenericPluginFactoryInterface *>(loader()->instance(driver))) {
       return factory->create(driver, specification);
    }
 #endif
+
    return 0;
 }
 
@@ -78,14 +78,16 @@ QStringList QGenericPluginFactory::keys()
 {
    QStringList list;
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
+#if ! defined(Q_OS_WIN32) || ! defined(QT_STATIC)
    QStringList plugins = loader()->keys();
+
    for (int i = 0; i < plugins.size(); ++i) {
       if (!list.contains(plugins.at(i))) {
          list += plugins.at(i);
       }
    }
-#endif //QT_MAKEDLL
+#endif
+
    return list;
 }
 

@@ -5,9 +5,7 @@ lib_libCsSvg@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore 
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtGui/private  -Iprivateinclude/QtSvg/private   \
    -Isrc/svg  -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
-	-DQT_BUILD_SVG_LIB \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+	-DQT_BUILD_SVG_LIB
 
 lib_libCsSvg@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsSvg@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la

@@ -75,7 +75,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     set(EXTRA_GUI_LIBS
         ${EXTRA_GUI_LIBS}
         ${FONTCONFIG_LIBRARIES}
-        ${FREETYPE_LIBRARIES}        
+        ${FREETYPE_LIBRARIES}
         ${X11_X11_LIB}
         ${X11_Xrender_LIB}
         ${X11_Xrandr_LIB}
@@ -98,7 +98,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     )
     include_directories(
         ${FONTCONFIG_INCLUDES}
-        ${FREETYPE_INCLUDE_DIRS}      
+        ${FREETYPE_INCLUDE_DIRS}
         ${X11_X11_INCLUDE_PATH}
         ${X11_Xrender_INCLUDE_PATH}
         ${X11_Xrandr_INCLUDE_PATH}
@@ -132,7 +132,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         -DQT_NO_STYLE_MAC
         -DQT_NO_LPR
         -DQT_NO_DIRECTWRITE
-        -DQT_MAKEDLL
    )
 endif()
 

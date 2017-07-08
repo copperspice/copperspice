@@ -6,9 +6,7 @@ lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtC
 	-Isrc/network/access -Isrc/network/bearer   \
 	-Isrc/network/socket     \
 	-DBUILD_DATE=\"`date +%Y-%m-%d`\"  \
-	-DQT_BUILD_NETWORK_LIB   \
-	-DQT_SHARED  \
-	-DQT_MAKEDLL
+	-DQT_BUILD_NETWORK_LIB
 
 lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsNetwork@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
@@ -52,7 +50,7 @@ NETWORK_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.network-header-deps.mk
 
-$(lib_libCsNetwork@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED) 
+$(lib_libCsNetwork@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(NETWORK_HEADERS_INSTALLED)
 
 -include .network-header-deps.mk
 

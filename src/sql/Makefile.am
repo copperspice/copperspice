@@ -5,9 +5,7 @@ lib_libCsSql@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore 
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtSql/private  \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_SQL_SQLITE   \
-	-DQT_BUILD_SQL_LIB \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+	-DQT_BUILD_SQL_LIB
 
 lib_libCsSql@BUILD_ABI@_la_CFLAGS =
 lib_libCsSql@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined

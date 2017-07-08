@@ -2,9 +2,7 @@ lib_LTLIBRARIES += lib/libCsXml@BUILD_ABI@.la
 lib_libCsXml@BUILD_ABI@_la_SOURCES =
 
 lib_libCsXml@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtXml -Iprivateinclude/QtCore/private  \
-	-DQT_BUILD_XML_LIB \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+	-DQT_BUILD_XML_LIB
 
 lib_libCsXml@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsXml@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
@@ -33,7 +31,7 @@ XML_HEADERS_INSTALLED= \
 
 BUILT_SOURCES+=.xml-header-deps.mk
 
-$(lib_libCsXml@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED) 
+$(lib_libCsXml@BUILD_ABI@_la_SOURCES) : $(CORE_HEADERS_INSTALLED) $(XML_HEADERS_INSTALLED)
 
 -include .xml-header-deps.mk
 

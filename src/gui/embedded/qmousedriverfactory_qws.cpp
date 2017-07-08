@@ -36,13 +36,12 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
+#if ! defined(Q_OS_WIN32) || ! defined(QT_STATIC)
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
-                          (QWSMouseHandlerFactoryInterface_iid,
-                           QLatin1String("/mousedrivers"), Qt::CaseInsensitive))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QWSMouseHandlerFactoryInterface_iid,
+                  QLatin1String("/mousedrivers"), Qt::CaseInsensitive))
 
-#endif //QT_MAKEDLL
+#endif
 
 /*!
     \class QMouseDriverFactory
@@ -116,12 +115,13 @@ QWSMouseHandler *QMouseDriverFactory::create(const QString &key, const QString &
    }
 #endif
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
-   if (QWSMouseHandlerFactoryInterface *factory = qobject_cast<QWSMouseHandlerFactoryInterface *>(loader()->instance(
-            driver))) {
+#if ! defined(Q_OS_WIN32) || ! defined(QT_STATIC)
+   if (QWSMouseHandlerFactoryInterface *factory =
+            qobject_cast<QWSMouseHandlerFactoryInterface *>(loader()->instance(driver))) {
       return factory->create(driver, device);
    }
 #endif
+
    return 0;
 }
 
@@ -151,14 +151,16 @@ QStringList QMouseDriverFactory::keys()
    list << QLatin1String("LinuxInput");
 #endif
 
-#if !defined(Q_OS_WIN32) || defined(QT_MAKEDLL)
+#if ! defined(Q_OS_WIN32) || ! defined(QT_STATIC)
    QStringList plugins = loader()->keys();
+
    for (int i = 0; i < plugins.size(); ++i) {
       if (!list.contains(plugins.at(i))) {
          list += plugins.at(i);
       }
    }
-#endif //QT_MAKEDLL
+#endif
+
    return list;
 }
 

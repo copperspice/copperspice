@@ -2,7 +2,6 @@ add_definitions(
     -DMAKE_PHONON_LIB
     -DQT_NO_DBUS
     -DQT_BUILD_PHONON_LIB
-    -DQT_MAKEDLL
 )
 set(EXTRA_PHONON_LIBS
     CsCore${BUILD_ABI}
@@ -272,9 +271,9 @@ set(PHONON_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimevideoplayer.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/backendheader.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/medianodevideopart.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/medianodeevent.h 
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/medianodeevent.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimeaudioplayer.h
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audionode.h 
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audionode.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audiograph.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audiooutput.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimemetadata.h
@@ -332,8 +331,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     )
     add_definitions(
         -DQT_BUILD_DS9_LIB
-        -DQT_SHARED
-        -DQT_MAKEDLL
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/ds9
@@ -378,8 +375,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     add_definitions(
         -DQT_NO_OPENGL
         -DQT_BUILD_GSTREAMER_LIB
-        -DQT_SHARED
-        -DQT_MAKEDLL
         ${GSTREAMER_DEFINITIONS}
         ${LIBXML2_DEFINITIONS}
     )
@@ -406,7 +401,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/backend.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/mediaobject.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/mediaobjectaudionode.mm
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audiomixer.mm 
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/audiomixer.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimeaudioplayer.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/videoframe.mm
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7/quicktimemetadata.mm
@@ -439,8 +434,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(
         -DQT_NO_OPENGL
         -DQT_BUILD_QT7_LIB
-        -DQT_SHARED
-        -DQT_MAKEDLL
     )
     include_directories(
         ${CMAKE_SOURCE_DIR}/src/3rdparty/phonon/qt7

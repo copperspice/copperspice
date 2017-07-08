@@ -1795,10 +1795,12 @@ void QAxServerBase::resize(const QSize &size)
     QSize oldSize = qt.widget->size();
     qt.widget->resize(size);
     QSize newSize = qt.widget->size();
+
     // make sure we get a resize event even if not embedded as a control
-    if (!m_hWnd && !qt.widget->isVisible() && newSize != oldSize) {
+    if (! m_hWnd && !qt.widget->isVisible() && newSize != oldSize) {
         QResizeEvent resizeEvent(newSize, oldSize);
-#ifndef QT_DLL // import from static library
+
+#ifdef QT_STATIC      // import from static library
         extern bool qt_sendSpontaneousEvent(QObject*,QEvent*);
 #endif
         qt_sendSpontaneousEvent(qt.widget, &resizeEvent);
@@ -4067,7 +4069,7 @@ HRESULT WINAPI QAxServerBase::SetColorScheme(LOGPALETTE*)
 }
 
 
-#ifdef QT_DLL // avoid conflict with symbol in static lib
+#ifndef QT_STATIC    // avoid conflict with symbol in static lib
 bool qt_sendSpontaneousEvent(QObject *o, QEvent *e)
 {
     return QCoreApplication::sendSpontaneousEvent(o, e);

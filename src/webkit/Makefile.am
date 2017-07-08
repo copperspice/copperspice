@@ -6,7 +6,6 @@ CXXFLAGS:=$(patsubst -O%,,@CXXFLAGS@)
 OBJCXXFLAGS=$(CXXFLAGS)
 
 AUTOMAKE_OPTIONS = subdir-objects
-AM_CFLAGS = -DQT_SHARED
 AM_CXXFLAGS = $(AM_CFLAGS)
 AM_LDFLAGS =
 BUILT_SOURCES =
@@ -52,7 +51,6 @@ ______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
 endif
 
 if OSTYPE_WIN
-______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_MAKEDLL
 ______lib_libCsWebKit@BUILD_ABI@_la_LDFLAGS += -lgdi32 -lwinmm -lshlwapi -lversion
 ______lib_libCsWebKit@BUILD_ABI@_la_LDFLAGS += -Wl,-s
 endif
@@ -5233,7 +5231,7 @@ WEBKIT_INTERNAL_INCLUDES= \
 	../3rdparty/webkit/include/WebCore/npapi.h \
 	../3rdparty/webkit/include/WebCore/npfunctions.h \
 	../3rdparty/webkit/include/WebCore/npruntime.h \
-	../3rdparty/webkit/include/WebCore/npruntime_internal.h 
+	../3rdparty/webkit/include/WebCore/npruntime_internal.h
 
 
 
@@ -5310,7 +5308,7 @@ create-webkit-headers: \
 
 BUILT_SOURCES+=.webkit-header-deps.mk create-webkit-headers
 
-#$(lib_CsWebKit1_la_SOURCES): create-core-headers create-gui-headers create-webkit-headers 
+#$(lib_CsWebKit1_la_SOURCES): create-core-headers create-gui-headers create-webkit-headers
 
 -include .webkit-header-deps.mk
 

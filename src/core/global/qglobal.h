@@ -660,16 +660,7 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #endif
 
 
-// Create DLL if QT_DLL is defined (Windows only)
-#if defined(Q_OS_WIN)
-#  if defined(QT_NODLL)
-#    undef QT_MAKEDLL
-#    undef QT_DLL
-
-#  elif defined(QT_MAKEDLL)        // create a DLL library
-#    if defined(QT_DLL)
-#      undef QT_DLL
-#    endif
+#if defined(Q_OS_WIN) &&  ! defined(QT_STATIC)        // create a DLL library
 
 #    if defined(QT_BUILD_CORE_LIB)
 #      define Q_CORE_EXPORT          Q_DECL_EXPORT
@@ -749,33 +740,11 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #      define Q_DBUS_EXPORT          Q_DECL_IMPORT
 #    endif
 
-#    define Q_TEMPLATEDLL
-
-#  elif defined(QT_DLL)     // use a DLL library
-#    define Q_CORE_EXPORT           Q_DECL_IMPORT
-#    define Q_GUI_EXPORT            Q_DECL_IMPORT
-#    define Q_SQL_EXPORT            Q_DECL_IMPORT
-#    define Q_NETWORK_EXPORT        Q_DECL_IMPORT
-#    define Q_SVG_EXPORT            Q_DECL_IMPORT
-#    define Q_DECLARATIVE_EXPORT    Q_DECL_IMPORT
-#    define Q_OPENGL_EXPORT         Q_DECL_IMPORT
-#    define Q_MULTIMEDIA_EXPORT     Q_DECL_IMPORT
-#    define Q_XML_EXPORT            Q_DECL_IMPORT
-#    define Q_XMLPATTERNS_EXPORT    Q_DECL_IMPORT
-#    define Q_SCRIPT_EXPORT         Q_DECL_IMPORT
-#    define Q_SCRIPTTOOLS_EXPORT    Q_DECL_IMPORT
-#    define Q_DBUS_EXPORT           Q_DECL_IMPORT
-#    define Q_TEMPLATEDLL
-#  endif
-
-#else
-#  undef QT_MAKEDLL    // ignore these for other platforms
-#  undef QT_DLL
-
 #endif
 
-#if !defined(Q_CORE_EXPORT)
-#  if defined(QT_SHARED)
+#if ! defined(Q_CORE_EXPORT)
+
+#  if ! defined(QT_STATIC)
 #    define Q_CORE_EXPORT           Q_DECL_EXPORT
 #    define Q_GUI_EXPORT            Q_DECL_EXPORT
 #    define Q_SQL_EXPORT            Q_DECL_EXPORT
@@ -804,6 +773,7 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #    define Q_SCRIPTTOOLS_EXPORT
 #    define Q_DBUS_EXPORT
 #  endif
+
 #endif
 
 inline void qt_noop(void) {}

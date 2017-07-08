@@ -9,9 +9,7 @@ lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_BUILD_CORE_LIB  \
-   -DBUILDING_LIB_CS_SIGNAL  \
-   -DQT_SHARED   \
-   -DQT_MAKEDLL
+   -DBUILDING_LIB_CS_SIGNAL
 
 lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
 lib_libCsCore@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)
@@ -26,7 +24,6 @@ lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv
 endif
 
 if OSTYPE_WIN
-lib_libCsCore@BUILD_ABI@_la_CFLAGS += -DQT_MAKEDLL
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 

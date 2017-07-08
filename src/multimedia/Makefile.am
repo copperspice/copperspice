@@ -3,9 +3,7 @@ lib_libCsMultimedia@BUILD_ABI@_la_SOURCES =
 
 lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui -Iinclude/QtMultimedia \
    -Iprivateinclude/QtCore/private  -Iprivateinclude/QtMultimedia/private   \
-   -DQT_BUILD_MULTIMEDIA_LIB   \
-	-DQT_SHARED   \
-	-DQT_MAKEDLL
+   -DQT_BUILD_MULTIMEDIA_LIB
 
 lib_libCsMultimedia@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsMultimedia@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_ABI@.la

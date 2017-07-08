@@ -540,7 +540,7 @@ set(WEBKITA_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSMessagePortCustom.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSMessagePortCustom.h
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNamedNodeMapCustom.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNavigatorCustom.cpp 
+    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNavigatorCustom.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNodeCustom.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNodeFilterCondition.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/bindings/js/JSNodeFilterCustom.cpp
@@ -2332,7 +2332,7 @@ set(WEBKITE_SOURCES
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/win)
-    add_definitions(-DUNICODE -DQT_MAKEDLL)
+    add_definitions(-DUNICODE)
     set(WEBKIT_SOURCES
         ${WEBKIT_SOURCES}
         ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/JavaScriptCore/wtf/OSAllocatorWin.cpp

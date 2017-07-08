@@ -15,13 +15,11 @@ add_definitions(
     -UHAVE_CONFIG_H
     -DUSE_SYSTEM_MALLOC
     -DQT_BUILD_SCRIPT_LIB
-    -DQT_SHARED
-    -DQT_MAKEDLL
 #   -DWTF_USE_JAVASCRIPTCORE_BINDINGS=1 -DWTF_CHANGES=1
 #   -DBUILDING_QT__
 #   -DBUILDING_JavaScriptCore -DBUILDING_WTF
 #   -DJSC=QTJSC -Djscyyparse=qtjscyyparse -Djscyylex=qtjscyylex
-#   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE="" -DQT_MAKEDLL
+#   -Djscyyerror=qtjscyyerror -DWTF=QTWTF -DWTF_EXPORT_PRIVATE=""
 #   -DWTF_USE_JSC -DWTF_PLATFORM_QT=1
 )
 set(EXTRA_SCRIPT_LIBS CsCore${BUILD_ABI})

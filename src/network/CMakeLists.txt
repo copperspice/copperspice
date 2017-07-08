@@ -5,6 +5,13 @@ set(EXTRA_NETWORK_LIBS CsCore${BUILD_ABI})
 set(EXTRA_NETWORK_CXXFLAGS)
 set(EXTRA_NETWORK_LDFLAGS)
 
+# these lines must come before the other includes, os x ordering issue
+if(NOT OPENSSL_FOUND)
+    add_definitions(-DQT_NO_OPENSSL)
+else()
+    include_directories(${OPENSSL_INCLUDE_DIR})
+endif()
+
 include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_BINARY_DIR}/privateinclude
@@ -21,12 +28,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl
 )
 
-if(NOT OPENSSL_FOUND)
-    add_definitions(-DQT_NO_OPENSSL)
-else()
-    include_directories(${OPENSSL_INCLUDE_DIR})
-endif()
-
 include(access/access.cmake)
 include(bearer/bearer.cmake)
 include(kernel/kernel.cmake)
@@ -41,7 +42,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_NETWORK_LIBS
         ${EXTRA_NETWORK_LIBS} ws2_32
     )
-    add_definitions(-DQT_MAKEDLL)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -73,7 +73,7 @@ macro_generate_resources("${NETWORK_SOURCES}")
 macro_generate_package(
     CsNetwork${BUILD_ABI}
     QtNetwork
-    "${EXTRA_CORE_CXXFLAGS}"
+    "${EXTRA_NETWORK_CXXFLAGS}"
     "CsCore${BUILD_ABI}"
 )
 

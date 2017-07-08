@@ -1,7 +1,5 @@
 add_definitions(
     -DQT_BUILD_SCRIPTTOOLS_LIB
-    -DQT_SHARED
-    -DQT_MAKEDLL
 )
 set(EXTRA_SCRIPTTOOLS_LIBS)
 set(EXTRA_SCRIPTTOOLS_CXXFLAGS)
@@ -45,7 +43,7 @@ macro_generate_resources("${SCRIPTTOOLS_SOURCES}")
 macro_generate_package(
     CsScriptTools${BUILD_ABI}
     QtScriptTools
-    "${EXTRA_SCRIPTTOOLS_CXXFLAGS}"    
+    "${EXTRA_SCRIPTTOOLS_CXXFLAGS}"
     "CsCore${BUILD_ABI} CsGui${BUILD_ABI}"
 )
 

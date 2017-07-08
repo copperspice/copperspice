@@ -1,6 +1,5 @@
 add_definitions(
     -DQT_BUILD_SVG_LIB
-    -DQT_SHARED    
 )
 set(EXTRA_SVG_LIBS CsCore${BUILD_ABI} CsGui${BUILD_ABI})
 set(EXTRA_SVG_CXXFLAGS)
@@ -71,7 +70,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_SVG_LIBS}
         ws2_32
     )
-    add_definitions(-DQT_MAKEDLL)
 endif()
 
 function_variable_fixup("${EXTRA_SVG_CXXFLAGS}" EXTRA_SVG_CXXFLAGS)
