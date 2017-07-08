@@ -34,15 +34,18 @@
 #include <QtCore/qset.h>
 #include <QtCore/qcontiguouscache.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QDebug
 {
    struct Stream {
-      Stream(QIODevice *device) : ts(device), ref(1), type(QtDebugMsg), space(true), message_output(false) {}
-      Stream(QString *string) : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg), space(true),
-         message_output(false) {}
-      Stream(QtMsgType t) : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t), space(true), message_output(true) {}
+      Stream(QIODevice *device)
+         : ts(device), ref(1), type(QtDebugMsg), space(true), message_output(false) {}
+
+      Stream(QString *string)
+         : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg), space(true), message_output(false) {}
+
+      Stream(QtMsgType t)
+         : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t), space(true), message_output(true) {}
+
       QTextStream ts;
       QString buffer;
       int ref;
@@ -52,33 +55,39 @@ class Q_CORE_EXPORT QDebug
    } *stream;
 
  public:
-   inline QDebug(QIODevice *device) : stream(new Stream(device)) {}
-   inline QDebug(QString *string) : stream(new Stream(string)) {}
-   inline QDebug(QtMsgType t) : stream(new Stream(t)) {}
-   inline QDebug(const QDebug &o): stream(o.stream) {
+   QDebug(QIODevice *device)
+      : stream(new Stream(device)) {}
+
+   QDebug(QString *string)
+      : stream(new Stream(string)) {}
+
+   QDebug(QtMsgType t)
+      : stream(new Stream(t)) {}
+
+   QDebug(const QDebug &o): stream(o.stream) {
       ++stream->ref;
    }
 
    inline QDebug &operator=(const QDebug &other);
 
-   inline ~QDebug() {
-      if (!--stream->ref) {
+   ~QDebug() {
+      if (! --stream->ref) {
          if (stream->message_output) {
 
             QT_TRY {
 
 #if QDEBUG_USE_LOCAL_ENCODING
-               qt_message_output(stream->type, stream->buffer.toLocal8Bit().data());
+               qt_message_output(stream->type, stream->buffer.toLocal8Bit().constData());
 #else
                qt_message_output(stream->type, stream->buffer.toLatin1().constData());
 #endif
 
             } QT_CATCH(std::bad_alloc &) {
-               /* We're out of memory - give up. */
+               // out of memory, give up.
             }
 
-
          }
+
          delete stream;
       }
    }
@@ -246,82 +255,87 @@ inline QDebug &QDebug::operator=(const QDebug &other)
       QDebug copy(other);
       qSwap(stream, copy.stream);
    }
+
    return *this;
 }
 
-#if defined(FORCE_UREF)
-template <class T>
-inline QDebug &operator<<(QDebug debug, const QList<T> &list)
-
-#else
 template <class T>
 inline QDebug operator<<(QDebug debug, const QList<T> &list)
-#endif
 {
    debug.nospace() << '(';
+
    for (typename QList<T>::size_type i = 0; i < list.count(); ++i) {
       if (i) {
          debug << ", ";
       }
       debug << list.at(i);
    }
+
    debug << ')';
    return debug.space();
 }
 
-#if defined(FORCE_UREF)
 template <typename T>
-inline QDebug &operator<<(QDebug debug, const QVector<T> &vec)
-#else
-template <typename T>
-inline QDebug operator<<(QDebug debug, const QVector<T> &vec)
-#endif
+inline QDebug operator<<(QDebug debug, const QVector<T> &vector)
 {
    debug.nospace() << "QVector";
-   return operator<<(debug, vec.toList());
+   return operator<<(debug, vector.toList());
 }
 
-#if defined(FORCE_UREF)
-template <class aKey, class aT>
-inline QDebug &operator<<(QDebug debug, const QMap<aKey, aT> &map)
-#else
-template <class aKey, class aT>
-inline QDebug operator<<(QDebug debug, const QMap<aKey, aT> &map)
-#endif
+template <class Key, class Val, class C>
+inline QDebug operator<<(QDebug debug, const QMap<Key, Val, C> &map)
 {
    debug.nospace() << "QMap(";
-   for (typename QMap<aKey, aT>::const_iterator it = map.constBegin();
-         it != map.constEnd(); ++it) {
+
+   for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
       debug << '(' << it.key() << ", " << it.value() << ')';
    }
+
    debug << ')';
    return debug.space();
 }
 
-#if defined(FORCE_UREF)
-template <class aKey, class aT>
-inline QDebug &operator<<(QDebug debug, const QHash<aKey, aT> &hash)
-#else
-template <class aKey, class aT>
-inline QDebug operator<<(QDebug debug, const QHash<aKey, aT> &hash)
-#endif
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+inline QDebug operator<<(QDebug debug, const QHash<Key, Val, Hash, KeyEqual> &hash)
 {
    debug.nospace() << "QHash(";
-   for (typename QHash<aKey, aT>::const_iterator it = hash.constBegin();
-         it != hash.constEnd(); ++it) {
+
+   for (auto it = hash.constBegin(); it != hash.constEnd(); ++it) {
       debug << '(' << it.key() << ", " << it.value() << ')';
    }
+
    debug << ')';
    return debug.space();
 }
 
-#if defined(FORCE_UREF)
-template <class T1, class T2>
-inline QDebug &operator<<(QDebug debug, const QPair<T1, T2> &pair)
-#else
+template <class Key, class Val, class C>
+inline QDebug operator<<(QDebug debug, const QMultiMap<Key, Val, C> &map)
+{
+   debug.nospace() << "QMultiMap(";
+
+   for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
+      debug << '(' << it.key() << ", " << it.value() << ')';
+   }
+
+   debug << ')';
+   return debug.space();
+}
+
+template <typename Key, typename Val, typename Hash, typename KeyEqual>
+inline QDebug operator<<(QDebug debug, const QMultiHash<Key, Val, Hash, KeyEqual> &hash)
+{
+   debug.nospace() << "QMultiHash(";
+
+   for (auto it = hash.constBegin(); it != hash.constEnd(); ++it) {
+      debug << '(' << it.key() << ", " << it.value() << ')';
+   }
+
+   debug << ')';
+   return debug.space();
+}
+
 template <class T1, class T2>
 inline QDebug operator<<(QDebug debug, const QPair<T1, T2> &pair)
-#endif
 {
    debug.nospace() << "QPair(" << pair.first << ',' << pair.second << ')';
    return debug.space();
@@ -334,44 +348,38 @@ inline QDebug operator<<(QDebug debug, const QSet<T> &set)
    return operator<<(debug, set.toList());
 }
 
-#if defined(FORCE_UREF)
-template <class T>
-inline QDebug &operator<<(QDebug debug, const QContiguousCache<T> &cache)
-#else
 template <class T>
 inline QDebug operator<<(QDebug debug, const QContiguousCache<T> &cache)
-#endif
 {
    debug.nospace() << "QContiguousCache(";
+
    for (int i = cache.firstIndex(); i <= cache.lastIndex(); ++i) {
       debug << cache[i];
       if (i != cache.lastIndex()) {
          debug << ", ";
       }
    }
+
    debug << ')';
    return debug.space();
 }
 
-#if defined(FORCE_UREF)
-template <class T>
-inline QDebug &operator<<(QDebug debug, const QFlags<T> &flags)
-
-#else
 template <class T>
 inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
 
-#endif
 {
    debug.nospace() << "QFlags(";
    bool needSeparator = false;
+
    for (uint i = 0; i < sizeof(T) * 8; ++i) {
+
       if (flags.testFlag(T(1 << i))) {
          if (needSeparator) {
             debug.nospace() << '|';
          } else {
             needSeparator = true;
          }
+
          debug.nospace() << "0x" << QByteArray::number(T(1 << i), 16).constData();
       }
    }
@@ -390,6 +398,4 @@ inline QDebug qWarning()
    return QDebug(QtWarningMsg);
 }
 
-QT_END_NAMESPACE
-
-#endif // QDEBUG_H
+#endif
