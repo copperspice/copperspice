@@ -328,247 +328,7 @@ void QTextEditPrivate::_q_ensureVisible(const QRectF &_rect)
    }
 }
 
-/*!
-    \class QTextEdit
-    \brief The QTextEdit class provides a widget that is used to edit and display
-    both plain and rich text.
 
-    \ingroup richtext-processing
-
-
-    \tableofcontents
-
-    \section1 Introduction and Concepts
-
-    QTextEdit is an advanced WYSIWYG viewer/editor supporting rich
-    text formatting using HTML-style tags. It is optimized to handle
-    large documents and to respond quickly to user input.
-
-    QTextEdit works on paragraphs and characters. A paragraph is a
-    formatted string which is word-wrapped to fit into the width of
-    the widget. By default when reading plain text, one newline
-    signifies a paragraph. A document consists of zero or more
-    paragraphs. The words in the paragraph are aligned in accordance
-    with the paragraph's alignment. Paragraphs are separated by hard
-    line breaks. Each character within a paragraph has its own
-    attributes, for example, font and color.
-
-    QTextEdit can display images, lists and tables. If the text is
-    too large to view within the text edit's viewport, scroll bars will
-    appear. The text edit can load both plain text and HTML files (a
-    subset of HTML 3.2 and 4).
-
-    If you just need to display a small piece of rich text use QLabel.
-
-    The rich text support in Qt is designed to provide a fast, portable and
-    efficient way to add reasonable online help facilities to
-    applications, and to provide a basis for rich text editors. If
-    you find the HTML support insufficient for your needs you may consider
-    the use of QtWebKit, which provides a full-featured web browser
-    widget.
-
-    The shape of the mouse cursor on a QTextEdit is Qt::IBeamCursor by default.
-    It can be changed through the viewport()'s cursor property.
-
-    \section1 Using QTextEdit as a Display Widget
-
-    QTextEdit can display a large HTML subset, including tables and
-    images.
-
-    The text is set or replaced using setHtml() which deletes any
-    existing text and replaces it with the text passed in the
-    setHtml() call. If you call setHtml() with legacy HTML, and then
-    call toHtml(), the text that is returned may have different markup,
-    but will render the same. The entire text can be deleted with clear().
-
-    Text itself can be inserted using the QTextCursor class or using the
-    convenience functions insertHtml(), insertPlainText(), append() or
-    paste(). QTextCursor is also able to insert complex objects like tables
-    or lists into the document, and it deals with creating selections
-    and applying changes to selected text.
-
-    By default the text edit wraps words at whitespace to fit within
-    the text edit widget. The setLineWrapMode() function is used to
-    specify the kind of line wrap you want, or \l NoWrap if you don't
-    want any wrapping. Call setLineWrapMode() to set a fixed pixel width
-    \l FixedPixelWidth, or character column (e.g. 80 column) \l
-    FixedColumnWidth with the pixels or columns specified with
-    setLineWrapColumnOrWidth(). If you use word wrap to the widget's width
-    \l WidgetWidth, you can specify whether to break on whitespace or
-    anywhere with setWordWrapMode().
-
-    The find() function can be used to find and select a given string
-    within the text.
-
-    If you want to limit the total number of paragraphs in a QTextEdit,
-    as for example it is often useful in a log viewer, then you can use
-    QTextDocument's maximumBlockCount property for that.
-
-    \section2 Read-only Key Bindings
-
-    When QTextEdit is used read-only the key bindings are limited to
-    navigation, and text may only be selected with the mouse:
-    \table
-    \header \i Keypresses \i Action
-    \row \i Up        \i Moves one line up.
-    \row \i Down        \i Moves one line down.
-    \row \i Left        \i Moves one character to the left.
-    \row \i Right        \i Moves one character to the right.
-    \row \i PageUp        \i Moves one (viewport) page up.
-    \row \i PageDown        \i Moves one (viewport) page down.
-    \row \i Home        \i Moves to the beginning of the text.
-    \row \i End                \i Moves to the end of the text.
-    \row \i Alt+Wheel
-         \i Scrolls the page horizontally (the Wheel is the mouse wheel).
-    \row \i Ctrl+Wheel        \i Zooms the text.
-    \row \i Ctrl+A            \i Selects all text.
-    \endtable
-
-    The text edit may be able to provide some meta-information. For
-    example, the documentTitle() function will return the text from
-    within HTML \c{<title>} tags.
-
-    \section1 Using QTextEdit as an Editor
-
-    All the information about using QTextEdit as a display widget also
-    applies here.
-
-    The current char format's attributes are set with setFontItalic(),
-    setFontWeight(), setFontUnderline(), setFontFamily(),
-    setFontPointSize(), setTextColor() and setCurrentFont(). The current
-    paragraph's alignment is set with setAlignment().
-
-    Selection of text is handled by the QTextCursor class, which provides
-    functionality for creating selections, retrieving the text contents or
-    deleting selections. You can retrieve the object that corresponds with
-    the user-visible cursor using the textCursor() method. If you want to set
-    a selection in QTextEdit just create one on a QTextCursor object and
-    then make that cursor the visible cursor using setTextCursor(). The selection
-    can be copied to the clipboard with copy(), or cut to the clipboard with
-    cut(). The entire text can be selected using selectAll().
-
-    When the cursor is moved and the underlying formatting attributes change,
-    the currentCharFormatChanged() signal is emitted to reflect the new attributes
-    at the new cursor position.
-
-    QTextEdit holds a QTextDocument object which can be retrieved using the
-    document() method. You can also set your own document object using setDocument().
-    QTextDocument emits a textChanged() signal if the text changes and it also
-    provides a isModified() function which will return true if the text has been
-    modified since it was either loaded or since the last call to setModified
-    with false as argument. In addition it provides methods for undo and redo.
-
-    \section2 Drag and Drop
-
-    QTextEdit also supports custom drag and drop behavior. By default,
-    QTextEdit will insert plain text, HTML and rich text when the user drops
-    data of these MIME types onto a document. Reimplement
-    canInsertFromMimeData() and insertFromMimeData() to add support for
-    additional MIME types.
-
-    For example, to allow the user to drag and drop an image onto a QTextEdit,
-    you could the implement these functions in the following way:
-
-    \snippet doc/src/snippets/textdocument-imagedrop/textedit.cpp 0
-
-    We add support for image MIME types by returning true. For all other
-    MIME types, we use the default implementation.
-
-    \snippet doc/src/snippets/textdocument-imagedrop/textedit.cpp 1
-
-    We unpack the image from the QVariant held by the MIME source and insert
-    it into the document as a resource.
-
-    \section2 Editing Key Bindings
-
-    The list of key bindings which are implemented for editing:
-    \table
-    \header \i Keypresses \i Action
-    \row \i Backspace \i Deletes the character to the left of the cursor.
-    \row \i Delete \i Deletes the character to the right of the cursor.
-    \row \i Ctrl+C \i Copy the selected text to the clipboard.
-    \row \i Ctrl+Insert \i Copy the selected text to the clipboard.
-    \row \i Ctrl+K \i Deletes to the end of the line.
-    \row \i Ctrl+V \i Pastes the clipboard text into text edit.
-    \row \i Shift+Insert \i Pastes the clipboard text into text edit.
-    \row \i Ctrl+X \i Deletes the selected text and copies it to the clipboard.
-    \row \i Shift+Delete \i Deletes the selected text and copies it to the clipboard.
-    \row \i Ctrl+Z \i Undoes the last operation.
-    \row \i Ctrl+Y \i Redoes the last operation.
-    \row \i Left \i Moves the cursor one character to the left.
-    \row \i Ctrl+Left \i Moves the cursor one word to the left.
-    \row \i Right \i Moves the cursor one character to the right.
-    \row \i Ctrl+Right \i Moves the cursor one word to the right.
-    \row \i Up \i Moves the cursor one line up.
-    \row \i Down \i Moves the cursor one line down.
-    \row \i PageUp \i Moves the cursor one page up.
-    \row \i PageDown \i Moves the cursor one page down.
-    \row \i Home \i Moves the cursor to the beginning of the line.
-    \row \i Ctrl+Home \i Moves the cursor to the beginning of the text.
-    \row \i End \i Moves the cursor to the end of the line.
-    \row \i Ctrl+End \i Moves the cursor to the end of the text.
-    \row \i Alt+Wheel \i Scrolls the page horizontally (the Wheel is the mouse wheel).
-    \endtable
-
-    To select (mark) text hold down the Shift key whilst pressing one
-    of the movement keystrokes, for example, \e{Shift+Right}
-    will select the character to the right, and \e{Shift+Ctrl+Right} will select the word to the right, etc.
-
-    \sa QTextDocument, QTextCursor, {Application Example},
-        {Syntax Highlighter Example}, {Rich Text Processing}
-*/
-
-/*!
-    \property QTextEdit::plainText
-    \since 4.3
-
-    This property gets and sets the text editor's contents as plain
-    text. Previous contents are removed and undo/redo history is reset
-    when the property is set.
-
-    If the text edit has another content type, it will not be replaced
-    by plain text if you call toPlainText(). The only exception to this
-    is the non-break space, \e{nbsp;}, that will be converted into
-    standard space.
-
-    By default, for an editor with no contents, this property contains
-    an empty string.
-
-    \sa html
-*/
-
-/*!
-    \property QTextEdit::undoRedoEnabled
-    \brief whether undo and redo are enabled
-
-    Users are only able to undo or redo actions if this property is
-    true, and if there is an action that can be undone (or redone).
-*/
-
-/*!
-    \enum QTextEdit::LineWrapMode
-
-    \value NoWrap
-    \value WidgetWidth
-    \value FixedPixelWidth
-    \value FixedColumnWidth
-*/
-
-/*!
-    \enum QTextEdit::AutoFormattingFlag
-
-    \value AutoNone Don't do any automatic formatting.
-    \value AutoBulletList Automatically create bullet lists (e.g. when
-    the user enters an asterisk ('*') in the left most column, or
-    presses Enter in an existing list item.
-    \value AutoAll Apply all automatic formatting. Currently only
-    automatic bullet lists are supported.
-*/
-
-/*!
-    Constructs an empty QTextEdit with parent \a
-    parent.
-*/
 QTextEdit::QTextEdit(QWidget *parent)
    : QAbstractScrollArea(*new QTextEditPrivate, parent)
 {
@@ -586,10 +346,6 @@ QTextEdit::QTextEdit(QTextEditPrivate &dd, QWidget *parent)
    d->init();
 }
 
-/*!
-    Constructs a QTextEdit with parent \a parent. The text edit will display
-    the text \a text. The text is interpreted as html.
-*/
 QTextEdit::QTextEdit(const QString &text, QWidget *parent)
    : QAbstractScrollArea(*new QTextEditPrivate, parent)
 {
@@ -597,10 +353,6 @@ QTextEdit::QTextEdit(const QString &text, QWidget *parent)
    d->init(text);
 }
 
-
-/*!
-    Destructor.
-*/
 QTextEdit::~QTextEdit()
 {
 }
@@ -2185,19 +1937,6 @@ void QTextEdit::insertPlainText(const QString &text)
    d->control->insertPlainText(text);
 }
 
-/*!
-    Convenience slot that inserts \a text which is assumed to be of
-    html formatting at the current cursor position.
-
-    It is equivalent to:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qtextedit.cpp 2
-
-    \note When using this function with a style sheet, the style sheet will
-    only apply to the current block in the document. In order to apply a style
-    sheet throughout a document, use QTextDocument::setDefaultStyleSheet()
-    instead.
- */
 #ifndef QT_NO_TEXTHTMLPARSER
 void QTextEdit::insertHtml(const QString &text)
 {
@@ -2206,11 +1945,6 @@ void QTextEdit::insertHtml(const QString &text)
 }
 #endif // QT_NO_TEXTHTMLPARSER
 
-/*!
-    Scrolls the text edit so that the anchor with the given \a name is
-    visible; does nothing if the \a name is empty, or is already
-    visible, or isn't found.
-*/
 void QTextEdit::scrollToAnchor(const QString &name)
 {
    Q_D(QTextEdit);
@@ -2231,15 +1965,6 @@ void QTextEdit::scrollToAnchor(const QString &name)
    d->vbar->setValue(newPosition);
 }
 
-/*!
-    \fn QTextEdit::zoomIn(int range)
-
-    Zooms in on the text by making the base font size \a range
-    points larger and recalculating all font sizes to be the new size.
-    This does not change the size of any images.
-
-    \sa zoomOut()
-*/
 void QTextEdit::zoomIn(int range)
 {
    QFont f = font();
@@ -2251,42 +1976,17 @@ void QTextEdit::zoomIn(int range)
    setFont(f);
 }
 
-/*!
-    \fn QTextEdit::zoomOut(int range)
-
-    \overload
-
-    Zooms out on the text by making the base font size \a range points
-    smaller and recalculating all font sizes to be the new size. This
-    does not change the size of any images.
-
-    \sa zoomIn()
-*/
 void QTextEdit::zoomOut(int range)
 {
    zoomIn(-range);
 }
 
-/*!
-    \since 4.2
-    Moves the cursor by performing the given \a operation.
-
-    If \a mode is QTextCursor::KeepAnchor, the cursor selects the text it moves over.
-    This is the same effect that the user achieves when they hold down the Shift key
-    and move the cursor with the cursor keys.
-
-    \sa QTextCursor::movePosition()
-*/
 void QTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
    Q_D(QTextEdit);
    d->control->moveCursor(operation, mode);
 }
 
-/*!
-    \since 4.2
-    Returns whether text can be pasted from the clipboard into the textedit.
-*/
 bool QTextEdit::canPaste() const
 {
    Q_D(const QTextEdit);
@@ -2294,29 +1994,13 @@ bool QTextEdit::canPaste() const
 }
 
 #ifndef QT_NO_PRINTER
-/*!
-    \since 4.3
-    Convenience function to print the text edit's document to the given \a printer. This
-    is equivalent to calling the print method on the document directly except that this
-    function also supports QPrinter::Selection as print range.
 
-    \sa QTextDocument::print()
-*/
 void QTextEdit::print(QPrinter *printer) const
 {
    Q_D(const QTextEdit);
    d->control->print(printer);
 }
 #endif // QT _NO_PRINTER
-
-/*! \property QTextEdit::tabChangesFocus
-  \brief whether \gui Tab changes focus or is accepted as input
-
-  In some occasions text edits should not allow the user to input
-  tabulators or change indentation using the \gui Tab key, as this breaks
-  the focus chain. The default is false.
-
-*/
 
 bool QTextEdit::tabChangesFocus() const
 {
@@ -2329,28 +2013,6 @@ void QTextEdit::setTabChangesFocus(bool b)
    Q_D(QTextEdit);
    d->tabChangesFocus = b;
 }
-
-/*!
-    \property QTextEdit::documentTitle
-    \brief the title of the document parsed from the text.
-
-    By default, for a newly-created, empty document, this property contains
-    an empty string.
-*/
-
-/*!
-    \property QTextEdit::lineWrapMode
-    \brief the line wrap mode
-
-    The default mode is WidgetWidth which causes words to be
-    wrapped at the right edge of the text edit. Wrapping occurs at
-    whitespace, keeping whole words intact. If you want wrapping to
-    occur within words use setWordWrapMode(). If you set a wrap mode of
-    FixedPixelWidth or FixedColumnWidth you should also call
-    setLineWrapColumnOrWidth() with the width you want.
-
-    \sa lineWrapColumnOrWidth
-*/
 
 QTextEdit::LineWrapMode QTextEdit::lineWrapMode() const
 {
@@ -2369,21 +2031,6 @@ void QTextEdit::setLineWrapMode(LineWrapMode wrap)
    d->relayoutDocument();
 }
 
-/*!
-    \property QTextEdit::lineWrapColumnOrWidth
-    \brief the position (in pixels or columns depending on the wrap mode) where text will be wrapped
-
-    If the wrap mode is FixedPixelWidth, the value is the number of
-    pixels from the left edge of the text edit at which text should be
-    wrapped. If the wrap mode is FixedColumnWidth, the value is the
-    column number (in character columns) from the left edge of the
-    text edit at which text should be wrapped.
-
-    By default, this property contains a value of 0.
-
-    \sa lineWrapMode
-*/
-
 int QTextEdit::lineWrapColumnOrWidth() const
 {
    Q_D(const QTextEdit);
@@ -2396,15 +2043,6 @@ void QTextEdit::setLineWrapColumnOrWidth(int w)
    d->lineWrapColumnOrWidth = w;
    d->relayoutDocument();
 }
-
-/*!
-    \property QTextEdit::wordWrapMode
-    \brief the mode QTextEdit will use when wrapping text by words
-
-    By default, this property is set to QTextOption::WrapAtWordBoundaryOrAnywhere.
-
-    \sa QTextOption::WrapMode
-*/
 
 QTextOption::WrapMode QTextEdit::wordWrapMode() const
 {
@@ -2422,71 +2060,14 @@ void QTextEdit::setWordWrapMode(QTextOption::WrapMode mode)
    d->updateDefaultTextOption();
 }
 
-/*!
-    Finds the next occurrence of the string, \a exp, using the given
-    \a options. Returns true if \a exp was found and changes the
-    cursor to select the match; otherwise returns false.
-*/
 bool QTextEdit::find(const QString &exp, QTextDocument::FindFlags options)
 {
    Q_D(QTextEdit);
    return d->control->find(exp, options);
 }
 
-/*!
-    \fn void QTextEdit::copyAvailable(bool yes)
-
-    This signal is emitted when text is selected or de-selected in the
-    text edit.
-
-    When text is selected this signal will be emitted with \a yes set
-    to true. If no text has been selected or if the selected text is
-    de-selected this signal is emitted with \a yes set to false.
-
-    If \a yes is true then copy() can be used to copy the selection to
-    the clipboard. If \a yes is false then copy() does nothing.
-
-    \sa selectionChanged()
-*/
-
-/*!
-    \fn void QTextEdit::currentCharFormatChanged(const QTextCharFormat &f)
-
-    This signal is emitted if the current character format has changed, for
-    example caused by a change of the cursor position.
-
-    The new format is \a f.
-
-    \sa setCurrentCharFormat()
-*/
-
-/*!
-    \fn void QTextEdit::selectionChanged()
-
-    This signal is emitted whenever the selection changes.
-
-    \sa copyAvailable()
-*/
-
-/*!
-    \fn void QTextEdit::cursorPositionChanged()
-
-    This signal is emitted whenever the position of the
-    cursor changed.
-*/
-
-/*!
-    \since 4.2
-
-    Sets the text edit's \a text. The text can be plain text or HTML
-    and the text edit will try to guess the right format.
-
-    Use setHtml() or setPlainText() directly to avoid text edit's guessing.
-
-    \sa toPlainText(), toHtml()
-*/
 void QTextEdit::setText(const QString &text)
-{  
+{
    Qt::TextFormat format = Qt::mightBeRichText(text) ? Qt::RichText : Qt::PlainText;
 
 #ifndef QT_NO_TEXTHTMLPARSER
@@ -2496,16 +2077,6 @@ void QTextEdit::setText(const QString &text)
 #endif
       setPlainText(text);
 }
-
-
-/*!
-    Appends a new paragraph with \a text to the end of the text edit.
-
-    \note The new paragraph appended will have the same character format and
-    block format as the current paragraph, determined by the position of the cursor.
-
-    \sa currentCharFormat(), QTextCursor::blockFormat()
-*/
 
 void QTextEdit::append(const QString &text)
 {
@@ -2518,189 +2089,13 @@ void QTextEdit::append(const QString &text)
    }
 }
 
-/*!
-    Ensures that the cursor is visible by scrolling the text edit if
-    necessary.
-*/
 void QTextEdit::ensureCursorVisible()
 {
    Q_D(QTextEdit);
    d->control->ensureCursorVisible();
 }
 
-/*!
-    \enum QTextEdit::KeyboardAction
-
-    \compat
-
-    \value ActionBackspace
-    \value ActionDelete
-    \value ActionReturn
-    \value ActionKill
-    \value ActionWordBackspace
-    \value ActionWordDelete
-*/
-
-/*!
-    \fn bool QTextEdit::find(const QString &exp, bool cs, bool wo)
-
-    Use the find() overload that takes a QTextDocument::FindFlags
-    argument.
-*/
-
-/*!
-    \fn void QTextEdit::sync()
-
-    Does nothing.
-*/
-
-/*!
-    \fn void QTextEdit::setBold(bool b)
-
-    Use setFontWeight() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setUnderline(bool b)
-
-    Use setFontUnderline() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setItalic(bool i)
-
-    Use setFontItalic() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setFamily(const QString &family)
-
-    Use setFontFamily() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setPointSize(int size)
-
-    Use setFontPointSize() instead.
-*/
-
-/*!
-    \fn bool QTextEdit::italic() const
-
-    Use fontItalic() instead.
-*/
-
-/*!
-    \fn bool QTextEdit::bold() const
-
-    Use fontWeight() >= QFont::Bold instead.
-*/
-
-/*!
-    \fn bool QTextEdit::underline() const
-
-    Use fontUnderline() instead.
-*/
-
-/*!
-    \fn QString QTextEdit::family() const
-
-    Use fontFamily() instead.
-*/
-
-/*!
-    \fn int QTextEdit::pointSize() const
-
-    Use int(fontPointSize()+0.5) instead.
-*/
-
-/*!
-    \fn bool QTextEdit::hasSelectedText() const
-
-    Use textCursor().hasSelection() instead.
-*/
-
-/*!
-    \fn QString QTextEdit::selectedText() const
-
-    Use textCursor().selectedText() instead.
-*/
-
-/*!
-    \fn bool QTextEdit::isUndoAvailable() const
-
-    Use document()->isUndoAvailable() instead.
-*/
-
-/*!
-    \fn bool QTextEdit::isRedoAvailable() const
-
-    Use document()->isRedoAvailable() instead.
-*/
-
-/*!
-    \fn void QTextEdit::insert(const QString &text)
-
-    Use insertPlainText() instead.
-*/
-
-/*!
-    \fn bool QTextEdit::isModified() const
-
-    Use document()->isModified() instead.
-*/
-
-/*!
-    \fn QColor QTextEdit::color() const
-
-    Use textColor() instead.
-*/
-
-/*!
-    \fn void QTextEdit::textChanged()
-
-    This signal is emitted whenever the document's content changes; for
-    example, when text is inserted or deleted, or when formatting is applied.
-*/
-
-/*!
-    \fn void QTextEdit::undoAvailable(bool available)
-
-    This signal is emitted whenever undo operations become available
-    (\a available is true) or unavailable (\a available is false).
-*/
-
-/*!
-    \fn void QTextEdit::redoAvailable(bool available)
-
-    This signal is emitted whenever redo operations become available
-    (\a available is true) or unavailable (\a available is false).
-*/
-
-/*!
-    \fn void QTextEdit::currentFontChanged(const QFont &font)
-
-    Use currentCharFormatChanged() instead.
-*/
-
-/*!
-    \fn void QTextEdit::currentColorChanged(const QColor &color)
-
-    Use currentCharFormatChanged() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setModified(bool m)
-
-    Use document->setModified() instead.
-*/
-
-/*!
-    \fn void QTextEdit::setColor(const QColor &color)
-
-    Use setTextColor() instead.
-*/
-#endif // QT_NO_TEXTEDIT
+#endif
 
 QT_END_NAMESPACE
 

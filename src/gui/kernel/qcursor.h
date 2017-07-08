@@ -68,6 +68,7 @@ class Q_GUI_EXPORT QCursor
    QCursor(const QPixmap &pixmap, int hotX = -1, int hotY = -1);
    QCursor(const QCursor &cursor);
    ~QCursor();
+
    QCursor &operator=(const QCursor &cursor);
 
    inline QCursor &operator=(QCursor && other) {
@@ -94,14 +95,18 @@ class Q_GUI_EXPORT QCursor
 #if defined(Q_OS_WIN)
    HCURSOR handle() const;
    QCursor(HCURSOR cursor);
+
 #elif defined(Q_WS_X11)
    Qt::HANDLE handle() const;
    QCursor(Qt::HANDLE cursor);
    static int x11Screen();
+
 #elif defined(Q_OS_MAC)
    Qt::HANDLE handle() const;
+
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
    int handle() const;
+
 #endif
 
 

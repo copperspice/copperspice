@@ -170,7 +170,7 @@ class QPathSegments
    int segments() const;
    int points() const;
 
-   const Segment &segmentAt(int index) const;
+   const QPathSegments::Segment &segmentAt(int index) const;
    const QLineF lineAt(int index) const;
    const QRectF &elementBounds(int index) const;
    int pathId(int index) const;
@@ -178,7 +178,7 @@ class QPathSegments
    const QPointF &pointAt(int vertex) const;
    int addPoint(const QPointF &point);
 
-   inline const Intersection *intersectionAt(int index) const;
+   inline const QPathSegments::Intersection *intersectionAt(int index) const;
    void addIntersection(int index, const Intersection &intersection);
 
    void mergePoints();
