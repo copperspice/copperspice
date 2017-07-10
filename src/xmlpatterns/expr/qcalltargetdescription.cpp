@@ -43,6 +43,7 @@ void CallTargetDescription::checkArgumentsCircularity(CallTargetDescription::Lis
 {
    /* Check the arguments. */
    const Expression::List ops(callsite->operands());
+
    const Expression::List::const_iterator end(ops.constEnd());
    Expression::List::const_iterator it(ops.constBegin());
 

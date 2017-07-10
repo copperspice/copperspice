@@ -605,6 +605,7 @@ void AccelTree::copyNodeTo(const QXmlNodeModelIndex &node,
 
          if (settings.testFlag(PreserveNamespaces)) {
             node.sendNamespaces(receiver);
+
          } else {
             /* Find the namespaces that we actually use and add them to outputted. These are drawn
              * from the element name, and the node's attributes. */
@@ -613,7 +614,7 @@ void AccelTree::copyNodeTo(const QXmlNodeModelIndex &node,
             const QXmlNodeModelIndex::Iterator::Ptr attributes(iterate(node, QXmlNodeModelIndex::AxisAttribute));
             QXmlNodeModelIndex attr(attributes->next());
 
-            while (!attr.isNull()) {
+            while (! attr.isNull()) {
                const QXmlName &attrName = attr.name();
                outputted.top().insert(attrName.prefix(), attrName.namespaceURI());
                attr = attributes->next();

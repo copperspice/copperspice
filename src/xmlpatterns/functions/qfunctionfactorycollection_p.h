@@ -38,7 +38,7 @@ class FunctionFactoryCollection: public FunctionFactory, public FunctionFactory:
    /**
     * Creates a function call node.
     */
-   Expression::Ptr createFunctionCall(const QXmlName, const Expression::List &arguments, 
+   Expression::Ptr createFunctionCall(const QXmlName, const Expression::List &arguments,
                   const StaticContext::Ptr &context, const SourceLocationReflection *const r) override;
 
    bool isAvailable(const NamePool::Ptr &np, const QXmlName name, const xsInteger arity) override;

@@ -75,8 +75,10 @@ FunctionSignature::Hash FunctionFactoryCollection::functionSignatures() const
    FunctionSignature::Hash result;
 
    for (const_iterator it(constBegin()); it != e; ++it) {
-      const FunctionSignature::Hash::const_iterator e2((*it)->functionSignatures().constEnd());
-      FunctionSignature::Hash::const_iterator sit((*it)->functionSignatures().constBegin());
+      auto tmp = (*it)->functionSignatures();
+
+      const FunctionSignature::Hash::const_iterator e2(tmp.constEnd());
+      FunctionSignature::Hash::const_iterator sit(tmp.constBegin());
 
       for (; sit != e2; ++sit) {
          result.insert(sit.key(), sit.value());

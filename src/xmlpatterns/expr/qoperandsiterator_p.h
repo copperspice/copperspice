@@ -89,9 +89,10 @@ class OperandsIterator
             ++previous.second;
 
             if (previous.second < previous.first.count()) {
-               const Expression::Ptr &op = previous.first.at(previous.second);
+               Expression::Ptr op = previous.first.at(previous.second);
                m_exprs.push(qMakePair(op->operands(), -1));
                return op;
+
             } else {
                // We have already reached the end of this level.
                m_exprs.pop();
@@ -100,8 +101,9 @@ class OperandsIterator
                }
             }
          }
+
       } else {
-         const Expression::Ptr &op = lvl.first.at(lvl.second);
+         Expression::Ptr op = lvl.first.at(lvl.second);
          m_exprs.push(qMakePair(op->operands(), -1));
          return op;
       }

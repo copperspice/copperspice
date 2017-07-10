@@ -42,17 +42,19 @@ ConstructorFunctionsFactory::ConstructorFunctionsFactory(const NamePool::Ptr &np
 {
    Q_ASSERT(m_typeFactory);
    Q_ASSERT(np);
-   SchemaType::Hash::const_iterator it(m_typeFactory->types().constBegin());
-   const SchemaType::Hash::const_iterator end(m_typeFactory->types().constEnd());
+
+   auto factoryTypes = m_typeFactory->types();
+
+   SchemaType::Hash::const_iterator it(factoryTypes.constBegin());
+   const SchemaType::Hash::const_iterator end(factoryTypes.constEnd());
 
    FunctionArgument::List args;
    const QXmlName argName(StandardNamespaces::empty, StandardLocalNames::sourceValue);
 
-   args.append(FunctionArgument::Ptr(new FunctionArgument(argName,
-                                     CommonSequenceTypes::ZeroOrOneAtomicType)));
+   args.append(FunctionArgument::Ptr(new FunctionArgument(argName, CommonSequenceTypes::ZeroOrOneAtomicType)));
 
    while (it != end) {
-      if (!BuiltinTypes::xsAnyAtomicType->wxsTypeMatches(*it) ||
+      if (! BuiltinTypes::xsAnyAtomicType->wxsTypeMatches(*it) ||
             *BuiltinTypes::xsAnyAtomicType == *static_cast<const AtomicType *>((*it).data()) ||
             *BuiltinTypes::xsNOTATION == *static_cast<const AtomicType *>((*it).data())) {
          /* It's not a valid type for a constructor function -- skip it. */
@@ -61,9 +63,9 @@ ConstructorFunctionsFactory::ConstructorFunctionsFactory(const NamePool::Ptr &np
       }
 
       const QXmlName name((*it)->name(np));
-      FunctionSignature::Ptr s(new FunctionSignature(name, 1, 1,
-                               makeGenericSequenceType(AtomicType::Ptr(*it),
-                                     Cardinality::zeroOrOne())));
+      FunctionSignature::Ptr s(new FunctionSignature(name, 1, 1, makeGenericSequenceType(AtomicType::Ptr(*it),
+                  Cardinality::zeroOrOne())));
+
       s->setArguments(args);
       m_signatures.insert(name, s);
       ++it;
@@ -71,8 +73,7 @@ ConstructorFunctionsFactory::ConstructorFunctionsFactory(const NamePool::Ptr &np
 }
 
 Expression::Ptr ConstructorFunctionsFactory::retrieveExpression(const QXmlName name,
-      const Expression::List &args,
-      const FunctionSignature::Ptr &sign) const
+                  const Expression::List &args, const FunctionSignature::Ptr &sign) const
 {
    Q_UNUSED(sign);
 
@@ -80,13 +81,11 @@ Expression::Ptr ConstructorFunctionsFactory::retrieveExpression(const QXmlName n
     * return an AtomicType. */
    const AtomicType::Ptr at(static_cast<AtomicType *>(m_typeFactory->createSchemaType(name).data()));
 
-   return Expression::Ptr(new CastAs(args.first(),
-                                     makeGenericSequenceType(at,
-                                           Cardinality::zeroOrOne())));
+   return Expression::Ptr(new CastAs(args.first(), makeGenericSequenceType(at, Cardinality::zeroOrOne())));
 }
 
 FunctionSignature::Ptr ConstructorFunctionsFactory::retrieveFunctionSignature(const NamePool::Ptr &np,
-      const QXmlName name)
+                  const QXmlName name)
 {
    Q_UNUSED(np);
    return functionSignatures().value(name);

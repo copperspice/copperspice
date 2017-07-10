@@ -179,9 +179,11 @@ Expression::Ptr Expression::invokeOptimizers(const Expression::Ptr &expr,
          OptimizationPass::ExpressionMarker::const_iterator mIt(sourceMarker.constBegin());
          sourceExpr = expr;
 
+         auto tmp = sourceExpr->operands();
+
          for (; mIt != mEnd; ++mIt) {
             Q_ASSERT(*mIt >= 0);
-            sourceExpr = sourceExpr->operands().at(*mIt);
+            sourceExpr = tmp.at(*mIt);
          }
 
          operands.append(sourceExpr);

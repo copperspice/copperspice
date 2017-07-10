@@ -45,9 +45,9 @@ class AbstractFunctionFactory : public FunctionFactory
 
    FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode localName,
                   const FunctionSignature::Arity minArgs, const FunctionSignature::Arity maxArgs,
-                  const SequenceType::Ptr &returnType, const Expression::Properties props) 
+                  const SequenceType::Ptr &returnType, const Expression::Properties props)
    {
-      return addFunction(localName, minArgs, maxArgs, returnType, 
+      return addFunction(localName, minArgs, maxArgs, returnType,
                   Expression::IDIgnorableExpression, props);
    }
 
@@ -56,7 +56,7 @@ class AbstractFunctionFactory : public FunctionFactory
                   const SequenceType::Ptr &returnType,
                   const Expression::ID id = Expression::IDIgnorableExpression,
                   const Expression::Properties props = Expression::Properties(),
-                  const StandardNamespaces::ID ns = StandardNamespaces::fn) 
+                  const StandardNamespaces::ID ns = StandardNamespaces::fn)
    {
       const QXmlName name(ns, localName);
 

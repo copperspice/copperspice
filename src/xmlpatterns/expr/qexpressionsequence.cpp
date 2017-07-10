@@ -71,6 +71,7 @@ Expression::Ptr ExpressionSequence::compress(const StaticContext::Ptr &context)
 
    Expression::List::const_iterator it(m_operands.constBegin());
    const Expression::List::const_iterator end(m_operands.constEnd());
+
    Expression::List result;
 
    for (; it != end; ++it) {
@@ -82,18 +83,24 @@ Expression::Ptr ExpressionSequence::compress(const StaticContext::Ptr &context)
        *
        * User function call sites that are of type empty-sequence() must be avoided since
        * they may contain calls to fn:error(), which we would rewrite away otherwise. */
+
       if (Id != IDUserFunctionCallsite && (*it)->staticType()->cardinality().isEmpty()) {
          /* Rewrite "(1, (), 2)" into "(1, 2)" by not
           * adding (*it) to result. */
          continue;
+
       } else if (Id == IDExpressionSequence) {
          /* Rewrite "(1, (2, 3), 4)" into "(1, 2, 3, 4)" */
-         Expression::List::const_iterator seqIt((*it)->operands().constBegin());
-         const Expression::List::const_iterator seqEnd((*it)->operands().constEnd());
+
+         auto list = (*it)->operands();
+
+         Expression::List::const_iterator seqIt(list.constBegin());
+         const Expression::List::const_iterator seqEnd(list.constEnd());
 
          for (; seqIt != seqEnd; ++seqIt) {
             result.append(*seqIt);
          }
+
       } else {
          result.append(*it);
       }

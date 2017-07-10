@@ -56,9 +56,7 @@ class FunctionFactory : public QSharedData
     * @param name the name of the function. For example fn:string-join.
     * @param arity the number of arguments the function must have.
     */
-   virtual bool isAvailable(const NamePool::Ptr &np,
-                            const QXmlName name,
-                            const xsInteger arity);
+   virtual bool isAvailable(const NamePool::Ptr &np, const QXmlName name, const xsInteger arity);
 
    virtual FunctionSignature::Hash functionSignatures() const = 0;
 
