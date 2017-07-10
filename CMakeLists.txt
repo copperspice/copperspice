@@ -39,8 +39,9 @@ include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
-include(TestLargeFiles)
+
 include(CopperSpiceBuildMacros)
+include(TestLargeFiles)
 
 # file locations for installing
 if(UNIX)
@@ -105,6 +106,7 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/.git;${CPACK_SOURCE_IGNORE_FILES}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CMAKE_INSTALL_PREFIX})
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+
 include(CPack)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -436,6 +438,7 @@ install(
       ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
       ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
+      ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
    DESTINATION cmake/CopperSpice
 )
 

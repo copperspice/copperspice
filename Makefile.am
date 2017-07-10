@@ -31,6 +31,7 @@ EXTRA_DIST= \
 	cmake/archlinux-mingw.cmake \
 	cmake/CopperSpiceConfig.cmake \
 	cmake/CopperSpiceConfigVersion.cmake \
+	cmake/InstallMinGW.cmake \
 	cmake/pkgconfig.cmake \
 	cmake/qt-acconfig.h.cmake \
 	src/tools/lconvert/CMakeLists.txt \

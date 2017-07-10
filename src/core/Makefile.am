@@ -11,7 +11,7 @@ lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore
    -DQT_BUILD_CORE_LIB  \
    -DBUILDING_LIB_CS_SIGNAL
 
-lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
+lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS) -DQT_BUILD_CORE_LIB
 lib_libCsCore@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 

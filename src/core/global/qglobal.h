@@ -30,6 +30,7 @@
 #define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 #include <qconfig.h>
+#include <qfeatures.h>
 
 #ifdef __cplusplus     // block a
 #include <algorithm>
@@ -410,8 +411,6 @@ QT_USE_NAMESPACE
 
 #endif
 
-QT_BEGIN_NAMESPACE
-
 // make sure to update QMetaType when changing these typedefs
 #include <stdint.h>
 
@@ -447,14 +446,13 @@ typedef quint64                qulonglong;
    QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
 
 
-#if defined(__cplusplus)
+#if defined(__cplusplus)      // block c
 
 /*
 quintptr and qptrdiff are guaranteed to be the same size as a pointer
       sizeof(void *) == sizeof(quintptr)
       && sizeof(void *) == sizeof(qptrdiff)
 */
-
 
 template<int>
 struct QIntegerForSize;
@@ -490,13 +488,10 @@ struct QIntegerForSizeof : QIntegerForSize<sizeof(T)> {
 typedef QIntegerForSizeof<void *>::Unsigned   quintptr;
 typedef QIntegerForSizeof<void *>::Signed     qptrdiff;
 
-
-QT_BEGIN_INCLUDE_NAMESPACE
 typedef unsigned char    uchar;
 typedef unsigned short   ushort;
 typedef unsigned int     uint;
 typedef unsigned long    ulong;
-QT_END_INCLUDE_NAMESPACE
 
 // ****
 #ifndef TRUE
@@ -628,9 +623,8 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #  endif
 #endif
 
-#include <qfeatures.h>
+#endif          //  block c
 
-#define QT_SUPPORTS(FEATURE) (! defined(QT_NO_##FEATURE))
 
 #ifndef Q_DECL_EXPORT
 #  if defined(Q_OS_WIN)
@@ -775,6 +769,9 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #  endif
 
 #endif
+
+
+#if defined(__cplusplus)      // block d
 
 inline void qt_noop(void) {}
 
@@ -1497,7 +1494,6 @@ inline int qIntCast(float f)
 Q_CORE_EXPORT void qsrand(uint seed);
 Q_CORE_EXPORT int qrand();
 
-
 #if defined (__ELF__)
 #  if defined (Q_OS_LINUX) || defined (Q_OS_SOLARIS) || defined (Q_OS_FREEBSD) || defined (Q_OS_OPENBSD) || defined (Q_OS_DRAGONFLY)
 #    define Q_OF_ELF
@@ -1508,8 +1504,6 @@ Q_CORE_EXPORT int qrand();
 #  define QT_NO_RAWFONT
 #endif
 
-QT_END_NAMESPACE
-
-#endif
+#endif      // block d
 
 #endif

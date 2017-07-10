@@ -13,13 +13,13 @@ lib_libCsGui@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/QtGui 
     -Isrc/gui/image  -Isrc/gui/kernel    \
     -Isrc/gui/styles  -Isrc/gui/text  -Isrc/gui/util  -Isrc/gui/widgets  -Isrc/gui/painting  \
     -DBUILD_DATE=\"`date +%Y-%m-%d`\"    \
-    -DQT_BUILD_GUI_LIB  \
+    -DQT_BUILD_GUI_LIB           \
     -DQT_BUILTIN_GIF_READER      \
     -DMNG_BUILD_SO               \
     -DMNG_NO_INCLUDE_JNG         \
     -DPNG_NO_CONFIG_H
 
-lib_libCsGui@BUILD_ABI@_la_CFLAGS = $(lib_libCsGui@BUILD_ABI@_la_CXXFLAGS)
+lib_libCsGui@BUILD_ABI@_la_CFLAGS = $(lib_libCsGui@BUILD_ABI@_la_CXXFLAGS) -DQT_BUILD_GUI_LIB
 lib_libCsGui@BUILD_ABI@_la_OBJCXXFLAGS =
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsGui@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la

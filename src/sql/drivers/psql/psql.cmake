@@ -14,6 +14,7 @@ set(SQL_INCLUDES
 )
 
 if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
+
     set(EXTRA_PSQL_LIBS
         ${EXTRA_PSQL_LIBS}
         # NOTE: the CMake module documents PostgreSQL_LIBRARIES however in
@@ -30,7 +31,8 @@ if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
     include_directories(${PostgreSQL_INCLUDE_DIRS})
     add_library(qsqlpsql${BUILD_ABI} MODULE ${PSQL_SOURCES})
     target_link_libraries(qsqlpsql${BUILD_ABI} ${EXTRA_PSQL_LIBS})
-    target_compile_definitions(qsqlpsql${BUILD_ABI} PRIVATE -DIN_TRUE)
+
+    target_compile_definitions(qsqlpsql${BUILD_ABI} PRIVATE -DIN_TRUE -DQT_PLUGIN)
 
     set(EXTRA_SQL_DRIVERS
         ${EXTRA_SQL_DRIVERS}
