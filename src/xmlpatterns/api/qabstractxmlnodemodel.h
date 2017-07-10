@@ -24,8 +24,6 @@
 #define QABSTRACTXMLNODEMODEL_H
 
 #include <QtXmlPatterns/QXmlName>
-#include <qitemtype_p.h>
-
 #include <QtCore/QSharedData>
 #include <QtCore/QScopedPointer>
 
@@ -51,6 +49,7 @@ namespace QPatternist {
 
 class DynamicContext;
 class Item;
+class ItemType;
 class XsdValidatedXmlNodeModel;
 
 template<typename TResult, typename TSource, typename TMapper, typename Context>
@@ -67,25 +66,21 @@ class NodeIndexStorage
  public:
    typedef qint64 Data;
 
-   /*!
-     \note Changing merely the order of these two members, ptr and data,
-           is a binary incompatible change on Mac Power PC.
-    */
+   //  ** Changing the order of these two members, ptr and data is a binary incompatible on Mac Power PC.
    union {
-      void *ptr; // Do not use ptr directy, use pointer() instead.
+      void *ptr;    // Do not use ptr directly, use pointer() instead.
       Data data;
    };
+
    void *pointer() const {
-      /* Constructing to qptrdiff means we avoid the warning "cast to pointer
-       * from integer of different size."
-       */
+      // Constructing to qptrdiff means we avoid the warning "cast to pointer  from integer of different size.
       return (void *)qptrdiff(data);
    }
 
    Data additionalData;
    const QAbstractXmlNodeModel *model;
 
-   /* Implementation is in qabstractxmlnodemodel.cpp. */
+   // Implementation is in qabstractxmlnodemodel.cpp.
    inline bool operator!=(const NodeIndexStorage &other) const;
 
    void reset() {
@@ -170,18 +165,18 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    }
 
    inline bool isNull() const {
-      return !m_storage.model;
+      return ! m_storage.model;
    }
 
-   /* The members below are internal, not part of the public API, and
-    * unsupported. Using them leads to undefined behavior. */
+   // The members below are internal and not part of the public API. They are unsupported.
+   // using them in your application can lead to undefined behavior.
 
    inline QXmlName name() const;
    inline QXmlNodeModelIndex root() const;
 
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex>> iterate(const Axis axis) const;
-
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QPatternist::Item> > sequencedTypedValue() const;
+
    inline QUrl documentUri() const;
    inline QUrl baseUri() const;
    inline NodeKind kind() const;
@@ -191,7 +186,8 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    inline QVector<QXmlName> namespaceBindings() const;
    inline QXmlName::NamespaceCode namespaceForPrefix(const QXmlName::PrefixCode prefix) const;
    inline QString stringValue() const;
-   inline QPatternist::ItemType::Ptr type() const;
+
+   inline QExplicitlySharedDataPointer<QPatternist::ItemType> type() const;
    inline bool is(const QXmlNodeModelIndex &other) const;
 
    inline void reset() {
@@ -267,7 +263,7 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
       const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
 
    virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const;
-   virtual QPatternist::ItemType::Ptr type(const QXmlNodeModelIndex &ni) const;
+   virtual QExplicitlySharedDataPointer<QPatternist::ItemType> type(const QXmlNodeModelIndex &ni) const;
 
    virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
                   const QXmlName::PrefixCode prefix) const;

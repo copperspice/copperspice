@@ -386,7 +386,7 @@ QPatternist::ItemIteratorPtr QAbstractXmlNodeModel::sequencedTypedValue(const QX
 /*!
  \internal
  */
-QPatternist::ItemType::Ptr QAbstractXmlNodeModel::type(const QXmlNodeModelIndex &) const
+QExplicitlySharedDataPointer<QPatternist::ItemType> QAbstractXmlNodeModel::type(const QXmlNodeModelIndex &) const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
    return QPatternist::ItemType::Ptr();

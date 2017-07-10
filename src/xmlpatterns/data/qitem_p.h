@@ -418,7 +418,7 @@ inline QString QXmlNodeModelIndex::stringValue() const
    return m_storage.model->stringValue(*this);
 }
 
-inline QPatternist::ItemType::Ptr QXmlNodeModelIndex::type() const
+inline QExplicitlySharedDataPointer<QPatternist::ItemType> QXmlNodeModelIndex::type() const
 {
    return m_storage.model->type(*this);
 }

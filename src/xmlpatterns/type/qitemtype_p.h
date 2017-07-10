@@ -38,8 +38,8 @@ class Item;
 class ItemType : public virtual QSharedData
 {
  public:
-   typedef QExplicitlySharedDataPointer<ItemType> Ptr;
-   typedef QList<ItemType::Ptr> List;
+   using Ptr  = QExplicitlySharedDataPointer<ItemType>;
+   using List = QList<ItemType::Ptr>;
 
    virtual ~ItemType();
 

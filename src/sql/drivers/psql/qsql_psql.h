@@ -23,8 +23,8 @@
 #ifndef QSQL_PSQL_H
 #define QSQL_PSQL_H
 
-#include <QtSql/qsqlresult.h>
-#include <QtSql/qsqldriver.h>
+#include <qsqlresult.h>
+#include <qsqldriver.h>
 
 #ifdef QT_PLUGIN
 #define Q_EXPORT_SQLDRIVER_PSQL
@@ -95,13 +95,11 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    explicit QPSQLDriver(QObject *parent = nullptr);
    explicit QPSQLDriver(PGconn *conn, QObject *parent = nullptr);
    ~QPSQLDriver();
+
    bool hasFeature(DriverFeature f) const;
-   bool open(const QString &db,
-             const QString &user,
-             const QString &password,
-             const QString &host,
-             int port,
-             const QString &connOpts);
+   bool open(const QString &db, const QString &user, const QString &password, const QString &host,
+             int port, const QString &connOpts);
+
    bool isOpen() const;
    void close();
    QSqlResult *createResult() const;
