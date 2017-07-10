@@ -23,9 +23,9 @@
 #include <qchar32.h>
 #include <qdatastream.h>
 
-//   #include <qtextcodec.h>
-//   #include <qunicodetables_p.h>
-//   #include "qunicodetables.cpp"         // do not change to < >
+// #include <qtextcodec.h>
+// #include <qunicodetables_p.h>
+// #include "qunicodetables.cpp"
 
 #define FLAG(x) (1 << (x))
 
