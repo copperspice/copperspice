@@ -72,7 +72,12 @@ www.copperspice.com/docs/cs_overview/index.html
 
 ### Presentations
 
-For additional information refer to our CopperSpice presentations at CppNow and CppCon:
+YouTube channel videos about CopperSpice, DoxyPress, C++, and the other topics related to our work.
+
+https://www.youtube.com/channel/UC-lNlWEq0kpMcThO-I81ZdQ
+
+
+Links to technical presentations recorded at CppNow and CppCon:
 
 www.copperspice.com/presentations.html
 
@@ -83,6 +88,9 @@ www.copperspice.com/presentations.html
 * **Barbara Geller**
 * **Robin Mills**
 * **Ivailo Monev**
+* **Charley Bey**
+* **Adam Mensel**
+* **Daniel Pfeifer**
 
 
 ### License
