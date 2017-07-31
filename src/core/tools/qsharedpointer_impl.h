@@ -439,8 +439,8 @@ template <class T> class QSharedPointer
    inline void enableSharedFromThis(const QEnableSharedFromThis<X> *ptr)
    {
        ptr->initializeFromSharedPointer(*this);
-   }  
-   
+   }
+
    inline void enableSharedFromThis(...) {}
 
    inline void deref() {
@@ -497,9 +497,14 @@ template <class T> class QSharedPointer
       qSwap(this->value, other.value);
    }
 
-   template <class X> friend class QSharedPointer;
-   template <class X> friend class QWeakPointer;
-   template <class X, class Y> friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
+   template <class X>
+   friend class QSharedPointer;
+
+   template <class X>
+   friend class QWeakPointer;
+
+   template <class X, class Y>
+   friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
          const QSharedPointer<Y> &src);
 
    inline void ref() const {
@@ -585,7 +590,7 @@ class QWeakPointer
 
 
    // special constructor that is enabled only if X derives from QObject (Broom - can wait)
-   template <class X> 
+   template <class X>
    inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr)
    { }
 
@@ -713,27 +718,27 @@ class QEnableSharedFromThis
  protected:
     QEnableSharedFromThis() = default;
     QEnableSharedFromThis(const QEnableSharedFromThis &) { }
-    QEnableSharedFromThis &operator=(const QEnableSharedFromThis &) { 
-	return *this; 
+    QEnableSharedFromThis &operator=(const QEnableSharedFromThis &) {
+	return *this;
     }
 
  public:
-    inline QSharedPointer<T> sharedFromThis() { 
-	return QSharedPointer<T>(weakPointer); 
+    inline QSharedPointer<T> sharedFromThis() {
+	return QSharedPointer<T>(weakPointer);
     }
-    
-    inline QSharedPointer<const T> sharedFromThis() const { 
-	return QSharedPointer<const T>(weakPointer); 
+
+    inline QSharedPointer<const T> sharedFromThis() const {
+	return QSharedPointer<const T>(weakPointer);
     }
-    
+
  private:
     template <class X> friend class QSharedPointer;
-    
+
     template <class X>
     void initializeFromSharedPointer(const QSharedPointer<X> &ptr) const {
 	weakPointer = ptr;
     }
-    
+
     mutable QWeakPointer<T> weakPointer;
 };
 

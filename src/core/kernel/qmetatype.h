@@ -206,13 +206,13 @@ int qRegisterMetaType(const char *typeName, T *dummy = nullptr)
 }
 
 template <typename T>
-inline int qMetaTypeId(T * = 0)
+inline int qMetaTypeId(T * = nullptr)
 {
    return QMetaTypeId2<T>::qt_metatype_id();
 }
 
 template <typename T>
-inline int qRegisterMetaType(T *v = 0)
+inline int qRegisterMetaType(T *v = nullptr)
 {
    return qMetaTypeId(v);
 }

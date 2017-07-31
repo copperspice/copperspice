@@ -24,13 +24,11 @@
 #include <qdatastream.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 QDebug operator<<(QDebug dbg, const QMargins &m)
 {
    dbg.nospace() << "QMargins(" << m.left() << ", "
                  << m.top() << ", " << m.right() << ", " << m.bottom() << ')';
+
    return dbg.space();
 }
 
-QT_END_NAMESPACE

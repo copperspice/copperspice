@@ -2642,6 +2642,7 @@ QDataStream &operator<<(QDataStream &out, const QDateTime &dateTime)
          out << dateTime.d->date << dateTime.d->time;
       }
       out << (qint8)dateTime.timeSpec();
+
    } else {
       out << dateTime.d->date << dateTime.d->time;
       if (out.version() >= 7) {

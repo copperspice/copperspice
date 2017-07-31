@@ -50,9 +50,6 @@ class QMargins
    int m_top;
    int m_right;
    int m_bottom;
-
-   friend inline bool operator==(const QMargins &, const QMargins &);
-   friend inline bool operator!=(const QMargins &, const QMargins &);
 };
 
 Q_DECLARE_TYPEINFO(QMargins, Q_MOVABLE_TYPE);
@@ -114,23 +111,23 @@ inline void QMargins::setBottom(int abottom)
 inline bool operator==(const QMargins &m1, const QMargins &m2)
 {
    return
-      m1.m_left == m2.m_left &&
-      m1.m_top == m2.m_top &&
-      m1.m_right == m2.m_right &&
-      m1.m_bottom == m2.m_bottom;
+      m1.left()   == m2.left()  &&
+      m1.top()    == m2.top()   &&
+      m1.right()  == m2.right() &&
+      m1.bottom() == m2.bottom();
 }
 
 inline bool operator!=(const QMargins &m1, const QMargins &m2)
 {
    return
-      m1.m_left != m2.m_left ||
-      m1.m_top != m2.m_top ||
-      m1.m_right != m2.m_right ||
-      m1.m_bottom != m2.m_bottom;
+      m1.left()   != m2.left()   ||
+      m1.top()    != m2.top()    ||
+      m1.right()  != m2.right()  ||
+      m1.bottom() != m2.bottom();
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMargins &);
 
 QT_END_NAMESPACE
 
-#endif // QMARGINS_H
+#endif
