@@ -298,12 +298,12 @@ struct QFragmentFindHelper {
    const QTextDocumentPrivate::FragmentMap &fragmentMap;
 };
 
-Q_STATIC_GLOBAL_INLINE_OPERATOR bool operator<(int fragment, const QFragmentFindHelper &helper)
+static inline bool operator<(int fragment, const QFragmentFindHelper &helper)
 {
    return helper.fragmentMap.position(fragment) < helper.pos;
 }
 
-Q_STATIC_GLOBAL_INLINE_OPERATOR bool operator<(const QFragmentFindHelper &helper, int fragment)
+static inline bool operator<(const QFragmentFindHelper &helper, int fragment)
 {
    return helper.pos < helper.fragmentMap.position(fragment);
 }

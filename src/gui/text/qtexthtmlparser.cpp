@@ -305,12 +305,12 @@ static const struct QTextHtmlEntity {
    { "zwnj", 0x200c }
 };
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QString &entityStr, const QTextHtmlEntity &entity)
+static bool operator<(const QString &entityStr, const QTextHtmlEntity &entity)
 {
    return entityStr < QLatin1String(entity.name);
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QTextHtmlEntity &entity, const QString &entityStr)
+static bool operator<(const QTextHtmlEntity &entity, const QString &entityStr)
 {
    return QLatin1String(entity.name) < entityStr;
 }
@@ -426,12 +426,12 @@ static const QTextHtmlElement elements[Html_NumElements] = {
 };
 
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QString &str, const QTextHtmlElement &e)
+static bool operator<(const QString &str, const QTextHtmlElement &e)
 {
    return str < QLatin1String(e.name);
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QTextHtmlElement &e, const QString &str)
+static bool operator<(const QTextHtmlElement &e, const QString &str)
 {
    return QLatin1String(e.name) < str;
 }

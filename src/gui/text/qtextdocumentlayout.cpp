@@ -378,12 +378,12 @@ struct QCheckPoint {
 };
 Q_DECLARE_TYPEINFO(QCheckPoint, Q_PRIMITIVE_TYPE);
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QCheckPoint &checkPoint, QFixed y)
+static bool operator<(const QCheckPoint &checkPoint, QFixed y)
 {
    return checkPoint.y < y;
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QCheckPoint &checkPoint, int pos)
+static bool operator<(const QCheckPoint &checkPoint, int pos)
 {
    return checkPoint.positionInFrame < pos;
 }
@@ -2818,7 +2818,7 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
          line.setPosition(QPointF((left - layoutStruct->x_left).toReal(), (layoutStruct->y - cy - lineAdjustment).toReal()));
          layoutStruct->y += lineHeight;
 
-         layoutStruct->contentsWidth = qMax(layoutStruct->contentsWidth, QFixed::fromReal(line.x() + 
+         layoutStruct->contentsWidth = qMax(layoutStruct->contentsWidth, QFixed::fromReal(line.x() +
                   line.naturalTextWidth()) + totalRightMargin);
 
          // position floats

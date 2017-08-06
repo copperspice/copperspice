@@ -324,12 +324,12 @@ static const QCssKnownValue styleFeatures[NumKnownStyleFeatures - 1] = {
    { "none", StyleFeature_None }
 };
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QString &name, const QCssKnownValue &prop)
+static bool operator<(const QString &name, const QCssKnownValue &prop)
 {
    return QString::compare(name, QLatin1String(prop.name), Qt::CaseInsensitive) < 0;
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator<(const QCssKnownValue &prop, const QString &name)
+static bool operator<(const QCssKnownValue &prop, const QString &name)
 {
    return QString::compare(QLatin1String(prop.name), name, Qt::CaseInsensitive) < 0;
 }

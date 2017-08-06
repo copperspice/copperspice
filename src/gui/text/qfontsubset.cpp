@@ -1268,7 +1268,7 @@ static QTtfGlyph generateGlyph(int index, const QPainterPath &path, qreal advanc
    return glyph;
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator <(const QTtfGlyph &g1, const QTtfGlyph &g2)
+static bool operator <(const QTtfGlyph &g1, const QTtfGlyph &g2)
 {
    return g1.index < g2.index;
 }
@@ -1348,7 +1348,7 @@ static QList<QTtfTable> generateGlyphTables(qttf_font_tables &tables, const QLis
    return list;
 }
 
-Q_STATIC_GLOBAL_OPERATOR bool operator <(const QTtfTable &t1, const QTtfTable &t2)
+static bool operator <(const QTtfTable &t1, const QTtfTable &t2)
 {
    return t1.tag < t2.tag;
 }
