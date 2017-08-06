@@ -196,7 +196,7 @@ void QFont::x11SetScreen(int screen)
 
 Qt::HANDLE QFont::handle() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
@@ -211,7 +211,7 @@ Qt::HANDLE QFont::handle() const
 FT_Face QFont::freetypeFace() const
 {
 #ifndef QT_NO_FREETYPE
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
    }
@@ -231,7 +231,7 @@ FT_Face QFont::freetypeFace() const
 
 QString QFont::rawName() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);

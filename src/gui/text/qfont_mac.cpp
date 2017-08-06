@@ -90,7 +90,7 @@ quint32 QFont::macFontID() const
 Qt::HANDLE QFont::handle() const
 {
 
-   QFontEngine *fe = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *fe = d->engineForScript(QChar::Script_Common);
    if (fe && fe->type() == QFontEngine::Multi) {
       return (Qt::HANDLE)static_cast<QCoreTextFontEngineMulti *>(fe)->macFontID();
    }

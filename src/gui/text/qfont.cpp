@@ -295,19 +295,22 @@ extern QMutex *qt_fontdatabase_mutex();
 QFontEngine *QFontPrivate::engineForScript(int script) const
 {
    QMutexLocker locker(qt_fontdatabase_mutex());
-   if (script >= QUnicodeTables::Inherited) {
-      script = QUnicodeTables::Common;
+   if (script <= QChar::Script_Latin) {
+      script = QChar::Script_Common;
    }
+
    if (engineData && engineData->fontCache != QFontCache::instance()) {
       // throw out engineData that came from a different thread
-      if (!engineData->ref.deref()) {
-	 delete engineData;
+      if (! engineData->ref.deref()) {
+         delete engineData;
       }
       engineData = 0;
    }
-   if (!engineData || !QT_FONT_ENGINE_FROM_DATA(engineData, script)) {
+
+   if (! engineData || ! QT_FONT_ENGINE_FROM_DATA(engineData, script)) {
       QFontDatabase::load(this, script);
    }
+
    return QT_FONT_ENGINE_FROM_DATA(engineData, script);
 }
 
@@ -432,8 +435,8 @@ void QFontPrivate::resolve(uint mask, const QFontPrivate *other)
 QFontEngineData::QFontEngineData()
    : ref(1), fontCache(QFontCache::instance())
 {
-#if !defined(Q_OS_MAC)
-   memset(engines, 0, QUnicodeTables::ScriptCount * sizeof(QFontEngine *));
+#if ! defined(Q_OS_MAC)
+   memset(engines, 0, QChar::ScriptCount * sizeof(QFontEngine *));
 #else
    engine = 0;
 #endif
@@ -441,8 +444,8 @@ QFontEngineData::QFontEngineData()
 
 QFontEngineData::~QFontEngineData()
 {
-#if !defined(Q_OS_MAC)
-   for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+#if ! defined(Q_OS_MAC)
+   for (int i = 0; i < QChar::ScriptCount; ++i) {
       if (engines[i] && !engines[i]->ref.deref()) {
 	 delete engines[i];
       }
@@ -1782,31 +1785,16 @@ void QFont::setRawMode(bool enable)
    d->rawMode = enable;
 }
 
-/*!
-    Returns true if a window system font exactly matching the settings
-    of this font is available.
-
-    \sa QFontInfo
-*/
 bool QFont::exactMatch() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    return (d->rawMode
            ? engine->type() != QFontEngine::Box
            : d->request.exactMatch(engine->fontDef));
 }
 
-/*!
-    Returns true if this font is equal to \a f; otherwise returns
-    false.
-
-    Two QFonts are considered equal if their font attributes are
-    equal. If rawMode() is enabled for both fonts, only the family
-    fields are compared.
-
-    \sa operator!=() isCopyOf()
-*/
 bool QFont::operator==(const QFont &f) const
 {
    return (f.d == d
@@ -2489,23 +2477,17 @@ QFontInfo &QFontInfo::operator=(const QFontInfo &fi)
 */
 QString QFontInfo::family() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    return engine->fontDef.family;
 }
 
-/*!
-    \since 4.8
-
-    Returns the style name of the matched window system font on
-    system that supports it.
-
-    \sa QFont::styleName()
-*/
 QString QFontInfo::styleName() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    return engine->fontDef.styleName;
 }
 
@@ -2516,8 +2498,9 @@ QString QFontInfo::styleName() const
 */
 int QFontInfo::pointSize() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    return qRound(engine->fontDef.pointSize);
 }
 
@@ -2528,7 +2511,7 @@ int QFontInfo::pointSize() const
 */
 qreal QFontInfo::pointSizeF() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->fontDef.pointSize;
 }
@@ -2540,7 +2523,7 @@ qreal QFontInfo::pointSizeF() const
 */
 int QFontInfo::pixelSize() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->fontDef.pixelSize;
 }
@@ -2552,7 +2535,7 @@ int QFontInfo::pixelSize() const
 */
 bool QFontInfo::italic() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->fontDef.style != QFont::StyleNormal;
 }
@@ -2564,7 +2547,7 @@ bool QFontInfo::italic() const
 */
 QFont::Style QFontInfo::style() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return (QFont::Style)engine->fontDef.style;
 }
@@ -2576,7 +2559,7 @@ QFont::Style QFontInfo::style() const
 */
 int QFontInfo::weight() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->fontDef.weight;
 
@@ -2641,7 +2624,7 @@ bool QFontInfo::strikeOut() const
 */
 bool QFontInfo::fixedPitch() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
 #ifdef Q_OS_MAC
    if (!engine->fontDef.fixedPitchComputed) {
@@ -2665,7 +2648,7 @@ bool QFontInfo::fixedPitch() const
 */
 QFont::StyleHint QFontInfo::styleHint() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return (QFont::StyleHint) engine->fontDef.styleHint;
 }
@@ -2693,7 +2676,7 @@ bool QFontInfo::rawMode() const
 */
 bool QFontInfo::exactMatch() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
 
    return (d->rawMode ? engine->type() != QFontEngine::Box : d->request.exactMatch(engine->fontDef));
@@ -2766,7 +2749,7 @@ QFontCache::~QFontCache()
 
 void QFontCache::clear()
 {
-   {  
+   {
       EngineDataCache::Iterator it  = engineDataCache.begin();
       EngineDataCache::Iterator end = engineDataCache.end();
 
@@ -2774,7 +2757,7 @@ void QFontCache::clear()
          QFontEngineData *data = it.value();
 
 #if ! defined(Q_OS_MAC)
-	 for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+	 for (int i = 0; i < QChar::ScriptCount; ++i) {
 	    if (data->engines[i] && !data->engines[i]->ref.deref()) {
 	       delete data->engines[i];
 	    }
@@ -2931,7 +2914,7 @@ void QFontCache::cleanupPrinterFonts()
       // clean out all unused engine data
       EngineDataCache::Iterator it  = engineDataCache.begin();
       EngineDataCache::Iterator end = engineDataCache.end();
-     
+
       while (it != end) {
          if (it.key().screen == 0) {
    	    ++it;
@@ -2939,27 +2922,27 @@ void QFontCache::cleanupPrinterFonts()
         }
 
          if (it.value()->ref.load() > 1) {
-      	   for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+      	   for (int i = 0; i < QChar::ScriptCount; ++i) {
       	      if (it.value()->engines[i] && !it.value()->engines[i]->ref.deref()) {
                   delete it.value()->engines[i];
       	      }
-   
+
       	      it.value()->engines[i] = 0;
       	    }
-   
+
       	    ++it;
-   
+
          } else {
-      
-      	    EngineDataCache::Iterator rem = it++;   
+
+      	    EngineDataCache::Iterator rem = it++;
       	    decreaseCost(sizeof(QFontEngineData));
-      
+
       	    FC_DEBUG("    %p", rem.value());
-      
+
       	    if (!rem.value()->ref.deref()) {
       	       delete rem.value();
       	    }
-   
+
       	    delete rem.value();
       	    engineDataCache.erase(rem);
          }
@@ -3030,7 +3013,7 @@ void QFontCache::timerEvent(QTimerEvent *)
 #  if defined(Q_WS_X11) || defined(Q_OS_WIN)
          // print out all engines
 
-         for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+         for (int i = 0; i < QChar::ScriptCount; ++i) {
             if (! it.value()->engines[i]) {
                continue;
             }

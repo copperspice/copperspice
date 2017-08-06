@@ -24,6 +24,7 @@
 #include <qdatastream.h>
 #include <qtextcodec.h>
 #include <qunicodetables_p.h>
+
 #include "qunicodetables.cpp"         // do not change to < >
 
 QT_BEGIN_NAMESPACE
@@ -38,44 +39,26 @@ QT_BEGIN_NAMESPACE
 
 bool QChar::isPrint() const
 {
-   const int test = FLAG(Other_Control) |
-                    FLAG(Other_NotAssigned);
-   return !(FLAG(qGetProp(ucs)->category) & test);
+   const int test = FLAG(Other_Control) | FLAG(Other_NotAssigned);
+   return ! (FLAG(QUnicodeTables::qGetProp(ucs)->category) & test);
 }
 
-/*!
-    Returns true if the character is a separator character
-    (Separator_* categories); otherwise returns false.
-*/
 bool QChar::isSpace() const
 {
    if (ucs >= 9 && ucs <= 13) {
       return true;
    }
-   const int test = FLAG(Separator_Space) |
-                    FLAG(Separator_Line) |
-                    FLAG(Separator_Paragraph);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   const int test = FLAG(Separator_Space) | FLAG(Separator_Line) | FLAG(Separator_Paragraph);
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
-/*!
-    Returns true if the character is a mark (Mark_* categories);
-    otherwise returns false.
-
-    See QChar::Category for more information regarding marks.
-*/
 bool QChar::isMark() const
 {
-   const int test = FLAG(Mark_NonSpacing) |
-                    FLAG(Mark_SpacingCombining) |
-                    FLAG(Mark_Enclosing);
-   return FLAG(qGetProp(ucs)->category) & test;
+   const int test = FLAG(Mark_NonSpacing) | FLAG(Mark_SpacingCombining) | FLAG(Mark_Enclosing);
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
-/*!
-    Returns true if the character is a punctuation mark (Punctuation_*
-    categories); otherwise returns false.
-*/
 bool QChar::isPunct() const
 {
    const int test = FLAG(Punctuation_Connector) |
@@ -85,13 +68,10 @@ bool QChar::isPunct() const
                     FLAG(Punctuation_InitialQuote) |
                     FLAG(Punctuation_FinalQuote) |
                     FLAG(Punctuation_Other);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
-/*!
-    Returns true if the character is a letter (Letter_* categories);
-    otherwise returns false.
-*/
 bool QChar::isLetter() const
 {
    const int test = FLAG(Letter_Uppercase) |
@@ -99,27 +79,19 @@ bool QChar::isLetter() const
                     FLAG(Letter_Titlecase) |
                     FLAG(Letter_Modifier) |
                     FLAG(Letter_Other);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
-/*!
-    Returns true if the character is a number (Number_* categories,
-    not just 0-9); otherwise returns false.
-
-    \sa isDigit()
-*/
 bool QChar::isNumber() const
 {
    const int test = FLAG(Number_DecimalDigit) |
                     FLAG(Number_Letter) |
                     FLAG(Number_Other);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
-/*!
-    Returns true if the character is a letter or number (Letter_* or
-    Number_* categories); otherwise returns false.
-*/
 bool QChar::isLetterOrNumber() const
 {
    const int test = FLAG(Letter_Uppercase) |
@@ -130,80 +102,58 @@ bool QChar::isLetterOrNumber() const
                     FLAG(Number_DecimalDigit) |
                     FLAG(Number_Letter) |
                     FLAG(Number_Other);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
 
-/*!
-    Returns true if the character is a decimal digit
-    (Number_DecimalDigit); otherwise returns false.
-*/
 bool QChar::isDigit() const
 {
-   return (qGetProp(ucs)->category == Number_DecimalDigit);
+   return (QUnicodeTables::qGetProp(ucs)->category == Number_DecimalDigit);
 }
 
 
-/*!
-    Returns true if the character is a symbol (Symbol_* categories);
-    otherwise returns false.
-*/
 bool QChar::isSymbol() const
 {
    const int test = FLAG(Symbol_Math) |
                     FLAG(Symbol_Currency) |
                     FLAG(Symbol_Modifier) |
                     FLAG(Symbol_Other);
-   return FLAG(qGetProp(ucs)->category) & test;
+
+   return FLAG(QUnicodeTables::qGetProp(ucs)->category) & test;
 }
 
 int QChar::digitValue() const
 {
-   return qGetProp(ucs)->digitValue;
+   return QUnicodeTables::qGetProp(ucs)->digitValue;
 }
 
-/*!
-    \overload
-    Returns the numeric value of the digit, specified by the UCS-2-encoded
-    character, \a ucs2, or -1 if the character is not a digit.
-*/
 int QChar::digitValue(ushort ucs2)
 {
-   return qGetProp(ucs2)->digitValue;
+   return QUnicodeTables::qGetProp(ucs2)->digitValue;
 }
 
-/*!
-    \overload
-    Returns the numeric value of the digit specified by the UCS-4-encoded
-    character, \a ucs4, or -1 if the character is not a digit.
-*/
 int QChar::digitValue(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return 0;
    }
-   return qGetProp(ucs4)->digitValue;
+
+   return QUnicodeTables::qGetProp(ucs4)->digitValue;
 }
 
-/*!
-    Returns the character's category.
-*/
 QChar::Category QChar::category() const
 {
-   return (QChar::Category) qGetProp(ucs)->category;
+   return (QChar::Category) QUnicodeTables::qGetProp(ucs)->category;
 }
 
-/*!
-    \overload
-    \since 4.3
-    Returns the category of the UCS-4-encoded character specified by \a ucs4.
-*/
 QChar::Category QChar::category(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
-      return QChar::NoCategory;
+   if (ucs4 > LastValidCodePoint) {
+      return QChar::Other_NotAssigned;
    }
-   return (QChar::Category) qGetProp(ucs4)->category;
+
+   return (QChar::Category) QUnicodeTables::qGetProp(ucs4)->category;
 }
 
 /*!
@@ -212,7 +162,7 @@ QChar::Category QChar::category(uint ucs4)
 */
 QChar::Category QChar::category(ushort ucs2)
 {
-   return (QChar::Category) qGetProp(ucs2)->category;
+   return (QChar::Category) QUnicodeTables::qGetProp(ucs2)->category;
 }
 
 
@@ -221,7 +171,7 @@ QChar::Category QChar::category(ushort ucs2)
 */
 QChar::Direction QChar::direction() const
 {
-   return (QChar::Direction) qGetProp(ucs)->direction;
+   return (QChar::Direction) QUnicodeTables::qGetProp(ucs)->direction;
 }
 
 /*!
@@ -230,10 +180,10 @@ QChar::Direction QChar::direction() const
 */
 QChar::Direction QChar::direction(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return QChar::DirL;
    }
-   return (QChar::Direction) qGetProp(ucs4)->direction;
+   return (QChar::Direction) QUnicodeTables::qGetProp(ucs4)->direction;
 }
 
 /*!
@@ -242,7 +192,7 @@ QChar::Direction QChar::direction(uint ucs4)
 */
 QChar::Direction QChar::direction(ushort ucs2)
 {
-   return (QChar::Direction) qGetProp(ucs2)->direction;
+   return (QChar::Direction) QUnicodeTables::qGetProp(ucs2)->direction;
 }
 
 /*!
@@ -251,7 +201,7 @@ QChar::Direction QChar::direction(ushort ucs2)
 */
 QChar::Joining QChar::joining() const
 {
-   return (QChar::Joining) qGetProp(ucs)->joining;
+   return (QChar::Joining) QUnicodeTables::qGetProp(ucs)->joining;
 }
 
 /*!
@@ -262,10 +212,11 @@ QChar::Joining QChar::joining() const
 */
 QChar::Joining QChar::joining(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return QChar::OtherJoining;
    }
-   return (QChar::Joining) qGetProp(ucs4)->joining;
+
+   return (QChar::Joining) QUnicodeTables::qGetProp(ucs4)->joining;
 }
 
 /*!
@@ -276,7 +227,7 @@ QChar::Joining QChar::joining(uint ucs4)
 */
 QChar::Joining QChar::joining(ushort ucs2)
 {
-   return (QChar::Joining) qGetProp(ucs2)->joining;
+   return (QChar::Joining) QUnicodeTables::qGetProp(ucs2)->joining;
 }
 
 
@@ -290,46 +241,12 @@ QChar::Joining QChar::joining(ushort ucs2)
 */
 bool QChar::hasMirrored() const
 {
-   return qGetProp(ucs)->mirrorDiff != 0;
+   return QUnicodeTables::qGetProp(ucs)->mirrorDiff != 0;
 }
 
-/*!
-    \fn bool QChar::isLower() const
-
-    Returns true if the character is a lowercase letter, i.e.
-    category() is Letter_Lowercase.
-
-    \sa isUpper(), toLower(), toUpper()
-*/
-
-/*!
-    \fn bool QChar::isUpper() const
-
-    Returns true if the character is an uppercase letter, i.e.
-    category() is Letter_Uppercase.
-
-    \sa isLower(), toUpper(), toLower()
-*/
-
-/*!
-    \fn bool QChar::isTitleCase() const
-    \since 4.3
-
-    Returns true if the character is a titlecase letter, i.e.
-    category() is Letter_Titlecase.
-
-    \sa isLower(), toUpper(), toLower(), toTitleCase()
-*/
-
-/*!
-    Returns the mirrored character if this character is a mirrored
-    character; otherwise returns the character itself.
-
-    \sa hasMirrored()
-*/
 QChar QChar::mirroredChar() const
 {
-   return ucs + qGetProp(ucs)->mirrorDiff;
+   return ucs + QUnicodeTables::qGetProp(ucs)->mirrorDiff;
 }
 
 /*!
@@ -341,10 +258,10 @@ QChar QChar::mirroredChar() const
 */
 uint QChar::mirroredChar(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return ucs4;
    }
-   return ucs4 + qGetProp(ucs4)->mirrorDiff;
+   return ucs4 + QUnicodeTables::qGetProp(ucs4)->mirrorDiff;
 }
 
 /*!
@@ -356,7 +273,7 @@ uint QChar::mirroredChar(uint ucs4)
 */
 ushort QChar::mirroredChar(ushort ucs2)
 {
-   return ucs2 + qGetProp(ucs2)->mirrorDiff;
+   return ucs2 + QUnicodeTables::qGetProp(ucs2)->mirrorDiff;
 }
 
 
@@ -373,13 +290,14 @@ enum {
 };
 
 // buffer has to have a length of 3. It's needed for Hangul decomposition
-static const unsigned short *QT_FASTCALL decompositionHelper
-(uint ucs4, int *length, int *tag, unsigned short *buffer)
+static const unsigned short *QT_FASTCALL decompositionHelper(uint ucs4, int *length, int *tag, unsigned short *buffer)
 {
    *length = 0;
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+
+   if (ucs4 > QChar::LastValidCodePoint) {
       return 0;
    }
+
    if (ucs4 >= Hangul_SBase && ucs4 < Hangul_SBase + Hangul_SCount) {
       int SIndex = ucs4 - Hangul_SBase;
       buffer[0] = Hangul_LBase + SIndex / Hangul_NCount; // L
@@ -394,9 +312,11 @@ static const unsigned short *QT_FASTCALL decompositionHelper
    if (index == 0xffff) {
       return 0;
    }
-   const unsigned short *decomposition = uc_decomposition_map + index;
+
+   const unsigned short *decomposition = QUnicodeTables::uc_decomposition_map + index;
    *tag = (*decomposition) & 0xff;
    *length = (*decomposition) >> 8;
+
    return decomposition + 1;
 }
 
@@ -420,6 +340,7 @@ QString QChar::decomposition(uint ucs4)
    int length;
    int tag;
    const unsigned short *d = decompositionHelper(ucs4, &length, &tag, buffer);
+
    return QString::fromUtf16(d, length);
 }
 
@@ -432,95 +353,65 @@ QChar::Decomposition QChar::decompositionTag() const
    return decompositionTag(ucs);
 }
 
-/*!
-    \overload
-    Returns the tag defining the composition of the UCS-4-encoded character
-    specified by \a ucs4. Returns QChar::Single if no decomposition exists.
-*/
 QChar::Decomposition QChar::decompositionTag(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return QChar::NoDecomposition;
    }
+
    const unsigned short index = GET_DECOMPOSITION_INDEX(ucs4);
    if (index == 0xffff) {
       return QChar::NoDecomposition;
    }
-   return (QChar::Decomposition)(uc_decomposition_map[index] & 0xff);
+
+   return (QChar::Decomposition)(QUnicodeTables::uc_decomposition_map[index] & 0xff);
 }
 
-/*!
-    Returns the combining class for the character as defined in the
-    Unicode standard. This is mainly useful as a positioning hint for
-    marks attached to a base character.
-
-    The Qt text rendering engine uses this information to correctly
-    position non-spacing marks around a base character.
-*/
 unsigned char QChar::combiningClass() const
 {
-   return (unsigned char) qGetProp(ucs)->combiningClass;
+   return (unsigned char) QUnicodeTables::qGetProp(ucs)->combiningClass;
 }
 
-/*!
-    \overload
-    Returns the combining class for the UCS-4-encoded character specified by
-    \a ucs4, as defined in the Unicode standard.
-*/
 unsigned char QChar::combiningClass(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return 0;
    }
-   return (unsigned char) qGetProp(ucs4)->combiningClass;
+   return (unsigned char) QUnicodeTables::qGetProp(ucs4)->combiningClass;
 }
 
-/*!
-    \overload
-    Returns the combining class for the UCS-2-encoded character specified by
-    \a ucs2, as defined in the Unicode standard.
-*/
 unsigned char QChar::combiningClass(ushort ucs2)
 {
-   return (unsigned char) qGetProp(ucs2)->combiningClass;
+   return (unsigned char) QUnicodeTables::qGetProp(ucs2)->combiningClass;
 }
 
-/*!
-    Returns the Unicode version that introduced this character.
-*/
+QChar::Script QChar::script(uint ucs4)
+{
+   if (ucs4 > LastValidCodePoint) {
+      return QChar::Script_Unknown;
+   }
+
+   return (QChar::Script) QUnicodeTables::qGetProp(ucs4)->script;
+}
+
 QChar::UnicodeVersion QChar::unicodeVersion() const
 {
-   return (QChar::UnicodeVersion) qGetProp(ucs)->unicodeVersion;
+   return (QChar::UnicodeVersion) QUnicodeTables::qGetProp(ucs)->unicodeVersion;
 }
 
-/*!
-    \overload
-    Returns the Unicode version that introduced the character specified in
-    its UCS-4-encoded form as \a ucs4.
-*/
 QChar::UnicodeVersion QChar::unicodeVersion(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return QChar::Unicode_Unassigned;
    }
-   return (QChar::UnicodeVersion) qGetProp(ucs4)->unicodeVersion;
+   return (QChar::UnicodeVersion) QUnicodeTables::qGetProp(ucs4)->unicodeVersion;
 }
 
-/*!
-    \overload
-    Returns the Unicode version that introduced the character specified in
-    its UCS-2-encoded form as \a ucs2.
-*/
 QChar::UnicodeVersion QChar::unicodeVersion(ushort ucs2)
 {
-   return (QChar::UnicodeVersion) qGetProp(ucs2)->unicodeVersion;
+   return (QChar::UnicodeVersion) QUnicodeTables::qGetProp(ucs2)->unicodeVersion;
 }
 
-/*!
-    \since 4.8
-
-    Returns the most recent supported Unicode version.
-*/
 QChar::UnicodeVersion QChar::currentUnicodeVersion()
 {
    return UNICODE_DATA_VERSION;
@@ -532,7 +423,8 @@ QChar::UnicodeVersion QChar::currentUnicodeVersion()
 */
 QChar QChar::toLower() const
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
+
    if (!p->lowerCaseSpecial) {
       return ucs + p->lowerCaseDiff;
    }
@@ -547,10 +439,10 @@ QChar QChar::toLower() const
 */
 uint QChar::toLower(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return ucs4;
    }
-   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
    if (!p->lowerCaseSpecial) {
       return ucs4 + p->lowerCaseDiff;
    }
@@ -565,7 +457,7 @@ uint QChar::toLower(uint ucs4)
 */
 ushort QChar::toLower(ushort ucs2)
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs2);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
    if (!p->lowerCaseSpecial) {
       return ucs2 + p->lowerCaseDiff;
    }
@@ -578,7 +470,7 @@ ushort QChar::toLower(ushort ucs2)
 */
 QChar QChar::toUpper() const
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
    if (!p->upperCaseSpecial) {
       return ucs + p->upperCaseDiff;
    }
@@ -593,10 +485,10 @@ QChar QChar::toUpper() const
 */
 uint QChar::toUpper(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return ucs4;
    }
-   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
    if (!p->upperCaseSpecial) {
       return ucs4 + p->upperCaseDiff;
    }
@@ -611,56 +503,44 @@ uint QChar::toUpper(uint ucs4)
 */
 ushort QChar::toUpper(ushort ucs2)
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs2);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
    if (!p->upperCaseSpecial) {
       return ucs2 + p->upperCaseDiff;
    }
    return ucs2;
 }
 
-/*!
-    Returns the title case equivalent if the character is lowercase or uppercase;
-    otherwise returns the character itself.
-*/
 QChar QChar::toTitleCase() const
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs);
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
    if (!p->titleCaseSpecial) {
       return ucs + p->titleCaseDiff;
    }
    return ucs;
 }
 
-/*!
-    \overload
-    Returns the title case equivalent of the UCS-4-encoded character specified
-    by \a ucs4 if the character is lowercase or uppercase; otherwise returns
-    the character itself.
-*/
 uint QChar::toTitleCase(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return ucs4;
    }
-   const QUnicodeTables::Properties *p = qGetProp(ucs4);
+
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
    if (!p->titleCaseSpecial) {
       return ucs4 + p->titleCaseDiff;
    }
+
    return ucs4;
 }
 
-/*!
-    \overload
-    Returns the title case equivalent of the UCS-2-encoded character specified
-    by \a ucs2 if the character is lowercase or uppercase; otherwise returns
-    the character itself.
-*/
 ushort QChar::toTitleCase(ushort ucs2)
 {
-   const QUnicodeTables::Properties *p = qGetProp(ucs2);
-   if (!p->titleCaseSpecial) {
+   const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
+
+   if (! p->titleCaseSpecial) {
       return ucs2 + p->titleCaseDiff;
    }
+
    return ucs2;
 }
 
@@ -671,7 +551,7 @@ static inline uint foldCase(const ushort *ch, const ushort *start)
    if (QChar(c).isLowSurrogate() && ch > start && QChar(*(ch - 1)).isHighSurrogate()) {
       c = QChar::surrogateToUcs4(*(ch - 1), c);
    }
-   return *ch + qGetProp(c)->caseFoldDiff;
+   return *ch + QUnicodeTables::qGetProp(c)->caseFoldDiff;
 }
 
 static inline uint foldCase(uint ch, uint &last)
@@ -681,12 +561,12 @@ static inline uint foldCase(uint ch, uint &last)
       c = QChar::surrogateToUcs4(last, c);
    }
    last = ch;
-   return ch + qGetProp(c)->caseFoldDiff;
+   return ch + QUnicodeTables::qGetProp(c)->caseFoldDiff;
 }
 
 static inline ushort foldCase(ushort ch)
 {
-   return ch + qGetProp(ch)->caseFoldDiff;
+   return ch + QUnicodeTables::qGetProp(ch)->caseFoldDiff;
 }
 
 /*!
@@ -695,7 +575,7 @@ static inline ushort foldCase(ushort ch)
 */
 QChar QChar::toCaseFolded() const
 {
-   return ucs + qGetProp(ucs)->caseFoldDiff;
+   return ucs + QUnicodeTables::qGetProp(ucs)->caseFoldDiff;
 }
 
 /*!
@@ -705,10 +585,10 @@ QChar QChar::toCaseFolded() const
 */
 uint QChar::toCaseFolded(uint ucs4)
 {
-   if (ucs4 > UNICODE_LAST_CODEPOINT) {
+   if (ucs4 > LastValidCodePoint) {
       return ucs4;
    }
-   return ucs4 + qGetProp(ucs4)->caseFoldDiff;
+   return ucs4 + QUnicodeTables::qGetProp(ucs4)->caseFoldDiff;
 }
 
 /*!
@@ -718,7 +598,7 @@ uint QChar::toCaseFolded(uint ucs4)
 */
 ushort QChar::toCaseFolded(ushort ucs2)
 {
-   return ucs2 + qGetProp(ucs2)->caseFoldDiff;
+   return ucs2 + QUnicodeTables::qGetProp(ucs2)->caseFoldDiff;
 }
 
 
@@ -819,7 +699,8 @@ static ushort ligatureHelper(ushort u1, ushort u2)
    if (index == 0xffff) {
       return 0;
    }
-   const unsigned short *ligatures = uc_ligature_map + index;
+
+   const unsigned short *ligatures = QUnicodeTables::uc_ligature_map + index;
    ushort length = *ligatures++;
    {
       const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
@@ -853,7 +734,7 @@ static void composeHelper(QString *str, QChar::UnicodeVersion version, int from)
             ++pos;
          }
       }
-      const QUnicodeTables::Properties *p = qGetProp(uc);
+      const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(uc);
       if (p->unicodeVersion == QChar::Unicode_Unassigned || p->unicodeVersion > version) {
          starter = -1; // to prevent starter == pos - 1
          lastCombining = 255; // to prevent combining > lastCombining
@@ -908,7 +789,7 @@ static void canonicalOrderHelper(QString *str, QChar::UnicodeVersion version, in
 
       ushort c2 = 0;
       {
-         const QUnicodeTables::Properties *p = qGetProp(u2);
+         const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(u2);
          if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version) {
             c2 = p->combiningClass;
          }
@@ -920,7 +801,7 @@ static void canonicalOrderHelper(QString *str, QChar::UnicodeVersion version, in
 
       ushort c1 = 0;
       {
-         const QUnicodeTables::Properties *p = qGetProp(u1);
+         const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(u1);
          if (p->unicodeVersion != QChar::Unicode_Unassigned && p->unicodeVersion <= version) {
             c1 = p->combiningClass;
          }

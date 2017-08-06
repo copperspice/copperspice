@@ -95,7 +95,7 @@ void QFont::cleanup()
 
 HFONT QFont::handle() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);

@@ -43,121 +43,11 @@ extern void qt_format_text(const QFont &font, const QRectF &_r,
                            int tabStops, int *tabArray, int tabArrayLen,
                            QPainter *painter);
 
-/*****************************************************************************
-  QFontMetrics member functions
- *****************************************************************************/
-
-/*!
-    \class QFontMetrics
-    \reentrant
-
-    \brief The QFontMetrics class provides font metrics information.
-
-    \ingroup painting
-    \ingroup shared
-
-    QFontMetrics functions calculate the size of characters and
-    strings for a given font. There are three ways you can create a
-    QFontMetrics object:
-
-    \list 1
-    \o Calling the QFontMetrics constructor with a QFont creates a
-    font metrics object for a screen-compatible font, i.e. the font
-    cannot be a printer font. If the font is changed
-    later, the font metrics object is \e not updated.
-
-    (Note: If you use a printer font the values returned may be
-    inaccurate. Printer fonts are not always accessible so the nearest
-    screen font is used if a printer font is supplied.)
-
-    \o QWidget::fontMetrics() returns the font metrics for a widget's
-    font. This is equivalent to QFontMetrics(widget->font()). If the
-    widget's font is changed later, the font metrics object is \e not
-    updated.
-
-    \o QPainter::fontMetrics() returns the font metrics for a
-    painter's current font. If the painter's font is changed later, the
-    font metrics object is \e not updated.
-    \endlist
-
-    Once created, the object provides functions to access the
-    individual metrics of the font, its characters, and for strings
-    rendered in the font.
-
-    There are several functions that operate on the font: ascent(),
-    descent(), height(), leading() and lineSpacing() return the basic
-    size properties of the font. The underlinePos(), overlinePos(),
-    strikeOutPos() and lineWidth() functions, return the properties of
-    the line that underlines, overlines or strikes out the
-    characters. These functions are all fast.
-
-    There are also some functions that operate on the set of glyphs in
-    the font: minLeftBearing(), minRightBearing() and maxWidth().
-    These are by necessity slow, and we recommend avoiding them if
-    possible.
-
-    For each character, you can get its width(), leftBearing() and
-    rightBearing() and find out whether it is in the font using
-    inFont(). You can also treat the character as a string, and use
-    the string functions on it.
-
-    The string functions include width(), to return the width of a
-    string in pixels (or points, for a printer), boundingRect(), to
-    return a rectangle large enough to contain the rendered string,
-    and size(), to return the size of that rectangle.
-
-    Example:
-    \snippet doc/src/snippets/code/src_gui_text_qfontmetrics.cpp 0
-
-    \sa QFont, QFontInfo, QFontDatabase, QFontComboBox, {Character Map Example}
-*/
-
-/*!
-    \fn QRect QFontMetrics::boundingRect(int x, int y, int width, int height,
-        int flags, const QString &text, int tabStops, int *tabArray) const
-    \overload
-
-    Returns the bounding rectangle for the given \a text within the
-    rectangle specified by the \a x and \a y coordinates, \a width, and
-    \a height.
-
-    If Qt::TextExpandTabs is set in \a flags and \a tabArray is
-    non-null, it specifies a 0-terminated sequence of pixel-positions
-    for tabs; otherwise, if \a tabStops is non-zero, it is used as the
-    tab spacing (in pixels).
-*/
-
-/*!
-    Constructs a font metrics object for \a font.
-
-    The font metrics will be compatible with the paintdevice used to
-    create \a font.
-
-    The font metrics object holds the information for the font that is
-    passed in the constructor at the time it is created, and is not
-    updated if the font's attributes are changed later.
-
-    Use QFontMetrics(const QFont &, QPaintDevice *) to get the font
-    metrics that are compatible with a certain paint device.
-*/
 QFontMetrics::QFontMetrics(const QFont &font)
    : d(font.d.data())
 {
 }
 
-/*!
-    Constructs a font metrics object for \a font and \a paintdevice.
-
-    The font metrics will be compatible with the paintdevice passed.
-    If the \a paintdevice is 0, the metrics will be screen-compatible,
-    ie. the metrics you get if you use the font for drawing text on a
-    \link QWidget widgets\endlink or \link QPixmap pixmaps\endlink,
-    not on a QPicture or QPrinter.
-
-    The font metrics object holds the information for the font that is
-    passed in the constructor at the time it is created, and is not
-    updated if the font's attributes are changed later.
-*/
 QFontMetrics::QFontMetrics(const QFont &font, QPaintDevice *paintdevice)
 {
    int dpi = paintdevice ? paintdevice->logicalDpiY() : qt_defaultDpi();
@@ -271,7 +161,7 @@ bool QFontMetrics::operator ==(const QFontMetrics &other)
 */
 int QFontMetrics::ascent() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->ascent());
 }
@@ -289,7 +179,7 @@ int QFontMetrics::ascent() const
 */
 int QFontMetrics::descent() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->descent());
 }
@@ -304,7 +194,7 @@ int QFontMetrics::descent() const
 */
 int QFontMetrics::height() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->ascent()) + qRound(engine->descent());
 }
@@ -318,7 +208,7 @@ int QFontMetrics::height() const
 */
 int QFontMetrics::leading() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->leading());
 }
@@ -332,7 +222,7 @@ int QFontMetrics::leading() const
 */
 int QFontMetrics::lineSpacing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->leading()) + qRound(engine->ascent()) + qRound(engine->descent());
 }
@@ -349,7 +239,7 @@ int QFontMetrics::lineSpacing() const
 */
 int QFontMetrics::minLeftBearing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->minLeftBearing());
 }
@@ -366,7 +256,7 @@ int QFontMetrics::minLeftBearing() const
 */
 int QFontMetrics::minRightBearing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->minRightBearing());
 }
@@ -376,7 +266,7 @@ int QFontMetrics::minRightBearing() const
 */
 int QFontMetrics::maxWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->maxCharWidth());
 }
@@ -387,81 +277,59 @@ int QFontMetrics::maxWidth() const
 */
 int QFontMetrics::xHeight() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    if (d->capital == QFont::SmallCaps) {
-      return qRound(d->smallCapsFontPrivate()->engineForScript(QUnicodeTables::Common)->ascent());
+      return qRound(d->smallCapsFontPrivate()->engineForScript(QChar::Script_Common)->ascent());
    }
    return qRound(engine->xHeight());
 }
 
-/*!
-    \since 4.2
-
-    Returns the average width of glyphs in the font.
-*/
 int QFontMetrics::averageCharWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->averageCharWidth());
 }
 
-/*!
-    Returns true if character \a ch is a valid character in the font;
-    otherwise returns false.
-*/
 bool QFontMetrics::inFont(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine = d->engineForScript(script);
    Q_ASSERT(engine != 0);
+
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
+
    return engine->canRender(&ch, 1);
 }
 
-/*!
-   \fn bool QFontMetrics::inFontUcs4(uint character) const
-   \since 4.8
-
-   Returns true if the given \a character encoded in UCS-4/UTF-32 is a valid
-   character in the font; otherwise returns false.
-*/
 bool QFontMetrics::inFontUcs4(uint ucs4) const
 {
-   const int script = QUnicodeTables::script(ucs4);
+   const int script = QChar::script(ucs4);
    QFontEngine *engine = d->engineForScript(script);
    Q_ASSERT(engine != 0);
+
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
+
    QString utf16 = QString::fromUcs4(&ucs4, 1);
    return engine->canRender(utf16.data(), utf16.length());
 }
 
-/*!
-    Returns the left bearing of character \a ch in the font.
-
-    The left bearing is the right-ward distance of the left-most pixel
-    of the character from the logical origin of the character. This
-    value is negative if the pixels of the character extend to the
-    left of the logical origin.
-
-    See width(QChar) for a graphical description of this metric.
-
-    \sa rightBearing(), minLeftBearing(), width()
-*/
 int QFontMetrics::leftBearing(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
+
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Box) {
       return 0;
@@ -472,33 +340,25 @@ int QFontMetrics::leftBearing(QChar ch) const
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
    engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal lb;
    engine->getGlyphBearings(glyphs.glyphs[0], &lb);
+
    return qRound(lb);
 }
 
-/*!
-    Returns the right bearing of character \a ch in the font.
-
-    The right bearing is the left-ward distance of the right-most
-    pixel of the character from the logical origin of a subsequent
-    character. This value is negative if the pixels of the character
-    extend to the right of the width() of the character.
-
-    See width() for a graphical description of this metric.
-
-    \sa leftBearing(), minRightBearing(), width()
-*/
 int QFontMetrics::rightBearing(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
+
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Box) {
       return 0;
@@ -512,21 +372,10 @@ int QFontMetrics::rightBearing(QChar ch) const
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal rb;
    engine->getGlyphBearings(glyphs.glyphs[0], 0, &rb);
+
    return qRound(rb);
 }
 
-/*!
-    Returns the width in pixels of the first \a len characters of \a
-    text. If \a len is negative (the default), the entire string is
-    used.
-
-    Note that this value is \e not equal to boundingRect().width();
-    boundingRect() returns a rectangle describing the pixels this
-    string will cover whereas width() returns the distance to where
-    the next string should be drawn.
-
-    \sa boundingRect()
-*/
 int QFontMetrics::width(const QString &text, int len) const
 {
    return width(text, len, 0);
@@ -551,7 +400,7 @@ int QFontMetrics::width(const QString &text, int len, int flags) const
       // Skip harfbuzz complex shaping, only use advances
       int numGlyphs = len;
       QVarLengthGlyphLayoutArray glyphs(numGlyphs);
-      QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+      QFontEngine *engine = d->engineForScript(QChar::Script_Common);
       if (!engine->stringToCMap(text.data(), len, &glyphs, &numGlyphs, 0)) {
          glyphs.resize(numGlyphs);
          if (!engine->stringToCMap(text.data(), len, &glyphs, &numGlyphs, 0)) {
@@ -601,15 +450,16 @@ int QFontMetrics::width(QChar ch) const
       return 0;
    }
 
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
-   Q_ASSERT(engine != 0);
 
+   Q_ASSERT(engine != 0);
    d->alterCharForCapitalization(ch);
 
    QGlyphLayoutArray<8> glyphs;
@@ -637,10 +487,10 @@ int QFontMetrics::charWidth(const QString &text, int pos) const
    }
 
    QChar ch = text.unicode()[pos];
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    int width;
 
-   if (script != QUnicodeTables::Common) {
+   if (script != QChar::Script_Common) {
       // complex script shaping. Have to do some hard work
       int from = qMax(0, pos - 8);
       int to = qMin(text.length(), pos + 8);
@@ -722,15 +572,16 @@ QRect QFontMetrics::boundingRect(const QString &text) const
 */
 QRect QFontMetrics::boundingRect(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
-   Q_ASSERT(engine != 0);
 
+   Q_ASSERT(engine != 0);
    d->alterCharForCapitalization(ch);
 
    QGlyphLayoutArray<10> glyphs;
@@ -927,7 +778,7 @@ QString QFontMetrics::elidedText(const QString &text, Qt::TextElideMode mode, in
 */
 int QFontMetrics::underlinePos() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->underlinePosition());
 }
@@ -963,7 +814,7 @@ int QFontMetrics::strikeOutPos() const
 */
 int QFontMetrics::lineWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return qRound(engine->lineThickness());
 }
@@ -1178,7 +1029,7 @@ bool QFontMetricsF::operator ==(const QFontMetricsF &other)
 */
 qreal QFontMetricsF::ascent() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->ascent().toReal();
 }
@@ -1197,7 +1048,7 @@ qreal QFontMetricsF::ascent() const
 */
 qreal QFontMetricsF::descent() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->descent().toReal();
 }
@@ -1212,7 +1063,7 @@ qreal QFontMetricsF::descent() const
 */
 qreal QFontMetricsF::height() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
 
    return (engine->ascent() + engine->descent()).toReal();
@@ -1227,7 +1078,7 @@ qreal QFontMetricsF::height() const
 */
 qreal QFontMetricsF::leading() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->leading().toReal();
 }
@@ -1241,7 +1092,7 @@ qreal QFontMetricsF::leading() const
 */
 qreal QFontMetricsF::lineSpacing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return (engine->leading() + engine->ascent() + engine->descent()).toReal();
 }
@@ -1258,7 +1109,7 @@ qreal QFontMetricsF::lineSpacing() const
 */
 qreal QFontMetricsF::minLeftBearing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->minLeftBearing();
 }
@@ -1275,7 +1126,7 @@ qreal QFontMetricsF::minLeftBearing() const
 */
 qreal QFontMetricsF::minRightBearing() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->minRightBearing();
 }
@@ -1285,7 +1136,7 @@ qreal QFontMetricsF::minRightBearing() const
 */
 qreal QFontMetricsF::maxWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->maxCharWidth();
 }
@@ -1296,81 +1147,59 @@ qreal QFontMetricsF::maxWidth() const
 */
 qreal QFontMetricsF::xHeight() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    if (d->capital == QFont::SmallCaps) {
-      return d->smallCapsFontPrivate()->engineForScript(QUnicodeTables::Common)->ascent().toReal();
+      return d->smallCapsFontPrivate()->engineForScript(QChar::Script_Common)->ascent().toReal();
    }
    return engine->xHeight().toReal();
 }
 
-/*!
-    \since 4.2
-
-    Returns the average width of glyphs in the font.
-*/
 qreal QFontMetricsF::averageCharWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->averageCharWidth().toReal();
 }
 
-/*!
-    Returns true if character \a ch is a valid character in the font;
-    otherwise returns false.
-*/
 bool QFontMetricsF::inFont(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine = d->engineForScript(script);
+
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
+
    return engine->canRender(&ch, 1);
 }
 
-/*!
-    \fn bool QFontMetricsF::inFontUcs4(uint ch) const
-    \since 4.8
-
-    Returns true if the character given by \a ch, encoded in UCS-4/UTF-32,
-    is a valid character in the font; otherwise returns false.
-*/
 bool QFontMetricsF::inFontUcs4(uint ucs4) const
 {
-   const int script = QUnicodeTables::script(ucs4);
+   const int script = QChar::script(ucs4);
    QFontEngine *engine = d->engineForScript(script);
    Q_ASSERT(engine != 0);
+
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
+
    QString utf16 = QString::fromUcs4(&ucs4, 1);
    return engine->canRender(utf16.data(), utf16.length());
 }
 
-/*!
-    Returns the left bearing of character \a ch in the font.
-
-    The left bearing is the right-ward distance of the left-most pixel
-    of the character from the logical origin of the character. This
-    value is negative if the pixels of the character extend to the
-    left of the logical origin.
-
-    See width(QChar) for a graphical description of this metric.
-
-    \sa rightBearing(), minLeftBearing(), width()
-*/
 qreal QFontMetricsF::leftBearing(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
+
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Box) {
       return 0;
@@ -1387,27 +1216,17 @@ qreal QFontMetricsF::leftBearing(QChar ch) const
    return lb;
 }
 
-/*!
-    Returns the right bearing of character \a ch in the font.
-
-    The right bearing is the left-ward distance of the right-most
-    pixel of the character from the logical origin of a subsequent
-    character. This value is negative if the pixels of the character
-    extend to the right of the width() of the character.
-
-    See width() for a graphical description of this metric.
-
-    \sa leftBearing(), minRightBearing(), width()
-*/
 qreal QFontMetricsF::rightBearing(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
+
    Q_ASSERT(engine != 0);
    if (engine->type() == QFontEngine::Box) {
       return 0;
@@ -1418,23 +1237,14 @@ qreal QFontMetricsF::rightBearing(QChar ch) const
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
    engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal rb;
    engine->getGlyphBearings(glyphs.glyphs[0], 0, &rb);
-   return rb;
 
+   return rb;
 }
 
-/*!
-    Returns the width in pixels of the characters in the given \a text.
-
-    Note that this value is \e not equal to the width returned by
-    boundingRect().width() because boundingRect() returns a rectangle
-    describing the pixels this string will cover whereas width()
-    returns the distance to where the next string should be drawn.
-
-    \sa boundingRect()
-*/
 qreal QFontMetricsF::width(const QString &text) const
 {
    int pos = text.indexOf(QLatin1Char('\x9c'));
@@ -1446,38 +1256,15 @@ qreal QFontMetricsF::width(const QString &text) const
    return layout.width(0, len).toReal();
 }
 
-/*!
-    \overload
-
-    \img bearings.png Bearings
-
-    Returns the logical width of character \a ch in pixels. This is a
-    distance appropriate for drawing a subsequent character after \a
-    ch.
-
-    Some of the metrics are described in the image to the right. The
-    central dark rectangles cover the logical width() of each
-    character. The outer pale rectangles cover the leftBearing() and
-    rightBearing() of each character. Notice that the bearings of "f"
-    in this particular font are both negative, while the bearings of
-    "o" are both positive.
-
-    \warning This function will produce incorrect results for Arabic
-    characters or non-spacing marks in the middle of a string, as the
-    glyph shaping and positioning of marks that happens when
-    processing strings cannot be taken into account. When implementing
-    an interactive text control, use QTextLayout instead.
-
-    \sa boundingRect()
-*/
 qreal QFontMetricsF::width(QChar ch) const
 {
    if (QChar::category(ch.unicode()) == QChar::Mark_NonSpacing) {
       return 0.;
    }
 
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
@@ -1528,30 +1315,18 @@ QRectF QFontMetricsF::boundingRect(const QString &text) const
                  gm.width.toReal(), gm.height.toReal());
 }
 
-/*!
-    Returns the bounding rectangle of the character \a ch relative to
-    the left-most point on the base line.
-
-    Note that the bounding rectangle may extend to the left of (0, 0),
-    e.g. for italicized fonts, and that the text output may cover \e
-    all pixels in the bounding rectangle.
-
-    Note that the rectangle usually extends both above and below the
-    base line.
-
-    \sa width()
-*/
 QRectF QFontMetricsF::boundingRect(QChar ch) const
 {
-   const int script = QUnicodeTables::script(ch);
+   const int script = ch.script();
    QFontEngine *engine;
+
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
       engine = d->smallCapsFontPrivate()->engineForScript(script);
    } else {
       engine = d->engineForScript(script);
    }
-   Q_ASSERT(engine != 0);
 
+   Q_ASSERT(engine != 0);
    d->alterCharForCapitalization(ch);
 
    QGlyphLayoutArray<10> glyphs;
@@ -1747,7 +1522,7 @@ QString QFontMetricsF::elidedText(const QString &text, Qt::TextElideMode mode, q
 */
 qreal QFontMetricsF::underlinePos() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->underlinePosition().toReal();
 }
@@ -1782,7 +1557,7 @@ qreal QFontMetricsF::strikeOutPos() const
 */
 qreal QFontMetricsF::lineWidth() const
 {
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
    return engine->lineThickness().toReal();
 }

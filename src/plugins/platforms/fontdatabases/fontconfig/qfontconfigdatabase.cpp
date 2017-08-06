@@ -550,8 +550,8 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString family, const 
         slant_value = FC_SLANT_OBLIQUE;
     FcPatternAddInteger(pattern, FC_SLANT, slant_value);
 
-    if (script != QUnicodeTables::Common && *specialLanguages[script] != '\0') {
-        Q_ASSERT(script < QUnicodeTables::ScriptCount);
+    if (script != QChar::Script_Common && *specialLanguages[script] != '\0') {
+        Q_ASSERT(script < QChar::ScriptCount);
         FcLangSet *ls = FcLangSetCreate();
         FcLangSetAdd(ls, (const FcChar8*)specialLanguages[script]);
         FcPatternAddLangSet(pattern, FC_LANG, ls);

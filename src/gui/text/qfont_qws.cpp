@@ -66,7 +66,7 @@ Qt::HANDLE QFont::handle() const
 FT_Face QFont::freetypeFace() const
 {
 #ifndef QT_NO_FREETYPE
-   QFontEngine *engine = d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);
    }

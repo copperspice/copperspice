@@ -1191,7 +1191,7 @@ static void qgl_use_font(QFontEngineFT *engine, int first, int count, int listBa
 void QGLContext::generateFontDisplayLists(const QFont &fnt, int listBase)
 {
    QFont f(fnt);
-   QFontEngine *engine = f.d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *engine = f.d->engineForScript(QChar::Script_Common);
 
    if (engine->type() == QFontEngine::Multi) {
       engine = static_cast<QFontEngineMulti *>(engine)->engine(0);

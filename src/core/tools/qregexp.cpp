@@ -35,9 +35,8 @@
 #include <qfunctions_p.h>
 
 #include <limits.h>
+#include <algorithm>
 #include <stdlib.h>
-
-QT_BEGIN_NAMESPACE
 
 int qFindString(const QChar *haystack, int haystackLen, int from,
                 const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
@@ -71,24 +70,27 @@ static bool isWord(QChar ch)
 }
 
 /*
-  Merges two vectors of ints and puts the result into the first
-  one.
+  Merges two vectors of ints and puts the result into the first one.
 */
 static void mergeInto(QVector<int> *a, const QVector<int> &b)
 {
    int asize = a->size();
    int bsize = b.size();
+
    if (asize == 0) {
       *a = b;
+
 #ifndef QT_NO_REGEXP_OPTIM
    } else if (bsize == 1 && a->at(asize - 1) < b.at(0)) {
       a->resize(asize + 1);
       (*a)[asize] = b.at(0);
 #endif
+
    } else if (bsize >= 1) {
       int csize = asize + bsize;
       QVector<int> c(csize);
       int i = 0, j = 0, k = 0;
+
       while (i < asize) {
          if (j < bsize) {
             if (a->at(i) == b.at(j)) {
@@ -104,6 +106,7 @@ static void mergeInto(QVector<int> *a, const QVector<int> &b)
             break;
          }
       }
+
       c.resize(csize);
       if (j < bsize) {
          memcpy(c.data() + k, b.constData() + j, (bsize - j) * sizeof(int));
@@ -250,15 +253,13 @@ struct QRegExpEngineKey {
    }
 };
 
-Q_STATIC_GLOBAL_OPERATOR bool operator==(const QRegExpEngineKey &key1, const QRegExpEngineKey &key2)
+static bool operator==(const QRegExpEngineKey &key1, const QRegExpEngineKey &key2)
 {
    return key1.pattern == key2.pattern && key1.patternSyntax == key2.patternSyntax
           && key1.cs == key2.cs;
 }
 
 class QRegExpEngine;
-
-//Q_DECLARE_TYPEINFO(QVector<int>, Q_MOVABLE_TYPE);
 
 /*
   This is the engine state during matching.
@@ -285,11 +286,13 @@ struct QRegExpMatchState {
    int *captured; // what match() returned last
    int slideTabSize; // size of slide table
    int capturedSize;
+
 #ifndef QT_NO_REGEXP_BACKREF
    QList<QVector<int> > sleeping; // list of back-reference sleepers
 #endif
-   int matchLen; // length of match
-   int oneTestMatchedLen; // length of partial match
+
+   int matchLen;             // length of match
+   int oneTestMatchedLen;    // length of partial match
 
    const QRegExpEngine *eng;
 
@@ -378,6 +381,8 @@ struct QRegExpAnchorAlternation {
 Q_DECLARE_TYPEINFO(QRegExpAnchorAlternation, Q_PRIMITIVE_TYPE);
 #endif
 
+#define FLAG(x) (1 << (x))
+
 #ifndef QT_NO_REGEXP_CCLASS
 /*
   The class QRegExpCharClass represents a set of characters, such as can
@@ -388,6 +393,7 @@ class QRegExpCharClass
 {
  public:
    QRegExpCharClass();
+
    inline QRegExpCharClass(const QRegExpCharClass &cc) {
       operator=(cc);
    }
@@ -399,8 +405,9 @@ class QRegExpCharClass
       return n;
    }
    void setNegative(bool negative);
-   void addCategories(int cats);
+   void addCategories(uint cats);
    void addRange(ushort from, ushort to);
+
    void addSingleton(ushort ch) {
       addRange(ch, ch);
    }
@@ -646,17 +653,14 @@ class QRegExpEngine
 
    friend class Box;
 
-   void setupCategoriesRangeMap();
-
-   /*
-     This is the lexical analyzer for regular expressions.
-   */
+   // This is the lexical analyzer for regular expressions.
    enum { Tok_Eos, Tok_Dollar, Tok_LeftParen, Tok_MagicLeftParen, Tok_PosLookahead,
           Tok_NegLookahead, Tok_RightParen, Tok_CharClass, Tok_Caret, Tok_Quantifier, Tok_Bar,
           Tok_Word, Tok_NonWord, Tok_Char = 0x10000, Tok_BackRef = 0x20000
         };
    int getChar();
    int getEscape();
+
 #ifndef QT_NO_REGEXP_INTERVAL
    int getRep(int def);
 #endif
@@ -686,9 +690,8 @@ class QRegExpEngine
    void parseTerm(Box *box);
    void parseExpression(Box *box);
 
-   int yyTok; // the last token read
-   bool yyMayCapture; // set this to false to disable capturing
-   QHash<QByteArray, QPair<int, int> > categoriesRangeMap; // fast lookup hash for xml schema extensions
+   int yyTok;          // the last token read
+   bool yyMayCapture;  // set this to false to disable capturing
 
    friend struct QRegExpMatchState;
 };
@@ -721,14 +724,14 @@ Q_CORE_EXPORT QString qt_regexp_toCanonical(const QString &pattern, QRegExp::Pat
 #ifndef QT_NO_REGEXP_WILDCARD
       case QRegExp::Wildcard:
          return wc2rx(pattern, false);
-         break;
+
       case QRegExp::WildcardUnix:
          return wc2rx(pattern, true);
-         break;
+
 #endif
       case QRegExp::FixedString:
          return QRegExp::escape(pattern);
-         break;
+
       case QRegExp::W3CXmlSchema11:
       default:
          return pattern;
@@ -767,15 +770,18 @@ void QRegExpMatchState::prepareForMatch(QRegExpEngine *eng)
    */
    int ns = eng->s.size(); // number of states
    int ncap = eng->ncap;
+
 #ifndef QT_NO_REGEXP_OPTIM
    int newSlideTabSize = qMax(eng->minl + 1, 16);
 #else
    int newSlideTabSize = 0;
 #endif
+
    int numCaptures = eng->captureCount();
    int newCapturedSize = 2 + 2 * numCaptures;
+
    bigArray = q_check_ptr((int *)realloc(bigArray,
-                                         ((3 + 4 * ncap) * ns + 4 * ncap + newSlideTabSize + newCapturedSize) * sizeof(int)));
+                  ((3 + 4 * ncap) * ns + 4 * ncap + newSlideTabSize + newCapturedSize) * sizeof(int)));
 
    // set all internal variables only _after_ bigArray is realloc'ed
    // to prevent a broken regexp in oom case
@@ -934,13 +940,16 @@ void QRegExpEngine::addPlusTransitions(const QVector<int> &from, const QVector<i
 {
    for (int i = 0; i < from.size(); i++) {
       QRegExpAutomatonState &st = s[from.at(i)];
+
       const QVector<int> oldOuts = st.outs;
       mergeInto(&st.outs, to);
+
       if (f.at(atom).capture != QRegExpAtom::NoCapture) {
          for (int j = 0; j < to.size(); j++) {
             // ### st.reenter.contains(to.at(j)) check looks suspicious
-            if (!st.reenter.contains(to.at(j)) &&
-                  qBinaryFind(oldOuts.constBegin(), oldOuts.constEnd(), to.at(j)) == oldOuts.end()) {
+
+            if (! st.reenter.contains(to.at(j)) &&
+                     ! std::binary_search(oldOuts.constBegin(), oldOuts.constEnd(), to.at(j))) {
                st.reenter.insert(to.at(j), atom);
             }
          }
@@ -979,12 +988,14 @@ int QRegExpEngine::anchorConcatenation(int a, int b)
    if (((a | b) & Anchor_Alternation) == 0) {
       return a | b;
    }
+
    if ((b & Anchor_Alternation) != 0) {
       qSwap(a, b);
    }
 
    int aprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).a, b);
    int bprime = anchorConcatenation(aa.at(a ^ Anchor_Alternation).b, b);
+
    return anchorAlternation(aprime, bprime);
 }
 #endif
@@ -1796,9 +1807,40 @@ void QRegExpCharClass::setNegative(bool negative)
 #endif
 }
 
-void QRegExpCharClass::addCategories(int cats)
+void QRegExpCharClass::addCategories(uint cats)
 {
-   c |= cats;
+   static const uint all_cats = FLAG(QChar::Mark_NonSpacing) |
+                                FLAG(QChar::Mark_SpacingCombining) |
+                                FLAG(QChar::Mark_Enclosing) |
+                                FLAG(QChar::Number_DecimalDigit) |
+                                FLAG(QChar::Number_Letter) |
+                                FLAG(QChar::Number_Other) |
+                                FLAG(QChar::Separator_Space) |
+                                FLAG(QChar::Separator_Line) |
+                                FLAG(QChar::Separator_Paragraph) |
+                                FLAG(QChar::Other_Control) |
+                                FLAG(QChar::Other_Format) |
+                                FLAG(QChar::Other_Surrogate) |
+                                FLAG(QChar::Other_PrivateUse) |
+                                FLAG(QChar::Other_NotAssigned) |
+                                FLAG(QChar::Letter_Uppercase) |
+                                FLAG(QChar::Letter_Lowercase) |
+                                FLAG(QChar::Letter_Titlecase) |
+                                FLAG(QChar::Letter_Modifier) |
+                                FLAG(QChar::Letter_Other) |
+                                FLAG(QChar::Punctuation_Connector) |
+                                FLAG(QChar::Punctuation_Dash) |
+                                FLAG(QChar::Punctuation_Open) |
+                                FLAG(QChar::Punctuation_Close) |
+                                FLAG(QChar::Punctuation_InitialQuote) |
+                                FLAG(QChar::Punctuation_FinalQuote) |
+                                FLAG(QChar::Punctuation_Other) |
+                                FLAG(QChar::Symbol_Math) |
+                                FLAG(QChar::Symbol_Currency) |
+                                FLAG(QChar::Symbol_Modifier) |
+                                FLAG(QChar::Symbol_Other);
+    c |= (all_cats & cats);
+
 #ifndef QT_NO_REGEXP_OPTIM
    occ1.fill(0, NumBadChars);
 #endif
@@ -1843,8 +1885,7 @@ bool QRegExpCharClass::in(QChar ch) const
       return n;
    }
 #endif
-
-   if (c != 0 && (c & (1 << (int)ch.category())) != 0) {
+   if (c != 0 && (c & FLAG(ch.category())) != 0) {
       return !n;
    }
 
@@ -2169,151 +2210,176 @@ void QRegExpEngine::Box::addAnchorsToEngine(const Box &to) const
    }
 }
 
-void QRegExpEngine::setupCategoriesRangeMap()
+#ifndef QT_NO_REGEXP_CCLASS
+// fast lookup hash for xml schema extensions
+// sorted by name for b-search
+
+struct CategoriesRangeMapEntry {
+    const char name[40];
+    uint first, second;
+};
+
+static const CategoriesRangeMapEntry categoriesRangeMap[] = {
+    { "AegeanNumbers",                        0x10100, 0x1013F },
+    { "AlphabeticPresentationForms",          0xFB00, 0xFB4F },
+    { "AncientGreekMusicalNotation",          0x1D200, 0x1D24F },
+    { "AncientGreekNumbers",                  0x10140, 0x1018F },
+    { "Arabic",                               0x0600, 0x06FF },
+    { "ArabicPresentationForms-A",            0xFB50, 0xFDFF },
+    { "ArabicPresentationForms-B",            0xFE70, 0xFEFF },
+    { "ArabicSupplement",                     0x0750, 0x077F },
+    { "Armenian",                             0x0530, 0x058F },
+    { "Arrows",                               0x2190, 0x21FF },
+    { "BasicLatin",                           0x0000, 0x007F },
+    { "Bengali",                              0x0980, 0x09FF },
+    { "BlockElements",                        0x2580, 0x259F },
+    { "Bopomofo",                             0x3100, 0x312F },
+    { "BopomofoExtended",                     0x31A0, 0x31BF },
+    { "BoxDrawing",                           0x2500, 0x257F },
+    { "BraillePatterns",                      0x2800, 0x28FF },
+    { "Buginese",                             0x1A00, 0x1A1F },
+    { "Buhid",                                0x1740, 0x175F },
+    { "ByzantineMusicalSymbols",              0x1D000, 0x1D0FF },
+    { "CJKCompatibility",                     0x3300, 0x33FF },
+    { "CJKCompatibilityForms",                0xFE30, 0xFE4F },
+    { "CJKCompatibilityIdeographs",           0xF900, 0xFAFF },
+    { "CJKCompatibilityIdeographsSupplement", 0x2F800, 0x2FA1F },
+    { "CJKRadicalsSupplement",                0x2E80, 0x2EFF },
+    { "CJKStrokes",                           0x31C0, 0x31EF },
+    { "CJKSymbolsandPunctuation",             0x3000, 0x303F },
+    { "CJKUnifiedIdeographs",                 0x4E00, 0x9FFF },
+    { "CJKUnifiedIdeographsExtensionA",       0x3400, 0x4DB5 },
+    { "CJKUnifiedIdeographsExtensionB",       0x20000, 0x2A6DF },
+    { "Cherokee",                             0x13A0, 0x13FF },
+    { "CombiningDiacriticalMarks",            0x0300, 0x036F },
+    { "CombiningDiacriticalMarksSupplement",  0x1DC0, 0x1DFF },
+    { "CombiningHalfMarks",                   0xFE20, 0xFE2F },
+    { "CombiningMarksforSymbols",             0x20D0, 0x20FF },
+    { "ControlPictures",                      0x2400, 0x243F },
+    { "Coptic",                               0x2C80, 0x2CFF },
+    { "CurrencySymbols",                      0x20A0, 0x20CF },
+    { "CypriotSyllabary",                     0x10800, 0x1083F },
+    { "Cyrillic",                             0x0400, 0x04FF },
+    { "CyrillicSupplement",                   0x0500, 0x052F },
+    { "Deseret",                              0x10400, 0x1044F },
+    { "Devanagari",                           0x0900, 0x097F },
+    { "Dingbats",                             0x2700, 0x27BF },
+    { "EnclosedAlphanumerics",                0x2460, 0x24FF },
+    { "EnclosedCJKLettersandMonths",          0x3200, 0x32FF },
+    { "Ethiopic",                             0x1200, 0x137F },
+    { "EthiopicExtended",                     0x2D80, 0x2DDF },
+    { "EthiopicSupplement",                   0x1380, 0x139F },
+    { "GeneralPunctuation",                   0x2000, 0x206F },
+    { "GeometricShapes",                      0x25A0, 0x25FF },
+    { "Georgian",                             0x10A0, 0x10FF },
+    { "GeorgianSupplement",                   0x2D00, 0x2D2F },
+    { "Glagolitic",                           0x2C00, 0x2C5F },
+    { "Gothic",                               0x10330, 0x1034F },
+    { "Greek",                                0x0370, 0x03FF },
+    { "GreekExtended",                        0x1F00, 0x1FFF },
+    { "Gujarati",                             0x0A80, 0x0AFF },
+    { "Gurmukhi",                             0x0A00, 0x0A7F },
+    { "HalfwidthandFullwidthForms",           0xFF00, 0xFFEF },
+    { "HangulCompatibilityJamo",              0x3130, 0x318F },
+    { "HangulJamo",                           0x1100, 0x11FF },
+    { "HangulSyllables",                      0xAC00, 0xD7A3 },
+    { "Hanunoo",                              0x1720, 0x173F },
+    { "Hebrew",                               0x0590, 0x05FF },
+    { "Hiragana",                             0x3040, 0x309F },
+    { "IPAExtensions",                        0x0250, 0x02AF },
+    { "IdeographicDescriptionCharacters",     0x2FF0, 0x2FFF },
+    { "Kanbun",                               0x3190, 0x319F },
+    { "KangxiRadicals",                       0x2F00, 0x2FDF },
+    { "Kannada",                              0x0C80, 0x0CFF },
+    { "Katakana",                             0x30A0, 0x30FF },
+    { "KatakanaPhoneticExtensions",           0x31F0, 0x31FF },
+    { "Kharoshthi",                           0x10A00, 0x10A5F },
+    { "Khmer",                                0x1780, 0x17FF },
+    { "KhmerSymbols",                         0x19E0, 0x19FF },
+    { "Lao",                                  0x0E80, 0x0EFF },
+    { "Latin-1Supplement",                    0x0080, 0x00FF },
+    { "LatinExtended-A",                      0x0100, 0x017F },
+    { "LatinExtended-B",                      0x0180, 0x024F },
+    { "LatinExtendedAdditional",              0x1E00, 0x1EFF },
+    { "LetterlikeSymbols",                    0x2100, 0x214F },
+    { "Limbu",                                0x1900, 0x194F },
+    { "LinearBIdeograms",                     0x10080, 0x100FF },
+    { "LinearBSyllabary",                     0x10000, 0x1007F },
+    { "Malayalam",                            0x0D00, 0x0D7F },
+    { "MathematicalAlphanumericSymbols",      0x1D400, 0x1D7FF },
+    { "MathematicalOperators",                0x2200, 0x22FF },
+    { "MiscellaneousMathematicalSymbols-A",   0x27C0, 0x27EF },
+    { "MiscellaneousMathematicalSymbols-B",   0x2980, 0x29FF },
+    { "MiscellaneousSymbols",                 0x2600, 0x26FF },
+    { "MiscellaneousSymbolsandArrows",        0x2B00, 0x2BFF },
+    { "MiscellaneousTechnical",               0x2300, 0x23FF },
+    { "ModifierToneLetters",                  0xA700, 0xA71F },
+    { "Mongolian",                            0x1800, 0x18AF },
+    { "MusicalSymbols",                       0x1D100, 0x1D1FF },
+    { "Myanmar",                              0x1000, 0x109F },
+    { "NewTaiLue",                            0x1980, 0x19DF },
+    { "NumberForms",                          0x2150, 0x218F },
+    { "Ogham",                                0x1680, 0x169F },
+    { "OldItalic",                            0x10300, 0x1032F },
+    { "OldPersian",                           0x103A0, 0x103DF },
+    { "OpticalCharacterRecognition",          0x2440, 0x245F },
+    { "Oriya",                                0x0B00, 0x0B7F },
+    { "Osmanya",                              0x10480, 0x104AF },
+    { "PhoneticExtensions",                   0x1D00, 0x1D7F },
+    { "PhoneticExtensionsSupplement",         0x1D80, 0x1DBF },
+    { "PrivateUse",                           0xE000, 0xF8FF },
+    { "Runic",                                0x16A0, 0x16FF },
+    { "Shavian",                              0x10450, 0x1047F },
+    { "Sinhala",                              0x0D80, 0x0DFF },
+    { "SmallFormVariants",                    0xFE50, 0xFE6F },
+    { "SpacingModifierLetters",               0x02B0, 0x02FF },
+    { "Specials",                             0xFFF0, 0xFFFF },
+    { "SuperscriptsandSubscripts",            0x2070, 0x209F },
+    { "SupplementalArrows-A",                 0x27F0, 0x27FF },
+    { "SupplementalArrows-B",                 0x2900, 0x297F },
+    { "SupplementalMathematicalOperators",    0x2A00, 0x2AFF },
+    { "SupplementalPunctuation",              0x2E00, 0x2E7F },
+    { "SupplementaryPrivateUseArea-A",        0xF0000, 0xFFFFF },
+    { "SupplementaryPrivateUseArea-B",        0x100000, 0x10FFFF },
+    { "SylotiNagri",                          0xA800, 0xA82F },
+    { "Syriac",                               0x0700, 0x074F },
+    { "Tagalog",                              0x1700, 0x171F },
+    { "Tagbanwa",                             0x1760, 0x177F },
+    { "Tags",                                 0xE0000, 0xE007F },
+    { "TaiLe",                                0x1950, 0x197F },
+    { "TaiXuanJingSymbols",                   0x1D300, 0x1D35F },
+    { "Tamil",                                0x0B80, 0x0BFF },
+    { "Telugu",                               0x0C00, 0x0C7F },
+    { "Thaana",                               0x0780, 0x07BF },
+    { "Thai",                                 0x0E00, 0x0E7F },
+    { "Tibetan",                              0x0F00, 0x0FFF },
+    { "Tifinagh",                             0x2D30, 0x2D7F },
+    { "Ugaritic",                             0x10380, 0x1039F },
+    { "UnifiedCanadianAboriginalSyllabics",   0x1400, 0x167F },
+    { "VariationSelectors",                   0xFE00, 0xFE0F },
+    { "VariationSelectorsSupplement",         0xE0100, 0xE01EF },
+    { "VerticalForms",                        0xFE10, 0xFE1F },
+    { "YiRadicals",                           0xA490, 0xA4CF },
+    { "YiSyllables",                          0xA000, 0xA48F },
+    { "YijingHexagramSymbols",                0x4DC0, 0x4DFF }
+};
+
+inline bool operator<(const CategoriesRangeMapEntry &entry1, const CategoriesRangeMapEntry &entry2)
 {
-   categoriesRangeMap.insert("IsBasicLatin",                           qMakePair(0x0000, 0x007F));
-   categoriesRangeMap.insert("IsLatin-1Supplement",                    qMakePair(0x0080, 0x00FF));
-   categoriesRangeMap.insert("IsLatinExtended-A",                      qMakePair(0x0100, 0x017F));
-   categoriesRangeMap.insert("IsLatinExtended-B",                      qMakePair(0x0180, 0x024F));
-   categoriesRangeMap.insert("IsIPAExtensions",                        qMakePair(0x0250, 0x02AF));
-   categoriesRangeMap.insert("IsSpacingModifierLetters",               qMakePair(0x02B0, 0x02FF));
-   categoriesRangeMap.insert("IsCombiningDiacriticalMarks",            qMakePair(0x0300, 0x036F));
-   categoriesRangeMap.insert("IsGreek",                                qMakePair(0x0370, 0x03FF));
-   categoriesRangeMap.insert("IsCyrillic",                             qMakePair(0x0400, 0x04FF));
-   categoriesRangeMap.insert("IsCyrillicSupplement",                   qMakePair(0x0500, 0x052F));
-   categoriesRangeMap.insert("IsArmenian",                             qMakePair(0x0530, 0x058F));
-   categoriesRangeMap.insert("IsHebrew",                               qMakePair(0x0590, 0x05FF));
-   categoriesRangeMap.insert("IsArabic",                               qMakePair(0x0600, 0x06FF));
-   categoriesRangeMap.insert("IsSyriac",                               qMakePair(0x0700, 0x074F));
-   categoriesRangeMap.insert("IsArabicSupplement",                     qMakePair(0x0750, 0x077F));
-   categoriesRangeMap.insert("IsThaana",                               qMakePair(0x0780, 0x07BF));
-   categoriesRangeMap.insert("IsDevanagari",                           qMakePair(0x0900, 0x097F));
-   categoriesRangeMap.insert("IsBengali",                              qMakePair(0x0980, 0x09FF));
-   categoriesRangeMap.insert("IsGurmukhi",                             qMakePair(0x0A00, 0x0A7F));
-   categoriesRangeMap.insert("IsGujarati",                             qMakePair(0x0A80, 0x0AFF));
-   categoriesRangeMap.insert("IsOriya",                                qMakePair(0x0B00, 0x0B7F));
-   categoriesRangeMap.insert("IsTamil",                                qMakePair(0x0B80, 0x0BFF));
-   categoriesRangeMap.insert("IsTelugu",                               qMakePair(0x0C00, 0x0C7F));
-   categoriesRangeMap.insert("IsKannada",                              qMakePair(0x0C80, 0x0CFF));
-   categoriesRangeMap.insert("IsMalayalam",                            qMakePair(0x0D00, 0x0D7F));
-   categoriesRangeMap.insert("IsSinhala",                              qMakePair(0x0D80, 0x0DFF));
-   categoriesRangeMap.insert("IsThai",                                 qMakePair(0x0E00, 0x0E7F));
-   categoriesRangeMap.insert("IsLao",                                  qMakePair(0x0E80, 0x0EFF));
-   categoriesRangeMap.insert("IsTibetan",                              qMakePair(0x0F00, 0x0FFF));
-   categoriesRangeMap.insert("IsMyanmar",                              qMakePair(0x1000, 0x109F));
-   categoriesRangeMap.insert("IsGeorgian",                             qMakePair(0x10A0, 0x10FF));
-   categoriesRangeMap.insert("IsHangulJamo",                           qMakePair(0x1100, 0x11FF));
-   categoriesRangeMap.insert("IsEthiopic",                             qMakePair(0x1200, 0x137F));
-   categoriesRangeMap.insert("IsEthiopicSupplement",                   qMakePair(0x1380, 0x139F));
-   categoriesRangeMap.insert("IsCherokee",                             qMakePair(0x13A0, 0x13FF));
-   categoriesRangeMap.insert("IsUnifiedCanadianAboriginalSyllabics",   qMakePair(0x1400, 0x167F));
-   categoriesRangeMap.insert("IsOgham",                                qMakePair(0x1680, 0x169F));
-   categoriesRangeMap.insert("IsRunic",                                qMakePair(0x16A0, 0x16FF));
-   categoriesRangeMap.insert("IsTagalog",                              qMakePair(0x1700, 0x171F));
-   categoriesRangeMap.insert("IsHanunoo",                              qMakePair(0x1720, 0x173F));
-   categoriesRangeMap.insert("IsBuhid",                                qMakePair(0x1740, 0x175F));
-   categoriesRangeMap.insert("IsTagbanwa",                             qMakePair(0x1760, 0x177F));
-   categoriesRangeMap.insert("IsKhmer",                                qMakePair(0x1780, 0x17FF));
-   categoriesRangeMap.insert("IsMongolian",                            qMakePair(0x1800, 0x18AF));
-   categoriesRangeMap.insert("IsLimbu",                                qMakePair(0x1900, 0x194F));
-   categoriesRangeMap.insert("IsTaiLe",                                qMakePair(0x1950, 0x197F));
-   categoriesRangeMap.insert("IsNewTaiLue",                            qMakePair(0x1980, 0x19DF));
-   categoriesRangeMap.insert("IsKhmerSymbols",                         qMakePair(0x19E0, 0x19FF));
-   categoriesRangeMap.insert("IsBuginese",                             qMakePair(0x1A00, 0x1A1F));
-   categoriesRangeMap.insert("IsPhoneticExtensions",                   qMakePair(0x1D00, 0x1D7F));
-   categoriesRangeMap.insert("IsPhoneticExtensionsSupplement",         qMakePair(0x1D80, 0x1DBF));
-   categoriesRangeMap.insert("IsCombiningDiacriticalMarksSupplement",  qMakePair(0x1DC0, 0x1DFF));
-   categoriesRangeMap.insert("IsLatinExtendedAdditional",              qMakePair(0x1E00, 0x1EFF));
-   categoriesRangeMap.insert("IsGreekExtended",                        qMakePair(0x1F00, 0x1FFF));
-   categoriesRangeMap.insert("IsGeneralPunctuation",                   qMakePair(0x2000, 0x206F));
-   categoriesRangeMap.insert("IsSuperscriptsandSubscripts",            qMakePair(0x2070, 0x209F));
-   categoriesRangeMap.insert("IsCurrencySymbols",                      qMakePair(0x20A0, 0x20CF));
-   categoriesRangeMap.insert("IsCombiningMarksforSymbols",             qMakePair(0x20D0, 0x20FF));
-   categoriesRangeMap.insert("IsLetterlikeSymbols",                    qMakePair(0x2100, 0x214F));
-   categoriesRangeMap.insert("IsNumberForms",                          qMakePair(0x2150, 0x218F));
-   categoriesRangeMap.insert("IsArrows",                               qMakePair(0x2190, 0x21FF));
-   categoriesRangeMap.insert("IsMathematicalOperators",                qMakePair(0x2200, 0x22FF));
-   categoriesRangeMap.insert("IsMiscellaneousTechnical",               qMakePair(0x2300, 0x23FF));
-   categoriesRangeMap.insert("IsControlPictures",                      qMakePair(0x2400, 0x243F));
-   categoriesRangeMap.insert("IsOpticalCharacterRecognition",          qMakePair(0x2440, 0x245F));
-   categoriesRangeMap.insert("IsEnclosedAlphanumerics",                qMakePair(0x2460, 0x24FF));
-   categoriesRangeMap.insert("IsBoxDrawing",                           qMakePair(0x2500, 0x257F));
-   categoriesRangeMap.insert("IsBlockElements",                        qMakePair(0x2580, 0x259F));
-   categoriesRangeMap.insert("IsGeometricShapes",                      qMakePair(0x25A0, 0x25FF));
-   categoriesRangeMap.insert("IsMiscellaneousSymbols",                 qMakePair(0x2600, 0x26FF));
-   categoriesRangeMap.insert("IsDingbats",                             qMakePair(0x2700, 0x27BF));
-   categoriesRangeMap.insert("IsMiscellaneousMathematicalSymbols-A",   qMakePair(0x27C0, 0x27EF));
-   categoriesRangeMap.insert("IsSupplementalArrows-A",                 qMakePair(0x27F0, 0x27FF));
-   categoriesRangeMap.insert("IsBraillePatterns",                      qMakePair(0x2800, 0x28FF));
-   categoriesRangeMap.insert("IsSupplementalArrows-B",                 qMakePair(0x2900, 0x297F));
-   categoriesRangeMap.insert("IsMiscellaneousMathematicalSymbols-B",   qMakePair(0x2980, 0x29FF));
-   categoriesRangeMap.insert("IsSupplementalMathematicalOperators",    qMakePair(0x2A00, 0x2AFF));
-   categoriesRangeMap.insert("IsMiscellaneousSymbolsandArrows",        qMakePair(0x2B00, 0x2BFF));
-   categoriesRangeMap.insert("IsGlagolitic",                           qMakePair(0x2C00, 0x2C5F));
-   categoriesRangeMap.insert("IsCoptic",                               qMakePair(0x2C80, 0x2CFF));
-   categoriesRangeMap.insert("IsGeorgianSupplement",                   qMakePair(0x2D00, 0x2D2F));
-   categoriesRangeMap.insert("IsTifinagh",                             qMakePair(0x2D30, 0x2D7F));
-   categoriesRangeMap.insert("IsEthiopicExtended",                     qMakePair(0x2D80, 0x2DDF));
-   categoriesRangeMap.insert("IsSupplementalPunctuation",              qMakePair(0x2E00, 0x2E7F));
-   categoriesRangeMap.insert("IsCJKRadicalsSupplement",                qMakePair(0x2E80, 0x2EFF));
-   categoriesRangeMap.insert("IsKangxiRadicals",                       qMakePair(0x2F00, 0x2FDF));
-   categoriesRangeMap.insert("IsIdeographicDescriptionCharacters",     qMakePair(0x2FF0, 0x2FFF));
-   categoriesRangeMap.insert("IsCJKSymbolsandPunctuation",             qMakePair(0x3000, 0x303F));
-   categoriesRangeMap.insert("IsHiragana",                             qMakePair(0x3040, 0x309F));
-   categoriesRangeMap.insert("IsKatakana",                             qMakePair(0x30A0, 0x30FF));
-   categoriesRangeMap.insert("IsBopomofo",                             qMakePair(0x3100, 0x312F));
-   categoriesRangeMap.insert("IsHangulCompatibilityJamo",              qMakePair(0x3130, 0x318F));
-   categoriesRangeMap.insert("IsKanbun",                               qMakePair(0x3190, 0x319F));
-   categoriesRangeMap.insert("IsBopomofoExtended",                     qMakePair(0x31A0, 0x31BF));
-   categoriesRangeMap.insert("IsCJKStrokes",                           qMakePair(0x31C0, 0x31EF));
-   categoriesRangeMap.insert("IsKatakanaPhoneticExtensions",           qMakePair(0x31F0, 0x31FF));
-   categoriesRangeMap.insert("IsEnclosedCJKLettersandMonths",          qMakePair(0x3200, 0x32FF));
-   categoriesRangeMap.insert("IsCJKCompatibility",                     qMakePair(0x3300, 0x33FF));
-   categoriesRangeMap.insert("IsCJKUnifiedIdeographsExtensionA",       qMakePair(0x3400, 0x4DB5));
-   categoriesRangeMap.insert("IsYijingHexagramSymbols",                qMakePair(0x4DC0, 0x4DFF));
-   categoriesRangeMap.insert("IsCJKUnifiedIdeographs",                 qMakePair(0x4E00, 0x9FFF));
-   categoriesRangeMap.insert("IsYiSyllables",                          qMakePair(0xA000, 0xA48F));
-   categoriesRangeMap.insert("IsYiRadicals",                           qMakePair(0xA490, 0xA4CF));
-   categoriesRangeMap.insert("IsModifierToneLetters",                  qMakePair(0xA700, 0xA71F));
-   categoriesRangeMap.insert("IsSylotiNagri",                          qMakePair(0xA800, 0xA82F));
-   categoriesRangeMap.insert("IsHangulSyllables",                      qMakePair(0xAC00, 0xD7A3));
-   categoriesRangeMap.insert("IsPrivateUse",                           qMakePair(0xE000, 0xF8FF));
-   categoriesRangeMap.insert("IsCJKCompatibilityIdeographs",           qMakePair(0xF900, 0xFAFF));
-   categoriesRangeMap.insert("IsAlphabeticPresentationForms",          qMakePair(0xFB00, 0xFB4F));
-   categoriesRangeMap.insert("IsArabicPresentationForms-A",            qMakePair(0xFB50, 0xFDFF));
-   categoriesRangeMap.insert("IsVariationSelectors",                   qMakePair(0xFE00, 0xFE0F));
-   categoriesRangeMap.insert("IsVerticalForms",                        qMakePair(0xFE10, 0xFE1F));
-   categoriesRangeMap.insert("IsCombiningHalfMarks",                   qMakePair(0xFE20, 0xFE2F));
-   categoriesRangeMap.insert("IsCJKCompatibilityForms",                qMakePair(0xFE30, 0xFE4F));
-   categoriesRangeMap.insert("IsSmallFormVariants",                    qMakePair(0xFE50, 0xFE6F));
-   categoriesRangeMap.insert("IsArabicPresentationForms-B",            qMakePair(0xFE70, 0xFEFF));
-   categoriesRangeMap.insert("IsHalfwidthandFullwidthForms",           qMakePair(0xFF00, 0xFFEF));
-   categoriesRangeMap.insert("IsSpecials",                             qMakePair(0xFFF0, 0xFFFF));
-   categoriesRangeMap.insert("IsLinearBSyllabary",                     qMakePair(0x10000, 0x1007F));
-   categoriesRangeMap.insert("IsLinearBIdeograms",                     qMakePair(0x10080, 0x100FF));
-   categoriesRangeMap.insert("IsAegeanNumbers",                        qMakePair(0x10100, 0x1013F));
-   categoriesRangeMap.insert("IsAncientGreekNumbers",                  qMakePair(0x10140, 0x1018F));
-   categoriesRangeMap.insert("IsOldItalic",                            qMakePair(0x10300, 0x1032F));
-   categoriesRangeMap.insert("IsGothic",                               qMakePair(0x10330, 0x1034F));
-   categoriesRangeMap.insert("IsUgaritic",                             qMakePair(0x10380, 0x1039F));
-   categoriesRangeMap.insert("IsOldPersian",                           qMakePair(0x103A0, 0x103DF));
-   categoriesRangeMap.insert("IsDeseret",                              qMakePair(0x10400, 0x1044F));
-   categoriesRangeMap.insert("IsShavian",                              qMakePair(0x10450, 0x1047F));
-   categoriesRangeMap.insert("IsOsmanya",                              qMakePair(0x10480, 0x104AF));
-   categoriesRangeMap.insert("IsCypriotSyllabary",                     qMakePair(0x10800, 0x1083F));
-   categoriesRangeMap.insert("IsKharoshthi",                           qMakePair(0x10A00, 0x10A5F));
-   categoriesRangeMap.insert("IsByzantineMusicalSymbols",              qMakePair(0x1D000, 0x1D0FF));
-   categoriesRangeMap.insert("IsMusicalSymbols",                       qMakePair(0x1D100, 0x1D1FF));
-   categoriesRangeMap.insert("IsAncientGreekMusicalNotation",          qMakePair(0x1D200, 0x1D24F));
-   categoriesRangeMap.insert("IsTaiXuanJingSymbols",                   qMakePair(0x1D300, 0x1D35F));
-   categoriesRangeMap.insert("IsMathematicalAlphanumericSymbols",      qMakePair(0x1D400, 0x1D7FF));
-   categoriesRangeMap.insert("IsCJKUnifiedIdeographsExtensionB",       qMakePair(0x20000, 0x2A6DF));
-   categoriesRangeMap.insert("IsCJKCompatibilityIdeographsSupplement", qMakePair(0x2F800, 0x2FA1F));
-   categoriesRangeMap.insert("IsTags",                                 qMakePair(0xE0000, 0xE007F));
-   categoriesRangeMap.insert("IsVariationSelectorsSupplement",         qMakePair(0xE0100, 0xE01EF));
-   categoriesRangeMap.insert("IsSupplementaryPrivateUseArea-A",        qMakePair(0xF0000, 0xFFFFF));
-   categoriesRangeMap.insert("IsSupplementaryPrivateUseArea-B",        qMakePair(0x100000, 0x10FFFF));
+   return qstrcmp(entry1.name, entry2.name) < 0;
 }
+
+inline bool operator<(const char *name, const CategoriesRangeMapEntry &entry)
+{
+   return qstrcmp(name, entry.name) < 0;
+}
+
+inline bool operator<(const CategoriesRangeMapEntry &entry, const char *name)
+{
+   return qstrcmp(entry.name, name) < 0;
+}
+
+#endif // QT_NO_REGEXP_CCLASS
 
 int QRegExpEngine::getChar()
 {
@@ -2328,6 +2394,7 @@ int QRegExpEngine::getEscape()
    ushort low;
    int i;
 #endif
+
    ushort val;
    int prevCh = yyCh;
 
@@ -2335,7 +2402,9 @@ int QRegExpEngine::getEscape()
       error(RXERR_END);
       return Tok_Char | '\\';
    }
+
    yyCh = getChar();
+
 #ifndef QT_NO_REGEXP_ESCAPE
    if ((prevCh & ~0xff) == 0) {
       const char *p = strchr(tab, prevCh);
@@ -2357,67 +2426,121 @@ int QRegExpEngine::getEscape()
             }
             yyCh = getChar();
          }
+
          if ((val & ~0377) != 0) {
             error(RXERR_OCTAL);
          }
          return Tok_Char | val;
 #endif
+
 #ifndef QT_NO_REGEXP_ESCAPE
       case 'B':
          return Tok_NonWord;
 #endif
+
 #ifndef QT_NO_REGEXP_CCLASS
       case 'D':
          // see QChar::isDigit()
-         yyCharClass->addCategories(0x7fffffef);
+         yyCharClass->addCategories(uint(-1) ^ FLAG(QChar::Number_DecimalDigit));
          return Tok_CharClass;
+
       case 'S':
          // see QChar::isSpace()
-         yyCharClass->addCategories(0x7ffff87f);
-         yyCharClass->addRange(0x0000, 0x0008);
-         yyCharClass->addRange(0x000e, 0x001f);
-         yyCharClass->addRange(0x007f, 0x009f);
-         return Tok_CharClass;
+        yyCharClass->addCategories(uint(-1) ^ (FLAG(QChar::Separator_Space) |
+                                               FLAG(QChar::Separator_Line) |
+                                               FLAG(QChar::Separator_Paragraph) |
+                                               FLAG(QChar::Other_Control)));
+        yyCharClass->addRange(0x0000, 0x0008);
+        yyCharClass->addRange(0x000e, 0x001f);
+        yyCharClass->addRange(0x007f, 0x0084);
+        yyCharClass->addRange(0x0086, 0x009f);
+
+        return Tok_CharClass;
+
       case 'W':
          // see QChar::isLetterOrNumber() and QChar::isMark()
-         yyCharClass->addCategories(0x7fe07f81);
-         yyCharClass->addRange(0x203f, 0x2040);
-         yyCharClass->addSingleton(0x2040);
-         yyCharClass->addSingleton(0x2054);
-         yyCharClass->addSingleton(0x30fb);
-         yyCharClass->addRange(0xfe33, 0xfe34);
-         yyCharClass->addRange(0xfe4d, 0xfe4f);
-         yyCharClass->addSingleton(0xff3f);
-         yyCharClass->addSingleton(0xff65);
-         return Tok_CharClass;
+        yyCharClass->addCategories(uint(-1) ^ (FLAG(QChar::Mark_NonSpacing) |
+                                               FLAG(QChar::Mark_SpacingCombining) |
+                                               FLAG(QChar::Mark_Enclosing) |
+                                               FLAG(QChar::Number_DecimalDigit) |
+                                               FLAG(QChar::Number_Letter) |
+                                               FLAG(QChar::Number_Other) |
+                                               FLAG(QChar::Letter_Uppercase) |
+                                               FLAG(QChar::Letter_Lowercase) |
+                                               FLAG(QChar::Letter_Titlecase) |
+                                               FLAG(QChar::Letter_Modifier) |
+                                               FLAG(QChar::Letter_Other) |
+                                               FLAG(QChar::Punctuation_Connector)));
+        yyCharClass->addRange(0x203f, 0x2040);
+        yyCharClass->addSingleton(0x2040);
+        yyCharClass->addSingleton(0x2054);
+        yyCharClass->addSingleton(0x30fb);
+        yyCharClass->addRange(0xfe33, 0xfe34);
+        yyCharClass->addRange(0xfe4d, 0xfe4f);
+        yyCharClass->addSingleton(0xff3f);
+        yyCharClass->addSingleton(0xff65);
+        return Tok_CharClass;
 #endif
+
 #ifndef QT_NO_REGEXP_ESCAPE
       case 'b':
          return Tok_Word;
 #endif
+
 #ifndef QT_NO_REGEXP_CCLASS
       case 'd':
          // see QChar::isDigit()
-         yyCharClass->addCategories(0x00000010);
+         yyCharClass->addCategories(FLAG(QChar::Number_DecimalDigit));
          return Tok_CharClass;
+
       case 's':
          // see QChar::isSpace()
-         yyCharClass->addCategories(0x00000380);
+         yyCharClass->addCategories(FLAG(QChar::Separator_Space) |
+                                    FLAG(QChar::Separator_Line) |
+                                    FLAG(QChar::Separator_Paragraph));
+
          yyCharClass->addRange(0x0009, 0x000d);
+         yyCharClass->addSingleton(0x0085);
          return Tok_CharClass;
+
       case 'w':
          // see QChar::isLetterOrNumber() and QChar::isMark()
-         yyCharClass->addCategories(0x000f807e);
+         yyCharClass->addCategories(FLAG(QChar::Mark_NonSpacing) |
+                                    FLAG(QChar::Mark_SpacingCombining) |
+                                    FLAG(QChar::Mark_Enclosing) |
+                                    FLAG(QChar::Number_DecimalDigit) |
+                                    FLAG(QChar::Number_Letter) |
+                                    FLAG(QChar::Number_Other) |
+                                    FLAG(QChar::Letter_Uppercase) |
+                                    FLAG(QChar::Letter_Lowercase) |
+                                    FLAG(QChar::Letter_Titlecase) |
+                                    FLAG(QChar::Letter_Modifier) |
+                                    FLAG(QChar::Letter_Other));
          yyCharClass->addSingleton(0x005f); // '_'
+
          return Tok_CharClass;
+
       case 'I':
          if (xmlSchemaExtensions) {
-            yyCharClass->setNegative(!yyCharClass->negative());
+            yyCharClass->setNegative(! yyCharClass->negative());
             // fall through
+         } else {
+            break;
          }
+
       case 'i':
-         if (xmlSchemaExtensions) {
-            yyCharClass->addCategories(0x000f807e);
+        if (xmlSchemaExtensions) {
+            yyCharClass->addCategories(FLAG(QChar::Mark_NonSpacing) |
+                                       FLAG(QChar::Mark_SpacingCombining) |
+                                       FLAG(QChar::Mark_Enclosing) |
+                                       FLAG(QChar::Number_DecimalDigit) |
+                                       FLAG(QChar::Number_Letter) |
+                                       FLAG(QChar::Number_Other) |
+                                       FLAG(QChar::Letter_Uppercase) |
+                                       FLAG(QChar::Letter_Lowercase) |
+                                       FLAG(QChar::Letter_Titlecase) |
+                                       FLAG(QChar::Letter_Modifier) |
+                                       FLAG(QChar::Letter_Other));
             yyCharClass->addSingleton(0x003a); // ':'
             yyCharClass->addSingleton(0x005f); // '_'
             yyCharClass->addRange(0x0041, 0x005a); // [A-Z]
@@ -2434,16 +2557,32 @@ int QRegExpEngine::getEscape()
             yyCharClass->addRange(0xf900, 0xfdcf);
             yyCharClass->addRange(0xfdf0, 0xfffd);
             yyCharClass->addRange((ushort)0x10000, (ushort)0xeffff);
+            return Tok_CharClass;
+         } else {
+             break;
          }
-         return Tok_CharClass;
+
       case 'C':
          if (xmlSchemaExtensions) {
             yyCharClass->setNegative(!yyCharClass->negative());
             // fall through
+         } else {
+            break;
          }
+
       case 'c':
          if (xmlSchemaExtensions) {
-            yyCharClass->addCategories(0x000f807e);
+            yyCharClass->addCategories(FLAG(QChar::Mark_NonSpacing) |
+                                       FLAG(QChar::Mark_SpacingCombining) |
+                                       FLAG(QChar::Mark_Enclosing) |
+                                       FLAG(QChar::Number_DecimalDigit) |
+                                       FLAG(QChar::Number_Letter) |
+                                       FLAG(QChar::Number_Other) |
+                                       FLAG(QChar::Letter_Uppercase) |
+                                       FLAG(QChar::Letter_Lowercase) |
+                                       FLAG(QChar::Letter_Titlecase) |
+                                       FLAG(QChar::Letter_Modifier) |
+                                       FLAG(QChar::Letter_Other));
             yyCharClass->addSingleton(0x002d); // '-'
             yyCharClass->addSingleton(0x002e); // '.'
             yyCharClass->addSingleton(0x003a); // ':'
@@ -2466,13 +2605,19 @@ int QRegExpEngine::getEscape()
             yyCharClass->addRange((ushort)0x10000, (ushort)0xeffff);
             yyCharClass->addRange(0x0300, 0x036f);
             yyCharClass->addRange(0x203f, 0x2040);
-         }
-         return Tok_CharClass;
+            return Tok_CharClass;
+        } else {
+            break;
+        }
+
       case 'P':
          if (xmlSchemaExtensions) {
-            yyCharClass->setNegative(!yyCharClass->negative());
+            yyCharClass->setNegative(! yyCharClass->negative());
             // fall through
-         }
+         } else {
+            break;
+        }
+
       case 'p':
          if (xmlSchemaExtensions) {
             if (yyCh != '{') {
@@ -2482,6 +2627,7 @@ int QRegExpEngine::getEscape()
 
             QByteArray category;
             yyCh = getChar();
+
             while (yyCh != '}') {
                if (yyCh == EOS) {
                   error(RXERR_END);
@@ -2490,99 +2636,162 @@ int QRegExpEngine::getEscape()
                category.append(yyCh);
                yyCh = getChar();
             }
-            yyCh = getChar(); // skip closing '}'
 
-            if (category == "M") {
-               yyCharClass->addCategories(0x0000000e);
-            } else if (category == "Mn") {
-               yyCharClass->addCategories(0x00000002);
-            } else if (category == "Mc") {
-               yyCharClass->addCategories(0x00000004);
-            } else if (category == "Me") {
-               yyCharClass->addCategories(0x00000008);
-            } else if (category == "N") {
-               yyCharClass->addCategories(0x00000070);
-            } else if (category == "Nd") {
-               yyCharClass->addCategories(0x00000010);
-            } else if (category == "Nl") {
-               yyCharClass->addCategories(0x00000020);
-            } else if (category == "No") {
-               yyCharClass->addCategories(0x00000040);
-            } else if (category == "Z") {
-               yyCharClass->addCategories(0x00000380);
-            } else if (category == "Zs") {
-               yyCharClass->addCategories(0x00000080);
-            } else if (category == "Zl") {
-               yyCharClass->addCategories(0x00000100);
-            } else if (category == "Zp") {
-               yyCharClass->addCategories(0x00000200);
-            } else if (category == "C") {
-               yyCharClass->addCategories(0x00006c00);
-            } else if (category == "Cc") {
-               yyCharClass->addCategories(0x00000400);
-            } else if (category == "Cf") {
-               yyCharClass->addCategories(0x00000800);
-            } else if (category == "Cs") {
-               yyCharClass->addCategories(0x00001000);
-            } else if (category == "Co") {
-               yyCharClass->addCategories(0x00002000);
-            } else if (category == "Cn") {
-               yyCharClass->addCategories(0x00004000);
-            } else if (category == "L") {
-               yyCharClass->addCategories(0x000f8000);
-            } else if (category == "Lu") {
-               yyCharClass->addCategories(0x00008000);
-            } else if (category == "Ll") {
-               yyCharClass->addCategories(0x00010000);
-            } else if (category == "Lt") {
-               yyCharClass->addCategories(0x00020000);
-            } else if (category == "Lm") {
-               yyCharClass->addCategories(0x00040000);
-            } else if (category == "Lo") {
-               yyCharClass->addCategories(0x00080000);
-            } else if (category == "P") {
-               yyCharClass->addCategories(0x4f580780);
-            } else if (category == "Pc") {
-               yyCharClass->addCategories(0x00100000);
-            } else if (category == "Pd") {
-               yyCharClass->addCategories(0x00200000);
-            } else if (category == "Ps") {
-               yyCharClass->addCategories(0x00400000);
-            } else if (category == "Pe") {
-               yyCharClass->addCategories(0x00800000);
-            } else if (category == "Pi") {
-               yyCharClass->addCategories(0x01000000);
-            } else if (category == "Pf") {
-               yyCharClass->addCategories(0x02000000);
-            } else if (category == "Po") {
-               yyCharClass->addCategories(0x04000000);
-            } else if (category == "S") {
-               yyCharClass->addCategories(0x78000000);
-            } else if (category == "Sm") {
-               yyCharClass->addCategories(0x08000000);
-            } else if (category == "Sc") {
-               yyCharClass->addCategories(0x10000000);
-            } else if (category == "Sk") {
-               yyCharClass->addCategories(0x20000000);
-            } else if (category == "So") {
-               yyCharClass->addCategories(0x40000000);
-            } else if (category.startsWith("Is")) {
-               if (categoriesRangeMap.isEmpty()) {
-                  setupCategoriesRangeMap();
-               }
+            yyCh = getChar();                // skip closing '}'
+            int catlen = category.length();
 
-               if (categoriesRangeMap.contains(category)) {
-                  const QPair<int, int> range = categoriesRangeMap.value(category);
-                  yyCharClass->addRange(range.first, range.second);
-               } else {
-                  error(RXERR_CATEGORY);
-               }
+            if (catlen == 1 || catlen == 2) {
+                switch (category.at(0)) {
+                case 'M':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Mark_NonSpacing) |
+                                                   FLAG(QChar::Mark_SpacingCombining) |
+                                                   FLAG(QChar::Mark_Enclosing));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'n': yyCharClass->addCategories(FLAG(QChar::Mark_NonSpacing)); break; // Mn
+                        case 'c': yyCharClass->addCategories(FLAG(QChar::Mark_SpacingCombining)); break; // Mc
+                        case 'e': yyCharClass->addCategories(FLAG(QChar::Mark_Enclosing)); break; // Me
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'N':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Number_DecimalDigit) |
+                                                   FLAG(QChar::Number_Letter) |
+                                                   FLAG(QChar::Number_Other));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'd': yyCharClass->addCategories(FLAG(QChar::Number_DecimalDigit)); break; // Nd
+                        case 'l': yyCharClass->addCategories(FLAG(QChar::Number_Letter)); break; // Hl
+                        case 'o': yyCharClass->addCategories(FLAG(QChar::Number_Other)); break; // No
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'Z':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Separator_Space) |
+                                                   FLAG(QChar::Separator_Line) |
+                                                   FLAG(QChar::Separator_Paragraph));
+                    } else {
+                        switch (category.at(1)) {
+                        case 's': yyCharClass->addCategories(FLAG(QChar::Separator_Space)); break; // Zs
+                        case 'l': yyCharClass->addCategories(FLAG(QChar::Separator_Line)); break; // Zl
+                        case 'p': yyCharClass->addCategories(FLAG(QChar::Separator_Paragraph)); break; // Zp
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'C':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Other_Control) |
+                                                   FLAG(QChar::Other_Format) |
+                                                   FLAG(QChar::Other_Surrogate) |
+                                                   FLAG(QChar::Other_PrivateUse) |
+                                                   FLAG(QChar::Other_NotAssigned));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'c': yyCharClass->addCategories(FLAG(QChar::Other_Control)); break; // Cc
+                        case 'f': yyCharClass->addCategories(FLAG(QChar::Other_Format)); break; // Cf
+                        case 's': yyCharClass->addCategories(FLAG(QChar::Other_Surrogate)); break; // Cs
+                        case 'o': yyCharClass->addCategories(FLAG(QChar::Other_PrivateUse)); break; // Co
+                        case 'n': yyCharClass->addCategories(FLAG(QChar::Other_NotAssigned)); break; // Cn
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'L':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Letter_Uppercase) |
+                                                   FLAG(QChar::Letter_Lowercase) |
+                                                   FLAG(QChar::Letter_Titlecase) |
+                                                   FLAG(QChar::Letter_Modifier) |
+                                                   FLAG(QChar::Letter_Other));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'u': yyCharClass->addCategories(FLAG(QChar::Letter_Uppercase)); break; // Lu
+                        case 'l': yyCharClass->addCategories(FLAG(QChar::Letter_Lowercase)); break; // Ll
+                        case 't': yyCharClass->addCategories(FLAG(QChar::Letter_Titlecase)); break; // Lt
+                        case 'm': yyCharClass->addCategories(FLAG(QChar::Letter_Modifier)); break; // Lm
+                        case 'o': yyCharClass->addCategories(FLAG(QChar::Letter_Other)); break; // Lo
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'P':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Punctuation_Connector) |
+                                                   FLAG(QChar::Punctuation_Dash) |
+                                                   FLAG(QChar::Punctuation_Open) |
+                                                   FLAG(QChar::Punctuation_Close) |
+                                                   FLAG(QChar::Punctuation_InitialQuote) |
+                                                   FLAG(QChar::Punctuation_FinalQuote) |
+                                                   FLAG(QChar::Punctuation_Other));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'c': yyCharClass->addCategories(FLAG(QChar::Punctuation_Connector)); break; // Pc
+                        case 'd': yyCharClass->addCategories(FLAG(QChar::Punctuation_Dash)); break; // Pd
+                        case 's': yyCharClass->addCategories(FLAG(QChar::Punctuation_Open)); break; // Ps
+                        case 'e': yyCharClass->addCategories(FLAG(QChar::Punctuation_Close)); break; // Pe
+                        case 'i': yyCharClass->addCategories(FLAG(QChar::Punctuation_InitialQuote)); break; // Pi
+                        case 'f': yyCharClass->addCategories(FLAG(QChar::Punctuation_FinalQuote)); break; // Pf
+                        case 'o': yyCharClass->addCategories(FLAG(QChar::Punctuation_Other)); break; // Po
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                case 'S':
+                    if (catlen == 1) {
+                        yyCharClass->addCategories(FLAG(QChar::Symbol_Math) |
+                                                   FLAG(QChar::Symbol_Currency) |
+                                                   FLAG(QChar::Symbol_Modifier) |
+                                                   FLAG(QChar::Symbol_Other));
+                    } else {
+                        switch (category.at(1)) {
+                        case 'm': yyCharClass->addCategories(FLAG(QChar::Symbol_Math)); break;     // Sm
+                        case 'c': yyCharClass->addCategories(FLAG(QChar::Symbol_Currency)); break; // Sc
+                        case 'k': yyCharClass->addCategories(FLAG(QChar::Symbol_Modifier)); break; // Sk
+                        case 'o': yyCharClass->addCategories(FLAG(QChar::Symbol_Other)); break;    // So
+                        default: error(RXERR_CATEGORY); break;
+                        }
+                    }
+                    break;
+
+                default:
+                    error(RXERR_CATEGORY);
+                    break;
+                }
+
+            } else if (catlen > 2 && category.at(0) == 'I' && category.at(1) == 's') {
+                static const int N = sizeof(categoriesRangeMap) / sizeof(categoriesRangeMap[0]);
+                const char * const categoryFamily = category.constData() + 2;
+                const CategoriesRangeMapEntry *r = std::lower_bound(categoriesRangeMap,
+                     categoriesRangeMap + N, categoryFamily);
+
+                if (r != categoriesRangeMap + N && qstrcmp(r->name, categoryFamily) == 0) {
+                    yyCharClass->addRange(r->first, r->second);
+                } else {
+                    error(RXERR_CATEGORY);
+                }
+
             } else {
-               error(RXERR_CATEGORY);
+                error(RXERR_CATEGORY);
             }
-         }
-         return Tok_CharClass;
+
+            return Tok_CharClass;
+        } else {
+            break;
+        }
 #endif
+
 #ifndef QT_NO_REGEXP_ESCAPE
       case 'x':
          val = 0;
@@ -2599,21 +2808,28 @@ int QRegExpEngine::getEscape()
          }
          return Tok_Char | val;
 #endif
+
       default:
-         if (prevCh >= '1' && prevCh <= '9') {
-#ifndef QT_NO_REGEXP_BACKREF
-            val = prevCh - '0';
-            while (yyCh >= '0' && yyCh <= '9') {
-               val = (val * 10) + (yyCh - '0');
-               yyCh = getChar();
-            }
-            return Tok_BackRef | val;
-#else
-            error(RXERR_DISABLED);
-#endif
-         }
-         return Tok_Char | prevCh;
+         break;
    }
+
+   if (prevCh >= '1' && prevCh <= '9') {
+#ifndef QT_NO_REGEXP_BACKREF
+      val = prevCh - '0';
+
+      while (yyCh >= '0' && yyCh <= '9') {
+         val = (val * 10) + (yyCh - '0');
+         yyCh = getChar();
+      }
+
+      return Tok_BackRef | val;
+#else
+      error(RXERR_DISABLED);
+
+#endif
+   }
+
+   return Tok_Char | prevCh;
 }
 
 #ifndef QT_NO_REGEXP_INTERVAL
@@ -2628,8 +2844,10 @@ int QRegExpEngine::getRep(int def)
             rep = def;
          }
          yyCh = getChar();
+
       } while (yyCh >= '0' && yyCh <= '9');
       return rep;
+
    } else {
       return def;
    }
@@ -3241,103 +3459,30 @@ static void invalidateEngine(QRegExpPrivate *priv)
    }
 }
 
-/*!
-    \enum QRegExp::CaretMode
-
-    The CaretMode enum defines the different meanings of the caret
-    (\bold{^}) in a regular expression. The possible values are:
-
-    \value CaretAtZero
-           The caret corresponds to index 0 in the searched string.
-
-    \value CaretAtOffset
-           The caret corresponds to the start offset of the search.
-
-    \value CaretWontMatch
-           The caret never matches.
-*/
-
-/*!
-    \enum QRegExp::PatternSyntax
-
-    The syntax used to interpret the meaning of the pattern.
-
-    \value RegExp A rich Perl-like pattern matching syntax. This is
-    the default.
-
-    \value RegExp2 Like RegExp, but with \l{greedy quantifiers}. This
-    will be the default in Qt 5. (Introduced in Qt 4.2.)
-
-    \value Wildcard This provides a simple pattern matching syntax
-    similar to that used by shells (command interpreters) for "file
-    globbing". See \l{Wildcard Matching}.
-
-    \value WildcardUnix This is similar to Wildcard but with the
-    behavior of a Unix shell. The wildcard characters can be escaped
-    with the character "\\".
-
-    \value FixedString The pattern is a fixed string. This is
-    equivalent to using the RegExp pattern on a string in
-    which all metacharacters are escaped using escape().
-
-    \value W3CXmlSchema11 The pattern is a regular expression as
-    defined by the W3C XML Schema 1.1 specification.
-
-    \sa setPatternSyntax()
-*/
-
-/*!
-    Constructs an empty regexp.
-
-    \sa isValid(), errorString()
-*/
 QRegExp::QRegExp()
 {
    priv = new QRegExpPrivate;
    prepareEngine(priv);
 }
 
-/*!
-    Constructs a regular expression object for the given \a pattern
-    string. The pattern must be given using wildcard notation if \a
-    syntax is \l Wildcard; the default is \l RegExp. The pattern is
-    case sensitive, unless \a cs is Qt::CaseInsensitive. Matching is
-    greedy (maximal), but can be changed by calling
-    setMinimal().
-
-    \sa setPattern(), setCaseSensitivity(), setPatternSyntax()
-*/
 QRegExp::QRegExp(const QString &pattern, Qt::CaseSensitivity cs, PatternSyntax syntax)
 {
    priv = new QRegExpPrivate(QRegExpEngineKey(pattern, syntax, cs));
    prepareEngine(priv);
 }
 
-/*!
-    Constructs a regular expression as a copy of \a rx.
-
-    \sa operator=()
-*/
 QRegExp::QRegExp(const QRegExp &rx)
 {
    priv = new QRegExpPrivate;
    operator=(rx);
 }
 
-/*!
-    Destroys the regular expression and cleans up its internal data.
-*/
 QRegExp::~QRegExp()
 {
    invalidateEngine(priv);
    delete priv;
 }
 
-/*!
-    Copies the regular expression \a rx and returns a reference to the
-    copy. The case sensitivity, wildcard, and minimal matching options
-    are also copied.
-*/
 QRegExp &QRegExp::operator=(const QRegExp &rx)
 {
    prepareEngine(rx.priv); // to allow sharing
@@ -3360,69 +3505,16 @@ QRegExp &QRegExp::operator=(const QRegExp &rx)
    return *this;
 }
 
-/*!
-    \fn void QRegExp::swap(QRegExp &other)
-    \since 4.8
-
-    Swaps regular expression \a other with this regular
-    expression. This operation is very fast and never fails.
-*/
-
-/*!
-    Returns true if this regular expression is equal to \a rx;
-    otherwise returns false.
-
-    Two QRegExp objects are equal if they have the same pattern
-    strings and the same settings for case sensitivity, wildcard and
-    minimal matching.
-*/
 bool QRegExp::operator==(const QRegExp &rx) const
 {
    return priv->engineKey == rx.priv->engineKey && priv->minimal == rx.priv->minimal;
 }
-
-/*!
-    \fn bool QRegExp::operator!=(const QRegExp &rx) const
-
-    Returns true if this regular expression is not equal to \a rx;
-    otherwise returns false.
-
-    \sa operator==()
-*/
-
-/*!
-    Returns true if the pattern string is empty; otherwise returns
-    false.
-
-    If you call exactMatch() with an empty pattern on an empty string
-    it will return true; otherwise it returns false since it operates
-    over the whole string. If you call indexIn() with an empty pattern
-    on \e any string it will return the start offset (0 by default)
-    because the empty pattern matches the 'emptiness' at the start of
-    the string. In this case the length of the match returned by
-    matchedLength() will be 0.
-
-    See QString::isEmpty().
-*/
 
 bool QRegExp::isEmpty() const
 {
    return priv->engineKey.pattern.isEmpty();
 }
 
-/*!
-    Returns true if the regular expression is valid; otherwise returns
-    false. An invalid regular expression never matches.
-
-    The pattern \bold{[a-z} is an example of an invalid pattern, since
-    it lacks a closing square bracket.
-
-    Note that the validity of a regexp may also depend on the setting
-    of the wildcard flag, for example \bold{*.html} is a valid
-    wildcard regexp but an invalid full regexp.
-
-    \sa errorString()
-*/
 bool QRegExp::isValid() const
 {
    if (priv->engineKey.pattern.isEmpty()) {
@@ -3433,24 +3525,11 @@ bool QRegExp::isValid() const
    }
 }
 
-/*!
-    Returns the pattern string of the regular expression. The pattern
-    has either regular expression syntax or wildcard syntax, depending
-    on patternSyntax().
-
-    \sa patternSyntax(), caseSensitivity()
-*/
 QString QRegExp::pattern() const
 {
    return priv->engineKey.pattern;
 }
 
-/*!
-    Sets the pattern string to \a pattern. The case sensitivity,
-    wildcard, and minimal matching options are not changed.
-
-    \sa setPatternSyntax(), setCaseSensitivity()
-*/
 void QRegExp::setPattern(const QString &pattern)
 {
    if (priv->engineKey.pattern != pattern) {
@@ -3459,25 +3538,11 @@ void QRegExp::setPattern(const QString &pattern)
    }
 }
 
-/*!
-    Returns Qt::CaseSensitive if the regexp is matched case
-    sensitively; otherwise returns Qt::CaseInsensitive.
-
-    \sa patternSyntax(), pattern(), isMinimal()
-*/
 Qt::CaseSensitivity QRegExp::caseSensitivity() const
 {
    return priv->engineKey.cs;
 }
 
-/*!
-    Sets case sensitive matching to \a cs.
-
-    If \a cs is Qt::CaseSensitive, \bold{\\.txt$} matches
-    \c{readme.txt} but not \c{README.TXT}.
-
-    \sa setPatternSyntax(), setPattern(), setMinimal()
-*/
 void QRegExp::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
    if ((bool)cs != (bool)priv->engineKey.cs) {
@@ -3486,32 +3551,11 @@ void QRegExp::setCaseSensitivity(Qt::CaseSensitivity cs)
    }
 }
 
-/*!
-    Returns the syntax used by the regular expression. The default is
-    QRegExp::RegExp.
-
-    \sa pattern(), caseSensitivity()
-*/
 QRegExp::PatternSyntax QRegExp::patternSyntax() const
 {
    return priv->engineKey.patternSyntax;
 }
 
-/*!
-    Sets the syntax mode for the regular expression. The default is
-    QRegExp::RegExp.
-
-    Setting \a syntax to QRegExp::Wildcard enables simple shell-like
-    \l{wildcard matching}. For example, \bold{r*.txt} matches the
-    string \c{readme.txt} in wildcard mode, but does not match
-    \c{readme}.
-
-    Setting \a syntax to QRegExp::FixedString means that the pattern
-    is interpreted as a plain string. Special characters (e.g.,
-    backslash) don't need to be escaped then.
-
-    \sa setPattern(), setCaseSensitivity(), escape()
-*/
 void QRegExp::setPatternSyntax(PatternSyntax syntax)
 {
    if (syntax != priv->engineKey.patternSyntax) {
@@ -3520,64 +3564,23 @@ void QRegExp::setPatternSyntax(PatternSyntax syntax)
    }
 }
 
-/*!
-    Returns true if minimal (non-greedy) matching is enabled;
-    otherwise returns false.
-
-    \sa caseSensitivity(), setMinimal()
-*/
 bool QRegExp::isMinimal() const
 {
    return priv->minimal;
 }
 
-/*!
-    Enables or disables minimal matching. If \a minimal is false,
-    matching is greedy (maximal) which is the default.
-
-    For example, suppose we have the input string "We must be
-    <b>bold</b>, very <b>bold</b>!" and the pattern
-    \bold{<b>.*</b>}. With the default greedy (maximal) matching,
-    the match is "We must be \underline{<b>bold</b>, very
-    <b>bold</b>}!". But with minimal (non-greedy) matching, the
-    first match is: "We must be \underline{<b>bold</b>}, very
-    <b>bold</b>!" and the second match is "We must be <b>bold</b>,
-    very \underline{<b>bold</b>}!". In practice we might use the pattern
-    \bold{<b>[^<]*\</b>} instead, although this will still fail for
-    nested tags.
-
-    \sa setCaseSensitivity()
-*/
 void QRegExp::setMinimal(bool minimal)
 {
    priv->minimal = minimal;
 }
 
 // ### Qt 5: make non-const
-/*!
-    Returns true if \a str is matched exactly by this regular
-    expression; otherwise returns false. You can determine how much of
-    the string was matched by calling matchedLength().
 
-    For a given regexp string R, exactMatch("R") is the equivalent of
-    indexIn("^R$") since exactMatch() effectively encloses the regexp
-    in the start of string and end of string anchors, except that it
-    sets matchedLength() differently.
-
-    For example, if the regular expression is \bold{blue}, then
-    exactMatch() returns true only for input \c blue. For inputs \c
-    bluebell, \c blutak and \c lightblue, exactMatch() returns false
-    and matchedLength() will return 4, 3 and 0 respectively.
-
-    Although const, this function sets matchedLength(),
-    capturedTexts(), and pos().
-
-    \sa indexIn(), lastIndexIn()
-*/
 bool QRegExp::exactMatch(const QString &str) const
 {
    prepareEngineForMatch(priv, str);
    priv->matchState.match(str.unicode(), str.length(), 0, priv->minimal, true, 0);
+
    if (priv->matchState.captured[1] == str.length()) {
       return true;
    } else {
@@ -3588,65 +3591,22 @@ bool QRegExp::exactMatch(const QString &str) const
 }
 
 // ### Qt 5: make non-const
-/*!
-    Attempts to find a match in \a str from position \a offset (0 by
-    default). If \a offset is -1, the search starts at the last
-    character; if -2, at the next to last character; etc.
-
-    Returns the position of the first match, or -1 if there was no
-    match.
-
-    The \a caretMode parameter can be used to instruct whether \bold{^}
-    should match at index 0 or at \a offset.
-
-    You might prefer to use QString::indexOf(), QString::contains(),
-    or even QStringList::filter(). To replace matches use
-    QString::replace().
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 13
-
-    Although const, this function sets matchedLength(),
-    capturedTexts() and pos().
-
-    If the QRegExp is a wildcard expression (see setPatternSyntax())
-    and want to test a string against the whole wildcard expression,
-    use exactMatch() instead of this function.
-
-    \sa lastIndexIn(), exactMatch()
-*/
 
 int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
 {
    prepareEngineForMatch(priv, str);
+
    if (offset < 0) {
       offset += str.length();
    }
+
    priv->matchState.match(str.unicode(), str.length(), offset,
-                          priv->minimal, false, caretIndex(offset, caretMode));
+                  priv->minimal, false, caretIndex(offset, caretMode));
+
    return priv->matchState.captured[0];
 }
 
 // ### Qt 5: make non-const
-/*!
-    Attempts to find a match backwards in \a str from position \a
-    offset. If \a offset is -1 (the default), the search starts at the
-    last character; if -2, at the next to last character; etc.
-
-    Returns the position of the first match, or -1 if there was no
-    match.
-
-    The \a caretMode parameter can be used to instruct whether \bold{^}
-    should match at index 0 or at \a offset.
-
-    Although const, this function sets matchedLength(),
-    capturedTexts() and pos().
-
-    \warning Searching backwards is much slower than searching
-    forwards.
-
-    \sa indexIn(), exactMatch()
-*/
 
 int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) const
 {
@@ -3670,12 +3630,6 @@ int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) co
    return -1;
 }
 
-/*!
-    Returns the length of the last matched string, or -1 if there was
-    no match.
-
-    \sa exactMatch(), indexIn(), lastIndexIn()
-*/
 int QRegExp::matchedLength() const
 {
    return priv->matchState.captured[1];
@@ -3689,44 +3643,6 @@ int QRegExp::captureCount() const
    return priv->eng->captureCount();
 }
 
-/*!
-    Returns a list of the captured text strings.
-
-    The first string in the list is the entire matched string. Each
-    subsequent list element contains a string that matched a
-    (capturing) subexpression of the regexp.
-
-    For example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 14
-
-    The above example also captures elements that may be present but
-    which we have no interest in. This problem can be solved by using
-    non-capturing parentheses:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 15
-
-    Note that if you want to iterate over the list, you should iterate
-    over a copy, e.g.
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 16
-
-    Some regexps can match an indeterminate number of times. For
-    example if the input string is "Offsets: 12 14 99 231 7" and the
-    regexp, \c{rx}, is \bold{(\\d+)+}, we would hope to get a list of
-    all the numbers matched. However, after calling
-    \c{rx.indexIn(str)}, capturedTexts() will return the list ("12",
-    "12"), i.e. the entire match was "12" and the first subexpression
-    matched was "12". The correct approach is to use cap() in a
-    \l{QRegExp#cap_in_a_loop}{loop}.
-
-    The order of elements in the string list is as follows. The first
-    element is the entire matching string. Each subsequent element
-    corresponds to the next capturing open left parentheses. Thus
-    capturedTexts()[1] is the text of the first capturing parentheses,
-    capturedTexts()[2] is the text of the second and so on
-    (corresponding to $1, $2, etc., in some other regexp languages).
-
-    \sa cap(), pos()
-*/
 QStringList QRegExp::capturedTexts() const
 {
    if (priv->capturedCache.isEmpty()) {
@@ -3756,21 +3672,6 @@ QStringList QRegExp::capturedTexts()
    return const_cast<const QRegExp *>(this)->capturedTexts();
 }
 
-/*!
-    Returns the text captured by the \a nth subexpression. The entire
-    match has index 0 and the parenthesized subexpressions have
-    indexes starting from 1 (excluding non-capturing parentheses).
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 17
-
-    The order of elements matched by cap() is as follows. The first
-    element, cap(0), is the entire matching string. Each subsequent
-    element corresponds to the next capturing open left parentheses.
-    Thus cap(1) is the text of the first capturing parentheses, cap(2)
-    is the text of the second, and so on.
-
-    \sa capturedTexts(), pos()
-*/
 QString QRegExp::cap(int nth) const
 {
    return capturedTexts().value(nth);
@@ -3784,20 +3685,6 @@ QString QRegExp::cap(int nth)
    return const_cast<const QRegExp *>(this)->cap(nth);
 }
 
-/*!
-    Returns the position of the \a nth captured text in the searched
-    string. If \a nth is 0 (the default), pos() returns the position
-    of the whole match.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 18
-
-    For zero-length matches, pos() always returns -1. (For example, if
-    cap(4) would return an empty string, pos(4) returns -1.) This is
-    a feature of the implementation.
-
-    \sa cap(), capturedTexts()
-*/
 int QRegExp::pos(int nth) const
 {
    if (nth < 0 || nth >= priv->matchState.capturedSize / 2) {
@@ -3815,12 +3702,6 @@ int QRegExp::pos(int nth)
    return const_cast<const QRegExp *>(this)->pos(nth);
 }
 
-/*!
-  Returns a text string that explains why a regexp pattern is
-  invalid the case being; otherwise returns "no error occurred".
-
-  \sa isValid()
-*/
 QString QRegExp::errorString() const
 {
    if (isValid()) {
@@ -3839,21 +3720,7 @@ QString QRegExp::errorString()
 }
 #endif
 
-/*!
-    Returns the string \a str with every regexp special character
-    escaped with a backslash. The special characters are $, (,), *, +,
-    ., ?, [, \,], ^, {, | and }.
 
-    Example:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 19
-
-    This function is useful to construct regexp patterns dynamically:
-
-    \snippet doc/src/snippets/code/src_corelib_tools_qregexp.cpp 20
-
-    \sa setPatternSyntax()
-*/
 QString QRegExp::escape(const QString &str)
 {
    QString quoted;
@@ -3883,82 +3750,8 @@ QString QRegExp::escape(const QString &str)
    return quoted;
 }
 
-/*!
-    \fn bool QRegExp::caseSensitive() const
-
-    Use \l caseSensitivity() instead.
-*/
-
-/*!
-    \fn void QRegExp::setCaseSensitive(bool sensitive)
-
-    Use \l setCaseSensitivity() instead.
-*/
-
-/*!
-    \fn bool QRegExp::wildcard() const
-
-    Use \l patternSyntax() instead.
-
-    \oldcode
-        bool wc = rx.wildcard();
-    \newcode
-        bool wc = (rx.patternSyntax() == QRegExp::Wildcard);
-    \endcode
-*/
-
-/*!
-    \fn void QRegExp::setWildcard(bool wildcard)
-
-    Use \l setPatternSyntax() instead.
-
-    \oldcode
-        rx.setWildcard(wc);
-    \newcode
-        rx.setPatternSyntax(wc ? QRegExp::Wildcard : QRegExp::RegExp);
-    \endcode
-*/
-
-/*!
-    \fn bool QRegExp::minimal() const
-
-    Use \l isMinimal() instead.
-*/
-
-/*!
-    \fn int QRegExp::search(const QString &str, int from = 0,
-                            CaretMode caretMode = CaretAtZero) const
-
-    Use \l indexIn() instead.
-*/
-
-/*!
-    \fn int QRegExp::searchRev(const QString &str, int from = -1, \
-                               CaretMode caretMode = CaretAtZero) const
-
-    Use \l lastIndexIn() instead.
-*/
-
-/*!
-    \fn QRegExp::QRegExp(const QString &pattern, bool cs, bool wildcard = false)
-
-    Use another constructor instead.
-
-    \oldcode
-        QRegExp rx("*.txt", false, true);
-    \newcode
-        QRegExp rx("*.txt", Qt::CaseInsensitive, QRegExp::Wildcard);
-    \endcode
-*/
-
 #ifndef QT_NO_DATASTREAM
-/*!
-    \relates QRegExp
 
-    Writes the regular expression \a regExp to stream \a out.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, const QRegExp &regExp)
 {
    return out << regExp.pattern() << (quint8)regExp.caseSensitivity()
@@ -3966,13 +3759,6 @@ QDataStream &operator<<(QDataStream &out, const QRegExp &regExp)
           << (quint8)!!regExp.isMinimal();
 }
 
-/*!
-    \relates QRegExp
-
-    Reads a regular expression from stream \a in into \a regExp.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
 {
    QString pattern;
@@ -3990,5 +3776,3 @@ QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
    return in;
 }
 #endif // QT_NO_DATASTREAM
-
-QT_END_NAMESPACE

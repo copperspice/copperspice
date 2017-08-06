@@ -100,7 +100,7 @@ void QFontEngineMultiXLFD::loadEngine(int at)
    Q_ASSERT(at < engines.size());
    Q_ASSERT(engines.at(at) == 0);
    const int encoding = encodings.at(at);
-   QFontEngine *fontEngine = QFontDatabase::loadXlfd(0, QUnicodeTables::Common, request, encoding);
+   QFontEngine *fontEngine = QFontDatabase::loadXlfd(0, QChar::Script_Common, request, encoding);
    Q_ASSERT(fontEngine != 0);
    fontEngine->ref.ref();
    engines[at] = fontEngine;

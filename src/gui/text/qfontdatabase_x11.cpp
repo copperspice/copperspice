@@ -1089,9 +1089,9 @@ static void loadFontConfig()
       return;
    }
 
-   Q_ASSERT_X(int(QUnicodeTables::ScriptCount) == SpecialLanguageCount,
+   Q_ASSERT_X(int(QChar::ScriptCount) == SpecialLanguageCount,
               "QFontDatabase", "New scripts have been added.");
-   Q_ASSERT_X(int(QUnicodeTables::ScriptCount) == SpecialCharCount,
+   Q_ASSERT_X(int(QChar::ScriptCount) == SpecialCharCount,
               "QFontDatabase", "New scripts have been added.");
    Q_ASSERT_X(int(QFontDatabase::WritingSystemsCount) == LanguageCount,
               "QFontDatabase", "New writing systems have been added.");
@@ -1591,8 +1591,8 @@ void qt_addPatternProps(FcPattern *pattern, int screen, int script, const QFontD
                        !(request.styleStrategy & QFont::NoAntialias));
    }
 
-   if (script != QUnicodeTables::Common && *specialLanguages[script] != '\0') {
-      Q_ASSERT(script < QUnicodeTables::ScriptCount);
+   if (script != QChar::Script_Common && *specialLanguages[script] != '\0') {
+      Q_ASSERT(script < QChar::ScriptCount);
       FcLangSet *ls = FcLangSetCreate();
       FcLangSetAdd(ls, (const FcChar8 *)specialLanguages[script]);
       FcPatternDel(pattern, FC_LANG);
@@ -1754,7 +1754,7 @@ static QFontEngine *tryPatternLoad(FcPattern *match, int screen,
       goto done;
    }
 
-   if (script != QUnicodeTables::Common) {
+   if (script != QChar::Script_Common) {
       // skip font if it doesn't support the language we want
       if (specialChars[script]) {
          // need to check the charset, as the langset doesn't work for these scripts
@@ -1870,7 +1870,7 @@ static QFontEngine *loadFc(const QFontPrivate *fp, int script, const QFontDef &r
       FM_DEBUG("engine for script %d is %s\n", script, fe ? fe->fontDef.family.toLatin1().data() : "(null)");
    }
    if (fe
-         && script == QUnicodeTables::Common
+         && script == QChar::Script_Common
          && !(request.styleStrategy & QFont::NoFontMerging) && !fe->symbol) {
       fe = new QFontEngineMultiFT(fe, match, pattern, fp->screen, request);
    } else {
@@ -2073,7 +2073,7 @@ static inline void gccBugWorkaround(const QFontDef &req)
 */
 void QFontDatabase::load(const QFontPrivate *d, int script)
 {
-   Q_ASSERT(script >= 0 && script < QUnicodeTables::ScriptCount);
+   Q_ASSERT(script >= 0 && script < QChar::ScriptCount);
 
    // normalize the request to get better caching
    QFontDef req = d->request;
@@ -2096,7 +2096,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
       req.stretch = 100;
    }
 
-   QFontCache::Key key(req, d->rawMode ? QUnicodeTables::Common : script, d->screen);
+   QFontCache::Key key(req, d->rawMode ? QChar::Script_Common : script, d->screen);
    if (!d->engineData) {
       getEngineData(d, key);
    }
@@ -2141,7 +2141,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
       }
    }
    if (fe->symbol || (d->request.styleStrategy & QFont::NoFontMerging)) {
-      for (int i = 0; i < QUnicodeTables::ScriptCount; ++i) {
+      for (int i = 0; i < QChar::ScriptCount; ++i) {
          if (!d->engineData->engines[i]) {
             d->engineData->engines[i] = fe;
             fe->ref.ref();

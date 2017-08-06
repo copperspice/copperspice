@@ -251,7 +251,7 @@ void QPlatformFontDatabase::populateFontDatabase()
     Returns the font engine that can be used to render the font described by
     the font definition, \a fontDef, in the specified \a script.
 */
-QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, QUnicodeTables::Script script, void *handle)
+QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, QChar::Script script, void *handle)
 {
    Q_UNUSED(script);
    Q_UNUSED(handle);
@@ -276,7 +276,7 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal
     \a style and \a script using the \a styleHint given.
 */
 QStringList QPlatformFontDatabase::fallbacksForFamily(const QString family, const QFont::Style &style,
-      const QFont::StyleHint &styleHint, const QUnicodeTables::Script &script) const
+      const QFont::StyleHint &styleHint, const QChar::Script &script) const
 {
    Q_UNUSED(family);
    Q_UNUSED(style);

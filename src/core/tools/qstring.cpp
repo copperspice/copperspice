@@ -72,8 +72,6 @@
 
 #define IS_RAW_DATA(d) ((d)->offset != sizeof(QStringData))
 
-QT_BEGIN_NAMESPACE
-
 #ifdef QT_USE_ICU
 // qlocale_icu.cpp
 extern bool qt_ucol_strcoll(const QChar *source, int sourceLength, const QChar *target, int targetLength, int *result);
@@ -3131,36 +3129,16 @@ int QString::compare_helper(const QChar *data1, int length1, QLatin1String s2,
 #define CSTR_GREATER_THAN 3
 #endif
 
-/*!
-    \overload localeAwareCompare()
-
-    Compares this string with the \a other string and returns an
-    integer less than, equal to, or greater than zero if this string
-    is less than, equal to, or greater than the \a other string.
-
-    The comparison is performed in a locale- and also
-    platform-dependent manner. Use this function to present sorted
-    lists of strings to the user.
-
-    Same as \c {localeAwareCompare(*this, other)}.
-*/
 int QString::localeAwareCompare(const QString &other) const
 {
    return localeAwareCompare_helper(constData(), length(), other.constData(), other.length());
 }
 
 #if defined(Q_OS_WIN32)
-QT_END_NAMESPACE
 #include <qt_windows.h>
-QT_BEGIN_NAMESPACE
 #endif
 
-/*!
-    \internal
-    \since 4.5
-*/
-int QString::localeAwareCompare_helper(const QChar *data1, int length1,
-                                       const QChar *data2, int length2)
+int QString::localeAwareCompare_helper(const QChar *data1, int length1, const QChar *data2, int length2)
 {
    // do the right thing for null and empty
    if (length1 == 0 || length2 == 0) {
@@ -3357,10 +3335,11 @@ QString QString::toLower() const
    while (p != e) {
       if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
          ushort high = *p++;
-         prop = qGetProp(QChar::surrogateToUcs4(high, *p));
+         prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(high, *p));
       } else {
-         prop = qGetProp(*p);
+         prop = QUnicodeTables::qGetProp(*p);
       }
+
       if (prop->lowerCaseDiff) {
          if (QChar::isLowSurrogate(*p)) {
             --p;   // safe; diff is 0 for surrogates
@@ -3368,15 +3347,17 @@ QString QString::toLower() const
          QString s(d->size, Qt::Uninitialized);
          memcpy(s.d->data(), d->data(), (p - d->data())*sizeof(ushort));
          ushort *pp = s.d->data() + (p - d->data());
+
          while (p != e) {
             if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
                *pp = *p++;
-               prop = qGetProp(QChar::surrogateToUcs4(*pp++, *p));
+               prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(*pp++, *p));
             } else {
-               prop = qGetProp(*p);
+               prop = QUnicodeTables::qGetProp(*p);
             }
+
             if (prop->lowerCaseSpecial) {
-               const ushort *specialCase = specialCaseMap + prop->lowerCaseDiff;
+               const ushort *specialCase = QUnicodeTables::specialCaseMap + prop->lowerCaseDiff;
                ushort length = *specialCase++;
                int pos = pp - s.d->data();
                s.resize(s.d->size + length - 1);
@@ -3423,24 +3404,26 @@ QString QString::toCaseFolded() const
    while (p != e) {
       if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
          ushort high = *p++;
-         prop = qGetProp(QChar::surrogateToUcs4(high, *p));
+         prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(high, *p));
       } else {
-         prop = qGetProp(*p);
+         prop = QUnicodeTables::qGetProp(*p);
       }
       if (prop->caseFoldDiff) {
          if (QChar::isLowSurrogate(*p)) {
             --p;   // safe; diff is 0 for surrogates
          }
+
          QString s(d->size, Qt::Uninitialized);
          memcpy(s.d->data(), d->data(), (p - d->data())*sizeof(ushort));
          ushort *pp = s.d->data() + (p - d->data());
          while (p != e) {
             if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
                *pp = *p++;
-               prop = qGetProp(QChar::surrogateToUcs4(*pp++, *p));
+               prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(*pp++, *p));
             } else {
-               prop = qGetProp(*p);
+               prop = QUnicodeTables::qGetProp(*p);
             }
+
             if (prop->caseFoldSpecial) {
                //### we currently don't support full case foldings
             } else {
@@ -3488,10 +3471,11 @@ QString QString::toUpper() const
    while (p != e) {
       if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
          ushort high = *p++;
-         prop = qGetProp(QChar::surrogateToUcs4(high, *p));
+         prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(high, *p));
       } else {
-         prop = qGetProp(*p);
+         prop = QUnicodeTables::qGetProp(*p);
       }
+
       if (prop->upperCaseDiff) {
          if (QChar::isLowSurrogate(*p)) {
             --p;   // safe; diff is 0 for surrogates
@@ -3502,12 +3486,12 @@ QString QString::toUpper() const
          while (p != e) {
             if (QChar::isHighSurrogate(*p) && QChar::isLowSurrogate(p[1])) {
                *pp = *p++;
-               prop = qGetProp(QChar::surrogateToUcs4(*pp++, *p));
+               prop = QUnicodeTables::qGetProp(QChar::surrogateToUcs4(*pp++, *p));
             } else {
-               prop = qGetProp(*p);
+               prop = QUnicodeTables::qGetProp(*p);
             }
             if (prop->upperCaseSpecial) {
-               const ushort *specialCase = specialCaseMap + prop->upperCaseDiff;
+               const ushort *specialCase = QUnicodeTables::specialCaseMap + prop->upperCaseDiff;
                ushort length = *specialCase++;
                int pos = pp - s.d->data();
                s.resize(s.d->size + length - 1);
@@ -4758,18 +4742,23 @@ void qt_string_normalize(QString *data, QString::NormalizationForm mode, QChar::
 
    if (version == QChar::Unicode_Unassigned) {
       version = UNICODE_DATA_VERSION;
+
    } else if (version != UNICODE_DATA_VERSION) {
       const QString &s = *data;
       QChar *d = 0;
-      for (int i = 0; i < NumNormalizationCorrections; ++i) {
-         const NormalizationCorrection &n = uc_normalization_corrections[i];
+
+      for (int i = 0; i < QUnicodeTables::NumNormalizationCorrections; ++i) {
+         const QUnicodeTables::NormalizationCorrection &n = QUnicodeTables::uc_normalization_corrections[i];
+
          if (n.version > version) {
             int pos = from;
+
             if (QChar::requiresSurrogates(n.ucs4)) {
                ushort ucs4High = QChar::highSurrogate(n.ucs4);
-               ushort ucs4Low = QChar::lowSurrogate(n.ucs4);
-               ushort oldHigh = QChar::highSurrogate(n.old_mapping);
-               ushort oldLow = QChar::lowSurrogate(n.old_mapping);
+               ushort ucs4Low  = QChar::lowSurrogate(n.ucs4);
+               ushort oldHigh  = QChar::highSurrogate(n.old_mapping);
+               ushort oldLow   = QChar::lowSurrogate(n.old_mapping);
+
                while (pos < s.length() - 1) {
                   if (s.at(pos).unicode() == ucs4High && s.at(pos + 1).unicode() == ucs4Low) {
                      if (!d) {
@@ -6781,22 +6770,3 @@ QString QString::toHtmlEscaped() const
    rich.squeeze();
    return rich;
 }
-
-/*!
-  \macro QStringLiteral(str)
-  \relates QString
-
-  The macro generates the data for a QString out of \a str at compile time if the compiler supports it.
-  Creating a QString from it is free in this case, and the generated string data is stored in
-  the read-only segment of the compiled object file.
-
-  Using QStringLiteral instead of a double quoted ascii literal can significantly speed up creation
-  of QString's from data known at compile time.
-
-  If the compiler is c++0x enabled the string \a str can actually contain unicode data.
-
-  For compilers not supporting the creation of compile time strings, QStringLiteral will fall back to
-  QLatin1String.
-*/
-
-QT_END_NAMESPACE

@@ -1442,40 +1442,40 @@ void QTextEngine::itemize() const
 
    const ushort *uc = reinterpret_cast<const ushort *>(layoutData->string.unicode());
    const ushort *e = uc + length;
-   int lastScript = QUnicodeTables::Common;
+   int lastScript = QChar::Script_Common;
    while (uc < e) {
       switch (*uc) {
          case QChar::ObjectReplacementCharacter:
-            analysis->script = QUnicodeTables::Common;
+            analysis->script = QChar::Script_Common;
             analysis->flags = QScriptAnalysis::Object;
             break;
          case QChar::LineSeparator:
             if (analysis->bidiLevel % 2) {
                --analysis->bidiLevel;
             }
-            analysis->script = QUnicodeTables::Common;
+            analysis->script = QChar::Script_Common;
             analysis->flags = QScriptAnalysis::LineOrParagraphSeparator;
             if (option.flags() & QTextOption::ShowLineAndParagraphSeparators) {
                *const_cast<ushort *>(uc) = 0x21B5;   // visual line separator
             }
             break;
          case QChar::Tabulation:
-            analysis->script = QUnicodeTables::Common;
+            analysis->script = QChar::Script_Common;
             analysis->flags = QScriptAnalysis::Tab;
             analysis->bidiLevel = control.baseLevel();
             break;
          case QChar::Space:
          case QChar::Nbsp:
             if (option.flags() & QTextOption::ShowTabsAndSpaces) {
-               analysis->script = QUnicodeTables::Common;
+               analysis->script = QChar::Script_Common;
                analysis->flags = QScriptAnalysis::Space;
                analysis->bidiLevel = control.baseLevel();
                break;
             }
          // fall through
          default:
-            int script = QUnicodeTables::script(*uc);
-            analysis->script = script == QUnicodeTables::Inherited ? lastScript : script;
+            int script = QChar::script(*uc);
+            analysis->script = script == QChar::Script_Inherited ? lastScript : script;
             analysis->flags = QScriptAnalysis::None;
             break;
       }
@@ -2132,9 +2132,9 @@ void QScriptLine::setDefaultHeight(QTextEngine *eng)
       if (pdev) {
          f = QFont(f, pdev);
       }
-      e = f.d->engineForScript(QUnicodeTables::Common);
+      e = f.d->engineForScript(QChar::Script_Common);
    } else {
-      e = eng->fnt.d->engineForScript(QUnicodeTables::Common);
+      e = eng->fnt.d->engineForScript(QChar::Script_Common);
    }
 
    QFixed other_ascent = e->ascent();
@@ -2486,7 +2486,7 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
    {
       QChar ellipsisChar(0x2026);
 
-      QFontEngine *fe = fnt.d->engineForScript(QUnicodeTables::Common);
+      QFontEngine *fe = fnt.d->engineForScript(QChar::Script_Common);
 
       QGlyphLayoutArray<1> ellipsisGlyph;
       {
@@ -2899,15 +2899,13 @@ int QTextEngine::getClusterLength(unsigned short *logClusters,
 }
 
 int QTextEngine::positionInLigature(const QScriptItem *si, int end,
-                                    QFixed x, QFixed edge, int glyph_pos,
-                                    bool cursorOnCharacter)
+                  QFixed x, QFixed edge, int glyph_pos, bool cursorOnCharacter)
 {
    unsigned short *logClusters = this->logClusters(si);
    int clusterStart = -1;
    int clusterLength = 0;
 
-   if (si->analysis.script != QUnicodeTables::Common &&
-         si->analysis.script != QUnicodeTables::Greek) {
+   if (si->analysis.script != QChar::Script_Common && si->analysis.script != QChar::Script_Greek) {
       if (glyph_pos == -1) {
          return si->position + end;
       } else {

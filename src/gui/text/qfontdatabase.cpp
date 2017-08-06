@@ -900,40 +900,40 @@ QStringList QFontDatabasePrivate::addTTFile(const QByteArray &file, const QByteA
 #endif
 
 static const int scriptForWritingSystem[] = {
-   QUnicodeTables::Common, // Any
-   QUnicodeTables::Latin, // Latin
-   QUnicodeTables::Greek, // Greek
-   QUnicodeTables::Cyrillic, // Cyrillic
-   QUnicodeTables::Armenian, // Armenian
-   QUnicodeTables::Hebrew, // Hebrew
-   QUnicodeTables::Arabic, // Arabic
-   QUnicodeTables::Syriac, // Syriac
-   QUnicodeTables::Thaana, // Thaana
-   QUnicodeTables::Devanagari, // Devanagari
-   QUnicodeTables::Bengali, // Bengali
-   QUnicodeTables::Gurmukhi, // Gurmukhi
-   QUnicodeTables::Gujarati, // Gujarati
-   QUnicodeTables::Oriya, // Oriya
-   QUnicodeTables::Tamil, // Tamil
-   QUnicodeTables::Telugu, // Telugu
-   QUnicodeTables::Kannada, // Kannada
-   QUnicodeTables::Malayalam, // Malayalam
-   QUnicodeTables::Sinhala, // Sinhala
-   QUnicodeTables::Thai, // Thai
-   QUnicodeTables::Lao, // Lao
-   QUnicodeTables::Tibetan, // Tibetan
-   QUnicodeTables::Myanmar, // Myanmar
-   QUnicodeTables::Georgian, // Georgian
-   QUnicodeTables::Khmer, // Khmer
-   QUnicodeTables::Common, // SimplifiedChinese
-   QUnicodeTables::Common, // TraditionalChinese
-   QUnicodeTables::Common, // Japanese
-   QUnicodeTables::Hangul, // Korean
-   QUnicodeTables::Common, // Vietnamese
-   QUnicodeTables::Common, // Symbol
-   QUnicodeTables::Ogham,  // Ogham
-   QUnicodeTables::Runic, // Runic
-   QUnicodeTables::Nko // Nko
+    QChar::Script_Common, // Any
+    QChar::Script_Latin, // Latin
+    QChar::Script_Greek, // Greek
+    QChar::Script_Cyrillic, // Cyrillic
+    QChar::Script_Armenian, // Armenian
+    QChar::Script_Hebrew, // Hebrew
+    QChar::Script_Arabic, // Arabic
+    QChar::Script_Syriac, // Syriac
+    QChar::Script_Thaana, // Thaana
+    QChar::Script_Devanagari, // Devanagari
+    QChar::Script_Bengali, // Bengali
+    QChar::Script_Gurmukhi, // Gurmukhi
+    QChar::Script_Gujarati, // Gujarati
+    QChar::Script_Oriya, // Oriya
+    QChar::Script_Tamil, // Tamil
+    QChar::Script_Telugu, // Telugu
+    QChar::Script_Kannada, // Kannada
+    QChar::Script_Malayalam, // Malayalam
+    QChar::Script_Sinhala, // Sinhala
+    QChar::Script_Thai, // Thai
+    QChar::Script_Lao, // Lao
+    QChar::Script_Tibetan, // Tibetan
+    QChar::Script_Myanmar, // Myanmar
+    QChar::Script_Georgian, // Georgian
+    QChar::Script_Khmer, // Khmer
+    QChar::Script_Han, // SimplifiedChinese
+    QChar::Script_Han, // TraditionalChinese
+    QChar::Script_Han, // Japanese
+    QChar::Script_Hangul, // Korean
+    QChar::Script_Latin, // Vietnamese
+    QChar::Script_Common, // Symbol
+    QChar::Script_Ogham,  // Ogham
+    QChar::Script_Runic, // Runic
+    QChar::Script_Nko // Nko
 };
 
 int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSystem)
@@ -950,8 +950,8 @@ static inline bool requiresOpenType(int writingSystem)
 }
 static inline bool scriptRequiresOpenType(int script)
 {
-   return ((script >= QUnicodeTables::Syriac && script <= QUnicodeTables::Sinhala)
-           || script == QUnicodeTables::Khmer || script == QUnicodeTables::Nko);
+   return ((script >= QChar::Script_Syriac && script <= QChar::Script_Sinhala)
+           || script == QChar::Script_Khmer || script == QChar::Script_Nko);
 }
 #endif
 
@@ -1493,7 +1493,7 @@ static void match(int script, const QFontDef &request,
 
       uint score_adjust = 0;
 
-      bool supported = (script == QUnicodeTables::Common);
+      bool supported = (script == QChar::Script_Common);
       for (int ws = 1; !supported && ws < QFontDatabase::WritingSystemsCount; ++ws) {
          if (scriptForWritingSystem[ws] != script) {
             continue;

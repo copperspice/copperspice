@@ -246,7 +246,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
       qWarning("QFont: Must construct a QApplication before a QFont");
    }
 
-   Q_ASSERT(script >= 0 && script < QUnicodeTables::ScriptCount);
+   Q_ASSERT(script >= 0 && script < QChar::ScriptCount);
    Q_UNUSED(script);
 
    QFontDef req = d->request;
@@ -254,7 +254,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
 
    // set the point size to 0 to get better caching
    req.pointSize = 0;
-   QFontCache::Key key = QFontCache::Key(req, QUnicodeTables::Common, d->screen);
+   QFontCache::Key key = QFontCache::Key(req, QChar::Script_Common, d->screen);
 
    if (!(d->engineData = QFontCache::instance()->findEngineData(key))) {
       d->engineData = new QFontEngineData;

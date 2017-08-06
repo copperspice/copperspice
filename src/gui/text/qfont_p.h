@@ -142,7 +142,7 @@ class QFontEngineData
    QFontCache *fontCache;
 
 #if ! defined(Q_OS_MAC)
-   QFontEngine *engines[QUnicodeTables::ScriptCount];
+   QFontEngine *engines[QChar::ScriptCount];
 #else
    QFontEngine *engine;
 #endif

@@ -707,7 +707,7 @@ QFontEngine *loadEngine(int script, const QFontPrivate *fp,
                                       style, size));
 #ifndef QT_NO_QWS_QPF
    if (!engine.isNull()
-         && script == QUnicodeTables::Common
+         && script == QChar::Script_Common
          && !(request.styleStrategy & QFont::NoFontMerging) && !engine->symbol) {
 
       QStringList fallbacks = privateDb()->fallbackFamilies;

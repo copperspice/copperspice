@@ -72,7 +72,7 @@ QString QFont::defaultFamily() const
    }
 
    QStringList list = QApplicationPrivate::platformIntegration()->fontDatabase()->fallbacksForFamily(familyName,
-                      QFont::StyleNormal, QFont::StyleHint(d->request.styleHint), QUnicodeTables::Common);
+                      QFont::StyleNormal, QFont::StyleHint(d->request.styleHint), QChar::Script_Common);
    if (list.size()) {
       familyName = list.at(0);
    }

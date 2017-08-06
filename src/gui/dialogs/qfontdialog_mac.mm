@@ -487,7 +487,7 @@ void QFontDialogPrivate::closeCocoaFontPanel()
 void QFontDialogPrivate::setFont(void *delegate, const QFont &font)
 {
    QMacCocoaAutoReleasePool pool;
-   QFontEngine *fe = font.d->engineForScript(QUnicodeTables::Common);
+   QFontEngine *fe = font.d->engineForScript(QChar::Script_Common);
    NSFontManager *mgr = [NSFontManager sharedFontManager];
    const NSFont *nsFont = 0;
 

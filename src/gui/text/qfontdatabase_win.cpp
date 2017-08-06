@@ -937,7 +937,7 @@ static QFontEngine *loadEngine(int script, const QFontDef &request,
    }
 #endif
 
-   if (script == QUnicodeTables::Common
+   if (script == QChar::Script_Common
          && !(request.styleStrategy & QFont::NoFontMerging)
          && desc != 0
          && !(desc->family->writingSystems[QFontDatabase::Symbol] & QtFontFamily::Supported)) {
@@ -983,12 +983,12 @@ QFontEngine *qt_load_font_engine_win(const QFontDef &request)
    // From qfont.cpp
    extern int qt_defaultDpi();
 
-   QFontCache::Key key(request, QUnicodeTables::Common);
+   QFontCache::Key key(request, QChar::Script_Common);
    QFontEngine *fe = QFontCache::instance()->findEngine(key);
    if (fe != 0) {
       return fe;
    } else
-      return loadEngine(QUnicodeTables::Common, request, 0, qt_defaultDpi(), false, 0,
+      return loadEngine(QChar::Script_Common, request, 0, qt_defaultDpi(), false, 0,
                         QStringList());
 }
 
@@ -1071,7 +1071,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
    if (!qApp) {
       qWarning("QFontDatabase::load: Must construct QApplication first");
    }
-   Q_ASSERT(script >= 0 && script < QUnicodeTables::ScriptCount);
+   Q_ASSERT(script >= 0 && script < QChar::ScriptCount);
 
    // normalize the request to get better caching
    QFontDef req = d->request;
@@ -1088,7 +1088,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
       req.stretch = 100;
    }
 
-   QFontCache::Key key(req, d->rawMode ? QUnicodeTables::Common : script, d->screen);
+   QFontCache::Key key(req, d->rawMode ? QChar::Script_Common : script, d->screen);
    if (!d->engineData) {
       getEngineData(d, key);
    }

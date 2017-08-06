@@ -38,29 +38,36 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QChar *chars, int
 {
    QVarLengthArray<HB_ScriptItem> scriptItems;
 
-   const ushort *string = reinterpret_cast<const ushort *>(chars);
+   const ushort *string  = reinterpret_cast<const ushort *>(chars);
    const ushort *unicode = string;
+
    // correctly assign script, isTab and isObject to the script analysis
    const ushort *uc = unicode;
-   const ushort *e = uc + length;
-   int script = QUnicodeTables::Common;
-   int lastScript = QUnicodeTables::Common;
+   const ushort *e  = uc + length;
+
+   int script     = QChar::Script_Common;
+   int lastScript = QChar::Script_Common;
+
    const ushort *start = uc;
+
    while (uc < e) {
-      int s = QUnicodeTables::script(*uc);
-      if (s != QUnicodeTables::Inherited) {
+      int s = QChar::script(*uc);
+      if (s != QChar::Script_Inherited) {
          script = s;
       }
+
       if (*uc == QChar::ObjectReplacementCharacter || *uc == QChar::LineSeparator || *uc == 9) {
-         script = QUnicodeTables::Common;
+         script = QChar::Script_Common;
       }
+
       if (script != lastScript) {
          if (uc != start) {
             HB_ScriptItem item;
-            item.pos = start - string;
-            item.length = uc - start;
-            item.script = (HB_Script)lastScript;
-            item.bidiLevel = 0; // ### what's the proper value?
+            item.pos       = start - string;
+            item.length    = uc - start;
+            item.script    = (HB_Script)lastScript;
+            item.bidiLevel = 0;                      // ### what's the proper value?
+
             scriptItems.append(item);
             start = uc;
          }
@@ -68,90 +75,29 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QChar *chars, int
       }
       ++uc;
    }
+
    if (uc != start) {
       HB_ScriptItem item;
-      item.pos = start - string;
-      item.length = uc - start;
-      item.script = (HB_Script)lastScript;
+      item.pos       = start - string;
+      item.length    = uc - start;
+      item.script    = (HB_Script)lastScript;
       item.bidiLevel = 0; // ### what's the proper value?
+
       scriptItems.append(item);
    }
 
    qGetCharAttributes(string, length, scriptItems.data(), scriptItems.count(), attributes);
+
    if (type == QTextBoundaryFinder::Word) {
       HB_GetWordBoundaries(string, length, scriptItems.data(), scriptItems.count(), attributes);
+
    } else if (type == QTextBoundaryFinder::Sentence) {
       HB_GetSentenceBoundaries(string, length, scriptItems.data(), scriptItems.count(), attributes);
    }
 }
 
-/*!
-    \class QTextBoundaryFinder
-
-    \brief The QTextBoundaryFinder class provides a way of finding Unicode text boundaries in a string.
-
-    \since 4.4
-    \ingroup tools
-    \ingroup shared
-    \ingroup string-processing
-    \reentrant
-
-    QTextBoundaryFinder allows to find Unicode text boundaries in a
-    string, similar to the Unicode text boundary specification (see
-    http://www.unicode.org/reports/tr29/tr29-11.html).
-
-    QTextBoundaryFinder can operate on a QString in four possible
-    modes depending on the value of \a BoundaryType.
-
-    Units of Unicode characters that make up what the user thinks of
-    as a character or basic unit of the language are here called
-    Grapheme clusters. The two unicode characters 'A' + diaeresis do
-    for example form one grapheme cluster as the user thinks of them
-    as one character, yet it is in this case represented by two
-    unicode code points.
-
-    Word boundaries are there to locate the start and end of what a
-    language considers to be a word.
-
-    Line break boundaries give possible places where a line break
-    might happen and sentence boundaries will show the beginning and
-    end of whole sentences.
-
-    The first position in a string is always a valid boundary and
-    refers to the position before the first character. The last
-    position at the length of the string is also valid and refers
-    to the position after the last character.
-*/
-
-/*!
-    \enum QTextBoundaryFinder::BoundaryType
-
-    \value Grapheme Finds a grapheme which is the smallest boundary. It
-    including letters, punctation marks, numerals and more.
-    \value Word Finds a word.
-    \value Line Finds possible positions for breaking the text into multiple
-    lines.
-    \value Sentence Finds sentence boundaries. These include periods, question
-    marks etc.
-*/
-
-/*!
-  \enum QTextBoundaryFinder::BoundaryReason
-
-  \value NotAtBoundary  The boundary finder is not at a boundary position.
-  \value StartWord  The boundary finder is at the start of a word.
-  \value EndWord  The boundary finder is at the end of a word.
-*/
-
-/*!
-  Constructs an invalid QTextBoundaryFinder object.
-*/
 QTextBoundaryFinder::QTextBoundaryFinder()
-   : t(Grapheme)
-   , chars(0)
-   , length(0)
-   , freePrivate(true)
-   , d(0)
+   : t(Grapheme), chars(0), length(0), freePrivate(true), d(0)
 {
 }
 

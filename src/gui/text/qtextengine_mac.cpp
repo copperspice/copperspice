@@ -59,7 +59,7 @@ static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayou
       if ((!symbolFont && uc[i].unicode() == 0x00ad) || qIsControlChar(uc[i].unicode())) {
          glyphs->attributes[pos].dontPrint = true;
       }
-      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(uc[i].unicode());
+      const QUnicodeTables::Properties *prop = QChar::properties(uc[i].unicode());
       int cat = prop->category;
 
       // one gets an inter character justification point if the current char is not a non spacing mark.
@@ -616,7 +616,7 @@ void QTextEngine::shapeTextMac(int item) const
 
       QGlyphLayout g = shapedGlyphs(&si);
 
-      if (si.analysis.script == QUnicodeTables::Arabic) {
+      if (si.analysis.script == QChar::Script_Arabic) {
          QVarLengthArray<QArabicProperties> props(len + 2);
          QArabicProperties *properties = props.data();
          int f = si.position;

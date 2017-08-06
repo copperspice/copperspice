@@ -32,19 +32,19 @@ extern "C" {
    HB_GraphemeClass HB_GetGraphemeClass(HB_UChar32 ch)
    {
       const QUnicodeTables::Properties *prop = QUnicodeTables::properties(ch);
-      return (HB_GraphemeClass) prop->graphemeBreak;
+      return (HB_GraphemeClass) prop->graphemeBreakClass;
    }
 
    HB_WordClass HB_GetWordClass(HB_UChar32 ch)
    {
       const QUnicodeTables::Properties *prop = QUnicodeTables::properties(ch);
-      return (HB_WordClass) prop->wordBreak;
+      return (HB_WordClass) prop->wordBreakClass;
    }
 
    HB_SentenceClass HB_GetSentenceClass(HB_UChar32 ch)
    {
       const QUnicodeTables::Properties *prop = QUnicodeTables::properties(ch);
-      return (HB_SentenceClass) prop->sentenceBreak;
+      return (HB_SentenceClass) prop->sentenceBreakClass;
    }
 
    HB_LineBreakClass HB_GetLineBreakClass(HB_UChar32 ch)
@@ -52,12 +52,11 @@ extern "C" {
       return (HB_LineBreakClass)QUnicodeTables::lineBreakClass(ch);
    }
 
-
    void HB_GetGraphemeAndLineBreakClass(HB_UChar32 ch, HB_GraphemeClass *grapheme, HB_LineBreakClass *lineBreak)
    {
       const QUnicodeTables::Properties *prop = QUnicodeTables::properties(ch);
-      *grapheme = (HB_GraphemeClass) prop->graphemeBreak;
-      *lineBreak = (HB_LineBreakClass) prop->line_break_class;
+      *grapheme  = (HB_GraphemeClass)  prop->graphemeBreakClass;
+      *lineBreak = (HB_LineBreakClass) prop->lineBreakClass;
    }
 
    void HB_GetUnicodeCharProperties(HB_UChar32 ch, HB_CharCategory *category, int *combiningClass)
