@@ -274,6 +274,8 @@ inline uint qHash(const QProcessEnvironmentPrivate::Key &key)
 }
 #endif
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+
 template<>
 Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
 {
@@ -289,6 +291,8 @@ Q_INLINE_TEMPLATE void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
    }
    d = x;
 }
+
+/**   \endcond   */
 
 class QProcessPrivate : public QIODevicePrivate
 {

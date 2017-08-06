@@ -27,9 +27,7 @@
 #include <cs_slot.h>
 #include <qglobal.h>
 
-#ifndef csPrintable
-#  define csPrintable(string)       QString(string).toLatin1().constData()
-#endif
+#define csPrintable(string)       QString(string).toLatin1().constData()
 
 #define Q_EMIT
 #define Q_ARG(type, data)           CSArgument<type>{data, #type}

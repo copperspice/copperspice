@@ -4611,47 +4611,26 @@ QStringList QString::split(QChar sep, SplitBehavior behavior, Qt::CaseSensitivit
 }
 
 #ifndef QT_NO_REGEXP
-/*!
-    \overload
-
-    Splits the string into substrings wherever the regular expression
-    \a rx matches, and returns the list of those strings. If \a rx
-    does not match anywhere in the string, split() returns a
-    single-element list containing this string.
-
-    Here's an example where we extract the words in a sentence
-    using one or more whitespace characters as the separator:
-
-    \snippet doc/src/snippets/qstring/main.cpp 59
-
-    Here's a similar example, but this time we use any sequence of
-    non-word characters as the separator:
-
-    \snippet doc/src/snippets/qstring/main.cpp 60
-
-    Here's a third example where we use a zero-length assertion,
-    \bold{\\b} (word boundary), to split the string into an
-    alternating sequence of non-word and word tokens:
-
-    \snippet doc/src/snippets/qstring/main.cpp 61
-
-    \sa QStringList::join(), section()
-*/
 QStringList QString::split(const QRegExp &rx, SplitBehavior behavior) const
 {
    QRegExp rx2(rx);
+
    QStringList list;
    int start = 0;
    int extra = 0;
    int end;
+
    while ((end = rx2.indexIn(*this, start + extra)) != -1) {
       int matchedLen = rx2.matchedLength();
+
       if (start != end || behavior == KeepEmptyParts) {
          list.append(mid(start, end - start));
       }
+
       start = end + matchedLen;
       extra = (matchedLen == 0) ? 1 : 0;
    }
+
    if (start != size() || behavior == KeepEmptyParts) {
       list.append(mid(start));
    }
@@ -4659,34 +4638,6 @@ QStringList QString::split(const QRegExp &rx, SplitBehavior behavior) const
 }
 #endif
 
-/*!
-    \enum QString::NormalizationForm
-
-    This enum describes the various normalized forms of Unicode text.
-
-    \value NormalizationForm_D  Canonical Decomposition
-    \value NormalizationForm_C  Canonical Decomposition followed by Canonical Composition
-    \value NormalizationForm_KD  Compatibility Decomposition
-    \value NormalizationForm_KC  Compatibility Decomposition followed by Canonical Composition
-
-    \sa normalized(),
-        {http://www.unicode.org/reports/tr15/}{Unicode Standard Annex #15}
-*/
-
-/*!
-    \since 4.5
-
-    Returns a copy of this string repeated the specified number of \a times.
-
-    If \a times is less than 1, an empty string is returned.
-
-    Example:
-
-    \code
-        QString str("ab");
-        str.repeated(4);            // returns "abababab"
-    \endcode
-*/
 QString QString::repeated(int times) const
 {
    if (d->size == 0) {

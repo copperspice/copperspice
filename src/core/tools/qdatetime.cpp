@@ -4486,39 +4486,47 @@ int QDateTimeParser::findAmPm(QString &str, int index, int *used) const
    for (int i = 0; i < size; ++i) {
       if (str.at(i) != space) {
          for (int j = 0; j < 2; ++j) {
-            if (!broken[j]) {
+
+            if (! broken[j]) {
                int index = ampm[j].indexOf(str.at(i));
                QDTPDEBUG << "looking for" << str.at(i)
                          << "in" << ampm[j] << "and got" << index;
+
                if (index == -1) {
                   if (str.at(i).category() == QChar::Letter_Uppercase) {
                      index = ampm[j].indexOf(str.at(i).toLower());
                      QDTPDEBUG << "trying with" << str.at(i).toLower()
                                << "in" << ampm[j] << "and got" << index;
+
                   } else if (str.at(i).category() == QChar::Letter_Lowercase) {
                      index = ampm[j].indexOf(str.at(i).toUpper());
                      QDTPDEBUG << "trying with" << str.at(i).toUpper()
                                << "in" << ampm[j] << "and got" << index;
                   }
+
                   if (index == -1) {
                      broken[j] = true;
                      if (broken[amindex] && broken[pmindex]) {
                         QDTPDEBUG << str << "didn't make it";
                         return Neither;
                      }
+
                      continue;
                   } else {
                      str[i] = ampm[j].at(index); // fix case
                   }
                }
+
                ampm[j].remove(index, 1);
             }
          }
       }
    }
+
    if (!broken[pmindex] && !broken[amindex]) {
       return PossibleBoth;
    }
+
    return (!broken[amindex] ? PossibleAM : PossiblePM);
 }
 
