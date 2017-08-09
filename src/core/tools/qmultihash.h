@@ -102,14 +102,16 @@ class QMultiHash
          return *this;
       }
 
-      iterator &operator+(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
+      iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
       }
 
-      iterator &operator-(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
+      iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
       }
 
       iterator &operator++() {
@@ -196,14 +198,16 @@ class QMultiHash
          return *this;
       }
 
-      const_iterator &operator+(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
+      const_iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
       }
 
-      const_iterator &operator-(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
+      const_iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
       }
 
       const_iterator &operator++() {
