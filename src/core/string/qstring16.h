@@ -23,52 +23,19 @@
 #ifndef QSTRING16_H
 #define QSTRING16_H
 
-#include <cs_string.h>
+#define CS_STRING_ALLOW_UNSAFE
 
+#include <qglobal.h>
+#include <cs_string.h>
 #include <qchar32.h>
 #include <qbytearray.h>
 
 class QRegExp;
-class QString16;
-
-void cs_swapFunc(QString16 &a, QString16 &b);
 
 class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 {
    public:
-      using Iterator        = iterator;
-      using ConstIterator   = const_iterator;
-
-      using iterator        = CsString::CsString_utf16::iterator;
-      using const_iterator  = CsString::CsString_utf16::const_iterator;
-
-      QString16() = default;
-      QString16(const QString16 &other) = default;
-      QString16(QString16 &&other) = default;
-
-      QString16(QChar32 c);
-      QString16(size_type size, QChar32 c);
-
-      QString16(const CsString::CsString_utf16 &other)
-         : CsString::CsString_utf16(other)
-      {
-      }
-
-      QString16(CsString::CsString_utf16 &&other)
-         : CsString::CsString_utf16(std::move(other))
-      {
-      }
-
-      template <typename Iterator>
-      QString16(Iterator begin, Iterator end)
-         : CsString::CsString_utf16(begin, end)
-      { }
-
-      ~QString16() = default;
 
 };
-
-Q_DECLARE_TYPEINFO(QString16, Q_MOVABLE_TYPE);      // broom - verify
-
 
 #endif

@@ -32,6 +32,17 @@
 
 namespace QUnicodeTables {
 
+struct NormalizationCorrection {
+   uint ucs4;
+   uint old_mapping;
+   int  version;
+};
+
+extern const NormalizationCorrection uc_normalization_corrections[];
+
+static constexpr const int NumNormalizationCorrections        = 6;
+static constexpr const int NormalizationCorrectionsVersionMax = 7;
+
 struct Properties {
     ushort category            : 8; /* 5 used */
     ushort direction           : 8; /* 5 used */

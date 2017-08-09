@@ -12844,22 +12844,13 @@ static const unsigned short uc_ligature_map[] = {
     0xd805, 0xddba, 0xd805, 0xddb9, 0xd805, 0xddbb
 };
 
-struct NormalizationCorrection {
-   uint ucs4;
-   uint old_mapping;
-   int version;
-};
-
-static const NormalizationCorrection uc_normalization_corrections[] = {
-    { 0xf951, 0x96fb, 6   },
+const NormalizationCorrection uc_normalization_corrections[] = {
+    { 0xf951,  0x96fb,  6 },
     { 0x2f868, 0x2136a, 7 },
-    { 0x2f874, 0x5f33, 7 },
-    { 0x2f91f, 0x43ab, 7 },
-    { 0x2f95f, 0x7aae, 7 },
-    { 0x2f9bf, 0x4d57, 7 }
+    { 0x2f874, 0x5f33,  7 },
+    { 0x2f91f, 0x43ab,  7 },
+    { 0x2f95f, 0x7aae,  7 },
+    { 0x2f9bf, 0x4d57,  7 }
 };
-
-enum { NumNormalizationCorrections = 6 };
-enum { NormalizationCorrectionsVersionMax = 7 };
 
 } // namespace QUnicodeTables

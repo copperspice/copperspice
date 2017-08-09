@@ -946,7 +946,9 @@ CsBasicString<E, A> &CsBasicString<E, A>::assign(Iterator begin, Iterator end)
 template <typename E, typename A>
 CsChar CsBasicString<E, A>::at(size_type index) const
 {
-   const_iterator iter = std::advance(begin(), index);
+   const_iterator iter = begin();
+   std::advance(iter, index);
+
    return *iter;
 }
 
@@ -3433,6 +3435,12 @@ template <typename E_FROM, typename A_FROM, typename E_TO, typename A_TO>
 void convert(const CsBasicString<E_FROM, A_FROM> &str_from, CsBasicString<E_TO, A_TO> &str_to)
 {
    str_to.assign(str_from.begin(), str_from.end());
+}
+
+template <typename E, typename A>
+void swap(CsBasicString<E, A> &str1, CsBasicString<E, A> &str2)
+{
+   str1.swap(str2);
 }
 
 template <typename E1, typename A1, typename E2, typename A2>

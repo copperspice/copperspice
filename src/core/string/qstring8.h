@@ -23,19 +23,180 @@
 #ifndef QSTRING8_H
 #define QSTRING8_H
 
-#include <cs_string.h>
+#define CS_STRING_ALLOW_UNSAFE
 
+#include <qglobal.h>
+#include <cs_string.h>
 #include <qchar32.h>
 #include <qbytearray.h>
 
 class QRegExp;
-class QString8;
 
-void cs_swapFunc(QString8 &a, QString8 &b);
+class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
+{
+   public:
+      QChar32Arrow (CsString::CsCharArrow c)
+         : CsString::CsCharArrow(c)
+      { }
+
+      const QChar32 *operator->() const {
+         static_assert(std::is_standard_layout<CsString::CsChar>::value, "Invalid reinterpret_cast for QChar32Arrow");
+         static_assert(sizeof(QChar32) == sizeof(CsString::CsChar), "Invalid reinterpret_cast for QChar32Arrow");
+
+         return reinterpret_cast<const QChar32 *>(CsString::CsCharArrow::operator->());
+      }
+};
 
 class Q_CORE_EXPORT QString8 : public CsString::CsString
 {
    public:
+      class iterator : public CsString::CsString::iterator
+      {
+       public:
+         using pointer     = QChar32 *;
+         using reference   = QChar32 &;
+         using value_type  = QChar32;
+
+         iterator() = default;
+
+         iterator(CsString::CsString::iterator iter)
+            : CsString::CsString::iterator(std::move(iter)) {
+         }
+
+         // operators
+         QChar32 operator*() const {
+            return CsString::CsString::iterator::operator*();
+         }
+
+         QChar32Arrow operator->() const {
+            return CsString::CsString::iterator::operator->();
+         }
+
+         bool operator==(iterator other) const {
+            return CsString::CsString::iterator::operator==(other);
+         }
+
+         bool operator!=(iterator other) const {
+            return CsString::CsString::iterator::operator!=(other);
+         }
+
+         iterator &operator+=(size_type n) {
+            CsString::CsString::iterator::operator+=(n);
+            return *this;
+         }
+
+         iterator &operator-=(size_type n) {
+            CsString::CsString::iterator::operator-=(n);
+            return *this;
+         }
+
+         iterator operator+(size_type n) const {
+            return CsString::CsString::iterator::operator+(n);
+         }
+
+         iterator operator-(size_type n) const {
+            return CsString::CsString::iterator::operator-(n);
+         }
+
+         iterator &operator++() {
+            CsString::CsString::iterator::operator++();
+            return *this;
+         }
+
+         iterator operator++(int n) {
+            return CsString::CsString::iterator::operator++(n);
+         }
+
+         iterator &operator--() {
+            CsString::CsString::iterator::operator--();
+            return *this;
+         }
+
+         iterator operator--(int n) {
+            return CsString::CsString::iterator::operator--(n);
+         }
+      };
+
+      class const_iterator : public CsString::CsString::const_iterator
+      {
+       public:
+         using pointer           = const QChar32 *;
+         using reference         = const QChar32 &;
+         using value_type        = const QChar32;
+
+         const_iterator() = default;
+
+         const_iterator(CsString::CsString::const_iterator iter)
+            : CsString::CsString::const_iterator(std::move(iter)) {
+         }
+
+         const_iterator(iterator iter)
+            : CsString::CsString::const_iterator(std::move(iter)) {
+         }
+
+         // operators
+         const QChar32 operator*() const {
+            return CsString::CsString::const_iterator::operator*();
+         }
+
+         QChar32Arrow operator->() const {
+            return CsString::CsString::const_iterator::operator->();
+         }
+
+         bool operator==(const_iterator other) const {
+            return CsString::CsString::const_iterator::operator==(other);
+         }
+
+         bool operator!=(const_iterator other) const {
+            return CsString::CsString::const_iterator::operator!=(other);
+         }
+
+         const_iterator &operator+=(size_type n) {
+            CsString::CsString::const_iterator::operator+=(n);
+            return *this;
+         }
+
+         const_iterator &operator-=(size_type n) {
+            CsString::CsString::const_iterator::operator-=(n);
+            return *this;
+         }
+
+         const_iterator operator+(size_type n) const {
+            return CsString::CsString::const_iterator::operator+(n);
+         }
+
+         const_iterator operator-(size_type n) const {
+            return CsString::CsString::const_iterator::operator-(n);
+         }
+
+         const_iterator &operator++() {
+            CsString::CsString::const_iterator::operator++();
+            return *this;
+         }
+
+         const_iterator operator++(int n) {
+            return CsString::CsString::const_iterator::operator++(n);
+         }
+
+         const_iterator &operator--() {
+            CsString::CsString::const_iterator::operator--();
+            return *this;
+         }
+
+         const_iterator operator--(int n) {
+            return CsString::CsString::const_iterator::operator--(n);
+         }
+      };
+
+      enum NormalizationForm {
+         NormalizationForm_D,
+         NormalizationForm_C,
+         NormalizationForm_KD,
+         NormalizationForm_KC
+      };
+
+      enum SplitBehavior { KeepEmptyParts, SkipEmptyParts };
+
       using Iterator        = iterator;
       using ConstIterator   = const_iterator;
 
@@ -43,12 +204,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using size_type       = ssize_t;
       using value_type      = QChar32;
 
-      // broom, following four iterators need to return an iterator to a QChar32
-      using iterator        = CsString::CsString::iterator;
-      using const_iterator  = CsString::CsString::const_iterator;
-
-      using reverse_iterator        = CsString::CsString::reverse_iterator;
-      using const_reverse_iterator  = CsString::CsString::const_reverse_iterator;
+      using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+      using reverse_iterator       = std::reverse_iterator<iterator>;
 
       QString8() = default;
       QString8(const QString8 &other) = default;
@@ -74,20 +231,35 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          }
       }
 
-      QString8(const CsString::CsString &other)
-         : CsString::CsString(other)
-      {
-      }
+/*
+      // for a const char * and char *
+      template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
+                  std::is_same<T, char *>::value>::type>
+      CsBasicString(const T &str, const A &a = A());
+*/
 
-      QString8(CsString::CsString &&other)
-         : CsString::CsString(std::move(other))
-      {
-      }
+      // for an array of chars
+      template <int N>
+      QString8(const char (&str)[N])
+         : CsString::CsString(str)
+      { }
 
       template <typename Iterator>
       QString8(Iterator begin, Iterator end)
          : CsString::CsString(begin, end)
       { }
+
+      // internal
+      QString8(const CsString::CsString &other)
+         : CsString::CsString(other)
+      {
+      }
+
+      // internal
+      QString8(CsString::CsString &&other)
+         : CsString::CsString(std::move(other))
+      {
+      }
 
       ~QString8() = default;
 
@@ -106,6 +278,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          CsString::CsString::append(other);
          return *this;
       }
+
+      // internal
+      using CsString::CsString::append;
 
       QChar32 at(size_type index) const;
 
@@ -146,13 +321,20 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       bool isEmpty() const;
 
+      // internal
+      bool isSimpleText() const;
+
       QString8 left(size_type numOfChars) const Q_REQUIRED_RESULT;
+      QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
 
       size_type length() const {
          return CsString::CsString::size();
       }
 
       QString8 mid(size_type index, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+
+      QString8 normalized(QString8::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
+                  const Q_REQUIRED_RESULT;
 
       QString8 &prepend(const QString8 &other) {
          CsString::CsString::insert(begin(), other);
@@ -208,6 +390,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
       QString8 right(size_type numOfChars) const Q_REQUIRED_RESULT;
+      QString8 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
+
+      QString8 simplified() const & Q_REQUIRED_RESULT;
+      QString8 simplified() && Q_REQUIRED_RESULT;
 
       size_type size() const {
          return CsString::CsString::size();
@@ -217,11 +403,23 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::shrink_to_fit();
       }
 
-/*
       void swap(QString8 &other) {
-         cs_swapFunc(*this, other);
+         CsString::CsString::swap(other);
       }
-*/
+
+      QString8 toHtmlEscaped() const;
+
+      QString8 toCaseFolded() const & Q_REQUIRED_RESULT;
+      QString8 toCaseFolded() && Q_REQUIRED_RESULT;
+
+      QString8 toLower() const & Q_REQUIRED_RESULT;
+      QString8 toLower() && Q_REQUIRED_RESULT;
+
+      QString8 toUpper() const & Q_REQUIRED_RESULT;
+      QString8 toUpper() && Q_REQUIRED_RESULT;
+
+      QString8 trimmed() const & Q_REQUIRED_RESULT;
+      QString8 trimmed() && Q_REQUIRED_RESULT;
 
       void truncate(size_type length);
 
@@ -287,8 +485,23 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
       // operators
-      using CsString::CsString::operator=;      // check QString doc if in
-      using CsString::CsString::operator+=;     // check QString doc if in
+      using CsString::CsString::operator=;      // internal
+      using CsString::CsString::operator+=;     // internal
+
+      QString8 &operator=(QChar32 c)  {
+         CsString::CsString::operator=(c);
+         return *this;
+      }
+
+      QString8 &operator+=(QChar32 c)  {
+         CsString::CsString::operator+=(c);
+         return *this;
+      }
+
+      QString8 &operator+=(QChar32::SpecialCharacter c) {
+         append(QChar32(c));
+         return *this;
+      }
 
       QString8 &operator=(const QString8 &other) = default;
       QString8 &operator=(QString8 && other) = default;
@@ -297,12 +510,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
 };
 
-Q_DECLARE_TYPEINFO(QString8, Q_MOVABLE_TYPE);      // broom - verify
-
-/*
-void cs_swapFunc(QString8 &a, QString8 &b) {
-   swap(a, b);
+inline void swap(QString8 &a, QString8 &b) {
+   a.swap(b);
 }
-*/
+
+QString8 cs_internal_string_normalize(const QString8 &data, QString8::NormalizationForm mode,
+                  QChar32::UnicodeVersion version, int from);
 
 #endif

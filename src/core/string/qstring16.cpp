@@ -20,9 +20,12 @@
 *
 ***********************************************************************/
 
-#include <qstring16.h>
+#include <qstring8.h>
 #include <qdatastream.h>
 #include <qregexp.h>
+#include <qunicodetables_p.h>
+
+/*
 
 QString16::QString16(QChar32 c)
    : CsString::CsString_utf16(1, c)
@@ -33,6 +36,8 @@ QString16::QString16(size_type size, QChar32 c)
    : CsString::CsString_utf16(size, c)
 {
 }
+
+*/
 
 // methods
 
@@ -55,5 +60,7 @@ QString16::QString16(size_type size, QChar32 c)
       return out;
    }
 #endif
+
+
 
 

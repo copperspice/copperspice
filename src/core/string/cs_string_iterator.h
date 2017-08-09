@@ -20,6 +20,21 @@
 
 namespace CsString {
 
+class LIB_CS_STRING_EXPORT CsCharArrow
+{
+   public:
+      CsCharArrow (CsChar c)
+         : m_data(c)
+      { }
+
+      const CsChar *operator->() const {
+         return &m_data;
+      }
+
+   private:
+      CsChar m_data;
+};
+
 template <typename E, typename A>
 class LIB_CS_STRING_EXPORT CsStringIterator
 {
@@ -36,7 +51,7 @@ class LIB_CS_STRING_EXPORT CsStringIterator
       CsStringIterator() = default;
 
       CsChar operator*() const;
-      CsChar operator->() const;
+      CsCharArrow operator->() const;
 
       CsChar operator[](size_type x) const;
 
@@ -80,9 +95,9 @@ CsChar CsStringIterator<E,A>::operator*() const
 }
 
 template <typename E, typename A>
-CsChar CsStringIterator<E,A>::operator->() const
+CsCharArrow CsStringIterator<E,A>::operator->() const
 {
-    return E::getCodePoint(m_iter);
+   return E::getCodePoint(m_iter);
 }
 
 template <typename E, typename A>
