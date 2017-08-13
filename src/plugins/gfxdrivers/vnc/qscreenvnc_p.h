@@ -279,10 +279,13 @@ public:
     void write(QTcpSocket *socket) const;
 
 private:
+    Q_PACKED_BEGIN
     struct Rect {
         quint8 xy;
         quint8 wh;
-    } Q_PACKED rects[8 * 16];
+    };
+    Q_PACKED_END
+    Rect rects[8 * 16];
 
     quint8 numRects;
     QRfbHextileEncoder<SRC> *encoder;

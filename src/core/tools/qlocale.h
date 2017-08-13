@@ -791,14 +791,16 @@ class Q_CORE_EXPORT QLocale
 
    QString createSeparatedList(const QStringList &strl) const;
    //private:                        // this should be private, but can't be
+#if (defined(__arm__) || defined(QT_NO_ARM_EABI))
+   Q_PACKED_BEGIN
+#endif
    struct Data {
       quint16 index;
       quint16 numberOptions;
-   }
+   };
 #if (defined(__arm__) || defined(QT_NO_ARM_EABI))
-   Q_PACKED
+   Q_PACKED_END
 #endif
-   ;
 
  private:
    friend struct QLocalePrivate;

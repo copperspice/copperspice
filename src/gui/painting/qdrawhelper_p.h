@@ -657,6 +657,7 @@ inline quint16 qt_colorConvert(quint32 color, quint16 dummy)
    return (r & 0xf800) | (g & 0x07e0) | (b & 0x001f);
 }
 
+Q_PACKED_BEGIN
 class quint32p
 {
  public:
@@ -679,8 +680,10 @@ class quint32p
  private:
    quint32p() {}
    quint32 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
+Q_PACKED_BEGIN
 class qabgr8888
 {
  public:
@@ -694,10 +697,12 @@ class qabgr8888
 
  private:
    quint32 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 class qrgb565;
 
+Q_PACKED_BEGIN
 class qargb8565
 {
  public:
@@ -740,8 +745,10 @@ class qargb8565
    friend class qrgb565;
 
    quint8 data[3];
-} Q_PACKED;
+};
+Q_PACKED_END
 
+Q_PACKED_BEGIN
 class qrgb565
 {
  public:
@@ -784,7 +791,8 @@ class qrgb565
    friend class qargb8565;
 
    quint16 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 qargb8565::qargb8565(quint32 v)
 {
@@ -926,6 +934,7 @@ bool qrgb565::operator==(const qrgb565 &v) const
    return data == v.data;
 }
 
+Q_PACKED_BEGIN
 class qbgr565
 {
  public:
@@ -941,10 +950,12 @@ class qbgr565
 
  private:
    quint16 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 class qrgb555;
 
+Q_PACKED_BEGIN
 class qargb8555
 {
  public:
@@ -984,8 +995,10 @@ class qargb8555
  private:
    friend class qrgb555;
    quint8 data[3];
-} Q_PACKED;
+};
+Q_PACKED_END
 
+Q_PACKED_BEGIN
 class qrgb555
 {
  public:
@@ -1066,7 +1079,8 @@ class qrgb555
    friend class qbgr555;
    quint16 data;
 
-} Q_PACKED;
+};
+Q_PACKED_END
 
 qrgb555::qrgb555(const qargb8555 &v)
 {
@@ -1090,6 +1104,7 @@ qrgb555 qrgb555::byte_mul(quint8 a) const
    return result;
 }
 
+Q_PACKED_BEGIN
 class qbgr555
 {
  public:
@@ -1109,7 +1124,8 @@ class qbgr555
 
  private:
    quint16 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 qargb8555::qargb8555(quint32 v)
 {
@@ -1199,6 +1215,7 @@ qargb8555 qargb8555::byte_mul(quint8 a) const
 
 class qrgb666;
 
+Q_PACKED_BEGIN
 class qargb6666
 {
  public:
@@ -1237,8 +1254,10 @@ class qargb6666
    friend class qrgb666;
    quint8 data[3];
 
-} Q_PACKED;
+};
+Q_PACKED_END
 
+Q_PACKED_BEGIN
 class qrgb666
 {
  public:
@@ -1281,7 +1300,8 @@ class qrgb666
    friend class qargb6666;
 
    quint8 data[3];
-} Q_PACKED;
+};
+Q_PACKED_END
 
 qrgb666::qrgb666(quint32 v)
 {
@@ -1418,6 +1438,7 @@ quint32 qargb6666::rawValue() const
    return (data[2] << 16) | (data[1] << 8) | data[0];
 }
 
+Q_PACKED_BEGIN
 class qrgb888
 {
  public:
@@ -1452,7 +1473,8 @@ class qrgb888
  private:
    uchar data[3];
 
-} Q_PACKED;
+};
+Q_PACKED_END
 
 qrgb888::qrgb888(quint32 v)
 {
@@ -1548,6 +1570,7 @@ inline quint8 qt_colorConvert(quint16 color, quint8 dummy)
 #endif // QT_QWS_DEPTH_8
 
 // hw: endianess??
+Q_PACKED_BEGIN
 class quint24
 {
  public:
@@ -1569,7 +1592,8 @@ class quint24
 
  private:
    uchar data[3];
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <>
 inline quint24 qt_colorConvert(quint32 color, quint24 dummy)
@@ -1579,6 +1603,7 @@ inline quint24 qt_colorConvert(quint32 color, quint24 dummy)
 }
 
 // hw: endianess??
+Q_PACKED_BEGIN
 class quint18
 {
  public:
@@ -1601,7 +1626,8 @@ class quint18
 
  private:
    uchar data[3];
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <>
 inline quint18 qt_colorConvert(quint32 color, quint18 dummy)
@@ -1612,6 +1638,7 @@ inline quint18 qt_colorConvert(quint32 color, quint18 dummy)
 
 class qrgb444;
 
+Q_PACKED_BEGIN
 class qargb4444
 {
  public:
@@ -1657,8 +1684,10 @@ class qargb4444
    friend class qrgb444;
    quint16 data;
 
-} Q_PACKED;
+};
+Q_PACKED_END
 
+Q_PACKED_BEGIN
 class qrgb444
 {
  public:
@@ -1703,8 +1732,8 @@ class qrgb444
    friend class qargb4444;
    quint16 data;
 
-} Q_PACKED;
-
+};
+Q_PACKED_END
 
 qargb4444::qargb4444(quint32p color)
 {
@@ -1812,6 +1841,7 @@ qrgb444 qrgb444::byte_mul(quint8 a) const
 
 #ifdef QT_QWS_DEPTH_GENERIC
 
+Q_PACKED_BEGIN
 struct qrgb {
  public:
    static int bpp;
@@ -1823,7 +1853,8 @@ struct qrgb {
    static int off_green;
    static int off_blue;
    static int off_alpha;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline quint32 qt_convertToRgb(SRC color);
@@ -1849,6 +1880,7 @@ inline quint32 qt_convertToRgb(quint16 color)
    return qt_convertToRgb(qt_colorConvert<quint32, quint16>(color, 0));
 }
 
+Q_PACKED_BEGIN
 class qrgb_generic16
 {
  public:
@@ -1870,7 +1902,8 @@ class qrgb_generic16
 
  private:
    quint16 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <>
 inline qrgb_generic16 qt_colorConvert(quint32 color, qrgb_generic16 dummy)

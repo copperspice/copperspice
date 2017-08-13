@@ -103,7 +103,9 @@ class Q_GUI_EXPORT QFontEngineQPF : public QFontEngine
       GlyphBlock
    };
 
-   struct Q_PACKED Header {
+   Q_PACKED_BEGIN
+   
+   struct Header {
       char magic[4]; // 'QPF2'
       quint32 lock;  // values: 0 = unlocked, 0xffffffff = read-only, otherwise qws client id of locking process
       quint8 majorVersion;
@@ -111,13 +113,13 @@ class Q_GUI_EXPORT QFontEngineQPF : public QFontEngine
       quint16 dataSize;
    };
 
-   struct Q_PACKED Block {
+   struct Block {
       quint16 tag;
       quint16 pad;
       quint32 dataSize;
    };
 
-   struct Q_PACKED Glyph {
+   struct Glyph {
       quint8 width;
       quint8 height;
       quint8 bytesPerLine;
@@ -125,6 +127,8 @@ class Q_GUI_EXPORT QFontEngineQPF : public QFontEngine
       qint8 y;
       qint8 advance;
    };
+
+   Q_PACKED_END
 
 #ifdef QT_FONTS_ARE_RESOURCES
    QFontEngineQPF(const QFontDef &def, const uchar *bytes, int size);

@@ -69,7 +69,8 @@ static inline unsigned int getChar(const QChar *str, int &i, const int len)
 #define FM_SMOOTH 1
 
 
-class Q_PACKED QPFGlyphMetrics
+Q_PACKED_BEGIN
+class QPFGlyphMetrics
 {
 
  public:
@@ -90,6 +91,7 @@ class Q_PACKED QPFGlyphMetrics
    //                    delete [] the data when the glyph is deleted.
    enum Flags { RendererOwnsData = 0x01 };
 };
+Q_PACKED_END
 
 class QPFGlyph
 {
@@ -106,7 +108,8 @@ class QPFGlyph
    uchar *data;
 };
 
-struct Q_PACKED QPFFontMetrics {
+Q_PACKED_BEGIN
+struct QPFFontMetrics {
    qint8 ascent, descent;
    qint8 leftbearing, rightbearing;
    quint8 maxwidth;
@@ -116,6 +119,7 @@ struct Q_PACKED QPFFontMetrics {
    quint8 underlinewidth;
    quint8 reserved3;
 };
+Q_PACKED_END
 
 
 class QPFGlyphTree

@@ -553,6 +553,7 @@ QT_IMPL_MEMROTATE(quint32, qrgb_generic16)
 QT_IMPL_MEMROTATE(quint16, qrgb_generic16)
 #endif
 
+Q_PACKED_BEGIN
 struct qrgb_gl_rgba {
  public:
    inline qrgb_gl_rgba(quint32 v) {
@@ -569,7 +570,8 @@ struct qrgb_gl_rgba {
 
  private:
    quint32 data;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 void Q_GUI_EXPORT qt_memrotate90_gl(const quint32 *src, int srcWidth, int srcHeight, int srcStride,
                                     quint32 *dest, int dstStride)

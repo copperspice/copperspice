@@ -261,8 +261,8 @@ QT_USE_NAMESPACE
 #    define Q_ALIGNOF(type)   __alignof__(type)
 #    define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #    define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
-#    define Q_PACKED          __attribute__ ((__packed__))
-
+#    define Q_PACKED_BEGIN    _Pragma("pack(push, 1)")
+#    define Q_PACKED_END      _Pragma("pack(pop)")
 #    define Q_NO_PACKED_REFERENCE
 
 #    ifndef __ARM_EABI__
@@ -299,7 +299,8 @@ QT_USE_NAMESPACE
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
 #  if (defined(Q_CC_GNU) || defined(Q_CC_INTEL))
-#    define Q_PACKED __attribute__ ((__packed__))
+#    define Q_PACKED_BEGIN  _Pragma("pack(push, 1)")
+#    define Q_PACKED_END    _Pragma("pack(pop)")
 #    define Q_NO_PACKED_REFERENCE
 
 #    ifndef __ARM_EABI__
@@ -356,8 +357,9 @@ QT_USE_NAMESPACE
 
 #endif
 
-#ifndef Q_PACKED
-#  define Q_PACKED
+#ifndef Q_PACKED_BEGIN
+#  define Q_PACKED_BEGIN
+#  define Q_PACKED_END
 #  undef Q_NO_PACKED_REFERENCE
 #endif
 

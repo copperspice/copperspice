@@ -45,6 +45,10 @@ struct QLatin1Char {
 };
 
 
+#if (defined(__arm__) && defined(QT_NO_ARM_EABI))
+Q_PACKED_BEGIN
+#endif
+
 class Q_CORE_EXPORT QChar
 {
  public:
@@ -317,12 +321,12 @@ class Q_CORE_EXPORT QChar
 
  private:
    ushort ucs;
-}
+};
 
 #if (defined(__arm__) && defined(QT_NO_ARM_EABI))
-Q_PACKED
+Q_PACKED_END
 #endif
-;
+
 
 Q_DECLARE_TYPEINFO(QChar, Q_MOVABLE_TYPE);
 

@@ -857,9 +857,11 @@ static void blit_8(QScreen *screen, const QImage &image,
 
 #ifdef QT_QWS_DEPTH_4
 
+Q_PACKED_BEGIN
 struct qgray4 {
    quint8 dummy;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToGray4(SRC color);
@@ -1005,9 +1007,11 @@ static void blit_4(QScreen *screen, const QImage &image,
 
 #ifdef QT_QWS_DEPTH_1
 
+Q_PACKED_BEGIN
 struct qmono {
    quint8 dummy;
-} Q_PACKED;
+};
+Q_PACKED_END
 
 template <typename SRC>
 Q_STATIC_TEMPLATE_FUNCTION inline quint8 qt_convertToMono(SRC color);
