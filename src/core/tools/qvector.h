@@ -247,11 +247,11 @@ class QVector
    }
 
    void push_front(const T &value) {
-      m_data.push_front(value);
+      m_data.insert(m_data.begin(), value);
    }
 
    void push_front(T &&value) {
-      m_data.push_front(std::move(value));
+      m_data.insert(m_data.begin(), std::move(value));
    }
 
    void remove(size_type i) {
