@@ -2192,7 +2192,7 @@ void QTextStreamPrivate::putNumber(qulonglong number, bool negative)
 */
 QTextStream &QTextStream::operator<<(bool b)
 {
-   return *this << bool(b);
+   return *this << int(b);
 }
 
 /*!
