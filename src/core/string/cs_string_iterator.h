@@ -14,6 +14,7 @@
 #ifndef LIB_CS_STRING_ITERATOR_H
 #define LIB_CS_STRING_ITERATOR_H
 
+#include <cstddef>
 #include <vector>
 
 #include <cs_char.h>
@@ -41,7 +42,7 @@ class LIB_CS_STRING_EXPORT CsStringIterator
    using v_iter = typename std::vector<typename E::storage_unit, A>::const_iterator;
 
    public:
-      using size_type         = ssize_t;
+      using size_type         = std::ptrdiff_t;
       using difference_type   = int;
       using value_type        = CsChar;
       using pointer           = CsChar *;

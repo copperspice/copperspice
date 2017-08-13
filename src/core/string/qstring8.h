@@ -25,6 +25,8 @@
 
 #define CS_STRING_ALLOW_UNSAFE
 
+#include <cstddef>
+
 #include <qglobal.h>
 #include <cs_string.h>
 #include <qchar32.h>
@@ -200,8 +202,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using Iterator        = iterator;
       using ConstIterator   = const_iterator;
 
-      using difference_type = ssize_t;
-      using size_type       = ssize_t;
+      using difference_type = std::ptrdiff_t;
+      using size_type       = std::ptrdiff_t;
       using value_type      = QChar32;
 
       using const_reverse_iterator = std::reverse_iterator<const_iterator>;
