@@ -15,6 +15,7 @@
 #define LIBGUARDED_RCU_LIST_HPP
 
 #include <atomic>
+#include <cstddef>
 #include <memory>
 #include <mutex>
 
@@ -48,7 +49,7 @@ class rcu_list
   public:
     using value_type      = T;
     using allocator_type  = Alloc;
-    using size_type       = ssize_t;
+    using size_type       = std::ptrdiff_t;
     using reference       = value_type &;
     using const_reference = const value_type &;
     using pointer         = typename std::allocator_traits<Alloc>::pointer;
@@ -312,7 +313,7 @@ class rcu_list<T, M, Alloc>::iterator
     friend rcu_list<T, M, Alloc>;
     friend rcu_list<T, M, Alloc>::const_iterator;
 
-    explicit iterator(const rcu_list<T, M, Alloc>::const_iterator &it)
+    explicit iterator(const typename rcu_list<T, M, Alloc>::const_iterator &it)
        : m_current(it.m_current)
     {
     }
@@ -342,7 +343,7 @@ class rcu_list<T, M, Alloc>::const_iterator
     {
     }
 
-    const_iterator(const rcu_list<T, M, Alloc>::iterator &it)
+    const_iterator(const typename rcu_list<T, M, Alloc>::iterator &it)
       : m_current(it.m_current)
     {
     }

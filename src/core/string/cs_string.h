@@ -15,6 +15,7 @@
 #define LIB_CS_STRING_H
 
 #include <algorithm>
+#include <cstddef>
 #include <exception>
 #include <iterator>
 #include <stdexcept>
@@ -38,7 +39,7 @@ template <typename E, typename A>
 class CsBasicString
 {
    public:
-      using size_type      = ssize_t;
+      using size_type      = std::ptrdiff_t;
       using const_iterator = CsStringIterator<E, A>;
       using iterator       = CsStringIterator<E, A>;
 
@@ -946,8 +947,9 @@ CsBasicString<E, A> &CsBasicString<E, A>::assign(Iterator begin, Iterator end)
 template <typename E, typename A>
 CsChar CsBasicString<E, A>::at(size_type index) const
 {
-   const_iterator iter = std::advance(begin(), index);
-   return *iter;
+    const_iterator iter = begin();
+    std::advance(iter, index);
+    return *iter;
 }
 
 template <typename E, typename A>
