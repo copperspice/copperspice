@@ -35,7 +35,7 @@ class QEventPrivate;
 class Q_CORE_EXPORT QEvent           // event base class
 {
    CORE_CS_GADGET(QEvent)
-   
+
  public:
    enum Type {
       /*
@@ -54,6 +54,8 @@ class Q_CORE_EXPORT QEvent           // event base class
       KeyRelease = 7,                         // key released
       FocusIn = 8,                            // keyboard focus received
       FocusOut = 9,                           // keyboard focus lost
+      FocusAboutToChange = 23,                // keyboard focus is about to be lost
+
       Enter = 10,                             // mouse enters widget
       Leave = 11,                             // mouse leaves widget
       Paint = 12,                             // paint widget
@@ -80,6 +82,7 @@ class Q_CORE_EXPORT QEvent           // event base class
       ApplicationLayoutDirectionChange = 37,  // application layout direction changed
       ApplicationPaletteChange = 38,          // application palette changed
       PaletteChange = 39,                     // widget palette changed
+
       Clipboard = 40,                         // internal clipboard event
       Speech = 42,                            // reserved for speech input
       MetaCall =  43,                         // meta call event
@@ -130,6 +133,7 @@ class Q_CORE_EXPORT QEvent           // event base class
       WindowBlocked = 103,                    // window is about to be blocked modally
       WindowUnblocked = 104,                  // windows modal blocking has ended
       WindowStateChange = 105,
+      ReadOnlyChange = 106,                   // readonly state has changed
 
       ToolTip = 110,
       WhatsThis = 111,
@@ -162,6 +166,7 @@ class Q_CORE_EXPORT QEvent           // event base class
       HoverLeave = 128,                       // mouse cursor leaves a hover widget
       HoverMove = 129,                        // mouse cursor move inside a hover widget
 
+      // may not be used
       AccessibilityHelp = 119,                // accessibility help text request
       AccessibilityDescription = 130,         // accessibility description text request
 
@@ -171,6 +176,7 @@ class Q_CORE_EXPORT QEvent           // event base class
       EnterEditFocus = 150,                   // enter edit mode in keypad navigation (Defined only with QT_KEYPAD_NAVIGATION)
       LeaveEditFocus = 151,                   // leave edit mode in keypad navigation (Defined only with QT_KEYPAD_NAVIGATION)
 #endif
+
       AcceptDropsChange = 152,
 
       ZeroTimerEvent = 154,                   // Used for Windows Zero timer events
@@ -233,18 +239,19 @@ class Q_CORE_EXPORT QEvent           // event base class
 
 #ifndef QT_NO_GESTURES
       NativeGesture = 197,                    // Internal for platform gesture support
-#endif
-      RequestSoftwareInputPanel = 199,
-      CloseSoftwareInputPanel = 200,
-
-      UpdateSoftKeys = 201,                   // Internal for compressing soft key updates
-
-      WinIdChange = 203,
-#ifndef QT_NO_GESTURES
       Gesture = 198,
       GestureOverride = 202,
 #endif
 
+      RequestSoftwareInputPanel = 199,
+      CloseSoftwareInputPanel = 200,
+
+      // may not be used
+      UpdateSoftKeys = 201,                   // Internal for compressing soft key updates
+
+      WinIdChange = 203,
+
+      SockClose = 211,                        // socket closed
       PlatformPanel = 212,
 
       // 512 reserved for Qt Jambi's MetaCall event

@@ -34,9 +34,6 @@
 
 QT_BEGIN_NAMESPACE
 
-/*
- * ENDIAN FUNCTIONS
-*/
 inline void qbswap_helper(const uchar *source, uchar *dest, int size)
 {
    for (int i = 0; i < size ; ++i) {
@@ -54,6 +51,14 @@ template <typename T> inline void qbswap(const T src, uchar *dest)
 template <typename T> inline void qToUnaligned(const T src, uchar *dest)
 {
    memcpy(dest, &src, sizeof(T));
+}
+
+template <typename T> inline T qFromUnaligned(const uchar *src)
+{
+    T dest;
+    memcpy(&dest, src, sizeof(T));
+
+    return dest;
 }
 
 /* T qFromLittleEndian(const uchar *src)
@@ -283,7 +288,7 @@ inline qint16 qFromBigEndian<qint16>(const uchar *src)
 }
 #endif
 
-template <typename T> 
+template <typename T>
 T qbswap(T source);
 
 

@@ -305,8 +305,66 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
 const QSysInfo::WinVersion QSysInfo::WindowsVersion = QSysInfo::windowsVersion();
 
+
+//
+class QWindowsSockInit
+{
+   public:
+      QWindowsSockInit();
+      ~QWindowsSockInit();
+
+      int version;
+};
+
+QWindowsSockInit::QWindowsSockInit()
+   :  version(0)
+{
+   WSAData wsadata;
+
+   // IPv6 requires Winsock v2.0 or better
+   if (WSAStartup(MAKEWORD(2,0), &wsadata) != 0) {
+      qWarning("QTcpSocketAPI: WinSock v2.0 initialization failed.");
+    } else {
+       version = 0x20;
+    }
+}
+
+QWindowsSockInit::~QWindowsSockInit()
+{
+   WSACleanup();
+}
+
 #endif
 
+QString QSysInfo::machineHostName()
+{
+
+#if defined(Q_OS_LINUX)
+   // gethostname(3) on Linux just calls uname(2)
+   struct utsname u;
+
+   if (uname(&u) == 0) {
+      return QString::fromLocal8Bit(u.nodename);
+   }
+
+#else
+
+#  ifdef Q_OS_WIN
+    // QtNetwork depends on machineHostName() initializing ws2_32.dll
+    static QWindowsSockInit winSock;
+#  endif
+
+   char hostName[512];
+   if (gethostname(hostName, sizeof(hostName)) == -1) {
+      return QString();
+   }
+
+   hostName[sizeof(hostName) - 1] = '\0';
+   return QString::fromLocal8Bit(hostName);
+#endif
+
+   return QString();
+}
 
 
 /*
@@ -499,9 +557,7 @@ QtMsgHandler qInstallMsgHandler(QtMsgHandler h)
    return old;
 }
 
-/*!
-    \internal
-*/
+// internal
 void qt_message_output(QtMsgType msgType, const char *buf)
 {
    if (handler) {
@@ -679,7 +735,6 @@ void qsrand(uint seed)
    srand(seed);
 #endif
 }
-
 
 int qrand()
 {

@@ -261,8 +261,7 @@ void QSocketNotifier::setEnabled(bool enable)
 */
 bool QSocketNotifier::event(QEvent *e)
 {
-   // Emits the activated() signal when a QEvent::SockAct is
-   // received.
+   // Emits the activated() signal when a QEvent::SockAct is received.
 
    if (e->type() == QEvent::ThreadChange) {
       if (snenabled) {
@@ -272,7 +271,7 @@ bool QSocketNotifier::event(QEvent *e)
    }
 
    QObject::event(e);                        // will activate filters
-   if (e->type() == QEvent::SockAct) {
+   if ((e->type() == QEvent::SockAct) || (e->type() == QEvent::SockClose)) {
       emit activated(sockfd);
       return true;
    }

@@ -1607,6 +1607,17 @@ QString QIODevice::errorString() const
    return d->errorString;
 }
 
+int qt_subtract_from_timeout(int timeout, int elapsed)
+{
+   if (timeout == -1) {
+      return -1;
+   }
+
+   timeout = timeout - elapsed;
+
+   return timeout < 0 ? 0 : timeout;
+}
+
 QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
 {
    debug << "OpenMode(";

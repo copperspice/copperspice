@@ -487,6 +487,7 @@ struct QIntegerForSizeof : QIntegerForSize<sizeof(T)> {
 
 typedef QIntegerForSizeof<void *>::Unsigned   quintptr;
 typedef QIntegerForSizeof<void *>::Signed     qptrdiff;
+typedef qptrdiff qintptr;
 
 typedef unsigned char    uchar;
 typedef unsigned short   ushort;
@@ -871,8 +872,13 @@ class Q_CORE_EXPORT QSysInfo
       MV_EL_CAPITAN   = MV_10_11,
       MV_SIERRA       = MV_10_12
    };
+
    static const MacVersion MacintoshVersion;
+
 #endif
+
+   static QString buildCpuArchitecture();
+   static QString machineHostName();
 };
 
 Q_CORE_EXPORT const char *qVersion();
