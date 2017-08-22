@@ -321,8 +321,10 @@ void QMessageBoxPrivate::updateSize()
 #if defined(Q_WS_QWS)
    // the width of the screen, less the window border.
    int hardLimit = screenSize.width() - (q->frameGeometry().width() - q->geometry().width());
+
 #else
-   int hardLimit = qMin(screenSize.width() - 480, 1000); // can never get bigger than this
+   int hardLimit = screenSize.width() - 480;       // used to have a qMin to set to 1000
+
    // on small screens allows the messagebox be the same size as the screen
    if (screenSize.width() <= 1024) {
       hardLimit = screenSize.width();

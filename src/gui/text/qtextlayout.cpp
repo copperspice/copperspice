@@ -1257,18 +1257,33 @@ void QTextLine::layout_helper(int maxGlyphs)
             addNextCluster(lbh.currentPosition, end, lbh.tmpData, lbh.glyphCount,
                            current, lbh.logClusters, lbh.glyphs);
 
-            if (lbh.currentPosition >= eng->layoutData->string.length()
-                  || attributes[lbh.currentPosition].whiteSpace
-                  || attributes[lbh.currentPosition - 1].lineBreakType != HB_NoBreak) {
+            // This is a hack to fix a regression caused by the introduction of the
+            // whitespace flag to non-breakable spaces and will cause the non-breakable
+            // spaces to behave as in previous Qt versions in the line breaking algorithm.
+            // The line breaks do not currently follow the Unicode specs, but fixing this would
+            // require refactoring the code and would cause behavioral regressions.
+            bool isBreakableSpace = lbh.currentPosition < eng->layoutData->string.length()
+                  && attributes[lbh.currentPosition].whiteSpace
+                  && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak;
+
+            bool isNotBreak = attributes[lbh.currentPosition - 1].lineBreakType != HB_NoBreak;
+
+            if (lbh.currentPosition >= eng->layoutData->string.length() || isBreakableSpace || isNotBreak ) {
                sb_or_ws = true;
                break;
+
             } else if (breakany && attributes[lbh.currentPosition].charStop) {
                break;
             }
+
          } while (lbh.currentPosition < end);
+
          lbh.minw = qMax(lbh.tmpData.textWidth, lbh.minw);
 
-         if (lbh.currentPosition && attributes[lbh.currentPosition - 1].lineBreakType == HB_SoftHyphen) {
+         if (lbh.currentPosition > 0 && lbh.currentPosition < end
+                   && attributes[lbh.currentPosition - 1].lineBreakType == HB_SoftHyphen
+                   && eng->layoutData->string.at(lbh.currentPosition - 1).unicode() == QChar::SoftHyphen) {
+
             // if we are splitting up a word because of
             // a soft hyphen then we ...
             //
@@ -1298,13 +1313,16 @@ void QTextLine::layout_helper(int maxGlyphs)
          // for the code to be more readable. Logic borrowed from qfontmetrics.cpp.
          // We ignore the right bearing if the minimum negative bearing is too little to
          // expand the text beyond the edge.
+
          if (sb_or_ws | breakany) {
             QFixed rightBearing = lbh.rightBearing; // store previous right bearing
 
-#if !defined(Q_OS_MAC)
+#if ! defined(Q_OS_MAC)
             if (lbh.calculateNewWidth(line) - lbh.minimumRightBearing > line.width)
 #endif
+
                lbh.adjustRightBearing();
+
             if (lbh.checkFullOtherwiseExtend(line)) {
                // we are too wide, fix right bearing
                if (rightBearing <= 0) {
@@ -1326,8 +1344,10 @@ void QTextLine::layout_helper(int maxGlyphs)
          newItem = item + 1;
       }
    }
+
    LB_DEBUG("reached end of line");
    lbh.checkFullOtherwiseExtend(line);
+
 found:
    if (lbh.rightBearing > 0 && !lbh.whiteSpaceOrObject) { // If right bearing has not yet been adjusted
       lbh.adjustRightBearing();
@@ -1357,6 +1377,7 @@ found:
    if (line.textWidth > 0 && item < eng->layoutData->items.size()) {
       eng->maxWidth += lbh.spaceData.textWidth;
    }
+
    if (eng->option.flags() & QTextOption::IncludeTrailingSpaces) {
       line.textWidth += lbh.spaceData.textWidth;
    }

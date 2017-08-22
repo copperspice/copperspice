@@ -2445,6 +2445,7 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
    if (flags & Qt::TextShowMnemonic) {
       itemize();
       HB_CharAttributes *attributes = const_cast<HB_CharAttributes *>(this->attributes());
+
       if (!attributes) {
          return QString();
       }
@@ -2462,9 +2463,11 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
             if (layoutData->string.at(i) == QLatin1Char('&')) {
                const int gp = logClusters[i - si.position];
                glyphs.attributes[gp].dontPrint = true;
+
                attributes[i + 1].charStop = false;
                attributes[i + 1].whiteSpace = false;
                attributes[i + 1].lineBreakType = HB_NoBreak;
+
                if (layoutData->string.at(i + 1) == QLatin1Char('&')) {
                   ++i;
                }

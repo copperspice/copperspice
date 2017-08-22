@@ -65,78 +65,91 @@
 
 enum break_class {
     // the first 4 values have to agree with the enum in QCharAttributes
-    ProhibitedBreak,            // PB in table
-    DirectBreak,                // DB in table
-    IndirectBreak,              // IB in table
-    CombiningIndirectBreak,     // CI in table
-    CombiningProhibitedBreak    // CP in table
+    ProhibitedBreak,                      // PB in table
+    DirectBreak,                          // DB in table
+    IndirectBreak,                        // IB in table
+    CombiningIndirectBreak,               // CI in table
+    CombiningProhibitedBreak,             // CP in table
+    ProhibitedBreakAfterHebrewPlusHyphen
 };
+
 #define DB DirectBreak
 #define IB IndirectBreak
 #define CI CombiningIndirectBreak
 #define CP CombiningProhibitedBreak
 #define PB ProhibitedBreak
+#define HH ProhibitedBreakAfterHebrewPlusHyphen
 
-static const hb_uint8 breakTable[HB_LineBreak_JT+1][HB_LineBreak_JT+1] =
+static const hb_uint8 breakTable[HB_LineBreak_CB+1][HB_LineBreak_CB+1] =
 {
-/*          OP  CL  QU  GL  NS  EX  SY  IS  PR  PO  NU  AL  ID  IN  HY  BA  BB  B2  ZW  CM  WJ  H2  H3  JL  JV  JT */
-/* OP */ { PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, CP, PB, PB, PB, PB, PB, PB },
-/* CL */ { DB, PB, IB, IB, PB, PB, PB, PB, IB, IB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* QU */ { PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB },
-/* GL */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB },
-/* NS */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* EX */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* SY */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* IS */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* PR */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, DB, IB, IB, DB, DB, PB, CI, PB, IB, IB, IB, IB, IB },
-/* PO */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* NU */ { IB, PB, IB, IB, IB, IB, PB, PB, IB, IB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* AL */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* ID */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* IN */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* HY */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* BA */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* BB */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB },
-/* B2 */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, IB, IB, DB, PB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* ZW */ { DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, PB, DB, DB, DB, DB, DB, DB, DB },
-/* CM */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB },
-/* WJ */ { IB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB },
-/* H2 */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, IB, IB },
-/* H3 */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, IB },
-/* JL */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, IB, IB, IB, IB, DB },
-/* JV */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, IB, IB },
-/* JT */ { DB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, IB }
+/*         OP  CL  CP  QU  GL  NS  EX  SY  IS  PR  PO  NU  AL  HL  ID  IN  HY  BA  BB  B2  ZW  CM  WJ  H2  H3  JL  JV  JT  RI  CB */
+/* OP */ { PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, PB, CP, PB, PB, PB, PB, PB, PB, PB, PB },
+/* CL */ { DB, PB, PB, IB, IB, PB, PB, PB, PB, DB, DB, DB, DB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* CP */ { DB, PB, PB, IB, IB, PB, PB, PB, PB, DB, DB, IB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* QU */ { PB, PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB, IB, IB },
+/* GL */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB, IB, IB },
+/* NS */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* EX */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* SY */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* IS */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* PR */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, IB, IB, DB, IB, IB, DB, DB, PB, CI, PB, IB, IB, IB, IB, IB, DB, DB },
+/* PO */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, IB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* NU */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* AL */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* HL */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, IB, DB, IB, CI, CI, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* ID */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* IN */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* HY */ { HH, PB, PB, IB, HH, IB, PB, PB, PB, HH, HH, IB, HH, HH, HH, HH, IB, IB, HH, HH, PB, CI, PB, HH, HH, HH, HH, HH, HH, DB },
+/* BA */ { HH, PB, PB, IB, HH, IB, PB, PB, PB, HH, HH, HH, HH, HH, HH, HH, IB, IB, HH, HH, PB, CI, PB, HH, HH, HH, HH, HH, HH, DB },
+/* BB */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB, IB, DB },
+/* B2 */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, DB, IB, IB, DB, PB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* ZW */ { DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, PB, DB, DB, DB, DB, DB, DB, DB, DB, DB },
+/* CM */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, IB, IB, IB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB },
+/* WJ */ { IB, PB, PB, IB, IB, IB, PB, PB, PB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, IB, PB, CI, PB, IB, IB, IB, IB, IB, IB, IB },
+/* H2 */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, IB, IB, DB, DB },
+/* H3 */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, IB, DB, DB },
+/* JL */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, IB, IB, IB, IB, DB, DB, DB },
+/* JV */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, IB, IB, DB, DB },
+/* JT */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, IB, DB, DB, DB, DB, IB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, IB, DB, DB },
+/* RI */ { DB, PB, PB, IB, IB, IB, PB, PB, PB, DB, DB, DB, DB, DB, DB, DB, IB, IB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, IB, DB },
+/* CB */ { DB, PB, PB, IB, IB, DB, PB, PB, PB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, DB, PB, CI, PB, DB, DB, DB, DB, DB, DB, DB }
 };
+
 #undef DB
 #undef IB
 #undef CI
 #undef CP
 #undef PB
+#undef HH
 
 static const hb_uint8 graphemeTable[HB_Grapheme_LVT + 1][HB_Grapheme_LVT + 1] =
 {
-//      Other, CR,    LF,    Control,Extend,L,    V,     T,     LV,    LVT
-    { true , true , true , true , true , true , true , true , true , true  }, // Other, 
-    { true , true , true , true , true , true , true , true , true , true  }, // CR,
-    { true , false, true , true , true , true , true , true , true , true  }, // LF,
-    { true , true , true , true , true , true , true , true , true , true  }, // Control,
-    { false, true , true , true , false, false, false, false, false, false }, // Extend,
-    { true , true , true , true , true , false, true , true , true , true  }, // L, 
-    { true , true , true , true , true , false, false, true , false, true  }, // V, 
-    { true , true , true , true , true , true , false, false, false, false }, // T, 
-    { true , true , true , true , true , false, true , true , true , true  }, // LV, 
-    { true , true , true , true , true , false, true , true , true , true  }, // LVT
+//    Other   CR     LF  Control Extend   RI  Prepend S-Mark   L      V      T      LV    LVT
+    { true , true , true , true , false, true , true , false, true , true , true , true , true  }, // Other
+    { true , true , false, true , true , true , true , true , true , true , true , true , true  }, // CR
+    { true , true , true , true , true , true , true , true , true , true , true , true , true  }, // LF
+    { true , true , true , true , true , true , true , true , true , true , true , true , true  }, // Control
+    { true , true , true , true , false, true , true , false, true , true , true , true , true  }, // Extend
+    { true , true , true , true , false, false, true , false, true , true , true , true , true  }, // RegionalIndicator
+    { false, true , true , true , false, false, false, false, false, false, false, false, false }, // Prepend
+    { true , true , true , true , false, true , true , false, true , true , true , true , true  }, // SpacingMark
+    { true , true , true , true , false, true , true , false, false, false, true , false, false }, // L
+    { true , true , true , true , false, true , true , false, true , false, false, true , true  }, // V
+    { true , true , true , true , false, true , true , false, true , true , false, true , true  }, // T
+    { true , true , true , true , false, true , true , false, true , false, false, true , true  }, // LV
+    { true , true , true , true , false, true , true , false, true , true , false, true , true  }, // LVT
 };
-    
+
 static void calcLineBreaks(const HB_UChar16 *uc, hb_uint32 len, HB_CharAttributes *charAttributes)
 {
-    if (!len)
+    if (! len)
         return;
 
     // ##### can this fail if the first char is a surrogate?
     HB_LineBreakClass cls;
     HB_GraphemeClass grapheme;
     HB_GetGraphemeAndLineBreakClass(*uc, &grapheme, &cls);
+
     // handle case where input starts with an LF
     if (cls == HB_LineBreak_LF)
         cls = HB_LineBreak_BK;
@@ -701,19 +714,33 @@ void HB_GetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
     }
 }
 
-
-enum BreakRule { NoBreak = 0, Break = 1, Middle = 2 };
+enum BreakRule {
+    NoBreak,
+    Break,
+    Lookup,
+    LookupW
+};
 
 static const hb_uint8 wordbreakTable[HB_Word_ExtendNumLet + 1][HB_Word_ExtendNumLet + 1] = {
-//        Other    Format   Katakana ALetter  MidLetter MidNum  Numeric  ExtendNumLet
-    {   Break,   Break,   Break,   Break,   Break,   Break,   Break,   Break }, // Other
-    {   Break,   Break,   Break,   Break,   Break,   Break,   Break,   Break }, // Format 
-    {   Break,   Break, NoBreak,   Break,   Break,   Break,   Break, NoBreak }, // Katakana
-    {   Break,   Break,   Break, NoBreak,  Middle,   Break, NoBreak, NoBreak }, // ALetter
-    {   Break,   Break,   Break,   Break,   Break,   Break,   Break,   Break }, // MidLetter
-    {   Break,   Break,   Break,   Break,   Break,   Break,   Break,   Break }, // MidNum
-    {   Break,   Break,   Break, NoBreak,   Break,  Middle, NoBreak, NoBreak }, // Numeric
-    {   Break,   Break, NoBreak, NoBreak,   Break,   Break, NoBreak, NoBreak }, // ExtendNumLet
+
+//    Other      CR       LF    Newline   Extend    RI    Katakana HLetter  ALetter  SQuote   DQuote  MidNumLet MidLetter MidNum  Numeric  ExtendNumLet
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // Other
+    { Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // CR
+    { Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // LF
+    { Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // Newline
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // Extend
+    { Break  , Break  , Break  , Break  , NoBreak, NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // RegionalIndicator
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , NoBreak }, // Katakana
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , NoBreak, NoBreak, LookupW, Lookup , LookupW, LookupW, Break  , NoBreak, NoBreak }, // HebrewLetter
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , NoBreak, NoBreak, LookupW, Break  , LookupW, LookupW, Break  , NoBreak, NoBreak }, // ALetter
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // SingleQuote
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // DoubleQuote
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // MidNumLet
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // MidLetter
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break  , Break   }, // MidNum
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , Break  , NoBreak, NoBreak, Lookup , Break  , Lookup , Break  , Lookup , NoBreak, NoBreak }, // Numeric
+    { Break  , Break  , Break  , Break  , NoBreak, Break  , NoBreak, NoBreak, NoBreak, Break  , Break  , Break  , Break  , Break  , NoBreak, NoBreak }, // ExtendNumLet
+
 };
 
 void HB_GetWordBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
@@ -729,18 +756,20 @@ void HB_GetWordBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
             attributes[i].wordBoundary = false;
             continue;
         }
+
         hb_uint32 nbrk = HB_GetWordClass(string[i]);
-        if (nbrk == HB_Word_Format) {
+        if (nbrk == HB_Word_Extend) {
             attributes[i].wordBoundary = (HB_GetSentenceClass(string[i-1]) == HB_Sentence_Sep);
             continue;
         }
+
         BreakRule rule = (BreakRule)wordbreakTable[brk][nbrk];
-        if (rule == Middle) {
+        if (rule == Lookup || rule == LookupW) {
             rule = Break;
             hb_uint32 lookahead = i + 1;
             while (lookahead < stringLength) {
                 hb_uint32 testbrk = HB_GetWordClass(string[lookahead]);
-                if (testbrk == HB_Word_Format && HB_GetSentenceClass(string[lookahead]) != HB_Sentence_Sep) {
+                if (testbrk == HB_Word_Extend && HB_GetSentenceClass(string[lookahead]) != HB_Sentence_Sep) {
                     ++lookahead;
                     continue;
                 }
@@ -758,36 +787,39 @@ void HB_GetWordBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
     }
 }
 
-
 enum SentenceBreakStates {
     SB_Initial,
+    SB_Lower,
     SB_Upper,
-    SB_UpATerm, 
+    SB_LUATerm,
     SB_ATerm,
-    SB_ATermC, 
-    SB_ACS, 
-    SB_STerm, 
-    SB_STermC, 
+    SB_ATermC,
+    SB_ACS,
+    SB_STerm,
+    SB_STermC,
     SB_SCS,
-    SB_BAfter, 
+    SB_BAfterC,
+    SB_BAfter,
     SB_Break,
-    SB_Look
+    SB_Lookup
 };
 
 static const hb_uint8 sentenceBreakTable[HB_Sentence_Close + 1][HB_Sentence_Close + 1] = {
-//        Other       Sep         Format      Sp          Lower       Upper       OLetter     Numeric     ATerm       STerm       Close
-      { SB_Initial, SB_BAfter , SB_Initial, SB_Initial, SB_Initial, SB_Upper  , SB_Initial, SB_Initial, SB_ATerm  , SB_STerm  , SB_Initial }, // SB_Initial,
-      { SB_Initial, SB_BAfter , SB_Upper  , SB_Initial, SB_Initial, SB_Upper  , SB_Initial, SB_Initial, SB_UpATerm, SB_STerm  , SB_Initial }, // SB_Upper
-      
-      { SB_Look   , SB_BAfter , SB_UpATerm, SB_ACS    , SB_Initial, SB_Upper  , SB_Break  , SB_Initial, SB_ATerm  , SB_STerm  , SB_ATermC  }, // SB_UpATerm
-      { SB_Look   , SB_BAfter , SB_ATerm  , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Initial, SB_ATerm  , SB_STerm  , SB_ATermC  }, // SB_ATerm
-      { SB_Look   , SB_BAfter , SB_ATermC , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Look   , SB_ATerm  , SB_STerm  , SB_ATermC  }, // SB_ATermC,
-      { SB_Look   , SB_BAfter , SB_ACS    , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Look   , SB_ATerm  , SB_STerm  , SB_Look    }, // SB_ACS,
-      
-      { SB_Break  , SB_BAfter , SB_STerm  , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_STermC  }, // SB_STerm,
-      { SB_Break  , SB_BAfter , SB_STermC , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_STermC  }, // SB_STermC,
-      { SB_Break  , SB_BAfter , SB_SCS    , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_Break   }, // SB_SCS,
-      { SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break   }, // SB_BAfter,
+//     Other     CR       LF      Sep     Extend     Sp      Lower   Upper    OLetter  Numeric  ATerm   SContinue STerm     Close
+    { SB_Initial, SB_BAfterC, SB_BAfter , SB_BAfter , SB_Initial, SB_Initial, SB_Lower  , SB_Upper  , SB_Initial, SB_Initial, SB_ATerm  , SB_Initial, SB_STerm  , SB_Initial }, // Initial
+    { SB_Initial, SB_BAfterC, SB_BAfter , SB_BAfter , SB_Lower  , SB_Initial, SB_Initial, SB_Initial, SB_Initial, SB_Initial, SB_LUATerm, SB_Initial, SB_STerm  , SB_Initial }, // Lower
+    { SB_Initial, SB_BAfterC, SB_BAfter , SB_BAfter , SB_Upper  , SB_Initial, SB_Initial, SB_Upper  , SB_Initial, SB_Initial, SB_LUATerm, SB_STerm  , SB_STerm  , SB_Initial }, // Upper
+
+    { SB_Lookup , SB_BAfterC, SB_BAfter , SB_BAfter , SB_LUATerm, SB_ACS    , SB_Initial, SB_Upper  , SB_Break  , SB_Initial, SB_ATerm  , SB_STerm  , SB_STerm  , SB_ATermC  }, // LUATerm
+    { SB_Lookup , SB_BAfterC, SB_BAfter , SB_BAfter , SB_ATerm  , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Initial, SB_ATerm  , SB_STerm  , SB_STerm  , SB_ATermC  }, // ATerm
+    { SB_Lookup , SB_BAfterC, SB_BAfter , SB_BAfter , SB_ATermC , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Lookup , SB_ATerm  , SB_STerm  , SB_STerm  , SB_ATermC  }, // ATermC
+    { SB_Lookup , SB_BAfterC, SB_BAfter , SB_BAfter , SB_ACS    , SB_ACS    , SB_Initial, SB_Break  , SB_Break  , SB_Lookup , SB_ATerm  , SB_STerm  , SB_STerm  , SB_Lookup  }, // ACS
+
+    { SB_Break  , SB_BAfterC, SB_BAfter , SB_BAfter , SB_STerm  , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_STerm  , SB_STermC  }, // STerm,
+    { SB_Break  , SB_BAfterC, SB_BAfter , SB_BAfter , SB_STermC , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_STerm  , SB_STermC  }, // STeSB_rmC
+    { SB_Break  , SB_BAfterC, SB_BAfter , SB_BAfter , SB_SCS    , SB_SCS    , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_ATerm  , SB_STerm  , SB_STerm  , SB_Break   }, // SCS
+    { SB_Break  , SB_Break  , SB_BAfter , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break   }, // BAfterC
+    { SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break  , SB_Break   }, // BAfter
 };
 
 void HB_GetSentenceBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
@@ -804,7 +836,7 @@ void HB_GetSentenceBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
             continue;
         }
         brk = sentenceBreakTable[brk][HB_GetSentenceClass(string[i])];
-        if (brk == SB_Look) {
+        if (brk == SB_Lookup) {
             brk = SB_Break;
             hb_uint32 lookahead = i + 1;
             while (lookahead < stringLength) {

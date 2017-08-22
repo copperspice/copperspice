@@ -41,19 +41,18 @@ HB_BEGIN_HEADER
  as we don't support any EBDIC based OS'es, NL is ignored and mapped to AL as well.
 */
 typedef enum {
-    HB_LineBreak_OP, HB_LineBreak_CL, HB_LineBreak_QU, HB_LineBreak_GL, HB_LineBreak_NS,
-    HB_LineBreak_EX, HB_LineBreak_SY, HB_LineBreak_IS, HB_LineBreak_PR, HB_LineBreak_PO,
-    HB_LineBreak_NU, HB_LineBreak_AL, HB_LineBreak_ID, HB_LineBreak_IN, HB_LineBreak_HY,
-    HB_LineBreak_BA, HB_LineBreak_BB, HB_LineBreak_B2, HB_LineBreak_ZW, HB_LineBreak_CM,
-    HB_LineBreak_WJ, HB_LineBreak_H2, HB_LineBreak_H3, HB_LineBreak_JL, HB_LineBreak_JV,
-    HB_LineBreak_JT, HB_LineBreak_SA, HB_LineBreak_SG,
-    HB_LineBreak_SP, HB_LineBreak_CR, HB_LineBreak_LF, HB_LineBreak_BK
+    HB_LineBreak_OP, HB_LineBreak_CL, HB_LineBreak_CP, HB_LineBreak_QU, HB_LineBreak_GL,
+    HB_LineBreak_NS, HB_LineBreak_EX, HB_LineBreak_SY, HB_LineBreak_IS, HB_LineBreak_PR,
+    HB_LineBreak_PO, HB_LineBreak_NU, HB_LineBreak_AL, HB_LineBreak_HL, HB_LineBreak_ID,
+    HB_LineBreak_IN, HB_LineBreak_HY, HB_LineBreak_BA, HB_LineBreak_BB, HB_LineBreak_B2,
+    HB_LineBreak_ZW, HB_LineBreak_CM, HB_LineBreak_WJ, HB_LineBreak_H2, HB_LineBreak_H3,
+    HB_LineBreak_JL, HB_LineBreak_JV, HB_LineBreak_JT, HB_LineBreak_RI, HB_LineBreak_CB,
+    HB_LineBreak_SA, HB_LineBreak_SG, HB_LineBreak_SP, HB_LineBreak_CR, HB_LineBreak_LF,
+    HB_LineBreak_BK
 } HB_LineBreakClass;
 
-typedef enum 
+typedef enum
 {
-    HB_NoCategory,
-
     HB_Mark_NonSpacing,          /*   Mn */
     HB_Mark_SpacingCombining,    /*   Mc */
     HB_Mark_Enclosing,           /*   Me */
@@ -94,45 +93,57 @@ typedef enum
 
 typedef enum
 {
-    HB_Grapheme_Other, 
+    HB_Grapheme_Other,
     HB_Grapheme_CR,
     HB_Grapheme_LF,
     HB_Grapheme_Control,
     HB_Grapheme_Extend,
-    HB_Grapheme_L, 
-    HB_Grapheme_V, 
-    HB_Grapheme_T, 
-    HB_Grapheme_LV, 
+    HB_GraphemeBreak_RegionalIndicator,
+    HB_GraphemeBreak_Prepend,
+    HB_GraphemeBreak_SpacingMark,
+    HB_Grapheme_L,
+    HB_Grapheme_V,
+    HB_Grapheme_T,
+    HB_Grapheme_LV,
     HB_Grapheme_LVT
 } HB_GraphemeClass;
-
 
 typedef enum
 {
     HB_Word_Other,
-    HB_Word_Format,
+    HB_Word_CR,
+    HB_Word_LF,
+    HB_Word_NewLine,
+    HB_Word_Extend,
+    HB_Word_RegionalIndicator,
     HB_Word_Katakana,
+    HB_Word_HebrewLetter,
     HB_Word_ALetter,
+    HB_Word_SingleQuote,
+    HB_Word_DoubleQuote,
+    HB_Word_MidNumLet,
     HB_Word_MidLetter,
     HB_Word_MidNum,
     HB_Word_Numeric,
     HB_Word_ExtendNumLet
 } HB_WordClass;
 
-
 typedef enum
 {
-    HB_Sentence_Other,
-    HB_Sentence_Sep,
-    HB_Sentence_Format,
-    HB_Sentence_Sp,
-    HB_Sentence_Lower,
-    HB_Sentence_Upper,
-    HB_Sentence_OLetter,
-    HB_Sentence_Numeric,
-    HB_Sentence_ATerm,
-    HB_Sentence_STerm,
-    HB_Sentence_Close
+   HB_Sentence_Other,
+   HB_Sentence_CR,
+   HB_Sentence_LF,
+   HB_Sentence_Sep,
+   HB_Sentence_Extend,
+   HB_Sentence_Sp,
+   HB_Sentence_Lower,
+   HB_Sentence_Upper,
+   HB_Sentence_OLetter,
+   HB_Sentence_Numeric,
+   HB_Sentence_ATerm,
+   HB_Sentence_SContinue,
+   HB_Sentence_STerm,
+   HB_Sentence_Close
 } HB_SentenceClass;
 
 HB_GraphemeClass HB_GetGraphemeClass(HB_UChar32 ch);
