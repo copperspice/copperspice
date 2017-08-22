@@ -33,6 +33,12 @@ class QByteArray;
 Q_CORE_EXPORT uint cs_getHashSeed();
 Q_CORE_EXPORT uint cs_stable_hash(const QString &key);
 
+Q_CORE_EXPORT uint qHashBits(const void *p, size_t len, uint seed);
+
+Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
+Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
+
 inline uint cs_hash_internal(const QChar *p, int len, uint seed)
 {
    uint h = seed;
@@ -43,10 +49,6 @@ inline uint cs_hash_internal(const QChar *p, int len, uint seed)
 
    return h;
 }
-
-Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
 
 inline uint qHash(char key, uint seed = 0)
 {

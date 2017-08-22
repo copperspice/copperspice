@@ -136,7 +136,7 @@ class Q_CORE_EXPORT QString
    void truncate(int pos);
    void chop(int n);
 
-   int capacity() const;
+   inline int capacity() const;
    inline void reserve(int size);
    inline void squeeze();
 
@@ -150,12 +150,13 @@ class Q_CORE_EXPORT QString
    inline bool isSharedWith(const QString &other) const {
       return d == other.d;
    }
-   void clear();
+
+   inline void clear();
 
    inline const QChar at(int i) const;
-   const QChar operator[](int i) const;
+   inline const QChar operator[](int i) const;
    QCharRef operator[](int i);
-   const QChar operator[](uint i) const;
+   inline const QChar operator[](uint i) const;
    QCharRef operator[](uint i);
 
    QString arg(qlonglong a, int fieldwidth = 0, int base = 10,
@@ -252,7 +253,7 @@ class Q_CORE_EXPORT QString
    };
    using SectionFlags = QFlags<SectionFlag>;
 
-   QString section(QChar sep, int start, int end = -1, SectionFlags flags = SectionDefault) const;
+   inline QString section(QChar sep, int start, int end = -1, SectionFlags flags = SectionDefault) const;
    QString section(const QString &in_sep, int start, int end = -1, SectionFlags flags = SectionDefault) const;
 
 #ifndef QT_NO_REGEXP
@@ -604,14 +605,14 @@ class Q_CORE_EXPORT QString
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
 
-   iterator begin();
-   const_iterator begin() const;
-   const_iterator cbegin() const;
-   const_iterator constBegin() const;
-   iterator end();
-   const_iterator end() const;
-   const_iterator cend() const;
-   const_iterator constEnd() const;
+   inline iterator begin();
+   inline const_iterator begin() const;
+   inline const_iterator cbegin() const;
+   inline const_iterator constBegin() const;
+   inline iterator end();
+   inline const_iterator end() const;
+   inline const_iterator cend() const;
+   inline const_iterator constEnd() const;
 
    // STL compatibility
    typedef const QChar &const_reference;

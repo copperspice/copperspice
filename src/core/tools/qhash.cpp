@@ -63,6 +63,11 @@ static inline uint hash(const uchar *p, int len, uint seed)
    return h;
 }
 
+uint qHashBits(const void *p, size_t len, uint seed)
+{
+    return hash(static_cast<const uchar*>(p), int(len), seed);
+}
+
 uint qHash(const QByteArray &key, uint seed)
 {
    return hash(reinterpret_cast<const uchar *>(key.constData()), key.size(), seed);
