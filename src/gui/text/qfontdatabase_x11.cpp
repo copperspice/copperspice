@@ -896,121 +896,231 @@ QFontDef qt_FcPatternToQFontDef(FcPattern *pattern, const QFontDef &request)
 }
 
 static const char *specialLanguages[] = {
-   "en", // Common
-   "el", // Greek
-   "ru", // Cyrillic
-   "hy", // Armenian
-   "he", // Hebrew
-   "ar", // Arabic
-   "syr", // Syriac
-   "div", // Thaana
-   "hi", // Devanagari
-   "bn", // Bengali
-   "pa", // Gurmukhi
-   "gu", // Gujarati
-   "or", // Oriya
-   "ta", // Tamil
-   "te", // Telugu
-   "kn", // Kannada
-   "ml", // Malayalam
-   "si", // Sinhala
-   "th", // Thai
-   "lo", // Lao
-   "bo", // Tibetan
-   "my", // Myanmar
-   "ka", // Georgian
-   "ko", // Hangul
-   "", // Ogham
-   "", // Runic
-   "km", // Khmer
-   "" // N'Ko
+    "",      // Unknown
+    "",      // Inherited
+    "",      // Common
+    "en",    // Latin
+    "el",    // Greek
+    "ru",    // Cyrillic
+    "hy",    // Armenian
+    "he",    // Hebrew
+    "ar",    // Arabic
+    "syr",   // Syriac
+    "dv",    // Thaana
+    "hi",    // Devanagari
+    "bn",    // Bengali
+    "pa",    // Gurmukhi
+    "gu",    // Gujarati
+    "or",    // Oriya
+    "ta",    // Tamil
+    "te",    // Telugu
+    "kn",    // Kannada
+    "ml",    // Malayalam
+    "si",    // Sinhala
+    "th",    // Thai
+    "lo",    // Lao
+    "bo",    // Tibetan
+    "my",    // Myanmar
+    "ka",    // Georgian
+    "ko",    // Hangul
+    "am",    // Ethiopic
+    "chr",   // Cherokee
+    "cr",    // CanadianAboriginal
+    "sga",   // Ogham
+    "non",   // Runic
+    "km",    // Khmer
+    "mn",    // Mongolian
+    "ja",    // Hiragana
+    "ja",    // Katakana
+    "zh-TW", // Bopomofo
+    "",      // Han
+    "ii",    // Yi
+    "ett",   // OldItalic
+    "got",   // Gothic
+    "en",    // Deseret
+    "fil",   // Tagalog
+    "hnn",   // Hanunoo
+    "bku",   // Buhid
+    "tbw",   // Tagbanwa
+    "cop",   // Coptic
+    "lif",   // Limbu
+    "tdd",   // TaiLe
+    "grc",   // LinearB
+    "uga",   // Ugaritic
+    "en",    // Shavian
+    "so",    // Osmanya
+    "grc",   // Cypriot
+    "",      // Braille
+    "bug",   // Buginese
+    "khb",   // NewTaiLue
+    "cu",    // Glagolitic
+    "shi",   // Tifinagh
+    "syl",   // SylotiNagri
+    "peo",   // OldPersian
+    "pra",   // Kharoshthi
+    "ban",   // Balinese
+    "akk",   // Cuneiform
+    "phn",   // Phoenician
+    "lzh",   // PhagsPa
+    "man",   // Nko
+    "su",    // Sundanese
+    "lep",   // Lepcha
+    "sat",   // OlChiki
+    "vai",   // Vai
+    "saz",   // Saurashtra
+    "eky",   // KayahLi
+    "rej",   // Rejang
+    "xlc",   // Lycian
+    "xcr",   // Carian
+    "xld",   // Lydian
+    "cjm",   // Cham
+    "nod",   // TaiTham
+    "blt",   // TaiViet
+    "ae",    // Avestan
+    "egy",   // EgyptianHieroglyphs
+    "smp",   // Samaritan
+    "lis",   // Lisu
+    "bax",   // Bamum
+    "jv",    // Javanese
+    "mni",   // MeeteiMayek
+    "arc",   // ImperialAramaic
+    "xsa",   // OldSouthArabian
+    "xpr",   // InscriptionalParthian
+    "pal",   // InscriptionalPahlavi
+    "otk",   // OldTurkic
+    "bh",    // Kaithi
+    "bbc",   // Batak
+    "pra",   // Brahmi
+    "myz",   // Mandaic
+    "ccp",   // Chakma
+    "xmr",   // MeroiticCursive
+    "xmr",   // MeroiticHieroglyphs
+    "hmd",   // Miao
+    "sa",    // Sharada
+    "srb",   // SoraSompeng
+    "doi",   // Takri
+    "lez",   // CaucasianAlbanian
+    "bsq",   // BassaVah
+    "fr",    // Duployan
+    "sq",    // Elbasan
+    "sa",    // Grantha
+    "hnj",   // PahawhHmong
+    "sd",    // Khojki
+    "lab",   // LinearA
+    "hi",    // Mahajani
+    "xmn",   // Manichaean
+    "men",   // MendeKikakui
+    "mr",    // Modi
+    "mru",   // Mro
+    "xna",   // OldNorthArabian
+    "arc",   // Nabataean
+    "arc",   // Palmyrene
+    "ctd",   // PauCinHau
+    "kv",    // OldPermic
+    "pal",   // PsalterPahlavi
+    "sa",    // Siddham
+    "sd",    // Khudawadi
+    "mai",   // Tirhuta
+    "hoc",   // WarangCiti
+    "",      // Ahom
+    "",      // AnatolianHieroglyphs
+    "",      // Hatran
+    "",      // Multani
+    "",      // OldHungarian
+    ""       // SignWriting
 };
 enum { SpecialLanguageCount = sizeof(specialLanguages) / sizeof(const char *) };
 
-static const ushort specialChars[] = {
-   0, // English
-   0, // Greek
-   0, // Cyrillic
-   0, // Armenian
-   0, // Hebrew
-   0, // Arabic
-   0, // Syriac
-   0, // Thaana
-   0, // Devanagari
-   0, // Bengali
-   0, // Gurmukhi
-   0, // Gujarati
-   0, // Oriya
-   0, // Tamil
-   0xc15, // Telugu
-   0xc95, // Kannada
-   0xd15, // Malayalam
-   0xd9a, // Sinhala
-   0, // Thai
-   0, // Lao
-   0, // Tibetan
+static const ushort specialChars[] = {         // broom, missing values
+   0,      // Any
+   0,      // Latin
+   0,      // Greek
+   0,      // Cyrillic
+   0,      // Armenian
+   0,      // Hebrew
+   0,      // Arabic
+   0,      // Syriac
+   0,      // Thaana
+   0,      // Devanagari
+   0,      // Bengali
+   0,      // Gurmukhi
+   0,      // Gujarati
+   0,      // Oriya
+   0,      // Tamil
+   0xc15,  // Telugu
+   0xc95,  // Kannada
+   0xd15,  // Malayalam
+   0xd9a,  // Sinhala
+   0,      // Thai
+   0,      // Lao
+   0,      // Tibetan
    0x1000, // Myanmar
-   0, // Georgian
-   0, // Hangul
+   0,      // Georgian
+   0,      // Khmer
+   0,      // SimplifiedChinese
+   0,      // TraditionalChinese
+   0,      // Japanese
+   0,      // Korean
+   0,      // Vietnamese
+   0,      // Symbol
    0x1681, // Ogham
    0x16a0, // Runic
-   0,  // Khmer
-   0x7ca // N'Ko
+   0x7ca   // N'Ko
 };
 enum { SpecialCharCount = sizeof(specialChars) / sizeof(ushort) };
 
 // this could become a list of all languages used for each writing
 // system, instead of using the single most common language.
 static const char *languageForWritingSystem[] = {
-   0,     // Any
-   "en",  // Latin
-   "el",  // Greek
-   "ru",  // Cyrillic
-   "hy",  // Armenian
-   "he",  // Hebrew
-   "ar",  // Arabic
-   "syr", // Syriac
-   "div", // Thaana
-   "hi",  // Devanagari
-   "bn",  // Bengali
-   "pa",  // Gurmukhi
-   "gu",  // Gujarati
-   "or",  // Oriya
-   "ta",  // Tamil
-   "te",  // Telugu
-   "kn",  // Kannada
-   "ml",  // Malayalam
-   "si",  // Sinhala
-   "th",  // Thai
-   "lo",  // Lao
-   "bo",  // Tibetan
-   "my",  // Myanmar
-   "ka",  // Georgian
-   "km",  // Khmer
-   "zh-cn", // SimplifiedChinese
-   "zh-tw", // TraditionalChinese
-   "ja",  // Japanese
-   "ko",  // Korean
-   "vi",  // Vietnamese
-   0, // Symbol
-   0, // Ogham
-   0, // Runic
-   0 // N'Ko
+    0,       // Any
+    "en",    // Latin
+    "el",    // Greek
+    "ru",    // Cyrillic
+    "hy",    // Armenian
+    "he",    // Hebrew
+    "ar",    // Arabic
+    "syr",   // Syriac
+    "div",   // Thaana
+    "hi",    // Devanagari
+    "bn",    // Bengali
+    "pa",    // Gurmukhi
+    "gu",    // Gujarati
+    "or",    // Oriya
+    "ta",    // Tamil
+    "te",    // Telugu
+    "kn",    // Kannada
+    "ml",    // Malayalam
+    "si",    // Sinhala
+    "th",    // Thai
+    "lo",    // Lao
+    "bo",    // Tibetan
+    "my",    // Myanmar
+    "ka",    // Georgian
+    "km",    // Khmer
+    "zh-cn", // SimplifiedChinese
+    "zh-tw", // TraditionalChinese
+    "ja",    // Japanese
+    "ko",    // Korean
+    "vi",    // Vietnamese
+    0,       // Symbol
+    "sga",   // Ogham
+    "non",   // Runic
+    "man"    // N'Ko
 };
 enum { LanguageCount = sizeof(languageForWritingSystem) / sizeof(const char *) };
 
-// Unfortunately FontConfig doesn't know about some languages. We have to test these through the
-// charset. The lists below contain the systems where we need to do this.
+// Unfortunately FontConfig does not know about some languages. Need to test these through
+// the charset. The lists below contain the systems where we need to do this.
 static const ushort sampleCharForWritingSystem[] = {
-   0,     // Any
+   0,  // Any
    0,  // Latin
    0,  // Greek
    0,  // Cyrillic
    0,  // Armenian
    0,  // Hebrew
    0,  // Arabic
-   0, // Syriac
-   0, // Thaana
+   0,  // Syriac
+   0,  // Thaana
    0,  // Devanagari
    0,  // Bengali
    0,  // Gurmukhi
@@ -1021,21 +1131,21 @@ static const ushort sampleCharForWritingSystem[] = {
    0xc95,  // Kannada
    0xd15,  // Malayalam
    0xd9a,  // Sinhala
-   0,  // Thai
-   0,  // Lao
-   0,  // Tibetan
-   0x1000,  // Myanmar
-   0,  // Georgian
-   0,  // Khmer
-   0, // SimplifiedChinese
-   0, // TraditionalChinese
-   0,  // Japanese
-   0,  // Korean
-   0,  // Vietnamese
-   0, // Symbol
+   0,      // Thai
+   0,      // Lao
+   0,      // Tibetan
+   0x1000, // Myanmar
+   0,      // Georgian
+   0,      // Khmer
+   0,      // SimplifiedChinese
+   0,      // TraditionalChinese
+   0,      // Japanese
+   0,      // Korean
+   0,      // Vietnamese
+   0,      // Symbol
    0x1681, // Ogham
    0x16a0, // Runic
-   0x7ca // N'Ko
+   0x7ca   // N'Ko
 };
 enum { SampleCharCount = sizeof(sampleCharForWritingSystem) / sizeof(ushort) };
 
@@ -1043,62 +1153,56 @@ enum { SampleCharCount = sizeof(sampleCharForWritingSystem) / sizeof(ushort) };
 // open type tables for is directly. Do this so we don't pick some strange
 // pseudo unicode font
 static const char *openType[] = {
-   0,     // Any
-   0,  // Latin
-   0,  // Greek
-   0,  // Cyrillic
-   0,  // Armenian
-   0,  // Hebrew
-   0,  // Arabic
-   "syrc",  // Syriac
-   "thaa",  // Thaana
-   "deva",  // Devanagari
-   "beng",  // Bengali
-   "guru",  // Gurmukhi
-   "gurj",  // Gujarati
-   "orya",  // Oriya
-   "taml",  // Tamil
-   "telu",  // Telugu
-   "knda",  // Kannada
-   "mlym",  // Malayalam
-   "sinh",  // Sinhala
-   0,  // Thai
-   0,  // Lao
-   "tibt",  // Tibetan
-   "mymr",  // Myanmar
-   0,  // Georgian
-   "khmr",  // Khmer
-   0, // SimplifiedChinese
-   0, // TraditionalChinese
-   0,  // Japanese
-   0,  // Korean
-   0,  // Vietnamese
-   0, // Symbol
-   0, // Ogham
-   0, // Runic
-   "nko " // N'Ko
+    0,       // Any
+    0,       // Latin
+    0,       // Greek
+    0,       // Cyrillic
+    0,       // Armenian
+    0,       // Hebrew
+    0,       // Arabic
+    "syrc",  // Syriac
+    "thaa",  // Thaana
+    "deva",  // Devanagari
+    "beng",  // Bengali
+    "guru",  // Gurmukhi
+    "gujr",  // Gujarati
+    "orya",  // Oriya
+    "taml",  // Tamil
+    "telu",  // Telugu
+    "knda",  // Kannada
+    "mlym",  // Malayalam
+    "sinh",  // Sinhala
+    0,       // Thai
+    0,       // Lao
+    "tibt",  // Tibetan
+    "mymr",  // Myanmar
+    0,       // Georgian
+    "khmr",  // Khmer
+    0,       // SimplifiedChinese
+    0,       // TraditionalChinese
+    0,       // Japanese
+    0,       // Korean
+    0,       // Vietnamese
+    0,       // Symbol
+    0,       // Ogham
+    0,       // Runic
+    "nko "   // N'Ko
 };
 enum { OpenTypeCount = sizeof(openType) / sizeof(const char *) };
 
 
 static void loadFontConfig()
 {
-   Q_ASSERT_X(X11, "QFontDatabase",
-              "A QApplication object needs to be constructed before FontConfig is used.");
-   if (!X11->has_fontconfig) {
+   Q_ASSERT_X(X11, "QFontDatabase", "A QApplication object needs to be constructed before FontConfig is used.");
+
+   if (! X11->has_fontconfig) {
       return;
    }
 
-   Q_ASSERT_X(int(QChar::ScriptCount) == SpecialLanguageCount,
-              "QFontDatabase", "New scripts have been added.");
-   Q_ASSERT_X(int(QChar::ScriptCount) == SpecialCharCount,
-              "QFontDatabase", "New scripts have been added.");
-   Q_ASSERT_X(int(QFontDatabase::WritingSystemsCount) == LanguageCount,
-              "QFontDatabase", "New writing systems have been added.");
-   Q_ASSERT_X(int(QFontDatabase::WritingSystemsCount) == SampleCharCount,
-              "QFontDatabase", "New writing systems have been added.");
-   Q_ASSERT_X(int(QFontDatabase::WritingSystemsCount) == OpenTypeCount,
-              "QFontDatabase", "New writing systems have been added.");
+   static_assert(int(QChar::ScriptCount) == SpecialLanguageCount,            "New scripts have been added.");
+   static_assert(int(QFontDatabase::WritingSystemsCount) == LanguageCount,   "New writing systems have been added.");
+   static_assert(int(QFontDatabase::WritingSystemsCount) == SampleCharCount, "New writing systems have been added.");
+   static_assert(int(QFontDatabase::WritingSystemsCount) == OpenTypeCount,   "New writing systems have been added.");
 
    QFontDatabasePrivate *db = privateDb();
    FcFontSet  *fonts;
@@ -1106,6 +1210,7 @@ static void loadFontConfig()
    FcPattern *pattern = FcPatternCreate();
    FcDefaultSubstitute(pattern);
    FcChar8 *lang = 0;
+
    if (FcPatternGetString(pattern, FC_LANG, 0, &lang) == FcResultMatch) {
       db->systemLang = QString::fromUtf8((const char *) lang);
    }
@@ -1123,8 +1228,9 @@ static void loadFontConfig()
    FcBool scalable;
 
    {
-      FcObjectSet *os = FcObjectSetCreate();
+      FcObjectSet *os    = FcObjectSetCreate();
       FcPattern *pattern = FcPatternCreate();
+
       const char *properties [] = {
          FC_FAMILY, FC_STYLE, FC_WEIGHT, FC_SLANT,
          FC_SPACING, FC_FILE, FC_INDEX,
@@ -1135,11 +1241,13 @@ static void loadFontConfig()
 #endif
          (const char *)0
       };
+
       const char **p = properties;
       while (*p) {
          FcObjectSetAdd(os, *p);
          ++p;
       }
+
       fonts = FcFontList(0, pattern, os);
       FcObjectSetDestroy(os);
       FcPatternDestroy(pattern);
@@ -1149,14 +1257,15 @@ static void loadFontConfig()
       if (FcPatternGetString(fonts->fonts[i], FC_FAMILY, 0, &value) != FcResultMatch) {
          continue;
       }
+
       //         capitalize(value);
-      familyName = QString::fromUtf8((const char *)value);
-      slant_value = FC_SLANT_ROMAN;
-      weight_value = FC_WEIGHT_MEDIUM;
+      familyName    = QString::fromUtf8((const char *)value);
+      slant_value   = FC_SLANT_ROMAN;
+      weight_value  = FC_WEIGHT_MEDIUM;
       spacing_value = FC_PROPORTIONAL;
-      file_value = 0;
+      file_value  = 0;
       index_value = 0;
-      scalable = FcTrue;
+      scalable    = FcTrue;
 
       if (FcPatternGetInteger (fonts->fonts[i], FC_SLANT, 0, &slant_value) != FcResultMatch) {
          slant_value = FC_SLANT_ROMAN;
@@ -1286,12 +1395,14 @@ static void loadFontConfig()
       const char *rawname;
       bool fixed;
    };
+
    const FcDefaultFont defaults[] = {
       { "Serif", "serif", false },
       { "Sans Serif", "sans-serif", false },
       { "Monospace", "monospace", true },
       { 0, 0, false }
    };
+
    const FcDefaultFont *f = defaults;
    while (f->qtname) {
       QtFontFamily *family = db->family(QLatin1String(f->qtname), true);
@@ -1739,8 +1850,7 @@ static void FcFontSetRemove(FcFontSet *fs, int at)
    }
 }
 
-static QFontEngine *tryPatternLoad(FcPattern *match, int screen,
-                                   const QFontDef &request, int script)
+static QFontEngine *tryPatternLoad(FcPattern *match, int screen, const QFontDef &request, int script)
 {
 #ifdef FONT_MATCH_DEBUG
    FcChar8 *fam;
@@ -1755,18 +1865,22 @@ static QFontEngine *tryPatternLoad(FcPattern *match, int screen,
    }
 
    if (script != QChar::Script_Common) {
-      // skip font if it doesn't support the language we want
-      if (specialChars[script]) {
+      // skip font if it does not support the language we want
+
+      if (script < SpecialCharCount && specialChars[script]) {
          // need to check the charset, as the langset doesn't work for these scripts
          FcCharSet *cs;
          if (FcPatternGetCharSet(match, FC_CHARSET, 0, &cs) != FcResultMatch) {
             goto done;
          }
-         if (!FcCharSetHasChar(cs, specialChars[script])) {
+
+         if (! FcCharSetHasChar(cs, specialChars[script])) {
             goto done;
          }
+
       } else if (*specialLanguages[script] != '\0') {
          FcLangSet *langSet = 0;
+
          if (FcPatternGetLangSet(match, FC_LANG, 0, &langSet) != FcResultMatch) {
             goto done;
          }
