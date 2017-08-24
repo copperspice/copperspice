@@ -44,6 +44,10 @@
 #include <CoreServices/CoreServices.h>
 #endif
 
+#if defined(Q_OS_UNIX)
+#include <sys/utsname.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 
 const char *qVersion()
