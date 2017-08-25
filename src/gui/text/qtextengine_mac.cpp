@@ -55,11 +55,13 @@ static void heuristicSetGlyphAttributes(const QChar *uc, int length, QGlyphLayou
       while (pos < logClusters[i]) {
          ++pos;
       }
+
       // hide soft-hyphens by default
-      if ((!symbolFont && uc[i].unicode() == 0x00ad) || qIsControlChar(uc[i].unicode())) {
+      if ((! symbolFont && uc[i].unicode() == 0x00ad) || qIsControlChar(uc[i].unicode())) {
          glyphs->attributes[pos].dontPrint = true;
       }
-      const QUnicodeTables::Properties *prop = QChar::properties(uc[i].unicode());
+
+      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(uc[i].unicode());
       int cat = prop->category;
 
       // one gets an inter character justification point if the current char is not a non spacing mark.
