@@ -14,6 +14,7 @@
 #ifndef LIB_CS_INTERNAL_H
 #define LIB_CS_INTERNAL_H
 
+#include <functional>
 #include <memory>
 #include <tuple>
 
