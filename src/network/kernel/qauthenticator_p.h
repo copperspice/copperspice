@@ -80,6 +80,7 @@ class QAuthenticatorPrivate
 #ifndef QT_NO_HTTP
    void parseHttpResponse(const QHttpResponseHeader &, bool isProxy);
 #endif
+
    void parseHttpResponse(const QList<QPair<QByteArray, QByteArray> > &, bool isProxy);
    void updateCredentials();
 };

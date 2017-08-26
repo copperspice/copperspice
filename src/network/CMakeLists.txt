@@ -8,6 +8,9 @@ set(EXTRA_NETWORK_LDFLAGS)
 # these lines must come before the other includes, os x ordering issue
 if(NOT OPENSSL_FOUND)
     add_definitions(-DQT_NO_OPENSSL)
+
+   set(EXTRA_NETWORK_LIBS
+        ${EXTRA_NETWORK_LIBS} ${OPENSSL_LIBRARIES}
 else()
     include_directories(${OPENSSL_INCLUDE_DIR})
 endif()
@@ -40,7 +43,7 @@ macro_generate_misc("${NETWORK_INCLUDES}" QtNetwork)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(EXTRA_NETWORK_LIBS
-        ${EXTRA_NETWORK_LIBS} ws2_32
+        ${EXTRA_NETWORK_LIBS} ws2_32 ldnsapi crypt32
     )
 endif()
 

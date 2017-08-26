@@ -22,7 +22,8 @@
 
 #include <qhostinfo.h>
 #include <qhostinfo_p.h>
-#include <QtCore/qscopedpointer.h>
+
+#include <qscopedpointer.h>
 #include <qabstracteventdispatcher.h>
 #include <qcoreapplication.h>
 #include <qmetaobject.h>
@@ -34,8 +35,6 @@
 #ifdef Q_OS_UNIX
 #  include <unistd.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 //#define QHOSTINFO_DEBUG
 Q_GLOBAL_STATIC(QHostInfoLookupManager, theHostInfoLookupManager)
@@ -113,11 +112,6 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
    return id;
 }
 
-/*!
-    Aborts the host lookup with the ID \a id, as returned by lookupHost().
-
-    \sa lookupHost(), lookupId()
-*/
 void QHostInfo::abortHostLookup(int id)
 {
    theHostInfoLookupManager()->abortLookup(id);
@@ -158,181 +152,82 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName, QSharedPointer<QNetw
 #endif
 
 
-/*!
-    \enum QHostInfo::HostInfoError
-
-    This enum describes the various errors that can occur when trying
-    to resolve a host name.
-
-    \value NoError The lookup was successful.
-    \value HostNotFound No IP addresses were found for the host.
-    \value UnknownError An unknown error occurred.
-
-    \sa error(), setError()
-*/
-
-/*!
-    Constructs an empty host info object with lookup ID \a id.
-
-    \sa lookupId()
-*/
 QHostInfo::QHostInfo(int id)
    : d(new QHostInfoPrivate)
 {
    d->lookupId = id;
 }
 
-/*!
-    Constructs a copy of \a other.
-*/
 QHostInfo::QHostInfo(const QHostInfo &other)
    : d(new QHostInfoPrivate(*other.d.data()))
 {
 }
 
-/*!
-    Assigns the data of the \a other object to this host info object,
-    and returns a reference to it.
-*/
 QHostInfo &QHostInfo::operator=(const QHostInfo &other)
 {
    *d.data() = *other.d.data();
    return *this;
 }
 
-/*!
-    Destroys the host info object.
-*/
 QHostInfo::~QHostInfo()
 {
 }
 
-/*!
-    Returns the list of IP addresses associated with hostName(). This
-    list may be empty.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_network_kernel_qhostinfo.cpp 5
-
-    \sa hostName(), error()
-*/
 QList<QHostAddress> QHostInfo::addresses() const
 {
    return d->addrs;
 }
 
-/*!
-    Sets the list of addresses in this QHostInfo to \a addresses.
-
-    \sa addresses()
-*/
 void QHostInfo::setAddresses(const QList<QHostAddress> &addresses)
 {
    d->addrs = addresses;
 }
 
-/*!
-    Returns the name of the host whose IP addresses were looked up.
-
-    \sa localHostName()
-*/
 QString QHostInfo::hostName() const
 {
    return d->hostName;
 }
 
-/*!
-    Sets the host name of this QHostInfo to \a hostName.
 
-    \sa hostName()
-*/
 void QHostInfo::setHostName(const QString &hostName)
 {
    d->hostName = hostName;
 }
 
-/*!
-    Returns the type of error that occurred if the host name lookup
-    failed; otherwise returns NoError.
-
-    \sa setError(), errorString()
-*/
 QHostInfo::HostInfoError QHostInfo::error() const
 {
    return d->err;
 }
 
-/*!
-    Sets the error type of this QHostInfo to \a error.
-
-    \sa error(), errorString()
-*/
 void QHostInfo::setError(HostInfoError error)
 {
    d->err = error;
 }
 
-/*!
-    Returns the ID of this lookup.
-
-    \sa setLookupId(), abortHostLookup(), hostName()
-*/
 int QHostInfo::lookupId() const
 {
    return d->lookupId;
 }
 
-/*!
-    Sets the ID of this lookup to \a id.
-
-    \sa lookupId(), lookupHost()
-*/
 void QHostInfo::setLookupId(int id)
 {
    d->lookupId = id;
 }
 
-/*!
-    If the lookup failed, this function returns a human readable
-    description of the error; otherwise "Unknown error" is returned.
-
-    \sa setErrorString(), error()
-*/
 QString QHostInfo::errorString() const
 {
    return d->errorStr;
 }
 
-/*!
-    Sets the human readable description of the error that occurred to \a str
-    if the lookup failed.
-
-    \sa errorString(), setError()
-*/
 void QHostInfo::setErrorString(const QString &str)
 {
    d->errorStr = str;
 }
 
-/*!
-    \fn QString QHostInfo::localHostName()
-
-    Returns the host name of this machine.
-
-    \sa hostName()
-*/
-
-/*!
-    \fn QString QHostInfo::localDomainName()
-
-    Returns the DNS domain of this machine.
-
-    Note: DNS domains are not related to domain names found in
-    Windows networks.
-
-    \sa hostName()
-*/
+QString QHostInfo::localHostName()
+{
+   return QSysInfo::machineHostName();
+}
 
 QHostInfoRunnable::QHostInfoRunnable(QString hn, int i) : toBeLookedUp(hn), id(i)
 {
@@ -403,7 +298,7 @@ QHostInfoLookupManager::QHostInfoLookupManager() : mutex(QMutex::Recursive), was
 {
    moveToThread(QCoreApplicationPrivate::mainThread());
    connect(QCoreApplication::instance(), SIGNAL(destroyed()), this, SLOT(waitForThreadPoolDone()), Qt::DirectConnection);
-   threadPool.setMaxThreadCount(5); // do 5 DNS lookups in parallel
+   threadPool.setMaxThreadCount(20); // do 20 DNS lookups in parallel
 }
 
 QHostInfoLookupManager::~QHostInfoLookupManager()
@@ -606,6 +501,14 @@ void qt_qhostinfo_enable_cache(bool e)
    }
 }
 
+void qt_qhostinfo_cache_inject(const QString &hostname, const QHostInfo &resolution)
+{
+    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
+    if (!manager || !manager->cache.isEnabled())
+        return;
+
+    manager->cache.put(hostname, resolution);
+}
 // cache for 60 seconds
 // cache 128 items
 QHostInfoCache::QHostInfoCache() : max_age(60), enabled(true), cache(128)
@@ -633,16 +536,16 @@ QHostInfo QHostInfoCache::get(const QString &name, bool *valid)
    QMutexLocker locker(&this->mutex);
 
    *valid = false;
-   if (cache.contains(name)) {
-      QHostInfoCacheElement *element = cache.object(name);
+   QHostInfoCacheElement *element = cache.object(name);
+
+   if (element != nullptr) {
       if (element->age.elapsed() < max_age * 1000) {
          *valid = true;
       }
       return element->info;
 
       // FIXME idea:
-      // if too old but not expired, trigger a new lookup
-      // to freshen our cache
+      // if too old but not expired, trigger a new lookup to freshen our cache
    }
 
    return QHostInfo();
@@ -675,9 +578,3 @@ QAbstractHostInfoLookupManager *QAbstractHostInfoLookupManager::globalInstance()
    return theHostInfoLookupManager();
 }
 
-void QHostInfoLookupManager::waitForThreadPoolDone()
-{
-   threadPool.waitForDone();
-}
-
-QT_END_NAMESPACE

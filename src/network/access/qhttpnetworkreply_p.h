@@ -57,8 +57,6 @@ static const unsigned char gz_magic[2] = {0x1f, 0x8b}; // gzip magic header
 #include <qringbuffer_p.h>
 #include <qbytedata_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QHttpNetworkConnection;
 class QHttpNetworkConnectionChannel;
 class QHttpNetworkRequest;
@@ -157,9 +155,12 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
  private:
    Q_DECLARE_PRIVATE(QHttpNetworkReply)
 
+   friend class QHttpSocketEngine;
    friend class QHttpNetworkConnection;
    friend class QHttpNetworkConnectionPrivate;
    friend class QHttpNetworkConnectionChannel;
+   friend class QHttpProtocolHandler;
+   friend class QSpdyProtocolHandler;
 
  protected:
    QScopedPointer<QHttpNetworkReplyPrivate> d_ptr;
@@ -255,10 +256,6 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
 
    char *userProvidedDownloadBuffer;
 };
-
-QT_END_NAMESPACE
-
-//Q_DECLARE_METATYPE(QHttpNetworkReply)
 
 #endif // QT_NO_HTTP
 

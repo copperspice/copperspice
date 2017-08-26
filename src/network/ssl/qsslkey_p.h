@@ -24,40 +24,77 @@
 #define QSSLKEY_P_H
 
 #include <qsslkey.h>
+#include <qsslsocket_p.h>       // includes wincrypt.h
+
+#ifndef QT_NO_OPENSSL
 #include <openssl/rsa.h>
 #include <openssl/dsa.h>
+#endif
 
 QT_BEGIN_NAMESPACE
 
 class QSslKeyPrivate
 {
  public:
+
+   enum Cipher {
+        DesCbc,
+        DesEde3Cbc,
+        Rc2Cbc
+    };
+
    inline QSslKeyPrivate()
-      : rsa(0)
-      , dsa(0) {
-      clear();
+      : algorithm(QSsl::Opaque), opaque(0)
+   {
+      clear(false);
    }
 
    inline ~QSslKeyPrivate() {
       clear();
    }
 
+#ifndef QT_NO_OPENSSL
+    bool fromEVP_PKEY(EVP_PKEY *pkey);
+#endif
+
    void clear(bool deep = true);
 
-   void decodePem(const QByteArray &pem, const QByteArray &passPhrase,
-                  bool deepClear = true);
+   void decodeDer(const QByteArray &der, bool deepClear = true);
+   void decodePem(const QByteArray &pem, const QByteArray &passPhrase, bool deepClear = true);
+
    QByteArray pemHeader() const;
    QByteArray pemFooter() const;
-   QByteArray pemFromDer(const QByteArray &der) const;
-   QByteArray derFromPem(const QByteArray &pem) const;
+   QByteArray pemFromDer(const QByteArray &der, const QMap<QByteArray, QByteArray> &headers) const;
+   QByteArray derFromPem(const QByteArray &pem, QMap<QByteArray, QByteArray> *headers) const;
+
+   int length() const;
+   QByteArray toPem(const QByteArray &passPhrase) const;
+   Qt::HANDLE handle() const;
 
    bool isNull;
    QSsl::KeyType type;
    QSsl::KeyAlgorithm algorithm;
-   RSA *rsa;
-   DSA *dsa;
 
-   QAtomicInt ref;
+   static QByteArray decrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv);
+   static QByteArray encrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv);
+
+#ifndef QT_NO_OPENSSL
+    union {
+        EVP_PKEY *opaque;
+        RSA *rsa;
+        DSA *dsa;
+#ifndef OPENSSL_NO_EC
+        EC_KEY *ec;
+#endif
+    };
+
+#else
+    Qt::HANDLE opaque;
+    QByteArray derData;
+    int keyLength;
+#endif
+
+    QAtomicInt ref;
 
  private:
    Q_DISABLE_COPY(QSslKeyPrivate)

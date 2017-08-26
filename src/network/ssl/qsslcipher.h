@@ -23,11 +23,9 @@
 #ifndef QSSLCIPHER_H
 #define QSSLCIPHER_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtNetwork/qssl.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qscopedpointer.h>
+#include <qssl.h>
 
 #ifndef QT_NO_OPENSSL
 
@@ -36,16 +34,13 @@ class QSslCipherPrivate;
 class Q_NETWORK_EXPORT QSslCipher
 {
 
- public:
+public:
    QSslCipher();
+   explicit QSslCipher(const QString &name);
    QSslCipher(const QString &name, QSsl::SslProtocol protocol);
    QSslCipher(const QSslCipher &other);
+
    ~QSslCipher();
-   QSslCipher &operator=(const QSslCipher &other);
-   bool operator==(const QSslCipher &other) const;
-   inline bool operator!=(const QSslCipher &other) const {
-      return !operator==(other);
-   }
 
    bool isNull() const;
    QString name() const;
@@ -58,7 +53,24 @@ class Q_NETWORK_EXPORT QSslCipher
    QString protocolString() const;
    QSsl::SslProtocol protocol() const;
 
- private:
+   void swap(QSslCipher &other) {
+      qSwap(d, other.d);
+   }
+
+
+   QSslCipher &operator=(QSslCipher &&other) {
+      swap(other);
+      return *this;
+   }
+
+   QSslCipher &operator=(const QSslCipher &other);
+   bool operator==(const QSslCipher &other) const;
+
+   inline bool operator!=(const QSslCipher &other) const {
+      return !operator==(other);
+   }
+
+private:
    QScopedPointer<QSslCipherPrivate> d;
    friend class QSslSocketBackendPrivate;
 };
@@ -67,8 +79,6 @@ class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCipher &cipher);
 
 #endif // QT_NO_OPENSSL
-
-QT_END_NAMESPACE
 
 #endif
 

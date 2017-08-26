@@ -186,8 +186,8 @@ class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
 
    bool wasDeleted;
 
- private :
-   NET_CS_SLOT_1(Private, void waitForThreadPoolDone())
+ private:
+   NET_CS_SLOT_1(Private, void waitForThreadPoolDone() { threadPool.waitForDone(); }  )
    NET_CS_SLOT_2(waitForThreadPoolDone)
 };
 

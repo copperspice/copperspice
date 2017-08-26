@@ -23,9 +23,9 @@
 #ifndef QTCPSERVER_H
 #define QTCPSERVER_H
 
-#include <QtCore/qobject.h>
-#include <QtNetwork/qabstractsocket.h>
-#include <QtNetwork/qhostaddress.h>
+#include <qobject.h>
+#include <qabstractsocket.h>
+#include <qhostaddress.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -56,8 +56,8 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    quint16 serverPort() const;
    QHostAddress serverAddress() const;
 
-   int socketDescriptor() const;
-   bool setSocketDescriptor(int socketDescriptor);
+   qintptr socketDescriptor() const;
+   bool setSocketDescriptor(qintptr socketDescriptor);
 
    bool waitForNewConnection(int msec = 0, bool *timedOut = 0);
    virtual bool hasPendingConnections() const;
@@ -66,8 +66,14 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    QAbstractSocket::SocketError serverError() const;
    QString errorString() const;
 
+   void pauseAccepting();
+   void resumeAccepting();
+
    NET_CS_SIGNAL_1(Public, void newConnection())
    NET_CS_SIGNAL_2(newConnection)
+
+   NET_CS_SIGNAL_1(Public, void acceptError(QAbstractSocket::SocketError socketError))
+   NET_CS_SIGNAL_2(acceptError, socketError)
 
 #ifndef QT_NO_NETWORKPROXY
    void setProxy(const QNetworkProxy &networkProxy);
@@ -75,7 +81,9 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
 #endif
 
  protected:
-   virtual void incomingConnection(int handle);
+   QTcpServer(QTcpServerPrivate &dd, QObject *parent = nullptr);
+
+   virtual void incomingConnection(qintptr handle);
    void addPendingConnection(QTcpSocket *socket);
 
    QScopedPointer<QTcpServerPrivate> d_ptr;

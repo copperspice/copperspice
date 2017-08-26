@@ -1210,8 +1210,6 @@ bool QHttpResponseHeader::parseLine(const QString &line, int number)
    return true;
 }
 
-/*! \reimp
-*/
 QString QHttpResponseHeader::toString() const
 {
    Q_D(const QHttpResponseHeader);
@@ -1422,8 +1420,6 @@ bool QHttpRequestHeader::parseLine(const QString &line, int number)
    return false;
 }
 
-/*! \reimp
-*/
 QString QHttpRequestHeader::toString() const
 {
    Q_D(const QHttpRequestHeader);

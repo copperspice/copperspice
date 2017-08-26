@@ -22,41 +22,40 @@
 
 //#define QHOSTINFO_DEBUG
 
-#include <qplatformdefs.h>
-#include <qhostinfo_p.h>
-#include <qnativesocketengine_p.h>
-#include <qiodevice.h>
-#include <qbytearray.h>
-#include <qlibrary.h>
-#include <qurl.h>
-#include <qfile.h>
-#include <qmutexpool_p.h>
-#include <qnet_unix_p.h>
-
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <resolv.h>
 #include <stdlib.h>
 
-#if defined (QT_NO_GETADDRINFO)
-#include <qmutex.h>
-QT_BEGIN_NAMESPACE
-Q_GLOBAL_STATIC(QMutex, getHostByNameMutex)
-QT_END_NAMESPACE
+#include <qhostinfo_p.h>
+#include <qbytearray.h>
+#include <qfile.h>
+#include <qiodevice.h>
+#include <qlibrary.h>
+#include <qmutexpool_p.h>
+#include <qnativesocketengine_p.h>
+#include <qnet_unix_p.h>
+#include <qplatformdefs.h>
+#include <qurl.h>
+
+#if defined(__GNU_LIBRARY__) && !defined(__UCLIBC__)
+#  include <gnu/lib-names.h>
 #endif
 
-QT_BEGIN_NAMESPACE
+#if defined (QT_NO_GETADDRINFO)
+   static QMutex getHostByNameMutex;
+#endif
+
+// #define QHOSTINFO_DEBUG
 
 // Almost always the same. If not, specify in qplatformdefs.h.
-#if !defined(QT_SOCKOPTLEN_T)
+#if ! defined(QT_SOCKOPTLEN_T)
 # define QT_SOCKOPTLEN_T QT_SOCKLEN_T
 #endif
 
-// HP-UXi has a bug in getaddrinfo(3) that makes it thread-unsafe
-// with this flag. So disable it in that platform.
-#if defined(AI_ADDRCONFIG) && !defined(Q_OS_HPUX)
-#  define Q_ADDRCONFIG  AI_ADDRCONFIG
+#if defined(AI_ADDRCONFIG)
+# define Q_ADDRCONFIG AI_ADDRCONFIG
 #endif
 
 typedef struct __res_state *res_state_ptr;
@@ -73,6 +72,7 @@ static void resolveLibrary()
 {
    QLibrary lib(QLatin1String("resolv"));
    lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+
    if (!lib.load()) {
       return;
    }
@@ -99,7 +99,6 @@ static void resolveLibrary()
          local_res_ninit = 0;
       }
    }
-
 }
 
 QHostInfo QHostInfoAgent::fromName(const QString &hostName)
@@ -107,17 +106,18 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    QHostInfo results;
 
 #if defined(QHOSTINFO_DEBUG)
-   qDebug("QHostInfoAgent::fromName(%s) looking up...",
-          hostName.toLatin1().constData());
+   qDebug("QHostInfoAgent::fromName(%s) looking up...", hostName.toLatin1().constData());
 #endif
 
    // Load res_init on demand.
-   static volatile bool triedResolve = false;
-   if (!triedResolve) {
+   static std::atomic<bool> triedResolve(false);
+
+   if (! triedResolve.load()) {
       QMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_init));
-      if (!triedResolve) {
+
+      if (! triedResolve.load()) {
          resolveLibrary();
-         triedResolve = true;
+         triedResolve.store(true);
       }
    }
 
@@ -131,7 +131,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       // Reverse lookup
 
       // Reverse lookups using getnameinfo are broken on darwin, use gethostbyaddr instead.
-#if !defined (QT_NO_GETADDRINFO) && !defined (Q_OS_DARWIN)
+#if ! defined (QT_NO_GETADDRINFO) && !defined (Q_OS_DARWIN)
       sockaddr_in sa4;
       sockaddr_in6 sa6;
       sockaddr *sa = 0;
@@ -206,6 +206,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    if (result == 0) {
       addrinfo *node = res;
       QList<QHostAddress> addresses;
+
       while (node) {
 #ifdef QHOSTINFO_DEBUG
          qDebug() << "getaddrinfo node: flags:" << node->ai_flags << "family:" << node->ai_family << "ai_socktype:" <<
@@ -226,7 +227,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
             if (sa6->sin6_scope_id) {
                addr.setScopeId(QString::number(sa6->sin6_scope_id));
             }
-            if (!addresses.contains(addr)) {
+            if (! addresses.contains(addr)) {
                addresses.append(addr);
             }
          }
@@ -243,15 +244,18 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
       results.setAddresses(addresses);
       freeaddrinfo(res);
-   } else if (result == EAI_NONAME
-              || result ==  EAI_FAIL
+
+   } else if (result == EAI_NONAME || result ==  EAI_FAIL) {
+
 #ifdef EAI_NODATA
               // EAI_NODATA is deprecated in RFC 3493
-              || result == EAI_NODATA
+              || result == EAI_NODATA ) {
 #endif
-             ) {
+
+
       results.setError(QHostInfo::HostNotFound);
       results.setErrorString(tr("Host not found"));
+
    } else {
       results.setError(QHostInfo::UnknownError);
       results.setErrorString(QString::fromLocal8Bit(gai_strerror(result)));
@@ -261,9 +265,9 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    // Fall back to gethostbyname for platforms that don't define
    // getaddrinfo. gethostbyname does not support IPv6, and it's not
    // reentrant on all platforms. For now this is okay since we only
-   // use one QHostInfoAgent, but if more agents are introduced, locking
-   // must be provided.
-   QMutexLocker locker(::getHostByNameMutex());
+   // use one QHostInfoAgent, but if more agents are introduced, locking must be provided.
+   QMutexLocker locker(&getHostByNameMutex);
+
    hostent *result = gethostbyname(aceHostname.constData());
    if (result) {
       if (result->h_addrtype == AF_INET) {
@@ -313,25 +317,17 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    return results;
 }
 
-QString QHostInfo::localHostName()
-{
-   char hostName[512];
-   if (gethostname(hostName, sizeof(hostName)) == -1) {
-      return QString();
-   }
-   hostName[sizeof(hostName) - 1] = '\0';
-   return QString::fromLocal8Bit(hostName);
-}
-
 QString QHostInfo::localDomainName()
 {
    resolveLibrary();
+
    if (local_res_ninit) {
       // using thread-safe version
       res_state_ptr state = res_state_ptr(malloc(sizeof(*state)));
       Q_CHECK_PTR(state);
       memset(state, 0, sizeof(*state));
       local_res_ninit(state);
+
       QString domainName = QUrl::fromAce(state->defdname);
       if (domainName.isEmpty()) {
          domainName = QUrl::fromAce(state->dnsrch[0]);
@@ -348,7 +344,7 @@ QString QHostInfo::localDomainName()
 #if defined(QT_NO_GETADDRINFO)
       // We have to call res_init to be sure that _res was initialized
       // So, for systems without getaddrinfo (which is thread-safe), we lock the mutex too
-      QMutexLocker locker(::getHostByNameMutex());
+      QMutexLocker locker(&getHostByNameMutex);
 #endif
       local_res_init();
       QString domainName = QUrl::fromAce(local_res->defdname);
@@ -365,7 +361,7 @@ QString QHostInfo::localDomainName()
 #else
    resolvconf.setFileName(QLatin1String("/etc/resolv.conf"));
 #endif
-   if (!resolvconf.open(QIODevice::ReadOnly)) {
+   if (! resolvconf.open(QIODevice::ReadOnly)) {
       return QString();   // failure
    }
 
@@ -390,5 +386,3 @@ QString QHostInfo::localDomainName()
    // return the fallen-back-to searched domain
    return domainName;
 }
-
-QT_END_NAMESPACE

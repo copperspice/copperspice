@@ -21,10 +21,11 @@
 ***********************************************************************/
 
 //#define QNATIVESOCKETENGINE_DEBUG
+#include <qnativesocketengine_p.h>
+
 #include <qabstracteventdispatcher.h>
 #include <qsocketnotifier.h>
 #include <qnetworkinterface.h>
-#include <qnativesocketengine_p.h>
 #include <qthread_p.h>
 
 #if !defined(QT_NO_NETWORKPROXY)
@@ -66,6 +67,14 @@ QT_BEGIN_NAMESPACE
                  " not in "#state1" or "#state2); \
         return (returnValue); \
     } } while (0)
+
+#define Q_CHECK_STATES3(function, state1, state2, state3, returnValue) do { \
+    if (d->socketState != (state1) && d->socketState != (state2) && d->socketState != (state3)) { \
+        qWarning(""#function" was called" \
+                 " not in "#state1" or "#state2); \
+        return (returnValue); \
+    } } while (0)
+
 #define Q_CHECK_TYPE(function, type, returnValue) do { \
     if (d->socketType != (type)) { \
         qWarning(#function" was called by a" \
@@ -74,19 +83,17 @@ QT_BEGIN_NAMESPACE
     } } while (0)
 #define Q_TR(a) QT_TRANSLATE_NOOP(QNativeSocketEngine, a)
 
-/*! \internal
-    Constructs the private class and initializes all data members.
 
-    On Windows, WSAStartup is called "recursively" for every
-    concurrent QNativeSocketEngine. This is safe, because WSAStartup and
-    WSACleanup are reference counted.
-*/
 QNativeSocketEnginePrivate::QNativeSocketEnginePrivate() :
    socketDescriptor(-1),
    readNotifier(0),
    writeNotifier(0),
    exceptNotifier(0)
 {
+
+#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
+    QSysInfo::machineHostName();        // this initializes ws2_32.dll
+#endif
 }
 
 /*! \internal
@@ -197,15 +204,48 @@ void QNativeSocketEnginePrivate::setError(QAbstractSocket::SocketError error, Er
       case InvalidProxyTypeString:
          socketErrorString = QNativeSocketEngine::tr("The proxy type is invalid for this operation");
          break;
+      case TemporaryErrorString:
+        socketErrorString = QNativeSocketEngine::tr("Temporary error");
+        break;
+      case NetworkDroppedConnectionErrorString:
+        socketErrorString = QNativeSocketEngine::tr("Network dropped connection on reset");
+        break;
+      case ConnectionResetErrorString:
+        socketErrorString = QNativeSocketEngine::tr("Connection reset by peer");
+        break;
       case UnknownSocketErrorString:
          socketErrorString = QNativeSocketEngine::tr("Unknown error");
          break;
    }
 }
 
+QHostAddress QNativeSocketEnginePrivate::adjustAddressProtocol(const QHostAddress &address) const
+{
+    QAbstractSocket::NetworkLayerProtocol targetProtocol = socketProtocol;
+    if (Q_LIKELY(targetProtocol == QAbstractSocket::UnknownNetworkLayerProtocol))
+        return address;
+
+    QAbstractSocket::NetworkLayerProtocol sourceProtocol = address.protocol();
+
+    if (targetProtocol == QAbstractSocket::AnyIPProtocol)
+        targetProtocol = QAbstractSocket::IPv6Protocol;
+    if (targetProtocol == QAbstractSocket::IPv6Protocol && sourceProtocol == QAbstractSocket::IPv4Protocol) {
+        // convert to IPv6 v4-mapped address. This always works
+        return QHostAddress(address.toIPv6Address());
+    }
+
+    if (targetProtocol == QAbstractSocket::IPv4Protocol && sourceProtocol == QAbstractSocket::IPv6Protocol) {
+        // convert to IPv4 if the source is a v4-mapped address
+        quint32 ip4 = address.toIPv4Address();
+        if (ip4)
+            return QHostAddress(ip4);
+    }
+
+    return address;
+}
 bool QNativeSocketEnginePrivate::checkProxy(const QHostAddress &address)
 {
-   if (address == QHostAddress::LocalHost || address == QHostAddress::LocalHostIPv6) {
+   if (address.isLoopback()) {
       return true;
    }
 
@@ -280,38 +320,41 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType,
       QString typeStr = QLatin1String("UnknownSocketType");
       if (socketType == QAbstractSocket::TcpSocket) {
          typeStr = QLatin1String("TcpSocket");
+
       } else if (socketType == QAbstractSocket::UdpSocket) {
          typeStr = QLatin1String("UdpSocket");
       }
+
       QString protocolStr = QLatin1String("UnknownProtocol");
       if (protocol == QAbstractSocket::IPv4Protocol) {
          protocolStr = QLatin1String("IPv4Protocol");
+
       } else if (protocol == QAbstractSocket::IPv6Protocol) {
          protocolStr = QLatin1String("IPv6Protocol");
       }
+
       qDebug("QNativeSocketEngine::initialize(type == %s, protocol == %s) failed: %s",
              typeStr.toLatin1().constData(), protocolStr.toLatin1().constData(), d->socketErrorString.toLatin1().constData());
 #endif
       return false;
    }
 
-   // Make the socket nonblocking.
-   if (!setOption(NonBlockingSocketOption, 1)) {
-      d->setError(QAbstractSocket::UnsupportedSocketOperationError,
-                  QNativeSocketEnginePrivate::NonBlockingInitFailedErrorString);
-      close();
-      return false;
-   }
+   if (socketType == QAbstractSocket::UdpSocket) {
 
-   // Set the broadcasting flag if it's a UDP socket.
-   if (socketType == QAbstractSocket::UdpSocket
-         && !setOption(BroadcastSocketOption, 1)) {
-      d->setError(QAbstractSocket::UnsupportedSocketOperationError,
+      // Set the broadcasting flag if it's a UDP socket.
+      if (!setOption(BroadcastSocketOption, 1)) {
+         d->setError(QAbstractSocket::UnsupportedSocketOperationError,
                   QNativeSocketEnginePrivate::BroadcastingInitFailedErrorString);
-      close();
-      return false;
-   }
+         close();
+         return false;
+       }
 
+
+
+        // Set some extra flags that are interesting to us, but accept failure
+        setOption(ReceivePacketInformation, 1);
+        setOption(ReceiveHopLimit, 1);
+    }
 
    // Make sure we receive out-of-band data
    if (socketType == QAbstractSocket::TcpSocket
@@ -333,8 +376,6 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType,
    // setReceiveBufferSize(49152);
    // setSendBufferSize(49152);
 
-   d->socketType = socketType;
-   d->socketProtocol = protocol;
    return true;
 }
 
@@ -348,7 +389,7 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType,
     If the socket type is either TCP or UDP, it is made non-blocking.
     UDP sockets are also broadcast enabled.
  */
-bool QNativeSocketEngine::initialize(int socketDescriptor, QAbstractSocket::SocketState socketState)
+bool QNativeSocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::SocketState socketState)
 {
    Q_D(QNativeSocketEngine);
 
@@ -406,7 +447,7 @@ bool QNativeSocketEngine::isValid() const
     Returns the native socket descriptor. Any use of this descriptor
     stands the risk of being non-portable.
 */
-int QNativeSocketEngine::socketDescriptor() const
+qintptr QNativeSocketEngine::socketDescriptor() const
 {
    Q_D(const QNativeSocketEngine);
    return d->socketDescriptor;
@@ -443,12 +484,12 @@ bool QNativeSocketEngine::connectToHost(const QHostAddress &address, quint16 por
       return false;
    }
 
-   Q_CHECK_STATES(QNativeSocketEngine::connectToHost(),
-                  QAbstractSocket::UnconnectedState, QAbstractSocket::ConnectingState, false);
+   Q_CHECK_STATES3(QNativeSocketEngine::connectToHost(), QAbstractSocket::BoundState,
+                   QAbstractSocket::UnconnectedState, QAbstractSocket::ConnectingState, false);
 
    d->peerAddress = address;
    d->peerPort = port;
-   bool connected = d->nativeConnect(address, port);
+   bool connected = d->nativeConnect(d->adjustAddressProtocol(address), port);
    if (connected) {
       d->fetchConnectionParameters();
    }
@@ -510,7 +551,7 @@ bool QNativeSocketEngine::bind(const QHostAddress &address, quint16 port)
 
    Q_CHECK_STATE(QNativeSocketEngine::bind(), QAbstractSocket::UnconnectedState, false);
 
-   if (!d->nativeBind(address, port)) {
+    if (!d->nativeBind(d->adjustAddressProtocol(address), port)) {
       return false;
    }
 
@@ -558,12 +599,21 @@ int QNativeSocketEngine::accept()
 {
    Q_D(QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::accept(), -1);
-   Q_CHECK_STATE(QNativeSocketEngine::accept(), QAbstractSocket::ListeningState, false);
-   Q_CHECK_TYPE(QNativeSocketEngine::accept(), QAbstractSocket::TcpSocket, false);
+   Q_CHECK_STATE(QNativeSocketEngine::accept(), QAbstractSocket::ListeningState, -1);
+   Q_CHECK_TYPE(QNativeSocketEngine::accept(), QAbstractSocket::TcpSocket, -1);
 
    return d->nativeAccept();
 }
 
+qint64 QNativeSocketEngine::bytesAvailable() const
+{
+    Q_D(const QNativeSocketEngine);
+    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::bytesAvailable(), -1);
+    Q_CHECK_NOT_STATE(QNativeSocketEngine::bytesAvailable(), QAbstractSocket::UnconnectedState, -1);
+
+    return d->nativeBytesAvailable();
+}
+#ifndef QT_NO_UDPSOCKET
 #ifndef QT_NO_NETWORKINTERFACE
 
 /*!
@@ -576,6 +626,17 @@ bool QNativeSocketEngine::joinMulticastGroup(const QHostAddress &groupAddress,
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::joinMulticastGroup(), false);
    Q_CHECK_STATE(QNativeSocketEngine::joinMulticastGroup(), QAbstractSocket::BoundState, false);
    Q_CHECK_TYPE(QNativeSocketEngine::joinMulticastGroup(), QAbstractSocket::UdpSocket, false);
+    // if the user binds a socket to an IPv6 address (or QHostAddress::Any) and
+    // then attempts to join an IPv4 multicast group, this won't work on
+    // Windows. In order to make this cross-platform, we warn & fail on all
+    // platforms.
+    if (groupAddress.protocol() == QAbstractSocket::IPv4Protocol &&
+        (d->socketProtocol == QAbstractSocket::IPv6Protocol ||
+         d->socketProtocol == QAbstractSocket::AnyIPProtocol)) {
+        qWarning("QAbstractSocket: cannot bind to QHostAddress::Any (or an IPv6 address) and join an IPv4 multicast group;"
+                 " bind to QHostAddress::AnyIPv4 instead if you want to do this");
+        return false;
+    }
    return d->nativeJoinMulticastGroup(groupAddress, iface);
 }
 
@@ -612,28 +673,7 @@ bool QNativeSocketEngine::setMulticastInterface(const QNetworkInterface &iface)
 
 #endif // QT_NO_NETWORKINTERFACE
 
-/*!
-    Returns the number of bytes that are currently available for
-    reading. On error, -1 is returned.
 
-    For UDP sockets, this function returns the accumulated size of all
-    pending datagrams, and it is therefore more useful for UDP sockets
-    to call hasPendingDatagrams() and pendingDatagramSize().
-*/
-qint64 QNativeSocketEngine::bytesAvailable() const
-{
-   Q_D(const QNativeSocketEngine);
-   Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::bytesAvailable(), -1);
-   Q_CHECK_NOT_STATE(QNativeSocketEngine::bytesAvailable(), QAbstractSocket::UnconnectedState, false);
-
-   return d->nativeBytesAvailable();
-}
-
-/*!
-    Returns true if there is at least one datagram pending. This
-    function is only called by UDP sockets, where a datagram can have
-    a size of 0. TCP sockets call bytesAvailable().
-*/
 bool QNativeSocketEngine::hasPendingDatagrams() const
 {
    Q_D(const QNativeSocketEngine);
@@ -654,62 +694,32 @@ qint64 QNativeSocketEngine::pendingDatagramSize() const
 {
    Q_D(const QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::pendingDatagramSize(), -1);
-   Q_CHECK_TYPE(QNativeSocketEngine::pendingDatagramSize(), QAbstractSocket::UdpSocket, false);
+   Q_CHECK_TYPE(QNativeSocketEngine::pendingDatagramSize(), QAbstractSocket::UdpSocket, -1);
 
    return d->nativePendingDatagramSize();
 }
 
-/*!
-    Reads up to \a maxSize bytes of a datagram from the socket,
-    stores it in \a data and returns the number of bytes read. The
-    address and port of the sender are stored in \a address and \a
-    port. If either of these pointers is 0, the corresponding value is
-    discarded.
 
-    To avoid unnecessarily loss of data, call pendingDatagramSize() to
-    determine the size of the pending message before reading it. If \a
-    maxSize is too small, the rest of the datagram will be lost.
-
-    Returns -1 if an error occurred.
-
-    \sa hasPendingDatagrams()
-*/
-qint64 QNativeSocketEngine::readDatagram(char *data, qint64 maxSize, QHostAddress *address,
-      quint16 *port)
+qint64 QNativeSocketEngine::readDatagram(char *data, qint64 maxSize, QIpPacketHeader *header,
+                                         PacketHeaderOptions options)
 {
    Q_D(QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::readDatagram(), -1);
    Q_CHECK_TYPE(QNativeSocketEngine::readDatagram(), QAbstractSocket::UdpSocket, false);
 
-   return d->nativeReceiveDatagram(data, maxSize, address, port);
+ return d->nativeReceiveDatagram(data, maxSize, header, options);
 }
 
-/*!
-    Writes a UDP datagram of size \a size bytes to the socket from
-    \a data to the address \a host on port \a port, and returns the
-    number of bytes written, or -1 if an error occurred.
 
-    Only one datagram is sent, and if there is too much data to fit
-    into a single datagram, the operation will fail and error()
-    will return QAbstractSocket::DatagramTooLargeError. Operating systems impose an
-    upper limit to the size of a datagram, but this size is different
-    on almost all platforms. Sending large datagrams is in general
-    disadvised, as even if they are sent successfully, they are likely
-    to be fragmented before arriving at their destination.
-
-    Experience has shown that it is in general safe to send datagrams
-    no larger than 512 bytes.
-
-    \sa readDatagram()
-*/
-qint64 QNativeSocketEngine::writeDatagram(const char *data, qint64 size,
-      const QHostAddress &host, quint16 port)
+qint64 QNativeSocketEngine::writeDatagram(const char *data, qint64 size, const QIpPacketHeader &header)
 {
    Q_D(QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::writeDatagram(), -1);
    Q_CHECK_TYPE(QNativeSocketEngine::writeDatagram(), QAbstractSocket::UdpSocket, -1);
-   return d->nativeSendDatagram(data, size, host, port);
+
+   return d->nativeSendDatagram(data, size, header);
 }
+#endif // QT_NO_UDPSOCKET
 
 /*!
     Writes a block of \a size bytes from \a data to the socket.
@@ -769,9 +779,11 @@ void QNativeSocketEngine::close()
    if (d->readNotifier) {
       d->readNotifier->setEnabled(false);
    }
+
    if (d->writeNotifier) {
       d->writeNotifier->setEnabled(false);
    }
+
    if (d->exceptNotifier) {
       d->exceptNotifier->setEnabled(false);
    }
@@ -797,6 +809,7 @@ void QNativeSocketEngine::close()
       delete d->writeNotifier;
       d->writeNotifier = 0;
    }
+
    if (d->exceptNotifier) {
       delete d->exceptNotifier;
       d->exceptNotifier = 0;
@@ -909,7 +922,8 @@ bool QNativeSocketEngine::waitForWrite(int msecs, bool *timedOut)
                   QNativeSocketEnginePrivate::TimeOutErrorString);
       d->hasSetSocketError = false; // A timeout error is temporary in waitFor functions
       return false;
-   } else if (state() == QAbstractSocket::ConnectingState) {
+
+   } else if (state() == QAbstractSocket::ConnectingState || (state() == QAbstractSocket::BoundState && d->socketDescriptor != -1)) {
       connectToHost(d->peerAddress, d->peerPort);
    }
 
@@ -1064,7 +1078,7 @@ bool QNativeSocketEngine::isReadNotificationEnabled() const
 class QReadNotifier : public QSocketNotifier
 {
  public:
-   QReadNotifier(int fd, QNativeSocketEngine *parent)
+   QReadNotifier(qintptr fd, QNativeSocketEngine *parent)
       : QSocketNotifier(fd, QSocketNotifier::Read, parent) {
       engine = parent;
    }
@@ -1080,6 +1094,9 @@ bool QReadNotifier::event(QEvent *e)
    if (e->type() == QEvent::SockAct) {
       engine->readNotification();
       return true;
+   } else if (e->type() == QEvent::SockClose) {
+        engine->closeNotification();
+        return true;
    }
    return QSocketNotifier::event(e);
 }

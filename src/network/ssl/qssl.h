@@ -26,8 +26,6 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/QFlags>
 
-QT_BEGIN_NAMESPACE
-
 namespace QSsl {
 enum KeyType {
    PrivateKey,
@@ -40,11 +38,13 @@ enum EncodingFormat {
 };
 
 enum KeyAlgorithm {
+   Opaque,
    Rsa,
-   Dsa
+   Dsa,
+   Ec
 };
 
-enum AlternateNameEntryType {
+enum AlternativeNameEntryType {
    EmailEntry,
    DnsEntry
 };
@@ -52,9 +52,14 @@ enum AlternateNameEntryType {
 enum SslProtocol {
    SslV3,
    SslV2,
-   TlsV1, // ### Qt5/rename to TlsV1_0 or so
-   AnyProtocol,
+   TlsV1_0,
+   TlsV1_1,
+   TlsV1_2,
    TlsV1SslV3,
+   TlsV1_0_OrLater,
+   TlsV1_1_OrLater,
+   TlsV1_2_OrLater,
+   AnyProtocol,
    SecureProtocols,
    UnknownProtocol = -1
 };
@@ -64,13 +69,15 @@ enum SslOption {
    SslOptionDisableSessionTickets = 0x02,
    SslOptionDisableCompression = 0x04,
    SslOptionDisableServerNameIndication = 0x08,
-   SslOptionDisableLegacyRenegotiation = 0x10
+   SslOptionDisableLegacyRenegotiation = 0x10,
+   SslOptionDisableSessionSharing = 0x20,
+   SslOptionDisableSessionPersistence = 0x40,
+   SslOptionDisableServerCipherPreference = 0x80
 };
 using SslOptions = QFlags<SslOption>;
+
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSsl::SslOptions)
 
-QT_END_NAMESPACE
-
-#endif // QSSL_H
+#endif

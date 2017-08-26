@@ -19,6 +19,7 @@ NETWORK_SOCKET_INCLUDES = \
 NETWORK_SOCKET_PRIVATE_INCLUDES = \
 	qabstractsocket_p.h \
 	qabstractsocketengine_p.h \
+	qtcpserver_p.h \
 	qhttpsocketengine_p.h \
 	qlocalserver_p.h \
 	qlocalsocket_p.h \

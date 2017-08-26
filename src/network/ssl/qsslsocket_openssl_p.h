@@ -51,22 +51,17 @@
 #include <openssl/dsa.h>
 #include <openssl/rsa.h>
 #include <openssl/crypto.h>
-
-#if OPENSSL_VERSION_NUMBER >= 0x0090806fL && ! defined(OPENSSL_NO_TLSEXT)
 #include <openssl/tls1.h>
-#endif
 
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 typedef _STACK STACK;
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QSslSocketBackendPrivate : public QSslSocketPrivate
 {
    Q_DECLARE_PUBLIC(QSslSocket)
 
- public:
+public:
    QSslSocketBackendPrivate();
    virtual ~QSslSocketBackendPrivate();
 
@@ -74,30 +69,67 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
    bool initSslContext();
    void destroySslContext();
    SSL *ssl;
-   SSL_CTX *ctx;
-   EVP_PKEY *pkey;
+
    BIO *readBio;
    BIO *writeBio;
    SSL_SESSION *session;
-   X509_STORE *certificateStore;
-   X509_STORE_CTX *certificateStoreCtx;
+
    QList<QPair<int, int> > errorList;
 
-   // Platform specific functions
-   void startClientEncryption();
-   void startServerEncryption();
-   void transmit();
-   bool startHandshake();
-   void disconnectFromHost();
-   void disconnected();
-   QSslCipher sessionCipher() const;
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L
+    static int s_indexForSSLExtraData; // index used in SSL_get_ex_data to get the matching QSslSocketBackendPrivate
+#endif
 
+   // Platform specific functions
+   void startClientEncryption() override;
+   void startServerEncryption() override;
+   void transmit() override;
+   bool startHandshake();
+   void disconnectFromHost() override;
+   void disconnected() override;
+
+   QSslCipher sessionCipher() const override;
+   QSsl::SslProtocol sessionProtocol() const override;
+   void continueHandshake() override;
+   bool checkSslErrors();
+   void storePeerCertificates();
+   unsigned int tlsPskClientCallback(const char *hint, char *identity, unsigned int max_identity_len,
+                  unsigned char *psk, unsigned int max_psk_len);
+
+#ifdef Q_OS_WIN
+    void fetchCaRootForCert(const QSslCertificate &cert);
+    void _q_caRootLoaded(QSslCertificate,QSslCertificate);
+#endif
+
+   static long setupOpenSslOptions(QSsl::SslProtocol protocol, QSsl::SslOptions sslOptions);
    static QSslCipher QSslCipher_from_SSL_CIPHER(SSL_CIPHER *cipher);
    static QList<QSslCertificate> STACKOFX509_to_QSslCertificates(STACK_OF(X509) *x509);
-   static bool isMatchingHostname(const QString &cn, const QString &hostname);
+   static QList<QSslError> verify(const QList<QSslCertificate> &certificateChain, const QString &hostName);
    static QString getErrorsFromOpenSsl();
+   static bool importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *cert,
+                  QList<QSslCertificate> *caCertificates, const QByteArray &passPhrase);
 };
 
-QT_END_NAMESPACE
+#ifdef Q_OS_WIN
+class QWindowsCaRootFetcher : public QObject
+{
+    CS_OBJECT(QWindowsCaRootFetcher);
+
+ public:
+   QWindowsCaRootFetcher(const QSslCertificate &certificate, QSslSocket::SslMode sslMode);
+   ~QWindowsCaRootFetcher();
+
+   NET_CS_SIGNAL_1(Public, void finished(QSslCertificate brokenChain, QSslCertificate caroot))
+   NET_CS_SIGNAL_2(finished, brokenChain, caroot)
+
+   NET_CS_SLOT_1(Public, void start())
+   NET_CS_SLOT_2(start)
+
+ private:
+    QSslCertificate cert;
+    QSslSocket::SslMode mode;
+};
+#endif
+
 
 #endif

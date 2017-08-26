@@ -22,15 +22,13 @@
 
 #include <qsslerror.h>
 #include <qsslsocket.h>
-#include <QtCore/qdebug.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdebug.h>
 
 class QSslErrorPrivate
 {
- public:
-   QSslError::SslError error;
-   QSslCertificate certificate;
+   public:
+      QSslError::SslError error;
+      QSslCertificate certificate;
 };
 
 // RVCT compiler in debug build does not like about default values in const-
@@ -42,11 +40,6 @@ QSslError::QSslError()
    d->certificate = QSslCertificate();
 }
 
-/*!
-    Constructs a QSslError object. The argument specifies the \a
-    error that occurred.
-
-*/
 QSslError::QSslError(SslError error)
    : d(new QSslErrorPrivate)
 {
@@ -54,12 +47,6 @@ QSslError::QSslError(SslError error)
    d->certificate = QSslCertificate();
 }
 
-/*!
-    Constructs a QSslError object. The two arguments specify the \a
-    error that occurred, and which \a certificate the error relates to.
-
-    \sa QSslCertificate
-*/
 QSslError::QSslError(SslError error, const QSslCertificate &certificate)
    : d(new QSslErrorPrivate)
 {
@@ -67,18 +54,12 @@ QSslError::QSslError(SslError error, const QSslCertificate &certificate)
    d->certificate = certificate;
 }
 
-/*!
-    Constructs an identical copy of \a other.
-*/
 QSslError::QSslError(const QSslError &other)
    : d(new QSslErrorPrivate)
 {
    *d.data() = *other.d.data();
 }
 
-/*!
-    Destroys the QSslError object.
-*/
 QSslError::~QSslError()
 {
 }
@@ -91,8 +72,7 @@ QSslError &QSslError::operator=(const QSslError &other)
 
 bool QSslError::operator==(const QSslError &other) const
 {
-   return d->error == other.d->error
-          && d->certificate == other.d->certificate;
+   return d->error == other.d->error && d->certificate == other.d->certificate;
 }
 
 QSslError::SslError QSslError::error() const
@@ -100,11 +80,6 @@ QSslError::SslError QSslError::error() const
    return d->error;
 }
 
-/*!
-    Returns a short localized human-readable description of the error.
-
-    \sa error(), certificate()
-*/
 QString QSslError::errorString() const
 {
    QString errStr;
@@ -163,7 +138,7 @@ QString QSslError::errorString() const
       case CertificateRejected:
          errStr = QSslSocket::tr("The root CA certificate is marked to reject the specified purpose");
          break;
-      case SubjectIssuerMismatch: // hostname mismatch
+      case SubjectIssuerMismatch:    // hostname mismatch
          errStr = QSslSocket::tr("The current candidate issuer certificate was rejected because its"
                                  " subject name did not match the issuer name of the current certificate");
          break;
@@ -192,15 +167,18 @@ QString QSslError::errorString() const
    return errStr;
 }
 
-/*!
-    Returns the certificate associated with this error, or a null certificate
-    if the error does not relate to any certificate.
-
-    \sa error(), errorString()
-*/
 QSslCertificate QSslError::certificate() const
 {
    return d->certificate;
+}
+
+uint qHash(const QSslError &key, uint seed)
+{
+   // 2x boost::hash_combine inlined:
+   seed ^= qHash(key.error())       + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+   seed ^= qHash(key.certificate()) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+
+   return seed;
 }
 
 QDebug operator<<(QDebug debug, const QSslError &error)
@@ -214,6 +192,3 @@ QDebug operator<<(QDebug debug, const QSslError::SslError &error)
    debug << QSslError(error).errorString();
    return debug;
 }
-
-
-QT_END_NAMESPACE

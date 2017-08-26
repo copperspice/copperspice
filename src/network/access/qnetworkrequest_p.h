@@ -30,8 +30,6 @@
 #include <QtCore/qshareddata.h>
 #include <QtCore/qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 // this is the common part between QNetworkRequestPrivate, QNetworkReplyPrivate and QHttpPartPrivate
 class QNetworkHeadersPrivate
 {
@@ -60,10 +58,5 @@ class QNetworkHeadersPrivate
    void setRawHeaderInternal(const QByteArray &key, const QByteArray &value);
    void parseAndSetHeader(const QByteArray &key, const QByteArray &value);
 };
-
-Q_DECLARE_TYPEINFO(QNetworkHeadersPrivate::RawHeaderPair, Q_MOVABLE_TYPE);
-
-QT_END_NAMESPACE
-
 
 #endif

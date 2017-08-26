@@ -25,14 +25,12 @@
 
 #include <qsslcipher.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSslCipherPrivate
 {
- public:
+public:
    QSslCipherPrivate()
       : isNull(true), supportedBits(0), bits(0),
-        exportable(false), protocol(QSsl::UnknownProtocol) {
+      exportable(false), protocol(QSsl::UnknownProtocol) {
    }
 
    bool isNull;
@@ -46,7 +44,5 @@ class QSslCipherPrivate
    QString protocolString;
    QSsl::SslProtocol protocol;
 };
-
-QT_END_NAMESPACE
 
 #endif

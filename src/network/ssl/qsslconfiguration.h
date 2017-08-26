@@ -23,38 +23,58 @@
 #ifndef QSSLCONFIGURATION_H
 #define QSSLCONFIGURATION_H
 
-#include <QtCore/qshareddata.h>
-#include <QtNetwork/qsslsocket.h>
-#include <QtNetwork/qssl.h>
+#include <qshareddata.h>
+#include <qsslsocket.h>
+#include <qssl.h>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_OPENSSL
 
-template<typename T> class QList;
+template<typename T>
+class QList;
+
 class QSslCertificate;
 class QSslCipher;
 class QSslKey;
+class QSslEllipticCurve;
+
 class QSslConfigurationPrivate;
 
 class Q_NETWORK_EXPORT QSslConfiguration
 {
+public:
+   enum NextProtocolNegotiationStatus {
+      NextProtocolNegotiationNone,
+      NextProtocolNegotiationNegotiated,
+      NextProtocolNegotiationUnsupported
+   };
 
- public:
    QSslConfiguration();
    QSslConfiguration(const QSslConfiguration &other);
    ~QSslConfiguration();
+
    QSslConfiguration &operator=(const QSslConfiguration &other);
 
+   QSslConfiguration &operator=(QSslConfiguration &&other) {
+      swap(other);
+      return *this;
+   }
+
    bool operator==(const QSslConfiguration &other) const;
-   inline bool operator!=(const QSslConfiguration &other) const {
+
+   bool operator!=(const QSslConfiguration &other) const {
       return !(*this == other);
    }
 
-   bool isNull() const; // ### Qt5/remove; who would need this?
+   bool isNull() const;
 
    QSsl::SslProtocol protocol() const;
    void setProtocol(QSsl::SslProtocol protocol);
+
+   void swap(QSslConfiguration &other) {
+      qSwap(d, other.d);
+   }
 
    // Verification
    QSslSocket::PeerVerifyMode peerVerifyMode() const;
@@ -64,12 +84,16 @@ class Q_NETWORK_EXPORT QSslConfiguration
    void setPeerVerifyDepth(int depth);
 
    // Certificate & cipher configuration
+   QList<QSslCertificate> localCertificateChain() const;
+   void setLocalCertificateChain(const QList<QSslCertificate> &localChain);
+
    QSslCertificate localCertificate() const;
    void setLocalCertificate(const QSslCertificate &certificate);
 
    QSslCertificate peerCertificate() const;
    QList<QSslCertificate> peerCertificateChain() const;
    QSslCipher sessionCipher() const;
+   QSsl::SslProtocol sessionProtocol() const;
 
    // Private keys, for server sockets
    QSslKey privateKey() const;
@@ -78,20 +102,44 @@ class Q_NETWORK_EXPORT QSslConfiguration
    // Cipher settings
    QList<QSslCipher> ciphers() const;
    void setCiphers(const QList<QSslCipher> &ciphers);
+   static QList<QSslCipher> supportedCiphers();
 
    // Certificate Authority (CA) settings
    QList<QSslCertificate> caCertificates() const;
    void setCaCertificates(const QList<QSslCertificate> &certificates);
+   static QList<QSslCertificate> systemCaCertificates();
 
    void setSslOption(QSsl::SslOption option, bool on);
    bool testSslOption(QSsl::SslOption option) const;
 
+   QByteArray sessionTicket() const;
+   void setSessionTicket(const QByteArray &sessionTicket);
+   int sessionTicketLifeTimeHint() const;
+
+   // EC settings
+   QVector<QSslEllipticCurve> ellipticCurves() const;
+   void setEllipticCurves(const QVector<QSslEllipticCurve> &curves);
+   static QVector<QSslEllipticCurve> supportedEllipticCurves();
+
    static QSslConfiguration defaultConfiguration();
    static void setDefaultConfiguration(const QSslConfiguration &configuration);
 
- private:
+   void setAllowedNextProtocols(const QList<QByteArray> &protocols);
+
+   QList<QByteArray> allowedNextProtocols() const;
+
+   QByteArray nextNegotiatedProtocol() const;
+   NextProtocolNegotiationStatus nextProtocolNegotiationStatus() const;
+
+   static const char NextProtocolSpdy3_0[];
+   static const char NextProtocolHttp1_1[];
+
+private:
    friend class QSslSocket;
    friend class QSslConfigurationPrivate;
+   friend class QSslSocketBackendPrivate;
+   friend class QSslContext;
+
    QSslConfiguration(QSslConfigurationPrivate *dd);
    QSharedDataPointer<QSslConfigurationPrivate> d;
 };
@@ -103,7 +151,5 @@ class Q_NETWORK_EXPORT QSslConfiguration
 };
 
 #endif  // QT_NO_OPENSSL
-
-QT_END_NAMESPACE
 
 #endif

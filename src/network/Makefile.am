@@ -11,12 +11,15 @@ lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtC
 lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsNetwork@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
 
-if !SSL
+if SSL
+lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += $(SSL_CFLAGS)
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += $(SSL_LIBS)
+else
 lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
 endif
 
 if OSTYPE_WIN
-lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32 -ldnsapi -lcrypt32
 endif
 
 if OSTYPE_DARWIN

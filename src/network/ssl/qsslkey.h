@@ -34,6 +34,7 @@ QT_BEGIN_NAMESPACE
 
 template <typename A, typename B> struct QPair;
 
+class QDebug;
 class QIODevice;
 class QSslKeyPrivate;
 
@@ -42,14 +43,22 @@ class Q_NETWORK_EXPORT QSslKey
 
  public:
    QSslKey();
-   QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem, 
+   QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem,
            QSsl::KeyType type = QSsl::PrivateKey, const QByteArray &passPhrase = QByteArray());
 
    QSslKey(QIODevice *device, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem,
            QSsl::KeyType type = QSsl::PrivateKey, const QByteArray &passPhrase = QByteArray());
 
+   explicit QSslKey(Qt::HANDLE handle, QSsl::KeyType type = QSsl::PrivateKey);
    QSslKey(const QSslKey &other);
+
    ~QSslKey();
+
+   QSslKey &operator=(QSslKey &&other) {
+      swap(other);
+      return *this;
+   }
+
    QSslKey &operator=(const QSslKey &other);
 
    bool isNull() const;
@@ -64,6 +73,10 @@ class Q_NETWORK_EXPORT QSslKey
 
    Qt::HANDLE handle() const;
 
+   void swap(QSslKey &other) {
+      qSwap(d, other.d);
+   }
+
    bool operator==(const QSslKey &key) const;
    inline bool operator!=(const QSslKey &key) const {
       return !operator==(key);
@@ -72,9 +85,9 @@ class Q_NETWORK_EXPORT QSslKey
  private:
    QExplicitlySharedDataPointer<QSslKeyPrivate> d;
    friend class QSslCertificate;
+   friend class QSslSocketBackendPrivate;
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslKey &key);
 
 #endif // QT_NO_OPENSSL

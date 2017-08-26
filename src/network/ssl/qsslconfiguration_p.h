@@ -28,28 +28,34 @@
 #include <qsslcertificate.h>
 #include <qsslcipher.h>
 #include <qsslkey.h>
+#include <qsslellipticcurve.h>
 
 QT_BEGIN_NAMESPACE
 
-class QSslConfigurationPrivate: public QSharedData
+class QSslConfigurationPrivate : public QSharedData
 {
- public:
+public:
    QSslConfigurationPrivate()
-      : protocol(QSsl::SecureProtocols),
-        peerVerifyMode(QSslSocket::AutoVerifyPeer),
-        peerVerifyDepth(0),
-        allowRootCertOnDemandLoading(true),
-        sslOptions(QSsl::SslOptionDisableEmptyFragments
-                   | QSsl::SslOptionDisableLegacyRenegotiation
-                   | QSsl::SslOptionDisableCompression) {
+      : sessionProtocol(QSsl::UnknownProtocol),
+      protocol(QSsl::SecureProtocols),
+      peerVerifyMode(QSslSocket::AutoVerifyPeer),
+      peerVerifyDepth(0),
+      allowRootCertOnDemandLoading(true),
+      peerSessionShared(false),
+      sslOptions(QSslConfigurationPrivate::defaultSslOptions),
+      sslSessionTicketLifeTimeHint(-1),
+      nextProtocolNegotiationStatus(QSslConfiguration::NextProtocolNegotiationNone)
+   {
    }
 
    QSslCertificate peerCertificate;
    QList<QSslCertificate> peerCertificateChain;
-   QSslCertificate localCertificate;
+
+   QList<QSslCertificate> localCertificateChain;
 
    QSslKey privateKey;
    QSslCipher sessionCipher;
+   QSsl::SslProtocol sessionProtocol;
    QList<QSslCipher> ciphers;
    QList<QSslCertificate> caCertificates;
 
@@ -57,8 +63,21 @@ class QSslConfigurationPrivate: public QSharedData
    QSslSocket::PeerVerifyMode peerVerifyMode;
    int peerVerifyDepth;
    bool allowRootCertOnDemandLoading;
+   bool peerSessionShared;
+
+   static bool peerSessionWasShared(const QSslConfiguration &configuration);
 
    QSsl::SslOptions sslOptions;
+   static const QSsl::SslOptions defaultSslOptions;
+
+   QVector<QSslEllipticCurve> ellipticCurves;
+
+   QByteArray sslSession;
+   int sslSessionTicketLifeTimeHint;
+
+   QList<QByteArray> nextAllowedProtocols;
+   QByteArray nextNegotiatedProtocol;
+   QSslConfiguration::NextProtocolNegotiationStatus nextProtocolNegotiationStatus;
 
    // in qsslsocket.cpp:
    static QSslConfiguration defaultConfiguration();

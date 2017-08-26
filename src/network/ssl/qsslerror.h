@@ -26,22 +26,13 @@
 #include <QtCore/qvariant.h>
 #include <QtNetwork/qsslcertificate.h>
 
-QT_BEGIN_NAMESPACE
-
-#ifdef QT_NO_OPENSSL
-
-class Q_NETWORK_EXPORT QSslError
-{
-};
-
-
-#else
+#ifndef QT_NO_OPENSSL
 
 class QSslErrorPrivate;
 
 class Q_NETWORK_EXPORT QSslError
 {
- public:
+public:
    enum SslError {
       NoError,
       UnableToGetIssuerCertificate,
@@ -76,30 +67,47 @@ class Q_NETWORK_EXPORT QSslError
    QSslError();
    QSslError(SslError error);
    QSslError(SslError error, const QSslCertificate &certificate);
-
    QSslError(const QSslError &other);
 
    ~QSslError();
+
+   SslError error() const;
+   QString errorString() const;
+
+   QSslCertificate certificate() const;
+
+   void swap(QSslError &other)  {
+      qSwap(d, other.d);
+   }
+
    QSslError &operator=(const QSslError &other);
    bool operator==(const QSslError &other) const;
+
    inline bool operator!=(const QSslError &other) const {
       return !(*this == other);
    }
 
-   SslError error() const;
-   QString errorString() const;
-   QSslCertificate certificate() const;
+   QSslError &operator=(QSslError &&other)  {
+      swap(other);
+      return *this;
+   }
 
- private:
+private:
    QScopedPointer<QSslErrorPrivate> d;
 };
+
+Q_NETWORK_EXPORT uint qHash(const QSslError &key, uint seed = 0);
 
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError &error);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError::SslError &error);
 
-#endif // QT_NO_OPENSSL
+#else
 
-QT_END_NAMESPACE
+class Q_NETWORK_EXPORT QSslError
+{
+};
+
+#endif // QT_NO_OPENSSL
 
 #endif

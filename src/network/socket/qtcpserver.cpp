@@ -22,71 +22,28 @@
 
 //#define QTCPSERVER_DEBUG
 
+#include <qtcpserver.h>
+#include <qtcpserver_p.h>
+
 #include <qalgorithms.h>
 #include <qhostaddress.h>
 #include <qlist.h>
 #include <qpointer.h>
 #include <qabstractsocketengine_p.h>
-#include <qtcpserver.h>
 #include <qtcpsocket.h>
 #include <qnetworkproxy.h>
-
-QT_BEGIN_NAMESPACE
 
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \
     if (!d->socketEngine) { \
         return returnValue; \
     } } while (0)
 
-class QTcpServerPrivate : public QAbstractSocketEngineReceiver
-{
-   Q_DECLARE_PUBLIC(QTcpServer)
-
- public:
-   QTcpServerPrivate();
-   virtual ~QTcpServerPrivate();
-
-   QList<QTcpSocket *> pendingConnections;
-
-   quint16 port;
-   QHostAddress address;
-
-   QAbstractSocket::SocketState state;
-   QAbstractSocketEngine *socketEngine;
-
-   QAbstractSocket::SocketError serverSocketError;
-   QString serverSocketErrorString;
-
-   int maxConnections;
-
-#ifndef QT_NO_NETWORKPROXY
-   QNetworkProxy proxy;
-   QNetworkProxy resolveProxy(const QHostAddress &address, quint16 port);
-#endif
-
-   // from QAbstractSocketEngineReceiver
-   void readNotification() override;
-   void writeNotification() override {}
-   void exceptionNotification() override {}
-   void connectionNotification() override {}
-
-#ifndef QT_NO_NETWORKPROXY
-   void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) override {}
-#endif
-
- protected:
-   QTcpServer *q_ptr;
-
-};
 
 /*! \internal
 */
 QTcpServerPrivate::QTcpServerPrivate()
-   : port(0)
-   , state(QAbstractSocket::UnconnectedState)
-   , socketEngine(0)
-   , serverSocketError(QAbstractSocket::UnknownSocketError)
-   , maxConnections(30)
+   : port(0), state(QAbstractSocket::UnconnectedState), socketEngine(0)
+   , serverSocketError(QAbstractSocket::UnknownSocketError), maxConnections(30)
 {
 }
 
@@ -103,8 +60,7 @@ QTcpServerPrivate::~QTcpServerPrivate()
 */
 QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint16 port)
 {
-   if (address == QHostAddress::LocalHost ||
-         address == QHostAddress::LocalHostIPv6) {
+   if (address.isLoopback()) {
       return QNetworkProxy::NoProxy;
    }
 
@@ -119,7 +75,7 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
    }
 
    // return the first that we can use
-   for (const QNetworkProxy & p : proxies) {
+   for (const QNetworkProxy &p : proxies) {
       if (p.capabilities() & QNetworkProxy::ListeningCapability) {
          return p;
       }
@@ -131,12 +87,30 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
 }
 #endif
 
-/*! \internal
-*/
+// internal
+void QTcpServerPrivate::configureCreatedSocket()
+{
+#if defined(Q_OS_UNIX)
+    // Under Unix, we want to be able to bind to the port, even if a socket on
+    // the same address-port is in TIME_WAIT. Under Windows this is possible
+    // anyway -- furthermore, the meaning of reusable on Windows is different:
+    // it means that you can use the same address-port for multiple listening
+    // sockets.
+
+    // Don't abort though if we can't set that option. For example the socks
+    // engine doesn't support that option, but that shouldn't prevent us from
+    // trying to bind/listen.
+
+    socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
+#endif
+}
+
+// internal
 void QTcpServerPrivate::readNotification()
 {
    Q_Q(QTcpServer);
-   for (;;) {
+
+  for (;;) {
       if (pendingConnections.count() >= maxConnections) {
 #if defined (QTCPSERVER_DEBUG)
          qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
@@ -149,6 +123,12 @@ void QTcpServerPrivate::readNotification()
 
       int descriptor = socketEngine->accept();
       if (descriptor == -1) {
+            if (socketEngine->error() != QAbstractSocket::TemporaryError) {
+                q->pauseAccepting();
+                serverSocketError = socketEngine->error();
+                serverSocketErrorString = socketEngine->errorString();
+                emit q->acceptError(serverSocketError);
+            }
          break;
       }
 #if defined (QTCPSERVER_DEBUG)
@@ -158,49 +138,40 @@ void QTcpServerPrivate::readNotification()
 
       QPointer<QTcpServer> that = q;
       emit q->newConnection();
-      if (!that || !q->isListening()) {
+
+      if (! that || ! q->isListening()) {
          return;
       }
    }
 }
 
-/*!
-    Constructs a QTcpServer object.
-
-    \a parent is passed to the QObject constructor.
-
-    \sa listen(), setSocketDescriptor()
-*/
 QTcpServer::QTcpServer(QObject *parent)
    : QObject(parent), d_ptr(new QTcpServerPrivate)
 {
    d_ptr->q_ptr = this;
+
+#if defined(QTCPSERVER_DEBUG)
+    qDebug("QTcpServer::QTcpServer(%p)", parent);
+#endif
+
 }
 
-/*!
-    Destroys the QTcpServer object. If the server is listening for
-    connections, the socket is automatically closed.
+// internal
+QTcpServer::QTcpServer(QTcpServerPrivate &dd, QObject *parent)
+    : QObject(parent), d_ptr(&dd)
+{
+   d_ptr->q_ptr = this;
 
-    Any client \l{QTcpSocket}s that are still connected must either
-    disconnect or be reparented before the server is deleted.
+#if defined(QTCPSERVER_DEBUG)
+    qDebug("QTcpServer::QTcpServer(QTcpServerPrivate == %p, parent == %p)", &dd, parent);
+#endif
+}
 
-    \sa close()
-*/
 QTcpServer::~QTcpServer()
 {
    close();
 }
 
-/*!
-    Tells the server to listen for incoming connections on address \a
-    address and port \a port. If \a port is 0, a port is chosen
-    automatically. If \a address is QHostAddress::Any, the server
-    will listen on all network interfaces.
-
-    Returns true on success; otherwise returns false.
-
-    \sa isListening()
-*/
 bool QTcpServer::listen(const QHostAddress &address, quint16 port)
 {
    Q_D(QTcpServer);
@@ -210,11 +181,12 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
    }
 
    QAbstractSocket::NetworkLayerProtocol proto = address.protocol();
+   QHostAddress addr = address;
 
 #ifdef QT_NO_NETWORKPROXY
    static const QNetworkProxy &proxy = *(QNetworkProxy *)0;
 #else
-   QNetworkProxy proxy = d->resolveProxy(address, port);
+   QNetworkProxy proxy = d->resolveProxy(addr, port);
 #endif
 
    delete d->socketEngine;
@@ -224,29 +196,26 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
       d->serverSocketErrorString = tr("Operation on socket is not supported");
       return false;
    }
+
 #ifndef QT_NO_BEARERMANAGEMENT
    //copy network session down to the socket engine (if it has been set)
    d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
 #endif
+
    if (!d->socketEngine->initialize(QAbstractSocket::TcpSocket, proto)) {
       d->serverSocketError = d->socketEngine->error();
       d->serverSocketErrorString = d->socketEngine->errorString();
       return false;
    }
 
-#if defined(Q_OS_UNIX)
-   // Under Unix, we want to be able to bind to the port, even if a socket on
-   // the same address-port is in TIME_WAIT. Under Windows this is possible
-   // anyway -- furthermore, the meaning of reusable on Windows is different:
-   // it means that you can use the same address-port for multiple listening
-   // sockets.
-   // Don't abort though if we can't set that option. For example the socks
-   // engine doesn't support that option, but that shouldn't prevent us from
-   // trying to bind/listen.
-   d->socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
-#endif
+   proto = d->socketEngine->protocol();
+   if (addr.protocol() == QAbstractSocket::AnyIPProtocol && proto == QAbstractSocket::IPv4Protocol) {
+        addr = QHostAddress::AnyIPv4;
+   }
 
-   if (!d->socketEngine->bind(address, port)) {
+   d->configureCreatedSocket();
+
+   if (! d->socketEngine->bind(addr, port)) {
       d->serverSocketError = d->socketEngine->error();
       d->serverSocketErrorString = d->socketEngine->errorString();
       return false;
@@ -272,12 +241,7 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
    return true;
 }
 
-/*!
-    Returns true if the server is currently listening for incoming
-    connections; otherwise returns false.
 
-    \sa listen()
-*/
 bool QTcpServer::isListening() const
 {
    Q_D(const QTcpServer);
@@ -312,32 +276,16 @@ void QTcpServer::close()
    d->state = QAbstractSocket::UnconnectedState;
 }
 
-/*!
-    Returns the native socket descriptor the server uses to listen
-    for incoming instructions, or -1 if the server is not listening.
 
-    If the server is using QNetworkProxy, the returned descriptor may
-    not be usable with native socket functions.
-
-    \sa setSocketDescriptor(), isListening()
-*/
-int QTcpServer::socketDescriptor() const
+qintptr QTcpServer::socketDescriptor() const
 {
    Q_D(const QTcpServer);
    Q_CHECK_SOCKETENGINE(-1);
    return d->socketEngine->socketDescriptor();
 }
 
-/*!
-    Sets the socket descriptor this server should use when listening
-    for incoming connections to \a socketDescriptor. Returns true if
-    the socket is set successfully; otherwise returns false.
 
-    The socket is assumed to be in listening state.
-
-    \sa socketDescriptor(), isListening()
-*/
-bool QTcpServer::setSocketDescriptor(int socketDescriptor)
+bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
 {
    Q_D(QTcpServer);
    if (isListening()) {
@@ -348,23 +296,28 @@ bool QTcpServer::setSocketDescriptor(int socketDescriptor)
    if (d->socketEngine) {
       delete d->socketEngine;
    }
+
    d->socketEngine = QAbstractSocketEngine::createSocketEngine(socketDescriptor, this);
    if (!d->socketEngine) {
       d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
       d->serverSocketErrorString = tr("Operation on socket is not supported");
       return false;
    }
+
 #ifndef QT_NO_BEARERMANAGEMENT
    //copy network session down to the socket engine (if it has been set)
    d->socketEngine->setProperty("_q_networksession", property("_q_networksession"));
 #endif
+
    if (!d->socketEngine->initialize(socketDescriptor, QAbstractSocket::ListeningState)) {
       d->serverSocketError = d->socketEngine->error();
       d->serverSocketErrorString = d->socketEngine->errorString();
+
 #if defined (QTCPSERVER_DEBUG)
       qDebug("QTcpServer::setSocketDescriptor(%i) failed (%s)", socketDescriptor,
              d->serverSocketErrorString.toLatin1().constData());
 #endif
+
       return false;
    }
 
@@ -407,25 +360,7 @@ QHostAddress QTcpServer::serverAddress() const
    return d->socketEngine->localAddress();
 }
 
-/*!
-    Waits for at most \a msec milliseconds or until an incoming
-    connection is available. Returns true if a connection is
-    available; otherwise returns false. If the operation timed out
-    and \a timedOut is not 0, *\a timedOut will be set to true.
 
-    This is a blocking function call. Its use is disadvised in a
-    single-threaded GUI application, since the whole application will
-    stop responding until the function returns.
-    waitForNewConnection() is mostly useful when there is no event
-    loop available.
-
-    The non-blocking alternative is to connect to the newConnection()
-    signal.
-
-    If msec is -1, this function will not time out.
-
-    \sa hasPendingConnections(), nextPendingConnection()
-*/
 bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
 {
    Q_D(QTcpServer);
@@ -448,35 +383,13 @@ bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
    return true;
 }
 
-/*!
-    Returns true if the server has a pending connection; otherwise
-    returns false.
 
-    \sa nextPendingConnection(), setMaxPendingConnections()
-*/
 bool QTcpServer::hasPendingConnections() const
 {
    return !d_func()->pendingConnections.isEmpty();
 }
 
-/*!
-    Returns the next pending connection as a connected QTcpSocket
-    object.
 
-    The socket is created as a child of the server, which means that
-    it is automatically deleted when the QTcpServer object is
-    destroyed. It is still a good idea to delete the object
-    explicitly when you are done with it, to avoid wasting memory.
-
-    0 is returned if this function is called when there are no pending
-    connections.
-
-    \note The returned QTcpSocket object cannot be used from another
-    thread. If you want to use an incoming connection from another thread,
-    you need to override incomingConnection().
-
-    \sa hasPendingConnections()
-*/
 QTcpSocket *QTcpServer::nextPendingConnection()
 {
    Q_D(QTcpServer);
@@ -484,37 +397,15 @@ QTcpSocket *QTcpServer::nextPendingConnection()
       return 0;
    }
 
-   if (!d->socketEngine->isReadNotificationEnabled()) {
+   if (! d->socketEngine->isReadNotificationEnabled()) {
       d->socketEngine->setReadNotificationEnabled(true);
    }
 
    return d->pendingConnections.takeFirst();
 }
 
-/*!
-    This virtual function is called by QTcpServer when a new
-    connection is available. The \a socketDescriptor argument is the
-    native socket descriptor for the accepted connection.
 
-    The base implementation creates a QTcpSocket, sets the socket
-    descriptor and then stores the QTcpSocket in an internal list of
-    pending connections. Finally newConnection() is emitted.
-
-    Reimplement this function to alter the server's behavior when a
-    connection is available.
-
-    If this server is using QNetworkProxy then the \a socketDescriptor
-    may not be usable with native socket functions, and should only be
-    used with QTcpSocket::setSocketDescriptor().
-
-    \note If you want to handle an incoming connection as a new QTcpSocket
-    object in another thread you have to pass the socketDescriptor
-    to the other thread and create the QTcpSocket object there and
-    use its setSocketDescriptor() method.
-
-    \sa newConnection(), nextPendingConnection(), addPendingConnection()
-*/
-void QTcpServer::incomingConnection(int socketDescriptor)
+void QTcpServer::incomingConnection(qintptr socketDescriptor)
 {
 #if defined (QTCPSERVER_DEBUG)
    qDebug("QTcpServer::incomingConnection(%i)", socketDescriptor);
@@ -541,85 +432,48 @@ void QTcpServer::addPendingConnection(QTcpSocket *socket)
    d_func()->pendingConnections.append(socket);
 }
 
-/*!
-    Sets the maximum number of pending accepted connections to \a
-    numConnections. QTcpServer will accept no more than \a
-    numConnections incoming connections before
-    nextPendingConnection() is called. By default, the limit is 30
-    pending connections.
 
-    Clients may still able to connect after the server has reached
-    its maximum number of pending connections (i.e., QTcpSocket can
-    still emit the connected() signal). QTcpServer will stop
-    accepting the new connections, but the operating system may
-    still keep them in queue.
-
-    \sa maxPendingConnections(), hasPendingConnections()
-*/
 void QTcpServer::setMaxPendingConnections(int numConnections)
 {
    d_func()->maxConnections = numConnections;
 }
 
-/*!
-    Returns the maximum number of pending accepted connections. The
-    default is 30.
 
-    \sa setMaxPendingConnections(), hasPendingConnections()
-*/
 int QTcpServer::maxPendingConnections() const
 {
    return d_func()->maxConnections;
 }
 
-/*!
-    Returns an error code for the last error that occurred.
 
-    \sa errorString()
-*/
 QAbstractSocket::SocketError QTcpServer::serverError() const
 {
    return d_func()->serverSocketError;
 }
 
-/*!
-    Returns a human readable description of the last error that
-    occurred.
-
-    \sa serverError()
-*/
 QString QTcpServer::errorString() const
 {
    return d_func()->serverSocketErrorString;
 }
 
+void QTcpServer::pauseAccepting()
+{
+   d_func()->socketEngine->setReadNotificationEnabled(false);
+}
+
+void QTcpServer::resumeAccepting()
+{
+   d_func()->socketEngine->setReadNotificationEnabled(true);
+}
+
 #ifndef QT_NO_NETWORKPROXY
-/*!
-    \since 4.1
 
-    Sets the explicit network proxy for this socket to \a networkProxy.
-
-    To disable the use of a proxy for this socket, use the
-    QNetworkProxy::NoProxy proxy type:
-
-    \snippet doc/src/snippets/code/src_network_socket_qtcpserver.cpp 0
-
-    \sa proxy(), QNetworkProxy
-*/
 void QTcpServer::setProxy(const QNetworkProxy &networkProxy)
 {
    Q_D(QTcpServer);
    d->proxy = networkProxy;
 }
 
-/*!
-    \since 4.1
 
-    Returns the network proxy for this socket.
-    By default QNetworkProxy::DefaultProxy is used.
-
-    \sa setProxy(), QNetworkProxy
-*/
 QNetworkProxy QTcpServer::proxy() const
 {
    Q_D(const QTcpServer);
@@ -627,4 +481,3 @@ QNetworkProxy QTcpServer::proxy() const
 }
 #endif // QT_NO_NETWORKPROXY
 
-QT_END_NAMESPACE

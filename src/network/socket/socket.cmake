@@ -22,6 +22,7 @@ set(NETWORK_PRIVATE_INCLUDES
     ${NETWORK_PRIVATE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qabstractsocket_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qabstractsocketengine_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpserver_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qhttpsocketengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket_p.h

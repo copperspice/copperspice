@@ -26,8 +26,6 @@
 #include <qabstractsocketengine_p.h>
 #include <qnetworkproxy.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_SOCKS5
 
 class QSocks5SocketEnginePrivate;
@@ -40,14 +38,14 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    QSocks5SocketEngine(QObject *parent = nullptr);
    ~QSocks5SocketEngine();
 
-   bool initialize(QAbstractSocket::SocketType type, 
+   bool initialize(QAbstractSocket::SocketType type,
                   QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol) override;
 
-   bool initialize(int socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState) override;
+   bool initialize(qintptr socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState) override;
 
    void setProxy(const QNetworkProxy &networkProxy);
 
-   int socketDescriptor() const override;
+   qintptr socketDescriptor() const override;
    bool isValid() const override;
 
    bool connectInternal();
@@ -72,8 +70,9 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    bool setMulticastInterface(const QNetworkInterface &iface) override;
 #endif
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0,quint16 *port = 0) override;
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr, quint16 port) override;
+   qint64 readDatagram(char *data, qint64 maxlen, QIpPacketHeader * = nullptr, PacketHeaderOptions = WantNone) override;
+   qint64 writeDatagram(const char *data, qint64 len, const QIpPacketHeader &) override;
+
    bool hasPendingDatagrams() const override;
    qint64 pendingDatagramSize() const override;
 #endif
@@ -144,8 +143,8 @@ class QSocks5Authenticator
    virtual bool beginAuthenticate(QTcpSocket *socket, bool *completed);
    virtual bool continueAuthenticate(QTcpSocket *socket, bool *completed);
 
-   virtual bool seal(const QByteArray buf, QByteArray *sealedBuf);
-   virtual bool unSeal(const QByteArray sealedBuf, QByteArray *buf);
+   virtual bool seal(const QByteArray &buf, QByteArray *sealedBuf);
+   virtual bool unSeal(const QByteArray &sealedBuf, QByteArray *buf);
    virtual bool unSeal(QTcpSocket *sealedSocket, QByteArray *buf);
 
    virtual QString errorString() {
@@ -250,7 +249,7 @@ class QSocks5SocketEnginePrivate : public QAbstractSocketEnginePrivate
 
    bool readNotificationEnabled, writeNotificationEnabled, exceptNotificationEnabled;
 
-   int socketDescriptor;
+   qintptr socketDescriptor;
 
    QSocks5Data *data;
    QSocks5ConnectData *connectData;
@@ -261,6 +260,7 @@ class QSocks5SocketEnginePrivate : public QAbstractSocketEnginePrivate
 
    QSocks5BindData *bindData;
    QString peerName;
+   QByteArray receivedHeaderFragment;
 
    mutable bool readNotificationActivated;
    mutable bool writeNotificationActivated;
@@ -282,9 +282,8 @@ class QSocks5SocketEngineHandler : public QSocketEngineHandler
    virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
          const QNetworkProxy &, QObject *parent) override;
 
-   virtual QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent) override;
+   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescripter, QObject *parent) override;
 };
 
-QT_END_NAMESPACE
 #endif // QT_NO_SOCKS5
 #endif // QSOCKS5SOCKETENGINE_H

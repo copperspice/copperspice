@@ -388,7 +388,8 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16
          // unreachable
       }
 
-   int connectResult = qt_safe_connect(socketDescriptor, sockAddrPtr, sockAddrSize);
+   qintptr connectResult = qt_safe_connect(socketDescriptor, sockAddrPtr, sockAddrSize);
+
    if (connectResult == -1) {
       switch (errno) {
          case EISCONN:
@@ -564,7 +565,7 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
 
 int QNativeSocketEnginePrivate::nativeAccept()
 {
-   int acceptedDescriptor = qt_safe_accept(socketDescriptor, 0, 0);
+   qintptr acceptedDescriptor = qt_safe_accept(socketDescriptor, 0, 0);
 
    return acceptedDescriptor;
 }

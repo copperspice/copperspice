@@ -25,8 +25,6 @@
 #include <qmutex.h>
 #include <qnetworkproxy.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSocketEngineHandlerList : public QList<QSocketEngineHandler *>
 {
  public:
@@ -37,18 +35,20 @@ Q_GLOBAL_STATIC(QSocketEngineHandlerList, socketHandlers)
 
 QSocketEngineHandler::QSocketEngineHandler()
 {
-   if (!socketHandlers()) {
+   if (! socketHandlers()) {
       return;
    }
+
    QMutexLocker locker(&socketHandlers()->mutex);
    socketHandlers()->prepend(this);
 }
 
 QSocketEngineHandler::~QSocketEngineHandler()
 {
-   if (!socketHandlers()) {
+   if (! socketHandlers()) {
       return;
    }
+
    QMutexLocker locker(&socketHandlers()->mutex);
    socketHandlers()->removeAll(this);
 }
@@ -109,7 +109,7 @@ QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(QAbstractSocket
    return new QNativeSocketEngine(parent);
 }
 
-QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(int socketDescripter, QObject *parent)
+QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(qintptr socketDescripter, QObject *parent)
 {
    QMutexLocker locker(&socketHandlers()->mutex);
    for (int i = 0; i < socketHandlers()->size(); i++) {
@@ -162,6 +162,12 @@ void QAbstractSocketEngine::exceptionNotification()
    if (QAbstractSocketEngineReceiver *receiver = d_func()->receiver) {
       receiver->exceptionNotification();
    }
+}
+
+void QAbstractSocketEngine::closeNotification()
+{
+    if (QAbstractSocketEngineReceiver *receiver = d_func()->receiver)
+        receiver->closeNotification();
 }
 
 void QAbstractSocketEngine::connectionNotification()
@@ -251,4 +257,3 @@ void QAbstractSocketEngine::setPeerPort(quint16 port)
    d_func()->peerPort = port;
 }
 
-QT_END_NAMESPACE

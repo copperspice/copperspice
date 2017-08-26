@@ -28,11 +28,10 @@
 #include <qnetworkproxy.h>
 #include <qauthenticator_p.h>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_NO_NETWORKPROXY) && !defined(QT_NO_HTTP)
+#if ! defined(QT_NO_NETWORKPROXY) && ! defined(QT_NO_HTTP)
 
 class QTcpSocket;
+class QHttpNetworkReply;
 class QHttpSocketEnginePrivate;
 
 class QHttpSocketEngine : public QAbstractSocketEngine
@@ -45,20 +44,18 @@ class QHttpSocketEngine : public QAbstractSocketEngine
       ConnectSent,
       Connected,
       SendAuthentication,
-      ReadResponseContent
+      ReadResponseContent,
+      ReadResponseHeader
    };
 
    QHttpSocketEngine(QObject *parent = nullptr);
    ~QHttpSocketEngine();
 
-   bool initialize(QAbstractSocket::SocketType type,
-                   QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol) override;
-
-   bool initialize(int socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState) override;
-
+   bool initialize(QAbstractSocket::SocketType type, QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol) override;
+   bool initialize(qintptr socketDescriptor, QAbstractSocket::SocketState socketState = QAbstractSocket::ConnectedState) override;
    void setProxy(const QNetworkProxy &networkProxy);
 
-   int socketDescriptor() const override;
+   qintptr socketDescriptor() const override;
 
    bool isValid() const override;
 
@@ -83,8 +80,8 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    bool setMulticastInterface(const QNetworkInterface &iface) override;
 #endif
 
-   qint64 readDatagram(char *data, qint64 maxlen, QHostAddress *addr = 0, quint16 *port = 0) override;
-   qint64 writeDatagram(const char *data, qint64 len, const QHostAddress &addr, quint16 port) override;
+   qint64 readDatagram(char *data, qint64 maxlen, QIpPacketHeader *, PacketHeaderOptions) override;
+   qint64 writeDatagram(const char *data, qint64 len, const QIpPacketHeader &) override;
    bool hasPendingDatagrams() const override;
    qint64 pendingDatagramSize() const override;
 #endif
@@ -97,8 +94,8 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    bool waitForRead(int msecs = 30000, bool *timedOut = 0) override;
    bool waitForWrite(int msecs = 30000, bool *timedOut = 0) override;
 
-   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite, 
-         int msecs = 30000, bool *timedOut = 0) override;
+   bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite,
+                  int msecs = 30000, bool *timedOut = 0) override;
 
    bool isReadNotificationEnabled() const override;
    void setReadNotificationEnabled(bool enable) override;
@@ -109,22 +106,29 @@ class QHttpSocketEngine : public QAbstractSocketEngine
 
    NET_CS_SLOT_1(Public, void slotSocketConnected())
    NET_CS_SLOT_2(slotSocketConnected)
+
    NET_CS_SLOT_1(Public, void slotSocketDisconnected())
    NET_CS_SLOT_2(slotSocketDisconnected)
+
    NET_CS_SLOT_1(Public, void slotSocketReadNotification())
    NET_CS_SLOT_2(slotSocketReadNotification)
+
    NET_CS_SLOT_1(Public, void slotSocketBytesWritten())
    NET_CS_SLOT_2(slotSocketBytesWritten)
+
    NET_CS_SLOT_1(Public, void slotSocketError(QAbstractSocket::SocketError error))
    NET_CS_SLOT_2(slotSocketError)
+
    NET_CS_SLOT_1(Public, void slotSocketStateChanged(QAbstractSocket::SocketState state))
    NET_CS_SLOT_2(slotSocketStateChanged)
 
- private :
+ private:
    NET_CS_SLOT_1(Private, void emitPendingReadNotification())
    NET_CS_SLOT_2(emitPendingReadNotification)
+
    NET_CS_SLOT_1(Private, void emitPendingWriteNotification())
    NET_CS_SLOT_2(emitPendingWriteNotification)
+
    NET_CS_SLOT_1(Private, void emitPendingConnectionNotification())
    NET_CS_SLOT_2(emitPendingConnectionNotification)
 
@@ -132,10 +136,10 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    void emitWriteNotification();
    void emitConnectionNotification();
 
+   bool readHttpHeader();
    Q_DECLARE_PRIVATE(QHttpSocketEngine)
    Q_DISABLE_COPY(QHttpSocketEngine)
 };
-
 
 class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
 {
@@ -148,9 +152,10 @@ class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
    QNetworkProxy proxy;
    QString peerName;
    QTcpSocket *socket;
-   QByteArray readBuffer; // only used for parsing the proxy response
+   QHttpNetworkReply *reply; // only used for parsing the proxy response
    QHttpSocketEngine::HttpState state;
    QAuthenticator authenticator;
+
    bool readNotificationEnabled;
    bool writeNotificationEnabled;
    bool exceptNotificationEnabled;
@@ -167,12 +172,11 @@ class QHttpSocketEngineHandler : public QSocketEngineHandler
 {
  public:
    virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
-         const QNetworkProxy &, QObject *parent) override;
+                  const QNetworkProxy &, QObject *parent) override;
 
-   virtual QAbstractSocketEngine *createSocketEngine(int socketDescripter, QObject *parent) override;
+   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescripter, QObject *parent) override;
 };
 #endif
 
-QT_END_NAMESPACE
 
 #endif // QHTTPSOCKETENGINE_H

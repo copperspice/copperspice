@@ -21,17 +21,18 @@
 ***********************************************************************/
 
 #include <qhttpsocketengine_p.h>
+#include "qhttpnetworkreply_p.h"
+#include "qiodevice_p.h"
 #include <qtcpsocket.h>
 #include <qhostaddress.h>
-#include <qurl.h>
 #include <qhttp.h>
 #include <qelapsedtimer.h>
 #include <qnetworkinterface.h>
+#include <qurl.h>
 
-#if !defined(QT_NO_NETWORKPROXY) && !defined(QT_NO_HTTP)
+
+#if ! defined(QT_NO_NETWORKPROXY) && !defined(QT_NO_HTTP)
 #include <qdebug.h>
-
-QT_BEGIN_NAMESPACE
 
 #define DEBUG
 
@@ -54,6 +55,7 @@ bool QHttpSocketEngine::initialize(QAbstractSocket::SocketType type, QAbstractSo
    setProtocol(protocol);
    setSocketType(type);
    d->socket = new QTcpSocket(this);
+    d->reply = new QHttpNetworkReply(QUrl(), this);
 #ifndef QT_NO_BEARERMANAGEMENT
    d->socket->setProperty("_q_networkSession", property("_q_networkSession"));
 #endif
@@ -85,7 +87,7 @@ bool QHttpSocketEngine::initialize(QAbstractSocket::SocketType type, QAbstractSo
    return true;
 }
 
-bool QHttpSocketEngine::initialize(int, QAbstractSocket::SocketState)
+bool QHttpSocketEngine::initialize(qintptr, QAbstractSocket::SocketState)
 {
    return false;
 }
@@ -94,17 +96,19 @@ void QHttpSocketEngine::setProxy(const QNetworkProxy &proxy)
 {
    Q_D(QHttpSocketEngine);
    d->proxy = proxy;
+
    QString user = proxy.user();
-   if (!user.isEmpty()) {
+   if (! user.isEmpty()) {
       d->authenticator.setUser(user);
    }
+
    QString password = proxy.password();
    if (!password.isEmpty()) {
       d->authenticator.setPassword(password);
    }
 }
 
-int QHttpSocketEngine::socketDescriptor() const
+qintptr QHttpSocketEngine::socketDescriptor() const
 {
    Q_D(const QHttpSocketEngine);
    return d->socket ? d->socket->socketDescriptor() : 0;
@@ -200,7 +204,7 @@ void QHttpSocketEngine::close()
 qint64 QHttpSocketEngine::bytesAvailable() const
 {
    Q_D(const QHttpSocketEngine);
-   return d->readBuffer.size() + (d->socket ? d->socket->bytesAvailable() : 0);
+   return d->socket ? d->socket->bytesAvailable() : 0;
 }
 
 qint64 QHttpSocketEngine::read(char *data, qint64 maxlen)
@@ -234,19 +238,18 @@ qint64 QHttpSocketEngine::write(const char *data, qint64 len)
 
 #ifndef QT_NO_UDPSOCKET
 #ifndef QT_NO_NETWORKINTERFACE
-bool QHttpSocketEngine::joinMulticastGroup(const QHostAddress &,
-      const QNetworkInterface &)
+bool QHttpSocketEngine::joinMulticastGroup(const QHostAddress &, const QNetworkInterface &)
 {
    setError(QAbstractSocket::UnsupportedSocketOperationError,
             QLatin1String("Operation on socket is not supported"));
    return false;
 }
 
-bool QHttpSocketEngine::leaveMulticastGroup(const QHostAddress &,
-      const QNetworkInterface &)
+bool QHttpSocketEngine::leaveMulticastGroup(const QHostAddress &, const QNetworkInterface &)
 {
    setError(QAbstractSocket::UnsupportedSocketOperationError,
             QLatin1String("Operation on socket is not supported"));
+
    return false;
 }
 
@@ -263,14 +266,11 @@ bool QHttpSocketEngine::setMulticastInterface(const QNetworkInterface &)
 }
 #endif // QT_NO_NETWORKINTERFACE
 
-qint64 QHttpSocketEngine::readDatagram(char *, qint64, QHostAddress *,
-                                       quint16 *)
+qint64 QHttpSocketEngine::readDatagram(char *, qint64, QIpPacketHeader *, PacketHeaderOptions)
 {
    return 0;
 }
-
-qint64 QHttpSocketEngine::writeDatagram(const char *, qint64, const QHostAddress &,
-                                        quint16)
+qint64 QHttpSocketEngine::writeDatagram(const char *, qint64, const QIpPacketHeader &)
 {
    return 0;
 }
@@ -327,25 +327,12 @@ bool QHttpSocketEngine::setOption(SocketOption option, int value)
    return false;
 }
 
-/*
-   Returns the difference between msecs and elapsed. If msecs is -1,
-   however, -1 is returned.
-*/
-static int qt_timeout_value(int msecs, int elapsed)
-{
-   if (msecs == -1) {
-      return -1;
-   }
-
-   int timeout = msecs - elapsed;
-   return timeout < 0 ? 0 : timeout;
-}
 
 bool QHttpSocketEngine::waitForRead(int msecs, bool *timedOut)
 {
    Q_D(const QHttpSocketEngine);
 
-   if (!d->socket || d->socket->state() == QAbstractSocket::UnconnectedState) {
+   if (! d->socket || d->socket->state() == QAbstractSocket::UnconnectedState) {
       return false;
    }
 
@@ -354,7 +341,7 @@ bool QHttpSocketEngine::waitForRead(int msecs, bool *timedOut)
 
    // Wait for more data if nothing is available.
    if (!d->socket->bytesAvailable()) {
-      if (!d->socket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
+      if (!d->socket->waitForReadyRead(qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
          if (d->socket->state() == QAbstractSocket::UnconnectedState) {
             return true;
          }
@@ -368,7 +355,7 @@ bool QHttpSocketEngine::waitForRead(int msecs, bool *timedOut)
 
    // If we're not connected yet, wait until we are, or until an error
    // occurs.
-   while (d->state != Connected && d->socket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
+   while (d->state != Connected && d->socket->waitForReadyRead(qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
       // Loop while the protocol handshake is taking place.
    }
 
@@ -406,7 +393,7 @@ bool QHttpSocketEngine::waitForWrite(int msecs, bool *timedOut)
    // If we're not connected yet, wait until we are, and until bytes have
    // been received (i.e., the socket has connected, we have sent the
    // greeting, and then received the response).
-   while (d->state != Connected && d->socket->waitForReadyRead(qt_timeout_value(msecs, stopWatch.elapsed()))) {
+   while (d->state != Connected && d->socket->waitForReadyRead(qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
       // Loop while the protocol handshake is taking place.
    }
 
@@ -462,6 +449,8 @@ void QHttpSocketEngine::setReadNotificationEnabled(bool enable)
       // Enabling read notification can trigger a notification.
       if (bytesAvailable()) {
          slotSocketReadNotification();
+      } else if (d->socket && d->socket->state() == QAbstractSocket::UnconnectedState) {
+         emitReadNotification();
       }
    }
 }
@@ -500,23 +489,24 @@ void QHttpSocketEngine::slotSocketConnected()
    // Send the greeting.
    const char method[] = "CONNECT";
    QByteArray peerAddress = d->peerName.isEmpty() ?
-                            d->peerAddress.toString().toLatin1() :
-                            QUrl::toAce(d->peerName);
+                            d->peerAddress.toString().toLatin1() : QUrl::toAce(d->peerName);
+
    QByteArray path = peerAddress + ':' + QByteArray::number(d->peerPort);
    QByteArray data = method;
-   data += " ";
+   data += ' ';
    data += path;
    data += " HTTP/1.1\r\n";
-   data += "Proxy-Connection: keep-alive\r\n"
-           "User-Agent: ";
-   QVariant v = property("_q_user-agent");
-   if (v.isValid()) {
-      data += v.toByteArray();
-   } else {
-      data += "Mozilla/5.0";
+   data += "Proxy-Connection: keep-alive\r\n";
+   data += "Host: " + peerAddress + "\r\n";
+
+   if (! d->proxy.hasRawHeader("User-Agent")) {
+      data += "User-Agent: Mozilla/5.0\r\n";
    }
-   data += "\r\n"
-           "Host: " + peerAddress + "\r\n";
+
+   for (const QByteArray &header : d->proxy.rawHeaderList()) {
+      data += header + ": " + d->proxy.rawHeader(header) + "\r\n";
+   }
+
    QAuthenticatorPrivate *priv = QAuthenticatorPrivate::getPrivate(d->authenticator);
    //qDebug() << "slotSocketConnected: priv=" << priv << (priv ? (int)priv->method : -1);
    if (priv && priv->method != QAuthenticatorPrivate::None) {
@@ -524,6 +514,7 @@ void QHttpSocketEngine::slotSocketConnected()
       data += "Proxy-Authorization: " + priv->calculateResponse(method, path);
       data += "\r\n";
    }
+
    data += "\r\n";
    //     qDebug() << ">>>>>>>> sending request" << this;
    //     qDebug() << data;
@@ -539,6 +530,7 @@ void QHttpSocketEngine::slotSocketDisconnected()
 void QHttpSocketEngine::slotSocketReadNotification()
 {
    Q_D(QHttpSocketEngine);
+
    if (d->state != Connected && d->socket->bytesAvailable() == 0) {
       return;
    }
@@ -551,18 +543,33 @@ void QHttpSocketEngine::slotSocketReadNotification()
       return;
    }
 
-readResponseContent:
+   if (d->state == ConnectSent) {
+      d->reply->d_func()->state = QHttpNetworkReplyPrivate::NothingDoneState;
+      d->state = ReadResponseHeader;
+   }
+
+   if (d->state == ReadResponseHeader) {
+        bool ok = readHttpHeader();
+        if (!ok) {
+            // protocol error, this isn't HTTP
+            d->socket->close();
+            setState(QAbstractSocket::UnconnectedState);
+            setError(QAbstractSocket::ProxyProtocolError, tr("Did not receive HTTP response from proxy"));
+            emitConnectionNotification();
+            return;
+        }
+
+        if (d->state == ReadResponseHeader)
+            return; // readHttpHeader() was not done yet, need to wait for more header data
+   }
    if (d->state == ReadResponseContent) {
       char dummybuffer[4096];
       while (d->pendingResponseData) {
          int read = d->socket->read(dummybuffer, qMin(sizeof(dummybuffer), (size_t)d->pendingResponseData));
-         if (read >= 0) {
-            dummybuffer[read] = 0;
-         }
-
          if (read == 0) {
             return;
          }
+
          if (read == -1) {
             d->socket->disconnectFromHost();
             emitWriteNotification();
@@ -570,39 +577,18 @@ readResponseContent:
          }
          d->pendingResponseData -= read;
       }
+
       if (d->pendingResponseData > 0) {
          return;
       }
-      d->state = SendAuthentication;
-      slotSocketConnected();
-      return;
+
+      if (d->reply->d_func()->statusCode == 407) {
+         d->state = SendAuthentication;
+      }
    }
 
-   // Still in handshake mode. Wait until we've got a full response.
-   bool done = false;
-   do {
-      d->readBuffer += d->socket->readLine();
-   } while (!(done = d->readBuffer.endsWith("\r\n\r\n")) && d->socket->canReadLine());
+   int statusCode = d->reply->statusCode();
 
-   if (!done) {
-      // Wait for more.
-      return;
-   }
-
-   if (!d->readBuffer.startsWith("HTTP/1.")) {
-      // protocol error, this isn't HTTP
-      d->readBuffer.clear();
-      d->socket->close();
-      setState(QAbstractSocket::UnconnectedState);
-      setError(QAbstractSocket::ProxyProtocolError, tr("Did not receive HTTP response from proxy"));
-      emitConnectionNotification();
-      return;
-   }
-
-   QHttpResponseHeader responseHeader(QString::fromLatin1(d->readBuffer));
-   d->readBuffer.clear(); // we parsed the proxy protocol response. from now on direct socket reading will be done
-
-   int statusCode = responseHeader.statusCode();
    QAuthenticatorPrivate *priv = 0;
    if (statusCode == 200) {
       d->state = Connected;
@@ -612,20 +598,27 @@ readResponseContent:
       d->authenticator.detach();
       priv = QAuthenticatorPrivate::getPrivate(d->authenticator);
       priv->hasFailed = false;
+
    } else if (statusCode == 407) {
-      if (d->credentialsSent) {
-         //407 response again means the provided username/password were invalid.
-         d->authenticator =
-            QAuthenticator(); //this is needed otherwise parseHttpResponse won't set the state, and then signal isn't emitted.
+      if (d->authenticator.isNull()) {
+            d->authenticator.detach();
+      }
+
+      priv = QAuthenticatorPrivate::getPrivate(d->authenticator);
+
+      if (d->credentialsSent && priv->phase != QAuthenticatorPrivate::Phase2) {
+         // Remember that NTLM is two-phase, so only reset when the authentication is not currently in progress.
+         // 407 response again means the provided username/password were invalid.
+
+         // this is needed otherwise parseHttpResponse won't set the state, and then signal isn't emitted.
+         d->authenticator = QAuthenticator();
+
          d->authenticator.detach();
          priv = QAuthenticatorPrivate::getPrivate(d->authenticator);
          priv->hasFailed = true;
-      } else if (d->authenticator.isNull()) {
-         d->authenticator.detach();
       }
-      priv = QAuthenticatorPrivate::getPrivate(d->authenticator);
 
-      priv->parseHttpResponse(responseHeader, true);
+      priv->parseHttpResponse(d->reply->header(), true);
 
       if (priv->phase == QAuthenticatorPrivate::Invalid) {
          // problem parsing the reply
@@ -637,22 +630,27 @@ readResponseContent:
       }
 
       bool willClose;
-      QString proxyConnectionHeader = responseHeader.value(QLatin1String("Proxy-Connection"));
+      QByteArray proxyConnectionHeader = d->reply->headerField("Proxy-Connection");
       // Although most proxies use the unofficial Proxy-Connection header, the Connection header
       // from http spec is also allowed.
+
       if (proxyConnectionHeader.isEmpty()) {
-         proxyConnectionHeader = responseHeader.value(QLatin1String("Connection"));
+         proxyConnectionHeader = d->reply->headerField("Connection");
       }
+
       proxyConnectionHeader = proxyConnectionHeader.toLower();
-      if (proxyConnectionHeader == QLatin1String("close")) {
+
+      if (proxyConnectionHeader == "close") {
          willClose = true;
-      } else if (proxyConnectionHeader == QLatin1String("keep-alive")) {
+
+      } else if (proxyConnectionHeader == "keep-alive") {
          willClose = false;
+
       } else {
          // no Proxy-Connection header, so use the default
          // HTTP 1.1's default behaviour is to keep persistent connections
          // HTTP 1.0 or earlier, so we expect the server to close
-         willClose = (responseHeader.majorVersion() * 0x100 + responseHeader.minorVersion()) <= 0x0100;
+         willClose = (d->reply->majorVersion() * 0x100 + d->reply->minorVersion()) <= 0x0100;
       }
 
       if (willClose) {
@@ -660,34 +658,34 @@ readResponseContent:
          // especially since the signal below may trigger a new event loop
          d->socket->disconnectFromHost();
          d->socket->readAll();
+
+         // done with the reply and need to reset it for the next connection
+         delete d->reply;
+         d->reply = new QHttpNetworkReply;
       }
 
       if (priv->phase == QAuthenticatorPrivate::Done) {
          emit proxyAuthenticationRequired(d->proxy, &d->authenticator);
       }
+
       // priv->phase will get reset to QAuthenticatorPrivate::Start if the authenticator got modified in the signal above.
       if (priv->phase == QAuthenticatorPrivate::Done) {
          setError(QAbstractSocket::ProxyAuthenticationRequiredError, tr("Authentication required"));
          d->socket->disconnectFromHost();
+
       } else {
          // close the connection if it isn't already and reconnect using the chosen authentication method
          d->state = SendAuthentication;
+
          if (willClose) {
             d->socket->connectToHost(d->proxy.hostName(), d->proxy.port());
          } else {
-            bool ok;
-            int contentLength = responseHeader.value(QLatin1String("Content-Length")).toInt(&ok);
-            if (ok && contentLength > 0) {
-               d->state = ReadResponseContent;
-               d->pendingResponseData = contentLength;
-               goto readResponseContent;
-            } else {
-               d->state = SendAuthentication;
-               slotSocketConnected();
-            }
+             // send the HTTP CONNECT again
+             slotSocketConnected();
          }
          return;
       }
+
    } else {
       d->socket->close();
       setState(QAbstractSocket::UnconnectedState);
@@ -712,6 +710,41 @@ readResponseContent:
    emitConnectionNotification();
 }
 
+bool QHttpSocketEngine::readHttpHeader()
+{
+    Q_D(QHttpSocketEngine);
+
+    if (d->state != ReadResponseHeader)
+        return false;
+
+    bool ok = true;
+    if (d->reply->d_func()->state == QHttpNetworkReplyPrivate::NothingDoneState) {
+        // do not keep old content sizes, status etc. around
+        d->reply->d_func()->clearHttpLayerInformation();
+        d->reply->d_func()->state = QHttpNetworkReplyPrivate::ReadingStatusState;
+    }
+
+    if (d->reply->d_func()->state == QHttpNetworkReplyPrivate::ReadingStatusState) {
+        ok = d->reply->d_func()->readStatus(d->socket) != -1;
+        if (ok && d->reply->d_func()->state == QHttpNetworkReplyPrivate::ReadingStatusState)
+            return true; //Not done parsing headers yet, wait for more data
+    }
+
+    if (ok && d->reply->d_func()->state == QHttpNetworkReplyPrivate::ReadingHeaderState) {
+        ok = d->reply->d_func()->readHeader(d->socket) != -1;
+        if (ok && d->reply->d_func()->state == QHttpNetworkReplyPrivate::ReadingHeaderState)
+            return true; //Not done parsing headers yet, wait for more data
+    }
+
+    if (ok) {
+        bool contentLengthOk;
+        int contentLength = d->reply->headerField("Content-Length").toInt(&contentLengthOk);
+        if (contentLengthOk && contentLength > 0)
+            d->pendingResponseData = contentLength;
+        d->state = ReadResponseContent; // we are done reading the header
+    }
+    return ok;
+}
 void QHttpSocketEngine::slotSocketBytesWritten()
 {
    Q_D(QHttpSocketEngine);
@@ -723,7 +756,6 @@ void QHttpSocketEngine::slotSocketBytesWritten()
 void QHttpSocketEngine::slotSocketError(QAbstractSocket::SocketError error)
 {
    Q_D(QHttpSocketEngine);
-   d->readBuffer.clear();
 
    if (d->state != Connected) {
       // we are in proxy handshaking stages
@@ -742,7 +774,7 @@ void QHttpSocketEngine::slotSocketError(QAbstractSocket::SocketError error)
       return;
    }
 
-   // We're connected
+   // connected
    if (error == QAbstractSocket::SocketTimeoutError) {
       return;   // ignore this error
    }
@@ -752,6 +784,7 @@ void QHttpSocketEngine::slotSocketError(QAbstractSocket::SocketError error)
    if (error != QAbstractSocket::RemoteHostClosedError) {
       qDebug() << "QHttpSocketEngine::slotSocketError: got weird error =" << error;
    }
+
    //read notification needs to always be emitted, otherwise the higher layer doesn't get the disconnected signal
    emitReadNotification();
 }
@@ -790,9 +823,10 @@ void QHttpSocketEngine::emitReadNotification()
 {
    Q_D(QHttpSocketEngine);
    d->readNotificationActivated = true;
+
    // if there is a connection notification pending we have to emit the readNotification
-   // incase there is connection error. This is only needed for Windows, but it does not
-   // hurt in other cases.
+   // incase there is connection error. This is only needed for Windows, but it does not hurt in other cases.
+
    if ((d->readNotificationEnabled && !d->readNotificationPending) || d->connectionNotificationPending) {
       d->readNotificationPending = true;
       QMetaObject::invokeMethod(this, "emitPendingReadNotification", Qt::QueuedConnection);
@@ -831,7 +865,8 @@ QHttpSocketEnginePrivate::QHttpSocketEnginePrivate()
    , pendingResponseData(0)
 {
    socket = 0;
-   state = QHttpSocketEngine::None;
+   reply  = 0;
+   state  = QHttpSocketEngine::None;
 }
 
 QHttpSocketEnginePrivate::~QHttpSocketEnginePrivate()
@@ -839,8 +874,7 @@ QHttpSocketEnginePrivate::~QHttpSocketEnginePrivate()
 }
 
 QAbstractSocketEngine *QHttpSocketEngineHandler::createSocketEngine(QAbstractSocket::SocketType socketType,
-      const QNetworkProxy &proxy,
-      QObject *parent)
+                  const QNetworkProxy &proxy, QObject *parent)
 {
    if (socketType != QAbstractSocket::TcpSocket) {
       return 0;
@@ -861,11 +895,9 @@ QAbstractSocketEngine *QHttpSocketEngineHandler::createSocketEngine(QAbstractSoc
    return engine;
 }
 
-QAbstractSocketEngine *QHttpSocketEngineHandler::createSocketEngine(int, QObject *)
+QAbstractSocketEngine *QHttpSocketEngineHandler::createSocketEngine(qintptr, QObject *)
 {
    return 0;
 }
-
-QT_END_NAMESPACE
 
 #endif
