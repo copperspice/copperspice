@@ -76,15 +76,15 @@ class Q_CORE_EXPORT QVariant
    enum Type {
       Invalid = QMetaType::UnknownType,
 
-      Bool = QMetaType::Bool,
-      Int = QMetaType::Int,
-      UInt = QMetaType::UInt,
-      LongLong = QMetaType::LongLong,
+      Bool      = QMetaType::Bool,
+      Int       = QMetaType::Int,
+      UInt      = QMetaType::UInt,
+      LongLong  = QMetaType::LongLong,
       ULongLong = QMetaType::ULongLong,
-      Double = QMetaType::Double,
+      Double    = QMetaType::Double,
 
-      Char   = QMetaType::QChar,
-      Char32 = QMetaType::QChar32,
+      Char      = QMetaType::QChar,
+      Char32    = QMetaType::QChar32,
 
       List      = QMetaType::QVariantList,
       Map       = QMetaType::QVariantMap,
@@ -97,8 +97,8 @@ class Q_CORE_EXPORT QVariant
       String16  = QMetaType::QString16,
 
       StringList = QMetaType::QStringList,
-      ByteArray = QMetaType::QByteArray,
-      BitArray = QMetaType::QBitArray,
+      ByteArray  = QMetaType::QByteArray,
+      BitArray   = QMetaType::QBitArray,
 
       Date = QMetaType::QDate,
       Time = QMetaType::QTime,
@@ -319,11 +319,11 @@ class Q_CORE_EXPORT QVariant
 
    template<typename T>
    static inline QVariant fromValue(const T &value) {
-       return QVariant(qMetaTypeId<T>(reinterpret_cast<T *>(0)), &value, QTypeInfo<T>::isPointer);
+      return QVariant(qMetaTypeId<T>(static_cast<T *>(nullptr)), &value, QTypeInfo<T>::isPointer);
    }
 
-   static inline QVariant fromValue(const QVariant& value) {
-       return value;
+   static inline QVariant fromValue(const QVariant &value) {
+      return value;
    }
 
    template<typename T>
@@ -339,13 +339,14 @@ class Q_CORE_EXPORT QVariant
    };
 
    struct Private {
-      inline Private(): type(Invalid), is_shared(false), is_null(true) {
+      inline Private(): type(Invalid), is_shared(false), is_null(true), is_ptr(false) {
          data.ptr = 0;
       }
+
       inline Private(const Private &other)
-         : data(other.data), type(other.type),
-           is_shared(other.is_shared), is_null(other.is_null) {
+         : data(other.data), type(other.type), is_shared(other.is_shared), is_null(other.is_null), is_ptr(other.is_ptr) {
       }
+
       union Data {
          char c;
          int i;
@@ -360,9 +361,11 @@ class Q_CORE_EXPORT QVariant
          void *ptr;
          PrivateShared *shared;
       } data;
-      uint type : 30;
+
+      uint type      : 30;
       uint is_shared : 1;
-      uint is_null : 1;
+      uint is_null   : 1;
+      uint is_ptr    : 1;
    };
 
    typedef void (*f_construct)(Private *, const void *);
@@ -420,10 +423,10 @@ class Q_CORE_EXPORT QVariant
    bool cmp(const QVariant &other) const;
 
  private:
+   bool clearRequired() const;
+
    // force compile error, prevent QVariant(QVariant::Type, int) to be called
-   inline QVariant(bool, int) {
-      Q_ASSERT(false);
-   }
+   QVariant(bool, int) = delete;
 };
 
 typedef QList<QVariant> QVariantList;
@@ -439,7 +442,6 @@ inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr
 }
 
 //
-
 inline QVariant::QVariant() {}
 inline bool QVariant::isValid() const
 {
@@ -449,19 +451,20 @@ inline bool QVariant::isValid() const
 template<typename T>
 inline void QVariant::setValue(const T &v)
 {
-   //i f possible we reuse the current QVariant private
-   const uint type = qMetaTypeId<T>(reinterpret_cast<T *>(0));
+   // if possible we reuse the current QVariant private
+   const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
+
    QVariant::Private &d = data_ptr();
 
    if (isDetached() && (type == d.type || (type <= uint(QVariant::Char) && d.type <= uint(QVariant::Char)))) {
-      d.type = type;
+      d.type    = type;
       d.is_null = false;
-      T *old = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
+      T *old    = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
 
       if (QTypeInfo<T>::isComplex) {
          old->~T();
       }
-      new (old) T(v); //call the copy constructor
+      new (old) T(v);  // call the copy constructor
 
    } else {
       *this = QVariant(type, &v, QTypeInfo<T>::isPointer);
@@ -558,7 +561,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
 QT_END_NAMESPACE
 
 Q_DECLARE_BUILTIN_METATYPE(QVariantList, QVariantList)
-Q_DECLARE_BUILTIN_METATYPE(QVariantMap, QVariantMap)
+Q_DECLARE_BUILTIN_METATYPE(QVariantMap,  QVariantMap)
 Q_DECLARE_BUILTIN_METATYPE(QVariantHash, QVariantHash)
 
 #endif // QVARIANT_H

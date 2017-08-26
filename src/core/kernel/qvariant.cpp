@@ -96,7 +96,7 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
 
       case QVariant::Char32:
-         // broom (wait a bit) sv_construct<QChar32>(x, copy);
+         // broom (wait) v_construct<QChar32>(x, copy);
          break;
 
       case QVariant::List:
@@ -117,7 +117,7 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
 
       case QVariant::String16:
-         // broom (wait a bit) v_construct<QString16>(x, copy);
+         // broom (wait) v_construct<QString16>(x, copy);
          break;
 
       case QVariant::StringList:
@@ -240,7 +240,7 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
    }
 
-   x->is_null = !copy;
+   x->is_null = ! copy;
 }
 
 static void clear(QVariant::Private *d)
@@ -251,7 +251,7 @@ static void clear(QVariant::Private *d)
          break;
 
       case QVariant::Char32:
-         // broom (wait a bit) v_clear<QChar32>(d);
+         // broom (wait) v_clear<QChar32>(d);
          break;
 
       case QVariant::String:
@@ -263,7 +263,7 @@ static void clear(QVariant::Private *d)
          break;
 
       case QVariant::String16:
-         // broom (wait a bit) v_clear<QString16>(d);
+         // broom (wait) v_clear<QString16>(d);
          break;
 
       case QVariant::StringList:
@@ -389,8 +389,9 @@ static void clear(QVariant::Private *d)
    }
 
    d->type = QVariant::Invalid;
-   d->is_null   = true;
    d->is_shared = false;
+   d->is_null   = true;
+   d->is_ptr    = false;
 }
 
 static bool isNull(const QVariant::Private *d)
@@ -401,7 +402,7 @@ static bool isNull(const QVariant::Private *d)
          return v_cast<QChar>(d)->isNull();
 
       case QVariant::Char32:
-         // broom (wait a bit) return v_cast<QChar32>(d)->isNull();
+         // broom (wait) return v_cast<QChar32>(d)->isNull();
          break;
 
       case QVariant::String:
@@ -499,7 +500,7 @@ static bool compare(const QVariant::Private *a, const QVariant::Private *b)
          return *v_cast<QChar>(a) == *v_cast<QChar>(b);
 
       case QVariant::Char32:
-         // broom (wait a bit)  return *v_cast<QChar32>(a) == *v_cast<QChar32>(b);
+         // broom (wait)  return *v_cast<QChar32>(a) == *v_cast<QChar32>(b);
          return false;
 
       case QVariant::String:
@@ -509,7 +510,7 @@ static bool compare(const QVariant::Private *a, const QVariant::Private *b)
          return *v_cast<QString8>(a) == *v_cast<QString8>(b);
 
       case QVariant::String16:
-         // broom (wait a bit) return *v_cast<QString16>(a) == *v_cast<QString16>(b);
+         // broom (wait) return *v_cast<QString16>(a) == *v_cast<QString16>(b);
          return false;
 
       case QVariant::StringList:
@@ -723,18 +724,18 @@ static qlonglong qConvertToNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QChar>(d)->unicode();
 
       case QVariant::Char32:
-         // broom (wait a bit)  return v_cast<QChar32>(d)->unicode();
+         // broom (wait)  return v_cast<QChar32>(d)->unicode();
          return 0;
 
       case QVariant::String:
          return v_cast<QString>(d)->toLongLong(ok);
 
       case QVariant::String8:
-         // broom (wait a bit) return v_cast<QString8>(d)->toLongLong(ok);
+         // broom (wait) return v_cast<QString8>(d)->toLongLong(ok);
          return 0;
 
       case QVariant::String16:
-         // broom (wait a bit) return v_cast<QString16>(d)->toLongLong(ok);
+         // broom (wait) return v_cast<QString16>(d)->toLongLong(ok);
          return 0;
 
       case QVariant::ByteArray:
@@ -773,18 +774,18 @@ static qulonglong qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QChar>(d)->unicode();
 
       case QVariant::Char32:
-         // broom (wait a bit) return v_cast<QChar32>(d)->unicode();
+         // broom (wait) return v_cast<QChar32>(d)->unicode();
          return 0;
 
       case QVariant::String:
          return v_cast<QString>(d)->toULongLong(ok);
 
       case QVariant::String8:
-         // broom (wait a bit) return v_cast<QString8>(d)->toULongLong(ok);
+         // broom (wait) return v_cast<QString8>(d)->toULongLong(ok);
          return 0;
 
       case QVariant::String16:
-         // broom (wait a bit) return v_cast<QString16>(d)->toULongLong(ok);
+         // broom (wait) return v_cast<QString16>(d)->toULongLong(ok);
          return 0;
 
       case QVariant::ByteArray:
@@ -1527,7 +1528,6 @@ Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler()
    return &qt_kernel_variant_handler;
 }
 
-
 const QVariant::Handler *QVariant::handler = &qt_kernel_variant_handler;
 
 void QVariant::create(int type, const void *copy)
@@ -1536,10 +1536,41 @@ void QVariant::create(int type, const void *copy)
    handler->construct(&d, copy);
 }
 
+bool QVariant::clearRequired() const
+{
+   if (! d.is_shared) {
+
+      if (d.type >= UserType) {
+         return false;
+      }
+
+      switch (d.type) {
+         case Invalid:
+         case Bool:
+         case Int:
+         case UInt:
+         case LongLong:
+         case ULongLong:
+         case Double:
+         case Char:
+         case Char32:
+            return false;
+      }
+
+      return true;
+   }
+
+   return false;
+}
 
 QVariant::~QVariant()
 {
-   if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > Char && d.type < UserType)) {
+   if (d.is_ptr) {
+      // create was not called so no construtor was called
+      return;
+   }
+
+   if ((d.is_shared && ! d.data.shared->ref.deref()) || clearRequired()) {
       handler->clear(&d);
    }
 }
@@ -1549,6 +1580,7 @@ QVariant::QVariant(const QVariant &p)
 {
    if (d.is_shared) {
       d.data.shared->ref.ref();
+
    } else if (p.d.type > Char && p.d.type < QVariant::UserType) {
       handler->construct(&d, p.constData());
       d.is_null = p.d.is_null;
@@ -1578,21 +1610,25 @@ QVariant::QVariant(int typeOrUserType, const void *copy)
 // internal
 QVariant::QVariant(int typeOrUserType, const void *copy, uint flags)
 {
-   if (flags) { //type is a pointer type
-      d.type = typeOrUserType;
+   if (flags) {
+      // type is a pointer type
+      d.is_ptr   = true;
+      d.type     = typeOrUserType;
+
       d.data.ptr = *reinterpret_cast<void *const *>(copy);
-      d.is_null = false;
+
    } else {
       create(typeOrUserType, copy);
-      d.is_null = false;
    }
+
+   d.is_null = false;
 }
 
 QVariant::QVariant(int val)
 {
    d.is_null = false;
-   d.type = Int;
-   d.data.i = val;
+   d.type    = Int;
+   d.data.i  = val;
 }
 QVariant::QVariant(uint val)
 {
@@ -1823,10 +1859,12 @@ QVariant &QVariant::operator=(const QVariant &variant)
    if (variant.d.is_shared) {
       variant.d.data.shared->ref.ref();
       d = variant.d;
+
    } else if (variant.d.type > Char && variant.d.type < UserType) {
       d.type = variant.d.type;
       handler->construct(&d, variant.constData());
       d.is_null = variant.d.is_null;
+
    } else {
       d = variant.d;
    }
