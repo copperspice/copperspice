@@ -48,7 +48,7 @@ CopperSpice consists of the following libraries:
 
 ### System Requirements
 
-To use the CopperSpice libraries you will need a C++11 compiler and a C++11 standard library.
+To use the CopperSpice libraries you will need a C++14 compiler and a C++14 standard library.
 
 Uses CMake or Autotools for building binary files. Your project can be built with either CMake
 or Autotools. Refer to our CopperSpice Overview documentation, DoxyPress application, or our
@@ -88,9 +88,9 @@ www.copperspice.com/presentations.html
 * **Barbara Geller**
 * **Robin Mills**
 * **Ivailo Monev**
-* **Charley Bey**
 * **Adam Mensel**
 * **Daniel Pfeifer**
+* **Zbigniew Skowron**
 
 
 ### License
