@@ -24,9 +24,9 @@ AC_PROG_CC_C99
 AM_PROG_CC_C_O
 AC_PROG_CXX
 
-# set flags for c++11
+# set flags for c++14
 AC_LANG([C++])
-AX_CXX_COMPILE_STDCXX_11([noext])
+AX_CXX_COMPILE_STDCXX(14,[noext])
 
 AC_CONFIG_HEADERS(include/qt-acconfig.h)
 
@@ -56,7 +56,7 @@ AC_PROG_OBJCXX
 
 # not mandatory
 echo ""
-PKG_CHECK_MODULES(SSL, openssl, SSL="yes", true)
+PKG_CHECK_MODULES(SSL, openssl >= 1.0.0, SSL="yes", true)
 PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
 
 AC_CHECK_HEADERS([cups/cups.h])

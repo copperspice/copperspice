@@ -112,7 +112,7 @@ include(CPack)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 if(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-undefined,error")
@@ -177,7 +177,7 @@ endforeach()
 message("")
 message(STATUS "Search for packages:\n")
 
-find_package(OpenSSL)
+find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
     PURPOSE "Required for HTTPS support"
     DESCRIPTION "Support for secure network communications (SSL and TLS)"
@@ -225,7 +225,7 @@ set_package_properties(MySQL PROPERTIES
     TYPE RECOMMENDED
 )
 
-# TODO: need a module for Qt Platform Abstraction
+# TODO: need a module for Platform Abstraction
 # find_package(QPA)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
