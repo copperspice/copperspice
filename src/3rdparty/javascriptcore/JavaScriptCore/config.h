@@ -39,16 +39,13 @@
 
 #if OS(WINDOWS)
 
-// If we don't define these, they get defined in windef.h. 
-// We want to use std::min and std::max
-#define max max
-#define min min
+// possible issue: defined in windef.h, we want to use std::min and std::max
+#define max  max
+#define min  min
 
-#if !COMPILER(MSVC7) && !OS(WINCE)
 // We need to define this before the first #include of stdlib.h or it won't contain rand_s.
 #ifndef _CRT_RAND_S
 #define _CRT_RAND_S
-#endif
 #endif
 
 #endif
@@ -68,9 +65,8 @@
 #include <wtf/FastMalloc.h>
 #endif
 
-// this breaks compilation of <QFontDatabase>, at least, so turn it off for now
-// Also generates errors on wx on Windows, because these functions
-// are used from wx headers. 
+// this breaks compilation of <QFontDatabase>, so turn it off for now
+// generates errors on wx on Windows, because these functions are used from wx headers.
 #if !PLATFORM(QT) && !PLATFORM(WX)
 #include <wtf/DisallowCType.h>
 #endif
