@@ -52,6 +52,7 @@ set(NETWORK_PRIVATE_INCLUDES
 set(NETWORK_SOURCES
     ${NETWORK_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qauthenticator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qurlinfo.cpp
