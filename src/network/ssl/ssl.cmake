@@ -37,7 +37,9 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl_symbols_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/sslsocket_mac_p.h
 )
+
 
 if(OPENSSL_FOUND)
     set(NETWORK_SOURCES
@@ -58,5 +60,14 @@ if(OPENSSL_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl_symbols.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator.cpp
+    )
+endif()
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(NETWORK_SOURCES
+        ${NETWORK_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac.cpp
     )
 endif()

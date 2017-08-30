@@ -33,7 +33,8 @@ NETWORK_SSL_PRIVATE_INCLUDES = \
 	qsslsocket_openssl_p.h \
 	qsslsocket_openssl_symbols_p.h \
 	qsslpresharedkeyauthenticator_p.h \
-	qsslsocket_p.h
+	qsslsocket_p.h \
+	qsslsocket_mac_p.h
 
 NETWORK_INCLUDES += $(NETWORK_SSL_INCLUDES)
 NETWORK_PRIVATE_INCLUDES += $(NETWORK_SSL_PRIVATE_INCLUDES)
@@ -60,3 +61,10 @@ lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/ssl/qsslsocket_openssl_symbols.cpp  \
 	src/network/ssl/qsslpresharedkeyauthenticator.cpp
 endif
+
+if OSTYPE_DARWIN
+lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
+	src/network/ssl/qsslkey_mac.cpp \
+	src/network/ssl/qsslsocket_mac.cpp
+endif
+
