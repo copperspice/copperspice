@@ -38,6 +38,8 @@ set(NETWORK_INCLUDES
 
 set(NETWORK_PRIVATE_INCLUDES
     ${NETWORK_PRIVATE_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractprotocolhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkheader_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkrequest_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkreply_p.h
@@ -58,7 +60,6 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyimpl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplydataimpl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyfileimpl_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkdiskcache_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpthreaddelegate_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpmultipart_p.h
@@ -66,6 +67,8 @@ set(NETWORK_PRIVATE_INCLUDES
 
 set(NETWORK_SOURCES
     ${NETWORK_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractprotocolhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qftp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpnetworkheader.cpp
@@ -88,7 +91,6 @@ set(NETWORK_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyimpl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplydataimpl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkreplyfileimpl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/access/qabstractnetworkcache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetworkdiskcache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpthreaddelegate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/access/qhttpmultipart.cpp

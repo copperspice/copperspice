@@ -25,6 +25,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "qcore_unix_p.h"
+
 #if defined(QT_NO_CLOCK_MONOTONIC)
 // turn off the monotonic clock
 # ifdef _POSIX_MONOTONIC_CLOCK
@@ -116,28 +118,38 @@ static inline void do_gettime(qint64 *sec, qint64 *frac)
 }
 
 // used in qcore_unix.cpp and qeventdispatcher_unix.cpp
-timeval qt_gettime()
+struct timespec qt_gettime()
 {
    qint64 sec, frac;
    do_gettime(&sec, &frac);
 
-   timeval tv;
+   timespec tv;
    tv.tv_sec = sec;
-   tv.tv_usec = frac;
-   if (monotonicClockAvailable) {
-      tv.tv_usec /= 1000;
-   }
+   tv.tv_nsec = frac;
 
    return tv;
 }
 
+void qt_nanosleep(timespec amount)
+{
+    // We'd like to use clock_nanosleep.
+    //
+    // But clock_nanosleep is from POSIX.1-2001 and both are *not*
+    // affected by clock changes when using relative sleeps, even for
+    // CLOCK_REALTIME.
+    //
+    // nanosleep is POSIX.1-1993
+
+    int r;
+    EINTR_LOOP(r, nanosleep(&amount, &amount));
+}
 static qint64 elapsedAndRestart(qint64 sec, qint64 frac,
                                 qint64 *nowsec, qint64 *nowfrac)
 {
    do_gettime(nowsec, nowfrac);
    sec = *nowsec - sec;
    frac = *nowfrac - frac;
-   return sec * Q_INT64_C(1000) + frac / fractionAdjustment();
+   return (sec * Q_INT64_C(1000000000) + frac) / Q_INT64_C(1000000);
 }
 
 void QElapsedTimer::start()
@@ -156,28 +168,25 @@ qint64 QElapsedTimer::nsecsElapsed() const
    do_gettime(&sec, &frac);
    sec = sec - t1;
    frac = frac - t2;
-   if (!monotonicClockAvailable) {
-      frac *= 1000;
-   }
+
    return sec * Q_INT64_C(1000000000) + frac;
 }
 
 qint64 QElapsedTimer::elapsed() const
 {
-   qint64 sec, frac;
-   return elapsedAndRestart(t1, t2, &sec, &frac);
+    return nsecsElapsed() / Q_INT64_C(1000000);
 }
 
 qint64 QElapsedTimer::msecsSinceReference() const
 {
-   return t1 * Q_INT64_C(1000) + t2 / fractionAdjustment();
+    return t1 * Q_INT64_C(1000) + t2 / Q_INT64_C(1000000);
 }
 
 qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 {
    qint64 secs = other.t1 - t1;
    qint64 fraction = other.t2 - t2;
-   return secs * Q_INT64_C(1000) + fraction / fractionAdjustment();
+    return (secs * Q_INT64_C(1000000000) + fraction) / Q_INT64_C(1000000);
 }
 
 qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const

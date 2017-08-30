@@ -131,7 +131,7 @@ extern "C" {
 
 } // Extern C
 
-int select(int, fd_set *, fd_set *, fd_set *, struct timeval *)
+int select(int, fd_set *, fd_set *, fd_set *, struct timespec *)
 {
    return 0;
 }

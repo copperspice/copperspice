@@ -25,134 +25,101 @@
 
 #include <qplatformdefs.h>
 #include <qatomic.h>
+#include <qbytearray.h>
+#include <qhashfunc.h>
 
 #ifndef Q_OS_UNIX
 # error <qcore_unix_p.h included on a non-Unix system>
 #endif
 
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include <sys/wait.h>
+#include <atomic>
 #include <errno.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 
 struct sockaddr;
-
-#if defined(Q_OS_LINUX) && defined(O_CLOEXEC)
-# define QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC 1
-QT_BEGIN_NAMESPACE
-namespace QtLibcSupplement {
-   inline int accept4(int, sockaddr *, QT_SOCKLEN_T *, int)
-   {
-      errno = ENOSYS;
-      return -1;
-   }
-   
-   inline int dup3(int, int, int)
-   {
-      errno = ENOSYS;
-      return -1;
-   }
-   
-   inline int pipe2(int [], int )
-   {
-      errno = ENOSYS;
-      return -1;
-   }
-}
-
-QT_END_NAMESPACE
-using namespace QT_PREPEND_NAMESPACE(QtLibcSupplement);
-
-#else
-# define QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC 0
-#endif
 
 #define EINTR_LOOP(var, cmd)                    \
     do {                                        \
         var = cmd;                              \
     } while (var == -1 && errno == EINTR)
 
-QT_BEGIN_NAMESPACE
 
-// Internal operator functions for timevals
-inline timeval &normalizedTimeval(timeval &t)
+// Internal operator functions for timespecs
+inline timespec &normalizedTimespec(timespec &t)
 {
-   while (t.tv_usec > 1000000l) {
-      ++t.tv_sec;
-      t.tv_usec -= 1000000l;
-   }
-   while (t.tv_usec < 0l) {
-      --t.tv_sec;
-      t.tv_usec += 1000000l;
-   }
-   return t;
+    while (t.tv_nsec >= 1000000000) {
+        ++t.tv_sec;
+        t.tv_nsec -= 1000000000;
+    }
+    while (t.tv_nsec < 0) {
+        --t.tv_sec;
+        t.tv_nsec += 1000000000;
+    }
+    return t;
 }
 
-inline bool operator<(const timeval &t1, const timeval &t2)
+inline bool operator<(const timespec &t1, const timespec &t2)
+{ return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_nsec < t2.tv_nsec); }
+
+inline bool operator==(const timespec &t1, const timespec &t2)
+{ return t1.tv_sec == t2.tv_sec && t1.tv_nsec == t2.tv_nsec; }
+
+inline bool operator!=(const timespec &t1, const timespec &t2)
+{ return !(t1 == t2); }
+
+inline timespec &operator+=(timespec &t1, const timespec &t2)
 {
-   return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_usec < t2.tv_usec);
+    t1.tv_sec += t2.tv_sec;
+    t1.tv_nsec += t2.tv_nsec;
+    return normalizedTimespec(t1);
 }
 
-inline bool operator==(const timeval &t1, const timeval &t2)
+inline timespec operator+(const timespec &t1, const timespec &t2)
 {
-   return t1.tv_sec == t2.tv_sec && t1.tv_usec == t2.tv_usec;
+    timespec tmp;
+    tmp.tv_sec = t1.tv_sec + t2.tv_sec;
+    tmp.tv_nsec = t1.tv_nsec + t2.tv_nsec;
+    return normalizedTimespec(tmp);
 }
 
-inline timeval &operator+=(timeval &t1, const timeval &t2)
+inline timespec operator-(const timespec &t1, const timespec &t2)
 {
-   t1.tv_sec += t2.tv_sec;
-   t1.tv_usec += t2.tv_usec;
-   return normalizedTimeval(t1);
+    timespec tmp;
+    tmp.tv_sec = t1.tv_sec - (t2.tv_sec - 1);
+    tmp.tv_nsec = t1.tv_nsec - (t2.tv_nsec + 1000000000);
+    return normalizedTimespec(tmp);
 }
 
-inline timeval operator+(const timeval &t1, const timeval &t2)
+inline timespec operator*(const timespec &t1, int mul)
 {
-   timeval tmp;
-   tmp.tv_sec = t1.tv_sec + t2.tv_sec;
-   tmp.tv_usec = t1.tv_usec + t2.tv_usec;
-   return normalizedTimeval(tmp);
-}
-
-inline timeval operator-(const timeval &t1, const timeval &t2)
-{
-   timeval tmp;
-   tmp.tv_sec = t1.tv_sec - (t2.tv_sec - 1);
-   tmp.tv_usec = t1.tv_usec - (t2.tv_usec + 1000000);
-   return normalizedTimeval(tmp);
-}
-
-inline timeval operator*(const timeval &t1, int mul)
-{
-   timeval tmp;
-   tmp.tv_sec = t1.tv_sec * mul;
-   tmp.tv_usec = t1.tv_usec * mul;
-   return normalizedTimeval(tmp);
+    timespec tmp;
+    tmp.tv_sec = t1.tv_sec * mul;
+    tmp.tv_nsec = t1.tv_nsec * mul;
+    return normalizedTimespec(tmp);
 }
 
 inline void qt_ignore_sigpipe()
 {
-#ifndef Q_NO_POSIX_SIGNALS
-   // Set to ignore SIGPIPE once only.
-   static QAtomicInt atom = QAtomicInt { 0 };
+    // Set to ignore SIGPIPE once only.
+    static std::atomic<bool> atom(false);
 
-   if (! atom.load()) {
-      // More than one thread could turn off SIGPIPE at the same time
-      // But that's acceptable because they all would be doing the same action
+    if (! atom.load()) {
+        // More than one thread could turn off SIGPIPE at the same time
+        // But that's acceptable because they all would be doing the same action
+        struct sigaction noaction;
+        memset(&noaction, 0, sizeof(noaction));
 
-      struct sigaction noaction;
-      memset(&noaction, 0, sizeof(noaction));
-      noaction.sa_handler = SIG_IGN;
-      ::sigaction(SIGPIPE, &noaction, 0);
-      atom.store(1);
-   }
-#else
-   // Posix signals are not supported by the underlying platform
-   // so we don't need to ignore sigpipe signal explicitly
-#endif
+        noaction.sa_handler = SIG_IGN;
+        ::sigaction(SIGPIPE, &noaction, 0);
+
+        atom.store(true);
+    }
 }
 
 // don't call QT_OPEN or ::open
@@ -162,6 +129,7 @@ static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 07
 #ifdef O_CLOEXEC
    flags |= O_CLOEXEC;
 #endif
+
    int fd;
    EINTR_LOOP(fd, QT_OPEN(pathname, flags, mode));
 
@@ -176,29 +144,20 @@ static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 07
 #define QT_OPEN         qt_safe_open
 
 
-// don't call ::pipe, call qt_safe_pipe
+
 static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
 {
-#ifdef O_CLOEXEC
-   Q_ASSERT((flags & ~(O_CLOEXEC | O_NONBLOCK)) == 0);
+    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
+
+#ifdef QT_THREADSAFE_CLOEXEC
+    // use pipe2
+    flags |= O_CLOEXEC;
+    return ::pipe2(pipefd, flags); // pipe2 is documented not to return EINTR
 #else
-   Q_ASSERT((flags & ~O_NONBLOCK) == 0);
-#endif
-
-   int ret;
-#if QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC && defined(O_CLOEXEC)
-   // use pipe2
-   flags |= O_CLOEXEC;
-   ret = ::pipe2(pipefd, flags); // pipe2 is Linux-specific and is documented not to return EINTR
-   if (ret == 0 || errno != ENOSYS) {
-      return ret;
-   }
-#endif
-
-   ret = ::pipe(pipefd);
-   if (ret == -1) {
-      return -1;
-   }
+    int ret = ::pipe(pipefd);
+    if (ret == -1) {
+        return -1;
+    }
 
    ::fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
    ::fcntl(pipefd[1], F_SETFD, FD_CLOEXEC);
@@ -210,6 +169,7 @@ static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
    }
 
    return 0;
+#endif
 }
 
 // don't call dup or fcntl(F_DUPFD)
@@ -217,51 +177,43 @@ static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC
 {
    Q_ASSERT(flags == FD_CLOEXEC || flags == 0);
 
-   int ret;
 #ifdef F_DUPFD_CLOEXEC
-   // use this fcntl
-   if (flags & FD_CLOEXEC) {
-      ret = ::fcntl(oldfd, F_DUPFD_CLOEXEC, atleast);
-      if (ret != -1 || errno != EINVAL) {
-         return ret;
-      }
-   }
-#endif
+    int cmd = F_DUPFD;
+    if (flags & FD_CLOEXEC)
+        cmd = F_DUPFD_CLOEXEC;
+    return ::fcntl(oldfd, cmd, atleast);
 
+#else
    // use F_DUPFD
-   ret = ::fcntl(oldfd, F_DUPFD, atleast);
+   int ret = ::fcntl(oldfd, F_DUPFD, atleast);
 
    if (flags && ret != -1) {
       ::fcntl(ret, F_SETFD, flags);
    }
    return ret;
+#endif
 }
 
-// don't call dup2
-// call qt_safe_dup2
+// don't call dup2, call qt_safe_dup2
 static inline int qt_safe_dup2(int oldfd, int newfd, int flags = FD_CLOEXEC)
 {
    Q_ASSERT(flags == FD_CLOEXEC || flags == 0);
 
    int ret;
-#if QT_UNIX_SUPPORTS_THREADSAFE_CLOEXEC && defined(O_CLOEXEC)
+#ifdef QT_THREADSAFE_CLOEXEC
    // use dup3
-   if (flags & FD_CLOEXEC) {
-      EINTR_LOOP(ret, ::dup3(oldfd, newfd, O_CLOEXEC));
-      if (ret == 0 || errno != ENOSYS) {
-         return ret;
-      }
-   }
-#endif
-   EINTR_LOOP(ret, ::dup2(oldfd, newfd));
-   if (ret == -1) {
-      return -1;
-   }
+    EINTR_LOOP(ret, ::dup3(oldfd, newfd, flags ? O_CLOEXEC : 0));
+    return ret;
+#else
 
-   if (flags) {
-      ::fcntl(newfd, F_SETFD, flags);
-   }
-   return 0;
+   EINTR_LOOP(ret, ::dup2(oldfd, newfd));
+    if (ret == -1)
+        return -1;
+
+    if (flags)
+        ::fcntl(newfd, F_SETFD, flags);
+    return 0;
+#endif
 }
 
 static inline qint64 qt_safe_read(int fd, void *data, qint64 maxlen)
@@ -326,13 +278,19 @@ static inline pid_t qt_safe_waitpid(pid_t pid, int *status, int options)
    return ret;
 }
 
-#if !defined(_POSIX_MONOTONIC_CLOCK)
+#if ! defined(_POSIX_MONOTONIC_CLOCK)
 #  define _POSIX_MONOTONIC_CLOCK -1
 #endif
 
-timeval qt_gettime(); // in qelapsedtimer_mac.cpp or qtimestamp_unix.cpp
+// in qelapsedtimer_mac.cpp or qtimestamp_unix.cpp
+timespec qt_gettime();
 
-Q_CORE_EXPORT int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept, const struct timeval *tv);
+void qt_nanosleep(timespec amount);
+
+Q_CORE_EXPORT int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+                  const struct timespec *tv);
+
+int qt_select_msecs(int nfds, fd_set *fdread, fd_set *fdwrite, int timeout);
 
 // according to X/OPEN we have to define semun ourselves
 // we use prefix as on some systems sem.h will have it
@@ -343,6 +301,18 @@ union qt_semun {
    unsigned short *array;      /* array for GETALL, SETALL */
 };
 
+#ifndef QT_POSIX_IPC
+#ifndef QT_NO_SHAREDMEMORY
+
+static inline key_t qt_safe_ftok(const QByteArray &filename, int proj_id)
+{
+    // Unfortunately ftok can return colliding keys even for different files.
+    // Try to add some more entropy via qHash.
+    return ::ftok(filename.constData(), qHash(filename, proj_id));
+}
+
+#endif // !QT_NO_SHAREDMEMORY
+#endif // !QT_POSIX_IPC
 QT_END_NAMESPACE
 
 #endif

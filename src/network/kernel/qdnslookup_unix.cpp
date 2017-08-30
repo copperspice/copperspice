@@ -96,15 +96,17 @@ static void resolveLibrary()
         local_res_nquery = res_nquery_proto(lib.resolve("res_nquery"));
 }
 
-void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestName, const QHostAddress &nameserver, QDnsLookupReply *reply)
+void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestName,
+                  const QHostAddress &nameserver, QDnsLookupReply *reply)
 {
     // Load dn_expand, res_ninit and res_nquery on demand.
-    static QBasicAtomicInt triedResolve = Q_BASIC_ATOMIC_INITIALIZER(false);
-    if (!triedResolve.loadAcquire()) {
+    static std::atomic<bool> triedResolve(false);
+
+    if (! triedResolve.load()) {
         QMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_ninit));
         if (!triedResolve.load()) {
             resolveLibrary();
-            triedResolve.storeRelease(true);
+            triedResolve.store(true);
         }
     }
 
@@ -170,7 +172,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
     // Perform DNS query.
     unsigned char response[PACKETSZ];
     memset(response, 0, sizeof(response));
-    const int responseLength = local_res_nquery(&state, requestName, C_IN, requestType, response, sizeof(response));
+    const int responseLength = local_res_nquery(&state, requestName.constData(), C_IN, requestType, response, sizeof(response));
 
     // Check the response header.
     HEADER *header = (HEADER*)response;

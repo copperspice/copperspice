@@ -35,6 +35,8 @@ NETWORK_ACCESS_INCLUDES = \
 	qnetworkrequest.h
 
 NETWORK_ACCESS_PRIVATE_INCLUDES = \
+	qabstractnetworkcache_p.h \
+	qabstractprotocolhandler_p.h \
 	qhttpnetworkheader_p.h \
 	qhttpnetworkrequest_p.h \
 	qhttpnetworkreply_p.h \
@@ -55,7 +57,6 @@ NETWORK_ACCESS_PRIVATE_INCLUDES = \
 	qnetworkreplyimpl_p.h \
 	qnetworkreplydataimpl_p.h \
 	qnetworkreplyfileimpl_p.h \
-	qabstractnetworkcache_p.h \
 	qnetworkdiskcache_p.h \
 	qhttpthreaddelegate_p.h \
 	qhttpmultipart_p.h
@@ -67,6 +68,8 @@ noinst_HEADERS+=$(patsubst %,src/network/access/%,$(NETWORK_ACCESS_INCLUDES)) \
 		$(patsubst %,src/network/access/%,$(NETWORK_ACCESS_PRIVATE_INCLUDES))
 
 lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
+	src/network/access/qabstractnetworkcache.cpp \
+	src/network/access/qabstractprotocolhandler.cpp \
 	src/network/access/qftp.cpp \
 	src/network/access/qhttp.cpp \
 	src/network/access/qhttpnetworkheader.cpp \
@@ -89,7 +92,6 @@ lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/access/qnetworkreplyimpl.cpp \
 	src/network/access/qnetworkreplydataimpl.cpp \
 	src/network/access/qnetworkreplyfileimpl.cpp \
-	src/network/access/qabstractnetworkcache.cpp \
 	src/network/access/qnetworkdiskcache.cpp \
 	src/network/access/qhttpthreaddelegate.cpp \
 	src/network/access/qhttpmultipart.cpp

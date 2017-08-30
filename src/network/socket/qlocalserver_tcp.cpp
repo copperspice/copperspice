@@ -91,7 +91,7 @@ void QLocalServerPrivate::_q_onNewConnection()
    }
 
    tcpSocket->setParent(q);
-   const quintptr socketDescriptor = tcpSocket->socketDescriptor();
+   const qintptr socketDescriptor = tcpSocket->socketDescriptor();
    q->incomingConnection(socketDescriptor);
 }
 

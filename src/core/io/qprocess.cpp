@@ -28,12 +28,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-
-QT_BEGIN_NAMESPACE
-/*
-    Returns a human readable representation of the first \a len
-    characters in \a data.
-*/
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
    if (!data) {
@@ -88,53 +82,12 @@ QT_END_NAMESPACE
 
 #ifndef QT_NO_PROCESS
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QProcessEnvironment
-
-    \brief The QProcessEnvironment class holds the environment variables that
-    can be passed to a program.
-
-    \ingroup io
-    \ingroup misc
-    \mainclass
-    \reentrant
-    \since 4.6
-
-    A process's environment is composed of a set of key=value pairs known as
-    environment variables. The QProcessEnvironment class wraps that concept
-    and allows easy manipulation of those variables. It's meant to be used
-    along with QProcess, to set the environment for child processes. It
-    cannot be used to change the current process's environment.
-
-    The environment of the calling process can be obtained using
-    QProcessEnvironment::systemEnvironment().
-
-    On Unix systems, the variable names are case-sensitive. For that reason,
-    this class will not touch the names of the variables. Note as well that
-    Unix environment allows both variable names and contents to contain arbitrary
-    binary data (except for the NUL character), but this is not supported by
-    QProcessEnvironment. This class only supports names and values that are
-    encodable by the current locale settings (see QTextCodec::codecForLocale).
-
-    On Windows, the variable names are case-insensitive. Therefore,
-    QProcessEnvironment will always uppercase the names and do case-insensitive
-    comparisons.
-
-    On Windows CE, the concept of environment does not exist. This class will
-    keep the values set for compatibility with other platforms, but the values
-    set will have no effect on the processes being created.
-
-    \sa QProcess, QProcess::systemEnvironment(), QProcess::setProcessEnvironment()
-*/
-
 QStringList QProcessEnvironmentPrivate::toList() const
 {
    QStringList result;
    result.reserve(hash.size());
-   Hash::ConstIterator it = hash.constBegin(),
-                       end = hash.constEnd();
+   Hash::ConstIterator it = hash.constBegin(), end = hash.constEnd();
+
    for ( ; it != end; ++it) {
       QString data = nameToString(it.key());
       QString value = valueToString(it.value());
@@ -229,23 +182,6 @@ QProcessEnvironment &QProcessEnvironment::operator=(const QProcessEnvironment &o
    return *this;
 }
 
-/*!
-    \fn bool QProcessEnvironment::operator !=(const QProcessEnvironment &other) const
-
-    Returns true if this and the \a other QProcessEnvironment objects are different.
-
-    \sa operator==()
-*/
-
-/*!
-    Returns true if this and the \a other QProcessEnvironment objects are equal.
-
-    Two QProcessEnvironment objects are considered equal if they have the same
-    set of key=value pairs. The comparison of keys is done case-sensitive on
-    platforms where the environment is case-sensitive.
-
-    \sa operator!=(), contains()
-*/
 bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
 {
    if (d == other.d) {
@@ -446,321 +382,6 @@ void QProcessPrivate::Channel::clear()
    file.clear();
    process = 0;
 }
-
-/*! \fn bool QProcessPrivate::startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory, qint64 *pid)
-
-\internal
- */
-
-/*!
-    \class QProcess
-
-    \brief The QProcess class is used to start external programs and
-    to communicate with them.
-
-    \ingroup io
-
-    \reentrant
-
-    \section1 Running a Process
-
-    To start a process, pass the name and command line arguments of
-    the program you want to run as arguments to start(). Arguments
-    are supplied as individual strings in a QStringList.
-
-    For example, the following code snippet runs the analog clock
-    example in the Motif style on X11 platforms by passing strings
-    containing "-style" and "motif" as two items in the list of
-    arguments:
-
-    \snippet doc/src/snippets/qprocess/qprocess-simpleexecution.cpp 0
-    \dots
-    \snippet doc/src/snippets/qprocess/qprocess-simpleexecution.cpp 1
-    \snippet doc/src/snippets/qprocess/qprocess-simpleexecution.cpp 2
-
-    QProcess then enters the \l Starting state, and when the program
-    has started, QProcess enters the \l Running state and emits
-    started().
-
-    QProcess allows you to treat a process as a sequential I/O
-    device. You can write to and read from the process just as you
-    would access a network connection using QTcpSocket. You can then
-    write to the process's standard input by calling write(), and
-    read the standard output by calling read(), readLine(), and
-    getChar(). Because it inherits QIODevice, QProcess can also be
-    used as an input source for QXmlReader, or for generating data to
-    be uploaded using QFtp.
-
-    \note On Windows CE and Symbian, reading and writing to a process
-    is not supported.
-
-    When the process exits, QProcess reenters the \l NotRunning state
-    (the initial state), and emits finished().
-
-    The finished() signal provides the exit code and exit status of
-    the process as arguments, and you can also call exitCode() to
-    obtain the exit code of the last process that finished, and
-    exitStatus() to obtain its exit status. If an error occurs at
-    any point in time, QProcess will emit the error() signal. You
-    can also call error() to find the type of error that occurred
-    last, and state() to find the current process state.
-
-    \section1 Communicating via Channels
-
-    Processes have two predefined output channels: The standard
-    output channel (\c stdout) supplies regular console output, and
-    the standard error channel (\c stderr) usually supplies the
-    errors that are printed by the process. These channels represent
-    two separate streams of data. You can toggle between them by
-    calling setReadChannel(). QProcess emits readyRead() when data is
-    available on the current read channel. It also emits
-    readyReadStandardOutput() when new standard output data is
-    available, and when new standard error data is available,
-    readyReadStandardError() is emitted. Instead of calling read(),
-    readLine(), or getChar(), you can explicitly read all data from
-    either of the two channels by calling readAllStandardOutput() or
-    readAllStandardError().
-
-    The terminology for the channels can be misleading. Be aware that
-    the process's output channels correspond to QProcess's
-    \e read channels, whereas the process's input channels correspond
-    to QProcess's \e write channels. This is because what we read
-    using QProcess is the process's output, and what we write becomes
-    the process's input.
-
-    QProcess can merge the two output channels, so that standard
-    output and standard error data from the running process both use
-    the standard output channel. Call setProcessChannelMode() with
-    MergedChannels before starting the process to activative
-    this feature. You also have the option of forwarding the output of
-    the running process to the calling, main process, by passing
-    ForwardedChannels as the argument.
-
-    Certain processes need special environment settings in order to
-    operate. You can set environment variables for your process by
-    calling setEnvironment(). To set a working directory, call
-    setWorkingDirectory(). By default, processes are run in the
-    current working directory of the calling process.
-
-    \note On Symbian, setting environment or working directory
-    is not supported. The working directory will always be the private
-    directory of the running process.
-
-    \note On QNX, setting the working directory may cause all
-    application threads, with the exception of the QProcess caller
-    thread, to temporarily freeze, owing to a limitation in
-    the operating system.
-
-    \section1 Synchronous Process API
-
-    QProcess provides a set of functions which allow it to be used
-    without an event loop, by suspending the calling thread until
-    certain signals are emitted:
-
-    \list
-    \o waitForStarted() blocks until the process has started.
-
-    \o waitForReadyRead() blocks until new data is
-    available for reading on the current read channel.
-
-    \o waitForBytesWritten() blocks until one payload of
-    data has been written to the process.
-
-    \o waitForFinished() blocks until the process has finished.
-    \endlist
-
-    Calling these functions from the main thread (the thread that
-    calls QApplication::exec()) may cause your user interface to
-    freeze.
-
-    The following example runs \c gzip to compress the string "Qt
-    rocks!", without an event loop:
-
-    \snippet doc/src/snippets/process/process.cpp 0
-
-    \section1 Notes for Windows Users
-
-    Some Windows commands (for example, \c dir) are not provided by
-    separate applications, but by the command interpreter itself.
-    If you attempt to use QProcess to execute these commands directly,
-    it won't work. One possible solution is to execute the command
-    interpreter itself (\c{cmd.exe} on some Windows systems), and ask
-    the interpreter to execute the desired command.
-
-    \section1 Symbian Platform Security Requirements
-
-    On Symbian, processes which use the functions kill() or terminate()
-    must have the \c PowerMgmt platform security capability. If the client
-    process lacks this capability, these functions will fail.
-
-    Platform security capabilities are added via the
-    \l{qmake-variable-reference.html#target-capability}{TARGET.CAPABILITY}
-    qmake variable.
-
-    \sa QBuffer, QFile, QTcpSocket
-*/
-
-/*!
-    \enum QProcess::ProcessChannel
-
-    This enum describes the process channels used by the running process.
-    Pass one of these values to setReadChannel() to set the
-    current read channel of QProcess.
-
-    \value StandardOutput The standard output (stdout) of the running
-           process.
-
-    \value StandardError The standard error (stderr) of the running
-           process.
-
-    \sa setReadChannel()
-*/
-
-/*!
-    \enum QProcess::ProcessChannelMode
-
-    This enum describes the process channel modes of QProcess. Pass
-    one of these values to setProcessChannelMode() to set the
-    current read channel mode.
-
-    \value SeparateChannels QProcess manages the output of the
-    running process, keeping standard output and standard error data
-    in separate internal buffers. You can select the QProcess's
-    current read channel by calling setReadChannel(). This is the
-    default channel mode of QProcess.
-
-    \value MergedChannels QProcess merges the output of the running
-    process into the standard output channel (\c stdout). The
-    standard error channel (\c stderr) will not receive any data. The
-    standard output and standard error data of the running process
-    are interleaved.
-
-    \value ForwardedChannels QProcess forwards the output of the
-    running process onto the main process. Anything the child process
-    writes to its standard output and standard error will be written
-    to the standard output and standard error of the main process.
-
-    \sa setProcessChannelMode()
-*/
-
-/*!
-    \enum QProcess::ProcessError
-
-    This enum describes the different types of errors that are
-    reported by QProcess.
-
-    \value FailedToStart The process failed to start. Either the
-    invoked program is missing, or you may have insufficient
-    permissions to invoke the program.
-
-    \value Crashed The process crashed some time after starting
-    successfully.
-
-    \value Timedout The last waitFor...() function timed out. The
-    state of QProcess is unchanged, and you can try calling
-    waitFor...() again.
-
-    \value WriteError An error occurred when attempting to write to the
-    process. For example, the process may not be running, or it may
-    have closed its input channel.
-
-    \value ReadError An error occurred when attempting to read from
-    the process. For example, the process may not be running.
-
-    \value UnknownError An unknown error occurred. This is the default
-    return value of error().
-
-    \sa error()
-*/
-
-/*!
-    \enum QProcess::ProcessState
-
-    This enum describes the different states of QProcess.
-
-    \value NotRunning The process is not running.
-
-    \value Starting The process is starting, but the program has not
-    yet been invoked.
-
-    \value Running The process is running and is ready for reading and
-    writing.
-
-    \sa state()
-*/
-
-/*!
-    \enum QProcess::ExitStatus
-
-    This enum describes the different exit statuses of QProcess.
-
-    \value NormalExit The process exited normally.
-
-    \value CrashExit The process crashed.
-
-    \sa exitStatus()
-*/
-
-/*!
-    \fn void QProcess::error(QProcess::ProcessError error)
-
-    This signal is emitted when an error occurs with the process. The
-    specified \a error describes the type of error that occurred.
-*/
-
-/*!
-    \fn void QProcess::started()
-
-    This signal is emitted by QProcess when the process has started,
-    and state() returns \l Running.
-*/
-
-/*!
-    \fn void QProcess::stateChanged(QProcess::ProcessState newState)
-
-    This signal is emitted whenever the state of QProcess changes. The
-    \a newState argument is the state QProcess changed to.
-*/
-
-/*!
-    \fn void QProcess::finished(int exitCode)
-    \obsolete
-    \overload
-
-    Use finished(int exitCode, QProcess::ExitStatus status) instead.
-*/
-
-/*!
-    \fn void QProcess::finished(int exitCode, QProcess::ExitStatus exitStatus)
-
-    This signal is emitted when the process finishes. \a exitCode is the exit
-    code of the process, and \a exitStatus is the exit status.  After the
-    process has finished, the buffers in QProcess are still intact. You can
-    still read any data that the process may have written before it finished.
-
-    \sa exitStatus()
-*/
-
-/*!
-    \fn void QProcess::readyReadStandardOutput()
-
-    This signal is emitted when the process has made new data
-    available through its standard output channel (\c stdout). It is
-    emitted regardless of the current \l{readChannel()}{read channel}.
-
-    \sa readAllStandardOutput(), readChannel()
-*/
-
-/*!
-    \fn void QProcess::readyReadStandardError()
-
-    This signal is emitted when the process has made new data
-    available through its standard error channel (\c stderr). It is
-    emitted regardless of the current \l{readChannel()}{read
-    channel}.
-
-    \sa readAllStandardError(), readChannel()
-*/
 
 /*! \internal
 */
@@ -1397,28 +1018,6 @@ void QProcess::setStandardInputFile(const QString &fileName)
    d->stdinChannel = fileName;
 }
 
-/*!
-    \since 4.2
-
-    Redirects the process' standard output to the file \a
-    fileName. When the redirection is in place, the standard output
-    read channel is closed: reading from it using read() will always
-    fail, as will readAllStandardOutput().
-
-    If the file \a fileName doesn't exist at the moment start() is
-    called, it will be created. If it cannot be created, the starting
-    will fail.
-
-    If the file exists and \a mode is QIODevice::Truncate, the file
-    will be truncated. Otherwise (if \a mode is QIODevice::Append),
-    the file will be appended to.
-
-    Calling setStandardOutputFile() after the process has started has
-    no effect.
-
-    \sa setStandardInputFile(), setStandardErrorFile(),
-        setStandardOutputProcess()
-*/
 void QProcess::setStandardOutputFile(const QString &fileName, OpenMode mode)
 {
    Q_ASSERT(mode == Append || mode == Truncate);
@@ -1428,24 +1027,6 @@ void QProcess::setStandardOutputFile(const QString &fileName, OpenMode mode)
    d->stdoutChannel.append = mode == Append;
 }
 
-/*!
-    \since 4.2
-
-    Redirects the process' standard error to the file \a
-    fileName. When the redirection is in place, the standard error
-    read channel is closed: reading from it using read() will always
-    fail, as will readAllStandardError(). The file will be appended to
-    if \a mode is Append, otherwise, it will be truncated.
-
-    See setStandardOutputFile() for more information on how the file
-    is opened.
-
-    Note: if setProcessChannelMode() was called with an argument of
-    QProcess::MergedChannels, this function has no effect.
-
-    \sa setStandardInputFile(), setStandardOutputFile(),
-        setStandardOutputProcess()
-*/
 void QProcess::setStandardErrorFile(const QString &fileName, OpenMode mode)
 {
    Q_ASSERT(mode == Append || mode == Truncate);
@@ -1455,18 +1036,6 @@ void QProcess::setStandardErrorFile(const QString &fileName, OpenMode mode)
    d->stderrChannel.append = mode == Append;
 }
 
-/*!
-    \since 4.2
-
-    Pipes the standard output stream of this process to the \a
-    destination process' standard input.
-
-    The following shell command:
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 2
-
-    Can be accomplished with QProcesses with the following code:
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 3
-*/
 void QProcess::setStandardOutputProcess(QProcess *destination)
 {
    QProcessPrivate *dfrom = d_func();
@@ -1477,40 +1046,12 @@ void QProcess::setStandardOutputProcess(QProcess *destination)
 
 #if defined(Q_OS_WIN)
 
-/*!
-    \since 4.7
-
-    Returns the additional native command line arguments for the program.
-
-    \note This function is available only on the Windows and Symbian
-    platforms.
-
-    \sa setNativeArguments()
-*/
 QString QProcess::nativeArguments() const
 {
    Q_D(const QProcess);
    return d->nativeArguments;
 }
 
-/*!
-    \since 4.7
-    \overload
-
-    Sets additional native command line \a arguments for the program.
-
-    On operating systems where the system API for passing command line
-    \a arguments to a subprocess natively uses a single string, one can
-    conceive command lines which cannot be passed via QProcess's portable
-    list-based API. In such cases this function must be used to set a
-    string which is \e appended to the string composed from the usual
-    argument list, with a delimiting space.
-
-    \note This function is available only on the Windows and Symbian
-    platforms.
-
-    \sa nativeArguments()
-*/
 void QProcess::setNativeArguments(const QString &arguments)
 {
    Q_D(QProcess);
@@ -2183,21 +1724,6 @@ void QProcess::terminate()
    d->terminateProcess();
 }
 
-/*!
-    Kills the current process, causing it to exit immediately.
-
-    On Windows, kill() uses TerminateProcess, and on Unix and Mac OS X, the
-    SIGKILL signal is sent to the process.
-
-    On Symbian, this function requires platform security capability
-    \c PowerMgmt. If absent, the process will panic with KERN-EXEC 46.
-
-    \note Killing running processes from other processes will typically
-    cause a panic in Symbian due to platform security.
-
-    \sa {Symbian Platform Security Requirements}
-    \sa terminate()
-*/
 void QProcess::kill()
 {
    Q_D(QProcess);
@@ -2213,36 +1739,12 @@ int QProcess::exitCode() const
    return d->exitCode;
 }
 
-/*!
-    \since 4.1
-
-    Returns the exit status of the last process that finished.
-
-    On Windows, if the process was terminated with TerminateProcess()
-    from another application this function will still return NormalExit
-    unless the exit code is less than 0.
-*/
 QProcess::ExitStatus QProcess::exitStatus() const
 {
    Q_D(const QProcess);
    return d->exitStatus;
 }
 
-/*!
-    Starts the program \a program with the arguments \a arguments in a
-    new process, waits for it to finish, and then returns the exit
-    code of the process. Any data the new process writes to the
-    console is forwarded to the calling process.
-
-    The environment and working directory are inherited from the calling
-    process.
-
-    On Windows, arguments that contain spaces are wrapped in quotes.
-
-    If the process cannot be started, -2 is returned. If the process
-    crashes, -1 is returned. Otherwise, the process' exit code is
-    returned.
-*/
 int QProcess::execute(const QString &program, const QStringList &arguments)
 {
    QProcess process;
@@ -2254,13 +1756,6 @@ int QProcess::execute(const QString &program, const QStringList &arguments)
    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 
-/*!
-    \overload
-
-    Starts the program \a program in a new process. \a program is a
-    single string of text containing both the program name and its
-    arguments. The arguments are separated by one or more spaces.
-*/
 int QProcess::execute(const QString &program)
 {
    QProcess process;
@@ -2272,74 +1767,21 @@ int QProcess::execute(const QString &program)
    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 
-/*!
-    Starts the program \a program with the arguments \a arguments in a
-    new process, and detaches from it. Returns true on success;
-    otherwise returns false. If the calling process exits, the
-    detached process will continue to live.
-
-    Note that arguments that contain spaces are not passed to the
-    process as separate arguments.
-
-    \bold{Unix:} The started process will run in its own session and act
-    like a daemon.
-
-    \bold{Windows:} Arguments that contain spaces are wrapped in quotes.
-    The started process will run as a regular standalone process.
-
-    The process will be started in the directory \a workingDirectory.
-
-    \note On QNX, this may cause all application threads to
-    temporarily freeze.
-
-    If the function is successful then *\a pid is set to the process
-    identifier of the started process.
-*/
-bool QProcess::startDetached(const QString &program,
-                             const QStringList &arguments,
-                             const QString &workingDirectory,
-                             qint64 *pid)
+bool QProcess::startDetached(const QString &program, const QStringList &arguments,
+                  const QString &workingDirectory, qint64 *pid)
 {
-   return QProcessPrivate::startDetached(program,
-                                         arguments,
-                                         workingDirectory,
-                                         pid);
+   return QProcessPrivate::startDetached(program, arguments, workingDirectory, pid);
 }
 
-/*!
-    Starts the program \a program with the given \a arguments in a
-    new process, and detaches from it. Returns true on success;
-    otherwise returns false. If the calling process exits, the
-    detached process will continue to live.
-
-    \note Arguments that contain spaces are not passed to the
-    process as separate arguments.
-
-    \bold{Unix:} The started process will run in its own session and act
-    like a daemon.
-
-    \bold{Windows:} Arguments that contain spaces are wrapped in quotes.
-    The started process will run as a regular standalone process.
-*/
-bool QProcess::startDetached(const QString &program,
-                             const QStringList &arguments)
+bool QProcess::startDetached(const QString &program, const QStringList &arguments)
 {
    return QProcessPrivate::startDetached(program, arguments);
 }
 
-/*!
-    \overload
-
-    Starts the program \a program in a new process. \a program is a
-    single string of text containing both the program name and its
-    arguments. The arguments are separated by one or more spaces.
-
-    The \a program string can also contain quotes, to ensure that arguments
-    containing spaces are correctly supplied to the new process.
-*/
 bool QProcess::startDetached(const QString &program)
 {
    QStringList args = parseCombinedArgString(program);
+
    if (args.isEmpty()) {
       return false;
    }
@@ -2350,79 +1792,34 @@ bool QProcess::startDetached(const QString &program)
    return QProcessPrivate::startDetached(prog, args);
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
-#if defined(Q_OS_MAC) && !defined(Q_OS_IOS)
+
+#if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
 # include <crt_externs.h>
 # define environ (*_NSGetEnviron())
+
 #elif defined(Q_OS_MAC) && defined(Q_OS_IOS)
 static char *qt_empty_environ[] = { 0 };
 #define environ qt_empty_environ
-#elif !defined(Q_OS_WIN)
-extern "C" { char **environ; }
+
+#elif ! defined(Q_OS_WIN)
+extern char **environ;
 #endif
-QT_END_INCLUDE_NAMESPACE
 
-/*!
-    \since 4.1
 
-    Returns the environment of the calling process as a list of
-    key=value pairs. Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 8
-
-    This function does not cache the system environment. Therefore, it's
-    possible to obtain an updated version of the environment if low-level C
-    library functions like \tt setenv ot \tt putenv have been called.
-
-    However, note that repeated calls to this function will recreate the
-    list of environment variables, which is a non-trivial operation.
-
-    \note For new code, it is recommended to use QProcessEnvironment::systemEnvironment()
-
-    \sa QProcessEnvironment::systemEnvironment(), environment(), setEnvironment()
-*/
 QStringList QProcess::systemEnvironment()
 {
    QStringList tmp;
-   char *entry = 0;
-   int count = 0;
-   while ((entry = environ[count++])) {
-      tmp << QString::fromLocal8Bit(entry);
+   const char *entry = nullptr;
+
+   if (environ != nullptr) {
+
+      for (int count = 0; (entry = environ[count]); ++count) {
+         tmp << QString::fromLocal8Bit(entry);
+      }
    }
+
    return tmp;
 }
-
-/*!
-    \fn QProcessEnvironment QProcessEnvironment::systemEnvironment()
-
-    \since 4.6
-
-    \brief The systemEnvironment function returns the environment of
-    the calling process.
-
-    It is returned as a QProcessEnvironment. This function does not
-    cache the system environment. Therefore, it's possible to obtain
-    an updated version of the environment if low-level C library
-    functions like \tt setenv ot \tt putenv have been called.
-
-    However, note that repeated calls to this function will recreate the
-    QProcessEnvironment object, which is a non-trivial operation.
-
-    \sa QProcess::systemEnvironment()
-*/
-
-/*!
-    \typedef Q_PID
-    \relates QProcess
-
-    Typedef for the identifiers used to represent processes on the underlying
-    platform. On Unix and Symbian, this corresponds to \l qint64; on Windows, it
-    corresponds to \c{_PROCESS_INFORMATION*}.
-
-    \sa QProcess::pid()
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PROCESS
 

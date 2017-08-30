@@ -20,36 +20,26 @@
 *
 ***********************************************************************/
 
-#ifndef QEVENTDISPATCHER_X11_P_H
-#define QEVENTDISPATCHER_X11_P_H
+#include <qabstractprotocolhandler_p.h>
+#include <qhttpnetworkconnectionchannel_p.h>
 
-#include <qeventdispatcher_unix_p.h>
+#ifndef QT_NO_HTTP
 
-QT_BEGIN_NAMESPACE
-
-class QEventDispatcherX11Private;
-
-class QEventDispatcherX11 : public QEventDispatcherUNIX
+QAbstractProtocolHandler::QAbstractProtocolHandler(QHttpNetworkConnectionChannel *channel)
+    : m_channel(channel), m_reply(0), m_socket(m_channel->socket), m_connection(m_channel->connection)
 {
-   GUI_CS_OBJECT(QEventDispatcherX11)
-   Q_DECLARE_PRIVATE(QEventDispatcherX11)
+    Q_ASSERT(m_channel);
+    Q_ASSERT(m_socket);
+    Q_ASSERT(m_connection);
+}
 
- public:
-   explicit QEventDispatcherX11(QObject *parent = nullptr);
-   ~QEventDispatcherX11();
+QAbstractProtocolHandler::~QAbstractProtocolHandler()
+{
+}
 
-   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
-   bool hasPendingEvents() override;
+void QAbstractProtocolHandler::setReply(QHttpNetworkReply *reply)
+{
+    m_reply = reply;
+}
 
-   void flush() override;
-
-   void startingUp() override;
-   void closingDown() override;
-
- protected:
-   int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timespec *timeout) override;
-};
-
-QT_END_NAMESPACE
-
-#endif // QEVENTDISPATCHER_X11_P_H
+#endif // QT_NO_HTTP

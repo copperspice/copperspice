@@ -48,7 +48,8 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
       DatagramTooLargeError = QAbstractSocket::DatagramTooLargeError,
       ConnectionError = QAbstractSocket::NetworkError,
       UnsupportedSocketOperationError = QAbstractSocket::UnsupportedSocketOperationError,
-      UnknownSocketError = QAbstractSocket::UnknownSocketError
+      UnknownSocketError = QAbstractSocket::UnknownSocketError,
+      OperationError = QAbstractSocket::OperationError
    };
 
    enum LocalSocketState {
@@ -61,6 +62,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    QLocalSocket(QObject *parent = nullptr);
    ~QLocalSocket();
 
+   void connectToServer(OpenMode openMode = ReadWrite);
    void connectToServer(const QString &name, OpenMode openMode = ReadWrite);
    void disconnectFromServer();
 
@@ -80,10 +82,10 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    qint64 readBufferSize() const;
    void setReadBufferSize(qint64 size);
 
-   bool setSocketDescriptor(quintptr socketDescriptor, LocalSocketState socketState = ConnectedState,
+   bool setSocketDescriptor(qintptr socketDescriptor, LocalSocketState socketState = ConnectedState,
                   OpenMode openMode = ReadWrite);
 
-   quintptr socketDescriptor() const;
+   qintptr socketDescriptor() const;
 
    LocalSocketState state() const;
    bool waitForBytesWritten(int msecs = 30000) override;

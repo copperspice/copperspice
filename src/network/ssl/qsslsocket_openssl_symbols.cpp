@@ -419,16 +419,20 @@ DEFINEFUNC(void, PKCS12_free, PKCS12 *pkcs12, pkcs12, return, DUMMYARG)
 struct NumericallyLess
 {
     typedef bool result_type;
-    result_type operator()(const QStringRef &lhs, const QStringRef &rhs) const
+    result_type operator()(const QString &lhs, const QString &rhs) const
     {
         bool ok = false;
         int b = 0;
         int a = lhs.toInt(&ok);
-        if (ok)
+
+        if (ok) {
             b = rhs.toInt(&ok);
+        }
+
         if (ok) {
             // both toInt succeeded
             return a < b;
+
         } else {
             // compare as strings;
             return lhs < rhs;
@@ -439,32 +443,40 @@ struct NumericallyLess
 struct LibGreaterThan
 {
     typedef bool result_type;
+
     result_type operator()(const QString &lhs, const QString &rhs) const
     {
-        const QVector<QStringRef> lhsparts = lhs.splitRef(QLatin1Char('.'));
-        const QVector<QStringRef> rhsparts = rhs.splitRef(QLatin1Char('.'));
+        const QStringList lhsparts = lhs.split(QLatin1Char('.'));
+        const QStringList rhsparts = rhs.split(QLatin1Char('.'));
+
         Q_ASSERT(lhsparts.count() > 1 && rhsparts.count() > 1);
 
         // note: checking rhs < lhs, the same as lhs > rhs
         return std::lexicographical_compare(rhsparts.begin() + 1, rhsparts.end(),
-                                            lhsparts.begin() + 1, lhsparts.end(),
-                                            NumericallyLess());
+                  lhsparts.begin() + 1, lhsparts.end(), NumericallyLess());
     }
 };
 
 #if defined(Q_OS_LINUX)
 static int dlIterateCallback(struct dl_phdr_info *info, size_t size, void *data)
 {
-    if (size < sizeof (info->dlpi_addr) + sizeof (info->dlpi_name))
-        return 1;
+    if (size < sizeof (info->dlpi_addr) + sizeof (info->dlpi_name)) {
+       return 1;
+    }
+
     QSet<QString> *paths = (QSet<QString> *)data;
     QString path = QString::fromLocal8Bit(info->dlpi_name);
-    if (!path.isEmpty()) {
+
+    if (! path.isEmpty()) {
+
         QFileInfo fi(path);
         path = fi.absolutePath();
-        if (!path.isEmpty())
+
+        if (!path.isEmpty()) {
             paths->insert(path);
+        }
     }
+
     return 0;
 }
 #endif

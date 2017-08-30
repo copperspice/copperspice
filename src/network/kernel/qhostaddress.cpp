@@ -773,20 +773,20 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
 bool QHostAddress::isLoopback() const
 {
     QT_ENSURE_PARSED(this);
-    if ((d->a & 0xFF000000) == 0x7F000000)
+
+    if ((d->a & 0xFF000000) == 0x7F000000)  {
         return true; // v4 range (including IPv6 wrapped IPv4 addresses)
+    }
+
     if (d->protocol == QAbstractSocket::IPv6Protocol) {
-#ifdef __SSE2__
-        const __m128i loopback = _mm_setr_epi8(0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 1);
-        __m128i ipv6 = _mm_loadu_si128((const __m128i *)d->a6.c);
-        __m128i cmp = _mm_cmpeq_epi8(ipv6, loopback);
-        return _mm_movemask_epi8(cmp) == 0xffff;
-#else
-        if (d->a6_64.c[0] != 0 || qFromBigEndian(d->a6_64.c[1]) != 1)
+
+        if (d->a6_64.c[0] != 0 || qFromBigEndian(d->a6_64.c[1]) != 1) {
             return false;
-#endif
+        }
+
         return true;
     }
+
     return false;
 }
 bool QHostAddress::isMulticast() const

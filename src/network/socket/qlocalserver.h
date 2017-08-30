@@ -23,7 +23,7 @@
 #ifndef QLOCALSERVER_H
 #define QLOCALSERVER_H
 
-#include <QtNetwork/qabstractsocket.h>
+#include <qabstractsocket.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
@@ -38,11 +38,20 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    NET_CS_OBJECT(QLocalServer)
    Q_DECLARE_PRIVATE(QLocalServer)
 
- public:
-   NET_CS_SIGNAL_1(Public, void newConnection())
-   NET_CS_SIGNAL_2(newConnection)
+   CS_PROPERTY_READ(socketOptions,  socketOptions)
+   CS_PROPERTY_WRITE(socketOptions, setSocketOptions)
 
-   QLocalServer(QObject *parent = nullptr);
+ public:
+   enum SocketOption {
+      NoOptions = 0x00,
+      UserAccessOption  = 0x01,
+      GroupAccessOption = 0x02,
+      OtherAccessOption = 0x04,
+      WorldAccessOption = 0x07
+   };
+   using SocketOptions = QFlags<SocketOption>;
+
+   explicit QLocalServer(QObject *parent = nullptr);
    ~QLocalServer();
 
    void close();
@@ -50,6 +59,7 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    virtual bool hasPendingConnections() const;
    bool isListening() const;
    bool listen(const QString &name);
+   bool listen(qintptr socketDescriptor);
    int maxPendingConnections() const;
    virtual QLocalSocket *nextPendingConnection();
    QString serverName() const;
@@ -57,10 +67,16 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    static bool removeServer(const QString &name);
    QAbstractSocket::SocketError serverError() const;
    void setMaxPendingConnections(int numConnections);
-   bool waitForNewConnection(int msec = 0, bool *timedOut = 0);
+   bool waitForNewConnection(int msec = 0, bool *timedOut = nullptr);
+
+   void setSocketOptions(SocketOptions options);
+   SocketOptions socketOptions() const;
+
+   NET_CS_SIGNAL_1(Public, void newConnection())
+   NET_CS_SIGNAL_2(newConnection)
 
  protected:
-   virtual void incomingConnection(quintptr socketDescriptor);
+   virtual void incomingConnection(qintptr socketDescriptor);
    QScopedPointer<QLocalServerPrivate> d_ptr;
 
  private:
@@ -68,7 +84,6 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
 
    NET_CS_SLOT_1(Private, void _q_onNewConnection())
    NET_CS_SLOT_2(_q_onNewConnection)
-
 };
 
 #endif // QT_NO_LOCALSERVER

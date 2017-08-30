@@ -61,10 +61,10 @@ extern "C" {
 
 }
 
-int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
+int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timespec *timeout);
 
 QT_END_NAMESPACE
 
 #endif //Q_OS_NACL
 
-#endif //QNACLUNIMPLEMENTED_H 
+#endif //QNACLUNIMPLEMENTED_H

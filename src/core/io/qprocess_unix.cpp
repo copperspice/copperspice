@@ -85,6 +85,7 @@ QT_END_NAMESPACE
 #include <qthread_p.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qdir.h>
 #include <qlist.h>
 #include <qhash.h>
 #include <qmutex.h>
@@ -488,25 +489,28 @@ bool QProcessPrivate::createChannel(Channel &channel)
    }
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
-#if defined(Q_OS_MAC) && !defined(QT_NO_CORESERVICES)
+
+#if defined(Q_OS_MAC) && ! defined(QT_NO_CORESERVICES)
 # include <crt_externs.h>
 # define environ (*_NSGetEnviron())
-#elif defined(Q_OS_SYMBIAN) || (defined(Q_OS_MAC) && defined(QT_NO_CORESERVICES))
+
+#elif (defined(Q_OS_MAC) && defined(QT_NO_CORESERVICES))
 static char *qt_empty_environ[] = { 0 };
 #define environ qt_empty_environ
-#else
+
+else
 extern char **environ;
 #endif
-QT_END_INCLUDE_NAMESPACE
 
 QProcessEnvironment QProcessEnvironment::systemEnvironment()
 {
    QProcessEnvironment env;
    const char *entry;
+
    for (int count = 0; (entry = environ[count]); ++count) {
       const char *equal = strchr(entry, '=');
-      if (!equal) {
+
+      if (! equal) {
          continue;
       }
 
@@ -515,6 +519,7 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
       env.d->hash.insert(QProcessEnvironmentPrivate::Key(name),
                          QProcessEnvironmentPrivate::Value(value));
    }
+
    return env;
 }
 
@@ -526,13 +531,14 @@ static char **_q_dupEnvironment(const QProcessEnvironmentPrivate::Hash &environm
    }
 
    // if LD_LIBRARY_PATH exists in the current environment, but
-   // not in the environment list passed by the programmer, then
-   // copy it over.
+   // not in the environment list passed by the programmer, then copy it over.
+
 #if defined(Q_OS_MAC)
    static const char libraryPath[] = "DYLD_LIBRARY_PATH";
 #else
    static const char libraryPath[] = "LD_LIBRARY_PATH";
 #endif
+
    const QByteArray envLibraryPath = qgetenv(libraryPath);
    bool needToAddLibraryPath = !envLibraryPath.isEmpty() &&
                                !environment.contains(QProcessEnvironmentPrivate::Key(QByteArray(libraryPath)));
@@ -949,47 +955,22 @@ void QProcessPrivate::killProcess()
    }
 }
 
-static int select_msecs(int nfds, fd_set *fdread, fd_set *fdwrite, int timeout)
-{
-   if (timeout < 0) {
-      return qt_safe_select(nfds, fdread, fdwrite, 0, 0);
-   }
-
-   struct timeval tv;
-   tv.tv_sec = timeout / 1000;
-   tv.tv_usec = (timeout % 1000) * 1000;
-   return qt_safe_select(nfds, fdread, fdwrite, 0, &tv);
-}
-
-/*
-   Returns the difference between msecs and elapsed. If msecs is -1,
-   however, -1 is returned.
-*/
-static int qt_timeout_value(int msecs, int elapsed)
-{
-   if (msecs == -1) {
-      return -1;
-   }
-
-   int timeout = msecs - elapsed;
-   return timeout < 0 ? 0 : timeout;
-}
-
 bool QProcessPrivate::waitForStarted(int msecs)
 {
    Q_Q(QProcess);
 
 #if defined (QPROCESS_DEBUG)
-   qDebug("QProcessPrivate::waitForStarted(%d) waiting for child to start (fd = %d)", msecs,
-          childStartedPipe[0]);
+   qDebug("QProcessPrivate::waitForStarted(%d) waiting for child to start (fd = %d)", msecs, childStartedPipe[0]);
 #endif
 
    fd_set fds;
    FD_ZERO(&fds);
    FD_SET(childStartedPipe[0], &fds);
-   if (select_msecs(childStartedPipe[0] + 1, &fds, 0, msecs) == 0) {
-      processError = QProcess::Timedout;
-      q->setErrorString(QProcess::tr("Process operation timed out"));
+
+   if (qt_select_msecs(childStartedPipe[0] + 1, &fds, 0, msecs) == 0) {
+     processError = QProcess::Timedout;
+     q->setErrorString(QProcess::tr("Process operation timed out"));
+
 #if defined (QPROCESS_DEBUG)
       qDebug("QProcessPrivate::waitForStarted(%d) == false (timed out)", msecs);
 #endif
@@ -997,15 +978,18 @@ bool QProcessPrivate::waitForStarted(int msecs)
    }
 
    bool startedEmitted = _q_startupNotification();
+
 #if defined (QPROCESS_DEBUG)
    qDebug("QProcessPrivate::waitForStarted() == %s", startedEmitted ? "true" : "false");
 #endif
+
    return startedEmitted;
 }
 
 bool QProcessPrivate::waitForReadyRead(int msecs)
 {
    Q_Q(QProcess);
+
 #if defined (QPROCESS_DEBUG)
    qDebug("QProcessPrivate::waitForReadyRead(%d)", msecs);
 #endif
@@ -1032,6 +1016,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
       {
          add_fd(nfds, stdoutChannel.pipe[0], &fdread);
       }
+
       if (stderrChannel.pipe[0] != -1)
       {
          add_fd(nfds, stderrChannel.pipe[0], &fdread);
@@ -1042,12 +1027,14 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
          add_fd(nfds, stdinChannel.pipe[1], &fdwrite);
       }
 
-      int timeout = qt_timeout_value(msecs, stopWatch.elapsed());
-      int ret = select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
+      int timeout = qt_subtract_from_timeout(msecs, stopWatch.elapsed());
+      int ret = qt_select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
+
       if (ret < 0)
       {
          break;
       }
+
       if (ret == 0)
       {
          processError = QProcess::Timedout;
@@ -1077,6 +1064,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
             readyReadEmitted = true;
          }
       }
+
       if (readyReadEmitted)
       {
          return true;
@@ -1100,6 +1088,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
 bool QProcessPrivate::waitForBytesWritten(int msecs)
 {
    Q_Q(QProcess);
+
 #if defined (QPROCESS_DEBUG)
    qDebug("QProcessPrivate::waitForBytesWritten(%d)", msecs);
 #endif
@@ -1133,8 +1122,8 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
          add_fd(nfds, stdinChannel.pipe[1], &fdwrite);
       }
 
-      int timeout = qt_timeout_value(msecs, stopWatch.elapsed());
-      int ret = select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
+      int timeout = qt_subtract_from_timeout(msecs, stopWatch.elapsed());
+      int ret = qt_select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
       if (ret < 0) {
          break;
       }
@@ -1215,12 +1204,13 @@ bool QProcessPrivate::waitForFinished(int msecs)
          add_fd(nfds, stdinChannel.pipe[1], &fdwrite);
       }
 
-      int timeout = qt_timeout_value(msecs, stopWatch.elapsed());
-      int ret = select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
+      int timeout = qt_subtract_from_timeout(msecs, stopWatch.elapsed());
+      int ret = qt_select_msecs(nfds + 1, &fdread, &fdwrite, timeout);
       if (ret < 0)
       {
          break;
       }
+
       if (ret == 0)
       {
          processError = QProcess::Timedout;
@@ -1264,7 +1254,7 @@ bool QProcessPrivate::waitForWrite(int msecs)
    fd_set fdwrite;
    FD_ZERO(&fdwrite);
    FD_SET(stdinChannel.pipe[1], &fdwrite);
-   return select_msecs(stdinChannel.pipe[1] + 1, 0, &fdwrite, msecs < 0 ? 0 : msecs) == 1;
+   return qt_select_msecs(stdinChannel.pipe[1] + 1, 0, &fdwrite, msecs < 0 ? 0 : msecs) == 1;
 }
 
 void QProcessPrivate::findExitCode()

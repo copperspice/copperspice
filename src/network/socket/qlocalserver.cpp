@@ -44,12 +44,26 @@ QLocalServer::~QLocalServer()
    }
 }
 
+void QLocalServer::setSocketOptions(SocketOptions options)
+{
+   Q_D(QLocalServer);
+   d->socketOptions = options;
+}
+
+QLocalServer::SocketOptions QLocalServer::socketOptions() const
+{
+   Q_D(const QLocalServer);
+   return d->socketOptions;
+}
+
 void QLocalServer::close()
 {
    Q_D(QLocalServer);
+
    if (!isListening()) {
       return;
    }
+
    qDeleteAll(d->pendingConnections);
    d->pendingConnections.clear();
    d->closeServer();
@@ -99,7 +113,7 @@ bool QLocalServer::hasPendingConnections() const
     \sa newConnection(), nextPendingConnection(),
     QLocalSocket::setSocketDescriptor()
  */
-void QLocalServer::incomingConnection(quintptr socketDescriptor)
+void QLocalServer::incomingConnection(qintptr socketDescriptor)
 {
    Q_D(QLocalServer);
    QLocalSocket *socket = new QLocalSocket(this);

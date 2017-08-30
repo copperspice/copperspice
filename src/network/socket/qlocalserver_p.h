@@ -51,16 +51,19 @@ class QLocalServerPrivate
 #if !defined(QT_LOCALSOCKET_TCP) && !defined(Q_OS_WIN)
       listenSocket(-1), socketNotifier(0),
 #endif
-      maxPendingConnections(30), error(QAbstractSocket::UnknownSocketError) {
+      maxPendingConnections(30), error(QAbstractSocket::UnknownSocketError),
+      socketOptions(QLocalServer::NoOptions) {
    }
 
    virtual ~QLocalServerPrivate() {}
 
    void init();
    bool listen(const QString &name);
+   bool listen(qintptr socketDescriptor);
    static bool removeServer(const QString &name);
    void closeServer();
    void waitForNewConnection(int msec, bool *timedOut);
+
    void _q_onNewConnection();
 
 #if defined(QT_LOCALSOCKET_TCP)
@@ -80,6 +83,7 @@ class QLocalServerPrivate
    QList<Listener> listeners;
    HANDLE eventHandle;
    QWinEventNotifier *connectionEventNotifier;
+
 #else
    void setError(const QString &function);
 
@@ -93,6 +97,7 @@ class QLocalServerPrivate
    QQueue<QLocalSocket *> pendingConnections;
    QString errorString;
    QAbstractSocket::SocketError error;
+   QLocalServer::SocketOptions socketOptions;
 
  protected:
    QLocalServer *q_ptr;

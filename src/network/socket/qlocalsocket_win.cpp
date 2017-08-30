@@ -176,7 +176,8 @@ void QLocalSocket::connectToServer(const QString &name, OpenMode openMode)
 
    // we have a valid handle
    d->serverName = name;
-   if (setSocketDescriptor((quintptr)localSocket, ConnectedState, openMode)) {
+
+   if (setSocketDescriptor((qintptr)localSocket, ConnectedState, openMode)) {
       d->handle = localSocket;
       emit connected();
    }
@@ -480,8 +481,7 @@ QLocalSocket::LocalSocketError QLocalSocket::error() const
    return d->error;
 }
 
-bool QLocalSocket::setSocketDescriptor(quintptr socketDescriptor,
-                                       LocalSocketState socketState, OpenMode openMode)
+bool QLocalSocket::setSocketDescriptor(qintptr socketDescriptor, LocalSocketState socketState, OpenMode openMode)
 {
    Q_D(QLocalSocket);
    d->readBuffer.clear();
@@ -530,10 +530,10 @@ void QLocalSocketPrivate::_q_emitReadyRead()
    }
 }
 
-quintptr QLocalSocket::socketDescriptor() const
+qintptr QLocalSocket::socketDescriptor() const
 {
    Q_D(const QLocalSocket);
-   return (quintptr)d->handle;
+   return (qintptr)d->handle;
 }
 
 qint64 QLocalSocket::readBufferSize() const

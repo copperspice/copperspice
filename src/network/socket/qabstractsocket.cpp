@@ -1506,19 +1506,6 @@ QVariant QAbstractSocket::socketOption(QAbstractSocket::SocketOption option)
    }
 }
 
-
-
-//  BROOM - IS THIS METHOD USED ?
-static int qt_timeout_value(int msecs, int elapsed)
-{
-   if (msecs == -1) {
-      return -1;
-   }
-
-   int timeout = msecs - elapsed;
-   return timeout < 0 ? 0 : timeout;
-}
-
 bool QAbstractSocket::waitForConnected(int msecs)
 {
    Q_D(QAbstractSocket);

@@ -40,22 +40,22 @@ QT_BEGIN_NAMESPACE
 
 // internal timer info
 struct QTimerInfo {
-   int id;           // - timer identifier
-   timeval interval; // - timer interval
-   timeval timeout;  // - when to sent event
-   QObject *obj;     // - object to receive event
+   int id;              // - timer identifier
+   int interval;        // - timer interval in milliseconds
+   timespec timeout;    // - when to sent event
+   QObject *obj;        // - object to receive event
    QTimerInfo **activateRef; // - ref from activateTimers
 };
 
 class QTimerInfoList : public QList<QTimerInfo *>
 {
 #if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_MAC))
-   timeval previousTime;
+   timespec previousTime;
    clock_t previousTicks;
    int ticksPerSecond;
    int msPerTick;
 
-   bool timeChanged(timeval *delta);
+   bool timeChanged(timespec *delta);
 #endif
 
    // state variables used by activateTimers()
@@ -64,15 +64,15 @@ class QTimerInfoList : public QList<QTimerInfo *>
  public:
    QTimerInfoList();
 
-   timeval currentTime;
-   timeval updateCurrentTime();
+   timespec currentTime;
+   timespec updateCurrentTime();
 
    // must call updateCurrentTime() first!
    void repairTimersIfNeeded();
 
-   bool timerWait(timeval &);
+   bool timerWait(timespec &);
    void timerInsert(QTimerInfo *);
-   void timerRepair(const timeval &);
+   void timerRepair(const timespec &);
 
    void registerTimer(int timerId, int interval, QObject *object);
    bool unregisterTimer(int timerId);
@@ -137,7 +137,7 @@ class Q_CORE_EXPORT QEventDispatcherUNIX : public QAbstractEventDispatcher
    int activateTimers();
    int activateSocketNotifiers();
 
-   virtual int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timeval *timeout);
+   virtual int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, timespec *timeout);
 };
 
 class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatcherPrivate
@@ -148,13 +148,14 @@ class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatche
    QEventDispatcherUNIXPrivate();
    ~QEventDispatcherUNIXPrivate();
 
-   int doSelect(QEventLoop::ProcessEventsFlags flags, timeval *timeout);
+   int doSelect(QEventLoop::ProcessEventsFlags flags, timespec *timeout);
 
    bool mainThread;
    int thread_pipe[2];
 
    // highest fd for all socket notifiers
    int sn_highest;
+
    // 3 socket notifier types - read, write and exception
    QSockNotType sn_vec[3];
 

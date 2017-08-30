@@ -245,13 +245,14 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       results.setAddresses(addresses);
       freeaddrinfo(res);
 
-   } else if (result == EAI_NONAME || result ==  EAI_FAIL) {
-
 #ifdef EAI_NODATA
-              // EAI_NODATA is deprecated in RFC 3493
-              || result == EAI_NODATA ) {
-#endif
+       // EAI_NODATA is deprecated in RFC 3493
+       } else if (result == EAI_NONAME || result ==  EAI_FAIL || result == EAI_NODATA ) {
 
+#else
+       } else if (result == EAI_NONAME || result ==  EAI_FAIL) {
+
+#endif
 
       results.setError(QHostInfo::HostNotFound);
       results.setErrorString(tr("Host not found"));
