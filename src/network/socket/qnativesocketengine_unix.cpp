@@ -41,6 +41,10 @@
 #include <arpa/inet.h>
 #endif
 
+#ifdef Q_OS_BSD4
+#include <net/if_dl.h>
+#endif
+
 #if defined QNATIVESOCKETENGINE_DEBUG
 #include <qstring.h>
 #include <ctype.h>
@@ -922,6 +926,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxS
                 header->ifindex = info->ipi_ifindex;
             }
 #else
+
 #  ifdef IP_RECVDSTADDR
             if (cmsgptr->cmsg_level == IPPROTO_IP && cmsgptr->cmsg_type == IP_RECVDSTADDR
                     && cmsgptr->cmsg_len >= CMSG_LEN(sizeof(in_addr))) {
@@ -930,6 +935,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxS
                 header->destinationAddress.setAddress(ntohl(addr->s_addr));
             }
 #  endif
+
 #  if defined(IP_RECVIF) && defined(Q_OS_BSD4)
             if (cmsgptr->cmsg_level == IPPROTO_IP && cmsgptr->cmsg_type == IP_RECVIF
                     && cmsgptr->cmsg_len >= CMSG_LEN(sizeof(sockaddr_dl))) {

@@ -24,6 +24,7 @@
 
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <netdb.h>
 #include <resolv.h>
 #include <stdlib.h>
@@ -39,7 +40,7 @@
 #include <qplatformdefs.h>
 #include <qurl.h>
 
-#if defined(__GNU_LIBRARY__) && !defined(__UCLIBC__)
+#if defined(__GNU_LIBRARY__) && ! defined(__UCLIBC__)
 #  include <gnu/lib-names.h>
 #endif
 

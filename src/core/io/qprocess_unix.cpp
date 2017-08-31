@@ -498,7 +498,7 @@ bool QProcessPrivate::createChannel(Channel &channel)
 static char *qt_empty_environ[] = { 0 };
 #define environ qt_empty_environ
 
-else
+#else
 extern char **environ;
 #endif
 

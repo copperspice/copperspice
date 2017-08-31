@@ -332,9 +332,7 @@ static QList<QNetworkInterfacePrivate *> createInterfaces(ifaddrs *rawList)
 }
 
 # elif defined(Q_OS_BSD4)
-QT_BEGIN_INCLUDE_NAMESPACE
 #  include <net/if_dl.h>
-QT_END_INCLUDE_NAMESPACE
 
 static QList<QNetworkInterfacePrivate *> createInterfaces(ifaddrs *rawList)
 {
