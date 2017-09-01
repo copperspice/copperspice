@@ -1798,12 +1798,16 @@ void QDockAreaLayoutInfo::split(int index, Qt::Orientation orientation,
 {
    if (orientation == o) {
       item_list.insert(index + 1, QDockAreaLayoutItem(dockWidgetItem));
+
    } else {
+
 #ifdef QT_NO_TABBAR
       const int tabBarShape = 0;
 #endif
+
       QDockAreaLayoutInfo *new_info
          = new QDockAreaLayoutInfo(sep, dockPos, orientation, tabBarShape, mainWindow);
+
       item_list[index].subinfo = new_info;
       new_info->item_list.append(item_list.at(index).widgetItem);
       item_list[index].widgetItem = 0;
@@ -1813,13 +1817,17 @@ void QDockAreaLayoutInfo::split(int index, Qt::Orientation orientation,
 
 QDockAreaLayoutItem &QDockAreaLayoutInfo::item(const QList<int> &path)
 {
-   Q_ASSERT(!path.isEmpty());
+   Q_ASSERT(! path.isEmpty());
+
    const int index = path.first();
+
    if (path.count() > 1) {
       const QDockAreaLayoutItem &item = item_list[index];
       Q_ASSERT(item.subinfo != 0);
+
       return item.subinfo->item(path.mid(1));
    }
+
    return item_list[index];
 }
 
@@ -2648,9 +2656,11 @@ const QDockAreaLayoutInfo *QDockAreaLayout::info(const QList<int> &path) const
 
 QDockAreaLayoutItem &QDockAreaLayout::item(const QList<int> &path)
 {
-   Q_ASSERT(!path.isEmpty());
+   Q_ASSERT(! path.isEmpty());
+
    const int index = path.first();
    Q_ASSERT(index >= 0 && index < QInternal::DockCount);
+
    return docks[index].item(path.mid(1));
 }
 
@@ -3517,6 +3527,7 @@ void QDockAreaLayout::keepSize(QDockWidget *w)
    if (path.isEmpty()) {
       return;
    }
+
    QDockAreaLayoutItem &item = this->item(path);
    if (item.size != -1) {
       item.flags |= QDockAreaLayoutItem::KeepSize;

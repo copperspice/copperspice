@@ -75,7 +75,7 @@ class QList
    using reverse_iterator       = typename std::deque<T>::reverse_iterator;
    using const_reverse_iterator = typename std::deque<T>::const_reverse_iterator;
 
-   // java   
+   // java
    using Java_Iterator          = QListIterator<T>;
    using Java_MutableIterator   = QMutableListIterator<T>;
 
@@ -110,7 +110,7 @@ class QList
    const T &back() const {
       return m_data.back();
    }
-  
+
    void clear(){
       return m_data.clear();
    }
@@ -119,7 +119,7 @@ class QList
 
    size_type count(const T &value) const;
 
-   size_type count() const {      
+   size_type count() const {
       return size();
    }
 
@@ -129,7 +129,7 @@ class QList
 
    bool isEmpty() const {
       return m_data.empty();
-   } 
+   }
 
    bool endsWith(const T &value) const {
       return ! isEmpty() && m_data.back() == value;
@@ -148,7 +148,7 @@ class QList
    const_reference constFirst() const {
       Q_ASSERT(! isEmpty());
       return m_data.front();
-   }  
+   }
 
    T &front() {
       return m_data.front();
@@ -234,10 +234,10 @@ class QList
    size_type removeAll(const T &value);
 
    void removeAt(size_type i) {
-      Q_ASSERT_X(i >= 0 && i < size(), "QList<T>::removeAt", "index out of range"); 
-      m_data.erase(m_data.begin() + i);   
+      Q_ASSERT_X(i >= 0 && i < size(), "QList<T>::removeAt", "index out of range");
+      m_data.erase(m_data.begin() + i);
    }
-   
+
    void removeFirst() {
       Q_ASSERT(!isEmpty());
       m_data.pop_front();
@@ -280,7 +280,7 @@ class QList
    // to from
    static QList<T> fromSet(const QSet<T> &set);
    static QList<T> fromVector(const QVector<T> &vector);
-  
+
    static QList<T> fromStdList(const std::list<T> &list) {
       QList<T> tmp;
       qCopy(list.begin(), list.end(), std::back_inserter(tmp));
@@ -352,7 +352,7 @@ class QList
    const_reverse_iterator crend() const {
       return m_data.rend();
    }
-  
+
    iterator erase(iterator begin, iterator end) {
       return m_data.erase(begin, end);
    }
@@ -470,8 +470,8 @@ QList<T> QList<T>::mid(size_type pos, size_type alength) const
       return *this;
    }
 
-   QList<T> retval(m_data.begin() + pos, m_data.begin() + pos + alength + 1);
- 
+   QList<T> retval(m_data.begin() + pos, m_data.begin() + pos + alength);
+
    return retval;
 }
 
@@ -484,7 +484,7 @@ inline void QList<T>::move(size_type from, size_type to)
    if (to == from) {
       // do nothing
 
-   } else if (to > from) {   
+   } else if (to > from) {
       // forward
       std::rotate(m_data.begin() + from, m_data.begin() + from + 1, m_data.begin() + to + 1);
 
@@ -492,7 +492,7 @@ inline void QList<T>::move(size_type from, size_type to)
       // reverse
       std::rotate(m_data.rend() - from - 1, m_data.rend() - from, m_data.rend() - to);
 
-   }  
+   }
 }
 
 template <typename T>
@@ -692,11 +692,11 @@ class QMutableListIterator
       inline T &peekPrevious() const { iterator p = i; return *--p; }
 
       inline void remove()
-      {  
-         if (c->constEnd() != const_iterator(n)) { 
-            i = c->erase(n); 
-            n = c->end(); 
-         } 
+      {
+         if (c->constEnd() != const_iterator(n)) {
+            i = c->erase(n);
+            n = c->end();
+         }
       }
 
       inline void setValue(const T &t) const { if (c->constEnd() != const_iterator(n)) *n = t; }
@@ -714,7 +714,7 @@ class QMutableListIterator
                return true;
             }
          }
-   
+
          n = c->end();
          return false;
       }

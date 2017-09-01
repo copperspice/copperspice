@@ -514,7 +514,7 @@ inline void QVector<T>::insert(size_type i, size_type n, const T &value)
 template <typename T>
 QVector<T> QVector<T>::mid(size_type pos, size_type length) const
 {
-   if (length < 0) {
+   if (length < 0 || pos + length > size()) {
       length = size() - pos;
    }
 
@@ -522,18 +522,9 @@ QVector<T> QVector<T>::mid(size_type pos, size_type length) const
       return *this;
    }
 
-   if (pos + length > size()) {
-      length = size() - pos;
-   }
+   QVector<T> retval(m_data.begin() + pos, m_data.begin() + pos + length);
 
-   QVector<T> copy;
-   copy.reserve(length);
-
-   for (size_type i = pos; i < pos + length; ++i) {
-      copy += at(i);
-   }
-
-   return copy;
+   return retval;
 }
 
 template <typename T>
