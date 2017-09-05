@@ -1,4 +1,7 @@
+if PHONON
 lib_LTLIBRARIES += lib/libCsPhonon@BUILD_ABI@.la
+endif
+
 lib_libCsPhonon@BUILD_ABI@_la_SOURCES =
 
 lib_libCsPhonon@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude  -Iinclude/phonon -Iprivateinclude/phonon -Iinclude/QtCore \
@@ -316,7 +319,10 @@ noinst_HEADERS+= \
 	$(patsubst %,src/3rdparty/phonon/phonon/%,$(PHONON_3RDPARTY_INCLUDES))
 
 if OSTYPE_WIN
+
+if PHONON
 lib_LTLIBRARIES += lib/phonon_ds9.la
+endif
 
 lib_phonon_ds9_la_SOURCES= \
 	src/3rdparty/phonon/ds9/abstractvideorenderer.cpp \
@@ -351,7 +357,10 @@ endif
 
 
 if OSTYPE_LINUX
+
+if PHONON
 lib_LTLIBRARIES += lib/phonon_gstreamer.la
+endif
 
 lib_phonon_gstreamer_la_SOURCES= \
 	src/3rdparty/phonon/gstreamer/abstractrenderer.cpp \
@@ -387,7 +396,10 @@ lib_phonon_gstreamer_la_LIBADD=lib/libCsCore@BUILD_ABI@.la lib/libCsGui@BUILD_AB
 endif
 
 if OSTYPE_BSD
+
+if PHONON
 lib_LTLIBRARIES += lib/phonon_gstreamer.la
+endif
 
 lib_phonon_gstreamer_la_SOURCES= \
         src/3rdparty/phonon/gstreamer/abstractrenderer.cpp \
@@ -427,7 +439,10 @@ EXTRA_DIST+= \
 	src/3rdparty/phonon/qt7/videoeffect.h
 
 if OSTYPE_DARWIN
+
+if PHONON
 lib_LTLIBRARIES += lib/phonon_qt7.la
+endif
 
 lib_phonon_qt7_la_SOURCES= \
 	src/3rdparty/phonon/qt7/quicktimevideoplayer.mm \

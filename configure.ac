@@ -150,8 +150,10 @@ AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
 AM_CONDITIONAL(QPA, false)
 
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
+
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
 #AM_CONDITIONAL(FREETYPE, test "x$FREETYPE" = x""yes)
+
 AM_CONDITIONAL(GLIB, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(FREETYPE, test "x$OSTYPE" = x""LINUX -o "x$OSTYPE" = x""BSD)
 AM_CONDITIONAL(ALSA, test "$ALSA" = "yes")
@@ -162,7 +164,13 @@ AM_CONDITIONAL(PULSEAUDIO_MAINLOOP_GLIB, test "$PULSEAUDIO_MAINLOOP_GLIB" = "yes
 # turns zlib off always
 AM_CONDITIONAL(ZLIB, test "x" = x""yes)
 
-AC_ARG_ENABLE([webkit],	AS_HELP_STRING([--disable-webkit], [Do not build WebKit]))
+AC_ARG_ENABLE([openssl],    AS_HELP_STRING([--disable-openssl],    [Do not include OpenSSL in CsNetwork]))
+AC_ARG_ENABLE([multimedia], AS_HELP_STRING([--disable-multimedia], [Do not build CsMultimedia]))
+AC_ARG_ENABLE([phonon],	    AS_HELP_STRING([--disable-phonon],     [Do not build CsPhonon]))
+AC_ARG_ENABLE([webkit],	    AS_HELP_STRING([--disable-webkit],     [Do not build CsWebKit]))
+
+AM_CONDITIONAL(MULTIMEDIA, test "x$enable_multimedia" != "xno")
+AM_CONDITIONAL(PHONON, test "x$enable_phonon" != "xno")
 AM_CONDITIONAL(WEBKIT, test "x$enable_webkit" != "xno")
 
 
@@ -199,8 +207,8 @@ else
    echo "MySQL client library not found, client drivers will not be built"
 fi
 
-AM_CONDITIONAL(SSL, test "x$SSL" = x""yes)
-if test "x$SSL" = x""yes; then
+AM_CONDITIONAL(SSL, test "x$SSL" = x""yes -a "x$enable_openssl" != "xno")
+if test "x$SSL" = x""yes -a "x$enable_openssl" != "xno"; then
    echo "Building with OpenSSL"
 
    if ! pkg-config openssl --atleast-version=1.0.1g; then
@@ -211,7 +219,7 @@ if test "x$SSL" = x""yes; then
       echo "------------------------------------------------------------"
    fi
 else
-   echo "OpenSSL libraries not found, HTTPS support will not be built"
+   echo "OpenSSL not found or disabled, HTTPS support will not be built into CsNetwork"
 fi
 
 echo

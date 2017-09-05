@@ -2,7 +2,7 @@ WEBKIT_CXXFLAGS:=$(CXXFLAGS)
 
 CXXFLAGS:=$(patsubst -O%,,@CXXFLAGS@)
 
-# for objective c, used to turn on c++11
+# for objective c
 OBJCXXFLAGS=$(CXXFLAGS)
 
 AUTOMAKE_OPTIONS = subdir-objects

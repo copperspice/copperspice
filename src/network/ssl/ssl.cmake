@@ -37,7 +37,7 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl_symbols_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/sslsocket_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac_p.h
 )
 
 

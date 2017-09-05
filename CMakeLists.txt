@@ -1,29 +1,3 @@
-# Current notes:
-#
-# * To find all FIXME/TODO related to the CMake build system (and those
-#   inherited from the autotools build system) execute the following in the
-#   top-level directory of the source tree:
-#
-#     find -name '*.cmake' -exec grep -E 'TODO|FIXME' {} +
-#     find -name CMakeLists.txt -exec grep -E 'TODO|FIXME' {} +
-#
-# * Use COMPILE_OPTIONS (list) instead of COMPILE_FLAGS (string)
-#
-# * Component libraries should probably be exported without the major build
-#   version in their names, e.g. CopperSpice::CsCore instead of
-#   CopperSpice::CsCore1.3 for consistency.
-#
-# * Definitions used on components (e.g. -DQT_NO_FREETYPE) should probably be
-#   set as interface definitions of some sort, also exposing them will make it
-#   possibly for projects to check for the features that CopperSpice was build
-#   with before attempting to compile any code which is nice to have. The file
-#   to record the features in should be cs_build_info.h I guess.
-#
-# * Proper RPATH handling, required for running rcc and uic during build, on
-#   Mac OSX most likely requires CMake version 2.8.12, see
-#   http://www.cmake.org/pipermail/cmake/2013-October/056020.html.
-#
-
 cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
 # silence a warning about rpath on OS X

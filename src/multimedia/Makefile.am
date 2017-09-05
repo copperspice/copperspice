@@ -1,4 +1,7 @@
+if MULTIMEDIA
 lib_LTLIBRARIES += lib/libCsMultimedia@BUILD_ABI@.la
+endif
+
 lib_libCsMultimedia@BUILD_ABI@_la_SOURCES =
 
 lib_libCsMultimedia@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore -Iinclude/QtGui -Iinclude/QtMultimedia \
