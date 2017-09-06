@@ -23,7 +23,8 @@ lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32 -ldnsapi -lcrypt32
 endif
 
 if OSTYPE_DARWIN
-lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -framework CoreServices
+lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -D__APPLE_USE_RFC_3542
+lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += -framework CoreServices
 endif
 
 NETWORK_INCLUDES =

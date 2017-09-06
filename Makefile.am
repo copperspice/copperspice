@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I autotools/m4 --install
 AM_CFLAGS =  -DQT_SHARED
 AM_CXXFLAGS = $(AM_CFLAGS)
 
-# for objective c, used to turn on c++11
+# for objective c
 OBJCXXFLAGS = $(CXXFLAGS)
 
 AM_LDFLAGS =

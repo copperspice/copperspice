@@ -48,6 +48,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(EXTRA_NETWORK_CXXFLAGS
+        ${EXTRA_NETWORK_CXXFLAGS}
+        -D__APPLE_USE_RFC_3542
+    )
     set(EXTRA_NETWORK_LDFLAGS
         ${EXTRA_NETWORK_LDFLAGS}
         -framework CoreServices

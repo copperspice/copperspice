@@ -60,11 +60,12 @@ lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/ssl/qsslsocket_openssl.cpp \
 	src/network/ssl/qsslsocket_openssl_symbols.cpp  \
 	src/network/ssl/qsslpresharedkeyauthenticator.cpp
-endif
 
 if OSTYPE_DARWIN
 lib_libCsNetwork@BUILD_ABI@_la_SOURCES += \
 	src/network/ssl/qsslkey_mac.cpp \
 	src/network/ssl/qsslsocket_mac.cpp
+endif
+
 endif
 
