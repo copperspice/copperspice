@@ -43,8 +43,8 @@ class CsBasicString
       using const_iterator = CsStringIterator<E, A>;
       using iterator       = CsStringIterator<E, A>;
 
-      using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-      using reverse_iterator       = std::reverse_iterator<iterator>;
+      using const_reverse_iterator = CsStringReverseIterator<const_iterator>;
+      using reverse_iterator       = CsStringReverseIterator<iterator>;
 
       static constexpr const size_type npos = -1;
 
@@ -223,6 +223,15 @@ class CsBasicString
       iterator erase(const_iterator iter);
       iterator erase(const_iterator iter_begin, const_iterator iter_end);
 
+      // ** iterator
+      const_iterator find_fast(const CsBasicString &str) const;
+      const_iterator find_fast(const CsBasicString &str, const_iterator iter_begin) const;
+
+      const_iterator rfind_fast(const CsBasicString &str) const;
+      const_iterator rfind_fast(const CsBasicString &str, const_iterator iter_end) const;
+
+
+      // ** index
       size_type find(const CsBasicString &str, size_type indexStart = 0) const;
 
       // for a const char * and char *
@@ -1013,6 +1022,112 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::erase(const_it
 }
 
 template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::find_fast(const CsBasicString &str) const
+{
+   return find_fast(str, begin());
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::find_fast(const CsBasicString &str,
+                  const_iterator iter_begin) const
+{
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   if (str.empty()) {
+      return iter_begin;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == str[0])  {
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str.begin() + 1;
+
+         while (text_iter != iter_end && pattern_iter != str.end())  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (pattern_iter == str.end()) {
+            // found a match
+            return iter;
+         }
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::rfind_fast(const CsBasicString &str) const
+{
+   return rfind_fast(str, end());
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::rfind_fast(const CsBasicString &str,
+                  const_iterator iter_end) const
+{
+   const_iterator iter_begin = begin();
+
+   if (iter_begin == iter_end) {
+      return end();
+   }
+
+   if (str.empty()) {
+      return iter_end;
+   }
+
+   auto iter    = iter_end;
+   auto str_end = str.end();
+
+   while (iter != begin())   {
+      --iter;
+
+      if (*iter == str[0])  {
+
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str.begin() + 1;
+
+         while (text_iter != end() && pattern_iter != str_end)  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (pattern_iter == str_end) {
+            // found a match
+            return iter;
+         }
+      }
+
+   }
+
+   return end();
+}
+
+template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(CsChar c, size_type indexStart) const
 {
    size_type stringLen = this->size();
@@ -1268,6 +1383,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const char (&s
 
    return -1;
 }
+
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const CsBasicString &str, size_type indexStart) const

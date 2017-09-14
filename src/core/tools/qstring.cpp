@@ -79,11 +79,14 @@ extern bool qt_ucol_strcoll(const QChar *source, int sourceLength, const QChar *
 
 // internal
 int qFindString(const QChar *haystack, int haystackLen, int from,
-                const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
+                  const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
+
 int qFindStringBoyerMoore(const QChar *haystack, int haystackLen, int from,
-                          const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
+                  const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
+
 static inline int qt_last_index_of(const QChar *haystack, int haystackLen, QChar needle,
-                                   int from, Qt::CaseSensitivity cs);
+                  int from, Qt::CaseSensitivity cs);
+
 static inline int qt_string_count(const QChar *haystack, int haystackLen,
                                   const QChar *needle, int needleLen,
                                   Qt::CaseSensitivity cs);

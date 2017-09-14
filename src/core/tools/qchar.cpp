@@ -276,19 +276,6 @@ ushort QChar::mirroredChar(ushort ucs2)
    return ucs2 + QUnicodeTables::qGetProp(ucs2)->mirrorDiff;
 }
 
-
-enum {
-   Hangul_SBase = 0xac00,
-   Hangul_LBase = 0x1100,
-   Hangul_VBase = 0x1161,
-   Hangul_TBase = 0x11a7,
-   Hangul_SCount = 11172,
-   Hangul_LCount = 19,
-   Hangul_VCount = 21,
-   Hangul_TCount = 28,
-   Hangul_NCount = 21 * 28
-};
-
 // buffer has to have a length of 3. It's needed for Hangul decomposition
 static const unsigned short *QT_FASTCALL decompositionHelper(uint ucs4, int *length, int *tag, unsigned short *buffer)
 {

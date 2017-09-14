@@ -256,6 +256,42 @@ auto CsStringIterator<E,A>::codePointEnd() const -> v_iter
    return m_iter + E::walk(1, m_iter);
 }
 
+// reverse iterator defreference needs to return by value
+template <typename T>
+class LIB_CS_STRING_EXPORT CsStringReverseIterator : public std::reverse_iterator<T>
+{
+   public:
+      CsStringReverseIterator() = default;
+
+      CsStringReverseIterator(T iter)
+         : std::reverse_iterator<T>(iter)
+      {
+      }
+
+      template <typename U>
+      CsStringReverseIterator(CsStringReverseIterator<U> iter)
+         : std::reverse_iterator<T>(iter.base())
+      {
+      }
+
+      decltype(std::declval<T>().operator*())  operator*() const;
+      decltype(std::declval<T>().operator->()) operator->() const;
+};
+
+template <typename T>
+decltype(std::declval<T>().operator*()) CsStringReverseIterator<T>::operator*() const
+{
+   auto tmp = this->base();
+   return (--tmp).operator*();
+}
+
+template <typename T>
+decltype(std::declval<T>().operator->()) CsStringReverseIterator<T>::operator->() const
+{
+   auto tmp = this->base();
+   return (--tmp).operator->();
+}
+
 }
 
 #endif

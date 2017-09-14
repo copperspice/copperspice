@@ -70,7 +70,26 @@ struct Properties {
 Q_CORE_EXPORT const Properties *QT_FASTCALL properties(uint ucs4);
 Q_CORE_EXPORT const Properties *QT_FASTCALL properties(ushort ucs2);
 
+#define GET_DECOMPOSITION_INDEX(ucs4) \
+       (ucs4 < 0x3400 \
+        ? (QUnicodeTables::uc_decomposition_trie[QUnicodeTables::uc_decomposition_trie[ucs4>>4] + (ucs4 & 0xf)]) \
+        : (ucs4 < 0x30000 \
+        ? QUnicodeTables::uc_decomposition_trie[QUnicodeTables::uc_decomposition_trie[((ucs4 - 0x3400)>>8) + 0x340] + \
+        (ucs4 & 0xff)] : 0xffff))
+
+#define GET_LIGATURE_INDEX(ucs4) \
+       (ucs4 < 0x3100 \
+        ? (QUnicodeTables::uc_ligature_trie[QUnicodeTables::uc_ligature_trie[ucs4>>5] + (ucs4 & 0x1f)]) \
+        : (ucs4 < 0x12000 \
+        ? QUnicodeTables::uc_ligature_trie[QUnicodeTables::uc_ligature_trie[((ucs4 - 0x3100)>>8) + 0x188] + (ucs4 & 0xff)] \
+        : 0xffff))
+
 extern const ushort specialCaseMap[];
+
+extern const unsigned short uc_decomposition_trie[];
+extern const unsigned short uc_decomposition_map[];
+extern const unsigned short uc_ligature_trie[];
+extern const unsigned short uc_ligature_map[];
 
 struct CasefoldTraits
 {
@@ -205,6 +224,19 @@ inline LineBreakClass lineBreakClass(QChar ch)
    return lineBreakClass(ch.unicode());
 }
 
-} // namespace QUnicodeTables
+}
+
+// constants for Hangul (de)composition, see UAX #15
+enum {
+    Hangul_SBase = 0xac00,
+    Hangul_LBase = 0x1100,
+    Hangul_VBase = 0x1161,
+    Hangul_TBase = 0x11a7,
+    Hangul_LCount = 19,
+    Hangul_VCount = 21,
+    Hangul_TCount = 28,
+    Hangul_NCount = Hangul_VCount * Hangul_TCount,
+    Hangul_SCount = Hangul_LCount * Hangul_NCount
+};
 
 #endif

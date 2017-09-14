@@ -29,18 +29,6 @@
 
 #define FLAG(x) (1 << (x))
 
-enum {
-   Hangul_SBase  = 0xac00,
-   Hangul_LBase  = 0x1100,
-   Hangul_VBase  = 0x1161,
-   Hangul_TBase  = 0x11a7,
-   Hangul_SCount = 11172,
-   Hangul_LCount = 19,
-   Hangul_VCount = 21,
-   Hangul_TCount = 28,
-   Hangul_NCount = 21 * 28
-};
-
 // methods
 QChar32::Category QChar32::category() const
 {
@@ -63,7 +51,6 @@ int QChar32::digitValue() const
 
    return QUnicodeTables::properties(value)->digitValue;
 }
-
 
 QChar32::Direction QChar32::direction() const
 {
@@ -296,7 +283,6 @@ QChar32::UnicodeVersion QChar32::currentUnicodeVersion()
 
 
 // operators
-
 #if ! defined(QT_NO_DATASTREAM)
    QDataStream &operator>>(QDataStream &out, QChar32 &str)
    {
