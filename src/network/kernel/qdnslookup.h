@@ -184,28 +184,28 @@ class Q_NETWORK_EXPORT QDnsTextRecord
 
 class Q_NETWORK_EXPORT QDnsLookup : public QObject
 {
-    CS_OBJECT(QDnsLookup)
+    NET_CS_OBJECT(QDnsLookup)
 
-    CS_PROPERTY_READ(error, error)
-    CS_PROPERTY_NOTIFY(error, finished)
+    NET_CS_PROPERTY_READ(error, error)
+    NET_CS_PROPERTY_NOTIFY(error, finished)
 
-    CS_PROPERTY_READ(errorString, errorString)
-    CS_PROPERTY_NOTIFY(errorString, finished)
+    NET_CS_PROPERTY_READ(errorString, errorString)
+    NET_CS_PROPERTY_NOTIFY(errorString, finished)
 
-    CS_PROPERTY_READ(name, name)
-    CS_PROPERTY_WRITE(name, setName)
-    CS_PROPERTY_NOTIFY(name, nameChanged)
+    NET_CS_PROPERTY_READ(name, name)
+    NET_CS_PROPERTY_WRITE(name, setName)
+    NET_CS_PROPERTY_NOTIFY(name, nameChanged)
 
-    CS_PROPERTY_READ(type, type)
-    CS_PROPERTY_WRITE(type, setType)
-    CS_PROPERTY_NOTIFY(type, typeChanged)
+    NET_CS_PROPERTY_READ(type, type)
+    NET_CS_PROPERTY_WRITE(type, setType)
+    NET_CS_PROPERTY_NOTIFY(type, typeChanged)
 
-    CS_PROPERTY_READ(nameserver, nameserver)
-    CS_PROPERTY_WRITE(nameserver, setNameserver)
-    CS_PROPERTY_NOTIFY(nameserver, nameserverChanged)
+    NET_CS_PROPERTY_READ(nameserver, nameserver)
+    NET_CS_PROPERTY_WRITE(nameserver, setNameserver)
+    NET_CS_PROPERTY_NOTIFY(nameserver, nameserverChanged)
 
  public:
-    CS_REGISTER_ENUM(enum Error
+    NET_CS_REGISTER_ENUM(enum Error
        {
            NoError = 0,
            ResolverError,
@@ -218,7 +218,7 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
        };
     )
 
-    CS_REGISTER_ENUM( enum Type
+    NET_CS_REGISTER_ENUM( enum Type
        {
            A = 1,
            AAAA = 28,

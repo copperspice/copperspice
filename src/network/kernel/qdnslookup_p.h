@@ -81,7 +81,7 @@ class QDnsLookupPrivate
 
 class QDnsLookupRunnable : public QObject, public QRunnable
 {
-    CS_OBJECT(QDnsLookupRunnable)
+    NET_CS_OBJECT(QDnsLookupRunnable)
 
  public:
     QDnsLookupRunnable(QDnsLookup::Type type, const QByteArray &name, const QHostAddress &nameserver)
@@ -104,7 +104,7 @@ class QDnsLookupRunnable : public QObject, public QRunnable
 
 class QDnsLookupThreadPool : public QThreadPool
 {
-    CS_OBJECT(QDnsLookupThreadPool)
+    NET_CS_OBJECT(QDnsLookupThreadPool)
 
  public:
     QDnsLookupThreadPool();

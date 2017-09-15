@@ -113,7 +113,7 @@ public:
 #ifdef Q_OS_WIN
 class QWindowsCaRootFetcher : public QObject
 {
-    CS_OBJECT(QWindowsCaRootFetcher);
+    NET_CS_OBJECT(QWindowsCaRootFetcher);
 
  public:
    QWindowsCaRootFetcher(const QSslCertificate &certificate, QSslSocket::SslMode sslMode);

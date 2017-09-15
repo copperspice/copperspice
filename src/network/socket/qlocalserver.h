@@ -38,8 +38,8 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    NET_CS_OBJECT(QLocalServer)
    Q_DECLARE_PRIVATE(QLocalServer)
 
-   CS_PROPERTY_READ(socketOptions,  socketOptions)
-   CS_PROPERTY_WRITE(socketOptions, setSocketOptions)
+   NET_CS_PROPERTY_READ(socketOptions,  socketOptions)
+   NET_CS_PROPERTY_WRITE(socketOptions, setSocketOptions)
 
  public:
    enum SocketOption {
