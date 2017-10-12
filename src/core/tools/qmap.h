@@ -24,9 +24,9 @@
 #define QMAP_H
 
 #include <qcontainerfwd.h>
-#include <qmapfunc.h>
 
 #include <qlist.h>
+#include <qmapfunc.h>
 #include <qrefcount.h>
 
 #include <map>
@@ -353,8 +353,7 @@ class QMap
 
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
       auto oldSize = m_data.size();
-
-      auto iter = m_data.emplace_hint(hint, key, value);
+      auto iter    = m_data.emplace_hint(hint, key, value);
 
       if (m_data.size() == oldSize) {
          // add new element
