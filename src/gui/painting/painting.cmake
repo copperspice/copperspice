@@ -202,15 +202,6 @@ if(X11_FOUND)
     )
 endif()
 
-if(QPA_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolormap_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice_qpa.cpp
-    )
-endif()
-
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
@@ -223,6 +214,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${EXTRA_GUI_LIBS}
         msimg32
     )
+
 # FIXME: check for COCOA instead?
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES

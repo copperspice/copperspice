@@ -323,7 +323,3 @@ if COCOA
 lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/image/qpixmap_mac.cpp
 endif
-
-if QPA
-lib_libCsGui@BUILD_ABI@_la_SOURCES +=
-endif

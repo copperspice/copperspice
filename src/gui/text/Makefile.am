@@ -42,7 +42,7 @@ GUI_PUBLIC_INCLUDES += \
 	QTextTable \
 	QTextTableCell \
 	QTextTableCellFormat \
-	QTextTableFormat 
+	QTextTableFormat
 
 GUI_TEXT_INCLUDES = \
 	qabstractgraphicsshapeitem.h \
@@ -87,7 +87,7 @@ GUI_TEXT_INCLUDES = \
 	qtexttable.h \
 	qtexttablecell.h \
 	qtexttablecellformat.h \
-	qtexttableformat.h 
+	qtexttableformat.h
 
 GUI_TEXT_PRIVATE_INCLUDES = \
 	qabstracttextdocumentlayout_p.h \
@@ -189,15 +189,4 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/text/qfontengine_coretext.mm
 endif
 
-if QPA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/text/qfont_qpa.cpp \
-	src/gui/text/qfontengine_qpa.cpp \
-	src/gui/text/qplatformfontdatabase_qpa.cpp \
-	src/gui/text/qrawfont_qpa.cpp
-lib_libCsGui@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_FONTCONFIG -DQT_NO_FREETYPE
-endif
-
-
 # missing a bunch of files from 3rdparty/freetype, not sure
-

@@ -318,8 +318,8 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qgesturemanager.cpp \
 	src/gui/kernel/qsoftkeymanager.cpp \
 	src/gui/kernel/qdesktopwidget.cpp \
-	src/gui/kernel/qguiplatformplugin.cpp
-
+	src/gui/kernel/qguiplatformplugin.cpp \
+	src/gui/kernel/qsound.cpp
 
 EXTRA_DIST+= \
 	src/3rdparty/wintab/wintab.h \
@@ -390,35 +390,4 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/cs_carbon_wrapper.mm
 
 lib_libCsGui@BUILD_ABI@_la_LDFLAGS += -framework AppKit
-endif
-
-if QPA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qapplication_qpa.cpp \
-	src/gui/kernel/qclipboard_qpa.cpp  \
-	src/gui/kernel/qcursor_qpa.cpp  \
-	src/gui/kernel/qdnd_qws.cpp  \
-	src/gui/kernel/qdesktopwidget_qpa.cpp  \
-	src/gui/kernel/qgenericpluginfactory_qpa.cpp  \
-	src/gui/kernel/qgenericplugin_qpa.cpp  \
-	src/gui/kernel/qkeymapper_qws.cpp  \
-	src/gui/kernel/qwidget_qpa.cpp  \
-	src/gui/kernel/qeventdispatcher_qpa.cpp  \
-	src/gui/kernel/qwindowsysteminterface_qpa.cpp  \
-	src/gui/kernel/qplatformintegration_qpa.cpp  \
-	src/gui/kernel/qplatformscreen_qpa.cpp  \
-	src/gui/kernel/qplatformintegrationfactory_qpa.cpp \
-	src/gui/kernel/qplatformintegrationplugin_qpa.cpp \
-	src/gui/kernel/qplatformwindow_qpa.cpp \
-	src/gui/kernel/qplatformwindowformat_qpa.cpp \
-	src/gui/kernel/qplatformeventloopintegration_qpa.cpp \
-	src/gui/kernel/qplatformglcontext_qpa.cpp \
-	src/gui/kernel/qplatformcursor_qpa.cpp \
-	src/gui/kernel/qplatformclipboard_qpa.cpp \
-	src/gui/kernel/qplatformnativeinterface_qpa.cpp \
-	src/gui/kernel/qsessionmanager_qpa.cpp \
-	src/gui/kernel/qeventdispatcher_glib_qpa.cpp
-else
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/kernel/qsound.cpp
 endif

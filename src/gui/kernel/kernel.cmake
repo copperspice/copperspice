@@ -316,6 +316,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsoftkeymanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
 )
 
 if(X11_FOUND)
@@ -336,41 +337,6 @@ if(X11_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkde.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguieventdispatcher_glib.cpp
-    )
-endif()
-
-if(QPA_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_qws.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_qws.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegration_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformscreen_qpa.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegrationfactory_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformintegrationplugin_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindow_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformwindowformat_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformeventloopintegration_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformglcontext_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformcursor_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformclipboard_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qplatformnativeinterface_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib_qpa.cpp
-    )
-else()
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsound.cpp
     )
 endif()
 

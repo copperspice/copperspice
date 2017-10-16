@@ -199,9 +199,6 @@ set_package_properties(MySQL PROPERTIES
     TYPE RECOMMENDED
 )
 
-# TODO: need a module for Platform Abstraction
-# find_package(QPA)
-
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     find_package(GTK2)
     set_package_properties(GTK2 PROPERTIES

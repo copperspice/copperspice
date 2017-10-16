@@ -41,7 +41,7 @@ set(GUI_PUBLIC_INCLUDES
     QTextTable
     QTextTableCell
     QTextTableCellFormat
-    QTextTableFormat 
+    QTextTableFormat
 )
 
 set(GUI_INCLUDES
@@ -88,7 +88,7 @@ set(GUI_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttablecell.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttablecellformat.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttableformat.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttableformat.h
 )
 
 set(GUI_PRIVATE_INCLUDES
@@ -174,17 +174,6 @@ if(X11_FOUND)
     )
 endif()
 
-if(QPA_FOUND)
-    set(GUI_SOURCES
-        ${GUI_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qplatformfontdatabase_qpa.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_qpa.cpp
-    )
-    add_definitions(-DQT_NO_FONTCONFIG -DQT_NO_FREETYPE)
-endif()
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GUI_SOURCES
         ${GUI_SOURCES}
@@ -193,6 +182,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontenginedirectwrite.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_win.cpp
     )
+
 # FIXME: check for COCOA instead?
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GUI_SOURCES

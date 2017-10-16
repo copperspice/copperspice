@@ -223,9 +223,3 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/painting/qwindowsurface_mac.cpp \
 	src/gui/painting/qunifiedtoolbarsurface_mac.cpp
 endif
-
-if QPA
-lib_libCsGui@BUILD_ABI@_la_SOURCES += \
-	src/gui/painting/qcolormap_qpa.cpp \
-	src/gui/painting/qpaintdevice_qpa.cpp
-endif

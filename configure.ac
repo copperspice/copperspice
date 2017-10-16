@@ -138,7 +138,6 @@ if test "x$missing" != "x"; then
    exit
 fi
 
-
 AM_CONDITIONAL(OSTYPE_WIN, test "$OSTYPE" == WIN)
 AM_CONDITIONAL(OSTYPE_LINUX, test "$OSTYPE" == LINUX)
 AM_CONDITIONAL(OSTYPE_DARWIN, test "$OSTYPE" == DARWIN)
@@ -148,8 +147,6 @@ AM_CONDITIONAL(X11, test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD)
 AM_CONDITIONAL(COCOA, test "$OSTYPE" == DARWIN)
 
 AM_CONDITIONAL(CUPS, test "x$ac_cv_header_cups_cups_h" = x""yes)
-AM_CONDITIONAL(QPA, false)
-
 AM_CONDITIONAL(GTK, test "x$GTK" = x""yes -a "$OSTYPE" != DARWIN)
 
 #AM_CONDITIONAL(GLIB, test "x$GLIB" = x""yes)
