@@ -27,12 +27,11 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qsharedpointer.h>
 #include <QtNetwork/qssl.h>
+#include <qcontainerfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_OPENSSL
-
-template <typename A, typename B> struct QPair;
 
 class QDebug;
 class QIODevice;

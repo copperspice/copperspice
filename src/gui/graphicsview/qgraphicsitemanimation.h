@@ -24,8 +24,9 @@
 #define QGRAPHICSITEMANIMATION_H
 
 #include <QtCore/qobject.h>
+#include <qcontainerfwd.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 QT_BEGIN_NAMESPACE
 
@@ -34,7 +35,6 @@ class QMatrix;
 class QPointF;
 class QTimeLine;
 class QGraphicsItemAnimationPrivate;
-template <class T1, class T2> struct QPair;
 
 class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
 {
