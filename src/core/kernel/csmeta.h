@@ -472,9 +472,6 @@ const char *cs_typeName_internal<const T &>::typeName()
 template<class T1>
 class QDeclarativeListProperty;
 
-template<class T1, class T2>
-struct QPair;
-
 // declare here, register in csObject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
 CS_DECLARE_CLASS(QColor)
@@ -545,7 +542,6 @@ CS_REGISTER_TEMPLATE(QLinkedList)
 CS_REGISTER_TEMPLATE(QList)
 CS_REGISTER_TEMPLATE(QMap)
 CS_REGISTER_TEMPLATE(QMultiMap)
-CS_REGISTER_TEMPLATE(QPair)
 CS_REGISTER_TEMPLATE(QQueue)
 CS_REGISTER_TEMPLATE(QSet)
 CS_REGISTER_TEMPLATE(QStack)

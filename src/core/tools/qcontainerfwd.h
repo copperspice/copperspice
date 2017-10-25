@@ -23,9 +23,10 @@
 #ifndef QCONTAINERFWD_H
 #define QCONTAINERFWD_H
 
+#include <utility>
+
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
 
 template <typename Key> class qHashFunc;
 template <typename Key> class qHashEqual;
@@ -43,11 +44,9 @@ template <typename Val> class QSet;
 template <typename Val> class QStack;
 template <typename Val> class QVector;
 
-template <typename Key, typename Val> class  QCache;
-template <typename T1,  typename T2>  struct QPair;
+template <typename Key, typename Val> class QCache;
+template <class T1, class T2> using QPair = std::pair<T1, T2>;
 
 template <typename Val, int Prealloc = 256> class QVarLengthArray;
-
-QT_END_NAMESPACE
 
 #endif

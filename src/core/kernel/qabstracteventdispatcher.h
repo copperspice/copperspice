@@ -32,16 +32,13 @@ QT_BEGIN_NAMESPACE
 class QAbstractEventDispatcherPrivate;
 class QSocketNotifier;
 
-template <class T1, class T2>
-struct QPair;
-
 class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 {
    CORE_CS_OBJECT(QAbstractEventDispatcher)
    Q_DECLARE_PRIVATE(QAbstractEventDispatcher)
 
  public:
-   typedef std::pair<int, int> TimerInfo;
+   using TimerInfo = std::pair<int, int>;
 
    explicit QAbstractEventDispatcher(QObject *parent = nullptr);
    ~QAbstractEventDispatcher();
@@ -70,7 +67,7 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    typedef bool(*EventFilter)(void *message);
    EventFilter setEventFilter(EventFilter filter);
    bool filterEvent(void *message);
- 
+
    CORE_CS_SIGNAL_1(Public, void aboutToBlock())
    CORE_CS_SIGNAL_2(aboutToBlock)
    CORE_CS_SIGNAL_1(Public, void awake())
