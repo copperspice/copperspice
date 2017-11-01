@@ -25,6 +25,7 @@ CORE_PUBLIC_INCLUDES += \
 	QEasingCurve \
 	QElapsedTimer \
 	QExplicitlySharedDataPointer \
+	QFlatMap \
 	QHash \
 	QHashIterator \
 	QLatin1Char \
@@ -119,6 +120,7 @@ CORE_TOOLS_INCLUDES = \
 	qeasingcurve.h \
 	qelapsedtimer.h \
 	qexplicitlyshareddatapointer.h \
+	qflatmap.h \
 	qhash.h \
 	qhashfunc.h \
 	qhashfwd.h \
@@ -221,6 +223,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qeasingcurve.cpp \
 	src/core/tools/qelapsedtimer.cpp \
 	src/core/tools/qfreelist.cpp \
+	src/core/tools/qflatmap.cpp \
 	src/core/tools/qhash.cpp \
 	src/core/tools/qline.cpp \
 	src/core/tools/qlinkedlist.cpp \

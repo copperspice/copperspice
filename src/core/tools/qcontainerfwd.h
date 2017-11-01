@@ -27,13 +27,15 @@
 
 #include <qglobal.h>
 
+template <typename Key> class qMapCompare;
+
+template <typename Key, typename Val, typename Compare = qMapCompare<Key>> class QFlatMap;
 
 template <typename Key> class qHashFunc;
 template <typename Key> class qHashEqual;
 template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>> class QHash;
 template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>> class QMultiHash;
 
-template <typename Key> class qMapCompare;
 template <typename Key, typename Val, typename Compare = qMapCompare<Key>> class QMap;
 template <typename Key, typename Val, typename Compare = qMapCompare<Key>> class QMultiMap;
 

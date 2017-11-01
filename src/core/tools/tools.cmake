@@ -23,6 +23,7 @@ set(CORE_PUBLIC_INCLUDES
     QEasingCurve
     QElapsedTimer
     QExplicitlySharedDataPointer
+    QFlatMap
     QHash
     QHashIterator
     QLatin1Char
@@ -119,6 +120,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qexplicitlyshareddatapointer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qflatmap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhash.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfunc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfwd.h
@@ -220,6 +222,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qfreelist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qflatmap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinkedlist.cpp

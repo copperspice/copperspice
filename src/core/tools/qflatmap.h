@@ -20,43 +20,44 @@
 *
 ***********************************************************************/
 
-#ifndef QMAP_H
-#define QMAP_H
+#ifndef QFLATMAP_H
+#define QFLATMAP_H
 
 #include <qcontainerfwd.h>
-
 #include <qlist.h>
+#include <qmap.h>
 #include <qmapfunc.h>
-#include <qrefcount.h>
+#include <qpair.h>
 
-#include <map>
+#include <vector>
 #include <initializer_list>
 
 template <typename Key, typename Val, typename C>
-class QMapIterator;
+class QFlatMapIterator;
 
 template <typename Key, typename Val, typename C>
-class QMutableMapIterator;
+class QMutableFlatMapIterator;
 
 template <typename Key, typename Val, typename C>
-class QMap
+class QFlatMap
 {
  public:
    class iterator
    {
+
     public:
       using iterator_category = std::bidirectional_iterator_tag;
 
       using pointer           = Val *;
       using reference         = Val &;
 
-      using difference_type   = typename std::map<Key, Val, C>::difference_type;
-      using size_type         = typename std::map<Key, Val, C>::difference_type;
+      using difference_type   = typename std::vector<std::pair<Key, Val>>::difference_type;
+      using size_type         = typename std::vector<std::pair<Key, Val>>::difference_type;
       using value_type        = Val;
 
       iterator() = default;
 
-      iterator(typename std::map<Key, Val, C>::iterator iter)
+      iterator(typename std::vector<std::pair<Key, Val>>::iterator iter)
          : m_iter(std::move(iter)) {
       }
 
@@ -68,7 +69,7 @@ class QMap
          return m_iter->second;
       }
 
-      std::pair<const Key, Val> &pair() const {
+      std::pair<Key, Val> &pair() const {
          return *m_iter;
       }
 
@@ -129,27 +130,28 @@ class QMap
          return m_iter--;
       }
 
-      friend class QMap<Key, Val, C>;
+      friend class QFlatMap<Key, Val, C>;
 
     private:
-      typename std::map<Key, Val, C>::iterator m_iter;
+      typename std::vector<std::pair<Key, Val>>::iterator m_iter;
    };
 
    class const_iterator
    {
+
     public:
       using iterator_category = std::bidirectional_iterator_tag;
 
       using pointer         = const Val *;
       using reference       = const Val &;
 
-      using difference_type = typename std::map<Key, Val, C>::difference_type;
-      using size_type       = typename std::map<Key, Val, C>::difference_type;
+      using difference_type = typename std::vector<std::pair<Key, Val>>::difference_type;
+      using size_type       = typename std::vector<std::pair<Key, Val>>::difference_type;
       using value_type      = Val;
 
       const_iterator() = default;
 
-      const_iterator(typename std::map<Key, Val, C>::const_iterator iter)
+      const_iterator(typename std::vector<std::pair<Key, Val>>::const_iterator iter)
          : m_iter(std::move(iter)) {
       }
 
@@ -165,7 +167,7 @@ class QMap
          return m_iter->second;
       }
 
-      const std::pair<const Key, Val> &pair() const {
+      const std::pair<Key, Val> &pair() const {
          return *m_iter;
       }
 
@@ -226,10 +228,37 @@ class QMap
          return m_iter--;
       }
 
-      friend class QMap<Key, Val, C>;
+      friend class QFlatMap<Key, Val, C>;
 
     private:
-      typename std::map<Key, Val, C>::const_iterator m_iter;
+      typename std::vector<std::pair<Key, Val>>::const_iterator m_iter;
+   };
+
+   class CompareFilter
+   {
+      public:
+         using Element = std::pair<Key, Val>;
+
+         CompareFilter(const C &compare) : m_compare(compare) {}
+
+         bool operator()(const Element &x, const Key &y) const {
+            return m_compare(x.first, y);
+         }
+
+         bool operator()(const Key &x, const Element &y) const {
+            return m_compare(x, y.first);
+         }
+
+         bool operator()(const Key &x, const Key &y) const {
+            return m_compare(x, y);
+         }
+
+         bool operator()(const Element &x, const Element &y) const {
+            return m_compare(x.first, y.first);
+         }
+
+      private:
+         const C &m_compare;
    };
 
    // legacy
@@ -241,8 +270,8 @@ class QMap
    using pointer         = Val *;
    using reference       = Val &;
 
-   using difference_type = typename std::map<Key, Val, C>::difference_type;
-   using size_type       = typename std::map<Key, Val, C>::difference_type;   // signed instead of unsigned
+   using difference_type = typename std::vector<std::pair<Key, Val>>::difference_type;
+   using size_type       = typename std::vector<std::pair<Key, Val>>::difference_type;   // signed instead of unsigned
    using value_type      = Val;
 
    using key_type        = typename std::map<Key, Val, C>::key_type;
@@ -251,33 +280,42 @@ class QMap
    using key_compare     = typename std::map<Key, Val, C>::key_compare;
 
    // from std
-   using allocator_type         = typename std::map<Key, Val, C>::allocator_type;
+   using allocator_type         = typename std::vector<std::pair<Key, Val>>::allocator_type;
    using reverse_iterator       = std::reverse_iterator<iterator>;
    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
    // java
-   using Java_Iterator          = QMapIterator<Key, Val, C>;
-   using Java_MutableIterator   = QMutableMapIterator<Key, Val, C>;
+   using Java_Iterator          = QFlatMapIterator<Key, Val, C>;
+   using Java_MutableIterator   = QMutableFlatMapIterator<Key, Val, C>;
 
-   QMap() = default;
+   QFlatMap() = default;
 
-   QMap(const QMap<Key, Val, C> &other) = default;
-   QMap(QMap<Key, Val, C> &&other)      = default;
+   QFlatMap(const QFlatMap<Key, Val, C> &other) = default;
+   QFlatMap(QFlatMap<Key, Val, C> &&other)      = default;
 
-   QMap(std::initializer_list<std::pair<Key, Val>> list, const C &compare = C())
-      : m_data(list, compare) {}
+   QFlatMap(std::initializer_list<std::pair<Key, Val>> list, const C &compare = C())
+      : m_compare(compare) {
 
-   explicit QMap(C compare)
-      : m_data(compare) {}
+      for (auto &item : list) {
+         insert(item.first, item.second);
+      }
+   }
 
-   explicit QMap(const std::map<Key, Val, C> &other)
-      : m_data(other) {}
+   explicit QFlatMap(C compare)
+      : m_compare(compare) {
+   }
+
+   explicit QFlatMap(const std::map<Key, Val, C> &other)
+      : m_data(other.begin(), other.end()), m_compare(other.key_comp()) {}
 
    template<typename Input_Iterator>
-   QMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
-      : m_data(first, last, compare) {}
+   QFlatMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
+      : m_data(first, last), m_compare(compare) {
 
-   ~QMap() = default;
+      std::sort(m_data.begin(), m_data.end(), CompareFilter{m_compare} );
+   }
+
+   ~QFlatMap() = default;
 
    // methods
    void clear() {
@@ -285,11 +323,11 @@ class QMap
    }
 
    bool contains(const Key &key) const {
-      return m_data.find(key) != m_data.end();
+      return std::binary_search(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    size_type count(const Key &key) const {
-      return m_data.count(key);
+      return contains(key);
    }
 
    size_type count() const {
@@ -305,11 +343,11 @@ class QMap
    }
 
    QPair<iterator, iterator> equal_range(const Key &key) {
-      return m_data.equal_range(key);
+      return std::equal_range(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    QPair<const_iterator, const_iterator> equal_range(const Key &key) const {
-      return m_data.equal_range(key);
+      return std::equal_range(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    iterator erase(const_iterator iter) {
@@ -329,24 +367,42 @@ class QMap
    }
 
    iterator find(const Key &key) {
-      // find returns an std::map::iterator, constructor will convert to QMap::iterator
-      return m_data.find(key);
+      auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
+
+      if (iter == m_data.end() || m_compare(key, iter->first)) {
+         iter = m_data.end();
+      }
+
+      return iter;
    }
 
    const_iterator find(const Key &key) const {
-      return m_data.find(key);
+      auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
+
+      if (iter == m_data.end() || m_compare(key, iter->first)) {
+         iter = m_data.end();
+      }
+
+      return iter;
    }
 
    const_iterator constFind(const Key &key) const {
-      return m_data.find(key);
+      auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
+
+      if (iter == m_data.end() || m_compare(key, iter->first)) {
+         iter = m_data.end();
+      }
+
+      return iter;
    }
 
    iterator insert(const Key &key, const Val &value) {
-      auto iter = m_data.find(key);
+      auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
 
-      if (iter == m_data.end()) {
+      if (iter == m_data.end() || m_compare(key, iter->first)) {
          // add new element, emplace returns an std::pair, first is the iterator
-         return m_data.emplace(key, value).first;
+
+         return m_data.emplace(iter, key, value);
       }
 
       // update value
@@ -356,15 +412,21 @@ class QMap
    }
 
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
-      auto oldSize = m_data.size();
-      auto iter    = m_data.emplace_hint(hint.m_iter, key, value);
+      if (hint == end() || m_compare(key, hint.key()))  {
 
-      if (m_data.size() == oldSize) {
-         // add new element
-         iter->second = value;
+         if (hint == begin()) {
+            return m_data.emplace(hint.m_iter, key, value);
+
+         }  else {
+            auto previous = hint - 1;
+
+            if (m_compare(previous.key(), key)) {
+               return m_data.emplace(hint.m_iter, key, value);
+            }
+         }
       }
 
-      return iter;
+      return insert(key, value);
    }
 
    const Key key(const Val &value, const Key &defaultKey = Key()) const;
@@ -385,15 +447,22 @@ class QMap
    }
 
    iterator lowerBound(const Key &key) {
-      return m_data.lower_bound(key);
+      return std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    const_iterator lowerBound(const Key &key) const  {
-      return m_data.lower_bound(key);
+      return std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    size_type remove(const Key &key)  {
-      return m_data.erase(key);
+      auto iter = find(key);
+
+      if (iter != end()) {
+         erase(iter);
+         return 1;
+      }
+
+      return 0;
    }
 
    size_type size() const {
@@ -401,35 +470,41 @@ class QMap
       return static_cast<size_type>(m_data.size());
    }
 
-   void swap(QMap<Key, Val, C> &other) {
+   void swap(QFlatMap<Key, Val, C> &other) {
       qSwap(m_data, other.m_data);
    }
 
    Val take(const Key &key)  {
-      auto iter = m_data.find(key);
+      auto iter = find(key);
 
-      if (iter == m_data.end()) {
+      if (iter == end()) {
          return Val();
       }
 
-      Val retval = std::move(iter->second);
+      Val retval = std::move(iter.value());
       m_data.erase(iter);
 
       return retval;
    }
 
    iterator upperBound(const Key &key)  {
-      return m_data.upper_bound(key);
+      return std::upper_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    const_iterator upperBound(const Key &key) const {
-      return m_data.upper_bound(key);
+      return std::upper_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
    QList<Key> uniqueKeys() const;
 
-   QMap<Key, Val, C> &unite(const QMap<Key, Val, C> &other) {
-      m_data.insert(other.m_data.begin(), other.m_data.end());
+   QFlatMap<Key, Val, C> &unite(const QFlatMap<Key, Val, C> &other) {
+
+      std::vector<std::pair<Key, Val>> tmp;
+      std::set_union(m_data.begin(), m_data.end(), other.m_data.begin(), other.m_data.end(),
+                  std::back_inserter(tmp), CompareFilter{m_compare} );
+
+      m_data = std::move(tmp);
+
       return *this;
    }
 
@@ -437,14 +512,9 @@ class QMap
 
    QList<Val> values() const;
 
-   // to from
-   std::map<Key, Val, C> toStdMap() const;
-
    // iterators
    iterator begin() {
-      // m_data.begin is an stl iterator
-      // return calls a conversion constructor since the return type is iterator, returns a QMap iterator
-
+      // m_data.begin() returns std::vector<T>::iterator
       return m_data.begin();
    }
 
@@ -501,14 +571,14 @@ class QMap
    }
 
    // operators
-   QMap<Key, Val, C> &operator=(const QMap<Key, Val, C> &other) = default;
-   QMap<Key, Val, C> &operator=(QMap<Key, Val, C> &&other)      = default;
+   QFlatMap<Key, Val, C> &operator=(const QFlatMap<Key, Val, C> &other) = default;
+   QFlatMap<Key, Val, C> &operator=(QFlatMap<Key, Val, C> &&other)      = default;
 
-   bool operator==(const QMap<Key, Val, C> &other) const {
+   bool operator==(const QFlatMap<Key, Val, C> &other) const {
       return m_data == other.m_data;
    }
 
-   bool operator!=(const QMap<Key, Val, C> &other) const {
+   bool operator!=(const QFlatMap<Key, Val, C> &other) const {
       return m_data != other.m_data;
    }
 
@@ -516,13 +586,14 @@ class QMap
    const Val operator[](const Key &key) const;
 
  private:
-   std::map<Key, Val, C> m_data;
+   std::vector<std::pair<Key, Val>> m_data;
+   C m_compare;
 };
 
 // methods
 
 template <class Key, class Val, class C>
-const Key QMap<Key, Val, C>::key(const Val &value, const Key &defaultKey) const
+const Key QFlatMap<Key, Val, C>::key(const Val &value, const Key &defaultKey) const
 {
    const_iterator iter = begin();
 
@@ -538,7 +609,7 @@ const Key QMap<Key, Val, C>::key(const Val &value, const Key &defaultKey) const
 }
 
 template <class Key, class Val, class C>
-QList<Key> QMap<Key, Val, C>::keys() const
+QList<Key> QFlatMap<Key, Val, C>::keys() const
 {
    QList<Key> retval;
    retval.reserve(size());
@@ -554,7 +625,7 @@ QList<Key> QMap<Key, Val, C>::keys() const
 }
 
 template <class Key, class Val, class C>
-QList<Key> QMap<Key, Val, C>::keys(const Val &value) const
+QList<Key> QFlatMap<Key, Val, C>::keys(const Val &value) const
 {
    QList<Key> retval;
 
@@ -571,7 +642,7 @@ QList<Key> QMap<Key, Val, C>::keys(const Val &value) const
 }
 
 template <class Key, class Val, class C>
-QList<Key> QMap<Key, Val, C>::uniqueKeys() const
+QList<Key> QFlatMap<Key, Val, C>::uniqueKeys() const
 {
    QList<Key> retval;
    retval.reserve(size());
@@ -589,9 +660,9 @@ QList<Key> QMap<Key, Val, C>::uniqueKeys() const
 }
 
 template <class Key, class Val, class C>
-const Val QMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
+const Val QFlatMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
 {
-   auto range = m_data.equal_range(key);
+   auto range = equal_range(key);
 
    if (range.first == range.second) {
       // key was not found
@@ -601,11 +672,11 @@ const Val QMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) cons
    // get last key in the range
    auto iter = --range.second;
 
-   return iter->second;
+   return iter.value();
 }
 
 template <class Key, class Val, class C>
-QList<Val> QMap<Key, Val, C>::values() const
+QList<Val> QFlatMap<Key, Val, C>::values() const
 {
    QList<Val> retval;
    retval.reserve(size());
@@ -623,62 +694,41 @@ QList<Val> QMap<Key, Val, C>::values() const
 // operators
 
 template <class Key, class Val, class C>
-const Val QMap<Key, Val, C>::operator[](const Key &key) const
+const Val QFlatMap<Key, Val, C>::operator[](const Key &key) const
 {
    return value(key);
 }
 
 template <class Key, class Val, class C>
-Val &QMap<Key, Val, C>::operator[](const Key &key)
+Val &QFlatMap<Key, Val, C>::operator[](const Key &key)
 {
-   auto range = m_data.equal_range(key);
+   auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
 
-   if (range.first == range.second) {
-      // default constructed element, emplace returns an std::pair, first is the iterator
-      auto iter = m_data.emplace(key, Val()).first;
+   if (iter == m_data.end() || m_compare(key, iter->first)) {
 
-      return iter->second;
+      iter = m_data.emplace(iter, key, Val());
    }
-
-   // get last key in the range
-   auto iter = --range.second;
 
    return iter->second;
 }
 
 
-// to from
-
-template <class Key, class Val, class C>
-std::map<Key, Val, C> QMap<Key, Val, C>::toStdMap() const
-{
-   std::map<Key, Val, C> map;
-   const_iterator iter = end();
-
-   while (iter != begin()) {
-      --iter;
-      map.insert(std::pair<Key, Val>(iter.key(), iter.value()));
-   }
-
-   return map;
-}
-
 // java style iterators
 
 template <class Key, class Val, class C = qMapCompare<Key>>
-class QMapIterator
+class QFlatMapIterator
 {
-   using const_iterator = typename QMap<Key, Val, C>::const_iterator;
+   using const_iterator = typename QFlatMap<Key, Val, C>::const_iterator;
    using Item           = const_iterator;
 
  public:
-   QMapIterator(const QMap<Key, Val, C> &container)
+   QFlatMapIterator(const QFlatMap<Key, Val, C> &container)
       : c(&container), i(c->constBegin()), n(c->constEnd()) {}
 
-   ~QMapIterator() {
+   ~QFlatMapIterator() {
    }
 
-   QMapIterator &operator=(const QMap<Key, Val, C> &container) {
+   QFlatMapIterator &operator=(const QFlatMap<Key, Val, C> &container) {
       c = container;
       i = c->constBegin();
       n = c->constEnd();
@@ -754,7 +804,7 @@ class QMapIterator
    }
 
  private:
-   const QMap<Key, Val, C> *c;
+   const QFlatMap<Key, Val, C> *c;
    const_iterator i;
    const_iterator n;
 
@@ -764,20 +814,20 @@ class QMapIterator
 };
 
 template <class Key, class Val, class C = qMapCompare<Key>>
-class QMutableMapIterator
+class QMutableFlatMapIterator
 {
-   using iterator       = typename QMap<Key, Val, C>::iterator;
-   using const_iterator = typename QMap<Key, Val, C>::const_iterator;
+   using iterator       = typename QFlatMap<Key, Val, C>::iterator;
+   using const_iterator = typename QFlatMap<Key, Val, C>::const_iterator;
    using Item           = iterator;
 
  public:
-   QMutableMapIterator(QMap<Key, Val, C> &container)
+   QMutableFlatMapIterator(QFlatMap<Key, Val, C> &container)
       : c(&container), i(c->begin()), n(c->end()) {}
 
-   ~QMutableMapIterator() {
+   ~QMutableFlatMapIterator() {
    }
 
-   QMutableMapIterator &operator=(QMap<Key, Val, C> &container) {
+   QMutableFlatMapIterator &operator=(QFlatMap<Key, Val, C> &container) {
       c = &container;
       i = c->begin();
       n = c->end();
@@ -872,7 +922,7 @@ class QMutableMapIterator
    }
 
  private:
-   QMap<Key, Val, C> *c;
+   QFlatMap<Key, Val, C> *c;
    iterator i;
    iterator n;
 
