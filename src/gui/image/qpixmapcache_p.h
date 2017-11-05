@@ -65,11 +65,6 @@ class QPixmapCacheEntry : public QPixmap
    QPixmapCache::Key key;
 };
 
-inline bool qIsDetached(QPixmapCacheEntry &t)
-{
-   return t.isDetached();
-}
-
 QT_END_NAMESPACE
 
 #endif // QPIXMAPCACHE_P_H

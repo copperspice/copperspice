@@ -972,31 +972,6 @@ const char *QMetaType::typeName(int typeId)
    return 0;
 }
 
-void QMetaType::unregisterType(const char *typeName)
-{
-   QVector<QCustomTypeInfo> *ct = customTypes();
-
-   if (! ct || !typeName) {
-      return;
-   }
-
-   NS(QByteArray) normalizedTypeName = QMetaObject::normalizedType(typeName);
-
-   QWriteLocker locker(customTypesLock());
-
-   for (int v = 0; v < ct->count(); ++v) {
-
-      if (ct->at(v).typeName == typeName) {
-         QCustomTypeInfo &inf = (*ct)[v];
-         inf.typeName.clear();
-         inf.constr = 0;
-         inf.destr  = 0;
-         inf.alias  = -1;
-      }
-   }
-}
-
-
 // **
 #ifndef QT_NO_DATASTREAM
 

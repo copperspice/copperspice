@@ -363,16 +363,11 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       if (!res) {
          qErrnoWarning("QWidget::create: Failed to set window procedure");
       }
+
    } else if (desktop) {                        // desktop widget
       id = GetDesktopWindow();
-      //         QWidget *otherDesktop = QWidget::find(id);        // is there another desktop?
-      //         if (otherDesktop && otherDesktop->testWFlags(Qt::WPaintDesktop)) {
-      //             otherDesktop->d_func()->setWinId(0);        // remove id from widget mapper
-      //             d->setWinId(id);                     // make sure otherDesktop is
-      //             otherDesktop->d_func()->setWinId(id);       //   found first
-      //         } else {
       setWinId(id);
-      //         }
+
    } else if (topLevel) {                       // create top-level widget
       if (popup) {
          parentw = 0;

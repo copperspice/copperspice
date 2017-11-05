@@ -36,13 +36,13 @@
 
 
 class QAtomicInt
-{  
-   public:      
-        
-      inline QAtomicInt() : m_data(0) { 
+{
+   public:
+
+      inline QAtomicInt() : m_data(0) {
       }
 
-      inline QAtomicInt(int value) : m_data(value) { 
+      inline QAtomicInt(int value) : m_data(value) {
       }
 
       inline QAtomicInt(const QAtomicInt &other) {
@@ -57,136 +57,136 @@ class QAtomicInt
          return *this;
       }
 
-      inline QAtomicInt &operator=(int data) {         
+      inline QAtomicInt &operator=(int data) {
          store(data);
          return *this;
       }
-         
+
       int load() const {
-         return m_data.load();  
+         return m_data.load();
       }
-      
+
       int loadAcquire() {
          return m_data.load(std::memory_order_acquire);
       }
-      
+
       void store(int newValue) {
-         m_data.store(newValue);   
+         m_data.store(newValue);
       }
-      
+
       void storeRelease(int newValue) {
-         m_data.store(newValue, std::memory_order_release);   
+         m_data.store(newValue, std::memory_order_release);
       }
-      
-      //   
-      static bool isReferenceCountingNative()  {         
+
+      //
+      static bool isReferenceCountingNative()  {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
 
-      static bool isReferenceCountingWaitFree()  { 
+      static bool isReferenceCountingWaitFree()  {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
-      
-      bool ref()  { 
+
+      bool ref()  {
          int newValue = ++m_data;
          return newValue != 0;
       }
 
-      bool deref()  { 
+      bool deref()  {
          int newValue = --m_data;
          return newValue != 0;
       }
-         
-      //      
-      static bool isTestAndSetNative()  { 
+
+      //
+      static bool isTestAndSetNative()  {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
 
-      static bool isTestAndSetWaitFree()  { 
+      static bool isTestAndSetWaitFree()  {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
-      
+
       bool testAndSetRelaxed(int expectedValue, int newValue)  {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);         
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
       }
-   
+
       bool testAndSetAcquire(int expectedValue, int newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire); 
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
       }
 
       bool testAndSetRelease(int expectedValue, int newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release); 
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
       }
 
       bool testAndSetOrdered(int expectedValue, int newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst); 
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst);
       }
-   
-      //   
-      static bool isFetchAndStoreNative() { 
+
+      //
+      static bool isFetchAndStoreNative() {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
 
-      static bool isFetchAndStoreWaitFree() { 
+      static bool isFetchAndStoreWaitFree() {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
-      
+
       int fetchAndStoreRelaxed(int newValue) {
-         return m_data.exchange(newValue, std::memory_order_relaxed); 
+         return m_data.exchange(newValue, std::memory_order_relaxed);
       }
 
       int fetchAndStoreAcquire(int newValue) {
-         return m_data.exchange(newValue, std::memory_order_acquire); 
+         return m_data.exchange(newValue, std::memory_order_acquire);
       }
 
       int fetchAndStoreRelease(int newValue) {
-         return m_data.exchange(newValue, std::memory_order_release); 
+         return m_data.exchange(newValue, std::memory_order_release);
       }
 
       int fetchAndStoreOrdered(int newValue) {
-         return m_data.exchange(newValue, std::memory_order_seq_cst); 
+         return m_data.exchange(newValue, std::memory_order_seq_cst);
       }
 
-      //         
-      static bool isFetchAndAddNative() { 
+      //
+      static bool isFetchAndAddNative() {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
 
-      static bool isFetchAndAddWaitFree()  { 
+      static bool isFetchAndAddWaitFree()  {
          return ATOMIC_INT_LOCK_FREE == 2;
       }
-  
+
       int fetchAndAddRelaxed(int valueToAdd) {
-         return m_data.fetch_add(valueToAdd, std::memory_order_relaxed);         
+         return m_data.fetch_add(valueToAdd, std::memory_order_relaxed);
       }
 
-      int fetchAndAddAcquire(int valueToAdd) {        
-         return m_data.fetch_add(valueToAdd, std::memory_order_acquire);   
+      int fetchAndAddAcquire(int valueToAdd) {
+         return m_data.fetch_add(valueToAdd, std::memory_order_acquire);
       }
 
       int fetchAndAddRelease(int valueToAdd) {
-         return m_data.fetch_add(valueToAdd, std::memory_order_release);   
+         return m_data.fetch_add(valueToAdd, std::memory_order_release);
       }
 
       int fetchAndAddOrdered(int valueToAdd) {
-         return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);   
+         return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);
       }
 
    private:
-      std::atomic<int> m_data;   
+      std::atomic<int> m_data;
 };
 
 
 template <typename T>
 class QAtomicPointer
 {
-   public:     
+   public:
       QAtomicPointer(T *value = 0) : m_data(value) {
       }
 
       QAtomicPointer(const QAtomicPointer<T> &other) {
          T *data = other.load();
-         store(data);     
+         store(data);
       }
 
       QAtomicPointer<T> &operator=(const QAtomicPointer<T> &other) {
@@ -200,9 +200,9 @@ class QAtomicPointer
          store(data);
          return *this;
       }
-        
+
       T *load() const {
-         return m_data.load();  
+         return m_data.load();
       }
 
       T *loadAcquire() {
@@ -210,14 +210,14 @@ class QAtomicPointer
       }
 
       void store(T *newValue) {
-         m_data.store(newValue);  
+         m_data.store(newValue);
       }
 
       void storeRelease(T *newValue) {
-         m_data.store(newValue, std::memory_order_release);  
+         m_data.store(newValue, std::memory_order_release);
       }
-      
-      //   
+
+      //
       static bool isTestAndSetNative() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
       }
@@ -225,23 +225,23 @@ class QAtomicPointer
       static bool isTestAndSetWaitFree() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
       }
-      
+
       bool testAndSetRelaxed(T *expectedValue, T *newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);    
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
       }
 
       bool testAndSetAcquire(T *expectedValue, T *newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);    
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
       }
 
       bool testAndSetRelease(T *expectedValue, T *newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);    
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
       }
 
       bool testAndSetOrdered(T *expectedValue, T *newValue) {
-         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst);    
+         return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst);
       }
-      
+
       //
       static bool isFetchAndStoreNative() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
@@ -250,23 +250,23 @@ class QAtomicPointer
       static bool isFetchAndStoreWaitFree() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
       }
-      
+
       T *fetchAndStoreRelaxed(T *newValue)  {
-         return m_data.exchange(newValue, std::memory_order_relaxed); 
+         return m_data.exchange(newValue, std::memory_order_relaxed);
       }
 
       T *fetchAndStoreAcquire(T *newValue) {
-         return m_data.exchange(newValue, std::memory_order_acquire); 
+         return m_data.exchange(newValue, std::memory_order_acquire);
       }
 
       T *fetchAndStoreRelease(T *newValue) {
-         return m_data.exchange(newValue, std::memory_order_release); 
+         return m_data.exchange(newValue, std::memory_order_release);
       }
 
       T *fetchAndStoreOrdered(T *newValue) {
-         return m_data.exchange(newValue, std::memory_order_seq_cst); 
+         return m_data.exchange(newValue, std::memory_order_seq_cst);
       }
-      
+
       //
       static bool isFetchAndAddNative() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
@@ -275,25 +275,25 @@ class QAtomicPointer
       static bool isFetchAndAddWaitFree() {
          return ATOMIC_POINTER_LOCK_FREE == 2;
       }
-      
+
       T *fetchAndAddRelaxed(std::ptrdiff_t valueToAdd) {
-         return m_data.fetch_add(valueToAdd, std::memory_order_relaxed);         
+         return m_data.fetch_add(valueToAdd, std::memory_order_relaxed);
       }
 
-      T *fetchAndAddAcquire(std::ptrdiff_t valueToAdd) {        
-         return m_data.fetch_add(valueToAdd, std::memory_order_acquire);   
+      T *fetchAndAddAcquire(std::ptrdiff_t valueToAdd) {
+         return m_data.fetch_add(valueToAdd, std::memory_order_acquire);
       }
 
       T *fetchAndAddRelease(std::ptrdiff_t valueToAdd){
-         return m_data.fetch_add(valueToAdd, std::memory_order_release);   
+         return m_data.fetch_add(valueToAdd, std::memory_order_release);
       }
 
       T *fetchAndAddOrdered(std::ptrdiff_t valueToAdd){
-         return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);   
+         return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);
       }
 
    private:
-      std::atomic<T *> m_data; 
+      std::atomic<T *> m_data;
 };
 
 template <typename T>

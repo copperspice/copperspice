@@ -1319,8 +1319,6 @@ class Q_CORE_EXPORT Qt
 
 #endif
 
-   typedef WindowFlags WFlags;
-
    enum WindowModality {
       NonModal,
       WindowModal,

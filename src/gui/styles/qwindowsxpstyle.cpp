@@ -210,7 +210,7 @@ QPixmap *QWindowsXPStylePrivate::tabbody = 0;
 QMap<QString, HTHEME> *QWindowsXPStylePrivate::handleMap = 0;
 bool QWindowsXPStylePrivate::use_xp = false;
 
-QAtomicInt QWindowsXPStylePrivate::ref = -1; 
+QAtomicInt QWindowsXPStylePrivate::ref = -1;
 
 /* \internal
     Checks if the theme engine can/should be used, or if we should
@@ -3235,8 +3235,9 @@ void QWindowsXPStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCo
             }
             if (sub & SC_TitleBarCloseButton && tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                theme.rect = proxy()->subControlRect(CC_TitleBar, option, SC_TitleBarCloseButton, widget);
-               //partId = titlebar->testWFlags(Qt::WA_WState_Tool) ? WP_SMALLCLOSEBUTTON : WP_CLOSEBUTTON;
+
                partId = WP_CLOSEBUTTON;
+
                if (widget && !widget->isEnabled()) {
                   stateId = CBS_DISABLED;
                } else if (option->activeSubControls == SC_TitleBarCloseButton && (option->state & State_Sunken)) {

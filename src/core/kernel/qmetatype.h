@@ -100,7 +100,6 @@ class Q_CORE_EXPORT QMetaType
    static bool isRegistered(int type);
    static void *construct(int type, const void *copy = 0);
    static void destroy(int type, void *data);
-   static void unregisterType(const char *typeName);
 
 #ifndef QT_NO_DATASTREAM
    static bool save(QDataStream &stream, int type, const void *data);

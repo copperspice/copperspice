@@ -884,13 +884,6 @@ class Q_CORE_EXPORT QSysInfo
 Q_CORE_EXPORT const char *qVersion();
 Q_CORE_EXPORT bool qSharedBuild();
 
-#if defined(Q_OS_MAC)
-inline int qMacVersion()
-{
-   return QSysInfo::MacintoshVersion;
-}
-#endif
-
 // not needed, used 115 times
 #ifndef Q_OUTOFLINE_TEMPLATE
 #  define Q_OUTOFLINE_TEMPLATE
@@ -1140,18 +1133,6 @@ static inline bool qIsNull(float f)
    return val.u == 0u;
 }
 
-
-/*
-   QTypeInfo     - type trait functionality
-   qIsDetached   - data sharing functionality
-*/
-
-//
-template <typename T> inline bool qIsDetached(T &)
-{
-   return true;
-}
-
 template <typename T>
 class QTypeInfo
 {
@@ -1229,8 +1210,6 @@ QT_BEGIN_NAMESPACE
 
 
 #define Q_DECLARE_SHARED(TYPE)    \
-template <>                       \
-inline bool qIsDetached<TYPE>(TYPE &t) { return t.isDetached(); } \
 template <>                       \
 inline void qSwap<TYPE>(TYPE &value1, TYPE &value2) \
 { qSwap(value1.data_ptr(), value2.data_ptr()); } \

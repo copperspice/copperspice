@@ -86,11 +86,8 @@ class Q_CORE_EXPORT QUuid
 #ifndef QT_NO_QUUID_STRING
    QUuid(const QString &);
    QUuid(const char *);
-   QString toString() const;
 
-   operator QString() const {
-      return toString();   // ### Qt5/remove
-   }
+   QString toString() const;
 
    QUuid(const QByteArray &);
    QByteArray toByteArray() const;

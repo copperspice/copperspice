@@ -98,17 +98,6 @@ typedef xsDouble PatternPriority;
  */
 typedef int ImportPrecedence;
 
-/**
- * @short Similar to Qt::escape(), but also escapes apostrophes and quotes,
- * such that the result is suitable as attribute content too.
- *
- * Since Qt::escape() is in QtGui, using it creates a dependency on that
- * library. This function does not.
- *
- * The implementation resides in qpatternistlocale.cpp.
- *
- * @see Qt::escape()
- */
 QString escape(const QString &input);
 }
 

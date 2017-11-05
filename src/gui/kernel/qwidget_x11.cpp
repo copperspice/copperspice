@@ -609,14 +609,8 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 #endif
 
       id = (WId)parentw;                        // id = root window
-      //         QWidget *otherDesktop = find(id);        // is there another desktop?
-      //         if (otherDesktop && otherDesktop->testWFlags(Qt::WPaintDesktop)) {
-      //             otherDesktop->d->setWinId(0);        // remove id from widget mapper
-      //             d->setWinId(id);                     // make sure otherDesktop is
-      //             otherDesktop->d->setWinId(id);       // found first
-      //         } else {
       setWinId(id);
-      //         }
+
    } else if (topLevel || q->testAttribute(Qt::WA_NativeWindow) || paintOnScreen()) {
 
 #ifdef QWIDGET_EXTRA_DEBUG
@@ -879,13 +873,11 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    // set X11 event mask
    if (desktop) {
-      //         QWidget* main_desktop = find(id);
-      //         if (main_desktop->testWFlags(Qt::WPaintDesktop))
-      //             XSelectInput(dpy, id, stdDesktopEventMask | ExposureMask);
-      //         else
       XSelectInput(dpy, id, stdDesktopEventMask);
+
    } else if (q->internalWinId()) {
       XSelectInput(dpy, id, stdWidgetEventMask);
+
 #if !defined (QT_NO_TABLET)
       QTabletDeviceDataList *tablet_list = qt_tablet_devices();
       if (X11->ptrXSelectExtensionEvent) {
