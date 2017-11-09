@@ -428,11 +428,9 @@ int SizePolicyHandle::compare(const SizePolicyHandle &rhs) const
 
 WriteInitialization::LayoutDefaultHandler::LayoutDefaultHandler()
 {
-   qFill(m_state, m_state + NumProperties, 0u);
-   qFill(m_defaultValues, m_defaultValues + NumProperties, 0);
+   std::fill(m_state, m_state + NumProperties, 0u);
+   std::fill(m_defaultValues, m_defaultValues + NumProperties, 0);
 }
-
-
 
 void WriteInitialization::LayoutDefaultHandler::acceptLayoutDefault(DomLayoutDefault *node)
 {
@@ -783,7 +781,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
 
    const DomPropertyMap attributes = propertyMap(node->elementAttribute());
    const QString pageDefaultString = QLatin1String("Page");
-   
+
    if (m_uic->customWidgetsInfo()->extends(parentClass, QLatin1String("QMainWindow"))) {
 
       if (m_uic->customWidgetsInfo()->extends(className, QLatin1String("QMenuBar"))) {

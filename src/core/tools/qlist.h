@@ -25,6 +25,7 @@
 
 #include <qalgorithms.h>
 
+#include <algorithm>
 #include <deque>
 #include <exception>
 #include <iterator>
@@ -283,7 +284,7 @@ class QList
 
    static QList<T> fromStdList(const std::list<T> &list) {
       QList<T> tmp;
-      qCopy(list.begin(), list.end(), std::back_inserter(tmp));
+      std::copy(list.begin(), list.end(), std::back_inserter(tmp));
       return tmp;
    }
 

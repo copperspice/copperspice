@@ -23,9 +23,10 @@
 #ifndef QVARLENGTHARRAY_H
 #define QVARLENGTHARRAY_H
 
+#include <algorithm>
+
 #include <QtCore/qcontainerfwd.h>
 #include <QtCore/qglobal.h>
-#include <QtCore/qalgorithms.h>
 
 #include <new>
 #include <string.h>
@@ -452,8 +453,9 @@ Q_OUTOFLINE_TEMPLATE typename QVarLengthArray<T, Prealloc>::iterator QVarLengthA
    int f = int(abegin - ptr);
    int l = int(aend - ptr);
    int n = l - f;
+
    if (QTypeInfo<T>::isComplex) {
-      qCopy(ptr + l, ptr + s, ptr + f);
+      std::copy(ptr + l, ptr + s, ptr + f);
       T *i = ptr + s;
       T *b = ptr + s - n;
       while (i != b) {

@@ -202,8 +202,7 @@ void QThreadPoolPrivate::enqueueTask(QRunnable *runnable, int priority)
    }
 
    // put it on the queue
-   QList<QPair<QRunnable *, int> >::iterator at =
-      qUpperBound(queue.begin(), queue.end(), priority);
+   QList<QPair<QRunnable *, int> >::iterator at = std::upper_bound(queue.begin(), queue.end(), priority);
    queue.insert(at, qMakePair(runnable, priority));
 }
 

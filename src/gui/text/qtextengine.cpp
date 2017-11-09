@@ -2644,7 +2644,7 @@ void QTextEngine::setBoundary(int strPos) const
       return;
    }
 
-   auto it = qUpperBound(layoutData->items.constBegin(),
+   auto it = std::upper_bound(layoutData->items.constBegin(),
                   layoutData->items.constEnd(), strPos, QScriptItemComparator());
 
    Q_ASSERT(it > layoutData->items.constBegin());

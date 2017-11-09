@@ -23,6 +23,8 @@
 #ifndef QTHREAD_P_H
 #define QTHREAD_P_H
 
+#include <algorithm>
+
 #include <qplatformdefs.h>
 #include <QtCore/qthread.h>
 #include <QtCore/qmutex.h>
@@ -88,7 +90,7 @@ class QPostEventList : public QList<QPostEvent>
          // insert event in descending priority order, using upper
          // bound for a given priority (to ensure proper ordering
          // of events with the same priority)
-         QPostEventList::iterator at = qUpperBound(begin() + insertionOffset, end(), priority);
+         QPostEventList::iterator at = std::upper_bound(begin() + insertionOffset, end(), priority);
          insert(at, ev);
       }
    }
