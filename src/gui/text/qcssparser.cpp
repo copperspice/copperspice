@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qcssparser_p.h>
 #include <qdebug.h>
 #include <qcolor.h>
@@ -337,10 +339,12 @@ static bool operator<(const QCssKnownValue &prop, const QString &name)
 static quint64 findKnownValue(const QString &name, const QCssKnownValue *start, int numValues)
 {
    const QCssKnownValue *end = &start[numValues - 1];
-   const QCssKnownValue *prop = qBinaryFind(start, end, name);
-   if (prop == end) {
+   const QCssKnownValue *prop = std::lower_bound(start, end, name);
+
+   if (prop == end || (name < *prop)) {
       return 0;
    }
+
    return prop->id;
 }
 

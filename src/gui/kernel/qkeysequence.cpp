@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qkeysequence.h>
 #include <qkeysequence_p.h>
 #include <qapplication_p.h>
@@ -97,8 +99,9 @@ static const MacSpecialKey *const MacSpecialKeyEntriesEnd = entries + NumEntries
 
 QChar qt_macSymbolForQtKey(int key)
 {
-   const MacSpecialKey *i = qBinaryFind(entries, MacSpecialKeyEntriesEnd, key);
-   if (i == MacSpecialKeyEntriesEnd) {
+   const MacSpecialKey *i = std::lower_bound(entries, MacSpecialKeyEntriesEnd, key);
+
+   if ((i == MacSpecialKeyEntriesEnd) || (key < *i) ) {
       return QChar();
    }
 
@@ -106,6 +109,7 @@ QChar qt_macSymbolForQtKey(int key)
 
    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)
          && (macSymbol == kControlUnicode || macSymbol == kCommandUnicode)) {
+
       if (macSymbol == kControlUnicode) {
          macSymbol = kCommandUnicode;
       } else {

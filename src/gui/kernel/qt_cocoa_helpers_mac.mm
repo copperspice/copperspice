@@ -24,6 +24,8 @@
 ** Copyright (C) 2007-2008, Apple, Inc.
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <cs_carbon_wrapper_p.h>
 #include <qt_mac_p.h>
 #include <qcore_mac_p.h>
@@ -538,30 +540,38 @@ static const KeyPair *const end = entries + NumEntries;
 QChar qtKey2CocoaKey(Qt::Key key)
 {
    // The first time this function is called, create a reverse
-   // looup table sorted on Qt Key rather than Cocoa key:
+   // lookup table sorted on Qt Key rather than Cocoa key:
+
    static QVector<KeyPair> rev_entries(NumEntries);
    static bool mustInit = true;
+
    if (mustInit) {
       mustInit = false;
+
       for (int i = 0; i < NumEntries; ++i) {
          rev_entries[i] = entries[i];
       }
-      qSort(rev_entries.begin(), rev_entries.end(), qtKey2CocoaKeySortLessThan);
+
+      std::sort(rev_entries.begin(), rev_entries.end(), qtKey2CocoaKeySortLessThan);
    }
-   const QVector<KeyPair>::iterator i
-      = qBinaryFind(rev_entries.begin(), rev_entries.end(), key);
-   if (i == rev_entries.end()) {
+
+   const QVector<KeyPair>::iterator i = std::lower_bound(rev_entries.begin(), rev_entries.end(), key);
+
+   if ((i == rev_entries.end()) || (key < *i)) {
       return QChar();
    }
+
    return i->cocoaKey;
 }
 
 static Qt::Key cocoaKey2QtKey(QChar keyCode)
 {
-   const KeyPair *i = qBinaryFind(entries, end, keyCode);
-   if (i == end) {
+   const KeyPair *i = std::lower_bound(entries, end, keyCode);
+
+   if ((i == end) || (keyCode < *i)) {
       return Qt::Key(keyCode.unicode());
    }
+
    return i->qtKey;
 }
 

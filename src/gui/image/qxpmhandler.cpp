@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qxpmhandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
@@ -733,8 +735,9 @@ inline bool operator<(const XPMRGBData &data, const char *name)
 
 static inline bool qt_get_named_xpm_rgb(const char *name_no_space, QRgb *rgb)
 {
-   const XPMRGBData *r = qBinaryFind(xpmRgbTbl, xpmRgbTbl + xpmRgbTblSize, name_no_space);
-   if (r != xpmRgbTbl + xpmRgbTblSize) {
+   const XPMRGBData *r = std::lower_bound(xpmRgbTbl, xpmRgbTbl + xpmRgbTblSize, name_no_space);
+
+   if ((r != xpmRgbTbl + xpmRgbTblSize) && !(name_no_space < *r)) {
       *rgb = r->value;
       return true;
    } else {

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qfilesystemmodel_p.h>
 #include <qfilesystemmodel.h>
 #include <qlocale.h>
@@ -28,8 +30,6 @@
 #include <qdebug.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
-
-#include <algorithm>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
@@ -1568,13 +1568,14 @@ void QFileSystemModelPrivate::_q_directoryChanged(const QString &directory, cons
    QStringList toRemove;
    QStringList newFiles = files;
 
-   qSort(newFiles.begin(), newFiles.end());
+   std::sort(newFiles.begin(), newFiles.end());
 
    for (auto childElement : parentNode->children) {
       QStringList::iterator iterator;
-      iterator = qBinaryFind(newFiles.begin(), newFiles.end(), childElement->fileName);
 
-      if (iterator == newFiles.end()) {
+      iterator = std::lower_bound(newFiles.begin(), newFiles.end(), childElement->fileName);
+
+      if (iterator == newFiles.end() || (childElement->fileName < *iterator)) {
          toRemove.append(childElement->fileName);
       }
    }

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qvariantanimation.h>
 #include <qvariantanimation_p.h>
 
@@ -31,110 +33,6 @@
 #ifndef QT_NO_ANIMATION
 
 QT_BEGIN_NAMESPACE
-
-/*!
-    \class QVariantAnimation
-    \ingroup animation
-    \brief The QVariantAnimation class provides an abstract base class for animations.
-    \since 4.6
-
-    This class is part of \l{The Animation Framework}. It serves as a
-    base class for property and item animations, with functions for
-    shared functionality.
-
-    QVariantAnimation cannot be used directly as it is an abstract
-    class; it has a pure virtual method called updateCurrentValue().
-    The class performs interpolation over
-    \l{QVariant}s, but leaves using the interpolated values to its
-    subclasses. Currently, Qt provides QPropertyAnimation, which
-    animates Qt \l{Qt's Property System}{properties}. See the
-    QPropertyAnimation class description if you wish to animate such
-    properties.
-
-    You can then set start and end values for the property by calling
-    setStartValue() and setEndValue(), and finally call start() to
-    start the animation. QVariantAnimation will interpolate the
-    property of the target object and emit valueChanged(). To react to
-    a change in the current value you have to reimplement the
-    updateCurrentValue() virtual function.
-
-    It is also possible to set values at specified steps situated
-    between the start and end value. The interpolation will then
-    touch these points at the specified steps. Note that the start and
-    end values are defined as the key values at 0.0 and 1.0.
-
-    There are two ways to affect how QVariantAnimation interpolates
-    the values. You can set an easing curve by calling
-    setEasingCurve(), and configure the duration by calling
-    setDuration(). You can change how the QVariants are interpolated
-    by creating a subclass of QVariantAnimation, and reimplementing
-    the virtual interpolated() function.
-
-    Subclassing QVariantAnimation can be an alternative if you have
-    \l{QVariant}s that you do not wish to declare as Qt properties.
-    Note, however, that you in most cases will be better off declaring
-    your QVariant as a property.
-
-    Not all QVariant types are supported. Below is a list of currently
-    supported QVariant types:
-
-    \list
-        \o \l{QMetaType::}{Int}
-        \o \l{QMetaType::}{UInt}
-        \o \l{QMetaType::}{Double}
-        \o \l{QMetaType::}{Float}
-        \o \l{QMetaType::}{QLine}
-        \o \l{QMetaType::}{QLineF}
-        \o \l{QMetaType::}{QPoint}
-        \o \l{QMetaType::}{QPointF}
-        \o \l{QMetaType::}{QSize}
-        \o \l{QMetaType::}{QSizeF}
-        \o \l{QMetaType::}{QRect}
-        \o \l{QMetaType::}{QRectF}
-        \o \l{QMetaType::}{QColor}
-    \endlist
-
-    If you need to interpolate other variant types, including custom
-    types, you have to implement interpolation for these yourself.
-    To do this, you can register an interpolator function for a given
-    type. This function takes 3 parameters: the start value, the end value
-    and the current progress.
-
-    Example:
-    \code
-        QVariant myColorInterpolator(const QColor &start, const QColor &end, qreal progress)
-        {
-            ...
-            return QColor(...);
-        }
-        ...
-        qRegisterAnimationInterpolator<QColor>(myColorInterpolator);
-    \endcode
-
-    Another option is to reimplement interpolated(), which returns
-    interpolation values for the value being interpolated.
-
-    \omit We need some snippets around here. \endomit
-
-    \sa QPropertyAnimation, QAbstractAnimation, {The Animation Framework}
-*/
-
-/*!
-    \fn void QVariantAnimation::valueChanged(const QVariant &value)
-
-    QVariantAnimation emits this signal whenever the current \a value changes.
-
-    \sa currentValue, startValue, endValue
-*/
-
-/*!
-    \fn void QVariantAnimation::updateCurrentValue(const QVariant &value) = 0;
-
-    This pure virtual function is called every time the animation's current
-    value changes. The \a value argument is the new current value.
-
-    \sa currentValue
-*/
 
 static bool animationValueLessThan(const QVariantAnimation::KeyValue &p1, const QVariantAnimation::KeyValue &p2)
 {
@@ -282,9 +180,9 @@ void QVariantAnimationPrivate::setCurrentValueForProgress(const qreal progress)
 QVariant QVariantAnimationPrivate::valueAt(qreal step) const
 {
    QVariantAnimation::KeyValues::const_iterator result =
-      qBinaryFind(keyValues.begin(), keyValues.end(), qMakePair(step, QVariant()), animationValueLessThan);
+      std::lower_bound(keyValues.constBegin(), keyValues.constEnd(), qMakePair(step, QVariant()), animationValueLessThan);
 
-   if (result != keyValues.constEnd()) {
+   if (result != keyValues.constEnd() && ! animationValueLessThan(qMakePair(step, QVariant()), *result)) {
       return result->second;
    }
 
@@ -600,28 +498,10 @@ void QVariantAnimation::setKeyValues(const KeyValues &keyValues)
 {
    Q_D(QVariantAnimation);
    d->keyValues = keyValues;
-   qSort(d->keyValues.begin(), d->keyValues.end(), animationValueLessThan);
+   std::sort(d->keyValues.begin(), d->keyValues.end(), animationValueLessThan);
    d->recalculateCurrentInterval(/*force=*/true);
 }
 
-/*!
-    \property QVariantAnimation::currentValue
-    \brief the current value of the animation.
-
-    This property describes the current value; an interpolated value
-    between the \l{startValue}{start value} and the \l{endValue}{end
-    value}, using the current time for progress. The value itself is
-    obtained from interpolated(), which is called repeatedly as the
-    animation is running.
-
-    QVariantAnimation calls the virtual updateCurrentValue() function
-    when the current value changes. This is particularly useful for
-    subclasses that need to track updates. For example,
-    QPropertyAnimation uses this function to animate Qt \l{Qt's
-    Property System}{properties}.
-
-    \sa startValue, endValue
-*/
 QVariant QVariantAnimation::currentValue() const
 {
    Q_D(const QVariantAnimation);

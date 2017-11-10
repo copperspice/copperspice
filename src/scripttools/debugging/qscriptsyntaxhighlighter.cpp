@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qscriptsyntaxhighlighter_p.h"
 #include "qfunctions_p.h"
 
@@ -122,16 +124,17 @@ static bool operator<(const char *kw, const KeywordHelper &helper)
 static bool isKeyword(const QString &word)
 {
    const char *const *start = &keywords[0];
-   const char *const *end = &keywords[MAX_KEYWORD - 1];
-   const char *const *kw = qBinaryFind(start, end, KeywordHelper(word));
+   const char *const *end   = &keywords[MAX_KEYWORD - 1];
 
-   return kw != end;
+   const KeywordHelper tmp(word);
+   const char *const *kw    = std::lower_bound(start, end, tmp);
+
+   return kw != end && ! (tmp < *kw);
 }
 
 QScriptSyntaxHighlighter::QScriptSyntaxHighlighter(QTextDocument *document)
    : QSyntaxHighlighter(document)
 {
-
    m_formats[ScriptNumberFormat].setForeground(Qt::darkBlue);
    m_formats[ScriptStringFormat].setForeground(Qt::darkGreen);
    m_formats[ScriptTypeFormat].setForeground(Qt::darkMagenta);

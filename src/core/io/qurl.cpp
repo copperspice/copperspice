@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qplatformdefs.h>
 #include <qurl.h>
 #include <qatomic.h>
@@ -2255,11 +2257,12 @@ static void mapToLowerCase(QString *str, int from)
                ++i;
             }
          }
-         const NameprepCaseFoldingEntry *entry = qBinaryFind(NameprepCaseFolding,
-                                                 NameprepCaseFolding + N,
-                                                 uc);
-         if ((entry - NameprepCaseFolding) != N) {
+
+         const NameprepCaseFoldingEntry *entry = std::lower_bound(NameprepCaseFolding, NameprepCaseFolding + N, uc);
+
+         if ((entry != NameprepCaseFolding + N) && ! (uc < *entry))  {
             int l = 1;
+
             while (l < 4 && entry->mapping[l]) {
                ++l;
             }

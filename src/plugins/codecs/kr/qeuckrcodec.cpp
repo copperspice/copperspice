@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-// Most of the cp949 code was originally written by Joon-Kyu Park, and is included 
+// Most of the cp949 code was originally written by Joon-Kyu Park, and is included
 // in Qt with the author's permission and the grateful thanks of the Qt team.
 
 /*! \class QEucKrCodec
@@ -45,6 +45,8 @@
     QByteArray fromUnicode(const QString& uc, int& lenInOut) const;
     QString toUnicode(const char* chars, int len) const;
 */
+
+#include <algorithm>
 
 #include "qeuckrcodec.h"
 #include "cp949codetbl.h"
@@ -3394,24 +3396,28 @@ QByteArray QCP949Codec::convertFromUnicode(const QChar *uc, int len, ConverterSt
     QByteArray rstr;
     rstr.resize(rlen);
     uchar* cursor = (uchar*)rstr.data();
+
     for (int i = 0; i < len; i++) {
         unsigned short ch = uc[i].unicode();
         uint j;
         if (ch < 0x80) {
             // ASCII
             *cursor++ = ch;
+
         } else if ((j = qt_UnicodeToKsc5601(ch))) {
             // KSC 5601
             *cursor++ = (j >> 8)   | 0x80;
             *cursor++ = (j & 0xff) | 0x80;
+
         } else {
-            const unsigned short *ptr = qBinaryFind(cp949_icode_to_unicode, cp949_icode_to_unicode + 8822, ch);
-            if (ptr == cp949_icode_to_unicode + 8822) {
+            const unsigned short *ptr = std::lower_bound(cp949_icode_to_unicode, cp949_icode_to_unicode + 8822, ch);
+
+            if (ptr == cp949_icode_to_unicode + 8822 || ch < *ptr) {
                 // Error
                 *cursor++ = replacement;
                 ++invalid;
-            }
-            else {
+
+            } else {
                 // The table 'cp949_icode_to_unicode' contains following
                 // 1. Elements of row 81-a0 (32 rows) consisting of 178 elements each.
                 // 2. Elements of row a1-fe not in EUC-KR consisting of 84 elements each.
@@ -3427,7 +3433,7 @@ QByteArray QCP949Codec::convertFromUnicode(const QChar *uc, int len, ConverterSt
                     row = internal_code / 178;
                     column = internal_code % 178;
                 }
-                else { 
+                else {
                     // code between a1-fe
                     internal_code -= 3008;
                     row = internal_code / 84;

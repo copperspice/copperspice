@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qglobal.h>
 #include <qrgb.h>
 #include <qstringlist.h>
@@ -272,6 +274,7 @@ inline bool operator<(const char *name, const RGBData &data)
 {
    return qstrcmp(name, data.name) < 0;
 }
+
 inline bool operator<(const RGBData &data, const char *name)
 {
    return qstrcmp(data.name, name) < 0;
@@ -279,12 +282,14 @@ inline bool operator<(const RGBData &data, const char *name)
 
 static bool get_named_rgb(const char *name_no_space, QRgb *rgb)
 {
-   QByteArray name = QByteArray(name_no_space).toLower();
-   const RGBData *r = qBinaryFind(rgbTbl, rgbTbl + rgbTblSize, name.constData());
-   if (r != rgbTbl + rgbTblSize) {
+   QByteArray name  = QByteArray(name_no_space).toLower();
+   const RGBData *r = std::lower_bound(rgbTbl, rgbTbl + rgbTblSize, name.constData());
+
+   if ((r != rgbTbl + rgbTblSize) || (name.constData() < *r)) {
       *rgb = r->value;
       return true;
    }
+
    return false;
 }
 
@@ -294,8 +299,10 @@ bool qt_get_named_rgb(const char *name, QRgb *rgb)
    if (len > 255) {
       return false;
    }
+
    char name_no_space[256];
    int pos = 0;
+
    for (int i = 0; i < len; i++) {
       if (name[i] != '\t' && name[i] != ' ') {
          name_no_space[pos++] = name[i];
