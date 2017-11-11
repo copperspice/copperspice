@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qtablewidget.h>
 
 #ifndef QT_NO_TABLEWIDGET
@@ -532,11 +534,12 @@ void QTableModel::sort(int column, Qt::SortOrder order)
    }
 
    LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
-   qStableSort(sortable.begin(), sortable.end(), compare);
+   std::stable_sort(sortable.begin(), sortable.end(), compare);
 
    QVector<QTableWidgetItem *> sorted_table(tableItems.count());
    QModelIndexList from;
    QModelIndexList to;
+
    for (int i = 0; i < rowCount(); ++i) {
       int r = (i < sortable.count()
                ? sortable.at(i).second
@@ -580,7 +583,7 @@ void QTableModel::ensureSorted(int column, Qt::SortOrder order,
    }
 
    LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
-   qStableSort(sorting.begin(), sorting.end(), compare);
+   std::stable_sort(sorting.begin(), sorting.end(), compare);
 
    QModelIndexList oldPersistentIndexes = persistentIndexList();
    QModelIndexList newPersistentIndexes = oldPersistentIndexes;
@@ -589,6 +592,7 @@ void QTableModel::ensureSorted(int column, Qt::SortOrder order,
    QVector<QTableWidgetItem *> colItems = columnItems(column);
    QVector<QTableWidgetItem *>::iterator vit = colItems.begin();
    bool changed = false;
+
    for (int i = 0; i < sorting.count(); ++i) {
       int oldRow = sorting.at(i).second;
       QTableWidgetItem *item = colItems.at(oldRow);

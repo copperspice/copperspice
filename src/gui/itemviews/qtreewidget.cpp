@@ -20,6 +20,7 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
 #include <qtreewidget.h>
 
 #ifndef QT_NO_TREEWIDGET
@@ -628,7 +629,7 @@ void QTreeModel::ensureSorted(int column, Qt::SortOrder order,
    }
 
    LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
-   qStableSort(sorting.begin(), sorting.end(), compare);
+   std::stable_sort(sorting.begin(), sorting.end(), compare);
 
    QModelIndexList oldPersistentIndexes;
    QModelIndexList newPersistentIndexes;
@@ -873,7 +874,7 @@ void QTreeModel::sortItems(QList<QTreeWidgetItem *> *items, int column, Qt::Sort
 
    // do the sorting
    LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
-   qStableSort(sorting.begin(), sorting.end(), compare);
+   std::stable_sort(sorting.begin(), sorting.end(), compare);
 
    QModelIndexList fromList;
    QModelIndexList toList;

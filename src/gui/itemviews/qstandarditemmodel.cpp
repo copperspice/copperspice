@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qstandarditemmodel.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
@@ -44,8 +46,7 @@ class QStandardItemModelLessThan
    inline QStandardItemModelLessThan() {
    }
 
-   inline bool operator()(const QPair<QStandardItem *, int> &l,
-                          const QPair<QStandardItem *, int> &r) const {
+   inline bool operator()(const QPair<QStandardItem *, int> &l, const QPair<QStandardItem *, int> &r) const {
       return *(l.first) < *(r.first);
    }
 };
@@ -241,10 +242,10 @@ void QStandardItemPrivate::sortChildren(int column, Qt::SortOrder order)
 
    if (order == Qt::AscendingOrder) {
       QStandardItemModelLessThan lt;
-      qStableSort(sortable.begin(), sortable.end(), lt);
+      std::stable_sort(sortable.begin(), sortable.end(), lt);
    } else {
       QStandardItemModelGreaterThan gt;
-      qStableSort(sortable.begin(), sortable.end(), gt);
+      std::stable_sort(sortable.begin(), sortable.end(), gt);
    }
 
    QModelIndexList changedPersistentIndexesFrom, changedPersistentIndexesTo;

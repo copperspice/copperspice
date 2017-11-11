@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qscriptcompletiontask_p.h"
 #include "qscriptcompletiontaskinterface_p_p.h"
 #include "qscriptdebuggerconsole_p.h"
@@ -30,8 +32,8 @@
 #include "qscriptdebuggerjobschedulerinterface_p.h"
 #include "qscriptdebuggerresponse_p.h"
 
-#include <QtCore/qset.h>
-#include <QtCore/qdebug.h>
+#include <qset.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -261,6 +263,7 @@ void QScriptCompletionTask::start()
                d->type = CommandArgumentCompletion;
                QScriptDebuggerJob *job = new QScriptCompleteScriptsJob(arg, d, d->commandScheduler);
                d->jobScheduler->scheduleJob(job);
+
             } else if (argType == QLatin1String("subcommand-name")) {
                for (int i = 0; i < cmd->subCommands().size(); ++i) {
                   QString name = cmd->subCommands().at(i);
@@ -268,12 +271,14 @@ void QScriptCompletionTask::start()
                      d->results.append(name);
                   }
                }
-               qStableSort(d->results);
+               std::stable_sort(d->results);
+
             } else if (argType == QLatin1String("script")) {
                d->completeScriptExpression();
             } else {
                emit finished();
             }
+
             if ((d->type == NoCompletion) && !d->results.isEmpty()) {
                d->position = pos;
                d->length = arg.length();

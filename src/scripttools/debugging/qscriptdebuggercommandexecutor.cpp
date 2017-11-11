@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qscriptdebuggercommandexecutor_p.h"
 
 #include "qscriptdebuggerbackend_p.h"
@@ -417,8 +419,10 @@ QScriptDebuggerResponse QScriptDebuggerCommandExecutor::execute(
                obj = obj.prototype();
             }
          }
+
          QStringList matchesList = matches.toList();
-         qStableSort(matchesList);
+         std::stable_sort(matchesList);
+
          response.setResult(matchesList);
       }
       break;

@@ -20,27 +20,21 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qscriptdebuggerconsolecommandmanager_p.h"
 #include "qscriptdebuggerconsolecommand_p.h"
 #include "qscriptdebuggerconsolecommandgroupdata_p.h"
 
-#include <QtCore/qlist.h>
-#include <QtCore/qstringlist.h>
+#include <qlist.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.5
-  \class QScriptDebuggerConsoleCommandManager
-  \internal
-
-  \brief The QScriptDebuggerConsoleCommandManager manages a collection of console commands.
-
-*/
 
 class QScriptDebuggerConsoleCommandManagerPrivate
 {
    Q_DECLARE_PUBLIC(QScriptDebuggerConsoleCommandManager)
+
  public:
    QScriptDebuggerConsoleCommandManagerPrivate();
    ~QScriptDebuggerConsoleCommandManagerPrivate();
@@ -209,6 +203,7 @@ QStringList QScriptDebuggerConsoleCommandManager::completions(const QString &pre
 {
    Q_D(const QScriptDebuggerConsoleCommandManager);
    QStringList result;
+
    for (int i = 0; i < d->commands.size(); ++i) {
       QScriptDebuggerConsoleCommand *cmd = d->commands.at(i);
       QStringList names;
@@ -221,7 +216,9 @@ QStringList QScriptDebuggerConsoleCommandManager::completions(const QString &pre
          }
       }
    }
-   qStableSort(result);
+
+   std::stable_sort(result);
+
    return result;
 }
 
