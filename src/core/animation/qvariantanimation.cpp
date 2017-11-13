@@ -126,11 +126,13 @@ void QVariantAnimationPrivate::recalculateCurrentInterval(bool force/*=false*/)
    //0 and 1 are still the boundaries
    if (force || (currentInterval.start.first > 0 && progress < currentInterval.start.first)
          || (currentInterval.end.first < 1 && progress > currentInterval.end.first)) {
+
       //let's update currentInterval
-      QVariantAnimation::KeyValues::const_iterator it = qLowerBound(keyValues.constBegin(),
+      QVariantAnimation::KeyValues::const_iterator it = std::lower_bound(keyValues.constBegin(),
             keyValues.constEnd(),
             qMakePair(progress, QVariant()),
             animationValueLessThan);
+
       if (it == keyValues.constBegin()) {
          //the item pointed to by it is the start element in the range
          if (it->first == 0 && keyValues.count() > 1) {
@@ -198,7 +200,7 @@ void QVariantAnimationPrivate::setValueAt(qreal step, const QVariant &value)
 
    QVariantAnimation::KeyValue pair(step, value);
 
-   QVariantAnimation::KeyValues::iterator result = qLowerBound(keyValues.begin(), keyValues.end(), pair,
+   QVariantAnimation::KeyValues::iterator result = std::lower_bound(keyValues.begin(), keyValues.end(), pair,
          animationValueLessThan);
    if (result == keyValues.end() || result->first != step) {
       keyValues.insert(result, pair);

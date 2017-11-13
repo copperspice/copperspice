@@ -691,8 +691,9 @@ static ushort ligatureHelper(ushort u1, ushort u2)
    ushort length = *ligatures++;
    {
       const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
-      const UCS2Pair *r = qBinaryFind(data, data + length, u1);
-      if (r != data + length) {
+      const UCS2Pair *r = std::lower_bound(data, data + length, ushort(u1));
+
+      if (r != data + length && r->u1 == ushort(u1)) {
          return r->u2;
       }
    }

@@ -38,8 +38,6 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-QT_BEGIN_NAMESPACE
-
 struct QEditorInfo {
    QEditorInfo(QWidget *e, bool s): widget(QWeakPointer<QWidget>(e)), isStatic(s) {}
    QEditorInfo(): isStatic(false) {}
@@ -438,27 +436,6 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    mutable QBasicTimer delayedLayout;
    mutable QBasicTimer fetchMoreTimer;
 };
-
-QT_BEGIN_INCLUDE_NAMESPACE
-#include <qvector.h>
-QT_END_INCLUDE_NAMESPACE
-
-template <typename T>
-inline int qBinarySearch(const QVector<T> &vec, const T &item, int start, int end)
-{
-   int i = (start + end + 1) >> 1;
-   while (end - start > 0) {
-      if (vec.at(i) > item) {
-         end = i - 1;
-      } else {
-         start = i;
-      }
-      i = (start + end + 1) >> 1;
-   }
-   return i;
-}
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ITEMVIEWS
 
