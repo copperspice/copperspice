@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qnetworkaccessmanager.h>
 #include <qnetworkaccessmanager_p.h>
 #include <qnetworkaccessauthenticationmanager_p.h>
@@ -42,7 +44,7 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
    }
 
    QNetworkAuthenticationCredential *findClosestMatch(const QString &domain) {
-      iterator it = qLowerBound(begin(), end(), domain);
+      iterator it = std::lower_bound(begin(), end(), domain);
 
       if (it == end() && !isEmpty()) {
          --it;

@@ -404,9 +404,10 @@ QList<QListWidgetItem *>::iterator QListModel::sortedInsertionIterator(
    Qt::SortOrder order, QListWidgetItem *item)
 {
    if (order == Qt::AscendingOrder) {
-      return qLowerBound(begin, end, item, QListModelLessThan());
+      return std::lower_bound(begin, end, item, QListModelLessThan());
    }
-   return qLowerBound(begin, end, item, QListModelGreaterThan());
+
+   return std::lower_bound(begin, end, item, QListModelGreaterThan());
 }
 
 void QListModel::itemChanged(QListWidgetItem *item)

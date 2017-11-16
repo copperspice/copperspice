@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qdebug.h>
 #include <qcoreapplication.h>
 #include <qstringlist.h>
@@ -828,15 +830,16 @@ bool QDBusConnection::registerObject(const QString &path, QObject *object, Regis
 
         // find the position where we'd insert the node
         QDBusConnectionPrivate::ObjectTreeNode::DataList::Iterator it =
-            qLowerBound(node->children.begin(), node->children.end(), pathComponents.at(i));
+            std::lower_bound(node->children.begin(), node->children.end(), pathComponents.at(i));
+
         if (it != node->children.end() && it->name == pathComponents.at(i)) {
             // match: this node exists
             node = it;
 
             // are we allowed to go deeper?
             if (node->flags & ExportChildObjects) {
-                // we're not
-                qDebug("Cannot register object at %s because %s exports its own child objects",
+                // we are not
+                qDebug("Cann ot register object at %s because %s exports its own child objects",
                        qPrintable(path), qPrintable(pathComponents.at(i)));
                 return false;
             }
@@ -901,7 +904,8 @@ void QDBusConnection::unregisterObject(const QString &path, UnregisterMode mode)
         }
 
         QDBusConnectionPrivate::ObjectTreeNode::DataList::Iterator it =
-            qLowerBound(node->children.begin(), node->children.end(), pathComponents.at(i));
+            std::lower_bound(node->children.begin(), node->children.end(), pathComponents.at(i));
+
         if (it == node->children.end() || it->name != pathComponents.at(i))
             break;              // node not found
 
@@ -933,11 +937,13 @@ QObject *QDBusConnection::objectRegisteredAt(const QString &path) const
     while (node) {
         if (pathComponents.count() == i)
             return node->obj;
+
         if ((node->flags & QDBusConnectionPrivate::VirtualObject) && (node->flags & QDBusConnection::SubPath))
             return node->obj;
 
         QDBusConnectionPrivate::ObjectTreeNode::DataList::ConstIterator it =
-            qLowerBound(node->children.constBegin(), node->children.constEnd(), pathComponents.at(i));
+            std::lower_bound(node->children.constBegin(), node->children.constEnd(), pathComponents.at(i));
+
         if (it == node->children.constEnd() || it->name != pathComponents.at(i))
             break;              // node not found
 

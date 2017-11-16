@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qtextdocumentlayout_p.h>
 #include <qtextdocument_p.h>
 #include <qtextimagehandler_p.h>
@@ -533,7 +535,7 @@ QTextFrame::Iterator QTextDocumentLayoutPrivate::frameIteratorForYPosition(QFixe
       return rootFrame->begin();
    }
 
-   QVector<QCheckPoint>::ConstIterator checkPoint = qLowerBound(checkPoints.begin(), checkPoints.end(), y);
+   QVector<QCheckPoint>::ConstIterator checkPoint = std::lower_bound(checkPoints.begin(), checkPoints.end(), y);
    if (checkPoint == checkPoints.end()) {
       return rootFrame->begin();
    }
@@ -710,14 +712,14 @@ QTextDocumentLayoutPrivate::hitTest(QTextTable *table, const QFixedPoint &point,
 {
    QTextTableData *td = static_cast<QTextTableData *>(data(table));
 
-   QVector<QFixed>::ConstIterator rowIt = qLowerBound(td->rowPositions.constBegin(), td->rowPositions.constEnd(), point.y);
+   QVector<QFixed>::ConstIterator rowIt = std::lower_bound(td->rowPositions.constBegin(), td->rowPositions.constEnd(), point.y);
    if (rowIt == td->rowPositions.constEnd()) {
       rowIt = td->rowPositions.constEnd() - 1;
    } else if (rowIt != td->rowPositions.constBegin()) {
       --rowIt;
    }
 
-   QVector<QFixed>::ConstIterator colIt = qLowerBound(td->columnPositions.constBegin(), td->columnPositions.constEnd(),
+   QVector<QFixed>::ConstIterator colIt = std::lower_bound(td->columnPositions.constBegin(), td->columnPositions.constEnd(),
                                           point.x);
    if (colIt == td->columnPositions.constEnd()) {
       colIt = td->columnPositions.constEnd() - 1;
@@ -1040,7 +1042,7 @@ void QTextDocumentLayoutPrivate::drawFrame(const QPointF &offset, QPainter *pain
       int lastRow = rows;
 
       if (context.clip.isValid()) {
-         QVector<QFixed>::ConstIterator rowIt = qLowerBound(td->rowPositions.constBegin(), td->rowPositions.constEnd(),
+         QVector<QFixed>::ConstIterator rowIt = std::lower_bound(td->rowPositions.constBegin(), td->rowPositions.constEnd(),
                                                 QFixed::fromReal(context.clip.top() - off.y()));
          if (rowIt != td->rowPositions.constEnd() && rowIt != td->rowPositions.constBegin()) {
             --rowIt;
@@ -1217,7 +1219,7 @@ void QTextDocumentLayoutPrivate::drawFlow(const QPointF &offset, QPainter *paint
 
    QVector<QCheckPoint>::ConstIterator lastVisibleCheckPoint = checkPoints.end();
    if (inRootFrame && context.clip.isValid()) {
-      lastVisibleCheckPoint = qLowerBound(checkPoints.begin(), checkPoints.end(), QFixed::fromReal(context.clip.bottom()));
+      lastVisibleCheckPoint = std::lower_bound(checkPoints.begin(), checkPoints.end(), QFixed::fromReal(context.clip.bottom()));
    }
 
    QTextBlock previousBlock;
@@ -2296,7 +2298,7 @@ void QTextDocumentLayoutPrivate::layoutFlow(QTextFrame::Iterator it, QTextLayout
       bool redoCheckPoints = layoutStruct->fullLayout || checkPoints.isEmpty();
 
       if (!redoCheckPoints) {
-         QVector<QCheckPoint>::Iterator checkPoint = qLowerBound(checkPoints.begin(), checkPoints.end(), layoutFrom);
+         QVector<QCheckPoint>::Iterator checkPoint = std::lower_bound(checkPoints.begin(), checkPoints.end(), layoutFrom);
          if (checkPoint != checkPoints.end()) {
             if (checkPoint != checkPoints.begin()) {
                --checkPoint;

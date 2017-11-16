@@ -730,9 +730,10 @@ QList<QTreeWidgetItem *>::iterator QTreeModel::sortedInsertionIterator(
    Qt::SortOrder order, QTreeWidgetItem *item)
 {
    if (order == Qt::AscendingOrder) {
-      return qLowerBound(begin, end, item, QTreeModelLessThan());
+      return std::lower_bound(begin, end, item, QTreeModelLessThan());
    }
-   return qLowerBound(begin, end, item, QTreeModelGreaterThan());
+
+   return std::lower_bound(begin, end, item, QTreeModelGreaterThan());
 }
 
 QStringList QTreeModel::mimeTypes() const

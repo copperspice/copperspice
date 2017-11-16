@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qtextobject.h>
 #include <qtextobject_p.h>
 #include <qtextdocument.h>
@@ -234,7 +236,7 @@ QTextBlockGroup::~QTextBlockGroup()
 void QTextBlockGroup::blockInserted(const QTextBlock &block)
 {
    Q_D(QTextBlockGroup);
-   QTextBlockGroupPrivate::BlockList::Iterator it = qLowerBound(d->blocks.begin(), d->blocks.end(), block);
+   QTextBlockGroupPrivate::BlockList::Iterator it = std::lower_bound(d->blocks.begin(), d->blocks.end(), block);
    d->blocks.insert(it, block);
    d->markBlocksDirty();
 }

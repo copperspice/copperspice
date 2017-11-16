@@ -334,9 +334,11 @@ void QTextTablePrivate::fragmentAdded(const QChar &type, uint fragment)
    if (type == QTextBeginningOfFrame) {
       Q_ASSERT(cells.indexOf(fragment) == -1);
       const uint pos = pieceTable->fragmentMap().position(fragment);
+
       QFragmentFindHelper helper(pos, pieceTable->fragmentMap());
-      QList<int>::Iterator it = qLowerBound(cells.begin(), cells.end(), helper);
+      QList<int>::Iterator it = std::lower_bound(cells.begin(), cells.end(), helper);
       cells.insert(it, fragment);
+
       if (!fragment_start || pos < pieceTable->fragmentMap().position(fragment_start)) {
          fragment_start = fragment;
       }
@@ -552,7 +554,7 @@ QTextTableCell QTextTable::cellAt(int position) const
    }
 
    QFragmentFindHelper helper(position, map);
-   QList<int>::ConstIterator it = qLowerBound(d->cells.begin(), d->cells.end(), helper);
+   QList<int>::ConstIterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
    if (it != d->cells.begin()) {
       --it;
    }
