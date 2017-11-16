@@ -123,7 +123,7 @@ void QGraphicsItemAnimationPrivate::insertUniquePair(qreal step, qreal value, QL
       result->value = value;
    } else {
       *binList << pair;
-      qSort(binList->begin(), binList->end());
+      std::sort(binList->begin(), binList->end());
    }
 }
 

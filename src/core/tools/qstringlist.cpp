@@ -20,6 +20,7 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
 #include <qstringlist.h>
 #include <qset.h>
 
@@ -92,7 +93,7 @@ QString QStringList::join(const QString &sep) const
 
 void QStringList::sort()
 {
-   qSort(*this);
+   std::sort(this->begin(), this->end());
 }
 
 #ifndef QT_NO_REGEXP

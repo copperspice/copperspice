@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qdebug.h>
 #include <qfontengine_p.h>
 #include <qbitmap.h>
@@ -882,8 +884,10 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
          offset += length;
       }
    }
+
 end:
-   qSort(kerning_pairs);
+   std::sort(kerning_pairs.begin(), kerning_pairs.end());
+
    //    for (int i = 0; i < kerning_pairs.count(); ++i)
    //        qDebug() << 'i' << i << "left_right" << hex << kerning_pairs.at(i).left_right;
 }

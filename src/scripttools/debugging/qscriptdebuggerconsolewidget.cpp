@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qscriptdebuggerconsolewidget_p.h"
 #include "qscriptdebuggerconsolewidgetinterface_p_p.h"
 #include "qscriptdebuggerconsolehistorianinterface_p.h"
@@ -243,7 +245,8 @@ void QScriptDebuggerConsoleWidgetPrivate::_q_onCompletionTaskFinished()
          for (int i = 0; i < task->resultCount(); ++i) {
             lst.append(task->resultAt(i).mid(task->length()));
          }
-         qSort(lst.begin(), lst.end(), lengthLessThan);
+         std::sort(lst.begin(), lst.end(), lengthLessThan);
+
          QString lcp = longestCommonPrefix(lst);
          if (!lcp.isEmpty()) {
             QString tmp = commandLine->input();

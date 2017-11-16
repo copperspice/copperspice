@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qwindowsxpstyle.h>
 #include <qwindowsxpstyle_p.h>
 
@@ -4347,7 +4349,8 @@ void QWindowsXPStylePrivate::showProperties(XPThemeData &themeData)
                }
          }
       }
-      qSort(all_props);
+
+      std::sort(all_props.begin(), all_props_end());
 
       {
          // List all properties

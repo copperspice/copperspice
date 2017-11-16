@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qabstractbutton.h>
 #include <qabstractitemview.h>
 #include <qbuttongroup.h>
@@ -126,7 +128,7 @@ void QButtonGroup::addButton(QAbstractButton *button, int id)
       if (ids.isEmpty()) {
          d->mapping[button] = -2;
       } else {
-         qSort(ids);
+         std::sort(ids.begin(), ids.end());
          d->mapping[button] = ids.first() - 1;
       }
    } else {

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qmdiarea_p.h>
 
 #ifndef QT_NO_MDIAREA
@@ -349,18 +351,21 @@ void MinOverlapPlacer::getCandidatePlacements(const QSize &size, const QList<QRe
    QSet<int> yset;
    xset << domain.left() << domain.right() - size.width() + 1;
    yset << domain.top();
+
    if (domain.bottom() - size.height() + 1 >= 0) {
       yset << domain.bottom() - size.height() + 1;
    }
+
    for (const QRect & rect : rects) {
       xset << rect.right() + 1;
       yset << rect.bottom() + 1;
    }
 
    QList<int> xlist = xset.values();
-   qSort(xlist.begin(), xlist.end());
+   std::sort(xlist.begin(), xlist.end());
+
    QList<int> ylist = yset.values();
-   qSort(ylist.begin(), ylist.end());
+   std::sort(ylist.begin(), ylist.end());
 
    for (int y : ylist) {
       for (int x : xlist) {

@@ -20,6 +20,7 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
 #include <QtCore/qglobal.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -27,8 +28,8 @@
 #include <qgraphicsscene_p.h>
 #include <qgraphicsscenebsptreeindex_p.h>
 #include <qgraphicssceneindex_p.h>
-#include <QtCore/qmath.h>
-#include <QtCore/qdebug.h>
+#include <qmath.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -192,7 +193,8 @@ void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *item, int *stac
 {
    if (!item->d_ptr->children.isEmpty()) {
       QList<QGraphicsItem *> childList = item->d_ptr->children;
-      qSort(childList.begin(), childList.end(), qt_closestLeaf);
+      std::sort(childList.begin(), childList.end(), qt_closestLeaf);
+
       for (int i = 0; i < childList.size(); ++i) {
          QGraphicsItem *item = childList.at(i);
          if (!(item->flags() & QGraphicsItem::ItemStacksBehindParent)) {
@@ -235,7 +237,7 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateSortCache()
       }
    }
 
-   qSort(topLevels.begin(), topLevels.end(), qt_closestLeaf);
+   std::sort(topLevels.begin(), topLevels.end(), qt_closestLeaf);
    for (int i = 0; i < topLevels.size(); ++i) {
       climbTree(topLevels.at(i), &stackingOrder);
    }
@@ -380,24 +382,24 @@ void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemLi
 
    if (onlyTopLevelItems) {
       if (order == Qt::DescendingOrder) {
-         qSort(itemList->begin(), itemList->end(), qt_closestLeaf);
+         std::sort(itemList->begin(), itemList->end(), qt_closestLeaf);
       } else if (order == Qt::AscendingOrder) {
-         qSort(itemList->begin(), itemList->end(), qt_notclosestLeaf);
+         std::sort(itemList->begin(), itemList->end(), qt_notclosestLeaf);
       }
       return;
    }
 
    if (sortCacheEnabled) {
       if (order == Qt::DescendingOrder) {
-         qSort(itemList->begin(), itemList->end(), closestItemFirst_withCache);
+         std::sort(itemList->begin(), itemList->end(), closestItemFirst_withCache);
       } else if (order == Qt::AscendingOrder) {
-         qSort(itemList->begin(), itemList->end(), closestItemLast_withCache);
+         std::sort(itemList->begin(), itemList->end(), closestItemLast_withCache);
       }
    } else {
       if (order == Qt::DescendingOrder) {
-         qSort(itemList->begin(), itemList->end(), qt_closestItemFirst);
+         std::sort(itemList->begin(), itemList->end(), qt_closestItemFirst);
       } else if (order == Qt::AscendingOrder) {
-         qSort(itemList->begin(), itemList->end(), qt_closestItemLast);
+         std::sort(itemList->begin(), itemList->end(), qt_closestItemLast);
       }
    }
 }

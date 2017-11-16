@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qrasterizer_p.h>
 #include <QPoint>
 #include <QRect>
@@ -301,8 +303,10 @@ void qScanConvert(QScanConverter &d, T allVertical)
       d.m_active.reset();
       return;
    }
-   qSort(d.m_lines.data(), d.m_lines.data() + d.m_lines.size(), QT_PREPEND_NAMESPACE(topOrder));
+
+   std::sort(d.m_lines.data(), d.m_lines.data() + d.m_lines.size(), QT_PREPEND_NAMESPACE(topOrder));
    int line = 0;
+
    for (int y = d.m_lines.first().top; y <= d.m_bottom; ++y) {
       for (; line < d.m_lines.size() && d.m_lines.at(line).top == y; ++line) {
          // add node to active list

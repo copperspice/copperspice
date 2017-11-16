@@ -22,6 +22,8 @@
 
 //#define QIMAGEREADER_DEBUG
 
+#include <algorithm>
+
 #include <qimagereader.h>
 #include <qbytearray.h>
 
@@ -1499,7 +1501,8 @@ QList<QByteArray> QImageReader::supportedImageFormats()
       sortedFormats << *it;
    }
 
-   qSort(sortedFormats);
+   std::sort(sortedFormats.begin(), sortedFormats.end());
+
    return sortedFormats;
 }
 

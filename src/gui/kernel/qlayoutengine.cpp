@@ -20,12 +20,13 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qlayout.h>
 #include <qlayoutengine_p.h>
 #include <qvector.h>
 #include <qwidget.h>
 #include <qlist.h>
-#include <qalgorithms.h>
 #include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
@@ -121,7 +122,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
          list << chain.at(i).minimumSize;
       }
 
-      qSort(list);
+      std::sort(list.begin(), list.end());
 
       int space_left = space - sumSpacing;
 
@@ -225,7 +226,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
          }
       }
 
-   } else { 
+   } else {
       // extra space
 
       int n = count;

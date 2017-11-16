@@ -20,7 +20,9 @@
 *
 ***********************************************************************/
 
-#include "boundingrecthighlighter.h"
+#include <algorithm>
+
+#include <boundingrecthighlighter.h>
 
 #include "../qdeclarativeviewinspector.h"
 #include "../qmlinspectorconstants.h"
@@ -100,14 +102,16 @@ void BoundingRectHighlighter::highlight(QList<QGraphicsObject*> items)
         return;
 
     QList<BoundingBox *> newBoxes;
-    foreach (QGraphicsObject *itemToHighlight, items) {
+
+    for (QGraphicsObject *itemToHighlight : items) {
         BoundingBox *box = boxFor(itemToHighlight);
-        if (!box)
+        if (! box) {
             box = createBoundingBox(itemToHighlight);
+        }
 
         newBoxes << box;
     }
-    qSort(newBoxes);
+    std::sort(newBoxes.begin(), newBoxes.end());
 
     if (newBoxes != m_boxes) {
         clear();
@@ -123,10 +127,10 @@ void BoundingRectHighlighter::highlight(QGraphicsObject* itemToHighlight)
         return;
 
     BoundingBox *box = boxFor(itemToHighlight);
-    if (!box) {
+    if (! box) {
         box = createBoundingBox(itemToHighlight);
         m_boxes << box;
-        qSort(m_boxes);
+        std::sort(m_boxes.begin(), m_boxes.end());
     }
 
     highlightAll();

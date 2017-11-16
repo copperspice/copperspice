@@ -22,6 +22,8 @@
 
 //#define QIODEVICE_DEBUG
 
+#include <algorithm>
+
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qiodevice_p.h>
@@ -1644,9 +1646,11 @@ QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
          modeList << QLatin1String("Unbuffered");
       }
    }
-   qSort(modeList);
+
+   std::sort(modeList.begin(), modeList.end());
    debug << modeList.join(QLatin1String("|"));
    debug << ')';
+
    return debug;
 }
 

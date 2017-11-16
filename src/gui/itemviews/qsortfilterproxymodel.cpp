@@ -1981,7 +1981,7 @@ bool QSortFilterProxyModel::removeRows(int row, int count, const QModelIndex &pa
    for (int i = row; i < row + count; ++i) {
       rows.append(m->source_rows.at(i));
    }
-   qSort(rows.begin(), rows.end());
+   std::sort(rows.begin(), rows.end());
 
    int pos = rows.count() - 1;
    bool ok = true;

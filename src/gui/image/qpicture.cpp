@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qpicture.h>
 #include <qpicture_p.h>
 
@@ -1456,7 +1458,7 @@ QStringList QPictureIO::inputFormats()
       }
    }
 
-   qSort(result);
+   std::sort(result.begin(), result.end());
 
    return result;
 }

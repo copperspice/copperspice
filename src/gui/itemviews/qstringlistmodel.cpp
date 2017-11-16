@@ -24,6 +24,8 @@
     A simple model that uses a QStringList as its data source.
 */
 
+#include <algorithm>
+
 #include <qstringlistmodel.h>
 
 #ifndef QT_NO_STRINGLISTMODEL
@@ -187,9 +189,9 @@ void QStringListModel::sort(int, Qt::SortOrder order)
    }
 
    if (order == Qt::AscendingOrder) {
-      qSort(list.begin(), list.end(), ascendingLessThan);
+      std::sort(list.begin(), list.end(), ascendingLessThan);
    } else {
-      qSort(list.begin(), list.end(), decendingLessThan);
+      std::sort(list.begin(), list.end(), decendingLessThan);
    }
 
    lst.clear();

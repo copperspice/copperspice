@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qpainter.h>
@@ -523,7 +525,8 @@ QDebug operator<<(QDebug debug, QStyle::State state)
       states << QLatin1String("UpArrow");
    }
 
-   qSort(states);
+   std::sort(states.begin(), states.end());
+
    debug << states.join(QLatin1String(" | "));
    debug << ')';
 #else

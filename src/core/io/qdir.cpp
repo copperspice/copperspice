@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qplatformdefs.h>
 #include <qdir.h>
 #include <qdir_p.h>
@@ -32,7 +34,6 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qvector.h>
-#include <qalgorithms.h>
 #include <qvarlengtharray.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
@@ -300,7 +301,8 @@ inline void QDirPrivate::sortFileList(QDir::SortFlags sort, QFileInfoList &l,
          for (int i = 0; i < n; ++i) {
             si[i].item = l.at(i);
          }
-         qSort(si.data(), si.data() + n, QDirSortItemComparator(sort));
+         std::sort(si.data(), si.data() + n, QDirSortItemComparator(sort));
+
          // put them back in the list(s)
          if (infos) {
             for (int i = 0; i < n; ++i) {

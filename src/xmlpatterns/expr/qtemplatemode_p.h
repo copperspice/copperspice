@@ -51,10 +51,9 @@ class TemplateMode : public QSharedData
    Q_DISABLE_COPY(TemplateMode)
 
    /**
-    * Operator for qSort().
+    * Operator for std::sort()
     */
-   static inline bool lessThanByPriority(const TemplatePattern::Ptr &t1,
-                                         const TemplatePattern::Ptr &t2);
+   static inline bool lessThanByPriority(const TemplatePattern::Ptr &t1, const TemplatePattern::Ptr &t2);
 };
 
 const QXmlName &TemplateMode::name() const

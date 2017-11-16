@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qstatemachine.h>
 
 #ifndef QT_NO_STATEMACHINE
@@ -322,7 +324,8 @@ QList<QAbstractState *> QStateMachinePrivate::exitStates(QEvent *event,
       }
    }
    QList<QAbstractState *> statesToExit_sorted = statesToExit.toList();
-   qSort(statesToExit_sorted.begin(), statesToExit_sorted.end(), stateExitLessThan);
+   std::sort(statesToExit_sorted.begin(), statesToExit_sorted.end(), stateExitLessThan);
+
    for (int i = 0; i < statesToExit_sorted.size(); ++i) {
       QAbstractState *s = statesToExit_sorted.at(i);
       if (QState *grp = toStandardState(s)) {
@@ -425,7 +428,7 @@ QList<QAbstractState *> QStateMachinePrivate::enterStates(QEvent *event,
    }
 
    QList<QAbstractState *> statesToEnter_sorted = statesToEnter.toList();
-   qSort(statesToEnter_sorted.begin(), statesToEnter_sorted.end(), stateEntryLessThan);
+   std::sort(statesToEnter_sorted.begin(), statesToEnter_sorted.end(), stateEntryLessThan);
 
    for (int i = 0; i < statesToEnter_sorted.size(); ++i) {
       QAbstractState *s = statesToEnter_sorted.at(i);

@@ -20,7 +20,9 @@
 *
 ***********************************************************************/
 
-#include "translator.h"
+#include <algorithm>
+
+#include <translator.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDebug>
@@ -588,7 +590,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd, in
       context.append(msg);
    }
    if (cd.sortContexts()) {
-      qSort(contextOrder);
+      std::sort(contextOrder.begin(), contextOrder.end());
    }
 
    QHash<QString, int> currentLine;

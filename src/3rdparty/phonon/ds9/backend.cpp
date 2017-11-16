@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "backend.h"
 #include "backendnode.h"
 
@@ -116,18 +118,20 @@ namespace Phonon
         {
             QStringList ret;
             {
-                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
+                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"),
+                  QSettings::NativeFormat);
                 ret += settings.childGroups();
             }
             {
                 QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types"),
-                     QSettings::NativeFormat);
+                  QSettings::NativeFormat);
                 ret += settings.childGroups();
             }
 
             ret.removeDuplicates();
             ret.replaceInStrings("\\", "/");
-            qSort(ret);
+            std::sort(ret.begin(), ret.end());
+
             return ret;
         }
 

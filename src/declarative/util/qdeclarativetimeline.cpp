@@ -20,7 +20,9 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
 #include <qdeclarativetimeline_p_p.h>
+
 #include <QDebug>
 #include <QMutex>
 #include <QThread>
@@ -829,8 +831,9 @@ int QDeclarativeTimeLinePrivate::advance(int t)
       length -= qMin(length, advanceTime);
       syncPoint -= advanceTime;
 
-      qSort(updates.begin(), updates.end());
+      std::sort(updates.begin(), updates.end());
       updateQueue = &updates;
+
       for (int ii = 0; ii < updates.count(); ++ii) {
          const Update &v = updates.at(ii).second;
          if (v.g) {

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qimagewriter.h>
 #include <qbytearray.h>
 #include <qfile.h>
@@ -678,7 +680,8 @@ QList<QByteArray> QImageWriter::supportedImageFormats()
       sortedFormats << *it;
    }
 
-   qSort(sortedFormats);
+   std::sort(sortedFormats.begin(), sortedFormats.end());
+
    return sortedFormats;
 }
 

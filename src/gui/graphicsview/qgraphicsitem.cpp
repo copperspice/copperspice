@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qgraphicsitem.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -765,17 +767,17 @@ void QGraphicsItemCache::purge()
 
     \sa QGraphicsScene::addItem(), setParentItem()
 */
-QGraphicsItem::QGraphicsItem(QGraphicsItem *parent)                                                     
+QGraphicsItem::QGraphicsItem(QGraphicsItem *parent)
    : d_ptr(new QGraphicsItemPrivate)
 {
    d_ptr->q_ptr = this;
-   setParentItem(parent);  
+   setParentItem(parent);
 }
 
 /*!
     \internal
 */
-QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent)                             
+QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent)
    : d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
@@ -3851,10 +3853,11 @@ void QGraphicsItem::setZValue(qreal z)
 void QGraphicsItemPrivate::ensureSequentialSiblingIndex()
 {
    if (!sequentialOrdering) {
-      qSort(children.begin(), children.end(), insertionOrder);
+      std::sort(children.begin(), children.end(), insertionOrder);
       sequentialOrdering = 1;
       needSortChildren = 1;
    }
+
    if (holesInSiblingIndex) {
       holesInSiblingIndex = 0;
       for (int i = 0; i < children.size(); ++i) {
@@ -6967,7 +6970,7 @@ QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, Q
    setRect(x, y, w, h);
 }
 
-QGraphicsEllipseItem::QGraphicsEllipseItem(QGraphicsItem *parent)                                          
+QGraphicsEllipseItem::QGraphicsEllipseItem(QGraphicsItem *parent)
                   : QAbstractGraphicsShapeItem(*new QGraphicsEllipseItemPrivate, parent)
 {
 }

@@ -23,9 +23,10 @@
 #ifndef QTCONCURRENTMEDIAN_H
 #define QTCONCURRENTMEDIAN_H
 
+#include <algorithm>
+
 #include <QtCore/qglobal.h>
 #include <QtCore/qvector.h>
-#include <QtCore/qalgorithms.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -72,8 +73,10 @@ class Median
    T median() {
       if (dirty) {
          dirty = false;
+
          QVector<T> sorted = values;
-         qSort(sorted);
+         std::sort(sorted.begin(), sorted.end());
+
          currentMedian = sorted.at(bufferSize / 2 + 1);
       }
       return currentMedian;

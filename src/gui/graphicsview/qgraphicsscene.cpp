@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qgraphicsscene.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -1359,7 +1361,7 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
 void QGraphicsScenePrivate::ensureSequentialTopLevelSiblingIndexes()
 {
    if (!topLevelSequentialOrdering) {
-      qSort(topLevelItems.begin(), topLevelItems.end(), QGraphicsItemPrivate::insertionOrder);
+      std::sort(topLevelItems.begin(), topLevelItems.end(), QGraphicsItemPrivate::insertionOrder);
       topLevelSequentialOrdering = true;
       needSortTopLevelItems = 1;
    }
@@ -6203,8 +6205,10 @@ void QGraphicsScenePrivate::gestureEventHandler(QGestureEvent *event)
       QSet<QGesture *> conflictedGestures; // that have multiple possible targets
       gestureTargetsAtHotSpots(startedGestures, Qt::GestureFlag(0), &cachedItemGestures, 0,
                                &normalGestures, &conflictedGestures);
+
       cachedTargetItems = cachedItemGestures.keys();
-      qSort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+      std::sort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+
       G_DEBUG() << "QGraphicsScenePrivate::gestureEventHandler:"
                 << "Normal gestures:" << normalGestures
                 << "Conflicting gestures:" << conflictedGestures;
@@ -6309,7 +6313,8 @@ void QGraphicsScenePrivate::gestureEventHandler(QGestureEvent *event)
                    << gesture->hotSpot() << gesture->d_func()->sceneHotSpot;
       }
    }
-   qSort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+   std::sort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+
    for (int i = 0; i < cachedTargetItems.size(); ++i) {
       QWeakPointer<QGraphicsObject> receiver = cachedTargetItems.at(i);
       QSet<QGesture *> gestures =
@@ -6390,11 +6395,11 @@ void QGraphicsScenePrivate::gestureEventHandler(QGestureEvent *event)
             }
          }
 
-         gestureTargetsAtHotSpots(ignoredGestures, Qt::ReceivePartialGestures,
-                                  &cachedItemGestures, &targetsSet, 0, 0);
+         gestureTargetsAtHotSpots(ignoredGestures, Qt::ReceivePartialGestures, &cachedItemGestures, &targetsSet, 0, 0);
 
          cachedTargetItems = targetsSet.toList();
-         qSort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+         std::sort(cachedTargetItems.begin(), cachedTargetItems.end(), qt_closestItemFirst);
+
          G_DEBUG() << "QGraphicsScenePrivate::gestureEventHandler:"
                    << "new targets:" << cachedTargetItems;
          i = -1; // start delivery again

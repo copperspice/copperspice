@@ -20,14 +20,14 @@
 *
 ***********************************************************************/
 
-#include "qdeclarativeimport_p.h"
+#include <algorithm>
+#include <qdeclarativeimport_p.h>
 
 #include <QtCore/qdebug.h>
 #include <QtCore/qdir.h>
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qpluginloader.h>
 #include <QtCore/qlibraryinfo.h>
-#include <QtCore/qalgorithms.h>
 #include <QtDeclarative/qdeclarativeextensioninterface.h>
 #include <private/qdeclarativeglobal_p.h>
 #include <private/qdeclarativetypenamecache_p.h>
@@ -408,7 +408,7 @@ QString QDeclarativeImportsPrivate::resolvedUri(const QString &dir_arg, QDeclara
    }
 
    QStringList paths = database->fileImportPath;
-   qSort(paths.begin(), paths.end(), greaterThan); // Ensure subdirs preceed their parents.
+   std::sort(paths.begin(), paths.end(), greaterThan); // Ensure subdirs preceed their parents.
 
    QString stableRelativePath = dir;
    foreach(const QString & path, paths) {

@@ -1785,7 +1785,8 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QL
    }
 
    // bundle up all of the changed signals into as few as possible
-   qSort(rowsToUpdate.begin(), rowsToUpdate.end());
+   std::sort(rowsToUpdate.begin(), rowsToUpdate.end());
+
    QString min;
    QString max;
 

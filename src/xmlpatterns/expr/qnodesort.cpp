@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "qcommonsequencetypes_p.h"
 #include "qdeduplicateiterator_p.h"
 #include "qnodesort_p.h"
@@ -62,7 +64,7 @@ Item::Iterator::Ptr NodeSortExpression::evaluateSequence(const DynamicContext::P
    } else if (nodes.first().isAtomicValue()) {
       return makeListIterator(nodes);
    } else {
-      qSort(nodes.begin(), nodes.end(), lessThanUsingNodeModel);
+      std::sort(nodes.begin(), nodes.end(), lessThanUsingNodeModel);
 
       return Item::Iterator::Ptr(new DeduplicateIterator(nodes));
    }

@@ -23,6 +23,8 @@
 #ifndef QGRAPHICSITEM_P_H
 #define QGRAPHICSITEM_P_H
 
+#include <algorithm>
+
 #include <qgraphicsitem.h>
 #include <qset.h>
 #include <qpixmapcache.h>
@@ -737,7 +739,8 @@ inline void QGraphicsItemPrivate::ensureSortedChildren()
       if (children.isEmpty()) {
          return;
       }
-      qSort(children.begin(), children.end(), qt_notclosestLeaf);
+      std::sort(children.begin(), children.end(), qt_notclosestLeaf);
+
       for (int i = 0; i < children.size(); ++i) {
          if (children.at(i)->d_ptr->siblingIndex != i) {
             sequentialOrdering = 0;

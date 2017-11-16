@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <QtCore/qglobal.h>
 #include <QtCore/qmutex.h>
 
@@ -1849,7 +1851,7 @@ static bool splitPolygon(const QPointF *points, int pointCount, QVector<QPointF>
       sorted << points + i;
    }
 
-   qSort(sorted.begin(), sorted.end(), isAbove);
+   std::sort(sorted.begin(), sorted.end(), isAbove);
 
    qreal splitY = sorted.at(sorted.size() / 2)->y();
 

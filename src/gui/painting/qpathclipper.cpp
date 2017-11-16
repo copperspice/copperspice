@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qpathclipper_p.h>
 #include <qbezier_p.h>
 #include <qdatabuffer_p.h>
@@ -842,7 +844,7 @@ void QWingedEdge::intersectAndAdd()
          }
       }
 
-      qSort(intersections.data(), intersections.data() + intersections.size());
+      std::sort(intersections.data(), intersections.data() + intersections.size());
 
       int first = m_segments.segmentAt(i).va;
       int second = m_segments.segmentAt(i).vb;
@@ -1729,7 +1731,7 @@ bool QPathClipper::doClip(QWingedEdge &list, ClipperMode mode)
       y_coords << list.vertex(i)->y;
    }
 
-   qSort(y_coords.begin(), y_coords.end());
+   std::sort(y_coords.begin(), y_coords.end());
    y_coords.resize(qRemoveDuplicates(y_coords.begin(), y_coords.end(), fuzzyCompare) - y_coords.begin());
 
 #ifdef QDEBUG_CLIPPER
@@ -1909,7 +1911,7 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
    QVector<QCrossingEdge> crossings = findCrossings(list, y);
 
    Q_ASSERT(!crossings.isEmpty());
-   qSort(crossings.begin(), crossings.end());
+   std::sort(crossings.begin(), crossings.end());
 
    int windingA = 0;
    int windingB = 0;

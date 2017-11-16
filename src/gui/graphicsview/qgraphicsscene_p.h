@@ -23,6 +23,8 @@
 #ifndef QGRAPHICSSCENE_P_H
 #define QGRAPHICSSCENE_P_H
 
+#include <algorithm>
+
 #include <qgraphicsscene.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
@@ -183,7 +185,7 @@ class QGraphicsScenePrivate
    void mousePressEventHandler(QGraphicsSceneMouseEvent *mouseEvent);
    QGraphicsWidget *windowForItem(const QGraphicsItem *item) const;
 
-   void drawItemHelper(QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option, 
+   void drawItemHelper(QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget, bool painterStateProtection);
 
    void drawItems(QPainter *painter, const QTransform *const viewTransform,
@@ -246,7 +248,7 @@ class QGraphicsScenePrivate
 
    inline void ensureSortedTopLevelItems() {
       if (needSortTopLevelItems) {
-         qSort(topLevelItems.begin(), topLevelItems.end(), qt_notclosestLeaf);
+         std::sort(topLevelItems.begin(), topLevelItems.end(), qt_notclosestLeaf);
          topLevelSequentialOrdering = false;
          needSortTopLevelItems = false;
       }
@@ -283,7 +285,7 @@ class QGraphicsScenePrivate
    QHash<Qt::GestureType, int>  grabbedGestures;
    void gestureEventHandler(QGestureEvent *event);
 
-   void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures, Qt::GestureFlag flag, 
+   void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures, Qt::GestureFlag flag,
           QHash<QGraphicsObject *, QSet<QGesture *> > *targets, QSet<QGraphicsObject *> *itemsSet = 0,
           QSet<QGesture *> *normal = 0, QSet<QGesture *> *conflicts = 0);
 

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qtextdocumentwriter.h>
 
 #include <QtCore/qfile.h>
@@ -349,11 +351,13 @@ QList<QByteArray> QTextDocumentWriter::supportedDocumentFormats()
 #ifndef QT_NO_TEXTHTMLPARSER
    answer << "HTML";
 #endif
+
 #ifndef QT_NO_TEXTODFWRITER
    answer << "ODF";
-#endif // QT_NO_TEXTODFWRITER
+#endif
 
-   qSort(answer);
+   std::sort(answer.begin(), answer.end());
+
    return answer;
 }
 

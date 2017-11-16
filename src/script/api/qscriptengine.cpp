@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <config.h>
 #include <qscriptengine.h>
 #include <qscriptsyntaxchecker_p.h>
@@ -79,247 +81,6 @@ Q_DECLARE_METATYPE(QObjectList)
 Q_DECLARE_METATYPE(QList<int>)
 
 QT_BEGIN_NAMESPACE
-
-/*!
-  \since 4.3
-  \class QScriptEngine
-  \reentrant
-
-  \brief The QScriptEngine class provides an environment for evaluating Qt Script code.
-
-  \ingroup script
-  \mainclass
-
-  See the \l{QtScript} documentation for information about the Qt Script language,
-  and how to get started with scripting your C++ application.
-
-  \section1 Evaluating Scripts
-
-  Use evaluate() to evaluate script code; this is the C++ equivalent
-  of the built-in script function \c{eval()}.
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 0
-
-  evaluate() returns a QScriptValue that holds the result of the
-  evaluation. The QScriptValue class provides functions for converting
-  the result to various C++ types (e.g. QScriptValue::toString()
-  and QScriptValue::toNumber()).
-
-  The following code snippet shows how a script function can be
-  defined and then invoked from C++ using QScriptValue::call():
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 1
-
-  As can be seen from the above snippets, a script is provided to the
-  engine in the form of a string. One common way of loading scripts is
-  by reading the contents of a file and passing it to evaluate():
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 2
-
-  Here we pass the name of the file as the second argument to
-  evaluate().  This does not affect evaluation in any way; the second
-  argument is a general-purpose string that is used to identify the
-  script for debugging purposes (for example, our filename will now
-  show up in any uncaughtExceptionBacktrace() involving the script).
-
-  \section1 Engine Configuration
-
-  The globalObject() function returns the \bold {Global Object}
-  associated with the script engine. Properties of the Global Object
-  are accessible from any script code (i.e. they are global
-  variables). Typically, before evaluating "user" scripts, you will
-  want to configure a script engine by adding one or more properties
-  to the Global Object:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 3
-
-  Adding custom properties to the scripting environment is one of the
-  standard means of providing a scripting API that is specific to your
-  application. Usually these custom properties are objects created by
-  the newQObject() or newObject() functions, or constructor functions
-  created by newFunction().
-
-  \section1 Script Exceptions
-
-  evaluate() can throw a script exception (e.g. due to a syntax
-  error); in that case, the return value is the value that was thrown
-  (typically an \c{Error} object). You can check whether the
-  evaluation caused an exception by calling hasUncaughtException(). In
-  that case, you can call toString() on the error object to obtain an
-  error message. The current uncaught exception is also available
-  through uncaughtException().
-  Calling clearExceptions() will cause any uncaught exceptions to be
-  cleared.
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 4
-
-  The checkSyntax() function can be used to determine whether code can be
-  usefully passed to evaluate().
-
-  \section1 Script Object Creation
-
-  Use newObject() to create a standard Qt Script object; this is the
-  C++ equivalent of the script statement \c{new Object()}. You can use
-  the object-specific functionality in QScriptValue to manipulate the
-  script object (e.g. QScriptValue::setProperty()). Similarly, use
-  newArray() to create a Qt Script array object. Use newDate() to
-  create a \c{Date} object, and newRegExp() to create a \c{RegExp}
-  object.
-
-  \section1 QObject Integration
-
-  Use newQObject() to wrap a QObject (or subclass)
-  pointer. newQObject() returns a proxy script object; properties,
-  children, and signals and slots of the QObject are available as
-  properties of the proxy object. No binding code is needed because it
-  is done dynamically using the Qt meta object system.
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 5
-
-  Use qScriptConnect() to connect a C++ signal to a script function;
-  this is the Qt Script equivalent of QObject::connect().  When a
-  script function is invoked in response to a C++ signal, it can cause
-  a script exception; you can connect to the signalHandlerException()
-  signal to catch such an exception.
-
-  Use newQMetaObject() to wrap a QMetaObject; this gives you a "script
-  representation" of a QObject-based class. newQMetaObject() returns a
-  proxy script object; enum values of the class are available as
-  properties of the proxy object. You can also specify a function that
-  will be used to construct objects of the class (e.g.  when the
-  constructor is invoked from a script). For classes that have a
-  "standard" Qt constructor, Qt Script can provide a default script
-  constructor for you; see scriptValueFromQMetaObject().
-
-  For more information about QObject integration, see
-  \l{Making Applications Scriptable}
-
-  \section1 Support for Custom C++ Types
-
-  Use newVariant() to wrap a QVariant. This can be used to store
-  values of custom (non-QObject) C++ types that have been registered
-  with the Qt meta-type system. To make such types scriptable, you
-  typically associate a prototype (delegate) object with the C++ type
-  by calling setDefaultPrototype(); the prototype object defines the
-  scripting API for the C++ type. Unlike the QObject integration,
-  there is no automatic binding possible here; i.e. you have to create
-  the scripting API yourself, for example by using the QScriptable
-  class.
-
-  Use fromScriptValue() to cast from a QScriptValue to another type,
-  and toScriptValue() to create a QScriptValue from another value.
-  You can specify how the conversion of C++ types is to be performed
-  with qScriptRegisterMetaType() and qScriptRegisterSequenceMetaType().
-  By default, Qt Script will use QVariant to store values of custom
-  types.
-
-  \section1 Importing Extensions
-
-  Use importExtension() to import plugin-based extensions into the
-  engine. Call availableExtensions() to obtain a list naming all the
-  available extensions, and importedExtensions() to obtain a list
-  naming only those extensions that have been imported.
-
-  Call pushContext() to open up a new variable scope, and popContext()
-  to close the current scope. This is useful if you are implementing
-  an extension that evaluates script code containing temporary
-  variable definitions (e.g. \c{var foo = 123;}) that are safe to
-  discard when evaluation has completed.
-
-  \section1 Native Functions
-
-  Use newFunction() to wrap native (C++) functions, including
-  constructors for your own custom types, so that these can be invoked
-  from script code. Such functions must have the signature
-  QScriptEngine::FunctionSignature. You may then pass the function as
-  argument to newFunction(). Here is an example of a function that
-  returns the sum of its first two arguments:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 6
-
-  To expose this function to script code, you can set it as a property
-  of the Global Object:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 7
-
-  Once this is done, script code can call your function in the exact
-  same manner as a "normal" script function:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 8
-
-  \section1 Long-running Scripts
-
-  If you need to evaluate possibly long-running scripts from the main
-  (GUI) thread, you should first call setProcessEventsInterval() to
-  make sure that the GUI stays responsive. You can abort a currently
-  running script by calling abortEvaluation(). You can determine
-  whether an engine is currently running a script by calling
-  isEvaluating().
-
-  \section1 Garbage Collection
-
-  Qt Script objects may be garbage collected when they are no longer
-  referenced. There is no guarantee as to when automatic garbage
-  collection will take place.
-
-  The collectGarbage() function can be called to explicitly request
-  garbage collection.
-
-  The reportAdditionalMemoryCost() function can be called to indicate
-  that a Qt Script object occupies memory that isn't managed by the
-  scripting environment. Reporting the additional cost makes it more
-  likely that the garbage collector will be triggered. This can be
-  useful, for example, when many custom, native Qt Script objects are
-  allocated.
-
-  \section1 Core Debugging/Tracing Facilities
-
-  Since Qt 4.4, you can be notified of events pertaining to script
-  execution (e.g. script function calls and statement execution)
-  through the QScriptEngineAgent interface; see the setAgent()
-  function. This can be used to implement debugging and profiling of a
-  QScriptEngine.
-
-  \sa QScriptValue, QScriptContext, QScriptEngineAgent
-
-*/
-
-/*!
-    \enum QScriptEngine::ValueOwnership
-
-    This enum specifies the ownership when wrapping a C++ value, e.g. by using newQObject().
-
-    \value QtOwnership The standard Qt ownership rules apply, i.e. the
-    associated object will never be explicitly deleted by the script
-    engine. This is the default. (QObject ownership is explained in
-    \l{Object Trees & Ownership}.)
-
-    \value ScriptOwnership The value is owned by the script
-    environment. The associated data will be deleted when appropriate
-    (i.e. after the garbage collector has discovered that there are no
-    more live references to the value).
-
-    \value AutoOwnership If the associated object has a parent, the Qt
-    ownership rules apply (QtOwnership); otherwise, the object is
-    owned by the script environment (ScriptOwnership).
-
-*/
-
-/*!
-    \enum  QScriptEngine::QObjectWrapOption
-
-    These flags specify options when wrapping a QObject pointer with newQObject().
-
-    \value ExcludeChildObjects The script object will not expose child objects as properties.
-    \value ExcludeSuperClassMethods The script object will not expose signals and slots inherited from the superclass.
-    \value ExcludeSuperClassProperties The script object will not expose properties inherited from the superclass.
-    \value ExcludeSuperClassContents Shorthand form for ExcludeSuperClassMethods | ExcludeSuperClassProperties
-    \value ExcludeDeleteLater The script object will not expose the QObject::deleteLater() slot.
-    \value ExcludeSlots The script object will not expose the QObject's slots.
-    \value AutoCreateDynamicProperties Properties that don't already exist in the QObject will be created as dynamic properties of that object, rather than as properties of the script object.
-    \value PreferExistingWrapperObject If a wrapper object with the requested configuration already exists, return that object.
-    \value SkipMethodsInEnumeration Don't include methods (signals and slots) when enumerating the object's properties.
-*/
 
 class QScriptSyntaxCheckResultPrivate
 {
@@ -3964,7 +3725,8 @@ QStringList QScriptEngine::availableExtensions() const
    }
 
    QStringList lst = result.toList();
-   qSort(lst);
+   std::sort(lst.begin(), lst.end());
+
    return lst;
 #endif
 }
@@ -3981,7 +3743,7 @@ QStringList QScriptEngine::importedExtensions() const
 {
    Q_D(const QScriptEngine);
    QStringList lst = d->importedExtensions.toList();
-   qSort(lst);
+   std::sort(lst.begin(), lst.end());
    return lst;
 }
 

@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include <qdir.h>
 #include <qfontdatabase.h>
 #include <qdebug.h>
@@ -33,7 +35,7 @@
 
 #ifdef Q_WS_QPA
 #include <qapplication_p.h>
-#include <QtGui/qplatformfontdatabase_qpa.h>
+#include <qplatformfontdatabase_qpa.h>
 #include <qabstractfileengine.h>
 #endif
 
@@ -1717,7 +1719,9 @@ QList<QFontDatabase::WritingSystem> QFontDatabase::writingSystems() const
          }
       }
    }
-   qSort(list);
+
+   std::sort(list.begin(), list.end());
+
    return list;
 }
 
@@ -2044,7 +2048,8 @@ end:
       return standardSizes();
    }
 
-   qSort(sizes);
+   std::sort(sizes.begin(), sizes.end());
+
    return sizes;
 #endif
 }
@@ -2165,7 +2170,8 @@ end:
       return QFontDatabase::standardSizes();
    }
 
-   qSort(sizes);
+   std::sort(sizes.begin(), sizes.end());
+
    return sizes;
 #endif
 }

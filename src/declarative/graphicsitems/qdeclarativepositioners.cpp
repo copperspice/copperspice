@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "private/qdeclarativepositioners_p.h"
 #include "private/qdeclarativepositioners_p_p.h"
 
@@ -219,9 +221,10 @@ void QDeclarativeBasePositioner::prePositioning()
 
    d->queuedPositioning = false;
    d->doingPositioning = true;
+
    //Need to order children by creation order modified by stacking order
    QList<QGraphicsItem *> children = d->QGraphicsItemPrivate::children;
-   qSort(children.begin(), children.end(), d->insertionOrder);
+   std::sort(children.begin(), children.end(), d->insertionOrder);
 
    QPODVector<PositionedItem, 8> oldItems;
    positionedItems.copyAndClear(oldItems);

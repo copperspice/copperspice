@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <algorithm>
+
 #include "private/qdeclarativecompiler_p.h"
 
 #include "private/qdeclarativeparser_p.h"
@@ -53,8 +55,8 @@
 #include <QSizeF>
 #include <QRectF>
 #include <QAtomicInt>
-#include <QtCore/qdebug.h>
-#include <QtCore/qdatetime.h>
+#include <qdebug.h>
+#include <qdatetime.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -813,7 +815,7 @@ bool QDeclarativeCompiler::buildObject(QDeclarativeParser::Object *obj, const Bi
             defaultProperty->values += explicitProperty->values;
             foreach(QDeclarativeParser::Value * value, defaultProperty->values)
             value->addref();
-            qSort(defaultProperty->values.begin(), defaultProperty->values.end(), ValuePtrLessThan);
+            std::sort(defaultProperty->values.begin(), defaultProperty->values.end(), ValuePtrLessThan);
 
          } else {
             defaultProperty = obj->defaultProperty;
