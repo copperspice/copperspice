@@ -23,8 +23,6 @@
 #ifndef QLIST_H
 #define QLIST_H
 
-#include <qalgorithms.h>
-
 #include <algorithm>
 #include <deque>
 #include <exception>
