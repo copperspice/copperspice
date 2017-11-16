@@ -25,28 +25,26 @@
 
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
-
 template<class T>
 class QStack : public QVector<T>
 {
    public:
       using const_reference = typename QVector<T>::const_reference;
       using reference       = typename QVector<T>::reference;
-      
+
       QStack() = default;
       ~QStack () = default;
-      
+
       void swap(QStack<T> &other) {
          QVector<T>::swap(other);
       }
-   
+
       void push(const T &value) {
          QVector<T>::append(value);
       }
-   
+
       T pop();
-   
+
       reference top();
       const_reference top() const;
 };
@@ -75,7 +73,5 @@ inline typename QStack<T>::const_reference QStack<T>::top() const
    Q_ASSERT(! this->isEmpty());
    return this->last();
 }
-
-QT_END_NAMESPACE
 
 #endif

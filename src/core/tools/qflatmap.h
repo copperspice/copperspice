@@ -23,14 +23,14 @@
 #ifndef QFLATMAP_H
 #define QFLATMAP_H
 
+#include <initializer_list>
+#include <vector>
+
 #include <qcontainerfwd.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qmapfunc.h>
 #include <qpair.h>
-
-#include <vector>
-#include <initializer_list>
 
 template <typename Key, typename Val, typename C>
 class QFlatMapIterator;

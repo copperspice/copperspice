@@ -25,15 +25,13 @@
 
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 template <class T>
 class QQueue : public QList<T>
 {
  public:
    QQueue()  = default;
    ~QQueue() = default;
-   
+
    // methods
    T dequeue() {
       return QList<T>::takeFirst();
@@ -46,7 +44,7 @@ class QQueue : public QList<T>
    void enqueue(T &&value) {
       QList<T>::append(std::move(value));
    }
-  
+
    T &head() {
       return QList<T>::first();
    }
@@ -57,11 +55,9 @@ class QQueue : public QList<T>
 
    void swap(QQueue<T> &other) {
       // prevent QList / QQueue swaps, must be a QQueue / QQueue swap
-      QList<T>::swap(other);   
+      QList<T>::swap(other);
    }
 
 };
-
-QT_END_NAMESPACE
 
 #endif

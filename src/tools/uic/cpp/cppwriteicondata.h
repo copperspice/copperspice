@@ -25,10 +25,10 @@
 
 #include "treewalker.h"
 
-QT_BEGIN_NAMESPACE
+#include <QString>
+#include <QTextStream>
+#include <QIODevice>
 
-class QTextStream;
-class QIODevice;
 class Driver;
 class Uic;
 
@@ -45,8 +45,7 @@ class WriteIconData : public TreeWalker
    void acceptImages(DomImages *images) override;
    void acceptImage(DomImage *image) override;
 
-   static void writeImage(QTextStream &output, const QString &indent,
-                          bool limitXPM_LineLength, const DomImage *image);
+   static void writeImage(QTextStream &output, const QString &indent, bool limitXPM_LineLength, const DomImage *image);
    static void writeImage(QIODevice &output, DomImage *image);
 
  private:
@@ -56,7 +55,5 @@ class WriteIconData : public TreeWalker
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEICONDATA_H

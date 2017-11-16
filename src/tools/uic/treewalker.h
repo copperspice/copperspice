@@ -23,9 +23,7 @@
 #ifndef TREEWALKER_H
 #define TREEWALKER_H
 
-#include <QtCore/QList>
-
-QT_BEGIN_NAMESPACE
+#include <QList>
 
 class DomUI;
 class DomLayoutDefault;
@@ -111,7 +109,5 @@ struct TreeWalker {
    virtual void acceptButtonGroups(const DomButtonGroups *buttonGroups);
    virtual void acceptButtonGroup(const DomButtonGroup *buttonGroup);
 };
-
-QT_END_NAMESPACE
 
 #endif // TREEWALKER_H

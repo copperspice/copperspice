@@ -25,8 +25,6 @@
 
 #include <qhash.h>
 
-QT_BEGIN_NAMESPACE
-
 template <class Key, class T>
 class QCache
 {
@@ -262,7 +260,5 @@ void QCache<Key, T>::trim(int m)
       unlink(*u);
    }
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -27,6 +27,7 @@
 #include <qcoreapplication.h>
 #include <qsocketnotifier.h>
 
+#include <qalgorithms.h>
 #include <qhash.h>
 #include <qlist.h>
 #include <qpair.h>

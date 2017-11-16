@@ -23,12 +23,10 @@
 #ifndef QVECTOR_H
 #define QVECTOR_H
 
-#include <qlist.h>
-
-#include <vector>
 #include <initializer_list>
+#include <vector>
 
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
 
 template <class T>
 class QVectorIterator;
@@ -763,7 +761,5 @@ class QMutableVectorIterator
 
       n = c->end(); return false;  }
 };
-
-QT_END_NAMESPACE
 
 #endif

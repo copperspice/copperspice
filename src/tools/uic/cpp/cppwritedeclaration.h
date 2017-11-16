@@ -24,10 +24,8 @@
 #define CPPWRITEDECLARATION_H
 
 #include "treewalker.h"
+#include <QTextStream>
 
-QT_BEGIN_NAMESPACE
-
-class QTextStream;
 class Driver;
 class Uic;
 
@@ -55,7 +53,5 @@ struct WriteDeclaration : public TreeWalker {
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEDECLARATION_H

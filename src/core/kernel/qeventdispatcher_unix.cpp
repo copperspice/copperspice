@@ -29,6 +29,8 @@
 #include <qthread_p.h>
 #include <qcoreapplication_p.h>
 #include <qcore_unix_p.h>
+#include <qalgorithms.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -24,12 +24,9 @@
 #define CPPWRITEICONINITIALIZATION_H
 
 #include "treewalker.h"
+#include <QString>
+#include <QTextStream>
 
-class QString;
-
-QT_BEGIN_NAMESPACE
-
-class QTextStream;
 class Driver;
 class Uic;
 
@@ -56,7 +53,5 @@ class WriteIconInitialization : public TreeWalker
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEICONINITIALIZATION_H

@@ -24,10 +24,8 @@
 #define CPPWRITEICONDECLARATION_H
 
 #include "treewalker.h"
+#include <QTextStream>
 
-QT_BEGIN_NAMESPACE
-
-class QTextStream;
 class Driver;
 class Uic;
 
@@ -51,7 +49,5 @@ class WriteIconDeclaration : public TreeWalker
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEICONDECLARATION_H

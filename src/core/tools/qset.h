@@ -23,12 +23,10 @@
 #ifndef QSET_H
 #define QSET_H
 
-#include <qhash.h>
-
-#include <unordered_set>
 #include <initializer_list>
+#include <unordered_set>
 
-QT_BEGIN_NAMESPACE
+#include <qhash.h>
 
 template <class T>
 class QSetIterator;
@@ -534,7 +532,5 @@ class QMutableSetIterator
       return false;
    }
 };
-
-QT_END_NAMESPACE
 
 #endif
