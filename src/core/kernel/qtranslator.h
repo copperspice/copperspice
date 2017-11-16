@@ -27,8 +27,6 @@
 #include <QtCore/qbytearray.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TRANSLATION
 
 class QLocale;
@@ -42,17 +40,14 @@ class Q_CORE_EXPORT QTranslator : public QObject
    explicit QTranslator(QObject *parent = nullptr);
    ~QTranslator();
 
-   // ### Qt5/Merge (with "int n = -1")
-   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = 0) const;
-   QString translate(const char *context, const char *sourceText, const char *disambiguation, int n) const;
-
+   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = 0, int n = -1) const;
    virtual bool isEmpty() const;
 
    bool load(const QString &filename, const QString &directory = QString(), const QString &search_delimiters = QString(),
-             const QString &suffix = QString());
- 
-   bool load(const QLocale &locale, const QString &filename, const QString &prefix = QString(), const QString &directory = QString(),
-             const QString &suffix = QString());
+                   const QString &suffix = QString());
+
+   bool load(const QLocale &locale, const QString &filename, const QString &prefix = QString(),
+                  const QString &directory = QString(), const QString &suffix = QString());
 
    bool load(const uchar *data, int len);
 
@@ -66,7 +61,5 @@ class Q_CORE_EXPORT QTranslator : public QObject
 };
 
 #endif // QT_NO_TRANSLATION
-
-QT_END_NAMESPACE
 
 #endif // QTRANSLATOR_H
