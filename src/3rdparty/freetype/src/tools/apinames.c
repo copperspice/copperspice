@@ -118,8 +118,7 @@ name_compare( const void*  name1,
 static void
 names_sort( void )
 {
-  qsort( the_names, (size_t)num_names,
-         sizeof ( the_names[0] ), name_compare );
+  qsort( the_names, (size_t)num_names, sizeof ( the_names[0] ), name_compare );
 }
 
 

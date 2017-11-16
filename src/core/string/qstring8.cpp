@@ -66,7 +66,7 @@ QString8::QString8(size_type size, QChar32 c)
 
 QString8::const_iterator QString8::cs_internal_find_fast(const QString8 &str, const_iterator iter_begin) const
 {
-   const_iterator iter_end = end();
+   const_iterator iter_end = cend();
 
    if (iter_begin == iter_end) {
       return iter_end;
@@ -86,7 +86,7 @@ QString8::const_iterator QString8::cs_internal_find_fast(const QString8 &str, co
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.end())  {
+         while (text_iter != iter_end && pattern_iter != str.cend())  {
 
             if (text_iter->toCaseFolded() == QString8(*pattern_iter))  {
                ++text_iter;
@@ -461,9 +461,9 @@ QString8 QString8::right(size_type numOfChars) const
       return *this;
    }
 
-   auto iter = end() - numOfChars;
+   auto iter = cend() - numOfChars;
 
-   return QString8(iter, end());
+   return QString8(iter, cend());
 }
 
 QString8 QString8::rightJustified(size_type width, QChar32 fill, bool truncate) const
@@ -801,7 +801,7 @@ QString8 QString8::trimmed() &&
 
    ++last_iter;
 
-   erase(last_iter, end());
+   erase(last_iter, cend());
 
    return *this;
 }
@@ -832,11 +832,11 @@ bool QString8::startsWith(const QString8 &other, Qt::CaseSensitivity cs) const
    }
 
    if (cs == Qt::CaseSensitive) {
-      auto iter = begin();
+      auto iter = cbegin();
 
       for (auto uc : other) {
 
-         if (iter == end()) {
+         if (iter == cend()) {
             return false;
          }
 
@@ -850,15 +850,13 @@ bool QString8::startsWith(const QString8 &other, Qt::CaseSensitivity cs) const
       return true;
 
    } else {
-      auto iter = begin();
+      auto iter = cbegin();
 
       for (auto uc : other) {
 
-         if (iter == end()) {
+         if (iter == cend()) {
             return false;
          }
-
-//       QChar32 foo = *iter;
 
          if ( iter->toCaseFolded() != uc.toCaseFolded()) {
             return false;
@@ -932,8 +930,8 @@ QString8 cs_internal_string_normalize(const QString8 &data, QString8::Normalizat
 {
    QString8 retval;
 
-   auto first_iter = data.begin() + from;
-   auto last_iter  = data.end();
+   auto first_iter = data.cbegin() + from;
+   auto last_iter  = data.cend();
 
    while (first_iter != last_iter) {
 
@@ -1135,8 +1133,8 @@ QString8 cs_internal_canonicalOrder(const QString8 &str, QChar32::UnicodeVersion
    // method three
    QString8 retval;
 
-   auto first_iter = str.begin();
-   auto last_iter  = str.end();
+   auto first_iter = str.cbegin();
+   auto last_iter  = str.cend();
 
    QVector< std::pair<ushort, QChar32>> buffer;
 
@@ -1226,8 +1224,8 @@ static QString8 cs_internal_compose(const QString8 &str, QChar32::UnicodeVersion
    // method four
    QString8 retval;
 
-   auto first_iter = str.begin();
-   auto last_iter  = str.end();
+   auto first_iter = str.cbegin();
+   auto last_iter  = str.cend();
 
    QString8::const_iterator iterBeg = last_iter;
    QString8::const_iterator iterEnd = last_iter;

@@ -678,7 +678,6 @@ void qErrnoWarning(int code, const char *msg, ...)
    qCritical("%s (%s)", buf.toLocal8Bit().constData(), qt_error_string(code).toLocal8Bit().constData());
 }
 
-
 void qFatal(const char *msg, ...)
 {
    va_list ap;

@@ -1199,15 +1199,11 @@ inline void qSwap(T &value1, T &value2)
    swap(value1, value2);
 }
 
-
 #define Q_DECLARE_SHARED_STL(TYPE) \
-QT_END_NAMESPACE \
 namespace std { \
     template<> inline void swap<QT_PREPEND_NAMESPACE(TYPE)>(QT_PREPEND_NAMESPACE(TYPE) &value1, QT_PREPEND_NAMESPACE(TYPE) &value2) \
     { swap(value1.data_ptr(), value2.data_ptr()); } \
-} \
-QT_BEGIN_NAMESPACE
-
+}
 
 #define Q_DECLARE_SHARED(TYPE)    \
 template <>                       \
