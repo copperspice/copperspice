@@ -120,9 +120,6 @@
 // Qt::WA_PaintOnScreen
 //#define QT_NO_PAINTONSCREEN
 
-// Painting Debug Utilities
-//#define QT_NO_PAINT_DEBUG
-
 // Phonon::AbstractMediaStream
 //#define QT_NO_PHONON_ABSTRACTMEDIASTREAM
 

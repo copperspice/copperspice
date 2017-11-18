@@ -144,10 +144,6 @@ static inline bool hasBackingStoreSupport()
 #endif
 }
 
-#ifdef Q_OS_MAC
-#  define QT_NO_PAINT_DEBUG
-#endif
-
 extern bool qt_sendSpontaneousEvent(QObject *, QEvent *); // qapplication.cpp
 extern QDesktopWidget *qt_desktopWidget; // qapplication.cpp
 
@@ -3683,9 +3679,6 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
          q->setAttribute(Qt::WA_WState_InPaintEvent);
 
          //clip away the new area
-#ifndef QT_NO_PAINT_DEBUG
-         bool flushed = QWidgetBackingStore::flushPaint(q, toBePainted);
-#endif
          QPaintEngine *paintEngine = pdev->paintEngine();
          if (paintEngine) {
             setRedirected(pdev, -offset);
@@ -3698,7 +3691,6 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
             if (pdev->devType() == QInternal::Widget) {
                static_cast<QWidget *>(pdev)->setAttribute(Qt::WA_WState_InPaintEvent);
             }
-
 #endif
             if (sharedPainter) {
                paintEngine->d_func()->systemClip = toBePainted;
@@ -3759,13 +3751,9 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
             delete paintEngine;
          }
 
-#ifndef QT_NO_PAINT_DEBUG
-         if (flushed) {
-            QWidgetBackingStore::unflushPaint(q, toBePainted);
-         }
-#endif
       } else if (q->isWindow()) {
          QPaintEngine *engine = pdev->paintEngine();
+
          if (engine) {
             QPainter p(pdev);
             p.setClipRegion(toBePainted);

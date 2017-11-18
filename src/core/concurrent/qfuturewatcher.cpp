@@ -21,12 +21,12 @@
 ***********************************************************************/
 
 #include <qfuturewatcher.h>
-
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qthread.h>
-
 #include <qfuturewatcher_p.h>
+
+#include <qalgorithms.h>
+#include <qcoreevent.h>
+#include <qcoreapplication.h>
+#include <qthread.h>
 
 QT_BEGIN_NAMESPACE
 

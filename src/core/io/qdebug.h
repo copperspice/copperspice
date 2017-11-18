@@ -23,16 +23,15 @@
 #ifndef QDEBUG_H
 #define QDEBUG_H
 
-#include <QtCore/qalgorithms.h>
+#include <QtCore/qcontiguouscache.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qmap.h>
 #include <QtCore/qpair.h>
-#include <QtCore/qtextstream.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qvector.h>
 #include <QtCore/qset.h>
-#include <QtCore/qcontiguouscache.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qtextstream.h>
+#include <QtCore/qvector.h>
 
 class Q_CORE_EXPORT QDebug
 {
@@ -83,7 +82,7 @@ class Q_CORE_EXPORT QDebug
 #endif
 
             } QT_CATCH(std::bad_alloc &) {
-               // out of memory, give up.
+               // out of memory, give up
             }
 
          }
@@ -244,11 +243,6 @@ class QNoDebug
    }
 };
 
-inline QDebug qCritical()
-{
-   return QDebug(QtCriticalMsg);
-}
-
 inline QDebug &QDebug::operator=(const QDebug &other)
 {
    if (this != &other) {
@@ -366,7 +360,6 @@ inline QDebug operator<<(QDebug debug, const QContiguousCache<T> &cache)
 
 template <class T>
 inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
-
 {
    debug.nospace() << "QFlags(";
    bool needSeparator = false;
@@ -388,9 +381,15 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
    return debug.space();
 }
 
+//
 inline QDebug qDebug()
 {
    return QDebug(QtDebugMsg);
+}
+
+inline QDebug qCritical()
+{
+   return QDebug(QtCriticalMsg);
 }
 
 inline QDebug qWarning()

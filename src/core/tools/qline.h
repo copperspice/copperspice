@@ -23,9 +23,10 @@
 #ifndef QLINE_H
 #define QLINE_H
 
-#include <QtCore/qpoint.h>
+#include <qpoint.h>
 
-QT_BEGIN_NAMESPACE
+class QDataStream;
+class QDebug;
 
 class Q_CORE_EXPORT QLine
 {
@@ -382,7 +383,5 @@ Q_CORE_EXPORT QDebug operator<<(QDebug d, const QLineF &p);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLineF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLineF &);
 #endif
-
-QT_END_NAMESPACE
 
 #endif // QLINE_H

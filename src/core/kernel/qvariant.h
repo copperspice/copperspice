@@ -41,6 +41,7 @@ class QBitArray;
 class QDataStream;
 class QDate;
 class QDateTime;
+class QDebug;
 class QEasingCurve;
 class QLatin1String;
 class QLine;

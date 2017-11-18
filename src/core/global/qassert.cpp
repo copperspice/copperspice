@@ -20,36 +20,17 @@
 *
 ***********************************************************************/
 
-#include <qpaintdevice.h>
+#include <qassert.h>
 #include <qlog.h>
 
-extern void qt_painter_removePaintDevice(QPaintDevice *); //qpainter.cpp
-
-QPaintDevice::QPaintDevice()
+void qt_assert(const char *assertion, const char *file, int line)
 {
-   painters = 0;
+   // Q_ASSERT macro calls this function when the test fails
+   qFatal("ASSERT: \"%s\" in file %s, line %d", assertion, file, line);
 }
 
-QPaintDevice::~QPaintDevice()
+void qt_assert_x(const char *where, const char *what, const char *file, int line)
 {
-   if (paintingActive()) {
-      qWarning("QPaintDevice: Can not destroy paint device which is being painted");
-   }
-
-   qt_painter_removePaintDevice(this);
+   // Q_ASSERT_X macro calls this function when the test fails
+   qFatal("ASSERT failure in %s: \"%s\", file %s, line %d", where, what, file, line);
 }
-
-
-#ifndef Q_WS_QPA
-int QPaintDevice::metric(PaintDeviceMetric) const
-{
-   qWarning("QPaintDevice::metrics: Device has no metric information");
-   return 0;
-}
-#endif
-
-Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, QPaintDevice::PaintDeviceMetric metric)
-{
-   return device->metric(metric);
-}
-

@@ -24,6 +24,7 @@
 #define QFREELIST_P_H
 
 #include <qglobal.h>
+#include <qassert.h>
 #include <qatomic.h>
 
 QT_BEGIN_NAMESPACE

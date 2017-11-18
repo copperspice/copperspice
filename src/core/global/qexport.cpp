@@ -20,36 +20,13 @@
 *
 ***********************************************************************/
 
-#include <qpaintdevice.h>
-#include <qlog.h>
+#include <qexport.h>
 
-extern void qt_painter_removePaintDevice(QPaintDevice *); //qpainter.cpp
-
-QPaintDevice::QPaintDevice()
+bool qSharedBuild()
 {
-   painters = 0;
-}
-
-QPaintDevice::~QPaintDevice()
-{
-   if (paintingActive()) {
-      qWarning("QPaintDevice: Can not destroy paint device which is being painted");
-   }
-
-   qt_painter_removePaintDevice(this);
-}
-
-
-#ifndef Q_WS_QPA
-int QPaintDevice::metric(PaintDeviceMetric) const
-{
-   qWarning("QPaintDevice::metrics: Device has no metric information");
-   return 0;
-}
+#ifdef QT_STATIC
+   return false;
+#else
+   return true;
 #endif
-
-Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, QPaintDevice::PaintDeviceMetric metric)
-{
-   return device->metric(metric);
 }
-

@@ -24,9 +24,8 @@
 #define QREFCOUNT_H
 
 #include <qglobal.h>
+#include <qassert.h>
 #include <qatomic.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QtPrivate {
 
@@ -105,7 +104,5 @@ class RefCount
 }
 
 #define Q_REFCOUNT_INITIALIZE_STATIC { -1 }
-
-QT_END_NAMESPACE
 
 #endif

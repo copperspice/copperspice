@@ -23,6 +23,8 @@
 #ifndef QMAPFUNC_H
 #define QMAPFUNC_H
 
+#include <qglobal.h>
+
 template <typename Key> inline bool qMapLessThanKey(const Key &key1, const Key &key2)
 {
    return key1 < key2;

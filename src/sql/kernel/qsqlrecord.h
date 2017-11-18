@@ -23,10 +23,9 @@
 #ifndef QSQLRECORD_H
 #define QSQLRECORD_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
+class QDebug;
 class QSqlField;
 class QStringList;
 class QVariant;
@@ -83,9 +82,5 @@ class Q_SQL_EXPORT QSqlRecord
 };
 
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlRecord &);
-
-
-QT_END_NAMESPACE
-
 
 #endif // QSQLRECORD_H

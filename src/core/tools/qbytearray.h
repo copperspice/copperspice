@@ -23,13 +23,13 @@
 #ifndef QBYTEARRAY_H
 #define QBYTEARRAY_H
 
+#include <qassert.h>
 #include <qrefcount.h>
 #include <qnamespace.h>
 #include <qarraydata.h>
 
 #include <string.h>
 #include <stdarg.h>
-
 #include <iterator>
 
 #ifdef truncate

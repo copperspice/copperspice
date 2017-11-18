@@ -23,9 +23,9 @@
 #ifndef QSQLERROR_H
 #define QSQLERROR_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
-QT_BEGIN_NAMESPACE
+class QDebug;
 
 class Q_SQL_EXPORT QSqlError
 {
@@ -68,7 +68,5 @@ class Q_SQL_EXPORT QSqlError
 
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlError &);
 
-
-QT_END_NAMESPACE
 
 #endif // QSQLERROR_H

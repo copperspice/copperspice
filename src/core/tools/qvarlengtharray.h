@@ -25,8 +25,9 @@
 
 #include <algorithm>
 
-#include <QtCore/qcontainerfwd.h>
-#include <QtCore/qglobal.h>
+#include <qcontainerfwd.h>
+#include <qglobal.h>
+#include <qassert.h>
 
 #include <new>
 #include <string.h>

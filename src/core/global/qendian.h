@@ -32,8 +32,6 @@
 #include <byteswap.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 inline void qbswap_helper(const uchar *source, uchar *dest, int size)
 {
    for (int i = 0; i < size ; ++i) {
@@ -47,7 +45,7 @@ template <typename T> inline void qbswap(const T src, uchar *dest)
 }
 
 // Used to implement a type-safe and alignment-safe copy operation
-// If you want to avoid the memcopy, you must write specializations for this function
+// If you want to avoid the memcopy you must write specializations for this function
 template <typename T> inline void qToUnaligned(const T src, uchar *dest)
 {
    memcpy(dest, &src, sizeof(T));
@@ -62,231 +60,94 @@ template <typename T> inline T qFromUnaligned(const uchar *src)
 }
 
 /* T qFromLittleEndian(const uchar *src)
- * This function will read a little-endian encoded value from \a src
- * and return the value in host-endian encoding.
+ * This function will read a little-endian encoded value from \a src and return the value in host-endian encoding.
  * There is no requirement that \a src must be aligned.
 */
-#if defined Q_CC_SUN
-inline quint64 qFromLittleEndian_helper(const uchar *src, quint64 *dest)
-{
-   return 0
-          | src[0]
-          | src[1] * Q_UINT64_C(0x0000000000000100)
-          | src[2] * Q_UINT64_C(0x0000000000010000)
-          | src[3] * Q_UINT64_C(0x0000000001000000)
-          | src[4] * Q_UINT64_C(0x0000000100000000)
-          | src[5] * Q_UINT64_C(0x0000010000000000)
-          | src[6] * Q_UINT64_C(0x0001000000000000)
-          | src[7] * Q_UINT64_C(0x0100000000000000);
-}
-
-inline quint32 qFromLittleEndian_helper(const uchar *src, quint32 *dest)
-{
-   return 0
-          | src[0]
-          | src[1] * quint32(0x00000100)
-          | src[2] * quint32(0x00010000)
-          | src[3] * quint32(0x01000000);
-}
-
-inline quint16 qFromLittleEndian_helper(const uchar *src, quint16 *dest)
-{
-   return 0
-          | src[0]
-          | src[1] * 0x0100;
-}
-
-inline qint64 qFromLittleEndian_helper(const uchar *src, qint64 *dest)
-{
-   return static_cast<qint64>(qFromLittleEndian_helper(src, reinterpret_cast<quint64 *>(0)));
-}
-
-inline qint32 qFromLittleEndian_helper(const uchar *src, qint32 *dest)
-{
-   return static_cast<qint32>(qFromLittleEndian_helper(src, reinterpret_cast<quint32 *>(0)));
-}
-
-inline qint16 qFromLittleEndian_helper(const uchar *src, qint16 *dest)
-{
-   return static_cast<qint16>(qFromLittleEndian_helper(src, reinterpret_cast<quint16 *>(0)));
-}
-
-template <class T> inline T qFromLittleEndian(const uchar *src)
-{
-   return qFromLittleEndian_helper(src, reinterpret_cast<T *>(0));
-}
-
-#else
 
 template <typename T>
-inline T qFromLittleEndian(const uchar *src);
-
-template <>
-inline quint64 qFromLittleEndian<quint64>(const uchar *src)
+inline T qFromLittleEndian(const uchar *src)
 {
-   return 0
-          | src[0]
-          | src[1] * Q_UINT64_C(0x0000000000000100)
-          | src[2] * Q_UINT64_C(0x0000000000010000)
-          | src[3] * Q_UINT64_C(0x0000000001000000)
-          | src[4] * Q_UINT64_C(0x0000000100000000)
-          | src[5] * Q_UINT64_C(0x0000010000000000)
-          | src[6] * Q_UINT64_C(0x0001000000000000)
-          | src[7] * Q_UINT64_C(0x0100000000000000);
+   static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
+   static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
+
+   if (sizeof(T) == 8) {
+      // 64
+      quint64 retval = 0
+             | src[0]
+             | src[1] * Q_UINT64_C(0x0000000000000100)
+             | src[2] * Q_UINT64_C(0x0000000000010000)
+             | src[3] * Q_UINT64_C(0x0000000001000000)
+             | src[4] * Q_UINT64_C(0x0000000100000000)
+             | src[5] * Q_UINT64_C(0x0000010000000000)
+             | src[6] * Q_UINT64_C(0x0001000000000000)
+             | src[7] * Q_UINT64_C(0x0100000000000000);
+
+      return static_cast<T>(retval);
+
+   } else if (sizeof(T) == 4) {
+      // 32
+      quint32 retval = 0
+             | src[0]
+             | src[1] * quint32(0x00000100)
+             | src[2] * quint32(0x00010000)
+             | src[3] * quint32(0x01000000);
+
+      return static_cast<T>(retval);
+
+   } else  {
+      // 16
+      quint16 retval = 0
+             | src[0]
+             | src[1] * 0x0100;
+
+      return static_cast<T>(retval);
+   }
 }
 
-template <>
-inline quint32 qFromLittleEndian<quint32>(const uchar *src)
-{
-   return 0
-          | src[0]
-          | src[1] * quint32(0x00000100)
-          | src[2] * quint32(0x00010000)
-          | src[3] * quint32(0x01000000);
-}
-
-template <>
-inline quint16 qFromLittleEndian<quint16>(const uchar *src)
-{
-   return quint16(0
-                  | src[0]
-                  | src[1] * 0x0100);
-}
-
-// signed specializations
-template <>
-inline qint64 qFromLittleEndian<qint64>(const uchar *src)
-{
-   return static_cast<qint64>(qFromLittleEndian<quint64>(src));
-}
-
-template <>
-inline qint32 qFromLittleEndian<qint32>(const uchar *src)
-{
-   return static_cast<qint32>(qFromLittleEndian<quint32>(src));
-}
-
-template <>
-inline qint16 qFromLittleEndian<qint16>(const uchar *src)
-{
-   return static_cast<qint16>(qFromLittleEndian<quint16>(src));
-}
-#endif
 
 /* This function will read a big-endian (also known as network order) encoded value from \a src
- * and return the value in host-endian encoding.
- * There is no requirement that \a src must be aligned.
+ * and return the value in host-endian encoding.There is no requirement that \a src must be aligned.
 */
-#if defined Q_CC_SUN
 
-inline quint64 qFromBigEndian_helper(const uchar *src, quint64 *dest)
-{
-   return 0
-          | src[7]
-          | src[6] * Q_UINT64_C(0x0000000000000100)
-          | src[5] * Q_UINT64_C(0x0000000000010000)
-          | src[4] * Q_UINT64_C(0x0000000001000000)
-          | src[3] * Q_UINT64_C(0x0000000100000000)
-          | src[2] * Q_UINT64_C(0x0000010000000000)
-          | src[1] * Q_UINT64_C(0x0001000000000000)
-          | src[0] * Q_UINT64_C(0x0100000000000000);
-}
-
-inline quint32 qFromBigEndian_helper(const uchar *src, quint32 *dest)
-{
-   return 0
-          | src[3]
-          | src[2] * quint32(0x00000100)
-          | src[1] * quint32(0x00010000)
-          | src[0] * quint32(0x01000000);
-}
-
-inline quint16 qFromBigEndian_helper(const uchar *src, quint16 *des)
-{
-   return 0
-          | src[1]
-          | src[0] * 0x0100;
-}
-
-
-inline qint64 qFromBigEndian_helper(const uchar *src, qint64 *dest)
-{
-   return static_cast<qint64>(qFromBigEndian_helper(src, reinterpret_cast<quint64 *>(0)));
-}
-
-inline qint32 qFromBigEndian_helper(const uchar *src, qint32 *dest)
-{
-   return static_cast<qint32>(qFromBigEndian_helper(src, reinterpret_cast<quint32 *>(0)));
-}
-
-inline qint16 qFromBigEndian_helper(const uchar *src, qint16 *dest)
-{
-   return static_cast<qint16>(qFromBigEndian_helper(src, reinterpret_cast<quint16 *>(0)));
-}
-
-template <class T>
+template <typename T>
 inline T qFromBigEndian(const uchar *src)
 {
-   return qFromBigEndian_helper(src, reinterpret_cast<T *>(0));
+   static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
+   static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
+
+   if (sizeof(T) == 8) {
+      // 64
+      quint64 retval = 0
+             | src[7]
+             | src[6] * Q_UINT64_C(0x0000000000000100)
+             | src[5] * Q_UINT64_C(0x0000000000010000)
+             | src[4] * Q_UINT64_C(0x0000000001000000)
+             | src[3] * Q_UINT64_C(0x0000000100000000)
+             | src[2] * Q_UINT64_C(0x0000010000000000)
+             | src[1] * Q_UINT64_C(0x0001000000000000)
+             | src[0] * Q_UINT64_C(0x0100000000000000);
+
+      return static_cast<T>(retval);
+
+   } else if (sizeof(T) == 4) {
+      // 32
+      quint32 retval = 0
+             | src[3]
+             | src[2] * quint32(0x00000100)
+             | src[1] * quint32(0x00010000)
+             | src[0] * quint32(0x01000000);
+
+      return static_cast<T>(retval);
+
+   } else  {
+      // 16
+      quint16 retval = 0
+             | src[1]
+             | src[0] * 0x0100;
+
+      return static_cast<T>(retval);
+   }
 }
-
-#else
-
-template <class T>
-inline T qFromBigEndian(const uchar *src);
-
-template<>
-inline quint64 qFromBigEndian<quint64>(const uchar *src)
-{
-   return 0
-          | src[7]
-          | src[6] * Q_UINT64_C(0x0000000000000100)
-          | src[5] * Q_UINT64_C(0x0000000000010000)
-          | src[4] * Q_UINT64_C(0x0000000001000000)
-          | src[3] * Q_UINT64_C(0x0000000100000000)
-          | src[2] * Q_UINT64_C(0x0000010000000000)
-          | src[1] * Q_UINT64_C(0x0001000000000000)
-          | src[0] * Q_UINT64_C(0x0100000000000000);
-}
-
-template<>
-inline quint32 qFromBigEndian<quint32>(const uchar *src)
-{
-   return 0
-          | src[3]
-          | src[2] * quint32(0x00000100)
-          | src[1] * quint32(0x00010000)
-          | src[0] * quint32(0x01000000);
-}
-
-template<>
-inline quint16 qFromBigEndian<quint16>(const uchar *src)
-{
-   return quint16( 0
-                   | src[1]
-                   | src[0] * quint16(0x0100));
-}
-
-
-// signed specializations
-template <>
-inline qint64 qFromBigEndian<qint64>(const uchar *src)
-{
-   return static_cast<qint64>(qFromBigEndian<quint64>(src));
-}
-
-template <>
-inline qint32 qFromBigEndian<qint32>(const uchar *src)
-{
-   return static_cast<qint32>(qFromBigEndian<quint32>(src));
-}
-
-template <>
-inline qint16 qFromBigEndian<qint16>(const uchar *src)
-{
-   return static_cast<qint16>(qFromBigEndian<quint16>(src));
-}
-#endif
 
 template <typename T>
 T qbswap(T source);
@@ -448,7 +309,5 @@ inline quint8 qbswap<quint8>(quint8 source)
 {
    return source;
 }
-
-QT_END_NAMESPACE
 
 #endif

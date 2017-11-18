@@ -23,9 +23,11 @@
 #ifndef QSIZE_H
 #define QSIZE_H
 
-#include <QtCore/qnamespace.h>
+#include <qnamespace.h>
+#include <qassert.h>
 
-QT_BEGIN_NAMESPACE
+class QDataStream;
+class QDebug;
 
 class Q_CORE_EXPORT QSize
 {
@@ -415,6 +417,5 @@ inline QSize QSizeF::toSize() const
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QSizeF &);
 
-QT_END_NAMESPACE
 
 #endif // QSIZE_H

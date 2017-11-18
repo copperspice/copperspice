@@ -23,9 +23,7 @@
 #ifndef QREADWRITELOCK_H
 #define QREADWRITELOCK_H
 
-#include <QtCore/qglobal.h>
-
-QT_BEGIN_NAMESPACE
+#include <qassert.h>
 
 struct QReadWriteLockPrivate;
 
@@ -142,7 +140,5 @@ inline QWriteLocker::QWriteLocker(QReadWriteLock *areadWriteLock)
               "QWriteLocker", "QReadWriteLock pointer is misaligned");
    relock();
 }
-
-QT_END_NAMESPACE
 
 #endif // QREADWRITELOCK_H

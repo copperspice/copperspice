@@ -20,36 +20,31 @@
 *
 ***********************************************************************/
 
-#include <qpaintdevice.h>
-#include <qlog.h>
+#ifndef QASSERT_H
+#define QASSERT_H
 
-extern void qt_painter_removePaintDevice(QPaintDevice *); //qpainter.cpp
+#include <qexport.h>
 
-QPaintDevice::QPaintDevice()
-{
-   painters = 0;
-}
+inline void qt_noop(void) {}
 
-QPaintDevice::~QPaintDevice()
-{
-   if (paintingActive()) {
-      qWarning("QPaintDevice: Can not destroy paint device which is being painted");
-   }
+Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);
 
-   qt_painter_removePaintDevice(this);
-}
-
-
-#ifndef Q_WS_QPA
-int QPaintDevice::metric(PaintDeviceMetric) const
-{
-   qWarning("QPaintDevice::metrics: Device has no metric information");
-   return 0;
-}
+#if ! defined(Q_ASSERT)
+#  ifndef QT_NO_DEBUG
+#    define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : qt_noop())
+#  else
+#    define Q_ASSERT(cond) qt_noop()
+#  endif
 #endif
 
-Q_GUI_EXPORT int qt_paint_device_metric(const QPaintDevice *device, QPaintDevice::PaintDeviceMetric metric)
-{
-   return device->metric(metric);
-}
+Q_CORE_EXPORT void qt_assert_x(const char *where, const char *what, const char *file, int line);
 
+#if ! defined(Q_ASSERT_X)
+#  ifndef QT_NO_DEBUG
+#    define Q_ASSERT_X(cond, where, what) ((!(cond)) ? qt_assert_x(where, what,__FILE__,__LINE__) : qt_noop())
+#  else
+#    define Q_ASSERT_X(cond, where, what) qt_noop()
+#  endif
+#endif
+
+#endif

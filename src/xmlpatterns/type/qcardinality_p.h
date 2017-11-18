@@ -23,9 +23,8 @@
 #ifndef QCardinality_P_H
 #define QCardinality_P_H
 
-#include <QtCore/QtGlobal>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qassert.h>
 
 class QString;
 
@@ -465,6 +464,5 @@ class Cardinality
 
 Q_DECLARE_TYPEINFO(QPatternist::Cardinality, Q_MOVABLE_TYPE);
 
-QT_END_NAMESPACE
 
 #endif

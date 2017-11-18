@@ -23,8 +23,7 @@
 #include <qlocalserver.h>
 #include <qlocalserver_p.h>
 #include <qlocalsocket.h>
-
-QT_BEGIN_NAMESPACE
+#include <qalgorithms.h>
 
 #ifndef QT_NO_LOCALSERVER
 
@@ -347,6 +346,4 @@ void QLocalServer::_q_onNewConnection()
 }
 
 #endif
-
-QT_END_NAMESPACE
 

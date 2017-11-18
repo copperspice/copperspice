@@ -24,89 +24,41 @@
 #define QGLOBAL_H
 
 #include <stddef.h>
+#include <stdint.h>
+
 #include <cs_build_info.h>
-
-// usage:  #if (CS_VERSION >= CS_VERSION_CHECK(1, 1, 0))
-#define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
-
 #include <qconfig.h>
+#include <qexport.h>
 #include <qfeatures.h>
 
-#ifdef __cplusplus     // block a
+// usage: #if (CS_VERSION >= CS_VERSION_CHECK(1, 1, 0))
+#define CS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
+
+#if defined(__cplusplus)
+
 #include <algorithm>
 
 class QByteArray;
-class QDataStream;
-class QDebug;
-class QNoDebug;
 class QString;
 
-#ifdef QT_NAMESPACE    // block b
+#define QT_PREPEND_NAMESPACE(name)       ::name
 
-#define QT_PREPEND_NAMESPACE(name) ::QT_NAMESPACE::name
+#define QT_FORWARD_DECLARE_CLASS(name)   class name;
+#define QT_FORWARD_DECLARE_STRUCT(name)  struct name;
 
-#define QT_USE_NAMESPACE    using namespace ::QT_NAMESPACE;
+#define QT_MANGLE_NAMESPACE(name)        name
 
-#define QT_BEGIN_NAMESPACE  namespace QT_NAMESPACE {
-#define QT_END_NAMESPACE    }
-
-#define QT_BEGIN_INCLUDE_NAMESPACE  }
-#define QT_END_INCLUDE_NAMESPACE    namespace QT_NAMESPACE {
-
-#define QT_FORWARD_DECLARE_CLASS(name)  \
-   QT_BEGIN_NAMESPACE class name;  \
-   QT_END_NAMESPACE \
-   using QT_PREPEND_NAMESPACE(name);
-
-# define QT_FORWARD_DECLARE_STRUCT(name) \
-    QT_BEGIN_NAMESPACE struct name;  \
-    QT_END_NAMESPACE \
-    using QT_PREPEND_NAMESPACE(name);
-
-# define QT_MANGLE_NAMESPACE0(x) x
-# define QT_MANGLE_NAMESPACE1(a, b)  a##_##b
-# define QT_MANGLE_NAMESPACE2(a, b)  QT_MANGLE_NAMESPACE1(a,b)
-
-# define QT_MANGLE_NAMESPACE(name)   QT_MANGLE_NAMESPACE2( QT_MANGLE_NAMESPACE0(name), QT_MANGLE_NAMESPACE0(QT_NAMESPACE))
-
-namespace QT_NAMESPACE {}
-
-#ifndef QT_NO_USING_NAMESPACE
-QT_USE_NAMESPACE
 #endif
 
-#else  // block b
-
-# define QT_PREPEND_NAMESPACE(name) ::name
-
-# define QT_USE_NAMESPACE
-
-# define QT_BEGIN_NAMESPACE
-# define QT_END_NAMESPACE
-
-# define QT_BEGIN_INCLUDE_NAMESPACE
-# define QT_END_INCLUDE_NAMESPACE
-
-# define QT_FORWARD_DECLARE_CLASS(name)  class name;
-# define QT_FORWARD_DECLARE_STRUCT(name) struct name;
-
-# define QT_MANGLE_NAMESPACE(name)       name
-
-#endif  // block b
-
-
-#else   // block a
+#define QT_USE_NAMESPACE
 
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE
-#define QT_USE_NAMESPACE
+
 #define QT_BEGIN_INCLUDE_NAMESPACE
 #define QT_END_INCLUDE_NAMESPACE
 
-#endif   // block a
-
-
-// detect target architecture
+// ** detect target architecture
 #if defined(__x86_64__)
 #define QT_ARCH_X86_64
 
@@ -118,7 +70,7 @@ QT_USE_NAMESPACE
 
 #endif
 
-// detect target endianness
+// ** detect target endianness
 #if defined (__BYTE_ORDER__) && \
     (__BYTE_ORDER__ - 0 == __ORDER_BIG_ENDIAN__ - 0 || __BYTE_ORDER__ - 0 == __ORDER_LITTLE_ENDIAN__ - 0)
 
@@ -141,7 +93,7 @@ QT_USE_NAMESPACE
 
 #endif
 
-// ******
+// **
 #if defined(Q_OS_MAC) && ! defined(Q_CC_INTEL)
 #define QT_BEGIN_INCLUDE_HEADER     }
 #define QT_END_INCLUDE_HEADER     extern "C++" {
@@ -152,16 +104,16 @@ QT_USE_NAMESPACE
 
 #endif
 
-// ******
+// **
 #if defined(__APPLE__) && defined(__GNUC__)
 #  define Q_OS_DARWIN
 #  define Q_OS_BSD4
 
-#elif ! defined(SAG_COM) && (defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
+#elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
 #  define Q_OS_WIN32
 #  define Q_OS_WIN64
 
-#elif !defined(SAG_COM) && (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  define Q_OS_WIN32
 
 #elif defined(__native_client__)
@@ -411,29 +363,6 @@ QT_USE_NAMESPACE
 
 #endif
 
-// make sure to update QMetaType when changing these typedefs
-#include <stdint.h>
-
-typedef int8_t                 qint8;
-typedef uint8_t                quint8;
-typedef int16_t                qint16;
-typedef uint16_t               quint16;
-typedef int32_t                qint32;
-typedef uint32_t               quint32;
-
-typedef long long              qint64;
-typedef unsigned long long     quint64;
-
-#define Q_INT64_C(c)           static_cast<long long>(c ## LL)
-#define Q_UINT64_C(c)          static_cast<unsigned long long>(c ## ULL)
-
-typedef qint64                 qlonglong;
-typedef quint64                qulonglong;
-
-#ifndef QT_POINTER_SIZE
-#define QT_POINTER_SIZE        sizeof(void *)
-#endif
-
 #define Q_INIT_RESOURCE_EXTERN(name) \
    extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();
 
@@ -445,54 +374,40 @@ typedef quint64                qulonglong;
    do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
    QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
 
+// make sure to update QMetaType when changing the following
+
+typedef int8_t               qint8;
+typedef uint8_t              quint8;
+
+typedef int16_t              qint16;
+typedef uint16_t             quint16;
+
+typedef int32_t              qint32;
+typedef uint32_t             quint32;
+
+typedef long long            qint64;
+typedef unsigned long long   quint64;
+
+typedef qint64               qlonglong;      // use qint64 instead, then remove this line
+typedef quint64              qulonglong;
+
+#define Q_INT64_C(c)         static_cast<int64_t>(c ## LL)
+#define Q_UINT64_C(c)        static_cast<uint64_t>(c ## ULL)
+
+#ifndef QT_POINTER_SIZE
+#define QT_POINTER_SIZE      sizeof(void *)
+#endif
 
 #if defined(__cplusplus)      // block c
 
-/*
-quintptr and qptrdiff are guaranteed to be the same size as a pointer
-      sizeof(void *) == sizeof(quintptr)
-      && sizeof(void *) == sizeof(qptrdiff)
-*/
+using qintptr   = std::conditional<sizeof(void *) == 4, qint32, qint64>::type;
+using qptrdiff  = qintptr;
+using quintptr  = std::conditional<sizeof(void *) == 4, quint32, quint64>::type;
 
-template<int>
-struct QIntegerForSize;
-
-template <>
-struct QIntegerForSize<1> {
-   typedef quint8  Unsigned;
-   typedef qint8   Signed;
-};
-
-template <>
-struct QIntegerForSize<2> {
-   typedef quint16 Unsigned;
-   typedef qint16  Signed;
-};
-
-template <>
-struct QIntegerForSize<4> {
-   typedef quint32 Unsigned;
-   typedef qint32  Signed;
-};
-
-template <>
-struct QIntegerForSize<8> {
-   typedef quint64 Unsigned;
-   typedef qint64  Signed;
-};
-
-template <class T>
-struct QIntegerForSizeof : QIntegerForSize<sizeof(T)> {
-};
-
-typedef QIntegerForSizeof<void *>::Unsigned   quintptr;
-typedef QIntegerForSizeof<void *>::Signed     qptrdiff;
-typedef qptrdiff qintptr;
-
-typedef unsigned char    uchar;
-typedef unsigned short   ushort;
-typedef unsigned int     uint;
-typedef unsigned long    ulong;
+using uchar     = unsigned char;
+using ushort    = unsigned short;
+using uint      = unsigned int;
+using ulong     = unsigned long;
 
 // ****
 #ifndef TRUE
@@ -559,9 +474,6 @@ typedef int QNoImplicitBoolCast;
 #if defined(QT_COORD_TYPE)
    typedef QT_COORD_TYPE  qreal;
 
-#elif defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
-   typedef float          qreal;
-
 #else
    typedef double         qreal;
 
@@ -624,157 +536,6 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> dec
 #  endif
 #endif
 
-#endif          //  block c
-
-
-#ifndef Q_DECL_EXPORT
-#  if defined(Q_OS_WIN)
-#    define Q_DECL_EXPORT    __declspec(dllexport)
-
-#  elif defined(QT_VISIBILITY_AVAILABLE)
-#    define Q_DECL_EXPORT    __attribute__((visibility("default")))
-#    define Q_DECL_HIDDEN    __attribute__((visibility("hidden")))
-#  endif
-
-#  ifndef Q_DECL_EXPORT
-#    define Q_DECL_EXPORT
-#  endif
-
-#endif
-
-#ifndef Q_DECL_IMPORT
-#  if defined(Q_OS_WIN)
-#    define Q_DECL_IMPORT    __declspec(dllimport)
-#  else
-#    define Q_DECL_IMPORT
-#  endif
-#endif
-
-#ifndef Q_DECL_HIDDEN
-#  define Q_DECL_HIDDEN
-#endif
-
-
-#if defined(Q_OS_WIN) &&  ! defined(QT_STATIC)        // create a DLL library
-
-#    if defined(QT_BUILD_CORE_LIB)
-#      define Q_CORE_EXPORT          Q_DECL_EXPORT
-#    else
-#      define Q_CORE_EXPORT          Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_GUI_LIB)
-#      define Q_GUI_EXPORT           Q_DECL_EXPORT
-#    else
-#      define Q_GUI_EXPORT           Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_SQL_LIB)
-#      define Q_SQL_EXPORT           Q_DECL_EXPORT
-#    else
-#      define Q_SQL_EXPORT           Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_NETWORK_LIB)
-#      define Q_NETWORK_EXPORT       Q_DECL_EXPORT
-#    else
-#      define Q_NETWORK_EXPORT       Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_SVG_LIB)
-#      define Q_SVG_EXPORT           Q_DECL_EXPORT
-#    else
-#      define Q_SVG_EXPORT           Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_DECLARATIVE_LIB)
-#      define Q_DECLARATIVE_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_DECLARATIVE_EXPORT   Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_OPENGL_LIB)
-#      define Q_OPENGL_EXPORT        Q_DECL_EXPORT
-#    else
-#      define Q_OPENGL_EXPORT        Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_MULTIMEDIA_LIB)
-#      define Q_MULTIMEDIA_EXPORT    Q_DECL_EXPORT
-#    else
-#      define Q_MULTIMEDIA_EXPORT    Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_XML_LIB)
-#      define Q_XML_EXPORT           Q_DECL_EXPORT
-#    else
-#      define Q_XML_EXPORT           Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_XMLPATTERNS_LIB)
-#      define Q_XMLPATTERNS_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_XMLPATTERNS_EXPORT   Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_SCRIPT_LIB)
-#      define Q_SCRIPT_EXPORT        Q_DECL_EXPORT
-#    else
-#      define Q_SCRIPT_EXPORT        Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_SCRIPTTOOLS_LIB)
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_IMPORT
-#    endif
-
-#    if defined(QT_BUILD_DBUS_LIB)
-#      define Q_DBUS_EXPORT          Q_DECL_EXPORT
-#    else
-#      define Q_DBUS_EXPORT          Q_DECL_IMPORT
-#    endif
-
-#endif
-
-#if ! defined(Q_CORE_EXPORT)
-
-#  if ! defined(QT_STATIC)
-#    define Q_CORE_EXPORT           Q_DECL_EXPORT
-#    define Q_GUI_EXPORT            Q_DECL_EXPORT
-#    define Q_SQL_EXPORT            Q_DECL_EXPORT
-#    define Q_NETWORK_EXPORT        Q_DECL_EXPORT
-#    define Q_SVG_EXPORT            Q_DECL_EXPORT
-#    define Q_DECLARATIVE_EXPORT    Q_DECL_EXPORT
-#    define Q_OPENGL_EXPORT         Q_DECL_EXPORT
-#    define Q_MULTIMEDIA_EXPORT     Q_DECL_EXPORT
-#    define Q_XML_EXPORT            Q_DECL_EXPORT
-#    define Q_XMLPATTERNS_EXPORT    Q_DECL_EXPORT
-#    define Q_SCRIPT_EXPORT         Q_DECL_EXPORT
-#    define Q_SCRIPTTOOLS_EXPORT    Q_DECL_EXPORT
-#    define Q_DBUS_EXPORT           Q_DECL_EXPORT
-#  else
-#    define Q_CORE_EXPORT
-#    define Q_GUI_EXPORT
-#    define Q_SQL_EXPORT
-#    define Q_NETWORK_EXPORT
-#    define Q_SVG_EXPORT
-#    define Q_DECLARATIVE_EXPORT
-#    define Q_OPENGL_EXPORT
-#    define Q_MULTIMEDIA_EXPORT
-#    define Q_XML_EXPORT
-#    define Q_XMLPATTERNS_EXPORT
-#    define Q_SCRIPT_EXPORT
-#    define Q_SCRIPTTOOLS_EXPORT
-#    define Q_DBUS_EXPORT
-#  endif
-
-#endif
-
-
-#if defined(__cplusplus)      // block d
-
-inline void qt_noop(void) {}
 
 #define QT_TRY       try
 #define QT_CATCH(A)  catch (A)
@@ -882,7 +643,6 @@ class Q_CORE_EXPORT QSysInfo
 };
 
 Q_CORE_EXPORT const char *qVersion();
-Q_CORE_EXPORT bool qSharedBuild();
 
 // not needed, used 115 times
 #ifndef Q_OUTOFLINE_TEMPLATE
@@ -904,68 +664,7 @@ Q_CORE_EXPORT bool qSharedBuild();
 #endif
 
 #ifndef qPrintable
-#  define qPrintable(string) QString(string).toLocal8Bit().constData()
-#endif
-
-Q_CORE_EXPORT QString qt_error_string(int errorCode = -1);
-Q_CORE_EXPORT void    qErrnoWarning(int code, const char *msg, ...);
-Q_CORE_EXPORT void    qErrnoWarning(const char *msg, ...);
-
-
-Q_CORE_EXPORT void qDebug(const char *, ...)
-#if defined(Q_CC_GNU) && ! defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-Q_CORE_EXPORT void qWarning(const char *, ...)
-#if defined(Q_CC_GNU) && ! defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-Q_CORE_EXPORT void qCritical(const char *, ...)
-#if defined(Q_CC_GNU) && ! defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-Q_CORE_EXPORT void qFatal(const char *, ...)
-#if defined(Q_CC_GNU) && ! defined(__INSURE__)
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
-
-inline QDebug qDebug();
-inline QDebug qWarning();
-inline QDebug qCritical();
-
-#define QT_NO_QDEBUG_MACRO   while (false) qDebug
-#define QT_NO_QWARNING_MACRO while (false) qWarning
-
-//
-Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);
-
-#if !defined(Q_ASSERT)
-#  ifndef QT_NO_DEBUG
-#    define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : qt_noop())
-#  else
-#    define Q_ASSERT(cond) qt_noop()
-#  endif
-#endif
-
-#if defined(QT_NO_DEBUG) && ! defined(QT_PAINT_DEBUG)
-#define QT_NO_PAINT_DEBUG
-#endif
-
-Q_CORE_EXPORT void qt_assert_x(const char *where, const char *what, const char *file, int line);
-
-#if !defined(Q_ASSERT_X)
-#  ifndef QT_NO_DEBUG
-#    define Q_ASSERT_X(cond, where, what) ((!(cond)) ? qt_assert_x(where, what,__FILE__,__LINE__) : qt_noop())
-#  else
-#    define Q_ASSERT_X(cond, where, what) qt_noop()
-#  endif
+#  define qPrintable(string)   QString(string).toLocal8Bit().constData()
 #endif
 
 Q_CORE_EXPORT void qt_check_pointer(const char *, int);
@@ -998,14 +697,6 @@ inline T *q_check_ptr(T *p)
 #   endif
 
 #endif
-
-enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMsg = QtCriticalMsg };
-
-Q_CORE_EXPORT void qt_message_output(QtMsgType, const char *buf);
-
-using QtMsgHandler = void (*)(QtMsgType, const char*);
-Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
-
 
 // * *
 template <typename T>
@@ -1214,19 +905,19 @@ Q_DECLARE_SHARED_STL(TYPE)
 
 //  QTypeInfo primitive specializations
 Q_DECLARE_TYPEINFO(signed char, Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(bool,    Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(char,    Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(uchar,   Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(short,   Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(ushort,  Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(int,     Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(uint,    Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(long,    Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(ulong,   Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(float,   Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(double,  Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(qint64,  Q_PRIMITIVE_TYPE);
-Q_DECLARE_TYPEINFO(quint64, Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(bool,        Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(char,        Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(uchar,       Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(short,       Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(ushort,      Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(int,         Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(uint,        Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(long,        Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(ulong,       Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(float,       Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(double,      Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(qint64,      Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(quint64,     Q_PRIMITIVE_TYPE);
 
 #ifndef Q_OS_DARWIN
 Q_DECLARE_TYPEINFO(long double, Q_PRIMITIVE_TYPE);
@@ -1238,12 +929,6 @@ Q_CORE_EXPORT void *qMallocAligned(size_t size, size_t alignment);
 Q_CORE_EXPORT void *qReallocAligned(void *ptr, size_t size, size_t oldsize, size_t alignment);
 Q_CORE_EXPORT void qFree(void *ptr);
 Q_CORE_EXPORT void qFreeAligned(void *ptr);
-
-
-//  used to avoid older compiler issues
-#if ! defined(QT_CC_WARNINGS)
-#  define QT_NO_WARNINGS
-#endif
 
 class Q_CORE_EXPORT QFlag
 {
@@ -1454,7 +1139,7 @@ Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 #define QT_TRID_NOOP(id) id
 #endif
 
-//  Some classes do not permit copies to be made of an object. These classes contain a private
+//  some classes do not permit copies to be made of an object. These classes contain a private
 //  copy constructor and assignment operator to disable copying (the compiler gives an error message)
 #define Q_DISABLE_COPY(ClassName)           \
     ClassName(const ClassName &) = delete;  \
@@ -1485,6 +1170,6 @@ Q_CORE_EXPORT int qrand();
 #  define QT_NO_RAWFONT
 #endif
 
-#endif      // block d
+#endif      // block c
 
 #endif

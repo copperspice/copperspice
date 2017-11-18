@@ -21,9 +21,7 @@
 ***********************************************************************/
 
 #include <qjson_p.h>
-#include <qalgorithms.h>
-
-QT_BEGIN_NAMESPACE
+#include <qlog.h>
 
 namespace QJsonPrivate {
 
@@ -433,4 +431,3 @@ void Value::copyData(const QJsonValue &v, char *dest, bool compressed)
 
 } // namespace QJsonPrivate
 
-QT_END_NAMESPACE

@@ -21,17 +21,16 @@
 ***********************************************************************/
 
 #include <qt_windows.h>
-#include <qmutex.h>
 #include <qatomic.h>
+#include <qlog.h>
+#include <qmutex.h>
 #include <qmutex_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QMutexPrivate::QMutexPrivate()
 {
    event = CreateEvent(0, FALSE, FALSE, 0);
    if (!event) {
-      qWarning("QMutexData::QMutexData: Cannot create event");
+      qWarning("QMutexData::QMutexData: Can not create event");
    }
 }
 
@@ -50,4 +49,3 @@ void QMutexPrivate::wakeUp()
    SetEvent(event);
 }
 
-QT_END_NAMESPACE

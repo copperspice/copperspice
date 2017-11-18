@@ -23,9 +23,10 @@
 #ifndef QPOINT_H
 #define QPOINT_H
 
-#include <QtCore/qnamespace.h>
+#include <qnamespace.h>
 
-QT_BEGIN_NAMESPACE
+class QDataStream;
+class QDebug;
 
 class Q_CORE_EXPORT QPoint
 {
@@ -398,6 +399,5 @@ inline QPoint QPointF::toPoint() const
 
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QPointF &p);
 
-QT_END_NAMESPACE
 
 #endif // QPOINT_H

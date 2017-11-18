@@ -21,30 +21,23 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+#include <qlog.h>
 #include <qsystemerror_p.h>
+
 #include <errno.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if !defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
 namespace {
-// There are two incompatible versions of strerror_r:
-// a) the XSI/POSIX.1 version, which returns an int,
-//    indicating success or not
-// b) the GNU version, which returns a char*, which may or may not
-//    be the beginning of the buffer we used
-// The GNU libc manpage for strerror_r says you should use the the XSI
-// version in portable code. However, it's impossible to do that if
-// _GNU_SOURCE is defined so we use C++ overloading to decide what to do
-// depending on the return type
+
 static inline QString fromstrerror_helper(int, const QByteArray &buf)
 {
    return QString::fromLocal8Bit(buf);
 }
+
 static inline QString fromstrerror_helper(const char *str, const QByteArray &)
 {
    return QString::fromLocal8Bit(str);
@@ -57,13 +50,11 @@ static QString windowsErrorString(int errorCode)
 {
    QString ret;
    wchar_t *string = 0;
+
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                 NULL,
-                 errorCode,
-                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                 (LPWSTR)&string,
-                 0,
-                 NULL);
+                 NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                 (LPWSTR)&string, 0, NULL);
+
    ret = QString::fromWCharArray(string);
    LocalFree((HLOCAL)string);
 
@@ -81,18 +72,23 @@ static QString standardLibraryErrorString(int errorCode)
    switch (errorCode) {
       case 0:
          break;
+
       case EACCES:
          s = QT_TRANSLATE_NOOP("QIODevice", "Permission denied");
          break;
+
       case EMFILE:
          s = QT_TRANSLATE_NOOP("QIODevice", "Too many open files");
          break;
+
       case ENOENT:
          s = QT_TRANSLATE_NOOP("QIODevice", "No such file or directory");
          break;
+
       case ENOSPC:
          s = QT_TRANSLATE_NOOP("QIODevice", "No space left on device");
          break;
+
       default: {
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
@@ -121,18 +117,18 @@ QString QSystemError::toString()
 #if defined (Q_OS_WIN)
          return windowsErrorString(errorCode);
 #else
-         //unix: fall through as native and standard library are the same
+         // unix: fall through as native and standard library are the same
 #endif
 
       case StandardLibraryError:
          return standardLibraryErrorString(errorCode);
-      default:
-         qWarning("invalid error scope");
-      //fall through
+
       case NoError:
          return QLatin1String("No error");
+
+      default:
+         qWarning("Invalid error scope");
+         return QLatin1String("Unrecognized error");
    }
 }
-
-QT_END_NAMESPACE
 

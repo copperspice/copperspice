@@ -49,8 +49,6 @@ class QWidgetBackingStore
    QWidgetBackingStore(QWidget *t);
    ~QWidgetBackingStore();
 
-   static void showYellowThing(QWidget *widget, const QRegion &rgn, int msec, bool);
-
    void sync(QWidget *exposedWidget, const QRegion &exposedRegion);
    void sync();
    void flush(QWidget *widget = 0, QWindowSurface *surface = 0);
@@ -64,12 +62,15 @@ class QWidgetBackingStore
    }
 
    inline bool isDirty() const {
-      return ! (dirtyWidgets.isEmpty() && dirty.isEmpty() && ! hasDirtyFromPreviousSync && ! fullUpdatePending
 
 #if defined(Q_WS_QWS) && ! defined(QT_NO_QWS_MANAGER)
-               && ! hasDirtyWindowDecoration()
+      return ! (dirtyWidgets.isEmpty() && dirty.isEmpty() && ! hasDirtyFromPreviousSync && ! fullUpdatePending
+                  && ! hasDirtyWindowDecoration());
+#else
+      return ! (dirtyWidgets.isEmpty() && dirty.isEmpty() && ! hasDirtyFromPreviousSync && ! fullUpdatePending);
+
 #endif
-              );
+
    }
 
    // ### Qt 4.6: Merge into a template function (after MSVC isn't supported anymore).
@@ -98,14 +99,12 @@ class QWidgetBackingStore
 
    QPoint tlwOffset;
 
-   static bool flushPaint(QWidget *widget, const QRegion &rgn);
-   static void unflushPaint(QWidget *widget, const QRegion &rgn);
-
    bool bltRect(const QRect &rect, int dx, int dy, QWidget *widget);
    void releaseBuffer();
 
    void beginPaint(QRegion &toClean, QWidget *widget, QWindowSurface *windowSurface,
                    BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates = true);
+
    void endPaint(const QRegion &cleaned, QWindowSurface *windowSurface, BeginPaintInfo *beginPaintInfo);
 
    QRegion dirtyRegion(QWidget *widget = 0) const;

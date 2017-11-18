@@ -24,11 +24,11 @@
 #define QCONTIGUOUSCACHE_H
 
 #include <qglobal.h>
+#include <qassert.h>
 #include <qatomic.h>
+
 #include <limits.h>
 #include <new>
-
-QT_BEGIN_NAMESPACE
 
 #undef QT_QCONTIGUOUSCACHE_DEBUG
 
@@ -568,7 +568,5 @@ inline T QContiguousCache<T>::takeLast()
    removeLast();
    return t;
 }
-
-QT_END_NAMESPACE
 
 #endif

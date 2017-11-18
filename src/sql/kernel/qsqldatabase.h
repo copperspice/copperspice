@@ -23,11 +23,10 @@
 #ifndef QSQLDATABASE_H
 #define QSQLDATABASE_H
 
-#include <QtCore/qstring.h>
-#include <QtSql/qsql.h>
+#include <qstring.h>
+#include <qsql.h>
 
-QT_BEGIN_NAMESPACE
-
+class QDebug;
 class QSqlError;
 class QSqlDriver;
 class QSqlIndex;
@@ -121,7 +120,5 @@ class Q_SQL_EXPORT QSqlDatabase
 };
 
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlDatabase &);
-
-QT_END_NAMESPACE
 
 #endif // QSQLDATABASE_H

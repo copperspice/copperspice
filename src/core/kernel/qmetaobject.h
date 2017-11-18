@@ -27,6 +27,7 @@
 #define QMETAOBJECT_H
 
 #include <csmeta.h>
+#include <qlog.h>
 #include <qmap.h>
 #include <qmultimap.h>
 #include <qmutex.h>

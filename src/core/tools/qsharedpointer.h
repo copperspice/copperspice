@@ -25,9 +25,9 @@
 #ifndef QSHAREDPOINTER_H
 #define QSHAREDPOINTER_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qsharedpointer_impl.h>
+#include <qassert.h>
+#include <qatomic.h>
+#include <qshareddata.h>
+#include <qsharedpointer_impl.h>
 
 #endif

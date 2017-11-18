@@ -2,18 +2,6 @@
 CORE_DIRS += src/core/global
 
 CORE_PUBLIC_INCLUDES += \
-	QCOORD \
-	QFlag \
-	QFlags \
-	QGlobalStatic \
-	QGlobalStaticDeleter \
-	QIncompatibleFlag \
-	QIntegerForSize \
-	QInternal \
-	QLibraryInfo \
-	QNoImplicitBoolCast \
-	QSysInfo \
-	QTypeInfo \
 	Q_INT16 \
 	Q_INT32 \
 	Q_INT64 \
@@ -26,6 +14,18 @@ CORE_PUBLIC_INCLUDES += \
 	Q_UINT8 \
 	Q_ULLONG \
 	Q_ULONG \
+	QCOORD \
+	QFlag \
+	QFlags \
+	QGlobalStatic \
+	QGlobalStaticDeleter \
+	QIncompatibleFlag \
+	QIntegerForSize \
+	QInternal \
+	QLibraryInfo \
+	QNoImplicitBoolCast \
+	QSysInfo \
+	QTypeInfo \
 	Qt \
 	QtConfig \
 	QtCore \
@@ -47,9 +47,11 @@ CORE_GLOBAL_INCLUDES = \
 	q_uint8.h \
 	q_ullong.h \
 	q_ulong.h \
+	qassert.h \
 	qconfig.h \
 	qcoord.h \
 	qendian.h \
+	qexport.h \
 	qfeatures.h \
 	qflag.h \
 	qflags.h \
@@ -60,6 +62,7 @@ CORE_GLOBAL_INCLUDES = \
 	qintegerforsize.h \
 	qinternal.h \
 	qlibraryinfo.h \
+	qlog.h \
 	qnamespace.h \
 	qnoimplicitboolcast.h \
 	qnumeric.h \
@@ -85,11 +88,14 @@ noinst_HEADERS+=$(patsubst %,src/core/global/%,$(CORE_GLOBAL_INCLUDES)) \
 		$(patsubst %,src/core/global/%,$(CORE_GLOBAL_PRIVATE_INCLUDES))
 
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+	src/core/global/qassert.cpp \
+	src/core/global/qexport.cpp \
 	src/core/global/qglobal.cpp \
 	src/core/global/qlibraryinfo.cpp \
+	src/core/global/qlog.cpp \
 	src/core/global/qmalloc.cpp \
 	src/core/global/qnumeric.cpp \
-   src/core/global/qnamespace.cpp
+	src/core/global/qnamespace.cpp
 
 
 

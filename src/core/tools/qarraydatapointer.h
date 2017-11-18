@@ -175,11 +175,9 @@ QT_END_NAMESPACE
 namespace std
 {
     template <class T>
-    inline void swap(
-            QT_PREPEND_NAMESPACE(QArrayDataPointer)<T> &p1,
-            QT_PREPEND_NAMESPACE(QArrayDataPointer)<T> &p2)
+    inline void swap(::QArrayDataPointer<T> &p1, ::QArrayDataPointer<T> &p2)
     {
-        p1.swap(p2);
+       p1.swap(p2);
     }
 }
 

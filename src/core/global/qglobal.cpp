@@ -20,25 +20,15 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
+#include <qglobal.h>
+#include <qlog.h>
+#include <qbytearray.h>
 #include <qstring.h>
-#include <qvector.h>
-#include <qlist.h>
-#include <qthreadstorage.h>
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qthread_p.h>
+#include <qscopedarraypointer.h>
 #include <qsystemlibrary_p.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <stdarg.h>
-#include <string.h>
+#include <qthreadstorage.h>
 
-#include <string>
-#include <exception>
-#include <errno.h>
+#include <limits>
 
 #if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
@@ -48,28 +38,16 @@
 #include <sys/utsname.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 const char *qVersion()
 {
    return CS_VERSION_STR;
 }
 
-bool qSharedBuild()
-{
-#ifdef QT_STATIC
-   return false;
-#else
-   return true;
-#endif
-}
-
+// ** OSX
 #if ! defined(QWS) && defined(Q_OS_MAC)
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qcore_mac_p.h>
 #include <qnamespace.h>
-QT_END_INCLUDE_NAMESPACE
 
 static QSysInfo::MacVersion macVersion()
 {
@@ -85,14 +63,13 @@ static QSysInfo::MacVersion macVersion()
 }
 const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
 
+
+// ** Windows
 #elif defined(Q_OS_WIN32)
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qt_windows.h>
-QT_END_INCLUDE_NAMESPACE
 
-
-// Determine Windows versions >= 8 by querying the version of kernel32.dll
+// determine versions >= 8 by querying the version of kernel32.dll
 static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
 {
    typedef WORD (WINAPI* PtrGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
@@ -259,7 +236,7 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
              winver = QSysInfo::WV_WINDOWS10;
 
           } else {
-             qWarning("Qt: Untested Windows version %d.%d detected", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
+             qWarning("Untested Windows version %d.%d detected", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
                    winver = QSysInfo::WV_NT_based;
           }
 
@@ -338,7 +315,7 @@ QWindowsSockInit::~QWindowsSockInit()
    WSACleanup();
 }
 
-#endif
+#endif  // end of windows block
 
 QString QSysInfo::machineHostName()
 {
@@ -371,9 +348,9 @@ QString QSysInfo::machineHostName()
 }
 
 
-/*
-  The Q_CHECK_PTR macro calls this function if an allocation check fails.
-*/
+
+// Q_CHECK_PTR macro calls this function if an allocation check fails
+
 void qt_check_pointer(const char *n, int l)
 {
    qFatal("In file %s, line %d: Out of memory", n, l);
@@ -389,32 +366,12 @@ void qBadAlloc()
 }
 
 /*
-  The Q_ASSERT macro calls this function when the test fails.
-*/
-void qt_assert(const char *assertion, const char *file, int line)
-{
-   qFatal("ASSERT: \"%s\" in file %s, line %d", assertion, file, line);
-}
-
-/*
-  The Q_ASSERT_X macro calls this function when the test fails.
-*/
-void qt_assert_x(const char *where, const char *what, const char *file, int line)
-{
-   qFatal("ASSERT failure in %s: \"%s\", file %s, line %d", where, what, file, line);
-}
-
-
-/*
     Dijkstra's bisection algorithm to find the square root of an integer.
-    Deliberately not exported as part of the API, but used in both
-    qsimplerichtext.cpp and qgfxraster_qws.cpp
 */
 Q_CORE_EXPORT unsigned int qt_int_sqrt(unsigned int n)
 {
-   // n must be in the range 0...UINT_MAX/2-1
-   if (n >= (UINT_MAX >> 2)) {
-      unsigned int r = 2 * qt_int_sqrt(n / 4);
+   if (n >= (std::numeric_limits<unsigned int>::max() >> 2)) {
+      unsigned int r  = 2 * qt_int_sqrt(n / 4);
       unsigned int r2 = r + 1;
       return (n >= r2 * r2) ? r2 : r;
    }
@@ -428,9 +385,10 @@ Q_CORE_EXPORT unsigned int qt_int_sqrt(unsigned int n)
       q >>= 2;
       h = p + q;
       p >>= 1;
+
       if (r >= h) {
-    p += q;
-    r -= h;
+          p += q;
+          r -= h;
       }
    }
 
@@ -445,245 +403,6 @@ void *qMemCopy(void *dest, const void *src, size_t n)
 void *qMemSet(void *dest, int c, size_t n)
 {
    return memset(dest, c, n);
-}
-
-static QtMsgHandler handler = 0;                // pointer to debug handler
-
-
-#if ! defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
-namespace {
-   // There are two incompatible versions of strerror_r:
-   // a) the XSI/POSIX.1 version, which returns an int,
-   //    indicating success or not
-   // b) the GNU version, which returns a char*, which may or may not
-   //    be the beginning of the buffer we used
-   // The GNU libc manpage for strerror_r says you should use the the XSI
-   // version in portable code. However, it's impossible to do that if
-   // _GNU_SOURCE is defined so we use C++ overloading to decide what to do
-   // depending on the return type
-   static inline QString fromstrerror_helper(int, const QByteArray &buf)
-   {
-      return QString::fromLocal8Bit(buf);
-   }
-
-   static inline QString fromstrerror_helper(const char *str, const QByteArray &)
-   {
-      return QString::fromLocal8Bit(str);
-   }
-}
-#endif
-
-QString qt_error_string(int errorCode)
-{
-   const char *s = 0;
-   QString ret;
-
-   if (errorCode == -1) {
-
-#if defined(Q_OS_WIN)
-      errorCode = GetLastError();
-#else
-      errorCode = errno;
-#endif
-   }
-
-   switch (errorCode) {
-      case 0:
-         break;
-
-      case EACCES:
-         s = QT_TRANSLATE_NOOP("QIODevice", "Permission denied");
-         break;
-
-      case EMFILE:
-         s = QT_TRANSLATE_NOOP("QIODevice", "Too many open files");
-         break;
-
-      case ENOENT:
-         s = QT_TRANSLATE_NOOP("QIODevice", "No such file or directory");
-         break;
-
-      case ENOSPC:
-         s = QT_TRANSLATE_NOOP("QIODevice", "No space left on device");
-         break;
-
-      default: {
-
-#ifdef Q_OS_WIN
-         wchar_t *string = 0;
-         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-             NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-             (LPWSTR)&string, 0, NULL);
-
-         ret = QString::fromWCharArray(string);
-         LocalFree((HLOCAL)string);
-
-         if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
-            ret = QString::fromLatin1("The specified module could not be found.");
-         }
-
-#elif defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
-         QByteArray buf(1024, '\0');
-         ret = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
-
-#else
-         ret = QString::fromLocal8Bit(strerror(errorCode));
-
-#endif
-
-         break;
-      }
-   }
-
-   if (s) {
-      ret = QString::fromLatin1(s);
-   }
-
-   return ret.trimmed();
-}
-
-#if defined(Q_OS_WIN) && defined(QT_BUILD_CORE_LIB)
-extern bool usingWinMain;
-extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str);
-#endif
-
-QtMsgHandler qInstallMsgHandler(QtMsgHandler h)
-{
-   QtMsgHandler old = handler;
-   handler = h;
-
-#if defined(Q_OS_WIN) && defined(QT_BUILD_CORE_LIB)
-   if (! handler && usingWinMain) {
-      handler = qWinMsgHandler;
-   }
-#endif
-
-   return old;
-}
-
-// internal
-void qt_message_output(QtMsgType msgType, const char *buf)
-{
-   if (handler) {
-      (*handler)(msgType, buf);
-   } else {
-      fprintf(stderr, "%s\n", buf);
-      fflush(stderr);
-   }
-
-   if (msgType == QtFatalMsg || (msgType == QtWarningMsg && (!qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
-
-#if (defined(Q_OS_UNIX) || defined(Q_CC_MINGW))
-      abort();    // generates core dump
-#else
-      exit(1);
-#endif
-
-   }
-}
-
-// internal
-static void qEmergencyOut(QtMsgType msgType, const char *msg, va_list ap)
-{
-   char emergency_buf[256] = { '\0' };
-   emergency_buf[255] = '\0';
-
-   if (msg) {
-      qvsnprintf(emergency_buf, 255, msg, ap);
-   }
-
-   qt_message_output(msgType, emergency_buf);
-}
-
-// internal
-static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
-{
-   if (std::uncaught_exception()) {
-      qEmergencyOut(msgType, msg, ap);
-      return;
-   }
-
-   QByteArray buf;
-
-   if (msg) {
-      QT_TRY {
-         buf = QString().vsprintf(msg, ap).toLocal8Bit();
-      } QT_CATCH(const std::bad_alloc &)  {
-
-         qEmergencyOut(msgType, msg, ap);
-
-         // do not rethrow - we use qWarning and friends in destructors.
-         return;
-      }
-   }
-
-   qt_message_output(msgType, buf.constData());
-}
-
-#undef qDebug
-
-void qDebug(const char *msg, ...)
-{
-   va_list ap;
-   va_start(ap, msg); // use variable arg list
-   qt_message(QtDebugMsg, msg, ap);
-   va_end(ap);
-}
-
-#undef qWarning
-
-void qWarning(const char *msg, ...)
-{
-   va_list ap;
-   va_start(ap, msg); // use variable arg list
-   qt_message(QtWarningMsg, msg, ap);
-   va_end(ap);
-}
-
-void qCritical(const char *msg, ...)
-{
-   va_list ap;
-   va_start(ap, msg); // use variable arg list
-   qt_message(QtCriticalMsg, msg, ap);
-   va_end(ap);
-}
-
-void qErrnoWarning(const char *msg, ...)
-{
-   // qt_error_string() will allocate anyway, so we don't have
-   // to be careful here (like we do in plain qWarning())
-   QString buf;
-   va_list ap;
-   va_start(ap, msg);
-   if (msg) {
-      buf.vsprintf(msg, ap);
-   }
-   va_end(ap);
-
-   qCritical("%s (%s)", buf.toLocal8Bit().constData(), qt_error_string(-1).toLocal8Bit().constData());
-}
-
-void qErrnoWarning(int code, const char *msg, ...)
-{
-   // qt_error_string() will allocate anyway, so we don't have
-   // to be careful here (like we do in plain qWarning())
-   QString buf;
-   va_list ap;
-   va_start(ap, msg);
-   if (msg) {
-      buf.vsprintf(msg, ap);
-   }
-   va_end(ap);
-
-   qCritical("%s (%s)", buf.toLocal8Bit().constData(), qt_error_string(code).toLocal8Bit().constData());
-}
-
-void qFatal(const char *msg, ...)
-{
-   va_list ap;
-   va_start(ap, msg); // use variable arg list
-   qt_message(QtFatalMsg, msg, ap);
-   va_end(ap);
 }
 
 QByteArray qgetenv(const char *varName)
@@ -767,4 +486,3 @@ int qrand()
 #endif
 }
 
-QT_END_NAMESPACE

@@ -21,13 +21,13 @@
 ***********************************************************************/
 
 #include <qelapsedtimer.h>
-#include <windows.h>
+#include <qlog.h>
 #include <qsystemlibrary_p.h>
+
+#include <windows.h>
 
 typedef ULONGLONG (WINAPI *PtrGetTickCount64)(void);
 static PtrGetTickCount64 ptrGetTickCount64 = 0;
-
-QT_BEGIN_NAMESPACE
 
 // Result of QueryPerformanceFrequency, 0 indicates that the high resolution timer is unavailable
 static quint64 counterFrequency = 0;
@@ -164,4 +164,4 @@ bool operator<(const QElapsedTimer &v1, const QElapsedTimer &v2)
    return (v1.t1 - v2.t1) < 0;
 }
 
-QT_END_NAMESPACE
+

@@ -25,8 +25,6 @@
 
 #include "treewalker.h"
 
-QT_BEGIN_NAMESPACE
-
 class QTextStream;
 class Driver;
 class Uic;
@@ -48,7 +46,5 @@ struct Validator : public TreeWalker {
  private:
    Driver *m_driver;
 };
-
-QT_END_NAMESPACE
 
 #endif

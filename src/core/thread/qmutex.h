@@ -23,11 +23,11 @@
 #ifndef QMUTEX_H
 #define QMUTEX_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <new>
+#include <qglobal.h>
+#include <qassert.h>
+#include <qatomic.h>
 
-QT_BEGIN_NAMESPACE
+#include <new>
 
 class QMutexData;
 
@@ -122,8 +122,5 @@ class Q_CORE_EXPORT QMutexLocker
 
    quintptr val;
 };
-
-
-QT_END_NAMESPACE
 
 #endif // QMUTEX_H

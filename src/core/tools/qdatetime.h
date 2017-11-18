@@ -23,11 +23,11 @@
 #ifndef QDATETIME_H
 #define QDATETIME_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qnamespace.h>
-#include <QtCore/qsharedpointer.h>
+#include <qstring.h>
+#include <qnamespace.h>
+#include <qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
+class QDebug;
 
 class Q_CORE_EXPORT QDate
 {
@@ -359,6 +359,5 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
 #endif
 
-QT_END_NAMESPACE
 
 #endif // QDATETIME_H

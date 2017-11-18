@@ -1,17 +1,5 @@
 set(CORE_PUBLIC_INCLUDES
-    ${CORE_PUBLIC_INCLUDES}   
-    QCOORD
-    QFlag
-    QFlags
-    QGlobalStatic
-    QGlobalStaticDeleter
-    QIncompatibleFlag
-    QIntegerForSize
-    QInternal
-    QLibraryInfo
-    QNoImplicitBoolCast
-    QSysInfo
-    QTypeInfo
+    ${CORE_PUBLIC_INCLUDES}
     Q_INT16
     Q_INT32
     Q_INT64
@@ -24,6 +12,18 @@ set(CORE_PUBLIC_INCLUDES
     Q_UINT8
     Q_ULLONG
     Q_ULONG
+    QCOORD
+    QFlag
+    QFlags
+    QGlobalStatic
+    QGlobalStaticDeleter
+    QIncompatibleFlag
+    QIntegerForSize
+    QInternal
+    QLibraryInfo
+    QNoImplicitBoolCast
+    QSysInfo
+    QTypeInfo
     Qt
     QtConfig
     QtCore
@@ -46,9 +46,11 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_uint8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ullong.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ulong.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qassert.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qconfig.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qcoord.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qendian.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qexport.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qfeatures.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qflag.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qflags.h
@@ -59,6 +61,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qintegerforsize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qinternal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qnoimplicitboolcast.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.h
@@ -82,8 +85,11 @@ set(CORE_PRIVATE_INCLUDES
 
 set(CORE_SOURCES
     ${CORE_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qassert.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qexport.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qmalloc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.cpp

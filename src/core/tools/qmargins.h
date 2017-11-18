@@ -23,9 +23,9 @@
 #ifndef QMARGINS_H
 #define QMARGINS_H
 
-#include <QtCore/qnamespace.h>
+#include <qnamespace.h>
 
-QT_BEGIN_NAMESPACE
+class QDebug;
 
 class QMargins
 {
@@ -127,7 +127,5 @@ inline bool operator!=(const QMargins &m1, const QMargins &m2)
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMargins &);
-
-QT_END_NAMESPACE
 
 #endif

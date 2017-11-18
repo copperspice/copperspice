@@ -23,9 +23,7 @@
 #ifndef QARRAYDATA_H
 #define QARRAYDATA_H
 
-#include <QtCore/qrefcount.h>
-
-QT_BEGIN_NAMESPACE
+#include <qrefcount.h>
 
 struct Q_CORE_EXPORT QArrayData {
    QtPrivate::RefCount ref;
@@ -183,8 +181,5 @@ struct QArrayDataPointerRef {
     (sizeof(QArrayData) + (Q_ALIGNOF(type) - 1)) \
         & ~(Q_ALIGNOF(type) - 1) } \
     /**/
-
-QT_END_NAMESPACE
-
 
 #endif // include guard

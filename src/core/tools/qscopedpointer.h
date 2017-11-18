@@ -23,16 +23,15 @@
 #ifndef QSCOPEDPOINTER_H
 #define QSCOPEDPOINTER_H
 
-#include <QtCore/qglobal.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qassert.h>
 
 template <typename T>
 struct QScopedPointerDeleter {
    static inline void cleanup(T *pointer) {
-      // Enforce a complete type.
-      // If you get a compile error here, read the section on forward declared
-      // classes in the QScopedPointer documentation.
+      // Enforce a complete type. If you get a compile error here, read the section on
+      // forward declared classes in the QScopedPointer documentation.
+
       typedef char IsIncompleteType[ sizeof(T) ? 1 : -1 ];
       (void) sizeof(IsIncompleteType);
 
@@ -213,7 +212,5 @@ class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
 
    Q_DISABLE_COPY(QScopedArrayPointer)
 };
-
-QT_END_NAMESPACE
 
 #endif // QSCOPEDPOINTER_H

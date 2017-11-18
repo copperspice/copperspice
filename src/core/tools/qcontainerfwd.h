@@ -25,8 +25,6 @@
 
 #include <utility>
 
-#include <qglobal.h>
-
 template <typename Key>
 class qHashFunc;
 

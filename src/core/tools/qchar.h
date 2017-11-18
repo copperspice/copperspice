@@ -23,11 +23,11 @@
 #ifndef QCHAR_H
 #define QCHAR_H
 
-#include <QtCore/qglobal.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qexport.h>
 
 class QString;
+class QDataStream;
 
 struct QLatin1Char {
  public:
@@ -550,7 +550,5 @@ inline bool operator>(QChar c1, QChar c2)
    Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QChar);
    Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar &);
 #endif
-
-QT_END_NAMESPACE
 
 #endif // QCHAR_H

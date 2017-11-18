@@ -23,7 +23,7 @@
 #ifndef QBITARRAY_H
 #define QBITARRAY_H
 
-#include <QtCore/qbytearray.h>
+#include <qbytearray.h>
 
 QT_BEGIN_NAMESPACE
 
