@@ -487,41 +487,42 @@ constexpr inline T qAbs(const T &t)
    return t >= 0 ? t : -t;
 }
 
-constexpr inline int qRound(qreal d)
+constexpr inline int qRound(double d)
 {
-   return d >= qreal(0.0) ? int(d + qreal(0.5)) : int(d - int(d - 1) + qreal(0.5)) + int(d - 1);
+   return d >= 0.0 ? int(d + 0.5) : int(d - double(int(d - 1)) + 0.5) + int(d - 1);
 }
 
-#if defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
+constexpr inline int qRound(float d)
+{
+   return d >= 0.0f ? int(d + 0.5f) : int(d - float(int(d - 1)) + 0.5f) + int(d - 1);
+}
+
 constexpr inline qint64 qRound64(double d)
 {
-   return d >= 0.0 ? qint64(d + 0.5) : qint64(d - qreal(qint64(d - 1)) + 0.5) + qint64(d - 1);
+   return d >= 0.0 ? qint64(d + 0.5) : qint64(d - double(qint64(d - 1)) + 0.5) + qint64(d - 1);
 }
 
-#else
-constexpr inline qint64 qRound64(qreal d)
+constexpr inline qint64 qRound64(float d)
 {
-   return d >= qreal(0.0) ? qint64(d + qreal(0.5)) : qint64(d - qreal(qint64(d - 1)) + qreal(0.5)) + qint64(d - 1);
+   return d >= 0.0f ? qint64(d + 0.5f) : qint64(d - float(qint64(d - 1)) + 0.5f) + qint64(d - 1);
 }
-
-#endif
 
 // enhanced to support size_type which can be 32 bit or 64 bit
 // the larger data type size will be returned
 template <typename T1, typename T2>
-constexpr inline auto qMin(const T1 &a, const T2 &b) -> decltype((a < b) ? a : b)
+constexpr inline auto qMin(const T1 &a, const T2 &b)
 {
    return (a < b) ? a : b;
 }
 
 template <typename T1, typename T2>
-constexpr inline auto qMax(const T1 &a, const T2 &b) -> decltype((a < b) ? b : a)
+constexpr inline auto qMax(const T1 &a, const T2 &b)
 {
    return (a < b) ? b : a;
 }
 
 template <typename T1, typename T2, typename T3>
-constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max) -> decltype(qMax(min, qMin(max, val)))
+constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
 {
    return qMax(min, qMin(max, val));
 }
@@ -1077,15 +1078,13 @@ typedef uint Flags;
 #define Q_FOREACH(variable, container)  \
 for (variable : container)
 
-#define Q_FOREVER for(;;)
-
 #ifndef QT_NO_KEYWORDS
 #  ifndef foreach
 #    define foreach Q_FOREACH
 #  endif
 
 #  ifndef forever
-#    define forever Q_FOREVER
+#    define forever for(;;)
 #  endif
 #endif
 
@@ -1147,6 +1146,7 @@ Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
 Q_CORE_EXPORT QByteArray qgetenv(const char *varName);
 Q_CORE_EXPORT bool       qputenv(const char *varName, const QByteArray &value);
+Q_CORE_EXPORT bool       qunsetenv(const char *varName);
 
 inline int qIntCast(double f)
 {

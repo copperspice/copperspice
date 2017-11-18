@@ -29,6 +29,7 @@
 #include <qthreadstorage.h>
 
 #include <limits>
+#include <mutex>
 
 #if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
@@ -405,23 +406,63 @@ void *qMemSet(void *dest, int c, size_t n)
    return memset(dest, c, n);
 }
 
+static std::mutex environmentMutex;
+
 QByteArray qgetenv(const char *varName)
 {
+   std::lock_guard<std::mutex> lock(environmentMutex);
+
    return QByteArray(::getenv(varName));
 }
 
 bool qputenv(const char *varName, const QByteArray &value)
 {
+   std::lock_guard<std::mutex> lock(environmentMutex);
+
+#if (defined(_POSIX_VERSION) && (_POSIX_VERSION-0) >= 200112L) || defined(Q_OS_HAIKU)
+    // POSIX.1-2001
+    return setenv(varName, value.constData(), true) == 0;
+
+#else
    QByteArray buffer(varName);
    buffer += '=';
    buffer += value;
+
    char *envVar = qstrdup(buffer.constData());
    int result = putenv(envVar);
-   if (result != 0) { // error. we have to delete the string.
+
+   if (result != 0) {
+      // error. we have to delete the string.
       delete[] envVar;
    }
 
    return result == 0;
+#endif
+}
+
+bool qunsetenv(const char *varName)
+{
+   std::lock_guard<std::mutex> lock(environmentMutex);
+
+#if (defined(_POSIX_VERSION) && (_POSIX_VERSION-0) >= 200112L) || defined(Q_OS_BSD4) || defined(Q_OS_HAIKU)
+   // POSIX.1-2001
+   return unsetenv(varName) == 0;
+
+#elif defined(Q_CC_MINGW)
+   // removes "var" from the environment, no memory leak
+   QByteArray buffer(varName);
+   buffer += '=';
+
+   return putenv(buffer.constData()) == 0;
+
+#else
+   // insert an empty var into the environment, memory leak
+   QByteArray buffer(varName);
+   buffer += '=';
+   char *envVar = qstrdup(buffer.constData());
+
+   return putenv(envVar) == 0;
+#endif
 }
 
 #if defined(Q_OS_UNIX)
