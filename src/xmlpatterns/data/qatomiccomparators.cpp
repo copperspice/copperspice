@@ -33,11 +33,8 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
-StringComparator::compare(const Item &o1,
-                          const AtomicComparator::Operator,
-                          const Item &o2) const
+StringComparator::compare(const Item &o1, const AtomicComparator::Operator, const Item &o2) const
 {
    const int result = QString::compare(o1.stringValue(), o2.stringValue());
 
@@ -219,8 +216,8 @@ IntegerComparator::compare(const Item &o1,
          return GreaterThan;
       }
    } else {
-      const qulonglong v1 = o1.as<Numeric>()->toUnsignedInteger();
-      const qulonglong v2 = o2.as<Numeric>()->toUnsignedInteger();
+      const quint64 v1 = o1.as<Numeric>()->toUnsignedInteger();
+      const quint64 v2 = o2.as<Numeric>()->toUnsignedInteger();
 
       if (v1 == v2) {
          return Equal;

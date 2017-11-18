@@ -54,7 +54,7 @@ static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt,
                      char **digits_str);
 #endif
 
-QString qulltoa(qulonglong l, int base, const QChar _zero)
+QString qulltoa(quint64 l, int base, const QChar _zero)
 {
    ushort buff[65]; // length of MAX_ULLONG in base 2
    ushort *p = buff + 65;
@@ -86,16 +86,13 @@ QString qulltoa(qulonglong l, int base, const QChar _zero)
    return QString(reinterpret_cast<QChar *>(p), 65 - (p - buff));
 }
 
-QString qlltoa(qlonglong l, int base, const QChar zero)
+QString qlltoa(qint64 l, int base, const QChar zero)
 {
    return qulltoa(l < 0 ? -l : l, base, zero);
 }
 
-QString &decimalForm(QChar zero, QChar decimal, QChar group,
-                     QString &digits, int decpt, uint precision,
-                     PrecisionMode pm,
-                     bool always_show_decpt,
-                     bool thousands_group)
+QString &decimalForm(QChar zero, QChar decimal, QChar group, QString &digits, int decpt, uint precision,
+                     PrecisionMode pm, bool always_show_decpt, bool thousands_group)
 {
    if (decpt < 0) {
       for (int i = 0; i < -decpt; ++i) {
@@ -255,10 +252,10 @@ bool removeGroupSeparators(QLocalePrivate::CharBuff *num)
  * Ignores `locale' stuff.  Assumes that the upper and lower case
  * alphabets and digits are each contiguous.
  */
-qulonglong qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
+quint64 qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
 {
     char * end = const_cast<char *>(nptr);
-    qulonglong retval = std::strtoull(nptr, &end, base);
+    quint64 retval = std::strtoull(nptr, &end, base);
 
     if(end != nptr) {
 	*ok = true;
@@ -280,10 +277,10 @@ qulonglong qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
  * Ignores `locale' stuff.  Assumes that the upper and lower case
  * alphabets and digits are each contiguous.
  */
-qlonglong qstrtoll(const char *nptr, const char **endptr, int base, bool *ok)
+qint64 qstrtoll(const char *nptr, const char **endptr, int base, bool *ok)
 {
     char * end = const_cast<char *>(nptr);
-    qlonglong retval = std::strtoll(nptr, &end, base);
+    qint64 retval = std::strtoll(nptr, &end, base);
 
     if(end != nptr) {
 	*ok = true;

@@ -80,11 +80,11 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
 
       case QVariant::LongLong:
-         x->data.ll = copy ? *static_cast<const qlonglong *>(copy) : Q_INT64_C(0);
+         x->data.ll = copy ? *static_cast<const qint64 *>(copy) : Q_INT64_C(0);
          break;
 
       case QVariant::ULongLong:
-         x->data.ull = copy ? *static_cast<const qulonglong *>(copy) : Q_UINT64_C(0);
+         x->data.ull = copy ? *static_cast<const quint64 *>(copy) : Q_UINT64_C(0);
          break;
 
       case QVariant::Double:
@@ -662,7 +662,7 @@ static bool compare(const QVariant::Private *a, const QVariant::Private *b)
 }
 
 // internal
-static qlonglong qMetaTypeNumber(const QVariant::Private *d)
+static qint64 qMetaTypeNumber(const QVariant::Private *d)
 {
    switch (d->type) {
       case QMetaType::Int:
@@ -672,13 +672,13 @@ static qlonglong qMetaTypeNumber(const QVariant::Private *d)
          return d->data.ll;
 
       case QMetaType::Char:
-         return qlonglong(*static_cast<signed char *>(d->data.shared->ptr));
+         return qint64(*static_cast<signed char *>(d->data.shared->ptr));
 
       case QMetaType::Short:
-         return qlonglong(*static_cast<short *>(d->data.shared->ptr));
+         return qint64(*static_cast<short *>(d->data.shared->ptr));
 
       case QMetaType::Long:
-         return qlonglong(*static_cast<long *>(d->data.shared->ptr));
+         return qint64(*static_cast<long *>(d->data.shared->ptr));
 
       case QMetaType::Float:
          return qRound64(d->data.f);
@@ -691,7 +691,7 @@ static qlonglong qMetaTypeNumber(const QVariant::Private *d)
    return 0;
 }
 
-static qulonglong qMetaTypeUNumber(const QVariant::Private *d)
+static quint64 qMetaTypeUNumber(const QVariant::Private *d)
 {
    switch (d->type) {
       case QVariant::UInt:
@@ -701,20 +701,20 @@ static qulonglong qMetaTypeUNumber(const QVariant::Private *d)
          return d->data.ull;
 
       case QMetaType::UChar:
-         return qulonglong(*static_cast<unsigned char *>(d->data.shared->ptr));
+         return quint64(*static_cast<unsigned char *>(d->data.shared->ptr));
 
       case QMetaType::UShort:
-         return qulonglong(*static_cast<ushort *>(d->data.shared->ptr));
+         return quint64(*static_cast<ushort *>(d->data.shared->ptr));
 
       case QMetaType::ULong:
-         return qulonglong(*static_cast<ulong *>(d->data.shared->ptr));
+         return quint64(*static_cast<ulong *>(d->data.shared->ptr));
    }
 
    Q_ASSERT(false);
    return 0;
 }
 
-static qlonglong qConvertToNumber(const QVariant::Private *d, bool *ok)
+static qint64 qConvertToNumber(const QVariant::Private *d, bool *ok)
 {
    *ok = true;
 
@@ -742,7 +742,7 @@ static qlonglong qConvertToNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QByteArray>(d)->toLongLong(ok);
 
       case QVariant::Bool:
-         return qlonglong(d->data.b);
+         return qint64(d->data.b);
 
       case QVariant::Double:
       case QVariant::Int:
@@ -758,14 +758,14 @@ static qlonglong qConvertToNumber(const QVariant::Private *d, bool *ok)
       case QMetaType::UChar:
       case QMetaType::UShort:
       case QMetaType::ULong:
-         return qlonglong(qMetaTypeUNumber(d));
+         return qint64(qMetaTypeUNumber(d));
    }
 
    *ok = false;
    return Q_INT64_C(0);
 }
 
-static qulonglong qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
+static quint64 qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
 {
    *ok = true;
 
@@ -792,7 +792,7 @@ static qulonglong qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QByteArray>(d)->toULongLong(ok);
 
       case QVariant::Bool:
-         return qulonglong(d->data.b);
+         return quint64(d->data.b);
 
       case QVariant::Double:
       case QVariant::Int:
@@ -801,7 +801,7 @@ static qulonglong qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
       case QMetaType::Long:
       case QMetaType::Float:
       case QMetaType::LongLong:
-         return qulonglong(qMetaTypeNumber(d));
+         return quint64(qMetaTypeNumber(d));
 
       case QVariant::ULongLong:
       case QVariant::UInt:
@@ -1148,11 +1148,11 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
          return *ok;
 
       case QVariant::LongLong:
-         *static_cast<qlonglong *>(result) = qConvertToNumber(d, ok);
+         *static_cast<qint64 *>(result) = qConvertToNumber(d, ok);
          return *ok;
 
       case QVariant::ULongLong: {
-         *static_cast<qulonglong *>(result) = qConvertToUnsignedNumber(d, ok);
+         *static_cast<quint64 *>(result) = qConvertToUnsignedNumber(d, ok);
          return *ok;
       }
 
@@ -1636,13 +1636,13 @@ QVariant::QVariant(uint val)
    d.type = UInt;
    d.data.u = val;
 }
-QVariant::QVariant(qlonglong val)
+QVariant::QVariant(qint64 val)
 {
    d.is_null = false;
    d.type = LongLong;
    d.data.ll = val;
 }
-QVariant::QVariant(qulonglong val)
+QVariant::QVariant(quint64 val)
 {
    d.is_null = false;
    d.type = ULongLong;
@@ -2264,14 +2264,14 @@ uint QVariant::toUInt(bool *ok) const
    return qNumVariantToHelper<uint>(d, handler, ok, d.data.u);
 }
 
-qlonglong QVariant::toLongLong(bool *ok) const
+qint64 QVariant::toLongLong(bool *ok) const
 {
-   return qNumVariantToHelper<qlonglong>(d, handler, ok, d.data.ll);
+   return qNumVariantToHelper<qint64>(d, handler, ok, d.data.ll);
 }
 
-qulonglong QVariant::toULongLong(bool *ok) const
+quint64 QVariant::toULongLong(bool *ok) const
 {
-   return qNumVariantToHelper<qulonglong>(d, handler, ok, d.data.ull);
+   return qNumVariantToHelper<quint64>(d, handler, ok, d.data.ull);
 }
 
 bool QVariant::toBool() const

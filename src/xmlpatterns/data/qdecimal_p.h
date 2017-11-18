@@ -52,7 +52,7 @@ class Decimal : public Numeric
    xsInteger toInteger() const override;
    xsFloat toFloat() const override;
    xsDecimal toDecimal() const override;
-   qulonglong toUnsignedInteger() const override;
+   quint64 toUnsignedInteger() const override;
 
    Numeric::Ptr round() const override;
    Numeric::Ptr roundHalfToEven(const xsInteger scale) const override;

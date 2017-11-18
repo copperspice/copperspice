@@ -1567,7 +1567,7 @@ bool QByteArray::isNull() const
    return d == Data::sharedNull();
 }
 
-qlonglong QByteArray::toLongLong(bool *ok, int base) const
+qint64 QByteArray::toLongLong(bool *ok, int base) const
 {
 #if defined(QT_CHECK_RANGE)
    if (base != 0 && (base < 2 || base > 36)) {
@@ -1579,7 +1579,7 @@ qlonglong QByteArray::toLongLong(bool *ok, int base) const
    return QLocalePrivate::bytearrayToLongLong(nulTerminated().constData(), base, ok);
 }
 
-qulonglong QByteArray::toULongLong(bool *ok, int base) const
+quint64 QByteArray::toULongLong(bool *ok, int base) const
 {
 #if defined(QT_CHECK_RANGE)
    if (base != 0 && (base < 2 || base > 36)) {
@@ -1593,7 +1593,7 @@ qulonglong QByteArray::toULongLong(bool *ok, int base) const
 
 int QByteArray::toInt(bool *ok, int base) const
 {
-   qlonglong v = toLongLong(ok, base);
+   qint64 v = toLongLong(ok, base);
    if (v < INT_MIN || v > INT_MAX) {
       if (ok) {
          *ok = false;
@@ -1605,7 +1605,7 @@ int QByteArray::toInt(bool *ok, int base) const
 
 uint QByteArray::toUInt(bool *ok, int base) const
 {
-   qulonglong v = toULongLong(ok, base);
+   quint64 v = toULongLong(ok, base);
    if (v > UINT_MAX) {
       if (ok) {
          *ok = false;
@@ -1617,7 +1617,7 @@ uint QByteArray::toUInt(bool *ok, int base) const
 
 long QByteArray::toLong(bool *ok, int base) const
 {
-   qlonglong v = toLongLong(ok, base);
+   qint64 v = toLongLong(ok, base);
    if (v < LONG_MIN || v > LONG_MAX) {
       if (ok) {
          *ok = false;
@@ -1629,7 +1629,7 @@ long QByteArray::toLong(bool *ok, int base) const
 
 ulong QByteArray::toULong(bool *ok, int base) const
 {
-   qulonglong v = toULongLong(ok, base);
+   quint64 v = toULongLong(ok, base);
    if (v > ULONG_MAX) {
       if (ok) {
          *ok = false;
@@ -1641,7 +1641,7 @@ ulong QByteArray::toULong(bool *ok, int base) const
 
 short QByteArray::toShort(bool *ok, int base) const
 {
-   qlonglong v = toLongLong(ok, base);
+   qint64 v = toLongLong(ok, base);
    if (v < SHRT_MIN || v > SHRT_MAX) {
       if (ok) {
          *ok = false;
@@ -1653,7 +1653,7 @@ short QByteArray::toShort(bool *ok, int base) const
 
 ushort QByteArray::toUShort(bool *ok, int base) const
 {
-   qulonglong v = toULongLong(ok, base);
+   quint64 v = toULongLong(ok, base);
    if (v > USHRT_MAX) {
       if (ok) {
          *ok = false;
@@ -1720,7 +1720,7 @@ QByteArray QByteArray::toBase64() const
    return tmp;
 }
 
-static char *qulltoa2(char *p, qulonglong n, int base)
+static char *qulltoa2(char *p, quint64 n, int base)
 {
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
@@ -1738,17 +1738,17 @@ static char *qulltoa2(char *p, qulonglong n, int base)
    return p;
 }
 
-QByteArray &QByteArray::setNum(qlonglong n, int base)
+QByteArray &QByteArray::setNum(qint64 n, int base)
 {
    const int buffsize = 66; // big enough for MAX_ULLONG in base 2
    char buff[buffsize];
    char *p;
 
    if (n < 0 && base == 10) {
-      p = qulltoa2(buff + buffsize, qulonglong(-(1 + n)) + 1, base);
+      p = qulltoa2(buff + buffsize, quint64(-(1 + n)) + 1, base);
       *--p = '-';
    } else {
-      p = qulltoa2(buff + buffsize, qulonglong(n), base);
+      p = qulltoa2(buff + buffsize, quint64(n), base);
    }
 
    clear();
@@ -1756,7 +1756,7 @@ QByteArray &QByteArray::setNum(qlonglong n, int base)
    return *this;
 }
 
-QByteArray &QByteArray::setNum(qulonglong n, int base)
+QByteArray &QByteArray::setNum(quint64 n, int base)
 {
    const int buffsize = 66; // big enough for MAX_ULLONG in base 2
    char buff[buffsize];
@@ -1813,14 +1813,14 @@ QByteArray QByteArray::number(uint n, int base)
    return s;
 }
 
-QByteArray QByteArray::number(qlonglong n, int base)
+QByteArray QByteArray::number(qint64 n, int base)
 {
    QByteArray s;
    s.setNum(n, base);
    return s;
 }
 
-QByteArray QByteArray::number(qulonglong n, int base)
+QByteArray QByteArray::number(quint64 n, int base)
 {
    QByteArray s;
    s.setNum(n, base);

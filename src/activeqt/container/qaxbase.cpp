@@ -193,7 +193,7 @@ static const char *const type_conversion[][2] =
     { "QList<double>", "QVariantList" },
     { "QList<bool>", "QVariantList" },
     { "QList<QDateTime>", "QVariantList" },
-    { "QList<qlonglong>", "QVariantList" },
+    { "QList<qint64>", "QVariantList" },
     { 0, 0 }
 };
 
@@ -729,9 +729,9 @@ QByteArray QAxEventSink::findProperty(DISPID dispID)
     \i QDateTime&
     \row
     \i CY
-    \i qlonglong
-    \i qlonglong
-    \i qlonglong&
+    \i qint64
+    \i qint64
+    \i qint64&
     \row
     \i OLE_COLOR
     \i QColor
@@ -1579,7 +1579,7 @@ private:
     }
 
     struct Method {
-        Method() : flags(0) 
+        Method() : flags(0)
         {}
         QByteArray type;
         QByteArray parameters;
@@ -1800,14 +1800,14 @@ QMetaObject *qax_readClassInfo(ITypeLib *typeLib, ITypeInfo *classInfo, const QM
 }
 
 MetaObjectGenerator::MetaObjectGenerator(QAxBase *ax, QAxBasePrivate *dptr)
-: that(ax), d(dptr), disp(0), dispInfo(0), classInfo(0), typelib(0), 
+: that(ax), d(dptr), disp(0), dispInfo(0), classInfo(0), typelib(0),
   iidnames(QLatin1String("HKEY_LOCAL_MACHINE\\Software\\Classes"), QSettings::NativeFormat)
 {
     init();
 }
 
 MetaObjectGenerator::MetaObjectGenerator(ITypeLib *tlib, ITypeInfo *tinfo)
-: that(0), d(0), disp(0), dispInfo(tinfo), classInfo(0), typelib(tlib), 
+: that(0), d(0), disp(0), dispInfo(tinfo), classInfo(0), typelib(tlib),
   iidnames(QLatin1String("HKEY_LOCAL_MACHINE\\Software\\Classes"), QSettings::NativeFormat)
 {
     init();
@@ -1964,7 +1964,7 @@ QByteArray MetaObjectGenerator::guessTypes(const TYPEDESC &tdesc, ITypeInfo *inf
         str = "int";
         break;
     case VT_I8:
-        str = "qlonglong";
+        str = "qint64";
         break;
     case VT_UI1:
     case VT_UI2:
@@ -1973,10 +1973,10 @@ QByteArray MetaObjectGenerator::guessTypes(const TYPEDESC &tdesc, ITypeInfo *inf
         str = "uint";
         break;
     case VT_UI8:
-        str = "qulonglong";
+        str = "quint64";
         break;
     case VT_CY:
-        str = "qlonglong";
+        str = "qint64";
         break;
     case VT_R4:
         str = "float";
@@ -2182,7 +2182,7 @@ void MetaObjectGenerator::readClassInfo()
                 classInfo->GetImplTypeFlags(i, &typeFlags);
                 if (typeFlags & IMPLTYPEFLAG_FSOURCE)
                     continue;
-                
+
                 HREFTYPE hrefType;
                 if (S_OK == classInfo->GetRefTypeOfImplType(i, &hrefType))
                     classInfo->GetRefTypeInfo(hrefType, &dispInfo);
@@ -2191,7 +2191,7 @@ void MetaObjectGenerator::readClassInfo()
                     dispInfo->GetTypeAttr(&ifaceAttr);
                     WORD typekind = ifaceAttr->typekind;
                     dispInfo->ReleaseTypeAttr(ifaceAttr);
-                    
+
                     if (typekind & TKIND_DISPATCH) {
                         break;
                     } else {
@@ -3362,7 +3362,7 @@ static bool checkHRESULT(HRESULT hres, EXCEPINFO *exc, QAxBase *that, const QStr
                 qWarning("             Help       : %s", help.toLatin1().data());
                 qWarning("         Connect to the exception(int,QString,QString,QString) signal to catch this exception");
             }
-        }       
+        }
         return false;
     case DISP_E_MEMBERNOTFOUND:
         qWarning("QAxBase: Error calling IDispatch member %s: Member not found", name.toLatin1().data());

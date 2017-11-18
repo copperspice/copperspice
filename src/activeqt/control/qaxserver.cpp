@@ -114,9 +114,9 @@ QString qAxInit()
 
     if (initCount++)
         return libFile;
-    
+
     InitializeCriticalSection(&qAxModuleSection);
-    
+
     libFile = QString::fromWCharArray(qAxModuleFilename);
     libFile = libFile.toLower();
     if (LoadTypeLibEx((wchar_t*)libFile.utf16(), REGKIND_NONE, &qAxTypeLibrary) == S_OK)
@@ -140,18 +140,18 @@ void qAxCleanup()
 {
     if (!initCount)
         qWarning("qAxInit/qAxCleanup mismatch");
-    
+
     if (--initCount)
         return;
 
     delete qax_factory;
     qax_factory = 0;
-    
+
     if (qAxTypeLibrary) {
         qAxTypeLibrary->Release();
         qAxTypeLibrary = 0;
     }
-    
+
     DeleteCriticalSection(&qAxModuleSection);
 }
 
@@ -171,7 +171,7 @@ unsigned long qAxUnlock()
     EnterCriticalSection(&qAxModuleSection);
     unsigned long ref = --qAxModuleRef;
     LeaveCriticalSection(&qAxModuleSection);
-    
+
     if (!ref)
         qax_shutDown();
     return ref;
@@ -212,10 +212,10 @@ HRESULT UpdateRegistry(BOOL bRegister)
     QString path = file.left(file.lastIndexOf(QLatin1Char('\\'))+1);
     QString module = file.right(file.length() - path.length());
     module = module.left(module.lastIndexOf(QLatin1Char('.')));
-    
+
     const QString appId = qAxFactory()->appID().toString().toUpper();
     const QString libId = qAxFactory()->typeLibID().toString().toUpper();
-    
+
     QString libFile = qAxInit();
     QString typeLibVersion;
 
@@ -247,7 +247,7 @@ HRESULT UpdateRegistry(BOOL bRegister)
         keyPath = QLatin1String("HKEY_CURRENT_USER\\Software\\Classes");
 
     QSettings settings(keyPath, QSettings::NativeFormat);
-    
+
     // we try to create the ActiveX widgets later on...
     bool delete_qApp = false;
     if (!qApp) {
@@ -255,7 +255,7 @@ HRESULT UpdateRegistry(BOOL bRegister)
         (void)new QApplication(argc, 0);
         delete_qApp = true;
     }
-    
+
     if (bRegister) {
         if (qAxOutProcServer) {
             settings.setValue(QLatin1String("/AppID/") + appId + QLatin1String("/."), module);
@@ -287,16 +287,16 @@ HRESULT UpdateRegistry(BOOL bRegister)
                     olemisc |= OLEMISC_INVISIBLEATRUNTIME;
                 else if (object->findChild<QMenuBar*>() && !qax_disable_inplaceframe)
                     olemisc |= OLEMISC_WANTSTOMENUMERGE;
-                
+
                 settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/."), className + QLatin1String(" Class"));
                 settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/CLSID/."), classId);
                 if (insertable)
                     settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/Insertable/."), QVariant(QLatin1String("")));
-                
+
                 settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/."), className + QLatin1String(" Class"));
                 settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/CLSID/."), classId);
                 settings.setValue(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/CurVer/."), module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion);
-                
+
                 settings.setValue(QLatin1String("/CLSID/") + classId + QLatin1String("/."), className + QLatin1String(" Class"));
                 if (file.endsWith(QLatin1String("exe"), Qt::CaseInsensitive))
                     settings.setValue(QLatin1String("/CLSID/") + classId + QLatin1String("/AppID"), appId);
@@ -362,31 +362,31 @@ HRESULT UpdateRegistry(BOOL bRegister)
             const QMetaObject *mo = qAxFactory()->metaObject(className);
             const QString classId = qAxFactory()->classID(className).toString().toUpper();
             className = qax_clean_type(className, mo);
-            
+
             QString classVersion = mo ? QString::fromLatin1(mo->classInfo(mo->indexOfClassInfo("Version")).value()) : QString();
             if (classVersion.isNull())
                 classVersion = QLatin1String("1.0");
             const QString classMajorVersion = classVersion.left(classVersion.indexOf(QLatin1Char('.')));
-            
+
             qAxFactory()->unregisterClass(*key, &settings);
-            
+
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/CLSID/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/Insertable/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion + QLatin1String("/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1Char('.') + classMajorVersion);
-            
+
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/CLSID/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/CurVer/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className + QLatin1String("/."));
             settings.remove(QLatin1Char('/') + module + QLatin1Char('.') + className);
-            
+
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/AppID"));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/Control/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/Insertable/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/InProcServer32/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/LocalServer32/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/MiscStatus/1/."));
-            settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/MiscStatus/."));	    
+            settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/MiscStatus/."));	
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/Programmable/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/ToolboxBitmap32/."));
             settings.remove(QLatin1String("/CLSID/") + classId + QLatin1String("/TypeLib/."));
@@ -426,7 +426,7 @@ HRESULT UpdateRegistry(BOOL bRegister)
             }
         }
     }
-    
+
     if (delete_qApp)
         delete qApp;
 
@@ -447,45 +447,44 @@ static QList<QByteArray> subtypes;
 static const char* const type_map[][2] =
 {
     // QVariant/Qt Value data types
-    { "QString",	"BSTR" },
-    { "QCString",	"BSTR" },
-    { "bool",		"VARIANT_BOOL" },
-    { "int",		"int" },
-    { "uint",		"unsigned int" },
-    { "double",		"double" }, 
-    { "QColor",		"OLE_COLOR" },
-    { "QDate",		"DATE" },
-    { "QTime",		"DATE" },
+    { "QString",	   "BSTR" },
+    { "QCString",	   "BSTR" },
+    { "bool",	   	"VARIANT_BOOL" },
+    { "int",	   	"int" },
+    { "uint",	   	"unsigned int" },
+    { "double",	   "double" },
+    { "QColor",	   "OLE_COLOR" },
+    { "QDate",	   	"DATE" },
+    { "QTime",		   "DATE" },
     { "QDateTime",	"DATE" },
-    { "QFont",		"IFontDisp*" },
-    { "QPixmap",	"IPictureDisp*" },
-    { "QVariant",	"VARIANT" },
+    { "QFont",	   	"IFontDisp*" },
+    { "QPixmap",	   "IPictureDisp*" },
+    { "QVariant",	   "VARIANT" },
     { "QVariantList",	 "SAFEARRAY(VARIANT)" },
     { "QList<QVariant>", "SAFEARRAY(VARIANT)" },
-    { "quint64",	"CY" },
-    { "qint64",	        "CY" },
-    { "qulonglong",	"CY" },
-    { "qlonglong",	"CY" },
+    { "quint64",	   "CY" },
+    { "qint64",	   "CY" },
     { "QByteArray",	"SAFEARRAY(BYTE)" },
     { "QStringList",	"SAFEARRAY(BSTR)" },
-    // Userdefined Qt datatypes - some not on Borland though
+
+    // Userdefined datatypes - some not on Borland though
     { "QCursor",         "enum MousePointer" },
     { "Qt::FocusPolicy", "enum FocusPolicy" },
 
 # if __REQUIRED_RPCNDR_H_VERSION__ >= Q_REQUIRED_RPCNDR_H_VERSION
     { "QRect",		"struct QRect" },
     { "QSize",		"struct QSize" },
-    { "QPoint",		"struct QPoint" },
+    { "QPoint",	"struct QPoint" },
 # endif
 
     // And we support COM data types
-    { "BOOL",		"BOOL" },
-    { "BSTR",		"BSTR" },
+    { "BOOL",		   "BOOL" },
+    { "BSTR",		   "BSTR" },
     { "OLE_COLOR",	"OLE_COLOR" },
-    { "DATE",		"DATE" },
-    { "VARIANT",	"VARIANT" },
+    { "DATE",		   "DATE" },
+    { "VARIANT",	   "VARIANT" },
     { "IDispatch",	"IDispatch*" },
-    { "IUnknown",	"IUnknown*" },
+    { "IUnknown",	   "IUnknown*" },
     { "IDispatch*",	"IDispatch*" },
     { "IUnknown*",	"IUnknown*" },
     { 0,		0 }
@@ -497,12 +496,12 @@ static QByteArray convertTypes(const QByteArray &qtype, bool *ok)
     qRegisterMetaType("IUnknown*", (void**)0);
 
     *ok = false;
-    
+
     int i = 0;
     while (type_map[i][0]) {
         if (qtype == type_map[i][0] && type_map[i][1]) {
             *ok = true;
-            return type_map[i][1];	    
+            return type_map[i][1];	
         }
         ++i;
     }
@@ -579,7 +578,7 @@ static QMap<QByteArray, int> mapping;
 static QByteArray renameOverloads(const QByteArray &name)
 {
     QByteArray newName = name;
-    
+
     int n = mapping.value(name);
     if (mapping.contains(name)) {
         int n = mapping.value(name);
@@ -588,7 +587,7 @@ static QByteArray renameOverloads(const QByteArray &name)
     } else {
         mapping.insert(name, 1);
     }
-    
+
     return newName;
 }
 
@@ -685,12 +684,12 @@ bool ignoreProps(const char *test)
 static QByteArray prototype(const QList<QByteArray> &parameterTypes, const QList<QByteArray> &parameterNames, bool *ok)
 {
     QByteArray prototype;
-    
+
     for (int p = 0; p < parameterTypes.count() && *ok; ++p) {
         bool out = false;
         QByteArray type(parameterTypes.at(p));
         QByteArray name(parameterNames.at(p));
-        
+
         if (type.endsWith('&')) {
             out = true;
             type.truncate(type.length() - 1);
@@ -709,18 +708,18 @@ static QByteArray prototype(const QList<QByteArray> &parameterTypes, const QList
             prototype += "[in] " + type + ' ';
         else
             prototype += "[in,out] " + type + ' ';
-        
+
         if (out)
             prototype += '*';
         if (name.isEmpty())
             prototype += 'p' + QByteArray::number(p);
         else
             prototype += "p_" + replaceKeyword(name);
-        
+
         if (p < parameterTypes.count() - 1)
             prototype += ", ";
     }
-    
+
     return prototype;
 }
 
@@ -752,32 +751,32 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
     int i = 0;
     if (!mo)
         return 3;
-    
+
     QString topclass = qAxFactory()->exposeToSuperClass(className);
     if (topclass.isEmpty())
         topclass = QLatin1String("QObject");
     bool hasStockEvents = qAxFactory()->hasStockEvents(className);
-    
+
     const QMetaObject *pmo = mo;
     do {
         pmo = pmo->superClass();
     } while (pmo && topclass != QString::fromLatin1(pmo->className()));
-    
+
     int enumoff = pmo ? pmo->enumeratorOffset() : mo->enumeratorOffset();
     int methodoff = pmo ? pmo->methodOffset() : mo->methodOffset();
     int propoff = pmo ? pmo->propertyOffset() : mo->propertyOffset();
-    
+
     int qtProps = 0;
     int qtSlots = 0;
 
     bool control = false;
-    
+
     if (o && o->isWidgetType()) {
         qtProps = QWidget::staticMetaObject.propertyCount();
         qtSlots = QWidget::staticMetaObject.methodCount();
         control = true;
     }
-    
+
     QString classID = qAxFactory()->classID(className).toString().toUpper();
     if (QUuid(classID).isNull())
         return 4;
@@ -789,20 +788,20 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
     QString eventsID = qAxFactory()->eventsID(className).toString().toUpper();
     bool hasEvents = !QUuid(eventsID).isNull();
     STRIPCB(eventsID);
-    
+
     QString cleanClassName = qax_clean_type(className, mo);
     QString defProp(QLatin1String(mo->classInfo(mo->indexOfClassInfo("DefaultProperty")).value()));
     QString defSignal(QLatin1String(mo->classInfo(mo->indexOfClassInfo("DefaultSignal")).value()));
-    
+
     for (i = enumoff; i < mo->enumeratorCount(); ++i) {
         const QMetaEnum enumerator = mo->enumerator(i);
         if (enums.contains(enumerator.name()))
             continue;
-        
+
         enums.append(enumerator.name());
-        
+
         out << "\tenum " << enumerator.name() << " {" << endl;
-        
+
         for (int j = 0; j < enumerator.keyCount(); ++j) {
             QByteArray key(enumerator.key(j));
             while (enumValues.contains(key)) {
@@ -864,7 +863,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
     out << "\t]" << endl;
     out << "\tdispinterface I" << cleanClassName  << endl;
     out << "\t{" << endl;
-    
+
     out << "\tproperties:" << endl;
     for (i = propoff; i < mo->propertyCount(); ++i) {
         const QMetaProperty property = mo->property(i);
@@ -874,14 +873,14 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
             continue;
         if (!property.name() || mo->indexOfProperty(property.name()) > i)
             continue;
-        
+
         bool ok = true;
         QByteArray type(convertTypes(property.typeName(), &ok));
         QByteArray name(replaceKeyword(property.name()));
-        
+
         if (!ok)
             out << "\t/****** Property is of unsupported datatype" << endl;
-        
+
         out << "\t\t[id(" << id << ')';
         if (!property.isWritable())
             out << ", readonly";
@@ -894,7 +893,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
         if (defProp == QLatin1String(name))
             out << ", uidefault";
         out << "] " << type << ' ' << name << ';' << endl;
-        
+
         if (!ok)
             out << "\t******/" << endl;
         ++id;
@@ -918,7 +917,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
             out << outBuffer;
             outBuffer = QByteArray();
         }
-        
+
         QByteArray signature(slot.signature());
         QByteArray name(signature.left(signature.indexOf('(')));
         if (i <= qtSlots && ignoreSlots(name))
@@ -932,20 +931,20 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
 
         QList<QByteArray> parameterTypes(slot.parameterTypes());
         QList<QByteArray> parameterNames(slot.parameterNames());
-        
+
         bool ok = true;
         QByteArray type = slot.typeName();
         if (type.isEmpty())
             type = "void";
         else
             type = convertTypes(type, &ok);
-        
+
         QByteArray ptype(prototype(parameterTypes, parameterNames, &ok));
         if (!ok)
             outBuffer += "\t/****** Slot parameter uses unsupported datatype\n";
-        
+
         outBuffer += "\t\t[id(" + QString::number(id).toLatin1() + ")] " + type + ' ' + name + '(' + ptype + ");\n";
-        
+
         if (!ok)
             outBuffer += "\t******/\n";
         ++id;
@@ -960,7 +959,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
 
     mapping.clear();
     id = 1;
-    
+
     if (hasEvents) {
         out << "\t[" << endl;
         out << "\t\tuuid(" << eventsID << ")," << endl;
@@ -970,7 +969,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
         out << "\t{" << endl;
         out << "\tproperties:" << endl;
         out << "\tmethods:" << endl;
-        
+
         if (hasStockEvents) {
             out << "\t/****** Stock events ******/" << endl;
             out << "\t\t[id(DISPID_CLICK)] void Click();" << endl;
@@ -982,12 +981,12 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
             out << "\t\t[id(DISPID_MOUSEMOVE)] void MouseMove(short Button, short Shift, OLE_XPOS_PIXELS x, OLE_YPOS_PIXELS y);" << endl;
             out << "\t\t[id(DISPID_MOUSEUP)] void MouseUp(short Button, short Shift, OLE_XPOS_PIXELS x, OLE_YPOS_PIXELS y);" << endl << endl;
         }
-        
+
         for (i = methodoff; i < mo->methodCount(); ++i) {
             const QMetaMethod signal = mo->method(i);
             if (signal.methodType() != QMetaMethod::Signal)
                 continue;
-            
+
             QByteArray signature(signal.signature());
             QByteArray name(signature.left(signature.indexOf('(')));
             signature = signature.mid(name.length() + 1);
@@ -995,33 +994,33 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
 
             QList<QByteArray> parameterTypes(signal.parameterTypes());
             QList<QByteArray> parameterNames(signal.parameterNames());
-            
+
             bool isDefault = defSignal == QLatin1String(name);
             name = renameOverloads(replaceKeyword(name));
             bool ok = true;
-            
+
             QByteArray type = signal.typeName();
             if (!type.isEmpty()) // signals with return value not supported
                 continue;
-            
+
             QByteArray ptype(prototype(parameterTypes, parameterNames, &ok));
             if (!ok)
                 out << "\t/****** Signal parameter uses unsupported datatype" << endl;
-            
+
             out << "\t\t[id(" << id << ')';
             if (isDefault)
                 out << ", uidefault";
             out << "] void " << name << '(' << ptype << ");" << endl;
-            
+
             if (!ok)
                 out << "\t******/" << endl;
             ++id;
         }
         out << "\t};" << endl << endl;
     }
-    
+
     out << "\t[" << endl;
-    
+
     if (qstricmp(mo->classInfo(mo->indexOfClassInfo("Aggregatable")).value(), "no"))
         out << "\t\taggregatable," << endl;
     if (!qstricmp(mo->classInfo(mo->indexOfClassInfo("RegisterObject")).value(), "yes"))
@@ -1052,7 +1051,7 @@ static HRESULT classIDL(QObject *o, const QMetaObject *mo, const QString &classN
     if (hasEvents)
         out << "\t\t[default, source] dispinterface I" << cleanClassName << "Events;" << endl;
     out << "\t};" << endl;
-    
+
     return S_OK;
 }
 
@@ -1068,10 +1067,10 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     }
     QFile file(outfile);
     file.remove();
-    
+
     QString filebase = QString::fromWCharArray(qAxModuleFilename);
     filebase = filebase.left(filebase.lastIndexOf(QLatin1Char('.')));
-    
+
     QString appID = qAxFactory()->appID().toString().toUpper();
     if (QUuid(appID).isNull())
         return 1;
@@ -1081,12 +1080,12 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
         return 2;
     STRIPCB(typeLibID);
     QString typelib = filebase.right(filebase.length() - filebase.lastIndexOf(QLatin1String("\\"))-1);
-    
+
     if (!file.open(QIODevice::WriteOnly))
         return -1;
-    
+
     out.setDevice(&file);
-    
+
     QString version(ver.unicode(), ver.length());
     while (version.count(QLatin1Char('.')) > 1) {
         int lastdot = version.lastIndexOf(QLatin1Char('.'));
@@ -1094,14 +1093,14 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     }
     if (version.isEmpty())
         version = QLatin1String("1.0");
-    
+
     QString idQRect(QUuid(CLSID_QRect).toString());
     STRIPCB(idQRect);
     QString idQSize(QUuid(CLSID_QSize).toString());
     STRIPCB(idQSize);
     QString idQPoint(QUuid(CLSID_QPoint).toString());
     STRIPCB(idQPoint);
-    
+
     out << "/****************************************************************************" << endl;
     out << "** Interface definition generated for ActiveQt project" << endl;
     out << "**" << endl;
@@ -1111,10 +1110,10 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     out << "**" << endl;
     out << "** WARNING! All changes made in this file will be lost!" << endl;
     out << "****************************************************************************/" << endl << endl;
-    
+
     out << "import \"ocidl.idl\";" << endl;
     out << "#include <olectl.h>" << endl << endl;
-    
+
     // dummy application to create widgets
     bool delete_qApp = false;
     if (!qApp) {
@@ -1122,7 +1121,7 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
         (void)new QApplication(argc, 0);
         delete_qApp = true;
     }
-    
+
     out << '[' << endl;
     out << "\tuuid(" << typeLibID << ")," << endl;
     out << "\tversion(" << version << ")," << endl;
@@ -1132,17 +1131,17 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     out << '{' << endl;
     out << "\timportlib(\"stdole32.tlb\");" << endl;
     out << "\timportlib(\"stdole2.tlb\");" << endl << endl;
-    
+
     QStringList keys = qAxFactory()->featureList();
     QStringList::ConstIterator key;
-    
+
     out << "\t/************************************************************************" << endl;
     out << "\t** If this causes a compile error in MIDL you need to upgrade the" << endl;
     out << "\t** Platform SDK you are using. Download the SDK from msdn.microsoft.com" << endl;
     out << "\t** and make sure that both the system and the Visual Studio environment" << endl;
     out << "\t** use the correct files." << endl;
     out << "\t**" << endl;
-    
+
 #if __REQUIRED_RPCNDR_H_VERSION__ < Q_REQUIRED_RPCNDR_H_VERSION
     out << "\t** Required version of MIDL could not be verified. QRect, QSize and QPoint" << endl;
     out << "\t** support needs an updated Platform SDK to be installed." << endl;
@@ -1150,7 +1149,7 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
 #else
     out << "\t************************************************************************/" << endl;
 #endif
-    
+
     out << endl;
     out << "\t[uuid(" << idQRect << ")]" << endl;
     out << "\tstruct QRect {" << endl;
@@ -1159,13 +1158,13 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     out << "\t\tint right;" << endl;
     out << "\t\tint bottom;" << endl;
     out << "\t};" << endl << endl;
-    
+
     out << "\t[uuid(" << idQSize << ")]" << endl;
     out << "\tstruct QSize {" << endl;
     out << "\t\tint width;" << endl;
     out << "\t\tint height;" << endl;
     out << "\t};" << endl << endl;
-    
+
     out << "\t[uuid(" << idQPoint << ")]" << endl;
     out << "\tstruct QPoint {" << endl;
     out << "\t\tint x;" << endl;
@@ -1176,9 +1175,9 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
 #endif
 
     out << endl;
-    
+
     out << "\t/* Forward declaration of classes that might be used as parameters */" << endl << endl;
-    
+
     int res = S_OK;
     for (key = keys.begin(); key != keys.end(); ++key) {
         QByteArray className = (*key).toLatin1();
@@ -1212,7 +1211,7 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
     out << endl;
     if (res != S_OK)
         goto ErrorInClass;
-    
+
     for (key = keys.begin(); key != keys.end(); ++key) {
         QByteArray className = (*key).toLatin1();
         QObject *o = qAxFactory()->createObject(QString::fromLatin1(className.constData()));
@@ -1230,10 +1229,10 @@ extern "C" HRESULT __stdcall DumpIDL(const QString &outfile, const QString &ver)
         if (res != S_OK)
             break;
     }
-    
+
     out << "};" << endl;
     out.flush();
-    
+
 ErrorInClass:
     if (delete_qApp)
         delete qApp;
@@ -1242,7 +1241,7 @@ ErrorInClass:
         file.close();
         file.remove();
     }
-    
+
     return res;
 }
 

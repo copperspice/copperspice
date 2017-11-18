@@ -169,10 +169,11 @@ class Q_CORE_EXPORT QVariant
 
    QVariant(int i);
    QVariant(uint ui);
-   QVariant(qlonglong ll);
-   QVariant(qulonglong ull);
+   QVariant(qint64 ll);
+   QVariant(quint64 ull);
    QVariant(bool b);
    QVariant(double d);
+
    QVariant(float f) {
       d.is_null = false;
       d.type = QMetaType::Float;
@@ -248,8 +249,8 @@ class Q_CORE_EXPORT QVariant
 
    int toInt(bool *ok = 0) const;
    uint toUInt(bool *ok = 0) const;
-   qlonglong toLongLong(bool *ok = 0) const;
-   qulonglong toULongLong(bool *ok = 0) const;
+   qint64 toLongLong(bool *ok = 0) const;
+   quint64 toULongLong(bool *ok = 0) const;
    bool toBool() const;
    double toDouble(bool *ok = 0) const;
    float toFloat(bool *ok = 0) const;
@@ -356,8 +357,8 @@ class Q_CORE_EXPORT QVariant
          double d;
          float f;
          qreal real;
-         qlonglong ll;
-         qulonglong ull;
+         qint64 ll;
+         quint64 ull;
          QObject *o;
          void *ptr;
          PrivateShared *shared;

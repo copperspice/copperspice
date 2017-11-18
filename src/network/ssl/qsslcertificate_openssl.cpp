@@ -80,7 +80,7 @@ QByteArray QSslCertificate::version() const
 {
    QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
    if (d->versionString.isEmpty() && d->x509) {
-      d->versionString = QByteArray::number(qlonglong(q_ASN1_INTEGER_get(d->x509->cert_info->version)) + 1);
+      d->versionString = QByteArray::number(qint64(q_ASN1_INTEGER_get(d->x509->cert_info->version)) + 1);
    }
 
    return d->versionString;
@@ -352,7 +352,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
             QVariantMap result;
             result[QLatin1String("ca")] = basic->ca ? true : false;
             if (basic->pathlen)
-                result[QLatin1String("pathLenConstraint")] = (qlonglong)q_ASN1_INTEGER_get(basic->pathlen);
+                result[QLatin1String("pathLenConstraint")] = (qint64)q_ASN1_INTEGER_get(basic->pathlen);
 
             q_BASIC_CONSTRAINTS_free(basic);
             return result;
@@ -422,7 +422,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 
             // serial
             if (auth_key->serial)
-                result[QLatin1String("serial")] = (qlonglong)q_ASN1_INTEGER_get(auth_key->serial);
+                result[QLatin1String("serial")] = (qint64)q_ASN1_INTEGER_get(auth_key->serial);
 
             q_AUTHORITY_KEYID_free(auth_key);
             return result;

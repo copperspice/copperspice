@@ -86,7 +86,7 @@ class AbstractFloat : public Numeric
 
    ItemType::Ptr type() const override;
    Item toNegated() const override;
-   qulonglong toUnsignedInteger() const override;
+   quint64 toUnsignedInteger() const override;
 
    bool isSigned() const override;
 

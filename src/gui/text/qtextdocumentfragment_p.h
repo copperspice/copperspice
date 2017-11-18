@@ -132,10 +132,6 @@ class QTextHtmlImporter : public QTextHtmlParser
    // either in a block or in regular text
    QStringList namedAnchors;
 
-#ifdef Q_CC_SUN
-   friend struct QTextHtmlImporter::Table;
-#endif
-
    struct TableCellIterator {
       inline TableCellIterator(QTextTable *t = 0) : table(t), row(0), column(0) {}
 

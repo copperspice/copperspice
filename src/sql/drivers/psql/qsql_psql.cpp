@@ -392,8 +392,9 @@ QVariant QPSQLResult::data(int i)
                QVariant retval;
                bool convert;
                double dbl = QString::fromLatin1(val).toDouble(&convert);
+
                if (numericalPrecisionPolicy() == QSql::LowPrecisionInt64) {
-                  retval = (qlonglong)dbl;
+                  retval = (qint64)dbl;
                } else if (numericalPrecisionPolicy() == QSql::LowPrecisionInt32) {
                   retval = (int)dbl;
                } else if (numericalPrecisionPolicy() == QSql::LowPrecisionDouble) {

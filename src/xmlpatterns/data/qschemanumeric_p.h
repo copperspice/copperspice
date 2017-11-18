@@ -65,7 +65,7 @@ class Numeric : public AtomicValue
     * @returns the number as an unsigned integer. If the value is not
     * unsigned, the code asserts and behavior is undefined.
     */
-   virtual qulonglong toUnsignedInteger() const = 0;
+   virtual quint64 toUnsignedInteger() const = 0;
 
    /**
     * @returns the particular number's value as a native representation of

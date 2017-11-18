@@ -48,8 +48,8 @@ Q_DECLARE_METATYPE(QList<short>)
 Q_DECLARE_METATYPE(QList<ushort>)
 Q_DECLARE_METATYPE(QList<int>)
 Q_DECLARE_METATYPE(QList<uint>)
-Q_DECLARE_METATYPE(QList<qlonglong>)
-Q_DECLARE_METATYPE(QList<qulonglong>)
+Q_DECLARE_METATYPE(QList<qint64>)
+Q_DECLARE_METATYPE(QList<quint64>)
 Q_DECLARE_METATYPE(QList<double>)
 
 QT_BEGIN_NAMESPACE
@@ -123,8 +123,8 @@ void QDBusMetaTypeId::init()
         qDBusRegisterMetaType<QList<ushort> >();
         qDBusRegisterMetaType<QList<int> >();
         qDBusRegisterMetaType<QList<uint> >();
-        qDBusRegisterMetaType<QList<qlonglong> >();
-        qDBusRegisterMetaType<QList<qulonglong> >();
+        qDBusRegisterMetaType<QList<qint64> >();
+        qDBusRegisterMetaType<QList<quint64> >();
         qDBusRegisterMetaType<QList<double> >();
         qDBusRegisterMetaType<QList<QDBusObjectPath> >();
         qDBusRegisterMetaType<QList<QDBusSignature> >();
@@ -308,10 +308,10 @@ int QDBusMetaType::signatureToType(const char *signature)
 
     case DBUS_TYPE_UINT16:
         return QMetaType::UShort;
-        
+
     case DBUS_TYPE_INT32:
         return QVariant::Int;
-        
+
     case DBUS_TYPE_UINT32:
         return QVariant::UInt;
 
@@ -365,7 +365,7 @@ int QDBusMetaType::signatureToType(const char *signature)
 
 /*!
     \fn QDBusMetaType::typeToSignature(int type)
-    \internal 
+    \internal
 
     Returns the D-Bus signature equivalent to the supplied meta type id \a type.
 

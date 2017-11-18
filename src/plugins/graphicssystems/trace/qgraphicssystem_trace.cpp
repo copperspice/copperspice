@@ -46,13 +46,11 @@ private:
     QPaintBuffer *buffer;
     QList<QRegion> updates;
 
-    qulonglong winId;
+    quint64 winId;
 };
 
 QTraceWindowSurface::QTraceWindowSurface(QWidget *widget)
-    : QRasterWindowSurface(widget)
-    , buffer(0)
-    , winId(0)
+    : QRasterWindowSurface(widget), buffer(0), winId(0)
 {
 }
 
@@ -102,7 +100,7 @@ void QTraceWindowSurface::endPaint(const QRegion &rgn)
     buffer->draw(&p, buffer->numFrames()-1);
     p.end();
 
-    winId = (qulonglong)window()->winId();
+    winId = (quint64)window()->winId();
 
     updates << rgn;
 

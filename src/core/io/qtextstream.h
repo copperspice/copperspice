@@ -41,7 +41,7 @@ class QTextCodec;
 class QTextDecoder;
 class QTextStreamPrivate;
 
-class Q_CORE_EXPORT QTextStream                                
+class Q_CORE_EXPORT QTextStream
 {
    Q_DECLARE_PRIVATE(QTextStream)
 
@@ -144,8 +144,8 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator>>(unsigned int &i);
    QTextStream &operator>>(signed long &i);
    QTextStream &operator>>(unsigned long &i);
-   QTextStream &operator>>(qlonglong &i);
-   QTextStream &operator>>(qulonglong &i);
+   QTextStream &operator>>(qint64 &i);
+   QTextStream &operator>>(quint64 &i);
    QTextStream &operator>>(float &f);
    QTextStream &operator>>(double &f);
    QTextStream &operator>>(QString &s);
@@ -161,8 +161,8 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(unsigned int i);
    QTextStream &operator<<(signed long i);
    QTextStream &operator<<(unsigned long i);
-   QTextStream &operator<<(qlonglong i);
-   QTextStream &operator<<(qulonglong i);
+   QTextStream &operator<<(qint64 i);
+   QTextStream &operator<<(quint64 i);
    QTextStream &operator<<(float f);
    QTextStream &operator<<(double f);
    QTextStream &operator<<(const QString &s);

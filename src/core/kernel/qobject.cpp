@@ -888,7 +888,7 @@ QDebug operator<<(QDebug debug, const QObject *object)
    if (object) {
 
       msg =  QByteArray(object->metaObject()->className()) + "(";
-      msg += QByteArray::number(static_cast<qulonglong>(object - static_cast<const QObject *>(0)), 16);
+      msg += QByteArray::number(static_cast<quint64>(object - static_cast<const QObject *>(0)), 16);
 
       if (! object->objectName().isEmpty())  {
          msg += ", name = ";

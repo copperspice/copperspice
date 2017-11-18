@@ -530,7 +530,7 @@ class DerivedInteger : public Numeric
       return false;
    }
 
-   qulonglong toUnsignedInteger() const override {
+   quint64 toUnsignedInteger() const override {
       switch (DerivedType) {
          /* Fallthrough all these. */
          case TypeByte:

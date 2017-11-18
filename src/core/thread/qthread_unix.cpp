@@ -82,7 +82,8 @@ enum { ThreadPriorityResetFlag = 0x80000000 };
 #if defined(Q_OS_LINUX) && defined(__GLIBC__) && (defined(Q_CC_GNU) || defined(Q_CC_INTEL))
 #define HAVE_TLS
 #endif
-#if defined(Q_CC_XLC) || defined (Q_CC_SUN)
+
+#if defined(Q_CC_XLC)
 #define HAVE_TLS
 #endif
 

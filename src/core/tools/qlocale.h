@@ -46,8 +46,10 @@ class Q_CORE_EXPORT QSystemLocale
 
    struct CurrencyToStringArgument {
       CurrencyToStringArgument() { }
+
       CurrencyToStringArgument(const QVariant &v, const QString &s)
          : value(v), symbol(s) { }
+
       QVariant value;
       QString symbol;
    };
@@ -82,7 +84,7 @@ class Q_CORE_EXPORT QSystemLocale
       FirstDayOfWeek, // Qt::DayOfWeek
       Weekdays, // QList<Qt::DayOfWeek>
       CurrencySymbol, // QString in: CurrencyToStringArgument
-      CurrencyToString, // QString in: qlonglong, qulonglong or double
+      CurrencyToString, // QString in: qint64, quint64 or double
       UILanguages, // QStringList
       StringToStandardQuotation, // QString in: QStringRef to quote
       StringToAlternateQuotation, // QString in: QStringRef to quote
@@ -108,7 +110,7 @@ struct QLocalePrivate;
 class Q_CORE_EXPORT QLocale
 {
    CORE_CS_GADGET(QLocale)
- 
+
    friend class QString;
    friend class QByteArray;
    friend class QIntValidator;
@@ -693,13 +695,13 @@ class Q_CORE_EXPORT QLocale
    ushort toUShort(const QString &s, bool *ok = 0, int base = 0) const;
    int toInt(const QString &s, bool *ok = 0, int base = 0) const;
    uint toUInt(const QString &s, bool *ok = 0, int base = 0) const;
-   qlonglong toLongLong(const QString &s, bool *ok = 0, int base = 0) const;
-   qlonglong toULongLong(const QString &s, bool *ok = 0, int base = 0) const;
+   qint64 toLongLong(const QString &s, bool *ok = 0, int base = 0) const;
+   quint64 toULongLong(const QString &s, bool *ok = 0, int base = 0) const;
    float toFloat(const QString &s, bool *ok = 0) const;
    double toDouble(const QString &s, bool *ok = 0) const;
 
-   QString toString(qlonglong i) const;
-   QString toString(qulonglong i) const;
+   QString toString(qint64 i) const;
+   QString toString(quint64 i) const;
    inline QString toString(short i) const;
    inline QString toString(ushort i) const;
    inline QString toString(int i) const;
@@ -755,8 +757,8 @@ class Q_CORE_EXPORT QLocale
    QString toLower(const QString &str) const;
 
    QString currencySymbol(CurrencySymbolFormat = CurrencySymbol) const;
-   QString toCurrencyString(qlonglong, const QString &symbol = QString()) const;
-   QString toCurrencyString(qulonglong, const QString &symbol = QString()) const;
+   QString toCurrencyString(qint64, const QString &symbol = QString()) const;
+   QString toCurrencyString(quint64, const QString &symbol = QString()) const;
    inline QString toCurrencyString(short, const QString &symbol = QString()) const;
    inline QString toCurrencyString(ushort, const QString &symbol = QString()) const;
    inline QString toCurrencyString(int, const QString &symbol = QString()) const;
@@ -815,19 +817,19 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions)
 
 inline QString QLocale::toString(short i) const
 {
-   return toString(qlonglong(i));
+   return toString(qint64(i));
 }
 inline QString QLocale::toString(ushort i) const
 {
-   return toString(qulonglong(i));
+   return toString(quint64(i));
 }
 inline QString QLocale::toString(int i) const
 {
-   return toString(qlonglong(i));
+   return toString(qint64(i));
 }
 inline QString QLocale::toString(uint i) const
 {
-   return toString(qulonglong(i));
+   return toString(quint64(i));
 }
 inline QString QLocale::toString(float i, char f, int prec) const
 {
@@ -846,22 +848,22 @@ inline bool QLocale::operator!=(const QLocale &other) const
 
 inline QString QLocale::toCurrencyString(short i, const QString &symbol) const
 {
-   return toCurrencyString(qlonglong(i), symbol);
+   return toCurrencyString(qint64(i), symbol);
 }
 
 inline QString QLocale::toCurrencyString(ushort i, const QString &symbol) const
 {
-   return toCurrencyString(qulonglong(i), symbol);
+   return toCurrencyString(quint64(i), symbol);
 }
 
 inline QString QLocale::toCurrencyString(int i, const QString &symbol) const
 {
-   return toCurrencyString(qlonglong(i), symbol);
+   return toCurrencyString(qint64(i), symbol);
 }
 
 inline QString QLocale::toCurrencyString(uint i, const QString &symbol) const
 {
-   return toCurrencyString(qulonglong(i), symbol);
+   return toCurrencyString(quint64(i), symbol);
 }
 
 inline QString QLocale::toCurrencyString(float i, const QString &symbol) const

@@ -152,7 +152,7 @@ xsDecimal Decimal::toDecimal() const
    return m_value;
 }
 
-qulonglong Decimal::toUnsignedInteger() const
+quint64 Decimal::toUnsignedInteger() const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;

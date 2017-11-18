@@ -10304,7 +10304,7 @@ void DomProperty::setElementSizeF(DomSizeF *a)
    m_sizeF = a;
 }
 
-void DomProperty::setElementLongLong(qlonglong a)
+void DomProperty::setElementLongLong(qint64 a)
 {
    clear(false);
    m_kind = LongLong;
@@ -10346,7 +10346,7 @@ void DomProperty::setElementUInt(uint a)
    m_UInt = a;
 }
 
-void DomProperty::setElementULongLong(qulonglong a)
+void DomProperty::setElementULongLong(quint64 a)
 {
    clear(false);
    m_kind = ULongLong;

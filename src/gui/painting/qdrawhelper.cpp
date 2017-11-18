@@ -3338,11 +3338,8 @@ enum SpanMethod {
    CallbackSpans
 };
 
-#if !defined(Q_CC_SUN)
-static
-#endif
-void drawBufferSpan(QSpanData *data, const uint *buffer, int bufsize,
-                    int x, int y, int length, uint const_alpha)
+
+static void drawBufferSpan(QSpanData *data, const uint *buffer, int bufsize, int x, int y, int length, uint const_alpha)
 {
 #if defined (Q_WS_QWS) && !defined(QT_NO_RASTERCALLBACKS)
    data->rasterEngine->drawBufferSpan(buffer, bufsize, x, y, length, const_alpha);
@@ -3357,10 +3354,7 @@ void drawBufferSpan(QSpanData *data, const uint *buffer, int bufsize,
 #endif
 }
 
-#if !defined(Q_CC_SUN)
-static
-#endif
-void blend_color_generic(int count, const QSpan *spans, void *userData)
+static void blend_color_generic(int count, const QSpan *spans, void *userData)
 {
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    uint buffer[buffer_size];

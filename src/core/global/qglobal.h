@@ -388,9 +388,6 @@ typedef uint32_t             quint32;
 typedef long long            qint64;
 typedef unsigned long long   quint64;
 
-typedef qint64               qlonglong;      // use qint64 instead, then remove this line
-typedef quint64              qulonglong;
-
 #define Q_INT64_C(c)         static_cast<int64_t>(c ## LL)
 #define Q_UINT64_C(c)        static_cast<uint64_t>(c ## ULL)
 

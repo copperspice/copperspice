@@ -293,7 +293,7 @@ bool AbstractFloat<isDouble>::isSigned() const
 }
 
 template <const bool isDouble>
-qulonglong AbstractFloat<isDouble>::toUnsignedInteger() const
+quint64 AbstractFloat<isDouble>::toUnsignedInteger() const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;

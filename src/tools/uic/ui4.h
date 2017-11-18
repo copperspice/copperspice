@@ -4711,10 +4711,10 @@ class QDESIGNER_UILIB_EXPORT DomProperty
    DomSizeF *takeElementSizeF();
    void setElementSizeF(DomSizeF *a);
 
-   inline qlonglong elementLongLong() const {
+   inline qint64 elementLongLong() const {
       return m_longLong;
    }
-   void setElementLongLong(qlonglong a);
+   void setElementLongLong(qint64 a);
 
    inline DomChar *elementChar() const {
       return m_char;
@@ -4733,10 +4733,10 @@ class QDESIGNER_UILIB_EXPORT DomProperty
    }
    void setElementUInt(uint a);
 
-   inline qulonglong elementULongLong() const {
+   inline quint64 elementULongLong() const {
       return m_uLongLong;
    }
-   void setElementULongLong(qulonglong a);
+   void setElementULongLong(quint64 a);
 
    inline DomBrush *elementBrush() const {
       return m_brush;
@@ -4784,11 +4784,11 @@ class QDESIGNER_UILIB_EXPORT DomProperty
    DomPointF *m_pointF;
    DomRectF *m_rectF;
    DomSizeF *m_sizeF;
-   qlonglong m_longLong;
+   qint64 m_longLong;
    DomChar *m_char;
    DomUrl *m_url;
    uint m_UInt;
-   qulonglong m_uLongLong;
+   quint64 m_uLongLong;
    DomBrush *m_brush;
 
    DomProperty(const DomProperty &other);

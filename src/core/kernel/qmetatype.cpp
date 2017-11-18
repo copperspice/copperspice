@@ -65,13 +65,13 @@ static const struct {
 types[] = {
 
    // core types
-   QT_ADD_STATIC_METATYPE("void", QMetaType::Void),
-   QT_ADD_STATIC_METATYPE("bool", QMetaType::Bool),
-   QT_ADD_STATIC_METATYPE("int", QMetaType::Int),
-   QT_ADD_STATIC_METATYPE("uint", QMetaType::UInt),
-   QT_ADD_STATIC_METATYPE("qlonglong", QMetaType::LongLong),
-   QT_ADD_STATIC_METATYPE("qulonglong", QMetaType::ULongLong),
-   QT_ADD_STATIC_METATYPE("double", QMetaType::Double),
+   QT_ADD_STATIC_METATYPE("void",    QMetaType::Void),
+   QT_ADD_STATIC_METATYPE("bool",    QMetaType::Bool),
+   QT_ADD_STATIC_METATYPE("int",     QMetaType::Int),
+   QT_ADD_STATIC_METATYPE("uint",    QMetaType::UInt),
+   QT_ADD_STATIC_METATYPE("qint64",  QMetaType::LongLong),
+   QT_ADD_STATIC_METATYPE("quint64", QMetaType::ULongLong),
+   QT_ADD_STATIC_METATYPE("double",  QMetaType::Double),
 
    QT_ADD_STATIC_METATYPE("long", QMetaType::Long),
    QT_ADD_STATIC_METATYPE("short", QMetaType::Short),
@@ -406,10 +406,10 @@ void *QMetaType::construct(int type, const void *copy)
             return new uint(*static_cast<const uint *>(copy));
 
          case QMetaType::LongLong:
-            return new qlonglong(*static_cast<const qlonglong *>(copy));
+            return new qint64(*static_cast<const qint64 *>(copy));
 
          case QMetaType::ULongLong:
-            return new qulonglong(*static_cast<const qulonglong *>(copy));
+            return new quint64(*static_cast<const quint64 *>(copy));
 
          case QMetaType::UShort:
             return new ushort(*static_cast<const ushort *>(copy));
@@ -555,10 +555,10 @@ void *QMetaType::construct(int type, const void *copy)
             return new uint;
 
          case QMetaType::LongLong:
-            return new qlonglong;
+            return new qint64;
 
          case QMetaType::ULongLong:
-            return new qulonglong;
+            return new quint64;
 
          case QMetaType::UShort:
             return new ushort;
@@ -726,21 +726,25 @@ void QMetaType::destroy(int type, void *data)
          break;
 
       case QMetaType::LongLong:
-         delete static_cast<qlonglong *>(data);
+         delete static_cast<qint64 *>(data);
          break;
 
       case QMetaType::ULongLong:
-         delete static_cast<qulonglong *>(data);
+         delete static_cast<quint64 *>(data);
          break;
+
       case QMetaType::UInt:
          delete static_cast<uint *>(data);
          break;
+
       case QMetaType::UShort:
          delete static_cast<ushort *>(data);
          break;
+
       case QMetaType::UChar:
          delete static_cast<uchar *>(data);
          break;
+
       case QMetaType::Bool:
          delete static_cast<bool *>(data);
          break;
@@ -1004,7 +1008,7 @@ bool QMetaType::save(QDataStream &stream, int type, const void *data)
          break;
 
       case QMetaType::Long:
-         stream << qlonglong(*static_cast<const long *>(data));
+         stream << qint64(*static_cast<const long *>(data));
          break;
 
       case QMetaType::Int:
@@ -1021,7 +1025,7 @@ bool QMetaType::save(QDataStream &stream, int type, const void *data)
          break;
 
       case QMetaType::ULong:
-         stream << qulonglong(*static_cast<const ulong *>(data));
+         stream << quint64(*static_cast<const ulong *>(data));
          break;
 
       case QMetaType::UInt:
@@ -1029,11 +1033,11 @@ bool QMetaType::save(QDataStream &stream, int type, const void *data)
          break;
 
       case QMetaType::LongLong:
-         stream << *static_cast<const qlonglong *>(data);
+         stream << *static_cast<const qint64 *>(data);
          break;
 
       case QMetaType::ULongLong:
-         stream << *static_cast<const qulonglong *>(data);
+         stream << *static_cast<const quint64 *>(data);
          break;
 
       case QMetaType::UShort:
@@ -1245,7 +1249,7 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
          return false;
 
       case QMetaType::Long: {
-         qlonglong l;
+         qint64 l;
          stream >> l;
          *static_cast<long *>(data) = long(l);
          break;
@@ -1254,6 +1258,7 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
       case QMetaType::Int:
          stream >> *static_cast<int *>(data);
          break;
+
       case QMetaType::Short:
          stream >> *static_cast<short *>(data);
          break;
@@ -1264,7 +1269,7 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
          break;
 
       case QMetaType::ULong: {
-         qulonglong ul;
+         quint64 ul;
          stream >> ul;
          *static_cast<ulong *>(data) = ulong(ul);
          break;
@@ -1275,11 +1280,11 @@ bool QMetaType::load(QDataStream &stream, int type, void *data)
          break;
 
       case QMetaType::LongLong:
-         stream >> *static_cast<qlonglong *>(data);
+         stream >> *static_cast<qint64 *>(data);
          break;
 
       case QMetaType::ULongLong:
-         stream >> *static_cast<qulonglong *>(data);
+         stream >> *static_cast<quint64 *>(data);
          break;
 
       case QMetaType::UShort:

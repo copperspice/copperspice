@@ -81,7 +81,7 @@ static QString yyComment;
 static QString yyString;
 
 
-static qlonglong yyInteger;
+static qint64 yyInteger;
 static int yyParenDepth;
 static int yyLineNo;
 static int yyCurLineNo;

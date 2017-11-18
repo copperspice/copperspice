@@ -2949,9 +2949,9 @@ JSC::JSValue QScriptEnginePrivate::create(JSC::ExecState *exec, int type, const 
          case QMetaType::UInt:
             return JSC::jsNumber(exec, *reinterpret_cast<const uint *>(ptr));
          case QMetaType::LongLong:
-            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const qlonglong *>(ptr)));
+            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const qint64 *>(ptr)));
          case QMetaType::ULongLong:
-            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const qulonglong *>(ptr)));
+            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const quint64 *>(ptr)));
          case QMetaType::Double:
             return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const double *>(ptr)));
          case QMetaType::QString:
@@ -3060,10 +3060,10 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
          *reinterpret_cast<uint *>(ptr) = toUInt32(exec, value);
          return true;
       case QMetaType::LongLong:
-         *reinterpret_cast<qlonglong *>(ptr) = qlonglong(toInteger(exec, value));
+         *reinterpret_cast<qint64 *>(ptr) = qint64(toInteger(exec, value));
          return true;
       case QMetaType::ULongLong:
-         *reinterpret_cast<qulonglong *>(ptr) = qulonglong(toInteger(exec, value));
+         *reinterpret_cast<quint64 *>(ptr) = quint64(toInteger(exec, value));
          return true;
       case QMetaType::Double:
          *reinterpret_cast<double *>(ptr) = toNumber(exec, value);
@@ -3253,10 +3253,10 @@ bool QScriptEnginePrivate::convertNumber(qsreal value, int type, void *ptr)
          *reinterpret_cast<uint *>(ptr) = QScript::ToUInt32(value);
          return true;
       case QMetaType::LongLong:
-         *reinterpret_cast<qlonglong *>(ptr) = qlonglong(QScript::ToInteger(value));
+         *reinterpret_cast<qint64 *>(ptr) = qint64(QScript::ToInteger(value));
          return true;
       case QMetaType::ULongLong:
-         *reinterpret_cast<qulonglong *>(ptr) = qulonglong(QScript::ToInteger(value));
+         *reinterpret_cast<quint64 *>(ptr) = quint64(QScript::ToInteger(value));
          return true;
       case QMetaType::Double:
          *reinterpret_cast<double *>(ptr) = value;
@@ -3301,10 +3301,10 @@ bool QScriptEnginePrivate::convertString(const QString &value, int type, void *p
          *reinterpret_cast<uint *>(ptr) = QScript::ToUInt32(value);
          return true;
       case QMetaType::LongLong:
-         *reinterpret_cast<qlonglong *>(ptr) = qlonglong(QScript::ToInteger(value));
+         *reinterpret_cast<qint64 *>(ptr) = qint64(QScript::ToInteger(value));
          return true;
       case QMetaType::ULongLong:
-         *reinterpret_cast<qulonglong *>(ptr) = qulonglong(QScript::ToInteger(value));
+         *reinterpret_cast<quint64 *>(ptr) = quint64(QScript::ToInteger(value));
          return true;
       case QMetaType::Double:
          *reinterpret_cast<double *>(ptr) = QScript::ToNumber(value);

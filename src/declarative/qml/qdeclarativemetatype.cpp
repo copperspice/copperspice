@@ -1269,10 +1269,10 @@ bool QDeclarativeMetaType::copy(int type, void *data, const void *copy)
             *static_cast<uint *>(data) = *static_cast<const uint *>(copy);
             return true;
          case QMetaType::LongLong:
-            *static_cast<qlonglong *>(data) = *static_cast<const qlonglong *>(copy);
+            *static_cast<qint64 *>(data) = *static_cast<const qint64 *>(copy);
             return true;
          case QMetaType::ULongLong:
-            *static_cast<qulonglong *>(data) = *static_cast<const qulonglong *>(copy);
+            *static_cast<quint64 *>(data) = *static_cast<const quint64 *>(copy);
             return true;
          case QMetaType::UShort:
             *static_cast<ushort *>(data) = *static_cast<const ushort *>(copy);
@@ -1470,10 +1470,10 @@ bool QDeclarativeMetaType::copy(int type, void *data, const void *copy)
             *static_cast<uint *>(data) = uint(0);
             return true;
          case QMetaType::LongLong:
-            *static_cast<qlonglong *>(data) = qlonglong(0);
+            *static_cast<qint64 *>(data) = qint64(0);
             return true;
          case QMetaType::ULongLong:
-            *static_cast<qulonglong *>(data) = qulonglong(0);
+            *static_cast<quint64 *>(data) = quint64(0);
             return true;
          case QMetaType::UShort:
             *static_cast<ushort *>(data) = ushort(0);

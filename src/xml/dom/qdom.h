@@ -490,14 +490,17 @@ class Q_XML_EXPORT QDomElement : public QDomNode
    // DOM functions
    QString attribute(const QString &name, const QString &defValue = QString() ) const;
    void setAttribute(const QString &name, const QString &value);
-   void setAttribute(const QString &name, qlonglong value);
-   void setAttribute(const QString &name, qulonglong value);
+   void setAttribute(const QString &name, qint64 value);
+   void setAttribute(const QString &name, quint64 value);
+
    inline void setAttribute(const QString &name, int value) {
-      setAttribute(name, qlonglong(value));
+      setAttribute(name, qint64(value));
    }
+
    inline void setAttribute(const QString &name, uint value) {
-      setAttribute(name, qulonglong(value));
+      setAttribute(name, quint64(value));
    }
+
    void setAttribute(const QString &name, float value);
    void setAttribute(const QString &name, double value);
    void removeAttribute(const QString &name);
@@ -509,16 +512,20 @@ class Q_XML_EXPORT QDomElement : public QDomNode
 
    QString attributeNS(const QString nsURI, const QString &localName, const QString &defValue = QString()) const;
    void setAttributeNS(const QString nsURI, const QString &qName, const QString &value);
+
    inline void setAttributeNS(const QString nsURI, const QString &qName, int value) {
-      setAttributeNS(nsURI, qName, qlonglong(value));
+      setAttributeNS(nsURI, qName, qint64(value));
    }
+
    inline void setAttributeNS(const QString nsURI, const QString &qName, uint value) {
-      setAttributeNS(nsURI, qName, qulonglong(value));
+      setAttributeNS(nsURI, qName, quint64(value));
    }
-   void setAttributeNS(const QString nsURI, const QString &qName, qlonglong value);
-   void setAttributeNS(const QString nsURI, const QString &qName, qulonglong value);
+
+   void setAttributeNS(const QString nsURI, const QString &qName, qint64 value);
+   void setAttributeNS(const QString nsURI, const QString &qName, quint64 value);
    void setAttributeNS(const QString nsURI, const QString &qName, double value);
    void removeAttributeNS(const QString &nsURI, const QString &localName);
+
    QDomAttr attributeNodeNS(const QString &nsURI, const QString &localName);
    QDomAttr setAttributeNodeNS(const QDomAttr &newAttr);
    QDomNodeList elementsByTagNameNS(const QString &nsURI, const QString &localName) const;

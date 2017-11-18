@@ -4356,7 +4356,7 @@ float QString::toFloat(bool *ok) const
 /*!
     \overload
 */
-QString &QString::setNum(qlonglong n, int base)
+QString &QString::setNum(qint64 n, int base)
 {
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
@@ -4373,7 +4373,7 @@ QString &QString::setNum(qlonglong n, int base)
 /*!
     \overload
 */
-QString &QString::setNum(qulonglong n, int base)
+QString &QString::setNum(quint64 n, int base)
 {
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
@@ -4519,7 +4519,7 @@ QString QString::number(uint n, int base)
 /*!
     \overload
 */
-QString QString::number(qlonglong n, int base)
+QString QString::number(qint64 n, int base)
 {
    QString s;
    s.setNum(n, base);
@@ -4529,7 +4529,7 @@ QString QString::number(qlonglong n, int base)
 /*!
     \overload
 */
-QString QString::number(qulonglong n, int base)
+QString QString::number(quint64 n, int base)
 {
    QString s;
    s.setNum(n, base);
@@ -5145,7 +5145,7 @@ QString QString::arg(const QString &a, int fieldWidth, QChar fillChar) const
   used. For negative numbers, zero padding might appear before the
   minus sign.
 */
-QString QString::arg(qlonglong a, int fieldWidth, int base, QChar fillChar) const
+QString QString::arg(qint64 a, int fieldWidth, int base, QChar fillChar) const
 {
    ArgEscapeData d = findArgEscapes(*this);
 
@@ -5194,7 +5194,7 @@ QString QString::arg(qlonglong a, int fieldWidth, int base, QChar fillChar) cons
   used. For negative numbers, zero padding might appear before the
   minus sign.
 */
-QString QString::arg(qulonglong a, int fieldWidth, int base, QChar fillChar) const
+QString QString::arg(quint64 a, int fieldWidth, int base, QChar fillChar) const
 {
    ArgEscapeData d = findArgEscapes(*this);
 

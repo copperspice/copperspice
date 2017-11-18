@@ -80,12 +80,12 @@ inline void QDBusMarshaller::append(uint arg)
     qIterAppend(&iterator, ba, DBUS_TYPE_UINT32, &arg);
 }
 
-inline void QDBusMarshaller::append(qlonglong arg)
+inline void QDBusMarshaller::append(qint64 arg)
 {
     qIterAppend(&iterator, ba, DBUS_TYPE_INT64, &arg);
 }
 
-inline void QDBusMarshaller::append(qulonglong arg)
+inline void QDBusMarshaller::append(quint64 arg)
 {
     qIterAppend(&iterator, ba, DBUS_TYPE_UINT64, &arg);
 }
@@ -497,7 +497,7 @@ bool QDBusMarshaller::appendCrossMarshalling(QDBusDemarshaller *demarshaller)
         // do exactly like the D-BUS docs suggest
         // (see apidocs for q_dbus_message_iter_get_basic)
 
-        qlonglong value;
+        qint64 value;
         q_dbus_message_iter_get_basic(&demarshaller->iterator, &value);
         q_dbus_message_iter_next(&demarshaller->iterator);
         q_dbus_message_iter_append_basic(&iterator, code, &value);

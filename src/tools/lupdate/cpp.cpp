@@ -313,7 +313,7 @@ class CppParser
    bool yyCodecIsUtf8;
    bool yyForceUtf8;
    QString yyWord;
-   qlonglong yyInteger;
+   qint64 yyInteger;
    QStack<IfdefState> yyIfdefStack;
    int yyBracketDepth;
    int yyBraceDepth;

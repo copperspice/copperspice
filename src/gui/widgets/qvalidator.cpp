@@ -99,7 +99,7 @@ QIntValidator::~QIntValidator()
    // nothing
 }
 
-static int numDigits(qlonglong n)
+static int numDigits(qint64 n)
 {
    if (n == 0) {
       return 1;
@@ -107,9 +107,9 @@ static int numDigits(qlonglong n)
    return (int)log10(double(n)) + 1;
 }
 
-static qlonglong pow10(int exp)
+static qint64 pow10(int exp)
 {
-   qlonglong result = 1;
+   qint64 result = 1;
    for (int i = 0; i < exp; ++i) {
       result *= 10;
    }
@@ -143,7 +143,7 @@ QValidator::State QIntValidator::validate(QString &input, int &) const
    }
 
    bool ok, overflow;
-   qlonglong entered = QLocalePrivate::bytearrayToLongLong(buff.constData(), 10, &ok, &overflow);
+   qint64 entered = QLocalePrivate::bytearrayToLongLong(buff.constData(), 10, &ok, &overflow);
    if (overflow || !ok) {
       return Invalid;
    }
@@ -173,7 +173,7 @@ void QIntValidator::fixup(QString &input) const
       }
    }
    bool ok, overflow;
-   qlonglong entered = QLocalePrivate::bytearrayToLongLong(buff.constData(), 10, &ok, &overflow);
+   qint64 entered = QLocalePrivate::bytearrayToLongLong(buff.constData(), 10, &ok, &overflow);
    if (ok && !overflow) {
       input = locale().toString(entered);
    }
@@ -320,7 +320,7 @@ QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QL
    if (notation == QDoubleValidator::StandardNotation) {
       double max = qMax(qAbs(q->b), qAbs(q->t));
       if (max < LLONG_MAX) {
-         qlonglong n = pow10(numDigits(qlonglong(max))) - 1;
+         qint64 n = pow10(numDigits(qint64(max))) - 1;
          if (qAbs(i) > n) {
             return QValidator::Invalid;
          }

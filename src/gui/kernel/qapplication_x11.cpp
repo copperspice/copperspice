@@ -5832,7 +5832,7 @@ static void sm_performSaveYourself(QSessionManagerPrivate *smd)
    // generate a new session key
    timeval tv;
    gettimeofday(&tv, 0);
-   smd->sessionKey  = QString::number(qulonglong(tv.tv_sec)) + QLatin1Char('_') + QString::number(qulonglong(tv.tv_usec));
+   smd->sessionKey  = QString::number(quint64(tv.tv_sec)) + QLatin1Char('_') + QString::number(quint64(tv.tv_usec));
 
    QStringList arguments = qApp->arguments();
    QString argument0 = arguments.isEmpty() ? qApp->applicationFilePath() : arguments.at(0);

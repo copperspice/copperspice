@@ -5057,7 +5057,7 @@ void QDomElement::setAttribute(const QString &name, const QString &value)
    IMPL->setAttribute(name, value);
 }
 
-void QDomElement::setAttribute(const QString &name, qlonglong value)
+void QDomElement::setAttribute(const QString &name, qint64 value)
 {
    if (!impl) {
       return;
@@ -5067,7 +5067,7 @@ void QDomElement::setAttribute(const QString &name, qlonglong value)
    IMPL->setAttribute(name, x);
 }
 
-void QDomElement::setAttribute(const QString &name, qulonglong value)
+void QDomElement::setAttribute(const QString &name, quint64 value)
 {
    if (!impl) {
       return;
@@ -5225,7 +5225,7 @@ void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, cons
 }
 
 
-void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, qlonglong value)
+void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, qint64 value)
 {
    if (!impl) {
       return;
@@ -5238,7 +5238,7 @@ void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, qlon
 /*!
     \overload
 */
-void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, qulonglong value)
+void QDomElement::setAttributeNS(const QString nsURI, const QString &qName, quint64 value)
 {
    if (!impl) {
       return;

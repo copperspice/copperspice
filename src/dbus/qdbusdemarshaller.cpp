@@ -96,14 +96,14 @@ inline uint QDBusDemarshaller::toUInt()
     return qIterGet<dbus_uint32_t>(&iterator);
 }
 
-inline qlonglong QDBusDemarshaller::toLongLong()
+inline qint64 QDBusDemarshaller::toLongLong()
 {
-    return qIterGet<qlonglong>(&iterator);
+    return qIterGet<qint64>(&iterator);
 }
 
-inline qulonglong QDBusDemarshaller::toULongLong()
+inline quint64 QDBusDemarshaller::toULongLong()
 {
-    return qIterGet<qulonglong>(&iterator);
+    return qIterGet<quint64>(&iterator);
 }
 
 inline double QDBusDemarshaller::toDouble()

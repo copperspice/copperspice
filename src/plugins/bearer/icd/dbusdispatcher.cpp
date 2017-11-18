@@ -341,14 +341,14 @@ static QVariant getVariantFromDBusMessage(DBusMessageIter *iter) {
         case DBUS_TYPE_INT64:
         {
             dbus_message_iter_get_basic(iter, &int64_data);
-            QVariant variant((qlonglong)int64_data);
+            QVariant variant((qint64)int64_data);
             return variant;
         }
 
         case DBUS_TYPE_UINT64:
         {
             dbus_message_iter_get_basic(iter, &uint64_data);
-            QVariant variant((qulonglong)uint64_data);
+            QVariant variant((quint64)uint64_data);
             return variant;
         }
 

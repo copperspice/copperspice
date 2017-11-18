@@ -42,10 +42,8 @@
 #   define NEEDS_VOLATILE
 #endif
 
-QT_BEGIN_NAMESPACE
-
-QString qulltoa(qulonglong l, int base, const QChar _zero);
-QString qlltoa(qlonglong l, int base, const QChar zero);
+QString qulltoa(quint64 l, int base, const QChar _zero);
+QString qlltoa(qint64 l, int base, const QChar zero);
 
 enum PrecisionMode {
    PMDecimalDigits =       0x01,
@@ -79,9 +77,8 @@ bool removeGroupSeparators(QLocalePrivate::CharBuff *num);
 
 Q_CORE_EXPORT char *qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **digits_str);
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
-qlonglong qstrtoll(const char *nptr, const char **endptr, int base, bool *ok);
-qulonglong qstrtoull(const char *nptr, const char **endptr, int base, bool *ok);
+qint64 qstrtoll(const char *nptr, const char **endptr, int base, bool *ok);
+quint64 qstrtoull(const char *nptr, const char **endptr, int base, bool *ok);
 
-QT_END_NAMESPACE
 
 #endif

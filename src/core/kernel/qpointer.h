@@ -79,9 +79,8 @@ class QPointer
       wp.clear();
    }
 };
-template <class T> Q_DECLARE_TYPEINFO_BODY(QPointer<T>, Q_MOVABLE_TYPE);
 
-#if (!defined(Q_CC_SUN) || (__SUNPRO_CC >= 0x580)) // ambiguity between const T * and T *
+template <class T> Q_DECLARE_TYPEINFO_BODY(QPointer<T>, Q_MOVABLE_TYPE);
 
 template <class T>
 inline bool operator==(const T *o, const QPointer<T> &p)
@@ -94,22 +93,6 @@ inline bool operator==(const QPointer<T> &p, const T *o)
 {
    return p.operator->() == o;
 }
-
-#else
-
-template<class T>
-inline bool operator==(const void *o, const QPointer<T> &p)
-{
-   return o == p.operator->();
-}
-
-template<class T>
-inline bool operator==(const QPointer<T> &p, const void *o)
-{
-   return p.operator->() == o;
-}
-
-#endif
 
 template <class T>
 inline bool operator==(T *o, const QPointer<T> &p)
@@ -129,9 +112,6 @@ inline bool operator==(const QPointer<T> &p1, const QPointer<T> &p2)
    return p1.operator->() == p2.operator->();
 }
 
-
-#if (!defined(Q_CC_SUN) || (__SUNPRO_CC >= 0x580)) // ambiguity between const T * and T *
-
 template <class T>
 inline bool operator!=(const T *o, const QPointer<T> &p)
 {
@@ -144,21 +124,6 @@ inline bool operator!= (const QPointer<T> &p, const T *o)
    return p.operator->() != o;
 }
 
-#else
-
-template<class T>
-inline bool operator!= (const void *o, const QPointer<T> &p)
-{
-   return o != p.operator->();
-}
-
-template<class T>
-inline bool operator!= (const QPointer<T> &p, const void *o)
-{
-   return p.operator->() != o;
-}
-
-#endif
 
 template <class T>
 inline bool operator!=(T *o, const QPointer<T> &p)

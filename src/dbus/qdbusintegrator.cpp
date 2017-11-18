@@ -373,7 +373,8 @@ static void qDBusNewConnection(DBusServer *server, DBusConnection *connection, v
 
     QDBusConnectionPrivate *newConnection = new QDBusConnectionPrivate(serverConnection->parent());
     QMutexLocker locker(&QDBusConnectionManager::instance()->mutex);
-    QDBusConnectionManager::instance()->setConnection(QLatin1String("QDBusServer-") + QString::number(reinterpret_cast<qulonglong>(newConnection)), newConnection);
+    QDBusConnectionManager::instance()->setConnection(QLatin1String("QDBusServer-") +
+                  QString::number(reinterpret_cast<quint64>(newConnection)), newConnection);
     serverConnection->serverConnectionNames << newConnection->name;
 
     // setPeer does the error handling for us

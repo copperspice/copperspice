@@ -68,8 +68,8 @@ public:
     QDBusArgument &operator<<(ushort arg);
     QDBusArgument &operator<<(int arg);
     QDBusArgument &operator<<(uint arg);
-    QDBusArgument &operator<<(qlonglong arg);
-    QDBusArgument &operator<<(qulonglong arg);
+    QDBusArgument &operator<<(qint64 arg);
+    QDBusArgument &operator<<(quint64 arg);
     QDBusArgument &operator<<(double arg);
     QDBusArgument &operator<<(const QString &arg);
     QDBusArgument &operator<<(const QDBusVariant &arg);
@@ -100,8 +100,8 @@ public:
     const QDBusArgument &operator>>(ushort &arg) const;
     const QDBusArgument &operator>>(int &arg) const;
     const QDBusArgument &operator>>(uint &arg) const;
-    const QDBusArgument &operator>>(qlonglong &arg) const;
-    const QDBusArgument &operator>>(qulonglong &arg) const;
+    const QDBusArgument &operator>>(qint64 &arg) const;
+    const QDBusArgument &operator>>(quint64 &arg) const;
     const QDBusArgument &operator>>(double &arg) const;
     const QDBusArgument &operator>>(QString &arg) const;
     const QDBusArgument &operator>>(QDBusVariant &arg) const;

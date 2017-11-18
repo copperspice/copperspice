@@ -26,23 +26,8 @@
 // takes a type, returns the internal void* pointer cast
 // to a pointer of the input type
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qvariant.h>
-
-QT_BEGIN_NAMESPACE
-
-#ifdef Q_CC_SUN // Sun CC picks the wrong overload, so introduce awful hack
-
-template <typename T>
-inline T *v_cast(const QVariant::Private *nd, T * = 0)
-{
-   QVariant::Private *d = const_cast<QVariant::Private *>(nd);
-   return ((sizeof(T) > sizeof(QVariant::Private::Data))
-           ? static_cast<T *>(d->data.shared->ptr)
-           : static_cast<T *>(static_cast<void *>(&d->data.c)));
-}
-
-#else // every other compiler in this world
+#include <qglobal.h>
+#include <qvariant.h>
 
 template <typename T>
 inline const T *v_cast(const QVariant::Private *d, T * = 0)
@@ -59,8 +44,6 @@ inline T *v_cast(QVariant::Private *d, T * = 0)
            ? static_cast<T *>(d->data.shared->ptr)
            : static_cast<T *>(static_cast<void *>(&d->data.c)));
 }
-
-#endif
 
 
 //a simple template that avoids to allocate 2 memory chunks when creating a QVariant
@@ -120,7 +103,5 @@ inline void v_clear(QVariant::Private *d, T * = 0)
 }
 
 Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler();
-
-QT_END_NAMESPACE
 
 #endif // QVARIANT_P_H

@@ -398,7 +398,7 @@ QDBusArgument &QDBusArgument::operator<<(uint arg)
     \overload
     Appends the primitive value \a arg of type \c{INT64} to the D-Bus stream.
 */
-QDBusArgument &QDBusArgument::operator<<(qlonglong arg)
+QDBusArgument &QDBusArgument::operator<<(qint64 arg)
 {
     if (QDBusArgumentPrivate::checkWrite(d))
         d->marshaller()->append(arg);
@@ -409,7 +409,7 @@ QDBusArgument &QDBusArgument::operator<<(qlonglong arg)
     \overload
     Appends the primitive value \a arg of type \c{UINT64} to the D-Bus stream.
 */
-QDBusArgument &QDBusArgument::operator<<(qulonglong arg)
+QDBusArgument &QDBusArgument::operator<<(quint64 arg)
 {
     if (QDBusArgumentPrivate::checkWrite(d))
         d->marshaller()->append(arg);
@@ -653,7 +653,7 @@ const QDBusArgument &QDBusArgument::operator>>(uint &arg) const
     Extracts one D-Bus primitive argument of type \c{INT64} from the
     D-Bus stream.
 */
-const QDBusArgument &QDBusArgument::operator>>(qlonglong &arg) const
+const QDBusArgument &QDBusArgument::operator>>(qint64 &arg) const
 {
     if (QDBusArgumentPrivate::checkReadAndDetach(d))
         arg = d->demarshaller()->toLongLong();
@@ -665,7 +665,7 @@ const QDBusArgument &QDBusArgument::operator>>(qlonglong &arg) const
     Extracts one D-Bus primitive argument of type \c{UINT64} from the
     D-Bus stream.
 */
-const QDBusArgument &QDBusArgument::operator>>(qulonglong &arg) const
+const QDBusArgument &QDBusArgument::operator>>(quint64 &arg) const
 {
     if (QDBusArgumentPrivate::checkReadAndDetach(d))
         arg = d->demarshaller()->toULongLong();

@@ -137,7 +137,7 @@ bool Integer::isSigned() const
    return true;
 }
 
-qulonglong Integer::toUnsignedInteger() const
+quint64 Integer::toUnsignedInteger() const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;

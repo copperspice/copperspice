@@ -94,21 +94,16 @@ typedef QVarLengthArray<ub2, 32> SizeArray;
 static QByteArray qMakeOraDate(const QDateTime &dt);
 static QDateTime qMakeDate(const char *oraDate);
 
-static QByteArray qMakeOCINumber(const qlonglong &ll, OCIError *err);
-static QByteArray qMakeOCINumber(const qulonglong &ull, OCIError *err);
+static QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err);
+static QByteArray qMakeOCINumber(const quint64 &ull, OCIError *err);
 
-static qlonglong qMakeLongLong(const char *ociNumber, OCIError *err);
-static qulonglong qMakeULongLong(const char *ociNumber, OCIError *err);
+static qint64 qMakeLongLong(const char *ociNumber, OCIError *err);
+static quint64 qMakeULongLong(const char *ociNumber, OCIError *err);
 
 static QString qOraWarn(OCIError *err, int *errorCode = 0);
 
-#ifndef Q_CC_SUN
-static // for some reason, Sun CC can't use qOraWarning when it's declared static
-#endif
-void qOraWarning(const char *msg, OCIError *err);
+static void qOraWarning(const char *msg, OCIError *err);
 static QSqlError qMakeError(const QString &errString, QSqlError::ErrorType type, OCIError *err);
-
-
 
 class QOCIRowId: public QSharedData
 {
@@ -707,50 +702,40 @@ QByteArray qMakeOraDate(const QDateTime &dt)
 /*!
   \internal
 
-   Convert qlonglong to the internal Oracle OCINumber format.
+   Convert qint64 to the internal Oracle OCINumber format.
   */
-QByteArray qMakeOCINumber(const qlonglong &ll, OCIError *err)
+QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err)
 {
    QByteArray ba(sizeof(OCINumber), 0);
 
-   OCINumberFromInt(err,
-                    &ll,
-                    sizeof(qlonglong),
-                    OCI_NUMBER_SIGNED,
-                    reinterpret_cast<OCINumber *>(ba.data()));
+   OCINumberFromInt(err, &ll, sizeof(qint64), OCI_NUMBER_SIGNED, reinterpret_cast<OCINumber *>(ba.data()));
    return ba;
 }
 
 /*!
   \internal
 
-   Convert qulonglong to the internal Oracle OCINumber format.
+   Convert quint64 to the internal Oracle OCINumber format.
   */
-QByteArray qMakeOCINumber(const qulonglong &ull, OCIError *err)
+QByteArray qMakeOCINumber(const quint64 &ull, OCIError *err)
 {
    QByteArray ba(sizeof(OCINumber), 0);
 
-   OCINumberFromInt(err,
-                    &ull,
-                    sizeof(qlonglong),
-                    OCI_NUMBER_UNSIGNED,
-                    reinterpret_cast<OCINumber *>(ba.data()));
+   OCINumberFromInt(err, &ull, sizeof(qint64), OCI_NUMBER_UNSIGNED, reinterpret_cast<OCINumber *>(ba.data()));
    return ba;
 }
 
-qlonglong qMakeLongLong(const char *ociNumber, OCIError *err)
+qint64 qMakeLongLong(const char *ociNumber, OCIError *err)
 {
-   qlonglong qll = 0;
-   OCINumberToInt(err, reinterpret_cast<const OCINumber *>(ociNumber), sizeof(qlonglong),
-                  OCI_NUMBER_SIGNED, &qll);
+   qint64 qll = 0;
+   OCINumberToInt(err, reinterpret_cast<const OCINumber *>(ociNumber), sizeof(qint64), OCI_NUMBER_SIGNED, &qll);
    return qll;
 }
 
-qulonglong qMakeULongLong(const char *ociNumber, OCIError *err)
+quint64 qMakeULongLong(const char *ociNumber, OCIError *err)
 {
-   qulonglong qull = 0;
-   OCINumberToInt(err, reinterpret_cast<const OCINumber *>(ociNumber), sizeof(qulonglong),
-                  OCI_NUMBER_UNSIGNED, &qull);
+   quint64 qull = 0;
+   OCINumberToInt(err, reinterpret_cast<const OCINumber *>(ociNumber), sizeof(quint64), OCI_NUMBER_UNSIGNED, &qull);
    return qull;
 }
 

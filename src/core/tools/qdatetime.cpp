@@ -111,8 +111,8 @@ static void getDateFromJulianDay(uint julianDay, int *year, int *month, int *day
    if (julianDay >= 2299161) {
       // Gregorian calendar starting from October 15, 1582
       // This algorithm is from Henry F. Fliegel and Thomas C. Van Flandern
-      qulonglong ell, n, i, j;
-      ell = qulonglong(julianDay) + 68569;
+      quint64 ell, n, i, j;
+      ell = quint64(julianDay) + 68569;
       n = (4 * ell) / 146097;
       ell = ell - (146097 * n + 3) / 4;
       i = (4000 * (ell + 1)) / 1461001;

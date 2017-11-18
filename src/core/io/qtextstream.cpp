@@ -94,7 +94,7 @@ QT_END_NAMESPACE
 #define IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(type) do { \
     Q_D(QTextStream); \
     CHECK_VALID_STREAM(*this); \
-    qulonglong tmp; \
+    quint64 tmp; \
     switch (d->getNumber(&tmp)) { \
     case QTextStreamPrivate::npsOk: \
         i = (type)tmp; \
@@ -207,12 +207,12 @@ class QTextStreamPrivate
 
    inline bool getChar(QChar *ch);
    inline void ungetChar(const QChar &ch);
-   NumberParsingStatus getNumber(qulonglong *l);
+   NumberParsingStatus getNumber(quint64 *l);
    bool getReal(double *f);
 
    inline void write(const QString &data);
    inline void putString(const QString &ch, bool number = false);
-   void putNumber(qulonglong number, bool negative);
+   void putNumber(quint64 number, bool negative);
 
    // buffers
    bool fillReadBuffer(qint64 maxBytes = -1);
@@ -1532,7 +1532,7 @@ QString QTextStream::read(qint64 maxlen)
 
 /*! \internal
 */
-QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong *ret)
+QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(quint64 *ret)
 {
    scan(0, 0, 0, NotSpace);
    consumeLastToken();
@@ -1575,7 +1575,7 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong
       // and local variable 'base' has been set appropriately.
    }
 
-   qulonglong val = 0;
+   quint64 val = 0;
    switch (base) {
       case 2: {
          QChar pf1, pf2, dig;
@@ -1666,11 +1666,11 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong
             return npsMissingDigit;
          }
          if (sign == locale.negativeSign()) {
-            qlonglong ival = qlonglong(val);
+            qint64 ival = qint64(val);
             if (ival > 0) {
                ival = -ival;
             }
-            val = qulonglong(ival);
+            val = quint64(ival);
          }
          break;
       }
@@ -1998,21 +1998,21 @@ QTextStream &QTextStream::operator>>(unsigned long &i)
 /*!
     \overload
 
-    Stores the integer in the qlonglong \a i.
+    Stores the integer in the qint64 \a i.
 */
-QTextStream &QTextStream::operator>>(qlonglong &i)
+QTextStream &QTextStream::operator>>(qint64 &i)
 {
-   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qlonglong);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qint64);
 }
 
 /*!
     \overload
 
-    Stores the integer in the qulonglong \a i.
+    Stores the integer in the quint64 \a i.
 */
-QTextStream &QTextStream::operator>>(qulonglong &i)
+QTextStream &QTextStream::operator>>(quint64 &i)
 {
-   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qulonglong);
+   IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(quint64);
 }
 
 /*!
@@ -2138,7 +2138,7 @@ QTextStream &QTextStream::operator>>(char *c)
 
 /*! \internal
  */
-void QTextStreamPrivate::putNumber(qulonglong number, bool negative)
+void QTextStreamPrivate::putNumber(quint64 number, bool negative)
 {
    QString result;
 
@@ -2164,9 +2164,10 @@ void QTextStreamPrivate::putNumber(qulonglong number, bool negative)
 
    const QLocalePrivate *dd = locale.d();
    int base = integerBase ? integerBase : 10;
+
    if (negative && base == 10) {
-      result = dd->longLongToString(-static_cast<qlonglong>(number), -1,
-                                    base, -1, flags);
+      result = dd->longLongToString(-static_cast<qint64>(number), -1, base, -1, flags);
+
    } else if (negative) {
       // Workaround for backward compatibility for writing negative
       // numbers in octal and hex:
@@ -2234,7 +2235,7 @@ QTextStream &QTextStream::operator<<(signed short i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   d->putNumber((quint64)qAbs(qint64(i)), i < 0);
    return *this;
 }
 
@@ -2247,7 +2248,7 @@ QTextStream &QTextStream::operator<<(unsigned short i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)i, false);
+   d->putNumber((quint64)i, false);
    return *this;
 }
 
@@ -2260,7 +2261,7 @@ QTextStream &QTextStream::operator<<(signed int i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   d->putNumber((quint64)qAbs(qint64(i)), i < 0);
    return *this;
 }
 
@@ -2273,7 +2274,7 @@ QTextStream &QTextStream::operator<<(unsigned int i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)i, false);
+   d->putNumber((quint64)i, false);
    return *this;
 }
 
@@ -2286,7 +2287,7 @@ QTextStream &QTextStream::operator<<(signed long i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)qAbs(qlonglong(i)), i < 0);
+   d->putNumber((quint64)qAbs(qint64(i)), i < 0);
    return *this;
 }
 
@@ -2299,29 +2300,29 @@ QTextStream &QTextStream::operator<<(unsigned long i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)i, false);
+   d->putNumber((quint64)i, false);
    return *this;
 }
 
 /*!
     \overload
 
-    Writes the qlonglong \a i to the stream.
+    Writes the qint64 \a i to the stream.
 */
-QTextStream &QTextStream::operator<<(qlonglong i)
+QTextStream &QTextStream::operator<<(qint64 i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);
-   d->putNumber((qulonglong)qAbs(i), i < 0);
+   d->putNumber((quint64)qAbs(i), i < 0);
    return *this;
 }
 
 /*!
     \overload
 
-    Writes the qulonglong \a i to the stream.
+    Writes the quint64 \a i to the stream.
 */
-QTextStream &QTextStream::operator<<(qulonglong i)
+QTextStream &QTextStream::operator<<(quint64 i)
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(*this);

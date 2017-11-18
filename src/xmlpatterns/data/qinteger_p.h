@@ -53,7 +53,7 @@ class Integer : public Numeric
    Numeric::Ptr floor() const override;
    Numeric::Ptr ceiling() const override;
    Numeric::Ptr abs() const override;
-   qulonglong toUnsignedInteger() const override;
+   quint64 toUnsignedInteger() const override;
 
    /**
     * @returns always @c false, @c xs:integer doesn't have

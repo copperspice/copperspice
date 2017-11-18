@@ -63,11 +63,11 @@ static void copyArgument(void *to, int id, const QVariant &arg)
             return;
 
         case QVariant::LongLong:
-            *reinterpret_cast<qlonglong *>(to) = arg.toLongLong();
+            *reinterpret_cast<qint64 *>(to) = arg.toLongLong();
             return;
 
         case QVariant::ULongLong:
-            *reinterpret_cast<qulonglong *>(to) = arg.toULongLong();
+            *reinterpret_cast<quint64 *>(to) = arg.toULongLong();
             return;
 
         case QVariant::Double:

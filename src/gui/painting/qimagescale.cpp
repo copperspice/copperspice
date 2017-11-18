@@ -258,8 +258,8 @@ QImageScaleInfo *QImageScale::qimageCalcScaleInfo(const QImage &img,
    QImageScaleInfo *isi;
    int scw, sch;
 
-   scw = dw * qlonglong(img.width()) / sw;
-   sch = dh * qlonglong(img.height()) / sh;
+   scw = dw * qint64(img.width()) / sw;
+   sch = dh * qint64(img.height()) / sh;
 
    isi = new QImageScaleInfo;
    if (!isi) {

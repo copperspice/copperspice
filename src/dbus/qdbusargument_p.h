@@ -87,8 +87,8 @@ public:
     void append(ushort arg);
     void append(int arg);
     void append(uint arg);
-    void append(qlonglong arg);
-    void append(qulonglong arg);
+    void append(qint64 arg);
+    void append(quint64 arg);
     void append(double arg);
     void append(const QString &arg);
     void append(const QDBusObjectPath &arg);
@@ -143,8 +143,8 @@ public:
     short toShort();
     int toInt();
     uint toUInt();
-    qlonglong toLongLong();
-    qulonglong toULongLong();
+    qint64 toLongLong();
+    quint64toULongLong();
     double toDouble();
     QString toString();
     QDBusObjectPath toObjectPath();
