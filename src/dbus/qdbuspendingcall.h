@@ -45,8 +45,6 @@ public:
     ~QDBusPendingCall();
     QDBusPendingCall &operator=(const QDBusPendingCall &other);
 
-
-    // pretend that they aren't here
     bool isFinished() const;
     void waitForFinished();
 
@@ -71,31 +69,25 @@ private:
 };
 
 class QDBusPendingCallWatcherPrivate;
+
 class Q_DBUS_EXPORT QDBusPendingCallWatcher: public QObject, public QDBusPendingCall
 {
     CS_OBJECT(QDBusPendingCallWatcher)
+
 public:
     QDBusPendingCallWatcher(const QDBusPendingCall &call, QObject *parent = nullptr);
     ~QDBusPendingCallWatcher();
 
     void waitForFinished();     // non-virtual override
 
-public:
     CS_SIGNAL_1(Public, void finished(QDBusPendingCallWatcher * self))
-    CS_SIGNAL_2(finished,self) 
+    CS_SIGNAL_2(finished,self)
 
 private:
     Q_DECLARE_PRIVATE(QDBusPendingCallWatcher)
+
     CS_SLOT_1(Private, void _q_finished())
     CS_SLOT_2(_q_finished)
-
-/*  PRIVATE_SLOT
-void _q_finished()
-{
-	Q_D(QDBusPendingCallWatcher);
-	d->_q_finished();
-}
-*/
 };
 
 QT_END_NAMESPACE

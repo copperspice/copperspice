@@ -2184,7 +2184,7 @@ void QX11PaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, co
 #ifndef QT_NO_XRENDER
    if (X11->use_xrender && d->picture && pixmap.x11PictureHandle()) {
 #if 0
-      // ### Qt 5: enable this
+      // ### Qt5: enable this
       XRenderPictureAttributes attrs;
       attrs.repeat = true;
       XRenderChangePicture(d->dpy, pixmap.x11PictureHandle(), CPRepeat, &attrs);

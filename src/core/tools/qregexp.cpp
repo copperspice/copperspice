@@ -3574,7 +3574,7 @@ void QRegExp::setMinimal(bool minimal)
    priv->minimal = minimal;
 }
 
-// ### Qt 5: make non-const
+// ### Qt5: make non-const
 
 bool QRegExp::exactMatch(const QString &str) const
 {
@@ -3590,7 +3590,7 @@ bool QRegExp::exactMatch(const QString &str) const
    }
 }
 
-// ### Qt 5: make non-const
+// ### Qt5: make non-const
 
 int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
 {
@@ -3606,7 +3606,7 @@ int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
    return priv->matchState.captured[0];
 }
 
-// ### Qt 5: make non-const
+// ### Qt5: make non-const
 
 int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) const
 {
@@ -3652,13 +3652,17 @@ QStringList QRegExp::capturedTexts() const
 
       for (int i = 0; i < n; i += 2) {
          QString m;
+
          if (captured[i + 1] == 0) {
-            m = QLatin1String("");   // ### Qt 5: don't distinguish between null and empty
+            m = QLatin1String("");        // ### Qt5: do not distinguish between null and empty
+
          } else if (captured[i] >= 0) {
             m = priv->t.mid(captured[i], captured[i + 1]);
          }
+
          priv->capturedCache.append(m);
       }
+
       priv->t.clear();
    }
    return priv->capturedCache;

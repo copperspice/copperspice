@@ -30,8 +30,6 @@
 
 #include <qjson_p.h>
 
-QT_BEGIN_NAMESPACE
-
 QJsonValue::QJsonValue(Type type)
    : ui(0), d(0), t(type)
 {
@@ -49,17 +47,21 @@ QJsonValue::QJsonValue(QJsonPrivate::Data *data, QJsonPrivate::Base *base, const
       case Null:
          dbl = 0;
          break;
+
       case Bool:
          b = v.toBoolean();
          break;
+
       case Double:
          dbl = v.toDouble(base);
          break;
+
       case String: {
          QString *s = new QString(v.toString(base));
-         stringData = s;
+         m_stringData = s;
          break;
       }
+
       case Array:
       case Object:
          d = data;
@@ -114,12 +116,7 @@ QJsonValue::QJsonValue(qint64 n)
 QJsonValue::QJsonValue(const QString &s)
    : d(0), t(String)
 {
-   /* Qt 5 Beta 1
-   stringData = *(QStringData **)(&s);
-   stringData->ref.ref();
-   */
-   // Temporary for QStringData
-   stringData = new QString(s);
+   m_stringData = new QString(s);
 }
 
 /*!
@@ -128,14 +125,7 @@ QJsonValue::QJsonValue(const QString &s)
 QJsonValue::QJsonValue(QLatin1String s)
    : d(0), t(String)
 {
-   // ### FIXME: Avoid creating the temp QString below
-   /* Qt 5 Beta 1
-   QString str(s);
-   stringData = *(QStringData **)(&str);
-   stringData->ref.ref();
-   */
-   // Temporary for QStringData
-   stringData = new QString(s);
+   m_stringData = new QString(s);
 }
 
 /*!
@@ -168,16 +158,11 @@ QJsonValue::QJsonValue(const QJsonObject &o)
  */
 QJsonValue::~QJsonValue()
 {
-   /* Qt 5 Beta 1
-   if (t == String && stringData && !stringData->ref.deref())
-       free(stringData);
-   */
-   // Temporary for QStringData
    if (t == String) {
-      delete stringData;
+      delete m_stringData;
    }
 
-   if (d && !d->ref.deref()) {
+   if (d && ! d->ref.deref()) {
       delete d;
    }
 }
@@ -187,20 +172,17 @@ QJsonValue::~QJsonValue()
  */
 QJsonValue::QJsonValue(const QJsonValue &other)
 {
-   t = other.t;
-   d = other.d;
+   t  = other.t;
+   d  = other.d;
    ui = other.ui;
+
    if (d) {
       d->ref.ref();
    }
 
-   if (t == String && stringData) {
-      /* Qt 5 Beta 1
-      stringData->ref.ref();
-      */
-      // Temporary for QStringData
-      QString *tmp = new QString(*stringData);
-      stringData = tmp;
+   if (t == String && m_stringData) {
+      QString *tmp = new QString(*m_stringData);
+      m_stringData = tmp;
    }
 }
 
@@ -209,13 +191,8 @@ QJsonValue::QJsonValue(const QJsonValue &other)
  */
 QJsonValue &QJsonValue::operator =(const QJsonValue &other)
 {
-   /* Qt 5 Beta 1
-   if (t == String && stringData && !stringData->ref.deref())
-       free(stringData);
-   */
-   // Temporary for QStringData
    if (t == String) {
-      delete stringData;
+      delete m_stringData;
    }
 
    t = other.t;
@@ -233,95 +210,14 @@ QJsonValue &QJsonValue::operator =(const QJsonValue &other)
 
    }
 
-   if (t == String && stringData) {
-      /* Qt 5 Beta 1
-      stringData->ref.ref();
-      */
-      // Temporary for QStringData
-      QString *tmp = new QString(*stringData);
-      stringData = tmp;
+   if (t == String && m_stringData) {
+      QString *tmp = new QString(*m_stringData);
+      m_stringData = tmp;
    }
 
    return *this;
 }
 
-/*!
-    \fn bool QJsonValue::isNull() const
-
-    Returns true if the value is null.
-*/
-
-/*!
-    \fn bool QJsonValue::isBool() const
-
-    Returns true if the value contains a boolean.
-
-    \sa toBool()
- */
-
-/*!
-    \fn bool QJsonValue::isDouble() const
-
-    Returns true if the value contains a double.
-
-    \sa toDouble()
- */
-
-/*!
-    \fn bool QJsonValue::isString() const
-
-    Returns true if the value contains a string.
-
-    \sa toString()
- */
-
-/*!
-    \fn bool QJsonValue::isArray() const
-
-    Returns true if the value contains an array.
-
-    \sa toArray()
- */
-
-/*!
-    \fn bool QJsonValue::isObject() const
-
-    Returns true if the value contains an object.
-
-    \sa toObject()
- */
-
-/*!
-    \fn bool QJsonValue::isUndefined() const
-
-    Returns true if the value is undefined. This can happen in certain
-    error cases as e.g. accessing a non existing key in a QJsonObject.
- */
-
-
-/*!
-    Converts \a variant to a QJsonValue and returns it.
-
-    The conversion will convert QVariant types as follows:
-
-    \list
-    \li QVariant::Bool to Bool
-    \li QVariant::Int
-    \li QVariant::Double
-    \li QVariant::LongLong
-    \li QVariant::ULongLong
-    \li QVariant::UInt to Double
-    \li QVariant::String to String
-    \li QVariant::StringList
-    \li QVariant::VariantList to Array
-    \li QVariant::VariantMap to Object
-    \endlist
-
-    For all other QVariant types a conversion to a QString will be attempted. If the returned string
-    is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
-
-    \sa toVariant()
- */
 QJsonValue QJsonValue::fromVariant(const QVariant &variant)
 {
    switch (variant.type()) {
@@ -466,13 +362,8 @@ QString QJsonValue::toString(const QString &defaultValue) const
    if (t != String) {
       return defaultValue;
    }
-   /* Qt 5 Beta 1
-   stringData->ref.ref(); // the constructor below doesn't add a ref.
-   QStringDataPtr holder = { stringData };
-   return QString(holder);
-   */
-   // Temporary for QStringData
-   return *stringData;
+
+   return *m_stringData;
 }
 
 /*!
@@ -482,7 +373,7 @@ QString QJsonValue::toString(const QString &defaultValue) const
  */
 QJsonArray QJsonValue::toArray(const QJsonArray &defaultValue) const
 {
-   if (!d || t != Array) {
+   if (! d || t != Array) {
       return defaultValue;
    }
 
@@ -594,31 +485,6 @@ void QJsonValue::detach()
    base = static_cast<QJsonPrivate::Object *>(d->header->root());
 }
 
-
-/*!
-    \class QJsonValueRef
-    \inmodule QtCore
-    \reentrant
-    \brief The QJsonValueRef class is a helper class for QJsonValue.
-
-    \internal
-
-    \ingroup json
-
-    When you get an object of type QJsonValueRef, if you can assign to it,
-    the assignment will apply to the character in the string from
-    which you got the reference. That is its whole purpose in life.
-
-    You can use it exactly in the same way as a reference to a QJsonValue.
-
-    The QJsonValueRef becomes invalid once modifications are made to the
-    string: if you want to keep the character, copy it into a QJsonValue.
-
-    Most of the QJsonValue member functions also exist in QJsonValueRef.
-    However, they are not explicitly documented here.
-*/
-
-
 QJsonValueRef &QJsonValueRef::operator =(const QJsonValue &val)
 {
    if (is_object) {
@@ -691,4 +557,3 @@ QDebug operator<<(QDebug dbg, const QJsonValue &o)
    return dbg.space();
 }
 
-QT_END_NAMESPACE

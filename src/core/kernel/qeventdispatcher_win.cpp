@@ -202,28 +202,6 @@ QThreadData *QEventDispatcherWin32Private::get_m_ThreadData()
    return threadData;
 }
 
-
-
-// ### Qt 5: remove
-Q_CORE_EXPORT bool winPeekMessage(MSG *msg, HWND hWnd, UINT wMsgFilterMin,
-                                  UINT wMsgFilterMax, UINT wRemoveMsg)
-{
-   return PeekMessage(msg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
-}
-
-// ### Qt 5: remove
-Q_CORE_EXPORT bool winPostMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-   return PostMessage(hWnd, msg, wParam, lParam);
-}
-
-// ### Qt 5: remove
-Q_CORE_EXPORT bool winGetMessage(MSG *msg, HWND hWnd, UINT wMsgFilterMin,
-                                 UINT wMsgFilterMax)
-{
-   return GetMessage(msg, hWnd, wMsgFilterMin, wMsgFilterMax);
-}
-
 // This function is called by a workerthread
 void WINAPI QT_WIN_CALLBACK qt_fast_timer_proc(uint timerId, uint /*reserved*/, DWORD_PTR user, DWORD_PTR /*reserved*/,
       DWORD_PTR /*reserved*/)

@@ -126,8 +126,7 @@ class Q_CORE_EXPORT QJsonValue
       bool b;
       double dbl;
 
-      // Temporary for QStringData:
-      QString *stringData;
+      QString *m_stringData;
       QJsonPrivate::Base *base;
    };
 

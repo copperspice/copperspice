@@ -89,13 +89,11 @@ class Q_GUI_EXPORT QMenu : public QWidget
    void setActiveAction(QAction *act);
    QAction *activeAction() const;
 
-   void popup(const QPoint &pos, QAction *at = 0);
-   QAction *exec();
-   QAction *exec(const QPoint &pos, QAction *at = 0);
+   void popup(const QPoint &pos, QAction *at = nullptr);
 
-   // ### Qt5/merge
-   static QAction *exec(QList<QAction *> actions, const QPoint &pos, QAction *at = 0);
-   static QAction *exec(QList<QAction *> actions, const QPoint &pos, QAction *at, QWidget *parent);
+   QAction *exec();
+   QAction *exec(const QPoint &pos, QAction *at = nullptr);
+   static QAction *exec(const QList<QAction *> &actions, const QPoint &pos, QAction *at = nullptr, QWidget *parent = nullptr);
 
    QSize sizeHint() const override;
 

@@ -139,10 +139,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    enum Encoding { CodecForTr, UnicodeUTF8, DefaultCodec = CodecForTr };
 
-   // ### Qt5/merge
-   static QString translate(const char *context, const char *key, const char *disambiguation = 0, Encoding encoding = CodecForTr);
-
-   static QString translate(const char *context, const char *key, const char *disambiguation, Encoding encoding, int n);
+   static QString translate(const char *context, const char *key, const char *disambiguation = nullptr, 
+                  Encoding encoding = CodecForTr, int n = -1);
 
    static void flush();
 

@@ -115,18 +115,12 @@ static QByteArray escapedString(const QString &s)
          } else {
             *cursor++ = (uchar)u;
          }
+
       } else {
          if (u < 0x0800) {
             *cursor++ = 0xc0 | ((uchar) (u >> 6));
+
          } else {
-            /* Qt 5 Beta 1
-            // is it one of the Unicode non-characters?
-            if (QChar::isNonCharacter(u)) {
-                *cursor++ = replacement;
-                ++ch;
-                continue;
-            }
-            */
 
             if (QChar::requiresSurrogates(u)) {
                *cursor++ = 0xf0 | ((uchar) (u >> 18));

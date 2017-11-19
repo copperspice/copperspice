@@ -72,7 +72,7 @@ void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunctio
 #else
 
 // NOTE: if you change the variable "pattern", this MUST also be modified in qlibrary.cpp and qplugin.cpp
-// QT 5: should probably remove the entire pattern concept and do the section trick
+// QT5: should probably remove the entire pattern concept and do the section trick
 
 #  ifdef QPLUGIN_DEBUG_STR
 #    undef QPLUGIN_DEBUG_STR

@@ -118,12 +118,13 @@ class Q_CORE_EXPORT QRect
    QRect &operator&=(const QRect &r);
 
    bool contains(const QPoint &p, bool proper = false) const;
-   bool contains(int x, int y) const; // inline methods, _don't_ merge these
+   bool contains(int x, int y) const;                   // inline methods, _don't_ merge these
    bool contains(int x, int y, bool proper) const;
    bool contains(const QRect &r, bool proper = false) const;
-   QRect unite(const QRect &r) const;  // ### Qt5/make QT4_SUPPORT
+
+   QRect unite(const QRect &r) const;                   // ### Qt5 (remove)
    QRect united(const QRect &other) const;
-   QRect intersect(const QRect &r) const;  // ### Qt5/make QT4_SUPPORT
+   QRect intersect(const QRect &r) const;               // ### Qt5 (remove)
    QRect intersected(const QRect &other) const;
    bool intersects(const QRect &r) const;
 

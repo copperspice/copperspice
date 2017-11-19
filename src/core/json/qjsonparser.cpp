@@ -811,12 +811,6 @@ static inline bool scanUtf8Char(const char *&json, const char *end, uint *result
       uc = (uc << 6) | (ch & 0x3f);
    }
 
-   /* Qt 5 Beta 1
-   if (uc < min_uc || QChar::isNonCharacter(uc) ||
-       QChar::isSurrogate(uc) || uc > QChar::LastValidCodePoint) {
-   */
-   // Temporary for missing QChar methods. Does not check for non-characters
-   // or past last valid code point.
    if (uc < min_uc ||
          QChar::isHighSurrogate(uc) || QChar::isLowSurrogate(uc)) {
       return false;

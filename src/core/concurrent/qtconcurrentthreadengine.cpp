@@ -22,8 +22,6 @@
 
 #include <qtconcurrentthreadengine.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 ThreadEngineBarrier::ThreadEngineBarrier()
@@ -250,8 +248,10 @@ bool ThreadEngineBase::threadThrottleExit()
    return barrier.releaseUnlessLast();
 }
 
-void ThreadEngineBase::run() // implements QRunnable.
+void ThreadEngineBase::run()
 {
+   // implements QRunnable
+
    if (this->isCanceled()) {
       threadExit();
       return;
@@ -281,8 +281,6 @@ void ThreadEngineBase::run() // implements QRunnable.
    threadExit();
 }
 
-
-
 void ThreadEngineBase::handleException(const QtConcurrent::Exception &exception)
 {
    if (futureInterface) {
@@ -292,9 +290,5 @@ void ThreadEngineBase::handleException(const QtConcurrent::Exception &exception)
    }
 }
 
-
-
 } // namepsace QtConcurrent
-
-QT_END_NAMESPACE
 

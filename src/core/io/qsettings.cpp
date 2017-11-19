@@ -765,7 +765,7 @@ void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray 
           QVariant().toStringList() returns an empty QStringList,
           so we're in good shape.
 
-          ### Qt 5: Use a nicer syntax, e.g. @List, for variant lists
+          ### Qt5: Use a nicer syntax, e.g. @List, for variant lists
       */
       result += "@Invalid()";
 

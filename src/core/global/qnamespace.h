@@ -119,8 +119,7 @@ class Q_CORE_EXPORT Qt
       NoButton         = 0x00000000,
       LeftButton       = 0x00000001,
       RightButton      = 0x00000002,
-      MidButton        = 0x00000004, // ### Qt5/remove me
-      MiddleButton     = MidButton,
+      MiddleButton     = 0x00000004,
       XButton1         = 0x00000008,
       XButton2         = 0x00000010,
       MouseButtonMask  = 0x000000ff

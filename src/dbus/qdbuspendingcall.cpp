@@ -30,8 +30,6 @@
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \class QDBusPendingCall
     \inmodule QtDBus
@@ -521,6 +519,12 @@ void QDBusPendingCallWatcher::waitForFinished()
         QCoreApplication::sendPostedEvents(this, QEvent::MetaCall);
     }
 }
-QT_END_NAMESPACE
+
+void QDBusPendingCallWatcher::_q_finished()
+{
+	Q_D(QDBusPendingCallWatcher);
+	d->_q_finished();
+}
+
 
 #endif // QT_NO_DBUS

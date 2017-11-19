@@ -3520,41 +3520,7 @@ QString QString::toUpper() const
    return *this;
 }
 
-// ### Qt 5: Consider whether this function shouldn't be removed See task 202871.
-/*!
-    Safely builds a formatted string from the format string \a cformat
-    and an arbitrary list of arguments.
-
-    The %lc escape sequence expects a unicode character of type ushort
-    (as returned by QChar::unicode()). The %ls escape sequence expects
-    a pointer to a zero-terminated array of unicode characters of type
-    ushort (as returned by QString::utf16()).
-
-    \note This function expects a UTF-8 string for %s and Latin-1 for
-    the format string.
-
-    The format string supports most of the conversion specifiers
-    provided by printf() in the standard C++ library. It doesn't
-    honor the length modifiers (e.g. \c h for \c short, \c ll for
-    \c{long long}). If you need those, use the standard snprintf()
-    function instead:
-
-    \snippet doc/src/snippets/qstring/main.cpp 63
-
-    \warning We do not recommend using QString::sprintf() in new Qt
-    code. Instead, consider using QTextStream or arg(), both of
-    which support Unicode strings seamlessly and are type-safe.
-    Here's an example that uses QTextStream:
-
-    \snippet doc/src/snippets/qstring/main.cpp 64
-
-    For \l {QObject::tr()}{translations}, especially if the strings
-    contains more than one escape sequence, you should consider using
-    the arg() function instead. This allows the order of the
-    replacements to be controlled by the translator.
-
-    \sa arg()
-*/
+// ### Qt5: remove
 
 QString &QString::sprintf(const char *cformat, ...)
 {

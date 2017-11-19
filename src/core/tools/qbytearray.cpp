@@ -293,12 +293,12 @@ QByteArray qUncompress(const uchar *data, int nbytes)
          return QByteArray();
       }
       QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + alloc + 1));
-      if (!p)
-      {
-         // Qt 5 - throw an exception
+      if (!p) {
+         // Qt5 - throw an exception
          qWarning("qUncompress: could not allocate enough memory to uncompress data");
          return QByteArray();
       }
+
       d.take(); // realloc was successful
       d.reset(p);
       d->offset = sizeof(QByteArrayData);
@@ -315,9 +315,10 @@ QByteArray qUncompress(const uchar *data, int nbytes)
                   qWarning("qUncompress: Input data is corrupted");
                   return QByteArray();
                }
+
                QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + len + 1));
                if (!p) {
-                  // Qt 5 - throw an exception
+                  // Qt5 - throw an exception
                   qWarning("qUncompress: could not allocate enough memory to uncompress data");
                   return QByteArray();
                }
