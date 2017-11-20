@@ -421,9 +421,9 @@ static const ushort mouseTbl[] = {
     WM_RBUTTONDOWN,     QEvent::MouseButtonPress,       Qt::RightButton,
     WM_RBUTTONUP,       QEvent::MouseButtonRelease,     Qt::RightButton,
     WM_RBUTTONDBLCLK,   QEvent::MouseButtonDblClick,    Qt::RightButton,
-    WM_MBUTTONDOWN,     QEvent::MouseButtonPress,       Qt::MidButton,
-    WM_MBUTTONUP,       QEvent::MouseButtonRelease,     Qt::MidButton,
-    WM_MBUTTONDBLCLK,   QEvent::MouseButtonDblClick,    Qt::MidButton,
+    WM_MBUTTONDOWN,     QEvent::MouseButtonPress,       Qt::MiddleButton,
+    WM_MBUTTONUP,       QEvent::MouseButtonRelease,     Qt::MiddleButton,
+    WM_MBUTTONDBLCLK,   QEvent::MouseButtonDblClick,    Qt::MiddleButton,
     0,                  0,                              0
 };
 
@@ -433,7 +433,7 @@ static Qt::MouseButtons translateMouseButtonState(int s)
     if (s & MK_LBUTTON)
         bst |= Qt::LeftButton;
     if (s & MK_MBUTTON)
-        bst |= Qt::MidButton;
+        bst |= Qt::MiddleButton;
     if (s & MK_RBUTTON)
         bst |= Qt::RightButton;
 

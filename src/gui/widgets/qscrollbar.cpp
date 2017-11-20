@@ -527,7 +527,7 @@ void QScrollBar::mousePressEvent(QMouseEvent *e)
 
    if (d->maximum == d->minimum // no range
          || (e->buttons() & (~e->button())) // another button was clicked before
-         || !(e->button() == Qt::LeftButton || (midButtonAbsPos && e->button() == Qt::MidButton))) {
+         || !(e->button() == Qt::LeftButton || (midButtonAbsPos && e->button() == Qt::MiddleButton))) {
       return;
    }
 
@@ -547,7 +547,7 @@ void QScrollBar::mousePressEvent(QMouseEvent *e)
 
    if ((d->pressedControl == QStyle::SC_ScrollBarAddPage
          || d->pressedControl == QStyle::SC_ScrollBarSubPage)
-         && ((midButtonAbsPos && e->button() == Qt::MidButton)
+         && ((midButtonAbsPos && e->button() == Qt::MiddleButton)
              || (style()->styleHint(QStyle::SH_ScrollBar_LeftClickAbsolutePosition, &opt, this)
                  && e->button() == Qt::LeftButton))) {
       int sliderLength = HORIZONTAL ? sr.width() : sr.height();
@@ -606,7 +606,7 @@ void QScrollBar::mouseMoveEvent(QMouseEvent *e)
    QStyleOptionSlider opt;
    initStyleOption(&opt);
    if (!(e->buttons() & Qt::LeftButton
-         ||  ((e->buttons() & Qt::MidButton)
+         ||  ((e->buttons() & Qt::MiddleButton)
               && style()->styleHint(QStyle::SH_ScrollBar_MiddleClickAbsolutePosition, &opt, this)))) {
       return;
    }

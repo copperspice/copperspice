@@ -284,7 +284,7 @@ class QWSPcMouseSubHandler_mouseman : public QWSPcMouseSubHandler
             nbstate |= Qt::RightButton;
          }
          if (buffer[0] & 0x04) {
-            nbstate |= Qt::MidButton;
+            nbstate |= Qt::MiddleButton;
          }
 
          int overflow = (buffer[0] >> 6) & 0x03;
@@ -428,21 +428,21 @@ class QWSPcMouseSubHandler_ms : public QWSPcMouseSubHandler_serial
 
    int tryData() {
       if (!(buffer[0] & 0x40)) {
-         if (buffer[0] == 0x20 && (bstate & Qt::MidButton)) {
+         if (buffer[0] == 0x20 && (bstate & Qt::MiddleButton)) {
             mman = 1; // mouseman extension
          }
          return 1;
       }
-      int extra = mman && (bstate & Qt::MidButton);
+      int extra = mman && (bstate & Qt::MiddleButton);
       if (nbuf >= 3 + extra) {
          int nbstate = 0;
          if (buffer[0] == 0x40 && !bstate && !buffer[1] && !buffer[2]) {
-            nbstate = Qt::MidButton;
+            nbstate = Qt::MiddleButton;
          } else {
             nbstate = ((buffer[0] & 0x20) >> 5)
                       | ((buffer[0] & 0x10) >> 3);
             if (extra && buffer[3] == 0x20) {
-               nbstate = Qt::MidButton;
+               nbstate = Qt::MiddleButton;
             }
          }
 
@@ -624,7 +624,7 @@ bool QWSPcMouseHandlerPrivate::sendEvent(QWSPcMouseSubHandler &h)
       return true;
    } else {
       h.takeMotion();
-      if (h.buttonState() & (Qt::RightButton | Qt::MidButton)) {
+      if (h.buttonState() & (Qt::RightButton | Qt::MiddleButton)) {
          // Strange for the user to press right or middle without
          // a moving mouse!
          h.worse();

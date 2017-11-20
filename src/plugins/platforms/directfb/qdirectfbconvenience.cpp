@@ -113,7 +113,7 @@ Qt::MouseButton QDirectFbConvenience::mouseButton(DFBInputDeviceButtonIdentifier
     case DIBI_LEFT:
         return Qt::LeftButton;
     case DIBI_MIDDLE:
-        return Qt::MidButton;
+        return Qt::MiddleButton;
     case DIBI_RIGHT:
         return Qt::RightButton;
     default:
@@ -129,7 +129,7 @@ Qt::MouseButtons QDirectFbConvenience::mouseButtons(DFBInputDeviceButtonMask mas
         buttons |= Qt::LeftButton;
     }
     if (mask & DIBM_MIDDLE) {
-        buttons |= Qt::MidButton;
+        buttons |= Qt::MiddleButton;
     }
     if (mask & DIBM_RIGHT) {
         buttons |= Qt::RightButton;

@@ -4334,7 +4334,7 @@ static Qt::MouseButtons translateMouseButtons(int s)
       ret |= Qt::LeftButton;
    }
    if (s & Button2Mask) {
-      ret |= Qt::MidButton;
+      ret |= Qt::MiddleButton;
    }
    if (s & Button3Mask) {
       ret |= Qt::RightButton;
@@ -4472,7 +4472,7 @@ bool QETWidget::translateMouseEvent(const XEvent *event)
             button = Qt::LeftButton;
             break;
          case Button2:
-            button = Qt::MidButton;
+            button = Qt::MiddleButton;
             break;
          case Button3:
             button = Qt::RightButton;

@@ -176,7 +176,7 @@ void QWSLinuxInputMousePrivate::readMouseData()
                button = Qt::LeftButton;
                break;
             case BTN_MIDDLE:
-               button = Qt::MidButton;
+               button = Qt::MiddleButton;
                break;
             case BTN_RIGHT:
                button = Qt::RightButton;

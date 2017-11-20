@@ -2923,7 +2923,7 @@ int QApplication::qwsProcessEvent(QWSEvent *event)
    } else if (widget && event->type == QWSEvent::Mouse) {
       // The mouse event is to one of my top-level widgets
       // which one?
-      const int btnMask = Qt::LeftButton | Qt::RightButton | Qt::MidButton;
+      const int btnMask = Qt::LeftButton | Qt::RightButton | Qt::MiddleButton;
       QPoint p(event->asMouse()->simpleData.x_root,
                event->asMouse()->simpleData.y_root);
       int mouseButtonState = event->asMouse()->simpleData.state & btnMask;
@@ -3396,7 +3396,7 @@ void QApplicationPrivate::closePopup(QWidget *popup)
 
 // Needed for QCursor::pos
 
-static const int AnyButton = (Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+static const int AnyButton = (Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
 
 
 
@@ -3478,7 +3478,7 @@ bool QETWidget::translateMouseEvent(const QWSMouseEvent *event, int prevstate)
       type = QEvent::MouseMove;
    } else if ((mouse.state & AnyButton) != (prevstate & AnyButton)) {
       Qt::MouseButtons current_buttons = Qt::MouseButtons(prevstate & Qt::MouseButtonMask);
-      for (button = Qt::LeftButton; !type && button <= Qt::MidButton; button <<= 1) {
+      for (button = Qt::LeftButton; !type && button <= Qt::MiddleButton; button <<= 1) {
          if ((mouse.state & button) != (current_buttons & button)) {
             // button press or release
             current_buttons = Qt::MouseButtons(current_buttons ^ button);
@@ -3628,7 +3628,7 @@ bool QETWidget::translateMouseEvent(const QWSMouseEvent *event, int prevstate)
       QPointer<QWidget> leaveAfterRelease = 0;
       if (type == QEvent::MouseButtonRelease &&
             (mouse.state & (~button) & (Qt::LeftButton |
-                                        Qt::MidButton |
+                                        Qt::MiddleButton |
                                         Qt::RightButton)) == 0) {
          // Button released outside the widget -> leave the widget after the
          // release event has been delivered.

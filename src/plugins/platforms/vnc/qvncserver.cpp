@@ -303,7 +303,7 @@ bool QRfbPointerEvent::read(QTcpSocket *s)
     if (buttonMask & 1)
         buttons |= Qt::LeftButton;
     if (buttonMask & 2)
-        buttons |= Qt::MidButton;
+        buttons |= Qt::MiddleButton;
     if (buttonMask & 4)
         buttons |= Qt::RightButton;
     if (buttonMask & 8)
@@ -800,7 +800,7 @@ static bool buttonChange(Qt::MouseButtons before, Qt::MouseButtons after, Qt::Mo
 {
     if (before == after)
         return false;
-    for (int b = Qt::LeftButton;  b <= Qt::MidButton; b<<=1) {
+    for (int b = Qt::LeftButton;  b <= Qt::MiddleButton; b<<=1) {
         if ((before & b) != (after & b)) {
             *button = static_cast<Qt::MouseButton>(b);
             *isPress = (after & b);

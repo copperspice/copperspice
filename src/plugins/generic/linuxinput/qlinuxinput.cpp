@@ -250,7 +250,7 @@ void QLinuxInputMouseHandler::readMouseData()
             Qt::MouseButton button = Qt::NoButton;
             switch (data->code) {
             case BTN_LEFT: button = Qt::LeftButton; break;
-            case BTN_MIDDLE: button = Qt::MidButton; break;
+            case BTN_MIDDLE: button = Qt::MiddleButton; break;
             case BTN_RIGHT: button = Qt::RightButton; break;
             }
             if (data->value)

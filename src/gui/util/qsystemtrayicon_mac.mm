@@ -428,7 +428,7 @@ QT_END_NAMESPACE
       return;
    }
 
-   if (mouseButton == Qt::MidButton) {
+   if (mouseButton == Qt::MiddleButton) {
       qtsystray_sendActivated(icon, QSystemTrayIcon::MiddleClick);
    } else {
       qtsystray_sendActivated(icon, QSystemTrayIcon::Trigger);

@@ -133,7 +133,7 @@ void QQnxMouseHandler::socketActivated()
          buttons |= Qt::LeftButton;
       }
       if (packet.hdr.buttons & _POINTER_BUTTON_MIDDLE) {
-         buttons |= Qt::MidButton;
+         buttons |= Qt::MiddleButton;
       }
       if (packet.hdr.buttons & _POINTER_BUTTON_RIGHT) {
          buttons |= Qt::RightButton;

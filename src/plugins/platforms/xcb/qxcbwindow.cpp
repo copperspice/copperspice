@@ -595,7 +595,7 @@ static Qt::MouseButtons translateMouseButtons(int s)
     if (s & XCB_BUTTON_MASK_1)
         ret |= Qt::LeftButton;
     if (s & XCB_BUTTON_MASK_2)
-        ret |= Qt::MidButton;
+        ret |= Qt::MiddleButton;
     if (s & XCB_BUTTON_MASK_3)
         ret |= Qt::RightButton;
     return ret;
@@ -607,7 +607,7 @@ static Qt::MouseButton translateMouseButton(xcb_button_t s)
     case 1:
         return Qt::LeftButton;
     case 2:
-        return Qt::MidButton;
+        return Qt::MiddleButton;
     case 3:
         return Qt::RightButton;
     default:

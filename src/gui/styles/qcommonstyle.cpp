@@ -4912,7 +4912,7 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
          break;
 
       case SH_Slider_AbsoluteSetButtons:
-         ret = Qt::MidButton;
+         ret = Qt::MiddleButton;
          break;
 
       case SH_Slider_PageSetButtons:

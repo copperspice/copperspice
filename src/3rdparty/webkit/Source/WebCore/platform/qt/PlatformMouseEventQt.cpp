@@ -59,7 +59,7 @@ PlatformMouseEvent::PlatformMouseEvent(QGraphicsSceneMouseEvent* event, int clic
         m_button = LeftButton;
     else if (event->button() == Qt::RightButton || (event->buttons() & Qt::RightButton))
         m_button = RightButton;
-    else if (event->button() == Qt::MidButton || (event->buttons() & Qt::MidButton))
+    else if (event->button() == Qt::MiddleButton || (event->buttons() & Qt::MiddleButton))
         m_button = MiddleButton;
     else
         m_button = NoButton;
@@ -116,7 +116,7 @@ PlatformMouseEvent::PlatformMouseEvent(QInputEvent* event, int clickCount)
             m_button = LeftButton;
         else if (mouseButtons & Qt::RightButton)
             m_button = RightButton;
-        else if (mouseButtons  & Qt::MidButton)
+        else if (mouseButtons  & Qt::MiddleButton)
             m_button = MiddleButton;
         else
             m_button = NoButton;

@@ -158,7 +158,7 @@ static Qt::MouseButtons translateMouseButtons(int s)
     if (s & Button1Mask)
         ret |= Qt::LeftButton;
     if (s & Button2Mask)
-        ret |= Qt::MidButton;
+        ret |= Qt::MiddleButton;
     if (s & Button3Mask)
         ret |= Qt::RightButton;
     return ret;
@@ -176,7 +176,7 @@ void QXlibWindow::handleMouseEvent(QEvent::Type type, XButtonEvent *e)
     if (type != QEvent::MouseMove) {
         switch (e->button) {
         case Button1: button = Qt::LeftButton; break;
-        case Button2: button = Qt::MidButton; break;
+        case Button2: button = Qt::MiddleButton; break;
         case Button3: button = Qt::RightButton; break;
         case Button4:
         case Button5:

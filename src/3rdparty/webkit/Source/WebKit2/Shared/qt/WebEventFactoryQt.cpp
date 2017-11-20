@@ -45,7 +45,7 @@ static WebMouseEvent::Button mouseButtonForEvent(QGraphicsSceneMouseEvent *event
         return WebMouseEvent::LeftButton;
     else if (event->button() == Qt::RightButton || (event->buttons() & Qt::RightButton))
         return WebMouseEvent::RightButton;
-    else if (event->button() == Qt::MidButton || (event->buttons() & Qt::MidButton))
+    else if (event->button() == Qt::MiddleButton || (event->buttons() & Qt::MiddleButton))
         return WebMouseEvent::MiddleButton;
     return WebMouseEvent::NoButton;
 }

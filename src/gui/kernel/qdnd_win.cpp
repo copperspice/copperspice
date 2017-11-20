@@ -336,7 +336,7 @@ Qt::MouseButtons toQtMouseButtons(DWORD keyState)
       buttons |= Qt::RightButton;
    }
    if (keyState & MK_MBUTTON) {
-      buttons |= Qt::MidButton;
+      buttons |= Qt::MiddleButton;
    }
 
    return buttons;
@@ -473,7 +473,7 @@ static inline Qt::MouseButtons keystate_to_mousebutton(DWORD grfKeyState)
       result |= Qt::LeftButton;
    }
    if (grfKeyState & MK_MBUTTON) {
-      result |= Qt::MidButton;
+      result |= Qt::MiddleButton;
    }
    if (grfKeyState & MK_RBUTTON) {
       result |= Qt::RightButton;

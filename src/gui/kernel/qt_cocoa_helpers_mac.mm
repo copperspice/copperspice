@@ -294,7 +294,7 @@ struct qt_mac_enum_mapper {
 static qt_mac_enum_mapper qt_mac_mouse_symbols[] = {
    { kEventMouseButtonPrimary, QT_MAC_MAP_ENUM(Qt::LeftButton) },
    { kEventMouseButtonSecondary, QT_MAC_MAP_ENUM(Qt::RightButton) },
-   { kEventMouseButtonTertiary, QT_MAC_MAP_ENUM(Qt::MidButton) },
+   { kEventMouseButtonTertiary, QT_MAC_MAP_ENUM(Qt::MiddleButton) },
    { 4, QT_MAC_MAP_ENUM(Qt::XButton1) },
    { 5, QT_MAC_MAP_ENUM(Qt::XButton2) },
    { 0, QT_MAC_MAP_ENUM(0) }
@@ -716,7 +716,7 @@ Qt::MouseButton cocoaButton2QtButton(NSInteger buttonNum)
       return Qt::RightButton;
    }
    if (buttonNum == 2) {
-      return Qt::MidButton;
+      return Qt::MiddleButton;
    }
    if (buttonNum == 3) {
       return Qt::XButton1;

@@ -1645,7 +1645,7 @@ void QLineControl::processMouseEvent(QMouseEvent *ev)
          if (QApplication::clipboard()->supportsSelection()) {
             if (ev->button() == Qt::LeftButton) {
                copy(QClipboard::Selection);
-            } else if (!isReadOnly() && ev->button() == Qt::MidButton) {
+            } else if (!isReadOnly() && ev->button() == Qt::MiddleButton) {
                deselect();
                insert(QApplication::clipboard()->text(QClipboard::Selection));
             }

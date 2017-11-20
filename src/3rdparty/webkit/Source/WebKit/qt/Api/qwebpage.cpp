@@ -779,7 +779,7 @@ void QWebPagePrivate::handleClipboard(QEvent* ev, Qt::MouseButton button)
                 Pasteboard::generalPasteboard()->writeSelection(focusFrame->editor()->selectedRange().get(), focusFrame->editor()->canSmartCopyOrDelete(), focusFrame);
                 ev->setAccepted(true);
             }
-        } else if (button == Qt::MidButton) {
+        } else if (button == Qt::MiddleButton) {
             if (focusFrame && (focusFrame->editor()->canPaste() || focusFrame->editor()->canDHTMLPaste())) {
                 focusFrame->editor()->paste();
                 ev->setAccepted(true);

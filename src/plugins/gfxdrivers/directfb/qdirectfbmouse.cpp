@@ -228,7 +228,7 @@ void QDirectFBMouseHandlerPrivate::readMouseData()
             if (input.buttons & DIBM_LEFT)
                 buttons |= Qt::LeftButton;
             if (input.buttons & DIBM_MIDDLE)
-                buttons |= Qt::MidButton;
+                buttons |= Qt::MiddleButton;
             if (input.buttons & DIBM_RIGHT)
                 buttons |= Qt::RightButton;
         }

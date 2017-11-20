@@ -483,7 +483,7 @@ class QMdiAreaTabBar : public QTabBar
 */
 void QMdiAreaTabBar::mousePressEvent(QMouseEvent *event)
 {
-   if (event->button() != Qt::MidButton) {
+   if (event->button() != Qt::MiddleButton) {
       QTabBar::mousePressEvent(event);
       return;
    }
