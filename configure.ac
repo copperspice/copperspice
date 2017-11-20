@@ -94,8 +94,11 @@ if test "$OSTYPE" == LINUX -o "$OSTYPE" == BSD; then
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, FONTCONFIG="yes", missing="$missing FontConfig")
 PKG_CHECK_MODULES(FREETYPE, freetype2, FREETYPE="yes", missing="$missing FreeType")
 PKG_CHECK_MODULES(GLIB, glib-2.0, GLIB="yes", missing="$missing GLIB")
+
+if test "x$enable_phonon" != "xno"; then
 PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, GSTREAMER="yes", missing="$missing Gstreamer")
 PKG_CHECK_MODULES(GSTREAMER_AUDIO, gstreamer-audio-0.10, GSTREAMER_AUDIO="yes", missing="$missing Gstreamer-Plugins")
+fi
 
 # not mandatory
 PKG_CHECK_MODULES(GTK, gtk+-2.0, GTK="yes", true)
