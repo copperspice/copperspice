@@ -1930,6 +1930,27 @@ int QCommonListViewBase::horizontalScrollToValue(const int /*index*/, QListView:
  * ListMode ListView Implementation
 */
 
+// internal only
+static inline int cs_vector_query(const QVector<int> &vector, int item, int start, int end)
+{
+   int i = (start + end + 1) >> 1;
+
+   while (end - start > 0) {
+      if (vector.at(i) > item)  {
+         end = i - 1;
+
+      }  else  {
+         start = i;
+
+      }
+
+      i = (start + end + 1) >> 1;
+   }
+
+   return i;
+}
+
+
 #ifndef QT_NO_DRAGANDDROP
 QAbstractItemView::DropIndicatorPosition QListModeViewBase::position(const QPoint &pos, const QRect &rect,
       const QModelIndex &index) const
@@ -2303,8 +2324,7 @@ QListViewItem QListModeViewBase::indexToListViewItem(const QModelIndex &index) c
       return QListViewItem();
    }
 
-   auto iter = std::lower_bound(segmentStartRows.cbegin(), segmentStartRows.cend() - 1, index.row() );
-   const int segment = iter - segmentStartRows.begin();
+   const int segment = cs_vector_query(segmentStartRows, index.row(), 0, segmentStartRows.count() - 1);
 
    QStyleOptionViewItemV4 options = viewOptions();
    options.rect.setSize(contentsSize);
@@ -2479,6 +2499,7 @@ void QListModeViewBase::doStaticLayout(const QListViewLayoutInfo &info)
    }
 }
 
+
 /*!
   \internal
   Finds the set of items intersecting with \a area.
@@ -2509,9 +2530,7 @@ QVector<QModelIndex> QListModeViewBase::intersectingSet(const QRect &area) const
 
    // the last segment position is actually the edge of the last segment
    const int segLast = segmentPositions.count() - 2;
-
-   auto iter = std::lower_bound(segmentPositions.cbegin(), segmentPositions.cend() - 1, segStartPosition);
-   int seg   = iter - segmentPositions.begin();
+   int seg = cs_vector_query(segmentPositions, segStartPosition, 0, segLast + 1);
 
    for (; seg <= segLast && segmentPositions.at(seg) <= segEndPosition; ++seg) {
       int first = segmentStartRows.at(seg);
@@ -2521,8 +2540,7 @@ QVector<QModelIndex> QListModeViewBase::intersectingSet(const QRect &area) const
          continue;
       }
 
-      auto iter = std::lower_bound(flowPositions.cbegin() + first, flowPositions.cbegin() + last, flowStartPosition );
-      int row = iter - flowPositions.begin();
+      int row = cs_vector_query(flowPositions, flowStartPosition, first, last );
 
       for (; row <= last && flowPositions.at(row) <= flowEndPosition; ++row) {
          if (isHidden(row)) {
@@ -2651,8 +2669,7 @@ int QListModeViewBase::perItemScrollToValue(int index, int scrollValue, int view
 
       } else if (! segmentStartRows.isEmpty()) {
          // we are scrolling in the "segment" direction
-         auto iter = std::lower_bound(segmentStartRows.cbegin(), segmentStartRows.cend() - 1, index );
-         const int segment = iter - segmentStartRows.begin();
+         int segment = cs_vector_query(segmentStartRows, index, 0, segmentStartRows.count() - 1);
 
          int leftSegment            = segment;
          const int rightSegment     = leftSegment;
