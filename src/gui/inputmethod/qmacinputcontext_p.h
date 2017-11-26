@@ -22,7 +22,6 @@
 
 #ifndef QMACINPUTCONTEXT_P_H
 #define QMACINPUTCONTEXT_P_H
-#include <qconfig.h>
 
 #ifndef QT_NO_IM
 

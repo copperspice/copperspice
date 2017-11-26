@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <QtDebug>
+#include <QDebug>
 
 #include "qaxisstep_p.h"
 #include "qcommonsequencetypes_p.h"

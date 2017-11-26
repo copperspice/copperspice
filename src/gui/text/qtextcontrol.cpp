@@ -31,7 +31,6 @@
 #include <qdebug.h>
 #include <qmime.h>
 #include <qdrag.h>
-#include <qconfig.h>
 #include <qclipboard.h>
 #include <qmenu.h>
 #include <qstyle.h>

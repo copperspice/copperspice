@@ -33,7 +33,6 @@ set(CORE_PUBLIC_INCLUDES
     QTextStreamFunction
     QTextStreamManipulator
     QUrl
-    QtDebug
 )
 
 set(CORE_INCLUDES
@@ -62,7 +61,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsavefile.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtdebug.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporarydir.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextistream.h

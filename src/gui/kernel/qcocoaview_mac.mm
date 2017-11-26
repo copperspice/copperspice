@@ -20,11 +20,9 @@
 *
 ***********************************************************************/
 
-#include <qconfig.h>
-
 #import <qcocoaview_mac_p.h>
-
 #include <cs_carbon_wrapper_p.h>
+
 #include <qwidget_p.h>
 #include <qt_mac_p.h>
 #include <qapplication_p.h>

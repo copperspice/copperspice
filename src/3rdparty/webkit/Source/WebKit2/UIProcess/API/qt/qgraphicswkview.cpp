@@ -38,7 +38,7 @@
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
 #include <QUrl>
-#include <QtDebug>
+#include <QDebug>
 #include <WebKit2/WKRetainPtr.h>
 #include <wtf/RefPtr.h>
 #include <wtf/text/WTFString.h>

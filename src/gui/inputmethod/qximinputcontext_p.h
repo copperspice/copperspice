@@ -23,7 +23,6 @@
 #ifndef QXIMINPUTCONTEXT_P_H
 #define QXIMINPUTCONTEXT_P_H
 
-#include <qconfig.h>
 #ifndef QT_NO_IM
 
 #include <QtCore/qglobal.h>

@@ -22,19 +22,19 @@
 
 #include "qtriangulator_p.h"
 
-#include <QtGui/qdialog.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpainterpath.h>
+#include <qdialog.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
 #include <qbezier_p.h>
 #include <qdatabuffer_p.h>
-#include <QtCore/qbitarray.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qqueue.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qalgorithms.h>
-#include <QtDebug>
+#include <qbitarray.h>
+#include <qvarlengtharray.h>
+#include <qqueue.h>
+#include <qglobal.h>
+#include <qpoint.h>
+#include <qalgorithms.h>
+#include <QDebug>
 #include <math.h>
 #include <qgl_p.h>
 

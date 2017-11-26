@@ -32,8 +32,8 @@
 #include <qvarlengtharray.h>
 #include <qgraphicswidget_p.h>
 
-#include <QtDebug>
-#include <QtCore/qmath.h>
+#include <QDebug>
+#include <qmath.h>
 
 QT_BEGIN_NAMESPACE
 

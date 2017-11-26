@@ -23,11 +23,10 @@
 #ifndef QPLATFORMFONTDATABASE_QPA_H
 #define QPLATFORMFONTDATABASE_QPA_H
 
-#include <QtCore/qconfig.h>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtGui/QFontDatabase>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QFontDatabase>
 #include <qfont_p.h>
 
 QT_BEGIN_NAMESPACE

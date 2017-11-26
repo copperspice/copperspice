@@ -23,12 +23,11 @@
 #ifndef QFONTENGINE_QPA_P_H
 #define QFONTENGINE_QPA_P_H
 
-#include <QtCore/qconfig.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qendian.h>
-#include <QtCore/QBuffer>
+#include <qglobal.h>
+#include <qendian.h>
+#include <QBuffer>
+#include <QFile>
 #include <qfontengine_p.h>
-#include <QtCore/QFile>
 
 QT_BEGIN_NAMESPACE
 

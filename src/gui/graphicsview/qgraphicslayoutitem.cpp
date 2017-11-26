@@ -31,7 +31,7 @@
 #include <qwidget.h>
 #include <qgraphicswidget.h>
 
-#include <QtDebug>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

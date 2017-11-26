@@ -30,7 +30,7 @@
 #include "phonon_export.h"
 
 #include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QtDebug>
+#include <QtCore/QDebug>
 #include <QtCore/QList>
 #include <QtCore/QSharedData>
 #include <QtCore/QString>
@@ -41,9 +41,9 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
     class ObjectDescriptionPrivate;
-   
+
     enum ObjectDescriptionType
-    {       
+    {
         AudioOutputDeviceType,
         EffectType,
         AudioChannelType,
@@ -136,41 +136,41 @@ template<ObjectDescriptionType T>
 class ObjectDescription
 {
     public:
-      
-        static inline ObjectDescription<T> fromIndex(int index) { 
+
+        static inline ObjectDescription<T> fromIndex(int index) {
             return ObjectDescription<T>(QExplicitlySharedDataPointer<ObjectDescriptionData>(ObjectDescriptionData::fromIndex(T, index)));
         }
-       
-        inline bool operator==(const ObjectDescription &otherDescription) const { 
+
+        inline bool operator==(const ObjectDescription &otherDescription) const {
             return *d == *otherDescription.d;
         }
-       
-        inline bool operator!=(const ObjectDescription &otherDescription) const { 
+
+        inline bool operator!=(const ObjectDescription &otherDescription) const {
             return !operator==(otherDescription);
         }
 
-        inline QString name() const 
-            { return d->name(); } 
+        inline QString name() const
+            { return d->name(); }
 
-        inline QString description() const 
+        inline QString description() const
             { return d->description(); }
- 
-        inline QVariant property(const char *name) const 
-            { return d->property(name); } 
 
-        inline QList<QByteArray> propertyNames() const 
-            { return d->propertyNames(); } 
-       
-        inline bool isValid() const 
-            { return d->isValid(); } 
-      
-        inline int index() const 
-            { return d->index(); } 
+        inline QVariant property(const char *name) const
+            { return d->property(name); }
 
-        ObjectDescription() 
+        inline QList<QByteArray> propertyNames() const
+            { return d->propertyNames(); }
+
+        inline bool isValid() const
+            { return d->isValid(); }
+
+        inline int index() const
+            { return d->index(); }
+
+        ObjectDescription()
                   : d(new ObjectDescriptionData(0)) {}
 
-        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties) 
+        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties)
                   : d(new ObjectDescriptionData(index, properties)) {}
 
     protected:
@@ -198,7 +198,7 @@ typedef ObjectDescription<EffectType> EffectDescription;
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
-#endif 
+#endif
 
 } //namespace Phonon
 
@@ -210,18 +210,18 @@ Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
 Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
-#endif 
+#endif
 
 #ifndef QT_NO_PHONON_EFFECT
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)
-#endif 
+#endif
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 Q_DECLARE_METATYPE(Phonon::AudioChannelDescription)
 Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
-#endif 
+#endif
 
 #endif // PHONON_OBJECTDESCRIPTION_H

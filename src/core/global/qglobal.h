@@ -27,7 +27,6 @@
 #include <stdint.h>
 
 #include <cs_build_info.h>
-#include <qconfig.h>
 #include <qexport.h>
 #include <qfeatures.h>
 
@@ -616,6 +615,7 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_10 = 0x000C,
       MV_10_11 = 0x000D,
       MV_10_12 = 0x000E,
+      MV_10_13 = 0x000F,
 
       MV_CHEETAH      = MV_10_0,
       MV_PUMA         = MV_10_1,
@@ -629,7 +629,8 @@ class Q_CORE_EXPORT QSysInfo
       MV_MAVERICKS    = MV_10_9,
       MV_YOSEMITE     = MV_10_10,
       MV_EL_CAPITAN   = MV_10_11,
-      MV_SIERRA       = MV_10_12
+      MV_SIERRA       = MV_10_12,
+      MV_HIGH_SIERRA  = MV_10_13
    };
 
    static const MacVersion MacintoshVersion;

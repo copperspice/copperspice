@@ -20,10 +20,9 @@
 *
 ***********************************************************************/
 
-#include <QtDebug>
+#include <QDebug>
 
 #include "qpatternistlocale_p.h"
-
 #include "qiodevicedelegate_p.h"
 
 QT_BEGIN_NAMESPACE

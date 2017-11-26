@@ -33,8 +33,7 @@ CORE_PUBLIC_INCLUDES += \
 	QTextStream \
 	QTextStreamFunction \
 	QTextStreamManipulator \
-	QUrl \
-	QtDebug
+	QUrl
 
 CORE_IO_INCLUDES = \
 	q_pid.h \
@@ -61,7 +60,6 @@ CORE_IO_INCLUDES = \
 	qsavefile.h \
 	qsettings.h \
 	qstandardpaths.h \
-	qtdebug.h \
 	qtemporarydir.h \
 	qtemporaryfile.h \
 	qtextistream.h \

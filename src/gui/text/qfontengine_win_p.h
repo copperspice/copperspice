@@ -23,8 +23,6 @@
 #ifndef QFONTENGINE_WIN_P_H
 #define QFONTENGINE_WIN_P_H
 
-#include <QtCore/qconfig.h>
-
 QT_BEGIN_NAMESPACE
 
 class QNativeImage;
@@ -51,7 +49,7 @@ class QFontEngineWin : public QFontEngine
    void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
          QTextItem::RenderFlags flags) override;
 
-   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path,
          QTextItem::RenderFlags flags) override;
 
    HGDIOBJ selectDesignFont() const;

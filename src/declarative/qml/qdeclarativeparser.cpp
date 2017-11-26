@@ -38,7 +38,7 @@
 #include <QSizeF>
 #include <QRectF>
 #include <QStringBuilder>
-#include <QtDebug>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

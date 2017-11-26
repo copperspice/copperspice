@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <QtDebug>
+#include <QDebug>
 #include "qxmlutils_p.h"
 #include "qxpathhelper_p.h"
 #include "qnamepool_p.h"

@@ -23,7 +23,7 @@
 #ifndef QDebug_P_H
 #define QDebug_P_H
 
-#include <QtDebug>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

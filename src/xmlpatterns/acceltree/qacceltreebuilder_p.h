@@ -23,8 +23,10 @@
 #ifndef QAccelTreeBuilder_P_H
 #define QAccelTreeBuilder_P_H
 
+#include <QDebug>
 #include <QSet>
 #include <QStack>
+
 #include "qxmlutils_p.h"
 #include "qacceltree_p.h"
 #include "qbuiltintypes_p.h"
@@ -34,9 +36,6 @@
 #include "qreportcontext_p.h"
 #include "qsourcelocationreflection_p.h"
 #include "qpatternistlocale_p.h"
-#include <QtDebug>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 template<bool FromDocument>
@@ -67,7 +66,7 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    void endElement() override;
    void attribute(const QXmlName &name, const QStringRef &value) override;
    void characters(const QStringRef &ch) override;
-   void whitespaceOnly(const QStringRef &ch) override; 
+   void whitespaceOnly(const QStringRef &ch) override;
    void processingInstruction(const QXmlName &target, const QString &data) override;
    void namespaceBinding(const QXmlName &nb) override;
    void comment(const QString &content) override;
@@ -119,7 +118,7 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
 
    /** If we have already commenced a document, we don't want to
     * add more document nodes. We keep track of them with this
-    * counter, which ensures that startDocument() and endDocument() are skipped consistently. 
+    * counter, which ensures that startDocument() and endDocument() are skipped consistently.
    */
    AccelTree::PreNumber            m_skippedDocumentNodes;
 
@@ -143,7 +142,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(AccelTreeBuilder<false>::Features)
 
 #include "qacceltreebuilder.cpp"
 }
-
-QT_END_NAMESPACE
 
 #endif

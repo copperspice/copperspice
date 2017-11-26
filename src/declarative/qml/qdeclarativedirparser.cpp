@@ -22,11 +22,11 @@
 
 #include "private/qdeclarativedirparser_p.h"
 #include "qdeclarativeerror.h"
-#include <private/qdeclarativeglobal_p.h>
+#include <qdeclarativeglobal_p.h>
 
-#include <QtCore/QTextStream>
-#include <QtCore/QFile>
-#include <QtCore/QtDebug>
+#include <QTextStream>
+#include <QFile>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

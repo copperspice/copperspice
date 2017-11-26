@@ -23,8 +23,6 @@
 #ifndef QWININPUTCONTEXT_P_H
 #define QWININPUTCONTEXT_P_H
 
-#include <qconfig.h>
-
 #ifndef QT_NO_IM
 
 #include <QtGui/qinputcontext.h>

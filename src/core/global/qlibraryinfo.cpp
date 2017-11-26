@@ -22,7 +22,6 @@
 
 #include <qdir.h>
 #include <qfile.h>
-#include <qconfig.h>
 #include <qlibraryinfo.h>
 #include <qscopedpointer.h>
 #include <qcoreapplication.h>

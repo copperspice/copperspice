@@ -21,10 +21,9 @@
 ***********************************************************************/
 
 #include "livesingleselectionmanipulator.h"
-
 #include "../qdeclarativeviewinspector_p.h"
 
-#include <QtDebug>
+#include <QDebug>
 
 namespace QmlJSDebugger {
 

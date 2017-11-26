@@ -14,20 +14,22 @@ CORE_PUBLIC_INCLUDES += \
 	Q_UINT8 \
 	Q_ULLONG \
 	Q_ULONG \
+	QAssert \
 	QCOORD \
 	QFlag \
 	QFlags \
+	QGlobal \
 	QGlobalStatic \
 	QGlobalStaticDeleter \
 	QIncompatibleFlag \
 	QIntegerForSize \
 	QInternal \
 	QLibraryInfo \
+	QLog \
 	QNoImplicitBoolCast \
 	QSysInfo \
 	QTypeInfo \
 	Qt \
-	QtConfig \
 	QtCore \
 	QtEndian \
 	QtGlobal \
@@ -48,7 +50,6 @@ CORE_GLOBAL_INCLUDES = \
 	q_ullong.h \
 	q_ulong.h \
 	qassert.h \
-	qconfig.h \
 	qcoord.h \
 	qendian.h \
 	qexport.h \
@@ -70,7 +71,6 @@ CORE_GLOBAL_INCLUDES = \
 	qplatformposix.h \
 	qsysinfo.h \
 	qt.h \
-	qtconfig.h \
 	qtcore.h \
 	qtendian.h \
 	qtglobal.h \
@@ -81,7 +81,7 @@ CORE_GLOBAL_INCLUDES = \
 CORE_GLOBAL_PRIVATE_INCLUDES = \
 	qnumeric_p.h
 
-CORE_INCLUDES += $(CORE_GLOBAL_INCLUDES) qconfig.h
+CORE_INCLUDES += $(CORE_GLOBAL_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_GLOBAL_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/core/global/%,$(CORE_GLOBAL_INCLUDES)) \

@@ -12,20 +12,22 @@ set(CORE_PUBLIC_INCLUDES
     Q_UINT8
     Q_ULLONG
     Q_ULONG
+    QAssert
     QCOORD
     QFlag
     QFlags
+    QGlobal
     QGlobalStatic
     QGlobalStaticDeleter
     QIncompatibleFlag
     QIntegerForSize
     QInternal
     QLibraryInfo
+    QLog
     QNoImplicitBoolCast
     QSysInfo
     QTypeInfo
     Qt
-    QtConfig
     QtCore
     QtEndian
     QtGlobal
@@ -47,7 +49,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ullong.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/q_ulong.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qassert.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/qconfig.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qcoord.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qendian.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qexport.h
@@ -69,7 +70,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qt.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/global/qtconfig.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qtendian.h
     ${CMAKE_CURRENT_SOURCE_DIR}/global/qtglobal.h

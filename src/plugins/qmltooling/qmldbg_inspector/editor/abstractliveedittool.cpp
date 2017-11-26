@@ -24,8 +24,7 @@
 #include "../qdeclarativeviewinspector_p.h"
 
 #include <QDeclarativeEngine>
-
-#include <QtDebug>
+#include <QDebug>
 #include <QGraphicsItem>
 #include <QDeclarativeItem>
 

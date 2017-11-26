@@ -24,10 +24,6 @@
 
 #include <translator.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QString>
-
 #include "parser/qdeclarativejsengine_p.h"
 #include "parser/qdeclarativejsparser_p.h"
 #include "parser/qdeclarativejslexer_p.h"
@@ -38,7 +34,8 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
-#include <QtDebug>
+#include <QDebug>
+#include <QString>
 #include <QStringList>
 
 #include <iostream>

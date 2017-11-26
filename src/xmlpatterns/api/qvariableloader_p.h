@@ -23,9 +23,9 @@
 #ifndef QVARIABLELOADER_P_H
 #define QVARIABLELOADER_P_H
 
-#include <QtCore/QSet>
-#include <QtXmlPatterns/QXmlQuery>
-#include <QtDebug>
+#include <QSet>
+#include <QXmlQuery>
+#include <QDebug>
 
 #include <qdynamiccontext_p.h>
 #include <qexternalvariableloader_p.h>
@@ -39,8 +39,8 @@ class VariableLoader : public ExternalVariableLoader
    typedef QHash<QXmlName, QVariant> BindingHash;
    typedef QExplicitlySharedDataPointer<VariableLoader> Ptr;
 
-   inline VariableLoader(const NamePool::Ptr &np, 
-                  const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr()) 
+   inline VariableLoader(const NamePool::Ptr &np,
+                  const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr())
                   : m_namePool(np), m_previousLoader(previousLoader)
    {
    }

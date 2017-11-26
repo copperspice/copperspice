@@ -109,7 +109,7 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
 
       case QtCriticalMsg:
       case QtDebugMsg: {
-         Q_ASSERT_X(false, Q_FUNC_INFO, "QtCriticalMsg or QtDebugMsg are not supported.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "CriticalMsg or DebugMsg are not supported.");
          return;
       }
    }

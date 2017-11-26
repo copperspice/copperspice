@@ -20,9 +20,9 @@
 *
 ***********************************************************************/
 
-#include <qxcbwindow.h>
-#include <QtDebug>
+#include <QDebug>
 
+#include <qxcbwindow.h>
 #include <qxcbconnection.h>
 #include <qxcbscreen.h>
 

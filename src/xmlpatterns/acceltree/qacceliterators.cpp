@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <QtDebug>
+#include <QDebug>
 
 #include "qacceliterators_p.h"
 

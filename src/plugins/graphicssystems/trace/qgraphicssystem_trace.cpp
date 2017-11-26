@@ -26,7 +26,7 @@
 #include <qwindowsurface_raster_p.h>
 #include <QFile>
 #include <QPainter>
-#include <QtDebug>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

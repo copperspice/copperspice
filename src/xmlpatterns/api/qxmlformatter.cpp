@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <QtDebug>
+#include <QDebug>
 
 #include "qxmlformatter.h"
 #include "qxpathhelper_p.h"

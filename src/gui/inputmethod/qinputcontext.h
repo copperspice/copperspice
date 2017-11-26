@@ -23,13 +23,12 @@
 #ifndef QINPUTCONTEXT_H
 #define QINPUTCONTEXT_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qconfig.h>
-#include <QtGui/qevent.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qaction.h>
+#include <qobject.h>
+#include <qglobal.h>
+#include <qevent.h>
+#include <qstring.h>
+#include <qlist.h>
+#include <qaction.h>
 #include <QScopedPointer>
 
 #ifndef QT_NO_IM

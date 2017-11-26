@@ -23,8 +23,7 @@
 #ifndef QWSSOCKET_QWS_H
 #define QWSSOCKET_QWS_H
 
-#include <QtCore/qconfig.h>
-#include <QtGui/qwsutils_qws.h>
+#include <qwsutils_qws.h>
 
 #ifndef QT_NO_QWS_MULTIPROCESS
 

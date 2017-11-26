@@ -52,7 +52,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QStyle>
 #include <QTouchEvent>
-#include <QtDebug>
+#include <QDebug>
 #include <WebCore/Cursor.h>
 #include <WebCore/FloatRect.h>
 #include <WebCore/NotImplemented.h>
