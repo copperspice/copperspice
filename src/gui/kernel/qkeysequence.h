@@ -148,10 +148,8 @@ class Q_GUI_EXPORT QKeySequence
    static QKeySequence mnemonic(const QString &text);
    static QList<QKeySequence> keyBindings(StandardKey key);
 
-   // ### Qt5/kill 'operator QString' - it's evil
-   operator QString() const;
    operator QVariant() const;
-   operator int() const;
+
    int operator[](uint i) const;
    QKeySequence &operator=(const QKeySequence &other);
 

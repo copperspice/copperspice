@@ -430,8 +430,8 @@ void QWellArray::keyPressEvent(QKeyEvent *e)
 //////////// QWellArray END
 
 static bool initrgb = false;
-static QRgb stdrgb[6 * 8];
-static QRgb cusrgb[2 * 8];
+static QRgb s_standardRGB[6 * 8];
+static QRgb s_customRGB[2 * 8];
 static bool customSet = false;
 
 
@@ -440,16 +440,18 @@ static void initRGB()
    if (initrgb) {
       return;
    }
+
    initrgb = true;
    int i = 0;
+
    for (int g = 0; g < 4; g++)
       for (int r = 0;  r < 4; r++)
          for (int b = 0; b < 3; b++) {
-            stdrgb[i++] = qRgb(r * 255 / 3, g * 255 / 3, b * 255 / 2);
+            s_standardRGB[i++] = qRgb(r * 255 / 3, g * 255 / 3, b * 255 / 2);
          }
 
    for (i = 0; i < 2 * 8; i++) {
-      cusrgb[i] = 0xffffffff;
+      s_customRGB[i] = 0xffffffff;
    }
 }
 
@@ -462,52 +464,35 @@ int QColorDialog::customCount()
    return 2 * 8;
 }
 
-/*!
-    \since 4.5
-
-    Returns the custom color at the given \a index as a QRgb value.
-*/
-QRgb QColorDialog::customColor(int index)
+QColor QColorDialog::customColor(int index)
 {
    if (uint(index) >= uint(customCount())) {
       return qRgb(255, 255, 255);
    }
+
    initRGB();
-   return cusrgb[index];
+   return s_customRGB[index];
 }
 
-/*!
-    Sets the custom color at \a index to the QRgb \a color value.
-
-    \note This function does not apply to the Native Color Dialog on the Mac
-    OS X platform. If you still require this function, use the
-    QColorDialog::DontUseNativeDialog option.
-*/
-void QColorDialog::setCustomColor(int index, QRgb color)
+void QColorDialog::setCustomColor(int index, QColor color)
 {
    if (uint(index) >= uint(customCount())) {
       return;
    }
+
    initRGB();
    customSet = true;
-   cusrgb[index] = color;
+   s_customRGB[index] = color.rgb();
 }
 
-/*!
-    Sets the standard color at \a  index to the QRgb \a color value.
-
-    \note This function does not apply to the Native Color Dialog on the Mac
-    OS X platform. If you still require this function, use the
-    QColorDialog::DontUseNativeDialog option.
-*/
-
-void QColorDialog::setStandardColor(int index, QRgb color)
+void QColorDialog::setStandardColor(int index, QColor color)
 {
    if (uint(index) >= uint(6 * 8)) {
       return;
    }
+
    initRGB();
-   stdrgb[index] = color;
+   s_standardRGB[index] = color.rgb();
 }
 
 static inline void rgb2hsv(QRgb rgb, int &h, int &s, int &v)
@@ -1486,7 +1471,7 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
    if (standard) {
       for (i = 0; i < 6; i++) {
          for (j = 0; j < 8; j++) {
-            if (color == stdrgb[i + j * 6]) {
+            if (color == s_standardRGB[i + j * 6]) {
                _q_newStandard(i, j);
                standard->setCurrent(i, j);
                standard->setSelected(i, j);
@@ -1500,7 +1485,7 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
    if (custom) {
       for (i = 0; i < 2; i++) {
          for (j = 0; j < 8; j++) {
-            if (color == cusrgb[i + j * 2]) {
+            if (color == s_customRGB[i + j * 2]) {
                _q_newCustom(i, j);
                custom->setCurrent(i, j);
                custom->setSelected(i, j);
@@ -1525,7 +1510,7 @@ void QColorDialogPrivate::_q_newColorTypedIn(const QRgb &rgb)
 void QColorDialogPrivate::_q_newCustom(int r, int c)
 {
    int i = r + 2 * c;
-   setCurrentColor(cusrgb[i]);
+   setCurrentColor(s_customRGB[i]);
    nextCust = i;
    if (standard) {
       standard->setSelected(-1, -1);
@@ -1534,7 +1519,8 @@ void QColorDialogPrivate::_q_newCustom(int r, int c)
 
 void QColorDialogPrivate::_q_newStandard(int r, int c)
 {
-   setCurrentColor(stdrgb[r + c * 6]);
+   setCurrentColor(s_standardRGB[r + c * 6]);
+
    if (custom) {
       custom->setSelected(-1, -1);
    }
@@ -1583,14 +1569,14 @@ void QColorDialogPrivate::init(const QColor &initial)
          QVariant v = settings.value(QLatin1String("CS/customColors/") + QString::number(i));
          if (v.isValid()) {
             QRgb rgb = v.toUInt();
-            cusrgb[i] = rgb;
+            s_customRGB[i] = rgb;
          }
       }
    }
 #endif
 
    if (!smallDisplay) {
-      standard = new QColorWell(q, 6, 8, stdrgb);
+      standard = new QColorWell(q, 6, 8, s_standardRGB);
       lblBasicColors = new QLabel(q);
 
 #ifndef QT_NO_SHORTCUT
@@ -1602,7 +1588,7 @@ void QColorDialogPrivate::init(const QColor &initial)
       leftLay->addWidget(standard);
       leftLay->addStretch();
 
-      custom = new QColorWell(q, 2, 8, cusrgb);
+      custom = new QColorWell(q, 2, 8, s_customRGB);
       custom->setAcceptDrops(true);
 
       q->connect(custom, SIGNAL(selected(int, int)), q, SLOT(_q_newCustom(int, int)));
@@ -1719,7 +1705,7 @@ void QColorDialogPrivate::init(const QColor &initial)
 
 void QColorDialogPrivate::_q_addCustom()
 {
-   cusrgb[nextCust] = cs->currentColor();
+   s_customRGB[nextCust] = cs->currentColor();
    if (custom) {
       custom->update();
    }
@@ -2005,60 +1991,17 @@ QColor QColorDialog::getColor(const QColor &initial, QWidget *parent, const QStr
                               ColorDialogOptions options)
 {
    QColorDialog dlg(parent);
+
    if (!title.isEmpty()) {
       dlg.setWindowTitle(title);
    }
+
    dlg.setOptions(options);
    dlg.setCurrentColor(initial);
    dlg.exec();
+
    return dlg.selectedColor();
 }
-
-/*!
-    Pops up a modal color dialog, lets the user choose a color, and
-    returns that color. The color is initially set to \a initial. The
-    dialog is a child of \a parent. It returns an invalid (see
-    QColor::isValid()) color if the user cancels the dialog.
-
-    On Symbian, this static function will use the native
-    color dialog and not a QColorDialog.
-*/
-
-QColor QColorDialog::getColor(const QColor &initial, QWidget *parent)
-{
-   return getColor(initial, parent, QString(), ColorDialogOptions(0));
-}
-
-
-/*!
-    \obsolete
-
-    Pops up a modal color dialog to allow the user to choose a color
-    and an alpha channel (transparency) value. The color+alpha is
-    initially set to \a initial. The dialog is a child of \a parent.
-
-    If \a ok is non-null, \e *\a ok is set to true if the user clicked
-    \gui{OK}, and to false if the user clicked Cancel.
-
-    If the user clicks Cancel, the \a initial value is returned.
-
-    Use QColorDialog::getColor() instead, passing the
-    QColorDialog::ShowAlphaChannel option.
-*/
-
-QRgb QColorDialog::getRgba(QRgb initial, bool *ok, QWidget *parent)
-{
-   QColor color(getColor(QColor(initial), parent, QString(), ShowAlphaChannel));
-   QRgb result = color.isValid() ? color.rgba() : initial;
-   if (ok) {
-      *ok = color.isValid();
-   }
-   return result;
-}
-
-/*!
-    Destroys the color dialog.
-*/
 
 QColorDialog::~QColorDialog()
 {
@@ -2074,8 +2017,9 @@ QColorDialog::~QColorDialog()
 #ifndef QT_NO_SETTINGS
    if (!customSet) {
       QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
+
       for (int i = 0; i < 2 * 8; ++i) {
-         settings.setValue(QLatin1String("CS/customColors/") + QString::number(i), cusrgb[i]);
+         settings.setValue(QLatin1String("CS/customColors/") + QString::number(i), s_customRGB[i]);
       }
    }
 #endif

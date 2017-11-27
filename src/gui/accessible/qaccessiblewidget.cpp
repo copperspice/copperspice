@@ -133,8 +133,9 @@ QString Q_GUI_EXPORT qt_accStripAmp(const QString &text)
 QString Q_GUI_EXPORT qt_accHotKey(const QString &text)
 {
    int ampIndex = qt_accAmpIndex(text);
+
    if (ampIndex != -1) {
-      return (QString)QKeySequence(Qt::ALT) + text.at(ampIndex + 1);
+      return QKeySequence(Qt::ALT).toString() + text.at(ampIndex + 1);
    }
 
    return QString();

@@ -524,56 +524,6 @@ class QHttpHeaderPrivate
  *
  ****************************************************/
 
-/*!
-    \class QHttpHeader
-    \obsolete
-    \brief The QHttpHeader class contains header information for HTTP.
-
-    \ingroup network
-    \inmodule QtNetwork
-
-    In most cases you should use the more specialized derivatives of
-    this class, QHttpResponseHeader and QHttpRequestHeader, rather
-    than directly using QHttpHeader.
-
-    QHttpHeader provides the HTTP header fields. A HTTP header field
-    consists of a name followed by a colon, a single space, and the
-    field value. (See RFC 1945.) Field names are case-insensitive. A
-    typical header field looks like this:
-    \snippet doc/src/snippets/code/src_network_access_qhttp.cpp 0
-
-    In the API the header field name is called the "key" and the
-    content is called the "value". You can get and set a header
-    field's value by using its key with value() and setValue(), e.g.
-    \snippet doc/src/snippets/code/src_network_access_qhttp.cpp 1
-
-    Some fields are so common that getters and setters are provided
-    for them as a convenient alternative to using \l value() and
-    \l setValue(), e.g. contentLength() and contentType(),
-    setContentLength() and setContentType().
-
-    Each header key has a \e single value associated with it. If you
-    set the value for a key which already exists the previous value
-    will be discarded.
-
-    \sa QHttpRequestHeader QHttpResponseHeader
-*/
-
-/*!
-    \fn int QHttpHeader::majorVersion() const
-
-    Returns the major protocol-version of the HTTP header.
-*/
-
-/*!
-    \fn int QHttpHeader::minorVersion() const
-
-    Returns the minor protocol-version of the HTTP header.
-*/
-
-/*!
-        Constructs an empty HTTP header.
-*/
 QHttpHeader::QHttpHeader()
    : d_ptr(new QHttpHeaderPrivate)
 {
@@ -954,9 +904,9 @@ bool QHttpHeader::hasContentLength() const
 
     \sa setContentLength() hasContentLength()
 */
-uint QHttpHeader::contentLength() const
+qint64 QHttpHeader::contentLength() const
 {
-   return value(QLatin1String("content-length")).toUInt();
+   return value(QLatin1String("content-length")).toULongLong();
 }
 
 /*!
@@ -965,7 +915,7 @@ uint QHttpHeader::contentLength() const
 
     \sa contentLength() hasContentLength()
 */
-void QHttpHeader::setContentLength(int len)
+void QHttpHeader::setContentLength(qint64 len)
 {
    setValue(QLatin1String("content-length"), QString::number(len));
 }
@@ -1497,237 +1447,10 @@ QHttp::~QHttp()
    abort();
 }
 
-/*!
-    \enum QHttp::ConnectionMode
-    \since 4.3
-
-    This enum is used to specify the mode of connection to use:
-
-    \value ConnectionModeHttp The connection is a regular HTTP connection to the server
-    \value ConnectionModeHttps The HTTPS protocol is used and the connection is encrypted using SSL.
-
-    When using the HTTPS mode, care should be taken to connect to the sslErrors signal, and
-    handle possible SSL errors.
-
-    \sa QSslSocket
-*/
-
-/*!
-    \enum QHttp::State
-
-    This enum is used to specify the state the client is in:
-
-    \value Unconnected There is no connection to the host.
-    \value HostLookup A host name lookup is in progress.
-    \value Connecting An attempt to connect to the host is in progress.
-    \value Sending The client is sending its request to the server.
-    \value Reading The client's request has been sent and the client
-    is reading the server's response.
-    \value Connected The connection to the host is open, but the client is
-    neither sending a request, nor waiting for a response.
-    \value Closing The connection is closing down, but is not yet
-    closed. (The state will be \c Unconnected when the connection is
-    closed.)
-
-    \sa stateChanged() state()
-*/
-
-/*!  \enum QHttp::Error
-
-    This enum identifies the error that occurred.
-
-    \value NoError No error occurred.
-    \value HostNotFound The host name lookup failed.
-    \value ConnectionRefused The server refused the connection.
-    \value UnexpectedClose The server closed the connection unexpectedly.
-    \value InvalidResponseHeader The server sent an invalid response header.
-    \value WrongContentLength The client could not read the content correctly
-    because an error with respect to the content length occurred.
-    \value Aborted The request was aborted with abort().
-    \value ProxyAuthenticationRequiredError QHttp is using a proxy, and the
-    proxy server requires authentication to establish a connection.
-    \value AuthenticationRequiredError The web server requires authentication
-    to complete the request.
-    \value UnknownError An error other than those specified above
-    occurred.
-
-    \sa error()
-*/
-
-/*!
-    \fn void QHttp::stateChanged(int state)
-
-    This signal is emitted when the state of the QHttp object changes.
-    The argument \a state is the new state of the connection; it is
-    one of the \l State values.
-
-    This usually happens when a request is started, but it can also
-    happen when the server closes the connection or when a call to
-    close() succeeded.
-
-    \sa get() post() head() request() close() state() State
-*/
-
-/*!
-    \fn void QHttp::responseHeaderReceived(const QHttpResponseHeader &resp);
-
-    This signal is emitted when the HTTP header of a server response
-    is available. The header is passed in \a resp.
-
-    \sa get() post() head() request() readyRead()
-*/
-
-/*!
-    \fn void QHttp::readyRead(const QHttpResponseHeader &resp)
-
-    This signal is emitted when there is new response data to read.
-
-    If you specified a device in the request where the data should be
-    written to, then this signal is \e not emitted; instead the data
-    is written directly to the device.
-
-    The response header is passed in \a resp.
-
-    You can read the data with the readAll() or read() functions
-
-    This signal is useful if you want to process the data in chunks as
-    soon as it becomes available. If you are only interested in the
-    complete data, just connect to the requestFinished() signal and
-    read the data then instead.
-
-    \sa get() post() request() readAll() read() bytesAvailable()
-*/
-
-/*!
-    \fn void QHttp::dataSendProgress(int done, int total)
-
-    This signal is emitted when this object sends data to a HTTP
-    server to inform it about the progress of the upload.
-
-    \a done is the amount of data that has already arrived and \a
-    total is the total amount of data. It is possible that the total
-    amount of data that should be transferred cannot be determined, in
-    which case \a total is 0.(If you connect to a QProgressBar, the
-    progress bar shows a busy indicator if the total is 0).
-
-    \warning \a done and \a total are not necessarily the size in
-    bytes, since for large files these values might need to be
-    "scaled" to avoid overflow.
-
-    \sa dataReadProgress(), post(), request(), QProgressBar
-*/
-
-/*!
-    \fn void QHttp::dataReadProgress(int done, int total)
-
-    This signal is emitted when this object reads data from a HTTP
-    server to indicate the current progress of the download.
-
-    \a done is the amount of data that has already arrived and \a
-    total is the total amount of data. It is possible that the total
-    amount of data that should be transferred cannot be determined, in
-    which case \a total is 0.(If you connect to a QProgressBar, the
-    progress bar shows a busy indicator if the total is 0).
-
-    \warning \a done and \a total are not necessarily the size in
-    bytes, since for large files these values might need to be
-    "scaled" to avoid overflow.
-
-    \sa dataSendProgress() get() post() request() QProgressBar
-*/
-
-/*!
-    \fn void QHttp::requestStarted(int id)
-
-    This signal is emitted when processing the request identified by
-    \a id starts.
-
-    \sa requestFinished() done()
-*/
-
-/*!
-    \fn void QHttp::requestFinished(int id, bool error)
-
-    This signal is emitted when processing the request identified by
-    \a id has finished. \a error is true if an error occurred during
-    the processing; otherwise \a error is false.
-
-    \sa requestStarted() done() error() errorString()
-*/
-
-/*!
-    \fn void QHttp::done(bool error)
-
-    This signal is emitted when the last pending request has finished;
-    (it is emitted after the last request's requestFinished() signal).
-    \a error is true if an error occurred during the processing;
-    otherwise \a error is false.
-
-    \sa requestFinished() error() errorString()
-*/
-
 #ifndef QT_NO_NETWORKPROXY
-
-/*!
-    \fn void QHttp::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
-    \since 4.3
-
-    This signal can be emitted when a \a proxy that requires
-    authentication is used. The \a authenticator object can then be
-    filled in with the required details to allow authentication and
-    continue the connection.
-
-    \note It is not possible to use a QueuedConnection to connect to
-    this signal, as the connection will fail if the authenticator has
-    not been filled in with new information when the signal returns.
-
-    \sa QAuthenticator, QNetworkProxy
-*/
 
 #endif
 
-/*!
-    \fn void QHttp::authenticationRequired(const QString &hostname, quint16 port, QAuthenticator *authenticator)
-    \since 4.3
-
-    This signal can be emitted when a web server on a given \a hostname and \a
-    port requires authentication. The \a authenticator object can then be
-    filled in with the required details to allow authentication and continue
-    the connection.
-
-    \note It is not possible to use a QueuedConnection to connect to
-    this signal, as the connection will fail if the authenticator has
-    not been filled in with new information when the signal returns.
-
-    \sa QAuthenticator, QNetworkProxy
-*/
-
-/*!
-    \fn void QHttp::sslErrors(const QList<QSslError> &errors)
-    \since 4.3
-
-    Forwards the sslErrors signal from the QSslSocket used in QHttp. \a errors
-    is the list of errors that occurred during the SSL handshake. Unless you
-    call ignoreSslErrors() from within a slot connected to this signal when an
-    error occurs, QHttp will tear down the connection immediately after
-    emitting the signal.
-
-    \sa QSslSocket QSslSocket::ignoreSslErrors()
-*/
-
-/*!
-    Aborts the current request and deletes all scheduled requests.
-
-    For the current request, the requestFinished() signal with the \c
-    error argument \c true is emitted. For all other requests that are
-    affected by the abort(), no signals are emitted.
-
-    Since this slot also deletes the scheduled requests, there are no
-    requests left and the done() signal is emitted (with the \c error
-    argument \c true).
-
-    \sa clearPendingRequests()
-*/
 void QHttp::abort()
 {
    Q_D(QHttp);

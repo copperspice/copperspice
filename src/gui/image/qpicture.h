@@ -97,7 +97,6 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
  private:
    bool exec(QPainter *p, QDataStream &ds, int i);
-   void detach_helper();
 
    QExplicitlySharedDataPointer<QPicturePrivate> d_ptr;
    friend class QPicturePaintEngine;

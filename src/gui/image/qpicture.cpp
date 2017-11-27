@@ -876,49 +876,11 @@ int QPicture::metric(PaintDeviceMetric m) const
    return val;
 }
 
-/*!
-    \fn void QPicture::detach()
-    \internal
-    Detaches from shared picture data and makes sure that this picture
-    is the only one referring to the data.
-
-    If multiple pictures share common data, this picture makes a copy
-    of the data and detaches itself from the sharing mechanism.
-    Nothing is done if there is just a single reference.
-*/
-
-/*! \fn bool QPicture::isDetached() const
-\internal
-*/
-
-/*! \internal
-### Qt 5 - remove me
- */
-void QPicture::detach_helper()
-{
-   // QExplicitelySharedDataPointer takes care of cloning using
-   // QPicturePrivate's copy constructor. Do not call detach_helper() anymore
-   // and remove in Qt 5, please.
-   Q_ASSERT_X(false, "QPicture::detach_helper()", "Do not call this function");
-}
-
-/*!
-    Assigns picture \a p to this picture and returns a reference to
-    this picture.
-*/
 QPicture &QPicture::operator=(const QPicture &p)
 {
    d_ptr = p.d_ptr;
    return *this;
 }
-
-/*!
-    \fn void QPicture::swap(QPicture &other)
-    \since 4.8
-
-    Swaps picture \a other with this picture. This operation is very
-    fast and never fails.
-*/
 
 /*!
   \internal

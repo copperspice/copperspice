@@ -403,21 +403,6 @@ void QGraphicsItemPrivate::updateSceneTransformFromParent()
    dirtySceneTransform = 0;
 }
 
-/*!
-    \internal
-
-    This helper function helped us add input method query support in
-    Qt 4.4.1 without having to reimplement the inputMethodQuery()
-    function in QGraphicsProxyWidget. ### Qt 5: Remove. We cannot
-    remove it in 4.5+ even if we do reimplement the function properly,
-    because apps compiled with 4.4 will not be able to call the
-    reimplementation.
-*/
-QVariant QGraphicsItemPrivate::inputMethodQueryHelper(Qt::InputMethodQuery query) const
-{
-   Q_UNUSED(query);
-   return QVariant();
-}
 
 /*!
     \internal
@@ -430,6 +415,7 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
       const QVariant *thisPointerVariant)
 {
    Q_Q(QGraphicsItem);
+
    if (newParent == parent) {
       return;
    }
@@ -4656,7 +4642,7 @@ void QGraphicsItemPrivate::clearSubFocus(QGraphicsItem *rootItem, QGraphicsItem 
     \internal
 
     Sets the focusProxy pointer to 0 for all items that have this item as their
-    focusProxy. ### Qt 5: Use QPointer instead.
+    focusProxy.
 */
 void QGraphicsItemPrivate::resetFocusProxy()
 {
@@ -5895,58 +5881,34 @@ void QGraphicsItem::inputMethodEvent(QInputMethodEvent *event)
 */
 QVariant QGraphicsItem::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-   if (isWidget()) {
-      // ### Qt 5: Remove. The reimplementation in
-      // QGraphicsProxyWidget solves this problem (but requires a
-      // recompile to take effect).
-      return d_ptr->inputMethodQueryHelper(query);
-   }
-
    Q_UNUSED(query);
    return QVariant();
 }
 
-/*!
-    Returns the current input method hints of this item.
-
-    Input method hints are only relevant for input items.
-    The hints are used by the input method to indicate how it should operate.
-    For example, if the Qt::ImhNumbersOnly flag is set, the input method may change
-    its visual components to reflect that only numbers can be entered.
-
-    The effect may vary between input method implementations.
-
-    \since 4.6
-
-    \sa setInputMethodHints(), inputMethodQuery(), QInputContext
-*/
 Qt::InputMethodHints QGraphicsItem::inputMethodHints() const
 {
    Q_D(const QGraphicsItem);
    return d->imHints;
 }
 
-/*!
-    Sets the current input method hints of this item to \a hints.
-
-    \since 4.6
-
-    \sa inputMethodHints(), inputMethodQuery(), QInputContext
-*/
 void QGraphicsItem::setInputMethodHints(Qt::InputMethodHints hints)
 {
    Q_D(QGraphicsItem);
+
    d->imHints = hints;
    if (!hasFocus()) {
       return;
    }
+
    d->scene->d_func()->updateInputMethodSensitivityInViews();
+
 #if ! defined(QT_NO_IM) && (defined(Q_WS_X11) || defined(Q_WS_QWS))
 
    QWidget *fw = QApplication::focusWidget();
    if (!fw) {
       return;
    }
+
    for (int i = 0 ; i < scene()->views().count() ; ++i)
       if (scene()->views().at(i) == fw)
          if (QInputContext *inputContext = fw->inputContext()) {

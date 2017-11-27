@@ -48,14 +48,13 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
    void setExclusive(bool);
    bool exclusive() const;
 
-   void addButton(QAbstractButton *);
-   void addButton(QAbstractButton *, int id);
+   void addButton(QAbstractButton *, int id = -1);
    void removeButton(QAbstractButton *);
 
    QList<QAbstractButton *> buttons() const;
 
    QAbstractButton *checkedButton() const;
-   // no setter on purpose!
+   // no setter on purpose
 
    QAbstractButton *button(int id) const;
    void setId(QAbstractButton *button, int id);

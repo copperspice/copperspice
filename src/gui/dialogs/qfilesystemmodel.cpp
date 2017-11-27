@@ -1541,20 +1541,26 @@ QStringList QFileSystemModel::nameFilters() const
 bool QFileSystemModel::event(QEvent *event)
 {
    Q_D(QFileSystemModel);
+
    if (event->type() == QEvent::LanguageChange) {
       d->root.retranslateStrings(d->fileInfoGatherer.iconProvider(), QString());
       return true;
    }
+
    return QAbstractItemModel::event(event);
 }
 
-bool QFileSystemModel::rmdir(const QModelIndex &aindex) const
+bool QFileSystemModel::rmdir(const QModelIndex &index)
 {
-   QString path = filePath(aindex);
-   QFileSystemModelPrivate *d = const_cast<QFileSystemModelPrivate *>(d_func());
-   d->fileInfoGatherer.removePath(path);
+   QString path = filePath(index);
+   const bool retval = QDir().rmdir(path);
 
-   return QDir().rmdir(path);
+   if (retval) {
+      QFileSystemModelPrivate *d = d_func();
+      d->fileInfoGatherer.removePath(path);
+   }
+
+   return retval;
 }
 
 void QFileSystemModelPrivate::_q_directoryChanged(const QString &directory, const QStringList &files)
@@ -1899,16 +1905,19 @@ bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) co
    // ### Qt5 simplify (because NoDotAndDotDot=NoDot|NoDotDot)
    const bool hideDotDot        = (filters & QDir::NoDotDot) || (filters & QDir::NoDotAndDotDot);
 
-   // we match the behavior of entryList and not QFileInfo on this
-   // incompatibility will not be fixed until Qt5
-
    bool isDot    = (node->fileName == QLatin1String("."));
    bool isDotDot = (node->fileName == QLatin1String(".."));
 
    if ( ( hideHidden && ! (isDot || isDotDot) && node->isHidden() )
-          || (hideDirs  && node->isDir()) || (hideFiles && node->isFile())  || (hideSystem  && node->isSystem())
-          || (hideReadable  && node->isReadable()) || (hideWritable   && node->isWritable()) || (hideExecutable && node->isExecutable())
-          || (hideSymlinks  && node->isSymLink()) || (hideDot && isDot) || (hideDotDot && isDotDot)) {
+          || (hideDirs  && node->isDir())
+          || (hideFiles && node->isFile())
+          || (hideSystem  && node->isSystem())
+          || (hideReadable  && node->isReadable())
+          || (hideWritable   && node->isWritable())
+          || (hideExecutable && node->isExecutable())
+          || (hideSymlinks  && node->isSymLink())
+          || (hideDot && isDot)
+          || (hideDotDot && isDotDot)) {
 
       return false;
    }

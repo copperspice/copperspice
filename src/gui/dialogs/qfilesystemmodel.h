@@ -94,7 +94,6 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
    Qt::DropActions supportedDropActions() const override;
 
-   // QFileSystemModel specific API
    QModelIndex setRootPath(const QString &path);
    QString rootPath() const;
    QDir rootDirectory() const;
@@ -124,7 +123,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    QDateTime lastModified(const QModelIndex &index) const;
 
    QModelIndex mkdir(const QModelIndex &parent, const QString &name);
-   bool rmdir(const QModelIndex &index) const; // ### Qt5/should not be const
+   bool rmdir(const QModelIndex &index);
 
    inline QString fileName(const QModelIndex &index) const;
    inline QIcon fileIcon(const QModelIndex &index) const;

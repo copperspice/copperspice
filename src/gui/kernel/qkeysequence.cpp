@@ -1525,38 +1525,11 @@ QKeySequence::SequenceMatch QKeySequence::matches(const QKeySequence &seq) const
 
 
 /*!
-    \obsolete
-
-    Use toString() instead.
-
-    Returns the key sequence as a QString. This is equivalent to
-    calling toString(QKeySequence::NativeText). Note that the
-    result is not platform independent.
-*/
-QKeySequence::operator QString() const
-{
-   return QKeySequence::toString(QKeySequence::NativeText);
-}
-
-/*!
    Returns the key sequence as a QVariant
 */
 QKeySequence::operator QVariant() const
 {
    return QVariant(QVariant::KeySequence, this);
-}
-
-/*!
-    \obsolete
-    For backward compatibility: returns the first keycode
-    as integer. If the key sequence is empty, 0 is returned.
- */
-QKeySequence::operator int () const
-{
-   if (1 <= count()) {
-      return d->key[0];
-   }
-   return 0;
 }
 
 
@@ -1581,26 +1554,6 @@ QKeySequence &QKeySequence::operator=(const QKeySequence &other)
    return *this;
 }
 
-/*!
-    \fn void QKeySequence::swap(QKeySequence &other)
-    \since 4.8
-
-    Swaps key sequence \a other with this key sequence. This operation is very
-    fast and never fails.
-*/
-
-/*!
-    \fn bool QKeySequence::operator!=(const QKeySequence &other) const
-
-    Returns true if this key sequence is not equal to the \a other
-    key sequence; otherwise returns false.
-*/
-
-
-/*!
-    Returns true if this key sequence is equal to the \a other
-    key sequence; otherwise returns false.
- */
 bool QKeySequence::operator==(const QKeySequence &other) const
 {
    return (d->key[0] == other.d->key[0] &&
@@ -1609,19 +1562,6 @@ bool QKeySequence::operator==(const QKeySequence &other) const
            d->key[3] == other.d->key[3]);
 }
 
-
-/*!
-    Provides an arbitrary comparison of this key sequence and
-    \a other key sequence. All that is guaranteed is that the
-    operator returns false if both key sequences are equal and
-    that (ks1 \< ks2) == !( ks2 \< ks1) if the key sequences
-    are not equal.
-
-    This function is useful in some circumstances, for example
-    if you want to use QKeySequence objects as keys in a QMap.
-
-    \sa operator==() operator!=() operator>() operator<=() operator>=()
-*/
 bool QKeySequence::operator< (const QKeySequence &other) const
 {
    for (int i = 0; i < 4; ++i)
@@ -1632,33 +1572,6 @@ bool QKeySequence::operator< (const QKeySequence &other) const
 }
 
 /*!
-    \fn bool QKeySequence::operator> (const QKeySequence &other) const
-
-    Returns true if this key sequence is larger than the \a other key
-    sequence; otherwise returns false.
-
-    \sa operator==() operator!=() operator<() operator<=() operator>=()
-*/
-
-/*!
-    \fn bool QKeySequence::operator<= (const QKeySequence &other) const
-
-    Returns true if this key sequence is smaller or equal to the
-    \a other key sequence; otherwise returns false.
-
-    \sa operator==() operator!=() operator<() operator>() operator>=()
-*/
-
-/*!
-    \fn bool QKeySequence::operator>= (const QKeySequence &other) const
-
-    Returns true if this key sequence is larger or equal to the
-    \a other key sequence; otherwise returns false.
-
-    \sa operator==() operator!=() operator<() operator>() operator<=()
-*/
-
-/*!
     \internal
 */
 bool QKeySequence::isDetached() const
@@ -1666,25 +1579,6 @@ bool QKeySequence::isDetached() const
    return d->ref.load() == 1;
 }
 
-/*!
-    \since 4.1
-
-    Return a string representation of the key sequence,
-    based on \a format.
-
-    For example, the value Qt::CTRL+Qt::Key_O results in "Ctrl+O".
-    If the key sequence has multiple key codes, each is separated
-    by commas in the string returned, such as "Alt+X, Ctrl+Y, Z".
-    The strings, "Ctrl", "Shift", etc. are translated using
-    QObject::tr() in the "QShortcut" context.
-
-    If the key sequence has no keys, an empty string is returned.
-
-    On Mac OS X, the string returned resembles the sequence that is
-    shown in the menu bar.
-
-    \sa fromString()
-*/
 QString QKeySequence::toString(SequenceFormat format) const
 {
    QString finalString;

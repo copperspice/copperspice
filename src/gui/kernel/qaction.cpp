@@ -1146,16 +1146,21 @@ QAction::event(QEvent *e)
 #ifndef QT_NO_SHORTCUT
    if (e->type() == QEvent::Shortcut) {
       QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
+
       Q_ASSERT_X(se->key() == d_func()->shortcut || d_func()->alternateShortcuts.contains(se->key()),
-                 "QAction::event",
-                 "Received shortcut event from incorrect shortcut");
+                 "QAction::event", "Received shortcut event from incorrect shortcut");
+
       if (se->isAmbiguous()) {
-         qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s", QString(se->key()).toLatin1().constData());
+         qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s",
+                  se->key().toString(QKeySequence::NativeText).toLatin1().constData());
+
       } else {
          activate(Trigger);
       }
+
       return true;
    }
+
 #endif
    return QObject::event(e);
 }

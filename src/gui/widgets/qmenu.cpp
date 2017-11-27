@@ -325,17 +325,21 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
          } else {
             QString s = action->text();
             int t = s.indexOf(QLatin1Char('\t'));
+
             if (t != -1) {
                tabWidth = qMax(int(tabWidth), qfm.width(s.mid(t + 1)));
                s = s.left(t);
+
 #ifndef QT_NO_SHORTCUT
             } else {
                QKeySequence seq = action->shortcut();
-               if (!seq.isEmpty()) {
-                  tabWidth = qMax(int(tabWidth), qfm.width(seq));
+
+               if (! seq.isEmpty()) {
+                  tabWidth = qMax(int(tabWidth), qfm.width(seq.toString(QKeySequence::NativeText)));
                }
 #endif
             }
+
             sz.setWidth(fm.boundingRect(QRect(), Qt::TextSingleLine | Qt::TextShowMnemonic, s).width());
             sz.setHeight(qMax(fm.height(), qfm.height()));
 
@@ -1302,14 +1306,18 @@ void QMenu::initStyleOption(QStyleOptionMenuItem *option, const QAction *action)
    if (action->isIconVisibleInMenu()) {
       option->icon = action->icon();
    }
+
    QString textAndAccel = action->text();
+
 #ifndef QT_NO_SHORTCUT
    if (textAndAccel.indexOf(QLatin1Char('\t')) == -1) {
       QKeySequence seq = action->shortcut();
+
       if (!seq.isEmpty()) {
-         textAndAccel += QLatin1Char('\t') + QString(seq);
+         textAndAccel += QLatin1Char('\t') + seq.toString(QKeySequence::NativeText);
       }
    }
+
 #endif
    option->text = textAndAccel;
    option->tabWidth = d->tabWidth;

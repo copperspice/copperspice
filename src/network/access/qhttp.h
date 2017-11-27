@@ -31,8 +31,6 @@
 #include <QScopedPointer>
 #include <qsslerror.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_HTTP
 
 class QTcpSocket;
@@ -68,10 +66,9 @@ class Q_NETWORK_EXPORT QHttpHeader
    void removeValue(const QString &key);
    void removeAllValues(const QString &key);
 
-   // ### Qt5/change to qint64
    bool hasContentLength() const;
-   uint contentLength() const;
-   void setContentLength(int len);
+   qint64 contentLength() const;
+   void setContentLength(qint64 len);
 
    bool hasContentType() const;
    QString contentType() const;
@@ -235,35 +232,39 @@ class Q_NETWORK_EXPORT QHttp : public QObject
    NET_CS_SLOT_2(ignoreSslErrors)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void stateChanged(int un_named_arg1))
-   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void stateChanged(int state))
+   NET_CS_SIGNAL_2(stateChanged, state)
+
    NET_CS_SIGNAL_1(Public, void responseHeaderReceived(const QHttpResponseHeader &resp))
    NET_CS_SIGNAL_2(responseHeaderReceived, resp)
+
    NET_CS_SIGNAL_1(Public, void readyRead(const QHttpResponseHeader &resp))
    NET_CS_SIGNAL_2(readyRead, resp)
 
-   // ### Qt5/change to qint64
-   NET_CS_SIGNAL_1(Public, void dataSendProgress(int un_named_arg1, int un_named_arg2))
-   NET_CS_SIGNAL_2(dataSendProgress, un_named_arg1, un_named_arg2)
-   NET_CS_SIGNAL_1(Public, void dataReadProgress(int un_named_arg1, int un_named_arg2))
-   NET_CS_SIGNAL_2(dataReadProgress, un_named_arg1, un_named_arg2)
+   //
+   NET_CS_SIGNAL_1(Public, void dataSendProgress(qint64 done, qint64 total))
+   NET_CS_SIGNAL_2(dataSendProgress, done, total)
 
-   NET_CS_SIGNAL_1(Public, void requestStarted(int un_named_arg1))
-   NET_CS_SIGNAL_2(requestStarted, un_named_arg1)
-   NET_CS_SIGNAL_1(Public, void requestFinished(int un_named_arg1, bool un_named_arg2))
-   NET_CS_SIGNAL_2(requestFinished, un_named_arg1, un_named_arg2)
-   NET_CS_SIGNAL_1(Public, void done(bool un_named_arg1))
-   NET_CS_SIGNAL_2(done, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void dataReadProgress(qint64 done, qint64 total))
+   NET_CS_SIGNAL_2(dataReadProgress, done, total)
+
+   //
+   NET_CS_SIGNAL_1(Public, void requestStarted(int id))
+   NET_CS_SIGNAL_2(requestStarted, id)
+
+   NET_CS_SIGNAL_1(Public, void requestFinished(int id, bool error))
+   NET_CS_SIGNAL_2(requestFinished, id, error)
+
+   NET_CS_SIGNAL_1(Public, void done(bool error))
+   NET_CS_SIGNAL_2(done, error)
 
 #ifndef QT_NO_NETWORKPROXY
-   NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *un_named_arg2))
-   NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, un_named_arg2)
+   NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, authenticator)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void authenticationRequired(const QString &hostname, quint16 port,
-                   QAuthenticator *un_named_arg3))
-
-   NET_CS_SIGNAL_2(authenticationRequired, hostname, port, un_named_arg3)
+   NET_CS_SIGNAL_1(Public, void authenticationRequired(const QString &hostname, quint16 port, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(authenticationRequired, hostname, port, authenticator)
 
 #ifndef QT_NO_OPENSSL
    NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &errors))
@@ -283,7 +284,7 @@ class Q_NETWORK_EXPORT QHttp : public QObject
    NET_CS_SLOT_1(Private, void _q_slotConnected())
    NET_CS_SLOT_2(_q_slotConnected)
 
-   NET_CS_SLOT_1(Private, void _q_slotError(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_slotError(QAbstractSocket::SocketError error))
    NET_CS_SLOT_2(_q_slotError)
 
    NET_CS_SLOT_1(Private, void _q_slotClosed())
@@ -320,7 +321,5 @@ class Q_NETWORK_EXPORT QHttp : public QObject
 };
 
 #endif // QT_NO_HTTP
-
-QT_END_NAMESPACE
 
 #endif // QHTTP_H

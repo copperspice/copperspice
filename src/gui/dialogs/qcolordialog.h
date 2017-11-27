@@ -23,9 +23,7 @@
 #ifndef QCOLORDIALOG_H
 #define QCOLORDIALOG_H
 
-#include <QtGui/qdialog.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 #ifndef QT_NO_COLORDIALOG
 
@@ -72,19 +70,13 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
 
    void setVisible(bool visible) override;
 
-   // ### Qt5/merge overloads with title = QString()
-   static QColor getColor(const QColor &initial, QWidget *parent, const QString &title,
-                          ColorDialogOptions options = 0);
-   static QColor getColor(const QColor &initial = Qt::white, QWidget *parent = nullptr);
+   static QColor getColor(const QColor &initial = Qt::white, QWidget *parent = nullptr,
+                  const QString &title = QString(),  ColorDialogOptions options = 0);
 
-   // obsolete
-   static QRgb getRgba(QRgb rgba = 0xffffffff, bool *ok = 0, QWidget *parent = nullptr);
-
-   // ### Qt5/use QColor in signatures
    static int customCount();
-   static QRgb customColor(int index);
-   static void setCustomColor(int index, QRgb color);
-   static void setStandardColor(int index, QRgb color);
+   static QColor customColor(int index);
+   static void setCustomColor(int index, QColor color);
+   static void setStandardColor(int index, QColor color);
 
    GUI_CS_SIGNAL_1(Public, void currentColorChanged(const QColor &color))
    GUI_CS_SIGNAL_2(currentColorChanged, color)
@@ -125,7 +117,5 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
 Q_DECLARE_OPERATORS_FOR_FLAGS(QColorDialog::ColorDialogOptions)
 
 #endif // QT_NO_COLORDIALOG
-
-QT_END_NAMESPACE
 
 #endif // QCOLORDIALOG_H

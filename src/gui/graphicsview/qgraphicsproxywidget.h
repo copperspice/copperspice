@@ -23,9 +23,7 @@
 #ifndef QGRAPHICSPROXYWIDGET_H
 #define QGRAPHICSPROXYWIDGET_H
 
-#include <QtGui/qgraphicswidget.h>
-
-QT_BEGIN_NAMESPACE
+#include <qgraphicswidget.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
@@ -96,9 +94,9 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
    void focusInEvent(QFocusEvent *event) override;
    void focusOutEvent(QFocusEvent *event) override;
    bool focusNextPrevChild(bool next) override;
-   // ### Qt 4.5:
-   // QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-   // void inputMethodEvent(QInputMethodEvent *event);
+
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
+   void inputMethodEvent(QInputMethodEvent *event) override;
 
    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
    void resizeEvent(QGraphicsSceneResizeEvent *event) override;
@@ -119,8 +117,6 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
 };
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif
 

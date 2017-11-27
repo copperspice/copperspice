@@ -223,7 +223,7 @@ QSharedPointer<QTabBarPrivate::Tab> QTabBarPrivate::at(int index)
       retval = tabList[index];
    }
 
-   return retval;        
+   return retval;
 }
 
 QSharedPointer<const QTabBarPrivate::Tab> QTabBarPrivate::at(int index) const
@@ -302,7 +302,7 @@ void QTabBarPrivate::layoutTabs()
          x += sz.width();
 
          maxHeight = qMax(maxHeight, sz.height());
-         sz = minimumTabSizeHint(i);
+         sz = q->minimumTabSizeHint(i);
 
          tabList[i]->minRect = QRect(minx, 0, sz.width(), sz.height());
          minx += sz.width();
@@ -334,7 +334,7 @@ void QTabBarPrivate::layoutTabs()
          y += sz.height();
 
          maxWidth = qMax(maxWidth, sz.width());
-         sz = minimumTabSizeHint(i);
+         sz = q->minimumTabSizeHint(i);
 
          tabList[i]->minRect = QRect(0, miny, sz.width(), sz.height());
          miny += sz.height();
@@ -345,7 +345,7 @@ void QTabBarPrivate::layoutTabs()
          tabChain[tabChainIndex].empty = false;
          tabChain[tabChainIndex].expansive = true;
 
-         if (!expanding) {
+         if (! expanding) {
             tabChain[tabChainIndex].maximumSize = tabChain[tabChainIndex].sizeHint;
          }
       }
@@ -355,8 +355,9 @@ void QTabBarPrivate::layoutTabs()
       maxExtent = maxWidth;
    }
 
-   Q_ASSERT(tabChainIndex == tabChain.count() - 1); // add an assert just to make sure.
-   // Mirror our front item.
+   Q_ASSERT(tabChainIndex == tabChain.count() - 1); // add an assert just to make sure
+
+   // Mirror our front item
    tabChain[tabChainIndex].init();
    tabChain[tabChainIndex].expansive = (tabAlignment != Qt::AlignRight)
                                        && (tabAlignment != Qt::AlignJustify);
@@ -442,11 +443,11 @@ void QTabBarPrivate::makeVisible(int index)
    const int start = horiz ? tabRect.left() : tabRect.top();
    const int end = horiz ? tabRect.right() : tabRect.bottom();
 
-   if (start < scrollOffset) { 
+   if (start < scrollOffset) {
       // too far left
       scrollOffset = start - (index ? 8 : 0);
 
-   } else if (end > scrollOffset + available) { 
+   } else if (end > scrollOffset + available) {
       // too far right
       scrollOffset = end - available + 1;
    }
@@ -1216,17 +1217,16 @@ static QString computeElidedText(Qt::TextElideMode mode, const QString &text)
    return ret;
 }
 
-QSize QTabBarPrivate::minimumTabSizeHint(int index)
+QSize QTabBar::minimumTabSizeHint(int index) const
 {
-   Q_Q(QTabBar);
+   Q_D(const QTabBar);
 
-   // ### Qt 5: make this a protected virtual function in QTabBar
-   Tab &tab = *tabList[index];
+   QTabBarPrivate::Tab &tab = const_cast<QTabBarPrivate::Tab &>( *(d->tabList[index]) );
 
    QString oldText = tab.text;
-   tab.text = computeElidedText(elideMode, oldText);
+   tab.text = computeElidedText(d->elideMode, oldText);
 
-   QSize size = q->tabSizeHint(index);
+   QSize size = tabSizeHint(index);
    tab.text = oldText;
 
    return size;
@@ -1248,7 +1248,7 @@ QSize QTabBar::tabSizeHint(int index) const
       const QFontMetrics fm = fontMetrics();
 
       int maxWidgetHeight = qMax(opt.leftButtonSize.height(), opt.rightButtonSize.height());
-      int maxWidgetWidth = qMax(opt.leftButtonSize.width(), opt.rightButtonSize.width());
+      int maxWidgetWidth  = qMax(opt.leftButtonSize.width(), opt.rightButtonSize.width());
 
       int widgetWidth = 0;
       int widgetHeight = 0;
@@ -1562,11 +1562,11 @@ void QTabBar::moveTab(int from, int to)
    if (d->pressedIndex != -1) {
       // Record the position of the pressed tab before reordering the tabs
 
-      if (vertical) { 
+      if (vertical) {
          oldPressedPosition = d->tabList[d->pressedIndex]->rect.y();
-      } else { 
+      } else {
          oldPressedPosition = d->tabList[d->pressedIndex]->rect.x();
-      }      
+      }
    }
 
    // Update the locations of the tabs first
@@ -2263,7 +2263,7 @@ void CloseButton::paintEvent(QPaintEvent *)
    if (const QTabBar *tb = qobject_cast<const QTabBar *>(parent())) {
       int index = tb->currentIndex();
 
-      QTabBar::ButtonPosition position = 
+      QTabBar::ButtonPosition position =
                   (QTabBar::ButtonPosition)style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, 0, tb);
 
       if (tb->tabButton(index, position) == this) {

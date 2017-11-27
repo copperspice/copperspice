@@ -160,8 +160,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_IndicatorItemViewItemDrop,
 
       PE_PanelItemViewItem,
-      PE_PanelItemViewRow, // ### Qt5/remove
-
+      PE_PanelItemViewRow,
       PE_PanelStatusBar,
 
       PE_IndicatorTabClose,
@@ -264,17 +263,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_ProgressBarContents,
       SE_ProgressBarLabel,
 
-      // ### Qt5/These values are unused; eliminate them
-      SE_DialogButtonAccept,
-      SE_DialogButtonReject,
-      SE_DialogButtonApply,
-      SE_DialogButtonHelp,
-      SE_DialogButtonAll,
-      SE_DialogButtonAbort,
-      SE_DialogButtonIgnore,
-      SE_DialogButtonRetry,
-      SE_DialogButtonCustom,
-
       SE_ToolBoxTabContents,
 
       SE_HeaderLabel,
@@ -304,7 +292,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_CheckBoxLayoutItem,
       SE_ComboBoxLayoutItem,
       SE_DateTimeEditLayoutItem,
-      SE_DialogButtonBoxLayoutItem, // ### remove
       SE_LabelLayoutItem,
       SE_ProgressBarLayoutItem,
       SE_PushButtonLayoutItem,
@@ -778,7 +765,7 @@ class Q_GUI_EXPORT QStyle : public QObject
    int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
          const QStyleOption *option = 0, const QWidget *widget = 0) const;
 
-   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,QSizePolicy::ControlTypes controls2, 
+   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,QSizePolicy::ControlTypes controls2,
          Qt::Orientation orientation, QStyleOption *option = 0, QWidget *widget = 0) const;
 
    const QStyle *proxy() const;

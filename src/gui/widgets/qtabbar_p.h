@@ -160,8 +160,6 @@ class QTabBarPrivate  : public QWidgetPrivate
 
    void setCurrentNextEnabledIndex(int offset);
 
-   QSize minimumTabSizeHint(int index);
-
    QToolButton *rightB;    // right or bottom
    QToolButton *leftB;     // left or top
 

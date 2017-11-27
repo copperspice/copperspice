@@ -171,6 +171,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 
  protected:
    virtual QSize tabSizeHint(int index) const;
+   virtual QSize minimumTabSizeHint(int index) const;
    virtual void tabInserted(int index);
    virtual void tabRemoved(int index);
    virtual void tabLayoutChange();

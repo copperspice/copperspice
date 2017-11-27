@@ -858,7 +858,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
       return;
    }
 
-#if defined (Q_OS_WIN) && !defined(QT_NO_CLIPBOARD) && ! defined(QT_NO_SHORTCUT)
+#if defined (Q_OS_WIN) && ! defined(QT_NO_CLIPBOARD) && ! defined(QT_NO_SHORTCUT)
    if (e == QKeySequence::Copy) {
       QString separator = QString::fromLatin1("---------------------------\n");
       QString textToCopy = separator;
@@ -884,13 +884,16 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 
 #ifndef QT_NO_SHORTCUT
    if (! (e->modifiers() & Qt::AltModifier)) {
-      int key = e->key() & ~((int)Qt::MODIFIER_MASK | (int)Qt::UNICODE_ACCEL);
+      int key = e->key() & ~(Qt::MODIFIER_MASK | Qt::UNICODE_ACCEL);
+
       if (key) {
          const QList<QAbstractButton *> buttons = d->buttonBox->buttons();
+
          for (int i = 0; i < buttons.count(); ++i) {
-            QAbstractButton *pb = buttons.at(i);
-            int acc = pb->shortcut() & ~((int)Qt::MODIFIER_MASK | (int)Qt::UNICODE_ACCEL);
-            if (acc == key) {
+            QAbstractButton *pb   = buttons.at(i);
+            QKeySequence shortcut = pb->shortcut();
+
+            if (! shortcut.isEmpty() && key == (shortcut[0] & ~(Qt::MODIFIER_MASK | Qt::UNICODE_ACCEL))) {
                pb->animateClick();
                return;
             }

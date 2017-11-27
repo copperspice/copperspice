@@ -1116,8 +1116,7 @@ QWorkspace::QWorkspace(QWidget *parent)
 /*!
     \internal
 */
-void
-QWorkspacePrivate::init()
+void QWorkspacePrivate::init()
 {
    Q_Q(QWorkspace);
 
@@ -1134,22 +1133,21 @@ QWorkspacePrivate::init()
    toolPopup->setObjectName(QLatin1String("qt_internal_mdi_tool_popup"));
 
    actions[QWorkspacePrivate::RestoreAct] = new QAction(QIcon(q->style()->standardPixmap(QStyle::SP_TitleBarNormalButton,
-         0, q)),
-         QWorkspace::tr("&Restore"), q);
+         0, q)), QWorkspace::tr("&Restore"), q);
+
    actions[QWorkspacePrivate::MoveAct] = new QAction(QWorkspace::tr("&Move"), q);
    actions[QWorkspacePrivate::ResizeAct] = new QAction(QWorkspace::tr("&Size"), q);
    actions[QWorkspacePrivate::MinimizeAct] = new QAction(QIcon(q->style()->standardPixmap(QStyle::SP_TitleBarMinButton, 0,
-         q)),
-         QWorkspace::tr("Mi&nimize"), q);
+         q)), QWorkspace::tr("Mi&nimize"), q);
+
    actions[QWorkspacePrivate::MaximizeAct] = new QAction(QIcon(q->style()->standardPixmap(QStyle::SP_TitleBarMaxButton, 0,
-         q)),
-         QWorkspace::tr("Ma&ximize"), q);
+         q)), QWorkspace::tr("Ma&ximize"), q);
 
    actions[QWorkspacePrivate::CloseAct] = new QAction(QIcon(q->style()->standardPixmap(QStyle::SP_TitleBarCloseButton, 0,
-         q)),
-         QWorkspace::tr("&Close")
+         q)), QWorkspace::tr("&Close")
+
 #ifndef QT_NO_SHORTCUT
-         + QLatin1Char('\t') + (QString)QKeySequence(Qt::CTRL + Qt::Key_F4)
+         + QLatin1Char('\t') + QKeySequence(Qt::CTRL + Qt::Key_F4).toString(QKeySequence::NativeText)
 #endif
          , q);
 
@@ -1157,8 +1155,7 @@ QWorkspacePrivate::init()
    actions[QWorkspacePrivate::StaysOnTopAct] = new QAction(QWorkspace::tr("Stay on &Top"), q);
    actions[QWorkspacePrivate::StaysOnTopAct]->setChecked(true);
    actions[QWorkspacePrivate::ShadeAct] = new QAction(QIcon(q->style()->standardPixmap(QStyle::SP_TitleBarShadeButton, 0,
-         q)),
-         QWorkspace::tr("Sh&ade"), q);
+         q)), QWorkspace::tr("Sh&ade"), q);
 
    QObject::connect(popup, SIGNAL(aboutToShow()), q, SLOT(_q_updateActions()));
    QObject::connect(popup, SIGNAL(triggered(QAction *)), q, SLOT(_q_operationMenuActivated(QAction *)));
@@ -1183,6 +1180,7 @@ QWorkspacePrivate::init()
 #ifndef QT_NO_SHORTCUT
    // Set up shortcut bindings (id -> slot), most used first
    QList <QKeySequence> shortcuts = QKeySequence::keyBindings(QKeySequence::NextChild);
+
    for (const QKeySequence & seq : shortcuts) {
       shortcutMap.insert(q->grabShortcut(seq), "activateNextWindow");
    }
@@ -1894,9 +1892,11 @@ bool QWorkspace::event(QEvent *e)
    if (e->type() == QEvent::Shortcut) {
       QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
       const char *theSlot = d->shortcutMap.value(se->shortcutId(), 0);
+
       if (theSlot) {
          QMetaObject::invokeMethod(this, theSlot);
       }
+
    } else
 #endif
       if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
