@@ -3005,7 +3005,7 @@ void QTreeWidget::sortItems(int column, Qt::SortOrder order)
 /*!
     \internal
 
-    ### Qt 5: remove
+    ### Qt5: remove
 */
 void QTreeWidget::setSortingEnabled(bool enable)
 {
@@ -3015,7 +3015,7 @@ void QTreeWidget::setSortingEnabled(bool enable)
 /*!
     \internal
 
-    ### Qt 5: remove
+    ### Qt5: remove
 */
 bool QTreeWidget::isSortingEnabled() const
 {

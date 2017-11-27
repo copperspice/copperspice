@@ -26,7 +26,7 @@
 
 QT_BEGIN_NAMESPACE
 
-// Legacy, single instance hooks: ### Qt 5: remove
+// Legacy, single instance hooks: ### Qt5: remove
 typedef void (*_qt_pixmap_cleanup_hook)(int);
 typedef void (*_qt_pixmap_cleanup_hook_64)(qint64);
 typedef void (*_qt_image_cleanup_hook)(int);

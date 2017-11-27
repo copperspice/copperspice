@@ -1158,7 +1158,7 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
 /*!
     \internal
 */
-// ### Qt 5: Use only the version above.
+// ### Qt5: Use only the version above.
 QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
                               QLineEdit::EchoMode mode, const QString &text, bool *ok,
                               Qt::WindowFlags flags)
@@ -1299,7 +1299,7 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
 /*!
     \internal
 */
-// ### Qt 5: Use only the version above.
+// ### Qt5: Use only the version above.
 QString QInputDialog::getItem(QWidget *parent, const QString &title, const QString &label,
                               const QStringList &items, int current, bool editable, bool *ok,
                               Qt::WindowFlags flags)

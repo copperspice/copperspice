@@ -109,7 +109,7 @@ void QButtonGroup::setExclusive(bool exclusive)
 }
 
 
-// TODO: Qt 5: Merge with addButton(QAbstractButton *button, int id)
+// TODO: Qt5: Merge with addButton(QAbstractButton *button, int id)
 void QButtonGroup::addButton(QAbstractButton *button)
 {
    addButton(button, -1);

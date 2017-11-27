@@ -76,7 +76,7 @@ QAbstractXmlNodeModel::~QAbstractXmlNodeModel()
 }
 
 /*
-### Qt 5:
+### Qt5:
 
 Add the function:
 

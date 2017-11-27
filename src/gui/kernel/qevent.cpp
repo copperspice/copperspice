@@ -960,7 +960,7 @@ QFocusEvent::~QFocusEvent()
 {
 }
 
-// ### Qt 5: remove
+// ### Qt5: remove
 /*!
     \internal
  */
@@ -3205,7 +3205,7 @@ QClipboardEvent::~QClipboardEvent()
     Returns the key sequence that triggered the event.
 */
 
-// ### Qt 5: remove
+// ### Qt5: remove
 /*!
     \fn const QKeySequence &QShortcutEvent::key()
 
@@ -3221,7 +3221,7 @@ QClipboardEvent::~QClipboardEvent()
     \sa QShortcut::id()
 */
 
-// ### Qt 5: remove
+// ### Qt5: remove
 /*!
     \fn int QShortcutEvent::shortcutId()
     \overload
@@ -3238,7 +3238,7 @@ QClipboardEvent::~QClipboardEvent()
     \sa QShortcut::activatedAmbiguously()
 */
 
-// ### Qt 5: remove
+// ### Qt5: remove
 /*!
     \fn bool QShortcutEvent::isAmbiguous()
 

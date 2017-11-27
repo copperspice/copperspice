@@ -268,7 +268,7 @@ class QXmlSimpleReaderPrivate
       ExternParameterEntity(const QString &p, const QString &s)
          : publicId(p), systemId(s) {}
       QString publicId;
-      QString systemId;     
+      QString systemId;
    };
 
    struct ExternEntity {
@@ -277,7 +277,7 @@ class QXmlSimpleReaderPrivate
          : publicId(p), systemId(s), notation(n) {}
       QString publicId;
       QString systemId;
-      QString notation;      
+      QString notation;
    };
 
    QMap<QString, ExternParameterEntity> externParameterEntities;
@@ -1335,7 +1335,7 @@ QXmlInputSource::QXmlInputSource(QIODevice *dev)
 */
 QXmlInputSource::~QXmlInputSource()
 {
-   // ### Qt 5: close the input device. See task 153111
+   // ### Qt5: close the input device. See task 153111
 #ifndef QT_NO_TEXTCODEC
    delete d->encMapper;
 #endif

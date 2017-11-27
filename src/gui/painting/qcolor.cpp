@@ -407,12 +407,6 @@ void QColor::getRgb(int *r, int *g, int *b, int *a) const
    }
 }
 
-/*!
-    \obsolete
-    \fn void QColor::getRgba(int *r, int *g, int *b, int *a) const
-
-    Use getRgb() instead.
-*/
 void QColor::setRgbF(qreal r, qreal g, qreal b, qreal a)
 {
    if (r < qreal(0.0) || r > qreal(1.0)

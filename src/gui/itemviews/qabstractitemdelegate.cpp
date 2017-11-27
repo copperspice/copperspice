@@ -155,17 +155,16 @@ QString QAbstractItemDelegate::elidedText(const QFontMetrics &fontMetrics, int w
 
     \sa QHelpEvent
 */
-// ### Qt 5: Make this a virtual non-slot function
-bool QAbstractItemDelegate::helpEvent(QHelpEvent *event,
-                                      QAbstractItemView *view,
-                                      const QStyleOptionViewItem &option,
-                                      const QModelIndex &index)
+// ### Qt5: Make this a virtual non-slot function
+bool QAbstractItemDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view,
+                  const QStyleOptionViewItem &option, const QModelIndex &index)
 {
    Q_UNUSED(option);
 
    if (!event || !view) {
       return false;
    }
+
    switch (event->type()) {
 #ifndef QT_NO_TOOLTIP
       case QEvent::ToolTip: {

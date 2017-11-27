@@ -1211,71 +1211,10 @@ void QApplication::setGraphicsSystem(const QString &system)
 #endif
 }
 
-/*!
-    Returns the color specification.
-
-    \sa QApplication::setColorSpec()
-*/
-
 int QApplication::colorSpec()
 {
    return QApplicationPrivate::app_cspec;
 }
-
-/*!
-    Sets the color specification for the application to \a spec.
-
-    The color specification controls how the application allocates colors when
-    run on a display with a limited amount of colors, e.g. 8 bit / 256 color
-    displays.
-
-    The color specification must be set before you create the QApplication
-    object.
-
-    The options are:
-    \list
-        \o  QApplication::NormalColor. This is the default color allocation
-            strategy. Use this option if your application uses buttons, menus,
-            texts and pixmaps with few colors. With this option, the
-            application uses system global colors. This works fine for most
-            applications under X11, but on the Windows platform, it may cause
-            dithering of non-standard colors.
-        \o  QApplication::CustomColor. Use this option if your application
-            needs a small number of custom colors. On X11, this option is the
-            same as NormalColor. On Windows, Qt creates a Windows palette, and
-            allocates colors to it on demand.
-        \o  QApplication::ManyColor. Use this option if your application is
-            very color hungry, e.g., it requires thousands of colors. \br
-            Under X11 the effect is:
-            \list
-                \o  For 256-color displays which have at best a 256 color true
-                    color visual, the default visual is used, and colors are
-                    allocated from a color cube. The color cube is the 6x6x6
-                    (216 color) "Web palette" (the red, green, and blue
-                    components always have one of the following values: 0x00,
-                    0x33, 0x66, 0x99, 0xCC, or 0xFF), but the number of colors
-                    can be changed by the \e -ncols option. The user can force
-                    the application to use the true color visual with the
-                    \l{QApplication::QApplication()}{-visual} option.
-                \o  For 256-color displays which have a true color visual with
-                    more than 256 colors, use that visual. Silicon Graphics X
-                    servers this feature, for example. They provide an 8 bit
-                    visual by default but can deliver true color when asked.
-            \endlist
-            On Windows, Qt creates a Windows palette, and fills it with a color
-            cube.
-    \endlist
-
-    Be aware that the CustomColor and ManyColor choices may lead to colormap
-    flashing: The foreground application gets (most) of the available colors,
-    while the background windows will look less attractive.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 2
-
-    \sa colorSpec()
-*/
 
 void QApplication::setColorSpec(int spec)
 {
@@ -1285,21 +1224,6 @@ void QApplication::setColorSpec(int spec)
    QApplicationPrivate::app_cspec = spec;
 }
 
-/*!
-    \property QApplication::globalStrut
-    \brief the minimum size that any GUI element that the user can interact
-           with should have
-
-    For example, no button should be resized to be smaller than the global
-    strut size. The strut size should be considered when reimplementing GUI
-    controls that may be used on touch-screens or similar I/O devices.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 3
-
-    By default, this property contains a QSize object with zero width and height.
-*/
 QSize QApplication::globalStrut()
 {
    return QApplicationPrivate::app_strut;
@@ -1310,16 +1234,12 @@ void QApplication::setGlobalStrut(const QSize &strut)
    QApplicationPrivate::app_strut = strut;
 }
 
-/*!
-    Returns the application palette.
-
-    \sa setPalette(), QWidget::palette()
-*/
 QPalette QApplication::palette()
 {
    if (!QApplicationPrivate::app_pal) {
       QApplicationPrivate::app_pal = new QPalette(Qt::black);
    }
+
    return *QApplicationPrivate::app_pal;
 }
 
@@ -3489,7 +3409,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                         Qt::ClickFocus, Qt::MouseFocusReason);
                }
 
-               // ### Qt 5 These dynamic tool tips should be an OPT-IN feature. Some platforms
+               // ### Qt5 These dynamic tool tips should be an OPT-IN feature. Some platforms
                // like Mac OS X (probably others too), can optimize their views by not
                // dispatching mouse move events. We have attributes to control hover,
                // and mouse tracking, but as long as we are deciding to implement this

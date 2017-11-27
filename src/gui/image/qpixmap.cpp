@@ -66,7 +66,7 @@
 
 QT_BEGIN_NAMESPACE
 
-// ### Qt 5: remove
+// ### Qt5: remove
 Q_GUI_EXPORT qint64 qt_pixmap_id(const QPixmap &pixmap)
 {
    return pixmap.cacheKey();

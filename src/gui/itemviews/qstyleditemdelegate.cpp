@@ -146,9 +146,9 @@ QString QStyledItemDelegate::displayText(const QVariant &value, const QLocale &l
 }
 
 void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
-{   
+{
    QVariant value = index.data(Qt::FontRole);
- 
+
    if (value.isValid() && ! value.isNull()) {
       option->font = qvariant_cast<QFont>(value).resolve(option->font);
       option->fontMetrics = QFontMetrics(option->font);
@@ -231,7 +231,7 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
       }
 
       v4->backgroundBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
-   }  
+   }
 }
 
 void QStyledItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -301,7 +301,7 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
    QVariant v = index.data(Qt::EditRole);
    QByteArray n = editor->metaObject()->userProperty().name();
 
-   // ### Qt 5: remove
+   // ### Qt5: remove
    // A work-around for missing "USER true" in qdatetimeedit.h for
    // QTimeEdit's time property and QDateEdit's date property.
    // It only triggers if the default user property "dateTime" is
@@ -314,7 +314,7 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
       }
    }
 
-   // ### Qt 5: give QComboBox a USER property
+   // ### Qt5: give QComboBox a USER property
    if (n.isEmpty() && editor->inherits("QComboBox")) {
       n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(v.userType()));
    }

@@ -409,7 +409,7 @@ void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
    QVariant v = index.data(Qt::EditRole);
    QByteArray n = editor->metaObject()->userProperty().name();
 
-   // ### Qt 5: remove
+   // ### Qt5: remove
    // A work-around for missing "USER true" in qdatetimeedit.h for
    // QTimeEdit's time property and QDateEdit's date property.
    // It only triggers if the default user property "dateTime" is
@@ -423,7 +423,7 @@ void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
       }
    }
 
-   // ### Qt 5: give QComboBox a USER property
+   // ### Qt5: give QComboBox a USER property
    if (n.isEmpty() && editor->inherits("QComboBox"))  {
       n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(v.userType()));
    }

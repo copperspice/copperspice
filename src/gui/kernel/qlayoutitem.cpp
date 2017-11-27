@@ -130,7 +130,7 @@ int QLayoutItem::heightForWidth(int /* w */) const
 
 QSizePolicy::ControlTypes QLayoutItem::controlTypes() const
 {
-   // ### Qt 5: This function should probably be virtual instead
+   // ### Qt5: This function should probably be virtual instead
    if (const QWidget *widget = const_cast<QLayoutItem *>(this)->widget()) {
       return widget->sizePolicy().controlType();
 
@@ -170,7 +170,7 @@ void QWidgetItem::setGeometry(const QRect &rect)
       this code is done using widget rect coordinates, not layout item rect coordinates.
       However, QWidgetItem's sizeHint(), maximumSize(), and heightForWidth() all work in
       terms of layout item rect coordinates. Therefore, we have to add or subtract
-      widgetRectSurplus here and there. The code could be simpler if we did everything 
+      widgetRectSurplus here and there. The code could be simpler if we did everything
       using layout item rect coordinates and did the conversion right before the call to QWidget::setGeometry().
     */
 

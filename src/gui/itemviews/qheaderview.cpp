@@ -907,7 +907,7 @@ int QHeaderView::logicalIndex(int visualIndex) const
     \sa isMovable(), sectionMoved()
 */
 
-// ### Qt 5: change to setSectionsMovable()
+// ### Qt5: change to setSectionsMovable()
 void QHeaderView::setMovable(bool movable)
 {
    Q_D(QHeaderView);
@@ -921,7 +921,7 @@ void QHeaderView::setMovable(bool movable)
     \sa setMovable()
 */
 
-// ### Qt 5: change to sectionsMovable()
+// ### Qt5: change to sectionsMovable()
 bool QHeaderView::isMovable() const
 {
    Q_D(const QHeaderView);
@@ -935,7 +935,7 @@ bool QHeaderView::isMovable() const
     setSortIndicatorShown()
 */
 
-// ### Qt 5: change to setSectionsClickable()
+// ### Qt5: change to setSectionsClickable()
 void QHeaderView::setClickable(bool clickable)
 {
    Q_D(QHeaderView);
@@ -950,7 +950,7 @@ void QHeaderView::setClickable(bool clickable)
     \sa setClickable()
 */
 
-// ### Qt 5: change to sectionsClickable()
+// ### Qt5: change to sectionsClickable()
 bool QHeaderView::isClickable() const
 {
    Q_D(const QHeaderView);
@@ -1002,7 +1002,7 @@ void QHeaderView::setResizeMode(ResizeMode mode)
     \sa setStretchLastSection()
 */
 
-// ### Qt 5: change to setSectionResizeMode()
+// ### Qt5: change to setSectionResizeMode()
 void QHeaderView::setResizeMode(int logicalIndex, ResizeMode mode)
 {
    Q_D(QHeaderView);

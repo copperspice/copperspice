@@ -243,7 +243,7 @@ int Q_DECLARATIVE_EXPORT qmlregister(RegistrationType, void *);
 
   Returns non-zero if the registration was sucessful.
 
-  This function is added to QtQuick 1 in Qt 5, and is here as private API for developers needing compatibility.
+  This function is added to QtQuick 1 in Qt5, and is here as private API for developers needing compatibility.
 */
 inline int qmlRegisterType(const QUrl &url, const char *uri, int versionMajor, int versionMinor, const char *qmlName)
 {

@@ -215,7 +215,7 @@ QAbstractXmlReceiver::~QAbstractXmlReceiver()
  */
 
 /*
-### Qt 5:
+### Qt5:
 
 Consider how source locations should be communicated. Maybe every signature
 should be extended by adding "qint64 line = -1, qint64 column = -1".
@@ -264,7 +264,7 @@ should be extended by adding "qint64 line = -1, qint64 column = -1".
  */
 
 /*
-### Qt 5:
+### Qt5:
 
 Change
     virtual void startDocument() = 0;
