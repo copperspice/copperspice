@@ -560,6 +560,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8 toUpper() const & Q_REQUIRED_RESULT;
       QString8 toUpper() && Q_REQUIRED_RESULT;
 
+      QByteArray toLatin1() const Q_REQUIRED_RESULT;
+      QByteArray toUtf8() const Q_REQUIRED_RESULT;
+
       QString8 trimmed() const & Q_REQUIRED_RESULT;
       QString8 trimmed() && Q_REQUIRED_RESULT;
 
@@ -568,6 +571,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       const uint8_t *utf8() const {
          return CsString::CsString::constData();
       }
+
+      // static
+      static QString8 fromUtf16(const char16_t *str, size_type size = -1);
+      static QString8 fromLatin1(const QByteArray &str);
 
       // iterators
       iterator begin() {

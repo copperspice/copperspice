@@ -41,6 +41,79 @@ QChar32::Category QChar32::category() const
    return static_cast<QChar32::Category>(QUnicodeTables::properties(value)->category);
 }
 
+unsigned char QChar32::combiningClass() const
+{
+   uint32_t value = unicode();
+
+   if (value > LastValidCodePoint) {
+      return 0;
+   }
+
+   return static_cast<unsigned char>(QUnicodeTables::properties(value)->combiningClass);
+}
+
+// buffer has to have a length of 3, required for Hangul decomposition
+static const uint16_t * cs_internal_decomposition(uint value, int *length, int *tag, unsigned short *buffer)
+{
+   if (value >= Hangul_SBase && value < Hangul_SBase + Hangul_SCount) {
+      // compute Hangul syllable decomposition as per UAX #15
+
+      const uint SIndex = value - Hangul_SBase;
+      buffer[0] = Hangul_LBase + SIndex / Hangul_NCount;                   // L
+      buffer[1] = Hangul_VBase + (SIndex % Hangul_NCount) / Hangul_TCount; // V
+      buffer[2] = Hangul_TBase + SIndex % Hangul_TCount;                   // T
+
+      *length = buffer[2] == Hangul_TBase ? 2 : 3;
+      *tag = QChar32::Canonical;
+
+      return buffer;
+   }
+
+   const unsigned short index = GET_DECOMPOSITION_INDEX(value);
+   if (index == 0xffff) {
+      *length = 0;
+      *tag    = QChar32::NoDecomposition;
+
+      return 0;
+   }
+
+   const unsigned short *decomposition = QUnicodeTables::uc_decomposition_map + index;
+   *tag    = (*decomposition) & 0xff;
+   *length = (*decomposition) >> 8;
+
+   return decomposition + 1;
+}
+
+QString8 QChar32::decomposition() const
+{
+   unsigned short buffer[3];
+   int length;
+   int tag;
+
+   uint32_t value = unicode();
+   const unsigned short *d = cs_internal_decomposition(value, &length, &tag, buffer);
+
+   // broom ( test code only )
+   return QString8::fromUtf16(reinterpret_cast<const char16_t *>(d), length);
+}
+
+QChar32::Decomposition QChar32::decompositionTag() const
+{
+   uint32_t value = unicode();
+
+   if (value > LastValidCodePoint) {
+      return QChar32::NoDecomposition;
+   }
+
+   const unsigned short index = GET_DECOMPOSITION_INDEX(value);
+
+   if (index == 0xffff) {
+      return QChar32::NoDecomposition;
+   }
+
+   return static_cast<QChar32::Decomposition>(QUnicodeTables::uc_decomposition_map[index] & 0xff);
+}
+
 int QChar32::digitValue() const
 {
    uint32_t value = unicode();
@@ -61,17 +134,6 @@ QChar32::Direction QChar32::direction() const
    }
 
    return static_cast<QChar32::Direction>(QUnicodeTables::properties(value)->direction);
-}
-
-QChar32::JoiningType QChar32::joiningType() const
-{
-   uint32_t value = unicode();
-
-   if (value > LastValidCodePoint) {
-      return QChar32::Joining_None;
-   }
-
-   return static_cast<QChar32::JoiningType>(QUnicodeTables::properties(value)->joining);
 }
 
 bool QChar32::hasMirrored() const
@@ -205,6 +267,17 @@ bool QChar32::isSymbol() const
    return FLAG(QUnicodeTables::properties(value)->category) & test;
 }
 
+QChar32::JoiningType QChar32::joiningType() const
+{
+   uint32_t value = unicode();
+
+   if (value > LastValidCodePoint) {
+      return QChar32::Joining_None;
+   }
+
+   return static_cast<QChar32::JoiningType>(QUnicodeTables::properties(value)->joining);
+}
+
 QChar32 QChar32::mirroredChar() const
 {
    uint32_t value = unicode();
@@ -214,6 +287,17 @@ QChar32 QChar32::mirroredChar() const
    }
 
    return static_cast<char32_t>(value + QUnicodeTables::properties(value)->mirrorDiff);
+}
+
+QChar32::Script QChar32::script() const
+{
+   uint32_t value = unicode();
+
+   if (value > LastValidCodePoint) {
+      return QChar32::Script_Unknown;
+   }
+
+   return static_cast<QChar32::Script>(QUnicodeTables::properties(value)->script);
 }
 
 QString8 QChar32::toLower() const

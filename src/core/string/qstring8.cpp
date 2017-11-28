@@ -310,6 +310,42 @@ QString8 &QString8::fill(QChar32 c, size_type newSize)
    return *this;
 }
 
+QString8 QString8::fromLatin1(const QByteArray &str)
+{
+   QString8 retval;
+
+   for (char c : str) {
+      const char32_t value = c;
+      retval.append(value);
+   }
+
+   return retval;
+}
+
+QString8 QString8::fromUtf16(const char16_t *value, size_type size)
+{
+   if (value == nullptr) {
+      return QString8();
+   }
+
+   if (size < 0) {
+      size = 0;
+
+      while (value[size] != 0) {
+         ++size;
+      }
+   }
+
+   // broom ( test code only )
+   QString8 retval;
+
+   for (int i = 0; i < size; ++i) {
+      retval.append(static_cast<char32_t>(value[i]));
+   }
+
+   return retval;
+}
+
 bool QString8::isEmpty() const
 {
    return empty();
@@ -897,6 +933,30 @@ QString8 QString8::toUpper() const &
 QString8 QString8::toUpper() &&
 {
     return convertCase<QUnicodeTables::UppercaseTraits>(*this);
+}
+
+QByteArray QString8::toLatin1() const
+{
+   QByteArray retval;
+
+   for (QChar32 c : *this) {
+      const char32_t value = c.unicode();
+
+      if (value > 255) {
+         retval.append('?' );
+
+      } else {
+         retval.append(value);
+
+      }
+   }
+
+   return retval;
+}
+
+QByteArray QString8::toUtf8() const
+{
+   return QByteArray(constData(), CsString::CsString::size_storage() );
 }
 
 void QString8::truncate(size_type length)

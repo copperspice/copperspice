@@ -359,43 +359,39 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Category category() const;
       unsigned char combiningClass() const;
 
+      QString8 decomposition() const;
+      Decomposition decompositionTag() const;
+
       int digitValue() const;
       Direction direction() const;
 
-
-//    QString8 decomposition() const;                  // broom
-//    Decomposition decompositionTag() const;
-
-
-      static QChar32 fromLatin1(char c) {
-         return QChar32(static_cast<char32_t>(c));
-      }
-
-      bool isLetter() const;
-      bool isLetterOrNumber() const;
+      bool hasMirrored() const;
 
       bool isDigit() const {
          return category() == Number_DecimalDigit;
       }
 
+      bool isLetter() const;
+      bool isLetterOrNumber() const;
+
+      bool isLower() const {
+         return category() == Letter_Lowercase;
+      }
+
       bool isMark() const;
+
+      bool isNonCharacter() const;
 
       bool isNull() const {
          return unicode() == 0;
       }
 
-      bool isNonCharacter() const;
       bool isNumber() const;
 
       bool isPrint() const;
       bool isPunct() const;
-
       bool isSpace() const;
       bool isSymbol() const;
-
-      bool isLower() const {
-         return category() == Letter_Lowercase;
-      }
 
       bool isTitleCase() const {
          return category() == Letter_Titlecase;
@@ -407,12 +403,10 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 
       JoiningType joiningType() const;
 
-      bool hasMirrored() const;
       QChar32 mirroredChar() const;
 
-      QString8 toLower() const;
-      QString8 toUpper() const;
-      QString8 toTitleCase() const;
+      Script script() const;
+
       QString8 toCaseFolded() const;
 
       char toLatin1() const {
@@ -424,6 +418,10 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 
          return 0;
       }
+
+      QString8 toLower() const;
+      QString8 toUpper() const;
+      QString8 toTitleCase() const;
 
       uint32_t unicode() const {
          return CsString::CsChar::unicode();
