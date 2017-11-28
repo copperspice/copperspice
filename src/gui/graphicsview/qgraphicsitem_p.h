@@ -169,10 +169,12 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void updateChildWithGraphicsEffectFlagRecursively();
    void updateAncestorFlag(QGraphicsItem::GraphicsItemFlag childFlag,
                            AncestorFlag flag = NoFlag, bool enabled = false, bool root = true);
+
    void updateAncestorFlags();
    void setIsMemberOfGroup(bool enabled);
    void remapItemPos(QEvent *event, QGraphicsItem *item);
    QPointF genericMapFromScene(const QPointF &pos, const QWidget *viewport) const;
+
    inline bool itemIsUntransformable() const {
       return (flags & QGraphicsItem::ItemIgnoresTransformations)
              || (ancestorFlags & AncestorIgnoresTransformations);
@@ -182,8 +184,6 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void combineTransformFromParent(QTransform *x, const QTransform *viewTransform = 0) const;
    virtual void updateSceneTransformFromParent();
 
-   // ### Qt5/Remove. Workaround for reimplementation added after Qt 4.4.
-   virtual QVariant inputMethodQueryHelper(Qt::InputMethodQuery query) const;
    static bool movableAncestorIsSelected(const QGraphicsItem *item);
 
    virtual void setPosHelper(const QPointF &pos);
@@ -192,8 +192,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void appendGraphicsTransform(QGraphicsTransform *t);
    void setVisibleHelper(bool newVisible, bool explicitly, bool update = true);
    void setEnabledHelper(bool newEnabled, bool explicitly, bool update = true);
-   bool discardUpdateRequest(bool ignoreVisibleBit = false,
-                             bool ignoreDirtyBit = false, bool ignoreOpacity = false) const;
+
+   bool discardUpdateRequest(bool ignoreVisibleBit = false, bool ignoreDirtyBit = false, bool ignoreOpacity = false) const;
    virtual void transformChanged() {}
    int depth() const;
 
