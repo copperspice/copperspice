@@ -1400,17 +1400,16 @@ void MainWindow::manual()
 
       m_assistantProcess->start(app, QStringList() << QLatin1String("-enableRemoteControl"));
       if (!m_assistantProcess->waitForStarted()) {
-         QMessageBox::critical(this, tr("Qt Linguist"),
-                               tr("Unable to launch Qt Assistant (%1)").arg(app));
+         QMessageBox::critical(this, tr("Linguist"), tr("Unable to launch Assistant (%1)").arg(app));
          return;
       }
    }
 
    QTextStream str(m_assistantProcess);
-   str << QLatin1String("SetSource qthelp://com.trolltech.linguist.")
-       << (QT_VERSION >> 16) << ((QT_VERSION >> 8) & 0xFF)
-       << (QT_VERSION & 0xFF)
-       << QLatin1String("/qdoc/linguist-manual.html")
+   str << QLatin1String("SetSource help://com.copperspice.linguist.")
+       << (CS_VERSION >> 16) << ((CS_VERSION >> 8) & 0xFF)
+       << (CS_VERSION & 0xFF)
+       << QLatin1String("/docs/linguist-manual.html")
        << QLatin1Char('\n') << endl;
 }
 
@@ -1422,12 +1421,11 @@ void MainWindow::about()
    version = version.arg(QLatin1String(QT_VERSION_STR));
 
    box.setText(tr("<center><img src=\":/images/splash.png\"/></img><p>%1</p></center>"
-                  "<p>Qt Linguist is a tool for adding translations to Qt "
-                  "applications.</p>"
+                  "<p>Linguist is a tool for adding translations to CopperSpice applications.</p>"
                   "<p>Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies)."
                  ).arg(version));
 
-   box.setWindowTitle(QApplication::translate("AboutDialog", "Qt Linguist"));
+   box.setWindowTitle(QApplication::translate("AboutDialog", "Linguist"));
    box.setIcon(QMessageBox::NoIcon);
    box.exec();
 }

@@ -384,7 +384,7 @@ QSet<QUrl> AccelTreeResourceLoader::deviceURIs() const
    QSet<QUrl> retval;
 
    while (it != end) {
-      if (it.key().toString().startsWith(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:"))) {
+      if (it.key().toString().startsWith(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:"))) {
          retval.insert(it.key());
       }
 

@@ -5,7 +5,7 @@
 	<key>CFBundleIconFile</key>
 	<string>linguist.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.trolltech.Linguist</string>
+	<string>com.copperspice.Linguist</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
         <key>CFBundleGetInfoString</key>

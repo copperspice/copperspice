@@ -181,7 +181,7 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
    QXmlSimpleReader reader;
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), false);
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), true);
-   reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
+   reader.setFeature(QLatin1String("http://copperspice.com/xml/features/report-whitespace-only-CharData"), false);
 
    UiReader handler(translator, cd);
    reader.setContentHandler(&handler);

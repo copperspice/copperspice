@@ -123,7 +123,7 @@ int main(int argc, char **argv)
       }
    }
 
-   app.setOrganizationName(QLatin1String("Trolltech"));
+   app.setOrganizationName(QLatin1String("CopperSpice"));
    app.setApplicationName(QLatin1String("Linguist"));
 
    QSettings config;

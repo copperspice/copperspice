@@ -234,11 +234,11 @@ bool PhraseBook::load(const QString &fileName, bool *langGuessed)
 
    QXmlInputSource in(&f);
    QXmlSimpleReader reader;
-   // don't click on these!
+
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), false);
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), true);
-   reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace"
-                                   "-only-CharData"), false);
+   reader.setFeature(QLatin1String("http://copperspice.com/xml/features/report-whitespace-only-CharData"), false);
+
    QphHandler *hand = new QphHandler(this);
    reader.setContentHandler(hand);
    reader.setErrorHandler(hand);

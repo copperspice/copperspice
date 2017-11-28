@@ -596,7 +596,7 @@ void QXmlQuery::bindVariable(const QXmlName &name, QIODevice *device)
        * same which means that the URI is the same, and hence the resource
        * loader will return the document for the old QIODevice.
        */
-      d->resourceLoader()->clear(QUrl(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+      d->resourceLoader()->clear(QUrl(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
                                       d->namePool.d->stringForLocalName(name.localName())));
    } else {
       vl->removeBinding(name);

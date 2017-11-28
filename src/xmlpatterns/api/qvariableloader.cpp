@@ -75,7 +75,7 @@ class StringListIterator : public ListIteratorPlatform<QString, Item, StringList
 class TemporaryTreesRedirectingContext : public DelegatingDynamicContext
 {
  public:
-   TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other, const DynamicContext::Ptr &modelStorage) 
+   TemporaryTreesRedirectingContext(const DynamicContext::Ptr &other, const DynamicContext::Ptr &modelStorage)
                   : DelegatingDynamicContext(other), m_modelStorage(modelStorage) {
       Q_ASSERT(m_modelStorage);
    }
@@ -146,7 +146,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
    const QVariant &variant = m_bindingHash.value(name);
 
    if (variant.userType() == qMetaTypeId<QIODevice *>()) {
-      return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+      return Item(AnyURI::fromValue(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
                                     m_namePool->stringForLocalName(name.localName())));
    }
 
@@ -160,7 +160,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
        * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
        * has accepted. */
       if (atomicValue.isNull()) {
-         return Item(AnyURI::fromValue(QLatin1String("tag:trolltech.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+         return Item(AnyURI::fromValue(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
                                        m_namePool->stringForLocalName(name.localName())));
       } else {
          return AtomicValue::toXDM(atomicValue);

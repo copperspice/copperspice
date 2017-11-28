@@ -6426,8 +6426,7 @@ static void initializeReader(QXmlSimpleReader &reader, bool namespaceProcessing)
 {
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-   reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"),
-                     false); // Shouldn't change in Qt 4
+   reader.setFeature(QLatin1String("http://copperspice.com/xml/features/report-whitespace-only-CharData"), false);
 }
 
 bool QDomDocumentPrivate::setContent(QXmlInputSource *source, bool namespaceProcessing, QString *errorMsg,
