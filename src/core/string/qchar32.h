@@ -365,6 +365,11 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       int digitValue() const;
       Direction direction() const;
 
+      static QChar32 fromLatin1(char c) {
+         QChar32 retval(static_cast<char32_t>(c));
+         return retval;
+      }
+
       bool hasMirrored() const;
 
       bool isDigit() const {

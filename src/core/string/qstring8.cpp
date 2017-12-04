@@ -322,16 +322,33 @@ QString8 QString8::fromLatin1(const QByteArray &str)
    return retval;
 }
 
-QString8 QString8::fromUtf16(const char16_t *value, size_type size)
+QString8 QString8::fromUtf8(const QByteArray &str)
 {
-   if (value == nullptr) {
+   // broom ( test code only )
+   QString8 retval;
+
+   for (char c : str) {
+
+      if (c == 0) {
+         break;
+      }
+
+      retval.append(static_cast<char32_t>(c));
+   }
+
+   return retval;
+}
+
+QString8 QString8::fromUtf8(const char *str, size_type size)
+{
+   if (str == nullptr) {
       return QString8();
    }
 
    if (size < 0) {
       size = 0;
 
-      while (value[size] != 0) {
+      while (str[size] != 0) {
          ++size;
       }
    }
@@ -340,7 +357,31 @@ QString8 QString8::fromUtf16(const char16_t *value, size_type size)
    QString8 retval;
 
    for (int i = 0; i < size; ++i) {
-      retval.append(static_cast<char32_t>(value[i]));
+      retval.append(static_cast<char32_t>(str[i]));
+   }
+
+   return retval;
+}
+
+QString8 QString8::fromUtf16(const char16_t *str, size_type size)
+{
+   if (str == nullptr) {
+      return QString8();
+   }
+
+   if (size < 0) {
+      size = 0;
+
+      while (str[size] != 0) {
+         ++size;
+      }
+   }
+
+   // broom ( test code only )
+   QString8 retval;
+
+   for (int i = 0; i < size; ++i) {
+      retval.append(static_cast<char32_t>(str[i]));
    }
 
    return retval;
@@ -632,63 +673,6 @@ QString8 QString8::simplified() &&
          retval.append(c);
 
       }
-   }
-
-   return retval;
-}
-
-QList<QString8> QString8::split(QChar32 sep, SplitBehavior behavior, Qt::CaseSensitivity cs) const
-{
-   QList<QString8> retval;
-
-   auto first_iter = cbegin();
-   auto last_iter  = cend();
-
-   const_iterator iter;
-
-   while ( (iter = indexOfFast(sep, first_iter, cs)) != last_iter) {
-
-      if (first_iter != iter || behavior == KeepEmptyParts) {
-         retval.append(QString8(first_iter, iter));
-      }
-
-      first_iter = ++iter;
-   }
-
-   if (first_iter != last_iter || behavior == KeepEmptyParts) {
-      retval.append(QString8(first_iter, last_iter));
-   }
-
-   return retval;
-}
-
-QList<QString8> QString8::split(const QString8 &sep, SplitBehavior behavior, Qt::CaseSensitivity cs) const
-{
-   QList<QString8> retval;
-
-   auto first_iter = cbegin();
-   auto last_iter  = cend();
-
-   const_iterator iter;
-
-   int len   = sep.size();
-   int extra = 0;
-
-   while ( (iter = indexOfFast(sep, first_iter + extra, cs)) != last_iter) {
-
-      if (first_iter != iter || behavior == KeepEmptyParts) {
-         retval.append(QString8(first_iter, iter));
-      }
-
-      first_iter = iter + len;
-
-      if (len == 0) {
-         extra = 1;
-      }
-   }
-
-   if (first_iter != last_iter || behavior == KeepEmptyParts) {
-      retval.append(QString8(first_iter, last_iter));
    }
 
    return retval;
