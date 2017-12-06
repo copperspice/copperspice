@@ -322,6 +322,31 @@ QString8 QString8::fromLatin1(const QByteArray &str)
    return retval;
 }
 
+QString8 QString8::fromLatin1(const char *str, size_type size)
+{
+   QString8 retval;
+
+   if (str == nullptr) {
+      // do nothing
+
+   } else if (size == -1)  {
+
+      for (size_type i = 0; str[i] != 0; ++i) {
+         const char32_t value = str[i];
+         retval.append(value);
+      }
+
+   } else {
+
+      for (size_type i = 0; i < size; ++i) {
+         const char32_t value = str[i];
+         retval.append(value);
+      }
+   }
+
+   return retval;
+}
+
 QString8 QString8::fromUtf8(const QByteArray &str)
 {
    // broom ( test code only )
@@ -532,6 +557,43 @@ QString8 QString8::repeated(size_type count) const
    return retval;
 }
 
+
+QString8 &QString8::replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs)
+{
+   // broom - missing code
+
+   return *this;
+}
+
+QString8 &QString8::replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
+                  Qt::CaseSensitivity cs)
+{
+   if (this->empty() || beforeSize == 0) {
+      return *this;
+   }
+
+   replace( QString8(before, beforeSize), QString8(after, afterSize), cs);
+
+   return *this;
+}
+
+QString8 &QString8::replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs)
+{
+
+   // broom - missing code
+
+   return *this;
+}
+
+QString8 &QString8::replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs)
+{
+
+   // broom - missing code
+
+   return *this;
+}
+
+
 QString8 QString8::right(size_type numOfChars) const
 {
    if (numOfChars < 0) {
@@ -672,32 +734,6 @@ QString8 QString8::simplified() &&
          isFirst = true;
          retval.append(c);
 
-      }
-   }
-
-   return retval;
-}
-
-QString8 QString8::toHtmlEscaped() const
-{
-   QString8 retval;
-
-   for (auto c : *this) {
-
-      if (c == UCHAR('<'))         {
-         retval.append("&lt;");
-
-      } else if (c == UCHAR('>'))  {
-         retval.append("&gt;");
-
-      } else if (c == UCHAR('&'))  {
-         retval.append("&amp;");
-
-      } else if (c == UCHAR('"'))  {
-         retval.append("&quot;");
-
-      } else {
-          retval.append(c);
       }
    }
 
@@ -899,6 +935,32 @@ QString8 QString8::toCaseFolded() &&
     return convertCase<QUnicodeTables::CasefoldTraits>(*this);
 }
 
+QString8 QString8::toHtmlEscaped() const
+{
+   QString8 retval;
+
+   for (auto c : *this) {
+
+      if (c == UCHAR('<'))         {
+         retval.append("&lt;");
+
+      } else if (c== UCHAR('>'))  {
+         retval.append("&gt;");
+
+      } else if (c == UCHAR('&'))  {
+         retval.append("&amp;");
+
+      } else if (c == UCHAR('"'))  {
+         retval.append("&quot;");
+
+      } else {
+         retval.append(c);
+      }
+   }
+
+   return retval;
+}
+
 QString8 QString8::toLower() const &
 {
     return convertCase<QUnicodeTables::LowercaseTraits>(*this);
@@ -940,7 +1002,14 @@ QByteArray QString8::toLatin1() const
 
 QByteArray QString8::toUtf8() const
 {
-   return QByteArray(constData(), CsString::CsString::size_storage() );
+   return QByteArray(constData(), CsString::CsString::size_storage());
+}
+
+QByteArray QString8::toUtf16() const
+{
+   // broom - missing code
+
+   return QByteArray();
 }
 
 void QString8::truncate(size_type length)

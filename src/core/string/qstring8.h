@@ -277,15 +277,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
 
       // methods
-      QString8 &append(QChar32 c)  {
-         CsString::CsString::append(c);
-         return *this;
-      }
-
-      QString8 &append(char c)  {
-         CsString::CsString::append(c);
-         return *this;
-      }
 
 
 /*    broom - review this
@@ -298,6 +289,16 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
 */
+
+      QString8 &append(QChar32 c)  {
+         CsString::CsString::append(c);
+         return *this;
+      }
+
+      QString8 &append(char c)  {
+         CsString::CsString::append(c);
+         return *this;
+      }
 
       QString8 &append(const QString8 &other)  {
          CsString::CsString::append(other);
@@ -480,8 +481,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
-      QString8 &prepend(const char *other) {
-         CsString::CsString::insert(begin(), other);
+      QString8 &prepend(char c) {
+         CsString::CsString::insert(begin(), c);
          return *this;
       }
 
@@ -512,8 +513,30 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &remove(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-      QString8 &replace(size_type index, size_type numOfChars, QChar32 c) {
+
+// doxy me
+       QString8 &replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+// doxy me
+       QString8 &replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
+                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+// doxy me
+       QString8 &replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+// doxy me
+       QString8 &replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+
+       QString8 &replace(size_type index, size_type numOfChars, QChar32 c) {
          CsString::CsString::replace(index, numOfChars, 1, c);
+         return *this;
+      }
+
+      // doxy me
+      QString8 &replace(size_type index, size_type numOfChars, const QChar32 *data, size_type size)
+      {
+         replace(index, numOfChars, QString8(data, size));
          return *this;
       }
 
@@ -581,6 +604,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QByteArray toLatin1() const Q_REQUIRED_RESULT;
       QByteArray toUtf8() const Q_REQUIRED_RESULT;
+      QByteArray toUtf16() const Q_REQUIRED_RESULT;
 
       QString8 trimmed() const & Q_REQUIRED_RESULT;
       QString8 trimmed() && Q_REQUIRED_RESULT;
@@ -593,19 +617,48 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // static
       static QString8 fromLatin1(const QByteArray &str);
+      static QString8 fromLatin1(const char *str, size_type size = -1);
+
       static QString8 fromUtf8(const QByteArray &str);
       static QString8 fromUtf8(const char *str, size_type size = -1);
       static QString8 fromUtf16(const char16_t *str, size_type size = -1);
 
-
-/*
       // wrappers
-      template <typename ...Ts>
-      QString8 split(QChar32 sep, Ts... args) const {
-         std::conditional<true, QStringParser, void>::type::split(*this, args...);
+      template <typename SP = QStringParser, typename ...Ts>
+      QString8 formatArg(Ts... args) const
+      {
+         return SP::formatArg(*this, args...);
       }
 
-*/
+      template <typename SP = QStringParser, typename ...Ts>
+      QString8 formatArgs(Ts... args) const
+      {
+         return SP::formatArgs(*this, args...);
+      }
+
+      template <typename SP = QStringParser, typename V>
+      static QString8 number(V value, int base  = 10)
+      {
+         return SP::template number<QString8>(value, base);
+      }
+
+      template <typename SP = QStringParser>
+      static QString8 number(double value, char format = 'g', int precision = 6)
+      {
+         return SP::template number<QString8>(value, format, precision);
+      }
+
+      template <typename SP = QStringParser, typename ...Ts>
+      auto split(QChar32 sep, Ts... args) const
+      {
+         return SP::split(*this, sep, args...);
+      }
+
+      template <typename SP = QStringParser, typename ...Ts>
+      auto split(const QString8 &sep, Ts... args) const
+      {
+         return SP::split(*this, sep, args...);
+      }
 
       // iterators
       iterator begin() {

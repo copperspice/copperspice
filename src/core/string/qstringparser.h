@@ -52,9 +52,9 @@ class Q_CORE_EXPORT QStringParser
 
       enum SplitBehavior { KeepEmptyParts, SkipEmptyParts };
 
-      // 1  value - quint64, long, short, etc
+      // a1  value - quint64, long, short, etc
       template <typename T, typename V, typename = typename std::enable_if<std::is_integral<V>::value>::type>
-      static T formatArg(const T &str, V value, int fieldwidth = 0, int base = 10, QChar32 fillChar = QChar32(' ') )
+      static T formatArg(const T &str, V value, int fieldwidth = 0, int base = 10, QChar32 fillChar = QChar32(' '))
       {
          ArgEscapeData d = findArgEscapes(str);
 
@@ -110,7 +110,7 @@ class Q_CORE_EXPORT QStringParser
          return replaceArgEscapes(str, d, fieldwidth, arg, locale_arg, fillChar);
       }
 
-      // 2  value - double
+      // a2  value - double
       template <typename T>
       static T formatArg(const T &str, double value, int fieldwidth = 0, char format = 'g', int precision = 6,
                   QChar32 fillChar = QChar32(' ') )
@@ -204,8 +204,10 @@ class Q_CORE_EXPORT QStringParser
          return replaceArgEscapes(str, d, fieldwidth, arg, locale_arg, fillChar);
       }
 
-      // 3  value - char, string
-      template <typename T, typename V, typename = typename std::enable_if<! std::is_integral<V>::value>::type>
+      // a3  value - char, string
+      template <typename T, typename V, typename = typename
+                  std::enable_if<! std::is_integral< typename std::remove_reference<V>::type>::value>::type>
+
       static T formatArg(const T &str, V &&value, int fieldwidth = 0, QChar32 fillChar = QChar32(' '))
       {
          const T tmp(std::forward<V>(value));
@@ -223,7 +225,7 @@ class Q_CORE_EXPORT QStringParser
          return replaceArgEscapes(str, d, fieldwidth, tmp, tmp, fillChar);
       }
 
-      // 4
+      // a4
       template <typename T, typename ...Ts>
       static T formatArgs(const T &str, Ts... args)
       {
@@ -231,16 +233,84 @@ class Q_CORE_EXPORT QStringParser
          return multiArg(str, argList);
       }
 
-      template <typename T>
-      T join(const QList<T> &list, const T &sep) const;
+      template <typename T, typename V>
+      static T join(const QList<T> &list, const V &sep);
+
+
+      // b1  value - quint64, long, short, etc
+      template <typename T = QString8, typename V>
+      static T number(V value, int base  = 10)
+      {
+         T retval;
+
+         if (base < 2 || base > 36) {
+            qWarning("Warning: QStringParser::number() invalid numeric base (%d)", base);
+            base = 10;
+         }
+
+         std::basic_ostringstream<char> stream;
+         stream << std::setbase(base);
+         stream << value;
+
+         std::string s1 = stream.str();
+         const char *s2 = s1.c_str();
+
+         retval = T::fromUtf8(s2);
+
+         return retval;
+      }
+
+      // b2  value
+      template <typename T = QString8>
+      static T number(double value, char format = 'g', int precision = 6)
+      {
+         std::basic_ostringstream<char> stream;
+
+         switch (format) {
+            case 'f':
+               stream << std::nouppercase << std::fixed;
+               break;
+
+            case 'e':
+               stream << std::nouppercase << std::scientific;
+               break;
+
+            case 'E':
+               stream << std::uppercase << std::scientific;
+               break;
+
+            case 'g':
+               stream << std::nouppercase << std::defaultfloat;
+               break;
+
+            case 'G':
+               stream << std::uppercase << std::defaultfloat;
+               break;
+
+            default:
+               qWarning("Warning: QStringParser::number() invalid format '%c'", format);
+               break;
+         }
+
+         stream << std::setprecision(precision);
+         stream.imbue(std::locale::classic());
+         stream << value;
+
+         std::string s1 = stream.str();
+         const char *s2 = s1.c_str();
+
+         T retval= T::fromUtf8(s2);
+
+         return retval;
+      }
 
       template <typename T>
-      QList<T> split(const T &str, QChar32 sep, SplitBehavior behavior = KeepEmptyParts,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive) const Q_REQUIRED_RESULT;
+      static QList<T> split(const T &str, QChar32 sep, SplitBehavior behavior = KeepEmptyParts,
+                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
       template <typename T>
-      QList<T> split(const T &str, const T &sep, SplitBehavior behavior = KeepEmptyParts,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive) const Q_REQUIRED_RESULT;
+      static QList<T> split(const T &str, const T &sep, SplitBehavior behavior = KeepEmptyParts,
+                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
    private:
       struct ArgEscapeData {
@@ -249,19 +319,6 @@ class Q_CORE_EXPORT QStringParser
          int locale_occurrences;    // number of occurrences of the lowest escape sequence number that contain 'L'
          int escape_len;            // total length of escape sequences which will be replaced
       };
-
-/*
-      template <typename T, typename V>
-      static csPrintf(const T &str, V value, int fieldwidth, int base, QChar32 fillChar, QChar32 format, int precsision) const
-      {
-         QString retval = str;
-         // broom (test code)
-         for (const auto &arg : argList) {
-            retval.append(" " + arg);
-         }
-         return retval;
-      }
-*/
 
       template <typename T>
       static T multiArg(const T &str, const QVector<T> &argList)
@@ -535,8 +592,8 @@ class Q_CORE_EXPORT QStringParser
       }
 };
 
-template <typename T>
-T QStringParser::join(const QList<T> &list, const T &sep) const
+template <typename T, typename V>
+T QStringParser::join(const QList<T> &list, const V &sep)
 {
    T retval;
    bool isFirst = true;
@@ -556,7 +613,7 @@ T QStringParser::join(const QList<T> &list, const T &sep) const
 }
 
 template <typename T>
-QList<T> QStringParser::split(const T &str, QChar32 sep, SplitBehavior behavior, Qt::CaseSensitivity cs) const
+QList<T> QStringParser::split(const T &str, QChar32 sep, SplitBehavior behavior, Qt::CaseSensitivity cs)
 {
    QList<QString8> retval;
 
@@ -582,7 +639,7 @@ QList<T> QStringParser::split(const T &str, QChar32 sep, SplitBehavior behavior,
 }
 
 template <typename T>
-QList<T> QStringParser::split(const T &str, const T &sep, SplitBehavior behavior, Qt::CaseSensitivity cs) const
+QList<T> QStringParser::split(const T &str, const T &sep, SplitBehavior behavior, Qt::CaseSensitivity cs)
 {
    QList<T> retval;
 
