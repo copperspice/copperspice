@@ -193,7 +193,7 @@ CsStringIterator<E,A> CsStringIterator<E,A>::operator-(size_type x) const
 template <typename E, typename A>
 typename CsStringIterator<E, A>::size_type CsStringIterator <E,A>::operator-(CsStringIterator other) const
 {
-   int retval = 0;
+   size_type retval = 0;
 
    CsStringIterator a = *this;
    CsStringIterator b = other;

@@ -30,8 +30,6 @@
 #include <qstring.h>
 #include <qstringmatcher.h>
 
-QT_BEGIN_NAMESPACE
-
 class QRegExp;
 
 using QStringListIterator        = QListIterator<QString>;
@@ -46,13 +44,13 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
       append(value);
    }
 
-   QStringList(const QStringList &other) 
+   QStringList(const QStringList &other)
       : QList<QString>(other) { }
 
-   QStringList(const QList<QString> &other) 
+   QStringList(const QList<QString> &other)
       : QList<QString>(other) { }
 
-   QStringList(std::initializer_list<QString> args) 
+   QStringList(std::initializer_list<QString> args)
       : QList<QString>(args) { }
 
    // methods
@@ -65,8 +63,8 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
    int removeDuplicates();
    QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-   void sort();     
-   
+   void sort();
+
    // operators
    QStringList operator+(const QStringList &other) const {
       QStringList n = *this;
@@ -86,7 +84,7 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
 
 #ifndef QT_NO_REGEXP
    QStringList filter(const QRegExp &rx) const;
-   
+
    int indexOf(const QRegExp &rx, int from = 0) const;
    int lastIndexOf(const QRegExp &rx, int from = -1) const;
    int indexOf(QRegExp &rx, int from = 0) const;
@@ -114,7 +112,5 @@ inline QDataStream &operator<<(QDataStream &out, const QStringList &list)
 }
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif

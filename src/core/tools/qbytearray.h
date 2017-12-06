@@ -246,17 +246,27 @@ class Q_CORE_EXPORT QByteArray
    QByteArray &replace(char before, char after);
 
    QList<QByteArray> split(char sep) const;
-
    QByteArray repeated(int times) const;
 
+   // BROOM - delete these when QString8 active
    QByteArray &append(const QString &s);
    QByteArray &insert(int i, const QString &s);
    QByteArray &replace(const QString &before, const char *after);
    QByteArray &replace(char c, const QString &after);
    QByteArray &replace(const QString &before, const QByteArray &after);
-
    int indexOf(const QString &s, int from = 0) const;
    int lastIndexOf(const QString &s, int from = -1) const;
+
+   QByteArray &operator+=(const QString &s);
+
+   inline bool operator==(const QString &s2) const;
+   inline bool operator!=(const QString &s2) const;
+   inline bool operator<(const QString &s2) const;
+   inline bool operator>(const QString &s2) const;
+   inline bool operator<=(const QString &s2) const;
+   inline bool operator>=(const QString &s2) const;
+   // delete these when QString8 active
+
 
    // iterators
    inline iterator begin();
@@ -307,18 +317,9 @@ class Q_CORE_EXPORT QByteArray
    QByteRef operator[](int i);
    QByteRef operator[](uint i);
 
-   QByteArray &operator+=(const QString &s);
-
    QByteArray &operator+=(char c);
    QByteArray &operator+=(const char *s);
    QByteArray &operator+=(const QByteArray &a);
-
-   inline bool operator==(const QString &s2) const;
-   inline bool operator!=(const QString &s2) const;
-   inline bool operator<(const QString &s2) const;
-   inline bool operator>(const QString &s2) const;
-   inline bool operator<=(const QString &s2) const;
-   inline bool operator>=(const QString &s2) const;
 
    short toShort(bool *ok = 0, int base = 10) const;
    ushort toUShort(bool *ok = 0, int base = 10) const;
