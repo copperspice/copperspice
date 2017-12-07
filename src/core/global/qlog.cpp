@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include <qlog.h>
+#include <cstdlib>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>

@@ -22,6 +22,7 @@
 
 #include <qplatformdefs.h>
 #include <qmutex.h>
+#include <qlog.h>
 
 #if !defined(QT_NO_THREAD)
 
