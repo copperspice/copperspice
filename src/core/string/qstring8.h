@@ -513,15 +513,13 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &remove(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-
-// doxy me
-       QString8 &replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+      QString8 &replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
 // doxy me
        QString8 &replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
                   Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-// doxy me
+
        QString8 &replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
 // doxy me
@@ -636,7 +634,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return SP::formatArgs(*this, args...);
       }
 
-      template <typename SP = QStringParser, typename V>
+      template <typename V, typename SP = QStringParser>
       static QString8 number(V value, int base  = 10)
       {
          return SP::template number<QString8>(value, base);

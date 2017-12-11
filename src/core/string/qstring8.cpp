@@ -557,7 +557,6 @@ QString8 QString8::repeated(size_type count) const
    return retval;
 }
 
-
 QString8 &QString8::replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs)
 {
    // broom - missing code
@@ -592,7 +591,6 @@ QString8 &QString8::replace(QChar32 c, const QString8 &after, Qt::CaseSensitivit
 
    return *this;
 }
-
 
 QString8 QString8::right(size_type numOfChars) const
 {

@@ -77,7 +77,8 @@ inline int qstrncmp(const char *str1, const char *str2, uint len)
 Q_CORE_EXPORT int qstricmp(const char *, const char *);
 Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 
-// implemented in qvsnprintf.cpp
+
+// BROOM - delete these when QString8 active, implemented in qvsnprintf.cpp
 Q_CORE_EXPORT int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap);
 Q_CORE_EXPORT int qsnprintf(char *str, size_t n, const char *fmt, ...);
 
@@ -249,22 +250,22 @@ class Q_CORE_EXPORT QByteArray
    QByteArray repeated(int times) const;
 
    // BROOM - delete these when QString8 active
-   QByteArray &append(const QString &s);
-   QByteArray &insert(int i, const QString &s);
+   QByteArray &append(const QString &str);
+   QByteArray &insert(int i, const QString &str);
    QByteArray &replace(const QString &before, const char *after);
    QByteArray &replace(char c, const QString &after);
    QByteArray &replace(const QString &before, const QByteArray &after);
-   int indexOf(const QString &s, int from = 0) const;
-   int lastIndexOf(const QString &s, int from = -1) const;
 
-   QByteArray &operator+=(const QString &s);
+   int indexOf(const QString &str, int from = 0) const;
+   int lastIndexOf(const QString &str, int from = -1) const;
 
-   inline bool operator==(const QString &s2) const;
-   inline bool operator!=(const QString &s2) const;
-   inline bool operator<(const QString &s2) const;
-   inline bool operator>(const QString &s2) const;
-   inline bool operator<=(const QString &s2) const;
-   inline bool operator>=(const QString &s2) const;
+   QByteArray &operator+=(const QString &str);
+   inline bool operator==(const QString &str) const;
+   inline bool operator!=(const QString &str) const;
+   inline bool operator<(const QString &str) const;
+   inline bool operator>(const QString &str) const;
+   inline bool operator<=(const QString &str) const;
+   inline bool operator>=(const QString &str) const;
    // delete these when QString8 active
 
 

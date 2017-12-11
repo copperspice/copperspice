@@ -1550,14 +1550,14 @@ inline QByteArray &QByteArray::operator+=(const QString &s)
    return operator+=(s.toAscii());
 }
 
-inline int QByteArray::indexOf(const QString &s, int from) const
+inline int QByteArray::indexOf(const QString &str, int from) const
 {
-   return indexOf(s.toAscii(), from);
+   return indexOf(str.toAscii(), from);
 }
 
-inline int QByteArray::lastIndexOf(const QString &s, int from) const
+inline int QByteArray::lastIndexOf(const QString &str, int from) const
 {
-   return lastIndexOf(s.toAscii(), from);
+   return lastIndexOf(str.toAscii(), from);
 }
 
 #if ! defined(QT_USE_QSTRINGBUILDER)
