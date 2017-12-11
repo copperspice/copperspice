@@ -146,34 +146,44 @@ QT_USE_NAMESPACE
    // In every other case we return NO, which means that Cocoa can do as it pleases
    // (i.e., fire the menu action).
    NSMenuItem *whichItem;
+
    // Change the private unicode keys to the ones used in setting the "Key Equivalents"
    NSString *characters = qt_mac_removePrivateUnicode([event characters]);
+
    if ([self hasShortcut: menu
          forKey: characters
          // Interested only in Shift, Cmd, Ctrl & Alt Keys, so ignoring masks like, Caps lock, Num Lock ...
          forModifiers: ([event modifierFlags] & (NSShiftKeyMask | NSControlKeyMask | NSCommandKeyMask | NSAlternateKeyMask))
          whichItem: &whichItem]) {
-      QWidget *widget = 0;
-      QAction *qaction = 0;
+
+      QWidget *widget  = nullptr;
+      QAction *qaction = nullptr;
+
       if (whichItem && [whichItem tag]) {
          qaction = reinterpret_cast<QAction *>([whichItem tag]);
       }
-      if (qApp->activePopupWidget())
+
+      if (qApp->activePopupWidget()) {
          widget = (qApp->activePopupWidget()->focusWidget() ?
                    qApp->activePopupWidget()->focusWidget() : qApp->activePopupWidget());
-      else if (QApplicationPrivate::focus_widget) {
+
+      } else if (QApplicationPrivate::focus_widget) {
          widget = QApplicationPrivate::focus_widget;
       }
+
       // If we could not find any receivers, pass it to the active window
-      if (!widget) {
+      if (! widget) {
          widget = qApp->activeWindow();
       }
+
       if (qaction && widget) {
-         int key = qaction->shortcut();
+         int key = qaction->shortcut()[0];
          QKeyEvent accel_ev(QEvent::ShortcutOverride, (key & (~Qt::KeyboardModifierMask)),
                             Qt::KeyboardModifiers(key & Qt::KeyboardModifierMask));
+
          accel_ev.ignore();
          qt_sendSpontaneousEvent(widget, &accel_ev);
+
          if (accel_ev.isAccepted()) {
             qt_dispatchKeyEvent(event, widget);
             *target = nil;
@@ -182,6 +192,7 @@ QT_USE_NAMESPACE
          }
       }
    }
+
    return NO;
 }
 
