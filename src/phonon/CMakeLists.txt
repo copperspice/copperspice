@@ -450,14 +450,14 @@ target_link_libraries(CsPhonon${BUILD_ABI} ${EXTRA_PHONON_LIBS})
 
 target_include_directories(CsPhonon${BUILD_ABI}
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtPhonon>
+   $<INSTALL_INTERFACE:include/phonon>
 )
 
 set_target_properties(CsPhonon${BUILD_ABI} PROPERTIES
-    VERSION "0" # for compat
-    SOVERSION "0.0.0" # for compat
-    COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_PHONON_LDFLAGS}
+   VERSION "0" # for compat
+   SOVERSION "0.0.0" # for compat
+   COMPILE_FLAGS ${EXTRA_PHONON_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_PHONON_LDFLAGS}
 )
 
 function_variable_fixup("${EXTRA_PHONON2_CXXFLAGS}" EXTRA_PHONON2_CXXFLAGS)
@@ -467,16 +467,10 @@ add_library(phonon_${PHONON2_SUFFIX} MODULE ${PHONON2_SOURCES} ${PHONON_INCLUDES
 target_link_libraries(phonon_${PHONON2_SUFFIX} ${EXTRA_PHONON2_LIBS})
 
 set_target_properties(phonon_${PHONON2_SUFFIX} PROPERTIES
-    COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
-    LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
-    PREFIX ""
-    )
-
-# TODO: this seems required on BSD but only in the private scope, including
-# x11 paths in the global scope breaks the build so here goes a workaround.
-# strange thing is that it does not require to be linked to any X11 librarise
-# which may be because CsGui is linked to X11 but a "bad" linker may bail out,
-# needs testing with lld and older versions of CMake.
+   COMPILE_FLAGS ${EXTRA_PHONON2_CXXFLAGS}
+   LINK_FLAGS ${EXTRA_PHONON2_LDFLAGS}
+   PREFIX ""
+)
 
 if(${PHONON2_SUFFIX} STREQUAL "gstreamer")
     target_include_directories(phonon_${PHONON2_SUFFIX} PRIVATE ${X11_X11_INCLUDE_PATH})
@@ -485,30 +479,34 @@ endif()
 macro_generate_resources("${PHONON_SOURCES}")
 macro_generate_resources("${PHONON2_SOURCES}")
 macro_generate_package(
-    CsPhonon${BUILD_ABI}
-    phonon
-    "${EXTRA_PHONON_CXXFLAGS}"
-    "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI}"
+   CsPhonon${BUILD_ABI}
+   phonon
+   "${EXTRA_PHONON_CXXFLAGS}"
+   "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI}"
 )
 macro_generate_package(
-    phonon_${PHONON2_SUFFIX}
-    phonon
-    "${EXTRA_PHONON2_CXXFLAGS}"
-    "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsPhonon${BUILD_ABI}"
+   phonon_${PHONON2_SUFFIX}
+   phonon
+   "${EXTRA_PHONON2_CXXFLAGS}"
+   "CsCore${BUILD_ABI} CsGui${BUILD_ABI} CsNetwork${BUILD_ABI} CsPhonon${BUILD_ABI}"
 )
 
 install(
-    TARGETS CsPhonon${BUILD_ABI}
-    EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   TARGETS CsPhonon${BUILD_ABI}
+   EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/include/phonon
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    COMPONENT Devel
+   DIRECTORY ${CMAKE_BINARY_DIR}/include/phonon
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+   COMPONENT Devel
 )
 
-install(TARGETS phonon_${PHONON2_SUFFIX} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(
+   TARGETS phonon_${PHONON2_SUFFIX}
+   EXPORT CopperSpiceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)

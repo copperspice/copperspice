@@ -2,8 +2,7 @@
 # Copyright (C) 2012-2017 Barbara Geller
 # Copyright (C) 2012-2017 Ansel Sermersheim
 # All rights reserved.
-#
-# Usage:  cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/archlinux-mingw.cmake
+
 
 set(CMAKE_SYSTEM_NAME Windows)
 

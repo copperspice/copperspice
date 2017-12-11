@@ -3,9 +3,7 @@
 # Copyright (C) 2012-2017 Ansel Sermersheim
 # All rights reserved.
 #
-#  Config file for the CopperSpice package
-#
-#  defines the following variables:
+#  Config file for the CopperSpice package, defines the following variables:
 #
 #  COPPERSPICE_INCLUDES               - all include directories
 #  COPPERSPICE_LIBRARIES              - all libraries to link against
@@ -66,12 +64,12 @@ foreach(component ${COPPERSPICE_COMPONENTS})
     )
 endforeach()
 
-# set compiler standard to C++11    (todo: switch to using compiler features)
+# set compiler standard to C++14    (todo: switch to using compiler features)
 if(NOT CMAKE_VERSION VERSION_LESS "3.1.0")
    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-   set(CMAKE_CXX_STANDARD 11)
+   set(CMAKE_CXX_STANDARD 14)
 
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 endif()
