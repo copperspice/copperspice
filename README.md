@@ -1,41 +1,38 @@
 ## CopperSpice
 
 ### Introduction
-
-CopperSpice consists of a set of libraries used to develop cross-platform software applications. It is an
-open source project released under the LGPL V2.1 license.
+CopperSpice is of a set of libraries used to develop cross-platform software applications in C++. This is an open source project
+released under the LGPL V2.1 license.
 
 ###### Major enhancements
 
-Meta-Object Compiler (moc)
- * The Meta-Object Compiler is no longer required for generating meta data
- * Since moc is no longer required it was removed
+Reflection
+ * No Meta-Object Compiler is required for generating meta data, all references were removed
  * The functionality provided by moc was replaced with compile time templates
  * CopperSpice automatically generates meta data for processing Signals/ Slots and Introspection
  * A template class can now inherit from QObject with no restrictions on types
- * Complex data types can be used without restrictions
-   * For example the following is valid in CopperSpice: QMap&lt;QString, int&gt;
+ * Complex data types such as **QMap&lt;QString, int&gt;** can be used without restriction
 
-New Functionality
+Enhanced Functionality
+ * CopperSpice makes extensive use of modern C++ features like variadic templates, constexpr, SFINAE, lambdas, atomics,
+   tuple, etc
+ * Reimplemented container classes in CsCore using the C++ standard library containers, iterators, and algorithms
  * CopperSpice includes several of the Qt 5 classes
- * CopperSpice makes extensive use of modern C++ features like variadic templates, constexpr,
-   SFINAE, lambdas, atomics, tuple, etc
- * Reimplement container classes in CsCore leveraging the C++ standard library containers, iterators, and algorithms
  * Integration of CsSignal
    * Improved thread aware Signal/Slot delivery
    * Increased efficiency while maintaining the full Signal/Slot API
  * Integration of CsString
    * Improved storage of Unicode strings
-   * In the process of adding QString8 (UTF-8) and QString16 (UTF-16)
+   * QString8 (UTF-8) and QString16 (UTF-16)
 
 Building
- * The CopperSpice libraries can be built using CMake or GNU Autotools
+ * CopperSpice libraries can be built using CMake or GNU Autotools
  * Any application using CopperSpice can be built with CMake, GNU Autotools, or any other build system
  * CopperSpice can be linked directly into any standard C++ application
 
 
-CopperSpice is a C++ library derived from the Qt framework. Our motivation for developing CopperSpice
-was to change the core design of the libraries leveraging modern C++ functionality.
+CopperSpice is a set of C++ libraries derived from the Qt framework. Our motivation for developing CopperSpice was to
+change the core design and leverage modern C++ functionality.
 
 CopperSpice consists of the following libraries:
 
@@ -74,7 +71,7 @@ www.copperspice.com/docs/cs_overview/index.html
 
 YouTube channel videos about CopperSpice, DoxyPress, C++, and the other topics related to our work.
 
-https://www.youtube.com/channel/UC-lNlWEq0kpMcThO-I81ZdQ
+https://www.youtube.com/copperspice
 
 
 Links to technical presentations recorded at CppNow and CppCon:
@@ -82,7 +79,7 @@ Links to technical presentations recorded at CppNow and CppCon:
 www.copperspice.com/presentations.html
 
 
-### Authors
+### Authors / Contributors
 
 * **Ansel Sermersheim**
 * **Barbara Geller**
@@ -91,12 +88,13 @@ www.copperspice.com/presentations.html
 * **Adam Mensel**
 * **Daniel Pfeifer**
 * **Zbigniew Skowron**
+* **Matan Nassaw**
 
 
 ### License
 
-This library is released under the LGPL V2.1 license. For more information refer to the
-LICENSE files provided with this project.
+This library is released under the LGPL V2.1 license. For more information refer to the LICENSE files provided with
+this project.
 
 
 ### References
