@@ -142,11 +142,13 @@ class Q_CORE_EXPORT QStringParser
                break;
 
             case 'g':
-               stream << std::nouppercase << std::defaultfloat;
+               stream << std::nouppercase;
+               stream.unsetf(std::ios_base::floatfield);
                break;
 
             case 'G':
-               stream << std::uppercase << std::defaultfloat;
+               stream << std::uppercase;
+               stream.unsetf(std::ios_base::floatfield);
                break;
 
             default:
@@ -280,11 +282,13 @@ class Q_CORE_EXPORT QStringParser
                break;
 
             case 'g':
-               stream << std::nouppercase << std::defaultfloat;
+               stream << std::nouppercase;
+               stream.unsetf(std::ios_base::floatfield);
                break;
 
             case 'G':
-               stream << std::uppercase << std::defaultfloat;
+               stream << std::uppercase;
+               stream.unsetf(std::ios_base::floatfield);
                break;
 
             default:
@@ -615,7 +619,7 @@ T QStringParser::join(const QList<T> &list, const V &sep)
 template <typename T>
 QList<T> QStringParser::split(const T &str, QChar32 sep, SplitBehavior behavior, Qt::CaseSensitivity cs)
 {
-   QList<QString8> retval;
+   QList<T> retval;
 
    auto first_iter = str.cbegin();
    auto last_iter  = str.cend();

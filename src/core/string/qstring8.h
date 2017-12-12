@@ -515,23 +515,17 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-// doxy me
-       QString8 &replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
+      QString8 &replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
                   Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
+      QString8 &replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+      QString8 &replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-       QString8 &replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-
-// doxy me
-       QString8 &replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-
-
-       QString8 &replace(size_type index, size_type numOfChars, QChar32 c) {
+      QString8 &replace(size_type index, size_type numOfChars, QChar32 c) {
          CsString::CsString::replace(index, numOfChars, 1, c);
          return *this;
       }
 
-      // doxy me
       QString8 &replace(size_type index, size_type numOfChars, const QChar32 *data, size_type size)
       {
          replace(index, numOfChars, QString8(data, size));
