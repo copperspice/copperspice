@@ -954,6 +954,11 @@ bool equal(const StringImpl* a, const char* b)
 
 bool equalIgnoringCase(StringImpl* a, StringImpl* b)
 {
+    if (!a)
+        return !b;
+    if (!b)
+	return !a;
+
     return CaseFoldingHash::equal(a, b);
 }
 
