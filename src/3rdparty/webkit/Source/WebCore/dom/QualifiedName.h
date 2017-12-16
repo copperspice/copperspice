@@ -113,7 +113,21 @@ inline bool operator!=(const QualifiedName& q, const AtomicString& a) { return a
 
 inline unsigned hashComponents(const QualifiedNameComponents& buf)
 {
-    return StringHasher::hashMemory<sizeof(QualifiedNameComponents)>(&buf);
+  unsigned retval = 0;
+
+  if(buf.m_prefix != nullptr) {
+    retval ^= buf.m_prefix->hash();
+  }
+
+  if(buf.m_localName != nullptr) {
+    retval ^= buf.m_localName->hash();
+  }
+
+  if(buf.m_namespace != nullptr) {
+    retval ^= buf.m_namespace->hash();
+  }
+
+  return retval;
 }
 
 struct QualifiedNameHash {
