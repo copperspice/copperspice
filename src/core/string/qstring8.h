@@ -28,9 +28,11 @@
 #include <cstddef>
 
 #include <qglobal.h>
+#include <qbytearray.h>
+
 #include <cs_string.h>
 #include <qchar32.h>
-#include <qbytearray.h>
+#include <qstringview8.h>
 
 class QStringParser;
 class QRegExp;
@@ -278,7 +280,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // methods
 
-
 /*    broom - review this
 
       // for an array of chars
@@ -287,7 +288,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          CsString::CsString::append(cStr);
          return *this;
       }
-
 */
 
       QString8 &append(QChar32 c)  {
@@ -455,6 +455,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       bool isSimpleText() const;
 
       QString8 left(size_type numOfChars) const Q_REQUIRED_RESULT;
+      QStringView8 leftView(size_type numOfChars) const Q_REQUIRED_RESULT;
       QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
 
       size_type length() const {
@@ -650,6 +651,24 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       auto split(const QString8 &sep, Ts... args) const
       {
          return SP::split(*this, sep, args...);
+      }
+
+      template <typename R, typename SP = QStringParser>
+      R toInteger(bool *ok = nullptr, int base = 10) const
+      {
+         return SP::template toInteger<R>(*this, ok, base);
+      }
+
+      template <typename SP = QStringParser>
+      double toDouble(bool *ok = nullptr) const
+      {
+         return SP::toDouble(*this, ok);
+      }
+
+      template <typename SP = QStringParser>
+      float toFloat(bool *ok = nullptr) const
+      {
+         return SP::toFloat(*this, ok);
       }
 
       // iterators

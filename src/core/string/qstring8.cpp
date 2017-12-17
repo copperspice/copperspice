@@ -439,6 +439,21 @@ QString8 QString8::left(size_type numOfChars) const
    return QString8(substr(0, numOfChars));
 }
 
+QStringView8 QString8::leftView(size_type numOfChars) const
+{
+   if (numOfChars < 0) {
+      return QStringView8(begin(), end());
+   }
+
+   const_iterator iter = begin();
+
+   for (size_type i = 0; i < numOfChars && iter != end(); ++i)  {
+      ++iter;
+   }
+
+   return QStringView8(begin(), iter);
+}
+
 QString8 QString8::leftJustified(size_type width, QChar32 fill, bool truncate) const
 {
    QString8 retval;
@@ -559,7 +574,9 @@ QString8 QString8::repeated(size_type count) const
 
 QString8 &QString8::replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs)
 {
+
    // broom - missing code
+
 
    return *this;
 }
@@ -571,7 +588,7 @@ QString8 &QString8::replace(const QChar32 *before, size_type beforeSize, const Q
       return *this;
    }
 
-   replace( QString8(before, beforeSize), QString8(after, afterSize), cs);
+   replace(QString8(before, beforeSize), QString8(after, afterSize), cs);
 
    return *this;
 }
@@ -586,7 +603,6 @@ QString8 &QString8::replace(QChar32 before, QChar32 after, Qt::CaseSensitivity c
 
 QString8 &QString8::replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs)
 {
-
    // broom - missing code
 
    return *this;

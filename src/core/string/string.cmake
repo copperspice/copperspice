@@ -4,6 +4,7 @@ set(CORE_PUBLIC_INCLUDES
     QString8
     QString16
     QStringParser
+    QStringView8
 )
 
 set(CORE_INCLUDES
@@ -12,10 +13,12 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_iterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_encoding.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_char.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_view.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview8.h
 )
 
 set(CORE_PRIVATE_INCLUDES

@@ -243,8 +243,6 @@ class Q_CORE_EXPORT QStringParser
       template <typename T = QString8, typename V>
       static T number(V value, int base  = 10)
       {
-         T retval;
-
          if (base < 2 || base > 36) {
             qWarning("Warning: QStringParser::number() invalid numeric base (%d)", base);
             base = 10;
@@ -257,7 +255,7 @@ class Q_CORE_EXPORT QStringParser
          std::string s1 = stream.str();
          const char *s2 = s1.c_str();
 
-         retval = T::fromUtf8(s2);
+         T retval = T::fromUtf8(s2);
 
          return retval;
       }
@@ -315,6 +313,46 @@ class Q_CORE_EXPORT QStringParser
       template <typename T>
       static QList<T> split(const T &str, const T &sep, SplitBehavior behavior = KeepEmptyParts,
                   Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+      //
+      template <typename R, typename T = QString8>
+      static R toInteger(const T &str, bool *ok = nullptr, int base = 10)
+      {
+         if (base != 0 && (base < 2 || base > 36)) {
+            qWarning("Warning: QStringParser::toInteger() invalid numeric base (%d)", base);
+            base = 10;
+         }
+
+         R retval;
+
+         std::istringstream stream(str.toLatin1().constData());
+         stream >> std::setbase(base);
+         stream >> retval;
+
+         return retval;
+      }
+
+      template <typename T = QString8>
+      static double toDouble(const T &str, bool *ok = nullptr)
+      {
+         double retval;
+
+         std::istringstream stream(str.toLatin1().constData());
+         stream >> retval;
+
+         return retval;
+      }
+
+      template <typename T = QString8>
+      static float toFloat(const T &str, bool *ok = nullptr)
+      {
+         float retval;
+
+         std::istringstream stream(str.toLatin1().constData());
+         stream >> retval;
+
+         return retval;
+      }
 
    private:
       struct ArgEscapeData {

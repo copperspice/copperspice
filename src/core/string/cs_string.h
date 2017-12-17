@@ -223,15 +223,45 @@ class CsBasicString
       iterator erase(const_iterator iter);
       iterator erase(const_iterator iter_begin, const_iterator iter_end);
 
-      // ** iterator
+      // ** uses an iterator, returns an iterator
       const_iterator find_fast(const CsBasicString &str) const;
       const_iterator find_fast(const CsBasicString &str, const_iterator iter_begin) const;
+
+      // for a const char * and char *
+      template <typename T,  typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
+                  std::is_same<T, char *>::value>::type>
+      const_iterator find_fast(const T &str, const_iterator iter_begin, size_type size) const;
+
+      // for an array of chars
+      template <int N>
+      const_iterator find_fast(const char (&str)[N], const_iterator iter_begin, size_type size) const;
+
+      // for a const char * and char *
+      template <typename T,  typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
+                  std::is_same<T, char *>::value>::type>
+      const_iterator find_fast(const T &str) const;
+
+      // for a const char * and char *
+      template <typename T,  typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
+                  std::is_same<T, char *>::value>::type>
+      const_iterator find_fast(const T &str, const_iterator iter_begin) const;
+
+      // for an array of chars
+      template <int N>
+      const_iterator find_fast(const char (&str)[N]) const;
+
+      // for an array of chars
+      template <int N>
+      const_iterator find_fast(const char (&str)[N], const_iterator iter_begin) const;
+
+      const_iterator find_fast(CsChar c) const;
+      const_iterator find_fast(CsChar c, const_iterator iter_begin) const;
 
       const_iterator rfind_fast(const CsBasicString &str) const;
       const_iterator rfind_fast(const CsBasicString &str, const_iterator iter_end) const;
 
 
-      // ** index
+      // ** uses an index, returns an index
       size_type find(const CsBasicString &str, size_type indexStart = 0) const;
 
       // for a const char * and char *
@@ -1022,13 +1052,13 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::erase(const_it
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::find_fast(const CsBasicString &str) const
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const CsBasicString &str) const
 {
    return find_fast(str, begin());
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::find_fast(const CsBasicString &str,
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const CsBasicString &str,
                   const_iterator iter_begin) const
 {
    const_iterator iter_end = end();
@@ -1073,14 +1103,183 @@ typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::find_fast(con
    return iter_end;
 }
 
+// for a const char * and char *
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::rfind_fast(const CsBasicString &str) const
+template <typename T,  typename>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str,
+            const_iterator iter_begin, size_type size) const
+{
+   // broom - not implemented yet
+
+#ifndef CS_STRING_ALLOW_UNSAFE
+   static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
+#endif
+
+}
+
+// for an array of chars
+template <typename E, typename A>
+template <int N>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N],
+                  const_iterator iter_begin, size_type size) const
+{
+   // broom - not implemented yet
+}
+
+// for a const char * and char *
+template <typename E, typename A>
+template <typename T,  typename>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str) const
+{
+   return find_fast(str, begin());
+}
+
+// for a const char * and char *
+template <typename E, typename A>
+template <typename T,  typename>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str, const_iterator iter_begin) const
+{
+#ifndef CS_STRING_ALLOW_UNSAFE
+   static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
+#endif
+
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   if (str == nullptr || str[0] == 0) {
+      return iter_begin;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == str[0])  {
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str  + 1;
+
+         while (text_iter != iter_end && *pattern_iter != 0)  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (*pattern_iter == 0) {
+            // found a match
+            return iter;
+         }
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
+}
+
+// for an array of chars
+template <typename E, typename A>
+template <int N>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N]) const
+{
+   return find_fast(str, begin());
+}
+
+// for an array of chars
+template <typename E, typename A>
+template <int N>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N],
+                  const_iterator iter_begin) const
+{
+   // make this safe (find which encoding the compiler is using, convert str from X to E)
+
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   if (N == 0) {
+      return iter_begin;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == str[0])  {
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str  + 1;
+
+         while (text_iter != iter_end && pattern_iter != str + N)  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (pattern_iter == str + N) {
+            // found a match
+            return iter;
+         }
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(CsChar c) const
+{
+   return find_fast(c, begin());
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(CsChar c, const_iterator iter_begin) const
+{
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == c)  {
+         return iter;
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(const CsBasicString &str) const
 {
    return rfind_fast(str, end());
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator  CsBasicString<E, A>::rfind_fast(const CsBasicString &str,
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(const CsBasicString &str,
                   const_iterator iter_end) const
 {
    const_iterator iter_begin = begin();

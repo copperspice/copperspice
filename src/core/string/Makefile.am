@@ -5,17 +5,20 @@ CORE_PUBLIC_INCLUDES += \
 	QChar32   \
 	QString8  \
 	QString16 \
-	QStringParser
+	QStringParser \
+	QStringView8
 
 CORE_STRING_INCLUDES = \
 	cs_string.h \
 	cs_string_iterator.h \
 	cs_encoding.h  \
 	cs_char.h   \
+	cs_string_view.h \
 	qchar32.h   \
 	qstring8.h  \
 	qstring16.h  \
-	qstringparser.h
+	qstringparser.h \
+	qstringview8.h
 
 CORE_STRING_PRIVATE_INCLUDES =
 
