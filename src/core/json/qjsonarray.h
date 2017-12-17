@@ -23,9 +23,7 @@
 #ifndef QJSONARRAY_H
 #define QJSONARRAY_H
 
-#include <QtCore/qjsonvalue.h>
-
-QT_BEGIN_NAMESPACE
+#include <qjsonvalue.h>
 
 class QDebug;
 class QStringList;
@@ -39,7 +37,7 @@ class Q_CORE_EXPORT QJsonArray
 
    using size_type       = int;
    using value_type      = QJsonValue;
-   using pointer         = value_type *;  
+   using pointer         = value_type *;
    using const_pointer   = const value_type *;
    using reference       = QJsonValueRef ;
    using const_reference = QJsonValue;
@@ -132,82 +130,103 @@ class Q_CORE_EXPORT QJsonArray
          return QJsonValueRefPtr(a, i);
       }
 
-      inline QJsonValueRef operator[](int j) const {
-         return QJsonValueRef(a, i + j);
+      inline QJsonValueRef operator[](int n) const {
+         return QJsonValueRef(a, i + n);
       }
 
-      inline bool operator==(const iterator &o) const {
-         return i == o.i;
+      inline bool operator==(const iterator &other) const {
+         return i == other.i;
       }
-      inline bool operator!=(const iterator &o) const {
-         return i != o.i;
+
+      inline bool operator!=(const iterator &other) const {
+         return i != other.i;
       }
+
       inline bool operator<(const iterator &other) const {
          return i < other.i;
       }
+
       inline bool operator<=(const iterator &other) const {
          return i <= other.i;
       }
+
       inline bool operator>(const iterator &other) const {
          return i > other.i;
       }
+
       inline bool operator>=(const iterator &other) const {
          return i >= other.i;
       }
-      inline bool operator==(const const_iterator &o) const {
-         return i == o.i;
+
+      inline bool operator==(const const_iterator &other) const {
+         return i == other.i;
       }
-      inline bool operator!=(const const_iterator &o) const {
-         return i != o.i;
+
+      inline bool operator!=(const const_iterator &other) const {
+         return i != other.i;
       }
+
       inline bool operator<(const const_iterator &other) const {
          return i < other.i;
       }
+
       inline bool operator<=(const const_iterator &other) const {
          return i <= other.i;
       }
+
       inline bool operator>(const const_iterator &other) const {
          return i > other.i;
       }
+
       inline bool operator>=(const const_iterator &other) const {
          return i >= other.i;
       }
+
       inline iterator &operator++() {
          ++i;
          return *this;
       }
+
       inline iterator operator++(int) {
          iterator n = *this;
          ++i;
          return n;
       }
+
       inline iterator &operator--() {
          i--;
          return *this;
       }
+
       inline iterator operator--(int) {
          iterator n = *this;
          i--;
          return n;
       }
-      inline iterator &operator+=(int j) {
-         i += j;
+
+      inline iterator &operator+=(int n) {
+         i += n;
          return *this;
       }
-      inline iterator &operator-=(int j) {
-         i -= j;
+
+      inline iterator &operator-=(int n) {
+         i -= n;
          return *this;
       }
-      inline iterator operator+(int j) const {
-         return iterator(a, i + j);
+
+      inline iterator operator+(int n) const {
+         return iterator(a, i + n);
       }
-      inline iterator operator-(int j) const {
-         return iterator(a, i - j);
+
+      inline iterator operator-(int n) const {
+         return iterator(a, i - n);
       }
-      inline int operator-(iterator j) const {
-         return i - j.i;
+
+      inline int operator-(iterator n) const {
+         return i - n.i;
       }
    };
+
    friend class iterator;
 
    class const_iterator
@@ -223,8 +242,8 @@ class Q_CORE_EXPORT QJsonArray
 
       inline const_iterator() : a(0), i(0) { }
       explicit inline const_iterator(const QJsonArray *array, int index) : a(array), i(index) { }
-      inline const_iterator(const const_iterator &o) : a(o.a), i(o.i) {}
-      inline const_iterator(const iterator &o) : a(o.a), i(o.i) {}
+      inline const_iterator(const const_iterator &other) : a(other.a), i(other.i) {}
+      inline const_iterator(const iterator &other) : a(other.a), i(other.i) {}
 
       inline QJsonValue operator*() const {
          return a->at(i);
@@ -237,28 +256,36 @@ class Q_CORE_EXPORT QJsonArray
       inline QJsonValue operator[](int j) const {
          return a->at(i + j);
       }
-      inline bool operator==(const const_iterator &o) const {
-         return i == o.i;
+
+      inline bool operator==(const const_iterator &other) const {
+         return i == other.i;
       }
-      inline bool operator!=(const const_iterator &o) const {
-         return i != o.i;
+
+      inline bool operator!=(const const_iterator &other) const {
+         return i != other.i;
       }
+
       inline bool operator<(const const_iterator &other) const {
          return i < other.i;
       }
+
       inline bool operator<=(const const_iterator &other) const {
          return i <= other.i;
       }
+
       inline bool operator>(const const_iterator &other) const {
          return i > other.i;
       }
+
       inline bool operator>=(const const_iterator &other) const {
          return i >= other.i;
       }
+
       inline const_iterator &operator++() {
          ++i;
          return *this;
       }
+
       inline const_iterator operator++(int) {
          const_iterator n = *this;
          ++i;
@@ -273,24 +300,29 @@ class Q_CORE_EXPORT QJsonArray
          i--;
          return n;
       }
-      inline const_iterator &operator+=(int j) {
-         i += j;
+      inline const_iterator &operator+=(int n) {
+         i += n;
          return *this;
       }
-      inline const_iterator &operator-=(int j) {
-         i -= j;
+
+      inline const_iterator &operator-=(int n) {
+         i -= n;
          return *this;
       }
-      inline const_iterator operator+(int j) const {
-         return const_iterator(a, i + j);
+
+      inline const_iterator operator+(int n) const {
+         return const_iterator(a, i + n);
       }
-      inline const_iterator operator-(int j) const {
-         return const_iterator(a, i - j);
+
+      inline const_iterator operator-(int n) const {
+         return const_iterator(a, i - n);
       }
-      inline int operator-(const_iterator j) const {
-         return i - j.i;
+
+      inline int operator-(const_iterator n) const {
+         return i - n.i;
       }
    };
+
    friend class const_iterator;
 
    // stl style
@@ -337,10 +369,11 @@ class Q_CORE_EXPORT QJsonArray
    void push_back(const QJsonValue &t) {
       append(t);
    }
+
    void push_front(const QJsonValue &t) {
       prepend(t);
    }
-   
+
    void pop_front() {
       removeFirst();
    }
@@ -369,6 +402,4 @@ class Q_CORE_EXPORT QJsonArray
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QJsonArray &);
 
-QT_END_NAMESPACE
-
-#endif // QJSONARRAY_H
+#endif

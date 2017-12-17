@@ -189,7 +189,7 @@ class QList
      return size();
    }
 
-   difference_type lastIndexOf(const T &value, size_type from = -1) const {
+   size_type lastIndexOf(const T &value, size_type from = -1) const {
       size_type retval = -1;
       size_type from_reverse = 0;
 

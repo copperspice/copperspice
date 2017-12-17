@@ -63,7 +63,7 @@ class Q_CORE_EXPORT QDebug
    QDebug(QtMsgType t)
       : stream(new Stream(t)) {}
 
-   QDebug(const QDebug &o): stream(o.stream) {
+   QDebug(const QDebug &other): stream(other.stream) {
       ++stream->ref;
    }
 

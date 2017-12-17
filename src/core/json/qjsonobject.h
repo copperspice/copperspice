@@ -24,9 +24,7 @@
 #define QJSONOBJECT_H
 
 #include <qjsonvalue.h>
-#include <QtCore/qcontainerfwd.h>
-
-QT_BEGIN_NAMESPACE
+#include <qcontainerfwd.h>
 
 class QDebug;
 typedef QMap<QString, QVariant> QVariantMap;
@@ -101,8 +99,8 @@ class Q_CORE_EXPORT QJsonObject
          return QJsonValueRef(o, i);
       }
 
-      inline QJsonValueRefPtr operator->() const { 
-        return QJsonValueRefPtr(o, i); 
+      inline QJsonValueRefPtr operator->() const {
+        return QJsonValueRefPtr(o, i);
       }
 
       inline bool operator==(const iterator &other) const {
@@ -130,20 +128,24 @@ class Q_CORE_EXPORT QJsonObject
          --i;
          return r;
       }
-      inline iterator operator+(int j) const {
+
+      inline iterator operator+(int n) const {
          iterator r = *this;
-         r.i += j;
+         r.i += n;
          return r;
       }
-      inline iterator operator-(int j) const {
-         return operator+(-j);
+
+      inline iterator operator-(int n) const {
+         return operator+(-n);
       }
-      inline iterator &operator+=(int j) {
-         i += j;
+
+      inline iterator &operator+=(int n) {
+         i += n;
          return *this;
       }
-      inline iterator &operator-=(int j) {
-         i -= j;
+
+      inline iterator &operator-=(int n) {
+         i -= n;
          return *this;
       }
 
@@ -191,7 +193,7 @@ class Q_CORE_EXPORT QJsonObject
          return o->valueAt(i);
       }
 
-      QJsonValuePtr operator->() const { 
+      QJsonValuePtr operator->() const {
          return  QJsonValuePtr(o->valueAt(i));
       }
 
@@ -225,23 +227,23 @@ class Q_CORE_EXPORT QJsonObject
          return r;
       }
 
-      const_iterator operator+(int j) const {
+      const_iterator operator+(int n) const {
          const_iterator r = *this;
-         r.i += j;
+         r.i += n;
          return r;
       }
 
-      const_iterator operator-(int j) const {
-         return operator+(-j);
+      const_iterator operator-(int n) const {
+         return operator+(-n);
       }
 
-      const_iterator &operator+=(int j) {
-         i += j;
+      const_iterator &operator+=(int n) {
+         i += n;
          return *this;
       }
 
-      const_iterator &operator-=(int j) {
-         i -= j;
+      const_iterator &operator-=(int n) {
+         i -= n;
          return *this;
       }
 
@@ -253,6 +255,7 @@ class Q_CORE_EXPORT QJsonObject
          return i != other.i;
       }
    };
+
    friend class const_iterator;
 
    // STL style
@@ -278,7 +281,7 @@ class Q_CORE_EXPORT QJsonObject
       return const_iterator(this, size());
    }
    iterator erase(iterator it);
-   
+
    typedef iterator Iterator;
    typedef const_iterator ConstIterator;
 
@@ -289,7 +292,7 @@ class Q_CORE_EXPORT QJsonObject
    }
 
    const_iterator constFind(const QString &key) const;
-   iterator insert(const QString &key, const QJsonValue &value); 
+   iterator insert(const QString &key, const QJsonValue &value);
 
    inline bool empty() const {
       return isEmpty();
@@ -317,6 +320,4 @@ class Q_CORE_EXPORT QJsonObject
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QJsonObject &);
 
-QT_END_NAMESPACE
-
-#endif // QJSONOBJECT_H
+#endif

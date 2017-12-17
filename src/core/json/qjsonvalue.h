@@ -23,10 +23,8 @@
 #ifndef QJSONVALUE_H
 #define QJSONVALUE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qstring.h>
 
 class QDebug;
 class QVariant;
@@ -61,10 +59,10 @@ class Q_CORE_EXPORT QJsonValue
    QJsonValue(double n);
    QJsonValue(int n);
    QJsonValue(qint64 n);
-   QJsonValue(const QString &s);
-   QJsonValue(QLatin1String s);
-   QJsonValue(const QJsonArray &a);
-   QJsonValue(const QJsonObject &o);
+   QJsonValue(const QString &str);
+   QJsonValue(QLatin1String str);
+   QJsonValue(const QJsonArray &arr);
+   QJsonValue(const QJsonObject &obj);
 
    ~QJsonValue();
 
@@ -78,21 +76,27 @@ class Q_CORE_EXPORT QJsonValue
    inline bool isNull() const {
       return type() == Null;
    }
+
    inline bool isBool() const {
       return type() == Bool;
    }
+
    inline bool isDouble() const {
       return type() == Double;
    }
+
    inline bool isString() const {
       return type() == String;
    }
+
    inline bool isArray() const {
       return type() == Array;
    }
+
    inline bool isObject() const {
       return type() == Object;
    }
+
    inline bool isUndefined() const {
       return type() == Undefined;
    }
@@ -139,6 +143,7 @@ class Q_CORE_EXPORT QJsonValueRef
  public:
    QJsonValueRef(QJsonArray *array, int idx)
       : a(array), is_object(false), index(idx) {}
+
    QJsonValueRef(QJsonObject *object, int idx)
       : o(object), is_object(true), index(idx) {}
 
@@ -151,24 +156,31 @@ class Q_CORE_EXPORT QJsonValueRef
    inline QJsonValue::Type type() const {
       return toValue().type();
    }
+
    inline bool isNull() const {
       return type() == QJsonValue::Null;
    }
+
    inline bool isBool() const {
       return type() == QJsonValue::Bool;
    }
+
    inline bool isDouble() const {
       return type() == QJsonValue::Double;
    }
+
    inline bool isString() const {
       return type() == QJsonValue::String;
    }
+
    inline bool isArray() const {
       return type() == QJsonValue::Array;
    }
+
    inline bool isObject() const {
       return type() == QJsonValue::Object;
    }
+
    inline bool isUndefined() const {
       return type() == QJsonValue::Undefined;
    }
@@ -176,21 +188,26 @@ class Q_CORE_EXPORT QJsonValueRef
    inline bool toBool() const {
       return toValue().toBool();
    }
+
    inline int toInt() const {
       return toValue().toInt();
    }
+
    inline double toDouble() const {
       return toValue().toDouble();
    }
+
    inline QString toString() const {
       return toValue().toString();
    }
+
    QJsonArray toArray() const;
    QJsonObject toObject() const;
 
    inline bool operator==(const QJsonValue &other) const {
       return toValue() == other;
    }
+
    inline bool operator!=(const QJsonValue &other) const {
       return toValue() != other;
    }
@@ -202,6 +219,7 @@ class Q_CORE_EXPORT QJsonValueRef
       QJsonArray *a;
       QJsonObject *o;
    };
+
    uint is_object : 1;
    uint index : 31;
 };
@@ -234,6 +252,4 @@ class Q_CORE_EXPORT QJsonValuePtr {
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QJsonValue &);
 
-QT_END_NAMESPACE
-
-#endif // QJSONVALUE_H
+#endif

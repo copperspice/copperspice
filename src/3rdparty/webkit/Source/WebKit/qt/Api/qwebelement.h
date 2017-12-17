@@ -186,6 +186,8 @@ class QWebElementCollectionPrivate;
 class QWEBKIT_EXPORT QWebElementCollection
 {
 public:
+    using size_type = int;
+
     QWebElementCollection();
     QWebElementCollection(const QWebElement &contextElement, const QString &query);
     QWebElementCollection(const QWebElementCollection &);
@@ -227,15 +229,17 @@ public:
            inline const_iterator operator++(int) { const_iterator n(collection, i); ++i; return n; }
            inline const_iterator& operator--() { i--; return *this; }
            inline const_iterator operator--(int) { const_iterator n(collection, i); i--; return n; }
-           inline const_iterator& operator+=(int j) { i += j; return *this; }
-           inline const_iterator& operator-=(int j) { i -= j; return *this; }
-           inline const_iterator operator+(int j) const { return const_iterator(collection, i + j); }
-           inline const_iterator operator-(int j) const { return const_iterator(collection, i - j); }
-           inline int operator-(const_iterator j) const { return i - j.i; }
+           inline const_iterator& operator+=(size_type n) { i += n; return *this; }
+           inline const_iterator& operator-=(size_type n) { i -= n; return *this; }
+           inline const_iterator operator+(size_type n) const { return const_iterator(collection, i + n); }
+           inline const_iterator operator-(size_type n) const { return const_iterator(collection, i - n); }
+           inline size_type operator-(const_iterator n) const { return i - n.i; }
+
        private:
             int i;
             const QWebElementCollection* const collection;
     };
+
     friend class const_iterator;
 
     inline const_iterator begin() const { return constBegin(); }
@@ -261,15 +265,17 @@ public:
         inline iterator operator++(int) { iterator n(collection, i); ++i; return n; }
         inline iterator& operator--() { i--; return *this; }
         inline iterator operator--(int) { iterator n(collection, i); i--; return n; }
-        inline iterator& operator+=(int j) { i += j; return *this; }
-        inline iterator& operator-=(int j) { i -= j; return *this; }
-        inline iterator operator+(int j) const { return iterator(collection, i + j); }
-        inline iterator operator-(int j) const { return iterator(collection, i - j); }
-        inline int operator-(iterator j) const { return i - j.i; }
+        inline iterator& operator+=(size_type n) { i += n; return *this; }
+        inline iterator& operator-=(size_type n) { i -= n; return *this; }
+        inline iterator operator+(size_type n) const { return iterator(collection, i + n); }
+        inline iterator operator-(size_type n) const { return iterator(collection, i - n); }
+        inline size_type operator-(iterator n) const { return i - n.i; }
+
     private:
         int i;
         const QWebElementCollection* const collection;
     };
+
     friend class iterator;
 
     inline iterator begin() { return iterator(this, 0); }
