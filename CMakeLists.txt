@@ -44,8 +44,12 @@ set(PACKAGE_STRING "copperspice ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}")
 set(PACKAGE_TARNAME "copperspice")
 set(PACKAGE_BUGREPORT "info@copperspice.com")
 set(PACKAGE_URL "http://www.copperspice.com/")
+
+# used in cs_build_info.h.in
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION "${PACKAGE_VERSION}")
+
+# used in cs_build_info.h.in
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
