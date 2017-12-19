@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qmessageauthenticationcode.h"
-#include "qvarlengtharray.h"
+#include <qmessageauthenticationcode.h>
+#include <qvarlengtharray.h>
 
 /*
    These #defines replace the typedefs needed by the RFC6234 code.
-   Normally the typedefs would come from from stdint.h, but since this header is not available on all
-   platforms define them here
+   Normally these typedefs would come from from stdint.h, however since this header is not
+   available on all platforms define them here
 
 */
 

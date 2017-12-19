@@ -50,21 +50,21 @@ class QMetaObject;
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
          QMetaObject_T<cs_class> &meta = const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()); \
-         meta.register_classInfo("plugin_iid", data);  \
-         meta.register_classInfo("plugin_version", QString::number(CS_VERSION)); \
+         meta.register_classInfo("plugin_iid", data);                               \
+         meta.register_classInfo("plugin_version", QString::number(CS_VERSION));    \
          \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__); \
          \
-         QString cname = QString::fromUtf8(cs_className());  \
-         meta.register_method<QObject * (*)()>(   \
-            cname, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__), \
+         QString cname = QString::fromUtf8(cs_className());                   \
+         meta.register_method<QObject * (*)()>(                               \
+            cname, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__),   \
             QMetaMethod::Constructor, cname + " " + cname + "()", QMetaMethod::Public);   \
          \
-         cs_regTrigger(cs_number<cntValue + 1>{} );  \
+         cs_regTrigger(cs_number<cntValue + 1>{} );                           \
       } \
-   static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)() \
+   static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)()            \
       { \
-         return new cs_class;  \
+         return new cs_class;                                                 \
       }
 
 #define CS_PLUGIN_KEY(y)            CS_CLASSINFO("plugin_key", y)
@@ -110,37 +110,37 @@ class cs_number<0>
 
 
 // ** cs_object
-#define CS_OBJECT(classNameX) \
+#define CS_OBJECT(classNameX)         \
    public: \
-      typedef cs_class cs_parent; \
-      typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      typedef cs_class cs_parent;     \
+      typedef classNameX cs_class;    \
+      CS_OBJECT_INTERNAL(classNameX)  \
    private:
 
 #define CS_OBJECT_MULTIPLE(classNameX,parentX) \
    public: \
-      typedef parentX cs_parent; \
-      typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL(classNameX) \
+      typedef parentX cs_parent;      \
+      typedef classNameX cs_class;    \
+      CS_OBJECT_INTERNAL(classNameX)  \
    private:
 
 #define CS_OBJECT_OUTSIDE(classNameX) \
    public: \
-      typedef cs_class cs_parent; \
-      typedef classNameX cs_class; \
-      CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+      typedef cs_class cs_parent;     \
+      typedef classNameX cs_class;    \
+      CS_OBJECT_INTERNAL_OUTSIDE(classNameX)   \
    private:
 
 #define CS_OBJECT_MULTIPLE_OUTSIDE(classNameX,parentX) \
    public: \
-      typedef parentX cs_parent; \
-      typedef classNameX cs_class; \
+      typedef parentX cs_parent;      \
+      typedef classNameX cs_class;    \
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    private:
 
 #define CS_OVERRIDE override
 
-#define CS_OBJECT_INTERNAL(classNameX) \
+#define CS_OBJECT_INTERNAL(classNameX)  \
    public: \
       static const char *cs_className() \
       { \
@@ -153,35 +153,35 @@ class cs_number<0>
       } \
       static constexpr cs_number<0> cs_counter(cs_number<0>)   \
       { \
-         return cs_number<0>{};   \
+         return cs_number<0>{};         \
       } \
       friend QMetaObject_T<classNameX>; \
       [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> & staticMetaObject()  \
       { \
          static std::atomic<bool> isCreated(false);                               \
          static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);     \
-         if (isCreated) {         \
-            return *createdObj;   \
+         if (isCreated) {               \
+            return *createdObj;         \
          } \
-         std::lock_guard<std::recursive_mutex> lock(m_metaObjectMutex());   \
-         if (createdObj != nullptr) { \
-            return *createdObj;       \
+         std::lock_guard<std::recursive_mutex> lock(m_metaObjectMutex()); \
+         if (createdObj != nullptr) {   \
+            return *createdObj;         \
          } \
          QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
          auto index = temp.find(typeid(cs_class));    \
          QMetaObject_T<classNameX> *newMeta;          \
-         if (index == temp.end()) {     \
+         if (index == temp.end()) {                   \
             newMeta = new QMetaObject_T<classNameX>;  \
             temp.insert(typeid(cs_class), newMeta);   \
-            createdObj.store(newMeta);  \
-            newMeta->postConstruct();   \
-            isCreated = true;    \
-            return *newMeta;     \
+            createdObj.store(newMeta);                \
+            newMeta->postConstruct();                 \
+            isCreated = true;                         \
+            return *newMeta;                          \
          } else {  \
             newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
             createdObj.store(newMeta);  \
-            isCreated = true;    \
-            return *newMeta;     \
+            isCreated = true;           \
+            return *newMeta;            \
          } \
       } \
       virtual Q_EXPORT_MAYBE const QMetaObject *metaObject() const CS_OVERRIDE \
@@ -192,15 +192,15 @@ class cs_number<0>
    private:
 
 
-#define CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+#define CS_OBJECT_INTERNAL_OUTSIDE(classNameX)    \
    public: \
-      static const char *cs_className() \
+      static const char *cs_className()           \
       { \
          static const char * retval(#classNameX); \
-         return retval; \
+         return retval;                           \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
-      virtual const QMetaObject *metaObject() const CS_OVERRIDE; \
+      virtual const QMetaObject *metaObject() const CS_OVERRIDE;   \
       CS_TR_FUNCTIONS \
    private:
 
@@ -240,13 +240,13 @@ class cs_number<0>
       static const QMetaObject_T<classNameX> & staticMetaObject() \
       { \
          QMap<std::type_index, QMetaObject *> &temp = CSGadget_Fake_Parent::m_metaObjectsAll(); \
-         auto index = temp.find(typeid(cs_class));      \
-         if (index == temp.end()) {       \
+         auto index = temp.find(typeid(cs_class));       \
+         if (index == temp.end()) {                      \
             QMetaObject_T<classNameX> *xx = new QMetaObject_T<classNameX>;  \
-            temp.insert(typeid(cs_class), xx);  \
-            xx->postConstruct(); \
-            return *xx; \
-         } else {      \
+            temp.insert(typeid(cs_class), xx);           \
+            xx->postConstruct();                         \
+            return *xx;                                  \
+         } else {                                        \
             return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
          } \
       } \

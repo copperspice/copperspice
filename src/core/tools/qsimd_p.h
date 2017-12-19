@@ -316,11 +316,8 @@ static inline quint64 qCpuFeatures()
     if (features == 0) {
         qDetectCpuFeatures();
         features = cs_cpu_features.load();
-
-
-
-
     }
+
     return features;
 }
 #define qCpuHasFeature(feature)     ((qCompilerCpuFeatures & (Q_UINT64_C(1) << CpuFeature ## feature)) \

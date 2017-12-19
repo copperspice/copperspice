@@ -76,7 +76,8 @@ QIconvCodec::QIconvCodec()
    Q_ASSERT_X(utf16Codec != 0,
               "QIconvCodec::convertToUnicode",
               "internal error, UTF-16 codec not found");
-   if (!utf16Codec) {
+
+   if (! utf16Codec) {
       fprintf(stderr, "QIconvCodec::convertToUnicode: internal error, UTF-16 codec not found\n");
       utf16Codec = reinterpret_cast<QTextCodec *>(~0);
    }

@@ -200,16 +200,18 @@ QThreadData *QThreadData::current(bool createIfNecessary)
 {
    QThreadData *data = get_thread_data();
 
-   if (!data && createIfNecessary) {
+   if (! data && createIfNecessary) {
       data = new QThreadData;
-      QT_TRY {
+
+      try {
          set_thread_data(data);
          data->thread = new QAdoptedThread(data);
-      } QT_CATCH(...) {
+
+      } catch (...) {
          clear_thread_data();
          data->deref();
          data = 0;
-         QT_RETHROW;
+         throw;
       }
 
       data->deref();

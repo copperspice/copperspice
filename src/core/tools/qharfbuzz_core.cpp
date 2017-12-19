@@ -375,6 +375,3 @@ hb_unicode_funcs_t *cs_get_unicode_funcs()
    static cs_hb_unicode_funcs_t retval;
    return retval.funcs;
 }
-
-static hb_user_data_key_t internal_useDesignMetricsKey;
-

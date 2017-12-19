@@ -41,52 +41,10 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 #include <new>
 #include <stdlib.h>
 
-// Returns a human readable representation of the first \a len characters in \a data.
-static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
-{
-   if (! data) {
-      return "(null)";
-   }
-
-   QByteArray out;
-   for (int i = 0; i < len; ++i) {
-      char c = data[i];
-
-      if (isprint(int(uchar(c)))) {
-         out += c;
-
-      } else switch (c) {
-            case '\n':
-               out += "\\n";
-               break;
-
-            case '\r':
-               out += "\\r";
-               break;
-
-            case '\t':
-               out += "\\t";
-               break;
-
-            default:
-               QString tmp = QString("\\x%1").formatArg((unsigned int)c, 0, 16);
-               out += tmp.toLatin1();
-         }
-   }
-
-   if (len < maxSize) {
-      out += "...";
-   }
-
-   return out;
-}
-
-
-
-// A precondition macro
 #define Q_VOID
+
 #define CHECK_VALID_STREAM(x) do { \
-    if (!d->m_string && !d->device) { \
+    if (! d->m_string && ! d->device) { \
         qWarning("QTextStream: No device"); \
         return x; \
     } } while (0)
@@ -123,7 +81,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 
 class QDeviceClosedNotifier : public QObject
 {
-   CORE_CS_OBJECT(QDeviceClosedNotifier)
+  CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
    inline QDeviceClosedNotifier() {
@@ -158,6 +116,7 @@ class QTextStreamPrivate
  public:
    QTextStreamPrivate(QTextStream *q_ptr);
    ~QTextStreamPrivate();
+
    void reset();
 
    // device
@@ -1040,38 +999,19 @@ qint64 QTextStream::pos() const
    return qint64(-1);
 }
 
-/*!
-    Reads and discards whitespace from the stream until either a
-    non-space character is detected, or until atEnd() returns
-    true. This function is useful when reading a stream character by
-    character.
-
-    Whitespace characters are all characters for which
-    QChar::isSpace() returns true.
-
-    \sa operator>>()
-*/
 void QTextStream::skipWhiteSpace()
 {
    Q_D(QTextStream);
    CHECK_VALID_STREAM(Q_VOID);
+
    d->scan(nullptr, 0, QTextStreamPrivate::NotSpace);
    d->consumeLastToken();
 }
 
-/*!
-    Sets the current device to \a device. If a device has already been
-    assigned, QTextStream will call flush() before the old device is
-    replaced.
-
-    \note This function resets locale to the default locale ('C')
-    and codec to the default codec, QTextCodec::codecForLocale().
-
-    \sa device(), setString()
-*/
 void QTextStream::setDevice(QIODevice *device)
 {
    Q_D(QTextStream);
+
    flush();
    if (d->deleteDevice) {
 

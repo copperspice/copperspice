@@ -27,9 +27,7 @@
 #ifndef QEVENTLOOP_H
 #define QEVENTLOOP_H
 
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qscopedpointer.h>
 
 class QEventLoopPrivate;
 
@@ -72,7 +70,5 @@ class Q_CORE_EXPORT QEventLoop : public QObject
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QEventLoop::ProcessEventsFlags)
-
-QT_END_NAMESPACE
 
 #endif // QEVENTLOOP_H

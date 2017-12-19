@@ -39,8 +39,6 @@
 
 #include <qfunctions_p.h>
 
-QT_BEGIN_NAMESPACE
-
 enum {
    TargetRatio = 100,
    MedianSize = 7
@@ -180,6 +178,4 @@ int BlockSizeManager::blockSize()
 }
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 

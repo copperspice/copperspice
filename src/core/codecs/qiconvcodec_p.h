@@ -34,8 +34,6 @@ typedef void *iconv_t;
 #include <iconv.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QIconvCodec: public QTextCodec
 {
  private:
@@ -70,8 +68,6 @@ class QIconvCodec: public QTextCodec
       void saveChars(const char *c, int count);
    };
 };
-
-QT_END_NAMESPACE
 
 #endif // Q_OS_UNIX && !QT_NO_ICONV
 

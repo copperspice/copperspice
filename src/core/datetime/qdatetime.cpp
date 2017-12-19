@@ -41,12 +41,12 @@
 #include <locale.h>
 #endif
 
-#include <cmath>
-#include <time.h>
-
 #if defined(Q_OS_MAC)
 #include <qcore_mac_p.h>
 #endif
+
+#include <cmath>
+#include <time.h>
 
 enum {
    SECS_PER_DAY    = 86400,

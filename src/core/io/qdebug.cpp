@@ -56,10 +56,9 @@ void QDebug::putString(QStringView str)
 
 void QDebug::putByteArray(const QByteArray &str)
 {
-
-
    stream->ts << str;
 }
+
 QDebug &QDebug::resetFormat()
 {
     stream->ts.reset();
@@ -109,7 +108,8 @@ QDebugStateSaver::QDebugStateSaver(QDebug &dbg)
     : d_ptr(new QDebugStateSaverPrivate(dbg))
 {
 }
+
 QDebugStateSaver::~QDebugStateSaver()
 {
-    d_ptr->restoreState();
+   d_ptr->restoreState();
 }

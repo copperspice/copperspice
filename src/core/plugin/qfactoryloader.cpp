@@ -299,7 +299,10 @@ QObject *QFactoryLoader::instance(QString key) const
 
 QObject *QFactoryLoader::instance(QLibraryHandle * library) const
 {
+
+/*
    Q_D(const QFactoryLoader);
+*/
 
    if (library == nullptr) {
       return nullptr;
