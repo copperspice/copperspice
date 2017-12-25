@@ -410,20 +410,20 @@ install(
       ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
       ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
-   DESTINATION cmake/CopperSpice
+   DESTINATION share/CopperSpice
 )
 
 install(EXPORT CopperSpiceLibraryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceLibraryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION share/CopperSpice
 )
 
 install(
     EXPORT CopperSpiceBinaryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceBinaryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION share/CopperSpice
 )
 
 message("")
