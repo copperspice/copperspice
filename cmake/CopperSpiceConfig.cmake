@@ -57,10 +57,10 @@ foreach(component ${COPPERSPICE_COMPONENTS})
 
     set(COPPERSPICE_LIBRARIES
         ${COPPERSPICE_LIBRARIES}
-        CopperSpice::Cs${component}@BUILD_MAJOR@
+        CopperSpice::Cs${component}@BUILD_ABI@
     )
     set(COPPERSPICE_${uppercomp}_LIBRARIES
-        CopperSpice::Cs${component}@BUILD_MAJOR@
+        CopperSpice::Cs${component}@BUILD_ABI@
     )
 endforeach()
 
