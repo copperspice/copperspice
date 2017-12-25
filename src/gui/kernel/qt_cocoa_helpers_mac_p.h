@@ -78,7 +78,7 @@ void qt_mac_showBaseLineSeparator(void * /*OSWindowRef */window, bool show);
 void * /*NSImage */qt_mac_create_nsimage(const QPixmap &pm);
 void qt_mac_update_mouseTracking(QWidget *widget);
 
-OSStatus qt_mac_drawCGImage(CGContextRef cg, const CGRect *inbounds, CGImageRef);
+void qt_mac_drawCGImage(CGContextRef cg, const CGRect *inbounds, CGImageRef);
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget);
 void qt_dispatchTabletProximityEvent(void * /*NSEvent * */ tabletEvent);
 bool qt_dispatchKeyEventWithCocoa(void * /*NSEvent * */ keyEvent, QWidget *widgetToGetEvent);

@@ -251,15 +251,8 @@ void qt_mac_update_mouseTracking(QWidget *widget)
    [qt_mac_nativeview_for(widget) updateTrackingAreas];
 }
 
-OSStatus qt_mac_drawCGImage(CGContextRef inContext, const CGRect *inBounds, CGImageRef inImage)
+void qt_mac_drawCGImage(CGContextRef inContext, const CGRect *inBounds, CGImageRef inImage)
 {
-   // Verbatim copy if HIViewDrawCGImage (as shown on Carbon-Dev)
-   OSStatus err = noErr;
-
-   require_action(inContext != NULL, InvalidContext, err = paramErr);
-   require_action(inBounds != NULL, InvalidBounds, err = paramErr);
-   require_action(inImage != NULL, InvalidImage, err = paramErr);
-
    CGContextSaveGState( inContext );
    CGContextTranslateCTM (inContext, 0, inBounds->origin.y + CGRectGetMaxY(*inBounds));
    CGContextScaleCTM(inContext, 1, -1);
@@ -267,12 +260,6 @@ OSStatus qt_mac_drawCGImage(CGContextRef inContext, const CGRect *inBounds, CGIm
    CGContextDrawImage(inContext, *inBounds, inImage);
 
    CGContextRestoreGState(inContext);
-
-InvalidImage:
-InvalidBounds:
-InvalidContext:
-
-   return err;
 }
 
 bool qt_mac_checkForNativeSizeGrip(const QWidget *widget)
