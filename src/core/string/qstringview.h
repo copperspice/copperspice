@@ -68,7 +68,7 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       { }
 
       // methods
-      QStringView at(size_type n) const {
+      QChar32 at(size_type n) const {
          return CsString::CsBasicStringView<S>::at(n);
       }
 
