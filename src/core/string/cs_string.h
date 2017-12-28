@@ -31,6 +31,9 @@
 
 namespace CsString {
 
+template <typename S>
+class CsBasicStringView;
+
 using CsString       = CsBasicString<utf8>;
 using CsString_utf8  = CsBasicString<utf8>;
 using CsString_utf16 = CsBasicString<utf16>;
@@ -40,6 +43,7 @@ class CsBasicString
 {
    public:
       using size_type      = std::ptrdiff_t;
+
       using const_iterator = CsStringIterator<E, A>;
       using iterator       = CsStringIterator<E, A>;
 
@@ -66,6 +70,7 @@ class CsBasicString
       CsBasicString(CsBasicString && str) = default;
       CsBasicString(CsBasicString && str, const A &a);
 
+
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
                   std::is_same<T, char *>::value>::type>
@@ -80,6 +85,7 @@ class CsBasicString
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
                   std::is_same<T, char *>::value>::type>
       CsBasicString(const T &str, size_type size, const A &a = A());
+
 
       // for an array of chars
       template <int N>
@@ -97,12 +103,13 @@ class CsBasicString
       // unknown encoding
       // CsBasicString(std::initializer_list<char> str, const A &a = A());
 
-      // requires stringview
-      // CsBasicString(CsStringView str, const A &a = A());
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString(CsBasicStringView<U> str, const A &a = A());
 
-      // requires stringview
-      // template <typename T>
-      // CsBasicString(const T &view, size_type indexStart, size_type size, const A &a = A());
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString(CsBasicStringView<U> str, size_type indexStart, size_type size, const A &a = A());
 
       // copy a range of CsChar from another string type container
       template <typename Iterator>
@@ -125,8 +132,10 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &operator=(std::initializer_list<char> list);
 
-      // requires stringview
-      // CsBasicString &operator=(CsStringView str);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &operator=(CsBasicStringView<U> str);
+
 
       CsBasicString &operator+=(const CsBasicString &str);
 
@@ -142,8 +151,9 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &operator+=(std::initializer_list<char> list);
 
-      // requires stringview
-      // CsBasicString &operator+=(CsStringView str);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &operator+=(CsBasicStringView<U> str);
 
       CsChar operator[](size_type index) const;
 
@@ -157,6 +167,7 @@ class CsBasicString
 
       template <typename Iterator>
       CsBasicString &append(Iterator begin, Iterator end);
+
 
       // for a const char * and char *
       template <typename T,  typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
@@ -173,6 +184,7 @@ class CsBasicString
                   std::is_same<T, char *>::value>::type>
       CsBasicString &append(const T &str);
 
+
       // for an array of chars
       template <int N>
       CsBasicString &append(const char (&str)[N]);
@@ -180,12 +192,13 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &append(std::initializer_list<char> str);
 
-      // requires stringview
-      // CsBasicString &append(CsStringView str);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &append(CsBasicStringView<U> str);
 
-      // requires stringview
-      // template <typename T>
-      // CsBasicString &append(const T &view, size_type indexStart, size_type size)
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &append(CsBasicStringView<U> str, size_type indexStart, size_type size);
 
       CsBasicString &assign(size_type count, CsChar c);
       CsBasicString &assign(const CsBasicString &str);
@@ -206,12 +219,13 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &assign(std::initializer_list<CsChar> str)
 
-      // requires stringview
-      // CsBasicString &assign(CsStringView str);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //    decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &assign(CsBasicStringView<U> str);
 
-      // requires stringview
-      // template <typename T>
-      // CsBasicString &assign(const T &view, size_type indexStart, size_type size)
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &assign(CsBasicStringView<U> str, size_type indexStart, size_type size);
 
       CsChar at(size_type index) const;
       CsChar back() const;
@@ -284,8 +298,9 @@ class CsBasicString
 
       size_type find(CsChar c, size_type indexStart = 0) const;
 
-      // requires stringview
-      // size_type find(CsBasicStringView view, size_type indexStart = 0) const;
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type find(CsBasicStringView<U> str, size_type indexStart = 0) const;
 
 
       size_type find_first_of(const CsBasicString &str, size_type indexStart = 0) const;
@@ -310,8 +325,9 @@ class CsBasicString
 
       size_type find_first_of(CsChar c, size_type indexStart = 0) const;
 
-      // requires stringview
-      // size_type find_first_of(CsBasicStringView view, , size_type indexStart = 0 ) const;
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type find_first_of(CsBasicStringView<U> str, size_type indexStart = 0 ) const;
 
 
       size_type find_last_of(const CsBasicString &str, size_type indexStart = npos) const;
@@ -336,8 +352,9 @@ class CsBasicString
 
       size_type find_last_of(CsChar c, size_type indexStart = npos) const;
 
-      // requires stringview
-      // size_type find_last_of(CsBasicStringView view, size_type indexStart = npos) const
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type find_last_of(CsBasicStringView<U> str, size_type indexStart = npos) const
 
 
       size_type find_first_not_of(const CsBasicString &str, size_type indexStart = 0) const;
@@ -362,8 +379,9 @@ class CsBasicString
 
       size_type find_first_not_of(CsChar c, size_type indexStart= 0) const;
 
-      // requires stringview
-      // size_type find_first_not_of(CsBasicStringView view, size_type indexStart = 0) const;
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type find_first_not_of(CsBasicStringView<U> str, size_type indexStart = 0) const;
 
 
       size_type find_last_not_of(const CsBasicString &str, size_type indexStart = npos) const;
@@ -388,8 +406,9 @@ class CsBasicString
 
       size_type find_last_not_of(CsChar c, size_type indexStart = npos) const;
 
-      // requires stringview
-      // size_type find_last_of(CsBasicStringView view, size_type indexStart = npos) const
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type find_last_of(CsBasicStringView<U> str, size_type indexStart = npos) const;
 
 
       size_type rfind(const CsBasicString &str, size_type indexStart = npos) const;
@@ -414,8 +433,10 @@ class CsBasicString
 
       size_type rfind(CsChar c, size_type indexStart = npos) const;
 
-      // requires stringview
-      // size_type rfind(CsBasicStringView view, size_type indexStart = npos) const;
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // size_type rfind(CsBasicStringView<U> str, size_type indexStart = npos) const;
+
 
       CsChar front() const;
       A getAllocator() const;
@@ -464,12 +485,13 @@ class CsBasicString
       // missing encoding
       // iterator insert(const_iterator posStart, std::initializer_list<CsChar> str);
 
-      // requires stringview
-      // CsBasicString & insert(size_type indexStart, CsBasicStringView view);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString & insert(size_type indexStart, CsBasicStringView<U> str);
 
-      // requires stringview
-      // template <typename T>
-      // CsBasicString &insert(size_type indexStart, const T &view, size_type srcStart, size_type srcSize == npos)
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // CsBasicString &insert(size_type indexStart, CsBasicStringView<U> str, size_type srcStart, size_type srcSize == npos)
 
       void pop_back();
       void push_back(CsChar c);
@@ -525,11 +547,13 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &replace(const_iterator first, const_iterator last, std::initializer_list<CsChar> str);
       	
-      // requires stringview
-      // basic_string& replace(size_type pos, size_type size, CsBasicStringView view);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // basic_string& replace(size_type pos, size_type size, CsBasicStringView<U> str);
       	
-      // requires stringview
-      // basic_string& replace(const_iterator first, const_iterator last, CsBasicStringView view);
+      // template <typename U, typename = typename std::enable_if< std::is_convertible<
+      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      // basic_string& replace(const_iterator first, const_iterator last, CsBasicStringView<U> str);
       	
       template <class T>
       CsBasicString &replace(size_type indexStart, size_type size, const T &str,
@@ -546,10 +570,10 @@ class CsBasicString
 
       size_type size_storage() const;
 
-      // same thing
+      // following 3 do the same thing
       size_type size_codePoints() const;
       size_type size() const;
-      size_type length()  const;
+      size_type length() const;
 
       CsBasicString substr(size_type indexStart = 0, size_type size = npos) const;
       void swap(CsBasicString &str);
@@ -694,20 +718,31 @@ template <typename E, typename A>
 CsBasicString<E, A>::CsBasicString(const CsBasicString &str, size_type indexStart, size_type size, const A &a)
    : m_string(1, 0, a)
 {
-   size_type stringLen = str.size();
+   const_iterator iter_begin = str.cbegin();
+   const_iterator iter_end;
 
-   if (indexStart > stringLen)  {
-      indexStart = stringLen;
+   for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
+      ++iter_begin;
    }
 
-   if (size < 0 || indexStart + size > stringLen)  {
-      size = stringLen - indexStart;
+   if (iter_begin == str.cend()) {
+      // index > size()
+      return;
    }
 
-   auto iter1 = str.begin() + indexStart;
-   auto iter2 = iter1 + size;
+   if (size >= 0) {
+      iter_end = iter_begin;
 
-   append(iter1, iter2);
+      for (size_type i = 0; i < size && iter_end != str.cend(); ++i)  {
+         ++iter_end;
+      }
+
+   } else {
+      iter_end = str.cend();
+
+   }
+
+   append(iter_begin, iter_end);
 }
 
 template <typename E, typename A>
@@ -715,7 +750,52 @@ CsBasicString<E, A>::CsBasicString(size_type count, CsChar c, const A &a)
    : m_string(1, 0, a)
 {
    E::insert(m_string, m_string.end() - 1, c, count);
+}
 
+template <typename E, typename A>
+template <typename U, typename>
+CsBasicString<E, A>::CsBasicString(CsBasicStringView<U> str, const A &a)
+   : CsBasicString(str.begin(), str.end(), a)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+}
+
+template <typename E, typename A>
+template <typename U,  typename>
+CsBasicString<E, A>::CsBasicString(CsBasicStringView<U> str, size_type indexStart, size_type size, const A &a)
+   : m_string(1, 0, a)
+{
+ static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   const_iterator iter_begin = str.cbegin();
+   const_iterator iter_end;
+
+   for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
+      ++iter_begin;
+   }
+
+   if (iter_begin == str.cend()) {
+      // index > size()
+      return;
+   }
+
+   if (size >= 0) {
+      iter_end = iter_begin;
+
+      for (size_type i = 0; i < size && iter_end != str.cend(); ++i)  {
+         ++iter_end;
+      }
+
+   } else {
+      iter_end = str.cend();
+
+   }
+
+   append(iter_begin, iter_end);
 }
 
 template <typename E, typename A>
@@ -914,6 +994,18 @@ CsBasicString<E, A> &CsBasicString<E, A>::append(const char (&str)[N])
 }
 
 template <typename E, typename A>
+template <typename U,  typename>
+CsBasicString<E, A> &CsBasicString<E, A>::append(CsBasicStringView<U> str)
+{
+ static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   append(str.cbegin(), str.cend());
+   return *this;
+}
+
+template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::assign(size_type count, CsChar c)
 {
    clear();
@@ -1033,7 +1125,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::erase(size_type indexStart, size_type 
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::erase(const_iterator iter)
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::erase(const_iterator iter)
 {
    str_iter vbegin;
    str_iter vend;
@@ -1045,7 +1137,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::erase(const_it
 }
 
 template <typename E, typename A>
-typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::erase(const_iterator iter_begin, const_iterator iter_end)
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::erase(const_iterator iter_begin, const_iterator iter_end)
 {
    auto retval = m_string.erase(iter_begin.codePointBegin(), iter_end.codePointBegin());
    return const_iterator(retval);
@@ -1106,24 +1198,111 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
 // for a const char * and char *
 template <typename E, typename A>
 template <typename T,  typename>
-typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str,
-            const_iterator iter_begin, size_type size) const
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str, const_iterator iter_begin,
+                  size_type size) const
 {
-   // broom - not implemented yet
-
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
 #endif
 
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   if (str == nullptr || str[0] == 0) {
+      return iter_begin;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == str[0])  {
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str  + 1;
+
+         int count = 0;
+
+         while (text_iter != iter_end && *pattern_iter != 0 && count < size)  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+               ++count;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (*pattern_iter == 0) {
+            // found a match
+            return iter;
+         }
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
 }
 
 // for an array of chars
 template <typename E, typename A>
 template <int N>
-typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N],
-                  const_iterator iter_begin, size_type size) const
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N], const_iterator iter_begin,
+                  size_type size) const
 {
-   // broom - not implemented yet
+   // make this safe
+
+   const_iterator iter_end = end();
+
+   if (iter_begin == iter_end) {
+      return iter_end;
+   }
+
+   if (str == nullptr || str[0] == 0) {
+      return iter_begin;
+   }
+
+   auto iter = iter_begin;
+
+   while (iter != iter_end)   {
+
+      if (*iter == str[0])  {
+         auto text_iter    = iter + 1;
+         auto pattern_iter = str  + 1;
+
+         int count = 0;
+
+         while (text_iter != iter_end && *pattern_iter != 0 && count < size)  {
+
+            if (*text_iter == *pattern_iter)  {
+               ++text_iter;
+               ++pattern_iter;
+
+               ++count;
+
+            } else {
+               break;
+
+            }
+         }
+
+         if (*pattern_iter == 0) {
+            // found a match
+            return iter;
+         }
+      }
+
+      ++iter;
+   }
+
+   return iter_end;
 }
 
 // for a const char * and char *
@@ -3618,15 +3797,9 @@ auto CsBasicString<E, A>::size() const -> size_type
 }
 
 template <typename E, typename A>
-auto CsBasicString<E, A>::length()  const  -> size_type
+auto CsBasicString<E, A>::length() const -> size_type
 {
-   size_type retval = 0;
-
-   for (auto item = begin(); item != end(); ++item) {
-      ++retval;
-   }
-
-   return retval;
+   return size();
 }
 
 template <typename E, typename A>
