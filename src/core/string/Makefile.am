@@ -6,7 +6,7 @@ CORE_PUBLIC_INCLUDES += \
 	QString8  \
 	QString16 \
 	QStringParser \
-	QStringView8
+	QStringView
 
 CORE_STRING_INCLUDES = \
 	cs_string.h \
@@ -18,7 +18,7 @@ CORE_STRING_INCLUDES = \
 	qstring8.h  \
 	qstring16.h  \
 	qstringparser.h \
-	qstringview8.h
+	qstringview.h
 
 CORE_STRING_PRIVATE_INCLUDES =
 

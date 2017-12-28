@@ -4,7 +4,7 @@ set(CORE_PUBLIC_INCLUDES
     QString8
     QString16
     QStringParser
-    QStringView8
+    QStringView
 )
 
 set(CORE_INCLUDES
@@ -18,7 +18,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.h
 )
 
 set(CORE_PRIVATE_INCLUDES
