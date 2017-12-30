@@ -95,7 +95,7 @@ class CsBasicStringView
       size_type size() const;
       size_type length()  const;
 
-      CsBasicStringView substr(size_type indexStart = 0, size_type size = npos) const;
+      CsBasicStringView<S> substr(size_type indexStart = 0, size_type size = npos) const;
 
       // iterators
       iterator begin() {

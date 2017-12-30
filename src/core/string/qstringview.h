@@ -107,7 +107,7 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return CsString::CsBasicStringView<S>::size();
       }
 
-      QStringView<S> mid(size_type index, size_type numOfChars = -1) const;
+      QStringView<S> mid(size_type indexStart, size_type numOfChars = -1) const;
       QStringView<S> right(size_type numOfChars) const;
 
       size_type size() const{
@@ -285,12 +285,12 @@ QStringView<S> QStringView<S>::left(size_type numOfChars) const
 }
 
 template <typename S>
-QStringView<S> QStringView<S>::mid(size_type index, size_type numOfChars) const
+QStringView<S> QStringView<S>::mid(size_type indexStart, size_type numOfChars) const
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
 
-   for (size_type i = 0; i < index && iter_begin != cend(); ++i)  {
+   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 

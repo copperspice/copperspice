@@ -132,10 +132,9 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &operator=(std::initializer_list<char> list);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &operator=(CsBasicStringView<U> str);
-
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &operator=(CsBasicStringView<U> str);
 
       CsBasicString &operator+=(const CsBasicString &str);
 
@@ -151,9 +150,9 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &operator+=(std::initializer_list<char> list);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &operator+=(CsBasicStringView<U> str);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &operator+=(CsBasicStringView<U> str);
 
       CsChar operator[](size_type index) const;
 
@@ -196,9 +195,9 @@ class CsBasicString
             decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
       CsBasicString &append(CsBasicStringView<U> str);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //      decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &append(CsBasicStringView<U> str, size_type indexStart, size_type size);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &append(CsBasicStringView<U> str, size_type indexStart, size_type size);
 
       CsBasicString &assign(size_type count, CsChar c);
       CsBasicString &assign(const CsBasicString &str);
@@ -219,13 +218,13 @@ class CsBasicString
       // unknown encoding
       // CsBasicString &assign(std::initializer_list<CsChar> str)
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //    decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &assign(CsBasicStringView<U> str);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+         decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &assign(CsBasicStringView<U> str);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &assign(CsBasicStringView<U> str, size_type indexStart, size_type size);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+        decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      CsBasicString &assign(CsBasicStringView<U> str, size_type indexStart, size_type size);
 
       CsChar at(size_type index) const;
       CsChar back() const;
@@ -485,13 +484,13 @@ class CsBasicString
       // missing encoding
       // iterator insert(const_iterator posStart, std::initializer_list<CsChar> str);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString & insert(size_type indexStart, CsBasicStringView<U> str);
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      iterator insert(size_type indexStart, CsBasicStringView<U> str);
 
-      // template <typename U, typename = typename std::enable_if< std::is_convertible<
-      //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // CsBasicString &insert(size_type indexStart, CsBasicStringView<U> str, size_type srcStart, size_type srcSize == npos)
+      template <typename U, typename = typename std::enable_if< std::is_convertible<
+            decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
+      iterator insert(size_type indexStart, CsBasicStringView<U> str, size_type srcStart, size_type srcSize = npos);
 
       void pop_back();
       void push_back(CsChar c);
@@ -832,6 +831,20 @@ CsBasicString<E, A> &CsBasicString<E, A>::operator=(const T &str)
    return *this;
 }
 
+template <typename E, typename A>
+template <typename U, typename>
+CsBasicString<E, A> &CsBasicString<E,A>::operator=(CsBasicStringView<U> str)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   m_string.clear();
+   m_string.push_back(0);
+
+   append(str);
+   return *this;
+}
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::operator+=(const CsBasicString &str)
@@ -855,6 +868,18 @@ CsBasicString<E, A> &CsBasicString<E, A>::operator+=(const T &str)
 
    append(str);
    return *this;;
+}
+
+template <typename E, typename A>
+template <typename U, typename>
+CsBasicString<E, A> &CsBasicString<E,A>::operator+=(CsBasicStringView<U> str)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   append(str);
+   return *this;
 }
 
 template <typename E, typename A>
@@ -1006,6 +1031,42 @@ CsBasicString<E, A> &CsBasicString<E, A>::append(CsBasicStringView<U> str)
 }
 
 template <typename E, typename A>
+template <typename U,  typename>
+CsBasicString<E, A> &CsBasicString<E, A>::append(CsBasicStringView<U> str, size_type indexStart, size_type size)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   const_iterator iter_begin = str.cbegin();
+   const_iterator iter_end;
+
+   for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
+      ++iter_begin;
+   }
+
+   if (iter_begin == str.cend()) {
+      // index > size()
+      return *this;
+   }
+
+   if (size >= 0) {
+      iter_end = iter_begin;
+
+      for (size_type i = 0; i < size && iter_end != str.cend(); ++i)  {
+         ++iter_end;
+      }
+
+   } else {
+      iter_end = str.cend();
+
+   }
+
+   append(iter_begin, iter_end);
+   return *this;
+}
+
+template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::assign(size_type count, CsChar c)
 {
    clear();
@@ -1071,6 +1132,34 @@ CsBasicString<E, A> &CsBasicString<E, A>::assign(Iterator begin, Iterator end)
 {
    clear();
    append(begin, end);
+
+   return *this;
+}
+
+template <typename E, typename A>
+template <typename U,  typename>
+CsBasicString<E, A> &CsBasicString<E, A>::assign(CsBasicStringView<U> str)
+{
+ static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   clear();
+   append(str.cbegin(), str.cend());
+
+   return *this;
+}
+
+template <typename E, typename A>
+template <typename U,  typename>
+CsBasicString<E, A> &CsBasicString<E, A>::assign(CsBasicStringView<U> str, size_type indexStart, size_type size)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   clear();
+   append(str, indexStart, size);
 
    return *this;
 }
@@ -3493,6 +3582,63 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
    }
 
    return (iter - count);
+}
+
+template <typename E, typename A>
+template <typename U,  typename>
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type indexStart, CsBasicStringView<U> str)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
+   const_iterator iter = begin() + indexStart;
+
+   for (CsChar c : str) {
+      str_iter iter_tmp = E::insert(m_string, iter.codePointBegin(), c);
+
+      iter = CsStringIterator<E, A>(iter_tmp);
+      ++iter;
+   }
+
+   return iter;
+}
+
+template <typename E, typename A>
+template <typename U,  typename>
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type indexStart, CsBasicStringView<U> str,
+                  size_type srcStart, size_type srcSize)
+{
+   static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
+      "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
+      "incompatible with the encoding for U");
+
+   size_type stringLen = this->size();
+
+   if (indexStart > stringLen)  {
+      throw std::out_of_range("CsString::insert index out of range");
+   }
+
+   const_iterator iter = begin() + indexStart;
+
+   const_iterator srcIter_begin = str.begin() + srcStart;
+   const_iterator srcIter_end   = srcIter_begin + srcSize;
+
+   for (auto srcIter = srcIter_begin; srcIter != srcIter_end; ++srcIter) {
+      // *srcIter is a CsChar
+      str_iter iter_tmp = E::insert(m_string, iter.codePointBegin(), *srcIter);
+
+      iter = CsStringIterator<E, A>(iter_tmp);
+      ++iter;
+   }
+
+   return iter;
 }
 
 template <typename E, typename A>

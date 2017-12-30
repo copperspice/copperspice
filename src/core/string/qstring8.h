@@ -223,21 +223,21 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8(QString8 &&other) = default;
 
       QString8(QChar32 c);
-      QString8(size_type size, QChar32 c);
+      QString8(size_type numOfChars, QChar32 c);
 
-      QString8(const QChar32 *str, size_type size = -1)  {
+      QString8(const QChar32 *data, size_type numOfChars = -1)  {
 
-         if (size == -1) {
-            const QChar32 *p = str;
+         if (numOfChars == -1) {
+            const QChar32 *p = data;
 
             while (p->unicode() != 0) {
                ++p;
             }
 
-            CsString::CsString::append(str, p);
+            CsString::CsString::append(data, p);
 
          } else {
-            CsString::CsString::append(str, str + size);
+            CsString::CsString::append(data, data + numOfChars);
 
          }
       }
@@ -298,8 +298,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
-      QString8 &append(const QChar32 *data, size_type size)  {
-         CsString::CsString::append(data, data + size);
+      QString8 &append(const QChar32 *data, size_type numOfChars)  {
+         CsString::CsString::append(data, data + numOfChars);
          return *this;
       }
 
@@ -310,6 +310,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &append(QStringView8 str) {
          CsString::CsString::append(str.cbegin(), str.cend());
+         return *this;
+      }
+
+      QString8 &append(QStringView8 str, size_type indexStart, size_type numOfChars) {
+         CsString::CsString::append(str, indexStart, numOfChars);
          return *this;
       }
 
@@ -361,7 +366,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       bool endsWith(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool endsWith(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-      QString8 &fill(QChar32 c, size_type size = -1);
+      QString8 &fill(QChar32 c, size_type numOfChars = -1);
 
       QChar32 first() const {
          return CsString::CsString::front();
@@ -468,29 +473,39 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          }
       }
 
-      QString8 &insert (size_type index, const QString8 & other)  {
-         CsString::CsString::insert(index, other);
+      QString8 &insert (size_type indexStart, const QString8 &str)  {
+         CsString::CsString::insert(indexStart, str);
          return *this;
       }
 
-      QString8 &insert(size_type index, QChar32 c) {
-         CsString::CsString::insert(index, 1, c);
+      QString8 &insert(size_type indexStart, QChar32 c) {
+         CsString::CsString::insert(indexStart, 1, c);
          return *this;
       }
 
-      QString8 &insert(size_type index, const QChar32 *data, size_type size) {
-         CsString::CsString::insert(begin() + index, data, data + size);
+      QString8 &insert(size_type indexStart, const QChar32 *data, size_type numOfChars) {
+         CsString::CsString::insert(begin() + indexStart, data, data + numOfChars);
          return *this;
       }
 
-      QString8 &insert(const_iterator first, const QString8 &other) {
-         CsString::CsString::insert(first, other);
+      QString8 &insert(const_iterator first, const QString8 &str) {
+         CsString::CsString::insert(first, str);
          return *this;
       }
 
       template<typename Iterator>
       QString8 &insert(const_iterator first, Iterator begin, Iterator end) {
          CsString::CsString::insert(first, begin, end);
+         return *this;
+      }
+
+      QString8 &insert(size_type indexStart, QStringView8 str) {
+         CsString::CsString::insert(indexStart, str);
+         return *this;
+      }
+
+      QString8 &insert(size_type indexStart, QStringView8 str, size_type srcStart, size_type numOfChars) {
+         CsString::CsString::insert(indexStart, str, srcStart, numOfChars);
          return *this;
       }
 
@@ -531,8 +546,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 */
 
-      QString8 mid(size_type index, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
-      QStringView8 midView (size_type position, size_type numOfChars = -1) const;
+      QString8 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
+      QStringView8 midView (size_type indexStart, size_type numOfChars = -1) const;
 
       QString8 normalized(QString8::NormalizationForm mode, QChar32::UnicodeVersion version = QChar32::Unicode_Unassigned)
                   const Q_REQUIRED_RESULT;
@@ -547,8 +562,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
-      QString8 &prepend(const QChar32 *data, size_type size)  {
-         CsString::CsString::insert(begin(), data, data + size);
+      QString8 &prepend(const QChar32 *data, size_type numOfChars)  {
+         CsString::CsString::insert(begin(), data, data + numOfChars);
          return *this;
       }
 
@@ -580,7 +595,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 repeated(size_type count) const Q_REQUIRED_RESULT;
 
-      QString8 &remove(size_type index, size_type size);
+      QString8 &remove(size_type indexStart, size_type numOfChars);
       QString8 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &remove(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
@@ -592,25 +607,25 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8 &replace(const QString8 &before, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &replace(QChar32 c, const QString8 &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
-      QString8 &replace(size_type index, size_type numOfChars, QChar32 c) {
-         CsString::CsString::replace(index, numOfChars, 1, c);
+      QString8 &replace(size_type indexStart, size_type numOfChars, QChar32 c) {
+         CsString::CsString::replace(indexStart, numOfChars, 1, c);
          return *this;
       }
 
-      QString8 &replace(size_type index, size_type numOfChars, const QChar32 *data, size_type size)
+      QString8 &replace(size_type indexStart, size_type numOfChars, const QChar32 *data, size_type sizeStr)
       {
-         replace(index, numOfChars, QString8(data, size));
+         replace(indexStart, numOfChars, QString8(data, sizeStr));
          return *this;
       }
 
-      QString8 &replace(size_type index, size_type numOfChars, const QString8 &other) {
-         CsString::CsString::replace(index, numOfChars, other);
+      QString8 &replace(size_type indexStart, size_type numOfChars, const QString8 &str) {
+         CsString::CsString::replace(indexStart, numOfChars, str);
          return *this;
       }
 
-      QString8 &replace(size_type index, size_type numOfChars, const QString8 &other, size_type size)
+      QString8 &replace(size_type indexStart, size_type numOfChars, const QString8 &str, size_type sizeStr)
       {
-         CsString::CsString::replace(index, numOfChars, other.left(size));
+         CsString::CsString::replace(indexStart, numOfChars, str.left(sizeStr));
          return *this;
       }
 
@@ -620,17 +635,17 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
-      QString8 &replace(const_iterator first, const_iterator last, const QString8 &other) {
-         CsString::CsString::replace(first, last, other);
+      QString8 &replace(const_iterator first, const_iterator last, const QString8 &str) {
+         CsString::CsString::replace(first, last, str);
          return *this;
       }
 
-      void resize(size_type size) {
-         return CsString::CsString::resize(size);
+      void resize(size_type numOfChars) {
+         return CsString::CsString::resize(numOfChars);
       }
 
-      void resize(size_type size, QChar32 c) {
-         return CsString::CsString::resize(size, c);
+      void resize(size_type numOfChars, QChar32 c) {
+         return CsString::CsString::resize(numOfChars, c);
       }
 
       QString8 right(size_type numOfChars) const Q_REQUIRED_RESULT;
@@ -682,11 +697,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // static
       static QString8 fromLatin1(const QByteArray &str);
-      static QString8 fromLatin1(const char *str, size_type size = -1);
+      static QString8 fromLatin1(const char *str, size_type numOfChars = -1);
 
       static QString8 fromUtf8(const QByteArray &str);
-      static QString8 fromUtf8(const char *str, size_type size = -1);
-      static QString8 fromUtf16(const char16_t *str, size_type size = -1);
+      static QString8 fromUtf8(const char *str, size_type numOfChars = -1);
+      static QString8 fromUtf16(const char16_t *str, size_type numOfChars = -1);
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
@@ -809,6 +824,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
+      QString8 &operator=(QStringView8 str) {
+         CsString::CsString::operator=(str);
+         return *this;
+      }
+
       QString8 &operator+=(QChar32 c)  {
          CsString::CsString::operator+=(c);
          return *this;
@@ -816,6 +836,16 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &operator+=(QChar32::SpecialCharacter c) {
          append(QChar32(c));
+         return *this;
+      }
+
+      QString8 &operator+= (const QString8 & other) {
+         CsString::CsString::operator+=(other);
+         return *this;
+      }
+
+      QString8 &operator+= (QStringView8 str) {
+         CsString::CsString::operator+=(str);
          return *this;
       }
 

@@ -59,8 +59,8 @@ QString8::QString8(QChar32 c)
 {
 }
 
-QString8::QString8(size_type size, QChar32 c)
-   : CsString::CsString(size, c)
+QString8::QString8(size_type numOfChars, QChar32 c)
+   : CsString::CsString(numOfChars, c)
 {
 }
 
@@ -442,14 +442,14 @@ QString8 QString8::fromLatin1(const QByteArray &str)
    return retval;
 }
 
-QString8 QString8::fromLatin1(const char *str, size_type size)
+QString8 QString8::fromLatin1(const char *str, size_type numOfChars)
 {
    QString8 retval;
 
    if (str == nullptr) {
       // do nothing
 
-   } else if (size == -1)  {
+   } else if (numOfChars == -1)  {
 
       for (size_type i = 0; str[i] != 0; ++i) {
          const char32_t value = str[i];
@@ -458,7 +458,7 @@ QString8 QString8::fromLatin1(const char *str, size_type size)
 
    } else {
 
-      for (size_type i = 0; i < size; ++i) {
+      for (size_type i = 0; i < numOfChars; ++i) {
          const char32_t value = str[i];
          retval.append(value);
       }
@@ -484,48 +484,48 @@ QString8 QString8::fromUtf8(const QByteArray &str)
    return retval;
 }
 
-QString8 QString8::fromUtf8(const char *str, size_type size)
+QString8 QString8::fromUtf8(const char *str, size_type numOfChars)
 {
    if (str == nullptr) {
       return QString8();
    }
 
-   if (size < 0) {
-      size = 0;
+   if (numOfChars < 0) {
+      numOfChars = 0;
 
-      while (str[size] != 0) {
-         ++size;
+      while (str[numOfChars] != 0) {
+         ++numOfChars;
       }
    }
 
    // broom ( test code only, full implementation pending )
    QString8 retval;
 
-   for (int i = 0; i < size; ++i) {
+   for (int i = 0; i < numOfChars; ++i) {
       retval.append(static_cast<char32_t>(str[i]));
    }
 
    return retval;
 }
 
-QString8 QString8::fromUtf16(const char16_t *str, size_type size)
+QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
 {
    if (str == nullptr) {
       return QString8();
    }
 
-   if (size < 0) {
-      size = 0;
+   if (numOfChars < 0) {
+      numOfChars = 0;
 
-      while (str[size] != 0) {
-         ++size;
+      while (str[numOfChars] != 0) {
+         ++numOfChars;
       }
    }
 
    // broom ( test code only, full implementation pending )
    QString8 retval;
 
-   for (int i = 0; i < size; ++i) {
+   for (int i = 0; i < numOfChars; ++i) {
       retval.append(static_cast<char32_t>(str[i]));
    }
 
@@ -603,17 +603,17 @@ int localeAwareCompare(QStringView8 str) const
 }
 */
 
-QString8 QString8::mid(size_type index, size_type numOfChars) const
+QString8 QString8::mid(size_type indexStart, size_type numOfChars) const
 {
-   return substr(index, numOfChars);
+   return substr(indexStart, numOfChars);
 }
 
-QStringView8 QString8::midView(size_type index, size_type numOfChars) const
+QStringView8 QString8::midView(size_type indexStart, size_type numOfChars) const
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
 
-   for (size_type i = 0; i < index && iter_begin != cend(); ++i)  {
+   for (size_type i = 0; i < indexStart && iter_begin != cend(); ++i)  {
       ++iter_begin;
    }
 
@@ -643,9 +643,9 @@ QString8 QString8::normalized(QString8::NormalizationForm mode, QChar32::Unicode
    return retval;
 }
 
-QString8 &QString8::remove(size_type indexStart, size_type size)
+QString8 &QString8::remove(size_type indexStart, size_type numOfChars)
 {
-   erase(indexStart, size);
+   erase(indexStart, numOfChars);
    return *this;
 }
 
