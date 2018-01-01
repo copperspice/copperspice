@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2017 Barbara Geller
-* Copyright (c) 2012-2017 Ansel Sermersheim
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
 * All rights reserved.
 *
 * This file is part of CopperSpice.

@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2012-2017 Barbara Geller
-# Copyright (C) 2012-2017 Ansel Sermersheim
+# Copyright (C) 2012-2018 Barbara Geller
+# Copyright (C) 2012-2018 Ansel Sermersheim
 # All rights reserved.    
 #
 # Copyright (c) 2008 Laurent Montel, <montel@kde.org>
