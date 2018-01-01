@@ -36,6 +36,8 @@
 #define CS_TOKENPASTE1(x,y)         x ## y
 #define CS_TOKENPASTE2(x,y)         CS_TOKENPASTE1(x,y)
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+
 template<int N>
 class cs_number : public cs_number<N - 1>
 {
@@ -49,6 +51,8 @@ class cs_number<0>
    public:
       static constexpr int value = 0;
 };
+
+/**   \endcond   */
 
 
 #ifdef QT_NO_TEXTCODEC

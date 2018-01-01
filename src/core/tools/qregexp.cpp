@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include <qregexp.h>
+
 #include <qalgorithms.h>
 #include <qbitarray.h>
 #include <qcache.h>

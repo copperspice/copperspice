@@ -20,7 +20,9 @@
 *
 ***********************************************************************/
 
+/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 #include <stdlib.h>
+/**   \endcond   */
 
 template <const bool isDouble>
 AbstractFloat<isDouble>::AbstractFloat(const xsDouble num) : m_value(num)
