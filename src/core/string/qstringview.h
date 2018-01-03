@@ -82,7 +82,9 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return CsString::CsBasicStringView<S>::empty();
       }
 
+      template <typename C = QChar32>
       bool endsWith(QChar32 ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
       bool endsWith(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       QChar32 first() const {
@@ -114,7 +116,9 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return CsString::CsBasicStringView<S>::size();
       }
 
+      template <typename C = QChar32>
       bool startsWith(QChar32 ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
       bool startsWith(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       S toCaseFolded() const Q_REQUIRED_RESULT;
@@ -190,7 +194,7 @@ template <typename S>
 QStringView<S> QStringView<S>::chopped(size_type numOfChars) const
 {
    if (numOfChars < 0) {
-      return QStringView8(cbegin(), cend());
+      return QStringView<S>(cbegin(), cend());
    }
 
    const_iterator iter = cend();
@@ -199,10 +203,11 @@ QStringView<S> QStringView<S>::chopped(size_type numOfChars) const
       --iter;
    }
 
-   return QStringView8(cbegin(), iter);
+   return QStringView<S>(cbegin(), iter);
 }
 
 template <typename S>
+template <typename C>
 bool QStringView<S>::endsWith(QChar32 c, Qt::CaseSensitivity cs) const
 {
    if (empty()) {
@@ -215,7 +220,7 @@ bool QStringView<S>::endsWith(QChar32 c, Qt::CaseSensitivity cs) const
       return *iter == c;
 
    } else {
-      return iter->toCaseFolded() == c.toCaseFolded();
+      return iter->toCaseFolded() == C(c).toCaseFolded();
 
    }
 }
@@ -272,7 +277,7 @@ template <typename S>
 QStringView<S> QStringView<S>::left(size_type numOfChars) const
 {
    if (numOfChars < 0) {
-      return QStringView8(cbegin(), cend());
+      return QStringView<S>(cbegin(), cend());
    }
 
    const_iterator iter = cbegin();
@@ -281,7 +286,7 @@ QStringView<S> QStringView<S>::left(size_type numOfChars) const
       ++iter;
    }
 
-   return QStringView8(cbegin(), iter);
+   return QStringView<S>(cbegin(), iter);
 }
 
 template <typename S>
@@ -296,7 +301,7 @@ QStringView<S> QStringView<S>::mid(size_type indexStart, size_type numOfChars) c
 
    if (iter_begin == cend()) {
       // index > size()
-      return QStringView8();
+      return QStringView<S>();
    }
 
    if (numOfChars >= 0) {
@@ -311,14 +316,14 @@ QStringView<S> QStringView<S>::mid(size_type indexStart, size_type numOfChars) c
 
    }
 
-   return QStringView8(iter_begin, iter_end);
+   return QStringView<S>(iter_begin, iter_end);
 }
 
 template <typename S>
 QStringView<S> QStringView<S>::right(size_type numOfChars) const
 {
    if (numOfChars < 0) {
-      return QStringView8(cbegin(), cend());
+      return QStringView<S>(cbegin(), cend());
    }
 
    const_iterator iter = cend();
@@ -327,10 +332,11 @@ QStringView<S> QStringView<S>::right(size_type numOfChars) const
       --iter;
    }
 
-   return QStringView8(iter, cend());
+   return QStringView<S>(iter, cend());
 }
 
 template <typename S>
+template <typename C>
 bool QStringView<S>::startsWith(QChar32 c, Qt::CaseSensitivity cs) const
 {
    if (empty()) {
@@ -341,7 +347,7 @@ bool QStringView<S>::startsWith(QChar32 c, Qt::CaseSensitivity cs) const
       return at(0) == c;
 
    } else {
-      return at(0).toCaseFolded() == c.toCaseFolded();
+      return at(0).toCaseFolded() == C(c).toCaseFolded();
 
    }
 }
