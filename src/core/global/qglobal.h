@@ -961,90 +961,111 @@ inline QIncompatibleFlag::QIncompatibleFlag(int ai) : i(ai) {}
 template<typename Enum>
 class QFlags
 {
-   typedef void **Zero;
-   int i;
+   public:
+      using enum_type = Enum;
 
- public:
-   typedef Enum enum_type;
+      constexpr inline QFlags(const QFlags &other)
+         : i(other.i)
+      {}
 
-   constexpr inline QFlags(const QFlags &f) : i(f.i) {}
-   constexpr inline QFlags(Enum f) : i(f) {}
-   constexpr inline QFlags(Zero = 0) : i(0) {}
+      constexpr inline QFlags(Enum value)
+         : i(static_cast<int>(value))
+      {}
 
-   inline QFlags(QFlag f) : i(f) {}
+      constexpr inline QFlags()
+         : i(0)
+      {}
 
-   inline QFlags &operator=(const QFlags &f) {
-      i = f.i;
-      return *this;
-   }
-   inline QFlags &operator&=(int mask)  {
-      i &= mask;
-      return *this;
-   }
-   inline QFlags &operator&=(uint mask) {
-      i &= mask;
-      return *this;
-   }
-   inline QFlags &operator|=(QFlags f)  {
-      i |= f.i;
-      return *this;
-   }
-   inline QFlags &operator|=(Enum f)    {
-      i |= f;
-      return *this;
-   }
-   inline QFlags &operator^=(QFlags f)  {
-      i ^= f.i;
-      return *this;
-   }
-   inline QFlags &operator^=(Enum f)    {
-      i ^= f;
-      return *this;
-   }
+      constexpr inline QFlags(std::nullptr_t)
+         : i(0)
+      {}
 
-   constexpr  inline operator int() const {
-      return i;
-   }
+      inline QFlags(QFlag flag)
+         : i(flag)
+      {}
 
-   constexpr inline QFlags operator|(QFlags f) const {
-      return QFlags(Enum(i | f.i));
-   }
+      inline QFlags &operator=(const QFlags &other) {
+         i = other.i;
+         return *this;
+      }
 
-   constexpr inline QFlags operator|(Enum f) const {
-      return QFlags(Enum(i | f));
-   }
+      inline QFlags &operator&=(int mask)  {
+         i &= mask;
+         return *this;
+      }
 
-   constexpr inline QFlags operator^(QFlags f) const {
-      return QFlags(Enum(i ^ f.i));
-   }
+      inline QFlags &operator&=(uint mask) {
+         i &= mask;
+         return *this;
+      }
 
-   constexpr inline QFlags operator^(Enum f) const {
-      return QFlags(Enum(i ^ f));
-   }
+      inline QFlags &operator|=(QFlags other)  {
+         i |= other.i;
+         return *this;
+      }
 
-   constexpr inline QFlags operator&(int mask) const {
-      return QFlags(Enum(i & mask));
-   }
+      inline QFlags &operator|=(Enum value)    {
+         i |= static_cast<int>(value);
+         return *this;
+      }
 
-   constexpr inline QFlags operator&(uint mask) const {
-      return QFlags(Enum(i & mask));
-   }
+      inline QFlags &operator^=(QFlags other)  {
+         i ^= other.i;
+         return *this;
+      }
 
-   constexpr inline QFlags operator&(Enum f) const {
-      return QFlags(Enum(i & f));
-   }
+      inline QFlags &operator^=(Enum value)    {
+         i ^= static_cast<int>(value);
+         return *this;
+      }
 
-   constexpr inline QFlags operator~() const {
-      return QFlags(Enum(~i));
-   }
+      constexpr  inline operator int() const {
+         return i;
+      }
 
-   constexpr inline bool operator!() const {
-      return !i;
-   }
+      constexpr inline QFlags operator|(QFlags other) const {
+         return QFlags(Enum(i | other.i));
+      }
 
-   inline bool testFlag(Enum f) const {
-      return (i & f) == f && (f != 0 || i == int(f) );
-   }
+      constexpr inline QFlags operator|(Enum value) const {
+         return QFlags(Enum(i | static_cast<int>(value)));
+      }
+
+      constexpr inline QFlags operator^(QFlags other) const {
+         return QFlags(Enum(i ^ other.i));
+      }
+
+      constexpr inline QFlags operator^(Enum value) const {
+         return QFlags(Enum(i ^ static_cast<int>(value)));
+      }
+
+      constexpr inline QFlags operator&(int mask) const {
+         return QFlags(Enum(i & mask));
+      }
+
+      constexpr inline QFlags operator&(uint mask) const {
+         return QFlags(Enum(i & mask));
+      }
+
+      constexpr inline QFlags operator&(Enum value) const {
+         return QFlags(Enum(i & static_cast<int>(value)));
+      }
+
+      constexpr inline QFlags operator~() const {
+         return QFlags(Enum(~i));
+      }
+
+      constexpr inline bool operator!() const {
+         return !i;
+      }
+
+      inline bool testFlag(Enum value) const {
+         int tmp = static_cast<int>(value);
+         return (i & tmp) == tmp && (tmp != 0 || i == tmp);
+      }
+
+   private:
+      int i;
 };
 
 
