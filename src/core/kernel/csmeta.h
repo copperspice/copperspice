@@ -472,6 +472,9 @@ const char *cs_typeName_internal<const T &>::typeName()
 template<class T1>
 class QDeclarativeListProperty;
 
+template <typename S>
+class QRegularExpression;
+
 // declare here, register in csObject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
 CS_DECLARE_CLASS(QColor)
@@ -512,7 +515,6 @@ CS_DECLARE_CLASS(QRect)
 CS_DECLARE_CLASS(QRectF)
 CS_DECLARE_CLASS(QRegion)
 CS_DECLARE_CLASS(QRegExp)
-CS_DECLARE_CLASS(QRegularExpression)
 CS_DECLARE_CLASS(QSize)
 CS_DECLARE_CLASS(QSizeF)
 CS_DECLARE_CLASS(QSizePolicy)
@@ -544,6 +546,7 @@ CS_REGISTER_TEMPLATE(QList)
 CS_REGISTER_TEMPLATE(QMap)
 CS_REGISTER_TEMPLATE(QMultiMap)
 CS_REGISTER_TEMPLATE(QQueue)
+CS_REGISTER_TEMPLATE(QRegularExpression)
 CS_REGISTER_TEMPLATE(QSet)
 CS_REGISTER_TEMPLATE(QStack)
 CS_REGISTER_TEMPLATE(QVector)
