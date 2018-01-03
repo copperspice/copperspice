@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2015-2017 Barbara Geller
-* Copyright (c) 2015-2017 Ansel Sermersheim
+* Copyright (c) 2015-2018 Barbara Geller
+* Copyright (c) 2015-2018 Ansel Sermersheim
 * All rights reserved.
 *
 * This file is part of libCsSignal
@@ -90,7 +90,7 @@ void CsSignal::SignalBase::addConnection(std::unique_ptr<const Internal::BentoAb
 
    senderListHandle->push_back(std::move(tempStruct));
 
-   // broom - will unlock when added to libGuarded  senderListHandle->unlock()
+   // broom - should unlock  senderListHandle->unlock()
 
    if (receiver != nullptr)  {
       auto receiverListHandle = receiver->m_possibleSenders.lock_write();
