@@ -20,6 +20,10 @@
 *
 ***********************************************************************/
 
+#include <limits>
+#include <mutex>
+#include <stdlib.h>
+
 #include <qglobal.h>
 #include <qlog.h>
 #include <qbytearray.h>
@@ -27,9 +31,6 @@
 #include <qscopedarraypointer.h>
 #include <qsystemlibrary_p.h>
 #include <qthreadstorage.h>
-
-#include <limits>
-#include <mutex>
 
 #if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>

@@ -72,10 +72,13 @@ HTMLImageElement::~HTMLImageElement()
 PassRefPtr<HTMLImageElement> HTMLImageElement::createForJSConstructor(Document* document, const int* optionalWidth, const int* optionalHeight)
 {
     RefPtr<HTMLImageElement> image = adoptRef(new HTMLImageElement(imgTag, document));
-    if (optionalWidth)
+
+    if (optionalWidth != nullptr)
         image->setWidth(*optionalWidth);
-    if (optionalHeight > 0)
+
+    if (optionalHeight != nullptr)
         image->setHeight(*optionalHeight);
+
     return image.release();
 }
 

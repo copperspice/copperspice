@@ -172,7 +172,7 @@ class QString;
 #  define MAC_OS_X_VERSION_MIN_REQUIRED   MAC_OS_X_VERSION_10_8
 #  include <AvailabilityMacros.h>
 
-#  if !defined(MAC_OS_X_VERSION_10_9)
+#  if ! defined(MAC_OS_X_VERSION_10_9)
 #     define MAC_OS_X_VERSION_10_9    MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
@@ -186,6 +186,10 @@ class QString;
 
 #  if ! defined(MAC_OS_X_VERSION_10_12)
 #     define MAC_OS_X_VERSION_10_12 101200
+#  endif
+
+#  if ! defined(MAC_OS_X_VERSION_10_13)
+#     define MAC_OS_X_VERSION_10_13 101300
 #  endif
 
 #endif
