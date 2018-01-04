@@ -3,7 +3,8 @@ WEBKIT_CXXFLAGS:=$(CXXFLAGS)
 CXXFLAGS:=$(patsubst -O%,,@CXXFLAGS@)
 
 # for objective c
-OBJCXXFLAGS=$(CXXFLAGS)
+OBJCXX=$(CXX)
+OBJCXXFLAGS = $(CXXFLAGS)
 
 AUTOMAKE_OPTIONS = subdir-objects
 AM_CXXFLAGS = $(AM_CFLAGS)
@@ -15,7 +16,6 @@ noinst_LTLIBRARIES =
 lib_LTLIBRARIES =
 EXTRA_LTLIBRARIES =
 EXTRA_DIST=
-
 
 ## Do not alter lines above this comment
 
