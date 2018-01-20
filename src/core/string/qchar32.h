@@ -29,7 +29,10 @@
 #include <cs_char.h>
 #include <cs_string.h>
 
+class QChar32;
 class QString8;
+
+inline uint qHash(const QChar32 &key, uint seed = 0);
 
 class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 {
@@ -466,5 +469,20 @@ inline bool operator>(QChar32 c1, QChar32 c2)
    return c1.unicode() > c2.unicode();
 }
 
+inline uint qHash(const QChar32 &key, uint seed)
+{
+   return key.unicode() ^ seed;
+}
+
+namespace std {
+   template<>
+   struct hash<QChar32>
+   {
+      size_t operator()(const QChar32 &key) const
+      {
+         return key.unicode();
+      }
+   };
+}
 
 #endif

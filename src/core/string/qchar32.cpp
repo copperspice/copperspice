@@ -93,7 +93,8 @@ QString8 QChar32::decomposition() const
    uint32_t value = unicode();
    const unsigned short *d = cs_internal_decomposition(value, &length, &tag, buffer);
 
-   // broom ( test code, fulll implementation pending )
+   // broom ( fulll implementation pending )
+
    return QString8::fromUtf16(reinterpret_cast<const char16_t *>(d), length);
 }
 
@@ -370,13 +371,13 @@ QChar32::UnicodeVersion QChar32::currentUnicodeVersion()
 #if ! defined(QT_NO_DATASTREAM)
    QDataStream &operator>>(QDataStream &out, QChar32 &str)
    {
-      // broom - implementation missing
+      // broom - pending implementation
       return out;
    }
 
    QDataStream &operator<<(QDataStream &out, const QChar32 &str)
    {
-      // broom - implementation missing
+      // broom - pending implementation
       return out;
    }
 #endif

@@ -144,11 +144,23 @@ class Q_CORE_EXPORT QByteArray
 
    QByteArray(const char *, int size = -1);
    QByteArray(int size, char c);
-   QByteArray(const QByteArray &);
+
+   QByteArray(const QByteArray &other)
+      : d(other.d)
+   {
+      d->ref.ref();
+   }
+
+   QByteArray(QByteArray &&other)
+      : d(other.d)
+   {
+      other.d = Data::sharedNull();
+   }
+
    QByteArray(int size, Qt::Initialization);
 
    ~QByteArray() {
-      if (!d->ref.deref()) {
+      if (! d->ref.deref()) {
          Data::deallocate(d);
       }
    }
@@ -448,11 +460,6 @@ inline void QByteArray::detach()
 inline bool QByteArray::isDetached() const
 {
    return !d->ref.isShared();
-}
-
-inline QByteArray::QByteArray(const QByteArray &a) : d(a.d)
-{
-   d->ref.ref();
 }
 
 inline int QByteArray::capacity() const

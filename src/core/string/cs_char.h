@@ -15,6 +15,8 @@
 #define LIB_CS_CHAR_H
 
 #include <stdint.h>
+
+#include <functional>
 #include <memory>
 
 namespace CsString {
@@ -128,7 +130,17 @@ inline uint32_t CsChar::unicode() const
    return m_char;
 }
 
+} // namespace
 
+namespace std {
+   template<>
+   struct hash<CsString::CsChar>
+   {
+      inline size_t operator()(const CsString::CsChar &key) const
+      {
+         return key.unicode();
+      }
+   };
 }
 
 #endif

@@ -270,6 +270,10 @@ class CsBasicString
       const_iterator find_fast(CsChar c) const;
       const_iterator find_fast(CsChar c, const_iterator iter_begin) const;
 
+
+      const_iterator rfind_fast(CsChar c) const;
+      const_iterator rfind_fast(CsChar c, const_iterator iter_end) const;
+
       const_iterator rfind_fast(const CsBasicString &str) const;
       const_iterator rfind_fast(const CsBasicString &str, const_iterator iter_end) const;
 
@@ -481,7 +485,7 @@ class CsBasicString
       template <typename Iterator>
       iterator insert(const_iterator posStart, Iterator begin, Iterator end);
 
-      // missing encoding
+      // unknown encoding
       // iterator insert(const_iterator posStart, std::initializer_list<CsChar> str);
 
       template <typename U, typename = typename std::enable_if< std::is_convertible<
@@ -548,11 +552,11 @@ class CsBasicString
       	
       // template <typename U, typename = typename std::enable_if< std::is_convertible<
       //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // basic_string& replace(size_type pos, size_type size, CsBasicStringView<U> str);
+      // basic_string &replace(size_type pos, size_type size, CsBasicStringView<U> str);
       	
       // template <typename U, typename = typename std::enable_if< std::is_convertible<
       //   decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      // basic_string& replace(const_iterator first, const_iterator last, CsBasicStringView<U> str);
+      // basic_string &replace(const_iterator first, const_iterator last, CsBasicStringView<U> str);
       	
       template <class T>
       CsBasicString &replace(size_type indexStart, size_type size, const T &str,
@@ -561,6 +565,8 @@ class CsBasicString
       template <class T>
       CsBasicString &replace(const_iterator first, const_iterator last, const T &str,
                   size_type srcStart, size_type srcSize = npos);
+
+      iterator replace(const_iterator iter, const CsBasicString &str);
 
       void resize(size_type size);
       void resize(size_type size, CsChar c);
@@ -1538,6 +1544,35 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(CsCh
    }
 
    return iter_end;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(CsChar c) const
+{
+   return rfind_fast(c, end());
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(CsChar c, const_iterator iter_end) const
+{
+   const_iterator iter_begin = begin();
+
+   if (iter_begin == iter_end) {
+      return end();
+   }
+
+   auto iter = iter_end;
+
+   while (iter != begin())   {
+      --iter;
+
+      if (*iter == c)  {
+         // found a match
+         return iter;
+      }
+   }
+
+   return end();
 }
 
 template <typename E, typename A>
@@ -3642,6 +3677,12 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type ind
 }
 
 template <typename E, typename A>
+auto CsBasicString<E, A>::length() const -> size_type
+{
+   return size();
+}
+
+template <typename E, typename A>
 void CsBasicString<E, A>::pop_back()
 {
    if (empty())  {
@@ -3912,40 +3953,10 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 }
 
 template <typename E, typename A>
-auto CsBasicString<E, A>::size_storage() const -> size_type
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::replace(const_iterator iter, const CsBasicString &str)
 {
-   // remove one for the null terminator
-   return m_string.size() - 1;
-}
-
-template <typename E, typename A>
-auto CsBasicString<E, A>::size_codePoints() const -> size_type
-{
-   size_type retval = 0;
-
-   for (auto item = begin(); item != end(); ++item) {
-      ++retval;
-   }
-
-   return retval;
-}
-
-template <typename E, typename A>
-auto CsBasicString<E, A>::size() const -> size_type
-{
-   size_type retval = 0;
-
-   for (auto item = begin(); item != end(); ++item) {
-      ++retval;
-   }
-
-   return retval;
-}
-
-template <typename E, typename A>
-auto CsBasicString<E, A>::length() const -> size_type
-{
-   return size();
+   auto tmpIter = erase(iter);
+   return insert(tmpIter, str);
 }
 
 template <typename E, typename A>
@@ -3980,6 +3991,37 @@ void CsBasicString<E, A>::resize(size_type size, CsChar c)
       erase(size, -count);
 
    }
+}
+
+template <typename E, typename A>
+auto CsBasicString<E, A>::size_storage() const -> size_type
+{
+   // remove one for the null terminator
+   return m_string.size() - 1;
+}
+
+template <typename E, typename A>
+auto CsBasicString<E, A>::size_codePoints() const -> size_type
+{
+   size_type retval = 0;
+
+   for (auto item = begin(); item != end(); ++item) {
+      ++retval;
+   }
+
+   return retval;
+}
+
+template <typename E, typename A>
+auto CsBasicString<E, A>::size() const -> size_type
+{
+   size_type retval = 0;
+
+   for (auto item = begin(); item != end(); ++item) {
+      ++retval;
+   }
+
+   return retval;
 }
 
 template <typename E, typename A>

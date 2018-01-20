@@ -50,13 +50,13 @@ QString16::QString16(size_type size, QChar32 c)
 #if ! defined(QT_NO_DATASTREAM)
    QDataStream &operator>>(QDataStream &out, QString16 &str)
    {
-      // broom - implementation missing
+      // broom - pending implementation
       return out;
    }
 
    QDataStream &operator<<(QDataStream &out, const QString16 &str)
    {
-      // broom - implementation missing
+      // broom - pending implementation
       return out;
    }
 #endif
