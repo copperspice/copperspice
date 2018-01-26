@@ -342,10 +342,10 @@ void QPageSetupWidget::setupPrinter() const
       engine->setProperty(PPK_CupsStringPageSize, QString::fromLatin1(cupsPageSize));
       engine->setProperty(PPK_CupsOptions, m_cups->options());
 
-      QRect pageRect = m_cups->pageRect(cupsPageSize);
+      QRect pageRect = m_cups->pageRect(cupsPageSize.data());
       engine->setProperty(PPK_CupsPageRect, pageRect);
 
-      QRect paperRect = m_cups->paperRect(cupsPageSize);
+      QRect paperRect = m_cups->paperRect(cupsPageSize.data());
       engine->setProperty(PPK_CupsPaperRect, paperRect);
 
       for (ps = 0; ps < QPrinter::NPaperSize; ++ps) {
@@ -402,8 +402,8 @@ void QPageSetupWidget::selectPrinter(QCUPSSupport *cups)
          m_printer->getPageMargins(&m_leftMargin, &m_topMargin, &m_rightMargin, &m_bottomMargin, QPrinter::Point);
       } else {
          QByteArray cupsPaperSizeChoice = widget.paperSize->itemData(widget.paperSize->currentIndex()).toByteArray();
-         QRect paper = m_cups->paperRect(cupsPaperSizeChoice);
-         QRect content = m_cups->pageRect(cupsPaperSizeChoice);
+         QRect paper = m_cups->paperRect(cupsPaperSizeChoice.data());
+         QRect content = m_cups->pageRect(cupsPaperSizeChoice.data());
 
          m_leftMargin = content.x() - paper.x();
          m_topMargin = content.y() - paper.y();
@@ -475,7 +475,7 @@ void QPageSetupWidget::_q_paperSizeChanged()
 #if !defined(QT_NO_CUPS)
       if (m_cups) { // combobox is filled with cups based data
          QByteArray cupsPageSize = widget.paperSize->itemData(widget.paperSize->currentIndex()).toByteArray();
-         m_paperSize = m_cups->paperRect(cupsPageSize).size();
+         m_paperSize = m_cups->paperRect(cupsPageSize.data()).size();
          if (orientation == QPrinter::Landscape) {
             m_paperSize = QSizeF(m_paperSize.height(), m_paperSize.width());   // swap
          }

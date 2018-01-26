@@ -997,10 +997,10 @@ void QUnixPrintWidgetPrivate::setCupsProperties()
       engine->setProperty(PPK_CupsStringPageSize, QString::fromLatin1(cupsPageSize));
       engine->setProperty(PPK_CupsOptions, cups->options());
 
-      QRect pageRect = cups->pageRect(cupsPageSize);
+      QRect pageRect = cups->pageRect(cupsPageSize.data());
       engine->setProperty(PPK_CupsPageRect, pageRect);
 
-      QRect paperRect = cups->paperRect(cupsPageSize);
+      QRect paperRect = cups->paperRect(cupsPageSize.data());
       engine->setProperty(PPK_CupsPaperRect, paperRect);
 
       for (int ps = 0; ps < QPrinter::NPaperSize; ++ps) {
