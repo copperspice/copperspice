@@ -9,7 +9,8 @@ lib_libCsCore@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtCore
    -I$(top_srcdir)/src/3rdparty/harfbuzz/src   \
    -DBUILD_DATE=\"`date +%Y-%m-%d`\"   \
    -DQT_BUILD_CORE_LIB  \
-   -DBUILDING_LIB_CS_SIGNAL
+   -DBUILDING_LIB_CS_SIGNAL \
+   -DBUILDING_LIB_CS_STRING
 
 lib_libCsCore@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS) -DQT_BUILD_CORE_LIB
 lib_libCsCore@BUILD_ABI@_la_OBJCXXFLAGS = $(lib_libCsCore@BUILD_ABI@_la_CXXFLAGS)
@@ -113,6 +114,7 @@ $(lib_libCsCore@BUILD_ABI@_la_SOURCES): $(CORE_HEADERS_INSTALLED)
 	@- rm -rf $@
 	echo "include/QtCore:" >> $@ ; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
+	echo "	\$$(MKDIR_P) \$$@/regex" >> $@ ; \
 	echo "privateinclude/QtCore/private:" >> $@; \
 	echo "	\$$(MKDIR_P) \$$@" >> $@ ; \
 	for i in $(CORE_PUBLIC_INCLUDES); do \

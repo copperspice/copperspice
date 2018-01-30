@@ -1,6 +1,7 @@
 add_definitions(
    -DQT_BUILD_CORE_LIB
    -DBUILDING_LIB_CS_SIGNAL
+   -DBUILDING_LIB_CS_STRING
 )
 
 set(EXTRA_CORE_LIBS ${GLIB2_LIBRARIES} ${GOBJECT2_LIBRARIES})
@@ -49,6 +50,7 @@ include(xml/xml.cmake)
 macro_generate_public("${CORE_PUBLIC_INCLUDES}" QtCore)
 macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
 macro_generate_misc("${CORE_INCLUDES}" QtCore)
+macro_generate_misc("${CORE_REGEX_INCLUDES}" QtCore/regex)
 
 if(ZLIB_FOUND)
    set(EXTRA_CORE_LIBS
@@ -107,7 +109,7 @@ endif()
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
 function_variable_fixup("${EXTRA_CORE_LDFLAGS}" EXTRA_CORE_LDFLAGS)
 
-add_library(CsCore${BUILD_ABI} SHARED ${CORE_SOURCES} ${CORE_INCLUDES})
+add_library(CsCore${BUILD_ABI} SHARED ${CORE_SOURCES} ${CORE_INCLUDES} ${CORE_REGEX_INCLUDES})
 target_link_libraries(CsCore${BUILD_ABI} ${EXTRA_CORE_LIBS})
 
 target_include_directories(CsCore${BUILD_ABI}
