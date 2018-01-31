@@ -5,6 +5,7 @@ set(CORE_PUBLIC_INCLUDES
     QString16
     QStringParser
     QStringView
+    QRegularExpression
 )
 
 set(CORE_INCLUDES
@@ -19,6 +20,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qregularexpression.h
 )
 
 set(CORE_REGEX_INCLUDES
@@ -62,6 +64,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/regex_raw_buffer.cpp
 )
 

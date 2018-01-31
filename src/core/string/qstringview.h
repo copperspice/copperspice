@@ -20,25 +20,27 @@
 *
 ***********************************************************************/
 
-#ifndef QSTRINGVIEW8_H
-#define QSTRINGVIEW8_H
+#ifndef QSTRINGVIEW_H
+#define QSTRINGVIEW_H
+
+#define CS_STRING_ALLOW_UNSAFE
+
+#include <qglobal.h>
+#include <qbytearray.h>
 
 #include <cs_string_view.h>
+#include <qchar32.h>
 
 class QString8;
 class QString16;
-
-/*
-namespace QUnicodeTables {
-   struct CasefoldTraits;
-}
-*/
 
 template <typename S>
 class QStringView;
 
 using QStringView8  = QStringView<QString8>;
 using QStringView16 = QStringView<QString16>;
+
+Q_CORE_EXPORT std::pair<int32_t, const ushort *> cs_internal_convertCaseTrait(int trait, const uint32_t value);
 
 template <typename S>
 class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
@@ -122,11 +124,13 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       bool startsWith(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       S toCaseFolded() const Q_REQUIRED_RESULT;
+      S toLower() const Q_REQUIRED_RESULT;
+      S toUpper() const Q_REQUIRED_RESULT;
 
       QByteArray toLatin1() const;
       QByteArray toUtf8() const;
 
-      // hold
+      // on hold
       // QString16 toUtf16() const;
 
       QStringView<S> trimmed() const;
@@ -188,6 +192,9 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       const_reverse_iterator crend() const {
          return CsString::CsBasicStringView<S>::crend();
       }
+
+   private:
+      S convertCase(int trait) const;
 };
 
 template <typename S>
@@ -401,15 +408,54 @@ bool QStringView<S>::startsWith(QStringView str, Qt::CaseSensitivity cs) const
    }
 }
 
-/*
+template <typename S>
+S QStringView<S>::convertCase(int trait) const
+{
+   S retval;
+
+   for (auto c : *this)  {
+      uint32_t value = c.unicode();
+
+      std::pair<int32_t, const ushort *> unicodeLookUp = cs_internal_convertCaseTrait(trait, value);
+
+      int32_t caseDiff          = unicodeLookUp.first;
+      const ushort *specialCase = unicodeLookUp.second;
+
+      if (specialCase != nullptr) {
+
+         ushort length = *specialCase;
+         ++specialCase;
+
+         for (ushort cnt; cnt < length; ++cnt)  {
+            retval += QChar32(specialCase[cnt]);
+         }
+
+      } else {
+         retval += QChar32( static_cast<char32_t>(value + caseDiff) );
+
+      }
+   }
+
+   return retval;
+}
 
 template <typename S>
 S QStringView<S>::toCaseFolded() const
 {
-   return convertCase<QUnicodeTables::CasefoldTraits, S>(*this);
+   return convertCase(1);
 }
 
-*/
+template <typename S>
+S QStringView<S>::toLower() const
+{
+   return convertCase(2);
+}
+
+template <typename S>
+S QStringView<S>::toUpper() const
+{
+   return convertCase(3);
+}
 
 template <typename S>
 QByteArray QStringView<S>::toLatin1() const

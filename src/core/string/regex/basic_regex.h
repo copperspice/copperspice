@@ -49,8 +49,8 @@ inline int hash_value_from_capture_name(Iterator i, Iterator j)
 {
    std::size_t retval = 0;
 
-   for (auto iter = i; i != j; ++iter) {
-      retval = retval ^ (std::hash<typename std::remove_cv<decltype(*i)>::type> {}(*iter));
+   for (auto iter = i; iter != j; ++iter) {
+      retval = retval ^ (std::hash<typename std::remove_cv<typename std::remove_reference<decltype(*i)>::type>::type> {}(*iter));
    }
 
    return static_cast<int>(retval);
@@ -60,6 +60,7 @@ class named_subexpressions
 {
  public:
    struct name {
+
       template <class Iter>
       name(const Iter i, const Iter j, int idx)
          : index(idx) {
@@ -200,6 +201,7 @@ class basic_regex_implementation : public regex_data<charT, traits>
 
    void assign(const typename traits::string_type::const_iterator iter_first,
                const typename traits::string_type::const_iterator iter_last, flag_type f) {
+
       regex_data<charT, traits> *pdat = this;
       basic_regex_parser<charT, traits> parser(pdat);
       parser.parse(iter_first, iter_last, f);

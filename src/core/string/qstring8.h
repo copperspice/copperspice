@@ -26,6 +26,7 @@
 #define CS_STRING_ALLOW_UNSAFE
 
 #include <cstddef>
+#include <string>
 
 #include <qglobal.h>
 #include <qbytearray.h>
@@ -35,7 +36,9 @@
 #include <qstringview.h>
 
 class QStringParser;
-class QRegExp;
+
+template <typename S>
+class QRegularExpression;
 
 class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
 {
@@ -339,6 +342,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       size_type count(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       size_type count(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+      size_type count(const QRegularExpression<QString8> &regExp) const;
 
       int compare(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       static int compare(const QString8 &str1, const QString8 &str2, Qt::CaseSensitivity cs = Qt::CaseSensitive) {
@@ -357,6 +361,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       bool contains(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+      bool contains(QRegularExpression<QString8> &regExp) const {
+         return indexOfFast(regExp) != end();
+      }
 
       const char *data() const {
          return constData();
@@ -406,6 +414,68 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          }
       }
 
+      const_iterator indexOfFast(QStringView8 str, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+
+         if (cs == Qt::CaseSensitive) {
+            return CsString::CsString::find_fast(str, from);
+
+         } else {
+            return cs_internal_find_fast(str, from);
+         }
+      }
+
+      const_iterator indexOfFast(const QRegularExpression<QString8> &regExp) const {
+         return indexOfFast(regExp, begin());
+      }
+
+      const_iterator indexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const;
+
+      const_iterator lastIndexOfFast(QChar32 c) const {
+         return lastIndexOfFast(c, cend(), Qt::CaseSensitive);
+      }
+
+      const_iterator lastIndexOfFast(QChar32 c, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const
+      {
+         if (cs == Qt::CaseSensitive) {
+            return CsString::CsString::rfind_fast(c, from);
+
+         } else {
+            return cs_internal_rfind_fast(c, from);
+
+         }
+      }
+
+      const_iterator lastIndexOfFast(const QString8 &str) const {
+         return lastIndexOfFast(str, cend(), Qt::CaseSensitive);
+      }
+
+      const_iterator lastIndexOfFast(const QString8 &str, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+
+         if (cs == Qt::CaseSensitive) {
+            return CsString::CsString::rfind_fast(str, from);
+
+         } else {
+            return cs_internal_rfind_fast(str, from);
+         }
+      }
+
+
+      const_iterator lastIndexOfFast(QStringView8 str, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+
+         if (cs == Qt::CaseSensitive) {
+            return CsString::CsString::rfind_fast(str, from);
+
+         } else {
+            return cs_internal_rfind_fast(str, from);
+         }
+      }
+
+      const_iterator lastIndexOfFast(const QRegularExpression<QString8> &regExp) const {
+         return lastIndexOfFast(regExp, end());
+      }
+
+      const_iterator lastIndexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const;
+
       // using indexes
       size_type indexOf(QChar32 c, size_type from = 0, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
 
@@ -448,28 +518,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          } else {
             QString8 tmp1 = this->toCaseFolded();
             return tmp1.CsString::CsString::rfind(str.toCaseFolded(), from);
-         }
-      }
-
-      // taking a string view, using iterators
-      const_iterator indexOfFast(QStringView8 str, const_iterator iter, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-
-         if (cs == Qt::CaseSensitive) {
-            return CsString::CsString::find_fast(str, iter);
-
-         } else {
-            return cs_internal_find_fast(str, iter);
-         }
-      }
-
-      const_iterator lastIndexOfFast(QStringView8 str, const_iterator iter, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-
-         if (cs == Qt::CaseSensitive) {
-            return CsString::CsString::rfind_fast(str, iter);
-
-         } else {
-            QString8 tmp1 = this->toCaseFolded();
-            return tmp1.CsString::CsString::rfind_fast(str.toCaseFolded(), iter);
          }
       }
 
@@ -536,11 +584,13 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       // not implemented, not documented
 
       int localeAwareCompare(const QString8 &str) const;
+
       static int localeAwareCompare(const QString8 &str1, const QString8 &str2) {
          return s1.localeAwareCompare(s2);
       }
 
       int localeAwareCompare(QStringView8 str) const;
+
       static int localeAwareCompare(const QString8 &str1, QStringView8 str2) {
          return s1.localeAwareCompare(s2);
       }
@@ -599,6 +649,12 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8 &remove(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive);
       QString8 &remove(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
+
+      QString8 &remove(const QRegularExpression<QString8> &regExp) {
+         replace(regExp, QString8());
+         return *this;
+      }
+
       QString8 &replace(QChar32 before, QChar32 after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
       QString8 &replace(const QChar32 *before, size_type beforeSize, const QChar32 *after, size_type afterSize,
@@ -639,6 +695,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          CsString::CsString::replace(first, last, str);
          return *this;
       }
+
+      QString8 &replace(const QRegularExpression<QString8> &regExp, const QString8 &after);
 
       void resize(size_type numOfChars) {
          return CsString::CsString::resize(numOfChars);
@@ -686,6 +744,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QByteArray toUtf8() const Q_REQUIRED_RESULT;
       QByteArray toUtf16() const Q_REQUIRED_RESULT;
 
+      std::string toStdString() const {
+         return std::string(cbegin().codePointBegin(), cend().codePointBegin() );
+      }
+
       QString8 trimmed() const & Q_REQUIRED_RESULT;
       QString8 trimmed() && Q_REQUIRED_RESULT;
 
@@ -729,15 +791,25 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      auto split(QChar32 sep, Ts... args) const
-      {
-         return SP::split(*this, sep, args...);
+      QString8 section(QChar32 separator, Ts... args) const {
+         return SP::section(*this, QString8(separator), args...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      auto split(const QString8 &sep, Ts... args) const
+      QString8 section(const QString8 &separator, Ts... args) const {
+         return SP::section(*this, separator, args...);
+      }
+
+      template <typename SP = QStringParser, typename ...Ts>
+      auto split(QChar32 separator, Ts... args) const
       {
-         return SP::split(*this, sep, args...);
+         return SP::split(*this, separator, args...);
+      }
+
+      template <typename SP = QStringParser, typename ...Ts>
+      auto split(const QString8 &separator, Ts... args) const
+      {
+         return SP::split(*this, separator, args...);
       }
 
       template <typename R, typename SP = QStringParser>
@@ -856,7 +928,12 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
    private:
       const_iterator cs_internal_find_fast(QChar32 c, const_iterator iter_begin) const;
       const_iterator cs_internal_find_fast(const QString8 &str, const_iterator iter_begin) const;
+      const_iterator cs_internal_rfind_fast(QChar32 c, const_iterator iter_begin) const;
+      const_iterator cs_internal_rfind_fast(const QString8 &str, const_iterator iter_begin) const;
 
+      iterator replace(const_iterator iter, const QString8 &str) {
+         return CsString::CsString::replace(iter, str);
+      }
 };
 
 #if ! defined(QT_NO_DATASTREAM)
@@ -864,6 +941,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
    Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
 #endif
 
+
+// free functions, comparisons for string literals
 inline bool operator==(const QString8 &str1, const QString8 &str2)
 {
    return (static_cast<CsString::CsString>(str1) == static_cast<CsString::CsString>(str2));

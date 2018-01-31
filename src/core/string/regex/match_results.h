@@ -39,11 +39,16 @@ template <class BidiIterator, class AllocatorT = std::allocator<sub_match<BidiIt
 class match_results
 {
  private:
-   typedef          std::vector<sub_match<BidiIterator>, AllocatorT> vector_type;
+   using vector_type     = std::vector<sub_match<BidiIterator>, AllocatorT>;
 
  public:
-   typedef typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::difference_type     difference_type;
-   typedef typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::value_type          char_type;
+   using difference_type = typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::difference_type;
+
+   // if BidiIterator is a const_iterator then value_type may have a const qualifer
+   // char_type is used as the T in std::vector and it can not be const T
+
+   using tmp_char_type   = typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::value_type;
+   using char_type       = typename std::remove_const<tmp_char_type>::type;
 
    typedef          sub_match<BidiIterator>                        value_type;
    typedef          const value_type                               &const_reference;
@@ -71,8 +76,8 @@ class match_results
    }
 
    match_results &operator=(const match_results &m) {
-      m_subs       = m.m_subs;
-      m_named_subs = m.m_named_subs;
+      m_subs              = m.m_subs;
+      m_named_subs        = m.m_named_subs;
       m_last_closed_paren = m.m_last_closed_paren;
       m_is_singular       = m.m_is_singular;
 
@@ -252,7 +257,7 @@ class match_results
       return named_subexpression(&*s.begin(), &*s.begin() + s.size());
    }
 
-   size_type named_subexpression_index(const char_type *i, const char_type *j) const {
+   size_type internal_named_subexpression_index(const char_type *i, const char_type *j) const {
 
       // Scan for the leftmost *matched* subexpression with the specified named.
       // If none found then return the leftmost expression with that name, otherwise an invalid index
@@ -286,11 +291,11 @@ class match_results
       std::vector<char_type> s;
 
       while (first != last) {
-         s.insert(s.end(), *first);
+         s.push_back(*first);
          ++first;
       }
 
-      return named_subexpression_index(&*s.begin(), &*s.begin() + s.size());
+      return internal_named_subexpression_index(&*s.begin(), &*s.begin() + s.size());
    }
 
    const_reference operator[](size_type sub) const {
@@ -442,6 +447,7 @@ class match_results
    void set_size(size_type n, BidiIterator i, BidiIterator j) {
       value_type v(j);
       size_type len = m_subs.size();
+
       if (len > n + 2) {
          m_subs.erase(m_subs.begin() + n + 2, m_subs.end());
          std::fill(m_subs.begin(), m_subs.end(), v);
@@ -451,12 +457,15 @@ class match_results
             m_subs.insert(m_subs.end(), n + 2 - len, v);
          }
       }
+
       m_subs[1].first = i;
       m_last_closed_paren = 0;
    }
+
    void set_base(BidiIterator pos) {
       m_base = pos;
    }
+
    BidiIterator base()const {
       return m_base;
    }

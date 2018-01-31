@@ -6,7 +6,8 @@ CORE_PUBLIC_INCLUDES += \
 	QString8  \
 	QString16 \
 	QStringParser \
-	QStringView
+	QStringView \
+	QRegularExpression
 
 CORE_STRING_INCLUDES = \
 	cs_string.h \
@@ -18,7 +19,8 @@ CORE_STRING_INCLUDES = \
 	qstring8.h  \
 	qstring16.h  \
 	qstringparser.h \
-	qstringview.h
+	qstringview.h \
+	qregularexpression.h
 
 CORE_REGEX_INCLUDES = \
 	regex/basic_regex.h \
@@ -65,4 +67,5 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/string/qstring8.cpp \
 	src/core/string/qstring16.cpp \
 	src/core/string/qstringparser.cpp \
+	src/core/string/qstringview.cpp \
 	src/core/string/regex/regex_raw_buffer.cpp

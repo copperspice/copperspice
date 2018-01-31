@@ -35,7 +35,6 @@
 #include "regex/match_flags.h"
 #include "regex/match_results.h"
 #include "regex/regex_iterator.h"
-#include "regex/regex_grep.h"
 #include "regex/regex_match.h"
 #include "regex/regex_merge.h"
 #include "regex/regex_split.h"
