@@ -60,7 +60,9 @@ CORE_PRIVATE_INCLUDES += $(CORE_STRING_PRIVATE_INCLUDES)
 
 
 noinst_HEADERS+=$(patsubst %,src/core/string/%,$(CORE_STRING_INCLUDES)) \
-		$(patsubst %,src/core/string/%,$(CORE_STRING_PRIVATE_INCLUDES))
+		$(patsubst %,src/core/string/%,$(CORE_STRING_PRIVATE_INCLUDES)) \
+		$(patsubst %,src/core/string/%,$(CORE_REGEX_INCLUDES))
+
 
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/string/qchar32.cpp  \
