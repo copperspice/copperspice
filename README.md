@@ -109,6 +109,7 @@ www.copperspice.com/presentations.html
 * **Daniel Pfeifer**
 * **Zbigniew Skowron**
 * **Matan Nassaw**
+* **Mortaro Marcello**
 
 
 ### License
