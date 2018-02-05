@@ -8,7 +8,6 @@ CORE_PUBLIC_INCLUDES += \
 	QBitRef \
 	QByteArray \
 	QByteRef \
-	QByteArrayMatcher \
 	QCache \
 	QChar \
 	QCharRef \
@@ -78,7 +77,6 @@ CORE_PUBLIC_INCLUDES += \
 	QStringBuilder \
 	QStringList \
 	QStringListIterator \
-	QStringMatcher \
 	QStringRef \
 	QSystemLocale \
 	QTextBoundaryFinder \
@@ -102,7 +100,6 @@ CORE_TOOLS_INCLUDES = \
 	qbitref.h \
 	qbytearray.h \
 	qbyteref.h \
-	qbytearraymatcher.h \
 	qcache.h \
 	qchar.h \
 	qcharref.h \
@@ -178,7 +175,6 @@ CORE_TOOLS_INCLUDES = \
 	qstringbuilder.h \
 	qstringlist.h \
 	qstringlistiterator.h \
-	qstringmatcher.h \
 	qstringref.h \
 	qsystemlocale.h \
 	qtalgorithms.h \
@@ -217,7 +213,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qarraydata.cpp \
 	src/core/tools/qbitarray.cpp \
 	src/core/tools/qbytearray.cpp \
-	src/core/tools/qbytearraymatcher.cpp \
 	src/core/tools/qcryptographichash.cpp \
 	src/core/tools/qdatetime.cpp \
 	src/core/tools/qeasingcurve.cpp \
@@ -249,7 +244,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qtextboundaryfinder.cpp \
 	src/core/tools/qtimeline.cpp \
 	src/core/tools/qvector.cpp \
-	src/core/tools/qvsnprintf.cpp \
 	src/3rdparty/harfbuzz/src/harfbuzz-buffer.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-gdef.c \
 	src/3rdparty/harfbuzz/src/harfbuzz-gsub.c \
@@ -323,7 +317,6 @@ EXTRA_DIST+=src/3rdparty/md5/md5.cpp \
 	    src/3rdparty/sha1/sha1.cpp \
 	    src/3rdparty/easing/easing.cpp \
 	    src/core/tools/qchar.cpp \
-	    src/core/tools/qstringmatcher.cpp \
 	    src/core/tools/qunicodetables.cpp \
 	    src/3rdparty/harfbuzz/src/harfbuzz-indic.cpp \
 	    src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp \

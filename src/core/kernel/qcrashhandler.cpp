@@ -94,20 +94,14 @@ QT_END_INCLUDE_NAMESPACE
 static char *globalProgName = NULL;
 static bool backtrace_command(FILE *outb, const char *format, ...)
 {
-
    bool ret = false;
    char buffer[50];
 
-   /*
-    * Please note that vsnprintf() is not ASync safe (ie. cannot safely
-    * be used from a signal handler.) If this proves to be a problem
-    * then the cmd string can be built by more basic functions such as
-    * strcpy, strcat, and a home-made integer-to-ascii function.
-    */
    va_list args;
    char cmd[512];
+
    va_start(args, format);
-   qvsnprintf(cmd, 512, format, args);
+   std:vsnprintf(cmd, 512, format, args);
    va_end(args);
 
    char *foo = cmd;
@@ -115,9 +109,11 @@ static bool backtrace_command(FILE *outb, const char *format, ...)
    if (FILE *inb = popen(foo, "r")) {
       while (!feof(inb)) {
          int len = fread(buffer, 1, sizeof(buffer), inb);
-         if (!len) {
+
+         if (! len) {
             break;
          }
+
          if (!ret) {
             fwrite("Output from ", 1, strlen("Output from "), outb);
             strtok(cmd, " ");
@@ -127,8 +123,10 @@ static bool backtrace_command(FILE *outb, const char *format, ...)
          }
          fwrite(buffer, 1, len, outb);
       }
+
       fclose(inb);
    }
+
    return ret;
 }
 

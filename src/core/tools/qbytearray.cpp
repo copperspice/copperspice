@@ -21,7 +21,6 @@
 ***********************************************************************/
 
 #include <qbytearray.h>
-#include <qbytearraymatcher.h>
 #include <qtools_p.h>
 #include <qstring.h>
 #include <qlist.h>
@@ -41,11 +40,86 @@
 
 #define IS_RAW_DATA(d) ((d)->offset != sizeof(QByteArrayData))
 
-QT_BEGIN_NAMESPACE
+// internal only
+static int findChar(const char *str, int len, char ch, int from)
+{
+   const uchar *s = (const uchar *)str;
+   uchar c        = (uchar)ch;
 
-int qFindByteArray(
-   const char *haystack0, int haystackLen, int from,
-   const char *needle0, int needleLen);
+   if (from < 0) {
+      from = qMax(from + len, 0);
+   }
+
+   if (from < len) {
+      const uchar *n = s + from - 1;
+      const uchar *e = s + len;
+
+      while (++n != e) {
+         if (*n == c) {
+            return  n - s;
+         }
+      }
+   }
+
+   return -1;
+}
+
+// internal only
+static int qFindByteArray(const char *haystack_X, int haystackLen, int from, const char *needle, int needleLen)
+{
+   if (from < 0) {
+      from += haystackLen;
+   }
+
+   if (uint(needleLen + from) > (uint)haystackLen) {
+      return -1;
+   }
+
+   if (haystackLen == 0) {
+      return -1;
+   }
+
+   if (needleLen == 0) {
+      return from;
+   }
+
+   if (needleLen == 1) {
+      return findChar(haystack_X, haystackLen, needle[0], from);
+   }
+
+   const char *haystack  = haystack_X + from;
+   const char *end       = haystack_X + (haystackLen - needleLen);
+
+   uint hashNeedle   = 0;
+   uint hashHaystack = 0;
+   int idx;
+
+   for (idx = 0; idx < needleLen; ++idx) {
+      hashNeedle   = ((hashNeedle << 1) + needle[idx]);
+      hashHaystack = ((hashHaystack << 1) + haystack[idx]);
+   }
+
+   hashHaystack -= *(haystack + (needleLen - 1));
+
+   while (haystack <= end) {
+      hashHaystack += *(haystack + (needleLen - 1));
+
+      if (hashHaystack == hashNeedle && *needle == *haystack && memcmp(needle, haystack, needleLen) == 0) {
+         return haystack - haystack_X;
+      }
+
+      // rehash haystack
+      if ((needleLen - 1) < sizeof(uint) * CHAR_BIT) {
+        hashHaystack -= (*haystack) << (needleLen - 1);
+      }
+
+      hashHaystack <<= 1;
+
+      ++haystack;
+   }
+
+   return -1;
+}
 
 int qAllocMore(int alloc, int extra)
 {
@@ -71,15 +145,14 @@ int qAllocMore(int alloc, int extra)
    return nalloc - extra;
 }
 
-/*****************************************************************************
-  Safe and portable C string functions; extensions to standard string.h
- *****************************************************************************/
+// Safe and portable C string functions; extensions to standard string.h
 
 char *qstrdup(const char *src)
 {
    if (!src) {
       return 0;
    }
+
    char *dst = new char[strlen(src) + 1];
    return qstrcpy(dst, src);
 }
@@ -96,7 +169,7 @@ char *qstrcpy(char *dst, const char *src)
 
 char *qstrncpy(char *dst, const char *src, uint len)
 {
-   if (!src || !dst) {
+   if (! src || !dst) {
       return 0;
    }
 
@@ -105,13 +178,13 @@ char *qstrncpy(char *dst, const char *src, uint len)
    if (len > 0) {
       dst[len - 1] = '\0';
    }
+
    return dst;
 }
 
 int qstrcmp(const char *str1, const char *str2)
 {
-   return (str1 && str2) ? strcmp(str1, str2)
-          : (str1 ? 1 : (str2 ? -1 : 0));
+   return (str1 && str2) ? strcmp(str1, str2) : (str1 ? 1 : (str2 ? -1 : 0));
 }
 
 int qstricmp(const char *str1, const char *str2)
@@ -120,13 +193,17 @@ int qstricmp(const char *str1, const char *str2)
    const uchar *s2 = reinterpret_cast<const uchar *>(str2);
    int res;
    uchar c;
+
    if (!s1 || !s2) {
       return s1 ? 1 : (s2 ? -1 : 0);
    }
-   for (; !(res = (c = QChar::toLower((ushort) * s1)) - QChar::toLower((ushort) * s2)); s1++, s2++)
+
+   for (; !(res = (c = QChar::toLower((ushort) * s1)) - QChar::toLower((ushort) * s2)); s1++, s2++)  {
       if (!c) {                              // strings are equal
          break;
       }
+   }
+
    return res;
 }
 
@@ -828,6 +905,7 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
       memcpy(copy, after, asize);
       a = copy;
    }
+
    if (before >= d->data() && before < d->data() + d->size) {
       char *copy = (char *)malloc(bsize);
       Q_CHECK_PTR(copy);
@@ -835,77 +913,94 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
       b = copy;
    }
 
-   QByteArrayMatcher matcher(before, bsize);
    int index = 0;
-   int len = d->size;
-   char *d = data();
+   int len   = d->size;
+   char *d   = data();
 
    if (bsize == asize) {
+
       if (bsize) {
-         while ((index = matcher.indexIn(*this, index)) != -1) {
+         while ((index = this->indexOf(before, index)) != -1) {
             memcpy(d + index, after, asize);
             index += bsize;
          }
       }
+
    } else if (asize < bsize) {
-      uint to = 0;
+      uint to  = 0;
       uint movestart = 0;
       uint num = 0;
-      while ((index = matcher.indexIn(*this, index)) != -1) {
+
+      while ((index = this->indexOf(before, index)) != -1) {
          if (num) {
             int msize = index - movestart;
+
             if (msize > 0) {
                memmove(d + to, d + movestart, msize);
                to += msize;
             }
+
          } else {
             to = index;
          }
+
          if (asize) {
             memcpy(d + to, after, asize);
             to += asize;
          }
+
          index += bsize;
          movestart = index;
          num++;
       }
+
       if (num) {
          int msize = len - movestart;
+
          if (msize > 0) {
             memmove(d + to, d + movestart, msize);
          }
          resize(len - num * (bsize - asize));
       }
+
    } else {
-      // the most complex case. We don't want to lose performance by doing repeated
-      // copies and reallocs of the string.
+      // the most complex case, do not want to lose performance by doing repeated copies and reallocs of the array
+
       while (index != -1) {
          uint indices[4096];
          uint pos = 0;
+
          while (pos < 4095) {
-            index = matcher.indexIn(*this, index);
+            index = this->indexOf(before, index);
+
             if (index == -1) {
                break;
             }
+
             indices[pos++] = index;
             index += bsize;
+
             // avoid infinite loop
-            if (!bsize) {
+            if (! bsize) {
                index++;
             }
          }
+
          if (!pos) {
             break;
          }
 
          // we have a table of replacement positions, use them for fast replacing
          int adjust = pos * (asize - bsize);
+
          // index has to be adjusted in case we get back into the loop above.
          if (index != -1) {
             index += adjust;
          }
+
          int newlen = len + adjust;
          int moveend = len;
+
          if (newlen > len) {
             resize(newlen);
             len = newlen;
@@ -917,10 +1012,13 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
             int movestart = indices[pos] + bsize;
             int insertstart = indices[pos] + pos * (asize - bsize);
             int moveto = insertstart + asize;
+
             memmove(d + moveto, d + movestart, (moveend - movestart));
+
             if (asize) {
                memcpy(d + insertstart, after, asize);
             }
+
             moveend = movestart - bsize;
          }
       }
@@ -929,10 +1027,10 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
    if (a != after) {
       ::free((char *)a);
    }
+
    if (b != before) {
       ::free((char *)b);
    }
-
 
    return *this;
 }
@@ -1008,11 +1106,6 @@ QByteArray QByteArray::repeated(int times) const
    return result;
 }
 
-#define REHASH(a) \
-    if (ol_minus_1 < sizeof(uint) * CHAR_BIT) \
-        hashHaystack -= (a) << ol_minus_1; \
-    hashHaystack <<= 1
-
 int QByteArray::indexOf(const QByteArray &ba, int from) const
 {
    const int ol = ba.d->size;
@@ -1065,41 +1158,57 @@ int QByteArray::indexOf(char ch, int from) const
    return -1;
 }
 
-static int lastIndexOfHelper(const char *haystack, int l, const char *needle, int ol, int from)
+static int lastIndexOfHelper(const char *haystack, int haystackLen, const char *needle, int needleLen, int from)
 {
-   int delta = l - ol;
+   int delta = haystackLen - needleLen;
+
    if (from < 0) {
       from = delta;
    }
-   if (from < 0 || from > l) {
+
+   if (from < 0 || from > haystackLen) {
       return -1;
    }
+
    if (from > delta) {
       from = delta;
    }
 
    const char *end = haystack;
    haystack += from;
-   const uint ol_minus_1 = ol - 1;
-   const char *n = needle + ol_minus_1;
-   const char *h = haystack + ol_minus_1;
-   uint hashNeedle = 0, hashHaystack = 0;
+
+   const char *n = needle   + (needleLen - 1);
+   const char *h = haystack + (needleLen - 1);
+
+   uint hashNeedle   = 0;
+   uint hashHaystack = 0;
    int idx;
-   for (idx = 0; idx < ol; ++idx) {
+
+   for (idx = 0; idx < needleLen; ++idx) {
       hashNeedle = ((hashNeedle << 1) + * (n - idx));
       hashHaystack = ((hashHaystack << 1) + * (h - idx));
    }
+
    hashHaystack -= *haystack;
+
    while (haystack >= end) {
       hashHaystack += *haystack;
-      if (hashHaystack == hashNeedle && memcmp(needle, haystack, ol) == 0) {
+
+      if (hashHaystack == hashNeedle && memcmp(needle, haystack, needleLen) == 0) {
          return haystack - end;
       }
-      --haystack;
-      REHASH(*(haystack + ol));
-   }
-   return -1;
 
+      --haystack;
+
+      // rehash haystack
+      if ((needleLen - 1) < sizeof(uint) * CHAR_BIT) {
+        hashHaystack -= (*(haystack + needleLen)) << (needleLen - 1);
+      }
+
+      hashHaystack <<= 1;
+   }
+
+   return -1;
 }
 
 int QByteArray::lastIndexOf(const QByteArray &ba, int from) const
@@ -1115,6 +1224,7 @@ int QByteArray::lastIndexOf(const QByteArray &ba, int from) const
 int QByteArray::lastIndexOf(const char *str, int from) const
 {
    const int ol = qstrlen(str);
+
    if (ol == 1) {
       return lastIndexOf(*str, from);
    }
@@ -1144,17 +1254,12 @@ int QByteArray::lastIndexOf(char ch, int from) const
 int QByteArray::count(const QByteArray &ba) const
 {
    int num = 0;
-   int i = -1;
-   if (d->size > 500 && ba.d->size > 5) {
-      QByteArrayMatcher matcher(ba);
-      while ((i = matcher.indexIn(*this, i + 1)) != -1) {
-         ++num;
-      }
-   } else {
-      while ((i = indexOf(ba, i + 1)) != -1) {
-         ++num;
-      }
+   int i   = -1;
+
+   while ((i = indexOf(ba, i + 1)) != -1) {
+      ++num;
    }
+
    return num;
 }
 
@@ -1168,7 +1273,9 @@ int QByteArray::count(char ch) const
    int num = 0;
    const char *i = d->data() + d->size;
    const char *b = d->data();
+
    while (i != b)
+
       if (*--i == ch) {
          ++num;
       }
@@ -2133,5 +2240,3 @@ QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteA
 
    return result;
 }
-
-QT_END_NAMESPACE

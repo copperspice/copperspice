@@ -1111,7 +1111,7 @@ for (variable : container)
 #  endif
 #endif
 
-// raw pointer ( QEasingCurvePrivate, QStringMatcherPrivate, maybe a few other classes 12/28/2013 )
+// raw pointer ( QEasingCurvePrivate, maybe a few other classes 12/28/2013 )
 template <typename T>
 T *qGetPtrHelper(T *ptr)
 {

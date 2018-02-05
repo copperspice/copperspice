@@ -90,7 +90,6 @@
 #include <qalgorithms.h>
 #include <qbitarray.h>
 #include <qbytearray.h>
-#include <qbytearraymatcher.h>
 #include <qcache.h>
 #include <qchar.h>
 #include <qcontainerfwd.h>
@@ -121,7 +120,6 @@
 #include <qstring.h>
 #include <qstringbuilder.h>
 #include <qstringlist.h>
-#include <qstringmatcher.h>
 #include <qtextboundaryfinder.h>
 #include <qtimeline.h>
 #include <qvarlengtharray.h>

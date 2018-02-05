@@ -41,11 +41,11 @@ bool QStringList::contains(const QString &str, Qt::CaseSensitivity cs) const
 
 QStringList QStringList::filter(const QString &str, Qt::CaseSensitivity cs) const
 {
-   QStringMatcher matcher(str, cs);
    QStringList res;
 
    for (int i = 0; i < this->size(); ++i) {
-      if (matcher.indexIn(this->at(i)) != -1) {
+
+      if (this->at(i).indexOf(str, cs) != -1) {
          res << this->at(i);
       }
    }

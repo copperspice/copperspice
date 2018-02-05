@@ -77,11 +77,6 @@ inline int qstrncmp(const char *str1, const char *str2, uint len)
 Q_CORE_EXPORT int qstricmp(const char *, const char *);
 Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 
-
-// BROOM - delete these when QString8 active, implemented in qvsnprintf.cpp
-Q_CORE_EXPORT int qvsnprintf(char *str, size_t n, const char *fmt, va_list ap);
-Q_CORE_EXPORT int qsnprintf(char *str, size_t n, const char *fmt, ...);
-
 // qChecksum: Internet checksum
 Q_CORE_EXPORT quint16 qChecksum(const char *s, uint len);
 

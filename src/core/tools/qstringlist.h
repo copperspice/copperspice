@@ -28,7 +28,6 @@
 #include <qlist.h>
 #include <qregexp.h>
 #include <qstring.h>
-#include <qstringmatcher.h>
 
 class QRegExp;
 

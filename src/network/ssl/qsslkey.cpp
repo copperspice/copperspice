@@ -27,10 +27,9 @@
 
 #include <qatomic.h>
 #include <qbytearray.h>
-#include <qbytearraymatcher.h>
 #include <qiodevice.h>
 
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -126,38 +125,52 @@ QByteArray QSslKeyPrivate::derFromPem(const QByteArray &pem, QMap<QByteArray, QB
 
     const int headerIndex = der.indexOf(header);
     const int footerIndex = der.indexOf(footer);
+
     if (headerIndex == -1 || footerIndex == -1)
         return QByteArray();
 
     der = der.mid(headerIndex + header.size(), footerIndex - (headerIndex + header.size()));
 
     if (der.contains("Proc-Type:")) {
-        // taken from QHttpNetworkReplyPrivate::parseHeader
-        const QByteArrayMatcher lf("\n");
-        const QByteArrayMatcher colon(":");
         int i = 0;
+
         while (i < der.count()) {
-            int j = colon.indexIn(der, i); // field-name
-            if (j == -1)
+            // field-name
+            int j = der.indexOf(":", i);
+
+            if (j == -1) {
                 break;
+            }
+
             const QByteArray field = der.mid(i, j - i).trimmed();
             j++;
+
             // any number of LWS is allowed before and after the value
             QByteArray value;
+
             do {
-                i = lf.indexIn(der, j);
-                if (i == -1)
+                i = der.indexOf("\n", j);
+
+                if (i == -1) {
                     break;
-                if (!value.isEmpty())
+                }
+
+                if (! value.isEmpty()) {
                     value += ' ';
+                }
+
                 // check if we have CRLF or only LF
                 bool hasCR = (i && der[i-1] == '\r');
                 int length = i -(hasCR ? 1: 0) - j;
                 value += der.mid(j, length).trimmed();
                 j = ++i;
+
             } while (i < der.count() && (der.at(i) == ' ' || der.at(i) == '\t'));
-            if (i == -1)
-                break; // something is wrong
+
+            if (i == -1) {
+                // something is wrong
+                break;
+            }
 
             headers->insert(field, value);
         }

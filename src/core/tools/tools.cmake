@@ -6,7 +6,6 @@ set(CORE_PUBLIC_INCLUDES
     QBitRef
     QByteArray
     QByteRef
-    QByteArrayMatcher
     QCache
     QChar
     QCharRef
@@ -76,7 +75,6 @@ set(CORE_PUBLIC_INCLUDES
     QStringBuilder
     QStringList
     QStringListIterator
-    QStringMatcher
     QStringRef
     QSystemLocale
     QTextBoundaryFinder
@@ -102,7 +100,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbyteref.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearraymatcher.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcache.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qchar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcharref.h
@@ -178,7 +175,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringbuilder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlistiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringmatcher.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsystemlocale.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtalgorithms.h
@@ -216,7 +212,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qarraydata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearraymatcher.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcryptographichash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qdatetime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.cpp
@@ -248,7 +243,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvector.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvsnprintf.cpp
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-buffer.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gdef.c
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-gsub.c

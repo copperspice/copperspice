@@ -31,7 +31,6 @@
 #include <qmutex.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qstringmatcher.h>
 #include <qvector.h>
 #include <qfunctions_p.h>
 
@@ -81,11 +80,9 @@ static void mergeInto(QVector<int> *a, const QVector<int> &b)
    if (asize == 0) {
       *a = b;
 
-#ifndef QT_NO_REGEXP_OPTIM
    } else if (bsize == 1 && a->at(asize - 1) < b.at(0)) {
       a->resize(asize + 1);
       (*a)[asize] = b.at(0);
-#endif
 
    } else if (bsize >= 1) {
       int csize = asize + bsize;
@@ -414,11 +411,11 @@ class QRegExpCharClass
    }
 
    bool in(QChar ch) const;
-#ifndef QT_NO_REGEXP_OPTIM
+
    const QVector<int> &firstOccurrence() const {
       return occ1;
    }
-#endif
+
 
 #if defined(QT_DEBUG)
    void dump() const;
@@ -428,15 +425,15 @@ class QRegExpCharClass
    int c; // character classes
    QVector<QRegExpCharClassRange> r; // character ranges
    bool n; // negative?
-#ifndef QT_NO_REGEXP_OPTIM
+
    QVector<int> occ1; // first-occurrence array
-#endif
 };
+
 #else
+
 struct QRegExpCharClass {
    int dummy;
 
-#ifndef QT_NO_REGEXP_OPTIM
    QRegExpCharClass() {
       occ1.fill(0, NumBadChars);
    }
@@ -445,7 +442,7 @@ struct QRegExpCharClass {
       return occ1;
    }
    QVector<int> occ1;
-#endif
+
 };
 #endif
 
@@ -500,9 +497,8 @@ class QRegExpEngine
 #endif
    void addAnchors(int from, int to, int a);
 
-#ifndef QT_NO_REGEXP_OPTIM
    void heuristicallyChooseHeuristic();
-#endif
+
 
 #if defined(QT_DEBUG)
    void dump() const;
@@ -540,12 +536,8 @@ class QRegExpEngine
    int addLookahead(QRegExpEngine *eng, bool negative);
 #endif
 
-#ifndef QT_NO_REGEXP_OPTIM
    bool goodStringMatch(QRegExpMatchState &matchState) const;
    bool badCharMatch(QRegExpMatchState &matchState) const;
-#else
-   bool bruteMatch(QRegExpMatchState &matchState) const;
-#endif
 
    QVector<QRegExpAutomatonState> s; // array of states
 #ifndef QT_NO_REGEXP_CAPTURE
@@ -556,19 +548,22 @@ class QRegExpEngine
 #endif
    int officialncap; // number of captures, seen from the outside
    int ncap; // number of captures, seen from the inside
+
 #ifndef QT_NO_REGEXP_CCLASS
    QVector<QRegExpCharClass> cl; // array of character classes
 #endif
+
 #ifndef QT_NO_REGEXP_LOOKAHEAD
    QVector<QRegExpLookahead *> ahead; // array of lookaheads
 #endif
+
 #ifndef QT_NO_REGEXP_ANCHOR_ALT
    QVector<QRegExpAnchorAlternation> aa; // array of (a, b) pairs of anchors
 #endif
-#ifndef QT_NO_REGEXP_OPTIM
+
    bool caretAnchored; // does the regexp start with ^?
    bool trivial; // is the good-string all that needs to match?
-#endif
+
    bool valid; // is the regular expression valid?
    Qt::CaseSensitivity cs; // case sensitive?
    bool greedyQuantifiers; // RegExp2?
@@ -577,7 +572,6 @@ class QRegExpEngine
    int nbrefs; // number of back-references
 #endif
 
-#ifndef QT_NO_REGEXP_OPTIM
    bool useGoodStringHeuristic; // use goodStringMatch? otherwise badCharMatch
 
    int goodEarlyStart; // the index where goodStr can first occur in a match
@@ -586,7 +580,6 @@ class QRegExpEngine
 
    int minl; // the minimum length of a match
    QVector<int> occ1; // first-occurrence array
-#endif
 
    /*
      The class Box is an abstraction for a regular expression
@@ -1296,19 +1289,22 @@ bool QRegExpMatchState::testAnchor(int i, int a, const int *capBegin)
 }
 
 #ifndef QT_NO_REGEXP_OPTIM
-/*
-  The three following functions are what Jeffrey Friedl would call
-  transmissions (or bump-alongs). Using one or the other should make
-  no difference except in performance.
-*/
 
 bool QRegExpEngine::goodStringMatch(QRegExpMatchState &matchState) const
 {
    int k = matchState.pos + goodEarlyStart;
-   QStringMatcher matcher(goodStr.unicode(), goodStr.length(), cs);
-   while ((k = matcher.indexIn(matchState.in, matchState.len, k)) != -1) {
+
+   while (true) {
+      QString tmp(matchState.in, matchState.len);
+      k = tmp.indexOf(goodStr, k, cs);
+
+      if (k == -1)  {
+         break;
+      }
+
       int from = k - goodLateStart;
-      int to = k - goodEarlyStart;
+      int to   = k - goodEarlyStart;
+
       if (from > matchState.pos) {
          matchState.pos = from;
       }
@@ -1319,8 +1315,10 @@ bool QRegExpEngine::goodStringMatch(QRegExpMatchState &matchState) const
          }
          ++matchState.pos;
       }
+
       ++k;
    }
+
    return false;
 }
 
@@ -3369,8 +3367,6 @@ struct QRegExpPrivate {
       : eng(0), engineKey(key), minimal(false) {}
 };
 
-#if ! defined(QT_NO_REGEXP_OPTIM)
-
 uint qHash(const QRegExpEngineKey &key, uint seed)
 {
    return qHash(key.pattern, seed);
@@ -3380,13 +3376,11 @@ typedef QCache<QRegExpEngineKey, QRegExpEngine> EngineCache;
 Q_GLOBAL_STATIC(EngineCache, globalEngineCache)
 Q_GLOBAL_STATIC(QMutex, mutex)
 
-#endif // QT_NO_REGEXP_OPTIM
 
 static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
 {
    if (! eng->ref.deref()) {
 
-#if ! defined(QT_NO_REGEXP_OPTIM)
       if (globalEngineCache()) {
          QMutexLocker locker(mutex());
 
@@ -3401,10 +3395,6 @@ static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
       } else {
          delete eng;
       }
-#else
-      Q_UNUSED(key);
-      delete eng;
-#endif
 
    }
 }
@@ -3412,7 +3402,7 @@ static void derefEngine(QRegExpEngine *eng, const QRegExpEngineKey &key)
 static void prepareEngine_helper(QRegExpPrivate *priv)
 {
    bool initMatchState = !priv->eng;
-#if !defined(QT_NO_REGEXP_OPTIM)
+
    if (!priv->eng && globalEngineCache()) {
       QMutexLocker locker(mutex());
       priv->eng = globalEngineCache()->take(priv->engineKey);
@@ -3420,7 +3410,6 @@ static void prepareEngine_helper(QRegExpPrivate *priv)
          priv->eng->ref.ref();
       }
    }
-#endif // QT_NO_REGEXP_OPTIM
 
    if (!priv->eng) {
       priv->eng = new QRegExpEngine(priv->engineKey);

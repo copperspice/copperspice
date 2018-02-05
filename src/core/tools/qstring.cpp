@@ -34,7 +34,6 @@
 #include <qlist.h>
 #include <qlocale.h>
 #include <qlocale_p.h>
-#include <qstringmatcher.h>
 #include <qvarlengtharray.h>
 #include <qtools_p.h>
 #include <qhash.h>
@@ -58,30 +57,24 @@
 #endif
 
 #include "qchar.cpp"               // do not change to use < >
-#include "qstringmatcher.cpp"      // do not change to use < >
 
 #ifndef LLONG_MAX
 #define LLONG_MAX qint64_C(9223372036854775807)
 #endif
+
 #ifndef LLONG_MIN
 #define LLONG_MIN (-LLONG_MAX - qint64_C(1))
 #endif
+
 #ifndef ULLONG_MAX
 #define ULLONG_MAX quint64_C(18446744073709551615)
 #endif
 
 #define IS_RAW_DATA(d) ((d)->offset != sizeof(QStringData))
 
-#ifdef QT_USE_ICU
-// qlocale_icu.cpp
-extern bool qt_ucol_strcoll(const QChar *source, int sourceLength, const QChar *target, int targetLength, int *result);
-#endif
 
 // internal
 int qFindString(const QChar *haystack, int haystackLen, int from,
-                  const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
-
-int qFindStringBoyerMoore(const QChar *haystack, int haystackLen, int from,
                   const QChar *needle, int needleLen, Qt::CaseSensitivity cs);
 
 static inline int qt_last_index_of(const QChar *haystack, int haystackLen, QChar needle,
@@ -971,53 +964,48 @@ void QString::replace_helper(uint *indices, int nIndices, int blen, const QChar 
    }
 }
 
-/*!
-  \since 4.5
-  \overload replace()
-
-  Replaces each occurrence in this string of the first \a blen
-  characters of \a before with the first \a alen characters of \a
-  after and returns a reference to this string.
-
-  If \a cs is Qt::CaseSensitive (default), the search is case
-  sensitive; otherwise the search is case insensitive.
-*/
-QString &QString::replace(const QChar *before, int blen,
-                          const QChar *after, int alen,
-                          Qt::CaseSensitivity cs)
+QString &QString::replace(const QChar *before, int blen, const QChar *after, int alen, Qt::CaseSensitivity cs)
 {
    if (d->size == 0) {
       if (blen) {
          return *this;
       }
+
    } else {
       if (cs == Qt::CaseSensitive && before == after && blen == alen) {
          return *this;
       }
    }
+
    if (alen == 0 && blen == 0) {
       return *this;
    }
 
-   QStringMatcher matcher(before, blen, cs);
-
    int index = 0;
+
+   QString tmpBefore(before, blen);
+
    while (1) {
       uint indices[1024];
       uint pos = 0;
+
       while (pos < 1023) {
-         index = matcher.indexIn(*this, index);
+         index = this->indexOf(tmpBefore, index, cs);
+
          if (index == -1) {
             break;
          }
+
          indices[pos++] = index;
          index += blen;
+
          // avoid infinite loop
-         if (!blen) {
+         if (! blen) {
             index++;
          }
       }
-      if (!pos) {
+
+      if (! pos) {
          break;
       }
 
@@ -1026,7 +1014,8 @@ QString &QString::replace(const QChar *before, int blen,
       if (index == -1) {
          break;
       }
-      // index has to be adjusted in case we get back into the loop above.
+
+      // index has to be adjusted in case we get back into the loop above
       index += pos * (alen - blen);
    }
 
@@ -1347,25 +1336,11 @@ int qFindString(
       return findChar(haystack0, haystackLen, needle0[0], from, cs);
    }
 
-   /*
-       We use the Boyer-Moore algorithm in cases where the overhead
-       for the skip table should pay off, otherwise we use a simple
-       hash function.
-   */
-   if (l > 500 && sl > 5)
-      return qFindStringBoyerMoore(haystack0, haystackLen, from,
-                                   needle0, needleLen, cs);
-
-   /*
-       We use some hashing for efficiency's sake. Instead of
-       comparing strings, we compare the hash value of str with that
-       of a part of this QString. Only if that matches, we call
-       ucstrncmp() or ucstrnicmp().
-   */
    const ushort *needle = (const ushort *)needle0;
    const ushort *haystack = (const ushort *)haystack0 + from;
    const ushort *end = (const ushort *)haystack0 + (l - sl);
    const int sl_minus_1 = sl - 1;
+
    int hashNeedle = 0, hashHaystack = 0, idx;
 
    if (cs == Qt::CaseSensitive) {
@@ -2187,19 +2162,6 @@ static QString extractSections(const QList<qt_section_chunk> &sections,
    return ret;
 }
 
-/*!
-    \overload section()
-
-    This string is treated as a sequence of fields separated by the
-    regular expression, \a reg.
-
-    \snippet doc/src/snippets/qstring/main.cpp 55
-
-    \warning Using this QRegExp version is much more expensive than
-    the overloaded string and character versions.
-
-    \sa split() simplified()
-*/
 QString QString::section(const QRegExp &reg, int start, int end, SectionFlags flags) const
 {
    const QChar *uc = unicode();
@@ -6457,26 +6419,20 @@ static inline int qt_last_index_of(const QChar *haystack, int haystackLen, QChar
 }
 
 static inline int qt_string_count(const QChar *haystack, int haystackLen,
-                                  const QChar *needle, int needleLen,
-                                  Qt::CaseSensitivity cs)
+                  const QChar *needle, int needleLen, Qt::CaseSensitivity cs)
 {
    int num = 0;
    int i = -1;
-   if (haystackLen > 500 && needleLen > 5) {
-      QStringMatcher matcher(needle, needleLen, cs);
-      while ((i = matcher.indexIn(haystack, haystackLen, i + 1)) != -1) {
-         ++num;
-      }
-   } else {
-      while ((i = qFindString(haystack, haystackLen, i + 1, needle, needleLen, cs)) != -1) {
-         ++num;
-      }
+
+   while ((i = qFindString(haystack, haystackLen, i + 1, needle, needleLen, cs)) != -1) {
+      ++num;
    }
+
    return num;
 }
 
 static inline int qt_string_count(const QChar *unicode, int size, QChar ch,
-                                  Qt::CaseSensitivity cs)
+                  Qt::CaseSensitivity cs)
 {
    ushort c = ch.unicode();
    int num = 0;

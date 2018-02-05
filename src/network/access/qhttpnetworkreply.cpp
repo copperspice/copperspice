@@ -22,14 +22,13 @@
 
 #include <qhttpnetworkreply_p.h>
 #include <qhttpnetworkconnection_p.h>
-#include <qbytearraymatcher.h>
 
 #ifndef QT_NO_HTTP
 
 #ifndef QT_NO_OPENSSL
-#    include <QtNetwork/qsslkey.h>
-#    include <QtNetwork/qsslcipher.h>
-#    include <QtNetwork/qsslconfiguration.h>
+#  include <QtNetwork/qsslkey.h>
+#  include <QtNetwork/qsslcipher.h>
+#  include <QtNetwork/qsslconfiguration.h>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -649,32 +648,43 @@ void QHttpNetworkReplyPrivate::parseHeader(const QByteArray &header)
 {
    // see rfc2616, sec 4 for information about HTTP/1.1 headers.
    // allows relaxed parsing here, accepts both CRLF & LF line endings
-   const QByteArrayMatcher lf("\n");
-   const QByteArrayMatcher colon(":");
+
    int i = 0;
+
    while (i < header.count()) {
-      int j = colon.indexIn(header, i); // field-name
+      // field-name
+      int j = header.indexOf(":", i);
+
       if (j == -1) {
          break;
       }
+
       const QByteArray field = header.mid(i, j - i).trimmed();
       j++;
+
       // any number of LWS is allowed before and after the value
       QByteArray value;
+
       do {
-         i = lf.indexIn(header, j);
+
+         i = header.indexOf("\n", j);
+
          if (i == -1) {
             break;
          }
+
          if (!value.isEmpty()) {
             value += ' ';
          }
+
          // check if we have CRLF or only LF
          bool hasCR = (i && header[i - 1] == '\r');
          int length = i - (hasCR ? 1 : 0) - j;
          value += header.mid(j, length).trimmed();
          j = ++i;
+
       } while (i < header.count() && (header.at(i) == ' ' || header.at(i) == '\t'));
+
       if (i == -1) {
          break;   // something is wrong
       }
