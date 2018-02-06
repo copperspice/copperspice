@@ -936,11 +936,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 };
 
-#if ! defined(QT_NO_DATASTREAM)
-   Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
-   Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
-#endif
-
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
 
 // free functions, comparisons for string literals
 inline bool operator==(const QString8 &str1, const QString8 &str2)

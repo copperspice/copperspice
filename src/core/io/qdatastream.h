@@ -38,8 +38,6 @@ class QIODevice;
 class QString8;
 class QString16;
 
-#if ! defined(QT_NO_DATASTREAM)
-
 class QDataStream;
 class QDataStreamPrivate;
 
@@ -60,16 +58,10 @@ class Q_CORE_EXPORT QDataStream
  public:
 
 #if CS_VERSION >= 0x010500
-#error (CS compile issue in qdatastream.h) Verify CopperSpice Version is listed in the following enum
+#error (CopperSpice compile issue in qdatastream.h) Verify version number is listed in the following enum
 #endif
 
    enum Version {
-      Qt_1_0 = 1,
-      Qt_2_0 = 2,
-      Qt_2_1 = 3,
-      Qt_3_0 = 4,
-      Qt_3_1 = 5,
-      Qt_3_3 = 6,
       Qt_4_0 = 7,
       Qt_4_1 = Qt_4_0,
       Qt_4_2 = 8,
@@ -79,17 +71,14 @@ class Q_CORE_EXPORT QDataStream
       Qt_4_6 = 12,
       Qt_4_7 = Qt_4_6,
       Qt_4_8 = Qt_4_7,
-      Qt_4_9 = Qt_4_8,
-      Qt_5_0 = 13,
-      Qt_5_1 = 14,
-      Qt_5_2 = 15,
-      Qt_5_3 = Qt_5_2,
 
       CS_1_0 = 128,
       CS_1_1 = CS_1_0,
       CS_1_2 = CS_1_1,
       CS_1_3 = CS_1_2,
-      CS_1_4 = CS_1_3
+      CS_1_4 = CS_1_3,
+
+      CS_DefaultStreamVersion = CS_1_4
    };
 
    enum ByteOrder {
@@ -567,6 +556,4 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiMap<K
    return out;
 }
 
-#endif // QT_NO_DATASTREAM
-
-#endif // QDATASTREAM_H
+#endif

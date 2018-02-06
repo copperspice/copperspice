@@ -366,19 +366,19 @@ QChar32::UnicodeVersion QChar32::currentUnicodeVersion()
    return UNICODE_DATA_VERSION_32;
 }
 
+QDataStream &operator>>(QDataStream &in, QChar32 &ch)
+{
+   quint32 tmp;
+   in >> tmp;
 
-// operators
-#if ! defined(QT_NO_DATASTREAM)
-   QDataStream &operator>>(QDataStream &out, QChar32 &str)
-   {
-      // broom - pending implementation
-      return out;
-   }
+   ch = static_cast<char32_t>(tmp);
 
-   QDataStream &operator<<(QDataStream &out, const QChar32 &str)
-   {
-      // broom - pending implementation
-      return out;
-   }
-#endif
+   return in;
+}
+
+QDataStream &operator<<(QDataStream &out, const QChar32 &ch)
+{
+   out << static_cast<quint32>(ch.unicode());
+   return out;
+}
 

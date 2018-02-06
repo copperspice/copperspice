@@ -1527,22 +1527,24 @@ void QString8::truncate(size_type length)
    }
 }
 
-// operators
+// data stream
+QDataStream &operator>>(QDataStream &in, QString8 &str)
+{
+   char *tmp;
+   uint len;
 
-#if ! defined(QT_NO_DATASTREAM)
-   QDataStream &operator>>(QDataStream &out, QString8 &str)
-   {
-      // broom - pending implementation
-      return out;
-   }
+   in.readBytes(tmp, len);
+   str = QString8::fromUtf8(tmp, len);
+   delete [] tmp;
 
-   QDataStream &operator<<(QDataStream &out, const QString8 &str)
-   {
-      // broom - pending implementation
-      return out;
-   }
-#endif
+   return in;
+}
 
+QDataStream &operator<<(QDataStream &out, const QString8 &str)
+{
+   out.writeBytes(str.constData(), str.size_storage());
+   return out;
+}
 
 // normalization functions
 QString8 cs_internal_string_normalize(const QString8 &data, QString8::NormalizationForm mode,

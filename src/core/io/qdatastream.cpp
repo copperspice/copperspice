@@ -23,19 +23,12 @@
 #include <qdatastream.h>
 #include <qdatastream_p.h>
 
-#if !defined(QT_NO_DATASTREAM)
 #include <qbuffer.h>
 #include <qstring.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <qendian.h>
-
-QT_BEGIN_NAMESPACE
-
-/*****************************************************************************
-  QDataStream member functions
- *****************************************************************************/
 
 #undef  CHECK_STREAM_PRECOND
 #ifndef QT_NO_DEBUG
@@ -56,57 +49,27 @@ QT_BEGIN_NAMESPACE
     if (q_status != Ok) \
         return retVal;
 
-enum {
-   DefaultStreamVersion = QDataStream::Qt_4_6
-};
-
-// ### 5.0: when streaming invalid QVariants, just the type should
-// be written, no "data" after it
+// ### 5.0: when streaming invalid QVariants, just the type should be written, no "data" after it
 
 QDataStream::QDataStream()
 {
    dev = 0;
    owndev = false;
    byteorder = BigEndian;
-   ver = DefaultStreamVersion;
+   ver = CS_DefaultStreamVersion;
    noswap = QSysInfo::ByteOrder == QSysInfo::BigEndian;
    q_status = Ok;
 }
-
-/*!
-    Constructs a data stream that uses the I/O device \a d.
-
-    \warning If you use QSocket or QSocketDevice as the I/O device \a d
-    for reading data, you must make sure that enough data is available
-    on the socket for the operation to successfully proceed;
-    QDataStream does not have any means to handle or recover from
-    short-reads.
-
-    \sa setDevice(), device()
-*/
 
 QDataStream::QDataStream(QIODevice *d)
 {
-   dev = d;                                // set device
+   dev = d;                                      // set device
    owndev = false;
    byteorder = BigEndian;                        // default byte order
-   ver = DefaultStreamVersion;
+   ver = CS_DefaultStreamVersion;
    noswap = QSysInfo::ByteOrder == QSysInfo::BigEndian;
    q_status = Ok;
 }
-
-/*!
-    \fn QDataStream::QDataStream(QByteArray *a, QIODevice::OpenMode mode)
-
-    Constructs a data stream that operates on a byte array, \a a. The
-    \a mode describes how the device is to be used.
-
-    Alternatively, you can use QDataStream(const QByteArray &) if you
-    just want to read from a byte array.
-
-    Since QByteArray is not a QIODevice subclass, internally a QBuffer
-    is created to wrap the byte array.
-*/
 
 QDataStream::QDataStream(QByteArray *a, QIODevice::OpenMode flags)
 {
@@ -117,19 +80,11 @@ QDataStream::QDataStream(QByteArray *a, QIODevice::OpenMode flags)
    dev = buf;
    owndev = true;
    byteorder = BigEndian;
-   ver = DefaultStreamVersion;
+   ver = CS_DefaultStreamVersion;
    noswap = QSysInfo::ByteOrder == QSysInfo::BigEndian;
    q_status = Ok;
 }
 
-/*!
-    Constructs a read-only data stream that operates on byte array \a a.
-    Use QDataStream(QByteArray*, int) if you want to write to a byte
-    array.
-
-    Since QByteArray is not a QIODevice subclass, internally a QBuffer
-    is created to wrap the byte array.
-*/
 QDataStream::QDataStream(const QByteArray &a)
 {
    QBuffer *buf = new QBuffer;
@@ -140,19 +95,10 @@ QDataStream::QDataStream(const QByteArray &a)
    dev = buf;
    owndev = true;
    byteorder = BigEndian;
-   ver = DefaultStreamVersion;
+   ver = CS_DefaultStreamVersion;
    noswap = QSysInfo::ByteOrder == QSysInfo::BigEndian;
    q_status = Ok;
 }
-
-/*!
-    Destroys the data stream.
-
-    The destructor will not affect the current I/O device, unless it is
-    an internal I/O device (e.g. a QBuffer) processing a QByteArray
-    passed in the \e constructor, in which case the internal I/O device
-    is destroyed.
-*/
 
 QDataStream::~QDataStream()
 {
@@ -160,25 +106,6 @@ QDataStream::~QDataStream()
       delete dev;
    }
 }
-
-
-/*!
-    \fn QIODevice *QDataStream::device() const
-
-    Returns the I/O device currently set, or 0 if no
-    device is currently set.
-
-    \sa setDevice()
-*/
-
-/*!
-    void QDataStream::setDevice(QIODevice *d)
-
-    Sets the I/O device to \a d, which can be 0
-    to unset to current I/O device.
-
-    \sa device()
-*/
 
 void QDataStream::setDevice(QIODevice *d)
 {
@@ -228,23 +155,6 @@ QDataStream::FloatingPointPrecision QDataStream::floatingPointPrecision() const
    return d == 0 ? QDataStream::DoublePrecision : d->floatingPointPrecision;
 }
 
-/*!
-    Sets the floating point precision of the data stream to \a precision. If the floating point precision is
-    DoublePrecision and the version of the data stream is Qt_4_6 or higher, all floating point
-    numbers will be written and read with 64-bit precision. If the floating point precision is
-    SinglePrecision and the version is Qt_4_6 or higher, all floating point numbers will be written
-    and read with 32-bit precision.
-
-    For versions prior to Qt_4_6, the precision of floating point numbers in the data stream depends
-    on the stream operator called.
-
-    The default is DoublePrecision.
-
-    \warning This property must be set to the same value on the object that writes and the object
-    that reads the data stream.
-
-    \since 4.6
-*/
 void QDataStream::setFloatingPointPrecision(QDataStream::FloatingPointPrecision precision)
 {
    if (d == 0) {
@@ -448,20 +358,9 @@ QDataStream &QDataStream::operator>>(bool &i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Reads a floating point number from the stream into \a f,
-    using the standard IEEE 754 format. Returns a reference to the
-    stream.
-
-    \sa setFloatingPointPrecision()
-*/
-
 QDataStream &QDataStream::operator>>(float &f)
 {
-   if (version() >= QDataStream::Qt_4_6
-         && floatingPointPrecision() == QDataStream::DoublePrecision) {
+   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::DoublePrecision) {
       double d;
       *this >> d;
       f = d;
@@ -470,19 +369,23 @@ QDataStream &QDataStream::operator>>(float &f)
 
    f = 0.0f;
    CHECK_STREAM_PRECOND(*this)
+
    if (dev->read((char *)&f, 4) != 4) {
       f = 0.0f;
       setStatus(ReadPastEnd);
+
    } else {
       if (!noswap) {
          union {
             float val1;
             quint32 val2;
          } x;
+
          x.val2 = qbswap(*reinterpret_cast<quint32 *>(&f));
          f = x.val1;
       }
    }
+
    return *this;
 }
 
@@ -502,8 +405,7 @@ QDataStream &QDataStream::operator>>(float &f)
 
 QDataStream &QDataStream::operator>>(double &f)
 {
-   if (version() >= QDataStream::Qt_4_6
-         && floatingPointPrecision() == QDataStream::SinglePrecision) {
+   if (version() >= QDataStream::Qt_4_6 && floatingPointPrecision() == QDataStream::SinglePrecision) {
       float d;
       *this >> d;
       f = d;
@@ -790,19 +692,9 @@ QDataStream &QDataStream::operator<<(bool i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes a floating point number, \a f, to the stream using
-    the standard IEEE 754 format. Returns a reference to the stream.
-
-    \sa setFloatingPointPrecision()
-*/
-
 QDataStream &QDataStream::operator<<(float f)
 {
-   if (version() >= QDataStream::Qt_4_6
-         && floatingPointPrecision() == QDataStream::DoublePrecision) {
+   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::DoublePrecision) {
       *this << double(f);
       return *this;
    }
@@ -841,8 +733,7 @@ QDataStream &QDataStream::operator<<(float f)
 
 QDataStream &QDataStream::operator<<(double f)
 {
-   if (version() >= QDataStream::Qt_4_6
-         && floatingPointPrecision() == QDataStream::SinglePrecision) {
+   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::SinglePrecision) {
       *this << float(f);
       return *this;
    }
@@ -1007,7 +898,3 @@ int QDataStream::skipRawData(int len)
       return len;
    }
 }
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_DATASTREAM
