@@ -644,44 +644,12 @@ QString8 QString8::fromLatin1(const char *str, size_type numOfChars)
 
 QString8 QString8::fromUtf8(const QByteArray &str)
 {
-   // broom ( test code only, full implementation required )
-
-   QString8 retval;
-
-   for (char c : str) {
-
-      if (c == 0) {
-         break;
-      }
-
-      retval.append(static_cast<char32_t>(c));
-   }
-
-   return retval;
+   return fromUtf8(str.constData(), str.size());
 }
 
 QString8 QString8::fromUtf8(const char *str, size_type numOfChars)
 {
-   if (str == nullptr) {
-      return QString8();
-   }
-
-   if (numOfChars < 0) {
-      numOfChars = 0;
-
-      while (str[numOfChars] != 0) {
-         ++numOfChars;
-      }
-   }
-
-   // broom ( test code only, full implementation required )
-   QString8 retval;
-
-   for (int i = 0; i < numOfChars; ++i) {
-      retval.append(static_cast<char32_t>(str[i]));
-   }
-
-   return retval;
+   return CsString::CsString::fromUtf8(str, numOfChars);
 }
 
 QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)

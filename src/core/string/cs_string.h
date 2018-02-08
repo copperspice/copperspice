@@ -442,6 +442,8 @@ class CsBasicString
 
 
       CsChar front() const;
+      static CsBasicString fromUtf8(const char *str, size_type numOfChars);
+
       A getAllocator() const;
 
       CsBasicString &insert(size_type indexStart, size_type count, CsChar c);
@@ -3310,6 +3312,113 @@ CsChar CsBasicString<E, A>::front() const
 }
 
 template <typename E, typename A>
+CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char *str, size_type numOfChars)
+{
+   if (str == nullptr) {
+      return CsBasicString();
+   }
+
+   if (numOfChars < 0) {
+      numOfChars = 0;
+
+      while (str[numOfChars] != 0) {
+         ++numOfChars;
+      }
+   }
+
+   CsBasicString retval;
+
+   int multi_size = 0;
+   char32_t data  = 0;
+
+   for (int i = 0; i < numOfChars; ++i) {
+
+      if ((str[i] & 0x80) == 0) {
+
+         if (multi_size != 0) {
+            // multi byte sequence was too short
+            multi_size = 0;
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         retval.append(static_cast<char32_t>(str[i]));
+
+
+      } else if ((str[i] & 0xC0) == 0x80) {
+         // continuation char
+
+         data = (data << 6) | (static_cast<char32_t>(str[i]) & 0x3F);
+
+         if (multi_size == 2 && data >= 0x80 && data <= 0x7FF) {
+            multi_size = 0;
+            retval.append(data);
+
+         } else if (multi_size == 3 && data >= 0x800 && data <= 0xFFFF) {
+            multi_size = 0;
+            retval.append(data);
+
+         } else if (multi_size == 4 && data >= 0x10000 && data <= 0x10FFFF) {
+            multi_size = 0;
+            retval.append(data);
+
+         }
+
+      } else if ((str[i] & 0xE0) == 0xC0) {
+         // begin two byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 2;
+         data = static_cast<char32_t>(str[i]) & 0x1F;
+
+      } else if ((str[i] & 0xF0) == 0xE0) {
+         // begin three byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 3;
+         data = static_cast<char32_t>(str[i]) & 0x0F;
+
+      } else if ((str[i] & 0xF8) == 0xF0) {
+        // begin four byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 4;
+         data = static_cast<char32_t>(str[i]) & 0x07;
+
+      } else {
+         // invalid character
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            multi_size = 0;
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         retval.append(UCHAR('\uFFFD'));
+
+      }
+   }
+
+   if (multi_size != 0) {
+      // invalid character at the end of the string
+      retval.append(UCHAR('\uFFFD'));
+   }
+
+   return retval;
+}
+
+template <typename E, typename A>
 A CsBasicString<E, A>::getAllocator() const
 {
    return m_string.get_allocator();
@@ -3534,7 +3643,7 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
       ++count;
    }
 
-   return (iter - count);
+   return (iter);
 }
 
 template <typename E, typename A>
