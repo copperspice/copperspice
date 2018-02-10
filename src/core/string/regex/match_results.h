@@ -31,43 +31,40 @@ namespace cs_regex_ns {
 
 namespace cs_regex_detail_ns {
 
+template <typename Traits>
 class named_subexpressions;
 
 }
 
-template <class BidiIterator, class AllocatorT = std::allocator<sub_match<BidiIterator>> >
+template <typename Traits, typename Allocator = std::allocator<sub_match<typename Traits::string_type::const_iterator>>>
 class match_results
 {
- private:
-   using vector_type     = std::vector<sub_match<BidiIterator>, AllocatorT>;
-
  public:
-   using difference_type = typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::difference_type;
+   using string_type        = typename Traits::string_type;
+   using char_type          = typename Traits::char_type;
 
-   // if BidiIterator is a const_iterator then value_type may have a const qualifer
-   // char_type is used as the T in std::vector and it can not be const T
+   using string_iterator    = typename Traits::string_type::const_iterator;
 
-   using tmp_char_type   = typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::value_type;
-   using char_type       = typename std::remove_const<tmp_char_type>::type;
+   using capture_names_type = cs_regex_detail_ns::named_subexpressions<Traits>;
 
-   typedef          sub_match<BidiIterator>                        value_type;
-   typedef          const value_type                               &const_reference;
-   typedef          const_reference                                reference;
-   typedef typename vector_type::const_iterator                    const_iterator;
-   typedef          const_iterator                                 iterator;
+   using vector_type        = std::vector<sub_match<string_iterator>, Allocator>;
+   using value_type         = typename vector_type::value_type;
+   using size_type          = typename vector_type::size_type;
+   using difference_type    = typename vector_type::difference_type;
 
-   typedef typename AllocatorT::size_type                          size_type;
-   typedef          AllocatorT                                     allocator_type;
+   using reference          = value_type &;
+   using const_reference    = const value_type &;
 
-   typedef          std::basic_string<char_type>                   string_type;
-   typedef          cs_regex_detail_ns::named_subexpressions       named_sub_type;
+   using iterator           = typename vector_type::iterator;
+   using const_iterator     = typename vector_type::const_iterator;
 
-   explicit match_results(const AllocatorT &a = AllocatorT())
-      : m_subs(a), m_base(), m_null(), m_last_closed_paren(0), m_is_singular(true)
+   explicit match_results(const Allocator &a = Allocator())
+      : m_capture_list(a), m_base(), m_null(), m_last_closed_paren(0), m_is_singular(true)
    {}
 
    match_results(const match_results &m)
-      : m_subs(m.m_subs), m_named_subs(m.m_named_subs), m_last_closed_paren(m.m_last_closed_paren), m_is_singular(m.m_is_singular) {
+      : m_capture_list(m.m_capture_list), m_capture_names(m.m_capture_names),
+        m_last_closed_paren(m.m_last_closed_paren), m_is_singular(m.m_is_singular) {
 
       if (! m_is_singular) {
          m_base = m.m_base;
@@ -76,8 +73,8 @@ class match_results
    }
 
    match_results &operator=(const match_results &m) {
-      m_subs              = m.m_subs;
-      m_named_subs        = m.m_named_subs;
+      m_capture_list      = m.m_capture_list;
+      m_capture_names     = m.m_capture_names;
       m_last_closed_paren = m.m_last_closed_paren;
       m_is_singular       = m.m_is_singular;
 
@@ -85,152 +82,123 @@ class match_results
          m_base = m.m_base;
          m_null = m.m_null;
       }
+
       return *this;
    }
 
    ~match_results() {}
 
    size_type size() const {
-      return empty() ? 0 : m_subs.size() - 2;
+      return empty() ? 0 : m_capture_list.size() - 2;
    }
 
    size_type max_size() const {
-      return m_subs.max_size();
+      return m_capture_list.max_size();
    }
 
    bool empty() const {
-      return m_subs.size() < 2;
+      return m_capture_list.size() < 2;
    }
 
-   difference_type length(size_type sub = 0) const {
+   difference_type length(size_type index = 0) const {
       if (m_is_singular) {
          raise_logic_error();
       }
 
-      sub += 2;
+      index += 2;
 
-      if ((sub < m_subs.size()) && (sub > 0)) {
-         return m_subs[sub].length();
+      if ((index < m_capture_list.size()) && (index > 0)) {
+         return m_capture_list[index].length();
       }
 
       return 0;
    }
 
-   difference_type length(const char_type *sub) const {
+   difference_type length(const char_type *capture_name) const {
       if (m_is_singular) {
          raise_logic_error();
       }
 
-      const char_type *sub_end = sub;
-      while (*sub_end) {
-         ++sub_end;
+      const char_type *end = capture_name;
+
+      while (*end) {
+         ++end;
       }
 
-      return length(named_subexpression_index(sub, sub_end));
+      return length(named_subexpression_index(capture_name, end));
    }
 
-   template <class charT>
-   difference_type length(const charT *sub) const {
+   difference_type length(const string_type &capture_name) const {
+      return length(named_subexpression_index(capture_name.begin(), capture_name.end()));
+   }
+
+   difference_type position(size_type index = 0) const {
       if (m_is_singular) {
          raise_logic_error();
       }
 
-      const charT *sub_end = sub;
-      while (*sub_end) {
-         ++sub_end;
-      }
+      index += 2;
 
-      return length(named_subexpression_index(sub, sub_end));
-   }
+      if (index < m_capture_list.size()) {
+         const sub_match<string_iterator> &s = m_capture_list[index];
 
-   template <class charT, class Traits, class Allocator>
-   difference_type length(const std::basic_string<charT, Traits, Allocator> &sub) const {
-      return length(sub.c_str());
-   }
-
-   difference_type position(size_type sub = 0) const {
-      if (m_is_singular) {
-         raise_logic_error();
-      }
-      sub += 2;
-      if (sub < m_subs.size()) {
-         const sub_match<BidiIterator> &s = m_subs[sub];
-         if (s.matched || (sub == 2)) {
-            return std::distance((BidiIterator)(m_base), (BidiIterator)(s.first));
+         if (s.matched || (index == 2)) {
+            return std::distance(m_base, s.first);
          }
       }
+
       return ~static_cast<difference_type>(0);
    }
 
-   difference_type position(const char_type *sub) const {
-      const char_type *sub_end = sub;
+   difference_type position(const char_type *capture_name) const {
+      const char_type *end = capture_name;
 
-      while (*sub_end) {
-         ++sub_end;
+      while (*end) {
+         ++end;
       }
-      return position(named_subexpression_index(sub, sub_end));
+
+      return position(named_subexpression_index(capture_name, end));
    }
 
-   template <class charT>
-   difference_type position(const charT *sub) const {
-      const charT *sub_end = sub;
-
-      while (*sub_end) {
-         ++sub_end;
-      }
-      return position(named_subexpression_index(sub, sub_end));
+   difference_type position(const string_type &capture_name) const {
+      return position(named_subexpression_index(capture_name.begin(), capture_name.end()));
    }
 
-   template <class charT, class Traits, class Allocator>
-   difference_type position(const std::basic_string<charT, Traits, Allocator> &sub) const {
-      return position(sub.c_str());
-   }
-
-   string_type str(size_type sub = 0) const {
+   string_type str(size_type index = 0) const {
       if (m_is_singular) {
          raise_logic_error();
       }
 
-      sub += 2;
+      index += 2;
       string_type result;
 
-      if (sub < m_subs.size() && (sub > 0)) {
-         const sub_match<BidiIterator> &s = m_subs[sub];
+      if (index < m_capture_list.size() && (index > 0)) {
+         const sub_match<string_iterator> &s = m_capture_list[index];
 
          if (s.matched) {
             result = s.str();
          }
       }
+
       return result;
    }
 
-   string_type str(const char_type *sub) const {
-      return (*this)[sub].str();
+   string_type str(const char_type *capture_name) const {
+      return (*this)[capture_name].str();
    }
 
-   template <class Traits, class Allocator>
-   string_type str(const std::basic_string<char_type, Traits, Allocator> &sub) const {
-      return (*this)[sub].str();
-   }
-
-   template <class charT>
-   string_type str(const charT *sub) const {
-      return (*this)[sub].str();
-   }
-
-   template <class charT, class Traits, class Allocator>
-   string_type str(const std::basic_string<charT, Traits, Allocator> &sub) const {
-      return (*this)[sub].str();
+   string_type str(const string_type &capture_name) const {
+      return (*this)[capture_name].str();
    }
 
    const_reference named_subexpression(const char_type *i, const char_type *j) const {
-      // Scan for the leftmost *matched* subexpression with the specified named:
+      // scan for the leftmost *matched* subexpression with the specified named:
 
       if (m_is_singular) {
          raise_logic_error();
       }
 
-      cs_regex_detail_ns::named_subexpressions::range_type r = m_named_subs->equal_range(i, j);
+      typename cs_regex_detail_ns::named_subexpressions<Traits>::range_type r = m_capture_names->equal_range(i, j);
 
       while ((r.first != r.second) && ((*this)[r.first->index].matched == false)) {
          ++r.first;
@@ -239,9 +207,7 @@ class match_results
       return r.first != r.second ? (*this)[r.first->index] : m_null;
    }
 
-   template <class Iterator>
-   const_reference named_subexpression(Iterator first, Iterator last) const {
-      static_assert(std::is_convertible<decltype(*first), char_type>::value, "Error: Invalid Iterator data type");
+   const_reference named_subexpression(string_iterator first, string_iterator last) const {
 
       if (first == last) {
          return m_null;
@@ -257,7 +223,7 @@ class match_results
       return named_subexpression(&*s.begin(), &*s.begin() + s.size());
    }
 
-   size_type internal_named_subexpression_index(const char_type *i, const char_type *j) const {
+   size_type internal_named_subexpression_index(string_iterator i, string_iterator j) const {
 
       // Scan for the leftmost *matched* subexpression with the specified named.
       // If none found then return the leftmost expression with that name, otherwise an invalid index
@@ -266,8 +232,11 @@ class match_results
          raise_logic_error();
       }
 
-      cs_regex_detail_ns::named_subexpressions::range_type s, r;
-      s = r = m_named_subs->equal_range(i, j);
+      typename cs_regex_detail_ns::named_subexpressions<Traits>::range_type s;
+      typename cs_regex_detail_ns::named_subexpressions<Traits>::range_type r;
+
+      r = m_capture_names->equal_range(i, j);
+      s = r;
 
       while ((r.first != r.second) && ((*this)[r.first->index].matched == false)) {
          ++r.first;
@@ -280,76 +249,50 @@ class match_results
       return r.first != r.second ? r.first->index : -20;
    }
 
-   template <class Iterator>
-   size_type named_subexpression_index(Iterator first, Iterator last) const {
-      static_assert(std::is_convertible<decltype(*first), char_type>::value, "Error: Invalid Iterator data type");
+   size_type named_subexpression_index(string_iterator first, string_iterator last) const {
 
       if (first == last) {
          return -1;
       }
 
-      std::vector<char_type> s;
-
-      while (first != last) {
-         s.push_back(*first);
-         ++first;
-      }
-
-      return internal_named_subexpression_index(&*s.begin(), &*s.begin() + s.size());
+      return internal_named_subexpression_index(first, last);
    }
 
-   const_reference operator[](size_type sub) const {
-      if (m_is_singular && m_subs.empty()) {
+   const_reference operator[](size_type index) const {
+      if (m_is_singular && m_capture_list.empty()) {
          raise_logic_error();
       }
 
-      sub += 2;
+      index += 2;
 
-      if (sub < m_subs.size() && (sub >= 0)) {
-         return m_subs[sub];
+      if (index < m_capture_list.size() && (index >= 0)) {
+         return m_capture_list[index];
       }
 
       return m_null;
    }
 
-   template <class Traits, class Allocator>
-   const_reference operator[](const std::basic_string<char_type, Traits, Allocator> &s) const {
-      return named_subexpression(s.c_str(), s.c_str() + s.size());
+   const_reference operator[](const string_type &capture_name) const {
+      return named_subexpression(capture_name.begin(), capture_name.end());
    }
 
-   template <class charT>
-   const_reference operator[](const charT *p) const {
-      static_assert(sizeof(charT) <= sizeof(char_type), "Error");
+/*
+   const_reference operator[](const char_type *capture_name) const {
+      const char_type *end = capture_name;
 
-      const charT *e = p;
-
-      while (*e) {
-         ++e;
+      while (*end) {
+         ++end;
       }
 
-      return named_subexpression(p, e);
+      return named_subexpression(capture_name, end);
    }
-
-   template <class charT, class Traits, class Allocator>
-   const_reference operator[](const std::basic_string<charT, Traits, Allocator> &ns) const {
-      static_assert(sizeof(charT) <= sizeof(char_type), "Error");
-
-      if (ns.empty()) {
-         return m_null;
-      }
-
-      std::vector<char_type> s;
-      for (unsigned i = 0; i < ns.size(); ++i) {
-         s.insert(s.end(), ns[i]);
-      }
-
-      return named_subexpression(&*s.begin(), &*s.begin() + s.size());
-   }
+*/
 
    const_reference prefix() const {
       if (m_is_singular) {
          raise_logic_error();
       }
+
       return (*this)[-1];
    }
 
@@ -357,15 +300,16 @@ class match_results
       if (m_is_singular) {
          raise_logic_error();
       }
+
       return (*this)[-2];
    }
 
    const_iterator begin() const {
-      return (m_subs.size() > 2) ? (m_subs.begin() + 2) : m_subs.end();
+      return (m_capture_list.size() > 2) ? (m_capture_list.begin() + 2) : m_capture_list.end();
    }
 
    const_iterator end() const {
-      return m_subs.end();
+      return m_capture_list.end();
    }
 
    const_reference get_last_closed_paren()const {
@@ -376,27 +320,30 @@ class match_results
       return m_last_closed_paren == 0 ? m_null : (*this)[m_last_closed_paren];
    }
 
-   allocator_type get_allocator() const {
-      return m_subs.get_allocator();
+   Allocator get_allocator() const {
+      return m_capture_list.get_allocator();
    }
 
    void swap(match_results &that) {
-      std::swap(m_subs, that.m_subs);
-      std::swap(m_named_subs, that.m_named_subs);
+      std::swap(m_capture_list, that.m_capture_list);
+      std::swap(m_capture_names, that.m_capture_names);
       std::swap(m_last_closed_paren, that.m_last_closed_paren);
 
       if (m_is_singular) {
-         if (!that.m_is_singular) {
+         if (! that.m_is_singular) {
             m_base = that.m_base;
             m_null = that.m_null;
          }
+
       } else if (that.m_is_singular) {
          that.m_base = m_base;
          that.m_null = m_null;
+
       } else {
          std::swap(m_base, that.m_base);
          std::swap(m_null, that.m_null);
       }
+
       std::swap(m_is_singular, that.m_is_singular);
    }
 
@@ -406,118 +353,135 @@ class match_results
       } else if (that.m_is_singular) {
          return false;
       }
-      return (m_subs == that.m_subs) && (m_base == that.m_base) && (m_last_closed_paren == that.m_last_closed_paren);
+      return (m_capture_list == that.m_capture_list) && (m_base == that.m_base) && (m_last_closed_paren == that.m_last_closed_paren);
    }
+
    bool operator!=(const match_results &that)const {
       return !(*this == that);
    }
 
    // private access functions
-   void set_second(BidiIterator i) {
-      assert(m_subs.size() > 2);
-      m_subs[2].second = i;
-      m_subs[2].matched = true;
-      m_subs[0].first = i;
-      m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
-      m_null.first = i;
-      m_null.second = i;
+   void set_second(string_iterator i) {
+      assert(m_capture_list.size() > 2);
+
+      m_capture_list[2].second  = i;
+      m_capture_list[2].matched = true;
+      m_capture_list[0].first   = i;
+      m_capture_list[0].matched = (m_capture_list[0].first != m_capture_list[0].second);
+
+      m_null.first   = i;
+      m_null.second  = i;
       m_null.matched = false;
       m_is_singular = false;
    }
 
-   void set_second(BidiIterator i, size_type pos, bool m = true, bool escape_k = false) {
+   void set_second(string_iterator i, size_type pos, bool m = true, bool escape_k = false) {
       if (pos) {
          m_last_closed_paren = static_cast<int>(pos);
       }
 
       pos += 2;
-      assert(m_subs.size() > pos);
-      m_subs[pos].second = i;
-      m_subs[pos].matched = m;
+      assert(m_capture_list.size() > pos);
+      m_capture_list[pos].second = i;
+      m_capture_list[pos].matched = m;
 
       if ((pos == 2) && !escape_k) {
-         m_subs[0].first = i;
-         m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
+         m_capture_list[0].first = i;
+         m_capture_list[0].matched = (m_capture_list[0].first != m_capture_list[0].second);
          m_null.first = i;
          m_null.second = i;
          m_null.matched = false;
          m_is_singular = false;
       }
    }
-   void set_size(size_type n, BidiIterator i, BidiIterator j) {
+
+   void set_size(size_type n, string_iterator i, string_iterator j) {
       value_type v(j);
-      size_type len = m_subs.size();
+
+      size_type len = m_capture_list.size();
 
       if (len > n + 2) {
-         m_subs.erase(m_subs.begin() + n + 2, m_subs.end());
-         std::fill(m_subs.begin(), m_subs.end(), v);
+         m_capture_list.erase(m_capture_list.begin() + n + 2, m_capture_list.end());
+         std::fill(m_capture_list.begin(), m_capture_list.end(), v);
+
       } else {
-         std::fill(m_subs.begin(), m_subs.end(), v);
+         std::fill(m_capture_list.begin(), m_capture_list.end(), v);
+
          if (n + 2 != len) {
-            m_subs.insert(m_subs.end(), n + 2 - len, v);
+            m_capture_list.insert(m_capture_list.end(), n + 2 - len, v);
          }
       }
 
-      m_subs[1].first = i;
+      m_capture_list[1].first = i;
       m_last_closed_paren = 0;
    }
 
-   void set_base(BidiIterator pos) {
+   void set_base(string_iterator pos) {
       m_base = pos;
    }
 
-   BidiIterator base()const {
+   string_iterator base()const {
       return m_base;
    }
-   void set_first(BidiIterator i) {
-      assert(m_subs.size() > 2);
-      // set up prefix:
-      m_subs[1].second = i;
-      m_subs[1].matched = (m_subs[1].first != i);
+
+   void set_first(string_iterator i) {
+      assert(m_capture_list.size() > 2);
+
+      // set up prefix
+      m_capture_list[1].second = i;
+      m_capture_list[1].matched = (m_capture_list[1].first != i);
+
       // set up $0:
-      m_subs[2].first = i;
-      // zero out everything else:
-      for (size_type n = 3; n < m_subs.size(); ++n) {
-         m_subs[n].first = m_subs[n].second = m_subs[0].second;
-         m_subs[n].matched = false;
+      m_capture_list[2].first = i;
+
+      // zero out everything else
+      for (size_type n = 3; n < m_capture_list.size(); ++n) {
+         m_capture_list[n].first = m_capture_list[n].second = m_capture_list[0].second;
+         m_capture_list[n].matched = false;
       }
    }
-   void set_first(BidiIterator i, size_type pos, bool escape_k = false) {
-      assert(pos + 2 < m_subs.size());
+
+   void set_first(string_iterator i, size_type pos, bool escape_k = false) {
+      assert(pos + 2 < m_capture_list.size());
+
       if (pos || escape_k) {
-         m_subs[pos + 2].first = i;
+         m_capture_list[pos + 2].first = i;
          if (escape_k) {
-            m_subs[1].second = i;
-            m_subs[1].matched = (m_subs[1].first != m_subs[1].second);
+            m_capture_list[1].second = i;
+            m_capture_list[1].matched = (m_capture_list[1].first != m_capture_list[1].second);
          }
+
       } else {
          set_first(i);
       }
    }
 
-   void maybe_assign(const match_results<BidiIterator, AllocatorT> &m);
+   void maybe_assign(const match_results<Traits, Allocator> &m);
 
-   void set_named_subs(std::shared_ptr<named_sub_type> subs) {
-      m_named_subs = subs;
+   void set_named_subs(std::shared_ptr<capture_names_type> capture_name) {
+      m_capture_names = capture_name;
    }
 
  private:
-   // Error handler called when an uninitialized match_results is accessed:
+   // error handler called when an uninitialized match_results is accessed:
    static void raise_logic_error() {
       std::logic_error e("Attempt to access an uninitialzed cs_regex_ns::::match_results<> class.");
       throw (e);
    }
 
-   vector_type            m_subs;                      // subexpressions
-   BidiIterator   m_base;                              // where the search started from
-   sub_match<BidiIterator> m_null;                     // a null match
-   std::shared_ptr<named_sub_type> m_named_subs;       // Shared copy of named subs in the regex object
-   int m_last_closed_paren;                            // Last ) to be seen - used for formatting
-   bool m_is_singular;                                 // True if our stored iterators are singular
+   vector_type m_capture_list;                             // list of subexpressions
+   std::shared_ptr<capture_names_type> m_capture_names;    // shared copy of named subs in the regex object
+
+   string_iterator m_base;                   // where the search started from
+   sub_match<string_iterator> m_null;        // a null match
+
+   int m_last_closed_paren;                  // Last ) to be seen - used for formatting
+   bool m_is_singular;                       // True if our stored iterators are singular
 };
 
-template <class BidiIterator, class Allocator>
-void match_results<BidiIterator, Allocator>::maybe_assign(const match_results<BidiIterator, Allocator> &m)
+
+template <class Traits, class Allocator>
+void match_results<Traits, Allocator>::maybe_assign(const match_results<Traits, Allocator> &m)
 {
    if (m_is_singular) {
       *this = m;
@@ -528,7 +492,6 @@ void match_results<BidiIterator, Allocator>::maybe_assign(const match_results<Bi
    p1 = begin();
    p2 = m.begin();
 
-
    // Distances are measured from the start of *this* match, unless this isn't
    // a valid match in which case we use the start of the whole sequence.  Note that
    // no subsequent match-candidate can ever be to the left of the first match found.
@@ -538,48 +501,54 @@ void match_results<BidiIterator, Allocator>::maybe_assign(const match_results<Bi
    // whether a sub-expression is a valid match, because partial matches set this
    // to false for sub-expression 0.
 
-   BidiIterator l_end = this->suffix().second;
-   BidiIterator l_base = (p1->first == l_end) ? this->prefix().first : (*this)[0].first;
-   difference_type len1 = 0;
-   difference_type len2 = 0;
+   string_iterator l_end = this->suffix().second;
+   string_iterator l_base = (p1->first == l_end) ? this->prefix().first : (*this)[0].first;
+
+   difference_type len1  = 0;
+   difference_type len2  = 0;
    difference_type base1 = 0;
    difference_type base2 = 0;
+
    std::size_t i;
 
    for (i = 0; i < size(); ++i, ++p1, ++p2) {
-      //
+
       // Leftmost takes priority over longest; handle special cases
       // where distances need not be computed first (an optimisation
       // for bidirectional iterators: ensure that we don't accidently
-      // compute the length of the whole sequence, as this can be really
-      // expensive).
-      //
+      // compute the length of the whole sequence, as this can be really  expensive).
+
       if (p1->first == l_end) {
          if (p2->first != l_end) {
-            // p2 must be better than p1, and no need to calculate
-            // actual distances:
+            // p2 must be better than p1, and no need to calculate actual distances
             base1 = 1;
             base2 = 0;
             break;
+
          } else {
             // *p1 and *p2 are either unmatched or match end-of sequence,
             // either way no need to calculate distances:
             if ((p1->matched == false) && (p2->matched == true)) {
                break;
             }
+
             if ((p1->matched == true) && (p2->matched == false)) {
                return;
             }
             continue;
          }
+
       } else if (p2->first == l_end) {
          // p1 better than p2, and no need to calculate distances:
          return;
       }
+
       base1 = std::distance(l_base, p1->first);
       base2 = std::distance(l_base, p2->first);
+
       assert(base1 >= 0);
       assert(base2 >= 0);
+
       if (base1 < base2) {
          return;
       }
@@ -588,8 +557,8 @@ void match_results<BidiIterator, Allocator>::maybe_assign(const match_results<Bi
          break;
       }
 
-      len1 = std::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
-      len2 = std::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
+      len1 = std::distance(p1->first, p1->second);
+      len2 = std::distance(p2->first, p2->second);
 
       assert(len1 >= 0);
       assert(len2 >= 0);
@@ -609,19 +578,20 @@ void match_results<BidiIterator, Allocator>::maybe_assign(const match_results<Bi
 
    if (base2 < base1) {
       *this = m;
+
    } else if ((len2 > len1) || ((p1->matched == false) && (p2->matched == true)) ) {
       *this = m;
    }
 }
 
-template <class BidiIterator, class Allocator>
-void swap(match_results<BidiIterator, Allocator> &a, match_results<BidiIterator, Allocator> &b)
+template <class Traits, class Allocator>
+void swap(match_results<Traits, Allocator> &a, match_results<Traits, Allocator> &b)
 {
    a.swap(b);
 }
 
-template <class charT, class traits, class BidiIterator, class Allocator> std::basic_ostream<charT, traits> &
-operator << (std::basic_ostream<charT, traits> &os, const match_results<BidiIterator, Allocator> &s)
+template <class charT, class Traits, class RegexTraits, class Allocator>
+std::basic_ostream<charT, Traits> & operator<< (std::basic_ostream<charT, Traits> &os, const match_results<RegexTraits, Allocator> &s)
 {
    return (os << s.str());
 }

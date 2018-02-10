@@ -367,15 +367,18 @@ template <class BidiIterator, class Allocator, class traits>
 class perl_matcher
 {
  public:
-   typedef typename traits::char_type char_type;
-   typedef perl_matcher<BidiIterator, Allocator, traits> self_type;
-   typedef bool (self_type::*matcher_proc_type)(void);
-   typedef std::size_t traits_size_type;
-   typedef typename is_byte<char_type>::width_type width_type;
-   typedef typename regex_iterator_traits<BidiIterator>::difference_type difference_type;
-   typedef match_results<BidiIterator, Allocator> results_type;
+   using char_type          = typename traits::char_type;
+   using self_type          = perl_matcher<BidiIterator, Allocator, traits>;
 
-   perl_matcher(BidiIterator first, BidiIterator end, match_results<BidiIterator, Allocator> &what,
+   using matcher_proc_type  = bool (self_type::*)(void);
+
+   using traits_size_type   = std::size_t;
+   using width_type         = typename is_byte<char_type>::width_type;
+
+   using difference_type    = typename regex_iterator_traits<BidiIterator>::difference_type;
+   using results_type       = match_results<traits, Allocator>;
+
+   perl_matcher(BidiIterator first, BidiIterator end, match_results<traits, Allocator> &what,
                 const basic_regex<char_type, traits> &e, match_flag_type f, BidiIterator l_base)
       :  m_result(what), base(first), last(end),
          position(first), backstop(l_base), re(e), traits_inst(e.get_traits()),
@@ -459,12 +462,13 @@ class perl_matcher
 
  private:
    // final result structure to be filled in:
-   match_results<BidiIterator, Allocator> &m_result;
+   match_results<traits, Allocator> &m_result;
+
    // temporary result for POSIX matches:
-   std::unique_ptr<match_results<BidiIterator, Allocator> > m_temp_match;
+   std::unique_ptr<match_results<traits, Allocator> > m_temp_match;
 
    // pointer to actual result structure to fill in:
-   match_results<BidiIterator, Allocator> *m_presult;
+   match_results<traits, Allocator> *m_presult;
 
    // start of sequence being searched:
    BidiIterator base;
@@ -512,7 +516,7 @@ class perl_matcher
    unsigned char match_any_mask;
 
    // recursion information:
-   std::vector<recursion_info<results_type> > recursion_stack;
+   std::vector<recursion_info<results_type>> recursion_stack;
 
    // additional members for non-recursive version
    typedef bool (self_type::*unwind_proc_type)(bool);
@@ -552,17 +556,23 @@ class perl_matcher
 
    // pointer to base of stack:
    saved_state *m_stack_base;
+
    // pointer to current stack position:
    saved_state *m_backup_state;
+
    // how many memory blocks have we used up?:
    unsigned used_block_count;
+
    // determines what value to return when unwinding from recursion,
    // allows for mixed recursive/non-recursive algorithm:
    bool m_recursive_result;
+
    // We have unwound to a lookahead/lookbehind, used by COMMIT/PRUNE/SKIP:
    bool m_unwound_lookahead;
+
    // We have unwound to an alternative, used by THEN:
    bool m_unwound_alt;
+
    // We are unwinding a commit - used by independent subs to determine whether to stop there or carry on unwinding:
    //bool m_unwind_commit;
    // Recursion limit:

@@ -61,7 +61,7 @@ inline bool regex_match(const std::basic_string<charT, ST, SA> &s,
 template <class charT, class traits>
 inline bool regex_match(const charT *str, const basic_regex<charT, traits> &e, match_flag_type flags = match_default)
 {
-   match_results<const charT *> m;
+   match_results<traits> m;
    return regex_match(str, str + traits::length(str), m, e, flags | regex_constants::match_any);
 }
 
@@ -69,9 +69,7 @@ template <class ST, class SA, class charT, class traits>
 inline bool regex_match(const std::basic_string<charT, ST, SA> &s, const basic_regex<charT, traits> &e,
                   match_flag_type flags = match_default)
 {
-   using iterator = typename std::basic_string<charT, ST, SA>::const_iterator;
-
-   match_results<iterator> m;
+   match_results<traits> m;
    return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
 }
 

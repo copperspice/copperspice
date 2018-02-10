@@ -666,7 +666,7 @@ QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
       }
    }
 
-   // broom ( test code only, full implementation required )
+   // broom ( full implementation required )
    QString8 retval;
 
    for (int i = 0; i < numOfChars; ++i) {
@@ -1023,18 +1023,107 @@ QString8 &QString8::replace(QChar32 c, const QString8 &after, Qt::CaseSensitivit
 
 QString8 &QString8::replace(const QRegularExpression<QString8> &regExp, const QString8 &after)
 {
-   // broom - add capture references
-
    QRegularExpressionMatch<QString8> match = regExp.match(*this);
+   QRegularExpressionMatch<QString8> splitMatch;
 
-   while (match.hasMatch())  {
-      auto first = match.capturedStart(0);
-      auto last  = match.capturedEnd(0);
+   static QRegularExpression<QString8> regSplit("(.*?)(\\\\[0-9])");
+   bool noCapture = true;
 
-      auto iter  = this->erase(first, last);
-      iter       = CsString::CsString::insert(iter, after);
+   auto iter = after.indexOfFast('\\');
 
-      match      = regExp.match(*this, iter);
+   if (iter != after.end() && iter != end() - 1) {
+      splitMatch = regSplit.match(after);
+
+      if (splitMatch.hasMatch()) {
+         noCapture = false;
+      }
+   }
+
+   if (noCapture) {
+
+      while (match.hasMatch())  {
+         auto first = match.capturedStart(0);
+         auto last  = match.capturedEnd(0);
+
+         auto iter  = this->erase(first, last);
+         iter       = CsString::CsString::insert(iter, after);
+
+         match      = regExp.match(*this, iter);
+      }
+
+   } else {
+      // look for a 0-9
+      QVector<QStringView8> list;
+
+      QString8::const_iterator hold;
+
+      while (splitMatch.hasMatch())  {
+         list.append(splitMatch.capturedView(1));
+         list.append(splitMatch.capturedView(2));
+
+         hold = splitMatch.capturedEnd(0);
+
+         splitMatch = regSplit.match(after, splitMatch.capturedEnd(0));
+      }
+
+      if (hold != after.end()) {
+
+         // grab the rest of 'after'
+         list.append( QStringView8(hold, after.end()) );
+      }
+
+      std::array<QString8, 10> saveCapture;
+
+      while (match.hasMatch())  {
+         auto first = match.capturedStart(0);
+         auto last  = match.capturedEnd(0);
+
+         for (int x = 0; x < 10; ++x) {
+            saveCapture[x] = match.captured(x);
+         }
+
+         auto iter  = this->erase(first, last);
+
+         for (const auto &item : list) {
+
+            if (item == "\\0") {
+               iter = CsString::CsString::insert(iter, saveCapture[0]);
+
+            } else if (item == "\\1") {
+                  iter = CsString::CsString::insert(iter, saveCapture[1]);
+
+            } else if (item == "\\2") {
+                  iter = CsString::CsString::insert(iter, saveCapture[2]);
+
+            } else if (item == "\\3") {
+                  iter = CsString::CsString::insert(iter, saveCapture[3]);
+
+            } else if (item == "\\4") {
+                  iter = CsString::CsString::insert(iter, saveCapture[4]);
+
+            } else if (item == "\\5") {
+                  iter = CsString::CsString::insert(iter, saveCapture[5]);
+
+            } else if (item == "\\6") {
+                  iter = CsString::CsString::insert(iter, saveCapture[6]);
+
+            } else if (item == "\\7") {
+                  iter = CsString::CsString::insert(iter, saveCapture[7]);
+
+            } else if (item == "\\8") {
+                  iter = CsString::CsString::insert(iter, saveCapture[8]);
+
+            } else if (item == "\\9") {
+                  iter = CsString::CsString::insert(iter, saveCapture[9]);
+
+            } else {
+               iter = CsString::CsString::insert(iter, item);
+
+            }
+         }
+
+         match = regExp.match(*this, iter);
+      }
    }
 
    return *this;

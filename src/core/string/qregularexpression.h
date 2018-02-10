@@ -145,7 +145,7 @@ class QRegexTraits
       }
 
       QChar32 translate_nocase(QChar32 c) const {
-         // broom - add soon, modify for case insensitive
+         // broom - ADD NOW
          return c;
       }
 
@@ -161,7 +161,7 @@ class QRegexTraits
 
       template<typename Iter>
       string_type lookup_collatename(Iter first, Iter last)  const {
-         // broom - add soon, modify for case insensitive
+         // broom - modify for case insensitive
          return S();
       }
 
@@ -250,7 +250,7 @@ class QRegexTraits
          }
 
          if (cType & Char_Category::categoryHexDigit) {
-            // broom - add soon
+            // broom - categoryHexDigit
 //          retval = retval || c.isX();
          }
 
@@ -435,14 +435,14 @@ class Q_CORE_EXPORT QRegularExpression
       QRegularExpression &operator=(QRegularExpression &&other) = default;
 
 
-/*    broom - hold for now
-      bool operator==(const QRegularExpression &regExp) const {
-      }
+    // unsure if this methods is required
+//    bool operator==(const QRegularExpression &regExp) const {
+//    }
 
-      bool operator!=(const QRegularExpression &regExp) const {
-         return !operator==(regExp);
-      }
-*/
+      // unsure if this methods is required
+//    bool operator!=(const QRegularExpression &regExp) const {
+//       return !operator==(regExp);
+//    }
 
    private:
       S m_pattern;
@@ -456,13 +456,12 @@ class Q_CORE_EXPORT QRegularExpression
       friend Q_CORE_EXPORT uint qHash(const QRegularExpression<S2> &key, uint seed);
 };
 
-#ifndef QT_NO_DATASTREAM
-   template <typename S>
-   Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegularExpression<S> &regExp);
 
-   template <typename S>
-   Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegularExpression<S> &regExp);
-#endif
+template <typename S>
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegularExpression<S> &regExp);
+
+template <typename S>
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegularExpression<S> &regExp);
 
 template <typename S>
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QRegularExpression<S> &regExp);
@@ -480,7 +479,7 @@ class Q_CORE_EXPORT QRegularExpressionMatch
       QRegularExpressionMatch(QRegularExpressionMatch &&other) = default;
 
       // internal only
-      QRegularExpressionMatch(cs_regex_ns::match_results<typename S::const_iterator> match)
+      QRegularExpressionMatch(cs_regex_ns::match_results<QRegexTraits<S>> match)
          : m_results(std::move(match)), m_valid(true)
       {
       }
@@ -533,10 +532,20 @@ class Q_CORE_EXPORT QRegularExpressionMatch
       QStringView<S> capturedView(QStringView<S> name) const;
 
       bool hasMatch() const {
-         return ! m_results.empty();
+         if (m_results.empty()) {
+            return false;
+         }
+
+         return m_results[0].matched;
       }
 
       bool hasPartialMatch() const {
+         if (m_results.empty()) {
+            return false;
+         }
+
+         // may need additional changes
+
          if (! m_results[0].matched) {
             return true;
          }
@@ -560,7 +569,7 @@ class Q_CORE_EXPORT QRegularExpressionMatch
       }
 
    private:
-      cs_regex_ns::match_results<typename S::const_iterator> m_results;
+      cs_regex_ns::match_results<QRegexTraits<S>> m_results;
       bool m_valid = false;
 };
 
@@ -677,16 +686,23 @@ template <typename S>
 QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S::const_iterator offset, QMatchType matchType,
                   QMatchOptionFlags matchOptions) const
 {
-   // broom - need to handle matchType, matchOptions
+   // broom - - ADD NOW need to handle matchType, matchOptions   PERTH
 
    if (m_valid) {
-      cs_regex_ns::match_results<typename S::const_iterator> matchResult;
-      cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex);
+      cs_regex_ns::match_results<QRegexTraits<S>> matchResult;
 
-      QRegularExpressionMatch<S> retval{matchResult};
-      return retval;
+      if (cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex)) {
+         QRegularExpressionMatch<S> retval{matchResult};
+         return retval;
+
+      } else {
+         // valid regex, no match
+         QRegularExpressionMatch<S> retval{cs_regex_ns::match_results<QRegexTraits<S>>()};
+         return retval;
+      }
 
    } else {
+      // invalid
       return QRegularExpressionMatch<S>();
 
    }
@@ -696,10 +712,10 @@ template <typename S>
 QRegularExpressionMatch<S> QRegularExpression<S>::match(const QStringView<S> &str, typename S::const_iterator offset,
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
-   // broom - need to handle matchType, matchOptions
+   // broom - - ADD NOW need to handle matchType, matchOptions
 
    if (m_valid) {
-      cs_regex_ns::match_results<typename S::const_iterator> matchResult;
+      cs_regex_ns::match_results<QRegexTraits<S>> matchResult;
       cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex);
 
       QRegularExpressionMatch<S> retval{matchResult};
@@ -716,7 +732,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const S &str, typename 
                   QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
-      // broom -implement
+      // broom -- implementation pending
 
    } else {
       return QRegularExpressionMatch<S>();
@@ -728,7 +744,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const QStringView<S> &s
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
-      // broom -implement
+      // broom -- implementation pending
 
    } else {
       return QRegularExpressionMatch<S>();
@@ -739,10 +755,9 @@ template <typename S>
 QList<S> QRegularExpression<S>::namedCaptureGroups() const
 {
    if (m_valid) {
-      QList<S> retval;
+      std::vector<S> tmp = m_regex.getNamedCaptureGroups();
 
-      // broom -implement
-
+      QList<S> retval(tmp.begin(), tmp.end());
       return retval;
 
    } else {
@@ -1039,13 +1054,13 @@ QList<S> QRegularExpressionMatch<S>::capturedTexts() const
 template <typename S>
 QMatchType QRegularExpressionMatch<S>::matchType() const
 {
-   // broom - implement
+   // broom - - ADD NOW
 }
 
 template <typename S>
 QMatchOptionFlags QRegularExpressionMatch<S>::matchOptions() const
 {
-   // broom - implement
+   // broom - - ADD NOW
 }
 
 
@@ -1054,18 +1069,9 @@ QMatchOptionFlags QRegularExpressionMatch<S>::matchOptions() const
 template <typename S>
 uint qHash(const QRegularExpression<S> &key, uint seed)
 {
-   // broom - implement
-}
-
-namespace std {
-   template<typename S>
-   struct hash<QRegularExpression<S>>
-   {
-      size_t operator()(const QRegularExpression<S> &key) const
-      {
-         // broom - implement
-      }
-   };
+   seed = qHash(key.m_pattern, seed);
+   seed = qHash(key.m_options, seed);
+   return seed;
 }
 
 #endif
