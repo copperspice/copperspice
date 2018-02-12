@@ -72,18 +72,6 @@ void QRegion::detach()
 #define QRGN_XOR              9
 #define QRGN_RECTS            10
 
-
-#ifndef QT_NO_DATASTREAM
-
-/*
-    Executes region commands in the internal buffer and rebuilds the
-    original region.
-
-    We do this when we read a region from the data stream.
-
-    If \a ver is non-0, uses the format version \a ver on reading the
-    byte array.
-*/
 void QRegion::exec(const QByteArray &buffer, int ver, QDataStream::ByteOrder byteOrder)
 {
    QByteArray copy = buffer;
@@ -102,13 +90,7 @@ void QRegion::exec(const QByteArray &buffer, int ver, QDataStream::ByteOrder byt
 
    while (!s.atEnd()) {
       qint32 id;
-      if (s.version() == 1) {
-         int id_int;
-         s >> id_int;
-         id = id_int;
-      } else {
-         s >> id;
-      }
+      s >> id;
 
 #ifndef QT_NO_DEBUG
       if (test_cnt > 0 && id != QRGN_TRANSLATE) {
@@ -180,21 +162,10 @@ QDataStream &operator<<(QDataStream &s, const QRegion &r)
       s << (quint32)0;
 
    } else {
-      if (s.version() == 1) {
-         int i;
-         for (i = a.size() - 1; i > 0; --i) {
-            s << (quint32)(12 + i * 24);
-            s << (int)QRGN_OR;
-         }
-         for (i = 0; i < a.size(); ++i) {
-            s << (quint32)(4 + 8) << (int)QRGN_SETRECT << a[i];
-         }
+      s << (quint32)(4 + 4 + 16 * a.size()); // 16: storage size of QRect
+      s << (qint32)QRGN_RECTS;
+      s << a;
 
-      } else {
-         s << (quint32)(4 + 4 + 16 * a.size()); // 16: storage size of QRect
-         s << (qint32)QRGN_RECTS;
-         s << a;
-      }
    }
 
    return s;
@@ -209,8 +180,6 @@ QDataStream &operator>>(QDataStream &s, QRegion &r)
 
    return s;
 }
-#endif //QT_NO_DATASTREAM
-
 
 QDebug operator<<(QDebug s, const QRegion &r)
 {
@@ -256,24 +225,11 @@ const QRegion QRegion::operator-(const QRegion &r) const
    return subtracted(r);
 }
 
-/*!
-    Applies the xored() function to this region and \a r. \c r1^r2 is
-    equivalent to \c r1.xored(r2).
-
-    \sa xored()
-*/
 const QRegion QRegion::operator^(const QRegion &r) const
 {
    return xored(r);
 }
 
-/*!
-    Applies the united() function to this region and \a r and assigns
-    the result to this region. \c r1|=r2 is equivalent to \c
-    {r1 = r1.united(r2)}.
-
-    \sa united()
-*/
 QRegion &QRegion::operator|=(const QRegion &r)
 {
    return *this = *this | r;

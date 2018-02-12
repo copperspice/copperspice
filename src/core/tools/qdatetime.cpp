@@ -2558,131 +2558,50 @@ void QDateTime::detach()
    d.detach();
 }
 
-/*****************************************************************************
-  Date/time stream functions
- *****************************************************************************/
-
-#ifndef QT_NO_DATASTREAM
-/*!
-    \relates QDate
-
-    Writes the \a date to stream \a out.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &out, const QDate &date)
 {
    return out << (quint32)(date.jd);
 }
 
-/*!
-    \relates QDate
-
-    Reads a date from stream \a in into the \a date.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator>>(QDataStream &in, QDate &date)
 {
    quint32 jd;
    in >> jd;
    date.jd = jd;
+
    return in;
 }
-
-/*!
-    \relates QTime
-
-    Writes \a time to stream \a out.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator<<(QDataStream &out, const QTime &time)
 {
    return out << quint32(time.mds);
 }
 
-/*!
-    \relates QTime
-
-    Reads a time from stream \a in into the given \a time.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator>>(QDataStream &in, QTime &time)
 {
    quint32 ds;
    in >> ds;
    time.mds = int(ds);
+
    return in;
 }
 
-/*!
-    \relates QDateTime
-
-    Writes \a dateTime to the \a out stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, const QDateTime &dateTime)
 {
-   if (out.version() == 13) {
-      if (dateTime.isValid()) {
-         // This approach is wrong and should not be used again; it breaks
-         // the guarantee that a deserialised local datetime is the same time
-         // of day, regardless of which timezone it was serialised in.
-         QDateTime asUTC = dateTime.toUTC();
-         out << asUTC.d->date << asUTC.d->time;
-      } else {
-         out << dateTime.d->date << dateTime.d->time;
-      }
-      out << (qint8)dateTime.timeSpec();
+   out << dateTime.d->date << dateTime.d->time;
+   out << (qint8)dateTime.d->spec;
 
-   } else {
-      out << dateTime.d->date << dateTime.d->time;
-      if (out.version() >= 7) {
-         out << (qint8)dateTime.d->spec;
-      }
-   }
    return out;
 }
 
-/*!
-    \relates QDateTime
-
-    Reads a datetime from the stream \a in into \a dateTime.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator>>(QDataStream &in, QDateTime &dateTime)
 {
-   dateTime.detach();
+   qint8 ts = (qint8)QDateTimePrivate::LocalUnknown;
 
-   in >> dateTime.d->date >> dateTime.d->time;
-
-   if (in.version() == 13) {
-      qint8 ts = 0;
-      in >> ts;
-      if (dateTime.isValid()) {
-         // We always store the datetime as UTC in 13 onwards.
-         dateTime.d->spec = QDateTimePrivate::UTC;
-         dateTime = dateTime.toTimeSpec(static_cast<Qt::TimeSpec>(ts));
-      }
-   } else {
-      qint8 ts = (qint8)QDateTimePrivate::LocalUnknown;
-      if (in.version() >= 7) {
-         in >> ts;
-      }
-      dateTime.d->spec = (QDateTimePrivate::Spec)ts;
-   }
-   return in;
+   in >> ts;
+   dateTime.d->spec = (QDateTimePrivate::Spec)ts;
 }
-#endif // QT_NO_DATASTREAM
 
 // checks if there is an unqoted 'AP' or 'ap' in the string
 static bool hasUnquotedAP(const QString &f)
@@ -2701,6 +2620,7 @@ static bool hasUnquotedAP(const QString &f)
 }
 
 #ifndef QT_NO_DATESTRING
+
 /*****************************************************************************
   Some static function used by QDate, QTime and QDateTime
 *****************************************************************************/

@@ -31,19 +31,15 @@
 #include <qvariant.h>
 #include <qcursor_p.h>
 
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_DATASTREAM
-
 QDataStream &operator<<(QDataStream &s, const QCursor &c)
 {
    s << (qint16)c.shape();                        // write shape id to stream
+
    if (c.shape() == Qt::BitmapCursor) {           // bitmap cursor
       bool isPixmap = false;
-      if (s.version() >= 7) {
-         isPixmap = !c.pixmap().isNull();
-         s << isPixmap;
-      }
+
+      isPixmap = !c.pixmap().isNull();
+      s << isPixmap;
 
       if (isPixmap) {
          s << c.pixmap();
@@ -56,24 +52,16 @@ QDataStream &operator<<(QDataStream &s, const QCursor &c)
    return s;
 }
 
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QCursor &cursor)
-    \relates QCursor
-
-    Reads the \a cursor from the \a stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator>>(QDataStream &s, QCursor &c)
 {
    qint16 shape;
-   s >> shape;                                        // read shape id from stream
+   s >> shape;                                     // read shape id from stream
+
    if (shape == Qt::BitmapCursor) {                // read bitmap cursor
       bool isPixmap = false;
-      if (s.version() >= 7) {
-         s >> isPixmap;
-      }
+
+      s >> isPixmap;
+
       if (isPixmap) {
          QPixmap pm;
          QPoint hot;
@@ -85,34 +73,13 @@ QDataStream &operator>>(QDataStream &s, QCursor &c)
          s >> bm >> bmm >> hot;
          c = QCursor(bm, bmm, hot.x(), hot.y());
       }
+
    } else {
       c.setShape((Qt::CursorShape)shape);                // create cursor with shape
    }
+
    return s;
 }
-#endif // QT_NO_DATASTREAM
-
-
-/*!
-    Constructs a custom pixmap cursor.
-
-    \a pixmap is the image. It is usual to give it a mask (set using
-    QPixmap::setMask()). \a hotX and \a hotY define the cursor's hot
-    spot.
-
-    If \a hotX is negative, it is set to the \c{pixmap().width()/2}.
-    If \a hotY is negative, it is set to the \c{pixmap().height()/2}.
-
-    Valid cursor sizes depend on the display hardware (or the
-    underlying window system). We recommend using 32 x 32 cursors,
-    because this size is supported on all platforms. Some platforms
-    also support 16 x 16, 48 x 48, and 64 x 64 cursors.
-
-    \note On Windows CE, the cursor size is fixed. If the pixmap
-    is bigger than the system size, it will be scaled.
-
-    \sa QPixmap::QPixmap(), QPixmap::setMask()
-*/
 
 QCursor::QCursor(const QPixmap &pixmap, int hotX, int hotY)
    : d(0)
@@ -134,42 +101,6 @@ QCursor::QCursor(const QPixmap &pixmap, int hotX, int hotY)
    d = QCursorData::setBitmap(bm, bmm, hotX, hotY);
    d->pixmap = pixmap;
 }
-
-
-
-/*!
-    Constructs a custom bitmap cursor.
-
-    \a bitmap and
-    \a mask make up the bitmap.
-    \a hotX and
-    \a hotY define the cursor's hot spot.
-
-    If \a hotX is negative, it is set to the \c{bitmap().width()/2}.
-    If \a hotY is negative, it is set to the \c{bitmap().height()/2}.
-
-    The cursor \a bitmap (B) and \a mask (M) bits are combined like this:
-    \list
-    \o B=1 and M=1 gives black.
-    \o B=0 and M=1 gives white.
-    \o B=0 and M=0 gives transparent.
-    \o B=1 and M=0 gives an XOR'd result under Windows, undefined
-    results on all other platforms.
-    \endlist
-
-    Use the global Qt color Qt::color0 to draw 0-pixels and Qt::color1 to
-    draw 1-pixels in the bitmaps.
-
-    Valid cursor sizes depend on the display hardware (or the
-    underlying window system). We recommend using 32 x 32 cursors,
-    because this size is supported on all platforms. Some platforms
-    also support 16 x 16, 48 x 48, and 64 x 64 cursors.
-
-    \note On Windows CE, the cursor size is fixed. If the pixmap
-    is bigger than the system size, it will be scaled.
-
-    \sa QBitmap::QBitmap(), QBitmap::setMask()
-*/
 
 QCursor::QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX, int hotY)
    : d(0)

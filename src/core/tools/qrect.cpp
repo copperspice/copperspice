@@ -342,80 +342,26 @@ bool QRect::intersects(const QRect &r) const
    return true;
 }
 
-/*!
-    \fn bool operator==(const QRect &r1, const QRect &r2)
-    \relates QRect
-
-    Returns true if the rectangles \a r1 and \a r2 are equal,
-    otherwise returns false.
-*/
-
-
-/*!
-    \fn bool operator!=(const QRect &r1, const QRect &r2)
-    \relates QRect
-
-    Returns true if the rectangles \a r1 and \a r2 are different, otherwise
-    returns false.
-*/
-
-
-/*****************************************************************************
-  QRect stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QRect &rectangle)
-    \relates QRect
-
-    Writes the given \a rectangle to the given \a stream, and returns
-    a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &s, const QRect &r)
 {
-   if (s.version() == 1)
-      s << (qint16)r.left() << (qint16)r.top()
-        << (qint16)r.right() << (qint16)r.bottom();
-   else
-      s << (qint32)r.left() << (qint32)r.top()
-        << (qint32)r.right() << (qint32)r.bottom();
+
+   s << (qint32)r.left() << (qint32)r.top()
+     << (qint32)r.right() << (qint32)r.bottom();
+
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QRect &rectangle)
-    \relates QRect
-
-    Reads a rectangle from the given \a stream into the given \a
-    rectangle, and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &s, QRect &r)
 {
-   if (s.version() == 1) {
-      qint16 x1, y1, x2, y2;
-      s >> x1;
-      s >> y1;
-      s >> x2;
-      s >> y2;
-      r.setCoords(x1, y1, x2, y2);
-   } else {
-      qint32 x1, y1, x2, y2;
-      s >> x1;
-      s >> y1;
-      s >> x2;
-      s >> y2;
-      r.setCoords(x1, y1, x2, y2);
-   }
+   qint32 x1, y1, x2, y2;
+   s >> x1;
+   s >> y1;
+   s >> x2;
+   s >> y2;
+   r.setCoords(x1, y1, x2, y2);
+
    return s;
 }
-
-#endif // QT_NO_DATASTREAM
 
 
 QDebug operator<<(QDebug dbg, const QRect &r)

@@ -45,10 +45,9 @@
 # include <qt_mac_p.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #ifdef Q_OS_MAC
 static bool qt_sequence_no_mnemonics = true;
+
 struct MacSpecialKey {
    int key;
    ushort macSymbol;
@@ -1630,14 +1629,12 @@ QString QKeySequence::listToString(const QList<QKeySequence> &list, SequenceForm
    return result;
 }
 
-#if !defined(QT_NO_DATASTREAM)
-
 QDataStream &operator<<(QDataStream &s, const QKeySequence &keysequence)
 {
    QList<quint32> list;
    list << keysequence.d->key[0];
 
-   if (s.version() >= 5 && keysequence.count() > 1) {
+   if (keysequence.count() > 1) {
       list << keysequence.d->key[1];
       list << keysequence.d->key[2];
       list << keysequence.d->key[3];
@@ -1646,27 +1643,17 @@ QDataStream &operator<<(QDataStream &s, const QKeySequence &keysequence)
    return s;
 }
 
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QKeySequence &sequence)
-    \relates QKeySequence
-
-    Reads a key sequence from the \a stream into the key \a sequence.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
 QDataStream &operator>>(QDataStream &s, QKeySequence &keysequence)
 {
    qAtomicDetach(keysequence.d);
    QList<quint32> list;
    s >> list;
+
    for (int i = 0; i < 4; ++i) {
       keysequence.d->key[i] = list.value(i);
    }
    return s;
 }
-
-#endif //QT_NO_DATASTREAM
 
 
 QDebug operator<<(QDebug dbg, const QKeySequence &p)
@@ -1678,14 +1665,4 @@ QDebug operator<<(QDebug dbg, const QKeySequence &p)
 #endif // QT_NO_SHORTCUT
 
 
-/*!
-    \typedef QKeySequence::DataPtr
-    \internal
-*/
 
-/*!
-   \fn DataPtr &QKeySequence::data_ptr()
-   \internal
-*/
-
-QT_END_NAMESPACE

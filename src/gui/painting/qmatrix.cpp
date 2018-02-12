@@ -934,70 +934,32 @@ Q_GUI_EXPORT QPainterPath operator *(const QPainterPath &p, const QMatrix &m)
 }
 
 
-/*****************************************************************************
-  QMatrix stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QMatrix &matrix)
-    \relates QMatrix
-
-    Writes the given \a matrix to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &s, const QMatrix &m)
 {
-   if (s.version() == 1) {
-      s << (float)m.m11() << (float)m.m12() << (float)m.m21()
-        << (float)m.m22() << (float)m.dx()  << (float)m.dy();
-   } else {
-      s << double(m.m11())
-        << double(m.m12())
-        << double(m.m21())
-        << double(m.m22())
-        << double(m.dx())
-        << double(m.dy());
-   }
+   s << double(m.m11())
+     << double(m.m12())
+     << double(m.m21())
+     << double(m.m22())
+     << double(m.dx())
+     << double(m.dy());
+
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QMatrix &matrix)
-    \relates QMatrix
-
-    Reads the given \a matrix from the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &s, QMatrix &m)
 {
-   if (s.version() == 1) {
-      float m11, m12, m21, m22, dx, dy;
-      s >> m11;
-      s >> m12;
-      s >> m21;
-      s >> m22;
-      s >> dx;
-      s >> dy;
-      m.setMatrix(m11, m12, m21, m22, dx, dy);
-   } else {
-      double m11, m12, m21, m22, dx, dy;
-      s >> m11;
-      s >> m12;
-      s >> m21;
-      s >> m22;
-      s >> dx;
-      s >> dy;
-      m.setMatrix(m11, m12, m21, m22, dx, dy);
-   }
+
+   double m11, m12, m21, m22, dx, dy;
+   s >> m11;
+   s >> m12;
+   s >> m21;
+   s >> m22;
+   s >> dx;
+   s >> dy;
+   m.setMatrix(m11, m12, m21, m22, dx, dy);
+
    return s;
 }
-#endif // QT_NO_DATASTREAM
 
 QDebug operator<<(QDebug dbg, const QMatrix &m)
 {

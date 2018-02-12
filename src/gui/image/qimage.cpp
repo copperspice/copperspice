@@ -4768,75 +4768,34 @@ bool QImageData::doImageIO(const QImage *image, QImageWriter *writer, int qualit
    return writer->write(*image);
 }
 
-/*****************************************************************************
-  QImage stream functions
- *****************************************************************************/
-#if !defined(QT_NO_DATASTREAM)
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QImage &image)
-    \relates QImage
-
-    Writes the given \a image to the given \a stream as a PNG image,
-    or as a BMP image if the stream's version is 1. Note that writing
-    the stream to a file will not produce a valid image file.
-
-    \sa QImage::save(), {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &s, const QImage &image)
 {
-   if (s.version() >= 5) {
-      if (image.isNull()) {
-         s << (qint32) 0; // null image marker
-         return s;
-      } else {
-         s << (qint32) 1;
-         // continue ...
-      }
+   if (image.isNull()) {
+      s << (qint32) 0; // null image marker
+      return s;
+   } else {
+      s << (qint32) 1;
+      // continue ...
    }
-   QImageWriter writer(s.device(), s.version() == 1 ? "bmp" : "png");
+
+   QImageWriter writer(s.device(), "png");
    writer.write(image);
    return s;
 }
 
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QImage &image)
-    \relates QImage
-
-    Reads an image from the given \a stream and stores it in the given
-    \a image.
-
-    \sa QImage::load(), {Serializing Qt Data Types}
-*/
-
 QDataStream &operator>>(QDataStream &s, QImage &image)
 {
-   if (s.version() >= 5) {
-      qint32 nullMarker;
-      s >> nullMarker;
-      if (!nullMarker) {
-         image = QImage(); // null image
-         return s;
-      }
+   qint32 nullMarker;
+   s >> nullMarker;
+   if (!nullMarker) {
+      image = QImage(); // null image
+      return s;
    }
+
    image = QImageReader(s.device(), 0).read();
    return s;
 }
-#endif // QT_NO_DATASTREAM
 
-
-/*!
-    \fn bool QImage::operator==(const QImage & image) const
-
-    Returns true if this image and the given \a image have the same
-    contents; otherwise returns false.
-
-    The comparison can be slow, unless there is some obvious
-    difference (e.g. different size or format), in which case the
-    function will return quickly.
-
-    \sa operator=()
-*/
 
 bool QImage::operator==(const QImage &i) const
 {

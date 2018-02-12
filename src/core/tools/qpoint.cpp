@@ -342,60 +342,23 @@ QT_BEGIN_NAMESPACE
     \sa QPoint::operator/=()
 */
 
-/*****************************************************************************
-  QPoint stream functions
- *****************************************************************************/
-#ifndef QT_NO_DATASTREAM
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QPoint &point)
-    \relates QPoint
-
-    Writes the given \a point to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &s, const QPoint &p)
 {
-   if (s.version() == 1) {
-      s << (qint16)p.x() << (qint16)p.y();
-   } else {
-      s << (qint32)p.x() << (qint32)p.y();
-   }
+   s << (qint32)p.x() << (qint32)p.y();
+
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QPoint &point)
-    \relates QPoint
-
-    Reads a point from the given \a stream into the given \a point
-    and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &s, QPoint &p)
 {
-   if (s.version() == 1) {
-      qint16 x, y;
-      s >> x;
-      p.rx() = x;
-      s >> y;
-      p.ry() = y;
+   qint32 x, y;
+   s >> x;
+   p.rx() = x;
+   s >> y;
+   p.ry() = y;
 
-   } else {
-      qint32 x, y;
-      s >> x;
-      p.rx() = x;
-      s >> y;
-      p.ry() = y;
-   }
    return s;
 }
-
-#endif // QT_NO_DATASTREAM
 
 int QPoint::manhattanLength() const
 {
@@ -414,13 +377,10 @@ QDebug operator<<(QDebug d, const QPointF &p)
    return d.space();
 }
 
-
 qreal QPointF::manhattanLength() const
 {
    return qAbs(x()) + qAbs(y());
 }
-
-#ifndef QT_NO_DATASTREAM
 
 QDataStream &operator<<(QDataStream &s, const QPointF &p)
 {
@@ -437,6 +397,4 @@ QDataStream &operator>>(QDataStream &s, QPointF &p)
    p.setY(qreal(y));
    return s;
 }
-#endif // QT_NO_DATASTREAM
-
 QT_END_NAMESPACE

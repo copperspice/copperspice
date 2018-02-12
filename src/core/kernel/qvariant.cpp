@@ -1991,13 +1991,6 @@ void QVariant::load(QDataStream &s)
    quint32 u;
    s >> u;
 
-   if (s.version() < QDataStream::Qt_4_0) {
-      if (u >= MapFromThreeCount) {
-         return;
-      }
-      u = map_from_three[u];
-   }
-
    qint8 is_null = false;
    if (s.version() >= QDataStream::Qt_4_2) {
       s >> is_null;

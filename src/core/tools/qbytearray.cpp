@@ -1529,7 +1529,7 @@ void QByteArray::clear()
 
 QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
 {
-   if (ba.isNull() && out.version() >= 6) {
+   if (ba.isNull()) {
       out << (quint32)0xffffffff;
       return out;
    }

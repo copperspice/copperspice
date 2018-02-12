@@ -892,45 +892,22 @@ QPalette QPalette::resolve(const QPalette &other) const
     \internal
 */
 
-
-/*****************************************************************************
-  QPalette stream functions
- *****************************************************************************/
-
-#ifndef QT_NO_DATASTREAM
-
 static const int NumOldRoles = 7;
 static const int oldRoles[7] = { QPalette::Foreground, QPalette::Background, QPalette::Light,
                                  QPalette::Dark, QPalette::Mid, QPalette::Text, QPalette::Base
                                };
 
-/*!
-    \relates QPalette
-
-    Writes the palette, \a p to the stream \a s and returns a
-    reference to the stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-
 QDataStream &operator<<(QDataStream &s, const QPalette &p)
 {
    for (int grp = 0; grp < (int)QPalette::NColorGroups; grp++) {
-      if (s.version() == 1) {
-         // Qt 1.x
-         for (int i = 0; i < NumOldRoles; ++i) {
-            s << p.d->br[grp][oldRoles[i]].color();
-         }
-      } else {
-         int max = QPalette::ToolTipText + 1;
-         if (s.version() <= QDataStream::Qt_2_1) {
-            max = QPalette::HighlightedText + 1;
-         } else if (s.version() <= QDataStream::Qt_4_3) {
-            max = QPalette::AlternateBase + 1;
-         }
-         for (int r = 0; r < max; r++) {
-            s << p.d->br[grp][r];
-         }
+      int max = QPalette::ToolTipText + 1;
+
+      if (s.version() <= QDataStream::Qt_4_3) {
+         max = QPalette::AlternateBase + 1;
+      }
+
+      for (int r = 0; r < max; r++) {
+         s << p.d->br[grp][r];
       }
    }
    return s;
@@ -945,43 +922,25 @@ static void readV1ColorGroup(QDataStream &s, QPalette &pal, QPalette::ColorGroup
    }
 }
 
-/*!
-    \relates QPalette
-
-    Reads a palette from the stream, \a s into the palette \a p, and
-    returns a reference to the stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-
 QDataStream &operator>>(QDataStream &s, QPalette &p)
 {
-   if (s.version() == 1) {
-      p = QPalette();
-      readV1ColorGroup(s, p, QPalette::Active);
-      readV1ColorGroup(s, p, QPalette::Disabled);
-      readV1ColorGroup(s, p, QPalette::Inactive);
-   } else {
-      int max = QPalette::NColorRoles;
-      if (s.version() <= QDataStream::Qt_2_1) {
-         p = QPalette();
-         max = QPalette::HighlightedText + 1;
-      } else if (s.version() <= QDataStream::Qt_4_3) {
-         p = QPalette();
-         max = QPalette::AlternateBase + 1;
-      }
+   int max = QPalette::NColorRoles;
 
-      QBrush tmp;
-      for (int grp = 0; grp < (int)QPalette::NColorGroups; ++grp) {
-         for (int role = 0; role < max; ++role) {
-            s >> tmp;
-            p.setBrush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role, tmp);
-         }
+   if (s.version() <= QDataStream::Qt_4_3) {
+      p = QPalette();
+      max = QPalette::AlternateBase + 1;
+   }
+
+   QBrush tmp;
+   for (int grp = 0; grp < (int)QPalette::NColorGroups; ++grp) {
+      for (int role = 0; role < max; ++role) {
+         s >> tmp;
+         p.setBrush((QPalette::ColorGroup)grp, (QPalette::ColorRole)role, tmp);
       }
    }
+
    return s;
 }
-#endif //QT_NO_DATASTREAM
 
 /*!
     Returns true if this palette and \a p are copies of each other,
