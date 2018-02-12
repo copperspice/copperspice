@@ -43,12 +43,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(QT_SOFTKEYS_ENABLED)
-#include <qaction.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
 class QErrorMessagePrivate : public QDialogPrivate
 {
    Q_DECLARE_PUBLIC(QErrorMessage)
@@ -57,9 +51,7 @@ class QErrorMessagePrivate : public QDialogPrivate
    QCheckBox *again;
    QTextEdit *errors;
    QLabel *icon;
-#ifdef QT_SOFTKEYS_ENABLED
-   QAction *okAction;
-#endif
+
    QQueue<QPair<QString, QString> > pending;
    QSet<QString> doNotShow;
    QSet<QString> doNotShowType;
@@ -209,14 +201,6 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    grid->setColumnStretch(1, 42);
    grid->setRowStretch(0, 42);
 
-#ifdef QT_SOFTKEYS_ENABLED
-   d->okAction = new QAction(d->ok);
-   d->okAction->setSoftKeyRole(QAction::PositiveSoftKey);
-
-   connect(d->okAction, SIGNAL(triggered()), this, SLOT(accept()));
-   addAction(d->okAction);
-#endif
-
    connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
 
    d->again->setChecked(true);
@@ -324,20 +308,6 @@ void QErrorMessage::showMessage(const QString &message)
    }
 }
 
-/*!
-    \since 4.5
-    \overload
-
-    Shows the given message, \a message, and returns immediately. If the user
-    has requested for messages of type, \a type, not to be shown again, this
-    function does nothing.
-
-    Normally, the message is displayed immediately. However, if there are
-    pending messages, it will be queued to be displayed later.
-
-    \sa showMessage()
-*/
-
 void QErrorMessage::showMessage(const QString &message, const QString &type)
 {
    Q_D(QErrorMessage);
@@ -366,17 +336,6 @@ void QErrorMessagePrivate::retranslateStrings()
 {
    again->setText(QErrorMessage::tr("&Show this message again"));
    ok->setText(QErrorMessage::tr("&OK"));
-#ifdef QT_SOFTKEYS_ENABLED
-   okAction->setText(ok->text());
-#endif
 }
-
-/*!
-    \fn void QErrorMessage::message(const QString & message)
-
-    Use showMessage(\a message) instead.
-*/
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ERRORMESSAGE

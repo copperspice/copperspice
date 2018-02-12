@@ -214,11 +214,6 @@ int QDialog::exec()
    setAttribute(Qt::WA_ShowModal, true);
    setResult(0);
 
-   bool showSystemDialogFullScreen = false;
-   if (showSystemDialogFullScreen) {
-      setWindowFlags(windowFlags() | Qt::WindowSoftkeysVisibleHint);
-      setWindowState(Qt::WindowFullScreen);
-   }
    show();
 
 #ifdef Q_OS_MAC
@@ -228,7 +223,9 @@ int QDialog::exec()
    QEventLoop eventLoop;
    d->eventLoop = &eventLoop;
    QPointer<QDialog> guard = this;
+
    (void) eventLoop.exec(QEventLoop::DialogExec);
+
    if (guard.isNull()) {
       return QDialog::Rejected;
    }

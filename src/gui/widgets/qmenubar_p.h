@@ -30,8 +30,6 @@
 #include <qabstractplatformmenubar_p.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_MENUBAR
 class QToolBar;
 class QMenuBarExtension;
@@ -168,10 +166,6 @@ class QMenuBarPrivate : public QWidgetPrivate
    OSMenuRef macMenu();
 #endif
 
-#ifdef QT_SOFTKEYS_ENABLED
-   QAction *menuBarAction;
-#endif
-
 #ifdef Q_WS_X11
    void updateCornerWidgetToolBar();
    QToolBar *cornerWidgetToolBar;
@@ -181,7 +175,5 @@ class QMenuBarPrivate : public QWidgetPrivate
 };
 
 #endif // QT_NO_MENUBAR
-
-QT_END_NAMESPACE
 
 #endif // QMENUBAR_P_H

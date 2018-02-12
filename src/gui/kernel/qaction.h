@@ -45,7 +45,6 @@ class Q_GUI_EXPORT QAction : public QObject
    Q_DECLARE_PRIVATE(QAction)
 
    GUI_CS_ENUM(MenuRole)
-   GUI_CS_ENUM(SoftKeyRole)
    GUI_CS_ENUM(Priority)
 
    GUI_CS_PROPERTY_READ(checkable, isCheckable)
@@ -107,10 +106,6 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_WRITE(menuRole, setMenuRole)
    GUI_CS_PROPERTY_NOTIFY(menuRole, changed)
 
-   GUI_CS_PROPERTY_READ(softKeyRole, softKeyRole)
-   GUI_CS_PROPERTY_WRITE(softKeyRole, setSoftKeyRole)
-   GUI_CS_PROPERTY_NOTIFY(softKeyRole, changed)
-
    GUI_CS_PROPERTY_READ(iconVisibleInMenu, isIconVisibleInMenu)
    GUI_CS_PROPERTY_WRITE(iconVisibleInMenu, setIconVisibleInMenu)
    GUI_CS_PROPERTY_NOTIFY(iconVisibleInMenu, changed)
@@ -121,8 +116,6 @@ class Q_GUI_EXPORT QAction : public QObject
    enum MenuRole { NoRole, TextHeuristicRole, ApplicationSpecificRole, AboutQtRole,
                    AboutRole, PreferencesRole, QuitRole
                  };
-
-   enum SoftKeyRole { NoSoftKey, PositiveSoftKey, NegativeSoftKey, SelectSoftKey };
 
    enum Priority { LowPriority = 0,
                    NormalPriority = 128,
@@ -203,9 +196,6 @@ class Q_GUI_EXPORT QAction : public QObject
    void setMenuRole(MenuRole menuRole);
    MenuRole menuRole() const;
 
-   void setSoftKeyRole(SoftKeyRole softKeyRole);
-   SoftKeyRole softKeyRole() const;
-
    void setIconVisibleInMenu(bool visible);
    bool isIconVisibleInMenu() const;
 
@@ -216,7 +206,7 @@ class Q_GUI_EXPORT QAction : public QObject
 #ifndef QT_NO_GRAPHICSVIEW
    QList<QGraphicsWidget *> associatedGraphicsWidgets() const; // ### suboptimal
 #endif
- 
+
    GUI_CS_SLOT_1(Public, void trigger())
    GUI_CS_SLOT_2(trigger)
 
@@ -270,7 +260,7 @@ class Q_GUI_EXPORT QAction : public QObject
 
 #ifdef Q_OS_MAC
    friend void qt_mac_clear_status_text(QAction *action);
-#endif  
+#endif
 
 };
 

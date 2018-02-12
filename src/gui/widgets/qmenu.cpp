@@ -53,7 +53,6 @@
 #include <qtooltip.h>
 #include <qpushbutton_p.h>
 #include <qaction_p.h>
-#include <qsoftkeymanager_p.h>
 
 #ifdef Q_WS_X11
 #   include <qt_x11_p.h>
@@ -176,16 +175,6 @@ void QMenuPrivate::init()
       scroll = new QMenuPrivate::QMenuScroller;
       scroll->scrollFlags = QMenuPrivate::QMenuScroller::ScrollNone;
    }
-
-#ifdef QT_SOFTKEYS_ENABLED
-   selectAction = QSoftKeyManager::createKeyedAction(QSoftKeyManager::SelectSoftKey, Qt::Key_Select, q);
-   cancelAction = QSoftKeyManager::createKeyedAction(QSoftKeyManager::CancelSoftKey, Qt::Key_Back, q);
-   selectAction->setPriority(QAction::HighPriority);
-   cancelAction->setPriority(QAction::HighPriority);
-   q->addAction(selectAction);
-   q->addAction(cancelAction);
-#endif
-
 }
 
 int QMenuPrivate::scrollerHeight() const
@@ -1662,13 +1651,6 @@ void QMenu::clear()
    QList<QAction *> acts = actions();
 
    for (int i = 0; i < acts.size(); i++) {
-#ifdef QT_SOFTKEYS_ENABLED
-      Q_D(QMenu);
-      // Lets not touch to our internal softkey actions
-      if (acts[i] == d->selectAction || acts[i] == d->cancelAction) {
-         continue;
-      }
-#endif
       removeAction(acts[i]);
       if (acts[i]->parent() == this && acts[i]->d_func()->widgets.isEmpty()) {
          delete acts[i];
@@ -2408,13 +2390,7 @@ QMenu::event(QEvent *e)
          }
          return true;
 #endif
-#ifdef QT_SOFTKEYS_ENABLED
-      case QEvent::LanguageChange: {
-         d->selectAction->setText(QSoftKeyManager::standardSoftKeyText(QSoftKeyManager::SelectSoftKey));
-         d->cancelAction->setText(QSoftKeyManager::standardSoftKeyText(QSoftKeyManager::CancelSoftKey));
-      }
-      break;
-#endif
+
       default:
          break;
    }

@@ -233,9 +233,6 @@ class Q_CORE_EXPORT Qt
       BypassGraphicsProxyWidget = 0x20000000,
       WindowOkButtonHint = 0x00080000,
       WindowCancelButtonHint = 0x00100000,
-      WindowSoftkeysVisibleHint = 0x40000000,
-      WindowSoftkeysRespondHint = 0x80000000
-
    };
 
    using WindowFlags = QFlags<WindowType>;
@@ -377,9 +374,6 @@ class Q_CORE_EXPORT Qt
       WA_AcceptTouchEvents = 121,
       WA_WState_AcceptedTouchBeginEvent = 122,
       WA_TouchPadAcceptSingleTouchEvents = 123,
-
-      WA_MergeSoftkeys =  124,
-      WA_MergeSoftkeysRecursively =  125,
 
       WA_LockPortraitOrientation = 128,
       WA_LockLandscapeOrientation = 129,

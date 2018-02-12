@@ -177,7 +177,7 @@ class QComboBoxPrivateScroller : public QWidget
       p.eraseRect(rect());
       style()->drawControl(QStyle::CE_MenuScroller, &menuOpt, &p);
    }
- 
+
  private:
    QAbstractSlider::SliderAction sliderAction;
    QBasicTimer timer;
@@ -198,7 +198,7 @@ class QComboBoxPrivateContainer : public QFrame
    QTimer blockMouseReleaseTimer;
    QBasicTimer adjustSizeTimer;
    QPoint initialClickPosition;
- 
+
    GUI_CS_SLOT_1(Public, void scrollItemView(int action))
    GUI_CS_SLOT_2(scrollItemView)
    GUI_CS_SLOT_1(Public, void updateScrollers())
@@ -222,17 +222,12 @@ class QComboBoxPrivateContainer : public QFrame
    void leaveEvent(QEvent *e) override;
    void resizeEvent(QResizeEvent *e) override;
    QStyleOptionComboBox comboStyleOption() const;
- 
+
  private:
    QComboBox *combo;
    QAbstractItemView *view;
    QComboBoxPrivateScroller *top;
    QComboBoxPrivateScroller *bottom;
-
-#ifdef QT_SOFTKEYS_ENABLED
-   QAction *selectAction;
-   QAction *cancelAction;
-#endif
 };
 
 class QComboMenuDelegate : public QAbstractItemDelegate

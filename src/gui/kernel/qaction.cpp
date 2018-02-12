@@ -61,13 +61,9 @@ static QString qt_strippedText(QString s)
    return s.trimmed();
 }
 
-
 QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
    visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
-   forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
-   iconVisibleInMenu(-1),
-   menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
-   priority(QAction::NormalPriority)
+   iconVisibleInMenu(-1), menuRole(QAction::TextHeuristicRole),  priority(QAction::NormalPriority)
 {
 
 #ifndef QT_NO_SHORTCUT
@@ -187,117 +183,6 @@ void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 
 
 /*!
-    \class QAction
-    \brief The QAction class provides an abstract user interface
-    action that can be inserted into widgets.
-
-    \ingroup mainwindow-classes
-
-
-    \omit
-        * parent and widget are different
-        * parent does not define context
-    \endomit
-
-    In applications many common commands can be invoked via menus,
-    toolbar buttons, and keyboard shortcuts. Since the user expects
-    each command to be performed in the same way, regardless of the
-    user interface used, it is useful to represent each command as
-    an \e action.
-
-    Actions can be added to menus and toolbars, and will
-    automatically keep them in sync. For example, in a word processor,
-    if the user presses a Bold toolbar button, the Bold menu item
-    will automatically be checked.
-
-    Actions can be created as independent objects, but they may
-    also be created during the construction of menus; the QMenu class
-    contains convenience functions for creating actions suitable for
-    use as menu items.
-
-    A QAction may contain an icon, menu text, a shortcut, status text,
-    "What's This?" text, and a tooltip. Most of these can be set in
-    the constructor. They can also be set independently with
-    setIcon(), setText(), setIconText(), setShortcut(),
-    setStatusTip(), setWhatsThis(), and setToolTip(). For menu items,
-    it is possible to set an individual font with setFont().
-
-    Actions are added to widgets using QWidget::addAction() or
-    QGraphicsWidget::addAction(). Note that an action must be added to a
-    widget before it can be used; this is also true when the shortcut should
-    be global (i.e., Qt::ApplicationShortcut as Qt::ShortcutContext).
-
-    Once a QAction has been created it should be added to the relevant
-    menu and toolbar, then connected to the slot which will perform
-    the action. For example:
-
-    \snippet examples/mainwindows/application/mainwindow.cpp 19
-    \codeline
-    \snippet examples/mainwindows/application/mainwindow.cpp 28
-    \snippet examples/mainwindows/application/mainwindow.cpp 31
-
-    We recommend that actions are created as children of the window
-    they are used in. In most cases actions will be children of
-    the application's main window.
-
-    \sa QMenu, QToolBar, {Application Example}
-*/
-
-/*!
-    \fn void QAction::trigger()
-
-    This is a convenience slot that calls activate(Trigger).
-*/
-
-/*!
-    \fn void QAction::hover()
-
-    This is a convenience slot that calls activate(Hover).
-*/
-
-/*!
-    \enum QAction::MenuRole
-
-    This enum describes how an action should be moved into the application menu on Mac OS X.
-
-    \value NoRole This action should not be put into the application menu
-    \value TextHeuristicRole This action should be put in the application menu based on the action's text
-           as described in the QMenuBar documentation.
-    \value ApplicationSpecificRole This action should be put in the application menu with an application specific role
-    \value AboutQtRole This action matches handles the "About Qt" menu item.
-    \value AboutRole This action should be placed where the "About" menu item is in the application menu. The text of
-           the menu item will be set to "About <application name>". The application name is fetched from the
-           \c{Info.plist} file in the application's bundle (See \l{Deploying an Application on Mac OS X}).
-    \value PreferencesRole This action should be placed where the  "Preferences..." menu item is in the application menu.
-    \value QuitRole This action should be placed where the Quit menu item is in the application menu.
-
-    Setting this value only has effect on items that are in the immediate menus
-    of the menubar, not the submenus of those menus. For example, if you have
-    File menu in your menubar and the File menu has a submenu, setting the
-    MenuRole for the actions in that submenu have no effect. They will never be moved.
-*/
-#ifndef qdoc
-/*! \since 4.6
-
-    \enum QAction::SoftKeyRole
-
-    This enum describes how an action should be placed in the softkey bar. Currently this enum only
-    has an effect on the Symbian platform.
-
-    \value NoSoftKey This action should not be used as a softkey
-    \value PositiveSoftKey This action is used to describe a softkey with a positive or non-destructive
-           role such as Ok, Select, or Options.
-    \value NegativeSoftKey This action is used to describe a soft ey with a negative or destructive role
-           role such as Cancel, Discard, or Close.
-    \value SelectSoftKey This action is used to describe a role that selects a particular item or widget
-           in the application.
-
-    Actions with a softkey role defined are only visible in the softkey bar when the widget containing
-    the action has focus. If no widget currently has focus, the softkey framework will traverse up the
-    widget parent hierarchy looking for a widget containing softkey actions.
- */
-#endif
-/*!
     Constructs an action with \a parent. If \a parent is an action
     group the action will be automatically inserted into the group.
 */
@@ -312,7 +197,6 @@ QAction::QAction(QObject *parent)
       d->group->addAction(this);
    }
 }
-
 
 /*!
     Constructs an action with some \a text and \a parent. If \a
@@ -661,34 +545,12 @@ void QAction::setActionGroup(QActionGroup *group)
    }
 }
 
-/*!
-  Returns the action group for this action. If no action group manages
-  this action then 0 will be returned.
-
-  \sa QActionGroup, QAction::setActionGroup()
-*/
 QActionGroup *QAction::actionGroup() const
 {
    Q_D(const QAction);
    return d->group;
 }
 
-
-/*!
-    \property QAction::icon
-    \brief the action's icon
-
-    In toolbars, the icon is used as the tool button icon; in menus,
-    it is displayed to the left of the menu text. There is no default
-    icon.
-
-    On Symbian the icons which are passed to softkeys, i.e. to actions with
-    softkey role, need to have pixmap alpha channel correctly set otherwise
-    drawing artifacts will appear when softkey is pressed down.
-
-    If a null icon (QIcon::isNull() is passed into this function,
-    the icon of the action is cleared.
-*/
 void QAction::setIcon(const QIcon &icon)
 {
    Q_D(QAction);
@@ -703,13 +565,7 @@ QIcon QAction::icon() const
 }
 
 #ifndef QT_NO_MENU
-/*!
-  Returns the menu contained by this action. Actions that contain
-  menus can be used to create menu items with submenus, or inserted
-  into toolbars to create buttons with popup menus.
 
-  \sa QMenu::addAction()
-*/
 QMenu *QAction::menu() const
 {
    Q_D(const QAction);
@@ -1418,53 +1274,6 @@ QAction::MenuRole QAction::menuRole() const
    return d->menuRole;
 }
 
-#ifndef qdoc
-/*!
-    \property QAction::softKeyRole
-    \brief the action's softkey role
-    \since 4.6
-
-    This indicates what type of role this action describes in the softkey framework
-    on platforms where such a framework is supported. Currently this is only
-    supported on the Symbian platform.
-
-    The softkey role can be changed any time.
-*/
-void QAction::setSoftKeyRole(SoftKeyRole softKeyRole)
-{
-   Q_D(QAction);
-   if (d->softKeyRole == softKeyRole) {
-      return;
-   }
-
-   d->softKeyRole = softKeyRole;
-   d->sendDataChanged();
-}
-
-QAction::SoftKeyRole QAction::softKeyRole() const
-{
-   Q_D(const QAction);
-   return d->softKeyRole;
-}
-#endif
-/*!
-    \property QAction::iconVisibleInMenu
-    \brief Whether or not an action should show an icon in a menu
-    \since 4.4
-
-    In some applications, it may make sense to have actions with icons in the
-    toolbar, but not in menus. If true, the icon (if valid) is shown in the menu, when it
-    is false, it is not shown.
-
-    The default is to follow whether the Qt::AA_DontShowIconsInMenus attribute
-    is set for the application. Explicitly settings this property overrides
-    the presence (or abscence) of the attribute.
-
-    For example:
-    \snippet doc/src/snippets/code/src_gui_kernel_qaction.cpp 0
-
-    \sa QAction::icon QApplication::setAttribute()
-*/
 void QAction::setIconVisibleInMenu(bool visible)
 {
    Q_D(QAction);

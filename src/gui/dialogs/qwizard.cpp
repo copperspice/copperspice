@@ -54,13 +54,7 @@
 #include <qdebug.h>
 #include <string.h>
 
-#ifdef QT_SOFTKEYS_ENABLED
-#include <qaction.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-// These fudge terms were needed a few places to obtain pixel-perfect results
+// These terms were needed a few places to obtain pixel-perfect results
 const int GapBetweenLogoAndRightEdge = 5;
 const int ModernHeaderTopMargin = 2;
 const int ClassicHMargin = 4;
@@ -566,9 +560,6 @@ class QWizardPrivate : public QDialogPrivate
       , maximumHeight(QWIDGETSIZE_MAX) {
       for (int i = 0; i < QWizard::NButtons; ++i) {
          btns[i] = 0;
-#ifdef QT_SOFTKEYS_ENABLED
-         softKeys[i] = 0;
-#endif
       }
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
       if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)) {
@@ -657,12 +648,8 @@ class QWizardPrivate : public QDialogPrivate
    QFrame *pageFrame;
    QLabel *titleLabel;
    QLabel *subTitleLabel;
+
    QWizardRuler *bottomRuler;
-
-#ifdef QT_SOFTKEYS_ENABLED
-   mutable QAction *softKeys[QWizard::NButtons];
-#endif
-
    QVBoxLayout *pageVBoxLayout;
    QHBoxLayout *buttonLayout;
    QGridLayout *mainLayout;
@@ -1430,41 +1417,18 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
          pushButton->setStyle(style);
       }
       pushButton->setObjectName(object_name_for_button(which));
+
 #ifdef Q_OS_MAC
       pushButton->setAutoDefault(false);
 #endif
+
       pushButton->hide();
-#ifdef Q_CC_HPACC
-      const_cast<QWizardPrivate *>(this)->btns[which] = pushButton;
-#else
       btns[which] = pushButton;
-#endif
+
       if (which < QWizard::NStandardButtons) {
          pushButton->setText(buttonDefaultText(wizStyle, which, this));
       }
 
-#ifdef QT_SOFTKEYS_ENABLED
-      QAction *softKey = new QAction(pushButton->text(), pushButton);
-      QAction::SoftKeyRole softKeyRole;
-      switch (which) {
-         case QWizard::NextButton:
-         case QWizard::FinishButton:
-         case QWizard::CancelButton:
-            softKeyRole = QAction::NegativeSoftKey;
-            break;
-         case QWizard::BackButton:
-         case QWizard::CommitButton:
-         case QWizard::HelpButton:
-         case QWizard::CustomButton1:
-         case QWizard::CustomButton2:
-         case QWizard::CustomButton3:
-         default:
-            softKeyRole = QAction::PositiveSoftKey;
-            break;
-      }
-      softKey->setSoftKeyRole(softKeyRole);
-      softKeys[which] = softKey;
-#endif
       connectButton(which);
    }
    return true;
@@ -1473,20 +1437,18 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
 void QWizardPrivate::connectButton(QWizard::WizardButton which) const
 {
    Q_Q(const QWizard);
+
    if (which < QWizard::NStandardButtons) {
       QObject::connect(btns[which], SIGNAL(clicked()), q, buttonSlots[which]);
    } else {
       QObject::connect(btns[which], SIGNAL(clicked()), q, SLOT(_q_emitCustomButtonClicked()));
    }
-
-#ifdef QT_SOFTKEYS_ENABLED
-   QObject::connect(softKeys[which], SIGNAL(triggered()), btns[which], SIGNAL(clicked()));
-#endif
 }
 
 void QWizardPrivate::updateButtonTexts()
 {
    Q_Q(QWizard);
+
    for (int i = 0; i < QWizard::NButtons; ++i) {
       if (btns[i]) {
          if (q->currentPage() && (q->currentPage()->d_func()->buttonCustomTexts.contains(i))) {
@@ -1496,9 +1458,7 @@ void QWizardPrivate::updateButtonTexts()
          } else if (i < QWizard::NStandardButtons) {
             btns[i]->setText(buttonDefaultText(wizStyle, i, this));
          }
-#ifdef QT_SOFTKEYS_ENABLED
-         softKeys[i]->setText(btns[i]->text());
-#endif
+
       }
    }
 }
@@ -1754,19 +1714,6 @@ void QWizardPrivate::_q_updateButtonStates()
       vistaHelper->backButton()->setEnabled(btn.back->isEnabled());
       vistaHelper->backButton()->setVisible(backButtonVisible);
       btn.back->setVisible(false);
-   }
-#endif
-
-#ifdef QT_SOFTKEYS_ENABLED
-   QAbstractButton *wizardButton;
-   for (int i = 0; i < QWizard::NButtons; ++i) {
-      wizardButton = btns[i];
-      if (wizardButton && !wizardButton->testAttribute(Qt::WA_WState_Hidden)) {
-         wizardButton->hide();
-         q->addAction(softKeys[i]);
-      } else {
-         q->removeAction(softKeys[i]);
-      }
    }
 #endif
 

@@ -265,8 +265,6 @@ GUI_KERNEL_PRIVATE_INCLUDES = \
 	qmacgesturerecognizer_mac_p.h \
 	qmultitouch_mac_p.h \
 	qshortcutmap_p.h \
-	qsoftkeymanager_common_p.h \
-	qsoftkeymanager_p.h \
 	qsound_p.h \
 	qstandardgestures_p.h \
 	qt_cocoa_helpers_mac_p.h \
@@ -316,7 +314,6 @@ lib_libCsGui@BUILD_ABI@_la_SOURCES += \
 	src/gui/kernel/qstandardgestures.cpp \
 	src/gui/kernel/qgesturerecognizer.cpp \
 	src/gui/kernel/qgesturemanager.cpp \
-	src/gui/kernel/qsoftkeymanager.cpp \
 	src/gui/kernel/qdesktopwidget.cpp \
 	src/gui/kernel/qguiplatformplugin.cpp \
 	src/gui/kernel/qsound.cpp

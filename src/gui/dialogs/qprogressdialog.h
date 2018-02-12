@@ -160,10 +160,6 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    QShortcut *escapeShortcut;
 #endif
 
-#ifdef QT_SOFTKEYS_ENABLED
-   QAction *cancelAction;
-#endif
-
    int  showTime;
 
    bool shown_once;

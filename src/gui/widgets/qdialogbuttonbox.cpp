@@ -30,106 +30,6 @@
 #include <QtGui/qaction.h>
 #include <qdialogbuttonbox.h>
 
-#ifdef QT_SOFTKEYS_ENABLED
-#include <QtGui/qaction.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QDialogButtonBox
-    \since 4.2
-    \brief The QDialogButtonBox class is a widget that presents buttons in a
-    layout that is appropriate to the current widget style.
-
-    \ingroup dialog-classes
-
-
-    Dialogs and message boxes typically present buttons in a layout that
-    conforms to the interface guidelines for that platform. Invariably,
-    different platforms have different layouts for their dialogs.
-    QDialogButtonBox allows a developer to add buttons to it and will
-    automatically use the appropriate layout for the user's desktop
-    environment.
-
-    Most buttons for a dialog follow certain roles. Such roles include:
-
-    \list
-    \o Accepting or rejecting the dialog.
-    \o Asking for help.
-    \o Performing actions on the dialog itself (such as resetting fields or
-       applying changes).
-    \endlist
-
-    There can also be alternate ways of dismissing the dialog which may cause
-    destructive results.
-
-    Most dialogs have buttons that can almost be considered standard (e.g.
-    \gui OK and \gui Cancel buttons). It is sometimes convenient to create these
-    buttons in a standard way.
-
-    There are a couple ways of using QDialogButtonBox. One ways is to create
-    the buttons (or button texts) yourself and add them to the button box,
-    specifying their role.
-
-    \snippet examples/dialogs/extension/finddialog.cpp 1
-    \snippet examples/dialogs/extension/finddialog.cpp 6
-
-    Alternatively, QDialogButtonBox provides several standard buttons (e.g. OK, Cancel, Save)
-    that you can use. They exist as flags so you can OR them together in the constructor.
-
-    \snippet examples/dialogs/tabdialog/tabdialog.cpp 2
-
-    You can mix and match normal buttons and standard buttons.
-
-    Currently the buttons are laid out in the following way if the button box is horizontal:
-    \table
-    \row \o \inlineimage buttonbox-gnomelayout-horizontal.png GnomeLayout Horizontal
-         \o Button box laid out in horizontal GnomeLayout
-    \row \o \inlineimage buttonbox-kdelayout-horizontal.png KdeLayout Horizontal
-         \o Button box laid out in horizontal KdeLayout
-    \row \o \inlineimage buttonbox-maclayout-horizontal.png MacLayout Horizontal
-         \o Button box laid out in horizontal MacLayout
-    \row \o \inlineimage buttonbox-winlayout-horizontal.png  WinLayout Horizontal
-         \o Button box laid out in horizontal WinLayout
-    \endtable
-
-    The buttons are laid out the following way if the button box is vertical:
-
-    \table
-    \row \o GnomeLayout
-         \o KdeLayout
-         \o MacLayout
-         \o WinLayout
-    \row \o \inlineimage buttonbox-gnomelayout-vertical.png GnomeLayout Vertical
-         \o \inlineimage buttonbox-kdelayout-vertical.png KdeLayout Vertical
-         \o \inlineimage buttonbox-maclayout-vertical.png MacLayout Vertical
-         \o \inlineimage buttonbox-winlayout-vertical.png WinLayout Vertical
-    \endtable
-
-    Additionally, button boxes that contain only buttons with ActionRole or
-    HelpRole can be considered modeless and have an alternate look on Mac OS X:
-
-    \table
-    \row \o modeless horizontal MacLayout
-         \o \inlineimage buttonbox-mac-modeless-horizontal.png Screenshot of modeless horizontal MacLayout
-    \endtable
-
-    When a button is clicked in the button box, the clicked() signal is emitted
-    for the actual button is that is pressed. For convenience, if the button
-    has an AcceptRole, RejectRole, or HelpRole, the accepted(), rejected(), or
-    helpRequested() signals are emitted respectively.
-
-    If you want a specific button to be default you need to call
-    QPushButton::setDefault() on it yourself. However, if there is no default
-    button set and to preserve which button is the default button across
-    platforms when using the QPushButton::autoDefault property, the first push
-    button with the accept role is made the default button when the
-    QDialogButtonBox is shown,
-
-    \sa QMessageBox, QPushButton, QDialog
-*/
-
 enum Roles {
    AcceptRole      = QDialogButtonBox::AcceptRole,
    RejectRole      = QDialogButtonBox::RejectRole,
@@ -258,29 +158,6 @@ static const Roles layouts[2][5][14] = {
    }
 };
 
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-class QDialogButtonEnabledProxy : public QObject
-{
- public:
-   QDialogButtonEnabledProxy(QObject *parent, QWidget *src, QAction *trg) : QObject(parent), source(src), target(trg) {
-      source->installEventFilter(this);
-      target->setEnabled(source->isEnabled());
-   }
-   ~QDialogButtonEnabledProxy() {
-      source->removeEventFilter(this);
-   }
-   bool eventFilter(QObject *object, QEvent *event) {
-      if (object == source && event->type() == QEvent::EnabledChange) {
-         target->setEnabled(source->isEnabled());
-      }
-      return false;
-   };
- private:
-   QWidget *source;
-   QAction *target;
-};
-#endif
-
 class QDialogButtonBoxPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QDialogButtonBox)
@@ -290,9 +167,6 @@ class QDialogButtonBoxPrivate : public QWidgetPrivate
 
    QList<QAbstractButton *> buttonLists[QDialogButtonBox::NRoles];
    QHash<QPushButton *, QDialogButtonBox::StandardButton> standardButtonHash;
-#ifdef QT_SOFTKEYS_ENABLED
-   QHash<QAbstractButton *, QAction *> softKeyActions;
-#endif
 
    Qt::Orientation orientation;
    QDialogButtonBox::ButtonLayout layoutPolicy;
@@ -312,9 +186,6 @@ class QDialogButtonBoxPrivate : public QWidgetPrivate
    void addButtonsToLayout(const QList<QAbstractButton *> &buttonList, bool reverse);
    void retranslateStrings();
    const char *standardButtonText(QDialogButtonBox::StandardButton sbutton) const;
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-   QAction *createSoftKey(QAbstractButton *button, QDialogButtonBox::ButtonRole role);
-#endif
 };
 
 QDialogButtonBoxPrivate::QDialogButtonBoxPrivate(Qt::Orientation orient)
@@ -591,64 +462,10 @@ void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBo
    QObject::connect(button, SIGNAL(destroyed()), q, SLOT(_q_handleButtonDestroyed()));
    buttonLists[role].append(button);
 
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-   QAction *action = createSoftKey(button, role);
-   softKeyActions.insert(button, action);
-   new QDialogButtonEnabledProxy(action, button, action);
-#endif
-
    if (doLayout) {
       layoutButtons();
    }
 }
-
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-QAction *QDialogButtonBoxPrivate::createSoftKey(QAbstractButton *button, QDialogButtonBox::ButtonRole role)
-{
-   Q_Q(QDialogButtonBox);
-   QAction::SoftKeyRole softkeyRole;
-
-   QAction *action = new QAction(button->text(), button);
-
-   switch (role) {
-      case ApplyRole:
-      case AcceptRole:
-      case YesRole:
-      case ActionRole:
-      case HelpRole:
-         softkeyRole = QAction::PositiveSoftKey;
-         break;
-      case RejectRole:
-      case DestructiveRole:
-      case NoRole:
-      case ResetRole:
-         softkeyRole = QAction::NegativeSoftKey;
-         break;
-      default:
-         break;
-   }
-   QObject::connect(action, SIGNAL(triggered()), button, SIGNAL(clicked()));
-   action->setSoftKeyRole(softkeyRole);
-
-
-   QWidget *dialog = 0;
-   QWidget *p = q;
-   while (p && !p->isWindow()) {
-      p = p->parentWidget();
-      if ((dialog = qobject_cast<QDialog *>(p))) {
-         break;
-      }
-   }
-
-   if (dialog) {
-      dialog->addAction(action);
-   } else {
-      q->addAction(action);
-   }
-
-   return action;
-}
-#endif
 
 void QDialogButtonBoxPrivate::createStandardButtons(QDialogButtonBox::StandardButtons buttons)
 {
@@ -740,17 +557,12 @@ void QDialogButtonBoxPrivate::retranslateStrings()
 {
    const char *buttonText = 0;
    QHash<QPushButton *, QDialogButtonBox::StandardButton>::iterator it =  standardButtonHash.begin();
+
    while (it != standardButtonHash.end()) {
       buttonText = standardButtonText(it.value());
       if (buttonText) {
          QPushButton *button = it.key();
          button->setText(QDialogButtonBox::tr(buttonText));
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-         QAction *action = softKeyActions.value(button, 0);
-         if (action) {
-            action->setText(button->text());
-         }
-#endif
       }
       ++it;
    }
@@ -944,11 +756,7 @@ void QDialogButtonBox::setOrientation(Qt::Orientation orientation)
 void QDialogButtonBox::clear()
 {
    Q_D(QDialogButtonBox);
-#ifdef QT_SOFTKEYS_ENABLED
-   // Delete softkey actions as they have the buttons as parents
-   qDeleteAll(d->softKeyActions.values());
-   d->softKeyActions.clear();
-#endif
+
    // Remove the created standard buttons, they should be in the other lists, which will
    // do the deletion
    d->standardButtonHash.clear();
@@ -1030,13 +838,7 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
          }
       }
    }
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-   QAction *action = d->softKeyActions.value(button, 0);
-   if (action) {
-      d->softKeyActions.remove(button);
-      delete action;
-   }
-#endif
+
    if (!d->internalRemove) {
       button->setParent(0);
    }
@@ -1108,11 +910,7 @@ QPushButton *QDialogButtonBox::addButton(StandardButton button)
 void QDialogButtonBox::setStandardButtons(StandardButtons buttons)
 {
    Q_D(QDialogButtonBox);
-#ifdef QT_SOFTKEYS_ENABLED
-   // Delete softkey actions since they have the buttons as parents
-   qDeleteAll(d->softKeyActions.values());
-   d->softKeyActions.clear();
-#endif
+
    // Clear out all the old standard buttons, then recreate them.
    qDeleteAll(d->standardButtonHash.keys());
    d->standardButtonHash.clear();
@@ -1278,43 +1076,10 @@ bool QDialogButtonBox::event(QEvent *event)
       if (!hasDefault && firstAcceptButton) {
          firstAcceptButton->setDefault(true);
       }
-#ifdef QT_SOFTKEYS_ENABLED
-      if (dialog) {
-         setFixedSize(0, 0);
-      }
-#endif
+
    } else if (event->type() == QEvent::LanguageChange) {
       d->retranslateStrings();
    }
-#if defined(QT_SOFTKEYS_ENABLED) && !defined(QT_NO_ACTION)
-   else if (event->type() == QEvent::ParentChange) {
-      QWidget *dialog = 0;
-      QWidget *p = this;
-      while (p && !p->isWindow()) {
-         p = p->parentWidget();
-         if ((dialog = qobject_cast<QDialog *>(p))) {
-            break;
-         }
-      }
-
-      // If the parent changes, then move the softkeys
-      for (QHash<QAbstractButton *, QAction *>::const_iterator it = d->softKeyActions.constBegin();
-            it != d->softKeyActions.constEnd(); ++it) {
-         QAction *current = it.value();
-         QList<QWidget *> widgets = current->associatedWidgets();
-
-         for (QWidget * w : widgets) {
-            w->removeAction(current); 
-         }
-
-         if (dialog) {
-            dialog->addAction(current);
-         } else {
-            addAction(current);
-         }
-      }
-   }
-#endif
 
    return QWidget::event(event);
 }
@@ -1332,4 +1097,3 @@ void QDialogButtonBox::_q_handleButtonDestroyed()
    d->_q_handleButtonDestroyed();
 }
 
-QT_END_NAMESPACE

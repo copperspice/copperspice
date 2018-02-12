@@ -246,9 +246,6 @@ class Q_CORE_EXPORT QEvent           // event base class
       RequestSoftwareInputPanel = 199,
       CloseSoftwareInputPanel = 200,
 
-      // may not be used
-      UpdateSoftKeys = 201,                   // Internal for compressing soft key updates
-
       WinIdChange = 203,
 
       SockClose = 211,                        // socket closed

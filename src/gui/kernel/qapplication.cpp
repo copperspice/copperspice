@@ -820,21 +820,11 @@ QWidget *QApplication::widgetAt(const QPoint &p)
    return window;
 }
 
-/*!
-    \fn QWidget *QApplication::widgetAt(int x, int y)
-
-    \overload
-
-    Returns the widget at global screen position (\a x, \a y), or 0 if there is
-    no Qt widget there.
-*/
 
 /*!
     \fn void QApplication::setArgs(int argc, char **argv)
     \internal
 */
-
-
 
 /*!
     \internal
@@ -842,13 +832,12 @@ QWidget *QApplication::widgetAt(const QPoint &p)
 bool QApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents)
 {
    if ((event->type() == QEvent::UpdateRequest
-
          || event->type() == QEvent::LayoutRequest
          || event->type() == QEvent::Resize
          || event->type() == QEvent::Move
          || event->type() == QEvent::LanguageChange
-         || event->type() == QEvent::UpdateSoftKeys
          || event->type() == QEvent::InputMethod)) {
+
       for (QPostEventList::const_iterator it = postedEvents->constBegin(); it != postedEvents->constEnd(); ++it) {
          const QPostEvent &cur = *it;
          if (cur.receiver != receiver || cur.event == 0 || cur.event->type() != event->type()) {
@@ -859,17 +848,21 @@ bool QApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventLis
 
          } else if (cur.event->type() == QEvent::Resize) {
             ((QResizeEvent *)(cur.event))->s = ((QResizeEvent *)event)->s;
+
          } else if (cur.event->type() == QEvent::Move) {
             ((QMoveEvent *)(cur.event))->p = ((QMoveEvent *)event)->p;
+
          } else if (cur.event->type() == QEvent::LanguageChange) {
             ;
-         } else if (cur.event->type() == QEvent::UpdateSoftKeys) {
-            ;
+
          } else if ( cur.event->type() == QEvent::InputMethod ) {
             *(QInputMethodEvent *)(cur.event) = *(QInputMethodEvent *)event;
+
          } else {
             continue;
+
          }
+
          delete event;
          return true;
       }
