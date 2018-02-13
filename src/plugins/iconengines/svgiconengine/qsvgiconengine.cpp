@@ -227,7 +227,6 @@ QIconEngineV2 *QSvgIconEngine::clone() const
     return new QSvgIconEngine(*this);
 }
 
-
 bool QSvgIconEngine::read(QDataStream &in)
 {
     d = new QSvgIconEnginePrivate;
@@ -237,6 +236,7 @@ bool QSvgIconEngine::read(QDataStream &in)
         int isCompressed;
         QHash<int, QString> fileNames;  // For memoryoptimization later
         in >> fileNames >> isCompressed >> *d->svgBuffers;
+
 #ifndef QT_NO_COMPRESS
         if (!isCompressed) {
             foreach(int key, d->svgBuffers->keys())
@@ -254,8 +254,8 @@ bool QSvgIconEngine::read(QDataStream &in)
             d->addedPixmaps = new QHash<int, QPixmap>;
             in >> *d->addedPixmaps;
         }
-    }
-    else {
+
+    } else {
         QPixmap pixmap;
         QByteArray data;
         uint mode;
@@ -263,13 +263,15 @@ bool QSvgIconEngine::read(QDataStream &in)
         int num_entries;
 
         in >> data;
-        if (!data.isEmpty()) {
+        if (! data.isEmpty()) {
+
 #ifndef QT_NO_COMPRESS
             data = qUncompress(data);
 #endif
             if (!data.isEmpty())
                 d->svgBuffers->insert(d->hashKey(QIcon::Normal, QIcon::Off), data);
         }
+
         in >> num_entries;
         for (int i=0; i<num_entries; ++i) {
             if (in.atEnd())
@@ -290,6 +292,7 @@ bool QSvgIconEngine::write(QDataStream &out) const
 {
     if (out.version() >= QDataStream::Qt_4_4) {
         int isCompressed = 0;
+
 #ifndef QT_NO_COMPRESS
         isCompressed = 1;
 #endif

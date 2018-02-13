@@ -23,15 +23,11 @@
 #ifndef QDATAURL_P_H
 #define QDATAURL_P_H
 
-#include <QtCore/qurl.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qpair.h>
-
-QT_BEGIN_NAMESPACE
+#include <qurl.h>
+#include <qbytearray.h>
+#include <qstring.h>
+#include <qpair.h>
 
 Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &url);
-
-QT_END_NAMESPACE
 
 #endif // QDATAURL_P_H

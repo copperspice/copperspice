@@ -371,7 +371,6 @@ qint64 QByteDeviceWrappingIoDevice::size() const
    return byteDevice->size();
 }
 
-
 qint64 QByteDeviceWrappingIoDevice::readData( char *data, qint64 maxSize)
 {
    qint64 len;
@@ -392,28 +391,6 @@ qint64 QByteDeviceWrappingIoDevice::writeData( const char *data, qint64 maxSize)
    return -1;
 }
 
-/*!
-    \class QNonContiguousByteDeviceFactory
-    \since 4.6
-
-    \inmodule QtCore
-
-    Creates a QNonContiguousByteDevice out of a QIODevice,
-    QByteArray etc.
-
-    \sa QNonContiguousByteDevice
-
-    \internal
-*/
-
-/*!
-    \fn static QNonContiguousByteDevice* QNonContiguousByteDeviceFactory::create(QIODevice *device);
-
-    Create a QNonContiguousByteDevice out of a QIODevice.
-    For QFile, QBuffer and all other QIoDevice, sequential or not.
-
-    \internal
-*/
 QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QIODevice *device)
 {
    // shortcut if it is a QBuffer
@@ -459,9 +436,7 @@ QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QByteArray *by
 */
 QIODevice *QNonContiguousByteDeviceFactory::wrap(QNonContiguousByteDevice *byteDevice)
 {
-   // ### FIXME if it already has been based on QIoDevice, we could that one out again
-   // and save some calling
-
+   // ### FIXME if the parameter inherits from QIoDevice, we could just return it
    // needed for FTP backend
 
    return new QByteDeviceWrappingIoDevice(byteDevice);

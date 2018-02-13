@@ -265,19 +265,16 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       // internal
       QString8(const CsString::CsString &other)
          : CsString::CsString(other)
-      {
-      }
+      { }
 
       // internal
       QString8(CsString::CsString &&other)
          : CsString::CsString(std::move(other))
-      {
-      }
+      { }
 
       QString8(QStringView8 str)
          : CsString::CsString( str )
-      {
-      }
+      { }
 
       ~QString8() = default;
 

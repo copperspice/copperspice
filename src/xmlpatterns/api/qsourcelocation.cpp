@@ -21,33 +21,8 @@
 ***********************************************************************/
 
 #include "qdebug_p.h"
-
 #include "qsourcelocation.h"
 
-
-QT_BEGIN_NAMESPACE
-
-/*!
-  \class QSourceLocation
-  \reentrant
-  \since 4.4
-  \brief The QSourceLocation class identifies a location in a resource by URI, line, and column.
-  \ingroup xml-tools
-
-  QSourceLocation is a simple value based class that has three
-  properties, uri(), line(), and column(), that, taken together,
-  identify a certain point in a resource, e.g., a file or an in-memory
-  document.
-
-  line() and column() refer to character counts (not byte counts), and
-  they both start from 1, as opposed to 0.
- */
-
-/*!
-   Construct a QSourceLocation that doesn't identify anything at all.
-
-   For a default constructed QSourceLocation(), isNull() returns \c true.
- */
 QSourceLocation::QSourceLocation() : m_line(-1), m_column(-1)
 {
 }
@@ -183,30 +158,14 @@ QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation)
    return debug;
 }
 
-/*!
-  Returns \c true if this QSourceLocation doesn't identify anything.
-
-  For a default constructed QSourceLocation, this function returns \c
-  true. The same applies for any other QSourceLocation whose uri() is
-  invalid.
- */
 bool QSourceLocation::isNull() const
 {
-   return !m_uri.isValid();
+   return ! m_uri.isValid();
 }
 
-/*!
- \since 4.4
-
- Computes a hash key for the QSourceLocation \a location.
-
- \relates QSourceLocation
- */
 uint qHash(const QSourceLocation &location)
 {
    /* Not the world's best hash function exactly. */
    return qHash(location.uri().toString()) + location.line() + location.column();
 }
-
-QT_END_NAMESPACE
 

@@ -1094,6 +1094,7 @@ QDataStream &operator<<(QDataStream &s, const QIcon &icon)
             qWarning("QIcon: Cannot stream QIconEngine. Use QIconEngineV2 instead.");
          }
       }
+
    } else if (s.version() == QDataStream::Qt_4_2) {
       if (icon.isNull()) {
          s << 0;
@@ -1109,20 +1110,13 @@ QDataStream &operator<<(QDataStream &s, const QIcon &icon)
             s << (uint) engine->pixmaps.at(i).state;
          }
       }
+
    } else {
       s << QPixmap(icon.pixmap(22, 22));
    }
+
    return s;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QIcon &icon)
-    \relates QIcon
-    \since 4.2
-
-    Reads an image, or a set of images, from the given \a stream into
-    the given \a icon.
-*/
 
 QDataStream &operator>>(QDataStream &s, QIcon &icon)
 {
@@ -1130,16 +1124,19 @@ QDataStream &operator>>(QDataStream &s, QIcon &icon)
       icon = QIcon();
       QString key;
       s >> key;
+
       if (key == QLatin1String("QPixmapIconEngine")) {
          icon.d = new QIconPrivate;
          QIconEngineV2 *engine = new QPixmapIconEngine;
          icon.d->engine = engine;
          engine->read(s);
+
       } else if (key == QLatin1String("QIconLoaderEngine")) {
          icon.d = new QIconPrivate;
          QIconEngineV2 *engine = new QIconLoaderEngine();
          icon.d->engine = engine;
          engine->read(s);
+
 #if ! defined(QT_NO_SETTINGS)
       } else if (QIconEngineFactoryInterfaceV2 *factory = qobject_cast<QIconEngineFactoryInterfaceV2 *>(loaderV2()->instance(
                     key))) {
@@ -1150,6 +1147,7 @@ QDataStream &operator>>(QDataStream &s, QIcon &icon)
          }
 #endif
       }
+
    } else if (s.version() == QDataStream::Qt_4_2) {
       icon = QIcon();
       int num_entries;

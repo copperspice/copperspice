@@ -50,7 +50,7 @@ MediaSource::MediaSource(const QString &filename)
     const QFileInfo fileInfo(filename);
     if (fileInfo.exists()) {
 
-        bool localFs = QAbstractFileEngine::LocalDiskFlag & 
+        bool localFs = QAbstractFileEngine::LocalDiskFlag &
                      QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
 
         if (localFs && ! filename.startsWith(QLatin1String(":/")) && ! filename.startsWith(QLatin1String("qrc://"))) {
@@ -230,7 +230,7 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 //X {
 //X     return d->audioCaptureDevice;
 //X }
-//X 
+//X
 //X VideoCaptureDevice MediaSource::videoCaptureDevice() const
 //X {
 //X     return d->videoCaptureDevice;

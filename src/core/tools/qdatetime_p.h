@@ -24,12 +24,12 @@
 #define QDATETIME_P_H
 
 #include <qplatformdefs.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qlocale.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
+#include <qatomic.h>
+#include <qdatetime.h>
+#include <qstringlist.h>
+#include <qlocale.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 #define QDATETIMEEDIT_TIME_MIN QTime(0, 0, 0, 0)
 #define QDATETIMEEDIT_TIME_MAX QTime(23, 59, 59, 999)
@@ -48,13 +48,16 @@ class QDateTimePrivate
  public:
    enum Spec { LocalUnknown = -1, LocalStandard = 0, LocalDST = 1, UTC = 2, OffsetFromUTC = 3};
 
-   QDateTimePrivate() : spec(LocalUnknown), m_offsetFromUtc(0) {}
-   QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec,
-                    int offsetSeconds);
+   QDateTimePrivate()
+      : spec(LocalUnknown), m_offsetFromUtc(0)
+   { }
+
+   QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec, int offsetSeconds);
+
    QDateTimePrivate(const QDateTimePrivate &other)
       : date(other.date), time(other.time), spec(other.spec),
-        m_offsetFromUtc(other.m_offsetFromUtc) {
-   }
+        m_offsetFromUtc(other.m_offsetFromUtc)
+   { }
 
    QAtomicInt ref;
    QDate date;
@@ -64,11 +67,13 @@ class QDateTimePrivate
 
    // Get current date/time in LocalTime and put result in outDate and outTime
    Spec getLocal(QDate &outDate, QTime &outTime) const;
+
    // Get current date/time in UTC and put result in outDate and outTime
    void getUTC(QDate &outDate, QTime &outTime) const;
 
    // Add msecs to given datetime and return result
    static QDateTime addMSecs(const QDateTime &dt, qint64 msecs);
+
    // Add msecs to given datetime and put result in utcDate and utcTime
    static void addMSecs(QDate &utcDate, QTime &utcTime, qint64 msecs);
 };
@@ -80,6 +85,7 @@ class Q_CORE_EXPORT QDateTimeParser
       FromString,
       DateTimeEdit
    };
+
    QDateTimeParser(QVariant::Type t, Context ctx)
       : currentSectionIndex(-1), display(0), cachedDay(-1), parserType(t),
         fixday(false), spec(Qt::LocalTime), context(ctx) {
@@ -97,7 +103,9 @@ class Q_CORE_EXPORT QDateTimeParser
       none.count = -1;
       none.zeroesAdded = 0;
    }
+
    virtual ~QDateTimeParser() {}
+
    enum {
       Neither = -1,
       AM = 0,

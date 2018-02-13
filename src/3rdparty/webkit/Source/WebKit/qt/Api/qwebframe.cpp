@@ -1814,8 +1814,10 @@ QString QWebHitTestResult::linkText() const
 */
 QUrl QWebHitTestResult::linkUrl() const
 {
-    if (!d)
+    if (! d) {
         return QUrl();
+    }
+
     return d->linkUrl;
 }
 
@@ -1837,8 +1839,10 @@ QUrl QWebHitTestResult::linkTitle() const
 */
 QWebElement QWebHitTestResult::linkElement() const
 {
-    if (!d)
+    if (! d) {
         return QWebElement();
+    }
+
     return d->linkElement;
 }
 

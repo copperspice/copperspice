@@ -1898,7 +1898,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
       case regex_constants::syntax_digit: {
          // an octal escape sequence, first character must be a zero followed by up to 3 octal digits
 
-         std::ptrdiff_t len = (std::min)(std::distance(m_position, m_end), static_cast<std::ptrdiff_t>(4));
+         std::ptrdiff_t len = std::min(static_cast<std::ptrdiff_t>(std::distance(m_position, m_end)), static_cast<std::ptrdiff_t>(4));
          typename traits::string_type::const_iterator bp = m_position;
 
          char32_t val = this->m_traits.toi(bp, bp + 1, 8);

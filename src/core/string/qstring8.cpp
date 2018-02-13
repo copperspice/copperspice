@@ -1572,7 +1572,7 @@ QByteArray QString8::toUtf8() const
 
 QByteArray QString8::toUtf16() const
 {
-   // broom - full implementation required
+   // broom ( full implementation required )
 
    return QByteArray();
 }

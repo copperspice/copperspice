@@ -71,7 +71,7 @@ static QString driveSpec(const QString &path)
 }
 
 QDirPrivate::QDirPrivate(const QString &path, const QStringList &nameFilters_, QDir::SortFlags sort_,
-                  QDir::Filters filters_)
+                         QDir::Filters filters_)
    : QSharedData(), nameFilters(nameFilters_), sort(sort_), filters(filters_), fileListsInitialized(false)
 {
    setPath(path.isEmpty() ? QString::fromLatin1(".") : path);
@@ -776,21 +776,6 @@ QString QDir::relativeFilePath(const QString &fileName) const
    return result;
 }
 
-/*!
-    \since 4.2
-
-    Returns \a pathName with the '/' separators converted to
-    separators that are appropriate for the underlying operating
-    system.
-
-    On Windows, toNativeSeparators("c:/winnt/system32") returns
-    "c:\\winnt\\system32".
-
-    The returned string may be the same as the argument on some
-    operating systems, for example on Unix.
-
-    \sa fromNativeSeparators(), separator()
-*/
 QString QDir::toNativeSeparators(const QString &pathName)
 {
 #if defined(Q_OS_WIN)
@@ -1984,6 +1969,7 @@ QString QDir::rootPath()
 */
 
 #ifndef QT_NO_REGEXP
+
 /*!
     \overload
 

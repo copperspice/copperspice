@@ -40,15 +40,15 @@ class Q_CORE_EXPORT QIODevice : public QObject
 {
    CORE_CS_OBJECT(QIODevice)
 
- public:   
+ public:
    enum OpenModeFlag {
-      NotOpen = 0x0000,
-      ReadOnly = 0x0001,
-      WriteOnly = 0x0002,
-      ReadWrite = ReadOnly | WriteOnly,
-      Append = 0x0004,
-      Truncate = 0x0008,
-      Text = 0x0010,
+      NotOpen    = 0x0000,
+      ReadOnly   = 0x0001,
+      WriteOnly  = 0x0002,
+      ReadWrite  = ReadOnly | WriteOnly,
+      Append     = 0x0004,
+      Truncate   = 0x0008,
+      Text       = 0x0010,
       Unbuffered = 0x0020
    };
    using OpenMode = QFlags<OpenModeFlag>;

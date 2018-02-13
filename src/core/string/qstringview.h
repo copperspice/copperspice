@@ -489,18 +489,6 @@ QByteArray QStringView<S>::toUtf8() const
    return retval;
 }
 
-
-/*  broom - hold
-
-template <>
-QByteArray QStringView<QString8>::toUtf8() const
-{
-   QByteArray retval = QByteArray(cbegin().codePointBegin(), cend().codePointBegin());
-   return retval;
-}
-
-*/
-
 template <typename S>
 QStringView<S> QStringView<S>::trimmed() const
 {

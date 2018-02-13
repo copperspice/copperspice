@@ -219,7 +219,10 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
 
  public:
    explicit QRegularExpressionValidator(QObject *parent = nullptr);
-   explicit QRegularExpressionValidator(const QRegExp &re, QObject *parent = nullptr);
+
+   // broom - change to use, const QRegularExpression & regExp
+   explicit QRegularExpressionValidator(const QRegExp &regExp, QObject *parent = nullptr);
+
    ~QRegularExpressionValidator();
 
    QValidator::State validate(QString &input, int &pos) const override;

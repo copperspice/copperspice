@@ -250,7 +250,7 @@ bool FrameLoaderClientQt::hasWebView() const
     return true;
 }
 
-void FrameLoaderClientQt::savePlatformDataToCachedFrame(CachedFrame*) 
+void FrameLoaderClientQt::savePlatformDataToCachedFrame(CachedFrame*)
 {
     notImplemented();
 }
@@ -577,7 +577,7 @@ void FrameLoaderClientQt::postProgressStartedNotification()
 
 void FrameLoaderClientQt::postProgressEstimateChangedNotification()
 {
-    if (m_webFrame && m_frame->page())  {   
+    if (m_webFrame && m_frame->page())  {
         emit loadProgress(qRound(m_frame->page()->progress()->estimatedProgress() * 100));
     }
 }
@@ -643,7 +643,7 @@ bool FrameLoaderClientQt::canShowMIMETypeAsHTML(const String& MIMEType) const
     notImplemented();
     return false;
 }
-    
+
 bool FrameLoaderClientQt::canShowMIMEType(const String& MIMEType) const
 {
     String type = MIMEType;
@@ -768,10 +768,10 @@ void FrameLoaderClientQt::registerForIconNotification(bool shouldRegister)
 {
 #if ENABLE(ICONDATABASE)
     if (shouldRegister)
-        connect(IconDatabaseClientQt::instance(), SIGNAL(iconLoadedForPageURL(const QString &)), 
+        connect(IconDatabaseClientQt::instance(), SIGNAL(iconLoadedForPageURL(const QString &)),
                      this, SLOT(onIconLoadedForPageURL(const QString &)), Qt::UniqueConnection);
     else
-        disconnect(IconDatabaseClientQt::instance(), SIGNAL(iconLoadedForPageURL(const QString &)), 
+        disconnect(IconDatabaseClientQt::instance(), SIGNAL(iconLoadedForPageURL(const QString &)),
                      this, SLOT(onIconLoadedForPageURL(const QString &)));
 #endif
 }
@@ -896,7 +896,7 @@ void FrameLoaderClientQt::committedLoad(WebCore::DocumentLoader* loader, const c
 {
     if (!m_pluginView)
         loader->commitData(data, length);
-    
+
     // We re-check here as the plugin can have been created.
     if (m_pluginView && m_pluginView->isPluginView()) {
         if (!m_hasSentResponseToPlugin) {
@@ -1380,10 +1380,10 @@ ObjectContentType FrameLoaderClientQt::objectContentType(const KURL& url, const 
         plugInType = ObjectContentNetscapePlugin;
     else if (m_frame->page() && m_frame->page()->pluginData() && m_frame->page()->pluginData()->supportsMimeType(mimeType))
         plugInType = ObjectContentOtherPlugin;
-        
+
     if (MIMETypeRegistry::isSupportedImageMIMEType(mimeType))
         return shouldPreferPlugInsForImages && plugInType != ObjectContentNone ? plugInType : ObjectContentImage;
-    
+
     if (plugInType != ObjectContentNone)
         return plugInType;
 
@@ -1416,7 +1416,7 @@ public:
             platformWidget()->deleteLater();
     }
     virtual void invalidateRect(const IntRect& r)
-    { 
+    {
         if (platformWidget())
             platformWidget()->update(r);
     }
@@ -1694,9 +1694,9 @@ void FrameLoaderClientQt::emitLoadFinished(bool ok)
     const bool wasOriginatingLoad = m_isOriginatingLoad;
     m_isOriginatingLoad = false;
 
-    QWebPage *webPage = m_webFrame->page(); 
+    QWebPage *webPage = m_webFrame->page();
 
-    if (wasOriginatingLoad && webPage)  {     
+    if (wasOriginatingLoad && webPage)  {
         emit webPage->loadFinished(ok);
     }
 
