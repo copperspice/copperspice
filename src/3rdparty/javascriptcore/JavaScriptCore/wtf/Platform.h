@@ -41,7 +41,7 @@
 #define CPU(WTF_FEATURE) (defined WTF_CPU_##WTF_FEATURE  && WTF_CPU_##WTF_FEATURE)
 /* HAVE() - specific system features (headers, functions or similar) that are present or not */
 #define HAVE(WTF_FEATURE) (defined HAVE_##WTF_FEATURE  && HAVE_##WTF_FEATURE)
-/* OS() - underlying operating system; only to be used for mandated low-level services like 
+/* OS() - underlying operating system; only to be used for mandated low-level services like
    virtual memory, not to choose a GUI toolkit */
 #define OS(WTF_FEATURE) (defined WTF_OS_##WTF_FEATURE  && WTF_OS_##WTF_FEATURE)
 
@@ -93,24 +93,9 @@
 #define WTF_COMPILER_SUNCC 1
 #endif
 
-/* COMPILER(WINSCW) - CodeWarrior for Symbian emulator */
-#if defined(__WINSCW__)
-#define WTF_COMPILER_WINSCW 1
-#endif
-
 /* COMPILER(INTEL) - Intel C++ Compiler */
 #if defined(__INTEL_COMPILER)
 #define WTF_COMPILER_INTEL 1
-#endif
-
-/* COMPILER(ACC) - HP aCC */
-#if defined(__HP_aCC)
-#define WTF_COMPILER_ACC 1
-#endif
-
-/* COMPILER(XLC) - IBM XL */
-#if defined(__xlC__)
-#define WTF_COMPILER_XLC 1
 #endif
 
 
@@ -126,10 +111,12 @@
 /* CPU(IA64) - Itanium / IA-64 */
 #if defined(__ia64__) || defined(__ia64) || defined(_M_IA64)
 #define WTF_CPU_IA64 1
+
 /* 32-bit mode on Itanium */
 #if !defined(__LP64__)
 #define WTF_CPU_IA64_32 1
 #endif
+
 /* Itanium can be both big- and little-endian;
    we need to determine at compile time which one it is.
     - HP's aCC compiler only compiles big-endian (so HP-UXi is always big-endian)
@@ -306,7 +293,7 @@
 
 
 /* CPU(ARMV5_OR_LOWER) - ARM instruction set v5 or earlier */
-/* On ARMv5 and below the natural alignment is required. 
+/* On ARMv5 and below the natural alignment is required.
    And there are some other differences for v5 or earlier. */
 #if !defined(ARMV5_OR_LOWER) && !WTF_ARM_ARCH_AT_LEAST(6)
 #define WTF_CPU_ARMV5_OR_LOWER 1
@@ -357,7 +344,7 @@
 #endif /* __mips__ */
 
 
-/* ==== OS() - underlying operating system; only to be used for mandated low-level services like 
+/* ==== OS() - underlying operating system; only to be used for mandated low-level services like
    virtual memory, not to choose a GUI toolkit ==== */
 
 /* OS(ANDROID) - Android */

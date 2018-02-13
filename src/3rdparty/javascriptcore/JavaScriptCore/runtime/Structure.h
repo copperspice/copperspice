@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef Structure_h
@@ -84,11 +84,11 @@ namespace JSC {
 
         ~Structure();
 
-        // These should be used with caution.  
+        // These should be used with caution.
         size_t addPropertyWithoutTransition(const Identifier& propertyName, unsigned attributes, JSCell* specificValue);
         size_t removePropertyWithoutTransition(const Identifier& propertyName);
         void setPrototypeWithoutTransition(JSValue prototype) { m_prototype = prototype; }
-        
+
         bool isDictionary() const { return m_dictionaryKind != NoneDictionaryKind; }
         bool isUncacheableDictionary() const { return m_dictionaryKind == UncachedDictionaryKind; }
 
@@ -128,7 +128,7 @@ namespace JSC {
         bool hasNonEnumerableProperties() const { return m_hasNonEnumerableProperties; }
 
         bool hasAnonymousSlots() const { return m_propertyTable && m_propertyTable->anonymousSlotCount; }
-        
+
         bool isEmpty() const { return m_propertyTable ? !m_propertyTable->keyCount : m_offset == noOffset; }
 
         void despecifyDictionaryFunction(const Identifier& propertyName);
@@ -137,11 +137,11 @@ namespace JSC {
         void setEnumerationCache(JSPropertyNameIterator* enumerationCache); // Defined in JSPropertyNameIterator.h.
         JSPropertyNameIterator* enumerationCache() { return m_enumerationCache.get(); }
         void getPropertyNames(PropertyNameArray&, EnumerationMode mode);
-        
+
     private:
         Structure(JSValue prototype, const TypeInfo&);
-        
-        typedef enum { 
+
+        typedef enum {
             NoneDictionaryKind = 0,
             CachedDictionaryKind = 1,
             UncachedDictionaryKind = 2
@@ -167,7 +167,7 @@ namespace JSC {
         void materializePropertyMap();
         void materializePropertyMapIfNecessary()
         {
-            if (m_propertyTable || !m_previous)             
+            if (m_propertyTable || !m_previous)
                 return;
             materializePropertyMap();
         }
@@ -177,11 +177,11 @@ namespace JSC {
             // Since the number of transitions is always the same as m_offset, we keep the size of Structure down by not storing both.
             return m_offset == noOffset ? 0 : m_offset + 1;
         }
-        
+
         bool isValid(ExecState*, StructureChain* cachedPrototypeChain) const;
 
         static const unsigned emptyEntryIndex = 0;
-    
+
         static const signed char s_maxTransitionLength = 64;
 
         static const signed char noOffset = -1;
@@ -210,14 +210,8 @@ namespace JSC {
         bool m_isPinnedPropertyTable : 1;
         bool m_hasGetterSetterProperties : 1;
         bool m_hasNonEnumerableProperties : 1;
-#if COMPILER(WINSCW)
-        // Workaround for Symbian WINSCW compiler that cannot resolve unsigned type of the declared 
-        // bitfield, when used as argument in make_pair() function calls in structure.ccp.
-        // This bitfield optimization is insignificant for the Symbian emulator target.
-        unsigned m_attributesInPrevious;
-#else
+
         unsigned m_attributesInPrevious : 7;
-#endif
         unsigned m_anonymousSlotsInPrevious : 6;
         unsigned m_specificFunctionThrashCount : 2;
         // 4 free bits
@@ -267,7 +261,7 @@ namespace JSC {
                 return m_propertyTable->entries()[entryIndex - 1].offset;
         }
     }
-    
+
     bool StructureTransitionTable::contains(const StructureTransitionTableHash::Key& key, JSCell* specificValue)
     {
         if (usingSingleTransitionSlot()) {
@@ -309,7 +303,7 @@ namespace JSC {
         }
         return table()->contains(key);
     }
-    
+
     void StructureTransitionTable::reifySingleTransition()
     {
         ASSERT(usingSingleTransitionSlot());
@@ -322,7 +316,7 @@ namespace JSC {
 
             add(StructureTransitionTableHash::Key
                      (RefPtr<UString::Rep>(existingTransition->m_nameInPrevious.get()), temp),
-                existingTransition, 
+                existingTransition,
                 existingTransition->m_specificValueInPrevious);
          }
     }

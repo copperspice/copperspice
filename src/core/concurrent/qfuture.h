@@ -344,7 +344,7 @@ class QFuture<void>
       return (d != other.d);
    }
 
-#if ! defined(Q_CC_XLC)
+
    template <typename T>
    QFuture(const QFuture<T> &other)
       : d(other.d) {
@@ -355,7 +355,6 @@ class QFuture<void>
       d = other.d;
       return *this;
    }
-#endif
 
    void cancel() {
       d.cancel();

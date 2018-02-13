@@ -47,7 +47,7 @@ class CppCastingHelper
     */
    template<typename TCastTarget>
    inline const TCastTarget *as() const {
-#if defined(Patternist_DEBUG) && !defined(Q_CC_XLC)
+#if defined(Patternist_DEBUG)
       /* At least on aix-xlc-64, the compiler cries when it sees dynamic_cast. */
       Q_ASSERT_X(dynamic_cast<const TCastTarget *>(static_cast<const TSubClass *>(this)),
                  Q_FUNC_INFO,
@@ -71,7 +71,7 @@ class CppCastingHelper
    template<typename TCastTarget>
    inline TCastTarget *as() {
 
-#if defined(Patternist_DEBUG) && !defined(Q_CC_XLC)
+#if defined(Patternist_DEBUG)
       /* on aix-xlc-64, the compiler cries when it sees dynamic_cast. */
       Q_ASSERT_X(dynamic_cast<TCastTarget *>(static_cast<TSubClass *>(this)),
                  Q_FUNC_INFO, "The cast is invalid. This class does not inherit the cast target.");

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef UStringImpl_h
@@ -37,7 +37,7 @@
 namespace JSC {
 
 class IdentifierTable;
-  
+
 typedef CrossThreadRefCounted<OwnFastMallocPtr<UChar> > SharedUChar;
 
 class UStringImpl : Noncopyable {
@@ -222,11 +222,9 @@ private:
 #if OS(SOLARIS) && COMPILER(SUNCC)
 public: // Otherwise the compiler complains about operator new not being accessible.
 #endif
-#if COMPILER(WINSCW) || COMPILER(XLC)
-    void* operator new(size_t size) { return Noncopyable::operator new(size); }
-#else
+
     using Noncopyable::operator new;
-#endif
+
 #if OS(SOLARIS) && COMPILER(SUNCC)
 private:
 #endif

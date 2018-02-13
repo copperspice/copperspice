@@ -79,7 +79,7 @@ namespace JSC {
         private:
             int m_flag;
         };
-    
+
 #endif
     private:
         static uint32_t s_flags;
@@ -104,20 +104,17 @@ namespace JSC {
             , m_size(0)
         {
         }
-        
+
         ~ScriptSampleRecord()
         {
             if (m_samples)
                 free(m_samples);
         }
-        
+
         void sample(CodeBlock*, Instruction*);
 
-#if COMPILER(WINSCW) || COMPILER(ACC)
-        ScriptExecutable* m_executable;
-#else
         RefPtr<ScriptExecutable> m_executable;
-#endif
+
         CodeBlock* m_codeBlock;
         int m_sampleCount;
         int m_opcodeSampleCount;
@@ -144,7 +141,7 @@ namespace JSC {
     public:
         friend struct CallRecord;
         friend class HostCallRecord;
-        
+
 #if ENABLE(OPCODE_SAMPLING)
         class CallRecord : public Noncopyable {
         public:
@@ -166,7 +163,7 @@ namespace JSC {
             intptr_t m_savedSample;
             CodeBlock* m_savedCodeBlock;
         };
-        
+
         class HostCallRecord : public CallRecord {
         public:
             HostCallRecord(SamplingTool* samplingTool)
@@ -190,7 +187,7 @@ namespace JSC {
             {
             }
         };
-#endif        
+#endif
 
         SamplingTool(Interpreter* interpreter)
             : m_interpreter(interpreter)
@@ -244,7 +241,7 @@ namespace JSC {
                 , m_codeBlock(codeBlock)
             {
             }
-            
+
             bool isNull() { return !m_sample; }
             CodeBlock* codeBlock() { return m_codeBlock; }
             Instruction* vPC() { return reinterpret_cast<Instruction*>(m_sample & ~0x3); }
@@ -258,9 +255,9 @@ namespace JSC {
 
         void doRun();
         static SamplingTool* s_samplingTool;
-        
+
         Interpreter* m_interpreter;
-        
+
         // State tracked by the main thread, used by the sampling thread.
         CodeBlock* m_codeBlock;
         intptr_t m_sample;
@@ -270,7 +267,7 @@ namespace JSC {
         long long m_opcodeSampleCount;
         unsigned m_opcodeSamples[numOpcodeIDs];
         unsigned m_opcodeSamplesInCTIFunctions[numOpcodeIDs];
-        
+
 #if ENABLE(CODEBLOCK_SAMPLING)
         Mutex m_scriptSampleMapMutex;
         OwnPtr<ScriptSampleRecordMap> m_scopeSampleMap;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WTF_Assertions_h
@@ -34,11 +34,11 @@
 
    For non-debug builds, everything is disabled by default.
    Defining any of the symbols explicitly prevents this from having any effect.
-   
+
    MSVC7 note: variadic macro support was added in MSVC8, so for now we disable
-   those macros in MSVC7. For more info, see the MSDN document on variadic 
+   those macros in MSVC7. For more info, see the MSDN document on variadic
    macros here:
-   
+
    http://msdn2.microsoft.com/en-us/library/ms177415(VS.80).aspx
 */
 
@@ -61,11 +61,7 @@
 #define ASSERTIONS_DISABLED_DEFAULT 0
 #endif
 
-#if COMPILER(MSVC7) || COMPILER(WINSCW)
-#define HAVE_VARIADIC_MACRO 0
-#else
 #define HAVE_VARIADIC_MACRO 1
-#endif
 
 #ifndef ASSERT_DISABLED
 #define ASSERT_DISABLED ASSERTIONS_DISABLED_DEFAULT
@@ -119,7 +115,7 @@
 #if COMPILER(GCC) && !defined(__OBJC__)
 #define WTF_ATTRIBUTE_PRINTF(formatStringArgument, extraArguments) __attribute__((__format__(printf, formatStringArgument, extraArguments)))
 #else
-#define WTF_ATTRIBUTE_PRINTF(formatStringArgument, extraArguments) 
+#define WTF_ATTRIBUTE_PRINTF(formatStringArgument, extraArguments)
 #endif
 
 /* These helper functions are always declared, but not necessarily always defined if the corresponding function is disabled. */
@@ -219,8 +215,8 @@ while (0)
     } \
 while (0)
 #endif
-                        
-                        
+
+
 /* ASSERT_ARG */
 
 #if ASSERT_ARG_DISABLED

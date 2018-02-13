@@ -39,10 +39,6 @@
 
 #if OS(WINDOWS)
 
-// possible issue: defined in windef.h, we want to use std::min and std::max
-#define max  max
-#define min  min
-
 // We need to define this before the first #include of stdlib.h or it won't contain rand_s.
 #ifndef _CRT_RAND_S
 #define _CRT_RAND_S
