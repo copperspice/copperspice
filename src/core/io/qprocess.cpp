@@ -30,27 +30,32 @@
 
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
-   if (!data) {
+   if (! data) {
       return "(null)";
    }
+
    QByteArray out;
    for (int i = 0; i < len && i < maxSize; ++i) {
       char c = data[i];
+
       if (isprint(c)) {
          out += c;
       } else switch (c) {
             case '\n':
                out += "\\n";
                break;
+
             case '\r':
                out += "\\r";
                break;
+
             case '\t':
                out += "\\t";
                break;
+
             default:
                char buf[5];
-               qsnprintf(buf, sizeof(buf), "\\%3o", c);
+               std::snprintf(buf, sizeof(buf), "\\%3o", c);
                buf[4] = '\0';
                out += QByteArray(buf);
          }
@@ -1768,7 +1773,7 @@ int QProcess::execute(const QString &program)
 }
 
 bool QProcess::startDetached(const QString &program, const QStringList &arguments,
-                  const QString &workingDirectory, qint64 *pid)
+                             const QString &workingDirectory, qint64 *pid)
 {
    return QProcessPrivate::startDetached(program, arguments, workingDirectory, pid);
 }

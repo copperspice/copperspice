@@ -181,11 +181,13 @@ static bool write_xbm_image(const QImage &sourceImage, QIODevice *device, const 
    int        msize = s.length() + 100;
    char *buf = new char[msize];
 
-   qsnprintf(buf, msize, "#define %s_width %d\n", s.toLatin1().data(), w);
+   std::snprintf(buf, msize, "#define %s_width %d\n", s.toLatin1().data(), w);
    device->write(buf, qstrlen(buf));
-   qsnprintf(buf, msize, "#define %s_height %d\n", s.toLatin1().data(), h);
+
+   std::snprintf(buf, msize, "#define %s_height %d\n", s.toLatin1().data(), h);
    device->write(buf, qstrlen(buf));
-   qsnprintf(buf, msize, "static char %s_bits[] = {\n ", s.toLatin1().data());
+
+   std::snprintf(buf, msize, "static char %s_bits[] = {\n ", s.toLatin1().data());
    device->write(buf, qstrlen(buf));
 
    if (image.format() != QImage::Format_MonoLSB) {

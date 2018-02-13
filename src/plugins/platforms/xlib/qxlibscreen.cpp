@@ -120,7 +120,9 @@ qDebug() << "qt_x_errhandler" << err->error_code;
     XGetErrorText( dpy, err->error_code, errstr, 256 );
     char buffer[256];
     char request_str[256];
-    qsnprintf(buffer, 256, "%d", err->request_code);
+
+    std::snprintf(buffer, 256, "%d", err->request_code);
+
     XGetErrorDatabaseText(dpy, "XRequest", buffer, "", request_str, 256);
     if (err->request_code < 128) {
         // X error for a normal protocol request
@@ -144,14 +146,16 @@ qDebug() << "qt_x_errhandler" << err->error_code;
         else if (err->request_code == X11->mitshm_major)
             extensionName = "MIT-SHM";
 #endif
+
         char minor_str[256];
         if (extensionName) {
-            qsnprintf(buffer, 256, "%s.%d", extensionName, err->minor_code);
+            std::snprintf(buffer, 256, "%s.%d", extensionName, err->minor_code);
             XGetErrorDatabaseText(dpy, "XRequest", buffer, "", minor_str, 256);
         } else {
             extensionName = "Uknown extension";
-            qsnprintf(minor_str, 256, "Unknown request");
+            std::snprintf(minor_str, 256, "Unknown request");
         }
+
         qWarning( "X Error: %s %d\n"
                   "  Extension:    %d (%s)\n"
                   "  Minor opcode: %d (%s)\n"

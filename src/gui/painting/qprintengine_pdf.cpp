@@ -744,7 +744,7 @@ void QPdfEnginePrivate::xprintf(const char *fmt, ...)
 
    va_list args;
    va_start(args, fmt);
-   int bufsize = qvsnprintf(buf, msize, fmt, args);
+   int bufsize = std::vsnprintf(buf, msize, fmt, args);
 
    Q_ASSERT(bufsize < msize);
 
