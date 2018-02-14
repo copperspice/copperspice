@@ -20,51 +20,35 @@
 *
 ***********************************************************************/
 
-#ifndef QCRYPTOGRAPHICHASH_H
-#define QCRYPTOGRAPHICHASH_H
+#ifndef QMESSAGE_AUTHENTICATION_CODE_H
+#define QMESSAGE_AUTHENTICATION_CODE_H
 
-#include <qbytearray.h>
+#include <qcryptographichash.h>
 
-class QCryptographicHashPrivate;
+class QMessageAuthenticationCodePrivate;
 class QIODevice;
 
-class Q_CORE_EXPORT QCryptographicHash
+class Q_CORE_EXPORT QMessageAuthenticationCode
 {
- public:
-   enum Algorithm {
-      Md4,
-      Md5,
-      Sha1,
-      Sha224,
-      Sha256,
-      Sha384,
-      Sha512,
-      Keccak_224,
-      Keccak_256,
-      Keccak_384,
-      Keccak_512,
-      Sha3_224,
-      Sha3_256,
-      Sha3_384,
-      Sha3_512
-   };
+public:
+    explicit QMessageAuthenticationCode(QCryptographicHash::Algorithm method, const QByteArray &key = QByteArray());
+    ~QMessageAuthenticationCode();
 
-   explicit QCryptographicHash(Algorithm method);
-   ~QCryptographicHash();
+    void reset();
 
-   void reset();
+    void setKey(const QByteArray &key);
 
-   void addData(const char *data, int length);
-   void addData(const QByteArray &data);
-   bool addData(QIODevice *device);
+    void addData(const char *data, int length);
+    void addData(const QByteArray &data);
+    bool addData(QIODevice *device);
 
-   QByteArray result() const;
+    QByteArray result() const;
 
-   static QByteArray hash(const QByteArray &data, Algorithm method);
+    static QByteArray hash(const QByteArray &message, const QByteArray &key, QCryptographicHash::Algorithm method);
 
- private:
-   Q_DISABLE_COPY(QCryptographicHash)
-   QCryptographicHashPrivate *d;
+private:
+    Q_DISABLE_COPY(QMessageAuthenticationCode)
+    QMessageAuthenticationCodePrivate *d;
 };
 
 #endif

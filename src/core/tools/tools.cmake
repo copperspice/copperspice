@@ -40,6 +40,7 @@ set(CORE_PUBLIC_INCLUDES
     QMap
     QMapIterator
     QMargins
+    QMessageAuthenticationCode
     QMultiHash
     QMultiMap
     QMutableHashIterator
@@ -138,6 +139,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapfunc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmapiterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmessageauthenticationcode.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmultihash.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmultimap.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmutablehashiterator.h
@@ -227,6 +229,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpoint.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmessageauthenticationcode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcontiguouscache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
@@ -253,11 +256,6 @@ set(CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz.cpp
 )
-
-# FIXME platform specific
-#  qelapsedtimer_mac.cpp
-#  qlocale_mac.mm
-#  qelapsedtimer_generic.cpp
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
