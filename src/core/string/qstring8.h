@@ -40,6 +40,14 @@ class QStringParser;
 template <typename S>
 class QRegularExpression;
 
+#ifdef Q_OS_DARWIN
+   using CFStringRef = const struct __CFString *;
+
+#  ifdef __OBJC__
+   @class NSString;
+#  endif
+#endif
+
 class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
 {
    public:
@@ -921,6 +929,17 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QChar32 operator[](size_type index) const {
          return CsString::CsString::operator[](index);
       }
+
+#if defined(Q_OS_DARWIN)
+    static QString8 fromCFString(CFStringRef string);
+    CFStringRef toCFString() const;
+
+#  if defined(__OBJC__)
+    static QString8 fromNSString(const NSString *string);
+    NSString *toNSString() const;
+#  endif
+
+#endif
 
    private:
       const_iterator cs_internal_find_fast(QChar32 c, const_iterator iter_begin) const;

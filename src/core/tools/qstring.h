@@ -35,6 +35,14 @@
 #error qstring.h must be included before any header file that defines truncate
 #endif
 
+#ifdef Q_OS_DARWIN
+   using CFStringRef = const struct __CFString *;
+
+#  ifdef __OBJC__
+   @class NSString;
+#  endif
+#endif
+
 QT_BEGIN_NAMESPACE
 
 class QCharRef;
@@ -640,6 +648,17 @@ class Q_CORE_EXPORT QString
 #ifndef QT_NO_STL_WCHAR
    static inline QString fromStdWString(const std::wstring &s);
    inline std::wstring toStdWString() const;
+#endif
+
+#if defined(Q_OS_DARWIN)
+    static QString fromCFString(CFStringRef string);
+    CFStringRef toCFString() const;
+
+#  if defined(__OBJC__)
+    static QString fromNSString(const NSString *string);
+    NSString *toNSString() const;
+#  endif
+
 #endif
 
    // compatibility

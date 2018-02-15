@@ -20,6 +20,8 @@
 *
 ***********************************************************************/
 
+#include <array>
+
 #include <qstring8.h>
 #include <qdatastream.h>
 #include <qregularexpression.h>
