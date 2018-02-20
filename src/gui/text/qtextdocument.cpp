@@ -1732,12 +1732,14 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
    if (doc) {
       r = doc->loadResource(type, name);
    }
+
 #ifndef QT_NO_TEXTEDIT
    else if (QTextEdit *edit = qobject_cast<QTextEdit *>(parent())) {
       QUrl resolvedName = edit->d_func()->resolveUrl(name);
       r = edit->loadResource(type, resolvedName);
    }
 #endif
+
 #ifndef QT_NO_TEXTCONTROL
    else if (QTextControl *control = qobject_cast<QTextControl *>(parent())) {
       r = control->loadResource(type, name);
@@ -1745,13 +1747,13 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
 #endif
 
    // handle data: URLs
-   if (r.isNull() && name.scheme().compare(QLatin1String("data"), Qt::CaseInsensitive) == 0) {
+   if (r.isNull() && name.scheme().compare("data", Qt::CaseInsensitive) == 0) {
       r = qDecodeDataUrl(name).second;
    }
 
    // if resource was not loaded try to load it here
-   if (!doc && r.isNull() && name.isRelative()) {
-      QUrl currentURL = d->url;
+   if (! doc && r.isNull() && name.isRelative()) {
+      QUrl currentURL  = QUrl(d->url);
       QUrl resourceUrl = name;
 
       // For the second case QUrl can merge "#someanchor" with "foo.html"
@@ -1761,14 +1763,15 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
                 && !QFileInfo(currentURL.toLocalFile()).isAbsolute()))
             || (name.hasFragment() && name.path().isEmpty())) {
          resourceUrl =  currentURL.resolved(name);
+
       } else {
          // this is our last resort when current url and new url are both relative
-         // we try to resolve against the current working directory in the local
-         // file system.
+         // we try to resolve against the current working directory in the local  file system.
          QFileInfo fi(currentURL.toLocalFile());
+
          if (fi.exists()) {
-            resourceUrl =
-               QUrl::fromLocalFile(fi.absolutePath() + QDir::separator()).resolved(name);
+            resourceUrl = QUrl::fromLocalFile(fi.absolutePath() + QDir::separator()).resolved(name);
+
          } else if (currentURL.isEmpty()) {
             resourceUrl.setScheme(QLatin1String("file"));
          }

@@ -23,132 +23,207 @@
 #ifndef QURL_H
 #define QURL_H
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qhash.h>
-
-QT_BEGIN_NAMESPACE
+#include <qbytearray.h>
+#include <qpair.h>
+#include <qstring.h>
+#include <qhash.h>
 
 class QUrlPrivate;
+class QUrlQuery;
 class QDataStream;
-class QMutexLocker;
+
+#ifdef Q_OS_DARWIN
+using CFURLRef = const struct __CFURL *;
+
+#ifdef __OBJC__
+@class NSURL;
+#endif
+
+#endif
+
+class QUrl;
+Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0);
 
 class Q_CORE_EXPORT QUrl
 {
  public:
    enum ParsingMode {
       TolerantMode,
-      StrictMode
+      StrictMode,
+      DecodedMode
    };
 
    // encoding / toString values
    enum FormattingOption {
-      None = 0x0,
-      RemoveScheme = 0x1,
-      RemovePassword = 0x2,
-      RemoveUserInfo = RemovePassword | 0x4,
-      RemovePort = 0x8,
+      None            = 0x0,
+      RemoveScheme    = 0x1,
+      RemovePassword  = 0x2,
+      RemoveUserInfo  = RemovePassword | 0x4,
+      RemovePort      = 0x8,
       RemoveAuthority = RemoveUserInfo | RemovePort | 0x10,
-      RemovePath = 0x20,
-      RemoveQuery = 0x40,
-      RemoveFragment = 0x80,
+      RemovePath      = 0x20,
+      RemoveQuery     = 0x40,
+      RemoveFragment  = 0x80,
+
       // 0x100: private: normalized
 
-      StripTrailingSlash = 0x10000
+      PreferLocalFile        = 0x200,
+      StripTrailingSlash     = 0x400,
+      RemoveFilename         = 0x800,
+      NormalizePathSegments  = 0x1000,
+
+      PrettyDecoded    = 0x000000,
+      EncodeSpaces     = 0x100000,
+      EncodeUnicode    = 0x200000,
+      EncodeDelimiters = 0x400000 | 0x800000,
+      EncodeReserved   = 0x1000000,
+      DecodeReserved   = 0x2000000,
+      // 0x4000000 used to indicate full-decode mode
+
+      FullyEncoded = EncodeSpaces | EncodeUnicode | EncodeDelimiters | EncodeReserved,
+      FullyDecoded = FullyEncoded | DecodeReserved | 0x4000000
    };
    using FormattingOptions = QFlags<FormattingOption>;
 
+   enum UserInputResolutionOption {
+      DefaultResolution,
+      AssumeLocalFile
+   };
+   using UserInputResolutionOptions = QFlags<UserInputResolutionOption>;
+
    QUrl();
+   QUrl(const QUrl &other);
 
-#ifdef QT_NO_URL_CAST_FROM_STRING
-   explicit
-#endif
+   explicit QUrl(const QString &url, ParsingMode mode = TolerantMode);
 
-   QUrl(const QString &url);
-   QUrl(const QString &url, ParsingMode mode);
+   QUrl(QUrl &&other)
+      : d(other.d) {
+      other.d = nullptr;
+   }
 
-   // ### Qt5/merge the two constructors, with mode = TolerantMode
-   QUrl(const QUrl &copy);
-   QUrl &operator =(const QUrl &copy);
+   QUrl &operator =(const QUrl &other);
 
-#ifndef QT_NO_URL_CAST_FROM_STRING
-   QUrl &operator =(const QString &url);
-#endif
-
-   inline QUrl &operator=(QUrl && other) {
+   QUrl &operator=(QUrl &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
    ~QUrl();
 
-   inline void swap(QUrl &other) {
+   QUrl adjusted(FormattingOptions options) const Q_REQUIRED_RESULT;
+
+   void clear();
+   void detach();
+
+   QString errorString() const;
+
+   QString fileName(FormattingOptions options = FullyDecoded) const;
+
+   static QUrl fromEncoded(const QByteArray &url, ParsingMode mode = TolerantMode);
+   static QString fromPercentEncoding(const QByteArray &);
+   static QUrl fromUserInput(const QString &userInput);
+
+   static QUrl fromUserInput(const QString &userInput, const QString &workingDirectory,
+                  UserInputResolutionOptions options = DefaultResolution);
+
+   static QUrl fromLocalFile(const QString &localfile);
+
+   bool hasFragment() const;
+   bool hasQuery() const;
+
+   bool isLocalFile() const;
+   bool isValid() const;
+   bool isEmpty() const;
+   bool isRelative() const;
+   bool isDetached() const;
+   bool isParentOf(const QUrl &url) const;
+
+   bool matches(const QUrl &url, FormattingOptions options) const;
+
+   QUrl resolved(const QUrl &relative) const Q_REQUIRED_RESULT;
+
+   void swap(QUrl &other) {
       qSwap(d, other.d);
    }
 
-   void setUrl(const QString &url);
-   void setUrl(const QString &url, ParsingMode mode);
-   // ### Qt5/merge the two setUrl() functions, with mode = TolerantMode
-   void setEncodedUrl(const QByteArray &url);
-   void setEncodedUrl(const QByteArray &url, ParsingMode mode);
-   // ### Qt5/merge the two setEncodedUrl() functions, with mode = TolerantMode
+   QString topLevelDomain(FormattingOptions options = FullyDecoded) const;
 
-   bool isValid() const;
+   static QByteArray toPercentEncoding(const QString &, const QByteArray &exclude = QByteArray(),
+                  const QByteArray &include = QByteArray());
 
-   bool isEmpty() const;
+   QString toLocalFile() const;
+   QString toString(FormattingOptions options = FormattingOptions(PrettyDecoded)) const;
+   QString toDisplayString(FormattingOptions options = FormattingOptions(PrettyDecoded)) const;
+   QByteArray toEncoded(FormattingOptions options = FullyEncoded) const;
 
-   void clear();
-
+   //
    void setScheme(const QString &scheme);
    QString scheme() const;
 
-   void setAuthority(const QString &authority);
-   QString authority() const;
+   void setAuthority(const QString &authority, ParsingMode mode = TolerantMode);
+   QString authority(FormattingOptions options = PrettyDecoded) const;
 
-   void setUserInfo(const QString &userInfo);
-   QString userInfo() const;
+   void setUserInfo(const QString &userInfo, ParsingMode mode = TolerantMode);
+   QString userInfo(FormattingOptions options = PrettyDecoded) const;
 
-   void setUserName(const QString &userName);
-   QString userName() const;
-   void setEncodedUserName(const QByteArray &userName);
-   QByteArray encodedUserName() const;
+   void setUserName(const QString &userName, ParsingMode mode = DecodedMode);
+   QString userName(FormattingOptions options = FullyDecoded) const;
 
-   void setPassword(const QString &password);
-   QString password() const;
-   void setEncodedPassword(const QByteArray &password);
-   QByteArray encodedPassword() const;
+   void setPassword(const QString &password, ParsingMode mode = DecodedMode);
+   QString password(FormattingOptions options = FullyDecoded) const;
 
-   void setHost(const QString &host);
-   QString host() const;
-   void setEncodedHost(const QByteArray &host);
-   QByteArray encodedHost() const;
+   void setHost(const QString &host, ParsingMode mode = DecodedMode);
+   QString host(FormattingOptions options = FullyDecoded) const;
 
    void setPort(int port);
-   int port() const;
-   int port(int defaultPort) const;
-   // ### Qt5/merge the two port() functions, with defaultPort = -1
+   int port(int defaultPort = -1) const;
 
-   void setPath(const QString &path);
-   QString path() const;
-   void setEncodedPath(const QByteArray &path);
-   QByteArray encodedPath() const;
+   void setPath(const QString &path, ParsingMode mode = DecodedMode);
+   QString path(FormattingOptions options = FullyDecoded) const;
 
-   bool hasQuery() const;
+   void setQuery(const QString &query, ParsingMode mode = TolerantMode);
+   void setQuery(const QUrlQuery &query);
+   QString query(FormattingOptions options = PrettyDecoded) const;
 
-   void setEncodedQuery(const QByteArray &query);
-   QByteArray encodedQuery() const;
+   void setUrl(const QString &url, ParsingMode mode = TolerantMode);
+   QString url(FormattingOptions options = FormattingOptions(PrettyDecoded)) const;
 
-   void setQueryDelimiters(char valueDelimiter, char pairDelimiter);
-   char queryValueDelimiter() const;
-   char queryPairDelimiter() const;
+   void setFragment(const QString &fragment, ParsingMode mode = TolerantMode);
+   QString fragment(FormattingOptions options = PrettyDecoded) const;
 
-   void setQueryItems(const QList<QPair<QString, QString> > &query);
+   // operators
+   bool operator <(const QUrl &url) const;
+   bool operator ==(const QUrl &url) const;
+   bool operator !=(const QUrl &url) const;
+
+# ifdef Q_OS_DARWIN
+   static QUrl fromCFURL(CFURLRef url);
+   CFURLRef    toCFURL() const;
+
+#if defined(__OBJC__)
+   static QUrl fromNSURL(const NSURL *url);
+   NSURL      *toNSURL() const;
+#endif
+
+#endif
+
+   static QString fromPunycode(const QByteArray &punycode) {
+      return fromAce(punycode);
+   }
+
+   static QByteArray toPunycode(const QString &string) {
+      return toAce(string);
+   }
+
    void addQueryItem(const QString &key, const QString &value);
+   void setQueryItems(const QList<QPair<QString, QString> > &query);
    QList<QPair<QString, QString> > queryItems() const;
+
    bool hasQueryItem(const QString &key) const;
    QString queryItemValue(const QString &key) const;
+
    QStringList allQueryItemValues(const QString &key) const;
+
    void removeQueryItem(const QString &key);
    void removeAllQueryItems(const QString &key);
 
@@ -161,79 +236,88 @@ class Q_CORE_EXPORT QUrl
    void removeEncodedQueryItem(const QByteArray &key);
    void removeAllEncodedQueryItems(const QByteArray &key);
 
-   void setFragment(const QString &fragment);
-   QString fragment() const;
-   void setEncodedFragment(const QByteArray &fragment);
-   QByteArray encodedFragment() const;
-   bool hasFragment() const;
+   void setEncodedUrl(const QByteArray &u, ParsingMode mode = TolerantMode) {
+      setUrl(fromEncodedComponent_helper(u), mode);
+   }
 
-   QString topLevelDomain() const;
+   QByteArray encodedUserName() const {
+      return userName(FullyEncoded).toLatin1();
+   }
+   void setEncodedUserName(const QByteArray &value) {
+      setUserName(fromEncodedComponent_helper(value));
+   }
 
-   QUrl resolved(const QUrl &relative) const;
+   QByteArray encodedPassword() const {
+      return password(FullyEncoded).toLatin1();
+   }
+   void setEncodedPassword(const QByteArray &value) {
+      setPassword(fromEncodedComponent_helper(value));
+   }
 
-   bool isRelative() const;
-   bool isParentOf(const QUrl &url) const;
+   QByteArray encodedHost() const {
+      return host(FullyEncoded).toLatin1();
+   }
+   void setEncodedHost(const QByteArray &value) {
+      setHost(fromEncodedComponent_helper(value));
+   }
 
-   static QUrl fromLocalFile(const QString &localfile);
-   QString toLocalFile() const;
-   bool isLocalFile() const;
+   QByteArray encodedPath() const {
+      return path(FullyEncoded).toLatin1();
+   }
+   void setEncodedPath(const QByteArray &value) {
+      setPath(fromEncodedComponent_helper(value));
+   }
 
-   QString toString(FormattingOptions options = None) const;
+   QByteArray encodedQuery() const {
+      return toLatin1_helper(query(FullyEncoded));
+   }
+   void setEncodedQuery(const QByteArray &query) {
+      setQuery(fromEncodedComponent_helper(query));
+   }
 
-   QByteArray toEncoded(FormattingOptions options = None) const;
-   static QUrl fromEncoded(const QByteArray &url);
-   static QUrl fromEncoded(const QByteArray &url, ParsingMode mode);
-   // ### Qt5/merge the two fromEncoded() functions, with mode = TolerantMode
+   QByteArray encodedFragment() const {
+      return toLatin1_helper(fragment(FullyEncoded));
+   }
+   void setEncodedFragment(const QByteArray &fragment) {
+      setFragment(fromEncodedComponent_helper(fragment));
+   }
 
-   static QUrl fromUserInput(const QString &userInput);
-
-   void detach();
-   bool isDetached() const;
-
-   bool operator <(const QUrl &url) const;
-   bool operator ==(const QUrl &url) const;
-   bool operator !=(const QUrl &url) const;
-
-   static QString fromPercentEncoding(const QByteArray &);
-   static QByteArray toPercentEncoding(const QString &,
-                                       const QByteArray &exclude = QByteArray(),
-                                       const QByteArray &include = QByteArray());
-   static QString fromPunycode(const QByteArray &);
-   static QByteArray toPunycode(const QString &);
    static QString fromAce(const QByteArray &);
    static QByteArray toAce(const QString &);
    static QStringList idnWhitelist();
+   static QStringList toStringList(const QList<QUrl> &urls, FormattingOptions options = FormattingOptions(PrettyDecoded));
+   static QList<QUrl> fromStringList(const QStringList &urls, ParsingMode mode = TolerantMode);
    static void setIdnWhitelist(const QStringList &);
 
-   QString errorString() const;
+   using DataPtr = QUrlPrivate *;
 
- private:
-   void detach(QMutexLocker &locker);
-   QUrlPrivate *d;
-
- public:
-   typedef QUrlPrivate *DataPtr;
    inline DataPtr &data_ptr() {
       return d;
    }
-};
 
-inline uint qHash(const QUrl &url, uint seed)
-{
-   return qHash(url.toEncoded(QUrl::FormattingOption(0x100)), seed);
-}
+ private:
+   // helper function for the encodedQuery and encodedFragment functions
+   static QByteArray toLatin1_helper(const QString &string) {
+      if (string.isEmpty()) {
+         return string.isNull() ? QByteArray() : QByteArray("");
+      }
+
+      return string.toLatin1();
+   }
+
+   static QString fromEncodedComponent_helper(const QByteArray &ba);
+
+   QUrlPrivate *d;
+
+   friend class QUrlQuery;
+   friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
+};
 
 Q_DECLARE_TYPEINFO(QUrl, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QUrl)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::FormattingOptions)
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QUrl &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QUrl &);
+
 #endif
-
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QUrl &);
-
-QT_END_NAMESPACE
-
-#endif // QURL_H

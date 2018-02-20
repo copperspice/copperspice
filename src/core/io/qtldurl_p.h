@@ -23,14 +23,10 @@
 #ifndef QTLDURL_P_H
 #define QTLDURL_P_H
 
-#include <QtCore/qurl.h>
-#include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <qurl.h>
+#include <qstring.h>
 
 Q_CORE_EXPORT QString qTopLevelDomain(const QString &domain);
 Q_CORE_EXPORT bool qIsEffectiveTLD(const QString &domain);
 
-QT_END_NAMESPACE
-
-#endif // QDATAURL_P_H
+#endif

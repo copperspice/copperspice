@@ -1722,7 +1722,7 @@ QSourceLocation XsdSchemaResolver::sourceLocation(const NamedSchemaComponent::Pt
       QSourceLocation location;
       location.setLine(1);
       location.setColumn(1);
-      location.setUri(QString::fromLatin1("dummyUri"));
+      location.setUri( QUrl("dummyUri"));
 
       return location;
    }

@@ -31,10 +31,12 @@
 #include <list>
 #include <string>
 #include <stdexcept>
+
 #include <limits.h>
 #include <string.h>
 
 #include <qassert.h>
+#include <qglobal.h>
 
 template <typename T>
 class QSet;
@@ -616,6 +618,16 @@ inline T &QList<T>::operator[](size_type i)
    return m_data[i];
 }
 
+template <typename T>
+uint qHash(const QList<T> &list, uint seed = 0)
+{
+   for (const auto &item : list)  {
+      seed = qHash(item, seed);
+   }
+
+   return seed;
+}
+
 template <class T>
 class QListIterator
 {
@@ -726,4 +738,4 @@ class QMutableListIterator
       }
 };
 
-#endif // QLIST_H
+#endif

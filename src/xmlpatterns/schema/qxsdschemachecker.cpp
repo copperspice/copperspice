@@ -2130,11 +2130,12 @@ QSourceLocation XsdSchemaChecker::sourceLocation(const NamedSchemaComponent::Ptr
 {
    if (m_componentLocationHash.contains(component)) {
       return m_componentLocationHash.value(component);
+
    } else {
       QSourceLocation location;
       location.setLine(1);
       location.setColumn(1);
-      location.setUri(QString::fromLatin1("dummyUri"));
+      location.setUri( QUrl("dummyUri") );
 
       return location;
    }

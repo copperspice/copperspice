@@ -70,7 +70,8 @@ MediaSource::MediaSource(const QString &filename)
         }
 
     } else {
-        d->url = filename;
+        d->url = QUrl(filename);
+
         if (d->url.isValid()) {
             d->type = Url;
         } else {

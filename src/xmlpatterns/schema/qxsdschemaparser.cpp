@@ -675,12 +675,13 @@ void XsdSchemaParser::parseImport()
       if (m_importedSchemas.contains(url)) {
          // we have imported that file already, according to the schema spec we are
          // allowed to silently skip it.
+
       } else {
          m_importedSchemas.insert(url);
 
          // as it is possible that well known schemas (e.g. XSD for XML) are only referenced by
          // namespace we should add it as well
-         m_importedSchemas.insert(importNamespace);
+         m_importedSchemas.insert(QUrl(importNamespace));
 
          std::unique_ptr<QNetworkReply> reply(AccelTreeResourceLoader::load(url, m_context->networkAccessManager(),
                                       XsdSchemaContext::Ptr(m_context), AccelTreeResourceLoader::ContinueOnError));
@@ -694,8 +695,10 @@ void XsdSchemaParser::parseImport()
             parser.setIncludedSchemas(m_includedSchemas);
             parser.setImportedSchemas(m_importedSchemas);
             parser.setRedefinedSchemas(m_redefinedSchemas);
+
             if (!parser.parse(XsdSchemaParser::ImportParser)) {
                return;
+
             } else {
                // add indirectly loaded schemas to the list of already loaded ones
                addIncludedSchemas(parser.m_includedSchemas);
@@ -704,22 +707,28 @@ void XsdSchemaParser::parseImport()
             }
          }
       }
+
    } else {
       // check whether it is a known namespace we have a builtin schema for
-      if (!importNamespace.isEmpty()) {
-         if (!m_importedSchemas.contains(importNamespace)) {
-            m_importedSchemas.insert(importNamespace);
+      if (! importNamespace.isEmpty()) {
+         QUrl tmp(importNamespace);
 
-            QFile file(QString::fromLatin1(":") + importNamespace);
+         if (! m_importedSchemas.contains(tmp)) {
+            m_importedSchemas.insert(tmp);
+
+            QFile file(":" + importNamespace);
+
             if (file.open(QIODevice::ReadOnly)) {
                XsdSchemaParser parser(XsdSchemaContext::Ptr(m_context), XsdSchemaParserContext::Ptr(m_parserContext), &file);
-               parser.setDocumentURI(importNamespace);
+               parser.setDocumentURI(tmp);
                parser.setTargetNamespace(importNamespace);
                parser.setIncludedSchemas(m_includedSchemas);
                parser.setImportedSchemas(m_importedSchemas);
                parser.setRedefinedSchemas(m_redefinedSchemas);
+
                if (!parser.parse(XsdSchemaParser::ImportParser)) {
                   return;
+
                } else {
                   // add indirectly loaded schemas to the list of already loaded ones
                   addIncludedSchemas(parser.m_includedSchemas);
@@ -728,8 +737,9 @@ void XsdSchemaParser::parseImport()
                }
             }
          }
+
       } else {
-         // we don't import anything... that is valid according to the schema
+         // we do not import anything... that is valid according to the schema
       }
    }
 
@@ -737,7 +747,7 @@ void XsdSchemaParser::parseImport()
 
    TagValidationHandler tagValidator(XsdTagScope::Import, this, NamePool::Ptr(m_namePool));
 
-   while (!atEnd()) {
+   while (! atEnd()) {
       readNext();
 
       if (isEndElement()) {

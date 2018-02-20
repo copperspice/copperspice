@@ -5975,7 +5975,7 @@ yyreduce:
          {
             allowedIn(QXmlQuery::XSLT20, parseInfo, (yyloc));
             Q_ASSERT(!(yyvsp[(2) - (5)].sval).isEmpty());
-            (yyval.expr) = create(new StaticBaseURIStore((yyvsp[(2) - (5)].sval), (yyvsp[(4) - (5)].expr)), (yyloc), parseInfo);
+            (yyval.expr) = create(new StaticBaseURIStore( QUrl(yyvsp[(2) - (5)].sval), (yyvsp[(4) - (5)].expr)), (yyloc), parseInfo);
          }
          break;
 

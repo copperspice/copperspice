@@ -149,7 +149,7 @@ void QSourceLocation::setUri(const QUrl &newUri)
 QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation)
 {
    debug << "QSourceLocation("
-         << sourceLocation.uri()
+         << sourceLocation.uri().toString()
          << ", line:"
          << sourceLocation.line()
          << ", column:"

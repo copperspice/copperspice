@@ -1527,20 +1527,23 @@ void QTextHtmlParserNode::applyCssDeclarations(const QVector<QCss::Declaration> 
 
 void QTextHtmlParserNode::applyBackgroundImage(const QString &url, const QTextDocument *resourceProvider)
 {
-   if (!url.isEmpty() && resourceProvider) {
-      QVariant val = resourceProvider->resource(QTextDocument::ImageResource, url);
+   if (! url.isEmpty() && resourceProvider) {
+      QVariant val = resourceProvider->resource(QTextDocument::ImageResource, QUrl(url) );
 
       if (qApp->thread() != QThread::currentThread()) {
          // must use images in non-GUI threads
+
          if (val.type() == QVariant::Image) {
             QImage image = qvariant_cast<QImage>(val);
             charFormat.setBackground(image);
+
          } else if (val.type() == QVariant::ByteArray) {
             QImage image;
             if (image.loadFromData(val.toByteArray())) {
                charFormat.setBackground(image);
             }
          }
+
       } else {
          if (val.type() == QVariant::Image || val.type() == QVariant::Pixmap) {
             charFormat.setBackground(qvariant_cast<QPixmap>(val));
@@ -1988,8 +1991,8 @@ void QTextHtmlParser::resolveStyleSheetImports(const QCss::StyleSheet &sheet)
 {
    for (int i = 0; i < sheet.importRules.count(); ++i) {
       const QCss::ImportRule &rule = sheet.importRules.at(i);
-      if (rule.media.isEmpty()
-            || rule.media.contains(QLatin1String("screen"), Qt::CaseInsensitive)) {
+
+      if (rule.media.isEmpty() || rule.media.contains(QLatin1String("screen"), Qt::CaseInsensitive)) {
          importStyleSheet(rule.href);
       }
    }
@@ -1997,22 +2000,26 @@ void QTextHtmlParser::resolveStyleSheetImports(const QCss::StyleSheet &sheet)
 
 void QTextHtmlParser::importStyleSheet(const QString &href)
 {
-   if (!resourceProvider) {
+   if (! resourceProvider) {
       return;
    }
-   for (int i = 0; i < externalStyleSheets.count(); ++i)
+
+   for (int i = 0; i < externalStyleSheets.count(); ++i)  {
       if (externalStyleSheets.at(i).url == href) {
          return;
       }
+   }
 
-   QVariant res = resourceProvider->resource(QTextDocument::StyleSheetResource, href);
+   QVariant res = resourceProvider->resource(QTextDocument::StyleSheetResource, QUrl(href));
    QString css;
+
    if (res.type() == QVariant::String) {
       css = res.toString();
    } else if (res.type() == QVariant::ByteArray) {
       // #### detect @charset
       css = QString::fromUtf8(res.toByteArray());
    }
+
    if (!css.isEmpty()) {
       QCss::Parser parser(css);
       QCss::StyleSheet sheet;

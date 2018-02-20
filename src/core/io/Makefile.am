@@ -33,7 +33,8 @@ CORE_PUBLIC_INCLUDES += \
 	QTextStream \
 	QTextStreamFunction \
 	QTextStreamManipulator \
-	QUrl
+	QUrl \
+	QUrlQuery
 
 CORE_IO_INCLUDES = \
 	q_pid.h \
@@ -68,7 +69,8 @@ CORE_IO_INCLUDES = \
 	qtextstreamfunction.h \
 	qtextstreammanipulator.h \
 	qts.h \
-	qurl.h
+	qurl.h \
+	qurlquery.h
 
 CORE_IO_PRIVATE_INCLUDES = \
 	qabstractfileengine_p.h \
@@ -84,6 +86,7 @@ CORE_IO_PRIVATE_INCLUDES = \
 	qprocess_p.h \
 	qresource_p.h \
 	qresource_iterator_p.h \
+	qurl_p.h \
 	qurltlds_p.h \
 	qtldurl_p.h \
 	qsavefile_p.h \
@@ -131,6 +134,9 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qresource.cpp \
 	src/core/io/qresource_iterator.cpp \
 	src/core/io/qurl.cpp \
+	src/core/io/qurlquery.cpp \
+	src/core/io/qurlidna.cpp \
+	src/core/io/qurlrecode.cpp \
 	src/core/io/qsavefile.cpp \
 	src/core/io/qsettings.cpp \
 	src/core/io/qstandardpaths.cpp \
@@ -176,12 +182,12 @@ endif
 
 if OSTYPE_BSD
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
-        src/core/io/qfsfileengine_unix.cpp \
-        src/core/io/qprocess_unix.cpp \
-        src/core/io/qfilesystemengine_unix.cpp \
-        src/core/io/qfilesystemwatcher_kqueue.cpp \
-        src/core/io/qfilesystemiterator_unix.cpp \
-        src/core/io/qstandardpaths_unix.cpp
+	src/core/io/qfsfileengine_unix.cpp \
+	src/core/io/qprocess_unix.cpp \
+	src/core/io/qfilesystemengine_unix.cpp \
+	src/core/io/qfilesystemwatcher_kqueue.cpp \
+	src/core/io/qfilesystemiterator_unix.cpp \
+	src/core/io/qstandardpaths_unix.cpp
 endif
 
 
@@ -194,5 +200,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfsfileengine_unix.cpp \
 	src/core/io/qprocess_unix.cpp \
 	src/core/io/qsettings_mac.cpp \
-	src/core/io/qstandardpaths_mac.cpp
+	src/core/io/qstandardpaths_mac.cpp \
+	src/core/io/qurl_mac.mm
 endif

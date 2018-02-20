@@ -44,7 +44,7 @@ AnyURI::Ptr AnyURI::fromValue(const QUrl &uri)
 AnyURI::Ptr AnyURI::resolveURI(const QString &relative, const QString &base)
 {
    const QUrl urlBase(base);
-   return AnyURI::fromValue(urlBase.resolved(relative).toString());
+   return AnyURI::fromValue(urlBase.resolved( QUrl(relative) ).toString());
 }
 
 ItemType::Ptr AnyURI::type() const

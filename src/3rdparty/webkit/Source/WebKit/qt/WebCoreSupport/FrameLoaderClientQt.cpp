@@ -1538,7 +1538,7 @@ PassRefPtr<Widget> FrameLoaderClientQt::createPlugin(const IntSize& pluginSize, 
         values.append(paramValues[i]);
 
     QString urlStr(url.string());
-    QUrl qurl = urlStr;
+    QUrl qurl = QUrl(urlStr);
 
     QObject* object = 0;
 

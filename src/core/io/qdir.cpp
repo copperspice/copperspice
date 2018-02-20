@@ -2005,6 +2005,146 @@ bool QDir::match(const QString &filter, const QString &fileName)
 #endif // QT_NO_REGEXP
 
 /*!
+    Returns \a path with redundant directory separators removed,
+    and "."s and ".."s resolved (as far as possible).
+
+    This method is shared with QUrl, so it doesn't deal with QDir::separator(),
+    nor does it remove the trailing slash, if any.
+*/
+QString qt_normalizePathSegments(const QString &name, bool allowUncPaths)
+{
+   const int len = name.length();
+
+   if (len == 0) {
+      return name;
+   }
+
+   int i = len - 1;
+
+   QVarLengthArray<QChar> outVector(len);
+   int used = len;
+
+   QChar *out          = outVector.data();
+   const QChar *p      = name.unicode();
+   const QChar *prefix = p;
+
+   int up              = 0;
+   int prefixLength    = 0;
+
+   if (allowUncPaths && len >= 2 && p[1].unicode() == '/' && p[0].unicode() == '/') {
+      // starts with double slash
+      prefixLength = 2;
+
+#ifdef Q_OS_WIN
+   } else if (len >= 2 && p[1].unicode() == ':') {
+      // remember the drive letter
+      prefixLength = (len > 2 && p[2].unicode() == '/') ? 3 : 2;
+#endif
+
+   } else if (p[0].unicode() == '/') {
+      prefixLength = 1;
+   }
+
+   p += prefixLength;
+   i -= prefixLength;
+
+   // replicate trailing slash (i > 0 checks for emptiness of input string p)
+   if (i > 0 && p[i].unicode() == '/') {
+      out[--used].unicode() = '/';
+      --i;
+   }
+
+   while (i >= 0) {
+      // remove trailing slashes
+      if (p[i].unicode() == '/') {
+         --i;
+         continue;
+      }
+
+      // remove current directory
+      if (p[i].unicode() == '.' && (i == 0 || p[i - 1].unicode() == '/')) {
+         --i;
+         continue;
+      }
+
+      // detect up dir
+      if (i >= 1 && p[i].unicode() == '.' && p[i - 1].unicode() == '.'
+            && (i == 1 || (i >= 2 && p[i - 2].unicode() == '/'))) {
+         ++up;
+         i -= 2;
+         continue;
+      }
+
+      // prepend a slash before copying when not empty
+      if (!up && used != len && out[used].unicode() != '/') {
+         out[--used] = QLatin1Char('/');
+      }
+
+      // skip or copy
+      while (i >= 0) {
+         if (p[i].unicode() == '/') { // do not copy slashes
+            --i;
+            break;
+         }
+
+         // actual copy
+         if (!up) {
+            out[--used] = p[i];
+         }
+         --i;
+      }
+
+      // decrement up after copying/skipping
+      if (up) {
+         --up;
+      }
+   }
+
+   // add remaining '..'
+   while (up) {
+      if (used != len && out[used].unicode() != '/') {
+         // is not empty and there isn't already a '/'
+         out[--used] = QLatin1Char('/');
+      }
+
+      out[--used] = QLatin1Char('.');
+      out[--used] = QLatin1Char('.');
+      --up;
+   }
+
+   bool isEmpty = used == len;
+
+   if (prefixLength) {
+      if (!isEmpty && out[used].unicode() == '/') {
+         // Eventhough there is a prefix the out string is a slash. This happens, if the input
+         // string only consists of a prefix followed by one or more slashes. Just skip the slash.
+         ++used;
+      }
+
+      for (int i = prefixLength - 1; i >= 0; --i) {
+         out[--used] = prefix[i];
+      }
+
+   } else {
+      if (isEmpty) {
+         // After resolving the input path, the resulting string is empty (e.g. "foo/.."). Return
+         // a dot in that case.
+         out[--used] = QLatin1Char('.');
+
+      } else if (out[used].unicode() == '/') {
+         // After parsing the input string, out only contains a slash. That happens whenever all
+         // parts are resolved and there is a trailing slash ("./" or "foo/../" for example).
+         // Prepend a dot to have the correct return value.
+         out[--used] = QLatin1Char('.');
+      }
+   }
+
+   // If path was not modified return the original value
+   QString ret = (used == 0 ? name : QString(out + used, len - used));
+   return ret;
+}
+
+/*!
     Removes all multiple directory separators "/" and resolves any
     "."s or ".."s found in the path, \a path.
 

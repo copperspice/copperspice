@@ -1826,9 +1826,11 @@ QUrl QWebHitTestResult::linkUrl() const
 */
 QUrl QWebHitTestResult::linkTitle() const
 {
-    if (!d)
-        return QUrl();
-    return d->linkTitle;
+    if (! d) {
+       return QUrl();
+    }
+
+    return QUrl(d->linkTitle);
 }
 
 /*

@@ -33,6 +33,7 @@ set(CORE_PUBLIC_INCLUDES
     QTextStreamFunction
     QTextStreamManipulator
     QUrl
+    QUrlQuery
 )
 
 set(CORE_INCLUDES
@@ -70,6 +71,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextstreammanipulator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qts.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlquery.h
 )
 
 set(CORE_PRIVATE_INCLUDES
@@ -88,6 +90,7 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource_iterator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qurltlds_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtldurl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsavefile_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings_p.h
@@ -130,6 +133,9 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlidna.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlrecode.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlquery.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsavefile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths.cpp
@@ -195,5 +201,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qprocess_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl_mac.mm
     )
 endif()
