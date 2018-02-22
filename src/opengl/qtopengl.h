@@ -1,7 +1,8 @@
-#ifndef QT_QTOPENGL_MODULE_H
-#define QT_QTOPENGL_MODULE_H
-#include <QtCore/QtCore>
-#include <QtGui/QtGui>
+#ifndef QT_OPENGL_H
+#define QT_OPENGL_H
+
+#include <qtcore.h>
+#include <qtgui.h>
 #include "qgl.h"
 #include "qglbuffer.h"
 #include "qglcolormap.h"

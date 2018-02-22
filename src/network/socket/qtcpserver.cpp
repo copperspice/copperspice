@@ -91,17 +91,17 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
 void QTcpServerPrivate::configureCreatedSocket()
 {
 #if defined(Q_OS_UNIX)
-    // Under Unix, we want to be able to bind to the port, even if a socket on
-    // the same address-port is in TIME_WAIT. Under Windows this is possible
-    // anyway -- furthermore, the meaning of reusable on Windows is different:
-    // it means that you can use the same address-port for multiple listening
-    // sockets.
+   // Under Unix, we want to be able to bind to the port, even if a socket on
+   // the same address-port is in TIME_WAIT. Under Windows this is possible
+   // anyway -- furthermore, the meaning of reusable on Windows is different:
+   // it means that you can use the same address-port for multiple listening
+   // sockets.
 
-    // Don't abort though if we can't set that option. For example the socks
-    // engine doesn't support that option, but that shouldn't prevent us from
-    // trying to bind/listen.
+   // Don't abort though if we can't set that option. For example the socks
+   // engine doesn't support that option, but that shouldn't prevent us from
+   // trying to bind/listen.
 
-    socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
+   socketEngine->setOption(QAbstractSocketEngine::AddressReusable, 1);
 #endif
 }
 
@@ -110,7 +110,7 @@ void QTcpServerPrivate::readNotification()
 {
    Q_Q(QTcpServer);
 
-  for (;;) {
+   for (;;) {
       if (pendingConnections.count() >= maxConnections) {
 #if defined (QTCPSERVER_DEBUG)
          qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
@@ -123,12 +123,12 @@ void QTcpServerPrivate::readNotification()
 
       int descriptor = socketEngine->accept();
       if (descriptor == -1) {
-            if (socketEngine->error() != QAbstractSocket::TemporaryError) {
-                q->pauseAccepting();
-                serverSocketError = socketEngine->error();
-                serverSocketErrorString = socketEngine->errorString();
-                emit q->acceptError(serverSocketError);
-            }
+         if (socketEngine->error() != QAbstractSocket::TemporaryError) {
+            q->pauseAccepting();
+            serverSocketError = socketEngine->error();
+            serverSocketErrorString = socketEngine->errorString();
+            emit q->acceptError(serverSocketError);
+         }
          break;
       }
 #if defined (QTCPSERVER_DEBUG)
@@ -151,19 +151,19 @@ QTcpServer::QTcpServer(QObject *parent)
    d_ptr->q_ptr = this;
 
 #if defined(QTCPSERVER_DEBUG)
-    qDebug("QTcpServer::QTcpServer(%p)", parent);
+   qDebug("QTcpServer::QTcpServer(%p)", parent);
 #endif
 
 }
 
 // internal
 QTcpServer::QTcpServer(QTcpServerPrivate &dd, QObject *parent)
-    : QObject(parent), d_ptr(&dd)
+   : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 
 #if defined(QTCPSERVER_DEBUG)
-    qDebug("QTcpServer::QTcpServer(QTcpServerPrivate == %p, parent == %p)", &dd, parent);
+   qDebug("QTcpServer::QTcpServer(QTcpServerPrivate == %p, parent == %p)", &dd, parent);
 #endif
 }
 
@@ -210,7 +210,7 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
 
    proto = d->socketEngine->protocol();
    if (addr.protocol() == QAbstractSocket::AnyIPProtocol && proto == QAbstractSocket::IPv4Protocol) {
-        addr = QHostAddress::AnyIPv4;
+      addr = QHostAddress::AnyIPv4;
    }
 
    d->configureCreatedSocket();

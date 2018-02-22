@@ -69,7 +69,7 @@ class QTcpServerPrivate : public QAbstractSocketEngineReceiver
    void connectionNotification() override {}
 
 #ifndef QT_NO_NETWORKPROXY
-    void proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *) override {}
+    void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *) override {}
 #endif
 
  protected:

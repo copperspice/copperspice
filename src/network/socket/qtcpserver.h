@@ -28,7 +28,7 @@
 #include <qhostaddress.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
+
 
 class QTcpServerPrivate;
 class QTcpSocket;
@@ -59,7 +59,7 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    qintptr socketDescriptor() const;
    bool setSocketDescriptor(qintptr socketDescriptor);
 
-   bool waitForNewConnection(int msec = 0, bool *timedOut = 0);
+   bool waitForNewConnection(int msec = 0, bool *timedOut = nullptr);
    virtual bool hasPendingConnections() const;
    virtual QTcpSocket *nextPendingConnection();
 
@@ -93,6 +93,6 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    Q_DECLARE_PRIVATE(QTcpServer)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QTCPSERVER_H

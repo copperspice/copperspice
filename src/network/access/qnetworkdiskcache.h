@@ -23,9 +23,8 @@
 #ifndef QNETWORKDISKCACHE_H
 #define QNETWORKDISKCACHE_H
 
-#include <QtNetwork/qabstractnetworkcache.h>
+#include <qabstractnetworkcache.h>
 
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_NETWORKDISKCACHE
 
@@ -68,6 +67,6 @@ class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
 
 #endif // QT_NO_NETWORKDISKCACHE
 
-QT_END_NAMESPACE
+
 
 #endif // QNETWORKDISKCACHE_H

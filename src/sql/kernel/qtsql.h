@@ -1,6 +1,7 @@
-#ifndef QTSQL_H
-#define QTSQL_H
-#include <QtCore/QtCore>
+#ifndef QT_SQL_H
+#define QT_SQL_H
+
+#include <qtcore.h>
 #include <qsql.h>
 #include <qsqldatabase.h>
 #include <qsqldriver.h>

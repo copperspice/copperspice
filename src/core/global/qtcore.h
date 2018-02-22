@@ -1,5 +1,6 @@
-#ifndef QTCORE_H
-#define QTCORE_H
+#ifndef QT_CORE_H
+#define QT_CORE_H
+
 #include <qfuture.h>
 #include <qfutureinterface.h>
 #include <qfuturesynchronizer.h>

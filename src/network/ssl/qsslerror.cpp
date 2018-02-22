@@ -26,9 +26,9 @@
 
 class QSslErrorPrivate
 {
-   public:
-      QSslError::SslError error;
-      QSslCertificate certificate;
+ public:
+   QSslError::SslError error;
+   QSslCertificate certificate;
 };
 
 // RVCT compiler in debug build does not like about default values in const-

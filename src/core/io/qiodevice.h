@@ -23,8 +23,8 @@
 #ifndef QIODEVICE_H
 #define QIODEVICE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
+#include <qobject.h>
+#include <qstring.h>
 #include <QScopedPointer>
 
 #ifdef open

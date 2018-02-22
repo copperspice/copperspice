@@ -28,51 +28,51 @@
 QT_USE_NAMESPACE
 
 static QByteArray wrapCCCrypt(CCOperation ccOp, QSslKeyPrivate::Cipher cipher, const QByteArray &data,
-                  const QByteArray &key, const QByteArray &iv)
+                              const QByteArray &key, const QByteArray &iv)
 {
-    int blockSize;
-    CCAlgorithm ccAlgorithm;
+   int blockSize;
+   CCAlgorithm ccAlgorithm;
 
-    switch (cipher) {
-    case QSslKeyPrivate::DesCbc:
-        blockSize = kCCBlockSizeDES;
-        ccAlgorithm = kCCAlgorithmDES;
-        break;
+   switch (cipher) {
+      case QSslKeyPrivate::DesCbc:
+         blockSize = kCCBlockSizeDES;
+         ccAlgorithm = kCCAlgorithmDES;
+         break;
 
-    case QSslKeyPrivate::DesEde3Cbc:
-        blockSize = kCCBlockSize3DES;
-        ccAlgorithm = kCCAlgorithm3DES;
-        break;
+      case QSslKeyPrivate::DesEde3Cbc:
+         blockSize = kCCBlockSize3DES;
+         ccAlgorithm = kCCAlgorithm3DES;
+         break;
 
-    case QSslKeyPrivate::Rc2Cbc:
-        blockSize = kCCBlockSizeRC2;
-        ccAlgorithm = kCCAlgorithmRC2;
-        break;
-    };
+      case QSslKeyPrivate::Rc2Cbc:
+         blockSize = kCCBlockSizeRC2;
+         ccAlgorithm = kCCAlgorithmRC2;
+         break;
+   };
 
-    size_t plainLength = 0;
-    QByteArray plain(data.size() + blockSize, 0);
+   size_t plainLength = 0;
+   QByteArray plain(data.size() + blockSize, 0);
 
-    CCCryptorStatus status = CCCrypt(
-        ccOp, ccAlgorithm, kCCOptionPKCS7Padding,
-        key.constData(), key.size(),
-        iv.constData(),
-        data.constData(), data.size(),
-        plain.data(), plain.size(), &plainLength);
+   CCCryptorStatus status = CCCrypt(
+                               ccOp, ccAlgorithm, kCCOptionPKCS7Padding,
+                               key.constData(), key.size(),
+                               iv.constData(),
+                               data.constData(), data.size(),
+                               plain.data(), plain.size(), &plainLength);
 
-    if (status == kCCSuccess) {
-        return plain.left(plainLength);
-    }
+   if (status == kCCSuccess) {
+      return plain.left(plainLength);
+   }
 
-    return QByteArray();
+   return QByteArray();
 }
 
 QByteArray QSslKeyPrivate::decrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv)
 {
-    return wrapCCCrypt(kCCDecrypt, cipher, data, key, iv);
+   return wrapCCCrypt(kCCDecrypt, cipher, data, key, iv);
 }
 
 QByteArray QSslKeyPrivate::encrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv)
 {
-    return wrapCCCrypt(kCCEncrypt, cipher, data, key, iv);
+   return wrapCCCrypt(kCCEncrypt, cipher, data, key, iv);
 }

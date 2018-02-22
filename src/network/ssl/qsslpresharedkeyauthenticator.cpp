@@ -28,12 +28,12 @@
 // internal
 
 QSslPreSharedKeyAuthenticatorPrivate::QSslPreSharedKeyAuthenticatorPrivate()
-    : maximumIdentityLength(0), maximumPreSharedKeyLength(0)
+   : maximumIdentityLength(0), maximumPreSharedKeyLength(0)
 {
 }
 
 QSslPreSharedKeyAuthenticator::QSslPreSharedKeyAuthenticator()
-    : d(new QSslPreSharedKeyAuthenticatorPrivate)
+   : d(new QSslPreSharedKeyAuthenticatorPrivate)
 {
 }
 
@@ -42,59 +42,59 @@ QSslPreSharedKeyAuthenticator::~QSslPreSharedKeyAuthenticator()
 }
 
 QSslPreSharedKeyAuthenticator::QSslPreSharedKeyAuthenticator(const QSslPreSharedKeyAuthenticator &authenticator)
-    : d(authenticator.d)
+   : d(authenticator.d)
 {
 }
 
 QSslPreSharedKeyAuthenticator &QSslPreSharedKeyAuthenticator::operator=(const QSslPreSharedKeyAuthenticator &authenticator)
 {
-    d = authenticator.d;
-    return *this;
+   d = authenticator.d;
+   return *this;
 }
 
 QByteArray QSslPreSharedKeyAuthenticator::identityHint() const
 {
-    return d->identityHint;
+   return d->identityHint;
 }
 
 void QSslPreSharedKeyAuthenticator::setIdentity(const QByteArray &identity)
 {
-    d->identity = identity;
+   d->identity = identity;
 }
 
 QByteArray QSslPreSharedKeyAuthenticator::identity() const
 {
-    return d->identity;
+   return d->identity;
 }
 
 
 int QSslPreSharedKeyAuthenticator::maximumIdentityLength() const
 {
-    return d->maximumIdentityLength;
+   return d->maximumIdentityLength;
 }
 
 void QSslPreSharedKeyAuthenticator::setPreSharedKey(const QByteArray &preSharedKey)
 {
-    d->preSharedKey = preSharedKey;
+   d->preSharedKey = preSharedKey;
 }
 
 QByteArray QSslPreSharedKeyAuthenticator::preSharedKey() const
 {
-    return d->preSharedKey;
+   return d->preSharedKey;
 }
 
 int QSslPreSharedKeyAuthenticator::maximumPreSharedKeyLength() const
 {
-    return d->maximumPreSharedKeyLength;
+   return d->maximumPreSharedKeyLength;
 }
 
 bool operator==(const QSslPreSharedKeyAuthenticator &lhs, const QSslPreSharedKeyAuthenticator &rhs)
 {
-    return ((lhs.d == rhs.d) ||
-            (lhs.d->identityHint == rhs.d->identityHint &&
-             lhs.d->identity == rhs.d->identity &&
-             lhs.d->maximumIdentityLength == rhs.d->maximumIdentityLength &&
-             lhs.d->preSharedKey == rhs.d->preSharedKey &&
-             lhs.d->maximumPreSharedKeyLength == rhs.d->maximumPreSharedKeyLength));
+   return ((lhs.d == rhs.d) ||
+           (lhs.d->identityHint == rhs.d->identityHint &&
+            lhs.d->identity == rhs.d->identity &&
+            lhs.d->maximumIdentityLength == rhs.d->maximumIdentityLength &&
+            lhs.d->preSharedKey == rhs.d->preSharedKey &&
+            lhs.d->maximumPreSharedKeyLength == rhs.d->maximumPreSharedKeyLength));
 }
 

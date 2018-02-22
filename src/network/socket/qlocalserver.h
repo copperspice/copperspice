@@ -26,8 +26,6 @@
 #include <qabstractsocket.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_LOCALSERVER
 
 class QLocalSocket;
@@ -88,7 +86,6 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
 
 #endif // QT_NO_LOCALSERVER
 
-QT_END_NAMESPACE
 
 #endif // QLOCALSERVER_H
 

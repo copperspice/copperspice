@@ -23,7 +23,6 @@
 #ifndef QABSTRACTNETWORKCACHE_P_H
 #define QABSTRACTNETWORKCACHE_P_H
 
-QT_BEGIN_NAMESPACE
 
 class QAbstractNetworkCachePrivate
 {
@@ -37,6 +36,6 @@ class QAbstractNetworkCachePrivate
 
 };
 
-QT_END_NAMESPACE
+
 
 #endif

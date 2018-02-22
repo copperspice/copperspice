@@ -23,7 +23,7 @@
 #ifndef QNETWORKCOOKIE_P_H
 #define QNETWORKCOOKIE_P_H
 
-#include <QtCore/qdatetime.h>
+#include <qdatetime.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -66,6 +66,5 @@ static int nextNonWhitespace(const QByteArray &text, int from)
    return text.length();
 }
 
-QT_END_NAMESPACE
 
 #endif

@@ -1,7 +1,8 @@
-#ifndef QTSVG_H
-#define QTSVG_H
-#include <QtCore/QtCore>
-#include <QtGui/QtGui>
+#ifndef QT_SVG_H
+#define QT_SVG_H
+
+#include <qtcore.h>
+#include <qtgui.h>
 #include "qgraphicssvgitem.h"
 #include "qsvggenerator.h"
 #include "qsvgrenderer.h"

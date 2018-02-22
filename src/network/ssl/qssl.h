@@ -23,8 +23,8 @@
 #ifndef QSSL_H
 #define QSSL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QFlags>
+#include <qglobal.h>
+#include <QFlags>
 
 namespace QSsl {
 enum KeyType {

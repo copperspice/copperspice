@@ -44,7 +44,7 @@ class QNetworkAccessCache : public QObject
    NET_CS_OBJECT(QNetworkAccessCache)
 
  public:
-   // idea copied from qcache.h
+
 
    class CacheableObject
    {

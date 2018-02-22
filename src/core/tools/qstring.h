@@ -23,10 +23,10 @@
 #ifndef QSTRING_H
 #define QSTRING_H
 
-#include <QtCore/qchar.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qrefcount.h>
-#include <QtCore/qnamespace.h>
+#include <qchar.h>
+#include <qbytearray.h>
+#include <qrefcount.h>
+#include <qnamespace.h>
 
 #include <string>
 #include <stdarg.h>

@@ -1,6 +1,7 @@
-#ifndef QTSCRIPT_H
-#define QTSCRIPT_H
-#include <QtCore/QtCore>
+#ifndef QT_SCRIPT_H
+#define QT_SCRIPT_H
+
+#include <qtcore.h>
 #include "qscriptable.h"
 #include "qscriptclass.h"
 #include "qscriptclasspropertyiterator.h"

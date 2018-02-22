@@ -163,6 +163,6 @@ static inline int qt_safe_recvmsg(int sockfd, struct msghdr *msg, int flags)
     return ret;
 }
 
-QT_END_NAMESPACE
+
 
 #endif // QNET_UNIX_P_H

@@ -2575,17 +2575,21 @@ QString QLocalePrivate::doubleToString(const QChar _zero, const QChar plus, cons
 
       char *rve = 0;
       char *buff = 0;
-      QT_TRY {
+
+      try {
          digits = QLatin1String(qdtoa(d, mode, pr, &decpt, &sign, &rve, &buff));
-      } QT_CATCH(...) {
+
+      } catch (...) {
          if (buff != 0) {
             free(buff);
          }
-         QT_RETHROW;
+         throw;
       }
+
       if (buff != 0) {
          free(buff);
       }
+
 #endif // QT_QLOCALE_USES_FCVT
 
       if (_zero.unicode() != '0') {

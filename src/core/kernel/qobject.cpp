@@ -73,8 +73,7 @@ QObject::QObject(QObject *t_parent)
 
       } catch (...) {
          m_threadData.load()->deref();
-
-         QT_RETHROW;
+         throw;
       }
    }
 }

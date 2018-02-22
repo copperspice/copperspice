@@ -1,4 +1,7 @@
-#include <QtNetwork/QtNetwork>
+#ifndef QT_WEBKIT_H
+#define QT_WEBKIT_H
+
+#include "qtnetwork.h"
 #include "qwebframe.h"
 #include "qgraphicswebview.h"
 #include "qwebkitglobal.h"
@@ -14,3 +17,5 @@
 #include "qwebhistory.h"
 #include "qwebinspector.h"
 #include "qwebkitversion.h"
+
+#endif

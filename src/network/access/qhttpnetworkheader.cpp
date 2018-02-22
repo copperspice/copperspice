@@ -22,9 +22,7 @@
 
 #include <qhttpnetworkheader_p.h>
 
-#ifndef QT_NO_HTTP
 
-QT_BEGIN_NAMESPACE
 
 QHttpNetworkHeaderPrivate::QHttpNetworkHeaderPrivate(const QUrl &newUrl)
    : url(newUrl)
@@ -80,7 +78,7 @@ QByteArray QHttpNetworkHeaderPrivate::headerField(const QByteArray &name, const 
    QByteArray result;
    bool first = true;
 
-   for (const QByteArray & value : allValues) {
+   for (const QByteArray &value : allValues) {
       if (! first) {
          result += ", ";
       }
@@ -127,6 +125,3 @@ bool QHttpNetworkHeaderPrivate::operator==(const QHttpNetworkHeaderPrivate &othe
 }
 
 
-QT_END_NAMESPACE
-
-#endif

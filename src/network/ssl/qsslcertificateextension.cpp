@@ -25,12 +25,12 @@
 
 
 QSslCertificateExtension::QSslCertificateExtension()
-    : d(new QSslCertificateExtensionPrivate)
+   : d(new QSslCertificateExtensionPrivate)
 {
 }
 
 QSslCertificateExtension::QSslCertificateExtension(const QSslCertificateExtension &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -40,33 +40,33 @@ QSslCertificateExtension::~QSslCertificateExtension()
 
 QSslCertificateExtension &QSslCertificateExtension::operator=(const QSslCertificateExtension &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 
 QString QSslCertificateExtension::oid() const
 {
-    return d->oid;
+   return d->oid;
 }
 
 
 QString QSslCertificateExtension::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 QVariant QSslCertificateExtension::value() const
 {
-    return d->value;
+   return d->value;
 }
 
 bool QSslCertificateExtension::isCritical() const
 {
-    return d->critical;
+   return d->critical;
 }
 
 bool QSslCertificateExtension::isSupported() const
 {
-    return d->supported;
+   return d->supported;
 }
 

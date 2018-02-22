@@ -23,9 +23,7 @@
 #ifndef QABSTRACTPROTOCOLHANDLER_H
 #define QABSTRACTPROTOCOLHANDLER_H
 
-#ifndef QT_NO_HTTP
-
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 class QHttpNetworkConnectionChannel;
 class QHttpNetworkReply;
@@ -33,6 +31,7 @@ class QAbstractSocket;
 class QHttpNetworkConnection;
 
 class QAbstractProtocolHandler {
+
  public:
     QAbstractProtocolHandler(QHttpNetworkConnectionChannel *channel);
     virtual ~QAbstractProtocolHandler();
@@ -48,7 +47,5 @@ class QAbstractProtocolHandler {
     QAbstractSocket *m_socket;
     QHttpNetworkConnection *m_connection;
 };
-
-#endif // QT_NO_HTTP
 
 #endif // QABSTRACTPROTOCOLHANDLER_H

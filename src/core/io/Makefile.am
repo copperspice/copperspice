@@ -146,17 +146,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfilesystementry.cpp \
 	src/core/io/qfilesystemengine.cpp
 
-## FIXME platform-specific
-# qfsfileengine_unix.cpp
-# qprocess_unix.cpp
-# qfilesystemwatcher_fsevents_p.h
-# qsettings_mac.cpp
-# qfilesystemwatcher_fsevents.cpp
-# qfilesystemwatcher_inotify_p.h
-# qfilesystemwatcher_dnotify_p.h
-# qfilesystemwatcher_kqueue.cpp
-# qfilesystemwatcher_kqueue_p.h
-
 if OSTYPE_WIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qwindowspipewriter.cpp \

@@ -31,7 +31,7 @@ class QDeclarativeStateGroupPrivate;
 
 class Q_DECLARATIVE_EXPORT QDeclarativeStateGroup : public QObject, public QDeclarativeParserStatus
 {
-   CS_OBJECT_MULTIPLE(QDeclarativeStateGroup, QObject)
+   DECL_CS_OBJECT_MULTIPLE(QDeclarativeStateGroup, QObject)
 
    CS_INTERFACES(QDeclarativeParserStatus)
    Q_DECLARE_PRIVATE(QDeclarativeStateGroup)

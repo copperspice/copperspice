@@ -1,7 +1,7 @@
-#ifndef QTGUI_H
-#define QTGUI_H
+#ifndef QT_GUI_H
+#define QT_GUI_H
 
-#include <QtCore/QtCore>
+#include <qtcore.h>
 #include <qcdestyle.h>
 #include <qcleanlooksstyle.h>
 #include <qcommonstyle.h>

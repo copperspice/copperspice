@@ -23,9 +23,8 @@
 #ifndef QSSL_P_H
 #define QSSL_P_H
 
-// #include <QtCore/QLoggingCategory>
+// unused file
 
-// broom - not currently used
-// Q_DECLARE_LOGGING_CATEGORY(lcSsl)
+
 
 #endif

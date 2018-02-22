@@ -146,17 +146,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemengine.cpp
 )
 
-## FIXME platform-specific
-# qfsfileengine_unix.cpp
-# qprocess_unix.cpp
-# qfilesystemwatcher_fsevents_p.h
-# qsettings_mac.cpp
-# qfilesystemwatcher_fsevents.cpp
-# qfilesystemwatcher_inotify_p.h
-# qfilesystemwatcher_dnotify_p.h
-# qfilesystemwatcher_kqueue.cpp
-# qfilesystemwatcher_kqueue_p.h
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
         ${CORE_SOURCES}

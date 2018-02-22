@@ -23,14 +23,12 @@
 #include <qabstractprotocolhandler_p.h>
 #include <qhttpnetworkconnectionchannel_p.h>
 
-#ifndef QT_NO_HTTP
-
 QAbstractProtocolHandler::QAbstractProtocolHandler(QHttpNetworkConnectionChannel *channel)
-    : m_channel(channel), m_reply(0), m_socket(m_channel->socket), m_connection(m_channel->connection)
+   : m_channel(channel), m_reply(0), m_socket(m_channel->socket), m_connection(m_channel->connection)
 {
-    Q_ASSERT(m_channel);
-    Q_ASSERT(m_socket);
-    Q_ASSERT(m_connection);
+   Q_ASSERT(m_channel);
+   Q_ASSERT(m_socket);
+   Q_ASSERT(m_connection);
 }
 
 QAbstractProtocolHandler::~QAbstractProtocolHandler()
@@ -39,7 +37,6 @@ QAbstractProtocolHandler::~QAbstractProtocolHandler()
 
 void QAbstractProtocolHandler::setReply(QHttpNetworkReply *reply)
 {
-    m_reply = reply;
+   m_reply = reply;
 }
 
-#endif // QT_NO_HTTP

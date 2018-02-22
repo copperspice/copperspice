@@ -23,7 +23,7 @@
 #ifndef QPOINTER_H
 #define QPOINTER_H
 
-#include <QtCore/qsharedpointer.h>
+#include <qsharedpointer.h>
 
 QT_BEGIN_NAMESPACE
 
