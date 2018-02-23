@@ -103,6 +103,10 @@ class Q_CORE_EXPORT QMetaMethod
    Attributes attributes() const;
 
    bool compare(const CsSignal::Internal::BentoAbstract &method) const;
+
+   template <typename SignalClass, typename ...SignalArgs>
+   static QMetaMethod fromSignal(void (SignalClass::* signalMethod)(SignalArgs ...) );
+
    const CSBentoAbstract *getBentoBox() const;
 
    const QMetaObject *getMetaObject() const;
@@ -272,6 +276,21 @@ class Q_CORE_EXPORT QMetaProperty
 };
 
 // **
+
+template <typename SignalClass, typename ...SignalArgs>
+QMetaMethod QMetaMethod::fromSignal(void (SignalClass::* signalMethod)(SignalArgs ...) )
+{
+   const auto &metaObj = SignalClass::staticMetaObject();
+
+   CSBento<void(SignalClass::*)(SignalArgs ...)> tmp = CSBento<void(SignalClass::*)(SignalArgs ...)>(signalMethod);
+   QMetaMethod testMethod = metaObj.lookUpMethod(tmp);
+
+   if (testMethod.methodType() == QMetaMethod::Signal) {
+      return testMethod;
+   }
+
+   return QMetaMethod();
+}
 
 // QMetaMethod::invoke moved to csobject_internal.h becasue Invoke calls methods in QObject
 // template<class ...Ts>

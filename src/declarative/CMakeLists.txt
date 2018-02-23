@@ -1,5 +1,4 @@
 add_definitions(
-    -DQT_NO_OPENSSL
     -DQT_BUILD_DECLARATIVE_LIB
 )
 set(EXTRA_DECLARATIVE_LIBS)

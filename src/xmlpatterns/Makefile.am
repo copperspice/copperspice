@@ -11,9 +11,6 @@ lib_libCsXmlPatterns@BUILD_ABI@_la_CFLAGS = $(AM_CFLAGS)
 lib_libCsXmlPatterns@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsXmlPatterns@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la lib/libCsNetwork@BUILD_ABI@.la
 
-# BROOM (enable OpenSSL)
-lib_libCsXmlPatterns@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
-
 XMLPATTERNS_INCLUDES =
 XMLPATTERNS_PUBLIC_INCLUDES =
 XMLPATTERNS_PRIVATE_INCLUDES =

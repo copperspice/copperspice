@@ -405,35 +405,32 @@ QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QIODevice *dev
    return new QNonContiguousByteDeviceIoDeviceImpl(device); // FIXME
 }
 
-/*!
-    Create a QNonContiguousByteDevice out of a QRingBuffer.
-
-    \internal
-*/
-QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QSharedPointer<QRingBuffer> ringBuffer)
-{
-   return new QNonContiguousByteDeviceRingBufferImpl(ringBuffer);
-}
-
-/*!
-    \fn static QNonContiguousByteDevice* QNonContiguousByteDeviceFactory::create(QByteArray *byteArray);
-
-    Create a QNonContiguousByteDevice out of a QByteArray.
-
-    \internal
-*/
 QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QByteArray *byteArray)
 {
    return new QNonContiguousByteDeviceByteArrayImpl(byteArray);
 }
 
-/*!
-    \fn static QIODevice* QNonContiguousByteDeviceFactory::wrap(QNonContiguousByteDevice* byteDevice);
 
-    Wrap the \a byteDevice (possibly again) into a QIODevice.
+QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QSharedPointer<QRingBuffer> ringBuffer)
+{
+   return new QNonContiguousByteDeviceRingBufferImpl(ringBuffer);
+}
 
-    \internal
-*/
+QSharedPointer<QNonContiguousByteDevice> QNonContiguousByteDeviceFactory::createShared(QIODevice *device)
+{
+   return QSharedPointer<QNonContiguousByteDevice>(create(device));
+}
+
+QSharedPointer<QNonContiguousByteDevice> QNonContiguousByteDeviceFactory::createShared(QByteArray *byteArray)
+{
+   return QSharedPointer<QNonContiguousByteDevice>(create(byteArray));
+}
+
+QSharedPointer<QNonContiguousByteDevice> QNonContiguousByteDeviceFactory::createShared(QSharedPointer<QRingBuffer> ringBuffer)
+{
+   return QSharedPointer<QNonContiguousByteDevice>(create(ringBuffer));
+}
+
 QIODevice *QNonContiguousByteDeviceFactory::wrap(QNonContiguousByteDevice *byteDevice)
 {
    // ### FIXME if the parameter inherits from QIoDevice, we could just return it

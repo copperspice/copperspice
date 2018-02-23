@@ -8,7 +8,6 @@ lib_libCsDeclarative1_la_CXXFLAGS = $(AM_CXXFLAGS)  \
 	-Iprivateinclude/QtDeclarative/private  \
 	-Iprivateinclude  -Iprivateinclude/QtCore -Iprivateinclude/QtDeclarative -Iprivateinclude/QtGui  \
    -Iprivateinclude/QtScript -I$(top_srcdir)/src/3rdparty/harfbuzz/src  \
-   -DQT_NO_OPENSSL   \
 	-DQT_BUILD_DECLARATIVE_LIB
 
 lib_libCsDeclarative1_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined

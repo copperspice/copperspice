@@ -1,7 +1,5 @@
 add_definitions(
     -DQT_BUILD_XMLPATTERNS_LIB
-    # BROOM (enable OpenSSL)
-    -DQT_NO_OPENSSL
 )
 set(EXTRA_XMLPATTERNS_LIBS CsCore${BUILD_ABI} CsNetwork${BUILD_ABI})
 set(EXTRA_XMLPATTERNS_CXXFLAGS)

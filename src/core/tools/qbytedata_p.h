@@ -24,6 +24,7 @@
 #define QBYTEDATA_P_H
 
 #include <qbytearray.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -62,7 +63,7 @@ class QByteDataBuffer
       bufferCompleteSize += bd.size();
    }
 
-   inline void prepend(QByteArray &bd) {
+   inline void prepend(const QByteArray &bd) {
       if (bd.isEmpty()) {
          return;
       }

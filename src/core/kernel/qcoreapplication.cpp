@@ -191,22 +191,24 @@ void qRemovePostRoutine(QtCleanUpFunction p)
 void Q_CORE_EXPORT qt_call_post_routines()
 {
    QVFuncList *list = 0;
-   QT_TRY {
+
+   try {
       list = postRList();
 
-   } QT_CATCH(const std::bad_alloc &) {
+   } catch (const std::bad_alloc &) {
       // ignore - if we can't allocate a post routine list,
       // there's a high probability that there's no post
       // routine to be executed :)
    }
+
    if (!list) {
       return;
    }
-   while (!list->isEmpty()) {
+
+   while (! list->isEmpty()) {
       (list->takeFirst())();
    }
 }
-
 
 // app starting up if false
 bool QCoreApplicationPrivate::is_app_running = false;
@@ -425,7 +427,7 @@ QCoreApplication::QCoreApplication(int &argc, char **argv, int _internal)
    QCoreApplicationPrivate::eventDispatcher->startingUp();
 }
 
-// ### move to QCoreApplicationPrivate constructor?
+// ### move to QCoreApplicationPrivate
 void QCoreApplication::init()
 {
    Q_D(QCoreApplication);
@@ -438,12 +440,12 @@ void QCoreApplication::init()
    Q_ASSERT_X(!self, "QCoreApplication", "there should be only one application object");
    QCoreApplication::self = this;
 
+   // threads
    QThread::initialize();
-
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    // use the event dispatcher created by the app programmer (if any)
-   if (!QCoreApplicationPrivate::eventDispatcher) {
+   if (! QCoreApplicationPrivate::eventDispatcher) {
       QCoreApplicationPrivate::eventDispatcher = threadData->eventDispatcher;
    }
 
@@ -494,11 +496,14 @@ QCoreApplication::~QCoreApplication()
 
    // Synchronize and stop the global thread pool threads.
    QThreadPool *globalThreadPool = 0;
-   QT_TRY {
+
+   try {
       globalThreadPool = QThreadPool::globalInstance();
-   } QT_CATCH (...) {
+
+   } catch (...) {
       // swallow the exception, since destructors shouldn't throw
    }
+
    if (globalThreadPool) {
       globalThreadPool->waitForDone();
    }
@@ -569,11 +574,12 @@ bool QCoreApplication::notifyInternal(QObject *receiver, QEvent *event)
    ++threadData->loopLevel;
 
    bool returnValue;
-   QT_TRY {
+   try {
       returnValue = notify(receiver, event);
-   } QT_CATCH (...) {
+
+   } catch (...) {
       --threadData->loopLevel;
-      QT_RETHROW;
+      throw;
    }
 
    --threadData->loopLevel;

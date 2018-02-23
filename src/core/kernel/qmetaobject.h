@@ -76,6 +76,11 @@ class Q_CORE_EXPORT QMetaObject
    virtual QMetaMethod method(int index) const = 0;
    QMetaMethod method(const CSBentoAbstract &temp) const;
 
+   // alternate name for method()
+   QMetaMethod lookUpMethod(const CSBentoAbstract &temp) const {
+      return method(temp);
+   }
+
    virtual int methodCount() const = 0;
    int methodOffset() const;
 

@@ -42,14 +42,25 @@ template<class T, int Prealloc>
 class QVarLengthArray
 {
  public:
+   typedef int size_type;
+   typedef T value_type;
+   typedef value_type *pointer;
+   typedef const value_type *const_pointer;
+   typedef value_type &reference;
+   typedef const value_type &const_reference;
+   typedef qptrdiff difference_type;
+
+   typedef T *iterator;
+   typedef const T *const_iterator;
+
    inline explicit QVarLengthArray(int size = 0);
 
-   inline QVarLengthArray(const QVarLengthArray<T, Prealloc> &other)
+   QVarLengthArray(const QVarLengthArray<T, Prealloc> &other)
       : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array)) {
       append(other.constData(), other.size());
    }
 
-   inline ~QVarLengthArray() {
+   ~QVarLengthArray() {
       if (QTypeInfo<T>::isComplex) {
          T *i = ptr + s;
          while (i-- != ptr) {
@@ -60,60 +71,54 @@ class QVarLengthArray
          qFree(ptr);
       }
    }
-   inline QVarLengthArray<T, Prealloc> &operator=(const QVarLengthArray<T, Prealloc> &other) {
-      if (this != &other) {
-         clear();
-         append(other.constData(), other.size());
-      }
-      return *this;
+
+   // methods
+   int capacity() const {
+      return a;
    }
 
-   inline void removeLast() {
+   bool contains(const T &value) const {
+      for (const auto &item : *this) {
+         if (item == value) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   void clear() {
+      resize(0);
+   }
+
+   int count() const {
+      return s;
+   }
+
+   void removeLast() {
       Q_ASSERT(s > 0);
       realloc(s - 1, a);
    }
 
-   inline int size() const {
+   int size() const {
       return s;
    }
 
-   inline int count() const {
-      return s;
-   }
-
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return (s == 0);
    }
 
    inline void resize(int size);
-   inline void clear() {
-      resize(0);
-   }
-
-   inline int capacity() const {
-      return a;
-   }
-
    inline void reserve(int size);
 
-   inline T &operator[](int idx) {
-      Q_ASSERT(idx >= 0 && idx < s);
-      return ptr[idx];
-   }
-
-   inline const T &operator[](int idx) const {
-      Q_ASSERT(idx >= 0 && idx < s);
-      return ptr[idx];
-   }
-
-   inline const T &at(int idx) const {
+   const T &at(int idx) const {
       return operator[](idx);
    }
 
    T value(int i) const;
    T value(int i, const T &defaultValue) const;
 
-   inline void append(const T &t) {
+   void append(const T &t) {
       if (s == a) { // i.e. s != 0
          realloc(s, s << 1);
       }
@@ -124,12 +129,14 @@ class QVarLengthArray
          ptr[idx] = t;
       }
    }
+
    void append(const T *buf, int size);
-   inline QVarLengthArray<T, Prealloc> &operator<<(const T &t) {
+   QVarLengthArray<T, Prealloc> &operator<<(const T &t) {
       append(t);
       return *this;
    }
-   inline QVarLengthArray<T, Prealloc> &operator+=(const T &t) {
+
+   QVarLengthArray<T, Prealloc> &operator+=(const T &t) {
       append(t);
       return *this;
    }
@@ -141,62 +148,16 @@ class QVarLengthArray
    void remove(int i);
    void remove(int i, int n);
 
-
-   inline T *data() {
-      return ptr;
-   }
-   inline const T *data() const {
-      return ptr;
-   }
-   inline const T *constData() const {
-      return ptr;
-   }
-   typedef int size_type;
-   typedef T value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef value_type &reference;
-   typedef const value_type &const_reference;
-   typedef qptrdiff difference_type;
-
-
-   typedef T *iterator;
-   typedef const T *const_iterator;
-
-   inline iterator begin() {
-      return ptr;
-   }
-   inline const_iterator begin() const {
-      return ptr;
-   }
-   inline const_iterator cbegin() const {
-      return ptr;
-   }
-   inline const_iterator constBegin() const {
-      return ptr;
-   }
-   inline iterator end() {
-      return ptr + s;
-   }
-   inline const_iterator end() const {
-      return ptr + s;
-   }
-   inline const_iterator cend() const {
-      return ptr + s;
-   }
-   inline const_iterator constEnd() const {
-      return ptr + s;
-   }
    iterator insert(iterator before, int n, const T &x);
    inline iterator insert(iterator before, const T &x) {
       return insert(before, 1, x);
    }
+
    iterator erase(iterator begin, iterator end);
    inline iterator erase(iterator pos) {
       return erase(pos, pos + 1);
    }
 
-   // STL compatibility:
    inline bool empty() const {
       return isEmpty();
    }
@@ -217,6 +178,69 @@ class QVarLengthArray
    }
    inline const T &back() const {
       return (*ptr + s - 1);
+   }
+
+   inline T *data() {
+      return ptr;
+   }
+   inline const T *data() const {
+      return ptr;
+   }
+   inline const T *constData() const {
+      return ptr;
+   }
+
+   // iterators
+   inline iterator begin() {
+      return ptr;
+   }
+
+   inline const_iterator begin() const {
+      return ptr;
+   }
+
+   inline const_iterator cbegin() const {
+      return ptr;
+   }
+
+   inline const_iterator constBegin() const {
+      return ptr;
+   }
+
+   inline iterator end() {
+      return ptr + s;
+   }
+
+   inline const_iterator end() const {
+      return ptr + s;
+   }
+
+   inline const_iterator cend() const {
+      return ptr + s;
+   }
+
+   inline const_iterator constEnd() const {
+      return ptr + s;
+   }
+
+   // operators
+   QVarLengthArray<T, Prealloc> &operator=(const QVarLengthArray<T, Prealloc> &other) {
+      if (this != &other) {
+         clear();
+         append(other.constData(), other.size());
+      }
+      return *this;
+   }
+
+
+   T &operator[](int idx) {
+      Q_ASSERT(idx >= 0 && idx < s);
+      return ptr[idx];
+   }
+
+   const T &operator[](int idx) const {
+      Q_ASSERT(idx >= 0 && idx < s);
+      return ptr[idx];
    }
 
  private:

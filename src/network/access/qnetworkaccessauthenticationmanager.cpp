@@ -79,7 +79,7 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
       }
    }
 
-   virtual void dispose() override {
+   void dispose() override {
       delete this;
    }
 };
@@ -112,9 +112,8 @@ static QByteArray proxyAuthenticationKey(const QNetworkProxy &proxy, const QStri
          // let there be errors if a new proxy type is added in the future
    }
 
-   if (key.scheme().isEmpty())
+   if (key.scheme().isEmpty()) {
       // proxy type not handled
-   {
       return QByteArray();
    }
 
