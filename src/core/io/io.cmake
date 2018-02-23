@@ -107,6 +107,7 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemmetadata_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemiterator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/io/qwindowspipereader_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/io/qwindowspipewriter_p.h
 )
 
@@ -149,6 +150,7 @@ set(CORE_SOURCES
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(CORE_SOURCES
         ${CORE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/qwindowspipereader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qwindowspipewriter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemiterator_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings_win.cpp

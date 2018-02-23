@@ -104,6 +104,7 @@ CORE_IO_PRIVATE_INCLUDES = \
 	qfilesystemmetadata_p.h \
 	qfilesystemiterator_p.h \
 	qtemporaryfile_p.h \
+	qwindowspipereader_p.h \
 	qwindowspipewriter_p.h
 
 CORE_INCLUDES += $(CORE_IO_INCLUDES)
@@ -148,6 +149,7 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 
 if OSTYPE_WIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+	src/core/io/qwindowspipereader.cpp \
 	src/core/io/qwindowspipewriter.cpp \
 	src/core/io/qfilesystemiterator_win.cpp \
 	src/core/io/qsettings_win.cpp \
@@ -180,7 +182,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qstandardpaths_unix.cpp \
 	src/core/io/forkfd_qt.cpp
 endif
-
 
 if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
