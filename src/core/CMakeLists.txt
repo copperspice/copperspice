@@ -85,6 +85,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
       dl
       ${CMAKE_THREAD_LIBS_INIT}
    )
+   include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
    set(EXTRA_CORE_LIBS
       ${EXTRA_CORE_LIBS}
@@ -99,10 +100,12 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTRA_CORE_LDFLAGS
       ${EXTRA_CORE_LDFLAGS}
       -framework CoreFoundation
+      -framework Foundation
       -framework Security
       -framework ApplicationServices
       -lobjc
    )
+   include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/global/Info.plist.app DESTINATION mac)
 endif()
 

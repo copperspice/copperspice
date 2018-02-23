@@ -18,10 +18,12 @@ lib_libCsCore@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 
 if OSTYPE_LINUX
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -ldl -lpthread
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
 if OSTYPE_BSD
 lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lpthread -L/usr/local/lib -liconv
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
 if OSTYPE_WIN
@@ -29,7 +31,9 @@ lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -lole32 -lws2_32 -Wl,-luuid
 endif
 
 if OSTYPE_DARWIN
-lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -framework CoreFoundation -framework Security -framework ApplicationServices -lobjc
+lib_libCsCore@BUILD_ABI@_la_LDFLAGS += -framework CoreFoundation -framework Foundation \
+   -framework Security -framework ApplicationServices -lobjc
+lib_libCsCore@BUILD_ABI@_la_CXXFLAGS += -I$(top_srcdir)/src/3rdparty/forkfd
 endif
 
 if ZLIB
@@ -157,7 +161,10 @@ EXTRA_DIST+= \
 	src/3rdparty/zlib/zlib.3 \
 	src/3rdparty/zlib/zlib.h \
 	src/3rdparty/zlib/zutil.c \
-	src/3rdparty/zlib/zutil.h
+	src/3rdparty/zlib/zutil.h \
+	src/3rdparty/forkfd/forkfd.h \
+	src/3rdparty/forkfd/forkfd.c \
+	src/3rdparty/forkfd/forkfd_gcc.h
 
 macdir=$(prefix)/mac
 dist_mac_DATA=

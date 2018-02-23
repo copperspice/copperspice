@@ -166,7 +166,8 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfilesystemwatcher_inotify.cpp \
 	src/core/io/qfilesystemwatcher_dnotify.cpp \
 	src/core/io/qfilesystemiterator_unix.cpp \
-	src/core/io/qstandardpaths_unix.cpp
+	src/core/io/qstandardpaths_unix.cpp \
+	src/core/io/forkfd_qt.cpp
 endif
 
 if OSTYPE_BSD
@@ -176,7 +177,8 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qfilesystemengine_unix.cpp \
 	src/core/io/qfilesystemwatcher_kqueue.cpp \
 	src/core/io/qfilesystemiterator_unix.cpp \
-	src/core/io/qstandardpaths_unix.cpp
+	src/core/io/qstandardpaths_unix.cpp \
+	src/core/io/forkfd_qt.cpp
 endif
 
 
@@ -190,5 +192,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/io/qprocess_unix.cpp \
 	src/core/io/qsettings_mac.cpp \
 	src/core/io/qstandardpaths_mac.cpp \
+	src/core/io/forkfd_qt.cpp \
 	src/core/io/qurl_mac.mm
 endif

@@ -168,6 +168,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemwatcher_dnotify.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemiterator_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/forkfd_qt.cpp
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
     set(CORE_SOURCES
@@ -178,6 +179,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "(OpenBSD|FreeBSD|NetBSD)")
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemwatcher_kqueue.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemiterator_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_unix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/forkfd_qt.cpp
     )
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CORE_SOURCES
@@ -190,6 +192,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qprocess_unix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/io/forkfd_qt.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl_mac.mm
     )
 endif()
