@@ -274,6 +274,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_mac.mm
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring_mac.mm
     )
 endif()

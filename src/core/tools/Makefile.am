@@ -281,6 +281,7 @@ if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qelapsedtimer_mac.cpp \
 	src/core/tools/qlocale_mac.mm \
+	src/core/tools/qbytearray_mac.mm \
 	src/core/tools/qstring_mac.mm
 endif
 
