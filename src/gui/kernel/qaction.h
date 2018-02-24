@@ -113,7 +113,7 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_WRITE(priority, setPriority)
 
  public:
-   enum MenuRole { NoRole, TextHeuristicRole, ApplicationSpecificRole, AboutQtRole,
+   enum MenuRole { NoRole, TextHeuristicRole, ApplicationSpecificRole, AboutCsRole,
                    AboutRole, PreferencesRole, QuitRole
                  };
 

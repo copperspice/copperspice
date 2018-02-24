@@ -23,8 +23,8 @@
 #ifndef QSHAREDDATA_H
 #define QSHAREDDATA_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
+#include <qglobal.h>
+#include <qatomic.h>
 
 QT_BEGIN_NAMESPACE
 

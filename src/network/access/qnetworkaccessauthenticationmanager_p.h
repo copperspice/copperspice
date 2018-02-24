@@ -26,10 +26,8 @@
 #include <qnetworkaccessmanager.h>
 #include <qnetworkaccesscache_p.h>
 #include <qnetworkaccessbackend_p.h>
-#include <QtNetwork/qnetworkproxy.h>
-#include <QtCore/QMutex>
-
-QT_BEGIN_NAMESPACE
+#include <qnetworkproxy.h>
+#include <QMutex>
 
 class QAuthenticator;
 class QAbstractNetworkCache;
@@ -82,7 +80,5 @@ class QNetworkAccessAuthenticationManager
    QNetworkAccessCache authenticationCache;
    QMutex mutex;
 };
-
-QT_END_NAMESPACE
 
 #endif

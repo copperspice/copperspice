@@ -28,8 +28,6 @@
 #include <qdebug.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QNetworkCacheMetaDataPrivate : public QSharedData
 {
  public:
@@ -348,5 +346,3 @@ QAbstractNetworkCache::QAbstractNetworkCache(QAbstractNetworkCachePrivate &dd, Q
 QAbstractNetworkCache::~QAbstractNetworkCache()
 {
 }
-
-QT_END_NAMESPACE

@@ -28,10 +28,7 @@
 #include <qlocale_p.h>
 #include <qscopedpointer.h>
 #include <qdatastream.h>
-
-#ifndef QT_NO_COMPRESS
 #include <zlib.h>
-#endif
 
 #include <ctype.h>
 #include <limits.h>
@@ -300,7 +297,6 @@ quint16 qChecksum(const char *data, uint len)
    return ~crc & 0xffff;
 }
 
-#ifndef QT_NO_COMPRESS
 QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
 {
    if (nbytes == 0) {
@@ -341,9 +337,7 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
 
    return bazip;
 }
-#endif
 
-#ifndef QT_NO_COMPRESS
 QByteArray qUncompress(const uchar *data, int nbytes)
 {
    if (!data) {
@@ -428,7 +422,6 @@ QByteArray qUncompress(const uchar *data, int nbytes)
       }
    }
 }
-#endif
 
 static inline bool qIsUpper(char c)
 {

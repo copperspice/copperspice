@@ -840,7 +840,8 @@ inline QByteArray &QByteArray::setNum(float n, char f, int prec)
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
 
-#ifndef QT_NO_COMPRESS
+
+//
 Q_CORE_EXPORT QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel = -1);
 Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
 
@@ -853,7 +854,6 @@ inline QByteArray qUncompress(const QByteArray &data)
 {
    return qUncompress(reinterpret_cast<const uchar *>(data.constData()), data.size());
 }
-#endif
 
 Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QByteArray)

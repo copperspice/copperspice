@@ -23,7 +23,7 @@
 #ifndef QTHREADSTORAGE_H
 #define QTHREADSTORAGE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

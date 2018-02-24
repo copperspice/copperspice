@@ -200,7 +200,6 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    static bool startDetached(const QString &program, const QStringList &arguments,
                   const QString &workingDirectory = QString(), qint64 *pid = nullptr);
 
-
    static bool startDetached(const QString &program);
 
    static QStringList systemEnvironment();

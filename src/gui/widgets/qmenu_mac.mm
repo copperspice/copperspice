@@ -269,8 +269,8 @@ static NSMenuItem *qt_mac_menu_merge_action(OSMenuRef merge, QMacMenuAction *act
          ret = [loader aboutMenuItem];
          break;
 
-      case QAction::AboutQtRole:
-         ret = [loader aboutQtMenuItem];
+      case QAction::AboutCsRole:
+         ret = [loader aboutCsMenuItem];
          break;
 
       case QAction::QuitRole:
