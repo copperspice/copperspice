@@ -167,15 +167,41 @@ extern "C" void Q_CORE_EXPORT qt_startup_hook()
 {
 }
 
-typedef QList<QtCleanUpFunction> QVFuncList;
+using QStartUpFuncList  = QList<QtStartUpFunction>;
+Q_GLOBAL_STATIC(QStartUpFuncList, preRList)
+
+using QVFuncList = QList<QtCleanUpFunction>;
 Q_GLOBAL_STATIC(QVFuncList, postRList)
+
+static QBasicMutex globalPreRoutinesMutex;
+
+void qAddPreRoutine(QtStartUpFunction p)
+{
+   QStartUpFuncList *list = preRList();
+
+   if (! list) {
+     return;
+   }
+
+   // C++11 added parallel dynamic initialization, this can be called from multiple threads
+   QMutexLocker locker(&globalPreRoutinesMutex);
+
+   if (QCoreApplication::instance()) {
+      p();
+   }
+
+   list->prepend(p); // in case QCoreApplication is re-created, see qt_call_pre_routines
+}
+
 
 void qAddPostRoutine(QtCleanUpFunction p)
 {
    QVFuncList *list = postRList();
+
    if (!list) {
       return;
    }
+
    list->prepend(p);
 }
 
@@ -186,6 +212,23 @@ void qRemovePostRoutine(QtCleanUpFunction p)
       return;
    }
    list->removeAll(p);
+}
+
+static void qt_call_pre_routines()
+{
+   QStartUpFuncList *list = preRList();
+   if (! list) {
+     return;
+   }
+
+   QMutexLocker locker(&globalPreRoutinesMutex);
+
+   // Unlike qt_call_post_routines, we do not empty the list, because Q_COREAPP_STARTUP_FUNCTION is a macro,
+   // so the user expects the function to be executed every time QCoreApplication is created.
+
+   for (int i = 0; i < list->count(); ++i) {
+     list->at(i)();
+   }
 }
 
 void Q_CORE_EXPORT qt_call_post_routines()
@@ -470,19 +513,13 @@ void QCoreApplication::init()
    }
 #endif
 
-#if defined(Q_OS_UNIX) && !(defined(QT_NO_PROCESS))
-   // Make sure the process manager thread object is created in the main
-   // thread.
-   QProcessPrivate::initializeProcessManager();
-#endif
-
 #ifdef QT_EVAL
    extern void qt_core_eval_init(uint);
    qt_core_eval_init(d->application_type);
 #endif
 
    d->processCommandLineArguments();
-
+   qt_call_pre_routines();
    qt_startup_hook();
 }
 

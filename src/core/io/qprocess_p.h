@@ -23,10 +23,10 @@
 #ifndef QPROCESS_P_H
 #define QPROCESS_P_H
 
-#include <QtCore/qprocess.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qshareddata.h>
+#include <qprocess.h>
+#include <qstringlist.h>
+#include <qhash.h>
+#include <qshareddata.h>
 #include <qringbuffer_p.h>
 #include <qiodevice_p.h>
 
@@ -35,7 +35,7 @@
 #endif
 
 #ifdef Q_OS_WIN
-#include <QtCore/qt_windows.h>
+#include <qt_windows.h>
 typedef HANDLE Q_PIPE;
 #define INVALID_Q_PIPE INVALID_HANDLE_VALUE
 #else
@@ -48,6 +48,7 @@ typedef int Q_PIPE;
 QT_BEGIN_NAMESPACE
 
 class QSocketNotifier;
+class QWindowsPipeReader;
 class QWindowsPipeWriter;
 class QWinEventNotifier;
 class QTimer;
@@ -76,9 +77,11 @@ class QProcEnvKey
  public:
    QProcEnvKey() : hash(0) {}
    explicit QProcEnvKey(const QByteArray &other) : key(other), hash(qHash(key)) {}
+
    QProcEnvKey(const QProcEnvKey &other) {
       *this = other;
    }
+
    bool operator==(const QProcEnvKey &other) const {
       return key == other.key;
    }
@@ -130,9 +133,10 @@ Q_DECLARE_TYPEINFO(QProcEnvKey, Q_MOVABLE_TYPE);
 class QProcessEnvironmentPrivate: public QSharedData
 {
  public:
-#ifdef Q_OS_WIN
    typedef QProcEnvKey Key;
    typedef QProcEnvValue Value;
+
+#ifdef Q_OS_WIN
 
    inline Key prepareName(const QString &name) const {
       return Key(name);
@@ -160,62 +164,15 @@ class QProcessEnvironmentPrivate: public QSharedData
    };
 
 #else
-   class Key
-   {
-    public:
-      Key() : hash(0) {}
-      explicit Key(const QByteArray &other) : key(other), hash(qHash(key)) {}
-      Key(const Key &other) {
-         *this = other;
-      }
-      bool operator==(const Key &other) const {
-         return key == other.key;
-      }
 
-      QByteArray key;
-      uint hash;
-   };
+    inline Key prepareName(const QString &name) const  {
+        Key &ent = nameMap[name];
+        if (ent.key.isEmpty())
+            ent = Key(name.toLocal8Bit());
+        return ent;
+    }
 
-   class Value
-   {
-    public:
-      Value() {}
-      Value(const Value &other) {
-         *this = other;
-      }
-      explicit Value(const QString &value) : stringValue(value) {}
-      explicit Value(const QByteArray &value) : byteValue(value) {}
-      bool operator==(const Value &other) const {
-         return byteValue.isEmpty() && other.byteValue.isEmpty()
-                ? stringValue == other.stringValue
-                : bytes() == other.bytes();
-      }
-      QByteArray bytes() const {
-         if (byteValue.isEmpty() && !stringValue.isEmpty()) {
-            byteValue = stringValue.toLocal8Bit();
-         }
-         return byteValue;
-      }
-      QString string() const {
-         if (stringValue.isEmpty() && !byteValue.isEmpty()) {
-            stringValue = QString::fromLocal8Bit(byteValue);
-         }
-         return stringValue;
-      }
-
-      mutable QByteArray byteValue;
-      mutable QString stringValue;
-   };
-
-   inline Key prepareName(const QString &name) const {
-      Key &ent = nameMap[name];
-      if (ent.key.isEmpty()) {
-         ent = Key(name.toLocal8Bit());
-      }
-      return ent;
-   }
-
-   inline QString nameToString(const Key &name) const {
+    inline QString nameToString(const Key &name) const  {
       const QString sname = QString::fromLocal8Bit(name.key);
       nameMap[sname] = name;
       return sname;
@@ -234,7 +191,7 @@ class QProcessEnvironmentPrivate: public QSharedData
    };
 
    struct OrderedMutexLocker : public QOrderedMutexLocker {
-                  OrderedMutexLocker(const QProcessEnvironmentPrivate *d1, const QProcessEnvironmentPrivate *d2)
+      OrderedMutexLocker(const QProcessEnvironmentPrivate *d1, const QProcessEnvironmentPrivate *d2)
       : QOrderedMutexLocker(&d1->mutex, &d2->mutex)  { }
    };
 
@@ -263,17 +220,6 @@ class QProcessEnvironmentPrivate: public QSharedData
    QStringList keys() const;
    void insert(const QProcessEnvironmentPrivate &other);
 };
-
-#ifndef Q_OS_WIN
-Q_DECLARE_TYPEINFO(QProcessEnvironmentPrivate::Key, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(QProcessEnvironmentPrivate::Value, Q_MOVABLE_TYPE);
-
-inline uint qHash(const QProcessEnvironmentPrivate::Key &key)
-{
-   return key.hash;
-}
-#endif
-
 /**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 
 template<>
@@ -311,6 +257,9 @@ class QProcessPrivate : public QIODevicePrivate
       Channel() : process(0), notifier(0), type(Normal), closed(false), append(false) {
          pipe[0] = INVALID_Q_PIPE;
          pipe[1] = INVALID_Q_PIPE;
+#ifdef Q_OS_WIN
+            reader = 0;
+#endif
       }
 
       void clear();
@@ -337,6 +286,14 @@ class QProcessPrivate : public QIODevicePrivate
       QString file;
       QProcessPrivate *process;
       QSocketNotifier *notifier;
+
+#ifdef Q_OS_WIN
+        union {
+            QWindowsPipeReader *reader;
+            QWindowsPipeWriter *writer;
+        };
+#endif
+        QRingBuffer buffer;
       Q_PIPE pipe[2];
 
       unsigned type : 2;
@@ -352,10 +309,11 @@ class QProcessPrivate : public QIODevicePrivate
    bool _q_canWrite();
    bool _q_startupNotification();
    bool _q_processDied();
-   void _q_notified();
+
 
    QProcess::ProcessChannel processChannel;
    QProcess::ProcessChannelMode processChannelMode;
+   QProcess::InputChannelMode inputChannelMode;
    QProcess::ProcessError processError;
    QProcess::ProcessState processState;
    QString workingDirectory;
@@ -369,8 +327,10 @@ class QProcessPrivate : public QIODevicePrivate
    Channel stdinChannel;
    Channel stdoutChannel;
    Channel stderrChannel;
-   bool createChannel(Channel &channel);
+   bool openChannel(Channel &channel);
+   void closeChannel(Channel *channel);
    void closeWriteChannel();
+   bool tryReadFromChannel(Channel *channel); // obviously, only stdout and stderr
 
    QString program;
    QStringList arguments;
@@ -381,29 +341,28 @@ class QProcessPrivate : public QIODevicePrivate
 
    QProcessEnvironment environment;
 
-   QRingBuffer outputReadBuffer;
-   QRingBuffer errorReadBuffer;
-   QRingBuffer writeBuffer;
-
    Q_PIPE childStartedPipe[2];
-   Q_PIPE deathPipe[2];
+
    void destroyPipe(Q_PIPE pipe[2]);
 
    QSocketNotifier *startupSocketNotifier;
    QSocketNotifier *deathNotifier;
 
-   // the wonderful windows notifier
-   QTimer *notifier;
-   QWindowsPipeWriter *pipeWriter;
-   QWinEventNotifier *processFinishedNotifier;
+    int forkfd;
 
+#ifdef Q_OS_WIN
+   QTimer *stdinWriteTrigger;
+   QWinEventNotifier *processFinishedNotifier;
+#endif
+
+   void start(QIODevice::OpenMode mode);
    void startProcess();
 
 #if defined(Q_OS_UNIX)
    void execChild(const char *workingDirectory, char **path, char **argv, char **envp);
 #endif
 
-   bool processStarted();
+    bool processStarted(QString *errorMessage = nullptr);
    void terminateProcess();
    void killProcess();
    void findExitCode();
@@ -413,6 +372,7 @@ class QProcessPrivate : public QIODevicePrivate
 #endif
 
 #ifdef Q_OS_WIN
+   bool drainOutputPipes();
    void flushPipeWriter();
    qint64 pipeWriterBytesToWrite() const;
 #endif
@@ -424,9 +384,6 @@ class QProcessPrivate : public QIODevicePrivate
    QProcess::ExitStatus exitStatus;
    bool crashed;
 
-#ifdef Q_OS_UNIX
-   int serial;
-#endif
 
    bool waitForStarted(int msecs = 30000);
    bool waitForReadyRead(int msecs = 30000);
@@ -434,17 +391,15 @@ class QProcessPrivate : public QIODevicePrivate
    bool waitForFinished(int msecs = 30000);
    bool waitForWrite(int msecs = 30000);
 
-   qint64 bytesAvailableFromStdout() const;
-   qint64 bytesAvailableFromStderr() const;
-   qint64 readFromStdout(char *data, qint64 maxlen);
-   qint64 readFromStderr(char *data, qint64 maxlen);
-   qint64 writeToStdin(const char *data, qint64 maxlen);
+   qint64 bytesAvailableInChannel(const Channel *channel) const;
+   qint64 readFromChannel(const Channel *channel, char *data, qint64 maxlen);
+   bool writeToStdin();
 
    void cleanup();
+   void setError(QProcess::ProcessError error, const QString &description = QString());
+   void setErrorAndEmit(QProcess::ProcessError error, const QString &description = QString());
 
-#ifdef Q_OS_UNIX
-   static void initializeProcessManager();
-#endif
+
 
 };
 

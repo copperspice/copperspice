@@ -308,10 +308,11 @@ public: \
                                              QCoreApplication::UnicodeUTF8, n); } \
 private:
 
-// * *
+//
+using QtStartUpFunction = void (*)();
 using QtCleanUpFunction = void (*)();
 
-
+Q_CORE_EXPORT void qAddPreRoutine(QtStartUpFunction);
 Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT QString qAppName();

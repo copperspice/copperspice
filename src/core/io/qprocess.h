@@ -31,7 +31,7 @@ QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PROCESS
 
-#if ! defined(Q_OS_WIN32)
+#if ! defined(Q_OS_WIN)
 typedef qint64 Q_PID;
 #else
 QT_END_NAMESPACE
@@ -48,6 +48,11 @@ class Q_CORE_EXPORT QProcessEnvironment
    QProcessEnvironment();
    QProcessEnvironment(const QProcessEnvironment &other);
    ~QProcessEnvironment();
+   QProcessEnvironment &operator=(QProcessEnvironment && other)  {
+      swap(other);
+      return *this;
+   }
+
    QProcessEnvironment &operator=(const QProcessEnvironment &other);
 
    bool operator==(const QProcessEnvironment &other) const;
@@ -70,6 +75,10 @@ class Q_CORE_EXPORT QProcessEnvironment
    void insert(const QProcessEnvironment &e);
 
    static QProcessEnvironment systemEnvironment();
+
+   void swap(QProcessEnvironment &other) {
+      qSwap(d, other.d);
+   }
 
  private:
    friend class QProcessPrivate;
@@ -102,8 +111,15 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    enum ProcessChannelMode {
       SeparateChannels,
       MergedChannels,
-      ForwardedChannels
+      ForwardedChannels,
+      ForwardedOutputChannel,
+      ForwardedErrorChannel
    };
+   enum InputChannelMode {
+      ManagedInputChannel,
+       ForwardedInputChannel
+   };
+
    enum ExitStatus {
       NormalExit,
       CrashExit
@@ -113,12 +129,19 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    virtual ~QProcess();
 
    void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
-   void start(const QString &program, OpenMode mode = ReadWrite);
-
+   void start(const QString &command, OpenMode mode = ReadWrite);
+    void start(OpenMode mode = ReadWrite);
+    bool open(OpenMode mode = ReadWrite) override;
+    QString program() const;
+    void setProgram(const QString &program);
+    QStringList arguments() const;
+    void setArguments(const QStringList & arguments);
    ProcessChannelMode readChannelMode() const;
    void setReadChannelMode(ProcessChannelMode mode);
    ProcessChannelMode processChannelMode() const;
    void setProcessChannelMode(ProcessChannelMode mode);
+   InputChannelMode inputChannelMode() const;
+   void setInputChannelMode(InputChannelMode mode);
 
    ProcessChannel readChannel() const;
    void setReadChannel(ProcessChannel channel);
@@ -128,7 +151,7 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
    void setStandardInputFile(const QString &fileName);
    void setStandardOutputFile(const QString &fileName, OpenMode mode = Truncate);
-   void setStandardErrorFile(const QString &fileName, OpenMode mode = Truncate);
+   void setStandardErrorFile(const QString &fileName,  OpenMode mode = Truncate);
    void setStandardOutputProcess(QProcess *destination);
 
 #if defined(Q_OS_WIN)
@@ -144,13 +167,13 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    void setProcessEnvironment(const QProcessEnvironment &environment);
    QProcessEnvironment processEnvironment() const;
 
-   // CopperSpice - method was called error()
-   QProcess::ProcessError errorCode() const;
+   QProcess::ProcessError error() const;
 
    QProcess::ProcessState state() const;
 
    // #### Qt5/Q_PID is a pointer on Windows and a value on Unix
    Q_PID pid() const;
+   qint64 processId() const;
 
    bool waitForStarted(int msecs = 30000);
    bool waitForReadyRead(int msecs = 30000) override;
@@ -174,14 +197,15 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    static int execute(const QString &program, const QStringList &arguments);
    static int execute(const QString &program);
 
-   static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory,
-                             qint64 *pid = 0);
-   static bool startDetached(const QString &program, const QStringList &arguments);
+   static bool startDetached(const QString &program, const QStringList &arguments,
+                  const QString &workingDirectory = QString(), qint64 *pid = nullptr);
+
+
    static bool startDetached(const QString &program);
 
    static QStringList systemEnvironment();
+   static QString nullDevice();
 
- public :
    CORE_CS_SLOT_1(Public, void terminate())
    CORE_CS_SLOT_2(terminate)
 
@@ -197,8 +221,8 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    CORE_CS_SIGNAL_1(Public, void finished(int exitCode, QProcess::ExitStatus exitStatus))
    CORE_CS_SIGNAL_OVERLOAD(finished, (int, QProcess::ExitStatus), exitCode, exitStatus)
 
-   CORE_CS_SIGNAL_1(Public, void error(QProcess::ProcessError error))
-   CORE_CS_SIGNAL_2(error, error)
+   CORE_CS_SIGNAL_1(Public, void errorOccurred(QProcess::ProcessError error))
+   CORE_CS_SIGNAL_2(errorOccurred, error)
 
    CORE_CS_SIGNAL_1(Public, void stateChanged(QProcess::ProcessState state))
    CORE_CS_SIGNAL_2(stateChanged, state)
@@ -211,7 +235,6 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
  protected:
    void setProcessState(ProcessState state);
-
    virtual void setupChildProcess();
 
    // QIODevice
@@ -237,14 +260,10 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    CORE_CS_SLOT_1(Private, bool _q_processDied())
    CORE_CS_SLOT_2(_q_processDied)
 
-   CORE_CS_SLOT_1(Private, void _q_notified())
-   CORE_CS_SLOT_2(_q_notified)
 
    friend class QProcessManager;
 };
 
 #endif // QT_NO_PROCESS
-
-QT_END_NAMESPACE
 
 #endif // QPROCESS_H
