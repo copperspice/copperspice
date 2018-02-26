@@ -23,41 +23,9 @@
 #include <qsslellipticcurve.h>
 #include <QDebug>
 
-#ifdef CS_ELLIPTIC_CURVE_NOT_SUPPORTED
-
-QString QSslEllipticCurve::shortName() const
-{
-   return QString();
-}
-
-QString QSslEllipticCurve::longName() const
-{
-   return QString();
-}
-
-QSslEllipticCurve QSslEllipticCurve::fromShortName(const QString &name)
-{
-   Q_UNUSED(name);
-   return QSslEllipticCurve();
-}
-
-QSslEllipticCurve QSslEllipticCurve::fromLongName(const QString &name)
-{
-   Q_UNUSED(name);
-   return QSslEllipticCurve();
-}
-
-bool QSslEllipticCurve::isTlsNamedCurve()
-{
-   return false;
-}
-
-#endif
-
 
 QDebug operator<<(QDebug debug, QSslEllipticCurve curve)
 {
-   // broom - resolve later
    // QDebugStateSaver saver(debug);
    // debug.resetFormat().nospace();
 

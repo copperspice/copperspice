@@ -20,12 +20,11 @@
 *
 ***********************************************************************/
 
-#include <qwineventnotifier_p.h>
+#include <qwineventnotifier.h>
 #include <qeventdispatcher_win_p.h>
 #include <qcoreapplication.h>
 #include <qthread_p.h>
 
-QT_BEGIN_NAMESPACE
 
 /*
     \class QWinEventNotifier
@@ -117,4 +116,4 @@ bool QWinEventNotifier::event(QEvent *e)
    return false;
 }
 
-QT_END_NAMESPACE
+

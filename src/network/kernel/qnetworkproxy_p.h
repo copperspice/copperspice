@@ -25,14 +25,14 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
-QT_BEGIN_NAMESPACE
+
 
 class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
 {
  public:
    QSystemConfigurationProxyFactory() : QNetworkProxyFactory() {}
 
-   virtual QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query) override {
+   virtual QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query)  {
       QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);
 
       // Make sure NoProxy is in the list, so that QTcpServer can work:
@@ -45,7 +45,7 @@ class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
    }
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_NETWORKINTERFACE
 

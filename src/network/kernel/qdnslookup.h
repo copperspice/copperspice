@@ -29,7 +29,7 @@
 #include <qsharedpointer.h>
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QHostAddress;
 class QDnsLookupPrivate;
@@ -45,14 +45,15 @@ class Q_NETWORK_EXPORT QDnsDomainNameRecord
  public:
     QDnsDomainNameRecord();
     QDnsDomainNameRecord(const QDnsDomainNameRecord &other);
+    ~QDnsDomainNameRecord();
+
+    QDnsDomainNameRecord &operator=(const QDnsDomainNameRecord &other);
 
     QDnsDomainNameRecord &operator=(QDnsDomainNameRecord &&other) {
       swap(other);
       return *this;
     }
 
-    QDnsDomainNameRecord &operator=(const QDnsDomainNameRecord &other);
-    ~QDnsDomainNameRecord();
 
     void swap(QDnsDomainNameRecord &other) {
       qSwap(d, other.d);
@@ -72,14 +73,15 @@ class Q_NETWORK_EXPORT QDnsHostAddressRecord
  public:
     QDnsHostAddressRecord();
     QDnsHostAddressRecord(const QDnsHostAddressRecord &other);
+    ~QDnsHostAddressRecord();
+
+    QDnsHostAddressRecord &operator=(const QDnsHostAddressRecord &other);
 
     QDnsHostAddressRecord &operator=(QDnsHostAddressRecord &&other)  {
       swap(other);
       return *this;
    }
 
-   QDnsHostAddressRecord &operator=(const QDnsHostAddressRecord &other);
-   ~QDnsHostAddressRecord();
 
    void swap(QDnsHostAddressRecord &other)  {
       qSwap(d, other.d);
@@ -99,7 +101,6 @@ class Q_NETWORK_EXPORT QDnsMailExchangeRecord
  public:
     QDnsMailExchangeRecord();
     QDnsMailExchangeRecord(const QDnsMailExchangeRecord &other);
-
    ~QDnsMailExchangeRecord();
 
    QDnsMailExchangeRecord &operator=(const QDnsMailExchangeRecord &other);
@@ -128,7 +129,6 @@ class Q_NETWORK_EXPORT QDnsServiceRecord
  public:
     QDnsServiceRecord();
     QDnsServiceRecord(const QDnsServiceRecord &other);
-
     ~QDnsServiceRecord();
 
     QDnsServiceRecord &operator=(QDnsServiceRecord &&other)  {
@@ -159,7 +159,6 @@ class Q_NETWORK_EXPORT QDnsTextRecord
  public:
     QDnsTextRecord();
     QDnsTextRecord(const QDnsTextRecord &other);
-
     ~QDnsTextRecord();
 
     QDnsTextRecord &operator=(const QDnsTextRecord &other);
@@ -286,6 +285,6 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
     NET_CS_SLOT_2(_q_lookupFinished)
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QDNSLOOKUP_H

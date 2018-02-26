@@ -26,12 +26,10 @@
 #include <qsslkey.h>
 #include <qsslsocket_p.h>       // includes wincrypt.h
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
 #include <openssl/rsa.h>
 #include <openssl/dsa.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QSslKeyPrivate
 {
@@ -53,7 +51,7 @@ class QSslKeyPrivate
       clear();
    }
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
     bool fromEVP_PKEY(EVP_PKEY *pkey);
 #endif
 
@@ -78,7 +76,7 @@ class QSslKeyPrivate
    static QByteArray decrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv);
    static QByteArray encrypt(Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv);
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
     union {
         EVP_PKEY *opaque;
         RSA *rsa;
@@ -100,6 +98,5 @@ class QSslKeyPrivate
    Q_DISABLE_COPY(QSslKeyPrivate)
 };
 
-QT_END_NAMESPACE
 
 #endif // QSSLKEY_P_H

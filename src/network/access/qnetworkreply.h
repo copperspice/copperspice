@@ -23,13 +23,11 @@
 #ifndef QNETWORKREPLY_H
 #define QNETWORKREPLY_H
 
-#include <QtCore/QIODevice>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
-
-QT_BEGIN_NAMESPACE
+#include <QIODevice>
+#include <QString>
+#include <QVariant>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
 class QUrl;
 class QVariant;
@@ -38,7 +36,7 @@ class QSslConfiguration;
 class QSslError;
 class QNetworkReplyPrivate;
 
-class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
+class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
 {
    NET_CS_OBJECT(QNetworkReply)
 
@@ -56,6 +54,10 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
       OperationCanceledError,
       SslHandshakeFailedError,
       TemporaryNetworkFailureError,
+      NetworkSessionFailedError,
+      BackgroundRequestNotAllowedError,
+      TooManyRedirectsError,
+      InsecureRedirectError,
       UnknownNetworkError = 99,
 
       // proxy errors (101-199):
@@ -72,20 +74,25 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
       ContentNotFoundError,
       AuthenticationRequiredError,
       ContentReSendError,
+      ContentConflictError,
+      ContentGoneError,
       UnknownContentError = 299,
 
       // protocol errors
       ProtocolUnknownError = 301,
       ProtocolInvalidOperationError,
-      ProtocolFailure = 399
+      ProtocolFailure = 399,
+      InternalServerError = 401,
+      OperationNotImplementedError,
+      ServiceUnavailableError,
+      UnknownServerError = 499
    };
 
    ~QNetworkReply();
-   virtual void abort() = 0;
 
    // reimplemented from QIODevice
-   void close() override;
-   bool isSequential() const override;
+   virtual void close() override;
+   virtual bool isSequential() const override;
 
    // like QAbstractSocket:
    qint64 readBufferSize() const;
@@ -113,15 +120,14 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    // attributes
    QVariant attribute(QNetworkRequest::Attribute code) const;
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
    QSslConfiguration sslConfiguration() const;
    void setSslConfiguration(const QSslConfiguration &configuration);
    void ignoreSslErrors(const QList<QSslError> &errors);
 #endif
 
-   virtual QSslConfiguration sslConfigurationImplementation() const;
-   virtual void setSslConfigurationImplementation(const QSslConfiguration &configuration);
-   virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors);
+   NET_CS_SLOT_1(Public, virtual void abort() = 0)
+   NET_CS_SLOT_2(abort)
 
    NET_CS_SLOT_1(Public, virtual void ignoreSslErrors())
    NET_CS_SLOT_OVERLOAD(ignoreSslErrors, ())
@@ -135,10 +141,19 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    NET_CS_SIGNAL_1(Public, void error(QNetworkReply::NetworkError un_named_arg1))
    NET_CS_SIGNAL_OVERLOAD(error, (QNetworkReply::NetworkError), un_named_arg1)
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
+   NET_CS_SIGNAL_1(Public, void encrypted())
+   NET_CS_SIGNAL_2(encrypted)
+
+   NET_CS_SIGNAL_1(Public, void preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(preSharedKeyAuthenticationRequired, authenticator)
+
    NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &errors))
    NET_CS_SIGNAL_2(sslErrors, errors)
 #endif
+
+   NET_CS_SIGNAL_1(Public, void redirected(QUrl url))
+   NET_CS_SIGNAL_2(redirected, url)
 
    NET_CS_SIGNAL_1(Public, void uploadProgress(qint64 bytesSent, qint64 bytesTotal))
    NET_CS_SIGNAL_2(uploadProgress, bytesSent, bytesTotal)
@@ -147,9 +162,9 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    NET_CS_SIGNAL_2(downloadProgress, bytesReceived, bytesTotal)
 
  protected:
-   QNetworkReply(QObject *parent = nullptr);
+   explicit QNetworkReply(QObject *parent = nullptr);
    QNetworkReply(QNetworkReplyPrivate &dd, QObject *parent);
-   qint64 writeData(const char *data, qint64 len) override;
+   virtual qint64 writeData(const char *data, qint64 len) override;
 
    void setOperation(QNetworkAccessManager::Operation operation);
    void setRequest(const QNetworkRequest &request);
@@ -160,10 +175,12 @@ class Q_NETWORK_EXPORT QNetworkReply: public QIODevice
    void setRawHeader(const QByteArray &headerName, const QByteArray &value);
    void setAttribute(QNetworkRequest::Attribute code, const QVariant &value);
 
+   virtual void sslConfigurationImplementation(QSslConfiguration &) const;
+   virtual void setSslConfigurationImplementation(const QSslConfiguration &configuration);
+   virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors);
+
  private:
    Q_DECLARE_PRIVATE(QNetworkReply)
 };
-
-QT_END_NAMESPACE
 
 #endif

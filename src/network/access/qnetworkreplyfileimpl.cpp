@@ -21,12 +21,11 @@
 ***********************************************************************/
 
 #include <qnetworkreplyfileimpl_p.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QFileInfo>
+#include <qdatetime.h>
+#include <QCoreApplication>
+#include <QFileInfo>
 #include <QDebug>
 
-QT_BEGIN_NAMESPACE
 
 QNetworkReplyFileImplPrivate::QNetworkReplyFileImplPrivate()
    : QNetworkReplyPrivate(), realFileSize(0)
@@ -50,7 +49,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QNetworkReplyFileImplPrivate *d = (QNetworkReplyFileImplPrivate *) d_func();
 
    QUrl url = req.url();
-   if (url.host() == QLatin1String("localhost")) {
+   if (url.host() == "localhost") {
       url.setHost(QString());
    }
 
@@ -60,6 +59,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
       // we handle only local files
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend",
                     "Request for opening non-local file %1").arg(url.toString());
+
       setError(QNetworkReply::ProtocolInvalidOperationError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProtocolInvalidOperationError));
@@ -67,6 +67,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
       return;
    }
 #endif
+
    if (url.path().isEmpty()) {
       url.setPath(QLatin1String("/"));
    }
@@ -85,7 +86,8 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QFileInfo fi(fileName);
    if (fi.isDir()) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend",
-                    "Cannot open %1: Path is a directory").arg(url.toString());
+                    "Can not open %1: Path is a directory").arg(url.toString());
+
       setError(QNetworkReply::ContentOperationNotPermittedError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
@@ -166,19 +168,23 @@ qint64 QNetworkReplyFileImpl::size() const
 qint64 QNetworkReplyFileImpl::readData(char *data, qint64 maxlen)
 {
    Q_D(QNetworkReplyFileImpl);
-   if (!d->realFile.isOpen()) {
+   if (! d->realFile.isOpen()) {
       return -1;
    }
+
    qint64 ret = d->realFile.read(data, maxlen);
    if (bytesAvailable() == 0 && d->realFile.isOpen()) {
       d->realFile.close();
    }
+
    if (ret == 0 && bytesAvailable() == 0) {
       return -1;
+
    } else {
+      setAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+      setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, QLatin1String("OK"));
       return ret;
    }
 }
 
 
-QT_END_NAMESPACE

@@ -35,62 +35,11 @@
 
 #include <stdlib.h>
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QNetworkCookie
-    \since 4.4
-    \brief The QNetworkCookie class holds one network cookie.
-
-    Cookies are small bits of information that stateless protocols
-    like HTTP use to maintain some persistent information across
-    requests.
-
-    A cookie is set by a remote server when it replies to a request
-    and it expects the same cookie to be sent back when further
-    requests are sent.
-
-    QNetworkCookie holds one such cookie as received from the
-    network. A cookie has a name and a value, but those are opaque to
-    the application (that is, the information stored in them has no
-    meaning to the application). A cookie has an associated path name
-    and domain, which indicate when the cookie should be sent again to
-    the server.
-
-    A cookie can also have an expiration date, indicating its
-    validity. If the expiration date is not present, the cookie is
-    considered a "session cookie" and should be discarded when the
-    application exits (or when its concept of session is over).
-
-    QNetworkCookie provides a way of parsing a cookie from the HTTP
-    header format using the QNetworkCookie::parseCookies()
-    function. However, when received in a QNetworkReply, the cookie is
-    already parsed.
-
-    This class implements cookies as described by the
-    \l{Netscape Cookie Specification}{initial cookie specification by
-    Netscape}, which is somewhat similar to the \l{RFC 2109} specification,
-    plus the \l{Mitigating Cross-site Scripting With HTTP-only Cookies}
-    {"HttpOnly" extension}. The more recent \l{RFC 2965} specification
-    (which uses the Set-Cookie2 header) is not supported.
-
-    \sa QNetworkCookieJar, QNetworkRequest, QNetworkReply
-*/
-
-/*!
-    Create a new QNetworkCookie object, initializing the cookie name
-    to \a name and its value to \a value.
-
-    A cookie is only valid if it has a name. However, the value is
-    opaque to the application and being empty may have significance to
-    the remote server.
-*/
 QNetworkCookie::QNetworkCookie(const QByteArray &name, const QByteArray &value)
    : d(new QNetworkCookiePrivate)
 {
    qRegisterMetaType<QNetworkCookie>();
    qRegisterMetaType<QList<QNetworkCookie> >();
-
    d->name = name;
    d->value = value;
 }
@@ -154,44 +103,21 @@ bool QNetworkCookie::operator==(const QNetworkCookie &other) const
           d->comment == other.d->comment;
 }
 
-/*!
-    Returns true if the "secure" option was specified in the cookie
-    string, false otherwise.
+bool QNetworkCookie::hasSameIdentifier(const QNetworkCookie &other) const
+{
+   return d->name == other.d->name && d->domain == other.d->domain && d->path == other.d->path;
+}
 
-    Secure cookies may contain private information and should not be
-    resent over unencrypted connections.
-
-    \sa setSecure()
-*/
 bool QNetworkCookie::isSecure() const
 {
    return d->secure;
 }
 
-/*!
-    Sets the secure flag of this cookie to \a enable.
-
-    Secure cookies may contain private information and should not be
-    resent over unencrypted connections.
-
-    \sa isSecure()
-*/
 void QNetworkCookie::setSecure(bool enable)
 {
    d->secure = enable;
 }
 
-/*!
-    \since 4.5
-
-    Returns true if the "HttpOnly" flag is enabled for this cookie.
-
-    A cookie that is "HttpOnly" is only set and retrieved by the
-    network requests and replies; i.e., the HTTP protocol. It is not
-    accessible from scripts running on browsers.
-
-    \sa isSecure()
-*/
 bool QNetworkCookie::isHttpOnly() const
 {
    return d->httpOnly;
@@ -348,97 +274,32 @@ static QPair<QByteArray, QByteArray> nextField(const QByteArray &text, int &posi
    //    (1)  token
    //    (2)  token = token
    //    (3)  token = quoted-string
-   int i;
+
    const int length = text.length();
    position = nextNonWhitespace(text, position);
 
-   // parse the first part, before the equal sign
-   for (i = position; i < length; ++i) {
-      char c = text.at(i);
-      if (c == ';' || c == '=') {
-         break;
-      }
+   int semiColonPosition = text.indexOf(';', position);
+   if (semiColonPosition < 0) {
+      semiColonPosition = length;   //no ';' means take everything to end of string
    }
-
-   QByteArray first = text.mid(position, i - position).trimmed();
-   position = i;
-
-   if (first.isEmpty()) {
-      return qMakePair(QByteArray(), QByteArray());
-   }
-   if (i == length || text.at(i) != '=')
-      // no equal sign, we found format (1)
-   {
-      return qMakePair(first, QByteArray());
-   }
-
-   QByteArray second;
-   second.reserve(32);         // arbitrary but works for most cases
-
-   i = nextNonWhitespace(text, position + 1);
-   if (i < length && text.at(i) == '"') {
-      // a quote, we found format (3), where:
-      // quoted-string  = ( <"> *(qdtext | quoted-pair ) <"> )
-      // qdtext         = <any TEXT except <">>
-      // quoted-pair    = "\" CHAR
-
-      // If it is NAME=VALUE, retain the value as is
-      // refer to http://bugreports.qt-project.org/browse/QTBUG-17746
+   int equalsPosition = text.indexOf('=', position);
+   if (equalsPosition < 0 || equalsPosition > semiColonPosition) {
       if (isNameValue) {
-         second += '"';
+         return qMakePair(QByteArray(), QByteArray());   //'=' is required for name-value-pair (RFC6265 section 5.2, rule 2)
       }
-      ++i;
-      while (i < length) {
-         char c = text.at(i);
-         if (c == '"') {
-            // end of quoted text
-            if (isNameValue) {
-               second += '"';
-            }
-            break;
-         } else if (c == '\\') {
-            if (isNameValue) {
-               second += '\\';
-            }
-            ++i;
-            if (i >= length)
-               // broken line
-            {
-               return qMakePair(QByteArray(), QByteArray());
-            }
-            c = text.at(i);
-         }
-
-         second += c;
-         ++i;
-      }
-
-      for ( ; i < length; ++i) {
-         char c = text.at(i);
-         if (c == ';') {
-            break;
-         }
-      }
-      position = i;
-   } else {
-      // no quote, we found format (2)
-      position = i;
-      for ( ; i < length; ++i) {
-         char c = text.at(i);
-         // for name value pairs, we want to parse until reaching the next ';'
-         // and not break when reaching a space char
-         if (c == ';' || ((isNameValue && (c == '\n' || c == '\r')) || (!isNameValue && isLWS(c)))) {
-            break;
-         }
-      }
-
-      second = text.mid(position, i - position).trimmed();
-      position = i;
+      equalsPosition = semiColonPosition; //no '=' means there is an attribute-name but no attribute-value
    }
 
-   if (second.isNull()) {
-      second.resize(0);   // turns into empty-but-not-null
+   QByteArray first = text.mid(position, equalsPosition - position).trimmed();
+   QByteArray second;
+   int secondLength = semiColonPosition - equalsPosition - 1;
+
+   if (secondLength > 0)  {
+      second = text.mid(equalsPosition + 1, secondLength).trimmed();
    }
+
+   position = semiColonPosition;
+
    return qMakePair(first, second);
 }
 
@@ -482,29 +343,19 @@ QByteArray QNetworkCookie::toRawForm(RawForm form) const
 
    result = d->name;
    result += '=';
-   if ((d->value.contains(';') ||
-         d->value.contains('"')) &&
-         (!d->value.startsWith('"') &&
-          !d->value.endsWith('"'))) {
-      result += '"';
 
-      QByteArray value = d->value;
-      value.replace('"', "\\\"");
-      result += value;
-
-      result += '"';
-   } else {
-      result += d->value;
-   }
+   result += d->value;
 
    if (form == Full) {
       // same as above, but encoding everything back
       if (isSecure()) {
          result += "; secure";
       }
+
       if (isHttpOnly()) {
          result += "; HttpOnly";
       }
+
       if (!isSessionCookie()) {
          result += "; expires=";
          result += QLocale::c().toString(d->expirationDate.toUTC(),
@@ -512,16 +363,25 @@ QByteArray QNetworkCookie::toRawForm(RawForm form) const
       }
       if (!d->domain.isEmpty()) {
          result += "; domain=";
-         QString domainNoDot = d->domain;
-         if (domainNoDot.startsWith(QLatin1Char('.'))) {
+
+         if (d->domain.startsWith(QLatin1Char('.'))) {
             result += '.';
-            domainNoDot = domainNoDot.mid(1);
+            result += QUrl::toAce(d->domain.mid(1));
+         } else {
+            QHostAddress hostAddr(d->domain);
+            if (hostAddr.protocol() == QAbstractSocket::IPv6Protocol) {
+               result += '[';
+               result += d->domain.toUtf8();
+               result += ']';
+            } else {
+               result += QUrl::toAce(d->domain);
+            }
          }
-         result += QUrl::toAce(domainNoDot);
       }
+
       if (!d->path.isEmpty()) {
          result += "; path=";
-         result += QUrl::toPercentEncoding(d->path, "/");
+         result += d->path.toUtf8();
       }
    }
    return result;
@@ -545,7 +405,7 @@ static const char zones[] =
    "eet\0" // 2
    "jst\0" // 9
    "\0";
-static int zoneOffsets[] = { -8, -8, -7, -7, -6, -6, -5, -5, -4, -3, 0, 0, 0, 1, 2, 9 };
+static const int zoneOffsets[] = {-8, -8, -7, -7, -6, -6, -5, -5, -4, -3, 0, 0, 0, 1, 2, 9 };
 
 static const char months[] =
    "jan\0"
@@ -587,9 +447,11 @@ static bool checkStaticArray(int &val, const QByteArray &dateString, int at, con
    if (dateString[at] < 'a' || dateString[at] > 'z') {
       return false;
    }
+
    if (val == -1 && dateString.length() >= at + 3) {
       int j = 0;
       int i = 0;
+
       while (i <= size) {
          const char *str = array + i;
          if (str[0] == dateString[at]
@@ -598,6 +460,7 @@ static bool checkStaticArray(int &val, const QByteArray &dateString, int at, con
             val = j;
             return true;
          }
+
          i += strlen(str) + 1;
          ++j;
       }
@@ -762,13 +625,14 @@ static QDateTime parseDateString(const QByteArray &dateString)
       // Could be month, day or year
       if (isNum) {
          int length = 1;
-         if (dateString.length() > at + 1
-               && isNumber(dateString[at + 1])) {
+         if (dateString.length() > at + 1 && isNumber(dateString[at + 1])) {
             ++length;
          }
+
          int x = atoi(dateString.mid(at, length).constData());
          if (year == -1 && (x > 31 || x == 0)) {
             year = x;
+
          } else {
             if (unknown[0] == -1) {
                unknown[0] = x;
@@ -824,9 +688,11 @@ static QDateTime parseDateString(const QByteArray &dateString)
       int currentValue = unknown[i];
       bool findMatchingMonth = couldBe[i] & ADAY && currentValue >= 29;
       bool findMatchingDay = couldBe[i] & AMONTH;
+
       if (!findMatchingMonth || !findMatchingDay) {
          continue;
       }
+
       for (int j = 0; j < 3; ++j) {
          if (j == i) {
             continue;
@@ -837,14 +703,17 @@ static QDateTime parseDateString(const QByteArray &dateString)
             } else if (k == 1 && !(findMatchingDay && (couldBe[j] & ADAY))) {
                continue;
             }
+
             int m = currentValue;
             int d = unknown[j];
             if (k == 0) {
                qSwap(m, d);
             }
+
             if (m == -1) {
                m = month;
             }
+
             bool found = true;
             switch (m) {
                case 2:
@@ -855,6 +724,7 @@ static QDateTime parseDateString(const QByteArray &dateString)
                      found = false;
                   }
                   break;
+
                case 4:
                case 6:
                case 9:
@@ -868,6 +738,7 @@ static QDateTime parseDateString(const QByteArray &dateString)
                      found = false;
                   }
             }
+
             if (k == 0) {
                findMatchingMonth = found;
             } else if (k == 1) {
@@ -991,7 +862,7 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
    // We do not support RFC 2965 Set-Cookie2-style cookies
 
    QList<QNetworkCookie> result;
-   QDateTime now = QDateTime::currentDateTime().toUTC();
+   const QDateTime now = QDateTime::currentDateTime().toUTC();
 
    int position = 0;
    const int length = cookieString.length();
@@ -1000,11 +871,12 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
 
       // The first part is always the "NAME=VALUE" part
       QPair<QByteArray, QByteArray> field = nextField(cookieString, position, true);
-      if (field.first.isEmpty() || field.second.isNull())
+
+      if (field.first.isEmpty()) {
          // parsing error
-      {
          break;
       }
+
       cookie.setName(field.first);
       cookie.setValue(field.second);
 
@@ -1019,6 +891,7 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                if (field.first == "expires") {
                   position -= field.second.length();
                   int end;
+
                   for (end = position; end < length; ++end)
                      if (isValueSeparator(cookieString.at(end))) {
                         break;
@@ -1027,44 +900,52 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                   QByteArray dateString = cookieString.mid(position, end - position).trimmed();
                   position = end;
                   QDateTime dt = parseDateString(dateString.toLower());
-                  if (!dt.isValid()) {
-                     return result;
-                  }
-                  cookie.setExpirationDate(dt);
-               } else if (field.first == "domain") {
-                  QByteArray rawDomain = field.second;
-                  QString maybeLeadingDot;
-                  if (rawDomain.startsWith('.')) {
-                     maybeLeadingDot = QLatin1Char('.');
-                     rawDomain = rawDomain.mid(1);
+
+                  if (dt.isValid()) {
+                     cookie.setExpirationDate(dt);
                   }
 
-                  QString normalizedDomain = QUrl::fromAce(QUrl::toAce(QString::fromUtf8(rawDomain)));
-                  if (normalizedDomain.isEmpty() && !rawDomain.isEmpty()) {
-                     return result;
+               } else if (field.first == "domain") {
+                  QByteArray rawDomain = field.second;
+                  if (!rawDomain.isEmpty()) {
+                     QString maybeLeadingDot;
+                     if (rawDomain.startsWith('.')) {
+                        maybeLeadingDot = QLatin1Char('.');
+                        rawDomain = rawDomain.mid(1);
+                     }
+                     QString normalizedDomain = QUrl::fromAce(QUrl::toAce(QString::fromUtf8(rawDomain)));
+                     if (!normalizedDomain.isEmpty()) {
+                        cookie.setDomain(maybeLeadingDot + normalizedDomain);
+                     } else {
+                        return result;
+                     }
                   }
-                  cookie.setDomain(maybeLeadingDot + normalizedDomain);
+
+
                } else if (field.first == "max-age") {
                   bool ok = false;
                   int secs = field.second.toInt(&ok);
-                  if (!ok) {
-                     return result;
+
+                  if (ok) {
+                     if (secs <= 0) {
+                        cookie.setExpirationDate(QDateTime::fromTime_t(0));
+                     } else {
+                        cookie.setExpirationDate(now.addSecs(secs));
+                     }
                   }
-                  cookie.setExpirationDate(now.addSecs(secs));
                } else if (field.first == "path") {
-                  QString path = QUrl::fromPercentEncoding(field.second);
-                  cookie.setPath(path);
+                  if (field.second.startsWith('/')) {
+                     cookie.setPath(QString::fromUtf8(field.second));
+                  } else {
+                     cookie.setPath(QString());
+                  }
+
                } else if (field.first == "secure") {
                   cookie.setSecure(true);
+
                } else if (field.first == "httponly") {
                   cookie.setHttpOnly(true);
-               } else if (field.first == "comment") {
-                  //cookie.setComment(QString::fromUtf8(field.second));
-               } else if (field.first == "version") {
-                  if (field.second != "1") {
-                     // oops, we don't know how to handle this cookie
-                     return result;
-                  }
+
                } else {
                   // got an unknown field in the cookie
                   // what do we do?
@@ -1082,10 +963,37 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
    return result;
 }
 
+void QNetworkCookie::normalize(const QUrl &url)
+{
+   if (d->path.isEmpty()) {
+      QString pathAndFileName = url.path();
+      QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QLatin1Char('/')) + 1);
+      if (defaultPath.isEmpty()) {
+         defaultPath = QLatin1Char('/');
+      }
+      d->path = defaultPath;
+   }
+
+   if (d->domain.isEmpty()) {
+      d->domain = url.host();
+   } else {
+      QHostAddress hostAddress(d->domain);
+      if (hostAddress.protocol() != QAbstractSocket::IPv4Protocol
+            && hostAddress.protocol() != QAbstractSocket::IPv6Protocol
+            && !d->domain.startsWith(QLatin1Char('.'))) {
+         d->domain.prepend(QLatin1Char('.'));
+      }
+   }
+}
+
 QDebug operator<<(QDebug s, const QNetworkCookie &cookie)
 {
+   // QDebugStateSaver saver(s);
+   // s.resetFormat().nospace();
+
    s.nospace() << "QNetworkCookie(" << cookie.toRawForm(QNetworkCookie::Full) << ')';
+
    return s.space();
 }
 
-QT_END_NAMESPACE
+

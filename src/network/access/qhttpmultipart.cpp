@@ -22,9 +22,9 @@
 
 #include <qhttpmultipart.h>
 #include <qhttpmultipart_p.h>
-#include <QtCore/qdatetime.h>       // for initializing the random number generator with QTime
-#include <QtCore/qmutex.h>
-#include <QtCore/qthreadstorage.h>
+#include <qdatetime.h>        // for initializing the random number generator with QTime
+#include <qmutex.h>
+#include <qthreadstorage.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -427,7 +427,8 @@ qint64 QHttpMultiPartIODevice::readData(char *data, qint64 maxSize)
    // skip the parts we have already read
    while (index < multiPart->parts.count() &&
           readPointer >= partOffsets.at(index) + multiPart->parts.at(index).d->size()
-          + multiPart->boundary.count() + 6) { // 6 == 2 boundary dashes, \r\n after boundary, \r\n after multipart
+          + multiPart->boundary.count() + 6) {
+      // 6 == 2 boundary dashes, \r\n after boundary, \r\n after multipart
       index++;
    }
 
@@ -447,9 +448,9 @@ qint64 QHttpMultiPartIODevice::readData(char *data, qint64 maxSize)
       }
 
       // check whether we need to read the data of the current part
-      if (bytesRead < maxSize && partIndex >= boundaryCount &&
-            partIndex < boundaryCount + multiPart->parts.at(index).d->size()) {
+      if (bytesRead < maxSize && partIndex >= boundaryCount && partIndex < boundaryCount + multiPart->parts.at(index).d->size()) {
          qint64 dataBytesRead = multiPart->parts[index].d->readData(data + bytesRead, maxSize - bytesRead);
+
          if (dataBytesRead == -1) {
             return -1;
          }

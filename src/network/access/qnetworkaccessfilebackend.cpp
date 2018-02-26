@@ -21,14 +21,20 @@
 ***********************************************************************/
 
 #include <qnetworkaccessfilebackend_p.h>
+#include <qurlinfo_p.h>
+
 #include <qfileinfo.h>
-#include <qurlinfo.h>
 #include <qdir.h>
 #include <qnoncontiguousbytedevice_p.h>
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
-QT_BEGIN_NAMESPACE
+QStringList QNetworkAccessFileBackendFactory::supportedSchemes() const
+{
+   QStringList schemes;
+   schemes << "file" << "qrc";
 
+   return schemes;
+}
 QNetworkAccessBackend *
 QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
       const QNetworkRequest &request) const
@@ -45,9 +51,10 @@ QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
    }
 
    QUrl url = request.url();
-   if (url.scheme().compare(QLatin1String("qrc"), Qt::CaseInsensitive) == 0 || url.isLocalFile()) {
+   if (url.scheme().compare("qrc", Qt::CaseInsensitive) == 0 || url.isLocalFile()) {
       return new QNetworkAccessFileBackend;
-   } else if (!url.isEmpty() && url.authority().isEmpty()) {
+
+   } else if (!url.scheme().isEmpty() && url.authority().isEmpty() && (url.scheme().length() > 1)) {
       // check if QFile could, in theory, open this URL via the file engines
       // it has to be in the format:
       //    prefix:path/to/file
@@ -56,9 +63,7 @@ QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
       // this construct here must match the one below in open()
       QFileInfo fi(url.toString(QUrl::RemoveAuthority | QUrl::RemoveFragment | QUrl::RemoveQuery));
       // On Windows and Symbian the drive letter is detected as the scheme.
-      if (fi.exists() && (url.scheme().isEmpty() || (url.scheme().length() == 1))) {
-         qWarning("QNetworkAccessFileBackendFactory: URL has no schema set, use file:// for files");
-      }
+
       if (fi.exists() || (op == QNetworkAccessManager::PutOperation && fi.dir().exists())) {
          return new QNetworkAccessFileBackend;
       }
@@ -83,6 +88,7 @@ void QNetworkAccessFileBackend::open()
    if (url.host() == QLatin1String("localhost")) {
       url.setHost(QString());
    }
+
 #if !defined(Q_OS_WIN)
    // do not allow UNC paths on Unix
    if (!url.host().isEmpty()) {
@@ -94,7 +100,7 @@ void QNetworkAccessFileBackend::open()
    }
 #endif // !defined(Q_OS_WIN)
    if (url.path().isEmpty()) {
-      url.setPath(QLatin1String("/"));
+      url.setPath("/");
    }
    setUrl(url);
 
@@ -109,7 +115,7 @@ void QNetworkAccessFileBackend::open()
    file.setFileName(fileName);
 
    if (operation() == QNetworkAccessManager::GetOperation) {
-      if (!loadFileInfo()) {
+      if (! loadFileInfo()) {
          return;
       }
    }
@@ -119,12 +125,14 @@ void QNetworkAccessFileBackend::open()
       case QNetworkAccessManager::GetOperation:
          mode = QIODevice::ReadOnly;
          break;
+
       case QNetworkAccessManager::PutOperation:
          mode = QIODevice::WriteOnly | QIODevice::Truncate;
          uploadByteDevice = createUploadByteDevice();
          QObject::connect(uploadByteDevice, SIGNAL(readyRead()), this, SLOT(uploadReadyReadSlot()));
          QMetaObject::invokeMethod(this, "uploadReadyReadSlot", Qt::QueuedConnection);
          break;
+
       default:
          Q_ASSERT_X(false, "QNetworkAccessFileBackend::open",
                     "Got a request operation I cannot handle!!");
@@ -147,6 +155,7 @@ void QNetworkAccessFileBackend::open()
       } else {
          error(QNetworkReply::ContentNotFoundError, msg);
       }
+
       finished();
    }
 }
@@ -157,34 +166,35 @@ void QNetworkAccessFileBackend::uploadReadyReadSlot()
       return;
    }
 
-   forever {
+   while (true) {
       qint64 haveRead;
       const char *readPointer = uploadByteDevice->readPointer(-1, haveRead);
-      if (haveRead == -1)
-      {
+
+      if (haveRead == -1) {
          // EOF
          hasUploadFinished = true;
          file.flush();
          file.close();
          finished();
          break;
-      } else if (haveRead == 0 || readPointer == 0)
-      {
+
+      } else if (haveRead == 0 || readPointer == 0) {
          // nothing to read right now, we will be called again later
          break;
+
       } else {
          qint64 haveWritten;
          haveWritten = file.write(readPointer, haveRead);
 
-         if (haveWritten < 0)
-         {
+         if (haveWritten < 0) {
             // write error!
             QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Write error writing to %1: %2")
-            .arg(url().toString(), file.errorString());
+                          .arg(url().toString(), file.errorString());
             error(QNetworkReply::ProtocolFailure, msg);
 
             finished();
             return;
+
          } else {
             uploadByteDevice->advanceReadPointer(haveWritten);
          }
@@ -239,6 +249,7 @@ bool QNetworkAccessFileBackend::readMoreFromFile()
       QByteArray data;
       data.reserve(wantToRead);
       qint64 actuallyRead = file.read(data.data(), wantToRead);
+
       if (actuallyRead <= 0) {
          // EOF or error
          if (file.error() != QFile::NoError) {
@@ -265,4 +276,5 @@ bool QNetworkAccessFileBackend::readMoreFromFile()
    return true;
 }
 
-QT_END_NAMESPACE
+
+

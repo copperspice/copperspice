@@ -30,7 +30,6 @@
 
 struct sockaddr;
 
-QT_BEGIN_NAMESPACE
 
 class QHostAddressPrivate;
 
@@ -49,6 +48,8 @@ class Q_NETWORK_EXPORT QIPv6Address
 };
 
 typedef QIPv6Address Q_IPV6ADDR;
+class QHostAddress;
+Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QHostAddress
 {
@@ -67,16 +68,17 @@ class Q_NETWORK_EXPORT QHostAddress
    explicit QHostAddress(quint32 ip4Addr);
    explicit QHostAddress(const quint8 *ip6Addr);
    explicit QHostAddress(const Q_IPV6ADDR &ip6Addr);
-   explicit QHostAddress(const sockaddr *sockaddr);
+
+   explicit QHostAddress(const sockaddr *address);
    explicit QHostAddress(const QString &address);
-   QHostAddress(const QHostAddress &address);
+   QHostAddress(const QHostAddress &other);
    QHostAddress(SpecialAddress address);
    ~QHostAddress();
 
    void setAddress(quint32 ip4Addr);
    void setAddress(const quint8 *ip6Addr);
    void setAddress(const Q_IPV6ADDR &ip6Addr);
-   void setAddress(const sockaddr *sockaddr);
+   void setAddress(const sockaddr *address);
    bool setAddress(const QString &address);
 
    QAbstractSocket::NetworkLayerProtocol protocol() const;
@@ -133,13 +135,11 @@ inline bool operator ==(QHostAddress::SpecialAddress address1, const QHostAddres
 }
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);
-Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 
-#ifndef QT_NO_DATASTREAM
 Q_NETWORK_EXPORT QDataStream &operator<<(QDataStream &, const QHostAddress &);
 Q_NETWORK_EXPORT QDataStream &operator>>(QDataStream &, QHostAddress &);
-#endif
 
-QT_END_NAMESPACE
+
+
 
 #endif // QHOSTADDRESS_H

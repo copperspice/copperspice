@@ -23,27 +23,15 @@
 #ifndef QNETWORKCONFIGMANAGER_H
 #define QNETWORKCONFIGMANAGER_H
 
-#ifdef QT_MOBILITY_BEARER
-# include <qmobilityglobal.h>
-#endif
-
-#include <QtCore/qobject.h>
-#include <QtNetwork/qnetworkconfiguration.h>
+#include <qobject.h>
+#include <qnetworkconfiguration.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-#ifndef QT_MOBILITY_BEARER
-QT_BEGIN_NAMESPACE
-#define QNetworkConfigurationManagerExport Q_NETWORK_EXPORT
-
-#else
-QTM_BEGIN_NAMESPACE
-#define QNetworkConfigurationManagerExport Q_BEARER_EXPORT
-
-#endif
 
 class QNetworkConfigurationManagerPrivate;
-class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public QObject
+
+class Q_NETWORK_EXPORT QNetworkConfigurationManager : public QObject
 {
    NET_CS_OBJECT(QNetworkConfigurationManager)
 
@@ -57,7 +45,6 @@ class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public Q
       DataStatistics = 0x00000020,
       NetworkSessionRequired = 0x00000040
    };
-
    using Capabilities = QFlags<Capability>;
 
    explicit QNetworkConfigurationManager(QObject *parent = nullptr);
@@ -66,7 +53,7 @@ class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public Q
    QNetworkConfigurationManager::Capabilities capabilities() const;
 
    QNetworkConfiguration defaultConfiguration() const;
-   QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags = 0) const;
+   QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags = QNetworkConfiguration::StateFlags()) const;
    QNetworkConfiguration configurationFromIdentifier(const QString &identifier) const;
 
    bool isOnline() const;
@@ -88,15 +75,13 @@ class QNetworkConfigurationManagerExport QNetworkConfigurationManager : public Q
 
    NET_CS_SIGNAL_1(Public, void updateCompleted())
    NET_CS_SIGNAL_2(updateCompleted)
+
+  private:
+    QNetworkConfigurationManager (const QNetworkConfigurationManager &) = delete;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QNetworkConfigurationManager::Capabilities)
 
-#ifndef QT_MOBILITY_BEARER
-QT_END_NAMESPACE
-#else
-QTM_END_NAMESPACE
-#endif
 
 #endif // QT_NO_BEARERMANAGEMENT
 

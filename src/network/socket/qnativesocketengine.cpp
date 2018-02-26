@@ -92,7 +92,7 @@ QNativeSocketEnginePrivate::QNativeSocketEnginePrivate() :
 {
 
 #if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
-    QSysInfo::machineHostName();        // this initializes ws2_32.dll
+   QSysInfo::machineHostName();        // this initializes ws2_32.dll
 #endif
 }
 
@@ -205,14 +205,14 @@ void QNativeSocketEnginePrivate::setError(QAbstractSocket::SocketError error, Er
          socketErrorString = QNativeSocketEngine::tr("The proxy type is invalid for this operation");
          break;
       case TemporaryErrorString:
-        socketErrorString = QNativeSocketEngine::tr("Temporary error");
-        break;
+         socketErrorString = QNativeSocketEngine::tr("Temporary error");
+         break;
       case NetworkDroppedConnectionErrorString:
-        socketErrorString = QNativeSocketEngine::tr("Network dropped connection on reset");
-        break;
+         socketErrorString = QNativeSocketEngine::tr("Network dropped connection on reset");
+         break;
       case ConnectionResetErrorString:
-        socketErrorString = QNativeSocketEngine::tr("Connection reset by peer");
-        break;
+         socketErrorString = QNativeSocketEngine::tr("Connection reset by peer");
+         break;
       case UnknownSocketErrorString:
          socketErrorString = QNativeSocketEngine::tr("Unknown error");
          break;
@@ -221,27 +221,30 @@ void QNativeSocketEnginePrivate::setError(QAbstractSocket::SocketError error, Er
 
 QHostAddress QNativeSocketEnginePrivate::adjustAddressProtocol(const QHostAddress &address) const
 {
-    QAbstractSocket::NetworkLayerProtocol targetProtocol = socketProtocol;
-    if (Q_LIKELY(targetProtocol == QAbstractSocket::UnknownNetworkLayerProtocol))
-        return address;
+   QAbstractSocket::NetworkLayerProtocol targetProtocol = socketProtocol;
+   if (Q_LIKELY(targetProtocol == QAbstractSocket::UnknownNetworkLayerProtocol)) {
+      return address;
+   }
 
-    QAbstractSocket::NetworkLayerProtocol sourceProtocol = address.protocol();
+   QAbstractSocket::NetworkLayerProtocol sourceProtocol = address.protocol();
 
-    if (targetProtocol == QAbstractSocket::AnyIPProtocol)
-        targetProtocol = QAbstractSocket::IPv6Protocol;
-    if (targetProtocol == QAbstractSocket::IPv6Protocol && sourceProtocol == QAbstractSocket::IPv4Protocol) {
-        // convert to IPv6 v4-mapped address. This always works
-        return QHostAddress(address.toIPv6Address());
-    }
+   if (targetProtocol == QAbstractSocket::AnyIPProtocol) {
+      targetProtocol = QAbstractSocket::IPv6Protocol;
+   }
+   if (targetProtocol == QAbstractSocket::IPv6Protocol && sourceProtocol == QAbstractSocket::IPv4Protocol) {
+      // convert to IPv6 v4-mapped address. This always works
+      return QHostAddress(address.toIPv6Address());
+   }
 
-    if (targetProtocol == QAbstractSocket::IPv4Protocol && sourceProtocol == QAbstractSocket::IPv6Protocol) {
-        // convert to IPv4 if the source is a v4-mapped address
-        quint32 ip4 = address.toIPv4Address();
-        if (ip4)
-            return QHostAddress(ip4);
-    }
+   if (targetProtocol == QAbstractSocket::IPv4Protocol && sourceProtocol == QAbstractSocket::IPv6Protocol) {
+      // convert to IPv4 if the source is a v4-mapped address
+      quint32 ip4 = address.toIPv4Address();
+      if (ip4) {
+         return QHostAddress(ip4);
+      }
+   }
 
-    return address;
+   return address;
 }
 bool QNativeSocketEnginePrivate::checkProxy(const QHostAddress &address)
 {
@@ -344,17 +347,17 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType,
       // Set the broadcasting flag if it's a UDP socket.
       if (!setOption(BroadcastSocketOption, 1)) {
          d->setError(QAbstractSocket::UnsupportedSocketOperationError,
-                  QNativeSocketEnginePrivate::BroadcastingInitFailedErrorString);
+                     QNativeSocketEnginePrivate::BroadcastingInitFailedErrorString);
          close();
          return false;
-       }
+      }
 
 
 
-        // Set some extra flags that are interesting to us, but accept failure
-        setOption(ReceivePacketInformation, 1);
-        setOption(ReceiveHopLimit, 1);
-    }
+      // Set some extra flags that are interesting to us, but accept failure
+      setOption(ReceivePacketInformation, 1);
+      setOption(ReceiveHopLimit, 1);
+   }
 
    // Make sure we receive out-of-band data
    if (socketType == QAbstractSocket::TcpSocket
@@ -402,8 +405,8 @@ bool QNativeSocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
    // determine socket type and protocol
    if (!d->fetchConnectionParameters()) {
 #if defined (QNATIVESOCKETENGINE_DEBUG)
-      qDebug("QNativeSocketEngine::initialize(socketDescriptor == %i) failed: %s",
-             socketDescriptor, d->socketErrorString.toLatin1().constData());
+      qDebug() << "QNativeSocketEngine::initialize(socketDescriptor) failed:"
+               << socketDescriptor << d->socketErrorString;
 #endif
       d->socketDescriptor = -1;
       return false;
@@ -551,7 +554,7 @@ bool QNativeSocketEngine::bind(const QHostAddress &address, quint16 port)
 
    Q_CHECK_STATE(QNativeSocketEngine::bind(), QAbstractSocket::UnconnectedState, false);
 
-    if (!d->nativeBind(d->adjustAddressProtocol(address), port)) {
+   if (!d->nativeBind(d->adjustAddressProtocol(address), port)) {
       return false;
    }
 
@@ -607,11 +610,11 @@ int QNativeSocketEngine::accept()
 
 qint64 QNativeSocketEngine::bytesAvailable() const
 {
-    Q_D(const QNativeSocketEngine);
-    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::bytesAvailable(), -1);
-    Q_CHECK_NOT_STATE(QNativeSocketEngine::bytesAvailable(), QAbstractSocket::UnconnectedState, -1);
+   Q_D(const QNativeSocketEngine);
+   Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::bytesAvailable(), -1);
+   Q_CHECK_NOT_STATE(QNativeSocketEngine::bytesAvailable(), QAbstractSocket::UnconnectedState, -1);
 
-    return d->nativeBytesAvailable();
+   return d->nativeBytesAvailable();
 }
 #ifndef QT_NO_UDPSOCKET
 #ifndef QT_NO_NETWORKINTERFACE
@@ -626,17 +629,17 @@ bool QNativeSocketEngine::joinMulticastGroup(const QHostAddress &groupAddress,
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::joinMulticastGroup(), false);
    Q_CHECK_STATE(QNativeSocketEngine::joinMulticastGroup(), QAbstractSocket::BoundState, false);
    Q_CHECK_TYPE(QNativeSocketEngine::joinMulticastGroup(), QAbstractSocket::UdpSocket, false);
-    // if the user binds a socket to an IPv6 address (or QHostAddress::Any) and
-    // then attempts to join an IPv4 multicast group, this won't work on
-    // Windows. In order to make this cross-platform, we warn & fail on all
-    // platforms.
-    if (groupAddress.protocol() == QAbstractSocket::IPv4Protocol &&
-        (d->socketProtocol == QAbstractSocket::IPv6Protocol ||
-         d->socketProtocol == QAbstractSocket::AnyIPProtocol)) {
-        qWarning("QAbstractSocket: cannot bind to QHostAddress::Any (or an IPv6 address) and join an IPv4 multicast group;"
-                 " bind to QHostAddress::AnyIPv4 instead if you want to do this");
-        return false;
-    }
+   // if the user binds a socket to an IPv6 address (or QHostAddress::Any) and
+   // then attempts to join an IPv4 multicast group, this won't work on
+   // Windows. In order to make this cross-platform, we warn & fail on all
+   // platforms.
+   if (groupAddress.protocol() == QAbstractSocket::IPv4Protocol &&
+         (d->socketProtocol == QAbstractSocket::IPv6Protocol ||
+          d->socketProtocol == QAbstractSocket::AnyIPProtocol)) {
+      qWarning("QAbstractSocket: cannot bind to QHostAddress::Any (or an IPv6 address) and join an IPv4 multicast group;"
+               " bind to QHostAddress::AnyIPv4 instead if you want to do this");
+      return false;
+   }
    return d->nativeJoinMulticastGroup(groupAddress, iface);
 }
 
@@ -701,13 +704,13 @@ qint64 QNativeSocketEngine::pendingDatagramSize() const
 
 
 qint64 QNativeSocketEngine::readDatagram(char *data, qint64 maxSize, QIpPacketHeader *header,
-                                         PacketHeaderOptions options)
+      PacketHeaderOptions options)
 {
    Q_D(QNativeSocketEngine);
    Q_CHECK_VALID_SOCKETLAYER(QNativeSocketEngine::readDatagram(), -1);
-   Q_CHECK_TYPE(QNativeSocketEngine::readDatagram(), QAbstractSocket::UdpSocket, false);
+   Q_CHECK_TYPE(QNativeSocketEngine::readDatagram(), QAbstractSocket::UdpSocket, -1);
 
- return d->nativeReceiveDatagram(data, maxSize, header, options);
+   return d->nativeReceiveDatagram(data, maxSize, header, options);
 }
 
 
@@ -1095,8 +1098,8 @@ bool QReadNotifier::event(QEvent *e)
       engine->readNotification();
       return true;
    } else if (e->type() == QEvent::SockClose) {
-        engine->closeNotification();
-        return true;
+      engine->closeNotification();
+      return true;
    }
    return QSocketNotifier::event(e);
 }

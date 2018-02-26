@@ -20,15 +20,14 @@
 *
 ***********************************************************************/
 
-#ifndef QFTP_H
-#define QFTP_H
+#ifndef QFTP_P_H
+#define QFTP_P_H
 
-#include <QtCore/qstring.h>
-#include <QtNetwork/qurlinfo.h>
-#include <QtCore/qobject.h>
+#include <qurlinfo_p.h>
+
+#include <qstring.h>
+#include <qobject.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_FTP
 
@@ -160,7 +159,5 @@ class Q_NETWORK_EXPORT QFtp : public QObject
 };
 
 #endif // QT_NO_FTP
-
-QT_END_NAMESPACE
 
 #endif // QFTP_H

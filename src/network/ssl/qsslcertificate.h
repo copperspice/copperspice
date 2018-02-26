@@ -31,10 +31,9 @@
 #include <qsharedpointer.h>
 #include <qssl.h>
 #include <qcontainerfwd.h>
+#include <qmetatype.h>
 
-typedef struct x509_st X509; // ### check if this works
-
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QDateTime;
 class QIODevice;
@@ -139,6 +138,6 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo in
 
 Q_DECLARE_METATYPE(QSslCertificate)
 
-#endif // QT_NO_OPENSSL
+#endif
 
 #endif

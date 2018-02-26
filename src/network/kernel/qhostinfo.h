@@ -42,7 +42,7 @@ class Q_NETWORK_EXPORT QHostInfo
       UnknownError
    };
 
-   QHostInfo(int lookupId = -1);
+   explicit QHostInfo(int lookupId = -1);
    QHostInfo(const QHostInfo &d);
    QHostInfo &operator=(const QHostInfo &d);
    ~QHostInfo();

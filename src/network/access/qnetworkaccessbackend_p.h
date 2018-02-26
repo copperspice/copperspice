@@ -24,7 +24,8 @@
 #define QNETWORKACCESSBACKEND_P_H
 
 #include <qnetworkreplyimpl_p.h>
-#include <QtCore/qobject.h>
+#include <qobject.h>
+#include <qsslerror.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -32,6 +33,7 @@ class QAuthenticator;
 class QNetworkProxy;
 class QNetworkProxyQuery;
 class QNetworkRequest;
+class QStringList;
 class QUrl;
 class QUrlInfo;
 class QSslConfiguration;
@@ -87,8 +89,7 @@ class QNetworkAccessBackend : public QObject
    // slot-like:
    virtual void downstreamReadyWrite();
    virtual void setDownstreamLimited(bool b);
-   virtual void setReadBufferSize(qint64 size);
-   virtual void emitReadBufferFreed(qint64 size);
+
    virtual void copyFinished(QIODevice *);
    virtual void ignoreSslErrors();
    virtual void ignoreSslErrors(const QList<QSslError> &errors);
@@ -172,7 +173,7 @@ class QNetworkAccessBackend : public QObject
    char *getDownloadBuffer(qint64);
 
    QSharedPointer<QNonContiguousByteDevice> uploadByteDevice;
-  
+
    NET_CS_SLOT_1(Protected, void finished())
    NET_CS_SLOT_2(finished)
 
@@ -192,6 +193,9 @@ class QNetworkAccessBackend : public QObject
 
    NET_CS_SLOT_1(Protected, void redirectionRequested(const QUrl &destination))
    NET_CS_SLOT_2(redirectionRequested)
+
+   NET_CS_SLOT_1(Protected, void encrypted())
+   NET_CS_SLOT_2(encrypted)
 
    NET_CS_SLOT_1(Protected, void sslErrors(const QList <QSslError> &errors))
    NET_CS_SLOT_2(sslErrors)
@@ -217,6 +221,8 @@ class QNetworkAccessBackendFactory
  public:
    QNetworkAccessBackendFactory();
    virtual ~QNetworkAccessBackendFactory();
+
+   virtual QStringList supportedSchemes() const = 0;
    virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const = 0;
 };
 

@@ -28,7 +28,7 @@
 #include <qsslkey.h>
 #include <qsslconfiguration_p.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
 #include <qsslcontext_openssl_p.h>
 #else
 class QSslContext;

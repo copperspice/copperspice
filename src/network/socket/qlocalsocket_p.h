@@ -33,9 +33,10 @@
 #   include <qtcpsocket.h>
 
 #elif defined(Q_OS_WIN)
-#   include <qwindowspipewriter_p.h>
 #   include <qringbuffer_p.h>
-#   include <qwineventnotifier_p.h>
+#   include <qwindowspipereader_p.h>
+#   include <qwindowspipewriter_p.h>
+#   include <qwineventnotifier.h>
 
 #else
 #   include <qabstractsocketengine_p.h>
@@ -47,7 +48,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(Q_OS_WIN) || defined(QT_LOCALSOCKET_TCP)
+#if ! defined(Q_OS_WIN) || defined(QT_LOCALSOCKET_TCP)
 class QLocalUnixSocket : public QTcpSocket
 {
 
@@ -98,26 +99,32 @@ class QLocalSocketPrivate : public QIODevicePrivate
    ~QLocalSocketPrivate();
    void destroyPipeHandles();
    void setErrorString(const QString &function);
-   void _q_notified();
+   // GONE void _q_notified();
    void _q_canWrite();
    void _q_pipeClosed();
-   void _q_emitReadyRead();
-   DWORD checkPipeState();
-   void startAsyncRead();
-   bool completeAsyncRead();
-   void checkReadyRead();
+   void _q_winError(ulong windowsError, const QString &function);
+
+   // GONE void _q_emitReadyRead();
+   // GONE DWORD checkPipeState();
+   // GONE  void startAsyncRead();
+   // GONE bool completeAsyncRead();
+   // GONE void checkReadyRead();
+
    HANDLE handle;
-   OVERLAPPED overlapped;
+   // GONE OVERLAPPED overlapped;
+   QRingBuffer writeBuffer;
    QWindowsPipeWriter *pipeWriter;
-   qint64 readBufferMaxSize;
-   QRingBuffer readBuffer;
-   int actualReadBufferSize;
-   QWinEventNotifier *dataReadNotifier;
+   QWindowsPipeReader *pipeReader;
+
+   // GONE qint64 readBufferMaxSize;
+   // GONE QRingBuffer readBuffer;
+   // GONE int actualReadBufferSize;
+   // GONE WinEventNotifier *dataReadNotifier;
    QLocalSocket::LocalSocketError error;
-   bool readSequenceStarted;
-   bool pendingReadyRead;
-   bool pipeClosed;
-   static const qint64 initialReadBufferSize = 4096;
+   // GONE bool readSequenceStarted;
+   // GONE bool pendingReadyRead;
+   // GONE bool pipeClosed;
+   // GONE static const qint64 initialReadBufferSize = 4096;
 
 #else
    QLocalUnixSocket unixSocket;
@@ -139,8 +146,6 @@ class QLocalSocketPrivate : public QIODevicePrivate
    QString fullServerName;
    QLocalSocket::LocalSocketState state;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_LOCALSOCKET
 

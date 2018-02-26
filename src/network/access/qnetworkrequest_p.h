@@ -42,7 +42,7 @@ class QNetworkHeadersPrivate
    RawHeadersList rawHeaders;
    CookedHeadersMap cookedHeaders;
    AttributesMap attributes;
-   QWeakPointer<QObject> originatingObject;
+   QPointer<QObject> originatingObject;
 
    RawHeadersList::ConstIterator findRawHeader(const QByteArray &key) const;
    RawHeadersList allRawHeaders() const;

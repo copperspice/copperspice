@@ -66,6 +66,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    void connectToServer(const QString &name, OpenMode openMode = ReadWrite);
    void disconnectFromServer();
 
+   void setServerName(const QString &name);
    QString serverName() const;
    QString fullServerName() const;
 
@@ -74,6 +75,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    qint64 bytesAvailable() const override;
    qint64 bytesToWrite() const override;
    bool canReadLine() const override;
+   bool open(OpenMode openMode = ReadWrite) override;
    void close() override;
 
    LocalSocketError error() const;
@@ -120,8 +122,8 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SLOT_2(_q_error)
 
 #elif defined(Q_OS_WIN)
-   NET_CS_SLOT_1(Private, void _q_notified())
-   NET_CS_SLOT_2(_q_notified)
+   // GONE NET_CS_SLOT_1(Private, void _q_notified())
+   // GONE NET_CS_SLOT_2(_q_notified)
 
    NET_CS_SLOT_1(Private, void _q_canWrite())
    NET_CS_SLOT_2(_q_canWrite)
@@ -129,8 +131,11 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SLOT_1(Private, void _q_pipeClosed())
    NET_CS_SLOT_2(_q_pipeClosed)
 
-   NET_CS_SLOT_1(Private, void _q_emitReadyRead())
-   NET_CS_SLOT_2(_q_emitReadyRead)
+   NET_CS_SLOT_1(Private, void _q_winError(ulong, const QString &))
+   NET_CS_SLOT_2(_q_winError)
+
+   // GONE NET_CS_SLOT_1(Private, void _q_emitReadyRead())
+   // GONE NET_CS_SLOT_2(_q_emitReadyRead)
 
 #else
    NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState un_named_arg1))

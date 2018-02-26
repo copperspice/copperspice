@@ -28,7 +28,7 @@
 #include <qnetworkproxy.h>
 #include <qauthenticator_p.h>
 
-#if ! defined(QT_NO_NETWORKPROXY) && ! defined(QT_NO_HTTP)
+#if ! defined(QT_NO_NETWORKPROXY)
 
 class QTcpSocket;
 class QHttpNetworkReply;

@@ -23,10 +23,10 @@
 #ifndef QSSLERROR_H
 #define QSSLERROR_H
 
-#include <QtCore/qvariant.h>
-#include <QtNetwork/qsslcertificate.h>
+#include <qvariant.h>
+#include <qsslcertificate.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QSslErrorPrivate;
 
@@ -102,12 +102,8 @@ class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError &error);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslError::SslError &error);
 
-#else
 
-class Q_NETWORK_EXPORT QSslError
-{
-};
 
-#endif // QT_NO_OPENSSL
+#endif
 
 #endif

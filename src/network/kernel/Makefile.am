@@ -10,7 +10,6 @@ NETWORK_PUBLIC_INCLUDES += \
 	QDnsLookup \
 	QHostAddress \
 	QHostInfo \
-	QUrlInfo \
 	QNetworkAddressEntry \
 	QNetworkProxy \
 	QNetworkProxyFactory \
@@ -28,7 +27,6 @@ NETWORK_KERNEL_INCLUDES = \
 	qdnslookup.h \
 	qhostaddress.h \
 	qhostinfo.h \
-	qurlinfo.h \
 	qnetworkaddressentry.h \
 	qnetworkproxy.h \
 	qnetworkproxyfactory.h \
@@ -43,7 +41,7 @@ NETWORK_KERNEL_PRIVATE_INCLUDES = \
 	qnetworkproxy_p.h \
 	qhostaddress_p.h \
 	qnetworkinterface_p.h \
-	qnetworkinterface_win_p.h
+	qurlinfo_p.h
 
 NETWORK_INCLUDES += $(NETWORK_KERNEL_INCLUDES)
 NETWORK_PRIVATE_INCLUDES += $(NETWORK_KERNEL_PRIVATE_INCLUDES)

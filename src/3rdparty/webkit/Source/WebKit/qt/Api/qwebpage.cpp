@@ -125,6 +125,8 @@
 #include "runtime/InitializeThreading.h"
 #include "wtf/Threading.h"
 
+#include <qhttpheader_p.h>
+
 #include <QApplication>
 #include <QBasicTimer>
 #include <QBitArray>
@@ -135,7 +137,6 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QFileDialog>
-#include <QHttpRequestHeader>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QNetworkProxy>
@@ -376,8 +377,8 @@ QWebPagePrivate::QWebPagePrivate(QWebPage *qq)
     memset(actions, 0, sizeof(actions));
 
     PageGroup::setShouldTrackVisitedLinks(true);
-    
-#if ENABLE(NOTIFICATIONS)    
+
+#if ENABLE(NOTIFICATIONS)
     NotificationPresenterClientQt::notificationPresenter()->addClient();
 #endif
 }
@@ -397,7 +398,7 @@ QWebPagePrivate::~QWebPagePrivate()
 #endif
     delete settings;
     delete page;
-    
+
     if (inspector)
         inspector->setPage(0);
 
@@ -3325,7 +3326,7 @@ void QWebPage::updatePositionDependentActions(const QPoint &pos)
 
     d->page->contextMenuController()->setHitTestResult(result);
     d->page->contextMenuController()->populate();
-    
+
 #if ENABLE(INSPECTOR)
     if (d->page->inspectorController()->enabled())
         d->page->contextMenuController()->addInspectElementItem();
@@ -3728,7 +3729,7 @@ QWebPluginFactory *QWebPage::pluginFactory() const
     The default implementation returns the following value:
 
     "Mozilla/5.0 (%Platform%%Security%%Subplatform%) AppleWebKit/%WebKitVersion% (KHTML, like Gecko) %AppVersion Safari/%WebKitVersion%"
-  
+
     In this string the following values are replaced at run-time:
     \list
     \o %Platform% expands to the windowing system followed by "; " if it is not Windows (e.g. "X11; ").
@@ -3764,9 +3765,9 @@ QString QWebPage::userAgentForUrl(const QUrl&) const
 #endif
     );
 
-#if defined(QT_NO_OPENSSL)
-        // No SSL support
-        firstPartTemp += QString::fromLatin1("N; ");
+#if ! defined(QT_SSL)
+   // No SSL support
+   firstPartTemp += QString::fromLatin1("N; ");
 #endif
 
         // Operating system
@@ -3909,7 +3910,7 @@ void QWebPage::_q_cleanupLeakMessages()
 	d->_q_cleanupLeakMessages();
 }
 
-#ifndef QT_NO_ACTION  
+#ifndef QT_NO_ACTION
 void QWebPage::_q_webActionTriggered(bool checked)
 {
    //Q_D(ErrorPageExtensionReturn);

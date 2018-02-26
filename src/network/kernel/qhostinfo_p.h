@@ -23,19 +23,19 @@
 #ifndef QHOSTINFO_P_H
 #define QHOSTINFO_P_H
 
-#include <QtCore/qcoreapplication.h>
+#include <qcoreapplication.h>
 #include <qcoreapplication_p.h>
-#include <QtNetwork/qhostinfo.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qpointer.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qthreadpool.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qrunnable.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qqueue.h>
+#include <qhostinfo.h>
+#include <qmutex.h>
+#include <qwaitcondition.h>
+#include <qobject.h>
+#include <qpointer.h>
+#include <qthread.h>
+#include <qthreadpool.h>
+#include <qmutex.h>
+#include <qrunnable.h>
+#include <qlist.h>
+#include <qqueue.h>
 #include <QElapsedTimer>
 #include <QCache>
 #include <QNetworkSession>
@@ -79,6 +79,7 @@ class QHostInfoPrivate
         errorStr(QLatin1String(QT_TRANSLATE_NOOP("QHostInfo", "Unknown error"))),
         lookupId(0) {
    }
+
 #ifndef QT_NO_BEARERMANAGEMENT
    //not a public API yet
    static QHostInfo fromName(const QString &hostName, QSharedPointer<QNetworkSession> networkSession);
@@ -93,10 +94,10 @@ class QHostInfoPrivate
 
 // These functions are outside of the QHostInfo class and strictly internal.
 // Do NOT use them outside of QAbstractSocket.
-QHostInfo Q_NETWORK_EXPORT qt_qhostinfo_lookup(const QString &name, QObject *receiver, const char *member, bool *valid,
-      int *id);
+QHostInfo Q_NETWORK_EXPORT qt_qhostinfo_lookup(const QString &name, QObject *receiver, const char *member, bool *valid, int *id);
 void qt_qhostinfo_clear_cache();
 void qt_qhostinfo_enable_cache(bool e);
+void qt_qhostinfo_cache_inject(const QString &hostname, const QHostInfo &resolution);
 
 class QHostInfoCache
 {
@@ -126,7 +127,7 @@ class QHostInfoCache
 class QHostInfoRunnable : public QRunnable
 {
  public:
-   QHostInfoRunnable (QString hn, int i);
+   QHostInfoRunnable (const QString &hn, int i);
    void run() override;
 
    QString toBeLookedUp;

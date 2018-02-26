@@ -25,19 +25,8 @@
 
 #include <qplatformdefs.h>
 
-#ifndef QT_NO_HTTP
-
 #ifndef QT_NO_COMPRESS
-#include <zlib.h>
-static const unsigned char gz_magic[2] = {0x1f, 0x8b}; // gzip magic header
-
-// gzip flag byte
-#define HEAD_CRC     0x02 // bit 1 set: header CRC present
-#define EXTRA_FIELD  0x04 // bit 2 set: extra field present
-#define ORIG_NAME    0x08 // bit 3 set: original file name present
-#define COMMENT      0x10 // bit 4 set: file comment present
-#define RESERVED     0xE0 // bits 5..7: reserved
-#define CHUNK 16384
+struct z_stream_s;
 #endif
 
 #include <QtNetwork/qtcpsocket.h>
@@ -111,17 +100,32 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    void setUserProvidedDownloadBuffer(char *);
    char *userProvidedDownloadBuffer();
 
+   void abort();
+   bool isAborted() const;
    bool isFinished() const;
 
    bool isPipeliningUsed() const;
+   bool isSpdyUsed() const;
+   void setSpdyWasUsed(bool spdy);
 
+   bool isRedirecting() const;
    QHttpNetworkConnection *connection();
 
-#ifndef QT_NO_OPENSSL
+   QUrl redirectUrl() const;
+   void setRedirectUrl(const QUrl &url);
+   static bool isHttpRedirect(int statusCode);
+
+#ifdef QT_SSL
    QSslConfiguration sslConfiguration() const;
    void setSslConfiguration(const QSslConfiguration &config);
    void ignoreSslErrors();
    void ignoreSslErrors(const QList<QSslError> &errors);
+
+   NET_CS_SIGNAL_1(Public, void encrypted())
+   NET_CS_SIGNAL_2(encrypted)
+
+   NET_CS_SIGNAL_1(Public, void preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(preSharedKeyAuthenticationRequired, authenticator)
 
    NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &errors))
    NET_CS_SIGNAL_2(sslErrors, errors)
@@ -129,18 +133,22 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
 
    NET_CS_SIGNAL_1(Public, void readyRead())
    NET_CS_SIGNAL_2(readyRead)
+
    NET_CS_SIGNAL_1(Public, void finished())
    NET_CS_SIGNAL_2(finished)
+
    NET_CS_SIGNAL_1(Public, void finishedWithError(QNetworkReply::NetworkError errorCode, const QString &detail = QString()))
    NET_CS_SIGNAL_2(finishedWithError, errorCode, detail)
+
    NET_CS_SIGNAL_1(Public, void headerChanged())
    NET_CS_SIGNAL_2(headerChanged)
 
-   // FIXME we need to change this to qint64!
-   NET_CS_SIGNAL_1(Public, void dataReadProgress(int done, int total))
+   NET_CS_SIGNAL_1(Public, void dataReadProgress(qint64 done, qint64 total))
    NET_CS_SIGNAL_2(dataReadProgress, done, total)
+
    NET_CS_SIGNAL_1(Public, void dataSendProgress(qint64 done, qint64 total))
    NET_CS_SIGNAL_2(dataSendProgress, done, total)
+
    NET_CS_SIGNAL_1(Public, void cacheCredentials(const QHttpNetworkRequest &request, QAuthenticator *authenticator))
    NET_CS_SIGNAL_2(cacheCredentials, request, authenticator)
 
@@ -149,8 +157,11 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, authenticator)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void authenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_1(Public, void authenticationRequired(QHttpNetworkRequest request, QAuthenticator *authenticator))
    NET_CS_SIGNAL_2(authenticationRequired, request, authenticator)
+
+   NET_CS_SIGNAL_1(Public, void redirected(QUrl url, int httpStatus, int maxRedirectsRemaining))
+   NET_CS_SIGNAL_2(redirected, url, httpStatus, maxRedirectsRemaining)
 
  private:
    Q_DECLARE_PRIVATE(QHttpNetworkReply)
@@ -189,10 +200,7 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    qint64 readReplyBodyChunked(QAbstractSocket *in, QByteDataBuffer *out);
    qint64 getChunkSize(QAbstractSocket *in, qint64 *chunkSize);
 
-   void appendUncompressedReplyData(QByteArray &qba);
-   void appendUncompressedReplyData(QByteDataBuffer &data);
-   void appendCompressedReplyData(QByteDataBuffer &data);
-
+   bool isRedirecting() const;
    bool shouldEmitSignals();
    bool expectContent();
    void eraseData();
@@ -200,13 +208,7 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    qint64 bytesAvailable() const;
    bool isChunked();
    bool isConnectionCloseEnabled();
-   bool isGzipped();
-
-#ifndef QT_NO_COMPRESS
-   bool gzipCheckHeader(QByteArray &content, int &pos);
-   int gunzipBodyPartially(QByteArray &compressed, QByteArray &inflated);
-   void gunzipBodyPartiallyEnd();
-#endif
+   bool isCompressed();
 
    void removeAutoDecompressHeader();
 
@@ -215,7 +217,12 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
       ReadingStatusState,
       ReadingHeaderState,
       ReadingDataState,
-      AllDoneState
+      AllDoneState,
+      SPDYSYNSent,
+      SPDYUploading,
+      SPDYHalfClosed,
+      SPDYClosed,
+      Aborted
    } state;
 
    QHttpNetworkRequest request;
@@ -233,18 +240,18 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    bool connectionCloseEnabled;
    bool forceConnectionCloseEnabled;
    bool lastChunkRead;
+
    qint64 currentChunkSize;
    qint64 currentChunkRead;
    qint64 readBufferMaxSize;
+   qint32 windowSizeDownload; // only for SPDY
+   qint32 windowSizeUpload; // only for SPDY
+   qint32 currentlyReceivedDataInWindow; // only for SPDY
+   qint32 currentlyUploadedDataInWindow; // only for SPDY
+   qint64 totallyUploadedData; // only for SPDY
+
    QPointer<QHttpNetworkConnection> connection;
    QPointer<QHttpNetworkConnectionChannel> connectionChannel;
-   bool initInflate;
-   bool streamEnd;
-
-#ifndef QT_NO_COMPRESS
-   z_stream inflateStrm;
-#endif
-
    bool autoDecompress;
 
    QByteDataBuffer responseData; // uncompressed body
@@ -252,11 +259,18 @@ class QHttpNetworkReplyPrivate : public QHttpNetworkHeaderPrivate
    bool requestIsPrepared;
 
    bool pipeliningUsed;
+    bool spdyUsed;
    bool downstreamLimited;
 
    char *userProvidedDownloadBuffer;
+   QUrl redirectUrl;
+#ifndef QT_NO_COMPRESS
+    z_stream_s *inflateStrm;
+    int initializeInflateStream();
+    qint64 uncompressBodyData(QByteDataBuffer *in, QByteDataBuffer *out);
+#endif
 };
 
-#endif // QT_NO_HTTP
+
 
 #endif // QHTTPNETWORKREPLY_H

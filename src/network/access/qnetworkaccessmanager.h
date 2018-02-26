@@ -23,12 +23,14 @@
 #ifndef QNETWORKACCESSMANAGER_H
 #define QNETWORKACCESSMANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QNetworkSession>
-#include <qsslerror.h>
-#include <QScopedPointer>
+#include <QStringList>
 
-QT_BEGIN_NAMESPACE
+#ifdef QT_SSL
+#include <QSslConfiguration>
+#include <QSslPreSharedKeyAuthenticator>
+#endif
 
 class QIODevice;
 class QAbstractNetworkCache;
@@ -39,16 +41,18 @@ class QNetworkRequest;
 class QNetworkReply;
 class QNetworkProxy;
 class QNetworkProxyFactory;
+class QSslError;
+
+#ifndef QT_NO_BEARERMANAGEMENT
+class QNetworkConfiguration;
+#endif
+
 class QHttpMultiPart;
 class QNetworkReplyImplPrivate;
 class QNetworkAccessManagerPrivate;
 
 template<typename T> class QList;
 class QNetworkCookie;
-
-#if !defined(QT_NO_BEARERMANAGEMENT) && !defined(QT_MOBILITY_BEARER)
-class QNetworkConfiguration;
-#endif
 
 class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
 {
@@ -82,6 +86,8 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
 
    explicit QNetworkAccessManager(QObject *parent = nullptr);
    ~QNetworkAccessManager();
+    virtual QStringList supportedSchemes() const;
+    void clearAccessCache();
 
 #ifndef QT_NO_NETWORKPROXY
    QNetworkProxy proxy() const;
@@ -105,72 +111,101 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    QNetworkReply *put(const QNetworkRequest &request, const QByteArray &data);
    QNetworkReply *put(const QNetworkRequest &request, QHttpMultiPart *multiPart);
    QNetworkReply *deleteResource(const QNetworkRequest &request);
-   QNetworkReply *sendCustomRequest(const QNetworkRequest &request, const QByteArray &verb, QIODevice *data = 0);
+   QNetworkReply *sendCustomRequest(const QNetworkRequest &request, const QByteArray &verb, QIODevice *data = nullptr);
 
-   NET_CS_SIGNAL_1(Public, void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator))
-   NET_CS_SIGNAL_2(authenticationRequired, reply, authenticator)
-   NET_CS_SIGNAL_1(Public, void finished(QNetworkReply *reply))
-   NET_CS_SIGNAL_2(finished, reply)
-
-#if !defined(QT_NO_BEARERMANAGEMENT) && !defined(QT_MOBILITY_BEARER)
+#if ! defined(QT_NO_BEARERMANAGEMENT)
    void setConfiguration(const QNetworkConfiguration &config);
    QNetworkConfiguration configuration() const;
    QNetworkConfiguration activeConfiguration() const;
-#endif
 
-#ifndef QT_NO_BEARERMANAGEMENT
    void setNetworkAccessible(NetworkAccessibility accessible);
    NetworkAccessibility networkAccessible() const;
 #endif
+
+#ifdef QT_SSL
+   void connectToHostEncrypted(const QString &hostName, quint16 port = 443,
+                  const QSslConfiguration &sslConfiguration = QSslConfiguration::defaultConfiguration());
+#endif
+
+   void connectToHost(const QString &hostName, quint16 port = 80);
 
 #ifndef QT_NO_NETWORKPROXY
    NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator))
    NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, authenticator)
 #endif
 
-#ifndef QT_NO_OPENSSL
+   NET_CS_SIGNAL_1(Public, void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(authenticationRequired, reply, authenticator)
+
+   NET_CS_SIGNAL_1(Public, void finished(QNetworkReply *reply))
+   NET_CS_SIGNAL_2(finished, reply)
+
+
+#ifdef QT_SSL
+   NET_CS_SIGNAL_1(Public,  void encrypted(QNetworkReply *reply))
+   NET_CS_SIGNAL_2(encrypted, reply)
+
    NET_CS_SIGNAL_1(Public, void sslErrors(QNetworkReply *reply, const QList <QSslError> &errors))
    NET_CS_SIGNAL_2(sslErrors, reply, errors)
-#endif
 
-#if !defined(QT_NO_BEARERMANAGEMENT) && !defined(QT_MOBILITY_BEARER)
-   NET_CS_SIGNAL_1(Public, void networkSessionConnected())
-   NET_CS_SIGNAL_2(networkSessionConnected)
+   NET_CS_SIGNAL_1(Public, void preSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator))
+   NET_CS_SIGNAL_2(preSharedKeyAuthenticationRequired, reply, authenticator)
 #endif
 
 #ifndef QT_NO_BEARERMANAGEMENT
+   NET_CS_SIGNAL_1(Public, void networkSessionConnected())
+   NET_CS_SIGNAL_2(networkSessionConnected)
+
    NET_CS_SIGNAL_1(Public, void networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible))
    NET_CS_SIGNAL_2(networkAccessibleChanged, accessible)
 #endif
 
  protected:
-   virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData = 0);
    QScopedPointer<QNetworkAccessManagerPrivate> d_ptr;
+
+   virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData = nullptr);
+
+   NET_CS_SLOT_1(Protected, QStringList supportedSchemesImplementation() const)
+   NET_CS_SLOT_2(supportedSchemesImplementation)
 
  private:
    friend class QNetworkReplyImplPrivate;
-   friend class QNetworkAccessHttpBackend;
+   friend class QNetworkReplyHttpImpl;
+   friend class QNetworkReplyHttpImplPrivate;
 
    Q_DECLARE_PRIVATE(QNetworkAccessManager)
 
    NET_CS_SLOT_1(Private, void _q_replyFinished())
    NET_CS_SLOT_2(_q_replyFinished)
 
-#ifndef QT_NO_OPENSSL
-   NET_CS_SLOT_1(Private, void _q_replySslErrors(const QList <QSslError> &un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_replyEncrypted())
+   NET_CS_SLOT_2(_q_replyEncrypted)
+
+#ifdef QT_SSL
+   NET_CS_SLOT_1(Private, void _q_replySslErrors(const QList<QSslError> &errList))
    NET_CS_SLOT_2(_q_replySslErrors)
+
+   NET_CS_SLOT_1(Private, void _q_replyPreSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *data))
+   NET_CS_SLOT_2(_q_replyPreSharedKeyAuthenticationRequired)
 #endif
 
-#if ! defined(QT_NO_BEARERMANAGEMENT) && !defined(QT_MOBILITY_BEARER)
+#ifndef QT_NO_BEARERMANAGEMENT
    NET_CS_SLOT_1(Private, void _q_networkSessionClosed())
    NET_CS_SLOT_2(_q_networkSessionClosed)
 
-   NET_CS_SLOT_1(Private, void _q_networkSessionStateChanged(QNetworkSession::State un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_networkSessionStateChanged(QNetworkSession::State data))
    NET_CS_SLOT_2(_q_networkSessionStateChanged)
+
+   NET_CS_SLOT_1(Private, void _q_onlineStateChanged(bool))
+   NET_CS_SLOT_2(_q_onlineStateChanged)
+
+   NET_CS_SLOT_1(Private, void _q_configurationChanged(const QNetworkConfiguration &data))
+   NET_CS_SLOT_2(_q_configurationChanged)
+
+   NET_CS_SLOT_1(Private, void _q_networkSessionFailed(QNetworkSession::SessionError data))
+   NET_CS_SLOT_2(_q_networkSessionFailed)
 #endif
 
 };
-
-QT_END_NAMESPACE
 
 #endif

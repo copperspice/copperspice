@@ -25,14 +25,13 @@
 #include <qnetworkaccessmanager.h>
 #include <qnetworkaccessmanager_p.h>
 #include <qnetworkaccessauthenticationmanager_p.h>
+#include <qsslerror.h>
 
-#include <QtCore/qbuffer.h>
-#include <QtCore/qurl.h>
-#include <QtCore/qvector.h>
-#include <QtCore/QMutexLocker>
-#include <QtNetwork/qauthenticator.h>
-
-QT_BEGIN_NAMESPACE
+#include <qauthenticator.h>
+#include <qbuffer.h>
+#include <qmutex.h>
+#include <qurl.h>
+#include <qvector.h>
 
 class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredential>, public QNetworkAccessCache::CacheableObject
 {
@@ -73,6 +72,7 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
          if (closestMatch) {
             auto tmp = begin() + (++closestMatch - data());
             QVector<QNetworkAuthenticationCredential>::insert(tmp, newCredential);
+
          } else {
             QVector<QNetworkAuthenticationCredential>::insert(end(), newCredential);
          }
@@ -222,6 +222,11 @@ void QNetworkAccessAuthenticationManager::cacheCredentials(const QUrl &url,
       const QAuthenticator *authenticator)
 {
    Q_ASSERT(authenticator);
+
+   if (authenticator->isNull()) {
+      return;
+   }
+
    QString domain = QString::fromLatin1("/"); // FIXME: make QAuthenticator return the domain
    QString realm = authenticator->realm();
 
@@ -299,5 +304,4 @@ void QNetworkAccessAuthenticationManager::clearCache()
    authenticationCache.clear();
 }
 
-QT_END_NAMESPACE
 

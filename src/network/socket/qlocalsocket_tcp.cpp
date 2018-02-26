@@ -28,8 +28,6 @@
 #include <qsettings.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 QLocalSocketPrivate::QLocalSocketPrivate() : QIODevicePrivate(),
    tcpSocket(0),
    ownsTcpSocket(true),
@@ -48,22 +46,26 @@ void QLocalSocketPrivate::setSocket(QLocalUnixSocket *socket)
       delete tcpSocket;
    }
    ownsTcpSocket = false;
-   tcpSocket = socket;
+   tcpSocket     = socket;
 
    Q_Q(QLocalSocket);
+
    // QIODevice signals
-   q->connect(tcpSocket, SIGNAL(aboutToClose()), q, SIGNAL(aboutToClose()));
-   q->connect(tcpSocket, SIGNAL(bytesWritten(qint64)),
-              q, SIGNAL(bytesWritten(qint64)));
-   q->connect(tcpSocket, SIGNAL(readyRead()), q, SIGNAL(readyRead()));
+   q->connect(tcpSocket, SIGNAL(aboutToClose()),       q, SLOT(aboutToClose()));
+   q->connect(tcpSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(bytesWritten(qint64)));
+   q->connect(tcpSocket, SIGNAL(readyRead()),          q, SLOT(readyRead()));
+
    // QAbstractSocket signals
-   q->connect(tcpSocket, SIGNAL(connected()), q, SIGNAL(connected()));
-   q->connect(tcpSocket, SIGNAL(disconnected()), q, SIGNAL(disconnected()));
+   q->connect(tcpSocket, SIGNAL(connected()),          q, SLOT(connected()));
+   q->connect(tcpSocket, SIGNAL(disconnected()),       q, SLOT(disconnected()));
+
    q->connect(tcpSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
               q, SLOT(_q_stateChanged(QAbstractSocket::SocketState)));
+
    q->connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
               q, SLOT(_q_error(QAbstractSocket::SocketError)));
-   q->connect(tcpSocket, SIGNAL(readChannelFinished()), q, SIGNAL(readChannelFinished()));
+
+   q->connect(tcpSocket, SIGNAL(readChannelFinished()), q, SLOT(readChannelFinished()));
    tcpSocket->setParent(q);
 }
 
@@ -96,12 +98,14 @@ void QLocalSocketPrivate::_q_stateChanged(QAbstractSocket::SocketState newState)
       case QAbstractSocket::ClosingState:
          state = QLocalSocket::ClosingState;
          break;
+
       default:
 #if defined QLOCALSOCKET_DEBUG
          qWarning() << "QLocalSocket::Unhandled socket state change:" << newState;
 #endif
          return;
    }
+
    if (currentState != state) {
       emit q->stateChanged(state);
    }
@@ -137,6 +141,9 @@ QString QLocalSocketPrivate::generateErrorString(QLocalSocket::LocalSocketError 
          break;
       case QLocalSocket::UnsupportedSocketOperationError:
          errorString = QLocalSocket::tr("%1: The socket operation is not supported").arg(function);
+         break;
+      case QLocalSocket::OperationError:
+         errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").arg(function);
          break;
       case QLocalSocket::UnknownSocketError:
       default:
@@ -195,11 +202,13 @@ void QLocalSocketPrivate::errorOccurred(QLocalSocket::LocalSocketError error, co
    }
 }
 
-void QLocalSocket::connectToServer(const QString &name, OpenMode openMode)
+void QLocalSocket::connectToServer(OpenMode openMode)
 {
    Q_D(QLocalSocket);
-   if (state() == ConnectedState
-         || state() == ConnectingState) {
+
+   if (state() == ConnectedState || state() == ConnectingState) {
+      setErrorString(tr("Trying to connect while connection is in progress"));
+      emit error(QLocalSocket::OperationError);
       return;
    }
 
@@ -207,30 +216,32 @@ void QLocalSocket::connectToServer(const QString &name, OpenMode openMode)
    d->state = ConnectingState;
    emit stateChanged(d->state);
 
-   if (name.isEmpty()) {
-      d->errorOccurred(ServerNotFoundError,
-                       QLatin1String("QLocalSocket::connectToServer"));
+   if (d->serverName.isEmpty()) {
+      d->errorOccurred(ServerNotFoundError, QLatin1String("QLocalSocket::connectToServer"));
       return;
    }
 
-   d->serverName = name;
-   const QLatin1String prefix("QLocalServer/");
-   if (name.startsWith(prefix)) {
-      d->fullServerName = name;
+
+   const QString prefix("QLocalServer/");
+
+   if (d->serverName.startsWith(prefix)) {
+      d->fullServerName = d->serverName;
    } else {
-      d->fullServerName = prefix + name;
+      d->fullServerName = prefix + d->serverName;
    }
 
-   QSettings settings(QLatin1String("CopperSpice"), QLatin1String("CS"));
+   QSettings settings("CopperSpice", "CS");
    bool ok;
+
    const quint16 port = settings.value(d->fullServerName).toUInt(&ok);
    if (!ok) {
       d->errorOccurred(ServerNotFoundError,
                        QLatin1String("QLocalSocket::connectToServer"));
       return;
    }
-   d->tcpSocket->connectToHost(QHostAddress::LocalHost, port, openMode);
+
    QIODevice::open(openMode);
+   d->tcpSocket->connectToHost(QHostAddress::LocalHost, port, openMode);
 }
 
 bool QLocalSocket::setSocketDescriptor(qintptr socketDescriptor, LocalSocketState socketState, OpenMode openMode)
@@ -256,8 +267,9 @@ bool QLocalSocket::setSocketDescriptor(qintptr socketDescriptor, LocalSocketStat
 
    // Is our parent a localServer? Then it wants us to use its remote socket.
    QLocalServer *localServer = qobject_cast<QLocalServer *>( parent() );
+
    if (localServer) {
-      for (QObject * child : localServer->children()) {
+      for (QObject *child : localServer->children()) {
          QTcpSocket *childTcpSocket = qobject_cast<QTcpSocket *>(child);
          if (childTcpSocket && childTcpSocket->socketDescriptor() == socketDescriptor) {
             d->setSocket( static_cast<QLocalUnixSocket *>(childTcpSocket) );
@@ -281,7 +293,7 @@ qintptr QLocalSocket::socketDescriptor() const
 qint64 QLocalSocket::readData(char *data, qint64 c)
 {
    Q_D(QLocalSocket);
-   return d->tcpSocket->readData(data, c);
+   return d->tcpSocket->read(data, c);
 }
 
 qint64 QLocalSocket::writeData(const char *data, qint64 c)
@@ -406,7 +418,7 @@ bool QLocalSocket::waitForDisconnected(int msecs)
 {
    Q_D(QLocalSocket);
    if (state() == UnconnectedState) {
-      qWarning() << "QLocalSocket::waitForDisconnected() is not allowed in UnconnectedState";
+      qWarning("QLocalSocket::waitForDisconnected() is not allowed in UnconnectedState");
       return false;
    }
    return (d->tcpSocket->waitForDisconnected(msecs));

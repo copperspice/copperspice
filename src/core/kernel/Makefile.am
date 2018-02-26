@@ -47,6 +47,7 @@ CORE_PUBLIC_INCLUDES += \
 	QVariantList \
 	QVariantHash \
 	QVariantMap \
+	QWinEventNotifier \
 	QtCleanUpFunction \
 	QtMsgHandler
 
@@ -101,6 +102,7 @@ CORE_KERNEL_INCLUDES = \
 	qvariantlist.h \
 	qvarianthash.h \
 	qvariantmap.h \
+	qwineventnotifier.h \
 	qmetatype.h \
 	csmeta.h \
 	csmeta_callevent.h \
@@ -125,7 +127,6 @@ CORE_KERNEL_PRIVATE_INCLUDES = \
 	qsystemsemaphore_p.h \
 	qeventdispatcher_win_p.h \
 	qeventdispatcher_unix_p.h \
-	qwineventnotifier_p.h \
 	qfunctions_p.h \
 	qcrashhandler_p.h \
 	qeventdispatcher_glib_p.h \
@@ -173,7 +174,7 @@ if OSTYPE_WIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/kernel/qeventdispatcher_win.cpp \
 	src/core/kernel/qcoreapplication_win.cpp \
-	src/core/kernel/qwineventnotifier_p.cpp \
+	src/core/kernel/qwineventnotifier.cpp \
 	src/core/kernel/qsharedmemory_win.cpp \
 	src/core/kernel/qsystemsemaphore_win.cpp
 endif

@@ -28,8 +28,6 @@
 #include <QtCore/QMetaType>
 #include <QtCore/QObject>
 
-QT_BEGIN_NAMESPACE
-
 class QByteArray;
 class QDateTime;
 class QString;
@@ -44,13 +42,24 @@ class Q_NETWORK_EXPORT QNetworkCookie
       Full
    };
 
-   QNetworkCookie(const QByteArray &name = QByteArray(), const QByteArray &value = QByteArray());
+   explicit QNetworkCookie(const QByteArray &name = QByteArray(), const QByteArray &value = QByteArray());
    QNetworkCookie(const QNetworkCookie &other);
    ~QNetworkCookie();
+
+   QNetworkCookie &operator=(QNetworkCookie &&other)  {
+      swap(other);
+      return *this;
+   }
+
    QNetworkCookie &operator=(const QNetworkCookie &other);
+
    bool operator==(const QNetworkCookie &other) const;
    inline bool operator!=(const QNetworkCookie &other) const {
       return !(*this == other);
+   }
+
+   void swap(QNetworkCookie &other)  {
+      qSwap(d, other.d);
    }
 
    bool isSecure() const;
@@ -76,18 +85,17 @@ class Q_NETWORK_EXPORT QNetworkCookie
 
    QByteArray toRawForm(RawForm form = Full) const;
 
+   bool hasSameIdentifier(const QNetworkCookie &other) const;
+   void normalize(const QUrl &url);
    static QList<QNetworkCookie> parseCookies(const QByteArray &cookieString);
 
  private:
    QSharedDataPointer<QNetworkCookiePrivate> d;
    friend class QNetworkCookiePrivate;
 };
-Q_DECLARE_TYPEINFO(QNetworkCookie, Q_MOVABLE_TYPE);
 
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QNetworkCookie)
 Q_DECLARE_METATYPE(QList<QNetworkCookie>)

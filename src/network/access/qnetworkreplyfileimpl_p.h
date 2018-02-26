@@ -41,12 +41,12 @@ class QNetworkReplyFileImpl: public QNetworkReply
    QNetworkReplyFileImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op);
    ~QNetworkReplyFileImpl();
 
-   virtual void abort() override;
+   void abort() override;
 
    // reimplemented from QNetworkReply
-   virtual void close() override;
-   virtual qint64 bytesAvailable() const override;
-   virtual bool isSequential () const override;
+   void close() override;
+   qint64 bytesAvailable() const override;
+   bool isSequential () const override;
    qint64 size() const override;
 
    virtual qint64 readData(char *data, qint64 maxlen) override;

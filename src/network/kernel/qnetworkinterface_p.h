@@ -48,6 +48,7 @@ class QNetworkInterfacePrivate: public QSharedData
  public:
    QNetworkInterfacePrivate() : index(0), flags(0) {
    }
+
    ~QNetworkInterfacePrivate() {
    }
 

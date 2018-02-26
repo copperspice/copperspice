@@ -25,12 +25,10 @@
 
 #include <qbearerengine_p.h>
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
-
-QT_BEGIN_NAMESPACE
 
 struct Q_NETWORK_EXPORT QBearerEngineFactoryInterface : public QFactoryInterface {
    virtual QBearerEngine *create(const QString &key) const = 0;
@@ -47,9 +45,8 @@ class Q_NETWORK_EXPORT QBearerEnginePlugin : public QObject, public QBearerEngin
  public:
    explicit QBearerEnginePlugin(QObject *parent = nullptr);
    virtual ~QBearerEnginePlugin();
+   virtual QBearerEngine *create(const QString &key) const = 0;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_BEARERMANAGEMENT
 

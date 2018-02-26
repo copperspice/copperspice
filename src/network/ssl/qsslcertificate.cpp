@@ -22,7 +22,7 @@
 
 #include <QtCore/qglobal.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
 #include <qsslsocket_openssl_symbols_p.h>
 #endif
 
@@ -73,7 +73,7 @@ QSslCertificate &QSslCertificate::operator=(const QSslCertificate &other)
 
 bool QSslCertificate::isBlacklisted() const
 {
-    return QSslCertificatePrivate::isBlacklisted(*this);
+   return QSslCertificatePrivate::isBlacklisted(*this);
 }
 void QSslCertificate::clear()
 {
@@ -90,50 +90,55 @@ QByteArray QSslCertificate::digest(QCryptographicHash::Algorithm algorithm) cons
 }
 
 QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
-                  QSsl::EncodingFormat format, QRegExp::PatternSyntax syntax)
+      QSsl::EncodingFormat format, QRegExp::PatternSyntax syntax)
 {
    // $, (,), *, +, ., ?, [, ,], ^, {, | and }.
    // make sure to use the same path separators on Windows and Unix like systems.
-    QString sourcePath = QDir::fromNativeSeparators(path);
+   QString sourcePath = QDir::fromNativeSeparators(path);
 
-    // Find the path without the filename
-    QString pathPrefix = sourcePath.left(sourcePath.lastIndexOf(QLatin1Char('/')));
+   // Find the path without the filename
+   QString pathPrefix = sourcePath.left(sourcePath.lastIndexOf(QLatin1Char('/')));
 
    // Check if the path contains any special chars
    int pos = -1;
-   if (syntax == QRegExp::Wildcard)
-        pos = pathPrefix.indexOf(QRegExp(QLatin1String("[*?[]")));
-   else if (syntax != QRegExp::FixedString)
-        pos = sourcePath.indexOf(QRegExp(QLatin1String("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]")));
+   if (syntax == QRegExp::Wildcard) {
+      pos = pathPrefix.indexOf(QRegExp(QLatin1String("[*?[]")));
+   } else if (syntax != QRegExp::FixedString) {
+      pos = sourcePath.indexOf(QRegExp(QLatin1String("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]")));
+   }
 
    if (pos != -1) {
-       // there was a special char in the path so cut of the part containing that char.
-        pathPrefix = pathPrefix.left(pos);
-        if (pathPrefix.contains(QLatin1Char('/')))
-            pathPrefix = pathPrefix.left(pathPrefix.lastIndexOf(QLatin1Char('/')));
-        else
-            pathPrefix.clear();
+      // there was a special char in the path so cut of the part containing that char.
+      pathPrefix = pathPrefix.left(pos);
+      if (pathPrefix.contains(QLatin1Char('/'))) {
+         pathPrefix = pathPrefix.left(pathPrefix.lastIndexOf(QLatin1Char('/')));
+      } else {
+         pathPrefix.clear();
+      }
 
-    } else {
-        // Check if the path is a file.
-        if (QFileInfo(sourcePath).isFile()) {
-            QFile file(sourcePath);
-            QIODevice::OpenMode openMode = QIODevice::ReadOnly;
-            if (format == QSsl::Pem)
-                openMode |= QIODevice::Text;
-            if (file.open(openMode))
+   } else {
+      // Check if the path is a file.
+      if (QFileInfo(sourcePath).isFile()) {
+         QFile file(sourcePath);
+         QIODevice::OpenMode openMode = QIODevice::ReadOnly;
+         if (format == QSsl::Pem) {
+            openMode |= QIODevice::Text;
+         }
+         if (file.open(openMode))
 
-         return QSslCertificate::fromData(file.readAll(), format);
+         {
+            return QSslCertificate::fromData(file.readAll(), format);
+         }
 
-      return QList<QSslCertificate>();
+         return QList<QSslCertificate>();
       }
    }
    // Special case - if the prefix ends up being nothing, use "." instead.
-    int startIndex = 0;
-    if (pathPrefix.isEmpty()) {
-        pathPrefix = QLatin1String(".");
-        startIndex = 2;
-    }
+   int startIndex = 0;
+   if (pathPrefix.isEmpty()) {
+      pathPrefix = QLatin1String(".");
+      startIndex = 2;
+   }
 
    // The path can be a file or directory.
    QList<QSslCertificate> certs;
@@ -147,11 +152,12 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
       }
 
       QFile file(filePath);
-        QIODevice::OpenMode openMode = QIODevice::ReadOnly;
-        if (format == QSsl::Pem)
-            openMode |= QIODevice::Text;
+      QIODevice::OpenMode openMode = QIODevice::ReadOnly;
+      if (format == QSsl::Pem) {
+         openMode |= QIODevice::Text;
+      }
 
-        if (file.open(openMode)) {
+      if (file.open(openMode)) {
          certs += QSslCertificate::fromData(file.readAll(), format);
       }
    }
@@ -171,19 +177,19 @@ QList<QSslCertificate> QSslCertificate::fromDevice(QIODevice *device, QSsl::Enco
 QList<QSslCertificate> QSslCertificate::fromData(const QByteArray &data, QSsl::EncodingFormat format)
 {
    return (format == QSsl::Pem)
-                  ? QSslCertificatePrivate::certificatesFromPem(data)
-                  : QSslCertificatePrivate::certificatesFromDer(data);
+          ? QSslCertificatePrivate::certificatesFromPem(data)
+          : QSslCertificatePrivate::certificatesFromDer(data);
 }
 
 QList<QSslError> QSslCertificate::verify(const QList<QSslCertificate> &certificateChain, const QString &hostName)
 {
-    return QSslSocketBackendPrivate::verify(certificateChain, hostName);
+   return QSslSocketBackendPrivate::verify(certificateChain, hostName);
 }
 
 bool QSslCertificate::importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *certificate,
-                  QList<QSslCertificate> *caCertificates, const QByteArray &passPhrase)
+                                   QList<QSslCertificate> *caCertificates, const QByteArray &passPhrase)
 {
-    return QSslSocketBackendPrivate::importPkcs12(device, key, certificate, caCertificates, passPhrase);
+   return QSslSocketBackendPrivate::importPkcs12(device, key, certificate, caCertificates, passPhrase);
 }
 
 // These certificates are known to be fraudulent and were created during the comodo
@@ -215,9 +221,9 @@ static const char *const certificate_blacklist[] = {
    "01:31:34:bf",                                     "DigiNotar PKIoverheid CA Organisatie - G2", // DigiNotar intermediate cross-signed by Dutch government
    "d6:d0:29:77:f1:49:fd:1a:83:f2:b9:ea:94:8c:5c:b4", "DigiNotar Extended Validation CA", // DigiNotar intermediate signed by DigiNotar EV Root
    "1e:7d:7a:53:3d:45:30:41:96:40:0f:71:48:1f:45:04", "DigiNotar Public CA 2025", // DigiNotar intermediate
-//    "(has not been seen in the wild so far)", "DigiNotar Public CA - G2", // DigiNotar intermediate
-//    "(has not been seen in the wild so far)", "Koninklijke Notariele Beroepsorganisatie CA", // compromised during DigiNotar breach
-//    "(has not been seen in the wild so far)", "Stichting TTP Infos CA," // compromised during DigiNotar breach
+   //    "(has not been seen in the wild so far)", "DigiNotar Public CA - G2", // DigiNotar intermediate
+   //    "(has not been seen in the wild so far)", "Koninklijke Notariele Beroepsorganisatie CA", // compromised during DigiNotar breach
+   //    "(has not been seen in the wild so far)", "Stichting TTP Infos CA," // compromised during DigiNotar breach
    "46:9c:2c:af",                                     "DigiNotar Root CA", // DigiNotar intermediate cross-signed by Entrust
    "46:9c:3c:c9",                                     "DigiNotar Root CA", // DigiNotar intermediate cross-signed by Entrust
 
@@ -291,32 +297,32 @@ QByteArray QSslCertificatePrivate::subjectInfoToString(QSslCertificate::SubjectI
       case QSslCertificate::EmailAddress:
          str = QByteArray("emailAddress");
          break;
-    }
+   }
 
-    return str;
+   return str;
 }
 
 QDebug operator<<(QDebug debug, const QSslCertificate &certificate)
 {
-   // broom - resolve later
+
    // QDebugStateSaver saver(debug);
    // debug.resetFormat().nospace();
 
-    debug << "QSslCertificate("
-          << certificate.version()
-          << ", " << certificate.serialNumber()
-          << ", " << certificate.digest().toBase64()
-          << ", " << certificate.issuerInfo(QSslCertificate::Organization)
-          << ", " << certificate.subjectInfo(QSslCertificate::Organization)
-          << ", " << certificate.subjectAlternativeNames()
+   debug << "QSslCertificate("
+         << certificate.version()
+         << ", " << certificate.serialNumber()
+         << ", " << certificate.digest().toBase64()
+         << ", " << certificate.issuerInfo(QSslCertificate::Organization)
+         << ", " << certificate.subjectInfo(QSslCertificate::Organization)
+         << ", " << certificate.subjectAlternativeNames()
 
 #ifndef QT_NO_DATESTRING
-          << ", " << certificate.effectiveDate()
-          << ", " << certificate.expiryDate()
+         << ", " << certificate.effectiveDate()
+         << ", " << certificate.expiryDate()
 #endif
-          << ')';
+         << ')';
 
-    return debug;
+   return debug;
 }
 
 QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info)

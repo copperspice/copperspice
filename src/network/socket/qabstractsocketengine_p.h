@@ -113,9 +113,7 @@ class QAbstractSocketEngine : public QObject
    QAbstractSocketEngine(QObject *parent = nullptr);
    ~QAbstractSocketEngine();
 
-   static QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
-                  const QNetworkProxy &, QObject *parent);
-
+   static QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType, const QNetworkProxy &, QObject *parent);
    static QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent);
 
    virtual bool initialize(QAbstractSocket::SocketType type,
@@ -261,7 +259,7 @@ class QSocketEngineHandler
 
    virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
          const QNetworkProxy &, QObject *parent) = 0;
-   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescripter, QObject *parent) = 0;
+   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) = 0;
 
  private:
    friend class QAbstractSocketEngine;

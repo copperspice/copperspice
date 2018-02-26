@@ -59,14 +59,15 @@ static getnameinfoProto local_getnameinfo = 0;
 static getaddrinfoProto local_getaddrinfo = 0;
 static freeaddrinfoProto local_freeaddrinfo = 0;
 
-static void resolveLibrary()
+static void resolveLibraryInternal()
 {
    // Attempt to resolve getaddrinfo(); without it we'll have to fall
    // back to gethostbyname(), which has no IPv6 support.
 
-    local_getaddrinfo  = (getaddrinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "getaddrinfo");
-    local_freeaddrinfo = (freeaddrinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "freeaddrinfo");
-    local_getnameinfo  = (getnameinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "getnameinfo");
+   local_getaddrinfo  = (getaddrinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "getaddrinfo");
+   local_freeaddrinfo = (freeaddrinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "freeaddrinfo");
+   local_getnameinfo  = (getnameinfoProto) QSystemLibrary::resolve(QLatin1String("ws2_32"), "getnameinfo");
+
 }
 
 static void translateWSAError(int error, QHostInfo *results)
@@ -96,7 +97,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       QMutexLocker locker(QMutexPool::globalInstanceGet(&local_getaddrinfo));
 
       if (! triedResolve.load()) {
-         resolveLibrary();
+         resolveLibraryInternal();
          triedResolve.store(true);
       }
    }
@@ -105,8 +106,8 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
 #if defined(QHOSTINFO_DEBUG)
    qDebug("QHostInfoAgent::fromName(): looking up \"%s\" (IPv6 support is %s)",
-           hostName.toLatin1().constData(),
-           (local_getaddrinfo && local_freeaddrinfo) ? "enabled" : "disabled");
+          hostName.toLatin1().constData(),
+          (local_getaddrinfo && local_freeaddrinfo) ? "enabled" : "disabled");
 #endif
 
    QHostAddress address;
@@ -141,7 +142,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
       } else {
          unsigned long addr = inet_addr(hostName.toLatin1().constData());
-         struct hostent *ent = gethostbyaddr((const char*)&addr, sizeof(addr), AF_INET);
+         struct hostent *ent = gethostbyaddr((const char *)&addr, sizeof(addr), AF_INET);
 
          if (ent) {
             results.setHostName(QString::fromLatin1(ent->h_name));
@@ -177,28 +178,26 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
          for (qt_addrinfo *p = res; p != 0; p = p->ai_next) {
             switch (p->ai_family) {
-               case AF_INET:
-                  {
-                     QHostAddress addr;
-                     addr.setAddress(ntohl(((sockaddr_in *) p->ai_addr)->sin_addr.s_addr));
+               case AF_INET: {
+                  QHostAddress addr;
+                  addr.setAddress(ntohl(((sockaddr_in *) p->ai_addr)->sin_addr.s_addr));
 
-                     if (!addresses.contains(addr)) {
-                        addresses.append(addr);
-                     }
+                  if (!addresses.contains(addr)) {
+                     addresses.append(addr);
                   }
+               }
 
-                  break;
+               break;
 
-               case AF_INET6:
-                  {
-                     QHostAddress addr;
-                     addr.setAddress(((sockaddr_in6 *) p->ai_addr)->sin6_addr.s6_addr);
+               case AF_INET6: {
+                  QHostAddress addr;
+                  addr.setAddress(((sockaddr_in6 *) p->ai_addr)->sin6_addr.s6_addr);
 
-                     if (!addresses.contains(addr)) {
-                        addresses.append(addr);
-                     }
+                  if (!addresses.contains(addr)) {
+                     addresses.append(addr);
                   }
-                  break;
+               }
+               break;
 
                default:
                   results.setError(QHostInfo::UnknownError);
@@ -223,18 +222,18 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          QList<QHostAddress> addresses;
 
          switch (ent->h_addrtype) {
-               case AF_INET:
-                   for (p = ent->h_addr_list; *p != 0; p++) {
-                       long *ip4Addr = (long *) *p;
-                       QHostAddress temp;
-                       temp.setAddress(ntohl(*ip4Addr));
-                       addresses << temp;
-                   }
-                   break;
-               default:
-                   results.setError(QHostInfo::UnknownError);
-                   results.setErrorString(tr("Unknown address type"));
-                   break;
+            case AF_INET:
+               for (p = ent->h_addr_list; *p != 0; p++) {
+                  long *ip4Addr = (long *) *p;
+                  QHostAddress temp;
+                  temp.setAddress(ntohl(*ip4Addr));
+                  addresses << temp;
+               }
+               break;
+            default:
+               results.setError(QHostInfo::UnknownError);
+               results.setErrorString(tr("Unknown address type"));
+               break;
          }
 
          results.setAddresses(addresses);
@@ -245,23 +244,23 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    }
 
 #if defined(QHOSTINFO_DEBUG)
-    if (results.error() != QHostInfo::NoError) {
-        qDebug("QHostInfoAgent::run(): error (%s)", results.errorString().toLatin1().constData());
+   if (results.error() != QHostInfo::NoError) {
+      qDebug("QHostInfoAgent::run(): error (%s)", results.errorString().toLatin1().constData());
 
-    } else {
-        QString tmp;
-        QList<QHostAddress> addresses = results.addresses();
+   } else {
+      QString tmp;
+      QList<QHostAddress> addresses = results.addresses();
 
-        for (int i = 0; i < addresses.count(); ++i) {
-            if (i != 0) tmp += ", ";
-            tmp += addresses.at(i).toString();
-        }
+      for (int i = 0; i < addresses.count(); ++i) {
+         if (i != 0) { tmp += ", "; }
+         tmp += addresses.at(i).toString();
+      }
 
-        qDebug("QHostInfoAgent::run(): found %i entries: {%s}",
-               addresses.count(), tmp.toLatin1().constData());
-    }
+      qDebug("QHostInfoAgent::run(): found %i entries: {%s}",
+             addresses.count(), tmp.toLatin1().constData());
+   }
 
 #endif
-    return results;
+   return results;
 }
 

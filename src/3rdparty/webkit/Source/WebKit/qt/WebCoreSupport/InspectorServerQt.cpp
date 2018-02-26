@@ -26,10 +26,8 @@
 #include "Page.h"
 #include "qwebpage.h"
 #include "qwebpage_p.h"
+#include <qhttpheader_p.h>
 #include <QFile>
-#include <QHttpHeader>
-#include <QHttpRequestHeader>
-#include <QHttpResponseHeader>
 #include <QString>
 #include <QStringList>
 #include <QTcpServer>

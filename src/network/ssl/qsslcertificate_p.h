@@ -28,15 +28,15 @@
 #include <qdatetime.h>
 #include <qmultimap.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_OPENSSL
 #include <openssl/x509.h>
+#include <qsslsocket_openssl_symbols_p.h>
+
 #else
    struct X509;
    struct X509_EXTENSION;
    struct ASN1_OBJECT;
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QSslCertificatePrivate
 {
@@ -47,7 +47,8 @@ class QSslCertificatePrivate
    }
 
    ~QSslCertificatePrivate() {
-#ifndef QT_NO_OPENSSL
+
+#ifdef QT_OPENSSL
       if (x509) {
          q_X509_free(x509);
       }
@@ -63,7 +64,7 @@ class QSslCertificatePrivate
    QDateTime notValidAfter;
    QDateTime notValidBefore;
 
-#ifdef QT_NO_OPENSSL
+#if ! defined(QT_OPENSSL)
     bool subjectMatchesIssuer;
     QSsl::KeyAlgorithm publicKeyAlgorithm;
     QByteArray publicKeyDerData;
@@ -95,7 +96,5 @@ class QSslCertificatePrivate
 
    QAtomicInt ref;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -36,10 +36,10 @@ Q_GLOBAL_STATIC(QDnsLookupThreadPool, theDnsLookupThreadPool);
 Q_GLOBAL_STATIC(QThreadStorage<bool *>, theDnsLookupSeedStorage);
 
 static bool qt_qdnsmailexchangerecord_less_than(const QDnsMailExchangeRecord &r1,
-                  const QDnsMailExchangeRecord &r2)
+      const QDnsMailExchangeRecord &r2)
 {
-    // Lower numbers are more preferred than higher ones.
-    return r1.preference() < r2.preference();
+   // Lower numbers are more preferred than higher ones.
+   return r1.preference() < r2.preference();
 }
 
 /*!
@@ -48,40 +48,42 @@ static bool qt_qdnsmailexchangerecord_less_than(const QDnsMailExchangeRecord &r1
 
 static void qt_qdnsmailexchangerecord_sort(QList<QDnsMailExchangeRecord> &records)
 {
-    // If we have no more than one result, we are done.
-    if (records.size() <= 1)
-        return;
+   // If we have no more than one result, we are done.
+   if (records.size() <= 1) {
+      return;
+   }
 
-    // Order the records by preference.
-    std::sort(records.begin(), records.end(), qt_qdnsmailexchangerecord_less_than);
+   // Order the records by preference.
+   std::sort(records.begin(), records.end(), qt_qdnsmailexchangerecord_less_than);
 
-    int i = 0;
-    while (i < records.size()) {
+   int i = 0;
+   while (i < records.size()) {
 
-        // Determine the slice of records with the current preference.
-        QList<QDnsMailExchangeRecord> slice;
-        const quint16 slicePreference = records[i].preference();
-        for (int j = i; j < records.size(); ++j) {
-            if (records[j].preference() != slicePreference)
-                break;
-            slice << records[j];
-        }
+      // Determine the slice of records with the current preference.
+      QList<QDnsMailExchangeRecord> slice;
+      const quint16 slicePreference = records[i].preference();
+      for (int j = i; j < records.size(); ++j) {
+         if (records[j].preference() != slicePreference) {
+            break;
+         }
+         slice << records[j];
+      }
 
-        // Randomize the slice of records.
-        while (!slice.isEmpty()) {
-            const unsigned int pos = qrand() % slice.size();
-            records[i++] = slice.takeAt(pos);
-        }
-    }
+      // Randomize the slice of records.
+      while (!slice.isEmpty()) {
+         const unsigned int pos = qrand() % slice.size();
+         records[i++] = slice.takeAt(pos);
+      }
+   }
 }
 
 static bool qt_qdnsservicerecord_less_than(const QDnsServiceRecord &r1, const QDnsServiceRecord &r2)
 {
-    // Order by priority, or if the priorities are equal,
-    // put zero weight records first.
-    return r1.priority() < r2.priority()
-       || (r1.priority() == r2.priority()
-        && r1.weight() == 0 && r2.weight() > 0);
+   // Order by priority, or if the priorities are equal,
+   // put zero weight records first.
+   return r1.priority() < r2.priority()
+          || (r1.priority() == r2.priority()
+              && r1.weight() == 0 && r2.weight() > 0);
 }
 
 /*!
@@ -90,87 +92,86 @@ static bool qt_qdnsservicerecord_less_than(const QDnsServiceRecord &r1, const QD
 
 static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
 {
-    // If we have no more than one result, we are done.
-    if (records.size() <= 1)
-        return;
+   // If we have no more than one result, we are done.
+   if (records.size() <= 1) {
+      return;
+   }
 
-    // Order the records by priority, and for records with an equal
-    // priority, put records with a zero weight first.
-    std::sort(records.begin(), records.end(), qt_qdnsservicerecord_less_than);
+   // Order the records by priority, and for records with an equal
+   // priority, put records with a zero weight first.
+   std::sort(records.begin(), records.end(), qt_qdnsservicerecord_less_than);
 
-    int i = 0;
-    while (i < records.size()) {
+   int i = 0;
+   while (i < records.size()) {
 
-        // Determine the slice of records with the current priority.
-        QList<QDnsServiceRecord> slice;
-        const quint16 slicePriority = records[i].priority();
-        unsigned int sliceWeight = 0;
-        for (int j = i; j < records.size(); ++j) {
-            if (records[j].priority() != slicePriority)
-                break;
-            sliceWeight += records[j].weight();
-            slice << records[j];
-        }
+      // Determine the slice of records with the current priority.
+      QList<QDnsServiceRecord> slice;
+      const quint16 slicePriority = records[i].priority();
+      unsigned int sliceWeight = 0;
+      for (int j = i; j < records.size(); ++j) {
+         if (records[j].priority() != slicePriority) {
+            break;
+         }
+         sliceWeight += records[j].weight();
+         slice << records[j];
+      }
 #ifdef QDNSLOOKUP_DEBUG
-        qDebug("qt_qdnsservicerecord_sort() : priority %i (size: %i, total weight: %i)",
-               slicePriority, slice.size(), sliceWeight);
+      qDebug("qt_qdnsservicerecord_sort() : priority %i (size: %i, total weight: %i)",
+             slicePriority, slice.size(), sliceWeight);
 #endif
 
-        // Order the slice of records.
-        while (!slice.isEmpty()) {
-            const unsigned int weightThreshold = qrand() % (sliceWeight + 1);
-            unsigned int summedWeight = 0;
-            for (int j = 0; j < slice.size(); ++j) {
-                summedWeight += slice[j].weight();
-                if (summedWeight >= weightThreshold) {
+      // Order the slice of records.
+      while (!slice.isEmpty()) {
+         const unsigned int weightThreshold = qrand() % (sliceWeight + 1);
+         unsigned int summedWeight = 0;
+         for (int j = 0; j < slice.size(); ++j) {
+            summedWeight += slice[j].weight();
+            if (summedWeight >= weightThreshold) {
 #ifdef QDNSLOOKUP_DEBUG
-                    qDebug("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
-                           qPrintable(slice[j].target()), slice[j].port(),
-                           slice[j].weight());
+               qDebug("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
+                      qPrintable(slice[j].target()), slice[j].port(),
+                      slice[j].weight());
 #endif
-                    // Adjust the slice weight and take the current record.
-                    sliceWeight -= slice[j].weight();
-                    records[i++] = slice.takeAt(j);
-                    break;
-                }
+               // Adjust the slice weight and take the current record.
+               sliceWeight -= slice[j].weight();
+               records[i++] = slice.takeAt(j);
+               break;
             }
-        }
-    }
+         }
+      }
+   }
 }
 
 const char *QDnsLookupPrivate::msgNoIpV6NameServerAdresses =
-    QT_TRANSLATE_NOOP("QDnsLookupRunnable", "IPv6 addresses for nameservers are currently not supported");
+   QT_TRANSLATE_NOOP("QDnsLookupRunnable", "IPv6 addresses for nameservers are currently not supported");
 
 QDnsLookup::QDnsLookup(QObject *parent)
-    : QObject(parent), d_ptr(new QDnsLookupPrivate)
+   : QObject(parent), d_ptr(new QDnsLookupPrivate)
 {
-    Q_D(QDnsLookup);
-    qRegisterMetaType<QDnsLookupReply>();
+   Q_D(QDnsLookup);
 
-    d->q_ptr = this;
+   d->q_ptr = this;
 }
 
 QDnsLookup::QDnsLookup(Type type, const QString &name, QObject *parent)
    : QObject(parent), d_ptr(new QDnsLookupPrivate)
 {
-    Q_D(QDnsLookup);
-    qRegisterMetaType<QDnsLookupReply>();
+   Q_D(QDnsLookup);
 
-    d->q_ptr = this;
-    d->name  = name;
-    d->type  = type;
+   d->q_ptr = this;
+   d->name  = name;
+   d->type  = type;
 }
 
 QDnsLookup::QDnsLookup(Type type, const QString &name, const QHostAddress &nameserver, QObject *parent)
-    : QObject(parent), d_ptr(new QDnsLookupPrivate)
+   : QObject(parent), d_ptr(new QDnsLookupPrivate)
 {
-    Q_D(QDnsLookup);
-    qRegisterMetaType<QDnsLookupReply>();
+   Q_D(QDnsLookup);
 
-    d->q_ptr = this;
-    d->name  = name;
-    d->type  = type;
-    d->nameserver = nameserver;
+   d->q_ptr = this;
+   d->name  = name;
+   d->type  = type;
+   d->nameserver = nameserver;
 }
 
 QDnsLookup::~QDnsLookup()
@@ -179,46 +180,46 @@ QDnsLookup::~QDnsLookup()
 
 QDnsLookup::Error QDnsLookup::error() const
 {
-    return d_func()->reply.error;
+   return d_func()->reply.error;
 }
 
 QString QDnsLookup::errorString() const
 {
-    return d_func()->reply.errorString;
+   return d_func()->reply.errorString;
 }
 
 bool QDnsLookup::isFinished() const
 {
-    return d_func()->isFinished;
+   return d_func()->isFinished;
 }
 
 QString QDnsLookup::name() const
 {
-    return d_func()->name;
+   return d_func()->name;
 }
 
 void QDnsLookup::setName(const QString &name)
 {
-    Q_D(QDnsLookup);
+   Q_D(QDnsLookup);
 
-    if (name != d->name) {
-        d->name = name;
-        emit nameChanged(name);
-    }
+   if (name != d->name) {
+      d->name = name;
+      emit nameChanged(name);
+   }
 }
 
 QDnsLookup::Type QDnsLookup::type() const
 {
-    return d_func()->type;
+   return d_func()->type;
 }
 
 void QDnsLookup::setType(Type type)
 {
-    Q_D(QDnsLookup);
-    if (type != d->type) {
-        d->type = type;
-        emit typeChanged(type);
-    }
+   Q_D(QDnsLookup);
+   if (type != d->type) {
+      d->type = type;
+      emit typeChanged(type);
+   }
 }
 
 /*!
@@ -228,16 +229,16 @@ void QDnsLookup::setType(Type type)
 
 QHostAddress QDnsLookup::nameserver() const
 {
-    return d_func()->nameserver;
+   return d_func()->nameserver;
 }
 
 void QDnsLookup::setNameserver(const QHostAddress &nameserver)
 {
-    Q_D(QDnsLookup);
-    if (nameserver != d->nameserver) {
-        d->nameserver = nameserver;
-        emit nameserverChanged(nameserver);
-    }
+   Q_D(QDnsLookup);
+   if (nameserver != d->nameserver) {
+      d->nameserver = nameserver;
+      emit nameserverChanged(nameserver);
+   }
 }
 
 /*!
@@ -246,7 +247,7 @@ void QDnsLookup::setNameserver(const QHostAddress &nameserver)
 
 QList<QDnsDomainNameRecord> QDnsLookup::canonicalNameRecords() const
 {
-    return d_func()->reply.canonicalNameRecords;
+   return d_func()->reply.canonicalNameRecords;
 }
 
 /*!
@@ -255,7 +256,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::canonicalNameRecords() const
 
 QList<QDnsHostAddressRecord> QDnsLookup::hostAddressRecords() const
 {
-    return d_func()->reply.hostAddressRecords;
+   return d_func()->reply.hostAddressRecords;
 }
 
 /*!
@@ -268,7 +269,7 @@ QList<QDnsHostAddressRecord> QDnsLookup::hostAddressRecords() const
 
 QList<QDnsMailExchangeRecord> QDnsLookup::mailExchangeRecords() const
 {
-    return d_func()->reply.mailExchangeRecords;
+   return d_func()->reply.mailExchangeRecords;
 }
 
 /*!
@@ -277,7 +278,7 @@ QList<QDnsMailExchangeRecord> QDnsLookup::mailExchangeRecords() const
 
 QList<QDnsDomainNameRecord> QDnsLookup::nameServerRecords() const
 {
-    return d_func()->reply.nameServerRecords;
+   return d_func()->reply.nameServerRecords;
 }
 
 /*!
@@ -286,7 +287,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::nameServerRecords() const
 
 QList<QDnsDomainNameRecord> QDnsLookup::pointerRecords() const
 {
-    return d_func()->reply.pointerRecords;
+   return d_func()->reply.pointerRecords;
 }
 
 /*!
@@ -299,7 +300,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::pointerRecords() const
 
 QList<QDnsServiceRecord> QDnsLookup::serviceRecords() const
 {
-    return d_func()->reply.serviceRecords;
+   return d_func()->reply.serviceRecords;
 }
 
 /*!
@@ -308,7 +309,7 @@ QList<QDnsServiceRecord> QDnsLookup::serviceRecords() const
 
 QList<QDnsTextRecord> QDnsLookup::textRecords() const
 {
-    return d_func()->reply.textRecords;
+   return d_func()->reply.textRecords;
 }
 
 /*!
@@ -319,15 +320,15 @@ QList<QDnsTextRecord> QDnsLookup::textRecords() const
 
 void QDnsLookup::abort()
 {
-    Q_D(QDnsLookup);
-    if (d->runnable) {
-        d->runnable = 0;
-        d->reply = QDnsLookupReply();
-        d->reply.error = QDnsLookup::OperationCancelledError;
-        d->reply.errorString = tr("Operation cancelled");
-        d->isFinished = true;
-        emit finished();
-    }
+   Q_D(QDnsLookup);
+   if (d->runnable) {
+      d->runnable = 0;
+      d->reply = QDnsLookupReply();
+      d->reply.error = QDnsLookup::OperationCancelledError;
+      d->reply.errorString = tr("Operation cancelled");
+      d->isFinished = true;
+      emit finished();
+   }
 }
 
 /*!
@@ -338,14 +339,14 @@ void QDnsLookup::abort()
 
 void QDnsLookup::lookup()
 {
-    Q_D(QDnsLookup);
-    d->isFinished = false;
-    d->reply = QDnsLookupReply();
-    d->runnable = new QDnsLookupRunnable(d->type, QUrl::toAce(d->name), d->nameserver);
-    connect(d->runnable, SIGNAL(finished(QDnsLookupReply)),
-            this, SLOT(_q_lookupFinished(QDnsLookupReply)),
-            Qt::BlockingQueuedConnection);
-    theDnsLookupThreadPool()->start(d->runnable);
+   Q_D(QDnsLookup);
+   d->isFinished = false;
+   d->reply = QDnsLookupReply();
+   d->runnable = new QDnsLookupRunnable(d->type, QUrl::toAce(d->name), d->nameserver);
+   connect(d->runnable, SIGNAL(finished(QDnsLookupReply)),
+           this, SLOT(_q_lookupFinished(QDnsLookupReply)),
+           Qt::BlockingQueuedConnection);
+   theDnsLookupThreadPool()->start(d->runnable);
 }
 
 /*!
@@ -368,7 +369,7 @@ void QDnsLookup::lookup()
 */
 
 QDnsDomainNameRecord::QDnsDomainNameRecord()
-    : d(new QDnsDomainNameRecordPrivate)
+   : d(new QDnsDomainNameRecordPrivate)
 {
 }
 
@@ -377,7 +378,7 @@ QDnsDomainNameRecord::QDnsDomainNameRecord()
 */
 
 QDnsDomainNameRecord::QDnsDomainNameRecord(const QDnsDomainNameRecord &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -395,7 +396,7 @@ QDnsDomainNameRecord::~QDnsDomainNameRecord()
 
 QString QDnsDomainNameRecord::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -404,7 +405,7 @@ QString QDnsDomainNameRecord::name() const
 
 quint32 QDnsDomainNameRecord::timeToLive() const
 {
-    return d->timeToLive;
+   return d->timeToLive;
 }
 
 /*!
@@ -413,7 +414,7 @@ quint32 QDnsDomainNameRecord::timeToLive() const
 
 QString QDnsDomainNameRecord::value() const
 {
-    return d->value;
+   return d->value;
 }
 
 /*!
@@ -423,8 +424,8 @@ QString QDnsDomainNameRecord::value() const
 
 QDnsDomainNameRecord &QDnsDomainNameRecord::operator=(const QDnsDomainNameRecord &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 /*!
     \fn void QDnsDomainNameRecord::swap(QDnsDomainNameRecord &other)
@@ -453,7 +454,7 @@ QDnsDomainNameRecord &QDnsDomainNameRecord::operator=(const QDnsDomainNameRecord
 */
 
 QDnsHostAddressRecord::QDnsHostAddressRecord()
-    : d(new QDnsHostAddressRecordPrivate)
+   : d(new QDnsHostAddressRecordPrivate)
 {
 }
 
@@ -462,7 +463,7 @@ QDnsHostAddressRecord::QDnsHostAddressRecord()
 */
 
 QDnsHostAddressRecord::QDnsHostAddressRecord(const QDnsHostAddressRecord &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -480,7 +481,7 @@ QDnsHostAddressRecord::~QDnsHostAddressRecord()
 
 QString QDnsHostAddressRecord::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -489,7 +490,7 @@ QString QDnsHostAddressRecord::name() const
 
 quint32 QDnsHostAddressRecord::timeToLive() const
 {
-    return d->timeToLive;
+   return d->timeToLive;
 }
 
 /*!
@@ -498,7 +499,7 @@ quint32 QDnsHostAddressRecord::timeToLive() const
 
 QHostAddress QDnsHostAddressRecord::value() const
 {
-    return d->value;
+   return d->value;
 }
 
 /*!
@@ -508,8 +509,8 @@ QHostAddress QDnsHostAddressRecord::value() const
 
 QDnsHostAddressRecord &QDnsHostAddressRecord::operator=(const QDnsHostAddressRecord &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 /*!
     \fn void QDnsHostAddressRecord::swap(QDnsHostAddressRecord &other)
@@ -540,7 +541,7 @@ QDnsHostAddressRecord &QDnsHostAddressRecord::operator=(const QDnsHostAddressRec
 */
 
 QDnsMailExchangeRecord::QDnsMailExchangeRecord()
-    : d(new QDnsMailExchangeRecordPrivate)
+   : d(new QDnsMailExchangeRecordPrivate)
 {
 }
 
@@ -549,7 +550,7 @@ QDnsMailExchangeRecord::QDnsMailExchangeRecord()
 */
 
 QDnsMailExchangeRecord::QDnsMailExchangeRecord(const QDnsMailExchangeRecord &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -567,7 +568,7 @@ QDnsMailExchangeRecord::~QDnsMailExchangeRecord()
 
 QString QDnsMailExchangeRecord::exchange() const
 {
-    return d->exchange;
+   return d->exchange;
 }
 
 /*!
@@ -576,7 +577,7 @@ QString QDnsMailExchangeRecord::exchange() const
 
 QString QDnsMailExchangeRecord::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -585,7 +586,7 @@ QString QDnsMailExchangeRecord::name() const
 
 quint16 QDnsMailExchangeRecord::preference() const
 {
-    return d->preference;
+   return d->preference;
 }
 
 /*!
@@ -594,7 +595,7 @@ quint16 QDnsMailExchangeRecord::preference() const
 
 quint32 QDnsMailExchangeRecord::timeToLive() const
 {
-    return d->timeToLive;
+   return d->timeToLive;
 }
 
 /*!
@@ -604,8 +605,8 @@ quint32 QDnsMailExchangeRecord::timeToLive() const
 
 QDnsMailExchangeRecord &QDnsMailExchangeRecord::operator=(const QDnsMailExchangeRecord &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 /*!
     \fn void QDnsMailExchangeRecord::swap(QDnsMailExchangeRecord &other)
@@ -636,7 +637,7 @@ QDnsMailExchangeRecord &QDnsMailExchangeRecord::operator=(const QDnsMailExchange
 */
 
 QDnsServiceRecord::QDnsServiceRecord()
-    : d(new QDnsServiceRecordPrivate)
+   : d(new QDnsServiceRecordPrivate)
 {
 }
 
@@ -645,7 +646,7 @@ QDnsServiceRecord::QDnsServiceRecord()
 */
 
 QDnsServiceRecord::QDnsServiceRecord(const QDnsServiceRecord &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -663,7 +664,7 @@ QDnsServiceRecord::~QDnsServiceRecord()
 
 QString QDnsServiceRecord::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -672,7 +673,7 @@ QString QDnsServiceRecord::name() const
 
 quint16 QDnsServiceRecord::port() const
 {
-    return d->port;
+   return d->port;
 }
 
 /*!
@@ -684,7 +685,7 @@ quint16 QDnsServiceRecord::port() const
 
 quint16 QDnsServiceRecord::priority() const
 {
-    return d->priority;
+   return d->priority;
 }
 
 /*!
@@ -693,7 +694,7 @@ quint16 QDnsServiceRecord::priority() const
 
 QString QDnsServiceRecord::target() const
 {
-    return d->target;
+   return d->target;
 }
 
 /*!
@@ -702,7 +703,7 @@ QString QDnsServiceRecord::target() const
 
 quint32 QDnsServiceRecord::timeToLive() const
 {
-    return d->timeToLive;
+   return d->timeToLive;
 }
 
 /*!
@@ -715,7 +716,7 @@ quint32 QDnsServiceRecord::timeToLive() const
 
 quint16 QDnsServiceRecord::weight() const
 {
-    return d->weight;
+   return d->weight;
 }
 
 /*!
@@ -725,8 +726,8 @@ quint16 QDnsServiceRecord::weight() const
 
 QDnsServiceRecord &QDnsServiceRecord::operator=(const QDnsServiceRecord &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 /*!
     \fn void QDnsServiceRecord::swap(QDnsServiceRecord &other)
@@ -757,7 +758,7 @@ QDnsServiceRecord &QDnsServiceRecord::operator=(const QDnsServiceRecord &other)
 */
 
 QDnsTextRecord::QDnsTextRecord()
-    : d(new QDnsTextRecordPrivate)
+   : d(new QDnsTextRecordPrivate)
 {
 }
 
@@ -766,7 +767,7 @@ QDnsTextRecord::QDnsTextRecord()
 */
 
 QDnsTextRecord::QDnsTextRecord(const QDnsTextRecord &other)
-    : d(other.d)
+   : d(other.d)
 {
 }
 
@@ -784,7 +785,7 @@ QDnsTextRecord::~QDnsTextRecord()
 
 QString QDnsTextRecord::name() const
 {
-    return d->name;
+   return d->name;
 }
 
 /*!
@@ -793,7 +794,7 @@ QString QDnsTextRecord::name() const
 
 quint32 QDnsTextRecord::timeToLive() const
 {
-    return d->timeToLive;
+   return d->timeToLive;
 }
 
 /*!
@@ -802,7 +803,7 @@ quint32 QDnsTextRecord::timeToLive() const
 
 QList<QByteArray> QDnsTextRecord::values() const
 {
-    return d->values;
+   return d->values;
 }
 
 /*!
@@ -812,8 +813,8 @@ QList<QByteArray> QDnsTextRecord::values() const
 
 QDnsTextRecord &QDnsTextRecord::operator=(const QDnsTextRecord &other)
 {
-    d = other.d;
-    return *this;
+   d = other.d;
+   return *this;
 }
 /*!
     \fn void QDnsTextRecord::swap(QDnsTextRecord &other)
@@ -824,71 +825,71 @@ QDnsTextRecord &QDnsTextRecord::operator=(const QDnsTextRecord &other)
 
 void QDnsLookupPrivate::_q_lookupFinished(const QDnsLookupReply &_reply)
 {
-    Q_Q(QDnsLookup);
-    if (runnable == q->sender()) {
+   Q_Q(QDnsLookup);
+   if (runnable == q->sender()) {
 #ifdef QDNSLOOKUP_DEBUG
-        qDebug("DNS reply for %s: %i (%s)", qPrintable(name), _reply.error, qPrintable(_reply.errorString));
+      qDebug("DNS reply for %s: %i (%s)", qPrintable(name), _reply.error, qPrintable(_reply.errorString));
 #endif
-        reply = _reply;
-        runnable = 0;
-        isFinished = true;
-        emit q->finished();
-    }
+      reply = _reply;
+      runnable = 0;
+      isFinished = true;
+      emit q->finished();
+   }
 }
 
 void QDnsLookupRunnable::run()
 {
-    QDnsLookupReply reply;
+   QDnsLookupReply reply;
 
-    // Validate input.
-    if (requestName.isEmpty()) {
-        reply.error = QDnsLookup::InvalidRequestError;
-        reply.errorString = tr("Invalid domain name");
-        emit finished(reply);
-        return;
-    }
+   // Validate input.
+   if (requestName.isEmpty()) {
+      reply.error = QDnsLookup::InvalidRequestError;
+      reply.errorString = tr("Invalid domain name");
+      emit finished(reply);
+      return;
+   }
 
-    // Perform request.
-    query(requestType, requestName, nameserver, &reply);
+   // Perform request.
+   query(requestType, requestName, nameserver, &reply);
 
-    // Sort results.
-    if (!theDnsLookupSeedStorage()->hasLocalData()) {
-        qsrand(QTime(0,0,0).msecsTo(QTime::currentTime()) ^ reinterpret_cast<quintptr>(this));
-        theDnsLookupSeedStorage()->setLocalData(new bool(true));
-    }
-    qt_qdnsmailexchangerecord_sort(reply.mailExchangeRecords);
-    qt_qdnsservicerecord_sort(reply.serviceRecords);
+   // Sort results.
+   if (!theDnsLookupSeedStorage()->hasLocalData()) {
+      qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()) ^ reinterpret_cast<quintptr>(this));
+      theDnsLookupSeedStorage()->setLocalData(new bool(true));
+   }
+   qt_qdnsmailexchangerecord_sort(reply.mailExchangeRecords);
+   qt_qdnsservicerecord_sort(reply.serviceRecords);
 
-    emit finished(reply);
+   emit finished(reply);
 }
 
 QDnsLookupThreadPool::QDnsLookupThreadPool()
-    : signalsConnected(false)
+   : signalsConnected(false)
 {
-    // Run up to 5 lookups in parallel.
-    setMaxThreadCount(5);
+   // Run up to 5 lookups in parallel.
+   setMaxThreadCount(5);
 }
 
 void QDnsLookupThreadPool::start(QRunnable *runnable)
 {
-    // Ensure threads complete at application destruction.
-    if (! signalsConnected) {
-        QMutexLocker signalsLocker(&signalsMutex);
-        if (!signalsConnected) {
-            QCoreApplication *app = QCoreApplication::instance();
-            if (!app) {
-                qWarning("QDnsLookup requires a QCoreApplication");
-                delete runnable;
-                return;
-            }
+   // Ensure threads complete at application destruction.
+   if (! signalsConnected) {
+      QMutexLocker signalsLocker(&signalsMutex);
+      if (!signalsConnected) {
+         QCoreApplication *app = QCoreApplication::instance();
+         if (!app) {
+            qWarning("QDnsLookup requires a QCoreApplication");
+            delete runnable;
+            return;
+         }
 
-            moveToThread(app->thread());
-            connect(app, SIGNAL(destroyed()), SLOT(_q_applicationDestroyed()), Qt::DirectConnection);
-            signalsConnected = true;
-        }
-    }
+         moveToThread(app->thread());
+         connect(app, SIGNAL(destroyed()), SLOT(_q_applicationDestroyed()), Qt::DirectConnection);
+         signalsConnected = true;
+      }
+   }
 
-    QThreadPool::start(runnable);
+   QThreadPool::start(runnable);
 }
 
 void QDnsLookupThreadPool::_q_applicationDestroyed()

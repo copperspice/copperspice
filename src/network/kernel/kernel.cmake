@@ -9,7 +9,6 @@ set(NETWORK_PUBLIC_INCLUDES
     QDnsLookup
     QHostAddress
     QHostInfo
-    QUrlInfo
     QNetworkAddressEntry
     QNetworkProxy
     QNetworkProxyFactory
@@ -29,7 +28,6 @@ set(NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qurlinfo.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkaddressentry.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxyfactory.h
@@ -46,7 +44,7 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkproxy_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qnetworkinterface_win_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qurlinfo_p.h
 )
 
 set(NETWORK_SOURCES

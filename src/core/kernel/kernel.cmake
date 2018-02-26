@@ -46,6 +46,7 @@ set(CORE_PUBLIC_INCLUDES
     QVariantList
     QVariantHash
     QVariantMap
+    QWinEventNotifier
     QtCleanUpFunction
     QtMsgHandler
 )
@@ -102,6 +103,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvarianthash.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantmap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_callevent.h
@@ -128,7 +130,6 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_win_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfunctions_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcrashhandler_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib_p.h
@@ -157,7 +158,7 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_callevent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_classinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_enum.cpp
@@ -172,7 +173,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${CORE_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication_win.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_win.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_win.cpp
     )

@@ -20,15 +20,15 @@
 *
 ***********************************************************************/
 
-#include <qurlinfo.h>
+#include "qurlinfo_p.h"
 
-#ifndef QT_NO_URLINFO
+#ifndef QT_NO_FTP
 
 #include <qurl.h>
 #include <qdir.h>
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
+
 
 class QUrlInfoPrivate
 {
@@ -699,6 +699,5 @@ bool QUrlInfo::isValid() const
    return d != 0;
 }
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_URLINFO

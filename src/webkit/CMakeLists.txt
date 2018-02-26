@@ -159,8 +159,18 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/qt
 )
 
-if(NOT OPENSSL_FOUND)
-    add_definitions(-DQT_NO_OPENSSL)
+if (SECURETRANSPORT_FOUND)
+    add_definitions(-DQT_SSL)
+    add_definitions(-DQT_SECURETRANSPORT)
+
+elseif (OPENSSL_FOUND)
+    add_definitions(-DQT_SSL)
+    add_definitions(-DQT_OPENSSL)
+
+    include_directories(${OPENSSL_INCLUDE_DIR})
+    set(EXTRA_NETWORK_LIBS
+        ${EXTRA_NETWORK_LIBS} ${OPENSSL_LIBRARIES}
+    )
 endif()
 
 set(WEBKIT_PUBLIC_INCLUDES

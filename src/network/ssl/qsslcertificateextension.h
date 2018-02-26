@@ -30,7 +30,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QSslCertificateExtensionPrivate;
 

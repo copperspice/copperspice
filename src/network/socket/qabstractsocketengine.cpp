@@ -109,11 +109,11 @@ QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(QAbstractSocket
    return new QNativeSocketEngine(parent);
 }
 
-QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(qintptr socketDescripter, QObject *parent)
+QAbstractSocketEngine *QAbstractSocketEngine::createSocketEngine(qintptr socketDescriptor, QObject *parent)
 {
    QMutexLocker locker(&socketHandlers()->mutex);
    for (int i = 0; i < socketHandlers()->size(); i++) {
-      if (QAbstractSocketEngine *ret = socketHandlers()->at(i)->createSocketEngine(socketDescripter, parent)) {
+      if (QAbstractSocketEngine *ret = socketHandlers()->at(i)->createSocketEngine(socketDescriptor, parent)) {
          return ret;
       }
    }
@@ -166,8 +166,9 @@ void QAbstractSocketEngine::exceptionNotification()
 
 void QAbstractSocketEngine::closeNotification()
 {
-    if (QAbstractSocketEngineReceiver *receiver = d_func()->receiver)
-        receiver->closeNotification();
+   if (QAbstractSocketEngineReceiver *receiver = d_func()->receiver) {
+      receiver->closeNotification();
+   }
 }
 
 void QAbstractSocketEngine::connectionNotification()

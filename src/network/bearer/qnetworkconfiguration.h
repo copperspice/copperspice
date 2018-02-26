@@ -23,46 +23,19 @@
 #ifndef QNETWORKCONFIGURATION_H
 #define QNETWORKCONFIGURATION_H
 
-#ifndef QT_MOBILITY_BEARER
-# include <QtCore/qglobal.h>
-#else
-# include <qmobilityglobal.h>
-#endif
-
-#include <QtCore/qshareddata.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
-
-#if defined(Q_OS_WIN) && defined(interface)
-#undef interface
-#endif
-
-#ifndef QT_MOBILITY_BEARER
-QT_BEGIN_NAMESPACE
-#define QNetworkConfigurationExport Q_NETWORK_EXPORT
-
-#else
-QTM_BEGIN_NAMESPACE
-#define QNetworkConfigurationExport Q_BEARER_EXPORT
-
-#endif
+#include <qglobal.h>
+#include <qmetatype.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qlist.h>
 
 class QNetworkConfigurationPrivate;
-class QNetworkConfigurationExport QNetworkConfiguration
+
+class Q_NETWORK_EXPORT QNetworkConfiguration
 {
 
  public:
-   QNetworkConfiguration();
-   QNetworkConfiguration(const QNetworkConfiguration &other);
-   QNetworkConfiguration &operator=(const QNetworkConfiguration &other);
-   ~QNetworkConfiguration();
-
-   bool operator==(const QNetworkConfiguration &other) const;
-   inline bool operator!=(const QNetworkConfiguration &other) const {
-      return !operator==(other);
-   }
-
-   enum Type {
+  enum Type {
       InternetAccessPoint = 0,
       ServiceNetwork,
       UserChoice,
@@ -84,7 +57,6 @@ class QNetworkConfigurationExport QNetworkConfiguration
    };
    using StateFlags = QFlags<StateFlag>;
 
-#ifndef QT_MOBILITY_BEARER
    enum BearerType {
       BearerUnknown,
       BearerEthernet,
@@ -94,26 +66,41 @@ class QNetworkConfigurationExport QNetworkConfiguration
       BearerWCDMA,
       BearerHSPA,
       BearerBluetooth,
-      BearerWiMAX
+      BearerWiMAX,
+      BearerEVDO,
+      BearerLTE,
+      Bearer3G,
+      Bearer4G
    };
-#endif
+
+   QNetworkConfiguration();
+   QNetworkConfiguration(const QNetworkConfiguration &other);
+   ~QNetworkConfiguration();
+
+   QNetworkConfiguration &operator=(QNetworkConfiguration &&other)  {
+      swap(other);
+      return *this;
+   }
+
+   QNetworkConfiguration &operator=(const QNetworkConfiguration &other);
+
+   bool operator==(const QNetworkConfiguration &other) const;
+
+   inline bool operator!=(const QNetworkConfiguration &other) const {
+      return !operator==(other);
+   }
+
+   void swap(QNetworkConfiguration &other) {
+      qSwap(d, other.d);
+   }
 
    StateFlags state() const;
    Type type() const;
    Purpose purpose() const;
 
-#ifndef QT_MOBILITY_BEARER
-#ifdef QT_DEPRECATED
-   // Required to maintain source compatibility with Qt Mobility.
-   QT_DEPRECATED inline QString bearerName() const {
-      return bearerTypeName();
-   }
-#endif
    BearerType bearerType() const;
+   BearerType bearerTypeFamily() const;
    QString bearerTypeName() const;
-#else
-   QString bearerName() const;
-#endif
 
    QString identifier() const;
    bool isRoamingAvailable() const;
@@ -130,10 +117,6 @@ class QNetworkConfigurationExport QNetworkConfiguration
    QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
 };
 
-#ifndef QT_MOBILITY_BEARER
-QT_END_NAMESPACE
-#else
-QTM_END_NAMESPACE
-#endif
+Q_DECLARE_METATYPE(QNetworkConfiguration)
 
 #endif // QNETWORKCONFIGURATION_H

@@ -41,6 +41,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    QNetworkSessionPrivate() : QObject(),
       state(QNetworkSession::Invalid), isOpen(false), mutex(QMutex::Recursive) {
    }
+
    virtual ~QNetworkSessionPrivate() {
    }
 
@@ -72,7 +73,12 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    virtual quint64 bytesWritten() const = 0;
    virtual quint64 bytesReceived() const = 0;
    virtual quint64 activeTime() const = 0;
- 
+
+   virtual QNetworkSession::UsagePolicies usagePolicies() const = 0;
+   virtual void setUsagePolicies(QNetworkSession::UsagePolicies) = 0;
+
+   static void setUsagePolicies(QNetworkSession&, QNetworkSession::UsagePolicies); //for unit testing
+
    //releases any pending waitForOpened() calls
    NET_CS_SIGNAL_1(Public, void quitPendingWaitsForOpened())
    NET_CS_SIGNAL_2(quitPendingWaitsForOpened)
@@ -92,6 +98,8 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    NET_CS_SIGNAL_1(Public, void preferredConfigurationChanged(const QNetworkConfiguration &config, bool isSeamless))
    NET_CS_SIGNAL_2(preferredConfigurationChanged, config, isSeamless)
 
+   NET_CS_SIGNAL_1(Public, void usagePoliciesChanged(QNetworkSession::UsagePolicies data))
+   NET_CS_SIGNAL_2(usagePoliciesChanged, data)
 
  protected:
    inline QNetworkConfigurationPrivatePointer privateConfiguration(const QNetworkConfiguration &config) const {
@@ -101,7 +109,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    inline void setPrivateConfiguration(QNetworkConfiguration &config, QNetworkConfigurationPrivatePointer ptr) const {
       config.d = ptr;
    }
- 
+
    QNetworkSession *q;
 
    // The config set on QNetworkSession.
@@ -122,9 +130,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    QMutex mutex;
 };
 
-QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QSharedPointer<QNetworkSession>)
 
 #endif // QT_NO_BEARERMANAGEMENT
 

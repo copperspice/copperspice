@@ -31,7 +31,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QDebug;
 class QIODevice;
@@ -89,7 +89,7 @@ class Q_NETWORK_EXPORT QSslKey
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslKey &key);
 
-#endif // QT_NO_OPENSSL
+#endif
 
 QT_END_NAMESPACE
 

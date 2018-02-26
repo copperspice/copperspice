@@ -33,14 +33,14 @@
 
 #elif defined(Q_OS_WIN)
 #   include <qt_windows.h>
-#   include <qwineventnotifier_p.h>
+#   include <qwineventnotifier.h>
 
 #else
 #   include <qabstractsocketengine_p.h>
 #   include <qsocketnotifier.h>
 #endif
 
-QT_BEGIN_NAMESPACE
+
 
 class QLocalServerPrivate
 {
@@ -104,7 +104,7 @@ class QLocalServerPrivate
 
 };
 
-QT_END_NAMESPACE
+
 
 #endif // QT_NO_LOCALSERVER
 

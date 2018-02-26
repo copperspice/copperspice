@@ -46,8 +46,19 @@ ______lib_libCsWebKit@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 ______lib_libCsWebKit@BUILD_ABI@_la_LIBADD = ../../lib/libCsCore@BUILD_ABI@.la ../../lib/libCsGui@BUILD_ABI@.la ../../lib/libCsNetwork@BUILD_ABI@.la
 
 
-if ! SSL
-______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
+if SECURETRANSPORT_FOUND
+______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_SSL
+______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_SECURETRANSPORT
+
+else
+
+if OPENSSL_FOUND
+______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_SSL
+______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += -DQT_OPENSSL
+______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += $(SSL_CFLAGS)
+______lib_libCsWebKit@BUILD_ABI@_la_LDFLAGS += $(SSL_LIBS)
+endif
+
 endif
 
 if OSTYPE_WIN
@@ -152,6 +163,7 @@ ______lib_libCsWebKit@BUILD_ABI@_la_CXXFLAGS += \
 	-I../../include/QtCore \
 	-I../../include/QtGui \
 	-I../../include/QtNetwork \
+	-I../../privateinclude/QtNetwork/private \
 	-I$(top_srcdir)/src/3rdparty/webkit/include/WebCore \
 	-I$(top_srcdir)/src/3rdparty/webkit/include \
 	-I$(top_srcdir)/src/3rdparty/webkit/Source/JavaScriptCore \

@@ -20,44 +20,22 @@
 *
 ***********************************************************************/
 
-#ifndef QWINEVENTNOTIFIER_P_H
-#define QWINEVENTNOTIFIER_P_H
+#ifndef QHTTPPROTOCOLHANDLER_H
+#define QHTTPPROTOCOLHANDLER_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qt_windows.h>
+#include <qabstractprotocolhandler_p.h>
 
-QT_BEGIN_NAMESPACE
 
-class Q_CORE_EXPORT QWinEventNotifier : public QObject
-{
-   CORE_CS_OBJECT(QWinEventNotifier)
 
- public:
-   explicit QWinEventNotifier(QObject *parent = nullptr);
-   explicit QWinEventNotifier(HANDLE hEvent, QObject *parent = nullptr);
-   ~QWinEventNotifier();
+class QHttpProtocolHandler : public QAbstractProtocolHandler {
+public:
+    QHttpProtocolHandler(QHttpNetworkConnectionChannel *channel);
 
-   void setHandle(HANDLE hEvent);
-   HANDLE handle() const;
-
-   bool isEnabled() const;
-
-   CORE_CS_SLOT_1(Public, void setEnabled(bool enable))
-   CORE_CS_SLOT_2(setEnabled)
-
-   CORE_CS_SIGNAL_1(Public, void activated(HANDLE hEvent))
-   CORE_CS_SIGNAL_2(activated, hEvent)
-
- protected:
-   bool event(QEvent *e) override;
-
- private:
-   Q_DISABLE_COPY(QWinEventNotifier)
-
-   HANDLE handleToEvent;
-   bool enabled;
+private:
+    virtual void _q_receiveReply() override;
+    virtual void _q_readyRead() override;
+    virtual bool sendRequest() override;
 };
 
-QT_END_NAMESPACE
 
-#endif // QWINEVENTNOTIFIER_P_H
+#endif

@@ -32,6 +32,9 @@
 #if defined(OCSP_RESPONSE)
 #undef OCSP_RESPONSE
 #endif
+#if defined(X509_NAME)
+#undef X509_NAME
+#endif
 #endif
 
 #include <openssl/asn1.h>
@@ -85,6 +88,7 @@ public:
    void startServerEncryption() override;
    void transmit() override;
    bool startHandshake();
+
    void disconnectFromHost() override;
    void disconnected() override;
 
@@ -98,7 +102,7 @@ public:
 
 #ifdef Q_OS_WIN
     void fetchCaRootForCert(const QSslCertificate &cert);
-    void _q_caRootLoaded(QSslCertificate,QSslCertificate);
+    void _q_caRootLoaded(QSslCertificate,QSslCertificate) override;
 #endif
 
    static long setupOpenSslOptions(QSsl::SslProtocol protocol, QSsl::SslOptions sslOptions);

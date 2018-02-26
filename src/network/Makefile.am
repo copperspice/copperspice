@@ -11,20 +11,29 @@ lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS = $(AM_CXXFLAGS) -Iinclude -Iinclude/QtC
 lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined
 lib_libCsNetwork@BUILD_ABI@_la_LIBADD = lib/libCsCore@BUILD_ABI@.la
 
-if SSL
-lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += $(SSL_CFLAGS)
-lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += $(SSL_LIBS)
+if SECURETRANSPORT_FOUND
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_SSL
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_SECURETRANSPORT
+
 else
-lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_NO_OPENSSL
+
+if OPENSSL_FOUND
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_SSL
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -DQT_OPENSSL
+
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += $(SSL_CFLAGS)
+   lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += $(SSL_LIBS)
+endif
+
 endif
 
 if OSTYPE_WIN
-lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32 -ldnsapi -lcrypt32
+   lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS += -lws2_32 -lcrypt32 -ldnsapi -liphlpapi
 endif
 
 if OSTYPE_DARWIN
-lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -D__APPLE_USE_RFC_3542
-lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += -framework CoreServices
+   lib_libCsNetwork@BUILD_ABI@_la_CXXFLAGS += -D__APPLE_USE_RFC_3542
+   lib_libCsNetwork@BUILD_ABI@_la_LDFLAGS  += -framework CoreServices -framework Security
 endif
 
 NETWORK_INCLUDES =

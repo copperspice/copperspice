@@ -23,11 +23,11 @@
 #ifndef QNETWORKSESSION_H
 #define QNETWORKSESSION_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
-#include <QtNetwork/qnetworkinterface.h>
-#include <QtCore/qvariant.h>
-#include <QtNetwork/qnetworkconfiguration.h>
+#include <qobject.h>
+#include <qstring.h>
+#include <qnetworkinterface.h>
+#include <qvariant.h>
+#include <qnetworkconfiguration.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
@@ -35,21 +35,11 @@
 #undef interface
 #endif
 
-#ifndef QT_MOBILITY_BEARER
-#include <QtCore/qshareddata.h>
-QT_BEGIN_NAMESPACE
-#define QNetworkSessionExport Q_NETWORK_EXPORT
-
-#else
-#include <qmobilityglobal.h>
-QTM_BEGIN_NAMESPACE
-#define QNetworkSessionExport Q_BEARER_EXPORT
-
-#endif
+#include <qshareddata.h>
 
 class QNetworkSessionPrivate;
 
-class QNetworkSessionExport QNetworkSession : public QObject
+class Q_NETWORK_EXPORT QNetworkSession : public QObject
 {
    NET_CS_OBJECT(QNetworkSession)
 
@@ -72,6 +62,12 @@ class QNetworkSessionExport QNetworkSession : public QObject
       InvalidConfigurationError
    };
 
+   enum UsagePolicy {
+        NoPolicy = 0,
+        NoBackgroundTrafficPolicy = 1
+   };
+   using UsagePolicies = QFlags<UsagePolicy>;
+
    explicit QNetworkSession(const QNetworkConfiguration &connConfig, QObject *parent = nullptr);
    virtual ~QNetworkSession();
 
@@ -92,6 +88,7 @@ class QNetworkSessionExport QNetworkSession : public QObject
    quint64 bytesReceived() const;
    quint64 activeTime() const;
 
+   QNetworkSession::UsagePolicies usagePolicies() const;
    bool waitForOpened(int msecs = 30000);
 
    NET_CS_SLOT_1(Public, void open())
@@ -103,7 +100,7 @@ class QNetworkSessionExport QNetworkSession : public QObject
    NET_CS_SLOT_1(Public, void stop())
    NET_CS_SLOT_2(stop)
 
-   //roaming related slots
+   // roaming related slots
    NET_CS_SLOT_1(Public, void migrate())
    NET_CS_SLOT_2(migrate)
 
@@ -134,24 +131,22 @@ class QNetworkSessionExport QNetworkSession : public QObject
    NET_CS_SIGNAL_1(Public, void newConfigurationActivated())
    NET_CS_SIGNAL_2(newConfigurationActivated)
 
+   NET_CS_SIGNAL_1(Public, void usagePoliciesChanged(QNetworkSession::UsagePolicies usagePolicies))
+   NET_CS_SIGNAL_2(usagePoliciesChanged, usagePolicies)
+
  protected:
-   virtual void connectNotify(const char *signal);
-   virtual void disconnectNotify(const char *signal);
+   void connectNotify(const QMetaMethod &signal) const override;
+   void disconnectNotify(const QMetaMethod &signal) const override;
 
  private:
    friend class QNetworkSessionPrivate;
    QNetworkSessionPrivate *d;
 };
 
-#ifndef QT_MOBILITY_BEARER
-QT_END_NAMESPACE
+Q_DECLARE_METATYPE(QSharedPointer<QNetworkSession>)
 Q_DECLARE_METATYPE(QNetworkSession::State)
 Q_DECLARE_METATYPE(QNetworkSession::SessionError)
-
-#else
-QTM_END_NAMESPACE
-
-#endif
+Q_DECLARE_METATYPE(QNetworkSession::UsagePolicies)
 
 #endif // QT_NO_BEARERMANAGEMENT
 

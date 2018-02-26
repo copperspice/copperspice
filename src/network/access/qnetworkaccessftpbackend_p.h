@@ -27,12 +27,10 @@
 #include <qnetworkaccesscache_p.h>
 #include <qnetworkrequest.h>
 #include <qnetworkreply.h>
-#include <QtNetwork/qftp.h>
-#include <QtCore/qpointer.h>
+#include <qftp_p.h>
+#include <qpointer.h>
 
 #ifndef QT_NO_FTP
-
-QT_BEGIN_NAMESPACE
 
 class QNetworkAccessFtpIODevice;
 class QNetworkAccessCachedFtpConnection;
@@ -69,10 +67,13 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 
    NET_CS_SLOT_1(Public, void ftpConnectionReady(QNetworkAccessCache::CacheableObject *object))
    NET_CS_SLOT_2(ftpConnectionReady)
+
    NET_CS_SLOT_1(Public, void ftpDone())
    NET_CS_SLOT_2(ftpDone)
+
    NET_CS_SLOT_1(Public, void ftpReadyRead())
    NET_CS_SLOT_2(ftpReadyRead)
+
    NET_CS_SLOT_1(Public, void ftpRawCommandReply(int code, const QString &text))
    NET_CS_SLOT_2(ftpRawCommandReply)
 
@@ -90,10 +91,9 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 class QNetworkAccessFtpBackendFactory: public QNetworkAccessBackendFactory
 {
  public:
+   QStringList supportedSchemes() const override;
    QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FTP
 

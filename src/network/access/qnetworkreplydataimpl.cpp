@@ -40,33 +40,41 @@ QNetworkReplyDataImpl::~QNetworkReplyDataImpl()
 {
 }
 
-QNetworkReplyDataImpl::QNetworkReplyDataImpl(QObject *parent, const QNetworkRequest &req,
-      const QNetworkAccessManager::Operation op)
+QNetworkReplyDataImpl::QNetworkReplyDataImpl(QObject *parent, const QNetworkRequest &req, const QNetworkAccessManager::Operation op)
    : QNetworkReply(*new QNetworkReplyDataImplPrivate(), parent)
 {
    Q_D(QNetworkReplyDataImpl);
+
    setRequest(req);
    setUrl(req.url());
    setOperation(op);
    setFinished(true);
+
    QNetworkReply::open(QIODevice::ReadOnly);
 
    QUrl url = req.url();
 
-   // FIXME qDecodeDataUrl should instead be rewritten to have the QByteArray
-   // and the mime type as an output parameter and return a bool instead
-   d->decodeDataUrlResult = qDecodeDataUrl(url);
+   QString mimeType;
+   QByteArray payload;
+   bool isValid = false;
 
-   if (! d->decodeDataUrlResult.first.isNull()) {
-      QString &mimeType = d->decodeDataUrlResult.first;
-      qint64 size = d->decodeDataUrlResult.second.size();
+   if (url.scheme().compare("data", Qt::CaseInsensitive) == 0 && url.host().isEmpty() ) {
+      QPair<QString, QByteArray> retval = qDecodeDataUrl(url);
+
+      mimeType = retval.first;
+      payload  = retval.second;
+      isValid  = true;
+   }
+
+   if (isValid) {
+      qint64 size = payload.size();
 
       setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
       setHeader(QNetworkRequest::ContentLengthHeader, size);
 
       QMetaObject::invokeMethod(this, "metaDataChanged", Qt::QueuedConnection);
 
-      d->decodedData.setBuffer(&d->decodeDataUrlResult.second);
+      d->decodedData.setData(payload);
       d->decodedData.open(QIODevice::ReadOnly);
 
       QMetaObject::invokeMethod(this, "downloadProgress", Qt::QueuedConnection, Q_ARG(qint64, size), Q_ARG(qint64, size));
@@ -74,9 +82,9 @@ QNetworkReplyDataImpl::QNetworkReplyDataImpl(QObject *parent, const QNetworkRequ
       QMetaObject::invokeMethod(this, "finished",  Qt::QueuedConnection);
 
    } else {
-      // something wrong with this URI
-      const QString msg = QCoreApplication::translate("QNetworkAccessDataBackend",
-                          "Invalid URI: %1").arg(QString::fromLatin1(url.toEncoded()));
+      // something is wrong with this URL
+      const QString msg = QCoreApplication::translate("QNetworkAccessDataBackend", "Invalid URI: %1").arg(url.toString());
+
       setError(QNetworkReply::ProtocolFailure, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProtocolFailure));
@@ -127,4 +135,4 @@ qint64 QNetworkReplyDataImpl::readData(char *data, qint64 maxlen)
 }
 
 
-QT_END_NAMESPACE
+

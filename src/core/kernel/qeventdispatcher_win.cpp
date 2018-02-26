@@ -28,7 +28,7 @@
 #include <qset.h>
 #include <qsocketnotifier.h>
 #include <qvarlengtharray.h>
-#include <qwineventnotifier_p.h>
+#include <qwineventnotifier.h>
 #include <qabstracteventdispatcher_p.h>
 #include <qcoreapplication_p.h>
 #include <qthread_p.h>

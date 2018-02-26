@@ -77,15 +77,15 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
 
    // Check any of the flags
    if (socketOptions & QLocalServer::WorldAccessOption) {
-        QFileInfo serverNameFileInfo(fullServerName);
-        tempDir.reset(new QTemporaryDir(serverNameFileInfo.absolutePath() + QLatin1Char('/')));
+      QFileInfo serverNameFileInfo(fullServerName);
+      tempDir.reset(new QTemporaryDir(serverNameFileInfo.absolutePath() + QLatin1Char('/')));
 
-        if (!tempDir->isValid()) {
-            setError(QLatin1String("QLocalServer::listen"));
-            return false;
-        }
-        encodedTempPath = QFile::encodeName(tempDir->path() + QLatin1String("/s"));
-    }
+      if (!tempDir->isValid()) {
+         setError(QLatin1String("QLocalServer::listen"));
+         return false;
+      }
+      encodedTempPath = QFile::encodeName(tempDir->path() + QLatin1String("/s"));
+   }
 
    // create the unix socket
    listenSocket = qt_safe_socket(PF_UNIX, SOCK_STREAM, 0);
@@ -105,17 +105,17 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
    }
 
    if (socketOptions & QLocalServer::WorldAccessOption) {
-        if (sizeof(addr.sun_path) < (uint)encodedTempPath.size() + 1) {
-            setError(QLatin1String("QLocalServer::listen"));
-            closeServer();
-            return false;
-        }
-        ::memcpy(addr.sun_path, encodedTempPath.constData(),
-                 encodedTempPath.size() + 1);
-    } else {
-        ::memcpy(addr.sun_path, encodedFullServerName.constData(),
-                 encodedFullServerName.size() + 1);
-    }
+      if (sizeof(addr.sun_path) < (uint)encodedTempPath.size() + 1) {
+         setError(QLatin1String("QLocalServer::listen"));
+         closeServer();
+         return false;
+      }
+      ::memcpy(addr.sun_path, encodedTempPath.constData(),
+               encodedTempPath.size() + 1);
+   } else {
+      ::memcpy(addr.sun_path, encodedFullServerName.constData(),
+               encodedFullServerName.size() + 1);
+   }
 
    // bind
    if (-1 == QT_SOCKET_BIND(listenSocket, (sockaddr *)&addr, sizeof(sockaddr_un))) {
@@ -123,9 +123,8 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
       // if address is in use already, just close the socket, but do not delete the file
       if (errno == EADDRINUSE) {
          QT_CLOSE(listenSocket);
-      }
-      // otherwise, close the socket and delete the file
-      else {
+      }  else {
+         // otherwise, close the socket and delete the file
          closeServer();
       }
       listenSocket = -1;
@@ -145,29 +144,32 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
    }
 
    if (socketOptions & QLocalServer::WorldAccessOption) {
-        mode_t mode = 000;
+      mode_t mode = 000;
 
-        if (socketOptions & QLocalServer::UserAccessOption)
-            mode |= S_IRWXU;
+      if (socketOptions & QLocalServer::UserAccessOption) {
+         mode |= S_IRWXU;
+      }
 
-        if (socketOptions & QLocalServer::GroupAccessOption)
-            mode |= S_IRWXG;
+      if (socketOptions & QLocalServer::GroupAccessOption) {
+         mode |= S_IRWXG;
+      }
 
-        if (socketOptions & QLocalServer::OtherAccessOption)
-            mode |= S_IRWXO;
+      if (socketOptions & QLocalServer::OtherAccessOption) {
+         mode |= S_IRWXO;
+      }
 
-        if (::chmod(encodedTempPath.constData(), mode) == -1) {
-            setError(QLatin1String("QLocalServer::listen"));
-            closeServer();
-            return false;
-        }
+      if (::chmod(encodedTempPath.constData(), mode) == -1) {
+         setError(QLatin1String("QLocalServer::listen"));
+         closeServer();
+         return false;
+      }
 
-        if (::rename(encodedTempPath.constData(), encodedFullServerName.constData()) == -1) {
-            setError(QLatin1String("QLocalServer::listen"));
-            closeServer();
-            return false;
-        }
-    }
+      if (::rename(encodedTempPath.constData(), encodedFullServerName.constData()) == -1) {
+         setError(QLatin1String("QLocalServer::listen"));
+         closeServer();
+         return false;
+      }
+   }
    Q_ASSERT(!socketNotifier);
    socketNotifier = new QSocketNotifier(listenSocket,
                                         QSocketNotifier::Read, q);
@@ -179,44 +181,44 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
 
 bool QLocalServerPrivate::listen(qintptr socketDescriptor)
 {
-    Q_Q(QLocalServer);
+   Q_Q(QLocalServer);
 
-    // Attach to the localsocket
-    listenSocket = socketDescriptor;
+   // Attach to the localsocket
+   listenSocket = socketDescriptor;
 
-    ::fcntl(listenSocket, F_SETFD, FD_CLOEXEC);
-    ::fcntl(listenSocket, F_SETFL, ::fcntl(listenSocket, F_GETFL) | O_NONBLOCK);
+   ::fcntl(listenSocket, F_SETFD, FD_CLOEXEC);
+   ::fcntl(listenSocket, F_SETFL, ::fcntl(listenSocket, F_GETFL) | O_NONBLOCK);
 
 #ifdef Q_OS_LINUX
-    struct ::sockaddr_un addr;
-    QT_SOCKLEN_T len = sizeof(addr);
-    memset(&addr, 0, sizeof(addr));
-    if (0 == ::getsockname(listenSocket, (sockaddr *)&addr, &len)) {
-        // check for absract sockets
-        if (addr.sun_family == PF_UNIX && addr.sun_path[0] == 0) {
-            addr.sun_path[0] = '@';
-        }
-        QString name = QString::fromLatin1(addr.sun_path);
-        if (!name.isEmpty()) {
-            fullServerName = name;
-            serverName = fullServerName.mid(fullServerName.lastIndexOf(QLatin1Char('/')) + 1);
-            if (serverName.isEmpty()) {
-                serverName = fullServerName;
-            }
-        }
-    }
+   struct ::sockaddr_un addr;
+   QT_SOCKLEN_T len = sizeof(addr);
+   memset(&addr, 0, sizeof(addr));
+   if (0 == ::getsockname(listenSocket, (sockaddr *)&addr, &len)) {
+      // check for absract sockets
+      if (addr.sun_family == PF_UNIX && addr.sun_path[0] == 0) {
+         addr.sun_path[0] = '@';
+      }
+      QString name = QString::fromLatin1(addr.sun_path);
+      if (!name.isEmpty()) {
+         fullServerName = name;
+         serverName = fullServerName.mid(fullServerName.lastIndexOf(QLatin1Char('/')) + 1);
+         if (serverName.isEmpty()) {
+            serverName = fullServerName;
+         }
+      }
+   }
 #else
-    serverName.clear();
-    fullServerName.clear();
+   serverName.clear();
+   fullServerName.clear();
 #endif
 
-    Q_ASSERT(!socketNotifier);
-    socketNotifier = new QSocketNotifier(listenSocket,
-                                         QSocketNotifier::Read, q);
-    q->connect(socketNotifier, SIGNAL(activated(int)),
-               q, SLOT(_q_onNewConnection()));
-    socketNotifier->setEnabled(maxPendingConnections > 0);
-    return true;
+   Q_ASSERT(!socketNotifier);
+   socketNotifier = new QSocketNotifier(listenSocket,
+                                        QSocketNotifier::Read, q);
+   q->connect(socketNotifier, SIGNAL(activated(int)),
+              q, SLOT(_q_onNewConnection()));
+   socketNotifier->setEnabled(maxPendingConnections > 0);
+   return true;
 }
 /*!
     \internal
@@ -273,9 +275,9 @@ void QLocalServerPrivate::waitForNewConnection(int msec, bool *timedOut)
    FD_ZERO(&readfds);
    FD_SET(listenSocket, &readfds);
 
-    struct timespec timeout;
-    timeout.tv_sec = msec / 1000;
-    timeout.tv_nsec = (msec % 1000) * 1000 * 1000;
+   struct timespec timeout;
+   timeout.tv_sec = msec / 1000;
+   timeout.tv_nsec = (msec % 1000) * 1000 * 1000;
 
    int result = -1;
    result = qt_safe_select(listenSocket + 1, &readfds, 0, 0, (msec == -1) ? 0 : &timeout);

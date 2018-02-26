@@ -29,7 +29,7 @@
 
 #include <openssl/ssl.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QSslContextPrivate;
 

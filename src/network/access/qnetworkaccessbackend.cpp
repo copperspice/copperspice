@@ -89,29 +89,36 @@ QNetworkAccessBackend *QNetworkAccessManagerPrivate::findBackend(QNetworkAccessM
    return 0;
 }
 
+QStringList QNetworkAccessManagerPrivate::backendSupportedSchemes() const
+{
+   if (QNetworkAccessBackendFactoryData::valid.load()) {
+      QMutexLocker locker(&factoryData()->mutex);
+      QNetworkAccessBackendFactoryData::ConstIterator it = factoryData()->constBegin();
+      QNetworkAccessBackendFactoryData::ConstIterator end = factoryData()->constEnd();
+      QStringList schemes;
+      while (it != end) {
+         schemes += (*it)->supportedSchemes();
+         ++it;
+      }
+      return schemes;
+   }
+   return QStringList();
+}
 QNonContiguousByteDevice *QNetworkAccessBackend::createUploadByteDevice()
 {
    if (reply->outgoingDataBuffer) {
-      uploadByteDevice = QSharedPointer<QNonContiguousByteDevice>(QNonContiguousByteDeviceFactory::create(
-                            reply->outgoingDataBuffer));
+      uploadByteDevice = QNonContiguousByteDeviceFactory::createShared(reply->outgoingDataBuffer);
+
    } else if (reply->outgoingData) {
-      uploadByteDevice = QSharedPointer<QNonContiguousByteDevice>(QNonContiguousByteDeviceFactory::create(
-                            reply->outgoingData));
+      uploadByteDevice = QNonContiguousByteDeviceFactory::createShared(reply->outgoingData);
+
    } else {
       return 0;
    }
 
-   bool bufferDisallowed =
-      reply->request.attribute(QNetworkRequest::DoNotBufferUploadDataAttribute,
-                               QVariant(false)) == QVariant(true);
-   if (bufferDisallowed) {
-      uploadByteDevice->disableReset();
-   }
-
    // We want signal emissions only for normal asynchronous uploads
    if (!isSynchronous()) {
-      connect(uploadByteDevice.data(), SIGNAL(readProgress(qint64, qint64)), this, SLOT(emitReplyUploadProgress(qint64,
-              qint64)));
+      connect(uploadByteDevice.data(), SIGNAL(readProgress(qint64, qint64)), this, SLOT(emitReplyUploadProgress(qint64, qint64)));
    }
 
    return uploadByteDevice.data();
@@ -146,18 +153,6 @@ void QNetworkAccessBackend::downstreamReadyWrite()
 void QNetworkAccessBackend::setDownstreamLimited(bool b)
 {
    Q_UNUSED(b);
-   // do nothing
-}
-
-void QNetworkAccessBackend::setReadBufferSize(qint64 size)
-{
-   Q_UNUSED(size);
-   // do nothing
-}
-
-void QNetworkAccessBackend::emitReadBufferFreed(qint64 size)
-{
-   Q_UNUSED(size);
    // do nothing
 }
 
@@ -317,16 +312,15 @@ void QNetworkAccessBackend::error(QNetworkReply::NetworkError code, const QStrin
 }
 
 #ifndef QT_NO_NETWORKPROXY
-void QNetworkAccessBackend::proxyAuthenticationRequired(const QNetworkProxy &proxy,
-      QAuthenticator *authenticator)
+void QNetworkAccessBackend::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
-   manager->proxyAuthenticationRequired(this, proxy, authenticator);
+   manager->proxyAuthenticationRequired(QUrl(), proxy, synchronous, authenticator, &reply->lastProxyAuthentication);
 }
 #endif
 
 void QNetworkAccessBackend::authenticationRequired(QAuthenticator *authenticator)
 {
-   manager->authenticationRequired(this, authenticator);
+   manager->authenticationRequired(authenticator, reply->q_func(), synchronous, reply->url, &reply->urlForLastAuthentication);
 }
 
 void QNetworkAccessBackend::metaDataChanged()
@@ -339,9 +333,15 @@ void QNetworkAccessBackend::redirectionRequested(const QUrl &target)
    reply->redirectionRequested(target);
 }
 
+void QNetworkAccessBackend::encrypted()
+{
+#ifdef QT_SSL
+   reply->encrypted();
+#endif
+}
 void QNetworkAccessBackend::sslErrors(const QList<QSslError> &errors)
 {
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
    reply->sslErrors(errors);
 #else
    Q_UNUSED(errors);
@@ -358,23 +358,24 @@ bool QNetworkAccessBackend::start()
 #ifndef QT_NO_BEARERMANAGEMENT
    // For bearer, check if session start is required
    QSharedPointer<QNetworkSession> networkSession(manager->getNetworkSession());
+
    if (networkSession) {
       // session required
-      if (networkSession->isOpen() &&
-            networkSession->state() == QNetworkSession::Connected) {
+
+      if (networkSession->isOpen() && networkSession->state() == QNetworkSession::Connected) {
          // Session is already open and ready to use.
          // copy network session down to the backend
          setProperty("_q_networksession", QVariant::fromValue(networkSession));
+
       } else {
          // Session not ready, but can skip for loopback connections
 
          // This is not ideal.
          const QString host = reply->url.host();
 
-         if (host == QLatin1String("localhost") ||
-               QHostAddress(host) == QHostAddress::LocalHost ||
-               QHostAddress(host) == QHostAddress::LocalHostIPv6) {
+         if (host == QLatin1String("localhost") || QHostAddress(host).isLoopback() || reply->url.isLocalFile()) {
             // Don't need an open session for localhost access.
+
          } else {
             // need to wait for session to be opened
             return false;
@@ -389,6 +390,7 @@ bool QNetworkAccessBackend::start()
    // the proxy settings change depending which AP was activated)
    QNetworkSession *session = networkSession.data();
    QNetworkConfiguration config;
+
    if (session) {
       QNetworkConfigurationManager configManager;
       // The active configuration tells us what IAP is in use

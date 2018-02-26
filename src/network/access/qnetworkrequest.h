@@ -23,12 +23,11 @@
 #ifndef QNETWORKREQUEST_H
 #define QNETWORKREQUEST_H
 
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QString>
-#include <QtCore/QUrl>
-#include <QtCore/QVariant>
+#include <QSharedDataPointer>
+#include <QString>
+#include <QUrl>
+#include <QVariant>
 
-QT_BEGIN_NAMESPACE
 
 class QSslConfiguration;
 class QNetworkRequestPrivate;
@@ -43,7 +42,9 @@ class Q_NETWORK_EXPORT QNetworkRequest
       LastModifiedHeader,
       CookieHeader,
       SetCookieHeader,
-      ContentDispositionHeader  // added for QMultipartMessage
+      ContentDispositionHeader,  // added for QMultipartMessage
+      UserAgentHeader,
+      ServerHeader
    };
    enum Attribute {
       HttpStatusCodeAttribute,
@@ -63,6 +64,11 @@ class Q_NETWORK_EXPORT QNetworkRequest
       MaximumDownloadBufferSizeAttribute, // internal
       DownloadBufferAttribute, // internal
       SynchronousRequestAttribute, // internal
+      BackgroundRequestAttribute,
+      SpdyAllowedAttribute,
+      SpdyWasUsedAttribute,
+      EmitAllUploadProgressSignalsAttribute,
+      FollowRedirectsAttribute,
 
       User = 1000,
       UserMax = 32767
@@ -87,7 +93,17 @@ class Q_NETWORK_EXPORT QNetworkRequest
    explicit QNetworkRequest(const QUrl &url = QUrl());
    QNetworkRequest(const QNetworkRequest &other);
    ~QNetworkRequest();
+
+   QNetworkRequest &operator=(QNetworkRequest &&other) {
+      swap(other);
+      return *this;
+   }
+
    QNetworkRequest &operator=(const QNetworkRequest &other);
+
+   void swap(QNetworkRequest &other)  {
+      qSwap(d, other.d);
+   }
 
    bool operator==(const QNetworkRequest &other) const;
    inline bool operator!=(const QNetworkRequest &other) const {
@@ -111,7 +127,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
    QVariant attribute(Attribute code, const QVariant &defaultValue = QVariant()) const;
    void setAttribute(Attribute code, const QVariant &value);
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
    QSslConfiguration sslConfiguration() const;
    void setSslConfiguration(const QSslConfiguration &configuration);
 #endif
@@ -122,12 +138,13 @@ class Q_NETWORK_EXPORT QNetworkRequest
    Priority priority() const;
    void setPriority(Priority priority);
 
+   // HTTP redirect related
+   int maximumRedirectsAllowed() const;
+   void setMaximumRedirectsAllowed(int maximumRedirectsAllowed);
  private:
    QSharedDataPointer<QNetworkRequestPrivate> d;
    friend class QNetworkRequestPrivate;
 };
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QNetworkRequest)
 

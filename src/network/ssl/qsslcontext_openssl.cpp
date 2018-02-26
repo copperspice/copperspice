@@ -39,8 +39,8 @@ static DH *get_dh1024()
    // 1024-bit MODP Group
    // From RFC 2409
    QByteArray params = QByteArray::fromBase64(QByteArrayLiteral("MIGHAoGBAP//////////yQ/aoiFowjTExmKLgNwc0SkCTgiKZ8x0Agu+pjsTmyJR" \
-                  "Sgh5jjQE3e+VGbPNOkMbMCsKbfJfFDdP4TVtbVHCReSFtXZiXn7G9ExC6aY37WsL" \
-                  "/1y29Aa37e44a/taiZ+lrp8kEXxLH+ZJKGZR7OZTgf//////////AgEC"));
+                       "Sgh5jjQE3e+VGbPNOkMbMCsKbfJfFDdP4TVtbVHCReSFtXZiXn7G9ExC6aY37WsL" \
+                       "/1y29Aa37e44a/taiZ+lrp8kEXxLH+ZJKGZR7OZTgf//////////AgEC"));
 
    const char *ptr = params.constData();
    DH *dh = q_d2i_DHparams(NULL, reinterpret_cast<const unsigned char **>(&ptr), params.length());
@@ -74,8 +74,8 @@ static inline QString msgErrorSettingEllipticCurves(const QString &why)
    return QSslSocket::tr("Error when setting the elliptic curves (%1)").arg(why);
 }
 
-QSslContext* QSslContext::fromConfiguration(QSslSocket::SslMode mode,
-                  const QSslConfiguration &configuration, bool allowRootCertOnDemandLoading)
+QSslContext *QSslContext::fromConfiguration(QSslSocket::SslMode mode,
+      const QSslConfiguration &configuration, bool allowRootCertOnDemandLoading)
 {
    QSslContext *sslContext = new QSslContext();
    sslContext->sslConfiguration = configuration;
@@ -89,79 +89,79 @@ QSslContext* QSslContext::fromConfiguration(QSslSocket::SslMode mode,
 init_context:
    switch (sslContext->sslConfiguration.protocol()) {
 
-   case QSsl::SslV2:
+      case QSsl::SslV2:
 #ifndef OPENSSL_NO_SSL2
-      sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv2_client_method() : q_SSLv2_server_method());
+         sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv2_client_method() : q_SSLv2_server_method());
 #else
-      // SSL 2 not supported by the system, but chosen deliberately -> error
-      sslContext->ctx = 0;
-      unsupportedProtocol = true;
+         // SSL 2 not supported by the system, but chosen deliberately -> error
+         sslContext->ctx = 0;
+         unsupportedProtocol = true;
 #endif
-      break;
+         break;
 
-   case QSsl::SslV3:
+      case QSsl::SslV3:
 #ifndef OPENSSL_NO_SSL3_METHOD
-      sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv3_client_method() : q_SSLv3_server_method());
+         sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv3_client_method() : q_SSLv3_server_method());
 #else
-      // SSL 3 not supported by the system, but chosen deliberately -> error
-      sslContext->ctx = 0;
-      unsupportedProtocol = true;
+         // SSL 3 not supported by the system, but chosen deliberately -> error
+         sslContext->ctx = 0;
+         unsupportedProtocol = true;
 #endif
-      break;
+         break;
 
-   case QSsl::SecureProtocols:
+      case QSsl::SecureProtocols:
 
-   // SSLv2 and SSLv3 will be disabled by SSL options
-   // But we need q_SSLv23_server_method() otherwise AnyProtocol will be unable to connect on Win32.
-   case QSsl::TlsV1SslV3:
+      // SSLv2 and SSLv3 will be disabled by SSL options
+      // But we need q_SSLv23_server_method() otherwise AnyProtocol will be unable to connect on Win32.
+      case QSsl::TlsV1SslV3:
 
-   // SSLv2 will will be disabled by SSL options
-   case QSsl::AnyProtocol:
+      // SSLv2 will will be disabled by SSL options
+      case QSsl::AnyProtocol:
 
-   default:
-      sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
-      break;
+      default:
+         sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+         break;
 
-   case QSsl::TlsV1_0:
-      sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_client_method() : q_TLSv1_server_method());
-      break;
+      case QSsl::TlsV1_0:
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_client_method() : q_TLSv1_server_method());
+         break;
 
-   case QSsl::TlsV1_1:
+      case QSsl::TlsV1_1:
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
-      sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_1_client_method() : q_TLSv1_1_server_method());
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_1_client_method() : q_TLSv1_1_server_method());
 #else
-      // TLS 1.1 not supported by the system, but chosen deliberately -> error
-      sslContext->ctx = 0;
-      unsupportedProtocol = true;
+         // TLS 1.1 not supported by the system, but chosen deliberately -> error
+         sslContext->ctx = 0;
+         unsupportedProtocol = true;
 #endif
-      break;
+         break;
 
-   case QSsl::TlsV1_2:
+      case QSsl::TlsV1_2:
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
-      sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_2_client_method() : q_TLSv1_2_server_method());
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLSv1_2_client_method() : q_TLSv1_2_server_method());
 #else
-      // TLS 1.2 not supported by the system, but chosen deliberately -> error
-      sslContext->ctx = 0;
-      unsupportedProtocol = true;
+         // TLS 1.2 not supported by the system, but chosen deliberately -> error
+         sslContext->ctx = 0;
+         unsupportedProtocol = true;
 #endif
-      break;
+         break;
 
-   case QSsl::TlsV1_0_OrLater:
-      // Specific protocols will be specified via SSL options.
-      sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
-      break;
+      case QSsl::TlsV1_0_OrLater:
+         // Specific protocols will be specified via SSL options.
+         sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+         break;
 
-   case QSsl::TlsV1_1_OrLater:
-   case QSsl::TlsV1_2_OrLater:
+      case QSsl::TlsV1_1_OrLater:
+      case QSsl::TlsV1_2_OrLater:
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
-      // Specific protocols will be specified via SSL options.
-      sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+         // Specific protocols will be specified via SSL options.
+         sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
 #else
-      // TLS 1.1/1.2 not supported by the system, but chosen deliberately -> error
-      sslContext->ctx = 0;
-      unsupportedProtocol = true;
+         // TLS 1.1/1.2 not supported by the system, but chosen deliberately -> error
+         sslContext->ctx = 0;
+         unsupportedProtocol = true;
 #endif
-      break;
+         break;
    }
 
    if (! sslContext->ctx) {
@@ -176,7 +176,7 @@ init_context:
       }
 
       sslContext->errorStr = QSslSocket::tr("Error creating SSL context (%1)").arg(
-                  unsupportedProtocol ? QSslSocket::tr("unsupported protocol") : QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+                                unsupportedProtocol ? QSslSocket::tr("unsupported protocol") : QSslSocketBackendPrivate::getErrorsFromOpenSsl());
 
       sslContext->errorCode = QSslError::UnspecifiedError;
       return sslContext;
@@ -189,8 +189,9 @@ init_context:
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
    // Tell OpenSSL to release memory early
    // http://www.openssl.org/docs/ssl/SSL_CTX_set_mode.html
-   if (q_SSLeay() >= 0x10000000L)
+   if (q_SSLeay() >= 0x10000000L) {
       q_SSL_CTX_set_mode(sslContext->ctx, SSL_MODE_RELEASE_BUFFERS);
+   }
 #endif
 
    // Initialize ciphers
@@ -370,7 +371,7 @@ init_context:
          // but let's avoid a copy into a temporary array
 
          if (! q_SSL_CTX_ctrl(sslContext->ctx, SSL_CTRL_SET_CURVES, qcurves.size(),
-                  const_cast<int *>(reinterpret_cast<const int *>(qcurves.data())))) {
+                              const_cast<int *>(reinterpret_cast<const int *>(qcurves.data())))) {
 
             sslContext->errorStr  = msgErrorSettingEllipticCurves(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
             sslContext->errorCode = QSslError::UnspecifiedError;
@@ -397,13 +398,13 @@ static int next_proto_cb(SSL *, unsigned char **out, unsigned char *outlen, cons
 {
    QSslContext::NPNContext *ctx = reinterpret_cast<QSslContext::NPNContext *>(arg);
 
-// comment out to debug:
-//    QList<QByteArray> supportedVersions;
-//    for (unsigned int i = 0; i < inlen; ) {
-//        QByteArray version(reinterpret_cast<const char *>(&in[i+1]), in[i]);
-//        supportedVersions << version;
-//        i += in[i] + 1;
-//    }
+   // comment out to debug:
+   //    QList<QByteArray> supportedVersions;
+   //    for (unsigned int i = 0; i < inlen; ) {
+   //        QByteArray version(reinterpret_cast<const char *>(&in[i+1]), in[i]);
+   //        supportedVersions << version;
+   //        i += in[i] + 1;
+   //    }
 
    int proto = q_SSL_select_next_proto(out, outlen, in, inlen, ctx->data, ctx->len);
 
@@ -434,15 +435,15 @@ QSslContext::NPNContext QSslContext::npnContext() const
 #endif // OPENSSL_VERSION_NUMBER >= 0x1000100fL ...
 
 // Needs to be deleted by caller
-SSL* QSslContext::createSsl()
+SSL *QSslContext::createSsl()
 {
-   SSL* ssl = q_SSL_new(ctx);
+   SSL *ssl = q_SSL_new(ctx);
    q_SSL_clear(ssl);
 
    if (!session && !sessionASN1().isEmpty() && !sslConfiguration.testSslOption(QSsl::SslOptionDisableSessionPersistence)) {
       const unsigned char *data = reinterpret_cast<const unsigned char *>(m_sessionASN1.constData());
       session = q_d2i_SSL_SESSION(0, &data, m_sessionASN1.size());   // refcount is 1 already, set
-                                                                     // by function above
+      // by function above
    }
 
    if (session) {
@@ -483,7 +484,7 @@ SSL* QSslContext::createSsl()
 }
 
 // We cache exactly one session here
-bool QSslContext::cacheSession(SSL* ssl)
+bool QSslContext::cacheSession(SSL *ssl)
 {
    // don't cache the same session again
    if (session && session == q_SSL_get_session(ssl)) {

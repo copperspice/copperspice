@@ -27,7 +27,6 @@
 #include <qtcpsocket.h>
 #include <qhostaddress.h>
 
-QT_BEGIN_NAMESPACE
 
 QTcpSocket::QTcpSocket(QObject *parent)
    : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)
@@ -54,4 +53,8 @@ QTcpSocket::QTcpSocket(QTcpSocketPrivate &dd, QObject *parent)
    d_func()->isBuffered = true;
 }
 
-QT_END_NAMESPACE
+QTcpSocket::QTcpSocket(QAbstractSocket::SocketType socketType, QTcpSocketPrivate &dd, QObject *parent)
+   : QAbstractSocket(socketType, dd, parent)
+{
+}
+

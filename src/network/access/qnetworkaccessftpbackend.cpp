@@ -22,12 +22,12 @@
 
 #include <qnetworkaccessftpbackend_p.h>
 #include <qnetworkaccessmanager_p.h>
-#include <QtNetwork/qauthenticator.h>
+#include <qauthenticator.h>
 #include <qnoncontiguousbytedevice_p.h>
 
-#ifndef QT_NO_FTP
+#include <QStringList>
 
-QT_BEGIN_NAMESPACE
+#ifndef QT_NO_FTP
 
 enum {
    DefaultFtpPort = 21
@@ -42,6 +42,10 @@ static QByteArray makeCacheKey(const QUrl &url)
           copy.toEncoded(QUrl::RemovePassword | QUrl::RemovePath | QUrl::RemoveQuery | QUrl::RemoveFragment);
 }
 
+QStringList QNetworkAccessFtpBackendFactory::supportedSchemes() const
+{
+   return QStringList("ftp");
+}
 QNetworkAccessBackend *
 QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const
 {
@@ -57,9 +61,10 @@ QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, con
    }
 
    QUrl url = request.url();
-   if (url.scheme().compare(QLatin1String("ftp"), Qt::CaseInsensitive) == 0) {
+   if (url.scheme().compare("ftp", Qt::CaseInsensitive) == 0) {
       return new QNetworkAccessFtpBackend;
    }
+
    return 0;
 }
 
@@ -89,6 +94,7 @@ QNetworkAccessFtpBackend::~QNetworkAccessFtpBackend()
    if (ftp && state != Disconnecting) {
       ftp->abort();
    }
+
    disconnectFromFtp();
 }
 
@@ -97,7 +103,7 @@ void QNetworkAccessFtpBackend::open()
 #ifndef QT_NO_NETWORKPROXY
    QNetworkProxy proxy;
 
-   for (const QNetworkProxy & p : proxyList()) {
+   for (const QNetworkProxy &p : proxyList()) {
       // use the first FTP proxy
       // or no proxy at all
       if (p.type() == QNetworkProxy::FtpCachingProxy || p.type() == QNetworkProxy::NoProxy) {
@@ -123,8 +129,8 @@ void QNetworkAccessFtpBackend::open()
       setUrl(url);
    }
 
-   if (url.path().endsWith(QLatin1Char('/'))) {
-      error(QNetworkReply::ContentOperationNotPermittedError, tr("Cannot open %1: is a directory").arg(url.toString()));
+   if (url.path().endsWith('/')) {
+      error(QNetworkReply::ContentOperationNotPermittedError, tr("Can not open %1: is a directory").arg(url.toString()));
       finished();
       return;
    }
@@ -180,8 +186,8 @@ void QNetworkAccessFtpBackend::downstreamReadyWrite()
 void QNetworkAccessFtpBackend::ftpConnectionReady(QNetworkAccessCache::CacheableObject *o)
 {
    ftp = static_cast<QNetworkAccessCachedFtpConnection *>(o);
-   connect(ftp, SIGNAL(done(bool)), this, SLOT(ftpDone()));
-   connect(ftp, SIGNAL(rawCommandReply(int, const QString &)), this, SLOT(ftpRawCommandReply(int, const QString &)));
+   connect(ftp, SIGNAL(done(bool)),  this, SLOT(ftpDone()));
+   connect(ftp, SIGNAL(rawCommandReply(int, QString )), this, SLOT(ftpRawCommandReply(int, QString )));
    connect(ftp, SIGNAL(readyRead()), this, SLOT(ftpReadyRead()));
 
    // is the login process done already?
@@ -219,6 +225,8 @@ void QNetworkAccessFtpBackend::ftpDone()
       if (ftp->state() == QFtp::Connected) {
          // the login did not succeed
          QUrl newUrl = url();
+
+         QString userInfo = newUrl.userInfo();
          newUrl.setUserInfo(QString());
          setUrl(newUrl);
 
@@ -232,6 +240,8 @@ void QNetworkAccessFtpBackend::ftpDone()
             return;
          }
 
+         newUrl.setUserInfo(userInfo);
+         setUrl(newUrl);
          error(QNetworkReply::AuthenticationRequiredError,
                tr("Logging in to %1 failed: authentication required")
                .arg(url().host()));
@@ -271,15 +281,15 @@ void QNetworkAccessFtpBackend::ftpDone()
       }
       msg = msg.arg(url().toString(), ftp->errorString());
 
-      if (state == Statting)
+      if (state == Statting) {
          // file probably doesn't exist
-      {
          error(QNetworkReply::ContentNotFoundError,  msg);
+
       } else {
          error(QNetworkReply::ContentAccessDenied, msg);
       }
 
-      disconnectFromFtp();
+      disconnectFromFtp(RemoveCachedConnection);
       finished();
    }
 
@@ -303,12 +313,14 @@ void QNetworkAccessFtpBackend::ftpDone()
             ftp->rawCommand(QLatin1String("TYPE I"));
             sizeId = ftp->rawCommand(command.arg(QLatin1String("SIZE"))); // get size
          }
+
          if (supportsMdtm) {
             mdtmId = ftp->rawCommand(command.arg(QLatin1String("MDTM")));   // get modified time
          }
          if (!supportsSize && !supportsMdtm) {
             ftpDone();   // no commands sent, move to the next state
          }
+
       } else {
          ftpDone();
       }
@@ -327,7 +339,7 @@ void QNetworkAccessFtpBackend::ftpDone()
 
    } else if (state == Transferring) {
       // upload or download finished
-      disconnectFromFtp(RemoveCachedConnection);
+      disconnectFromFtp();
       finished();
    }
 }
@@ -353,13 +365,16 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
       if (text.contains(QLatin1String("SIZE"), Qt::CaseSensitive)) {
          supportsSize = true;
       }
+
       if (text.contains(QLatin1String("MDTM"), Qt::CaseSensitive)) {
          supportsMdtm = true;
       }
+
    } else if (code == 213) {          // file status
       if (id == sizeId) {
          // reply to the size command
          setHeader(QNetworkRequest::ContentLengthHeader, text.toLongLong());
+
 #ifndef QT_NO_DATESTRING
       } else if (id == mdtmId) {
          QDateTime dt = QDateTime::fromString(text, QLatin1String("yyyyMMddHHmmss"));
@@ -368,7 +383,5 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
       }
    }
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FTP

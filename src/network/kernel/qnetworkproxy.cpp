@@ -25,11 +25,13 @@
 #ifndef QT_NO_NETWORKPROXY
 
 #include <qnetworkproxy_p.h>
-#include "qnetworkrequest_p.h"
+#include <qnetworkrequest_p.h>
 #include <qsocks5socketengine_p.h>
 #include <qhttpsocketengine_p.h>
 #include <qauthenticator.h>
+#include <qdebug.h>
 #include <qmutex.h>
+#include <qstringlist.h>
 #include <qurl.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -52,13 +54,13 @@ class QGlobalNetworkProxy
       setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
 #endif
 
-#ifndef QT_NO_SOCKS5
-      socks5SocketEngineHandler = new QSocks5SocketEngineHandler();
-#endif
 
-#ifndef QT_NO_HTTP
+      socks5SocketEngineHandler = new QSocks5SocketEngineHandler();
+
+
+
       httpSocketEngineHandler = new QHttpSocketEngineHandler();
-#endif
+
    }
 
    ~QGlobalNetworkProxy() {
@@ -80,9 +82,15 @@ class QGlobalNetworkProxy
 
    void setApplicationProxyFactory(QNetworkProxyFactory *factory) {
       QMutexLocker lock(&mutex);
+
+      if (factory == applicationLevelProxyFactory) {
+         return;
+      }
+
       if (applicationLevelProxy) {
          *applicationLevelProxy = QNetworkProxy();
       }
+
       delete applicationLevelProxyFactory;
       applicationLevelProxyFactory = factory;
    }
@@ -113,8 +121,8 @@ QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery
    if (hostname == QLatin1String("localhost")
          || hostname.startsWith(QLatin1String("localhost."))
          || (parsed.setAddress(hostname)
-             && (parsed == QHostAddress::LocalHost
-                 || parsed == QHostAddress::LocalHostIPv6))) {
+             && (parsed.isLoopback()))) {
+
       result << QNetworkProxy(QNetworkProxy::NoProxy);
       return result;
    }
@@ -159,28 +167,28 @@ static QNetworkProxy::Capabilities defaultCapabilitiesForType(QNetworkProxy::Pro
    static const int defaults[] = {
       /* [QNetworkProxy::DefaultProxy] = */
       (int(QNetworkProxy::ListeningCapability) |
-      int(QNetworkProxy::TunnelingCapability) |
-      int(QNetworkProxy::UdpTunnelingCapability)),
+       int(QNetworkProxy::TunnelingCapability) |
+       int(QNetworkProxy::UdpTunnelingCapability)),
       /* [QNetworkProxy::Socks5Proxy] = */
       (int(QNetworkProxy::TunnelingCapability) |
-      int(QNetworkProxy::ListeningCapability) |
-      int(QNetworkProxy::UdpTunnelingCapability) |
-      int(QNetworkProxy::HostNameLookupCapability)),
+       int(QNetworkProxy::ListeningCapability) |
+       int(QNetworkProxy::UdpTunnelingCapability) |
+       int(QNetworkProxy::HostNameLookupCapability)),
       // it's weird to talk about the proxy capabilities of a "not proxy"...
       /* [QNetworkProxy::NoProxy] = */
       (int(QNetworkProxy::ListeningCapability) |
-      int(QNetworkProxy::TunnelingCapability) |
-      int(QNetworkProxy::UdpTunnelingCapability)),
+       int(QNetworkProxy::TunnelingCapability) |
+       int(QNetworkProxy::UdpTunnelingCapability)),
       /* [QNetworkProxy::HttpProxy] = */
       (int(QNetworkProxy::TunnelingCapability) |
-      int(QNetworkProxy::CachingCapability) |
-      int(QNetworkProxy::HostNameLookupCapability)),
+       int(QNetworkProxy::CachingCapability) |
+       int(QNetworkProxy::HostNameLookupCapability)),
       /* [QNetworkProxy::HttpCachingProxy] = */
       (int(QNetworkProxy::CachingCapability) |
-      int(QNetworkProxy::HostNameLookupCapability)),
+       int(QNetworkProxy::HostNameLookupCapability)),
       /* [QNetworkProxy::FtpCachingProxy] = */
       (int(QNetworkProxy::CachingCapability) |
-      int(QNetworkProxy::HostNameLookupCapability)),
+       int(QNetworkProxy::HostNameLookupCapability)),
    };
 
    if (int(type) < 0 || int(type) > int(QNetworkProxy::FtpCachingProxy)) {
@@ -202,7 +210,7 @@ class QNetworkProxyPrivate: public QSharedData
    QNetworkHeadersPrivate headers;
 
    inline QNetworkProxyPrivate(QNetworkProxy::ProxyType t = QNetworkProxy::DefaultProxy, const QString &h = QString(),
-                  quint16 p = 0, const QString &u = QString(), const QString &pw = QString())
+                               quint16 p = 0, const QString &u = QString(), const QString &pw = QString())
 
       : hostName(h),
         user(u),
@@ -252,7 +260,7 @@ QNetworkProxy::QNetworkProxy()
     \sa capabilities()
 */
 QNetworkProxy::QNetworkProxy(ProxyType type, const QString &hostName, quint16 port,
-                  const QString &user, const QString &password)
+                             const QString &user, const QString &password)
    : d(new QNetworkProxyPrivate(type, hostName, port, user, password))
 {
    // make sure we have QGlobalNetworkProxy singleton created, otherwise you don't have
@@ -509,7 +517,7 @@ void QNetworkProxy::setHeader(QNetworkRequest::KnownHeaders header, const QVaria
 bool QNetworkProxy::hasRawHeader(const QByteArray &headerName) const
 {
    if (d->type != HttpProxy && d->type != HttpCachingProxy) {
-        return false;
+      return false;
    }
 
    return d->headers.findRawHeader(headerName) != d->headers.rawHeaders.constEnd();
@@ -517,26 +525,30 @@ bool QNetworkProxy::hasRawHeader(const QByteArray &headerName) const
 
 QByteArray QNetworkProxy::rawHeader(const QByteArray &headerName) const
 {
-    if (d->type != HttpProxy && d->type != HttpCachingProxy)
-        return QByteArray();
-    QNetworkHeadersPrivate::RawHeadersList::ConstIterator it =
-        d->headers.findRawHeader(headerName);
-    if (it != d->headers.rawHeaders.constEnd())
-        return it->second;
-    return QByteArray();
+   if (d->type != HttpProxy && d->type != HttpCachingProxy) {
+      return QByteArray();
+   }
+   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it =
+      d->headers.findRawHeader(headerName);
+   if (it != d->headers.rawHeaders.constEnd()) {
+      return it->second;
+   }
+   return QByteArray();
 }
 
 QList<QByteArray> QNetworkProxy::rawHeaderList() const
 {
-    if (d->type != HttpProxy && d->type != HttpCachingProxy)
-        return QList<QByteArray>();
-    return d->headers.rawHeadersKeys();
+   if (d->type != HttpProxy && d->type != HttpCachingProxy) {
+      return QList<QByteArray>();
+   }
+   return d->headers.rawHeadersKeys();
 }
 
 void QNetworkProxy::setRawHeader(const QByteArray &headerName, const QByteArray &headerValue)
 {
-    if (d->type == HttpProxy || d->type == HttpCachingProxy)
-        d->headers.setRawHeader(headerName, headerValue);
+   if (d->type == HttpProxy || d->type == HttpCachingProxy) {
+      d->headers.setRawHeader(headerName, headerValue);
+   }
 }
 
 class QNetworkProxyQueryPrivate: public QSharedData
@@ -592,7 +604,7 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QUrl &requestUrl, QueryType queryTy
 
 
 QNetworkProxyQuery::QNetworkProxyQuery(const QString &hostname, int port,
-                  const QString &protocolTag, QueryType queryType)
+                                       const QString &protocolTag, QueryType queryType)
 {
    d->remote.setScheme(protocolTag);
    d->remote.setHost(hostname);
@@ -618,7 +630,7 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfi
 }
 
 QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfiguration,
-                  const QString &hostname, int port, const QString &protocolTag, QueryType queryType)
+                                       const QString &hostname, int port, const QString &protocolTag, QueryType queryType)
 {
    d->config = networkConfiguration;
    d->remote.setScheme(protocolTag);
@@ -628,7 +640,7 @@ QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfi
 }
 
 QNetworkProxyQuery::QNetworkProxyQuery(const QNetworkConfiguration &networkConfiguration,
-                  quint16 bindPort, const QString &protocolTag, QueryType queryType)
+                                       quint16 bindPort, const QString &protocolTag, QueryType queryType)
 {
    d->config = networkConfiguration;
    d->remote.setScheme(protocolTag);
@@ -763,5 +775,64 @@ QList<QNetworkProxy> QNetworkProxyFactory::proxyForQuery(const QNetworkProxyQuer
    }
    return globalNetworkProxy()->proxyForQuery(query);
 }
+
+QDebug operator<<(QDebug debug, const QNetworkProxy &proxy)
+{
+   //   QDebugStateSaver saver(debug);
+   //   debug.resetFormat().nospace();
+
+   QNetworkProxy::ProxyType type = proxy.type();
+
+   switch (type) {
+      case QNetworkProxy::NoProxy:
+         debug << "NoProxy ";
+         break;
+      case QNetworkProxy::DefaultProxy:
+         debug << "DefaultProxy ";
+         break;
+      case QNetworkProxy::Socks5Proxy:
+         debug << "Socks5Proxy ";
+         break;
+      case QNetworkProxy::HttpProxy:
+         debug << "HttpProxy ";
+         break;
+      case QNetworkProxy::HttpCachingProxy:
+         debug << "HttpCachingProxy ";
+         break;
+      case QNetworkProxy::FtpCachingProxy:
+         debug << "FtpCachingProxy ";
+         break;
+      default:
+         debug << "Unknown proxy " << int(type);
+         break;
+   }
+   debug << '"' << proxy.hostName() << ':' << proxy.port() << "\" ";
+   QNetworkProxy::Capabilities caps = proxy.capabilities();
+   QStringList scaps;
+
+   if (caps & QNetworkProxy::TunnelingCapability) {
+      scaps << "Tunnel";
+   }
+
+   if (caps & QNetworkProxy::ListeningCapability) {
+      scaps << "Listen";
+   }
+
+   if (caps & QNetworkProxy::UdpTunnelingCapability) {
+      scaps << "UDP";
+   }
+
+   if (caps & QNetworkProxy::CachingCapability) {
+      scaps << "Caching";
+   }
+
+   if (caps & QNetworkProxy::HostNameLookupCapability) {
+      scaps << "NameLookup";
+   }
+
+   debug << '[' << scaps.join(" ") << ']';
+   return debug;
+}
+
 
 #endif // QT_NO_NETWORKPROXY

@@ -28,7 +28,6 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
 
 class QHttpPartPrivate;
 class QHttpMultiPart;
@@ -41,8 +40,14 @@ class Q_NETWORK_EXPORT QHttpPart
    QHttpPart(const QHttpPart &other);
    ~QHttpPart();
 
+   QHttpPart &operator=(QHttpPart &&other)  {
+      swap(other);
+      return *this;
+   }
+
    QHttpPart &operator=(const QHttpPart &other);
    bool operator==(const QHttpPart &other) const;
+
    inline bool operator!=(const QHttpPart &other) const {
       return !operator==(other);
    }
@@ -52,6 +57,10 @@ class Q_NETWORK_EXPORT QHttpPart
 
    void setBody(const QByteArray &body);
    void setBodyDevice(QIODevice *device);
+
+   void swap(QHttpPart &other)  {
+      qSwap(d, other.d);
+   }
 
  private:
    QSharedDataPointer<QHttpPartPrivate> d;
@@ -72,8 +81,8 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
       AlternativeType
    };
 
-   QHttpMultiPart(QObject *parent = nullptr);
-   QHttpMultiPart(ContentType contentType, QObject *parent = nullptr);
+   explicit QHttpMultiPart(QObject *parent = nullptr);
+   explicit QHttpMultiPart(ContentType contentType, QObject *parent = nullptr);
    ~QHttpMultiPart();
 
    void append(const QHttpPart &httpPart);
@@ -95,6 +104,5 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 
 };
 
-QT_END_NAMESPACE
 
 #endif // QHTTPMULTIPART_H

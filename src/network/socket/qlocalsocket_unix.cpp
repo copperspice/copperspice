@@ -146,8 +146,8 @@ QString QLocalSocketPrivate::generateErrorString(QLocalSocket::LocalSocketError 
          errorString = QLocalSocket::tr("%1: The socket operation is not supported").arg(function);
          break;
       case QLocalSocket::OperationError:
-        errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").arg(function);
-        break;
+         errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").arg(function);
+         break;
       case QLocalSocket::UnknownSocketError:
       default:
          errorString = QLocalSocket::tr("%1: Unknown error %2").arg(function).arg(errno);
@@ -213,10 +213,10 @@ void QLocalSocket::connectToServer(OpenMode openMode)
 
    if (state() == ConnectedState || state() == ConnectingState) {
       QString errorString = d->generateErrorString(QLocalSocket::OperationError, "QLocalSocket::connectToserver");
-        setErrorString(errorString);
-        emit error(QLocalSocket::OperationError);
-        return;
-    }
+      setErrorString(errorString);
+      emit error(QLocalSocket::OperationError);
+      return;
+   }
 
    d->errorString.clear();
    d->unixSocket.setSocketState(QAbstractSocket::ConnectingState);
@@ -229,8 +229,9 @@ void QLocalSocket::connectToServer(OpenMode openMode)
    }
 
    // create the socket
-   if (-1 == (d->connectingSocket = qt_safe_socket(PF_UNIX, SOCK_STREAM, 0))) {
-      d->errorOccurred(UnsupportedSocketOperationError, "QLocalSocket::connectToServer");
+   if (-1 == (d->connectingSocket = qt_safe_socket(PF_UNIX, SOCK_STREAM, 0, O_NONBLOCK))) {
+      d->errorOccurred(UnsupportedSocketOperationError,
+                       QLatin1String("QLocalSocket::connectToServer"));
       return;
    }
 

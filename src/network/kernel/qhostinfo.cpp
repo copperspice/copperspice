@@ -22,6 +22,7 @@
 
 #include <qhostinfo.h>
 #include <qhostinfo_p.h>
+#include <qnetworksession_p.h>
 
 #include <qscopedpointer.h>
 #include <qabstracteventdispatcher.h>
@@ -30,7 +31,6 @@
 #include <qstringlist.h>
 #include <qthread.h>
 #include <qurl.h>
-#include <qnetworksession_p.h>
 
 #ifdef Q_OS_UNIX
 #  include <unistd.h>
@@ -53,8 +53,6 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
       qWarning("QHostInfo::lookupHost() called with no event dispatcher");
       return -1;
    }
-
-   qRegisterMetaType<QHostInfo>("QHostInfo");
 
    // generate unique ID
    int id = theIdCounter.fetchAndAddRelaxed(1);
@@ -84,6 +82,7 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
          // check cache first
          bool valid = false;
          QHostInfo info = manager->cache.get(name, &valid);
+
          if (valid) {
             if (!receiver) {
                return -1;
@@ -102,8 +101,7 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *me
       // cache is not enabled or it was not in the cache, do normal lookup
       QHostInfoRunnable *runnable = new QHostInfoRunnable(name, id);
       if (receiver) {
-         QObject::connect(&runnable->resultEmitter, SIGNAL(resultsReady(const QHostInfo &)), receiver, member,
-                          Qt::QueuedConnection);
+         QObject::connect(&runnable->resultEmitter, SIGNAL(resultsReady(const QHostInfo &)), receiver, member, Qt::QueuedConnection);
       }
 
       manager->scheduleLookup(runnable);
@@ -229,7 +227,7 @@ QString QHostInfo::localHostName()
    return QSysInfo::machineHostName();
 }
 
-QHostInfoRunnable::QHostInfoRunnable(QString hn, int i) : toBeLookedUp(hn), id(i)
+QHostInfoRunnable::QHostInfoRunnable(const QString &hn, int i) : toBeLookedUp(hn), id(i)
 {
    setAutoDelete(true);
 }
@@ -503,11 +501,12 @@ void qt_qhostinfo_enable_cache(bool e)
 
 void qt_qhostinfo_cache_inject(const QString &hostname, const QHostInfo &resolution)
 {
-    QAbstractHostInfoLookupManager* manager = theHostInfoLookupManager();
-    if (!manager || !manager->cache.isEnabled())
-        return;
+   QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+   if (!manager || !manager->cache.isEnabled()) {
+      return;
+   }
 
-    manager->cache.put(hostname, resolution);
+   manager->cache.put(hostname, resolution);
 }
 // cache for 60 seconds
 // cache 128 items

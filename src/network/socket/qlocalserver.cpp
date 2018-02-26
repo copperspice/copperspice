@@ -180,6 +180,20 @@ bool QLocalServer::listen(const QString &name)
 }
 
 /*!
+bool QLocalServer::listen(qintptr socketDescriptor)
+{
+    Q_D(QLocalServer);
+    if (isListening()) {
+        qWarning("QLocalServer::listen() called when already listening");
+        return false;
+    }
+    d->serverName.clear();
+    d->fullServerName.clear();
+    if (!d->listen(socketDescriptor)) {
+        return false;
+    }
+    return true;
+}
     Returns the maximum number of pending accepted connections.
     The default is 30.
 

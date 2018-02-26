@@ -2,11 +2,13 @@ set(NETWORK_PUBLIC_INCLUDES
     ${NETWORK_PUBLIC_INCLUDES}
     QSsl
     QSslCertificate
+    QSslCertificateExtension
     QSslConfiguration
     QSslCipher
     QSslEllipticCurve
     QSslError
     QSslKey
+    QSslPreSharedKeyAuthenticator
     QSslSocket
 )
 
@@ -38,35 +40,45 @@ set(NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qasn1element_p.h
 )
 
-if(OPENSSL_FOUND)
-    set(NETWORK_SOURCES
-        ${NETWORK_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_openssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslconfiguration.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcontext_openssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcipher.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_openssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslerror.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_openssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl_symbols.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator.cpp
-    )
+if(OPENSSL_FOUND OR SECURETRANSPORT_FOUND)
+   set(NETWORK_SOURCES
+      ${NETWORK_SOURCES}
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qasn1element.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslconfiguration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcipher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslerror.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension.cpp
+   )
+endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(OPENSSL_FOUND AND NOT SECURETRANSPORT_FOUND)
+   set(NETWORK_SOURCES
+      ${NETWORK_SOURCES}
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_openssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcontext_openssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_openssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_openssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_openssl_symbols.cpp
+   )
+endif()
+
+if(SECURETRANSPORT_FOUND)
     set(NETWORK_SOURCES
         ${NETWORK_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket_mac.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_etc.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey_etc.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve_etc.cpp
     )
-endif()
-
 endif()

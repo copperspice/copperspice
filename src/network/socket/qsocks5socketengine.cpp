@@ -372,9 +372,10 @@ bool QSocks5BindStore::contains(qintptr socketDescriptor)
 QSocks5BindData *QSocks5BindStore::retrieve(qintptr socketDescriptor)
 {
    QMutexLocker lock(&mutex);
-   if (!store.contains(socketDescriptor)) {
+   if (! store.contains(socketDescriptor)) {
       return 0;
    }
+
    QSocks5BindData *bindData = store.take(socketDescriptor);
    if (bindData) {
       if (bindData->controlSocket->thread() != QThread::currentThread()) {
@@ -1137,8 +1138,8 @@ bool QSocks5SocketEngine::connectInternal()
 
    if (d->socketState != QAbstractSocket::ConnectingState) {
 
-      if (d->socks5State == QSocks5SocketEnginePrivate::Uninitialized) {
-
+      if (d->socks5State == QSocks5SocketEnginePrivate::Uninitialized
+            || d->socks5State == QSocks5SocketEnginePrivate::AuthenticatingError) {
          setState(QAbstractSocket::ConnectingState);
          // limit buffer in internal socket, data is buffered in the external socket under application control
          d->data->controlSocket->setReadBufferSize(65536);
@@ -1234,8 +1235,7 @@ void QSocks5SocketEnginePrivate::_q_controlSocketBytesWritten()
 {
    QSOCKS5_DEBUG << "_q_controlSocketBytesWritten";
 
-   if (socks5State != Connected
-         || (mode == ConnectMode && data->controlSocket->bytesToWrite())) {
+   if (socks5State != Connected || (mode == ConnectMode && data->controlSocket->bytesToWrite())) {
       return;
    }
 
@@ -1470,35 +1470,35 @@ int QSocks5SocketEngine::accept()
    qintptr sd = -1;
 
    switch (d->socks5State) {
-    case QSocks5SocketEnginePrivate::BindSuccess:
-      QSOCKS5_Q_DEBUG << "BindSuccess adding" << d->socketDescriptor << "to the bind store";
-      d->data->controlSocket->disconnect();
-      d->data->controlSocket->setParent(0);
-      d->bindData->localAddress = d->localAddress;
-      d->bindData->localPort = d->localPort;
-      sd = d->socketDescriptor;
+      case QSocks5SocketEnginePrivate::BindSuccess:
+         QSOCKS5_Q_DEBUG << "BindSuccess adding" << d->socketDescriptor << "to the bind store";
+         d->data->controlSocket->disconnect();
+         d->data->controlSocket->setParent(0);
+         d->bindData->localAddress = d->localAddress;
+         d->bindData->localPort = d->localPort;
+         sd = d->socketDescriptor;
 
-      socks5BindStore()->add(sd, d->bindData);
-      d->data = 0;
-      d->bindData = 0;
-      d->socketDescriptor = 0;
+         socks5BindStore()->add(sd, d->bindData);
+         d->data = 0;
+         d->bindData = 0;
+         d->socketDescriptor = 0;
 
-      //### do something about this socket layer ... set it closed and an error about why ...
-      // reset state and local port/address
-      d->socks5State = QSocks5SocketEnginePrivate::Uninitialized; // ..??
-      d->socketState = QAbstractSocket::UnconnectedState;
-      break;
+         //### do something about this socket layer ... set it closed and an error about why ...
+         // reset state and local port/address
+         d->socks5State = QSocks5SocketEnginePrivate::Uninitialized; // ..??
+         d->socketState = QAbstractSocket::UnconnectedState;
+         break;
 
-    case QSocks5SocketEnginePrivate::ControlSocketError:
-        setError(QAbstractSocket::ProxyProtocolError, QLatin1String("Control socket error"));
-        break;
+      case QSocks5SocketEnginePrivate::ControlSocketError:
+         setError(QAbstractSocket::ProxyProtocolError, QLatin1String("Control socket error"));
+         break;
 
-    default:
-        setError(QAbstractSocket::ProxyProtocolError, QLatin1String("SOCKS5 proxy error"));
-        break;
-    }
+      default:
+         setError(QAbstractSocket::ProxyProtocolError, QLatin1String("SOCKS5 proxy error"));
+         break;
+   }
 
-    return sd;
+   return sd;
 }
 
 void QSocks5SocketEngine::close()

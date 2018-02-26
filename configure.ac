@@ -55,9 +55,9 @@ esac
 
 AC_PROG_OBJCXX
 
-# not mandatory
+# optional packages
 echo ""
-PKG_CHECK_MODULES(SSL, openssl >= 1.0.0, SSL="yes", true)
+PKG_CHECK_MODULES(OPENSSL, openssl >= 1.0.0, OPENSSL="yes", true)
 PKG_CHECK_MODULES(ZLIB, zlib, ZLIB="yes", true)
 
 AC_CHECK_HEADERS([cups/cups.h])
@@ -208,8 +208,8 @@ else
    echo "MySQL client library not found, client drivers will not be built"
 fi
 
-AM_CONDITIONAL(SSL, test "x$SSL" = x""yes -a "x$enable_openssl" != "xno")
-if test "x$SSL" = x""yes -a "x$enable_openssl" != "xno"; then
+AM_CONDITIONAL(OPENSSL_FOUND, test "x$OPENSSL" = x""yes -a "x$enable_openssl" != "xno")
+if test "x$OPENSSL" = x""yes -a "x$enable_openssl" != "xno"; then
    echo "Building with OpenSSL"
 
    if ! pkg-config openssl --atleast-version=1.0.1g; then
@@ -222,6 +222,9 @@ if test "x$SSL" = x""yes -a "x$enable_openssl" != "xno"; then
 else
    echo "OpenSSL not found or disabled, HTTPS support will not be built into CsNetwork"
 fi
+
+# secure_transport is always installed for all supportedversions
+AM_CONDITIONAL(SECURETRANSPORT_FOUND, test "$OSTYPE" == DARWIN -a "x$enable_securetransport" != "xno")
 
 echo
 echo "CopperSpice configured to run on:     " $OSTYPE_DISPLAY

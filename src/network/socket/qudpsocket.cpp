@@ -180,9 +180,7 @@ qint64 QUdpSocket::writeDatagram(const char *data, qint64 size, const QHostAddre
       emit bytesWritten(sent);
 
    } else {
-      d->socketError = d->socketEngine->error();
-      setErrorString(d->socketEngine->errorString());
-      emit error(d->socketError);
+      d->setErrorAndEmit(d->socketEngine->error(), d->socketEngine->errorString());
    }
    return sent;
 }
@@ -201,23 +199,24 @@ qint64 QUdpSocket::readDatagram(char *data, qint64 maxSize, QHostAddress *addres
 
    QT_CHECK_BOUND("QUdpSocket::readDatagram()", -1);
 
- qint64 readBytes;
-    if (address || port) {
-        QIpPacketHeader header;
-        readBytes = d->socketEngine->readDatagram(data, maxSize, &header,
-                                                  QAbstractSocketEngine::WantDatagramSender);
-        if (address)
-            *address = header.senderAddress;
-        if (port)
-            *port = header.senderPort;
-    } else {
-        readBytes = d->socketEngine->readDatagram(data, maxSize);
-    }
+   qint64 readBytes;
+   if (address || port) {
+      QIpPacketHeader header;
+      readBytes = d->socketEngine->readDatagram(data, maxSize, &header,
+                  QAbstractSocketEngine::WantDatagramSender);
+      if (address) {
+         *address = header.senderAddress;
+      }
+      if (port) {
+         *port = header.senderPort;
+      }
+   } else {
+      readBytes = d->socketEngine->readDatagram(data, maxSize);
+   }
    d_func()->socketEngine->setReadNotificationEnabled(true);
+
    if (readBytes < 0) {
-      d->socketError = d->socketEngine->error();
-      setErrorString(d->socketEngine->errorString());
-      emit error(d->socketError);
+      d->setErrorAndEmit(d->socketEngine->error(), d->socketEngine->errorString());
    }
 
    return readBytes;

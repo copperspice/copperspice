@@ -24,6 +24,7 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
+#include <CFNetwork/CFNetwork.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <SystemConfiguration/SystemConfiguration.h>
 #include <QtCore/QRegExp>
@@ -57,7 +58,7 @@
  *
  */
 
-QT_BEGIN_NAMESPACE
+
 
 static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
 {
@@ -213,20 +214,28 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
       int enabled;
       if (CFNumberGetValue(pacEnabled, kCFNumberIntType, &enabled) && enabled) {
          // PAC is enabled
-         CFStringRef cfPacLocation = (CFStringRef)CFDictionaryGetValue(dict, kSCPropNetProxiesProxyAutoConfigURLString);
+         CFStringRef pacLocationSetting = (CFStringRef)CFDictionaryGetValue(dict, kSCPropNetProxiesProxyAutoConfigURLString);
+         QCFType<CFStringRef> cfPacLocation = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, pacLocationSetting, NULL, NULL,
+                                              kCFStringEncodingUTF8);
 
          if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_5) {
             QCFType<CFDataRef> pacData;
             QCFType<CFURLRef> pacUrl = CFURLCreateWithString(kCFAllocatorDefault, cfPacLocation, NULL);
+            if (!pacUrl) {
+               qWarning("Invalid PAC URL \"%s\"", qPrintable(QCFString::toQString(cfPacLocation)));
+               return result;
+            }
             SInt32 errorCode;
             if (!CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, pacUrl, &pacData, NULL, NULL, &errorCode)) {
                QString pacLocation = QCFString::toQString(cfPacLocation);
                qWarning("Unable to get the PAC script at \"%s\" (%s)", qPrintable(pacLocation), cfurlErrorDescription(errorCode));
                return result;
             }
-
-            QCFType<CFStringRef> pacScript = CFStringCreateFromExternalRepresentation(kCFAllocatorDefault, pacData,
-                                             kCFStringEncodingISOLatin1);
+            if (!pacData) {
+               qWarning("\"%s\" returned an empty PAC script", qPrintable(QCFString::toQString(cfPacLocation)));
+               return result;
+            }
+            QCFType<CFStringRef> pacScript = CFStringCreateFromExternalRepresentation(kCFAllocatorDefault, pacData, kCFStringEncodingISOLatin1);
             if (!pacScript) {
                // This should never happen, but the documentation says it may return NULL if there was a problem creating the object.
                QString pacLocation = QCFString::toQString(cfPacLocation);
@@ -239,8 +248,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
                return result; // Invalid URL, abort
             }
 
-            QCFType<CFURLRef> targetURL = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8 *)encodedURL.data(), encodedURL.size(),
-                                          kCFStringEncodingUTF8, NULL);
+            QCFType<CFURLRef> targetURL = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8 *)encodedURL.data(), encodedURL.size(), kCFStringEncodingUTF8, NULL);
             if (!targetURL) {
                return result; // URL creation problem, abort
             }
@@ -336,4 +344,4 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
 #endif
 
-QT_END_NAMESPACE
+

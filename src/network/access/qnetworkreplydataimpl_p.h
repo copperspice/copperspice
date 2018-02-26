@@ -28,7 +28,7 @@
 #include <qnetworkaccessmanager.h>
 #include <QBuffer>
 
-QT_BEGIN_NAMESPACE
+
 
 class QNetworkReplyDataImplPrivate;
 
@@ -59,12 +59,10 @@ class QNetworkReplyDataImplPrivate: public QNetworkReplyPrivate
    QNetworkReplyDataImplPrivate();
    ~QNetworkReplyDataImplPrivate();
 
-   QPair<QString, QByteArray> decodeDataUrlResult;
    QBuffer decodedData;
 
    Q_DECLARE_PUBLIC(QNetworkReplyDataImpl)
 };
 
-QT_END_NAMESPACE
 
 #endif // QNETWORKREPLYDATAIMPL_H

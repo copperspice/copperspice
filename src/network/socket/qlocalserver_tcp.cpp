@@ -61,6 +61,10 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
    return true;
 }
 
+bool QLocalServerPrivate::listen(qintptr socketDescriptor)
+{
+   return tcpServer.setSocketDescriptor(socketDescriptor);
+}
 void QLocalServerPrivate::closeServer()
 {
    QSettings settings(QLatin1String("CopperSpice"), QLatin1String("CS"));

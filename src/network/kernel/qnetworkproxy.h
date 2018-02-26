@@ -67,7 +67,6 @@ class Q_NETWORK_EXPORT QNetworkProxyQuery
 #endif
 
    QNetworkProxyQuery(const QNetworkProxyQuery &other);
-
    ~QNetworkProxyQuery();
 
    QNetworkProxyQuery &operator=(const QNetworkProxyQuery &other);
@@ -213,6 +212,7 @@ class Q_NETWORK_EXPORT QNetworkProxyFactory
    static QList<QNetworkProxy> systemProxyForQuery(const QNetworkProxyQuery &query = QNetworkProxyQuery());
 };
 
+Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QNetworkProxy &proxy);
 #endif // QT_NO_NETWORKPROXY
 
 #endif // QHOSTINFO_H

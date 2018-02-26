@@ -43,9 +43,13 @@ class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject
    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
 
+   virtual bool insertCookie(const QNetworkCookie &cookie);
+   virtual bool updateCookie(const QNetworkCookie &cookie);
+   virtual bool deleteCookie(const QNetworkCookie &cookie);
  protected:
    QList<QNetworkCookie> allCookies() const;
    void setAllCookies(const QList<QNetworkCookie> &cookieList);
+   virtual bool validateCookie(const QNetworkCookie &cookie, const QUrl &url) const;
 
    QScopedPointer<QNetworkCookieJarPrivate> d_ptr;
 

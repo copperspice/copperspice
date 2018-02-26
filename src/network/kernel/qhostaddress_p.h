@@ -23,7 +23,6 @@
 #ifndef QHOSTADDRESS_P_H
 #define QHOSTADDRESS_P_H
 
-QT_BEGIN_NAMESPACE
 
 #include <qhostaddress.h>
 #include <qabstractsocket.h>
@@ -42,6 +41,5 @@ class QNetmaskAddress: public QHostAddress
    void setPrefixLength(QAbstractSocket::NetworkLayerProtocol proto, int len);
 };
 
-QT_END_NAMESPACE
 
 #endif

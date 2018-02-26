@@ -24,28 +24,29 @@
 
 #include <sys/types.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <netdb.h>
 #include <resolv.h>
 #include <stdlib.h>
 
 #include <qhostinfo_p.h>
+#include <qnativesocketengine_p.h>
+#include <qnet_unix_p.h>
+
+#include <qurl.h>
+
 #include <qbytearray.h>
 #include <qfile.h>
+#include <qplatformdefs.h>
 #include <qiodevice.h>
 #include <qlibrary.h>
 #include <qmutexpool_p.h>
-#include <qnativesocketengine_p.h>
-#include <qnet_unix_p.h>
-#include <qplatformdefs.h>
-#include <qurl.h>
 
 #if defined(__GNU_LIBRARY__) && ! defined(__UCLIBC__)
 #  include <gnu/lib-names.h>
 #endif
 
 #if defined (QT_NO_GETADDRINFO)
-   static QMutex getHostByNameMutex;
+static QMutex getHostByNameMutex;
 #endif
 
 // #define QHOSTINFO_DEBUG
@@ -69,7 +70,7 @@ typedef void (*res_nclose_proto)(res_state_ptr);
 static res_nclose_proto local_res_nclose = 0;
 static res_state_ptr local_res = 0;
 
-static void resolveLibrary()
+static void resolveLibraryInternal()
 {
    QLibrary lib(QLatin1String("resolv"));
    lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
@@ -117,7 +118,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       QMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_init));
 
       if (! triedResolve.load()) {
-         resolveLibrary();
+         resolveLibraryInternal();
          triedResolve.store(true);
       }
    }
@@ -247,11 +248,11 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       freeaddrinfo(res);
 
 #ifdef EAI_NODATA
-       // EAI_NODATA is deprecated in RFC 3493
-       } else if (result == EAI_NONAME || result ==  EAI_FAIL || result == EAI_NODATA ) {
+      // EAI_NODATA is deprecated in RFC 3493
+   } else if (result == EAI_NONAME || result ==  EAI_FAIL || result == EAI_NODATA ) {
 
 #else
-       } else if (result == EAI_NONAME || result ==  EAI_FAIL) {
+   } else if (result == EAI_NONAME || result ==  EAI_FAIL) {
 
 #endif
 
@@ -311,9 +312,9 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          }
          tmp += addresses.at(i).toString();
       }
+
       qDebug("QHostInfoAgent::fromName(): found %i entries for \"%s\": {%s}",
-             addresses.count(), hostName.toLatin1().constData(),
-             tmp.toLatin1().constData());
+             addresses.count(), hostName.toLatin1().constData(), tmp.toLatin1().constData());
    }
 #endif
    return results;
@@ -321,7 +322,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
 QString QHostInfo::localDomainName()
 {
-   resolveLibrary();
+   resolveLibraryInternal();
 
    if (local_res_ninit) {
       // using thread-safe version

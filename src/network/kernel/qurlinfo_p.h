@@ -20,16 +20,15 @@
 *
 ***********************************************************************/
 
-#ifndef QURLINFO_H
-#define QURLINFO_H
+#ifndef QURLINFO_P_H
+#define QURLINFO_P_H
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qiodevice.h>
+#include <qdatetime.h>
+#include <qstring.h>
+#include <qiodevice.h>
 
-QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_URLINFO
+#ifndef QT_NO_FTP
 class QUrl;
 class QUrlInfoPrivate;
 
@@ -97,8 +96,7 @@ class Q_NETWORK_EXPORT QUrlInfo
    QUrlInfoPrivate *d;
 };
 
-#endif // QT_NO_URLINFO
+#endif // QT_NO_FTP
 
-QT_END_NAMESPACE
 
 #endif // QURLINFO_H

@@ -34,10 +34,51 @@
 
 QT_BEGIN_NAMESPACE
 
+static bool ignoreProxyFor(const QNetworkProxyQuery &query)
+{
+   const QByteArray noProxy = qgetenv("no_proxy").trimmed();
+
+   if (noProxy.isEmpty()) {
+      return false;
+   }
+
+   const QList<QByteArray> noProxyTokens = noProxy.split(',');
+   for (const QByteArray &rawToken : noProxyTokens) {
+      QByteArray token = rawToken.trimmed();
+      QString peerHostName = query.peerHostName();
+      if (token.startsWith('*')) {
+         token = token.mid(1);
+      }
+
+      // Harmonize trailing dot notation
+      if (token.endsWith('.') && !peerHostName.endsWith('.')) {
+         token = token.left(token.length() - 1);
+      }
+
+      // We prepend a dot to both values, so that when we do a suffix match,
+      // we don't match "donotmatch.com" with "match.com"
+      if (!token.startsWith('.')) {
+         token.prepend('.');
+      }
+
+      if (!peerHostName.startsWith('.')) {
+         peerHostName.prepend('.');
+      }
+
+      if (peerHostName.endsWith(QString::fromLatin1(token))) {
+         return true;
+      }
+   }
+
+   return false;
+}
 QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkProxyQuery &query)
 {
    QList<QNetworkProxy> proxyList;
 
+   if (ignoreProxyFor(query)) {
+      return proxyList << QNetworkProxy::NoProxy;
+   }
    const QString queryProtocol = query.protocolTag().toLower();
    QByteArray proxy_env;
 
@@ -62,17 +103,23 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
                              url.port() ? url.port() : 1080, url.userName(), url.password());
          proxyList << proxy;
+
       } else if (url.scheme() == QLatin1String("socks5h")) {
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
                              url.port() ? url.port() : 1080, url.userName(), url.password());
          proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
          proxyList << proxy;
-      } else if (url.scheme() == QLatin1String("http") || url.scheme().isEmpty()) {
+
+      } else if ((url.scheme() == QLatin1String("http") || url.scheme().isEmpty())
+                 && query.queryType() != QNetworkProxyQuery::UdpSocket
+                 && query.queryType() != QNetworkProxyQuery::TcpServer) {
+
          QNetworkProxy proxy(QNetworkProxy::HttpProxy, url.host(),
                              url.port() ? url.port() : 8080, url.userName(), url.password());
          proxyList << proxy;
       }
    }
+
    if (proxyList.isEmpty()) {
       proxyList << QNetworkProxy::NoProxy;
    }

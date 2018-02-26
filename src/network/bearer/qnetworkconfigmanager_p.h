@@ -25,12 +25,10 @@
 
 #include <qnetworkconfigmanager.h>
 #include <qnetworkconfiguration_p.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qset.h>
+#include <qmutex.h>
+#include <qset.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
-
-QT_BEGIN_NAMESPACE
 
 class QBearerEngine;
 class QTimer;
@@ -64,8 +62,8 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
    NET_CS_SLOT_1(Public, void updateConfigurations())
    NET_CS_SLOT_2(updateConfigurations)
 
-   NET_CS_SLOT_1(Public, static void addPostRoutine())
-   NET_CS_SLOT_2(addPostRoutine)
+   NET_CS_SLOT_1(Public, static void addPreAndPostRoutine())
+   NET_CS_SLOT_2(addPreAndPostRoutine)
 
    NET_CS_SIGNAL_1(Public, void configurationAdded(const QNetworkConfiguration &config))
    NET_CS_SIGNAL_OVERLOAD(configurationAdded, (const QNetworkConfiguration &), config)
@@ -78,6 +76,7 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
 
    NET_CS_SIGNAL_1(Public, void configurationUpdateComplete())
    NET_CS_SIGNAL_2(configurationUpdateComplete)
+
 
    NET_CS_SIGNAL_1(Public, void onlineStateChanged(bool isOnline))
    NET_CS_SIGNAL_2(onlineStateChanged, isOnline)
@@ -117,7 +116,6 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
 
 Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate();
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_BEARERMANAGEMENT
 

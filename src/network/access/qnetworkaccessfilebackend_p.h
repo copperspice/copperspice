@@ -26,9 +26,8 @@
 #include <qnetworkaccessbackend_p.h>
 #include <qnetworkrequest.h>
 #include <qnetworkreply.h>
-#include <QtCore/qfile.h>
+#include <qfile.h>
 
-QT_BEGIN_NAMESPACE
 
 class QNetworkAccessFileBackend: public QNetworkAccessBackend
 {
@@ -61,9 +60,9 @@ class QNetworkAccessFileBackend: public QNetworkAccessBackend
 class QNetworkAccessFileBackendFactory: public QNetworkAccessBackendFactory
 {
  public:
-   virtual QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
+    QStringList supportedSchemes() const override;
+    QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
 
-QT_END_NAMESPACE
 
 #endif

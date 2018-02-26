@@ -27,14 +27,15 @@
 #include <qnetworkreply_p.h>
 #include <qnetworkaccessmanager.h>
 #include <qnetworkproxy.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qqueue.h>
-#include <QtCore/qbuffer.h>
-#include <qringbuffer_p.h>
-#include <qbytedata_p.h>
-#include <QSharedPointer>
+#include <qnetworksession.h>
 
-QT_BEGIN_NAMESPACE
+#include <qbuffer.h>
+#include <qbytedata_p.h>
+#include <qmap.h>
+#include <qqueue.h>
+#include <qringbuffer_p.h>
+
+#include <QSharedPointer>
 
 class QAbstractNetworkCache;
 class QNetworkAccessBackend;
@@ -48,9 +49,9 @@ class QNetworkReplyImpl: public QNetworkReply
    QNetworkReplyImpl(QObject *parent = nullptr);
    ~QNetworkReplyImpl();
 
-   void abort() override;
+   virtual void abort() override;
 
-   // reimplemented from QNetworkReply / QIODevice
+   // reimplemented from QNetworkReply or QIODevice
    void close() override;
    qint64 bytesAvailable() const override;
    void setReadBufferSize(qint64 size) override;
@@ -58,14 +59,6 @@ class QNetworkReplyImpl: public QNetworkReply
 
    qint64 readData(char *data, qint64 maxlen) override;
    bool event(QEvent *) override;
-
-#ifndef QT_NO_OPENSSL
-   virtual void ignoreSslErrors();
-
-   QSslConfiguration sslConfigurationImplementation() const override;
-   void setSslConfigurationImplementation(const QSslConfiguration &configuration) override;
-   void ignoreSslErrorsImplementation(const QList<QSslError> &errors) override;
-#endif
 
    Q_DECLARE_PRIVATE(QNetworkReplyImpl)
 
@@ -90,13 +83,23 @@ class QNetworkReplyImpl: public QNetworkReply
 
    NET_CS_SLOT_1(Private, void _q_networkSessionFailed())
    NET_CS_SLOT_2(_q_networkSessionFailed)
+
+   NET_CS_SLOT_1(Private, void _q_networkSessionStateChanged(QNetworkSession::State))
+   NET_CS_SLOT_2(_q_networkSessionStateChanged)
+
+   NET_CS_SLOT_1(Private, void _q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies))
+   NET_CS_SLOT_2(_q_networkSessionUsagePoliciesChanged)
 #endif
 
-   NET_CS_SLOT_1(Private, void _q_cacheDestroyed())
-   NET_CS_SLOT_2(_q_cacheDestroyed)
+#ifdef QT_SSL
+protected:
+   virtual void ignoreSslErrors();
+   virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors) override;
 
-   NET_CS_SLOT_1(Private, void _q_cacheSaveDeviceAboutToClose())
-   NET_CS_SLOT_2(_q_cacheSaveDeviceAboutToClose)
+   void sslConfigurationImplementation(QSslConfiguration &configuration) const override;
+   void setSslConfigurationImplementation(const QSslConfiguration &configuration) override;
+#endif
+
 };
 
 class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
@@ -108,23 +111,12 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
       NotifyCopyFinished
    };
 
-   enum State {
-      Idle,               // The reply is idle.
-      Buffering,          // The reply is buffering outgoing data.
-      Working,            // The reply is uploading/downloading data.
-      Finished,           // The reply has finished.
-      Aborted,            // The reply has been aborted.
-      WaitingForSession,  // The reply is waiting for the session to open before connecting.
-      Reconnecting        // The reply will reconnect to once roaming has completed.
-   };
-
    typedef QQueue<InternalNotifications> NotificationQueue;
 
    QNetworkReplyImplPrivate();
 
    void _q_startOperation();
-   void _q_sourceReadyRead();
-   void _q_sourceReadChannelFinished();
+
    void _q_copyReadyRead();
    void _q_copyReadChannelFinished();
    void _q_bufferOutgoingData();
@@ -133,10 +125,9 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
 #ifndef QT_NO_BEARERMANAGEMENT
    void _q_networkSessionConnected();
    void _q_networkSessionFailed();
+   void _q_networkSessionStateChanged(QNetworkSession::State);
+   void _q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies);
 #endif
-
-   void _q_cacheDestroyed();
-   void _q_cacheSaveDeviceAboutToClose();
 
    void setup(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *outgoingData);
 
@@ -168,6 +159,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
    void error(QNetworkReply::NetworkError code, const QString &errorString);
    void metaDataChanged();
    void redirectionRequested(const QUrl &target);
+   void encrypted();
    void sslErrors(const QList<QSslError> &errors);
 
    QNetworkAccessBackend *backend;
@@ -201,7 +193,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
    QString httpReasonPhrase;
    int httpStatusCode;
 
-   State state;
+   ReplyState state;
 
    // only used when the "zero copy" style is used. Else readBuffer is used.
    // Please note that the whole "zero copy" download buffer API is private right now. Do not use it.
@@ -232,6 +224,6 @@ class QDisabledNetworkReply : public QNetworkReply
 };
 #endif
 
-QT_END_NAMESPACE
+Q_DECLARE_METATYPE(QSharedPointer<char>)
 
 #endif

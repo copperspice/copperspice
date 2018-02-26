@@ -26,7 +26,7 @@
 #include <qlist.h>
 #include <qregexp.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 #include <qtcpsocket.h>
 #include <qsslerror.h>
@@ -239,6 +239,6 @@ private:
    friend class QSslSocketBackendPrivate;
 };
 
-#endif // QT_NO_OPENSSL
+#endif
 
 #endif

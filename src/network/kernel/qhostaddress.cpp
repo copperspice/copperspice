@@ -98,9 +98,9 @@ class QHostAddressPrivate
    quint32 a;    // IPv4 address
 
    union {
-        Q_IPV6ADDR a6; // IPv6 address
-        struct { quint64 c[2]; } a6_64;
-        struct { quint32 c[4]; } a6_32;
+      Q_IPV6ADDR a6; // IPv6 address
+      struct { quint64 c[2]; } a6_64;
+      struct { quint32 c[4]; } a6_32;
    };
 
    QAbstractSocket::NetworkLayerProtocol protocol;
@@ -130,35 +130,37 @@ void QHostAddressPrivate::setAddress(quint32 a_)
       a6_32.c[2] = qToBigEndian(0xffff);
       a6_32.c[3] = qToBigEndian(a);
    } else {
-     a6_64.c[1] = 0;
-  }
+      a6_64.c[1] = 0;
+   }
 }
 
 /// parses v4-mapped addresses or the AnyIPv6 address and stores in \a a;
 /// returns true if the address was one of those
-static bool convertToIpv4(quint32& a, const Q_IPV6ADDR &a6)
+static bool convertToIpv4(quint32 &a, const Q_IPV6ADDR &a6)
 {
-    const uchar *ptr = a6.c;
-    if (qFromUnaligned<quint64>(ptr) != 0)
-        return false;
-    if (qFromBigEndian<quint32>(ptr + 8) == 0) {
-        // is it AnyIPv6?
-        a = 0;
-        return qFromBigEndian<quint32>(ptr + 12) == 0;
-    }
-    if (qFromBigEndian<quint32>(ptr + 8) != 0xFFFF)
-        return false;
-    a = qFromBigEndian<quint32>(ptr + 12);
-    return true;
+   const uchar *ptr = a6.c;
+   if (qFromUnaligned<quint64>(ptr) != 0) {
+      return false;
+   }
+   if (qFromBigEndian<quint32>(ptr + 8) == 0) {
+      // is it AnyIPv6?
+      a = 0;
+      return qFromBigEndian<quint32>(ptr + 12) == 0;
+   }
+   if (qFromBigEndian<quint32>(ptr + 8) != 0xFFFF) {
+      return false;
+   }
+   a = qFromBigEndian<quint32>(ptr + 12);
+   return true;
 }
 
 void QHostAddressPrivate::setAddress(const quint8 *a_)
 {
-    protocol = QAbstractSocket::IPv6Protocol;
-    isParsed = true;
-    memcpy(a6.c, a_, sizeof(a6));
-    a = 0;
-    convertToIpv4(a, a6);
+   protocol = QAbstractSocket::IPv6Protocol;
+   isParsed = true;
+   memcpy(a6.c, a_, sizeof(a6));
+   a = 0;
+   convertToIpv4(a, a6);
 }
 
 void QHostAddressPrivate::setAddress(const Q_IPV6ADDR &a_)
@@ -187,7 +189,7 @@ bool QHostAddressPrivate::parse()
    QString a = ipString.simplified();
 
    if (a.isEmpty()) {
-        return false;
+      return false;
    }
 
    // All IPv6 addresses contain a ':', and may contain a '.'.
@@ -201,9 +203,9 @@ bool QHostAddressPrivate::parse()
 
    quint32 maybeIp4 = 0;
    if (QIPAddressUtils::parseIp4(maybeIp4, a.constBegin(), a.constEnd())) {
-        setAddress(maybeIp4);
-        return true;
-    }
+      setAddress(maybeIp4);
+      return true;
+   }
    return false;
 }
 
@@ -416,11 +418,11 @@ QHostAddress::QHostAddress(SpecialAddress address)
          break;
 
       case AnyIPv4:
-        break;
+         break;
 
       case LocalHostIPv6:
          ip6[15] = 1;
-          // fall through
+      // fall through
       case AnyIPv6:
          d->setAddress(ip6);
          return;
@@ -489,14 +491,15 @@ void QHostAddress::setAddress(const struct sockaddr *sockaddr)
 
 quint32 QHostAddress::toIPv4Address(bool *ok) const
 {
-    QT_ENSURE_PARSED(this);
-    quint32 dummy;
+   QT_ENSURE_PARSED(this);
+   quint32 dummy;
 
-    if (ok)
-        *ok = d->protocol == QAbstractSocket::IPv4Protocol ||
-                  d->protocol == QAbstractSocket::AnyIPProtocol ||
-                  (d->protocol == QAbstractSocket::IPv6Protocol && convertToIpv4(dummy, d->a6));
-    return d->a;
+   if (ok) {
+      *ok = d->protocol == QAbstractSocket::IPv4Protocol || d->protocol == QAbstractSocket::AnyIPProtocol ||
+            (d->protocol == QAbstractSocket::IPv6Protocol && convertToIpv4(dummy, d->a6));
+   }
+
+   return d->a;
 }
 
 QAbstractSocket::NetworkLayerProtocol QHostAddress::protocol() const
@@ -524,12 +527,12 @@ QString QHostAddress::toString() const
    }
 
    if (d->protocol == QAbstractSocket::IPv6Protocol) {
-        QString s;
-        QIPAddressUtils::toString(s, d->a6.c);
+      QString s;
+      QIPAddressUtils::toString(s, d->a6.c);
 
-        if (!d->scopeId.isEmpty()) {
+      if (! d->scopeId.isEmpty()) {
          s.append(QLatin1Char('%') + d->scopeId);
-        }
+      }
 
       return s;
    }
@@ -572,35 +575,35 @@ bool QHostAddress::operator ==(SpecialAddress other) const
    QT_ENSURE_PARSED(this);
 
    quint32 ip4 = INADDR_ANY;
-    switch (other) {
-    case Null:
-        return d->protocol == QAbstractSocket::UnknownNetworkLayerProtocol;
+   switch (other) {
+      case Null:
+         return d->protocol == QAbstractSocket::UnknownNetworkLayerProtocol;
 
-    case Broadcast:
-        ip4 = INADDR_BROADCAST;
-        break;
+      case Broadcast:
+         ip4 = INADDR_BROADCAST;
+         break;
 
-    case LocalHost:
-        ip4 = INADDR_LOOPBACK;
-        break;
+      case LocalHost:
+         ip4 = INADDR_LOOPBACK;
+         break;
 
-    case Any:
-        return d->protocol == QAbstractSocket::AnyIPProtocol;
+      case Any:
+         return d->protocol == QAbstractSocket::AnyIPProtocol;
 
-    case AnyIPv4:
-        break;
+      case AnyIPv4:
+         break;
 
-    case LocalHostIPv6:
-    case AnyIPv6:
-        if (d->protocol == QAbstractSocket::IPv6Protocol) {
+      case LocalHostIPv6:
+      case AnyIPv6:
+         if (d->protocol == QAbstractSocket::IPv6Protocol) {
             quint64 second = quint8(other == LocalHostIPv6);  // 1 for localhost, 0 for any
             return d->a6_64.c[0] == 0 && d->a6_64.c[1] == qToBigEndian(second);
-        }
-        return false;
-    }
+         }
+         return false;
+   }
 
-    // common IPv4 part
-    return d->protocol == QAbstractSocket::IPv4Protocol && d->a == ip4;
+   // common IPv4 part
+   return d->protocol == QAbstractSocket::IPv4Protocol && d->a == ip4;
 }
 
 bool QHostAddress::isNull() const
@@ -772,35 +775,35 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
 
 bool QHostAddress::isLoopback() const
 {
-    QT_ENSURE_PARSED(this);
+   QT_ENSURE_PARSED(this);
 
-    if ((d->a & 0xFF000000) == 0x7F000000)  {
-        return true; // v4 range (including IPv6 wrapped IPv4 addresses)
-    }
+   if ((d->a & 0xFF000000) == 0x7F000000)  {
+      return true; // v4 range (including IPv6 wrapped IPv4 addresses)
+   }
 
-    if (d->protocol == QAbstractSocket::IPv6Protocol) {
+   if (d->protocol == QAbstractSocket::IPv6Protocol) {
 
-        if (d->a6_64.c[0] != 0 || qFromBigEndian(d->a6_64.c[1]) != 1) {
-            return false;
-        }
+      if (d->a6_64.c[0] != 0 || qFromBigEndian(d->a6_64.c[1]) != 1) {
+         return false;
+      }
 
-        return true;
-    }
+      return true;
+   }
 
-    return false;
+   return false;
 }
 bool QHostAddress::isMulticast() const
 {
-    QT_ENSURE_PARSED(this);
-    if ((d->a & 0xF0000000) == 0xE0000000) {
-        return true; // 224.0.0.0-239.255.255.255 (including v4-mapped IPv6 addresses)
-    }
+   QT_ENSURE_PARSED(this);
+   if ((d->a & 0xF0000000) == 0xE0000000) {
+      return true; // 224.0.0.0-239.255.255.255 (including v4-mapped IPv6 addresses)
+   }
 
-    if (d->protocol == QAbstractSocket::IPv6Protocol) {
-        return d->a6.c[0] == 0xff;
-    }
+   if (d->protocol == QAbstractSocket::IPv6Protocol) {
+      return d->a6.c[0] == 0xff;
+   }
 
-    return false;
+   return false;
 }
 QDebug operator<<(QDebug d, const QHostAddress &address)
 {
@@ -808,7 +811,7 @@ QDebug operator<<(QDebug d, const QHostAddress &address)
    // d.resetFormat().nospace();
 
    if (address == QHostAddress::Any) {
-        d << "QHostAddress(QHostAddress::Any)";
+      d << "QHostAddress(QHostAddress::Any)";
    } else {
       d << "QHostAddress(" << address.toString() << ')';
    }

@@ -24,13 +24,12 @@
 #define QNETWORKCONFIGURATION_P_H
 
 #include <qnetworkconfiguration.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qmap.h>
-
-QT_BEGIN_NAMESPACE
+#include <qshareddata.h>
+#include <qmutex.h>
+#include <qmap.h>
 
 typedef QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> QNetworkConfigurationPrivatePointer;
+
 class QNetworkConfigurationPrivate : public QSharedData
 {
  public:
@@ -41,13 +40,10 @@ class QNetworkConfigurationPrivate : public QSharedData
       bearerType(QNetworkConfiguration::BearerUnknown),
       isValid(false), roamingSupported(false) {
    }
+
    virtual ~QNetworkConfigurationPrivate() {
       //release pointers to member configurations
       serviceNetworkMembers.clear();
-   }
-
-   virtual QString bearerTypeName() const {
-      return QLatin1String("Unknown");
    }
 
    QMap<unsigned int, QNetworkConfigurationPrivatePointer> serviceNetworkMembers;
@@ -69,6 +65,6 @@ class QNetworkConfigurationPrivate : public QSharedData
    Q_DISABLE_COPY(QNetworkConfigurationPrivate)
 };
 
-QT_END_NAMESPACE
+Q_DECLARE_METATYPE(QNetworkConfigurationPrivatePointer)
 
-#endif // QNETWORKCONFIGURATIONPRIVATE_H
+#endif

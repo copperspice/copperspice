@@ -27,9 +27,7 @@
 #include <qsslsocket.h>
 #include <qssl.h>
 
-QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 template<typename T>
 class QList;
@@ -144,12 +142,6 @@ private:
    QSharedDataPointer<QSslConfigurationPrivate> d;
 };
 
-#else
-
-class Q_NETWORK_EXPORT QSslConfiguration
-{
-};
-
-#endif  // QT_NO_OPENSSL
+#endif
 
 #endif

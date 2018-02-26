@@ -23,11 +23,10 @@
 #ifndef QHTTPNETWORKREQUEST_P_H
 #define QHTTPNETWORKREQUEST_P_H
 
-#ifndef QT_NO_HTTP
+
 
 #include <qhttpnetworkheader_p.h>
 
-QT_BEGIN_NAMESPACE
 
 class QNonContiguousByteDevice;
 class QHttpNetworkRequestPrivate;
@@ -53,7 +52,7 @@ class QHttpNetworkRequest: public QHttpNetworkHeader
       LowPriority
    };
 
-   QHttpNetworkRequest(const QUrl &url = QUrl(), Operation operation = Get, Priority priority = NormalPriority);
+   explicit QHttpNetworkRequest(const QUrl &url = QUrl(), Operation operation = Get, Priority priority = NormalPriority);
    QHttpNetworkRequest(const QHttpNetworkRequest &other);
    virtual ~QHttpNetworkRequest();
    QHttpNetworkRequest &operator=(const QHttpNetworkRequest &other);
@@ -84,20 +83,32 @@ class QHttpNetworkRequest: public QHttpNetworkHeader
    bool isPipeliningAllowed() const;
    void setPipeliningAllowed(bool b);
 
+   bool isSPDYAllowed() const;
+   void setSPDYAllowed(bool b);
    bool withCredentials() const;
    void setWithCredentials(bool b);
 
    bool isSsl() const;
    void setSsl(bool);
 
+    bool isPreConnect() const;
+    void setPreConnect(bool preConnect);
+    bool isFollowRedirects() const;
+    void setFollowRedirects(bool followRedirect);
+    int redirectCount() const;
+    void setRedirectCount(int count);
    void setUploadByteDevice(QNonContiguousByteDevice *bd);
    QNonContiguousByteDevice *uploadByteDevice() const;
 
+   QByteArray methodName() const;
+   QByteArray uri(bool throughProxy) const;
  private:
    QSharedDataPointer<QHttpNetworkRequestPrivate> d;
    friend class QHttpNetworkRequestPrivate;
    friend class QHttpNetworkConnectionPrivate;
    friend class QHttpNetworkConnectionChannel;
+   friend class QHttpProtocolHandler;
+   friend class QSpdyProtocolHandler;
 };
 
 class QHttpNetworkRequestPrivate : public QHttpNetworkHeaderPrivate
@@ -110,8 +121,6 @@ class QHttpNetworkRequestPrivate : public QHttpNetworkHeaderPrivate
    ~QHttpNetworkRequestPrivate();
 
    bool operator==(const QHttpNetworkRequestPrivate &other) const;
-   QByteArray methodName() const;
-   QByteArray uri(bool throughProxy) const;
 
    static QByteArray header(const QHttpNetworkRequest &request, bool throughProxy);
 
@@ -121,13 +130,17 @@ class QHttpNetworkRequestPrivate : public QHttpNetworkHeaderPrivate
    mutable QNonContiguousByteDevice *uploadByteDevice;
    bool autoDecompress;
    bool pipeliningAllowed;
+   bool spdyAllowed;
    bool withCredentials;
    bool ssl;
+   bool preConnect;
+   bool followRedirect;
+   int redirectCount;
 };
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_HTTP
 
 
-#endif // QHTTPNETWORKREQUEST_H
+
+
+
+#endif

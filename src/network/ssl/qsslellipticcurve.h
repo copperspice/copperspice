@@ -23,9 +23,9 @@
 #ifndef QSSLELLIPTICCURVE_H
 #define QSSLELLIPTICCURVE_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QString>
-#include <QtCore/QMetaType>
+#include <QtGlobal>
+#include <QString>
+#include <QMetaType>
 #include <qhashfunc.h>
 
 class QDebug;
@@ -37,7 +37,7 @@ uint qHash(QSslEllipticCurve curve, uint seed = 0);
 class Q_NETWORK_EXPORT QSslEllipticCurve {
 
 public:
-   QSslEllipticCurve()
+   constexpr QSslEllipticCurve()
       : id(0)
    {
    }
@@ -48,7 +48,7 @@ public:
    QString shortName() const Q_REQUIRED_RESULT;
    QString longName() const Q_REQUIRED_RESULT;
 
-   bool isValid() const {
+   constexpr bool isValid() const {
       return id != 0;
    }
 
@@ -57,7 +57,7 @@ public:
 private:
    int id;
 
-   friend bool operator==(QSslEllipticCurve lhs, QSslEllipticCurve rhs);
+   friend constexpr bool operator==(QSslEllipticCurve lhs, QSslEllipticCurve rhs);
    friend uint qHash(QSslEllipticCurve curve, uint seed);
 
    friend class QSslSocketPrivate;
@@ -69,12 +69,12 @@ inline uint qHash(QSslEllipticCurve curve, uint seed)
    return qHash(curve.id, seed);
 }
 
-inline bool operator==(QSslEllipticCurve lhs, QSslEllipticCurve rhs)
+constexpr inline bool operator==(QSslEllipticCurve lhs, QSslEllipticCurve rhs)
 {
    return lhs.id == rhs.id;
 }
 
-inline bool operator!=(QSslEllipticCurve lhs, QSslEllipticCurve rhs)
+constexpr inline bool operator!=(QSslEllipticCurve lhs, QSslEllipticCurve rhs)
 {
    return !operator==(lhs, rhs);
 }

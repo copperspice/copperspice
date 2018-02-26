@@ -23,10 +23,10 @@
 #include <qnetworkconfigmanager.h>
 #include <qnetworkconfigmanager_p.h>
 #include <qbearerengine_p.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qthread.h>
+#include <qstringlist.h>
+#include <qcoreapplication.h>
+#include <qmutex.h>
+#include <qthread.h>
 #include <qcoreapplication_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -34,56 +34,67 @@
 QT_BEGIN_NAMESPACE
 
 static QAtomicPointer<QNetworkConfigurationManagerPrivate> connManager_ptr;
-Q_GLOBAL_STATIC(QMutex, connManager_mutex)
+
+
 static QAtomicInt appShutdown;
 
+static void connManager_prepare()
+{
+   int shutdown = appShutdown.fetchAndStoreAcquire(0);
+   Q_ASSERT(shutdown == 0 || shutdown == 1);
+   Q_UNUSED(shutdown);
+}
 static void connManager_cleanup()
 {
    // this is not atomic or thread-safe!
    int shutdown = appShutdown.fetchAndStoreAcquire(1);
    Q_ASSERT(shutdown == 0);
-   if (connManager_ptr.load()) {
-      connManager_ptr.load()->cleanup();
+
+   QNetworkConfigurationManagerPrivate *cmp = connManager_ptr.fetchAndStoreAcquire(0);
+
+   if (cmp) {
+      cmp->cleanup();
    }
-   connManager_ptr.store(0);
 }
 
-void QNetworkConfigurationManagerPrivate::addPostRoutine()
+void QNetworkConfigurationManagerPrivate::addPreAndPostRoutine()
 {
+   qAddPreRoutine(connManager_prepare);
    qAddPostRoutine(connManager_cleanup);
 }
 
-static QNetworkConfigurationManagerPrivate *connManager()
+QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
 {
-   QNetworkConfigurationManagerPrivate *ptr = connManager_ptr.fetchAndAddAcquire(0);
-   if (!ptr && !appShutdown.load()) {
-      QMutexLocker locker(connManager_mutex());
-      if (!(ptr = connManager_ptr.fetchAndAddAcquire(0))) {
+   QNetworkConfigurationManagerPrivate *ptr = connManager_ptr.loadAcquire();
+   int shutdown = appShutdown.loadAcquire();
+   if (!ptr && !shutdown) {
+      static QBasicMutex connManager_mutex;
+      QMutexLocker locker(&connManager_mutex);
+
+      if (! (ptr = connManager_ptr.loadAcquire())) {
          ptr = new QNetworkConfigurationManagerPrivate;
 
          if (QCoreApplicationPrivate::mainThread() == QThread::currentThread()) {
             // right thread or no main thread yet
-            ptr->addPostRoutine();
+            ptr->addPreAndPostRoutine();
             ptr->initialize();
+
          } else {
             // wrong thread, we need to make the main thread do this
             QObject *obj = new QObject;
-            QObject::connect(obj, SIGNAL(destroyed()), ptr, SLOT(addPostRoutine()), Qt::DirectConnection);
+            QObject::connect(obj, SIGNAL(destroyed()), ptr, SLOT(addPreAndPostRoutine()), Qt::DirectConnection);
             ptr->initialize(); // this moves us to the right thread
             obj->moveToThread(QCoreApplicationPrivate::mainThread());
             obj->deleteLater();
          }
 
-         connManager_ptr.fetchAndStoreRelease(ptr);
+         connManager_ptr.storeRelease(ptr);
       }
    }
    return ptr;
 }
 
-QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
-{
-   return connManager();
-}
+
 
 /*!
     \class QNetworkConfigurationManager
@@ -212,20 +223,23 @@ QNetworkConfigurationManager::QNetworkConfigurationManager(QObject *parent)
 {
    QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
 
-   connect(priv, SIGNAL(configurationAdded(const QNetworkConfiguration &)),
-           this, SLOT(configurationAdded(const QNetworkConfiguration &)));
+   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
+           (&QNetworkConfigurationManagerPrivate::configurationAdded),
+           this, &QNetworkConfigurationManager::configurationAdded);
 
-   connect(priv, SIGNAL(configurationRemoved(const QNetworkConfiguration &)),
-           this, SLOT(configurationRemoved(const QNetworkConfiguration &)));
+   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
+           (&QNetworkConfigurationManagerPrivate::configurationRemoved),
+           this, &QNetworkConfigurationManager::configurationRemoved);
 
-   connect(priv, SIGNAL(configurationChanged(const QNetworkConfiguration &)),
-           this, SLOT(configurationChanged(const QNetworkConfiguration &)));
+   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
+           (&QNetworkConfigurationManagerPrivate::configurationChanged),
+           this, &QNetworkConfigurationManager::configurationChanged);
 
-   connect(priv, SIGNAL(onlineStateChanged(bool)),
-           this, SLOT(onlineStateChanged(bool)));
+   connect(priv, &QNetworkConfigurationManagerPrivate::onlineStateChanged,
+           this, &QNetworkConfigurationManager::onlineStateChanged);
 
-   connect(priv, SIGNAL(configurationUpdateComplete()),
-           this, SLOT(updateCompleted()));
+   connect(priv, &QNetworkConfigurationManagerPrivate::configurationUpdateComplete,
+           this, &QNetworkConfigurationManager::updateCompleted);
 
    priv->enablePolling();
 }
@@ -235,25 +249,17 @@ QNetworkConfigurationManager::QNetworkConfigurationManager(QObject *parent)
 */
 QNetworkConfigurationManager::~QNetworkConfigurationManager()
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       priv->disablePolling();
    }
 }
 
-
-/*!
-    Returns the default configuration to be used. This function always returns a discovered
-    configuration; otherwise an invalid configuration.
-
-    In some cases it may be required to call updateConfigurations() and wait for the
-    updateCompleted() signal before calling this function.
-
-    \sa allConfigurations()
-*/
 QNetworkConfiguration QNetworkConfigurationManager::defaultConfiguration() const
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       return priv->defaultConfiguration();
    }
@@ -261,35 +267,10 @@ QNetworkConfiguration QNetworkConfigurationManager::defaultConfiguration() const
    return QNetworkConfiguration();
 }
 
-/*!
-    Returns the list of configurations which comply with the given \a filter.
-
-    By default this function returns all (defined and undefined) configurations.
-
-    A wireless network with a particular SSID may only be accessible in a
-    certain area despite the fact that the system has a valid configuration
-    for it. Therefore the filter flag may be used to limit the list to
-    discovered and possibly connected configurations only.
-
-    If \a filter is set to zero this function returns all possible configurations.
-
-    Note that this function returns the states for all configurations as they are known at
-    the time of this function call. If for instance a configuration of type WLAN is defined
-    the system may have to perform a WLAN scan in order to determine whether it is
-    actually available. To obtain the most accurate state updateConfigurations() should
-    be used to update each configuration's state. Note that such an update may require
-    some time. It's completion is signalled by updateCompleted(). In the absence of a
-    configuration update this function returns the best estimate at the time of the call.
-    Therefore, if WLAN configurations are of interest, it is recommended that
-    updateConfigurations() is called once after QNetworkConfigurationManager
-    instantiation (WLAN scans are too time consuming to perform in constructor).
-    After this the data is kept automatically up-to-date as the system reports
-    any changes.
-*/
-QList<QNetworkConfiguration> QNetworkConfigurationManager::allConfigurations(QNetworkConfiguration::StateFlags filter)
-const
+QList<QNetworkConfiguration> QNetworkConfigurationManager::allConfigurations(QNetworkConfiguration::StateFlags filter) const
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       return priv->allConfigurations(filter);
    }
@@ -297,15 +278,10 @@ const
    return QList<QNetworkConfiguration>();
 }
 
-/*!
-    Returns the QNetworkConfiguration for \a identifier; otherwise returns an
-    invalid QNetworkConfiguration.
-
-    \sa QNetworkConfiguration::identifier()
-*/
 QNetworkConfiguration QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       return priv->configurationFromIdentifier(identifier);
    }
@@ -325,7 +301,8 @@ QNetworkConfiguration QNetworkConfigurationManager::configurationFromIdentifier(
 */
 bool QNetworkConfigurationManager::isOnline() const
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       return priv->isOnline();
    }
@@ -338,7 +315,8 @@ bool QNetworkConfigurationManager::isOnline() const
 */
 QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabilities() const
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       return priv->capabilities();
    }
@@ -362,7 +340,8 @@ QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabil
 */
 void QNetworkConfigurationManager::updateConfigurations()
 {
-   QNetworkConfigurationManagerPrivate *priv = connManager();
+   QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
+
    if (priv) {
       priv->performAsyncConfigurationUpdate();
    }

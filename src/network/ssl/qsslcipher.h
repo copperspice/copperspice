@@ -27,7 +27,7 @@
 #include <qscopedpointer.h>
 #include <qssl.h>
 
-#ifndef QT_NO_OPENSSL
+#ifdef QT_SSL
 
 class QSslCipherPrivate;
 
@@ -78,7 +78,7 @@ private:
 class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCipher &cipher);
 
-#endif // QT_NO_OPENSSL
+#endif
 
 #endif
 
