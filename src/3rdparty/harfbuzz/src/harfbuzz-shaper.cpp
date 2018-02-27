@@ -705,6 +705,11 @@ void HB_GetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
 
     for (hb_uint32 i = 0; i < numItems; ++i) {
         HB_Script script = items[i].script;
+
+        if (script >= (sizeof(HB_ScriptEngines) / sizeof(HB_ScriptEngines[0]))) {
+            continue;
+        }
+
         if (script == HB_Script_Inherited)
             script = HB_Script_Common;
         HB_AttributeFunction attributeFunction = HB_ScriptEngines[script].charAttributes;
