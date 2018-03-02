@@ -31,6 +31,8 @@
 #include <qchar32.h>
 #include <qlist.h>
 
+class QDataStream;
+
 template <typename S>
 class QStringView;
 
@@ -40,8 +42,8 @@ class QRegularExpression;
 template <typename S>
 class QRegularExpressionMatch;
 
-using QRegularExpression8  = QRegularExpression<QString8>;
-using QRegularExpression16 = QRegularExpression<QString16>;
+using QRegularExpression8       = QRegularExpression<QString8>;
+using QRegularExpression16      = QRegularExpression<QString16>;
 
 using QRegularExpressionMatch8  = QRegularExpressionMatch<QString8>;
 using QRegularExpressionMatch16 = QRegularExpressionMatch<QString16>;
@@ -50,34 +52,31 @@ template <typename S>
 uint qHash(const QRegularExpression<S> &key, uint seed = 0);
 
 enum class QPatternOption {
-   NoPatternOption                 = 0x0000,
-   CaseInsensitiveOption           = 0x0001,
-   DotMatchesEverythingOption      = 0x0002,
-   MultilineOption                 = 0x0004,
-   ExtendedPatternSyntaxOption     = 0x0008,
-   InvertedGreedinessOption        = 0x0010,
-   DontCaptureOption               = 0x0020,
-   UseUnicodePropertiesOption      = 0x0040
+   NoPatternOption               = 0x0000,
+   CaseInsensitiveOption         = 0x0001,
+   DotMatchesEverythingOption    = 0x0002,
+   MultilineOption               = 0x0004,
+   ExtendedPatternSyntaxOption   = 0x0008,
+   ExactMatchOption              = 0x0010,
+   DontCaptureOption             = 0x0020,
+   WildcardOption                = 0x0040
 };
 Q_DECLARE_FLAGS(QPatternOptionFlags, QPatternOption)
 
 enum class QMatchType {
    NormalMatch = 0,
    PartialPreferCompleteMatch,
-   PartialPreferFirstMatch,
    NoMatch
 };
 
 enum class QMatchOption {
-   NoMatchOption                     = 0x0000,
-   AnchoredMatchOption               = 0x0001,
-   DontCheckSubjectStringMatchOption = 0x0002
+   NoMatchOption                 = 0x0000,
+   AnchoredMatchOption           = 0x0001
 };
 Q_DECLARE_FLAGS(QMatchOptionFlags, QMatchOption)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPatternOptionFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMatchOptionFlags)
-
 
 namespace cs_regex_ns {
 namespace cs_regex_detail_ns {
@@ -145,7 +144,7 @@ class QRegexTraits
       }
 
       QChar32 translate_nocase(QChar32 c) const {
-         // broom - ADD NOW
+         // broom -- implementation pending
          return c;
       }
 
@@ -416,13 +415,13 @@ class Q_CORE_EXPORT QRegularExpression
       }
 
       QPatternOptionFlags patternOptions() const {
-         return m_options;
+         return m_patternOptions;
       }
 
       void setPattern(const S &pattern);
 
       void setPatternOptions(QPatternOptionFlags options)  {
-         m_options = options;
+         m_patternOptions = options;
          setPattern(m_pattern);
       }
 
@@ -446,11 +445,13 @@ class Q_CORE_EXPORT QRegularExpression
 
    private:
       S m_pattern;
-      QPatternOptionFlags m_options;
+      QPatternOptionFlags m_patternOptions = QPatternOption::NoPatternOption;
       cs_regex_ns::basic_regex<QChar32, QRegexTraits<S>> m_regex;
 
       bool m_valid = false;
       S m_errorString;
+
+      static S convert_wildcard(const S &str, const bool enableEscaping);
 
       template <typename S2>
       friend Q_CORE_EXPORT uint qHash(const QRegularExpression<S2> &key, uint seed);
@@ -464,13 +465,6 @@ template <typename S>
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegularExpression<S> &regExp);
 
 template <typename S>
-Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QRegularExpression<S> &regExp);
-
-template <typename S>
-Q_CORE_EXPORT QDebug operator<<(QDebug debug, QPatternOptionFlags patternOptions);
-
-
-template <typename S>
 class Q_CORE_EXPORT QRegularExpressionMatch
 {
    public:
@@ -479,8 +473,8 @@ class Q_CORE_EXPORT QRegularExpressionMatch
       QRegularExpressionMatch(QRegularExpressionMatch &&other) = default;
 
       // internal only
-      QRegularExpressionMatch(cs_regex_ns::match_results<QRegexTraits<S>> match)
-         : m_results(std::move(match)), m_valid(true)
+      QRegularExpressionMatch(cs_regex_ns::match_results<QRegexTraits<S>> match, QMatchType matchType, QMatchOptionFlags matchOptions)
+         : m_results(std::move(match)), m_matchType(matchType), m_matchOptions(matchOptions), m_valid(true)
       {
       }
 
@@ -570,19 +564,19 @@ class Q_CORE_EXPORT QRegularExpressionMatch
 
    private:
       cs_regex_ns::match_results<QRegexTraits<S>> m_results;
+
+      QMatchType m_matchType = QMatchType::NoMatch;
+      QMatchOptionFlags m_matchOptions = QMatchOption::NoMatchOption;
+
       bool m_valid = false;
 };
-
-template <typename S>
-Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QRegularExpressionMatch<S> &match);
-
 
 // implementations
 
 template <typename S>
 QRegularExpression<S>::QRegularExpression(const S &pattern, QPatternOptionFlags options)
 {
-   m_options = options;
+   m_patternOptions = options;
    setPattern(pattern);
 }
 
@@ -607,8 +601,8 @@ S QRegularExpression<S>::escape(const S &str)
       if (ch == '\0') {
          // literal NUL must be escaped with "\\0" and not "\\\0"
 
-         result.append(QLatin1Char('\\'));
-         result.append(QLatin1Char('0'));
+         result.append('\\');
+         result.append('0');
 
       } else if ( (ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') &&
                   (ch < '0' || ch > '9') && (ch != '_') )  {
@@ -686,18 +680,39 @@ template <typename S>
 QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S::const_iterator offset, QMatchType matchType,
                   QMatchOptionFlags matchOptions) const
 {
-   // broom - - ADD NOW need to handle matchType, matchOptions   PERTH
-
    if (m_valid) {
       cs_regex_ns::match_results<QRegexTraits<S>> matchResult;
 
-      if (cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex)) {
-         QRegularExpressionMatch<S> retval{matchResult};
+      // option flags
+      cs_regex_ns::regex_constants::match_flag_type tmpOptions = cs_regex_ns::regex_constants::match_default;
+
+
+      if (matchType == QMatchType::PartialPreferCompleteMatch) {
+         tmpOptions |= cs_regex_ns::regex_constants::match_partial;
+      }
+
+      if (matchOptions & QMatchOption::AnchoredMatchOption) {
+         tmpOptions |= cs_regex_ns::regex_constants::match_continuous;
+      }
+
+      // pattern flags
+      if (! (m_patternOptions & QPatternOption::DotMatchesEverythingOption)) {
+         // backwards from flag
+         tmpOptions |= cs_regex_ns::regex_constants::match_not_dot_newline;
+      }
+
+      if (! (m_patternOptions & QPatternOption::MultilineOption)) {
+         // backwards from flag
+         tmpOptions |= cs_regex_ns::regex_constants::match_single_line;
+      }
+
+      if (cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex, tmpOptions)) {
+         QRegularExpressionMatch<S> retval{matchResult, matchType, matchOptions};
          return retval;
 
       } else {
          // valid regex, no match
-         QRegularExpressionMatch<S> retval{cs_regex_ns::match_results<QRegexTraits<S>>()};
+         QRegularExpressionMatch<S> retval{cs_regex_ns::match_results<QRegexTraits<S>>(), QMatchType::NoMatch, matchOptions};
          return retval;
       }
 
@@ -712,16 +727,44 @@ template <typename S>
 QRegularExpressionMatch<S> QRegularExpression<S>::match(const QStringView<S> &str, typename S::const_iterator offset,
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
-   // broom - - ADD NOW need to handle matchType, matchOptions
-
    if (m_valid) {
       cs_regex_ns::match_results<QRegexTraits<S>> matchResult;
-      cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex);
 
-      QRegularExpressionMatch<S> retval{matchResult};
-      return retval;
+      // option flags
+      cs_regex_ns::regex_constants::match_flag_type tmpOptions = cs_regex_ns::regex_constants::match_default;
+
+
+      if (matchType == QMatchType::PartialPreferCompleteMatch) {
+         tmpOptions |= cs_regex_ns::regex_constants::match_partial;
+      }
+
+      if (matchOptions & QMatchOption::AnchoredMatchOption) {
+         tmpOptions |= cs_regex_ns::regex_constants::match_continuous;
+      }
+
+      // pattern flags
+      if (! (m_patternOptions & QPatternOption::DotMatchesEverythingOption)) {
+         // backwards from flag
+         tmpOptions |= cs_regex_ns::regex_constants::match_not_dot_newline;
+      }
+
+      if (! (m_patternOptions & QPatternOption::MultilineOption)) {
+         // backwards from flag
+         tmpOptions |= cs_regex_ns::regex_constants::match_single_line;
+      }
+
+      if (cs_regex_ns::regex_search(offset, str.cend(), matchResult, m_regex, tmpOptions)) {
+         QRegularExpressionMatch<S> retval{matchResult, matchType, matchOptions};
+         return retval;
+
+      } else {
+         // valid regex, no match
+         QRegularExpressionMatch<S> retval{cs_regex_ns::match_results<QRegexTraits<S>>(), QMatchType::NoMatch, matchOptions};
+         return retval;
+      }
 
    } else {
+      // invalid
       return QRegularExpressionMatch<S>();
 
    }
@@ -773,32 +816,21 @@ void QRegularExpression<S>::setPattern(const S &pattern)
    // declare flags
    typename cs_regex_ns::basic_regex<QChar32, QRegexTraits<S>>::flag_type flags;
 
-   if (m_options & QPatternOption::CaseInsensitiveOption) {
-// BROOM      flags |= std::regex_constants::icase;
+   if (m_patternOptions & QPatternOption::CaseInsensitiveOption) {
+      flags |= cs_regex_ns::regex_constants::icase;
    }
 
-   if (m_options & QPatternOption::DotMatchesEverythingOption) {
-// BROOM      flags |= std::regex_constants::icase;
+   if (m_patternOptions & QPatternOption::ExtendedPatternSyntaxOption) {
+      flags |= cs_regex_ns::regex_constants::mod_x;
    }
 
-   if (m_options & QPatternOption::MultilineOption) {
-// BROOM    flags |= std::regex_constants::multiline;
-   }
-
-   if (m_options & QPatternOption::ExtendedPatternSyntaxOption) {
-// BROOM       flags |= std::regex_constants::extended;
-   }
-
-   if (m_options & QPatternOption::InvertedGreedinessOption) {
-// BROOM       flags |= std::regex_constants::icase;
-   }
-
-   if (m_options & QPatternOption::DontCaptureOption ) {
+   if (m_patternOptions & QPatternOption::DontCaptureOption ) {
       flags |= cs_regex_ns::regex_constants::nosubs;
    }
 
-   if (m_options & QPatternOption::UseUnicodePropertiesOption) {
-// BROOM     flags |= std::regex_constants::icase;
+   // exact match
+   if (m_patternOptions &QPatternOption::ExactMatchOption) {
+      m_pattern = "\\A(?:" + m_pattern + ")\\z";
    }
 
    try  {
@@ -1054,13 +1086,146 @@ QList<S> QRegularExpressionMatch<S>::capturedTexts() const
 template <typename S>
 QMatchType QRegularExpressionMatch<S>::matchType() const
 {
-   // broom - - ADD NOW
+   return m_matchType;
 }
 
 template <typename S>
 QMatchOptionFlags QRegularExpressionMatch<S>::matchOptions() const
 {
-   // broom - - ADD NOW
+   return m_matchOptions;
+}
+
+template<typename S>
+S QRegularExpression<S>::convert_wildcard(const S &str, const bool enableEscaping)
+{
+   S retval;
+
+   const int len = str.length();
+
+   // previous character is '\'
+   bool isEscaping = false;
+
+   typename S::const_iterator iter = str.begin();
+   typename S::const_iterator end  = str.end();
+
+   while (iter != end) {
+      const QChar32 c = *iter;
+      ++iter;
+
+      switch (c.unicode()) {
+
+         case '\\':
+            if (enableEscaping) {
+
+               if (isEscaping) {
+                  retval += "\\\\";
+               }
+
+               // we insert the \\ later if necessary
+
+               if (iter == end) {
+                  // the end
+                  retval += "\\\\";
+               }
+
+            } else {
+               retval += "\\\\";
+            }
+
+            isEscaping = true;
+            break;
+
+         case '*':
+            if (isEscaping) {
+               retval += "\\*";
+               isEscaping = false;
+
+            } else {
+               retval += ".*";
+            }
+
+            break;
+
+         case '?':
+            if (isEscaping) {
+               retval += "\\?";
+               isEscaping = false;
+
+            } else {
+               retval += '.';
+            }
+
+            break;
+
+         case '$':
+         case '(':
+         case ')':
+         case '+':
+         case '.':
+         case '^':
+         case '{':
+         case '|':
+         case '}':
+            if (isEscaping) {
+               isEscaping = false;
+               retval += "\\\\";
+            }
+
+            retval += '\\';
+            retval += c;
+            break;
+
+         case '[':
+            if (isEscaping) {
+               isEscaping = false;
+               retval += "\\[";
+
+            } else {
+               retval += c;
+
+               if (*iter == '^') {
+                  retval += *iter;
+                  ++iter;
+               }
+
+               if (iter != end) {
+
+                  if (*iter == ']') {
+                     retval += *iter;
+                     ++iter;
+                  }
+
+                  while (iter != end && *iter != ']') {
+                     if (*iter == '\\') {
+                        retval += '\\';
+                     }
+
+                     retval += *iter;
+                     ++iter;
+                  }
+               }
+            }
+            break;
+
+         case ']':
+            if (isEscaping) {
+               isEscaping = false;
+               retval += "\\";
+            }
+
+            retval += c;
+            break;
+
+         default:
+            if (isEscaping) {
+               isEscaping = false;
+               retval += "\\\\";
+            }
+            retval += c;
+      }
+   }
+
+   return retval;
 }
 
 
@@ -1070,7 +1235,7 @@ template <typename S>
 uint qHash(const QRegularExpression<S> &key, uint seed)
 {
    seed = qHash(key.m_pattern, seed);
-   seed = qHash(key.m_options, seed);
+   seed = qHash(key.m_patternOptions, seed);
    return seed;
 }
 

@@ -24,6 +24,7 @@
 #define CS_MATCH_RESULTS_H
 
 #include <cassert>
+#include <vector>
 
 #include "regex/regex_sub_match.h"
 

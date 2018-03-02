@@ -21,6 +21,9 @@
 #ifndef CS_PERL_MATCHER_H
 #define CS_PERL_MATCHER_H
 
+#include <memory>
+#include <vector>
+
 #include "regex/iterator_category.h"
 
 namespace cs_regex_ns {

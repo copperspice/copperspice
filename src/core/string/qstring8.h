@@ -88,6 +88,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             return CsString::CsString::iterator::operator->();
          }
 
+         QChar32 operator[](size_type n) const {
+            return CsString::CsString::iterator::operator[](n);
+         }
+
          bool operator==(iterator other) const {
             return CsString::CsString::iterator::operator==(other);
          }
@@ -163,6 +167,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             return CsString::CsString::const_iterator::operator->();
          }
 
+         QChar32 operator[](size_type n) const {
+            return CsString::CsString::const_iterator::operator[](n);
+         }
+
          bool operator==(const_iterator other) const {
             return CsString::CsString::const_iterator::operator==(other);
          }
@@ -235,6 +243,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8(QChar32 c);
       QString8(size_type numOfChars, QChar32 c);
+
+      QString8(QChar32::SpecialCharacter c)
+         : QString8(QChar32(c))
+      { }
 
       QString8(const QChar32 *data, size_type numOfChars = -1)  {
 
@@ -367,7 +379,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       bool contains(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-      bool contains(QRegularExpression<QString8> &regExp) const {
+      bool contains(const QRegularExpression<QString8> &regExp) const {
          return indexOfFast(regExp) != end();
       }
 
@@ -747,7 +759,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QByteArray toLatin1() const Q_REQUIRED_RESULT;
       QByteArray toUtf8() const Q_REQUIRED_RESULT;
-      QByteArray toUtf16() const Q_REQUIRED_RESULT;
+      QString16 toUtf16() const Q_REQUIRED_RESULT;
+
+      std::wstring toStdWString() const;
 
       std::string toStdString() const {
          return std::string(cbegin().codePointBegin(), cend().codePointBegin() );
@@ -768,19 +782,24 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       static QString8 fromUtf8(const QByteArray &str);
       static QString8 fromUtf8(const char *str, size_type numOfChars = -1);
+
       static QString8 fromUtf16(const char16_t *str, size_type numOfChars = -1);
+      static QString8 fromUtf16(const QString16 &str);
+
+      static QString8 fromStdWString(const std::wstring &str);
+      static QString8 fromStdString(const std::string &str);
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
-      QString8 formatArg(Ts... args) const
+      QString8 formatArg(Ts&&... args) const
       {
-         return SP::formatArg(*this, args...);
+         return SP::template formatArg<QString8>(*this, std::forward<Ts>(args)...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
       QString8 formatArgs(Ts... args) const
       {
-         return SP::formatArgs(*this, args...);
+         return SP::template formatArgs<QString8>(*this, args...);
       }
 
       template <typename V, typename SP = QStringParser>

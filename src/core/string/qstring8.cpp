@@ -23,6 +23,7 @@
 #include <array>
 
 #include <qstring8.h>
+#include <qstring16.h>
 #include <qdatastream.h>
 #include <qregularexpression.h>
 #include <qunicodetables_p.h>
@@ -676,6 +677,26 @@ QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
    }
 
    return retval;
+}
+
+QString8 QString8::fromUtf16(const QString16 &str)
+{
+   return fromUtf16((const char16_t *)str.constData(), str.size_storage());
+}
+
+QString8 QString8::fromStdWString(const std::wstring &str)
+{
+   // broom ( full implementation required )
+
+   return QString8();
+}
+
+QString8 QString8::fromStdString(const std::string &str)
+{
+
+   // broom ( full implementation required )
+
+   return QString8();
 }
 
 QString8::const_iterator QString8::indexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const
@@ -1572,11 +1593,27 @@ QByteArray QString8::toUtf8() const
    return QByteArray(constData(), CsString::CsString::size_storage());
 }
 
-QByteArray QString8::toUtf16() const
+QString16 QString8::toUtf16() const
 {
    // broom ( full implementation required )
 
-   return QByteArray();
+
+   return QString16();
+}
+
+std::wstring QString8::toStdWString() const
+{
+   // broom ( full implementation required )
+
+   std::wstring retval;
+
+   for (QChar32 c : *this) {
+      const wchar_t value = c.unicode();
+
+      retval.push_back(value);
+   }
+
+   return retval;
 }
 
 void QString8::truncate(size_type length)

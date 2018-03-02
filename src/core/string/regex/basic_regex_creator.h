@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cstring>
+#include <set>
 
 namespace cs_regex_ns {
 
