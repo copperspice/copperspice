@@ -92,7 +92,6 @@ Q_GUI_EXPORT _qt_filedialog_save_file_url_hook qt_filedialog_save_file_url_hook 
 bool Q_GUI_EXPORT qt_use_native_dialogs = true; // for the benefit of testing tools, until we have a proper API
 #endif
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #ifdef Q_OS_WIN
 #include <qwindowsstyle.h>
 #endif
@@ -103,13 +102,6 @@ QT_BEGIN_INCLUDE_NAMESPACE
 #include <qmacstyle_mac.h>
 #endif
 
-QT_END_INCLUDE_NAMESPACE
-
-/*!
-    \fn QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags flags)
-
-    Constructs a file dialog with the given \a parent and widget \a flags.
-*/
 QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags f)
    : QDialog(*new QFileDialogPrivate, parent, f)
 {
@@ -3448,7 +3440,5 @@ QStringList QFSCompleter::splitPath(const QString &path) const
 }
 
 #endif // QT_NO_COMPLETER
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILEDIALOG

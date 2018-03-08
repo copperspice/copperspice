@@ -37,17 +37,13 @@ class Q_GUI_EXPORT QMimeSource
    virtual QByteArray encodedData(const QString &format) const = 0;
 };
 
-
 #if defined(Q_OS_WIN)
-
-QT_BEGIN_INCLUDE_NAMESPACE
 
 typedef struct tagFORMATETC FORMATETC;
 typedef struct tagSTGMEDIUM STGMEDIUM;
 struct IDataObject;
 
 #include <QtCore/qvariant.h>
-QT_END_INCLUDE_NAMESPACE
 
 /*
   Encapsulation of conversion between MIME and Windows CLIPFORMAT.
@@ -158,10 +154,8 @@ class Q_GUI_EXPORT QMacPasteboardMime
    virtual QList<QByteArray> convertFromMime(const QString &mime, QVariant data, QString flav) = 0;
 };
 
-// ### Qt5/Add const QStringList& QMacPasteboardMime::supportedFlavours()
+// ### Qt5/Add const QStringList & QMacPasteboardMime::supportedFlavours()
 Q_GUI_EXPORT void qRegisterDraggedTypes(const QStringList &types);
 #endif
-
-QT_END_NAMESPACE
 
 #endif // QMIME_H

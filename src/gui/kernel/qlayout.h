@@ -32,8 +32,6 @@
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
 class QLayout;
 class QSize;
 class QLayoutPrivate;
@@ -145,11 +143,7 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    friend class QWidget;
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <QtGui/qboxlayout.h>
 #include <QtGui/qgridlayout.h>
-QT_END_INCLUDE_NAMESPACE
-
-QT_END_NAMESPACE
 
 #endif // QLAYOUT_H

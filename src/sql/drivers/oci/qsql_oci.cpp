@@ -66,8 +66,6 @@
 Q_DECLARE_METATYPE(OCIEnv *)
 Q_DECLARE_METATYPE(OCIStmt *)
 
-QT_BEGIN_NAMESPACE
-
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 enum { QOCIEncoding = 2002 }; // AL16UTF16LE
 #else
@@ -134,9 +132,7 @@ QOCIRowId::~QOCIRowId()
 }
 
 typedef QSharedDataPointer<QOCIRowId> QOCIRowIdPointer;
-QT_BEGIN_INCLUDE_NAMESPACE
 Q_DECLARE_METATYPE(QOCIRowIdPointer)
-QT_END_INCLUDE_NAMESPACE
 
 class QOCICols;
 
@@ -2724,5 +2720,3 @@ QString QOCIDriver::escapeIdentifier(const QString &identifier, IdentifierType t
    }
    return res;
 }
-
-QT_END_NAMESPACE

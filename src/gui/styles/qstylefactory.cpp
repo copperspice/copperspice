@@ -49,12 +49,8 @@
 #include <qwindowsvistastyle.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if !defined(QT_NO_STYLE_MAC) && defined(Q_OS_MAC)
-QT_BEGIN_INCLUDE_NAMESPACE
 #  include <qmacstyle_mac.h>
-QT_END_INCLUDE_NAMESPACE
 #endif
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleFactoryInterface_iid, QLatin1String("/styles"), Qt::CaseInsensitive))
@@ -194,4 +190,3 @@ QStringList QStyleFactory::keys()
    return list;
 }
 
-QT_END_NAMESPACE

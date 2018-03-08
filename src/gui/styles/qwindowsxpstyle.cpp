@@ -53,8 +53,6 @@
 #include <qvarlengtharray.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 // Runtime resolved theme engine function calls
 typedef bool (WINAPI *PtrIsAppThemed)();
 typedef bool (WINAPI *PtrIsThemeActive)();
@@ -4129,14 +4127,14 @@ QWindowsXPStyle::QWindowsXPStyle(QWindowsXPStylePrivate &dd) : QWindowsStyle(dd)
 // debugging code when you uncomment the DEBUG_XP_STYLE define at the top of the file.
 
 #ifdef DEBUG_XP_STYLE
-// The schema file expects these to be defined by the user.
+
+// schema file expects these to be defined by the user.
 #define TMT_ENUMDEF 8
 #define TMT_ENUMVAL TEXT('A')
 #define TMT_ENUM    TEXT('B')
 #define SCHEMA_STRINGS // For 2nd pass on schema file
-QT_BEGIN_INCLUDE_NAMESPACE
+
 #include <tmschema.h>
-QT_END_INCLUDE_NAMESPACE
 
 // A property's value, type and name combo
 struct PropPair {
@@ -4391,9 +4389,5 @@ void QWindowsXPStylePrivate::showProperties(XPThemeData &themeData)
    }
 }
 #endif
-// Debugging code -----------------------------------------------------------------------[ END ]---
-
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_WINDOWSXP

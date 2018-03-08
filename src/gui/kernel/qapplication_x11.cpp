@@ -129,8 +129,6 @@ extern "C" {
 # define QT_NO_UNSETENV
 #endif
 
-QT_BEGIN_NAMESPACE
-
 //#define X_NOT_BROKEN
 #ifdef X_NOT_BROKEN
 // Some X libraries are built with setlocale #defined to _Xsetlocale,
@@ -139,7 +137,7 @@ QT_BEGIN_NAMESPACE
 // X looks and doesn't see the value Qt set. The solution here is to
 // implement _Xsetlocale just in case X calls it - redirecting it to
 // the real libC version.
-//
+
 # ifndef setlocale
 extern "C" char *_Xsetlocale(int category, const char *locale);
 char *_Xsetlocale(int category, const char *locale)
@@ -2877,7 +2875,7 @@ QString QApplicationPrivate::appName() const
    return QString::fromLocal8Bit(QT_PREPEND_NAMESPACE(appName));
 }
 
-const char *QX11Info::appClass()                                // get application class
+const char *QX11Info::appClass()                // get application class
 {
    return QT_PREPEND_NAMESPACE(appClass);
 }
@@ -5662,9 +5660,7 @@ bool QApplication::isEffectEnabled(Qt::UIEffect effect)
 
 #ifndef QT_NO_SESSIONMANAGER
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <X11/SM/SMlib.h>
-QT_END_INCLUDE_NAMESPACE
 
 class QSessionManagerPrivate
 {
@@ -6422,4 +6418,3 @@ void QApplicationPrivate::cleanupMultitouch_sys()
 
 #endif // QT_RX71_MULTITOUCH
 
-QT_END_NAMESPACE

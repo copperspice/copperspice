@@ -36,8 +36,6 @@
 #include <qpixmap_raster_p.h>
 #include <qimagepixmapcleanuphooks_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class SurfaceCache;
 class QDirectFBPaintEnginePrivate : public QRasterPaintEnginePrivate
 {
@@ -144,9 +142,9 @@ private:
 
 
 #ifdef QT_DIRECTFB_IMAGECACHE
-QT_BEGIN_INCLUDE_NAMESPACE
+
 #include <qimage_p.h>
-QT_END_INCLUDE_NAMESPACE
+
 struct CachedImage
 {
     IDirectFBSurface *surface;
@@ -1563,8 +1561,6 @@ static void rasterFallbackWarn(const char *msg, const char *func, const device *
     }
     qWarning("%s", qPrintable(out));
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_QWS_DIRECTFB
 

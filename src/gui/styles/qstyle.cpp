@@ -41,8 +41,6 @@
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
 static const int MaxBits = 8 * sizeof(QSizePolicy::ControlType);
 
 static int unpackControlTypes(QSizePolicy::ControlTypes controls, QSizePolicy::ControlType *array)
@@ -441,10 +439,7 @@ int QStyle::layoutSpacingImplementation(QSizePolicy::ControlType /* control1 */,
    return -1;
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <QDebug>
-QT_END_INCLUDE_NAMESPACE
-
 
 QDebug operator<<(QDebug debug, QStyle::State state)
 {
@@ -553,4 +548,3 @@ void QStyle::setProxy(QStyle *style)
    d->proxyStyle = style;
 }
 
-QT_END_NAMESPACE

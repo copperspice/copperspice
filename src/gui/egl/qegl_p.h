@@ -23,8 +23,6 @@
 #ifndef QEGL_P_H
 #define QEGL_P_H
 
-QT_BEGIN_INCLUDE_NAMESPACE
-
 #ifndef QT_NO_EGL
 #if defined(QT_OPENGL_ES_2)
 #   include <GLES2/gl2.h>
@@ -91,12 +89,8 @@ typedef NativeDisplayType EGLNativeDisplayType;
 #define QEGL_NATIVE_TYPES_DEFINED 1
 #endif
 
-QT_END_INCLUDE_NAMESPACE
-
 #include <QtGui/qpaintdevice.h>
 #include <QFlags>
-
-QT_BEGIN_NAMESPACE
 
 #define QEGL_NO_CONFIG ((EGLConfig)-1)
 
@@ -189,7 +183,5 @@ Q_GUI_EXPORT VisualID getCompatibleVisualId(EGLConfig config);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QEgl::ConfigOptions)
-
-QT_END_NAMESPACE
 
 #endif //QEGL_P_H

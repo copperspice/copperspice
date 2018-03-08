@@ -32,8 +32,6 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSystemTrayIconSys;
 class QToolButton;
 class QLabel;
@@ -99,12 +97,11 @@ class QBalloonTip : public QWidget
 };
 
 #if defined(Q_WS_X11)
-QT_BEGIN_INCLUDE_NAMESPACE
+
 #include <QtCore/qcoreapplication.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
-QT_END_INCLUDE_NAMESPACE
 
 class QSystemTrayIconSys : public QWidget
 {
@@ -157,7 +154,6 @@ class QSystemTrayIconSys : public QWidget
 };
 #endif // Q_WS_X11
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYSTEMTRAYICON
 

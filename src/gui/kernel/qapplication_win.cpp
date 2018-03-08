@@ -150,7 +150,6 @@ typedef struct tagTOUCHINPUT {
 #ifndef IMR_CONFIRMRECONVERTSTRING
 #define IMR_CONFIRMRECONVERTSTRING 0x0005
 #endif
-QT_BEGIN_NAMESPACE
 
 
 #ifndef SPI_SETFONTSMOOTHINGTYPE
@@ -317,9 +316,7 @@ extern HRGN qt_tryCreateRegion(QRegion::RegionType type, int left, int top, int 
 #define WM_MOUSELEAVE    0x02A3
 #endif
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qwidget_p.h>
-QT_END_INCLUDE_NAMESPACE
 
 static int translateButtonState(int s, int type, int button);
 
@@ -395,7 +392,7 @@ class QETWidget : public QWidget                // event translator widget
    void syncBackingStore() {
       d_func()->syncBackingStore();
    }
-  
+
    QWidgetData *dataPtr() {
       return data;
    }
@@ -4173,4 +4170,3 @@ bool QApplicationPrivate::translateTouchEvent(const MSG &msg)
    return true;
 }
 
-QT_END_NAMESPACE

@@ -28,7 +28,7 @@
 #include <qsystemlibrary_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
-#include <qdrawutil.h>   
+#include <qdrawutil.h>
 #include <qevent.h>
 #include <qmenu.h>
 #include <qmenubar.h>
@@ -58,20 +58,15 @@
 
 #include <qstylehelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #if defined(Q_OS_WIN)
-
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qt_windows.h>
-QT_END_INCLUDE_NAMESPACE
+
 #  ifndef COLOR_GRADIENTACTIVECAPTION
 #    define COLOR_GRADIENTACTIVECAPTION     27
 #  endif
 #  ifndef COLOR_GRADIENTINACTIVECAPTION
 #    define COLOR_GRADIENTINACTIVECAPTION   28
 #  endif
-
 
 typedef struct {
    DWORD cbSize;
@@ -91,9 +86,7 @@ static PtrSHGetStockIconInfo pSHGetStockIconInfo = 0;
 
 #endif
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <limits.h>
-QT_END_INCLUDE_NAMESPACE
 
 enum QSliderDirection { SlUp, SlDown, SlLeft, SlRight };
 
@@ -3275,8 +3268,5 @@ QIcon QWindowsStyle::standardIconImplementation(StandardPixmap standardIcon, con
    return icon;
 }
 
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_STYLE_WINDOWS

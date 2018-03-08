@@ -44,22 +44,17 @@
 #include <fcntl.h>
 #include <errno.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_QWS_QPF2
 
 #include <qpfutil.cpp>
-
-QT_BEGIN_INCLUDE_NAMESPACE
 
 #if defined(Q_WS_QWS)
 #include <qwscommand_qws_p.h>
 #include <qwsdisplay_qws.h>
 #include <qabstractfontengine_p.h>
 #endif
-#include <qplatformdefs.h>
 
-QT_END_INCLUDE_NAMESPACE
+#include <qplatformdefs.h>
 
 //#define DEBUG_HEADER
 //#define DEBUG_FONTENGINE
@@ -1197,7 +1192,6 @@ void QFontEngineMultiQWS::loadEngine(int at)
 
 void QFontEngineMultiQWS::draw(QPaintEngine */*p*/, qreal /*x*/, qreal /*y*/, const QTextItemInt &/*si*/)
 {
-   qFatal("QFontEngineMultiQWS::draw should never be called!");
+   qFatal("QFontEngineMultiQWS::Draw should never be called");
 }
 
-QT_END_NAMESPACE

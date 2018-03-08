@@ -34,10 +34,7 @@ XML_SAX_INCLUDES = \
 	qxmlreader.h \
 	qxmlsimplereader.h
 
-#XML_SAX_PRIVATE_INCLUDES =
-
 XML_INCLUDES += $(XML_SAX_INCLUDES)
-#XML_PRIVATE_INCLUDES += $(XML_SAX_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/xml/sax/%,$(XML_SAX_INCLUDES)) \
 		$(patsubst %,src/xml/sax/%,$(XML_SAX_PRIVATE_INCLUDES))

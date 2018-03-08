@@ -63,8 +63,6 @@
 
 // common DC for all fonts
 
-QT_BEGIN_NAMESPACE
-
 class QtHDC
 {
    HDC _hdc;
@@ -924,9 +922,7 @@ QFontEngine::FaceId QFontEngineWin::faceId() const
    return _faceId;
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qdebug.h>
-QT_END_INCLUDE_NAMESPACE
 
 int QFontEngineWin::synthesized() const
 {
@@ -1266,5 +1262,3 @@ void QFontEngineMultiWin::loadEngine(int at)
 
    // TODO: increase cost in QFontCache for the font engine loaded here
 }
-
-QT_END_NAMESPACE

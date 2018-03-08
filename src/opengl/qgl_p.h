@@ -43,8 +43,6 @@
 #include <QtGui/QPlatformGLContext>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QGLContext;
 class QGLOverlayWidget;
 class QPixmap;
@@ -73,9 +71,7 @@ class QWSGLWindowSurface;
 class QEglContext;
 #endif
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qglextensions_p.h>
-QT_END_INCLUDE_NAMESPACE
 
 class QGLFormatPrivate
 {
@@ -868,6 +864,5 @@ class QGLEngineThreadStorage
  private:
    QThreadStorage<QPaintEngine *> storage;
 };
-QT_END_NAMESPACE
 
 #endif // QGL_P_H

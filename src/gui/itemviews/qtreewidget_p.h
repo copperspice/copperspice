@@ -33,8 +33,6 @@
 
 #ifndef QT_NO_TREEWIDGET
 
-QT_BEGIN_NAMESPACE
-
 class QTreeWidgetItem;
 class QTreeWidgetItemIterator;
 class QTreeModelPrivate;
@@ -143,14 +141,12 @@ class QTreeModel : public QAbstractItemModel
    bool inline executePendingSort() const;
 
    bool isChanging() const;
- 
+
    Q_DECLARE_PRIVATE(QTreeModel)
 
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qabstractitemmodel_p.h>
-QT_END_INCLUDE_NAMESPACE
 
 class QTreeModelPrivate : public QAbstractItemModelPrivate
 {
@@ -221,8 +217,6 @@ class QTreeWidgetPrivate : public QTreeViewPrivate
    // used by QTreeWidgetItem::sortChildren to make sure the column argument is used
    int explicitSortColumn;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TREEWIDGET
 

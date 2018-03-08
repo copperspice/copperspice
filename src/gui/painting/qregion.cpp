@@ -36,8 +36,6 @@
 #include <stdlib.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 QRegion::QRegion(int x, int y, int w, int h, RegionType t)
 {
    QRegion tmp(QRect(x, y, w, h), t);
@@ -1066,19 +1064,13 @@ void QRegionPrivate::selfTest() const
 #endif
 
 #if defined(Q_WS_X11)
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qregion_x11.cpp>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_MAC)
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qregion_mac.cpp>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_WIN)
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qregion_win.cpp>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_QWS) || defined(Q_WS_QPA)
 static QRegionPrivate qrp;
@@ -1157,9 +1149,7 @@ SOFTWARE.
 #ifndef _XREGION_H
 #define _XREGION_H
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <limits.h>
-QT_END_INCLUDE_NAMESPACE
 
 /*  1 if two BOXes overlap.
  *  0 if two BOXes do not overlap.
@@ -3981,4 +3971,3 @@ bool QRegion::intersects(const QRect &rect) const
 }
 
 #endif
-QT_END_NAMESPACE

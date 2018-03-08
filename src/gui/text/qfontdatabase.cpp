@@ -68,8 +68,6 @@
 #  include <dwrite.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #define SMOOTH_SCALABLE 0xffff
 
 bool qt_enable_test_font = false;
@@ -1107,7 +1105,6 @@ QMutex *qt_fontdatabase_mutex()
    return fontDatabaseMutex();
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #if defined(Q_WS_X11)
 #  include <qfontdatabase_x11.cpp>
 
@@ -1124,7 +1121,6 @@ QT_BEGIN_INCLUDE_NAMESPACE
 #  include <qfontdatabase_qpa.cpp>
 
 #endif
-QT_END_INCLUDE_NAMESPACE
 
 #if !defined(Q_WS_X11) && !defined(Q_OS_MAC)
 QString QFontDatabase::resolveFontFamilyAlias(const QString &family)
@@ -2712,26 +2708,6 @@ bool QFontDatabasePrivate::isApplicationFont(const QString &fileName)
    return false;
 }
 
-/*!
-    \since 4.2
-
-    Loads the font from the file specified by \a fileName and makes it available to
-    the application. An ID is returned that can be used to remove the font again
-    with removeApplicationFont() or to retrieve the list of family names contained
-    in the font.
-
-    The function returns -1 if the font could not be loaded.
-
-    Currently only TrueType fonts, TrueType font collections, and OpenType fonts are
-    supported.
-
-    \note Adding application fonts on Unix/X11 platforms without fontconfig is
-    currently not supported.
-
-    \note On Symbian, the font family names get truncated to a length of 20 characters.
-
-    \sa addApplicationFontFromData(), applicationFontFamilies(), removeApplicationFont()
-*/
 int QFontDatabase::addApplicationFont(const QString &fileName)
 {
    QByteArray data;
@@ -2744,82 +2720,15 @@ int QFontDatabase::addApplicationFont(const QString &fileName)
    return privateDb()->addAppFont(data, fileName);
 }
 
-/*!
-    \since 4.2
-
-    Loads the font from binary data specified by \a fontData and makes it available to
-    the application. An ID is returned that can be used to remove the font again
-    with removeApplicationFont() or to retrieve the list of family names contained
-    in the font.
-
-    The function returns -1 if the font could not be loaded.
-
-    Currently only TrueType fonts and TrueType font collections are supported.
-
-    \bold{Note:} Adding application fonts on Unix/X11 platforms without fontconfig is
-    currently not supported.
-
-    \note On Symbian, the font family names get truncated to a length of 20 characters.
-
-    \sa addApplicationFont(), applicationFontFamilies(), removeApplicationFont()
-*/
 int QFontDatabase::addApplicationFontFromData(const QByteArray &fontData)
 {
    QMutexLocker locker(fontDatabaseMutex());
    return privateDb()->addAppFont(fontData, QString() /* fileName */);
 }
 
-/*!
-    \since 4.2
-
-    Returns a list of font families for the given application font identified by
-    \a id.
-
-    \sa addApplicationFont(), addApplicationFontFromData()
-*/
 QStringList QFontDatabase::applicationFontFamilies(int id)
 {
    QMutexLocker locker(fontDatabaseMutex());
    return privateDb()->applicationFonts.value(id).families;
 }
-
-/*!
-    \fn bool QFontDatabase::removeApplicationFont(int id)
-    \since 4.2
-
-    Removes the previously loaded application font identified by \a
-    id. Returns true if unloading of the font succeeded; otherwise
-    returns false.
-
-    \sa removeAllApplicationFonts(), addApplicationFont(),
-        addApplicationFontFromData()
-*/
-
-/*!
-    \fn bool QFontDatabase::removeAllApplicationFonts()
-    \since 4.2
-
-    Removes all application-local fonts previously added using addApplicationFont()
-    and addApplicationFontFromData().
-
-    Returns true if unloading of the fonts succeeded; otherwise
-    returns false.
-
-    \sa removeApplicationFont(), addApplicationFont(), addApplicationFontFromData()
-*/
-
-/*!
-    \fn bool QFontDatabase::supportsThreadedFontRendering()
-    \since 4.4
-
-    Returns true if font rendering is supported outside the GUI
-    thread, false otherwise. In other words, a return value of false
-    means that all QPainter::drawText() calls outside the GUI thread
-    will not produce readable output.
-
-    \sa {Thread-Support in Qt Modules#Painting In Threads}{Painting In Threads}
-*/
-
-
-QT_END_NAMESPACE
 

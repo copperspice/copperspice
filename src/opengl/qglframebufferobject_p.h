@@ -20,18 +20,12 @@
 *
 ***********************************************************************/
 
-#ifndef QGLFRAMEBUFFEROBJECT_P_H
-#define QGLFRAMEBUFFEROBJECT_P_H
-
-QT_BEGIN_NAMESPACE
-
-QT_BEGIN_INCLUDE_NAMESPACE
+#ifndef QGL_FRAMEBUFFEROBJECT_P_H
+#define QGL_FRAMEBUFFEROBJECT_P_H
 
 #include <qglframebufferobject.h>
 #include <qglpaintdevice_p.h>
 #include <qgl_p.h>
-
-QT_END_INCLUDE_NAMESPACE
 
 #ifndef QT_OPENGL_ES
 #define DEFAULT_FORMAT GL_RGBA8
@@ -135,8 +129,5 @@ class QGLFramebufferObjectPrivate
       return fbo_guard.id();
    }
 };
-
-
-QT_END_NAMESPACE
 
 #endif // QGLFRAMEBUFFEROBJECT_P_H

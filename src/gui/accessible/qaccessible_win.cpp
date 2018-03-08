@@ -47,13 +47,10 @@
 #include <comdef.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 //#define DEBUG_SHOW_ATCLIENT_COMMANDS
 #ifdef DEBUG_SHOW_ATCLIENT_COMMANDS
-QT_BEGIN_INCLUDE_NAMESPACE
+
 #include <qdebug.h>
-QT_END_INCLUDE_NAMESPACE
 
 static const char *roleString(QAccessible::Role role)
 {
@@ -1510,7 +1507,5 @@ HRESULT STDMETHODCALLTYPE QWindowsAccessible::ContextSensitiveHelp(BOOL)
 {
    return S_OK;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY

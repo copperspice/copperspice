@@ -56,8 +56,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
-
 static bool qt_gen_epsf = false;
 
 void qt_generate_epsf(bool b)
@@ -174,9 +172,7 @@ QPSPrintEnginePrivate::~QPSPrintEnginePrivate()
 {
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qdebug.h>
-QT_END_INCLUDE_NAMESPACE
 
 static void ps_r7(QPdf::ByteStream &stream, const char *s, int l)
 {
@@ -980,7 +976,7 @@ bool QPSPrintEngine::newPage()
 
 bool QPSPrintEngine::abort()
 {
-   // ### abort!?!
+   // ### abort?
    return false;
 }
 
@@ -989,7 +985,5 @@ QPrinter::PrinterState QPSPrintEngine::printerState() const
    Q_D(const QPSPrintEngine);
    return d->printerState;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER

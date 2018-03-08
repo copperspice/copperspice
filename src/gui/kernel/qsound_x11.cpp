@@ -29,14 +29,10 @@
 #include <qapplication.h>
 #include <qsound_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_NAS
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <audio/audiolib.h>
 #include <audio/soundlib.h>
-QT_END_INCLUDE_NAMESPACE
 
 static AuServer *nas = 0;
 
@@ -265,7 +261,6 @@ QAuServerNull::QAuServerNull(QObject *parent)
 {
 }
 
-
 QAuServer *qt_new_audio_server()
 {
 #ifndef QT_NO_NAS
@@ -278,7 +273,5 @@ QAuServer *qt_new_audio_server()
 #endif
    return new QAuServerNull(qApp);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SOUND

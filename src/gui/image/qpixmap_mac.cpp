@@ -40,8 +40,6 @@
 #include <limits.h>
 #include <string.h>
 
-QT_BEGIN_NAMESPACE
-
 extern const uchar *qt_get_bitflip_array(); //qimage.cpp
 extern CGContextRef qt_mac_cg_context(const QPaintDevice *pdev); //qpaintdevice_mac.cpp
 extern RgnHandle qt_mac_get_rgn(); //qregion_mac.cpp
@@ -684,10 +682,8 @@ void QMacPixmapData::macCreatePixels()
    pixelsSize = numBytes;
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/gl.h>
-QT_END_INCLUDE_NAMESPACE
 
 // Load and resolve the symbols we need from OpenGL manually so QtGui doesn't have to link against the OpenGL framework.
 typedef CGLError (*PtrCGLChoosePixelFormat)(const CGLPixelFormatAttribute *, CGLPixelFormatObj *,  long *);
@@ -1095,4 +1091,4 @@ QPixmap QPixmap::fromMacCGImageRef(CGImageRef image)
    return ret;
 }
 
-QT_END_NAMESPACE
+

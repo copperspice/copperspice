@@ -30,8 +30,6 @@
 #include <QtGui/qicon.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACTION
 
 class QMenu;
@@ -264,12 +262,8 @@ class Q_GUI_EXPORT QAction : public QObject
 
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <QtGui/qactiongroup.h>
-QT_END_INCLUDE_NAMESPACE
 
 #endif // QT_NO_ACTION
-
-QT_END_NAMESPACE
 
 #endif // QACTION_H

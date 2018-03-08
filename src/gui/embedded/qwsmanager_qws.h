@@ -28,8 +28,6 @@
 #include <QtGui/qdecoration_qws.h>
 #include <QtGui/qevent.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_QWS_MANAGER
 
 class QAction;
@@ -87,12 +85,8 @@ class Q_GUI_EXPORT QWSManager : public QObject
    friend class QGLDrawable;
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <QtGui/qdecorationdefault_qws.h>
-QT_END_INCLUDE_NAMESPACE
 
 #endif // QT_NO_QWS_MANAGER
-
-QT_END_NAMESPACE
 
 #endif // QWSMANAGER_QWS_H

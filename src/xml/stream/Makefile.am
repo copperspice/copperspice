@@ -29,12 +29,8 @@ XML_STREAM_INCLUDES = \
 	qxmlstreamstringref.h \
 	qxmlstreamwriter.h
 
-#XML_STREAM_PRIVATE_INCLUDES =
-
 XML_INCLUDES += $(XML_STREAM_INCLUDES)
-#XML_PRIVATE_INCLUDES += $(XML_STREAM_PRIVATE_INCLUDES)
 
 noinst_HEADERS+=$(patsubst %,src/xml/stream/%,$(XML_STREAM_INCLUDES)) \
 		$(patsubst %,src/xml/stream/%,$(XML_STREAM_PRIVATE_INCLUDES))
-
 

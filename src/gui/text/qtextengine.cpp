@@ -37,8 +37,6 @@
 #include <qapplication.h>
 #include <stdlib.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace {
 
 // Helper class used in QTextEngine::itemize
@@ -213,10 +211,10 @@ class Itemizer
 // ----------------------------------------------------------------------------
 
 #define BIDI_DEBUG 0
+
 #if (BIDI_DEBUG >= 1)
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <iostream>
-QT_END_INCLUDE_NAMESPACE
+
 using namespace std;
 
 static const char *directions[] = {
@@ -871,8 +869,6 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
 #endif
 }
 
-QT_BEGIN_INCLUDE_NAMESPACE
-
 #if defined(Q_WS_X11) || defined (Q_WS_QWS)
 #  include <qfontengine_ft_p.h>
 
@@ -883,7 +879,6 @@ QT_BEGIN_INCLUDE_NAMESPACE
 
 #include <qharfbuzz_p.h>
 
-QT_END_INCLUDE_NAMESPACE
 
 // ask the font engine to find out which glyphs (as an index in the specific font) to use for the text in one item.
 static bool stringToGlyphs(HB_ShaperItem *item, QGlyphLayout *glyphs, QFontEngine *fontEngine)
@@ -3365,4 +3360,3 @@ bool QTextEngine::ensureSpace(int nGlyphs) const
    return true;
 }
 
-QT_END_NAMESPACE

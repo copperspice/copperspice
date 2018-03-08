@@ -35,8 +35,6 @@
 #include <qt_mac_p.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QKeyEvent;
 class QKeyMapperPrivate;
 
@@ -53,7 +51,7 @@ class QKeyMapper : public QObject
    static QKeyMapper *instance();
    static void changeKeyboard();
    static bool sendKeyEvent(QWidget *widget, bool grab, QEvent::Type type, int code, Qt::KeyboardModifiers modifiers,
-                            const QString &text, bool autorepeat, int count, quint32 nativeScanCode, 
+                            const QString &text, bool autorepeat, int count, quint32 nativeScanCode,
                             quint32 nativeVirtualKey, quint32 nativeModifiers, bool *unusedExceptForCocoa = 0);
 
    static QList<int> possibleKeys(QKeyEvent *e);
@@ -98,16 +96,12 @@ typedef struct tagMSG MSG;
 
 #elif defined(Q_OS_MAC)
 
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qt_mac_p.h>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_X11)
 
-QT_BEGIN_INCLUDE_NAMESPACE
 typedef ulong XID;
 typedef XID KeySym;
-QT_END_INCLUDE_NAMESPACE
 
 struct QXCoreDesc {
    int min_keycode;
@@ -184,7 +178,5 @@ class QKeyMapperPrivate
 };
 
 QKeyMapperPrivate *qt_keymapper_private(); // from qkeymapper.cpp
-
-QT_END_NAMESPACE
 
 #endif // QKEYMAPPER_P_H

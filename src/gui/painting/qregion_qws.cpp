@@ -34,8 +34,6 @@
 #include <qatomic.h>
 #include <qsemaphore.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFastMutex
 {
    QAtomicInt contenders;
@@ -329,14 +327,10 @@ bool QRegionPrivate::canPrepend(const QRegionPrivate *r) const
 }
 
 #if defined(Q_WS_X11)
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qregion_x11.cpp>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_OS_MAC)
-QT_BEGIN_INCLUDE_NAMESPACE
 # include <qregion_mac.cpp>
-QT_END_INCLUDE_NAMESPACE
 
 #elif defined(Q_WS_QWS)
 static QRegionPrivate qrp;
@@ -414,9 +408,7 @@ SOFTWARE.
 #ifndef _XREGION_H
 #define _XREGION_H
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <limits.h>
-QT_END_INCLUDE_NAMESPACE
 
 /*  1 if two BOXs overlap.
  *  0 if two BOXs do not overlap.
@@ -3249,4 +3241,3 @@ bool QRegion::isRect() const
 }
 #endif
 
-QT_END_NAMESPACE

@@ -20,13 +20,10 @@
 *
 ***********************************************************************/
 
-#ifndef QGLPIXELBUFFER_P_H
-#define QGLPIXELBUFFER_P_H
+#ifndef QGL_PIXELBUFFER_P_H
+#define QGL_PIXELBUFFER_P_H
 
-QT_BEGIN_NAMESPACE
-
-QT_BEGIN_INCLUDE_NAMESPACE
-#include "QtOpenGL/qglpixelbuffer.h"
+#include <qglpixelbuffer.h>
 #include <qgl_p.h>
 #include <qglpaintdevice_p.h>
 #include <qglobal.h>
@@ -101,8 +98,6 @@ DECLARE_HANDLE(HPBUFFERARB);
 #elif !defined(QT_NO_EGL)
 #include <qegl_p.h>
 #endif
-
-QT_END_INCLUDE_NAMESPACE
 
 class QEglContext;
 
@@ -183,7 +178,5 @@ class QGLPixelBufferPrivate
    void *ctx;
 #endif
 };
-
-QT_END_NAMESPACE
 
 #endif // QGLPIXELBUFFER_P_H

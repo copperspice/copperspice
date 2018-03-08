@@ -26,13 +26,9 @@
 
 #if !defined(QT_NO_IM)
 
-QT_BEGIN_NAMESPACE
-
 #if !defined(QT_NO_XIM)
 
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <qplatformdefs.h>
-
 #include <qapplication.h>
 #include <qwidget.h>
 #include <qstring.h>
@@ -45,7 +41,6 @@ QT_BEGIN_INCLUDE_NAMESPACE
 
 #include <stdlib.h>
 #include <limits.h>
-QT_END_INCLUDE_NAMESPACE
 
 // #define QT_XIM_DEBUG
 #ifdef QT_XIM_DEBUG
@@ -894,7 +889,5 @@ bool QXIMInputContext::x11FilterEvent(QWidget *, XEvent *)
 }
 
 #endif //QT_NO_XIM
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_IM
