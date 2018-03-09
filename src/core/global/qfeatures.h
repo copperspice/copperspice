@@ -282,9 +282,6 @@
 // QWheelEvent
 //#define QT_NO_WHEELEVENT
 
-//
-//#define QT_NO_XMLSTREAM
-
 
 // QButtonGroup
 #if !defined(QT_NO_BUTTONGROUP) && (defined(QT_NO_GROUPBOX))
@@ -427,16 +424,6 @@
 #define QT_NO_UNDOSTACK
 #endif
 
-// QXmlStreamReader
-#if !defined(QT_NO_XMLSTREAMREADER) && (defined(QT_NO_XMLSTREAM))
-#define QT_NO_XMLSTREAMREADER
-#endif
-
-// QXmlStreamWriter
-#if !defined(QT_NO_XMLSTREAMWRITER) && (defined(QT_NO_XMLSTREAM))
-#define QT_NO_XMLSTREAMWRITER
-#endif
-
 // Context menu
 #if !defined(QT_NO_CONTEXTMENU) && (defined(QT_NO_MENU))
 #define QT_NO_CONTEXTMENU
@@ -468,7 +455,7 @@
 #endif
 
 // OdfWriter
-#if !defined(QT_NO_TEXTODFWRITER) && (defined(QT_NO_XMLSTREAMWRITER))
+#if ! defined(QT_NO_TEXTODFWRITER) && (0)   // removed test which was always false
 #define QT_NO_TEXTODFWRITER
 #endif
 
@@ -543,7 +530,7 @@
 #endif
 
 // QtSvg module
-#if !defined(QT_NO_SVG) && (defined(QT_NO_XMLSTREAMREADER) || defined(QT_NO_CSSPARSER))
+#if !defined(QT_NO_SVG) && defined(QT_NO_CSSPARSER)
 #define QT_NO_SVG
 #endif
 

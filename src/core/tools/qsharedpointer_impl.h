@@ -588,8 +588,8 @@ class QWeakPointer
       }
    }
 
-
-   // special constructor enabled only if X derives from QObject (Broom - can wait)
+   // broom - ok to have on hold
+   // special constructor enabled only if X derives from QObject
    template <class X>
    inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr)
    { }

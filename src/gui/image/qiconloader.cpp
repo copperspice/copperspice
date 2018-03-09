@@ -457,8 +457,7 @@ QIconLoaderEngineEntry *QIconLoaderEngine::entryForSize(const QSize &size)
  * we can never return a bigger size than the requested size.
  *
  */
-QSize QIconLoaderEngine::actualSize(const QSize &size, QIcon::Mode mode,
-                                    QIcon::State state)
+QSize QIconLoaderEngine::actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
    ensureLoaded();
 
@@ -487,11 +486,11 @@ QPixmap PixmapEntry::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
 
    int actualSize = qMin(size.width(), size.height());
 
-   QString key = QLatin1Literal("$qt_theme_")
-                 % HexString<qint64>(basePixmap.cacheKey())
-                 % HexString<int>(mode)
-                 % HexString<qint64>(qApp->palette().cacheKey())
-                 % HexString<int>(actualSize);
+   QString key = "$cs_theme_"
+                  % HexString<qint64>(basePixmap.cacheKey())
+                  % HexString<int>(mode)
+                  % HexString<qint64>(qApp->palette().cacheKey())
+                  % HexString<int>(actualSize);
 
    QPixmap cachedPixmap;
    if (QPixmapCache::find(key, &cachedPixmap)) {

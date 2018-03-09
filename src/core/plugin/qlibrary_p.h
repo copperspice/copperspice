@@ -51,7 +51,8 @@ class QLibraryPrivate
 
    pHnd;
 
-   QString fileName, qualifiedFileName;
+   QString fileName;
+   QString qualifiedFileName;
    QString fullVersion;
 
    bool load();

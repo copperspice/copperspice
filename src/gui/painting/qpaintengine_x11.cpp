@@ -214,14 +214,13 @@ static const uchar base_dither_matrix[DITHER_SIZE][DITHER_SIZE] = {
 static QPixmap qt_patternForAlpha(uchar alpha, int screen)
 {
    QPixmap pm;
-   QString key = QLatin1Literal("$qt-alpha-brush$")
-                 % HexString<uchar>(alpha)
-                 % HexString<int>(screen);
+   QString key = "$cs_alpha_brush$" % HexString<uchar>(alpha) % HexString<int>(screen);
 
-   if (!QPixmapCache::find(key, pm)) {
-      // #### why not use a mono image here????
+   if (! QPixmapCache::find(key, pm)) {
+      // #### why not use a mono image here?
       QImage pattern(DITHER_SIZE, DITHER_SIZE, QImage::Format_ARGB32);
       pattern.fill(0xffffffff);
+
       for (int y = 0; y < DITHER_SIZE; ++y) {
          for (int x = 0; x < DITHER_SIZE; ++x) {
             if (base_dither_matrix[x][y] <= alpha) {
@@ -229,10 +228,12 @@ static QPixmap qt_patternForAlpha(uchar alpha, int screen)
             }
          }
       }
+
       pm = QBitmap::fromImage(pattern);
       pm.x11SetScreen(screen);
       QPixmapCache::insert(key, pm);
    }
+
    return pm;
 }
 

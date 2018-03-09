@@ -90,7 +90,7 @@ void CsSignal::SignalBase::addConnection(std::unique_ptr<const Internal::BentoAb
 
    senderListHandle->push_back(std::move(tempStruct));
 
-   // broom - should unlock  senderListHandle->unlock()
+   // broom - senderListHandle->unlock()
 
    if (receiver != nullptr)  {
       auto receiverListHandle = receiver->m_possibleSenders.lock_write();

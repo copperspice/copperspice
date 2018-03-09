@@ -1614,10 +1614,12 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
          case WM_TOUCH:
             result = QApplicationPrivate::instance()->translateTouchEvent(msg);
             break;
+
          case WM_KEYDOWN:                        // keyboard event
          case WM_SYSKEYDOWN:
             qt_keymapper_private()->updateKeyMap(msg);
          // fall-through intended
+
          case WM_KEYUP:
          case WM_SYSKEYUP:
          case WM_IME_CHAR:
@@ -1629,6 +1631,7 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                result = true; // consume event since there is a dead char next
                break;
             }
+
             QWidget *g = QWidget::keyboardGrabber();
             if (g && qt_get_tablet_widget() && hwnd == qt_get_tablet_widget()->winId()) {
                // if we get an event for the internal tablet widget,
@@ -1637,23 +1640,27 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                // now, just in case).
                g = 0;
             }
+
             if (g) {
                widget = (QETWidget *)g;
+
             } else if (QApplication::activePopupWidget())
                widget = (QETWidget *)QApplication::activePopupWidget()->focusWidget()
                         ? (QETWidget *)QApplication::activePopupWidget()->focusWidget()
                         : (QETWidget *)QApplication::activePopupWidget();
+
             else if (QApplication::focusWidget()) {
                widget = (QETWidget *)QApplication::focusWidget();
+
             } else if (!widget || widget->internalWinId() == GetFocus()) { // We faked the message to go to exactly that widget.
                widget = (QETWidget *)widget->window();
             }
+
             if (widget->isEnabled())
-               result = sm_blockUserInput
-                        ? true
-                        : qt_keymapper_private()->translateKeyEvent(widget, msg, g != 0);
+               result = sm_blockUserInput ? true : qt_keymapper_private()->translateKeyEvent(widget, msg, g != 0);
             break;
          }
+
          case WM_SYSCHAR:
             result = true;                        // consume event
             break;

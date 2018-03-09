@@ -25,7 +25,6 @@
 
 #include <qglobal.h>
 #include <qfutureinterface.h>
-#include <qstring.h>
 #include <qtconcurrentcompilertest.h>
 
 template <typename T>

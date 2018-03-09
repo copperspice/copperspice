@@ -488,9 +488,11 @@ static void qBrushSetAlphaF(QBrush *brush, qreal alpha)
       // Modify the texture - ridiculously expensive.
       QPixmap texture = brush->texture();
       QPixmap pixmap;
-      QString name = QLatin1Literal("qbrushtexture-alpha")
+
+      QString name = "qbrushtexture_alpha"
                      % HexString<qreal>(alpha)
                      % HexString<qint64>(texture.cacheKey());
+
       if (!QPixmapCache::find(name, pixmap)) {
          QImage image = texture.toImage();
          QRgb *rgb = reinterpret_cast<QRgb *>(image.bits());
@@ -551,7 +553,8 @@ static QBrush qBrushLight(QBrush brush, int light)
       // Modify the texture - ridiculously expensive.
       QPixmap texture = brush.texture();
       QPixmap pixmap;
-      QString name = QLatin1Literal("qbrushtexture-light")
+
+      QString name = "qbrushtexture_light"
                      % HexString<int>(light)
                      % HexString<qint64>(texture.cacheKey());
 
@@ -613,7 +616,7 @@ static QBrush qBrushDark(QBrush brush, int dark)
       // Modify the texture - ridiculously expensive.
       QPixmap texture = brush.texture();
       QPixmap pixmap;
-      QString name = QLatin1Literal("qbrushtexture-dark")
+      QString name = "qbrushtexture_dark"
                      % HexString<int>(dark)
                      % HexString<qint64>(texture.cacheKey());
 
@@ -622,6 +625,7 @@ static QBrush qBrushDark(QBrush brush, int dark)
          QRgb *rgb = reinterpret_cast<QRgb *>(image.bits());
          int pixels = image.width() * image.height();
          QColor tmpColor;
+
          while (pixels--) {
             tmpColor.setRgb(*rgb);
             *rgb++ = tmpColor.darker(dark).rgba();
@@ -740,7 +744,7 @@ static QColor mergedColors(const QColor &colorA, const QColor &colorB, int facto
 static void qt_plastique_draw_gradient(QPainter *painter, const QRect &rect, const QColor &gradientStart,
                                        const QColor &gradientStop)
 {
-   QString gradientName = QLatin1Literal("qplastique-g")
+   QString gradientName = "qplastique_g"
                           % HexString<int>(rect.width())
                           % HexString<int>(rect.height())
                           % HexString<QRgb>(gradientStart.rgba())

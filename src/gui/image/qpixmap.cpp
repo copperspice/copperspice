@@ -804,7 +804,8 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
    }
 
    QFileInfo info(fileName);
-   QString key = QLatin1Literal("qt_pixmap")
+
+   QString key = "cs_pixmap"
                  % info.absoluteFilePath()
                  % HexString<uint>(info.lastModified().toTime_t())
                  % HexString<quint64>(info.size())

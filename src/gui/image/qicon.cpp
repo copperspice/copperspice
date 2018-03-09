@@ -246,6 +246,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
 {
    QPixmap pm;
    QPixmapIconEngineEntry *pe = bestMatch(size, mode, state, false);
+
    if (pe) {
       pm = pe->pixmap;
    }
@@ -270,7 +271,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
       actualSize.scale(size, Qt::KeepAspectRatio);
    }
 
-   QString key = QLatin1Literal("qt_")
+   QString key = "cs_"
                  % HexString<quint64>(pm.cacheKey())
                  % HexString<uint>(pe->mode)
                  % HexString<quint64>(QApplication::palette().cacheKey())
@@ -281,10 +282,12 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
       if (QPixmapCache::find(key % HexString<uint>(mode), pm)) {
          return pm;   // horray
       }
+
       if (QPixmapCache::find(key % HexString<uint>(QIcon::Normal), pm)) {
          QStyleOption opt(0);
-         opt.palette = QApplication::palette();
+         opt.palette    = QApplication::palette();
          QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
+
          if (pm.cacheKey() == active.cacheKey()) {
             return pm;
          }
@@ -295,16 +298,21 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
       if (pm.size() != actualSize) {
          pm = pm.scaled(actualSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
       }
+
       if (pe->mode != mode && mode != QIcon::Normal) {
          QStyleOption opt(0);
+
          opt.palette = QApplication::palette();
          QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pm, &opt);
+
          if (!generated.isNull()) {
             pm = generated;
          }
       }
+
       QPixmapCache::insert(key % HexString<uint>(mode), pm);
    }
+
    return pm;
 }
 
