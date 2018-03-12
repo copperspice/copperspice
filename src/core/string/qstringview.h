@@ -84,6 +84,7 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return CsString::CsBasicStringView<S>::empty();
       }
 
+      template <typename C = QChar32>
       bool endsWith(QChar32 ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       bool endsWith(S str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
@@ -121,6 +122,7 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
          return CsString::CsBasicStringView<S>::size();
       }
 
+      template <typename C = QChar32>
       bool startsWith(QChar32 ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
       bool startsWith(S str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
@@ -227,6 +229,7 @@ QStringView<S> QStringView<S>::chopped(size_type numOfChars) const
 }
 
 template <typename S>
+template <typename C>
 bool QStringView<S>::endsWith(QChar32 c, Qt::CaseSensitivity cs) const
 {
    if (empty()) {
@@ -239,7 +242,7 @@ bool QStringView<S>::endsWith(QChar32 c, Qt::CaseSensitivity cs) const
       return *iter == c;
 
    } else {
-      return iter->toCaseFolded() == c.toCaseFolded();
+      return iter->toCaseFolded() == C(c).toCaseFolded();
 
    }
 }
@@ -355,6 +358,7 @@ QStringView<S> QStringView<S>::right(size_type numOfChars) const
 }
 
 template <typename S>
+template <typename C>
 bool QStringView<S>::startsWith(QChar32 c, Qt::CaseSensitivity cs) const
 {
    if (empty()) {
@@ -365,7 +369,7 @@ bool QStringView<S>::startsWith(QChar32 c, Qt::CaseSensitivity cs) const
       return at(0) == c;
 
    } else {
-      return at(0).toCaseFolded() == c.toCaseFolded();
+      return at(0).toCaseFolded() == C(c).toCaseFolded();
 
    }
 }
