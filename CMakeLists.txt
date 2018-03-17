@@ -416,26 +416,34 @@ configure_file(
     @ONLY
 )
 
+if(APPLE)
+    set(PKG_PREFIX "CopperSpice.framework/Resources")
+elseif(WIN32)
+    set(PKG_PREFIX "cmake/CopperSpice")
+else()
+    set(PKG_PREFIX "${CMAKE_INSTALL_LIBDIR}/cmake/CopperSpice")
+endif()
+
 install(
    FILES
       ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
       ${CMAKE_BINARY_DIR}/CopperSpiceConfigVersion.cmake
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
       ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
-   DESTINATION cmake/CopperSpice
+   DESTINATION ${PKG_PREFIX}
 )
 
 install(EXPORT CopperSpiceLibraryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceLibraryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION ${PKG_PREFIX}
 )
 
 install(
     EXPORT CopperSpiceBinaryTargets
     NAMESPACE CopperSpice::
     FILE CopperSpiceBinaryTargets.cmake
-    DESTINATION cmake/CopperSpice
+    DESTINATION ${PKG_PREFIX}
 )
 
 message("")
