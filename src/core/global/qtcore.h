@@ -1,6 +1,8 @@
 #ifndef QT_CORE_H
 #define QT_CORE_H
 
+#include <qabstractanimation.h>
+#include <qanimationgroup.h>
 #include <qfuture.h>
 #include <qfutureinterface.h>
 #include <qfuturesynchronizer.h>
@@ -27,7 +29,6 @@
 #include <qlibrary.h>
 #include <qplugin.h>
 #include <qpluginloader.h>
-#include <quuid.h>
 #include <qtextcodec.h>
 #include <qtextcodecplugin.h>
 #include <qabstractfileengine.h>
@@ -110,7 +111,7 @@
 #include <qpoint.h>
 #include <qqueue.h>
 #include <qrect.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qscopedpointer.h>
 #include <qscopedvaluerollback.h>
 #include <qset.h>
@@ -118,18 +119,19 @@
 #include <qsharedpointer.h>
 #include <qsize.h>
 #include <qstack.h>
-#include <qstring.h>
-#include <qstringbuilder.h>
+#include <qstring8.h>
+#include <qstring16.h>
 #include <qstringlist.h>
+#include <qstringparser.h>
+#include <qstringview8.h>
 #include <qtextboundaryfinder.h>
 #include <qtimeline.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
-#include <qabstractanimation.h>
-#include <qanimationgroup.h>
 #include <qparallelanimationgroup.h>
 #include <qpauseanimation.h>
 #include <qpropertyanimation.h>
 #include <qsequentialanimationgroup.h>
+#include <quuid.h>
 #include <qvariantanimation.h>
 #endif

@@ -101,9 +101,10 @@ static bool lookupElement_X(const QString &element)
 
 
 // **
-const char *Qt::cs_className()
+const QString &Qt::cs_className()
 {
-   return "Qt";
+   static QString retval("Qt");
+   return retval;
 }
 
 const QMetaObject_T<Qt> &Qt::staticMetaObject()
@@ -131,9 +132,10 @@ bool Qt::mightBeRichText(const QString &text)
    }
 
    // skip a leading <?xml ... ?> as for example with xhtml
-   if (text.mid(start, 5) == QLatin1String("<?xml")) {
+   if (text.mid(start, 5) == "<?xml") {
+
       while (start < text.length()) {
-         if (text.at(start) == QLatin1Char('?') && start + 2 < text.length() && text.at(start + 1) == QLatin1Char('>')) {
+         if (text.at(start) == '?' && start + 2 < text.length() && text.at(start + 1) == '>') {
             start += 2;
             break;
          }
@@ -145,20 +147,20 @@ bool Qt::mightBeRichText(const QString &text)
       }
    }
 
-   if (text.mid(start, 5).toLower() == QLatin1String("<!doc")) {
+   if (text.mid(start, 5).toLower() == "<!doc") {
       return true;
    }
 
    int open = start;
-   while (open < text.length() && text.at(open) != QLatin1Char('<') && text.at(open) != QLatin1Char('\n')) {
-      if (text.at(open) == QLatin1Char('&') &&  text.mid(open + 1, 3) == QLatin1String("lt;")) {
+   while (open < text.length() && text.at(open) != '<' && text.at(open) != '\n') {
+      if (text.at(open) == '&' &&  text.mid(open + 1, 3) == "lt;") {
          return true;   // support desperate attempt of user to see <...>
       }
       ++open;
    }
 
-   if (open < text.length() && text.at(open) == QLatin1Char('<')) {
-      const int close = text.indexOf(QLatin1Char('>'), open);
+   if (open < text.length() && text.at(open) == '<') {
+      const int close = text.indexOf('>', open);
 
       if (close > -1) {
          QString tag;
@@ -166,11 +168,14 @@ bool Qt::mightBeRichText(const QString &text)
          for (int i = open + 1; i < close; ++i) {
             if (text[i].isDigit() || text[i].isLetter()) {
                tag += text[i];
+
             } else if (!tag.isEmpty() && text[i].isSpace()) {
                break;
-            } else if (!tag.isEmpty() && text[i] == QLatin1Char('/') && i + 1 == close) {
+
+            } else if (!tag.isEmpty() && text[i] == '/' && i + 1 == close) {
                break;
-            } else if (!text[i].isSpace() && (!tag.isEmpty() || text[i] != QLatin1Char('!'))) {
+
+            } else if (!text[i].isSpace() && (!tag.isEmpty() || text[i] != '!')) {
                return false;   // that's not a tag
             }
          }
@@ -189,54 +194,65 @@ bool Qt::mightBeRichText(const QString &text)
 QString Qt::convertFromPlainText(const QString &plain, Qt::WhiteSpaceMode mode)
 {
    int col = 0;
-   QString rich;
-   rich += QLatin1String("<p>");
+   QString rich = "<p>";
 
    for (int i = 0; i < plain.length(); ++i) {
-      if (plain[i] == QLatin1Char('\n')) {
+      if (plain[i] == '\n') {
          int c = 1;
-         while (i + 1 < plain.length() && plain[i + 1] == QLatin1Char('\n')) {
+
+         while (i + 1 < plain.length() && plain[i + 1] == '\n') {
             i++;
             c++;
          }
 
          if (c == 1) {
-            rich += QLatin1String("<br>\n");
+            rich += "<br>\n";
+
          } else {
-            rich += QLatin1String("</p>\n");
+            rich += "</p>\n";
+
             while (--c > 1) {
-               rich += QLatin1String("<br>\n");
+               rich += "<br>\n";
             }
-            rich += QLatin1String("<p>");
+            rich += "<p>";
          }
+
          col = 0;
 
       } else {
-         if (mode == Qt::WhiteSpacePre && plain[i] == QLatin1Char('\t')) {
-            rich += QChar(0x00a0U);
+         char32_t nbsp = 0x00A0;
+
+         if (mode == Qt::WhiteSpacePre && plain[i] == '\t') {
+            rich += QChar32(nbsp);
             ++col;
 
             while (col % 8) {
-               rich += QChar(0x00a0U);
+               rich += QChar32(nbsp);
                ++col;
             }
+
          } else if (mode == Qt::WhiteSpacePre && plain[i].isSpace()) {
-            rich += QChar(0x00a0U);
-         } else if (plain[i] == QLatin1Char('<')) {
-            rich += QLatin1String("&lt;");
-         } else if (plain[i] == QLatin1Char('>')) {
-            rich += QLatin1String("&gt;");
-         } else if (plain[i] == QLatin1Char('&')) {
-            rich += QLatin1String("&amp;");
+            rich += QChar32(nbsp);
+
+         } else if (plain[i] == '<') {
+            rich += "&lt;";
+
+         } else if (plain[i] == '>') {
+            rich += "&gt;";
+
+         } else if (plain[i] == '&') {
+            rich += "&amp;";
+
          } else {
             rich += plain[i];
          }
+
          ++col;
       }
    }
 
    if (col != 0) {
-      rich += QLatin1String("</p>");
+      rich += "</p>";
    }
    return rich;
 }

@@ -24,7 +24,7 @@
 #define QLOG_H
 
 #include <qexport.h>
-#include <qstring.h>
+#include <qstring8.h>
 
 class QDebug;
 class QNoDebug;

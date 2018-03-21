@@ -1,6 +1,8 @@
 set(CORE_PUBLIC_INCLUDES
     ${CORE_PUBLIC_INCLUDES}
+    QChar
     QChar32
+    QString
     QString8
     QString16
     QStringParser
@@ -15,7 +17,9 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_encoding.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_char.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_view.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
@@ -68,3 +72,9 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/regex/regex_raw_buffer.cpp
 )
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CORE_SOURCES
+        ${CORE_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring_mac.mm
+    )
+endif()

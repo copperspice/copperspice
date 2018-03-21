@@ -25,13 +25,12 @@
 #include <qlibraryinfo.h>
 #include <qscopedpointer.h>
 #include <qcoreapplication.h>
+#include <qregularexpression.h>
 #include <cs_build_info.h>
 
 #ifdef Q_OS_MAC
 #  include "qcore_mac_p.h"
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SETTINGS
 
@@ -46,7 +45,7 @@ QSettings *QLibraryInfo::configuration()
 
 QSettings *QLibraryInfo::findConfiguration()
 {
-   QString qtconfig = QLatin1String(":/cs/etc/cs.conf");
+   QString qtconfig(":/cs/etc/cs.conf");
 
    if (! QFile::exists(qtconfig) && QCoreApplication::instance()) {
 
@@ -54,7 +53,7 @@ QSettings *QLibraryInfo::findConfiguration()
       CFBundleRef bundleRef = CFBundleGetMainBundle();
 
       if (bundleRef) {
-         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString(QLatin1String("cs.conf")), 0, 0);
+         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf"), 0, 0);
 
          if (urlRef) {
             QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
@@ -66,7 +65,7 @@ QSettings *QLibraryInfo::findConfiguration()
 #endif
       {
          QDir pwd(QCoreApplication::applicationDirPath());
-         qtconfig = pwd.filePath(QLatin1String("cs.conf"));
+         qtconfig = pwd.filePath("cs.conf");
       }
    }
 
@@ -75,11 +74,6 @@ QSettings *QLibraryInfo::findConfiguration()
    }
 
    return 0;     // no luck
-}
-
-QString QLibraryInfo::buildKey()
-{
-   return QString::fromLatin1(QT_BUILD_KEY);
 }
 
 #ifndef QT_NO_DATESTRING
@@ -91,14 +85,12 @@ QDate QLibraryInfo::buildDate()
 
 QString QLibraryInfo::licensee()
 {
-   const char *str = "Open Source";
-   return QString::fromLocal8Bit(str);
+   return QString("Open Source");
 }
 
 QString QLibraryInfo::licensedProducts()
 {
-   const char *str = "Open Source";
-   return QString::fromLatin1(str);
+   return QString("Open Source");
 }
 
 QString QLibraryInfo::location(LibraryLocation loc)
@@ -115,46 +107,46 @@ QString QLibraryInfo::location(LibraryLocation loc)
       switch (loc) {
 
          case PluginsPath:
-            key = QLatin1String("Plugins");
-            defaultValue = QLatin1String("plugins");
+            key = "Plugins";
+            defaultValue = "plugins";
             break;
 
          case ImportsPath:
-            key = QLatin1String("Imports");
-            defaultValue = QLatin1String("imports");
+            key = "Imports";
+            defaultValue = "imports";
             break;
 
          case Qml2ImportsPath:
-            QLatin1String("Qml2Imports");
-            defaultValue = QLatin1String("qml");
+            defaultValue = "qml";
             break;
 
          case TranslationsPath:
-            key = QLatin1String("Translations");
-            defaultValue = QLatin1String("translations");
+            key = "Translations";
+            defaultValue = "translations";
             break;
 
          case SettingsPath:
-            key = QLatin1String("Settings");
+            key = "Settings";
             break;
 
          default:
             break;
       }
 
-      if (! key.isNull()) {
-         config->beginGroup(QLatin1String("Paths"));
-
+      if (! key.isEmpty()) {
+         config->beginGroup("Paths");
          retval = config->value(key, defaultValue).toString();
 
          // expand environment variables in the form $(ENVVAR)
-         int rep;
-         QRegExp reg_var(QLatin1String("\\$\\(.*\\)"));
-         reg_var.setMinimal(true);
+         QRegularExpression8 reg_var("\\$\\((.*?)\\)");
 
-         while ((rep = reg_var.indexIn(retval)) != -1) {
-            retval.replace(rep, reg_var.matchedLength(), QString::fromLocal8Bit(qgetenv(retval.mid(rep + 2,
-                           reg_var.matchedLength() - 3).toLatin1().constData()).constData()));
+         QRegularExpressionMatch8 match = reg_var.match(retval);
+
+         while (match.hasMatch()) {
+            QString newStr = QString::fromUtf8( qgetenv(match.captured(1).toLatin1().constData()) );
+
+            retval.replace(match.capturedStart(0), match.capturedEnd(0), newStr);
+            match = reg_var.match(retval);
          }
 
          config->endGroup();
@@ -166,23 +158,23 @@ QString QLibraryInfo::location(LibraryLocation loc)
       switch (loc) {
 
          case PluginsPath:
-            retval = QLatin1String("plugins");
+            retval = "plugins";
             break;
 
          case ImportsPath:
-            retval = QLatin1String("imports");
+            retval = "imports";
             break;
 
          case Qml2ImportsPath:
-            retval = QLatin1String("qml");
+            retval = "qml";
             break;
 
          case TranslationsPath:
-            retval = QLatin1String("translations");
+            retval = "translations";
             break;
 
          case SettingsPath:
-            // key = QLatin1String("Settings");
+            // key = "Settings";
             break;
 
          default:
@@ -218,4 +210,3 @@ Q_CORE_EXPORT void cs_print_build_info()
    fflush(stdout);
 }
 
-QT_END_NAMESPACE

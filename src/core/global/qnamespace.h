@@ -29,7 +29,6 @@
 
 class CSGadget_Fake_Parent;
 class QMetaObject;
-class QString;
 class QTextCodec;
 
 template<class T>
@@ -38,7 +37,6 @@ class QMetaObject_T;
 class Q_CORE_EXPORT Qt
 {
    private:
-
       struct cs_classname {
          static constexpr const char *value = "Qt";
       };
@@ -49,7 +47,7 @@ class Q_CORE_EXPORT Qt
       using cs_parent = CSGadget_Fake_Parent;
       using cs_class = Qt;
 
-      static const char *cs_className();
+      static const QString &cs_className();
       static const QMetaObject_T<Qt> &staticMetaObject();
       virtual const QMetaObject *metaObject() const;
 
@@ -61,9 +59,6 @@ class Q_CORE_EXPORT Qt
       {
          return cs_number<0>{};
       }
-
-      // implemented in QString.h
-      static QString escape(const QString &plain);
 
       enum GlobalColor {
          color0,

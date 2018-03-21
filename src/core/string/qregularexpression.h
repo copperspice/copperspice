@@ -33,13 +33,10 @@
 
 class QDataStream;
 
-template <typename S>
-class QStringView;
-
-template <typename S>
+template <typename S = QString8>
 class QRegularExpression;
 
-template <typename S>
+template <typename S = QString8>
 class QRegularExpressionMatch;
 
 using QRegularExpression8       = QRegularExpression<QString8>;
@@ -144,7 +141,7 @@ class QRegexTraits
       }
 
       QChar32 translate_nocase(QChar32 c) const {
-         // broom -- implementation pending
+         // broom -- modify for case insensitive
          return c;
       }
 
@@ -160,7 +157,7 @@ class QRegexTraits
 
       template<typename Iter>
       string_type lookup_collatename(Iter first, Iter last)  const {
-         // broom - modify for case insensitive
+         // broom -- modify for case insensitive
          return S();
       }
 
@@ -365,11 +362,11 @@ class Q_CORE_EXPORT QRegularExpression
       QList<QRegularExpressionMatch<S>> globalMatch(const S &str, typename S::const_iterator offset,
                   QMatchType matchType = QMatchType::NormalMatch, QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
-      QList<QRegularExpressionMatch<S>> globalMatch(const QStringView<S> &str) const {
+      QList<QRegularExpressionMatch<S>> globalMatch(QStringView<S> str) const {
          return globalMatch(str, str.begin());
       }
 
-      QList<QRegularExpressionMatch<S>> globalMatch(const QStringView<S> &str, typename S::const_iterator offset,
+      QList<QRegularExpressionMatch<S>> globalMatch(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType = QMatchType::NormalMatch, QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
       bool isValid() const {
@@ -383,11 +380,11 @@ class Q_CORE_EXPORT QRegularExpression
       QRegularExpressionMatch<S> match(const S &str, typename S::const_iterator offset, QMatchType matchType = QMatchType::NormalMatch,
                   QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
-      QRegularExpressionMatch<S> match(const QStringView<S> &str) const {
+      QRegularExpressionMatch<S> match(QStringView<S> str) const {
          return match(str, str.begin());
       }
 
-      QRegularExpressionMatch<S> match(const QStringView<S> &str, typename S::const_iterator offset,
+      QRegularExpressionMatch<S> match(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType = QMatchType::NormalMatch, QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
 
@@ -398,11 +395,11 @@ class Q_CORE_EXPORT QRegularExpression
       QRegularExpressionMatch<S> rmatch(const S &str, typename S::const_iterator offset, QMatchType matchType = QMatchType::NormalMatch,
                   QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
-      QRegularExpressionMatch<S> rmatch(const QStringView<S> &str) const {
+      QRegularExpressionMatch<S> rmatch(QStringView<S> str) const {
          return rmatch(str, str.end());
       }
 
-      QRegularExpressionMatch<S> rmatch(const QStringView<S> &str, typename S::const_iterator offset,
+      QRegularExpressionMatch<S> rmatch(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType = QMatchType::NormalMatch,
                   QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
@@ -648,7 +645,7 @@ QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(const S &st
 }
 
 template <typename S>
-QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(const QStringView<S> &str, typename S::const_iterator offset,
+QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
   if (m_valid) {
@@ -724,7 +721,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S
 }
 
 template <typename S>
-QRegularExpressionMatch<S> QRegularExpression<S>::match(const QStringView<S> &str, typename S::const_iterator offset,
+QRegularExpressionMatch<S> QRegularExpression<S>::match(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
@@ -775,7 +772,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const S &str, typename 
                   QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
-      // broom -- implementation pending
+      // broom -- implementation pending rmatch
 
    } else {
       return QRegularExpressionMatch<S>();
@@ -783,11 +780,11 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const S &str, typename 
 }
 
 template <typename S>
-QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const QStringView<S> &str, typename S::const_iterator offset,
+QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(QStringView<S> str, typename S::const_iterator offset,
                   QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
-      // broom -- implementation pending
+      // broom -- implementation pending rmatch
 
    } else {
       return QRegularExpressionMatch<S>();

@@ -27,7 +27,7 @@
 #include <qglobal.h>
 #include <qlog.h>
 #include <qbytearray.h>
-#include <qstring.h>
+#include <qstring8.h>
 #include <qscopedarraypointer.h>
 #include <qsystemlibrary_p.h>
 #include <qthreadstorage.h>
@@ -78,7 +78,7 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
    typedef BOOL (WINAPI* PtrVerQueryValueW)(LPCVOID, LPCWSTR, LPVOID, PUINT);
    typedef BOOL (WINAPI* PtrGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);
 
-   QSystemLibrary versionLib(QLatin1String("version"));
+   QSystemLibrary versionLib("version");
 
    if (! versionLib.load()) {
      return false;
@@ -327,7 +327,7 @@ QString QSysInfo::machineHostName()
    struct utsname u;
 
    if (uname(&u) == 0) {
-      return QString::fromLocal8Bit(u.nodename);
+      return QString::fromUtf8(u.nodename);
    }
 
 #else
@@ -343,13 +343,11 @@ QString QSysInfo::machineHostName()
    }
 
    hostName[sizeof(hostName) - 1] = '\0';
-   return QString::fromLocal8Bit(hostName);
+   return QString::fromUtf8(hostName);
 #endif
 
    return QString();
 }
-
-
 
 // Q_CHECK_PTR macro calls this function if an allocation check fails
 
@@ -420,8 +418,7 @@ bool qputenv(const char *varName, const QByteArray &value)
 {
    std::lock_guard<std::mutex> lock(environmentMutex);
 
-#if (defined(_POSIX_VERSION) && (_POSIX_VERSION-0) >= 200112L) || defined(Q_OS_HAIKU)
-    // POSIX.1-2001
+#if defined(_POSIX_VERSION) && (_POSIX_VERSION - 0) >= 200112L
     return setenv(varName, value.constData(), true) == 0;
 
 #else
@@ -433,7 +430,7 @@ bool qputenv(const char *varName, const QByteArray &value)
    int result = putenv(envVar);
 
    if (result != 0) {
-      // error. we have to delete the string.
+      // error, we have to delete the string.
       delete[] envVar;
    }
 
@@ -445,8 +442,7 @@ bool qunsetenv(const char *varName)
 {
    std::lock_guard<std::mutex> lock(environmentMutex);
 
-#if (defined(_POSIX_VERSION) && (_POSIX_VERSION-0) >= 200112L) || defined(Q_OS_BSD4) || defined(Q_OS_HAIKU)
-   // POSIX.1-2001
+#if defined(_POSIX_VERSION) && (_POSIX_VERSION - 0) >= 200112L
    return unsetenv(varName) == 0;
 
 #elif defined(Q_CC_MINGW)

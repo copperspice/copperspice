@@ -24,6 +24,7 @@
 #include <cstdio>
 
 #include <qlog.h>
+#include <qstring8.h>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>
@@ -35,7 +36,6 @@ extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char *str);
 #endif
 
 static QtMsgHandler s_handler = nullptr;          // pointer to debug handler
-
 
 #if ! defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
 namespace {
@@ -64,7 +64,7 @@ QString qt_error_string(int errorCode)
    }
 
    const char *s = nullptr;
-   QString ret;
+   QString retval;
 
    switch (errorCode) {
       case 0:
@@ -89,24 +89,24 @@ QString qt_error_string(int errorCode)
       default: {
 
 #ifdef Q_OS_WIN
-         wchar_t *string = 0;
-         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-             NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-             (LPWSTR)&string, 0, NULL);
+         char16_t *string = 0;
 
-         ret = QString::fromWCharArray(string);
+         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+             NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&string, 0, NULL);
+
+         retval = QString::fromUtf16(string);
          LocalFree((HLOCAL)string);
 
-         if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
-            ret = QString::fromLatin1("The specified module could not be found.");
+         if (retval.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
+            retval = "Specified module could not be found.";
          }
 
 #elif defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
          QByteArray buf(1024, '\0');
-         ret = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
+         retval = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
 
 #else
-         ret = QString::fromLocal8Bit(strerror(errorCode));
+         retval = QString::fromUtf8(strerror(errorCode));
 
 #endif
 
@@ -115,10 +115,10 @@ QString qt_error_string(int errorCode)
    }
 
    if (s) {
-      ret = QString::fromLatin1(s);
+      retval = QString::fromUtf8(s);
    }
 
-   return ret.trimmed();
+   return retval.trimmed();
 }
 
 QtMsgHandler qInstallMsgHandler(QtMsgHandler h)
@@ -179,13 +179,21 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
       return;
    }
 
-   QByteArray buf;
+   QByteArray buffer(1024, '\0');
 
    if (msg) {
-      QT_TRY {
-         buf = QString().vsprintf(msg, ap).toLocal8Bit();
+      try {
 
-      } QT_CATCH(const std::bad_alloc &)  {
+         while (true) {
+
+            if (std::vsnprintf(buffer.data(), buffer.size(), msg, ap) < buffer.size()) {
+               break;
+            }
+
+            buffer.resize(buffer.size() * 2);
+         }
+
+      } catch (const std::bad_alloc &)  {
          qEmergencyOut(msgType, msg, ap);
 
          // do not rethrow, use qWarning and friends in destructors
@@ -193,7 +201,7 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
       }
    }
 
-   qt_message_output(msgType, buf.constData());
+   qt_message_output(msgType, buffer.constData());
 }
 
 //
@@ -223,41 +231,51 @@ void qCritical(const char *msg, ...)
 
 void qErrnoWarning(const char *msg, ...)
 {
-   // qt_error_string() will allocate anyway, so we don't have
-   // to be careful here (like we do in plain qWarning())
-   QString buf;
+   QByteArray buffer(1024, '\0');
 
    va_list ap;
    va_start(ap, msg);
 
    if (msg) {
-      buf.vsprintf(msg, ap);
+
+      while (true) {
+         if (std::vsnprintf(buffer.data(), buffer.size(), msg, ap) < buffer.size()) {
+            break;
+         }
+
+         buffer.resize(buffer.size() * 2);
+      }
    }
    va_end(ap);
 
-   qCritical("%s (%s)", buf.toLocal8Bit().constData(), qt_error_string(-1).toLocal8Bit().constData());
+   qCritical("%s (%s)", buffer.constData(), qt_error_string(-1).toUtf8().constData());
 }
 
 void qErrnoWarning(int code, const char *msg, ...)
 {
-   // qt_error_string() will allocate anyway, so we don't have
-   // to be careful here (like we do in plain qWarning())
-   QString buf;
+   QByteArray buffer(1024, '\0');;
 
    va_list ap;
    va_start(ap, msg);
+
    if (msg) {
-      buf.vsprintf(msg, ap);
+      while (true) {
+         if (std::vsnprintf(buffer.data(), buffer.size(), msg, ap) < buffer.size()) {
+            break;
+         }
+
+         buffer.resize(buffer.size() * 2);
+      }
    }
    va_end(ap);
 
-   qCritical("%s (%s)", buf.toLocal8Bit().constData(), qt_error_string(code).toLocal8Bit().constData());
+   qCritical("%s (%s)", buffer.constData(), qt_error_string(code).toUtf8().constData());
 }
 
 void qFatal(const char *msg, ...)
 {
    va_list ap;
-   va_start(ap, msg); // use variable arg list
+   va_start(ap, msg);                   // use variable arg list
    qt_message(QtFatalMsg, msg, ap);
    va_end(ap);
 }

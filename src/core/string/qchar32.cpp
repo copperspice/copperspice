@@ -22,6 +22,7 @@
 
 #include <qchar32.h>
 #include <qstring8.h>
+#include <qstring16.h>
 #include <qdatastream.h>
 #include <qunicodetables_p.h>
 
@@ -92,8 +93,6 @@ QString8 QChar32::decomposition() const
 
    uint32_t value = unicode();
    const unsigned short *d = cs_internal_decomposition(value, &length, &tag, buffer);
-
-   // broom ( fulll implementation pending )
 
    return QString8::fromUtf16(reinterpret_cast<const char16_t *>(d), length);
 }
@@ -347,6 +346,12 @@ QString8 QChar32::toTitleCase() const
 QString8 QChar32::toCaseFolded() const
 {
    QString8 retval(*this);
+   return retval.toCaseFolded();
+}
+
+QString16 QChar32::toCaseFolded16() const
+{
+   QString16 retval(*this);
    return retval.toCaseFolded();
 }
 

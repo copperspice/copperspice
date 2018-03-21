@@ -31,7 +31,7 @@
 **
 ****************************************************************************/
 
-#include "qstring.h"
+#include <qstring8.h>
 
 #import <Foundation/Foundation.h>
 

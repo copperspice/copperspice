@@ -111,8 +111,8 @@ class Q_CORE_EXPORT QStringParser
       }
 
       // a2  value - double
-      template <typename T>
-      static T formatArg(const T &str, double value, int fieldwidth = 0, char format = 'g', int precision = 6,
+      template <typename T, typename V, typename = typename std::enable_if<std::is_same<V, double>::value>::type>
+      static T formatArg(const T &str, V value, int fieldwidth = 0, char format = 'g', int precision = 6,
                   QChar32 fillChar = QChar32(' ') )
       {
          ArgEscapeData d = findArgEscapes(str);

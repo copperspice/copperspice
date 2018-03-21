@@ -23,11 +23,9 @@
 #ifndef QLIBRARYINFO_H
 #define QLIBRARYINFO_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/QDate>
+#include <qstring8.h>
+#include <qdate.h>
 #include <qsettings.h>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SETTINGS
 
@@ -36,7 +34,6 @@ class Q_CORE_EXPORT QLibraryInfo
  public:
    static QString licensee();
    static QString licensedProducts();
-   static QString buildKey();
 
 #ifndef QT_NO_DATESTRING
    static QDate buildDate();
@@ -62,7 +59,5 @@ class Q_CORE_EXPORT QLibraryInfo
 #endif /* QT_NO_SETTINGS */
 
 Q_CORE_EXPORT void cs_print_build_info();
-
-QT_END_NAMESPACE
 
 #endif

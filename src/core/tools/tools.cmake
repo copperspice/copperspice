@@ -1,16 +1,11 @@
 set(CORE_PUBLIC_INCLUDES
     ${CORE_PUBLIC_INCLUDES}
-    QAbstractConcatenable
     QArrayData
     QBitArray
     QBitRef
     QByteArray
     QByteRef
     QCache
-    QChar
-    QCharRef
-    QConcatenable
-    QConstString
     QContiguousCache
     QContiguousCacheData
     QContiguousCacheTypedData
@@ -25,9 +20,6 @@ set(CORE_PUBLIC_INCLUDES
     QFlatMap
     QHash
     QHashIterator
-    QLatin1Char
-    QLatin1Literal
-    QLatin1String
     QLine
     QLineF
     QLinkedList
@@ -71,12 +63,8 @@ set(CORE_PUBLIC_INCLUDES
     QSize
     QSizeF
     QStack
-    QStdWString
-    QString
-    QStringBuilder
     QStringList
     QStringListIterator
-    QStringRef
     QSystemLocale
     QTextBoundaryFinder
     QTime
@@ -93,7 +81,6 @@ set(CORE_PUBLIC_INCLUDES
 
 set(CORE_INCLUDES
     ${CORE_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qabstractconcatenable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qalgorithms.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qarraydata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qarraydataops.h
@@ -102,10 +89,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbyteref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcache.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qchar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcharref.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qconcatenable.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qconststring.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcontainerfwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcontiguouscache.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcontiguouscachedata.h
@@ -123,9 +106,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfunc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashfwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qhashiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1char.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1literal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlatin1string.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinkedlist.h
@@ -172,12 +152,8 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstack.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstdwstring.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringbuilder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlistiterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsystemlocale.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtalgorithms.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtcontainerfwd.h
@@ -235,13 +211,10 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qregexp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qshareddata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringbuilder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
@@ -275,6 +248,5 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_mac.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_mac.mm
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray_mac.mm
-        ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring_mac.mm
     )
 endif()

@@ -31,6 +31,7 @@
 
 class QChar32;
 class QString8;
+class QString16;
 
 inline uint qHash(const QChar32 &key, uint seed = 0);
 
@@ -416,6 +417,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Script script() const;
 
       QString8 toCaseFolded() const;
+      QString16 toCaseFolded16() const;
 
       char toLatin1() const {
          uint32_t tmp = unicode();
@@ -437,6 +439,21 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
 
       UnicodeVersion unicodeVersion() const;
       static UnicodeVersion currentUnicodeVersion();
+};
+
+class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
+{
+   public:
+      QChar32Arrow (CsString::CsCharArrow c)
+         : CsString::CsCharArrow(c)
+      { }
+
+      const QChar32 *operator->() const {
+         static_assert(std::is_standard_layout<CsString::CsChar>::value, "Invalid reinterpret_cast for QChar32Arrow");
+         static_assert(sizeof(QChar32) == sizeof(CsString::CsChar), "Invalid reinterpret_cast for QChar32Arrow");
+
+         return reinterpret_cast<const QChar32 *>(CsString::CsCharArrow::operator->());
+      }
 };
 
 inline bool operator==(QChar32 c1, QChar32 c2)

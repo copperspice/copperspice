@@ -237,6 +237,9 @@ class CsBasicString
       iterator erase(const_iterator iter_begin, const_iterator iter_end);
 
       // ** uses an iterator, returns an iterator
+      const_iterator find_fast(CsChar c) const;
+      const_iterator find_fast(CsChar c, const_iterator iter_begin) const;
+
       const_iterator find_fast(const CsBasicString &str) const;
       const_iterator find_fast(const CsBasicString &str, const_iterator iter_begin) const;
 
@@ -267,16 +270,12 @@ class CsBasicString
       template <int N>
       const_iterator find_fast(const char (&str)[N], const_iterator iter_begin) const;
 
-      const_iterator find_fast(CsChar c) const;
-      const_iterator find_fast(CsChar c, const_iterator iter_begin) const;
-
-
+      //
       const_iterator rfind_fast(CsChar c) const;
       const_iterator rfind_fast(CsChar c, const_iterator iter_end) const;
 
       const_iterator rfind_fast(const CsBasicString &str) const;
       const_iterator rfind_fast(const CsBasicString &str, const_iterator iter_end) const;
-
 
       // ** uses an index, returns an index
       size_type find(const CsBasicString &str, size_type indexStart = 0) const;

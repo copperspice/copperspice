@@ -48,21 +48,6 @@ class QRegularExpression;
 #  endif
 #endif
 
-class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
-{
-   public:
-      QChar32Arrow (CsString::CsCharArrow c)
-         : CsString::CsCharArrow(c)
-      { }
-
-      const QChar32 *operator->() const {
-         static_assert(std::is_standard_layout<CsString::CsChar>::value, "Invalid reinterpret_cast for QChar32Arrow");
-         static_assert(sizeof(QChar32) == sizeof(CsString::CsChar), "Invalid reinterpret_cast for QChar32Arrow");
-
-         return reinterpret_cast<const QChar32 *>(CsString::CsCharArrow::operator->());
-      }
-};
-
 class Q_CORE_EXPORT QString8 : public CsString::CsString
 {
    public:
@@ -230,6 +215,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using difference_type = std::ptrdiff_t;
       using size_type       = std::ptrdiff_t;
       using value_type      = QChar32;
+      using storage_type    = char;
 
       using Iterator        = iterator;
       using ConstIterator   = const_iterator;
@@ -264,6 +250,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
          }
       }
+
+      QString8(const_iterator begin, const_iterator end)
+         : CsString::CsString(begin, end)
+      { }
 
       // for an array of chars
       template <int N>
@@ -361,15 +351,19 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       size_type count(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       size_type count(const QRegularExpression<QString8> &regExp) const;
 
-      int compare(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      static int compare(const QString8 &str1, const QString8 &str2, Qt::CaseSensitivity cs = Qt::CaseSensitive) {
-         return str1.compare(str2, cs);
+      int compare(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+         return compare(QStringView8(*this), QStringView8(str), cs);
       }
 
-      int compare(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      static int compare(const QString8 &str1, QStringView8 str2, Qt::CaseSensitivity cs = Qt::CaseSensitive) {
-         return str1.compare(str2, cs);
+      static int compare(const QString8 &str1, const QString8 &str2, Qt::CaseSensitivity cs = Qt::CaseSensitive) {
+         return compare(QStringView8(str1), QStringView8(str2), cs);
       }
+
+      int compare(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+         return compare(QStringView8(*this), str, cs);
+      }
+
+      static int compare(QStringView8 str1, QStringView8 str2, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
       const char *constData() const {
          return reinterpret_cast<const char *>(CsString::CsString::constData());
@@ -475,7 +469,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             return cs_internal_rfind_fast(str, from);
          }
       }
-
 
       const_iterator lastIndexOfFast(QStringView8 str, const_iterator from, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
 
@@ -586,9 +579,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::back();
       }
 
-      // internal method
-      bool isSimpleText() const;
-
       QString8 left(size_type numOfChars) const Q_REQUIRED_RESULT;
       QStringView8 leftView(size_type numOfChars) const Q_REQUIRED_RESULT;
       QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const Q_REQUIRED_RESULT;
@@ -597,21 +587,20 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::size();
       }
 
-/*
-      // not implemented, not documented
-
-      int localeAwareCompare(const QString8 &str) const;
+      int localeAwareCompare(const QString8 &str) const {
+         return localeAwareCompare(QStringView8(*this), QStringView8(str));
+      }
 
       static int localeAwareCompare(const QString8 &str1, const QString8 &str2) {
-         return s1.localeAwareCompare(s2);
+         return localeAwareCompare(QStringView8(str1), QStringView8(str2));
       }
 
-      int localeAwareCompare(QStringView8 str) const;
-
-      static int localeAwareCompare(const QString8 &str1, QStringView8 str2) {
-         return s1.localeAwareCompare(s2);
+      int localeAwareCompare(QStringView8 str) const {
+         return localeAwareCompare(QStringView8(*this), str);
       }
-*/
+
+      static int localeAwareCompare(QStringView8 str1, QStringView8 str2);
+
 
       QString8 mid(size_type indexStart, size_type numOfChars = -1) const Q_REQUIRED_RESULT;
       QStringView8 midView (size_type indexStart, size_type numOfChars = -1) const;
@@ -734,6 +723,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::size();
       }
 
+      size_type size_storage() const {
+         return CsString::CsString::size_storage();
+      }
+
       bool startsWith(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool startsWith(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool startsWith(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
@@ -786,8 +779,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       static QString8 fromUtf16(const char16_t *str, size_type numOfChars = -1);
       static QString8 fromUtf16(const QString16 &str);
 
-      static QString8 fromStdWString(const std::wstring &str);
-      static QString8 fromStdString(const std::string &str);
+      static QString8 fromStdWString(const std::wstring &str, size_type numOfChars = -1);
+      static QString8 fromStdString(const std::string &str, size_type numOfChars = -1);
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>

@@ -2,17 +2,12 @@
 CORE_DIRS += src/core/tools
 
 CORE_PUBLIC_INCLUDES += \
-	QAbstractConcatenable \
 	QArrayData \
 	QBitArray \
 	QBitRef \
 	QByteArray \
 	QByteRef \
-	QCache \
-	QChar \
-	QCharRef \
-	QConcatenable \
-	QConstString \
+	QCache \	
 	QContiguousCache \
 	QContiguousCacheData \
 	QContiguousCacheTypedData \
@@ -27,9 +22,6 @@ CORE_PUBLIC_INCLUDES += \
 	QFlatMap \
 	QHash \
 	QHashIterator \
-	QLatin1Char \
-	QLatin1Literal \
-	QLatin1String \
 	QLine \
 	QLineF \
 	QLinkedList \
@@ -73,12 +65,8 @@ CORE_PUBLIC_INCLUDES += \
 	QSize \
 	QSizeF \
 	QStack \
-	QStdWString \
-	QString \
-	QStringBuilder \
 	QStringList \
 	QStringListIterator \
-	QStringRef \
 	QSystemLocale \
 	QTextBoundaryFinder \
 	QTime \
@@ -93,7 +81,6 @@ CORE_PUBLIC_INCLUDES += \
 	QtContainerFwd
 
 CORE_TOOLS_INCLUDES = \
-	qabstractconcatenable.h \
 	qalgorithms.h \
 	qarraydata.h \
 	qarraydataops.h \
@@ -102,10 +89,6 @@ CORE_TOOLS_INCLUDES = \
 	qbytearray.h \
 	qbyteref.h \
 	qcache.h \
-	qchar.h \
-	qcharref.h \
-	qconcatenable.h \
-	qconststring.h \
 	qcontainerfwd.h \
 	qcontiguouscache.h \
 	qcontiguouscachedata.h \
@@ -123,9 +106,6 @@ CORE_TOOLS_INCLUDES = \
 	qhashfunc.h \
 	qhashfwd.h \
 	qhashiterator.h \
-	qlatin1char.h \
-	qlatin1literal.h \
-	qlatin1string.h \
 	qline.h \
 	qlinef.h \
 	qlinkedlist.h \
@@ -172,12 +152,8 @@ CORE_TOOLS_INCLUDES = \
 	qsize.h \
 	qsizef.h \
 	qstack.h \
-	qstdwstring.h \
-	qstring.h \
-	qstringbuilder.h \
 	qstringlist.h \
 	qstringlistiterator.h \
-	qstringref.h \
 	qsystemlocale.h \
 	qtalgorithms.h \
 	qtcontainerfwd.h \
@@ -236,13 +212,10 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qcommandlineparser.cpp \
 	src/core/tools/qrect.cpp \
 	src/core/tools/qrefcount.cpp \
-	src/core/tools/qregexp.cpp \
 	src/core/tools/qshareddata.cpp \
 	src/core/tools/qsharedpointer.cpp \
 	src/core/tools/qsimd.cpp \
 	src/core/tools/qsize.cpp \
-	src/core/tools/qstring.cpp \
-	src/core/tools/qstringbuilder.cpp \
 	src/core/tools/qstringlist.cpp \
 	src/core/tools/qtextboundaryfinder.cpp \
 	src/core/tools/qtimeline.cpp \
@@ -281,8 +254,7 @@ if OSTYPE_DARWIN
 lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/tools/qelapsedtimer_mac.cpp \
 	src/core/tools/qlocale_mac.mm \
-	src/core/tools/qbytearray_mac.mm \
-	src/core/tools/qstring_mac.mm
+	src/core/tools/qbytearray_mac.mm
 endif
 
 
@@ -325,7 +297,6 @@ EXTRA_DIST+=src/3rdparty/md5/md5.cpp \
 	    src/3rdparty/md4/md4.cpp \
 	    src/3rdparty/sha1/sha1.cpp \
 	    src/3rdparty/easing/easing.cpp \
-	    src/core/tools/qchar.cpp \
 	    src/core/tools/qunicodetables.cpp \
 	    src/3rdparty/harfbuzz/src/harfbuzz-indic.cpp \
 	    src/3rdparty/harfbuzz/src/harfbuzz-shaper-all.cpp \

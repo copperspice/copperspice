@@ -36,8 +36,8 @@
 #include <qlist.h>
 #include <qvariant.h>
 #include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <qregularexpression.h>
+#include <qstring8.h>
 #include <qstringlist.h>
 #include <qtextcodec.h>
 #include <stdlib.h>

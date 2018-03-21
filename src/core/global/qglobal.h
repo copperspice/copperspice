@@ -38,24 +38,28 @@
 #include <algorithm>
 
 class QByteArray;
-class QString;
+class QChar32;
+class QString8;
+class QString16;
+
+template <typename S = QString8>
+class QStringView;
+
+using QChar         = QChar32;
+using QString       = QString8;
+using QLatin1Char   = QChar32;
+using QLatin1String = QString8;
+using QStringRef    = QStringView<QString8>;
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
-
 #define QT_FORWARD_DECLARE_CLASS(name)   class name;
-#define QT_FORWARD_DECLARE_STRUCT(name)  struct name;
-
 #define QT_MANGLE_NAMESPACE(name)        name
 
 #endif
 
 #define QT_USE_NAMESPACE
-
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE
-
-#define QT_BEGIN_INCLUDE_NAMESPACE
-#define QT_END_INCLUDE_NAMESPACE
 
 // ** detect target architecture
 #if defined(__x86_64__)
@@ -527,10 +531,6 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
    return qMax(min, qMin(max, val));
 }
 
-#ifndef QT_BUILD_KEY
-#define QT_BUILD_KEY "(copperspice)"
-#endif
-
 #if defined(Q_OS_MAC)
 #  ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT
@@ -664,10 +664,6 @@ Q_CORE_EXPORT const char *qVersion();
 // Debugging and error handling
 #if ! defined(QT_NO_DEBUG) && ! defined(QT_DEBUG)
 #  define QT_DEBUG
-#endif
-
-#ifndef qPrintable
-#  define qPrintable(string)   QString(string).toLocal8Bit().constData()
 #endif
 
 Q_CORE_EXPORT void qt_check_pointer(const char *, int);
@@ -853,6 +849,7 @@ class QTypeInfo<T *>
    };
 };
 
+
 /*
    Specialize a specific type with: Q_DECLARE_TYPEINFO(type, flags);
 
@@ -868,15 +865,15 @@ enum { /* TYPEINFO flags */
 };
 
 #define Q_DECLARE_TYPEINFO_BODY(TYPE, FLAGS) \
-class QTypeInfo<TYPE > \
+class QTypeInfo<TYPE> \
 { \
 public: \
    enum { \
-   isComplex = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
-   isStatic = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
-   isLarge = (sizeof(TYPE)>sizeof(void*)), \
-   isPointer = false, \
-   isDummy = (((FLAGS) & Q_DUMMY_TYPE) != 0) \
+      isComplex = (((FLAGS) & Q_PRIMITIVE_TYPE) == 0), \
+      isStatic  = (((FLAGS) & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0), \
+      isLarge   = (sizeof(TYPE)>sizeof(void*)), \
+      isPointer = false, \
+      isDummy   = (((FLAGS) & Q_DUMMY_TYPE) != 0) \
    }; \
     static inline const char *name() { return #TYPE; } \
 }

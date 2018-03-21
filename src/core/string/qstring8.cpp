@@ -28,6 +28,10 @@
 #include <qregularexpression.h>
 #include <qunicodetables_p.h>
 
+#if defined(Q_OS_WIN32)
+#include <qt_windows.h>
+#endif
+
 static bool cs_internal_quickCheck(QString8::const_iterator &first_iter, QString8::const_iterator last_iter,
                   QString8::NormalizationForm mode);
 
@@ -56,6 +60,12 @@ inline bool operator<(const UCS2Pair &ligature, ushort u1)
 {
    return ligature.u1 < u1;
 }
+
+#if ! defined(CSTR_LESS_THAN)
+#define CSTR_LESS_THAN       1
+#define CSTR_EQUAL           2
+#define CSTR_GREATER_THAN    3
+#endif
 
 QString8::QString8(QChar32 c)
    : CsString::CsString(1, c)
@@ -232,12 +242,12 @@ void QString8::chop(size_type n)
    }
 }
 
-int QString8::compare(const QString8 &str, Qt::CaseSensitivity cs) const
+int QString8::compare(QStringView8 str1, QStringView8 str2, Qt::CaseSensitivity cs)
 {
-   auto iter_a = cbegin();
-   auto iter_b = str.cbegin();
+   auto iter_a = str1.cbegin();
+   auto iter_b = str2.cbegin();
 
-   while (iter_a != cend() && iter_b != str.cend()) {
+   while (iter_a != str1.cend() && iter_b != str2.cend()) {
 
       auto value_a = *iter_a;
       auto value_b = *iter_b;
@@ -268,57 +278,10 @@ int QString8::compare(const QString8 &str, Qt::CaseSensitivity cs) const
       ++iter_b;
    }
 
-   if (iter_b != str.cend())  {
+   if (iter_b != str2.cend())  {
       return -1;
 
-   } else if (iter_a != cend()) {
-      return 1;
-
-   }
-
-   return 0;
-}
-
-int QString8::compare(QStringView8 str, Qt::CaseSensitivity cs) const
-{
-   auto iter_a = cbegin();
-   auto iter_b = str.cbegin();
-
-   while (iter_a != cend() && iter_b != str.cend()) {
-
-      auto value_a = *iter_a;
-      auto value_b = *iter_b;
-
-      if (cs == Qt::CaseSensitive) {
-         if (value_a < value_b) {
-            return -1;
-
-         } else if (value_a > value_b) {
-            return 1;
-
-         }
-
-      } else {
-         auto folded_a = value_a.toCaseFolded();
-         auto folded_b = value_b.toCaseFolded();
-
-         if (folded_a < folded_b) {
-            return -1;
-
-         } else if (folded_a > folded_b) {
-            return 1;
-
-         }
-      }
-
-      ++iter_a;
-      ++iter_b;
-   }
-
-   if (iter_b != str.cend())  {
-      return -1;
-
-   } else if (iter_a != cend()) {
+   } else if (iter_a != str1.cend()) {
       return 1;
 
    }
@@ -669,7 +632,8 @@ QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
       }
    }
 
-   // broom ( full implementation required )
+   // broom -- partial, pending surrogates
+
    QString8 retval;
 
    for (int i = 0; i < numOfChars; ++i) {
@@ -684,19 +648,41 @@ QString8 QString8::fromUtf16(const QString16 &str)
    return fromUtf16((const char16_t *)str.constData(), str.size_storage());
 }
 
-QString8 QString8::fromStdWString(const std::wstring &str)
+QString8 QString8::fromStdWString(const std::wstring &str, size_type numOfChars)
 {
-   // broom ( full implementation required )
+   QString8 retval;
+
+   if (sizeof(wchar_t) == sizeof(char16_t)) {
+      retval = fromUtf16((const char16_t *)&str[0], numOfChars);
+
+   } else {
+      for (wchar_t ch : str) {
+         if (numOfChars == 0) {
+            break;
+         }
+
+         retval.push_back(ch);
+         --numOfChars;
+      }
+   }
 
    return QString8();
 }
 
-QString8 QString8::fromStdString(const std::string &str)
+QString8 QString8::fromStdString(const std::string &str, size_type numOfChars)
 {
+   QString8 retval;
 
-   // broom ( full implementation required )
+   for (char ch : str) {
+      if (numOfChars == 0) {
+         break;
+      }
 
-   return QString8();
+      retval.push_back(ch);
+      --numOfChars;
+   }
+
+   return retval;
 }
 
 QString8::const_iterator QString8::indexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const
@@ -719,19 +705,6 @@ QString8::const_iterator QString8::lastIndexOfFast(const QRegularExpression<QStr
    }
 
    return end();
-}
-
-bool QString8::isSimpleText() const
-{
-   for (auto c : *this) {
-      uint32_t value = c.unicode();
-
-      if (value > 0x058f && (value < 0x1100 || value > 0xfb0f)) {
-         return false;
-      }
-   }
-
-   return true;
 }
 
 QString8 QString8::left(size_type numOfChars) const
@@ -780,17 +753,73 @@ QString8 QString8::leftJustified(size_type width, QChar32 fill, bool truncate) c
    return retval;
 }
 
-/*
-int localeAwareCompare(const QString8 &str) const
+int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
 {
-   // not implemented
-}
+   int len1 = str1.size();
+   int len2 = str2.size();
 
-int localeAwareCompare(QStringView8 str) const
-{
-   // not imlemented
+   if (len1 == 0 && len2 == 0) {
+      return 0;
+
+   } else if (len1 == 0) {
+      return -1;
+
+   } else if (len2 == 0) {
+      return 1;
+   }
+
+#if defined(Q_OS_WIN32)
+   QString16 tmp1(str1.begin(), str1.end());
+   QString16 tmp2(str1.begin(), str1.end());
+
+   int retval = CompareString(GetUserDefaultLCID(), 0, (wchar_t *)tmp1.constData(), tmp1.size_storage(),
+                  (wchar_t *)tmp1.constData(), tmp2.size_storage());
+
+   switch (retval) {
+      case CSTR_LESS_THAN:
+         return -1;
+
+      case CSTR_GREATER_THAN:
+         return 1;
+
+      default:
+         return 0;
+   }
+
+#elif defined (Q_OS_MAC)
+
+   const CFStringRef mac_str1 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
+                  reinterpret_cast<const UInit8 *>(str1.charData()), str1.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
+
+   const CFStringRef mac_str2 = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
+                  reinterpret_cast<const UInit8 *>(str2,charData()), str2.size_storage(), kCFStringEncodingUTF8, false, kCFAllocatorNull);
+
+   const int result = CFStringCompare(mac_str1, mac_str2, kCFCompareLocalized);
+
+   CFRelease(mac_str1);
+   CFRelease(mac_str2);
+
+   return result;
+
+#elif defined(Q_OS_UNIX)
+   // may be a bit slow however it is correct
+
+   std::wstring tmp1(str1.toStdWString());
+   std::wstring tmp2(str2.toStdWString());
+
+   int delta = wcscoll(tmp1.c_str(), tmp2.c_str());
+
+   if (delta == 0) {
+      delta = compare(str1, str2);
+   }
+
+   return delta;
+
+#else
+   return compare(str1, str2);
+
+#endif
 }
-*/
 
 QString8 QString8::mid(size_type indexStart, size_type numOfChars) const
 {
@@ -1595,22 +1624,22 @@ QByteArray QString8::toUtf8() const
 
 QString16 QString8::toUtf16() const
 {
-   // broom ( full implementation required )
-
-
-   return QString16();
+   return QString16(this->begin(), this->end());
 }
 
 std::wstring QString8::toStdWString() const
 {
-   // broom ( full implementation required )
-
    std::wstring retval;
 
-   for (QChar32 c : *this) {
-      const wchar_t value = c.unicode();
+   if (sizeof(wchar_t) == sizeof(char16_t)) {
+      QString16 tmp = this->toUtf16();
+      retval = std::wstring(reinterpret_cast<const wchar_t *>(tmp.constData()), tmp.size_storage());
 
-      retval.push_back(value);
+   } else {
+      for (QChar32 c : *this) {
+         const wchar_t value = c.unicode();
+         retval.push_back(value);
+      }
    }
 
    return retval;
@@ -1697,8 +1726,6 @@ QString8 cs_internal_string_normalize(const QString8 &data, QString8::Normalizat
    // ** 1
    if (cs_internal_quickCheck(first_iter, last_iter, mode)) {
       // nothing to normalize
-
-      printf("QString 8  Quick Check \n");
       return data;
    }
 

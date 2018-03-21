@@ -2,7 +2,9 @@
 CORE_DIRS += src/core/string
 
 CORE_PUBLIC_INCLUDES += \
+	QChar     \
 	QChar32   \
+	QString   \
 	QString8  \
 	QString16 \
 	QStringParser \
@@ -15,8 +17,10 @@ CORE_STRING_INCLUDES = \
 	cs_encoding.h  \
 	cs_char.h   \
 	cs_string_view.h \
-	qchar32.h   \
-	qstring8.h  \
+	qchar.h      \
+	qchar32.h    \
+	qstring.h    \
+	qstring8.h   \
 	qstring16.h  \
 	qstringparser.h \
 	qstringview.h \
@@ -57,6 +61,12 @@ CORE_STRING_PRIVATE_INCLUDES =
 
 CORE_INCLUDES += $(CORE_STRING_INCLUDES) $(CORE_REGEX_INCLUDES)
 CORE_PRIVATE_INCLUDES += $(CORE_STRING_PRIVATE_INCLUDES)
+
+
+if OSTYPE_DARWIN
+lib_libCsCore@BUILD_ABI@_la_SOURCES += \
+	src/core/string/qstring_mac.mm
+endif
 
 
 noinst_HEADERS+=$(patsubst %,src/core/string/%,$(CORE_STRING_INCLUDES)) \
