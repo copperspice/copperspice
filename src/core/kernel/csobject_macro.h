@@ -27,7 +27,8 @@
 #include <cs_slot.h>
 #include <qglobal.h>
 
-#define csPrintable(string)         QString(string).toLatin1().constData()
+#define qPrintable(string)          QString8(string).constData()
+#define csPrintable(string)         QString8(string).constData()
 #define csPrintable8(string)        QString8(string).constData()
 #define csPrintable16(string)       QString16(string).toUtf8().constData()
 
@@ -59,13 +60,13 @@ class cs_number<0>
 
 #ifdef QT_NO_TEXTCODEC
 # define CS_TR_FUNCTIONS \
-   static inline QString tr(const char *s, const char *c = 0, int n = -1) \
+   static inline QString8 tr(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().tr(s, c, n); }
 #else
 # define CS_TR_FUNCTIONS \
-   static inline QString tr(const char *s, const char *c = 0, int n = -1) \
+   static inline QString8 tr(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().tr(s, c, n); } \
-   static inline QString trUtf8(const char *s, const char *c = 0, int n = -1) \
+   static inline QString8 trUtf8(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().trUtf8(s, c, n); }
 #endif
 
@@ -103,9 +104,10 @@ class cs_number<0>
 
 #define CS_OBJECT_INTERNAL(classNameX) \
    public: \
-      static const char *cs_className() \
+      static const QString8 &cs_className() \
       { \
-         return #classNameX; \
+         static QString8 retval(#classNameX); \
+         return retval; \
       } \
       template<int N> \
       static void cs_regTrigger(cs_number<N>) \
@@ -152,15 +154,16 @@ class cs_number<0>
    private: \
       struct cs_classname \
       { \
-         static constexpr const char *value = #classNameX; \
+         static constexpr const char value[] = #classNameX; \
       };
 
 
 #define CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    public: \
-      static const char *cs_className() \
+      static const QString8 &cs_className() \
       { \
-         return #classNameX; \
+         static QString8 retval(#classNameX); \
+         return retval; \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
       virtual const QMetaObject *metaObject() const CS_OVERRIDE; \
@@ -168,7 +171,7 @@ class cs_number<0>
    private: \
       struct cs_classname \
       { \
-         static constexpr const char *value = #classNameX; \
+         static constexpr const char value[] = #classNameX; \
       };
 
 
@@ -190,10 +193,11 @@ class cs_number<0>
 
 #define CS_GADGET_INTERNAL(classNameX) \
    public: \
-      static const char *cs_className() \
+      static const QString8 &cs_className() \
       { \
-         return #classNameX; \
-      }; \
+         static QString8 retval(#classNameX); \
+         return retval; \
+      } \
       template<int N> \
       static void cs_regTrigger(cs_number<N>) \
       { \
@@ -220,29 +224,33 @@ class cs_number<0>
    private: \
       struct cs_classname \
       { \
-         static constexpr const char *value = #classNameX; \
+         static constexpr const char value[] = #classNameX; \
       };
 
 #define CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
    public: \
-      static const char *cs_className() \
+      static const QString8 &cs_className() \
       { \
-         return #classNameX; \
+         static QString8 retval(#classNameX); \
+         return retval; \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
       CS_TR_FUNCTIONS \
    private: \
       struct cs_classname \
       { \
-         static constexpr const char *value = #classNameX; \
+         static constexpr const char value[] = #classNameX; \
       };
 
 
 // ** interface
 #define CS_DECLARE_INTERFACE(IFace, IId) \
    template<> \
-   inline const char *qobject_interface_iid<IFace *>() \
-      { return IId; } \
+   inline const QString8 &qobject_interface_iid<IFace *>() \
+      {  \
+         static QString8 retval(IId); \
+         return retval;               \
+      } \
    template<> \
    inline IFace * qobject_cast<IFace *>(QObject *object) \
       { \
@@ -348,7 +356,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;    \
+         const auto &va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
@@ -381,7 +389,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;    \
+         const auto &va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
@@ -451,7 +459,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
       {  \
-         const char *va_args = #__VA_ARGS__;    \
+         const auto &va_args = #__VA_ARGS__;    \
          QMetaMethod::Access accessType = QMetaMethod::access; \
          constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro

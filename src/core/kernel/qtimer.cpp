@@ -24,8 +24,6 @@
 #include <qabstracteventdispatcher.h>
 #include <qcoreapplication.h>
 
-QT_BEGIN_NAMESPACE
-
 static const int INV_TIMER = -1;                // invalid timer id
 
 QTimer::QTimer(QObject *parent)
@@ -80,7 +78,7 @@ class QSingleShotTimer : public QObject
 
  public:
    ~QSingleShotTimer();
-   QSingleShotTimer(int msec, QObject *r, const char *m);
+   QSingleShotTimer(int msec, QObject *r, const QString8 &member);
 
    CORE_CS_SIGNAL_1(Public, void timeout())
    CORE_CS_SIGNAL_2(timeout)
@@ -89,7 +87,7 @@ class QSingleShotTimer : public QObject
    void timerEvent(QTimerEvent *) override;
 };
 
-QSingleShotTimer::QSingleShotTimer(int msec, QObject *receiver, const char *member)
+QSingleShotTimer::QSingleShotTimer(int msec, QObject *receiver, const QString8 &member)
    : QObject(QAbstractEventDispatcher::instance())
 {
    connect(this, SIGNAL(timeout()), receiver, member);
@@ -110,31 +108,30 @@ void QSingleShotTimer::timerEvent(QTimerEvent *)
    if (timerId > 0) {
       killTimer(timerId);
    }
+
    timerId = -1;
    emit timeout();
 
-   // we would like to use delete later here, but it feels like a
-   // waste to post a new event to handle this event, so we just unset the flag
-   // and explicitly delete
    delete this;
 }
 
-void QTimer::singleShot(int msec, QObject *receiver, const char *member)
+void QTimer::singleShot(int msec, QObject *receiver, const QString8 &member)
 {
-   if (receiver && member) {
+   if (receiver && ! member.isEmpty()) {
+
       if (msec == 0) {
          // special code shortpath for 0-timers
-         const char *bracketPosition = strchr(member, '(');
+         int bracketPosition = member.indexOf('(');
 
-         if (! bracketPosition) {
+         if (bracketPosition == -1) {
             qWarning("QTimer::singleShot: Invalid slot specification");
             return;
          }
 
          // extract method name
-         QByteArray methodName(member, bracketPosition - member);
+         QString8 methodName = member.left(bracketPosition - 1);
 
-         QMetaObject::invokeMethod(receiver, methodName.constData(), Qt::QueuedConnection);
+         QMetaObject::invokeMethod(receiver, methodName, Qt::QueuedConnection);
          return;
       }
 
@@ -155,4 +152,3 @@ void QTimer::setInterval(int msec)
    }
 }
 
-QT_END_NAMESPACE

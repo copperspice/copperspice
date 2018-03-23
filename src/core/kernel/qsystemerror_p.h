@@ -23,7 +23,7 @@
 #ifndef QSYSTEMERROR_P_H
 #define QSYSTEMERROR_P_H
 
-#include <qstring.h>
+#include <qstring8.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -75,9 +75,11 @@ class QMutexUnlocker
    inline explicit QMutexUnlocker(QMutex *m)
       : mtx(m) {
    }
+
    inline ~QMutexUnlocker() {
       unlock();
    }
+
    inline void unlock() {
       if (mtx) {
          mtx->unlock();
@@ -95,34 +97,37 @@ class QMutexUnlocker
 extern QString qAppFileName();
 #endif
 
-int QCoreApplicationPrivate::app_compile_version = 0x040000; //we don't know exactly, but it's at least 4.0.0
 
-
-#if !defined(Q_OS_WIN)
+#if ! defined(Q_OS_WIN)
 #ifdef Q_OS_MAC
 QString QCoreApplicationPrivate::macMenuBarName()
 {
    QString bundleName;
    CFTypeRef string = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), CFSTR("CFBundleName"));
+
    if (string) {
       bundleName = QCFString::toQString(static_cast<CFStringRef>(string));
    }
    return bundleName;
 }
 #endif
+
 QString QCoreApplicationPrivate::appName() const
 {
    QMutexLocker locker(QMutexPool::globalInstanceGet(&applicationName));
 
    if (applicationName.isNull()) {
+
 #ifdef Q_OS_MAC
       applicationName = macMenuBarName();
 #endif
+
       if (applicationName.isEmpty() && argv[0]) {
          char *p = strrchr(argv[0], '/');
          applicationName = QString::fromLocal8Bit(p ? p + 1 : argv[0]);
       }
    }
+
    return applicationName;
 }
 #endif
@@ -141,17 +146,23 @@ Q_GLOBAL_STATIC(QString, qmljs_debug_arguments);
 void QCoreApplicationPrivate::processCommandLineArguments()
 {
    int j = argc ? 1 : 0;
+
    for (int i = 1; i < argc; ++i) {
+
       if (argv[i] && *argv[i] != '-') {
          argv[j++] = argv[i];
          continue;
       }
+
       QByteArray arg = argv[i];
+
       if (arg.startsWith("-qmljsdebugger=")) {
-         *qmljs_debug_arguments() = QString::fromLocal8Bit(arg.right(arg.length() - 15));
+         *qmljs_debug_arguments() = QString::fromUtf8(arg.right(arg.length() - 15));
+
       } else if (arg == "-qmljsdebugger" && i < argc - 1) {
          ++i;
-         *qmljs_debug_arguments() = QString::fromLocal8Bit(argv[i]);
+         *qmljs_debug_arguments() = QString::fromUtf8(argv[i]);
+
       } else {
          argv[j++] = argv[i];
       }
@@ -312,13 +323,13 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
    : argc(aargc), argv(aargv), application_type(0), eventFilter(0),
      in_exec(false), aboutToQuitEmitted(false)
 {
-   app_compile_version = flags & 0xffffff;
-
    static const char *const empty = "";
+
    if (argc == 0 || argv == 0) {
       argc = 0;
-      argv = (char **)&empty; // ouch! careful with QCoreApplication::argv()!
+      argv = (char **)&empty; // careful with QCoreApplication::argv()
    }
+
    QCoreApplicationPrivate::is_app_closing = false;
 
 #ifdef Q_OS_UNIX
@@ -401,15 +412,16 @@ void QCoreApplicationPrivate::checkReceiverThread(QObject *receiver)
 {
    QThread *currentThread = QThread::currentThread();
    QThread *thr = receiver->thread();
-   Q_ASSERT_X(currentThread == thr || !thr,
-              "QCoreApplication::sendEvent",
-              QString::fromLatin1("Cannot send events to objects owned by a different thread. "
+
+   Q_ASSERT_X(currentThread == thr || ! thr, "QCoreApplication::sendEvent",
+              QString::fromLatin1("Can not send events to objects owned by a different thread. "
                                   "Current thread %1. Receiver '%2' (of type '%3') was created in thread %4")
-              .arg(QString::number((quintptr) currentThread, 16))
-              .arg(receiver->objectName())
-              .arg(QLatin1String(receiver->metaObject()->className()))
-              .arg(QString::number((quintptr) thr, 16))
-              .toLocal8Bit().data());
+              .formatArg(QString::number((quintptr) currentThread, 16))
+              .formatArg(receiver->objectName())
+              .formatArg(receiver->metaObject()->className())
+              .formatArg(QString::number((quintptr) thr, 16))
+              .toUtf8().constData());
+
    Q_UNUSED(currentThread);
    Q_UNUSED(thr);
 }
@@ -422,8 +434,9 @@ void QCoreApplicationPrivate::appendApplicationPathToLibraryPaths()
    Q_ASSERT(app_libpaths);
 
    QString app_location( QCoreApplication::applicationFilePath() );
-   app_location.truncate(app_location.lastIndexOf(QLatin1Char('/')));
+   app_location.truncate(app_location.lastIndexOf('/'));
    app_location = QDir(app_location).canonicalPath();
+
    if (QFile::exists(app_location) && !app_libpaths->contains(app_location)) {
       app_libpaths->append(app_location);
    }
@@ -566,6 +579,7 @@ void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on)
    } else {
       QCoreApplicationPrivate::attribs &= ~(1 << attribute);
    }
+
 #ifdef Q_OS_MAC
    // Turn on the no native menubar here, since we used to
    // do this implicitly. We DO NOT flip it off if someone sets
@@ -575,8 +589,8 @@ void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on)
    // Considering this attribute isn't only at the beginning
    // it's unlikely it will ever be a problem, but I want
    // to have the behavior documented here.
-   if (attribute == Qt::AA_MacPluginApplication && on
-         && !testAttribute(Qt::AA_DontUseNativeMenuBar)) {
+
+   if (attribute == Qt::AA_MacPluginApplication && on && ! testAttribute(Qt::AA_DontUseNativeMenuBar)) {
       setAttribute(Qt::AA_DontUseNativeMenuBar, true);
    }
 #endif
@@ -602,7 +616,7 @@ bool QCoreApplication::testAttribute(Qt::ApplicationAttribute attribute)
 */
 bool QCoreApplication::notifyInternal(QObject *receiver, QEvent *event)
 {
-   // Qt enforces the rule that events can only be sent to objects in
+   // enforces the rule that events can only be sent to objects in
    // the current thread, so receiver->d_func()->threadData is
    // equivalent to QThreadData::current(), just without the function call overhead.
 
@@ -632,7 +646,7 @@ bool QCoreApplication::notify(QObject *receiver, QEvent *event)
       return true;
    }
 
-   if (receiver == 0) {                        // serious error
+   if (receiver == nullptr) {                        // serious error
       qWarning("QCoreApplication::notify: Unexpected null receiver");
       return true;
    }
@@ -1165,7 +1179,7 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
 
 void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
 {
-   if (!event || !event->posted) {
+   if (! event || !event->posted) {
       return;
    }
 
@@ -1174,22 +1188,24 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
    QMutexLocker locker(&data->postEventList.mutex);
 
    if (data->postEventList.size() == 0) {
+
 #if defined(QT_DEBUG)
-      qDebug("QCoreApplication::removePostedEvent: Internal error: %p %d is posted",
-             (void *)event, event->type());
+      qDebug("QCoreApplication::removePostedEvent: Internal error: %p %d is posted", (void *)event, event->type());
       return;
 #endif
+
    }
 
    for (int i = 0; i < data->postEventList.size(); ++i) {
       const QPostEvent &pe = data->postEventList.at(i);
+
       if (pe.event == event) {
+
 #ifndef QT_NO_DEBUG
          qWarning("QCoreApplication::removePostedEvent: Event of type %d deleted while posted to %s %s",
-                  event->type(),
-                  pe.receiver->metaObject()->className(),
-                  pe.receiver->objectName().toLocal8Bit().data());
+                  event->type(), pe.receiver->metaObject()->className(), pe.receiver->objectName().toUtf8().data());
 #endif
+
          CSInternalEvents::decr_PostedEvents(pe.receiver);
          pe.event->posted = false;
 
@@ -1209,6 +1225,7 @@ bool QCoreApplication::event(QEvent *e)
       quit();
       return true;
    }
+
    return QObject::event(e);
 }
 
@@ -1271,7 +1288,7 @@ static void replacePercentN(QString *result, int n)
             fmt = QLatin1String("%1");
          }
          if (result->at(percentPos + len) == QLatin1Char('n')) {
-            fmt = fmt.arg(n);
+            fmt = fmt.formatArg(n);
             ++len;
             result->replace(percentPos, len, fmt);
             len = fmt.length();
@@ -1334,13 +1351,14 @@ bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)
 
 QString QCoreApplication::applicationDirPath()
 {
-   if (!self) {
+   if (! self) {
       qWarning("QCoreApplication::applicationDirPath: Please instantiate the QApplication object first");
       return QString();
    }
 
    QCoreApplicationPrivate *d = self->d_func();
-   if (d->cachedApplicationDirPath.isNull()) {
+
+   if (d->cachedApplicationDirPath.isEmpty()) {
       d->cachedApplicationDirPath = QFileInfo(applicationFilePath()).path();
    }
 
@@ -1349,13 +1367,13 @@ QString QCoreApplication::applicationDirPath()
 
 QString QCoreApplication::applicationFilePath()
 {
-   if (!self) {
-      qWarning("QCoreApplication::applicationFilePath: Please instantiate the QApplication object first");
+   if (! self) {
+      qWarning("QCoreApplication::applicationFilePath: QApplication must be instantiated before calling this method");
       return QString();
    }
 
    QCoreApplicationPrivate *d = self->d_func();
-   if (!d->cachedApplicationFilePath.isNull()) {
+   if (! d->cachedApplicationFilePath.isEmpty()) {
       return d->cachedApplicationFilePath;
    }
 
@@ -1374,9 +1392,9 @@ QString QCoreApplication::applicationFilePath()
 
 #if defined( Q_OS_UNIX )
 #  ifdef Q_OS_LINUX
-   // Try looking for a /proc/<pid>/exe symlink first which points to
-   // the absolute path of the executable
-   QFileInfo pfi(QString::fromLatin1("/proc/%1/exe").arg(getpid()));
+   // Try looking for a /proc/<pid>/exe symlink first which points to the absolute path of the executable
+   QFileInfo pfi(QString::fromLatin1("/proc/%1/exe").formatArg(getpid()));
+
    if (pfi.exists() && pfi.isSymLink()) {
       d->cachedApplicationFilePath = pfi.canonicalFilePath();
       return d->cachedApplicationFilePath;
@@ -1387,31 +1405,27 @@ QString QCoreApplication::applicationFilePath()
    QString absPath;
 
    if (!argv0.isEmpty() && argv0.at(0) == QLatin1Char('/')) {
-      /*
-        If argv0 starts with a slash, it is already an absolute
-        file path.
-      */
+      // If argv0 starts with a slash, it is already an absolute file path.
       absPath = argv0;
+
    } else if (argv0.contains(QLatin1Char('/'))) {
-      /*
-        If argv0 contains one or more slashes, it is a file path
-        relative to the current directory.
-      */
+      // If argv0 contains one or more slashes, it is a file path relative to the current directory.
       absPath = QDir::current().absoluteFilePath(argv0);
+
    } else {
-      /*
-        Otherwise, the file path has to be determined using the
-        PATH environment variable.
-      */
-      QByteArray pEnv = qgetenv("PATH");
-      QDir currentDir = QDir::current();
+      // Otherwise, the file path has to be determined using the PATH environment variable.
+      QByteArray pEnv   = qgetenv("PATH");
+      QDir currentDir   = QDir::current();
       QStringList paths = QString::fromLocal8Bit(pEnv.constData()).split(QLatin1Char(':'));
+
       for (QStringList::const_iterator p = paths.constBegin(); p != paths.constEnd(); ++p) {
          if ((*p).isEmpty()) {
             continue;
          }
+
          QString candidate = currentDir.absoluteFilePath(*p + QLatin1Char('/') + argv0);
          QFileInfo candidate_fi(candidate);
+
          if (candidate_fi.exists() && !candidate_fi.isDir()) {
             absPath = candidate;
             break;
@@ -1458,10 +1472,11 @@ int QCoreApplication::argc()
 */
 char **QCoreApplication::argv()
 {
-   if (!self) {
+   if (! self) {
       qWarning("QCoreApplication::argv: Please instantiate the QApplication object first");
-      return 0;
+      return nullptr;
    }
+
    return self->d_func()->argv;
 }
 
@@ -1469,43 +1484,48 @@ QStringList QCoreApplication::arguments()
 {
    QStringList list;
 
-   if (!self) {
+   if (! self) {
       qWarning("QCoreApplication::arguments: Please instantiate the QApplication object first");
       return list;
    }
+
 #ifdef Q_OS_WIN
-   QString cmdline = QString::fromWCharArray(GetCommandLine());
+   QString cmdline = QString::fromStdWString(std::wstring(GetCommandLine()));
 
    list = qWinCmdArgs(cmdline);
-   if (self->d_func()->application_type) { // GUI app? Skip known - see qapplication.cpp
+
+   if (self->d_func()->application_type) {
+      // GUI app? Skip known - see qapplication.cpp
       QStringList stripped;
+
       for (int a = 0; a < list.count(); ++a) {
-         QString arg = list.at(a);
+         QString arg      = list.at(a);
          QByteArray l1arg = arg.toLatin1();
-         if (l1arg == "-qdevel" ||
-               l1arg == "-qdebug" ||
-               l1arg == "-reverse" ||
-               l1arg == "-stylesheet" ||
-               l1arg == "-widgetcount")
+
+         if (l1arg == "-qdevel" || l1arg == "-qdebug" || l1arg == "-reverse" ||
+                  l1arg == "-stylesheet" || l1arg == "-widgetcount")  {
             ;
-         else if (l1arg.startsWith("-style=") ||
-                  l1arg.startsWith("-qmljsdebugger="))
+
+         } else if (l1arg.startsWith("-style=") || l1arg.startsWith("-qmljsdebugger=")) {
             ;
-         else if (l1arg == "-style" ||
-                  l1arg == "-qmljsdebugger" ||
-                  l1arg == "-session" ||
-                  l1arg == "-graphicssystem" ||
-                  l1arg == "-testability") {
+
+         } else if (l1arg == "-style" || l1arg == "-qmljsdebugger" || l1arg == "-session" ||
+                  l1arg == "-graphicssystem" || l1arg == "-testability") {
             ++a;
+
          } else {
             stripped += arg;
+
          }
       }
+
       list = stripped;
    }
+
 #else
    const int ac = self->d_func()->argc;
    char **const av = self->d_func()->argv;
+
    for (int a = 0; a < ac; ++a) {
       list << QString::fromLocal8Bit(av[a]);
    }
@@ -1559,12 +1579,14 @@ Q_GLOBAL_STATIC_WITH_ARGS(QMutex, libraryPathMutex, (QMutex::Recursive))
 QStringList QCoreApplication::libraryPaths()
 {
    QMutexLocker locker(libraryPathMutex());
+
    if (!coreappdata()->app_libpaths) {
       QStringList *app_libpaths = coreappdata()->app_libpaths = new QStringList;
       QString installPathPlugins =  QLibraryInfo::location(QLibraryInfo::PluginsPath);
 
       if (QFile::exists(installPathPlugins)) {
          // Make sure we convert from backslashes to slashes.
+
          installPathPlugins = QDir(installPathPlugins).canonicalPath();
          if (!app_libpaths->contains(installPathPlugins)) {
             app_libpaths->append(installPathPlugins);
@@ -1579,21 +1601,24 @@ QStringList QCoreApplication::libraryPaths()
 
       const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
       if (!libPathEnv.isEmpty()) {
+
 #if defined(Q_OS_WIN)
          QLatin1Char pathSep(';');
 #else
          QLatin1Char pathSep(':');
 #endif
-         QStringList paths = QString::fromLatin1(libPathEnv).split(pathSep, QString::SkipEmptyParts);
+         QStringList paths = QString::fromLatin1(libPathEnv).split(pathSep, QStringParser::SkipEmptyParts);
+
          for (QStringList::const_iterator it = paths.constBegin(); it != paths.constEnd(); ++it) {
             QString canonicalPath = QDir(*it).canonicalPath();
-            if (!canonicalPath.isEmpty()
-                  && !app_libpaths->contains(canonicalPath)) {
+
+            if (!canonicalPath.isEmpty() && !app_libpaths->contains(canonicalPath)) {
                app_libpaths->append(canonicalPath);
             }
          }
       }
    }
+
    return *(coreappdata()->app_libpaths);
 }
 

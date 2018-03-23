@@ -23,11 +23,9 @@
 #ifndef QCOREAPPLICATION_P_H
 #define QCOREAPPLICATION_P_H
 
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qtranslator.h>
-#include <QtCore/qsettings.h>
-
-QT_BEGIN_NAMESPACE
+#include <qcoreapplication.h>
+#include <qtranslator.h>
+#include <qsettings.h>
 
 typedef QList<QTranslator *> QTranslatorList;
 
@@ -95,17 +93,16 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static bool is_app_closing;
 
    static uint attribs;
+
    static inline bool testAttribute(uint flag) {
       return attribs & (1 << flag);
    }
-   static int app_compile_version;
+
    static QSettings *copperspiceConf();
 
  protected:
    QCoreApplication *q_ptr;
 
 };
-
-QT_END_NAMESPACE
 
 #endif // QCOREAPPLICATION_P_H

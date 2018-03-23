@@ -23,21 +23,18 @@
 #include <qobject.h>
 #include <csmeta.h>
 #include <qmetaobject.h>
+#include <qstringlist.h>
+#include <qstringparser.h>
 
-#include <QByteArray>
-#include <QStringList>
-
-QMetaEnum::QMetaEnum(const char *name, const char *scope, bool isFlag)
+QMetaEnum::QMetaEnum(const QString8 &name, const QString8 &scope, bool isFlag)
+   : m_name(name), m_scope(scope), m_flag(isFlag)
 {
-   m_name  = name;
-   m_scope = scope;
-   m_flag  = isFlag;
 }
 
 QMetaEnum::QMetaEnum()
 {
-   m_name  = 0;
-   m_scope = 0;
+   m_name  = QString8();
+   m_scope = QString8();
 }
 
 bool QMetaEnum::isFlag() const
@@ -47,21 +44,20 @@ bool QMetaEnum::isFlag() const
 
 bool QMetaEnum::isValid() const
 {
-   return (this->name() != 0);
+   return m_name.isEmpty();
 }
 
-const char *QMetaEnum::key(int index) const
+const QString8 &QMetaEnum::key(int index) const
 {
    if (index < 0 || index >= m_data.size() ) {
-      return 0;
+      static QString8 retval;
+      return retval;
    }
 
    auto elem = m_data.begin();
    elem += index;
 
-   const char *retval = elem.key().constData();
-
-   return retval;
+   return elem.key();
 }
 
 int QMetaEnum::keyCount() const
@@ -70,9 +66,9 @@ int QMetaEnum::keyCount() const
    return count;
 }
 
-int QMetaEnum::keyToValue(const char *key) const
+int QMetaEnum::keyToValue(const QString8 &key) const
 {
-   if (! key) {
+   if (key.isEmpty()) {
       return -1;
    }
 
@@ -90,33 +86,30 @@ int QMetaEnum::keyToValue(const char *key) const
    return retval;
 }
 
-int QMetaEnum::keysToValue(const char *keys) const
+int QMetaEnum::keysToValue(const QString8 &keys) const
 {
    int value = 0;
+   QList<QString8> list = keys.split('|');
 
-   QByteArray temp = keys;
-   QList<QByteArray> tList = temp.split('|');
-
-   for (auto elem = tList.begin(); elem != tList.end(); ++elem) {
-      temp  = elem->trimmed();
-      value |= keyToValue(temp.constData());
+   for (auto elem : list) {
+      value |= keyToValue(elem.trimmed());
    }
 
    return value;
 }
 
-const char *QMetaEnum::name() const
+const QString8 &QMetaEnum::name() const
 {
    return m_name;
 }
 
 // internal
-void QMetaEnum::setData(QMap<QByteArray, int> valueMap)
+void QMetaEnum::setData(QMap<QString8, int> valueMap)
 {
    m_data = valueMap;
 }
 
-const char *QMetaEnum::scope() const
+const QString8 &QMetaEnum::scope() const
 {
    return m_scope;
 }
@@ -133,24 +126,23 @@ int QMetaEnum::value(int index) const
    return elem.value();
 }
 
-const char *QMetaEnum::valueToKey(int value) const
+const QString8 &QMetaEnum::valueToKey(int value) const
 {
-   const char *retval = 0;
-
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 
       if (elem.value() == value) {
-         retval = elem.key().constData();
-         break;
+         return elem.key();
       }
    }
+
+   static const QString8 retval;
 
    return retval;
 }
 
-QByteArray QMetaEnum::valueToKeys(int value) const
+QString8 QMetaEnum::valueToKeys(int value) const
 {
-   QByteArray keys = "";
+   QString8 keys;
 
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 

@@ -56,7 +56,7 @@
 #  undef old_qDebug
 #endif
 
-#include <qstring.h>
+#include <qstring8.h>
 
 QT_BEGIN_NAMESPACE
 

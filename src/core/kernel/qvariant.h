@@ -31,11 +31,13 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qmetatype.h>
-#include <qstring.h>
+#include <qstring8.h>
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
+template<typename S>
+class QRegularExpression;
+using QRegularExpression8 = QRegularExpression<QString8>;
 
 class QBitArray;
 class QDataStream;
@@ -43,7 +45,6 @@ class QDate;
 class QDateTime;
 class QDebug;
 class QEasingCurve;
-class QLatin1String;
 class QLine;
 class QLineF;
 class QLocale;
@@ -57,11 +58,6 @@ class QSize;
 class QSizeF;
 class QRect;
 class QRectF;
-
-#ifndef QT_NO_REGEXP
-class QRegExp;
-#endif
-
 class QTextFormat;
 class QTextLength;
 class QUrl;
@@ -75,37 +71,41 @@ class Q_CORE_EXPORT QVariant
 {
  public:
    enum Type {
-      Invalid = QMetaType::UnknownType,
+      Invalid    = QMetaType::UnknownType,
 
-      Bool      = QMetaType::Bool,
-      Int       = QMetaType::Int,
-      UInt      = QMetaType::UInt,
-      LongLong  = QMetaType::LongLong,
-      ULongLong = QMetaType::ULongLong,
-      Double    = QMetaType::Double,
+      Bool       = QMetaType::Bool,
+      Int        = QMetaType::Int,
+      UInt       = QMetaType::UInt,
+      LongLong   = QMetaType::LongLong,
+      ULongLong  = QMetaType::ULongLong,
+      Double     = QMetaType::Double,
 
-      Char      = QMetaType::QChar,
-      Char32    = QMetaType::QChar32,
-
-      List      = QMetaType::QVariantList,
-      Map       = QMetaType::QVariantMap,
-      MultiMap  = QMetaType::QVariantMultiMap,
-      Hash      = QMetaType::QVariantHash,
-      MultiHash = QMetaType::QVariantMultiHash,
-
-      String    = QMetaType::QString,
-      String8   = QMetaType::QString8,
-      String16  = QMetaType::QString16,
-
-      StringList = QMetaType::QStringList,
       ByteArray  = QMetaType::QByteArray,
       BitArray   = QMetaType::QBitArray,
 
-      Date = QMetaType::QDate,
-      Time = QMetaType::QTime,
-      DateTime = QMetaType::QDateTime,
-      Url = QMetaType::QUrl,
-      Locale = QMetaType::QLocale,
+      Char       = QMetaType::QChar,
+      Char32     = QMetaType::QChar32,
+
+      String     = QMetaType::QString,
+      String8    = QMetaType::QString8,
+      String16   = QMetaType::QString16,
+
+      RegularExpression = QMetaType::QRegularExpression,
+      StringView        = QMetaType::QStringView,
+
+      StringList = QMetaType::QStringList,
+      List       = QMetaType::QVariantList,
+      Map        = QMetaType::QVariantMap,
+      MultiMap   = QMetaType::QVariantMultiMap,
+      Hash       = QMetaType::QVariantHash,
+      MultiHash  = QMetaType::QVariantMultiHash,
+
+      Date       = QMetaType::QDate,
+      Time       = QMetaType::QTime,
+      DateTime   = QMetaType::QDateTime,
+      Url        = QMetaType::QUrl,
+      Locale     = QMetaType::QLocale,
+
       Rect = QMetaType::QRect,
       RectF = QMetaType::QRectF,
       Size = QMetaType::QSize,
@@ -114,9 +114,7 @@ class Q_CORE_EXPORT QVariant
       LineF = QMetaType::QLineF,
       Point = QMetaType::QPoint,
       PointF = QMetaType::QPointF,
-      RegExp = QMetaType::QRegExp,
       EasingCurve = QMetaType::QEasingCurve,
-
       Uuid = QMetaType::QUuid,
       ModelIndex = QMetaType::QModelIndex,
 
@@ -163,9 +161,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(int typeOrUserType, const void *copy, uint flags);
    QVariant(const QVariant &other);
 
-#ifndef QT_NO_DATASTREAM
    QVariant(QDataStream &s);
-#endif
 
    QVariant(int i);
    QVariant(uint ui);
@@ -182,14 +178,19 @@ class Q_CORE_EXPORT QVariant
 
    QVariant(const QByteArray &bytearray);
    QVariant(const QBitArray &bitarray);
-   QVariant(const QString &string);
-   QVariant(const QLatin1String &string);
-   QVariant(const QStringList &stringlist);
-   QVariant(const QChar &qchar);
+
+   QVariant(const QChar32 &qchar);
+   QVariant(const QString8 &string);
+   QVariant(const QString16 &string);
+
+   QVariant(const QRegularExpression8 &regExp);
+ 
    QVariant(const QDate &date);
    QVariant(const QTime &time);
    QVariant(const QDateTime &datetime);
+
    QVariant(const QList<QVariant> &list);
+   QVariant(const QStringList &stringlist);
 
    QVariant(const QMap<QString, QVariant> &map);
    QVariant(const QHash<QString, QVariant> &hash);
@@ -206,10 +207,6 @@ class Q_CORE_EXPORT QVariant
    QVariant(const QRectF &rect);
 
    QVariant(const QLocale &locale);
-
-#ifndef QT_NO_REGEXP
-   QVariant(const QRegExp &regExp);
-#endif
 
    QVariant(const QUrl &url);
    QVariant(const QEasingCurve &easing);
@@ -234,7 +231,7 @@ class Q_CORE_EXPORT QVariant
 
    Type type() const;
    int userType() const;
-   const char *typeName() const;
+   const QString8 &typeName() const;
 
    bool canConvert(Type t) const;
    bool convert(Type t);
@@ -258,14 +255,20 @@ class Q_CORE_EXPORT QVariant
 
    QByteArray toByteArray() const;
    QBitArray toBitArray() const;
-   QString toString() const;
+
+   QChar32 toChar() const;
+   QString8 toString() const;
+   QString16 toString16() const;
+
+   QList<QVariant> toList() const;
    QStringList toStringList() const;
-   QChar toChar() const;
+
+   QRegularExpression8 toRegularExpression() const; 
+
    QDate toDate() const;
    QTime toTime() const;
    QDateTime toDateTime() const;
-   QList<QVariant> toList() const;
-
+ 
    QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
    QMultiMap<QString, QVariant> toMultiMap() const;
@@ -281,11 +284,6 @@ class Q_CORE_EXPORT QVariant
    QRectF toRectF() const;
 
    QLocale toLocale() const;
-
-#ifndef QT_NO_REGEXP
-   QRegExp toRegExp() const;
-#endif
-
    QUrl toUrl() const;
    QEasingCurve toEasingCurve() const;
    QUuid toUuid() const;
@@ -295,16 +293,15 @@ class Q_CORE_EXPORT QVariant
    QJsonArray toJsonArray() const;
    QJsonDocument toJsonDocument() const;
 
-#ifndef QT_NO_DATASTREAM
    void load(QDataStream &ds);
    void save(QDataStream &ds) const;
-#endif
 
-   static const char *typeToName(Type type);
-   static Type nameToType(const char *name);
+   static const QString8 &typeToName(Type type);
+   static Type nameToType(const QString8 &name);
 
    void *data();
    const void *constData() const;
+
    inline const void *data() const {
       return constData();
    }
@@ -374,23 +371,20 @@ class Q_CORE_EXPORT QVariant
    typedef void (*f_clear)(Private *);
    typedef bool (*f_null)(const Private *);
 
-#ifndef QT_NO_DATASTREAM
    typedef void (*f_load)(Private *, QDataStream &);
    typedef void (*f_save)(const Private *, QDataStream &);
-#endif
 
    typedef bool (*f_compare)(const Private *, const Private *);
    typedef bool (*f_convert)(const QVariant::Private *d, Type t, void *, bool *);
    typedef bool (*f_canConvert)(const QVariant::Private *d, Type t);
    typedef void (*f_debugStream)(QDebug, const QVariant &);
+
    struct Handler {
       f_construct construct;
       f_clear clear;
       f_null isNull;
-#ifndef QT_NO_DATASTREAM
       f_load load;
       f_save save;
-#endif
       f_compare compare;
       f_convert convert;
       f_canConvert canConvert;
@@ -479,12 +473,10 @@ inline void QVariant::setValue(const QVariant &v)
    *this = v;
 }
 
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
-#endif
 
 inline bool QVariant::isDetached() const
 {
@@ -540,30 +532,14 @@ template<> inline QVariant qvariant_cast<QVariant>(const QVariant &v)
    return v;
 }
 
-#ifdef QT_DEPRECATED
-template<typename T>
-inline QT_DEPRECATED T qVariantValue(const QVariant &variant)
-{
-   return qvariant_cast<T>(variant);
-}
-
-template<typename T>
-inline QT_DEPRECATED bool qVariantCanConvert(const QVariant &variant)
-{
-   return variant.template canConvert<T>();
-}
-#endif
-
 Q_DECLARE_SHARED(QVariant)
 Q_DECLARE_TYPEINFO(QVariant, Q_MOVABLE_TYPE);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
 
-QT_END_NAMESPACE
-
 Q_DECLARE_BUILTIN_METATYPE(QVariantList, QVariantList)
 Q_DECLARE_BUILTIN_METATYPE(QVariantMap,  QVariantMap)
 Q_DECLARE_BUILTIN_METATYPE(QVariantHash, QVariantHash)
 
-#endif // QVARIANT_H
+#endif

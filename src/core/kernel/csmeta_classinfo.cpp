@@ -23,18 +23,18 @@
 #include <qobject.h>
 #include <csmeta.h>
 
-QMetaClassInfo::QMetaClassInfo(const char *name, const char *value)
+QMetaClassInfo::QMetaClassInfo(const QString8 &name, const QString8 &value)
 {
    m_name  = name;
    m_value = value;
 }
 
-const char *QMetaClassInfo::name() const
+const QString8 &QMetaClassInfo::name() const
 {
    return m_name;
 }
 
-const char *QMetaClassInfo::value() const
+const QString8 &QMetaClassInfo::value() const
 {
    return m_value;
 }

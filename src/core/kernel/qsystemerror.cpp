@@ -20,27 +20,28 @@
 *
 ***********************************************************************/
 
+#include <errno.h>
+
 #include <qglobal.h>
 #include <qlog.h>
 #include <qsystemerror_p.h>
-
-#include <errno.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
-#if !defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
+#if ! defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
+
 namespace {
 
 static inline QString fromstrerror_helper(int, const QByteArray &buf)
 {
-   return QString::fromLocal8Bit(buf);
+   return QString::fromUtf8(buf);
 }
 
 static inline QString fromstrerror_helper(const char *str, const QByteArray &)
 {
-   return QString::fromLocal8Bit(str);
+   return QString::fromUtf8(str);
 }
 }
 #endif
@@ -49,17 +50,16 @@ static inline QString fromstrerror_helper(const char *str, const QByteArray &)
 static QString windowsErrorString(int errorCode)
 {
    QString ret;
-   wchar_t *string = 0;
+   wchar_t *buffer = 0;
 
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                 NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                 (LPWSTR)&string, 0, NULL);
+                 NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, NULL);
 
-   ret = QString::fromWCharArray(string);
-   LocalFree((HLOCAL)string);
+   ret = QString::fromStdWString(std::wstring(buffer));
+   LocalFree((HLOCAL)buffer);
 
    if (ret.isEmpty() && errorCode == ERROR_MOD_NOT_FOUND) {
-      ret = QString::fromLatin1("The specified module could not be found.");
+      ret = QString("The specified module could not be found.");
    }
    return ret;
 }
@@ -69,6 +69,7 @@ static QString standardLibraryErrorString(int errorCode)
 {
    const char *s = 0;
    QString ret;
+
    switch (errorCode) {
       case 0:
          break;
@@ -95,7 +96,7 @@ static QString standardLibraryErrorString(int errorCode)
          QByteArray buf(1024, '\0');
          ret = fromstrerror_helper(strerror_r(errorCode, buf.data(), buf.size()), buf);
 #else
-         ret = QString::fromLocal8Bit(strerror(errorCode));
+         ret = QString::fromUtf8(strerror(errorCode));
 #endif
 
          break;

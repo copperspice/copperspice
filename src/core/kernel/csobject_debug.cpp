@@ -35,7 +35,7 @@ static void dumpRecursive(int level, QObject *object)
          buffer += "    ";
       }
 
-      qDebug("%s%s::%s", buffer.constData(), object->metaObject()->className(), csPrintable(object->objectName()));
+      qDebug("%s%s::%s", buffer.constData(), csPrintable(object->metaObject()->className()), csPrintable(object->objectName()));
 
       QList<QObject *> children = object->children();
 
@@ -62,10 +62,7 @@ void QObject::dumpObjectInfo()
 
 #if defined(QT_DEBUG)
    qDebug("\n--  dumpObjectInfo  --\n");
-
-   qDebug("  OBJECT %s::%s", this->metaObject()->className(),
-          objectName().isEmpty() ? "unnamed" : objectName().toLocal8Bit().data());
-
+   qDebug("  OBJECT %s::%s", this->metaObject()->className(), objectName().isEmpty() ? "unnamed" : objectName().toUtf8().constData());
    qDebug("  SIGNAL LIST - CONNECTED TO WHICH RECEIVERS");
 
    const QMetaObject *metaObject = this->metaObject();
@@ -91,7 +88,7 @@ void QObject::dumpObjectInfo()
          if (obj) {
             const QMetaObject *receiverMetaObject = obj->metaObject();
 
-            // broom - review again (on hold, ok)
+            // broom - ok to have on hold
             // const QMetaMethod slotMetaMethod      = receiverMetaObject->method(*temp.slotMethod);
 
             qDebug("          --> %s::%s",

@@ -181,7 +181,7 @@ std::atomic<QtSharedPointer::ExternalRefCountData *> &CSInternalRefCount::get_m_
 
 
 // **
-bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const char *signal)
+bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const QString8 &signal)
 {
    if (! object) {
       return false;
@@ -191,7 +191,7 @@ bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, 
 }
 
 
-QList<QObject *> CSInternalSender::receiverList(const QObject *object, const char *signal)
+QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QString8 &signal)
 {
    if (! object) {
       return QList<QObject *> {};
@@ -265,8 +265,8 @@ void QObject::internal_reregisterTimers(QList< std::pair<int, int> > timerList)
 
 // classes
 CS_REGISTER_CLASS(QAbstractState)
+CS_REGISTER_CLASS(QChar32)
 CS_REGISTER_CLASS(QColor)
-CS_REGISTER_CLASS(QChar)
 CS_REGISTER_CLASS(QCursor)
 CS_REGISTER_CLASS(QBitmap)
 CS_REGISTER_CLASS(QBrush)
@@ -302,12 +302,12 @@ CS_REGISTER_CLASS(QPixmap)
 CS_REGISTER_CLASS(QRect)
 CS_REGISTER_CLASS(QRectF)
 CS_REGISTER_CLASS(QRegion)
-CS_REGISTER_CLASS(QRegExp)
 CS_REGISTER_CLASS(QSize)
 CS_REGISTER_CLASS(QSizeF)
 CS_REGISTER_CLASS(QSizePolicy)
 CS_REGISTER_CLASS(QState)
-CS_REGISTER_CLASS(QString)
+CS_REGISTER_CLASS(QString8)
+CS_REGISTER_CLASS(QString16)
 CS_REGISTER_CLASS(QStringList)
 CS_REGISTER_CLASS(QStyleOption)
 CS_REGISTER_CLASS(QStyleOptionViewItem)

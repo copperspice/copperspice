@@ -49,7 +49,7 @@ class Q_CORE_EXPORT QTimer : public QObject
    inline int interval() const;
 
    inline void setSingleShot(bool singleShot);
-   static void singleShot(int msec, QObject *receiver, const char *member);
+   static void singleShot(int msec, QObject *receiver, const QString8 &member);
    inline bool isSingleShot() const;
 
    CORE_CS_SLOT_1(Public, void start(int msec))

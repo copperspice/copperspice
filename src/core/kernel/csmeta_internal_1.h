@@ -23,9 +23,11 @@
 #ifndef CSMETA_INTERNAL_1_H
 #define CSMETA_INTERNAL_1_H
 
+// include first, do not move
+#include <qstring8.h>
+
 #include <qmetatype.h>
 #include <qvariant.h>
-#include <qstring.h>
 
 #include <initializer_list>
 #include <functional>
@@ -37,7 +39,7 @@ class QObject;
 class QMetaObject;
 
 template<class T1>
-const char *cs_typeName();
+const QString8 &cs_typeName();
 
 // csArgument
 template <typename T>
@@ -45,14 +47,14 @@ class CSArgument
 {
  public:
    CSArgument(const T &data);
-   CSArgument(const T &data, const char *typeName);
+   CSArgument(const T &data, const QString8 &typeName);
 
    T getData() const;
-   const char *getTypeName() const;
+   const QString8 &getTypeName() const;
 
  private:
    T m_data;
-   const char *m_typeName;
+   QString8 m_typeName;
 };
 
 template <typename T>
@@ -62,7 +64,7 @@ CSArgument<T>::CSArgument(const T &data)
 }
 
 template <typename T>
-CSArgument<T>::CSArgument(const T &data, const char *typeName)
+CSArgument<T>::CSArgument(const T &data, const QString8 &typeName)
    : m_data(data), m_typeName(typeName)
 {
 }
@@ -74,27 +76,30 @@ T CSArgument<T>::getData() const
 }
 
 template <typename T>
-const char *CSArgument<T>::getTypeName() const
+const QString8 &CSArgument<T>::getTypeName() const
 {
    return m_typeName;
 }
 
-inline const char *cs_argName()
+inline const QString8 &cs_argName()
 {
-   return "";
+   static QString8 retval("");
+   return retval;
 }
 
 template <typename T>
-const char *cs_argName(const CSArgument<T> &data)
+const QString8 &cs_argName(const CSArgument<T> &data)
 {
    return data.getTypeName();
 }
 
 template<class T1, class T2, class ...Ts>
-const char *cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &data2, const CSArgument<Ts> &... dataX)
+const QString8 &cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &data2, const CSArgument<Ts> &... dataX)
 {
-   static QByteArray temp = QByteArray( cs_argName(data1) ) + "," + cs_argName(data2, dataX...);
-   return temp.constData();
+   static thread_local QString8 argName;
+   argName = cs_argName(data1) + "," + cs_argName(data2, dataX...);
+
+   return argName;
 }
 
 // csGeneric
@@ -445,7 +450,7 @@ class CSBentoAbstract : public virtual CsSignal::Internal::BentoAbstract
 {
    public:
       using CsSignal::Internal::BentoAbstract::invoke;
-      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+      virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval = 0) const = 0;
 
       virtual bool checkReturnType(CSGenericReturnArgument &retval) const = 0;
@@ -455,51 +460,51 @@ template<class T>
 class CSBento : public CSBentoAbstract, public CsSignal::Internal::Bento<T>
 {
    public:
-      CSBento(T ptr);   
+      CSBento(T ptr);
 
-      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
-      
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override;
+
       using CsSignal::Internal::Bento<T>::invoke;
-      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval = 0) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
 template<class FunctionReturn, class ...FunctionArgs>
-class CSBento<FunctionReturn (*)(FunctionArgs...)> : public CSBentoAbstract, 
+class CSBento<FunctionReturn (*)(FunctionArgs...)> : public CSBentoAbstract,
                   public CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>
 {
    public:
       CSBento(FunctionReturn (*ptr)(FunctionArgs...));
 
-      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override;
 
       using CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>::invoke;
-      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                  CSGenericReturnArgument *retval = 0) const override;
-
-      bool checkReturnType(CSGenericReturnArgument &retval) const override;      
-};
-
-template<class MethodClass, class MethodReturn, class...MethodArgs>
-class CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>: public CSBentoAbstract, 
-                  public CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>
-{
-   public:
-      CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
-
-      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
-
-      using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke;
-      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval = 0) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBentoAbstract, 
+class CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>: public CSBentoAbstract,
+                  public CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>
+{
+   public:
+      CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) );
+
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override;
+
+      using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke;
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
+                  CSGenericReturnArgument *retval = 0) const override;
+
+      bool checkReturnType(CSGenericReturnArgument &retval) const override;
+};
+
+template<class MethodClass, class MethodReturn, class...MethodArgs>
+class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBentoAbstract,
                   public CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>
 {
    // specialization, pointer to const method
@@ -507,12 +512,12 @@ class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBento
    public:
       CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...) const);
 
-      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override; 
-      
+      std::unique_ptr<CsSignal::Internal::BentoAbstract> clone() const override;
+
       using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke;
-      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
-                     CSGenericReturnArgument *retval = 0) const override; 
-      
+      void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
+                     CSGenericReturnArgument *retval = 0) const override;
+
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
 
@@ -527,11 +532,11 @@ CSBento<T>::CSBento(T lambda)
 template<class T>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<T>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<T>>(*this); 
+   return CsSignal::Internal::make_unique<CSBento<T>>(*this);
 }
 
 template<class T>
-void CSBento<T>::invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack, 
+void CSBento<T>::invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval) const
 {
    // T must be a class, will be a compiler error otherwise
@@ -555,7 +560,7 @@ bool CSBento<T>::checkReturnType(CSGenericReturnArgument &retval) const
 
 // (2) specialization, function pointer
 template<class FunctionReturn, class ...FunctionArgs>
-CSBento<FunctionReturn (*)(FunctionArgs...)>::CSBento(FunctionReturn (*ptr)(FunctionArgs...)) 
+CSBento<FunctionReturn (*)(FunctionArgs...)>::CSBento(FunctionReturn (*ptr)(FunctionArgs...))
    : CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>(ptr)
 {
 }
@@ -563,11 +568,11 @@ CSBento<FunctionReturn (*)(FunctionArgs...)>::CSBento(FunctionReturn (*ptr)(Func
 template<class FunctionReturn, class ...FunctionArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<FunctionReturn (*)(FunctionArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<FunctionReturn (*)(FunctionArgs...)>>(*this); 
+   return CsSignal::Internal::make_unique<CSBento<FunctionReturn (*)(FunctionArgs...)>>(*this);
 }
 
 template<class FunctionReturn, class ...FunctionArgs>
-void CSBento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *, 
+void CSBento<FunctionReturn (*)(FunctionArgs...)>::invoke(QObject *,
                   const CsSignal::Internal::TeaCupAbstract *dataPack, CSGenericReturnArgument *retval) const
 {
    // no need to verify receiver since it is not used
@@ -613,7 +618,7 @@ bool CSBento<FunctionReturn (*)(FunctionArgs...)>::checkReturnType(CSGenericRetu
 
 // (3) specialization, method pointer
 template<class MethodClass, class MethodReturn, class...MethodArgs>
-CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...)) 
+CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::CSBento(MethodReturn(MethodClass::*ptr)(MethodArgs...))
    : CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>(ptr)
 {
 }
@@ -621,7 +626,7 @@ CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::CSBento(MethodReturn(Metho
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this); 
+   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>
@@ -687,7 +692,7 @@ CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::CSBento(MethodReturn
 template<class MethodClass, class MethodReturn, class...MethodArgs>
 std::unique_ptr<CsSignal::Internal::BentoAbstract> CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>::clone() const
 {
-   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this); 
+   return CsSignal::Internal::make_unique<CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>>(*this);
 }
 
 template<class MethodClass, class MethodReturn, class ...MethodArgs>

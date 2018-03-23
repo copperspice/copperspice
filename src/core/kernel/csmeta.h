@@ -25,67 +25,59 @@
 
 #include <csmeta_internal_1.h>
 
-#include <QByteArray>
-#include <QList>
-#include <QMap>
-#include <QVariant>
+#include <qlist.h>
+#include <qmap.h>
+#include <qstring8.h>
+#include <qvariant.h>
 
 #include <utility>
 #include <tuple>
-
-QT_BEGIN_NAMESPACE
 
 class QMetaObject;
 
 class Q_CORE_EXPORT QMetaClassInfo
 {
  public:
-   QMetaClassInfo(const char *name, const char *value);
+   QMetaClassInfo(const QString8 &name, const QString8 &value);
 
-   const char *name() const;
-   const char *value() const;
+   const QString8 &name() const;
+   const QString8 &value() const;
 
  private:
-   const char *m_name;
-   const char *m_value;
+   QString8 m_name;
+   QString8 m_value;
 };
-
-Q_DECLARE_TYPEINFO(QMetaClassInfo, Q_MOVABLE_TYPE);
-
 
 class Q_CORE_EXPORT QMetaEnum
 {
  public:
-   QMetaEnum(const char *name, const char *scope, bool isFlag);
+   QMetaEnum(const QString8 &name, const QString8 &scope, bool isFlag);
    QMetaEnum();
 
    bool isFlag() const;
    bool isValid() const;
 
-   const char *key(int index) const;
+   const QString8 &key(int index) const;
    int keyCount() const;
-   int keyToValue(const char *key) const;
-   int keysToValue(const char *keys) const;
+   int keyToValue(const QString8 &key) const;
+   int keysToValue(const QString8 &keys) const;
 
-   const char *name() const;
-   const char *scope() const;
+   const QString8 &name() const;
+   const QString8 &scope() const;
 
-   void setData(QMap<QByteArray, int> valueMap);
+   void setData(QMap<QString8, int> valueMap);
 
    int value(int index) const;
-   const char *valueToKey(int value) const;
-   QByteArray valueToKeys(int value) const;
+   const QString8 &valueToKey(int value) const;
+   QString8 valueToKeys(int value) const;
 
  private:
-   const char *m_name;
-   const char *m_scope;
-   bool m_flag;
+   QString8 m_name;
+   QString8 m_scope;
+   bool     m_flag;
 
-   QMap<QByteArray, int> m_data;
+   QMap<QString8, int> m_data;
 };
-
-Q_DECLARE_TYPEINFO(QMetaEnum, Q_MOVABLE_TYPE);
-
 
 class Q_CORE_EXPORT QMetaMethod
 {
@@ -94,7 +86,7 @@ class Q_CORE_EXPORT QMetaMethod
    enum MethodType { Method, Signal, Slot, Constructor };
    enum Attributes { Compatibility = 0x1, Cloned = 0x2, Scriptable = 0x4 };   // internal
 
-   QMetaMethod(const char *typeName, const QByteArray &signature, QList<QByteArray> paramNames,
+   QMetaMethod(const QString8 &typeName, const QString8 &signature, std::vector<QString8> paramNames,
                Access access, MethodType methodType, Attributes attributes, QMetaObject *obj);
 
    QMetaMethod();
@@ -108,29 +100,29 @@ class Q_CORE_EXPORT QMetaMethod
    static QMetaMethod fromSignal(void (SignalClass::* signalMethod)(SignalArgs ...) );
 
    const CSBentoAbstract *getBentoBox() const;
-
    const QMetaObject *getMetaObject() const;
 
-   QByteArray name() const;
+   const QString8 name() const;
 
    int methodIndex() const;
    MethodType methodType() const;
 
-   QList<QByteArray> parameterNames() const;
-   QList<QByteArray> parameterTypes() const;
+   QList<QString8> parameterNames() const;
+   QList<QString8> parameterTypes() const;
 
    int parameterCount() const;
    int parameterType(int index) const;
 
-   QByteArray methodSignature() const;
-   const char *typeName() const;
+   const QString8 &methodSignature() const;
+   const QString8 &typeName() const;
 
    int revision() const;
    void setRevision(int revision);
 
    void setBentoBox(const CSBentoAbstract *method);
-   void setTag(const char *data);
-   const char *tag() const;
+
+   void setTag(const QString8 &data);
+   const QString8 &tag() const;
 
    template<class R, class ...Ts>
    bool invoke(QObject *object, Qt::ConnectionType type, CSReturnArgument<R> retval, Ts &&... Vs) const;
@@ -146,17 +138,17 @@ class Q_CORE_EXPORT QMetaMethod
 
  private:
    int m_revision;
-   const char *m_typeName;
+   QString8 m_typeName;
+   QString8 m_signature;
 
-   QByteArray m_signature;
-   QList<QByteArray> m_paramNames;
+   QList<QString8> m_paramNames;
 
    MethodType   m_methodType;
    Attributes   m_attributes;
    QMetaObject *m_metaObject;
-
    Access       m_access;
-   const char  *m_tag;
+
+   QString8 m_tag;
    const CSBentoAbstract *m_bento;
 
    friend bool operator==(const QMetaMethod &m1, const QMetaMethod &m2);
@@ -190,15 +182,15 @@ class Q_CORE_EXPORT QMetaProperty
                STORED, USER, CONSTANT, FINAL
              };
 
-   QMetaProperty(const char *name = 0, QMetaObject *obj = 0 );
+   QMetaProperty(const QString8 &name = QString8(), QMetaObject *obj = nullptr);
 
    bool isReadable() const;
    bool isWritable() const;
    bool isResettable() const;
-   bool isDesignable(const QObject *obj = 0) const;
-   bool isScriptable(const QObject *obj = 0) const;
-   bool isStored(const QObject *obj = 0) const;
-   bool isUser(const QObject *obj = 0) const;
+   bool isDesignable(const QObject *obj = nullptr) const;
+   bool isScriptable(const QObject *obj = nullptr) const;
+   bool isStored(const QObject *obj = nullptr) const;
+   bool isUser(const QObject *obj = nullptr) const;
    bool isConstant() const;
    bool isFinal() const;
    bool isValid() const;
@@ -210,7 +202,7 @@ class Q_CORE_EXPORT QMetaProperty
    bool hasNotifySignal() const;
    bool hasStdCppSet() const;
 
-   const char *name() const;
+   const QString8 &name() const;
    QMetaMethod notifySignal() const;
    int notifySignalIndex() const;
    int propertyIndex() const;
@@ -226,15 +218,15 @@ class Q_CORE_EXPORT QMetaProperty
    void setConstant();
    void setFinal();
    void setRevision(int value);
-   void setTypeName(const char *typeName);
+   void setTypeName(const QString8 &typeName);
 
-   const char *typeName() const;
+   const QString8 &typeName() const;
    QVariant::Type type() const;
    int userType() const;
    bool write(QObject *obj, const QVariant &value) const;
 
    // properties
-   void setReadMethod(const char *typeName, JarReadAbstract *jarRead);
+   void setReadMethod(const QString8 &typeName, JarReadAbstract *jarRead);
    void setWriteMethod(JarWriteAbstract *method);
 
    template<class T>
@@ -249,9 +241,9 @@ class Q_CORE_EXPORT QMetaProperty
    void setUser(JarReadAbstract *method);
 
  private:
-   const char *m_name;
    QMetaObject *m_metaObject;
-   const char *m_typeName;
+   QString8 m_name;
+   QString8 m_typeName;
 
    bool m_read_able;
    bool m_write_able;
@@ -316,7 +308,7 @@ template <class T, class = void>
 class Q_CORE_EXPORT cs_typeName_internal
 {
    public:
-      static const char *typeName();
+      static const QString8 &typeName();
 };
 
 
@@ -325,10 +317,11 @@ class Q_CORE_EXPORT cs_typeName_internal
 // cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
 #define CS_REGISTER_CLASS(dataType) \
    class dataType; \
-   Q_CORE_EXPORT const char * cs_typeName_internal<dataType, void>::typeName() \
+   Q_CORE_EXPORT const QString8 &cs_typeName_internal<dataType, void>::typeName() \
    { \
-      return #dataType; \
-   } \
+      static QString8 retval(#dataType); \
+      return retval; \
+   }
 
 
 // cs_typeName_internal<dataType> is specialization of a templated class
@@ -338,17 +331,18 @@ class Q_CORE_EXPORT cs_typeName_internal
    class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
    { \
       public: \
-         static const char *typeName(); \
+         static const QString8 &typeName(); \
    };
 
 
 #define CS_REGISTER_TYPE(dataType) \
    template <>  \
-   Q_CORE_EXPORT const char * cs_typeName_internal<dataType,void>::typeName() \
+   Q_CORE_EXPORT const QString8 &cs_typeName_internal<dataType,void>::typeName() \
    { \
-      return #dataType; \
+      static QString8 retval(#dataType); \
+      return retval; \
    } \
-   template const char *cs_typeName_internal<dataType,void>::typeName();
+   template const QString8 &cs_typeName_internal<dataType,void>::typeName();
 
 
 #define CS_REGISTER_TEMPLATE(dataType) \
@@ -356,13 +350,13 @@ class Q_CORE_EXPORT cs_typeName_internal
    class cs_typeName_internal< dataType<Ts...> >  \
    { \
       public:  \
-         static const char * typeName();  \
+         static const QString8 &typeName();  \
    };  \
    template<class... Ts> \
-   const char * cs_typeName_internal< dataType<Ts...> >::typeName() \
+   const QString8 &cs_typeName_internal< dataType<Ts...> >::typeName() \
    { \
-      static QByteArray temp = QByteArray(#dataType) + "<" + cs_typeName<Ts...>() + ">";  \
-      return temp.constData(); \
+      static QString8 retval(QString8(#dataType) + "<" + cs_typeName<Ts...>() + ">");  \
+      return retval; \
    }
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
@@ -370,14 +364,14 @@ template<class E>
 class cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
-   static const char *typeName();
+   static const QString8 &typeName();
 };
 
 template<class E>
 class cs_typeName_internal< QFlags<E> >
 {
  public:
-   static const char *typeName();
+   static const QString8 &typeName();
 };
 
 
@@ -387,11 +381,11 @@ class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObj
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
-   static const char *typeName();
+   static const QString8 &typeName();
 };
 
 template<class T>
-inline const char *cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject ,
+inline const QString8 &cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject ,
        typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >::typeName()
 {
    return T::staticMetaObject().className();
@@ -402,22 +396,22 @@ inline const char *cs_typeName_internal<T, typename std::enable_if< std::is_base
 class cs_internalEmpty;
 
 template<class T1 = cs_internalEmpty>
-const char *cs_typeName()
+const QString8 &cs_typeName()
 {
    if (std::is_same<T1, cs_internalEmpty>::value) {
-      return "";
+      static QString8 retval("");
+      return retval;
 
    } else {
-      static QByteArray temp = QByteArray( cs_typeName_internal<T1>::typeName() );
-      return temp.constData();
+      return cs_typeName_internal<T1>::typeName();
    }
 }
 
 template<class T1, class T2, class ...Ts>
-const char *cs_typeName()
+const QString8 &cs_typeName()
 {
-   static QByteArray temp = QByteArray( cs_typeName_internal<T1>::typeName() ) + "," + cs_typeName<T2, Ts...>();
-   return temp.constData();
+   static QString8 tmp = cs_typeName_internal<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
+   return tmp;
 }
 
 
@@ -426,15 +420,14 @@ template<class T>
 class cs_typeName_internal<T *>
 {
  public:
-   static const char *typeName();
-   \
+   static const QString8 &typeName();
 };
 
 template<class T>
-const char *cs_typeName_internal<T *>::typeName()
+const QString8 &cs_typeName_internal<T *>::typeName()
 {
-   static QByteArray temp = QByteArray( cs_typeName<T>() ) + "*";
-   return temp.constData();
+   static QString8 tmp = cs_typeName<T>() + "*";
+   return tmp;
 }
 
 
@@ -443,15 +436,14 @@ template<class T>
 class cs_typeName_internal<const T *>
 {
  public:
-   static const char *typeName();
-   \
+   static const QString8 &typeName();
 };
 
 template<class T>
-const char *cs_typeName_internal<const T *>::typeName()
+const QString8 &cs_typeName_internal<const T *>::typeName()
 {
-   static QByteArray temp = "const " + QByteArray( cs_typeName<T>() ) + "*";
-   return temp.constData();
+   static QString8 tmp = "const " + cs_typeName<T>() + "*";
+   return tmp;
 }
 
 
@@ -460,15 +452,15 @@ template<class T>
 class cs_typeName_internal<T &>
 {
  public:
-   static const char *typeName();
+   static const QString8 &typeName();
    \
 };
 
 template<class T>
-const char *cs_typeName_internal<T &>::typeName()
+const QString8 &cs_typeName_internal<T &>::typeName()
 {
-   static QByteArray temp = QByteArray( cs_typeName<T>() ) + "&";
-   return temp.constData();
+   static QString8 tmp = cs_typeName<T>() + "&";
+   return tmp;
 }
 
 
@@ -477,15 +469,15 @@ template<class T>
 class cs_typeName_internal<const T &>
 {
  public:
-   static const char *typeName();
+   static const QString8 &typeName();
    \
 };
 
 template<class T>
-const char *cs_typeName_internal<const T &>::typeName()
+const QString8 &cs_typeName_internal<const T &>::typeName()
 {
-   static QByteArray temp = "const " + QByteArray( cs_typeName<T>() ) + "&";
-   return temp.constData();
+   static QString8 tmp = "const " + cs_typeName<T>() + "&";
+   return tmp;
 }
 
 template<class T1>
@@ -496,8 +488,8 @@ class QRegularExpression;
 
 // declare here, register in csObject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
+CS_DECLARE_CLASS(QChar32)
 CS_DECLARE_CLASS(QColor)
-CS_DECLARE_CLASS(QChar)
 CS_DECLARE_CLASS(QCursor)
 CS_DECLARE_CLASS(QBitmap)
 CS_DECLARE_CLASS(QBrush)
@@ -533,12 +525,12 @@ CS_DECLARE_CLASS(QPixmap)
 CS_DECLARE_CLASS(QRect)
 CS_DECLARE_CLASS(QRectF)
 CS_DECLARE_CLASS(QRegion)
-CS_DECLARE_CLASS(QRegExp)
 CS_DECLARE_CLASS(QSize)
 CS_DECLARE_CLASS(QSizeF)
 CS_DECLARE_CLASS(QSizePolicy)
 CS_DECLARE_CLASS(QState)
-CS_DECLARE_CLASS(QString)
+CS_DECLARE_CLASS(QString8)
+CS_DECLARE_CLASS(QString16)
 CS_DECLARE_CLASS(QStringList)
 CS_DECLARE_CLASS(QStyleOption)
 CS_DECLARE_CLASS(QStyleOptionViewItem)
@@ -567,6 +559,7 @@ CS_REGISTER_TEMPLATE(QMultiMap)
 CS_REGISTER_TEMPLATE(QQueue)
 CS_REGISTER_TEMPLATE(QRegularExpression)
 CS_REGISTER_TEMPLATE(QSet)
+CS_REGISTER_TEMPLATE(QStringView)
 CS_REGISTER_TEMPLATE(QStack)
 CS_REGISTER_TEMPLATE(QVector)
 CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
@@ -608,7 +601,5 @@ void QMetaProperty::setResetMethod( void (T::*method)() )
    m_resetJar   = new SpiceJarReset<T>(method);
    m_reset_able = true;
 }
-
-QT_END_NAMESPACE
 
 #endif

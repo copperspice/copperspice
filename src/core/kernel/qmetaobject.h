@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-// do not move include, if qobject.h is included directly forward declarations are not sufficient 12/30/2013
+// do not move include, if qobject.h is included directly forward declarations are not sufficient
 #include <qobject.h>
 
 #ifndef QMETAOBJECT_H
@@ -31,17 +31,13 @@
 #include <qmap.h>
 #include <qmultimap.h>
 #include <qmutex.h>
-#include <qstring.h>
+#include <qstring8.h>
 #include <qvector.h>
 
 #include <utility>
 #include <stdexcept>
 #include <typeindex>
 #include <tuple>
-
-QT_BEGIN_NAMESPACE
-
-class QObject;
 
 class Q_CORE_EXPORT QMetaObject
 {
@@ -52,10 +48,10 @@ class Q_CORE_EXPORT QMetaObject
    virtual int classInfoCount() const = 0;
    int classInfoOffset() const;
 
-   virtual const char *className() const = 0;
+   virtual const QString8 &className() const = 0;
    static void connectSlotsByName(QObject *o);
 
-   virtual const char *getInterface_iid() const = 0;
+   virtual const QString8 &getInterface_iid() const = 0;
 
    virtual QMetaMethod constructor(int index) const = 0;
    virtual int constructorCount() const = 0;
@@ -64,14 +60,14 @@ class Q_CORE_EXPORT QMetaObject
    virtual int enumeratorCount() const = 0;
    int enumeratorOffset() const;
 
-   int indexOfClassInfo(const char *name) const;
-   int indexOfConstructor(const char *constructor) const;
-   int indexOfEnumerator(const char *name) const;
-   int indexOfMethod(const char *method) const;
+   int indexOfClassInfo(const QString8 &name) const;
+   int indexOfConstructor(const QString8 &constructor) const;
+   int indexOfEnumerator(const QString8 &name) const;
+   int indexOfMethod(const QString8 &method) const;
    int indexOfMethod(const CsSignal::Internal::BentoAbstract &temp) const;
-   int indexOfProperty(const char *name) const;
-   int indexOfSignal(const char *signal) const;
-   int indexOfSlot(const char *slot) const;
+   int indexOfProperty(const QString8 &name) const;
+   int indexOfSignal(const QString8 &signal) const;
+   int indexOfSlot(const QString8 &slot) const;
 
    virtual QMetaMethod method(int index) const = 0;
    QMetaMethod method(const CSBentoAbstract &temp) const;
@@ -90,32 +86,32 @@ class Q_CORE_EXPORT QMetaObject
 
    virtual const QMetaObject *superClass() const = 0;
 
-   QString tr(const char *s, const char *c = 0, int n = -1) const;
-   QString trUtf8(const char *s, const char *c = 0, int n = -1) const;
+   QString8 tr(const char *s, const char *c = 0, int n = -1) const;
+   QString8 trUtf8(const char *s, const char *c = 0, int n = -1) const;
 
    QMetaProperty userProperty() const;
 
    //
-   static bool checkConnectArgs(const char *signal, const char *method);
+   static bool checkConnectArgs(const QString8 &signal, const QString8 &method);
    static bool checkConnectArgs(const QMetaMethod &signal, const QMetaMethod &method);
-   static QByteArray normalizedSignature(const char *method);
-   static QByteArray normalizedType(const char *type);
+   static QString8 normalizedSignature(const QString8 &method);
+   static QString8 normalizedType(const QString8 &type);
 
    template<class T>
    static QMetaEnum findEnum();
 
    template<class R, class ...Ts>
-   static bool invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, CSReturnArgument<R> retval,
+   static bool invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type, CSReturnArgument<R> retval,
                             CSArgument<Ts>... Vs);
 
    template<class R, class ...Ts>
-   static bool invokeMethod(QObject *object, const char *member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs);
+   static bool invokeMethod(QObject *object, const QString8 &member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs);
 
    template<class ...Ts>
-   static bool invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, CSArgument<Ts>... Vs);
+   static bool invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type, CSArgument<Ts>... Vs);
 
    template<class ...Ts>
-   static bool invokeMethod(QObject *object, const char *member, CSArgument<Ts>... Vs);
+   static bool invokeMethod(QObject *object, const QString8 &member, CSArgument<Ts>... Vs);
 
    template<class MethodClass, class... MethodArgs>
    QMetaMethod method( void (MethodClass::*methodPtr)(MethodArgs...) ) const;
@@ -124,22 +120,22 @@ class Q_CORE_EXPORT QMetaObject
    QObject *newInstance(Ts... Vs) const;
 
  protected:
-   static std::tuple<std::vector<const char *>, const char *, QList<QByteArray> > getSignatures(const char *fullName);
+   static std::tuple<std::vector<QString8>, QString8, std::vector<QString8>> getSignatures(const QString8 &fullName);
 
    // global enum list
-   static QMap<std::type_index, std::pair<QMetaObject *, QString> > &m_enumsAll();
+   static QMap<std::type_index, std::pair<QMetaObject *, QString8> > &m_enumsAll();
 
-   int enum_calculate(QString enumData, QMap<QByteArray, int> valueMap);
+   int enum_calculate(QString8 enumData, QMap<QString8, int> valueMap);
 
  private:
-   static QByteArray getType(const char *fullName);
+   static QString8 getType(const QString8 &fullName);
 };
 
 template<class T>
 QMetaEnum QMetaObject::findEnum()
 {
    QMetaEnum data;
-   std::pair<QMetaObject *, QString> enumData;
+   std::pair<QMetaObject *, QString8> enumData;
 
    // look up the enum type
    auto iter_enum = m_enumsAll().find(typeid(T));
@@ -151,9 +147,9 @@ QMetaEnum QMetaObject::findEnum()
       enumData = iter_enum.value();
 
       QMetaObject *metaObj = enumData.first;
-      QString name         = enumData.second;
+      QString8 name        = enumData.second;
 
-      int index = metaObj->indexOfEnumerator(name.toLatin1().constData());
+      int index = metaObj->indexOfEnumerator(name);
       data = metaObj->enumerator(index);
    }
 
@@ -187,14 +183,14 @@ QMetaMethod QMetaObject::method( void (MethodClass::*methodPtr)(MethodArgs...) )
 template<class ...Ts>
 QObject *QMetaObject::newInstance(Ts... Vs) const
 {
-   QByteArray constructorName = className();
+   QString8 constructorName = className();
 
    // signature of the method being invoked
    constructorName += "(";
    constructorName += cs_typeName<Ts...>();
    constructorName += ")";
 
-   int index = this->indexOfConstructor(constructorName.constData());
+   int index = this->indexOfConstructor(constructorName);
 
    if (index == -1)  {
       return 0;
@@ -215,7 +211,7 @@ QObject *QMetaObject::newInstance(Ts... Vs) const
 class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 {
  public:
-   void register_classInfo(const char *name, const char *value);
+   void register_classInfo(const QString8 &name, const QString8 &value);
    QMetaClassInfo classInfo(int index) const override;
 
    int classInfoCount() const override;
@@ -223,7 +219,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    QMetaMethod constructor(int index) const override;
    int constructorCount() const override;
 
-   void register_enum_data(const char *args, const char *scope);
+   void register_enum_data(const QString8 &args, const QString8 &scope);
 
    QMetaEnum enumerator(int index) const override;
    int enumeratorCount() const override;
@@ -235,26 +231,26 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    int propertyCount() const override;
 
    //
-   int  register_enum(const char *name, std::type_index id, const char *scope);
-   int  register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id);
-   void register_tag(const char *name, const char *method);
+   int  register_enum(const QString8 &name, std::type_index id, const QString8 &scope);
+   int  register_flag(const QString8 &enumName, const QString8 &scope, const QString8 &flagName, std::type_index id);
+   void register_tag(const QString8 &name, const QString8 &method);
 
-   void register_method_s1(const char *name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
+   void register_method_s1(const QString8 &name, QMetaMethod::Access access, QMetaMethod::MethodType kind);
 
    // properties
-   int register_property_read(const char *name, const char *dataType, JarReadAbstract *readJar);
-   int register_property_write(const char *name, JarWriteAbstract *method);
-   int register_property_bool(const char *name, JarReadAbstract *method, QMetaProperty::Kind kind);
+   int register_property_read(const QString8 &name, const QString8 &dataType, JarReadAbstract *readJar);
+   int register_property_write(const QString8 &name, JarWriteAbstract *method);
+   int register_property_bool(const QString8 &name, JarReadAbstract *method, QMetaProperty::Kind kind);
 
-   void register_property_int(const char *name, int value, QMetaProperty::Kind kind);
+   void register_property_int(const QString8 &name, int value, QMetaProperty::Kind kind);
 
  protected:
-   QMap<QString, QMetaClassInfo> m_classInfo;
-   QMap<QString, QMetaMethod> m_constructor;         // constructor
-   QMap<QString, QMetaMethod> m_methods;             // methds, signals, slots
-   QMap<QString, QMetaEnum> m_enums;
-   QMap<QString, QMetaProperty> m_properties;
-   QMultiMap<QString, QString> m_flag;
+   QMap<QString8, QMetaClassInfo> m_classInfo;
+   QMap<QString8, QMetaMethod>    m_constructor;         // constructor
+   QMap<QString8, QMetaMethod>    m_methods;             // methds, signals, slots
+   QMap<QString8, QMetaEnum>      m_enums;
+   QMap<QString8, QMetaProperty>  m_properties;
+   QMultiMap<QString8, QString8>  m_flag;
 };
 
 // **
@@ -266,8 +262,8 @@ class QMetaObject_T : public QMetaObject_X
 
       void postConstruct();
 
-      const char *className() const override;
-      const char *getInterface_iid() const override;
+      const QString8 &className() const override;
+      const QString8 &getInterface_iid() const override;
       const QMetaObject *superClass() const override;
 
       // revision
@@ -276,19 +272,19 @@ class QMetaObject_T : public QMetaObject_X
 
       // signals
       template<class U>
-      void register_method_s2(const char *name, U method, QMetaMethod::MethodType kind);
+      void register_method_s2(const QString8 &name, U method, QMetaMethod::MethodType kind);
 
       // slots, invokables
       template<class U>
-      void register_method(const char *name, U method, QMetaMethod::MethodType kind,
-                  const char *va_args, QMetaMethod::Access access);
+      void register_method(const QString8 &name, U method, QMetaMethod::MethodType kind,
+                  const QString8 &va_args, QMetaMethod::Access access);
 
       // properties
       template<class U>
-      void register_property_notify(const char *name, U method);
+      void register_property_notify(const QString8 &name, U method);
 
       template<class U>
-      void register_property_reset(const char *name, U method);
+      void register_property_reset(const QString8 &name, U method);
 };
 
 
@@ -305,16 +301,16 @@ void QMetaObject_T<T>::postConstruct()
 }
 
 template<class T>
-const char *QMetaObject_T<T>::className() const
+const QString8 &QMetaObject_T<T>::className() const
 {
    return T::cs_className();
 }
 
 template<class T>
-inline const char *qobject_interface_iid();
+inline const QString8 &qobject_interface_iid();
 
 template<class T>
-const char *QMetaObject_T<T>::getInterface_iid() const
+const QString8 &QMetaObject_T<T>::getInterface_iid() const
 {
    return qobject_interface_iid<T *>();
 }
@@ -338,14 +334,14 @@ void QMetaObject_T<T>::register_method_rev(U method, int revision)
 {
    CSBento<U> temp = CSBento<U>(method);
 
-   QString tokenName;
+   QString8 tokenName;
    QMetaMethod data;
 
    for (auto k = m_methods.begin(); k != m_methods.end(); ++k)  {
 
       if ( k.value().compare(temp) )  {
          tokenName = k.key();
-         data = k.value();
+         data      = k.value();
          break;
       }
    }
@@ -367,13 +363,13 @@ void QMetaObject_T<T>::register_method_rev(U method, int revision)
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMethod::MethodType kind)
+void QMetaObject_T<T>::register_method_s2(const QString8 &name, U method, QMetaMethod::MethodType kind)
 {
-   if (! name || ! name[0] ) {
+   if (name.isEmpty()) {
       return;
    }
 
-   QMap<QString, QMetaMethod> *map;
+   QMap<QString8, QMetaMethod> *map;
 
    if (kind == QMetaMethod::Constructor) {
       map = &m_constructor;
@@ -383,8 +379,8 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
 
    }
 
-   QByteArray tokenName = name;
-   tokenName.remove(32);
+   QString8 tokenName = name;
+   tokenName.remove(' ');
 
    QMetaMethod data;
 
@@ -392,7 +388,7 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
       // has a paren in name, overloaded method
 
       tokenName = normalizedSignature(name);
-      tokenName.remove(32);
+      tokenName.remove(' ');
 
       auto item  = map->find(tokenName);
       bool found = ( item != map->end() );
@@ -400,10 +396,10 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
       if (! found)  {
          // entry not found in QMap
 
-         QByteArray msg = QByteArray(T::staticMetaObject().className());
-         msg += "::" + QByteArray(name) + " Unable to register overloaded method pointer, verify signal/slot";
+         QString8 msg = T::staticMetaObject().className();
+         msg += "::" + name + " Unable to register overloaded method pointer, verify signal/slot";
 
-         qDebug("%s", msg.constData());
+         qDebug("%s", msg);
          throw std::logic_error(std::string {msg.constData()});
 
       } else {
@@ -418,26 +414,25 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
       map->insert(tokenName, data);
 
    } else {
-      // no paren in name
-      const char xx = '(' + 1;
+      // no paren in name, set itemU to one past the last matching method
 
-      auto itemL = map->lowerBound(tokenName + "(");
-      auto itemU = map->lowerBound(tokenName + QByteArray(1, xx) );
+      auto itemL = map->lowerBound(tokenName + '(' );
+      auto itemU = map->lowerBound(tokenName + ')' );
 
       if (itemL == itemU) {
          // no matches found in QMap
 
-         QByteArray msg = QByteArray(T::staticMetaObject().className());
-         msg += "::" + QByteArray(name) + " Unable to register method pointer, verify signal/slot";
+         QString8 msg = T::staticMetaObject().className();
+         msg += "::" + name + " Unable to register method pointer, verify signal/slot";
 
-         qDebug("%s", msg.constData());
+         qDebug("%s", msg);
          throw std::logic_error(std::string {msg.constData()});
       }
 
       for (auto index = itemL; index != itemU; ++index)  {
 
          // retrieve existing obj
-         QString key = index.key();
+         QString8 key = index.key();
          data = index.value();
 
          //
@@ -454,52 +449,48 @@ void QMetaObject_T<T>::register_method_s2(const char *name, U method, QMetaMetho
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::MethodType kind,
-                  const char *va_args, QMetaMethod::Access access)
+void QMetaObject_T<T>::register_method(const QString8 &name, U method, QMetaMethod::MethodType kind,
+                  const QString8 &va_args, QMetaMethod::Access access)
 {
-   if (! name || ! name[0] || ! va_args || ! va_args[0]) {
+   if (name.isEmpty() || va_args.isEmpty()) {
       return;
    }
 
    // declare first
-   std::vector<const char *> signatures;
-   const char *typeReturn;
-   QList<QByteArray> paramNames;
+   std::vector<QString8> signatures;
+   QString8 typeReturn;
 
+   std::vector<QString8> paramNames;
    std::tie(signatures, typeReturn, paramNames) = this->getSignatures(va_args);
 
    //
    QMetaMethod::Attributes attr = QMetaMethod::Attributes();
-   auto size = signatures.size();
+   auto count = signatures.size();                              // base method plus number of defaulted parameters
 
-   QList<QByteArray> tempNames = paramNames;
+   std::vector<QString8> tmpArgNames = paramNames;
 
-   for ( int k = 0; k < size; ++k )  {
+   for (std::vector<QString8>::size_type k = 0; k < count; ++k)  {
 
-      if (size > 1) {
-         // adjust the number of parameter names
-         int howMany = paramNames.size() - ((size - 1) - k);
-         tempNames   = paramNames.mid(0, howMany);
+      if (count > 1) {
+         // remove defaulted parameter names
+         int howMany = paramNames.size() - ((count - 1) - k);
+         tmpArgNames = std::vector<QString8>(paramNames.begin(), paramNames.begin() + howMany);
 
-         attr = QMetaMethod::Cloned;
-
-         if (k == size - 1) {
+         if (k == count - 1) {
+            // base method
             attr = QMetaMethod::Attributes();
+
+         }  else {
+            attr = QMetaMethod::Cloned;
          }
       }
 
-      // remove spacing from the key
-      QString tokenKey = signatures[k];
-      tokenKey.remove(QChar(32));
-
-      // adjust spacing in the value
-      QString tokenValue = signatures[k];
-      tokenValue.remove(QChar(32));
-
-      QByteArray tokenData = tokenValue.toLatin1();
+      // remove all spaces from the key
+      QString8 tokenKey = signatures[k];
+      tokenKey.remove(' ');
 
       // save the key/value into the master map
-      QMetaMethod data(typeReturn, tokenData, tempNames, access, kind, attr, this);
+      QMetaMethod data(typeReturn, tokenKey, tmpArgNames, access, kind, attr, this);
 
       CSBento<U> *temp = new CSBento<U>(method);
       data.setBentoBox(temp);
@@ -516,9 +507,9 @@ void QMetaObject_T<T>::register_method(const char *name, U method, QMetaMethod::
 // **
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_property_notify(const char *name, U method)
+void QMetaObject_T<T>::register_property_notify(const QString8 &name, U method)
 {
-   if (! name || ! name[0] ) {
+   if (name.isEmpty()) {
       return;
    }
 
@@ -546,9 +537,9 @@ void QMetaObject_T<T>::register_property_notify(const char *name, U method)
 
 template<class T>
 template<class U>
-void QMetaObject_T<T>::register_property_reset(const char *name, U method)
+void QMetaObject_T<T>::register_property_reset(const QString8 &name, U method)
 {
-   if (! name || ! name[0] ) {
+   if (name.isEmpty()) {
       return;
    }
 
@@ -578,7 +569,5 @@ void QMetaObject_T<T>::register_property_reset(const char *name, U method)
 #include <csmeta_internal_2.h>
 
 /**   \endcond   */
-
-QT_END_NAMESPACE
 
 #endif

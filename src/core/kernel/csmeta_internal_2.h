@@ -84,9 +84,9 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
       if (obj.isValid()) {
 
          if (obj.isFlag()) {
-            temp = obj.keysToValue( data.toString().toLatin1().constData() );
+            temp = obj.keysToValue(data.toString());
          } else {
-            temp = obj.keyToValue( data.toString().toLatin1().constData() );
+            temp = obj.keyToValue(data.toString());
          }
 
       } else {
@@ -113,47 +113,49 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
 
 // classes for these 2 methods, located in csmeta.h around line 330
 template<class E>
-inline const char *cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+inline const QString8 &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
    if (obj.isValid()) {
-      static QByteArray temp = obj.scope() + QByteArray("::") + obj.name();
-      return temp.constData();
+      static QString8 tmp = obj.scope() + "::" + obj.name();
+      return tmp;
 
    } else {
-      return "Unknown_Enum";
+      static QString8 retval("Unknown_Enum");
+      return retval;
 
    }
 }
 
 template<class E>
-inline const char *cs_typeName_internal< QFlags<E> >::typeName()
+inline const QString8 &cs_typeName_internal< QFlags<E> >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 
    if (obj.isValid()) {
-      static QByteArray temp = obj.scope() + QByteArray("::") + obj.name();
-      return temp.constData();
+      static QString8 tmp = obj.scope() + "::" + obj.name();
+      return tmp;
 
    } else {
-      return "Unknown_Enum";
-
+      static QString8 retval("Unknown_Enum");
+      return retval;
    }
 }
 
 template<class T>
 void cs_namespace_register_enum(const char *name, std::type_index id, const char *scope)
 {
-   const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(name, id, scope);
+   const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(QString8::fromUtf8(name), id, QString8::fromUtf8(scope));
 }
 
-  
+
 // ** flags
 template<class T>
 void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id)
 {
-   const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(enumName, scope, flagName, id); 
+   const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(QString8::fromUtf8(enumName),
+                  QString8::fromUtf8(scope), QString8::fromUtf8(flagName), id);
 }
 
 #endif

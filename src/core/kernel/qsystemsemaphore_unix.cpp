@@ -66,15 +66,15 @@ void QSystemSemaphorePrivate::setErrorString(const QString &function)
    switch (errno) {
       case EPERM:
       case EACCES:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: permission denied").arg(function);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: permission denied").formatArg(function);
          error = QSystemSemaphore::PermissionDenied;
          break;
       case EEXIST:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: already exists").arg(function);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: already exists").formatArg(function);
          error = QSystemSemaphore::AlreadyExists;
          break;
       case ENOENT:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: does not exist").arg(function);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: does not exist").formatArg(function);
          error = QSystemSemaphore::NotFound;
          break;
       case ERANGE:
@@ -83,15 +83,15 @@ void QSystemSemaphorePrivate::setErrorString(const QString &function)
       case EMFILE:
       case ENFILE:
       case EOVERFLOW:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: out of resources").arg(function);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: out of resources").formatArg(function);
          error = QSystemSemaphore::OutOfResources;
          break;
       case ENAMETOOLONG:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: name error").arg(function);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: name error").formatArg(function);
          error = QSystemSemaphore::KeyError;
          break;
       default:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: unknown error %2").arg(function).arg(errno);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: unknown error %2").formatArg(function).formatArg(errno);
          error = QSystemSemaphore::UnknownError;
 #ifdef QSYSTEMSEMAPHORE_DEBUG
          qDebug() << errorString << "key" << key << "errno" << errno << EINVAL;
@@ -114,7 +114,7 @@ key_t QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
 
    if (key.isEmpty()) {
       errorString = QCoreApplication::tr("%1: key is empty",
-                                         "QSystemSemaphore").arg(QLatin1String("QSystemSemaphore::handle"));
+                                         "QSystemSemaphore").formatArg(QLatin1String("QSystemSemaphore::handle"));
       error = QSystemSemaphore::KeyError;
       return -1;
    }
@@ -123,7 +123,7 @@ key_t QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
    int built = QSharedMemoryPrivate::createUnixKeyFile(fileName);
    if (-1 == built) {
       errorString = QCoreApplication::tr("%1: unable to make key",
-                                         "QSystemSemaphore").arg(QLatin1String("QSystemSemaphore::handle"));
+                                         "QSystemSemaphore").formatArg(QLatin1String("QSystemSemaphore::handle"));
       error = QSystemSemaphore::KeyError;
       return -1;
    }
@@ -131,9 +131,10 @@ key_t QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
 
    // Get the unix key for the created file
    unix_key = ftok(QFile::encodeName(fileName).constData(), 'Q');
+
    if (-1 == unix_key) {
       errorString = QCoreApplication::tr("%1: ftok failed",
-                                         "QSystemSemaphore").arg(QLatin1String("QSystemSemaphore::handle"));
+                                         "QSystemSemaphore").formatArg(QLatin1String("QSystemSemaphore::handle"));
       error = QSystemSemaphore::KeyError;
       return -1;
    }
@@ -181,7 +182,7 @@ bool QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
 
    if (fileName.isEmpty()) {
       errorString = QCoreApplication::tr("%1: key is empty",
-                                         "QSystemSemaphore").arg(QLatin1String("QSystemSemaphore::handle"));
+                                         "QSystemSemaphore").formatArg(QLatin1String("QSystemSemaphore::handle"));
       error = QSystemSemaphore::KeyError;
       return false;
    }
@@ -194,6 +195,7 @@ bool QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
       do {
          semaphore = sem_open(semName.constData(), oflag, 0666, initialValue);
       } while (semaphore == SEM_FAILED && errno == EINTR);
+
       if (semaphore == SEM_FAILED && errno == EEXIST) {
          if (mode == QSystemSemaphore::Create) {
             if (sem_unlink(semName.constData()) == -1 && errno != ENOENT) {
@@ -203,6 +205,7 @@ bool QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode mode)
             // Race condition: the semaphore might be recreated before
             // we call sem_open again, so we'll retry several times.
             maxTries = 3;
+
          } else {
             // Race condition: if it no longer exists at the next sem_open
             // call, we won't realize we created it, so we'll leak it later.

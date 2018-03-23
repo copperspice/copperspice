@@ -23,8 +23,8 @@
 #ifndef QSYSTEMSEMAPHORE_H
 #define QSYSTEMSEMAPHORE_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
+#include <qstring8.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

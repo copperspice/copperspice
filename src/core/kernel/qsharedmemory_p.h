@@ -24,13 +24,16 @@
 #define QSHAREDMEMORY_P_H
 
 #include <qsharedmemory.h>
+#include <qstringparser.h>
 
 #ifdef QT_NO_SHAREDMEMORY
 #ifndef QT_NO_SYSTEMSEMAPHORE
+
 namespace QSharedMemoryPrivate {
 int createUnixKeyFile(const QString &fileName);
-QString makePlatformSafeKey(const QString &key, const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_");
 }
+
 #endif
 #else
 
@@ -94,7 +97,7 @@ class QSharedMemoryPrivate
 #endif
 
    static int createUnixKeyFile(const QString &fileName);
-   static QString makePlatformSafeKey(const QString &key, const QString &prefix = QLatin1String("qipc_sharedmemory_"));
+   static QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_"));
 
 #ifdef Q_OS_WIN
    HANDLE handle();
@@ -114,11 +117,13 @@ class QSharedMemoryPrivate
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
    inline bool tryLocker(QSharedMemoryLocker *locker, const QString &function) {
+
       if (!locker->lock()) {
-         errorString = QSharedMemory::tr("%1: unable to lock").arg(function);
+         errorString = QSharedMemory::tr("%1: unable to lock").formatArg(function);
          error = QSharedMemory::LockError;
          return false;
       }
+
       return true;
    }
 #endif // QT_NO_SYSTEMSEMAPHORE

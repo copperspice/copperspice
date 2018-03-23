@@ -23,19 +23,15 @@
 #ifndef QCORECMDLINEARGS_P_H
 #define QCORECMDLINEARGS_P_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring8.h>
+#include <qstringlist.h>
 
 #if defined(Q_OS_WIN32)
 
-QT_BEGIN_INCLUDE_NAMESPACE
-# include <QtCore/qvector.h>
+# include <qvector.h>
 # if defined(Q_OS_WIN32)
 #  include <qt_windows.h>
 # endif
-QT_END_INCLUDE_NAMESPACE
 
 // template implementation of the parsing algorithm
 // this is used from qcoreapplication_win.cpp and the tools (rcc, uic...)
@@ -53,6 +49,7 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
       while (QChar((short)(*p)).isSpace()) {                // skip white space
          p++;
       }
+
       if (*p && p < p_end) {                                // arg starts
          int quote;
          Char *start, *r;
@@ -63,7 +60,9 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
             quote = 0;
             start = p;
          }
+
          r = start;
+
          while (*p && p < p_end) {
             if (quote) {
                if (*p == quote) {
@@ -112,9 +111,10 @@ static inline QStringList qWinCmdArgs(QString cmdLine) // not const-ref: this mi
    QStringList args;
 
    int argc = 0;
-   QVector<wchar_t *> argv = qWinCmdLine<wchar_t>((wchar_t *)cmdLine.utf16(), cmdLine.length(), argc);
+   QVector<wchar_t *> argv = qWinCmdLine<wchar_t>(&cmdLine.toStdWString()[0], cmdLine.length(), argc);
+
    for (int a = 0; a < argc; ++a) {
-      args << QString::fromWCharArray(argv[a]);
+      args << QString::fromStdWString(std::wstring(argv[a]));
    }
 
    return args;
@@ -124,12 +124,14 @@ static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {
    Q_UNUSED(argc)
    Q_UNUSED(argv)
-   QString cmdLine = QString::fromWCharArray(GetCommandLine());
+
+   QString cmdLine = QString::fromStdWString(std::wstring(GetCommandLine()));
+
    return qWinCmdArgs(cmdLine);
 }
 #endif
 
-#else 
+#else
 
 static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {
@@ -141,7 +143,5 @@ static inline QStringList qCmdLineArgs(int argc, char *argv[])
 }
 
 #endif // Q_OS_WIN
-
-QT_END_NAMESPACE
 
 #endif // QCORECMDLINEARGS_WIN_P_H

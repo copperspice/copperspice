@@ -24,10 +24,9 @@
 #define CSOBJECT_INTERNAL_H
 
 #include <QCoreApplication>
-#include <QThread>
-#include <QSemaphore>
-
 #include <csmeta_callevent.h>
+#include <qsemaphore.h>
+#include <qstring8.h>
 #include <qthread.h>
 
 // signal & slot method ptr
@@ -59,19 +58,17 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
-   const char *senderClass = senderMetaObject->className();
-
-   QByteArray signature    = signalMetaMethod.methodSignature();
-   const char *signalName  = signature.constData();
+   const QString8 &senderClass = senderMetaObject->className();
+   const QString8 &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
-      qWarning("%s%s%s", "QObject::connect() ", senderClass, "::<Invalid Signal> ");
+      qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
       return false;
    }
 
    // is signalMethod a signal
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
-      qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::", signalName, "was not a valid signal");
+      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), "was not a valid signal");
       return false;
    }
 
@@ -117,19 +114,17 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
-   const char *senderClass = senderMetaObject->className();
-
-   QByteArray signature    = signalMetaMethod.methodSignature();
-   const char *signalName  = signature.constData();
+   const QString8 &senderClass = senderMetaObject->className();
+   const QString8 &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
-      qWarning("%s%s%s", "QObject::connect() ", senderClass, "::<Invalid Signal> ");
+      qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
       return false;
    }
 
    // is signalMethod a signal
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
-      qWarning("%s%s%s%s%s", "QObject::connect() ", senderClass, "::", signalName, "was not a valid signal");
+      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), "was not a valid signal");
       return false;
    }
 
@@ -195,13 +190,12 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 }
 
 template<class ...Ts>
-bool cs_factory_interface_query(const QString &data)
+bool cs_factory_interface_query(const QString8 &data)
 {
-   std::vector<const char *> list = { qobject_interface_iid<Ts *>()... };
+   std::vector<QString8> vector = { qobject_interface_iid<Ts *>()... };
 
-   for (unsigned int k = 0; k < list.size(); ++k) {
-
-      if (data == list[k]) {
+   for (const auto &item : vector) {
+      if (data == item) {
          return true;
       }
    }
@@ -220,7 +214,7 @@ bool cs_factory_interface_query(const QString &data)
 */
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type,
+bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type,
                CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    if (! object) {
@@ -228,14 +222,10 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
    }
 
    // signature of the method being invoked
-   QByteArray sig = member;
-   sig += "(";
-   sig += cs_argName(Vs...);
-   sig += ")";
+   QString8 sig = member + "(" + cs_argName(Vs...) + ")";
 
-   //
    const QMetaObject *metaObject = object->metaObject();
-   int index = metaObject->indexOfMethod(sig.constData());
+   int index = metaObject->indexOfMethod(sig);
 
    if (index == -1)  {
       QList<QString> msgList;
@@ -245,10 +235,10 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
          int numOfChars = sig.indexOf('(') + 1;
 
-         QMetaMethod testMethod   = metaObject->method(k);
-         QByteArray testSignature = testMethod.methodSignature();
+         QMetaMethod testMethod = metaObject->method(k);
+         QString8 testSignature = testMethod.methodSignature();
 
-         if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
+         if (testSignature.leftView(numOfChars) == sig.leftView(numOfChars))  {
             msgList.append(testSignature);
 
             // test if the related method matches
@@ -258,10 +248,10 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
          }
       }
 
-      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig.constData());
+      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig);
 
       for (int k = 0; k < msgList.size(); ++k ) {
-         qWarning(" Related methods: %s", qPrintable(msgList[k]) );
+         qWarning(" Related methods: %s", csPrintable(msgList[k]) );
       }
 
       return false;
@@ -274,21 +264,16 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 }
 
 template<class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::ConnectionType type, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type, CSArgument<Ts>... Vs)
 {
    if (! object) {
       return false;
    }
 
-   // signature of the method being invoked
-   QByteArray sig = member;
-   sig += "(";
-   sig += cs_argName(Vs...);
-   sig += ")";
+   QString8 sig = member + "(" + cs_argName(Vs...) + ")";
 
-   //
    const QMetaObject *metaObject = object->metaObject();
-   int index = metaObject->indexOfMethod(sig.constData());
+   int index = metaObject->indexOfMethod(sig);
 
    if (index == -1)  {
       QList<QString> msgList;
@@ -298,10 +283,10 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 
          int numOfChars = sig.indexOf('(') + 1;
 
-         QMetaMethod testMethod   = metaObject->method(k);
-         QByteArray testSignature = testMethod.methodSignature();
+         QMetaMethod testMethod  = metaObject->method(k);
+         QString8 testSignature = testMethod.methodSignature();
 
-         if (strncmp(testSignature.constData(), sig.constData(), numOfChars) == 0)  {
+         if (testSignature.leftView(numOfChars) == sig.leftView(numOfChars))  {
             msgList.append(testSignature);
 
             // test if the related method matches
@@ -311,10 +296,10 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
          }
       }
 
-      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig.constData());
+      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig);
 
       for (int k = 0; k < msgList.size(); ++k ) {
-         qWarning(" Related methods: %s", qPrintable(msgList[k]) );
+         qWarning(" Related methods: %s", csPrintable(msgList[k]) );
       }
 
       return false;
@@ -327,14 +312,14 @@ bool QMetaObject::invokeMethod(QObject *object, const char *member, Qt::Connecti
 }
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    // calls the first overload
    return invokeMethod(object, member, Qt::AutoConnection, retval, Vs...);
 }
 
 template<class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const char *member, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, CSArgument<Ts>... Vs)
 {
    // calls the second overload
    return invokeMethod(object, member, Qt::AutoConnection, Vs...);
@@ -434,7 +419,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       QSemaphore semaphore;
 
-      // broom (on hold, ok)
+      // broom - ok to have on hold
       // add &retval to QMetaCallEvent so we can return a value
 
       // store the signal data, false indicates the data will not be copied

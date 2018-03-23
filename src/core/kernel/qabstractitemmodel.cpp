@@ -22,14 +22,15 @@
 
 #include <qabstractitemmodel.h>
 #include <qabstractitemmodel_p.h>
+#include <qbitarray.h>
 #include <qdatastream.h>
+#include <qdebug.h>
 #include <qstringlist.h>
 #include <qsize.h>
 #include <qmimedata.h>
-#include <qdebug.h>
+#include <qregularexpression.h>
 #include <qvector.h>
 #include <qstack.h>
-#include <qbitarray.h>
 
 #include <limits.h>
 
@@ -1257,66 +1258,105 @@ QModelIndex QAbstractItemModel::buddy(const QModelIndex &index) const
    return index;
 }
 
-QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role,
-                  const QVariant &value, int hits, Qt::MatchFlags flags) const
+QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role, const QVariant &value,
+                  int hits, Qt::MatchFlags flags) const
 {
    QModelIndexList result;
+
    uint matchType = flags & 0x0F;
    Qt::CaseSensitivity cs = flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
    bool recurse = flags & Qt::MatchRecursive;
    bool wrap = flags & Qt::MatchWrap;
    bool allHits = (hits == -1);
 
-   QString text; // only convert to a string if it is needed
+   QString text;                      // only convert to a string if it is needed
    QModelIndex p = parent(start);
 
    int from = start.row();
-   int to = rowCount(p);
+   int to   = rowCount(p);
 
    // iterates twice if wrapping
-   for (int i = 0; (wrap && i < 2) || (!wrap && i < 1); ++i) {
+   for (int i = 0; (wrap && i < 2) || (! wrap && i < 1); ++i) {
+
       for (int r = from; (r < to) && (allHits || result.count() < hits); ++r) {
          QModelIndex idx = index(r, start.column(), p);
-         if (!idx.isValid()) {
+
+         if (! idx.isValid()) {
             continue;
          }
+
          QVariant v = data(idx, role);
+
          // QVariant based matching
          if (matchType == Qt::MatchExactly) {
             if (value == v) {
                result.append(idx);
             }
-         } else { // QString based matching
-            if (text.isEmpty()) { // lazy conversion
+
+         } else {
+            // QString based matching
+
+            if (text.isEmpty()) {
+               // lazy conversion
                text = value.toString();
             }
+
             QString t = v.toString();
+
             switch (matchType) {
+
                case Qt::MatchRegExp:
-                  if (QRegExp(text, cs).exactMatch(t)) {
-                     result.append(idx);
+                  {
+                     QPatternOptionFlags options = QPatternOption::ExactMatchOption;
+
+                     if (cs == Qt::CaseInsensitive) {
+                        options |= QPatternOption::CaseInsensitiveOption;
+                     }
+
+                     QRegularExpression8 regExp(text, options);
+
+                     if (regExp.match(t).hasMatch()) {
+                        result.append(idx);
+                     }
+
+                     break;
                   }
-                  break;
+
                case Qt::MatchWildcard:
-                  if (QRegExp(text, cs, QRegExp::Wildcard).exactMatch(t)) {
-                     result.append(idx);
+                  {
+                     QPatternOptionFlags options = QPatternOption::ExactMatchOption | QPatternOption::WildcardOption;
+
+                     if (cs == Qt::CaseInsensitive) {
+                        options |= QPatternOption::CaseInsensitiveOption;
+                     }
+
+                     QRegularExpression8 regExp(text, options);
+
+                     if (regExp.match(t).hasMatch()) {
+                        result.append(idx);
+                     }
+                     break;
                   }
-                  break;
+
                case Qt::MatchStartsWith:
                   if (t.startsWith(text, cs)) {
                      result.append(idx);
                   }
                   break;
+
                case Qt::MatchEndsWith:
                   if (t.endsWith(text, cs)) {
                      result.append(idx);
                   }
                   break;
+
                case Qt::MatchFixedString:
                   if (t.compare(text, cs) == 0) {
                      result.append(idx);
                   }
                   break;
+
                case Qt::MatchContains:
                default:
                   if (t.contains(text, cs)) {
@@ -1324,12 +1364,14 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role,
                   }
             }
          }
+
          if (recurse && hasChildren(idx)) { // search the hierarchy
             result += match(index(0, idx.column(), idx), role,
                             (text.isEmpty() ? value : text),
                             (allHits ? -1 : hits - result.count()), flags);
          }
       }
+
       // prepare for the next iteration
       from = 0;
       to = start.row();
@@ -1337,42 +1379,17 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role,
    return result;
 }
 
-/*!
-    Returns the row and column span of the item represented by \a index.
-
-    \note Currently, span is not used.
-*/
-
 QSize QAbstractItemModel::span(const QModelIndex &) const
 {
    return QSize(1, 1);
 }
 
-/*!
-    \since 4.6
-
-    Sets the model's role names to \a roleNames.
-
-    This function allows mapping of role identifiers to role property names in
-    Declarative UI.  This function must be called before the model is used.
-    Modifying the role names after the model has been set may result in
-    undefined behaviour.
-
-    \sa roleNames()
-*/
 void QAbstractItemModel::setRoleNames(const QHash<int, QByteArray> &roleNames)
 {
    Q_D(QAbstractItemModel);
    d->roleNames = roleNames;
 }
 
-/*!
-    \since 4.6
-
-    Returns the model's role names.
-
-    \sa setRoleNames()
-*/
 const QHash<int, QByteArray> &QAbstractItemModel::roleNames() const
 {
    Q_D(const QAbstractItemModel);

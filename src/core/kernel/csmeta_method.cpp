@@ -24,18 +24,12 @@
 #include <csmeta.h>
 #include <qmetaobject.h>
 
-QMetaMethod::QMetaMethod(const char *typeName, const QByteArray &signature, QList<QByteArray> paramNames,
-                         QMetaMethod::Access access, QMetaMethod::MethodType methodType, 
-                         QMetaMethod::Attributes attributes, QMetaObject *obj)
+QMetaMethod::QMetaMethod(const QString8 &typeName, const QString8 &signature, std::vector<QString8> paramNames,
+                  QMetaMethod::Access access, QMetaMethod::MethodType methodType,
+                  QMetaMethod::Attributes attributes, QMetaObject *obj)
+   : m_typeName(typeName), m_signature(signature), m_paramNames(paramNames.begin(), paramNames.end()),
+     m_access(access), m_methodType(methodType), m_attributes(attributes), m_metaObject(obj)
 {
-   m_typeName   = typeName;
-   m_signature  = signature;
-   m_paramNames = paramNames;
-   m_access     = access;
-   m_methodType = methodType;
-   m_attributes = attributes;
-   m_metaObject = obj;
-
    m_bento     = nullptr;
    m_tag       = "";
    m_revision  = 0;
@@ -51,8 +45,9 @@ QMetaMethod::QMetaMethod()
    m_attributes = Attributes(0);
    m_metaObject = nullptr;
 
-   m_bento = nullptr;
-   m_tag   = "";
+   m_bento      = nullptr;
+   m_tag        = "";
+   m_revision   = 0;
 }
 
 QMetaMethod::Access QMetaMethod::access() const
@@ -95,9 +90,7 @@ int QMetaMethod::methodIndex() const
       return -1;
    }
 
-   const char *method = m_signature.constData();
-
-   return m_metaObject->indexOfMethod(method);
+   return m_metaObject->indexOfMethod(m_signature);
 }
 
 QMetaMethod::MethodType QMetaMethod::methodType() const
@@ -105,9 +98,9 @@ QMetaMethod::MethodType QMetaMethod::methodType() const
    return m_methodType;
 }
 
-QByteArray QMetaMethod::name() const
+const QString8 QMetaMethod::name() const
 {
-   QByteArray retval = m_signature;
+   QString8 retval = m_signature;
 
    int pos = m_signature.indexOf("(");
    retval  = m_signature.left(pos);
@@ -122,45 +115,46 @@ int QMetaMethod::parameterCount() const
 
 int QMetaMethod::parameterType(int index) const
 {
-   QList<QByteArray> types = parameterTypes();
-   QByteArray typeName = types[index];
+   QList<QString8> types = parameterTypes();
+   QString8 typeName = types[index];
 
-   int retval = QMetaType::type(typeName.constData());
+   int retval = QMetaType::type(typeName);
 
    return retval;
 }
 
-QList<QByteArray> QMetaMethod::parameterNames() const
+QList<QString8> QMetaMethod::parameterNames() const
 {
    return m_paramNames;
 }
 
-QList<QByteArray> QMetaMethod::parameterTypes() const
+QList<QString8> QMetaMethod::parameterTypes() const
 {
-   QList<QByteArray> retval;
+   QList<QString8> retval;
 
-   const char *temp = m_signature.constData();
-   char letter;
+   QString8::const_iterator iter = m_signature.begin();
+   QChar32 letter;
 
-   while (*temp)  {
-      letter = *temp;
+   while (iter != m_signature.end())  {
+      letter = *iter;
 
       if (letter == '(') {
          break;
       }
 
-      ++temp;
+      ++iter;
    }
 
-   ++temp;
+   ++iter;
 
-   QByteArray word;
+   QString8 word;
+
    int angleLevel    = 0;
    int bracketLevel  = 0;
    int parenLevel    = 0;
 
-   while (*temp)  {
-      letter = *temp;
+   while (iter != m_signature.end())  {
+      letter = *iter;
 
       // A
       if (letter == '<') {
@@ -193,7 +187,7 @@ QList<QByteArray> QMetaMethod::parameterTypes() const
 
       }
 
-      ++temp;
+      ++iter;
    }
 
    // remove last letter
@@ -216,7 +210,7 @@ void QMetaMethod::setBentoBox(const CSBentoAbstract *method)
    m_bento = method;
 }
 
-QByteArray QMetaMethod::methodSignature() const
+const QString8 &QMetaMethod::methodSignature() const
 {
    return m_signature;
 }
@@ -226,17 +220,17 @@ void QMetaMethod::setRevision(int revision)
    m_revision = revision;
 }
 
-void QMetaMethod::setTag(const char *data)
+void QMetaMethod::setTag(const QString8 &data)
 {
    m_tag = data;
 }
 
-const char *QMetaMethod::tag() const
+const QString8 &QMetaMethod::tag() const
 {
    return m_tag;
 }
 
-const char *QMetaMethod::typeName() const
+const QString8 &QMetaMethod::typeName() const
 {
    return m_typeName;
 }
