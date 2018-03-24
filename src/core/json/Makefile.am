@@ -5,17 +5,17 @@ CORE_PUBLIC_INCLUDES += \
 	QJsonDocument \
 	QJsonObject \
 	QJsonParseError \
-	QJsonValue 
+	QJsonValue
 
 CORE_JSON_INCLUDES = \
+	qjson.h \
 	qjsonarray.h \
 	qjsondocument.h \
 	qjsonobject.h \
 	qjsonparseerror.h \
-	qjsonvalue.h 
+	qjsonvalue.h
 
 CORE_JSON_PRIVATE_INCLUDES = \
-	qjson_p.h \
 	qjsonparser_p.h \
 	qjsonwriter_p.h
 

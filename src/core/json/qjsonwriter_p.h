@@ -23,21 +23,16 @@
 #ifndef QJSONWRITER_P_H
 #define QJSONWRITER_P_H
 
-#include <qjsonvalue.h>
+#include <qjsondocument.h>
+#include <qjsonarray.h>
+#include <qjsonobject.h>
+#include <qstring8.h>
 
-QT_BEGIN_NAMESPACE
-
-namespace QJsonPrivate {
-
-class Writer
+class QJsonWriter
 {
  public:
-   static void objectToJson(const QJsonPrivate::Object *o, QByteArray &json, int indent, bool compact = false);
-   static void arrayToJson(const QJsonPrivate::Array *a, QByteArray &json, int indent, bool compact = false);
+   static QString arrayToString(const QJsonArray &data, int indent, QJsonDocument::JsonFormat format);
+   static QString objectToString(const QJsonObject &data, int indent, QJsonDocument::JsonFormat format);
 };
-
-}
-
-QT_END_NAMESPACE
 
 #endif

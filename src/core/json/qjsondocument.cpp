@@ -21,437 +21,144 @@
 ***********************************************************************/
 
 #include <qjsondocument.h>
-#include <qjsonobject.h>
-#include <qjsonvalue.h>
-#include <qjsonarray.h>
+#include <qjsonparser_p.h>
+#include <qjsonwriter_p.h>
+
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <qdebug.h>
-#include <qjsonwriter_p.h>
-#include <qjsonparser_p.h>
-#include <qjson_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QJsonDocument::QJsonDocument()
-   : d(0)
 {
+   m_data = std::make_shared<QJsonValue>();
 }
 
 QJsonDocument::QJsonDocument(const QJsonObject &object)
-   : d(0)
+   : m_data(std::make_shared<QJsonValue>(object))
 {
-   setObject(object);
 }
 
 QJsonDocument::QJsonDocument(const QJsonArray &array)
-   : d(0)
+   : m_data(std::make_shared<QJsonValue>(array))
 {
-   setArray(array);
-}
-
-QJsonDocument::QJsonDocument(QJsonPrivate::Data *data)
-   : d(data)
-{
-   Q_ASSERT(d);
-   d->ref.ref();
-}
-
-QJsonDocument::~QJsonDocument()
-{
-   if (d && !d->ref.deref()) {
-      delete d;
-   }
 }
 
 QJsonDocument::QJsonDocument(const QJsonDocument &other)
 {
-   d = other.d;
-   if (d) {
-      d->ref.ref();
-   }
+   m_data = other.m_data;
 }
 
-/*!
- * Assigns the \a other document to this QJsonDocument.
- * Returns a reference to this object.
- */
+QJsonDocument::QJsonDocument(QJsonDocument &&other)
+{
+   m_data = std::move(other.m_data);
+}
+
 QJsonDocument &QJsonDocument::operator =(const QJsonDocument &other)
 {
-   if (d != other.d) {
-      if (d && !d->ref.deref()) {
-         delete d;
-      }
-      d = other.d;
-      if (d) {
-         d->ref.ref();
-      }
-   }
-
+   m_data = other.m_data;
    return *this;
 }
 
-QJsonDocument QJsonDocument::fromRawData(const char *data, int size, DataValidation validation)
+QJsonDocument::~QJsonDocument()
 {
-   if (quintptr(data) & 3) {
-      qWarning() << "QJsonDocument::fromRawData: data has to have 4 byte alignment";
-      return QJsonDocument();
-   }
-
-   QJsonPrivate::Data *d = new QJsonPrivate::Data((char *)data, size);
-   d->ownsData = false;
-
-   if (validation != BypassValidation && !d->valid()) {
-      delete d;
-      return QJsonDocument();
-   }
-
-   return QJsonDocument(d);
 }
 
-const char *QJsonDocument::rawData(int *size) const
-{
-   if (!d) {
-      *size = 0;
-      return 0;
-   }
-   *size = d->alloc;
-   return d->rawData;
-}
-
-QJsonDocument QJsonDocument::fromBinaryData(const QByteArray &data, DataValidation validation)
-{
-   if (data.size() < (int)(sizeof(QJsonPrivate::Header) + sizeof(QJsonPrivate::Base))) {
-      return QJsonDocument();
-   }
-
-   QJsonPrivate::Header h;
-   memcpy(&h, data.constData(), sizeof(QJsonPrivate::Header));
-   QJsonPrivate::Base root;
-   memcpy(&root, data.constData() + sizeof(QJsonPrivate::Header), sizeof(QJsonPrivate::Base));
-
-   // do basic checks here, so we don't try to allocate more memory than we can.
-   if (h.tag != QJsonDocument::BinaryFormatTag || h.version != 1u ||
-         sizeof(QJsonPrivate::Header) + root.size > (uint)data.size()) {
-      return QJsonDocument();
-   }
-
-   const uint size = sizeof(QJsonPrivate::Header) + root.size;
-   char *raw = (char *)malloc(size);
-   if (!raw) {
-      return QJsonDocument();
-   }
-
-   memcpy(raw, data.constData(), size);
-   QJsonPrivate::Data *d = new QJsonPrivate::Data(raw, size);
-
-   if (validation != BypassValidation && !d->valid()) {
-      delete d;
-      return QJsonDocument();
-   }
-
-   return QJsonDocument(d);
-}
-
-/*!
- Creates a QJsonDocument from the QVariant \a variant.
-
- If the \a variant contains any other type than a QVariant::Map,
- QVariant::List or QVariant::StringList, the returned document
- document is invalid.
-
- \sa toVariant()
- */
 QJsonDocument QJsonDocument::fromVariant(const QVariant &variant)
 {
    QJsonDocument doc;
+
    if (variant.type() == QVariant::Map) {
       doc.setObject(QJsonObject::fromVariantMap(variant.toMap()));
+
    } else if (variant.type() == QVariant::List) {
       doc.setArray(QJsonArray::fromVariantList(variant.toList()));
+
    } else if (variant.type() == QVariant::StringList) {
       doc.setArray(QJsonArray::fromStringList(variant.toStringList()));
    }
+
    return doc;
 }
 
-/*!
- Returns a QVariant representing the Json document.
-
- The returned variant will be a QVariantList if the document is
- a QJsonArray and a QVariantMap if the document is a QJsonObject.
-
- \sa fromVariant(), QJsonValue::toVariant()
- */
 QVariant QJsonDocument::toVariant() const
 {
-   if (!d) {
-      return QVariant();
-   }
+   if (m_data->isArray()) {
+      return m_data->toArray().toVariantList();
 
-   if (d->header->root()->isArray()) {
-      return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root())).toVariantList();
    } else {
-      return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root())).toVariantMap();
+      return m_data->toObject().toVariantMap();
    }
 }
 
-QByteArray QJsonDocument::toJson(JsonFormat format) const
+QString QJsonDocument::toJson(JsonFormat format) const
 {
-   if (!d) {
-      return QByteArray();
+   QString retval;
+
+   if (m_data->isArray()) {
+      retval = QJsonWriter::arrayToString(m_data->toArray(), 0, format);
+
+   } else if (m_data->isObject()) {
+      retval = QJsonWriter::objectToString(m_data->toObject(), 0, format);
    }
 
-   QByteArray json;
-
-   if (d->header->root()->isArray()) {
-      QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(d->header->root()), json, 0, (format == Compact));
-   } else {
-      QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(d->header->root()), json, 0,
-                                         (format == Compact));
-   }
-
-   return json;
+   return retval;
 }
 
-/*!
- Parses a UTF-8 encoded JSON document and creates a QJsonDocument
- from it.
-
- \a json contains the json document to be parsed.
-
- The optional \a error variable can be used to pass in a QJsonParseError data
- structure that will contain information about possible errors encountered during
- parsing.
-
- \sa toJson(), QJsonParseError
- */
 QJsonDocument QJsonDocument::fromJson(const QByteArray &json, QJsonParseError *error)
 {
-   QJsonPrivate::Parser parser(json.constData(), json.length());
-   return parser.parse(error);
+   return fromJson(QString::fromUtf8(json), error);
 }
 
-/*!
-    Returns true if the document doesn't contain any data.
- */
+QJsonDocument QJsonDocument::fromJson(QStringView8 json, QJsonParseError *error)
+{
+   return QJsonParser(json).parse(error);
+}
+
 bool QJsonDocument::isEmpty() const
 {
-   if (!d) {
+   return m_data->isNull();
+}
+
+bool QJsonDocument::isArray() const
+{
+   return m_data->isArray();
+}
+
+bool QJsonDocument::isObject() const
+{
+   return m_data->isObject();
+}
+
+QJsonObject QJsonDocument::object() const
+{
+   return m_data->toObject();
+}
+
+QJsonArray QJsonDocument::array() const
+{
+   return m_data->toArray();
+}
+
+void QJsonDocument::setObject(const QJsonObject &object)
+{
+   *m_data = QJsonValue(object);
+}
+
+void QJsonDocument::setArray(const QJsonArray &array)
+{
+   *m_data = QJsonValue(array);
+}
+
+bool QJsonDocument::operator==(const QJsonDocument &other) const
+{
+   if (m_data == other.m_data) {
       return true;
    }
 
    return false;
 }
 
-/*!
- Returns a binary representation of the document.
-
- The binary representation is also the native format used internally in Qt,
- and is very efficient and fast to convert to and from.
-
- The binary format can be stored on disk and interchanged with other applications
- or computers. fromBinaryData() can be used to convert it back into a
- JSON document.
-
- \sa fromBinaryData()
- */
-QByteArray QJsonDocument::toBinaryData() const
-{
-   if (!d || !d->rawData) {
-      return QByteArray();
-   }
-
-   return QByteArray(d->rawData, d->header->root()->size + sizeof(QJsonPrivate::Header));
-}
-
-/*!
-    Returns true if the document contains an array.
-
-    \sa array(), isObject()
- */
-bool QJsonDocument::isArray() const
-{
-   if (!d) {
-      return false;
-   }
-
-   QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
-   return h->root()->isArray();
-}
-
-/*!
-    Returns true if the document contains an object.
-
-    \sa object(), isArray()
- */
-bool QJsonDocument::isObject() const
-{
-   if (!d) {
-      return false;
-   }
-
-   QJsonPrivate::Header *h = (QJsonPrivate::Header *)d->rawData;
-   return h->root()->isObject();
-}
-
-/*!
-    Returns the QJsonObject contained in the document.
-
-    Returns an empty object if the document contains an
-    array.
-
-    \sa isObject(), array(), setObject()
- */
-QJsonObject QJsonDocument::object() const
-{
-   if (d) {
-      QJsonPrivate::Base *b = d->header->root();
-      if (b->isObject()) {
-         return QJsonObject(d, static_cast<QJsonPrivate::Object *>(b));
-      }
-   }
-   return QJsonObject();
-}
-
-/*!
-    Returns the QJsonArray contained in the document.
-
-    Returns an empty array if the document contains an
-    object.
-
-    \sa isArray(), object(), setArray()
- */
-QJsonArray QJsonDocument::array() const
-{
-   if (d) {
-      QJsonPrivate::Base *b = d->header->root();
-      if (b->isArray()) {
-         return QJsonArray(d, static_cast<QJsonPrivate::Array *>(b));
-      }
-   }
-   return QJsonArray();
-}
-
-/*!
-    Sets \a object as the main object of this document.
-
-    \sa setArray(), object()
- */
-void QJsonDocument::setObject(const QJsonObject &object)
-{
-   if (d && !d->ref.deref()) {
-      delete d;
-   }
-
-   d = object.d;
-
-   if (!d) {
-      d = new QJsonPrivate::Data(0, QJsonValue::Object);
-   } else if (d->compactionCounter || object.o != d->header->root()) {
-      QJsonObject o(object);
-      if (d->compactionCounter) {
-         o.compact();
-      } else {
-         o.detach();
-      }
-      d = o.d;
-      d->ref.ref();
-      return;
-   }
-   d->ref.ref();
-}
-
-/*!
-    Sets \a array as the main object of this document.
-
-    \sa setObject(), array()
- */
-void QJsonDocument::setArray(const QJsonArray &array)
-{
-   if (d && !d->ref.deref()) {
-      delete d;
-   }
-
-   d = array.d;
-
-   if (!d) {
-      d = new QJsonPrivate::Data(0, QJsonValue::Array);
-   } else if (d->compactionCounter || array.a != d->header->root()) {
-      QJsonArray a(array);
-      if (d->compactionCounter) {
-         a.compact();
-      } else {
-         a.detach();
-      }
-      d = a.d;
-      d->ref.ref();
-      return;
-   }
-   d->ref.ref();
-}
-
-/*!
-    Returns \c true if the \a other document is equal to this document.
- */
-bool QJsonDocument::operator==(const QJsonDocument &other) const
-{
-   if (d == other.d) {
-      return true;
-   }
-
-   if (!d || !other.d) {
-      return false;
-   }
-
-   if (d->header->root()->isArray() != other.d->header->root()->isArray()) {
-      return false;
-   }
-
-   if (d->header->root()->isObject())
-      return QJsonObject(d, static_cast<QJsonPrivate::Object *>(d->header->root()))
-             == QJsonObject(other.d, static_cast<QJsonPrivate::Object *>(other.d->header->root()));
-   else
-      return QJsonArray(d, static_cast<QJsonPrivate::Array *>(d->header->root()))
-             == QJsonArray(other.d, static_cast<QJsonPrivate::Array *>(other.d->header->root()));
-}
-
-/*!
- \fn bool QJsonDocument::operator!=(const QJsonDocument &other) const
-
-    returns \c true if \a other is not equal to this document
- */
-
-/*!
-    returns true if this document is null.
-
-    Null documents are documents created through the default constructor.
-
-    Documents created from UTF-8 encoded text or the binary format are
-    validated during parsing. If validation fails, the returned document
-    will also be null.
- */
 bool QJsonDocument::isNull() const
 {
-   return (d == 0);
+   return m_data->isNull();
 }
 
-QDebug operator<<(QDebug dbg, const QJsonDocument &o)
-{
-   if (!o.d) {
-      dbg << "QJsonDocument()";
-      return dbg;
-   }
-   QByteArray json;
-   if (o.d->header->root()->isArray()) {
-      QJsonPrivate::Writer::arrayToJson(static_cast<QJsonPrivate::Array *>(o.d->header->root()), json, 0, true);
-   } else {
-      QJsonPrivate::Writer::objectToJson(static_cast<QJsonPrivate::Object *>(o.d->header->root()), json, 0, true);
-   }
-   dbg.nospace() << "QJsonDocument("
-                 << json.constData() // print as utf-8 string without extra quotation marks
-                 << ")";
-   return dbg.space();
-}
-
-QT_END_NAMESPACE

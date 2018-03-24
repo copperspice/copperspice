@@ -24,71 +24,48 @@
 #define QJSONPARSER_P_H
 
 #include <qjsondocument.h>
-#include <qvarlengtharray.h>
+#include <qjsonvalue.h>
+#include <qstring8.h>
 
-#include <stdlib.h>
-
-QT_BEGIN_NAMESPACE
-
-namespace QJsonPrivate {
-
-class Parser
+class QJsonParser
 {
  public:
-   Parser(const char *json, int length);
-
-   QJsonDocument parse(QJsonParseError *error);
-
-   class ParsedObject
-   {
-    public:
-      ParsedObject(Parser *p, int pos) : parser(p), objectPosition(pos) {}
-      void insert(uint offset);
-
-      Parser *parser;
-      int objectPosition;
-      QVarLengthArray<uint, 64> offsets;
-
-      inline QJsonPrivate::Entry *entryAt(int i) const {
-         return reinterpret_cast<QJsonPrivate::Entry *>(parser->data + objectPosition + offsets[i]);
-      }
+   enum TokenType {
+      Null           = 0x00,
+      Space          = 0x20,
+      Tab            = 0x09,
+      LineFeed       = 0x0a,
+      Return         = 0x0d,
+      BeginArray     = 0x5b,
+      BeginObject    = 0x7b,
+      EndArray       = 0x5d,
+      EndObject      = 0x7d,
+      NameSeparator  = 0x3a,
+      ValueSeparator = 0x2c,
+      Quote          = 0x22
    };
 
+   QJsonParser(QStringView8 data);
+   QJsonDocument parse(QJsonParseError *error);
 
  private:
-   inline void eatBOM();
-   inline bool eatSpace();
-   inline char nextToken();
+   void eatBOM();
+   bool eatWhiteSpace();
+   TokenType nextToken();
 
-   bool parseObject();
-   bool parseArray();
-   bool parseMember(int baseOffset);
-   bool parseString(bool *latin1);
-   bool parseValue(QJsonPrivate::Value *val, int baseOffset);
-   bool parseNumber(QJsonPrivate::Value *val, int baseOffset);
-   const char *head;
-   const char *json;
-   const char *end;
+   bool parseArray(QJsonArray &array);
+   bool parseObject(QJsonObject &object);
+   bool parseMember(QJsonObject &object);
+   bool parseString(QString &str);
 
-   char *data;
-   int dataLength;
-   int current;
+   bool parseValue(QJsonValue &value);
+   bool parseNumber(QJsonValue &value);
+
+   QStringView8 m_data;
+   QString::const_iterator m_position;
+
    int nestingLevel;
    QJsonParseError::ParseError lastError;
-
-   inline int reserveSpace(int space) {
-      if (current + space >= dataLength) {
-         dataLength = 2 * dataLength + space;
-         data = (char *)realloc(data, dataLength);
-      }
-      int pos = current;
-      current += space;
-      return pos;
-   }
 };
-
-}
-
-QT_END_NAMESPACE
 
 #endif

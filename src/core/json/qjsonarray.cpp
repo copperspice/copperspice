@@ -20,468 +20,203 @@
 *
 ***********************************************************************/
 
-#include <qjsonobject.h>
-#include <qjsonvalue.h>
+#include <qjson.h>
 #include <qjsonarray.h>
-#include <qjsonvalue.h>
-#include <qstringlist.h>
-#include <qvariant.h>
-#include <qdebug.h>
-
 #include <qjsonwriter_p.h>
-#include <qjson_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QJsonArray::QJsonArray()
-   : d(0), a(0)
 {
+   m_array = std::make_shared<QJsonDataArray>();
 }
 
-
-QJsonArray::QJsonArray(QJsonPrivate::Data *data, QJsonPrivate::Array *array)
-   : d(data), a(array)
+QJsonArray::QJsonArray(const_iterator iter_begin, const_iterator iter_end)
 {
-   Q_ASSERT(data);
-   Q_ASSERT(array);
-   d->ref.ref();
-}
-
-QJsonArray::~QJsonArray()
-{
-   if (d && !d->ref.deref()) {
-      delete d;
-   }
+   m_array = std::make_shared<QJsonDataArray>();
+   m_array->m_vector = QVector<QJsonValue>(iter_begin, iter_end);
 }
 
 QJsonArray::QJsonArray(const QJsonArray &other)
 {
-   d = other.d;
-   a = other.a;
-   if (d) {
-      d->ref.ref();
+   m_array = std::make_shared<QJsonDataArray>(*other.m_array);
+}
+
+QJsonArray::QJsonArray(QJsonArray &&other)
+{
+   m_array = std::move(other.m_array);
+}
+
+QJsonArray::QJsonArray(std::initializer_list<QJsonValue> args) {
+
+   m_array = std::make_shared<QJsonDataArray>();
+
+   for (const auto &item : args) {
+      append(item);
    }
+}
+
+QJsonArray::~QJsonArray()
+{
+}
+
+void QJsonArray::append(QJsonValue value) {
+   m_array->m_vector.append(std::move(value));
 }
 
 QJsonArray &QJsonArray::operator =(const QJsonArray &other)
 {
-   if (d != other.d) {
-      if (d && !d->ref.deref()) {
-         delete d;
-      }
-      d = other.d;
-      if (d) {
-         d->ref.ref();
-      }
-   }
-   a = other.a;
+   *m_array = *other.m_array;
 
    return *this;
+}
+
+const QJsonValue &QJsonArray::at(size_type index) const
+{
+   return m_array->m_vector.at(index);
+}
+
+bool QJsonArray::contains(const QJsonValue &value) const
+{
+   return m_array->m_vector.contains(value);
+}
+
+QJsonArray::iterator QJsonArray::erase(const_iterator iter) {
+   return m_array->m_vector.erase(iter);
+}
+
+const QJsonValue &QJsonArray::first() const
+{
+   return m_array->m_vector.first();
+}
+
+void QJsonArray::insert(size_type index, QJsonValue value)
+{
+   return m_array->m_vector.insert(index, std::move(value));
+}
+
+QJsonArray::iterator QJsonArray::insert(iterator before, QJsonValue value) {
+   return m_array->m_vector.insert(before, std::move(value));
+}
+
+bool QJsonArray::isEmpty() const
+{
+   return ! m_array->m_vector.size();
+}
+
+const QJsonValue &QJsonArray::last() const
+{
+   return m_array->m_vector.last();
+}
+
+void QJsonArray::prepend(QJsonValue value) {
+   m_array->m_vector.append(std::move(value));
+}
+
+void QJsonArray::removeAt(size_type index)
+{
+   m_array->m_vector.removeAt(index);
+}
+
+QJsonArray::size_type QJsonArray::size() const
+{
+   return m_array->m_vector.size();
+}
+
+QJsonValue QJsonArray::takeAt(size_type index)
+{
+   return m_array->m_vector.takeAt(index);
 }
 
 QJsonArray QJsonArray::fromStringList(const QStringList &list)
 {
    QJsonArray array;
-   for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
-      array.append(QJsonValue(*it));
+
+   for (const auto &item : list) {
+      array.append(QJsonValue(item));
    }
+
    return array;
 }
 
-QJsonArray QJsonArray::fromVariantList(const QVariantList &list)
+QJsonArray QJsonArray::fromVariantList(const QList<QVariant> &list)
 {
    QJsonArray array;
-   for (QVariantList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
-      array.append(QJsonValue::fromVariant(*it));
+
+   for (const auto &item : list) {
+      array.append(QJsonValue::fromVariant(item));
    }
+
    return array;
 }
 
-QVariantList QJsonArray::toVariantList() const
+QList<QVariant> QJsonArray::toVariantList() const
 {
-   QVariantList list;
+   QList<QVariant> list;
 
-   if (a) {
-      for (int i = 0; i < (int)a->length; ++i) {
-         list.append(QJsonValue(d, a, a->at(i)).toVariant());
-      }
+   for (const auto &item : *this) {
+      list.append(item.toVariant());
    }
+
    return list;
 }
 
-int QJsonArray::size() const
+void QJsonArray::replace(size_type index, QJsonValue value)
 {
-   if (!d) {
-      return 0;
-   }
-
-   return (int)a->length;
+   m_array->m_vector.replace(index, std::move(value));
 }
 
-/*!
-    \fn QJsonArray::count() const
-
-    Same as size().
-
-    \sa size()
-*/
-
-/*!
-    Returns \c true if the object is empty. This is the same as size() == 0.
-
-    \sa size()
- */
-bool QJsonArray::isEmpty() const
+QJsonValue &QJsonArray::operator [](size_type index)
 {
-   if (!d) {
-      return true;
-   }
-
-   return !a->length;
+   return m_array->m_vector[index];
 }
 
-/*!
-    Returns a QJsonValue representing the value for index \a i.
-
-    The returned QJsonValue is \c Undefined, if \a i is out of bounds.
-
- */
-QJsonValue QJsonArray::at(int i) const
+const QJsonValue &QJsonArray::operator[](size_type index) const
 {
-   if (!a || i < 0 || i >= (int)a->length) {
-      return QJsonValue(QJsonValue::Undefined);
-   }
-
-   return QJsonValue(d, a, a->at(i));
+   return m_array->m_vector[index];
 }
 
-/*!
-    Returns the first value stored in the array.
-
-    Same as \c at(0).
-
-    \sa at()
- */
-QJsonValue QJsonArray::first() const
-{
-   return at(0);
-}
-
-/*!
-    Returns the last value stored in the array.
-
-    Same as \c{at(size() - 1)}.
-
-    \sa at()
- */
-QJsonValue QJsonArray::last() const
-{
-   return at(a ? (a->length - 1) : 0);
-}
-
-/*!
-    Inserts \a value at the beginning of the array.
-
-    This is the same as \c{insert(0, value)} and will prepend \a value to the array.
-
-    \sa append(), insert()
- */
-void QJsonArray::prepend(const QJsonValue &value)
-{
-   insert(0, value);
-}
-
-/*!
-    Inserts \a value at the end of the array.
-
-    \sa prepend(), insert()
- */
-void QJsonArray::append(const QJsonValue &value)
-{
-   insert(a ? (int)a->length : 0, value);
-}
-
-/*!
-    Removes the value at index position \a i. \a i must be a valid
-    index position in the array (i.e., \c{0 <= i < size()}).
-
-    \sa insert(), replace()
- */
-void QJsonArray::removeAt(int i)
-{
-   if (!a || i < 0 || i >= (int)a->length) {
-      return;
-   }
-
-   detach();
-   a->removeItems(i, 1);
-   ++d->compactionCounter;
-   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u) {
-      compact();
-   }
-}
-
-/*! \fn void QJsonArray::removeFirst()
-
-    Removes the first item in the array. Calling this function is
-    equivalent to calling \c{removeAt(0)}. The array must not be empty. If
-    the array can be empty, call isEmpty() before calling this
-    function.
-
-    \sa removeAt(), removeLast()
-*/
-
-/*! \fn void QJsonArray::removeLast()
-
-    Removes the last item in the array. Calling this function is
-    equivalent to calling \c{removeAt(size() - 1)}. The array must not be
-    empty. If the array can be empty, call isEmpty() before calling
-    this function.
-
-    \sa removeAt(), removeFirst()
-*/
-
-/*!
-    Removes the item at index position \a i and returns it. \a i must
-    be a valid index position in the array (i.e., \c{0 <= i < size()}).
-
-    If you don't use the return value, removeAt() is more efficient.
-
-    \sa removeAt()
- */
-QJsonValue QJsonArray::takeAt(int i)
-{
-   if (!a || i < 0 || i >= (int)a->length) {
-      return QJsonValue(QJsonValue::Undefined);
-   }
-
-   QJsonValue v(d, a, a->at(i));
-   removeAt(i); // detaches
-   return v;
-}
-
-/*!
-    Inserts \a value at index position \a i in the array. If \a i
-    is \c 0, the value is prepended to the array. If \a i is size(), the
-    value is appended to the array.
-
-    \sa append(), prepend(), replace(), removeAt()
- */
-void QJsonArray::insert(int i, const QJsonValue &value)
-{
-   Q_ASSERT (i >= 0 && i <= (a ? (int)a->length : 0));
-   QJsonValue val = value;
-
-   bool compressed;
-   int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
-
-   detach(valueSize + sizeof(QJsonPrivate::Value));
-
-   if (!a->length) {
-      a->tableOffset = sizeof(QJsonPrivate::Array);
-   }
-
-   int valueOffset = a->reserveSpace(valueSize, i, 1, false);
-   if (!valueOffset) {
-      return;
-   }
-
-   QJsonPrivate::Value &v = (*a)[i];
-   v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
-   v.latinOrIntValue = compressed;
-   v.latinKey = false;
-   v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
-   if (valueSize) {
-      QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
-   }
-}
-
-/*!
-    \fn QJsonArray::iterator QJsonArray::insert(iterator before, const QJsonValue &value)
-
-    Inserts \a value before the position pointed to by \a before, and returns an iterator
-    pointing to the newly inserted item.
-
-    \sa erase(), insert()
-*/
-
-/*!
-    \fn QJsonArray::iterator QJsonArray::erase(iterator it)
-
-    Removes the item pointed to by \a it, and returns an iterator pointing to the
-    next item.
-
-    \sa removeAt()
-*/
-
-/*!
-    Replaces the item at index position \a i with \a value. \a i must
-    be a valid index position in the array (i.e., \c{0 <= i < size()}).
-
-    \sa operator[](), removeAt()
- */
-void QJsonArray::replace(int i, const QJsonValue &value)
-{
-   Q_ASSERT (a && i >= 0 && i < (int)(a->length));
-   QJsonValue val = value;
-
-   bool compressed;
-   int valueSize = QJsonPrivate::Value::requiredStorage(val, &compressed);
-
-   detach(valueSize);
-
-   if (!a->length) {
-      a->tableOffset = sizeof(QJsonPrivate::Array);
-   }
-
-   int valueOffset = a->reserveSpace(valueSize, i, 1, true);
-   if (!valueOffset) {
-      return;
-   }
-
-   QJsonPrivate::Value &v = (*a)[i];
-   v.type = (val.t == QJsonValue::Undefined ? QJsonValue::Null : val.t);
-   v.latinOrIntValue = compressed;
-   v.latinKey = false;
-   v.value = QJsonPrivate::Value::valueToStore(val, valueOffset);
-   if (valueSize) {
-      QJsonPrivate::Value::copyData(val, (char *)a + valueOffset, compressed);
-   }
-
-   ++d->compactionCounter;
-   if (d->compactionCounter > 32u && d->compactionCounter >= unsigned(a->length) / 2u) {
-      compact();
-   }
-}
-
-/*!
-    Returns \c true if the array contains an occurrence of \a value, otherwise \c false.
-
-    \sa count()
- */
-bool QJsonArray::contains(const QJsonValue &value) const
-{
-   for (int i = 0; i < size(); i++) {
-      if (at(i) == value) {
-         return true;
-      }
-   }
-   return false;
-}
-
-/*!
-    Returns the value at index position \a i as a modifiable reference.
-    \a i must be a valid index position in the array (i.e., \c{0 <= i <
-    size()}).
-
-    The return value is of type QJsonValueRef, a helper class for QJsonArray
-    and QJsonObject. When you get an object of type QJsonValueRef, you can
-    use it as if it were a reference to a QJsonValue. If you assign to it,
-    the assignment will apply to the character in the QJsonArray of QJsonObject
-    from which you got the reference.
-
-    \sa at()
- */
-QJsonValueRef QJsonArray::operator [](int i)
-{
-   Q_ASSERT(a && i >= 0 && i < (int)a->length);
-   return QJsonValueRef(this, i);
-}
-
-/*!
-    \overload
-
-    Same as at().
- */
-QJsonValue QJsonArray::operator[](int i) const
-{
-   return at(i);
-}
-
-/*!
-    Returns \c true if this array is equal to \a other.
- */
 bool QJsonArray::operator==(const QJsonArray &other) const
 {
-   if (a == other.a) {
-      return true;
-   }
-
-   if (!a) {
-      return !other.a->length;
-   }
-   if (!other.a) {
-      return !a->length;
-   }
-   if (a->length != other.a->length) {
-      return false;
-   }
-
-   for (int i = 0; i < (int)a->length; ++i) {
-      if (QJsonValue(d, a, a->at(i)) != QJsonValue(other.d, other.a, other.a->at(i))) {
-         return false;
-      }
-   }
-   return true;
+   return m_array->m_vector == other.m_array->m_vector;
 }
 
-/*!
-    Returns \c true if this array is not equal to \a other.
- */
 bool QJsonArray::operator!=(const QJsonArray &other) const
 {
    return !(*this == other);
 }
 
-void QJsonArray::detach(uint reserve)
+QJsonArray &QJsonArray::operator+=(QJsonValue value)
 {
-   if (!d) {
-      d = new QJsonPrivate::Data(reserve, QJsonValue::Array);
-      a = static_cast<QJsonPrivate::Array *>(d->header->root());
-      d->ref.ref();
-      return;
-   }
-   if (reserve == 0 && d->ref.load() == 1) {
-      return;
-   }
-
-   QJsonPrivate::Data *x = d->clone(a, reserve);
-   x->ref.ref();
-   if (!d->ref.deref()) {
-      delete d;
-   }
-   d = x;
-   a = static_cast<QJsonPrivate::Array *>(d->header->root());
+   m_array->m_vector.append(std::move(value));
+   return *this;
 }
 
-/*!
-    \internal
- */
-void QJsonArray::compact()
+QJsonArray &QJsonArray::operator<< (const QJsonValue value)
 {
-   if (!d || !d->compactionCounter) {
-      return;
-   }
-
-   detach();
-   d->compact();
-   a = static_cast<QJsonPrivate::Array *>(d->header->root());
+   m_array->m_vector.append(std::move(value));
+   return *this;
 }
 
-
-QDebug operator<<(QDebug dbg, const QJsonArray &a)
-{
-   if (!a.a) {
-      dbg << "QJsonArray()";
-      return dbg;
-   }
-   QByteArray json;
-   QJsonPrivate::Writer::arrayToJson(a.a, json, 0, true);
-   dbg.nospace() << "QJsonArray("
-                 << json.constData() // print as utf-8 string without extra quotation marks
-                 << ")";
-   return dbg.space();
+// iterators
+QJsonArray::iterator QJsonArray::begin() {
+   return m_array->m_vector.begin();
 }
 
-QT_END_NAMESPACE
+QJsonArray::const_iterator QJsonArray::begin() const {
+   return m_array->m_vector.begin();
+}
 
+QJsonArray::const_iterator QJsonArray::constBegin() const {
+   return m_array->m_vector.constBegin();
+}
+
+QJsonArray::iterator QJsonArray::end() {
+   return m_array->m_vector.end();
+}
+
+QJsonArray::const_iterator QJsonArray::end() const {
+   return m_array->m_vector.end();
+}
+
+QJsonArray::const_iterator QJsonArray::constEnd() const {
+   return m_array->m_vector.constEnd();
+}
