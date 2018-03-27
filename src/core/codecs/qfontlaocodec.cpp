@@ -75,27 +75,32 @@ QString QFontLaoCodec::convertToUnicode(const char *, int, ConverterState *) con
    return QString();
 }
 
-QByteArray QFontLaoCodec::convertFromUnicode(const QChar *uc, int len, ConverterState *) const
+QByteArray QFontLaoCodec::convertFromUnicode(const QStringView8 &str, ConverterState *) const
 {
-   QByteArray rstring(len, Qt::Uninitialized);
-   uchar *rdata = (uchar *) rstring.data();
-   const QChar *sdata = uc;
-   int i = 0;
-   for (; i < len; ++i, ++sdata, ++rdata) {
-      if (sdata->unicode() < 0x80) {
-         *rdata = (uchar) sdata->unicode();
-      } else if (sdata->unicode() >= 0x0e80 && sdata->unicode() <= 0x0eff) {
-         uchar lao = unicode_to_mulelao[sdata->unicode() - 0x0e80];
+   QByteArray retval;
+
+   for (auto c : str) {
+      char32_t uc = c.unicode();
+
+      if (uc < 0x80) {
+         retval.append(uc & 0xFF);
+
+      } else if (uc >= 0x0e80 && uc <= 0x0eff) {
+         uchar lao = unicode_to_mulelao[uc - 0x0e80];
+
          if (lao) {
-            *rdata = lao;
+            retval.append(lao);
+
          } else {
-            *rdata = 0;
+            retval.append('\0');
          }
+
       } else {
-         *rdata = 0;
+         retval.append('\0');
       }
    }
-   return rstring;
+
+   return retval;
 }
 
 QT_END_NAMESPACE

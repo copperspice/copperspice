@@ -22,10 +22,9 @@
 
 #include <qtextcodecplugin.h>
 #include <qstringlist.h>
+#include <qstringparser.h>
 
 #ifndef QT_NO_TEXTCODECPLUGIN
-
-QT_BEGIN_NAMESPACE
 
 QTextCodecPlugin::QTextCodecPlugin(QObject *parent)
    : QObject(parent)
@@ -41,24 +40,25 @@ QStringList QTextCodecPlugin::keys() const
    QStringList keys;
    QList<QByteArray> list = names();
    list += aliases();
+
    for (int i = 0; i < list.size(); ++i) {
       keys += QString::fromLatin1(list.at(i));
    }
+
    QList<int> mibs = mibEnums();
    for (int i = 0; i < mibs.count(); ++i) {
-      keys += QLatin1String("MIB: ") + QString::number(mibs.at(i));
+      keys += "MIB: " + QString::number(mibs.at(i));
    }
+
    return keys;
 }
 
 QTextCodec *QTextCodecPlugin::create(const QString &name)
 {
-   if (name.startsWith(QLatin1String("MIB: "))) {
-      return createForMib(name.mid(4).toInt());
+   if (name.startsWith("MIB: ")) {
+      return createForMib(name.mid(4).toInteger<int>());
    }
    return createForName(name.toLatin1());
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTCODECPLUGIN

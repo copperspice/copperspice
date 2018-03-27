@@ -26,8 +26,6 @@
 #include <QtCore/qtextcodec.h>
 #include <qtextcodec_p.h>
 
-QT_BEGIN_NAMESPACE
-
 enum DataEndianness {
    DetectEndianness,
    BigEndianness,
@@ -36,19 +34,17 @@ enum DataEndianness {
 
 struct QUtf8 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *);
-   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *);
+   static QByteArray convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *);
 };
 
 struct QUtf16 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *,
-                                        DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
 };
 
 struct QUtf32 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-   static QByteArray convertFromUnicode(const QChar *, int, QTextCodec::ConverterState *,
-                                        DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
 };
 
 #ifndef QT_NO_TEXTCODEC
@@ -59,7 +55,7 @@ class QUtf8Codec : public QTextCodec
    ~QUtf8Codec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
    void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
 
    QByteArray name() const override;
@@ -80,7 +76,7 @@ class QUtf16Codec : public QTextCodec
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
 
  protected:
    DataEndianness e;
@@ -124,7 +120,7 @@ class QUtf32Codec : public QTextCodec
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
 
  protected:
    DataEndianness e;
@@ -156,7 +152,5 @@ class QUtf32LECodec : public QUtf32Codec
 
 
 #endif // QT_NO_TEXTCODEC
-
-QT_END_NAMESPACE
 
 #endif // QUTFCODEC_P_H

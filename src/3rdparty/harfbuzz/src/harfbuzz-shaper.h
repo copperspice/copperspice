@@ -140,7 +140,7 @@ typedef struct {
     /*HB_Bool*/ hb_bitfield charStop                :1;     /* Valid cursor position (for left/right arrow) */
     /*HB_Bool*/ hb_bitfield wordBoundary            :1;
     /*HB_Bool*/ hb_bitfield sentenceBoundary        :1;
-    hb_bitfield unused                  :2;
+    hb_bitfield unused                              :2;
 } HB_CharAttributes;
 
 void HB_GetCharAttributes(const HB_UChar16 *string, hb_uint32 stringLength,
@@ -154,8 +154,8 @@ void HB_GetWordBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
 
 /* requires HB_GetCharAttributes to be called before */
 void HB_GetSentenceBoundaries(const HB_UChar16 *string, hb_uint32 stringLength,
-                              const HB_ScriptItem *items, hb_uint32 numItems,
-                              HB_CharAttributes *attributes);
+                          const HB_ScriptItem *items, hb_uint32 numItems,
+                          HB_CharAttributes *attributes);
 
 
 typedef enum {
@@ -169,7 +169,7 @@ typedef enum {
     HB_ShaperFlag_UseDesignMetrics = 2
 } HB_ShaperFlag;
 
-/* 
+/*
    highest value means highest priority for justification. Justification is done by first inserting kashidas
    starting with the highest priority positions, then stretching spaces, afterwards extending inter char
    spacing, and last spacing between arabic words.
@@ -189,7 +189,7 @@ typedef enum {
     HB_Arabic_Kashida = 13   /* Kashida(U+640) in middle of word */
 } HB_JustificationClass;
 
-// This structure is binary compatible with Uniscribe's SCRIPT_VISATTR. Would be nice to keep it like that 
+// This structure is binary compatible with Uniscribe's SCRIPT_VISATTR. Would be nice to keep it like that
 typedef struct {
     hb_bitfield justification   :4;  /* Justification class */
     hb_bitfield clusterStart    :1;  /* First glyph of representation of cluster */

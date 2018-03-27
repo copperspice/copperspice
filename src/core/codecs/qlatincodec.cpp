@@ -25,8 +25,6 @@
 
 #ifndef QT_NO_TEXTCODEC
 
-QT_BEGIN_NAMESPACE
-
 QLatin1Codec::~QLatin1Codec()
 {
 }
@@ -40,25 +38,30 @@ QString QLatin1Codec::convertToUnicode(const char *chars, int len, ConverterStat
    return QString::fromLatin1(chars, len);
 }
 
-
-QByteArray QLatin1Codec::convertFromUnicode(const QChar *ch, int len, ConverterState *state) const
+QByteArray QLatin1Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
-   QByteArray r(len, Qt::Uninitialized);
-   char *d = r.data();
+
+   QByteArray retval;
+
    int invalid = 0;
-   for (int i = 0; i < len; ++i) {
-      if (ch[i] > 0xff) {
-         d[i] = replacement;
+
+   for (auto c : str) {
+
+      if (c > 0xff) {
+         retval.append(replacement);
          ++invalid;
+
       } else {
-         d[i] = (char)ch[i].cell();
+         retval.append(c.unicode() & 0xFF);
       }
    }
+
    if (state) {
       state->invalidChars += invalid;
    }
-   return r;
+
+   return retval;
 }
 
 QByteArray QLatin1Codec::name() const
@@ -77,12 +80,10 @@ QList<QByteArray> QLatin1Codec::aliases() const
    return list;
 }
 
-
 int QLatin1Codec::mibEnum() const
 {
    return 4;
 }
-
 
 QLatin15Codec::~QLatin15Codec()
 {
@@ -94,52 +95,93 @@ QString QLatin15Codec::convertToUnicode(const char *chars, int len, ConverterSta
       return QString();
    }
 
-   QString str = QString::fromLatin1(chars, len);
-   QChar *uc = str.data();
+   QString retval;
+   const char *c = chars;
+
    while (len--) {
-      switch (uc->unicode()) {
+
+      switch (static_cast<uchar>(*c)) {
+
          case 0xa4:
-            *uc = 0x20ac;
+            {
+               char32_t tmp = U'\u20ac';
+               retval.append(tmp);
+            }
             break;
+
          case 0xa6:
-            *uc = 0x0160;
+            {
+               char32_t tmp = U'\u0160';
+               retval.append(tmp);
+            }
             break;
+
          case 0xa8:
-            *uc = 0x0161;
+            {
+               char32_t tmp = U'\u0161';
+               retval.append(tmp);
+            }
             break;
+
          case 0xb4:
-            *uc = 0x017d;
+            {
+               char32_t tmp = U'\u017d';
+               retval.append(tmp);
+            }
             break;
+
          case 0xb8:
-            *uc = 0x017e;
+            {
+               char32_t tmp = U'\u017e';
+               retval.append(tmp);
+            }
             break;
+
          case 0xbc:
-            *uc = 0x0152;
+            {
+               char32_t tmp = U'\u0152';
+               retval.append(tmp);
+            }
             break;
+
          case 0xbd:
-            *uc = 0x0153;
+            {
+               char32_t tmp = U'\u0153';
+               retval.append(tmp);
+            }
             break;
+
          case 0xbe:
-            *uc = 0x0178;
+            {
+               char32_t tmp = U'\u0178';
+               retval.append(tmp);
+            }
             break;
+
          default:
+            retval.append(c);
             break;
       }
-      uc++;
+
+      c++;
    }
-   return str;
+
+   return retval;
 }
 
-QByteArray QLatin15Codec::convertFromUnicode(const QChar *in, int length, ConverterState *state) const
+QByteArray QLatin15Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
-   QByteArray r(length, Qt::Uninitialized);
-   char *d = r.data();
+
+   QByteArray retval;
    int invalid = 0;
-   for (int i = 0; i < length; ++i) {
-      uchar c;
-      ushort uc = in[i].unicode();
+
+   for (auto c : str) {
+      char32_t uc = c.unicode();
+      uchar tmp   = uc & 0xFF;
+
       if (uc < 0x0100) {
+
          if (uc > 0xa3) {
             switch (uc) {
                case 0xa4:
@@ -150,60 +192,64 @@ QByteArray QLatin15Codec::convertFromUnicode(const QChar *in, int length, Conver
                case 0xbc:
                case 0xbd:
                case 0xbe:
-                  c = replacement;
+                  tmp = replacement;
                   ++invalid;
                   break;
+
                default:
-                  c = (unsigned char) uc;
                   break;
             }
-         } else {
-            c = (unsigned char) uc;
          }
+
       } else {
          if (uc == 0x20ac) {
-            c = 0xa4;
+            tmp = 0xa4;
+
          } else if ((uc & 0xff00) == 0x0100) {
+
             switch (uc) {
                case 0x0160:
-                  c = 0xa6;
+                  tmp = 0xa6;
                   break;
                case 0x0161:
-                  c = 0xa8;
+                  tmp = 0xa8;
                   break;
                case 0x017d:
-                  c = 0xb4;
+                  tmp = 0xb4;
                   break;
                case 0x017e:
-                  c = 0xb8;
+                  tmp = 0xb8;
                   break;
                case 0x0152:
-                  c = 0xbc;
+                  tmp = 0xbc;
                   break;
                case 0x0153:
-                  c = 0xbd;
+                  tmp = 0xbd;
                   break;
                case 0x0178:
-                  c = 0xbe;
+                  tmp = 0xbe;
                   break;
                default:
-                  c = replacement;
+                  tmp = replacement;
                   ++invalid;
             }
+
          } else {
-            c = replacement;
+            tmp = replacement;
             ++invalid;
          }
       }
-      d[i] = (char)c;
+
+      retval.append(tmp);
    }
+
    if (state) {
       state->remainingChars = 0;
       state->invalidChars += invalid;
    }
-   return r;
-}
 
+   return retval;
+}
 
 QByteArray QLatin15Codec::name() const
 {
@@ -221,7 +267,5 @@ int QLatin15Codec::mibEnum() const
 {
    return 111;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTCODEC

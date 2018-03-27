@@ -20,7 +20,6 @@ CORE_CODECS_PRIVATE_INCLUDES = \
 	qlatincodec_p.h \
 	qsimplecodec_p.h \
 	qtextcodec_p.h \
-	qtsciicodec_p.h \
 	qutfcodec_p.h \
 	qiconvcodec_p.h \
 	qfontlaocodec_p.h
@@ -38,7 +37,6 @@ lib_libCsCore@BUILD_ABI@_la_SOURCES += \
 	src/core/codecs/qsimplecodec.cpp \
 	src/core/codecs/qtextcodec.cpp \
 	src/core/codecs/qtextcodecplugin.cpp \
-	src/core/codecs/qtsciicodec.cpp \
 	src/core/codecs/qutfcodec.cpp \
 	src/core/codecs/qfontlaocodec.cpp
 

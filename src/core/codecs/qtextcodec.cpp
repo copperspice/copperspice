@@ -26,28 +26,32 @@
 
 #ifndef QT_NO_TEXTCODEC
 
-#include <qlist.h>
-#include <qfile.h>
-#include <qvarlengtharray.h>
-#include <qcoreapplication.h>
-#include <qtextcodecplugin.h>
+#include <qlatincodec_p.h>
 #include <qfactoryloader_p.h>
+#include <qutfcodec_p.h>
+#include <qsimplecodec_p.h>
+#include <qtextcodecplugin.h>
+
+#include <qcoreapplication.h>
+#include <qlocale.h>
+#include <qfile.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qmutex.h>
 #include <qstringlist.h>
+#include <qstringparser.h>
+#include <qvarlengtharray.h>
 
 #ifdef Q_OS_UNIX
 #  include <qiconvcodec_p.h>
 #endif
 
-#include <qutfcodec_p.h>
-#include <qsimplecodec_p.h>
-#include <qlatincodec_p.h>
-
 #ifndef QT_NO_CODECS
-#  include <qtsciicodec_p.h>
 #  include <qisciicodec_p.h>
 
 #  if defined(QT_NO_ICONV) && ! defined(QT_CODEC_PLUGINS)
 //   no iconv(3) support, must build all codecs into the library
+
 #    include "../../plugins/codecs/cn/qgb18030codec.h"
 #    include "../../plugins/codecs/jp/qeucjpcodec.h"
 #    include "../../plugins/codecs/jp/qjiscodec.h"
@@ -62,10 +66,6 @@
 #  endif
 #endif
 
-#include <qlocale.h>
-#include <qmutex.h>
-#include <qhash.h>
-
 #include <stdlib.h>
 #include <ctype.h>
 #include <locale.h>
@@ -74,19 +74,13 @@
 #include <langinfo.h>
 #endif
 
-// enabling this is not exception safe!
-// #define Q_DEBUG_TEXTCODEC
-
-QT_BEGIN_NAMESPACE
-
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecFactoryInterface_iid, QLatin1String("/codecs")))
+Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecFactoryInterface_iid, "/codecs"))
 #endif
 
-//Cache for QTextCodec::codecForName and codecForMib.
+// Cache for QTextCodec::codecForName and codecForMib.
 typedef QHash<QByteArray, QTextCodec *> QTextCodecCache;
 Q_GLOBAL_STATIC(QTextCodecCache, qTextCodecCache)
-
 
 static char qtolower(char c)
 {
@@ -102,7 +96,7 @@ static bool qisalnum(char c)
 
 static bool nameMatch(const QByteArray &name, const QByteArray &test)
 {
-   // if they're the same, return a perfect score
+   // if they are the same, return a perfect score
    if (qstricmp(name.constData(), test.constData()) == 0) {
       return true;
    }
@@ -129,56 +123,51 @@ static bool nameMatch(const QByteArray &name, const QByteArray &test)
       }
       ++n;
    }
+
    while (*h && !qisalnum(*h)) {
       ++h;
    }
    return (*h == '\0');
 }
 
-
 static QTextCodec *createForName(const QByteArray &name)
 {
+
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
    QStringList keys = l->keys();
+
    for (int i = 0; i < keys.size(); ++i) {
       if (nameMatch(name, keys.at(i).toLatin1())) {
          QString realName = keys.at(i);
-         if (QTextCodecFactoryInterface * factory
-               = qobject_cast<QTextCodecFactoryInterface *>(l->instance(realName))) {
+
+         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(l->instance(realName))) {
             return factory->create(realName);
          }
       }
    }
-#else
-   Q_UNUSED(name);
 #endif
+
    return 0;
 }
 
 static QTextCodec *createForMib(int mib)
 {
+
 #ifndef QT_NO_TEXTCODECPLUGIN
-   QString name = QLatin1String("MIB: ") + QString::number(mib);
+   QString name = "MIB: " + QString::number(mib);
 
    if (QTextCodecFactoryInterface *factory = qobject_cast<QTextCodecFactoryInterface *>(loader()->instance(name))) {
       return factory->create(name);
    }
-#else
-   Q_UNUSED(mib);
-
 #endif
+
    return 0;
 }
 
 static QList<QTextCodec *> *all = 0;
-#ifdef Q_DEBUG_TEXTCODEC
-static bool destroying_is_ok = false;
-#endif
-
 static QTextCodec *localeMapper = 0;
 QTextCodec *QTextCodec::cftr = 0;
-
 
 class QTextCodecCleanup
 {
@@ -186,33 +175,21 @@ class QTextCodecCleanup
    ~QTextCodecCleanup();
 };
 
-/*
-    Deletes all the created codecs. This destructor is called just
-    before exiting to delete any QTextCodec objects that may be lying
-    around.
-*/
 QTextCodecCleanup::~QTextCodecCleanup()
 {
-   if (!all) {
+   if (! all) {
       return;
    }
 
-#ifdef Q_DEBUG_TEXTCODEC
-   destroying_is_ok = true;
-#endif
-
    QList<QTextCodec *> *myAll = all;
+
    all = 0; // Otherwise the d'tor destroys the iterator
-   for (QList<QTextCodec *>::const_iterator it = myAll->constBegin()
-         ; it != myAll->constEnd(); ++it) {
+   for (QList<QTextCodec *>::const_iterator it = myAll->constBegin(); it != myAll->constEnd(); ++it) {
       delete *it;
    }
+
    delete myAll;
    localeMapper = 0;
-
-#ifdef Q_DEBUG_TEXTCODEC
-   destroying_is_ok = false;
-#endif
 }
 
 Q_GLOBAL_STATIC(QTextCodecCleanup, createQTextCodecCleanup)
@@ -222,211 +199,14 @@ bool QTextCodec::validCodecs()
    return true;
 }
 
-
 #if defined(Q_OS_WIN32)
-class QWindowsLocalCodec: public QTextCodec
-{
- public:
-   QWindowsLocalCodec();
-   ~QWindowsLocalCodec();
+   // no code here
 
-   QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
-   QString convertToUnicodeCharByChar(const char *chars, int length, ConverterState *state) const;
-
-   QByteArray name() const override;
-   int mibEnum() const override;
-
-};
-
-QWindowsLocalCodec::QWindowsLocalCodec()
-{
-}
-
-QWindowsLocalCodec::~QWindowsLocalCodec()
-{
-}
-
-QString QWindowsLocalCodec::convertToUnicode(const char *chars, int length, ConverterState *state) const
-{
-   const char *mb = chars;
-   int mblen = length;
-
-   if (!mb || !mblen) {
-      return QString();
-   }
-
-   QVarLengthArray<wchar_t, 4096> wc(4096);
-   int len;
-   QString sp;
-   bool prepend = false;
-   char state_data = 0;
-   int remainingChars = 0;
-
-   //save the current state information
-   if (state) {
-      state_data = (char)state->state_data[0];
-      remainingChars = state->remainingChars;
-   }
-
-   //convert the pending charcter (if available)
-   if (state && remainingChars) {
-      char prev[3] = {0};
-      prev[0] = state_data;
-      prev[1] = mb[0];
-      remainingChars = 0;
-      len = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,
-                                prev, 2, wc.data(), wc.size());
-      if (len) {
-         prepend = true;
-         sp.append(QChar(wc[0]));
-         mb++;
-         mblen--;
-         wc[0] = 0;
-      }
-   }
-
-   while (!(len = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED | MB_ERR_INVALID_CHARS,
-                                      mb, mblen, wc.data(), wc.size()))) {
-      int r = GetLastError();
-      if (r == ERROR_INSUFFICIENT_BUFFER) {
-         const int wclen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,
-                                               mb, mblen, 0, 0);
-         wc.resize(wclen);
-      } else if (r == ERROR_NO_UNICODE_TRANSLATION) {
-         //find the last non NULL character
-         while (mblen > 1  && !(mb[mblen - 1])) {
-            mblen--;
-         }
-         //check whether,  we hit an invalid character in the middle
-         if ((mblen <= 1) || (remainingChars && state_data)) {
-            return convertToUnicodeCharByChar(chars, length, state);
-         }
-         //Remove the last character and try again...
-         state_data = mb[mblen - 1];
-         remainingChars = 1;
-         mblen--;
-      } else {
-         // Fail.
-         qWarning("MultiByteToWideChar: Cannot convert multibyte text");
-         break;
-      }
-   }
-
-   if (len <= 0) {
-      return QString();
-   }
-
-   if (wc[len - 1] == 0) { // len - 1: we don't want terminator
-      --len;
-   }
-
-   //save the new state information
-   if (state) {
-      state->state_data[0] = (char)state_data;
-      state->remainingChars = remainingChars;
-   }
-   QString s((QChar *)wc.data(), len);
-   if (prepend) {
-      return sp + s;
-   }
-   return s;
-}
-
-QString QWindowsLocalCodec::convertToUnicodeCharByChar(const char *chars, int length, ConverterState *state) const
-{
-   if (!chars || !length) {
-      return QString();
-   }
-
-   int copyLocation = 0;
-   int extra = 2;
-   if (state && state->remainingChars) {
-      copyLocation = state->remainingChars;
-      extra += copyLocation;
-   }
-   int newLength = length + extra;
-   char *mbcs = new char[newLength];
-   //ensure that we have a NULL terminated string
-   mbcs[newLength - 1] = 0;
-   mbcs[newLength - 2] = 0;
-   memcpy(&(mbcs[copyLocation]), chars, length);
-   if (copyLocation) {
-      //copy the last character from the state
-      mbcs[0] = (char)state->state_data[0];
-      state->remainingChars = 0;
-   }
-   const char *mb = mbcs;
-
-   const char *next = 0;
-   QString s;
-   while ((next = CharNextExA(CP_ACP, mb, 0)) != mb) {
-      wchar_t wc[2] = {0};
-      int charlength = next - mb;
-      int len = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED | MB_ERR_INVALID_CHARS, mb, charlength, wc, 2);
-      if (len > 0) {
-         s.append(QChar(wc[0]));
-      } else {
-         int r = GetLastError();
-         //check if the character being dropped is the last character
-         if (r == ERROR_NO_UNICODE_TRANSLATION && mb == (mbcs + newLength - 3) && state) {
-            state->remainingChars = 1;
-            state->state_data[0] = (char) * mb;
-         }
-      }
-      mb = next;
-   }
-
-   delete [] mbcs;
-   return s;
-}
-
-QByteArray QWindowsLocalCodec::convertFromUnicode(const QChar *ch, int uclen, ConverterState *) const
-{
-   if (!ch) {
-      return QByteArray();
-   }
-   if (uclen == 0) {
-      return QByteArray("");
-   }
-   BOOL used_def;
-   QByteArray mb(4096, 0);
-   int len;
-   while (!(len = WideCharToMultiByte(CP_ACP, 0, (const wchar_t *)ch, uclen,
-                                      mb.data(), mb.size() - 1, 0, &used_def))) {
-      int r = GetLastError();
-      if (r == ERROR_INSUFFICIENT_BUFFER) {
-         mb.resize(1 + WideCharToMultiByte(CP_ACP, 0,
-                                           (const wchar_t *)ch, uclen,
-                                           0, 0, 0, &used_def));
-         // and try again...
-      } else {
-#ifndef QT_NO_DEBUG
-         // Fail.
-         qWarning("WideCharToMultiByte: Cannot convert multibyte text (error %d): %s (UTF-8)",
-                  r, QString(ch, uclen).toLocal8Bit().data());
-#endif
-         break;
-      }
-   }
-   mb.resize(len);
-   return mb;
-}
-
-
-QByteArray QWindowsLocalCodec::name() const
-{
-   return "System";
-}
-
-int QWindowsLocalCodec::mibEnum() const
-{
-   return 0;
-}
 
 #else
 
 /* locale names mostly copied from XFree86 */
+
 static const char *const iso8859_2locales[] = {
    "croatian", "cs", "cs_CS", "cs_CZ", "cz", "cz_CZ", "czech", "hr",
    "hr_HR", "hu", "hu_HU", "hungarian", "pl", "pl_PL", "polish", "ro",
@@ -492,27 +272,16 @@ static const char *const tis_620locales[] = {
    "th", "th_TH", "thai", 0
 };
 
-// static const char * const tcvnlocales[] = {
-//     "vi", "vi_VN", 0 };
-
 static bool try_locale_list(const char *const locale[], const QByteArray &lang)
 {
    int i;
-   for (i = 0; locale[i] && lang != locale[i]; i++)
+
+   for (i = 0; locale[i] && lang != locale[i]; i++) {
       ;
+   }
+
    return locale[i] != 0;
 }
-
-// For the probably_koi8_locales we have to look. the standard says
-// these are 8859-5, but almost all Russian users use KOI8-R and
-// incorrectly set $LANG to ru_RU. We'll check tolower() to see what
-// it thinks ru_RU means.
-
-// If you read the history, it seems that many Russians blame ISO and
-// Perestroika for the confusion.
-//
-// The real bug is that some programs break if the user specifies
-// ru_RU.KOI8-R.
 
 static const char *const probably_koi8_rlocales[] = {
    "ru", "ru_SU", "ru_RU", "russian", 0
@@ -522,27 +291,32 @@ static QTextCodec *ru_RU_hack(const char *i)
 {
    QTextCodec *ru_RU_codec = 0;
 
-#if !defined(QT_NO_SETLOCALE)
+#if ! defined(QT_NO_SETLOCALE)
    QByteArray origlocale(setlocale(LC_CTYPE, i));
 #else
    QByteArray origlocale(i);
 #endif
+
    // unicode   koi8r   latin5   name
    // 0x044E    0xC0    0xEE     CYRILLIC SMALL LETTER YU
    // 0x042E    0xE0    0xCE     CYRILLIC CAPITAL LETTER YU
+
    int latin5 = tolower(0xCE);
-   int koi8r = tolower(0xE0);
+   int koi8r  = tolower(0xE0);
+
    if (koi8r == 0xC0 && latin5 != 0xEE) {
       ru_RU_codec = QTextCodec::codecForName("KOI8-R");
+
    } else if (koi8r != 0xC0 && latin5 == 0xEE) {
       ru_RU_codec = QTextCodec::codecForName("ISO 8859-5");
+
    } else {
-      // something else again... let's assume... *throws dice*
+      // something else again
       ru_RU_codec = QTextCodec::codecForName("KOI8-R");
-      qWarning("QTextCodec: Using KOI8-R, probe failed (%02x %02x %s)",
-               koi8r, latin5, i);
+      qWarning("QTextCodec: Using KOI8-R, probe failed (%02x %02x %s)", koi8r, latin5, i);
    }
-#if !defined(QT_NO_SETLOCALE)
+
+#if ! defined(QT_NO_SETLOCALE)
    setlocale(LC_CTYPE, origlocale.constData());
 #endif
 
@@ -551,12 +325,13 @@ static QTextCodec *ru_RU_hack(const char *i)
 
 #endif
 
-#if !defined(Q_OS_WIN32)
+#if ! defined(Q_OS_WIN32)
 static QTextCodec *checkForCodec(const QByteArray &name)
 {
    QTextCodec *c = QTextCodec::codecForName(name);
    if (!c) {
       const int index = name.indexOf('@');
+
       if (index != -1) {
          c = QTextCodec::codecForName(name.left(index));
       }
@@ -565,53 +340,52 @@ static QTextCodec *checkForCodec(const QByteArray &name)
 }
 #endif
 
-/* the next two functions are implicitely thread safe,
-   as they are only called by setup() which uses a mutex.
-*/
+
+//
 static void setupLocaleMapper()
 {
 
 #if defined(Q_OS_WIN32)
-   localeMapper = QTextCodec::codecForName("System");
-#else
+   localeMapper = QTextCodec::codecForName("UTF-8");
 
-#ifndef QT_NO_ICONV
-   localeMapper = QTextCodec::codecForName("System");
-#endif
+#else
+   localeMapper = QTextCodec::codecForName("UTF-8");
 
 #if defined (_XOPEN_UNIX)
-   if (!localeMapper) {
+   if (! localeMapper) {
       char *charset = nl_langinfo (CODESET);
+
       if (charset) {
          localeMapper = QTextCodec::codecForName(charset);
       }
    }
+
 #endif
 
-   if (!localeMapper) {
+   if (! localeMapper) {
       // Very poorly defined and followed standards causes lots of
       // code to try to get all the cases... This logic is
-      // duplicated in QIconvCodec, so if you change it here, change
-      // it there too.
+      // duplicated in QIconvCodec, so if you change it here, change it there too.
 
-      // Try to determine locale codeset from locale name assigned to
-      // LC_CTYPE category.
+      // Try to determine locale codeset from locale name assigned to LC_CTYPE category.
 
       // First part is getting that locale name.  First try setlocale() which
       // definitely knows it, but since we cannot fully trust it, get ready
       // to fall back to environment variables.
+
 #if !defined(QT_NO_SETLOCALE)
       const QByteArray ctype = setlocale(LC_CTYPE, 0);
 #else
       const QByteArray ctype;
 #endif
 
-      // Get the first nonempty value from $LC_ALL, $LC_CTYPE, and $LANG
-      // environment variables.
+      // Get the first nonempty value from $LC_ALL, $LC_CTYPE, and $LANG environment variables.
       QByteArray lang = qgetenv("LC_ALL");
+
       if (lang.isEmpty() || lang == "C") {
          lang = qgetenv("LC_CTYPE");
       }
+
       if (lang.isEmpty() || lang == "C") {
          lang = qgetenv("LANG");
       }
@@ -696,11 +470,11 @@ static void setupLocaleMapper()
    }
 
    // If everything failed, we default to 8859-1
-   // We could perhaps default to 8859-15.
-   if (!localeMapper) {
+   if (! localeMapper) {
       localeMapper = QTextCodec::codecForName("ISO 8859-1");
    }
 #endif
+
 }
 
 
@@ -723,7 +497,6 @@ static void setup()
    (void) createQTextCodecCleanup();
 
 #ifndef QT_NO_CODECS
-   (void)new QTsciiCodec;
    for (int i = 0; i < 9; ++i) {
       (void)new QIsciiCodec(i);
    }
@@ -732,10 +505,10 @@ static void setup()
       (void)new QSimpleTextCodec(i);
    }
 
-
-#  if defined(Q_WS_X11)
+#if defined(Q_WS_X11)
    (void)new QFontLaoCodec;
-#    if defined(QT_NO_ICONV)
+
+#if defined(QT_NO_ICONV)
    // no iconv(3) support, must build all codecs into the library
    (void)new QFontGb2312Codec;
    (void)new QFontGbkCodec;
@@ -749,7 +522,7 @@ static void setup()
 #  endif // Q_WS_X11
 
 
-#  if defined(QT_NO_ICONV) && !defined(QT_CODEC_PLUGINS)
+#  if defined(QT_NO_ICONV) && ! defined(QT_CODEC_PLUGINS)
    (void)new QGb18030Codec;
    (void)new QGbkCodec;
    (void)new QGb2312Codec;
@@ -760,12 +533,9 @@ static void setup()
    (void)new QCP949Codec;
    (void)new QBig5Codec;
    (void)new QBig5hkscsCodec;
-#  endif // QT_NO_ICONV
-#endif // QT_NO_CODECS
+#  endif
 
-#if defined(Q_OS_WIN32)
-   (void) new QWindowsLocalCodec;
-#endif // Q_OS_WIN32
+#endif // QT_NO_CODECS
 
    (void)new QUtf16Codec;
    (void)new QUtf16BECodec;
@@ -778,36 +548,14 @@ static void setup()
    (void)new QUtf8Codec;
 
 #if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
-   // QIconvCodec depends on the UTF-16 codec, so it needs to be created last
+   // QIconvCodec depends on the UTF-16 codec so it needs to be created last
    (void) new QIconvCodec();
 #endif
 
-
-   if (!localeMapper) {
+   if (! localeMapper) {
       setupLocaleMapper();
    }
 }
-
-/*!
-    \enum QTextCodec::ConversionFlag
-
-    \value DefaultConversion  No flag is set.
-    \value ConvertInvalidToNull  If this flag is set, each invalid input
-                                 character is output as a null character.
-    \value IgnoreHeader  Ignore any Unicode byte-order mark and don't generate any.
-
-    \omitvalue FreeFunction
-*/
-
-/*!
-    \fn QTextCodec::ConverterState::ConverterState(ConversionFlags flags)
-
-    Constructs a ConverterState object initialized with the given \a flags.
-*/
-
-/*!
-    Destroys the ConverterState object.
-*/
 QTextCodec::ConverterState::~ConverterState()
 {
    if (flags & FreeFunction) {
@@ -827,11 +575,6 @@ QTextCodec::QTextCodec()
 
 QTextCodec::~QTextCodec()
 {
-#ifdef Q_DEBUG_TEXTCODEC
-   if (!destroying_is_ok) {
-      qWarning("QTextCodec::~QTextCodec: Called by application");
-   }
-#endif
    if (all) {
       QMutexLocker locker(textCodecsMutex());
 
@@ -1011,9 +754,10 @@ QList<int> QTextCodec::availableMibs()
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
    QFactoryLoader *l = loader();
    QStringList keys = l->keys();
+
    for (int i = 0; i < keys.size(); ++i) {
       if (keys.at(i).startsWith(QLatin1String("MIB: "))) {
-         int mib = keys.at(i).mid(5).toInt();
+         int mib = keys.at(i).mid(5).toInteger<int>();
          if (!codecs.contains(mib)) {
             codecs += mib;
          }
@@ -1082,178 +826,47 @@ QTextCodec *QTextCodec::codecForLocale()
     otherwise its name.
 */
 
-/*!
-    \fn int QTextCodec::mibEnum() const
 
-    Subclasses of QTextCodec must reimplement this function. It
-    returns the MIBenum (see \l{IANA character-sets encoding file}
-    for more information). It is important that each QTextCodec
-    subclass returns the correct unique value for this function.
-*/
-
-/*!
-  Subclasses can return a number of aliases for the codec in question.
-
-  Standard aliases for codecs can be found in the
-  \l{IANA character-sets encoding file}.
-*/
 QList<QByteArray> QTextCodec::aliases() const
 {
    return QList<QByteArray>();
 }
 
-/*!
-    \fn QString QTextCodec::convertToUnicode(const char *chars, int len,
-                                             ConverterState *state) const
-
-    QTextCodec subclasses must reimplement this function.
-
-    Converts the first \a len characters of \a chars from the
-    encoding of the subclass to Unicode, and returns the result in a
-    QString.
-
-    \a state can be 0, in which case the conversion is stateless and
-    default conversion rules should be used. If state is not 0, the
-    codec should save the state after the conversion in \a state, and
-    adjust the remainingChars and invalidChars members of the struct.
-*/
-
-/*!
-    \fn QByteArray QTextCodec::convertFromUnicode(const QChar *input, int number,
-                                                  ConverterState *state) const
-
-    QTextCodec subclasses must reimplement this function.
-
-    Converts the first \a number of characters from the \a input array
-    from Unicode to the encoding of the subclass, and returns the result
-    in a QByteArray.
-
-    \a state can be 0 in which case the conversion is stateless and
-    default conversion rules should be used. If state is not 0, the
-    codec should save the state after the conversion in \a state, and
-    adjust the remainingChars and invalidChars members of the struct.
-*/
-
-/*!
-    Creates a QTextDecoder which stores enough state to decode chunks
-    of \c{char *} data to create chunks of Unicode data.
-
-    The caller is responsible for deleting the returned object.
-*/
-QTextDecoder *QTextCodec::makeDecoder() const
-{
-   return new QTextDecoder(this);
-}
-
-/*!
-    Creates a QTextDecoder with a specified \a flags to decode chunks
-    of \c{char *} data to create chunks of Unicode data.
-
-    The caller is responsible for deleting the returned object.
-
-    \since 4.7
-*/
 QTextDecoder *QTextCodec::makeDecoder(QTextCodec::ConversionFlags flags) const
 {
    return new QTextDecoder(this, flags);
 }
 
-
-/*!
-    Creates a QTextEncoder which stores enough state to encode chunks
-    of Unicode data as \c{char *} data.
-
-    The caller is responsible for deleting the returned object.
-*/
-QTextEncoder *QTextCodec::makeEncoder() const
-{
-   return new QTextEncoder(this);
-}
-
-/*!
-    Creates a QTextEncoder with a specified \a flags to encode chunks
-    of Unicode data as \c{char *} data.
-
-    The caller is responsible for deleting the returned object.
-
-    \since 4.7
-*/
 QTextEncoder *QTextCodec::makeEncoder(QTextCodec::ConversionFlags flags) const
 {
    return new QTextEncoder(this, flags);
 }
 
-/*!
-    \fn QByteArray QTextCodec::fromUnicode(const QChar *input, int number,
-                                           ConverterState *state) const
-
-    Converts the first \a number of characters from the \a input array
-    from Unicode to the encoding of this codec, and returns the result
-    in a QByteArray.
-
-    The \a state of the convertor used is updated.
-*/
-
-/*!
-    Converts \a str from Unicode to the encoding of this codec, and
-    returns the result in a QByteArray.
-*/
-QByteArray QTextCodec::fromUnicode(const QString &str) const
-{
-   return convertFromUnicode(str.constData(), str.length(), 0);
-}
-
-/*!
-    \fn QString QTextCodec::toUnicode(const char *input, int size,
-                                      ConverterState *state) const
-
-    Converts the first \a size characters from the \a input from the
-    encoding of this codec to Unicode, and returns the result in a
-    QString.
-
-    The \a state of the convertor used is updated.
-*/
-
-/*!
-    Converts \a a from the encoding of this codec to Unicode, and
-    returns the result in a QString.
-*/
 QString QTextCodec::toUnicode(const QByteArray &a) const
 {
    return convertToUnicode(a.constData(), a.length(), 0);
 }
 
-/*!
-    Returns true if the Unicode character \a ch can be fully encoded
-    with this codec; otherwise returns false.
-*/
 bool QTextCodec::canEncode(QChar ch) const
 {
    ConverterState state;
+
    state.flags = ConvertInvalidToNull;
-   convertFromUnicode(&ch, 1, &state);
+   convertFromUnicode(QString(ch), &state);
+
    return (state.invalidChars == 0);
 }
 
-/*!
-    \overload
-
-    \a s contains the string being tested for encode-ability.
-*/
-bool QTextCodec::canEncode(const QString &s) const
+bool QTextCodec::canEncode(const QString &str) const
 {
    ConverterState state;
+
    state.flags = ConvertInvalidToNull;
-   convertFromUnicode(s.constData(), s.length(), &state);
+   convertFromUnicode(str, &state);
+
    return (state.invalidChars == 0);
 }
 
-
-/*!
-    \overload
-
-    \a chars contains the source characters.
-*/
 QString QTextCodec::toUnicode(const char *chars) const
 {
    int len = qstrlen(chars);
@@ -1300,64 +913,16 @@ QTextEncoder::~QTextEncoder()
 {
 }
 
-/*! \internal
-    \since 4.5
-    Determines whether the eecoder encountered a failure while decoding the input. If
-    an error was encountered, the produced result is undefined, and gets converted as according
-    to the conversion flags.
- */
 bool QTextEncoder::hasFailure() const
 {
    return state.invalidChars != 0;
 }
 
-/*!
-    Converts the Unicode string \a str into an encoded QByteArray.
-*/
 QByteArray QTextEncoder::fromUnicode(const QString &str)
 {
-   QByteArray result = c->fromUnicode(str.constData(), str.length(), &state);
+   QByteArray result = c->fromUnicode(str, &state);
    return result;
 }
-
-/*!
-    \overload
-
-    Converts \a len characters (not bytes) from \a uc, and returns the
-    result in a QByteArray.
-*/
-QByteArray QTextEncoder::fromUnicode(const QChar *uc, int len)
-{
-   QByteArray result = c->fromUnicode(uc, len, &state);
-   return result;
-}
-
-/*!
-    \class QTextDecoder
-    \brief The QTextDecoder class provides a state-based decoder.
-    \reentrant
-    \ingroup i18n
-
-    A text decoder converts text from an encoded text format into Unicode
-    using a specific codec.
-
-    The decoder converts text in this format into Unicode, remembering any
-    state that is required between calls.
-
-    \sa QTextCodec::makeDecoder(), QTextEncoder
-*/
-
-/*!
-    \fn QTextDecoder::QTextDecoder(const QTextCodec *codec)
-
-    Constructs a text decoder for the given \a codec.
-*/
-
-/*!
-    Constructs a text decoder for the given \a codec and conversion \a flags.
-
-    \since 4.7
-*/
 
 QTextDecoder::QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags)
    : c(codec), state()
@@ -1365,40 +930,24 @@ QTextDecoder::QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags 
    state.flags = flags;
 }
 
-/*!
-    Destroys the decoder.
-*/
 QTextDecoder::~QTextDecoder()
 {
 }
 
-/*!
-    \fn QString QTextDecoder::toUnicode(const char *chars, int len)
-
-    Converts the first \a len bytes in \a chars to Unicode, returning
-    the result.
-
-    If not all characters are used (e.g. if only part of a multi-byte
-    encoding is at the end of the characters), the decoder remembers
-    enough state to continue with the next call to this function.
-*/
 QString QTextDecoder::toUnicode(const char *chars, int len)
 {
    return c->toUnicode(chars, len, &state);
 }
 
-
-/*! \overload
-
-    The converted string is returned in \a target.
- */
 void QTextDecoder::toUnicode(QString *target, const char *chars, int len)
 {
    Q_ASSERT(target);
+
    switch (c->mibEnum()) {
       case 106: // utf8
          static_cast<const QUtf8Codec *>(c)->convertToUnicode(target, chars, len, &state);
          break;
+
       case 4: { // latin1
          target->resize(len);
          ushort *data = (ushort *)target->data();
@@ -1407,6 +956,7 @@ void QTextDecoder::toUnicode(QString *target, const char *chars, int len)
          }
       }
       break;
+
       default:
          *target = c->toUnicode(chars, len, &state);
    }

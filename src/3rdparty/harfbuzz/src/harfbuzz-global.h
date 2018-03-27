@@ -55,31 +55,31 @@ HB_BEGIN_HEADER
             ( (HB_UInt)_x3 <<  8 ) |     \
               (HB_UInt)_x4         )
 
-typedef char hb_int8;
-typedef unsigned char hb_uint8;
-typedef short hb_int16;
+typedef char           hb_int8;
+typedef unsigned char  hb_uint8;
+typedef short          hb_int16;
 typedef unsigned short hb_uint16;
-typedef int hb_int32;
-typedef unsigned int hb_uint32;
+typedef int            hb_int32;
+typedef unsigned int   hb_uint32;
 
-typedef hb_uint8 HB_Bool;
+typedef hb_uint8       HB_Bool;
 
-typedef hb_uint8 HB_Byte;
-typedef hb_uint16 HB_UShort;
-typedef hb_uint32 HB_UInt;
-typedef hb_int8 HB_Char;
-typedef hb_int16 HB_Short;
-typedef hb_int32 HB_Int;
+typedef hb_uint8       HB_Byte;
+typedef hb_uint16      HB_UShort;
+typedef hb_uint32      HB_UInt;
+typedef hb_int8        HB_Char;
+typedef hb_int16       HB_Short;
+typedef hb_int32       HB_Int;
 
-typedef hb_uint16 HB_UChar16;
-typedef hb_uint32 HB_UChar32;
-typedef hb_uint32 HB_Glyph;
-typedef hb_int32 HB_Fixed; /* 26.6 */
+typedef hb_uint16      HB_UChar16;
+typedef hb_uint32      HB_UChar32;
+typedef hb_uint32      HB_Glyph;
+typedef hb_int32       HB_Fixed;             /* 26.6 */
 
 #define HB_FIXED_CONSTANT(v) ((v) * 64)
 #define HB_FIXED_ROUND(v) (((v)+32) & -64)
 
-typedef hb_int32 HB_16Dot16; /* 16.16 */
+typedef hb_int32 HB_16Dot16;                /* 16.16 */
 
 typedef void * HB_Pointer;
 typedef hb_uint32 HB_Tag;

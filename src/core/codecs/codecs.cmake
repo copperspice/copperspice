@@ -22,7 +22,6 @@ set(CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qlatincodec_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qsimplecodec_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qtextcodec_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qtsciicodec_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qutfcodec_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qiconvcodec_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qfontlaocodec_p.h
@@ -35,7 +34,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qsimplecodec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qtextcodec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qtextcodecplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qtsciicodec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qutfcodec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codecs/qfontlaocodec.cpp
 )

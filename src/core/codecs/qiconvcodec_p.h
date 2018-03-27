@@ -45,7 +45,7 @@ class QIconvCodec: public QTextCodec
    ~QIconvCodec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
 
    QByteArray name() const override;
    int mibEnum() const override;
@@ -57,7 +57,9 @@ class QIconvCodec: public QTextCodec
     public:
       IconvState(iconv_t x);
       ~IconvState();
+
       ConverterState internalState;
+
       char *buffer;
       int bufferLen;
       iconv_t cd;

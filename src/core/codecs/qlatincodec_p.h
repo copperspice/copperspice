@@ -35,7 +35,7 @@ class QLatin1Codec : public QTextCodec
    ~QLatin1Codec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
 
    QByteArray name() const override;
    QList<QByteArray> aliases() const override;
@@ -48,7 +48,7 @@ class QLatin15Codec: public QTextCodec
    ~QLatin15Codec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QChar *, int, ConverterState *) const override;
+   QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *) const override;
 
    QByteArray name() const override;
    QList<QByteArray> aliases() const override;

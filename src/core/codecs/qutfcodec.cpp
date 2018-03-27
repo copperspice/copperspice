@@ -20,272 +20,212 @@
 *
 ***********************************************************************/
 
-#include <qutfcodec_p.h>
-#include <qlist.h>
-#include <qendian.h>
-#include <qchar.h>
 
-QT_BEGIN_NAMESPACE
+#include <qutfcodec_p.h>
+#include <qendian.h>
+#include <qlist.h>
+#include <qstring8.h>
+#include <qstring16.h>
 
 enum { Endian = 0, Data = 1 };
 
 static inline bool isUnicodeNonCharacter(uint ucs4)
 {
-   // Unicode has a couple of "non-characters" that one can use internally,
-   // but are not allowed to be used for text interchange.
-   //
-   // Those are the last two entries each Unicode Plane (U+FFFE, U+FFFF,
-   // U+1FFFE, U+1FFFF, etc.) as well as the entries between U+FDD0 and
-   // U+FDEF (inclusive)
-
    return (ucs4 & 0xfffe) == 0xfffe || (ucs4 - 0xfdd0U) < 16;
 }
 
-QByteArray QUtf8::convertFromUnicode(const QChar *uc, int len, QTextCodec::ConverterState *state)
+QByteArray QUtf8::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state)
 {
-   uchar replacement = '?';
-   int rlen = 3 * len;
-   int surrogate_high = -1;
+   QByteArray retval;
+
+   if (state && ! (state->flags & QTextCodec::IgnoreHeader)) {
+      retval.append(0xEF);
+      retval.append(0xBB);
+      retval.append(0xBF);
+   }
+
+   retval += QByteArray(str.charData(), str.size_storage());
+
    if (state) {
-      if (state->flags & QTextCodec::ConvertInvalidToNull) {
-         replacement = 0;
-      }
-      if (!(state->flags & QTextCodec::IgnoreHeader)) {
-         rlen += 3;
-      }
-      if (state->remainingChars) {
-         surrogate_high = state->state_data[0];
-      }
-   }
-
-   QByteArray rstr;
-   rstr.resize(rlen);
-   uchar *cursor = (uchar *)rstr.data();
-   const QChar *ch = uc;
-   int invalid = 0;
-   if (state && !(state->flags & QTextCodec::IgnoreHeader)) {
-      *cursor++ = 0xef;
-      *cursor++ = 0xbb;
-      *cursor++ = 0xbf;
-   }
-
-   const QChar *end = ch + len;
-   while (ch < end) {
-      uint u = ch->unicode();
-      if (surrogate_high >= 0) {
-         if (ch->isLowSurrogate()) {
-            u = QChar::surrogateToUcs4(surrogate_high, u);
-            surrogate_high = -1;
-         } else {
-            // high surrogate without low
-            *cursor = replacement;
-            ++ch;
-            ++invalid;
-            surrogate_high = -1;
-            continue;
-         }
-      } else if (ch->isLowSurrogate()) {
-         // low surrogate without high
-         *cursor = replacement;
-         ++ch;
-         ++invalid;
-         continue;
-      } else if (ch->isHighSurrogate()) {
-         surrogate_high = u;
-         ++ch;
-         continue;
-      }
-
-      if (u < 0x80) {
-         *cursor++ = (uchar)u;
-      } else {
-         if (u < 0x0800) {
-            *cursor++ = 0xc0 | ((uchar) (u >> 6));
-         } else {
-            // is it one of the Unicode non-characters?
-            if (isUnicodeNonCharacter(u)) {
-               *cursor++ = replacement;
-               ++ch;
-               ++invalid;
-               continue;
-            }
-
-            if (u > 0xffff) {
-               *cursor++ = 0xf0 | ((uchar) (u >> 18));
-               *cursor++ = 0x80 | (((uchar) (u >> 12)) & 0x3f);
-            } else {
-               *cursor++ = 0xe0 | (((uchar) (u >> 12)) & 0x3f);
-            }
-            *cursor++ = 0x80 | (((uchar) (u >> 6)) & 0x3f);
-         }
-         *cursor++ = 0x80 | ((uchar) (u & 0x3f));
-      }
-      ++ch;
-   }
-
-   rstr.resize(cursor - (const uchar *)rstr.constData());
-   if (state) {
-      state->invalidChars += invalid;
-      state->flags |= QTextCodec::IgnoreHeader;
       state->remainingChars = 0;
-      if (surrogate_high >= 0) {
-         state->remainingChars = 1;
-         state->state_data[0] = surrogate_high;
-      }
+      state->flags |= QTextCodec::IgnoreHeader;
    }
-   return rstr;
+
+   return retval;
 }
 
 QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::ConverterState *state)
 {
-   bool headerdone = false;
-   ushort replacement = QChar::ReplacementCharacter;
-   int need = 0;
-   int error = -1;
-   uint uc = 0;
-   uint min_uc = 0;
+   QString retval;
+
+   bool headerDone   = false;
+   QChar replacement = QChar::ReplacementCharacter;
+
+   uint32_t data = 0;
+   int bytesLeft = 0;
+   int invalid   = 0;
+
+   const char *src = chars;
+   const char *end = src + len;
+
    if (state) {
       if (state->flags & QTextCodec::IgnoreHeader) {
-         headerdone = true;
+         headerDone = true;
       }
+
       if (state->flags & QTextCodec::ConvertInvalidToNull) {
          replacement = QChar::Null;
       }
-      need = state->remainingChars;
-      if (need) {
-         uc = state->state_data[0];
-         min_uc = state->state_data[1];
+
+      if (state->remainingChars) {
+         // handle incoming state
+
+         bytesLeft = state->remainingChars;
+         memcpy(&data, &state->state_data[0], 4);
       }
    }
-   if (!headerdone && len > 3
-         && (uchar)chars[0] == 0xef && (uchar)chars[1] == 0xbb && (uchar)chars[2] == 0xbf) {
-      // starts with a byte order mark
-      chars += 3;
-      len -= 3;
-      headerdone = true;
-   }
 
-   QString result(need + len + 1, Qt::Uninitialized); // worst case
-   ushort *qch = (ushort *)result.unicode();
-   uchar ch;
-   int invalid = 0;
+   while (src != end) {
+      uint8_t byte = *src;
+      ++src;
 
-   for (int i = 0; i < len; ++i) {
-      ch = chars[i];
-      if (need) {
-         if ((ch & 0xc0) == 0x80) {
-            uc = (uc << 6) | (ch & 0x3f);
-            --need;
-            if (!need) {
-               // utf-8 bom composes into 0xfeff code point
-               bool nonCharacter;
-               if (!headerdone && uc == 0xfeff) {
-                  // don't do anything, just skip the BOM
-               } else if (!(nonCharacter = isUnicodeNonCharacter(uc)) && uc > 0xffff && uc < 0x110000) {
-                  // surrogate pair
-                  Q_ASSERT((qch - (ushort *)result.unicode()) + 2 < result.length());
-                  *qch++ = QChar::highSurrogate(uc);
-                  *qch++ = QChar::lowSurrogate(uc);
-               } else if ((uc < min_uc) || (uc >= 0xd800 && uc <= 0xdfff) || nonCharacter || uc >= 0x110000) {
-                  // error: overlong sequence, UTF16 surrogate or non-character
-                  *qch++ = replacement;
-                  ++invalid;
-               } else {
-                  *qch++ = uc;
-               }
-               headerdone = true;
-            }
-         } else {
-            // error
-            i = error;
-            *qch++ = replacement;
-            ++invalid;
-            need = 0;
-            headerdone = true;
-         }
-      } else {
-         if (ch < 128) {
-            *qch++ = ushort(ch);
-            headerdone = true;
-         } else if ((ch & 0xe0) == 0xc0) {
-            uc = ch & 0x1f;
-            need = 1;
-            error = i;
-            min_uc = 0x80;
-            headerdone = true;
-         } else if ((ch & 0xf0) == 0xe0) {
-            uc = ch & 0x0f;
-            need = 2;
-            error = i;
-            min_uc = 0x800;
-         } else if ((ch & 0xf8) == 0xf0) {
-            uc = ch & 0x07;
-            need = 3;
-            error = i;
-            min_uc = 0x10000;
-            headerdone = true;
-         } else {
-            // error
-            *qch++ = replacement;
-            ++invalid;
-            headerdone = true;
-         }
-      }
-   }
-   if (!state && need > 0) {
-      // unterminated UTF sequence
-      for (int i = error; i < len; ++i) {
-         *qch++ = replacement;
+      if (bytesLeft > 0 && (byte < 0x80 || byte > 0xBF)) {
+         bytesLeft = 0;
          ++invalid;
+
+         retval.append(replacement);
+      }
+
+      if (byte <= 0x7F) {
+         data = byte;
+
+      } else if (byte <= 0xBF) {
+         data = (data << 6) | (byte & 0x3F);
+         --bytesLeft;
+
+      } else if (byte <= 0xDF) {
+         data = (byte & 0x1F);
+
+         if (data == 0) {
+            ++invalid;
+            retval.append(replacement);
+            continue;
+         }
+
+         bytesLeft = 1;
+
+      } else if (byte <= 0xEF) {
+         data = (byte & 0x0F);
+
+         if (data == 0) {
+            ++invalid;
+            retval.append(replacement);
+            continue;
+         }
+
+         bytesLeft = 2;
+
+      } else if (byte <= 0xF4) {
+         data = (byte & 0x07);
+
+         if (data == 0) {
+            ++invalid;
+            retval.append(replacement);
+            continue;
+         }
+
+         bytesLeft = 3;
+
+      } else {
+         bytesLeft = 0;
+         ++invalid;
+
+         retval.append(replacement);
+         continue;
+      }
+
+      if (bytesLeft == 0) {
+
+         if (! headerDone) {
+            headerDone = true;
+
+            // skip the BOM
+            if (data == 0xFEFF) {
+               continue;
+            }
+         }
+
+         if (data > 0x10FFFF) {
+            ++invalid;
+            retval.append(replacement);
+            continue;
+         }
+
+         retval.append(char32_t(data));
       }
    }
-   result.truncate(qch - (ushort *)result.unicode());
+
+   if (! state && bytesLeft != 0) {
+      // unterminated UTF sequence
+      retval.append(replacement);
+   }
+
    if (state) {
       state->invalidChars += invalid;
-      state->remainingChars = need;
-      if (headerdone) {
+
+      if (headerDone) {
          state->flags |= QTextCodec::IgnoreHeader;
       }
-      state->state_data[0] = need ? uc : 0;
-      state->state_data[1] = need ? min_uc : 0;
+
+      if (bytesLeft != 0) {
+         state->remainingChars = bytesLeft;
+         memcpy(&state->state_data[0], &data, 4);
+
+      } else {
+         state->remainingChars = 0;
+
+      }
    }
-   return result;
+
+   return retval;
 }
 
-QByteArray QUtf16::convertFromUnicode(const QChar *uc, int len, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf16::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state, DataEndianness e)
 {
+   QByteArray retval;
+
    DataEndianness endian = e;
-   int length =  2 * len;
-   if (!state || (!(state->flags & QTextCodec::IgnoreHeader))) {
-      length += 2;
-   }
-   if (e == DetectEndianness) {
+   if (! state || (! (state->flags & QTextCodec::IgnoreHeader))) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   QByteArray d;
-   d.resize(length);
-   char *data = d.data();
-   if (!state || !(state->flags & QTextCodec::IgnoreHeader)) {
-      QChar bom(QChar::ByteOrderMark);
+   if (! state || ! (state->flags & QTextCodec::IgnoreHeader)) {
       if (endian == BigEndianness) {
-         data[0] = bom.row();
-         data[1] = bom.cell();
-      } else {
-         data[0] = bom.cell();
-         data[1] = bom.row();
+         retval.append(0xFE);
+         retval.append(0xFF);
+
+      } else  {
+         retval.append(0xFF);
+         retval.append(0xFE);
       }
-      data += 2;
    }
-   if (endian == BigEndianness) {
-      for (int i = 0; i < len; ++i) {
-         *(data++) = uc[i].row();
-         *(data++) = uc[i].cell();
-      }
-   } else {
-      for (int i = 0; i < len; ++i) {
-         *(data++) = uc[i].cell();
-         *(data++) = uc[i].row();
+
+   QString16 tmp(str.begin(), str.end());
+
+   const char16_t *iter = tmp.data();
+   const char16_t *end  = iter + tmp.size_storage();
+
+   while (iter != end) {
+      char16_t ch = *iter;
+      ++iter;
+
+     if (endian == BigEndianness) {
+         retval.append(ch >> 8);
+         retval.append(ch & 0xFF);
+
+      } else  {
+         retval.append(ch & 0xFF);
+         retval.append(ch >> 8);
       }
    }
 
@@ -293,135 +233,192 @@ QByteArray QUtf16::convertFromUnicode(const QChar *uc, int len, QTextCodec::Conv
       state->remainingChars = 0;
       state->flags |= QTextCodec::IgnoreHeader;
    }
-   return d;
+
+   return retval;
 }
 
 QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::ConverterState *state, DataEndianness e)
 {
+   QString retval;
+
    DataEndianness endian = e;
-   bool half = false;
-   uchar buf = 0;
-   bool headerdone = false;
+   QChar replacement = QChar::ReplacementCharacter;
+
+   uint32_t data    = 0;
+   bool headerDone  = false;
+   int  bytesRead   = 0;
+   int invalid      = 0;
+
+   const char *iter = chars;
+   const char *end  = iter + len;
+
    if (state) {
-      headerdone = state->flags & QTextCodec::IgnoreHeader;
+      if (state->flags & QTextCodec::IgnoreHeader) {
+         headerDone = true;
+      }
+
+      if (state->flags & QTextCodec::ConvertInvalidToNull) {
+         replacement = QChar::Null;
+      }
+
+      if (state->remainingChars != 0) {
+         bytesRead = state->remainingChars;
+         memcpy(&data, &state->state_data[Data], 4);
+      }
+
       if (endian == DetectEndianness) {
          endian = (DataEndianness)state->state_data[Endian];
       }
-      if (state->remainingChars) {
-         half = true;
-         buf = state->state_data[Data];
-      }
    }
-   if (headerdone && endian == DetectEndianness) {
+
+   if (headerDone && endian == DetectEndianness) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   QString result(len, Qt::Uninitialized); // worst case
-   QChar *qch = (QChar *)result.unicode();
-   while (len--) {
-      if (half) {
-         QChar ch;
+   while (iter != end)   {
+      uint8_t byte = *iter;
+      ++iter;
+
+     if (bytesRead == 1 || bytesRead == 3) {
+
          if (endian == LittleEndianness) {
-            ch.setRow(*chars++);
-            ch.setCell(buf);
+            data = (data << 16) | (byte << 8) | (data & 0xFF);
+            ++bytesRead;
+
          } else {
-            ch.setRow(buf);
-            ch.setCell(*chars++);
+            data = data << 8 | byte;
+            ++bytesRead;
          }
-         if (!headerdone) {
-            headerdone = true;
+
+         if (! headerDone) {
+            headerDone = true;
+
             if (endian == DetectEndianness) {
-               if (ch == QChar::ByteOrderSwapped) {
+
+               if (data == 0xFFFE) {
                   endian = LittleEndianness;
-               } else if (ch == QChar::ByteOrderMark) {
+
+                  bytesRead = 0;
+                  continue;
+
+               } else if (data == 0xFEFF) {
                   endian = BigEndianness;
+
+                  bytesRead = 0;
+                  continue;
+
                } else {
                   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
                      endian = BigEndianness;
+
                   } else {
                      endian = LittleEndianness;
-                     ch = QChar((ch.unicode() >> 8) | ((ch.unicode() & 0xff) << 8));
+                     data = ((data & 0xFF) << 8) | (data >> 8);
                   }
-                  *qch++ = ch;
                }
-            } else if (ch != QChar::ByteOrderMark) {
-               *qch++ = ch;
             }
-         } else {
-            *qch++ = ch;
          }
-         half = false;
-      } else {
-         buf = *chars++;
-         half = true;
-      }
+
+         if (bytesRead == 2 && (data <= 0xD7FF || data >= 0xE000)) {
+            bytesRead = 0;
+
+            retval.append(char32_t(data));
+            data = 0;
+
+         } else if (bytesRead == 2 && (data >= 0xD800 && data <= 0xDBFF)) {
+            // do nothing
+
+         } else if (bytesRead == 4) {
+            data = data - 0xD800DC00;
+            data = (data >> 16) | (data & 0x3FF);
+
+            if (data >= 0x10000 && data <= 0x10FFFF) {
+               bytesRead = 0;
+
+               retval.append(char32_t(data));
+               data = 0;
+
+            } else  {
+               bytesRead = 0;
+               ++invalid;
+
+               retval.append(replacement);
+               data = 0;
+            }
+
+         } else {
+            bytesRead = 0;
+            ++invalid;
+
+            retval.append(replacement);
+            data = 0;
+         }
+
+     } else {
+         data = data << 8 | byte;
+         ++bytesRead;
+     }
    }
-   result.truncate(qch - result.unicode());
 
    if (state) {
-      if (headerdone) {
+      state->invalidChars += invalid;
+
+      if (headerDone) {
          state->flags |= QTextCodec::IgnoreHeader;
       }
+
       state->state_data[Endian] = endian;
-      if (half) {
-         state->remainingChars = 1;
-         state->state_data[Data] = buf;
+
+      if (bytesRead != 0) {
+         state->remainingChars = bytesRead;
+         memcpy(&state->state_data[Data], &data, 4);
+
       } else {
-         state->remainingChars = 0;
+         state->remainingChars   = 0;
          state->state_data[Data] = 0;
       }
    }
-   return result;
+
+   return retval;
 }
 
-QByteArray QUtf32::convertFromUnicode(const QChar *uc, int len, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf32::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state, DataEndianness e)
 {
+   QByteArray retval;
+
    DataEndianness endian = e;
-   int length =  4 * len;
-   if (!state || (!(state->flags & QTextCodec::IgnoreHeader))) {
-      length += 4;
-   }
-   if (e == DetectEndianness) {
+   if (! state || (! (state->flags & QTextCodec::IgnoreHeader))) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   QByteArray d(length, Qt::Uninitialized);
-   char *data = d.data();
-   if (!state || !(state->flags & QTextCodec::IgnoreHeader)) {
+   if (! state || ! (state->flags & QTextCodec::IgnoreHeader)) {
       if (endian == BigEndianness) {
-         data[0] = 0;
-         data[1] = 0;
-         data[2] = (char)0xfe;
-         data[3] = (char)0xff;
-      } else {
-         data[0] = (char)0xff;
-         data[1] = (char)0xfe;
-         data[2] = 0;
-         data[3] = 0;
+         retval.append('\x00');
+         retval.append('\x00');
+         retval.append(0xFE);
+         retval.append(0xFF);
+
+      } else  {
+         retval.append(0xFF);
+         retval.append(0xFE);
+         retval.append('\x00');
+         retval.append('\x00');
       }
-      data += 4;
    }
-   if (endian == BigEndianness) {
-      for (int i = 0; i < len; ++i) {
-         uint cp = uc[i].unicode();
-         if (uc[i].isHighSurrogate() && i < len - 1) {
-            cp = QChar::surrogateToUcs4(cp, uc[++i].unicode());
-         }
-         *(data++) = cp >> 24;
-         *(data++) = (cp >> 16) & 0xff;
-         *(data++) = (cp >> 8) & 0xff;
-         *(data++) = cp & 0xff;
-      }
-   } else {
-      for (int i = 0; i < len; ++i) {
-         uint cp = uc[i].unicode();
-         if (uc[i].isHighSurrogate() && i < len - 1) {
-            cp = QChar::surrogateToUcs4(cp, uc[++i].unicode());
-         }
-         *(data++) = cp & 0xff;
-         *(data++) = (cp >> 8) & 0xff;
-         *(data++) = (cp >> 16) & 0xff;
-         *(data++) = cp >> 24;
+
+   for (auto ch : str) {
+
+      if (endian == BigEndianness) {
+         retval.append((ch.unicode() >> 24) & 0xFF);
+         retval.append((ch.unicode() >> 16) & 0xFF);
+         retval.append((ch.unicode() >> 8)  & 0xFF);
+         retval.append(ch.unicode() & 0xFF);
+
+      } else  {
+         retval.append(ch.unicode() & 0xFF);
+         retval.append((ch.unicode() >> 8)  & 0xFF);
+         retval.append((ch.unicode() >> 16) & 0xFF);
+         retval.append((ch.unicode() >> 24) & 0xFF);
       }
    }
 
@@ -429,81 +426,101 @@ QByteArray QUtf32::convertFromUnicode(const QChar *uc, int len, QTextCodec::Conv
       state->remainingChars = 0;
       state->flags |= QTextCodec::IgnoreHeader;
    }
-   return d;
+
+   return retval;
 }
 
 QString QUtf32::convertToUnicode(const char *chars, int len, QTextCodec::ConverterState *state, DataEndianness e)
 {
+   QString retval;
+
    DataEndianness endian = e;
-   uchar tuple[4];
-   int num = 0;
-   bool headerdone = false;
+
+   uint32_t data    = 0;
+   bool headerDone  = false;
+   int  bytesRead   = 0;
+
+   const char *iter = chars;
+   const char *end  = iter + len;
+
    if (state) {
-      headerdone = state->flags & QTextCodec::IgnoreHeader;
+      headerDone = state->flags & QTextCodec::IgnoreHeader;
+
       if (endian == DetectEndianness) {
          endian = (DataEndianness)state->state_data[Endian];
       }
-      num = state->remainingChars;
-      memcpy(tuple, &state->state_data[Data], 4);
+
+      bytesRead = state->remainingChars;
+      memcpy(&data, &state->state_data[Data], 4);
    }
-   if (headerdone && endian == DetectEndianness) {
+
+   if (headerDone && endian == DetectEndianness) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   QString result;
-   result.resize((num + len) >> 2 << 1); // worst case
-   QChar *qch = (QChar *)result.unicode();
+   while (iter != end)   {
+      data = (data << 8) | *iter;
 
-   const char *end = chars + len;
-   while (chars < end) {
-      tuple[num++] = *chars++;
-      if (num == 4) {
-         if (!headerdone) {
+      ++iter;
+      ++bytesRead;
+
+      if (bytesRead == 4) {
+
+         if (! headerDone) {
+
             if (endian == DetectEndianness) {
-               if (endian == DetectEndianness) {
-                  if (tuple[0] == 0xff && tuple[1] == 0xfe && tuple[2] == 0 && tuple[3] == 0 && endian != BigEndianness) {
-                     endian = LittleEndianness;
-                     num = 0;
-                     continue;
-                  } else if (tuple[0] == 0 && tuple[1] == 0 && tuple[2] == 0xfe && tuple[3] == 0xff && endian != LittleEndianness) {
-                     endian = BigEndianness;
-                     num = 0;
-                     continue;
-                  } else if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                     endian = BigEndianness;
-                  } else {
-                     endian = LittleEndianness;
-                  }
+               if (data == 0x0000FEFF) {
+                  endian = BigEndianness;
+                  bytesRead = 0;
+                  continue;
+
+               } else if (data == 0xFFFE0000)  {
+                  endian = LittleEndianness;
+                  bytesRead = 0;
+                  continue;
+
+               } else if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+                  endian = BigEndianness;
+
+               } else {
+                  endian = LittleEndianness;
                }
-            } else if (((endian == BigEndianness) ? qFromBigEndian<quint32>(tuple) : qFromLittleEndian<quint32>
-                        (tuple)) == QChar::ByteOrderMark) {
-               num = 0;
+
+            } else if (endian == BigEndianness && data == 0x0000FEFF) {
+               bytesRead = 0;
+               continue;
+
+            } else if (endian == LittleEndianness && data == 0xFFFE0000) {
+               bytesRead = 0;
                continue;
             }
          }
-         uint code = (endian == BigEndianness) ? qFromBigEndian<quint32>(tuple) : qFromLittleEndian<quint32>(tuple);
-         if (code >= 0x10000) {
-            *qch++ = QChar::highSurrogate(code);
-            *qch++ = QChar::lowSurrogate(code);
+
+         if (endian == BigEndianness) {
+            retval.append(char32_t(data));
+
          } else {
-            *qch++ = code;
+            data = (data & 0x0000FFFF) << 16 | (data & 0xFFFF0000) >> 16;
+            char32_t tmp = (data & 0x00FF00FF) << 8 | (data & 0xFF00FF00) >> 8;
+            retval.append(tmp);
          }
-         num = 0;
+
+         bytesRead = 0;
       }
    }
-   result.truncate(qch - result.unicode());
 
    if (state) {
-      if (headerdone) {
+      if (headerDone) {
          state->flags |= QTextCodec::IgnoreHeader;
       }
-      state->state_data[Endian] = endian;
-      state->remainingChars = num;
-      memcpy(&state->state_data[Data], tuple, 4);
-   }
-   return result;
-}
 
+      state->state_data[Endian] = endian;
+      state->remainingChars     = bytesRead;
+      memcpy(&state->state_data[Data], &data, 4);
+   }
+
+   return retval;
+}
 
 #ifndef QT_NO_TEXTCODEC
 
@@ -511,9 +528,9 @@ QUtf8Codec::~QUtf8Codec()
 {
 }
 
-QByteArray QUtf8Codec::convertFromUnicode(const QChar *uc, int len, ConverterState *state) const
+QByteArray QUtf8Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
-   return QUtf8::convertFromUnicode(uc, len, state);
+   return QUtf8::convertFromUnicode(str, state);
 }
 
 void QUtf8Codec::convertToUnicode(QString *target, const char *chars, int len, ConverterState *state) const
@@ -540,9 +557,9 @@ QUtf16Codec::~QUtf16Codec()
 {
 }
 
-QByteArray QUtf16Codec::convertFromUnicode(const QChar *uc, int len, ConverterState *state) const
+QByteArray QUtf16Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
-   return QUtf16::convertFromUnicode(uc, len, state, e);
+   return QUtf16::convertFromUnicode(str, state, e);
 }
 
 QString QUtf16Codec::convertToUnicode(const char *chars, int len, ConverterState *state) const
@@ -601,9 +618,9 @@ QUtf32Codec::~QUtf32Codec()
 {
 }
 
-QByteArray QUtf32Codec::convertFromUnicode(const QChar *uc, int len, ConverterState *state) const
+QByteArray QUtf32Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
-   return QUtf32::convertFromUnicode(uc, len, state, e);
+   return QUtf32::convertFromUnicode(str, state, e);
 }
 
 QString QUtf32Codec::convertToUnicode(const char *chars, int len, ConverterState *state) const
@@ -659,6 +676,5 @@ QList<QByteArray> QUtf32LECodec::aliases() const
    return list;
 }
 
-#endif //QT_NO_TEXTCODEC
+#endif
 
-QT_END_NAMESPACE

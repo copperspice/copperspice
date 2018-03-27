@@ -759,60 +759,65 @@ QString QSimpleTextCodec::convertToUnicode(const char *chars, int len, Converter
    }
 
    const unsigned char *c = (const unsigned char *)chars;
-
-   QString r(len, Qt::Uninitialized);
-   QChar *uc = r.data();
+   QString retval;
 
    for (int i = 0; i < len; i++) {
       if (c[i] > 127) {
-         uc[i] = unicodevalues[forwardIndex].values[c[i] - 128];
+         retval.append(unicodevalues[forwardIndex].values[c[i] - 128]);
+
       } else {
-         uc[i] = QLatin1Char(c[i]);
+        retval.append(c[i]);
       }
    }
-   return r;
+
+   return retval;
 }
 
-QByteArray QSimpleTextCodec::convertFromUnicode(const QChar *in, int length, ConverterState *state) const
+QByteArray QSimpleTextCodec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
    int invalid = 0;
 
    QByteArray *rmap = reverseMap.load();
+
    if (!rmap) {
       rmap = buildReverseMap(this->forwardIndex);
+
       if (!reverseMap.testAndSetRelease(0, rmap)) {
          delete rmap;
          rmap = reverseMap.load();
       }
    }
 
-   QByteArray r(length, Qt::Uninitialized);
-   int i = length;
-   int u;
-   const QChar *ucp = in;
-   unsigned char *rp = (unsigned char *)r.data();
    const unsigned char *rmp = (const unsigned char *)rmap->constData();
    int rmsize = (int) rmap->size();
-   while (i--) {
-      u = ucp->unicode();
-      if (u < 128) {
-         *rp = (char)u;
+
+   QByteArray retval;
+
+   for (auto c : str) {
+      char32_t uc = c.unicode();
+
+      if (uc < 128) {
+         retval.append(uc & 0xFF);
+
       } else {
-         *rp = ((u < rmsize) ? (*(rmp + u)) : 0);
-         if (*rp == 0) {
-            *rp = replacement;
+         auto tmp = (uc < rmsize) ? (*(rmp + uc)) : 0;
+
+         if (tmp == 0) {
+            retval.append(replacement);
             ++invalid;
+
+         } else {
+            retval.append(tmp);
          }
       }
-      rp++;
-      ucp++;
    }
 
    if (state) {
       state->invalidChars += invalid;
    }
-   return r;
+
+   return retval;
 }
 
 QByteArray QSimpleTextCodec::name() const

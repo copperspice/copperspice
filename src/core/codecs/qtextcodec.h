@@ -23,8 +23,8 @@
 #ifndef QTEXTCODEC_H
 #define QTEXTCODEC_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
+#include <qstring8.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,10 +64,6 @@ class Q_CORE_EXPORT QTextCodec
    bool canEncode(QChar) const;
    bool canEncode(const QString &) const;
 
-   QString toUnicode(const QByteArray &) const;
-   QString toUnicode(const char *chars) const;
-   QByteArray fromUnicode(const QString &uc) const;
-
    enum ConversionFlag {
       DefaultConversion,
       ConvertInvalidToNull = 0x80000000,
@@ -78,39 +74,50 @@ class Q_CORE_EXPORT QTextCodec
 
    struct Q_CORE_EXPORT ConverterState {
       ConverterState(ConversionFlags f = DefaultConversion)
-         : flags(f), remainingChars(0), invalidChars(0), d(0) {
-         state_data[0] = state_data[1] = state_data[2] = 0;
+         : flags(f), remainingChars(0), invalidChars(0), d(0)
+      {
+         state_data[0] = 0;
+         state_data[1] = 0;
+         state_data[2] = 0;
       }
+
       ~ConverterState();
+
       ConversionFlags flags;
       int remainingChars;
       int invalidChars;
       uint state_data[3];
       void *d;
+
     private:
       Q_DISABLE_COPY(ConverterState)
    };
 
-   QString toUnicode(const char *in, int length, ConverterState *state = 0) const {
-      return convertToUnicode(in, length, state);
-   }
-   QByteArray fromUnicode(const QChar *in, int length, ConverterState *state = 0) const {
-      return convertFromUnicode(in, length, state);
+   QString toUnicode(const QByteArray &) const;
+   QString toUnicode(const char *chars) const;
+
+   QString toUnicode(const char *in, int len, ConverterState *state = nullptr) const {
+      return convertToUnicode(in, len, state);
    }
 
-   // ### Qt5/merge these functions.
-   QTextDecoder *makeDecoder() const;
-   QTextDecoder *makeDecoder(ConversionFlags flags) const;
-   QTextEncoder *makeEncoder() const;
-   QTextEncoder *makeEncoder(ConversionFlags flags) const;
+   QByteArray fromUnicode(const QString &str, ConverterState *state = nullptr) const {
+      return convertFromUnicode(str, state);
+   }
+
+   QByteArray fromUnicode(const QStringView8 &str, ConverterState *state = nullptr) const {
+      return convertFromUnicode(str, state);
+   }
+
+   QTextDecoder *makeDecoder(ConversionFlags flags = DefaultConversion) const;
+   QTextEncoder *makeEncoder(ConversionFlags flags = DefaultConversion) const;
 
    virtual QByteArray name() const = 0;
    virtual QList<QByteArray> aliases() const;
    virtual int mibEnum() const = 0;
 
  protected:
-   virtual QString convertToUnicode(const char *in, int length, ConverterState *state) const = 0;
-   virtual QByteArray convertFromUnicode(const QChar *in, int length, ConverterState *state) const = 0;
+   virtual QString convertToUnicode(const char *in, int len, ConverterState *state) const = 0;
+   virtual QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *state) const = 0;
 
    QTextCodec();
    virtual ~QTextCodec();
