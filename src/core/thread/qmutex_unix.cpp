@@ -26,7 +26,7 @@
 #include <qlog.h>
 #include <qmutex.h>
 #include <qplatformdefs.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qmutex_p.h>
 
 static void report_error(int code, const char *where, const char *what)

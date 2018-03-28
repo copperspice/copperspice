@@ -72,7 +72,7 @@ void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunctio
 #else
 
 // NOTE: if you change the variable "pattern", this MUST also be modified in qlibrary.cpp and qplugin.cpp
-// QT5: should probably remove the entire pattern concept and do the section trick
+// should probably remove the entire pattern concept
 
 #  ifdef QPLUGIN_DEBUG_STR
 #    undef QPLUGIN_DEBUG_STR
@@ -90,8 +90,7 @@ void Q_CORE_EXPORT qRegisterStaticPluginInstanceFunction(QtPluginInstanceFunctio
     static const char qt_plugin_verification_data[] = \
       "pattern=CS_PLUGIN_VERIFICATION_DATA\n" \
       "version=" CS_VERSION_STR "\n" \
-      "debug=" QPLUGIN_DEBUG_STR "\n" \
-      "buildkey=" QT_BUILD_KEY;
+      "debug=" QPLUGIN_DEBUG_STR;
 
 #  if defined (Q_OF_ELF) && defined (Q_CC_GNU)
 #  define Q_PLUGIN_VERIFICATION_SECTION \

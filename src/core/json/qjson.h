@@ -25,12 +25,11 @@
 
 #include <qjsonarray.h>
 #include <qjsonobject.h>
-
 #include <qjsonvalue.h>
 
 #include <qcontainerfwd.h>
 #include <qflatmap.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 class QJsonData
 {

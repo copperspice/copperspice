@@ -42,7 +42,7 @@ void QPropertyAnimationPrivate::updateMetaProperty()
    // otherwise it will be set to QVariant::Invalid at the end of this function
 
    propertyType  = targetValue->property(propertyName).userType();
-   propertyIndex = targetValue->metaObject()->indexOfProperty(propertyName.constData());
+   propertyIndex = targetValue->metaObject()->indexOfProperty(propertyName);
 
    if (propertyType != QVariant::Invalid) {
       convertValues(propertyType);
@@ -73,7 +73,7 @@ void QPropertyAnimationPrivate::updateProperty(const QVariant &newValue)
       return;
    }
 
-   targetValue->setProperty(propertyName.constData(), newValue);
+   targetValue->setProperty(propertyName, newValue);
 }
 
 /*!
@@ -219,19 +219,19 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
 
          // update the default start value
          if (oldState == Stopped) {
-            d->setDefaultStartEndValue(d->targetValue->property(d->propertyName.constData()));
+            d->setDefaultStartEndValue(d->targetValue->property(d->propertyName));
 
             //let's check if we have a start value and an end value
             if (!startValue().isValid() && (d->direction == Backward || !d->defaultStartEndValue.isValid())) {
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without start value",
                         d->propertyName.constData(), d->target.data()->metaObject()->className(),
-                        qPrintable(d->target.data()->objectName()));
+                        csPrintable(d->target.data()->objectName()));
             }
 
             if (!endValue().isValid() && (d->direction == Forward || !d->defaultStartEndValue.isValid())) {
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without end value",
                         d->propertyName.constData(), d->target.data()->metaObject()->className(),
-                        qPrintable(d->target.data()->objectName()));
+                        csPrintable(d->target.data()->objectName()));
             }
          }
       } else if (hash.value(key) == this) {

@@ -23,12 +23,8 @@
 #ifndef QXMLUTILS_P_H
 #define QXMLUTILS_P_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
-class QString;
-class QChar;
 class QXmlCharRange;
 
 //  This class contains helper functions related to XML for validating character classes, productions in the XML specification
@@ -39,10 +35,13 @@ class Q_CORE_EXPORT QXmlUtils
    static bool isChar(const QChar c);
    static bool isNameChar(const QChar c);
    static bool isLetter(const QChar c);
-   static bool isNCName(const QStringRef &ncName);
+
+   static bool isNCName(const QStringView8 &ncName);
+
    static inline bool isNCName(const QString &ncName) {
-      return isNCName(&ncName);
+      return isNCName(QStringView8(ncName));
    }
+
    static bool isPublicID(const QString &candidate);
 
  private:
@@ -54,7 +53,5 @@ class Q_CORE_EXPORT QXmlUtils
    static bool isIdeographic(const QChar c);
    static bool isCombiningChar(const QChar c);
 };
-
-QT_END_NAMESPACE
 
 #endif

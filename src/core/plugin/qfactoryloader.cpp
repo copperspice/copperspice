@@ -122,10 +122,10 @@ void QFactoryLoader::updateDir(const QString &pluginDir, QSettings &settings)
       }
 
       QString regkey = QString::fromLatin1("CopperSpice Factory Cache %1.%2/%3:/%4")
-                       .arg((CS_VERSION & 0xff0000) >> 16)
-                       .arg((CS_VERSION & 0xff00) >> 8)
-                       .arg(d->iid)
-                       .arg(fileName);
+                       .formatArg((CS_VERSION & 0xff0000) >> 16)
+                       .formatArg((CS_VERSION & 0xff00) >> 8)
+                       .formatArg(d->iid)
+                       .formatArg(fileName);
 
       QStringList reg, keys;
       reg = settings.value(regkey).toStringList();

@@ -45,15 +45,13 @@
 #include <qdir.h>
 #include <qelfparser_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifdef QT_NO_DEBUG
 #  define QLIBRARY_AS_DEBUG false
 #else
 #  define QLIBRARY_AS_DEBUG true
 #endif
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
 // We don not use separate debug and release libs on UNIX, so we want
 // to allow loading plugins, regardless of how they were built.
 #  define QT_NO_DEBUG_PLUGIN_CHECK
@@ -140,7 +138,7 @@ static int qt_tokenize(const char *s, ulong s_len, ulong *advance, qt_token_info
 /*
   returns true if the string s was correctly parsed, false otherwise.
 */
-static bool qt_parse_pattern(const char *s, uint *version, bool *debug, QByteArray *key)
+static bool qt_parse_pattern(const char *s, uint *version, bool *debug)
 {
    bool ret = true;
 
@@ -150,6 +148,7 @@ static bool qt_parse_pattern(const char *s, uint *version, bool *debug, QByteArr
 
    do {
       parse = qt_tokenize(s + at, parselen, &advance, pinfo);
+
       if (parse == -1) {
          ret = false;
          break;
@@ -176,9 +175,6 @@ static bool qt_parse_pattern(const char *s, uint *version, bool *debug, QByteArr
       } else if (qstrncmp("debug", pinfo.results[0], pinfo.lengths[0]) == 0) {
          *debug = qstrncmp("true", pinfo.results[1], pinfo.lengths[1]) == 0;
 
-      } else if (qstrncmp("buildkey", pinfo.results[0], pinfo.lengths[0]) == 0) {
-         // save buildkey
-         *key = QByteArray(pinfo.results[1], pinfo.lengths[1]);
       }
 
    } while (parse == 1 && parselen > 0);
@@ -187,7 +183,7 @@ static bool qt_parse_pattern(const char *s, uint *version, bool *debug, QByteArr
 }
 #endif // QT_NO_PLUGIN_CHECK
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(QT_NO_PLUGIN_CHECK)
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC) && ! defined(QT_NO_PLUGIN_CHECK)
 
 static long qt_find_pattern(const char *s, ulong s_len, const char *pattern, ulong p_len)
 {
@@ -229,7 +225,7 @@ static long qt_find_pattern(const char *s, ulong s_len, const char *pattern, ulo
    return -1;
 }
 
-static bool qt_unix_query(const QString &library, uint *version, bool *debug, QByteArray *key, QLibraryPrivate *lib = 0)
+static bool qt_unix_query(const QString &library, uint *version, bool *debug, QLibraryPrivate *lib = nullptr)
 {
    QFile file(library);
 
@@ -241,19 +237,21 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QB
       if (qt_debug_component()) {
          qWarning("%s: %s", QFile::encodeName(library).constData(), csPrintable(qt_error_string(errno)));
       }
+
       return false;
    }
 
    QByteArray data;
-   const char *filedata = 0;
-   ulong fdlen = file.size();
-   filedata = (char *) file.map(0, fdlen);
+   const char *filedata = nullptr;
 
-   if (filedata == 0) {
+   ulong fdlen = file.size();
+   filedata    = (char *) file.map(nullptr, fdlen);
+
+   if (filedata == nullptr) {
       // try reading the data into memory instead
-      data = file.readAll();
+      data     = file.readAll();
       filedata = data.constData();
-      fdlen = data.size();
+      fdlen    = data.size();
    }
 
 
@@ -263,7 +261,7 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QB
    //  ELF binaries on GNU, have .qplugin sections.
    long pos = 0;
    const char pattern[] = "pattern=CS_PLUGIN_VERIFICATION_DATA";
-   const ulong plen = qstrlen(pattern);
+   const ulong plen     = qstrlen(pattern);
 
 #if defined (Q_OF_ELF) && defined(Q_CC_GNU)
    int r = QElfParser().parse(filedata, fdlen, library, lib, &pos, &fdlen);
@@ -272,6 +270,7 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QB
       if (pos > 0) {
          // find inside .rodata
          long rel = qt_find_pattern(filedata + pos, fdlen, pattern, plen);
+
          if (rel < 0) {
             pos = -1;
          } else {
@@ -291,15 +290,16 @@ static bool qt_unix_query(const QString &library, uint *version, bool *debug, QB
 
 #else
    pos = qt_find_pattern(filedata, fdlen, pattern, plen);
-#endif // defined(Q_OF_ELF) && defined(Q_CC_GNU)
+
+#endif
 
    bool ret = false;
    if (pos >= 0) {
-      ret = qt_parse_pattern(filedata + pos, version, debug, key);
+      ret = qt_parse_pattern(filedata + pos, version, debug);
    }
 
-   if (!ret && lib) {
-      lib->errorString = QLibrary::tr("Plugin verification data mismatch in '%1'").arg(library);
+   if (! ret && lib) {
+      lib->errorString = QLibrary::tr("Plugin verification data mismatch in '%1'").formatArg(library);
    }
 
    file.close();
@@ -523,8 +523,7 @@ bool QLibrary::isLibrary(const QString &fileName)
 
 typedef const char *(*QtPluginQueryVerificationDataFunction)();
 
-bool qt_get_verificationdata(QtPluginQueryVerificationDataFunction pfn, uint *cs_version, bool *debug, QByteArray *key,
-                             bool *exceptionThrown)
+bool qt_get_verificationdata(QtPluginQueryVerificationDataFunction pfn, uint *cs_version, bool *debug, bool *exceptionThrown)
 {
    *exceptionThrown = false;
    const char *szData = 0;
@@ -541,12 +540,15 @@ bool qt_get_verificationdata(QtPluginQueryVerificationDataFunction pfn, uint *cs
    }
 #else
    szData = pfn();
+
 #endif
 
 #ifdef QT_NO_PLUGIN_CHECK
    return true;
 #else
-   return qt_parse_pattern(szData, cs_version, debug, key);
+
+   return qt_parse_pattern(szData, cs_version, debug);
+
 #endif
 }
 
@@ -559,12 +561,14 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
    }
 
 #ifndef QT_NO_PLUGIN_CHECK
-   bool debug = !QLIBRARY_AS_DEBUG;
-   QByteArray key;
+   bool debug = ! QLIBRARY_AS_DEBUG;
+
+   QString key;
    bool success = false;
 
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
-   if (fileName.endsWith(QLatin1String(".debug"))) {
+   if (fileName.endsWith(".debug")) {
+
       // refuse to load a file that ends in .debug
       // these are the debug symbols from the libraries
       // the problem is that they are valid shared library files
@@ -585,27 +589,27 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 #endif
 
    QString regkey = QString::fromLatin1("CopperSpice Plugin Cache %1.%2.%3/%4")
-                    .arg((CS_VERSION & 0xff0000) >> 16)
-                    .arg((CS_VERSION & 0xff00) >> 8)
-                    .arg(QLIBRARY_AS_DEBUG ? QLatin1String("debug") : QLatin1String("false"))
-                    .arg(fileName);
+                    .formatArg((CS_VERSION & 0xff0000) >> 16)
+                    .formatArg((CS_VERSION & 0xff00) >> 8)
+                    .formatArg(QLIBRARY_AS_DEBUG ? "debug" : "false")
+                    .formatArg(fileName);
 
 #ifdef Q_OS_MAC
-   // On Mac, add the application arch to the reg key in order to
-   // cache plugin information separately for each arch. This prevents
-   // Qt from wrongly caching plugin load failures when the archs don't match.
+   // On Mac add the application arch to the regkey in order to
+   // cache plugin information separately for each arch. This prevents it
+   // from wrongly caching plugin load failures when the archs don't match.
 
 #if defined(__x86_64__)
-   regkey += QLatin1String("-x86_64");
+   regkey += ("-x86_64";
 
 #elif defined(__i386__)
-   regkey += QLatin1String("-i386");
+   regkey += "-i386";
 
 #elif defined(__ppc64__)
-   regkey += QLatin1String("-ppc64");
+   regkey += "-ppc64";
 
 #elif defined(__ppc__)
-   regkey += QLatin1String("-ppc");
+   regkey += "-ppc";
 
 #endif
 
@@ -617,21 +621,23 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
    if (! settings) {
       settings = QCoreApplicationPrivate::copperspiceConf();
    }
+
    reg = settings->value(regkey).toStringList();
+
 #endif
 
    if (reg.count() == 4 && lastModified == reg.at(3)) {
-      cs_version = reg.at(0).toUInt(0, 16);
-      debug = bool(reg.at(1).toInt());
-      key = reg.at(2).toLatin1();
-      success = cs_version != 0;
+      cs_version = reg.at(0).toInteger<int>(0, 16);
+      debug      = bool(reg.at(1).toInteger<int>());
+      key        = reg.at(2);
+      success    = cs_version != 0;
 
    } else {
 
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
       if (! pHnd) {
          // use unix shortcut to avoid loading the library
-         success = qt_unix_query(fileName, &cs_version, &debug, &key, this);
+         success = qt_unix_query(fileName, &cs_version, &debug, this);
       } else
 #endif
       {
@@ -648,13 +654,13 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 
                // avoid 'Bad Image' message box
                UINT oldmode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
-               hTempModule = ::LoadLibraryEx((wchar_t *)QDir::toNativeSeparators(fileName).utf16(), 0, dwFlags);
+               hTempModule = ::LoadLibraryEx(&QDir::toNativeSeparators(fileName).toStdWString()[0], 0, dwFlags);
                SetErrorMode(oldmode);
             }
 
 #else
             if (! pHnd) {
-               temporary_load =  load_sys();
+               temporary_load = load_sys();
             }
 #endif
 
@@ -663,12 +669,11 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
             QtPluginQueryVerificationDataFunction qtPluginQueryVerificationDataFunction;
 
             if (hTempModule) {
-               qtPluginQueryVerificationDataFunction =
-                  reinterpret_cast<QtPluginQueryVerificationDataFunction>
+               qtPluginQueryVerificationDataFunction = reinterpret_cast<QtPluginQueryVerificationDataFunction>
                   (::GetProcAddress(hTempModule, "cs_plugin_query_verification_data"));
+
             } else {
-               qtPluginQueryVerificationDataFunction =
-                  reinterpret_cast<QtPluginQueryVerificationDataFunction>
+               qtPluginQueryVerificationDataFunction = reinterpret_cast<QtPluginQueryVerificationDataFunction>
                   (resolve("cs_plugin_query_verification_data"));
             }
 
@@ -679,7 +684,7 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 #endif
 
             bool exceptionThrown = false;
-            bool ret = qt_get_verificationdata(qtPluginQueryVerificationDataFunction, &cs_version, &debug, &key, &exceptionThrown);
+            bool ret = qt_get_verificationdata(qtPluginQueryVerificationDataFunction, &cs_version, &debug, &exceptionThrown);
 
             if (! exceptionThrown) {
                if (! ret) {
@@ -728,7 +733,7 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 
       queried << QString::number(cs_version, 16)
               << QString::number((int)debug)
-              << QLatin1String(key)
+              << key
               << lastModified;
 
       settings->setValue(regkey, queried);
@@ -738,10 +743,11 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
 
    if (! success) {
       if (errorString.isEmpty()) {
+
          if (fileName.isEmpty()) {
             errorString = QLibrary::tr("Shared library was not found.");
          } else {
-            errorString = QLibrary::tr("File '%1' is not a valid CopperSpice plugin.").arg(fileName);
+            errorString = QLibrary::tr("File '%1' is not a valid CopperSpice plugin.").formatArg(fileName);
          }
       }
       return false;
@@ -753,48 +759,23 @@ bool QLibraryPrivate::isPlugin(QSettings *settings)
       if (qt_debug_component()) {
          qWarning("In %s:\n"
                   "  Plugin uses incompatible CopperSpice library (%d.%d.%d) [%s]", QFile::encodeName(fileName).constData(),
-                  (cs_version & 0xff0000) >> 16, (cs_version & 0xff00) >> 8, cs_version & 0xff, debug ? "debug" : "release");
+                  (cs_version & 0xff0000) >> 16, (cs_version & 0xff00) >> 8, cs_version & 0xff, debug ? QString("debug") : QString("release") );
       }
 
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library. (%2.%3.%4) [%5]")
-                  .arg(fileName).arg((cs_version & 0xff0000) >> 16).arg((cs_version & 0xff00) >> 8).arg(cs_version & 0xff)
-                  .arg(debug ? "debug" : "release" );
-
-   } else if (key != QT_BUILD_KEY
-              // we may have some compatibility keys, try them too:
-
-#ifdef CS_BUILD_KEY_COMPAT1
-              && key != CS_BUILD_KEY_COMPAT1
-#endif
-
-#ifdef CS_BUILD_KEY_COMPAT2
-              && key != CS_BUILD_KEY_COMPAT2
-#endif
-
-#ifdef CS_BUILD_KEY_COMPAT3
-              && key != CS_BUILD_KEY_COMPAT3
-#endif
-
-             ) {
-
-      if (qt_debug_component()) {
-         qWarning("In %s:\n"
-                  "  Plugin uses incompatible CopperSpice library\n"
-                  "  Expected build key \"%s\", got \"%s\"",
-                  QFile::encodeName(fileName).constData(), QT_BUILD_KEY, key.isEmpty() ? "<null>" : key.constData());
-      }
-
-      errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library.\n"
-                  " Expected build key \"%2\", got \"%3\"").arg(fileName).arg(QLatin1String(QT_BUILD_KEY))
-                  .arg(key.isEmpty() ? "<null>" : key.constData() );
+                  .formatArg(fileName).formatArg((cs_version & 0xff0000) >> 16).formatArg((cs_version & 0xff00) >> 8).formatArg(cs_version & 0xff)
+                  .formatArg(debug ? QString("debug") : QString("release") );
 
 #ifndef QT_NO_DEBUG_PLUGIN_CHECK
+
    } else if (debug != QLIBRARY_AS_DEBUG) {
       // do not issue a qWarning since there may be no debug support
       errorString = QLibrary::tr("Plugin '%1' uses incompatible CopperSpice library."
-                  " (Can not mix debug and release libraries.)").arg(fileName);
+                  " (Can not mix debug and release libraries.)").formatArg(fileName);
 
 #endif
+
+
    } else {
       pluginState = IsAPlugin;
 
@@ -972,4 +953,3 @@ bool qt_debug_component()
    return debug_env != 0;
 }
 
-QT_END_NAMESPACE

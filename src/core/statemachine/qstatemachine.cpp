@@ -994,21 +994,21 @@ void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractSta
          Q_ASSERT(currentContext != 0);
 
          errorString = QStateMachine::tr("Missing initial state in compound state '%1'")
-                       .arg(currentContext->objectName());
+                       .formatArg(currentContext->objectName());
 
          break;
       case QStateMachine::NoDefaultStateInHistoryStateError:
          Q_ASSERT(currentContext != 0);
 
          errorString = QStateMachine::tr("Missing default state in history state '%1'")
-                       .arg(currentContext->objectName());
+                       .formatArg(currentContext->objectName());
          break;
 
       case QStateMachine::NoCommonAncestorForTransitionError:
          Q_ASSERT(currentContext != 0);
 
          errorString = QStateMachine::tr("No common ancestor for targets and source of transition from state '%1'")
-                       .arg(currentContext->objectName());
+                       .formatArg(currentContext->objectName());
          break;
       default:
          errorString = QStateMachine::tr("Unknown error");

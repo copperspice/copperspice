@@ -23,31 +23,33 @@
 #ifndef QSYSTEMLIBRARY_P_H
 #define QSYSTEMLIBRARY_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
-#include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
 
 class QSystemLibrary
 {
  public:
    explicit QSystemLibrary(const QString &libraryName) {
       m_libraryName = libraryName;
-      m_handle = 0;
-      m_didLoad = false;
+      m_handle      = 0;
+      m_didLoad     = false;
    }
+
+/* BROOM - may be able to remove this constructor
 
    explicit QSystemLibrary(const wchar_t *libraryName) {
       m_libraryName = QString::fromWCharArray(libraryName);
-      m_handle = 0;
-      m_didLoad = false;
+      m_handle      = 0;
+      m_didLoad     = false;
    }
 
+*/
+
    bool load(bool onlySystemDirectory = true) {
-      m_handle = load((const wchar_t *)m_libraryName.utf16(), onlySystemDirectory);
+      m_handle = load(m_libraryName, onlySystemDirectory);
       m_didLoad = true;
       return (m_handle != 0);
    }
@@ -57,30 +59,28 @@ class QSystemLibrary
    }
 
    void *resolve(const char *symbol) {
-      if (!m_didLoad) {
+      if (! m_didLoad) {
          load();
       }
+
       if (!m_handle) {
          return 0;
       }
 
       return (void *)GetProcAddress(m_handle, symbol);
-
    }
 
    static void *resolve(const QString &libraryName, const char *symbol) {
       return QSystemLibrary(libraryName).resolve(symbol);
    }
 
-   static Q_CORE_EXPORT HINSTANCE load(const wchar_t *lpFileName, bool onlySystemDirectory = true);
+   static Q_CORE_EXPORT HINSTANCE load(const QString &libraryName, bool onlySystemDirectory = true);
 
  private:
    HINSTANCE m_handle;
-   QString m_libraryName;
-   bool m_didLoad;
+   QString   m_libraryName;
+   bool      m_didLoad;
 };
-
-QT_END_NAMESPACE
 
 #endif // Q_OS_WIN
 

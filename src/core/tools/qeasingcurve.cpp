@@ -21,14 +21,14 @@
 ***********************************************************************/
 
 #include <qeasingcurve.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qstring.h>
+#include <qdebug.h>
+#include <qstring8.h>
 
 #ifndef QT_NO_DATASTREAM
 #include <QtCore/qdatastream.h>
 #endif
 
-QT_BEGIN_NAMESPACE
+#include "../../3rdparty/easing/easing.cpp"
 
 static bool isConfigFunction(QEasingCurve::Type type)
 {
@@ -73,10 +73,6 @@ bool QEasingCurveFunction::operator==(const QEasingCurveFunction &other)
           qFuzzyCompare(_a, other._a) &&
           qFuzzyCompare(_o, other._o);
 }
-
-QT_BEGIN_INCLUDE_NAMESPACE
-#include "../../3rdparty/easing/easing.cpp"
-QT_END_INCLUDE_NAMESPACE
 
 class QEasingCurvePrivate
 {
@@ -578,9 +574,9 @@ QDebug operator<<(QDebug debug, const QEasingCurve &item)
          << "func:" << item.d_ptr->func;
 
    if (item.d_ptr->config) {
-      debug << QString::fromLatin1("period:%1").arg(item.d_ptr->config->_p, 0, 'f', 20)
-            << QString::fromLatin1("amp:%1").arg(item.d_ptr->config->_a, 0, 'f', 20)
-            << QString::fromLatin1("overshoot:%1").arg(item.d_ptr->config->_o, 0, 'f', 20);
+      debug << QString::fromLatin1("period:%1").formatArg(item.d_ptr->config->_p, 0, 'f', 20)
+            << QString::fromLatin1("amp:%1").formatArg(item.d_ptr->config->_a, 0, 'f', 20)
+            << QString::fromLatin1("overshoot:%1").formatArg(item.d_ptr->config->_o, 0, 'f', 20);
    }
    return debug;
 }
@@ -646,4 +642,3 @@ QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing)
 }
 #endif // QT_NO_DATASTREAM
 
-QT_END_NAMESPACE

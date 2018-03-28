@@ -26,7 +26,7 @@
 #include <qjsonvalue.h>
 #include <qflatmap.h>
 #include <qhash.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>
 

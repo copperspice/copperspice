@@ -24,7 +24,7 @@
 #define QJSONVALUE_H
 
 #include <qglobal.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qvariant.h>
 
 class QJsonData;

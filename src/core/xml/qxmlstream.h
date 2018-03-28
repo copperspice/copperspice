@@ -23,217 +23,263 @@
 #ifndef QXMLSTREAM_H
 #define QXMLSTREAM_H
 
-#include <QtCore/qiodevice.h>
+#include <qiodevice.h>
+#include <qstring.h>
+#include <qscopedpointer.h>
+#include <qvector.h>
 
-#ifndef QT_NO_XMLSTREAM
+class QXmlStreamAttributes;
+class QXmlStreamReaderPrivate;
+class QXmlStreamWriterPrivate;
 
-#include <QtCore/qstring.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qscopedpointer.h>
-
-QT_BEGIN_NAMESPACE
-
-#if defined QT_BUILD_XML_LIB
-# define Q_XMLSTREAM_EXPORT     Q_XML_EXPORT
-#else
-# define Q_XMLSTREAM_EXPORT     Q_CORE_EXPORT
-#endif
-
-
-class Q_XMLSTREAM_EXPORT QXmlStreamStringRef
+class Q_CORE_EXPORT QXmlStringView
 {
-   QString m_string;
-   int m_position, m_size;
-
  public:
-   inline QXmlStreamStringRef(): m_position(0), m_size(0) {}
-   inline QXmlStreamStringRef(const QStringRef &aString)
-      : m_string(aString.string() ? *aString.string() : QString()), m_position(aString.position()), m_size(aString.size()) {}
-   inline QXmlStreamStringRef(const QString &aString): m_string(aString), m_position(0), m_size(aString.size()) {}
-   inline ~QXmlStreamStringRef() {}
-   inline void clear() {
+   QXmlStringView()
+   {}
+
+   QXmlStringView(const QString &str)
+      : m_string(str), m_begin(m_string.begin()), m_end(m_string.end())
+   {}
+
+   QXmlStringView(const QStringView8 &view)
+      : m_string(view), m_begin(m_string.begin()), m_end(m_string.end())
+   {}
+
+   ~QXmlStringView()
+   {}
+
+   void clear() {
       m_string.clear();
-      m_position = m_size = 0;
+      m_begin = m_string.begin();
+      m_end   = m_string.end();
    }
-   inline operator QStringRef() const {
-      return QStringRef(&m_string, m_position, m_size);
+
+   operator QStringView8() const {
+      return QStringView8(m_begin, m_end);
    }
-   inline const QString *string() const {
-      return &m_string;
+
+   QString::const_iterator begin() const {
+      return m_begin;
    }
-   inline int position() const {
-      return m_position;
+
+   QString::const_iterator end() const {
+      return m_end;
    }
-   inline int size() const {
-      return m_size;
-   }
+
+ private:
+   QString m_string;
+
+   QString::const_iterator m_begin;
+   QString::const_iterator m_end;
 };
 
-
-class QXmlStreamReaderPrivate;
-class QXmlStreamAttributes;
-
-class Q_XMLSTREAM_EXPORT QXmlStreamAttribute
+class Q_CORE_EXPORT QXmlStreamAttribute
 {
-   QXmlStreamStringRef m_name, m_namespaceUri, m_qualifiedName, m_value;
-   void *reserved;
-   uint m_isDefault : 1;
-   friend class QXmlStreamReaderPrivate;
-   friend class QXmlStreamAttributes;
-
  public:
    QXmlStreamAttribute();
    QXmlStreamAttribute(const QString &qualifiedName, const QString &value);
    QXmlStreamAttribute(const QString &namespaceUri, const QString &name, const QString &value);
    QXmlStreamAttribute(const QXmlStreamAttribute &);
    QXmlStreamAttribute &operator=(const QXmlStreamAttribute &);
+
    ~QXmlStreamAttribute();
-   inline QStringRef namespaceUri() const {
+
+   inline QStringView8 namespaceUri() const {
       return m_namespaceUri;
    }
-   inline QStringRef name() const {
+
+   inline QStringView8 name() const {
       return m_name;
    }
-   inline QStringRef qualifiedName() const {
+
+   inline QStringView8 qualifiedName() const {
       return m_qualifiedName;
    }
-   inline QStringRef prefix() const {
-      return QStringRef(m_qualifiedName.string(),
-                        m_qualifiedName.position(),
-                        qMax(0, m_qualifiedName.size() - m_name.size() - 1));
+
+   inline QStringView8 prefix() const {
+      auto iter_qualName = m_qualifiedName.end();
+      auto iter_name     = m_name.begin();
+
+      if (iter_name != m_name.end()) {
+         ++iter_name;
+
+         while (iter_name != m_name.end()) {
+
+            if (iter_qualName == m_qualifiedName.begin()) {
+               break;
+            }
+
+            --iter_qualName;
+            ++iter_name;
+         }
+      }
+
+      return QStringView8(m_qualifiedName.begin(), iter_qualName);
    }
-   inline QStringRef value() const {
+
+   inline QStringView8 value() const {
       return m_value;
    }
+
    inline bool isDefault() const {
       return m_isDefault;
    }
+
    inline bool operator==(const QXmlStreamAttribute &other) const {
-      return (value() == other.value()
-              && (namespaceUri().isNull() ? (qualifiedName() == other.qualifiedName())
-                  : (namespaceUri() == other.namespaceUri() && name() == other.name())));
+      bool retval = (value() == other.value());
+
+      if (retval) {
+         if (namespaceUri().isEmpty()) {
+            retval = (qualifiedName() == other.qualifiedName());
+
+         } else {
+            retval = (namespaceUri() == other.namespaceUri() && name() == other.name());
+
+         }
+      }
+
+      return retval;
    }
+
    inline bool operator!=(const QXmlStreamAttribute &other) const {
-      return !operator==(other);
+      return ! operator==(other);
    }
+
+  private:
+   QXmlStringView m_name;
+   QXmlStringView m_namespaceUri;
+   QXmlStringView m_qualifiedName;
+   QXmlStringView m_value;
+
+   uint m_isDefault : 1;
+
+   friend class QXmlStreamReaderPrivate;
+   friend class QXmlStreamAttributes;
 };
 
 Q_DECLARE_TYPEINFO(QXmlStreamAttribute, Q_MOVABLE_TYPE);
 
-class Q_XMLSTREAM_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
+class Q_CORE_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
 {
  public:
    inline QXmlStreamAttributes() {}
-   QStringRef value(const QString &namespaceUri, const QString &name) const;
-   QStringRef value(const QString &namespaceUri, const QLatin1String &name) const;
-   QStringRef value(const QLatin1String &namespaceUri, const QLatin1String &name) const;
-   QStringRef value(const QString &qualifiedName) const;
-   QStringRef value(const QLatin1String &qualifiedName) const;
+
+   QStringView8 value(const QString &namespaceUri, const QString &name) const;
+   QStringView8 value(const QString &qualifiedName) const;
+
    void append(const QString &namespaceUri, const QString &name, const QString &value);
    void append(const QString &qualifiedName, const QString &value);
 
    inline bool hasAttribute(const QString &qualifiedName) const {
-      return !value(qualifiedName).isNull();
-   }
-
-   inline bool hasAttribute(const QLatin1String &qualifiedName) const {
-      return !value(qualifiedName).isNull();
+      return ! value(qualifiedName).isEmpty();
    }
 
    inline bool hasAttribute(const QString &namespaceUri, const QString &name) const {
-      return !value(namespaceUri, name).isNull();
+      return ! value(namespaceUri, name).isEmpty();
    }
 
    using QVector<QXmlStreamAttribute>::append;
 };
 
-class Q_XMLSTREAM_EXPORT QXmlStreamNamespaceDeclaration
+class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
 {
-   QXmlStreamStringRef m_prefix, m_namespaceUri;
-   void *reserved;
-
-   friend class QXmlStreamReaderPrivate;
  public:
    QXmlStreamNamespaceDeclaration();
    QXmlStreamNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &);
    QXmlStreamNamespaceDeclaration(const QString &prefix, const QString &namespaceUri);
    ~QXmlStreamNamespaceDeclaration();
+
    QXmlStreamNamespaceDeclaration &operator=(const QXmlStreamNamespaceDeclaration &);
-   inline QStringRef prefix() const {
+   inline QStringView8 prefix() const {
       return m_prefix;
    }
-   inline QStringRef namespaceUri() const {
+
+   inline QStringView8 namespaceUri() const {
       return m_namespaceUri;
    }
+
    inline bool operator==(const QXmlStreamNamespaceDeclaration &other) const {
       return (prefix() == other.prefix() && namespaceUri() == other.namespaceUri());
-   }
-   inline bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
+   }   inline bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
       return !operator==(other);
    }
+
+ private:
+   QXmlStringView m_prefix;
+   QXmlStringView m_namespaceUri;
+
+   friend class QXmlStreamReaderPrivate;
 };
 
 Q_DECLARE_TYPEINFO(QXmlStreamNamespaceDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<QXmlStreamNamespaceDeclaration> QXmlStreamNamespaceDeclarations;
 
-class Q_XMLSTREAM_EXPORT QXmlStreamNotationDeclaration
+class Q_CORE_EXPORT QXmlStreamNotationDeclaration
 {
-   QXmlStreamStringRef m_name, m_systemId, m_publicId;
-   void *reserved;
-
-   friend class QXmlStreamReaderPrivate;
-
  public:
    QXmlStreamNotationDeclaration();
-   ~QXmlStreamNotationDeclaration();
    QXmlStreamNotationDeclaration(const QXmlStreamNotationDeclaration &);
    QXmlStreamNotationDeclaration &operator=(const QXmlStreamNotationDeclaration &);
-   inline QStringRef name() const {
+
+   ~QXmlStreamNotationDeclaration();
+
+   inline QStringView8 name() const {
       return m_name;
    }
-   inline QStringRef systemId() const {
+
+   inline QStringView8 systemId() const {
       return m_systemId;
    }
-   inline QStringRef publicId() const {
+
+   inline QStringView8 publicId() const {
       return m_publicId;
    }
+
    inline bool operator==(const QXmlStreamNotationDeclaration &other) const {
       return (name() == other.name() && systemId() == other.systemId()
               && publicId() == other.publicId());
    }
+
    inline bool operator!=(const QXmlStreamNotationDeclaration &other) const {
       return !operator==(other);
    }
+
+ private:
+   QXmlStringView m_name, m_systemId, m_publicId;
+
+   friend class QXmlStreamReaderPrivate;
 };
 
 Q_DECLARE_TYPEINFO(QXmlStreamNotationDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<QXmlStreamNotationDeclaration> QXmlStreamNotationDeclarations;
 
-class Q_XMLSTREAM_EXPORT QXmlStreamEntityDeclaration
+class Q_CORE_EXPORT QXmlStreamEntityDeclaration
 {
-   QXmlStreamStringRef m_name, m_notationName, m_systemId, m_publicId, m_value;
-   void *reserved;
-
-   friend class QXmlStreamReaderPrivate;
-
  public:
    QXmlStreamEntityDeclaration();
-   ~QXmlStreamEntityDeclaration();
    QXmlStreamEntityDeclaration(const QXmlStreamEntityDeclaration &);
    QXmlStreamEntityDeclaration &operator=(const QXmlStreamEntityDeclaration &);
-   inline QStringRef name() const {
+
+   ~QXmlStreamEntityDeclaration();
+
+   inline QStringView8 name() const {
       return m_name;
    }
-   inline QStringRef notationName() const {
+
+   inline QStringView8 notationName() const {
       return m_notationName;
    }
-   inline QStringRef systemId() const {
+
+   inline QStringView8 systemId() const {
       return m_systemId;
    }
-   inline QStringRef publicId() const {
+
+   inline QStringView8 publicId() const {
       return m_publicId;
    }
-   inline QStringRef value() const {
+
+   inline QStringView8 value() const {
       return m_value;
    }
    inline bool operator==(const QXmlStreamEntityDeclaration &other) const {
@@ -243,16 +289,21 @@ class Q_XMLSTREAM_EXPORT QXmlStreamEntityDeclaration
               && publicId() == other.publicId()
               && value() == other.value());
    }
+
    inline bool operator!=(const QXmlStreamEntityDeclaration &other) const {
       return !operator==(other);
    }
+
+ private:
+   QXmlStringView m_name, m_notationName, m_systemId, m_publicId, m_value;
+
+   friend class QXmlStreamReaderPrivate;
 };
 
 Q_DECLARE_TYPEINFO(QXmlStreamEntityDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<QXmlStreamEntityDeclaration> QXmlStreamEntityDeclarations;
 
-
-class Q_XMLSTREAM_EXPORT QXmlStreamEntityResolver
+class Q_CORE_EXPORT QXmlStreamEntityResolver
 {
  public:
    virtual ~QXmlStreamEntityResolver();
@@ -260,11 +311,8 @@ class Q_XMLSTREAM_EXPORT QXmlStreamEntityResolver
    virtual QString resolveUndeclaredEntity(const QString &name);
 };
 
-#ifndef QT_NO_XMLSTREAMREADER
-
-class Q_XMLSTREAM_EXPORT QXmlStreamReader
+class Q_CORE_EXPORT QXmlStreamReader
 {
-
  public:
    enum TokenType {
       NoToken = 0,
@@ -278,6 +326,20 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
       DTD,
       EntityReference,
       ProcessingInstruction
+   };
+
+   enum ReadElementTextBehaviour {
+      ErrorOnUnexpectedElement,
+      IncludeChildElements,
+      SkipChildElements
+   };
+
+   enum Error {
+      NoError,
+      UnexpectedElementError,
+      CustomError,
+      NotWellFormedError,
+      PrematureEndOfDocumentError
    };
 
    QXmlStreamReader();
@@ -294,7 +356,6 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
    void addData(const char *data);
    void clear();
 
-
    bool atEnd() const;
    TokenType readNext();
 
@@ -310,36 +371,45 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
    inline bool isStartDocument() const {
       return tokenType() == StartDocument;
    }
+
    inline bool isEndDocument() const {
       return tokenType() == EndDocument;
    }
+
    inline bool isStartElement() const {
       return tokenType() == StartElement;
    }
+
    inline bool isEndElement() const {
       return tokenType() == EndElement;
    }
+
    inline bool isCharacters() const {
       return tokenType() == Characters;
    }
+
    bool isWhitespace() const;
+
    bool isCDATA() const;
+
    inline bool isComment() const {
       return tokenType() == Comment;
    }
+
    inline bool isDTD() const {
       return tokenType() == DTD;
    }
    inline bool isEntityReference() const {
       return tokenType() == EntityReference;
    }
+
    inline bool isProcessingInstruction() const {
       return tokenType() == ProcessingInstruction;
    }
 
    bool isStandaloneDocument() const;
-   QStringRef documentVersion() const;
-   QStringRef documentEncoding() const;
+   QStringView8 documentVersion() const;
+   QStringView8 documentEncoding() const;
 
    qint64 lineNumber() const;
    qint64 columnNumber() const;
@@ -347,41 +417,28 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
 
    QXmlStreamAttributes attributes() const;
 
-   enum ReadElementTextBehaviour {
-      ErrorOnUnexpectedElement,
-      IncludeChildElements,
-      SkipChildElements
-   };
    QString readElementText(ReadElementTextBehaviour behaviour);
    QString readElementText();
 
-   QStringRef name() const;
-   QStringRef namespaceUri() const;
-   QStringRef qualifiedName() const;
-   QStringRef prefix() const;
+   QStringView8 name() const;
+   QStringView8 namespaceUri() const;
+   QStringView8 qualifiedName() const;
+   QStringView8 prefix() const;
 
-   QStringRef processingInstructionTarget() const;
-   QStringRef processingInstructionData() const;
+   QStringView8 processingInstructionTarget() const;
+   QStringView8 processingInstructionData() const;
 
-   QStringRef text() const;
+   QStringView8 text() const;
 
    QXmlStreamNamespaceDeclarations namespaceDeclarations() const;
    void addExtraNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &extraNamespaceDeclaraction);
    void addExtraNamespaceDeclarations(const QXmlStreamNamespaceDeclarations &extraNamespaceDeclaractions);
    QXmlStreamNotationDeclarations notationDeclarations() const;
    QXmlStreamEntityDeclarations entityDeclarations() const;
-   QStringRef dtdName() const;
-   QStringRef dtdPublicId() const;
-   QStringRef dtdSystemId() const;
+   QStringView8 dtdName() const;
+   QStringView8 dtdPublicId() const;
+   QStringView8 dtdSystemId() const;
 
-
-   enum Error {
-      NoError,
-      UnexpectedElementError,
-      CustomError,
-      NotWellFormedError,
-      PrematureEndOfDocumentError
-   };
    void raiseError(const QString &message = QString());
    QString errorString() const;
    Error error() const;
@@ -399,15 +456,9 @@ class Q_XMLSTREAM_EXPORT QXmlStreamReader
    QScopedPointer<QXmlStreamReaderPrivate> d_ptr;
 
 };
-#endif // QT_NO_XMLSTREAMREADER
 
-#ifndef QT_NO_XMLSTREAMWRITER
-
-class QXmlStreamWriterPrivate;
-
-class Q_XMLSTREAM_EXPORT QXmlStreamWriter
+class Q_CORE_EXPORT QXmlStreamWriter
 {
-
  public:
    QXmlStreamWriter();
    QXmlStreamWriter(QIODevice *device);
@@ -418,11 +469,9 @@ class Q_XMLSTREAM_EXPORT QXmlStreamWriter
    void setDevice(QIODevice *device);
    QIODevice *device() const;
 
-#ifndef QT_NO_TEXTCODEC
    void setCodec(QTextCodec *codec);
    void setCodec(const char *codecName);
    QTextCodec *codec() const;
-#endif
 
    void setAutoFormatting(bool);
    bool autoFormatting() const;
@@ -461,10 +510,7 @@ class Q_XMLSTREAM_EXPORT QXmlStreamWriter
    void writeStartElement(const QString &qualifiedName);
    void writeStartElement(const QString &namespaceUri, const QString &name);
 
-#ifndef QT_NO_XMLSTREAMREADER
    void writeCurrentToken(const QXmlStreamReader &reader);
-#endif
-
    bool hasError() const;
 
  private:
@@ -472,9 +518,5 @@ class Q_XMLSTREAM_EXPORT QXmlStreamWriter
    Q_DECLARE_PRIVATE(QXmlStreamWriter)
    QScopedPointer<QXmlStreamWriterPrivate> d_ptr;
 };
-#endif // QT_NO_XMLSTREAMWRITER
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_XMLSTREAM
-#endif // QXMLSTREAM_H
+#endif

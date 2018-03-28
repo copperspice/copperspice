@@ -89,6 +89,7 @@ template <class T> class QSharedDataPointer
    inline bool operator==(const QSharedDataPointer<T> &other) const {
       return d == other.d;
    }
+
    inline bool operator!=(const QSharedDataPointer<T> &other) const {
       return d != other.d;
    }
@@ -96,8 +97,9 @@ template <class T> class QSharedDataPointer
    inline QSharedDataPointer() {
       d = 0;
    }
+
    inline ~QSharedDataPointer() {
-      if (d && !d->ref.deref()) {
+      if (d && ! d->ref.deref()) {
          delete d;
       }
    }

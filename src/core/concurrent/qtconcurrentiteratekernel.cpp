@@ -62,6 +62,7 @@ static qint64 getticks()
 
 #ifndef _POSIX_THREAD_CPUTIME
    clockId = CLOCK_REALTIME;
+
 #elif (_POSIX_THREAD_CPUTIME-0 <= 0)
    // if we don't have CLOCK_THREAD_CPUTIME_ID, we have to just use elapsed realtime instead
    clockId = CLOCK_REALTIME;
@@ -69,14 +70,16 @@ static qint64 getticks()
 #  if (_POSIX_THREAD_CPUTIME-0 == 0)
    // detect availablility of CLOCK_THREAD_CPUTIME_ID
    static long useThreadCpuTime = -2;
+
    if (useThreadCpuTime == -2) {
-      // sysconf() will return either -1 or _POSIX_VERSION (don't care about thread races here)
       useThreadCpuTime = sysconf(_SC_THREAD_CPUTIME);
    }
+
    if (useThreadCpuTime != -1) {
       clockId = CLOCK_THREAD_CPUTIME_ID;
    }
 #  endif
+
 #else
    clockId = CLOCK_THREAD_CPUTIME_ID;
 #endif

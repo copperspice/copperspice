@@ -27,7 +27,7 @@
 #include <qjsonarray.h>
 #include <qjsonobject.h>
 #include <qjsonvalue.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 class QJsonParser;
 

@@ -34,13 +34,8 @@
 #define QT_NO_DYNAMIC_LIBRARY
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if !defined(QT_HPUX_LD) && !defined(QT_NO_DYNAMIC_LIBRARY)
-
-QT_BEGIN_INCLUDE_NAMESPACE
 #include <dlfcn.h>
-QT_END_INCLUDE_NAMESPACE
 #endif
 
 static QString qdlerror()
@@ -91,21 +86,21 @@ bool QLibraryPrivate::load_sys()
       // .so is preferred.
 # if defined(__ia64)
       if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".so.%1").arg(fullVersion);
+         suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
       } else {
          suffixes << QLatin1String(".so");
       }
 # endif
       if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".sl.%1").arg(fullVersion);
-         suffixes << QString::fromLatin1(".%1").arg(fullVersion);
+         suffixes << QString::fromLatin1(".sl.%1").formatArg(fullVersion);
+         suffixes << QString::fromLatin1(".%1").formatArg(fullVersion);
       } else {
          suffixes << QLatin1String(".sl");
       }
 #else
 
       if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".so.%1").arg(fullVersion);
+         suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
       } else {
          suffixes << QLatin1String(".so");
       }
@@ -113,8 +108,8 @@ bool QLibraryPrivate::load_sys()
 
 # ifdef Q_OS_MAC
       if (!fullVersion.isEmpty()) {
-         suffixes << QString::fromLatin1(".%1.bundle").arg(fullVersion);
-         suffixes << QString::fromLatin1(".%1.dylib").arg(fullVersion);
+         suffixes << QString::fromLatin1(".%1.bundle").formatArg(fullVersion);
+         suffixes << QString::fromLatin1(".%1.dylib").formatArg(fullVersion);
       } else {
          suffixes << QLatin1String(".bundle") << QLatin1String(".dylib");
       }
@@ -230,7 +225,7 @@ bool QLibraryPrivate::load_sys()
       qualifiedFileName = attempt;
       errorString.clear();
    } else {
-      errorString = QLibrary::tr("Can not load library %1: %2").arg(fileName).arg(qdlerror());
+      errorString = QLibrary::tr("Can not load library %1: %2").formatArg(fileName).formatArg(qdlerror());
    }
    return (pHnd != 0);
 }
@@ -243,7 +238,7 @@ bool QLibraryPrivate::unload_sys()
 #  else
    if (dlclose(pHnd)) {
 #  endif
-      errorString = QLibrary::tr("Cannot unload library %1: %2").arg(fileName).arg(qdlerror());
+      errorString = QLibrary::tr("Cannot unload library %1: %2").formatArg(fileName).formatArg(qdlerror());
       return false;
    }
 #endif
@@ -276,14 +271,12 @@ void *QLibraryPrivate::resolve_sys(const char *symbol)
 #endif
 
    if (!address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").arg(
-                       QString::fromLatin1(symbol)).arg(fileName).arg(qdlerror());
+      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2: %3").formatArg(
+                       QString::fromLatin1(symbol)).formatArg(fileName).formatArg(qdlerror());
    } else {
       errorString.clear();
    }
 
    return address;
 }
-
-QT_END_NAMESPACE
 

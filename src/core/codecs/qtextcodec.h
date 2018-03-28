@@ -23,7 +23,7 @@
 #ifndef QTEXTCODEC_H
 #define QTEXTCODEC_H
 
-#include <qstring8.h>
+#include <qstring.h>
 #include <qlist.h>
 
 QT_BEGIN_NAMESPACE

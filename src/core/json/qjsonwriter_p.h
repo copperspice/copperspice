@@ -26,7 +26,7 @@
 #include <qjsondocument.h>
 #include <qjsonarray.h>
 #include <qjsonobject.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 class QJsonWriter
 {

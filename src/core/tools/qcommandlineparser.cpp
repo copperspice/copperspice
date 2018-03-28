@@ -25,15 +25,15 @@
 ** Copyright (C) 2013 David Faure <faure@kde.org>
 *****************************************************/
 
-#include <qcommandlineparser.h>
-
-#include <qcoreapplication.h>
-#include <qhash.h>
-#include <qvector.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-QT_BEGIN_NAMESPACE
+
+#include <qcommandlineparser.h>
+#include <qcoreapplication.h>
+#include <qhash.h>
+#include <qstringparser.h>
+#include <qvector.h>
 
 typedef QHash<QString, int> NameHash_t;
 
@@ -42,9 +42,7 @@ class QCommandLineParserPrivate
  public:
    inline QCommandLineParserPrivate()
       : singleDashWordOptionMode(QCommandLineParser::ParseAsCompactedShortOptions),
-        builtinVersionOption(false),
-        builtinHelpOption(false),
-        needsParsing(true) {
+        builtinVersionOption(false), builtinHelpOption(false), needsParsing(true) {
    }
 
    bool parse(const QStringList &args);
@@ -172,6 +170,7 @@ QCommandLineOption QCommandLineParser::addHelpOption()
 {
    d->builtinHelpOption = true;
    QCommandLineOption opt(QStringList()
+
 #ifdef Q_OS_WIN
                           << QString("?")
 #endif
@@ -210,17 +209,18 @@ bool QCommandLineParser::parse(const QStringList &arguments)
    return d->parse(arguments);
 }
 
-
 QString QCommandLineParser::errorText() const
 {
-   if (!d->errorText.isEmpty()) {
+   if (! d->errorText.isEmpty()) {
       return d->errorText;
    }
+
    if (d->unknownOptionNames.count() == 1) {
-      return tr("Unknown option '%1'.").arg(d->unknownOptionNames.first());
+      return tr("Unknown option '%1'.").formatArg(d->unknownOptionNames.first());
    }
+
    if (d->unknownOptionNames.count() > 1) {
-      return tr("Unknown options: %1.").arg(d->unknownOptionNames.join(QString(", ")));
+      return tr("Unknown options: %1.").formatArg(d->unknownOptionNames.join(QString(", ")));
    }
    return QString();
 }
@@ -280,7 +280,7 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
          if (assignPos == -1) {
             ++(*argumentIterator);
             if (*argumentIterator == argsEnd) {
-               errorText = QCommandLineParser::tr("Missing value after '%1'.").arg(argument);
+               errorText = QCommandLineParser::tr("Missing value after '%1'.").formatArg(argument);
                return false;
             }
             optionValuesHash[optionOffset].append(*(*argumentIterator));
@@ -289,7 +289,7 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
          }
       } else {
          if (assignPos != -1) {
-            errorText = QCommandLineParser::tr("Unexpected value after '%1'.").arg(argument.left(assignPos));
+            errorText = QCommandLineParser::tr("Unexpected value after '%1'.").formatArg(argument.left(assignPos));
             return false;
          }
       }
@@ -676,7 +676,7 @@ QString QCommandLineParserPrivate::helpText() const
       usage += arg.syntax;
    }
 
-   text += QCommandLineParser::tr("Usage: %1").arg(usage) + nl;
+   text += QCommandLineParser::tr("Usage: %1").formatArg(usage) + nl;
    if (!description.isEmpty()) {
       text += description + nl;
    }

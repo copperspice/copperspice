@@ -20,17 +20,13 @@
 *
 ***********************************************************************/
 
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qstring.h>
-
 #include <qxmlutils_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /* TODO:
- * - isNameChar() doesn't have to be public, it's only needed in
- *   qdom.cpp -- refactor fixedXmlName() to use isNCName()
- * - A lot of functions can be inlined.
+ * - isNameChar() doesn't have to be public, it's only needed in qdom.cpp
+ *-- refactor fixedXmlName() to use isNCName()
  */
 
 class QXmlCharRange
@@ -202,46 +198,19 @@ bool QXmlUtils::isBaseChar(const QChar c)
    return rangeContains(g_base_begin, g_base_end, c);
 }
 
-/*!
-   \internal
-
-   Determines whether \a encName is a valid instance of production [81]EncName in the XML 1.0
-   specification. If it is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml/#NT-EncName}
-           {Extensible Markup Language (XML) 1.0 (Fourth Edition), [81] EncName}
- */
 bool QXmlUtils::isEncName(const QString &encName)
 {
-   const QRegExp encNameRegExp(QLatin1String("[A-Za-z][A-Za-z0-9._\\-]*"));
+   static const QRegularExpression8 encNameRegExp("^[A-Za-z][A-Za-z0-9._\\-]*$");
    Q_ASSERT(encNameRegExp.isValid());
 
-   return encNameRegExp.exactMatch(encName);
+   return encName.contains(encNameRegExp);
 }
 
-/*!
- \internal
-
-   Determines whether \a c is a valid instance of production [84]Letter in the XML 1.0
-   specification. If it is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml/#NT-Letter}
-           {Extensible Markup Language (XML) 1.0 (Fourth Edition), [84] Letter}
- */
 bool QXmlUtils::isLetter(const QChar c)
 {
    return isBaseChar(c) || isIdeographic(c);
 }
 
-/*!
-   \internal
-
-   Determines whether \a c is a valid instance of production [2]Char in the XML 1.0
-   specification. If it is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml/#NT-Char}
-           {Extensible Markup Language (XML) 1.0 (Fourth Edition), [2] Char}
- */
 bool QXmlUtils::isChar(const QChar c)
 {
    return (c.unicode() >= 0x0020 && c.unicode() <= 0xD7FF)
@@ -251,16 +220,6 @@ bool QXmlUtils::isChar(const QChar c)
           || (c.unicode() >= 0xE000 && c.unicode() <= 0xFFFD);
 }
 
-/*!
-   \internal
-
-   Determines whether \a c is a valid instance of
-   production [4]NameChar in the XML 1.0 specification. If it
-   is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml/#NT-NameChar}
-           {Extensible Markup Language (XML) 1.0 (Fourth Edition), [4] NameChar}
- */
 bool QXmlUtils::isNameChar(const QChar c)
 {
    return isBaseChar(c)
@@ -274,16 +233,6 @@ bool QXmlUtils::isNameChar(const QChar c)
           || isExtender(c);
 }
 
-/*!
-   \internal
-
-   Determines whether \a c is a valid instance of
-   production [12] PubidLiteral in the XML 1.0 specification. If it
-   is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml/#NT-PubidLiteral}
-           {Extensible Markup Language (XML) 1.0 (Fourth Edition), [12] PubidLiteral}
- */
 bool QXmlUtils::isPublicID(const QString &candidate)
 {
    const int len = candidate.length();
@@ -291,9 +240,7 @@ bool QXmlUtils::isPublicID(const QString &candidate)
    for (int i = 0; i < len; ++i) {
       const ushort cp = candidate.at(i).unicode();
 
-      if ((cp >= 'a' && cp <= 'z')
-            || (cp >= 'A' && cp <= 'Z')
-            || (cp >= '0' && cp <= '9')) {
+      if ((cp >= 'a' && cp <= 'z') || (cp >= 'A' && cp <= 'Z') || (cp >= '0' && cp <= '9')) {
          continue;
       }
 
@@ -340,7 +287,7 @@ bool QXmlUtils::isPublicID(const QString &candidate)
     \sa \l {http://www.w3.org/TR/REC-xml-names/#NT-NCName}
            {W3CNamespaces in XML 1.0 (Second Edition), [4] NCName}
  */
-bool QXmlUtils::isNCName(const QStringRef &ncName)
+bool QXmlUtils::isNCName(const QStringView8 &ncName)
 {
    if (ncName.isEmpty()) {
       return false;
@@ -355,7 +302,8 @@ bool QXmlUtils::isNCName(const QStringRef &ncName)
    const int len = ncName.size();
    for (int i = 0; i < len; ++i) {
       const QChar &at = ncName.at(i);
-      if (!QXmlUtils::isNameChar(at) || at == QLatin1Char(':')) {
+
+      if (!QXmlUtils::isNameChar(at) || at == ':') {
          return false;
       }
    }
@@ -363,4 +311,3 @@ bool QXmlUtils::isNCName(const QStringRef &ncName)
    return true;
 }
 
-QT_END_NAMESPACE
