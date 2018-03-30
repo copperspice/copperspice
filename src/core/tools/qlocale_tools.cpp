@@ -22,9 +22,10 @@
 
 #include <qlocale_tools_p.h>
 #include <qlocale_p.h>
-#include <qstring.h>
+#include <qstring8.h>
 
 #include <ctype.h>
+#include <errno.h>
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -40,19 +41,53 @@
 #ifndef LLONG_MAX
 #   define LLONG_MAX Q_INT64_C(0x7fffffffffffffff)
 #endif
+
 #ifndef LLONG_MIN
 #   define LLONG_MIN (-LLONG_MAX - Q_INT64_C(1))
 #endif
+
 #ifndef ULLONG_MAX
 #   define ULLONG_MAX Q_UINT64_C(0xffffffffffffffff)
 #endif
 
-QT_BEGIN_NAMESPACE
 
-#ifndef QT_QLOCALE_USES_FCVT
-static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
-                     char **digits_str);
-#endif
+quint64 qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
+{
+   char *end = const_cast<char *>(nptr);
+   quint64 retval = std::strtoull(nptr, &end, base);
+
+   if (end != nptr) {
+      *ok = true;
+   } else {
+      *ok = false;
+   }
+
+   if (endptr) {
+      *endptr = end;
+   }
+
+   return retval;
+}
+
+
+
+qint64 qstrtoll(const char *nptr, const char **endptr, int base, bool *ok)
+{
+   char *end = const_cast<char *>(nptr);
+   qint64 retval = std::strtoll(nptr, &end, base);
+
+   if (end != nptr) {
+      *ok = true;
+   } else {
+      *ok = false;
+   }
+
+   if (endptr) {
+      *endptr = end;
+   }
+
+   return retval;
+}
 
 QString qulltoa(quint64 l, int base, const QChar _zero)
 {
@@ -134,11 +169,8 @@ QString &decimalForm(QChar zero, QChar decimal, QChar group, QString &digits, in
    return digits;
 }
 
-QString &exponentForm(QChar zero, QChar decimal, QChar exponential,
-                      QChar group, QChar plus, QChar minus,
-                      QString &digits, int decpt, uint precision,
-                      PrecisionMode pm,
-                      bool always_show_decpt)
+QString &exponentForm(QChar zero, QChar decimal, QChar exponential, QChar group, QChar plus, QChar minus,
+                      QString &digits, int decpt, uint precision, PrecisionMode pm, bool always_show_decpt)
 {
    int exp = decpt - 1;
 
@@ -146,10 +178,12 @@ QString &exponentForm(QChar zero, QChar decimal, QChar exponential,
       for (uint i = digits.length(); i < precision + 1; ++i) {
          digits.append(zero);
       }
+
    } else if (pm == PMSignificantDigits) {
       for (uint i = digits.length(); i < precision; ++i) {
          digits.append(zero);
       }
+
    } else { // pm == PMChopTrailingZeros
    }
 
@@ -158,144 +192,11 @@ QString &exponentForm(QChar zero, QChar decimal, QChar exponential,
    }
 
    digits.append(exponential);
-   digits.append(QLocalePrivate::longLongToString(zero, group, plus, minus,
-                 exp, 2, 10, -1, QLocalePrivate::AlwaysShowSign));
+   digits.append(QLocaleData::longLongToString(zero, group, plus, minus, exp, 2, 10, -1, QLocaleData::AlwaysShowSign));
 
    return digits;
 }
 
-// Removes thousand-group separators in "C" locale.
-bool removeGroupSeparators(QLocalePrivate::CharBuff *num)
-{
-   int group_cnt = 0; // counts number of group chars
-   int decpt_idx = -1;
-
-   char *data = num->data();
-   int l = qstrlen(data);
-
-   // Find the decimal point and check if there are any group chars
-   int i = 0;
-   for (; i < l; ++i) {
-      char c = data[i];
-
-      if (c == ',') {
-         if (i == 0 || data[i - 1] < '0' || data[i - 1] > '9') {
-            return false;
-         }
-         if (i == l - 1 || data[i + 1] < '0' || data[i + 1] > '9') {
-            return false;
-         }
-         ++group_cnt;
-      } else if (c == '.') {
-         // Fail if more than one decimal points
-         if (decpt_idx != -1) {
-            return false;
-         }
-         decpt_idx = i;
-      } else if (c == 'e' || c == 'E') {
-         // an 'e' or 'E' - if we have not encountered a decimal
-         // point, this is where it "is".
-         if (decpt_idx == -1) {
-            decpt_idx = i;
-         }
-      }
-   }
-
-   // If no group chars, we're done
-   if (group_cnt == 0) {
-      return true;
-   }
-
-   // No decimal point means that it "is" at the end of the string
-   if (decpt_idx == -1) {
-      decpt_idx = l;
-   }
-
-   i = 0;
-   while (i < l && group_cnt > 0) {
-      char c = data[i];
-
-      if (c == ',') {
-         // Don't allow group chars after the decimal point
-         if (i > decpt_idx) {
-            return false;
-         }
-
-         // Check that it is placed correctly relative to the decpt
-         if ((decpt_idx - i) % 4 != 0) {
-            return false;
-         }
-
-         // Remove it
-         memmove(data + i, data + i + 1, l - i - 1);
-         data[--l] = '\0';
-
-         --group_cnt;
-         --decpt_idx;
-      } else {
-         // Check that we are not missing a separator
-         if (i < decpt_idx
-               && (decpt_idx - i) % 4 == 0
-               && !(i == 0 && c == '-')) { // check for negative sign at start of string
-            return false;
-         }
-         ++i;
-      }
-   }
-
-   return true;
-}
-
-/*
- * Convert a string to an unsigned long long integer.
- *
- * Ignores `locale' stuff.  Assumes that the upper and lower case
- * alphabets and digits are each contiguous.
- */
-quint64 qstrtoull(const char *nptr, const char **endptr, int base, bool *ok)
-{
-    char * end = const_cast<char *>(nptr);
-    quint64 retval = std::strtoull(nptr, &end, base);
-
-    if(end != nptr) {
-	*ok = true;
-    } else {
-	*ok = false;
-    }
-
-    if(endptr) {
-	*endptr = end;
-    }
-
-    return retval;
-}
-
-
-/*
- * Convert a string to a long long integer.
- *
- * Ignores `locale' stuff.  Assumes that the upper and lower case
- * alphabets and digits are each contiguous.
- */
-qint64 qstrtoll(const char *nptr, const char **endptr, int base, bool *ok)
-{
-    char * end = const_cast<char *>(nptr);
-    qint64 retval = std::strtoll(nptr, &end, base);
-
-    if(end != nptr) {
-	*ok = true;
-    } else {
-	*ok = false;
-    }
-
-    if(endptr) {
-	*endptr = end;
-    }
-
-    return retval;
-}
-
-#ifndef QT_QLOCALE_USES_FCVT
 
 /*        From: NetBSD: strtod.c,v 1.26 1998/02/03 18:44:21 perry Exp */
 /* $FreeBSD: src/lib/libc/stdlib/netbsd_strtod.c,v 1.2.2.2 2001/03/02 17:14:15 tegge Exp $        */
@@ -398,9 +299,8 @@ __RCSID("$NetBSD: strtod.c,v 1.26 1998/02/03 18:44:21 perry Exp $");
 #define MALLOC malloc
 
 #ifdef BSD_QDTOA_DEBUG
-QT_BEGIN_INCLUDE_NAMESPACE
+
 #include <stdio.h>
-QT_END_INCLUDE_NAMESPACE
 
 #define Bug(x) {fprintf(stderr, "%s\n", x); exit(1);}
 #endif
@@ -415,99 +315,76 @@ QT_END_INCLUDE_NAMESPACE
 #error Exactly one of IEEE_BIG_OR_LITTLE_ENDIAN, VAX, or IBM should be defined.
 #endif
 
-static inline ULong _getWord0(const NEEDS_VOLATILE double x)
+static inline ULong getWord0(const double x)
 {
-   const NEEDS_VOLATILE uchar *ptr = reinterpret_cast<const NEEDS_VOLATILE uchar *>(&x);
+   char buffer[sizeof(double)];
+   memcpy(buffer, &x, sizeof(double));
 
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-      return (ptr[0] << 24) + (ptr[1] << 16) + (ptr[2] << 8) + ptr[3];
+      return (buffer[0] << 24) + (buffer[1] << 16) + (buffer[2] << 8) + buffer[3];
 
    } else {
-      return (ptr[7] << 24) + (ptr[6] << 16) + (ptr[5] << 8) + ptr[4];
+      return (buffer[7] << 24) + (buffer[6] << 16) + (buffer[5] << 8) + buffer[4];
 
    }
 }
 
-static inline void _setWord0(NEEDS_VOLATILE double *x, ULong l)
+static inline void setWord0(double *x, ULong l)
 {
-   NEEDS_VOLATILE uchar *ptr = reinterpret_cast<NEEDS_VOLATILE uchar *>(x);
+   char buffer[sizeof(double)];
+   memcpy(buffer, x, sizeof(double));
+
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-      ptr[0] = uchar(l >> 24);
-      ptr[1] = uchar(l >> 16);
-      ptr[2] = uchar(l >> 8);
-      ptr[3] = uchar(l);
+      buffer[0] = uchar(l >> 24);
+      buffer[1] = uchar(l >> 16);
+      buffer[2] = uchar(l >> 8);
+      buffer[3] = uchar(l);
+
    } else {
-      ptr[7] = uchar(l >> 24);
-      ptr[6] = uchar(l >> 16);
-      ptr[5] = uchar(l >> 8);
-      ptr[4] = uchar(l);
+      buffer[7] = uchar(l >> 24);
+      buffer[6] = uchar(l >> 16);
+      buffer[5] = uchar(l >> 8);
+      buffer[4] = uchar(l);
+   }
+
+   memcpy(x, buffer, sizeof(double));
+}
+
+static inline ULong getWord1(const double x)
+{
+   char buffer[sizeof(double)];
+   memcpy(buffer, &x, sizeof(double));
+
+   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      return (buffer[4] << 24) + (buffer[5] << 16) + (buffer[6] << 8) + buffer[7];
+   } else {
+      return (buffer[3] << 24) + (buffer[2] << 16) + (buffer[1] << 8) + buffer[0];
    }
 }
 
-static inline ULong _getWord1(const NEEDS_VOLATILE double x)
+static inline void setWord1(double *x, ULong l)
 {
-   const NEEDS_VOLATILE uchar *ptr = reinterpret_cast<const NEEDS_VOLATILE uchar *>(&x);
+   char buffer[sizeof(double)];
+   memcpy(buffer, x, sizeof(double));
+
    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-      return (ptr[4] << 24) + (ptr[5] << 16) + (ptr[6] << 8) + ptr[7];
+      buffer[4] = uchar(l >> 24);
+      buffer[5] = uchar(l >> 16);
+      buffer[6] = uchar(l >> 8);
+      buffer[7] = uchar(l);
+
    } else {
-      return (ptr[3] << 24) + (ptr[2] << 16) + (ptr[1] << 8) + ptr[0];
+      buffer[3] = uchar(l >> 24);
+      buffer[2] = uchar(l >> 16);
+      buffer[1] = uchar(l >> 8);
+      buffer[0] = uchar(l);
    }
-}
-static inline void _setWord1(NEEDS_VOLATILE double *x, ULong l)
-{
-   NEEDS_VOLATILE uchar *ptr = reinterpret_cast<uchar NEEDS_VOLATILE *>(x);
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-      ptr[4] = uchar(l >> 24);
-      ptr[5] = uchar(l >> 16);
-      ptr[6] = uchar(l >> 8);
-      ptr[7] = uchar(l);
-   } else {
-      ptr[3] = uchar(l >> 24);
-      ptr[2] = uchar(l >> 16);
-      ptr[1] = uchar(l >> 8);
-      ptr[0] = uchar(l);
-   }
-}
 
-static inline ULong getWord0(const NEEDS_VOLATILE double x)
-{
-#ifdef QT_ARMFPA
-   return _getWord1(x);
-#else
-   return _getWord0(x);
-#endif
-}
-
-static inline void setWord0(NEEDS_VOLATILE double *x, ULong l)
-{
-#ifdef QT_ARMFPA
-   _setWord1(x, l);
-#else
-   _setWord0(x, l);
-#endif
-}
-
-static inline ULong getWord1(const NEEDS_VOLATILE double x)
-{
-#ifdef QT_ARMFPA
-   return _getWord0(x);
-#else
-   return _getWord1(x);
-#endif
-}
-
-static inline void setWord1(NEEDS_VOLATILE double *x, ULong l)
-{
-#ifdef QT_ARMFPA
-   _setWord0(x, l);
-#else
-   _setWord1(x, l);
-#endif
+   memcpy(x, buffer, sizeof(double));
 }
 
 static inline void Storeinc(ULong *&a, const ULong &b, const ULong &c)
 {
-
    *a = (ushort(b) << 16) | ushort(c);
    ++a;
 }
@@ -630,7 +507,7 @@ extern double rnd_prod(double, double), rnd_quot(double, double);
 #define Kmax 15
 
 struct
-      Bigint {
+   Bigint {
    struct Bigint *next;
    int k, maxwds, sign, wds;
    ULong x[1];
@@ -1010,6 +887,7 @@ static int cmp(Bigint *a, Bigint *b)
 
    i = a->wds;
    j = b->wds;
+
 #ifdef BSD_QDTOA_DEBUG
    if (i > 1 && !a->x[i - 1]) {
       Bug("cmp called with a->x[a->wds-1] == 0");
@@ -1018,6 +896,7 @@ static int cmp(Bigint *a, Bigint *b)
       Bug("cmp called with b->x[b->wds-1] == 0");
    }
 #endif
+
    if (i -= j) {
       return i;
    }
@@ -1117,14 +996,18 @@ static double ulp(double x)
    double a;
 
    L = (getWord0(x) & Exp_mask) - (P - 1) * Exp_msk1;
+
 #ifndef Sudden_Underflow
    if (L > 0) {
 #endif
+
 #ifdef IBM
       L |= Exp_msk1 >> 4;
 #endif
+
       setWord0(&a, L);
       setWord1(&a, 0);
+
 #ifndef Sudden_Underflow
    } else {
       L = -L >> Exp_shift;
@@ -1150,13 +1033,16 @@ static double b2d(Bigint *a, int *e)
    xa0 = a->x;
    xa = xa0 + a->wds;
    y = *--xa;
+
 #ifdef BSD_QDTOA_DEBUG
    if (!y) {
       Bug("zero y in b2d");
    }
 #endif
+
    k = hi0bits(y);
    *e = 32 - k;
+
 #ifdef Pack_32
    if (k < Ebits) {
       setWord0(&d, Exp_1 | y >> (Ebits - k));
@@ -1252,8 +1138,7 @@ static Bigint *d2b(double d, int *e, int *bits)
             x[2] = z >> k & 0xffff;
             x[3] = z >> k + 16;
             i = 3;
-         }
-      else {
+         } else {
          x[0] = y & 0xffff;
          x[1] = y >> 16;
          x[2] = z & 0xffff;
@@ -2118,9 +2003,11 @@ Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *si
 {
    // Some values of the floating-point control word can cause _qdtoa to crash with an underflow.
    // We set a safe value here.
+
 #ifdef Q_OS_WIN
    _clear87();
    unsigned int oldbits = _control87(0, 0);
+
 #ifndef MCW_EM
 #    ifdef _MCW_EM
 #        define MCW_EM _MCW_EM
@@ -2128,50 +2015,50 @@ Q_CORE_EXPORT char *qdtoa ( double d, int mode, int ndigits, int *decpt, int *si
 #        define MCW_EM 0x0008001F
 #    endif
 #endif
-#ifndef MCW_DN
-#    ifdef _MCW_DN
-#        define MCW_DN _MCW_DN
-#    else
-#        define MCW_DN 0x03000000
-#    endif
-#endif
-#ifndef MCW_RC
-#    ifdef _MCW_RC
-#        define MCW_RC _MCW_RC
-#    else
-#        define MCW_RC 0x00000300
-#    endif
-#endif
+
 
    _control87(MCW_EM, MCW_EM);
 #endif
 
-#if defined(Q_OS_LINUX) && !defined(__UCLIBC__)
+#if defined(Q_OS_LINUX) && ! defined(__UCLIBC__)
    fenv_t envp;
    feholdexcept(&envp);
 #endif
 
-   char *s = _qdtoa(d, mode, ndigits, decpt, sign, rve, resultp);
+   char *s = qdtoa(d, mode, ndigits, decpt, sign, rve, resultp);
 
 #ifdef Q_OS_WIN
    _clear87();
+
 #ifndef _M_X64
    _control87(oldbits, 0xFFFFF);
+
 #else
-   _control87(oldbits, MCW_EM | MCW_DN | MCW_RC);
+#  ifndef _MCW_EM // Potentially missing on MinGW
+#    define _MCW_EM         0x0008001f
+#  endif
+#  ifndef _MCW_RC
+#    define _MCW_RC         0x00000300
+#  endif
+#  ifndef _MCW_DN
+#    define _MCW_DN         0x03000000
+#  endif
+   _control87(oldbits, _MCW_EM | _MCW_DN | _MCW_RC);
+
 #endif //_M_X64
 #endif //Q_OS_WIN
 
-#if defined(Q_OS_LINUX) && !defined(__UCLIBC__)
+#if defined(Q_OS_LINUX) && ! defined(__UCLIBC__)
    fesetenv(&envp);
 #endif
 
    return s;
 }
 
-static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
+static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
 {
    int bbits, b2, b5, be, dig, i, ieps, ilim0, j, j1, k, k0, k_check, leftright, m2, m5, s2, s5, try_quick;
+
    int ilim = 0, ilim1 = 0, spec_case = 0;        /* pacify gcc */
    Long L;
 
@@ -2182,6 +2069,7 @@ static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt,
 
    Bigint *b, *b1, *delta, *mhi, *S;
    Bigint *mlo = NULL; /* pacify gcc */
+
    double d2;
    double ds, eps;
    char *s, *s0;
@@ -2240,30 +2128,12 @@ static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt,
    }
 
    b = d2b(d, &be, &bbits);
-
-#ifdef Sudden_Underflow
    i = (int)(getWord0(d) >> Exp_shift1 & (Exp_mask >> Exp_shift1));
 
-   d2 = d;
-   setWord0(&d2, getWord0(d2) & Frac_mask1);
-   setWord0(&d2, getWord0(d2) | Exp_11);
-
-#ifdef IBM
-   if (j = 11 - hi0bits(getWord0(d2) & Frac_mask)) {
-      d2 /= 1 << j;
-   }
+#ifndef Sudden_Underflow
+   if (i != 0) {
 #endif
 
-   i -= Bias;
-
-#ifdef IBM
-   i <<= 2;
-   i += j;
-#endif
-
-
-#else
-   if ((i = int(getWord0(d) >> Exp_shift1 & (Exp_mask >> Exp_shift1))) != 0) {
 
       d2 = d;
       setWord0(&d2, getWord0(d2) & Frac_mask1);
@@ -2281,7 +2151,7 @@ static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt,
       i <<= 2;
       i += j;
 #endif
-
+#ifndef Sudden_Underflow
       denorm = 0;
 
    } else {
@@ -2780,59 +2650,3 @@ ret1:
    }
    return s0;
 }
-#else
-// NOT thread safe!
-
-#include <errno.h>
-
-Q_CORE_EXPORT char *qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
-{
-   if (rve) {
-      *rve = 0;
-   }
-
-   char *res;
-   if (mode == 0) {
-      ndigits = 80;
-   }
-
-   if (mode == 3) {
-      res = fcvt(d, ndigits, decpt, sign);
-   } else {
-      res = ecvt(d, ndigits, decpt, sign);
-   }
-
-   int n = qstrlen(res);
-   if (mode == 0) { // remove trailing 0's
-      const int stop = qMax(1, *decpt);
-      int i;
-      for (i = n - 1; i >= stop; --i) {
-         if (res[i] != '0') {
-            break;
-         }
-      }
-      n = i + 1;
-   }
-   *resultp = static_cast<char *>(malloc(n + 1));
-   Q_CHECK_PTR(resultp);
-   qstrncpy(*resultp, res, n + 1);
-   return *resultp;
-}
-
-Q_CORE_EXPORT double qstrtod(const char *s00, const char **se, bool *ok)
-{
-   double ret = strtod((char *)s00, (char **)se);
-   if (ok) {
-      if ((ret == 0.0l && errno == ERANGE)
-            || ret == HUGE_VAL || ret == -HUGE_VAL) {
-         *ok = false;
-      } else {
-         *ok = true;   // the result will be that we don't report underflow in this case
-      }
-   }
-   return ret;
-}
-
-#endif // QT_QLOCALE_USES_FCVT
-
-QT_END_NAMESPACE

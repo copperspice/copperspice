@@ -26,10 +26,8 @@
 #include <qalgorithms.h>
 #include <qdatastream.h>
 #include <qlist.h>
-#include <qregexp.h>
-#include <qstring.h>
-
-class QRegExp;
+#include <qregularexpression.h>
+#include <qstring8.h>
 
 using QStringListIterator        = QListIterator<QString>;
 using QMutableStringListIterator = QMutableListIterator<QString>;
@@ -82,14 +80,14 @@ class Q_CORE_EXPORT QStringList : public QList<QString>
    }
 
 #ifndef QT_NO_REGEXP
-   QStringList filter(const QRegExp &rx) const;
+   QStringList filter(const QRegularExpression8 &rx) const;
 
-   int indexOf(const QRegExp &rx, int from = 0) const;
-   int lastIndexOf(const QRegExp &rx, int from = -1) const;
-   int indexOf(QRegExp &rx, int from = 0) const;
-   int lastIndexOf(QRegExp &rx, int from = -1) const;
+   int indexOf(const QRegularExpression8 &rx, int from = 0) const;
+   int lastIndexOf(const QRegularExpression8 &rx, int from = -1) const;
+   int indexOf(QRegularExpression8 &rx, int from = 0) const;
+   int lastIndexOf(QRegularExpression8 &rx, int from = -1) const;
 
-   QStringList &replaceInStrings(const QRegExp &rx, const QString &after);
+   QStringList &replaceInStrings(const QRegularExpression8 &rx, const QString &after);
 #endif
 
    using QList<QString>::indexOf;

@@ -23,14 +23,22 @@
 #ifndef QBYTEARRAY_H
 #define QBYTEARRAY_H
 
+#include <string.h>
+#include <stdarg.h>
+#include <iterator>
+
 #include <qassert.h>
 #include <qrefcount.h>
 #include <qnamespace.h>
 #include <qarraydata.h>
 
-#include <string.h>
-#include <stdarg.h>
-#include <iterator>
+class QByteRef;
+class QDataStream;
+
+template <typename T> 
+class QList;
+
+using QByteArrayData = QArrayData;
 
 #ifdef truncate
 #error Header file qbytearray.h must be included before any header file that defines truncate
@@ -84,13 +92,6 @@ Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 
 // qChecksum: Internet checksum
 Q_CORE_EXPORT quint16 qChecksum(const char *s, uint len);
-
-class QByteRef;
-class QString;
-class QDataStream;
-
-template <typename T> class QList;
-typedef QArrayData QByteArrayData;
 
 template<int N> struct QStaticByteArrayData {
    QByteArrayData ba;
@@ -282,26 +283,6 @@ class Q_CORE_EXPORT QByteArray
    QList<QByteArray> split(char sep) const;
    QByteArray repeated(int times) const;
 
-   // BROOM - delete these when QString8 active
-   QByteArray &append(const QString &str);
-   QByteArray &insert(int i, const QString &str);
-   QByteArray &replace(const QString &before, const char *after);
-   QByteArray &replace(char c, const QString &after);
-   QByteArray &replace(const QString &before, const QByteArray &after);
-
-   int indexOf(const QString &str, int from = 0) const;
-   int lastIndexOf(const QString &str, int from = -1) const;
-
-   QByteArray &operator+=(const QString &str);
-   inline bool operator==(const QString &str) const;
-   inline bool operator!=(const QString &str) const;
-   inline bool operator<(const QString &str) const;
-   inline bool operator>(const QString &str) const;
-   inline bool operator<=(const QString &str) const;
-   inline bool operator>=(const QString &str) const;
-   // delete these when QString8 active
-
-
    // iterators
    inline iterator begin();
    inline const_iterator begin() const;
@@ -415,7 +396,6 @@ class Q_CORE_EXPORT QByteArray
    QByteArray nulTerminated() const;
 
    friend class QByteRef;
-   friend class QString;
    friend Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
 };
 
@@ -762,9 +742,6 @@ inline bool operator>=(const char *a1, const QByteArray &a2)
    return qstrcmp(a1, a2) >= 0;
 }
 
-//
-#if !defined(QT_USE_QSTRINGBUILDER)
-
 inline const QByteArray operator+(const QByteArray &a1, const QByteArray &a2)
 {
    return QByteArray(a1) += a2;
@@ -789,8 +766,6 @@ inline const QByteArray operator+(char a1, const QByteArray &a2)
 {
    return QByteArray(&a1, 1) += a2;
 }
-
-#endif // QT_USE_QSTRINGBUILDER
 
 inline bool QByteArray::contains(const char *c) const
 {
@@ -840,8 +815,6 @@ inline QByteArray &QByteArray::setNum(float n, char f, int prec)
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
 
-
-//
 Q_CORE_EXPORT QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel = -1);
 Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
 
@@ -857,9 +830,5 @@ inline QByteArray qUncompress(const QByteArray &data)
 
 Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 Q_DECLARE_SHARED(QByteArray)
-
-#ifdef QT_USE_QSTRINGBUILDER
-#include <qstring.h>
-#endif
 
 #endif // QBYTEARRAY_H

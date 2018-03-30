@@ -25,7 +25,8 @@
 
 #include <qchar.h>
 #include <qpair.h>
-#include <qstring.h>
+#include <qstring8.h>
+#include <qstring16.h>
 
 class QBitArray;
 class QByteArray;
@@ -37,18 +38,6 @@ Q_CORE_EXPORT uint qHashBits(const void *p, size_t len, uint seed);
 
 Q_CORE_EXPORT uint qHash(const QBitArray  &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QByteArray &key, uint seed = 0);
-Q_CORE_EXPORT uint qHash(const QLatin1String &key, uint seed = 0);
-
-inline uint cs_hash_internal(const QChar *p, int len, uint seed)
-{
-   uint h = seed;
-
-   for (int i = 0; i < len; ++i) {
-      h = 31 * h + p[i].unicode();
-   }
-
-   return h;
-}
 
 inline uint qHash(char key, uint seed = 0)
 {
@@ -113,19 +102,48 @@ inline uint qHash(qint64 key, uint seed = 0)
    return qHash(quint64(key), seed);
 }
 
-inline uint qHash(QChar key, uint seed = 0)
-{
-   return qHash(key.unicode(), seed);
-}
-
 inline uint qHash(const QString &key, uint seed = 0)
 {
-   return cs_hash_internal(key.unicode(), key.size(), seed);
+   uint h = seed;
+
+   for (QChar c : key) {
+      h = 31 * h + c.unicode();
+   }
+
+   return h;
 }
 
-inline uint qHash(const QStringRef &key, uint seed = 0)
+inline uint qHash(const QString16 &key, uint seed = 0)
 {
-   return cs_hash_internal(key.unicode(), key.size(), seed);
+   uint h = seed;
+
+   for (QChar c : key) {
+      h = 31 * h + c.unicode();
+   }
+
+   return h;
+}
+
+inline uint qHash(const QStringView8 &key, uint seed = 0)
+{
+   uint h = seed;
+
+   for (QChar c : key) {
+      h = 31 * h + c.unicode();
+   }
+
+   return h;
+}
+
+inline uint qHash(const QStringView16 &key, uint seed = 0)
+{
+   uint h = seed;
+
+   for (QChar c : key) {
+      h = 31 * h + c.unicode();
+   }
+
+   return h;
 }
 
 template <typename Key>

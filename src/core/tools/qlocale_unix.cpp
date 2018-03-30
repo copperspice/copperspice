@@ -21,12 +21,9 @@
 ***********************************************************************/
 
 #include <qlocale_p.h>
-#include <qstringbuilder.h>
 #include <qdatetime.h>
 #include <qstringlist.h>
 #include <qvariant.h>
-
-QT_BEGIN_NAMESPACE
 
 static QByteArray getSystemLocale()
 {
@@ -87,7 +84,7 @@ Q_GLOBAL_STATIC(QSystemLocaleData, qSystemLocaleData)
 #endif
 
 #ifndef QT_NO_SYSTEMLOCALE
-QLocale QSystemLocale::fallbackLocale() const
+QLocale QSystemLocale::fallbackUiLocale() const
 {
 
    QByteArray lang = getSystemLocale();
@@ -234,4 +231,3 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
 }
 #endif // QT_NO_SYSTEMLOCALE
 
-QT_END_NAMESPACE

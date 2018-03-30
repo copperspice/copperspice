@@ -24,7 +24,6 @@
 #include <qstringlist.h>
 #include <qvariant.h>
 #include <qdatetime.h>
-#include <qstringbuilder.h>
 
 #if !defined(QWS) && defined(Q_OS_MAC)
 #include <qcore_mac_p.h>
@@ -411,7 +410,7 @@ static QVariant macQuoteString(QSystemLocale::QueryType type, const QStringRef &
 
 #ifndef QT_NO_SYSTEMLOCALE
 
-QLocale QSystemLocale::fallbackLocale() const
+QLocale QSystemLocale::fallbackUiLocale() const
 {
    return QLocale(QString::fromUtf8(getMacLocaleName().constData()));
 }

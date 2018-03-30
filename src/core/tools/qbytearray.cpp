@@ -22,7 +22,7 @@
 
 #include <qbytearray.h>
 #include <qtools_p.h>
-#include <qstring.h>
+#include <qstring8.h>
 #include <qlist.h>
 #include <qlocale.h>
 #include <qlocale_p.h>
@@ -188,39 +188,81 @@ int qstricmp(const char *str1, const char *str2)
 {
    const uchar *s1 = reinterpret_cast<const uchar *>(str1);
    const uchar *s2 = reinterpret_cast<const uchar *>(str2);
-   int res;
+
    uchar c;
 
-   if (!s1 || !s2) {
+   if (! s1 || !s2) {
       return s1 ? 1 : (s2 ? -1 : 0);
    }
 
-   for (; !(res = (c = QChar::toLower((ushort) * s1)) - QChar::toLower((ushort) * s2)); s1++, s2++)  {
-      if (!c) {                              // strings are equal
-         break;
+   while (*s1 && *s2)  {
+      QString ch1 = QChar((char32_t) *s1).toLower();
+      QString ch2 = QChar((char32_t) *s2).toLower();
+
+      if (ch1 < ch2 )  {
+         return -1;
+
+      } else if (ch1 > ch2 )  {
+         return 1;
+
       }
+
+      ++s1;
+      ++s2;
    }
 
-   return res;
+   if (*s1 != '\0') {
+      return 1;
+
+   } else if (*s2 != '\0') {
+      return -1;
+
+   }
+
+   return 0;
 }
 
 int qstrnicmp(const char *str1, const char *str2, uint len)
 {
    const uchar *s1 = reinterpret_cast<const uchar *>(str1);
    const uchar *s2 = reinterpret_cast<const uchar *>(str2);
-   int res;
+
    uchar c;
-   if (!s1 || !s2) {
+
+   if (! s1 || !s2) {
       return s1 ? 1 : (s2 ? -1 : 0);
    }
-   for (; len--; s1++, s2++) {
-      if ((res = (c = QChar::toLower((ushort) * s1)) - QChar::toLower((ushort) * s2))) {
-         return res;
+
+   while (*s1 && *s2)  {
+      QString ch1 = QChar((char32_t) *s1).toLower();
+      QString ch2 = QChar((char32_t) *s2).toLower();
+
+      if (ch1 < ch2 )  {
+         return -1;
+
+      } else if (ch1 > ch2 )  {
+         return 1;
+
       }
-      if (!c) {                              // strings are equal
-         break;
+
+      --len;
+
+      if (len == 0) {
+         return 0;
       }
+
+      ++s1;
+      ++s2;
    }
+
+   if (*s1 != '\0') {
+      return 1;
+
+   } else if (*s2 != '\0') {
+      return -1;
+
+   }
+
    return 0;
 }
 
@@ -229,30 +271,30 @@ int qstrnicmp(const char *str1, const char *str2, uint len)
  */
 int qstrcmp(const QByteArray &str1, const char *str2)
 {
-   if (!str2) {
+   if (! str2) {
       return str1.isEmpty() ? 0 : +1;
    }
 
    const char *str1data = str1.constData();
-   const char *str1end = str1data + str1.length();
+   const char *str1end  = str1data + str1.length();
+
    for ( ; str1data < str1end && *str2; ++str1data, ++str2) {
       int diff = int(uchar(*str1data)) - uchar(*str2);
-      if (diff)
+
+      if (diff) {
          // found a difference
-      {
          return diff;
       }
    }
 
    // Why did we stop?
-   if (*str2 != '\0')
-      // not the null, so we stopped because str1 is shorter
-   {
+   if (*str2 != '\0') {
+      // str1 is shorter
       return -1;
    }
-   if (str1data < str1end)
-      // we haven't reached the end, so str1 must be longer
-   {
+
+   if (str1data < str1end) {
+      // str1 must be longer
       return +1;
    }
    return 0;
@@ -263,18 +305,17 @@ int qstrcmp(const QByteArray &str1, const char *str2)
  */
 int qstrcmp(const QByteArray &str1, const QByteArray &str2)
 {
-   int l1 = str1.length();
-   int l2 = str2.length();
+   int l1  = str1.length();
+   int l2  = str2.length();
    int ret = memcmp(str1.constData(), str2.constData(), qMin(l1, l2));
+
    if (ret != 0) {
       return ret;
    }
 
-   // they matched qMin(l1, l2) bytes
-   // so the longer one is lexically after the shorter one
+   // they matched qMin(l1, l2) bytes so the longer one is lexically after the shorter one
    return l1 - l2;
 }
-
 
 static const quint16 crc_tbl[16] = {
    0x0000, 0x1081, 0x2102, 0x3183,
@@ -288,6 +329,7 @@ quint16 qChecksum(const char *data, uint len)
    quint16 crc = 0xffff;
    uchar c;
    const uchar *p = reinterpret_cast<const uchar *>(data);
+
    while (len--) {
       c = *p++;
       crc = ((crc >> 4) & 0x0fff) ^ crc_tbl[((crc ^ c) & 15)];
@@ -302,10 +344,12 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
    if (nbytes == 0) {
       return QByteArray(4, '\0');
    }
+
    if (!data) {
       qWarning("qCompress: Data is null");
       return QByteArray();
    }
+
    if (compressionLevel < -1 || compressionLevel > 9) {
       compressionLevel = -1;
    }
@@ -313,6 +357,7 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
    ulong len = nbytes + nbytes / 100 + 13;
    QByteArray bazip;
    int res;
+
    do {
       bazip.resize(len + 4);
       res = ::compress2((uchar *)bazip.data() + 4, &len, (uchar *)data, nbytes, compressionLevel);
@@ -1465,49 +1510,14 @@ QByteArray QByteArray::mid(int pos, int len) const
    return QByteArray(d->data() + pos, len);
 }
 
-/*!
-    Returns a lowercase copy of the byte array. The bytearray is
-    interpreted as a Latin-1 encoded string.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 30
-
-    \sa toUpper(), {8-bit Character Comparisons}
-*/
 QByteArray QByteArray::toLower() const
 {
-   QByteArray s(*this);
-   uchar *p = reinterpret_cast<uchar *>(s.data());
-   if (p) {
-      while (*p) {
-         *p = QChar::toLower((ushort) * p);
-         p++;
-      }
-   }
-   return s;
+   return QString::fromLatin1(*this).toLower().toLatin1();
 }
-
-/*!
-    Returns an uppercase copy of the byte array. The bytearray is
-    interpreted as a Latin-1 encoded string.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_tools_qbytearray.cpp 31
-
-    \sa toLower(), {8-bit Character Comparisons}
-*/
 
 QByteArray QByteArray::toUpper() const
 {
-   QByteArray s(*this);
-   uchar *p = reinterpret_cast<uchar *>(s.data());
-   if (p) {
-      while (*p) {
-         *p = QChar::toUpper((ushort) * p);
-         p++;
-      }
-   }
-   return s;
+   return QString::fromLatin1(*this).toUpper().toLatin1();
 }
 
 void QByteArray::clear()
@@ -1515,10 +1525,9 @@ void QByteArray::clear()
    if (!d->ref.deref()) {
       Data::deallocate(d);
    }
+
    d = Data::sharedNull();
 }
-
-#if !defined(QT_NO_DATASTREAM)
 
 QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
 {
@@ -1526,14 +1535,17 @@ QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
       out << (quint32)0xffffffff;
       return out;
    }
+
    return out.writeBytes(ba.constData(), ba.size());
 }
 
 QDataStream &operator>>(QDataStream &in, QByteArray &ba)
 {
    ba.clear();
+
    quint32 len;
    in >> len;
+
    if (len == 0xffffffff) {
       return in;
    }
@@ -1544,17 +1556,19 @@ QDataStream &operator>>(QDataStream &in, QByteArray &ba)
    do {
       int blockSize = qMin(Step, len - allocated);
       ba.resize(allocated + blockSize);
+
       if (in.readRawData(ba.data() + allocated, blockSize) != blockSize) {
          ba.clear();
          in.setStatus(QDataStream::ReadPastEnd);
          return in;
       }
+
       allocated += blockSize;
+
    } while (allocated < len);
 
    return in;
 }
-#endif
 
 QByteArray QByteArray::simplified() const
 {
@@ -1596,20 +1610,28 @@ QByteArray QByteArray::trimmed() const
    if (d->size == 0) {
       return *this;
    }
+
    const char *s = d->data();
    if (!isspace(uchar(*s)) && !isspace(uchar(s[d->size - 1]))) {
       return *this;
    }
+
    int start = 0;
    int end = d->size - 1;
-   while (start <= end && isspace(uchar(s[start]))) { // skip white space from start
+
+   while (start <= end && isspace(uchar(s[start]))) {
+      // skip white space from start
       start++;
    }
-   if (start <= end) {                          // only white space
-      while (end && isspace(uchar(s[end]))) {         // skip white space from end
+
+   if (start <= end) {
+      // only white space
+      while (end && isspace(uchar(s[end]))) {
+         // skip white space from end
          end--;
       }
    }
+
    int l = end - start + 1;
    if (l <= 0) {
       QByteArrayDataPtr empty = { Data::allocate(0) };
@@ -1623,6 +1645,7 @@ QByteArray QByteArray::leftJustified(int width, char fill, bool truncate) const
    QByteArray result;
    int len = d->size;
    int padlen = width - len;
+
    if (padlen > 0) {
       result.resize(len + padlen);
       if (len) {
@@ -1677,7 +1700,7 @@ qint64 QByteArray::toLongLong(bool *ok, int base) const
    }
 #endif
 
-   return QLocalePrivate::bytearrayToLongLong(nulTerminated().constData(), base, ok);
+   return QLocaleData::bytearrayToLongLong(nulTerminated().constData(), base, ok);
 }
 
 quint64 QByteArray::toULongLong(bool *ok, int base) const
@@ -1689,7 +1712,7 @@ quint64 QByteArray::toULongLong(bool *ok, int base) const
    }
 #endif
 
-   return QLocalePrivate::bytearrayToUnsLongLong(nulTerminated().constData(), base, ok);
+   return QLocaleData::bytearrayToUnsLongLong(nulTerminated().constData(), base, ok);
 }
 
 int QByteArray::toInt(bool *ok, int base) const
@@ -1707,6 +1730,7 @@ int QByteArray::toInt(bool *ok, int base) const
 uint QByteArray::toUInt(bool *ok, int base) const
 {
    quint64 v = toULongLong(ok, base);
+
    if (v > UINT_MAX) {
       if (ok) {
          *ok = false;
@@ -1719,6 +1743,7 @@ uint QByteArray::toUInt(bool *ok, int base) const
 long QByteArray::toLong(bool *ok, int base) const
 {
    qint64 v = toLongLong(ok, base);
+
    if (v < LONG_MIN || v > LONG_MAX) {
       if (ok) {
          *ok = false;
@@ -1731,6 +1756,7 @@ long QByteArray::toLong(bool *ok, int base) const
 ulong QByteArray::toULong(bool *ok, int base) const
 {
    quint64 v = toULongLong(ok, base);
+
    if (v > ULONG_MAX) {
       if (ok) {
          *ok = false;
@@ -1743,6 +1769,7 @@ ulong QByteArray::toULong(bool *ok, int base) const
 short QByteArray::toShort(bool *ok, int base) const
 {
    qint64 v = toLongLong(ok, base);
+
    if (v < SHRT_MIN || v > SHRT_MAX) {
       if (ok) {
          *ok = false;
@@ -1755,6 +1782,7 @@ short QByteArray::toShort(bool *ok, int base) const
 ushort QByteArray::toUShort(bool *ok, int base) const
 {
    quint64 v = toULongLong(ok, base);
+
    if (v > USHRT_MAX) {
       if (ok) {
          *ok = false;
@@ -1766,7 +1794,7 @@ ushort QByteArray::toUShort(bool *ok, int base) const
 
 double QByteArray::toDouble(bool *ok) const
 {
-   return QLocalePrivate::bytearrayToDouble(nulTerminated().constData(), ok);
+   return QLocaleData::bytearrayToDouble(nulTerminated().constData(), ok);
 }
 
 float QByteArray::toFloat(bool *ok) const
@@ -1778,6 +1806,7 @@ QByteArray QByteArray::toBase64() const
 {
    const char alphabet[] = "ABCDEFGH" "IJKLMNOP" "QRSTUVWX" "YZabcdef"
                            "ghijklmn" "opqrstuv" "wxyz0123" "456789+/";
+
    const char padchar = '=';
    int padlen = 0;
 
@@ -1785,9 +1814,11 @@ QByteArray QByteArray::toBase64() const
 
    int i = 0;
    char *out = tmp.data();
+
    while (i < d->size) {
       int chunk = 0;
       chunk |= int(uchar(d->data()[i++])) << 16;
+
       if (i == d->size) {
          padlen = 2;
       } else {
@@ -1803,8 +1834,10 @@ QByteArray QByteArray::toBase64() const
       int k = (chunk & 0x0003f000) >> 12;
       int l = (chunk & 0x00000fc0) >> 6;
       int m = (chunk & 0x0000003f);
+
       *out++ = alphabet[j];
       *out++ = alphabet[k];
+
       if (padlen > 1) {
          *out++ = padchar;
       } else {
@@ -1823,13 +1856,16 @@ QByteArray QByteArray::toBase64() const
 
 static char *qulltoa2(char *p, quint64 n, int base)
 {
+
 #if defined(QT_CHECK_RANGE)
    if (base < 2 || base > 36) {
       qWarning("QByteArray::setNum: Invalid base %d", base);
       base = 10;
    }
 #endif
+
    const char b = 'a' - 10;
+
    do {
       const int c = n % base;
       n /= base;
@@ -1870,24 +1906,28 @@ QByteArray &QByteArray::setNum(quint64 n, int base)
 
 QByteArray &QByteArray::setNum(double n, char f, int prec)
 {
-   QLocalePrivate::DoubleForm form = QLocalePrivate::DFDecimal;
+   QLocaleData::DoubleForm form = QLocaleData::DFDecimal;
    uint flags = 0;
 
    if (qIsUpper(f)) {
-      flags = QLocalePrivate::CapitalEorX;
+      flags = QLocaleData::CapitalEorX;
    }
+
    f = qToLower(f);
 
    switch (f) {
       case 'f':
-         form = QLocalePrivate::DFDecimal;
+         form = QLocaleData::DFDecimal;
          break;
+
       case 'e':
-         form = QLocalePrivate::DFExponent;
+         form = QLocaleData::DFExponent;
          break;
+
       case 'g':
-         form = QLocalePrivate::DFSignificantDigits;
+         form = QLocaleData::DFSignificantDigits;
          break;
+
       default:
 #if defined(QT_CHECK_RANGE)
          qWarning("QByteArray::setNum: Invalid format char '%c'", f);
@@ -1895,8 +1935,7 @@ QByteArray &QByteArray::setNum(double n, char f, int prec)
          break;
    }
 
-   QLocale locale(QLocale::C);
-   *this = locale.d()->doubleToString(n, prec, form, -1, flags).toLatin1();
+   *this = QLocaleData::c()->doubleToString(n, prec, form, -1, flags).toLatin1();
    return *this;
 }
 
@@ -1938,15 +1977,20 @@ QByteArray QByteArray::number(double n, char f, int prec)
 QByteArray QByteArray::fromRawData(const char *data, int size)
 {
    Data *x;
+
    if (!data) {
       x = Data::sharedNull();
+
    } else if (!size) {
       x = Data::allocate(0);
+
    } else {
       x = Data::fromRawData(data, size);
       Q_CHECK_PTR(x);
    }
+
    QByteArrayDataPtr dataPtr = { x };
+
    return QByteArray(dataPtr);
 }
 
@@ -1954,10 +1998,12 @@ QByteArray &QByteArray::setRawData(const char *data, uint size)
 {
    if (d->ref.isShared() || d->alloc) {
       *this = fromRawData(data, size);
+
    } else {
       if (data) {
          d->size = size;
          d->offset = data - reinterpret_cast<char *>(d);
+
       } else {
          d->offset = sizeof(QByteArrayData);
          d->size = 0;
@@ -1993,8 +2039,9 @@ QByteArray QByteArray::fromBase64(const QByteArray &base64)
       }
 
       if (d != -1) {
-         buf = (buf << 6) | d;
+         buf    = (buf << 6) | d;
          nbits += 6;
+
          if (nbits >= 8) {
             nbits -= 8;
             tmp[offset++] = buf >> nbits;
@@ -2013,9 +2060,11 @@ QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
    uchar *result = (uchar *)res.data() + res.size();
 
    bool odd_digit = true;
+
    for (int i = hexEncoded.size() - 1; i >= 0; --i) {
       int ch = hexEncoded.at(i);
       int tmp;
+
       if (ch >= '0' && ch <= '9') {
          tmp = ch - '0';
       } else if (ch >= 'a' && ch <= 'f') {
@@ -2025,6 +2074,7 @@ QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
       } else {
          continue;
       }
+
       if (odd_digit) {
          --result;
          *result = tmp;
@@ -2044,6 +2094,7 @@ QByteArray QByteArray::toHex() const
    QByteArray hex(d->size * 2, Qt::Uninitialized);
    char *hexData = hex.data();
    const uchar *data = (const uchar *)d->data();
+
    for (int i = 0; i < d->size; ++i) {
       int j = (data[i] >> 4) & 0xf;
       if (j <= 9) {
@@ -2075,6 +2126,7 @@ static void q_fromPercentEncoding(QByteArray *ba, char percent)
    int outlen = 0;
    int a, b;
    char c;
+
    while (i < len) {
       c = inputPtr[i];
       if (c == percent && i + 2 < len) {
@@ -2121,6 +2173,7 @@ QByteArray QByteArray::fromPercentEncoding(const QByteArray &input, char percent
    if (input.isNull()) {
       return QByteArray();   // preserve null
    }
+
    if (input.isEmpty()) {
       return QByteArray(input.data(), 0);
    }
@@ -2138,6 +2191,7 @@ static inline bool q_strchr(const char str[], char chr)
 
    const char *ptr = str;
    char c;
+
    while ((c = *ptr++))
       if (c == chr) {
          return true;
@@ -2159,36 +2213,42 @@ static void q_toPercentEncoding(QByteArray *ba, const char *dontEncode, const ch
 
    QByteArray input = *ba;
    int len = input.count();
+
    const char *inputData = input.constData();
    char *output = 0;
    int length = 0;
 
    for (int i = 0; i < len; ++i) {
       unsigned char c = *inputData++;
-      if (((c >= 0x61 && c <= 0x7A) // ALPHA
-            || (c >= 0x41 && c <= 0x5A) // ALPHA
-            || (c >= 0x30 && c <= 0x39) // DIGIT
+
+      if (((c >= 0x61 && c <= 0x7A)       // ALPHA
+            || (c >= 0x41 && c <= 0x5A)   // ALPHA
+            || (c >= 0x30 && c <= 0x39)   // DIGIT
             || c == 0x2D // -
             || c == 0x2E // .
             || c == 0x5F // _
             || c == 0x7E // ~
-            || q_strchr(dontEncode, c))
-            && !q_strchr(alsoEncode, c)) {
+            || q_strchr(dontEncode, c)) && !q_strchr(alsoEncode, c)) {
+
          if (output) {
             output[length] = c;
          }
+
          ++length;
+
       } else {
-         if (!output) {
+         if (! output) {
             // detach now
             ba->resize(len * 3); // worst case
             output = ba->data();
          }
+
          output[length++] = percent;
          output[length++] = toHexHelper((c & 0xf0) >> 4);
          output[length++] = toHexHelper(c & 0xf);
       }
    }
+
    if (output) {
       ba->truncate(length);
    }
@@ -2205,8 +2265,7 @@ void q_normalizePercentEncoding(QByteArray *ba, const char *exclude)
    q_toPercentEncoding(ba, exclude, 0, '%');
 }
 
-QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteArray &include,
-      char percent) const
+QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteArray &include, char percent) const
 {
    if (isNull()) {
       return QByteArray();   // preserve null
@@ -2217,14 +2276,16 @@ QByteArray QByteArray::toPercentEncoding(const QByteArray &exclude, const QByteA
    }
 
    QByteArray include2 = include;
-   if (percent != '%')                         // the default
-      if ((percent >= 0x61 && percent <= 0x7A) // ALPHA
-            || (percent >= 0x41 && percent <= 0x5A) // ALPHA
-            || (percent >= 0x30 && percent <= 0x39) // DIGIT
-            || percent == 0x2D // -
-            || percent == 0x2E // .
-            || percent == 0x5F // _
-            || percent == 0x7E) { // ~
+   if (percent != '%')
+      // the default
+      if ((percent >= 0x61 && percent <= 0x7A)       // ALPHA
+            || (percent >= 0x41 && percent <= 0x5A)  // ALPHA
+            || (percent >= 0x30 && percent <= 0x39)  // DIGIT
+            || percent == 0x2D                       // -
+            || percent == 0x2E                       // .
+            || percent == 0x5F                       // _
+            || percent == 0x7E) {                    // ~
+
          include2 += percent;
       }
 

@@ -23,21 +23,13 @@
 #ifndef QTEXTBOUNDARYFINDER_H
 #define QTEXTBOUNDARYFINDER_H
 
-#include <QtCore/qchar.h>
-#include <QtCore/qstring.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring8.h>
 
 class QTextBoundaryFinderPrivate;
 
 class Q_CORE_EXPORT QTextBoundaryFinder
 {
  public:
-   QTextBoundaryFinder();
-   QTextBoundaryFinder(const QTextBoundaryFinder &other);
-   QTextBoundaryFinder &operator=(const QTextBoundaryFinder &other);
-   ~QTextBoundaryFinder();
-
    enum BoundaryType {
       Grapheme,
       Word,
@@ -47,14 +39,19 @@ class Q_CORE_EXPORT QTextBoundaryFinder
 
    enum BoundaryReason {
       NotAtBoundary = 0,
-      StartWord = 1,
-      EndWord = 2
-                //Hyphen
+      StartWord     = 1,
+      EndWord       = 2
+      // Hyphen
    };
    using BoundaryReasons = QFlags<BoundaryReason>;
 
-   QTextBoundaryFinder(BoundaryType type, const QString &string);
-   QTextBoundaryFinder(BoundaryType type, const QChar *chars, int length, unsigned char *buffer = 0, int bufferSize = 0);
+   QTextBoundaryFinder();
+   QTextBoundaryFinder(const QTextBoundaryFinder &other);
+   QTextBoundaryFinder(BoundaryType type, const QString &str);
+
+   ~QTextBoundaryFinder();
+
+   QTextBoundaryFinder &operator=(const QTextBoundaryFinder &other);
 
    inline bool isValid() const {
       return d;
@@ -63,6 +60,7 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    inline BoundaryType type() const {
       return t;
    }
+
    QString string() const;
 
    void toStart();
@@ -78,16 +76,17 @@ class Q_CORE_EXPORT QTextBoundaryFinder
 
  private:
    BoundaryType t;
-   QString s;
-   const QChar *chars;
-   int length;
-   int pos;
+
+   QString m_str;
+   QString::const_iterator iter_pos;
+
+   bool m_valid = true;
+
    uint freePrivate : 1;
    uint unused : 31;
+
    QTextBoundaryFinderPrivate *d;
 };
-
-QT_END_NAMESPACE
 
 #endif
 

@@ -394,7 +394,11 @@ class QVector
    }
 
    iterator erase(iterator pos) {
-      return  m_data.erase(pos);
+      return m_data.erase(pos);
+   }
+
+   iterator erase(const_iterator pos) {
+      return m_data.erase(pos);
    }
 
    iterator insert(iterator before, size_type n, const T &value) {

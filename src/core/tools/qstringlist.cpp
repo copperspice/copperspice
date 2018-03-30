@@ -23,8 +23,7 @@
 #include <algorithm>
 #include <qstringlist.h>
 #include <qset.h>
-
-QT_BEGIN_NAMESPACE
+#include <qregularexpression.h>
 
 bool QStringList::contains(const QString &str, Qt::CaseSensitivity cs) const
 {
@@ -64,31 +63,20 @@ QStringList & QStringList::replaceInStrings(const QString &before, const QString
 
 QString QStringList::join(const QString &sep) const
 {
-   int totalLength = 0;
-   const int size = this->size();
+   QString retval;
 
-   for (int i = 0; i < size; ++i) {
-      totalLength += this->at(i).size();
+   if (this->isEmpty()) {
+      return retval;
    }
 
-   if (size > 0) {
-      totalLength += sep.size() * (size - 1);
-   }
-
-   QString res;
-   if (totalLength == 0) {
-      return res;
-   }
-
-   res.reserve(totalLength);
    for (int i = 0; i < this->size(); ++i) {
       if (i) {
-         res += sep;
+         retval += sep;
       }
 
-      res += this->at(i);
+      retval += this->at(i);
    }
-   return res;
+   return retval;
 }
 
 void QStringList::sort()
@@ -98,7 +86,7 @@ void QStringList::sort()
 
 #ifndef QT_NO_REGEXP
 
-QStringList QStringList::filter(const QRegExp &rx) const
+QStringList QStringList::filter(const QRegularExpression8 &rx) const
 {
    QStringList res;
 
@@ -111,7 +99,7 @@ QStringList QStringList::filter(const QRegExp &rx) const
    return res;
 }
 
-QStringList & QStringList::replaceInStrings(const QRegExp &rx, const QString &after)
+QStringList & QStringList::replaceInStrings(const QRegularExpression8 &rx, const QString &after)
 {
    for (int i = 0; i < this->size(); ++i) {
       (*this)[i].replace(rx, after);
@@ -120,14 +108,18 @@ QStringList & QStringList::replaceInStrings(const QRegExp &rx, const QString &af
    return *this;
 }
 
-static int indexOfMutating(const QStringList *that, QRegExp &rx, int from)
+int QStringList::indexOf(const QRegularExpression8 &regExp, int from) const
 {
    if (from < 0) {
-      from = qMax(from + that->size(), 0);
+      from = qMax(from + this->size(), 0);
    }
 
-   for (int i = from; i < that->size(); ++i) {
-      if (rx.exactMatch(that->at(i))) {
+   QPatternOptionFlags options = QPatternOption::ExactMatchOption | regExp.patternOptions();
+   QRegularExpression8 re(regExp.pattern(), options);
+
+   for (int i = from; i < this->size(); ++i) {
+
+      if(re.match(this->at(i)).hasMatch()) {
          return i;
       }
    }
@@ -135,17 +127,20 @@ static int indexOfMutating(const QStringList *that, QRegExp &rx, int from)
    return -1;
 }
 
-static int lastIndexOfMutating(const QStringList *that, QRegExp &rx, int from)
+int QStringList::lastIndexOf( const QRegularExpression8 &regExp, int from) const
 {
    if (from < 0) {
-      from += that->size();
+      from += this->size();
 
-   } else if (from >= that->size()) {
-      from = that->size() - 1;
+   } else if (from >= this->size()) {
+      from = this->size() - 1;
    }
+
+   QPatternOptionFlags options = QPatternOption::ExactMatchOption | regExp.patternOptions();
+   QRegularExpression8 re(regExp.pattern(), options);
 
    for (int i = from; i >= 0; --i) {
-      if (rx.exactMatch(that->at(i))) {
+      if(re.match(this->at(i)).hasMatch()) {
          return i;
       }
    }
@@ -153,27 +148,6 @@ static int lastIndexOfMutating(const QStringList *that, QRegExp &rx, int from)
    return -1;
 }
 
-int QStringList::indexOf(const QRegExp &rx, int from) const
-{
-   QRegExp rx2(rx);
-   return indexOfMutating(this, rx2, from);
-}
-
-int QStringList::indexOf(QRegExp &rx, int from) const
-{
-   return indexOfMutating(this, rx, from);
-}
-
-int QStringList::lastIndexOf( const QRegExp &rx, int from) const
-{
-   QRegExp rx2(rx);
-   return lastIndexOfMutating(this, rx2, from);
-}
-
-int QStringList::lastIndexOf(QRegExp &rx, int from) const
-{
-   return lastIndexOfMutating(this, rx, from);
-}
 #endif
 
 int QStringList::removeDuplicates()
@@ -206,4 +180,4 @@ int QStringList::removeDuplicates()
    return n - j;
 }
 
-QT_END_NAMESPACE
+

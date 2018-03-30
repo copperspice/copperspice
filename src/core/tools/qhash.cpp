@@ -39,7 +39,7 @@
 #include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qglobal.h>
-#include <qstring.h>
+#include <qstring8.h>
 
 #ifdef Q_OS_UNIX
 #include <stdio.h>
@@ -89,19 +89,12 @@ uint qHash(const QBitArray &bitArray, uint seed)
    return result;
 }
 
-uint qHash(const QLatin1String &key, uint seed)
-{
-   return hash(reinterpret_cast<const uchar *>(key.data()), key.size(), seed);
-}
-
 uint cs_stable_hash(const QString &key)
 {
-   const QChar *p = key.unicode();
-   int n  = key.size();
    uint h = 0;
 
-   while (n--) {
-      h = (h << 4) + (*p++).unicode();
+   for (auto item : key) {
+      h  = (h << 4) + item.unicode();
       h ^= (h & 0xf0000000) >> 23;
       h &= 0x0fffffff;
    }

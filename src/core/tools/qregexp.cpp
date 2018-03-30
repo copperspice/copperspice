@@ -64,14 +64,14 @@ const int InftyLen = INT_MAX;
 const int InftyRep = 1025;
 const int EOS = -1;
 
+namespace QDeprecated {
+
+
 static bool isWord(QChar ch)
 {
    return ch.isLetterOrNumber() || ch.isMark() || ch == QLatin1Char('_');
 }
 
-/*
-  Merges two vectors of ints and puts the result into the first one.
-*/
 static void mergeInto(QVector<int> *a, const QVector<int> &b)
 {
    int asize = a->size();
@@ -113,14 +113,6 @@ static void mergeInto(QVector<int> *a, const QVector<int> &b)
    }
 }
 
-#ifndef QT_NO_REGEXP_WILDCARD
-/*
-  Translates a wildcard pattern to an equivalent regular expression
-  pattern (e.g., *.cpp to .*\.cpp).
-
-  If enableEscaping is true, it is possible to escape the wildcard
-  characters with \
-*/
 static QString wc2rx(const QString &wc_str, const bool enableEscaping)
 {
    const int wclen = wc_str.length();
@@ -219,7 +211,6 @@ static QString wc2rx(const QString &wc_str, const bool enableEscaping)
    }
    return rx;
 }
-#endif
 
 static int caretIndex(int offset, QRegExp::CaretMode caretMode)
 {
@@ -232,9 +223,6 @@ static int caretIndex(int offset, QRegExp::CaretMode caretMode)
    }
 }
 
-/*
-    The QRegExpEngineKey struct uniquely identifies an engine.
-*/
 struct QRegExpEngineKey {
    QString pattern;
    QRegExp::PatternSyntax patternSyntax;
@@ -259,9 +247,6 @@ static bool operator==(const QRegExpEngineKey &key1, const QRegExpEngineKey &key
 
 class QRegExpEngine;
 
-/*
-  This is the engine state during matching.
-*/
 struct QRegExpMatchState {
    const QChar *in; // a pointer to the input string data
    int pos; // the current position in the string
@@ -318,6 +303,7 @@ struct QRegExpMatchState {
   constructed from a regular expression.
 */
 struct QRegExpAutomatonState {
+
 #ifndef QT_NO_REGEXP_CAPTURE
    int atom; // which atom does this state belong to?
 #endif
@@ -327,6 +313,7 @@ struct QRegExpAutomatonState {
    QMap<int, int> anchors; // anchors met when transiting out
 
    inline QRegExpAutomatonState() { }
+
 #ifndef QT_NO_REGEXP_CAPTURE
    inline QRegExpAutomatonState(int a, int m)
       : atom(a), match(m) { }
@@ -335,8 +322,6 @@ struct QRegExpAutomatonState {
       : match(m) { }
 #endif
 };
-
-Q_DECLARE_TYPEINFO(QRegExpAutomatonState, Q_MOVABLE_TYPE);
 
 /*
   The struct QRegExpCharClassRange represents a range of characters (e.g.,
@@ -715,6 +700,7 @@ struct QRegExpLookahead {
 Q_CORE_EXPORT QString qt_regexp_toCanonical(const QString &pattern, QRegExp::PatternSyntax patternSyntax)
 {
    switch (patternSyntax) {
+
 #ifndef QT_NO_REGEXP_WILDCARD
       case QRegExp::Wildcard:
          return wc2rx(pattern, false);
@@ -3355,6 +3341,7 @@ struct QRegExpPrivate {
    QRegExpEngine *eng;
    QRegExpEngineKey engineKey;
    bool minimal;
+
 #ifndef QT_NO_REGEXP_CAPTURE
    QString t; // last string passed to QRegExp::indexIn() or lastIndexIn()
    QStringList capturedCache; // what QRegExp::capturedTexts() returned last
@@ -3580,8 +3567,6 @@ bool QRegExp::exactMatch(const QString &str) const
    }
 }
 
-// ### Qt5: make non-const
-
 int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
 {
    prepareEngineForMatch(priv, str);
@@ -3590,13 +3575,12 @@ int QRegExp::indexIn(const QString &str, int offset, CaretMode caretMode) const
       offset += str.length();
    }
 
-   priv->matchState.match(str.unicode(), str.length(), offset,
-                  priv->minimal, false, caretIndex(offset, caretMode));
+   priv->matchState.match(str.unicode(), str.length(), offset, priv->minimal, false, caretIndex(offset, caretMode));
 
    return priv->matchState.captured[0];
 }
 
-// ### Qt5: make non-const
+
 
 int QRegExp::lastIndexIn(const QString &str, int offset, CaretMode caretMode) const
 {
@@ -3721,6 +3705,7 @@ QString QRegExp::escape(const QString &str)
    const int count = str.count();
    quoted.reserve(count * 2);
    const QLatin1Char backslash('\\');
+
    for (int i = 0; i < count; i++) {
       switch (str.at(i).toLatin1()) {
          case '$':
@@ -3744,29 +3729,31 @@ QString QRegExp::escape(const QString &str)
    return quoted;
 }
 
-#ifndef QT_NO_DATASTREAM
-
 QDataStream &operator<<(QDataStream &out, const QRegExp &regExp)
 {
-   return out << regExp.pattern() << (quint8)regExp.caseSensitivity()
+   return out << regExp.pattern().toUtf8() << (quint8)regExp.caseSensitivity()
           << (quint8)regExp.patternSyntax()
           << (quint8)!!regExp.isMinimal();
 }
 
 QDataStream &operator>>(QDataStream &in, QRegExp &regExp)
 {
-   QString pattern;
+   QByteArray pattern;
+
    quint8 cs;
    quint8 patternSyntax;
    quint8 isMinimal;
 
    in >> pattern >> cs >> patternSyntax >> isMinimal;
 
-   QRegExp newRegExp(pattern, Qt::CaseSensitivity(cs),
-                     QRegExp::PatternSyntax(patternSyntax));
+   QRegExp newRegExp(QString::fromUtf8(pattern), Qt::CaseSensitivity(cs), QRegExp::PatternSyntax(patternSyntax));
 
    newRegExp.setMinimal(isMinimal);
    regExp = newRegExp;
+
    return in;
 }
-#endif // QT_NO_DATASTREAM
+
+}  // namespace
+
+Q_DECLARE_TYPEINFO(QRegExpAutomatonState, Q_MOVABLE_TYPE);

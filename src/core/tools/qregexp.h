@@ -23,14 +23,12 @@
 #ifndef QREGEXP_H
 #define QREGEXP_H
 
-#ifndef QT_NO_REGEXP
-
 #include <qstring.h>
+class QStringList;
 
-QT_BEGIN_NAMESPACE
+namespace QDeprecated {
 
 struct QRegExpPrivate;
-class QStringList;
 
 class Q_CORE_EXPORT QRegExp
 {
@@ -85,12 +83,7 @@ class Q_CORE_EXPORT QRegExp
    int lastIndexIn(const QString &str, int offset = -1, CaretMode caretMode = CaretAtZero) const;
 
    int matchedLength() const;
-
-#ifndef QT_NO_REGEXP_CAPTURE
-
-#ifdef QT_DEPRECATED
-   QT_DEPRECATED int numCaptures() const;
-#endif
+   int numCaptures() const;
 
    int captureCount() const;
    QStringList capturedTexts() const;
@@ -101,7 +94,6 @@ class Q_CORE_EXPORT QRegExp
    int pos(int nth = 0);
    QString errorString() const;
    QString errorString();
-#endif
 
    static QString escape(const QString &str);
 
@@ -109,15 +101,11 @@ class Q_CORE_EXPORT QRegExp
    QRegExpPrivate *priv;
 };
 
-Q_DECLARE_TYPEINFO(QRegExp, Q_MOVABLE_TYPE);
-
-#ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegExp &regExp);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegExp &regExp);
-#endif
 
-QT_END_NAMESPACE
+} // namespace
 
-#endif // QT_NO_REGEXP
+Q_DECLARE_TYPEINFO(QDeprecated::QRegExp, Q_MOVABLE_TYPE);
 
 #endif // QREGEXP_H

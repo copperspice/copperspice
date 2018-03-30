@@ -315,6 +315,12 @@ class QFlatMap
       std::sort(m_data.begin(), m_data.end(), CompareFilter{m_compare} );
    }
 
+   QFlatMap(const_iterator first, const_iterator last, const C &compare = C())
+      : m_data(first.m_iter, last.m_iter), m_compare(compare) {
+
+      std::sort(m_data.begin(), m_data.end(), CompareFilter{m_compare} );
+   }
+
    ~QFlatMap() = default;
 
    // methods
@@ -482,7 +488,7 @@ class QFlatMap
       }
 
       Val retval = std::move(iter.value());
-      m_data.erase(iter);
+      erase(iter);
 
       return retval;
    }

@@ -23,7 +23,7 @@
 #ifndef QDATETIME_H
 #define QDATETIME_H
 
-#include <qstring.h>
+#include <qstring8.h>
 #include <qnamespace.h>
 #include <qsharedpointer.h>
 
