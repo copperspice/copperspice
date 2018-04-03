@@ -23,8 +23,8 @@
 #ifndef QFILEDEVICE_H
 #define QFILEDEVICE_H
 
-#include <QtCore/qiodevice.h>
-#include <QtCore/qstring.h>
+#include <qiodevice.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,31 +26,33 @@
 #include <qdir.h>
 #include <qfileinfo_p.h>
 
-QT_BEGIN_NAMESPACE
-
 QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
 {
-   if (cache_enabled && !fileNames[(int)name].isNull()) {
+   if (cache_enabled && ! fileNames[(int)name].isEmpty()) {
       return fileNames[(int)name];
    }
 
    QString ret;
-   if (fileEngine == 0) { 
+
+   if (fileEngine == 0) {
       // local file; use the QFileSystemEngine directly
 
       switch (name) {
          case QAbstractFileEngine::CanonicalName:
          case QAbstractFileEngine::CanonicalPathName: {
             QFileSystemEntry entry = QFileSystemEngine::canonicalName(fileEntry, metaData);
+
             if (cache_enabled) { // be smart and store both
                fileNames[QAbstractFileEngine::CanonicalName] = entry.filePath();
                fileNames[QAbstractFileEngine::CanonicalPathName] = entry.path();
             }
+
             if (name == QAbstractFileEngine::CanonicalName) {
                ret = entry.filePath();
             } else {
                ret = entry.path();
             }
+
             break;
          }
 
@@ -66,11 +68,12 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
          case QAbstractFileEngine::AbsolutePathName: {
             QFileSystemEntry entry = QFileSystemEngine::absoluteName(fileEntry);
 
-            if (cache_enabled) { 
+            if (cache_enabled) {
                // be smart and store both
                fileNames[QAbstractFileEngine::AbsoluteName] = entry.filePath();
                fileNames[QAbstractFileEngine::AbsolutePathName] = entry.path();
             }
+
             if (name == QAbstractFileEngine::AbsoluteName) {
                ret = entry.filePath();
             } else {
@@ -86,10 +89,6 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
       ret = fileEngine->fileName(name);
    }
 
-   if (ret.isNull()) {
-      ret = QLatin1String("");
-   }
-
    if (cache_enabled) {
       fileNames[(int)name] = ret;
    }
@@ -99,7 +98,7 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
 
 QString QFileInfoPrivate::getFileOwner(QAbstractFileEngine::FileOwner own) const
 {
-   if (cache_enabled && !fileOwners[(int)own].isNull()) {
+   if (cache_enabled && !fileOwners[(int)own].isEmpty()) {
       return fileOwners[(int)own];
    }
 
@@ -118,7 +117,7 @@ QString QFileInfoPrivate::getFileOwner(QAbstractFileEngine::FileOwner own) const
       ret = fileEngine->owner(own);
    }
 
-   if (ret.isNull()) {
+   if (ret.isEmpty()) {
       ret = QLatin1String("");
    }
 
@@ -131,7 +130,7 @@ QString QFileInfoPrivate::getFileOwner(QAbstractFileEngine::FileOwner own) const
 
 uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) const
 {
-   Q_ASSERT(fileEngine); 
+   Q_ASSERT(fileEngine);
 
    // this should never be called when using the native FS
    // We split the testing into tests for for LinkType, BundleType, PermsMask and the rest.
@@ -195,7 +194,7 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
 
 QDateTime &QFileInfoPrivate::getFileTime(QAbstractFileEngine::FileTime request) const
 {
-   Q_ASSERT(fileEngine); 
+   Q_ASSERT(fileEngine);
    // should never be called when using the native FS
 
    if (!cache_enabled) {
@@ -403,8 +402,8 @@ bool QFileInfo::makeAbsolute()
 bool QFileInfo::exists() const
 {
    Q_D(const QFileInfo);
-    
-   if (d->isDefaultConstructed) {  
+
+   if (d->isDefaultConstructed) {
       return false;
    }
 
@@ -414,7 +413,7 @@ bool QFileInfo::exists() const
       }
 
       return d->metaData.exists();
-   }    
+   }
 
    return d->getFileFlags(QAbstractFileEngine::ExistsFlag);
 }
@@ -438,7 +437,7 @@ QString QFileInfo::filePath() const
 QString QFileInfo::fileName() const
 {
    Q_D(const QFileInfo);
- 
+
    if (d->isDefaultConstructed) {
       return QLatin1String("");
    }
@@ -666,9 +665,9 @@ bool QFileInfo::isRoot() const
 
          if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::ExistsAttribute)) {
             QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::ExistsAttribute);
-         }    
+         }
 
-         return d->metaData.exists();         
+         return d->metaData.exists();
 #else
          return true;
 #endif
@@ -783,11 +782,11 @@ QFile::Permissions QFileInfo::permissions() const
 qint64 QFileInfo::size() const
 {
    Q_D(const QFileInfo);
-  
+
    if (d->isDefaultConstructed) {
       return 0;
    }
-  
+
    if (d->fileEngine == 0) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::SizeAttribute)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::SizeAttribute);
@@ -874,4 +873,3 @@ void QFileInfo::setCaching(bool enable)
    d->cache_enabled = enable;
 }
 
-QT_END_NAMESPACE

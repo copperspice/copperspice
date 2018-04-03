@@ -36,7 +36,7 @@
 #include <qurlquery.h>
 
 // source code located in qdir.cpp
-extern QString qt_normalizePathSegments(const QString &name, bool allowUncPaths);
+extern QString cs_internal_normalizePath(const QString &name, bool allowUncPaths);
 
 int minPositive(int value1, int value2)
 {
@@ -374,6 +374,7 @@ static const ushort userNameInUrl[] = {
    // no need to list encode(x) for the other characters
    0
 };
+
 static const ushort *const passwordInUrl = userNameInUrl + 1;
 static const ushort *const pathInUrl = userNameInUrl + 5;
 static const ushort *const queryInUrl = userNameInUrl + 6;
@@ -381,15 +382,15 @@ static const ushort *const fragmentInUrl = userNameInUrl + 6;
 
 static inline void parseDecodedComponent(QString &data)
 {
-   data.replace(QLatin1Char('%'), QString("%25"));
+   data.replace('%', "%25");
 }
 
-static inline QString
-recodeFromUser(const QString &input, const ushort *actions, int from, int to)
+static inline QString recodeFromUser(const QString &input, const ushort *actions, int from, int to)
 {
    QString output;
-   const QChar *begin = input.constData() + from;
-   const QChar *end   = input.constData() + to;
+
+   QString::const_iterator begin = input.begin() + from;
+   QString::const_iterator end   = input.begin() + to;
 
    if (qt_urlRecode(output, begin, end, 0, actions)) {
       return output;
@@ -400,8 +401,7 @@ recodeFromUser(const QString &input, const ushort *actions, int from, int to)
 
 // appendXXXX functions: copy from the internal form to the external, user form
 // the internal value is stored in its PrettyDecoded form so that case is easy
-static inline void appendToUser(QString &appendTo, const QString &value, QUrl::FormattingOptions options,
-                                const ushort *actions)
+static inline void appendToUser(QString &appendTo, const QString &value, QUrl::FormattingOptions options, const ushort *actions)
 {
    if (options == QUrl::PrettyDecoded) {
       appendTo += value;
@@ -467,7 +467,7 @@ inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptio
       }
    }
 
-   if (! qt_urlRecode(appendTo, userName.constData(), userName.constEnd(), options, userNameActions)) {
+   if (! qt_urlRecode(appendTo, userName.constBegin(), userName.constEnd(), options, userNameActions)) {
       appendTo += userName;
    }
 
@@ -477,7 +477,7 @@ inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptio
    } else {
       appendTo += QLatin1Char(':');
 
-      if (! qt_urlRecode(appendTo, password.constData(), password.constEnd(), options, passwordActions)) {
+      if (! qt_urlRecode(appendTo, password.constBegin(), password.constEnd(), options, passwordActions)) {
          appendTo += password;
       }
    }
@@ -502,7 +502,7 @@ inline void QUrlPrivate::appendPath(QString &appendTo, QUrl::FormattingOptions o
    QString thePath = path;
 
    if (options & QUrl::NormalizePathSegments) {
-      thePath = qt_normalizePathSegments(path, false);
+      thePath = cs_internal_normalizePath(path, false);
    }
 
    if (options & QUrl::RemoveFilename) {
@@ -576,9 +576,9 @@ inline bool QUrlPrivate::setScheme(const QString &value, int len, bool doSetErro
          }
       }
 
-      // found something else
-      // don't call setError needlessly:
+      // found something else , don't call setError needlessly:
       // if we've been called from parse(), it will try to recover
+
       if (doSetError) {
          setError(InvalidSchemeError, value, i);
       }
@@ -588,14 +588,7 @@ inline bool QUrlPrivate::setScheme(const QString &value, int len, bool doSetErro
    scheme = value.left(len);
 
    if (needsLowercasing != -1) {
-      // schemes are ASCII only, so we don't need the full Unicode toLower
-      QChar *schemeData = scheme.data(); // force detaching here
-      for (int i = needsLowercasing; i >= 0; --i) {
-         ushort c = schemeData[i].unicode();
-         if (c >= 'A' && c <= 'Z') {
-            schemeData[i] = c + 0x20;
-         }
-      }
+      scheme = scheme.toLower();
    }
 
    // did we set to the file protocol?
@@ -605,10 +598,13 @@ inline bool QUrlPrivate::setScheme(const QString &value, int len, bool doSetErro
          || scheme == webDavScheme()
 #endif
       ) {
+
       flags |= IsLocalFile;
+
    } else {
       flags &= ~IsLocalFile;
    }
+
    return true;
 }
 
@@ -764,140 +760,154 @@ inline void QUrlPrivate::appendHost(QString &appendTo, QUrl::FormattingOptions o
    }
 }
 
-static const QChar *parseIpFuture(QString &host, const QChar *begin, const QChar *end, QUrl::ParsingMode mode)
+static QString::const_iterator parseIpFuture(QString &host, QString::const_iterator begin, QString::const_iterator end, QUrl::ParsingMode mode)
 {
    //    IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
-   static const char acceptable[] =
-      "!$&'()*+,;=" // sub-delims
-      ":"           // ":"
-      "-._~";       // unreserved
+
+   static const QString acceptable =
+                  "!$&'()*+,;="          // sub-delims
+                  ":"                    // ":"
+                  "-._~";                // unreserved
 
    // the brackets and the "v" have been checked
-   const QChar *const origBegin = begin;
+   QString::const_iterator origBegin = begin;
 
-   if (begin[3].unicode() != '.') {
-      return &begin[3];
+   if (begin[3] != '.') {
+      return begin + 3;
    }
 
-   if ((begin[2].unicode() >= 'A' && begin[2].unicode() <= 'F') ||
-         (begin[2].unicode() >= 'a' && begin[2].unicode() <= 'f') ||
-         (begin[2].unicode() >= '0' && begin[2].unicode() <= '9')) {
+   if ((begin[2] >= 'A' && begin[2] <= 'F') || (begin[2] >= 'a' && begin[2] <= 'f') || (begin[2] >= '0' && begin[2] <= '9')) {
 
-      // this is so unlikely that we'll just go down the slow path
-      // decode the whole string, skipping the "[vH." and "]" which we already know to be there
-      host += QString::fromRawData(begin, 4);
+      // this is very unlikely, decode the whole string skipping the "[vH." and "]" which we already know to be there
+      host += QString(begin, begin + 4);
 
-      // uppercase the version, if necessary
-      if (begin[2].unicode() >= 'a') {
-         host[host.length() - 2] = begin[2].unicode() - 0x20;
+      // uppercase the version if necessary
+      if (begin[2] >= 'a') {
+         host.replace(host.end() - 2, host.end() - 1, begin[2].toLower() );
       }
 
       begin += 4;
       --end;
 
       QString decoded;
+
       if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, QUrl::FullyDecoded, 0)) {
          begin = decoded.constBegin();
-         end = decoded.constEnd();
+         end   = decoded.constEnd();
       }
 
       for ( ; begin != end; ++begin) {
-         if (begin->unicode() >= 'A' && begin->unicode() <= 'Z') {
+         if (*begin >= 'A' && *begin <= 'Z') {
             host += *begin;
-         } else if (begin->unicode() >= 'a' && begin->unicode() <= 'z') {
+
+         } else if (*begin >= 'a' && *begin <= 'z') {
             host += *begin;
-         } else if (begin->unicode() >= '0' && begin->unicode() <= '9') {
+
+         } else if (*begin >= '0' && *begin <= '9') {
             host += *begin;
-         } else if (begin->unicode() < 0x80 && strchr(acceptable, begin->unicode()) != 0) {
+
+         } else if (*begin < 0x80 && acceptable.contains(*begin)) {
             host += *begin;
+
          } else {
-            return decoded.isEmpty() ? begin : &origBegin[2];
+            return decoded.isEmpty() ? begin : origBegin + 2;
          }
       }
-      host += QLatin1Char(']');
-      return 0;
+
+      host += ']';
+
+      return end;
    }
-   return &origBegin[2];
+
+   return origBegin + 2;
 }
 
 // ONLY the IPv6 address is parsed here, WITHOUT the brackets
-static const QChar *parseIp6(QString &host, const QChar *begin, const QChar *end, QUrl::ParsingMode mode)
+static QString::const_iterator parseIp6(QString &host, QString::const_iterator begin, QString::const_iterator end, QUrl::ParsingMode mode)
 {
    QIPAddressUtils::IPv6Address address;
-   const QChar *ret = QIPAddressUtils::parseIp6(address, begin, end);
+   QString::const_iterator iter = QIPAddressUtils::parseIp6(address, begin, end);
 
-   if (ret) {
+   if (iter != end) {
       // this struct is kept in automatic storage because it's only 4 bytes
       const ushort decodeColon[] = { decode(':'), 0 };
 
-      // IPv6 failed parsing, check if it was a percent-encoded character in
-      // the middle and try again
+      // IPv6 failed parsing, check if it was a percent-encoded character in the middle and try again
       QString decoded;
-      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, 0, decodeColon)) {
-         // recurse
-         // if the parsing fails again, the qt_urlRecode above will return 0
-         ret = parseIp6(host, decoded.constBegin(), decoded.constEnd(), mode);
 
-         // we can't return ret, otherwise it would be dangling
-         return ret ? end : 0;
+      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, 0, decodeColon)) {
+         // recurse if the parsing fails again, the qt_urlRecode above will return end
+         return parseIp6(host, decoded.constBegin(), decoded.constEnd(), mode);
       }
 
       // no transformation, nothing to re-parse
-      return ret;
+      return iter;
    }
-
-   host.reserve(host.size() + (end - begin));
 
    host += '[';
    QIPAddressUtils::toString(host, address);
    host += ']';
 
-   return 0;
+   return end;
 }
 
 inline bool QUrlPrivate::setHost(const QString &value, int from, int iend, QUrl::ParsingMode mode)
 {
-   const QChar *begin = value.constData() + from;
-   const QChar *end   = value.constData() + iend;
+   QString::const_iterator begin = value.constBegin() + from;
+   QString::const_iterator end   = value.constBegin() + iend;
 
    const int len = end - begin;
+
    host.clear();
    sectionIsPresent |= Host;
+
    if (len == 0) {
       return true;
    }
 
-   if (begin[0].unicode() == '[') {
+   if (begin[0] == '[') {
       // IPv6Address or IPvFuture
       // smallest IPv6 address is      "[::]"   (len = 4)
       // smallest IPvFuture address is "[v7.X]" (len = 6)
 
-      if (end[-1].unicode() != ']') {
+      QString::const_iterator iter;
+
+      if (end[-1] != ']') {
          setError(HostMissingEndBracket, value);
          return false;
       }
 
-      if (len > 5 && begin[1].unicode() == 'v') {
-         const QChar *c = parseIpFuture(host, begin, end, mode);
-         if (c) {
-            setError(InvalidIPvFutureError, value, c - value.constData());
+      if (len > 5 && begin[1] == 'v') {
+         iter = parseIpFuture(host, begin, end, mode);
+
+         if (iter == end) {
+            return true;
+
+         } else {
+            setError(InvalidIPvFutureError, value, iter - value.begin());
+            return false;
          }
-         return !c;
+
 
       } else if (begin[1].unicode() == 'v') {
          setError(InvalidIPvFutureError, value, from);
+
       }
 
-      const QChar *c = parseIp6(host, begin + 1, end - 1, mode);
-      if (!c) {
+      iter = parseIp6(host, begin + 1, end - 1, mode);
+
+      if (iter == end) {
          return true;
       }
 
-      if (c == end - 1) {
+      if (iter == end - 1) {
          setError(InvalidIPv6AddressError, value, from);
+
       } else {
-         setError(InvalidCharacterInIPv6Error, value, c - value.constData());
+         setError(InvalidCharacterInIPv6Error, value, iter - value.begin());
+
       }
+
       return false;
    }
 
@@ -905,14 +915,12 @@ inline bool QUrlPrivate::setHost(const QString &value, int from, int iend, QUrl:
    QIPAddressUtils::IPv4Address ip4;
 
    if (QIPAddressUtils::parseIp4(ip4, begin, end)) {
-      // yes, it was
       QIPAddressUtils::toString(host, ip4);
       return true;
    }
 
    // This is probably a reg-name.
-   // But it can also be an encoded string that, when decoded becomes one
-   // of the types above.
+   // Can also be an encoded string that when decoded becomes one of the types above.
    //
    // Two types of encoding are possible:
    //  percent encoding (e.g., "%31%30%2E%30%2E%30%2E%31" -> "10.0.0.1")
@@ -927,9 +935,9 @@ inline bool QUrlPrivate::setHost(const QString &value, int from, int iend, QUrl:
    QString s;
 
    if (mode == QUrl::TolerantMode && qt_urlRecode(s, begin, end, 0, 0)) {
-      // something was decoded
-      // anything encoded left?
-      int pos = s.indexOf(QChar(0x25)); // '%'
+      // something was decoded, anything encoded left?
+      int pos = s.indexOf('%'); // '%'
+
       if (pos != -1) {
          setError(InvalidRegNameError, s, pos);
          return false;
@@ -939,7 +947,8 @@ inline bool QUrlPrivate::setHost(const QString &value, int from, int iend, QUrl:
       return setHost(s, 0, s.length(), QUrl::StrictMode);
    }
 
-   s = qt_ACE_do(QString::fromRawData(begin, len), NormalizeAce, ForbidLeadingDot);
+   s = qt_ACE_do(QString(begin, end), NormalizeAce, ForbidLeadingDot);
+
    if (s.isEmpty()) {
       setError(InvalidRegNameError, value);
       return false;
@@ -951,6 +960,7 @@ inline bool QUrlPrivate::setHost(const QString &value, int from, int iend, QUrl:
    } else {
       host = s;
    }
+
    return true;
 }
 
@@ -966,6 +976,7 @@ inline void QUrlPrivate::parse(const QString &url, QUrl::ParsingMode parsingMode
 
    sectionIsPresent = 0;
    flags = 0;
+
    clearError();
 
    // find the important delimiters
@@ -974,11 +985,11 @@ inline void QUrlPrivate::parse(const QString &url, QUrl::ParsingMode parsingMode
    int hash     = -1;
 
    const int len = url.length();
-   const QChar *const begin = url.constData();
-   const ushort *const data = reinterpret_cast<const ushort *>(begin);
+
+   QString::const_iterator iter = url.begin();
 
    for (int i = 0; i < len; ++i) {
-      uint uc = data[i];
+      QChar32 uc = iter[i];
 
       if (uc == '#' && hash == -1) {
          hash = i;
@@ -990,6 +1001,7 @@ inline void QUrlPrivate::parse(const QString &url, QUrl::ParsingMode parsingMode
       if (question == -1) {
          if (uc == ':' && colon == -1) {
             colon = i;
+
          } else if (uc == '?') {
             question = i;
          }
@@ -1020,12 +1032,12 @@ inline void QUrlPrivate::parse(const QString &url, QUrl::ParsingMode parsingMode
       hierEnd = hash;
    }
 
-   if (hierEnd - hierStart >= 2 && data[hierStart] == '/' && data[hierStart + 1] == '/') {
+   if (hierEnd - hierStart >= 2 && url[hierStart] == '/' && url[hierStart + 1] == '/') {
       // we have an authority, it ends at the first slash after these
       int authorityEnd = hierEnd;
 
       for (int i = hierStart + 2; i < authorityEnd ; ++i) {
-         if (data[i] == '/') {
+         if (url[i] == '/') {
             authorityEnd = i;
             break;
          }
@@ -1146,88 +1158,98 @@ inline QString QUrlPrivate::mergePaths(const QString &relativePath) const
 /*
     From http://www.ietf.org/rfc/rfc3986.txt, 5.2.4: Remove dot segments
 
-    Removes unnecessary ../ and ./ from the path. Used for normalizing
-    the URL.
+    Removes unnecessary ../ and ./ from the path. Used for normalizing the URL.
 */
-static void removeDotsFromPath(QString *path)
+static void removeDotsFromPath(QString &path)
 {
-   // The input buffer is initialized with the now-appended path
-   // components and the output buffer is initialized to the empty
-   // string.
-   QChar *out = path->data();
-   const QChar *in = out;
-   const QChar *end = out + path->size();
+   // input buffer is initialized with the appended path components
+   // output buffer is initialized to the empty string
 
-   // If the input buffer consists only of
-   // "." or "..", then remove that from the input
-   // buffer;
-   if (path->size() == 1 && in[0].unicode() == '.') {
+   QString retval;
+
+   QString::const_iterator in  = path.begin();
+   QString::const_iterator end = path.end();
+
+   // If the input buffer consists only of "." or "..", then remove that from the input buffer
+   if (path == ".") {
       ++in;
-   } else if (path->size() == 2 && in[0].unicode() == '.' && in[1].unicode() == '.') {
+
+   } else if (path == "..") {
       in += 2;
    }
-   // While the input buffer is not empty, loop:
+
    while (in < end) {
 
-      // otherwise, if the input buffer begins with a prefix of "../" or "./",
-      // then remove that prefix from the input buffer;
-      if (path->size() >= 2 && in[0].unicode() == '.' && in[1].unicode() == '/') {
+      // if the input buffer begins with a prefix of "../" or "./", remove that prefix from the input buffer;
+      QStringView8 tmp(in, end);
+
+      if (tmp.startsWith("./")) {
          in += 2;
-      } else if (path->size() >= 3 && in[0].unicode() == '.'
-                 && in[1].unicode() == '.' && in[2].unicode() == '/') {
+
+      } else if (tmp.startsWith("../")) {
          in += 3;
       }
 
-      // otherwise, if the input buffer begins with a prefix of
-      // "/./" or "/.", where "." is a complete path segment,
+      // if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment
       // then replace that prefix with "/" in the input buffer;
-      if (in <= end - 3 && in[0].unicode() == '/' && in[1].unicode() == '.'
-            && in[2].unicode() == '/') {
+
+      tmp = QStringView8(in, end);
+
+      if (tmp.startsWith("/./")) {
          in += 2;
          continue;
-      } else if (in == end - 2 && in[0].unicode() == '/' && in[1].unicode() == '.') {
-         *out++ = QLatin1Char('/');
+
+      } else if (tmp.startsWith("/.")) {
+         retval.append("/");
          in += 2;
          break;
       }
 
-      // otherwise, if the input buffer begins with a prefix
-      // of "/../" or "/..", where ".." is a complete path
-      // segment, then replace that prefix with "/" in the
-      // input buffer and remove the last //segment and its
-      // preceding "/" (if any) from the output buffer;
-      if (in <= end - 4 && in[0].unicode() == '/' && in[1].unicode() == '.'
-            && in[2].unicode() == '.' && in[3].unicode() == '/') {
-         while (out > path->constData() && (--out)->unicode() != '/')
-            ;
-         if (out == path->constData() && out->unicode() != '/') {
+      // if the input buffer begins with a prefix of "/../" or "/..", where ".." is a complete path segment
+      // then replace that prefix with "/" in the input buffer and remove the last segment and its
+      // preceding "/" (if any) from the output buffer
+
+      if (tmp.startsWith("/../")) {
+
+         while (retval.size() > 1 && ! retval.endsWith('/')) {
+            retval.chop(1);
+         }
+
+         if (retval.size() == 1 && retval != "/") {
             ++in;
          }
+
          in += 3;
          continue;
-      } else if (in == end - 3 && in[0].unicode() == '/' && in[1].unicode() == '.'
-                 && in[2].unicode() == '.') {
-         while (out > path->constData() && (--out)->unicode() != '/')
-            ;
-         if (out->unicode() == '/') {
-            ++out;
+
+      } else if (tmp == "/..") {
+
+         while (retval.size() > 1 && ! retval.endsWith('/')) {
+
+            if (retval.startsWith("/") && retval.size() == 2) {
+               break;
+            }
+
+            retval.chop(1);
          }
+
          in += 3;
          break;
       }
 
-      // otherwise move the first path segment in
-      // the input buffer to the end of the output
-      // buffer, including the initial "/" character
-      // (if any) and any subsequent characters up
-      // to, but not including, the next "/"
-      // character or the end of the input buffer.
-      *out++ = *in++;
-      while (in < end && in->unicode() != '/') {
-         *out++ = *in++;
+      // move the first path segment in the input buffer to the end of the output buffer, including the initial "/" character
+      // (if any) and any subsequent characters up to, but not including, the next "/" character or the end of the input buffer.
+
+      retval.append(*in);
+      ++in;
+
+      while (in != end && *in != '/') {
+         retval.append(*in);
+         ++in;
       }
    }
-   path->truncate(out - path->constData());
+
+   path = retval;
 }
 
 inline QUrlPrivate::ErrorCode QUrlPrivate::validityError(QString *source, int *position) const
@@ -1489,7 +1511,7 @@ void QUrl::setAuthority(const QString &authority, ParsingMode mode)
    }
 
    d->setAuthority(authority, 0, authority.length(), mode);
-   if (authority.isNull()) {
+   if (authority.isEmpty()) {
       // QUrlPrivate::setAuthority cleared almost everything
       // but it leaves the Host bit set
       d->sectionIsPresent &= ~QUrlPrivate::Authority;
@@ -1527,7 +1549,7 @@ void QUrl::setUserInfo(const QString &userInfo, ParsingMode mode)
 
    d->setUserInfo(trimmed, 0, trimmed.length());
 
-   if (userInfo.isNull()) {
+   if (userInfo.isEmpty()) {
       // QUrlPrivate::setUserInfo cleared almost everything
       // but it leaves the UserName bit set
       d->sectionIsPresent &= ~QUrlPrivate::UserInfo;
@@ -1568,7 +1590,7 @@ void QUrl::setUserName(const QString &userName, ParsingMode mode)
 
    d->setUserName(data, 0, data.length());
 
-   if (userName.isNull()) {
+   if (userName.isEmpty()) {
       d->sectionIsPresent &= ~QUrlPrivate::UserName;
    } else if (mode == StrictMode && !d->validateComponent(QUrlPrivate::UserName, userName)) {
       d->userName.clear();
@@ -1598,7 +1620,8 @@ void QUrl::setPassword(const QString &password, ParsingMode mode)
    }
 
    d->setPassword(data, 0, data.length());
-   if (password.isNull()) {
+
+   if (password.isEmpty()) {
       d->sectionIsPresent &= ~QUrlPrivate::Password;
    } else if (mode == StrictMode && !d->validateComponent(QUrlPrivate::Password, password)) {
       d->password.clear();
@@ -1628,10 +1651,11 @@ void QUrl::setHost(const QString &host, ParsingMode mode)
    }
 
    if (d->setHost(data, 0, data.length(), mode)) {
-      if (host.isNull()) {
+      if (host.isEmpty()) {
          d->sectionIsPresent &= ~QUrlPrivate::Host;
       }
-   } else if (!data.startsWith(QLatin1Char('['))) {
+
+   } else if (! data.startsWith('[')) {
       // setHost failed, it might be IPv6 or IPvFuture in need of bracketing
       Q_ASSERT(d->error);
 
@@ -1700,7 +1724,7 @@ void QUrl::setPath(const QString &path, ParsingMode mode)
    }
 
    int from = 0;
-   while (from < data.length() - 2 && data.midRef(from, 2) == QLatin1String("//")) {
+   while (from < data.length() - 2 && data.midView(from, 2) == "//") {
       ++from;
    }
 
@@ -1752,7 +1776,7 @@ void QUrl::setQuery(const QString &query, ParsingMode mode)
    }
 
    d->setQuery(data, 0, data.length());
-   if (query.isNull()) {
+   if (query.isEmpty()) {
       d->sectionIsPresent &= ~QUrlPrivate::Query;
    } else if (mode == StrictMode && !d->validateComponent(QUrlPrivate::Query, query)) {
       d->query.clear();
@@ -1776,15 +1800,13 @@ void QUrl::setQuery(const QUrlQuery &query)
 
 QString QUrl::query(FormattingOptions options) const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
    QString result;
    d->appendQuery(result, options, QUrlPrivate::Query);
-   if (d->hasQuery() && result.isNull()) {
-      result.detach();
-   }
+
    return result;
 }
 
@@ -1794,13 +1816,15 @@ void QUrl::setFragment(const QString &fragment, ParsingMode mode)
    d->clearError();
 
    QString data = fragment;
+
    if (mode == DecodedMode) {
       parseDecodedComponent(data);
       mode = TolerantMode;
    }
 
    d->setFragment(data, 0, data.length());
-   if (fragment.isNull()) {
+
+   if (fragment.isEmpty()) {
       d->sectionIsPresent &= ~QUrlPrivate::Fragment;
    } else if (mode == StrictMode && !d->validateComponent(QUrlPrivate::Fragment, fragment)) {
       d->fragment.clear();
@@ -1815,9 +1839,7 @@ QString QUrl::fragment(FormattingOptions options) const
 
    QString result;
    d->appendFragment(result, options, QUrlPrivate::Fragment);
-   if (d->hasFragment() && result.isNull()) {
-      result.detach();
-   }
+
    return result;
 }
 
@@ -1843,14 +1865,16 @@ QUrl QUrl::resolved(const QUrl &relative) const
    if (!d) {
       return relative;
    }
-   if (!relative.d) {
+
+   if (! relative.d) {
       return *this;
    }
 
    QUrl t;
 
    // Compatibility hack (mostly for qtdeclarative) : treat "file:relative.txt" as relative even though QUrl::isRelative() says false
-   if (!relative.d->scheme.isEmpty() && (!relative.isLocalFile() || QDir::isAbsolutePath(relative.d->path))) {
+
+   if (! relative.d->scheme.isEmpty() && (! relative.isLocalFile() || QDir::isAbsolutePath(relative.d->path))) {
       t = relative;
       t.detach();
 
@@ -1858,6 +1882,7 @@ QUrl QUrl::resolved(const QUrl &relative) const
       if (relative.d->hasAuthority()) {
          t = relative;
          t.detach();
+
       } else {
          t.d = new QUrlPrivate;
 
@@ -1870,17 +1895,19 @@ QUrl QUrl::resolved(const QUrl &relative) const
 
          if (relative.d->path.isEmpty()) {
             t.d->path = d->path;
+
             if (relative.d->hasQuery()) {
                t.d->query = relative.d->query;
                t.d->sectionIsPresent |= QUrlPrivate::Query;
+
             } else if (d->hasQuery()) {
                t.d->query = d->query;
                t.d->sectionIsPresent |= QUrlPrivate::Query;
             }
+
          } else {
-            t.d->path = relative.d->path.startsWith(QLatin1Char('/'))
-                        ? relative.d->path
-                        : d->mergePaths(relative.d->path);
+            t.d->path = relative.d->path.startsWith('/') ? relative.d->path : d->mergePaths(relative.d->path);
+
             if (relative.d->hasQuery()) {
                t.d->query = relative.d->query;
                t.d->sectionIsPresent |= QUrlPrivate::Query;
@@ -1888,21 +1915,25 @@ QUrl QUrl::resolved(const QUrl &relative) const
          }
       }
       t.d->scheme = d->scheme;
+
       if (d->hasScheme()) {
          t.d->sectionIsPresent |= QUrlPrivate::Scheme;
       } else {
          t.d->sectionIsPresent &= ~QUrlPrivate::Scheme;
       }
+
       t.d->flags |= d->flags & QUrlPrivate::IsLocalFile;
    }
+
    t.d->fragment = relative.d->fragment;
+
    if (relative.d->hasFragment()) {
       t.d->sectionIsPresent |= QUrlPrivate::Fragment;
    } else {
       t.d->sectionIsPresent &= ~QUrlPrivate::Fragment;
    }
 
-   removeDotsFromPath(&t.d->path);
+   removeDotsFromPath(t.d->path);
 
    return t;
 }
@@ -2006,22 +2037,27 @@ QUrl QUrl::adjusted(QUrl::FormattingOptions options) const
 
    if ((options & RemoveAuthority) == RemoveAuthority) {
       that.setAuthority(QString());
+
    } else {
       if ((options & RemoveUserInfo) == RemoveUserInfo) {
          that.setUserInfo(QString());
       } else if (options & RemovePassword) {
          that.setPassword(QString());
       }
+
       if (options & RemovePort) {
          that.setPort(-1);
       }
    }
+
    if (options & RemoveQuery) {
       that.setQuery(QString());
    }
+
    if (options & RemoveFragment) {
       that.setFragment(QString());
    }
+
    if (options & RemovePath) {
       that.setPath(QString());
    } else if (options & (StripTrailingSlash | RemoveFilename | NormalizePathSegments)) {
@@ -2080,6 +2116,11 @@ QByteArray QUrl::toPercentEncoding(const QString &input, const QByteArray &exclu
 QString QUrl::fromEncodedComponent_helper(const QByteArray &ba)
 {
    return qt_urlRecodeByteArray(ba);
+}
+
+QString QUrl::fromAce(const QString &domain)
+{
+   return qt_ACE_do(domain, NormalizeAce, ForbidLeadingDot /*FIXME: make configurable*/);
 }
 
 QString QUrl::fromAce(const QByteArray &domain)
@@ -2437,25 +2478,24 @@ static QString errorMessage(QUrlPrivate::ErrorCode errorCode, const QString &err
    switch (errorCode) {
 
       case QUrlPrivate::NoError:
-         Q_ASSERT_X(false, "QUrl::errorString",
-                    "Impossible: QUrl::errorString should have treated this condition");
+         Q_ASSERT_X(false, "QUrl::errorString", "Impossible: QUrl::errorString should have treated this condition");
 
          return QString();
 
       case QUrlPrivate::InvalidSchemeError: {
          QString msg = QString("Invalid scheme (character '%1' not permitted)");
-         return msg.arg(c);
+         return msg.formatArg(c);
       }
 
       case QUrlPrivate::InvalidUserNameError:
-         return QString("Invalid user name (character '%1' not permitted)").arg(c);
+         return QString("Invalid user name (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::InvalidPasswordError:
-         return QString("Invalid password (character '%1' not permitted)").arg(c);
+         return QString("Invalid password (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::InvalidRegNameError:
          if (errorPosition != -1) {
-            return QString("Invalid hostname (character '%1' not permitted)").arg(c);
+            return QString("Invalid hostname (character '%1' not permitted)").formatArg(c);
          } else {
             return QString("Invalid hostname (contains invalid characters)");
          }
@@ -2467,10 +2507,10 @@ static QString errorMessage(QUrlPrivate::ErrorCode errorCode, const QString &err
          return QString("Invalid IPv6 address");
 
       case QUrlPrivate::InvalidCharacterInIPv6Error:
-         return QString("Invalid IPv6 address (character '%1' not permitted)").arg(c);
+         return QString("Invalid IPv6 address (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::InvalidIPvFutureError:
-         return QString("Invalid IPvFuture address (character '%1' not permitted)").arg(c);
+         return QString("Invalid IPvFuture address (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::HostMissingEndBracket:
          return QString("Expected ']' to match '[' in hostname");
@@ -2482,13 +2522,13 @@ static QString errorMessage(QUrlPrivate::ErrorCode errorCode, const QString &err
          return QString("Port field was empty");
 
       case QUrlPrivate::InvalidPathError:
-         return QString("Invalid path (character '%1' not permitted)").arg(c);
+         return QString("Invalid path (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::InvalidQueryError:
-         return QString("Invalid query (character '%1' not permitted)").arg(c);
+         return QString("Invalid query (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::InvalidFragmentError:
-         return QString("Invalid fragment (character '%1' not permitted)").arg(c);
+         return QString("Invalid fragment (character '%1' not permitted)").formatArg(c);
 
       case QUrlPrivate::AuthorityPresentAndPathIsRelative:
          return QString("Path component is relative and authority is present");
@@ -2502,14 +2542,11 @@ static QString errorMessage(QUrlPrivate::ErrorCode errorCode, const QString &err
    return QString();
 }
 
-static inline void appendComponentIfPresent(QString &msg, bool present, const char *componentName,
-      const QString &component)
+static inline void appendComponentIfPresent(QString &msg, bool present, const char *componentName, const QString &component)
 {
    if (present) {
-      msg += QLatin1String(componentName);
-      msg += '"';
-      msg += component;
-      msg += "\",";
+      msg += QString::fromUtf8(componentName);
+      msg += '"' + msg + component + "\",";
    }
 }
 
@@ -2605,7 +2642,7 @@ static QUrl adjustFtpPath(QUrl url)
 static bool isIp6(const QString &text)
 {
    QIPAddressUtils::IPv6Address address;
-   return !text.isEmpty() && QIPAddressUtils::parseIp6(address, text.begin(), text.end()) == 0;
+   return ! text.isEmpty() && QIPAddressUtils::parseIp6(address, text.begin(), text.end()) == text.end();
 }
 
 QUrl QUrl::fromUserInput(const QString &userInput, const QString &workingDirectory,
@@ -2616,7 +2653,6 @@ QUrl QUrl::fromUserInput(const QString &userInput, const QString &workingDirecto
    if (trimmedString.isEmpty()) {
       return QUrl();
    }
-
 
    // Check for IPv6 addresses, since a path starting with ":" is absolute (a resource)
    // and IPv6 addresses can start with "c:" too

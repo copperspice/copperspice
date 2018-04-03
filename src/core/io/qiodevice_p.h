@@ -23,9 +23,9 @@
 #ifndef QIODEVICE_P_H
 #define QIODEVICE_P_H
 
-#include <QtCore/qiodevice.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qstring.h>
+#include <qiodevice.h>
+#include <qbytearray.h>
+#include <qstring.h>
 #include <qringbuffer_p.h>
 
 QT_BEGIN_NAMESPACE

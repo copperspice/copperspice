@@ -26,21 +26,15 @@
 #include <qfsfileengine_p.h>
 
 #ifdef Q_OS_WIN
-#include <QtCore/qstringbuilder.h>
-#endif
-
-QT_BEGIN_NAMESPACE
-
-#ifdef Q_OS_WIN
 static bool isUncRoot(const QString &server)
 {
    QString localPath = QDir::toNativeSeparators(server);
 
-   if (! localPath.startsWith(QLatin1String("\\\\"))) {
+   if (! localPath.startsWith("\\\\")) {
       return false;
    }
 
-   int idx = localPath.indexOf(QLatin1Char('\\'), 2);
+   int idx = localPath.indexOf('\\', 2);
    if (idx == -1 || idx + 1 == localPath.length()) {
       return true;
    }
@@ -53,7 +47,7 @@ static bool isUncRoot(const QString &server)
    }
 
    // test the 'share name'
-   idx = localPath.indexOf(QLatin1Char('\\'), idx);
+   idx = localPath.indexOf('\\', idx);
 
    if (idx == -1 || idx + 1 == localPath.length()) {
       return true;
@@ -65,17 +59,17 @@ static bool isUncRoot(const QString &server)
 static inline QString fixIfRelativeUncPath(const QString &path)
 {
    QString currentPath = QDir::currentPath();
-   if (currentPath.startsWith(QLatin1String("//"))) {
-      return currentPath % QChar(QLatin1Char('/')) % path;
+
+   if (currentPath.startsWith("//")) {
+      return currentPath + '/' + path;
    }
+
    return path;
 }
 #endif
 
 QFileSystemEntry::QFileSystemEntry()
-   : m_lastSeparator(0),
-     m_firstDotInFileName(0),
-     m_lastDotInFileName(0)
+   : m_lastSeparator(0), m_firstDotInFileName(0), m_lastDotInFileName(0)
 {
 }
 
@@ -146,10 +140,11 @@ void QFileSystemEntry::resolveFilePath() const
       m_filePath = QDir::fromNativeSeparators(m_nativeFilePath);
 
 #ifdef Q_OS_WIN
-      if (m_filePath.startsWith(QLatin1String("//?/UNC/"))) {
+      if (m_filePath.startsWith("//?/UNC/")) {
          m_filePath = m_filePath.remove(2, 6);
       }
-      if (m_filePath.startsWith(QLatin1String("//?/"))) {
+
+      if (m_filePath.startsWith("//?/")) {
          m_filePath = m_filePath.remove(0, 4);
       }
 #endif
@@ -228,7 +223,7 @@ QString QFileSystemEntry::baseName() const
    if (m_firstDotInFileName >= 0) {
       length = m_firstDotInFileName;
 
-      if (m_lastSeparator != -1) { 
+      if (m_lastSeparator != -1) {
          // avoid off by one
          length--;
       }
@@ -251,7 +246,7 @@ QString QFileSystemEntry::completeBaseName() const
    if (m_firstDotInFileName >= 0) {
       length = m_firstDotInFileName + m_lastDotInFileName;
 
-      if (m_lastSeparator != -1) { 
+      if (m_lastSeparator != -1) {
          // avoid off by one
          length--;
       }
@@ -293,7 +288,7 @@ QString QFileSystemEntry::completeSuffix() const
 bool QFileSystemEntry::isRelative() const
 {
    resolveFilePath();
-  
+
    if (m_filePath.isEmpty()) {
       return true;
    }
@@ -310,10 +305,10 @@ bool QFileSystemEntry::isAbsolute() const
    if (m_filePath.isEmpty()) {
       return false;
    }
-  
+
    bool temp1  = m_filePath.length() >= 3 && (m_filePath[0].isLetter() && m_filePath[1].unicode() == ':' && m_filePath[2].unicode() == '/');
    bool retval = temp1 || (m_filePath.length() >= 2 && (m_filePath.at(0) == QLatin1Char('/') && m_filePath.at(1) == QLatin1Char('/')));
-   
+
    return retval;
 }
 
@@ -327,7 +322,7 @@ bool QFileSystemEntry::isDriveLetter_Root() const
       retval = m_filePath.at(0).isLetter() && m_filePath.at(1) == QLatin1Char(':') && m_filePath.at(2) == QLatin1Char('/');
    }
 
-   return retval; 
+   return retval;
 }
 
 #else
@@ -347,7 +342,7 @@ bool QFileSystemEntry::isAbsolute() const
 
 bool QFileSystemEntry::isRoot() const
 {
-   resolveFilePath(); 
+   resolveFilePath();
 
   if (m_filePath == QLatin1String("/")) {
       return true;
@@ -360,7 +355,7 @@ bool QFileSystemEntry::isRoot() const
    }
 
 #endif
-    
+
    return false;
 }
 
@@ -469,4 +464,3 @@ bool QFileSystemEntry::isClean() const
    return (dots != 1 && dots != 2); // clean if path doesn't end in . or ..
 }
 
-QT_END_NAMESPACE

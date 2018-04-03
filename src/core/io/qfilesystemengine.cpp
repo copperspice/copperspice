@@ -21,9 +21,8 @@
 ***********************************************************************/
 
 #include <qfilesystemengine_p.h>
-#include <QtCore/qdir.h>
-#include <QtCore/qset.h>
-#include <QtCore/qstringbuilder.h>
+#include <qdir.h>
+#include <qset.h>
 #include <qabstractfileengine_p.h>
 #include <qresource_p.h>
 
@@ -42,20 +41,25 @@ QString QFileSystemEngine::slowCanonicalized(const QString &path)
    }
 
    QFileInfo fi;
-   const QChar slash(QLatin1Char('/'));
+
+   const QChar slash('/');
+
    QString tmpPath = path;
    int separatorPos = 0;
+
    QSet<QString> nonSymlinks;
    QSet<QString> known;
 
    known.insert(path);
    do {
+
 #ifdef Q_OS_WIN
       if (separatorPos == 0) {
          if (tmpPath.size() >= 2 && tmpPath.at(0) == slash && tmpPath.at(1) == slash) {
             // UNC, skip past the first two elements
             separatorPos = tmpPath.indexOf(slash, 2);
-         } else if (tmpPath.size() >= 3 && tmpPath.at(1) == QLatin1Char(':') && tmpPath.at(2) == slash) {
+
+         } else if (tmpPath.size() >= 3 && tmpPath.at(1) == ':' && tmpPath.at(2) == slash) {
             // volume root, skip since it can not be a symlink
             separatorPos = 2;
          }
@@ -124,17 +128,19 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
       QAbstractFileEngine *&engine, bool resolvingEntry = false)
 {
    QString const &filePath = entry.filePath();
+
    if ((engine = qt_custom_file_engine_handler_create(filePath))) {
       return _q_checkEntry(engine, resolvingEntry);
    }
 
    for (int prefixSeparator = 0; prefixSeparator < filePath.size(); ++prefixSeparator) {
       QChar const ch = filePath[prefixSeparator];
-      if (ch == QLatin1Char('/')) {
+
+      if (ch == '/') {
          break;
       }
 
-      if (ch == QLatin1Char(':')) {
+      if (ch == ':') {
          if (prefixSeparator == 0) {
             engine = new QResourceFileEngine(filePath);
             return _q_checkEntry(engine, resolvingEntry);
@@ -145,9 +151,11 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
          }
 
          const QStringList &paths = QDir::searchPaths(filePath.left(prefixSeparator));
+
          for (int i = 0; i < paths.count(); i++) {
-            entry = QFileSystemEntry(QDir::cleanPath(paths.at(i) % QLatin1Char('/') % filePath.mid(prefixSeparator + 1)));
-            // Recurse!
+            entry = QFileSystemEntry(QDir::cleanPath(paths.at(i) + '/' + filePath.mid(prefixSeparator + 1)));
+
+            // recurse
             if (_q_resolveEntryAndCreateLegacyEngine_recursive(entry, data, engine, true)) {
                return true;
             }
@@ -367,7 +375,7 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
    Q_UNUSED(metaData);
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
 
-#else 
+#else
 
    if (!metaData.hasFlags(QFileSystemMetaData::GroupId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);

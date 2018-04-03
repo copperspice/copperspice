@@ -23,27 +23,30 @@
 #ifndef QDEBUG_H
 #define QDEBUG_H
 
-#include <QtCore/qcontiguouscache.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qset.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qtextstream.h>
-#include <QtCore/qvector.h>
+#include <qcontiguouscache.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qpair.h>
+#include <qset.h>
+#include <qstring.h>
+#include <qtextstream.h>
+#include <qvector.h>
 
 class Q_CORE_EXPORT QDebug
 {
    struct Stream {
       Stream(QIODevice *device)
-         : ts(device), ref(1), type(QtDebugMsg), space(true), message_output(false) {}
+         : ts(device), ref(1), type(QtDebugMsg), space(true), message_output(false)
+      {}
 
       Stream(QString *string)
-         : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg), space(true), message_output(false) {}
+         : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg), space(true), message_output(false)
+      {}
 
       Stream(QtMsgType t)
-         : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t), space(true), message_output(true) {}
+         : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t), space(true), message_output(true)
+      {}
 
       QTextStream ts;
       QString buffer;
@@ -73,7 +76,7 @@ class Q_CORE_EXPORT QDebug
       if (! --stream->ref) {
          if (stream->message_output) {
 
-            QT_TRY {
+            try {
 
 #if QDEBUG_USE_LOCAL_ENCODING
                qt_message_output(stream->type, stream->buffer.toLocal8Bit().constData());
@@ -81,7 +84,7 @@ class Q_CORE_EXPORT QDebug
                qt_message_output(stream->type, stream->buffer.toLatin1().constData());
 #endif
 
-            } QT_CATCH(std::bad_alloc &) {
+            } catch (std::bad_alloc &) {
                // out of memory, give up
             }
 
@@ -107,11 +110,6 @@ class Q_CORE_EXPORT QDebug
          stream->ts << ' ';
       }
       return *this;
-   }
-
-   inline QDebug &operator<<(QChar t) {
-      stream->ts << '\'' << t << '\'';
-      return maybeSpace();
    }
 
    inline QDebug &operator<<(bool t) {
@@ -179,19 +177,20 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
+   inline QDebug &operator<<(QChar t) {
+      stream->ts << '\'' << t << '\'';
+      return maybeSpace();
+   }
+
    inline QDebug &operator<<(const QString &t) {
       stream->ts << '\"' << t  << '\"';
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(const QStringRef &t) {
-      return operator<<(t.toString());
+   inline QDebug &operator<<(const QStringView8 &t) {
+      return operator<<(QString(t));
    }
 
-   inline QDebug &operator<<(const QLatin1String &t) {
-      stream->ts << '\"'  << t.latin1() << '\"';
-      return maybeSpace();
-   }
    inline QDebug &operator<<(const QByteArray &t) {
       stream->ts  << '\"' << t << '\"';
       return maybeSpace();

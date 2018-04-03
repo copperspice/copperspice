@@ -23,10 +23,10 @@
 #ifndef QSETTINGS_H
 #define QSETTINGS_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qstring.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qvariant.h>
+#include <qstring.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_SETTINGS
 

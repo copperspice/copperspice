@@ -28,7 +28,7 @@
 #include <qdir.h>
 #include <qelapsedtimer.h>
 #include <qfileinfo.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qtimer.h>
 #include <qthread_p.h>
 #include <qthread.h>
@@ -61,16 +61,17 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
    wchar_t pipeName[256];
    unsigned int attempts = 1000;
    forever {
-      _snwprintf(pipeName, sizeof(pipeName) / sizeof(pipeName[0]),
-                 L"\\\\.\\pipe\\qt-%X", qrand());
+      _snwprintf(pipeName, sizeof(pipeName) / sizeof(pipeName[0]), L"\\\\.\\pipe\\qt-%X", qrand());
 
       DWORD dwOpenMode = FILE_FLAG_OVERLAPPED;
       DWORD dwOutputBufferSize = 0;
       DWORD dwInputBufferSize = 0;
       const DWORD dwPipeBufferSize = 1024 * 1024;
+
       if (isInputPipe) {
          dwOpenMode |= PIPE_ACCESS_OUTBOUND;
          dwOutputBufferSize = dwPipeBufferSize;
+
       } else {
          dwOpenMode |= PIPE_ACCESS_INBOUND;
          dwInputBufferSize = dwPipeBufferSize;
@@ -80,6 +81,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
       if (QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA) {
          dwPipeFlags |= PIPE_REJECT_REMOTE_CLIENTS;
       }
+
       hServer = CreateNamedPipe(pipeName,
                                 dwOpenMode,
                                 dwPipeFlags,
@@ -91,12 +93,14 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
       if (hServer != INVALID_HANDLE_VALUE) {
          break;
       }
+
       DWORD dwError = GetLastError();
       if (dwError != ERROR_PIPE_BUSY || !--attempts) {
          qErrnoWarning(dwError, "QProcess: CreateNamedPipe failed.");
          return;
       }
    }
+
    secAtt.bInheritHandle = TRUE;
    const HANDLE hClient = CreateFile(pipeName,
                                      (isInputPipe ? (GENERIC_READ | FILE_WRITE_ATTRIBUTES)
@@ -106,12 +110,15 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
                                      OPEN_EXISTING,
                                      FILE_FLAG_OVERLAPPED,
                                      NULL);
+
    if (hClient == INVALID_HANDLE_VALUE) {
       qErrnoWarning("QProcess: CreateFile failed.");
       CloseHandle(hServer);
       return;
    }
+
    ConnectNamedPipe(hServer, NULL);
+
    if (isInputPipe) {
       pipe[0] = hClient;
       pipe[1] = hServer;
@@ -124,9 +131,8 @@ static void duplicateStdWriteChannel(Q_PIPE *pipe, DWORD nStdHandle)
 {
    pipe[0] = INVALID_Q_PIPE;
    HANDLE hStdWriteChannel = GetStdHandle(nStdHandle);
-   HANDLE hCurrentProcess = GetCurrentProcess();
-   DuplicateHandle(hCurrentProcess, hStdWriteChannel, hCurrentProcess,
-                   &pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS);
+   HANDLE hCurrentProcess  = GetCurrentProcess();
+   DuplicateHandle(hCurrentProcess, hStdWriteChannel, hCurrentProcess, &pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS);
 }
 
 /*
@@ -192,32 +198,22 @@ bool QProcessPrivate::openChannel(Channel &channel)
       if (&channel == &stdinChannel) {
          // try to open in read-only mode
          channel.pipe[1] = INVALID_Q_PIPE;
-         channel.pipe[0] =
-            CreateFile((const wchar_t *)QFSFileEnginePrivate::longFileName(channel.file).utf16(),
-                       GENERIC_READ,
-                       FILE_SHARE_READ | FILE_SHARE_WRITE,
-                       &secAtt,
-                       OPEN_EXISTING,
-                       FILE_ATTRIBUTE_NORMAL,
-                       NULL);
+         channel.pipe[0] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
+                  GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
+                  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
          if (channel.pipe[0] != INVALID_Q_PIPE) {
             return true;
          }
 
-         setErrorAndEmit(QProcess::FailedToStart,
-                         QProcess::tr("Could not open input redirection for reading"));
+         setErrorAndEmit(QProcess::FailedToStart, QProcess::tr("Could not open input redirection for reading"));
+
       } else {
          // open in write mode
          channel.pipe[0] = INVALID_Q_PIPE;
-         channel.pipe[1] =
-            CreateFile((const wchar_t *)QFSFileEnginePrivate::longFileName(channel.file).utf16(),
-                       GENERIC_WRITE,
-                       FILE_SHARE_READ | FILE_SHARE_WRITE,
-                       &secAtt,
-                       channel.append ? OPEN_ALWAYS : CREATE_ALWAYS,
-                       FILE_ATTRIBUTE_NORMAL,
-                       NULL);
+         channel.pipe[1] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
+                  GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
+                  channel.append ? OPEN_ALWAYS : CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
          if (channel.pipe[1] != INVALID_Q_PIPE) {
             if (channel.append) {
@@ -226,14 +222,14 @@ bool QProcessPrivate::openChannel(Channel &channel)
             return true;
          }
 
-         setErrorAndEmit(QProcess::FailedToStart,
-                         QProcess::tr("Could not open output redirection for writing"));
+         setErrorAndEmit(QProcess::FailedToStart, QProcess::tr("Could not open output redirection for writing"));
       }
 
       // could not open file
 
       cleanup();
       return false;
+
    } else {
       Q_ASSERT_X(channel.process, "QProcess::start", "Internal error");
 
@@ -243,15 +239,13 @@ bool QProcessPrivate::openChannel(Channel &channel)
       if (channel.type == Channel::PipeSource) {
          // we are the source
          source = &channel;
-         sink = &channel.process->stdinChannel;
+         sink   = &channel.process->stdinChannel;
 
          if (source->pipe[1] != INVALID_Q_PIPE) {
-            // already constructed by the sink
-            // make it inheritable
+            // already constructed by the sink make it inheritable
             HANDLE tmpHandle = source->pipe[1];
-            if (!DuplicateHandle(GetCurrentProcess(), tmpHandle,
-                                 GetCurrentProcess(), &source->pipe[1],
-                                 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+
+            if (! DuplicateHandle(GetCurrentProcess(), tmpHandle, GetCurrentProcess(), &source->pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS)) {
                return false;
             }
 
@@ -276,21 +270,21 @@ bool QProcessPrivate::openChannel(Channel &channel)
             // already constructed by the source
             // make it inheritable
             HANDLE tmpHandle = sink->pipe[0];
-            if (!DuplicateHandle(GetCurrentProcess(), tmpHandle,
-                                 GetCurrentProcess(), &sink->pipe[0],
-                                 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+
+            if (! DuplicateHandle(GetCurrentProcess(), tmpHandle, GetCurrentProcess(), &sink->pipe[0], 0, TRUE, DUPLICATE_SAME_ACCESS)) {
                return false;
             }
 
             CloseHandle(tmpHandle);
             return true;
          }
+
          Q_ASSERT(sink == &stdinChannel);
          Q_ASSERT(source->process == this && source->type == Channel::PipeSource);
 
          qt_create_pipe(sink->pipe, /* in = */ true); // sink is stdin
          source->pipe[1] = sink->pipe[1];
-         sink->pipe[1] = INVALID_Q_PIPE;
+         sink->pipe[1]   = INVALID_Q_PIPE;
 
          return true;
       }
@@ -303,6 +297,7 @@ void QProcessPrivate::destroyPipe(Q_PIPE pipe[2])
       CloseHandle(pipe[0]);
       pipe[0] = INVALID_Q_PIPE;
    }
+
    if (pipe[1] != INVALID_Q_PIPE) {
       CloseHandle(pipe[1]);
       pipe[1] = INVALID_Q_PIPE;
@@ -325,35 +320,44 @@ void QProcessPrivate::closeChannel(Channel *channel)
 static QString qt_create_commandline(const QString &program, const QStringList &arguments)
 {
    QString args;
-   if (!program.isEmpty()) {
+
+   if (! program.isEmpty()) {
       QString programName = program;
-      if (!programName.startsWith(QLatin1Char('\"')) && !programName.endsWith(QLatin1Char('\"')) &&
-            programName.contains(QLatin1Char(' '))) {
-         programName = QLatin1Char('\"') + programName + QLatin1Char('\"');
+
+      if (!programName.startsWith('\"') && ! programName.endsWith('\"') && programName.contains(' ')) {
+         programName = '\"' + programName + '\"';
       }
-      programName.replace(QLatin1Char('/'), QLatin1Char('\\'));
+
+      programName.replace('/', '\\');
 
       // add the prgram as the first arg ... it works better
-      args = programName + QLatin1Char(' ');
+      args = programName + ' ';
    }
 
    for (int i = 0; i < arguments.size(); ++i) {
       QString tmp = arguments.at(i);
+
       // Quotes are escaped and their preceding backslashes are doubled.
-      tmp.replace(QRegExp(QLatin1String("(\\\\*)\"")), QLatin1String("\\1\\1\\\""));
-      if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains(QLatin1Char('\t'))) {
+      tmp.replace(QRegularExpression8("(\\\\*)\""), "\\1\\1\\\"");
+
+      if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains('\t')) {
+
          // The argument must not end with a \ since this would be interpreted
          // as escaping the quote -- rather put the \ behind the quote: e.g.
          // rather use "foo"\ than "foo\"
+
          int i = tmp.length();
-         while (i > 0 && tmp.at(i - 1) == QLatin1Char('\\')) {
+         while (i > 0 && tmp.at(i - 1) == '\\') {
             --i;
          }
+
          tmp.insert(i, QLatin1Char('"'));
          tmp.prepend(QLatin1Char('"'));
       }
+
       args += QLatin1Char(' ') + tmp;
    }
+
    return args;
 }
 
@@ -364,12 +368,14 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
    // Calls to setenv() affect the low-level environment as well.
    // This is not the case the other way round.
    if (wchar_t *envStrings = GetEnvironmentStringsW()) {
+
       for (const wchar_t *entry = envStrings; *entry; ) {
          const int entryLen = int(wcslen(entry));
+
          if (const wchar_t *equal = wcschr(entry + 1, L'=')) {
-            int nameLen = equal - entry;
-            QString name = QString::fromWCharArray(entry, nameLen);
-            QString value = QString::fromWCharArray(equal + 1, entryLen - nameLen - 1);
+            int nameLen   = equal - entry;
+            QString name  = QString::fromStdWString(std::wstring(entry, nameLen));
+            QString value = QString::fromStdWString(std::wstring(equal + 1, entryLen - nameLen - 1));
             env.d->hash.insert(QProcessEnvironmentPrivate::Key(name), value);
          }
          entry += entryLen + 1;
@@ -383,57 +389,65 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
 static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &environment)
 {
    QByteArray envlist;
-   if (!environment.isEmpty()) {
+   if (! environment.isEmpty()) {
       QProcessEnvironmentPrivate::Hash copy = environment;
 
       // add PATH if necessary (for DLL loading)
-      QProcessEnvironmentPrivate::Key pathKey(QLatin1String("PATH"));
+      QProcessEnvironmentPrivate::Key pathKey("PATH");
+
       if (!copy.contains(pathKey)) {
          QByteArray path = qgetenv("PATH");
 
          if (!path.isEmpty()) {
-            copy.insert(pathKey, QString::fromLocal8Bit(path));
+            copy.insert(pathKey, QString::fromUtf8(path));
          }
       }
 
       // add systemroot if needed
-      QProcessEnvironmentPrivate::Key rootKey(QLatin1String("SystemRoot"));
-      if (!copy.contains(rootKey)) {
+      QProcessEnvironmentPrivate::Key rootKey("SystemRoot");
+
+      if (! copy.contains(rootKey)) {
          QByteArray systemRoot = qgetenv("SystemRoot");
-         if (!systemRoot.isEmpty()) {
-            copy.insert(rootKey, QString::fromLocal8Bit(systemRoot));
+
+         if (! systemRoot.isEmpty()) {
+            copy.insert(rootKey, QString::fromUtf8(systemRoot));
          }
       }
 
       int pos = 0;
-      QProcessEnvironmentPrivate::Hash::ConstIterator it = copy.constBegin(),
-                                                      end = copy.constEnd();
+      QProcessEnvironmentPrivate::Hash::ConstIterator it = copy.constBegin(), end = copy.constEnd();
 
       static const wchar_t equal = L'=';
-      static const wchar_t nul = L'\0';
+      static const wchar_t nul   = L'\0';
 
       for ( ; it != end; ++it) {
-         uint tmpSize = sizeof(wchar_t) * (it.key().length() + it.value().length() + 2);
+         std::wstring key   = it.key().toStdWString();
+         std::wstring value = it.value().toStdWString();
+
+         uint tmpSize = sizeof(wchar_t) * (key.size() + value.size() + 2);
+
          // ignore empty strings
          if (tmpSize == sizeof(wchar_t) * 2) {
             continue;
          }
+
          envlist.resize(envlist.size() + tmpSize);
 
-         tmpSize = it.key().length() * sizeof(wchar_t);
-         memcpy(envlist.data() + pos, it.key().utf16(), tmpSize);
+         tmpSize = key.size() * sizeof(wchar_t);
+         memcpy(envlist.data() + pos, &key[0], tmpSize);
          pos += tmpSize;
 
          memcpy(envlist.data() + pos, &equal, sizeof(wchar_t));
          pos += sizeof(wchar_t);
 
-         tmpSize = it.value().length() * sizeof(wchar_t);
-         memcpy(envlist.data() + pos, it.value().utf16(), tmpSize);
+         tmpSize = value.size() * sizeof(wchar_t);
+         memcpy(envlist.data() + pos, &value[0], tmpSize);
          pos += tmpSize;
 
          memcpy(envlist.data() + pos, &nul, sizeof(wchar_t));
          pos += sizeof(wchar_t);
       }
+
       // add the 2 terminating 0 (actually 4, just to be on the safe side)
       envlist.resize( envlist.size() + 4 );
       envlist[pos++] = 0;
@@ -441,6 +455,7 @@ static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &
       envlist[pos++] = 0;
       envlist[pos++] = 0;
    }
+
    return envlist;
 }
 
@@ -457,27 +472,28 @@ void QProcessPrivate::startProcess()
       delete pid;
       pid = 0;
    }
+
    pid = new PROCESS_INFORMATION;
    memset(pid, 0, sizeof(PROCESS_INFORMATION));
 
    q->setProcessState(QProcess::Starting);
 
-   if (!openChannel(stdinChannel) ||
-         !openChannel(stdoutChannel) ||
-         !openChannel(stderrChannel)) {
+   if (! openChannel(stdinChannel) || ! openChannel(stdoutChannel) || ! openChannel(stderrChannel)) {
       return;
    }
 
    QString args = qt_create_commandline(program, arguments);
    QByteArray envlist;
+
    if (environment.d.constData()) {
       envlist = qt_create_environment(environment.d.constData()->hash);
    }
 
    if (!nativeArguments.isEmpty()) {
-      if (!args.isEmpty()) {
-         args += QLatin1Char(' ');
+      if (! args.isEmpty()) {
+         args += ' ';
       }
+
       args += nativeArguments;
    }
 
@@ -492,33 +508,31 @@ void QProcessPrivate::startProcess()
    dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
 
    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
-                                (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                                (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                                0, 0, 0,
-                                STARTF_USESTDHANDLES,
-                                0, 0, 0,
-                                stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1]
-                              };
-   success = CreateProcess(0, (wchar_t *)args.utf16(),
-                           0, 0, TRUE, dwCreationFlags,
-                           environment.isEmpty() ? 0 : envlist.data(),
-                           workingDirectory.isEmpty() ? 0 : (wchar_t *)QDir::toNativeSeparators(workingDirectory).utf16(),
-                           &startupInfo, pid);
+                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                  0, 0, 0, STARTF_USESTDHANDLES, 0, 0, 0,
+                  stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1]};
+
+   success = CreateProcess(0, &args.toStdWString()[0], 0, 0, TRUE, dwCreationFlags,
+                  environment.isEmpty() ? 0 : envlist.data(),
+                  workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0], &startupInfo, pid);
+
    QString errorString;
 
    if (!success) {
       // Capture the error string before we do CloseHandle below
-      errorString = QProcess::tr("Process failed to start: %1").arg(qt_error_string());
+      errorString = QProcess::tr("Process failed to start: %1").formatArg(qt_error_string());
    }
 
    if (stdinChannel.pipe[0] != INVALID_Q_PIPE) {
       CloseHandle(stdinChannel.pipe[0]);
       stdinChannel.pipe[0] = INVALID_Q_PIPE;
    }
+
    if (stdoutChannel.pipe[1] != INVALID_Q_PIPE) {
       CloseHandle(stdoutChannel.pipe[1]);
       stdoutChannel.pipe[1] = INVALID_Q_PIPE;
    }
+
    if (stderrChannel.pipe[1] != INVALID_Q_PIPE) {
       CloseHandle(stderrChannel.pipe[1]);
       stderrChannel.pipe[1] = INVALID_Q_PIPE;
@@ -625,43 +639,54 @@ bool QProcessPrivate::drainOutputPipes()
    if (!stdoutChannel.reader && !stderrChannel.reader) {
       return false;
    }
+
    bool someReadyReadEmitted = false;
-   forever {
+
+   while (true) {
       bool readyReadEmitted = false;
       bool readOperationActive = false;
+
       if (stdoutChannel.reader) {
          readyReadEmitted |= stdoutChannel.reader->waitForReadyRead(0);
          readOperationActive = stdoutChannel.reader && stdoutChannel.reader->isReadOperationActive();
       }
+
       if (stderrChannel.reader) {
          readyReadEmitted |= stderrChannel.reader->waitForReadyRead(0);
          readOperationActive |= stderrChannel.reader && stderrChannel.reader->isReadOperationActive();
       }
+
       someReadyReadEmitted |= readyReadEmitted;
       if (!readOperationActive || !readyReadEmitted) {
          break;
       }
+
       QThread::yieldCurrentThread();
    }
+
    return someReadyReadEmitted;
 }
 bool QProcessPrivate::waitForReadyRead(int msecs)
 {
    QIncrementalSleepTimer timer(msecs);
-   forever {
+
+   while (true) {
       if (!stdinChannel.buffer.isEmpty() && !_q_canWrite()) {
          return false;
       }
       if (stdinChannel.writer && stdinChannel.writer->waitForWrite(0)) {
          timer.resetIncrements();
       }
+
       if ((stdoutChannel.reader && stdoutChannel.reader->waitForReadyRead(0))
             || (stderrChannel.reader && stderrChannel.reader->waitForReadyRead(0))) {
          return true;
       }
-      if (!pid) {
+
+      if (! pid) {
          return false;
       }
+
       if (WaitForSingleObjectEx(pid->hProcess, 0, false) == WAIT_OBJECT_0) {
          bool readyReadEmitted = drainOutputPipes();
          if (pid) {
@@ -669,6 +694,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
          }
          return readyReadEmitted;
       }
+
       Sleep(timer.nextSleepTime());
       if (timer.hasTimedOut()) {
          break;
@@ -682,7 +708,7 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
 {
    QIncrementalSleepTimer timer(msecs);
 
-   forever {
+   while (true) {
       // Check if we have any data pending: the pipe writer has
       // bytes waiting to written, or it has written data since the
       // last time we called pipeWriter->waitForWrite().
@@ -750,7 +776,6 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
    setError(QProcess::Timedout);
    return false;
 }
-
 
 bool QProcessPrivate::waitForFinished(int msecs)
 {
@@ -853,8 +878,7 @@ bool QProcessPrivate::waitForWrite(int msecs)
 
 // Use ShellExecuteEx() to trigger an UAC prompt when CreateProcess()fails
 // with ERROR_ELEVATION_REQUIRED.
-static bool startDetachedUacPrompt(const QString &programIn, const QStringList &arguments,
-                                   const QString &workingDir, qint64 *pid)
+static bool startDetachedUacPrompt(const QString &programIn, const QStringList &arguments, const QString &workingDir, qint64 *pid)
 {
    typedef BOOL (WINAPI * ShellExecuteExType)(SHELLEXECUTEINFOW *);
 
@@ -868,56 +892,63 @@ static bool startDetachedUacPrompt(const QString &programIn, const QStringList &
    const QString args = qt_create_commandline(QString(), arguments); // needs arguments only
    SHELLEXECUTEINFOW shellExecuteExInfo;
    memset(&shellExecuteExInfo, 0, sizeof(SHELLEXECUTEINFOW));
+
    shellExecuteExInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
-   shellExecuteExInfo.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_UNICODE | SEE_MASK_FLAG_NO_UI;
+   shellExecuteExInfo.fMask  = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_UNICODE | SEE_MASK_FLAG_NO_UI;
    shellExecuteExInfo.lpVerb = L"runas";
 
    const QString program = QDir::toNativeSeparators(programIn);
-   shellExecuteExInfo.lpFile = reinterpret_cast<LPCWSTR>(program.utf16());
 
-   if (!args.isEmpty()) {
-      shellExecuteExInfo.lpParameters = reinterpret_cast<LPCWSTR>(args.utf16());
+   std::wstring tmp_program = program.toStdWString();
+   shellExecuteExInfo.lpFile = reinterpret_cast<LPCWSTR>(&tmp_program[0]);
+
+   std::wstring tmp_args;
+   if (! args.isEmpty()) {
+      tmp_args = args.toStdWString();
+      shellExecuteExInfo.lpParameters = reinterpret_cast<LPCWSTR>(&tmp_args[0]);
    }
 
-   if (!workingDir.isEmpty()) {
-      shellExecuteExInfo.lpDirectory = reinterpret_cast<LPCWSTR>(workingDir.utf16());
+   std::wstring tmp_dir;
+   if (! workingDir.isEmpty()) {
+      tmp_dir = workingDir.toStdWString();
+      shellExecuteExInfo.lpDirectory = reinterpret_cast<LPCWSTR>(&tmp_dir[0]);
    }
+
    shellExecuteExInfo.nShow = SW_SHOWNORMAL;
-   if (!shellExecuteEx(&shellExecuteExInfo)) {
+
+   if (! shellExecuteEx(&shellExecuteExInfo)) {
       return false;
    }
+
    if (pid) {
       *pid = qint64(GetProcessId(shellExecuteExInfo.hProcess));
    }
+
    CloseHandle(shellExecuteExInfo.hProcess);
    return true;
 }
 
-bool QProcessPrivate::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir,
-                                    qint64 *pid)
+bool QProcessPrivate::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir, qint64 *pid)
 {
    static const DWORD errorElevationRequired = 740;
 
    QString args = qt_create_commandline(program, arguments);
-
    bool success = false;
 
    PROCESS_INFORMATION pinfo;
 
    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
-                                (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                                (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                              };
-   success = CreateProcess(0, (wchar_t *)args.utf16(),
-                           0, 0, FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, 0,
-                           workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(),
-                           &startupInfo, &pinfo);
+                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+   success = CreateProcess(0, &args.toStdWString()[0],
+                  0, 0, FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, 0,
+                  workingDir.isEmpty() ? nullptr : &workingDir.toStdWString()[0], &startupInfo, &pinfo);
 
    if (success) {
       CloseHandle(pinfo.hThread);
       CloseHandle(pinfo.hProcess);
+
       if (pid) {
          *pid = pinfo.dwProcessId;
       }

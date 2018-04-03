@@ -23,8 +23,7 @@
 #include <qurl.h>
 #include <qutfcodec_p.h>
 #include <qtools_p.h>
-
-#include <qstring8.h>
+#include <qstring.h>
 
 // ### move to qurl_p.h
 enum EncodingAction {
@@ -181,7 +180,7 @@ static inline ushort toUpperHex(ushort c)
 
 static inline QChar toUpperHex(QChar c)
 {
-   return isUpperHex(c) ? c : c.unicode() - 0x20;
+   return isUpperHex(c) ? c : QChar( char32_t(c.unicode() - 0x20) );
 }
 
 static inline ushort decodeNibble(ushort c)
@@ -226,8 +225,7 @@ static inline ushort encodeNibble(ushort c)
 }
 
 // returns true if we performed a UTF-8 decoding
-static bool encoded_utf8_to_utf16(int c, QString::const_iterator &iter, QString &retval,
-                                  QString::const_iterator end)
+static bool encoded_utf8_to_utf16(int c, QString::const_iterator &iter, QString &retval, QString::const_iterator end)
 {
    QByteArray tmpStr;
    tmpStr.append(c);
@@ -258,49 +256,12 @@ static bool encoded_utf8_to_utf16(int c, QString::const_iterator &iter, QString 
    return true;
 }
 
-static void utf16_to_encoded_utf8(QChar c, QString::const_iterator &iter, QString &retval,
-                                  QString::const_iterator end)
+static void utf16_to_encoded_utf8(QChar c, QString &retval)
 {
-   // check  QChar is a surrogate
-   QString8 tmpStr;
+   QString tmpStr;
 
-   if (! c.isHighSurrogate() &&  ! c.isLowSurrogate()) {
-      // have entire code point
-      tmpStr.append( static_cast<char32_t>(c.unicode()) );
-
-   } else if (c.isHighSurrogate() && iter != end && iter->isLowSurrogate()) {
-      // low surrogate after current high surrogate
-
-      QChar c2 = *iter;
-      ++iter;
-
-      tmpStr.append(  static_cast<char32_t>(QChar::surrogateToUcs4(c, c2)));
-
-   } else {
-      // bad surrogate pair sequence, encode bad UTF-16 to WTF-8
-
-      // first of three bytes
-      uchar tmp = 0xe0 | uchar(c.unicode() >> 12);
-
-      retval.append("%E");
-      retval.append( encodeNibble(tmp & 0xf) );
-
-      // second byte
-      tmp = 0x80 | (uchar(c.unicode() >> 6) & 0x3f);
-
-      retval.append('%');
-      retval.append( encodeNibble(tmp >> 4)  );
-      retval.append( encodeNibble(tmp & 0xf) );
-
-      // third byte
-      tmp = 0x80 | (c.unicode() & 0x3f);
-
-      retval.append('%');
-      retval.append( encodeNibble(tmp >> 4)  );
-      retval.append( encodeNibble(tmp & 0xf) );
-
-      return;
-   }
+   // have entire code point
+   tmpStr.append(c);
 
    // add the percent
    for (const char *data = tmpStr.constData(); *data != 0; ++data)  {
@@ -347,7 +308,7 @@ void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, Enco
 
       if (c >= 0x80 && encoding & QUrl::EncodeUnicode) {
          // encode the UTF-8 sequence
-         utf16_to_encoded_utf8(c, iter, retval, end);
+         utf16_to_encoded_utf8(c, retval);
          return;
 
       } else if (c >= 0x80) {
@@ -389,51 +350,40 @@ void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, Enco
    }
 }
 
-static int decode(QString &appendTo, const ushort *begin, const ushort *end)
+static int decode(QString &appendTo, QString::const_iterator begin, QString::const_iterator end)
 {
-   const int origSize  = appendTo.size();
-   const ushort *input = begin;
-   ushort *output = 0;
+   QString::const_iterator input = begin;
+   QString retval;
 
    while (input != end) {
+
       if (*input != '%') {
-
-         if (output) {
-            *output++ = *input;
-         }
-
+         retval.append(*input);
          ++input;
+
          continue;
       }
 
-      if (Q_UNLIKELY(end - input < 3 || !isHex(input[1]) || !isHex(input[2]))) {
+      if (end - input < 3 || ! isHex(input[1]) || ! isHex(input[2])) {
          // badly-encoded data
-         appendTo.resize(origSize + (end - begin));
-         memcpy(appendTo.begin() + origSize, begin, (end - begin) * sizeof(ushort));
          return end - begin;
       }
 
-      if (Q_UNLIKELY(!output)) {
-         // detach
-         appendTo.resize(origSize + (end - begin));
-         output = reinterpret_cast<ushort *>(appendTo.begin()) + origSize;
-         memcpy(output, begin, (input - begin) * sizeof(ushort));
-         output += input - begin;
-      }
-
       ++input;
-      *output++ = decodeNibble(input[0]) << 4 | decodeNibble(input[1]);
+      retval.append(decodeNibble(input[0]) << 4 | decodeNibble(input[1]));
 
-      if (output[-1] >= 0x80) {
-         output[-1] = QChar::ReplacementCharacter;
+      if (retval.last() >= 0x80) {
+         retval.replace(retval.end() - 1, retval.end(), QChar::ReplacementCharacter);
       }
+
       input += 2;
    }
 
-   if (output) {
-      int len = output - reinterpret_cast<ushort *>(appendTo.begin());
-      appendTo.truncate(len);
-      return len - origSize;
+   if (retval != appendTo) {
+      int len  = retval.size() - appendTo.size();
+      appendTo = std::move(retval);
+
+      return len;
    }
 
    return 0;
@@ -454,11 +404,11 @@ static int recode(QString &result, QString::const_iterator begin, QString::const
    for ( ; iter != end; ++iter) {
       c = *iter;
 
-      if (c < 0x20U) {
+      if (c < 0x20) {
          action = EncodeCharacter;
       }
 
-      if (c < 0x20U || c >= 0x80U) {    // also: (c - 0x20 < 0x60U)
+      if (c < 0x20 || c >= 0x80) {
          non_trivial(c, iter, retval, action, begin, end, encoding, actionTable);
          continue;
       }
@@ -519,13 +469,13 @@ static void maskTable(uchar (&table)[N], const uchar (&mask)[N])
     Corrects percent encoded errors by interpreting every '%' as meaning "%25"
 */
 
-int qt_urlRecode(QString &appendTo, const QChar *begin, const QChar *end,
+int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QString::const_iterator end,
                  QUrl::FormattingOptions encoding, const ushort *tableModifications)
 {
    uchar actionTable[sizeof defaultActionTable];
 
    if (encoding == QUrl::FullyDecoded) {
-      return decode(appendTo, reinterpret_cast<const ushort *>(begin), reinterpret_cast<const ushort *>(end));
+      return decode(appendTo, begin, end);
    }
 
    memcpy(actionTable, defaultActionTable, sizeof actionTable);

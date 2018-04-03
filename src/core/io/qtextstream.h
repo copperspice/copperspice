@@ -23,11 +23,11 @@
 #ifndef QTEXTSTREAM_H
 #define QTEXTSTREAM_H
 
-#include <QtCore/qiodevice.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qchar.h>
-#include <QtCore/qlocale.h>
-#include <QtCore/qscopedpointer.h>
+#include <qiodevice.h>
+#include <qstring.h>
+#include <qchar.h>
+#include <qlocale.h>
+#include <qscopedpointer.h>
 
 #include <stdio.h>
 
@@ -150,7 +150,6 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator>>(double &f);
    QTextStream &operator>>(QString &s);
    QTextStream &operator>>(QByteArray &array);
-   QTextStream &operator>>(char *c);
 
    QTextStream &operator<<(bool b);
    QTextStream &operator<<(QChar ch);
@@ -167,7 +166,6 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(double f);
    QTextStream &operator<<(const QString &s);
    QTextStream &operator<<(const QByteArray &array);
-   QTextStream &operator<<(const char *c);
    QTextStream &operator<<(const void *ptr);
 
  private:

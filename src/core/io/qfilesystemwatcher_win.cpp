@@ -59,7 +59,7 @@ QWindowsFileSystemWatcherEngine::~QWindowsFileSystemWatcherEngine()
    }
 }
 
-QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths, 
+QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QStringList *files, QStringList *directories)
 {
    // qDebug()<<"Adding"<<paths.count()<<"to existing"<<(files->count() + directories->count())<<"watchers";
@@ -146,12 +146,14 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          // qDebug()<<"  No thread found";
          // Volume and folder paths need a trailing slash for proper notification
          // (e.g. "c:" -> "c:/").
-         const QString effectiveAbsolutePath =
-            isDir ? (absolutePath + QLatin1Char('/')) : absolutePath;
 
-         handle.handle = FindFirstChangeNotification((wchar_t *) QDir::toNativeSeparators(effectiveAbsolutePath).utf16(), false,
-                         flags);
-         handle.flags = flags;
+         const QString effectiveAbsolutePath = isDir ? (absolutePath + '/') : absolutePath;
+
+         handle.handle = FindFirstChangeNotification(&QDir::toNativeSeparators(effectiveAbsolutePath).toStdWString()[0],
+                  false, flags);
+
+         handle.flags  = flags;
+
          if (handle.handle == INVALID_HANDLE_VALUE) {
             continue;
          }

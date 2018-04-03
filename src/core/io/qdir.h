@@ -23,10 +23,10 @@
 #ifndef QDIR_H
 #define QDIR_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qfileinfo.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qshareddata.h>
+#include <qstring.h>
+#include <qfileinfo.h>
+#include <qstringlist.h>
+#include <qshareddata.h>
 
 // Undefine macro definition found in an X11 header
 #undef Unsorted
@@ -198,10 +198,8 @@ class Q_CORE_EXPORT QDir
    }
    static QString tempPath();
 
-#ifndef QT_NO_REGEXP
    static bool match(const QStringList &filters, const QString &fileName);
    static bool match(const QString &filter, const QString &fileName);
-#endif
 
    static QString cleanPath(const QString &path);
    void refresh() const;

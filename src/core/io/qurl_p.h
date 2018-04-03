@@ -26,18 +26,14 @@
 #include <qurl.h>
 
 // in qurlrecode.cpp
-extern int qt_urlRecode(QString &appendTo, const QChar *begin, const QChar *end,
+extern int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QString::const_iterator end,
                         QUrl::FormattingOptions encoding, const ushort *tableModifications = 0);
 
 // in qurlidna.cpp
 enum AceLeadingDot { AllowLeadingDot, ForbidLeadingDot };
 enum AceOperation { ToAceOnly, NormalizeAce };
 
-extern QString qt_ACE_do(const QString &domain, AceOperation op, AceLeadingDot dot);
-extern  void qt_nameprep(QString *source, int from);
-extern bool qt_check_std3rules(const QChar *uc, int len);
-extern void qt_punycodeEncoder(const QChar *s, int ucLength, QString *output);
-extern QString qt_punycodeDecoder(const QString &pc);
-extern QString qt_urlRecodeByteArray(const QByteArray &ba);
+QString qt_ACE_do(QStringView8 domain, AceOperation op, AceLeadingDot dot);
+QString qt_urlRecodeByteArray(const QByteArray &ba);
 
 #endif

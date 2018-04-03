@@ -126,8 +126,9 @@ inline QString QSettingsGroup::toString() const
 {
    QString result;
    result = str;
+
    if (num > 0) {
-      result += QLatin1Char('/');
+      result += '/';
       result += QString::number(num);
    }
    return result;
@@ -214,7 +215,7 @@ class QSettingsPrivate
    static bool iniUnescapedKey(const QByteArray &key, int from, int to, QString &result);
    static void iniEscapedString(const QString &str, QByteArray &result, QTextCodec *codec);
    static void iniEscapedStringList(const QStringList &strs, QByteArray &result, QTextCodec *codec);
-   static bool iniUnescapedStringList(const QByteArray &str, int from, int to, QString &stringResult, 
+   static bool iniUnescapedStringList(const QByteArray &str, int from, int to, QString &stringResult,
                                       QStringList &stringListResult, QTextCodec *codec);
    static QStringList splitArgs(const QString &s, int idx);
 

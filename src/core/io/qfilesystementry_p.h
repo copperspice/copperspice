@@ -23,8 +23,8 @@
 #ifndef QFILESYSTEMENTRY_P_H
 #define QFILESYSTEMENTRY_P_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qbytearray.h>
+#include <qstring.h>
+#include <qbytearray.h>
 
 #if defined(Q_OS_WIN)
 #define QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16
@@ -64,7 +64,7 @@ class QFileSystemEntry
    bool isRelative() const;
    bool isClean() const;
 
-#if defined(Q_OS_WIN)  
+#if defined(Q_OS_WIN)
    bool isDriveLetter_Root() const;
 #endif
 

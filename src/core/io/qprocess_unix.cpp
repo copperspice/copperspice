@@ -41,6 +41,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
    QByteArray out;
    for (int i = 0; i < len; ++i) {
       char c = data[i];
+
       if (isprint(c)) {
          out += c;
 
@@ -58,8 +59,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
                break;
 
             default:
-               QString tmp;
-               tmp.sprintf("\\%o", c);
+               QString tmp = QString("\\%1").formatArg(c, 0, 8);
                out += tmp.toLatin1();
          }
    }
@@ -483,7 +483,7 @@ void QProcessPrivate::startProcess()
 
       q->setProcessState(QProcess::NotRunning);
       setErrorAndEmit(QProcess::FailedToStart,
-                      QProcess::tr("Resource error (fork failure): %1").arg(qt_error_string(lastForkErrno)));
+                      QProcess::tr("Resource error (fork failure): %1").formatArg(qt_error_string(lastForkErrno)));
       cleanup();
       return;
    }

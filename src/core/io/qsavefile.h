@@ -30,8 +30,8 @@
 #ifndef QSAVEFILE_H
 #define QSAVEFILE_H
 
-#include <QtCore/qfiledevice.h>
-#include <QtCore/qstring.h>
+#include <qfiledevice.h>
+#include <qstring.h>
 
 #ifdef open
 #error qsavefile.h must be included before any header file that defines open

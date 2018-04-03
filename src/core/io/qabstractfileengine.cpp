@@ -34,7 +34,6 @@
 // built-in handlers
 #include <qfsfileengine.h>
 #include <qdiriterator.h>
-#include <qstringbuilder.h>
 
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
@@ -895,11 +894,13 @@ QDir::Filters QAbstractFileEngineIterator::filters() const
 QString QAbstractFileEngineIterator::currentFilePath() const
 {
    QString name = currentFileName();
-   if (!name.isNull()) {
+
+   if (! name.isEmpty()) {
       QString tmp = path();
-      if (!tmp.isEmpty()) {
-         if (!tmp.endsWith(QLatin1Char('/'))) {
-            tmp.append(QLatin1Char('/'));
+
+      if (! tmp.isEmpty()) {
+         if (!tmp.endsWith('/')) {
+            tmp.append('/');
          }
          name.prepend(tmp);
       }

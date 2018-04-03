@@ -23,9 +23,9 @@
 #include <qfilesystemiterator_p.h>
 #include <qfilesystemengine_p.h>
 #include <qplatformdefs.h>
-#include <QtCore/qt_windows.h>
+#include <qstringparser.h>
+#include <qt_windows.h>
 
-QT_BEGIN_NAMESPACE
 #ifndef  QT_NO_FILESYSTEMITERATOR
 
 bool done = true;
@@ -76,21 +76,24 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
       DWORD dwAdditionalFlags  = 0;
 
       if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
-         dwAdditionalFlags = 2;  // FIND_FIRST_EX_LARGE_FETCH
-         infoLevel = 1 ;         // FindExInfoBasic;
+         dwAdditionalFlags = 2;        // FIND_FIRST_EX_LARGE_FETCH
+         infoLevel = 1 ;               // FindExInfoBasic;
       }
 
-      int searchOps =  0;         // FindExSearchNameMatch
+      int searchOps =  0;              // FindExSearchNameMatch
       if (onlyDirs) {
-         searchOps = 1 ;   // FindExSearchLimitToDirectories
+         searchOps = 1 ;              // FindExSearchLimitToDirectories
       }
-      findFileHandle = FindFirstFileEx((const wchar_t *)nativePath.utf16(), FINDEX_INFO_LEVELS(infoLevel), &findData,
+
+      findFileHandle = FindFirstFileEx(&nativePath.toStdWString()[0], FINDEX_INFO_LEVELS(infoLevel), &findData,
                                        FINDEX_SEARCH_OPS(searchOps), 0, dwAdditionalFlags);
+
       if (findFileHandle == INVALID_HANDLE_VALUE) {
-         if (nativePath.startsWith(QLatin1String("\\\\?\\UNC\\"))) {
-            QStringList parts = nativePath.split(QLatin1Char('\\'), QString::SkipEmptyParts);
-            if (parts.count() == 4 && QFileSystemEngine::uncListSharesOnServer(
-                     QLatin1String("\\\\") + parts.at(2), &uncShares)) {
+
+         if (nativePath.startsWith("\\\\?\\UNC\\")) {
+            QStringList parts = nativePath.split('\\', QStringParser::SkipEmptyParts);
+
+            if (parts.count() == 4 && QFileSystemEngine::uncListSharesOnServer("\\\\" + parts.at(2), &uncShares)) {
                if (uncShares.isEmpty()) {
                   return false;   // No shares found in the server
                } else {
@@ -100,9 +103,11 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
          }
       }
    }
+
    if (findFileHandle == INVALID_HANDLE_VALUE && !uncFallback) {
       return false;
    }
+
    // Retrieve the new file information.
    if (!haveData) {
       if (uncFallback) {
@@ -120,17 +125,21 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
       fileEntry = QFileSystemEntry(dirPath + uncShares.at(uncShareIndex));
       metaData.fillFromFileAttribute(FILE_ATTRIBUTE_DIRECTORY);
       return true;
+
    } else {
-      QString fileName = QString::fromWCharArray(findData.cFileName);
+      QString fileName = QString::fromStdWString(std::wstring(findData.cFileName));
+
       fileEntry = QFileSystemEntry(dirPath + fileName);
-      metaData = QFileSystemMetaData();
-      if (!fileName.endsWith(QLatin1String(".lnk"))) {
+      metaData  = QFileSystemMetaData();
+
+      if (! fileName.endsWith(QLatin1String(".lnk"))) {
          metaData.fillFromFindData(findData, true);
       }
       return true;
    }
+
    return false;
 }
 
 #endif //  QT_NO_FILESYSTEMITERATOR
-QT_END_NAMESPACE
+

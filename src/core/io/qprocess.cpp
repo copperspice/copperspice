@@ -22,19 +22,19 @@
 
 //#define QPROCESS_DEBUG
 
-#include <qstring.h>
 #include <ctype.h>
 #include <errno.h>
 
 #include <qprocess.h>
 #include <qprocess_p.h>
 
+#include <qcoreapplication.h>
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qdir.h>
-#include <qcoreapplication.h>
 #include <qelapsedtimer.h>
 #include <qsocketnotifier.h>
+#include <qstring.h>
 #include <qtimer.h>
 
 #ifdef Q_OS_WIN
@@ -196,6 +196,7 @@ bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
       } else {
          return isEmpty();
       }
+
    } else {
       return other.isEmpty();
    }
@@ -1419,12 +1420,7 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
       readBuffer->free(bytesToReadFromThisBlock);
    }
 
-#if defined QPROCESS_DEBUG
-   qDebug("QProcess::readData(%p \"%s\", %lld) == %lld",
-          data, qt_prettyDebug(data, readSoFar, 16).constData(), maxlen, readSoFar);
-#endif
-
-   if (!readSoFar && d->processState == QProcess::NotRunning) {
+   if (! readSoFar && d->processState == QProcess::NotRunning) {
       return -1;   // EOF
    }
    return readSoFar;
@@ -1437,12 +1433,6 @@ qint64 QProcess::writeData(const char *data, qint64 len)
    Q_D(QProcess);
 
    if (d->stdinChannel.closed) {
-
-#if defined QPROCESS_DEBUG
-      qDebug("QProcess::writeData(%p \"%s\", %lld) == 0 (write channel closing)",
-             data, qt_prettyDebug(data, len, 16).constData(), len);
-#endif
-
       return 0;
    }
 
@@ -1451,9 +1441,7 @@ qint64 QProcess::writeData(const char *data, qint64 len)
       d->stdinWriteTrigger = new QTimer;
       d->stdinWriteTrigger->setSingleShot(true);
 
-      connect(d->stdinWriteTrigger, &QTimer::timeout, this, [d]() {
-         d->_q_canWrite();
-      } );
+      connect(d->stdinWriteTrigger, &QTimer::timeout, this, [d]() {d->_q_canWrite(); } );
    }
 
 #endif
@@ -1469,11 +1457,6 @@ qint64 QProcess::writeData(const char *data, qint64 len)
       if (d->stdinChannel.notifier) {
          d->stdinChannel.notifier->setEnabled(true);
       }
-#endif
-
-#if defined QPROCESS_DEBUG
-      qDebug("QProcess::writeData(%p \"%s\", %lld) == 1 (written to buffer)",
-             data, qt_prettyDebug(data, len, 16).constData(), len);
 #endif
 
       return 1;
@@ -1655,8 +1638,9 @@ static QStringList parseCombinedArgString(const QString &program)
    // "hello world". three consecutive double quotes represent
    // the quote character itself.
    for (int i = 0; i < program.size(); ++i) {
-      if (program.at(i) == QLatin1Char('"')) {
+      if (program.at(i) == '"') {
          ++quoteCount;
+
          if (quoteCount == 3) {
             // third consecutive quote
             quoteCount = 0;
@@ -1851,20 +1835,19 @@ QStringList QProcess::systemEnvironment()
    if (environ != nullptr) {
 
       for (int count = 0; (entry = environ[count]); ++count) {
-         tmp << QString::fromLocal8Bit(entry);
+         tmp << QString::fromUtf8(entry);
       }
    }
 
    return tmp;
 }
 
-
 QString QProcess::nullDevice()
 {
 #ifdef Q_OS_WIN
-   return QStringLiteral("\\\\.\\NUL");
+   return QString("\\\\.\\NUL");
 #else
-   return QStringLiteral("/dev/null");
+   return QString("/dev/null");
 #endif
 }
 

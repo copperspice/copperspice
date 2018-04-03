@@ -21,14 +21,18 @@
 ***********************************************************************/
 
 #include <qstandardpaths.h>
+
+#include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfile.h>
+#include <qfilesystemengine_p.h>
 #include <qhash.h>
 #include <qtextstream.h>
-#include <qfilesystemengine_p.h>
+
+#include <qregularexpression.h>
+
 #include <errno.h>
 #include <stdlib.h>
-#include <qcoreapplication.h>
 
 #ifndef QT_NO_STANDARDPATHS
 
@@ -135,26 +139,33 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 
    // http://www.freedesktop.org/wiki/Software/xdg-user-dirs
    QString xdgConfigHome = QFile::decodeName(qgetenv("XDG_CONFIG_HOME"));
+
    if (xdgConfigHome.isEmpty()) {
       xdgConfigHome = QDir::homePath() + QLatin1String("/.config");
    }
+
    QFile file(xdgConfigHome + QLatin1String("/user-dirs.dirs"));
+
    if (!isTestModeEnabled() && file.open(QIODevice::ReadOnly)) {
       QHash<QString, QString> lines;
       QTextStream stream(&file);
+
       // Only look for lines like: XDG_DESKTOP_DIR="$HOME/Desktop"
-      QRegExp exp(QLatin1String("^XDG_(.*)_DIR=(.*)$"));
-      while (!stream.atEnd()) {
+      QRegularExpression8 exp("^XDG_(.*)_DIR=(.*)$");
+
+      while (! stream.atEnd()) {
          const QString &line = stream.readLine();
+
          if (exp.indexIn(line) != -1) {
             const QStringList lst = exp.capturedTexts();
-            const QString key = lst.at(1);
+            const QString key     = lst.at(1);
+
             QString value = lst.at(2);
-            if (value.length() > 2
-                  && value.startsWith(QLatin1Char('\"'))
-                  && value.endsWith(QLatin1Char('\"'))) {
+
+            if (value.length() > 2 && value.startsWith('\"') && value.endsWith('\"')) {
                value = value.mid(1, value.length() - 2);
             }
+
             // Store the key and value: "DESKTOP", "$HOME/Desktop"
             lines[key] = value;
          }

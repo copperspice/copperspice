@@ -27,25 +27,17 @@
 #include <qscopedpointer.h>
 #include <qiodevice.h>
 #include <qcontainerfwd.h>
+#include <qregularexpression.h>
 
 #ifdef Status
 #error qdatastream.h must be included before any header file that defines Status
 #endif
-
-class QByteArray;
-class QChar32;
-class QIODevice;
-class QString8;
-class QString16;
 
 class QDataStream;
 class QDataStreamPrivate;
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString &);
-
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString16 &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString16 &);
@@ -395,7 +387,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QHash<Key, T> &has
 }
 
 template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
+QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
 {
    out << quint32(hash.size());
 
@@ -411,7 +403,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QHash<Key, 
 }
 
 template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiHash<Key, T> &hash)
+QDataStream &operator>>(QDataStream &in, QMultiHash<Key, T> &hash)
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
@@ -444,7 +436,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiHash<Key, T>
 }
 
 template <class Key, class T>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiHash<Key, T> &hash)
+QDataStream &operator<<(QDataStream &out, const QMultiHash<Key, T> &hash)
 {
    out << quint32(hash.size());
 
@@ -460,7 +452,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiHash<
 }
 
 template <class aKey, class aT>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &map)
+QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &map)
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
@@ -493,7 +485,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &ma
 }
 
 template <class Key, class Val, class C>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
+QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
    typename QMap<Key, Val, C>::ConstIterator it = map.end();
@@ -508,7 +500,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMap<Key, V
 }
 
 template <class aKey, class aT>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiMap<aKey, aT> &map)
+QDataStream &operator>>(QDataStream &in, QMultiMap<aKey, aT> &map)
 {
    QDataStream::Status oldStatus = in.status();
    in.resetStatus();
@@ -541,7 +533,7 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator>>(QDataStream &in, QMultiMap<aKey, aT
 }
 
 template <class Key, class Val, class C>
-Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiMap<Key, Val, C> &map)
+QDataStream &operator<<(QDataStream &out, const QMultiMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
 
@@ -554,6 +546,26 @@ Q_OUTOFLINE_TEMPLATE QDataStream &operator<<(QDataStream &out, const QMultiMap<K
    }
 
    return out;
+}
+
+template <typename S>
+QDataStream &operator<<(QDataStream &out, const Cs::QRegularExpression<S> &regExp)
+{
+   out << regExp.pattern() << quint32(regExp.patternOptions());
+   return out;
+}
+
+template <typename S>
+QDataStream &operator>>(QDataStream &in, Cs::QRegularExpression<S> &regExp)
+{
+   S pattern;
+   quint32 patternOptions;
+
+   in >> pattern >> patternOptions;
+   regExp.setPattern(pattern);
+   regExp.setPatternOptions(QPatternOptionFlags(patternOptions));
+
+   return in;
 }
 
 #endif

@@ -35,7 +35,8 @@ class QUrlQueryPrivate : public QSharedData
    QUrlQueryPrivate(const QString &query = QString())
       : valueDelimiter(QUrlQuery::defaultQueryValueDelimiter()),
         pairDelimiter(QUrlQuery::defaultQueryPairDelimiter()) {
-      if (!query.isEmpty()) {
+
+      if (! query.isEmpty()) {
          setQuery(query);
       }
    }
@@ -117,17 +118,19 @@ inline QString QUrlQueryPrivate::recodeFromUser(const QString &input) const
 {
    // note: duplicated in setQuery()
    QString output;
+
    ushort prettyDecodedActions[] = {
       decode(pairDelimiter.unicode()),
       decode(valueDelimiter.unicode()),
       decode('#'),
       0
    };
-   if (qt_urlRecode(output, input.constData(), input.constData() + input.length(),
-                    QUrl::DecodeReserved,
-                    prettyDecodedActions)) {
+
+   if (qt_urlRecode(output, input.begin(), input.end(), QUrl::DecodeReserved, prettyDecodedActions)) {
+
       return output;
    }
+
    return input;
 }
 
@@ -144,23 +147,24 @@ inline QString QUrlQueryPrivate::recodeToUser(const QString &input, QUrl::Format
       return input;
    }
 
-   if (!(encoding & QUrl::EncodeDelimiters)) {
+   if (! (encoding & QUrl::EncodeDelimiters)) {
       QString output;
-      if (qt_urlRecode(output, input.constData(), input.constData() + input.length(),
-                       encoding, 0)) {
+
+      if (qt_urlRecode(output, input.begin(), input.end(), encoding, 0)) {
          return output;
       }
       return input;
    }
 
    // re-encode the "#" character and the query delimiter pair
-   ushort actions[] = { encode(pairDelimiter.unicode()), encode(valueDelimiter.unicode()),
-                        encode('#'), 0
-                      };
+   ushort actions[] = { encode(pairDelimiter.unicode()), encode(valueDelimiter.unicode()), encode('#'), 0 };
+
    QString output;
-   if (qt_urlRecode(output, input.constData(), input.constData() + input.length(), encoding, actions)) {
+
+   if (qt_urlRecode(output, input.begin(), input.end(), encoding, actions)) {
       return output;
    }
+
    return input;
 }
 
@@ -174,53 +178,59 @@ void QUrlQueryPrivate::setQuery(const QString &query)
    };
 
    itemList.clear();
-   const QChar *pos = query.constData();
-   const QChar *const end = pos + query.size();
-   while (pos != end) {
-      const QChar *begin = pos;
-      const QChar *delimiter = 0;
-      while (pos != end) {
+
+   QString::const_iterator iter = query.begin();
+   QString::const_iterator end  = query.end();
+
+   while (iter != end) {
+      QString::const_iterator begin     = iter;
+      QString::const_iterator delimiter = end;
+
+      while (iter != end) {
          // scan for the component parts of this pair
-         if (!delimiter && pos->unicode() == valueDelimiter) {
-            delimiter = pos;
+         if (delimiter == end && *iter == valueDelimiter) {
+            delimiter = iter;
          }
-         if (pos->unicode() == pairDelimiter) {
+
+         if (*iter == pairDelimiter) {
             break;
          }
-         ++pos;
+
+         ++iter;
       }
-      if (!delimiter) {
-         delimiter = pos;
+
+      if (delimiter == end) {
+         delimiter = iter;
       }
 
       // pos is the end of this pair (the end of the string or the pair delimiter)
       // delimiter points to the value delimiter or to the end of this pair
 
       QString key;
-      if (!qt_urlRecode(key, begin, delimiter,
-                        QUrl::DecodeReserved,
-                        prettyDecodedActions)) {
-         key = QString(begin, delimiter - begin);
+
+      if (! qt_urlRecode(key, begin, delimiter, QUrl::DecodeReserved, prettyDecodedActions)) {
+         key = QString(begin, delimiter);
       }
 
-      if (delimiter == pos) {
+      if (delimiter == iter) {
          // the value delimiter wasn't found, store a null value
          itemList.append(qMakePair(key, QString()));
-      } else if (delimiter + 1 == pos) {
-         // if the delimiter was found but the value is empty, store empty-but-not-null
-         itemList.append(qMakePair(key, QString(0, Qt::Uninitialized)));
+
+      } else if (delimiter + 1 == iter) {
+         itemList.append(qMakePair(key, QString()));
+
       } else {
          QString value;
-         if (!qt_urlRecode(value, delimiter + 1, pos,
-                           QUrl::DecodeReserved,
-                           prettyDecodedActions)) {
-            value = QString(delimiter + 1, pos - delimiter - 1);
+
+         if (! qt_urlRecode(value, delimiter + 1, iter, QUrl::DecodeReserved,prettyDecodedActions)) {
+            value = QString(delimiter + 1, iter);
          }
+
          itemList.append(qMakePair(key, value));
       }
 
-      if (pos != end) {
-         ++pos;
+      if (iter != end) {
+         ++iter;
       }
    }
 }
@@ -273,7 +283,7 @@ bool QUrlQuery::operator ==(const QUrlQuery &other) const
    }
 
    if (d && other.d) {
-      // keep in sync with qHash(QUrlQuery):
+      // keep in sync with qHash(QUrlQuery)
 
       return d->valueDelimiter == other.d->valueDelimiter &&
              d->pairDelimiter == other.d->pairDelimiter &&
@@ -286,7 +296,7 @@ bool QUrlQuery::operator ==(const QUrlQuery &other) const
 uint qHash(const QUrlQuery &key, uint seed)
 {
    if (const QUrlQueryPrivate *d = key.d) {
-      // keep in sync with operator==:
+      // keep in sync with operator==
 
       seed = qHash(d->valueDelimiter, seed);
       seed = qHash(d->pairDelimiter, seed);
@@ -321,32 +331,16 @@ void QUrlQuery::setQuery(const QString &queryString)
    d->setQuery(queryString);
 }
 
-static void recodeAndAppend(QString &to, const QString &input,
-                            QUrl::FormattingOptions encoding, const ushort *tableModifications)
+static void recodeAndAppend(QString &to, const QString &input, QUrl::FormattingOptions encoding, const ushort *tableModifications)
 {
-   if (!qt_urlRecode(to, input.constData(), input.constData() + input.length(), encoding, tableModifications)) {
+   if (!qt_urlRecode(to, input.constBegin(), input.constEnd(), encoding, tableModifications)) {
       to += input;
    }
 }
 
-/*!
-    Returns the reconstructed query string, formed from the key-value pairs
-    currently stored in this QUrlQuery object and separated by the query
-    delimiters chosen for this object. The keys and values are encoded using
-    the options given by the \a encoding parameter.
-
-    For this function, the only ambiguous delimiter is the hash ("#"), as in
-    URLs it is used to separate the query string from the fragment that may
-    follow.
-
-    The order of the key-value pairs in the returned string is exactly the same
-    as in the original query.
-
-    \sa setQuery(), QUrl::setQuery(), QUrl::fragment(), {encoding}{Encoding}
-*/
 QString QUrlQuery::query(QUrl::FormattingOptions encoding) const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
@@ -356,162 +350,100 @@ QString QUrlQuery::query(QUrl::FormattingOptions encoding) const
 
    // start with what's always encoded
    ushort tableActions[] = {
-      encode(d->pairDelimiter.unicode()),  // 0
-      encode(d->valueDelimiter.unicode()), // 1
-      0,                                   // 2
+      encode(d->pairDelimiter.unicode()),  
+      encode(d->valueDelimiter.unicode()), 
+      0,                                  
       0
    };
+
    if (encoding & QUrl::EncodeDelimiters) {
       tableActions[2] = encode('#');
    }
 
    QString result;
    Map::const_iterator it = d->itemList.constBegin();
-   Map::const_iterator end = d->itemList.constEnd();
-
-   {
-      int size = 0;
-      for ( ; it != end; ++it) {
-         size += it->first.length() + 1 + it->second.length() + 1;
-      }
-      result.reserve(size + size / 4);
-   }
+   Map::const_iterator end = d->itemList.constEnd();  
 
    for (it = d->itemList.constBegin(); it != end; ++it) {
       if (!result.isEmpty()) {
          result += QChar(d->pairDelimiter);
       }
+
       recodeAndAppend(result, it->first, encoding, tableActions);
-      if (!it->second.isNull()) {
+
+      if (! it->second.isEmpty()) {
          result += QChar(d->valueDelimiter);
          recodeAndAppend(result, it->second, encoding, tableActions);
       }
    }
+
    return result;
 }
 
-/*!
-    Sets the characters used for delimiting between keys and values,
-    and between key-value pairs in the URL's query string. The default
-    value delimiter is '=' and the default pair delimiter is '&'.
-
-    \image qurl-querystring.png
-
-    \a valueDelimiter will be used for separating keys from values,
-    and \a pairDelimiter will be used to separate key-value pairs.
-    Any occurrences of these delimiting characters in the encoded
-    representation of the keys and values of the query string are
-    percent encoded when returned in query().
-
-    If \a valueDelimiter is set to '(' and \a pairDelimiter is ')',
-    the above query string would instead be represented like this:
-
-    \snippet code/src_corelib_io_qurl.cpp 4
-
-    \note Non-standard delimiters should be chosen from among what RFC 3986 calls
-    "sub-delimiters". They are:
-
-    \code
-      sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
-                    / "*" / "+" / "," / ";" / "="
-    \endcode
-
-    Use of other characters is not supported and may result in unexpected
-    behaviour. This method does not verify that you passed a valid delimiter.
-
-    \sa queryValueDelimiter(), queryPairDelimiter()
-*/
 void QUrlQuery::setQueryDelimiters(QChar valueDelimiter, QChar pairDelimiter)
 {
-   d->valueDelimiter = valueDelimiter.unicode();
-   d->pairDelimiter = pairDelimiter.unicode();
+   d->valueDelimiter = valueDelimiter;
+   d->pairDelimiter  = pairDelimiter;
 }
 
-/*!
-    Returns the character used to delimit between keys and values when
-    reconstructing the query string in query() or when parsing in setQuery().
-
-    \sa setQueryDelimiters(), queryPairDelimiter()
-*/
 QChar QUrlQuery::queryValueDelimiter() const
 {
    return d ? d->valueDelimiter : defaultQueryValueDelimiter();
 }
 
-/*!
-    Returns the character used to delimit between keys-value pairs when
-    reconstructing the query string in query() or when parsing in setQuery().
-
-    \sa setQueryDelimiters(), queryValueDelimiter()
-*/
 QChar QUrlQuery::queryPairDelimiter() const
 {
    return d ? d->pairDelimiter : defaultQueryPairDelimiter();
 }
 
-/*!
-    Sets the items in this QUrlQuery object to \a query. The order of the
-    elements in \a query is preserved.
-
-    \note This method does not treat spaces (ASCII 0x20) and plus ("+") signs
-    as the same, like HTML forms do. If you need spaces to be represented as
-    plus signs, use actual plus signs.
-
-    \sa queryItems(), isEmpty()
-*/
 void QUrlQuery::setQueryItems(const QList<QPair<QString, QString> > &query)
 {
    clear();
+
    if (query.isEmpty()) {
       return;
    }
 
    QUrlQueryPrivate *dd = d;
-   QList<QPair<QString, QString> >::const_iterator it = query.constBegin(),
-                                                   end = query.constEnd();
+
+   QList<QPair<QString, QString> >::const_iterator it = query.constBegin();
+   QList<QPair<QString, QString> >::const_iterator end = query.constEnd();
+
    for ( ; it != end; ++it) {
       dd->addQueryItem(it->first, it->second);
    }
 }
 
-/*!
-    Returns the query string of the URL, as a map of keys and values, using the
-    options specified in \a encoding to encode the items. The order of the
-    elements is the same as the one found in the query string or set with
-    setQueryItems().
-
-    \sa setQueryItems(), {encoding}{Encoding}
-*/
 QList<QPair<QString, QString> > QUrlQuery::queryItems(QUrl::FormattingOptions encoding) const
 {
-   if (!d) {
+   if (! d) {
       return QList<QPair<QString, QString> >();
    }
+
    if (idempotentRecodeToUser(encoding)) {
       return d->itemList;
    }
 
    QList<QPair<QString, QString> > result;
-   Map::const_iterator it = d->itemList.constBegin();
+
+   Map::const_iterator it  = d->itemList.constBegin();
    Map::const_iterator end = d->itemList.constEnd();
+
    result.reserve(d->itemList.count());
-   for ( ; it != end; ++it)
-      result << qMakePair(d->recodeToUser(it->first, encoding),
-                          d->recodeToUser(it->second, encoding));
+
+   for ( ; it != end; ++it) {
+      result << qMakePair(d->recodeToUser(it->first, encoding), d->recodeToUser(it->second, encoding));
+   }
+
    return result;
 }
 
-/*!
-    Returns \c true if there is a query string pair whose key is equal
-    to \a key from the URL.
-
-    \sa addQueryItem(), queryItemValue()
-*/
 bool QUrlQuery::hasQueryItem(const QString &key) const
 {
    if (!d) {
       return false;
    }
+
    return d->findKey(key) != d->itemList.constEnd();
 }
 
@@ -523,21 +455,26 @@ void QUrlQuery::addQueryItem(const QString &key, const QString &value)
 QString QUrlQuery::queryItemValue(const QString &key, QUrl::FormattingOptions encoding) const
 {
    QString result;
+
    if (d) {
       Map::const_iterator it = d->findKey(key);
+
       if (it != d->itemList.constEnd()) {
          result = d->recodeToUser(it->second, encoding);
       }
    }
+
    return result;
 }
 
 QStringList QUrlQuery::allQueryItemValues(const QString &key, QUrl::FormattingOptions encoding) const
 {
    QStringList result;
+
    if (d) {
       QString encodedKey = d->recodeFromUser(key);
       int idx = d->findRecodedKey(encodedKey);
+
       while (idx < d->itemList.size()) {
          result << d->recodeToUser(d->itemList.at(idx).second, encoding);
          idx = d->findRecodedKey(encodedKey, idx + 1);
@@ -550,6 +487,7 @@ void QUrlQuery::removeQueryItem(const QString &key)
 {
    if (d) {
       Map::iterator it = d->findKey(key);
+
       if (it != d->itemList.end()) {
          d->itemList.erase(it);
       }
@@ -561,6 +499,7 @@ void QUrlQuery::removeAllQueryItems(const QString &key)
    if (d.constData()) {
       QString encodedKey = d->recodeFromUser(key);
       Map::iterator it = d->itemList.begin();
+
       while (it != d->itemList.end()) {
          if (it->first == encodedKey) {
             it = d->itemList.erase(it);

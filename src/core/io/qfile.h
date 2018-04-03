@@ -23,8 +23,8 @@
 #ifndef QFILE_H
 #define QFILE_H
 
-#include <QtCore/qfiledevice.h>
-#include <QtCore/qstring.h>
+#include <qfiledevice.h>
+#include <qstring.h>
 #include <stdio.h>
 
 #ifdef open

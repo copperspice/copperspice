@@ -106,8 +106,9 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
       if (application) {
          QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, application);
          CFStringRef identifier = CFBundleGetIdentifier(bundle);
-         QString applicationId = QCFString::toQString(identifier);
-         if (applicationId != QLatin1String("com.apple.finder")) {
+         QString applicationId  = QCFString::toQString(identifier);
+
+         if (applicationId != "com.apple.finder") {
             return true;
          }
       }
@@ -146,7 +147,9 @@ bool QFileSystemEngine::isCaseSensitive()
 //static
 QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data)
 {
-#if defined(__GLIBC__) && !defined(PATH_MAX)
+
+#if defined(__GLIBC__) && ! defined(PATH_MAX)
+
 #define PATH_CHUNK_SIZE 256
    char *s = 0;
    int len = -1;
@@ -169,39 +172,46 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
    char s[PATH_MAX + 1];
    int len = readlink(link.nativeFilePath().constData(), s, PATH_MAX);
 #endif
+
    if (len > 0) {
       QString ret;
       if (!data.hasFlags(QFileSystemMetaData::DirectoryType)) {
          fillMetaData(link, data, QFileSystemMetaData::DirectoryType);
       }
+
       if (data.isDirectory() && s[0] != '/') {
          QDir parent(link.filePath());
          parent.cdUp();
          ret = parent.path();
-         if (!ret.isEmpty() && !ret.endsWith(QLatin1Char('/'))) {
-            ret += QLatin1Char('/');
+
+         if (!ret.isEmpty() && ! ret.endsWith('/')) {
+            ret += '/';
          }
       }
+
       s[len] = '\0';
       ret += QFile::decodeName(QByteArray(s));
+
 #if defined(__GLIBC__) && !defined(PATH_MAX)
       ::free(s);
 #endif
 
-      if (!ret.startsWith(QLatin1Char('/'))) {
-         if (link.filePath().startsWith(QLatin1Char('/'))) {
-            ret.prepend(link.filePath().left(link.filePath().lastIndexOf(QLatin1Char('/')))
-                        + QLatin1Char('/'));
+      if (!ret.startsWith('/')) {
+         if (link.filePath().startsWith('/')) {
+            ret.prepend(link.filePath().left(link.filePath().lastIndexOf('/')) + '/');
+
          } else {
-            ret.prepend(QDir::currentPath() + QLatin1Char('/'));
+            ret.prepend(QDir::currentPath() + '/');
          }
       }
+
       ret = QDir::cleanPath(ret);
-      if (ret.size() > 1 && ret.endsWith(QLatin1Char('/'))) {
+      if (ret.size() > 1 && ret.endsWith('/')) {
          ret.chop(1);
       }
       return QFileSystemEntry(ret);
    }
+
 #if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)
    {
       FSRef fref;
@@ -230,13 +240,9 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
       return entry;
    }
 
-#if !defined(Q_OS_MAC) && _POSIX_VERSION < 200809L
-   // realpath(X,0) is not supported
-   Q_UNUSED(data);
-   return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
-#else
    char *ret = 0;
-# if defined(Q_OS_MAC) && !defined(Q_OS_IOS)
+
+# if defined(Q_OS_MAC) && ! defined(Q_OS_IOS)
    // When using -mmacosx-version-min=10.4, we get the legacy realpath implementation,
    // which does not work properly with the realpath(X,0) form. See QTBUG-28282.
    if (QSysInfo::MacintoshVersion >= QSysInfo::MV_10_6) {
@@ -260,32 +266,27 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
          return QFileSystemEntry(ret);
       }
    }
+
 # else
-#  if _POSIX_VERSION >= 200801L
    ret = realpath(entry.nativeFilePath().constData(), (char *)0);
-#  else
-   ret = (char *)malloc(PATH_MAX + 1);
-   if (realpath(entry.nativeFilePath().constData(), (char *)ret) == 0) {
-      const int savedErrno = errno; // errno is checked below, and free() might change it
-      free(ret);
-      errno = savedErrno;
-      ret = 0;
-   }
-#  endif
+
 # endif
+
    if (ret) {
       data.knownFlagsMask |= QFileSystemMetaData::ExistsAttribute;
       data.entryFlags |= QFileSystemMetaData::ExistsAttribute;
       QString canonicalPath = QDir::cleanPath(QString::fromLocal8Bit(ret));
       free(ret);
       return QFileSystemEntry(canonicalPath);
-   } else if (errno == ENOENT) { // file doesn't exist
+
+   } else if (errno == ENOENT) {
+      // file doesn't exist
       data.knownFlagsMask |= QFileSystemMetaData::ExistsAttribute;
       data.entryFlags &= ~(QFileSystemMetaData::ExistsAttribute);
       return QFileSystemEntry();
    }
    return entry;
-#endif
+
 }
 
 //static
@@ -311,6 +312,7 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
    if (result.length() == 1 && result[0] == '/') {
       return QFileSystemEntry(result, QFileSystemEntry::FromNativePath());
    }
+
    const bool isDir = result.endsWith('/');
 
    /* as long as QDir::cleanPath() operates on a QString we have to convert to a string here.
@@ -319,9 +321,11 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
     */
    QFileSystemEntry resultingEntry(result, QFileSystemEntry::FromNativePath());
    QString stringVersion = QDir::cleanPath(resultingEntry.filePath());
+
    if (isDir) {
-      stringVersion.append(QLatin1Char('/'));
+      stringVersion.append('/');
    }
+
    return QFileSystemEntry(stringVersion);
 }
 
@@ -329,10 +333,12 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
 QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
    struct stat statResult;
+
    if (stat(entry.nativeFilePath().constData(), &statResult)) {
       qErrnoWarning("stat() failed for '%s'", entry.nativeFilePath().constData());
       return QByteArray();
    }
+
    QByteArray result = QByteArray::number(quint64(statResult.st_dev), 16);
    result += ':';
    result += QByteArray::number(quint64(statResult.st_ino), 16);
@@ -344,21 +350,22 @@ QString QFileSystemEngine::resolveUserName(uint userId)
 {
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
    int size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
+
    if (size_max == -1) {
       size_max = 1024;
    }
+
    QVarLengthArray<char, 1024> buf(size_max);
 #endif
 
    struct passwd *pw = 0;
 
-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
+#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && ! defined(Q_OS_OPENBSD)
    struct passwd entry;
    getpwuid_r(userId, &entry, buf.data(), buf.size(), &pw);
 #else
    pw = getpwuid(userId);
 #endif
-
 
    if (pw) {
       return QFile::decodeName(QByteArray(pw->pw_name));
@@ -435,7 +442,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
    }
 #endif
 
-#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)        
+#if !defined(QWS) && !defined(Q_WS_QPA) && defined(Q_OS_MAC)
    if (what & QFileSystemMetaData::HiddenAttribute) {
       // Mac OS >= 10.5: st_flags & UF_HIDDEN
       what |= QFileSystemMetaData::PosixStatFlags;
@@ -543,13 +550,13 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
       data.knownFlagsMask |= (what & QFileSystemMetaData::UserPermissions);
    }
 
-   if (what & QFileSystemMetaData::HiddenAttribute
-         && !data.isHidden()) {
+   if (what & QFileSystemMetaData::HiddenAttribute && !data.isHidden()) {
       QString fileName = entry.fileName();
-      if ((fileName.size() > 0 && fileName.at(0) == QLatin1Char('.'))
-            || (entryExists && _q_isMacHidden(nativeFilePath))) {
+
+      if ((fileName.size() > 0 && fileName.at(0) == '.') || (entryExists && _q_isMacHidden(nativeFilePath))) {
          data.entryFlags |= QFileSystemMetaData::HiddenAttribute;
       }
+
       data.knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
    }
 
@@ -595,7 +602,7 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
       return true;
    }
 #if defined(Q_OS_DARWIN)  // Mac X doesn't support trailing /'s
-   if (dirName.endsWith(QLatin1Char('/'))) {
+   if (dirName.endsWith('/')) {
       dirName.chop(1);
    }
 #endif
@@ -732,19 +739,21 @@ QString QFileSystemEngine::homePath()
 
 QString QFileSystemEngine::rootPath()
 {
-   return QLatin1String("/");
+   return QString("/");
 }
 
 QString QFileSystemEngine::tempPath()
 {
 #ifdef QT_UNIX_TEMP_PATH_OVERRIDE
-   return QLatin1String(QT_UNIX_TEMP_PATH_OVERRIDE);
+   return QT_UNIX_TEMP_PATH_OVERRIDE;
 
 #else
    QString temp = QFile::decodeName(qgetenv("TMPDIR"));
+
    if (temp.isEmpty()) {
-      temp = QLatin1String("/tmp/");
+      temp = "/tmp/";
    }
+
    return QDir::cleanPath(temp);
 #endif
 }

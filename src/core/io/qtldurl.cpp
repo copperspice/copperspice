@@ -25,6 +25,7 @@
 #include <qurltlds_p.h>
 #include <qtldurl_p.h>
 #include <qstringlist.h>
+#include <qstringparser.h>
 
 static bool containsTLDEntry(const QString &entry)
 {
@@ -65,7 +66,7 @@ static bool containsTLDEntry(const QString &entry)
 Q_CORE_EXPORT QString qTopLevelDomain(const QString &domain)
 {
    const QString domainLower = domain.toLower();
-   QStringList sections = domainLower.split(QLatin1Char('.'), QString::SkipEmptyParts);
+   QStringList sections      = domainLower.split('.', QStringParser::SkipEmptyParts);
 
    if (sections.isEmpty()) {
       return QString();
@@ -73,7 +74,8 @@ Q_CORE_EXPORT QString qTopLevelDomain(const QString &domain)
 
    QString level, tld;
    for (int j = sections.count() - 1; j >= 0; --j) {
-      level.prepend(QLatin1Char('.') + sections.at(j));
+      level.prepend('.' + sections.at(j));
+
       if (qIsEffectiveTLD(level.right(level.size() - 1))) {
          tld = level;
       }
@@ -96,23 +98,24 @@ Q_CORE_EXPORT bool qIsEffectiveTLD(const QString &domain)
       return true;
    }
 
-   const int dot = domain.indexOf(QLatin1Char('.'));
+   const int dot = domain.indexOf('.');
 
    if (dot >= 0) {
       int count = domain.size() - dot;
+
       QString wildCardDomain;
 
-      wildCardDomain.reserve(count + 1);
-      wildCardDomain.append(QLatin1Char('*'));
+      wildCardDomain.append('*');
       wildCardDomain.append(domain.right(count));
 
       // 2. if table contains '*.bar.com',
       // test if table contains '!foo.bar.com'
       if (containsTLDEntry(wildCardDomain)) {
          QString exceptionDomain;
-         exceptionDomain.reserve(domain.size() + 1);
-         exceptionDomain.append(QLatin1Char('!'));
+
+         exceptionDomain.append('!');
          exceptionDomain.append(domain);
+
          return (! containsTLDEntry(exceptionDomain));
       }
    }

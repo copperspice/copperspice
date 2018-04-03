@@ -24,8 +24,6 @@
 #include <qurl.h>
 #include <qdataurl_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \internal
 
@@ -37,13 +35,9 @@ Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
    QString mimeType;
    QByteArray payload;
 
-   if (uri.scheme() == QLatin1String("data") && uri.host().isEmpty()) {
-      mimeType = QLatin1String("text/plain;charset=US-ASCII");
+   if (uri.scheme() == "data" && uri.host().isEmpty()) {
+      mimeType = "text/plain;charset=US-ASCII";
 
-      // the following would have been the correct thing, but
-      // reality often differs from the specification. People have
-      // data: URIs with ? and #
-      //QByteArray data = QByteArray::fromPercentEncoding(uri.encodedPath());
       QByteArray data = QByteArray::fromPercentEncoding(uri.toEncoded());
 
       // remove the data: scheme
@@ -51,8 +45,10 @@ Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
 
       // parse it:
       int pos = data.indexOf(',');
+
       if (pos != -1) {
          payload = data.mid(pos + 1);
+
          data.truncate(pos);
          data = data.trimmed();
 
@@ -63,17 +59,19 @@ Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
          }
 
          if (data.toLower().startsWith("charset")) {
-            int i = 7;      // strlen("charset")
+            int i = 7;
+
             while (data.at(i) == ' ') {
                ++i;
             }
+
             if (data.at(i) == '=') {
                data.prepend("text/plain;");
             }
          }
 
-         if (!data.isEmpty()) {
-            mimeType = QLatin1String(data.trimmed());
+         if (! data.isEmpty()) {
+            mimeType = QString::fromUtf8(data.trimmed());
          }
 
       }
@@ -81,5 +79,3 @@ Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
 
    return QPair<QString, QByteArray>(mimeType, payload);
 }
-
-QT_END_NAMESPACE

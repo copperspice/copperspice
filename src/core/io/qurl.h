@@ -257,6 +257,7 @@ class Q_CORE_EXPORT QUrl
    QByteArray encodedHost() const {
       return host(FullyEncoded).toLatin1();
    }
+
    void setEncodedHost(const QByteArray &value) {
       setHost(fromEncodedComponent_helper(value));
    }
@@ -269,21 +270,24 @@ class Q_CORE_EXPORT QUrl
    }
 
    QByteArray encodedQuery() const {
-      return toLatin1_helper(query(FullyEncoded));
+      return query(FullyEncoded).toLatin1();
    }
+
    void setEncodedQuery(const QByteArray &query) {
       setQuery(fromEncodedComponent_helper(query));
    }
 
    QByteArray encodedFragment() const {
-      return toLatin1_helper(fragment(FullyEncoded));
+      return fragment(FullyEncoded).toLatin1();
    }
    void setEncodedFragment(const QByteArray &fragment) {
       setFragment(fromEncodedComponent_helper(fragment));
    }
 
+   static QString fromAce(const QString &);
    static QString fromAce(const QByteArray &);
    static QByteArray toAce(const QString &);
+
    static QStringList idnWhitelist();
    static QStringList toStringList(const QList<QUrl> &urls, FormattingOptions options = FormattingOptions(PrettyDecoded));
    static QList<QUrl> fromStringList(const QStringList &urls, ParsingMode mode = TolerantMode);
@@ -296,15 +300,6 @@ class Q_CORE_EXPORT QUrl
    }
 
  private:
-   // helper function for the encodedQuery and encodedFragment functions
-   static QByteArray toLatin1_helper(const QString &string) {
-      if (string.isEmpty()) {
-         return string.isNull() ? QByteArray() : QByteArray("");
-      }
-
-      return string.toLatin1();
-   }
-
    static QString fromEncodedComponent_helper(const QByteArray &ba);
 
    QUrlPrivate *d;

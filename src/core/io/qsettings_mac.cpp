@@ -171,11 +171,13 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
       case QVariant::Bool:
          result = value.toBool() ? kCFBooleanTrue : kCFBooleanFalse;
          break;
+
       case QVariant::Int:
       case QVariant::UInt: {
-         int n = value.toInt();
+         int n  = value.toInteger<int>();
          result = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &n);
       }
+
       break;
       case QVariant::Double: {
          double n = value.toDouble();
