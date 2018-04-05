@@ -24,7 +24,8 @@ CORE_STRING_INCLUDES = \
 	qstring16.h  \
 	qstringparser.h \
 	qstringview.h \
-	qregularexpression.h
+	qregularexpression.h  \
+	qstringfwd.h
 
 CORE_REGEX_INCLUDES = \
 	regex/basic_regex.h \

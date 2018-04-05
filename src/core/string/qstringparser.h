@@ -52,7 +52,7 @@ class Q_CORE_EXPORT QStringParser
 
       enum SplitBehavior { KeepEmptyParts, SkipEmptyParts };
 
-      // a1  value - quint64, long, short, etc
+      // V is data type quint64, long, short, etc
       template <typename T, typename V, typename = typename std::enable_if<std::is_integral<V>::value>::type>
       static T formatArg(const T &str, V value, int fieldwidth = 0, int base = 10, QChar32 fillChar = QChar32(' '))
       {
@@ -110,8 +110,8 @@ class Q_CORE_EXPORT QStringParser
          return replaceArgEscapes(str, d, fieldwidth, arg, locale_arg, fillChar);
       }
 
-      // a2  value - double
-      template <typename T, typename V, typename = typename std::enable_if<std::is_same<V, double>::value>::type>
+      // V data type is double, float, long double
+      template <typename T, typename V, typename = typename std::enable_if<std::is_floating_point<V>::value>::type>
       static T formatArg(const T &str, V value, int fieldwidth = 0, char format = 'g', int precision = 6,
                   QChar32 fillChar = QChar32(' ') )
       {
@@ -206,9 +206,9 @@ class Q_CORE_EXPORT QStringParser
          return replaceArgEscapes(str, d, fieldwidth, arg, locale_arg, fillChar);
       }
 
-      // a3  value - char, string
-      template <typename T, typename V, typename = typename
-                  std::enable_if<! std::is_integral< typename std::remove_reference<V>::type>::value>::type>
+      // V data type is char, string
+      template <typename T, typename V,
+                  typename = typename std::enable_if<! std::is_arithmetic<typename std::remove_reference<V>::type>::value>::type>
 
       static T formatArg(const T &str, V &&value, int fieldwidth = 0, QChar32 fillChar = QChar32(' '))
       {

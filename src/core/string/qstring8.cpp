@@ -347,14 +347,14 @@ QString8::size_type QString8::count(QStringView8 str, Qt::CaseSensitivity cs) co
    return retval;
 }
 
-QString8::size_type QString8::count(const QRegularExpression<QString8> &regExp) const
+QString8::size_type QString8::count(const QRegularExpression8 &regExp) const
 {
    size_type retval = 0;
 
    const_iterator iter     = cbegin();
    const_iterator iter_end = cend();
 
-   QRegularExpressionMatch<QString8> match;
+   QRegularExpressionMatch8 match;
 
    while (iter != iter_end) {                      // count overlapping matches
       match = regExp.match(*this, iter);
@@ -685,9 +685,9 @@ QString8 QString8::fromStdString(const std::string &str, size_type numOfChars)
    return retval;
 }
 
-QString8::const_iterator QString8::indexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const
+QString8::const_iterator QString8::indexOfFast(const QRegularExpression8 &regExp, const_iterator from) const
 {
-   QRegularExpressionMatch<QString8> match = regExp.match(*this, from);
+   QRegularExpressionMatch8 match = regExp.match(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -696,9 +696,9 @@ QString8::const_iterator QString8::indexOfFast(const QRegularExpression<QString8
    return end();
 }
 
-QString8::const_iterator QString8::lastIndexOfFast(const QRegularExpression<QString8> &regExp, const_iterator from) const
+QString8::const_iterator QString8::lastIndexOfFast(const QRegularExpression8 &regExp, const_iterator from) const
 {
-   QRegularExpressionMatch<QString8> match = regExp.rmatch(*this, from);
+   QRegularExpressionMatch8 match = regExp.rmatch(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -1073,12 +1073,12 @@ QString8 &QString8::replace(QChar32 c, const QString8 &after, Qt::CaseSensitivit
    return *this;
 }
 
-QString8 &QString8::replace(const QRegularExpression<QString8> &regExp, const QString8 &after)
+QString8 &QString8::replace(const QRegularExpression8 &regExp, const QString8 &after)
 {
-   QRegularExpressionMatch<QString8> match = regExp.match(*this);
-   QRegularExpressionMatch<QString8> splitMatch;
+   QRegularExpressionMatch8 match = regExp.match(*this);
+   QRegularExpressionMatch8 splitMatch;
 
-   static QRegularExpression<QString8> regSplit("(.*?)(\\\\[0-9])");
+   static QRegularExpression8 regSplit("(.*?)(\\\\[0-9])");
    bool noCapture = true;
 
    auto iter = after.indexOfFast('\\');

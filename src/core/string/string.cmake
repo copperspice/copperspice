@@ -25,6 +25,7 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringparser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/string/qregularexpression.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstringfwd.h
 )
 
 set(CORE_REGEX_INCLUDES

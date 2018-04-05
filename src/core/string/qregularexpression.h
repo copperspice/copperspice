@@ -30,23 +30,10 @@
 #include <qglobal.h>
 #include <qchar32.h>
 #include <qlist.h>
-
-class QDataStream;
-
-template <typename S = QString8>
-class QRegularExpression;
-
-template <typename S = QString8>
-class QRegularExpressionMatch;
-
-using QRegularExpression8       = QRegularExpression<QString8>;
-using QRegularExpression16      = QRegularExpression<QString16>;
-
-using QRegularExpressionMatch8  = QRegularExpressionMatch<QString8>;
-using QRegularExpressionMatch16 = QRegularExpressionMatch<QString16>;
+#include <qstringfwd.h>
 
 template <typename S>
-uint qHash(const QRegularExpression<S> &key, uint seed = 0);
+uint qHash(const Cs::QRegularExpression<S> &key, uint seed = 0);
 
 enum class QPatternOption {
    NoPatternOption               = 0x0000,
@@ -56,7 +43,8 @@ enum class QPatternOption {
    ExtendedPatternSyntaxOption   = 0x0008,
    ExactMatchOption              = 0x0010,
    DontCaptureOption             = 0x0020,
-   WildcardOption                = 0x0040
+   WildcardOption                = 0x0040,
+   WildcardUnixOption            = 0x0080,
 };
 Q_DECLARE_FLAGS(QPatternOptionFlags, QPatternOption)
 
@@ -92,7 +80,7 @@ inline bool is_combining<QChar32>(QChar32 c)
 }   // namespace
 
 
-// new type traits, internal only
+// type traits, internal only
 template<typename S>
 class QRegexTraits
 {
@@ -331,6 +319,10 @@ class QRegexTraits
       }
 };
 
+#if ! defined (CS_DOXYPRESS)
+namespace Cs {
+#endif
+
 template <typename S>
 class Q_CORE_EXPORT QRegularExpression
 {
@@ -453,13 +445,6 @@ class Q_CORE_EXPORT QRegularExpression
       template <typename S2>
       friend Q_CORE_EXPORT uint qHash(const QRegularExpression<S2> &key, uint seed);
 };
-
-
-template <typename S>
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegularExpression<S> &regExp);
-
-template <typename S>
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QRegularExpression<S> &regExp);
 
 template <typename S>
 class Q_CORE_EXPORT QRegularExpressionMatch
@@ -1225,15 +1210,157 @@ S QRegularExpression<S>::convert_wildcard(const S &str, const bool enableEscapin
    return retval;
 }
 
+#if ! defined (CS_DOXYPRESS)
+}  // cs namespace
+#endif
+
 
 // ** hash Implementations
 
 template <typename S>
-uint qHash(const QRegularExpression<S> &key, uint seed)
+uint qHash(const Cs::QRegularExpression<S> &key, uint seed)
 {
    seed = qHash(key.m_pattern, seed);
    seed = qHash(key.m_patternOptions, seed);
    return seed;
+}
+
+// used by QScriptEngine::newRegExp to convert to a pattern that JavaScriptCore can understand
+template <typename S>
+static S wc2rx(const S &str, bool enableEscaping)
+{
+   S retval;
+
+   int i           = 0;
+   bool isEscaping = false;                // the previous character is '\'
+
+   typename S::const_iterator iter = str.begin();
+   typename S::const_iterator end  = str.end();
+
+   while (iter != end) {
+      auto c = *iter;
+      ++iter;
+
+      switch (c.unicode()) {
+
+         case '\\':
+            if (enableEscaping) {
+               if (isEscaping) {
+                  retval.append("\\\\");
+               }
+
+               // we insert the \\ later if necessary
+               if (iter == end) {
+                  retval.append("\\\\");
+               }
+
+            } else {
+               retval.append("\\\\");
+            }
+
+            isEscaping = true;
+            break;
+
+         case '*':
+            if (isEscaping) {
+               retval.append("\\*");
+               isEscaping = false;
+
+            } else {
+               retval.append(".*");
+            }
+            break;
+
+         case '?':
+            if (isEscaping) {
+               retval.append("\\?");
+               isEscaping = false;
+
+            } else {
+               retval.append('.');
+            }
+
+            break;
+
+         case '$':
+         case '(':
+         case ')':
+         case '+':
+         case '.':
+         case '^':
+         case '{':
+         case '|':
+         case '}':
+            if (isEscaping) {
+               isEscaping = false;
+               retval.append("\\\\");
+            }
+
+            retval.append('\\');
+            retval.append(c);
+            break;
+
+         case '[':
+            if (isEscaping) {
+               isEscaping = false;
+               retval.append("\\[");
+
+            } else {
+               retval.append(c);
+
+               if (*iter == '^') {
+                  retval.append(*iter);
+                  ++iter;
+               }
+
+               if (iter != end) {
+
+                  while (iter != end && *iter != ']') {
+                     if (*iter == '\\') {
+                        retval.append('\\');
+                     }
+
+                     retval.append(*iter);
+                     ++iter;
+                  }
+               }
+            }
+            break;
+
+         case ']':
+            if (isEscaping) {
+               isEscaping = false;
+               retval.append("\\");
+            }
+
+            retval.append(c);
+            break;
+
+         default:
+            if (isEscaping) {
+               isEscaping = false;
+               retval.append("\\\\");
+            }
+
+            retval.append(c);
+      }
+   }
+
+   return retval;
+}
+
+template <typename S>
+S cs_internal_regexp_toCanonical(const S &pattern, QPatternOptionFlags flags)
+{
+   if (flags & QPatternOption::WildcardOption) {
+      return wc2rx(pattern, false);
+
+   } else if (flags & QPatternOption::WildcardUnixOption) {
+      return wc2rx(pattern, true);
+
+   } else {
+      return pattern;
+   }
 }
 
 #endif

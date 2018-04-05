@@ -342,14 +342,14 @@ QString16::size_type QString16::count(QStringView16 str, Qt::CaseSensitivity cs)
    return retval;
 }
 
-QString16::size_type QString16::count(const QRegularExpression<QString16> &regExp) const
+QString16::size_type QString16::count(const QRegularExpression16 &regExp) const
 {
    size_type retval = 0;
 
    const_iterator iter     = cbegin();
    const_iterator iter_end = cend();
 
-   QRegularExpressionMatch<QString16> match;
+   QRegularExpressionMatch16 match;
 
    while (iter != iter_end) {                      // count overlapping matches
       match = regExp.match(*this, iter);
@@ -680,9 +680,9 @@ QString16 QString16::fromStdString(const std::string &str, size_type numOfChars)
    return retval;
 }
 
-QString16::const_iterator QString16::indexOfFast(const QRegularExpression<QString16> &regExp, const_iterator from) const
+QString16::const_iterator QString16::indexOfFast(const QRegularExpression16 &regExp, const_iterator from) const
 {
-   QRegularExpressionMatch<QString16> match = regExp.match(*this, from);
+   QRegularExpressionMatch16 match = regExp.match(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -691,9 +691,9 @@ QString16::const_iterator QString16::indexOfFast(const QRegularExpression<QStrin
    return end();
 }
 
-QString16::const_iterator QString16::lastIndexOfFast(const QRegularExpression<QString16> &regExp, const_iterator from) const
+QString16::const_iterator QString16::lastIndexOfFast(const QRegularExpression16 &regExp, const_iterator from) const
 {
-   QRegularExpressionMatch<QString16> match = regExp.rmatch(*this, from);
+   QRegularExpressionMatch16 match = regExp.rmatch(*this, from);
 
    if (match.hasMatch())  {
       return match.capturedStart(0);
@@ -1068,12 +1068,12 @@ QString16 &QString16::replace(QChar32 c, const QString16 &after, Qt::CaseSensiti
    return *this;
 }
 
-QString16 &QString16::replace(const QRegularExpression<QString16> &regExp, const QString16 &after)
+QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString16 &after)
 {
-   QRegularExpressionMatch<QString16> match = regExp.match(*this);
-   QRegularExpressionMatch<QString16> splitMatch;
+   QRegularExpressionMatch16 match = regExp.match(*this);
+   QRegularExpressionMatch16 splitMatch;
 
-   static QRegularExpression<QString16> regSplit("(.*?)(\\\\[0-9])");
+   static QRegularExpression16 regSplit("(.*?)(\\\\[0-9])");
    bool noCapture = true;
 
    auto iter = after.indexOfFast('\\');

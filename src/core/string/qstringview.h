@@ -25,36 +25,32 @@
 
 #define CS_STRING_ALLOW_UNSAFE
 
+#include <cs_string_view.h>
+
 #include <qglobal.h>
 #include <qbytearray.h>
-
-#include <cs_string_view.h>
 #include <qchar32.h>
-
-class QString8;
-class QString16;
-
-template <typename S>
-class QStringView;
-
-using QStringView8  = QStringView<QString8>;
-using QStringView16 = QStringView<QString16>;
+#include <qstringfwd.h>
 
 Q_CORE_EXPORT std::pair<int32_t, const ushort *> cs_internal_convertCaseTrait(int trait, const uint32_t value);
+
+#if ! defined (CS_DOXYPRESS)
+namespace Cs {
+#endif
 
 template <typename S>
 class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
 {
    public:
       using difference_type = std::ptrdiff_t;
-      using size_type       = std::ptrdiff_t;
       using value_type      = const QChar32;
+      using size_type       = std::ptrdiff_t;
 
       using const_iterator  = typename S::const_iterator;
       using iterator        = typename S::const_iterator;
 
-      using const_reverse_iterator = typename S::const_reverse_iterator;
       using reverse_iterator       = typename S::const_reverse_iterator;
+      using const_reverse_iterator = typename S::const_reverse_iterator;
 
       QStringView() = default;
 
@@ -802,5 +798,9 @@ typename QStringView<S>::value_type QStringView<S>::operator[](size_type n) cons
 {
    return CsString::CsBasicStringView<S>::at(n);
 }
+
+#if ! defined (CS_DOXYPRESS)
+}  // cs namespace
+#endif
 
 #endif

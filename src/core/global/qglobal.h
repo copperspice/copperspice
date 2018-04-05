@@ -36,20 +36,7 @@
 #if defined(__cplusplus)
 
 #include <algorithm>
-
-class QByteArray;
-class QChar32;
-class QString8;
-class QString16;
-
-template <typename S = QString8>
-class QStringView;
-
-using QChar         = QChar32;
-using QString       = QString8;
-using QLatin1Char   = QChar32;
-using QLatin1String = QString8;
-using QStringRef    = QStringView<QString8>;
+#include <qstringfwd.h>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
 #define QT_FORWARD_DECLARE_CLASS(name)   class name;

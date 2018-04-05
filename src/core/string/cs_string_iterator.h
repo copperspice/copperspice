@@ -42,12 +42,13 @@ class LIB_CS_STRING_EXPORT CsStringIterator
    using v_iter = typename std::vector<typename E::storage_unit, A>::const_iterator;
 
    public:
-      using size_type         = std::ptrdiff_t;
-      using difference_type   = int;
+      using difference_type   = std::ptrdiff_t;
       using value_type        = CsChar;
       using pointer           = CsChar *;
       using reference         = CsChar;
       using iterator_category = std::random_access_iterator_tag;
+
+      using size_type         = std::ptrdiff_t;
 
       CsStringIterator() = default;
 

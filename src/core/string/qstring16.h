@@ -28,17 +28,15 @@
 #include <cstddef>
 #include <string>
 
+#include <cs_string.h>
+
 #include <qglobal.h>
 #include <qbytearray.h>
-
-#include <cs_string.h>
 #include <qchar32.h>
 #include <qstringview.h>
+#include <qstringfwd.h>
 
 class QStringParser;
-
-template <typename S>
-class QRegularExpression;
 
 class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 {
@@ -46,9 +44,9 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       class iterator : public CsString::CsString_utf16::iterator
       {
        public:
+         using value_type  = QChar32;
          using pointer     = QChar32 *;
          using reference   = QChar32 &;
-         using value_type  = QChar32;
 
          iterator() = default;
 
@@ -121,9 +119,9 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       class const_iterator : public CsString::CsString_utf16::const_iterator
       {
        public:
+         using value_type        = const QChar32;
          using pointer           = const QChar32 *;
          using reference         = const QChar32 &;
-         using value_type        = const QChar32;
 
          const_iterator() = default;
 
@@ -205,15 +203,16 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       };
 
       using difference_type = std::ptrdiff_t;
-      using size_type       = std::ptrdiff_t;
       using value_type      = QChar32;
+      using size_type       = std::ptrdiff_t;
+
       using storage_type    = char16_t;
 
       using Iterator        = iterator;
       using ConstIterator   = const_iterator;
 
-      using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
+      using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
       QString16() = default;
       QString16(const QString16 &other) = default;
@@ -341,7 +340,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       size_type count(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       size_type count(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       size_type count(QStringView16 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-      size_type count(const QRegularExpression<QString16> &regExp) const;
+      size_type count(const QRegularExpression16 &regExp) const;
 
       int compare(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
          return compare(QStringView16(*this), QStringView16(str), cs);
@@ -365,7 +364,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       bool contains(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(QStringView16 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-      bool contains(const QRegularExpression<QString16> &regExp) const {
+      bool contains(const QRegularExpression16 &regExp) const {
          return indexOfFast(regExp) != end();
       }
 
@@ -427,11 +426,11 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          }
       }
 
-      const_iterator indexOfFast(const QRegularExpression<QString16> &regExp) const {
+      const_iterator indexOfFast(const QRegularExpression16 &regExp) const {
          return indexOfFast(regExp, begin());
       }
 
-      const_iterator indexOfFast(const QRegularExpression<QString16> &regExp, const_iterator from) const;
+      const_iterator indexOfFast(const QRegularExpression16 &regExp, const_iterator from) const;
 
       const_iterator lastIndexOfFast(QChar32 c) const {
          return lastIndexOfFast(c, cend(), Qt::CaseSensitive);
@@ -473,11 +472,11 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          }
       }
 
-      const_iterator lastIndexOfFast(const QRegularExpression<QString16> &regExp) const {
+      const_iterator lastIndexOfFast(const QRegularExpression16 &regExp) const {
          return lastIndexOfFast(regExp, end());
       }
 
-      const_iterator lastIndexOfFast(const QRegularExpression<QString16> &regExp, const_iterator from) const;
+      const_iterator lastIndexOfFast(const QRegularExpression16 &regExp, const_iterator from) const;
 
       // using indexes
       size_type indexOf(QChar32 c, size_type from = 0, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
@@ -648,7 +647,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       QString16 &remove(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
 
-      QString16 &remove(const QRegularExpression<QString16> &regExp) {
+      QString16 &remove(const QRegularExpression16 &regExp) {
          replace(regExp, QString16());
          return *this;
       }
@@ -694,7 +693,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return *this;
       }
 
-      QString16 &replace(const QRegularExpression<QString16> &regExp, const QString16 &after);
+      QString16 &replace(const QRegularExpression16 &regExp, const QString16 &after);
 
       void resize(size_type numOfChars) {
          return CsString::CsString_utf16::resize(numOfChars);
