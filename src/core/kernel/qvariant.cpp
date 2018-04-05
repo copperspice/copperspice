@@ -107,7 +107,7 @@ static void construct(QVariant::Private *x, const void *copy)
          break;
 
       case QVariant::String16:
-         // broom (wait) v_construct<QString16>(x, copy);
+         v_construct<QString16>(x, copy);
          break;
 
       case QVariant::StringList:
@@ -243,7 +243,7 @@ static void clear(QVariant::Private *d)
          break;
 
       case QVariant::String16:
-         // broom (wait) v_clear<QString16>(d);
+         v_clear<QString16>(d);
          break;
 
       case QVariant::StringList:
@@ -476,7 +476,7 @@ static bool compare(const QVariant::Private *a, const QVariant::Private *b)
          return *v_cast<QString8>(a) == *v_cast<QString8>(b);
 
       case QVariant::String16:
-         // broom (wait) return *v_cast<QString16>(a) == *v_cast<QString16>(b);
+         return *v_cast<QString16>(a) == *v_cast<QString16>(b);
          return false;
 
       case QVariant::StringList:
@@ -645,6 +645,9 @@ static qint64 qMetaTypeNumber(const QVariant::Private *d)
 
       case QVariant::Double:
          return qRound64(d->data.d);
+
+      case QMetaType::QJsonValue:
+         return v_cast<QJsonValue>(d)->toDouble();
    }
 
    Q_ASSERT(false);
@@ -687,14 +690,18 @@ static qint64 qConvertToNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QString8>(d)->toInteger<qint64>(ok);
 
       case QVariant::String16:
-         // broom (wait) return v_cast<QString16>(d)->toLongLong(ok);
-         return 0;
+         return v_cast<QString16>(d)->toInteger<qint64>(ok);;
 
       case QVariant::ByteArray:
          return v_cast<QByteArray>(d)->toLongLong(ok);
 
       case QVariant::Bool:
          return qint64(d->data.b);
+
+      case QMetaType::QJsonValue:
+         if (! v_cast<QJsonValue>(d)->isDouble()) {
+            break;
+         }
 
       case QVariant::Double:
       case QVariant::Int:
@@ -730,14 +737,18 @@ static quint64 qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
          return v_cast<QString8>(d)->toInteger<quint64>(ok);
 
       case QVariant::String16:
-         // broom (wait) return v_cast<QString16>(d)->toULongLong(ok);
-         return 0;
+         return v_cast<QString16>(d)->toInteger<quint64>(ok);
 
       case QVariant::ByteArray:
          return v_cast<QByteArray>(d)->toULongLong(ok);
 
       case QVariant::Bool:
          return quint64(d->data.b);
+
+      case QMetaType::QJsonValue:
+         if (! v_cast<QJsonValue>(d)->isDouble()) {
+            break;
+         }
 
       case QVariant::Double:
       case QVariant::Int:
@@ -854,6 +865,14 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
                   *str = v_cast<QStringList>(d)->at(0);
                }
                break;
+
+            case QMetaType::QJsonValue:
+               if (! v_cast<QJsonValue>(d)->isString()) {
+                  *str = v_cast<QJsonValue>(d)->toString();
+
+               } else if (! v_cast<QJsonValue>(d)->isNull()) {
+                  return false;
+               }
 
             case QVariant::Url:
                *str = v_cast<QUrl>(d)->toString();
@@ -1140,6 +1159,13 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
                *b = qMetaTypeUNumber(d) != Q_UINT64_C(0);
                break;
 
+            case QMetaType::QJsonValue:
+               *b = v_cast<QJsonValue>(d)->toBool(false);
+
+               if (! v_cast<QJsonValue>(d)->isBool()) {
+                  return false;
+               }
+
             default:
                *b = false;
                return false;
@@ -1184,6 +1210,13 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
                *f = double(qMetaTypeUNumber(d));
                break;
 
+            case QMetaType::QJsonValue:
+               *f = v_cast<QJsonValue>(d)->toDouble(0.0);
+
+               if (! v_cast<QJsonValue>(d)->isDouble()) {
+                  return false;
+               }
+
             default:
                *f = 0.0;
                return false;
@@ -1226,6 +1259,13 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
                *f = float(qMetaTypeUNumber(d));
                break;
 
+            case QMetaType::QJsonValue:
+               *f = v_cast<QJsonValue>(d)->toDouble(0.0);
+
+               if (! v_cast<QJsonValue>(d)->isDouble()) {
+                  return false;
+               }
+
             default:
                *f = 0.0f;
                return false;
@@ -1245,17 +1285,42 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
          } else if (QMetaType::typeName(d->type) == "QList<QVariant>") {
             *static_cast<QVariantList *>(result) = *static_cast<QList<QVariant> *>(d->data.shared->ptr);
 
+         } else if (d->type == QMetaType::QJsonValue) {
+
+            if (! v_cast<QJsonValue>(d)->isArray()) {
+               return false;
+            }
+
+           *static_cast<QVariantList *>(result) = v_cast<QJsonValue>(d)->toArray().toVariantList();
+
+         } else if (d->type == QMetaType::QJsonArray) {
+            *static_cast<QVariantList *>(result) = v_cast<QJsonArray>(d)->toVariantList();
+
          } else {
             return false;
          }
+
          break;
 
       case QVariant::Map:
          if (QMetaType::typeName(d->type) == "QMap<QString, QVariant>") {
             *static_cast<QVariantMap *>(result) = *static_cast<QMap<QString, QVariant> *>(d->data.shared->ptr);
+
+         } else if (d->type == QMetaType::QJsonValue) {
+
+            if (! v_cast<QJsonValue>(d)->isObject()) {
+               return false;
+            }
+
+           *static_cast<QVariantMap *>(result) = v_cast<QJsonValue>(d)->toObject().toVariantMap();
+
+         } else if (d->type == QMetaType::QJsonObject) {
+            *static_cast<QVariantMap *>(result) = v_cast<QJsonObject>(d)->toVariantMap();
+
          } else {
             return false;
          }
+
          break;
 
       case QVariant::MultiMap:
@@ -1269,9 +1334,23 @@ static bool convert(const QVariant::Private *d, QVariant::Type t, void *result, 
       case QVariant::Hash:
          if (QMetaType::typeName(d->type) == "QHash<QString, QVariant>") {
             *static_cast<QVariantHash *>(result) = *static_cast<QHash<QString, QVariant> *>(d->data.shared->ptr);
+
+         } else if (d->type == QMetaType::QJsonValue) {
+
+            if (! v_cast<QJsonValue>(d)->isObject()) {
+               return false;
+            }
+
+           *static_cast<QVariantHash *>(result) = v_cast<QJsonValue>(d)->toObject().toVariantHash();
+
+         } else if (d->type == QMetaType::QJsonObject) {
+            *static_cast<QVariantHash *>(result) = v_cast<QJsonObject>(d)->toVariantHash();
+
          } else {
             return false;
+
          }
+
          break;
 
       case QVariant::MultiHash:
@@ -1607,18 +1686,28 @@ QVariant::QVariant(const QByteArray &val)
    d.type = ByteArray;
    v_construct<QByteArray>(&d, val);
 }
+
 QVariant::QVariant(const QBitArray &val)
 {
    d.is_null = false;
    d.type = BitArray;
    v_construct<QBitArray>(&d, val);
 }
+
 QVariant::QVariant(const QString &val)
 {
    d.is_null = false;
    d.type = String;
    v_construct<QString>(&d, val);
 }
+
+QVariant::QVariant(const QString16 &val)
+{
+   d.is_null = false;
+   d.type = String16;
+   v_construct<QString16>(&d, val);
+}
+
 QVariant::QVariant(const QChar &val)
 {
    d.is_null = false;
@@ -1639,12 +1728,14 @@ QVariant::QVariant(const QDate &val)
    d.type = Date;
    v_construct<QDate>(&d, val);
 }
+
 QVariant::QVariant(const QTime &val)
 {
    d.is_null = false;
    d.type = Time;
    v_construct<QTime>(&d, val);
 }
+
 QVariant::QVariant(const QDateTime &val)
 {
    d.is_null = false;
@@ -1765,6 +1856,41 @@ QVariant::QVariant(const QRegularExpression8 &regExp)
    d.is_null = false;
    d.type = RegularExpression;
    v_construct<QRegularExpression8>(&d, regExp);
+}
+
+QVariant::QVariant(const QUuid &uuid)
+{
+   d.is_null = false;
+   d.type = Uuid;
+   v_construct<QUuid>(&d, uuid);
+}
+
+QVariant::QVariant(const QJsonValue &json)
+{
+   d.is_null = false;
+   d.type = JsonValue;
+   v_construct<QJsonValue>(&d, json);
+}
+
+QVariant::QVariant(const QJsonArray &json)
+{
+   d.is_null = false;
+   d.type = JsonArray;
+   v_construct<QJsonArray>(&d, json);
+}
+
+QVariant::QVariant(const QJsonObject &json)
+{
+   d.is_null = false;
+   d.type = JsonObject;
+   v_construct<QJsonObject>(&d, json);
+}
+
+QVariant::QVariant(const QJsonDocument &json)
+{
+   d.is_null = false;
+   d.type = JsonDocument;
+   v_construct<QJsonDocument>(&d, json);
 }
 
 QVariant::QVariant(Qt::GlobalColor color)
@@ -2020,8 +2146,7 @@ QDataStream &operator<<(QDataStream &s, const QVariant::Type p)
 
 
 template <typename T>
-inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t,
-                          const QVariant::Handler *handler, T * = 0)
+inline T qVariantToHelper(const QVariant::Private &d, QVariant::Type t, const QVariant::Handler *handler, T * = 0)
 {
    if (d.type == t) {
       return *v_cast<T>(&d);
@@ -2144,6 +2269,31 @@ QRegularExpression8 QVariant::toRegularExpression() const
    return qVariantToHelper<QRegularExpression8>(d, RegularExpression, handler);
 }
 
+QUuid QVariant::toUuid() const
+{
+   return qVariantToHelper<QUuid>(d, Uuid, handler);
+}
+
+QJsonValue QVariant::toJsonValue() const
+{
+   return qVariantToHelper<QJsonValue>(d, JsonValue, handler);
+}
+
+QJsonObject QVariant::toJsonObject() const
+{
+   return qVariantToHelper<QJsonObject>(d, JsonObject, handler);
+}
+
+QJsonArray QVariant::toJsonArray() const
+{
+   return qVariantToHelper<QJsonArray>(d, JsonArray, handler);
+}
+
+QJsonDocument QVariant::toJsonDocument() const
+{
+   return qVariantToHelper<QJsonDocument>(d, JsonDocument, handler);
+}
+
 QChar QVariant::toChar() const
 {
    return qVariantToHelper<QChar>(d, Char, handler);
@@ -2255,9 +2405,9 @@ static const quint32 qCanConvertMatrix[QMetaType::User + 1] = {
    /*QByteArray 7 */    1 << QVariant::String     | 1 << QVariant::Int        | 1 << QVariant::UInt | 1 << QVariant::Bool
    | 1 << QVariant::Double     | 1 << QVariant::LongLong   | 1 << QVariant::ULongLong,
 
-   /*QBitArray*/     0,
+   /*QBitArray */     0,
 
-   /*QChar32*/       1 << QVariant::Int        | 1 << QVariant::UInt       | 1 << QVariant::LongLong
+   /*QChar32 */       1 << QVariant::Int        | 1 << QVariant::UInt       | 1 << QVariant::LongLong
    | 1 << QVariant::ULongLong,
 
    /*QString8 */      1 << QVariant::StringList | 1 << QVariant::ByteArray  | 1 << QVariant::Int
@@ -2361,10 +2511,44 @@ bool QVariant::canConvert(Type t) const
 
    }
 
+   if (currentType == QMetaType::QJsonValue) {
+
+      switch (t) {
+         case QMetaType::QString:
+         case QMetaType::Bool:
+         case QMetaType::Int:
+         case QMetaType::UInt:
+         case QMetaType::Double:
+         case QMetaType::Float:
+         case QMetaType::ULong:
+         case QMetaType::Long:
+         case QMetaType::LongLong:
+         case QMetaType::ULongLong:
+         case QMetaType::UShort:
+         case QMetaType::UChar:
+         case QMetaType::Char:
+         case QMetaType::SChar:
+         case QMetaType::Short:
+         case QMetaType::QVariantList:
+         case QMetaType::QVariantMap:
+         case QMetaType::QVariantHash:
+            return true;
+
+         default:
+            return false;
+      }
+
+   } else if (currentType == JsonArray) {
+      return uint(t) == QMetaType::QVariantList;
+
+   } else if (currentType == QMetaType::QJsonObject) {
+      return uint(t) == QMetaType::QVariantMap || uint(t) == QMetaType::QVariantHash;
+   }
+
    switch (t) {
 
       case QVariant::Int:
-         return currentType == QVariant::KeySequence || currentType == QMetaType::ULong   ||
+         return currentType == QVariant::KeySequence || currentType == QMetaType::ULong  ||
                 currentType == QMetaType::Long  || currentType == QMetaType::UShort  ||
                 currentType == QMetaType::UChar || currentType == QMetaType::Char || currentType == QMetaType::Short;
 
@@ -2419,7 +2603,7 @@ bool QVariant::convert(Type t)
    QVariant oldValue = *this;
 
    clear();
-   if (!oldValue.canConvert(t)) {
+   if (! oldValue.canConvert(t)) {
       return false;
    }
 

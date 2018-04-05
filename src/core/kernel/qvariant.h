@@ -35,10 +35,6 @@
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
 
-template<typename S>
-class QRegularExpression;
-using QRegularExpression8 = QRegularExpression<QString8>;
-
 class QBitArray;
 class QDataStream;
 class QDate;
@@ -118,6 +114,11 @@ class Q_CORE_EXPORT QVariant
       Uuid = QMetaType::QUuid,
       ModelIndex = QMetaType::QModelIndex,
 
+      JsonValue    = QMetaType::QJsonValue,
+      JsonArray    = QMetaType::QJsonArray,
+      JsonObject   = QMetaType::QJsonValue,
+      JsonDocument = QMetaType::QJsonValue,
+
       Font = QMetaType::QFont,
       Pixmap = QMetaType::QPixmap,
       Brush = QMetaType::QBrush,
@@ -184,7 +185,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(const QString16 &string);
 
    QVariant(const QRegularExpression8 &regExp);
- 
+
    QVariant(const QDate &date);
    QVariant(const QTime &time);
    QVariant(const QDateTime &datetime);
@@ -263,12 +264,12 @@ class Q_CORE_EXPORT QVariant
    QList<QVariant> toList() const;
    QStringList toStringList() const;
 
-   QRegularExpression8 toRegularExpression() const; 
+   QRegularExpression8 toRegularExpression() const;
 
    QDate toDate() const;
    QTime toTime() const;
    QDateTime toDateTime() const;
- 
+
    QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
    QMultiMap<QString, QVariant> toMultiMap() const;
@@ -506,7 +507,8 @@ inline bool operator!=(const QVariant &v1, const QVariantComparisonHelper &v2)
    return !operator==(v1, v2);
 }
 
-template<typename T> inline T qvariant_cast(const QVariant &v)
+template<typename T>
+inline T qvariant_cast(const QVariant &v)
 {
    const int vid = qMetaTypeId<T>(static_cast<T *>(0));
 
@@ -524,7 +526,8 @@ template<typename T> inline T qvariant_cast(const QVariant &v)
    return T();
 }
 
-template<> inline QVariant qvariant_cast<QVariant>(const QVariant &v)
+template<>
+inline QVariant qvariant_cast<QVariant>(const QVariant &v)
 {
    if (v.userType() == QMetaType::QVariant) {
       return *reinterpret_cast<const QVariant *>(v.constData());

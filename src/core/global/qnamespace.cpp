@@ -99,11 +99,10 @@ static bool lookupElement_X(const QString &element)
 
 }
 
-
 // **
-const QString &Qt::cs_className()
+const char *Qt::cs_className()
 {
-   static QString retval("Qt");
+   static const char *retval("Qt");
    return retval;
 }
 

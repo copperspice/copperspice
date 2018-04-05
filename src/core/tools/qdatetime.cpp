@@ -2101,7 +2101,7 @@ QDateTime QDateTime::fromString(const QString &str, Qt::DateFormat format)
 
          // Recognize timezone specifications
          int offset = 0;
-         QString::const_iterator sign_iter = tmp.indexOfFast(QRegularExpression<QString>("[+-]"));
+         QString::const_iterator sign_iter = tmp.indexOfFast(QRegularExpression("[+-]"));
 
          if (sign_iter != tmp.end()) {
             bool ok;

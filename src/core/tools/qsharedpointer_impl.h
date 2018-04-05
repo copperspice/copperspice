@@ -27,25 +27,12 @@
 #ifndef QSHAREDPOINTER_IMPL_H
 #define QSHAREDPOINTER_IMPL_H
 
-#include <qhashfwd.h>
-
 #include <new>
-#include <qatomic.h>
 #include <utility>
 
-QT_BEGIN_NAMESPACE
+#include <qatomic.h>
+#include <qhashfwd.h>
 
-#ifdef QT_NO_DEBUG
-# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          qt_noop()
-#else
-
-template<typename T> inline void qt_sharedpointer_cast_check(T *) { }
-# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          \
-    qt_sharedpointer_cast_check<T>(static_cast<X *>(0))
-#endif
-
-
-// forward declarations
 class QVariant;
 class QObject;
 
@@ -70,7 +57,18 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
+
+#ifdef QT_NO_DEBUG
+# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          qt_noop()
+#else
+
+template<typename T> inline void qt_sharedpointer_cast_check(T *) { }
+# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          \
+    qt_sharedpointer_cast_check<T>(static_cast<X *>(0))
+#endif
+
 namespace QtSharedPointer {
+
 template <class T> class InternalRefCount;
 template <class T> class ExternalRefCount;
 
@@ -85,6 +83,7 @@ inline void executeDeleter(T *t, RetVal (Class:: *memberDeleter)())
 {
    (t->*memberDeleter)();
 }
+
 template <class T, typename Deleter>
 inline void executeDeleter(T *t, Deleter d)
 {
@@ -92,25 +91,27 @@ inline void executeDeleter(T *t, Deleter d)
 }
 struct NormalDeleter {};
 
-// this uses partial template specialization
 template <class T> struct RemovePointer;
+
 template <class T> struct RemovePointer<T *> {
    typedef T Type;
 };
+
 template <class T> struct RemovePointer<QSharedPointer<T> > {
    typedef T Type;
 };
+
 template <class T> struct RemovePointer<QWeakPointer<T> > {
    typedef T Type;
 };
 
 // This class is the d-pointer of QSharedPointer and QWeakPointer.
-//
+
 // It is a reference-counted reference counter. "strongref" is the inner
 // reference counter, and it tracks the lifetime of the pointer itself.
 // "weakref" is the outer reference counter and it tracks the lifetime of
 // the ExternalRefCountData object.
-//
+
 // The deleter is stored in the destroyer member and is always a pointer to
 // a static function in ExternalRefCountWithCustomDeleter or in
 // ExternalRefCountWithContiguousData
@@ -588,17 +589,16 @@ class QWeakPointer
       }
    }
 
-   // broom - ok to have on hold
    // special constructor enabled only if X derives from QObject
-   template <class X>
+   template <class X, typename O = QObject, typename = typename std::enable_if<std::is_base_of<O, X>::value>::type>
    inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr)
    { }
 
-   template <class X>
+   template <class X, typename O = QObject, typename = typename std::enable_if<std::is_base_of<O, X>::value>::type>
    inline QWeakPointer &operator=(X *ptr)
-   { return *this = QWeakPointer(ptr); }
-
-
+   {
+      return *this = QWeakPointer(ptr);
+   }
 
    inline QWeakPointer(const QWeakPointer<T> &o) : d(o.d), value(o.value) {
       if (d) {

@@ -26,6 +26,7 @@
 #include <qglobal.h>
 #include <qatomic.h>
 #include <qcontainerfwd.h>
+#include <qstringfwd.h>
 
 class QDataStream;
 struct QMetaTypeGuiHelper;
@@ -296,11 +297,6 @@ class QString8;
 class QString16;
 
 class QStringList;
-
-template <typename S>
-class QStringView;
-
-using QStringView8 = QStringView<QString8>;
 
 class QDate;
 class QTime;

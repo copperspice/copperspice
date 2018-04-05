@@ -24,9 +24,11 @@
 #define QLOCALE_H
 
 #include <qvariant.h>
+#include <qshareddata.h>
+
+// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
 #include <qstring8.h>
 #include <qstringview.h>
-#include <qshareddata.h>
 
 class QLocale;
 class QLocalePrivate;

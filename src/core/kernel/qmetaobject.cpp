@@ -1674,9 +1674,9 @@ int QMetaObject_X::register_flag(const QString8 &enumName, const QString8 &scope
    return 0;
 }
 
-void QMetaObject_X::register_enum_data(const QString8 &args, const QString8 &scope)
+void QMetaObject_X::register_enum_data(const QString8 &args)
 {
-   if (args.isEmpty() || scope.isEmpty()) {
+   if (args.isEmpty()) {
       return;
    }
 

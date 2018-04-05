@@ -47,7 +47,7 @@ QString QSharedMemoryPrivate::makePlatformSafeKey(const QString &key, const QStr
    QString result = prefix;
 
    QString part1 = key;
-   part1.replace(QRegularExpression<QString8>("[^A-Za-z]"), QString());
+   part1.replace(QRegularExpression8("[^A-Za-z]"), QString());
 
    result.append(part1);
 

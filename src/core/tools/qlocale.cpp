@@ -2133,7 +2133,7 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                used = true;
                repeat = 1;
 
-/* broom - hold for dateTime
+/* broom - ok to have on hold until new dateTime changes
                if (formatDate) {
                   result.append(datetime.timeZoneAbbreviation());
                } else {

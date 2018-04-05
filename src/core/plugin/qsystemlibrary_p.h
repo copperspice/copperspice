@@ -38,16 +38,6 @@ class QSystemLibrary
       m_didLoad     = false;
    }
 
-/* BROOM - may be able to remove this constructor
-
-   explicit QSystemLibrary(const wchar_t *libraryName) {
-      m_libraryName = QString::fromWCharArray(libraryName);
-      m_handle      = 0;
-      m_didLoad     = false;
-   }
-
-*/
-
    bool load(bool onlySystemDirectory = true) {
       m_handle = load(m_libraryName, onlySystemDirectory);
       m_didLoad = true;

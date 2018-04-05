@@ -37,17 +37,13 @@ class QMetaObject_T;
 class Q_CORE_EXPORT Qt
 {
    private:
-      struct cs_classname {
-         static constexpr const char *value = "Qt";
-      };
-
       ~Qt();
 
    public:
       using cs_parent = CSGadget_Fake_Parent;
-      using cs_class = Qt;
+      using cs_class  = Qt;
 
-      static const QString &cs_className();
+      static const char *cs_className();
       static const QMetaObject_T<Qt> &staticMetaObject();
       virtual const QMetaObject *metaObject() const;
 

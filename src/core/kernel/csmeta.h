@@ -29,6 +29,7 @@
 #include <qmap.h>
 #include <qstring8.h>
 #include <qvariant.h>
+#include <qstringfwd.h>
 
 #include <utility>
 #include <tuple>
@@ -323,10 +324,27 @@ class Q_CORE_EXPORT cs_typeName_internal
       return retval; \
    }
 
-
 // cs_typeName_internal<dataType> is specialization of a templated class
 #define CS_DECLARE_CLASS(dataType) \
    class dataType; \
+   template <>  \
+   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
+   { \
+      public: \
+         static const QString8 &typeName(); \
+   };
+
+
+// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
+#define CS_REGISTER_TYPEDEF(dataType) \
+   Q_CORE_EXPORT const QString8 &cs_typeName_internal<dataType, void>::typeName() \
+   { \
+      static QString8 retval(#dataType); \
+      return retval; \
+   }
+
+// cs_typeName_internal<dataType> is specialization of a templated class
+#define CS_DECLARE_TYPEDEF(dataType) \
    template <>  \
    class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
    { \
@@ -483,8 +501,6 @@ const QString8 &cs_typeName_internal<const T &>::typeName()
 template<class T1>
 class QDeclarativeListProperty;
 
-template <typename S>
-class QRegularExpression;
 
 // declare here, register in csObject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
@@ -548,6 +564,11 @@ CS_DECLARE_CLASS(QVector2D)
 CS_DECLARE_CLASS(QVector3D)
 CS_DECLARE_CLASS(QVector4D)
 
+CS_DECLARE_TYPEDEF(QRegularExpression8)
+CS_DECLARE_TYPEDEF(QRegularExpression16)
+CS_DECLARE_TYPEDEF(QStringView8)
+CS_DECLARE_TYPEDEF(QStringView16)
+
 //
 CS_REGISTER_TEMPLATE(QFlatMap)
 CS_REGISTER_TEMPLATE(QHash)
@@ -557,9 +578,7 @@ CS_REGISTER_TEMPLATE(QList)
 CS_REGISTER_TEMPLATE(QMap)
 CS_REGISTER_TEMPLATE(QMultiMap)
 CS_REGISTER_TEMPLATE(QQueue)
-CS_REGISTER_TEMPLATE(QRegularExpression)
 CS_REGISTER_TEMPLATE(QSet)
-CS_REGISTER_TEMPLATE(QStringView)
 CS_REGISTER_TEMPLATE(QStack)
 CS_REGISTER_TEMPLATE(QVector)
 CS_REGISTER_TEMPLATE(QDeclarativeListProperty)

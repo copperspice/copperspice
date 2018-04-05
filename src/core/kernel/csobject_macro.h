@@ -104,9 +104,9 @@ class cs_number<0>
 
 #define CS_OBJECT_INTERNAL(classNameX) \
    public: \
-      static const QString8 &cs_className() \
+      static const char *cs_className() \
       { \
-         static QString8 retval(#classNameX); \
+         static const char *retval(#classNameX); \
          return retval; \
       } \
       template<int N> \
@@ -151,28 +151,20 @@ class cs_number<0>
          return &staticMetaObject(); \
       } \
       CS_TR_FUNCTIONS \
-   private: \
-      struct cs_classname \
-      { \
-         static constexpr const char value[] = #classNameX; \
-      };
+   private:
 
 
 #define CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    public: \
-      static const QString8 &cs_className() \
+      static const char *cs_className() \
       { \
-         static QString8 retval(#classNameX); \
+         static const char * retval(#classNameX); \
          return retval; \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
       virtual const QMetaObject *metaObject() const CS_OVERRIDE; \
       CS_TR_FUNCTIONS \
-   private: \
-      struct cs_classname \
-      { \
-         static constexpr const char value[] = #classNameX; \
-      };
+   private:
 
 
 // ** cs_gadget
@@ -193,9 +185,9 @@ class cs_number<0>
 
 #define CS_GADGET_INTERNAL(classNameX) \
    public: \
-      static const QString8 &cs_className() \
+      static const char *cs_className() \
       { \
-         static QString8 retval(#classNameX); \
+         static const char *retval(#classNameX); \
          return retval; \
       } \
       template<int N> \
@@ -221,26 +213,19 @@ class cs_number<0>
          } \
       } \
       CS_TR_FUNCTIONS \
-   private: \
-      struct cs_classname \
-      { \
-         static constexpr const char value[] = #classNameX; \
-      };
+   private:
+
 
 #define CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
    public: \
-      static const QString8 &cs_className() \
+      static const char *cs_className() \
       { \
-         static QString8 retval(#classNameX); \
+         static const char *retval(#classNameX); \
          return retval; \
       } \
       static const QMetaObject_T<classNameX> & staticMetaObject(); \
       CS_TR_FUNCTIONS \
-   private: \
-      struct cs_classname \
-      { \
-         static constexpr const char value[] = #classNameX; \
-      };
+   private:
 
 
 // ** interface
@@ -303,7 +288,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         cs_namespace_register_enum<cs_class>(#name, typeid(name), cs_classname::value);  \
+         cs_namespace_register_enum<cs_class>(#name, typeid(name), cs_className());  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
@@ -320,7 +305,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_enum_data(#__VA_ARGS__, cs_classname::value);  \
+         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_enum_data(#__VA_ARGS__);  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
@@ -337,7 +322,7 @@ class cs_number<0>
       }  \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         cs_namespace_register_flag<cs_class>(#enumName, cs_classname::value,    \
+         cs_namespace_register_flag<cs_class>(#enumName, cs_className(),    \
             #flagName, typeid(flagName));  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \

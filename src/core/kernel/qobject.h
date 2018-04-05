@@ -400,7 +400,7 @@ T QObject::property(const QString8 &name) const
 }
 
 template<>
-QVariant QObject::property<QVariant>(const QString8 &name) const
+inline QVariant QObject::property<QVariant>(const QString8 &name) const
 {
    const QMetaObject *metaObj = metaObject();
 

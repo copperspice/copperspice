@@ -219,7 +219,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    QMetaMethod constructor(int index) const override;
    int constructorCount() const override;
 
-   void register_enum_data(const QString8 &args, const QString8 &scope);
+   void register_enum_data(const QString8 &args);
 
    QMetaEnum enumerator(int index) const override;
    int enumeratorCount() const override;
@@ -303,7 +303,8 @@ void QMetaObject_T<T>::postConstruct()
 template<class T>
 const QString8 &QMetaObject_T<T>::className() const
 {
-   return T::cs_className();
+   static QString8 retval = QString::fromUtf8(T::cs_className());
+   return retval;
 }
 
 template<class T>

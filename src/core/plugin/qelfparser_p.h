@@ -25,12 +25,10 @@
 
 #include <qendian.h>
 #include <qglobal.h>
+#include <qstringfwd.h>
 
 #if defined (Q_OF_ELF) && defined(Q_CC_GNU)
 
-QT_BEGIN_NAMESPACE
-
-class QString;
 class QLibraryPrivate;
 
 typedef quint16  qelfhalf_t;
@@ -67,8 +65,6 @@ class QElfParser
    const char *parseSectionHeader(const char *s, ElfSectionHeader *sh);
    int parse(const char *m_s, ulong fdlen, const QString &library, QLibraryPrivate *lib, long *pos, ulong *sectionlen);
 };
-
-QT_END_NAMESPACE
 
 #endif // defined(Q_OF_ELF) && defined(Q_CC_GNU)
 
