@@ -482,10 +482,12 @@ QString QScriptDeclarativeClass::toString(const Identifier &identifier)
 bool QScriptDeclarativeClass::startsWithUpper(const Identifier &identifier)
 {
    JSC::UString::Rep *r = (JSC::UString::Rep *)identifier;
+
    if (r->size() < 1) {
       return false;
    }
-   return QChar::category((ushort)(r->data()[0])) == QChar::Letter_Uppercase;
+
+   return QChar(char32_t(r->data()[0])).category() == QChar::Letter_Uppercase;
 }
 
 quint32 QScriptDeclarativeClass::toArrayIndex(const Identifier &identifier, bool *ok)
@@ -495,9 +497,8 @@ quint32 QScriptDeclarativeClass::toArrayIndex(const Identifier &identifier, bool
    return s.toArrayIndex(ok);
 }
 
-QScriptClass::QueryFlags
-QScriptDeclarativeClass::queryProperty(Object *object, const Identifier &name,
-                                       QScriptClass::QueryFlags flags)
+QScriptClass::QueryFlags QScriptDeclarativeClass::queryProperty(Object *object,
+                  const Identifier &name, QScriptClass::QueryFlags flags)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
@@ -505,32 +506,28 @@ QScriptDeclarativeClass::queryProperty(Object *object, const Identifier &name,
    return 0;
 }
 
-QScriptDeclarativeClass::Value
-QScriptDeclarativeClass::property(Object *object, const Identifier &name)
+QScriptDeclarativeClass::Value QScriptDeclarativeClass::property(Object *object, const Identifier &name)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
    return Value();
 }
 
-void QScriptDeclarativeClass::setProperty(Object *object, const Identifier &name,
-      const QScriptValue &value)
+void QScriptDeclarativeClass::setProperty(Object *object, const Identifier &name, const QScriptValue &value)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
    Q_UNUSED(value);
 }
 
-QScriptValue::PropertyFlags
-QScriptDeclarativeClass::propertyFlags(Object *object, const Identifier &name)
+QScriptValue::PropertyFlags QScriptDeclarativeClass::propertyFlags(Object *object, const Identifier &name)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
    return 0;
 }
 
-QScriptDeclarativeClass::Value QScriptDeclarativeClass::call(Object *object,
-      QScriptContext *ctxt)
+QScriptDeclarativeClass::Value QScriptDeclarativeClass::call(Object *object, QScriptContext *ctxt)
 {
    Q_UNUSED(object);
    Q_UNUSED(ctxt);

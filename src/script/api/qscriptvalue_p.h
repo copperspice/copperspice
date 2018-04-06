@@ -26,9 +26,8 @@
 #include "wtf/Platform.h"
 #include "JSValue.h"
 
-QT_BEGIN_NAMESPACE
+#include <qstringfwd.h>
 
-class QString;
 class QScriptEnginePrivate;
 class QScriptValue;
 
@@ -125,7 +124,5 @@ inline bool QScriptValuePrivate::isObject() const
 }
 
 // Rest of inline functions implemented in qscriptengine_p.h
-
-QT_END_NAMESPACE
 
 #endif

@@ -23,11 +23,9 @@
 #ifndef QSCRIPTVALUE_H
 #define QSCRIPTVALUE_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qsharedpointer.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qlist.h>
+#include <qsharedpointer.h>
 
 class QScriptClass;
 class QScriptValue;
@@ -35,12 +33,9 @@ class QScriptEngine;
 class QScriptString;
 class QVariant;
 class QObject;
-struct QMetaObject;
 class QDateTime;
 
-#ifndef QT_NO_REGEXP
-class QRegExp;
-#endif
+struct QMetaObject;
 
 typedef QList<QScriptValue> QScriptValueList;
 
@@ -49,6 +44,7 @@ typedef double qsreal;
 class QScriptValuePrivate;
 class QScriptEnginePrivate;
 struct QScriptValuePrivatePointerDeleter;
+
 class Q_SCRIPT_EXPORT QScriptValue
 {
  public:
@@ -100,7 +96,6 @@ class Q_SCRIPT_EXPORT QScriptValue
    QScriptValue(uint value);
    QScriptValue(qsreal value);
    QScriptValue(const QString &value);
-   QScriptValue(const QLatin1String &value);
 
    QScriptValue &operator=(const QScriptValue &other);
 
@@ -136,9 +131,8 @@ class Q_SCRIPT_EXPORT QScriptValue
    const QMetaObject *toQMetaObject() const;
    QScriptValue toObject() const;
    QDateTime toDateTime() const;
-#ifndef QT_NO_REGEXP
-   QRegExp toRegExp() const;
-#endif
+
+   QRegularExpression toRegExp() const;
 
    bool instanceOf(const QScriptValue &other) const;
 
@@ -205,7 +199,5 @@ class Q_SCRIPT_EXPORT QScriptValue
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::ResolveFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::PropertyFlags)
-
-QT_END_NAMESPACE
 
 #endif

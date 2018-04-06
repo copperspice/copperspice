@@ -27,10 +27,10 @@
 
 #include "qscriptgrammar_p.h"
 #include "qscriptastfwd_p.h"
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
-class QString;
 class QScriptEnginePrivate;
 class QScriptNameIdImpl;
 

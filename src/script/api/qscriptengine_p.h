@@ -23,11 +23,13 @@
 #ifndef QSCRIPTENGINE_P_H
 #define QSCRIPTENGINE_P_H
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qnumeric.h>
-#include <QtCore/qregexp.h>
-#include <QtCore/qset.h>
+#include <qdatetime.h>
+#include <qhash.h>
+#include <qnumeric.h>
+#include <qregularexpression.h>
+#include <qset.h>
+#include <qstringfwd.h>
+
 #include "qscriptvalue_p.h"
 #include "qscriptstring_p.h"
 #include "bridge/qscriptclassobject_p.h"
@@ -62,10 +64,8 @@ class JSCell;
 class JSGlobalObject;
 }
 
-
 QT_BEGIN_NAMESPACE
 
-class QString;
 class QStringList;
 class QScriptContext;
 class QScriptValue;
@@ -77,6 +77,7 @@ class QScriptEngine;
 class QScriptProgramPrivate;
 
 namespace QScript {
+
 class QObjectPrototype;
 class QMetaObjectPrototype;
 class QVariantPrototype;
@@ -105,8 +106,7 @@ qsreal DateTimeToMs(JSC::ExecState *, const QDateTime &);
 inline QScriptEnginePrivate *scriptEngineFromExec(const JSC::ExecState *exec);
 bool isFunction(JSC::JSValue value);
 
-inline void convertToLatin1_helper(const UChar *i, int length, char *s);
-inline QByteArray convertToLatin1(const JSC::UString &str);
+inline QString convertToString(const JSC::UString &str);
 
 class UStringSourceProviderWithFeedback;
 
@@ -154,10 +154,7 @@ class QScriptEnginePrivate
    static inline JSC::UString toString(JSC::ExecState *, JSC::JSValue);
 
    static inline QDateTime toDateTime(JSC::ExecState *, JSC::JSValue);
-
-#ifndef QT_NO_REGEXP
-   static QRegExp toRegExp(JSC::ExecState *, JSC::JSValue);
-#endif
+   static QRegularExpression toRegExp(JSC::ExecState *, JSC::JSValue);
 
    static QVariant toVariant(JSC::ExecState *, JSC::JSValue);
    static inline QObject *toQObject(JSC::ExecState *, JSC::JSValue);
@@ -290,9 +287,7 @@ class QScriptEnginePrivate
    static inline JSC::JSValue newDate(JSC::ExecState *, const QDateTime &);
    inline JSC::JSValue newObject();
 
-#ifndef QT_NO_REGEXP
-   static JSC::JSValue newRegExp(JSC::ExecState *, const QRegExp &);
-#endif
+   static JSC::JSValue newRegExp(JSC::ExecState *, const QRegularExpression &);
 
    static JSC::JSValue newRegExp(JSC::ExecState *, const QString &pattern, const QString &flags);
    JSC::JSValue newVariant(const QVariant &);
@@ -304,13 +299,12 @@ class QScriptEnginePrivate
    JSC::UString translationContextFromUrl(const JSC::UString &);
 
    //
-   JSC::JSValue newQObject(QObject *object,
-                           QScriptEngine::ValueOwnership ownership = QScriptEngine::QtOwnership,
+   JSC::JSValue newQObject(QObject *object, QScriptEngine::ValueOwnership ownership = QScriptEngine::QtOwnership,
                            const QScriptEngine:: QObjectWrapOptions &options = 0);
 
    JSC::JSValue newQMetaObject(const QMetaObject *metaObject, JSC::JSValue ctor);
 
-   static bool convertToNativeQObject(JSC::ExecState *, JSC::JSValue, const QByteArray &targetType, void **result);
+   static bool convertToNativeQObject(JSC::ExecState *, JSC::JSValue, const QString &targetType, void **result);
 
    JSC::JSValue evaluateHelper(JSC::ExecState *exec, intptr_t sourceId, JSC::EvalExecutable *executable, bool &compile);
 
@@ -318,17 +312,13 @@ class QScriptEnginePrivate
    void disposeQObject(QObject *object);
    void emitSignalHandlerException();
 
-   bool scriptConnect(QObject *sender, const char *signal,
-                      JSC::JSValue receiver, JSC::JSValue function,
+   bool scriptConnect(QObject *sender, const QString &signal, JSC::JSValue receiver, JSC::JSValue function,
                       Qt::ConnectionType type);
 
-   bool scriptDisconnect(QObject *sender, const char *signal,
-                         JSC::JSValue receiver, JSC::JSValue function);
+   bool scriptDisconnect(QObject *sender, const QString &signal, JSC::JSValue receiver, JSC::JSValue function);
 
-   bool scriptConnect(QObject *sender, int index,
-                      JSC::JSValue receiver, JSC::JSValue function,
-                      JSC::JSValue senderWrapper,
-                      Qt::ConnectionType type);
+   bool scriptConnect(QObject *sender, int index, JSC::JSValue receiver, JSC::JSValue function,
+                      JSC::JSValue senderWrapper, Qt::ConnectionType type);
 
    bool scriptDisconnect(QObject *sender, int index, JSC::JSValue receiver, JSC::JSValue function);
    bool scriptConnect(JSC::JSValue signal, JSC::JSValue receiver, JSC::JSValue function, Qt::ConnectionType type);
@@ -530,23 +520,22 @@ inline bool ToBool(qsreal value)
 
 inline bool ToBool(const QString &value)
 {
-   return !value.isEmpty();
+   return ! value.isEmpty();
 }
 
-inline void convertToLatin1_helper(const UChar *i, int length, char *s)
+inline QString convertToString(const JSC::UString &str)
 {
-   const UChar *e = i + length;
+   QString retval;
+
+   const UChar *i = str.data();
+   const UChar *e  = i + str.size();
+
    while (i != e) {
-      *(s++) = (uchar) * (i++);
+      retval.append(char32_t(*i));
+      ++i;
    }
-   *s = '\0';
-}
 
-inline QByteArray convertToLatin1(const JSC::UString &str)
-{
-   QByteArray ba(str.size(), Qt::Uninitialized);
-   convertToLatin1_helper(str.data(), str.size(), ba.data());
-   return ba;
+   return retval;
 }
 
 } // namespace QScript
@@ -731,8 +720,7 @@ inline JSC::JSValue QScriptEnginePrivate::property(JSC::ExecState *exec, JSC::JS
 }
 
 inline QScriptValue::PropertyFlags QScriptEnginePrivate::propertyFlags(JSC::ExecState *exec, JSC::JSValue value,
-      const JSC::UString &name,
-      const QScriptValue::ResolveFlags &mode)
+      const JSC::UString &name, const QScriptValue::ResolveFlags &mode)
 {
    return propertyFlags(exec, value, JSC::Identifier(exec, name), mode);
 }

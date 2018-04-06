@@ -21,19 +21,13 @@
 ***********************************************************************/
 
 #include "qscriptsyntaxchecker_p.h"
-
 #include "qscriptlexer_p.h"
 #include "qscriptparser_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 
-
 SyntaxChecker::SyntaxChecker():
-   tos(0),
-   stack_size(0),
-   state_stack(0)
+   tos(0), stack_size(0), state_stack(0)
 {
 }
 
@@ -87,6 +81,7 @@ SyntaxChecker::Result SyntaxChecker::checkSyntax(const QString &code)
             checkerState = Valid;
          }
          break;
+
       } else if (act > 0) {
          if (++tos == stack_size) {
             reallocateStack();
@@ -132,6 +127,7 @@ SyntaxChecker::Result SyntaxChecker::checkSyntax(const QString &code)
          int shifts = 0;
          int reduces = 0;
          int expected_tokens [3];
+
          for (int tk = 0; tk < TERMINAL_COUNT; ++tk) {
             int k = t_action (ers, tk);
 
@@ -139,9 +135,10 @@ SyntaxChecker::Result SyntaxChecker::checkSyntax(const QString &code)
                continue;
             } else if (k < 0) {
                ++reduces;
+
             } else if (spell [tk]) {
                if (shifts < 3) {
-                  expected_tokens [shifts] = tk;
+                  expected_tokens[shifts] = tk;
                }
                ++shifts;
             }
@@ -153,15 +150,15 @@ SyntaxChecker::Result SyntaxChecker::checkSyntax(const QString &code)
 
             for (int s = 0; s < shifts; ++s) {
                if (first) {
-                  error_message += QLatin1String ("Expected ");
+                  error_message += "Expected ";
                } else {
-                  error_message += QLatin1String (", ");
+                  error_message += ", ";
                }
 
                first = false;
-               error_message += QLatin1Char('`');
-               error_message += QLatin1String (spell [expected_tokens [s]]);
-               error_message += QLatin1Char('\'');
+               error_message += '`';
+               error_message += QString::fromLatin1(spell[expected_tokens[s]]);
+               error_message += '\'';
             }
          }
 
@@ -179,13 +176,15 @@ SyntaxChecker::Result SyntaxChecker::checkSyntax(const QString &code)
    if (checkerState == Error) {
       if (lexer.error() == QScript::Lexer::UnclosedComment) {
          checkerState = Intermediate;
+
       } else if (yytoken == 0) {
          checkerState = Intermediate;
       }
    }
+
    return Result(checkerState, error_lineno, error_column, error_message);
 }
 
 } // namespace QScript
 
-QT_END_NAMESPACE
+

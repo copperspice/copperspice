@@ -335,10 +335,7 @@ noinst_HEADERS += \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/Assertions.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/Collator.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/qt4/UnicodeQt4.h \
-	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/glib/UnicodeGLib.h \
-	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/glib/UnicodeMacrosFromICU.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/UTF8.h \
-	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/icu/UnicodeIcu.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/Unicode.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/Locker.h \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/StringExtras.h \
@@ -520,7 +517,6 @@ lib_libCsScript@BUILD_ABI@_la_SOURCES += \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/TypeTraits.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/CollatorDefault.cpp \
-	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/icu/CollatorICU.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/wtf/unicode/UTF8.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexCompiler.cpp \
 	src/3rdparty/javascriptcore/JavaScriptCore/yarr/RegexInterpreter.cpp \

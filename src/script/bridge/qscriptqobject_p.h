@@ -25,8 +25,8 @@
 
 #include "qscriptobject_p.h"
 #include "qscriptengine.h"
-#include <QtCore/qpointer.h>
-#include "qhash.h"
+#include <qpointer.h>
+#include <qhash.h>
 
 #include "InternalFunction.h"
 
@@ -47,7 +47,7 @@ class QObjectDelegate : public QScriptObjectDelegate
       QScriptEngine::ValueOwnership ownership;
       QScriptEngine::QObjectWrapOptions options;
 
-      QHash<QByteArray, JSC::JSValue> cachedMembers;
+      QHash<QString, JSC::JSValue> cachedMembers;
 
       Data(QObject *o, QScriptEngine::ValueOwnership own, QScriptEngine::QObjectWrapOptions opt)
          : value(o), ownership(own), options(opt) {}

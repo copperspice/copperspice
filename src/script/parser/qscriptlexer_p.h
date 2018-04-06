@@ -23,9 +23,7 @@
 #ifndef QSCRIPTLEXER_P_H
 #define QSCRIPTLEXER_P_H
 
-#include <QtCore/QString>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
 
 class QScriptEnginePrivate;
 class QScriptNameIdImpl;
@@ -38,7 +36,7 @@ class Lexer
    Lexer(QScriptEnginePrivate *eng);
    ~Lexer();
 
-   void setCode(const QString &c, int lineno);
+   void setCode(const QString &str, int lineno);
    int lex();
 
    int currentLineNo() const {
@@ -140,43 +138,11 @@ class Lexer
       err = NoError;
    }
 
- private:
-   QScriptEnginePrivate *driver;
-   int yylineno;
-   bool done;
-   char *buffer8;
-   QChar *buffer16;
-   uint size8, size16;
-   uint pos8, pos16;
-   bool terminator;
-   bool restrKeyword;
-   // encountered delimiter like "'" and "}" on last run
-   bool delimited;
-   int stackToken;
-
-   State state;
-   void setDone(State s);
-   uint pos;
-   void shift(uint p);
-   int lookupKeyword(const char *);
-
-   bool isWhiteSpace() const;
-   bool isLineTerminator() const;
-   bool isHexDigit(ushort c) const;
-   bool isOctalDigit(ushort c) const;
-
-   int matchPunctuator(ushort c1, ushort c2,
-                       ushort c3, ushort c4);
-   ushort singleEscape(ushort c) const;
-   ushort convertOctal(ushort c1, ushort c2,
-                       ushort c3) const;
- public:
-   static unsigned char convertHex(ushort c1);
-   static unsigned char convertHex(ushort c1, ushort c2);
-   static QChar convertUnicode(ushort c1, ushort c2,
-                               ushort c3, ushort c4);
-   static bool isIdentLetter(ushort c);
-   static bool isDecimalDigit(ushort c);
+   static unsigned char convertHex(char32_t c1);
+   static unsigned char convertHex(char32_t c1, char32_t c2);
+   static QChar convertUnicode(char32_t c1, char32_t c2, char32_t c3, char32_t c4);
+   static bool isIdentLetter(char32_t c);
+   static bool isDecimalDigit(char32_t c);
 
    inline int ival() const {
       return qsyylval.ival;
@@ -196,7 +162,37 @@ class Lexer
    }
 
  private:
-   void record8(ushort c);
+
+   QScriptEnginePrivate *driver;
+   int yylineno;
+   bool done;
+   char *buffer8;
+   QChar *buffer16;
+   uint size8, size16;
+   uint pos8, pos16;
+   bool terminator;
+   bool restrKeyword;
+
+   // encountered delimiter like "'" and "}" on last run
+   bool delimited;
+   int stackToken;
+
+   State state;
+   void setDone(State s);
+   uint pos;
+   void shift(uint p);
+   int lookupKeyword(const char *);
+
+   bool isWhiteSpace() const;
+   bool isLineTerminator() const;
+   bool isHexDigit(char32_t c) const;
+   bool isOctalDigit(char32_t c) const;
+
+   int matchPunctuator(char32_t c1, char32_t c2, char32_t c3, char32_t c4);
+   char32_t singleEscape(char32_t c) const;
+   char32_t convertOctal(char32_t c1, char32_t c2, char32_t c3) const;
+
+   void record8(char32_t c);
    void record16(QChar c);
    void recordStartPos();
 
@@ -204,12 +200,13 @@ class Lexer
 
    void syncProhibitAutomaticSemicolon();
 
-   const QChar *code;
+   QString::const_iterator m_iter;
+
    uint length;
    int yycolumn;
    int startlineno;
    int startcolumn;
-   int bol;     // begin of line
+   int bol;                 // begin of line
 
    union {
       int ival;
@@ -218,7 +215,7 @@ class Lexer
    } qsyylval;
 
    // current and following unicode characters
-   ushort current, next1, next2, next3;
+   char32_t current, next1, next2, next3;
 
    struct keyword {
       const char *name;
@@ -237,7 +234,5 @@ class Lexer
 };
 
 } // namespace QScript
-
-QT_END_NAMESPACE
 
 #endif

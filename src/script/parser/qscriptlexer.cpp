@@ -21,14 +21,12 @@
 ***********************************************************************/
 
 #include "qscriptlexer_p.h"
-
 #include "qscriptgrammar_p.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-QT_BEGIN_NAMESPACE
 
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 
@@ -41,24 +39,16 @@ Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
     } \
     while (0)
 
-typedef double qsreal; // ###
+typedef double qsreal;
 
 namespace QScript {
 extern qsreal integerFromString(const char *buf, int size, int radix);
 }
 
 QScript::Lexer::Lexer(QScriptEnginePrivate *eng)
-   : driver(eng),
-     yylineno(0),
-     size8(128), size16(128), restrKeyword(false),
-     stackToken(-1), pos(0),
-     code(0), length(0),
-     bol(true),
-     current(0), next1(0), next2(0), next3(0),
-     err(NoError),
-     check_reserved(true),
-     parenthesesState(IgnoreParentheses),
-     prohibitAutomaticSemicolon(false)
+   : driver(eng), yylineno(0), size8(128), size16(128), restrKeyword(false), stackToken(-1), pos(0),
+     length(0), bol(true), current(0), next1(0), next2(0), next3(0),
+     err(NoError), check_reserved(true), parenthesesState(IgnoreParentheses), prohibitAutomaticSemicolon(false)
 {
    // allocate space for read buffers
    buffer8 = new char[size8];
@@ -74,24 +64,24 @@ QScript::Lexer::~Lexer()
    delete [] buffer16;
 }
 
-void QScript::Lexer::setCode(const QString &c, int lineno)
+void QScript::Lexer::setCode(const QString &str, int lineno)
 {
-   errmsg = QString();
-   yylineno = lineno;
-   yycolumn = 1;
+   errmsg       = QString();
+   yylineno     = lineno;
+   yycolumn     = 1;
    restrKeyword = false;
-   delimited = false;
-   stackToken = -1;
-   pos = 0;
-   code = c.unicode();
-   length = c.length();
-   bol = true;
+   delimited    = false;
+   stackToken   = -1;
+   pos          = 0;
+   m_iter       = str.begin();
+   length       = str.length();
+   bol          = true;
 
    // read first characters
-   current = (length > 0) ? code[0].unicode() : 0;
-   next1 = (length > 1) ? code[1].unicode() : 0;
-   next2 = (length > 2) ? code[2].unicode() : 0;
-   next3 = (length > 3) ? code[3].unicode() : 0;
+   current = (length > 0) ? m_iter[0].unicode() : 0;
+   next1   = (length > 1) ? m_iter[1].unicode() : 0;
+   next2   = (length > 2) ? m_iter[2].unicode() : 0;
+   next3   = (length > 3) ? m_iter[3].unicode() : 0;
 }
 
 void QScript::Lexer::shift(uint p)
@@ -99,10 +89,11 @@ void QScript::Lexer::shift(uint p)
    while (p--) {
       ++pos;
       ++yycolumn;
+
       current = next1;
-      next1 = next2;
-      next2 = next3;
-      next3 = (pos + 3 < length) ? code[pos + 3].unicode() : 0;
+      next1  = next2;
+      next2  = next3;
+      next3  = (pos + 3 < length) ? m_iter[pos + 3].unicode() : 0;
    }
 }
 
@@ -118,12 +109,15 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
       case 2: {
          if (c[0] == QLatin1Char('d') && c[1] == QLatin1Char('o')) {
             return QScriptGrammar::T_DO;
+
          } else if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('f')) {
             return QScriptGrammar::T_IF;
+
          } else if (c[0] == QLatin1Char('i') && c[1] == QLatin1Char('n')) {
             return QScriptGrammar::T_IN;
          }
       }
+
       break;
 
       case 3: {
@@ -422,15 +416,18 @@ int QScript::Lexer::findReservedWord(const QChar *c, int size) const
 
 int QScript::Lexer::lex()
 {
-   int token = 0;
-   state = Start;
-   ushort stringType = 0; // either single or double quotes
-   pos8 = pos16 = 0;
-   done = false;
+   int token  = 0;
+   state      = Start;
+   pos8       = 0;
+   pos16      = 0;
+   done       = false;
    terminator = false;
+
+   char32_t stringType = 0;          // either single or double quotes
 
    // did we push a token on the stack previously ?
    // (after an automatic semicolon insertion)
+
    if (stackToken >= 0) {
       setDone(Other);
       token = stackToken;
@@ -815,8 +812,7 @@ int QScript::Lexer::lex()
 
 bool QScript::Lexer::isWhiteSpace() const
 {
-   return (current == ' ' || current == '\t' ||
-           current == 0x0b || current == 0x0c);
+   return (current == ' ' || current == '\t' || current == 0x0b || current == 0x0c);
 }
 
 bool QScript::Lexer::isLineTerminator() const
@@ -824,40 +820,38 @@ bool QScript::Lexer::isLineTerminator() const
    return (current == '\n' || current == '\r');
 }
 
-bool QScript::Lexer::isIdentLetter(ushort c)
+bool QScript::Lexer::isIdentLetter(char32_t c)
 {
    /* TODO: allow other legitimate unicode chars */
-   return ((c >= 'a' && c <= 'z')
-           || (c >= 'A' && c <= 'Z')
-           || c == '$'
-           || c == '_');
+   return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '$' || c == '_');
 }
 
-bool QScript::Lexer::isDecimalDigit(ushort c)
+bool QScript::Lexer::isDecimalDigit(char32_t c)
 {
    return (c >= '0' && c <= '9');
 }
 
-bool QScript::Lexer::isHexDigit(ushort c) const
+bool QScript::Lexer::isHexDigit(char32_t c) const
 {
    return ((c >= '0' && c <= '9')
            || (c >= 'a' && c <= 'f')
            || (c >= 'A' && c <= 'F'));
 }
 
-bool QScript::Lexer::isOctalDigit(ushort c) const
+bool QScript::Lexer::isOctalDigit(char32_t c) const
 {
    return (c >= '0' && c <= '7');
 }
 
-int QScript::Lexer::matchPunctuator(ushort c1, ushort c2,
-                                    ushort c3, ushort c4)
+int QScript::Lexer::matchPunctuator(char32_t c1, char32_t c2, char32_t c3, char32_t c4)
 {
    if (c1 == '>' && c2 == '>' && c3 == '>' && c4 == '=') {
       shift(4);
       return QScriptGrammar::T_GT_GT_GT_EQ;
+
    } else if (c1 == '=' && c2 == '=' && c3 == '=') {
       shift(3);
+
       return QScriptGrammar::T_EQ_EQ_EQ;
    } else if (c1 == '!' && c2 == '=' && c3 == '=') {
       shift(3);
@@ -1006,7 +1000,7 @@ int QScript::Lexer::matchPunctuator(ushort c1, ushort c2,
    }
 }
 
-ushort QScript::Lexer::singleEscape(ushort c) const
+char32_t QScript::Lexer::singleEscape(char32_t c) const
 {
    switch (c) {
       case 'b':
@@ -1032,13 +1026,12 @@ ushort QScript::Lexer::singleEscape(ushort c) const
    }
 }
 
-ushort QScript::Lexer::convertOctal(ushort c1, ushort c2,
-                                    ushort c3) const
+char32_t QScript::Lexer::convertOctal(char32_t c1, char32_t c2, char32_t c3) const
 {
    return ((c1 - '0') * 64 + (c2 - '0') * 8 + c3 - '0');
 }
 
-unsigned char QScript::Lexer::convertHex(ushort c)
+unsigned char QScript::Lexer::convertHex(char32_t c)
 {
    if (c >= '0' && c <= '9') {
       return (c - '0');
@@ -1049,19 +1042,17 @@ unsigned char QScript::Lexer::convertHex(ushort c)
    }
 }
 
-unsigned char QScript::Lexer::convertHex(ushort c1, ushort c2)
+unsigned char QScript::Lexer::convertHex(char32_t c1, char32_t c2)
 {
    return ((convertHex(c1) << 4) + convertHex(c2));
 }
 
-QChar QScript::Lexer::convertUnicode(ushort c1, ushort c2,
-                                     ushort c3, ushort c4)
+QChar QScript::Lexer::convertUnicode(char32_t c1, char32_t c2, char32_t c3, char32_t c4)
 {
-   return QChar((convertHex(c3) << 4) + convertHex(c4),
-                (convertHex(c1) << 4) + convertHex(c2));
+   return QChar(char32_t((convertHex(c1) << 12) + (convertHex(c2) << 8) + (convertHex(c3) << 4) + convertHex(c4)));
 }
 
-void QScript::Lexer::record8(ushort c)
+void QScript::Lexer::record8(char32_t c)
 {
    Q_ASSERT(c <= 0xff);
 
@@ -1110,9 +1101,11 @@ bool QScript::Lexer::scanRegExp(RegExpBodyPrefix prefix)
       if (isLineTerminator() || current == 0) {
          errmsg = QLatin1String("Unterminated regular expression literal");
          return false;
+
       } else if (current != '/' || lastWasEscape == true) {
          record16(current);
          lastWasEscape = !lastWasEscape && (current == '\\');
+
       } else {
          if (driver) {
             Q_ASSERT_X(false, Q_FUNC_INFO, "not implemented");
@@ -1146,11 +1139,12 @@ bool QScript::Lexer::scanRegExp(RegExpBodyPrefix prefix)
          default:
             flag = 0;
       }
+
       if (flag == 0) {
-         errmsg = QString::fromLatin1("Invalid regular expression flag '%0'")
-                  .arg(QChar(current));
+         errmsg = QString("Invalid regular expression flag '%0'").formatArg(QChar(current));
          return false;
       }
+
       flags |= flag;
       record16(current);
       shift(1);
@@ -1172,4 +1166,3 @@ void QScript::Lexer::syncProhibitAutomaticSemicolon()
    }
 }
 
-QT_END_NAMESPACE

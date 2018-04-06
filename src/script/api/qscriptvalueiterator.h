@@ -25,10 +25,10 @@
 
 #include <QtScript/qscriptvalue.h>
 #include <QtCore/qscopedpointer.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
-class QString;
 class QScriptString;
 class QScriptValueIteratorPrivate;
 

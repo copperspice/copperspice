@@ -37,133 +37,9 @@
 #include "Operations.h"
 #include "Arguments.h"
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qnumeric.h>
-
-/*!
-  \since 4.3
-  \class QScriptValue
-
-  \brief The QScriptValue class acts as a container for the Qt Script data types.
-
-  \ingroup script
-  \mainclass
-
-  QScriptValue supports the types defined in the \l{ECMA-262}
-  standard: The primitive types, which are Undefined, Null, Boolean,
-  Number, and String; and the Object type. Additionally, Qt Script
-  has built-in support for QVariant, QObject and QMetaObject.
-
-  For the object-based types (including Date and RegExp), use the
-  newT() functions in QScriptEngine (e.g. QScriptEngine::newObject())
-  to create a QScriptValue of the desired type. For the primitive types,
-  use one of the QScriptValue constructor overloads.
-
-  The methods named isT() (e.g. isBool(), isUndefined()) can be
-  used to test if a value is of a certain type. The methods named
-  toT() (e.g. toBool(), toString()) can be used to convert a
-  QScriptValue to another type. You can also use the generic
-  qscriptvalue_cast() function.
-
-  Object values have zero or more properties which are themselves
-  QScriptValues. Use setProperty() to set a property of an object, and
-  call property() to retrieve the value of a property.
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalue.cpp 0
-
-  Each property can have a set of attributes; these are specified as
-  the third (optional) argument to setProperty(). The attributes of a
-  property can be queried by calling the propertyFlags() function. The
-  following code snippet creates a property that cannot be modified by
-  script code:
-
-  \snippet doc/src/snippets/code/src_script_qscriptvalue.cpp 1
-
-  If you want to iterate over the properties of a script object, use
-  the QScriptValueIterator class.
-
-  Object values have an internal \c{prototype} property, which can be
-  accessed with prototype() and setPrototype(). Properties added to a
-  prototype are shared by all objects having that prototype; this is
-  referred to as prototype-based inheritance. In practice, it means
-  that (by default) the property() function will automatically attempt
-  to look up look the property in the prototype() (and in the
-  prototype of the prototype(), and so on), if the object itself does
-  not have the requested property. Note that this prototype-based
-  lookup is not performed by setProperty(); setProperty() will always
-  create the property in the script object itself.  For more
-  information, see the \l{QtScript} documentation.
-
-  Function objects (objects for which isFunction() returns true) can
-  be invoked by calling call(). Constructor functions can be used to
-  construct new objects by calling construct().
-
-  Use equals(), strictlyEquals() and lessThan() to compare a QScriptValue
-  to another.
-
-  Object values can have custom data associated with them; see the
-  setData() and data() functions. By default, this data is not
-  accessible to scripts; it can be used to store any data you want to
-  associate with the script object. Typically this is used by custom
-  class objects (see QScriptClass) to store a C++ type that contains
-  the "native" object data.
-
-  Note that a QScriptValue for which isObject() is true only carries a
-  reference to an actual object; copying the QScriptValue will only
-  copy the object reference, not the object itself. If you want to
-  clone an object (i.e. copy an object's properties to another
-  object), you can do so with the help of a \c{for-in} statement in
-  script code, or QScriptValueIterator in C++.
-
-  \sa QScriptEngine, QScriptValueIterator
-*/
-
-/*!
-    \enum QScriptValue::SpecialValue
-
-    This enum is used to specify a single-valued type.
-
-    \value UndefinedValue An undefined value.
-
-    \value NullValue A null value.
-*/
-
-/*!
-    \enum QScriptValue::PropertyFlag
-
-    This enum describes the attributes of a property.
-
-    \value ReadOnly The property is read-only. Attempts by Qt Script code to write to the property will be ignored.
-
-    \value Undeletable Attempts by Qt Script code to \c{delete} the property will be ignored.
-
-    \value SkipInEnumeration The property is not to be enumerated by a \c{for-in} enumeration.
-
-    \value PropertyGetter The property is defined by a function which will be called to get the property value.
-
-    \value PropertySetter The property is defined by a function which will be called to set the property value.
-
-    \omitvalue QObjectMember This flag is used to indicate that an existing property is a QObject member (a property or method).
-
-    \value KeepExistingFlags This value is used to indicate to setProperty() that the property's flags should be left unchanged. If the property doesn't exist, the default flags (0) will be used.
-
-    \omitvalue UserRange Flags in this range are not used by Qt Script, and can be used for custom purposes.
-*/
-
-/*!
-    \enum QScriptValue::ResolveFlag
-
-    This enum specifies how to look up a property of an object.
-
-    \value ResolveLocal Only check the object's own properties.
-
-    \value ResolvePrototype Check the object's own properties first, then search the prototype chain. This is the default.
-
-    \omitvalue ResolveScope Check the object's own properties first, then search the scope chain.
-
-    \omitvalue ResolveFull Check the object's own properties first, then search the prototype chain, and finally search the scope chain.
-*/
+#include <qvariant.h>
+#include <qvarlengtharray.h>
+#include <qnumeric.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -367,12 +243,6 @@ QScriptValue::QScriptValue(qsreal value)
 }
 
 QScriptValue::QScriptValue(const QString &value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
-{
-   d_ptr->initFrom(value);
-}
-
-QScriptValue::QScriptValue(const QLatin1String &value)
    : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
 {
    d_ptr->initFrom(value);
@@ -1203,39 +1073,25 @@ QDateTime QScriptValue::toDateTime() const
    if (!d || !d->engine) {
       return QDateTime();
    }
+
    QScript::APIShim shim(d->engine);
+
    return QScriptEnginePrivate::toDateTime(d->engine->currentFrame, d->jscValue);
 }
 
-#ifndef QT_NO_REGEXP
-/*!
-  Returns the QRegExp representation of this value.
-  If this QScriptValue is not a regular expression, an empty
-  QRegExp is returned.
-
-  \sa isRegExp()
-*/
-QRegExp QScriptValue::toRegExp() const
+QRegularExpression QScriptValue::toRegExp() const
 {
    Q_D(const QScriptValue);
-   if (!d || !d->engine) {
-      return QRegExp();
+
+   if (! d || !d->engine) {
+      return QRegularExpression();
    }
+
    QScript::APIShim shim(d->engine);
+
    return QScriptEnginePrivate::toRegExp(d->engine->currentFrame, d->jscValue);
 }
-#endif // QT_NO_REGEXP
 
-/*!
-  If this QScriptValue is a QObject, returns the QObject pointer
-  that the QScriptValue represents; otherwise, returns 0.
-
-  If the QObject that this QScriptValue wraps has been deleted,
-  this function returns 0 (i.e. it is possible for toQObject()
-  to return 0 even when isQObject() returns true).
-
-  \sa isQObject()
-*/
 QObject *QScriptValue::toQObject() const
 {
    Q_D(const QScriptValue);
