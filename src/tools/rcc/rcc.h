@@ -143,6 +143,8 @@ class RCCResourceLibrary
    void writeMangleNamespaceFunction(const QByteArray &name);
    void writeAddNamespaceFunction(const QByteArray &name);
    void writeHex(quint8 number);
+
+   void writeNumber1(quint8 number);
    void writeNumber2(quint16 number);
    void writeNumber4(quint32 number);
 

@@ -162,13 +162,13 @@ int runRcc(int argc, char *argv[])
                errorMsg = QLatin1String("Missing compression level");
                break;
             }
-            library.setCompressLevel(args[++i].toInt());
+            library.setCompressLevel(args[++i].toInteger<int>());
          } else if (opt == QLatin1String("-threshold")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing compression threshold");
                break;
             }
-            library.setCompressThreshold(args[++i].toInt());
+            library.setCompressThreshold(args[++i].toInteger<int>());
 
          } else if (opt == QLatin1String("-binary")) {
             library.setFormat(RCCResourceLibrary::Binary);
@@ -194,7 +194,7 @@ int runRcc(int argc, char *argv[])
          } else if (opt == QLatin1String("-project")) {
             projectRequested = true;
          } else {
-            errorMsg = QString::fromLatin1("Unknown option: '%1'").arg(args[i]);
+            errorMsg = QString("Unknown option: '%1'").formatArg(args[i]);
          }
 
       } else {
@@ -243,7 +243,7 @@ int runRcc(int argc, char *argv[])
    } else {
       out.setFileName(outFilename);
       if (! out.open(mode)) {
-         const QString msg = QString::fromUtf8("Unable to open %1 for writing: %2\n").arg(outFilename).arg(out.errorString());
+         const QString msg = QString("Unable to open %1 for writing: %2\n").formatArg(outFilename).formatArg(out.errorString());
          errorDevice.write(msg.toUtf8());
 
          return 1;

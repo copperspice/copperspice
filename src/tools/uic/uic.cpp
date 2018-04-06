@@ -85,11 +85,12 @@ bool Uic::printDependencies()
    if (DomIncludes *includes = ui->elementIncludes()) {
       for (DomInclude * incl : includes->elementInclude()) {
          QString file = incl->text();
+
          if (file.isEmpty()) {
             continue;
          }
 
-         fprintf(stdout, "%s\n", file.toLocal8Bit().constData());
+         fprintf(stdout, "%s\n", csPrintable(file));
       }
    }
 
@@ -101,7 +102,7 @@ bool Uic::printDependencies()
                continue;
             }
 
-            fprintf(stdout, "%s\n", file.toLocal8Bit().constData());
+            fprintf(stdout, "%s\n", csPrintable(file));
          }
       }
    }
@@ -121,7 +122,7 @@ void Uic::writeCopyrightHeader(DomUI *ui)
    out << "/********************************************************************************\n";
    out << "** Form generated from reading UI file '" << QFileInfo(opt.inputFile).fileName() << "'\n";
    out << "**\n";
-   out << "** Created by: CopperSpice User Interface Compiler version " << QLatin1String(CS_VERSION_STR) << "\n";
+   out << "** Created by: CopperSpice User Interface Compiler version " << CS_VERSION_STR << "\n";
    out << "**\n";
    out << "** WARNING! All changes made in this file will be lost when recompiling UI file!\n";
    out << "********************************************************************************/\n\n";
@@ -133,9 +134,11 @@ static double versionFromUiAttribute(QXmlStreamReader &reader)
 {
    const QXmlStreamAttributes attributes = reader.attributes();
    const QString versionAttribute = QLatin1String("version");
-   if (!attributes.hasAttribute(versionAttribute)) {
+
+   if (! attributes.hasAttribute(versionAttribute)) {
       return 4.0;
    }
+
    const QString version = attributes.value(versionAttribute).toString();
    return version.toDouble();
 }
@@ -143,32 +146,29 @@ static double versionFromUiAttribute(QXmlStreamReader &reader)
 DomUI *Uic::parseUiFile(QXmlStreamReader &reader)
 {
    DomUI *ui = 0;
+   const QString uiElement = "ui";
 
-   const QString uiElement = QLatin1String("ui");
-   while (!reader.atEnd()) {
+   while (! reader.atEnd()) {
       if (reader.readNext() == QXmlStreamReader::StartElement) {
-         if (reader.name().compare(uiElement, Qt::CaseInsensitive) == 0
-               && !ui) {
-            const double version = versionFromUiAttribute(reader);
-            if (version < 4.0) {
-               const QString msg = QString::fromLatin1("uic: File generated with too old version of Qt Designer (%1)").arg(version);
-               fprintf(stderr, "%s\n", qPrintable(msg));
-               return 0;
-            }
+
+         if (QString(reader.name()).compare(uiElement, Qt::CaseInsensitive) == 0 && ! ui) {
+            // const double version = versionFromUiAttribute(reader);
 
             ui = new DomUI();
             ui->read(reader);
+
          } else {
             reader.raiseError(QLatin1String("Unexpected element ") + reader.name().toString());
          }
       }
    }
+
    if (reader.hasError()) {
       delete ui;
       ui = 0;
-      fprintf(stderr, "%s\n", qPrintable(QString::fromLatin1("uic: Error in line %1, column %2 : %3")
-                                         .arg(reader.lineNumber()).arg(reader.columnNumber())
-                                         .arg(reader.errorString())));
+
+      fprintf(stderr, "%s\n", csPrintable(QString("uic: Error in line %1, column %2 : %3")
+                  .formatArg(reader.lineNumber()).formatArg(reader.columnNumber()).formatArg(reader.errorString())));
    }
 
    return ui;
@@ -206,18 +206,22 @@ bool Uic::write(QIODevice *in)
    bool rtn = false;
 
    if (option().generator == Option::JavaGenerator) {
+
 #ifdef QT_UIC_JAVA_GENERATOR
-      if (language.toLower() != QLatin1String("jambi")) {
+      if (language.toLower() != "jambi") {
          fprintf(stderr, "uic: File is not a 'jambi' form\n");
          return false;
       }
+
       rtn = jwrite (ui);
 #else
       fprintf(stderr, "uic: option to generate java code not compiled in\n");
 #endif
+
    } else {
+
 #ifdef QT_UIC_CPP_GENERATOR
-      if (!language.isEmpty() && language.toLower() != QLatin1String("c++")) {
+      if (!language.isEmpty() && language.toLower() != "c++") {
          fprintf(stderr, "uic: File is not a 'c++' ui file, language=%s\n", qPrintable(language));
          return false;
       }

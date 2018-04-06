@@ -23,7 +23,7 @@
 #ifndef XML_QDOM_H
 #define XML_QDOM_H
 
-#include <qstring.h>
+#include <qstring8.h>
 
 QT_BEGIN_NAMESPACE
 

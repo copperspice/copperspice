@@ -230,9 +230,8 @@ struct WriteInitialization : public TreeWalker {
       Driver *m_driver;
    };
 
-   void addInitializer(Item *item,
-                       const QString &name, int column, const QString &value, const QString &directive = QString(),
-                       bool translatable = false) const;
+   void addInitializer(Item *item, const QString &name, int column, const QString &value, const QString &directive = QString(),
+                  bool translatable = false) const;
 
    void addQtFlagsInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1) const;
 
@@ -240,8 +239,8 @@ struct WriteInitialization : public TreeWalker {
 
    void addBrushInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1);
 
-   void addStringInitializer(Item *item,
-                             const DomPropertyMap &properties, const QString &name, int column = -1, const QString &directive = QString()) const;
+   void addStringInitializer(Item *item, const DomPropertyMap &properties, const QString &name, int column = -1,
+                  const QString &directive = QString()) const;
 
    void addCommonInitializers(Item *item, const DomPropertyMap &properties, int column = -1);
 

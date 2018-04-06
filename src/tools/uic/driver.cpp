@@ -118,13 +118,15 @@ QString Driver::findOrInsertButtonGroup(const DomButtonGroup *ui_group)
 const DomButtonGroup *Driver::findButtonGroup(const QString &attributeName) const
 {
    const ButtonGroupNameHash::const_iterator cend = m_buttonGroups.constEnd();
-   for (ButtonGroupNameHash::const_iterator it = m_buttonGroups.constBegin(); it != cend; ++it)
+
+   for (auto it = m_buttonGroups.constBegin(); it != cend; ++it)  {
       if (it.key()->attributeName() == attributeName) {
          return it.key();
       }
+   }
+
    return 0;
 }
-
 
 QString Driver::findOrInsertName(const QString &name)
 {
@@ -133,14 +135,18 @@ QString Driver::findOrInsertName(const QString &name)
 
 QString Driver::normalizedName(const QString &name)
 {
-   QString result = name;
-   QChar *data = result.data();
-   for (int i = name.size(); --i >= 0; ++data) {
-      if (!data->isLetterOrNumber()) {
-         *data = QLatin1Char('_');
+   QString retval;
+
+   for (QChar c : name) {
+
+      if (c.isLetterOrNumber()) {
+         retval.append(c);
+      } else {
+         retval.append('_');
       }
    }
-   return result;
+
+   return retval;
 }
 
 QString Driver::unique(const QString &instanceName, const QString &className)
@@ -158,6 +164,7 @@ QString Driver::unique(const QString &instanceName, const QString &className)
          alreadyUsed = true;
          name = base + QString::number(id++);
       }
+
    } else if (className.size()) {
       name = unique(qtify(className));
    } else {
@@ -166,12 +173,11 @@ QString Driver::unique(const QString &instanceName, const QString &className)
 
    if (alreadyUsed && className.size()) {
       fprintf(stderr, "%s: Warning: The name '%s' (%s) is already in use, defaulting to '%s'.\n",
-              qPrintable(m_option.messagePrefix()),
-              qPrintable(instanceName), qPrintable(className),
-              qPrintable(name));
+              qPrintable(m_option.messagePrefix()), qPrintable(instanceName), qPrintable(className), qPrintable(name));
    }
 
    m_nameRepository.insert(name, true);
+
    return name;
 }
 
@@ -179,16 +185,19 @@ QString Driver::qtify(const QString &name)
 {
    QString qname = name;
 
-   if (qname.at(0) == QLatin1Char('Q') || qname.at(0) == QLatin1Char('K')) {
+   if (qname.startsWith('Q') || qname.startsWith('K')) {
       qname = qname.mid(1);
    }
 
    int i = 0;
    while (i < qname.length()) {
+
       if (qname.at(i).toLower() != qname.at(i)) {
-         qname[i] = qname.at(i).toLower();
+         qname.replace(i, 1,  qname.at(i).toLower());
+
       } else {
          break;
+
       }
 
       ++i;

@@ -30,6 +30,7 @@
 #include <QTextEdit>
 #include <QUrl>
 #include <QWidget>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,7 +40,6 @@ class QContextMenuEvent;
 class QKeyEvent;
 class QMenu;
 class QSizeF;
-class QString;
 class QVariant;
 
 class MessageHighlighter;

@@ -37,7 +37,8 @@ static const char *error = 0;
 
 void showHelp(const char *appName)
 {
-   fprintf(stderr, "Qt User Interface Compiler version %s\n", UIC_VERSION_STR);
+   fprintf(stderr, "CopperSpice User Interface Compiler version %s\n", UIC_VERSION_STR);
+
    if (error) {
       fprintf(stderr, "%s: %s\n", appName, error);
    }
@@ -60,53 +61,70 @@ int runUic(int argc, char *argv[])
    Driver driver;
 
    const char *fileName = 0;
-
    int arg = 1;
+
    while (arg < argc) {
-      QString opt = QString::fromLocal8Bit(argv[arg]);
-      if (opt == QLatin1String("-h") || opt == QLatin1String("-help")) {
+      QString opt = QString::fromUtf8(argv[arg]);
+
+      if (opt == QLatin1String("-h") || opt == "-help") {
          showHelp(argv[0]);
          return 0;
-      } else if (opt == QLatin1String("-d") || opt == QLatin1String("-dependencies")) {
+
+      } else if (opt == QLatin1String("-d") || opt == "-dependencies") {
          driver.option().dependencies = true;
-      } else if (opt == QLatin1String("-v") || opt == QLatin1String("-version")) {
+
+      } else if (opt == QLatin1String("-v") || opt == "-version") {
          fprintf(stderr, "CopperSpice User Interface Compiler version %s\n", UIC_VERSION_STR);
          return 0;
+
       } else if (opt == QLatin1String("-o") || opt == QLatin1String("-output")) {
          ++arg;
+
          if (!argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
          driver.option().outputFile = QFile::decodeName(argv[arg]);
+
       } else if (opt == QLatin1String("-p") || opt == QLatin1String("-no-protection")) {
          driver.option().headerProtection = false;
+
       } else if (opt == QLatin1String("-n") || opt == QLatin1String("-no-implicit-includes")) {
          driver.option().implicitIncludes = false;
+
       } else if (opt == QLatin1String("-postfix")) {
          ++arg;
-         if (!argv[arg]) {
+
+         if (! argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
-         driver.option().postfix = QLatin1String(argv[arg]);
+         driver.option().postfix = QString::fromUtf8(argv[arg]);
+
       } else if (opt == QLatin1String("-tr") || opt == QLatin1String("-translate")) {
          ++arg;
          if (!argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
-         driver.option().translateFunction = QLatin1String(argv[arg]);
-      } else if (opt == QLatin1String("-g") || opt == QLatin1String("-generator")) {
+
+         driver.option().translateFunction = QString::fromUtf8(argv[arg]);
+
+
+      } else if (opt == "-g" || opt == "-generator") {
          ++arg;
-         if (!argv[arg]) {
+
+         if (! argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
-         QString name = QString::fromLocal8Bit(argv[arg]).toLower ();
-         driver.option().generator = (name == QLatin1String ("java")) ? Option::JavaGenerator : Option::CppGenerator;
+
+         QString name = QString::fromUtf8(argv[arg]).toLower();
+         driver.option().generator = (name == "java") ? Option::JavaGenerator : Option::CppGenerator;
+
       } else if (!fileName) {
          fileName = argv[arg];
+
       } else {
          showHelp(argv[0]);
          return 1;
@@ -116,8 +134,9 @@ int runUic(int argc, char *argv[])
    }
 
    QString inputFile;
+
    if (fileName) {
-      inputFile = QString::fromLocal8Bit(fileName);
+      inputFile = QString::fromUtf8(fileName);
    } else {
       driver.option().headerProtection = false;
    }
@@ -128,12 +147,15 @@ int runUic(int argc, char *argv[])
 
    QTextStream *out = 0;
    QFile f;
+
    if (driver.option().outputFile.size()) {
       f.setFileName(driver.option().outputFile);
+
       if (!f.open(QIODevice::WriteOnly | QFile::Text)) {
          fprintf(stderr, "Could not create output file\n");
          return 1;
       }
+
       out = new QTextStream(&f);
       out->setCodec(QTextCodec::codecForName("UTF-8"));
    }
@@ -141,12 +163,12 @@ int runUic(int argc, char *argv[])
    bool rtn = driver.uic(inputFile, out);
    delete out;
 
-   if (!rtn) {
+   if (! rtn) {
       if (driver.option().outputFile.size()) {
          f.close();
          f.remove();
       }
-      fprintf(stderr, "File '%s' is not valid\n", inputFile.isEmpty() ? "<stdin>" : inputFile.toLocal8Bit().constData());
+      fprintf(stderr, "File '%s' is not valid\n", inputFile.isEmpty() ? "<stdin>" : csPrintable(inputFile));
    }
 
    return !rtn;

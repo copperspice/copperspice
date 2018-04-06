@@ -24,13 +24,10 @@
 #define LUPDATE_H
 
 #include "qglobal.h"
-
-#include <QList>
-
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+#include <qstringfwd.h>
 
 class ConversionData;
-class QString;
 class QStringList;
 class Translator;
 class TranslatorMessage;
@@ -52,8 +49,7 @@ enum UpdateOption {
 Q_DECLARE_FLAGS(UpdateOptions, UpdateOption)
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
-Translator merge(const Translator &tor, const Translator &virginTor,
-                 UpdateOptions options, QString &err);
+Translator merge(const Translator &tor, const Translator &virginTor, UpdateOptions options, QString &err);
 
 void fetchtrInlinedCpp(const QString &in, Translator &translator, const QString &context);
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd);
@@ -61,7 +57,5 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
 bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadUI(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadQml(Translator &translator, const QString &filename, ConversionData &cd);
-
-QT_END_NAMESPACE
 
 #endif
