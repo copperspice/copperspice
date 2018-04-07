@@ -58,7 +58,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    if (!url.host().isEmpty()) {
       // we handle only local files
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend",
-                    "Request for opening non-local file %1").arg(url.toString());
+                    "Request for opening non-local file %1").formatArg(url.toString());
 
       setError(QNetworkReply::ProtocolInvalidOperationError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
@@ -86,11 +86,11 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QFileInfo fi(fileName);
    if (fi.isDir()) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend",
-                    "Can not open %1: Path is a directory").arg(url.toString());
+                    "Can not open %1: Path is a directory").formatArg(url.toString());
 
       setError(QNetworkReply::ContentOperationNotPermittedError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                                Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
+                  Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
       return;
    }
@@ -101,12 +101,12 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    // could we open the file?
    if (!opened) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Error opening %1: %2")
-                    .arg(d->realFile.fileName(), d->realFile.errorString());
+                  .formatArgs(d->realFile.fileName(), d->realFile.errorString());
 
       if (d->realFile.exists()) {
          setError(QNetworkReply::ContentAccessDenied, msg);
          QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                                   Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentAccessDenied));
+                  Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentAccessDenied));
       } else {
          setError(QNetworkReply::ContentNotFoundError, msg);
          QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,

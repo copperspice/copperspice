@@ -31,12 +31,15 @@
 #include <qdatastream.h>
 #include <qendian.h>
 #include <qstring.h>
+#include <qstring16.h>
 #include <qdatetime.h>
+#include <qtextcodec.h>
 
 #ifdef Q_OS_WIN
 #include <qmutex.h>
 #include <qmutexpool_p.h>
 #include <rpc.h>
+
 #define SECURITY_WIN32 1
 #include <security.h>
 
@@ -73,9 +76,6 @@ QAuthenticator::QAuthenticator(const QAuthenticator &other)
    }
 }
 
-/*!
-    Assigns the contents of \a other to this authenticator.
-*/
 QAuthenticator &QAuthenticator::operator=(const QAuthenticator &other)
 {
    if (d == other.d) {
@@ -105,10 +105,6 @@ QAuthenticator &QAuthenticator::operator=(const QAuthenticator &other)
    return *this;
 }
 
-/*!
-    Returns true if this authenticator is identical to \a other; otherwise
-    returns false.
-*/
 bool QAuthenticator::operator==(const QAuthenticator &other) const
 {
    if (d == other.d) {
@@ -137,14 +133,10 @@ void QAuthenticator::setUser(const QString &user)
    d->updateCredentials();
 }
 
-/*!
-  returns the password used for authentication.
-*/
 QString QAuthenticator::password() const
 {
    return d ? d->password : QString();
 }
-
 
 void QAuthenticator::setPassword(const QString &password)
 {
@@ -186,37 +178,17 @@ QVariant QAuthenticator::option(const QString &opt) const
    return d ? d->options.value(opt) : QVariant();
 }
 
-/*!
-    \since 4.7
-    Returns all incoming options set in this QAuthenticator object by parsing
-    the server reply. See \l{QAuthenticator#Options} for more information
-    on incoming options.
-
-    \sa option(), QAuthenticator#Options
-*/
 QVariantHash QAuthenticator::options() const
 {
    return d ? d->options : QVariantHash();
 }
 
-/*!
-    \since 4.7
-
-    Sets the outgoing option \a opt to value \a value.
-    See \l{QAuthenticator#Options} for more information on outgoing options.
-
-    \sa options(), option(), QAuthenticator#Options
-*/
 void QAuthenticator::setOption(const QString &opt, const QVariant &value)
 {
    detach();
    d->options.insert(opt, value);
 }
 
-
-/*!
-    Returns true if the authenticator is null.
-*/
 bool QAuthenticator::isNull() const
 {
    return !d;
@@ -248,6 +220,7 @@ QAuthenticatorPrivate::QAuthenticatorPrivate()
 
 QAuthenticatorPrivate::~QAuthenticatorPrivate()
 {
+
 #if defined(Q_OS_WIN)
    if (ntlmWindowsHandles) {
       delete ntlmWindowsHandles;
@@ -267,12 +240,14 @@ void QAuthenticatorPrivate::updateCredentials()
             realm.clear();
             userDomain = user.left(separatorPosn);
             extractedUser = user.mid(separatorPosn + 1);
+
          } else {
             extractedUser = user;
             realm.clear();
             userDomain.clear();
          }
          break;
+
       default:
          userDomain.clear();
          break;
@@ -870,41 +845,43 @@ static void qStreamNtlmBuffer(QDataStream &ds, const QByteArray &s)
    ds.writeRawData(s.constData(), s.size());
 }
 
-
 static void qStreamNtlmString(QDataStream &ds, const QString &s, bool unicode)
 {
-   if (!unicode) {
+   if (! unicode) {
       qStreamNtlmBuffer(ds, s.toLatin1());
       return;
    }
-   const ushort *d = s.utf16();
-   for (int i = 0; i < s.length(); ++i) {
-      ds << d[i];
+
+   const QString16 &tmp = s.toUtf16();
+   auto ptr = tmp.constData();
+
+   for (int i = 0; i < tmp.size_storage(); ++i) {
+      ds << ptr[i];
    }
 }
-
-
 
 static int qEncodeNtlmBuffer(QNtlmBuffer &buf, int offset, const QByteArray &s)
 {
    buf.len = s.size();
    buf.maxLen = buf.len;
    buf.offset = (offset + 1) & ~1;
+
    return buf.offset + buf.len;
 }
 
 
 static int qEncodeNtlmString(QNtlmBuffer &buf, int offset, const QString &s, bool unicode)
 {
-   if (!unicode) {
+   if (! unicode) {
       return qEncodeNtlmBuffer(buf, offset, s.toLatin1());
    }
+
    buf.len = 2 * s.length();
    buf.maxLen = buf.len;
    buf.offset = (offset + 1) & ~1;
+
    return buf.offset + buf.len;
 }
-
 
 static QDataStream &operator<<(QDataStream &s, const QNtlmBuffer &b)
 {
@@ -921,8 +898,9 @@ static QDataStream &operator>>(QDataStream &s, QNtlmBuffer &b)
 
 class QNtlmPhase1Block : public QNtlmPhase1BlockBase
 {
-   // request
  public:
+   // request
+
    QNtlmPhase1Block() {
       qstrncpy(magic, "NTLMSSP", 8);
       type = 1;
@@ -936,8 +914,9 @@ class QNtlmPhase1Block : public QNtlmPhase1BlockBase
 
 class QNtlmPhase2Block : public QNtlmPhase2BlockBase
 {
-   // challenge
  public:
+   // challenge
+
    QNtlmPhase2Block() {
       magic[0] = 0;
       type = 0xffffffff;
@@ -947,8 +926,6 @@ class QNtlmPhase2Block : public QNtlmPhase2BlockBase
    QString targetNameStr, targetInfoStr;
    QByteArray targetInfoBuff;
 };
-
-
 
 class QNtlmPhase3Block : public QNtlmPhase3BlockBase    // response
 {
@@ -987,11 +964,11 @@ static QDataStream &operator<<(QDataStream &s, const QNtlmPhase1Block &b)
    return s;
 }
 
-
 static QDataStream &operator<<(QDataStream &s, const QNtlmPhase3Block &b)
 {
    bool unicode = (b.flags & NTLMSSP_NEGOTIATE_UNICODE);
    s.writeRawData(b.magic, sizeof(b.magic));
+
    s << b.type;
    s << b.lmResponse;
    s << b.ntlmResponse;
@@ -1001,13 +978,13 @@ static QDataStream &operator<<(QDataStream &s, const QNtlmPhase3Block &b)
    s << b.sessionKey;
    s << b.flags;
 
-   if (!b.domainStr.isEmpty()) {
+   if (! b.domainStr.isEmpty()) {
       qStreamNtlmString(s, b.domainStr, unicode);
    }
 
    qStreamNtlmString(s, b.userStr, unicode);
 
-   if (!b.workstationStr.isEmpty()) {
+   if (! b.workstationStr.isEmpty()) {
       qStreamNtlmString(s, b.workstationStr, unicode);
    }
 
@@ -1015,66 +992,35 @@ static QDataStream &operator<<(QDataStream &s, const QNtlmPhase3Block &b)
    qStreamNtlmBuffer(s, b.lmResponseBuf);
    qStreamNtlmBuffer(s, b.ntlmResponseBuf);
 
-
    return s;
 }
-
 
 static QByteArray qNtlmPhase1()
 {
    QByteArray rc;
    QDataStream ds(&rc, QIODevice::WriteOnly);
    ds.setByteOrder(QDataStream::LittleEndian);
+
    QNtlmPhase1Block pb;
    ds << pb;
+
    return rc;
 }
 
-
 static QByteArray qStringAsUcs2Le(const QString &src)
 {
-   QByteArray rc(2 * src.length(), 0);
-   const unsigned short *s = src.utf16();
-   unsigned short *d = (unsigned short *)rc.data();
-   for (int i = 0; i < src.length(); ++i) {
-      d[i] = qToLittleEndian(s[i]);
-   }
-   return rc;
+   static QTextCodec *codec = QTextCodec::codecForName("UTF-16LE");
+   return codec->fromUnicode(src);
 }
 
 static QString qStringFromUcs2Le(QByteArray src)
 {
    Q_ASSERT(src.size() % 2 == 0);
-   unsigned short *d = (unsigned short *)src.data();
-   for (int i = 0; i < src.length() / 2; ++i) {
-      d[i] = qFromLittleEndian(d[i]);
-   }
-   return QString((const QChar *)src.data(), src.size() / 2);
+
+   static QTextCodec *codec = QTextCodec::codecForName("UTF-16LE");
+   return codec->toUnicode(src);
 }
 
-
-/*********************************************************************
-* Function Name: qEncodeHmacMd5
-* Params:
-*    key:   Type - QByteArray
-*         - It is the Authentication key
-*    message:   Type - QByteArray
-*         - This is the actual message which will be encoded
-*           using HMacMd5 hash algorithm
-*
-* Return Value:
-*    hmacDigest:   Type - QByteArray
-*
-* Description:
-*    This function will be used to encode the input message using
-*    HMacMd5 hash algorithm.
-*
-*    As per the RFC2104 the HMacMd5 algorithm can be specified
-*        ---------------------------------------
-*         MD5(K XOR opad, MD5(K XOR ipad, text))
-*        ---------------------------------------
-*
-*********************************************************************/
 QByteArray qEncodeHmacMd5(QByteArray &key, const QByteArray &message)
 {
    Q_ASSERT_X(!(message.isEmpty()), "qEncodeHmacMd5", "Empty message check");
@@ -1132,15 +1078,17 @@ QByteArray qEncodeHmacMd5(QByteArray &key, const QByteArray &message)
 
    /*MD5 hash always returns 16 byte digest only and HMAC-MD5 spec
      (RFC 2104) also says digest length should be 16 bytes*/
+
    return hmacDigest;
 }
 
-static QByteArray qCreatev2Hash(const QAuthenticatorPrivate *ctx,
-                                QNtlmPhase3Block *phase3)
+static QByteArray qCreatev2Hash(const QAuthenticatorPrivate *ctx, QNtlmPhase3Block *phase3)
 {
    Q_ASSERT(phase3 != 0);
+
    // since v2 Hash is need for both NTLMv2 and LMv2 it is calculated
    // only once and stored and reused
+
    if (phase3->v2Hash.size() == 0) {
       QCryptographicHash md4(QCryptographicHash::Md4);
       QByteArray passUnicode = qStringAsUcs2Le(ctx->password);
@@ -1148,13 +1096,13 @@ static QByteArray qCreatev2Hash(const QAuthenticatorPrivate *ctx,
 
       QByteArray hashKey = md4.result();
       Q_ASSERT(hashKey.size() == 16);
+
       // Assuming the user and domain is always unicode in challenge
-      QByteArray message =
-         qStringAsUcs2Le(ctx->extractedUser.toUpper()) +
-         qStringAsUcs2Le(phase3->domainStr);
+      QByteArray message = qStringAsUcs2Le(ctx->extractedUser.toUpper()) + qStringAsUcs2Le(phase3->domainStr);
 
       phase3->v2Hash = qEncodeHmacMd5(hashKey, message);
    }
+
    return phase3->v2Hash;
 }
 

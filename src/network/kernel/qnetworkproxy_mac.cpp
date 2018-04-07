@@ -27,12 +27,12 @@
 #include <CFNetwork/CFNetwork.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <SystemConfiguration/SystemConfiguration.h>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtCore/qendian.h>
-#include <QtCore/qstringlist.h>
+
+#include <qendian.h>
 #include <qcore_mac_p.h>
+#include <qregularexpression.h>
+#include <qstringlist.h>
+#include <qurl.h>
 
 /*
  * MacOS X has a proxy configuration module in System Preferences (on

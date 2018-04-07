@@ -39,7 +39,7 @@
 #include <qiodevice_p.h>
 #include <qendian.h>
 #include <qnetworkinterface.h>
-
+#include <qstring.h>
 
 static const int MaxWriteBufferSize = 128 * 1024;
 
@@ -125,14 +125,14 @@ static QString dump(const QByteArray &buf)
       }
 
       uint val = (unsigned char)buf.at(i);
-      // data += QString("0x%1").arg(val, 3, 16, QLatin1Char('0'));
       data += QString::number(val);
    }
+
    if (buf.size() > MAX_DATA_DUMP) {
       data += QLatin1String(" ...");
    }
 
-   return QString::fromLatin1("size: %1 data: { %2 }").arg(buf.size()).arg(data);
+   return QString::fromLatin1("size: %1 data: { %2 }").formatArg(buf.size()).formatArg(data);
 }
 
 #else
@@ -640,7 +640,7 @@ void QSocks5SocketEnginePrivate::setErrorState(Socks5State state, const QString 
          q->setError(QAbstractSocket::ProxyAuthenticationRequiredError,
                      extraMessage.isEmpty() ?
                      QSocks5SocketEngine::tr("Proxy authentication failed") :
-                     QSocks5SocketEngine::tr("Proxy authentication failed: %1").arg(extraMessage));
+                     QSocks5SocketEngine::tr("Proxy authentication failed: %1").formatArg(extraMessage));
          break;
 
       case RequestError:
@@ -701,7 +701,7 @@ void QSocks5SocketEnginePrivate::setErrorState(Socks5State state, Socks5Error so
 
       default:
          q->setError(QAbstractSocket::UnknownSocketError,
-                     QSocks5SocketEngine::tr("Unknown SOCKSv5 proxy error code 0x%1").arg(int(socks5error), 16));
+                     QSocks5SocketEngine::tr("Unknown SOCKSv5 proxy error code 0x%1").formatArg(int(socks5error), 16));
          break;
    }
 

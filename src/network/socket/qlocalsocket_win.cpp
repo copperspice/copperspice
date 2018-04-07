@@ -24,6 +24,7 @@
 #include <qthread_p.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qstring.h>
 
 void QLocalSocketPrivate::init()
 {
@@ -56,22 +57,22 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
       case ERROR_BROKEN_PIPE:
       case ERROR_NO_DATA:
          error = QLocalSocket::ConnectionError;
-         errorString = QLocalSocket::tr("%1: Connection error").arg(function);
+         errorString = QLocalSocket::tr("%1: Connection error").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
       case ERROR_FILE_NOT_FOUND:
          error = QLocalSocket::ServerNotFoundError;
-         errorString = QLocalSocket::tr("%1: Invalid name").arg(function);
+         errorString = QLocalSocket::tr("%1: Invalid name").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
       case ERROR_ACCESS_DENIED:
          error = QLocalSocket::SocketAccessError;
-         errorString = QLocalSocket::tr("%1: Access denied").arg(function);
+         errorString = QLocalSocket::tr("%1: Access denied").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
       default:
          error = QLocalSocket::UnknownSocketError;
-         errorString = QLocalSocket::tr("%1: Unknown error %2").arg(function).arg(windowsError);
+         errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(windowsError);
 
 #if defined QLOCALSOCKET_DEBUG
          qWarning() << "QLocalSocket error not handled:" << errorString;
@@ -115,6 +116,7 @@ void QLocalSocketPrivate::destroyPipeHandles()
 void QLocalSocket::connectToServer(OpenMode openMode)
 {
    Q_D(QLocalSocket);
+
    if (state() == ConnectedState || state() == ConnectingState) {
       setErrorString(tr("Trying to connect while connection is in progress"));
       emit error(QLocalSocket::OperationError);
@@ -125,16 +127,20 @@ void QLocalSocket::connectToServer(OpenMode openMode)
    d->errorString = QString();
    d->state = ConnectingState;
    emit stateChanged(d->state);
+
    if (d->serverName.isEmpty()) {
       d->error = QLocalSocket::ServerNotFoundError;
-      setErrorString(QLocalSocket::tr("%1: Invalid name").arg(QLatin1String("QLocalSocket::connectToServer")));
+      setErrorString(QLocalSocket::tr("%1: Invalid name").formatArg("QLocalSocket::connectToServer"));
       d->state = UnconnectedState;
+
       emit error(d->error);
       emit stateChanged(d->state);
+
       return;
    }
 
-   QString pipePath = QLatin1String("\\\\.\\pipe\\");
+   QString pipePath = "\\\\.\\pipe\\";
+
    if (d->serverName.startsWith(pipePath)) {
       d->fullServerName = d->serverName;
    } else {
@@ -143,16 +149,13 @@ void QLocalSocket::connectToServer(OpenMode openMode)
 
    // Try to open a named pipe
    HANDLE localSocket;
-   forever {
+
+   while (true) {
       DWORD permissions = (openMode & QIODevice::ReadOnly) ? GENERIC_READ : 0;
       permissions |= (openMode & QIODevice::WriteOnly) ? GENERIC_WRITE : 0;
-      localSocket = CreateFile((const wchar_t *)d->fullServerName.utf16(),   // pipe name
-                               permissions,
-                               0,              // no sharing
-                               NULL,           // default security attributes
-                               OPEN_EXISTING,  // opens existing pipe
-                               FILE_FLAG_OVERLAPPED,
-                               NULL);          // no template file
+
+      localSocket = CreateFile(d->fullServerName.toStdWString().c_str(), permissions, 0,
+                  NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
 
       if (localSocket != INVALID_HANDLE_VALUE)  {
          break;
@@ -164,14 +167,14 @@ void QLocalSocket::connectToServer(OpenMode openMode)
          break;
       }
 
-      // All pipe instances are busy, so wait until connected or up to 5 seconds.
-      if (!WaitNamedPipe((const wchar_t *)d->fullServerName.utf16(), 5000))   {
+      // All pipe instances are busy so wait until connected or up to 5 seconds.
+      if (! WaitNamedPipe(d->fullServerName.toStdWString().c_str(), 5000))   {
          break;
       }
    }
 
    if (localSocket == INVALID_HANDLE_VALUE) {
-      d->setErrorString(QLatin1String("QLocalSocket::connectToServer"));
+      d->setErrorString("QLocalSocket::connectToServer");
       d->fullServerName = QString();
       return;
    }

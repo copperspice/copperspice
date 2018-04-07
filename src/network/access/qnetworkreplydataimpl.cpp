@@ -83,7 +83,7 @@ QNetworkReplyDataImpl::QNetworkReplyDataImpl(QObject *parent, const QNetworkRequ
 
    } else {
       // something is wrong with this URL
-      const QString msg = QCoreApplication::translate("QNetworkAccessDataBackend", "Invalid URI: %1").arg(url.toString());
+      const QString msg = QCoreApplication::translate("QNetworkAccessDataBackend", "Invalid URI: %1").formatArg(url.toString());
 
       setError(QNetworkReply::ProtocolFailure, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,

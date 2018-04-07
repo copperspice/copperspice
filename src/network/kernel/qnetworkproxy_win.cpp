@@ -28,7 +28,7 @@
 
 #include <qmutex.h>
 #include <qstringlist.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qurl.h>
 
 #include <qsystemlibrary_p.h>
@@ -209,7 +209,8 @@ static bool isBypassed(const QString &host, const QStringList &bypassList)
 
       } else {
          // do wildcard matching
-         QRegExp rx(entry, Qt::CaseInsensitive, QRegExp::Wildcard);
+         QRegularExpression rx(entry, Qt::CaseInsensitive, QRegExp::Wildcard);
+
          if (rx.exactMatch(host)) {
             return true;
          }

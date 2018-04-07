@@ -74,8 +74,10 @@ QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interface
 {
    QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList = allInterfaces();
    QList<QSharedDataPointer<QNetworkInterfacePrivate> >::ConstIterator it = interfaceList.constBegin();
+
    bool ok;
-   uint index = name.toUInt(&ok);
+   uint index = name.toInteger<uint>(&ok);
+
    for ( ; it != interfaceList.constEnd(); ++it) {
       if (ok && (*it)->index == int(index)) {
          return *it;

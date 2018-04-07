@@ -506,9 +506,10 @@ bool QHttpNetworkReplyPrivate::parseStatus(const QByteArray &status)
 
    int i = spacePos;
    int j = status.indexOf(' ', i + 1); // j == -1 || at(j) == ' ' so j+1 == 0 && j+1 <= length()
-   const QByteArray code = status.mid(i + 1, j - i - 1);
 
+   const QByteArray code = status.mid(i + 1, j - i - 1);
    bool ok;
+
    statusCode = code.toInt(&ok);
    reasonPhrase = QString::fromLatin1(status.constData() + j + 1);
 
@@ -524,8 +525,8 @@ qint64 QHttpNetworkReplyPrivate::readHeader(QAbstractSocket *socket)
       fragment.reserve(512);
    }
 
-   qint64 bytes = 0;
-   char c = 0;
+   qint64 bytes    = 0;
+   char c          = 0;
    bool allHeaders = false;
    qint64 haveRead = 0;
    do {
@@ -534,9 +535,11 @@ qint64 QHttpNetworkReplyPrivate::readHeader(QAbstractSocket *socket)
       if (haveRead == 0) {
          // read more later
          break;
+
       } else if (haveRead == -1) {
          // connection broke down
          return -1;
+
       } else {
          fragment.append(c);
          bytes++;

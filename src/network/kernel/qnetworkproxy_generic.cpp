@@ -98,7 +98,8 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
    }
 
    if (!proxy_env.isEmpty()) {
-      QUrl url = QUrl(QString::fromLocal8Bit(proxy_env));
+      QUrl url = QUrl(QString::fromUtf8(proxy_env));
+
       if (url.scheme() == QLatin1String("socks5")) {
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
                              url.port() ? url.port() : 1080, url.userName(), url.password());
@@ -107,6 +108,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
       } else if (url.scheme() == QLatin1String("socks5h")) {
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
                              url.port() ? url.port() : 1080, url.userName(), url.password());
+
          proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
          proxyList << proxy;
 

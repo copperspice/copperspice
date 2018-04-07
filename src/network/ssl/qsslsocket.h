@@ -24,7 +24,7 @@
 #define QSSLSOCKET_H
 
 #include <qlist.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 
 #ifdef QT_SSL
 
@@ -139,13 +139,13 @@ public:
 
    // CA settings.
    bool addCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+                  QRegularExpression::PatternSyntax syntax = QRegularExpression::FixedString);
 
    void addCaCertificate(const QSslCertificate &certificate);
    void addCaCertificates(const QList<QSslCertificate> &certificates);
 
    static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+                  QRegularExpression::PatternSyntax syntax = QRegularExpression::FixedString);
 
    static void addDefaultCaCertificate(const QSslCertificate &certificate);
    static void addDefaultCaCertificates(const QList<QSslCertificate> &certificates);

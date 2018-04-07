@@ -24,12 +24,13 @@
 #include <qlocalserver_p.h>
 #include <qlocalsocket.h>
 #include <qsystemerror_p.h>
-
+#include <qstring.h>
 #include <qdebug.h>
 
 #include <aclapi.h>
 #include <accctrl.h>
 #include <sddl.h>
+
 // The buffer size need to be 0 otherwise data could be
 // lost if the socket that has written data closes the connection
 // before it is read.  Pipewriter is used for write buffering.
@@ -148,9 +149,7 @@ bool QLocalServerPrivate::addListener()
       }
       sa.lpSecurityDescriptor = pSD.data();
    }
-   listener.handle = CreateNamedPipe(
-                        (const wchar_t *)fullServerName.utf16(), // pipe name
-                        PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,       // read/write access
+   listener.handle = CreateNamedPipe(fullServerName.toStdWString().c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                         PIPE_TYPE_BYTE |          // byte type pipe
                         PIPE_READMODE_BYTE |      // byte-read mode
                         PIPE_WAIT,                // blocking mode
@@ -197,7 +196,7 @@ bool QLocalServerPrivate::addListener()
 void QLocalServerPrivate::setError(const QString &function)
 {
    int windowsError = GetLastError();
-   errorString = QString::fromLatin1("%1: %2").arg(function).arg(qt_error_string(windowsError));
+   errorString = QString::fromLatin1("%1: %2").formatArg(function).formatArg(qt_error_string(windowsError));
    error = QAbstractSocket::UnknownSocketError;
 }
 

@@ -148,7 +148,7 @@ void QNetworkAccessAuthenticationManager::cacheProxyCredentials(const QNetworkPr
    proxy.setUser(authenticator->user());
 
    // don't cache null passwords, empty password may be valid though
-   if (authenticator->password().isNull()) {
+   if (authenticator->password().isEmpty()) {
       return;
    }
 

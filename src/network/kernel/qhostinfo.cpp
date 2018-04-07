@@ -41,12 +41,11 @@ Q_GLOBAL_STATIC(QHostInfoLookupManager, theHostInfoLookupManager)
 
 static QAtomicInt theIdCounter = 1;
 
-int QHostInfo::lookupHost(const QString &name, QObject *receiver, const char *member)
+int QHostInfo::lookupHost(const QString &name, QObject *receiver, const QString &member)
 {
 
 #if defined QHOSTINFO_DEBUG
-   qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)",
-          name.toLatin1().constData(), receiver, member ? member + 1 : 0);
+   qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)", name.toLatin1().constData(), receiver, member ? member + 1 : 0);
 #endif
 
    if (! QAbstractEventDispatcher::instance(QThread::currentThread())) {
@@ -462,15 +461,17 @@ void QHostInfoLookupManager::lookupFinished(QHostInfoRunnable *r)
 }
 
 // This function returns immediately when we had a result in the cache, else it will later emit a signal
-QHostInfo qt_qhostinfo_lookup(const QString &name, QObject *receiver, const char *member, bool *valid, int *id)
+QHostInfo qt_qhostinfo_lookup(const QString &name, QObject *receiver, const QString &member, bool *valid, int *id)
 {
    *valid = false;
    *id = -1;
 
    // check cache
    QAbstractHostInfoLookupManager *manager = theHostInfoLookupManager();
+
    if (manager && manager->cache.isEnabled()) {
       QHostInfo info = manager->cache.get(name, valid);
+
       if (*valid) {
          return info;
       }

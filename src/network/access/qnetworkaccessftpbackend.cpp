@@ -24,8 +24,8 @@
 #include <qnetworkaccessmanager_p.h>
 #include <qauthenticator.h>
 #include <qnoncontiguousbytedevice_p.h>
-
-#include <QStringList>
+#include <qstring.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_FTP
 
@@ -130,7 +130,7 @@ void QNetworkAccessFtpBackend::open()
    }
 
    if (url.path().endsWith('/')) {
-      error(QNetworkReply::ContentOperationNotPermittedError, tr("Can not open %1: is a directory").arg(url.toString()));
+      error(QNetworkReply::ContentOperationNotPermittedError, tr("Can not open %1: is a directory").formatArg(url.toString()));
       finished();
       return;
    }
@@ -243,8 +243,8 @@ void QNetworkAccessFtpBackend::ftpDone()
          newUrl.setUserInfo(userInfo);
          setUrl(newUrl);
          error(QNetworkReply::AuthenticationRequiredError,
-               tr("Logging in to %1 failed: authentication required")
-               .arg(url().host()));
+               tr("Logging in to %1 failed: authentication required").formatArg(url().host()));
+
       } else {
          // we did not connect
          QNetworkReply::NetworkError code;
@@ -274,12 +274,14 @@ void QNetworkAccessFtpBackend::ftpDone()
    // check for errors:
    if (ftp->error() != QFtp::NoError) {
       QString msg;
+
       if (operation() == QNetworkAccessManager::GetOperation) {
          msg = tr("Error while downloading %1: %2");
       } else {
          msg = tr("Error while uploading %1: %2");
       }
-      msg = msg.arg(url().toString(), ftp->errorString());
+
+      msg = msg.formatArgs(url().toString(), ftp->errorString());
 
       if (state == Statting) {
          // file probably doesn't exist
@@ -298,8 +300,9 @@ void QNetworkAccessFtpBackend::ftpDone()
       if (operation() == QNetworkAccessManager::GetOperation) {
          // send help command to find out if server supports "SIZE" and "MDTM"
          QString command = url().path();
-         command.prepend(QLatin1String("%1 "));
+         command.prepend("%1 ");
          helpId = ftp->rawCommand(QLatin1String("HELP")); // get supported commands
+
       } else {
          ftpDone();
       }
@@ -311,11 +314,11 @@ void QNetworkAccessFtpBackend::ftpDone()
          command.prepend(QLatin1String("%1 "));
          if (supportsSize) {
             ftp->rawCommand(QLatin1String("TYPE I"));
-            sizeId = ftp->rawCommand(command.arg(QLatin1String("SIZE"))); // get size
+            sizeId = ftp->rawCommand(command.formatArg(QLatin1String("SIZE"))); // get size
          }
 
          if (supportsMdtm) {
-            mdtmId = ftp->rawCommand(command.arg(QLatin1String("MDTM")));   // get modified time
+            mdtmId = ftp->rawCommand(command.formatArg(QLatin1String("MDTM")));   // get modified time
          }
          if (!supportsSize && !supportsMdtm) {
             ftpDone();   // no commands sent, move to the next state
@@ -373,7 +376,7 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
    } else if (code == 213) {          // file status
       if (id == sizeId) {
          // reply to the size command
-         setHeader(QNetworkRequest::ContentLengthHeader, text.toLongLong());
+         setHeader(QNetworkRequest::ContentLengthHeader, text.toInteger<qint64>());
 
 #ifndef QT_NO_DATESTRING
       } else if (id == mdtmId) {

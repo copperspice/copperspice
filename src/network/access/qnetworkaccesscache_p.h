@@ -72,7 +72,7 @@ class QNetworkAccessCache : public QObject
 
    struct Receiver {
       QPointer<QObject> object;
-      const char *member;
+      QString member;
    };
 
    struct Node {
@@ -98,7 +98,7 @@ class QNetworkAccessCache : public QObject
 
    void addEntry(const QByteArray &key, CacheableObject *entry);
    bool hasEntry(const QByteArray &key) const;
-   bool requestEntry(const QByteArray &key, QObject *target, const char *member);
+   bool requestEntry(const QByteArray &key, QObject *target, const QString &member);
 
    CacheableObject *requestEntryNow(const QByteArray &key);
    void releaseEntry(const QByteArray &key);
@@ -121,7 +121,7 @@ class QNetworkAccessCache : public QObject
    void linkEntry(const QByteArray &key);
    bool unlinkEntry(const QByteArray &key);
    void updateTimer();
-   bool emitEntryReady(Node *node, QObject *target, const char *member);
+   bool emitEntryReady(Node *node, QObject *target, const QString &member);
 };
 
 QT_END_NAMESPACE

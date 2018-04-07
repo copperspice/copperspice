@@ -483,9 +483,9 @@ void QHttpThreadDelegate::finishedSlot()
 
    if (httpReply->statusCode() >= 400) {
       // it's an error reply
-      QString msg = QLatin1String(QT_TRANSLATE_NOOP("QNetworkReply",
-                                  "Error transferring %1 - server replied: %2"));
-      msg = msg.arg(httpRequest.url().toString(), httpReply->reasonPhrase());
+      QString msg = QString(QT_TRANSLATE_NOOP("QNetworkReply", "Error transferring %1 - server replied: %2"))
+                  .formatArgs(httpRequest.url().toString(), httpReply->reasonPhrase());
+
       emit error(statusCodeFromHttp(httpReply->statusCode(), httpRequest.url()), msg);
    }
 
@@ -512,8 +512,8 @@ void QHttpThreadDelegate::synchronousFinishedSlot()
 
    if (httpReply->statusCode() >= 400) {
       // it's an error reply
-      QString msg = QLatin1String(QT_TRANSLATE_NOOP("QNetworkReply",  "Error transferring %1 - server replied: %2"));
-      incomingErrorDetail = msg.arg(httpRequest.url().toString(), httpReply->reasonPhrase());
+      QString msg = QString(QT_TRANSLATE_NOOP("QNetworkReply",  "Error transferring %1 - server replied: %2"));
+      incomingErrorDetail = msg.formatArgs(httpRequest.url().toString(), httpReply->reasonPhrase());
       incomingErrorCode = statusCodeFromHttp(httpReply->statusCode(), httpRequest.url());
    }
 

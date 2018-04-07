@@ -591,8 +591,7 @@ QNetworkReply *QNetworkAccessManager::createRequest(QNetworkAccessManager::Opera
 #endif
 
    QNetworkRequest request = req;
-   if (!request.header(QNetworkRequest::ContentLengthHeader).isValid() &&
-         outgoingData && !outgoingData->isSequential()) {
+   if (!request.header(QNetworkRequest::ContentLengthHeader).isValid() && outgoingData && !outgoingData->isSequential()) {
       // request has no Content-Length
       // but the data that is outgoing is random-access
       request.setHeader(QNetworkRequest::ContentLengthHeader, outgoingData->size());
@@ -603,7 +602,8 @@ QNetworkReply *QNetworkAccessManager::createRequest(QNetworkAccessManager::Opera
                             QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic) {
       if (d->cookieJar) {
          QList<QNetworkCookie> cookies = d->cookieJar->cookiesForUrl(request.url());
-         if (!cookies.isEmpty()) {
+
+         if (! cookies.isEmpty()) {
             request.setHeader(QNetworkRequest::CookieHeader, QVariant::fromValue(cookies));
          }
       }

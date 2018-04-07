@@ -307,10 +307,10 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
          acceptLanguage = "en,*";
 
       } else if (systemLocale.startsWith("en-")) {
-         acceptLanguage = QString("%1,*").arg(systemLocale);
+         acceptLanguage = QString("%1,*").formatArg(systemLocale);
 
       } else {
-         acceptLanguage = QString("%1,en,*").arg(systemLocale);
+         acceptLanguage = QString("%1,en,*").formatArg(systemLocale);
       }
 
       request.setHeaderField("Accept-Language", acceptLanguage.toLatin1());
@@ -886,9 +886,9 @@ QString QHttpNetworkConnectionPrivate::errorDetail(QNetworkReply::NetworkError e
    switch (errorCode) {
       case QNetworkReply::HostNotFoundError:
          if (socket) {
-            errorString = QCoreApplication::translate("QHttp", "Host %1 not found").arg(socket->peerName());
+            errorString = QCoreApplication::translate("QHttp", "Host %1 not found").formatArg(socket->peerName());
          } else {
-            errorString = QCoreApplication::translate("QHttp", "Host %1 not found").arg(hostName);
+            errorString = QCoreApplication::translate("QHttp", "Host %1 not found").formatArg(hostName);
          }
          break;
 

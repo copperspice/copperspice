@@ -163,6 +163,7 @@ void QNetworkAccessCache::updateTimer()
 
    if (interval <= 0) {
       interval = 0;
+
    } else {
       // round up the interval
       interval = (interval + 15) & ~16;
@@ -171,10 +172,9 @@ void QNetworkAccessCache::updateTimer()
    timer.start(interval * 1000, this);
 }
 
-bool QNetworkAccessCache::emitEntryReady(Node *node, QObject *target, const char *member)
+bool QNetworkAccessCache::emitEntryReady(Node *node, QObject *target, const QString &member)
 {
-   if (! connect(this, SIGNAL(entryReady(QNetworkAccessCache::CacheableObject *)), target,
-                 member, Qt::QueuedConnection)) {
+   if (! connect(this, SIGNAL(entryReady(QNetworkAccessCache::CacheableObject *)), target, member, Qt::QueuedConnection)) {
       return false;
    }
 
@@ -235,7 +235,7 @@ bool QNetworkAccessCache::hasEntry(const QByteArray &key) const
    return hash.contains(key);
 }
 
-bool QNetworkAccessCache::requestEntry(const QByteArray &key, QObject *target, const char *member)
+bool QNetworkAccessCache::requestEntry(const QByteArray &key, QObject *target, const QString &member)
 {
    auto it = hash.find(key);
    if (it == hash.end()) {

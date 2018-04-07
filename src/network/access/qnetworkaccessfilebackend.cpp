@@ -21,12 +21,13 @@
 ***********************************************************************/
 
 #include <qnetworkaccessfilebackend_p.h>
-#include <qurlinfo_p.h>
 
+#include <QCoreApplication>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qnoncontiguousbytedevice_p.h>
-#include <QCoreApplication>
+#include <qstring.h>
+#include <qurlinfo_p.h>
 
 QStringList QNetworkAccessFileBackendFactory::supportedSchemes() const
 {
@@ -94,7 +95,7 @@ void QNetworkAccessFileBackend::open()
    if (!url.host().isEmpty()) {
       // we handle only local files
       error(QNetworkReply::ProtocolInvalidOperationError,
-            QCoreApplication::translate("QNetworkAccessFileBackend", "Request for opening non-local file %1").arg(url.toString()));
+            QCoreApplication::translate("QNetworkAccessFileBackend", "Request for opening non-local file %1").formatArg(url.toString()));
       finished();
       return;
    }
@@ -145,7 +146,7 @@ void QNetworkAccessFileBackend::open()
    // could we open the file?
    if (!opened) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Error opening %1: %2")
-                    .arg(this->url().toString(), file.errorString());
+                    .formatArgs(this->url().toString(), file.errorString());
 
       // why couldn't we open the file?
       // if we're opening for reading, either it doesn't exist, or it's access denied
@@ -189,7 +190,7 @@ void QNetworkAccessFileBackend::uploadReadyReadSlot()
          if (haveWritten < 0) {
             // write error!
             QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Write error writing to %1: %2")
-                          .arg(url().toString(), file.errorString());
+                          .formatArgs(url().toString(), file.errorString());
             error(QNetworkReply::ProtocolFailure, msg);
 
             finished();
@@ -231,7 +232,7 @@ bool QNetworkAccessFileBackend::loadFileInfo()
 
    if (fi.isDir()) {
       error(QNetworkReply::ContentOperationNotPermittedError,
-            QCoreApplication::translate("QNetworkAccessFileBackend", "Cannot open %1: Path is a directory").arg(url().toString()));
+            QCoreApplication::translate("QNetworkAccessFileBackend", "Can not open %1: Path is a directory").formatArg(url().toString()));
       finished();
       return false;
    }
@@ -242,19 +243,21 @@ bool QNetworkAccessFileBackend::loadFileInfo()
 bool QNetworkAccessFileBackend::readMoreFromFile()
 {
    qint64 wantToRead;
+
    while ((wantToRead = nextDownstreamBlockSize()) > 0) {
-      // ### FIXME!!
-      // Obtain a pointer from the ringbuffer!
-      // Avoid extra copy
+      // ### FIXME
+      // Obtain a pointer from the ringbuffer, Avoid extra copy
+
       QByteArray data;
       data.reserve(wantToRead);
+
       qint64 actuallyRead = file.read(data.data(), wantToRead);
 
       if (actuallyRead <= 0) {
          // EOF or error
          if (file.error() != QFile::NoError) {
             QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Read error reading from %1: %2")
-                          .arg(url().toString(), file.errorString());
+                          .formatArgs(url().toString(), file.errorString());
             error(QNetworkReply::ProtocolFailure, msg);
 
             finished();

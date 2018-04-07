@@ -411,7 +411,7 @@ static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescri
 // keep inline
 inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid)
 {
-   return scopeid.toUInt();
+   return scopeid.toInteger<uint>();
 }
 
 bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType, QAbstractSocket::NetworkLayerProtocol &socketProtocol)

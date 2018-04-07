@@ -116,38 +116,38 @@ QString QLocalSocketPrivate::generateErrorString(QLocalSocket::LocalSocketError 
    QString errorString;
    switch (error) {
       case QLocalSocket::ConnectionRefusedError:
-         errorString = QLocalSocket::tr("%1: Connection refused").arg(function);
+         errorString = QLocalSocket::tr("%1: Connection refused").formatArg(function);
          break;
       case QLocalSocket::PeerClosedError:
-         errorString = QLocalSocket::tr("%1: Remote closed").arg(function);
+         errorString = QLocalSocket::tr("%1: Remote closed").formatArg(function);
          break;
       case QLocalSocket::ServerNotFoundError:
-         errorString = QLocalSocket::tr("%1: Invalid name").arg(function);
+         errorString = QLocalSocket::tr("%1: Invalid name").formatArg(function);
          break;
       case QLocalSocket::SocketAccessError:
-         errorString = QLocalSocket::tr("%1: Socket access error").arg(function);
+         errorString = QLocalSocket::tr("%1: Socket access error").formatArg(function);
          break;
       case QLocalSocket::SocketResourceError:
-         errorString = QLocalSocket::tr("%1: Socket resource error").arg(function);
+         errorString = QLocalSocket::tr("%1: Socket resource error").formatArg(function);
          break;
       case QLocalSocket::SocketTimeoutError:
-         errorString = QLocalSocket::tr("%1: Socket operation timed out").arg(function);
+         errorString = QLocalSocket::tr("%1: Socket operation timed out").formatArg(function);
          break;
       case QLocalSocket::DatagramTooLargeError:
-         errorString = QLocalSocket::tr("%1: Datagram too large").arg(function);
+         errorString = QLocalSocket::tr("%1: Datagram too large").formatArg(function);
          break;
       case QLocalSocket::ConnectionError:
-         errorString = QLocalSocket::tr("%1: Connection error").arg(function);
+         errorString = QLocalSocket::tr("%1: Connection error").formatArg(function);
          break;
       case QLocalSocket::UnsupportedSocketOperationError:
-         errorString = QLocalSocket::tr("%1: The socket operation is not supported").arg(function);
+         errorString = QLocalSocket::tr("%1: The socket operation is not supported").formatArg(function);
          break;
       case QLocalSocket::OperationError:
-         errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").arg(function);
+         errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").formatArg(function);
          break;
       case QLocalSocket::UnknownSocketError:
       default:
-         errorString = QLocalSocket::tr("%1: Unknown error").arg(function);
+         errorString = QLocalSocket::tr("%1: Unknown error").formatArg(function);
    }
    return errorString;
 }

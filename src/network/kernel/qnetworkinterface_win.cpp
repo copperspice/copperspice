@@ -190,18 +190,19 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
          IP_ADAPTER_ADDRESSES_LH tmp;
          memcpy(&tmp, ptr, sizeof(IP_ADAPTER_ADDRESSES_LH));
 
-         WCHAR buf[IF_MAX_STRING_SIZE + 1];
+         std::wstring buffer(IF_MAX_STRING_SIZE + 1, L'\0');
 
-         if (ptrConvertInterfaceLuidToName(&tmp.Luid, buf, sizeof(buf) / sizeof(buf[0])) == NO_ERROR) {
-            iface->name = QString::fromWCharArray(buf);
+         if (ptrConvertInterfaceLuidToName(&tmp.Luid, &buffer[0], buffer.size()) == NO_ERROR) {
+            iface->name = QString::fromStdWString(buffer);
          }
       }
 
       if (iface->name.isEmpty()) {
-         iface->name = QString::fromLocal8Bit(ptr->AdapterName);
+         iface->name = QString::fromUtf8(ptr->AdapterName);
       }
 
-      iface->friendlyName = QString::fromWCharArray(ptr->FriendlyName);
+      iface->friendlyName = QString::fromStdWString(std::wstring(ptr->FriendlyName));
+
       if (ptr->PhysicalAddressLength)
          iface->hardwareAddress = iface->makeHwAddress(ptr->PhysicalAddressLength, ptr->PhysicalAddress);
 
@@ -266,7 +267,7 @@ QString QHostInfo::localDomainName()
    if (GetNetworkParams(pinfo, &bufSize) == ERROR_BUFFER_OVERFLOW) {
       pinfo = (FIXED_INFO *)malloc(bufSize);
 
-      if (!pinfo) {
+      if (! pinfo) {
          return QString();
       }
 
@@ -277,7 +278,7 @@ QString QHostInfo::localDomainName()
       }
    }
 
-   QString domainName = QUrl::fromAce(pinfo->DomainName);
+   QString domainName = QUrl::fromAce(QByteArray(pinfo->DomainName));
 
    if (pinfo != &info) {
       free(pinfo);

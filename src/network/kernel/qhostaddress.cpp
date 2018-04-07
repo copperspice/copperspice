@@ -171,15 +171,17 @@ void QHostAddressPrivate::setAddress(const Q_IPV6ADDR &a_)
 static bool parseIp6(const QString &address, QIPAddressUtils::IPv6Address &addr, QString *scopeId)
 {
    QString tmp = address;
-   int scopeIdPos = tmp.lastIndexOf(QLatin1Char('%'));
+   int scopeIdPos = tmp.lastIndexOf('%');
+
    if (scopeIdPos != -1) {
       *scopeId = tmp.mid(scopeIdPos + 1);
       tmp.chop(tmp.size() - scopeIdPos);
+
    } else {
       scopeId->clear();
    }
 
-   return QIPAddressUtils::parseIp6(addr, tmp.constBegin(), tmp.constEnd()) == 0;
+   return QIPAddressUtils::parseIp6(addr, tmp.constBegin(), tmp.constEnd()) == tmp.end();
 }
 
 bool QHostAddressPrivate::parse()
@@ -193,8 +195,9 @@ bool QHostAddressPrivate::parse()
    }
 
    // All IPv6 addresses contain a ':', and may contain a '.'.
-   if (a.contains(QLatin1Char(':'))) {
+   if (a.contains(':')) {
       quint8 maybeIp6[16];
+
       if (parseIp6(a, maybeIp6, &scopeId)) {
          setAddress(maybeIp6);
          return true;
@@ -700,14 +703,15 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
       if (!isIpv6 && subnet.indexOf(QLatin1Char('.'), slash + 1) != -1) {
          // IP-style, convert it to bit-count form
          QNetmaskAddress parser;
-         if (!parser.setAddress(subnet.mid(slash + 1))) {
+         if (! parser.setAddress(subnet.mid(slash + 1))) {
             return invalid;
          }
          netmask = parser.prefixLength();
+
       } else {
          bool ok;
-         netmask = subnet.mid(slash + 1).toUInt(&ok);
-         if (!ok) {
+         netmask = subnet.mid(slash + 1).toInteger<uint>(&ok);
+         if (! ok) {
             return invalid;   // failed to parse the subnet
          }
       }
@@ -748,7 +752,7 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
    quint32 addr = 0;
    for (int i = 0; i < parts.count(); ++i) {
       bool ok;
-      uint byteValue = parts.at(i).toUInt(&ok);
+      uint byteValue = parts.at(i).toInteger<uint>(&ok);
       if (!ok || byteValue > 255) {
          return invalid;   // invalid IPv4 address
       }
@@ -756,6 +760,7 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
       addr <<= 8;
       addr += byteValue;
    }
+
    addr <<= 8 * (4 - parts.count());
    if (netmask == -1) {
       netmask = 8 * parts.count();

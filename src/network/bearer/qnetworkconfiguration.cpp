@@ -254,59 +254,58 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerTypeFamily() cons
 }
 QString QNetworkConfiguration::bearerTypeName() const
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return QString();
    }
 
    QMutexLocker locker(&d->mutex);
 
-   if (d->type == QNetworkConfiguration::ServiceNetwork ||
-         d->type == QNetworkConfiguration::UserChoice) {
+   if (d->type == QNetworkConfiguration::ServiceNetwork || d->type == QNetworkConfiguration::UserChoice) {
       return QString();
    }
 
    switch (d->bearerType) {
 
       case BearerEthernet:
-         return "Ethernet";
+         return QString("Ethernet");
 
       case BearerWLAN:
-         return "WLAN";
+         return QString("WLAN");
 
       case Bearer2G:
-         return "2G";
+         return QString("2G");
 
       case Bearer3G:
-         return "3G";
+         return QString("3G");
 
       case Bearer4G:
-         return "4G";
+         return QString("4G");
 
       case BearerCDMA2000:
-         return "CDMA2000";
+         return QString("CDMA2000");
 
       case BearerWCDMA:
-         return "WCDMA";
+         return QString("WCDMA");
 
       case BearerHSPA:
-         return "HSPA";
+         return QString("HSPA");
 
       case BearerBluetooth:
-         return "Bluetooth";
+         return QString("Bluetooth");
 
       case BearerWiMAX:
-         return "WiMAX";
+         return QString("WiMAX");
 
       case BearerEVDO:
-         return "EVDO";
+         return QString("EVDO");
 
       case BearerLTE:
-         return "LTE";
+         return QString("LTE");
 
       case BearerUnknown:
          break;
    }
 
-   return "Unknown";
+   return QString("Unknown");
 }
 

@@ -25,13 +25,13 @@
 
 #include <qnetworkrequest.h>
 #include <qnetworkreply.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qlocale.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qurl.h>
+#include <qbytearray.h>
+#include <qdebug.h>
+#include <qlist.h>
+#include <qlocale.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qurl.h>
 
 #include <stdlib.h>
 
@@ -422,7 +422,7 @@ static const char months[] =
    "dec\0"
    "\0";
 
-static inline bool isNumber(char s)
+static inline bool isNumber(QChar s)
 {
    return s >= '0' && s <= '9';
 }
@@ -437,12 +437,12 @@ static inline bool isValueSeparator(char c)
    return isTerminator(c) || c == ';';
 }
 
-static inline bool isWhitespace(char c)
+static inline bool isWhitespace(QChar c)
 {
    return c == ' '  || c == '\t';
 }
 
-static bool checkStaticArray(int &val, const QByteArray &dateString, int at, const char *array, int size)
+static bool checkStaticArray(int &val, const QString &dateString, int at, const char *array, int size)
 {
    if (dateString[at] < 'a' || dateString[at] > 'z') {
       return false;
@@ -454,9 +454,7 @@ static bool checkStaticArray(int &val, const QByteArray &dateString, int at, con
 
       while (i <= size) {
          const char *str = array + i;
-         if (str[0] == dateString[at]
-               && str[1] == dateString[at + 1]
-               && str[2] == dateString[at + 2]) {
+         if (str[0] == dateString[at] && str[1] == dateString[at + 1] && str[2] == dateString[at + 2]) {
             val = j;
             return true;
          }
@@ -493,30 +491,32 @@ static bool checkStaticArray(int &val, const QByteArray &dateString, int at, con
     Or in their own words:
         "} // else what the hell is this."
 */
-static QDateTime parseDateString(const QByteArray &dateString)
+static QDateTime parseDateString(const QString &dateString)
 {
    QTime time;
+
    // placeholders for values when we are not sure it is a year, month or day
    int unknown[3] = { -1, -1, -1};
-   int month = -1;
-   int day = -1;
-   int year = -1;
+   int month      = -1;
+   int day        = -1;
+   int year       = -1;
    int zoneOffset = -1;
 
    // hour:minute:second.ms pm
-   QRegExp timeRx(QLatin1String("(\\d{1,2}):(\\d{1,2})(:(\\d{1,2})|)(\\.(\\d{1,3})|)((\\s{0,}(am|pm))|)"));
+   QRegularExpression timeRegEx(QLatin1String("(\\d{1,2}):(\\d{1,2})(:(\\d{1,2})|)(\\.(\\d{1,3})|)((\\s{0,}(am|pm))|)"));
 
    int at = 0;
    while (at < dateString.length()) {
+
 #ifdef PARSEDATESTRINGDEBUG
       qDebug() << dateString.mid(at);
 #endif
       bool isNum = isNumber(dateString[at]);
 
       // Month
-      if (!isNum
-            && checkStaticArray(month, dateString, at, months, sizeof(months) - 1)) {
+      if (! isNum && checkStaticArray(month, dateString, at, months, sizeof(months) - 1)) {
          ++month;
+
 #ifdef PARSEDATESTRINGDEBUG
          qDebug() << "Month:" << month;
 #endif
@@ -524,11 +524,10 @@ static QDateTime parseDateString(const QByteArray &dateString)
          continue;
       }
       // Zone
-      if (!isNum
-            && zoneOffset == -1
-            && checkStaticArray(zoneOffset, dateString, at, zones, sizeof(zones) - 1)) {
+      if (! isNum && zoneOffset == -1 && checkStaticArray(zoneOffset, dateString, at, zones, sizeof(zones) - 1)) {
          int sign = (at >= 0 && dateString[at - 1] == '-') ? -1 : 1;
          zoneOffset = sign * zoneOffsets[zoneOffset] * 60 * 60;
+
 #ifdef PARSEDATESTRINGDEBUG
          qDebug() << "Zone:" << month;
 #endif
@@ -536,10 +535,9 @@ static QDateTime parseDateString(const QByteArray &dateString)
          continue;
       }
       // Zone offset
-      if (!isNum
+      if (! isNum
             && (zoneOffset == -1 || zoneOffset == 0) // Can only go after gmt
-            && (dateString[at] == '+' || dateString[at] == '-')
-            && (at == 0
+            && (dateString[at] == '+' || dateString[at] == '-') && (at == 0
                 || isWhitespace(dateString[at - 1])
                 || dateString[at - 1] == ','
                 || (at >= 3
@@ -548,10 +546,11 @@ static QDateTime parseDateString(const QByteArray &dateString)
                     && (dateString[at - 1] == 't')))) {
 
          int end = 1;
-         while (end < 5 && dateString.length() > at + end
-                && dateString[at + end] >= '0' && dateString[at + end] <= '9') {
+
+         while (end < 5 && dateString.length() > at + end && dateString[at + end] >= '0' && dateString[at + end] <= '9') {
             ++end;
          }
+
          int minutes = 0;
          int hours = 0;
          switch (end - 1) {
@@ -571,6 +570,7 @@ static QDateTime parseDateString(const QByteArray &dateString)
          if (end != 1) {
             int sign = dateString[at] == '-' ? -1 : 1;
             zoneOffset = sign * ((minutes * 60) + (hours * 60 * 60));
+
 #ifdef PARSEDATESTRINGDEBUG
             qDebug() << "Zone offset:" << zoneOffset << hours << minutes;
 #endif
@@ -580,40 +580,45 @@ static QDateTime parseDateString(const QByteArray &dateString)
       }
 
       // Time
-      if (isNum && time.isNull()
-            && dateString.length() >= at + 3
-            && (dateString[at + 2] == ':' || dateString[at + 1] == ':')) {
+      if (isNum && time.isNull() && dateString.length() >= at + 3 && (dateString[at + 2] == ':' || dateString[at + 1] == ':')) {
+
          // While the date can be found all over the string the format
          // for the time is set and a nice regexp can be used.
-         int pos = timeRx.indexIn(QLatin1String(dateString), at);
-         if (pos != -1) {
-            QStringList list = timeRx.capturedTexts();
-            int h = atoi(list.at(1).toLatin1().constData());
-            int m = atoi(list.at(2).toLatin1().constData());
-            int s = atoi(list.at(4).toLatin1().constData());
+
+         QRegularExpressionMatch match = timeRegEx.match(dateString, dateString.begin() + at);
+
+         if (match.hasMatch()) {
+            QStringList list = match.capturedTexts();
+
+            int h  = atoi(list.at(1).toLatin1().constData());
+            int m  = atoi(list.at(2).toLatin1().constData());
+            int s  = atoi(list.at(4).toLatin1().constData());
             int ms = atoi(list.at(6).toLatin1().constData());
-            if (h < 12 && !list.at(9).isEmpty())
-               if (list.at(9) == QLatin1String("pm")) {
+
+            if (h < 12 && !list.at(9).isEmpty()) {
+               if (list.at(9) == "pm") {
                   h += 12;
                }
+            }
+
             time = QTime(h, m, s, ms);
+
 #ifdef PARSEDATESTRINGDEBUG
-            qDebug() << "Time:" << list << timeRx.matchedLength();
+            qDebug() << "Time:" << list << match.capturedLength(0);
 #endif
-            at += timeRx.matchedLength();
+
+            at += match.capturedLength(0);
             continue;
          }
       }
 
       // 4 digit Year
-      if (isNum
-            && year == -1
-            && dateString.length() > at + 3) {
-         if (isNumber(dateString[at + 1])
-               && isNumber(dateString[at + 2])
-               && isNumber(dateString[at + 3])) {
+      if (isNum && year == -1 && dateString.length() > at + 3) {
+
+         if (isNumber(dateString[at + 1]) && isNumber(dateString[at + 2]) && isNumber(dateString[at + 3])) {
             year = atoi(dateString.mid(at, 4).constData());
             at += 4;
+
 #ifdef PARSEDATESTRINGDEBUG
             qDebug() << "Year:" << year;
 #endif
@@ -625,11 +630,13 @@ static QDateTime parseDateString(const QByteArray &dateString)
       // Could be month, day or year
       if (isNum) {
          int length = 1;
+
          if (dateString.length() > at + 1 && isNumber(dateString[at + 1])) {
             ++length;
          }
 
          int x = atoi(dateString.mid(at, length).constData());
+
          if (year == -1 && (x > 31 || x == 0)) {
             year = x;
 
@@ -643,6 +650,7 @@ static QDateTime parseDateString(const QByteArray &dateString)
             }
          }
          at += length;
+
 #ifdef PARSEDATESTRINGDEBUG
          qDebug() << "Saving" << x;
 #endif
@@ -897,8 +905,9 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                         break;
                      }
 
-                  QByteArray dateString = cookieString.mid(position, end - position).trimmed();
+                  QString dateString = QString::fromUtf8(cookieString.mid(position, end - position).trimmed());
                   position = end;
+
                   QDateTime dt = parseDateString(dateString.toLower());
 
                   if (dt.isValid()) {
@@ -933,6 +942,7 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                         cookie.setExpirationDate(now.addSecs(secs));
                      }
                   }
+
                } else if (field.first == "path") {
                   if (field.second.startsWith('/')) {
                      cookie.setPath(QString::fromUtf8(field.second));

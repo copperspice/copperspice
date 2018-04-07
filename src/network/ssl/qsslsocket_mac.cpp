@@ -568,7 +568,7 @@ void QSslSocketBackendPrivate::transmit()
          const OSStatus err = SSLWrite(context, writeBuffer.readPointer(), nextDataBlockSize, &writtenBytes);
 
          if (err != noErr && err != errSSLWouldBlock) {
-            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLWrite failed: %1").arg(err));
+            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLWrite failed: %1").formatArg(err));
             break;
          }
 
@@ -606,7 +606,7 @@ void QSslSocketBackendPrivate::transmit()
                             QSslSocket::tr("The TLS/SSL connection has been closed"));
             break;
          } else if (err != noErr && err != errSSLWouldBlock) {
-            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLRead failed: %1").arg(err));
+            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLRead failed: %1").formatA(err));
             break;
          }
 
@@ -861,7 +861,7 @@ bool QSslSocketBackendPrivate::initSslContext()
    const OSStatus err = SSLSetIOFuncs(context, reinterpret_cast<SSLReadFunc>(&_q_SSLRead), reinterpret_cast<SSLWriteFunc>(&_q_SSLWrite));
    if (err != noErr) {
       destroySslContext();
-      setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLSetIOFuncs failed: %1").arg(err));
+      setErrorAndEmit(QAbstractSocket::SslInternalError, QString("SSLSetIOFuncs failed: %1").formatA(err));
       return false;
    }
 
@@ -903,7 +903,7 @@ bool QSslSocketBackendPrivate::initSslContext()
 
       if (err != noErr) {
          destroySslContext();
-         setErrorAndEmit(QSslSocket::SslInternalError, QString("SSLSetSessionOption failed: %1").arg(err));
+         setErrorAndEmit(QSslSocket::SslInternalError, QString("SSLSetSessionOption failed: %1").formatA(err));
          return false;
       }
 
@@ -919,7 +919,7 @@ bool QSslSocketBackendPrivate::initSslContext()
 
          if (err != noErr) {
             destroySslContext();
-            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("failed to set SSL context option in server mode: %1").arg(err));
+            setErrorAndEmit(QAbstractSocket::SslInternalError, QString("failed to set SSL context option in server mode: %1").formatArg(err));
             return false;
          }
       }
@@ -971,7 +971,7 @@ bool QSslSocketBackendPrivate::setSessionCertificate(QString &errorDescription, 
       if (err != noErr) {
 
          errorCode = QAbstractSocket::SslInvalidUserDataError;
-         errorDescription = QString("SecPKCS12Import failed: %1").arg(err);
+         errorDescription = QString("SecPKCS12Import failed: %1").formatArg(err);
          return false;
       }
 
@@ -1011,7 +1011,7 @@ bool QSslSocketBackendPrivate::setSessionCertificate(QString &errorDescription, 
 
       if (err != noErr) {
          errorCode = QAbstractSocket::SslInvalidUserDataError;
-         errorDescription = QString("Cannot set certificate and key: %1").arg(err);
+         errorDescription = QString("Cannot set certificate and key: %1").formatArg(err);
          return false;
       }
    }
@@ -1077,7 +1077,7 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
    // !trust - SSLCopyPeerTrust can return noErr but null trust.
    if (err != noErr || !trust) {
       if (!canIgnoreVerify) {
-         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("Failed to obtain peer trust: %1").arg(err));
+         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("Failed to obtain peer trust: %1").formatArg(err));
          plainSocket->disconnectFromHost();
          return false;
       } else {
@@ -1101,7 +1101,7 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
       if (err != noErr) {
          // We can not ignore this, it's not even about trust verification
          // probably ...
-         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("SecTrustEvaluate failed: %1").arg(err));
+         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("SecTrustEvaluate failed: %1").formatArg(err));
          plainSocket->disconnectFromHost();
          return false;
       }
@@ -1278,7 +1278,7 @@ bool QSslSocketBackendPrivate::startHandshake()
          return startHandshake();
       }
 
-      setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("SSLHandshake failed: %1").arg(err));
+      setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, QString("SSLHandshake failed: %1").formatArg(err));
       plainSocket->disconnectFromHost();
       return false;
    }

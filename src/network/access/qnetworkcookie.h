@@ -28,9 +28,10 @@
 #include <QtCore/QMetaType>
 #include <QtCore/QObject>
 
+#include <qstring.h>
+
 class QByteArray;
 class QDateTime;
-class QString;
 class QUrl;
 class QNetworkCookiePrivate;
 

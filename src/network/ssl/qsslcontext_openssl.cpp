@@ -28,6 +28,7 @@
 #include <qsslsocket_p.h>
 #include <qsslsocket_openssl_p.h>
 #include <qsslsocket_openssl_symbols_p.h>
+#include <qstring.h>
 
 // defined in qsslsocket_openssl.cpp:
 extern int q_X509Callback(int ok, X509_STORE_CTX *ctx);
@@ -71,7 +72,7 @@ QSslContext::~QSslContext()
 
 static inline QString msgErrorSettingEllipticCurves(const QString &why)
 {
-   return QSslSocket::tr("Error when setting the elliptic curves (%1)").arg(why);
+   return QSslSocket::tr("Error when setting the elliptic curves (%1)").formatArg(why);
 }
 
 QSslContext *QSslContext::fromConfiguration(QSslSocket::SslMode mode,
@@ -175,8 +176,8 @@ init_context:
          }
       }
 
-      sslContext->errorStr = QSslSocket::tr("Error creating SSL context (%1)").arg(
-                                unsupportedProtocol ? QSslSocket::tr("unsupported protocol") : QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+      sslContext->errorStr = QSslSocket::tr("Error creating SSL context (%1)")
+                  .formatArg(unsupportedProtocol ? QSslSocket::tr("unsupported protocol") : QSslSocketBackendPrivate::getErrorsFromOpenSsl());
 
       sslContext->errorCode = QSslError::UnspecifiedError;
       return sslContext;
@@ -214,7 +215,7 @@ init_context:
    }
 
    if (! q_SSL_CTX_set_cipher_list(sslContext->ctx, cipherString.data())) {
-      sslContext->errorStr = QSslSocket::tr("Invalid or empty cipher list (%1)").arg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+      sslContext->errorStr = QSslSocket::tr("Invalid or empty cipher list (%1)").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
       sslContext->errorCode = QSslError::UnspecifiedError;
       return sslContext;
    }
@@ -252,14 +253,14 @@ init_context:
    if (!sslContext->sslConfiguration.localCertificate().isNull()) {
       // Require a private key as well.
       if (sslContext->sslConfiguration.privateKey().isNull()) {
-         sslContext->errorStr = QSslSocket::tr("Cannot provide a certificate with no key, %1").arg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+         sslContext->errorStr = QSslSocket::tr("Cannot provide a certificate with no key, %1").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
          sslContext->errorCode = QSslError::UnspecifiedError;
          return sslContext;
       }
 
       // Load certificate
       if (! q_SSL_CTX_use_certificate(sslContext->ctx, (X509 *)sslContext->sslConfiguration.localCertificate().handle())) {
-         sslContext->errorStr = QSslSocket::tr("Error loading local certificate, %1").arg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+         sslContext->errorStr = QSslSocket::tr("Error loading local certificate, %1").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
          sslContext->errorCode = QSslError::UnspecifiedError;
          return sslContext;
       }
@@ -290,7 +291,7 @@ init_context:
       }
 
       if (! q_SSL_CTX_use_PrivateKey(sslContext->ctx, sslContext->pkey)) {
-         sslContext->errorStr = QSslSocket::tr("Error loading private key, %1").arg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+         sslContext->errorStr = QSslSocket::tr("Error loading private key, %1").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
          sslContext->errorCode = QSslError::UnspecifiedError;
          return sslContext;
       }
@@ -301,7 +302,7 @@ init_context:
 
       // Check if the certificate matches the private key.
       if (! q_SSL_CTX_check_private_key(sslContext->ctx)) {
-         sslContext->errorStr = QSslSocket::tr("Private key does not certify public key, %1").arg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+         sslContext->errorStr = QSslSocket::tr("Private key does not certify public key, %1").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
          sslContext->errorCode = QSslError::UnspecifiedError;
          return sslContext;
       }

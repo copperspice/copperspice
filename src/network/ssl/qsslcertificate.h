@@ -27,7 +27,7 @@
 #include <qbytearray.h>
 #include <qcryptographichash.h>
 #include <qdatetime.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qsharedpointer.h>
 #include <qssl.h>
 #include <qcontainerfwd.h>
@@ -113,7 +113,7 @@ public:
    QString toText() const;
 
    static QList<QSslCertificate> fromPath(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QRegExp::PatternSyntax syntax = QRegExp::FixedString);
+                  QRegularExpression::PatternSyntax syntax = QRegularExpression::FixedString);
 
    static QList<QSslCertificate> fromDevice(QIODevice *device, QSsl::EncodingFormat format = QSsl::Pem);
    static QList<QSslCertificate> fromData(const QByteArray &data, QSsl::EncodingFormat format = QSsl::Pem);

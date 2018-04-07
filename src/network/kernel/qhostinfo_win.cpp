@@ -81,7 +81,7 @@ static void translateWSAError(int error, QHostInfo *results)
          return;
       default:
          results->setError(QHostInfo::UnknownError);
-         results->setErrorString(QHostInfoAgent::tr("Unknown error (%1)").arg(error));
+         results->setErrorString(QHostInfoAgent::tr("Unknown error (%1)").formatArg(error));
          return;
    }
 }

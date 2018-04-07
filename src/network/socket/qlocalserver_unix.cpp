@@ -301,7 +301,7 @@ void QLocalServerPrivate::setError(const QString &function)
 
    switch (errno) {
       case EACCES:
-         errorString = QLocalServer::tr("%1: Permission denied").arg(function);
+         errorString = QLocalServer::tr("%1: Permission denied").formatArg(function);
          error = QAbstractSocket::SocketAccessError;
          break;
       case ELOOP:
@@ -309,18 +309,18 @@ void QLocalServerPrivate::setError(const QString &function)
       case ENAMETOOLONG:
       case EROFS:
       case ENOTDIR:
-         errorString = QLocalServer::tr("%1: Name error").arg(function);
+         errorString = QLocalServer::tr("%1: Name error").formatArg(function);
          error = QAbstractSocket::HostNotFoundError;
          break;
       case EADDRINUSE:
-         errorString = QLocalServer::tr("%1: Address in use").arg(function);
+         errorString = QLocalServer::tr("%1: Address in use").formatArg(function);
          error = QAbstractSocket::AddressInUseError;
          break;
 
       default:
-         errorString = QLocalServer::tr("%1: Unknown error %2")
-                       .arg(function).arg(errno);
+         errorString = QLocalServer::tr("%1: Unknown error %2").formatArg(function).formatArg(errno);
          error = QAbstractSocket::UnknownSocketError;
+
 #if defined QLOCALSERVER_DEBUG
          qWarning() << errorString << "fullServerName:" << fullServerName;
 #endif

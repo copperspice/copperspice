@@ -165,7 +165,7 @@ bool QLocalServer::listen(const QString &name)
    if (name.isEmpty()) {
       d->error = QAbstractSocket::HostNotFoundError;
       QString function = QLatin1String("QLocalServer::listen");
-      d->errorString = tr("%1: Name error").arg(function);
+      d->errorString = tr("%1: Name error").formatArg(function);
       return false;
    }
 

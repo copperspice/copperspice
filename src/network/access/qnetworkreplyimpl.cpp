@@ -65,7 +65,7 @@ void QNetworkReplyImplPrivate::_q_startOperation()
    // QNetworkReplyImplPrivate::setup())
    if (!backend) {
       error(QNetworkReplyImpl::ProtocolUnknownError,
-            QCoreApplication::translate("QNetworkReply", "Protocol \"%1\" is unknown").arg(url.scheme())); // not really true!;
+            QCoreApplication::translate("QNetworkReply", "Protocol \"%1\" is unknown").formatArg(url.scheme())); // not really true!;
       finished();
       return;
    }

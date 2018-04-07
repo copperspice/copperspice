@@ -40,10 +40,12 @@ class QNetworkAuthenticationCredential
    QString domain;
    QString user;
    QString password;
+
    bool isNull() const {
-      return domain.isNull() && user.isNull() && password.isNull();
+      return domain.isEmpty() && user.isEmpty() && password.isEmpty();
    }
 };
+
 Q_DECLARE_TYPEINFO(QNetworkAuthenticationCredential, Q_MOVABLE_TYPE);
 inline bool operator<(const QNetworkAuthenticationCredential &t1, const QString &t2)
 {
