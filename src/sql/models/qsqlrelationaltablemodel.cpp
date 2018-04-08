@@ -459,13 +459,6 @@ void QSqlRelationalTableModel::setRelation(int column, const QSqlRelation &relat
    }
    d->relations[column].init(this, relation);
 }
-
-/*!
-    Returns the relation for the column \a column, or an invalid
-    relation if no relation is set.
-
-    \sa setRelation(), QSqlRelation::isValid()
-*/
 QSqlRelation QSqlRelationalTableModel::relation(int column) const
 {
    Q_D(const QSqlRelationalTableModel);
@@ -475,11 +468,10 @@ QSqlRelation QSqlRelationalTableModel::relation(int column) const
 QString QSqlRelationalTableModelPrivate::relationField(const QString &tableName,
       const QString &fieldName) const
 {
-   QString ret;
-   ret.reserve(tableName.size() + fieldName.size() + 1);
-   ret.append(tableName).append(QLatin1Char('.')).append(fieldName);
+   QString retval;
+   retval.append(tableName).append('.').append(fieldName);
 
-   return ret;
+   return retval;
 }
 
 /*!
@@ -534,25 +526,31 @@ QString QSqlRelationalTableModel::selectStatement() const
 
    for (int i = 0; i < rec.count(); ++i) {
       QSqlRelation relation = d->relations.value(i, nullRelation).rel;
+
       if (relation.isValid()) {
-         QString relTableAlias = QString::fromLatin1("relTblAl_%1").arg(i);
+         QString relTableAlias = QString::fromLatin1("relTblAl_%1").formatArg(i);
+
          if (!fList.isEmpty()) {
             fList.append(QLatin1String(", "));
          }
+
          fList.append(d->relationField(relTableAlias, relation.displayColumn()));
 
          // If there are duplicate field names they must be aliased
          if (fieldNames.value(fieldList[i]) > 1) {
             QString relTableName = relation.tableName().section(QChar::fromLatin1('.'), -1, -1);
+
             if (d->db.driver()->isIdentifierEscaped(relTableName, QSqlDriver::TableName)) {
                relTableName = d->db.driver()->stripDelimiters(relTableName, QSqlDriver::TableName);
             }
+
             QString displayColumn = relation.displayColumn();
+
             if (d->db.driver()->isIdentifierEscaped(displayColumn, QSqlDriver::FieldName)) {
                displayColumn = d->db.driver()->stripDelimiters(displayColumn, QSqlDriver::FieldName);
             }
-            fList.append(QString::fromLatin1(" AS %1_%2_%3").arg(relTableName).arg(displayColumn).arg(fieldNames.value(
-                            fieldList[i])));
+
+            fList.append(QString::fromLatin1(" AS %1_%2_%3").formatArg(relTableName).formatArg(displayColumn).formatArg(fieldNames.value(fieldList[i])));
             fieldNames.insert(fieldList[i], fieldNames.value(fieldList[i]) - 1);
          }
 

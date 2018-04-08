@@ -2217,7 +2217,7 @@ bool QOCIDriver::open(const QString &db,
    if (!hostname.isEmpty())
       connectionString =
          QString::fromLatin1("(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=%1)(Port=%2))"
-                             "(CONNECT_DATA=(SID=%3)))").arg(hostname).arg((port > -1 ? port : 1521)).arg(db);
+                             "(CONNECT_DATA=(SID=%3)))").formatArg(hostname).formatArg((port > -1 ? port : 1521)).formatArg(db);
 
    r = OCIHandleAlloc(d->env, reinterpret_cast<void **>(&d->srvhp), OCI_HTYPE_SERVER, 0, 0);
    if (r == OCI_SUCCESS)
@@ -2518,9 +2518,9 @@ QSqlRecord QOCIDriver::record(const QString &tablename) const
                               "from all_tab_columns a "
                               "where a.table_name=%2"));
    if (d->serverVersion >= 9) {
-      stmt = stmt.arg(QLatin1String(", char_length "));
+      stmt = stmt.formatArg(QLatin1String(", char_length "));
    } else {
-      stmt = stmt.arg(QLatin1String(" "));
+      stmt = stmt.formatArg(QLatin1String(" "));
    }
    bool buildRecordInfo = false;
    QString table, owner, tmpStmt;
@@ -2532,7 +2532,7 @@ QSqlRecord QOCIDriver::record(const QString &tablename) const
       table = table.toUpper();
    }
 
-   tmpStmt = stmt.arg(QLatin1Char('\'') + table + QLatin1Char('\''));
+   tmpStmt = stmt.formatArg(QLatin1Char('\'') + table + QLatin1Char('\''));
    if (owner.isEmpty()) {
       owner = d->user;
    }

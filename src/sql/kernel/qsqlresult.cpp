@@ -134,9 +134,9 @@ QString QSqlResultPrivate::positionalToNamedBinding()
    int n = sql.size();
 
    QString result;
-   result.reserve(n * 5 / 4);
+
    bool inQuote = false;
-   int count = 0;
+   int count    = 0;
 
    for (int i = 0; i < n; ++i) {
       QChar ch = sql.at(i);
@@ -158,10 +158,10 @@ QString QSqlResultPrivate::namedToPositionalBinding()
    int n = sql.size();
 
    QString result;
-   result.reserve(n);
+
    bool inQuote = false;
-   int count = 0;
-   int i = 0;
+   int count    = 0;
+   int i        = 0;
 
    while (i < n) {
       QChar ch = sql.at(i);

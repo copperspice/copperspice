@@ -23,13 +23,13 @@
 #ifndef QSQLRESULT_H
 #define QSQLRESULT_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
-#include <QtSql/qsql.h>
+#include <qvariant.h>
+#include <qvector.h>
+#include <qsql.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 
-class QString;
 class QSqlRecord;
 class QVariant;
 class QSqlDriver;

@@ -691,7 +691,7 @@ static char *createArrayBuffer(char *buffer, const QList<QVariant> &list,
    if (list.size() != elements) { // size mismatch
       error = QLatin1String("Expected size: %1. Supplied size: %2");
       error = QLatin1String("Array size mismatch. Fieldname: %1 ")
-              + error.arg(elements).arg(list.size());
+              + error.formatArg(elements).formatArg(list.size());
       return 0;
    }
 
@@ -804,7 +804,7 @@ bool QIBaseResultPrivate::writeArray(int column, const QList<QVariant> &list)
 
    if (list.size() > arraySize) {
       error = QLatin1String("Array size missmatch: size of %1 is %2, size of provided list is %3");
-      error = error.arg(QLatin1String(sqlname)).arg(arraySize).arg(list.size());
+      error = error.formatArg(QLatin1String(sqlname)).formatArg(arraySize).formatArg(list.size());
       q->setLastError(QSqlError(error, QLatin1String(""), QSqlError::StatementError));
       return false;
    }
@@ -812,7 +812,7 @@ bool QIBaseResultPrivate::writeArray(int column, const QList<QVariant> &list)
    if (!createArrayBuffer(ba.data(), list,
                           qIBaseTypeName(desc.array_desc_dtype, inda->sqlvar[column].sqlscale < 0),
                           0, &desc, error, tc)) {
-      q->setLastError(QSqlError(error.arg(QLatin1String(sqlname)), QLatin1String(""),
+      q->setLastError(QSqlError(error.formatArg(QLatin1String(sqlname)), QLatin1String(""),
                                 QSqlError::StatementError));
       return false;
    }
@@ -1867,7 +1867,7 @@ bool QIBaseDriver::subscribeToNotificationImplementation(const QString &name)
                   eBuffer->resultBuffer);
 
    if (status[0] == 1 && status[1]) {
-      setLastError(QSqlError(QString::fromLatin1("Could not subscribe to event notifications for %1.").arg(name)));
+      setLastError(QSqlError(QString::fromLatin1("Could not subscribe to event notifications for %1.").formatArg(name)));
       d->eventBuffers.remove(name);
       qFreeEventBuffer(eBuffer);
       return false;
@@ -1895,7 +1895,7 @@ bool QIBaseDriver::unsubscribeFromNotificationImplementation(const QString &name
    isc_cancel_events(status, &d->ibase, &eBuffer->eventId);
 
    if (status[0] == 1 && status[1]) {
-      setLastError(QSqlError(QString::fromLatin1("Could not unsubscribe from event notifications for %1.").arg(name)));
+      setLastError(QSqlError(QString::fromLatin1("Could not unsubscribe from event notifications for %1.").formatArg(name)));
       return false;
    }
 

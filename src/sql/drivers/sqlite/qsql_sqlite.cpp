@@ -391,6 +391,7 @@ bool QSQLiteResult::exec()
       return false;
    }
    int paramCount = sqlite3_bind_parameter_count(d->stmt);
+
    if (paramCount == values.count()) {
       for (int i = 0; i < paramCount; ++i) {
          res = SQLITE_OK;
@@ -398,53 +399,62 @@ bool QSQLiteResult::exec()
 
          if (value.isNull()) {
             res = sqlite3_bind_null(d->stmt, i + 1);
+
          } else {
             switch (value.type()) {
+
                case QVariant::ByteArray: {
                   const QByteArray *ba = static_cast<const QByteArray *>(value.constData());
-                  res = sqlite3_bind_blob(d->stmt, i + 1, ba->constData(),
-                                          ba->size(), SQLITE_STATIC);
+                  res = sqlite3_bind_blob(d->stmt, i + 1, ba->constData(), ba->size(), SQLITE_STATIC);
                   break;
                }
+
                case QVariant::Int:
                   res = sqlite3_bind_int(d->stmt, i + 1, value.toInt());
                   break;
+
                case QVariant::Double:
                   res = sqlite3_bind_double(d->stmt, i + 1, value.toDouble());
                   break;
+
                case QVariant::UInt:
                case QVariant::LongLong:
                   res = sqlite3_bind_int64(d->stmt, i + 1, value.toLongLong());
                   break;
+
                case QVariant::String: {
                   // lifetime of string == lifetime of its qvariant
                   const QString *str = static_cast<const QString *>(value.constData());
-                  res = sqlite3_bind_text16(d->stmt, i + 1, str->utf16(),
-                                            (str->size()) * sizeof(QChar), SQLITE_STATIC);
+                  res = sqlite3_bind_text64(d->stmt, i + 1, str->constData(), str->size_storage(), SQLITE_STATIC, SQLITE_UTF8);
                   break;
                }
+
                default: {
                   QString str = value.toString();
                   // SQLITE_TRANSIENT makes sure that sqlite buffers the data
-                  res = sqlite3_bind_text16(d->stmt, i + 1, str.utf16(),
-                                            (str.size()) * sizeof(QChar), SQLITE_TRANSIENT);
+                  res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
             }
          }
+
          if (res != SQLITE_OK) {
             setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-                                    "Unable to bind parameters"), QSqlError::StatementError, res));
+                  "Unable to bind parameters"), QSqlError::StatementError, res));
+
             d->finalize();
             return false;
          }
       }
    } else {
       setLastError(QSqlError(QCoreApplication::translate("QSQLiteResult",
-                             "Parameter count mismatch"), QString(), QSqlError::StatementError));
+                  "Parameter count mismatch"), QString(), QSqlError::StatementError));
+
       return false;
    }
+
    d->skippedStatus = d->fetchNext(d->firstRow, 0, true);
+
    if (lastError().isValid()) {
       setSelect(false);
       setActive(false);
@@ -556,12 +566,13 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
    }
    bool sharedCache = false;
    int openMode = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, timeOut = 5000;
-   QStringList opts = QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
-  
+   QStringList opts = QString(conOpts).remove(' ').split(';');
+
    for (const QString & option : opts) {
       if (option.startsWith(QLatin1String("QSQLITE_BUSY_TIMEOUT="))) {
          bool ok;
-         int nt = option.mid(21).toInt(&ok);
+         int nt = option.mid(21).toInteger<int>(&ok);
+
          if (ok) {
             timeOut = nt;
          }
@@ -581,14 +592,14 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
       setOpen(true);
       setOpenError(false);
       return true;
+
    } else {
       if (d->access) {
          sqlite3_close(d->access);
          d->access = 0;
       }
 
-      setLastError(qMakeError(d->access, tr("Error opening database"),
-                              QSqlError::ConnectionError));
+      setLastError(qMakeError(d->access, tr("Error opening database"), QSqlError::ConnectionError));
       setOpenError(true);
       return false;
    }
@@ -666,21 +677,25 @@ bool QSQLiteDriver::rollbackTransaction()
 QStringList QSQLiteDriver::tables(QSql::TableType type) const
 {
    QStringList res;
-   if (!isOpen()) {
+
+   if (! isOpen()) {
       return res;
    }
 
    QSqlQuery q(createResult());
    q.setForwardOnly(true);
 
-   QString sql = QLatin1String("SELECT name FROM sqlite_master WHERE %1 "
-                               "UNION ALL SELECT name FROM sqlite_temp_master WHERE %1");
+   QString sql = "SELECT name FROM sqlite_master WHERE %1 UNION ALL SELECT name FROM sqlite_temp_master WHERE %1";
+
    if ((type & QSql::Tables) && (type & QSql::Views)) {
-      sql = sql.arg(QLatin1String("type='table' OR type='view'"));
+      sql = sql.formatArg("type='table' OR type='view'");
+
    } else if (type & QSql::Tables) {
-      sql = sql.arg(QLatin1String("type='table'"));
+      sql = sql.formatArg("type='table'");
+
    } else if (type & QSql::Views) {
-      sql = sql.arg(QLatin1String("type='view'"));
+      sql = sql.formatArg("type='view'");
+
    } else {
       sql.clear();
    }
@@ -693,7 +708,7 @@ QStringList QSQLiteDriver::tables(QSql::TableType type) const
 
    if (type & QSql::SystemTables) {
       // there are no internal tables beside this one:
-      res.append(QLatin1String("sqlite_master"));
+      res.append("sqlite_master");
    }
 
    return res;

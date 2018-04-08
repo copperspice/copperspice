@@ -22,7 +22,7 @@
 
 #include <qglobal.h>
 
-#ifdef Q_OS_WIN32    
+#ifdef Q_OS_WIN32
 
 // We assume that MS SQL Server is used. Set Q_USE_SYBASE to force Sybase.
 // Conflicting declarations of LPCBYTE in sqlfront.h and winscard.h
@@ -173,12 +173,12 @@ extern "C" {
 
       if (severity > 0) {
          QString errMsg = QString::fromLatin1("%1 (Msg %2, Level %3, State %4, Server %5, Line %6)")
-                          .arg(QString::fromLatin1(msgtext))
-                          .arg(msgno)
-                          .arg(severity)
-                          .arg(msgstate)
-                          .arg(QString::fromLatin1(srvname))
-                          .arg(line);
+                          .formatArg(QString::fromLatin1(msgtext))
+                          .formatArg(msgno)
+                          .formatArg(severity)
+                          .formatArg(msgstate)
+                          .formatArg(QString::fromLatin1(srvname))
+                          .formatArg(line);
          p->addErrorMsg(errMsg);
          if (severity > 10) {
             // Severe messages are really errors in the sense of lastError
@@ -213,7 +213,7 @@ extern "C" {
       }
 
 
-      QString errMsg = QString::fromLatin1("%1 %2\n").arg(QLatin1String(dberrstr)).arg(
+      QString errMsg = QString::fromLatin1("%1 %2\n").formatArg(QLatin1String(dberrstr)).formatArg(
                           QLatin1String(oserrstr));
       errMsg += p->getErrorMsgs();
       p->lastError = qMakeError(errMsg, QSqlError::UnknownError, dberr);
@@ -721,7 +721,7 @@ QSqlRecord QTDSDriver::record(const QString &tablename) const
 
    QString stmt (QLatin1String("select name, type, length, prec from syscolumns "
                                "where id = (select id from sysobjects where name = '%1')"));
-   t.exec(stmt.arg(table));
+   t.exec(stmt.formatArg(table));
    while (t.next()) {
       QSqlField f(t.value(0).toString().simplified(), qDecodeTDSType(t.value(1).toInt()));
       f.setLength(t.value(2).toInt());
@@ -812,7 +812,7 @@ QSqlIndex QTDSDriver::primaryIndex(const QString &tablename) const
 
    QSqlQuery t(createResult());
    t.setForwardOnly(true);
-   t.exec(QString::fromLatin1("sp_helpindex '%1'").arg(table));
+   t.exec(QString::fromLatin1("sp_helpindex '%1'").formatArg(table));
    if (t.next()) {
       QStringList fNames = t.value(2).toString().simplified().split(QLatin1Char(','));
       QRegExp regx(QLatin1String("\\s*(\\S+)(?:\\s+(DESC|desc))?\\s*"));

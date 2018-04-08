@@ -377,12 +377,11 @@ QString QSqlDriver::stripDelimiters(const QString &identifier, IdentifierType ty
    return result;
 }
 
-QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
-                                 const QSqlRecord &rec, bool preparedStatement) const
+QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName, const QSqlRecord &rec, bool preparedStatement) const
 {
    int i;
    QString s;
-   s.reserve(128);
+
    switch (type) {
       case SelectStatement:
          for (i = 0; i < rec.count(); ++i) {
@@ -394,8 +393,9 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
             return s;
          }
          s.chop(2);
-         s.prepend(QLatin1String("SELECT ")).append(QLatin1String(" FROM ")).append(tableName);
+         s.prepend("SELECT ").append(" FROM ").append(tableName);
          break;
+
       case WhereStatement:
          if (preparedStatement) {
             for (int i = 0; i < rec.count(); ++i) {
@@ -407,6 +407,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
                }
                s.append(QLatin1String(" AND "));
             }
+
          } else {
             for (i = 0; i < rec.count(); ++i) {
                s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this));
@@ -476,39 +477,6 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
    return s;
 }
 
-/*!
-    Returns a string representation of the \a field value for the
-    database. This is used, for example, when constructing INSERT and
-    UPDATE statements.
-
-    The default implementation returns the value formatted as a string
-    according to the following rules:
-
-    \list
-
-    \i If \a field is character data, the value is returned enclosed
-    in single quotation marks, which is appropriate for many SQL
-    databases. Any embedded single-quote characters are escaped
-    (replaced with two single-quote characters). If \a trimStrings is
-    true (the default is false), all trailing whitespace is trimmed
-    from the field.
-
-    \i If \a field is date/time data, the value is formatted in ISO
-    format and enclosed in single quotation marks. If the date/time
-    data is invalid, "NULL" is returned.
-
-    \i If \a field is \link QByteArray bytearray\endlink data, and the
-    driver can edit binary fields, the value is formatted as a
-    hexadecimal string.
-
-    \i For any other field type, toString() is called on its value
-    and the result of this is returned.
-
-    \endlist
-
-    \sa QVariant::toString()
-
-*/
 QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
 {
    const QLatin1String nullTxt("NULL");
@@ -516,6 +484,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
    QString r;
    if (field.isNull()) {
       r = nullTxt;
+
    } else {
       switch (field.type()) {
          case QVariant::Int:
@@ -526,6 +495,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
                r = field.value().toString();
             }
             break;
+
 #ifndef QT_NO_DATESTRING
          case QVariant::Date:
             if (field.value().toDate().isValid())

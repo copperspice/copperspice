@@ -513,11 +513,12 @@ void QSqlRecord::detach()
 QDebug operator<<(QDebug dbg, const QSqlRecord &r)
 {
    dbg << "QSqlRecord(" << r.count() << ')';
+
    for (int i = 0; i < r.count(); ++i) {
-      dbg << '\n' << QString::fromLatin1("%1:").arg(i, 2) << r.field(i) << r.value(i).toString();
+      dbg << '\n' << QString::fromLatin1("%1:").formatArg(i, 2) << r.field(i) << r.value(i).toString();
    }
+
    return dbg;
 }
-
 
 QT_END_NAMESPACE

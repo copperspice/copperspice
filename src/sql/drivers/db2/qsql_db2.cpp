@@ -82,8 +82,7 @@ static QString qFromTChar(SQLTCHAR *str)
    return QString((const QChar *)str);
 }
 
-// dangerous!! (but fast). Don't use in functions that
-// require out parameters!
+// dangerous but fast, Don't use in functions that require out parameters!
 static SQLTCHAR *qToTChar(const QString &str)
 {
    return (SQLTCHAR *)str.utf16();
@@ -96,17 +95,15 @@ static QString qWarnDB2Handle(int handleType, SQLHANDLE handle)
    SQLRETURN r = SQL_ERROR;
    SQLTCHAR state[SQL_SQLSTATE_SIZE + 1];
    SQLTCHAR description[SQL_MAX_MESSAGE_LENGTH];
-   r = SQLGetDiagRec(handleType,
-                     handle,
-                     1,
-                     (SQLTCHAR *) state,
-                     &nativeCode,
-                     (SQLTCHAR *) description,
+
+   r = SQLGetDiagRec(handleType, handle, 1, (SQLTCHAR *) state, &nativeCode, (SQLTCHAR *) description,
                      SQL_MAX_MESSAGE_LENGTH - 1, /* in bytes, not in characters */
                      &msgLen);
+
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
       return QString(qFromTChar(description));
    }
+
    return QString();
 }
 
@@ -135,8 +132,7 @@ static void qSqlWarning(const QString &message, const QDB2ResultPrivate *d)
             qDB2Warn(d).toLocal8Bit().constData());
 }
 
-static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
-                            const QDB2DriverPrivate *p)
+static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QDB2DriverPrivate *p)
 {
    return QSqlError(QLatin1String("QDB2: ") + err, qDB2Warn(p), type);
 }
@@ -222,7 +218,7 @@ static QSqlField qMakeFieldInfo(const QDB2ResultPrivate *d, int i)
                       &nullable);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeFieldInfo: Unable to describe column %1").arg(i), d);
+      qSqlWarning(QString::fromLatin1("qMakeFieldInfo: Unable to describe column %1").fromatArg(i), d);
       return QSqlField();
    }
    QSqlField f(qFromTChar(colName), qDecodeDB2Type(colType));
@@ -485,10 +481,11 @@ static bool qMakeStatement(QDB2ResultPrivate *d, bool forwardOnly, bool setForwa
                          (SQLPOINTER) SQL_CURSOR_STATIC,
                          SQL_IS_UINTEGER);
    }
+
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
-      qSqlWarning(QString::fromLatin1("QDB2Result::reset: Unable to set %1 attribute.").arg(
-                     forwardOnly ? QLatin1String("SQL_CURSOR_FORWARD_ONLY")
-                     : QLatin1String("SQL_CURSOR_STATIC")), d);
+      qSqlWarning(QString::fromLatin1("QDB2Result::reset: Unable to set %1 attribute.")
+                  .fromatArg(forwardOnly ? QLatin1String("SQL_CURSOR_FORWARD_ONLY") : QLatin1String("SQL_CURSOR_STATIC")), d);
+
       return false;
    }
    return true;
@@ -876,7 +873,7 @@ bool QDB2Result::fetch(int i)
    }
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO && r != SQL_NO_DATA) {
       setLastError(qMakeError(QCoreApplication::translate("QDB2Result",
-                              "Unable to fetch record %1").arg(i), QSqlError::StatementError, d));
+                              "Unable to fetch record %1").fromatArg(i), QSqlError::StatementError, d));
       return false;
    } else if (r == SQL_NO_DATA) {
       return false;
@@ -1245,7 +1242,7 @@ bool QDB2Driver::open(const QString &db, const QString &user, const QString &pas
       }
       if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO)
          qSqlWarning(QString::fromLatin1("QDB2Driver::open: "
-                                         "Unable to set connection attribute '%1'").arg(opt), d);
+                                         "Unable to set connection attribute '%1'").fromatArg(opt), d);
    }
 
    if (protocol.isEmpty()) {

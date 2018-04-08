@@ -615,7 +615,7 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
                       &nullable);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to describe column %1").arg(i), p);
+      qSqlWarning(QString::fromLatin1("qMakeField: Unable to describe column %1").fromatArg(i), p);
       return QSqlField();
    }
 
@@ -628,7 +628,7 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
                         0,
                         &unsignedFlag);
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").arg(i), p);
+      qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").fromatArg(i), p);
    }
 
 #ifdef UNICODE
@@ -695,13 +695,16 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
    // Set any connection attributes
    const QStringList opts(connOpts.split(QLatin1Char(';'), QString::SkipEmptyParts));
    SQLRETURN r = SQL_SUCCESS;
+
    for (int i = 0; i < opts.count(); ++i) {
       const QString tmp(opts.at(i));
       int idx;
+
       if ((idx = tmp.indexOf(QLatin1Char('='))) == -1) {
          qWarning() << "QODBCDriver::open: Illegal connect option value '" << tmp << '\'';
          continue;
       }
+
       const QString opt(tmp.left(idx));
       const QString val(tmp.mid(idx + 1).simplified());
       SQLUINTEGER v = 0;
@@ -710,38 +713,51 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
       if (opt.toUpper() == QLatin1String("SQL_ATTR_ACCESS_MODE")) {
          if (val.toUpper() == QLatin1String("SQL_MODE_READ_ONLY")) {
             v = SQL_MODE_READ_ONLY;
+
          } else if (val.toUpper() == QLatin1String("SQL_MODE_READ_WRITE")) {
             v = SQL_MODE_READ_WRITE;
+
          } else {
             qWarning() << "QODBCDriver::open: Unknown option value '" << val << '\'';
             continue;
          }
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_ACCESS_MODE, (SQLPOINTER) v, 0);
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_CONNECTION_TIMEOUT")) {
+
+      } else if (opt.toUpper() == "SQL_ATTR_CONNECTION_TIMEOUT") {
          v = val.toUInt();
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_CONNECTION_TIMEOUT, (SQLPOINTER) v, 0);
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_LOGIN_TIMEOUT")) {
+
+      } else if (opt.toUpper() == "SQL_ATTR_LOGIN_TIMEOUT") {
          v = val.toUInt();
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_LOGIN_TIMEOUT, (SQLPOINTER) v, 0);
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_CURRENT_CATALOG")) {
-         val.utf16(); // 0 terminate
+
+      } else if (opt.toUpper() == "SQL_ATTR_CURRENT_CATALOG") {
+         // 0 terminate
+         val.utf16();
+
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_CURRENT_CATALOG,
+
 #ifdef UNICODE
                                toSQLTCHAR(val).data(),
 #else
                                (SQLCHAR *) val.toUtf8().data(),
 #endif
                                val.length() * sizeof(SQLTCHAR));
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_METADATA_ID")) {
-         if (val.toUpper() == QLatin1String("SQL_TRUE")) {
+
+      } else if (opt.toUpper() == "SQL_ATTR_METADATA_ID") {
+         if (val.toUpper() == "SQL_TRUE") {
             v = SQL_TRUE;
-         } else if (val.toUpper() == QLatin1String("SQL_FALSE")) {
+
+         } else if (val.toUpper() == "SQL_FALSE") {
             v = SQL_FALSE;
+
          } else {
             qWarning() << "QODBCDriver::open: Unknown option value '" << val << '\'';
             continue;
          }
+
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_METADATA_ID, (SQLPOINTER) v, 0);
+
       } else if (opt.toUpper() == QLatin1String("SQL_ATTR_PACKET_SIZE")) {
          v = val.toUInt();
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_PACKET_SIZE, (SQLPOINTER) v, 0);
@@ -797,8 +813,7 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
          qWarning() << "QODBCDriver::open: Unknown connection attribute '" << opt << '\'';
       }
       if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO)
-         qSqlWarning(QString::fromLatin1("QODBCDriver::open: Unable to set connection attribute'%1'").arg(
-                        opt), this);
+         qSqlWarning(QString::fromLatin1("QODBCDriver::open: Unable to set connection attribute'%1'").fromatArg(opt), this);
    }
    return true;
 }

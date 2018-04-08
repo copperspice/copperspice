@@ -96,15 +96,15 @@ class Q_SQL_EXPORT QSqlDatabase
 
    QSqlDriver *driver() const;
 
-   static const char *defaultConnection;
+   static QString defaultConnection;
 
-   static QSqlDatabase addDatabase(const QString &type, const QString &connectionName = QLatin1String(defaultConnection));
-   static QSqlDatabase addDatabase(QSqlDriver *driver, const QString &connectionName = QLatin1String(defaultConnection));
+   static QSqlDatabase addDatabase(const QString &type, const QString &connectionName = defaultConnection);
+   static QSqlDatabase addDatabase(QSqlDriver *driver,  const QString &connectionName = defaultConnection);
    static QSqlDatabase cloneDatabase(const QSqlDatabase &other, const QString &connectionName);
-   static QSqlDatabase database(const QString &connectionName = QLatin1String(defaultConnection),bool open = true);
+   static QSqlDatabase database(const QString &connectionName = defaultConnection, bool open = true);
 
    static void removeDatabase(const QString &connectionName);
-   static bool contains(const QString &connectionName = QLatin1String(defaultConnection));
+   static bool contains(const QString &connectionName = defaultConnection);
    static QStringList drivers();
    static QStringList connectionNames();
    static void registerSqlDriver(const QString &name, QSqlDriverCreatorBase *creator);

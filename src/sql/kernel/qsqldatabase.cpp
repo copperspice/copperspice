@@ -93,7 +93,7 @@ QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QSqlDriverFactoryInterface_iid, "/sqldrivers"))
 
-const char *QSqlDatabase::defaultConnection = "qt_sql_default_connection";
+QString QSqlDatabase::defaultConnection = "qt_sql_default_connection";
 
 typedef QHash<QString, QSqlDriverCreatorBase *> DriverDict;
 
@@ -104,6 +104,7 @@ class QConnectionDict: public QHash<QString, QSqlDatabase>
       QReadLocker locker(&lock);
       return contains(key);
    }
+
    inline QStringList keys_ts() const {
       QReadLocker locker(&lock);
       return keys();
@@ -111,6 +112,7 @@ class QConnectionDict: public QHash<QString, QSqlDatabase>
 
    mutable QReadWriteLock lock;
 };
+
 Q_GLOBAL_STATIC(QConnectionDict, dbDict)
 
 class QSqlDatabasePrivate
@@ -217,8 +219,7 @@ QSqlDatabasePrivate *QSqlDatabasePrivate::shared_null()
 void QSqlDatabasePrivate::invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn)
 {
    if (db.d->ref.load() != 1 && doWarn) {
-      qWarning("QSqlDatabasePrivate::removeDatabase: connection '%s' is still in use, "
-               "all queries will cease to work.", name.toLocal8Bit().constData());
+      qWarning("QSqlDatabasePrivate::removeDatabase: connection '%s' is still in use, all queries will cease to work.", csPrintable(name));
       db.d->disable();
       db.d->connName.clear();
    }
@@ -228,6 +229,7 @@ void QSqlDatabasePrivate::removeDatabase(const QString &name)
 {
    QConnectionDict *dict = dbDict();
    Q_ASSERT(dict);
+
    QWriteLocker locker(&dict->lock);
 
    if (!dict->contains(name)) {
@@ -241,13 +243,15 @@ void QSqlDatabasePrivate::addDatabase(const QSqlDatabase &db, const QString &nam
 {
    QConnectionDict *dict = dbDict();
    Q_ASSERT(dict);
+
    QWriteLocker locker(&dict->lock);
 
    if (dict->contains(name)) {
       invalidateDb(dict->take(name), name);
-      qWarning("QSqlDatabasePrivate::addDatabase: duplicate connection name '%s', old "
-               "connection removed.", name.toLocal8Bit().data());
+
+      qWarning("QSqlDatabasePrivate::addDatabase: duplicate connection name '%s', old connection removed.", csPrintable(name));
    }
+
    dict->insert(name, db);
    db.d->connName = name;
 }
