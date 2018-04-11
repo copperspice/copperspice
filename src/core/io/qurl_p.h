@@ -33,7 +33,7 @@ extern int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QStrin
 enum AceLeadingDot { AllowLeadingDot, ForbidLeadingDot };
 enum AceOperation { ToAceOnly, NormalizeAce };
 
-QString qt_ACE_do(QStringView8 domain, AceOperation op, AceLeadingDot dot);
+QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot);
 QString qt_urlRecodeByteArray(const QByteArray &ba);
 
 #endif

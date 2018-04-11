@@ -624,8 +624,6 @@ template <class Key, class Val, class C>
 QList<Key> QMultiMap<Key, Val, C>::keys() const
 {
    QList<Key> retval;
-   retval.reserve(size());
-
    const_iterator iter = begin();
 
    while (iter != end()) {
@@ -678,7 +676,6 @@ template <class Key, class Val, class C>
 QList<Key> QMultiMap<Key, Val, C>::uniqueKeys() const
 {
    QList<Key> retval;
-   retval.reserve(size());
 
    for (const auto &item : m_data) {
 
@@ -696,8 +693,6 @@ template <class Key, class Val, class C>
 QList<Val> QMultiMap<Key, Val, C>::values() const
 {
    QList<Val> retval;
-   retval.reserve(size());
-
    const_iterator iter = begin();
 
    while (iter != end()) {

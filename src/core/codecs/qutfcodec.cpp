@@ -24,7 +24,7 @@
 #include <qutfcodec_p.h>
 #include <qendian.h>
 #include <qlist.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstring16.h>
 
 enum { Endian = 0, Data = 1 };
@@ -34,7 +34,7 @@ static inline bool isUnicodeNonCharacter(uint ucs4)
    return (ucs4 & 0xfffe) == 0xfffe || (ucs4 - 0xfdd0U) < 16;
 }
 
-QByteArray QUtf8::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state)
+QByteArray QUtf8::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state)
 {
    QByteArray retval;
 
@@ -190,7 +190,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
    return retval;
 }
 
-QByteArray QUtf16::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf16::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state, DataEndianness e)
 {
    QByteArray retval;
 
@@ -382,7 +382,7 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
    return retval;
 }
 
-QByteArray QUtf32::convertFromUnicode(const QStringView8 &str, QTextCodec::ConverterState *state, DataEndianness e)
+QByteArray QUtf32::convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *state, DataEndianness e)
 {
    QByteArray retval;
 
@@ -528,7 +528,7 @@ QUtf8Codec::~QUtf8Codec()
 {
 }
 
-QByteArray QUtf8Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QUtf8Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    return QUtf8::convertFromUnicode(str, state);
 }
@@ -557,7 +557,7 @@ QUtf16Codec::~QUtf16Codec()
 {
 }
 
-QByteArray QUtf16Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QUtf16Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    return QUtf16::convertFromUnicode(str, state, e);
 }
@@ -618,7 +618,7 @@ QUtf32Codec::~QUtf32Codec()
 {
 }
 
-QByteArray QUtf32Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QUtf32Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    return QUtf32::convertFromUnicode(str, state, e);
 }

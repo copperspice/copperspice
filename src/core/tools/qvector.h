@@ -644,7 +644,6 @@ template <typename T>
 QList<T> QVector<T>::toList() const
 {
    QList<T> result;
-   result.reserve(size());
 
    for (const auto &i : m_data) {
       result.append(i);

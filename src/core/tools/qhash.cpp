@@ -39,7 +39,7 @@
 #include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qglobal.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 #ifdef Q_OS_UNIX
 #include <stdio.h>

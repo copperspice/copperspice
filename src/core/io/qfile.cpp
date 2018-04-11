@@ -717,10 +717,12 @@ bool QFile::copy(const QString &fileName, const QString &newName)
 bool QFile::open(OpenMode mode)
 {
    Q_D(QFile);
+
    if (isOpen()) {
       qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
       return false;
    }
+
    if (mode & Append) {
       mode |= WriteOnly;
    }
@@ -731,22 +733,26 @@ bool QFile::open(OpenMode mode)
       return false;
    }
 
-   // QIODevice provides the buffering, so there's no need to request it from the file engine.
+   // QIODevice provides the buffering, so there is no need to request it from the file engine.
    if (d->engine()->open(mode | QIODevice::Unbuffered)) {
       QIODevice::open(mode);
 
       if (mode & Append) {
-         //The file engine should have done this in open(),
-         //this is a workaround for backward compatibility
+         // file engine should have done this in open(), workaround for backward compatibility
          seek(size());
       }
+
       return true;
    }
+
    QFile::FileError err = d->fileEngine->error();
+
    if (err == QFile::UnspecifiedError) {
       err = QFile::OpenError;
    }
+
    d->setError(err, d->fileEngine->errorString());
+
    return false;
 }
 

@@ -60,13 +60,13 @@ class cs_number<0>
 
 #ifdef QT_NO_TEXTCODEC
 # define CS_TR_FUNCTIONS \
-   static inline QString8 tr(const char *s, const char *c = 0, int n = -1) \
+   static inline QString tr(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().tr(s, c, n); }
 #else
 # define CS_TR_FUNCTIONS \
-   static inline QString8 tr(const char *s, const char *c = 0, int n = -1) \
+   static inline QString tr(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().tr(s, c, n); } \
-   static inline QString8 trUtf8(const char *s, const char *c = 0, int n = -1) \
+   static inline QString trUtf8(const char *s, const char *c = 0, int n = -1) \
       { return staticMetaObject().trUtf8(s, c, n); }
 #endif
 
@@ -231,9 +231,9 @@ class cs_number<0>
 // ** interface
 #define CS_DECLARE_INTERFACE(IFace, IId) \
    template<> \
-   inline const QString8 &qobject_interface_iid<IFace *>() \
+   inline const QString &qobject_interface_iid<IFace *>() \
       {  \
-         static QString8 retval(IId); \
+         static QString retval(IId); \
          return retval;               \
       } \
    template<> \

@@ -28,6 +28,9 @@
 #include <qcontainerfwd.h>
 #include <qstringfwd.h>
 
+// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
+#include <qstring8.h>
+
 class QDataStream;
 struct QMetaTypeGuiHelper;
 
@@ -91,22 +94,23 @@ class Q_CORE_EXPORT QMetaType
    using LoadOperator = void (*)(QDataStream &, void *);
 
 #if ! defined (CS_DOXYPRESS)
-#define QString8 ::QString8
+// required so QString is used as a data type and not an enum value
+#define QString ::QString
 #endif
 
-   static void registerStreamOperators(const QString8 &typeName, SaveOperator saveOp, LoadOperator loadOp);
+   static void registerStreamOperators(const QString &typeName, SaveOperator saveOp, LoadOperator loadOp);
    static void registerStreamOperators(int type, SaveOperator saveOp, LoadOperator loadOp);
 
-   static int registerType(const QString8 &typeName, Destructor destructor, Constructor constructor);
-   static int registerTypedef(const QString8 &typeName, int aliasId);
-   static int type(const QString8 &typeName);
-   static const QString8 &typeName(int type);
+   static int registerType(const QString &typeName, Destructor destructor, Constructor constructor);
+   static int registerTypedef(const QString &typeName, int aliasId);
+   static int type(const QString &typeName);
+   static const QString &typeName(int type);
    static bool isRegistered(int type);
    static void *construct(int type, const void *original = nullptr);
    static void destroy(int type, void *data);
 
 #if ! defined (CS_DOXYPRESS)
-#undef QString8
+#undef QString
 #endif
 
    static bool save(QDataStream &stream, int type, const void *data);
@@ -187,7 +191,7 @@ struct QMetaTypeIdHelper<T, false> {
 }
 
 template <typename T>
-int qRegisterMetaType(const QString8 &typeName, T *dummy = nullptr)
+int qRegisterMetaType(const QString &typeName, T *dummy = nullptr)
 {
    if (! dummy) {
       int typedefOf = QtPrivate::QMetaTypeIdHelper<T>::qt_metatype_id();
@@ -238,7 +242,7 @@ inline int qMetaTypeId_Query()
 #ifndef QT_NO_DATASTREAM
 
 template <typename T>
-void qRegisterMetaTypeStreamOperators(const QString8 &typeName, T * = nullptr )
+void qRegisterMetaTypeStreamOperators(const QString &typeName, T * = nullptr )
 {
    using SavePtr = void (*)(QDataStream &, const T *);
    using LoadPtr = void (*)(QDataStream &, T *);
@@ -368,8 +372,10 @@ Q_DECLARE_BUILTIN_METATYPE(QChar32,      QChar32)
 Q_DECLARE_BUILTIN_METATYPE(QString8,     QString8)
 Q_DECLARE_BUILTIN_METATYPE(QString16,    QString16)
 
-Q_DECLARE_BUILTIN_METATYPE(QStringList,  QStringList)
+Q_DECLARE_BUILTIN_METATYPE(QRegularExpression,    QRegularExpression)
+
 Q_DECLARE_BUILTIN_METATYPE(QStringView8, QStringView)
+Q_DECLARE_BUILTIN_METATYPE(QStringList,  QStringList)
 
 Q_DECLARE_BUILTIN_METATYPE(QObject *,    QObjectStar)
 Q_DECLARE_BUILTIN_METATYPE(QWidget *,    QWidgetStar)

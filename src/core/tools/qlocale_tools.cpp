@@ -22,7 +22,7 @@
 
 #include <qlocale_tools_p.h>
 #include <qlocale_p.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 #include <ctype.h>
 #include <errno.h>
@@ -89,15 +89,15 @@ qint64 qstrtoll(const char *nptr, const char **endptr, int base, bool *ok)
    return retval;
 }
 
-QString qulltoa(quint64 l, int base, const QChar _zero)
+QString qulltoa(quint64 value, int base, const QChar zero_ch)
 {
-   ushort buff[65]; // length of MAX_ULLONG in base 2
-   ushort *p = buff + 65;
+   char32_t buffer[65];                // length of MAX_ULLONG in base 2
+   char32_t *p = buffer + 65;
 
-   if (base != 10 || _zero.unicode() == '0') {
-      while (l != 0) {
-         int c = l % base;
+   if (base != 10 || zero_ch.unicode() == '0') {
 
+      while (value != 0) {
+         int c = value % base;
          --p;
 
          if (c < 10) {
@@ -106,19 +106,21 @@ QString qulltoa(quint64 l, int base, const QChar _zero)
             *p = c - 10 + 'a';
          }
 
-         l /= base;
+         value /= base;
       }
+
    } else {
-      while (l != 0) {
-         int c = l % base;
 
-         *(--p) = _zero.unicode() + c;
+      while (value != 0) {
+         int c = value % base;
 
-         l /= base;
+         *(--p) = zero_ch.unicode() + c;
+
+         value /= base;
       }
    }
 
-   return QString(reinterpret_cast<QChar *>(p), 65 - (p - buff));
+   return QString(p, buffer + 65);
 }
 
 QString qlltoa(qint64 l, int base, const QChar zero)
@@ -134,6 +136,7 @@ QString &decimalForm(QChar zero, QChar decimal, QChar group, QString &digits, in
          digits.prepend(zero);
       }
       decpt = 0;
+
    } else if (decpt > digits.length()) {
       for (int i = digits.length(); i < decpt; ++i) {
          digits.append(zero);
@@ -1487,10 +1490,12 @@ dig_done:
             if (ok != 0) {
                *ok = false;
             }
+
 #ifdef __STDC__
             rv = HUGE_VAL;
 #else
             /* Can't trust HUGE_VAL */
+
 #ifdef IEEE_Arith
             setWord0(&rv, Exp_mask);
             setWord1(&rv, 0);

@@ -633,17 +633,17 @@ QString decodeMSG(const MSG &msg)
 
    // Unknown WM_, so use number
    if (wmmsg.isEmpty()) {
-      wmmsg = QString::fromLatin1("WM_(%1)").formatArg(msg.message);
+      wmmsg = QString("WM_(%1)").formatArg(msg.message);
    }
 
    QString rawParameters = QString("hwnd(0x%1)").formatArg(reinterpret_cast<quintptr>(msg.hwnd), 8, 16, '0');
 
    // Custom WM_'s
    if (msg.message > WM_APP) {
-      wmmsg = QString::fromLatin1("WM_APP + %1").formatArg(msg.message - WM_APP);
+      wmmsg = QString("WM_APP + %1").formatArg(msg.message - WM_APP);
 
    } else if (msg.message > WM_USER) {
-      wmmsg = QString::fromLatin1("WM_USER + %1").formatArg(msg.message - WM_USER);
+      wmmsg = QString("WM_USER + %1").formatArg(msg.message - WM_USER);
    }
 
    QString parameters;

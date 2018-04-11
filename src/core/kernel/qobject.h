@@ -98,65 +98,65 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    bool blockSignals(bool block);
    const QList<QObject *> &children() const;
 
-   bool connect(const QObject *sender, const QString8 &signalMethod, const QString8 &location,
-                  const QString8 &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+   bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
+                  const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
-   static bool connect(const QObject *sender, const QString8 &signalMethod, const QString8 &location,
-                  const QObject *receiver, const QString8 &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+   static bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
+                  const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
-   static bool connect(const QObject *sender, const QString8 &signalMethod,
-                  const QObject *receiver, const QString8 &slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
-                  const QString8 &location = QString8());
+   static bool connect(const QObject *sender, const QString &signalMethod,
+                  const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
+                  const QString &location = QString());
 
    static bool connect(const QObject *sender, const QMetaMethod &signalMethod,
                   const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
-   bool connect(const QObject *sender, const QString8 &signalMethod, const QString8 &slotMethod,
+   bool connect(const QObject *sender, const QString &signalMethod, const QString &slotMethod,
                   Qt::ConnectionType type = Qt::AutoConnection);
 
-   static bool disconnect(const QObject *sender, const QString8 &signalMethod,
-                  const QObject *receiver, const QString8 &slotMethod );
+   static bool disconnect(const QObject *sender, const QString &signalMethod,
+                  const QObject *receiver, const QString &slotMethod );
 
    static bool disconnect(const QObject *sender, const QMetaMethod &signalMethod,
                   const QObject *receiver, const QMetaMethod &slotMethod );
 
-   static bool disconnect(const QObject *sender, const QString8 &signalMethod, const QString8 &location,
-                  const QObject *receiver, const QString8 &slotMethod );
+   static bool disconnect(const QObject *sender, const QString &signalMethod, const QString &location,
+                  const QObject *receiver, const QString &slotMethod );
 
-   bool disconnect(const QString8 &signalMethod = QString8(), const QObject *receiver = nullptr, const QString8 &slotMethod = QString8()) const;
+   bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr, const QString &slotMethod = QString()) const;
 
-   bool disconnect(const QString8 &signalMethod, const QString8 &lineNumber, const QObject *receiver = nullptr,
-                   const QString8 &slotMethod = QString8()) const;
+   bool disconnect(const QString &signalMethod, const QString &lineNumber, const QObject *receiver = nullptr,
+                   const QString &slotMethod = QString()) const;
 
-   bool disconnect(const QObject *receiver, const QString8 &slotMethod = QString8()) const;
+   bool disconnect(const QObject *receiver, const QString &slotMethod = QString()) const;
 
    void dumpObjectTree();
    void dumpObjectInfo();
 
-   QList<QString8> dynamicPropertyNames() const;
+   QList<QString> dynamicPropertyNames() const;
 
    virtual bool event(QEvent *);
    virtual bool eventFilter(QObject *watched, QEvent *event);
    void installEventFilter(QObject *obj);
 
-   bool inherits(const QString8 &classname) const;
+   bool inherits(const QString &classname) const;
    bool isWidgetType() const;
    void killTimer(int id);
 
    void moveToThread(QThread *targetThread);
-   QString8 objectName() const;
+   QString objectName() const;
    QObject *parent() const;
 
    void removeEventFilter(QObject *obj);
 
-   void setObjectName(const QString8 &name);
+   void setObjectName(const QString &name);
    void setParent(QObject *parent);
-   bool setProperty(const QString8 &name, const QVariant &value);
+   bool setProperty(const QString &name, const QVariant &value);
    bool signalsBlocked() const;
    int startTimer(int interval);
 
-   bool cs_InstanceOf(const QString8 &iid);
-   virtual bool cs_interface_query(const QString8 &data) const;
+   bool cs_InstanceOf(const QString &iid);
+   virtual bool cs_interface_query(const QString &data) const;
 
    QThread *thread() const;
 
@@ -182,21 +182,21 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
                           const Receiver *receiver, T slot);
 
    template<typename T>
-   T findChild(const QString8 &aName = QString8()) const;
+   T findChild(const QString &aName = QString()) const;
 
    template<class T>
-   QList<T> findChildren(const QString8 &objName = QString8()) const;
+   QList<T> findChildren(const QString &objName = QString()) const;
 
    template<class T>
-   QList<T> findChildren(const QRegularExpression8 &regExp) const;
+   QList<T> findChildren(const QRegularExpression &regExp) const;
 
    template<class T = QVariant>
-   T property(const QString8 &name) const;
+   T property(const QString &name) const;
 
    CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = nullptr))
    CORE_CS_SIGNAL_2(destroyed, obj)
 
-   CORE_CS_SIGNAL_1(Public, void objectNameChanged(const QString8 &objectName))
+   CORE_CS_SIGNAL_1(Public, void objectNameChanged(const QString &objectName))
    CORE_CS_SIGNAL_2(objectNameChanged, objectName)
 
    CORE_CS_SLOT_1(Public, void deleteLater())
@@ -215,7 +215,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    bool isSignalConnected(const QMetaMethod &signalMethod) const;
 
-   int receivers(const QString8 &signal) const;
+   int receivers(const QString &signal) const;
 
    QObject *sender() const;
    int senderSignalIndex() const;
@@ -232,7 +232,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    QList< QPointer<QObject> > m_eventFilters;
 
-   QString8 m_objectName;
+   QString m_objectName;
    int m_postedEvents;
 
    mutable std::atomic<QtSharedPointer::ExternalRefCountData *> m_sharedRefCount;
@@ -249,18 +249,18 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    // id of the thread which owns the object
    std::atomic<QThreadData *> m_threadData;
 
-   QList<QString8> m_extra_propertyNames;
+   QList<QString> m_extra_propertyNames;
    QList<QVariant> m_extra_propertyValues;
 
    void deleteChildren();
-   bool isSender(const QObject *receiver, const QString8 &signal) const;
+   bool isSender(const QObject *receiver, const QString &signal) const;
    void moveToThread_helper();
    void removeObject();
 
    bool compareThreads() const override;
    void queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind) override;
 
-   QList<QObject *> receiverList(const QString8 &signal) const;
+   QList<QObject *> receiverList(const QString &signal) const;
    QList<QObject *> senderList() const;
 
    void setThreadData_helper(QThreadData *currentData, QThreadData *targetData);
@@ -268,7 +268,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool check_parent_thread(QObject *parent, QThreadData *parentThreadData, QThreadData *currentThreadData);
 
    template<class T>
-   void findChildren_helper(const QString8 &name, const QRegularExpression8 *regExp, QList<T> &list) const;
+   void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list) const;
 
    CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList< std::pair<int, int> > timerList))
    CORE_CS_SLOT_2(internal_reregisterTimers)
@@ -283,7 +283,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 };
 
 template<class T>
-T QObject::findChild(const QString8 &childName) const
+T QObject::findChild(const QString &childName) const
 {
    T retval = nullptr;
    QObject *temp;
@@ -311,7 +311,7 @@ T QObject::findChild(const QString8 &childName) const
 }
 
 template<class T>
-QList<T> QObject::findChildren(const QString8 &objName) const
+QList<T> QObject::findChildren(const QString &objName) const
 {
    QList<T> list;
    this->findChildren_helper<T>(objName, nullptr, list);
@@ -320,16 +320,16 @@ QList<T> QObject::findChildren(const QString8 &objName) const
 }
 
 template<typename T>
-QList<T> QObject::findChildren(const QRegularExpression8 &regExp) const
+QList<T> QObject::findChildren(const QRegularExpression &regExp) const
 {
    QList<T> list;
-   this->findChildren_helper<T>(QString8(), &regExp, list);
+   this->findChildren_helper<T>(QString(), &regExp, list);
 
    return list;
 }
 
 template<class T>
-void QObject::findChildren_helper(const QString8 &name, const QRegularExpression8 *regExp, QList<T> &list) const
+void QObject::findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list) const
 {
    QObject *temp;
 
@@ -358,7 +358,7 @@ void QObject::findChildren_helper(const QString8 &name, const QRegularExpression
 }
 
 template<class T>
-T QObject::property(const QString8 &name) const
+T QObject::property(const QString &name) const
 {
    const QMetaObject *meta = metaObject();
 
@@ -400,7 +400,7 @@ T QObject::property(const QString8 &name) const
 }
 
 template<>
-inline QVariant QObject::property<QVariant>(const QString8 &name) const
+inline QVariant QObject::property<QVariant>(const QString &name) const
 {
    const QMetaObject *metaObj = metaObject();
 
@@ -442,9 +442,9 @@ inline T qobject_cast(const QObject *object)
 }
 
 template <class T>
-inline const QString8 &qobject_interface_iid()
+inline const QString &qobject_interface_iid()
 {
-   static QString8 retval;
+   static QString retval;
 
    return retval;
 }
@@ -527,7 +527,6 @@ class Q_CORE_EXPORT CSInternalEvents
    friend class QWidgetPrivate;
 
    friend struct QDeclarativeGraphics_DerivedObject;
-
 };
 
 class Q_CORE_EXPORT CSInternalRefCount
@@ -547,8 +546,8 @@ class Q_CORE_EXPORT CSInternalRefCount
 class Q_CORE_EXPORT CSInternalSender
 {
  private:
-   static bool isSender(const QObject *object, const QObject *receiver, const QString8 &signal);
-   static QObjectList receiverList(const QObject *object, const QString8 &signal);
+   static bool isSender(const QObject *object, const QObject *receiver, const QString &signal);
+   static QObjectList receiverList(const QObject *object, const QString &signal);
    static QObjectList senderList(const QObject *object);
 
    friend class QACConnectionObject;

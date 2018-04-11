@@ -132,6 +132,7 @@ class QDeviceClosedNotifier : public QObject
       if (device) {
          connect(device, SIGNAL(aboutToClose()), this, SLOT(flushStream()));
       }
+
       this->stream = stream;
    }
 
@@ -146,7 +147,6 @@ void  QDeviceClosedNotifier::flushStream()
 {
    stream->flush();
 }
-
 
 class QTextStreamPrivate
 {
@@ -247,8 +247,7 @@ QTextStreamPrivate::QTextStreamPrivate(QTextStream *q_ptr)
 #ifndef QT_NO_TEXTCODEC
    readConverterSavedState(0),
 #endif
-   readConverterSavedStateOffset(0),
-   locale(QLocale::c())
+   readConverterSavedStateOffset(0), locale(QLocale::c())
 {
    this->q_ptr = q_ptr;
    reset();
@@ -275,11 +274,11 @@ static void resetCodecConverterStateHelper(QTextCodec::ConverterState *state)
    new (state) QTextCodec::ConverterState;
 }
 
-static void copyConverterStateHelper(QTextCodec::ConverterState *dest,
-                                     const QTextCodec::ConverterState *src)
+static void copyConverterStateHelper(QTextCodec::ConverterState *dest, const QTextCodec::ConverterState *src)
 {
-   // ### QTextCodec::ConverterState's copy constructors and assignments are
-   // private. This function copies the structure manually.
+   // ### QTextCodec::ConverterState's copy constructors and assignments are private
+   // This function copies the structure manually.
+
    Q_ASSERT(!src->d);
    dest->flags = src->flags;
    dest->invalidChars = src->invalidChars;
@@ -778,32 +777,21 @@ inline void QTextStreamPrivate::putString(const QString &s, bool number)
    write(tmp);
 }
 
-/*!
-    Constructs a QTextStream. Before you can use it for reading or
-    writing, you must assign a device or a string.
-
-    \sa setDevice(), setString()
-*/
 QTextStream::QTextStream()
    : d_ptr(new QTextStreamPrivate(this))
 {
-#if defined (QTEXTSTREAM_DEBUG)
-   qDebug("QTextStream::QTextStream()");
-#endif
    Q_D(QTextStream);
    d->status = Ok;
 }
 
-/*!
-    Constructs a QTextStream that operates on \a device.
-*/
 QTextStream::QTextStream(QIODevice *device)
    : d_ptr(new QTextStreamPrivate(this))
 {
+
 #if defined (QTEXTSTREAM_DEBUG)
-   qDebug("QTextStream::QTextStream(QIODevice *device == *%p)",
-          device);
+   qDebug("QTextStream::QTextStream(QIODevice *device == *%p)", device);
 #endif
+
    Q_D(QTextStream);
    d->device = device;
 
@@ -811,10 +799,6 @@ QTextStream::QTextStream(QIODevice *device)
    d->status = Ok;
 }
 
-/*!
-    Constructs a QTextStream that operates on \a string, using \a
-    openMode to define the open mode.
-*/
 QTextStream::QTextStream(QString *str, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
@@ -825,18 +809,14 @@ QTextStream::QTextStream(QString *str, QIODevice::OpenMode openMode)
    d->status = Ok;
 }
 
-/*!
-    Constructs a QTextStream that operates on \a array, using \a
-    openMode to define the open mode. Internally, the array is wrapped
-    by a QBuffer.
-*/
 QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
+
 #if defined (QTEXTSTREAM_DEBUG)
-   qDebug("QTextStream::QTextStream(QByteArray *array == *%p, openMode = %d)",
-          array, int(openMode));
+   qDebug("QTextStream::QTextStream(QByteArray *array == *%p, openMode = %d)", array, int(openMode));
 #endif
+
    Q_D(QTextStream);
    d->device = new QBuffer(array);
    d->device->open(openMode);
@@ -860,47 +840,33 @@ QTextStream::QTextStream(const QByteArray &array, QIODevice::OpenMode openMode)
    d->status = Ok;
 }
 
-/*!
-    Constructs a QTextStream that operates on \a fileHandle, using \a
-    openMode to define the open mode. Internally, a QFile is created
-    to handle the FILE pointer.
-
-    This constructor is useful for working directly with the common
-    FILE based input and output streams: stdin, stdout and stderr. Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qtextstream.cpp 4
-*/
-
 QTextStream::QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
 #if defined (QTEXTSTREAM_DEBUG)
-   qDebug("QTextStream::QTextStream(FILE *fileHandle = %p, openMode = %d)",
-          fileHandle, int(openMode));
+   qDebug("QTextStream::QTextStream(FILE *fileHandle = %p, openMode = %d)", fileHandle, int(openMode));
 #endif
+
    QFile *file = new QFile;
    file->open(fileHandle, openMode);
 
    Q_D(QTextStream);
-   d->device = file;
+   d->device       = file;
    d->deleteDevice = true;
+
    d->deviceClosedNotifier.setupDevice(this, d->device);
 
-   d->status = Ok;
+   d->status       = Ok;
 }
 
-/*!
-    Destroys the QTextStream.
-
-    If the stream operates on a device, flush() will be called
-    implicitly. Otherwise, the device is unaffected.
-*/
 QTextStream::~QTextStream()
 {
    Q_D(QTextStream);
+
 #if defined (QTEXTSTREAM_DEBUG)
    qDebug("QTextStream::~QTextStream()");
 #endif
+
    if (!d->writeBuffer.isEmpty()) {
       d->flushWriteBuffer();
    }
@@ -2066,9 +2032,10 @@ void QTextStreamPrivate::putNumber(quint64 number, bool negative)
       flags |= QLocaleData::CapitalEorX;
    }
 
-   // add thousands group separators. For backward compatibility we
-   // don't add a group separator for C locale.
-   if (locale != QLocale::c() && !locale.numberOptions().testFlag(QLocale::OmitGroupSeparator)) {
+   // add thousands group separators. For backward compatibility we do not
+   // add a group separator for C locale.
+
+   if (locale != QLocale::c() && ! locale.numberOptions().testFlag(QLocale::OmitGroupSeparator)) {
       flags |= QLocaleData::ThousandsGroup;
    }
 
@@ -2173,6 +2140,7 @@ QTextStream &QTextStream::operator<<(unsigned short i)
 QTextStream &QTextStream::operator<<(signed int i)
 {
    Q_D(QTextStream);
+
    CHECK_VALID_STREAM(*this);
    d->putNumber((quint64)qAbs(qint64(i)), i < 0);
    return *this;

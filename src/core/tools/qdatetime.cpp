@@ -3600,7 +3600,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
 
       for (int index = 0; state != Invalid && index < sectionNodesCount; ++index) {
 
-         QStringView8 tmpView(input.begin() + pos, input.begin() + pos + separators.at(index).size());
+         QStringView tmpView(input.begin() + pos, input.begin() + pos + separators.at(index).size());
 
          if (tmpView != separators.at(index)) {
 
@@ -3707,7 +3707,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
          }
       }
 
-      QStringView8 tmpView(input.begin() + pos, input.end());
+      QStringView tmpView(input.begin() + pos, input.end());
 
       if (state != Invalid && tmpView != separators.last()) {
          QDT_DEBUG << "invalid because" << tmpView << "!=" << separators.last() << pos;

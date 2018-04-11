@@ -58,8 +58,8 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
-   const QString8 &senderClass = senderMetaObject->className();
-   const QString8 &signature   = signalMetaMethod.methodSignature();
+   const QString &senderClass = senderMetaObject->className();
+   const QString &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
       qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
@@ -114,8 +114,8 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    const QMetaObject *senderMetaObject = sender->metaObject();
    QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
 
-   const QString8 &senderClass = senderMetaObject->className();
-   const QString8 &signature   = signalMetaMethod.methodSignature();
+   const QString &senderClass = senderMetaObject->className();
+   const QString &signature   = signalMetaMethod.methodSignature();
 
    if (signature.isEmpty())  {
       qWarning("%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::<Invalid Signal> ");
@@ -190,9 +190,9 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 }
 
 template<class ...Ts>
-bool cs_factory_interface_query(const QString8 &data)
+bool cs_factory_interface_query(const QString &data)
 {
-   std::vector<QString8> vector = { qobject_interface_iid<Ts *>()... };
+   std::vector<QString> vector = { qobject_interface_iid<Ts *>()... };
 
    for (const auto &item : vector) {
       if (data == item) {
@@ -214,7 +214,7 @@ bool cs_factory_interface_query(const QString8 &data)
 */
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type,
+bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::ConnectionType type,
                CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    if (! object) {
@@ -222,7 +222,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::Conn
    }
 
    // signature of the method being invoked
-   QString8 sig = member + "(" + cs_argName(Vs...) + ")";
+   QString sig = member + "(" + cs_argName(Vs...) + ")";
 
    const QMetaObject *metaObject = object->metaObject();
    int index = metaObject->indexOfMethod(sig);
@@ -236,7 +236,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::Conn
          int numOfChars = sig.indexOf('(') + 1;
 
          QMetaMethod testMethod = metaObject->method(k);
-         QString8 testSignature = testMethod.methodSignature();
+         QString testSignature = testMethod.methodSignature();
 
          if (testSignature.leftView(numOfChars) == sig.leftView(numOfChars))  {
             msgList.append(testSignature);
@@ -264,13 +264,13 @@ bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::Conn
 }
 
 template<class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::ConnectionType type, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::ConnectionType type, CSArgument<Ts>... Vs)
 {
    if (! object) {
       return false;
    }
 
-   QString8 sig = member + "(" + cs_argName(Vs...) + ")";
+   QString sig = member + "(" + cs_argName(Vs...) + ")";
 
    const QMetaObject *metaObject = object->metaObject();
    int index = metaObject->indexOfMethod(sig);
@@ -284,7 +284,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::Conn
          int numOfChars = sig.indexOf('(') + 1;
 
          QMetaMethod testMethod  = metaObject->method(k);
-         QString8 testSignature = testMethod.methodSignature();
+         QString testSignature = testMethod.methodSignature();
 
          if (testSignature.leftView(numOfChars) == sig.leftView(numOfChars))  {
             msgList.append(testSignature);
@@ -312,14 +312,14 @@ bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, Qt::Conn
 }
 
 template<class R, class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString &member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs)
 {
    // calls the first overload
    return invokeMethod(object, member, Qt::AutoConnection, retval, Vs...);
 }
 
 template<class ...Ts>
-bool QMetaObject::invokeMethod(QObject *object, const QString8 &member, CSArgument<Ts>... Vs)
+bool QMetaObject::invokeMethod(QObject *object, const QString &member, CSArgument<Ts>... Vs)
 {
    // calls the second overload
    return invokeMethod(object, member, Qt::AutoConnection, Vs...);

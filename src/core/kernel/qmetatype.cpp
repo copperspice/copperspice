@@ -27,7 +27,6 @@
 #include <qdatetime.h>
 #include <qlocale.h>
 #include <qreadwritelock.h>
-#include <qstring8.h>
 #include <qstring16.h>
 #include <qstringlist.h>
 

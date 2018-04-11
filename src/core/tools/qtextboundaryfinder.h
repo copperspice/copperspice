@@ -23,7 +23,7 @@
 #ifndef QTEXTBOUNDARYFINDER_H
 #define QTEXTBOUNDARYFINDER_H
 
-#include <qstring8.h>
+#include <qstring.h>
 
 class QTextBoundaryFinderPrivate;
 

@@ -26,7 +26,7 @@
 #ifndef QT_NO_TRANSLATION
 
 #include <qfileinfo.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstringlist.h>
 #include <qcoreapplication.h>
 #include <qcoreapplication_p.h>

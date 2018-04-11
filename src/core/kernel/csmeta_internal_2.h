@@ -113,32 +113,32 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
 
 // classes for these 2 methods, located in csmeta.h around line 330
 template<class E>
-inline const QString8 &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+inline const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
    if (obj.isValid()) {
-      static QString8 tmp = obj.scope() + "::" + obj.name();
+      static QString tmp = obj.scope() + "::" + obj.name();
       return tmp;
 
    } else {
-      static QString8 retval("Unknown_Enum");
+      static QString retval("Unknown_Enum");
       return retval;
 
    }
 }
 
 template<class E>
-inline const QString8 &cs_typeName_internal< QFlags<E> >::typeName()
+inline const QString &cs_typeName_internal< QFlags<E> >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 
    if (obj.isValid()) {
-      static QString8 tmp = obj.scope() + "::" + obj.name();
+      static QString tmp = obj.scope() + "::" + obj.name();
       return tmp;
 
    } else {
-      static QString8 retval("Unknown_Enum");
+      static QString retval("Unknown_Enum");
       return retval;
    }
 }
@@ -146,7 +146,7 @@ inline const QString8 &cs_typeName_internal< QFlags<E> >::typeName()
 template<class T>
 void cs_namespace_register_enum(const char *name, std::type_index id, const char *scope)
 {
-   const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(QString8::fromUtf8(name), id, QString8::fromUtf8(scope));
+   const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(QString::fromUtf8(name), id, QString::fromUtf8(scope));
 }
 
 
@@ -154,8 +154,8 @@ void cs_namespace_register_enum(const char *name, std::type_index id, const char
 template<class T>
 void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id)
 {
-   const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(QString8::fromUtf8(enumName),
-                  QString8::fromUtf8(scope), QString8::fromUtf8(flagName), id);
+   const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(QString::fromUtf8(enumName),
+                  QString::fromUtf8(scope), QString::fromUtf8(flagName), id);
 }
 
 #endif

@@ -187,7 +187,7 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(const QStringView8 &t) {
+   inline QDebug &operator<<(const QStringView &t) {
       return operator<<(QString(t));
    }
 

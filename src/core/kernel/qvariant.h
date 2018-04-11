@@ -31,9 +31,11 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qmetatype.h>
-#include <qstring8.h>
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
+
+// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
+#include <qstring8.h>
 
 class QBitArray;
 class QDataStream;

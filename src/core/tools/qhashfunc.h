@@ -25,7 +25,7 @@
 
 #include <qchar.h>
 #include <qpair.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstring16.h>
 
 class QBitArray;
@@ -124,7 +124,7 @@ inline uint qHash(const QString16 &key, uint seed = 0)
    return h;
 }
 
-inline uint qHash(const QStringView8 &key, uint seed = 0)
+inline uint qHash(const QStringView &key, uint seed = 0)
 {
    uint h = seed;
 

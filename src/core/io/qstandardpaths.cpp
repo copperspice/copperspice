@@ -102,7 +102,7 @@ static inline QString searchExecutable(const QStringList &searchPaths, const QSt
    const QDir currentDir = QDir::current();
 
    for (const QString & searchPath : searchPaths) {
-      const QString candidate = currentDir.absoluteFilePath(searchPath + QLatin1Char('/') + executableName);
+      const QString candidate = currentDir.absoluteFilePath(searchPath + '/' + executableName);
       const QString absPath = checkExecutable(candidate);
 
       if (! absPath.isEmpty()) {
@@ -122,7 +122,7 @@ static inline QString searchExecutableAppendSuffix(const QStringList &searchPath
    const QDir currentDir = QDir::current();
 
    for (const QString & searchPath : searchPaths) {
-      const QString candidateRoot = currentDir.absoluteFilePath(searchPath + QLatin1Char('/') + executableName);
+      const QString candidateRoot = currentDir.absoluteFilePath(searchPath + '/' + executableName);
 
       for (const QString & suffix : suffixes) {
          const QString absPath = checkExecutable(candidateRoot + suffix);
@@ -144,23 +144,23 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
    }
 
    QStringList searchPaths = paths;
+
    if (paths.isEmpty()) {
       QByteArray pEnv = qgetenv("PATH");
 
 #if defined(Q_OS_WIN)
-      const QLatin1Char pathSep(';');
+      const QChar pathSep(';');
 #else
-      const QLatin1Char pathSep(':');
+      const QChar pathSep(':');
 #endif
 
-      // Remove trailing slashes, which occur on Windows.
+      // Remove trailing slashes, which occur on Windows
       const QStringList rawPaths = QString::fromUtf8(pEnv.constData()).split(pathSep, QStringParser::SkipEmptyParts);
-      searchPaths.reserve(rawPaths.size());
 
       for (const QString & rawPath : rawPaths) {
          QString cleanPath = QDir::cleanPath(rawPath);
 
-         if (cleanPath.size() > 1 && cleanPath.endsWith(QLatin1Char('/'))) {
+         if (cleanPath.size() > 1 && cleanPath.endsWith('/')) {
             cleanPath.truncate(cleanPath.size() - 1);
          }
 
@@ -174,11 +174,12 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
 
    static const QStringList executable_extensions = executableExtensions();
 
-   if (executableName.contains(QLatin1Char('.'))) {
+   if (executableName.contains('.')) {
       const QString suffix = QFileInfo(executableName).suffix();
-      if (suffix.isEmpty() || !executable_extensions.contains(QLatin1Char('.') + suffix, Qt::CaseInsensitive)) {
+      if (suffix.isEmpty() || !executable_extensions.contains('.' + suffix, Qt::CaseInsensitive)) {
          return searchExecutableAppendSuffix(searchPaths, executableName, executable_extensions);
       }
+
    } else {
       return searchExecutableAppendSuffix(searchPaths, executableName, executable_extensions);
    }

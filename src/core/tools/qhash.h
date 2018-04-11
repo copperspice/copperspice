@@ -492,8 +492,6 @@ template <typename Key, typename Val, typename Hash, typename KeyEqual>
 QList<Key> QHash<Key, Val, Hash, KeyEqual>::keys() const
 {
    QList<Key> retval;
-   retval.reserve(size());
-
    const_iterator iter = begin();
 
    while (iter != end()) {
@@ -508,7 +506,6 @@ template <typename Key, typename Val, typename Hash, typename KeyEqual>
 QList<Key> QHash<Key, Val, Hash, KeyEqual>::keys(const Val &value) const
 {
    QList<Key> retval;
-
    const_iterator iter = begin();
 
    while (iter != end()) {
@@ -526,8 +523,6 @@ template <typename Key, typename Val, typename Hash, typename KeyEqual>
 QList<Val> QHash<Key, Val, Hash, KeyEqual>::values() const
 {
    QList<Val> retval;
-   retval.reserve(size());
-
    const_iterator iter = begin();
 
    while (iter != end()) {

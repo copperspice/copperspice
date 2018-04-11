@@ -78,7 +78,7 @@ class QSingleShotTimer : public QObject
 
  public:
    ~QSingleShotTimer();
-   QSingleShotTimer(int msec, QObject *r, const QString8 &member);
+   QSingleShotTimer(int msec, QObject *r, const QString &member);
 
    CORE_CS_SIGNAL_1(Public, void timeout())
    CORE_CS_SIGNAL_2(timeout)
@@ -87,7 +87,7 @@ class QSingleShotTimer : public QObject
    void timerEvent(QTimerEvent *) override;
 };
 
-QSingleShotTimer::QSingleShotTimer(int msec, QObject *receiver, const QString8 &member)
+QSingleShotTimer::QSingleShotTimer(int msec, QObject *receiver, const QString &member)
    : QObject(QAbstractEventDispatcher::instance())
 {
    connect(this, SIGNAL(timeout()), receiver, member);
@@ -115,7 +115,7 @@ void QSingleShotTimer::timerEvent(QTimerEvent *)
    delete this;
 }
 
-void QTimer::singleShot(int msec, QObject *receiver, const QString8 &member)
+void QTimer::singleShot(int msec, QObject *receiver, const QString &member)
 {
    if (receiver && ! member.isEmpty()) {
 
@@ -129,7 +129,7 @@ void QTimer::singleShot(int msec, QObject *receiver, const QString8 &member)
          }
 
          // extract method name
-         QString8 methodName = member.left(bracketPosition - 1);
+         QString methodName = member.left(bracketPosition - 1);
 
          QMetaObject::invokeMethod(receiver, methodName, Qt::QueuedConnection);
          return;

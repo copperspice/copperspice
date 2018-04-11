@@ -48,7 +48,6 @@ set(CORE_PUBLIC_INCLUDES
     QQueue
     QRect
     QRectF
-    QRegExp
     QScopedArrayPointer
     QScopedPointer
     QScopedPointerArrayDeleter
@@ -136,7 +135,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrectf.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qregexp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedarraypointer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointerarraydeleter.h

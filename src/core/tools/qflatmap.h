@@ -618,8 +618,6 @@ template <class Key, class Val, class C>
 QList<Key> QFlatMap<Key, Val, C>::keys() const
 {
    QList<Key> retval;
-   retval.reserve(size());
-
    const_iterator iter = begin();
 
    while (iter != end()) {
@@ -634,7 +632,6 @@ template <class Key, class Val, class C>
 QList<Key> QFlatMap<Key, Val, C>::keys(const Val &value) const
 {
    QList<Key> retval;
-
    const_iterator iter = begin();
 
    while (iter != end()) {

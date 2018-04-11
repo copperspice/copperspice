@@ -350,9 +350,9 @@ QString QUrlQuery::query(QUrl::FormattingOptions encoding) const
 
    // start with what's always encoded
    ushort tableActions[] = {
-      encode(d->pairDelimiter.unicode()),  
-      encode(d->valueDelimiter.unicode()), 
-      0,                                  
+      encode(d->pairDelimiter.unicode()),
+      encode(d->valueDelimiter.unicode()),
+      0,
       0
    };
 
@@ -362,7 +362,7 @@ QString QUrlQuery::query(QUrl::FormattingOptions encoding) const
 
    QString result;
    Map::const_iterator it = d->itemList.constBegin();
-   Map::const_iterator end = d->itemList.constEnd();  
+   Map::const_iterator end = d->itemList.constEnd();
 
    for (it = d->itemList.constBegin(); it != end; ++it) {
       if (!result.isEmpty()) {
@@ -428,8 +428,6 @@ QList<QPair<QString, QString> > QUrlQuery::queryItems(QUrl::FormattingOptions en
 
    Map::const_iterator it  = d->itemList.constBegin();
    Map::const_iterator end = d->itemList.constEnd();
-
-   result.reserve(d->itemList.count());
 
    for ( ; it != end; ++it) {
       result << qMakePair(d->recodeToUser(it->first, encoding), d->recodeToUser(it->second, encoding));

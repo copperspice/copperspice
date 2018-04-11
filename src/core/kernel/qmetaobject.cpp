@@ -40,12 +40,12 @@ int QMetaObject::classInfoOffset() const
    return retval;
 }
 
-bool QMetaObject::checkConnectArgs(const QString8 &signal, const QString8 &method)
+bool QMetaObject::checkConnectArgs(const QString &signal, const QString &method)
 {
    bool retval = false;
 
-   QString8::const_iterator s1 = signal.begin();
-   QString8::const_iterator s2 = method.begin();
+   QString::const_iterator s1 = signal.begin();
+   QString::const_iterator s2 = method.begin();
 
    while (*s1++ != '(') {
       // scan to first '('
@@ -75,8 +75,8 @@ bool QMetaObject::checkConnectArgs(const QMetaMethod &signal, const QMetaMethod 
 {
    bool retval = true;
 
-   QList<QString8> typesSignal = signal.parameterTypes();
-   QList<QString8> typesSlot   = slot.parameterTypes();
+   QList<QString> typesSignal = signal.parameterTypes();
+   QList<QString> typesSlot   = slot.parameterTypes();
 
    if (typesSignal.count() < typesSlot.count() )  {
       retval = false;
@@ -109,7 +109,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
 
    for (int slotIndex = 0; slotIndex < metaObj->methodCount(); ++slotIndex) {
 
-      const QString8 &slotName = metaObj->method(slotIndex).methodSignature();
+      const QString &slotName = metaObj->method(slotIndex).methodSignature();
 
       if (! slotName.startsWith("on_")) {
          continue;
@@ -124,7 +124,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
          const QObject *element = list.at(j);
 
          // name of the element
-         const QString8 &objName = element->objectName();
+         const QString &objName = element->objectName();
          int len = objName.length();
 
          // on_myButton_clicked
@@ -146,7 +146,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
             }
 
             // get signal name for the widget/element
-            const QString8 &testSignal = signalMethod.methodSignature();
+            const QString &testSignal = signalMethod.methodSignature();
 
             if (desiredSignal == testSignal)  {
                // found a matching signal for our slot
@@ -196,7 +196,7 @@ int QMetaObject::enumeratorOffset() const
    return retval;
 }
 
-int QMetaObject::indexOfClassInfo(const QString8 &name) const
+int QMetaObject::indexOfClassInfo(const QString &name) const
 {
    int retval = -1;
 
@@ -212,12 +212,12 @@ int QMetaObject::indexOfClassInfo(const QString8 &name) const
    return retval;
 }
 
-int QMetaObject::indexOfConstructor(const QString8 &constructor) const
+int QMetaObject::indexOfConstructor(const QString &constructor) const
 {
    int retval = -1;
 
    // adjust spacing in the passed method name
-   QString8 tValue = constructor;
+   QString tValue = constructor;
    tValue.remove(char(32));
 
    for (int index = 0; index < this->constructorCount(); ++index) {
@@ -235,7 +235,7 @@ int QMetaObject::indexOfConstructor(const QString8 &constructor) const
    return retval;
 }
 
-int QMetaObject::indexOfEnumerator(const QString8 &name) const
+int QMetaObject::indexOfEnumerator(const QString &name) const
 {
    int retval = -1;
 
@@ -251,12 +251,12 @@ int QMetaObject::indexOfEnumerator(const QString8 &name) const
    return retval;
 }
 
-int QMetaObject::indexOfMethod(const QString8 &method) const
+int QMetaObject::indexOfMethod(const QString &method) const
 {
    int retval = -1;
 
    // adjust spacing in the passed method name
-   QString8 tValue = method;
+   QString tValue = method;
    tValue.remove(' ');
 
    for (int index = 0; index < this->methodCount(); ++index) {
@@ -289,7 +289,7 @@ int QMetaObject::indexOfMethod(const CsSignal::Internal::BentoAbstract &temp) co
    return retval;
 }
 
-int QMetaObject::indexOfProperty(const QString8 &name) const
+int QMetaObject::indexOfProperty(const QString &name) const
 {
    int retval = -1;
 
@@ -305,12 +305,12 @@ int QMetaObject::indexOfProperty(const QString8 &name) const
    return retval;
 }
 
-int QMetaObject::indexOfSignal(const QString8 &signal) const
+int QMetaObject::indexOfSignal(const QString &signal) const
 {
    int retval = -1;
 
    // adjust spacing in the passed method name
-   QString8 tValue = signal;
+   QString tValue = signal;
    tValue.remove(' ');
    tValue.chop(1);
 
@@ -331,12 +331,12 @@ int QMetaObject::indexOfSignal(const QString8 &signal) const
    return retval;
 }
 
-int QMetaObject::indexOfSlot(const QString8 &slot) const
+int QMetaObject::indexOfSlot(const QString &slot) const
 {
    int retval = -1;
 
    // adjust spacing in the passed method name
-   QString8 tValue = slot;
+   QString tValue = slot;
    tValue.remove(' ');
 
    for (int index = 0; index < this->methodCount(); ++index) {
@@ -393,20 +393,20 @@ int QMetaObject::methodOffset() const
    return retval;
 }
 
-QString8 QMetaObject::normalizedSignature(const QString8 &method)
+QString QMetaObject::normalizedSignature(const QString &method)
 {
-   QString8 result;
+   QString result;
 
    if (method.isEmpty()) {
       return result;
    }
 
-   std::vector<QString8> signatures;
-   QString8 typeReturn;
-   std::vector<QString8> paramNames;
+   std::vector<QString> signatures;
+   QString typeReturn;
+   std::vector<QString> paramNames;
 
    // no return type was passed
-   QString8 fullMethod = "void " + method;
+   QString fullMethod = "void " + method;
 
    std::tie(signatures, typeReturn, paramNames) = getSignatures(fullMethod);
    result = signatures[signatures.size() - 1];
@@ -414,9 +414,9 @@ QString8 QMetaObject::normalizedSignature(const QString8 &method)
    return result;
 }
 
-QString8 QMetaObject::normalizedType(const QString8 &type)
+QString QMetaObject::normalizedType(const QString &type)
 {
-   QString8 result;
+   QString result;
 
    if (type.isEmpty()) {
       return result;
@@ -439,13 +439,13 @@ int QMetaObject::propertyOffset() const
    return retval;
 }
 
-QString8 QMetaObject::tr(const char *text, const char *notes, int n) const
+QString QMetaObject::tr(const char *text, const char *notes, int n) const
 {
    const char *context = csPrintable(className());
    return QCoreApplication::translate(context, text, notes, QCoreApplication::CodecForTr, n);
 }
 
-QString8 QMetaObject::trUtf8(const char *text, const char *notes, int n) const
+QString QMetaObject::trUtf8(const char *text, const char *notes, int n) const
 {
    const char *context = csPrintable(className());
    return QCoreApplication::translate(context, text, notes, QCoreApplication::UnicodeUTF8, n);
@@ -471,16 +471,16 @@ QMetaProperty QMetaObject::userProperty() const
 
 // ***************
 
-std::tuple<std::vector<QString8>, QString8, std::vector<QString8> > QMetaObject::getSignatures(const QString8 &fullName)
+std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::getSignatures(const QString &fullName)
 {
    try {
 
-      std::vector<QString8> sigList;
-      QString8 returnType;
-      std::vector<QString8> paramNames;
+      std::vector<QString> sigList;
+      QString returnType;
+      std::vector<QString> paramNames;
 
-      QList<QString8> tokens;
-      QString8 item;
+      QList<QString> tokens;
+      QString item;
 
       // part 1, decipher tokens from fullName
       for (auto letter : fullName) {
@@ -518,10 +518,10 @@ std::tuple<std::vector<QString8>, QString8, std::vector<QString8> > QMetaObject:
       // part 2, parse return type from tokens
       int index = 0;
 
-      QString8 typeReturn;
+      QString typeReturn;
 
-      QString8 word;
-      QString8 nextWord;
+      QString word;
+      QString nextWord;
 
       bool isStar = false;
 
@@ -677,16 +677,16 @@ std::tuple<std::vector<QString8>, QString8, std::vector<QString8> > QMetaObject:
       returnType = strdup(csPrintable(typeReturn));
 
       // part 3 parse method name
-      QString8 signature = tokens[index++];
+      QString signature = tokens[index++];
 
       // part 4, parse signature from tokens
-      QString8 typeArg;
+      QString typeArg;
 
       bool found_funcPtrVar;
       bool isDefaultArg;
 
       // parse open paren
-      QString8 leftParn = tokens[index++];
+      QString leftParn = tokens[index++];
 
       if (leftParn != "(")   {
          qWarning("QMetaObject:getSignature() Unable to parse signature: %s", fullName);
@@ -1033,7 +1033,7 @@ std::tuple<std::vector<QString8>, QString8, std::vector<QString8> > QMetaObject:
 
             if (isDefaultArg)  {
                // add overloaded signature to the vector
-               QString8 tmp = signature;
+               QString tmp = signature;
 
                if (tmp.endsWith(",")) {
                   tmp.chop(1);
@@ -1073,10 +1073,10 @@ std::tuple<std::vector<QString8>, QString8, std::vector<QString8> > QMetaObject:
 
 
 // **
-QString8 QMetaObject::getType(const QString8 &fullName)
+QString QMetaObject::getType(const QString &fullName)
 {
-   QList<QString8> tokens;
-   QString8    item;
+   QList<QString> tokens;
+   QString    item;
 
    // part 1, decipher tokens from fullName
    for (auto letter : fullName) {
@@ -1116,10 +1116,10 @@ QString8 QMetaObject::getType(const QString8 &fullName)
    // part 2, parse return type from tokens
    int index = 0;
 
-   QString8 typeReturn;
+   QString typeReturn;
 
-   QString8 word;
-   QString8 nextWord;
+   QString word;
+   QString nextWord;
 
    bool isStar = false;
 
@@ -1270,12 +1270,12 @@ QString8 QMetaObject::getType(const QString8 &fullName)
    return typeReturn;
 }
 
-int QMetaObject::enum_calculate(QString8 enumData, QMap<QString8, int> valueMap)
+int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
 {
    int retval = 0;
 
-   QList<QString8> tokens;
-   QString8 item;
+   QList<QString> tokens;
+   QString item;
 
    QString::const_iterator iter = enumData.begin();
 
@@ -1328,10 +1328,10 @@ int QMetaObject::enum_calculate(QString8 enumData, QMap<QString8, int> valueMap)
    int tokensSize = tokens.size();
    int index = 0;
 
-   QString8 word;
+   QString word;
 
-   QList<QString8> opList;
-   QList<QString8> vList;
+   QList<QString> opList;
+   QList<QString> vList;
 
    while (index < tokensSize)  {
       word = tokens[index];
@@ -1402,15 +1402,15 @@ int QMetaObject::enum_calculate(QString8 enumData, QMap<QString8, int> valueMap)
          // Ginger::MetaModifier
 
          int pos = word.indexOf("::");
-         QString8 className = word.mid(0, pos);
-         QString8 enumKey   = word.mid(pos + 2);
+         QString className = word.mid(0, pos);
+         QString enumKey   = word.mid(pos + 2);
 
          for (auto index = m_enumsAll().begin(); index != m_enumsAll().end(); ++index  )  {
 
             QMetaObject *obj = index.value().first;
 
             if ( obj->className() == className )  {
-               QString8 enumName = index.value().second;
+               QString enumName = index.value().second;
 
                // obtain the enum object
                int x = obj->indexOfEnumerator(enumName);
@@ -1492,7 +1492,7 @@ int QMetaObject::enum_calculate(QString8 enumData, QMap<QString8, int> valueMap)
 }
 
 // ** internal
-void QMetaObject_X::register_classInfo(const QString8 &name, const QString8 &value)
+void QMetaObject_X::register_classInfo(const QString &name, const QString &value)
 {
    if (name.isEmpty()) {
       return;
@@ -1641,7 +1641,7 @@ int QMetaObject_X::propertyCount() const
    return count;
 }
 
-int QMetaObject_X::register_enum(const QString8 &name, std::type_index id, const QString8 &scope)
+int QMetaObject_X::register_enum(const QString &name, std::type_index id, const QString &scope)
 {
    if (name.isEmpty() || scope.isEmpty()) {
       return 0;
@@ -1656,7 +1656,7 @@ int QMetaObject_X::register_enum(const QString8 &name, std::type_index id, const
    return 0;
 }
 
-int QMetaObject_X::register_flag(const QString8 &enumName, const QString8 &scope, const QString8 &flagName, std::type_index id)
+int QMetaObject_X::register_flag(const QString &enumName, const QString &scope, const QString &flagName, std::type_index id)
 {
    if (enumName.isEmpty() || scope.isEmpty() || flagName.isEmpty()) {
       return 0;
@@ -1674,13 +1674,13 @@ int QMetaObject_X::register_flag(const QString8 &enumName, const QString8 &scope
    return 0;
 }
 
-void QMetaObject_X::register_enum_data(const QString8 &args)
+void QMetaObject_X::register_enum_data(const QString &args)
 {
    if (args.isEmpty()) {
       return;
    }
 
-   QString8 word;
+   QString word;
    bool isName = false;
 
    QString::const_iterator iter = args.begin();
@@ -1713,10 +1713,10 @@ void QMetaObject_X::register_enum_data(const QString8 &args)
       }
    }
 
-   QString8 enumName = word;
+   QString enumName = word;
 
    // part 2, get the enum data
-   QMap<QString8, int> valueMap;
+   QMap<QString, int> valueMap;
 
    int value = 0;
    word      = "";
@@ -1733,7 +1733,7 @@ void QMetaObject_X::register_enum_data(const QString8 &args)
 
          if (index > 0)  {
             // convert enum value
-            QString8 t_word = word.mid(index + 1);
+            QString t_word = word.mid(index + 1);
 
             bool ok;
             int t_value = QStringParser::toInteger<int>(t_word, &ok, 0);
@@ -1750,7 +1750,7 @@ void QMetaObject_X::register_enum_data(const QString8 &args)
             word = word.left(index);
          }
 
-         QString8 key = word;
+         QString key = word;
          valueMap.insert(key, value);
          value++;
 
@@ -1770,7 +1770,7 @@ void QMetaObject_X::register_enum_data(const QString8 &args)
 
 
    // 3 look up enumName to test, is a flag?
-   std::vector<QString8> tempName(0);
+   std::vector<QString> tempName(0);
 
    auto iter_flag = m_flag.find(enumName);
 
@@ -1802,16 +1802,16 @@ void QMetaObject_X::register_enum_data(const QString8 &args)
    }
 }
 
-void QMetaObject_X::register_method_s1(const QString8 &name, QMetaMethod::Access access, QMetaMethod::MethodType kind)
+void QMetaObject_X::register_method_s1(const QString &name, QMetaMethod::Access access, QMetaMethod::MethodType kind)
 {
    if (name.isEmpty()) {
       return;
    }
 
    // declare first
-   std::vector<QString8> signatures;
-   QString8 typeReturn;
-   std::vector<QString8> paramNames;
+   std::vector<QString> signatures;
+   QString typeReturn;
+   std::vector<QString> paramNames;
 
    std::tie(signatures, typeReturn, paramNames) = this->getSignatures(name);
 
@@ -1819,14 +1819,14 @@ void QMetaObject_X::register_method_s1(const QString8 &name, QMetaMethod::Access
    QMetaMethod::Attributes attr = QMetaMethod::Attributes();
    auto count = signatures.size();                              // base method plus number of defaulted parameters
 
-   std::vector<QString8> tmpArgNames = paramNames;
+   std::vector<QString> tmpArgNames = paramNames;
 
-   for (std::vector<QString8>::size_type k = 0; k < count; ++k)  {
+   for (std::vector<QString>::size_type k = 0; k < count; ++k)  {
 
       if (count > 1) {
          // remove defaulted parameter names
          int howMany = paramNames.size() - ((count - 1) - k);
-         tmpArgNames = std::vector<QString8>(paramNames.begin(), paramNames.begin() + howMany);
+         tmpArgNames = std::vector<QString>(paramNames.begin(), paramNames.begin() + howMany);
 
          if (k == count - 1) {
             // base method
@@ -1838,7 +1838,7 @@ void QMetaObject_X::register_method_s1(const QString8 &name, QMetaMethod::Access
       }
 
       // remove spacing from the key
-      QString8 tokenKey = signatures[k];
+      QString tokenKey = signatures[k];
       tokenKey.remove(' ');
 
       // save the key/value into the master map
@@ -1852,7 +1852,7 @@ void QMetaObject_X::register_method_s1(const QString8 &name, QMetaMethod::Access
    }
 }
 
-void QMetaObject_X::register_tag(const QString8 &name, const QString8 &method)
+void QMetaObject_X::register_tag(const QString &name, const QString &method)
 {
    if (name.isEmpty()) {
       return;
@@ -1876,7 +1876,7 @@ void QMetaObject_X::register_tag(const QString8 &name, const QString8 &method)
 }
 
 // ** internal properties
-int QMetaObject_X::register_property_read(const QString8 &name, const QString8 &dataType, JarReadAbstract *readJar)
+int QMetaObject_X::register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar)
 {
    if (name.isEmpty() ) {
       return 0;
@@ -1906,7 +1906,7 @@ int QMetaObject_X::register_property_read(const QString8 &name, const QString8 &
    return 0;
 }
 
-int QMetaObject_X::register_property_write(const QString8 &name, JarWriteAbstract *method)
+int QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method)
 {
    if (name.isEmpty()) {
       return 0;
@@ -1936,7 +1936,7 @@ int QMetaObject_X::register_property_write(const QString8 &name, JarWriteAbstrac
    return 0;
 }
 
-int QMetaObject_X::register_property_bool(const QString8 &name, JarReadAbstract *method, QMetaProperty::Kind kind)
+int QMetaObject_X::register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind)
 {
    if (name.isEmpty()) {
       return 0;
@@ -1977,7 +1977,7 @@ int QMetaObject_X::register_property_bool(const QString8 &name, JarReadAbstract 
    return 0;
 }
 
-void QMetaObject_X::register_property_int(const QString8 &name, int value, QMetaProperty::Kind kind)
+void QMetaObject_X::register_property_int(const QString &name, int value, QMetaProperty::Kind kind)
 {
    if (name.isEmpty()) {
       return;

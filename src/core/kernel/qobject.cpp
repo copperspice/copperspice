@@ -392,10 +392,9 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
       qWarning("QObject::disconnect() Can not disconnect as sender is null");
       return false;
 
-   } else if (receiver == nullptr && slotMethod != nullptr) {
-      qWarning("QObject::disconnect() Can not disconnect as receiver is null and slot was specified");
+   } else if (receiver == nullptr && ! slotMethod.isEmpty()) {
+      qWarning("QObject::disconnect() Can not disconnect as the receiver is null and a slot method was specified");
       return false;
-
    }
 
    // normalize the signal and slot method names or signatures
@@ -416,7 +415,6 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
          signalNormalized = signalMethod;
       }
    }
-
 
    if (! slotMethod.isEmpty()) {
 
@@ -462,7 +460,7 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
       slot_index = receiverMetaObject->indexOfSlot(slotNormalized);
    }
 
-   const CSBentoAbstract * slotMethod_Bento = nullptr;
+   const CSBentoAbstract *slotMethod_Bento = nullptr;
 
    if (slot_index != -1) {
       slotMethod_Bento = receiverMetaObject->method(slot_index).getBentoBox();

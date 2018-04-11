@@ -1805,8 +1805,9 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
       --end;
    }
 
-   while (true) {
+   bool done = false;
 
+   while (! done) {
       // remove trailing slashes
       if (*end == '/') {
 
@@ -1853,6 +1854,7 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
             // do not copy slashes
 
             if (end == iter) {
+               done = true;
                break;
             }
 
@@ -1865,6 +1867,7 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
          }
 
          if (end == iter) {
+            done = true;
             break;
          }
 
@@ -1932,7 +1935,6 @@ QString QDir::cleanPath(const QString &path)
    // allow unc paths
    allowUncPaths = true;
 #endif
-
 
    QString retval = cs_internal_normalizePath(name, allowUncPaths);
 

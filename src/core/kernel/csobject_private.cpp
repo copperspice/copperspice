@@ -181,7 +181,7 @@ std::atomic<QtSharedPointer::ExternalRefCountData *> &CSInternalRefCount::get_m_
 
 
 // **
-bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const QString8 &signal)
+bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, const QString &signal)
 {
    if (! object) {
       return false;
@@ -191,7 +191,7 @@ bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, 
 }
 
 
-QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QString8 &signal)
+QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QString &signal)
 {
    if (! object) {
       return QList<QObject *> {};

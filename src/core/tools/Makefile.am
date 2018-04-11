@@ -7,7 +7,7 @@ CORE_PUBLIC_INCLUDES += \
 	QBitRef \
 	QByteArray \
 	QByteRef \
-	QCache \	
+	QCache \
 	QContiguousCache \
 	QContiguousCacheData \
 	QContiguousCacheTypedData \
@@ -50,7 +50,6 @@ CORE_PUBLIC_INCLUDES += \
 	QQueue \
 	QRect \
 	QRectF \
-	QRegExp \
 	QScopedArrayPointer \
 	QScopedPointer \
 	QScopedPointerArrayDeleter \
@@ -136,7 +135,6 @@ CORE_TOOLS_INCLUDES = \
 	qrect.h \
 	qrectf.h \
 	qrefcount.h \
-	qregexp.h \
 	qscopedarraypointer.h \
 	qscopedpointer.h \
 	qscopedpointerarraydeleter.h \

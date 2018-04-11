@@ -22,7 +22,7 @@
 
 #include <qeasingcurve.h>
 #include <qdebug.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 #ifndef QT_NO_DATASTREAM
 #include <QtCore/qdatastream.h>

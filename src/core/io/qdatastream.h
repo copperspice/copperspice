@@ -233,18 +233,18 @@ inline QDataStream &QDataStream::operator<<(quint64 i)
 }
 
 template <typename T>
-QDataStream &operator>>(QDataStream &s, QList<T> &l)
+QDataStream &operator>>(QDataStream &s, QList<T> &list)
 {
-   l.clear();
+   list.clear();
 
    quint32 c;
    s >> c;
-   l.reserve(c);
 
    for (quint32 i = 0; i < c; ++i) {
       T t;
       s >> t;
-      l.append(t);
+
+      list.append(t);
 
       if (s.atEnd()) {
          break;

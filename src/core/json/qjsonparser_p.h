@@ -45,7 +45,7 @@ class QJsonParser
       Quote          = 0x22
    };
 
-   QJsonParser(QStringView8 data);
+   QJsonParser(QStringView data);
    QJsonDocument parse(QJsonParseError *error);
 
  private:
@@ -61,7 +61,7 @@ class QJsonParser
    bool parseValue(QJsonValue &value);
    bool parseNumber(QJsonValue &value);
 
-   QStringView8 m_data;
+   QStringView m_data;
    QString::const_iterator m_position;
 
    int nestingLevel;

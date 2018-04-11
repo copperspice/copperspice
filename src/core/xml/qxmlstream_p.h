@@ -30,11 +30,12 @@
 #endif
 
 #include <qhash.h>
+#include <qstack.h>
 #include <qstring.h>
 #include <qtextdecoder.h>
 #include <qxmlutils_p.h>
 
-QStringView8 makeStringView(const QString *str, int start, int length)
+QStringView makeStringView(const QString *str, int start, int length)
 {
    QString::const_iterator begin;
    QString::const_iterator end;
@@ -42,7 +43,7 @@ QStringView8 makeStringView(const QString *str, int start, int length)
    begin = str->begin() + start;
    end   = begin + length;
 
-   return QStringView8(begin, end);
+   return QStringView(begin, end);
 }
 
 class QXmlStreamEntityResolver;
@@ -148,7 +149,6 @@ class QXmlStreamReader_Table
       return action_info [yyn];
    }
 };
-
 
 const char *const QXmlStreamReader_Table::spell [] = {
    "end of file", 0, " ", "<", ">", "&", "#", "\'", "\"", "[",
@@ -637,64 +637,6 @@ const short QXmlStreamReader_Table::action_check [] = {
    -1, -1, -1, -1, -1, -1, -1, -1
 };
 
-
-template <typename T> class QXmlStreamSimpleStack
-{
-   T *data;
-   int tos, cap;
-
- public:
-   inline QXmlStreamSimpleStack(): data(0), tos(-1), cap(0) {}
-   inline ~QXmlStreamSimpleStack() {
-      if (data) {
-         qFree(data);
-      }
-   }
-
-   inline void reserve(int extraCapacity) {
-      if (tos + extraCapacity + 1 > cap) {
-         cap = qMax(tos + extraCapacity + 1, cap << 1 );
-         data = reinterpret_cast<T *>(qRealloc(data, cap * sizeof(T)));
-         Q_CHECK_PTR(data);
-      }
-   }
-
-   inline T &push() {
-      reserve(1);
-      return data[++tos];
-   }
-   inline T &rawPush() {
-      return data[++tos];
-   }
-   inline const T &top() const {
-      return data[tos];
-   }
-   inline T &top() {
-      return data[tos];
-   }
-   inline T &pop() {
-      return data[tos--];
-   }
-   inline T &operator[](int index) {
-      return data[index];
-   }
-   inline const T &at(int index) const {
-      return data[index];
-   }
-   inline int size() const {
-      return tos + 1;
-   }
-   inline void resize(int s) {
-      tos = s - 1;
-   }
-   inline bool isEmpty() const {
-      return tos < 0;
-   }
-   inline void clear() {
-      tos = -1;
-   }
-};
-
 class QXmlStream
 {
    Q_DECLARE_TR_FUNCTIONS(QXmlStream)
@@ -717,14 +659,9 @@ class QXmlStreamPrivateTagStack
    };
 
    QXmlStreamPrivateTagStack();
-   QXmlStreamSimpleStack<NamespaceDeclaration> namespaceDeclarations;
 
-   bool tagsDone;
-
-   QXmlStreamSimpleStack<Tag> tagStack;
-
-   Tag &tagStack_pop() {
-      Tag &tag = tagStack.pop();
+   Tag tagStack_pop() {
+      Tag tag = tagStack.pop();
 
       namespaceDeclarations.resize(tag.namespaceDeclarationsSize);
       tagsDone = tagStack.isEmpty();
@@ -733,12 +670,17 @@ class QXmlStreamPrivateTagStack
    }
 
    Tag &tagStack_push() {
-      Tag &tag = tagStack.push();
+      tagStack.push(Tag());
+      Tag &tag = tagStack.top();
 
       tag.namespaceDeclarationsSize = namespaceDeclarations.size();
 
       return tag;
    }
+
+   bool tagsDone;
+   QStack<NamespaceDeclaration> namespaceDeclarations;
+   QStack<Tag> tagStack;
 };
 
 class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStreamPrivateTagStack
@@ -812,7 +754,8 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       }
 
       entity.isCurrentlyReferenced = true;
-      entityReferenceStack.push()  = &entity;
+      entityReferenceStack.push(&entity);
+
       injectToken(ENTITY_DONE);
       return true;
    }
@@ -820,7 +763,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    void write(const QString &);
    void write(const char *);
 
-   QStringView8 namespaceForPrefix(const QStringView8 &prefix);
+   QStringView namespaceForPrefix(QStringView prefix);
    void resolveTag();
    void resolvePublicNamespaces();
    void resolveDtd();
@@ -828,7 +771,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    bool checkStartDocument();
    void startDocument();
    void parseError();
-   void checkPublicLiteral(const QStringView8 &publicId);
+   void checkPublicLiteral(QStringView publicId);
 
    void resume(int rule);
 
@@ -868,45 +811,45 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       Value value;
    };
 
-   inline QStringView8 symString(int index) {
+   inline QStringView symString(int index) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix, symbol.len - symbol.prefix);
    }
 
-   inline QStringView8 symName(int index) {
+   inline QStringView symName(int index) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos, symbol.len);
    }
 
-   inline QStringView8 symString(int index, int offset) {
+   inline QStringView symString(int index, int offset) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix + offset, symbol.len - symbol.prefix -  offset);
    }
 
-   inline QStringView8 symPrefix(int index) {
+   inline QStringView symPrefix(int index) {
       const Value &symbol = sym(index);
 
       if (symbol.prefix) {
          return makeStringView(&textBuffer, symbol.pos, symbol.prefix - 1);
       }
 
-      return QStringView8();
+      return QStringView();
    }
 
-   inline QStringView8 symString(const Value &symbol) {
+   inline QStringView symString(const Value &symbol) {
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix, symbol.len - symbol.prefix);
    }
 
-   inline QStringView8 symName(const Value &symbol) {
+   inline QStringView symName(const Value &symbol) {
       return makeStringView(&textBuffer, symbol.pos, symbol.len);
    }
 
-   inline QStringView8 symPrefix(const Value &symbol) {
+   inline QStringView symPrefix(const Value &symbol) {
       if (symbol.prefix) {
          return makeStringView(&textBuffer, symbol.pos, symbol.prefix - 1);
       }
 
-      return QStringView8();
+      return QStringView();
    }
 
    inline void clearSym() {
@@ -920,11 +863,11 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    inline uint peekChar();
 
    inline void putChar(uint c) {
-      putStack.push() = c;
+      putStack.push(c);
    }
 
    inline void putChar(QChar c) {
-      putStack.push() =  c.unicode();
+      putStack.push(c.unicode());
    }
 
    void putString(const QString &s, int from = 0);
@@ -981,12 +924,12 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    QXmlStreamReader::TokenType type;
    QXmlStreamReader::Error error;
 
-   QXmlStreamSimpleStack<Entity *>            entityReferenceStack;
-   QXmlStreamSimpleStack<DtdAttribute>        dtdAttributes;
-   QXmlStreamSimpleStack<NotationDeclaration> notationDeclarations;
-   QXmlStreamSimpleStack<EntityDeclaration>   entityDeclarations;
-   QXmlStreamSimpleStack<Attribute>           attributeStack;
-   QXmlStreamSimpleStack<uint>                putStack;
+   QStack<Entity *>            entityReferenceStack;
+   QStack<DtdAttribute>        dtdAttributes;
+   QStack<NotationDeclaration> notationDeclarations;
+   QStack<EntityDeclaration>   entityDeclarations;
+   QStack<Attribute>           attributeStack;
+   QStack<uint>                putStack;
 
    QXmlStreamNotationDeclarations  publicNotationDeclarations;
    QXmlStreamNamespaceDeclarations publicNamespaceDeclarations;
@@ -1037,7 +980,6 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    uint lockEncoding : 1;
    uint namespaceProcessing : 1;
 
-
  private:
    QXmlStreamReader *q_ptr;
    Q_DECLARE_PUBLIC(QXmlStreamReader)
@@ -1070,13 +1012,16 @@ bool QXmlStreamReaderPrivate::parse()
 
          if (isEmptyElement) {
             setType(QXmlStreamReader::EndElement);
-            Tag &tag = tagStack_pop();
-            namespaceUri = tag.namespaceDeclaration.namespaceUri;
-            name = tag.name;
-            qualifiedName = tag.qualifiedName;
+
+            Tag tag = tagStack_pop();
+            namespaceUri   = tag.namespaceDeclaration.namespaceUri;
+            name           = tag.name;
+            qualifiedName  = tag.qualifiedName;
+
             isEmptyElement = false;
             return true;
          }
+
          clearTextBuffer();
          break;
 
@@ -1431,6 +1376,7 @@ bool QXmlStreamReaderPrivate::parse()
                sym(1) = sym(2);
                lastAttributeValue.clear();
                lastAttributeIsCData = false;
+
                if (!scanAttType() && atEnd) {
                   resume(83);
                   return false;
@@ -1438,7 +1384,10 @@ bool QXmlStreamReaderPrivate::parse()
                break;
 
             case 84: {
-               DtdAttribute &dtdAttribute = dtdAttributes.push();
+
+               dtdAttributes.push(DtdAttribute());
+               DtdAttribute &dtdAttribute = dtdAttributes.top();
+
                dtdAttribute.tagName.clear();
 
                dtdAttribute.isCDATA = lastAttributeIsCData;
@@ -1469,7 +1418,7 @@ bool QXmlStreamReaderPrivate::parse()
                }
 
                int n = dtdAttributes.size();
-               QStringView8 tagName = symName(3);
+               QStringView tagName = symName(3);
 
                while (n--) {
                   DtdAttribute &dtdAttribute = dtdAttributes[n];
@@ -1495,7 +1444,10 @@ bool QXmlStreamReaderPrivate::parse()
                   resume(89);
                   return false;
                }
-               EntityDeclaration &entityDeclaration = entityDeclarations.push();
+
+               entityDeclarations.push(EntityDeclaration());
+               EntityDeclaration &entityDeclaration = entityDeclarations.top();
+
                entityDeclaration.clear();
                entityDeclaration.name = symString(3);
             }
@@ -1506,7 +1458,10 @@ bool QXmlStreamReaderPrivate::parse()
                   resume(90);
                   return false;
                }
-               EntityDeclaration &entityDeclaration = entityDeclarations.push();
+
+               entityDeclarations.push(EntityDeclaration());
+               EntityDeclaration &entityDeclaration = entityDeclarations.top();
+
                entityDeclaration.clear();
                entityDeclaration.name = symString(5);
                entityDeclaration.parameter = true;
@@ -1518,6 +1473,7 @@ bool QXmlStreamReaderPrivate::parse()
                   resume(91);
                   return false;
                }
+
                EntityDeclaration &entityDeclaration = entityDeclarations.top();
                entityDeclaration.systemId = symString(3);
                entityDeclaration.external = true;
@@ -1644,7 +1600,10 @@ bool QXmlStreamReaderPrivate::parse()
                   resume(102);
                   return false;
                }
-               NotationDeclaration &notationDeclaration = notationDeclarations.push();
+
+               notationDeclarations.push(NotationDeclaration());
+               NotationDeclaration &notationDeclaration = notationDeclarations.top();
+
                notationDeclaration.name = symString(3);
             }
             break;
@@ -1765,13 +1724,16 @@ bool QXmlStreamReaderPrivate::parse()
                break;
 
             case 229: {
-               QStringView8 prefix = symPrefix(1);
+               QStringView prefix = symPrefix(1);
 
                if (prefix.isEmpty() && symString(1) == "xmlns" && namespaceProcessing) {
-                  NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+
+                  namespaceDeclarations.push(NamespaceDeclaration());
+                  NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
+
                   namespaceDeclaration.prefix.clear();
 
-                  const QStringView8 ns(symString(5));
+                  const QStringView ns(symString(5));
 
                   if (ns == "http://www.w3.org/2000/xmlns/" || ns == "http://www.w3.org/XML/1998/namespace") {
                      raiseWellFormedError(QXmlStream::tr("Illegal namespace declaration."));
@@ -1780,12 +1742,15 @@ bool QXmlStreamReaderPrivate::parse()
                   }
 
                } else {
-                  Attribute &attribute = attributeStack.push();
-                  attribute.key = sym(1);
+                  attributeStack.push(Attribute());
+                  Attribute &attribute = attributeStack.top();
+
+                  attribute.key   = sym(1);
                   attribute.value = sym(5);
 
-                  QStringView8 attributeQualifiedName = symName(1);
+                  QStringView attributeQualifiedName = symName(1);
                   bool normalize = false;
+
                   for (int a = 0; a < dtdAttributes.size(); ++a) {
                      DtdAttribute &dtdAttribute = dtdAttributes[a];
                      if (!dtdAttribute.isCDATA
@@ -1827,10 +1792,11 @@ bool QXmlStreamReaderPrivate::parse()
                   }
 
                   if (prefix == "xmlns" && namespaceProcessing) {
-                     NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+                     namespaceDeclarations.push(NamespaceDeclaration());
+                     NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
 
-                     QStringView8 namespacePrefix = symString(attribute.key);
-                     QStringView8 namespaceUri    = symString(attribute.value);
+                     QStringView namespacePrefix = symString(attribute.key);
+                     QStringView namespaceUri    = symString(attribute.value);
 
                      attributeStack.pop();
 
@@ -1876,11 +1842,12 @@ bool QXmlStreamReaderPrivate::parse()
 
             case 238: {
                setType(QXmlStreamReader::EndElement);
-               Tag &tag = tagStack_pop();
+               Tag tag = tagStack_pop();
 
                namespaceUri = tag.namespaceDeclaration.namespaceUri;
                name = tag.name;
                qualifiedName = tag.qualifiedName;
+
                if (qualifiedName != symName(3)) {
                   raiseWellFormedError(QXmlStream::tr("Opening and ending tag mismatch."));
                }

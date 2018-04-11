@@ -22,7 +22,7 @@
 
 #include <qbytearray.h>
 #include <qtools_p.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qlist.h>
 #include <qlocale.h>
 #include <qlocale_p.h>

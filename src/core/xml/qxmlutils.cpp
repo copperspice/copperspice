@@ -287,7 +287,7 @@ bool QXmlUtils::isPublicID(const QString &candidate)
     \sa \l {http://www.w3.org/TR/REC-xml-names/#NT-NCName}
            {W3CNamespaces in XML 1.0 (Second Edition), [4] NCName}
  */
-bool QXmlUtils::isNCName(const QStringView8 &ncName)
+bool QXmlUtils::isNCName(const QStringView &ncName)
 {
    if (ncName.isEmpty()) {
       return false;

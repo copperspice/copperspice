@@ -35,7 +35,7 @@
 #include <qdatetime.h>
 #include <qhashfunc.h>
 #include <qnamespace.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
 #include <qvariant.h>
@@ -900,7 +900,7 @@ QString QLocale::quoteString(const QString &str, QuotationStyle style) const
    return quoteString(str, style);
 }
 
-QString QLocale::quoteString(const QStringView8 &str, QuotationStyle style) const
+QString QLocale::quoteString(const QStringView &str, QuotationStyle style) const
 {
 #ifndef QT_NO_SYSTEMLOCALE
    if (d->m_data == systemData()) {
@@ -1529,13 +1529,7 @@ QList<QLocale> QLocale::matchingLocales(QLocale::Language language,
 
    QList<QLocale> result;
 
-   if (language == QLocale::AnyLanguage && script == QLocale::AnyScript && country == QLocale::AnyCountry) {
-      result.reserve(locale_data_size);
-   }
-
    const QLocaleData *data = locale_data + locale_index[language];
-
-
 
    while ( (data != locale_data + locale_data_size)
            && (language == QLocale::AnyLanguage || data->m_language_id == uint(language))) {
@@ -1552,16 +1546,6 @@ QList<QLocale> QLocale::matchingLocales(QLocale::Language language,
    return result;
 }
 
-/*!
-    \obsolete
-    \since 4.3
-
-    Returns the list of countries that have entires for \a language in Qt's locale
-    database. If the result is an empty list, then \a language is not represented in
-    Qt's locale database.
-
-    \sa matchingLocales()
-*/
 QList<QLocale::Country> QLocale::countriesForLanguage(Language language)
 {
    QList<Country> result;
@@ -2408,12 +2392,11 @@ QString QLocaleData::longLongToString(const QChar zero, const QChar group, const
 
 QString QLocaleData::unsLongLongToString(quint64 l, int precision, int base, int width, unsigned flags) const
 {
-   return unsLongLongToString(m_zero, m_group, m_plus,
-                              l, precision, base, width, flags);
+   return unsLongLongToString(m_zero, m_group, m_plus, l, precision, base, width, flags);
 }
 
-QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, const QChar plus, quint64 l, int precision,
-      int base, int width, unsigned flags)
+QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, const QChar plus, quint64 l,
+                  int precision, int base, int width, unsigned flags)
 {
    bool precision_not_specified = false;
 
@@ -2423,7 +2406,6 @@ QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, co
    }
 
    QString num_str = qulltoa(l, base, zero);
-
    uint cnt_thousand_sep = 0;
 
    if (flags & ThousandsGroup && base == 10) {

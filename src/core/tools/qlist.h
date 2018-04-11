@@ -259,8 +259,12 @@ class QList
    bool removeOne(const T &value);
    void replace(size_type i, const T &value);
 
-   void reserve(size_type size) {
-      // this method should do nothing
+   [[deprecated]] void reserve(size_type size) {
+      // this method should do nothing, undocumented
+   }
+
+   void resize(size_type size) {
+      m_data.resize(size);
    }
 
    size_type size() const {

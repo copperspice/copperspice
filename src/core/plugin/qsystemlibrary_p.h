@@ -53,7 +53,7 @@ class QSystemLibrary
          load();
       }
 
-      if (!m_handle) {
+      if (! m_handle) {
          return 0;
       }
 

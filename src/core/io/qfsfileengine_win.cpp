@@ -60,10 +60,7 @@ static inline bool isUncPath(const QString &path)
    return (path.startsWith("\\\\") && path.size() > 2 && path.at(2) != '.');
 }
 
-
-/*!
-    \internal
-*/
+// internal
 QString QFSFileEnginePrivate::longFileName(const QString &path)
 {
    if (path.startsWith("\\\\.\\")) {

@@ -23,7 +23,7 @@
 #ifndef QCORECMDLINEARGS_P_H
 #define QCORECMDLINEARGS_P_H
 
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstringlist.h>
 
 #if defined(Q_OS_WIN32)

@@ -168,6 +168,11 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(const QByteArray &array);
    QTextStream &operator<<(const void *ptr);
 
+   // broom - fix this code
+   QTextStream &operator<<(const char *s) {
+      return *this << QString::fromLatin1(s);
+   }
+
  private:
    Q_DISABLE_COPY(QTextStream)
    QScopedPointer<QTextStreamPrivate> d_ptr;
@@ -179,9 +184,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextStream::NumberFlags)
   QTextStream manipulators
  *****************************************************************************/
 
-typedef QTextStream &(*QTextStreamFunction)(QTextStream &); // manipulator function
-typedef void (QTextStream::*QTSMFI)(int); // manipulator w/int argument
-typedef void (QTextStream::*QTSMFC)(QChar); // manipulator w/QChar argument
+typedef QTextStream &(*QTextStreamFunction)(QTextStream &);    // manipulator function
+typedef void (QTextStream::*QTSMFI)(int);                      // manipulator w/int argument
+typedef void (QTextStream::*QTSMFC)(QChar);                    // manipulator w/QChar argument
 
 class Q_CORE_EXPORT QTextStreamManipulator
 {

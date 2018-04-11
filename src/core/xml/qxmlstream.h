@@ -32,48 +32,6 @@ class QXmlStreamAttributes;
 class QXmlStreamReaderPrivate;
 class QXmlStreamWriterPrivate;
 
-class Q_CORE_EXPORT QXmlStringView
-{
- public:
-   QXmlStringView()
-   {}
-
-   QXmlStringView(const QString &str)
-      : m_string(str), m_begin(m_string.begin()), m_end(m_string.end())
-   {}
-
-   QXmlStringView(const QStringView8 &view)
-      : m_string(view), m_begin(m_string.begin()), m_end(m_string.end())
-   {}
-
-   ~QXmlStringView()
-   {}
-
-   void clear() {
-      m_string.clear();
-      m_begin = m_string.begin();
-      m_end   = m_string.end();
-   }
-
-   operator QStringView8() const {
-      return QStringView8(m_begin, m_end);
-   }
-
-   QString::const_iterator begin() const {
-      return m_begin;
-   }
-
-   QString::const_iterator end() const {
-      return m_end;
-   }
-
- private:
-   QString m_string;
-
-   QString::const_iterator m_begin;
-   QString::const_iterator m_end;
-};
-
 class Q_CORE_EXPORT QXmlStreamAttribute
 {
  public:
@@ -85,19 +43,19 @@ class Q_CORE_EXPORT QXmlStreamAttribute
 
    ~QXmlStreamAttribute();
 
-   inline QStringView8 namespaceUri() const {
+   inline QStringView namespaceUri() const {
       return m_namespaceUri;
    }
 
-   inline QStringView8 name() const {
+   inline QStringView name() const {
       return m_name;
    }
 
-   inline QStringView8 qualifiedName() const {
+   inline QStringView qualifiedName() const {
       return m_qualifiedName;
    }
 
-   inline QStringView8 prefix() const {
+   inline QStringView prefix() const {
       auto iter_qualName = m_qualifiedName.end();
       auto iter_name     = m_name.begin();
 
@@ -115,10 +73,10 @@ class Q_CORE_EXPORT QXmlStreamAttribute
          }
       }
 
-      return QStringView8(m_qualifiedName.begin(), iter_qualName);
+      return QStringView(m_qualifiedName.begin(), iter_qualName);
    }
 
-   inline QStringView8 value() const {
+   inline QStringView value() const {
       return m_value;
    }
 
@@ -147,10 +105,10 @@ class Q_CORE_EXPORT QXmlStreamAttribute
    }
 
   private:
-   QXmlStringView m_name;
-   QXmlStringView m_namespaceUri;
-   QXmlStringView m_qualifiedName;
-   QXmlStringView m_value;
+   QString m_name;
+   QString m_namespaceUri;
+   QString m_qualifiedName;
+   QString m_value;
 
    uint m_isDefault : 1;
 
@@ -165,8 +123,8 @@ class Q_CORE_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
  public:
    inline QXmlStreamAttributes() {}
 
-   QStringView8 value(const QString &namespaceUri, const QString &name) const;
-   QStringView8 value(const QString &qualifiedName) const;
+   QStringView value(const QString &namespaceUri, const QString &name) const;
+   QStringView value(const QString &qualifiedName) const;
 
    void append(const QString &namespaceUri, const QString &name, const QString &value);
    void append(const QString &qualifiedName, const QString &value);
@@ -191,11 +149,11 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
    ~QXmlStreamNamespaceDeclaration();
 
    QXmlStreamNamespaceDeclaration &operator=(const QXmlStreamNamespaceDeclaration &);
-   inline QStringView8 prefix() const {
+   inline QStringView prefix() const {
       return m_prefix;
    }
 
-   inline QStringView8 namespaceUri() const {
+   inline QStringView namespaceUri() const {
       return m_namespaceUri;
    }
 
@@ -206,8 +164,8 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
    }
 
  private:
-   QXmlStringView m_prefix;
-   QXmlStringView m_namespaceUri;
+   QString m_prefix;
+   QString m_namespaceUri;
 
    friend class QXmlStreamReaderPrivate;
 };
@@ -224,15 +182,15 @@ class Q_CORE_EXPORT QXmlStreamNotationDeclaration
 
    ~QXmlStreamNotationDeclaration();
 
-   inline QStringView8 name() const {
+   inline QStringView name() const {
       return m_name;
    }
 
-   inline QStringView8 systemId() const {
+   inline QStringView systemId() const {
       return m_systemId;
    }
 
-   inline QStringView8 publicId() const {
+   inline QStringView publicId() const {
       return m_publicId;
    }
 
@@ -246,7 +204,9 @@ class Q_CORE_EXPORT QXmlStreamNotationDeclaration
    }
 
  private:
-   QXmlStringView m_name, m_systemId, m_publicId;
+   QString m_name;
+   QString m_systemId;
+   QString m_publicId;
 
    friend class QXmlStreamReaderPrivate;
 };
@@ -263,23 +223,23 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
 
    ~QXmlStreamEntityDeclaration();
 
-   inline QStringView8 name() const {
+   inline QStringView name() const {
       return m_name;
    }
 
-   inline QStringView8 notationName() const {
+   inline QStringView notationName() const {
       return m_notationName;
    }
 
-   inline QStringView8 systemId() const {
+   inline QStringView systemId() const {
       return m_systemId;
    }
 
-   inline QStringView8 publicId() const {
+   inline QStringView publicId() const {
       return m_publicId;
    }
 
-   inline QStringView8 value() const {
+   inline QStringView value() const {
       return m_value;
    }
    inline bool operator==(const QXmlStreamEntityDeclaration &other) const {
@@ -295,7 +255,11 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
    }
 
  private:
-   QXmlStringView m_name, m_notationName, m_systemId, m_publicId, m_value;
+   QString m_name;
+   QString m_notationName;
+   QString m_systemId;
+   QString m_publicId;
+   QString m_value;
 
    friend class QXmlStreamReaderPrivate;
 };
@@ -408,8 +372,8 @@ class Q_CORE_EXPORT QXmlStreamReader
    }
 
    bool isStandaloneDocument() const;
-   QStringView8 documentVersion() const;
-   QStringView8 documentEncoding() const;
+   QStringView documentVersion() const;
+   QStringView documentEncoding() const;
 
    qint64 lineNumber() const;
    qint64 columnNumber() const;
@@ -420,24 +384,24 @@ class Q_CORE_EXPORT QXmlStreamReader
    QString readElementText(ReadElementTextBehaviour behaviour);
    QString readElementText();
 
-   QStringView8 name() const;
-   QStringView8 namespaceUri() const;
-   QStringView8 qualifiedName() const;
-   QStringView8 prefix() const;
+   QStringView name() const;
+   QStringView namespaceUri() const;
+   QStringView qualifiedName() const;
+   QStringView prefix() const;
 
-   QStringView8 processingInstructionTarget() const;
-   QStringView8 processingInstructionData() const;
+   QStringView processingInstructionTarget() const;
+   QStringView processingInstructionData() const;
 
-   QStringView8 text() const;
+   QStringView text() const;
 
    QXmlStreamNamespaceDeclarations namespaceDeclarations() const;
    void addExtraNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &extraNamespaceDeclaraction);
    void addExtraNamespaceDeclarations(const QXmlStreamNamespaceDeclarations &extraNamespaceDeclaractions);
    QXmlStreamNotationDeclarations notationDeclarations() const;
    QXmlStreamEntityDeclarations entityDeclarations() const;
-   QStringView8 dtdName() const;
-   QStringView8 dtdPublicId() const;
-   QStringView8 dtdSystemId() const;
+   QStringView dtdName() const;
+   QStringView dtdPublicId() const;
+   QStringView dtdSystemId() const;
 
    void raiseError(const QString &message = QString());
    QString errorString() const;

@@ -25,7 +25,6 @@
 
 #include <cmath>
 
-#include <qstring8.h>
 #include <qvarlengtharray.h>
 #include <qmetatype.h>
 #include <qlocale.h>

@@ -26,7 +26,6 @@
 #include <cmath>
 
 #include <qlocale_p.h>
-#include <qstring8.h>
 
 QString qulltoa(quint64 l, int base, const QChar _zero);
 QString qlltoa(qint64 l, int base, const QChar zero);

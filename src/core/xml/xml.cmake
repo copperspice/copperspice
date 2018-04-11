@@ -10,8 +10,8 @@ set(CORE_PUBLIC_INCLUDES
     QXmlStreamNotationDeclaration
     QXmlStreamNotationDeclarations
     QXmlStreamReader
-    QXmlStreamStringRef
     QXmlStreamWriter
+    QXmlStream
 )
 
 set(CORE_INCLUDES
@@ -26,7 +26,6 @@ set(CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamnotationdeclaration.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamnotationdeclarations.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamreader.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamstringref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamwriter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstream.h
 )

@@ -93,7 +93,6 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 QStringList QProcessEnvironmentPrivate::toList() const
 {
    QStringList result;
-   result.reserve(hash.size());
 
    Hash::const_iterator it  = hash.constBegin();
    Hash::const_iterator end = hash.constEnd();
@@ -101,6 +100,7 @@ QStringList QProcessEnvironmentPrivate::toList() const
    for ( ; it != end; ++it) {
       result << nameToString(it.key()) + QLatin1Char('=') + valueToString(it.value());
    }
+
    return result;
 }
 
@@ -128,7 +128,7 @@ QProcessEnvironment QProcessEnvironmentPrivate::fromList(const QStringList &list
 QStringList QProcessEnvironmentPrivate::keys() const
 {
    QStringList result;
-   result.reserve(hash.size());
+
    Hash::const_iterator it = hash.constBegin();
    Hash::const_iterator end = hash.constEnd();
 
@@ -202,24 +202,12 @@ bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
    }
 }
 
-/*!
-    Returns true if this QProcessEnvironment object is empty: that is
-    there are no key=value pairs set.
-
-    \sa clear(), systemEnvironment(), insert()
-*/
 bool QProcessEnvironment::isEmpty() const
 {
    // Needs no locking, as no hash nodes are accessed
    return d ? d->hash.isEmpty() : true;
 }
 
-/*!
-    Removes all key=value pairs from this QProcessEnvironment object, making
-    it empty.
-
-    \sa isEmpty(), systemEnvironment()
-*/
 void QProcessEnvironment::clear()
 {
    if (d) {
@@ -229,16 +217,6 @@ void QProcessEnvironment::clear()
    // re-populated with the same keys again.
 }
 
-/*!
-    Returns true if the environment variable of name \a name is found in
-    this QProcessEnvironment object.
-
-    On Windows, variable names are case-insensitive, so the key is converted
-    to uppercase before searching. On other systems, names are case-sensitive
-    so no trasformation is applied.
-
-    \sa insert(), value()
-*/
 bool QProcessEnvironment::contains(const QString &name) const
 {
    if (!d) {

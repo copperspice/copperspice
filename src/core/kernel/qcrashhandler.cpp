@@ -40,6 +40,7 @@
 #include <qplatformdefs.h>
 #include <qcrashhandler_p.h>
 #include <qbytearray.h>
+#include <qstring.h>
 
 #ifndef QT_NO_CRASHHANDLER
 
@@ -49,9 +50,8 @@
 
 QtCrashHandler QSegfaultHandler::callback = 0;
 
-#if defined(__GLIBC__) && (__GLIBC__ >= 2) && !defined(__UCLIBC__) && ! defined(QT_LINUXBASE)
+#if defined(__GLIBC__) && (__GLIBC__ >= 2) && ! defined(__UCLIBC__) && ! defined(QT_LINUXBASE)
 
-#include <qstring8.h>
 #include <execinfo.h>
 
 static void print_backtrace(FILE *outb)

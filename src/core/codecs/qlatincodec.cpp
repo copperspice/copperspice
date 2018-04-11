@@ -38,7 +38,7 @@ QString QLatin1Codec::convertToUnicode(const char *chars, int len, ConverterStat
    return QString::fromLatin1(chars, len);
 }
 
-QByteArray QLatin1Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QLatin1Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
 
@@ -169,7 +169,7 @@ QString QLatin15Codec::convertToUnicode(const char *chars, int len, ConverterSta
    return retval;
 }
 
-QByteArray QLatin15Codec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QLatin15Codec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
 

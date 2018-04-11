@@ -1181,7 +1181,7 @@ static void removeDotsFromPath(QString &path)
    while (in < end) {
 
       // if the input buffer begins with a prefix of "../" or "./", remove that prefix from the input buffer;
-      QStringView8 tmp(in, end);
+      QStringView tmp(in, end);
 
       if (tmp.startsWith("./")) {
          in += 2;
@@ -1193,7 +1193,7 @@ static void removeDotsFromPath(QString &path)
       // if the input buffer begins with a prefix of "/./" or "/.", where "." is a complete path segment
       // then replace that prefix with "/" in the input buffer;
 
-      tmp = QStringView8(in, end);
+      tmp = QStringView(in, end);
 
       if (tmp.startsWith("/./")) {
          in += 2;
@@ -2590,7 +2590,6 @@ QString QUrl::errorString() const
 QStringList QUrl::toStringList(const QList<QUrl> &urls, FormattingOptions options)
 {
    QStringList lst;
-   lst.reserve(urls.size());
 
    for (const QUrl &url : urls) {
       lst.append(url.toString(options));
@@ -2602,7 +2601,6 @@ QStringList QUrl::toStringList(const QList<QUrl> &urls, FormattingOptions option
 QList<QUrl> QUrl::fromStringList(const QStringList &urls, ParsingMode mode)
 {
    QList<QUrl> lst;
-   lst.reserve(urls.size());
 
    for (const QString &str : urls) {
       lst.append(QUrl(str, mode));

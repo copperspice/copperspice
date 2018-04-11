@@ -2215,7 +2215,7 @@ static inline void appendEncode(QString *output, uint &delta, uint &bias, uint &
    ++h;
 }
 
-static void qt_punycodeEncoder(QStringView8 str, QString *output)
+static void qt_punycodeEncoder(QStringView str, QString *output)
 {
    QString retval;
 
@@ -2441,7 +2441,7 @@ static QSet<QString> idn_whitelist = {
 
 static QStringList *user_idn_whitelist = nullptr;
 
-static bool cs_internal_idn_enabled(QStringView8 domain)
+static bool cs_internal_idn_enabled(QStringView domain)
 {
    QString::const_iterator iter = domain.lastIndexOfFast('.');
 
@@ -2449,7 +2449,7 @@ static bool cs_internal_idn_enabled(QStringView8 domain)
       return false;
    }
 
-   QString tldString = qt_ACE_do(QStringView8(iter + 1, domain.end()), ToAceOnly, ForbidLeadingDot);
+   QString tldString = qt_ACE_do(QStringView(iter + 1, domain.end()), ToAceOnly, ForbidLeadingDot);
 
    if (user_idn_whitelist) {
       return user_idn_whitelist->contains(tldString);
@@ -2466,7 +2466,7 @@ static inline bool isDotDelimiter(ushort uc)
    return uc == 0x2e || uc == 0x3002 || uc == 0xff0e || uc == 0xff61;
 }
 
-static QString::const_iterator nextDotDelimiter(QStringView8 domain, QString::const_iterator iter)
+static QString::const_iterator nextDotDelimiter(QStringView domain, QString::const_iterator iter)
 {
    while (iter != domain.end()) {
       if (isDotDelimiter(iter->unicode())) {
@@ -2480,7 +2480,7 @@ static QString::const_iterator nextDotDelimiter(QStringView8 domain, QString::co
    return iter;
 }
 
-QString qt_ACE_do(QStringView8 domain, AceOperation op, AceLeadingDot dot)
+QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
 {
    if (domain.isEmpty()) {
       return domain;
@@ -2517,7 +2517,7 @@ QString qt_ACE_do(QStringView8 domain, AceOperation op, AceLeadingDot dot)
       int prevLen = retval.size();
       bool simple = true;
 
-      QStringView8 tmpLabel(last_iter, iter);
+      QStringView tmpLabel(last_iter, iter);
       for (auto ch : tmpLabel) {
          if (ch > 0x7F) {
             simple = false;
@@ -2551,7 +2551,7 @@ QString qt_ACE_do(QStringView8 domain, AceOperation op, AceLeadingDot dot)
          int toReserve = labelLength + 4 + 6;         // "xn--" plus some extra bytes
 
          aceForm.clear();
-         qt_punycodeEncoder(QStringView8(retval.begin() + prevLen, retval.end()), &aceForm);
+         qt_punycodeEncoder(QStringView(retval.begin() + prevLen, retval.end()), &aceForm);
 
          // resize() + memcpy() here because we are overwriting the data copied
          bool appended = false;
@@ -2605,7 +2605,6 @@ QStringList QUrl::idnWhitelist()
    }
 
    QStringList list;
-   list.reserve(idn_whitelist.size());
 
    for (const auto &item : idn_whitelist) {
       list.append(item);

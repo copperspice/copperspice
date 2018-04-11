@@ -68,21 +68,11 @@ QXmlStreamEntityResolver *QXmlStreamReader::entityResolver() const
    return d->entityResolver;
 }
 
-
-/*!
-  Constructs a stream reader.
-
-  \sa setDevice(), addData()
- */
 QXmlStreamReader::QXmlStreamReader()
    : d_ptr(new QXmlStreamReaderPrivate(this))
 {
 }
 
-/*!  Creates a new stream reader that reads from \a device.
-
-\sa setDevice(), clear()
- */
 QXmlStreamReader::QXmlStreamReader(QIODevice *device)
    : d_ptr(new QXmlStreamReaderPrivate(this))
 {
@@ -135,18 +125,6 @@ QXmlStreamReader::~QXmlStreamReader()
    }
 }
 
-/*! \fn bool QXmlStreamReader::hasError() const
-    Returns \c true if an error has occurred, otherwise \c false.
-
-    \sa errorString(), error()
- */
-
-/*!
-    Sets the current device to \a device. Setting the device resets
-    the stream to its initial state.
-
-    \sa device(), clear()
-*/
 void QXmlStreamReader::setDevice(QIODevice *device)
 {
    Q_D(QXmlStreamReader);
@@ -290,9 +268,11 @@ QXmlStreamReader::TokenType QXmlStreamReader::readNext()
       d->parse();
       if (d->atEnd && d->type != EndDocument && d->type != Invalid) {
          d->raiseError(PrematureEndOfDocumentError);
+
       } else if (!d->atEnd && d->type == EndDocument) {
          d->raiseWellFormedError(QXmlStream::tr("Extra content at end of document."));
       }
+
    } else if (d->error == PrematureEndOfDocumentError) {
       // resume error
       d->type = NoToken;
@@ -448,7 +428,9 @@ QXmlStreamPrivateTagStack::QXmlStreamPrivateTagStack()
 {
    tagStack.reserve(16);
 
-   NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+   namespaceDeclarations.push(NamespaceDeclaration());
+   NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
+
    namespaceDeclaration.prefix       = "xml";
    namespaceDeclaration.namespaceUri = "http://www.w3.org/XML/1998/namespace";
 }
@@ -1146,7 +1128,7 @@ void QXmlStreamReaderPrivate::putString(const QString &s, int from)
    putStack.reserve(s.size());
 
    for (int i = s.size() - 1; i >= from; --i) {
-      putStack.rawPush() = s.at(i).unicode();
+      putStack.push(s.at(i).unicode());
    }
 }
 
@@ -1155,7 +1137,7 @@ void QXmlStreamReaderPrivate::putStringLiteral(const QString &s)
    putStack.reserve(s.size());
 
    for (int i = s.size() - 1; i >= 0; --i) {
-      putStack.rawPush() = ((LETTER << 16) | s.at(i).unicode());
+      putStack.push(((LETTER << 16) | s.at(i).unicode()));
    }
 }
 
@@ -1167,9 +1149,9 @@ void QXmlStreamReaderPrivate::putReplacement(const QString &s)
       ushort c = s.at(i).unicode();
 
       if (c == '\n' || c == '\r') {
-         putStack.rawPush() = ((LETTER << 16) | c);
+         putStack.push(((LETTER << 16) | c));
       } else {
-         putStack.rawPush() = c;
+         putStack.push(c);
       }
    }
 }
@@ -1181,11 +1163,13 @@ void QXmlStreamReaderPrivate::putReplacementInAttributeValue(const QString &s)
       ushort c = s.at(i).unicode();
 
       if (c == '&' || c == ';') {
-         putStack.rawPush() = c;
+         putStack.push(c);
+
       } else if (c == '\n' || c == '\r') {
-         putStack.rawPush() = ' ';
+         putStack.push(' ');
+
       } else {
-         putStack.rawPush() = ((LETTER << 16) | c);
+         putStack.push(((LETTER << 16) | c));
       }
    }
 }
@@ -1279,7 +1263,7 @@ ushort QXmlStreamReaderPrivate::getChar_helper()
    return 0;
 }
 
-QStringView8 QXmlStreamReaderPrivate::namespaceForPrefix(const QStringView8 &prefix)
+QStringView QXmlStreamReaderPrivate::namespaceForPrefix(QStringView prefix)
 {
    for (int j = namespaceDeclarations.size() - 1; j >= 0; --j) {
       const NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.at(j);
@@ -1292,7 +1276,7 @@ QStringView8 QXmlStreamReaderPrivate::namespaceForPrefix(const QStringView8 &pre
       raiseWellFormedError(QXmlStream::tr("Namespace prefix '%1' not declared").formatArg(prefix.toString()));
    }
 
-   return QStringView8();
+   return QStringView();
 }
 
 /*
@@ -1321,13 +1305,14 @@ void QXmlStreamReaderPrivate::resolveTag()
          }
 
          if (dtdAttribute.attributePrefix.isEmpty() && dtdAttribute.attributeName == "xmlns") {
-            NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+            namespaceDeclarations.push(NamespaceDeclaration());
+            NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
+
             namespaceDeclaration.prefix.clear();
 
-            const QStringView8 ns(dtdAttribute.defaultValue);
+            QStringView ns(dtdAttribute.defaultValue);
 
             if (ns == "http://www.w3.org/2000/xmlns/" || ns == "http://www.w3.org/XML/1998/namespace") {
-
                raiseWellFormedError(QXmlStream::tr("Illegal namespace declaration."));
 
             } else {
@@ -1335,10 +1320,11 @@ void QXmlStreamReaderPrivate::resolveTag()
             }
 
          } else if (dtdAttribute.attributePrefix == "xmlns") {
-            NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+             namespaceDeclarations.push(NamespaceDeclaration());
+            NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
 
-            QStringView8 namespacePrefix = dtdAttribute.attributeName;
-            QStringView8 namespaceUri = dtdAttribute.defaultValue;
+            QStringView namespacePrefix = dtdAttribute.attributeName;
+            QStringView namespaceUri    = dtdAttribute.defaultValue;
 
             if ((namespacePrefix == "xml" ^ namespaceUri == "http://www.w3.org/XML/1998/namespace")
                   || namespaceUri    == "http://www.w3.org/2000/xmlns/" || namespaceUri.isEmpty()
@@ -1361,18 +1347,17 @@ void QXmlStreamReaderPrivate::resolveTag()
       QXmlStreamAttribute &attribute = attributes[i];
       Attribute &attrib = attributeStack[i];
 
-      QStringView8 prefix(symPrefix(attrib.key));
-      QStringView8 name(symString(attrib.key));
-      QStringView8 qualifiedName(symName(attrib.key));
-      QStringView8 value(symString(attrib.value));
+      QStringView prefix(symPrefix(attrib.key));
+      QStringView name(symString(attrib.key));
+      QStringView qualifiedName(symName(attrib.key));
+      QStringView value(symString(attrib.value));
 
-      attribute.m_name = QXmlStringView(name);
-      attribute.m_qualifiedName = QXmlStringView(qualifiedName);
-      attribute.m_value = QXmlStringView(value);
+      attribute.m_name  = name;
+      attribute.m_qualifiedName = qualifiedName;
+      attribute.m_value = value;
 
       if (! prefix.isEmpty()) {
-         QStringView8 attributeNamespaceUri = namespaceForPrefix(prefix);
-         attribute.m_namespaceUri = QXmlStringView(attributeNamespaceUri);
+         attribute.m_namespaceUri = namespaceForPrefix(prefix);
       }
 
       for (int j = 0; j < i; ++j) {
@@ -1403,13 +1388,12 @@ void QXmlStreamReaderPrivate::resolveTag()
       }
 
       QXmlStreamAttribute attribute;
-      attribute.m_name = QXmlStringView(dtdAttribute.attributeName);
-      attribute.m_qualifiedName = QXmlStringView(dtdAttribute.attributeQualifiedName);
-      attribute.m_value = QXmlStringView(dtdAttribute.defaultValue);
+      attribute.m_name =  dtdAttribute.attributeName;
+      attribute.m_qualifiedName = dtdAttribute.attributeQualifiedName;
+      attribute.m_value = dtdAttribute.defaultValue;
 
       if (! dtdAttribute.attributePrefix.isEmpty()) {
-         QStringView8 attributeNamespaceUri = namespaceForPrefix(dtdAttribute.attributePrefix);
-         attribute.m_namespaceUri = QXmlStringView(attributeNamespaceUri);
+         attribute.m_namespaceUri = namespaceForPrefix(dtdAttribute.attributePrefix);
       }
 
       attribute.m_isDefault = true;
@@ -1429,8 +1413,8 @@ void QXmlStreamReaderPrivate::resolvePublicNamespaces()
       const NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.at(tag.namespaceDeclarationsSize + i);
       QXmlStreamNamespaceDeclaration &publicNamespaceDeclaration = publicNamespaceDeclarations[i];
 
-      publicNamespaceDeclaration.m_prefix       = QXmlStringView(namespaceDeclaration.prefix);
-      publicNamespaceDeclaration.m_namespaceUri = QXmlStringView(namespaceDeclaration.namespaceUri);
+      publicNamespaceDeclaration.m_prefix       = namespaceDeclaration.prefix;
+      publicNamespaceDeclaration.m_namespaceUri = namespaceDeclaration.namespaceUri;
    }
 }
 
@@ -1442,9 +1426,9 @@ void QXmlStreamReaderPrivate::resolveDtd()
       const QXmlStreamReaderPrivate::NotationDeclaration &notationDeclaration = notationDeclarations.at(i);
       QXmlStreamNotationDeclaration &publicNotationDeclaration = publicNotationDeclarations[i];
 
-      publicNotationDeclaration.m_name     = QXmlStringView(notationDeclaration.name);
-      publicNotationDeclaration.m_systemId = QXmlStringView(notationDeclaration.systemId);
-      publicNotationDeclaration.m_publicId = QXmlStringView(notationDeclaration.publicId);
+      publicNotationDeclaration.m_name     = notationDeclaration.name;
+      publicNotationDeclaration.m_systemId = notationDeclaration.systemId;
+      publicNotationDeclaration.m_publicId = notationDeclaration.publicId;
 
    }
 
@@ -1454,11 +1438,12 @@ void QXmlStreamReaderPrivate::resolveDtd()
    for (int i = 0; i < entityDeclarations.size(); ++i) {
       const QXmlStreamReaderPrivate::EntityDeclaration &entityDeclaration = entityDeclarations.at(i);
       QXmlStreamEntityDeclaration &publicEntityDeclaration = publicEntityDeclarations[i];
-      publicEntityDeclaration.m_name         = QXmlStringView(entityDeclaration.name);
-      publicEntityDeclaration.m_notationName = QXmlStringView(entityDeclaration.notationName);
-      publicEntityDeclaration.m_systemId     = QXmlStringView(entityDeclaration.systemId);
-      publicEntityDeclaration.m_publicId     = QXmlStringView(entityDeclaration.publicId);
-      publicEntityDeclaration.m_value        = QXmlStringView(entityDeclaration.value);
+
+      publicEntityDeclaration.m_name         = entityDeclaration.name;
+      publicEntityDeclaration.m_notationName = entityDeclaration.notationName;
+      publicEntityDeclaration.m_systemId     = entityDeclaration.systemId;
+      publicEntityDeclaration.m_publicId     = entityDeclaration.publicId;
+      publicEntityDeclaration.m_value        = entityDeclaration.value;
    }
 
    entityDeclarations.clear();
@@ -1485,7 +1470,7 @@ QChar QXmlStreamReaderPrivate::resolveCharRef(int symbolIndex)
    return ok ? char32_t(s) : char32_t(0);
 }
 
-void QXmlStreamReaderPrivate::checkPublicLiteral(const QStringView8 &publicId)
+void QXmlStreamReaderPrivate::checkPublicLiteral(QStringView publicId)
 {
    //#x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
 
@@ -1571,9 +1556,9 @@ void QXmlStreamReaderPrivate::startDocument()
 
    for (int i = 0; err.isEmpty() && i < n; ++i) {
       Attribute &attrib = attributeStack[i];
-      QStringView8 prefix(symPrefix(attrib.key));
-      QStringView8 key(symString(attrib.key));
-      QStringView8 value(symString(attrib.value));
+      QStringView prefix(symPrefix(attrib.key));
+      QStringView key(symString(attrib.key));
+      QStringView value(symString(attrib.value));
 
       if (prefix.isEmpty() && key == QLatin1String("encoding")) {
          const QString name(value.toString());
@@ -1755,7 +1740,7 @@ qint64 QXmlStreamReader::characterOffset() const
 /*!  Returns the text of \l Characters, \l Comment, \l DTD, or
   EntityReference.
  */
-QStringView8 QXmlStreamReader::text() const
+QStringView QXmlStreamReader::text() const
 {
    Q_D(const QXmlStreamReader);
    return d->text;
@@ -1800,13 +1785,13 @@ QXmlStreamEntityDeclarations QXmlStreamReader::entityDeclarations() const
   name. Otherwise an empty string is returned.
 
  */
-QStringView8 QXmlStreamReader::dtdName() const
+QStringView QXmlStreamReader::dtdName() const
 {
    Q_D(const QXmlStreamReader);
    if (d->type == QXmlStreamReader::DTD) {
       return d->dtdName;
    }
-   return QStringView8();
+   return QStringView();
 }
 
 /*!
@@ -1816,13 +1801,15 @@ QStringView8 QXmlStreamReader::dtdName() const
   public identifier. Otherwise an empty string is returned.
 
  */
-QStringView8 QXmlStreamReader::dtdPublicId() const
+QStringView QXmlStreamReader::dtdPublicId() const
 {
    Q_D(const QXmlStreamReader);
+
    if (d->type == QXmlStreamReader::DTD) {
       return d->dtdPublicId;
    }
-   return QStringView8();
+
+   return QStringView();
 }
 
 /*!
@@ -1832,13 +1819,13 @@ QStringView8 QXmlStreamReader::dtdPublicId() const
   system identifier. Otherwise an empty string is returned.
 
  */
-QStringView8 QXmlStreamReader::dtdSystemId() const
+QStringView QXmlStreamReader::dtdSystemId() const
 {
    Q_D(const QXmlStreamReader);
    if (d->type == QXmlStreamReader::DTD) {
       return d->dtdSystemId;
    }
-   return QStringView8();
+   return QStringView();
 }
 
 QXmlStreamNamespaceDeclarations QXmlStreamReader::namespaceDeclarations() const
@@ -1856,7 +1843,8 @@ void QXmlStreamReader::addExtraNamespaceDeclaration(const QXmlStreamNamespaceDec
 {
    Q_D(QXmlStreamReader);
 
-   QXmlStreamReaderPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.push();
+   d->namespaceDeclarations.push(QXmlStreamReaderPrivate::NamespaceDeclaration());
+   QXmlStreamReaderPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.top();
 
    namespaceDeclaration.prefix       = extraNamespaceDeclaration.prefix();
    namespaceDeclaration.namespaceUri = extraNamespaceDeclaration.namespaceUri();
@@ -1915,57 +1903,40 @@ QString QXmlStreamReader::readElementText(ReadElementTextBehaviour behaviour)
    return QString();
 }
 
-/*!
-  \overload readElementText()
-
-  Calling this function is equivalent to calling readElementText(ErrorOnUnexpectedElement).
- */
 QString QXmlStreamReader::readElementText()
 {
    return readElementText(ErrorOnUnexpectedElement);
 }
 
-/*!  Raises a custom error with an optional error \a message.
-
-  \sa error(), errorString()
- */
 void QXmlStreamReader::raiseError(const QString &message)
 {
    Q_D(QXmlStreamReader);
    d->raiseError(CustomError, message);
 }
 
-/*!
-  Returns the error message that was set with raiseError().
-
-  \sa error(), lineNumber(), columnNumber(), characterOffset()
- */
 QString QXmlStreamReader::errorString() const
 {
    Q_D(const QXmlStreamReader);
+
    if (d->type == QXmlStreamReader::Invalid) {
       return d->errorString;
    }
+
    return QString();
 }
 
-/*!  Returns the type of the current error, or NoError if no error occurred.
-
-  \sa errorString(), raiseError()
- */
 QXmlStreamReader::Error QXmlStreamReader::error() const
 {
    Q_D(const QXmlStreamReader);
+
    if (d->type == QXmlStreamReader::Invalid) {
       return d->error;
    }
+
    return NoError;
 }
 
-/*!
-  Returns the target of a ProcessingInstruction.
- */
-QStringView8 QXmlStreamReader::processingInstructionTarget() const
+QStringView QXmlStreamReader::processingInstructionTarget() const
 {
    Q_D(const QXmlStreamReader);
    return d->processingInstructionTarget;
@@ -1974,7 +1945,7 @@ QStringView8 QXmlStreamReader::processingInstructionTarget() const
 /*!
   Returns the data of a ProcessingInstruction.
  */
-QStringView8 QXmlStreamReader::processingInstructionData() const
+QStringView QXmlStreamReader::processingInstructionData() const
 {
    Q_D(const QXmlStreamReader);
    return d->processingInstructionData;
@@ -1987,7 +1958,7 @@ QStringView8 QXmlStreamReader::processingInstructionData() const
 
   \sa namespaceUri(), qualifiedName()
  */
-QStringView8 QXmlStreamReader::name() const
+QStringView QXmlStreamReader::name() const
 {
    Q_D(const QXmlStreamReader);
    return d->name;
@@ -1998,7 +1969,7 @@ QStringView8 QXmlStreamReader::name() const
 
   \sa name(), qualifiedName()
  */
-QStringView8 QXmlStreamReader::namespaceUri() const
+QStringView QXmlStreamReader::namespaceUri() const
 {
    Q_D(const QXmlStreamReader);
    return d->namespaceUri;
@@ -2016,14 +1987,14 @@ QStringView8 QXmlStreamReader::namespaceUri() const
 
    \sa name(), prefix(), namespaceUri()
  */
-QStringView8 QXmlStreamReader::qualifiedName() const
+QStringView QXmlStreamReader::qualifiedName() const
 {
    Q_D(const QXmlStreamReader);
    return d->qualifiedName;
 }
 
 
-QStringView8 QXmlStreamReader::prefix() const
+QStringView QXmlStreamReader::prefix() const
 {
    Q_D(const QXmlStreamReader);
    return d->prefix;
@@ -2046,21 +2017,19 @@ QXmlStreamAttribute::~QXmlStreamAttribute()
 
 QXmlStreamAttribute::QXmlStreamAttribute(const QString &namespaceUri, const QString &name, const QString &value)
 {
-   m_namespaceUri  = QXmlStringView(QStringView8(namespaceUri));
-
-   m_name          = QXmlStringView(QStringView8(name));
+   m_namespaceUri  = namespaceUri;
+   m_name          = name;
    m_qualifiedName = m_name;
-
-   m_value         = QXmlStringView(QStringView8(value));
+   m_value         = value;
 }
 
 QXmlStreamAttribute::QXmlStreamAttribute(const QString &qualifiedName, const QString &value)
 {
    auto iter_colon = qualifiedName.indexOfFast(':') + 1;
-   m_name          = QXmlStringView(QStringView8(iter_colon, qualifiedName.end()));
+   m_name          = QStringView(iter_colon, qualifiedName.end());
 
-   m_qualifiedName = QXmlStringView(QStringView8(qualifiedName));
-   m_value         = QXmlStringView(QStringView8(value));
+   m_qualifiedName = qualifiedName;
+   m_value         = value;
 }
 
 QXmlStreamAttribute::QXmlStreamAttribute(const QXmlStreamAttribute &other)
@@ -2070,28 +2039,24 @@ QXmlStreamAttribute::QXmlStreamAttribute(const QXmlStreamAttribute &other)
 
 QXmlStreamAttribute &QXmlStreamAttribute::operator=(const QXmlStreamAttribute &other)
 {
-   m_name = other.m_name;
-   m_namespaceUri = other.m_namespaceUri;
+   m_name          = other.m_name;
+   m_namespaceUri  = other.m_namespaceUri;
    m_qualifiedName = other.m_qualifiedName;
-   m_value = other.m_value;
-   m_isDefault = other.m_isDefault;
+   m_value         = other.m_value;
+   m_isDefault     = other.m_isDefault;
+
    return *this;
 }
 
 QXmlStreamNotationDeclaration::QXmlStreamNotationDeclaration()
 {
 }
-/*!
-  Creates a copy of \a other.
- */
+
 QXmlStreamNotationDeclaration::QXmlStreamNotationDeclaration(const QXmlStreamNotationDeclaration &other)
 {
    *this = other;
 }
 
-/*!
-  Assigns \a other to this notation declaration.
- */
 QXmlStreamNotationDeclaration &QXmlStreamNotationDeclaration::operator=(const QXmlStreamNotationDeclaration &other)
 {
    m_name = other.m_name;
@@ -2176,7 +2141,7 @@ QXmlStreamEntityDeclaration::~QXmlStreamEntityDeclaration()
 {
 }
 
-QStringView8 QXmlStreamAttributes::value(const QString &namespaceUri, const QString &name) const
+QStringView QXmlStreamAttributes::value(const QString &namespaceUri, const QString &name) const
 {
    for (int i = 0; i < size(); ++i) {
       const QXmlStreamAttribute &attribute = at(i);
@@ -2185,10 +2150,10 @@ QStringView8 QXmlStreamAttributes::value(const QString &namespaceUri, const QStr
          return attribute.value();
       }
    }
-   return QStringView8();
+   return QStringView();
 }
 
-QStringView8 QXmlStreamAttributes::value(const QString &qualifiedName) const
+QStringView QXmlStreamAttributes::value(const QString &qualifiedName) const
 {
    for (int i = 0; i < size(); ++i) {
       const QXmlStreamAttribute &attribute = at(i);
@@ -2197,7 +2162,7 @@ QStringView8 QXmlStreamAttributes::value(const QString &qualifiedName) const
          return attribute.value();
       }
    }
-   return QStringView8();
+   return QStringView();
 }
 
 void QXmlStreamAttributes::append(const QString &namespaceUri, const QString &name, const QString &value)
@@ -2228,7 +2193,7 @@ bool QXmlStreamReader::isStandaloneDocument() const
    return d->standalone;
 }
 
-QStringView8 QXmlStreamReader::documentVersion() const
+QStringView QXmlStreamReader::documentVersion() const
 {
    Q_D(const QXmlStreamReader);
 
@@ -2236,16 +2201,16 @@ QStringView8 QXmlStreamReader::documentVersion() const
       return d->documentVersion;
    }
 
-   return QStringView8();
+   return QStringView();
 }
 
-QStringView8 QXmlStreamReader::documentEncoding() const
+QStringView QXmlStreamReader::documentEncoding() const
 {
    Q_D(const QXmlStreamReader);
    if (d->type == QXmlStreamReader::StartDocument) {
       return d->documentEncoding;
    }
-   return QStringView8();
+   return QStringView();
 }
 
 class QXmlStreamWriterPrivate : public QXmlStreamPrivateTagStack
@@ -2264,7 +2229,7 @@ class QXmlStreamWriterPrivate : public QXmlStreamPrivateTagStack
       delete encoder;
    }
 
-   void write(const QStringView8 &);
+   void write(const QStringView &);
    void write(const QString &);
    void writeEscaped(const QString &, bool escapeWhitespace = false);
    void write(const char *s, int len);
@@ -2336,7 +2301,7 @@ void QXmlStreamWriterPrivate::checkIfASCIICompatibleCodec()
    isCodecASCIICompatible = (bytes.count() == 1);
 }
 
-void QXmlStreamWriterPrivate::write(const QStringView8 &str)
+void QXmlStreamWriterPrivate::write(const QStringView &str)
 {
    if (device) {
 
@@ -2461,12 +2426,14 @@ bool QXmlStreamWriterPrivate::finishStartElement(bool contents)
 
    if (inEmptyElement) {
       write("/>");
-      QXmlStreamWriterPrivate::Tag &tag = tagStack_pop();
+      QXmlStreamWriterPrivate::Tag tag = tagStack_pop();
       lastNamespaceDeclaration = tag.namespaceDeclarationsSize;
       lastWasStartElement = false;
+
    } else {
       write(">");
    }
+
    inStartElement = inEmptyElement = false;
    lastNamespaceDeclaration = namespaceDeclarations.size();
    return hadSomethingWritten;
@@ -2488,7 +2455,9 @@ QXmlStreamPrivateTagStack::NamespaceDeclaration &QXmlStreamWriterPrivate::findNa
    if (namespaceUri.isEmpty()) {
       return emptyNamespace;
    }
-   NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.push();
+
+   namespaceDeclarations.push(NamespaceDeclaration());
+   NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
 
    if (namespaceUri.isEmpty()) {
       namespaceDeclaration.prefix.clear();
@@ -2725,12 +2694,15 @@ void QXmlStreamWriter::writeAttribute(const QString &namespaceUri, const QString
    Q_D(QXmlStreamWriter);
    Q_ASSERT(d->inStartElement);
    Q_ASSERT(!name.contains(QLatin1Char(':')));
+
    QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->findNamespace(namespaceUri, true, true);
    d->write(" ");
+
    if (!namespaceDeclaration.prefix.isEmpty()) {
       d->write(namespaceDeclaration.prefix);
       d->write(":");
    }
+
    d->write(name);
    d->write("=\"");
    d->writeEscaped(value, true);
@@ -2747,13 +2719,11 @@ void QXmlStreamWriter::writeAttribute(const QString &namespaceUri, const QString
  */
 void QXmlStreamWriter::writeAttribute(const QXmlStreamAttribute &attribute)
 {
-   if (attribute.namespaceUri().isEmpty())
-      writeAttribute(attribute.qualifiedName().toString(),
-                     attribute.value().toString());
-   else
-      writeAttribute(attribute.namespaceUri().toString(),
-                     attribute.name().toString(),
-                     attribute.value().toString());
+   if (attribute.namespaceUri().isEmpty()) {
+      writeAttribute(attribute.qualifiedName().toString(), attribute.value());
+   } else {
+      writeAttribute(attribute.namespaceUri().toString(), attribute.name(), attribute.value());
+   }
 }
 
 
@@ -2931,6 +2901,7 @@ void QXmlStreamWriter::writeEndDocument()
 void QXmlStreamWriter::writeEndElement()
 {
    Q_D(QXmlStreamWriter);
+
    if (d->tagStack.isEmpty()) {
       return;
    }
@@ -2939,7 +2910,8 @@ void QXmlStreamWriter::writeEndElement()
    if (d->inStartElement && !d->inEmptyElement) {
       d->write("/>");
       d->lastWasStartElement = d->inStartElement = false;
-      QXmlStreamWriterPrivate::Tag &tag = d->tagStack_pop();
+
+      QXmlStreamWriterPrivate::Tag tag = d->tagStack_pop();
       d->lastNamespaceDeclaration = tag.namespaceDeclarationsSize;
       return;
    }
@@ -2947,21 +2919,25 @@ void QXmlStreamWriter::writeEndElement()
    if (!d->finishStartElement(false) && !d->lastWasStartElement && d->autoFormatting) {
       d->indent(d->tagStack.size() - 1);
    }
+
    if (d->tagStack.isEmpty()) {
       return;
    }
+
    d->lastWasStartElement = false;
-   QXmlStreamWriterPrivate::Tag &tag = d->tagStack_pop();
+
+   QXmlStreamWriterPrivate::Tag tag = d->tagStack_pop();
    d->lastNamespaceDeclaration = tag.namespaceDeclarationsSize;
    d->write("</");
+
    if (!tag.namespaceDeclaration.prefix.isEmpty()) {
       d->write(tag.namespaceDeclaration.prefix);
       d->write(":");
    }
+
    d->write(tag.name);
    d->write(">");
 }
-
 
 
 /*!
@@ -2989,7 +2965,8 @@ void QXmlStreamWriter::writeNamespace(const QString &namespaceUri, const QString
       Q_ASSERT(! ((prefix == "xml") ^ (namespaceUri == "http://www.w3.org/XML/1998/namespace")));
       Q_ASSERT(namespaceUri != "http://www.w3.org/2000/xmlns/");
 
-      QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.push();
+      d->namespaceDeclarations.push(QXmlStreamWriterPrivate::NamespaceDeclaration());
+      QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.top();
 
       namespaceDeclaration.prefix       = prefix;
       namespaceDeclaration.namespaceUri = namespaceUri;
@@ -3006,9 +2983,10 @@ void QXmlStreamWriter::writeDefaultNamespace(const QString &namespaceUri)
    Q_ASSERT(namespaceUri != QLatin1String("http://www.w3.org/XML/1998/namespace"));
    Q_ASSERT(namespaceUri != QLatin1String("http://www.w3.org/2000/xmlns/"));
 
-   QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.push();
-   namespaceDeclaration.prefix.clear();
+   d->namespaceDeclarations.push(QXmlStreamWriterPrivate::NamespaceDeclaration());
+   QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->namespaceDeclarations.top();
 
+   namespaceDeclaration.prefix.clear();
    namespaceDeclaration.namespaceUri = namespaceUri;
 
    if (d->inStartElement) {

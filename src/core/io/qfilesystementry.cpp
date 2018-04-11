@@ -129,6 +129,7 @@ QString QFileSystemEntry::filePath() const
 QFileSystemEntry::NativePath QFileSystemEntry::nativeFilePath() const
 {
    resolveNativeFilePath();
+
    return m_nativeFilePath;
 }
 
@@ -157,10 +158,11 @@ void QFileSystemEntry::resolveFilePath() const
 
 void QFileSystemEntry::resolveNativeFilePath() const
 {
-   if (!m_filePath.isEmpty() && m_nativeFilePath.isEmpty()) {
+   if (! m_filePath.isEmpty() && m_nativeFilePath.isEmpty()) {
 
 #ifdef Q_OS_WIN
       QString filePath = m_filePath;
+
       if (isRelative()) {
          filePath = fixIfRelativeUncPath(m_filePath);
       }

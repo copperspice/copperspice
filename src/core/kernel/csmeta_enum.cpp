@@ -26,15 +26,15 @@
 #include <qstringlist.h>
 #include <qstringparser.h>
 
-QMetaEnum::QMetaEnum(const QString8 &name, const QString8 &scope, bool isFlag)
+QMetaEnum::QMetaEnum(const QString &name, const QString &scope, bool isFlag)
    : m_name(name), m_scope(scope), m_flag(isFlag)
 {
 }
 
 QMetaEnum::QMetaEnum()
 {
-   m_name  = QString8();
-   m_scope = QString8();
+   m_name  = QString();
+   m_scope = QString();
 }
 
 bool QMetaEnum::isFlag() const
@@ -47,10 +47,10 @@ bool QMetaEnum::isValid() const
    return m_name.isEmpty();
 }
 
-const QString8 &QMetaEnum::key(int index) const
+const QString &QMetaEnum::key(int index) const
 {
    if (index < 0 || index >= m_data.size() ) {
-      static QString8 retval;
+      static QString retval;
       return retval;
    }
 
@@ -66,7 +66,7 @@ int QMetaEnum::keyCount() const
    return count;
 }
 
-int QMetaEnum::keyToValue(const QString8 &key) const
+int QMetaEnum::keyToValue(const QString &key) const
 {
    if (key.isEmpty()) {
       return -1;
@@ -86,10 +86,10 @@ int QMetaEnum::keyToValue(const QString8 &key) const
    return retval;
 }
 
-int QMetaEnum::keysToValue(const QString8 &keys) const
+int QMetaEnum::keysToValue(const QString &keys) const
 {
    int value = 0;
-   QList<QString8> list = keys.split('|');
+   QList<QString> list = keys.split('|');
 
    for (auto elem : list) {
       value |= keyToValue(elem.trimmed());
@@ -98,18 +98,18 @@ int QMetaEnum::keysToValue(const QString8 &keys) const
    return value;
 }
 
-const QString8 &QMetaEnum::name() const
+const QString &QMetaEnum::name() const
 {
    return m_name;
 }
 
 // internal
-void QMetaEnum::setData(QMap<QString8, int> valueMap)
+void QMetaEnum::setData(QMap<QString, int> valueMap)
 {
    m_data = valueMap;
 }
 
-const QString8 &QMetaEnum::scope() const
+const QString &QMetaEnum::scope() const
 {
    return m_scope;
 }
@@ -126,7 +126,7 @@ int QMetaEnum::value(int index) const
    return elem.value();
 }
 
-const QString8 &QMetaEnum::valueToKey(int value) const
+const QString &QMetaEnum::valueToKey(int value) const
 {
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 
@@ -135,14 +135,14 @@ const QString8 &QMetaEnum::valueToKey(int value) const
       }
    }
 
-   static const QString8 retval;
+   static const QString retval;
 
    return retval;
 }
 
-QString8 QMetaEnum::valueToKeys(int value) const
+QString QMetaEnum::valueToKeys(int value) const
 {
-   QString8 keys;
+   QString keys;
 
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 

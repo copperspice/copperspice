@@ -123,7 +123,7 @@
 #include <qstring16.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
-#include <qstringview8.h>
+#include <qstringview.h>
 #include <qtextboundaryfinder.h>
 #include <qtimeline.h>
 #include <qvarlengtharray.h>

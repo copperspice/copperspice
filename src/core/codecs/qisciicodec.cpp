@@ -148,7 +148,7 @@ static const uchar uni_to_iscii_pairs[] = {
    0x64, 0x64  // 0x965
 };
 
-QByteArray QIsciiCodec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QIsciiCodec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    char replacement = '?';
    bool halant      = false;

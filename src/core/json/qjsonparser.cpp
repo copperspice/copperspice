@@ -96,7 +96,7 @@ QString QJsonParseError::errorString() const
    return sz;
 }
 
-QJsonParser::QJsonParser(QStringView8 data)
+QJsonParser::QJsonParser(QStringView data)
    : m_data(data), nestingLevel(0), lastError(QJsonParseError::NoError)
 {
 }
@@ -368,7 +368,7 @@ bool QJsonParser::parseValue(QJsonValue &value)
             return false;
          }
 
-         if (QStringView8(m_position, m_data.end()).startsWith("ull")) {
+         if (QStringView(m_position, m_data.end()).startsWith("ull")) {
             value = QJsonValue(QJsonValue::Null);
             return true;
          }
@@ -382,7 +382,7 @@ bool QJsonParser::parseValue(QJsonValue &value)
             return false;
          }
 
-         if (QStringView8(m_position, m_data.end()).startsWith("rue")) {
+         if (QStringView(m_position, m_data.end()).startsWith("rue")) {
             value = QJsonValue(true);
             return true;
          }
@@ -396,7 +396,7 @@ bool QJsonParser::parseValue(QJsonValue &value)
             return false;
          }
 
-         if (QStringView8(m_position, m_data.end()).startsWith("alse")) {
+         if (QStringView(m_position, m_data.end()).startsWith("alse")) {
             value = QJsonValue(false);
             return true;
          }
@@ -467,7 +467,7 @@ bool QJsonParser::parseNumber(QJsonValue &value)
    }
 
    bool ok;
-   double retval = QStringParser::toDouble(QStringView8(start, m_position), &ok);
+   double retval = QStringParser::toDouble(QStringView(start, m_position), &ok);
 
    if (m_position == m_data.end()) {
       lastError = QJsonParseError::TerminationByNumber;

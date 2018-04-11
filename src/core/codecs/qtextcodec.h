@@ -104,7 +104,7 @@ class Q_CORE_EXPORT QTextCodec
       return convertFromUnicode(str, state);
    }
 
-   QByteArray fromUnicode(const QStringView8 &str, ConverterState *state = nullptr) const {
+   QByteArray fromUnicode(const QStringView &str, ConverterState *state = nullptr) const {
       return convertFromUnicode(str, state);
    }
 
@@ -117,7 +117,7 @@ class Q_CORE_EXPORT QTextCodec
 
  protected:
    virtual QString convertToUnicode(const char *in, int len, ConverterState *state) const = 0;
-   virtual QByteArray convertFromUnicode(const QStringView8 &str, ConverterState *state) const = 0;
+   virtual QByteArray convertFromUnicode(const QStringView &str, ConverterState *state) const = 0;
 
    QTextCodec();
    virtual ~QTextCodec();

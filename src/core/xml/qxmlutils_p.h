@@ -36,10 +36,10 @@ class Q_CORE_EXPORT QXmlUtils
    static bool isNameChar(const QChar c);
    static bool isLetter(const QChar c);
 
-   static bool isNCName(const QStringView8 &ncName);
+   static bool isNCName(const QStringView &ncName);
 
    static inline bool isNCName(const QString &ncName) {
-      return isNCName(QStringView8(ncName));
+      return isNCName(QStringView(ncName));
    }
 
    static bool isPublicID(const QString &candidate);

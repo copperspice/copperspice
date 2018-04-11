@@ -317,7 +317,7 @@ static bool setByteOrder(iconv_t cd)
    return true;
 }
 
-QByteArray QIconvCodec::convertFromUnicode(const QStringView8 &str, ConverterState *convState) const
+QByteArray QIconvCodec::convertFromUnicode(const QStringView &str, ConverterState *convState) const
 {
    char *inBytes;
    char *outBytes;

@@ -27,7 +27,7 @@
 #include <qdatastream.h>
 #include <qlist.h>
 #include <qregularexpression.h>
-#include <qstring8.h>
+#include <qstring.h>
 
 using QStringListIterator        = QListIterator<QString>;
 using QMutableStringListIterator = QMutableListIterator<QString>;

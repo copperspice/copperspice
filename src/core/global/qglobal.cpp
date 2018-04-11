@@ -27,7 +27,7 @@
 #include <qglobal.h>
 #include <qlog.h>
 #include <qbytearray.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qscopedarraypointer.h>
 #include <qsystemlibrary_p.h>
 #include <qthreadstorage.h>

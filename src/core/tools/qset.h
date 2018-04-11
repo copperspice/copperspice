@@ -369,7 +369,6 @@ template <typename T>
 QList<T> QSet<T>::toList() const
 {
    QList<T> result;
-   result.reserve(size());
 
    for (const auto &item : m_data) {
       result.append(item);

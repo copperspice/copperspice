@@ -23,7 +23,7 @@
 #ifndef QSYSTEMSEMAPHORE_H
 #define QSYSTEMSEMAPHORE_H
 
-#include <qstring8.h>
+#include <qstring.h>
 #include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE

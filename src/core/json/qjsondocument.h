@@ -94,7 +94,7 @@ class Q_CORE_EXPORT QJsonDocument
    QString toJson(JsonFormat format = Indented) const;
 
    //
-   static QJsonDocument fromJson(QStringView8 json, QJsonParseError *error = nullptr);
+   static QJsonDocument fromJson(QStringView json, QJsonParseError *error = nullptr);
    static QJsonDocument fromJson(const QByteArray &json, QJsonParseError *error = nullptr);
    static QJsonDocument fromVariant(const QVariant &variant);
 

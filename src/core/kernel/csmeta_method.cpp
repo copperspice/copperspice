@@ -24,7 +24,7 @@
 #include <csmeta.h>
 #include <qmetaobject.h>
 
-QMetaMethod::QMetaMethod(const QString8 &typeName, const QString8 &signature, std::vector<QString8> paramNames,
+QMetaMethod::QMetaMethod(const QString &typeName, const QString &signature, std::vector<QString> paramNames,
                   QMetaMethod::Access access, QMetaMethod::MethodType methodType,
                   QMetaMethod::Attributes attributes, QMetaObject *obj)
    : m_typeName(typeName), m_signature(signature), m_paramNames(paramNames.begin(), paramNames.end()),
@@ -98,9 +98,9 @@ QMetaMethod::MethodType QMetaMethod::methodType() const
    return m_methodType;
 }
 
-const QString8 QMetaMethod::name() const
+const QString QMetaMethod::name() const
 {
-   QString8 retval = m_signature;
+   QString retval = m_signature;
 
    int pos = m_signature.indexOf("(");
    retval  = m_signature.left(pos);
@@ -115,24 +115,24 @@ int QMetaMethod::parameterCount() const
 
 int QMetaMethod::parameterType(int index) const
 {
-   QList<QString8> types = parameterTypes();
-   QString8 typeName = types[index];
+   QList<QString> types = parameterTypes();
+   QString typeName = types[index];
 
    int retval = QMetaType::type(typeName);
 
    return retval;
 }
 
-QList<QString8> QMetaMethod::parameterNames() const
+QList<QString> QMetaMethod::parameterNames() const
 {
    return m_paramNames;
 }
 
-QList<QString8> QMetaMethod::parameterTypes() const
+QList<QString> QMetaMethod::parameterTypes() const
 {
-   QList<QString8> retval;
+   QList<QString> retval;
 
-   QString8::const_iterator iter = m_signature.begin();
+   QString::const_iterator iter = m_signature.begin();
    QChar32 letter;
 
    while (iter != m_signature.end())  {
@@ -147,7 +147,7 @@ QList<QString8> QMetaMethod::parameterTypes() const
 
    ++iter;
 
-   QString8 word;
+   QString word;
 
    int angleLevel    = 0;
    int bracketLevel  = 0;
@@ -210,7 +210,7 @@ void QMetaMethod::setBentoBox(const CSBentoAbstract *method)
    m_bento = method;
 }
 
-const QString8 &QMetaMethod::methodSignature() const
+const QString &QMetaMethod::methodSignature() const
 {
    return m_signature;
 }
@@ -220,17 +220,17 @@ void QMetaMethod::setRevision(int revision)
    m_revision = revision;
 }
 
-void QMetaMethod::setTag(const QString8 &data)
+void QMetaMethod::setTag(const QString &data)
 {
    m_tag = data;
 }
 
-const QString8 &QMetaMethod::tag() const
+const QString &QMetaMethod::tag() const
 {
    return m_tag;
 }
 
-const QString8 &QMetaMethod::typeName() const
+const QString &QMetaMethod::typeName() const
 {
    return m_typeName;
 }

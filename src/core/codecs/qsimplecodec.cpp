@@ -773,7 +773,7 @@ QString QSimpleTextCodec::convertToUnicode(const char *chars, int len, Converter
    return retval;
 }
 
-QByteArray QSimpleTextCodec::convertFromUnicode(const QStringView8 &str, ConverterState *state) const
+QByteArray QSimpleTextCodec::convertFromUnicode(const QStringView &str, ConverterState *state) const
 {
    const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
    int invalid = 0;

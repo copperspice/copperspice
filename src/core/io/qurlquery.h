@@ -209,7 +209,6 @@ inline QList<QPair<QByteArray, QByteArray> > QUrl::encodedQueryItems() const
    QList<QPair<QString, QString> >::ConstIterator it = items.constBegin();
    QList<QPair<QByteArray, QByteArray> > result;
 
-   result.reserve(items.size());
    for ( ; it != items.constEnd(); ++it) {
       result << qMakePair(it->first.toLatin1(), it->second.toLatin1());
    }
@@ -220,7 +219,6 @@ inline QList<QByteArray> QUrl::allEncodedQueryItemValues(const QByteArray &key) 
 {
    QStringList items = QUrlQuery(*this).allQueryItemValues(fromEncodedComponent_helper(key), QUrl::FullyEncoded);
    QList<QByteArray> result;
-   result.reserve(items.size());
 
    for (const QString &item : items) {
       result << item.toLatin1();

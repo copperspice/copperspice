@@ -39,7 +39,7 @@ class QObject;
 class QMetaObject;
 
 template<class T1>
-const QString8 &cs_typeName();
+const QString &cs_typeName();
 
 // csArgument
 template <typename T>
@@ -47,14 +47,14 @@ class CSArgument
 {
  public:
    CSArgument(const T &data);
-   CSArgument(const T &data, const QString8 &typeName);
+   CSArgument(const T &data, const QString &typeName);
 
    T getData() const;
-   const QString8 &getTypeName() const;
+   const QString &getTypeName() const;
 
  private:
    T m_data;
-   QString8 m_typeName;
+   QString m_typeName;
 };
 
 template <typename T>
@@ -64,7 +64,7 @@ CSArgument<T>::CSArgument(const T &data)
 }
 
 template <typename T>
-CSArgument<T>::CSArgument(const T &data, const QString8 &typeName)
+CSArgument<T>::CSArgument(const T &data, const QString &typeName)
    : m_data(data), m_typeName(typeName)
 {
 }
@@ -76,27 +76,27 @@ T CSArgument<T>::getData() const
 }
 
 template <typename T>
-const QString8 &CSArgument<T>::getTypeName() const
+const QString &CSArgument<T>::getTypeName() const
 {
    return m_typeName;
 }
 
-inline const QString8 &cs_argName()
+inline const QString &cs_argName()
 {
-   static QString8 retval("");
+   static QString retval("");
    return retval;
 }
 
 template <typename T>
-const QString8 &cs_argName(const CSArgument<T> &data)
+const QString &cs_argName(const CSArgument<T> &data)
 {
    return data.getTypeName();
 }
 
 template<class T1, class T2, class ...Ts>
-const QString8 &cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &data2, const CSArgument<Ts> &... dataX)
+const QString &cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &data2, const CSArgument<Ts> &... dataX)
 {
-   static thread_local QString8 argName;
+   static thread_local QString argName;
    argName = cs_argName(data1) + "," + cs_argName(data2, dataX...);
 
    return argName;

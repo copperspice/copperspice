@@ -13,8 +13,8 @@ CORE_PUBLIC_INCLUDES += \
 	QXmlStreamNotationDeclaration \
 	QXmlStreamNotationDeclarations \
 	QXmlStreamReader \
-	QXmlStreamStringRef \
-	QXmlStreamWriter
+	QXmlStreamWriter \
+	QXmlStream
 
 CORE_XML_INCLUDES = \
 	qxmlstreamattribute.h \
@@ -27,7 +27,6 @@ CORE_XML_INCLUDES = \
 	qxmlstreamnotationdeclaration.h \
 	qxmlstreamnotationdeclarations.h \
 	qxmlstreamreader.h \
-	qxmlstreamstringref.h \
 	qxmlstreamwriter.h \
 	qxmlstream.h
 
