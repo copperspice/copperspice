@@ -327,6 +327,15 @@ class Q_CORE_EXPORT QStringParser
       static QList<T> split(const T &str, const T &separator, SplitBehavior behavior = KeepEmptyParts,
                   Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
+#if defined (CS_DOXYPRESS)
+      template <typename T>
+      static QList<T> split(const T &str, const QRegularExpression &separator, SplitBehavior behavior = KeepEmptyParts);
+#else
+      template <typename T>
+      static QList<T> split(const T &str, const Cs::QRegularExpression<T> &separator, SplitBehavior behavior = KeepEmptyParts);
+
+#endif
+
       //
       template <typename R, typename T = QString8>
       static R toInteger(const T &str, bool *ok = nullptr, int base = 10)
@@ -822,5 +831,15 @@ QList<T> QStringParser::split(const T &str, const T &separator, SplitBehavior be
 
    return retval;
 }
+
+template <typename T>
+QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &separator, SplitBehavior behavior)
+{
+   QList<T> retval;
+
+
+   return retval;
+}
+
 
 #endif

@@ -661,7 +661,7 @@ QString16 QString16::fromStdWString(const std::wstring &str, size_type numOfChar
       }
    }
 
-   return QString16();
+   return retval;
 }
 
 QString16 QString16::fromStdString(const std::string &str, size_type numOfChars)
@@ -1244,6 +1244,11 @@ QString16 QString16::simplified() const &
       ++first_iter;
    }
 
+   if (first_iter == last_iter)  {
+      // string was all whitespace
+      return retval;
+   }
+
    --last_iter;
 
    while (first_iter != last_iter) {
@@ -1298,6 +1303,11 @@ QString16 QString16::simplified() &&
       }
 
       ++first_iter;
+   }
+
+   if (first_iter == last_iter)  {
+      // string was all whitespace
+      return retval;
    }
 
    --last_iter;

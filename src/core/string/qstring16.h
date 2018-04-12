@@ -819,6 +819,12 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return SP::split(*this, separator, args...);
       }
 
+      template <typename SP = QStringParser, typename ...Ts>
+      auto split(const QRegularExpression16 &separator, Ts... args) const
+      {
+         return SP::split(*this, separator, args...);
+      }
+
       template <typename R, typename SP = QStringParser>
       R toInteger(bool *ok = nullptr, int base = 10) const
       {

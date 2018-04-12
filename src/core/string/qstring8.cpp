@@ -666,7 +666,7 @@ QString8 QString8::fromStdWString(const std::wstring &str, size_type numOfChars)
       }
    }
 
-   return QString8();
+   return retval;
 }
 
 QString8 QString8::fromStdString(const std::string &str, size_type numOfChars)
@@ -1249,6 +1249,11 @@ QString8 QString8::simplified() const &
       ++first_iter;
    }
 
+   if (first_iter == last_iter)  {
+      // string was all whitespace
+      return retval;
+   }
+
    --last_iter;
 
    while (first_iter != last_iter) {
@@ -1303,6 +1308,11 @@ QString8 QString8::simplified() &&
       }
 
       ++first_iter;
+   }
+
+   if (first_iter == last_iter)  {
+      // string was all whitespace
+      return retval;
    }
 
    --last_iter;

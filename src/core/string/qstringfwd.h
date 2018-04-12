@@ -33,7 +33,9 @@ using QString       = QString8;
 using QLatin1Char   = QChar32;
 using QLatin1String = QString8;
 
+#if ! defined (CS_DOXYPRESS)
 namespace Cs {
+#endif
 
 template <typename S>
 class QRegularExpression;
@@ -44,7 +46,9 @@ class QRegularExpressionMatch;
 template <typename S>
 class QStringView;
 
+#if ! defined (CS_DOXYPRESS)
 }
+#endif
 
 using QRegularExpression        = Cs::QRegularExpression<QString8>;
 using QRegularExpression8       = Cs::QRegularExpression<QString8>;
@@ -54,7 +58,10 @@ using QRegularExpressionMatch   = Cs::QRegularExpressionMatch<QString8>;
 using QRegularExpressionMatch8  = Cs::QRegularExpressionMatch<QString8>;
 using QRegularExpressionMatch16 = Cs::QRegularExpressionMatch<QString16>;
 
+#if ! defined (CS_DOXYPRESS)
 using QStringView    = Cs::QStringView<QString8>;
+#endif
+
 using QStringView8   = Cs::QStringView<QString8>;
 using QStringView16  = Cs::QStringView<QString16>;
 

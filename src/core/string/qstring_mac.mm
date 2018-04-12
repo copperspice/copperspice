@@ -20,7 +20,7 @@
 *
 ***********************************************************************/
 
-#include <qstring8.h>
+#include <qstring.h>
 
 #import <Foundation/Foundation.h>
 
