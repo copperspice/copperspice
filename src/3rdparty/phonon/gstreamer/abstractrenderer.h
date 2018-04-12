@@ -23,18 +23,19 @@
 #ifndef GSTREAMER_ABSTRACTRENDERER_H
 #define GSTREAMER_ABSTRACTRENDERER_H
 
-#include "backend.h"
-#include "common.h"
-#include "medianode.h"
+#include <gstreamer/backend.h>
+#include <gstreamer/common.h>
+#include <gstreamer/medianode.h>
 #include <phonon/videowidget.h>
+#include <qstringfwd.h>
 
 #ifndef QT_NO_PHONON_VIDEO
 
 QT_BEGIN_NAMESPACE
 
-class QString;
 namespace Phonon
 {
+
 namespace Gstreamer
 {
 

@@ -28,22 +28,19 @@
 #define PHONON_EFFECT_H
 
 #include "phonondefs.h"
-#include <QtCore/QObject>
+#include <QObject>
 #include "objectdescription.h"
 #include "medianode.h"
-
-QT_BEGIN_NAMESPACE
+#include <qcontainerfwd.h>
+#include <qstringfwd.h>
 
 #ifndef QT_NO_PHONON_EFFECT
-
-class QString;
-template<class T> class QList;
 
 namespace Phonon
 {
     class EffectParameter;
     class EffectPrivate;
-   
+
     class PHONON_EXPORT Effect : public QObject, public MediaNode
     {
         PHN_CS_OBJECT(Effect)
@@ -92,8 +89,6 @@ namespace Phonon
 } //namespace Phonon
 
 #endif // QT_NO_EFFECT
-
-QT_END_NAMESPACE
 
 #endif // PHONON_EFFECT_H
 

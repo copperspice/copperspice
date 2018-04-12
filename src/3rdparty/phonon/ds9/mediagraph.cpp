@@ -1019,35 +1019,52 @@ namespace Phonon
         {
             QMultiMap<QString, QString> ret;
             ComPointer<IAMMediaContent> mediaContent(m_demux, IID_IAMMediaContent);
+
             if (mediaContent) {
-                //let's get the meta data
+                // get the meta data
                 BSTR str;
+
                 HRESULT hr = mediaContent->get_AuthorName(&str);
+                std::wstring tmp(str);
+
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("ARTIST"), QString::fromWCharArray(str));
+                    ret.insert("ARTIST", QString::fromStdWString(tmp));
                     SysFreeString(str);
                 }
+
                 hr = mediaContent->get_Title(&str);
+                tmp = str;
+
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("TITLE"), QString::fromWCharArray(str));
+                    ret.insert("TITLE", QString::fromStdWString(tmp));
                     SysFreeString(str);
                 }
+
                 hr = mediaContent->get_Description(&str);
+                tmp = str;
+
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromWCharArray(str));
+                    ret.insert("DESCRIPTION", QString::fromStdWString(tmp));
                     SysFreeString(str);
                 }
+
                 hr = mediaContent->get_Copyright(&str);
+                tmp = str;
+
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromWCharArray(str));
+                    ret.insert("COPYRIGHT", QString::fromStdWString(tmp));
                     SysFreeString(str);
                 }
+
                 hr = mediaContent->get_MoreInfoText(&str);
+                tmp = str;
+
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("MOREINFO"), QString::fromWCharArray(str));
+                    ret.insert("MOREINFO", QString::fromStdWString(tmp));
                     SysFreeString(str);
                 }
             }
+
             return ret;
         }
 

@@ -45,11 +45,11 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     K_D(VolumeSlider);
 
 #ifndef QT_NO_TOOLTIP
-    setToolTip(tr("Volume: %1%").arg(100));
+    setToolTip(tr("Volume: %1%").formatArg(100));
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%").arg(100));
+    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%").formatArg(100));
 #endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), this, SLOT(_k_sliderChanged(int)));
@@ -64,10 +64,10 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
 {
     K_D(VolumeSlider);
 #ifndef QT_NO_TOOLTIP
-    setToolTip(tr("Volume: %1%").arg(100));
+    setToolTip(tr("Volume: %1%").formatArg(100));
 #endif
 #ifndef QT_NO_WHATSTHIS
-    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%").arg(100));
+    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%").formatArg(100));
 #endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), this, SLOT(_k_sliderChanged(int)));
@@ -121,9 +121,9 @@ void VolumeSlider::setMaximumVolume(qreal volume)
 {
     int max = static_cast<int>(volume * 100);
     k_ptr->slider.setMaximum(max);
+
 #ifndef QT_NO_WHATSTHIS
-    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%")
-            .arg(max));
+    setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%. The rightmost is %1%").formatArg(max));
 #endif
 }
 
@@ -196,7 +196,7 @@ void VolumeSliderPrivate::_k_mutedChanged(bool muted)
         muteButton.setIcon(mutedIcon);
     } else {
 #ifndef QT_NO_TOOLTIP
-        q->setToolTip(VolumeSlider::tr("Volume: %1%").arg(static_cast<int>(output->volume() * 100.0)));
+        q->setToolTip(VolumeSlider::tr("Volume: %1%").formatArg(static_cast<int>(output->volume() * 100.0)));
 #endif
         muteButton.setIcon(volumeIcon);
     }
@@ -211,7 +211,7 @@ void VolumeSliderPrivate::_k_sliderChanged(int value)
     if (output) {
 #ifndef QT_NO_TOOLTIP
         if (!output->isMuted()) {
-           q->setToolTip(VolumeSlider::tr("Volume: %1%").arg(value));
+           q->setToolTip(VolumeSlider::tr("Volume: %1%").formatArg(value));
         }
 #endif
 

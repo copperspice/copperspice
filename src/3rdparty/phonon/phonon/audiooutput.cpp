@@ -35,16 +35,14 @@
 #include "platform_p.h"
 #include "pulsesupport.h"
 
-#include <QtCore/qmath.h>
-#include <QtCore/quuid.h>
+#include <qmath.h>
+#include <quuid.h>
 
 #define PHONON_CLASSNAME AudioOutput
 #define IFACES2 AudioOutputInterface42
 #define IFACES1 IFACES2
 #define IFACES0 AudioOutputInterface40, IFACES1
 #define PHONON_INTERFACENAME IFACES0
-
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -89,7 +87,7 @@ AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     d->init(category);
 }
 
-AudioOutput::AudioOutput(QObject *parent) 
+AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(* new AudioOutputPrivate, parent)
 {
     K_D(AudioOutput);
@@ -143,7 +141,7 @@ void AudioOutputPrivate::createBackendObject()
 
     if (m_backendObject) {
 
-      device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, 
+      device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category,
                   GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
 
       setupBackendObject();
@@ -300,13 +298,13 @@ void AudioOutputPrivate::setupBackendObject()
     pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
-    // if the output device is not available and the device was not explicitly set 
+    // if the output device is not available and the device was not explicitly set
     // There is no need to set the output device initially if PA is used as as we
     // know it will not work (stream doesn't exist yet) and that this will be handled by _k_deviceChanged()
 
     if (! PulseSupport::getInstance()->isActive() && ! callSetOutputDevice(this, device) && ! outputDeviceOverridden) {
         // fall back in the preference list of output devices
-        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, 
+        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category,
                   GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
 
         if (deviceList.isEmpty()) {
@@ -328,7 +326,7 @@ void AudioOutputPrivate::setupBackendObject()
         handleAutomaticDeviceChange(none, FallbackChange);
     }
 
-#endif 
+#endif
 }
 
 void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
@@ -478,7 +476,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
             const QString &text = AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name()); 
+                        "Falling back to <b>%2</b>.</html>").formatArg(device1.name()).formatArg(device2.name());
 
             Platform::notification("AudioDeviceFallback", text);
 
@@ -493,10 +491,10 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
         const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
-                "which just became available and has higher preference.</html>").arg(device2.name());
+                "which just became available and has higher preference.</html>").formatArg(device2.name());
 
         Platform::notification("AudioDeviceFallback", text,
-                QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())), q, SLOT(_k_revertFallback()));
+                QStringList(AudioOutput::tr("Revert back to device '%1'").formatArg(device1.name())), q, SLOT(_k_revertFallback()));
 #endif
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
@@ -510,14 +508,14 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         if (device1.property("available").toBool()) {
 
             const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
-                    "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
+                    "which has higher preference or is specifically configured for this stream.</html>").formatArg(device2.name());
 
             Platform::notification("AudioDeviceFallback", text,
-                    QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
+                    QStringList(AudioOutput::tr("Revert back to device '%1'").formatArg(device1.name())),
                     q, SLOT(_k_revertFallback()));
         } else {
             const QString &text = AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                    "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
+                    "Falling back to <b>%2</b>.</html>").formatArg(device1.name()).formatArg(device2.name());
 
             Platform::notification("AudioDeviceFallback", text);
         }
@@ -573,16 +571,16 @@ void AudioOutput::_k_deviceChanged(QString streamUuid,int device)
 
 } //namespace Phonon
 
-QT_END_NAMESPACE
 
+template <>
+const QString &cs_typeName_internal<Phonon::AudioOutputDevice, void>::typeName()
+{
+   static QString retval = QString("AudioOutputDevice");
+   return retval;
+}
 
-template <>  
-const char * cs_typeName_internal<Phonon::AudioOutputDevice, void>::typeName() 
-{ 
-   return "AudioOutputDevice"; 
-} 
-
-template const char *cs_typeName_internal<Phonon::AudioOutputDevice,void>::typeName();
+template
+const QString &cs_typeName_internal<Phonon::AudioOutputDevice,void>::typeName();
 
 
 #undef PHONON_CLASSNAME

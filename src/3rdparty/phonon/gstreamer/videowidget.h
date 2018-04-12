@@ -25,18 +25,18 @@
 
 #include <phonon/videowidget.h>
 #include <phonon/videowidgetinterface.h>
-#include "backend.h"
-#include "common.h"
-#include "medianode.h"
-#include "abstractrenderer.h"
-#include "videowidget.h"
+
+#include <gstreamer/backend.h>
+#include <gstreamer/common.h>
+#include <gstreamer/medianode.h>
+#include <gstreamer/abstractrenderer.h>
+#include <gstreamer/videowidget.h>
+#include <qstringfwd.h>
 #include <gst/gst.h>
 
 #ifndef QT_NO_PHONON_VIDEO
 
 QT_BEGIN_NAMESPACE
-
-class QString;
 
 namespace Phonon
 {
@@ -47,7 +47,7 @@ class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public 
 {
     GSTRM_CS_OBJECT(VideoWidget)
     CS_INTERFACES(Phonon::VideoWidgetInterface, Phonon::Gstreamer::MediaNode)
-   
+
 public:
     VideoWidget(Backend *backend, QWidget *parent = nullptr);
     ~VideoWidget();

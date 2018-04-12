@@ -28,14 +28,11 @@
 #define PHONON_PHONONNAMESPACE_H
 
 #include "phonon_export.h"
+#include <qstringfwd.h>
 
 #define PHONON_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 #define PHONON_VERSION PHONON_VERSION_CHECK(4, 4, 0)
 #define PHONON_VERSION_STR "4.4.0"
-
-QT_BEGIN_NAMESPACE
-
-class QString;
 
 namespace Phonon
 {
@@ -108,11 +105,11 @@ namespace Phonon
 
     enum State
     {
-        LoadingState,       
-        StoppedState,       
-        PlayingState,     
-        BufferingState,      
-        PausedState,      
+        LoadingState,
+        StoppedState,
+        PlayingState,
+        BufferingState,
+        PausedState,
         ErrorState
     };
 
@@ -208,9 +205,10 @@ namespace Phonon
     };
     Q_DECLARE_FLAGS(MediaStreamTypes, MediaStreamType)*/
 } // namespace Phonon
+
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaStreamTypes)
 
-QT_END_NAMESPACE
+
 
 //X class kdbgstream;
 //X #include <kdebug.h>
@@ -249,5 +247,4 @@ Q_DECLARE_METATYPE(Phonon::State)
 Q_DECLARE_METATYPE(Phonon::ErrorType)
 Q_DECLARE_METATYPE(Phonon::Category)
 
-
-#endif 
+#endif

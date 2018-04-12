@@ -23,14 +23,13 @@
 #ifndef GSTREAMER_X11RENDERER_H
 #define GSTREAMER_X11RENDERER_H
 
-#include <videowidget.h>
-#include <common.h>
-#include <QtGui/QWidget>
+#include <gstreamer/videowidget.h>
+#include <gstreamer/common.h>
+#include <qwidget.h>
 #include <gst/gst.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
-
-class QString;
 
 namespace Phonon
 {

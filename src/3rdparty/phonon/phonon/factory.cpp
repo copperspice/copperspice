@@ -53,7 +53,7 @@ namespace Phonon
 class PlatformPlugin;
 
 class FactoryPrivate : public Phonon::Factory::Sender
-{  
+{
     PHN_CS_OBJECT(FactoryPrivate)
     friend QObject *Factory::backend(bool);
 
@@ -76,8 +76,8 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QList<MediaNodePrivate *> mediaNodePrivateList;
 
     private:
-        
-#ifndef QT_NO_DBUS        
+
+#ifndef QT_NO_DBUS
         // called via DBUS when the user changes the Phonon Backend.
         PHN_CS_SLOT_1(Private,void phononBackendChanged())
         PHN_CS_SLOT_2(phononBackendChanged)
@@ -88,7 +88,7 @@ class FactoryPrivate : public Phonon::Factory::Sender
         PHN_CS_SLOT_2(objectDestroyed)
 
         PHN_CS_SLOT_1(Private,void objectDescriptionChanged(ObjectDescriptionType))
-        PHN_CS_SLOT_2(objectDescriptionChanged)                       
+        PHN_CS_SLOT_2(objectDescriptionChanged)
 };
 
 PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
@@ -121,7 +121,7 @@ bool FactoryPrivate::createBackend()
     if (f) {
         m_backendObject = f->createBackend();
     }
-#endif 
+#endif
 
     if (! m_backendObject) {
         ensureLibraryPathSet();
@@ -238,7 +238,7 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
 
     //emit capabilitiesChanged();
 
-#endif 
+#endif
 }
 
 Factory::Sender *Factory::sender()
@@ -373,7 +373,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
 
     if (! platform_plugin_env.isEmpty()) {
-        QPluginLoader pluginLoader(QString::fromLocal8Bit(platform_plugin_env.constData()));
+        QPluginLoader pluginLoader(QString::fromUtf8(platform_plugin_env));
 
         if (pluginLoader.load()) {
             m_platformPlugin = qobject_cast<PlatformPlugin *>(pluginLoader.instance());
@@ -388,8 +388,8 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     ensureLibraryPathSet();
     QDir dir;
 
-    dir.setNameFilters(! qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList(QLatin1String("kde.*")) :
-            (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList(QLatin1String("gnome.*")) : QStringList())  );
+    dir.setNameFilters(! qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList("kde.*") :
+            (! qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList("gnome.*") : QStringList())  );
 
     dir.setFilter(QDir::Files);
     const QStringList libPaths = QCoreApplication::libraryPaths();
@@ -424,9 +424,9 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
 
                 } else {
                     delete qobj;
-                    pDebug() << Q_FUNC_INFO 
-                             << dir.absolutePath() 
-                             << "exists but the platform plugin was not loadable:" 
+                    pDebug() << Q_FUNC_INFO
+                             << dir.absolutePath()
+                             << "exists but the platform plugin was not loadable:"
                              << pluginLoader.errorString();
                     pluginLoader.unload();
                 }
@@ -462,8 +462,8 @@ QObject *Factory::backend(bool createWhenNull)
         globalFactory->createBackend();
 
         // XXX: might create "reentrancy" problems:
-        // a method calls this method and is called again because the 
-        
+        // a method calls this method and is called again because the
+
         emit globalFactory->backendChanged();
     }
     return globalFactory->m_backendObject;

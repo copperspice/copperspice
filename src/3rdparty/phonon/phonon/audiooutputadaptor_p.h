@@ -23,7 +23,9 @@
 #ifndef PHONON_AUDIOOUTPUTADAPTOR_P_H
 #define PHONON_AUDIOOUTPUTADAPTOR_P_H
 
-#include <QtCore/QObject>
+#include <QObject>
+#include <qcontainerfwd.h>
+#include <qstringfwd.h>
 
 #ifndef QT_NO_DBUS
 #include <QtDBus/QtDBus>
@@ -31,9 +33,6 @@
 QT_BEGIN_NAMESPACE
 
 class QByteArray;
-template<class T> class QList;
-template<class Key, class Value> class QMap;
-class QString;
 class QStringList;
 class QVariant;
 
@@ -104,22 +103,22 @@ public:
     void setVolume(double value);
 
     PHN_CS_SLOT_1(Public, QString category())
-    PHN_CS_SLOT_2(category) 
+    PHN_CS_SLOT_2(category)
     PHN_CS_SLOT_1(Public, QString name())
-    PHN_CS_SLOT_2(name) 
+    PHN_CS_SLOT_2(name)
 
     PHN_CS_SIGNAL_1(Public, void mutedChanged(bool in0))
-    PHN_CS_SIGNAL_2(mutedChanged,in0) 
+    PHN_CS_SIGNAL_2(mutedChanged,in0)
     PHN_CS_SIGNAL_1(Public, void nameChanged(const QString & newName))
-    PHN_CS_SIGNAL_2(nameChanged,newName) 
+    PHN_CS_SIGNAL_2(nameChanged,newName)
     PHN_CS_SIGNAL_1(Public, void newOutputAvailable(const QString & service,const QString & path))
-    PHN_CS_SIGNAL_2(newOutputAvailable,service,path) 
+    PHN_CS_SIGNAL_2(newOutputAvailable,service,path)
     PHN_CS_SIGNAL_1(Public, void outputDestroyed())
-    PHN_CS_SIGNAL_2(outputDestroyed) 
+    PHN_CS_SIGNAL_2(outputDestroyed)
     PHN_CS_SIGNAL_1(Public, void outputDeviceIndexChanged(int in0))
-    PHN_CS_SIGNAL_2(outputDeviceIndexChanged,in0) 
+    PHN_CS_SIGNAL_2(outputDeviceIndexChanged,in0)
     PHN_CS_SIGNAL_1(Public, void volumeChanged(qreal in0))
-    PHN_CS_SIGNAL_2(volumeChanged,in0) 
+    PHN_CS_SIGNAL_2(volumeChanged,in0)
 };
 
 } // namespace Phonon

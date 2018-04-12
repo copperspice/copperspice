@@ -149,7 +149,7 @@ namespace Phonon
             //we create a new graph
             w.graph = Graph(CLSID_FilterGraph, IID_IGraphBuilder);
             w.url = url;
-            w.url.detach();
+
             w.id = m_currentWorkId++;
 
             m_queue.enqueue(w);
@@ -235,15 +235,16 @@ namespace Phonon
             } else if (m_currentWork.task == Render) {
 
                 if (m_currentWork.filter) {
-                    //let's render pins
+                    // let's render pins
                     const QList<OutputPin> outputs = BackendNode::pins(m_currentWork.filter, PINDIR_OUTPUT);
                     for (int i = 0; SUCCEEDED(hr) && i < outputs.count(); ++i) {
                         hr = m_currentWork.graph->Render(outputs.at(i));
                     }
 
-                } else if (!m_currentWork.url.isEmpty()) {
-                    //let's render a url (blocking call)
-                    hr = m_currentWork.graph->RenderFile(reinterpret_cast<const wchar_t *>(m_currentWork.url.utf16()), 0);
+                } else if (! m_currentWork.url.isEmpty()) {
+                    // let's render a url (blocking call)
+                    hr = m_currentWork.graph->RenderFile(&m_currentWork.url.toStdWString()[0], 0);
+
                 }
 
                 if (hr != E_ABORT) {
@@ -306,7 +307,7 @@ namespace Phonon
                 OAFilterState s;
 
                 //blocking call
-                HRESULT hr = mc->GetState(INFINITE, &s);         
+                HRESULT hr = mc->GetState(INFINITE, &s);
 
                 if (SUCCEEDED(hr)) {
                     if (s == State_Stopped) {
@@ -529,7 +530,7 @@ namespace Phonon
             for (int i = 0; i < m_videoWidgets.count(); ++i) {
                 m_videoWidgets.at(i)->setCurrentGraph(currentGraph()->index());
             }
-#endif 
+#endif
 
             emit currentSourceChanged(currentGraph()->mediaSource());
             emit metaDataChanged(currentGraph()->metadata());
@@ -750,14 +751,14 @@ namespace Phonon
         }
 
         void MediaObject::loadingFinished(MediaGraph *mg)
-        {                   
+        {
             if (mg == currentGraph()) {
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
                 //Title interface
                 m_currentTitle = 0;
                 setTitles(currentGraph()->titles());
-#endif 
+#endif
 
                 HRESULT hr = mg->renderResult();
 
@@ -841,21 +842,23 @@ namespace Phonon
             if (hr != S_OK) {
 
 #ifdef GRAPH_DEBUG
-                qWarning("An error occurred 0x%x",hr);
+                qWarning("An error occurred 0x%x", hr);
 #endif
 
-                LPAMGETERRORTEXT getErrorText = (LPAMGETERRORTEXT)QLibrary::resolve(QLatin1String("quartz"), "AMGetErrorTextW");
+                LPAMGETERRORTEXT getErrorText = (LPAMGETERRORTEXT)QLibrary::resolve("quartz", "AMGetErrorTextW");
 
-                WCHAR buffer[MAX_ERROR_TEXT_LEN];
-                if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromWCharArray(buffer);
+                std::wstring buffer(MAX_ERROR_TEXT_LEN, L'\0');
+
+                if (getErrorText && getErrorText(hr, &buffer[0], MAX_ERROR_TEXT_LEN)) {
+                    m_errorString = QString::fromStdWString(buffer);
                 } else {
-                    m_errorString = QString::fromLatin1("Unknown error");
+                    m_errorString = QString("Unknown error");
                 }
 
                 const QString comError = QString::number(uint(hr), 16);
-                if (!m_errorString.toLower().contains(comError.toLower())) {
-                    m_errorString += QString::fromLatin1(" (0x%1)").arg(comError);
+
+                if (! m_errorString.toLower().contains(comError.toLower())) {
+                    m_errorString += QString(" (0x%1)").formatArg(comError);
                 }
 
                 if (FAILED(hr)) {

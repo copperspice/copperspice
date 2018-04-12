@@ -30,11 +30,8 @@
 #include "phonon_export.h"
 #include "phonondefs.h"
 #include "abstractvideooutput.h"
-#include <QtGui/QWidget>
-
-QT_BEGIN_NAMESPACE
-
-class QString;
+#include <QWidget>
+#include <qstringfwd.h>
 
 #ifndef QT_NO_PHONON_VIDEO
 
@@ -46,38 +43,38 @@ class AbstractVideoOutput;
     {
         PHN_CS_OBJECT(VideoWidget)
         K_DECLARE_PRIVATE(VideoWidget)
-                
+
         PHN_CS_ENUM(AspectRatio)
         PHN_CS_ENUM(ScaleMode)
-        
+
         PHN_CS_PROPERTY_READ(fullScreen, isFullScreen)
         PHN_CS_PROPERTY_WRITE(fullScreen, setFullScreen)
-       
+
         PHN_CS_PROPERTY_READ(aspectRatio, aspectRatio)
         PHN_CS_PROPERTY_WRITE(aspectRatio, setAspectRatio)
-       
+
         PHN_CS_PROPERTY_READ(scaleMode, scaleMode)
         PHN_CS_PROPERTY_WRITE(scaleMode, setScaleMode)
-       
+
         PHN_CS_PROPERTY_READ(brightness, brightness)
         PHN_CS_PROPERTY_WRITE(brightness, setBrightness)
-       
+
         PHN_CS_PROPERTY_READ(contrast, contrast)
         PHN_CS_PROPERTY_WRITE(contrast, setContrast)
-       
+
         PHN_CS_PROPERTY_READ(hue, hue)
         PHN_CS_PROPERTY_WRITE(hue, setHue)
-       
+
         PHN_CS_PROPERTY_READ(saturation, saturation)
         PHN_CS_PROPERTY_WRITE(saturation, setSaturation)
 
         public:
-           
+
             enum AspectRatio
-            {              
-                AspectRatioAuto = 0,               
-                AspectRatioWidget = 1,                
-                AspectRatio4_3 = 2,                
+            {
+                AspectRatioAuto = 0,
+                AspectRatioWidget = 1,
+                AspectRatio4_3 = 2,
                 AspectRatio16_9 = 3
             };
 
@@ -85,7 +82,7 @@ class AbstractVideoOutput;
                 FitInView = 0,
                 ScaleAndCrop = 1
             };
-           
+
             VideoWidget(QWidget *parent = nullptr);
 
             AspectRatio aspectRatio() const;
@@ -100,28 +97,28 @@ class AbstractVideoOutput;
             //TODO: bar colors property
         public :
             PHN_CS_SLOT_1(Public, void setFullScreen(bool fullscreen))
-            PHN_CS_SLOT_2(setFullScreen) 
+            PHN_CS_SLOT_2(setFullScreen)
 
             PHN_CS_SLOT_1(Public, void exitFullScreen())
-            PHN_CS_SLOT_2(exitFullScreen) 
-           
+            PHN_CS_SLOT_2(exitFullScreen)
+
             PHN_CS_SLOT_1(Public, void enterFullScreen())
-            PHN_CS_SLOT_2(enterFullScreen) 
+            PHN_CS_SLOT_2(enterFullScreen)
 
             PHN_CS_SLOT_1(Public, void setAspectRatio(AspectRatio un_named_arg1))
-            PHN_CS_SLOT_2(setAspectRatio) 
+            PHN_CS_SLOT_2(setAspectRatio)
 
             PHN_CS_SLOT_1(Public, void setScaleMode(ScaleMode un_named_arg1))
-            PHN_CS_SLOT_2(setScaleMode) 
+            PHN_CS_SLOT_2(setScaleMode)
 
             PHN_CS_SLOT_1(Public, void setBrightness(qreal value))
-            PHN_CS_SLOT_2(setBrightness) 
+            PHN_CS_SLOT_2(setBrightness)
             PHN_CS_SLOT_1(Public, void setContrast(qreal value))
-            PHN_CS_SLOT_2(setContrast) 
+            PHN_CS_SLOT_2(setContrast)
             PHN_CS_SLOT_1(Public, void setHue(qreal value))
-            PHN_CS_SLOT_2(setHue) 
+            PHN_CS_SLOT_2(setHue)
             PHN_CS_SLOT_1(Public, void setSaturation(qreal value))
-            PHN_CS_SLOT_2(setSaturation) 
+            PHN_CS_SLOT_2(setSaturation)
 
         protected:
             VideoWidget(VideoWidgetPrivate &d, QWidget *parent);
@@ -133,7 +130,5 @@ class AbstractVideoOutput;
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE
 
 #endif

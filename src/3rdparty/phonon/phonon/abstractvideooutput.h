@@ -31,12 +31,9 @@
 #include "phonon_export.h"
 #include "medianode.h"
 #include <QtCore/QObject>
-
-QT_BEGIN_NAMESPACE
+#include <qstringfwd.h>
 
 #ifndef QT_NO_PHONON_VIDEO
-
-class QString;
 
 namespace Phonon
 {
@@ -60,7 +57,5 @@ namespace Experimental
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE
 
 #endif // Phonon_ABSTRACTVIDEOOUTPUTBASE_H

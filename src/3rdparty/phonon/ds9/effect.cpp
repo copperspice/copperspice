@@ -64,48 +64,57 @@ namespace Phonon
         {
             QList<Phonon::EffectParameter> ret;
             ComPointer<IMediaParamInfo> paramInfo(m_filters[0], IID_IMediaParamInfo);
+
             if (!paramInfo) {
                 return ret;
             }
+
             DWORD paramCount = 0;
             paramInfo->GetParamCount( &paramCount);
 
             for(quint32 i = 0; i < paramCount; i++) {
                 MP_PARAMINFO info;
                 HRESULT hr = paramInfo->GetParamInfo(i, &info);
+
                 Q_ASSERT(SUCCEEDED(hr));
                 WCHAR *name = 0;
                 hr = paramInfo->GetParamText(i, &name);
+
                 Q_ASSERT(SUCCEEDED(hr));
                 QVariant def, min, max;
-
                 QVariantList values;
 
-                switch(info.mpType)
-                {
+                switch(info.mpType) {
+
                 case MPT_ENUM:
                     {
                         WCHAR *current = name;
-                        current += wcslen(current) + 1; //skip the name
-                        current += wcslen(current) + 1; //skip the unit
+                        current += wcslen(current) + 1;    //skip the name
+                        current += wcslen(current) + 1;    //skip the unit
+
                         for(; *current; current += wcslen(current) + 1) {
-                            values.append( QString::fromWCharArray(current) );
+                           std::wstring tmp(current);
+                           values.append( QString::fromStdWString(tmp) );
                         }
                     }
                     //FALLTHROUGH
+
                 case MPT_INT:
                     def = int(info.mpdNeutralValue);
                     min = int(info.mpdMinValue);
                     max = int(info.mpdMaxValue);
                     break;
+
                 case MPT_FLOAT:
                     def = info.mpdNeutralValue;
                     min = info.mpdMinValue;
                     max = info.mpdMaxValue;
                     break;
+
                 case MPT_BOOL:
                     def = bool(info.mpdNeutralValue);
                     break;
+
                 case MPT_MAX:
                     //Reserved ms-help://MS.PSDKSVR2003R2.1033/directshow/htm/mp_typeenumeration.htm
                     break;
@@ -114,7 +123,9 @@ namespace Phonon
                 Phonon::EffectParameter::Hints hint = info.mopCaps == MP_CAPS_CURVE_INVSQUARE ?
                     Phonon::EffectParameter::LogarithmicHint : Phonon::EffectParameter::Hints(0);
 
-                const QString n = QString::fromWCharArray(name);
+                std::wstring tmp(name);
+                const QString n = QString::fromStdWString(tmp);
+
                 ret.append(Phonon::EffectParameter(i, n, hint, def, min, max, values));
                 ::CoTaskMemFree(name); //let's free the memory
             }

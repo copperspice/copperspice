@@ -177,7 +177,9 @@ namespace Phonon
                     while (S_OK == enumMon->Next(1, mon.pparam(), 0)) {
                         LPOLESTR str = 0;
                         mon->GetDisplayName(0, 0, &str);
-                        const QString name = QString::fromWCharArray(str);
+
+                        std::wstring tmp(str);
+                        const QString name = QString::fromStdWString(tmp);
 
                         ComPointer<IMalloc> alloc;
                         ::CoGetMalloc(1, alloc.pparam());
@@ -212,6 +214,7 @@ namespace Phonon
                     m_audioEffects.clear();
                     ComPointer<IEnumDMO> enumDMO;
                     HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
+
                     if (SUCCEEDED(hr)) {
                         CLSID clsid;
                         while (S_OK == enumDMO->Next(1, &clsid, 0, 0)) {
@@ -240,24 +243,31 @@ namespace Phonon
                 {
                     const AudioMoniker &mon = m_audioOutputs[index];
                     LPOLESTR str = 0;
-                    HRESULT hr = mon->GetDisplayName(0,0, &str);
+                    HRESULT hr   = mon->GetDisplayName(0,0, &str);
+
                     if (SUCCEEDED(hr)) {
-                        QString name = QString::fromWCharArray(str);
-                  ComPointer<IMalloc> alloc;
-                  ::CoGetMalloc(1, alloc.pparam());
+                        std::wstring tmp(str);
+                        QString name = QString::fromStdWString(tmp);
+
+                        ComPointer<IMalloc> alloc;
+
+                        ::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
                         ret["name"] = name.mid(name.indexOf('\\') + 1);
-               }
+                }
 
                 }
                 break;
+
 #ifndef QT_NO_PHONON_EFFECT
             case Phonon::EffectType:
                 {
                     WCHAR name[80]; // 80 is clearly stated in the MSDN doc
                     HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
+
                     if (SUCCEEDED(hr)) {
-                        ret["name"] = QString::fromWCharArray(name);
+                       std::wstring tmp(name);
+                       ret["name"] = QString::fromStdWString(tmp);
                     }
                 }
                 break;

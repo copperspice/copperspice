@@ -141,20 +141,21 @@ namespace Phonon
         {
             //now open the cd-drive
             QString path;
+
             if (drive.isNull()) {
                 path = QString::fromLatin1("\\\\.\\Cdrom0"); 	
             } else { 	
-                path = QString::fromLatin1("\\\\.\\%1:").arg(drive); 	
+                path = QString::fromLatin1("\\\\.\\%1:").formatArg(drive); 	
             }
 
-            m_cddrive = ::CreateFile((const wchar_t *)path.utf16(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-
+            m_cddrive = ::CreateFile(&path.toStdWString()[0], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
             memset(&m_toc, 0, sizeof(CDROM_TOC));
+
             //read the TOC
             DWORD bytesRead = 0;
             bool tocRead = ::DeviceIoControl(m_cddrive, IOCTL_CDROM_READ_TOC, 0, 0, &m_toc, sizeof(CDROM_TOC), &bytesRead, 0);
 
-            if (!tocRead) {
+            if (! tocRead) {
                 qWarning("unable to load the TOC from the CD");
                 return;
             }

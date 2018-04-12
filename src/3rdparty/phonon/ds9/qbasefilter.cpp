@@ -27,7 +27,8 @@
 #include "qbasefilter.h"
 #include "qpin.h"
 
-#include <QtCore/QMutex>
+#include <qmutex.h>
+#include <qstring16.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -188,7 +189,7 @@ namespace Phonon
         {
             return m_state;
         }
-        
+
         IFilterGraph *QBaseFilter::graph() const
         {
             return m_graph;
@@ -223,7 +224,7 @@ namespace Phonon
                     *out = static_cast<IMediaSeeking*>(this);
                 } else if (iid == IID_IMediaPosition ||iid == IID_IDispatch) {
                     *out = static_cast<IMediaPosition*>(this);
-                } 
+                }
             } else {
                 *out = 0;
                 hr = E_NOINTERFACE;
@@ -345,26 +346,34 @@ namespace Phonon
         STDMETHODIMP QBaseFilter::QueryFilterInfo(FILTER_INFO *info )
         {
             QMutexLocker locker(&m_mutex);
-            if (!info) {
+
+            if (! info) {
                 return E_POINTER;
             }
+
             info->pGraph = m_graph;
+
             if (m_graph) {
                 m_graph->AddRef();
             }
-            memcpy(info->achName, m_name.utf16(), qMin(MAX_FILTER_NAME, m_name.length()+1) *2);
+
+            QString16 tmp = m_name.toUtf16();
+            memcpy(info->achName,tmp.constData(), qMin(MAX_FILTER_NAME, m_name.size_storage() + 1) * 2);
+
             return S_OK;
         }
 
         STDMETHODIMP QBaseFilter::JoinFilterGraph(IFilterGraph *graph, LPCWSTR name)
         {
             QMutexLocker locker(&m_mutex);
+
             m_graph = graph;
-            m_name = QString::fromWCharArray(name);
+            m_name  = QString::fromStdWString(std::wstring(name));
+
             return S_OK;
         }
 
-        STDMETHODIMP QBaseFilter::EnumPins( IEnumPins **ep)
+        STDMETHODIMP QBaseFilter::EnumPins(IEnumPins **ep)
         {
             if (!ep) {
                 return E_POINTER;
@@ -502,7 +511,7 @@ namespace Phonon
             return hr;
         }
 
-        STDMETHODIMP QBaseFilter::ConvertTimeFormat(LONGLONG *pTarget, 
+        STDMETHODIMP QBaseFilter::ConvertTimeFormat(LONGLONG *pTarget,
             const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat)
         {
             IMediaSeeking *ms = getUpstreamMediaSeeking();
@@ -756,7 +765,7 @@ namespace Phonon
             return hr;
         }
 
-        STDMETHODIMP QBaseFilter::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, 
+        STDMETHODIMP QBaseFilter::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams,
             VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
         {
             IMediaPosition *mp = getUpstreamMediaPosition();

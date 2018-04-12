@@ -23,8 +23,9 @@
 #ifndef GSTREAMER_WIDGETRENDERER_H
 #define GSTREAMER_WIDGETRENDERER_H
 
-#include "videowidget.h"
-#include "common.h"
+#include <gstreamer/common.h>
+#include <gstreamer/videowidget.h>
+#include <qstringfwd.h>
 
 #ifndef QT_NO_OPENGL
 #include <QtOpenGL/QGLFormat>
@@ -32,9 +33,8 @@
 #endif
 
 #ifndef QT_NO_PHONON_VIDEO
-QT_BEGIN_NAMESPACE
 
-class QString;
+QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
