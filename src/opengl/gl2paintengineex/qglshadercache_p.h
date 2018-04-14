@@ -23,13 +23,7 @@
 #ifndef QGLSHADERCACHE_P_H
 #define QGLSHADERCACHE_P_H
 
-#include <QtCore/qglobal.h>
-
-#if defined(QT_MEEGO_EXPERIMENTAL_SHADERCACHE) && defined(QT_OPENGL_ES_2)
-#  include "qglshadercache_meego_p.h"
-#else
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
 
 class QGLShaderProgram;
 class QGLContext;
@@ -37,7 +31,7 @@ class QGLContext;
 class CachedShader
 {
  public:
-   inline CachedShader(const QByteArray &, const QByteArray &) {
+   inline CachedShader(const QString &, const QString &) {
    }
 
    inline bool isCached() {
@@ -53,8 +47,4 @@ class CachedShader
    }
 };
 
-QT_END_NAMESPACE
-
-
-#endif
 #endif

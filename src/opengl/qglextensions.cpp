@@ -20,34 +20,31 @@
 *
 ***********************************************************************/
 
-#include "qgl_p.h"
+#include <qgl_p.h>
 #include <qglframebufferobject.h>
 
-QT_BEGIN_NAMESPACE
-
-static void *qt_gl_getProcAddress_search
-(QGLContext *ctx, const char *name1, const char *name2,
- const char *name3, const char *name4)
+static void *qt_gl_getProcAddress_search(QGLContext *ctx, const QString &name1, const QString &name2,
+                  const QString &name3, const QString &name4)
 {
    void *addr;
 
-   addr = ctx->getProcAddress(QLatin1String(name1));
+   addr = ctx->getProcAddress(name1);
    if (addr) {
       return addr;
    }
 
-   addr = ctx->getProcAddress(QLatin1String(name2));
+   addr = ctx->getProcAddress(name2);
    if (addr) {
       return addr;
    }
 
-   addr = ctx->getProcAddress(QLatin1String(name3));
+   addr = ctx->getProcAddress(name3);
    if (addr) {
       return addr;
    }
 
-   if (name4) {
-      return ctx->getProcAddress(QLatin1String(name4));
+   if (! name4.isEmpty()) {
+      return ctx->getProcAddress(name4);
    }
 
    return 0;
@@ -56,23 +53,33 @@ static void *qt_gl_getProcAddress_search
 // Search for an extension function starting with the most likely
 // function suffix first, and then trying the other variations.
 #if defined(QT_OPENGL_ES)
+
 #define qt_gl_getProcAddress(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name, name "OES", name "EXT", name "ARB")
+
 #define qt_gl_getProcAddressEXT(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "OES", name, name "EXT", name "ARB")
+
 #define qt_gl_getProcAddressARB(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "OES", name, name "ARB", name "EXT")
+
 #define qt_gl_getProcAddressOES(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "OES", name, name "EXT", name "ARB")
+
 #else
+
 #define qt_gl_getProcAddress(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name, name "ARB", name "EXT", 0)
+
 #define qt_gl_getProcAddressEXT(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "EXT", name, name "ARB", 0)
+
 #define qt_gl_getProcAddressARB(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "ARB", name, name "EXT", 0)
+
 #define qt_gl_getProcAddressOES(ctx,name) \
     qt_gl_getProcAddress_search((ctx), name "OES", name, name "EXT", name "ARB")
+
 #endif
 
 bool qt_resolve_framebufferobject_extensions(QGLContext *ctx)
@@ -82,7 +89,9 @@ bool qt_resolve_framebufferobject_extensions(QGLContext *ctx)
    if (have_resolved) {
       return true;
    }
+
    have_resolved = true;
+
 #else
    if (glIsRenderbuffer != 0) {
       return true;
@@ -95,31 +104,37 @@ bool qt_resolve_framebufferobject_extensions(QGLContext *ctx)
       return false;
    }
 
-
    glBlitFramebufferEXT = (_glBlitFramebufferEXT) qt_gl_getProcAddressEXT(ctx, "glBlitFramebuffer");
    glRenderbufferStorageMultisampleEXT =
-      (_glRenderbufferStorageMultisampleEXT) qt_gl_getProcAddressEXT(ctx, "glRenderbufferStorageMultisample");
+       (_glRenderbufferStorageMultisampleEXT) qt_gl_getProcAddressEXT(ctx, "glRenderbufferStorageMultisample");
 
-#if !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_OPENGL_ES_2)
    glIsRenderbuffer = (_glIsRenderbuffer) qt_gl_getProcAddressEXT(ctx, "glIsRenderbuffer");
+
    if (!glIsRenderbuffer) {
       return false;   // Not much point searching for anything else.
    }
-   glBindRenderbuffer = (_glBindRenderbuffer) qt_gl_getProcAddressEXT(ctx, "glBindRenderbuffer");
+
+   glBindRenderbuffer    = (_glBindRenderbuffer) qt_gl_getProcAddressEXT(ctx, "glBindRenderbuffer");
    glDeleteRenderbuffers = (_glDeleteRenderbuffers) qt_gl_getProcAddressEXT(ctx, "glDeleteRenderbuffers");
-   glGenRenderbuffers = (_glGenRenderbuffers) qt_gl_getProcAddressEXT(ctx, "glGenRenderbuffers");
+   glGenRenderbuffers    = (_glGenRenderbuffers) qt_gl_getProcAddressEXT(ctx, "glGenRenderbuffers");
    glRenderbufferStorage = (_glRenderbufferStorage) qt_gl_getProcAddressEXT(ctx, "glRenderbufferStorage");
+
    glGetRenderbufferParameteriv =
       (_glGetRenderbufferParameteriv) qt_gl_getProcAddressEXT(ctx, "glGetRenderbufferParameteriv");
-   glIsFramebuffer = (_glIsFramebuffer) qt_gl_getProcAddressEXT(ctx, "glIsFramebuffer");
-   glBindFramebuffer = (_glBindFramebuffer) qt_gl_getProcAddressEXT(ctx, "glBindFramebuffer");
+
+   glIsFramebuffer      = (_glIsFramebuffer) qt_gl_getProcAddressEXT(ctx, "glIsFramebuffer");
+   glBindFramebuffer    = (_glBindFramebuffer) qt_gl_getProcAddressEXT(ctx, "glBindFramebuffer");
    glDeleteFramebuffers = (_glDeleteFramebuffers) qt_gl_getProcAddressEXT(ctx, "glDeleteFramebuffers");
-   glGenFramebuffers = (_glGenFramebuffers) qt_gl_getProcAddressEXT(ctx, "glGenFramebuffers");
+   glGenFramebuffers    = (_glGenFramebuffers) qt_gl_getProcAddressEXT(ctx, "glGenFramebuffers");
    glCheckFramebufferStatus = (_glCheckFramebufferStatus) qt_gl_getProcAddressEXT(ctx, "glCheckFramebufferStatus");
-   glFramebufferTexture2D = (_glFramebufferTexture2D) qt_gl_getProcAddressEXT(ctx, "glFramebufferTexture2D");
+
+   glFramebufferTexture2D    = (_glFramebufferTexture2D) qt_gl_getProcAddressEXT(ctx, "glFramebufferTexture2D");
    glFramebufferRenderbuffer = (_glFramebufferRenderbuffer) qt_gl_getProcAddressEXT(ctx, "glFramebufferRenderbuffer");
+
    glGetFramebufferAttachmentParameteriv =
       (_glGetFramebufferAttachmentParameteriv) qt_gl_getProcAddressEXT(ctx, "glGetFramebufferAttachmentParameteriv");
+
    glGenerateMipmap = (_glGenerateMipmap) qt_gl_getProcAddressEXT(ctx, "glGenerateMipmap");
 
    return glIsRenderbuffer != 0;
@@ -439,4 +454,4 @@ bool qt_resolve_version_2_0_functions(QGLContext *ctx)
 #endif
 
 
-QT_END_NAMESPACE
+

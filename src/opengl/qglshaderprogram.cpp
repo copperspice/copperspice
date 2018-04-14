@@ -3210,13 +3210,14 @@ bool QGLShader::hasOpenGLShaders(ShaderType type, const QGLContext *context)
       return false;
    }
 
-   if ((type & Geometry) && !QByteArray((const char *) glGetString(GL_EXTENSIONS)).contains("GL_EXT_geometry_shader4")) {
+   const QString &extensionStr = cs_glGetString(GL_EXTENSIONS);
+
+   if ((type & Geometry) && ! extensionStr.contains("GL_EXT_geometry_shader4")) {
       return false;
    }
 
    return true;
 }
-
 
 
 #ifdef Q_MAC_COMPAT_GL_FUNCTIONS

@@ -142,10 +142,11 @@ QPixmapFilter *QGL2PaintEngineEx::pixmapFilter(int type, const QPixmapFilter *pr
       default:
          break;
    }
+
    return QPaintEngineEx::pixmapFilter(type, prototype);
 }
 
-static const char *qt_gl_colorize_filter =
+static const QString qt_gl_colorize_filter =
    "uniform lowp vec4 colorizeColor;"
    "uniform lowp float colorizeStrength;"
    "lowp vec4 customShader(lowp sampler2D src, highp vec2 srcCoords)"
@@ -532,7 +533,7 @@ bool QGLPixmapBlurFilter::processGL(QPainter *painter, const QPointF &pos, const
    return true;
 }
 
-static const char *qt_gl_drop_shadow_filter =
+static const QString qt_gl_drop_shadow_filter =
    "uniform lowp vec4 shadowColor;"
    "lowp vec4 customShader(lowp sampler2D src, highp vec2 srcCoords)"
    "{"

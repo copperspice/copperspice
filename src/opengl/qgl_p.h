@@ -73,6 +73,9 @@ class QEglContext;
 
 #include <qglextensions_p.h>
 
+QString cs_glGetString(GLenum data);
+QString cs_glGetStringI(GLenum data, GLuint index);
+
 class QGLFormatPrivate
 {
  public:
@@ -815,34 +818,19 @@ class Q_OPENGL_EXPORT QGLSharedResourceGuard
    friend class QGLContextGroup;
 };
 
-
 class QGLExtensionMatcher
 {
  public:
-   QGLExtensionMatcher(const char *str);
+   QGLExtensionMatcher(const QString &str);
    QGLExtensionMatcher();
 
-   bool match(const char *str) const {
-      int str_length = qstrlen(str);
-
-      Q_ASSERT(str);
-      Q_ASSERT(str_length > 0);
-      Q_ASSERT(str[str_length - 1] != ' ');
-
-      for (int i = 0; i < m_offsets.size(); ++i) {
-         const char *extension = m_extensions.constData() + m_offsets.at(i);
-         if (qstrncmp(extension, str, str_length) == 0 && extension[str_length] == ' ') {
-            return true;
-         }
-      }
-      return false;
+   bool match(const QString &str) const {
+      return m_extensions.contains(str);
    }
 
  private:
-   void init(const char *str);
-
-   QByteArray m_extensions;
-   QVector<int> m_offsets;
+   void init(const QString &str);
+   QStringList m_extensions;
 };
 
 

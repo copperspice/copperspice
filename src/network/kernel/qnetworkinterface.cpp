@@ -92,8 +92,9 @@ QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interface
 
 QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interfaceFromIndex(int index)
 {
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList = allInterfaces();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList     = allInterfaces();
    QList<QSharedDataPointer<QNetworkInterfacePrivate> >::ConstIterator it = interfaceList.constBegin();
+
    for ( ; it != interfaceList.constEnd(); ++it)
       if ((*it)->index == index) {
          return *it;
@@ -106,7 +107,6 @@ QList<QSharedDataPointer<QNetworkInterfacePrivate> > QNetworkInterfaceManager::a
 {
    QList<QNetworkInterfacePrivate *> list = postProcess(scan());
    QList<QSharedDataPointer<QNetworkInterfacePrivate> > result;
-   result.reserve(list.size());
 
    for (QNetworkInterfacePrivate *ptr : list) {
       result << QSharedDataPointer<QNetworkInterfacePrivate>(ptr);

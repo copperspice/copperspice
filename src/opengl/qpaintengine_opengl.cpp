@@ -1317,12 +1317,13 @@ bool QOpenGLPaintEngine::begin(QPaintDevice *pdev)
    static bool nvidia_workaround_needs_init = true;
    if (nvidia_workaround_needs_init) {
       // nvidia 9x.xx unix drivers contain a bug which requires us to
-      // call glFinish before releasing an fbo to avoid painting
-      // artifacts
-      const QByteArray versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
-      const int pos = versionString.indexOf("NVIDIA");
+      // call glFinish before releasing an fbo to avoid painting artifacts
+
+      const QString &versionStr = cs_glGetString(GL_VERSION);
+      const int pos = versionStr.indexOf("NVIDIA");
+
       if (pos >= 0) {
-         const float nvidiaDriverVersion = versionString.mid(pos + strlen("NVIDIA")).toFloat();
+         const float nvidiaDriverVersion = versionStr.mid(pos + strlen("NVIDIA")).toFloat();
          qt_nvidiaFboNeedsFinish = nvidiaDriverVersion >= 90.0 && nvidiaDriverVersion < 100.0;
       }
       nvidia_workaround_needs_init = false;
@@ -5137,6 +5138,7 @@ void QOpenGLPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    // we use a gradient pen
    if ((d->matrix.det() > 1) || (d->pen_brush_style >= Qt::LinearGradientPattern
                                  && d->pen_brush_style <= Qt::ConicalGradientPattern)) {
+
       QPaintEngine::drawTextItem(p, textItem);
       return;
    }
@@ -5145,21 +5147,22 @@ void QOpenGLPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    QVarLengthArray<QFixedPoint> positions;
    QVarLengthArray<glyph_t> glyphs;
    QTransform matrix = QTransform::fromTranslate(qRound(p.x()), qRound(p.y()));
+
    ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
    {
       QStaticTextItem staticTextItem;
-      staticTextItem.chars = const_cast<QChar *>(ti.chars);
+      staticTextItem.m_iter = ti.m_iter;
+      staticTextItem.m_end  = ti.m_end;
+
       staticTextItem.setFontEngine(ti.fontEngine);
       staticTextItem.glyphs = glyphs.data();
-      staticTextItem.numChars = ti.num_chars;
       staticTextItem.numGlyphs = glyphs.size();
       staticTextItem.glyphPositions = positions.data();
       drawStaticTextItem(&staticTextItem);
    }
 
 }
-
 
 void QOpenGLPaintEngine::drawEllipse(const QRectF &rect)
 {

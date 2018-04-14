@@ -298,9 +298,10 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
 
       TotalSnippetCount, InvalidSnippetName
    };
+
 #if defined (QT_DEBUG)
    CS_ENUM(SnippetName)
-   static QByteArray snippetNameStr(SnippetName snippetName);
+   static QString snippetNameStr(SnippetName snippetName);
 #endif
 
    /*
@@ -319,19 +320,20 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
    QGLShaderProgram *simpleProgram() {
       return simpleShaderProg;
    }
+
    QGLShaderProgram *blitProgram() {
       return blitShaderProg;
    }
+
    // Compile the program if it's not already in the cache, return the item in the cache.
    QGLEngineShaderProg *findProgramInCache(const QGLEngineShaderProg &prog);
-   // Compile the custom shader if it's not already in the cache, return the item in the cache.
 
+   // Compile the custom shader if it's not already in the cache, return the item in the cache.
    static QGLEngineSharedShaders *shadersForContext(const QGLContext *context);
 
    // Ideally, this would be static and cleanup all programs in all contexts which
    // contain the custom code. Currently it is just a hint and we rely on deleted
-   // custom shaders being cleaned up by being kicked out of the cache when it's
-   // full.
+   // custom shaders being cleaned up by being kicked out of the cache when it's full.
    void cleanupCustomStage(QGLCustomShaderStage *stage);
 
  private:
@@ -341,7 +343,7 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
    QList<QGLEngineShaderProg *> cachedPrograms;
    QList<QGLShader *> shaders;
 
-   static const char *qShaderSnippets[TotalSnippetCount];
+   static QStringList qShaderSnippets;
 };
 
 
@@ -363,17 +365,17 @@ class QGLEngineShaderProg
    QGLEngineSharedShaders::SnippetName maskFragShader;
    QGLEngineSharedShaders::SnippetName compositionFragShader;
 
-   QByteArray          customStageSource; //TODO: Decent cache key for custom stages
-   QGLShaderProgram   *program;
+   QString customStageSource;          //TODO: Decent cache key for custom stages
+   QGLShaderProgram *program;
 
    QVector<uint> uniformLocations;
 
-   bool                useTextureCoords;
-   bool                useOpacityAttribute;
-   bool                usePmvMatrixAttribute;
+   bool useTextureCoords;
+   bool useOpacityAttribute;
+   bool usePmvMatrixAttribute;
 
    bool operator==(const QGLEngineShaderProg &other) {
-      // We don't care about the program
+      // do not care about the program
       return ( mainVertexShader      == other.mainVertexShader &&
                positionVertexShader  == other.positionVertexShader &&
                mainFragShader        == other.mainFragShader &&

@@ -25,8 +25,6 @@
 
 #include <QGLShaderProgram>
 
-QT_BEGIN_NAMESPACE
-
 class QGLCustomShaderStagePrivate;
 
 class Q_OPENGL_EXPORT QGLCustomShaderStage
@@ -36,24 +34,22 @@ class Q_OPENGL_EXPORT QGLCustomShaderStage
  public:
    QGLCustomShaderStage();
    virtual ~QGLCustomShaderStage();
-   virtual void setUniforms(QGLShaderProgram *) {}
 
+   virtual void setUniforms(QGLShaderProgram *) {}
    void setUniformsDirty();
 
    bool setOnPainter(QPainter *);
    void removeFromPainter(QPainter *);
-   QByteArray source() const;
+   QString source() const;
 
    void setInactive();
 
  protected:
-   void setSource(const QByteArray &);
+   void setSource(const QString &);
 
  private:
    QGLCustomShaderStagePrivate *d_ptr;
 };
 
-
-QT_END_NAMESPACE
 
 #endif

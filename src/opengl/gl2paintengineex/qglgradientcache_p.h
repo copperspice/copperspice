@@ -25,9 +25,9 @@
 
 #include <QMultiHash>
 #include <QObject>
-#include <QtOpenGL/QtOpenGL>
+#include <QtOpenGL>
 #include <qgl_p.h>
-#include <QtCore/qmutex.h>
+#include <qmutex.h>
 
 QT_BEGIN_NAMESPACE
 

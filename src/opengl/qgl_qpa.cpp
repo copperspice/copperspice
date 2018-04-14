@@ -194,12 +194,15 @@ void QGLContext::reset()
 void QGLContext::makeCurrent()
 {
    Q_D(QGLContext);
+
    d->platformContext->makeCurrent();
 
-   if (!d->workaroundsCached) {
+   if (! d->workaroundsCached) {
       d->workaroundsCached = true;
-      const char *renderer = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
-      if (renderer && strstr(renderer, "Mali")) {
+
+      const QString &renderStr = cs_glGetString(GL_RENDERER);
+
+      if (renderStr.contains("Mali")) {
          d->workaround_brokenFBOReadBack = true;
       }
    }
@@ -224,9 +227,7 @@ void *QGLContext::getProcAddress(const QString &procName) const
    return d->platformContext->getProcAddress(procName);
 }
 
-void QGLWidget::setContext(QGLContext *context,
-                           const QGLContext *shareContext,
-                           bool deleteOldContext)
+void QGLWidget::setContext(QGLContext *context, const QGLContext *shareContext, bool deleteOldContext)
 {
    Q_D(QGLWidget);
    if (context == 0) {

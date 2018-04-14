@@ -177,13 +177,18 @@ void QGLContext::makeCurrent()
 
    if (d->eglContext->makeCurrent(d->eglSurfaceForDevice())) {
       QGLContextPrivate::setCurrentContext(this);
-      if (!d->workaroundsCached) {
+
+      if (! d->workaroundsCached) {
          d->workaroundsCached = true;
-         const char *renderer = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
-         if (!renderer) {
+
+         const QString &renderStr = cs_glGetString(GL_RENDERER);
+
+         if (renderStr.isEmpty()) {
             return;
          }
-         if ((strstr(renderer, "SGX") || strstr(renderer, "MBX"))) {
+
+         if (renderStr.contains("SGX") || renderStr.contains("MBX")) {
+
             // PowerVR MBX/SGX chips needs to clear all buffers when starting to render
             // a new frame, otherwise there will be a performance penalty to pay for each frame.
             qDebug() << "Found SGX/MBX driver, enabling FullClearOnEveryFrame";

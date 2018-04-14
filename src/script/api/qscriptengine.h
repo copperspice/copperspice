@@ -23,10 +23,10 @@
 #ifndef QSCRIPTENGINE_H
 #define QSCRIPTENGINE_H
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtCore/qobject.h>
+#include <qmetatype.h>
+#include <qvariant.h>
+#include <qsharedpointer.h>
+#include <qobject.h>
 
 #include <QtScript/qscriptvalue.h>
 #include <QtScript/qscriptcontext.h>

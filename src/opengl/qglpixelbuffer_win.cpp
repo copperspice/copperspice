@@ -248,13 +248,13 @@ bool QGLPixelBufferPrivate::init(const QSize &size, const QGLFormat &f, QGLWidge
    has_render_texture = false;
 
    // sample buffers doesn't work in conjunction with the render_texture extension
-   if (!f.sampleBuffers()) {
+   if (! f.sampleBuffers()) {
       PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
          (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
 
       if (wglGetExtensionsStringARB) {
-         QString extensions(QLatin1String(wglGetExtensionsStringARB(dc)));
-         has_render_texture = extensions.contains(QLatin1String("WGL_ARB_render_texture"));
+         QString extensions(QString::fromLatin1(wglGetExtensionsStringARB(dc)));
+         has_render_texture = extensions.contains("WGL_ARB_render_texture");
       }
    }
 
@@ -350,6 +350,7 @@ bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
    }
    PFNWGLBINDTEXIMAGEARBPROC wglBindTexImageARB =
       (PFNWGLBINDTEXIMAGEARBPROC) wglGetProcAddress("wglBindTexImageARB");
+
    if (wglBindTexImageARB) {
       glBindTexture(GL_TEXTURE_2D, texture_id);
       return wglBindTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
@@ -360,11 +361,14 @@ bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 void QGLPixelBuffer::releaseFromDynamicTexture()
 {
    Q_D(QGLPixelBuffer);
+
    if (d->invalid || !d->has_render_texture) {
       return;
    }
+
    PFNWGLRELEASETEXIMAGEARBPROC wglReleaseTexImageARB =
       (PFNWGLRELEASETEXIMAGEARBPROC) wglGetProcAddress("wglReleaseTexImageARB");
+
    if (wglReleaseTexImageARB) {
       wglReleaseTexImageARB(d->pbuf, WGL_FRONT_LEFT_ARB);
    }
@@ -374,21 +378,26 @@ bool QGLPixelBuffer::hasOpenGLPbuffers()
 {
    bool ret = false;
    QGLTemporaryContext *tmpContext = 0;
-   if (!QGLContext::currentContext()) {
+
+   if (! QGLContext::currentContext()) {
       tmpContext = new QGLTemporaryContext;
    }
+
    PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB =
       (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
+
    if (wglGetExtensionsStringARB) {
-      QString extensions(QLatin1String(wglGetExtensionsStringARB(wglGetCurrentDC())));
-      if (extensions.contains(QLatin1String("WGL_ARB_pbuffer"))
-            && extensions.contains(QLatin1String("WGL_ARB_pixel_format"))) {
+      QString extensions(QString::fromLatin1(wglGetExtensionsStringARB(wglGetCurrentDC())));
+
+      if (extensions.contains("WGL_ARB_pbuffer") && extensions.contains("WGL_ARB_pixel_format")) {
          ret = true;
       }
    }
+
    if (tmpContext) {
       delete tmpContext;
    }
+
    return ret;
 }
 

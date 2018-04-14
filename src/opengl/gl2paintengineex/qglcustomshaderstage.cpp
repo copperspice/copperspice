@@ -34,10 +34,8 @@ class QGLCustomShaderStagePrivate
       m_manager(0) {}
 
    QPointer<QGLEngineShaderManager> m_manager;
-   QByteArray              m_source;
+   QString m_source;
 };
-
-
 
 
 QGLCustomShaderStage::QGLCustomShaderStage()
@@ -99,7 +97,7 @@ void QGLCustomShaderStage::removeFromPainter(QPainter *p)
    d->m_manager = 0;
 }
 
-QByteArray QGLCustomShaderStage::source() const
+QString QGLCustomShaderStage::source() const
 {
    Q_D(const QGLCustomShaderStage);
    return d->m_source;
@@ -113,7 +111,7 @@ void QGLCustomShaderStage::setInactive()
    d->m_manager = 0;
 }
 
-void QGLCustomShaderStage::setSource(const QByteArray &s)
+void QGLCustomShaderStage::setSource(const QString &s)
 {
    Q_D(QGLCustomShaderStage);
    d->m_source = s;

@@ -23,21 +23,18 @@
 #ifndef QAUDIO_H
 #define QAUDIO_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qmetatype.h>
-
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qmetatype.h>
+#include <qstring.h>
 
 namespace QAudio {
-enum Error { NoError, OpenError, IOError, UnderrunError, FatalError };
-enum State { ActiveState, SuspendedState, StoppedState, IdleState };
-enum Mode { AudioInput, AudioOutput };
+   enum Error { NoError, OpenError, IOError, UnderrunError, FatalError };
+   enum State { ActiveState, SuspendedState, StoppedState, IdleState };
+   enum Mode  { AudioInput, AudioOutput };
 }
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(QAudio::Error)
 Q_DECLARE_METATYPE(QAudio::State)
 Q_DECLARE_METATYPE(QAudio::Mode)
 
-#endif // QAUDIO_H
+#endif

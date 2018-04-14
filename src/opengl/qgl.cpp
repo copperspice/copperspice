@@ -22,7 +22,7 @@
 
 #include "qapplication.h"
 #include "qplatformdefs.h"
-#include "qgl.h"
+#include <qgl.h>
 #include <qdebug.h>
 
 #if defined(Q_WS_X11)
@@ -77,18 +77,28 @@
 #include <qpixmapdata_gl_p.h>
 #include <qglpixelbuffer_p.h>
 #include <qimagepixmapcleanuphooks_p.h>
-#include "qcolormap.h"
-#include "qfile.h"
-#include "qlibrary.h"
+#include <qcolormap.h>
+#include <qfile.h>
+#include <qlibrary.h>
 #include <qmutex.h>
 
 #if defined(QT_OPENGL_ES) && !defined(QT_NO_EGL)
 #include <EGL/egl.h>
 #endif
 
-// #define QT_GL_CONTEXT_RESOURCE_DEBUG
+using qt_glGetStringi = const GLubyte * (APIENTRY *)(GLenum, GLuint);
 
-QT_BEGIN_NAMESPACE
+#ifndef GL_NUM_EXTENSIONS
+#define GL_NUM_EXTENSIONS 0x821D
+#endif
+
+typedef void (*_qt_pixmap_cleanup_hook_64)(qint64);
+typedef void (*_qt_image_cleanup_hook_64)(qint64);
+
+extern Q_GUI_EXPORT _qt_pixmap_cleanup_hook_64 qt_pixmap_cleanup_hook_64;
+extern Q_GUI_EXPORT _qt_image_cleanup_hook_64 qt_image_cleanup_hook_64;
+
+Q_GLOBAL_STATIC(QGLTextureCache, qt_gl_texture_cache)
 
 #if defined(Q_WS_X11) || defined(Q_OS_MAC) || defined(Q_WS_QWS) || defined(Q_WS_QPA)
 QGLExtensionFuncs QGLContextPrivate::qt_extensionFuncs;
@@ -99,11 +109,13 @@ extern const QX11Info *qt_x11Info(const QPaintDevice *pd);
 #endif
 
 struct QGLThreadContext {
+
    ~QGLThreadContext() {
       if (context) {
          context->doneCurrent();
       }
    }
+
    QGLContext *context;
 };
 
@@ -1280,6 +1292,7 @@ QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
 {
    static bool cachedDefault = false;
    static OpenGLVersionFlags defaultVersionFlags = OpenGL_Version_None;
+
    QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
    QGLTemporaryContext *tmpContext = 0;
 
@@ -1299,12 +1312,14 @@ QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
       }
    }
 
-   QString versionString(QLatin1String(reinterpret_cast<const char *>(glGetString(GL_VERSION))));
-   OpenGLVersionFlags versionFlags = qOpenGLVersionFlagsFromString(versionString);
+   const QString &versionStr = cs_glGetString(GL_VERSION);
+   OpenGLVersionFlags versionFlags = qOpenGLVersionFlagsFromString(versionStr);
+
    if (currentCtx) {
       currentCtx->d_func()->version_flags_cached = true;
       currentCtx->d_func()->version_flags = versionFlags;
    }
+
    if (tmpContext) {
       defaultVersionFlags = versionFlags;
       delete tmpContext;
@@ -1710,15 +1725,6 @@ int qt_next_power_of_two(int v)
    ++v;
    return v;
 }
-
-typedef void (*_qt_pixmap_cleanup_hook_64)(qint64);
-typedef void (*_qt_image_cleanup_hook_64)(qint64);
-
-extern Q_GUI_EXPORT _qt_pixmap_cleanup_hook_64 qt_pixmap_cleanup_hook_64;
-extern Q_GUI_EXPORT _qt_image_cleanup_hook_64 qt_image_cleanup_hook_64;
-
-
-Q_GLOBAL_STATIC(QGLTextureCache, qt_gl_texture_cache)
 
 QGLTextureCache::QGLTextureCache()
    : m_cache(64 * 1024) // cache ~64 MB worth of textures - this is not accurate though
@@ -2509,17 +2515,17 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
    // Try to use texture_from_pixmap
    const QX11Info *xinfo = qt_x11Info(paintDevice);
    if (pd->classId() == QPixmapData::X11Class && pd->pixelType() == QPixmapData::PixmapType
-         && xinfo && xinfo->screen() == pixmap.x11Info().screen()
-         && target == GL_TEXTURE_2D
+         && xinfo && xinfo->screen() == pixmap.x11Info().screen() && target == GL_TEXTURE_2D
          && QApplication::instance()->thread() == QThread::currentThread()) {
-      if (!workaround_brokenTextureFromPixmap_init) {
+
+      if (! workaround_brokenTextureFromPixmap_init) {
          workaround_brokenTextureFromPixmap_init = true;
 
-         const QByteArray versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
-         const int pos = versionString.indexOf("NVIDIA ");
+         const QString &versionStr = cs_glGetString(GL_VERSION);
+         const int pos = versionStr.indexOf("NVIDIA ");
 
          if (pos >= 0) {
-            const QByteArray nvidiaVersionString = versionString.mid(pos + strlen("NVIDIA "));
+            const QString nvidiaVersionString = versionStr.mid(pos + strlen("NVIDIA "));
 
             if (nvidiaVersionString.startsWith("195") || nvidiaVersionString.startsWith("256")) {
                workaround_brokenTextureFromPixmap = true;
@@ -2529,6 +2535,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
 
       if (!workaround_brokenTextureFromPixmap) {
          texture = bindTextureFromNativePixmap(const_cast<QPixmap *>(&pixmap), key, options);
+
          if (texture) {
             texture->options |= QGLContext::MemoryManagedBindOption;
             texture->boundPixmap = pd;
@@ -4625,42 +4632,53 @@ int QGLWidget::fontDisplayListBase(const QFont &font, int listBase)
    Q_D(QGLWidget);
    int base;
 
-   if (!d->glcx) { // this can't happen unless we run out of mem
+   if (! d->glcx) {
+      // this can not happen unless we run out of mem
       return 0;
    }
 
    // always regenerate font disp. lists for pixmaps - hw accelerated
    // contexts can't handle this otherwise
    bool regenerate = d->glcx->deviceIsPixmap();
+
 #ifndef QT_NO_FONTCONFIG
-   // font color needs to be part of the font cache key when using
-   // antialiased fonts since one set of glyphs needs to be generated
-   // for each font color
+   // font color needs to be part of the font cache key when using antialiased fonts since one
+   // set of glyphs needs to be generated for each font color
+
    QString color_key;
+
    if (font.styleStrategy() != QFont::NoAntialias) {
       GLfloat color[4];
       glGetFloatv(GL_CURRENT_COLOR, color);
-      color_key.sprintf("%f_%f_%f", color[0], color[1], color[2]);
+
+      color_key = QString("%1_%2_%3").formatArg(color[0], 0, 'f').formatArg(color[1], 0, 'f').formatArg(color[2], 0, 'f');
    }
+
    QString key = font.key() + color_key + QString::number((int) regenerate);
+
 #else
    QString key = font.key() + QString::number((int) regenerate);
 #endif
-   if (!regenerate && (d->displayListCache.find(key) != d->displayListCache.end())) {
+
+   if (! regenerate && (d->displayListCache.find(key) != d->displayListCache.end())) {
       base = d->displayListCache[key];
+
    } else {
       int maxBase = listBase - 256;
       QMap<QString, int>::ConstIterator it;
+
       for (it = d->displayListCache.constBegin(); it != d->displayListCache.constEnd(); ++it) {
          if (maxBase < it.value()) {
             maxBase = it.value();
          }
       }
+
       maxBase += 256;
       d->glcx->generateFontDisplayLists(font, maxBase);
       d->displayListCache[key] = maxBase;
       base = maxBase;
    }
+
    return base;
 #else // QT_OPENGL_ES
    Q_UNUSED(font);
@@ -5182,79 +5200,93 @@ Q_OPENGL_EXPORT QPaintEngine *qt_qgl_paint_engine()
 #endif
 }
 
-/*!
-    \internal
-
-    Returns the GL widget's paint engine. This is normally a
-    QOpenGLPaintEngine.
-*/
 QPaintEngine *QGLWidget::paintEngine() const
 {
    return qt_qgl_paint_engine();
 }
 
-typedef const GLubyte *(APIENTRY *qt_glGetStringi)(GLenum, GLuint);
-
-#ifndef GL_NUM_EXTENSIONS
-#define GL_NUM_EXTENSIONS 0x821D
-#endif
-
-QGLExtensionMatcher::QGLExtensionMatcher(const char *str)
+QGLExtensionMatcher::QGLExtensionMatcher(const QString &str)
 {
    init(str);
 }
 
+QString cs_glGetString(GLenum data)
+{
+   const GLubyte *begin = glGetString(data);
+
+   if (begin == nullptr) {
+      return QString();
+
+   } else {
+      const GLubyte *end = begin;
+
+      while (*end) {
+         ++end;
+      }
+
+      return QString(begin, end);
+   }
+}
+
+QString cs_glGetStringI(GLenum data, GLuint index)
+{
+   static qt_glGetStringi funcPtr = nullptr;
+
+   if (funcPtr == nullptr) {
+      const QGLContext *ctx = QGLContext::currentContext();
+
+      if (ctx == nullptr) {
+         return QString();
+      }
+
+      funcPtr = (qt_glGetStringi)ctx->getProcAddress("glGetStringi");
+   }
+
+   const GLubyte *begin = funcPtr(data, index);
+
+   if (begin == nullptr) {
+      return QString();
+
+   } else {
+      const GLubyte *end = begin;
+
+      while (*end) {
+         ++end;
+      }
+
+      return QString(begin, end);
+   }
+}
+
 QGLExtensionMatcher::QGLExtensionMatcher()
 {
-   const char *extensionStr = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
+   const QString &extensionStr = cs_glGetString(GL_EXTENSIONS);
 
-   if (extensionStr) {
+   if (! extensionStr.isEmpty()) {
       init(extensionStr);
+
    } else {
       // clear error state
       while (glGetError()) {}
 
-      const QGLContext *ctx = QGLContext::currentContext();
-      if (ctx) {
-         qt_glGetStringi glGetStringi = (qt_glGetStringi)ctx->getProcAddress(QLatin1String("glGetStringi"));
+      GLint numExtensions;
+      glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
 
-         GLint numExtensions;
-         glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+      for (int i = 0; i < numExtensions; ++i) {
+         const QString &extStr = cs_glGetStringI(GL_EXTENSIONS, i);
 
-         for (int i = 0; i < numExtensions; ++i) {
-            const char *str = reinterpret_cast<const char *>(glGetStringi(GL_EXTENSIONS, i));
-
-            m_offsets << m_extensions.size();
-
-            while (*str != 0) {
-               m_extensions.append(*str++);
-            }
-            m_extensions.append(' ');
+         if (! extStr.isEmpty()) {
+            m_extensions.append(extStr);
          }
       }
    }
 }
 
-void QGLExtensionMatcher::init(const char *str)
+void QGLExtensionMatcher::init(const QString &str)
 {
-   m_extensions = str;
-
-   // make sure extension string ends with a space
-   if (!m_extensions.endsWith(' ')) {
-      m_extensions.append(' ');
-   }
-
-   int index = 0;
-   int next = 0;
-   while ((next = m_extensions.indexOf(' ', index)) >= 0) {
-      m_offsets << index;
-      index = next + 1;
-   }
+   m_extensions = str.split(' ');
 }
 
-/*
-    Returns the GL extensions for the current context.
-*/
 QGLExtensions::Extensions QGLExtensions::currentContextExtensions()
 {
    QGLExtensionMatcher extensions;
@@ -5263,68 +5295,88 @@ QGLExtensions::Extensions QGLExtensions::currentContextExtensions()
    if (extensions.match("GL_ARB_texture_rectangle")) {
       glExtensions |= TextureRectangle;
    }
+
    if (extensions.match("GL_ARB_multisample")) {
       glExtensions |= SampleBuffers;
    }
+
    if (extensions.match("GL_SGIS_generate_mipmap")) {
       glExtensions |= GenerateMipmap;
    }
+
    if (extensions.match("GL_ARB_texture_compression")) {
       glExtensions |= TextureCompression;
    }
+
    if (extensions.match("GL_EXT_texture_compression_s3tc")) {
       glExtensions |= DDSTextureCompression;
    }
+
    if (extensions.match("GL_OES_compressed_ETC1_RGB8_texture")) {
       glExtensions |= ETC1TextureCompression;
    }
+
    if (extensions.match("GL_IMG_texture_compression_pvrtc")) {
       glExtensions |= PVRTCTextureCompression;
    }
+
    if (extensions.match("GL_ARB_fragment_program")) {
       glExtensions |= FragmentProgram;
    }
+
    if (extensions.match("GL_ARB_fragment_shader")) {
       glExtensions |= FragmentShader;
    }
+
    if (extensions.match("GL_ARB_shader_objects")) {
       glExtensions |= FragmentShader;
    }
+
    if (extensions.match("GL_ARB_texture_mirrored_repeat")) {
       glExtensions |= MirroredRepeat;
    }
+
    if (extensions.match("GL_EXT_framebuffer_object")) {
       glExtensions |= FramebufferObject;
    }
+
    if (extensions.match("GL_EXT_stencil_two_side")) {
       glExtensions |= StencilTwoSide;
    }
+
    if (extensions.match("GL_EXT_stencil_wrap")) {
       glExtensions |= StencilWrap;
    }
+
    if (extensions.match("GL_EXT_packed_depth_stencil")) {
       glExtensions |= PackedDepthStencil;
    }
+
    if (extensions.match("GL_NV_float_buffer")) {
       glExtensions |= NVFloatBuffer;
    }
+
    if (extensions.match("GL_ARB_pixel_buffer_object")) {
       glExtensions |= PixelBufferObject;
    }
+
    if (extensions.match("GL_IMG_texture_format_BGRA8888")
          || extensions.match("GL_EXT_texture_format_BGRA8888")) {
       glExtensions |= BGRATextureFormat;
    }
+
 #if defined(QT_OPENGL_ES_2)
    glExtensions |= FramebufferObject;
    glExtensions |= GenerateMipmap;
    glExtensions |= FragmentShader;
 #endif
+
 #if defined(QT_OPENGL_ES_1)
    if (extensions.match("GL_OES_framebuffer_object")) {
       glExtensions |= FramebufferObject;
    }
 #endif
+
 #if defined(QT_OPENGL_ES)
    if (extensions.match("GL_OES_packed_depth_stencil")) {
       glExtensions |= PackedDepthStencil;
@@ -5338,6 +5390,7 @@ QGLExtensions::Extensions QGLExtensions::currentContextExtensions()
 #else
    glExtensions |= ElementIndexUint;
 #endif
+
    if (extensions.match("GL_ARB_framebuffer_object")) {
       // ARB_framebuffer_object also includes EXT_framebuffer_blit.
       glExtensions |= FramebufferObject;
@@ -6003,4 +6056,3 @@ void QGLTextureDestroyer::freeTexture_slot(QGLContext *context, QPixmapData *bou
    glDeleteTextures(1, &id);
 }
 
-QT_END_NAMESPACE

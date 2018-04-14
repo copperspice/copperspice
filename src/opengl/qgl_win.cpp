@@ -669,21 +669,24 @@ QGLTemporaryContext::QGLTemporaryContext(bool directRendering, QWidget *parent)
    : d(new QGLTemporaryContextPrivate)
 {
    QString windowClassName = qt_getRegisteredWndClass();
-   if (parent && !parent->internalWinId()) {
+
+   if (parent && ! parent->internalWinId()) {
       parent = parent->nativeParentWidget();
    }
 
-   d->dmy_id = CreateWindow((const wchar_t *)windowClassName.utf16(),
-                            0, 0, 0, 0, 1, 1,
-                            parent ? parent->winId() : 0, 0, qWinAppInst(), 0);
+   d->dmy_id = CreateWindow(&windowClassName.toStdWString()[0], 0, 0, 0, 0, 1, 1,
+                  parent ? parent->winId() : 0, 0, qWinAppInst(), 0);
 
    d->dmy_pdc = GetDC(d->dmy_id);
+
    PIXELFORMATDESCRIPTOR dmy_pfd;
    memset(&dmy_pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+
    dmy_pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
    dmy_pfd.nVersion = 1;
    dmy_pfd.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
    dmy_pfd.iPixelType = PFD_TYPE_RGBA;
+
    if (!directRendering) {
       dmy_pfd.dwFlags |= PFD_GENERIC_FORMAT;
    }
@@ -775,11 +778,13 @@ void QGLContextPrivate::updateFormatVersion()
    const GLubyte *s = glGetString(GL_VERSION);
 
    if (!(s && s[0] >= '0' && s[0] <= '9' && s[1] == '.' && s[2] >= '0' && s[2] <= '9')) {
-      if (!s) {
+
+      if (! s) {
          qWarning("QGLContext::chooseContext(): OpenGL version string is null.");
       } else {
          qWarning("QGLContext::chooseContext(): Unexpected OpenGL version string format.");
       }
+
       glFormat.setVersion(0, 0);
       glFormat.setProfile(QGLFormat::NoProfile);
       glFormat.setOption(QGL::DeprecatedFunctions);

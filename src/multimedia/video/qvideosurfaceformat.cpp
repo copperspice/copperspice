@@ -666,7 +666,7 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
       case QVideoFrame::Format_Y16:
          typeName = QLatin1String("Format_Y16");
       default:
-         typeName = QString(QLatin1String("UserType(%1)" )).arg(int(f.pixelFormat()));
+         typeName = QString("UserType(%1)").formatArg(int(f.pixelFormat()));
    }
 
    dbg.nospace() << "QVideoSurfaceFormat(" << typeName;
@@ -677,7 +677,7 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 
    for (const QByteArray & propertyName : f.propertyNames()) {
       dbg << "\n    " << propertyName.data() << " = " << f.property(propertyName.data());
-   }   
+   }
 
    return dbg.space();
 }

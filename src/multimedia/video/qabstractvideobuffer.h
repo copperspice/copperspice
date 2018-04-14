@@ -23,7 +23,8 @@
 #ifndef QABSTRACTVIDEOBUFFER_H
 #define QABSTRACTVIDEOBUFFER_H
 
-#include <QtCore/qmetatype.h>
+#include <qmetatype.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 

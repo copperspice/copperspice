@@ -90,28 +90,35 @@ QByteArray QSslCertificate::digest(QCryptographicHash::Algorithm algorithm) cons
 }
 
 QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
-      QSsl::EncodingFormat format, QRegExp::PatternSyntax syntax)
+                  QSsl::EncodingFormat format, QPatternOptionFlags syntax)
 {
    // $, (,), *, +, ., ?, [, ,], ^, {, | and }.
    // make sure to use the same path separators on Windows and Unix like systems.
    QString sourcePath = QDir::fromNativeSeparators(path);
 
    // Find the path without the filename
-   QString pathPrefix = sourcePath.left(sourcePath.lastIndexOf(QLatin1Char('/')));
+   QString pathPrefix = sourcePath.left(sourcePath.lastIndexOf('/'));
 
    // Check if the path contains any special chars
    int pos = -1;
+
+
+// BROOM - fix this
+
+
    if (syntax == QRegExp::Wildcard) {
-      pos = pathPrefix.indexOf(QRegExp(QLatin1String("[*?[]")));
+      pos = pathPrefix.indexOf(QRegExp("[*?[]"));
+
    } else if (syntax != QRegExp::FixedString) {
-      pos = sourcePath.indexOf(QRegExp(QLatin1String("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]")));
+      pos = sourcePath.indexOf(QRegExp("[\\$\\(\\)\\*\\+\\.\\?\\[\\]\\^\\{\\}\\|]"));
    }
 
    if (pos != -1) {
       // there was a special char in the path so cut of the part containing that char.
       pathPrefix = pathPrefix.left(pos);
-      if (pathPrefix.contains(QLatin1Char('/'))) {
-         pathPrefix = pathPrefix.left(pathPrefix.lastIndexOf(QLatin1Char('/')));
+
+      if (pathPrefix.contains('/')) {
+         pathPrefix = pathPrefix.left(pathPrefix.lastIndexOf('/'));
       } else {
          pathPrefix.clear();
       }
@@ -121,18 +128,19 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
       if (QFileInfo(sourcePath).isFile()) {
          QFile file(sourcePath);
          QIODevice::OpenMode openMode = QIODevice::ReadOnly;
+
          if (format == QSsl::Pem) {
             openMode |= QIODevice::Text;
          }
-         if (file.open(openMode))
 
-         {
+         if (file.open(openMode))  {
             return QSslCertificate::fromData(file.readAll(), format);
          }
 
          return QList<QSslCertificate>();
       }
    }
+
    // Special case - if the prefix ends up being nothing, use "." instead.
    int startIndex = 0;
    if (pathPrefix.isEmpty()) {
@@ -168,7 +176,7 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path,
 QList<QSslCertificate> QSslCertificate::fromDevice(QIODevice *device, QSsl::EncodingFormat format)
 {
    if (!device) {
-      qWarning("QSslCertificate::fromDevice: cannot read from a null device");
+      qWarning("QSslCertificate::fromDevice: can not read from a null device");
       return QList<QSslCertificate>();
    }
    return fromData(device->readAll(), format);

@@ -24,7 +24,7 @@
 #include "qpaintengineex_opengl2_p.h"
 #include "qglengineshadersource_p.h"
 
-#if defined QT_OPENGL_ES_2 && !defined(QT_NO_EGL)
+#if defined QT_OPENGL_ES_2 && ! defined(QT_NO_EGL)
 #include "qeglcontext_p.h"
 #endif
 
@@ -38,11 +38,8 @@ QAtomicInt qgltextureglyphcache_serial_number = 1;
 
 QGLTextureGlyphCache::QGLTextureGlyphCache(const QGLContext *context, QFontEngineGlyphCache::Type type,
       const QTransform &matrix)
-   : QImageTextureGlyphCache(type, matrix), QGLContextGroupResourceBase()
-   , ctx(0)
-   , pex(0)
-   , m_blitProgram(0)
-   , m_filterMode(Nearest)
+   : QImageTextureGlyphCache(type, matrix), QGLContextGroupResourceBase(), ctx(0)
+   , pex(0), m_blitProgram(0), m_filterMode(Nearest)
    , m_serialNumber(qgltextureglyphcache_serial_number.fetchAndAddRelaxed(1))
 {
 #ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
@@ -332,9 +329,10 @@ void QGLTextureGlyphCache::fillTexture(const Coord &c, glyph_t glyph, QFixed sub
       // time.
 
       if (!ctx->d_ptr->workaround_brokenAlphaTexSubImage_init) {
-         // don't know which driver versions exhibit this bug, so be conservative for now
-         const QByteArray vendorString(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
-         ctx->d_ptr->workaround_brokenAlphaTexSubImage = vendorString.indexOf("NVIDIA") >= 0;
+          // do not know which driver versions exhibit this bug, so be conservative for now
+         const QString &vendorStr = cs_glGetString(GL_VENDOR);
+
+         ctx->d_ptr->workaround_brokenAlphaTexSubImage = vendorStr.indexOf("NVIDIA") >= 0;
          ctx->d_ptr->workaround_brokenAlphaTexSubImage_init = true;
       }
 
@@ -342,6 +340,7 @@ void QGLTextureGlyphCache::fillTexture(const Coord &c, glyph_t glyph, QFixed sub
          for (int i = 0; i < maskHeight; ++i) {
             glTexSubImage2D(GL_TEXTURE_2D, 0, c.x, c.y + i, maskWidth, 1, GL_ALPHA, GL_UNSIGNED_BYTE, mask.scanLine(i));
          }
+
       } else {
          glTexSubImage2D(GL_TEXTURE_2D, 0, c.x, c.y, maskWidth, maskHeight, GL_ALPHA, GL_UNSIGNED_BYTE, mask.bits());
       }

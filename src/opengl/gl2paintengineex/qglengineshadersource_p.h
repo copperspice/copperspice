@@ -25,16 +25,14 @@
 
 #include "qglengineshadermanager_p.h"
 
-QT_BEGIN_NAMESPACE
-
-static const char *const qglslMainVertexShader = "\n\
+static const QString qglslMainVertexShader = "\n\
     void setPosition(); \n\
     void main(void) \n\
     { \n\
         setPosition(); \n\
     }\n";
 
-static const char *const qglslMainWithTexCoordsVertexShader = "\n\
+static const QString qglslMainWithTexCoordsVertexShader = "\n\
     attribute highp   vec2      textureCoordArray; \n\
     varying   highp   vec2      textureCoords; \n\
     void setPosition(); \n\
@@ -44,7 +42,7 @@ static const char *const qglslMainWithTexCoordsVertexShader = "\n\
         textureCoords = textureCoordArray; \n\
     }\n";
 
-static const char *const qglslMainWithTexCoordsAndOpacityVertexShader = "\n\
+static const QString qglslMainWithTexCoordsAndOpacityVertexShader = "\n\
     attribute highp   vec2      textureCoordArray; \n\
     attribute lowp    float     opacityArray; \n\
     varying   highp   vec2      textureCoords; \n\
@@ -59,7 +57,7 @@ static const char *const qglslMainWithTexCoordsAndOpacityVertexShader = "\n\
 
 // NOTE: We let GL do the perspective correction so texture lookups in the fragment
 //       shader are also perspective corrected.
-static const char *const qglslPositionOnlyVertexShader = "\n\
+static const QString qglslPositionOnlyVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray; \n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -71,7 +69,7 @@ static const char *const qglslPositionOnlyVertexShader = "\n\
         gl_Position = vec4(transformedPos.xy, 0.0, transformedPos.z); \n\
     }\n";
 
-static const char *const qglslComplexGeometryPositionOnlyVertexShader = "\n\
+static const QString qglslComplexGeometryPositionOnlyVertexShader = "\n\
     uniform highp mat3 matrix; \n\
     attribute highp vec2 vertexCoordsArray; \n\
     void setPosition(void) \n\
@@ -79,7 +77,7 @@ static const char *const qglslComplexGeometryPositionOnlyVertexShader = "\n\
       gl_Position = vec4(matrix * vec3(vertexCoordsArray, 1), 1);\n\
     } \n";
 
-static const char *const qglslUntransformedPositionVertexShader = "\n\
+static const QString qglslUntransformedPositionVertexShader = "\n\
     attribute highp   vec4      vertexCoordsArray; \n\
     void setPosition(void) \n\
     { \n\
@@ -87,7 +85,7 @@ static const char *const qglslUntransformedPositionVertexShader = "\n\
     }\n";
 
 // Pattern Brush - This assumes the texture size is 8x8 and thus, the inverted size is 0.125
-static const char *const qglslPositionWithPatternBrushVertexShader = "\n\
+static const QString qglslPositionWithPatternBrushVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray; \n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -108,7 +106,7 @@ static const char *const qglslPositionWithPatternBrushVertexShader = "\n\
         patternTexCoords.xy = (hTexCoords.xy * 0.125) * invertedHTexCoordsZ; \n\
     }\n";
 
-static const char *const qglslAffinePositionWithPatternBrushVertexShader
+static const QString qglslAffinePositionWithPatternBrushVertexShader
    = qglslPositionWithPatternBrushVertexShader;
 
 static const char *const qglslPatternBrushSrcFragmentShader = "\n\
@@ -122,7 +120,7 @@ static const char *const qglslPatternBrushSrcFragmentShader = "\n\
 
 
 // Linear Gradient Brush
-static const char *const qglslPositionWithLinearGradientBrushVertexShader = "\n\
+static const QString qglslPositionWithLinearGradientBrushVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray; \n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -143,7 +141,7 @@ static const char *const qglslPositionWithLinearGradientBrushVertexShader = "\n\
         index = (dot(linearData.xy, hTexCoords.xy) * linearData.z) * invertedHTexCoordsZ; \n\
     }\n";
 
-static const char *const qglslAffinePositionWithLinearGradientBrushVertexShader
+static const QString qglslAffinePositionWithLinearGradientBrushVertexShader
    = qglslPositionWithLinearGradientBrushVertexShader;
 
 static const char *const qglslLinearGradientBrushSrcFragmentShader = "\n\
@@ -157,7 +155,7 @@ static const char *const qglslLinearGradientBrushSrcFragmentShader = "\n\
 
 
 // Conical Gradient Brush
-static const char *const qglslPositionWithConicalGradientBrushVertexShader = "\n\
+static const QString qglslPositionWithConicalGradientBrushVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray; \n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -177,7 +175,7 @@ static const char *const qglslPositionWithConicalGradientBrushVertexShader = "\n
         A = hTexCoords.xy * invertedHTexCoordsZ; \n\
     }\n";
 
-static const char *const qglslAffinePositionWithConicalGradientBrushVertexShader
+static const QString qglslAffinePositionWithConicalGradientBrushVertexShader
    = qglslPositionWithConicalGradientBrushVertexShader;
 
 static const char *const qglslConicalGradientBrushSrcFragmentShader = "\n\
@@ -197,7 +195,7 @@ static const char *const qglslConicalGradientBrushSrcFragmentShader = "\n\
 
 
 // Radial Gradient Brush
-static const char *const qglslPositionWithRadialGradientBrushVertexShader = "\n\
+static const QString qglslPositionWithRadialGradientBrushVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray;\n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -221,10 +219,9 @@ static const char *const qglslPositionWithRadialGradientBrushVertexShader = "\n\
         b = bradius.x + 2.0 * dot(A, fmp); \n\
     }\n";
 
-static const char *const qglslAffinePositionWithRadialGradientBrushVertexShader
-   = qglslPositionWithRadialGradientBrushVertexShader;
+static const QString qglslAffinePositionWithRadialGradientBrushVertexShader = qglslPositionWithRadialGradientBrushVertexShader;
 
-static const char *const qglslRadialGradientBrushSrcFragmentShader = "\n\
+static const QString qglslRadialGradientBrushSrcFragmentShader = "\n\
     uniform           sampler2D brushTexture; \n\
     uniform   highp   float     fmp2_m_radius2; \n\
     uniform   highp   float     inverse_2_fmp2_m_radius2; \n\
@@ -248,7 +245,7 @@ static const char *const qglslRadialGradientBrushSrcFragmentShader = "\n\
 
 
 // Texture Brush
-static const char *const qglslPositionWithTextureBrushVertexShader = "\n\
+static const QString qglslPositionWithTextureBrushVertexShader = "\n\
     attribute highp   vec2      vertexCoordsArray; \n\
     attribute highp   vec3      pmvMatrix1; \n\
     attribute highp   vec3      pmvMatrix2; \n\
@@ -269,21 +266,23 @@ static const char *const qglslPositionWithTextureBrushVertexShader = "\n\
         brushTextureCoords.xy = (hTexCoords.xy * invertedTextureSize) * gl_Position.w; \n\
     }\n";
 
-static const char *const qglslAffinePositionWithTextureBrushVertexShader
-   = qglslPositionWithTextureBrushVertexShader;
+static const QString qglslAffinePositionWithTextureBrushVertexShader = qglslPositionWithTextureBrushVertexShader;
 
 #if defined(QT_OPENGL_ES_2)
+
 // OpenGL ES does not support GL_REPEAT wrap modes for NPOT textures. So instead,
 // we emulate GL_REPEAT by only taking the fractional part of the texture coords.
 // TODO: Special case POT textures which don't need this emulation
-static const char *const qglslTextureBrushSrcFragmentShader = "\n\
+
+static const QString qglslTextureBrushSrcFragmentShader = "\n\
     varying highp   vec2      brushTextureCoords; \n\
     uniform         sampler2D brushTexture; \n\
     lowp vec4 srcPixel() { \n\
         return texture2D(brushTexture, fract(brushTextureCoords)); \n\
     }\n";
 #else
-static const char *const qglslTextureBrushSrcFragmentShader = "\n\
+
+static const QString qglslTextureBrushSrcFragmentShader = "\n\
     varying   highp   vec2      brushTextureCoords; \n\
     uniform           sampler2D brushTexture; \n\
     lowp vec4 srcPixel() \n\
@@ -292,7 +291,7 @@ static const char *const qglslTextureBrushSrcFragmentShader = "\n\
     }\n";
 #endif
 
-static const char *const qglslTextureBrushSrcWithPatternFragmentShader = "\n\
+static const QString qglslTextureBrushSrcWithPatternFragmentShader = "\n\
     varying   highp   vec2      brushTextureCoords; \n\
     uniform   lowp    vec4      patternColor; \n\
     uniform           sampler2D brushTexture; \n\
@@ -302,14 +301,14 @@ static const char *const qglslTextureBrushSrcWithPatternFragmentShader = "\n\
     }\n";
 
 // Solid Fill Brush
-static const char *const qglslSolidBrushSrcFragmentShader = "\n\
+static const QString qglslSolidBrushSrcFragmentShader = "\n\
     uniform   lowp    vec4      fragmentColor; \n\
     lowp vec4 srcPixel() \n\
     { \n\
         return fragmentColor; \n\
     }\n";
 
-static const char *const qglslImageSrcFragmentShader = "\n\
+static const QString qglslImageSrcFragmentShader = "\n\
     varying   highp   vec2      textureCoords; \n\
     uniform           sampler2D imageTexture; \n\
     lowp vec4 srcPixel() \n\
@@ -317,7 +316,7 @@ static const char *const qglslImageSrcFragmentShader = "\n\
       "return texture2D(imageTexture, textureCoords); \n"
       "}\n";
 
-static const char *const qglslCustomSrcFragmentShader = "\n\
+static const QString qglslCustomSrcFragmentShader = "\n\
     varying   highp   vec2      textureCoords; \n\
     uniform           sampler2D imageTexture; \n\
     lowp vec4 srcPixel() \n\
@@ -334,7 +333,7 @@ static const char *const qglslImageSrcWithPatternFragmentShader = "\n\
         return patternColor * (1.0 - texture2D(imageTexture, textureCoords).r); \n\
     }\n";
 
-static const char *const qglslNonPremultipliedImageSrcFragmentShader = "\n\
+static const QString qglslNonPremultipliedImageSrcFragmentShader = "\n\
     varying   highp   vec2      textureCoords; \n\
     uniform          sampler2D imageTexture; \n\
     lowp vec4 srcPixel() \n\
@@ -344,13 +343,13 @@ static const char *const qglslNonPremultipliedImageSrcFragmentShader = "\n\
         return sample; \n\
     }\n";
 
-static const char *const qglslShockingPinkSrcFragmentShader = "\n\
+static const QString qglslShockingPinkSrcFragmentShader = "\n\
     lowp vec4 srcPixel() \n\
     { \n\
         return vec4(0.98, 0.06, 0.75, 1.0); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_ImageArrays = "\n\
+static const QString qglslMainFragmentShader_ImageArrays = "\n\
     varying   lowp    float     opacity; \n\
     lowp vec4 srcPixel(); \n\
     void main() \n\
@@ -358,7 +357,7 @@ static const char *const qglslMainFragmentShader_ImageArrays = "\n\
         gl_FragColor = srcPixel() * opacity; \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_CMO = "\n\
+static const QString qglslMainFragmentShader_CMO = "\n\
     uniform   lowp    float     globalOpacity; \n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 applyMask(lowp vec4); \n\
@@ -368,7 +367,7 @@ static const char *const qglslMainFragmentShader_CMO = "\n\
         gl_FragColor = applyMask(compose(srcPixel()*globalOpacity))); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_CM = "\n\
+static const QString qglslMainFragmentShader_CM = "\n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 applyMask(lowp vec4); \n\
     lowp vec4 compose(lowp vec4); \n\
@@ -377,7 +376,7 @@ static const char *const qglslMainFragmentShader_CM = "\n\
         gl_FragColor = applyMask(compose(srcPixel())); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_MO = "\n\
+static const QString qglslMainFragmentShader_MO = "\n\
     uniform   lowp    float     globalOpacity; \n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 applyMask(lowp vec4); \n\
@@ -386,7 +385,7 @@ static const char *const qglslMainFragmentShader_MO = "\n\
         gl_FragColor = applyMask(srcPixel()*globalOpacity); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_M = "\n\
+static const QString qglslMainFragmentShader_M = "\n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 applyMask(lowp vec4); \n\
     void main() \n\
@@ -394,7 +393,7 @@ static const char *const qglslMainFragmentShader_M = "\n\
         gl_FragColor = applyMask(srcPixel()); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_CO = "\n\
+static const QString qglslMainFragmentShader_CO = "\n\
     uniform   lowp    float     globalOpacity; \n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 compose(lowp vec4); \n\
@@ -403,7 +402,7 @@ static const char *const qglslMainFragmentShader_CO = "\n\
         gl_FragColor = compose(srcPixel()*globalOpacity); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_C = "\n\
+static const QString qglslMainFragmentShader_C = "\n\
     lowp vec4 srcPixel(); \n\
     lowp vec4 compose(lowp vec4); \n\
     void main() \n\
@@ -411,7 +410,7 @@ static const char *const qglslMainFragmentShader_C = "\n\
         gl_FragColor = compose(srcPixel()); \n\
     }\n";
 
-static const char *const qglslMainFragmentShader_O = "\n\
+static const QString qglslMainFragmentShader_O = "\n\
     uniform   lowp    float     globalOpacity; \n\
     lowp vec4 srcPixel(); \n\
     void main() \n\
@@ -419,14 +418,14 @@ static const char *const qglslMainFragmentShader_O = "\n\
         gl_FragColor = srcPixel()*globalOpacity; \n\
     }\n";
 
-static const char *const qglslMainFragmentShader = "\n\
+static const QString qglslMainFragmentShader = "\n\
     lowp vec4 srcPixel(); \n\
     void main() \n\
     { \n\
         gl_FragColor = srcPixel(); \n\
     }\n";
 
-static const char *const qglslMaskFragmentShader = "\n\
+static const QString qglslMaskFragmentShader = "\n\
     varying   highp   vec2      textureCoords;\n\
     uniform           sampler2D maskTexture;\n\
     lowp vec4 applyMask(lowp vec4 src) \n\
@@ -450,7 +449,7 @@ static const char *const qglslMaskFragmentShader = "\n\
 // dest.c = dest.c * (1 - mask.c) + src.c * alpha
 //
 
-static const char *const qglslRgbMaskFragmentShaderPass1 = "\n\
+static const QString qglslRgbMaskFragmentShaderPass1 = "\n\
     varying   highp   vec2      textureCoords;\n\
     uniform           sampler2D maskTexture;\n\
     lowp vec4 applyMask(lowp vec4 src) \n\
@@ -459,7 +458,7 @@ static const char *const qglslRgbMaskFragmentShaderPass1 = "\n\
         return src.a * mask; \n\
     }\n";
 
-static const char *const qglslRgbMaskFragmentShaderPass2 = "\n\
+static const QString qglslRgbMaskFragmentShaderPass2 = "\n\
     varying   highp   vec2      textureCoords;\n\
     uniform           sampler2D maskTexture;\n\
     lowp vec4 applyMask(lowp vec4 src) \n\
@@ -486,6 +485,4 @@ static const char *const qglslRgbMaskFragmentShaderPass2 = "\n\
         ExclusionCompositionModeFragmentShader,
 */
 
-QT_END_NAMESPACE
-
-#endif // GLGC_SHADER_SOURCE_H
+#endif

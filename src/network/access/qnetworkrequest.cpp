@@ -455,8 +455,9 @@ static QVariant parseHeaderValue(QNetworkRequest::KnownHeaders header, const QBy
 QNetworkHeadersPrivate::RawHeadersList::ConstIterator
 QNetworkHeadersPrivate::findRawHeader(const QByteArray &key) const
 {
-   RawHeadersList::ConstIterator it = rawHeaders.constBegin();
+   RawHeadersList::ConstIterator it  = rawHeaders.constBegin();
    RawHeadersList::ConstIterator end = rawHeaders.constEnd();
+
    for ( ; it != end; ++it)
       if (qstricmp(it->first.constData(), key.constData()) == 0) {
          return it;
@@ -473,8 +474,8 @@ QNetworkHeadersPrivate::RawHeadersList QNetworkHeadersPrivate::allRawHeaders() c
 QList<QByteArray> QNetworkHeadersPrivate::rawHeadersKeys() const
 {
    QList<QByteArray> result;
-   result.reserve(rawHeaders.size());
    RawHeadersList::ConstIterator it = rawHeaders.constBegin(), end = rawHeaders.constEnd();
+
    for ( ; it != end; ++it) {
       result << it->first;
    }
