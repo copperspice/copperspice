@@ -11,11 +11,9 @@ XML_PUBLIC_INCLUDES += \
 	QXmlStreamNotationDeclaration \
 	QXmlStreamNotationDeclarations \
 	QXmlStreamReader \
-	QXmlStreamStringRef \
 	QXmlStreamWriter
 
 XML_STREAM_INCLUDES = \
-	qxmlstream.h \
 	qxmlstreamattribute.h \
 	qxmlstreamattributes.h \
 	qxmlstreamentitydeclaration.h \
@@ -26,7 +24,6 @@ XML_STREAM_INCLUDES = \
 	qxmlstreamnotationdeclaration.h \
 	qxmlstreamnotationdeclarations.h \
 	qxmlstreamreader.h \
-	qxmlstreamstringref.h \
 	qxmlstreamwriter.h
 
 XML_INCLUDES += $(XML_STREAM_INCLUDES)

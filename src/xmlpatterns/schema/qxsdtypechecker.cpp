@@ -223,7 +223,7 @@ bool XsdTypeChecker::isValidString(const QString &normalizedString, const AnySim
       // special QName check
       if (BuiltinTypes::xsQName->wxsTypeMatches(type)) {
          if (!XPathHelper::isQName(normalizedString)) {
-            errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").arg(formatData(normalizedString)).arg(formatType(
+            errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").formatArg(formatData(normalizedString)).formatArg(formatType(
                           m_namePool, type));
             return false;
          }
@@ -231,7 +231,7 @@ bool XsdTypeChecker::isValidString(const QString &normalizedString, const AnySim
 
       const AtomicValue::Ptr value = fromLexical(normalizedString, type, m_context, m_reflection);
       if (value->hasError()) {
-         errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").arg(formatData(normalizedString)).arg(formatType(
+         errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").formatArg(formatData(normalizedString)).formatArg(formatType(
                        m_namePool, type));
          return false;
       }
@@ -255,7 +255,7 @@ bool XsdTypeChecker::isValidString(const QString &normalizedString, const AnySim
 
          const AtomicValue::Ptr value = fromLexical(normalizedString, targetType, m_context, m_reflection);
          if (value->hasError()) {
-            errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").arg(formatData(normalizedString)).arg(formatType(
+            errorMsg = QtXmlPatterns::tr("%1 is not valid according to %2.").formatArg(formatData(normalizedString)).formatArg(formatType(
                           m_namePool, targetType));
             return false;
          }
@@ -269,7 +269,7 @@ bool XsdTypeChecker::isValidString(const QString &normalizedString, const AnySim
          }
 
       } else if (simpleType->category() == XsdSimpleType::SimpleTypeList) {
-         QStringList entries = normalizedString.split(QLatin1Char(' '), QString::SkipEmptyParts);
+         QStringList entries = normalizedString.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
          for (int i = 0; i < entries.count(); ++i) {
             entries[i] = normalizedValue(entries.at(i), mergedFacetsForType(simpleType->itemType(), m_context));
          }
@@ -347,8 +347,8 @@ bool XsdTypeChecker::valuesAreEqual(const QString &value, const QString &otherVa
       return XsdSchemaHelper::constructAndCompare(valueStr, AtomicComparator::OperatorEqual, otherValueStr, targetType,
              m_context, m_reflection);
    } else if (type->category() == SchemaType::SimpleTypeList) {
-      const QStringList values = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
-      const QStringList otherValues = otherValue.split(QLatin1Char(' '), QString::SkipEmptyParts);
+      const QStringList values = value.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
+      const QStringList otherValues = otherValue.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
       if (values.count() != otherValues.count()) {
          return false;
       }
@@ -414,25 +414,33 @@ bool XsdTypeChecker::checkConstrainingFacets(const AtomicValue::Ptr &value, cons
    } else if (BuiltinTypes::xsGMonth->wxsTypeMatches(type)) {
       return checkConstrainingFacetsDateTime(value->as<AbstractDateTime>()->toDateTime(), lexicalValue, facets,
                                              BuiltinTypes::xsGMonth, errorMsg);
+
    } else if (BuiltinTypes::xsGMonthDay->wxsTypeMatches(type)) {
       return checkConstrainingFacetsDateTime(value->as<AbstractDateTime>()->toDateTime(), lexicalValue, facets,
                                              BuiltinTypes::xsGMonthDay, errorMsg);
+
    } else if (BuiltinTypes::xsGDay->wxsTypeMatches(type)) {
       return checkConstrainingFacetsDateTime(value->as<AbstractDateTime>()->toDateTime(), lexicalValue, facets,
                                              BuiltinTypes::xsGDay, errorMsg);
+
    } else if (BuiltinTypes::xsTime->wxsTypeMatches(type)) {
       return checkConstrainingFacetsDateTime(value->as<AbstractDateTime>()->toDateTime(), lexicalValue, facets,
                                              BuiltinTypes::xsTime, errorMsg);
+
    } else if (BuiltinTypes::xsDuration->wxsTypeMatches(type)) {
       return checkConstrainingFacetsDuration(value, lexicalValue, facets, errorMsg);
+
    } else if (BuiltinTypes::xsBoolean->wxsTypeMatches(type)) {
       return checkConstrainingFacetsBoolean(value->as<Boolean>()->value(), lexicalValue, facets, errorMsg);
+
    } else if (BuiltinTypes::xsHexBinary->wxsTypeMatches(type)) {
       return checkConstrainingFacetsBinary(value->as<Base64Binary>()->asByteArray(), facets, BuiltinTypes::xsHexBinary,
                                            errorMsg);
+
    } else if (BuiltinTypes::xsBase64Binary->wxsTypeMatches(type)) {
       return checkConstrainingFacetsBinary(value->as<Base64Binary>()->asByteArray(), facets, BuiltinTypes::xsBase64Binary,
                                            errorMsg);
+
    } else if (BuiltinTypes::xsQName->wxsTypeMatches(type)) {
       return checkConstrainingFacetsQName(value->as<QNameValue>()->qName(), lexicalValue, facets, errorMsg);
    }
@@ -446,35 +454,43 @@ bool XsdTypeChecker::checkConstrainingFacetsString(const QString &value, const X
    if (facets.contains(XsdFacet::Length)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Length);
       const DerivedInteger<TypeNonNegativeInteger>::Ptr length = facet->value();
+
       if (length->toInteger() != value.length()) {
          errorMsg = QtXmlPatterns::tr("String content does not match the length facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::MinimumLength)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MinimumLength);
       const DerivedInteger<TypeNonNegativeInteger>::Ptr length = facet->value();
+
       if (length->toInteger() > value.length()) {
          errorMsg = QtXmlPatterns::tr("String content does not match the minLength facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::MaximumLength)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MaximumLength);
       const DerivedInteger<TypeNonNegativeInteger>::Ptr length = facet->value();
+
       if (length->toInteger() < value.length()) {
          errorMsg = QtXmlPatterns::tr("String content does not match the maxLength facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::Pattern)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(value)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(value).hasMatch()) {
             found = true;
             break;
          }
@@ -485,6 +501,7 @@ bool XsdTypeChecker::checkConstrainingFacetsString(const QString &value, const X
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::Enumeration)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Enumeration);
       const DerivedString<TypeString>::Ptr valueStr = DerivedString<TypeString>::fromLexical(m_namePool, value);
@@ -504,6 +521,7 @@ bool XsdTypeChecker::checkConstrainingFacetsString(const QString &value, const X
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::Assertion)) {
       //TODO: implement
    }
@@ -517,16 +535,19 @@ bool XsdTypeChecker::checkConstrainingFacetsSignedInteger(long long value, const
    if (facets.contains(XsdFacet::MaximumInclusive)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MaximumInclusive);
       const Numeric::Ptr facetValue = ValueFactory::fromLexical(
-                                         facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+                  facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+
       if (facetValue->toInteger() < value) {
          errorMsg = QtXmlPatterns::tr("Signed integer content does not match the maxInclusive facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::MaximumExclusive)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MaximumExclusive);
       const Numeric::Ptr facetValue = ValueFactory::fromLexical(
-                                         facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+                  facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+
       if (facetValue->toInteger() <= value) {
          errorMsg = QtXmlPatterns::tr("Signed integer content does not match the maxExclusive facet.");
          return false;
@@ -535,21 +556,25 @@ bool XsdTypeChecker::checkConstrainingFacetsSignedInteger(long long value, const
    if (facets.contains(XsdFacet::MinimumInclusive)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MinimumInclusive);
       const Numeric::Ptr facetValue = ValueFactory::fromLexical(
-                                         facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+                  facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+
       if (facetValue->toInteger() > value) {
          errorMsg = QtXmlPatterns::tr("Signed integer content does not match the minInclusive facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::MinimumExclusive)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::MinimumExclusive);
       const Numeric::Ptr facetValue = ValueFactory::fromLexical(
-                                         facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+                  facet->value()->as<DerivedString<TypeString> >()->stringValue(), BuiltinTypes::xsLong, m_context, m_reflection);
+
       if (facetValue->toInteger() >= value) {
          errorMsg = QtXmlPatterns::tr("Signed integer content does not match the minExclusive facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::Enumeration)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Enumeration);
       const DerivedString<TypeString>::Ptr valueStr = DerivedString<TypeString>::fromLexical(m_namePool,
@@ -557,6 +582,7 @@ bool XsdTypeChecker::checkConstrainingFacetsSignedInteger(long long value, const
 
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          if (XsdSchemaHelper::constructAndCompare(valueStr, AtomicComparator::OperatorEqual, multiValue.at(j),
                BuiltinTypes::xsLong, m_context, m_reflection)) {
@@ -576,8 +602,9 @@ bool XsdTypeChecker::checkConstrainingFacetsSignedInteger(long long value, const
       bool found = false;
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -650,6 +677,7 @@ bool XsdTypeChecker::checkConstrainingFacetsUnsignedInteger(unsigned long long v
 
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          if (XsdSchemaHelper::constructAndCompare(valueStr, AtomicComparator::OperatorEqual, multiValue.at(j),
                BuiltinTypes::xsUnsignedLong, m_context, m_reflection)) {
@@ -667,10 +695,12 @@ bool XsdTypeChecker::checkConstrainingFacetsUnsignedInteger(unsigned long long v
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -769,10 +799,12 @@ bool XsdTypeChecker::checkConstrainingFacetsDouble(double value, const QString &
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -877,10 +909,12 @@ bool XsdTypeChecker::checkConstrainingFacetsDateTime(const QDateTime &value, con
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -961,10 +995,12 @@ bool XsdTypeChecker::checkConstrainingFacetsDuration(const AtomicValue::Ptr &, c
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -989,10 +1025,12 @@ bool XsdTypeChecker::checkConstrainingFacetsBoolean(bool, const QString &lexical
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -1079,8 +1117,8 @@ bool XsdTypeChecker::checkConstrainingFacetsQName(const QXmlName &value, const Q
       // always true
    }
    if (facets.contains(XsdFacet::Enumeration)) {
-      if (!XPathHelper::isQName(lexicalValue)) {
-         errorMsg = QtXmlPatterns::tr("Invalid QName content: %1.").arg(formatData(lexicalValue));
+      if (! XPathHelper::isQName(lexicalValue)) {
+         errorMsg = QtXmlPatterns::tr("Invalid QName content: %1.").formatArg(formatData(lexicalValue));
          return false;
       }
 
@@ -1096,19 +1134,22 @@ bool XsdTypeChecker::checkConstrainingFacetsQName(const QXmlName &value, const Q
          }
       }
 
-      if (!found) {
+      if (! found) {
          errorMsg = QtXmlPatterns::tr("QName content is not listed in the enumeration facet.");
          return false;
       }
    }
+
    if (facets.contains(XsdFacet::Pattern)) {
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -1208,7 +1249,7 @@ bool XsdTypeChecker::checkConstrainingFacetsList(const QStringList &values, cons
          const AtomicValue::List multiValue = facet->multiValue();
          for (int i = 0; i < multiValue.count(); ++i) {
             const QStringList facetValueList = multiValue.at(i)->as<DerivedString<TypeString> >()->stringValue().split(
-                                                  QLatin1Char(' '), QString::SkipEmptyParts);
+                                                  QLatin1Char(' '), QStringParser::SkipEmptyParts);
 
             // create the list of atomic string values
             QList<QXmlName> facetValues;
@@ -1250,7 +1291,7 @@ bool XsdTypeChecker::checkConstrainingFacetsList(const QStringList &values, cons
          const AtomicValue::List multiValue = facet->multiValue();
          for (int i = 0; i < multiValue.count(); ++i) {
             const QStringList facetValueList = multiValue.at(i)->as<DerivedString<TypeString> >()->stringValue().split(
-                                                  QLatin1Char(' '), QString::SkipEmptyParts);
+                                                  QLatin1Char(' '), QStringParser::SkipEmptyParts);
 
             // create the list of atomic string values
             AtomicValue::List facetValues;
@@ -1289,10 +1330,12 @@ bool XsdTypeChecker::checkConstrainingFacetsList(const QStringList &values, cons
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -1348,10 +1391,12 @@ bool XsdTypeChecker::checkConstrainingFacetsUnion(const QString &value, const QS
       const XsdFacet::Ptr facet = facets.value(XsdFacet::Pattern);
       const AtomicValue::List multiValue = facet->multiValue();
       bool found = false;
+
       for (int j = 0; j < multiValue.count(); ++j) {
          const QString pattern = multiValue.at(j)->as<DerivedString<TypeString> >()->stringValue();
-         const QRegExp exp = PatternPlatform::parsePattern(pattern, m_context, m_reflection);
-         if (exp.exactMatch(lexicalValue)) {
+         const QRegularExpression exp = PatternPlatform::parsePattern(pattern, QPatternOption::ExactMatchOption, m_context, m_reflection);
+
+         if (exp.match(lexicalValue).hasMatch()) {
             found = true;
             break;
          }
@@ -1375,7 +1420,7 @@ AtomicValue::Ptr XsdTypeChecker::fromLexical(const QString &value, const SchemaT
    if (type->name(m_namePool) == BuiltinTypes::xsNOTATION->name(m_namePool) ||
          type->name(m_namePool) == BuiltinTypes::xsQName->name(m_namePool)) {
       if (value.simplified().isEmpty()) {
-         return ValidationError::createError(QtXmlPatterns::tr("Data of type %1 are not allowed to be empty.").arg(formatType(
+         return ValidationError::createError(QtXmlPatterns::tr("Data of type %1 are not allowed to be empty.").formatArg(formatType(
                                                 m_namePool, BuiltinTypes::xsNOTATION)));
       }
 

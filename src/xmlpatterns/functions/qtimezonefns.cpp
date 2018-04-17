@@ -67,15 +67,15 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          context->error(QtXmlPatterns::tr("A zone offset must be in the "
                                           "range %1..%2 inclusive. %3 is "
                                           "out of range.")
-                        .arg(formatData("-PT14H"))
-                        .arg(formatData("PT14H"))
-                        .arg(formatData(tz->stringValue())),
+                        .formatArg(formatData("-PT14H"))
+                        .formatArg(formatData("PT14H"))
+                        .formatArg(formatData(tz->stringValue())),
                         ReportContext::FODT0003, this);
          return Item();
       } else if (tzMSecs > MSecLimit ||
                  tzMSecs < -MSecLimit) {
          context->error(QtXmlPatterns::tr("%1 is not a whole number of minutes.")
-                        .arg(formatData(tz->stringValue())),
+                        .formatArg(formatData(tz->stringValue())),
                         ReportContext::FODT0003, this);
          return Item();
       }

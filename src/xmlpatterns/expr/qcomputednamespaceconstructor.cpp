@@ -46,8 +46,7 @@ void ComputedNamespaceConstructor::evaluateToSequenceReceiver(const DynamicConte
 
    if (namespaceURI.isEmpty()) {
       context->error(QtXmlPatterns::tr("In a namespace constructor, the value for a namespace cannot be an empty string."),
-                     ReportContext::XTDE0930,
-                     this);
+                     ReportContext::XTDE0930, this);
    }
 
    /* One optimization could be to store a pointer to
@@ -56,10 +55,7 @@ void ComputedNamespaceConstructor::evaluateToSequenceReceiver(const DynamicConte
 
    if (!prefix.isEmpty() && !QXmlUtils::isNCName(prefix)) {
       context->error(QtXmlPatterns::tr("The prefix must be a valid %1, which %2 is not.")
-                     .arg(formatType(np, BuiltinTypes::xsNCName),
-                          formatKeyword(prefix)),
-                     ReportContext::XTDE0920,
-                     this);
+                     .formatArgs(formatType(np, BuiltinTypes::xsNCName), formatKeyword(prefix)), ReportContext::XTDE0920, this);
    }
    const QXmlName binding(np->allocateBinding(prefix, namespaceURI));
 
@@ -69,18 +65,14 @@ void ComputedNamespaceConstructor::evaluateToSequenceReceiver(const DynamicConte
 
    if (binding.prefix() == StandardPrefixes::xmlns) {
       context->error(QtXmlPatterns::tr("The prefix %1 cannot be bound.")
-                     .arg(formatKeyword(prefix)),
-                     ReportContext::XTDE0920,
-                     this);
+                     .formatArg(formatKeyword(prefix)), ReportContext::XTDE0920, this);
    }
 
    if ((binding.prefix() == StandardPrefixes::xml && binding.namespaceURI() != StandardNamespaces::xml)
          ||
          (binding.prefix() != StandardPrefixes::xml && binding.namespaceURI() == StandardNamespaces::xml)) {
       context->error(QtXmlPatterns::tr("Only the prefix %1 can be bound to %2 and vice versa.")
-                     .arg(formatKeyword(prefix), formatKeyword(namespaceURI)),
-                     ReportContext::XTDE0925,
-                     this);
+                     .formatArgs(formatKeyword(prefix), formatKeyword(namespaceURI)), ReportContext::XTDE0925, this);
    }
 
    context->outputReceiver()->namespaceBinding(binding);

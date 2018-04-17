@@ -361,20 +361,19 @@ class DerivedInteger : public Numeric
        * variable solves it. */
       const StorageType minimum = minInclusive;
 
-      if ((limitsUsage & LimitUpwards) &&
-            num > maxInclusive) {
-         return ValidationError::createError(QtXmlPatterns::tr(
-                                                "Value %1 of type %2 exceeds maximum (%3).")
-                                             .arg(QPatternist::formatData(static_cast<xsInteger>(num)))
-                                             .arg(formatType(np, itemType()))
-                                             .arg(QPatternist::formatData(static_cast<xsInteger>(maxInclusive))));
-      } else if ((limitsUsage & LimitDownwards) &&
-                 lessThan(num, minimum)) {
-         return ValidationError::createError(QtXmlPatterns::tr(
-                                                "Value %1 of type %2 is below minimum (%3).")
-                                             .arg(QPatternist::formatData(static_cast<xsInteger>(num)))
-                                             .arg(formatType(np, itemType()))
-                                             .arg(QPatternist::formatData(static_cast<xsInteger>(minInclusive))));
+      if ((limitsUsage & LimitUpwards) && num > maxInclusive) {
+
+         return ValidationError::createError(QtXmlPatterns::tr("Value %1 of type %2 exceeds maximum (%3).")
+                                             .formatArg(QPatternist::formatData(static_cast<xsInteger>(num)))
+                                             .formatArg(formatType(np, itemType()))
+                                             .formatArg(QPatternist::formatData(static_cast<xsInteger>(maxInclusive))));
+
+      } else if ((limitsUsage & LimitDownwards) && lessThan(num, minimum)) {
+
+         return ValidationError::createError(QtXmlPatterns::tr("Value %1 of type %2 is below minimum (%3).")
+                                             .formatArg(QPatternist::formatData(static_cast<xsInteger>(num)))
+                                             .formatArg(formatType(np, itemType()))
+                                             .formatArg(QPatternist::formatData(static_cast<xsInteger>(minInclusive))));
       } else {
          return AtomicValue::Ptr(new DerivedInteger(num));
       }
@@ -392,25 +391,26 @@ class DerivedInteger : public Numeric
       bool conversionOk = false;
       TemporaryStorageType num;
 
-      /* Depending on the type, we need to call different conversion
-       * functions on QString. */
+      /* Depending on the type, we need to call different conversion functions on QString. */
       switch (DerivedType) {
          case TypeUnsignedLong: {
-            /* Qt decides to flag '-' as invalid, so remove it before. */
+
+            /* flag '-' as invalid, so remove it before. */
             if (strNumeric.contains(QLatin1Char('-'))) {
-               num = QString(strNumeric).remove(QLatin1Char('-')).toULongLong(&conversionOk);
+               num = QString(strNumeric).remove('-').toInteger<quint64>(&conversionOk);
 
                if (num != 0) {
                   conversionOk = false;
                }
             } else {
-               num = strNumeric.toULongLong(&conversionOk);
+               num = strNumeric.toInteger<quint64>(&conversionOk);
             }
 
             break;
          }
+
          default: {
-            num = strNumeric.toLongLong(&conversionOk);
+            num = strNumeric.toInteger<qint64>(&conversionOk);
             break;
          }
       }

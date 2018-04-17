@@ -25,12 +25,12 @@
 
 #include <QtCore/QtGlobal>
 #include <qcontainerfwd.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 class QXmlItem;
 class QXmlName;
-class QString;
 class QVariant;
 
 namespace QPatternist {

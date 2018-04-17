@@ -241,11 +241,11 @@ int NormalizeUnicodeFN::determineNormalizationForm(const DynamicContext::Ptr &co
                                        "unsupported. The supported forms are "
                                        "%2, %3, %4, and %5, and none, i.e. "
                                        "the empty string (no normalization).")
-                     .arg(formatKeyword(strRepr))
-                     .arg(formatKeyword("NFC"))
-                     .arg(formatKeyword("NFD"))
-                     .arg(formatKeyword("NFKC"))
-                     .arg(formatKeyword("NFKD")),
+                     .formatArg(formatKeyword(strRepr))
+                     .formatArg(formatKeyword("NFC"))
+                     .formatArg(formatKeyword("NFD"))
+                     .formatArg(formatKeyword("NFKC"))
+                     .formatArg(formatKeyword("NFKD")),
                      ReportContext::FOCH0003,
                      this);
       return QString::NormalizationForm_C; /* Silence compiler warning. */
@@ -294,7 +294,7 @@ Item TranslateFN::evaluateSingleton(const DynamicContext::Ptr &context) const
    const int argLen = arg.length();
 
    QString result;
-   result.reserve(argLen);
+
    int outI = 0;
 
    for (int i = 0; i < argLen; ++i) {

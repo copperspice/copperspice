@@ -48,81 +48,16 @@ class QXmlFormatterPrivate : public QXmlSerializerPrivate
    QStack<bool>    canIndent;
 };
 
-QXmlFormatterPrivate::QXmlFormatterPrivate(const QXmlQuery &query,
-      QIODevice *const outputDevice) : QXmlSerializerPrivate(query, outputDevice)
-   , indentationDepth(4)
-   , currentDepth(0)
+QXmlFormatterPrivate::QXmlFormatterPrivate(const QXmlQuery &query, QIODevice *const outputDevice)
+   : QXmlSerializerPrivate(query, outputDevice), indentationDepth(4), currentDepth(0)
 {
-   indentString.reserve(30);
-   indentString.resize(1);
-   indentString[0] = QLatin1Char('\n');
+   indentString = '\n';
+
    canIndent.push(false);
 }
 
-/*!
-   \class QXmlFormatter
-   \brief The QXmlFormatter class is an implementation of QXmlSerializer for transforming XQuery output into formatted XML.
-   \reentrant
-   \since 4.4
-   \ingroup xml-tools
-
-   QXmlFormatter is a subclass of QXmlSerializer that formats the XML
-   output to make it easier for humans to read.
-
-   QXmlSerializer outputs XML without adding unnecessary whitespace.
-   In particular, it does not add \e {newlines} and indentation.
-   To make the XML output easier to read, QXmlFormatter adds \e{newlines}
-   and indentation by adding, removing, and modifying
-   \l{XQuery Sequence}{sequence nodes} that only consist of whitespace.
-   It also modifies whitespace in other places where it is not
-   significant; e.g., between attributes and in the document prologue.
-
-   For example, where the base class QXmlSerializer would
-   output this:
-
-   \quotefile doc/src/snippets/patternist/notIndented.xml
-
-   QXmlFormatter outputs this:
-
-   \quotefile doc/src/snippets/patternist/indented.xml
-
-   If you just want to serialize your XML in a human-readable
-   format, use QXmlFormatter as it is. The default indentation
-   level is 4 spaces, but you can set your own indentation value
-   setIndentationDepth().
-
-   The \e{newlines} and indentation added by QXmlFormatter are
-   suitable for common formats, such as XHTML, SVG, or Docbook,
-   where whitespace is not significant. However, if your XML will
-   be used as input where whitespace is significant, then you must
-   write your own subclass of QXmlSerializer or QAbstractXmlReceiver.
-
-   Note that using QXmlFormatter instead of QXmlSerializer will
-   increase computational overhead and document storage size due
-   to the insertion of whitespace.
-
-   Note also that the indentation style used by QXmlFormatter
-   remains loosely defined and may change in future versions of
-   Qt. If a specific indentation style is required then either
-   use the base class QXmlSerializer directly, or write your own
-   subclass of QXmlSerializer or QAbstractXmlReceiver.
-   Alternatively, you can subclass QXmlFormatter and reimplement
-   the callbacks there.
-
-   \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlformatter.cpp 0
-*/
-
-/*!
-  Constructs a formatter that uses the name pool and message
-  handler in \a query, and writes the result to \a outputDevice
-  as formatted XML.
-
-  \a outputDevice is passed directly to QXmlSerializer's constructor.
-
-  \sa QXmlSerializer
- */
-QXmlFormatter::QXmlFormatter(const QXmlQuery &query,
-                             QIODevice *outputDevice) : QXmlSerializer(new QXmlFormatterPrivate(query, outputDevice))
+QXmlFormatter::QXmlFormatter(const QXmlQuery &query, QIODevice *outputDevice)
+   : QXmlSerializer(new QXmlFormatterPrivate(query, outputDevice))
 {
 }
 
@@ -135,11 +70,13 @@ void QXmlFormatter::startFormattingContent()
 
    if (QPatternist::XPathHelper::isWhitespaceOnly(d->characterBuffer)) {
       if (d->canIndent.top()) {
-         QXmlSerializer::characters(QStringRef(&d->indentString));
+         QXmlSerializer::characters(QStringView(d->indentString));
       }
+
    } else {
-      if (!d->characterBuffer.isEmpty()) { /* Significant data, we don't touch it. */
-         QXmlSerializer::characters(QStringRef(&d->characterBuffer));
+      if (!d->characterBuffer.isEmpty()) {
+         /* Significant data, we don't touch it. */
+         QXmlSerializer::characters(QStringView(d->characterBuffer));
       }
    }
 
@@ -183,8 +120,7 @@ void QXmlFormatter::endElement()
 /*!
   \reimp
  */
-void QXmlFormatter::attribute(const QXmlName &name,
-                              const QStringRef &value)
+void QXmlFormatter::attribute(const QXmlName &name, QStringView value)
 {
    QXmlSerializer::attribute(name, value);
 }
@@ -203,7 +139,7 @@ void QXmlFormatter::comment(const QString &value)
 /*!
  \reimp
  */
-void QXmlFormatter::characters(const QStringRef &value)
+void QXmlFormatter::characters(QStringView value)
 {
    Q_D(QXmlFormatter);
    d->isPreviousAtomic = false;
@@ -264,8 +200,8 @@ void QXmlFormatter::endOfSequence()
    Q_D(QXmlFormatter);
 
    /* Flush any buffered content. */
-   if (!d->characterBuffer.isEmpty()) {
-      QXmlSerializer::characters(QStringRef(&d->characterBuffer));
+   if (! d->characterBuffer.isEmpty()) {
+      QXmlSerializer::characters(QStringView(d->characterBuffer));
    }
 
    d->write('\n');

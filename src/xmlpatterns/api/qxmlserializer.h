@@ -39,14 +39,14 @@ class Q_XMLPATTERNS_EXPORT QXmlSerializer : public QAbstractXmlReceiver
 
    void namespaceBinding(const QXmlName &nb) override;
 
-   void characters(const QStringRef &value) override;
+   void characters(QStringView value) override;
    void comment(const QString &value) override;
 
    void startElement(const QXmlName &name) override;
 
    void endElement() override;
 
-   void attribute(const QXmlName &name, const QStringRef &value) override;
+   void attribute(const QXmlName &name, QStringView value) override;
 
    void processingInstruction(const QXmlName &name, const QString &value) override;
 

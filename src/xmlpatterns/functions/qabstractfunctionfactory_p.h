@@ -27,14 +27,11 @@
 #include <qfunctionfactory_p.h>
 #include <qfunctionsignature_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class AbstractFunctionFactory : public FunctionFactory
 {
  public:
-   Expression::Ptr createFunctionCall(const QXmlName name,
-                  const Expression::List &arguments, const StaticContext::Ptr &context,
+   Expression::Ptr createFunctionCall(const QXmlName name, const Expression::List &arguments, const StaticContext::Ptr &context,
                   const SourceLocationReflection *const r) override;
 
    FunctionSignature::Hash functionSignatures() const override;
@@ -47,8 +44,7 @@ class AbstractFunctionFactory : public FunctionFactory
                   const FunctionSignature::Arity minArgs, const FunctionSignature::Arity maxArgs,
                   const SequenceType::Ptr &returnType, const Expression::Properties props)
    {
-      return addFunction(localName, minArgs, maxArgs, returnType,
-                  Expression::IDIgnorableExpression, props);
+      return addFunction(localName, minArgs, maxArgs, returnType, Expression::IDIgnorableExpression, props);
    }
 
    FunctionSignature::Ptr addFunction(const QXmlName::LocalNameCode &localName,
@@ -66,8 +62,8 @@ class AbstractFunctionFactory : public FunctionFactory
       return s;
    }
 
-   static inline QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const char *const name) {
-      return np->allocateLocalName(QLatin1String(name));
+   static inline QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const QString &name) {
+      return np->allocateLocalName(name);
    }
 
    FunctionSignature::Hash m_signatures;
@@ -78,7 +74,5 @@ class AbstractFunctionFactory : public FunctionFactory
 
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

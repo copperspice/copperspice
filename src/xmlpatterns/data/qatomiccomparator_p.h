@@ -26,10 +26,9 @@
 #include <QFlags>
 #include <qitem_p.h>
 #include <qatomictypedispatch_p.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
-
-class QString;
 
 namespace QPatternist {
 class AtomicComparator : public AtomicTypeVisitorResult

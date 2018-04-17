@@ -23,7 +23,7 @@
 #ifndef QAbstractDuration_P_H
 #define QAbstractDuration_P_H
 
-#include <QRegExp>
+#include <qregularexpression.h>
 #include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -40,7 +40,7 @@ class AbstractDuration : public AtomicValue
    class CaptureTable
    {
     public:
-      CaptureTable(const QRegExp &exp,
+      CaptureTable(const QRegularExpression &exp,
                    const qint8 yearP,
                    const qint8 monthP,
                    const qint8 dayP = -1,
@@ -61,7 +61,7 @@ class AbstractDuration : public AtomicValue
          Q_ASSERT(yearP == -1 || yearP == 2);
       }
 
-      const QRegExp regExp;
+      const QRegularExpression regExp;
       const qint8 year;
       const qint8 month;
       const qint8 day;

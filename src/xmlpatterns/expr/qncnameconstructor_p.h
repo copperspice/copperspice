@@ -27,9 +27,9 @@
 #include "qpatternistlocale_p.h"
 #include "qxmlutils_p.h"
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class NCNameConstructor : public SingleContainer
 {
  public:
@@ -66,7 +66,7 @@ class NCNameConstructor : public SingleContainer
       return QtXmlPatterns::tr("The target name in a processing instruction "
                                "cannot be %1 in any combination of upper "
                                "and lower case. Therefore, %2 is invalid.")
-             .arg(formatKeyword("xml"), formatKeyword(lexTarget));
+             .formatArgs(formatKeyword("xml"), formatKeyword(lexTarget));
    }
 };
 
@@ -82,19 +82,12 @@ inline void NCNameConstructor::validateTargetName(const QString &lexicalTarget, 
       }
 
    } else {
-      context->error(QtXmlPatterns::tr("%1 is not a valid target name in "
-                                       "a processing instruction. It "
-                                       "must be a %2 value, e.g. %3.")
-                     .arg(formatKeyword(lexicalTarget))
-                     .arg(formatType(context->namePool(),
-                                     BuiltinTypes::xsNCName))
-                     .arg(formatKeyword("my-name.123")),
-                     LexicallyInvalid,
-                     r);
+      context->error(QtXmlPatterns::tr("%1 is not a valid target name in a processing instruction. It "
+                     "must be a %2 value, e.g. %3.")
+                     .formatArg(formatKeyword(lexicalTarget)).formatArg(formatType(context->namePool(), BuiltinTypes::xsNCName))
+                     .formatArg(formatKeyword("my-name.123")), LexicallyInvalid, r);
    }
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

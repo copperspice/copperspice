@@ -65,11 +65,12 @@ class AnyURI : public AtomicString
                              const SourceLocationReflection *const r,
                              bool *const isValid = 0,
                              const bool issueError = true) {
+
       /* QUrl doesn't flag ":/..." so we workaround it. */
       const QString simplified(value.simplified());
       const QUrl uri(simplified, QUrl::StrictMode);
 
-      if (uri.isEmpty() || (uri.isValid() && (!simplified.startsWith(QLatin1Char(':')) || !uri.isRelative()))) {
+      if (uri.isEmpty() || (uri.isValid() && (!simplified.startsWith(':') || ! uri.isRelative()))) {
          if (isValid) {
             *isValid = true;
          }
@@ -81,9 +82,8 @@ class AnyURI : public AtomicString
          }
 
          if (issueError) {
-            context->error(QtXmlPatterns::tr("%1 is not a valid value of type %2.").arg(formatURI(value),
-                           formatType(context->namePool(), BuiltinTypes::xsAnyURI)),
-                           code, r);
+            context->error(QtXmlPatterns::tr("%1 is not a valid value of type %2.").formatArgs(formatURI(value),
+                           formatType(context->namePool(), BuiltinTypes::xsAnyURI)), code, r);
          }
 
          return QUrl();
@@ -103,9 +103,9 @@ class AnyURI : public AtomicString
     * an error is issued via @p context.
     */
    template<const ReportContext::ErrorCode code, typename TReportContext>
-   static inline AnyURI::Ptr fromLexical(const QString &value,
-                                         const TReportContext &context,
-                                         const SourceLocationReflection *const r) {
+   static inline AnyURI::Ptr fromLexical(const QString &value, const TReportContext &context,
+                  const SourceLocationReflection *const r) {
+
       return AnyURI::Ptr(new AnyURI(toQUrl<code>(value, context, r).toString()));
    }
 
@@ -136,8 +136,7 @@ class AnyURI : public AtomicString
     * @short Returns this @c xs:anyURI value in a QUrl.
     */
    inline QUrl toQUrl() const {
-      Q_ASSERT_X(QUrl(m_value).isValid(), Q_FUNC_INFO,
-                 qPrintable(QString::fromLatin1("%1 is apparently not ok for QUrl.").arg(m_value)));
+      Q_ASSERT_X(QUrl(m_value).isValid(), Q_FUNC_INFO, qPrintable(QString("%1 is apparently not ok for QUrl.").formatArg(m_value)));
       return QUrl(m_value);
    }
 

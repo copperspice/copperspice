@@ -143,7 +143,7 @@ bool XsdValidatingInstanceReader::read()
 
          if (!m_stateMachines.isEmpty() && hasStateMachine) {
             if (!m_stateMachines.top().inEndState()) {
-               error(QtXmlPatterns::tr("Element %1 is missing child element.").arg(formatKeyword(m_namePool->displayName(
+               error(QtXmlPatterns::tr("Element %1 is missing child element.").formatArg(formatKeyword(m_namePool->displayName(
                         elementName))));
                return false;
             }
@@ -160,7 +160,7 @@ bool XsdValidatingInstanceReader::read()
    while (it.hasNext()) {
       const QString id = it.next();
       if (!ids.contains(id)) {
-         error(QtXmlPatterns::tr("There is one IDREF value with no corresponding ID: %1.").arg(formatKeyword(id)));
+         error(QtXmlPatterns::tr("There is one IDREF value with no corresponding ID: %1.").formatArg(formatKeyword(id)));
          return false;
       }
    }
@@ -203,14 +203,14 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
    // first check if a custom schema is defined
    if (hasAttribute(m_xsiSchemaLocationName)) {
       const QString schemaLocation = attribute(m_xsiSchemaLocationName);
-      const QStringList parts = schemaLocation.split(QLatin1Char(' '), QString::SkipEmptyParts);
+      const QStringList parts = schemaLocation.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
       if ((parts.count() % 2) == 1) {
-         error(QtXmlPatterns::tr("%1 contains invalid data.").arg(formatKeyword(m_namePool, m_xsiSchemaLocationName)));
+         error(QtXmlPatterns::tr("%1 contains invalid data.").formatArg(formatKeyword(m_namePool, m_xsiSchemaLocationName)));
          return false;
       }
 
       for (int i = 0; i < parts.count(); i += 2) {
-         const QString identifier = QString::fromLatin1("%1 %2").arg(parts.at(i)).arg(parts.at(i + 1));
+         const QString identifier = QString::fromLatin1("%1 %2").formatArg(parts.at(i)).formatArg(parts.at(i + 1));
          if (m_processedSchemaLocations.contains(identifier)) {
             continue;
          } else {
@@ -219,7 +219,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
 
          // check constraint 4) from http://www.w3.org/TR/xmlschema-1/#schema-loc (only valid for XML Schema 1.0?)
          if (m_processedNamespaces.contains(parts.at(i))) {
-            error(QtXmlPatterns::tr("xsi:schemaLocation namespace %1 has already appeared earlier in the instance document.").arg(
+            error(QtXmlPatterns::tr("xsi:schemaLocation namespace %1 has already appeared earlier in the instance document.").formatArg(
                      formatKeyword(parts.at(i))));
             return false;
          }
@@ -270,7 +270,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
       XsdElement::Ptr element = elementByName(name());
       if (!element) {
          if (!hasAttribute(m_xsiTypeName)) {
-            error(QtXmlPatterns::tr("No definition for element %1 available.").arg(formatKeyword(m_namePool, name())));
+            error(QtXmlPatterns::tr("No definition for element %1 available.").formatArg(formatKeyword(m_namePool, name())));
             return false;
          }
 
@@ -288,7 +288,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
 
          const SchemaType::Ptr elementType = typeByName(typeName);
          if (!elementType) {
-            error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").arg(formatType(m_namePool, typeName)));
+            error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").formatArg(formatType(m_namePool, typeName)));
             return false;
          }
          element->setType(elementType);
@@ -303,7 +303,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
 
    } else {
       if (!m_stateMachines.top().proceed<QXmlName>(name())) {
-         error(QtXmlPatterns::tr("Element %1 is not defined in this scope.").arg(formatKeyword(m_namePool, name())));
+         error(QtXmlPatterns::tr("Element %1 is not defined in this scope.").formatArg(formatKeyword(m_namePool, name())));
          return false;
       }
 
@@ -338,7 +338,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
 
                   const SchemaType::Ptr elementType = typeByName(typeName);
                   if (!elementType) {
-                     error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").arg(formatType(m_namePool, typeName)));
+                     error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").formatArg(formatType(m_namePool, typeName)));
                      return false;
                   }
                   elementDeclaration->setType(elementType);
@@ -347,7 +347,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
 
             if (!elementDeclaration) {
                if (wildcard->processContents() == XsdWildcard::Strict) {
-                  error(QtXmlPatterns::tr("Declaration for element %1 does not exist.").arg(formatKeyword(m_namePool->displayName(
+                  error(QtXmlPatterns::tr("Declaration for element %1 does not exist.").formatArg(formatKeyword(m_namePool->displayName(
                            name()))));
                   return false;
                } else {
@@ -360,7 +360,7 @@ bool XsdValidatingInstanceReader::validate(bool &hasStateMachine, XsdElement::Pt
             } else {
                if (!validateElement(elementDeclaration, hasStateMachine)) {
                   if (wildcard->processContents() == XsdWildcard::Strict) {
-                     error(QtXmlPatterns::tr("Element %1 contains invalid content.").arg(formatKeyword(m_namePool->displayName(name()))));
+                     error(QtXmlPatterns::tr("Element %1 contains invalid content.").formatArg(formatKeyword(m_namePool->displayName(name()))));
                      return false;
                   }
                }
@@ -409,13 +409,13 @@ void XsdValidatingInstanceReader::createAndPushStateMachine(const XsdParticle::P
    builder.addStartState(startState);
 
    /*
-       QString fileName = QString("/tmp/foo_%1.dot").arg(m_namePool->displayName(complexType->name(m_namePool)));
-       QString pngFileName = QString("/tmp/foo_%1.png").arg(m_namePool->displayName(complexType->name(m_namePool)));
+       QString fileName = QString("/tmp/foo_%1.dot").formatArg(m_namePool->displayName(complexType->name(m_namePool)));
+       QString pngFileName = QString("/tmp/foo_%1.png").formatArg(m_namePool->displayName(complexType->name(m_namePool)));
        QFile file(fileName);
        file.open(QIODevice::WriteOnly);
        stateMachine.outputGraph(&file, "Hello");
        file.close();
-       ::system(QString("dot -Tpng %1 -o%2").arg(fileName).arg(pngFileName).toLatin1().data());
+       ::system(QString("dot -Tpng %1 -o%2").formatArg(fileName).formatArg(pngFileName).toLatin1().data());
    */
 
    stateMachine = stateMachine.toDFA();
@@ -433,7 +433,7 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
 
    // 2
    if (declaration->isAbstract()) {
-      error(QtXmlPatterns::tr("Element %1 is declared as abstract.").arg(formatKeyword(declaration->displayName(
+      error(QtXmlPatterns::tr("Element %1 is declared as abstract.").formatArg(formatKeyword(declaration->displayName(
                m_namePool))));
       return false;
    }
@@ -441,7 +441,7 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
    // 3
    if (!declaration->isNillable()) {
       if (hasAttribute(m_xsiNilName)) {
-         error(QtXmlPatterns::tr("Element %1 is not nillable.").arg(formatKeyword(declaration->displayName(m_namePool))));
+         error(QtXmlPatterns::tr("Element %1 is not nillable.").formatArg(formatKeyword(declaration->displayName(m_namePool))));
          return false; // 3.1
       }
    } else {
@@ -449,7 +449,7 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
          const QString value = attribute(m_xsiNilName);
          const Boolean::Ptr nil = Boolean::fromLexical(value);
          if (nil->hasError()) {
-            error(QtXmlPatterns::tr("Attribute %1 contains invalid data: %2").arg(formatKeyword(QLatin1String("nil."))).arg(
+            error(QtXmlPatterns::tr("Attribute %1 contains invalid data: %2").formatArg(formatKeyword(QLatin1String("nil."))).formatArg(
                      formatData(value)));
             return false;
          }
@@ -483,7 +483,7 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
       const SchemaType::Ptr elementType = typeByName(typeName);
       // 4.1
       if (!elementType) {
-         error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").arg(formatType(m_namePool, typeName)));
+         error(QtXmlPatterns::tr("Specified type %1 is not known to the schema.").formatArg(formatType(m_namePool, typeName)));
          return false;
       }
 
@@ -499,8 +499,8 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
       if (!XsdSchemaHelper::isValidlySubstitutable(elementType, declaration->type(), constraints)) {
          if (declaration->type()->name(m_namePool) != BuiltinTypes::xsAnyType->name(
                   m_namePool)) { // xs:anyType is a valid substitutable type here
-            error(QtXmlPatterns::tr("Specified type %1 is not validly substitutable with element type %2.").arg(formatType(
-                     m_namePool, elementType)).arg(formatType(m_namePool, declaration->type())));
+            error(QtXmlPatterns::tr("Specified type %1 is not validly substitutable with element type %2.").formatArg(formatType(
+                     m_namePool, elementType)).formatArg(formatType(m_namePool, declaration->type())));
             return false;
          }
       }
@@ -525,7 +525,7 @@ bool XsdValidatingInstanceReader::validateElementType(const XsdElement::Ptr &dec
    // 2
    if (type->isComplexType() && type->isDefinedBySchema()) {
       if (XsdComplexType::Ptr(type)->isAbstract()) {
-         error(QtXmlPatterns::tr("Complex type %1 is not allowed to be abstract.").arg(formatType(m_namePool, type)));
+         error(QtXmlPatterns::tr("Complex type %1 is not allowed to be abstract.").formatArg(formatType(m_namePool, type)));
          return false;
       }
    }
@@ -549,14 +549,14 @@ bool XsdValidatingInstanceReader::validateElementSimpleType(const XsdElement::Pt
    QSet<QXmlName> elementAttributes = attributeNames();
    elementAttributes.subtract(allowedAttributes);
    if (!elementAttributes.isEmpty()) {
-      error(QtXmlPatterns::tr("Element %1 contains not allowed attributes.").arg(formatKeyword(declaration->displayName(
+      error(QtXmlPatterns::tr("Element %1 contains not allowed attributes.").formatArg(formatKeyword(declaration->displayName(
                m_namePool))));
       return false;
    }
 
    // 3.1.2
    if (hasChildElement()) {
-      error(QtXmlPatterns::tr("Element %1 contains not allowed child element.").arg(formatKeyword(declaration->displayName(
+      error(QtXmlPatterns::tr("Element %1 contains not allowed child element.").formatArg(formatKeyword(declaration->displayName(
                m_namePool))));
       return false;
    }
@@ -579,8 +579,8 @@ bool XsdValidatingInstanceReader::validateElementSimpleType(const XsdElement::Pt
 
       const XsdTypeChecker checker(m_context, namespaceBindings(item().toNodeModelIndex()), sourceLocation());
       if (!checker.isValidString(actualValue, type, errorMsg, &boundType)) {
-         error(QtXmlPatterns::tr("Content of element %1 does not match its type definition: %2.").arg(formatKeyword(
-                  declaration->displayName(m_namePool))).arg(errorMsg));
+         error(QtXmlPatterns::tr("Content of element %1 does not match its type definition: %2.").formatArg(formatKeyword(
+                  declaration->displayName(m_namePool))).formatArg(errorMsg));
          return false;
       }
 
@@ -588,7 +588,7 @@ bool XsdValidatingInstanceReader::validateElementSimpleType(const XsdElement::Pt
       if (declaration->valueConstraint() && declaration->valueConstraint()->variety() == XsdElement::ValueConstraint::Fixed) {
          const QString actualConstraintValue = XsdTypeChecker::normalizedValue(declaration->valueConstraint()->value(), facets);
          if (!text().isEmpty() && !checker.valuesAreEqual(actualValue, actualConstraintValue, type)) {
-            error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").arg(formatKeyword(
+            error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").formatArg(formatKeyword(
                      declaration->displayName(m_namePool))));
             return false;
          }
@@ -608,7 +608,7 @@ bool XsdValidatingInstanceReader::validateElementSimpleType(const XsdElement::Pt
    }
 
    if (m_idRefsType->wxsTypeMatches(type)) {
-      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QString::SkipEmptyParts);
+      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
       for (int i = 0; i < idRefs.count(); ++i) {
          m_idRefs.insert(idRefs.at(i));
       }
@@ -652,7 +652,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
          // 1.1
          if (complexType->contentType()->variety() == XsdComplexType::ContentType::Empty) {
             if (hasChildText() || hasChildElement()) {
-               error(QtXmlPatterns::tr("Element %1 contains not allowed child content.").arg(formatKeyword(declaration->displayName(
+               error(QtXmlPatterns::tr("Element %1 contains not allowed child content.").formatArg(formatKeyword(declaration->displayName(
                         m_namePool))));
                return false;
             }
@@ -661,7 +661,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
          // 1.2
          if (complexType->contentType()->variety() == XsdComplexType::ContentType::Simple) {
             if (hasChildElement()) {
-               error(QtXmlPatterns::tr("Element %1 contains not allowed child element.").arg(formatKeyword(declaration->displayName(
+               error(QtXmlPatterns::tr("Element %1 contains not allowed child element.").formatArg(formatKeyword(declaration->displayName(
                         m_namePool))));
                return false;
             }
@@ -680,15 +680,15 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
             AnySimpleType::Ptr boundType;
             const XsdTypeChecker checker(m_context, namespaceBindings(item().toNodeModelIndex()), sourceLocation());
             if (!checker.isValidString(actualValue, complexType->contentType()->simpleType(), errorMsg, &boundType)) {
-               error(QtXmlPatterns::tr("Content of element %1 does not match its type definition: %2.").arg(formatKeyword(
-                        declaration->displayName(m_namePool))).arg(errorMsg));
+               error(QtXmlPatterns::tr("Content of element %1 does not match its type definition: %2.").formatArg(formatKeyword(
+                        declaration->displayName(m_namePool))).formatArg(errorMsg));
                return false;
             }
 
             // additional check
             if (declaration->valueConstraint() && declaration->valueConstraint()->variety() == XsdElement::ValueConstraint::Fixed) {
                if (!checker.valuesAreEqual(actualValue, declaration->valueConstraint()->value(), boundType)) {
-                  error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").arg(formatKeyword(
+                  error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").formatArg(formatKeyword(
                            declaration->displayName(m_namePool))));
                   return false;
                }
@@ -698,7 +698,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
          // 1.3
          if (complexType->contentType()->variety() == XsdComplexType::ContentType::ElementOnly) {
             if (!text().simplified().isEmpty()) {
-               error(QtXmlPatterns::tr("Element %1 contains not allowed text content.").arg(formatKeyword(declaration->displayName(
+               error(QtXmlPatterns::tr("Element %1 contains not allowed text content.").formatArg(formatKeyword(declaration->displayName(
                         m_namePool))));
                return false;
             }
@@ -717,7 +717,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
             if (complexType->contentType()->variety() == XsdComplexType::ContentType::Mixed) {
                if (declaration->valueConstraint() && declaration->valueConstraint()->variety() == XsdElement::ValueConstraint::Fixed) {
                   if (hasChildElement()) {
-                     error(QtXmlPatterns::tr("Element %1 cannot contain other elements, as it has fixed content.").arg(formatKeyword(
+                     error(QtXmlPatterns::tr("Element %1 cannot contain other elements, as it has fixed content.").formatArg(formatKeyword(
                               declaration->displayName(m_namePool))));
                      return false;
                   }
@@ -733,7 +733,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
                   }
 
                   if (actualValue != declaration->valueConstraint()->value()) {
-                     error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").arg(formatKeyword(
+                     error(QtXmlPatterns::tr("Content of element %1 does not match defined value constraint.").formatArg(formatKeyword(
                               declaration->displayName(m_namePool))));
                      return false;
                   }
@@ -764,9 +764,9 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
 
          if (usesIt.value()->isRequired()) {
             if (!attributes.contains(usesIt.key())) {
-               error(QtXmlPatterns::tr("Element %1 is missing required attribute %2.").arg(formatKeyword(declaration->displayName(
+               error(QtXmlPatterns::tr("Element %1 is missing required attribute %2.").formatArg(formatKeyword(declaration->displayName(
                         m_namePool)))
-                     .arg(formatKeyword(m_namePool->displayName(usesIt.key()))));
+                     .formatArg(formatKeyword(m_namePool->displayName(usesIt.key()))));
                return false;
             }
          }
@@ -797,7 +797,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
             if (complexType->attributeWildcard()) {
                const XsdWildcard::Ptr wildcard(complexType->attributeWildcard());
                if (!validateAttributeWildcard(attributeName, wildcard)) {
-                  error(QtXmlPatterns::tr("Attribute %1 does not match the attribute wildcard.").arg(formatKeyword(
+                  error(QtXmlPatterns::tr("Attribute %1 does not match the attribute wildcard.").formatArg(formatKeyword(
                            m_namePool->displayName(attributeName))));
                   return false;
                }
@@ -807,7 +807,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
 
                   if (!attributeDeclaration) {
                      if (wildcard->processContents() == XsdWildcard::Strict) {
-                        error(QtXmlPatterns::tr("Declaration for attribute %1 does not exist.").arg(formatKeyword(m_namePool->displayName(
+                        error(QtXmlPatterns::tr("Declaration for attribute %1 does not exist.").formatArg(formatKeyword(m_namePool->displayName(
                                  attributeName))));
                         return false;
                      }
@@ -815,8 +815,8 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
                      if (BuiltinTypes::xsID->wxsTypeMatches(attributeDeclaration->type())) {
                         if (hasIDAttribute) {
                            error(QtXmlPatterns::tr("Element %1 contains two attributes of type %2.")
-                                 .arg(formatKeyword(declaration->displayName(m_namePool)))
-                                 .arg(formatKeyword("ID")));
+                                 .formatArg(formatKeyword(declaration->displayName(m_namePool)))
+                                 .formatArg(formatKeyword("ID")));
                            return false;
                         }
 
@@ -825,7 +825,7 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
 
                      if (!validateAttribute(attributeDeclaration, attribute(attributeName))) {
                         if (wildcard->processContents() == XsdWildcard::Strict) {
-                           error(QtXmlPatterns::tr("Attribute %1 contains invalid content.").arg(formatKeyword(m_namePool->displayName(
+                           error(QtXmlPatterns::tr("Attribute %1 contains invalid content.").formatArg(formatKeyword(m_namePool->displayName(
                                     attributeName))));
                            return false;
                         }
@@ -833,9 +833,9 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
                   }
                }
             } else {
-               error(QtXmlPatterns::tr("Element %1 contains unknown attribute %2.").arg(formatKeyword(declaration->displayName(
+               error(QtXmlPatterns::tr("Element %1 contains unknown attribute %2.").formatArg(formatKeyword(declaration->displayName(
                         m_namePool)))
-                     .arg(formatKeyword(m_namePool->displayName(attributeName))));
+                     .formatArg(formatKeyword(m_namePool->displayName(attributeName))));
                return false;
             }
          }
@@ -874,8 +874,8 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttributeUse::Ptr &
 
    const XsdTypeChecker checker(m_context, namespaceBindings(index), sourceLocation());
    if (!checker.isValidString(actualValue, attributeType, errorMsg, &boundType)) {
-      error(QtXmlPatterns::tr("Content of attribute %1 does not match its type definition: %2.").arg(formatKeyword(
-               declaration->attribute()->displayName(m_namePool))).arg(errorMsg));
+      error(QtXmlPatterns::tr("Content of attribute %1 does not match its type definition: %2.").formatArg(formatKeyword(
+               declaration->attribute()->displayName(m_namePool))).formatArg(errorMsg));
       return false;
    }
 
@@ -884,7 +884,7 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttributeUse::Ptr &
          declaration->valueConstraint()->variety() == XsdAttributeUse::ValueConstraint::Fixed) {
       const QString actualConstraintValue = XsdTypeChecker::normalizedValue(declaration->valueConstraint()->value(), facets);
       if (!checker.valuesAreEqual(actualValue, actualConstraintValue, attributeType)) {
-         error(QtXmlPatterns::tr("Content of attribute %1 does not match defined value constraint.").arg(formatKeyword(
+         error(QtXmlPatterns::tr("Content of attribute %1 does not match defined value constraint.").formatArg(formatKeyword(
                   declaration->attribute()->displayName(m_namePool))));
          return false;
       }
@@ -895,7 +895,7 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttributeUse::Ptr &
    }
 
    if (m_idRefsType->wxsTypeMatches(declaration->attribute()->type())) {
-      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QString::SkipEmptyParts);
+      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
       for (int i = 0; i < idRefs.count(); ++i) {
          m_idRefs.insert(idRefs.at(i));
       }
@@ -924,8 +924,8 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttribute::Ptr &dec
 
    const XsdTypeChecker checker(m_context, namespaceBindings(index), sourceLocation());
    if (!checker.isValidString(actualValue, attributeType, errorMsg, &boundType)) {
-      error(QtXmlPatterns::tr("Content of attribute %1 does not match its type definition: %2.").arg(formatKeyword(
-               declaration->displayName(m_namePool))).arg(errorMsg));
+      error(QtXmlPatterns::tr("Content of attribute %1 does not match its type definition: %2.").formatArg(formatKeyword(
+               declaration->displayName(m_namePool))).formatArg(errorMsg));
       return false;
    }
 
@@ -934,7 +934,7 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttribute::Ptr &dec
          declaration->valueConstraint()->variety() == XsdAttribute::ValueConstraint::Fixed) {
       const QString actualConstraintValue = XsdTypeChecker::normalizedValue(declaration->valueConstraint()->value(), facets);
       if (!checker.valuesAreEqual(actualValue, actualConstraintValue, attributeType)) {
-         error(QtXmlPatterns::tr("Content of attribute %1 does not match defined value constraint.").arg(formatKeyword(
+         error(QtXmlPatterns::tr("Content of attribute %1 does not match defined value constraint.").formatArg(formatKeyword(
                   declaration->displayName(m_namePool))));
          return false;
       }
@@ -945,7 +945,7 @@ bool XsdValidatingInstanceReader::validateAttribute(const XsdAttribute::Ptr &dec
    }
 
    if (m_idRefsType->wxsTypeMatches(declaration->type())) {
-      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QString::SkipEmptyParts);
+      const QStringList idRefs = actualValue.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
       for (int i = 0; i < idRefs.count(); ++i) {
          m_idRefs.insert(idRefs.at(i));
       }
@@ -1031,7 +1031,7 @@ bool XsdValidatingInstanceReader::validateUniqueIdentityConstraint(const XsdElem
          }
 
          if (node.fieldsAreEqual(innerNode, m_namePool, m_context, &reflection)) {
-            error(QtXmlPatterns::tr("Non-unique value found for constraint %1.").arg(formatKeyword(constraint->displayName(
+            error(QtXmlPatterns::tr("Non-unique value found for constraint %1.").formatArg(formatKeyword(constraint->displayName(
                      m_namePool))));
             return false;
          }
@@ -1054,7 +1054,7 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
 
    // 4.2.1
    if (targetNodeSet.count() != qualifiedNodeSet.count()) {
-      error(QtXmlPatterns::tr("Key constraint %1 contains absent fields.").arg(formatKeyword(constraint->displayName(
+      error(QtXmlPatterns::tr("Key constraint %1 contains absent fields.").formatArg(formatKeyword(constraint->displayName(
                m_namePool))));
       return false;
    }
@@ -1075,8 +1075,8 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
             const XsdElement::Ptr declaration = m_model->assignedElement(index);
             if (declaration && declaration->isNillable()) {
                error(QtXmlPatterns::tr("Key constraint %1 contains references nillable element %2.")
-                     .arg(formatKeyword(constraint->displayName(m_namePool)))
-                     .arg(formatKeyword(declaration->displayName(m_namePool))));
+                     .formatArg(formatKeyword(constraint->displayName(m_namePool)))
+                     .formatArg(formatKeyword(declaration->displayName(m_namePool))));
                return false;
             }
          }
@@ -1115,7 +1115,7 @@ bool XsdValidatingInstanceReader::validateKeyRefIdentityConstraint(const XsdElem
       }
 
       if (!foundMatching) {
-         error(QtXmlPatterns::tr("No referenced value found for key reference %1.").arg(formatKeyword(constraint->displayName(
+         error(QtXmlPatterns::tr("No referenced value found for key reference %1.").formatArg(formatKeyword(constraint->displayName(
                   m_namePool))));
          return false;
       }
@@ -1163,6 +1163,7 @@ bool XsdValidatingInstanceReader::selectNodeSets(const XsdElement::Ptr &, const 
 
    // now we iterate over all target nodes and select the fields for each node
    QXmlItem item(resultItems.next());
+
    while (!item.isNull()) {
 
       TargetNode targetNode(item);
@@ -1183,7 +1184,7 @@ bool XsdValidatingInstanceReader::selectNodeSets(const XsdElement::Ptr &, const 
          }
 
          if (fieldVector.count() > 1) {
-            error(QtXmlPatterns::tr("More than one value found for field %1.").arg(formatData(field->expression())));
+            error(QtXmlPatterns::tr("More than one value found for field %1.").formatArg(formatData(field->expression())));
             return false;
          }
 
@@ -1204,7 +1205,7 @@ bool XsdValidatingInstanceReader::selectNodeSets(const XsdElement::Ptr &, const 
                }
             }
             if (!typeOk) {
-               error(QtXmlPatterns::tr("Field %1 has no simple type.").arg(formatData(field->expression())));
+               error(QtXmlPatterns::tr("Field %1 has no simple type.").formatArg(formatData(field->expression())));
                return false;
             }
 
@@ -1230,7 +1231,7 @@ bool XsdValidatingInstanceReader::selectNodeSets(const XsdElement::Ptr &, const 
                targetType = BuiltinTypes::xsString;
 
                const QXmlName qName = convertToQName(value.trimmed());
-               value = QString::fromLatin1("%1:%2").arg(m_namePool->stringForNamespace(qName.namespaceURI())).arg(
+               value = QString::fromLatin1("%1:%2").formatArg(m_namePool->stringForNamespace(qName.namespaceURI())).formatArg(
                           m_namePool->stringForLocalName(qName.localName()));
             }
 
@@ -1281,7 +1282,7 @@ SchemaType::Ptr XsdValidatingInstanceReader::typeByName(const QXmlName &name) co
 void XsdValidatingInstanceReader::addIdIdRefBinding(const QString &id, const NamedSchemaComponent::Ptr &binding)
 {
    if (!m_model->idIdRefBindings(id).isEmpty()) {
-      error(QtXmlPatterns::tr("ID value '%1' is not unique.").arg(formatKeyword(id)));
+      error(QtXmlPatterns::tr("ID value '%1' is not unique.").formatArg(formatKeyword(id)));
       return;
    }
 
@@ -1292,8 +1293,8 @@ QString XsdValidatingInstanceReader::qNameAttribute(const QXmlName &attributeNam
 {
    const QString value = attribute(attributeName).simplified();
    if (!XPathHelper::isQName(value)) {
-      error(QtXmlPatterns::tr("'%1' attribute contains invalid QName content: %2.").arg(m_namePool->displayName(
-               attributeName)).arg(formatData(value)));
+      error(QtXmlPatterns::tr("'%1' attribute contains invalid QName content: %2.").formatArg(m_namePool->displayName(
+               attributeName)).formatArg(formatData(value)));
       return QString();
    } else {
       return value;

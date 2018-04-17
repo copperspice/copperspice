@@ -28,12 +28,12 @@
 #include <QSourceLocation>
 #include <qnamepool_p.h>
 #include <qxmlname.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 class QAbstractMessageHandler;
 class QSourceLocation;
-class QString;
 
 namespace QPatternist {
 class SourceLocationReflection;

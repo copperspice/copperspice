@@ -60,7 +60,7 @@ QString ProcessingInstructionConstructor::data(const DynamicContext::Ptr &contex
       const QString value(leftTrimmed(dataArg.stringValue()));
 
       if (value.contains(QLatin1String("?>"))) {
-         context->error(QtXmlPatterns::tr("The data of a processing instruction cannot contain the string %1").arg(
+         context->error(QtXmlPatterns::tr("The data of a processing instruction cannot contain the string %1").formatArg(
                            formatData("?>")),
                         ReportContext::XQDY0026, this);
          return QString();

@@ -154,8 +154,8 @@ ComparingAggregator<oper, result>::typeCheck(const StaticContext::Ptr &context,
               !BuiltinTypes::xsDateTime->xdtTypeMatches(t1) &&
               !BuiltinTypes::xsYearMonthDuration->xdtTypeMatches(t1)) {
       context->error(QtXmlPatterns::tr("The first argument to %1 cannot be of type %2.")
-                     .arg(QPatternist::formatFunction(context->namePool(), signature()))
-                     .arg(formatType(context->namePool(), m_operands.first()->staticType())),
+                     .formatArg(QPatternist::formatFunction(context->namePool(), signature()))
+                     .formatArg(formatType(context->namePool(), m_operands.first()->staticType())),
                      ReportContext::FORG0006, this);
       return me;
    }

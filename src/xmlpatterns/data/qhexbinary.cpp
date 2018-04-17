@@ -72,11 +72,9 @@ AtomicValue::Ptr HexBinary::fromLexical(const NamePool::Ptr &np, const QString &
 
    if ((len & 1) != 0) {
       /* Catch a common case. */
-      return ValidationError::createError(QtXmlPatterns::tr(
-                                             "A value of type %1 must contain an even number of "
-                                             "digits. The value %2 does not.")
-                                          .arg(formatType(np, BuiltinTypes::xsHexBinary),
-                                                formatData(QString::number(len))));
+      return ValidationError::createError(QtXmlPatterns::tr("A value of type %1 must contain an even number of "
+                  "digits. The value %2 does not.")
+                  .formatArgs(formatType(np, BuiltinTypes::xsHexBinary), formatData(QString::number(len))));
    }
 
    QByteArray val;
@@ -87,16 +85,15 @@ AtomicValue::Ptr HexBinary::fromLexical(const NamePool::Ptr &np, const QString &
       qint8 p2 = fromHex(lexical[i * 2 + 1]);
 
       if (p1 == -1 || p2 == -1) {
-         const QString hex(QString::fromLatin1("%1%2").arg(lexical[i * 2], lexical[i * 2 + 1]));
+         const QString hex(QString("%1%2").formatArgs(lexical[i * 2], lexical[i * 2 + 1]));
 
-         return ValidationError::createError(QtXmlPatterns::tr(
-                                                "%1 is not valid as a value of type %2.")
-                                             .arg(formatData(hex),
-                                                   formatType(np, BuiltinTypes::xsHexBinary)));
+         return ValidationError::createError(QtXmlPatterns::tr("%1 is not valid as a value of type %2.")
+                  .formatArgs(formatData(hex), formatType(np, BuiltinTypes::xsHexBinary)));
       }
 
       val[i] = static_cast<char>(p1 * 16 + p2);
    }
+
    Q_ASSERT(!val.isEmpty());
 
    return AtomicValue::Ptr(new HexBinary(val));
@@ -111,8 +108,8 @@ QString HexBinary::stringValue() const
 {
    static const char s_toHex[] = "0123456789ABCDEF";
    const int len = m_value.count();
+
    QString result;
-   result.reserve(len * 2);
 
    for (int i = 0; i < len; ++i) {
       // This cast is significant.

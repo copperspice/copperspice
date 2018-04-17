@@ -57,11 +57,9 @@ AtomicValue::~AtomicValue()
 
 bool AtomicValue::evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &context) const
 {
-   context->error(QtXmlPatterns::tr("A value of type %1 cannot have an "
-                                    "Effective Boolean Value.")
-                  .arg(formatType(context->namePool(), type())),
-                  ReportContext::FORG0006,
-                  QSourceLocation());
+   context->error(QtXmlPatterns::tr("A value of type %1 cannot have an Effective Boolean Value.")
+                  .formatArg(formatType(context->namePool(), type())), ReportContext::FORG0006,  QSourceLocation());
+
    return false; /* Silence GCC warning. */
 }
 
@@ -113,8 +111,7 @@ QVariant AtomicValue::toQt(const AtomicValue *const value)
 
 Item AtomicValue::toXDM(const QVariant &value)
 {
-   Q_ASSERT_X(value.isValid(), Q_FUNC_INFO,
-              "QVariants sent to Patternist must be valid.");
+   Q_ASSERT_X(value.isValid(), Q_FUNC_INFO, "QVariants sent to Patternist must be valid.");
 
    switch (value.userType()) {
       case QVariant::Char:
@@ -135,7 +132,7 @@ Item AtomicValue::toXDM(const QVariant &value)
       case QVariant::LongLong:
       /* Fallthrough. */
       case QVariant::UInt:
-         return Integer::fromValue(value.toLongLong());
+         return Integer::fromValue(value.toInt());
       case QVariant::ULongLong:
          return DerivedInteger<TypeUnsignedLong>::fromValueUnchecked(value.toULongLong());
       case QVariant::Bool:
@@ -156,8 +153,8 @@ Item AtomicValue::toXDM(const QVariant &value)
             return Item(Float::fromValue(value.value<float>()));
 
          } else {
-            Q_ASSERT_X(false, Q_FUNC_INFO, csPrintable(QString::fromLatin1("QVariants of type %1 are not supported "
-                  "in Patternist").arg(QLatin1String(value.typeName()))));
+            Q_ASSERT_X(false, Q_FUNC_INFO, csPrintable(QString::fromLatin1("QVariants of type %1 are not supported in Patternist")
+                  .formatArg(QLatin1String(value.typeName()))));
 
             return AtomicValue::Ptr();
          }

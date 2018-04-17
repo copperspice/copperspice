@@ -361,7 +361,7 @@ inline QXmlNodeModelIndex QXmlNodeModelIndex::root() const
    return m_storage.model->root(*this);
 }
 
-inline QXmlNodeModelIndex::Iterator::Ptr QXmlNodeModelIndex::iterate(const QXmlNodeModelIndex::Axis axis) const
+inline auto QXmlNodeModelIndex::iterate(const QXmlNodeModelIndex::Axis axis) const -> Iterator::Ptr
 {
    return m_storage.model->iterate(*this, axis);
 }

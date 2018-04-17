@@ -59,17 +59,16 @@ void OutputValidator::endElement()
    m_receiver->endElement();
 }
 
-void OutputValidator::attribute(const QXmlName &name,
-                                const QStringRef &value)
+void OutputValidator::attribute(const QXmlName &name, QStringView value)
 {
    if (m_hasReceivedChildren) {
       m_context->error(QtXmlPatterns::tr("It's not possible to add attributes after any other kind of node."),
-                       m_isXSLT ? ReportContext::XTDE0410 : ReportContext::XQTY0024, this);
+                  m_isXSLT ? ReportContext::XTDE0410 : ReportContext::XQTY0024, this);
+
    } else {
       if (!m_isXSLT && m_attributes.contains(name)) {
-         m_context->error(QtXmlPatterns::tr("An attribute by name %1 has already been created.").arg(formatKeyword(
-                             m_context->namePool(), name)),
-                          ReportContext::XQDY0025, this);
+         m_context->error(QtXmlPatterns::tr("An attribute by name %1 has already been created.").formatArg(formatKeyword(
+                  m_context->namePool(), name)), ReportContext::XQDY0025, this);
       } else {
          m_attributes.insert(name);
          m_receiver->attribute(name, value);
@@ -83,7 +82,7 @@ void OutputValidator::comment(const QString &value)
    m_receiver->comment(value);
 }
 
-void OutputValidator::characters(const QStringRef &value)
+void OutputValidator::characters(QStringView value)
 {
    m_hasReceivedChildren = true;
    m_receiver->characters(value);

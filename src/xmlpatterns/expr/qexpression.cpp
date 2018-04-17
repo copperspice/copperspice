@@ -362,7 +362,7 @@ const SourceLocationReflection *Expression::actualReflection() const
 
 QString Expression::description() const
 {
-   return QString::fromLatin1("Expression, id: %1").arg(QString::number(id()));
+   return QString::fromLatin1("Expression, id: %1").formatArg(QString::number(id()));
 }
 
 PatternPriority Expression::patternPriority() const

@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QSet>
 #include <QStack>
+#include <qstringfwd.h>
 
 #include "qxmlutils_p.h"
 #include "qacceltree_p.h"
@@ -64,9 +65,9 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    void startElement(const QXmlName &name) override;
    void startElement(const QXmlName &name, qint64 line, qint64 column);
    void endElement() override;
-   void attribute(const QXmlName &name, const QStringRef &value) override;
-   void characters(const QStringRef &ch) override;
-   void whitespaceOnly(const QStringRef &ch) override;
+   void attribute(const QXmlName &name, QStringView value) override;
+   void characters(QStringView ch) override;
+   void whitespaceOnly(QStringView ch) override;
    void processingInstruction(const QXmlName &target, const QString &data) override;
    void namespaceBinding(const QXmlName &nb) override;
    void comment(const QString &content) override;

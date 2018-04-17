@@ -25,6 +25,7 @@
 
 #include <QSharedData>
 #include <qitem_p.h>
+#inculde <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -110,7 +111,7 @@ class QAbstractXmlReceiver : public QSharedData
     *
     * @see characters()
     */
-   virtual void whitespaceOnly(const QStringRef &value);
+   virtual void whitespaceOnly(QStringView value);
 
    /**
     * Start of a document node.

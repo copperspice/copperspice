@@ -38,7 +38,7 @@ Item Integer::fromValue(const xsInteger num)
 AtomicValue::Ptr Integer::fromLexical(const QString &strNumeric)
 {
    bool conversionOk = false;
-   const xsInteger num = strNumeric.toLongLong(&conversionOk);
+   const xsInteger num = strNumeric.toInteger<qint64>(&conversionOk);
 
    if (conversionOk) {
       return AtomicValue::Ptr(new Integer(num));

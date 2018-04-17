@@ -5852,16 +5852,16 @@ bool QDomDocumentPrivate::setContent(QXmlInputSource *source, bool namespaceProc
    return setContent(source, &reader, errorMsg, errorLine, errorColumn);
 }
 
-bool QDomDocumentPrivate::setContent(QXmlInputSource *source, QXmlReader *reader, QString *errorMsg, int *errorLine,
-                                     int *errorColumn)
+bool QDomDocumentPrivate::setContent(QXmlInputSource *source, QXmlReader *reader, QString *errorMsg, int *errorLine, int *errorColumn)
 {
    clear();
+
    impl = new QDomImplementationPrivate;
    type = new QDomDocumentTypePrivate(this, this);
    type->ref.deref();
 
    bool namespaceProcessing = reader->feature(QLatin1String("http://xml.org/sax/features/namespaces"))
-                              && !reader->feature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"));
+                              && ! reader->feature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"));
 
    QDomHandler hnd(this, namespaceProcessing);
    reader->setContentHandler(&hnd);
@@ -5870,16 +5870,19 @@ bool QDomDocumentPrivate::setContent(QXmlInputSource *source, QXmlReader *reader
    reader->setDeclHandler(&hnd);
    reader->setDTDHandler(&hnd);
 
-   if (!reader->parse(source)) {
+   if (! reader->parse(source)) {
       if (errorMsg) {
          *errorMsg = hnd.errorMsg;
       }
+
       if (errorLine) {
          *errorLine = hnd.errorLine;
       }
+
       if (errorColumn) {
          *errorColumn = hnd.errorColumn;
       }
+
       return false;
    }
 
@@ -6335,7 +6338,7 @@ bool QDomDocument::setContent(const QString &text, bool namespaceProcessing, QSt
 
 bool QDomDocument::setContent(const QByteArray &data, bool namespaceProcessing, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-   if (!impl) {
+   if (! impl) {
       impl = new QDomDocumentPrivate();
    }
 
@@ -6352,26 +6355,18 @@ bool QDomDocument::setContent(const QByteArray &data, bool namespaceProcessing, 
     This function reads the XML document from the IO device \a dev, returning
     true if the content was successfully parsed; otherwise returns false.
 */
-bool QDomDocument::setContent(QIODevice *dev, bool namespaceProcessing, QString *errorMsg, int *errorLine,
-                              int *errorColumn)
+bool QDomDocument::setContent(QIODevice *dev, bool namespaceProcessing, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-   if (!impl) {
+   if (! impl) {
       impl = new QDomDocumentPrivate();
    }
+
    QXmlInputSource source(dev);
    return IMPL->setContent(&source, namespaceProcessing, errorMsg, errorLine, errorColumn);
 }
 
-/*!
-    \overload
-    \since 4.5
 
-    This function reads the XML document from the QXmlInputSource \a source,
-    returning true if the content was successfully parsed; otherwise returns false.
-
-*/
-bool QDomDocument::setContent(QXmlInputSource *source, bool namespaceProcessing, QString *errorMsg, int *errorLine,
-                              int *errorColumn )
+bool QDomDocument::setContent(QXmlInputSource *source, bool namespaceProcessing, QString *errorMsg, int *errorLine, int *errorColumn )
 {
    if (!impl) {
       impl = new QDomDocumentPrivate();

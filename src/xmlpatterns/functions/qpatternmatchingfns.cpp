@@ -30,8 +30,6 @@
 
 #include "qpatternmatchingfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 MatchesFN::MatchesFN() : PatternPlatform(2)
@@ -40,7 +38,7 @@ MatchesFN::MatchesFN() : PatternPlatform(2)
 
 Item MatchesFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-   const QRegExp regexp(pattern(context));
+   const QRegularExpression regexp(pattern(context));
    QString input;
 
    const Item arg(m_operands.first()->evaluateSingleton(context));
@@ -57,7 +55,7 @@ ReplaceFN::ReplaceFN() : PatternPlatform(3)
 
 Item ReplaceFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-   const QRegExp regexp(pattern(context));
+   const QRegularExpression regexp(pattern(context));
    QString input;
 
    const Item arg(m_operands.first()->evaluateSingleton(context));
@@ -65,37 +63,34 @@ Item ReplaceFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       input = arg.stringValue();
    }
 
-   const QString replacement(m_replacementString.isNull() ? parseReplacement(regexp.captureCount(), context)
-                             : m_replacementString);
-
+   const QString replacement(m_replacementString.isEmpty() ?
+                  parseReplacement(regexp.captureCount(), context) : m_replacementString);
 
    return AtomicString::fromValue(input.replace(regexp, replacement));
 }
 
 QString ReplaceFN::errorAtEnd(const char ch)
 {
-   return QtXmlPatterns::tr("%1 must be followed by %2 or %3, not at "
-                            "the end of the replacement string.")
-          .arg(formatKeyword(QLatin1Char(ch)))
-          .arg(formatKeyword(QLatin1Char('\\')))
-          .arg(formatKeyword(QLatin1Char('$')));
+   return QtXmlPatterns::tr("%1 must be followed by %2 or %3, not at the end of the replacement string.")
+          .formatArg(formatKeyword(QLatin1Char(ch)))
+          .formatArg(formatKeyword(QLatin1Char('\\')))
+          .formatArg(formatKeyword(QLatin1Char('$')));
 }
 
-QString ReplaceFN::parseReplacement(const int,
-                                    const DynamicContext::Ptr &context) const
+QString ReplaceFN::parseReplacement(const int, const DynamicContext::Ptr &context) const
 {
    // TODO what if there is no groups, can one rewrite to the replacement then?
    const QString input(m_operands.at(2)->evaluateSingleton(context).stringValue());
 
    QString retval;
-   retval.reserve(input.size());
    const int len = input.length();
 
    for (int i = 0; i < len; ++i) {
       const QChar ch(input.at(i));
+
       switch (ch.toLatin1()) {
          case '$': {
-            /* QRegExp uses '\' as opposed to '$' for marking sub groups. */
+            /* QRegularExpression uses '\' as opposed to '$' for marking sub groups. */
             retval.append(QLatin1Char('\\'));
 
             ++i;
@@ -108,10 +103,8 @@ QString ReplaceFN::parseReplacement(const int,
             if (nextCh.isDigit()) {
                retval.append(nextCh);
             } else {
-               context->error(QtXmlPatterns::tr("In the replacement string, %1 must be "
-                                                "followed by at least one digit when not escaped.")
-                              .arg(formatKeyword(QLatin1Char('$'))),
-                              ReportContext::FORX0004, this);
+               context->error(QtXmlPatterns::tr("In the replacement string, %1 must be followed by at least one digit when not escaped.")
+                              .formatArg(formatKeyword(QLatin1Char('$'))), ReportContext::FORX0004, this);
                return QString();
             }
 
@@ -131,9 +124,9 @@ QString ReplaceFN::parseReplacement(const int,
             } else {
                context->error(QtXmlPatterns::tr("In the replacement string, %1 can only be used to "
                                                 "escape itself or %2, not %3")
-                              .arg(formatKeyword(QLatin1Char('\\')))
-                              .arg(formatKeyword(QLatin1Char('$')))
-                              .arg(formatKeyword(nextCh)),
+                              .formatArg(formatKeyword(QLatin1Char('\\')))
+                              .formatArg(formatKeyword(QLatin1Char('$')))
+                              .formatArg(formatKeyword(nextCh)),
                               ReportContext::FORX0004, this);
                return QString();
             }
@@ -175,7 +168,7 @@ TokenizeFN::TokenizeFN() : PatternPlatform(2)
  */
 static inline bool qIsForwardIteratorEnd(const QString &item)
 {
-   return item.isNull();
+   return item.isEmpty();
 }
 
 Item TokenizeFN::mapToItem(const QString &subject, const DynamicContext::Ptr &) const
@@ -186,21 +179,20 @@ Item TokenizeFN::mapToItem(const QString &subject, const DynamicContext::Ptr &) 
 Item::Iterator::Ptr TokenizeFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
    const Item arg(m_operands.first()->evaluateSingleton(context));
-   if (!arg) {
+
+   if (! arg) {
       return CommonValues::emptyIterator;
    }
 
    const QString input(arg.stringValue());
+
    if (input.isEmpty()) {
       return CommonValues::emptyIterator;
    }
 
-   const QRegExp regExp(pattern(context));
-   const QStringList result(input.split(regExp, QString::KeepEmptyParts));
+   const QRegularExpression regExp(pattern(context));
+   const QStringList result(input.split(regExp, QStringParser::KeepEmptyParts));
 
-   return makeItemMappingIterator<Item>(ConstPtr(this),
-                                        makeListIterator(result),
-                                        DynamicContext::Ptr());
+   return makeItemMappingIterator<Item>(ConstPtr(this), makeListIterator(result), DynamicContext::Ptr());
 }
 
-QT_END_NAMESPACE

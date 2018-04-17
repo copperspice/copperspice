@@ -60,7 +60,7 @@ NamePool::NamePool()
       unlockedAllocateNamespace(QLatin1String("  |  InternalXSLT"));
 
       Q_ASSERT_X(m_namespaces.count() == StandardNamespaceCount, Q_FUNC_INFO,
-                 qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").arg(StandardNamespaceCount).arg(m_namespaces.count())));
+                 qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").formatArg(StandardNamespaceCount).formatArg(m_namespaces.count())));
    }
 
    /* Prefixes. */
@@ -76,7 +76,7 @@ NamePool::NamePool()
       unlockedAllocatePrefix(QLatin1String("|||")); /* Invalid NCName, for StopNamespaceInheritance. */
 
       Q_ASSERT_X(m_prefixes.count() == StandardPrefixCount, Q_FUNC_INFO,
-                 qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").arg(StandardPrefixCount).arg(m_prefixes.count())));
+                 qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").formatArg(StandardPrefixCount).formatArg(m_prefixes.count())));
    }
 
    /* Local names. */
@@ -240,10 +240,10 @@ QXmlName NamePool::allocateQName(const QString &uri, const QString &localName, c
    */
 
    Q_ASSERT_X(QXmlUtils::isNCName(localName), Q_FUNC_INFO,
-              qPrintable(QString::fromLatin1("'%1' is an invalid NCName.").arg(localName)));
+              qPrintable(QString::fromLatin1("'%1' is an invalid NCName.").formatArg(localName)));
 
-   const QXmlName::NamespaceCode nsCode = unlockedAllocateNamespace(uri);
-   const QXmlName::LocalNameCode localCode  = unlockedAllocateLocalName(localName);
+   const QXmlName::NamespaceCode nsCode    = unlockedAllocateNamespace(uri);
+   const QXmlName::LocalNameCode localCode = unlockedAllocateLocalName(localName);
 
    Q_ASSERT(prefix.isEmpty() || QXmlUtils::isNCName(prefix));
    const QXmlName::PrefixCode prefixCode = unlockedAllocatePrefix(prefix);
@@ -256,7 +256,7 @@ QXmlName NamePool::allocateBinding(const QString &prefix, const QString &uri)
    QWriteLocker l(&lock);
 
    Q_ASSERT_X(prefix.isEmpty() || QXmlUtils::isNCName(prefix), Q_FUNC_INFO,
-              qPrintable(QString::fromLatin1("%1 is an invalid prefix.").arg(prefix)));
+              qPrintable(QString::fromLatin1("%1 is an invalid prefix.").formatArg(prefix)));
    const QXmlName::NamespaceCode nsCode = unlockedAllocateNamespace(uri);
 
    Q_ASSERT(prefix.isEmpty() || QXmlUtils::isNCName(prefix));
@@ -268,7 +268,7 @@ QXmlName NamePool::allocateBinding(const QString &prefix, const QString &uri)
 QXmlName::LocalNameCode NamePool::unlockedAllocateLocalName(const QString &ln)
 {
    Q_ASSERT_X(QXmlUtils::isNCName(ln), Q_FUNC_INFO,
-              qPrintable(QString::fromLatin1("Invalid local name: \"%1\"").arg(ln)));
+              qPrintable(QString::fromLatin1("Invalid local name: \"%1\"").formatArg(ln)));
 
    int indexInLocalNames = m_localNameMapping.value(ln, NoSuchValue);
 

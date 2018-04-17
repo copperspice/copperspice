@@ -250,7 +250,7 @@ Item::Iterator::Ptr CollectionFN::evaluateSequence(const DynamicContext::Ptr &co
          const QUrl uri(AnyURI::toQUrl<ReportContext::FODC0004>(itemURI.stringValue(), context, this));
 
          // TODO 2. Resolve against static context base URI(store base URI at compile time)
-         context->error(QtXmlPatterns::tr("%1 cannot be retrieved").arg(formatResourcePath(uri)),
+         context->error(QtXmlPatterns::tr("%1 cannot be retrieved").formatArg(formatResourcePath(uri)),
                         ReportContext::FODC0004, this);
          return CommonValues::emptyIterator;
       } else {

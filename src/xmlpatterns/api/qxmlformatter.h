@@ -24,6 +24,7 @@
 #define QXMLFORMATTER_H
 
 #include <QtXmlPatterns/QXmlSerializer>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 class QIODevice;
@@ -36,12 +37,12 @@ class Q_XMLPATTERNS_EXPORT QXmlFormatter : public QXmlSerializer
  public:
    QXmlFormatter(const QXmlQuery &query, QIODevice *outputDevice);
 
-   void characters(const QStringRef &value) override;
+   void characters(QStringView value) override;
    void comment(const QString &value) override;
    void startElement(const QXmlName &name) override;
    void endElement() override;
 
-   void attribute(const QXmlName &name, const QStringRef &value) override;
+   void attribute(const QXmlName &name, QStringView value) override;
    void processingInstruction(const QXmlName &name, const QString &value) override;
 
    void atomicValue(const QVariant &value) override;

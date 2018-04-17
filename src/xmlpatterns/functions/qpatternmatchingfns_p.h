@@ -52,7 +52,7 @@ class ReplaceFN : public PatternPlatform
    static inline QString errorAtEnd(const char ch);
 
    /**
-    * Reads the string in the third argument and converts it to a a QRegExp compatible
+    * Reads the string in the third argument and converts it to a a QRegularExpression compatible
     * replacement string, containing sub-group references and so forth.
     */
    QString parseReplacement(const int captureCount, const DynamicContext::Ptr &context) const;

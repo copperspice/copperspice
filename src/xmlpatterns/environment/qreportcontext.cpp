@@ -20,13 +20,11 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qurl.h>
 
 #include "qabstractmessagehandler.h"
-
 #include "qcommonnamespaces_p.h"
 #include "qexpression_p.h"
-
 #include "qreportcontext_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -44,28 +42,20 @@ QString ReportContext::finalizeDescription(const QString &desc)
           + QLatin1String("</p></body></html>");
 }
 
-void ReportContext::warning(const QString &description,
-                            const QSourceLocation &sourceLocation)
+void ReportContext::warning(const QString &description, const QSourceLocation &sourceLocation)
 {
    messageHandler()->message(QtWarningMsg, finalizeDescription(description), QUrl(), sourceLocation);
 }
 
-void ReportContext::createError(const QString &description,
-                                const QtMsgType type,
-                                const QUrl &id,
-                                const QSourceLocation &sourceLocation) const
+void ReportContext::createError(const QString &description, const QtMsgType type, const QUrl &id, const QSourceLocation &sourceLocation) const
 {
    messageHandler()->message(type, finalizeDescription(description), id, sourceLocation);
    throw Exception(true);
 }
 
-void ReportContext::error(const QString &msg,
-                          const ErrorCode code,
-                          const QSourceLocation &sourceLocation)
+void ReportContext::error(const QString &msg, const ErrorCode code, const QSourceLocation &sourceLocation)
 {
-   createError(msg, QtFatalMsg,
-               QUrl(CommonNamespaces::XPERR + QLatin1Char('#') + codeToString(code)),
-               sourceLocation);
+   createError(msg, QtFatalMsg, QUrl(CommonNamespaces::XPERR + QLatin1Char('#') + codeToString(code)), sourceLocation);
 }
 
 QSourceLocation ReportContext::lookupSourceLocation(const SourceLocationReflection *const r) const
@@ -78,34 +68,28 @@ QSourceLocation ReportContext::lookupSourceLocation(const SourceLocationReflecti
 
    if (sl.isNull()) {
       Q_ASSERT_X(!locationFor(actual).isNull(), Q_FUNC_INFO,
-                 qPrintable(QString::fromLatin1("No location is available for: %1").arg(actual->description())));
+                 qPrintable(QString::fromLatin1("No location is available for: %1").formatArg(actual->description())));
+
       return locationFor(actual);
    } else {
       return sl;
    }
 }
 
-void ReportContext::error(const QString &message,
-                          const ReportContext::ErrorCode errorCode,
-                          const SourceLocationReflection *const reflection)
+void ReportContext::error(const QString &message, const ReportContext::ErrorCode errorCode, const SourceLocationReflection *const reflection)
 {
    Q_ASSERT(reflection);
    error(message, errorCode, lookupSourceLocation(reflection));
 }
 
-void ReportContext::error(const QString &msg,
-                          const QXmlName qname,
-                          const SourceLocationReflection *const reflection)
+void ReportContext::error(const QString &msg, const QXmlName qname, const SourceLocationReflection *const reflection)
 {
-   Q_ASSERT(!qname.isNull());
-   createError(msg, QtFatalMsg,
-               QUrl(namePool()->stringForNamespace(qname.namespaceURI()) + QLatin1Char('#') + namePool()->stringForLocalName(
-                       qname.localName())),
-               lookupSourceLocation(reflection));
+   Q_ASSERT(! qname.isNull());
+   createError(msg, QtFatalMsg, QUrl(namePool()->stringForNamespace(qname.namespaceURI()) + QLatin1Char('#') + namePool()->stringForLocalName(
+                  qname.localName())), lookupSourceLocation(reflection));
 }
 
-QString ReportContext::codeFromURI(const QString &typeURI,
-                                   QString &uri)
+QString ReportContext::codeFromURI(const QString &typeURI, QString &uri)
 {
    /* Wouldn't surprise me if this can be done more efficiently. */
    QUrl source(typeURI);
@@ -113,6 +97,7 @@ QString ReportContext::codeFromURI(const QString &typeURI,
    const QString code(source.fragment());
    source.setFragment(QString());
    uri = source.toString();
+
    return code;
 }
 
@@ -1046,24 +1031,23 @@ QString ReportContext::codeToString(const ReportContext::ErrorCode code)
    }
 
    Q_ASSERT_X(result, Q_FUNC_INFO, "Unknown enum value.");
-   return QLatin1String(result);
+
+   return QString::fromLatin1(result);
 }
 
-QUrl ReportContext::resolveURI(const QUrl &relative,
-                               const QUrl &baseURI) const
+QUrl ReportContext::resolveURI(const QUrl &relative, const QUrl &baseURI) const
 {
-   Q_ASSERT_X(!baseURI.isRelative(), Q_FUNC_INFO,
-              "The base URI passed from the engine wasn't absolute.");
+   Q_ASSERT_X(!baseURI.isRelative(), Q_FUNC_INFO, "The base URI passed from the engine wasn't absolute.");
 
    const QAbstractUriResolver *const resolver(uriResolver());
 
    if (resolver) {
       const QUrl final(resolver->resolve(relative, baseURI));
-      Q_ASSERT_X(final.isValid() || final.isEmpty(), Q_FUNC_INFO,
-                 "The QAbstractUriResolver must return a valid URI.");
-      Q_ASSERT_X(!final.isRelative(), Q_FUNC_INFO,
-                 "The QAbstractUriResolver must return an absolute URI.");
+      Q_ASSERT_X(final.isValid() || final.isEmpty(), Q_FUNC_INFO, "The QAbstractUriResolver must return a valid URI.");
+      Q_ASSERT_X(!final.isRelative(), Q_FUNC_INFO, "The QAbstractUriResolver must return an absolute URI.");
+
       return final;
+
    } else {
       return baseURI.resolved(relative);
    }

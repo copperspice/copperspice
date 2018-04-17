@@ -398,8 +398,7 @@ XsdStateMachine<TransitionType> XsdStateMachine<TransitionType>::toDFA() const
 }
 
 template <typename TransitionType>
-QHash<typename XsdStateMachine<TransitionType>::StateId, typename XsdStateMachine<TransitionType>::StateType>
-XsdStateMachine<TransitionType>::states() const
+auto XsdStateMachine<TransitionType>::states() const -> QHash<StateId, StateType>
 {
    return m_states;
 }

@@ -78,22 +78,27 @@ QXmlName::NamespaceCode NamespaceSupport::uri(const QXmlName::PrefixCode prefixC
 bool NamespaceSupport::processName(const QString &qname, NameType type, QXmlName &name) const
 {
    int len = qname.size();
-   const QChar *data = qname.constData();
+
    for (int pos = 0; pos < len; ++pos) {
-      if (data[pos] == QLatin1Char(':')) {
+
+      if (qname[pos] == ':') {
          const QXmlName::PrefixCode prefixCode = m_namePool->allocatePrefix(qname.left(pos));
-         if (!m_ns.contains(prefixCode)) {
+
+         if (! m_ns.contains(prefixCode)) {
             return false;
          }
-         const QXmlName::NamespaceCode namespaceCode = uri(prefixCode);
-         const QXmlName::LocalNameCode localNameCode = m_namePool->allocateLocalName(qname.mid(pos + 1));
+
+         const QXmlName::NamespaceCode  namespaceCode = uri(prefixCode);
+         const QXmlName::LocalNameCode  localNameCode = m_namePool->allocateLocalName(qname.mid(pos + 1));
          name = QXmlName(namespaceCode, localNameCode, prefixCode);
+
          return true;
       }
    }
 
    // there was no ':'
    QXmlName::NamespaceCode namespaceCode = 0;
+
    // attributes don't take default namespace
    if (type == ElementName && !m_ns.isEmpty()) {
       namespaceCode = m_ns.value(0);   // get default namespace

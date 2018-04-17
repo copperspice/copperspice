@@ -3115,8 +3115,6 @@ QXmlDeclHandler *QXmlSimpleReader::declHandler() const
    return d->declHnd;
 }
 
-
-
 /*!
     \reimp
 */
@@ -3169,22 +3167,27 @@ bool QXmlSimpleReader::parse(const QXmlInputSource *input, bool incremental)
 
    if (incremental) {
       d->initIncrementalParsing();
+
    } else {
       delete d->parseStack;
       d->parseStack = 0;
    }
+
    d->init(input);
 
    // call the handler
    if (d->contentHnd) {
       d->contentHnd->setDocumentLocator(d->locator.data());
-      if (!d->contentHnd->startDocument()) {
+
+      if (! d->contentHnd->startDocument()) {
          d->reportParseError(d->contentHnd->errorString());
          d->tags.clear();
          return false;
       }
    }
+
    qt_xml_skipped_entity_in_content = false;
+
    return d->parseBeginOrContinue(0, incremental);
 }
 
@@ -3216,10 +3219,13 @@ bool QXmlSimpleReader::parse(const QXmlInputSource *input, bool incremental)
 bool QXmlSimpleReader::parseContinue()
 {
    Q_D(QXmlSimpleReader);
+
    if (d->parseStack == 0 || d->parseStack->isEmpty()) {
       return false;
    }
+
    d->initData();
+
    int state = d->parseStack->pop().state;
    return d->parseBeginOrContinue(state, true);
 }
@@ -3232,7 +3238,7 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
    bool atEndOrig = atEnd();
 
    if (state == 0) {
-      if (!parseProlog()) {
+      if (! parseProlog()) {
          if (incremental && error.isEmpty()) {
             pushParseState(0, 0);
             return true;
@@ -3243,18 +3249,24 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
       }
       state = 1;
    }
+
    if (state == 1) {
-      if (!parseElement()) {
+
+      if (! parseElement()) {
+
          if (incremental && error.isEmpty()) {
             pushParseState(0, 1);
             return true;
+
          } else {
             tags.clear();
             return false;
          }
       }
+
       state = 2;
    }
+
    // parse Misc*
    while (!atEnd()) {
       if (!parseMisc()) {
@@ -3267,26 +3279,31 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
          }
       }
    }
+
    if (!atEndOrig && incremental) {
       // we parsed something at all, so be prepared to come back later
       pushParseState(0, 2);
       return true;
    }
+
    // is stack empty?
-   if (!tags.isEmpty() && !error.isEmpty()) {
+   if (! tags.isEmpty() && !error.isEmpty()) {
       reportParseError(QLatin1String(XMLERR_UNEXPECTEDEOF));
       tags.clear();
       return false;
    }
+
    // call the handler
    if (contentHnd) {
       delete parseStack;
       parseStack = 0;
+
       if (!contentHnd->endDocument()) {
          reportParseError(contentHnd->errorString());
          return false;
       }
    }
+
    return true;
 }
 
@@ -3599,20 +3616,26 @@ bool QXmlSimpleReaderPrivate::parseElement()
 
    if (parseStack == 0 || parseStack->isEmpty()) {
       state = Init;
+
    } else {
       state = parseStack->pop().state;
+
 #if defined(QT_QXML_DEBUG)
       qDebug("QXmlSimpleReader: parseElement (cont) in state %d", state);
 #endif
-      if (!parseStack->isEmpty()) {
+
+      if (! parseStack->isEmpty()) {
          ParseFunction function = parseStack->top().function;
+
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
+
 #if defined(QT_QXML_DEBUG)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
-         if (!(this->*function)()) {
+
+         if (! (this->*function)()) {
             parseFailed(&QXmlSimpleReaderPrivate::parseElement, state);
             return false;
          }
@@ -3624,25 +3647,31 @@ bool QXmlSimpleReaderPrivate::parseElement()
          case ReadName:
             // store it on the stack
             tags.push(name());
+
             // empty the attributes
             attList.clear();
+
             if (useNamespaces) {
                namespaceSupport.pushContext();
             }
             break;
+
          case ETagBegin2:
             if (!processElementETagBegin2()) {
                return false;
             }
             break;
+
          case Attrib:
             if (!processElementAttribute()) {
                return false;
             }
             state = AttribPro;
             break;
+
          case Done:
             return true;
+
          case -1:
             reportParseError(QLatin1String(XMLERR_ERRORPARSINGELEMENT));
             return false;
@@ -3652,22 +3681,29 @@ bool QXmlSimpleReaderPrivate::parseElement()
          unexpectedEof(&QXmlSimpleReaderPrivate::parseElement, state);
          return false;
       }
+
       if (fastDetermineNameChar(c) == NameBeginning) {
          input = InpNameBe;
+
       } else if (c == QLatin1Char('>')) {
          input = InpGt;
+
       } else if (is_S(c)) {
          input = InpWs;
+
       } else if (c == QLatin1Char('/')) {
          input = InpSlash;
+
       } else {
          input = InpUnknown;
       }
+
       state = table[state][input];
 
       switch (state) {
          case ReadName:
             parseName_useRef = false;
+
             if (!parseName()) {
                parseFailed(&QXmlSimpleReaderPrivate::parseElement, state);
                return false;
@@ -3676,11 +3712,12 @@ bool QXmlSimpleReaderPrivate::parseElement()
          case Ws1:
          case Ws2:
          case Ws3:
-            if (!eat_ws()) {
+            if (! eat_ws()) {
                parseFailed(&QXmlSimpleReaderPrivate::parseElement, state);
                return false;
             }
             break;
+
          case STagEnd:
             // call the handler
             if (contentHnd) {
@@ -3701,15 +3738,18 @@ bool QXmlSimpleReaderPrivate::parseElement()
             }
             next();
             break;
+
          case STagEnd2:
-            if (!parseContent()) {
+            if (! parseContent()) {
                parseFailed(&QXmlSimpleReaderPrivate::parseElement, state);
                return false;
             }
             break;
+
          case ETagBegin:
             next();
             break;
+
          case ETagBegin2:
             // get the name of the tag
             parseName_useRef = false;
@@ -3718,6 +3758,7 @@ bool QXmlSimpleReaderPrivate::parseElement()
                return false;
             }
             break;
+
          case EmptyTag:
             if  (tags.isEmpty()) {
                reportParseError(QLatin1String(XMLERR_TAGMISMATCH));
@@ -3728,6 +3769,7 @@ bool QXmlSimpleReaderPrivate::parseElement()
             }
             next();
             break;
+
          case Attrib:
          case AttribPro:
             // get name and value of attribute
@@ -3736,11 +3778,13 @@ bool QXmlSimpleReaderPrivate::parseElement()
                return false;
             }
             break;
+
          case Done:
             next();
             break;
       }
    }
+
    return false;
 }
 
@@ -3970,19 +4014,25 @@ bool QXmlSimpleReaderPrivate::parseContent()
    if (parseStack == 0 || parseStack->isEmpty()) {
       contentCharDataRead = false;
       state = Init;
+
    } else {
       state = parseStack->pop().state;
+
 #if defined(QT_QXML_DEBUG)
       qDebug("QXmlSimpleReader: parseContent (cont) in state %d", state);
 #endif
-      if (!parseStack->isEmpty()) {
+
+      if (! parseStack->isEmpty()) {
          ParseFunction function = parseStack->top().function;
+
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
+
 #if defined(QT_QXML_DEBUG)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
+
          if (!(this->*function)()) {
             parseFailed(&QXmlSimpleReaderPrivate::parseContent, state);
             return false;
@@ -4150,7 +4200,7 @@ bool QXmlSimpleReaderPrivate::parseContent()
                if (reportEntities) {
                   // report character data in chunks
                   if (contentHnd) {
-                     if (reportWhitespaceCharData || !string().simplified().isEmpty()) {
+                     if (reportWhitespaceCharData || ! string().simplified().isEmpty()) {
                         if (!contentHnd->characters(string())) {
                            reportParseError(contentHnd->errorString());
                            return false;
@@ -4168,19 +4218,23 @@ bool QXmlSimpleReaderPrivate::parseContent()
             break;
          case Lt:
             // call the handler for CharData
+
             if (contentHnd) {
                if (contentCharDataRead) {
-                  if (reportWhitespaceCharData || !string().simplified().isEmpty()) {
-                     if (!contentHnd->characters(string())) {
+
+                  if (reportWhitespaceCharData || ! string().simplified().isEmpty()) {
+                     if (! contentHnd->characters(string())) {
                         reportParseError(contentHnd->errorString());
                         return false;
                      }
                   }
                }
             }
+
             contentCharDataRead = false;
             next();
             break;
+
          case PInstr:
          case PInstrR:
             parsePI_xmldecl = false;
@@ -4226,6 +4280,7 @@ bool QXmlSimpleReaderPrivate::parseContent()
             break;
       }
    }
+
    return false;
 }
 

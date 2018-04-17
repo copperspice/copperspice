@@ -23,15 +23,17 @@
 #ifndef QDerivedString_P_H
 #define QDerivedString_P_H
 
-#include <QRegExp>
+#include <qregularexpression.h>
 #include <qxmlutils_p.h>
 #include <qbuiltintypes_p.h>
 #include <qpatternistlocale_p.h>
 #include <qvalidationerror_p.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 template<TypeOfDerivedString DerivedType>
 class DerivedString : public AtomicValue
 {
@@ -170,9 +172,8 @@ class DerivedString : public AtomicValue
    }
 
    static AtomicValue::Ptr error(const NamePool::Ptr &np, const QString &invalidValue) {
-      return ValidationError::createError(QString::fromLatin1("%1 is not a valid value for "
-                                          "type %2.").arg(formatData(invalidValue))
-                                          .arg(formatType(np, itemType())));
+      return ValidationError::createError(QString("%1 is not a valid value for type %2.")
+                  .formatArg(formatData(invalidValue)).formatArg(formatType(np, itemType())));
    }
 
  public:
@@ -196,17 +197,20 @@ class DerivedString : public AtomicValue
       switch (DerivedType) {
          case TypeString:
             return AtomicValue::Ptr(new DerivedString(lexical));
+
          case TypeNormalizedString:
             return AtomicValue::Ptr(new DerivedString(attributeNormalize(lexical)));
+
          case TypeToken:
             return AtomicValue::Ptr(new DerivedString(lexical.simplified()));
+
          case TypeLanguage: {
             const QString simplified(lexical.trimmed());
 
-            const QRegExp validate(QLatin1String("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"));
+            const QRegularExpression validate("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*", QPatternOption::ExactMatchOption);
             Q_ASSERT(validate.isValid());
 
-            if (validate.exactMatch(simplified)) {
+            if (validate.match(simplified).hasMatch()) {
                return AtomicValue::Ptr(new DerivedString(lexical.simplified()));
             } else {
                return error(np, simplified);

@@ -31,13 +31,9 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 GenericDynamicContext::GenericDynamicContext(const NamePool::Ptr &np,
-      QAbstractMessageHandler *const errHandler,
-      const LocationHash &locations) : m_messageHandler(errHandler)
-   , m_currentDateTime(QDateTime::currentDateTime().toTimeSpec(Qt::UTC))
-   , m_outputReceiver(0)
-   , m_namePool(np)
-   , m_locations(locations)
-   , m_uriResolver(0)
+      QAbstractMessageHandler *const errHandler, const LocationHash &locations)
+   : m_messageHandler(errHandler), m_currentDateTime(QDateTime::currentDateTime().toTimeSpec(Qt::UTC)),
+      m_outputReceiver(0), m_namePool(np), m_locations(locations), m_uriResolver(0)
 {
    Q_ASSERT(m_messageHandler);
    Q_ASSERT(m_namePool);
@@ -45,7 +41,6 @@ GenericDynamicContext::GenericDynamicContext(const NamePool::Ptr &np,
 
 QExplicitlySharedDataPointer<DayTimeDuration> GenericDynamicContext::implicitTimezone() const
 {
-   /* Or what do you prefer, sir? */
    return CommonValues::DayTimeDurationZero;
 }
 

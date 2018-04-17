@@ -26,6 +26,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QScopedPointer>
 #include <QtXmlPatterns/QXmlNodeModelIndex>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -45,15 +46,13 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlReceiver
 
    virtual void startElement(const QXmlName &name) = 0;
    virtual void endElement() = 0;
-   virtual void attribute(const QXmlName &name,
-                          const QStringRef &value) = 0;
+   virtual void attribute(const QXmlName &name, QStringView value) = 0;
    virtual void comment(const QString &value) = 0;
-   virtual void characters(const QStringRef &value) = 0;
+   virtual void characters(QStringView value) = 0;
    virtual void startDocument() = 0;
    virtual void endDocument() = 0;
 
-   virtual void processingInstruction(const QXmlName &target,
-                                      const QString &value) = 0;
+   virtual void processingInstruction(const QXmlName &target, const QString &value) = 0;
 
    virtual void atomicValue(const QVariant &value) = 0;
    virtual void namespaceBinding(const QXmlName &name) = 0;
@@ -62,7 +61,7 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlReceiver
 
    /* The members below are internal, not part of the public API, and
     * unsupported. Using them leads to undefined behavior. */
-   virtual void whitespaceOnly(const QStringRef &value);
+   virtual void whitespaceOnly(QStringView value);
    virtual void item(const QPatternist::Item &item);
 
  protected:

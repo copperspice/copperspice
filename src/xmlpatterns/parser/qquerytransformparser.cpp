@@ -45,13 +45,11 @@
 #define yynerrs XPathnerrs
 #define yylloc XPathlloc
 
-/* Copy the first part of user declarations.  */
-/* Line 164 of yacc.c.  */
-#line 22 "querytransformparser.ypp"
-
 #include <limits>
 
-#include <QUrl>
+#include <qurl.h>
+#include <qstring.h>
+#include <qdebug_p.h>
 
 #include "qabstractfloat_p.h"
 #include "qandexpression_p.h"
@@ -76,7 +74,6 @@
 #include "qcontextitem_p.h"
 #include "qcopyof_p.h"
 #include "qcurrentitemstore_p.h"
-#include "qdebug_p.h"
 #include "qdelegatingnamespaceresolver_p.h"
 #include "qdocumentconstructor_p.h"
 #include "qelementconstructor_p.h"
@@ -234,7 +231,7 @@ static void allowedIn(const QueryLanguages allowedLanguages,
       }
 
       parseInfo->staticContext->error(QtXmlPatterns::tr("A construct was encountered "
-                                      "which is disallowed in the current language(%1).").arg(langName),
+                                      "which is disallowed in the current language(%1).").formatArg(langName),
                                       ReportContext::XPST0003,
                                       fromYYLTYPE(sourceLocator, parseInfo));
 
@@ -349,7 +346,7 @@ static void registerNamedTemplate(const QXmlName &name,
    if (e) {
       parseInfo->staticContext->error(QtXmlPatterns::tr("A template with name %1 "
                                       "has already been declared.")
-                                      .arg(formatKeyword(parseInfo->staticContext->namePool(),
+                                      .formatArg(formatKeyword(parseInfo->staticContext->namePool(),
                                             name)),
                                       ReportContext::XTSE0660,
                                       fromYYLTYPE(sourceLocator, parseInfo));
@@ -371,7 +368,7 @@ Expression::Ptr createNumericLiteral(const QString &in,
 
    if (num.template as<AtomicValue>()->hasError()) {
       parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is not a valid numeric literal.")
-                                      .arg(formatData(in)),
+                                      .formatArg(formatData(in)),
                                       ReportContext::XPST0003, fromYYLTYPE(sl, parseInfo));
       return Expression::Ptr(); /* Avoid compiler warning. */
    } else {
@@ -390,8 +387,7 @@ static int XPatherror(YYLTYPE *sourceLocator, const ParserContext *const parseIn
    Q_UNUSED(sourceLocator);
    Q_ASSERT(parseInfo);
 
-   parseInfo->staticContext->error(escape(QLatin1String(msg)), ReportContext::XPST0003, fromYYLTYPE(*sourceLocator,
-                                   parseInfo));
+   parseInfo->staticContext->error(escape(QString::fromLatin1(msg)), ReportContext::XPST0003, fromYYLTYPE(*sourceLocator, parseInfo));
    return 1;
 }
 
@@ -559,7 +555,7 @@ static inline Expression::Ptr createIdPatternPath(const Expression::Ptr &operand
 static inline QString prologMessage(const char *const msg)
 {
    Q_ASSERT(msg);
-   return QtXmlPatterns::tr("Only one %1 declaration can occur in the query prolog.").arg(formatKeyword(msg));
+   return QtXmlPatterns::tr("Only one %1 declaration can occur in the query prolog.").formatArg(formatKeyword(msg));
 }
 
 /**
@@ -750,7 +746,7 @@ static void checkVariableCircularity(const VariableDeclaration::Ptr &var,
 
       if (var->slot == ref->slot() && type == ref->variableDeclaration()->type) {
          parseInfo->staticContext->error(QtXmlPatterns::tr("The initialization of variable %1 "
-                                         "depends on itself").arg(formatKeyword(var, parseInfo->staticContext->namePool())),
+                                         "depends on itself").formatArg(formatKeyword(var, parseInfo->staticContext->namePool())),
                                          parseInfo->isXSLT() ? ReportContext::XTDE0640 : ReportContext::XQST0054, ref);
          return;
       } else {
@@ -806,7 +802,7 @@ static void variableUnavailable(const QXmlName &variableName,
                                 const YYLTYPE &location)
 {
    parseInfo->staticContext->error(QtXmlPatterns::tr("No variable with name %1 exists")
-                                   .arg(formatKeyword(parseInfo->staticContext->namePool(), variableName)),
+                                   .formatArg(formatKeyword(parseInfo->staticContext->namePool(), variableName)),
                                    ReportContext::XPST0008, fromYYLTYPE(location, parseInfo));
 }
 
@@ -1241,9 +1237,6 @@ typedef struct YYLTYPE {
 
 
 /* Copy the second part of user declarations.  */
-
-/* Line 221 of yacc.c.  */
-#line 1323 "qquerytransformparser.cpp"
 
 #ifdef short
 # undef short
@@ -3572,8 +3565,6 @@ yyreduce:
    YY_REDUCE_PRINT (yyn);
    switch (yyn) {
       case 5:
-         /* Line 1269 of yacc.c.  */
-#line 1380 "querytransformparser.ypp"
          {
 
             /* Suppress more compiler warnings about unused defines. */
@@ -3597,39 +3588,34 @@ yyreduce:
                const ReflectYYLTYPE ryy((yyloc), parseInfo);
 
                parseInfo->staticContext->error(QtXmlPatterns::tr("Version %1 is not supported. The supported "
-                                               "XQuery version is 1.0.")
-                                               .arg(formatData((yyvsp[(3) - (5)].sval))),
-                                               ReportContext::XQST0031, &ryy);
+                      "XQuery version is 1.0.")
+                      .formatArg(formatData((yyvsp[(3) - (5)].sval))), ReportContext::XQST0031, &ryy);
             }
          }
          break;
 
       case 7:
-         /* Line 1269 of yacc.c.  */
-#line 1412 "querytransformparser.ypp"
          {
-            const QRegExp encNameRegExp(QLatin1String("[A-Za-z][A-Za-z0-9._\\-]*"));
+            const QRegularExpression encNameRegExp("[A-Za-z][A-Za-z0-9._\\-]*", QPatternOption::ExactMatchOption);
 
-            if (!encNameRegExp.exactMatch((yyvsp[(2) - (2)].sval))) {
+            if (! encNameRegExp.match((yyvsp[(2) - (2)].sval)).hasMatch()) {
+
                parseInfo->staticContext->error(QtXmlPatterns::tr("The encoding %1 is invalid. "
-                                               "It must contain Latin characters only, "
-                                               "must not contain whitespace, and must match "
-                                               "the regular expression %2.")
-                                               .arg(formatKeyword((yyvsp[(2) - (2)].sval)),
-                                                    formatExpression(encNameRegExp.pattern())),
-                                               ReportContext::XQST0087, fromYYLTYPE((yyloc), parseInfo));
+                      "It must contain Latin characters only, must not contain whitespace, and must match "
+                      "the regular expression %2.")
+                      .formatArgs(formatKeyword((yyvsp[(2) - (2)].sval)), formatExpression(encNameRegExp.pattern())),
+                      ReportContext::XQST0087, fromYYLTYPE((yyloc), parseInfo));
             }
          }
          break;
 
       case 8:
-         /* Line 1269 of yacc.c.  */
-#line 1428 "querytransformparser.ypp"
          {
             /* In XSL-T, we can have dangling variable references, so resolve them
              * before we proceed with other steps, such as checking circularity. */
             if (parseInfo->isXSLT()) {
-               typedef QMultiHash<QXmlName, Expression::Ptr> Hash;
+               using Hash = QMultiHash<QXmlName, Expression::Ptr>;
+
                const Hash::const_iterator end(parseInfo->unresolvedVariableReferences.constEnd());
 
                for (Hash::const_iterator it(parseInfo->unresolvedVariableReferences.constBegin()); it != end; ++it) {
@@ -3661,7 +3647,7 @@ yyreduce:
                   }
                   if (it == end) {
                      parseInfo->staticContext->error(QtXmlPatterns::tr("No function with signature %1 is available")
-                                                     .arg(formatFunction(callsite)),
+                                                     .formatArg(formatFunction(callsite)),
                                                      ReportContext::XPST0017, fromYYLTYPE((yyloc), parseInfo));
                   }
                }
@@ -3716,8 +3702,6 @@ yyreduce:
          break;
 
       case 10:
-         /* Line 1269 of yacc.c.  */
-#line 1528 "querytransformparser.ypp"
          {
             // TODO add to namespace context
             parseInfo->moduleNamespace = parseInfo->staticContext->namePool()->allocateNamespace((yyvsp[(3) - (6)].sval));
@@ -3725,8 +3709,6 @@ yyreduce:
          break;
 
       case 12:
-         /* Line 1269 of yacc.c.  */
-#line 1536 "querytransformparser.ypp"
          {
             allowedIn(QXmlQuery::XQuery10, parseInfo, (yyloc));
             if (parseInfo->hasSecondPrologPart)
@@ -3736,8 +3718,6 @@ yyreduce:
          break;
 
       case 13:
-         /* Line 1269 of yacc.c.  */
-#line 1543 "querytransformparser.ypp"
          {
             if (parseInfo->hasSecondPrologPart)
                parseInfo->staticContext->error(QtXmlPatterns::tr("A default namespace declaration must occur before function, "
@@ -3746,8 +3726,6 @@ yyreduce:
          break;
 
       case 14:
-         /* Line 1269 of yacc.c.  */
-#line 1549 "querytransformparser.ypp"
          {
             if (parseInfo->hasSecondPrologPart)
                parseInfo->staticContext->error(QtXmlPatterns::tr("Namespace declarations must occur before function, "
@@ -3756,8 +3734,6 @@ yyreduce:
          break;
 
       case 15:
-         /* Line 1269 of yacc.c.  */
-#line 1555 "querytransformparser.ypp"
          {
             allowedIn(QXmlQuery::XQuery10, parseInfo, (yyloc));
             if (parseInfo->hasSecondPrologPart)
@@ -3767,24 +3743,18 @@ yyreduce:
          break;
 
       case 17:
-         /* Line 1269 of yacc.c.  */
-#line 1565 "querytransformparser.ypp"
          {
             parseInfo->hasSecondPrologPart = true;
          }
          break;
 
       case 18:
-         /* Line 1269 of yacc.c.  */
-#line 1569 "querytransformparser.ypp"
          {
             parseInfo->hasSecondPrologPart = true;
          }
          break;
 
       case 19:
-         /* Line 1269 of yacc.c.  */
-#line 1573 "querytransformparser.ypp"
          {
             allowedIn(QXmlQuery::XQuery10, parseInfo, (yyloc));
             parseInfo->hasSecondPrologPart = true;
@@ -3865,7 +3835,7 @@ yyreduce:
                if (modeName == QXmlName(StandardNamespaces::InternalXSLT, StandardLocalNames::all) &&
                      (yyvsp[(10) - (15)].qNameVector).count() > 1) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("The keyword %1 cannot occur with any other mode name.")
-                                                  .arg(formatKeyword(QLatin1String("#all"))),
+                                                  .formatArg(formatKeyword(QLatin1String("#all"))),
                                                   ReportContext::XTSE0530,
                                                   fromYYLTYPE((yyloc), parseInfo));
                }
@@ -3894,11 +3864,10 @@ yyreduce:
             const AtomicValue::Ptr val(Decimal::fromLexical((yyvsp[(2) - (2)].sval)));
             if (val->hasError()) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("The value of attribute %1 must be of type %2, which %3 isn't.")
-                                               .arg(formatKeyword(QLatin1String("priority")),
-                                                    formatType(parseInfo->staticContext->namePool(), BuiltinTypes::xsDecimal),
-                                                    formatData((yyvsp[(2) - (2)].sval))),
-                                               ReportContext::XTSE0530,
-                                               fromYYLTYPE((yyloc), parseInfo));
+                  .formatArgs(formatKeyword("priority"),
+                  formatType(parseInfo->staticContext->namePool(), BuiltinTypes::xsDecimal),
+                  formatData((yyvsp[(2) - (2)].sval))), ReportContext::XTSE0530, fromYYLTYPE((yyloc), parseInfo));
+
             } else {
                (yyval.enums.Double) = val->as<Numeric>()->toDouble();
             }
@@ -3963,21 +3932,21 @@ yyreduce:
 
             if ((yyvsp[(3) - (7)].sval) == QLatin1String("xmlns")) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("It is not possible to redeclare prefix %1.")
-                                               .arg(formatKeyword(QLatin1String("xmlns"))),
+                                               .formatArg(formatKeyword(QLatin1String("xmlns"))),
                                                ReportContext::XQST0070, fromYYLTYPE((yyloc), parseInfo));
             } else if ((yyvsp[(5) - (7)].sval) == CommonNamespaces::XML || (yyvsp[(3) - (7)].sval) == QLatin1String("xml")) {
                parseInfo->staticContext->error(QtXmlPatterns::tr(
                                                   "The prefix %1 cannot be bound. By default, it is already bound "
                                                   "to the namespace %2.")
-                                               .arg(formatKeyword("xml"))
-                                               .arg(formatURI(CommonNamespaces::XML)),
+                                               .formatArg(formatKeyword("xml"))
+                                               .formatArg(formatURI(CommonNamespaces::XML)),
                                                ReportContext::XQST0070,
                                                fromYYLTYPE((yyloc), parseInfo));
             } else if (parseInfo->declaredPrefixes.contains((yyvsp[(3) - (7)].sval))) {
                /* This includes the case where the user has bound a default prefix(such
                 * as 'local') and now tries to do it again. */
                parseInfo->staticContext->error(QtXmlPatterns::tr("Prefix %1 is already declared in the prolog.")
-                                               .arg(formatKeyword((yyvsp[(3) - (7)].sval))),
+                                               .formatArg(formatKeyword((yyvsp[(3) - (7)].sval))),
                                                ReportContext::XQST0033, fromYYLTYPE((yyloc), parseInfo));
             } else {
                parseInfo->declaredPrefixes.append((yyvsp[(3) - (7)].sval));
@@ -4217,7 +4186,7 @@ yyreduce:
          {
             parseInfo->staticContext->error(QtXmlPatterns::tr("The Schema Import feature is not supported, "
                                             "and therefore %1 declarations cannot occur.")
-                                            .arg(formatKeyword("import schema")),
+                                            .formatArg(formatKeyword("import schema")),
                                             ReportContext::XQST0009, fromYYLTYPE((yyloc), parseInfo));
          }
          break;
@@ -4228,7 +4197,7 @@ yyreduce:
          {
             if ((yyvsp[(4) - (6)].sval).isEmpty()) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("The target namespace of a %1 cannot be empty.")
-                                               .arg(formatKeyword("module import")),
+                                               .formatArg(formatKeyword("module import")),
                                                ReportContext::XQST0088, fromYYLTYPE((yyloc), parseInfo));
 
             } else {
@@ -4247,7 +4216,7 @@ yyreduce:
             if (variableByName((yyvsp[(5) - (9)].qName), parseInfo)) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("A variable with name %1 has already "
                                                "been declared.")
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool()->toLexical((yyvsp[(5) - (9)].qName)))),
+                                               .formatArg(formatKeyword(parseInfo->staticContext->namePool()->toLexical((yyvsp[(5) - (9)].qName)))),
                                                parseInfo->isXSLT() ? ReportContext::XTSE0630 : ReportContext::XQST0049,
                                                fromYYLTYPE((yyloc), parseInfo));
             } else {
@@ -4281,7 +4250,7 @@ yyreduce:
                   } else {
                      parseInfo->staticContext->error(QtXmlPatterns::tr("No value is available for the external "
                                                      "variable with name %1.")
-                                                     .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (9)].qName))),
+                                                     .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (9)].qName))),
                                                      parseInfo->isXSLT() ? ReportContext::XTDE0050 : ReportContext::XPDY0002,
                                                      fromYYLTYPE((yyloc), parseInfo));
                   }
@@ -4380,31 +4349,24 @@ yyreduce:
             if ((yyvsp[(10) - (11)].expr)) { /* We got a function body. */
                if (ns == StandardNamespaces::empty) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("The namespace for a user defined function "
-                                                  "cannot be empty (try the predefined "
-                                                  "prefix %1, which exists for cases "
-                                                  "like this)")
-                                                  .arg(formatKeyword("local")),
-                                                  ReportContext::XQST0060, fromYYLTYPE((yyloc), parseInfo));
+                            "cannot be empty (try the predefined prefix %1, which exists for cases like this)")
+                            .formatArg(formatKeyword("local")), ReportContext::XQST0060, fromYYLTYPE((yyloc), parseInfo));
+
                } else if (XPathHelper::isReservedNamespace(ns)) {
-                  parseInfo->staticContext->error(QtXmlPatterns::tr(
-                                                     "The namespace %1 is reserved; therefore "
-                                                     "user defined functions may not use it. "
-                                                     "Try the predefined prefix %2, which "
-                                                     "exists for these cases.")
-                                                  .arg(formatURI(parseInfo->staticContext->namePool(), ns), formatKeyword("local")),
-                                                  parseInfo->isXSLT() ? ReportContext::XTSE0080 : ReportContext::XQST0045,
-                                                  fromYYLTYPE((yyloc), parseInfo));
+                  parseInfo->staticContext->error(QtXmlPatterns::tr("The namespace %1 is reserved; therefore "
+                            "user defined functions may not use it. Try the predefined prefix %2, which "
+                            "exists for these cases.")
+                            .formatArgs(formatURI(parseInfo->staticContext->namePool(), ns), formatKeyword("local")),
+                            parseInfo->isXSLT() ? ReportContext::XTSE0080 : ReportContext::XQST0045, fromYYLTYPE((yyloc), parseInfo));
+
                } else if (parseInfo->moduleNamespace != StandardNamespaces::empty &&
                           ns != parseInfo->moduleNamespace) {
-                  parseInfo->staticContext->error(QtXmlPatterns::tr(
-                                                     "The namespace of a user defined "
-                                                     "function in a library module must be "
-                                                     "equivalent to the module namespace. "
-                                                     "In other words, it should be %1 instead "
-                                                     "of %2")
-                                                  .arg(formatURI(parseInfo->staticContext->namePool(), parseInfo->moduleNamespace),
-                                                       formatURI(parseInfo->staticContext->namePool(), ns)),
-                                                  ReportContext::XQST0048, fromYYLTYPE((yyloc), parseInfo));
+                  parseInfo->staticContext->error(QtXmlPatterns::tr("The namespace of a user defined "
+                            "function in a library module must be equivalent to the module namespace. "
+                            "In other words, it should be %1 instead of %2")
+                            .formatArgs(formatURI(parseInfo->staticContext->namePool(), parseInfo->moduleNamespace),
+                            formatURI(parseInfo->staticContext->namePool(), ns)), ReportContext::XQST0048, fromYYLTYPE((yyloc), parseInfo));
+
                } else {
                   /* Apply function conversion such that the body matches the declared
                    * return type. */
@@ -4421,16 +4383,16 @@ yyreduce:
                                                     argCount /* minArgs */,
                                                     argCount /* maxArgs */,
                                                     (yyvsp[(9) - (11)].sequenceType) /* returnType */));
+
                   sign->setArguments((yyvsp[(6) - (11)].functionArguments));
                   const UserFunction::List::const_iterator end(parseInfo->userFunctions.constEnd());
                   UserFunction::List::const_iterator it(parseInfo->userFunctions.constBegin());
 
                   for (; it != end; ++it) {
                      if (*(*it)->signature() == *sign) {
-                        parseInfo->staticContext->error(QtXmlPatterns::tr("A function already exists with "
-                                                        "the signature %1.")
-                                                        .arg(formatFunction(parseInfo->staticContext->namePool(), sign)),
-                                                        parseInfo->isXSLT() ? ReportContext::XTSE0770 : ReportContext::XQST0034, fromYYLTYPE((yyloc), parseInfo));
+                        parseInfo->staticContext->error(QtXmlPatterns::tr("A function already exists with the signature %1.")
+                            .formatArg(formatFunction(parseInfo->staticContext->namePool(), sign)),
+                            parseInfo->isXSLT() ? ReportContext::XTSE0770 : ReportContext::XQST0034, fromYYLTYPE((yyloc), parseInfo));
                      }
                   }
 
@@ -4485,10 +4447,9 @@ yyreduce:
             for (; it != end; ++it) {
                if ((*it)->name() == (yyvsp[(3) - (3)].functionArgument)->name()) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("An argument with name %1 has already "
-                                                  "been declared. Every argument name "
-                                                  "must be unique.")
-                                                  .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (3)].functionArgument)->name())),
-                                                  ReportContext::XQST0039, fromYYLTYPE((yyloc), parseInfo));
+                            "been declared. Every argument name must be unique.")
+                            .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (3)].functionArgument)->name())),
+                            ReportContext::XQST0039, fromYYLTYPE((yyloc), parseInfo));
                }
             }
 
@@ -4667,7 +4628,7 @@ yyreduce:
                if (!isVariableReference(id) && id != Expression::IDStringValue) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("When function %1 is used for matching inside a pattern, "
                                                   "the argument must be a variable reference or a string literal.")
-                                                  .arg(formatFunction(parseInfo->staticContext->namePool(), signature)),
+                                                  .formatArg(formatFunction(parseInfo->staticContext->namePool(), signature)),
                                                   ReportContext::XPST0003,
                                                   fromYYLTYPE((yyloc), parseInfo));
                }
@@ -4675,7 +4636,7 @@ yyreduce:
                if (ands.first()->id() != Expression::IDStringValue) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, the first argument to function %1 "
                                                   "must be a string literal, when used for matching.")
-                                                  .arg(formatFunction(parseInfo->staticContext->namePool(), signature)),
+                                                  .formatArg(formatFunction(parseInfo->staticContext->namePool(), signature)),
                                                   ReportContext::XPST0003,
                                                   fromYYLTYPE((yyloc), parseInfo));
                }
@@ -4687,28 +4648,25 @@ yyreduce:
                      id2 != Expression::IDBooleanValue &&
                      id2 != Expression::IDFloat) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, the first argument to function %1 "
-                                                  "must be a literal or a variable reference, when used for matching.")
-                                                  .arg(formatFunction(parseInfo->staticContext->namePool(), signature)),
-                                                  ReportContext::XPST0003,
-                                                  fromYYLTYPE((yyloc), parseInfo));
+                       "must be a literal or a variable reference, when used for matching.")
+                       .formatArg(formatFunction(parseInfo->staticContext->namePool(), signature)),
+                       ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
                }
 
                if (ands.count() == 3) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, function %1 cannot have a third argument.")
-                                                  .arg(formatFunction(parseInfo->staticContext->namePool(), signature)),
-                                                  ReportContext::XPST0003,
-                                                  fromYYLTYPE((yyloc), parseInfo));
+                      .formatArg(formatFunction(parseInfo->staticContext->namePool(), signature)),
+                      ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
                }
 
             } else {
                const FunctionSignature::Hash signs(parseInfo->staticContext->functionSignatures()->functionSignatures());
                parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, only function %1 "
-                                               "and %2, not %3, can be used for matching.")
-                                               .arg(formatFunction(parseInfo->staticContext->namePool(), signs.value(id)),
-                                                    formatFunction(parseInfo->staticContext->namePool(), signs.value(key)),
-                                                    formatFunction(parseInfo->staticContext->namePool(), signature)),
-                                               ReportContext::XPST0003,
-                                               fromYYLTYPE((yyloc), parseInfo));
+                      "and %2, not %3, can be used for matching.")
+                      .formatArgs(formatFunction(parseInfo->staticContext->namePool(), signs.value(id)),
+                      formatFunction(parseInfo->staticContext->namePool(), signs.value(key)),
+                      formatFunction(parseInfo->staticContext->namePool(), signature)), ReportContext::XPST0003,
+                      fromYYLTYPE((yyloc), parseInfo));
             }
 
             (yyval.expr) = (yyvsp[(1) - (1)].expr);
@@ -4752,9 +4710,9 @@ yyreduce:
              * while the way we implement pattern, "the other way of seeing it",
              * e.g from right to left, are very much. */
 
-            if (axisStep->nodeTest() == BuiltinTypes::document
-                  || axis == QXmlNodeModelIndex::AxisChild) {
+            if (axisStep->nodeTest() == BuiltinTypes::document || axis == QXmlNodeModelIndex::AxisChild) {
                axisStep->setAxis(QXmlNodeModelIndex::AxisSelf);
+
             } else if (axis == QXmlNodeModelIndex::AxisAttribute) {
                axisStep->setAxis(QXmlNodeModelIndex::AxisSelf);
                /* Consider that the user write attribute::node().  This is
@@ -4764,14 +4722,14 @@ yyreduce:
                if (*axisStep->nodeTest() == *BuiltinTypes::node) {
                   axisStep->setNodeTest(BuiltinTypes::attribute);
                }
+
             } else {
                parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, axis %1 cannot be used, "
-                                               "only axis %2 or %3 can.")
-                                               .arg(formatKeyword(AxisStep::axisName(axis)),
-                                                    formatKeyword(AxisStep::axisName(QXmlNodeModelIndex::AxisChild)),
-                                                    formatKeyword(AxisStep::axisName(QXmlNodeModelIndex::AxisAttribute))),
-                                               ReportContext::XPST0003,
-                                               fromYYLTYPE((yyloc), parseInfo));
+                            "only axis %2 or %3 can.")
+                            .formatArgs(formatKeyword(AxisStep::axisName(axis)),
+                            formatKeyword(AxisStep::axisName(QXmlNodeModelIndex::AxisChild)),
+                            formatKeyword(AxisStep::axisName(QXmlNodeModelIndex::AxisAttribute))),
+                            ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
             }
 
             (yyval.expr) = (yyvsp[(1) - (1)].expr);
@@ -4890,7 +4848,7 @@ yyreduce:
 
                if (!QXmlUtils::isNCName((yyvsp[(1) - (1)].sval))) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is an invalid template mode name.")
-                                                  .arg(formatKeyword((yyvsp[(1) - (1)].sval))),
+                                                  .formatArg(formatKeyword((yyvsp[(1) - (1)].sval))),
                                                   ReportContext::XTSE0550,
                                                   fromYYLTYPE((yyloc), parseInfo));
                }
@@ -4936,7 +4894,7 @@ yyreduce:
                 * to our range variable. This is an error. */
                parseInfo->staticContext->error(QtXmlPatterns::tr("The name of a variable bound in a for-expression must be different "
                                                "from the positional variable. Hence, the two variables named %1 collide.")
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (10)].qName))),
+                                               .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (10)].qName))),
                                                ReportContext::XQST0089,
                                                fromYYLTYPE((yyloc), parseInfo));
 
@@ -5795,7 +5753,7 @@ yyreduce:
             allowedIn(QXmlQuery::XQuery10, parseInfo, (yyloc));
             parseInfo->staticContext->error(QtXmlPatterns::tr("The Schema Validation Feature is not supported. "
                                             "Hence, %1-expressions may not be used.")
-                                            .arg(formatKeyword("validate")),
+                                            .formatArg(formatKeyword("validate")),
                                             ReportContext::XQST0075, fromYYLTYPE((yyloc), parseInfo));
             /*
             $$ = Validate::create($2, $1, parseInfo->staticContext);
@@ -6114,7 +6072,7 @@ yyreduce:
                if ((!isParsingWithParam && VariableDeclaration::contains(parseInfo->templateParameters, (yyvsp[(3) - (5)].qName))) ||
                      (isParsingWithParam && parseInfo->templateWithParams.contains((yyvsp[(3) - (5)].qName)))) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("Each name of a template parameter must be unique; %1 is duplicated.")
-                                                  .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (5)].qName))),
+                                                  .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (5)].qName))),
                                                   isParsingWithParam ? ReportContext::XTSE0670 : ReportContext::XTSE0580, fromYYLTYPE((yyloc), parseInfo));
                } else {
                   if (isParsingWithParam) {
@@ -6240,7 +6198,7 @@ yyreduce:
                /* We don't raise XPST0010 here because the namespace axis isn't an optional
                 * axis. It simply is not part of the XQuery grammar. */
                parseInfo->staticContext->error(QtXmlPatterns::tr("The %1-axis is unsupported in XQuery")
-                                               .arg(formatKeyword("namespace")),
+                                               .formatArg(formatKeyword("namespace")),
                                                ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
             } else {
                (yyval.enums.axis) = (yyvsp[(1) - (2)].enums.axis);
@@ -6598,7 +6556,7 @@ yyreduce:
                   (yyval.expr) = create(func, (yyloc), parseInfo);
                } else {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("No function with name %1 is available.")
-                                                  .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(1) - (4)].qName))),
+                                                  .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(1) - (4)].qName))),
                                                   ReportContext::XPST0017, fromYYLTYPE((yyloc), parseInfo));
                }
             } else { /* It's a call to a function created with 'declare function'.*/
@@ -6698,33 +6656,33 @@ yyreduce:
                      if (localName != StandardPrefixes::xmlns) {
                         parseInfo->staticContext->error(
                            QtXmlPatterns::tr("The namespace URI cannot be the empty string when binding to a prefix, %1.")
-                           .arg(formatURI(strPrefix)),
+                           .formatArg(formatURI(strPrefix)),
                            ReportContext::XQST0085, fromYYLTYPE((yyloc), parseInfo));
                      }
                   } else if (!AnyURI::isValid(strNamespace)) {
-                     parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is an invalid namespace URI.").arg(formatURI(strNamespace)),
+                     parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is an invalid namespace URI.").formatArg(formatURI(strNamespace)),
                                                      ReportContext::XQST0022, fromYYLTYPE((yyloc), parseInfo));
                   }
 
                   if (prefix == StandardPrefixes::xmlns && localName == StandardPrefixes::xmlns) {
                      parseInfo->staticContext->error(QtXmlPatterns::tr("It is not possible to bind to the prefix %1")
-                                                     .arg(formatKeyword("xmlns")),
+                                                     .formatArg(formatKeyword("xmlns")),
                                                      ReportContext::XQST0070, fromYYLTYPE((yyloc), parseInfo));
                   }
 
                   if (ns == StandardNamespaces::xml && localName != StandardPrefixes::xml) {
                      parseInfo->staticContext->error(
                         QtXmlPatterns::tr("Namespace %1 can only be bound to %2 (and it is, in either case, pre-declared).")
-                        .arg(formatURI(namePool->stringForNamespace(StandardNamespaces::xml)))
-                        .arg(formatKeyword("xml")),
+                        .formatArg(formatURI(namePool->stringForNamespace(StandardNamespaces::xml)))
+                        .formatArg(formatKeyword("xml")),
                         ReportContext::XQST0070, fromYYLTYPE((yyloc), parseInfo));
                   }
 
                   if (localName == StandardPrefixes::xml && ns != StandardNamespaces::xml) {
                      parseInfo->staticContext->error(
                         QtXmlPatterns::tr("Prefix %1 can only be bound to %2 (and it is, in either case, pre-declared).")
-                        .arg(formatKeyword("xml"))
-                        .arg(formatURI(namePool->stringForNamespace(StandardNamespaces::xml))),
+                        .formatArg(formatKeyword("xml"))
+                        .formatArg(formatURI(namePool->stringForNamespace(StandardNamespaces::xml))),
                         ReportContext::XQST0070, fromYYLTYPE((yyloc), parseInfo));
                   }
 
@@ -6738,7 +6696,7 @@ yyreduce:
 
                   if (usedDeclarations.contains(nb.prefix())) {
                      parseInfo->staticContext->error(QtXmlPatterns::tr("Two namespace declaration attributes have the same name: %1.")
-                                                     .arg(formatKeyword(namePool->stringForPrefix(nb.prefix()))),
+                                                     .formatArg(formatKeyword(namePool->stringForPrefix(nb.prefix()))),
                                                      ReportContext::XQST0071, fromYYLTYPE((yyloc), parseInfo));
 
                   } else {
@@ -6832,7 +6790,7 @@ yyreduce:
                                                           &ryy, true);
                   if (declaredAttributes.contains(att)) {
                      parseInfo->staticContext->error(QtXmlPatterns::tr("An attribute with name %1 has already appeared on this element.")
-                                                     .arg(formatKeyword(parseInfo->staticContext->namePool(), att)),
+                                                     .formatArg(formatKeyword(parseInfo->staticContext->namePool(), att)),
                                                      ReportContext::XQST0040, fromYYLTYPE((yyloc), parseInfo));
 
                   } else {
@@ -6893,16 +6851,18 @@ yyreduce:
          {
             if (!(yyvsp[(4) - (5)].qName).isLexicallyEqual(parseInfo->tagStack.top())) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("A direct element constructor is not "
-                                               "well-formed. %1 is ended with %2.")
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool()->toLexical(parseInfo->tagStack.top())),
-                                                    formatKeyword(parseInfo->staticContext->namePool()->toLexical((yyvsp[(4) - (5)].qName)))),
-                                               ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
+                            "well-formed. %1 is ended with %2.")
+                            .formatArgs(formatKeyword(parseInfo->staticContext->namePool()->toLexical(parseInfo->tagStack.top())),
+                            formatKeyword(parseInfo->staticContext->namePool()->toLexical((yyvsp[(4) - (5)].qName)))),
+                            ReportContext::XPST0003, fromYYLTYPE((yyloc), parseInfo));
             }
 
             if ((yyvsp[(2) - (5)].expressionList).isEmpty()) {
                (yyval.expr) = create(new EmptySequence(), (yyloc), parseInfo);
+
             } else if ((yyvsp[(2) - (5)].expressionList).size() == 1) {
                (yyval.expr) = (yyvsp[(2) - (5)].expressionList).first();
+
             } else {
                (yyval.expr) = create(new ExpressionSequence((yyvsp[(2) - (5)].expressionList)), (yyloc), parseInfo);
             }
@@ -7373,7 +7333,7 @@ yyreduce:
 
             if (!t) {
                parseInfo->staticContext->error(QtXmlPatterns::tr("The name %1 does not refer to any schema type.")
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(1) - (1)].qName))), ReportContext::XPST0051,
+                                               .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(1) - (1)].qName))), ReportContext::XPST0051,
                                                fromYYLTYPE((yyloc), parseInfo));
             } else if (BuiltinTypes::xsAnyAtomicType->wxsTypeMatches(t)) {
                (yyval.itemType) = AtomicType::Ptr(t);
@@ -7383,13 +7343,13 @@ yyreduce:
                   parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is an complex type. Casting to complex "
                                                   "types is not possible. However, casting "
                                                   "to atomic types such as %2 works.")
-                                                  .arg(formatType(parseInfo->staticContext->namePool(), t))
-                                                  .arg(formatType(parseInfo->staticContext->namePool(), BuiltinTypes::xsInteger)),
+                                                  .formatArg(formatType(parseInfo->staticContext->namePool(), t))
+                                                  .formatArg(formatType(parseInfo->staticContext->namePool(), BuiltinTypes::xsInteger)),
                                                   ReportContext::XPST0051, fromYYLTYPE((yyloc), parseInfo));
                } else {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is not an atomic type. Casting "
                                                   "is only possible to atomic types.")
-                                                  .arg(formatType(parseInfo->staticContext->namePool(), t)),
+                                                  .formatArg(formatType(parseInfo->staticContext->namePool(), t)),
                                                   ReportContext::XPST0051, fromYYLTYPE((yyloc), parseInfo));
                }
             }
@@ -7464,7 +7424,7 @@ yyreduce:
             } else {
                parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is not a valid name for a "
                                                "processing-instruction.")
-                                               .arg(formatKeyword((yyvsp[(3) - (4)].sval))),
+                                               .formatArg(formatKeyword((yyvsp[(3) - (4)].sval))),
                                                ReportContext::XPTY0004,
                                                fromYYLTYPE((yyloc), parseInfo));
             }
@@ -7504,7 +7464,7 @@ yyreduce:
             if (t) {
                (yyval.itemType) = BuiltinTypes::attribute;
             } else {
-               parseInfo->staticContext->error(unknownType().arg(formatKeyword(parseInfo->staticContext->namePool(),
+               parseInfo->staticContext->error(unknownType().formatArg(formatKeyword(parseInfo->staticContext->namePool(),
                                                (yyvsp[(5) - (6)].qName))),
                                                ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             }
@@ -7520,7 +7480,7 @@ yyreduce:
             if (t) {
                (yyval.itemType) = BuiltinTypes::attribute;
             } else {
-               parseInfo->staticContext->error(unknownType().arg(formatKeyword(parseInfo->staticContext->namePool(),
+               parseInfo->staticContext->error(unknownType().formatArg(formatKeyword(parseInfo->staticContext->namePool(),
                                                (yyvsp[(5) - (6)].qName))),
                                                ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             }
@@ -7534,39 +7494,31 @@ yyreduce:
             parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is not in the in-scope attribute "
                                             "declarations. Note that the schema import "
                                             "feature is not supported.")
-                                            .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (4)].qName))),
+                                            .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (4)].qName))),
                                             ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             (yyval.itemType).reset();
          }
          break;
 
       case 446:
-         /* Line 1269 of yacc.c.  */
-#line 4456 "querytransformparser.ypp"
          {
             (yyval.itemType) = BuiltinTypes::element;
          }
          break;
 
       case 447:
-         /* Line 1269 of yacc.c.  */
-#line 4461 "querytransformparser.ypp"
          {
             (yyval.itemType) = BuiltinTypes::element;
          }
          break;
 
       case 448:
-         /* Line 1269 of yacc.c.  */
-#line 4466 "querytransformparser.ypp"
          {
             (yyval.itemType) = QNameTest::create(BuiltinTypes::element, (yyvsp[(3) - (4)].qName));
          }
          break;
 
       case 449:
-         /* Line 1269 of yacc.c.  */
-#line 4471 "querytransformparser.ypp"
          {
             const SchemaType::Ptr t(parseInfo->staticContext->schemaDefinitions()->createSchemaType((yyvsp[(5) - (7)].qName)));
 
@@ -7574,15 +7526,13 @@ yyreduce:
                (yyval.itemType) = BuiltinTypes::element;
             } else {
                parseInfo->staticContext->error(unknownType()
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (7)].qName))),
+                                               .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (7)].qName))),
                                                ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             }
          }
          break;
 
       case 450:
-         /* Line 1269 of yacc.c.  */
-#line 4485 "querytransformparser.ypp"
          {
             const SchemaType::Ptr t(parseInfo->staticContext->schemaDefinitions()->createSchemaType((yyvsp[(5) - (7)].qName)));
 
@@ -7590,36 +7540,30 @@ yyreduce:
                (yyval.itemType) = BuiltinTypes::element;
             } else {
                parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is an unknown schema type.")
-                                               .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (7)].qName))),
+                                               .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(5) - (7)].qName))),
                                                ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             }
          }
          break;
 
       case 453:
-         /* Line 1269 of yacc.c.  */
-#line 4502 "querytransformparser.ypp"
          {
             parseInfo->staticContext->error(QtXmlPatterns::tr("%1 is not in the in-scope attribute "
                                             "declarations. Note that the schema import "
                                             "feature is not supported.")
-                                            .arg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (4)].qName))),
+                                            .formatArg(formatKeyword(parseInfo->staticContext->namePool(), (yyvsp[(3) - (4)].qName))),
                                             ReportContext::XPST0008, fromYYLTYPE((yyloc), parseInfo));
             (yyval.itemType).reset();
          }
          break;
 
       case 455:
-         /* Line 1269 of yacc.c.  */
-#line 4514 "querytransformparser.ypp"
          {
             (yyval.qName) = parseInfo->staticContext->namePool()->allocateQName(StandardNamespaces::empty, (yyvsp[(1) - (1)].sval));
          }
          break;
 
       case 457:
-         /* Line 1269 of yacc.c.  */
-#line 4526 "querytransformparser.ypp"
          {
             if (parseInfo->nodeTestSource == BuiltinTypes::element) {
                (yyval.qName) = parseInfo->staticContext->namePool()->allocateQName(
@@ -7632,8 +7576,6 @@ yyreduce:
          break;
 
       case 462:
-         /* Line 1269 of yacc.c.  */
-#line 4540 "querytransformparser.ypp"
          {
             (yyval.qName) = parseInfo->staticContext->namePool()->allocateQName(
                                parseInfo->staticContext->defaultFunctionNamespace(), (yyvsp[(1) - (1)].sval));
@@ -7641,8 +7583,6 @@ yyreduce:
          break;
 
       case 463:
-         /* Line 1269 of yacc.c.  */
-#line 4544 "querytransformparser.ypp"
          {
             (yyval.qName) = parseInfo->staticContext->namePool()->allocateQName(StandardNamespaces::InternalXSLT,
                             (yyvsp[(2) - (2)].sval));

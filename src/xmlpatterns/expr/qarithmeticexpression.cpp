@@ -95,7 +95,7 @@ Item ArithmeticExpression::flexiblyCalculate(const Item &op1,
 
    const AtomicMathematician::Ptr ingela(fetchMathematician(a1, a2, op, true, context, reflection, code, isCompat));
 
-   return ingela->calculate(a1->evaluateSingleton(context), op, 
+   return ingela->calculate(a1->evaluateSingleton(context), op,
                             a2->evaluateSingleton(context), context);
 }
 
@@ -166,11 +166,10 @@ ArithmeticExpression::fetchMathematician(Expression::Ptr &op1,
          return AtomicMathematician::Ptr();
       }
 
-      context->error(QtXmlPatterns::tr(
-                        "Operator %1 cannot be used on type %2.")
-                     .arg(formatKeyword(AtomicMathematician::displayName(op)))
-                     .arg(formatType(context->namePool(), t1)),
-                     code, reflection);
+      context->error(QtXmlPatterns::tr("Operator %1 cannot be used on type %2.")
+                     .formatArg(formatKeyword(AtomicMathematician::displayName(op)))
+                     .formatArg(formatType(context->namePool(), t1)), code, reflection);
+
       return AtomicMathematician::Ptr();
    }
 
@@ -185,12 +184,11 @@ ArithmeticExpression::fetchMathematician(Expression::Ptr &op1,
       return AtomicMathematician::Ptr();
    }
 
-   context->error(QtXmlPatterns::tr("Operator %1 cannot be used on "
-                                    "atomic values of type %2 and %3.")
-                  .arg(formatKeyword(AtomicMathematician::displayName(op)))
-                  .arg(formatType(context->namePool(), t1))
-                  .arg(formatType(context->namePool(), t2)),
-                  code, reflection);
+   context->error(QtXmlPatterns::tr("Operator %1 cannot be used on atomic values of type %2 and %3.")
+                  .formatArg(formatKeyword(AtomicMathematician::displayName(op)))
+                  .formatArg(formatType(context->namePool(), t1))
+                  .formatArg(formatType(context->namePool(), t2)), code, reflection);
+
    return AtomicMathematician::Ptr();
 }
 

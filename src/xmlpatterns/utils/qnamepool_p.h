@@ -476,14 +476,13 @@ inline QXmlName::QXmlName(const NamespaceCode uri,
    /* We can't use members like prefix() here because if one of the
     * values are to large, they would overflow into the others. */
    Q_ASSERT_X(p <= MaximumPrefixes, "",
-              qPrintable(QString::fromLatin1("NamePool prefix limits: max is %1, therefore %2 exceeds.").arg(MaximumPrefixes).arg(
-                            p)));
+              qPrintable(QString("NamePool prefix limits: max is %1, therefore %2 exceeds.").formatArg(MaximumPrefixes).formatArg(p)));
+
    Q_ASSERT_X(ln <= MaximumLocalNames, "",
-              qPrintable(QString::fromLatin1("NamePool local name limits: max is %1, therefore %2 exceeds.").arg(
-                            MaximumLocalNames).arg(ln)));
+              qPrintable(QString("NamePool local name limits: max is %1, therefore %2 exceeds.").formatArg(MaximumLocalNames).formatArg(ln)));
+
    Q_ASSERT_X(uri <= MaximumNamespaces, "",
-              qPrintable(QString::fromLatin1("NamePool namespace limits: max is %1, therefore %2 exceeds.").arg(
-                            MaximumNamespaces).arg(uri)));
+              qPrintable(QString("NamePool namespace limits: max is %1, therefore %2 exceeds.").formatArg(MaximumNamespaces).formatArg(uri)));
 }
 
 

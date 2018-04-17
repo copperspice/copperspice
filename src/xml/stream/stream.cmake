@@ -10,13 +10,11 @@ set(XML_PUBLIC_INCLUDES
     QXmlStreamNotationDeclaration
     QXmlStreamNotationDeclarations
     QXmlStreamReader
-    QXmlStreamStringRef
     QXmlStreamWriter
 )
 
 set(XML_INCLUDES
     ${XML_INCLUDES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamattribute.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamattributes.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamentitydeclaration.h
@@ -27,6 +25,5 @@ set(XML_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamnotationdeclaration.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamnotationdeclarations.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamreader.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamstringref.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stream/qxmlstreamwriter.h
 )

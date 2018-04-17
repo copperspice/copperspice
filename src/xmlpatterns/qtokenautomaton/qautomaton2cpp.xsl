@@ -62,7 +62,7 @@
                 <xsl:text> toToken(const QString &amp;value);&#xA;</xsl:text>
                 <xsl:text>static inline </xsl:text>
                 <xsl:value-of select="$tokenEnum"/>
-                <xsl:text> toToken(const QStringRef &amp;value);&#xA;</xsl:text>
+                <xsl:text> toToken(QStringView value);&#xA;</xsl:text>
                 <xsl:text>static </xsl:text>
                 <xsl:value-of select="$tokenEnum"/>
                 <xsl:text> toToken(const QChar *data, int length);&#xA;</xsl:text>
@@ -94,7 +94,7 @@
                 <xsl:text>inline </xsl:text>
                 <xsl:value-of select="@className"/>::<xsl:value-of select="$tokenEnum"/>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="@className"/>::toToken(const QStringRef &amp;value)
+                <xsl:value-of select="@className"/>::toToken(QStringView value)
                 {
                     return toToken(value.constData(), value.length());
                 }

@@ -25,7 +25,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QString;
+#include <qstringfwd.h>
 
 namespace QPatternist {
 class SourceLocationReflection

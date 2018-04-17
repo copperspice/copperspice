@@ -35,6 +35,7 @@
 QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class FunctionSignature : public CallTargetDescription
 {
  public:
@@ -45,19 +46,16 @@ class FunctionSignature : public CallTargetDescription
       UnlimitedArity = -1
    };
 
-   typedef QExplicitlySharedDataPointer<FunctionSignature> Ptr;
-   typedef QHash<QXmlName, FunctionSignature::Ptr> Hash;
-   typedef QList<FunctionSignature::Ptr> List;
+   using Ptr   = QExplicitlySharedDataPointer<FunctionSignature>;
+   using Hash  = QHash<QXmlName, FunctionSignature::Ptr>;
+   using List  = QList<FunctionSignature::Ptr>;
 
    /**
     * A number which tells the amount of arguments a function has.
     */
    typedef qint16 Arity;
 
-   FunctionSignature(const QXmlName name,
-                     const Arity minArgs,
-                     const Arity maxArgs,
-                     const SequenceType::Ptr &returnType,
+   FunctionSignature(const QXmlName name, const Arity minArgs, const Arity maxArgs, const SequenceType::Ptr &returnType,
                      const Expression::Properties chars = Expression::Properties(),
                      const Expression::ID id = Expression::IDIgnorableExpression);
 
@@ -69,8 +67,7 @@ class FunctionSignature : public CallTargetDescription
     * calling setArguments() with a list containing a FunctionsArgument with name @p name
     * and type @p type.
     */
-   void appendArgument(const QXmlName::LocalNameCode name,
-                       const SequenceType::Ptr &type);
+   void appendArgument(const QXmlName::LocalNameCode name, const SequenceType::Ptr &type);
 
    /**
     * Checks whether @p arity is within the range of allowed count of arguments. For example,
@@ -144,9 +141,7 @@ class FunctionSignature : public CallTargetDescription
  */
 static inline QString formatFunction(const NamePool::Ptr &np, const FunctionSignature::Ptr &func)
 {
-   return QLatin1String("<span class='XQuery-function'>")  +
-          escape(func->displayName(np))                    +
-          QLatin1String("</span>");
+   return QLatin1String("<span class='XQuery-function'>")  + escape(func->displayName(np)) + QLatin1String("</span>");
 }
 }
 

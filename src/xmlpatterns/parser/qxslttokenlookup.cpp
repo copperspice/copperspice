@@ -24,1999 +24,514 @@
 
 #include "qxslttokenlookup_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier2(const QChar *data)
-
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier2(QStringView data)
 {
-   if (data[0] == 97)
+   if (data.startsWith("as"))  {
+      return As;
 
+   } else if (data.startsWith("id"))   {
+      return Id;
 
-   {
-
-      if (data[1] == 115)
-
-
-      {
-         return As;
-      }
+   } else if (data.startsWith("if"))   {
+      return If;
 
    }
-
-   else if (data[0] == 105)
-
-
-   {
-      if (data[1] == 100)
-
-
-      {
-
-
-         return Id;
-
-      }
-
-      else if (data[1] == 102)
-
-
-      {
-
-
-         return If;
-
-      }
-
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier3(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier3(QStringView data)
 {
-   if (data[0] == 107)
+   if (data.startsWith("key"))  {
+      return Key;
 
-
-   {
-
-      static const unsigned short string[] = {
-         101, 121
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
-
-
-      {
-         return Key;
-      }
-
+   } else if (data.startsWith("use"))   {
+      return Use;
    }
-
-   else if (data[0] == 117)
-
-
-   {
-
-      static const unsigned short string[] = {
-         115, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 2) == 0)
-
-
-      {
-         return Use;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier4(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier4(QStringView data)
 {
-   if (data[0] == 99)
+   if (data.startsWith("copy"))  {
+      return Copy;
 
+   } else if (data.startsWith("href"))  {
+      return Href;
 
-   {
+   } else if (data.startsWith("lang"))  {
+      return Lang;
 
-      static const unsigned short string[] = {
-         111, 112, 121
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
+   } else if (data.startsWith("mode"))  {
+      return Mode;
 
+   } else if (data.startsWith("name"))  {
+      return Name;
 
-      {
-         return Copy;
-      }
+   } else if (data.startsWith("sort"))  {
+      return Sort;
 
-   }
+   } else if (data.startsWith("test"))  {
+      return Test;
 
-   else if (data[0] == 104)
+   } else if (data.startsWith("text"))  {
+       return Text;
 
+   } else if (data.startsWith("type"))  {
+       return Type;
 
-   {
-
-      static const unsigned short string[] = {
-         114, 101, 102
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return Href;
-      }
+   } else if  (data.startsWith("when"))  {
+       return When;
 
    }
-
-   else if (data[0] == 108)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 110, 103
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return Lang;
-      }
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 100, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return Mode;
-      }
-
-   }
-
-   else if (data[0] == 110)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 109, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return Name;
-      }
-
-   }
-
-   else if (data[0] == 115)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 114, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return Sort;
-      }
-
-   }
-
-   else if (data[0] == 116)
-
-
-   {
-      if (data[1] == 101)
-
-
-      {
-         if (data[2] == 115)
-
-
-         {
-
-            if (data[3] == 116)
-
-
-            {
-               return Test;
-            }
-
-         }
-
-         else if (data[2] == 120)
-
-
-         {
-
-            if (data[3] == 116)
-
-
-            {
-               return Text;
-            }
-
-         }
-
-
-      }
-
-      else if (data[1] == 121)
-
-
-      {
-
-         static const unsigned short string[] = {
-            112, 101
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 2) == 0)
-
-
-         {
-            return Type;
-         }
-
-      }
-
-
-   }
-
-   else if (data[0] == 119)
-
-
-   {
-
-      static const unsigned short string[] = {
-         104, 101, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 3) == 0)
-
-
-      {
-         return When;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier5(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier5(QStringView data)
 {
-   if (data[0] == 102)
+   if (data.startsWith("flags"))  {
+      return Flags;
 
+   } else if (data.startsWith("match"))  {
+      return Match;
 
-   {
+   } else if (data.startsWith("order"))  {
+      return Order;
 
-      static const unsigned short string[] = {
-         108, 97, 103, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
+   } else if (data.startsWith("param"))  {
+      return Param;
 
-
-      {
-         return Flags;
-      }
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 116, 99, 104
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-
-
-      {
-         return Match;
-      }
+   } else if (data.startsWith("regex"))  {
+      return Regex;
 
    }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         114, 100, 101, 114
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-
-
-      {
-         return Order;
-      }
-
-   }
-
-   else if (data[0] == 112)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 114, 97, 109
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-
-
-      {
-         return Param;
-      }
-
-   }
-
-   else if (data[0] == 114)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 103, 101, 120
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 4) == 0)
-
-
-      {
-         return Regex;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier6(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier6(QStringView data)
 {
-   if (data[0] == 99)
+   if (data.startsWith("choose"))  {
+      return Choose;
 
+   } else if (data.startsWith("format"))  {
+      return Format;
 
-   {
+   } else if (data.startsWith("import"))  {
+      return Import;
 
-      static const unsigned short string[] = {
-         104, 111, 111, 115, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
+   } else if (data.startsWith("indent"))  {
+      return Indent;
 
+   } else if (data.startsWith("method"))  {
+      return Method;
 
-      {
-         return Choose;
-      }
+   } else if (data.startsWith("output"))  {
+      return Output;
 
-   }
+   } else if (data.startsWith("select"))  {
+      return Select;
 
-   else if (data[0] == 102)
+   } else if (data.startsWith("stable"))  {
+      return Stable;
 
-
-   {
-
-      static const unsigned short string[] = {
-         111, 114, 109, 97, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-
-
-      {
-         return Format;
-      }
+   } else if (data.startsWith("tunnel"))  {
+      return Tunnel;
 
    }
-
-   else if (data[0] == 105)
-
-
-   {
-      if (data[1] == 109)
-
-
-      {
-
-         static const unsigned short string[] = {
-            112, 111, 114, 116
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-
-
-         {
-            return Import;
-         }
-
-      }
-
-      else if (data[1] == 110)
-
-
-      {
-
-         static const unsigned short string[] = {
-            100, 101, 110, 116
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-
-
-         {
-            return Indent;
-         }
-
-      }
-
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 116, 104, 111, 100
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-
-
-      {
-         return Method;
-      }
-
-   }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         117, 116, 112, 117, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-
-
-      {
-         return Output;
-      }
-
-   }
-
-   else if (data[0] == 115)
-
-
-   {
-      if (data[1] == 101)
-
-
-      {
-
-         static const unsigned short string[] = {
-            108, 101, 99, 116
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-
-
-         {
-            return Select;
-         }
-
-      }
-
-      else if (data[1] == 116)
-
-
-      {
-
-         static const unsigned short string[] = {
-            97, 98, 108, 101
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 4) == 0)
-
-
-         {
-            return Stable;
-         }
-
-      }
-
-
-   }
-
-   else if (data[0] == 116)
-
-
-   {
-
-      static const unsigned short string[] = {
-         117, 110, 110, 101, 108
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 5) == 0)
-
-
-      {
-         return Tunnel;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier7(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier7(QStringView data)
 {
-   if (data[0] == 99)
+   if (data.startsWith("comment"))  {
+      return Comment;
 
+   } else if (data.startsWith("copy-of"))  {
+      return CopyOf;
 
-   {
-      if (data[1] == 111)
+   } else if (data.startsWith("element"))  {
+      return Element;
 
+   } else if (data.startsWith("include"))  {
+      return Include;
 
-      {
-         if (data[2] == 109)
+   } else if (data.startsWith("message"))  {
+       return Message;
 
-
-         {
-
-            static const unsigned short string[] = {
-               109, 101, 110, 116
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 4) == 0)
-
-
-            {
-               return Comment;
-            }
-
-         }
-
-         else if (data[2] == 112)
-
-
-         {
-
-            static const unsigned short string[] = {
-               121, 45, 111, 102
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 4) == 0)
-
-
-            {
-               return CopyOf;
-            }
-
-         }
-
-
-      }
-
+   } else if (data.startsWith("version"))  {
+      return Version;
 
    }
-
-   else if (data[0] == 101)
-
-
-   {
-
-      static const unsigned short string[] = {
-         108, 101, 109, 101, 110, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-
-
-      {
-         return Element;
-      }
-
-   }
-
-   else if (data[0] == 105)
-
-
-   {
-
-      static const unsigned short string[] = {
-         110, 99, 108, 117, 100, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-
-
-      {
-         return Include;
-      }
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 115, 115, 97, 103, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-
-
-      {
-         return Message;
-      }
-
-   }
-
-   else if (data[0] == 118)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 114, 115, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 6) == 0)
-
-
-      {
-         return Version;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier8(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier8(QStringView data)
 {
-   if (data[0] == 100)
+   if (data.startsWith("document"))  {
+       return Document;
 
+   } else if (data.startsWith("elements"))  {
+      return Elements;
 
-   {
+   } else if (data.startsWith("encoding"))  {
+      return Encoding;
 
-      static const unsigned short string[] = {
-         111, 99, 117, 109, 101, 110, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
+   } else if (data.startsWith("for-each"))  {
+      return ForEach;
 
+   } else if (data.startsWith("function"))  {
+      return Function;
 
-      {
-         return Document;
-      }
+   } else if (data.startsWith("override"))  {
+      return Override;
 
-   }
+   } else if (data.startsWith("priority"))  {
+      return Priority;
 
-   else if (data[0] == 101)
+   } else if (data.startsWith("required"))  {
+      return Required;
 
+   } else if (data.startsWith("sequence"))  {
+      return Sequence;
 
-   {
-      if (data[1] == 108)
+   } else if (data.startsWith("template"))  {
+      return Template;
 
+   } else if (data.startsWith("use-when"))  {
+      return UseWhen;
 
-      {
+   } else if (data.startsWith("value-of"))  {
+      return ValueOf;
 
-         static const unsigned short string[] = {
-            101, 109, 101, 110, 116, 115
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
-
-
-         {
-            return Elements;
-         }
-
-      }
-
-      else if (data[1] == 110)
-
-
-      {
-
-         static const unsigned short string[] = {
-            99, 111, 100, 105, 110, 103
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
-
-
-         {
-            return Encoding;
-         }
-
-      }
-
+   } else if (data.startsWith("variable"))  {
+      return Variable;
 
    }
-
-   else if (data[0] == 102)
-
-
-   {
-      if (data[1] == 111)
-
-
-      {
-
-         static const unsigned short string[] = {
-            114, 45, 101, 97, 99, 104
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
-
-
-         {
-            return ForEach;
-         }
-
-      }
-
-      else if (data[1] == 117)
-
-
-      {
-
-         static const unsigned short string[] = {
-            110, 99, 116, 105, 111, 110
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 6) == 0)
-
-
-         {
-            return Function;
-         }
-
-      }
-
-
-   }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         118, 101, 114, 114, 105, 100, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return Override;
-      }
-
-   }
-
-   else if (data[0] == 112)
-
-
-   {
-
-      static const unsigned short string[] = {
-         114, 105, 111, 114, 105, 116, 121
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return Priority;
-      }
-
-   }
-
-   else if (data[0] == 114)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 113, 117, 105, 114, 101, 100
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return Required;
-      }
-
-   }
-
-   else if (data[0] == 115)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 113, 117, 101, 110, 99, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return Sequence;
-      }
-
-   }
-
-   else if (data[0] == 116)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 109, 112, 108, 97, 116, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return Template;
-      }
-
-   }
-
-   else if (data[0] == 117)
-
-
-   {
-
-      static const unsigned short string[] = {
-         115, 101, 45, 119, 104, 101, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 7) == 0)
-
-
-      {
-         return UseWhen;
-      }
-
-   }
-
-   else if (data[0] == 118)
-
-
-   {
-      if (data[1] == 97)
-
-
-      {
-         if (data[2] == 108)
-
-
-         {
-
-            static const unsigned short string[] = {
-               117, 101, 45, 111, 102
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
-
-
-            {
-               return ValueOf;
-            }
-
-         }
-
-         else if (data[2] == 114)
-
-
-         {
-
-            static const unsigned short string[] = {
-               105, 97, 98, 108, 101
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 5) == 0)
-
-
-            {
-               return Variable;
-            }
-
-         }
-
-
-      }
-
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier9(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier9(QStringView data)
 {
-   if (data[0] == 97)
+    if (data.startsWith("attribute"))  {
+      return Attribute;
 
+   } else if (data.startsWith("collation"))  {
+      return Collation;
 
-   {
+   } else if (data.startsWith("data-type"))  {
+      return DataType;
 
-      static const unsigned short string[] = {
-         116, 116, 114, 105, 98, 117, 116, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
+   } else if (data.startsWith("namespace"))  {
+      return Namespace;
 
+   } else if (data.startsWith("otherwise"))  {
+      return Otherwise;
 
-      {
-         return Attribute;
-      }
+   } else if (data.startsWith("separator"))  {
+      return Separator;
 
-   }
+   } else if (data.startsWith("terminate"))  {
+      return Terminate;
 
-   else if (data[0] == 99)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 108, 108, 97, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-
-
-      {
-         return Collation;
-      }
+   } else if (data.startsWith("transform"))  {
+      return Transform;
 
    }
-
-   else if (data[0] == 100)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 116, 97, 45, 116, 121, 112, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-
-
-      {
-         return DataType;
-      }
-
-   }
-
-   else if (data[0] == 110)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 109, 101, 115, 112, 97, 99, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-
-
-      {
-         return Namespace;
-      }
-
-   }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         116, 104, 101, 114, 119, 105, 115, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-
-
-      {
-         return Otherwise;
-      }
-
-   }
-
-   else if (data[0] == 115)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 112, 97, 114, 97, 116, 111, 114
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 8) == 0)
-
-
-      {
-         return Separator;
-      }
-
-   }
-
-   else if (data[0] == 116)
-
-
-   {
-      if (data[1] == 101)
-
-
-      {
-
-         static const unsigned short string[] = {
-            114, 109, 105, 110, 97, 116, 101
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
-
-
-         {
-            return Terminate;
-         }
-
-      }
-
-      else if (data[1] == 114)
-
-
-      {
-
-         static const unsigned short string[] = {
-            97, 110, 115, 102, 111, 114, 109
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 7) == 0)
-
-
-         {
-            return Transform;
-         }
-
-      }
-
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier10(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier10(QStringView data)
 {
-   if (data[0] == 99)
+   if (data.startsWith("case-order"))  {
+      return CaseOrder;
 
+   } else if (data.startsWith("media-type"))  {
+       return MediaType;
 
-   {
+   } else if (data.startsWith("standalone"))  {
+      return Standalone;
 
-      static const unsigned short string[] = {
-         97, 115, 101, 45, 111, 114, 100, 101, 114
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
+   } else if (data.startsWith("stylesheet"))  {
+      return Stylesheet;
 
+   } else if (data.startsWith("validation"))  {
+      return Validation;
 
-      {
-         return CaseOrder;
-      }
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 100, 105, 97, 45, 116, 121, 112, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-
-
-      {
-         return MediaType;
-      }
+   } else if (data.startsWith("with-param"))  {
+      return WithParam;
 
    }
-
-   else if (data[0] == 115)
-
-
-   {
-      if (data[1] == 116)
-
-
-      {
-         if (data[2] == 97)
-
-
-         {
-
-            static const unsigned short string[] = {
-               110, 100, 97, 108, 111, 110, 101
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 7) == 0)
-
-
-            {
-               return Standalone;
-            }
-
-         }
-
-         else if (data[2] == 121)
-
-
-         {
-
-            static const unsigned short string[] = {
-               108, 101, 115, 104, 101, 101, 116
-            };
-            if (memcmp(&data[3], &string, sizeof(QChar) * 7) == 0)
-
-
-            {
-               return Stylesheet;
-            }
-
-         }
-
-
-      }
-
-
-   }
-
-   else if (data[0] == 118)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 108, 105, 100, 97, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-
-
-      {
-         return Validation;
-      }
-
-   }
-
-   else if (data[0] == 119)
-
-
-   {
-
-      static const unsigned short string[] = {
-         105, 116, 104, 45, 112, 97, 114, 97, 109
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 9) == 0)
-
-
-      {
-         return WithParam;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier11(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier11(QStringView data)
 {
-
-   static const unsigned short string[] = {
-      115, 116, 114, 105, 112, 45, 115, 112, 97, 99, 101
-   };
-   if (memcmp(&data[0], &string, sizeof(QChar) * 11) == 0)
-
-
-   {
+   if (data.startsWith("strip-space"))  {
       return StripSpace;
    }
 
-
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier12(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier12(QStringView data)
 {
-
-   static const unsigned short string[] = {
-      112, 101, 114, 102, 111, 114, 109, 45, 115, 111, 114, 116
-   };
-   if (memcmp(&data[0], &string, sizeof(QChar) * 12) == 0)
-
-
-   {
+   if (data.startsWith("perform-sort"))  {
       return PerformSort;
    }
 
+   return NoKeyword;
+}
+
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier13(QStringView data)
+{
+   if (data.startsWith("attribute-set"))  {
+      return AttributeSet;
+
+   } else if (data.startsWith("call-template"))  {
+      return CallTemplate;
+
+   } else if (data.startsWith("import-schema"))  {
+      return ImportSchema;
+   }
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier13(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier14(QStringView data)
 {
-   if (data[0] == 97)
+   if (data.startsWith("analyze-string"))  {
+      return AnalyzeString;
 
+   } else if (data.startsWith("doctype-public"))  {
+      return DoctypePublic;
 
-   {
+   } else if (data.startsWith("doctype-system"))  {
+      return DoctypeSystem;
 
-      static const unsigned short string[] = {
-         116, 116, 114, 105, 98, 117, 116, 101, 45, 115, 101, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
+   } else if (data.startsWith("output-version"))  {
+      return OutputVersion;
 
-
-      {
-         return AttributeSet;
-      }
-
-   }
-
-   else if (data[0] == 99)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 108, 108, 45, 116, 101, 109, 112, 108, 97, 116, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
-
-
-      {
-         return CallTemplate;
-      }
+   } else if (data.startsWith("preserve-space"))  {
+      return PreserveSpace;
 
    }
-
-   else if (data[0] == 105)
-
-
-   {
-
-      static const unsigned short string[] = {
-         109, 112, 111, 114, 116, 45, 115, 99, 104, 101, 109, 97
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 12) == 0)
-
-
-      {
-         return ImportSchema;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier14(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier15(QStringView data)
 {
-   if (data[0] == 97)
+   if (data.startsWith("apply-templates"))  {
+      return ApplyTemplates;
 
+   } else if (data.startsWith("byte-order-mark"))  {
+      return ByteOrderMark;
 
-   {
+   } else if (data.startsWith("copy-namespaces"))  {
+      return CopyNamespaces;
 
-      static const unsigned short string[] = {
-         110, 97, 108, 121, 122, 101, 45, 115, 116, 114, 105, 110, 103
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
+   } else if (data.startsWith("result-document"))  {
+      return ResultDocument;
 
-
-      {
-         return AnalyzeString;
-      }
-
-   }
-
-   else if (data[0] == 100)
-
-
-   {
-      if (data[1] == 111)
-
-
-      {
-         if (data[2] == 99)
-
-
-         {
-            if (data[3] == 116)
-
-
-            {
-               if (data[4] == 121)
-
-
-               {
-                  if (data[5] == 112)
-
-
-                  {
-                     if (data[6] == 101)
-
-
-                     {
-                        if (data[7] == 45)
-
-
-                        {
-                           if (data[8] == 112)
-
-
-                           {
-
-                              static const unsigned short string[] = {
-                                 117, 98, 108, 105, 99
-                              };
-                              if (memcmp(&data[9], &string, sizeof(QChar) * 5) == 0)
-
-
-                              {
-                                 return DoctypePublic;
-                              }
-
-                           }
-
-                           else if (data[8] == 115)
-
-
-                           {
-
-                              static const unsigned short string[] = {
-                                 121, 115, 116, 101, 109
-                              };
-                              if (memcmp(&data[9], &string, sizeof(QChar) * 5) == 0)
-
-
-                              {
-                                 return DoctypeSystem;
-                              }
-
-                           }
-
-
-                        }
-
-
-                     }
-
-
-                  }
-
-
-               }
-
-
-            }
-
-
-         }
-
-
-      }
-
+   } else if (data.startsWith("schema-location"))  {
+      return SchemaLocation;
 
    }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         117, 116, 112, 117, 116, 45, 118, 101, 114, 115, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
-
-
-      {
-         return OutputVersion;
-      }
-
-   }
-
-   else if (data[0] == 112)
-
-
-   {
-
-      static const unsigned short string[] = {
-         114, 101, 115, 101, 114, 118, 101, 45, 115, 112, 97, 99, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 13) == 0)
-
-
-      {
-         return PreserveSpace;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier15(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier17(QStringView data)
 {
-   if (data[0] == 97)
-
-
-   {
-
-      static const unsigned short string[] = {
-         112, 112, 108, 121, 45, 116, 101, 109, 112, 108, 97, 116, 101, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-
-
-      {
-         return ApplyTemplates;
-      }
-
-   }
-
-   else if (data[0] == 98)
-
-
-   {
-
-      static const unsigned short string[] = {
-         121, 116, 101, 45, 111, 114, 100, 101, 114, 45, 109, 97, 114, 107
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-
-
-      {
-         return ByteOrderMark;
-      }
-
-   }
-
-   else if (data[0] == 99)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 112, 121, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-
-
-      {
-         return CopyNamespaces;
-      }
-
-   }
-
-   else if (data[0] == 114)
-
-
-   {
-
-      static const unsigned short string[] = {
-         101, 115, 117, 108, 116, 45, 100, 111, 99, 117, 109, 101, 110, 116
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-
-
-      {
-         return ResultDocument;
-      }
-
-   }
-
-   else if (data[0] == 115)
-
-
-   {
-
-      static const unsigned short string[] = {
-         99, 104, 101, 109, 97, 45, 108, 111, 99, 97, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 14) == 0)
-
-
-      {
-         return SchemaLocation;
-      }
-
-   }
-
-
-
-   return NoKeyword;
-}
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier17(const QChar *data)
-
-{
-
-   static const unsigned short string[] = {
-      100, 101, 102, 97, 117, 108, 116, 45, 99, 111, 108, 108, 97, 116, 105, 111, 110
-   };
-   if (memcmp(&data[0], &string, sizeof(QChar) * 17) == 0)
-
-
-   {
+   if (data.startsWith("default-collation"))  {
       return DefaultCollation;
    }
 
+   return NoKeyword;
+}
+
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier18(QStringView data)
+{
+   if (data.startsWith("default-validation"))  {
+      return DefaultValidation;
+
+   } else if (data.startsWith("inherit-namespaces"))  {
+      return InheritNamespaces;
+
+   } else if (data.startsWith("matching-substring"))  {
+      return MatchingSubstring;
+
+   } else if (data.startsWith("normalization-form"))  {
+      return NormalizationForm;
+
+   } else if (data.startsWith("undeclare-prefixes"))  {
+      return UndeclarePrefixes;
+
+   } else if (data.startsWith("use-attribute-sets"))  {
+      return UseAttributeSets;
+
+   } else if (data.startsWith("use-character-maps"))  {
+      return UseCharacterMaps;
+
+   }
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier18(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier20(QStringView data)
 {
-   if (data[0] == 100)
+   if (data.startsWith("include-content-type"))  {
+      return IncludeContentType;
 
-
-   {
-
-      static const unsigned short string[] = {
-         101, 102, 97, 117, 108, 116, 45, 118, 97, 108, 105, 100, 97, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-
-
-      {
-         return DefaultValidation;
-      }
+   } else if (data.startsWith("omit-xml-declaration"))  {
+      return OmitXmlDeclaration;
 
    }
-
-   else if (data[0] == 105)
-
-
-   {
-
-      static const unsigned short string[] = {
-         110, 104, 101, 114, 105, 116, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-
-
-      {
-         return InheritNamespaces;
-      }
-
-   }
-
-   else if (data[0] == 109)
-
-
-   {
-
-      static const unsigned short string[] = {
-         97, 116, 99, 104, 105, 110, 103, 45, 115, 117, 98, 115, 116, 114, 105, 110, 103
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-
-
-      {
-         return MatchingSubstring;
-      }
-
-   }
-
-   else if (data[0] == 110)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 114, 109, 97, 108, 105, 122, 97, 116, 105, 111, 110, 45, 102, 111, 114, 109
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 17) == 0)
-
-
-      {
-         return NormalizationForm;
-      }
-
-   }
-
-   else if (data[0] == 117)
-
-
-   {
-      if (data[1] == 110)
-
-
-      {
-
-         static const unsigned short string[] = {
-            100, 101, 99, 108, 97, 114, 101, 45, 112, 114, 101, 102, 105, 120, 101, 115
-         };
-         if (memcmp(&data[2], &string, sizeof(QChar) * 16) == 0)
-
-
-         {
-            return UndeclarePrefixes;
-         }
-
-      }
-
-      else if (data[1] == 115)
-
-
-      {
-         if (data[2] == 101)
-
-
-         {
-            if (data[3] == 45)
-
-
-            {
-               if (data[4] == 97)
-
-
-               {
-
-                  static const unsigned short string[] = {
-                     116, 116, 114, 105, 98, 117, 116, 101, 45, 115, 101, 116, 115
-                  };
-                  if (memcmp(&data[5], &string, sizeof(QChar) * 13) == 0)
-
-
-                  {
-                     return UseAttributeSets;
-                  }
-
-               }
-
-               else if (data[4] == 99)
-
-
-               {
-
-                  static const unsigned short string[] = {
-                     104, 97, 114, 97, 99, 116, 101, 114, 45, 109, 97, 112, 115
-                  };
-                  if (memcmp(&data[5], &string, sizeof(QChar) * 13) == 0)
-
-
-                  {
-                     return UseCharacterMaps;
-                  }
-
-               }
-
-
-            }
-
-
-         }
-
-
-      }
-
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier20(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier21(QStringView data)
 {
-   if (data[0] == 105)
-
-
-   {
-
-      static const unsigned short string[] = {
-         110, 99, 108, 117, 100, 101, 45, 99, 111, 110, 116, 101, 110, 116, 45, 116, 121, 112, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 19) == 0)
-
-
-      {
-         return IncludeContentType;
-      }
-
-   }
-
-   else if (data[0] == 111)
-
-
-   {
-
-      static const unsigned short string[] = {
-         109, 105, 116, 45, 120, 109, 108, 45, 100, 101, 99, 108, 97, 114, 97, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 19) == 0)
-
-
-      {
-         return OmitXmlDeclaration;
-      }
-
-   }
-
-
-
-   return NoKeyword;
-}
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier21(const QChar *data)
-
-{
-
-   static const unsigned short string[] = {
-      101, 115, 99, 97, 112, 101, 45, 117, 114, 105, 45, 97, 116, 116, 114, 105, 98, 117, 116, 101, 115
-   };
-   if (memcmp(&data[0], &string, sizeof(QChar) * 21) == 0)
-
-
-   {
+   if (data.startsWith("escape-uri-attributes"))  {
       return EscapeUriAttributes;
    }
 
+   return NoKeyword;
+}
+
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier22(QStringView data)
+{
+   if (data.startsWith("cdata-section-elements"))  {
+      return CdataSectionElements;
+
+   } else if (data.startsWith("input-type-annotations"))  {
+      return InputTypeAnnotations;
+
+   } else if (data.startsWith("non-matching-substring"))  {
+      return NonMatchingSubstring;
+
+   } else if (data.startsWith("processing-instruction"))  {
+      return ProcessingInstruction;
+
+   }
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier22(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier23(QStringView data)
 {
-   if (data[0] == 99)
+   if (data.startsWith("exclude-result-prefixes"))  {
+      return ExcludeResultPrefixes;
 
-
-   {
-
-      static const unsigned short string[] = {
-         100, 97, 116, 97, 45, 115, 101, 99, 116, 105, 111, 110, 45, 101, 108, 101, 109, 101, 110, 116, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 21) == 0)
-
-
-      {
-         return CdataSectionElements;
-      }
+   } else if (data.startsWith("xpath-default-namespace"))  {
+      return XpathDefaultNamespace;
 
    }
-
-   else if (data[0] == 105)
-
-
-   {
-
-      static const unsigned short string[] = {
-         110, 112, 117, 116, 45, 116, 121, 112, 101, 45, 97, 110, 110, 111, 116, 97, 116, 105, 111, 110, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 21) == 0)
-
-
-      {
-         return InputTypeAnnotations;
-      }
-
-   }
-
-   else if (data[0] == 110)
-
-
-   {
-
-      static const unsigned short string[] = {
-         111, 110, 45, 109, 97, 116, 99, 104, 105, 110, 103, 45, 115, 117, 98, 115, 116, 114, 105, 110, 103
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 21) == 0)
-
-
-      {
-         return NonMatchingSubstring;
-      }
-
-   }
-
-   else if (data[0] == 112)
-
-
-   {
-
-      static const unsigned short string[] = {
-         114, 111, 99, 101, 115, 115, 105, 110, 103, 45, 105, 110, 115, 116, 114, 117, 99, 116, 105, 111, 110
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 21) == 0)
-
-
-      {
-         return ProcessingInstruction;
-      }
-
-   }
-
-
 
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier23(const QChar *data)
 
+XSLTTokenLookup::NodeName XSLTTokenLookup::classifier26(QStringView data)
 {
-   if (data[0] == 101)
-
-
-   {
-
-      static const unsigned short string[] = {
-         120, 99, 108, 117, 100, 101, 45, 114, 101, 115, 117, 108, 116, 45, 112, 114, 101, 102, 105, 120, 101, 115
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 22) == 0)
-
-
-      {
-         return ExcludeResultPrefixes;
-      }
-
-   }
-
-   else if (data[0] == 120)
-
-
-   {
-
-      static const unsigned short string[] = {
-         112, 97, 116, 104, 45, 100, 101, 102, 97, 117, 108, 116, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101
-      };
-      if (memcmp(&data[1], &string, sizeof(QChar) * 22) == 0)
-
-
-      {
-         return XpathDefaultNamespace;
-      }
-
-   }
-
-
-
-   return NoKeyword;
-}
-XSLTTokenLookup::NodeName XSLTTokenLookup::classifier26(const QChar *data)
-
-{
-
-   static const unsigned short string[] = {
-      101, 120, 116, 101, 110, 115, 105, 111, 110, 45, 101, 108, 101, 109, 101, 110, 116, 45, 112, 114, 101, 102, 105, 120, 101, 115
-   };
-   if (memcmp(&data[0], &string, sizeof(QChar) * 26) == 0)
-
-
-   {
+   if (data.startsWith("extension-element-prefixes"))  {
       return ExtensionElementPrefixes;
    }
 
-
    return NoKeyword;
 }
-XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QChar *data, int length)
+
+XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(QStringView data, int length)
 {
    switch (length) {
 
       case 2:
          return classifier2(data);
 
-
       case 3:
          return classifier3(data);
-
 
       case 4:
          return classifier4(data);
 
-
       case 5:
          return classifier5(data);
-
 
       case 6:
          return classifier6(data);
 
-
       case 7:
          return classifier7(data);
-
 
       case 8:
          return classifier8(data);
 
-
       case 9:
          return classifier9(data);
-
 
       case 10:
          return classifier10(data);
 
-
       case 11:
          return classifier11(data);
-
 
       case 12:
          return classifier12(data);
 
-
       case 13:
          return classifier13(data);
-
 
       case 14:
          return classifier14(data);
 
-
       case 15:
          return classifier15(data);
-
 
       case 17:
          return classifier17(data);
 
-
       case 18:
          return classifier18(data);
-
 
       case 20:
          return classifier20(data);
 
-
       case 21:
          return classifier21(data);
-
 
       case 22:
          return classifier22(data);
 
-
       case 23:
          return classifier23(data);
 
-
       case 26:
          return classifier26(data);
-
 
       default:
          return NoKeyword;
    }
 }
 
-
 QString XSLTTokenLookup::toString(NodeName token)
 {
-   const unsigned short *data = 0;
+   const char *data = nullptr;
    int length = 0;
 
    switch (token) {
 
       case AnalyzeString: {
-         static const unsigned short staticallyStoredAnalyzeString[] = {
+         static const char staticallyStoredAnalyzeString[] = {
             97, 110, 97, 108, 121, 122, 101, 45, 115, 116, 114, 105, 110, 103, 0
          };
          data = staticallyStoredAnalyzeString;
@@ -2025,7 +540,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ApplyTemplates: {
-         static const unsigned short staticallyStoredApplyTemplates[] = {
+         static const char staticallyStoredApplyTemplates[] = {
             97, 112, 112, 108, 121, 45, 116, 101, 109, 112, 108, 97, 116, 101, 115, 0
          };
          data = staticallyStoredApplyTemplates;
@@ -2034,7 +549,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case As: {
-         static const unsigned short staticallyStoredAs[] = {
+         static const char staticallyStoredAs[] = {
             97, 115, 0
          };
          data = staticallyStoredAs;
@@ -2043,7 +558,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Attribute: {
-         static const unsigned short staticallyStoredAttribute[] = {
+         static const char staticallyStoredAttribute[] = {
             97, 116, 116, 114, 105, 98, 117, 116, 101, 0
          };
          data = staticallyStoredAttribute;
@@ -2052,7 +567,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case AttributeSet: {
-         static const unsigned short staticallyStoredAttributeSet[] = {
+         static const char staticallyStoredAttributeSet[] = {
             97, 116, 116, 114, 105, 98, 117, 116, 101, 45, 115, 101, 116, 0
          };
          data = staticallyStoredAttributeSet;
@@ -2061,7 +576,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ByteOrderMark: {
-         static const unsigned short staticallyStoredByteOrderMark[] = {
+         static const char staticallyStoredByteOrderMark[] = {
             98, 121, 116, 101, 45, 111, 114, 100, 101, 114, 45, 109, 97, 114, 107, 0
          };
          data = staticallyStoredByteOrderMark;
@@ -2070,7 +585,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case CallTemplate: {
-         static const unsigned short staticallyStoredCallTemplate[] = {
+         static const char staticallyStoredCallTemplate[] = {
             99, 97, 108, 108, 45, 116, 101, 109, 112, 108, 97, 116, 101, 0
          };
          data = staticallyStoredCallTemplate;
@@ -2079,7 +594,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case CaseOrder: {
-         static const unsigned short staticallyStoredCaseOrder[] = {
+         static const char staticallyStoredCaseOrder[] = {
             99, 97, 115, 101, 45, 111, 114, 100, 101, 114, 0
          };
          data = staticallyStoredCaseOrder;
@@ -2088,7 +603,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case CdataSectionElements: {
-         static const unsigned short staticallyStoredCdataSectionElements[] = {
+         static const char staticallyStoredCdataSectionElements[] = {
             99, 100, 97, 116, 97, 45, 115, 101, 99, 116, 105, 111, 110, 45, 101, 108, 101, 109, 101, 110, 116, 115, 0
          };
          data = staticallyStoredCdataSectionElements;
@@ -2097,7 +612,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Choose: {
-         static const unsigned short staticallyStoredChoose[] = {
+         static const char staticallyStoredChoose[] = {
             99, 104, 111, 111, 115, 101, 0
          };
          data = staticallyStoredChoose;
@@ -2106,7 +621,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Collation: {
-         static const unsigned short staticallyStoredCollation[] = {
+         static const char staticallyStoredCollation[] = {
             99, 111, 108, 108, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredCollation;
@@ -2115,7 +630,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Comment: {
-         static const unsigned short staticallyStoredComment[] = {
+         static const char staticallyStoredComment[] = {
             99, 111, 109, 109, 101, 110, 116, 0
          };
          data = staticallyStoredComment;
@@ -2124,7 +639,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Copy: {
-         static const unsigned short staticallyStoredCopy[] = {
+         static const char staticallyStoredCopy[] = {
             99, 111, 112, 121, 0
          };
          data = staticallyStoredCopy;
@@ -2133,7 +648,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case CopyNamespaces: {
-         static const unsigned short staticallyStoredCopyNamespaces[] = {
+         static const char staticallyStoredCopyNamespaces[] = {
             99, 111, 112, 121, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101, 115, 0
          };
          data = staticallyStoredCopyNamespaces;
@@ -2142,7 +657,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case CopyOf: {
-         static const unsigned short staticallyStoredCopyOf[] = {
+         static const char staticallyStoredCopyOf[] = {
             99, 111, 112, 121, 45, 111, 102, 0
          };
          data = staticallyStoredCopyOf;
@@ -2151,7 +666,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case DataType: {
-         static const unsigned short staticallyStoredDataType[] = {
+         static const char staticallyStoredDataType[] = {
             100, 97, 116, 97, 45, 116, 121, 112, 101, 0
          };
          data = staticallyStoredDataType;
@@ -2160,7 +675,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case DefaultCollation: {
-         static const unsigned short staticallyStoredDefaultCollation[] = {
+         static const char staticallyStoredDefaultCollation[] = {
             100, 101, 102, 97, 117, 108, 116, 45, 99, 111, 108, 108, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredDefaultCollation;
@@ -2169,7 +684,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case DefaultValidation: {
-         static const unsigned short staticallyStoredDefaultValidation[] = {
+         static const char staticallyStoredDefaultValidation[] = {
             100, 101, 102, 97, 117, 108, 116, 45, 118, 97, 108, 105, 100, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredDefaultValidation;
@@ -2178,7 +693,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case DoctypePublic: {
-         static const unsigned short staticallyStoredDoctypePublic[] = {
+         static const char staticallyStoredDoctypePublic[] = {
             100, 111, 99, 116, 121, 112, 101, 45, 112, 117, 98, 108, 105, 99, 0
          };
          data = staticallyStoredDoctypePublic;
@@ -2187,7 +702,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case DoctypeSystem: {
-         static const unsigned short staticallyStoredDoctypeSystem[] = {
+         static const char staticallyStoredDoctypeSystem[] = {
             100, 111, 99, 116, 121, 112, 101, 45, 115, 121, 115, 116, 101, 109, 0
          };
          data = staticallyStoredDoctypeSystem;
@@ -2196,7 +711,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Document: {
-         static const unsigned short staticallyStoredDocument[] = {
+         static const char staticallyStoredDocument[] = {
             100, 111, 99, 117, 109, 101, 110, 116, 0
          };
          data = staticallyStoredDocument;
@@ -2205,7 +720,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Element: {
-         static const unsigned short staticallyStoredElement[] = {
+         static const char staticallyStoredElement[] = {
             101, 108, 101, 109, 101, 110, 116, 0
          };
          data = staticallyStoredElement;
@@ -2214,7 +729,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Elements: {
-         static const unsigned short staticallyStoredElements[] = {
+         static const char staticallyStoredElements[] = {
             101, 108, 101, 109, 101, 110, 116, 115, 0
          };
          data = staticallyStoredElements;
@@ -2223,7 +738,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Encoding: {
-         static const unsigned short staticallyStoredEncoding[] = {
+         static const char staticallyStoredEncoding[] = {
             101, 110, 99, 111, 100, 105, 110, 103, 0
          };
          data = staticallyStoredEncoding;
@@ -2232,7 +747,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case EscapeUriAttributes: {
-         static const unsigned short staticallyStoredEscapeUriAttributes[] = {
+         static const char staticallyStoredEscapeUriAttributes[] = {
             101, 115, 99, 97, 112, 101, 45, 117, 114, 105, 45, 97, 116, 116, 114, 105, 98, 117, 116, 101, 115, 0
          };
          data = staticallyStoredEscapeUriAttributes;
@@ -2241,7 +756,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ExcludeResultPrefixes: {
-         static const unsigned short staticallyStoredExcludeResultPrefixes[] = {
+         static const char staticallyStoredExcludeResultPrefixes[] = {
             101, 120, 99, 108, 117, 100, 101, 45, 114, 101, 115, 117, 108, 116, 45, 112, 114, 101, 102, 105, 120, 101, 115, 0
          };
          data = staticallyStoredExcludeResultPrefixes;
@@ -2250,7 +765,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ExtensionElementPrefixes: {
-         static const unsigned short staticallyStoredExtensionElementPrefixes[] = {
+         static const char staticallyStoredExtensionElementPrefixes[] = {
             101, 120, 116, 101, 110, 115, 105, 111, 110, 45, 101, 108, 101, 109, 101, 110, 116, 45, 112, 114, 101, 102, 105, 120, 101, 115, 0
          };
          data = staticallyStoredExtensionElementPrefixes;
@@ -2259,7 +774,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Flags: {
-         static const unsigned short staticallyStoredFlags[] = {
+         static const char staticallyStoredFlags[] = {
             102, 108, 97, 103, 115, 0
          };
          data = staticallyStoredFlags;
@@ -2268,7 +783,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ForEach: {
-         static const unsigned short staticallyStoredForEach[] = {
+         static const char staticallyStoredForEach[] = {
             102, 111, 114, 45, 101, 97, 99, 104, 0
          };
          data = staticallyStoredForEach;
@@ -2277,7 +792,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Format: {
-         static const unsigned short staticallyStoredFormat[] = {
+         static const char staticallyStoredFormat[] = {
             102, 111, 114, 109, 97, 116, 0
          };
          data = staticallyStoredFormat;
@@ -2286,7 +801,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Function: {
-         static const unsigned short staticallyStoredFunction[] = {
+         static const char staticallyStoredFunction[] = {
             102, 117, 110, 99, 116, 105, 111, 110, 0
          };
          data = staticallyStoredFunction;
@@ -2295,7 +810,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Href: {
-         static const unsigned short staticallyStoredHref[] = {
+         static const char staticallyStoredHref[] = {
             104, 114, 101, 102, 0
          };
          data = staticallyStoredHref;
@@ -2304,7 +819,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Id: {
-         static const unsigned short staticallyStoredId[] = {
+         static const char staticallyStoredId[] = {
             105, 100, 0
          };
          data = staticallyStoredId;
@@ -2313,7 +828,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case If: {
-         static const unsigned short staticallyStoredIf[] = {
+         static const char staticallyStoredIf[] = {
             105, 102, 0
          };
          data = staticallyStoredIf;
@@ -2322,7 +837,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Import: {
-         static const unsigned short staticallyStoredImport[] = {
+         static const char staticallyStoredImport[] = {
             105, 109, 112, 111, 114, 116, 0
          };
          data = staticallyStoredImport;
@@ -2331,7 +846,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ImportSchema: {
-         static const unsigned short staticallyStoredImportSchema[] = {
+         static const char staticallyStoredImportSchema[] = {
             105, 109, 112, 111, 114, 116, 45, 115, 99, 104, 101, 109, 97, 0
          };
          data = staticallyStoredImportSchema;
@@ -2340,7 +855,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Include: {
-         static const unsigned short staticallyStoredInclude[] = {
+         static const char staticallyStoredInclude[] = {
             105, 110, 99, 108, 117, 100, 101, 0
          };
          data = staticallyStoredInclude;
@@ -2349,7 +864,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case IncludeContentType: {
-         static const unsigned short staticallyStoredIncludeContentType[] = {
+         static const char staticallyStoredIncludeContentType[] = {
             105, 110, 99, 108, 117, 100, 101, 45, 99, 111, 110, 116, 101, 110, 116, 45, 116, 121, 112, 101, 0
          };
          data = staticallyStoredIncludeContentType;
@@ -2358,7 +873,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Indent: {
-         static const unsigned short staticallyStoredIndent[] = {
+         static const char staticallyStoredIndent[] = {
             105, 110, 100, 101, 110, 116, 0
          };
          data = staticallyStoredIndent;
@@ -2367,7 +882,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case InheritNamespaces: {
-         static const unsigned short staticallyStoredInheritNamespaces[] = {
+         static const char staticallyStoredInheritNamespaces[] = {
             105, 110, 104, 101, 114, 105, 116, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101, 115, 0
          };
          data = staticallyStoredInheritNamespaces;
@@ -2376,7 +891,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case InputTypeAnnotations: {
-         static const unsigned short staticallyStoredInputTypeAnnotations[] = {
+         static const char staticallyStoredInputTypeAnnotations[] = {
             105, 110, 112, 117, 116, 45, 116, 121, 112, 101, 45, 97, 110, 110, 111, 116, 97, 116, 105, 111, 110, 115, 0
          };
          data = staticallyStoredInputTypeAnnotations;
@@ -2385,7 +900,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Key: {
-         static const unsigned short staticallyStoredKey[] = {
+         static const char staticallyStoredKey[] = {
             107, 101, 121, 0
          };
          data = staticallyStoredKey;
@@ -2394,7 +909,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Lang: {
-         static const unsigned short staticallyStoredLang[] = {
+         static const char staticallyStoredLang[] = {
             108, 97, 110, 103, 0
          };
          data = staticallyStoredLang;
@@ -2403,7 +918,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Match: {
-         static const unsigned short staticallyStoredMatch[] = {
+         static const char staticallyStoredMatch[] = {
             109, 97, 116, 99, 104, 0
          };
          data = staticallyStoredMatch;
@@ -2412,7 +927,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case MatchingSubstring: {
-         static const unsigned short staticallyStoredMatchingSubstring[] = {
+         static const char staticallyStoredMatchingSubstring[] = {
             109, 97, 116, 99, 104, 105, 110, 103, 45, 115, 117, 98, 115, 116, 114, 105, 110, 103, 0
          };
          data = staticallyStoredMatchingSubstring;
@@ -2421,7 +936,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case MediaType: {
-         static const unsigned short staticallyStoredMediaType[] = {
+         static const char staticallyStoredMediaType[] = {
             109, 101, 100, 105, 97, 45, 116, 121, 112, 101, 0
          };
          data = staticallyStoredMediaType;
@@ -2430,7 +945,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Message: {
-         static const unsigned short staticallyStoredMessage[] = {
+         static const char staticallyStoredMessage[] = {
             109, 101, 115, 115, 97, 103, 101, 0
          };
          data = staticallyStoredMessage;
@@ -2439,7 +954,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Method: {
-         static const unsigned short staticallyStoredMethod[] = {
+         static const char staticallyStoredMethod[] = {
             109, 101, 116, 104, 111, 100, 0
          };
          data = staticallyStoredMethod;
@@ -2448,7 +963,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Mode: {
-         static const unsigned short staticallyStoredMode[] = {
+         static const char staticallyStoredMode[] = {
             109, 111, 100, 101, 0
          };
          data = staticallyStoredMode;
@@ -2457,7 +972,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Name: {
-         static const unsigned short staticallyStoredName[] = {
+         static const char staticallyStoredName[] = {
             110, 97, 109, 101, 0
          };
          data = staticallyStoredName;
@@ -2466,7 +981,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Namespace: {
-         static const unsigned short staticallyStoredNamespace[] = {
+         static const char staticallyStoredNamespace[] = {
             110, 97, 109, 101, 115, 112, 97, 99, 101, 0
          };
          data = staticallyStoredNamespace;
@@ -2475,7 +990,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case NonMatchingSubstring: {
-         static const unsigned short staticallyStoredNonMatchingSubstring[] = {
+         static const char staticallyStoredNonMatchingSubstring[] = {
             110, 111, 110, 45, 109, 97, 116, 99, 104, 105, 110, 103, 45, 115, 117, 98, 115, 116, 114, 105, 110, 103, 0
          };
          data = staticallyStoredNonMatchingSubstring;
@@ -2484,7 +999,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case NormalizationForm: {
-         static const unsigned short staticallyStoredNormalizationForm[] = {
+         static const char staticallyStoredNormalizationForm[] = {
             110, 111, 114, 109, 97, 108, 105, 122, 97, 116, 105, 111, 110, 45, 102, 111, 114, 109, 0
          };
          data = staticallyStoredNormalizationForm;
@@ -2493,7 +1008,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case OmitXmlDeclaration: {
-         static const unsigned short staticallyStoredOmitXmlDeclaration[] = {
+         static const char staticallyStoredOmitXmlDeclaration[] = {
             111, 109, 105, 116, 45, 120, 109, 108, 45, 100, 101, 99, 108, 97, 114, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredOmitXmlDeclaration;
@@ -2502,7 +1017,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Order: {
-         static const unsigned short staticallyStoredOrder[] = {
+         static const char staticallyStoredOrder[] = {
             111, 114, 100, 101, 114, 0
          };
          data = staticallyStoredOrder;
@@ -2511,7 +1026,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Otherwise: {
-         static const unsigned short staticallyStoredOtherwise[] = {
+         static const char staticallyStoredOtherwise[] = {
             111, 116, 104, 101, 114, 119, 105, 115, 101, 0
          };
          data = staticallyStoredOtherwise;
@@ -2520,7 +1035,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Output: {
-         static const unsigned short staticallyStoredOutput[] = {
+         static const char staticallyStoredOutput[] = {
             111, 117, 116, 112, 117, 116, 0
          };
          data = staticallyStoredOutput;
@@ -2529,7 +1044,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case OutputVersion: {
-         static const unsigned short staticallyStoredOutputVersion[] = {
+         static const char staticallyStoredOutputVersion[] = {
             111, 117, 116, 112, 117, 116, 45, 118, 101, 114, 115, 105, 111, 110, 0
          };
          data = staticallyStoredOutputVersion;
@@ -2538,7 +1053,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Override: {
-         static const unsigned short staticallyStoredOverride[] = {
+         static const char staticallyStoredOverride[] = {
             111, 118, 101, 114, 114, 105, 100, 101, 0
          };
          data = staticallyStoredOverride;
@@ -2547,7 +1062,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Param: {
-         static const unsigned short staticallyStoredParam[] = {
+         static const char staticallyStoredParam[] = {
             112, 97, 114, 97, 109, 0
          };
          data = staticallyStoredParam;
@@ -2556,7 +1071,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case PerformSort: {
-         static const unsigned short staticallyStoredPerformSort[] = {
+         static const char staticallyStoredPerformSort[] = {
             112, 101, 114, 102, 111, 114, 109, 45, 115, 111, 114, 116, 0
          };
          data = staticallyStoredPerformSort;
@@ -2565,7 +1080,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case PreserveSpace: {
-         static const unsigned short staticallyStoredPreserveSpace[] = {
+         static const char staticallyStoredPreserveSpace[] = {
             112, 114, 101, 115, 101, 114, 118, 101, 45, 115, 112, 97, 99, 101, 0
          };
          data = staticallyStoredPreserveSpace;
@@ -2574,7 +1089,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Priority: {
-         static const unsigned short staticallyStoredPriority[] = {
+         static const char staticallyStoredPriority[] = {
             112, 114, 105, 111, 114, 105, 116, 121, 0
          };
          data = staticallyStoredPriority;
@@ -2583,7 +1098,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ProcessingInstruction: {
-         static const unsigned short staticallyStoredProcessingInstruction[] = {
+         static const char staticallyStoredProcessingInstruction[] = {
             112, 114, 111, 99, 101, 115, 115, 105, 110, 103, 45, 105, 110, 115, 116, 114, 117, 99, 116, 105, 111, 110, 0
          };
          data = staticallyStoredProcessingInstruction;
@@ -2592,7 +1107,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Regex: {
-         static const unsigned short staticallyStoredRegex[] = {
+         static const char staticallyStoredRegex[] = {
             114, 101, 103, 101, 120, 0
          };
          data = staticallyStoredRegex;
@@ -2601,7 +1116,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Required: {
-         static const unsigned short staticallyStoredRequired[] = {
+         static const char staticallyStoredRequired[] = {
             114, 101, 113, 117, 105, 114, 101, 100, 0
          };
          data = staticallyStoredRequired;
@@ -2610,7 +1125,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ResultDocument: {
-         static const unsigned short staticallyStoredResultDocument[] = {
+         static const char staticallyStoredResultDocument[] = {
             114, 101, 115, 117, 108, 116, 45, 100, 111, 99, 117, 109, 101, 110, 116, 0
          };
          data = staticallyStoredResultDocument;
@@ -2619,7 +1134,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case SchemaLocation: {
-         static const unsigned short staticallyStoredSchemaLocation[] = {
+         static const char staticallyStoredSchemaLocation[] = {
             115, 99, 104, 101, 109, 97, 45, 108, 111, 99, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredSchemaLocation;
@@ -2628,7 +1143,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Select: {
-         static const unsigned short staticallyStoredSelect[] = {
+         static const char staticallyStoredSelect[] = {
             115, 101, 108, 101, 99, 116, 0
          };
          data = staticallyStoredSelect;
@@ -2637,7 +1152,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Separator: {
-         static const unsigned short staticallyStoredSeparator[] = {
+         static const char staticallyStoredSeparator[] = {
             115, 101, 112, 97, 114, 97, 116, 111, 114, 0
          };
          data = staticallyStoredSeparator;
@@ -2646,7 +1161,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Sequence: {
-         static const unsigned short staticallyStoredSequence[] = {
+         static const char staticallyStoredSequence[] = {
             115, 101, 113, 117, 101, 110, 99, 101, 0
          };
          data = staticallyStoredSequence;
@@ -2655,7 +1170,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Sort: {
-         static const unsigned short staticallyStoredSort[] = {
+         static const char staticallyStoredSort[] = {
             115, 111, 114, 116, 0
          };
          data = staticallyStoredSort;
@@ -2664,7 +1179,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Stable: {
-         static const unsigned short staticallyStoredStable[] = {
+         static const char staticallyStoredStable[] = {
             115, 116, 97, 98, 108, 101, 0
          };
          data = staticallyStoredStable;
@@ -2673,7 +1188,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Standalone: {
-         static const unsigned short staticallyStoredStandalone[] = {
+         static const char staticallyStoredStandalone[] = {
             115, 116, 97, 110, 100, 97, 108, 111, 110, 101, 0
          };
          data = staticallyStoredStandalone;
@@ -2682,7 +1197,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case StripSpace: {
-         static const unsigned short staticallyStoredStripSpace[] = {
+         static const char staticallyStoredStripSpace[] = {
             115, 116, 114, 105, 112, 45, 115, 112, 97, 99, 101, 0
          };
          data = staticallyStoredStripSpace;
@@ -2691,7 +1206,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Stylesheet: {
-         static const unsigned short staticallyStoredStylesheet[] = {
+         static const char staticallyStoredStylesheet[] = {
             115, 116, 121, 108, 101, 115, 104, 101, 101, 116, 0
          };
          data = staticallyStoredStylesheet;
@@ -2700,7 +1215,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Template: {
-         static const unsigned short staticallyStoredTemplate[] = {
+         static const char staticallyStoredTemplate[] = {
             116, 101, 109, 112, 108, 97, 116, 101, 0
          };
          data = staticallyStoredTemplate;
@@ -2709,7 +1224,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Terminate: {
-         static const unsigned short staticallyStoredTerminate[] = {
+         static const char staticallyStoredTerminate[] = {
             116, 101, 114, 109, 105, 110, 97, 116, 101, 0
          };
          data = staticallyStoredTerminate;
@@ -2718,7 +1233,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Test: {
-         static const unsigned short staticallyStoredTest[] = {
+         static const char staticallyStoredTest[] = {
             116, 101, 115, 116, 0
          };
          data = staticallyStoredTest;
@@ -2727,7 +1242,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Text: {
-         static const unsigned short staticallyStoredText[] = {
+         static const char staticallyStoredText[] = {
             116, 101, 120, 116, 0
          };
          data = staticallyStoredText;
@@ -2736,7 +1251,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Transform: {
-         static const unsigned short staticallyStoredTransform[] = {
+         static const char staticallyStoredTransform[] = {
             116, 114, 97, 110, 115, 102, 111, 114, 109, 0
          };
          data = staticallyStoredTransform;
@@ -2745,7 +1260,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Tunnel: {
-         static const unsigned short staticallyStoredTunnel[] = {
+         static const char staticallyStoredTunnel[] = {
             116, 117, 110, 110, 101, 108, 0
          };
          data = staticallyStoredTunnel;
@@ -2754,7 +1269,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Type: {
-         static const unsigned short staticallyStoredType[] = {
+         static const char staticallyStoredType[] = {
             116, 121, 112, 101, 0
          };
          data = staticallyStoredType;
@@ -2763,7 +1278,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case UndeclarePrefixes: {
-         static const unsigned short staticallyStoredUndeclarePrefixes[] = {
+         static const char staticallyStoredUndeclarePrefixes[] = {
             117, 110, 100, 101, 99, 108, 97, 114, 101, 45, 112, 114, 101, 102, 105, 120, 101, 115, 0
          };
          data = staticallyStoredUndeclarePrefixes;
@@ -2772,7 +1287,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Use: {
-         static const unsigned short staticallyStoredUse[] = {
+         static const char staticallyStoredUse[] = {
             117, 115, 101, 0
          };
          data = staticallyStoredUse;
@@ -2781,7 +1296,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case UseAttributeSets: {
-         static const unsigned short staticallyStoredUseAttributeSets[] = {
+         static const char staticallyStoredUseAttributeSets[] = {
             117, 115, 101, 45, 97, 116, 116, 114, 105, 98, 117, 116, 101, 45, 115, 101, 116, 115, 0
          };
          data = staticallyStoredUseAttributeSets;
@@ -2790,7 +1305,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case UseCharacterMaps: {
-         static const unsigned short staticallyStoredUseCharacterMaps[] = {
+         static const char staticallyStoredUseCharacterMaps[] = {
             117, 115, 101, 45, 99, 104, 97, 114, 97, 99, 116, 101, 114, 45, 109, 97, 112, 115, 0
          };
          data = staticallyStoredUseCharacterMaps;
@@ -2799,7 +1314,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case UseWhen: {
-         static const unsigned short staticallyStoredUseWhen[] = {
+         static const char staticallyStoredUseWhen[] = {
             117, 115, 101, 45, 119, 104, 101, 110, 0
          };
          data = staticallyStoredUseWhen;
@@ -2808,7 +1323,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Validation: {
-         static const unsigned short staticallyStoredValidation[] = {
+         static const char staticallyStoredValidation[] = {
             118, 97, 108, 105, 100, 97, 116, 105, 111, 110, 0
          };
          data = staticallyStoredValidation;
@@ -2817,7 +1332,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case ValueOf: {
-         static const unsigned short staticallyStoredValueOf[] = {
+         static const char staticallyStoredValueOf[] = {
             118, 97, 108, 117, 101, 45, 111, 102, 0
          };
          data = staticallyStoredValueOf;
@@ -2826,7 +1341,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Variable: {
-         static const unsigned short staticallyStoredVariable[] = {
+         static const char staticallyStoredVariable[] = {
             118, 97, 114, 105, 97, 98, 108, 101, 0
          };
          data = staticallyStoredVariable;
@@ -2835,7 +1350,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case Version: {
-         static const unsigned short staticallyStoredVersion[] = {
+         static const char staticallyStoredVersion[] = {
             118, 101, 114, 115, 105, 111, 110, 0
          };
          data = staticallyStoredVersion;
@@ -2844,7 +1359,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case When: {
-         static const unsigned short staticallyStoredWhen[] = {
+         static const char staticallyStoredWhen[] = {
             119, 104, 101, 110, 0
          };
          data = staticallyStoredWhen;
@@ -2853,7 +1368,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case WithParam: {
-         static const unsigned short staticallyStoredWithParam[] = {
+         static const char staticallyStoredWithParam[] = {
             119, 105, 116, 104, 45, 112, 97, 114, 97, 109, 0
          };
          data = staticallyStoredWithParam;
@@ -2862,7 +1377,7 @@ QString XSLTTokenLookup::toString(NodeName token)
       }
 
       case XpathDefaultNamespace: {
-         static const unsigned short staticallyStoredXpathDefaultNamespace[] = {
+         static const char staticallyStoredXpathDefaultNamespace[] = {
             120, 112, 97, 116, 104, 45, 100, 101, 102, 97, 117, 108, 116, 45, 110, 97, 109, 101, 115, 112, 97, 99, 101, 0
          };
          data = staticallyStoredXpathDefaultNamespace;
@@ -2877,14 +1392,6 @@ QString XSLTTokenLookup::toString(NodeName token)
          ;
    }
 
-   union {
-      const unsigned short *data;
-      const QChar *asQChar;
-   } converter;
-   converter.data = data;
-
-   return QString::fromRawData(converter.asQChar, length);
+   return QString::fromLatin1(data, length);
 }
-
-QT_END_NAMESPACE
 

@@ -57,15 +57,15 @@ class ColorOutputPrivate
       coloringEnabled = isColoringPossible();
    }
 
-   ColorOutput::ColorMapping   colorMapping;
-   int                         currentColorID;
-   bool                        coloringEnabled;
+   ColorOutput::ColorMapping  colorMapping;
+   int                        currentColorID;
+   bool                       coloringEnabled;
 
    static const char *const foregrounds[];
    static const char *const backgrounds[];
 
    inline void write(const QString &msg) {
-      m_out.write(msg.toLocal8Bit());
+      m_out.write(msg.toUtf8());
    }
 
    static QString escapeCode(const QString &in) {
@@ -78,7 +78,7 @@ class ColorOutputPrivate
    }
 
  private:
-   QFile                       m_out;
+   QFile m_out;
 
    /*!
     Returns true if it's suitable to send colored output to \c stderr.
@@ -292,7 +292,8 @@ void ColorOutput::writeUncolored(const QString &message)
 QString ColorOutput::colorify(const QString &message, int colorID) const
 {
    Q_ASSERT_X(colorID == -1 || d->colorMapping.contains(colorID), Q_FUNC_INFO,
-              qPrintable(QString::fromLatin1("There is no color registered by id %1").arg(colorID)));
+              qPrintable(QString("There is no color registered by id %1").formatArg(colorID)));
+
    Q_ASSERT_X(!message.isEmpty(), Q_FUNC_INFO, "It makes no sense to attempt to print an empty string.");
 
    if (colorID != -1) {
@@ -313,12 +314,12 @@ QString ColorOutput::colorify(const QString &message, int colorID) const
       bool closureNeeded = false;
 
       if (foregroundCode) {
-         finalMessage.append(ColorOutputPrivate::escapeCode(QLatin1String(ColorOutputPrivate::foregrounds[foregroundCode - 1])));
+         finalMessage.append(ColorOutputPrivate::escapeCode(QString::fromLatin1(ColorOutputPrivate::foregrounds[foregroundCode - 1])));
          closureNeeded = true;
       }
 
       if (backgroundCode) {
-         finalMessage.append(ColorOutputPrivate::escapeCode(QLatin1String(ColorOutputPrivate::backgrounds[backgroundCode - 1])));
+         finalMessage.append(ColorOutputPrivate::escapeCode(QString::fromLatin1(ColorOutputPrivate::backgrounds[backgroundCode - 1])));
          closureNeeded = true;
       }
 
@@ -326,7 +327,7 @@ QString ColorOutput::colorify(const QString &message, int colorID) const
 
       if (closureNeeded) {
          finalMessage.append(QChar(0x1B));
-         finalMessage.append(QLatin1String("[0m"));
+         finalMessage.append("[0m");
       }
 
       return finalMessage;

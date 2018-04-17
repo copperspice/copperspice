@@ -80,6 +80,7 @@ void AccelTree::printStats(const NamePool::Ptr &np) const
    pDebug() << "+---------------+-------+-------+---------------+-------+--------------+-------+";
    pDebug() << "| Pre number    | Depth | Size  | Post Number   | Kind  | Name         | Value |";
    pDebug() << "+---------------+-------+-------+---------------+-------+--------------+-------+";
+
    for (int i = 0; i < len; ++i) {
       const BasicNodeData &v = basicData.at(i);
       pDebug() << '|' << i
@@ -92,15 +93,17 @@ void AccelTree::printStats(const NamePool::Ptr &np) const
                                isCompressed(i)) ? CompressedWhitespace::decompress(data.value(i))
                               : data.value(i))
                << "\t|";
+
       /*
-      pDebug() << '|' << QString().arg(i, 14)
-               << '|' << QString().arg(v.depth(), 6)
-               << '|' << QString().arg(v.size(), 6)
-               << '|' << QString().arg(postNumber(i), 14)
-               << '|' << QString().arg(v.kind(), 6)
+      pDebug() << '|' << QString().formatArg(i, 14)
+               << '|' << QString().formatArg(v.depth(), 6)
+               << '|' << QString().formatArg(v.size(), 6)
+               << '|' << QString().formatArg(postNumber(i), 14)
+               << '|' << QString().formatArg(v.kind(), 6)
                << '|';
                */
    }
+
    pDebug() << "+---------------+-------+-------+---------------+-------+--------------+";
    pDebug() << "Namespaces(" << namespaces.count() << "):";
 
@@ -633,9 +636,9 @@ void AccelTree::copyNodeTo(const QXmlNodeModelIndex &node,
             QXmlNodeModelIndex::Iterator::Ptr attributes(node.iterate(QXmlNodeModelIndex::AxisAttribute));
             QXmlNodeModelIndex attribute(attributes->next());
 
-            while (!attribute.isNull()) {
+            while (! attribute.isNull()) {
                const QString &v = attribute.stringValue();
-               receiver->attribute(attribute.name(), QStringRef(&v));
+               receiver->attribute(attribute.name(), QStringView(v));
                attribute = attributes->next();
             }
          }

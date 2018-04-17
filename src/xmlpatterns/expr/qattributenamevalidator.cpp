@@ -43,23 +43,20 @@ Item AttributeNameValidator::evaluateSingleton(const DynamicContext::Ptr &contex
    const QXmlName qName(name.as<QNameValue>()->qName());
 
    if (qName.namespaceURI() == StandardNamespaces::xmlns) {
-      context->error(QtXmlPatterns::tr("The namespace URI in the name for a "
-                                       "computed attribute cannot be %1.")
-                     .arg(formatURI(CommonNamespaces::XMLNS)),
+      context->error(QtXmlPatterns::tr("The namespace URI in the name for a computed attribute cannot be %1.")
+                     .formatArg(formatURI(CommonNamespaces::XMLNS)),
                      ReportContext::XQDY0044, this);
+
       return Item(); /* Silence warning. */
-   } else if (qName.namespaceURI() == StandardNamespaces::empty &&
-              qName.localName() == StandardLocalNames::xmlns) {
-      context->error(QtXmlPatterns::tr("The name for a computed attribute "
-                                       "cannot have the namespace URI %1 "
-                                       "with the local name %2.")
-                     .arg(formatURI(CommonNamespaces::XMLNS))
-                     .arg(formatKeyword("xmlns")),
-                     ReportContext::XQDY0044, this);
+
+   } else if (qName.namespaceURI() == StandardNamespaces::empty && qName.localName() == StandardLocalNames::xmlns) {
+      context->error(QtXmlPatterns::tr("The name for a computed attribute cannot have the namespace URI %1 with the local name %2.")
+                     .formatArg(formatURI(CommonNamespaces::XMLNS)).formatArg(formatKeyword("xmlns")), ReportContext::XQDY0044, this);
+
       return Item(); /* Silence warning. */
+
    } else if (!qName.hasPrefix() && qName.hasNamespace()) {
-      return Item(QNameValue::fromValue(context->namePool(),
-                                        QXmlName(qName.namespaceURI(), qName.localName(), StandardPrefixes::ns0)));
+      return Item(QNameValue::fromValue(context->namePool(), QXmlName(qName.namespaceURI(), qName.localName(), StandardPrefixes::ns0)));
    } else {
       return name;
    }

@@ -29,31 +29,28 @@
 
 #include "qcardinalityverifier_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
-QString CardinalityVerifier::wrongCardinality(const Cardinality &req,
-      const Cardinality &got)
+QString CardinalityVerifier::wrongCardinality(const Cardinality &req, const Cardinality &got)
 {
-   return QtXmlPatterns::tr("Required cardinality is %1; got cardinality %2.")
-          .arg(formatType(req), formatType(got));
+   return QtXmlPatterns::tr("Required cardinality is %1, received cardinality %2.")
+          .formatArgs(formatType(req), formatType(got));
 }
 
 Expression::Ptr CardinalityVerifier::verifyCardinality(const Expression::Ptr &operand,
-      const Cardinality &requiredCard,
-      const StaticContext::Ptr &context,
-      const ReportContext::ErrorCode code)
+      const Cardinality &requiredCard, const StaticContext::Ptr &context, const ReportContext::ErrorCode code)
 {
    const Cardinality opCard(operand->staticType()->cardinality());
 
    if (requiredCard.isMatch(opCard)) {
       return operand;
+
    } else if (requiredCard.canMatch(opCard)) {
       return Expression::Ptr(new CardinalityVerifier(operand, requiredCard, code));
-   } else if (context->compatModeEnabled() &&
-              !opCard.isEmpty()) {
+
+   } else if (context->compatModeEnabled() && !opCard.isEmpty()) {
       return GenericPredicate::createFirstItem(operand);
+
    } else {
       /* Sequences within this cardinality can never match. */
       context->error(wrongCardinality(requiredCard, opCard), code, operand.data());
@@ -61,13 +58,8 @@ Expression::Ptr CardinalityVerifier::verifyCardinality(const Expression::Ptr &op
    }
 }
 
-CardinalityVerifier::CardinalityVerifier(const Expression::Ptr &operand,
-      const Cardinality &card,
-      const ReportContext::ErrorCode code)
-   : SingleContainer(operand),
-     m_reqCard(card),
-     m_allowsMany(operand->staticType()->cardinality().allowsMany()),
-     m_errorCode(code)
+CardinalityVerifier::CardinalityVerifier(const Expression::Ptr &operand, const Cardinality &card, const ReportContext::ErrorCode code)
+   : SingleContainer(operand), m_reqCard(card), m_allowsMany(operand->staticType()->cardinality().allowsMany()), m_errorCode(code)
 {
    Q_ASSERT_X(m_reqCard != Cardinality::zeroOrMore(), Q_FUNC_INFO,
               "It makes no sense to use CardinalityVerifier for cardinality zero-or-more.");
@@ -181,4 +173,3 @@ Expression::ID CardinalityVerifier::id() const
    return IDCardinalityVerifier;
 }
 
-QT_END_NAMESPACE

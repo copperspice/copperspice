@@ -154,11 +154,13 @@ Item VariableLoader::itemForName(const QXmlName &name) const
 
    if (item.isNode()) {
       return Item::fromPublic(item);
+
    } else {
       const QVariant atomicValue(item.toAtomicValue());
       /* If the atomicValue is null it means it doesn't exist in m_bindingHash, and therefore it must
        * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
        * has accepted. */
+
       if (atomicValue.isNull()) {
          return Item(AnyURI::fromValue(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
                                        m_namePool->stringForLocalName(name.localName())));
@@ -204,8 +206,7 @@ void VariableLoader::removeBinding(const QXmlName &name)
 
 bool VariableLoader::hasBinding(const QXmlName &name) const
 {
-   return m_bindingHash.contains(name)
-          || (m_previousLoader && m_previousLoader->hasBinding(name));
+   return m_bindingHash.contains(name) || (m_previousLoader && m_previousLoader->hasBinding(name));
 }
 
 QVariant VariableLoader::valueFor(const QXmlName &name) const
@@ -219,8 +220,7 @@ QVariant VariableLoader::valueFor(const QXmlName &name) const
    }
 }
 
-void VariableLoader::addBinding(const QXmlName &name,
-                                const QVariant &value)
+void VariableLoader::addBinding(const QXmlName &name, const QVariant &value)
 {
    m_bindingHash.insert(name, value);
 }

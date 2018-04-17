@@ -37,47 +37,39 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-QString TypeChecker::wrongType(const NamePool::Ptr &np,
-                               const ItemType::Ptr &reqType,
-                               const ItemType::Ptr &opType)
+QString TypeChecker::wrongType(const NamePool::Ptr &np, const ItemType::Ptr &reqType, const ItemType::Ptr &opType)
 {
    return QtXmlPatterns::tr("Required type is %1, but %2 was found.")
-          .arg(formatType(np, reqType), formatType(np, opType));
+          .formatArgs(formatType(np, reqType), formatType(np, opType));
 }
 
-Expression::Ptr TypeChecker::applyFunctionConversion(const Expression::Ptr &operand,
-      const SequenceType::Ptr &reqType,
-      const StaticContext::Ptr &context,
-      const ReportContext::ErrorCode code,
-      const Options options)
+Expression::Ptr TypeChecker::applyFunctionConversion(const Expression::Ptr &operand, const SequenceType::Ptr &reqType,
+      const StaticContext::Ptr &context, const ReportContext::ErrorCode code, const Options options)
 {
    Q_ASSERT_X(!ReportContext::codeToString(code).isEmpty(), Q_FUNC_INFO,
               "This test ensures 'code' exists, otherwise codeToString() would assert.");
+
    Q_ASSERT(operand);
    Q_ASSERT(reqType);
    Q_ASSERT(context);
 
    /* Do it in two steps: verify type, and then cardinality. */
-   const Expression::Ptr cardVerified(CardinalityVerifier::verifyCardinality(operand, reqType->cardinality(), context,
-                                      code));
+   const Expression::Ptr cardVerified(CardinalityVerifier::verifyCardinality(operand, reqType->cardinality(), context, code));
    return verifyType(cardVerified, reqType, context, code, options);
 }
 
-bool TypeChecker::promotionPossible(const ItemType::Ptr &fromType,
-                                    const ItemType::Ptr &toType,
-                                    const StaticContext::Ptr &context)
+bool TypeChecker::promotionPossible(const ItemType::Ptr &fromType, const ItemType::Ptr &toType, const StaticContext::Ptr &context)
 {
    /* These types can be promoted to xs:string. xs:untypedAtomic should be
     * cast when interpreting it formally, but implementing it as a promotion
     * gives the same result(and is faster). */
-   if (*toType == *BuiltinTypes::xsString &&
-         (BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(fromType) ||
+
+   if (*toType == *BuiltinTypes::xsString && (BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(fromType) ||
           BuiltinTypes::xsAnyURI->xdtTypeMatches(fromType))) {
       return true;
    }
 
-   if (*toType == *BuiltinTypes::xsDouble &&
-         BuiltinTypes::numeric->xdtTypeMatches(fromType)) {
+   if (*toType == *BuiltinTypes::xsDouble && BuiltinTypes::numeric->xdtTypeMatches(fromType)) {
       /* Any numeric can be promoted to xs:double. */
       return true;
    }
@@ -87,26 +79,21 @@ bool TypeChecker::promotionPossible(const ItemType::Ptr &fromType,
 
    {
       context->warning(QtXmlPatterns::tr("Promoting %1 to %2 may cause loss of precision.")
-                       .arg(formatType(context->namePool(), fromType))
-                       .arg(formatType(context->namePool(), BuiltinTypes::xsFloat)));
+                       .formatArg(formatType(context->namePool(), fromType))
+                       .formatArg(formatType(context->namePool(), BuiltinTypes::xsFloat)));
       return true;
    }
 
    return false;
 }
 
-Expression::Ptr TypeChecker::typeCheck(Expression *const op,
-                                       const StaticContext::Ptr &context,
-                                       const SequenceType::Ptr &reqType)
+Expression::Ptr TypeChecker::typeCheck(Expression *const op, const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    return Expression::Ptr(op->typeCheck(context, reqType));
 }
 
-Expression::Ptr TypeChecker::verifyType(const Expression::Ptr &operand,
-                                        const SequenceType::Ptr &reqSeqType,
-                                        const StaticContext::Ptr &context,
-                                        const ReportContext::ErrorCode code,
-                                        const Options options)
+Expression::Ptr TypeChecker::verifyType(const Expression::Ptr &operand, const SequenceType::Ptr &reqSeqType,
+                  const StaticContext::Ptr &context, const ReportContext::ErrorCode code, const Options options)
 {
    const ItemType::Ptr reqType(reqSeqType->itemType());
    const Expression::Properties props(operand->properties());
@@ -114,17 +101,20 @@ Expression::Ptr TypeChecker::verifyType(const Expression::Ptr &operand,
    /* If operand requires a focus, do the necessary type checking for that. */
    if (props.testFlag(Expression::RequiresFocus) && options.testFlag(CheckFocus)) {
       const ItemType::Ptr contextType(context->contextItemType());
+
       if (contextType) {
          if (props.testFlag(Expression::RequiresContextItem)) {
             Q_ASSERT_X(operand->expectedContextItemType(), Q_FUNC_INFO,
                        "When the Expression sets the RequiresContextItem property, it must "
                        "return a type in expectedContextItemType()");
+
             const ItemType::Ptr expectedContextType(operand->expectedContextItemType());
 
             /* Allow the empty sequence. We don't want to trigger XPTY0020 on ()/... . */
             if (!expectedContextType->xdtTypeMatches(contextType) && contextType != CommonSequenceTypes::Empty) {
                context->error(wrongType(context->namePool(), operand->expectedContextItemType(), contextType),
                               ReportContext::XPTY0020, operand.data());
+
                return operand;
             }
          }

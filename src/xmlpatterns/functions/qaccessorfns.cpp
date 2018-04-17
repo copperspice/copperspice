@@ -75,8 +75,7 @@ Item StringFN::evaluateSingleton(const DynamicContext::Ptr &context) const
    }
 }
 
-Expression::Ptr StringFN::typeCheck(const StaticContext::Ptr &context,
-                                    const SequenceType::Ptr &reqType)
+Expression::Ptr StringFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    const Expression::Ptr me(FunctionCall::typeCheck(context, reqType));
    if (me != this) {

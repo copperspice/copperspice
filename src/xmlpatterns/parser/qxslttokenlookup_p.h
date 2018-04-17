@@ -25,9 +25,7 @@
 #ifndef Qxslttokenlookup_P_H
 #define Qxslttokenlookup_P_H
 
-#include <QtCore/QString>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
 
 namespace QPatternist {
 class XSLTTokenLookup
@@ -135,48 +133,46 @@ class XSLTTokenLookup
    };
 
    static inline NodeName toToken(const QString &value);
-   static inline NodeName toToken(const QStringRef &value);
-   static NodeName toToken(const QChar *data, int length);
+   static inline NodeName toToken(QStringView value);
+   static NodeName toToken(QStringView, int length);
+
    static QString toString(NodeName token);
 
-
  private:
-   static inline NodeName classifier2(const QChar *data);
-   static inline NodeName classifier3(const QChar *data);
-   static inline NodeName classifier4(const QChar *data);
-   static inline NodeName classifier5(const QChar *data);
-   static inline NodeName classifier6(const QChar *data);
-   static inline NodeName classifier7(const QChar *data);
-   static inline NodeName classifier8(const QChar *data);
-   static inline NodeName classifier9(const QChar *data);
-   static inline NodeName classifier10(const QChar *data);
-   static inline NodeName classifier11(const QChar *data);
-   static inline NodeName classifier12(const QChar *data);
-   static inline NodeName classifier13(const QChar *data);
-   static inline NodeName classifier14(const QChar *data);
-   static inline NodeName classifier15(const QChar *data);
-   static inline NodeName classifier17(const QChar *data);
-   static inline NodeName classifier18(const QChar *data);
-   static inline NodeName classifier20(const QChar *data);
-   static inline NodeName classifier21(const QChar *data);
-   static inline NodeName classifier22(const QChar *data);
-   static inline NodeName classifier23(const QChar *data);
-   static inline NodeName classifier26(const QChar *data);
+   static inline NodeName classifier2(QStringView data);
+   static inline NodeName classifier3(QStringView data);
+   static inline NodeName classifier4(QStringView data);
+   static inline NodeName classifier5(QStringView data);
+   static inline NodeName classifier6(QStringView data);
+   static inline NodeName classifier7(QStringView data);
+   static inline NodeName classifier8(QStringView data);
+   static inline NodeName classifier9(QStringView data);
+   static inline NodeName classifier10(QStringView data);
+   static inline NodeName classifier11(QStringView data);
+   static inline NodeName classifier12(QStringView data);
+   static inline NodeName classifier13(QStringView data);
+   static inline NodeName classifier14(QStringView data);
+   static inline NodeName classifier15(QStringView data);
+   static inline NodeName classifier17(QStringView data);
+   static inline NodeName classifier18(QStringView data);
+   static inline NodeName classifier20(QStringView data);
+   static inline NodeName classifier21(QStringView data);
+   static inline NodeName classifier22(QStringView data);
+   static inline NodeName classifier23(QStringView data);
+   static inline NodeName classifier26(QStringView data);
 
 };
 
 inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QString &value)
 {
-   return toToken(value.constData(), value.length());
+   return toToken(value, value.length());
 }
 
-inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(const QStringRef &value)
+inline XSLTTokenLookup::NodeName XSLTTokenLookup::toToken(QStringView value)
 {
-   return toToken(value.constData(), value.length());
+   return toToken(value, value.length());
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -64,7 +64,7 @@ QXmlName XsdSchemaParserContext::createAnonymousName(const QString &targetNamesp
 {
    m_anonymousNameCounter.ref();
 
-   const QString name = QString::fromLatin1("__AnonymousClass_%1").arg(m_anonymousNameCounter.load());
+   const QString name = QString::fromLatin1("__AnonymousClass_%1").formatArg(m_anonymousNameCounter.load());
 
    return m_namePool->allocateQName(targetNamespace, name);
 }
@@ -589,7 +589,7 @@ ElementDescription<XsdSchemaToken, XsdTagScope::Type>::Hash  XsdSchemaParserCont
    }
 
    Q_ASSERT_X(elementDescriptions.count() == ReservedForElements, Q_FUNC_INFO,
-              qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").arg(ReservedForElements).arg(
+              qPrintable(QString::fromLatin1("Expected is %1, actual is %2.").formatArg(ReservedForElements).formatArg(
                             elementDescriptions.count())));
 
    return elementDescriptions;

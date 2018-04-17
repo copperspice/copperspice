@@ -27,6 +27,7 @@
 #include <qitem_p.h>
 #include <qpatternistlocale_p.h>
 #include <qreportcontext_p.h>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -66,18 +67,15 @@ class XPathHelper
     * not, error code @p code is raised via @p context.
     */
    template<const ReportContext::ErrorCode code, typename TReportContext>
-   static inline void checkCollationSupport(const QString &collation,
-         const TReportContext &context,
-         const SourceLocationReflection *const r) {
+
+   static inline void checkCollationSupport(const QString &collation, const TReportContext &context, const SourceLocationReflection *const r) {
       Q_ASSERT(context);
       Q_ASSERT(r);
 
-      if (collation != QLatin1String(CommonNamespaces::UNICODE_COLLATION)) {
-         context->error(QtXmlPatterns::tr("Only the Unicode Codepoint "
-                                          "Collation is supported(%1). %2 is unsupported.")
-                        .arg(formatURI(QLatin1String(CommonNamespaces::UNICODE_COLLATION)))
-                        .arg(formatURI(collation)),
-                        code, r);
+      if (collation != QString::fromLatin1(CommonNamespaces::UNICODE_COLLATION)) {
+         context->error(QtXmlPatterns::tr("Only the Unicode Codepoint Collation is supported(%1). %2 is unsupported.")
+                        .formatArg(formatURI(QString::fromLatin1(CommonNamespaces::UNICODE_COLLATION)))
+                        .formatArg(formatURI(collation)), code, r);
       }
    }
 
@@ -96,11 +94,12 @@ class XPathHelper
     *
     * @returns @c true if @p string consists only of whitespace, otherwise @c false.
     */
-   static inline bool isWhitespaceOnly(const QStringRef &string) {
+   static inline bool isWhitespaceOnly(QStringView string) {
       const int len = string.length();
 
       for (int i = 0; i < len; ++i) {
-         if (!string.at(i).isSpace()) { // TODO and this is wrong, see sdk/TODO
+         if (! string.at(i).isSpace()) {
+            // TODO and this is wrong, see sdk/TODO
             return false;
          }
       }
@@ -112,7 +111,7 @@ class XPathHelper
     * @overload
     */
    static inline bool isWhitespaceOnly(const QString &string) {
-      return isWhitespaceOnly(QStringRef(&string));
+      return isWhitespaceOnly(QStringView(string));
    }
 
  private:

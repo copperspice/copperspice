@@ -36,8 +36,7 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 AccelTreeResourceLoader::AccelTreeResourceLoader(const NamePool::Ptr &np,
-      const NetworkAccessDelegator::Ptr &manager,
-      AccelTreeBuilder<true>::Features features)
+                  const NetworkAccessDelegator::Ptr &manager, AccelTreeBuilder<true>::Features features)
    : m_namePool(np), m_networkAccessDelegator(manager), m_features(features)
 {
    Q_ASSERT(m_namePool);
@@ -89,8 +88,7 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri,
                context, errorHandling);
 }
 
-QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri,
-      QNetworkAccessManager *const networkManager,
+QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessManager *const networkManager,
       const ReportContext::Ptr &context, ErrorHandling errorHandling)
 
 {
@@ -124,11 +122,8 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri,
    }
 }
 
-bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev,
-      AccelTreeBuilder<true> *const receiver,
-      const NamePool::Ptr &np,
-      const ReportContext::Ptr &context,
-      const QUrl &uri)
+bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev, AccelTreeBuilder<true> *const receiver,
+                  const NamePool::Ptr &np, const ReportContext::Ptr &context, const QUrl &uri)
 {
    Q_ASSERT(dev);
    Q_ASSERT(receiver);
@@ -136,10 +131,9 @@ bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev,
 
    QXmlStreamReader reader(dev);
 
-   /* Optimize: change NamePool to take QStringRef such that we don't have to call toString() below. That
-    * will save us a gazillion of temporary QStrings. */
+   // ### Optimize: change NamePool to take QStringView
 
-   while (!reader.atEnd()) {
+   while (! reader.atEnd()) {
       reader.readNext();
 
       switch (reader.tokenType()) {
@@ -151,8 +145,8 @@ bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev,
             /* Send namespace declarations. */
             const QXmlStreamNamespaceDeclarations &nss = reader.namespaceDeclarations();
 
-            /* The far most common case, is for it to be empty. */
-            if (!nss.isEmpty()) {
+            /* The far most common case is for this to be empty. */
+            if (! nss.isEmpty()) {
                const int len = nss.size();
 
                for (int i = 0; i < len; ++i) {
@@ -169,16 +163,17 @@ bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev,
                const QXmlStreamAttribute &attr = attrs.at(i);
 
                receiver->attribute(np->allocateQName(attr.namespaceUri().toString(), attr.name().toString(),
-                                                     attr.prefix().toString()),
-                                   attr.value());
+                                                     attr.prefix().toString()), attr.value());
             }
 
             continue;
          }
+
          case QXmlStreamReader::EndElement: {
             receiver->endElement();
             continue;
          }
+
          case QXmlStreamReader::Characters: {
             if (reader.isWhitespace()) {
                receiver->whitespaceOnly(reader.text());
@@ -305,12 +300,11 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
        * encoding is recognized as specified in [XML 1.0]"
        */
       codec = QTextCodec::codecForMib(106);
+
    } else {
       codec = QTextCodec::codecForName(encoding.toLatin1());
       if (codec && context) {
-         context->error(QtXmlPatterns::tr("%1 is an unsupported encoding.").arg(formatURI(encoding)),
-                        ReportContext::XTDE1190,
-                        where);
+         context->error(QtXmlPatterns::tr("%1 is an unsupported encoding.").formatArg(formatURI(encoding)), ReportContext::XTDE1190, where);
       } else {
          return false;
       }
@@ -322,11 +316,8 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
 
    if (converterState.invalidChars) {
       if (context) {
-         context->error(QtXmlPatterns::tr("%1 contains octets which are disallowed in "
-                                          "the requested encoding %2.").arg(formatURI(uri),
-                                                formatURI(encoding)),
-                        ReportContext::XTDE1190,
-                        where);
+         context->error(QtXmlPatterns::tr("%1 contains octets which are disallowed in the requested encoding %2.").
+                  formatArgs(formatURI(uri), formatURI(encoding)), ReportContext::XTDE1190, where);
       } else {
          return false;
       }
@@ -337,12 +328,8 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
    for (int i = 0; i < len; ++i) {
       if (!QXmlUtils::isChar(result.at(i))) {
          if (context) {
-            context->error(QtXmlPatterns::tr("The codepoint %1, occurring in %2 using encoding %3, "
-                                             "is an invalid XML character.").arg(formatData(result.at(i)),
-                                                   formatURI(uri),
-                                                   formatURI(encoding)),
-                           ReportContext::XTDE1190,
-                           where);
+            context->error(QtXmlPatterns::tr("The codepoint %1, occurring in %2 using encoding %3, is an invalid XML character.")
+                  .formatArgs(formatData(result.at(i)), formatURI(uri), formatURI(encoding)), ReportContext::XTDE1190, where);
          } else {
             return false;
          }
@@ -353,25 +340,23 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
    return true;
 }
 
-bool AccelTreeResourceLoader::isUnparsedTextAvailable(const QUrl &uri,
-      const QString &encoding)
+bool AccelTreeResourceLoader::isUnparsedTextAvailable(const QUrl &uri, const QString &encoding)
 {
    return retrieveUnparsedText(uri, encoding, ReportContext::Ptr(), 0);
 }
 
-Item AccelTreeResourceLoader::openUnparsedText(const QUrl &uri,
-      const QString &encoding,
-      const ReportContext::Ptr &context,
-      const SourceLocationReflection *const where)
+Item AccelTreeResourceLoader::openUnparsedText(const QUrl &uri, const QString &encoding,
+                  const ReportContext::Ptr &context, const SourceLocationReflection *const where)
 {
    const QString &text = m_unparsedTexts.value(qMakePair(uri, encoding));
 
-   if (text.isNull()) {
+   if (text.isEmpty()) {
       if (retrieveUnparsedText(uri, encoding, context, where)) {
          return openUnparsedText(uri, encoding, context, where);
       } else {
          return Item();
       }
+
    } else {
       return AtomicString::fromValue(text);
    }

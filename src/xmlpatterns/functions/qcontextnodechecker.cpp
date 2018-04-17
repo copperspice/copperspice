@@ -22,22 +22,13 @@
 
 #include "qcontextnodechecker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
-void ContextNodeChecker::checkTargetNode(const QXmlNodeModelIndex &node,
-      const DynamicContext::Ptr &context,
-      const ReportContext::ErrorCode code) const
+void ContextNodeChecker::checkTargetNode(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context,
+                  const ReportContext::ErrorCode code) const
 {
    if (node.root().kind() != QXmlNodeModelIndex::Document) {
-      context->error(QtXmlPatterns::tr("The root node of the second argument "
-                                       "to function %1 must be a document "
-                                       "node. %2 is not a document node.")
-                     .arg(formatFunction(context->namePool(), signature()),
-                          formatData(node)),
-                     code, this);
+      context->error(QtXmlPatterns::tr("The root node of the second argument to function %1 must be a document node. %2 is not a document node.")
+                  .formatArgs(formatFunction(context->namePool(), signature()), formatData(node)), code, this);
    }
 }
-
-QT_END_NAMESPACE

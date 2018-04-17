@@ -187,7 +187,6 @@ void QXmlSerializer::writeEscaped(const QString &toEscape)
    }
 
    QString result;
-   result.reserve(int(toEscape.length() * 1.1));
    const int length = toEscape.length();
 
    for (int i = 0; i < length; ++i) {
@@ -217,7 +216,6 @@ void QXmlSerializer::writeEscapedAttribute(const QString &toEscape)
    }
 
    QString result;
-   result.reserve(int(toEscape.length() * 1.1));
    const int length = toEscape.length();
 
    for (int i = 0; i < length; ++i) {
@@ -245,7 +243,7 @@ void QXmlSerializer::writeEscapedAttribute(const QString &toEscape)
 void QXmlSerializer::write(const QString &content)
 {
    Q_D(QXmlSerializer);
-   d->device->write(d->codec->fromUnicode(content.constData(), content.length(), &d->converterState));
+   d->device->write(d->codec->fromUnicode(content, &d->converterState));
 }
 
 /*!
@@ -260,10 +258,9 @@ void QXmlSerializer::write(const QXmlName &name)
       QByteArray &mutableCell = d->nameCache[name.code()];
 
       const QString content(d->np->toLexical(name));
-      mutableCell = d->codec->fromUnicode(content.constData(),
-                                          content.length(),
-                                          &d->converterState);
+      mutableCell = d->codec->fromUnicode(content, &d->converterState);
       d->device->write(mutableCell);
+
    } else {
       d->device->write(cell);
    }
@@ -294,12 +291,10 @@ void QXmlSerializer::startElement(const QXmlName &name)
    if (atDocumentRoot()) {
       if (d->state == BeforeDocumentElement) {
          d->state = InsideDocumentElement;
+
       } else if (d->state != InsideDocumentElement) {
-         d->query.d->staticContext()->error(QtXmlPatterns::tr(
-                                               "Element %1 can't be serialized because it appears outside "
-                                               "the document element.").arg(formatKeyword(d->np, name)),
-                                            ReportContext::SENR0001,
-                                            d->query.d->expression().data());
+         d->query.d->staticContext()->error(QtXmlPatterns::tr("Element %1 can't be serialized because it appears outside "
+                  "the document element.").formatArgs(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
       }
    }
 
@@ -337,8 +332,7 @@ void QXmlSerializer::endElement()
 /*!
   \reimp
  */
-void QXmlSerializer::attribute(const QXmlName &name,
-                               const QStringRef &value)
+void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
 {
    Q_D(QXmlSerializer);
    Q_ASSERT(!name.isNull());
@@ -354,11 +348,8 @@ void QXmlSerializer::attribute(const QXmlName &name,
 
    if (atDocumentRoot()) {
       Q_UNUSED(d);
-      d->query.d->staticContext()->error(QtXmlPatterns::tr(
-                                            "Attribute %1 can't be serialized because it appears at "
-                                            "the top level.").arg(formatKeyword(d->np, name)),
-                                         ReportContext::SENR0001,
-                                         d->query.d->expression().data());
+      d->query.d->staticContext()->error(QtXmlPatterns::tr("Attribute %1 can't be serialized because it appears at "
+                  "the top level.").formatArg(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
    } else {
       d->write(' ');
       write(name);
@@ -457,10 +448,9 @@ void QXmlSerializer::namespaceBinding(const QXmlName &nb)
 void QXmlSerializer::comment(const QString &value)
 {
    Q_D(QXmlSerializer);
-   Q_ASSERT_X(!value.contains(QLatin1String("--")),
-              Q_FUNC_INFO,
-              "Invalid input; it's the caller's responsibility to ensure "
-              "the input is correct.");
+
+   Q_ASSERT_X(!value.contains(QLatin1String("--")), Q_FUNC_INFO,
+                  "Invalid input, it is the caller's responsibility to ensure the input is correct.");
 
    startContent();
    write("<!--");
@@ -472,12 +462,13 @@ void QXmlSerializer::comment(const QString &value)
 /*!
  \reimp
  */
-void QXmlSerializer::characters(const QStringRef &value)
+void QXmlSerializer::characters(QStringView value)
 {
    Q_D(QXmlSerializer);
+
    d->isPreviousAtomic = false;
    startContent();
-   writeEscaped(value.toString());
+   writeEscaped(QString(value));
 }
 
 /*!
@@ -487,10 +478,8 @@ void QXmlSerializer::processingInstruction(const QXmlName &name,
       const QString &value)
 {
    Q_D(QXmlSerializer);
-   Q_ASSERT_X(!value.contains(QLatin1String("?>")),
-              Q_FUNC_INFO,
-              "Invalid input; it's the caller's responsibility to ensure "
-              "the input is correct.");
+   Q_ASSERT_X(! value.contains(QLatin1String("?>")), Q_FUNC_INFO,
+                  "Invalid input, it is the caller's responsibility to ensure the input is correct.");
 
    startContent();
    write("<?");

@@ -82,7 +82,7 @@ QChar CompressedWhitespace::toChar(const CharIdentifier id)
    }
 }
 
-QString CompressedWhitespace::compress(const QStringRef &input)
+QString CompressedWhitespace::compress(QStringView input)
 {
    Q_ASSERT(!isEven(1) && isEven(0) && isEven(2));
    Q_ASSERT(!input.isEmpty());

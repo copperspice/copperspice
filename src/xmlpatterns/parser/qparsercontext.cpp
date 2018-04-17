@@ -70,7 +70,7 @@ void ParserContext::finalizePushedVariable(const int amount,
          continue;
       } else {
          staticContext->warning(QtXmlPatterns::tr("The variable %1 is unused")
-                                .arg(formatKeyword(var, staticContext->namePool())));
+                                .formatArg(formatKeyword(var, staticContext->namePool())));
       }
    }
 }

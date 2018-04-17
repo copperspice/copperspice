@@ -28,8 +28,8 @@
 #include <QVector>
 #include <QXmlName>
 
-#include "qitem_p.h"
-#include "qnamepool_p.h"
+#include <qitem_p.h>
+#include <qnamepool_p.h>
 
 QT_BEGIN_NAMESPACE
 

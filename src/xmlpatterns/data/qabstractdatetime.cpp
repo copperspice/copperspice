@@ -42,61 +42,65 @@ AbstractDateTime::AbstractDateTime(const QDateTime &dateTime) : m_dateTime(dateT
 #define getCapt(sym)        ((captTable.sym == -1) ? QString() : capts.at(captTable.sym))
 #define getSafeCapt(sym)    ((captTable.sym == -1) ? QString() : capts.value(captTable.sym))
 
-QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage,
-                                   const QString &lexicalSource,
-                                   const CaptureTable &captTable)
+QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage, const QString &lexicalSource, const CaptureTable &captTable)
 {
-   QRegExp myExp(captTable.regExp);
+   QString pattern = captTable.regExp.pattern();
+   QRegularExpression myExp(pattern, QPatternOption::ExactMatchOption);
 
-   if (!myExp.exactMatch(lexicalSource)) {
+   QRegularExpressionMatch match = myExp.match(lexicalSource);
+
+   if (! match.hasMatch()) {
       badData(QString());
    }
 
-   const QStringList capts(myExp.capturedTexts());
+   const QStringList capts = match.capturedTexts();
    const QString yearStr(getCapt(year));
 
-   if (yearStr.size() > 4 && yearStr.at(0) == QLatin1Char('0')) {
+   if (yearStr.size() > 4 && yearStr.at(0) == '0') {
       badData(QtXmlPatterns::tr("Year %1 is invalid because it begins with %2.")
-              .arg(formatData(yearStr)).arg(formatData("0")));
+              .formatArg(formatData(yearStr)).formatArg(formatData("0")));
    }
 
    /* If the strings are empty, load default values which are
     * guranteed to pass the validness tests. */
    const QString monthStr(getCapt(month));
    const QString dayStr(getCapt(day));
-   YearProperty year = yearStr.isEmpty() ? DefaultYear : yearStr.toInt();
+
+   YearProperty year = yearStr.isEmpty() ? DefaultYear : yearStr.toInteger<int>();
+
    if (getCapt(yearSign) == QChar::fromLatin1('-')) {
       year = -year;
    }
-   const MonthProperty month = monthStr.isEmpty() ? DefaultMonth : monthStr.toInt();
-   const MonthProperty day = dayStr.isEmpty() ? DefaultDay : dayStr.toInt();
+
+   const MonthProperty month = monthStr.isEmpty() ? DefaultMonth : monthStr.toInteger<int>();
+   const MonthProperty day = dayStr.isEmpty() ? DefaultDay : dayStr.toInteger<int>();
 
    if (!QDate::isValid(year, month, day)) {
       /* Try to give an intelligent message. */
       if (day > 31 || day < 1) {
          badData(QtXmlPatterns::tr("Day %1 is outside the range %2..%3.")
-                 .arg(formatData(QString::number(day)))
-                 .arg(formatData("01"))
-                 .arg(formatData("31")));
+                 .formatArg(formatData(QString::number(day)))
+                 .formatArg(formatData("01"))
+                 .formatArg(formatData("31")));
+
       } else if (month > 12 || month < -12 || month == 0) {
          badData(QtXmlPatterns::tr("Month %1 is outside the range %2..%3.")
-                 .arg(month)
-                 .arg(formatData("01"))
-                 .arg(formatData("12")));
+                 .formatArg(month)
+                 .formatArg(formatData("01"))
+                 .formatArg(formatData("12")));
 
       } else if (QDate::isValid(DefaultYear, month, day)) {
          /* We can't use the badData() macro here because we need a different
           * error code: FODT0001 instead of FORG0001. */
-         errorMessage = ValidationError::createError(QtXmlPatterns::tr(
-                           "Overflow: Can't represent date %1.")
-                        .arg(formatData(QLatin1String("%1-%2-%3"))
-                             .arg(year).arg(month).arg(day)),
-                        ReportContext::FODT0001);
+         errorMessage = ValidationError::createError(QtXmlPatterns::tr("Overflow: Can't represent date %1.")
+                  .formatArg(formatData(QLatin1String("%1-%2-%3"))
+                  .formatArg(year).formatArg(month).formatArg(day)), ReportContext::FODT0001);
          return QDateTime();
+
       } else {
          badData(QtXmlPatterns::tr("Day %1 is invalid for month %2.")
-                 .arg(formatData(QString::number(day)))
-                 .arg(formatData(QString::number(month))));
+                 .formatArg(formatData(QString::number(day)))
+                 .formatArg(formatData(QString::number(month))));
       }
    }
 
@@ -125,15 +129,19 @@ QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage,
       const QString hourStr(getCapt(hour));
       const QString minutesStr(getCapt(minutes));
       const QString secondsStr(getCapt(seconds));
-      HourProperty hour = hourStr.toInt();
-      const MinuteProperty mins = minutesStr.toInt();
-      const SecondProperty secs = secondsStr.toInt();
+
+      HourProperty hour = hourStr.toInteger<int>();
+
+      const MinuteProperty mins = minutesStr.toInteger<int>();
+      const SecondProperty secs = secondsStr.toInteger<int>();
 
       QString msecondsStr(getSafeCapt(mseconds));
+
       if (!msecondsStr.isEmpty()) {
          msecondsStr = msecondsStr.leftJustified(3, QLatin1Char('0'), true);
       }
-      const MSecondProperty msecs = msecondsStr.toInt();
+
+      const MSecondProperty msecs = msecondsStr.toInteger<int>();
 
       if (hour == 24) {
          /* 24:00:00.00 is an invalid time for QTime, so handle it here. */
@@ -141,14 +149,14 @@ QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage,
             badData(QtXmlPatterns::tr("Time 24:%1:%2.%3 is invalid. "
                                       "Hour is 24, but minutes, seconds, "
                                       "and milliseconds are not all 0; ")
-                    .arg(mins).arg(secs).arg(msecs));
+                    .formatArg(mins).formatArg(secs).formatArg(msecs));
          } else {
             hour = 0;
             date = date.addDays(1);
          }
       } else if (!QTime::isValid(hour, mins, secs, msecs)) {
          badData(QtXmlPatterns::tr("Time %1:%2:%3.%4 is invalid.")
-                 .arg(hour).arg(mins).arg(secs).arg(msecs));
+                 .formatArg(hour).formatArg(mins).formatArg(secs).formatArg(msecs));
       }
 
       const QTime time(hour, mins, secs, msecs);
@@ -183,32 +191,34 @@ ZOTotal AbstractDateTime::parseZoneOffset(ZoneOffsetParseResult &result,
 
    const QString zoneOffsetHourStr(getCapt(zoneOffsetHour));
    Q_ASSERT(!zoneOffsetHourStr.isEmpty());
-   const ZOHourProperty zoHour = zoneOffsetHourStr.toInt();
+
+   const ZOHourProperty zoHour = zoneOffsetHourStr.toInteger<int>();
 
    if (zoHour > 14 || zoHour < -14) {
       result = Error;
       return 0;
       /*
       badZOData(QtXmlPatterns::tr("%1 it is not a valid hour property in a zone offset. "
-                     "It must be less than or equal to 14.").arg(zoHour));
+                     "It must be less than or equal to 14.").formatArg(zoHour));
                      */
    }
 
    const QString zoneOffsetMinuteStr(getCapt(zoneOffsetMinute));
    Q_ASSERT(!zoneOffsetMinuteStr.isEmpty());
-   const ZOHourProperty zoMins = zoneOffsetMinuteStr.toInt();
+
+   const ZOHourProperty zoMins = zoneOffsetMinuteStr.toInteger<int>();
 
    if (zoHour == 14 && zoMins != 0) {
       /*
       badZOData(QtXmlPatterns::tr("When the hour property in a zone offset is 14, the minute property "
-                     "must be 0, not %1.").arg(zoMins));
+                     "must be 0, not %1.").formatArg(zoMins));
                      */
       result = Error;
       return 0;
    } else if (zoMins > 59 || zoMins < -59) {
       /*
       badZOData(QtXmlPatterns::tr("The minute property in a zone offset cannot be larger than 59. "
-                     "%1 is therefore invalid.").arg(zoMins));
+                     "%1 is therefore invalid.").formatArg(zoMins));
                      */
       result = Error;
       return 0;
@@ -312,12 +322,11 @@ QString AbstractDateTime::zoneOffsetToString() const
          const int minutes = (posZoneOffset % (60 * 60)) / 60;
 
          QString result;
-         result.reserve(6);
-
-         result.append(zoneOffset < 0 ? QLatin1Char('-') : QLatin1Char('+'));
-         result.append(QString::number(hours).rightJustified(2, QLatin1Char('0')));
+         result.append(zoneOffset < 0 ? QLatin1Char('-') : '+');
+         result.append(QString::number(hours).rightJustified(2, '0'));
          result.append(QLatin1Char(':'));
-         result.append(QString::number(minutes).rightJustified(2, QLatin1Char('0')));
+         result.append(QString::number(minutes).rightJustified(2, '0'));
+
          return result;
       }
    }

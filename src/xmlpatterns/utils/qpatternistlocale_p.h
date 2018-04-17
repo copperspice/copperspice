@@ -24,12 +24,13 @@
 #define QPatternistLocale_P_H
 
 #include <QCoreApplication>
-#include <QString>
 #include <QUrl>
 
 #include <qcardinality_p.h>
 #include <qnamepool_p.h>
 #include <qprimitives_p.h>
+
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -59,14 +60,14 @@ inline QString formatKeyword(const QString &keyword)
 /**
  * @overload
  */
-static inline QString formatKeyword(const QStringRef &keyword)
+static inline QString formatKeyword(QStringView keyword)
 {
-   return formatKeyword(keyword.toString());
+   return formatKeyword(QString(keyword));
 }
 
 static inline QString formatKeyword(const char *const keyword)
 {
-   return formatKeyword(QLatin1String(keyword));
+   return formatKeyword(QString::fromLatin1(keyword));
 }
 
 static inline QString formatKeyword(const QChar keyword)
@@ -88,7 +89,7 @@ static inline QString formatElement(const QString &element)
  */
 static inline QString formatElement(const char *const element)
 {
-   return formatElement(QLatin1String(element));
+   return formatElement(QString::fromLatin1(element));
 }
 
 /**
@@ -105,7 +106,7 @@ static inline QString formatAttribute(const QString &attribute)
  */
 static inline QString formatAttribute(const char *const attribute)
 {
-   return formatAttribute(QLatin1String(attribute));
+   return formatAttribute(QString::fromLatin1(attribute));
 }
 
 /**
@@ -203,16 +204,9 @@ static inline QString formatData(const xsInteger data)
  */
 static inline QString formatData(const char *const data)
 {
-   return formatData(QLatin1String(data));
+   return formatData(QString::fromLatin1(data));
 }
 
-/**
- * This is an overload, provided for convenience.
- */
-static inline QString formatData(const QLatin1Char &data)
-{
-   return formatData(QString(data));
-}
 
 /**
  * Formats an arbitrary expression, such as a regular expression
@@ -220,9 +214,7 @@ static inline QString formatData(const QLatin1Char &data)
  */
 static inline QString formatExpression(const QString &expr)
 {
-   return QLatin1String("<span class='XQuery-expression'>")    +
-          escape(expr)                                         +
-          QLatin1String("</span>");
+   return "<span class='XQuery-expression'>" + escape(expr) + "</span>";
 }
 
 }

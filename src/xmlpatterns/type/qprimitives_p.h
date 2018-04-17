@@ -26,10 +26,9 @@
 #include <QtGlobal>
 #include <QtCore/QHash>
 #include <QtCore/QUrl>
+#include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE
-
-class QString;
 
 namespace QPatternist {
 typedef qreal xsDouble;

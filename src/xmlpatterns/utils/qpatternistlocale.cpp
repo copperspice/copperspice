@@ -22,13 +22,11 @@
 
 #include "qpatternistlocale_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 QString escape(const QString &input)
 {
    QString rich;
-   rich.reserve(int(input.length() * 1.1));
 
    for (int i = 0; i < input.length(); ++i) {
       switch (input.at(i).unicode()) {
@@ -61,4 +59,3 @@ QString escape(const QString &input)
 }
 }
 
-QT_END_NAMESPACE

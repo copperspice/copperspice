@@ -45,7 +45,7 @@ Item TextNodeConstructor::evaluateSingleton(const DynamicContext::Ptr &context) 
 
    const NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(QUrl()));
    const QString &v = chars.stringValue();
-   nodeBuilder->characters(QStringRef(&v));
+   nodeBuilder->characters(QStringView(v));
 
    const QAbstractXmlNodeModel::Ptr nm(nodeBuilder->builtDocument());
    context->addNodeModel(nm);
@@ -61,9 +61,10 @@ void TextNodeConstructor::evaluateToSequenceReceiver(const DynamicContext::Ptr &
 
    if (item) {
       const QString &v = item.stringValue();
-      receiver->characters(QStringRef(&v));
+      receiver->characters(QStringView(v));
+
    } else {
-      receiver->characters(QStringRef());
+      receiver->characters(QStringView());
    }
 }
 

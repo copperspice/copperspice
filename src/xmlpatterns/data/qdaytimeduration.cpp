@@ -48,7 +48,7 @@ DayTimeDuration::Ptr DayTimeDuration::fromLexical(const QString &lexical)
 {
    static const CaptureTable captureTable(
       /* The extra paranthesis is a build fix for GCC 3.3. */
-      (QRegExp(QLatin1String(
+      (QRegularExpression(QLatin1String(
                   "^\\s*"                         /* Any preceding whitespace. */
                   "(-)?"                          /* Any minus sign. */
                   "P"                             /* Delimiter. */

@@ -100,22 +100,25 @@ QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
    if (XPathHelper::isQName(lexicalQName)) {
       QString prefix;
       QString local;
+
       XPathHelper::splitQName(lexicalQName, prefix, local);
+
       const QXmlName::NamespaceCode nsCode = asForAttribute &&
-                                             prefix.isEmpty() ? QXmlName::NamespaceCode(StandardNamespaces::empty)
-                                             : (nsResolver->lookupNamespaceURI(context->namePool()->allocatePrefix(prefix)));
+                  prefix.isEmpty() ? QXmlName::NamespaceCode(StandardNamespaces::empty)
+                  : (nsResolver->lookupNamespaceURI(context->namePool()->allocatePrefix(prefix)));
 
       if (nsCode == NamespaceResolver::NoBinding) {
-         context->error(QtXmlPatterns::tr("No namespace binding exists for "
-                                          "the prefix %1 in %2").arg(formatKeyword(prefix), formatKeyword(lexicalQName)), NoBinding, r);
+         context->error(QtXmlPatterns::tr("No namespace binding exists for the prefix %1 in %2")
+                  .formatArgs(formatKeyword(prefix), formatKeyword(lexicalQName)), NoBinding, r);
 
          return QXmlName(); /* Silence compiler warning. */
+
       } else {
          return context->namePool()->allocateQName(context->namePool()->stringForNamespace(nsCode), local, prefix);
       }
    } else {
       context->error(QtXmlPatterns::tr("%1 is an invalid %2")
-                     .arg(formatData(lexicalQName)).arg(formatType(context->namePool(), BuiltinTypes::xsQName)), InvalidQName, r);
+                     .formatArg(formatData(lexicalQName)).formatArg(formatType(context->namePool(), BuiltinTypes::xsQName)), InvalidQName, r);
 
       return QXmlName(); /* Silence compiler warning. */
    }

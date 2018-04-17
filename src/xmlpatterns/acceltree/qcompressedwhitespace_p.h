@@ -23,13 +23,8 @@
 #ifndef QCompressedWhitespace_P_H
 #define QCompressedWhitespace_P_H
 
-#include <QtGlobal>
-
-QT_BEGIN_NAMESPACE
-
-class QChar;
-class QString;
-class QStringRef;
+#include <qglobal.h>
+#include <qstringfwd.h>
 
 namespace QPatternist {
 
@@ -48,7 +43,7 @@ class CompressedWhitespace
     *
     * @see decompress()
     */
-   static QString compress(const QStringRef &input);
+   static QString compress(QStringView input);
 
    /**
     * @short Decompresses @p input into a usual QString.
@@ -125,7 +120,5 @@ class CompressedWhitespace
    Q_DISABLE_COPY(CompressedWhitespace)
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

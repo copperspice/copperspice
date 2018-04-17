@@ -37,7 +37,7 @@ Item ErrorFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 
    switch (m_operands.count()) {
       case 0: { /* No args. */
-         context->error(QtXmlPatterns::tr("%1 was called.").arg(formatFunction(context->namePool(), signature())),
+         context->error(QtXmlPatterns::tr("%1 was called.").formatArg(formatFunction(context->namePool(), signature())),
                         ReportContext::FOER0000, this);
          return Item();
       }

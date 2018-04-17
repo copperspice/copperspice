@@ -320,7 +320,7 @@ Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
       Q_ASSERT(CommonSequenceTypes::ZeroOrOneDocumentNode->matches(m_type));
       return Expression::Ptr(FunctionCall::typeCheck(context, reqType));
    } else {
-      context->error(QtXmlPatterns::tr("It will not be possible to retrieve %1.").arg(formatURI(uri)),
+      context->error(QtXmlPatterns::tr("It will not be possible to retrieve %1.").formatArg(formatURI(uri)),
                      ReportContext::FODC0002, this);
       return Expression::Ptr();
    }

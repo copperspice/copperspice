@@ -46,11 +46,11 @@ QString CommentConstructor::evaluateContent(const DynamicContext::Ptr &context) 
 
    if (content.contains(QLatin1String("--"))) {
       context->error(QtXmlPatterns::tr("A comment cannot contain %1")
-                     .arg(formatData("--")),
+                     .formatArg(formatData("--")),
                      ReportContext::XQDY0072, this);
    } else if (content.endsWith(QLatin1Char('-'))) {
       context->error(QtXmlPatterns::tr("A comment cannot end with a %1.")
-                     .arg(formatData(QLatin1Char('-'))),
+                     .formatArg(formatData(QLatin1Char('-'))),
                      ReportContext::XQDY0072, this);
    }
 

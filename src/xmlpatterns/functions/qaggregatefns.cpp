@@ -43,8 +43,7 @@ Item CountFN::evaluateSingleton(const DynamicContext::Ptr &context) const
    return Integer::fromValue(m_operands.first()->evaluateSequence(context)->count());
 }
 
-Expression::Ptr CountFN::typeCheck(const StaticContext::Ptr &context,
-                                   const SequenceType::Ptr &reqType)
+Expression::Ptr CountFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    if (*CommonSequenceTypes::EBV->itemType() == *reqType->itemType()) {
       return ByIDCreator::create(IDExistsFN, operands(), context, this)->typeCheck(context, reqType);
@@ -83,25 +82,23 @@ Expression::Ptr AddingAggregate::typeCheck(const StaticContext::Ptr &context,
 
    if (*CommonSequenceTypes::Empty == *t1) {
       return me;
-   } else if (*BuiltinTypes::xsAnyAtomicType == *t1 ||
-              *BuiltinTypes::numeric == *t1) {
+
+   } else if (*BuiltinTypes::xsAnyAtomicType == *t1 || *BuiltinTypes::numeric == *t1) {
       return me;
+
    } else if (BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(t1)) {
-      m_operands.replace(0, Expression::Ptr(new UntypedAtomicConverter(m_operands.first(),
-                                            BuiltinTypes::xsDouble)));
+      m_operands.replace(0, Expression::Ptr(new UntypedAtomicConverter(m_operands.first(), BuiltinTypes::xsDouble)));
+
       t1 = m_operands.first()->staticType()->itemType();
    } else if (!BuiltinTypes::numeric->xdtTypeMatches(t1) &&
               !BuiltinTypes::xsDayTimeDuration->xdtTypeMatches(t1) &&
               !BuiltinTypes::xsYearMonthDuration->xdtTypeMatches(t1)) {
+
       /* Translator, don't translate the type names. */
-      context->error(QtXmlPatterns::tr("The first argument to %1 cannot be "
-                                       "of type %2. It must be a numeric "
-                                       "type, xs:yearMonthDuration or "
-                                       "xs:dayTimeDuration.")
-                     .arg(formatFunction(context->namePool(), signature()))
-                     .arg(formatType(context->namePool(),
-                                     m_operands.first()->staticType())),
-                     ReportContext::FORG0006, this);
+      context->error(QtXmlPatterns::tr("The first argument to %1 cannot be of type %2. It must be a numeric "
+                                       "type, xs:yearMonthDuration or xs:dayTimeDuration.")
+                     .formatArg(formatFunction(context->namePool(), signature()))
+                     .formatArg(formatType(context->namePool(), m_operands.first()->staticType())), ReportContext::FORG0006, this);
    }
 
    if (!m_operands.first()->staticType()->cardinality().allowsMany()) {
@@ -110,9 +107,8 @@ Expression::Ptr AddingAggregate::typeCheck(const StaticContext::Ptr &context,
 
    /* We know fetchMathematician won't attempt a rewrite of the operand, so this is safe. */
    m_mather = ArithmeticExpression::fetchMathematician(m_operands.first(), m_operands.first(),
-              AtomicMathematician::Add, true, context,
-              this,
-              ReportContext::FORG0006);
+              AtomicMathematician::Add, true, context, this, ReportContext::FORG0006);
+
    return me;
 }
 
@@ -141,44 +137,39 @@ Item AvgFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 
    /* Note that we use the same m_mather which was used for adding,
     * can be worth to think about. */
-   return ArithmeticExpression::flexiblyCalculate(sum, AtomicMathematician::Div,
-          Integer::fromValue(count),
-          m_divider, context,
-          this,
-          ReportContext::FORG0006);
+   return ArithmeticExpression::flexiblyCalculate(sum, AtomicMathematician::Div, Integer::fromValue(count),
+          m_divider, context, this, ReportContext::FORG0006);
 }
 
-Expression::Ptr AvgFN::typeCheck(const StaticContext::Ptr &context,
-                                 const SequenceType::Ptr &reqType)
+Expression::Ptr AvgFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    const Expression::Ptr me(FunctionCall::typeCheck(context, reqType));
    ItemType::Ptr t1(m_operands.first()->staticType()->itemType());
 
    if (*CommonSequenceTypes::Empty == *t1) {
       return me;
-   } else if (*BuiltinTypes::xsAnyAtomicType == *t1 ||
-              *BuiltinTypes::numeric == *t1) {
+
+   } else if (*BuiltinTypes::xsAnyAtomicType == *t1 || *BuiltinTypes::numeric == *t1) {
       return me;
+
    } else if (BuiltinTypes::xsUntypedAtomic->xdtTypeMatches(t1)) {
-      m_operands.replace(0, Expression::Ptr(new UntypedAtomicConverter(m_operands.first(),
-                                            BuiltinTypes::xsDouble)));
+      m_operands.replace(0, Expression::Ptr(new UntypedAtomicConverter(m_operands.first(), BuiltinTypes::xsDouble)));
       t1 = m_operands.first()->staticType()->itemType();
+
    } else if (!BuiltinTypes::numeric->xdtTypeMatches(t1) &&
               !BuiltinTypes::xsDayTimeDuration->xdtTypeMatches(t1) &&
               !BuiltinTypes::xsYearMonthDuration->xdtTypeMatches(t1)) {
+
       /* Translator, don't translate the type names. */
-      context->error(QtXmlPatterns::tr("The first argument to %1 cannot be "
-                                       "of type %2. It must be of type %3, "
-                                       "%4, or %5.")
-                     .arg(signature())
-                     .arg(formatType(context->namePool(), m_operands.first()->staticType()))
-                     .arg(formatType(context->namePool(), BuiltinTypes::numeric))
-                     .arg(formatType(context->namePool(), BuiltinTypes::xsYearMonthDuration))
-                     .arg(formatType(context->namePool(), BuiltinTypes::xsDayTimeDuration)),
-                     ReportContext::FORG0006, this);
+      context->error(QtXmlPatterns::tr("The first argument to %1 can not be of type %2. It must be of type %3, %4, or %5.")
+                     .formatArg(formatFunction(context->namePool(), signature()))
+                     .formatArg(formatType(context->namePool(), m_operands.first()->staticType()))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::numeric))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::xsYearMonthDuration))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::xsDayTimeDuration)), ReportContext::FORG0006, this);
    }
 
-   if (!m_operands.first()->staticType()->cardinality().allowsMany()) {
+   if (! m_operands.first()->staticType()->cardinality().allowsMany()) {
       return m_operands.first();
    }
 
@@ -187,8 +178,10 @@ Expression::Ptr AvgFN::typeCheck(const StaticContext::Ptr &context,
    Expression::Ptr op2(wrapLiteral(CommonValues::IntegerOne, context, this));
    m_adder = ArithmeticExpression::fetchMathematician(m_operands.first(), m_operands.first(),
              AtomicMathematician::Add, true, context, this);
+
    m_divider = ArithmeticExpression::fetchMathematician(m_operands.first(), op2,
-               AtomicMathematician::Div, true, context, this);
+             AtomicMathematician::Div, true, context, this);
+
    return me;
 }
 
@@ -205,9 +198,8 @@ SequenceType::Ptr AvgFN::staticType() const
 
    /* else, it means the type is xsDayTimeDuration, xsYearMonthDuration,
     * xsDouble, xsFloat or xsAnyAtomicType, which we use as is. */
-   return makeGenericSequenceType(BuiltinTypes::xsAnyAtomicType->xdtTypeMatches(t) ? t : ItemType::Ptr(
-                                     BuiltinTypes::xsAnyAtomicType),
-                                  opt->cardinality().toWithoutMany());
+   return makeGenericSequenceType(BuiltinTypes::xsAnyAtomicType->xdtTypeMatches(t) ? t :
+                  ItemType::Ptr(BuiltinTypes::xsAnyAtomicType), opt->cardinality().toWithoutMany());
 }
 
 Item SumFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -217,16 +209,14 @@ Item SumFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 
    while (sum) {
       const Item next(it->next());
-      if (!next) {
+      if ( !next) {
          break;
       }
 
-      sum = ArithmeticExpression::flexiblyCalculate(sum, AtomicMathematician::Add,
-            next, m_mather, context, this,
-            ReportContext::FORG0006);
+      sum = ArithmeticExpression::flexiblyCalculate(sum, AtomicMathematician::Add, next, m_mather, context, this, ReportContext::FORG0006);
    };
 
-   if (!sum) {
+   if (! sum) {
       if (m_operands.count() == 1) {
          return CommonValues::IntegerZero;
       } else {
@@ -237,8 +227,7 @@ Item SumFN::evaluateSingleton(const DynamicContext::Ptr &context) const
    return sum;
 }
 
-Expression::Ptr SumFN::typeCheck(const StaticContext::Ptr &context,
-                                 const SequenceType::Ptr &reqType)
+Expression::Ptr SumFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    const Expression::Ptr me(AddingAggregate::typeCheck(context, reqType));
 
@@ -261,15 +250,13 @@ Expression::Ptr SumFN::typeCheck(const StaticContext::Ptr &context,
          *CommonSequenceTypes::Empty != *t &&
          !BuiltinTypes::xsDayTimeDuration->xdtTypeMatches(t) &&
          !BuiltinTypes::xsYearMonthDuration->xdtTypeMatches(t)) {
-      context->error(QtXmlPatterns::tr("The second argument to %1 cannot be "
-                                       "of type %2. It must be of type %3, "
-                                       "%4, or %5.")
-                     .arg(formatFunction(context->namePool(), signature()))
-                     .arg(formatType(context->namePool(), m_operands.at(1)->staticType()))
-                     .arg(formatType(context->namePool(), BuiltinTypes::numeric))
-                     .arg(formatType(context->namePool(), BuiltinTypes::xsYearMonthDuration))
-                     .arg(formatType(context->namePool(), BuiltinTypes::xsDayTimeDuration)),
-                     ReportContext::FORG0006, this);
+
+         context->error(QtXmlPatterns::tr("The second argument to %1 cannot be of type %2. It must be of type %3, %4, or %5.")
+                     .formatArg(formatFunction(context->namePool(), signature()))
+                     .formatArg(formatType(context->namePool(), m_operands.at(1)->staticType()))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::numeric))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::xsYearMonthDuration))
+                     .formatArg(formatType(context->namePool(), BuiltinTypes::xsDayTimeDuration)), ReportContext::FORG0006, this);
       return me;
    }
 

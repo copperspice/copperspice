@@ -59,16 +59,15 @@ void DocumentContentValidator::endElement()
    m_receiver->endElement();
 }
 
-void DocumentContentValidator::attribute(const QXmlName &name,
-      const QStringRef &value)
+void DocumentContentValidator::attribute(const QXmlName &name, QStringView value)
 {
    if (m_elementDepth == 0) {
       m_context->error(QtXmlPatterns::tr("An attribute node cannot be a "
-                                         "child of a document node. "
-                                         "Therefore, the attribute %1 "
-                                         "is out of place.")
-                       .arg(formatKeyword(m_context->namePool(), name)),
-                       ReportContext::XPTY0004, m_expr.data());
+                  "child of a document node. "
+                  "Therefore, the attribute %1 "
+                  "is out of place.")
+                  .formatArgs(formatKeyword(m_context->namePool(), name)), ReportContext::XPTY0004, m_expr.data());
+
    } else {
       m_receiver->attribute(name, value);
    }
@@ -79,7 +78,7 @@ void DocumentContentValidator::comment(const QString &value)
    m_receiver->comment(value);
 }
 
-void DocumentContentValidator::characters(const QStringRef &value)
+void DocumentContentValidator::characters(QStringView value)
 {
    m_receiver->characters(value);
 }

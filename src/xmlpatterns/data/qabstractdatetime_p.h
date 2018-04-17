@@ -24,7 +24,7 @@
 #define QAbstractDateTime_P_H
 
 #include <QDateTime>
-#include <QRegExp>
+#include <qregularexpression.h>
 #include <qitem_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -54,7 +54,7 @@ class AbstractDateTime : public AtomicValue
    class CaptureTable
    {
     public:
-      CaptureTable(const QRegExp &exp,
+      CaptureTable(const QRegularExpression &exp,
                    const qint8 zoneOffsetSignP,
                    const qint8 zoneOffsetHourP,
                    const qint8 zoneOffsetMinuteP,
@@ -82,7 +82,7 @@ class AbstractDateTime : public AtomicValue
          Q_ASSERT(exp.isValid());
       }
 
-      const QRegExp regExp;
+      const QRegularExpression regExp;
       const qint8 zoneOffsetSign;
       const qint8 zoneOffsetHour;
       const qint8 zoneOffsetMinute;
@@ -134,8 +134,7 @@ class AbstractDateTime : public AtomicValue
     * @c false is returned and @p message is set to contain a translated message for
     * human consumption, describing the error.
     */
-   static bool isRangeValid(const QDate &date,
-                            QString &message);
+   static bool isRangeValid(const QDate &date, QString &message);
 
  protected:
 

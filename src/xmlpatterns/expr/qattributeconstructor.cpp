@@ -58,7 +58,7 @@ Item AttributeConstructor::evaluateSingleton(const DynamicContext::Ptr &context)
    const QString value(processValue(name, content));
    const NodeBuilder::Ptr nodeBuilder(context->nodeBuilder(QUrl()));
 
-   nodeBuilder->attribute(name, QStringRef(&value));
+   nodeBuilder->attribute(name, QStringView(value));
 
    const QAbstractXmlNodeModel::Ptr nm(nodeBuilder->builtDocument());
    context->addNodeModel(nm);
@@ -74,7 +74,7 @@ void AttributeConstructor::evaluateToSequenceReceiver(const DynamicContext::Ptr 
    const QXmlName name(nameItem.as<QNameValue>()->qName());
    const QString value(processValue(name, content));
 
-   receiver->attribute(name, QStringRef(&value));
+   receiver->attribute(name, QStringView(value));
 }
 
 SequenceType::Ptr AttributeConstructor::staticType() const

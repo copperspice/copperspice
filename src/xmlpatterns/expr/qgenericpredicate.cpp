@@ -79,7 +79,7 @@ Expression::Ptr GenericPredicate::create(const Expression::Ptr &sourceExpression
                                        "predicate. A predicate must have "
                                        "either a numeric type or an "
                                        "Effective Boolean Value type.")
-                     .arg(formatType(context->namePool(),
+                     .formatArg(formatType(context->namePool(),
                                      sourceExpression->staticType())),
                      ReportContext::FORG0006, location);
       return Expression::Ptr(); /* Silence compiler warning. */

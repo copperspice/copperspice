@@ -60,13 +60,13 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
    switch (type) {
       case QtWarningMsg: {
          if (hasLine) {
-            writeUncolored(QXmlPatternistCLI::tr("Warning in %1, at line %2, column %3: %4").arg(QString::fromLatin1(
-                  sourceLocation.uri().toEncoded()), QString::number(sourceLocation.line()),
+            writeUncolored(QXmlPatternistCLI::tr("Warning in %1, at line %2, column %3: %4")
+                  .formatArgs(QString(sourceLocation.uri().toEncoded()), QString::number(sourceLocation.line()),
                   QString::number(sourceLocation.column()), colorifyDescription(description)));
 
          } else {
-            writeUncolored(QXmlPatternistCLI::tr("Warning in %1: %2").arg(QString::fromLatin1(sourceLocation.uri().toEncoded()),
-                  colorifyDescription(description)));
+            writeUncolored(QXmlPatternistCLI::tr("Warning in %1: %2")
+                  .formatArgs(QString(sourceLocation.uri().toEncoded()), colorifyDescription(description)));
          }
 
          break;
@@ -94,15 +94,14 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
 
          if (hasLine) {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4: %5").arg(colorify(errorId, ErrorCode),
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4: %5").formatArgs(colorify(errorId, ErrorCode),
                            colorify(location, Location),
                            colorify(QString::number(sourceLocation.line()), Location),
                            colorify(QString::number(sourceLocation.column()), Location),
                            colorifyDescription(description)));
          } else {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2: %3").arg(colorify(errorId, ErrorCode),
-                           colorify(location, Location),
-                           colorifyDescription(description)));
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2: %3")
+                           .formatArgs(colorify(errorId, ErrorCode), colorify(location, Location), colorifyDescription(description)));
          }
          break;
       }
@@ -118,22 +117,24 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
 QString ColoringMessageHandler::colorifyDescription(const QString &in) const
 {
    QXmlStreamReader reader(in);
+
    QString result;
-   result.reserve(in.size());
    ColorType currentColor = RunningText;
 
-   while (!reader.atEnd()) {
+   while (! reader.atEnd()) {
       reader.readNext();
 
       switch (reader.tokenType()) {
          case QXmlStreamReader::StartElement: {
-            if (reader.name() == QLatin1String("span")) {
-               Q_ASSERT(m_classToColor.contains(reader.attributes().value(QLatin1String("class")).toString()));
-               currentColor = m_classToColor.value(reader.attributes().value(QLatin1String("class")).toString());
+
+            if (reader.name() == "span") {
+               Q_ASSERT(m_classToColor.contains(reader.attributes().value("class").toString()));
+               currentColor = m_classToColor.value(reader.attributes().value("class").toString());
             }
 
             continue;
          }
+
          case QXmlStreamReader::Characters: {
             result.append(colorify(reader.text().toString(), currentColor));
             continue;

@@ -134,8 +134,7 @@ fetchComparator(const ItemType::Ptr &t1,
    if (!locator) {
       if (issueError) {
          context->error(QtXmlPatterns::tr("No comparisons can be done involving the type %1.")
-                        .arg(formatType(context->namePool(), t1)),
-                        errorCode, static_cast<const TSubClass *>(this)->actualReflection());
+                        .formatArg(formatType(context->namePool(), t1)), errorCode, static_cast<const TSubClass *>(this)->actualReflection());
       }
       return AtomicComparator::Ptr();
    }
@@ -147,10 +146,8 @@ fetchComparator(const ItemType::Ptr &t1,
       return comp;
    } else if (issueError) {
       context->error(QtXmlPatterns::tr("Operator %1 is not available between atomic values of type %2 and %3.")
-                     .arg(formatKeyword(AtomicComparator::displayName(operatorID(),
-                                        comparisonType)),
-                          formatType(context->namePool(), t1),
-                          formatType(context->namePool(), t2)),
+                     .formatArgs(formatKeyword(AtomicComparator::displayName(operatorID(), comparisonType)),
+                     formatType(context->namePool(), t1), formatType(context->namePool(), t2)),
                      errorCode, static_cast<const TSubClass *>(this)->actualReflection());
    }
 

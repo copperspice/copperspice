@@ -37,13 +37,13 @@ class DocumentContentValidator : public QAbstractXmlReceiver
    DocumentContentValidator(QAbstractXmlReceiver *const receiver, const DynamicContext::Ptr &context, const Expression::ConstPtr &expr);
 
    void namespaceBinding(const QXmlName &nb) override;
-   void characters(const QStringRef &value) override;
+   void characters(QStringView value) override;
    void comment(const QString &value) override;
 
    void startElement(const QXmlName &name) override;
    void endElement() override;
 
-   void attribute(const QXmlName &name, const QStringRef &value) override;
+   void attribute(const QXmlName &name, QStringView value) override;
 
    void processingInstruction(const QXmlName &name, const QString &value) override;
 

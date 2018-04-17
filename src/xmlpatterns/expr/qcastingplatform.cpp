@@ -105,7 +105,7 @@ AtomicCaster::Ptr CastingPlatform<TSubClass, issueError>::locateCaster(const Ite
    if (!locator) {
       if (issueError) {
          context->error(QtXmlPatterns::tr("No casting is possible with %1 as the target type.")
-                        .arg(formatType(context->namePool(), targetType)),
+                        .formatArg(formatType(context->namePool(), targetType)),
                         ReportContext::XPTY0004, location);
       } else {
          castImpossible = true;
@@ -118,8 +118,8 @@ AtomicCaster::Ptr CastingPlatform<TSubClass, issueError>::locateCaster(const Ite
    if (!caster) {
       if (issueError) {
          context->error(QtXmlPatterns::tr("It is not possible to cast from %1 to %2.")
-                        .arg(formatType(context->namePool(), sourceType))
-                        .arg(formatType(context->namePool(), targetType)),
+                        .formatArg(formatType(context->namePool(), sourceType))
+                        .formatArg(formatType(context->namePool(), targetType)),
                         ReportContext::XPTY0004, location);
       } else {
          castImpossible = true;
@@ -145,16 +145,15 @@ void CastingPlatform<TSubClass, issueError>::checkTargetType(const ReportContext
    if (asAtomic->isAbstract()) {
       context->error(QtXmlPatterns::tr("Casting to %1 is not possible because it "
                                        "is an abstract type, and can therefore never be instantiated.")
-                     .arg(formatType(context->namePool(), tType)),
+                     .formatArg(formatType(context->namePool(), tType)),
                      ReportContext::XPST0080,
                      static_cast<const TSubClass *>(this));
    }
 }
 
 template <typename TSubClass, const bool issueError>
-void CastingPlatform<TSubClass, issueError>::issueCastError(const Item &validationError,
-      const Item &sourceValue,
-      const ReportContext::Ptr &context) const
+void CastingPlatform<TSubClass, issueError>::issueCastError(const Item &validationError, const Item &sourceValue,
+                  const ReportContext::Ptr &context) const
 {
    Q_ASSERT(validationError);
    Q_ASSERT(context);
@@ -164,23 +163,22 @@ void CastingPlatform<TSubClass, issueError>::issueCastError(const Item &validati
    const ValidationError::Ptr err(validationError.template as<ValidationError>());
    QString msg(err->message());
 
-   if (msg.isNull()) {
-      msg = QtXmlPatterns::tr("It's not possible to cast the value %1 of type %2 to %3")
-            .arg(formatData(sourceValue.stringValue()))
-            .arg(formatType(context->namePool(), sourceValue.type()))
-            .arg(formatType(context->namePool(), targetType()));
+   if (msg.isEmpty()) {
+      msg = QtXmlPatterns::tr("It is not possible to cast the value %1 of type %2 to %3")
+            .formatArg(formatData(sourceValue.stringValue()))
+            .formatArg(formatType(context->namePool(), sourceValue.type()))
+            .formatArg(formatType(context->namePool(), targetType()));
    } else {
       Q_ASSERT(!msg.isEmpty());
       msg = QtXmlPatterns::tr("Failure when casting from %1 to %2: %3")
-            .arg(formatType(context->namePool(), sourceValue.type()))
-            .arg(formatType(context->namePool(), targetType()))
-            .arg(msg);
+            .formatArg(formatType(context->namePool(), sourceValue.type()))
+            .formatArg(formatType(context->namePool(), targetType()))
+            .formatArg(msg);
    }
 
    /* If m_errorCode is FORG0001, we assume our sub-classer doesn't have a
     * special wish about error code, so then we use the error object's code.
     */
-   context->error(msg, m_errorCode == ReportContext::FORG0001 ? err->errorCode() : m_errorCode,
-                  static_cast<const TSubClass *>(this));
+   context->error(msg, m_errorCode == ReportContext::FORG0001 ? err->errorCode() : m_errorCode, static_cast<const TSubClass *>(this));
 }
 

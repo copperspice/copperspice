@@ -42,10 +42,8 @@ class UserFunction : public QSharedData
    /**
     * If @p slotOffset is -1, it means this function has no arguments.
     */
-   UserFunction(const FunctionSignature::Ptr &signature,
-                const Expression::Ptr &body,
-                const VariableSlotID slotOffset,
-                const VariableDeclaration::List &varDecls);
+   UserFunction(const FunctionSignature::Ptr &signature, const Expression::Ptr &body,
+                const VariableSlotID slotOffset, const VariableDeclaration::List &varDecls);
 
    inline const Expression::Ptr &body() const;
    inline void setBody(const Expression::Ptr &newBody);

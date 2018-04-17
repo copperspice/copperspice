@@ -36,7 +36,7 @@ GYear::Ptr GYear::fromLexical(const QString &lexical)
 {
    static const CaptureTable captureTable( // STATIC DATA
       /* The extra paranthesis is a build fix for GCC 3.3. */
-      (QRegExp(QLatin1String(
+      (QRegularExpression(QLatin1String(
                   "^\\s*"                             /* Any preceding whitespace. */
                   "(-?)"                              /* Any preceding minus. */
                   "(-?\\d{4,})"                       /* The year part, "1999". */

@@ -36,8 +36,8 @@ AbstractDuration::AbstractDuration(const bool isPos) : m_isPositive(isPos)
 {
 }
 
-#define error(msg) return ValidationError::createError(msg);
-#define getCapt(sym)        ((captTable.sym == -1) ? QString() : capts.at(captTable.sym))
+#define error(msg)    return ValidationError::createError(msg);
+#define getCapt(sym)  ((captTable.sym == -1) ? QString() : capts.at(captTable.sym))
 
 AtomicValue::Ptr AbstractDuration::create(const CaptureTable &captTable,
       const QString &lexical,
@@ -59,30 +59,30 @@ AtomicValue::Ptr AbstractDuration::create(const CaptureTable &captTable,
    SecondCountProperty secCount = 0;
 
    Q_ASSERT(isPositive);
-   QRegExp myExp(captTable.regExp); /* Copy, in order to stay thread safe. */
 
-   if (!myExp.exactMatch(lexical)) {
+   QString pattern = captTable.regExp.pattern();
+   QRegularExpression myExp(pattern, QPatternOption::ExactMatchOption);
+
+   QRegularExpressionMatch match = myExp.match(lexical);
+
+   if (! match.hasMatch()) {
       error(QString());
    }
 
-   const QStringList capts(myExp.capturedTexts());
-
+   const QStringList capts = match.capturedTexts();
 
    if (days) {
       if (getCapt(tDelimiter).isEmpty()) {
-         if ((years && getCapt(year).isEmpty() && getCapt(month).isEmpty() && getCapt(day).isEmpty())
-               ||
-               (!years && getCapt(day).isEmpty())) {
+
+         if ((years && getCapt(year).isEmpty() && getCapt(month).isEmpty() && getCapt(day).isEmpty()) ||
+                   (! years && getCapt(day).isEmpty())) {
             error(QtXmlPatterns::tr("At least one component must be present."));
          }
-      } else if (getCapt(hour).isEmpty() &&
-                 getCapt(minutes).isEmpty() &&
-                 getCapt(seconds).isEmpty() &&
-                 getCapt(mseconds).isEmpty()) {
-         error(QtXmlPatterns::tr("At least one time component must appear "
-                                 "after the %1-delimiter.")
-               .arg(formatKeyword("T")));
+
+      } else if (getCapt(hour).isEmpty() && getCapt(minutes).isEmpty() && getCapt(seconds).isEmpty() && getCapt(mseconds).isEmpty()) {
+         error(QtXmlPatterns::tr("At least one time component must appear after the %1-delimiter.").formatArg(formatKeyword("T")));
       }
+
    } else if (getCapt(year).isEmpty() && getCapt(month).isEmpty()) { /* This checks xs:yearMonthDuration. */
       error(QtXmlPatterns::tr("At least one component must be present."));
    }
@@ -96,16 +96,16 @@ AtomicValue::Ptr AbstractDuration::create(const CaptureTable &captTable,
       Q_ASSERT(seconds);
       Q_ASSERT(mseconds);
 
-      *days = getCapt(day).toInt();
-      hourCount = getCapt(hour).toInt();
-      minCount = getCapt(minutes).toInt();
-      secCount = getCapt(seconds).toInt();
+      *days     = getCapt(day).toInteger<int>();
+      hourCount = getCapt(hour).toInteger<int>();
+      minCount  = getCapt(minutes).toInteger<int>();
+      secCount  = getCapt(seconds).toInteger<int>();
 
       const QString msecondsStr(getCapt(mseconds));
       if (!msecondsStr.isEmpty()) {
-         *mseconds = msecondsStr.leftJustified(3, QLatin1Char('0')).toInt();
+         *mseconds = msecondsStr.leftJustified(3, '0').toInteger<int>();
       } else {
-         *mseconds = msecondsStr.toInt();
+         *mseconds = msecondsStr.toInteger<int>();
       }
 
       if (secCount > 59) {
@@ -137,8 +137,8 @@ AtomicValue::Ptr AbstractDuration::create(const CaptureTable &captTable,
    /* We're supposed to handle years/months. */
    Q_ASSERT(months);
 
-   *years = getCapt(year).toInt();
-   monthCount = getCapt(month).toInt();
+   *years = getCapt(year).toInteger<int>();
+   monthCount = getCapt(month).toInteger<int>();
 
    if (monthCount > 11) {
       *years += monthCount / 12;
@@ -149,6 +149,7 @@ AtomicValue::Ptr AbstractDuration::create(const CaptureTable &captTable,
 
    return AtomicValue::Ptr();
 }
+
 #undef error
 #undef getCapt
 
@@ -161,8 +162,10 @@ bool AbstractDuration::operator==(const AbstractDuration &other) const
          && minutes() == other.minutes()
          && seconds() == other.seconds()
          && mseconds() == other.mseconds()) {
+
       if (isPositive() == other.isPositive()) {
          return true;
+
       } else if (years() == 0
                  && months() == 0
                  && days() == 0
@@ -180,7 +183,8 @@ bool AbstractDuration::operator==(const AbstractDuration &other) const
 QString AbstractDuration::serializeMSeconds(const MSecondProperty mseconds)
 {
    QString retval;
-   retval.append(QLatin1Char('.'));
+   retval.append('.');
+
    int div = 100;
    MSecondProperty msecs = mseconds;
 

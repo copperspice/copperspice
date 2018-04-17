@@ -23,11 +23,10 @@
 #ifndef QCommonNamespaces_P_H
 #define QCommonNamespaces_P_H
 
-#include <QLatin1String>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
 
 namespace QPatternist {
+
 namespace CommonNamespaces {
 /**
  * Namespace for the special XML namespace. It is by definition
@@ -36,7 +35,7 @@ namespace CommonNamespaces {
  *
  * Specification: http://www.w3.org/TR/REC-xml-names/
  */
-const QLatin1String XML("http://www.w3.org/XML/1998/namespace");
+const QString XML("http://www.w3.org/XML/1998/namespace");
 
 /**
  * The namespace for the xmlns prefix. The Namespaces in XML recommendation
@@ -45,7 +44,7 @@ const QLatin1String XML("http://www.w3.org/XML/1998/namespace");
  *
  * http://www.w3.org/2000/xmlns/
  */
-const QLatin1String XMLNS("http://www.w3.org/2000/xmlns/");
+const QString XMLNS("http://www.w3.org/2000/xmlns/");
 
 /**
  * The namespace for W3C XML Schema. This is used for the XML language it
@@ -55,7 +54,7 @@ const QLatin1String XMLNS("http://www.w3.org/2000/xmlns/");
  * @see <a href="http://www.w3.org/TR/xmlschema-2/datatypes.html#namespaces">XML Schema
  * Part 2: Datatypes Second Edition, 3.1 Namespace considerations</a>
  */
-const QLatin1String WXS("http://www.w3.org/2001/XMLSchema");
+const QString WXS("http://www.w3.org/2001/XMLSchema");
 
 /**
  * The namespace for W3C XML Schema attributes used in schema instances.
@@ -66,7 +65,7 @@ const QLatin1String WXS("http://www.w3.org/2001/XMLSchema");
  * Schema Part 1: Structures Second Edition, 2.6 Schema-Related
  * Markup in Documents Being Validated</a>
  */
-const QLatin1String XSI("http://www.w3.org/2001/XMLSchema-instance");
+const QString XSI("http://www.w3.org/2001/XMLSchema-instance");
 
 /**
  * The namespace for built-in XPath functions, as defined in for example
@@ -74,7 +73,7 @@ const QLatin1String XSI("http://www.w3.org/2001/XMLSchema-instance");
  *
  * Specification: http://www.w3.org/TR/xquery-operators/
  */
-const QLatin1String XFN("http://www.w3.org/2005/xpath-functions");
+const QString XFN("http://www.w3.org/2005/xpath-functions");
 
 /**
  * The namespace for XSL-T 1.0 and 2.0.
@@ -83,7 +82,7 @@ const QLatin1String XFN("http://www.w3.org/2005/xpath-functions");
  * Transformations (XSLT) Version 2.0, 3.1 XSLT Namespace</a>
  * @see <a href="http://www.w3.org/TR/xslt">XSL Transformations (XSLT) Version 1.0</a>
  */
-const QLatin1String XSLT("http://www.w3.org/1999/XSL/Transform");
+const QString XSLT("http://www.w3.org/1999/XSL/Transform");
 
 /**
  * The namespace for identifying errors in XPath.
@@ -91,7 +90,7 @@ const QLatin1String XSLT("http://www.w3.org/1999/XSL/Transform");
  * @see <a href="http://www.w3.org/TR/xpath20/#id-identifying-errors">XML Path Language (XPath)
  * 2.0, 2.3.2 Identifying and Reporting Errors</a>
  */
-const QLatin1String XPERR("http://www.w3.org/2005/xqt-errors");
+const QString XPERR("http://www.w3.org/2005/xqt-errors");
 
 /**
  * The XPath 2.0 Unicode codepoint collation URI identifier. Collations
@@ -103,10 +102,8 @@ const char *const UNICODE_COLLATION = "http://www.w3.org/2005/xpath-functions/co
  * A namespace provided in XQuery 1.0, to easily declare local
  * variables and functions.
  */
-const QLatin1String XDT_LOCAL("http://www.w3.org/2005/xquery-local-functions");
+const QString XDT_LOCAL("http://www.w3.org/2005/xquery-local-functions");
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

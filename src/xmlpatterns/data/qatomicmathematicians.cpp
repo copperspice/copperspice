@@ -44,22 +44,21 @@ using namespace QPatternist;
 static inline QString idivZeroInvalid()
 {
    return QtXmlPatterns::tr("Integer division (%1) by zero (%2) is undefined.")
-          .arg(formatKeyword("idiv"))
-          .arg(formatData("0"));
+          .formatArg(formatKeyword("idiv")).formatArg(formatData("0"));
 }
 
 static inline QString divZeroInvalid()
 {
    return QtXmlPatterns::tr("Division (%1) by zero (%2) is undefined.")
-          .arg(formatKeyword("div"))
-          .arg(formatData("0"));
+          .formatArg(formatKeyword("div"))
+          .formatArg(formatData("0"));
 }
 
 static inline QString modZeroInvalid()
 {
    return QtXmlPatterns::tr("Modulus division (%1) by zero (%2) is undefined.")
-          .arg(formatKeyword("mod"))
-          .arg(formatData("0"));
+          .formatArg(formatKeyword("mod"))
+          .formatArg(formatData("0"));
 }
 
 Item DecimalMathematician::calculate(const Item &o1,
@@ -165,9 +164,9 @@ Item DurationNumericMathematician::calculate(const Item &o1,
             context->error(QtXmlPatterns::tr(
                               "Dividing a value of type %1 by %2 (not-a-number) "
                               "is not allowed.")
-                           .arg(formatType(context->namePool(),
+                           .formatArg(formatType(context->namePool(),
                                            duration->type()))
-                           .arg(formatData("NaN")),
+                           .formatArg(formatData("NaN")),
                            ReportContext::FOCA0005,
                            this);
             return Item();
@@ -175,10 +174,10 @@ Item DurationNumericMathematician::calculate(const Item &o1,
             context->error(QtXmlPatterns::tr(
                               "Dividing a value of type %1 by %2 or %3 (plus or "
                               "minus zero) is not allowed.")
-                           .arg(formatType(context->namePool(),
+                           .formatArg(formatType(context->namePool(),
                                            duration->type()))
-                           .arg(formatData("-0"))
-                           .arg(formatData("0")),
+                           .formatArg(formatData("-0"))
+                           .formatArg(formatData("0")),
                            ReportContext::FODT0002,
                            this);
             return Item();
@@ -190,30 +189,24 @@ Item DurationNumericMathematician::calculate(const Item &o1,
          if (Double::isEqual(dbl, 0)) {
             return duration->fromValue(0);
          } else if (qIsNaN(dbl)) {
-            context->error(QtXmlPatterns::tr(
-                              "Dividing a value of type %1 by %2 (not-a-number) "
-                              "is not allowed.")
-                           .arg(formatType(context->namePool(),
-                                           duration->type()))
-                           .arg(formatData("NaN")),
+            context->error(QtXmlPatterns::tr("Dividing a value of type %1 by %2 (not-a-number) is not allowed.")
+                           .formatArg(formatType(context->namePool(), duration->type()))
+                           .formatArg(formatData("NaN")),
                            ReportContext::FOCA0005,
                            this);
             return Item();
          } else if (qIsInf(dbl)) {
-            context->error(QtXmlPatterns::tr(
-                              "Multiplication of a value of type %1 by %2 or %3 "
+            context->error(QtXmlPatterns::tr("Multiplication of a value of type %1 by %2 or %3 "
                               "(plus or minus infinity) is not allowed.")
-                           .arg(formatType(context->namePool(),
-                                           duration->type()))
-                           .arg(formatData("-INF"))
-                           .arg(formatData("INF")),
-                           ReportContext::FODT0002,
-                           this);
+                           .formatArg(formatType(context->namePool(), duration->type()))
+                           .formatArg(formatData("-INF"))
+                           .formatArg(formatData("INF")), ReportContext::FODT0002, this);
             return Item();
          }
 
          return duration->fromValue(static_cast<AbstractDuration::Value>(duration->value() * dbl));
       }
+
       default: {
          Q_ASSERT(false);
          return Item(); /* Silence warning. */

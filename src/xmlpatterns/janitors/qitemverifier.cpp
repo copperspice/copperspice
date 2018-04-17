@@ -31,8 +31,7 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-ItemVerifier::ItemVerifier(const Expression::Ptr &operand,
-                           const ItemType::Ptr &reqType,
+ItemVerifier::ItemVerifier(const Expression::Ptr &operand, const ItemType::Ptr &reqType,
                            const ReportContext::ErrorCode errorCode) : SingleContainer(operand),
    m_reqType(reqType),
    m_errorCode(errorCode)
@@ -47,10 +46,7 @@ void ItemVerifier::verifyItem(const Item &item, const DynamicContext::Ptr &conte
    }
 
    context->error(QtXmlPatterns::tr("The item %1 did not match the required type %2.")
-                  .arg(formatData(item.stringValue()),
-                       formatType(context->namePool(), m_reqType)),
-                  m_errorCode,
-                  this);
+                  .formatArgs(formatData(item.stringValue()), formatType(context->namePool(), m_reqType)), m_errorCode, this);
 }
 
 const SourceLocationReflection *ItemVerifier::actualReflection() const

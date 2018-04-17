@@ -36,7 +36,7 @@ GDay::Ptr GDay::fromLexical(const QString &lexical)
 {
    static const CaptureTable captureTable( // STATIC DATA
       /* The extra paranthesis is a build fix for GCC 3.3. */
-      (QRegExp(QLatin1String(
+      (QRegularExpression(QLatin1String(
                   "^\\s*"                                 /* Any preceding whitespace. */
                   "---"                                   /* Delimiter. */
                   "(\\d{2})"                              /* The day part, "03". */

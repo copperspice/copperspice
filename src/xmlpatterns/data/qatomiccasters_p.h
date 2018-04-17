@@ -118,10 +118,9 @@ class NumericToDecimalCaster : public AtomicCaster
          if (num->isInf() || num->isNaN()) {
 
             return ValidationError::createError(errorMessage()
-                  .arg(formatType(context->namePool(), IsInteger ? BuiltinTypes::xsInteger : BuiltinTypes::xsDecimal))
-                  .arg(formatType(context->namePool(), t))
-                  .arg(formatData(num->stringValue())),
-                  ReportContext::FOCA0002);
+                  .formatArg(formatType(context->namePool(), IsInteger ? BuiltinTypes::xsInteger : BuiltinTypes::xsDecimal))
+                  .formatArg(formatType(context->namePool(), t))
+                  .formatArg(formatData(num->stringValue())), ReportContext::FOCA0002);
          }
       }
 
@@ -363,10 +362,9 @@ class NumericToDerivedIntegerCaster : public AtomicCaster
       if (BuiltinTypes::xsDouble->xdtTypeMatches(t) || BuiltinTypes::xsFloat->xdtTypeMatches(t)) {
          if (num->isInf() || num->isNaN()) {
             return ValidationError::createError(NumericToDecimalCaster<false>::errorMessage()
-                                                .arg(formatType(context->namePool(), DerivedInteger<type>::itemType()))
-                                                .arg(formatType(context->namePool(), t))
-                                                .arg(formatData(num->stringValue())),
-                                                ReportContext::FOCA0002);
+                                                .formatArg(formatType(context->namePool(), DerivedInteger<type>::itemType()))
+                                                .formatArg(formatType(context->namePool(), t))
+                                                .formatArg(formatData(num->stringValue())), ReportContext::FOCA0002);
          }
       }
 

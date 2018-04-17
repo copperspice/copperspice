@@ -25,8 +25,7 @@
 
 #include <qglobal.h>
 #include <qassert.h>
-
-class QString;
+#include <qstringfwd.h>
 
 namespace QPatternist {
 class Cardinality

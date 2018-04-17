@@ -46,10 +46,9 @@ Item QNameFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       ns = paramURI.stringValue();
    }
 
-   if (!XPathHelper::isQName(paramQName)) {
-      context->error(QtXmlPatterns::tr("%1 is an invalid %2").arg(formatData(paramQName),
-                     formatType(context->namePool(), BuiltinTypes::xsQName)),
-                     ReportContext::FOCA0002, this);
+   if (! XPathHelper::isQName(paramQName)) {
+      context->error(QtXmlPatterns::tr("%1 is an invalid %2")
+                  .formatArgs(formatData(paramQName), formatType(context->namePool(), BuiltinTypes::xsQName)), ReportContext::FOCA0002, this);
       return Item();
    }
 
@@ -62,12 +61,10 @@ Item QNameFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       if (prefix.isEmpty()) {
          return toItem(QNameValue::fromValue(context->namePool(), n));
       } else {
-         context->error(QtXmlPatterns::tr(
-                           "If the first argument is the empty sequence or "
-                           "a zero-length string (no namespace), a prefix "
-                           "cannot be specified. Prefix %1 was specified.")
-                        .arg(formatKeyword(prefix)),
-                        ReportContext::FOCA0002, this);
+         context->error(QtXmlPatterns::tr("If the first argument is the empty sequence or a zero-length string (no namespace), a prefix "
+                           "can not be specified. Prefix %1 was specified.")
+                  .formatArg(formatKeyword(prefix)), ReportContext::FOCA0002, this);
+
          return Item(); /* Silence compiler warning. */
       }
    } else {

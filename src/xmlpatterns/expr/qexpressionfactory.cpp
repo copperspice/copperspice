@@ -174,7 +174,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
          if (t) {
             site->setTemplate(t);
          } else {
-            context->error(QtXmlPatterns::tr("No template by name %1 exists.").arg(formatKeyword(context->namePool(), targetName)),
+            context->error(QtXmlPatterns::tr("No template by name %1 exists.").formatArg(formatKeyword(context->namePool(), targetName)),
                            ReportContext::XTSE0650,
                            site);
          }

@@ -51,7 +51,7 @@ inline bool qIsForwardIteratorEnd(const T &unit)
 template<>
 inline bool qIsForwardIteratorEnd(const QString &unit)
 {
-   return unit.isNull();
+   return unit.isEmpty();
 }
 
 template<typename T> class QAbstractXmlForwardIterator;
