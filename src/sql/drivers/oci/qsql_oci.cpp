@@ -26,7 +26,7 @@
 #include <qvariant.h>
 #include <qdatetime.h>
 #include <qmetatype.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qshareddata.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>

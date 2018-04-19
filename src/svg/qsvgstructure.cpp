@@ -241,11 +241,10 @@ inline static bool isSupportedSvgFeature(const QString &str)
    };
 
    if (str.length() <= MAX_WORD_LENGTH && str.length() >= MIN_WORD_LENGTH) {
-      const int key = str.length()
-                      + asso_values[str.at(45).unicode()]
-                      + asso_values[str.at(44).unicode()];
+      const int key = str.length() + asso_values[str.at(45).unicode()] + asso_values[str.at(44).unicode()];
+
       if (key <= MAX_HASH_VALUE && key >= 0) {
-         return str == QLatin1String(wordlist[key]);
+         return str == QString::fromLatin1(wordlist[key]);
       }
    }
    return false;

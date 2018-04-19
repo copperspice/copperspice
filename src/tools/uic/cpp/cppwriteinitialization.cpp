@@ -1728,8 +1728,10 @@ QString  WriteInitialization::writeSizePolicy(const DomSizePolicy *sp)
 
    m_output << m_indent << spName << ".setHorizontalStretch("
             << sp->elementHorStretch() << ");\n";
+
    m_output << m_indent << spName << ".setVerticalStretch("
             << sp->elementVerStretch() << ");\n";
+
    return spName;
 }
 // Check for a font with the given properties in the FontPropertiesNameMap

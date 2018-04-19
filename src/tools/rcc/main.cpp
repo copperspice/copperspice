@@ -31,8 +31,6 @@
 #include <QFileInfo>
 #include <QTextStream>
 
-QT_BEGIN_NAMESPACE
-
 void showHelp(const QString &argv0, const QString &error)
 {
    fprintf(stderr, "CopperSpice resource compiler\n");
@@ -60,13 +58,13 @@ void showHelp(const QString &argv0, const QString &error)
 
 void dumpRecursive(const QDir &dir, QTextStream &out)
 {
-   QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot
-                  | QDir::NoSymLinks);
+   QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
    for (QFileInfo entry : entries) {
 
       if (entry.isDir()) {
          dumpRecursive(entry.filePath(), out);
+
       } else {
          out << QLatin1String("<file>")
              << entry.filePath()
@@ -89,14 +87,14 @@ int createProject(const QString &outFileName)
 
    if (outFileName.isEmpty()) {
       isOk = file.open(stdout, QFile::WriteOnly | QFile::Text);
+
    } else {
       file.setFileName(outFileName);
       isOk = file.open(QFile::WriteOnly | QFile::Text);
    }
    if (! isOk) {
       fprintf(stderr, "Unable to open %s: %s\n",
-              outFileName.isEmpty() ? csPrintable(outFileName) : "standard output",
-              csPrintable(file.errorString()));
+              outFileName.isEmpty() ? csPrintable(outFileName) : "standard output", csPrintable(file.errorString()));
       return 1;
    }
 
@@ -114,23 +112,25 @@ int createProject(const QString &outFileName)
 int runRcc(int argc, char *argv[])
 {
    QString outFilename;
-   bool helpRequested = false;
-   bool list = false;
-   bool projectRequested = false;
    QStringList filenamesIn;
+
+   bool helpRequested    = false;
+   bool list             = false;
+   bool projectRequested = false;
 
    QStringList args = qCmdLineArgs(argc, argv);
 
    RCCResourceLibrary library;
 
-   //parse options
+   // parse options
    QString errorMsg;
+
    for (int i = 1; i < args.count() && errorMsg.isEmpty(); i++) {
       if (args[i].isEmpty()) {
          continue;
       }
 
-      if (args[i][0] == QLatin1Char('-')) {
+      if (args[i][0] == '-') {
          // option
          QString opt = args[i];
 
@@ -147,22 +147,25 @@ int runRcc(int argc, char *argv[])
                break;
             }
             library.setInitName(args[++i]);
+
          } else if (opt == QLatin1String("-root")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing root path");
                break;
             }
+
             library.setResourceRoot(QDir::cleanPath(args[++i]));
-            if (library.resourceRoot().isEmpty()
-                  || library.resourceRoot().at(0) != QLatin1Char('/')) {
+            if (library.resourceRoot().isEmpty() || library.resourceRoot().at(0) != QLatin1Char('/')) {
                errorMsg = QLatin1String("Root must start with a /");
             }
+
          } else if (opt == QLatin1String("-compress")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing compression level");
                break;
             }
             library.setCompressLevel(args[++i].toInteger<int>());
+
          } else if (opt == QLatin1String("-threshold")) {
             if (!(i < argc - 1)) {
                errorMsg = QLatin1String("Missing compression threshold");
@@ -191,8 +194,10 @@ int runRcc(int argc, char *argv[])
 
          } else if (opt == QLatin1String("-no-compress")) {
             library.setCompressLevel(-2);
+
          } else if (opt == QLatin1String("-project")) {
             projectRequested = true;
+
          } else {
             errorMsg = QString("Unknown option: '%1'").formatArg(args[i]);
          }
@@ -207,11 +212,11 @@ int runRcc(int argc, char *argv[])
       }
    }
 
-   if (projectRequested && !helpRequested) {
+   if (projectRequested && ! helpRequested) {
       return createProject(outFilename);
    }
 
-   if (!filenamesIn.size() || !errorMsg.isEmpty() || helpRequested) {
+   if (! filenamesIn.size() || ! errorMsg.isEmpty() || helpRequested) {
       showHelp(args[0], errorMsg);
       return 1;
    }
@@ -225,13 +230,14 @@ int runRcc(int argc, char *argv[])
 
    library.setInputFiles(filenamesIn);
 
-   if (!library.readFiles(list, errorDevice)) {
+   if (! library.readFiles(list, errorDevice)) {
       return 1;
    }
 
    // open output
    QFile out;
    QIODevice::OpenMode mode = QIODevice::WriteOnly;
+
    if (library.format() == RCCResourceLibrary::C_Code) {
       mode |= QIODevice::Text;
    }
@@ -242,6 +248,7 @@ int runRcc(int argc, char *argv[])
 
    } else {
       out.setFileName(outFilename);
+
       if (! out.open(mode)) {
          const QString msg = QString("Unable to open %1 for writing: %2\n").formatArg(outFilename).formatArg(out.errorString());
          errorDevice.write(msg.toUtf8());
@@ -253,19 +260,19 @@ int runRcc(int argc, char *argv[])
    // do the task
    if (list) {
       const QStringList data = library.dataFiles();
+
       for (int i = 0; i < data.size(); ++i) {
          out.write(qPrintable(QDir::cleanPath(data.at(i))));
          out.write("\n");
       }
+
       return 0;
    }
 
    return library.output(out, errorDevice) ? 0 : 1;
 }
 
-QT_END_NAMESPACE
-
 int main(int argc, char *argv[])
 {
-   return QT_PREPEND_NAMESPACE(runRcc)(argc, argv);
+   return runRcc(argc, argv);
 }

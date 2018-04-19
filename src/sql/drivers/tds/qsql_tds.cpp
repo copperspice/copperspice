@@ -38,7 +38,7 @@
 #include <qvariant.h>
 #include <qdatetime.h>
 #include <qhash.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlindex.h>

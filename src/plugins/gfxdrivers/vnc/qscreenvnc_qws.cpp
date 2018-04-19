@@ -28,11 +28,11 @@
 #include <qwindowsystem_qws.h>
 #include <qwsdisplay_qws.h>
 #include <qscreendriverfactory_qws.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qregexp.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qpolygon.h>
-#include <QtGui/qpainter.h>
+#include <qtimer.h>
+#include <qregularexpression.h>
+#include <qwidget.h>
+#include <qpolygon.h>
+#include <qpainter.h>
 #include <qdebug.h>
 #include <qwindowsurface_qws_p.h>
 #include <qwssignalhandler_p.h>

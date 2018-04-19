@@ -23,15 +23,15 @@
 #ifndef QSVGHANDLER_P_H
 #define QSVGHANDLER_P_H
 
-#include "QtXml/qxmlstream.h"
+#include <qxmlstream.h>
 
 #ifndef QT_NO_SVG
 
-#include "QtCore/qhash.h"
-#include "QtCore/qstack.h"
-#include "qsvgstyle_p.h"
-#include "qcssparser_p.h"
-#include "qsvggraphics_p.h"
+#include <qhash.h>
+#include <qstack.h>
+#include <qsvgstyle_p.h>
+#include <qcssparser_p.h>
+#include <qsvggraphics_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -43,8 +43,8 @@ class QSvgStyleSelector;
 class QXmlStreamReader;
 
 struct QSvgCssAttribute {
-   QXmlStreamStringRef name;
-   QXmlStreamStringRef value;
+   QString name;
+   QString value;
 };
 
 class QSvgHandler
@@ -104,8 +104,8 @@ class QSvgHandler
 
  public:
    bool startElement(const QString &localName, const QXmlStreamAttributes &attributes);
-   bool endElement(const QStringRef &localName);
-   bool characters(const QStringRef &str);
+   bool endElement(QStringView localName);
+   bool characters(QStringView str);
    bool processingInstruction(const QString &target, const QString &data);
 
  private:
@@ -143,10 +143,8 @@ class QSvgHandler
    void resolveGradients(QSvgNode *node);
 
    QPen m_defaultPen;
-   /**
-    * Whether we own the variable xml, and hence whether
-    * we need to delete it.
-    */
+
+   // Whether we own the variable xml, and hence whether we need to delete it.
    const bool m_ownsReader;
 };
 

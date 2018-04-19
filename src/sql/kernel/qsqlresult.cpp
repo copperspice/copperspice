@@ -22,7 +22,7 @@
 
 #include <qvariant.h>
 #include <qhash.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlrecord.h>
@@ -30,7 +30,7 @@
 #include <qvector.h>
 #include <qsqldriver.h>
 #include <qpointer.h>
-#include <QDebug>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

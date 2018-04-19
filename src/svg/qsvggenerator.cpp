@@ -37,17 +37,16 @@
 
 QT_BEGIN_NAMESPACE
 
-static void translate_color(const QColor &color, QString *color_string,
-                            QString *opacity_string)
+static void translate_color(const QColor &color, QString *color_string, QString *opacity_string)
 {
    Q_ASSERT(color_string);
    Q_ASSERT(opacity_string);
 
    *color_string =
       QString::fromLatin1("#%1%2%3")
-      .arg(color.red(), 2, 16, QLatin1Char('0'))
-      .arg(color.green(), 2, 16, QLatin1Char('0'))
-      .arg(color.blue(), 2, 16, QLatin1Char('0'));
+      .formatArg(color.red(), 2, 16, QLatin1Char('0'))
+      .formatArg(color.green(), 2, 16, QLatin1Char('0'))
+      .formatArg(color.blue(), 2, 16, QLatin1Char('0'));
    *opacity_string = QString::number(color.alphaF());
 }
 
@@ -57,7 +56,7 @@ static void translate_dashPattern(QVector<qreal> pattern, const qreal &width, QS
 
    // Note that SVG operates in absolute lengths, whereas Qt uses a length/width ratio.
    for (qreal entry : pattern) {
-      *pattern_string += QString::fromLatin1("%1,").arg(entry * width);
+      *pattern_string += QString::fromLatin1("%1,").formatArg(entry * width);
    }
 
    pattern_string->chop(1);
@@ -101,7 +100,7 @@ class QSvgPaintEnginePrivate : public QPaintEnginePrivate
 
    QString generateGradientName() {
       ++numGradients;
-      currentGradientName = QString::fromLatin1("gradient%1").arg(numGradients);
+      currentGradientName = QString::fromLatin1("gradient%1").formatArg(numGradients);
       return currentGradientName;
    }
 
@@ -275,9 +274,9 @@ class QSvgPaintEngine : public QPaintEngine
       for (QGradientStop stop : stops) {
          QString color =
             QString::fromLatin1("#%1%2%3")
-            .arg(stop.second.red(), 2, 16, QLatin1Char('0'))
-            .arg(stop.second.green(), 2, 16, QLatin1Char('0'))
-            .arg(stop.second.blue(), 2, 16, QLatin1Char('0'));
+            .formatArg(stop.second.red(), 2, 16, QLatin1Char('0'))
+            .formatArg(stop.second.green(), 2, 16, QLatin1Char('0'))
+            .formatArg(stop.second.blue(), 2, 16, QLatin1Char('0'));
          str << QLatin1String("    <stop offset=\"") << stop.first << QLatin1String("\" ")
              << QLatin1String("stop-color=\"") << color << QLatin1String("\" ")
              << QLatin1String("stop-opacity=\"") << stop.second.alphaF() << QLatin1String("\" />\n");
@@ -417,19 +416,19 @@ class QSvgPaintEngine : public QPaintEngine
          break;
          case Qt::LinearGradientPattern:
             saveLinearGradientBrush(sbrush.gradient());
-            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
+            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").formatArg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
          case Qt::RadialGradientPattern:
             saveRadialGradientBrush(sbrush.gradient());
-            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
+            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").formatArg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
          case Qt::ConicalGradientPattern:
             saveConicalGradientBrush(sbrush.gradient());
-            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
+            d_func()->attributes.fill = QString::fromLatin1("url(#%1)").formatArg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
             stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
@@ -1040,12 +1039,13 @@ void QSvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
 void QSvgPaintEngine::drawTextItem(const QPointF &pt, const QTextItem &textItem)
 {
    Q_D(QSvgPaintEngine);
+
    if (d->pen.style() == Qt::NoPen) {
       return;
    }
 
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
-   QString s = QString::fromRawData(ti.chars, ti.num_chars);
+   QString s = QString(ti.m_iter, ti.m_end);
 
    *d->stream << "<text "
               "fill=\"" << d->attributes.stroke << "\" "
@@ -1053,9 +1053,10 @@ void QSvgPaintEngine::drawTextItem(const QPointF &pt, const QTextItem &textItem)
               "stroke=\"none\" "
               "xml:space=\"preserve\" "
               "x=\"" << pt.x() << "\" y=\"" << pt.y() << "\" ";
+
    qfontToSvg(textItem.font());
    *d->stream << " >"
-              << Qt::escape(s)
+              << s.toHtmlEscaped()
               << "</text>"
               << endl;
 }

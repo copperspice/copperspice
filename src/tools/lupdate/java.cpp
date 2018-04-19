@@ -26,10 +26,10 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QtCore/QRegExp>
+#include <qregularexpression.h>
 #include <QtCore/QStack>
 #include <QtCore/QStack>
-#include <QtCore/QString>
+#include <qstring.h>
 #include <QtCore/QTextCodec>
 #include <QtCore/QCoreApplication>
 

@@ -24,9 +24,8 @@
 #include "uic.h"
 #include "ui4.h"
 
-#include <QtCore/QRegExp>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDebug>
+#include <qfileinfo.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -260,35 +259,41 @@ bool Driver::printDependencies(const QString &fileName)
 
 bool Driver::uic(const QString &fileName, DomUI *ui, QTextStream *out)
 {
-   m_option.inputFile = fileName;
-
+   m_option.inputFile     = fileName;
    QTextStream *oldOutput = m_output;
 
-   m_output = out != 0 ? out : &m_stdout;
+   if (out != nullptr) {
+      m_output = out;
+   } else {
+      m_output =&m_stdout;
+   }
 
    Uic tool(this);
-   bool rtn = false;
+   bool retval = false;
+
 #ifdef QT_UIC_CPP_GENERATOR
-   rtn = tool.write(ui);
+   retval = tool.write(ui);
 #else
    Q_UNUSED(ui);
-   fprintf(stderr, "uic: option to generate cpp code not compiled in [%s:%d]\n",
-           __FILE__, __LINE__);
+   fprintf(stderr, "Uic: option to generate cpp code not compiled in [%s:%d]\n", __FILE__, __LINE__);
 #endif
 
    m_output = oldOutput;
 
-   return rtn;
+   return retval;
 }
 
 bool Driver::uic(const QString &fileName, QTextStream *out)
 {
    QFile f;
+
    if (fileName.isEmpty()) {
       f.open(stdin, QIODevice::ReadOnly);
+
    } else {
       f.setFileName(fileName);
-      if (!f.open(QIODevice::ReadOnly)) {
+
+      if (! f.open(QIODevice::ReadOnly)) {
          return false;
       }
    }
@@ -300,7 +305,9 @@ bool Driver::uic(const QString &fileName, QTextStream *out)
 
    if (out) {
       m_output = out;
+
    } else {
+
 #ifdef Q_OS_WIN
       // As one might also redirect the output to a file on win,
       // we should not create the textstream with QFile::Text flag.
@@ -310,11 +317,13 @@ bool Driver::uic(const QString &fileName, QTextStream *out)
 #else
       m_output = new QTextStream(stdout, QIODevice::WriteOnly | QFile::Text);
 #endif
+
       deleteOutput = true;
    }
 
    Uic tool(this);
-   bool rtn = tool.write(&f);
+   bool retval = tool.write(&f);
+
    f.close();
 
    if (deleteOutput) {
@@ -323,12 +332,12 @@ bool Driver::uic(const QString &fileName, QTextStream *out)
 
    m_output = oldOutput;
 
-   return rtn;
+   return retval;
 }
 
 void Driver::reset()
 {
-   Q_ASSERT( m_output == 0 );
+   Q_ASSERT( m_output == 0);
 
    m_option = Option();
    m_output = 0;

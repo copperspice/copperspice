@@ -31,9 +31,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QTextCodec>
 
-QT_BEGIN_NAMESPACE
-
-static const char *error = 0;
+static const char *error = nullptr;
 
 void showHelp(const char *appName)
 {
@@ -58,10 +56,10 @@ void showHelp(const char *appName)
 
 int runUic(int argc, char *argv[])
 {
-   Driver driver;
 
    const char *fileName = 0;
    int arg = 1;
+   Driver driver;
 
    while (arg < argc) {
       QString opt = QString::fromUtf8(argv[arg]);
@@ -80,7 +78,7 @@ int runUic(int argc, char *argv[])
       } else if (opt == QLatin1String("-o") || opt == QLatin1String("-output")) {
          ++arg;
 
-         if (!argv[arg]) {
+         if (! argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
@@ -109,7 +107,6 @@ int runUic(int argc, char *argv[])
          }
 
          driver.option().translateFunction = QString::fromUtf8(argv[arg]);
-
 
       } else if (opt == "-g" || opt == "-generator") {
          ++arg;
@@ -142,7 +139,7 @@ int runUic(int argc, char *argv[])
    }
 
    if (driver.option().dependencies) {
-      return !driver.printDependencies(inputFile);
+      return ! driver.printDependencies(inputFile);
    }
 
    QTextStream *out = 0;
@@ -151,8 +148,8 @@ int runUic(int argc, char *argv[])
    if (driver.option().outputFile.size()) {
       f.setFileName(driver.option().outputFile);
 
-      if (!f.open(QIODevice::WriteOnly | QFile::Text)) {
-         fprintf(stderr, "Could not create output file\n");
+      if (! f.open(QIODevice::WriteOnly | QFile::Text)) {
+         fprintf(stderr, "Could not create output file %s\n", csPrintable(f.errorString()));
          return 1;
       }
 
@@ -168,15 +165,13 @@ int runUic(int argc, char *argv[])
          f.close();
          f.remove();
       }
+
       fprintf(stderr, "File '%s' is not valid\n", inputFile.isEmpty() ? "<stdin>" : csPrintable(inputFile));
    }
 
    return !rtn;
 }
-
-QT_END_NAMESPACE
-
 int main(int argc, char *argv[])
 {
-   return QT_PREPEND_NAMESPACE(runUic)(argc, argv);
+   return runUic(argc, argv);
 }

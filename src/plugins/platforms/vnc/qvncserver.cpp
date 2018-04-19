@@ -22,29 +22,22 @@
 
 #include "qvncserver.h"
 
-#include <QtCore/qtimer.h>
-#include <QtCore/qregexp.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qpolygon.h>
-#include <QtGui/qpainter.h>
-
-#include <QtGui/qevent.h>
+#include <qtimer.h>
+#include <qregularexpression.h>
+#include <qwidget.h>
+#include <qpolygon.h>
+#include <qpainter.h>
+#include <qevent.h>
 #include <QWindowSystemInterface>
-
 #include <qplatformdefs.h>
-
 #include <qdebug.h>
 
 #include <stdlib.h>
 
-
 #define QT_QWS_VNC_DEBUG
 #define QT_NO_QWS_CURSOR //###
 
-
 QT_BEGIN_NAMESPACE
-
-
 
 //copied from qscreen_qws.h
 #ifndef QT_QWS_DEPTH16_RGB

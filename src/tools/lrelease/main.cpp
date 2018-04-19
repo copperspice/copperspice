@@ -28,8 +28,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
+#include <qregularexpression.h>
+#include <qstring.h>
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 #include <QtCore/QLibraryInfo>

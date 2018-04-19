@@ -24,7 +24,7 @@
 
 #include "rcc.h"
 
-#include <qmultihash.>
+#include <qmultihash.h>
 #include <QByteArray>
 #include <QDateTime>
 #include <QDebug>
@@ -341,8 +341,7 @@ RCCResourceLibrary::~RCCResourceLibrary()
    delete m_root;
 }
 
-bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
-                  const QString &fname, QString currentPath, bool ignoreErrors)
+bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice, const QString &fname, QString currentPath, bool ignoreErrors)
 {
    Q_ASSERT(m_errorDevice);
 
@@ -352,12 +351,14 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
    }
 
    QDomDocument document;
+
    {
       QString errorMsg;
       int errorLine   = 0;
       int errorColumn = 0;
 
       if (! document.setContent(inputDevice, &errorMsg, &errorLine, &errorColumn)) {
+
          if (ignoreErrors) {
             return true;
          }
@@ -374,6 +375,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
    QDomElement domRoot = document.firstChildElement(m_strings.TAG_RCC).toElement();
 
    if (! domRoot.isNull() && domRoot.tagName() == m_strings.TAG_RCC) {
+
       for (QDomNode node = domRoot.firstChild(); ! node.isNull(); node = node.nextSibling()) {
          if (! node.isElement()) {
             continue;
@@ -404,7 +406,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
                prefix = child.attribute(m_strings.ATTRIBUTE_PREFIX);
             }
 
-            if (!prefix.startsWith(slash)) {
+            if (! prefix.startsWith(slash)) {
                prefix.prepend(slash);
             }
 
@@ -444,6 +446,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
                   }
 
                   alias = QDir::cleanPath(alias);
+
                   while (alias.startsWith("../")) {
                      alias.remove(0, 3);
                   }
@@ -457,7 +460,10 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
                   QFileInfo file(absFileName);
                   if (! file.exists()) {
                      m_failedResources.push_back(absFileName);
-                     const QString msg = QString("RCC: Error in '%1': Can not find file '%2'\n").formatArg(fname).formatArg(fileName);
+
+                     const QString msg = QString("RCC: Error in '%1': Can not find file '%2'\n")
+                           .formatArg(fname).formatArg(fileName);
+
                      m_errorDevice->write(msg.toUtf8());
 
                      if (ignoreErrors) {
@@ -505,7 +511,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
                                  RCCFileInfo(child.fileName(), child, language, country,
                                  RCCFileInfo::NoFlags, compressLevel, compressThreshold));
 
-                           if (!arc) {
+                           if (! arc) {
                               m_failedResources.push_back(child.fileName());
                            }
                         }
@@ -521,7 +527,7 @@ bool RCCResourceLibrary::interpretResourceFile(QIODevice *inputDevice,
       const QString msg = QString("RCC: Warning: No resources in '%1'.\n").formatArg(fname);
       m_errorDevice->write(msg.toUtf8());
 
-      if (!ignoreErrors && m_format == Binary) {
+      if (! ignoreErrors && m_format == Binary) {
          // create dummy entry, otherwise loading qith QResource will crash
          m_root = new RCCFileInfo(QString(), QFileInfo(), QLocale::C, QLocale::AnyCountry, RCCFileInfo::Directory);
       }
@@ -606,6 +612,7 @@ bool RCCResourceLibrary::readFiles(bool ignoreErrors, QIODevice &errorDevice)
 
    for (int i = 0; i < m_fileNames.size(); ++i) {
       QFile fileIn;
+
       QString fname = m_fileNames.at(i);
       QString pwd;
 
@@ -614,7 +621,7 @@ bool RCCResourceLibrary::readFiles(bool ignoreErrors, QIODevice &errorDevice)
          pwd   = QDir::currentPath();
          fileIn.setFileName(fname);
 
-         if (!fileIn.open(stdin, QIODevice::ReadOnly)) {
+         if (! fileIn.open(stdin, QIODevice::ReadOnly)) {
             m_errorDevice->write(msgOpenReadFailed(fname, fileIn.errorString()).toUtf8());
             return false;
          }
@@ -623,11 +630,12 @@ bool RCCResourceLibrary::readFiles(bool ignoreErrors, QIODevice &errorDevice)
          pwd = QFileInfo(fname).path();
          fileIn.setFileName(fname);
 
-         if (!fileIn.open(QIODevice::ReadOnly)) {
+         if (! fileIn.open(QIODevice::ReadOnly)) {
             m_errorDevice->write(msgOpenReadFailed(fname, fileIn.errorString()).toUtf8());
             return false;
          }
       }
+
       if (m_verbose) {
          const QString msg = QString("Interpreting %1\n").formatArg(fname);
          m_errorDevice->write(msg.toUtf8());
@@ -637,6 +645,7 @@ bool RCCResourceLibrary::readFiles(bool ignoreErrors, QIODevice &errorDevice)
          return false;
       }
    }
+
    return true;
 }
 

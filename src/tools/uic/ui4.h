@@ -3519,37 +3519,49 @@ class QDESIGNER_UILIB_EXPORT DomSizePolicy
    inline int elementHSizeType() const {
       return m_hSizeType;
    }
+
    void setElementHSizeType(int a);
+
    inline bool hasElementHSizeType() const {
       return m_children & HSizeType;
    }
+
    void clearElementHSizeType();
 
    inline int elementVSizeType() const {
       return m_vSizeType;
    }
+
    void setElementVSizeType(int a);
+
    inline bool hasElementVSizeType() const {
       return m_children & VSizeType;
    }
+
    void clearElementVSizeType();
 
    inline int elementHorStretch() const {
       return m_horStretch;
    }
+
    void setElementHorStretch(int a);
+
    inline bool hasElementHorStretch() const {
       return m_children & HorStretch;
    }
+
    void clearElementHorStretch();
 
    inline int elementVerStretch() const {
       return m_verStretch;
    }
+
    void setElementVerStretch(int a);
+
    inline bool hasElementVerStretch() const {
       return m_children & VerStretch;
    }
+
    void clearElementVerStretch();
 
  private:

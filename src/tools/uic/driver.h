@@ -29,8 +29,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
-QT_BEGIN_NAMESPACE
-
 class QTextStream;
 class DomUI;
 class DomWidget;
@@ -77,8 +75,7 @@ class Driver
 
    static QString normalizedName(const QString &name);
    static QString qtify(const QString &name);
-   QString unique(const QString &instanceName = QString(),
-                  const QString &className = QString());
+   QString unique(const QString &instanceName = QString(), const QString &className = QString());
 
    // symbol table
    QString findOrInsertWidget(DomWidget *ui_widget);
@@ -89,6 +86,7 @@ class Driver
    QString findOrInsertActionGroup(DomActionGroup *ui_group);
    QString findOrInsertAction(DomAction *ui_action);
    QString findOrInsertButtonGroup(const DomButtonGroup *ui_group);
+
    // Find a group by its non-uniqified name
    const DomButtonGroup *findButtonGroup(const QString &attributeName) const;
 
@@ -118,13 +116,13 @@ class Driver
    QHash<DomSpacer *, QString> m_spacers;
    QHash<DomLayout *, QString> m_layouts;
    QHash<DomActionGroup *, QString> m_actionGroups;
+
    typedef QHash<const DomButtonGroup *, QString> ButtonGroupNameHash;
    ButtonGroupNameHash m_buttonGroups;
+
    QHash<DomAction *, QString> m_actions;
    QHash<QString, bool> m_nameRepository;
    QHash<QString, bool> m_pixmaps;
 };
-
-QT_END_NAMESPACE
 
 #endif // DRIVER_H
