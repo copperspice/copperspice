@@ -23,11 +23,8 @@
 #ifndef QSCREENDRIVERFACTORY_QWS_H
 #define QSCREENDRIVERFACTORY_QWS_H
 
-#include <QtCore/qstringlist.h>
+#include <qstringlist.h>
 
-QT_BEGIN_NAMESPACE
-
-class QString;
 class QScreen;
 
 class Q_GUI_EXPORT QScreenDriverFactory
@@ -38,6 +35,4 @@ class Q_GUI_EXPORT QScreenDriverFactory
    static QScreen *create(const QString &, int);
 };
 
-QT_END_NAMESPACE
-
-#endif // QSCREENDRIVERFACTORY_QWS_H
+#endif

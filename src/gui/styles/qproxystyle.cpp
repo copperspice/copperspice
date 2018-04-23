@@ -29,33 +29,6 @@
 
 #if !defined(QT_NO_STYLE_PROXY) || defined(QT_PLUGIN)
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QProxyStyle
-
-    \brief The QProxyStyle class is a convenience class that simplifies
-    dynamically overriding QStyle elements.
-
-    \since 4.6
-
-    A QProxyStyle wraps a QStyle (usually the default system style) for the
-    purpose of dynamically overriding painting or other specific style behavior.
-
-    The following example shows how to override the shortcut underline
-    behavior on any platform:
-
-    \snippet doc/src/snippets/code/src_gui_qproxystyle.cpp 1
-
-    Warning: The \l {QCommonStyle} {common styles} provided by Qt will
-    respect this hint, because they call QStyle::proxy(), but there is
-    no guarantee that QStyle::proxy() will be called for user defined
-    or system controlled styles. It would not work on a Mac, for
-    example, where menus are handled by the operating system.
-
-    \sa QStyle
-*/
-
 void QProxyStylePrivate::ensureBaseStyle() const
 {
    Q_Q(const QProxyStyle);
@@ -66,11 +39,12 @@ void QProxyStylePrivate::ensureBaseStyle() const
 
    if (!baseStyle && !QApplicationPrivate::styleOverride.isEmpty()) {
       baseStyle = QStyleFactory::create(QApplicationPrivate::styleOverride);
+
       if (baseStyle) {
          // If baseStyle is an instance of the same proxyStyle
          // we destroy it and fall back to the desktop style
-         if (qstrcmp(baseStyle->metaObject()->className(),
-                     q->metaObject()->className()) == 0) {
+
+         if (baseStyle->metaObject()->className() == q->metaObject()->className()) {
             delete baseStyle;
             baseStyle = 0;
          }
@@ -89,18 +63,11 @@ void QProxyStylePrivate::ensureBaseStyle() const
    baseStyle->setParent(const_cast<QProxyStyle *>(q)); // Take ownership
 }
 
-/*!
-  Constructs a QProxyStyle object for overriding behavior in \a style
-  or in the current application \l{QStyle}{style} if \a style is 0
-  (default). Normally \a style is 0, because you want to override
-  behavior in the system style.
-
-  Ownership of \a style is transferred to QProxyStyle.
-*/
-QProxyStyle::QProxyStyle(QStyle *style) :
-   QCommonStyle(*new QProxyStylePrivate())
+QProxyStyle::QProxyStyle(QStyle *style)
+   : QCommonStyle(*new QProxyStylePrivate())
 {
    Q_D(QProxyStyle);
+
    if (style) {
       style->setProxy(this);
       style->setParent(this); // Take ownership
@@ -108,20 +75,10 @@ QProxyStyle::QProxyStyle(QStyle *style) :
    }
 }
 
-/*!
-    Destroys the QProxyStyle object.
-*/
 QProxyStyle::~QProxyStyle()
 {
 }
 
-/*!
-    Returns the proxy base style object. If no base style
-    is set on the proxy style, QProxyStyle will create
-    an instance of the application style instead.
-
-    \sa setBaseStyle(), QStyle
-*/
 QStyle *QProxyStyle::baseStyle() const
 {
    Q_D (const QProxyStyle);
@@ -361,53 +318,20 @@ bool QProxyStyle::event(QEvent *e)
    return d->baseStyle->event(e);
 }
 
-/*!
-  Returns an icon for the given \a standardIcon.
-
-  Reimplement this slot to provide your own icons in a QStyle
-  subclass. The \a option argument can be used to pass extra
-  information required to find the appropriate icon. The \a widget
-  argument is optional and can also be used to help find the icon.
-
-  \note Because of binary compatibility constraints, standardIcon()
-  introduced in Qt 4.1 is not virtual. Therefore it must dynamically
-  detect and call \e this slot.  This default implementation simply
-  calls standardIcon() with the given parameters.
-
-  \sa standardIcon()
- */
 QIcon QProxyStyle::standardIconImplementation(StandardPixmap standardIcon,
-      const QStyleOption *option,
-      const QWidget *widget) const
+                  const QStyleOption *option, const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
    return d->baseStyle->standardIcon(standardIcon, option, widget);
 }
 
-/*!
-  This slot is called by layoutSpacing() to determine the spacing that
-  should be used between \a control1 and \a control2 in a layout. \a
-  orientation specifies whether the controls are laid out side by side
-  or stacked vertically. The \a option parameter can be used to pass
-  extra information about the parent widget.  The \a widget parameter
-  is optional and can also be used if \a option is 0.
-
-  The default implementation returns -1.
-
-  \sa layoutSpacing(), combinedLayoutSpacing()
- */
-int QProxyStyle::layoutSpacingImplementation(QSizePolicy::ControlType control1,
-      QSizePolicy::ControlType control2,
-      Qt::Orientation orientation,
-      const QStyleOption *option,
-      const QWidget *widget) const
+int QProxyStyle::layoutSpacingImplementation(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
+                  Qt::Orientation orientation, const QStyleOption *option, const QWidget *widget) const
 {
    Q_D (const QProxyStyle);
    d->ensureBaseStyle();
    return d->baseStyle->layoutSpacing(control1, control2, orientation, option, widget);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_STYLE_PROXY

@@ -489,7 +489,7 @@ inline static void qt_mac_get_fixed_pitch(QtFontFamily *f)
 
 QtFontFoundry *QtFontFamily::foundry(const QString &f, bool create)
 {
-   if (f.isNull() && count == 1) {
+   if (f.isEmpty() && count == 1) {
       return foundries[0];
    }
 
@@ -967,43 +967,55 @@ static inline bool scriptRequiresOpenType(int script)
 */
 static void parseFontName(const QString &name, QString &foundry, QString &family)
 {
-   int i = name.indexOf(QLatin1Char('['));
-   int li = name.lastIndexOf(QLatin1Char(']'));
+   int i  = name.indexOf('[');
+   int li = name.lastIndexOf(']');
+
    if (i >= 0 && li >= 0 && i < li) {
       foundry = name.mid(i + 1, li - i - 1);
-      if (i > 0 && name[i - 1] == QLatin1Char(' ')) {
+      if (i > 0 && name[i - 1] == ' ') {
          i--;
       }
       family = name.left(i);
+
    } else {
       foundry.clear();
       family = name;
    }
 
-   // capitalize the family/foundry names
-   bool space = true;
-   QChar *s = family.data();
-   int len = family.length();
-   while (len--) {
-      if (space) {
-         *s = s->toUpper();
+   // capitalize the family names
+   bool isSpace = true;
+   QString tmp;
+
+   for (const auto &c : family) {
+      if (isSpace) {
+         tmp.append(c.toUpper());
+
+      } else {
+         tmp.append(c);
       }
-      space = s->isSpace();
-      ++s;
+
+      isSpace = c.isSpace();
    }
 
-   space = true;
-   s = foundry.data();
-   len = foundry.length();
-   while (len--) {
-      if (space) {
-         *s = s->toUpper();
+   family = tmp;
+
+   // capitalize the foundry names
+   isSpace = true;
+   tmp     = "";
+
+   for (const auto &c : foundry) {
+      if (isSpace) {
+         tmp.append(c.toUpper());
+
+      } else {
+         tmp.append(c);
       }
-      space = s->isSpace();
-      ++s;
+
+      isSpace = c.isSpace();
    }
+
+   foundry = tmp;
 }
-
 
 struct QtFontDesc {
    inline QtFontDesc() : family(0), foundry(0), style(0), size(0), encoding(0), familyIndex(-1) {}

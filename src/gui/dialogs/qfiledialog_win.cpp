@@ -31,7 +31,7 @@
 #include <qapplication_p.h>
 #include <qt_windows.h>
 #include <qglobal.h>
-#include <qregexp.h>
+#include <QRegularExpression.h>
 #include <qbuffer.h>
 #include <qdir.h>
 #include <qstringlist.h>
@@ -79,7 +79,7 @@ static void qt_win_resolve_libs()
    }
 }
 
-extern const char *qt_file_dialog_filter_reg_exp; // defined in qfiledialog.cpp
+extern const QString qt_file_dialog_filter_reg_exp;                   // defined in qfiledialog.cpp
 extern QStringList qt_make_filter_list(const QString &filter);
 
 const int maxNameLen  = 1023;
@@ -89,23 +89,24 @@ const int maxMultiLen = 65535;
 static QString qt_win_extract_filter(const QString &rawFilter)
 {
    QString result = rawFilter;
-   QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
-   int index = r.indexIn(result);
 
-   if (index >= 0) {
-      result = r.cap(2);
+   static QRegularExpression regExp(qt_file_dialog_filter_reg_exp);
+   QRegularExpressionMatch match = regExp.match(result);
+
+   if (match.hasMatch()) {
+      result = match.captured(2);
    }
 
-   QStringList list = result.split(QLatin1Char(' ')); 
+   QStringList list = result.split(' ');
 
    for (auto &it : list) {
-      if (it == QLatin1String("*")) {
-         it = QLatin1String("*.*");
+      if (it == "*") {
+         it = "*.*";
          break;
       }
    }
 
-   return list.join(QLatin1String(";"));
+   return list.join(";");
 }
 
 static QStringList qt_win_make_filters_list(const QString &filter)
@@ -123,19 +124,21 @@ static QStringList qt_win_make_filters_list(const QString &filter)
 static QString qt_win_filter(const QString &filter, bool hideFiltersDetails)
 {
    QStringList filterLst    = qt_win_make_filters_list(filter);
-   
+
    QString winfilters;
-   QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
+
+   static QRegularExpression regExp(qt_file_dialog_filter_reg_exp);
+   QRegularExpressionMatch match;
 
    for (const auto &subfilter : filterLst) {
 
       if (! subfilter.isEmpty()) {
 
          if (hideFiltersDetails) {
-            int index = r.indexIn(subfilter);
+            match = regExp.match(subfilter);
 
-            if (index >= 0) {
-               winfilters += r.cap(1);
+            if (match.hasMatch()) {
+               winfilters += match.captured(1);
             }
 
          } else {
@@ -615,8 +618,8 @@ static int __stdcall winGetExistDirCallbackProc(HWND hwnd, UINT uMsg, LPARAM lPa
 typedef HRESULT (WINAPI *PtrSHCreateItemFromParsingName)(PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv);
 static PtrSHCreateItemFromParsingName pSHCreateItemFromParsingName = 0;
 
-static bool qt_win_set_IFileDialogOptions(IFileDialog *pfd, const QString &initialSelection, 
-      const QString &initialDirectory, const QString &title, const QStringList &filterLst, 
+static bool qt_win_set_IFileDialogOptions(IFileDialog *pfd, const QString &initialSelection,
+      const QString &initialDirectory, const QString &title, const QStringList &filterLst,
       QFileDialog::FileMode mode, QFileDialog::Options options)
 {
    if (! pSHCreateItemFromParsingName) {
@@ -714,7 +717,7 @@ static bool qt_win_set_IFileDialogOptions(IFileDialog *pfd, const QString &initi
          newOptions |= (FOS_FILEMUSTEXIST | FOS_PATHMUSTEXIST);
       }
 
-      if (mode == QFileDialog::ExistingFiles) { 
+      if (mode == QFileDialog::ExistingFiles) {
          newOptions |= FOS_ALLOWMULTISELECT;
       }
 
@@ -830,7 +833,7 @@ static QStringList qt_win_CID_get_open_file_names(const QFileDialogArgs &args,
    return result;
 }
 
-static QString qt_win_CID_get_save_file_name(const QFileDialogArgs &args, QString *initialDirectory, 
+static QString qt_win_CID_get_save_file_name(const QFileDialogArgs &args, QString *initialDirectory,
                   const QStringList &filterList, QString *selectedFilter, int selectedFilterIndex)
 {
    QString result;

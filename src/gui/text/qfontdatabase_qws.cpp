@@ -240,17 +240,21 @@ bool QFontDatabasePrivate::loadFromCache(const QString &fontPath)
 
 static QString qwsFontPath()
 {
-   QString fontpath = QString::fromLocal8Bit(qgetenv("QT_QWS_FONTDIR"));
+   QString fontpath = QString::fromUtf8(qgetenv("QT_QWS_FONTDIR"));
+
    if (fontpath.isEmpty()) {
+
 #ifdef QT_FONTS_ARE_RESOURCES
       fontpath = QLatin1String(":/qt/fonts");
 #else
+
 #ifndef QT_NO_SETTINGS
       fontpath = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
       fontpath += QLatin1String("/fonts");
 #else
       fontpath = QLatin1String("/lib/fonts");
 #endif
+
 #endif //QT_FONTS_ARE_RESOURCES
    }
 
@@ -602,7 +606,8 @@ QFontEngine *loadSingleEngine(int script, const QFontPrivate *fp,
 #endif
    } else
 #endif
-      if ( foundry->name != QLatin1String("qt") ) { ///#### is this the best way????
+      if ( foundry->name != "qt" ) {
+         ///#### is this the best way?
          QString file = QFile::decodeName(size->fileName);
 
          QFontDef def = request;

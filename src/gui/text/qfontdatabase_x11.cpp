@@ -1031,7 +1031,7 @@ static const char *specialLanguages[] = {
 };
 enum { SpecialLanguageCount = sizeof(specialLanguages) / sizeof(const char *) };
 
-static const ushort specialChars[] = {         // broom, missing values
+static const ushort specialChars[] = {         // broom, might be missing values
    0,      // Any
    0,      // Latin
    0,      // Greek
@@ -1857,10 +1857,11 @@ static QFontEngine *tryPatternLoad(FcPattern *match, int screen, const QFontDef 
    FcPatternGetString(match, FC_FAMILY, 0, &fam);
    FM_DEBUG("==== trying %s\n", fam);
 #endif
+
    FM_DEBUG("passes charset test\n");
 
    QFontEngineX11FT *engine = 0;
-   if (!match) { // probably no fonts available.
+   if (! match) { // probably no fonts available.
       goto done;
    }
 
@@ -1868,8 +1869,9 @@ static QFontEngine *tryPatternLoad(FcPattern *match, int screen, const QFontDef 
       // skip font if it does not support the language we want
 
       if (script < SpecialCharCount && specialChars[script]) {
-         // need to check the charset, as the langset doesn't work for these scripts
+         // need to check the charset, as the langset does not work for these scripts
          FcCharSet *cs;
+
          if (FcPatternGetCharSet(match, FC_CHARSET, 0, &cs) != FcResultMatch) {
             goto done;
          }

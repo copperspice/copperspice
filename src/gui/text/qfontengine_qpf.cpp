@@ -759,22 +759,25 @@ QFontEngine::Type QFontEngineQPF::type() const
    return QFontEngine::QPF2;
 }
 
-bool QFontEngineQPF::canRender(const QChar *string, int len)
+bool QFontEngineQPF::canRender(QStringView str)
 {
    const uchar *cmap = externalCMap ? externalCMap : (fontData + cmapOffset);
 
    if (symbol) {
       for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
+         unsigned int uc = getChar(str, i, len);
          glyph_t g = getTrueTypeGlyphIndex(cmap, uc);
+
          if(!g && uc < 0x100)
             g = getTrueTypeGlyphIndex(cmap, uc + 0xf000);
          if (!g)
             return false;
       }
+
    } else {
       for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
+         unsigned int uc = getChar(str, i, len);
+
          if (!getTrueTypeGlyphIndex(cmap, uc))
             return false;
       }

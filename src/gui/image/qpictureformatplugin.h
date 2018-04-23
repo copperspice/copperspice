@@ -25,12 +25,12 @@
 
 #include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qstringfwd.h>
 
 #if ! defined(QT_NO_PICTURE)
 
 class QPicture;
 class QImage;
-class QString;
 class QStringList;
 
 struct Q_GUI_EXPORT QPictureFormatInterface : public QFactoryInterface {

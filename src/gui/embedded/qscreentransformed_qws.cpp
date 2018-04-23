@@ -160,7 +160,7 @@ QTransformedScreen::~QTransformedScreen()
 
 static int getDisplayId(const QString &spec)
 {
-   QRegExp regexp(QLatin1String(":(\\d+)\\b"));
+   QRegularExpression regexp(QLatin1String(":(\\d+)\\b"));
    if (regexp.lastIndexIn(spec) != -1) {
       const QString capture = regexp.cap(1);
       return capture.toInt();
@@ -170,7 +170,7 @@ static int getDisplayId(const QString &spec)
 
 static QTransformedScreen::Transformation filterTransformation(QString &spec)
 {
-   QRegExp regexp(QLatin1String("\\bRot(\\d+):?\\b"), Qt::CaseInsensitive);
+   QRegularExpression regexp(QLatin1String("\\bRot(\\d+):?\\b"), Qt::CaseInsensitive);
    if (regexp.indexIn(spec) == -1) {
       return QTransformedScreen::None;
    }
@@ -193,7 +193,7 @@ bool QTransformedScreen::connect(const QString &displaySpec)
       dspec = QString();
    }
 
-   const QString displayIdSpec = QString::fromLatin1(" :%1").arg(displayId);
+   const QString displayIdSpec = QString::fromLatin1(" :%1").formatArg(displayId);
    if (dspec.endsWith(displayIdSpec)) {
       dspec = dspec.left(dspec.size() - displayIdSpec.size());
    }

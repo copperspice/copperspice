@@ -49,14 +49,14 @@ class QCopServerRegexp
 
    QString channel;
    QWSClient *client;
-   QRegExp regexp;
+   QRegularExpression regexp;
 };
 
 QCopServerRegexp::QCopServerRegexp( const QString &channel, QWSClient *client )
 {
    this->channel = channel;
    this->client = client;
-   this->regexp = QRegExp( channel, Qt::CaseSensitive, QRegExp::Wildcard );
+   this->regexp = QRegularExpression( channel, Qt::CaseSensitive, QRegularExpression::Wildcard );
 }
 
 QCopServerRegexp::QCopServerRegexp( const QCopServerRegexp &other )

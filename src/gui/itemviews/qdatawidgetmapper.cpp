@@ -68,10 +68,10 @@ class QDataWidgetMapperPrivate
              : model->index(itemPos, currentIdx(), rootIndex);
    }
 
-   inline void flipEventFilters(QAbstractItemDelegate *oldDelegate,
-                                QAbstractItemDelegate *newDelegate) {
+   inline void flipEventFilters(QAbstractItemDelegate *oldDelegate, QAbstractItemDelegate *newDelegate) {
       for (int i = 0; i < widgetMap.count(); ++i) {
          QWidget *w = widgetMap.at(i).widget;
+
          if (!w) {
             continue;
          }
@@ -91,13 +91,14 @@ class QDataWidgetMapperPrivate
    struct WidgetMapper {
       inline WidgetMapper(QWidget *w = 0, int c = 0, const QModelIndex &i = QModelIndex())
          : widget(w), section(c), currentIndex(i) {}
-      inline WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QByteArray &p)
+
+      inline WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QString &p)
          : widget(w), section(c), currentIndex(i), property(p) {}
 
       QPointer<QWidget> widget;
       int section;
       QPersistentModelIndex currentIndex;
-      QByteArray property;
+      QString property;
    };
 
    void populate(WidgetMapper &m);
@@ -244,96 +245,6 @@ void QDataWidgetMapperPrivate::_q_modelDestroyed()
    q->setModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
-/*!
-    \class QDataWidgetMapper
-    \brief The QDataWidgetMapper class provides mapping between a section
-    of a data model to widgets.
-    \since 4.2
-    \ingroup model-view
-    \ingroup advanced
-
-    QDataWidgetMapper can be used to create data-aware widgets by mapping
-    them to sections of an item model. A section is a column of a model
-    if the orientation is horizontal (the default), otherwise a row.
-
-    Every time the current index changes, each widget is updated with data
-    from the model via the property specified when its mapping was made.
-    If the user edits the contents of a widget, the changes are read using
-    the same property and written back to the model.
-    By default, each widget's \l{Q_PROPERTY()}{user property} is used to
-    transfer data between the model and the widget. Since Qt 4.3, an
-    additional addMapping() function enables a named property to be used
-    instead of the default user property.
-
-    It is possible to set an item delegate to support custom widgets. By default,
-    a QItemDelegate is used to synchronize the model with the widgets.
-
-    Let us assume that we have an item model named \c{model} with the following contents:
-
-    \table
-    \row \o 1 \o Qt Norway       \o Oslo
-    \row \o 2 \o Qt Australia    \o Brisbane
-    \row \o 3 \o Qt USA          \o Palo Alto
-    \row \o 4 \o Qt China        \o Beijing
-    \row \o 5 \o Qt Germany      \o Berlin
-    \endtable
-
-    The following code will map the columns of the model to widgets called \c mySpinBox,
-    \c myLineEdit and \c{myCountryChooser}:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qdatawidgetmapper.cpp 0
-
-    After the call to toFirst(), \c mySpinBox displays the value \c{1}, \c myLineEdit
-    displays \c{Qt Norway} and \c myCountryChooser displays \c{Oslo}. The
-    navigational functions toFirst(), toNext(), toPrevious(), toLast() and setCurrentIndex()
-    can be used to navigate in the model and update the widgets with contents from
-    the model.
-
-    The setRootIndex() function enables a particular item in a model to be
-    specified as the root index - children of this item will be mapped to
-    the relevant widgets in the user interface.
-
-    QDataWidgetMapper supports two submit policies, \c AutoSubmit and \c{ManualSubmit}.
-    \c AutoSubmit will update the model as soon as the current widget loses focus,
-    \c ManualSubmit will not update the model unless submit() is called. \c ManualSubmit
-    is useful when displaying a dialog that lets the user cancel all modifications.
-    Also, other views that display the model won't update until the user finishes
-    all their modifications and submits.
-
-    Note that QDataWidgetMapper keeps track of external modifications. If the contents
-    of the model are updated in another module of the application, the widgets are
-    updated as well.
-
-    \sa QAbstractItemModel, QAbstractItemDelegate
- */
-
-/*! \enum QDataWidgetMapper::SubmitPolicy
-
-    This enum describes the possible submit policies a QDataWidgetMapper
-    supports.
-
-    \value AutoSubmit    Whenever a widget loses focus, the widget's current
-                         value is set to the item model.
-    \value ManualSubmit  The model is not updated until submit() is called.
- */
-
-/*!
-    \fn void QDataWidgetMapper::currentIndexChanged(int index)
-
-    This signal is emitted after the current index has changed and
-    all widgets were populated with new data. \a index is the new
-    current index.
-
-    \sa currentIndex(), setCurrentIndex()
- */
-
-/*!
-    Constructs a new QDataWidgetMapper with parent object \a parent.
-    By default, the orientation is horizontal and the submit policy
-    is \c{AutoSubmit}.
-
-    \sa setOrientation(), setSubmitPolicy()
- */
 QDataWidgetMapper::QDataWidgetMapper(QObject *parent)
    : QObject(parent), d_ptr(new QDataWidgetMapperPrivate)
 {
@@ -341,19 +252,10 @@ QDataWidgetMapper::QDataWidgetMapper(QObject *parent)
    setItemDelegate(new QItemDelegate(this));
 }
 
-/*!
-    Destroys the object.
- */
 QDataWidgetMapper::~QDataWidgetMapper()
 {
 }
 
-/*!
-     Sets the current model to \a model. If another model was set,
-     all mappings to that old model are cleared.
-
-     \sa model()
- */
 void QDataWidgetMapper::setModel(QAbstractItemModel *model)
 {
    Q_D(QDataWidgetMapper);
@@ -460,30 +362,6 @@ QModelIndex QDataWidgetMapper::rootIndex() const
    return QModelIndex(d->rootIndex);
 }
 
-/*!
-    Adds a mapping between a \a widget and a \a section from the model.
-    The \a section is a column in the model if the orientation is
-    horizontal (the default), otherwise a row.
-
-    For the following example, we assume a model \c myModel that
-    has two columns: the first one contains the names of people in a
-    group, and the second column contains their ages. The first column
-    is mapped to the QLineEdit \c nameLineEdit, and the second is
-    mapped to the QSpinBox \c{ageSpinBox}:
-
-    \snippet doc/src/snippets/code/src_gui_itemviews_qdatawidgetmapper.cpp 1
-
-    \bold{Notes:}
-    \list
-    \o If the \a widget is already mapped to a section, the
-    old mapping will be replaced by the new one.
-    \o Only one-to-one mappings between sections and widgets are allowed.
-    It is not possible to map a single section to multiple widgets, or to
-    map a single widget to multiple sections.
-    \endlist
-
-    \sa removeMapping(), mappedSection(), clearMapping()
- */
 void QDataWidgetMapper::addMapping(QWidget *widget, int section)
 {
    Q_D(QDataWidgetMapper);
@@ -502,7 +380,7 @@ void QDataWidgetMapper::addMapping(QWidget *widget, int section)
   \sa addMapping()
 */
 
-void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QByteArray &propertyName)
+void QDataWidgetMapper::addMapping(QWidget *widget, int section, const QString &propertyName)
 {
    Q_D(QDataWidgetMapper);
 
@@ -547,25 +425,21 @@ int QDataWidgetMapper::mappedSection(QWidget *widget) const
    return d->widgetMap.at(idx).section;
 }
 
-/*!
-  \since 4.3
-  Returns the name of the property that is used when mapping
-  data to the given \a widget.
-
-  \sa mappedSection(), addMapping(), removeMapping()
-*/
-
-QByteArray QDataWidgetMapper::mappedPropertyName(QWidget *widget) const
+QString QDataWidgetMapper::mappedPropertyName(QWidget *widget) const
 {
    Q_D(const QDataWidgetMapper);
 
    int idx = d->findWidget(widget);
+
    if (idx == -1) {
       return QByteArray();
    }
+
    const QDataWidgetMapperPrivate::WidgetMapper &m = d->widgetMap.at(idx);
+
    if (m.property.isEmpty()) {
       return m.widget->metaObject()->userProperty().name();
+
    } else {
       return m.property;
    }

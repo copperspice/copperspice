@@ -839,15 +839,16 @@ QFontEngine::FaceId QCoreTextFontEngine::faceId() const
    return result;
 }
 
-bool QCoreTextFontEngine::canRender(const QChar *string, int len)
+bool QCoreTextFontEngine::canRender(QStringView str)
 {
    QVarLengthArray<CGGlyph> cgGlyphs(len);
-   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *) string, cgGlyphs.data(), len);
+   return CTFontGetGlyphsForCharacters(ctfont, (const UniChar *) str, cgGlyphs.data(), len);  // BROOM
 }
 
 bool QCoreTextFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length) const
 {
    QCFType<CFDataRef> table = CTFontCopyTable(ctfont, tag, 0);
+
    if (!table || !length) {
       return false;
    }

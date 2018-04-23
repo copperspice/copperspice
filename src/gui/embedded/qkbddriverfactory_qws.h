@@ -23,13 +23,10 @@
 #ifndef QKBDDRIVERFACTORY_QWS_H
 #define QKBDDRIVERFACTORY_QWS_H
 
-#include <QtCore/qstringlist.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_QWS_KEYBOARD
 
-QT_BEGIN_NAMESPACE
-
-class QString;
 class QWSKeyboardHandler;
 
 class Q_GUI_EXPORT QKbdDriverFactory
@@ -40,7 +37,5 @@ class Q_GUI_EXPORT QKbdDriverFactory
    static QWSKeyboardHandler *create(const QString &, const QString &);
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_QWS_KEYBOARD
-#endif // QKBDDRIVERFACTORY_QWS_H
+#endif

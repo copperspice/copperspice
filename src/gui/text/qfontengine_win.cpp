@@ -102,7 +102,7 @@ static void resolveGetCharWidthI()
       return;
    }
 
-   QSystemLibrary gdi32(QLatin1String("gdi32"));
+   QSystemLibrary gdi32("gdi32");
    ptrGetCharWidthI = (PtrGetCharWidthI)gdi32.resolve("GetCharWidthI");
 
    resolvedGetCharWidthI = true;
@@ -177,111 +177,132 @@ void QFontEngineWin::getCMap()
    HDC hdc = shared_dc();
    SelectObject(hdc, hfont);
    bool symb = false;
+
    if (ttf) {
       cmapTable = getSfntTable(qbswap<quint32>(MAKE_TAG('c', 'm', 'a', 'p')));
-      int size = 0;
-      cmap = QFontEngine::getCMap(reinterpret_cast<const uchar *>(cmapTable.constData()),
-                                  cmapTable.size(), &symb, &size);
+      int size  = 0;
+      cmap      = QFontEngine::getCMap(reinterpret_cast<const uchar *>(cmapTable.constData()), cmapTable.size(), &symb, &size);
    }
-   if (!cmap) {
+
+   if (! cmap) {
       ttf = false;
       symb = false;
    }
+
    symbol = symb;
    designToDevice = 1;
    _faceId.index = 0;
+
    if (cmap) {
       OUTLINETEXTMETRIC *otm = getOutlineTextMetric(hdc);
+
       designToDevice = QFixed((int)otm->otmEMSquare) / int(otm->otmTextMetrics.tmHeight);
-      unitsPerEm = otm->otmEMSquare;
-      x_height = (int)otm->otmsXHeight;
+      unitsPerEm     = otm->otmEMSquare;
+      x_height       = (int)otm->otmsXHeight;
       loadKerningPairs(designToDevice);
-      _faceId.filename = QString::fromWCharArray((wchar_t *)((char *)otm + (quintptr)otm->otmpFullName)).toLatin1();
+
+      // BROOM
+      _faceId.filename = QString::fromStdWString((wchar_t *)((char *)otm + (quintptr)otm->otmpFullName)).toLatin1();
+
       lineWidth = otm->otmsUnderscoreSize;
-      fsType = otm->otmfsType;
+      fsType    = otm->otmfsType;
       free(otm);
+
    } else {
       unitsPerEm = tm.tmHeight;
    }
 }
 
-
-inline unsigned int getChar(const QChar *str, int &i, const int len)
-{
-   uint ucs4 = str[i].unicode();
-   if (str[i].isHighSurrogate() && i < len - 1 && str[i + 1].isLowSurrogate()) {
-      ++i;
-      ucs4 = QChar::surrogateToUcs4(ucs4, str[i].unicode());
-   }
-   return ucs4;
-}
-
-int QFontEngineWin::getGlyphIndexes(const QChar *str, int numChars, QGlyphLayout *glyphs, bool mirrored) const
+int QFontEngineWin::getGlyphIndexes(QStringView str, QGlyphLayout *glyphs, bool mirrored) const
 {
    int i = 0;
    int glyph_pos = 0;
+
    if (mirrored) {
 
       if (symbol) {
-         for (; i < numChars; ++i, ++glyph_pos) {
-            unsigned int uc = getChar(str, i, numChars);
+
+         for (QChar c : str) {
+            char32_t uc = c.unicode();
+
             glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc);
-            if (!glyphs->glyphs[glyph_pos] && uc < 0x100) {
+
+            if (! glyphs->glyphs[glyph_pos] && uc < 0x100) {
                glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc + 0xf000);
             }
+
+            ++glyph_pos;
          }
+
       } else if (ttf) {
-         for (; i < numChars; ++i, ++glyph_pos) {
-            unsigned int uc = getChar(str, i, numChars);
-            glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, QChar::mirroredChar(uc));
+         for (QChar c : str) {
+            char32_t ucs = c.mirroredChar().unicode();
+
+            glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, ucs);
+            ++glyph_pos;
          }
+
       } else {
-
          wchar_t first = tm.tmFirstChar;
-         wchar_t last = tm.tmLastChar;
+         wchar_t last  = tm.tmLastChar;
 
-         for (; i < numChars; ++i, ++glyph_pos) {
-            uint ucs = QChar::mirroredChar(getChar(str, i, numChars));
-            if (
-               ucs >= first && ucs <= last) {
+         for (QChar c : str) {
+            char32_t ucs = c.mirroredChar().unicode();
+
+            if (ucs >= first && ucs <= last) {
                glyphs->glyphs[glyph_pos] = ucs;
+
             } else {
                glyphs->glyphs[glyph_pos] = 0;
             }
+
+            ++glyph_pos;
          }
       }
+
    } else {
 
       if (symbol) {
-         for (; i < numChars; ++i, ++glyph_pos) {
-            unsigned int uc = getChar(str, i, numChars);
+         for (QChar c : str) {
+            char32_t uc = c.unicode();
+
             glyphs->glyphs[i] = getTrueTypeGlyphIndex(cmap, uc);
+
             if (!glyphs->glyphs[glyph_pos] && uc < 0x100) {
                glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc + 0xf000);
             }
-         }
-      } else if (ttf) {
-         for (; i < numChars; ++i, ++glyph_pos) {
-            unsigned int uc = getChar(str, i, numChars);
-            glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc);
-         }
-      } else {
 
+            ++glyph_pos;
+         }
+
+      } else if (ttf) {
+         for (QChar c : str) {
+            char32_t uc = c.unicode();
+
+            glyphs->glyphs[glyph_pos] = getTrueTypeGlyphIndex(cmap, uc);
+            ++glyph_pos;
+         }
+
+      } else {
          wchar_t first = tm.tmFirstChar;
          wchar_t last = tm.tmLastChar;
 
-         for (; i < numChars; ++i, ++glyph_pos) {
-            uint uc = getChar(str, i, numChars);
-            if (
-               uc >= first && uc <= last) {
+         for (QChar c : str) {
+            char32_t uc = c.unicode();
+
+            if (uc >= first && uc <= last) {
                glyphs->glyphs[glyph_pos] = uc;
             } else {
                glyphs->glyphs[glyph_pos] = 0;
             }
+
+            ++glyph_pos;
          }
       }
    }
+
    glyphs->numGlyphs = glyph_pos;
+
    return glyph_pos;
 }
 
@@ -321,7 +342,7 @@ QFontEngineWin::QFontEngineWin(const QString &name, HFONT _hfont, bool stockFont
    designAdvances = 0;
    designAdvancesSize = 0;
 
-   if (!resolvedGetCharWidthI) {
+   if (! resolvedGetCharWidthI) {
       resolveGetCharWidthI();
    }
 }
@@ -355,21 +376,23 @@ HGDIOBJ QFontEngineWin::selectDesignFont() const
    return SelectObject(shared_dc(), designFont);
 }
 
-bool QFontEngineWin::stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                                  QTextEngine::ShaperFlags flags) const
+bool QFontEngineWin::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const
 {
+   int len = str.length();
+
    if (*nglyphs < len) {
       *nglyphs = len;
       return false;
    }
 
-   *nglyphs = getGlyphIndexes(str, len, glyphs, flags & QTextEngine::RightToLeft);
+   *nglyphs = getGlyphIndexes(str, glyphs, flags & QTextEngine::RightToLeft);
 
    if (flags & QTextEngine::GlyphIndicesOnly) {
       return true;
    }
 
    recalcAdvances(glyphs, flags);
+
    return true;
 }
 
@@ -384,9 +407,11 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
 {
    HGDIOBJ oldFont = 0;
    HDC hdc = shared_dc();
+
    if (ttf && (flags & QTextEngine::DesignMetrics)) {
       for (int i = 0; i < glyphs->numGlyphs; i++) {
          unsigned int glyph = glyphs->glyphs[i];
+
          if (int(glyph) >= designAdvancesSize) {
             int newSize = (glyph + 256) >> 8 << 8;
             designAdvances = q_check_ptr((QFixed *)realloc(designAdvances,
@@ -419,12 +444,13 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
 
          if (glyph >= widthCacheSize) {
             int newSize = (glyph + 256) >> 8 << 8;
-            widthCache = q_check_ptr((unsigned char *)realloc(widthCache,
-                                     newSize * sizeof(QFixed)));
+            widthCache = q_check_ptr((unsigned char *)realloc(widthCache, newSize * sizeof(QFixed)));
             memset(widthCache + widthCacheSize, 0, newSize - widthCacheSize);
             widthCacheSize = newSize;
          }
+
          glyphs->advances_x[i] = widthCache[glyph];
+
          // font-width cache failed
          if (glyphs->advances_x[i] == 0) {
             int width = 0;
@@ -432,21 +458,26 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
                oldFont = SelectObject(hdc, hfont);
             }
 
-            if (!ttf) {
+            if (! ttf) {
                QChar ch[2] = { ushort(glyph), 0 };
                int chrLen = 1;
+
                if (glyph > 0xffff) {
                   ch[0] = QChar::highSurrogate(glyph);
                   ch[1] = QChar::lowSurrogate(glyph);
                   ++chrLen;
                }
+
                SIZE size = {0, 0};
                GetTextExtentPoint32(hdc, (wchar_t *)ch, chrLen, &size);
                width = size.cx;
+
             } else {
                calculateTTFGlyphWidth(hdc, glyph, width);
             }
+
             glyphs->advances_x[i] = width;
+
             // if glyph's within cache range, store it for later
             if (width > 0 && width < 0x100) {
                widthCache[glyph] = width;
@@ -706,11 +737,13 @@ const char *QFontEngineWin::name() const
    return 0;
 }
 
-bool QFontEngineWin::canRender(const QChar *string,  int len)
+bool QFontEngineWin::canRender(QStringView str)
 {
    if (symbol) {
-      for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
+
+      for (QChar c : str) {
+         char32_t uc = c.unicode();
+
          if (getTrueTypeGlyphIndex(cmap, uc) == 0) {
             if (uc < 0x100) {
                if (getTrueTypeGlyphIndex(cmap, uc + 0xf000) == 0) {
@@ -721,20 +754,32 @@ bool QFontEngineWin::canRender(const QChar *string,  int len)
             }
          }
       }
+
    } else if (ttf) {
-      for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
+       for (QChar c : str) {
+         char32_t uc = c.unicode();
+
          if (getTrueTypeGlyphIndex(cmap, uc) == 0) {
             return false;
          }
       }
+
    } else {
-      while (len--) {
-         if (tm.tmFirstChar > string->unicode() || tm.tmLastChar < string->unicode()) {
+      wchar_t first = tm.tmFirstChar;
+      wchar_t last  = tm.tmLastChar;
+
+      for (QChar c : str) {
+         char32_t ucs = c.unicode();
+
+         if (ucs >= first && ucs <= last) {
+            // keep going
+
+         } else {
             return false;
          }
       }
    }
+
    return true;
 }
 

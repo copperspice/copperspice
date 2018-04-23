@@ -2052,7 +2052,7 @@ bool QApplicationPrivate::qws_apply_settings()
    }
 
    // read library (ie. plugin) path list
-   QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").arg(CS_VERSION >> 16).arg((CS_VERSION & 0xff00) >> 8);
+   QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").formatArg(CS_VERSION >> 16).formatArg((CS_VERSION & 0xff00) >> 8);
    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
    if (! pathlist.isEmpty()) {
@@ -2348,7 +2348,7 @@ void qt_init(QApplicationPrivate *priv, int type)
    mouseInWidget = new QPointer<QWidget>;
 
    const QString disp = QString::fromLatin1(qws_display_spec);
-   QRegExp regexp(QLatin1String(":(\\d+)$"));
+   QRegularExpression regexp(QLatin1String(":(\\d+)$"));
    if (regexp.lastIndexIn(disp) != -1) {
       const QString capture = regexp.cap(1);
       bool ok = false;

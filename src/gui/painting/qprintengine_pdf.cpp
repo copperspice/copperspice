@@ -996,7 +996,7 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
 #ifdef FONT_DUMP
    static int i = 0;
    QString fileName("font%1.ttf");
-   fileName = fileName.arg(i++);
+   fileName = fileName.formatArg(i++);
    QFile ff(fileName);
    ff.open(QFile::WriteOnly);
    ff.write(fontData);

@@ -28,7 +28,6 @@
 #if !defined(QT_NO_STYLE_GTK)
 
 #include <QtCore/qstring.h>
-#include <QtCore/qstringbuilder.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGtkStyle>
@@ -253,7 +252,7 @@ typedef guchar *(*Ptr_gdk_pixbuf_get_pixels) (const GdkPixbuf *pixbuf);
 typedef int (*Ptr_gdk_pixbuf_get_width) (const GdkPixbuf *pixbuf);
 typedef void (*Ptr_gdk_color_free) (const GdkColor *);
 typedef int (*Ptr_gdk_pixbuf_get_height) (const GdkPixbuf *pixbuf);
-typedef GdkPixbuf *(*Ptr_gdk_pixbuf_get_from_drawable) (GdkPixbuf *dest, GdkDrawable *src, GdkColormap *cmap, 
+typedef GdkPixbuf *(*Ptr_gdk_pixbuf_get_from_drawable) (GdkPixbuf *dest, GdkDrawable *src, GdkColormap *cmap,
       int src_x, int src_y, int dest_x, int dest_y, int width, int height);
 
 typedef GdkPixmap *(*Ptr_gdk_pixmap_new) (GdkDrawable *drawable, gint width, gint height, gint depth);
@@ -261,7 +260,7 @@ typedef GdkPixmap *(*Ptr_gdk_pixmap_new) (GdkDrawable *drawable, gint width, gin
 typedef GdkPixbuf *(*Ptr_gdk_pixbuf_new) (GdkColorspace colorspace, gboolean has_alpha,
       int bits_per_sample, int width, int height);
 
-typedef void (*Ptr_gdk_draw_rectangle) (GdkDrawable *drawable, GdkGC *gc, gboolean filled, gint x, gint y, 
+typedef void (*Ptr_gdk_draw_rectangle) (GdkDrawable *drawable, GdkGC *gc, gboolean filled, gint x, gint y,
       gint width, gint height);
 
 typedef void (*Ptr_gdk_pixbuf_unref)(GdkPixbuf *);
@@ -368,7 +367,7 @@ class QGtkStylePrivate : public QCleanlooksStylePrivate
          QString *selectedFilter, QFileDialog::Options options);
 
    static QString openDirectory(QWidget *parent, const QString &caption, const QString &dir, QFileDialog::Options options);
-         
+
    static QStringList openFilenames(QWidget *parent, const QString &caption, const QString &dir, const QString &filter,
          QString *selectedFilter, QFileDialog::Options options);
 

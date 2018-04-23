@@ -53,7 +53,7 @@ class QFontDialogPrivate : public QDialogPrivate
    void updateStyles();
    void updateSizes();
 
-   static QFont getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title, 
+   static QFont getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title,
                         QFontDialog::FontDialogOptions options);
 
    void init();
@@ -105,7 +105,7 @@ class QFontDialogPrivate : public QDialogPrivate
    QFont selectedFont;
    QFontDialog::FontDialogOptions opts;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 
 #ifdef Q_OS_MAC
    static void setFont(void *delegate, const QFont &font);

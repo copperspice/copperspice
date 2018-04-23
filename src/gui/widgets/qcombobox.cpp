@@ -2177,15 +2177,19 @@ void QComboBox::insertItem(int index, const QIcon &icon, const QString &text, co
       }
       m->insertRow(index, item);
       ++itemCount;
+
    } else {
       d->inserting = true;
       if (d->model->insertRows(index, 1, d->root)) {
          QModelIndex item = d->model->index(index, d->modelColumn, d->root);
+
          if (icon.isNull() && !userData.isValid()) {
             d->model->setData(item, text, Qt::EditRole);
+
          } else {
             QMap<int, QVariant> values;
-            if (!text.isNull()) {
+
+            if (!text.isEmpty()) {
                values.insert(Qt::EditRole, text);
             }
             if (!icon.isNull()) {

@@ -43,8 +43,7 @@ class QCoreTextFontEngine : public QFontEngine
    QCoreTextFontEngine(CGFontRef font, const QFontDef &def);
    ~QCoreTextFontEngine();
 
-   virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
    virtual void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const;
 
    virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
@@ -60,21 +59,22 @@ class QCoreTextFontEngine : public QFontEngine
    virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int numGlyphs,
                                 QPainterPath *path, QTextItem::RenderFlags);
 
-   virtual const char *name() const {
+   virtual bool canRender(QStringView str) override;
+
+   virtual const char *name() const override {
       return "QCoreTextFontEngine";
    }
 
-   virtual bool canRender(const QChar *string, int len);
+   virtual Type type() const override {
+      return QFontEngine::Mac;
+   }
 
    virtual int synthesized() const {
       return synthesisFlags;
    }
+
    virtual bool supportsSubPixelPositions() const {
       return true;
-   }
-
-   virtual Type type() const {
-      return QFontEngine::Mac;
    }
 
    void draw(CGContextRef ctx, qreal x, qreal y, const QTextItemInt &ti, int paintDeviceHeight);
@@ -133,17 +133,15 @@ class QCoreTextFontEngineMulti : public QFontEngineMulti
    QCoreTextFontEngineMulti(CTFontRef ctFontRef, const QFontDef &fontDef, bool kerning);
    ~QCoreTextFontEngineMulti();
 
-   virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
 
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                     QTextEngine::ShaperFlags flags,
-                     unsigned short *logClusters, const HB_CharAttributes *charAttributes,
-                     QScriptItem *si) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags,
+                     unsigned short *logClusters, const HB_CharAttributes *charAttributes, QScriptItem *si) const;
 
    virtual const char *name() const {
       return "CoreText";
    }
+
    inline CTFontRef macFontID() const {
       return ctfont;
    }

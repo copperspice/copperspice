@@ -48,18 +48,22 @@ static bool read_xbm_header(QIODevice *device, int &w, int &h)
 {
    const int buflen = 300;
    const int maxlen = 4096;
-   char buf[buflen + 1];
-   QRegExp r1(QLatin1String("^#define[ \t]+[a-zA-Z0-9._]+[ \t]+"));
-   QRegExp r2(QLatin1String("[0-9]+"));
 
-   qint64 readBytes = 0;
+   char buffer[buflen + 1];
+   buffer[0] = '\0';
+
+   static QRegularExpression regExp1("^#define[ \t]+[a-zA-Z0-9._]+[ \t]+");
+   static QRegularExpression regExp2("[0-9]+");
+
+   QRegularExpressionMatch match1;
+   QRegularExpressionMatch match2;
+
+   qint64 readBytes      = 0;
    qint64 totalReadBytes = 0;
 
-   buf[0] = '\0';
-
    // skip initial comment, if any
-   while (buf[0] != '#') {
-      readBytes = device->readLine(buf, buflen);
+   while (buffer[0] != '#') {
+      readBytes = device->readLine(buffer, buflen);
 
       // if readBytes >= buflen, it's very probably not a C file
       if (readBytes <= 0 || readBytes >= buflen - 1) {
@@ -69,33 +73,42 @@ static bool read_xbm_header(QIODevice *device, int &w, int &h)
       // limit xbm headers to the first 4k in the file to prevent
       // excessive reads on non-xbm files
       totalReadBytes += readBytes;
+
       if (totalReadBytes >= maxlen) {
          return false;
       }
    }
 
-   buf[readBytes - 1] = '\0';
-   QString sbuf;
-   sbuf = QString::fromLatin1(buf);
+   buffer[readBytes - 1] = '\0';
+   QString str_buffer = QString::fromLatin1(buffer);
 
    // "#define .._width <num>"
-   if (r1.indexIn(sbuf) == 0 &&
-         r2.indexIn(sbuf, r1.matchedLength()) == r1.matchedLength()) {
-      w = QByteArray(&buf[r1.matchedLength()]).trimmed().toInt();
+   match1 = regExp1.match(str_buffer);
+
+   if (match1.hasMatch())  {
+      match2 = regExp2.match(str_buffer, match1.capturedEnd(0));
+
+      if (match2.capturedStart(0) == match1.capturedEnd(0)) {
+         w = QByteArray(&buffer[match1.capturedLength(0)]).trimmed().toInt();
+      }
    }
 
    // "#define .._height <num>"
-   readBytes = device->readLine(buf, buflen);
+   readBytes = device->readLine(buffer, buflen);
+
    if (readBytes <= 0) {
       return false;
    }
-   buf[readBytes - 1] = '\0';
 
-   sbuf = QString::fromLatin1(buf);
+   buffer[readBytes - 1] = '\0';
+   str_buffer = QString::fromLatin1(buffer);
 
-   if (r1.indexIn(sbuf) == 0 &&
-         r2.indexIn(sbuf, r1.matchedLength()) == r1.matchedLength()) {
-      h = QByteArray(&buf[r1.matchedLength()]).trimmed().toInt();
+   if (match1.hasMatch())  {
+      match2 = regExp2.match(str_buffer, match1.capturedEnd(0));
+
+      if (match2.capturedStart(0) == match1.capturedEnd(0)) {
+         h = QByteArray(&buffer[match1.capturedLength(0)]).trimmed().toInt();
+      }
    }
 
    // format error
@@ -128,6 +141,7 @@ static bool read_xbm_body(QIODevice *device, int w, int h, QImage *outImage)
 
    if (outImage->size() != QSize(w, h) || outImage->format() != QImage::Format_MonoLSB) {
       *outImage = QImage(w, h, QImage::Format_MonoLSB);
+
       if (outImage->isNull()) {
          return false;
       }
@@ -135,7 +149,7 @@ static bool read_xbm_body(QIODevice *device, int w, int h, QImage *outImage)
 
    outImage->setColorCount(2);
    outImage->setColor(0, qRgb(255, 255, 255));      // white
-   outImage->setColor(1, qRgb(0, 0, 0));              // black
+   outImage->setColor(1, qRgb(0, 0, 0));            // black
 
    int           x = 0, y = 0;
    uchar *b = outImage->scanLine(0);
@@ -323,23 +337,24 @@ bool QXbmHandler::write(const QImage &image)
 
 bool QXbmHandler::supportsOption(ImageOption option) const
 {
-   return option == Name
-          || option == Size
-          || option == ImageFormat;
+   return option == Name || option == Size || option == ImageFormat;
 }
 
 QVariant QXbmHandler::option(ImageOption option) const
 {
    if (option == Name) {
       return fileName;
+
    } else if (option == Size) {
       if (state == Error) {
          return QVariant();
       }
+
       if (state == Ready && !const_cast<QXbmHandler *>(this)->readHeader()) {
          return QVariant();
       }
       return QSize(width, height);
+
    } else if (option == ImageFormat) {
       return QImage::Format_MonoLSB;
    }

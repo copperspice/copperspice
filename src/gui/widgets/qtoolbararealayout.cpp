@@ -1312,12 +1312,15 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
 
          for (int k = 0; k < line.toolBarItems.count(); ++k) {
             const QToolBarAreaLayoutItem &item = line.toolBarItems.at(k);
+
             QWidget *widget = const_cast<QLayoutItem *>(item.widgetItem)->widget();
             QString objectName = widget->objectName();
+
             if (objectName.isEmpty()) {
                qWarning("QMainWindow::saveState(): 'objectName' not set for QToolBar %p '%s'",
-                        widget, widget->windowTitle().toLocal8Bit().constData());
+                        widget, csPrintable(widget->windowTitle()) );
             }
+
             stream << objectName;
             // we store information as:
             // 1st bit: 1 if shown

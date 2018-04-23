@@ -190,8 +190,8 @@ QShortcut::QShortcut(QWidget *parent)
    Q_ASSERT(parent != 0);
 }
 
-QShortcut::QShortcut(const QKeySequence &key, QWidget *parent, const char *member,
-                     const char *ambiguousMember, Qt::ShortcutContext context)
+QShortcut::QShortcut(const QKeySequence &key, QWidget *parent, const QString &member,
+                     const QString &ambiguousMember, Qt::ShortcutContext context)
    : QObject(parent), d_ptr(new QShortcutPrivate)
 {
    d_ptr->q_ptr = this;
@@ -204,11 +204,11 @@ QShortcut::QShortcut(const QKeySequence &key, QWidget *parent, const char *membe
    d->sc_sequence = key;
    d->redoGrab(qApp->d_func()->shortcutMap);
 
-   if (member) {
+   if (! member.isEmpty()) {
       connect(this, SIGNAL(activated()), parent, member);
    }
 
-   if (ambiguousMember) {
+   if (! ambiguousMember.isEmpty()) {
       connect(this, SIGNAL(activatedAmbiguously()), parent, ambiguousMember);
    }
 }

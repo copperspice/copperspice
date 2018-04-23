@@ -1170,14 +1170,17 @@ Qt::LayoutDirection QTextBlock::textDirection() const
    const int pos = position();
    QTextDocumentPrivate::FragmentIterator it = p->find(pos);
    QTextDocumentPrivate::FragmentIterator end = p->find(pos + length() - 1); // -1 to omit the block separator char
+
    for (; it != end; ++it) {
       const QTextFragmentData *const frag = it.value();
       const QChar *p = buffer.constData() + frag->stringPosition;
       const QChar *const end = p + frag->size_array[0];
+
       while (p < end) {
          switch (QChar::direction(p->unicode())) {
             case QChar::DirL:
                return Qt::LeftToRight;
+
             case QChar::DirR:
             case QChar::DirAL:
                return Qt::RightToLeft;
@@ -1190,46 +1193,33 @@ Qt::LayoutDirection QTextBlock::textDirection() const
    return Qt::LeftToRight;
 }
 
-/*!
-    Returns the block's contents as plain text.
-
-    \sa length() charFormat() blockFormat()
- */
 QString QTextBlock::text() const
 {
-   if (!p || !n) {
+   if (! p || ! n) {
       return QString();
    }
 
    const QString buffer = p->buffer();
    QString text;
-   text.reserve(length());
 
    const int pos = position();
-   QTextDocumentPrivate::FragmentIterator it = p->find(pos);
+   QTextDocumentPrivate::FragmentIterator it  = p->find(pos);
    QTextDocumentPrivate::FragmentIterator end = p->find(pos + length() - 1); // -1 to omit the block separator char
+
    for (; it != end; ++it) {
       const QTextFragmentData *const frag = it.value();
-      text += QString::fromRawData(buffer.constData() + frag->stringPosition, frag->size_array[0]);
+
+      text += buffer.mid(frag->stringPosition, frag->size_array[0]);
    }
 
    return text;
 }
 
-
-/*!
-    Returns the text document this text block belongs to, or 0 if the
-    text block does not belong to any document.
-*/
 const QTextDocument *QTextBlock::document() const
 {
    return p ? p->document() : 0;
 }
 
-/*!
-    If the block represents a list item, returns the list that the item belongs
-    to; otherwise returns 0.
-*/
 QTextList *QTextBlock::textList() const
 {
    if (!isValid()) {
@@ -1241,12 +1231,6 @@ QTextList *QTextBlock::textList() const
    return qobject_cast<QTextList *>(obj);
 }
 
-/*!
-    \since 4.1
-
-    Returns a pointer to a QTextBlockUserData object if previously set with
-    setUserData() or a null pointer.
-*/
 QTextBlockUserData *QTextBlock::userData() const
 {
    if (!p || !n) {
@@ -1257,31 +1241,6 @@ QTextBlockUserData *QTextBlock::userData() const
    return b->userData;
 }
 
-/*!
-    \since 4.1
-
-    Attaches the given \a data object to the text block.
-
-    QTextBlockUserData can be used to store custom settings.  The
-    ownership is passed to the underlying text document, i.e. the
-    provided QTextBlockUserData object will be deleted if the
-    corresponding text block gets deleted. The user data object is
-    not stored in the undo history, so it will not be available after
-    undoing the deletion of a text block.
-
-    For example, if you write a programming editor in an IDE, you may
-    want to let your user set breakpoints visually in your code for an
-    integrated debugger. In a programming editor a line of text
-    usually corresponds to one QTextBlock. The QTextBlockUserData
-    interface allows the developer to store data for each QTextBlock,
-    like for example in which lines of the source code the user has a
-    breakpoint set. Of course this could also be stored externally,
-    but by storing it inside the QTextDocument, it will for example be
-    automatically deleted when the user deletes the associated
-    line. It's really just a way to store custom information in the
-    QTextDocument without using custom properties in QTextFormat which
-    would affect the undo/redo stack.
-*/
 void QTextBlock::setUserData(QTextBlockUserData *data)
 {
    if (!p || !n) {
@@ -1779,7 +1738,7 @@ QTextCharFormat QTextFragment::charFormat() const
 */
 int QTextFragment::charFormatIndex() const
 {
-   if (!p || !n) {
+   if (! p || !n) {
       return -1;
    }
    const QTextFragmentData *data = p->fragmentMap().fragment(n);
@@ -1800,11 +1759,13 @@ QString QTextFragment::text() const
    QString result;
    QString buffer = p->buffer();
    int f = n;
+
    while (f != ne) {
       const QTextFragmentData *const frag = p->fragmentMap().fragment(f);
-      result += QString(buffer.constData() + frag->stringPosition, frag->size_array[0]);
+      result += buffer.mid(frag->stringPosition, frag->size_array[0]);
       f = p->fragmentMap().next(f);
    }
+
    return result;
 }
 

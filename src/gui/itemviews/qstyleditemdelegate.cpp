@@ -297,18 +297,22 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
    Q_UNUSED(editor);
    Q_UNUSED(index);
 #else
+
    Q_D(const QStyledItemDelegate);
    QVariant v = index.data(Qt::EditRole);
-   QByteArray n = editor->metaObject()->userProperty().name();
+
+   QString n = editor->metaObject()->userProperty().name();
 
    // ### Qt5: remove
    // A work-around for missing "USER true" in qdatetimeedit.h for
    // QTimeEdit's time property and QDateEdit's date property.
    // It only triggers if the default user property "dateTime" is
    // reported for QTimeEdit and QDateEdit.
+
    if (n == "dateTime") {
       if (editor->inherits("QTimeEdit")) {
          n = "time";
+
       } else if (editor->inherits("QDateEdit")) {
          n = "date";
       }
@@ -318,8 +322,9 @@ void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
    if (n.isEmpty() && editor->inherits("QComboBox")) {
       n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(v.userType()));
    }
+
    if (!n.isEmpty()) {
-      if (!v.isValid()) {
+      if (! v.isValid()) {
          v = QVariant(editor->property(n).userType(), (const void *)0);
       }
       editor->setProperty(n, v);
@@ -339,22 +344,17 @@ void QStyledItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
    Q_ASSERT(model);
    Q_ASSERT(editor);
 
-   QByteArray n = editor->metaObject()->userProperty().name();
+   QString n = editor->metaObject()->userProperty().name();
 
    if (n.isEmpty()) {
       n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(model->data(index, Qt::EditRole).userType()));
-   }
 
-   if (!n.isEmpty()) {
+   } else {
       model->setData(index, editor->property(n), Qt::EditRole);
    }
 #endif
 }
 
-/*!
-    Updates the \a editor for the item specified by \a index
-    according to the style \a option given.
-*/
 void QStyledItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    if (!editor) {
@@ -370,7 +370,7 @@ void QStyledItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpti
    // let the editor take up all available space
    //if the editor is not a QLineEdit or it is in a QTableView
 
-#if !defined(QT_NO_TABLEVIEW) && !defined(QT_NO_LINEEDIT)
+#if ! defined(QT_NO_TABLEVIEW) && !defined(QT_NO_LINEEDIT)
    if (qobject_cast<QExpandingLineEdit *>(editor) && !qobject_cast<const QTableView *>(widget)) {
       opt.showDecorationSelected = editor->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, 0, editor);
    } else

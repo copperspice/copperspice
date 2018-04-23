@@ -51,7 +51,7 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
    QPrinterPrivate *pd;
    bool ownsPrinter;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 
    QAbstractPrintDialog::PrintDialogOptions options;
 

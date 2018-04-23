@@ -1501,35 +1501,23 @@ static inline unsigned int getChar(const QChar *str, int &i, const int len)
    return ucs4;
 }
 
-bool QFontEngineFT::canRender(const QChar *string, int len)
+bool QFontEngineFT::canRender(QStringView str)
 {
    FT_Face face = freetype->face;
-#if 0
-   if (_cmap != -1) {
-      lockFace();
-      for ( int i = 0; i < len; i++ ) {
-         unsigned int uc = getChar(string, i, len);
-         if (!FcCharSetHasChar (_font->charset, uc) && getAdobeCharIndex(face, _cmap, uc) == 0) {
-            allExist = false;
-            break;
-         }
-      }
-      unlockFace();
-   } else
-#endif
-   {
-      for ( int i = 0; i < len; i++ ) {
-         unsigned int uc = getChar(string, i, len);
-         if (!FT_Get_Char_Index(face, uc)) {
-            return false;
-         }
+
+   for ( int i = 0; i < len; i++ ) {
+      unsigned int uc = getChar(str, i, len);
+
+      if (! FT_Get_Char_Index(face, uc)) {
+         return false;
       }
    }
+
    return true;
 }
 
 void QFontEngineFT::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path,
-                                     QTextItem::RenderFlags flags)
+                  QTextItem::RenderFlags flags)
 {
    if (!glyphs.numGlyphs) {
       return;
@@ -1537,6 +1525,7 @@ void QFontEngineFT::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyph
 
    if (FT_IS_SCALABLE(freetype->face)) {
       QFontEngine::addOutlineToPath(x, y, glyphs, path, flags);
+
    } else {
       QVarLengthArray<QFixedPoint> positions;
       QVarLengthArray<glyph_t> positioned_glyphs;

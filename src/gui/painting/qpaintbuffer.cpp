@@ -39,53 +39,51 @@
 
 QT_BEGIN_NAMESPACE
 
-extern void qt_format_text(const QFont &font,
-                           const QRectF &_r, int tf, const QTextOption *option, const QString &str, QRectF *brect,
-                           int tabstops, int *tabarray, int tabarraylen,
-                           QPainter *painter);
+extern void qt_format_text(const QFont &font, const QRectF &_r, int tf, const QTextOption *option, const QString &str, QRectF *brect,
+                  int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
 
 QTextItemIntCopy::QTextItemIntCopy(const QTextItem &item)
    : m_item(static_cast<const QTextItemInt &>(item))
 {
-   QChar *chars = new QChar[m_item.num_chars];
-   unsigned short *logClusters = new unsigned short[m_item.num_chars];
-   memcpy(chars, m_item.chars, m_item.num_chars * sizeof(QChar));
-   memcpy(logClusters, m_item.logClusters, m_item.num_chars * sizeof(unsigned short));
-   m_item.chars = chars;
+   // text
+   m_text = QString(m_item.m_iter, m_item.m_end);
+   m_item.m_iter = m_text.begin();
+   m_item.m_end  = m_text.end();
+
+   // font
+   m_font = *m_item.f;
+
+   int textLen = m_text.length();
+
+   unsigned short *logClusters = new unsigned short[textLen];
+   memcpy(logClusters, m_item.logClusters, textLen * sizeof(unsigned short));
    m_item.logClusters = logClusters;
 
    const int size = QGlyphLayout::spaceNeededForGlyphLayout(m_item.glyphs.numGlyphs);
    char *glyphLayoutData = new char[size];
    QGlyphLayout glyphs(glyphLayoutData, m_item.glyphs.numGlyphs);
-   memcpy(glyphs.offsets, m_item.glyphs.offsets, m_item.glyphs.numGlyphs * sizeof(QFixedPoint));
-   memcpy(glyphs.glyphs, m_item.glyphs.glyphs, m_item.glyphs.numGlyphs * sizeof(HB_Glyph));
+
+   memcpy(glyphs.offsets,    m_item.glyphs.offsets, m_item.glyphs.numGlyphs * sizeof(QFixedPoint));
+   memcpy(glyphs.glyphs,     m_item.glyphs.glyphs, m_item.glyphs.numGlyphs * sizeof(HB_Glyph));
    memcpy(glyphs.advances_x, m_item.glyphs.advances_x, m_item.glyphs.numGlyphs * sizeof(QFixed));
    memcpy(glyphs.advances_y, m_item.glyphs.advances_y, m_item.glyphs.numGlyphs * sizeof(QFixed));
    memcpy(glyphs.justifications, m_item.glyphs.justifications, m_item.glyphs.numGlyphs * sizeof(QGlyphJustification));
    memcpy(glyphs.attributes, m_item.glyphs.attributes, m_item.glyphs.numGlyphs * sizeof(HB_GlyphAttributes));
+
    m_item.glyphs = glyphs;
-
-   m_font = *m_item.f;
-   m_item.f = &m_font;
-
-   m_item.fontEngine->ref.ref(); // Increment reference count.
+   m_item.f      = &m_font;
+   m_item.fontEngine->ref.ref(); // Increment reference count
 }
 
 QTextItemIntCopy::~QTextItemIntCopy()
 {
-   delete m_item.chars;
    delete m_item.logClusters;
    delete m_item.glyphs.data();
-   if (!m_item.fontEngine->ref.deref()) {
+
+   if (! m_item.fontEngine->ref.deref()) {
       delete m_item.fontEngine;
    }
 }
-
-/************************************************************************
- *
- * QPaintBufferSignalProxy
- *
- ************************************************************************/
 
 Q_GLOBAL_STATIC(QPaintBufferSignalProxy, theSignalProxy)
 
@@ -93,12 +91,6 @@ QPaintBufferSignalProxy *QPaintBufferSignalProxy::instance()
 {
    return theSignalProxy();
 }
-
-/************************************************************************
- *
- * QPaintBufferPrivate
- *
- ************************************************************************/
 
 QPaintBufferPrivate::QPaintBufferPrivate()
    : ref(1), engine(0), penWidthAdjustment(0)
@@ -113,6 +105,7 @@ QPaintBufferPrivate::~QPaintBufferPrivate()
 
    for (int i = 0; i < commands.size(); ++i) {
       const QPaintBufferCommand &cmd = commands.at(i);
+
       if (cmd.id == QPaintBufferPrivate::Cmd_DrawTextItem) {
          delete reinterpret_cast<QTextItemIntCopy *>(qvariant_cast<void *>(variants.at(cmd.offset)));
       }
@@ -127,9 +120,9 @@ inline void QPaintBufferPrivate::updateBoundingRect(const QRectF &br)
    QPainter *painter = engine->painter();
    const QTransform transform = painter->transform();
    QRectF devRect = transform.mapRect(br);
+
    if (penWidthAdjustment > 0) {
-      devRect = devRect.adjusted(-penWidthAdjustment, -penWidthAdjustment,
-                                 penWidthAdjustment, penWidthAdjustment);
+      devRect = devRect.adjusted(-penWidthAdjustment, -penWidthAdjustment, penWidthAdjustment, penWidthAdjustment);
    }
 
    if (boundingRect.isEmpty()) {
@@ -145,15 +138,6 @@ inline void QPaintBufferPrivate::updateBoundingRect(const QRectF &br)
       boundingRect &= transform.mapRect(painter->clipRegion().boundingRect());
    }
 }
-
-
-/************************************************************************
- *
- * QPaintBuffer
- *
- ************************************************************************/
-
-
 
 QPaintBuffer::QPaintBuffer()
    : d_ptr(new QPaintBufferPrivate)
@@ -230,8 +214,6 @@ bool QPaintBuffer::isEmpty() const
 {
    return d_ptr->commands.isEmpty();
 }
-
-
 
 void QPaintBuffer::draw(QPainter *painter, int frame) const
 {

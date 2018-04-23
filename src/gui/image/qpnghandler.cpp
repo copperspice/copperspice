@@ -33,7 +33,7 @@
 
 #ifdef QT_USE_BUNDLED_LIBPNG
 #include <../../3rdparty/libpng/png.h>            // not sure if this can be changed to < >
-#include <../../3rdparty/libpng/pngconf.h>        // not sure if this can be changed to < > 
+#include <../../3rdparty/libpng/pngconf.h>        // not sure if this can be changed to < >
 #else
 #include <png.h>
 #include <pngconf.h>
@@ -659,6 +659,7 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
 
    QMap<QString, QString>::ConstIterator it = text.constBegin();
    int i = 0;
+
    while (it != text.constEnd()) {
       text_ptr[i].key = qstrdup(it.key().left(79).toLatin1().constData());
       bool noCompress = (it.value().length() < 40);
@@ -667,8 +668,9 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
       bool needsItxt = false;
 
       for (const QChar c : it.value()) {
-         uchar ch = c.cell();
-         if (c.row() || (ch < 0x20 && ch != '\n') || (ch > 0x7e && ch < 0xa0)) {
+         uchar ch = c.unicode() & 0xFF;
+
+         if (c.unicode() > 0xFF || (ch < 0x20 && ch != '\n') || (ch > 0x7e && ch < 0xa0)) {
             needsItxt = true;
             break;
          }

@@ -226,16 +226,17 @@ static const QCssKnownValue values[NumKnownValues - 1] = {
 };
 
 //Map id to strings as they appears in the 'values' array above
-static const short indexOfId[NumKnownValues] = { 0, 41, 48, 42, 49, 54, 35, 26, 70, 71, 25, 43, 5, 63, 47,
-                                                 29, 58, 59, 27, 51, 61, 6, 10, 39, 56, 19, 13, 17, 18, 20, 21, 50, 24, 46, 67, 37, 3, 2, 40, 62, 16,
-                                                 11, 57, 14, 32, 64, 33, 65, 55, 66, 34, 69, 8, 28, 38, 12, 36, 60, 7, 9, 4, 68, 53, 22, 23, 30, 31,
-                                                 1, 15, 0, 52, 45, 44
-                                               };
+static const short indexOfId[NumKnownValues] = {
+   0, 41, 48, 42, 49, 54, 35, 26, 70, 71, 25, 43, 5, 63, 47,
+  29, 58, 59, 27, 51, 61, 6, 10, 39, 56, 19, 13, 17, 18, 20, 21, 50, 24, 46, 67, 37, 3, 2, 40, 62, 16,
+  11, 57, 14, 32, 64, 33, 65, 55, 66, 34, 69, 8, 28, 38, 12, 36, 60, 7, 9, 4, 68, 53, 22, 23, 30, 31,
+   1, 15, 0, 52, 45, 44
+};
 
 QString Value::toString() const
 {
    if (type == KnownIdentifier) {
-      return QLatin1String(values[indexOfId[variant.toInt()]].name);
+      return QString::fromLatin1(values[indexOfId[variant.toInt()]].name);
    } else {
       return variant.toString();
    }
@@ -328,12 +329,12 @@ static const QCssKnownValue styleFeatures[NumKnownStyleFeatures - 1] = {
 
 static bool operator<(const QString &name, const QCssKnownValue &prop)
 {
-   return QString::compare(name, QLatin1String(prop.name), Qt::CaseInsensitive) < 0;
+   return QString::compare(name, QString::fromLatin1(prop.name), Qt::CaseInsensitive) < 0;
 }
 
 static bool operator<(const QCssKnownValue &prop, const QString &name)
 {
-   return QString::compare(QLatin1String(prop.name), name, Qt::CaseInsensitive) < 0;
+   return QString::compare(QString::fromLatin1(prop.name), name, Qt::CaseInsensitive) < 0;
 }
 
 static quint64 findKnownValue(const QString &name, const QCssKnownValue *start, int numValues)
@@ -348,7 +349,6 @@ static quint64 findKnownValue(const QString &name, const QCssKnownValue *start, 
    return prop->id;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 // Value Extractor
 ValueExtractor::ValueExtractor(const QVector<Declaration> &decls, const QPalette &pal)
    : declarations(decls), adjustment(0), fontExtracted(false), pal(pal)
@@ -358,14 +358,17 @@ ValueExtractor::ValueExtractor(const QVector<Declaration> &decls, const QPalette
 LengthData ValueExtractor::lengthValue(const Value &v)
 {
    QString s = v.variant.toString();
-   s.reserve(s.length());
+
    LengthData data;
    data.unit = LengthData::None;
-   if (s.endsWith(QLatin1String("px"), Qt::CaseInsensitive)) {
+
+   if (s.endsWith("px", Qt::CaseInsensitive)) {
       data.unit = LengthData::Px;
-   } else if (s.endsWith(QLatin1String("ex"), Qt::CaseInsensitive)) {
+
+   } else if (s.endsWith("ex", Qt::CaseInsensitive)) {
       data.unit = LengthData::Ex;
-   } else if (s.endsWith(QLatin1String("em"), Qt::CaseInsensitive)) {
+
+   } else if (s.endsWith("em", Qt::CaseInsensitive)) {
       data.unit = LengthData::Em;
    }
 
@@ -381,9 +384,11 @@ static int lengthValueFromData(const LengthData &data, const QFont &f)
 {
    if (data.unit == LengthData::Ex) {
       return qRound(QFontMetrics(f).xHeight() * data.number);
+
    } else if (data.unit == LengthData::Em) {
       return qRound(QFontMetrics(f).height() * data.number);
    }
+
    return qRound(data.number);
 }
 
@@ -1647,17 +1652,20 @@ bool Declaration::realValue(qreal *real, const char *unit) const
    if (d->values.count() != 1) {
       return false;
    }
+
    const Value &v = d->values.at(0);
    if (unit && v.type != Value::Length) {
       return false;
    }
+
    QString s = v.variant.toString();
    if (unit) {
-      if (!s.endsWith(QLatin1String(unit), Qt::CaseInsensitive)) {
+      if (! s.endsWith(QString::fromLatin1(unit), Qt::CaseInsensitive)) {
          return false;
       }
       s.chop(qstrlen(unit));
    }
+
    bool ok = false;
    qreal val = s.toDouble(&ok);
    if (ok) {
@@ -1671,18 +1679,23 @@ static bool intValueHelper(const QCss::Value &v, int *i, const char *unit)
    if (unit && v.type != Value::Length) {
       return false;
    }
+
    QString s = v.variant.toString();
+
    if (unit) {
-      if (!s.endsWith(QLatin1String(unit), Qt::CaseInsensitive)) {
+      if (!s.endsWith(QString::fromLatin1(unit), Qt::CaseInsensitive)) {
          return false;
       }
       s.chop(qstrlen(unit));
    }
+
    bool ok = false;
-   int val = s.toInt(&ok);
+   int val = s.toInteger<int>(&ok);
+
    if (ok) {
       *i = val;
    }
+
    return ok;
 }
 
@@ -1728,16 +1741,20 @@ QRect Declaration::rectValue() const
    if (v.type != Value::Function) {
       return QRect();
    }
+
    QStringList func = v.variant.toStringList();
-   if (func.count() != 2 || func.at(0).compare(QLatin1String("rect")) != 0) {
+   if (func.count() != 2 || func.at(0).compare("rect") != 0) {
       return QRect();
    }
-   QStringList args = func[1].split(QLatin1Char(' '), QString::SkipEmptyParts);
+
+   QStringList args = func[1].split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
    if (args.count() != 4) {
       return QRect();
    }
-   QRect rect(args[0].toInt(), args[1].toInt(), args[2].toInt(), args[3].toInt());
+
+   QRect rect(args[0].toInteger<int>(), args[1].toInteger<int>(), args[2].toInteger<int>(), args[3].toInteger<int>());
    d->parsed = QVariant::fromValue<QRect>(rect);
+
    return rect;
 }
 
@@ -1897,13 +1914,13 @@ Qt::Alignment Declaration::alignmentValue() const
    return v;
 }
 
-void Declaration::borderImageValue(QString *image, int *cuts,
-                                   TileMode *h, TileMode *v) const
+void Declaration::borderImageValue(QString *image, int *cuts, TileMode *h, TileMode *v) const
 {
    *image = uriValue();
    for (int i = 0; i < 4; i++) {
       cuts[i] = -1;
    }
+
    *h = *v = TileMode_Stretch;
 
    if (d->values.count() < 2) {
@@ -1912,32 +1929,37 @@ void Declaration::borderImageValue(QString *image, int *cuts,
 
    if (d->values.at(1).type == Value::Number) { // cuts!
       int i;
+
       for (i = 0; i < qMin(d->values.count() - 1, 4); i++) {
          const Value &v = d->values.at(i + 1);
+
          if (v.type != Value::Number) {
             break;
          }
-         cuts[i] = v.variant.toString().toInt();
+         cuts[i] = v.variant.toString().toInteger<int>();
       }
+
       if (i == 0) {
          cuts[0] = cuts[1] = cuts[2] = cuts[3] = 0;
+
       } else if (i == 1) {
          cuts[3] = cuts[2] = cuts[1] = cuts[0];
+
       } else if (i == 2) {
          cuts[2] = cuts[0], cuts[3] = cuts[1];
+
       } else if (i == 3) {
          cuts[3] = cuts[1];
       }
    }
 
    if (d->values.last().type == Value::Identifier) {
-      *v = static_cast<TileMode>(findKnownValue(d->values.last().variant.toString(),
-                                 tileModes, NumKnownTileModes));
+      *v = static_cast<TileMode>(findKnownValue(d->values.last().variant.toString(), tileModes, NumKnownTileModes));
    }
+
    if (d->values[d->values.count() - 2].type == Value::Identifier) {
-      *h = static_cast<TileMode>
-           (findKnownValue(d->values[d->values.count() - 2].variant.toString(),
-                           tileModes, NumKnownTileModes));
+      *h = static_cast<TileMode>(findKnownValue(d->values[d->values.count() - 2].variant.toString(), tileModes, NumKnownTileModes));
+
    } else {
       *h = *v;
    }
@@ -2199,7 +2221,7 @@ bool StyleSelector::basicSelectorMatches(const BasicSelector &sel, NodePtr node)
          const QCss::AttributeSelector &a = sel.attributeSelectors.at(i);
 
          const QString attrValue = attribute(node, a.name);
-         if (attrValue.isNull()) {
+         if (attrValue.isEmpty()) {
             return false;
          }
 
@@ -2331,18 +2353,21 @@ QVector<Declaration> StyleSelector::declarationsForNode(NodePtr node, const char
 {
    QVector<Declaration> decls;
    QVector<StyleRule> rules = styleRulesForNode(node);
+
    for (int i = 0; i < rules.count(); i++) {
       const Selector &selector = rules.at(i).selectors.at(0);
       const QString pseudoElement = selector.pseudoElement();
 
-      if (extraPseudo && pseudoElement == QLatin1String(extraPseudo)) {
+      if (extraPseudo && pseudoElement == QString::fromLatin1(extraPseudo)) {
          decls += rules.at(i).declarations;
          continue;
       }
 
-      if (!pseudoElement.isEmpty()) { // skip rules with pseudo elements
+      if (! pseudoElement.isEmpty()) {
+         // skip rules with pseudo elements
          continue;
       }
+
       quint64 pseudoClass = selector.pseudoClass();
       if (pseudoClass == PseudoClass_Enabled || pseudoClass == PseudoClass_Unspecified) {
          decls += rules.at(i).declarations;
@@ -2353,10 +2378,7 @@ QVector<Declaration> StyleSelector::declarationsForNode(NodePtr node, const char
 
 static inline bool isHexDigit(const char c)
 {
-   return (c >= '0' && c <= '9')
-          || (c >= 'a' && c <= 'f')
-          || (c >= 'A' && c <= 'F')
-          ;
+   return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 }
 
 QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
@@ -2370,17 +2392,17 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
    int i = 0;
    while (i < output.size()) {
       if (output.at(i) == QLatin1Char('\\')) {
-
          ++i;
+
          // test for unicode hex escape
          int hexCount = 0;
          const int hexStart = i;
-         while (i < output.size()
-                && isHexDigit(output.at(i).toLatin1())
-                && hexCount < 7) {
+
+         while (i < output.size() && isHexDigit(output.at(i).toLatin1()) && hexCount < 7) {
             ++hexCount;
             ++i;
          }
+
          if (hexCount == 0) {
             if (hasEscapeSequences) {
                *hasEscapeSequences = true;
@@ -2390,13 +2412,15 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
 
          hexCount = qMin(hexCount, 6);
          bool ok = false;
-         ushort code = output.mid(hexStart, hexCount).toUShort(&ok, 16);
+         ushort code = output.mid(hexStart, hexCount).toInteger<ushort>(&ok, 16);
+
          if (ok) {
             output.replace(hexStart - 1, hexCount + 1, QChar(code));
             i = hexStart;
          } else {
             i = hexStart;
          }
+
       } else {
          ++i;
       }
@@ -2407,8 +2431,7 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
 int QCssScanner_Generated::handleCommentStart()
 {
    while (pos < input.size() - 1) {
-      if (input.at(pos) == QLatin1Char('*')
-            && input.at(pos + 1) == QLatin1Char('/')) {
+      if (input.at(pos) == QLatin1Char('*') && input.at(pos + 1) == QLatin1Char('/')) {
          pos += 2;
          break;
       }
@@ -2420,8 +2443,10 @@ int QCssScanner_Generated::handleCommentStart()
 void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 {
    QCssScanner_Generated scanner(preprocessedInput);
+
    Symbol sym;
    int tok = scanner.lex();
+
    while (tok != -1) {
       sym.token = static_cast<QCss::TokenType>(tok);
       sym.text = scanner.input;
@@ -2435,15 +2460,15 @@ void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 QString Symbol::lexem() const
 {
    QString result;
-   if (len > 0) {
-      result.reserve(len);
-   }
+
    for (int i = 0; i < len; ++i) {
       if (text.at(start + i) == QLatin1Char('\\') && i < len - 1) {
          ++i;
       }
+
       result += text.at(start + i);
    }
+
    return result;
 }
 

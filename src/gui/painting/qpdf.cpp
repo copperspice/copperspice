@@ -937,38 +937,44 @@ QPdfBaseEngine::QPdfBaseEngine(QPdfBaseEnginePrivate &dd, PaintEngineFeatures f)
    : QAlphaPaintEngine(dd, f)
 {
    Q_D(QPdfBaseEngine);
+
 #if !defined(QT_NO_CUPS)
    if (QCUPSSupport::isAvailable()) {
       QCUPSSupport cups;
+
       const cups_dest_t *printers = cups.availablePrinters();
       int prnCount = cups.availablePrintersCount();
 
       for (int i = 0; i <  prnCount; ++i) {
          if (printers[i].is_default) {
-            d->printerName = QString::fromLocal8Bit(printers[i].name);
+            d->printerName = QString::fromUtf8(printers[i].name);
             break;
          }
       }
 
    } else
 #endif
+
    {
-      d->printerName = QString::fromLocal8Bit(qgetenv("PRINTER"));
+      d->printerName = QString::fromUtf8(qgetenv("PRINTER"));
+
       if (d->printerName.isEmpty()) {
-         d->printerName = QString::fromLocal8Bit(qgetenv("LPDEST"));
+         d->printerName = QString::fromUtf8(qgetenv("LPDEST"));
       }
+
       if (d->printerName.isEmpty()) {
-         d->printerName = QString::fromLocal8Bit(qgetenv("NPRINTER"));
+         d->printerName = QString::fromUtf8(qgetenv("NPRINTER"));
       }
+
       if (d->printerName.isEmpty()) {
-         d->printerName = QString::fromLocal8Bit(qgetenv("NGPRINTER"));
+         d->printerName = QString::fromUtf8(qgetenv("NGPRINTER"));
       }
    }
 }
 
 void QPdfBaseEngine::drawPoints (const QPointF *points, int pointCount)
 {
-   if (!points) {
+   if (! points) {
       return;
    }
 

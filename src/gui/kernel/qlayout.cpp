@@ -88,10 +88,9 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
 
    } else if (w) {
       if (w->layout()) {
-         qWarning("QLayout: Attempting to add QLayout \"%s\" to %s \"%s\", which"
-                  " already has a layout",
-                  qPrintable(QObject::objectName()), w->metaObject()->className(),
-                  w->objectName().toLocal8Bit().data());
+         qWarning("QLayout: Attempting to add QLayout \"%s\" to %s \"%s\", which  already has a layout",
+                  csPrintable(QObject::objectName()), csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+
          setParent(0);
 
       } else {
@@ -763,8 +762,7 @@ QLayout::~QLayout()
 void QLayout::addChildLayout(QLayout *l)
 {
    if (l->parent()) {
-      qWarning("QLayout::addChildLayout: layout \"%s\" already has a parent",
-               l->objectName().toLocal8Bit().data());
+      qWarning("QLayout::addChildLayout: layout \"%s\" already has a parent", csPrintable(l->objectName()));
       return;
    }
    l->setParent(this);
@@ -818,8 +816,8 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
 
 #ifdef QT_DEBUG
          if (pw && pw != mw && layoutDebug()) {
-            qWarning("QLayout::addChildLayout() Widget %s \"%s\" in wrong parent; moved to correct parent",
-                     w->metaObject()->className(), w->objectName().toLocal8Bit().data());
+            qWarning("QLayout::addChildLayout() Widget %s \"%s\" in wrong parent, moved to correct parent",
+                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
          bool needShow = mwVisible && !(w->isHidden() && w->testAttribute(Qt::WA_WState_ExplicitShowHide));
@@ -829,6 +827,7 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
          if (needShow) {
             QMetaObject::invokeMethod(w, "_q_showIfNotHidden", Qt::QueuedConnection);   //show later
          }
+
       } else if (QLayout *l = item->layout()) {
          l->d_func()->reparentChildWidgets(mw);
       }
@@ -853,19 +852,22 @@ void QLayout::addChildWidget(QWidget *w)
       QLayout *l = pw->layout();
 
       if (l && removeWidgetRecursively(l, w)) {
+
 #ifdef QT_DEBUG
-         if (layoutDebug())
+         if (layoutDebug()) {
             qWarning("QLayout::addChildWidget: %s \"%s\" is already in a layout; moved to new layout",
-                     w->metaObject()->className(), w->objectName().toLocal8Bit().data());
+                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
+         }
 #endif
       }
    }
 
    if (pw && mw && pw != mw) {
+
 #ifdef QT_DEBUG
       if (layoutDebug())
          qWarning("QLayout::addChildWidget: %s \"%s\" in wrong parent; moved to correct parent",
-                  w->metaObject()->className(), w->objectName().toLocal8Bit().data());
+                  csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
       pw = 0;
    }
@@ -1021,10 +1023,11 @@ bool QLayout::activate()
    if (d->activated) {
       return false;
    }
+
    QWidget *mw = static_cast<QWidget *>(parent());
    if (mw == 0) {
       qWarning("QLayout::activate: %s \"%s\" does not have a main widget",
-               QObject::metaObject()->className(), QObject::objectName().toLocal8Bit().data());
+               csPrintable(QObject::metaObject()->className()), csPrintable(QObject::objectName()));
       return false;
    }
    activateRecursiveHelper(this);

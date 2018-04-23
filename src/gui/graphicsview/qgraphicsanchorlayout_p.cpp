@@ -20,19 +20,18 @@
 *
 ***********************************************************************/
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qapplication.h>
-#include <QtCore/qlinkedlist.h>
-#include <QtCore/qstack.h>
+#include <qwidget.h>
+#include <qapplication.h>
+#include <qlinkedlist.h>
+#include <qstack.h>
 
 #ifdef QT_DEBUG
-#include <QtCore/qfile.h>
+#include <qfile.h>
 #endif
 
 #include <qgraphicsanchorlayout_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-QT_BEGIN_NAMESPACE
 
 // To ensure that all variables inside the simplex solver are non-negative,
 // we limit the size of anchors in the interval [-limit, limit]. Then before
@@ -600,11 +599,11 @@ QString GraphPath::toString() const
    QString string(QLatin1String("Path: "));
 
    for (AnchorData * edge : positives) {
-      string += QString::fromLatin1(" (+++) %1").arg(edge->toString());
+      string += QString::fromLatin1(" (+++) %1").formatArg(edge->toString());
    }
 
    for (AnchorData * edge : negatives) {
-      string += QString::fromLatin1(" (---) %1").arg(edge->toString());
+      string += QString::fromLatin1(" (---) %1").formatArg(edge->toString());
    }
 
    return string;
@@ -874,7 +873,7 @@ bool QGraphicsAnchorLayoutPrivate::replaceVertex(Orientation orientation, Anchor
       AnchorVertex *otherV = replaceVertex_helper(ad, oldV, newV);
 
 #if defined(QT_DEBUG)
-      ad->name = QString::fromLatin1("%1 --to--> %2").arg(ad->from->toString()).arg(ad->to->toString());
+      ad->name = QString::fromLatin1("%1 --to--> %2").formatArg(ad->from->toString()).formatArg(ad->to->toString());
 #endif
 
       bool newFeasible;
@@ -1742,7 +1741,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
    data->from = v1;
    data->to = v2;
 #ifdef QT_DEBUG
-   data->name = QString::fromLatin1("%1 --to--> %2").arg(v1->toString()).arg(v2->toString());
+   data->name = QString::fromLatin1("%1 --to--> %2").formatArg(v1->toString()).formatArg(v2->toString());
 #endif
    // ### bit to track internal anchors, since inside AnchorData methods
    // we don't have access to the 'q' pointer.
@@ -2604,14 +2603,14 @@ void QGraphicsAnchorLayoutPrivate::identifyFloatItems(const QSet<AnchorData *> &
 
    for (const AnchorData * ad : visited) {
       identifyNonFloatItems_helper(ad, &nonFloating);
-   }   
+   }
 
    QSet<QGraphicsLayoutItem *> allItems;
 
    for (QGraphicsLayoutItem * item : items) {
       allItems.insert(item);
    }
-   
+
    m_floatItems[orientation] = allItems - nonFloating;
 }
 
@@ -3007,19 +3006,19 @@ bool QGraphicsAnchorLayoutPrivate::hasConflicts() const
 #ifdef QT_DEBUG
 void QGraphicsAnchorLayoutPrivate::dumpGraph(const QString &name)
 {
-   QFile file(QString::fromLatin1("anchorlayout.%1.dot").arg(name));
-   if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
-      qWarning("Could not write to %s", file.fileName().toLocal8Bit().constData());
+   QFile file(QString("anchorlayout.%1.dot").formatArg(name));
+
+   if (! file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+      qWarning("Could not write to %s", csPrintable(file.fileName()));
    }
 
-   QString str = QString::fromLatin1("digraph anchorlayout {\nnode [shape=\"rect\"]\n%1}");
+   QString str = "digraph anchorlayout {\nnode [shape=\"rect\"]\n%1}";
    QString dotContents = graph[0].serializeToDot();
    dotContents += graph[1].serializeToDot();
-   file.write(str.arg(dotContents).toLocal8Bit());
 
+   file.write(str.formatArg(dotContents).toUtf8());
    file.close();
 }
 #endif
 
-QT_END_NAMESPACE
 #endif //QT_NO_GRAPHICSVIEW

@@ -1521,10 +1521,10 @@ void QGridLayout::addItem(QLayoutItem *item, int row, int column, int rowSpan, i
 static bool checkWidget(QLayout *l, QWidget *w)
 {
    if (!w) {
-      qWarning("QLayout: Cannot add null widget to %s/%s", l->metaObject()->className(),
-               l->objectName().toLocal8Bit().data());
+      qWarning("QLayout: Can not add null widget to %s/%s", csPrintable(l->metaObject()->className()), csPrintable(l->objectName()));
       return false;
    }
+
    return true;
 }
 
@@ -1543,10 +1543,11 @@ void QGridLayout::addWidget(QWidget *widget, int row, int column, Qt::Alignment 
    }
    if (row < 0 || column < 0) {
       qWarning("QGridLayout: Cannot add %s/%s to %s/%s at row %d column %d",
-               widget->metaObject()->className(), widget->objectName().toLocal8Bit().data(),
-               metaObject()->className(), objectName().toLocal8Bit().data(), row, column);
+               csPrintable(widget->metaObject()->className()), csPrintable(widget->objectName()),
+               csPrintable(metaObject()->className()), csPrintable(objectName()), row, column);
       return;
    }
+
    addChildWidget(widget);
    QWidgetItem *b = QLayoutPrivate::createWidgetItem(this, widget);
    addItem(b, row, column, 1, 1, alignment);

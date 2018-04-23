@@ -40,7 +40,7 @@
 
 //#define QDATETIMEEDIT_QDTEDEBUG
 #ifdef QDATETIMEEDIT_QDTEDEBUG
-#  define QDTEDEBUG qDebug() << QString::fromLatin1("%1:%2").arg(__FILE__).arg(__LINE__)
+#  define QDTEDEBUG qDebug() << QString::fromLatin1("%1:%2").formatArg(__FILE__).formatArg(__LINE__)
 #  define QDTEDEBUGN qDebug
 #else
 #  define QDTEDEBUG if (false) qDebug()
@@ -2156,12 +2156,14 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
    if (ignoreCursorPositionChanged || specialValue()) {
       return;
    }
+
    const QString oldText = displayText();
    updateCache(value, oldText);
 
    const bool allowChange = !edit->hasSelectedText();
    const bool forward = oldpos <= newpos;
    ignoreCursorPositionChanged = true;
+
    int s = sectionAt(newpos);
    if (s == NoSectionIndex && forward && newpos > 0) {
       s = sectionAt(newpos - 1);
@@ -2195,6 +2197,7 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
    if (allowChange && currentSectionIndex != s) {
       interpret(EmitIfChanged);
    }
+
    if (c == -1) {
       setSelected(s, true);
    } else if (!edit->hasSelectedText()) {
@@ -2210,11 +2213,9 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
              << "was" << sectionName(sectionType(currentSectionIndex));
 
    currentSectionIndex = s;
-   Q_ASSERT_X(currentSectionIndex < sectionNodes.size(),
-              "QDateTimeEditPrivate::_q_editorCursorPositionChanged()",
-              qPrintable(QString::fromLatin1("Internal error (%1 %2)").
-                         arg(currentSectionIndex).
-                         arg(sectionNodes.size())));
+
+   Q_ASSERT_X(currentSectionIndex < sectionNodes.size(), "QDateTimeEditPrivate::_q_editorCursorPositionChanged()",
+             csPrintable(QString("Internal error (%1 %2)").formatArg(currentSectionIndex).formatArg(sectionNodes.size())) );
 
    ignoreCursorPositionChanged = false;
 }

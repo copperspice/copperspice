@@ -82,7 +82,7 @@ QTextItem::RenderFlags QTextItem::renderFlags() const
 QString QTextItem::text() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
-   return QString(ti->chars, ti->num_chars);
+   return QString(ti->m_iter, ti->m_end);
 }
 
 /*!

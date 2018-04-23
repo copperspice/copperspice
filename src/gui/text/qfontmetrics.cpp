@@ -302,32 +302,33 @@ bool QFontMetrics::inFont(QChar ch) const
       return false;
    }
 
-   return engine->canRender(&ch, 1);
+   return engine->canRender(QString(ch));
 }
 
 bool QFontMetrics::inFontUcs4(uint ucs4) const
 {
-   const int script = QChar::script(ucs4);
-   QFontEngine *engine = d->engineForScript(script);
+   QChar ch = QChar(char32_t(ucs4));
+   const int script_id = ch.script();
+
+   QFontEngine *engine = d->engineForScript(script_id);
    Q_ASSERT(engine != 0);
 
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
 
-   QString utf16 = QString::fromUcs4(&ucs4, 1);
-   return engine->canRender(utf16.data(), utf16.length());
+   return engine->canRender(QString(ch));
 }
 
 int QFontMetrics::leftBearing(QChar ch) const
 {
-   const int script = ch.script();
+   const int script_id = ch.script();
    QFontEngine *engine;
 
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
-      engine = d->smallCapsFontPrivate()->engineForScript(script);
+      engine = d->smallCapsFontPrivate()->engineForScript(script_id);
    } else {
-      engine = d->engineForScript(script);
+      engine = d->engineForScript(script_id);
    }
 
    Q_ASSERT(engine != 0);
@@ -339,7 +340,8 @@ int QFontMetrics::leftBearing(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
 
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal lb;
@@ -368,7 +370,8 @@ int QFontMetrics::rightBearing(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
+
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal rb;
    engine->getGlyphBearings(glyphs.glyphs[0], 0, &rb);
@@ -401,17 +404,21 @@ int QFontMetrics::width(const QString &text, int len, int flags) const
       int numGlyphs = len;
       QVarLengthGlyphLayoutArray glyphs(numGlyphs);
       QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-      if (!engine->stringToCMap(text.data(), len, &glyphs, &numGlyphs, 0)) {
+
+      if (! engine->stringToCMap(text, &glyphs, &numGlyphs, 0)) {
          glyphs.resize(numGlyphs);
-         if (!engine->stringToCMap(text.data(), len, &glyphs, &numGlyphs, 0)) {
-            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap shouldn't fail twice");
+
+         if (! engine->stringToCMap(text, &glyphs, &numGlyphs, 0)) {
+            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap should not fail twice");
          }
       }
 
       QFixed width;
+
       for (int i = 0; i < numGlyphs; ++i) {
          width += glyphs.advances_x[i];
       }
+
       return qRound(width);
    }
 
@@ -420,43 +427,19 @@ int QFontMetrics::width(const QString &text, int len, int flags) const
    return qRound(layout.width(0, len));
 }
 
-/*!
-    \overload
-
-    \img bearings.png Bearings
-
-    Returns the logical width of character \a ch in pixels. This is a
-    distance appropriate for drawing a subsequent character after \a
-    ch.
-
-    Some of the metrics are described in the image to the right. The
-    central dark rectangles cover the logical width() of each
-    character. The outer pale rectangles cover the leftBearing() and
-    rightBearing() of each character. Notice that the bearings of "f"
-    in this particular font are both negative, while the bearings of
-    "o" are both positive.
-
-    \warning This function will produce incorrect results for Arabic
-    characters or non-spacing marks in the middle of a string, as the
-    glyph shaping and positioning of marks that happens when
-    processing strings cannot be taken into account. When implementing
-    an interactive text control, use QTextLayout instead.
-
-    \sa boundingRect()
-*/
 int QFontMetrics::width(QChar ch) const
 {
-   if (QChar::category(ch.unicode()) == QChar::Mark_NonSpacing) {
+   if (ch.category() == QChar::Mark_NonSpacing) {
       return 0;
    }
 
-   const int script = ch.script();
+   const int script_id = ch.script();
    QFontEngine *engine;
 
    if (d->capital == QFont::SmallCaps && ch.isLower()) {
-      engine = d->smallCapsFontPrivate()->engineForScript(script);
+      engine = d->smallCapsFontPrivate()->engineForScript(script_id);
    } else {
-      engine = d->engineForScript(script);
+      engine = d->engineForScript(script_id);
    }
 
    Q_ASSERT(engine != 0);
@@ -464,82 +447,60 @@ int QFontMetrics::width(QChar ch) const
 
    QGlyphLayoutArray<8> glyphs;
    int nglyphs = 7;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
+
    return qRound(glyphs.advances_x[0]);
 }
 
-/*! \obsolete
-
-    Returns the width of the character at position \a pos in the
-    string \a text.
-
-    The whole string is needed, as the glyph drawn may change
-    depending on the context (the letter before and after the current
-    one) for some languages (e.g. Arabic).
-
-    This function also takes non spacing marks and ligatures into
-    account.
-*/
+// obsolete
 int QFontMetrics::charWidth(const QString &text, int pos) const
 {
-   if (pos < 0 || pos > (int)text.length()) {
+   if (pos < 0 || pos > text.length()) {
       return 0;
    }
 
-   QChar ch = text.unicode()[pos];
+   QChar ch = text[pos];
+
    const int script = ch.script();
    int width;
 
    if (script != QChar::Script_Common) {
       // complex script shaping. Have to do some hard work
       int from = qMax(0, pos - 8);
-      int to = qMin(text.length(), pos + 8);
-      QString cstr = QString::fromRawData(text.unicode() + from, to - from);
+      int to   = qMin(text.length(), pos + 8);
+
+      QString cstr = text.mid(from, to - from);
       QStackTextEngine layout(cstr, d.data());
+
       layout.ignoreBidi = true;
       layout.itemize();
       width = qRound(layout.width(pos - from, 1));
-   } else if (QChar::category(ch.unicode()) == QChar::Mark_NonSpacing) {
+
+   } else if (ch.category() == QChar::Mark_NonSpacing) {
       width = 0;
+
    } else {
       QFontEngine *engine;
+
       if (d->capital == QFont::SmallCaps && ch.isLower()) {
          engine = d->smallCapsFontPrivate()->engineForScript(script);
       } else {
          engine = d->engineForScript(script);
       }
+
       Q_ASSERT(engine != 0);
 
       d->alterCharForCapitalization(ch);
 
       QGlyphLayoutArray<8> glyphs;
       int nglyphs = 7;
-      engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+      engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
       width = qRound(glyphs.advances_x[0]);
    }
+
    return width;
 }
 
-/*!
-    Returns the bounding rectangle of the characters in the string
-    specified by \a text. The bounding rectangle always covers at least
-    the set of pixels the text would cover if drawn at (0, 0).
-
-    Note that the bounding rectangle may extend to the left of (0, 0),
-    e.g. for italicized fonts, and that the width of the returned
-    rectangle might be different than what the width() method returns.
-
-    If you want to know the advance width of the string (to layout
-    a set of strings next to each other), use width() instead.
-
-    Newline characters are processed as normal characters, \e not as
-    linebreaks.
-
-    The height of the bounding rectangle is at least as large as the
-    value returned by height().
-
-    \sa width(), height(), QPainter::boundingRect(), tightBoundingRect()
-*/
 QRect QFontMetrics::boundingRect(const QString &text) const
 {
    if (text.length() == 0) {
@@ -553,23 +514,6 @@ QRect QFontMetrics::boundingRect(const QString &text) const
    return QRect(qRound(gm.x), qRound(gm.y), qRound(gm.width), qRound(gm.height));
 }
 
-/*!
-    Returns the rectangle that is covered by ink if character \a ch
-    were to be drawn at the origin of the coordinate system.
-
-    Note that the bounding rectangle may extend to the left of (0, 0)
-    (e.g., for italicized fonts), and that the text output may cover \e
-    all pixels in the bounding rectangle. For a space character the rectangle
-    will usually be empty.
-
-    Note that the rectangle usually extends both above and below the
-    base line.
-
-    \warning The width of the returned rectangle is not the advance width
-    of the character. Use boundingRect(const QString &) or width() instead.
-
-    \sa width()
-*/
 QRect QFontMetrics::boundingRect(QChar ch) const
 {
    const int script = ch.script();
@@ -586,7 +530,7 @@ QRect QFontMetrics::boundingRect(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
    glyph_metrics_t gm = engine->boundingBox(glyphs.glyphs[0]);
    return QRect(qRound(gm.x), qRound(gm.y), qRound(gm.width), qRound(gm.height));
 }
@@ -1149,9 +1093,11 @@ qreal QFontMetricsF::xHeight() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    if (d->capital == QFont::SmallCaps) {
       return d->smallCapsFontPrivate()->engineForScript(QChar::Script_Common)->ascent().toReal();
    }
+
    return engine->xHeight().toReal();
 }
 
@@ -1159,6 +1105,7 @@ qreal QFontMetricsF::averageCharWidth() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != 0);
+
    return engine->averageCharWidth().toReal();
 }
 
@@ -1172,21 +1119,23 @@ bool QFontMetricsF::inFont(QChar ch) const
       return false;
    }
 
-   return engine->canRender(&ch, 1);
+   return engine->canRender(QString(ch));
 }
 
 bool QFontMetricsF::inFontUcs4(uint ucs4) const
 {
-   const int script = QChar::script(ucs4);
+   QChar ch = QChar(char32_t(ucs4));
+
+   const int script = ch.script();
    QFontEngine *engine = d->engineForScript(script);
+
    Q_ASSERT(engine != 0);
 
    if (engine->type() == QFontEngine::Box) {
       return false;
    }
 
-   QString utf16 = QString::fromUcs4(&ucs4, 1);
-   return engine->canRender(utf16.data(), utf16.length());
+   return engine->canRender(QString(ch));
 }
 
 qreal QFontMetricsF::leftBearing(QChar ch) const
@@ -1209,10 +1158,12 @@ qreal QFontMetricsF::leftBearing(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
+
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal lb;
    engine->getGlyphBearings(glyphs.glyphs[0], &lb);
+
    return lb;
 }
 
@@ -1236,7 +1187,8 @@ qreal QFontMetricsF::rightBearing(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
 
    // ### can nglyphs != 1 happen at all? Not currently I think
    qreal rb;
@@ -1247,7 +1199,7 @@ qreal QFontMetricsF::rightBearing(QChar ch) const
 
 qreal QFontMetricsF::width(const QString &text) const
 {
-   int pos = text.indexOf(QLatin1Char('\x9c'));
+   int pos = text.indexOf('\x9c');
    int len = (pos != -1) ? pos : text.length();
 
    QStackTextEngine layout(text, d.data());
@@ -1258,7 +1210,7 @@ qreal QFontMetricsF::width(const QString &text) const
 
 qreal QFontMetricsF::width(QChar ch) const
 {
-   if (QChar::category(ch.unicode()) == QChar::Mark_NonSpacing) {
+   if (ch.category() == QChar::Mark_NonSpacing) {
       return 0.;
    }
 
@@ -1276,33 +1228,15 @@ qreal QFontMetricsF::width(QChar ch) const
 
    QGlyphLayoutArray<8> glyphs;
    int nglyphs = 7;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
    return glyphs.advances_x[0].toReal();
 }
 
-/*!
-    Returns the bounding rectangle of the characters in the string
-    specified by \a text. The bounding rectangle always covers at least
-    the set of pixels the text would cover if drawn at (0, 0).
-
-    Note that the bounding rectangle may extend to the left of (0, 0),
-    e.g. for italicized fonts, and that the width of the returned
-    rectangle might be different than what the width() method returns.
-
-    If you want to know the advance width of the string (to layout
-    a set of strings next to each other), use width() instead.
-
-    Newline characters are processed as normal characters, \e not as
-    linebreaks.
-
-    The height of the bounding rectangle is at least as large as the
-    value returned height().
-
-    \sa width(), height(), QPainter::boundingRect()
-*/
 QRectF QFontMetricsF::boundingRect(const QString &text) const
 {
    int len = text.length();
+
    if (len == 0) {
       return QRectF();
    }
@@ -1311,8 +1245,8 @@ QRectF QFontMetricsF::boundingRect(const QString &text) const
    layout.ignoreBidi = true;
    layout.itemize();
    glyph_metrics_t gm = layout.boundingBox(0, len);
-   return QRectF(gm.x.toReal(), gm.y.toReal(),
-                 gm.width.toReal(), gm.height.toReal());
+
+   return QRectF(gm.x.toReal(), gm.y.toReal(), gm.width.toReal(), gm.height.toReal());
 }
 
 QRectF QFontMetricsF::boundingRect(QChar ch) const
@@ -1331,140 +1265,33 @@ QRectF QFontMetricsF::boundingRect(QChar ch) const
 
    QGlyphLayoutArray<10> glyphs;
    int nglyphs = 9;
-   engine->stringToCMap(&ch, 1, &glyphs, &nglyphs, 0);
+
+   engine->stringToCMap(QString(ch), &glyphs, &nglyphs, 0);
    glyph_metrics_t gm = engine->boundingBox(glyphs.glyphs[0]);
+
    return QRectF(gm.x.toReal(), gm.y.toReal(), gm.width.toReal(), gm.height.toReal());
 }
 
-/*!
-    \overload
-
-    Returns the bounding rectangle of the characters in the given \a text.
-    This is the set of pixels the text would cover if drawn when constrained
-    to the bounding rectangle specified by \a rect.
-
-    The \a flags argument is the bitwise OR of the following flags:
-    \list
-    \o Qt::AlignLeft aligns to the left border, except for
-          Arabic and Hebrew where it aligns to the right.
-    \o Qt::AlignRight aligns to the right border, except for
-          Arabic and Hebrew where it aligns to the left.
-    \o Qt::AlignJustify produces justified text.
-    \o Qt::AlignHCenter aligns horizontally centered.
-    \o Qt::AlignTop aligns to the top border.
-    \o Qt::AlignBottom aligns to the bottom border.
-    \o Qt::AlignVCenter aligns vertically centered
-    \o Qt::AlignCenter (== \c{Qt::AlignHCenter | Qt::AlignVCenter})
-    \o Qt::TextSingleLine ignores newline characters in the text.
-    \o Qt::TextExpandTabs expands tabs (see below)
-    \o Qt::TextShowMnemonic interprets "&x" as \underline{x}; i.e., underlined.
-    \o Qt::TextWordWrap breaks the text to fit the rectangle.
-    \endlist
-
-    Qt::Horizontal alignment defaults to Qt::AlignLeft and vertical
-    alignment defaults to Qt::AlignTop.
-
-    If several of the horizontal or several of the vertical alignment
-    flags are set, the resulting alignment is undefined.
-
-    These flags are defined in \l{Qt::AlignmentFlag}.
-
-    If Qt::TextExpandTabs is set in \a flags, the following behavior is
-    used to interpret tab characters in the text:
-    \list
-    \o If \a tabArray is non-null, it specifies a 0-terminated sequence of
-       pixel-positions for tabs in the text.
-    \o If \a tabStops is non-zero, it is used as the tab spacing (in pixels).
-    \endlist
-
-    Note that the bounding rectangle may extend to the left of (0, 0),
-    e.g. for italicized fonts.
-
-    Newline characters are processed as line breaks.
-
-    Despite the different actual character heights, the heights of the
-    bounding rectangles of "Yes" and "yes" are the same.
-
-    The bounding rectangle returned by this function is somewhat larger
-    than that calculated by the simpler boundingRect() function. This
-    function uses the \link minLeftBearing() maximum left \endlink and
-    \link minRightBearing() right \endlink font bearings as is
-    necessary for multi-line text to align correctly. Also,
-    fontHeight() and lineSpacing() are used to calculate the height,
-    rather than individual character heights.
-
-    \sa width(), QPainter::boundingRect(), Qt::Alignment
-*/
 QRectF QFontMetricsF::boundingRect(const QRectF &rect, int flags, const QString &text,
                                    int tabStops, int *tabArray) const
 {
    int tabArrayLen = 0;
+
    if (tabArray)
       while (tabArray[tabArrayLen]) {
          tabArrayLen++;
       }
 
    QRectF rb;
-   qt_format_text(QFont(d.data()), rect, flags | Qt::TextDontPrint, text, &rb, tabStops, tabArray,
-                  tabArrayLen, 0);
+   qt_format_text(QFont(d.data()), rect, flags | Qt::TextDontPrint, text, &rb, tabStops, tabArray, tabArrayLen, 0);
    return rb;
 }
 
-/*!
-    Returns the size in pixels of the characters in the given \a text.
-
-    The \a flags argument is the bitwise OR of the following flags:
-    \list
-    \o Qt::TextSingleLine ignores newline characters.
-    \o Qt::TextExpandTabs expands tabs (see below)
-    \o Qt::TextShowMnemonic interprets "&x" as \underline{x}; i.e., underlined.
-    \o Qt::TextWordBreak breaks the text to fit the rectangle.
-    \endlist
-
-    These flags are defined in \l{Qt::TextFlags}.
-
-    If Qt::TextExpandTabs is set in \a flags, the following behavior is
-    used to interpret tab characters in the text:
-    \list
-    \o If \a tabArray is non-null, it specifies a 0-terminated sequence of
-       pixel-positions for tabs in the text.
-    \o If \a tabStops is non-zero, it is used as the tab spacing (in pixels).
-    \endlist
-
-    Newline characters are processed as line breaks.
-
-    Note: Despite the different actual character heights, the heights of the
-    bounding rectangles of "Yes" and "yes" are the same.
-
-    \sa boundingRect()
-*/
 QSizeF QFontMetricsF::size(int flags, const QString &text, int tabStops, int *tabArray) const
 {
    return boundingRect(QRectF(), flags | Qt::TextLongestVariant, text, tabStops, tabArray).size();
 }
 
-/*!
-  \since 4.3
-
-    Returns a tight bounding rectangle around the characters in the
-    string specified by \a text. The bounding rectangle always covers
-    at least the set of pixels the text would cover if drawn at (0,
-    0).
-
-    Note that the bounding rectangle may extend to the left of (0, 0),
-    e.g. for italicized fonts, and that the width of the returned
-    rectangle might be different than what the width() method returns.
-
-    If you want to know the advance width of the string (to layout
-    a set of strings next to each other), use width() instead.
-
-    Newline characters are processed as normal characters, \e not as
-    linebreaks.
-
-    \warning Calling this method is very slow on Windows.
-
-    \sa width(), height(), boundingRect()
-*/
 QRectF QFontMetricsF::tightBoundingRect(const QString &text) const
 {
    if (text.length() == 0) {
@@ -1478,28 +1305,14 @@ QRectF QFontMetricsF::tightBoundingRect(const QString &text) const
    return QRectF(gm.x.toReal(), gm.y.toReal(), gm.width.toReal(), gm.height.toReal());
 }
 
-/*!
-    \since 4.2
-
-    If the string \a text is wider than \a width, returns an elided
-    version of the string (i.e., a string with "..." in it).
-    Otherwise, returns the original string.
-
-    The \a mode parameter specifies whether the text is elided on the
-    left (e.g., "...tech"), in the middle (e.g., "Tr...ch"), or on
-    the right (e.g., "Trol...").
-
-    The \a width is specified in pixels, not characters.
-
-    The \a flags argument is optional and currently only supports
-    Qt::TextShowMnemonic as value.
-*/
 QString QFontMetricsF::elidedText(const QString &text, Qt::TextElideMode mode, qreal width, int flags) const
 {
    QString _text = text;
+
    if (!(flags & Qt::TextLongestVariant)) {
       int posA = 0;
       int posB = _text.indexOf(QLatin1Char('\x9c'));
+
       while (posB >= 0) {
          QString portion = _text.mid(posA, posB - posA);
          if (size(flags, portion).width() <= width) {
@@ -1510,6 +1323,7 @@ QString QFontMetricsF::elidedText(const QString &text, Qt::TextElideMode mode, q
       }
       _text = _text.mid(posA);
    }
+
    QStackTextEngine engine(_text, QFont(d.data()));
    return engine.elidedText(mode, QFixed::fromReal(width), flags);
 }

@@ -199,25 +199,21 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
 
    void doKerning(QGlyphLayout *, QTextEngine::ShaperFlags) const override;
 
-   Type type() const override {
-      return QFontEngine::Freetype;
-   }
+   bool canRender(QStringView str) override;
 
    const char *name() const override {
       return "freetype";
    }
 
+   Type type() const override {
+      return QFontEngine::Freetype;
+   }
+
    void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) override;
-   bool canRender(const QChar *string, int len) override;
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, QTextItem::RenderFlags flags) override;
+   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path, QTextItem::RenderFlags flags) override;
 
-   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-                  QPainterPath *path, QTextItem::RenderFlags flags) override;
-
-   void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs,
-                  QPainterPath *path, QTextItem::RenderFlags flags) override;
-
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                  QTextEngine::ShaperFlags flags) const override;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
 
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
    glyph_metrics_t boundingBox(glyph_t glyph) override;
@@ -260,7 +256,7 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
       return defaultFormat == Format_Mono;
    }
 
-   Glyph *loadGlyph(uint glyph, QFixed subPixelPosition, GlyphFormat format = Format_None, 
+   Glyph *loadGlyph(uint glyph, QFixed subPixelPosition, GlyphFormat format = Format_None,
                   bool fetchMetricsOnly = false) const {
       return loadGlyph(&defaultGlyphSet, glyph, subPixelPosition, format, fetchMetricsOnly);
    }
@@ -298,7 +294,7 @@ class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
 
    bool init(FaceId faceId, bool antialias, GlyphFormat format, QFreetypeFace *freetypeFace);
 
-   HB_Error getPointInOutline(HB_Glyph glyph, int flags, hb_uint32 point, HB_Fixed *xpos, 
+   HB_Error getPointInOutline(HB_Glyph glyph, int flags, hb_uint32 point, HB_Fixed *xpos,
                   HB_Fixed *ypos, hb_uint32 *nPoints) override;
 
    enum HintStyle {

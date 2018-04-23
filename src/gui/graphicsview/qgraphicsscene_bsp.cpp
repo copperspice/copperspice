@@ -157,9 +157,9 @@ QString QGraphicsSceneBspTree::debug(int index) const
       QRectF rect = rectForIndex(index);
       if (!leaves[node->leafIndex].isEmpty()) {
          tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
-                .arg(rect.left()).arg(rect.top())
-                .arg(rect.width()).arg(rect.height())
-                .arg(leaves[node->leafIndex].size());
+                .formatArg(rect.left()).formatArg(rect.top())
+                .formatArg(rect.width()).formatArg(rect.height())
+                .formatArg(leaves[node->leafIndex].size());
       }
    } else {
       if (node->type == Node::Horizontal) {

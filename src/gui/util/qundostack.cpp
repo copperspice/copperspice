@@ -339,7 +339,7 @@ void QUndoAction::setPrefixedText(const QString &text)
       if (text.isEmpty()) {
          setText(m_defaultText);
       } else {
-         setText(m_prefix.arg(text));
+         setText(m_prefix.formatArg(text));
       }
    }
 }

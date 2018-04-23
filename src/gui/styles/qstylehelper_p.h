@@ -24,14 +24,11 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qpolygon.h>
-#include <QtCore/qstringbuilder.h>
 
 #ifndef QSTYLEHELPER_P_H
 #define QSTYLEHELPER_P_H
 
 #include <qhexstring_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QPainter;
 class QPixmap;
@@ -47,12 +44,10 @@ qreal angle(const QPointF &p1, const QPointF &p2);
 QPolygonF calcLines(const QStyleOptionSlider *dial);
 int calcBigLineSize(int radius);
 void drawDial(const QStyleOptionSlider *dial, QPainter *painter);
-#endif 
+#endif
 
 void drawBorderPixmap(const QPixmap &pixmap, QPainter *painter, const QRect &rect, int left = 0, int top = 0, int right = 0, int bottom = 0);
 }
 
-
-QT_END_NAMESPACE
 
 #endif // QSTYLEHELPER_P_H

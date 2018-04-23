@@ -104,17 +104,13 @@ void QTextBlockData::invalidate() const
 
 static bool isValidBlockSeparator(const QChar &ch)
 {
-   return ch == QChar::ParagraphSeparator
-          || ch == QTextBeginningOfFrame
-          || ch == QTextEndOfFrame;
+   return ch == QChar::ParagraphSeparator || ch == QTextBeginningOfFrame || ch == QTextEndOfFrame;
 }
 
 #ifndef QT_NO_DEBUG
 static bool noBlockInString(const QString &str)
 {
-   return !str.contains(QChar::ParagraphSeparator)
-          && !str.contains(QTextBeginningOfFrame)
-          && !str.contains(QTextEndOfFrame);
+   return ! str.contains(QChar(QChar::ParagraphSeparator)) && ! str.contains(QTextBeginningOfFrame) && ! str.contains(QTextEndOfFrame);
 }
 #endif
 
@@ -124,10 +120,7 @@ bool QTextUndoCommand::tryMerge(const QTextUndoCommand &other)
       return false;
    }
 
-   if (command == Inserted
-         && (pos + length == other.pos)
-         && (strPos + length == other.strPos)
-         && format == other.format) {
+   if (command == Inserted && (pos + length == other.pos) && (strPos + length == other.strPos) && format == other.format) {
 
       length += other.length;
       return true;
@@ -1295,7 +1288,7 @@ void QTextDocumentPrivate::finishEdit()
 
    for (const QTextCursor & cursor : changedCursors) {
       emit q->cursorPositionChanged(cursor);
-   }   
+   }
 
    contentsChanged();
 
@@ -1815,7 +1808,7 @@ void QTextDocumentPrivate::aboutToRemoveCell(int from, int to)
    Q_ASSERT(from <= to);
    for (QTextCursorPrivate * curs : cursors) {
       curs->aboutToRemoveCell(from, to);
-   }   
+   }
 }
 
 QT_END_NAMESPACE

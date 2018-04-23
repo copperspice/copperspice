@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_SORTFILTERPROXYMODEL
 
-#include <QtCore/qregexp.h>
+#include <QtCore/QRegularExpression.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -78,11 +78,11 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const override;
    QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const override;
 
-   QRegExp filterRegExp() const;
-   void setFilterRegExp(const QRegExp &regExp);
+   QRegularExpression filterRegExp() const;
+   void setFilterRegExp(const QRegularExpression &regExp);
 
    // wrapper for overloaded method
-   inline void cs_setFilterRegExp(const QRegExp &regExp);
+   inline void cs_setFilterRegExp(const QRegularExpression &regExp);
 
    int filterKeyColumn() const;
    void setFilterKeyColumn(int column);
@@ -220,7 +220,7 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 
 };
 
-void QSortFilterProxyModel::cs_setFilterRegExp(const QRegExp &regExp)
+void QSortFilterProxyModel::cs_setFilterRegExp(const QRegularExpression &regExp)
 {
    setFilterRegExp(regExp);
 }

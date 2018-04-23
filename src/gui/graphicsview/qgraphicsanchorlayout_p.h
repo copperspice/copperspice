@@ -137,7 +137,7 @@ struct AnchorData : public QSimplexVariable {
 #ifdef QT_DEBUG
 inline QString AnchorData::toString() const
 {
-   return QString::fromLatin1("Anchor(%1)").arg(name);
+   return QString("Anchor(%1)").formatArg(name);
 }
 #endif
 
@@ -146,8 +146,9 @@ struct SequentialAnchorData : public AnchorData {
       : AnchorData(), m_children(vertices), m_edges(edges) {
       type = AnchorData::Sequential;
       orientation = m_edges.at(0)->orientation;
+
 #ifdef QT_DEBUG
-      name = QString::fromLatin1("%1 -- %2").arg(vertices.first()->toString(), vertices.last()->toString());
+      name = QString::fromLatin1("%1 -- %2").formatArgs(vertices.first()->toString(), vertices.last()->toString());
 #endif
    }
 
@@ -172,9 +173,11 @@ struct ParallelAnchorData : public AnchorData {
       // direction as the first anchor.
       from = first->from;
       to = first->to;
+
 #ifdef QT_DEBUG
-      name = QString::fromLatin1("%1 | %2").arg(first->toString(), second->toString());
+      name = QString("%1 | %2").formatArgs(first->toString(), second->toString());
 #endif
+
    }
 
    void updateChildrenSizes() override;
@@ -211,14 +214,15 @@ struct AnchorVertexPair : public AnchorVertex {
 #ifdef QT_DEBUG
 inline QString AnchorVertex::toString() const
 {
-   if (!this) {
+   if (! this) {
       return QLatin1String("NULL");
    } else if (m_type == Pair) {
       const AnchorVertexPair *vp = static_cast<const AnchorVertexPair *>(this);
-      return QString::fromLatin1("(%1, %2)").arg(vp->m_first->toString()).arg(vp->m_second->toString());
+      return QString::fromLatin1("(%1, %2)").formatArg(vp->m_first->toString()).formatArg(vp->m_second->toString());
    } else if (!m_item) {
-      return QString::fromLatin1("NULL_%1").arg(quintptr(this));
+      return QString::fromLatin1("NULL_%1").formatArg(quintptr(this));
    }
+
    QString edge;
    switch (m_edge) {
       case Qt::AnchorLeft:
@@ -252,7 +256,7 @@ inline QString AnchorVertex::toString() const
       }
    }
    edge.insert(0, QLatin1String("%1_"));
-   return edge.arg(itemName);
+   return edge.formatArg(itemName);
 }
 #endif
 

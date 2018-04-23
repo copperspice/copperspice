@@ -144,7 +144,7 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
    bool sort_localeaware;
 
    int filter_column;
-   QRegExp filter_regexp;
+   QRegularExpression filter_regexp;
    int filter_role;
 
    bool dynamic_sortfilter;
@@ -1411,162 +1411,6 @@ void QSortFilterProxyModelPrivate::_q_sourceColumnsRemoved(
    proxy_sort_column = q->mapFromSource(model->index(0, source_sort_column, source_parent)).column();
 }
 
-/*!
-    \since 4.1
-    \class QSortFilterProxyModel
-    \brief The QSortFilterProxyModel class provides support for sorting and
-    filtering data passed between another model and a view.
-
-    \ingroup model-view
-
-    QSortFilterProxyModel can be used for sorting items, filtering out items,
-    or both. The model transforms the structure of a source model by mapping
-    the model indexes it supplies to new indexes, corresponding to different
-    locations, for views to use. This approach allows a given source model to
-    be restructured as far as views are concerned without requiring any
-    transformations on the underlying data, and without duplicating the data in
-    memory.
-
-    Let's assume that we want to sort and filter the items provided by a custom
-    model. The code to set up the model and the view, \e without sorting and
-    filtering, would look like this:
-
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 1
-
-    To add sorting and filtering support to \c MyItemModel, we need to create
-    a QSortFilterProxyModel, call setSourceModel() with the \c MyItemModel as
-    argument, and install the QSortFilterProxyModel on the view:
-
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 0
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 2
-
-    At this point, neither sorting nor filtering is enabled; the original data
-    is displayed in the view. Any changes made through the
-    QSortFilterProxyModel are applied to the original model.
-
-    The QSortFilterProxyModel acts as a wrapper for the original model. If you
-    need to convert source \l{QModelIndex}es to sorted/filtered model indexes
-    or vice versa, use mapToSource(), mapFromSource(), mapSelectionToSource(),
-    and mapSelectionFromSource().
-
-    \note By default, the model does not dynamically re-sort and re-filter data
-    whenever the original model changes. This behavior can be changed by
-    setting the \l{QSortFilterProxyModel::dynamicSortFilter}{dynamicSortFilter}
-    property.
-
-    The \l{itemviews/basicsortfiltermodel}{Basic Sort/Filter Model} and
-    \l{itemviews/customsortfiltermodel}{Custom Sort/Filter Model} examples
-    illustrate how to use QSortFilterProxyModel to perform basic sorting and
-    filtering and how to subclass it to implement custom behavior.
-
-    \section1 Sorting
-
-    QTableView and QTreeView have a
-    \l{QTreeView::sortingEnabled}{sortingEnabled} property that controls
-    whether the user can sort the view by clicking the view's horizontal
-    header. For example:
-
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 3
-
-    When this feature is on (the default is off), clicking on a header section
-    sorts the items according to that column. By clicking repeatedly, the user
-    can alternate between ascending and descending order.
-
-    \image qsortfilterproxymodel-sorting.png A sorted QTreeView
-
-    Behind the scene, the view calls the sort() virtual function on the model
-    to reorder the data in the model. To make your data sortable, you can
-    either implement sort() in your model, or use a QSortFilterProxyModel to
-    wrap your model -- QSortFilterProxyModel provides a generic sort()
-    reimplementation that operates on the sortRole() (Qt::DisplayRole by
-    default) of the items and that understands several data types, including
-    \c int, QString, and QDateTime. For hierarchical models, sorting is applied
-    recursively to all child items. String comparisons are case sensitive by
-    default; this can be changed by setting the \l{QSortFilterProxyModel::}
-    {sortCaseSensitivity} property.
-
-    Custom sorting behavior is achieved by subclassing
-    QSortFilterProxyModel and reimplementing lessThan(), which is
-    used to compare items. For example:
-
-    \snippet examples/itemviews/customsortfiltermodel/mysortfilterproxymodel.cpp 5
-
-    (This code snippet comes from the
-    \l{itemviews/customsortfiltermodel}{Custom Sort/Filter Model}
-    example.)
-
-    An alternative approach to sorting is to disable sorting on the view and to
-    impose a certain order to the user. This is done by explicitly calling
-    sort() with the desired column and order as arguments on the
-    QSortFilterProxyModel (or on the original model if it implements sort()).
-    For example:
-
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 4
-
-    QSortFilterProxyModel can be sorted by column -1, in which case it returns
-    to the sort order of the underlying source model.
-
-    \section1 Filtering
-
-    In addition to sorting, QSortFilterProxyModel can be used to hide items
-    that do not match a certain filter. The filter is specified using a QRegExp
-    object and is applied to the filterRole() (Qt::DisplayRole by default) of
-    each item, for a given column. The QRegExp object can be used to match a
-    regular expression, a wildcard pattern, or a fixed string. For example:
-
-    \snippet doc/src/snippets/qsortfilterproxymodel-details/main.cpp 5
-
-    For hierarchical models, the filter is applied recursively to all children.
-    If a parent item doesn't match the filter, none of its children will be
-    shown.
-
-    A common use case is to let the user specify the filter regexp, wildcard
-    pattern, or fixed string in a QLineEdit and to connect the
-    \l{QLineEdit::textChanged()}{textChanged()} signal to setFilterRegExp(),
-    setFilterWildcard(), or setFilterFixedString() to reapply the filter.
-
-    Custom filtering behavior can be achieved by reimplementing the
-    filterAcceptsRow() and filterAcceptsColumn() functions. For
-    example (from the \l{itemviews/customsortfiltermodel}
-    {Custom Sort/Filter Model} example), the following implementation ignores
-    the \l{QSortFilterProxyModel::filterKeyColumn}{filterKeyColumn} property
-    and performs filtering on columns 0, 1, and 2:
-
-    \snippet examples/itemviews/customsortfiltermodel/mysortfilterproxymodel.cpp 3
-
-    (This code snippet comes from the
-    \l{itemviews/customsortfiltermodel}{Custom Sort/Filter Model}
-    example.)
-
-    If you are working with large amounts of filtering and have to invoke
-    invalidateFilter() repeatedly, using reset() may be more efficient,
-    depending on the implementation of your model. However, reset() returns the
-    proxy model to its original state, losing selection information, and will
-    cause the proxy model to be repopulated.
-
-    \section1 Subclassing
-
-    Since QAbstractProxyModel and its subclasses are derived from
-    QAbstractItemModel, much of the same advice about subclassing normal models
-    also applies to proxy models. In addition, it is worth noting that many of
-    the default implementations of functions in this class are written so that
-    they call the equivalent functions in the relevant source model. This
-    simple proxying mechanism may need to be overridden for source models with
-    more complex behavior; for example, if the source model provides a custom
-    hasChildren() implementation, you should also provide one in the proxy
-    model.
-
-    \note Some general guidelines for subclassing models are available in the
-    \l{Model Subclassing Reference}.
-
-    \sa QAbstractProxyModel, QAbstractItemModel, {Model/View Programming},
-    {Basic Sort/Filter Model Example}, {Custom Sort/Filter Model Example}, QIdentityProxyModel
-*/
-
-/*!
-    Constructs a sorting filter model with the given \a parent.
-*/
-
 QSortFilterProxyModel::QSortFilterProxyModel(QObject *parent)
    : QAbstractProxyModel(*new QSortFilterProxyModelPrivate, parent)
 {
@@ -2146,38 +1990,19 @@ int QSortFilterProxyModel::sortColumn() const
    return d->proxy_sort_column;
 }
 
-/*!
-    \since 4.5
-    \brief the order currently used for sorting
-
-    This returns the most recently used sort order.
-*/
 Qt::SortOrder QSortFilterProxyModel::sortOrder() const
 {
    Q_D(const QSortFilterProxyModel);
    return d->sort_order;
 }
 
-/*!
-    \property QSortFilterProxyModel::filterRegExp
-    \brief the QRegExp used to filter the contents of the source model
-
-    Setting this property overwrites the current
-    \l{QSortFilterProxyModel::filterCaseSensitivity}{filterCaseSensitivity}.
-    By default, the QRegExp is an empty string matching all contents.
-
-    If no QRegExp or an empty string is set, everything in the source model
-    will be accepted.
-
-    \sa filterCaseSensitivity, setFilterWildcard(), setFilterFixedString()
-*/
-QRegExp QSortFilterProxyModel::filterRegExp() const
+QRegularExpression QSortFilterProxyModel::filterRegExp() const
 {
    Q_D(const QSortFilterProxyModel);
    return d->filter_regexp;
 }
 
-void QSortFilterProxyModel::setFilterRegExp(const QRegExp &regExp)
+void QSortFilterProxyModel::setFilterRegExp(const QRegularExpression &regExp)
 {
    Q_D(QSortFilterProxyModel);
    d->filter_regexp = regExp;
@@ -2208,7 +2033,7 @@ void QSortFilterProxyModel::setFilterKeyColumn(int column)
 /*!
     \property QSortFilterProxyModel::filterCaseSensitivity
 
-    \brief the case sensitivity of the QRegExp pattern used to filter the
+    \brief the case sensitivity of the QRegularExpression pattern used to filter the
     contents of the source model
 
     By default, the filter is case sensitive.
@@ -2275,6 +2100,7 @@ bool QSortFilterProxyModel::isSortLocaleAware() const
 void QSortFilterProxyModel::setSortLocaleAware(bool on)
 {
    Q_D(QSortFilterProxyModel);
+
    if (d->sort_localeaware == on) {
       return;
    }
@@ -2283,66 +2109,36 @@ void QSortFilterProxyModel::setSortLocaleAware(bool on)
    d->sort();
 }
 
-/*!
-    \overload
 
-    Sets the regular expression used to filter the contents
-    of the source model to \a pattern.
-
-    \sa setFilterCaseSensitivity(), setFilterWildcard(), setFilterFixedString(), filterRegExp()
-*/
 void QSortFilterProxyModel::setFilterRegExp(const QString &pattern)
 {
    Q_D(QSortFilterProxyModel);
-   d->filter_regexp.setPatternSyntax(QRegExp::RegExp);
+
+   d->filter_regexp.setPatternOptions(QPatternOption::NoPatternOption);
    d->filter_regexp.setPattern(pattern);
    d->filter_changed();
 }
 
-/*!
-    Sets the wildcard expression used to filter the contents
-    of the source model to the given \a pattern.
-
-    \sa setFilterCaseSensitivity(), setFilterRegExp(), setFilterFixedString(), filterRegExp()
-*/
 void QSortFilterProxyModel::setFilterWildcard(const QString &pattern)
 {
    Q_D(QSortFilterProxyModel);
-   d->filter_regexp.setPatternSyntax(QRegExp::Wildcard);
+
+   d->filter_regexp.setPatternOptions(QPatternOption::WildcardOption);
    d->filter_regexp.setPattern(pattern);
    d->filter_changed();
 }
 
-/*!
-    Sets the fixed string used to filter the contents
-    of the source model to the given \a pattern.
-
-    \sa setFilterCaseSensitivity(), setFilterRegExp(), setFilterWildcard(), filterRegExp()
-*/
 void QSortFilterProxyModel::setFilterFixedString(const QString &pattern)
 {
    Q_D(QSortFilterProxyModel);
-   d->filter_regexp.setPatternSyntax(QRegExp::FixedString);
+
+// BROOM - fix this area
+
+   d->filter_regexp.setPatternOptions(QPatternOption::NoPatternOption);
    d->filter_regexp.setPattern(pattern);
    d->filter_changed();
 }
 
-/*!
-    \since 4.2
-    \property QSortFilterProxyModel::dynamicSortFilter
-    \brief whether the proxy model is dynamically sorted and filtered
-    whenever the contents of the source model change
-
-    Note that you should not update the source model through the proxy
-    model when dynamicSortFilter is true. For instance, if you set the
-    proxy model on a QComboBox, then using functions that update the
-    model, e.g., \l{QComboBox::}{addItem()}, will not work as
-    expected. An alternative is to set dynamicSortFilter to false and
-    call \l{QSortFilterProxyModel::}{sort()} after adding items to the
-    QComboBox.
-
-    The default value is false.
-*/
 bool QSortFilterProxyModel::dynamicSortFilter() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2352,21 +2148,13 @@ bool QSortFilterProxyModel::dynamicSortFilter() const
 void QSortFilterProxyModel::setDynamicSortFilter(bool enable)
 {
    Q_D(QSortFilterProxyModel);
+
    d->dynamic_sortfilter = enable;
    if (enable) {
       d->sort();
    }
 }
 
-/*!
-    \since 4.2
-    \property QSortFilterProxyModel::sortRole
-    \brief the item role that is used to query the source model's data when sorting items
-
-    The default value is Qt::DisplayRole.
-
-    \sa lessThan()
-*/
 int QSortFilterProxyModel::sortRole() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2376,22 +2164,15 @@ int QSortFilterProxyModel::sortRole() const
 void QSortFilterProxyModel::setSortRole(int role)
 {
    Q_D(QSortFilterProxyModel);
+
    if (d->sort_role == role) {
       return;
    }
+
    d->sort_role = role;
    d->sort();
 }
 
-/*!
-    \since 4.2
-    \property QSortFilterProxyModel::filterRole
-    \brief the item role that is used to query the source model's data when filtering items
-
-    The default value is Qt::DisplayRole.
-
-    \sa filterAcceptsRow()
-*/
 int QSortFilterProxyModel::filterRole() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2416,6 +2197,7 @@ void QSortFilterProxyModel::setFilterRole(int role)
 void QSortFilterProxyModel::clear()
 {
    Q_D(QSortFilterProxyModel);
+
    emit layoutAboutToBeChanged();
    d->_q_clearMapping();
    emit layoutChanged();

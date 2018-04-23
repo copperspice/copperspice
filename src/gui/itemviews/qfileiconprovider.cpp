@@ -235,7 +235,7 @@ QIcon QFileIconProviderPrivate::getWinIcon(const QFileInfo &fileInfo) const
    const bool cacheableDirIcon = fileInfo.isDir() && !fileInfo.isRoot();
    if (!useCustomDirectoryIcons && defaultFolderIIcon >= 0 && cacheableDirIcon) {
       // We already have the default folder icon, just return it
-      key = QString::fromLatin1("qt_dir_%1").arg(defaultFolderIIcon);
+      key = QString::fromLatin1("qt_dir_%1").formatArg(defaultFolderIIcon);
       QPixmapCache::find(key, pixmap);
       if (!pixmap.isNull()) {
          retIcon.addPixmap(pixmap);
@@ -276,7 +276,7 @@ QIcon QFileIconProviderPrivate::getWinIcon(const QFileInfo &fileInfo) const
             defaultFolderIIcon = info.iIcon;
          }
          //using the unique icon index provided by windows save us from duplicate keys
-         key = QString::fromLatin1("qt_dir_%1").arg(info.iIcon);
+         key = QString::fromLatin1("qt_dir_%1").formatArg(info.iIcon);
          QPixmapCache::find(key, pixmap);
          if (!pixmap.isNull()) {
             retIcon.addPixmap(pixmap);
@@ -309,7 +309,7 @@ QIcon QFileIconProviderPrivate::getWinIcon(const QFileInfo &fileInfo) const
    if (val && info.hIcon) {
       if (fileInfo.isDir() && !fileInfo.isRoot()) {
          //using the unique icon index provided by windows save us from duplicate keys
-         key = QString::fromLatin1("qt_dir_%1").arg(info.iIcon);
+         key = QString::fromLatin1("qt_dir_%1").formatArg(info.iIcon);
       }
       pixmap = QPixmap::fromWinHICON(info.hIcon);
 

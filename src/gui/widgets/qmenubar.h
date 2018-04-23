@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    using QWidget::addAction;
 
    QAction *addAction(const QString &text);
-   QAction *addAction(const QString &text, const QObject *receiver, const char *member);
+   QAction *addAction(const QString &text, const QObject *receiver, const QString &member);
 
    QAction *addMenu(QMenu *menu);
    QMenu *addMenu(const QString &title);

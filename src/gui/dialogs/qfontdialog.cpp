@@ -541,7 +541,7 @@ void QFontDialogPrivate::updateSizes()
 void QFontDialogPrivate::_q_updateSample()
 {
    // compute new font
-   int pSize = sizeEdit->text().toInt();
+   int pSize = sizeEdit->text().toInteger<int>();
    QFont newFont(fdb.font(familyList->currentText(), style, pSize));
    newFont.setStrikeOut(strikeout->isChecked());
    newFont.setUnderline(underline->isChecked());
@@ -623,7 +623,7 @@ void QFontDialogPrivate::_q_sizeHighlighted(int index)
       sizeEdit->selectAll();
    }
 
-   size = s.toInt();
+   size = s.toInteger<int>();
    _q_updateSample();
 }
 
@@ -636,7 +636,7 @@ void QFontDialogPrivate::_q_sizeHighlighted(int index)
 void QFontDialogPrivate::_q_sizeChanged(const QString &s)
 {
    // no need to check if the conversion is valid, since we have an QIntValidator in the size edit
-   int size = s.toInt();
+   int size = s.toInteger<int>();
    if (this->size == size) {
       return;
    }
@@ -645,7 +645,7 @@ void QFontDialogPrivate::_q_sizeChanged(const QString &s)
    if (sizeList->count() != 0) {
       int i;
       for (i = 0; i < sizeList->count() - 1; i++) {
-         if (sizeList->text(i).toInt() >= this->size) {
+         if (sizeList->text(i).toInteger<int>() >= this->size) {
             break;
          }
       }
@@ -829,7 +829,7 @@ bool QFontDialogPrivate::sharedFontPanelAvailable = true;
 
     The signal will be disconnected from the slot when the dialog is closed.
 */
-void QFontDialog::open(QObject *receiver, const char *member)
+void QFontDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QFontDialog);
 
@@ -922,8 +922,7 @@ void QFontDialog::done(int result)
    }
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(fontSelected(const QFont &)),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
+      disconnect(this, SIGNAL(fontSelected(const QFont &)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
 
       d->receiverToDisconnectOnClose = 0;
    }

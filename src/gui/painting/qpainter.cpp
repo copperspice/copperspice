@@ -6157,13 +6157,13 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
 {
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output) {
-      printf("QPainter::drawText(), pos=[%.2f,%.2f], str='%s'\n", p.x(), p.y(), str.toLatin1().constData());
+      printf("QPainter::drawText(), pos=[%.2f,%.2f], str='%s'\n", p.x(), p.y(), csPrintable(str));
    }
 #endif
 
    Q_D(QPainter);
 
-   if (!d->engine || str.isEmpty() || pen().style() == Qt::NoPen) {
+   if (! d->engine || str.isEmpty() || pen().style() == Qt::NoPen) {
       return;
    }
 
@@ -6171,27 +6171,31 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
       // Skip harfbuzz complex shaping, shape using glyph advances only
       int len = str.length();
       int numGlyphs = len;
+
       QVarLengthGlyphLayoutArray glyphs(len);
       QFontEngine *fontEngine = d->state->font.d->engineForScript(QChar::Script_Common);
 
-      if (!fontEngine->stringToCMap(str.data(), len, &glyphs, &numGlyphs, 0)) {
+      if (! fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
          glyphs.resize(numGlyphs);
-         if (!fontEngine->stringToCMap(str.data(), len, &glyphs, &numGlyphs, 0)) {
-            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap shouldn't fail twice");
+
+         if (!fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
+            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap should not fail twice");
          }
       }
 
-      QTextItemInt gf(glyphs, &d->state->font, str.data(), len, fontEngine);
+      QTextItemInt gf(glyphs, &d->state->font, str.begin(), str.end(), fontEngine);
       drawTextItem(p, gf);
       return;
    }
 
    QStackTextEngine engine(str, d->state->font);
    engine.option.setTextDirection(d->state->layoutDirection);
+
    if (tf & (Qt::TextForceLeftToRight | Qt::TextForceRightToLeft)) {
       engine.ignoreBidi = true;
       engine.option.setTextDirection((tf & Qt::TextForceLeftToRight) ? Qt::LeftToRight : Qt::RightToLeft);
    }
+
    engine.itemize();
    QScriptLine line;
    line.length = str.length();
@@ -6200,6 +6204,7 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
    int nItems = engine.layoutData->items.size();
    QVarLengthArray<int> visualOrder(nItems);
    QVarLengthArray<uchar> levels(nItems);
+
    for (int i = 0; i < nItems; ++i) {
       levels[i] = engine.layoutData->items[i].analysis.bidiLevel;
    }
@@ -6475,9 +6480,7 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
 {
    const qreal radiusBase = qMax(qreal(1), maxRadius);
 
-   QString key = "WaveUnderline_"
-                 % pen.color().name()
-                 % HexString<qreal>(radiusBase);
+   QString key = "WaveUnderline_" + pen.color().name() + HexString<qreal>(radiusBase);
 
    QPixmap pixmap;
    if (QPixmapCache::find(key, pixmap)) {
@@ -6485,7 +6488,7 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
    }
 
    const qreal halfPeriod = qMax(qreal(2), qreal(radiusBase * 1.61803399)); // the golden ratio
-   const int width = qCeil(100 / (2 * halfPeriod)) * (2 * halfPeriod);
+   const int width  = qCeil(100 / (2 * halfPeriod)) * (2 * halfPeriod);
    const int radius = qFloor(radiusBase);
 
    QPainterPath path;

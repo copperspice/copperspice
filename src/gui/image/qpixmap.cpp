@@ -806,10 +806,10 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
    QFileInfo info(fileName);
 
    QString key = "cs_pixmap"
-                 % info.absoluteFilePath()
-                 % HexString<uint>(info.lastModified().toTime_t())
-                 % HexString<quint64>(info.size())
-                 % HexString<uint>(data ? data->pixelType() : QPixmapData::PixmapType);
+                 + info.absoluteFilePath()
+                 + HexString<uint>(info.lastModified().toTime_t())
+                 + HexString<quint64>(info.size())
+                 + HexString<uint>(data ? data->pixelType() : QPixmapData::PixmapType);
 
    // Note: If no extension is provided, we try to match the
    // file against known plugin extensions

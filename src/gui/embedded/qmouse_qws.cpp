@@ -376,8 +376,8 @@ void QWSCalibratedMouseHandler::clearCalibration()
 
 void QWSCalibratedMouseHandler::writeCalibration()
 {
-   QString calFile;
-   calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
+   QString calFile = QString::fromUtf8(qgetenv("POINTERCAL_FILE"));
+
    if (calFile.isEmpty()) {
       calFile = QLatin1String("/etc/pointercal");
    }
@@ -398,7 +398,8 @@ void QWSCalibratedMouseHandler::writeCalibration()
 
 void QWSCalibratedMouseHandler::readCalibration()
 {
-   QString calFile = QString::fromLocal8Bit(qgetenv("POINTERCAL_FILE"));
+   QString calFile = QString::fromUtf8(qgetenv("POINTERCAL_FILE"));
+
    if (calFile.isEmpty()) {
       calFile = QLatin1String("/etc/pointercal");
    }

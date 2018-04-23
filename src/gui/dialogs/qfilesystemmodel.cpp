@@ -129,16 +129,17 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QM
 #ifdef Q_OS_WIN32
 static QString qt_GetLongPathName(const QString &strShortPath)
 {
-   if (strShortPath.isEmpty() || strShortPath == QLatin1String(".") || strShortPath == QLatin1String("..")) {
+   if (strShortPath.isEmpty() || strShortPath == "." || strShortPath == "..") {
       return strShortPath;
    }
 
-   if (strShortPath.length() == 2 && strShortPath.endsWith(QLatin1Char(':'))) {
+   if (strShortPath.length() == 2 && strShortPath.endsWith(':')) {
       return strShortPath.toUpper();
    }
 
    const QString absPath = QDir(strShortPath).absolutePath();
-   if (absPath.startsWith(QLatin1String("//")) || absPath.startsWith(QLatin1String("\\\\"))) {
+
+   if (absPath.startsWith("//") || absPath.startsWith("\\\\")) {
       // unc
       return QDir::fromNativeSeparators(absPath);
    }
@@ -147,20 +148,22 @@ static QString qt_GetLongPathName(const QString &strShortPath)
       return QString();
    }
 
-   const QString inputString = QLatin1String("\\\\?\\") + QDir::toNativeSeparators(absPath);
-   QVarLengthArray<TCHAR, MAX_PATH> buffer(MAX_PATH);
-   DWORD result = ::GetLongPathName((wchar_t *)inputString.utf16(), buffer.data(),buffer.size());
+   const QString inputString = "\\\\?\\" + QDir::toNativeSeparators(absPath);
+   std::wstring buffer(MAX_PATH, L'\0');
+
+   DWORD result = ::GetLongPathName(&inputString.toStdWString()[0], &buffer[0], buffer.size());
 
    if (result > DWORD(buffer.size())) {
       buffer.resize(result);
-      result = ::GetLongPathName((wchar_t *)inputString.utf16(), buffer.data(), buffer.size());
+      result = ::GetLongPathName(&inputString.toStdWString()[0], &buffer[0], buffer.size());
    }
 
    if (result > 4) {
-      QString longPath = QString::fromWCharArray(buffer.data() + 4);
+      buffer.erase(0, 4);
+      QString longPath = QString::fromStdWString(buffer);
 
       // ignoring prefix
-      longPath[0] = longPath.at(0).toUpper();
+      longPath.replace(0, 1, longPath.at(0).toUpper());
 
       // capital drive letters
       return QDir::fromNativeSeparators(longPath);
@@ -197,7 +200,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
    }
 
    // ### TODO can we use bool QAbstractFileEngine::caseSensitive() const?
-   QStringList pathElements = absolutePath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+   QStringList pathElements = absolutePath.split(QLatin1Char('/'), QStringParser::SkipEmptyParts);
 
 #if defined(Q_OS_WIN)
    if ((pathElements.isEmpty())) {
@@ -646,22 +649,22 @@ QString QFileSystemModelPrivate::size(qint64 bytes)
    const qint64 tb = 1024 * gb;
 
    if (bytes >= tb) {
-      return QFileSystemModel::tr("%1 TB").arg(QLocale().toString(qreal(bytes) / tb, 'f', 3));
+      return QFileSystemModel::tr("%1 TB").formatArg(QLocale().toString(qreal(bytes) / tb, 'f', 3));
    }
 
    if (bytes >= gb) {
-      return QFileSystemModel::tr("%1 GB").arg(QLocale().toString(qreal(bytes) / gb, 'f', 2));
+      return QFileSystemModel::tr("%1 GB").formatArg(QLocale().toString(qreal(bytes) / gb, 'f', 2));
    }
 
    if (bytes >= mb) {
-      return QFileSystemModel::tr("%1 MB").arg(QLocale().toString(qreal(bytes) / mb, 'f', 1));
+      return QFileSystemModel::tr("%1 MB").formatArg(QLocale().toString(qreal(bytes) / mb, 'f', 1));
    }
 
    if (bytes >= kb) {
-      return QFileSystemModel::tr("%1 KB").arg(QLocale().toString(bytes / kb));
+      return QFileSystemModel::tr("%1 KB").formatArg(QLocale().toString(bytes / kb));
    }
 
-   return QFileSystemModel::tr("%1 bytes").arg(QLocale().toString(bytes));
+   return QFileSystemModel::tr("%1 bytes").formatArg(QLocale().toString(bytes));
 }
 
 QString QFileSystemModelPrivate::time(const QModelIndex &index) const
@@ -712,8 +715,8 @@ QString QFileSystemModelPrivate::displayName(const QModelIndex &index) const
 #if defined(Q_OS_WIN)
    QFileSystemNode *dirNode = node(index);
 
-   if (! dirNode->volumeName.isNull()) {
-      return dirNode->volumeName + QLatin1String(" (") + name(index) + QLatin1Char(')');
+   if (! dirNode->volumeName.isEmpty()) {
+      return dirNode->volumeName + " (" + name(index) + ')';
    }
 #endif
 
@@ -722,7 +725,7 @@ QString QFileSystemModelPrivate::displayName(const QModelIndex &index) const
 
 QIcon QFileSystemModelPrivate::icon(const QModelIndex &index) const
 {
-   if (!index.isValid()) {
+   if (! index.isValid()) {
       return QIcon();
    }
 
@@ -749,7 +752,7 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
 
 #ifndef QT_NO_MESSAGEBOX
       QMessageBox::information(0, QFileSystemModel::tr("Invalid Filename"), QFileSystemModel::tr("<b>\"%1\" is invalid.</b><br>"
-         "Use a filename with fewer characters or no punctuation.").arg(newName),QMessageBox::Ok);
+         "Use a filename with fewer characters or no punctuation.").formatArg(newName),QMessageBox::Ok);
 
 #endif
       return false;
@@ -922,24 +925,28 @@ int QFileSystemModelPrivate::naturalCompare(const QString &s1, const QString &s2
          int lookAheadLocation1 = l1;
          int lookAheadLocation2 = l2;
          int currentReturnValue = 0;
+
          // find the last digit, setting currentReturnValue as we go if it isn't equal
-         for (
-            QChar lookAhead1 = c1, lookAhead2 = c2;
-            (lookAheadLocation1 <= s1.length() && lookAheadLocation2 <= s2.length());
-            lookAhead1 = getNextChar(s1, ++lookAheadLocation1),
-            lookAhead2 = getNextChar(s2, ++lookAheadLocation2)
-         ) {
+         for (QChar lookAhead1 = c1, lookAhead2 = c2;
+                  (lookAheadLocation1 <= s1.length() && lookAheadLocation2 <= s2.length());
+                  lookAhead1 = getNextChar(s1, ++lookAheadLocation1),
+                  lookAhead2 = getNextChar(s2, ++lookAheadLocation2)) {
+
             bool is1ADigit = !lookAhead1.isNull() && lookAhead1.isDigit();
             bool is2ADigit = !lookAhead2.isNull() && lookAhead2.isDigit();
+
             if (!is1ADigit && !is2ADigit) {
                break;
             }
-            if (!is1ADigit) {
+
+            if (! is1ADigit) {
                return -1;
             }
-            if (!is2ADigit) {
+
+            if (! is2ADigit) {
                return 1;
             }
+
             if (currentReturnValue == 0) {
                if (lookAhead1 < lookAhead2) {
                   currentReturnValue = -1;
@@ -948,27 +955,33 @@ int QFileSystemModelPrivate::naturalCompare(const QString &s1, const QString &s2
                }
             }
          }
+
          if (currentReturnValue != 0) {
             return currentReturnValue;
          }
       }
 
       if (cs == Qt::CaseInsensitive) {
-         if (!c1.isLower()) {
-            c1 = c1.toLower();
+         if (! c1.isLower()) {
+            c1 = c1.toLower()[0];
          }
-         if (!c2.isLower()) {
-            c2 = c2.toLower();
+
+         if (! c2.isLower()) {
+            c2 = c2.toLower()[0];
          }
       }
+
       int r = QString::localeAwareCompare(c1, c2);
+
       if (r < 0) {
          return -1;
       }
+
       if (r > 0) {
          return 1;
       }
    }
+
    // The two strings are the same (02 == 2) so fall back to the normal sort
    return QString::compare(s1, s2, cs);
 }
@@ -1487,34 +1500,48 @@ void QFileSystemModel::setNameFilters(const QStringList &filters)
 #ifndef QT_NO_REGEXP
    Q_D(QFileSystemModel);
 
-   if (!d->bypassFilters.isEmpty()) {
+   if (! d->bypassFilters.isEmpty()) {
       // update the bypass filter to only bypass the stuff that must be kept around
       d->bypassFilters.clear();
 
       // We guarantee that rootPath will stick around
       QPersistentModelIndex root(index(rootPath()));
       QModelIndexList persistantList = persistentIndexList();
+
       for (int i = 0; i < persistantList.count(); ++i) {
          QFileSystemModelPrivate::QFileSystemNode *node;
          node = d->node(persistantList.at(i));
+
          while (node) {
             if (d->bypassFilters.contains(node)) {
                break;
             }
+
             if (node->isDir()) {
                d->bypassFilters[node] = true;
             }
+
             node = node->parent;
          }
       }
    }
 
    d->nameFilters.clear();
-   const Qt::CaseSensitivity caseSensitive =
-      (filter() & QDir::CaseSensitive) ? Qt::CaseSensitive : Qt::CaseInsensitive;
-   for (int i = 0; i < filters.size(); ++i) {
-      d->nameFilters << QRegExp(filters.at(i), caseSensitive, QRegExp::Wildcard);
+
+   QPatternOptionFlags flags = QPatternOption::WildcardOption;
+
+   if (filter() & QDir::CaseSensitive) {
+      // do nothing
+
+   } else {
+      flags |= QPatternOption::CaseInsensitiveOption;
+
    }
+
+   for (int i = 0; i < filters.size(); ++i) {
+      d->nameFilters << QRegularExpression(filters.at(i), flags);
+   }
+
    d->forceSort = true;
    d->delayedSort();
 #endif
@@ -1602,18 +1629,17 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::addNode(QFile
 #endif
 
 #if defined(Q_OS_WIN)
-   //The parentNode is "" so we are listing the drives
+   // parentNode is "" so we are listing the drives
 
    if (parentNode->fileName.isEmpty()) {
-      wchar_t name[MAX_PATH + 1];
+      std::wstring name(MAX_PATH + 1, L'\0');
 
-      //GetVolumeInformation requires to add trailing backslash
+      // GetVolumeInformation requires to add trailing backslash
       const QString nodeName = fileName + QLatin1String("\\");
-      BOOL success = ::GetVolumeInformation((wchar_t *)(nodeName.utf16()),
-                                            name, MAX_PATH + 1, NULL, 0, NULL, NULL, 0);
+      BOOL success = ::GetVolumeInformation(&nodeName.toStdWString()[0], &name[0], MAX_PATH + 1, NULL, 0, NULL, NULL, 0);
 
       if (success && name[0]) {
-         node->volumeName = QString::fromWCharArray(name);
+         node->volumeName = QString::fromStdWString(name);
       }
    }
 #endif
@@ -1631,9 +1657,8 @@ void QFileSystemModelPrivate::removeNode(QFileSystemModelPrivate::QFileSystemNod
 
    int vLocation = parentNode->visibleLocation(name);
 
-   if (vLocation >= 0 && !indexHidden)
-      q->beginRemoveRows(parent, translateVisibleLocation(parentNode, vLocation),
-                         translateVisibleLocation(parentNode, vLocation));
+   if (vLocation >= 0 && ! indexHidden)
+      q->beginRemoveRows(parent, translateVisibleLocation(parentNode, vLocation), translateVisibleLocation(parentNode, vLocation));
 
    QFileSystemNode *node = parentNode->children.take(name);
    delete node;
@@ -1909,15 +1934,15 @@ bool QFileSystemModelPrivate::filtersAcceptsNode(const QFileSystemNode *node) co
    bool isDotDot = (node->fileName == QLatin1String(".."));
 
    if ( ( hideHidden && ! (isDot || isDotDot) && node->isHidden() )
-          || (hideDirs  && node->isDir())
-          || (hideFiles && node->isFile())
-          || (hideSystem  && node->isSystem())
-          || (hideReadable  && node->isReadable())
+          || (hideDirs       && node->isDir())
+          || (hideFiles      && node->isFile())
+          || (hideSystem     && node->isSystem())
+          || (hideReadable   && node->isReadable())
           || (hideWritable   && node->isWritable())
           || (hideExecutable && node->isExecutable())
-          || (hideSymlinks  && node->isSymLink())
-          || (hideDot && isDot)
-          || (hideDotDot && isDotDot)) {
+          || (hideSymlinks   && node->isSymLink())
+          || (hideDot        && isDot)
+          || (hideDotDot     && isDotDot)) {
 
       return false;
    }
@@ -1934,14 +1959,17 @@ bool QFileSystemModelPrivate::passNameFilters(const QFileSystemNode *node) const
 
    // Check the name regularexpression filters
    if (! (node->isDir() && (filters & QDir::AllDirs))) {
+
       for (int i = 0; i < nameFilters.size(); ++i) {
-         if (nameFilters.at(i).exactMatch(node->fileName)) {
+         if (nameFilters.at(i).match(node->fileName).hasMatch()) {
             return true;
          }
       }
+
       return false;
    }
 #endif
+
    return true;
 }
 

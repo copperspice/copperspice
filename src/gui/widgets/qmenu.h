@@ -60,10 +60,10 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
    QAction *addAction(const QString &text);
    QAction *addAction(const QIcon &icon, const QString &text);
-   QAction *addAction(const QString &text, const QObject *receiver,
-                      const char *member, const QKeySequence &shortcut = 0);
+   QAction *addAction(const QString &text, const QObject *receiver, const QString &member, const QKeySequence &shortcut = 0);
+
    QAction *addAction(const QIcon &icon, const QString &text,
-                      const QObject *receiver, const char *member, const QKeySequence &shortcut = 0);
+                      const QObject *receiver, const QString &member, const QKeySequence &shortcut = 0);
 
    QAction *addMenu(QMenu *menu);
    QMenu *addMenu(const QString &title);

@@ -167,9 +167,10 @@ void QSystemTrayIconSys::setIconContents(NOTIFYICONDATA &tnd)
    tnd.uFlags |= NIF_MESSAGE | NIF_ICON | NIF_TIP;
    tnd.uCallbackMessage = MYWM_NOTIFYICON;
    tnd.hIcon = hIcon;
+
    QString tip = q->toolTip();
 
-   if (!tip.isNull()) {
+   if (! tip.isEmpty()) {
       tip = tip.left(maxTipLength - 1) + QChar();
       memcpy(tnd.szTip, tip.utf16(), qMin(tip.length() + 1, maxTipLength) * sizeof(wchar_t));
    }

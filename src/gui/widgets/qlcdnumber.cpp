@@ -51,141 +51,54 @@ class QLCDNumberPrivate : public QFramePrivate
    QBitArray points;
 };
 
-/*!
-    \class QLCDNumber
-
-    \brief The QLCDNumber widget displays a number with LCD-like digits.
-
-    \ingroup basicwidgets
-
-
-    It can display a number in just about any size. It can display
-    decimal, hexadecimal, octal or binary numbers. It is easy to
-    connect to data sources using the display() slot, which is
-    overloaded to take any of five argument types.
-
-    There are also slots to change the base with setMode() and the
-    decimal point with setSmallDecimalPoint().
-
-    QLCDNumber emits the overflow() signal when it is asked to display
-    something beyond its range. The range is set by setDigitCount(),
-    but setSmallDecimalPoint() also influences it. If the display is
-    set to hexadecimal, octal or binary, the integer equivalent of the
-    value is displayed.
-
-    These digits and other symbols can be shown: 0/O, 1, 2, 3, 4, 5/S,
-    6, 7, 8, 9/g, minus, decimal point, A, B, C, D, E, F, h, H, L, o,
-    P, r, u, U, Y, colon, degree sign (which is specified as single
-    quote in the string) and space. QLCDNumber substitutes spaces for
-    illegal characters.
-
-    It is not possible to retrieve the contents of a QLCDNumber
-    object, although you can retrieve the numeric value with value().
-    If you really need the text, we recommend that you connect the
-    signals that feed the display() slot to another slot as well and
-    store the value there.
-
-    Incidentally, QLCDNumber is the very oldest part of Qt, tracing
-    its roots back to a BASIC program on the \link
-    http://www.nvg.ntnu.no/sinclair/computers/zxspectrum/zxspectrum.htm
-    Sinclair Spectrum\endlink.
-
-    \table
-    \row \o \inlineimage motif-lcdnumber.png Screenshot of a Motif style LCD number widget
-    \inlineimage cde-lcdnumber.png Screenshot of a CDE style LCD number widget
-    \inlineimage windows-lcdnumber.png Screenshot of a Windows style LCD number widget
-    \inlineimage windowsxp-lcdnumber.png Screenshot of a Windows XP style LCD number widget
-    \inlineimage macintosh-lcdnumber.png Screenshot of a Macintosh style LCD number widget
-    \inlineimage plastique-lcdnumber.png Screenshot of a Plastique style LCD number widget
-    \row \o LCD number widgets shown in various widget styles (from left to right):
-    \l{Motif Style Widget Gallery}{Motif}, \l{CDE Style Widget Gallery}{CDE},
-    \l{Windows Style Widget Gallery}{Windows}, \l{Windows XP Style Widget Gallery}{Windows XP},
-    \l{Macintosh Style Widget Gallery}{Macintosh}, \l{Plastique Style Widget Gallery}{Plastique}.
-    \endtable
-
-    \sa QLabel, QFrame, {Digital Clock Example}, {Tetrix Example}
-*/
-
-/*!
-    \enum QLCDNumber::Mode
-
-    This type determines how numbers are shown.
-
-    \value Hex  Hexadecimal
-    \value Dec  Decimal
-    \value Oct  Octal
-    \value Bin  Binary
-    \omitvalue HEX
-    \omitvalue DEC
-    \omitvalue OCT
-    \omitvalue BIN
-
-    If the display is set to hexadecimal, octal or binary, the integer
-    equivalent of the value is displayed.
-*/
-
-/*!
-    \enum QLCDNumber::SegmentStyle
-
-    This type determines the visual appearance of the QLCDNumber
-    widget.
-
-    \value Outline gives raised segments filled with the background color.
-    \value Filled gives raised segments filled with the windowText color.
-    \value Flat gives flat segments filled with the windowText color.
-*/
-
-
-
-/*!
-    \fn void QLCDNumber::overflow()
-
-    This signal is emitted whenever the QLCDNumber is asked to display
-    a too-large number or a too-long string.
-
-    It is never emitted by setDigitCount().
-*/
-
-
 static QString int2string(int num, int base, int ndigits, bool *oflow)
 {
    QString s;
    bool negative;
+
    if (num < 0) {
       negative = true;
       num      = -num;
    } else {
       negative = false;
    }
+
    switch (base) {
       case QLCDNumber::Hex:
-         s.sprintf("%*x", ndigits, num);
+         s = QString("%1").formatArg(num, ndigits, 16);
          break;
+
       case QLCDNumber::Dec:
-         s.sprintf("%*i", ndigits, num);
+         s = QString("%1").formatArg(num, ndigits, 10);
          break;
+
       case QLCDNumber::Oct:
-         s.sprintf("%*o", ndigits, num);
+         s = QString("%1").formatArg(num, ndigits, 8);
          break;
+
       case QLCDNumber::Bin: {
          char buf[42];
          char *p = &buf[41];
          uint n = num;
          int len = 0;
          *p = '\0';
+
          do {
             *--p = (char)((n & 1) + '0');
             n >>= 1;
             len++;
          } while (n != 0);
+
          len = ndigits - len;
          if (len > 0) {
             s.fill(QLatin1Char(' '), len);
          }
+
          s += QString::fromLatin1(p);
       }
       break;
    }
+
    if (negative) {
       for (int i = 0; i < (int)s.length(); i++) {
          if (s[i] != QLatin1Char(' ')) {
@@ -198,9 +111,11 @@ static QString int2string(int num, int base, int ndigits, bool *oflow)
          }
       }
    }
+
    if (oflow) {
       *oflow = (int)s.length() > ndigits;
    }
+
    return s;
 }
 
@@ -208,6 +123,7 @@ static QString int2string(int num, int base, int ndigits, bool *oflow)
 static QString double2string(double num, int base, int ndigits, bool *oflow)
 {
    QString s;
+
    if (base != QLCDNumber::Dec) {
       bool of = num >= 2147483648.0 || num < -2147483648.0;
       if (of) {                             // oops, integer overflow
@@ -217,20 +133,26 @@ static QString double2string(double num, int base, int ndigits, bool *oflow)
          return s;
       }
       s = int2string((int)num, base, ndigits, 0);
+
    } else {                                    // decimal base
       int nd = ndigits;
+
       do {
-         s.sprintf("%*.*g", ndigits, nd, num);
-         int i = s.indexOf(QLatin1Char('e'));
-         if (i > 0 && s[i + 1] == QLatin1Char('+')) {
-            s[i] = QLatin1Char(' ');
-            s[i + 1] = QLatin1Char('e');
+         s = QString("%1").formatArg(num, ndigits, 'g', nd);
+         int i = s.indexOf('e');
+
+         if (i > 0 && s[i + 1] == '+') {
+            s[i]     = ' ';
+            s[i + 1] = 'e';
          }
+
       } while (nd-- && (int)s.length() > ndigits);
    }
+
    if (oflow) {
       *oflow = (int)s.length() > ndigits;
    }
+
    return s;
 }
 
@@ -342,17 +264,6 @@ static const char *getSegments(char ch)               // gets list of segments f
    return segments[n];
 }
 
-
-/*!
-    Constructs an LCD number, sets the number of digits to 5, the base
-    to decimal, the decimal point mode to 'small' and the frame style
-    to a raised box. The segmentStyle() is set to \c Outline.
-
-    The \a parent argument is passed to the QFrame constructor.
-
-    \sa setDigitCount(), setSmallDecimalPoint()
-*/
-
 QLCDNumber::QLCDNumber(QWidget *parent)
    : QFrame(*new QLCDNumberPrivate, parent)
 {
@@ -360,18 +271,6 @@ QLCDNumber::QLCDNumber(QWidget *parent)
    d->ndigits = 5;
    d->init();
 }
-
-
-/*!
-    Constructs an LCD number, sets the number of digits to \a
-    numDigits, the base to decimal, the decimal point mode to 'small'
-    and the frame style to a raised box. The segmentStyle() is set to
-    \c Filled.
-
-    The \a parent argument is passed to the QFrame constructor.
-
-    \sa setDigitCount(), setSmallDecimalPoint()
-*/
 
 QLCDNumber::QLCDNumber(uint numDigits, QWidget *parent)
    : QFrame(*new QLCDNumberPrivate, parent)
@@ -415,24 +314,6 @@ void QLCDNumber::setNumDigits(int numDigits)
    setDigitCount(numDigits);
 }
 
-/*!
-    \since 4.6
-    \property QLCDNumber::digitCount
-    \brief the current number of digits displayed
-
-    Corresponds to the current number of digits. If \l
-    QLCDNumber::smallDecimalPoint is false, the decimal point occupies
-    one digit position.
-
-    By default, this property contains a value of 5.
-
-    \sa smallDecimalPoint
-*/
-
-/*!
-  Sets the current number of digits to \a numDigits. Must
-  be in the range 0..99.
- */
 void QLCDNumber::setDigitCount(int numDigits)
 {
    Q_D(QLCDNumber);
@@ -446,11 +327,13 @@ void QLCDNumber::setDigitCount(int numDigits)
                objectName().toLocal8Bit().constData());
       numDigits = 0;
    }
-   if (d->digitStr.isNull()) {                  // from constructor
+
+   if (d->digitStr.isEmpty()) {                 // from constructor
       d->ndigits = numDigits;
       d->digitStr.fill(QLatin1Char(' '), d->ndigits);
       d->points.fill(0, d->ndigits);
       d->digitStr[d->ndigits - 1] = QLatin1Char('0'); // "0" is the default number
+
    } else {
       bool doDisplay = d->ndigits == 0;
       if (numDigits == d->ndigits) {           // no change
@@ -1079,8 +962,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          default :
-            qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n",
-                     q->objectName().toLocal8Bit().constData(), segmentNo);
+            qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n", csPrintable(q->objectName()), segmentNo);
       }
       // End exact copy
       p.setPen(Qt::NoPen);
@@ -1096,7 +978,9 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
 
 #define LINETO(X,Y) p.drawLine(ppt.x(), ppt.y(), pt.x()+(X), pt.y()+(Y)); \
                     ppt = QPoint(pt.x()+(X), pt.y()+(Y))
+
 #define LIGHT p.setPen(lightColor)
+
 #define DARK  p.setPen(darkColor)
    if (shadow)
       switch (segmentNo) {
@@ -1213,8 +1097,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, 0);
             break;
          default :
-            qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n",
-                     q->objectName().toLocal8Bit().constData(), segmentNo);
+            qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n", csPrintable(q->objectName()), segmentNo);
       }
 
 #undef LINETO

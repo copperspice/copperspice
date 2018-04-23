@@ -312,12 +312,14 @@ QByteArray QFontSubset::glyphName(unsigned int glyph, const QVector<int> reverse
 
    QByteArray ba;
    QPdf::ByteStream s(&ba);
+
 #ifndef QT_NO_FREETYPE
    FT_Face face = ft_face(fontEngine);
 
    char name[32];
    name[0] = 0;
    if (face && FT_HAS_GLYPH_NAMES(face)) {
+
 #if defined(Q_WS_X11)
       if (fontEngine->type() == QFontEngine::XLFD) {
          glyphIndex = static_cast<QFontEngineXLFD *>(fontEngine)->glyphIndexToFreetypeGlyphIndex(glyphIndex);
@@ -332,6 +334,7 @@ QByteArray QFontSubset::glyphName(unsigned int glyph, const QVector<int> reverse
       s << '/' << name;
    } else
 #endif
+
 #if defined(Q_WS_X11)
       if (fontEngine->type() == QFontEngine::XLFD) {
          uint uc = static_cast<QFontEngineXLFD *>(fontEngine)->toUnicode(glyphIndex);
@@ -413,8 +416,7 @@ QByteArray QFontSubset::widthArray() const
 static void checkRanges(QPdf::ByteStream &ts, QByteArray &ranges, int &nranges)
 {
    if (++nranges > 100) {
-      ts << nranges << "beginbfrange\n"
-         << ranges << "endbfrange\n";
+      ts << nranges << "beginbfrange\n" << ranges << "endbfrange\n";
       ranges = QByteArray();
       nranges = 0;
    }
@@ -424,19 +426,26 @@ QVector<int> QFontSubset::getReverseMap() const
 {
    QVector<int> reverseMap;
    reverseMap.resize(0x10000);
+
    for (uint i = 0; i < 0x10000; ++i) {
       reverseMap[i] = 0;
    }
+
    QGlyphLayoutArray<10> glyphs;
+
    for (uint uc = 0; uc < 0x10000; ++uc) {
-      QChar ch(uc);
+      QChar ch = QChar(char32_t(uc));
+
       int nglyphs = 10;
-      fontEngine->stringToCMap(&ch, 1, &glyphs, &nglyphs, QTextEngine::GlyphIndicesOnly);
+      fontEngine->stringToCMap(QString(ch), &glyphs, &nglyphs, QTextEngine::GlyphIndicesOnly);
+
       int idx = glyph_indices.indexOf(glyphs.glyphs[0]);
-      if (idx >= 0 && !reverseMap.at(idx)) {
+
+      if (idx >= 0 && ! reverseMap.at(idx)) {
          reverseMap[idx] = uc;
       }
    }
+
    return reverseMap;
 }
 
@@ -446,6 +455,7 @@ QByteArray QFontSubset::createToUnicodeMap() const
 
    QByteArray touc;
    QPdf::ByteStream ts(&touc);
+
    ts << "/CIDInit /ProcSet findresource begin\n"
       "12 dict begin\n"
       "begincmap\n"
@@ -929,12 +939,15 @@ static QTtfTable generateName(const QList<QTtfNameRecord> &name)
 
    const int name_size = 6 + 12 * name.size();
    int string_size = 0;
+
    for (int i = 0; i < name.size(); ++i) {
       string_size += name.at(i).value.length() * char_size;
    }
+
    t.data.resize(name_size + string_size);
 
    QTtfStream s(t.data);
+
    // quint16  format  Format selector (=0).
    s << quint16(0)
      // quint16  count  Number of name records.
@@ -947,9 +960,11 @@ static QTtfTable generateName(const QList<QTtfNameRecord> &name)
    int off = 0;
    for (int i = 0; i < name.size(); ++i) {
       int len = name.at(i).value.length() * char_size;
+
       // quint16  platformID  Platform ID.
       // quint16  encodingID  Platform-specific encoding ID.
       // quint16  languageID  Language ID.
+
       s << quint16(3)
         << quint16(1)
         << quint16(0x0409) // en_US
@@ -961,17 +976,19 @@ static QTtfTable generateName(const QList<QTtfNameRecord> &name)
         << quint16(off);
       off += len;
    }
-   for (int i = 0; i < name.size(); ++i) {
-      const QString &n = name.at(i).value;
-      const ushort *uc = n.utf16();
-      for (int i = 0; i < n.length(); ++i) {
+
+   for (const auto &item : name) {
+      const QString16 &n = item.value.toUtf16();
+      const char16_t *uc = n.constData();
+
+      for (int i = 0; i < n.size_storage(); ++i) {
          s << quint16(*uc);
          ++uc;
       }
    }
+
    return t;
 }
-
 
 enum Flags {
    OffCurve = 0,

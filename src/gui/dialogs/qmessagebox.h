@@ -124,7 +124,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    using StandardButtons = QFlags<StandardButton>;
 
    explicit QMessageBox(QWidget *parent = nullptr);
-   QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons = NoButton, 
+   QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons = NoButton,
                QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
    ~QMessageBox();
@@ -135,8 +135,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    void removeButton(QAbstractButton *button);
 
    using QDialog::open;
-
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    QList<QAbstractButton *> buttons() const;
    ButtonRole buttonRole(QAbstractButton *button) const;
@@ -238,11 +237,11 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
                   const QString &button0Text, const QString &button1Text = QString(), const QString &button2Text = QString(),
                   int defaultButtonNumber = 0, int escapeButtonNumber = -1);
 
-   static int critical(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1) 
+   static int critical(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1)
    {
       return critical(parent, title, text, StandardButtons(button0), button1);
    }
- 
+
    QString informativeText() const;
    void setInformativeText(const QString &text);
 
@@ -278,7 +277,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)
 #define QT_REQUIRE_VERSION(argc, argv, str) static_assert(0, "Macro QT_REQUIRE_VERSION(argc, argv, str) has been" \
    " removed, use function cs_require_version(argc, argv, str) instead");
 
-Q_GUI_EXPORT void cs_require_version(int argc, char *argv[], const char *str); 
+Q_GUI_EXPORT void cs_require_version(int argc, char *argv[], const char *str);
 
 #endif // QT_NO_MESSAGEBOX
 

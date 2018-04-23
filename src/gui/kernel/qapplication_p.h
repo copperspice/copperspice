@@ -227,10 +227,10 @@ typedef struct tagGESTURECONFIG {
 
 #endif // Q_OS_WIN
 
-typedef QHash<QByteArray, QFont> FontHash;
+typedef QHash<QString, QFont> FontHash;
 FontHash *qt_app_fonts_hash();
 
-typedef QHash<QByteArray, QPalette> PaletteHash;
+typedef QHash<QString, QPalette> PaletteHash;
 PaletteHash *qt_app_palettes_hash();
 
 class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
@@ -402,15 +402,15 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    static bool fade_menu;
    static bool fade_tooltip;
    static bool animate_toolbox;
-   static bool widgetCount; // Coupled with -widgetcount switch
-   static bool load_testability; // Coupled with -testability switch
+   static bool widgetCount;          // Coupled with -widgetcount switch
+   static bool load_testability;     // Coupled with -testability switch
 
 #ifdef Q_OS_MAC
    static bool native_modal_dialog_active;
 #endif
 
    static void setSystemPalette(const QPalette &pal);
-   static void setPalette_helper(const QPalette &palette, const char *className, bool clearWidgetPaletteHash);
+   static void setPalette_helper(const QPalette &palette, const QString &className, bool clearWidgetPaletteHash);
    static void initializeWidgetPaletteHash();
    static void setSystemFont(const QFont &font);
 

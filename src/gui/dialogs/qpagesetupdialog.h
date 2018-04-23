@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QPageSetupDialog : public QAbstractPageSetupDialog
    int exec() override;
 
    using QDialog::open;
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    QPrinter *printer() {
       return QAbstractPageSetupDialog::printer();

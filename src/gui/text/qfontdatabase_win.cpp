@@ -402,29 +402,33 @@ void populate_database(const QString &fam)
 
    LOGFONT lf;
    lf.lfCharSet = DEFAULT_CHARSET;
-   if (fam.isNull()) {
+
+   if (fam.isEmpty()) {
       lf.lfFaceName[0] = 0;
    } else {
       memcpy(lf.lfFaceName, fam.utf16(), sizeof(wchar_t) * qMin(fam.length() + 1, 32));  // 32 = Windows hard-coded
    }
    lf.lfPitchAndFamily = 0;
 
-   EnumFontFamiliesEx(dummy, &lf,
-                      (FONTENUMPROC)storeFont, (LPARAM)privateDb(), 0);
+   EnumFontFamiliesEx(dummy, &lf, (FONTENUMPROC)storeFont, (LPARAM)privateDb(), 0);
 
    ReleaseDC(0, dummy);
 
    for (int i = 0; i < d->applicationFonts.count(); ++i) {
       QFontDatabasePrivate::ApplicationFont fnt = d->applicationFonts.at(i);
+
       if (!fnt.memoryFont) {
          continue;
       }
+
       for (int j = 0; j < fnt.families.count(); ++j) {
          const QString familyName = fnt.families.at(j);
          HDC hdc = GetDC(0);
          LOGFONT lf;
+
          memset(&lf, 0, sizeof(LOGFONT));
          memcpy(lf.lfFaceName, familyName.utf16(), sizeof(wchar_t) * qMin(LF_FACESIZE, familyName.size()));
+
          lf.lfCharSet = DEFAULT_CHARSET;
          HFONT hfont = CreateFontIndirect(&lf);
          HGDIOBJ oldobj = SelectObject(hdc, hfont);
@@ -581,63 +585,58 @@ static void initFontInfo(QFontEngineDirectWrite *fe, const QFontDef &request, in
 }
 #endif
 
-static const char *other_tryFonts[] = {
+static const QStringList other_tryFonts = {
    "Arial",
    "MS UI Gothic",
    "Gulim",
    "SimSun",
    "PMingLiU",
-   "Arial Unicode MS",
-   0
+   "Arial Unicode MS"
 };
 
-static const char *jp_tryFonts [] = {
+static const QStringList jp_tryFonts = {
    "MS UI Gothic",
    "Arial",
    "Gulim",
    "SimSun",
    "PMingLiU",
-   "Arial Unicode MS",
-   0
+   "Arial Unicode MS"
 };
 
-static const char *ch_CN_tryFonts [] = {
+static const QStringList ch_CN_tryFonts = {
    "SimSun",
    "Arial",
    "PMingLiU",
    "Gulim",
    "MS UI Gothic",
-   "Arial Unicode MS",
-   0
+   "Arial Unicode MS"
 };
 
-static const char *ch_TW_tryFonts [] = {
+static const QStringList ch_TW_tryFonts = {
    "PMingLiU",
    "Arial",
    "SimSun",
    "Gulim",
    "MS UI Gothic",
-   "Arial Unicode MS",
-   0
+   "Arial Unicode MS"
 };
 
-static const char *kr_tryFonts[] = {
+static const QStringList kr_tryFonts = {
    "Gulim",
    "Arial",
    "PMingLiU",
    "SimSun",
    "MS UI Gothic",
-   "Arial Unicode MS",
-   0
+   "Arial Unicode MS"
 };
 
-static const char **tryFonts = 0;
+static const QStringList *tryFonts = nullptr;
 
-#if !defined(QT_NO_DIRECTWRITE)
+#if ! defined(QT_NO_DIRECTWRITE)
+
 static QString fontNameSubstitute(const QString &familyName)
 {
-   QLatin1String key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\"
-                     "FontSubstitutes");
+   QString key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\" "FontSubstitutes");
    return QSettings(key, QSettings::NativeFormat).value(familyName, familyName).toString();
 }
 #endif
@@ -647,6 +646,7 @@ static inline HFONT systemFont()
    if (stock_sysfont == 0) {
       stock_sysfont = (HFONT)GetStockObject(SYSTEM_FONT);
    }
+
    return stock_sysfont;
 }
 
@@ -654,10 +654,8 @@ static inline HFONT systemFont()
 #define DEFAULT_GUI_FONT 17
 #endif
 
-static QFontEngine *loadEngine(int script, const QFontDef &request,
-                               HDC fontHdc, int dpi, bool rawMode,
-                               const QtFontDesc *desc,
-                               const QStringList &family_list)
+static QFontEngine *loadEngine(int script, const QFontDef &request, HDC fontHdc, int dpi, bool rawMode,
+                  const QtFontDesc *desc, const QStringList &family_list)
 {
    LOGFONT lf;
    memset(&lf, 0, sizeof(LOGFONT));
@@ -704,7 +702,7 @@ static QFontEngine *loadEngine(int script, const QFontDef &request,
       } else if (fam == QLatin1String("oem_fixed")) {
          f = OEM_FIXED_FONT;
       } else if (fam[0] == QLatin1Char('#')) {
-         f = fam.right(fam.length() - 1).toInt();
+         f = fam.right(fam.length() - 1).toInteger<int>();
       } else {
          f = deffnt;
       }
@@ -849,16 +847,17 @@ static QFontEngine *loadEngine(int script, const QFontDef &request,
          useDirectWrite = false;
 
          QFontDatabasePrivate *db = privateDb();
+
          if (db->directWriteFactory == 0) {
-            HRESULT hr = DWriteCreateFactory(
-                            DWRITE_FACTORY_TYPE_SHARED,
-                            __uuidof(IDWriteFactory),
-                            reinterpret_cast<IUnknown **>(&db->directWriteFactory)
-                         );
+            HRESULT hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                            reinterpret_cast<IUnknown **>(&db->directWriteFactory));
+
             if (FAILED(hr)) {
                qErrnoWarning("QFontEngine::loadEngine: DWriteCreateFactory failed");
+
             } else {
                hr = db->directWriteFactory->GetGdiInterop(&db->directWriteGdiInterop);
+
                if (FAILED(hr)) {
                   qErrnoWarning("QFontEngine::loadEngine: GetGdiInterop failed");
                }
@@ -870,14 +869,13 @@ static QFontEngine *loadEngine(int script, const QFontDef &request,
             memcpy(lf.lfFaceName, nameSubstitute.utf16(),
                    sizeof(wchar_t) * qMin(nameSubstitute.length() + 1, LF_FACESIZE));
 
-            HRESULT hr = db->directWriteGdiInterop->CreateFontFromLOGFONT(
-                            &lf,
-                            &directWriteFont);
+            HRESULT hr = db->directWriteGdiInterop->CreateFontFromLOGFONT(&lf, &directWriteFont);
+
             if (FAILED(hr)) {
+
 #ifndef QT_NO_DEBUG
                qErrnoWarning("QFontEngine::loadEngine: CreateFontFromLOGFONT failed "
-                             "for %ls (0x%lx)",
-                             lf.lfFaceName, hr);
+                             "for %ls (0x%lx)", lf.lfFaceName, hr);
 #endif
             } else {
                DeleteObject(hfont);
@@ -937,40 +935,47 @@ static QFontEngine *loadEngine(int script, const QFontDef &request,
    }
 #endif
 
-   if (script == QChar::Script_Common
-         && !(request.styleStrategy & QFont::NoFontMerging)
-         && desc != 0
-         && !(desc->family->writingSystems[QFontDatabase::Symbol] & QtFontFamily::Supported)) {
-      if (!tryFonts) {
+   if (script == QChar::Script_Common && !(request.styleStrategy & QFont::NoFontMerging)
+         && desc != 0 && !(desc->family->writingSystems[QFontDatabase::Symbol] & QtFontFamily::Supported)) {
+
+      if (tryFonts != nullptr) {
          LANGID lid = GetUserDefaultLangID();
+
          switch ( lid & 0xff ) {
-            case LANG_CHINESE: // Chinese (Taiwan)
-               if ( lid == 0x0804 ) { // Taiwan
-                  tryFonts = ch_TW_tryFonts;
+            case LANG_CHINESE:
+               // Chinese (Taiwan)
+
+               if ( lid == 0x0804 ) {
+                  // Taiwan
+                  tryFonts = &ch_TW_tryFonts;
                } else {
-                  tryFonts = ch_CN_tryFonts;
+                  tryFonts = &ch_CN_tryFonts;
                }
                break;
+
             case LANG_JAPANESE:
-               tryFonts = jp_tryFonts;
+               tryFonts = &jp_tryFonts;
                break;
+
             case LANG_KOREAN:
-               tryFonts = kr_tryFonts;
+               tryFonts = &kr_tryFonts;
                break;
+
             default:
-               tryFonts = other_tryFonts;
+               tryFonts = &other_tryFonts;
                break;
          }
       }
-      QStringList fm = QFontDatabase().families();
+
+      QStringList fm   = QFontDatabase().families();
       QStringList list = family_list;
-      const char **tf = tryFonts;
-      while (tf && *tf) {
-         if (fm.contains(QLatin1String(*tf))) {
-            list << QLatin1String(*tf);
+
+      for (const QString &item : *tryFonts)  {
+         if (fm.contains(item)) {
+            list << item;
          }
-         ++tf;
       }
+
       QFontEngine *mfe = new QFontEngineMultiWin(fe, list);
       mfe->fontDef = fe->fontDef;
       fe = mfe;
@@ -985,16 +990,18 @@ QFontEngine *qt_load_font_engine_win(const QFontDef &request)
 
    QFontCache::Key key(request, QChar::Script_Common);
    QFontEngine *fe = QFontCache::instance()->findEngine(key);
+
    if (fe != 0) {
       return fe;
-   } else
-      return loadEngine(QChar::Script_Common, request, 0, qt_defaultDpi(), false, 0,
-                        QStringList());
+   } else {
+      return loadEngine(QChar::Script_Common, request, 0, qt_defaultDpi(), false, 0, QStringList());
+   }
 }
 
 const char *styleHint(const QFontDef &request)
 {
    const char *stylehint = 0;
+
    switch (request.styleHint) {
       case QFont::SansSerif:
          stylehint = "Arial";
@@ -1021,7 +1028,7 @@ static QFontEngine *loadWin(const QFontPrivate *d, int script, const QFontDef &r
 
    const char *stylehint = styleHint(d->request);
    if (stylehint) {
-      family_list << QLatin1String(stylehint);
+      family_list << QString::fromLatin1(stylehint);
    }
 
    // append the default fallback font for the specified script

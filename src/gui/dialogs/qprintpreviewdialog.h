@@ -43,8 +43,7 @@ class Q_GUI_EXPORT QPrintPreviewDialog : public QDialog
    ~QPrintPreviewDialog();
 
    using QDialog::open;
-
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    QPrinter *printer();
 

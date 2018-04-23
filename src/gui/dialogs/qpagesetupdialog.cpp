@@ -103,7 +103,7 @@ bool QPageSetupDialog::isOptionEnabled(PageSetupDialogOption option) const
    return testOption(option);
 }
 
-void QPageSetupDialog::open(QObject *receiver, const char *member)
+void QPageSetupDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QPageSetupDialog);
    connect(this, SIGNAL(accepted()), receiver, member);

@@ -23,16 +23,13 @@
 #ifndef QABSTRACTPAGESETUPDIALOG_H
 #define QABSTRACTPAGESETUPDIALOG_H
 
-#include <QtGui/qdialog.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
 class QAbstractPageSetupDialogPrivate;
 class QPrinter;
 
-// ### Qt5 - Remove this class
 class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
 {
    GUI_CS_OBJECT(QAbstractPageSetupDialog)
@@ -40,8 +37,7 @@ class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
 
  public:
    explicit QAbstractPageSetupDialog(QPrinter *printer, QWidget *parent = nullptr);
-   QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr,
-                            QPrinter *printer, QWidget *parent = nullptr);
+   QAbstractPageSetupDialog(QAbstractPageSetupDialogPrivate &ptr, QPrinter *printer, QWidget *parent = nullptr);
    ~QAbstractPageSetupDialog();
 
    virtual int exec() = 0;
@@ -51,7 +47,5 @@ class Q_GUI_EXPORT QAbstractPageSetupDialog : public QDialog
 };
 
 #endif // QT_NO_PRINTDIALOG
-
-QT_END_NAMESPACE
 
 #endif // QABSTRACTPAGESETUPDIALOG_H

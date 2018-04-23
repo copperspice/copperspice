@@ -28,7 +28,7 @@
 #include <qtexttable.h>
 #include <qtextlist.h>
 #include <qdebug.h>
-#include <qregexp.h>
+#include <QRegularExpression.h>
 #include <qvarlengtharray.h>
 #include <qtextcodec.h>
 #include <qthread.h>
@@ -641,30 +641,18 @@ int QTextDocument::characterCount() const
 QChar QTextDocument::characterAt(int pos) const
 {
    Q_D(const QTextDocument);
+
    if (pos < 0 || pos >= d->length()) {
       return QChar();
    }
+
    QTextDocumentPrivate::FragmentIterator fragIt = d->find(pos);
+
    const QTextFragmentData *const frag = fragIt.value();
    const int offsetInFragment = qMax(0, pos - fragIt.position());
+
    return d->text.at(frag->stringPosition + offsetInFragment);
 }
-
-
-/*!
-    \property QTextDocument::defaultStyleSheet
-    \since 4.2
-
-    The default style sheet is applied to all newly HTML formatted text that is
-    inserted into the document, for example using setHtml() or QTextCursor::insertHtml().
-
-    The style sheet needs to be compliant to CSS 2.1 syntax.
-
-    \bold{Note:} Changing the default style sheet does not have any effect to the existing content
-    of the document.
-
-    \sa {Supported HTML Subset}
-*/
 
 #ifndef QT_NO_CSSPARSER
 void QTextDocument::setDefaultStyleSheet(const QString &sheet)
@@ -1010,8 +998,8 @@ void QTextDocument::setHtml(const QString &html)
 */
 QTextCursor QTextDocument::find(const QString &subString, int from, FindFlags options) const
 {
-   QRegExp expr(subString);
-   expr.setPatternSyntax(QRegExp::FixedString);
+   QRegularExpression expr(subString);
+   expr.setPatternSyntax(QRegularExpression::FixedString);
    expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
    return find(expr, from, options);
@@ -1044,18 +1032,18 @@ QTextCursor QTextDocument::find(const QString &subString, const QTextCursor &fro
          pos = from.selectionEnd();
       }
    }
-   QRegExp expr(subString);
-   expr.setPatternSyntax(QRegExp::FixedString);
+   QRegularExpression expr(subString);
+   expr.setPatternSyntax(QRegularExpression::FixedString);
    expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
    return find(expr, pos, options);
 }
 
 
-static bool findInBlock(const QTextBlock &block, const QRegExp &expression, int offset,
+static bool findInBlock(const QTextBlock &block, const QRegularExpression &expression, int offset,
                         QTextDocument::FindFlags options, QTextCursor &cursor)
 {
-   const QRegExp expr(expression);
+   const QRegularExpression expr(expression);
    QString text = block.text();
    text.replace(QChar::Nbsp, QLatin1Char(' '));
 
@@ -1090,7 +1078,7 @@ static bool findInBlock(const QTextBlock &block, const QRegExp &expression, int 
 }
 
 /*!
-    \fn QTextCursor QTextDocument::find(const QRegExp & expr, int position, FindFlags options) const
+    \fn QTextCursor QTextDocument::find(const QRegularExpression & expr, int position, FindFlags options) const
 
     \overload
 
@@ -1098,7 +1086,7 @@ static bool findInBlock(const QTextBlock &block, const QRegExp &expression, int 
     The search starts at the given \a position, and proceeds forwards
     through the document unless specified otherwise in the search options.
     The \a options control the type of search performed. The FindCaseSensitively
-    option is ignored for this overload, use QRegExp::caseSensitivity instead.
+    option is ignored for this overload, use QRegularExpression::caseSensitivity instead.
 
     Returns a cursor with the match selected if a match was found; otherwise
     returns a null cursor.
@@ -1106,15 +1094,16 @@ static bool findInBlock(const QTextBlock &block, const QRegExp &expression, int 
     If the \a position is 0 (the default) the search begins from the beginning
     of the document; otherwise it begins at the specified position.
 */
-QTextCursor QTextDocument::find(const QRegExp &expr, int from, FindFlags options) const
+QTextCursor QTextDocument::find(const QRegularExpression &expr, int from, FindFlags options) const
 {
    Q_D(const QTextDocument);
 
-   if (expr.isEmpty()) {
+   if (expr.pattern().isEmpty()) {
       return QTextCursor();
    }
 
    int pos = from;
+
    //the cursor is positioned between characters, so for a backward search
    //do not include the character given in the position.
    if (options & FindBackward) {
@@ -1151,13 +1140,13 @@ QTextCursor QTextDocument::find(const QRegExp &expr, int from, FindFlags options
 }
 
 /*!
-    \fn QTextCursor QTextDocument::find(const QRegExp &expr, const QTextCursor &cursor, FindFlags options) const
+    \fn QTextCursor QTextDocument::find(const QRegularExpression &expr, const QTextCursor &cursor, FindFlags options) const
 
     Finds the next occurrence, matching the regular expression, \a expr, in the document.
     The search starts at the position of the given \a cursor, and proceeds
     forwards through the document unless specified otherwise in the search
     options. The \a options control the type of search performed. The FindCaseSensitively
-    option is ignored for this overload, use QRegExp::caseSensitivity instead.
+    option is ignored for this overload, use QRegularExpression::caseSensitivity instead.
 
     Returns a cursor with the match selected if a match was found; otherwise
     returns a null cursor.
@@ -1168,7 +1157,7 @@ QTextCursor QTextDocument::find(const QRegExp &expr, int from, FindFlags options
     By default the search is case-sensitive, and can match text anywhere in the
     document.
 */
-QTextCursor QTextDocument::find(const QRegExp &expr, const QTextCursor &from, FindFlags options) const
+QTextCursor QTextDocument::find(const QRegularExpression &expr, const QTextCursor &from, FindFlags options) const
 {
    int pos = 0;
    if (!from.isNull()) {
@@ -1632,47 +1621,11 @@ void QTextDocument::print(QPrinter *printer) const
 }
 #endif
 
-/*!
-    \enum QTextDocument::ResourceType
-
-    This enum describes the types of resources that can be loaded by
-    QTextDocument's loadResource() function.
-
-    \value HtmlResource  The resource contains HTML.
-    \value ImageResource The resource contains image data.
-                         Currently supported data types are QVariant::Pixmap and
-                         QVariant::Image. If the corresponding variant is of type
-                         QVariant::ByteArray then Qt attempts to load the image using
-                         QImage::loadFromData. QVariant::Icon is currently not supported.
-                         The icon needs to be converted to one of the supported types first,
-                         for example using QIcon::pixmap.
-    \value StyleSheetResource The resource contains CSS.
-    \value UserResource  The first available value for user defined
-                         resource types.
-
-    \sa loadResource()
-*/
-
-/*!
-    Returns data of the specified \a type from the resource with the
-    given \a name.
-
-    This function is called by the rich text engine to request data that isn't
-    directly stored by QTextDocument, but still associated with it. For example,
-    images are referenced indirectly by the name attribute of a QTextImageFormat
-    object.
-
-    Resources are cached internally in the document. If a resource can
-    not be found in the cache, loadResource is called to try to load
-    the resource. loadResource should then use addResource to add the
-    resource to the cache.
-
-    \sa QTextDocument::ResourceType
-*/
 QVariant QTextDocument::resource(int type, const QUrl &name) const
 {
    Q_D(const QTextDocument);
    QVariant r = d->resources.value(name);
+
    if (!r.isValid()) {
       r = d->cachedResources.value(name);
       if (!r.isValid()) {
@@ -1682,24 +1635,6 @@ QVariant QTextDocument::resource(int type, const QUrl &name) const
    return r;
 }
 
-/*!
-    Adds the resource \a resource to the resource cache, using \a
-    type and \a name as identifiers. \a type should be a value from
-    QTextDocument::ResourceType.
-
-    For example, you can add an image as a resource in order to reference it
-    from within the document:
-
-    \snippet snippets/textdocument-resources/main.cpp Adding a resource
-
-    The image can be inserted into the document using the QTextCursor API:
-
-    \snippet snippets/textdocument-resources/main.cpp Inserting an image with a cursor
-
-    Alternatively, you can insert images using the HTML \c img tag:
-
-    \snippet snippets/textdocument-resources/main.cpp Inserting an image using HTML
-*/
 void QTextDocument::addResource(int type, const QUrl &name, const QVariant &resource)
 {
    Q_UNUSED(type);
@@ -1707,22 +1642,6 @@ void QTextDocument::addResource(int type, const QUrl &name, const QVariant &reso
    d->resources.insert(name, resource);
 }
 
-/*!
-    Loads data of the specified \a type from the resource with the
-    given \a name.
-
-    This function is called by the rich text engine to request data that isn't
-    directly stored by QTextDocument, but still associated with it. For example,
-    images are referenced indirectly by the name attribute of a QTextImageFormat
-    object.
-
-    When called by Qt, \a type is one of the values of
-    QTextDocument::ResourceType.
-
-    If the QTextDocument is a child object of a QTextEdit, QTextBrowser,
-    or a QTextDocument itself then the default implementation tries
-    to retrieve the data from the parent.
-*/
 QVariant QTextDocument::loadResource(int type, const QUrl &name)
 {
    Q_D(QTextDocument);
@@ -1833,36 +1752,31 @@ QTextHtmlExporter::QTextHtmlExporter(const QTextDocument *_doc)
    defaultCharFormat.clearProperty(QTextFormat::TextUnderlineStyle);
 }
 
-/*!
-    Returns the document in HTML format. The conversion may not be
-    perfect, especially for complex documents, due to the limitations
-    of HTML.
-*/
 QString QTextHtmlExporter::toHtml(const QByteArray &encoding, ExportMode mode)
 {
-   html = QLatin1String("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
+   html = QString::fromLatin1("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "
                         "\"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                         "<html><head><meta name=\"qrichtext\" content=\"1\" />");
-   html.reserve(doc->docHandle()->length());
 
    fragmentMarkers = (mode == ExportFragment);
 
-   if (!encoding.isEmpty()) {
-      html += QString::fromLatin1("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%1\" />").arg(
-                 QString::fromLatin1(encoding));
+   if (! encoding.isEmpty()) {
+      html += QString::fromLatin1("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%1\" />")
+                  .formatArg(QString::fromLatin1(encoding));
    }
 
    QString title  = doc->metaInformation(QTextDocument::DocumentTitle);
-   if (!title.isEmpty()) {
-      html += QString::fromLatin1("<title>") + title + QString::fromLatin1("</title>");
+   if (! title.isEmpty()) {
+      html += "<title>" + title + "</title>";
    }
-   html += QLatin1String("<style type=\"text/css\">\n");
-   html += QLatin1String("p, li { white-space: pre-wrap; }\n");
-   html += QLatin1String("</style>");
-   html += QLatin1String("</head><body");
+
+   html += "<style type=\"text/css\">\n";
+   html += "p, li { white-space: pre-wrap; }\n";
+   html += "</style>";
+   html += "</head><body";
 
    if (mode == ExportEntireDocument) {
-      html += QLatin1String(" style=\"");
+      html += " style=\"";
 
       emitFontFamily(defaultCharFormat.fontFamily());
 
@@ -1870,6 +1784,7 @@ QString QTextHtmlExporter::toHtml(const QByteArray &encoding, ExportMode mode)
          html += QLatin1String(" font-size:");
          html += QString::number(defaultCharFormat.fontPointSize());
          html += QLatin1String("pt;");
+
       } else if (defaultCharFormat.hasProperty(QTextFormat::FontPixelSize)) {
          html += QLatin1String(" font-size:");
          html += QString::number(defaultCharFormat.intProperty(QTextFormat::FontPixelSize));
@@ -1887,7 +1802,7 @@ QString QTextHtmlExporter::toHtml(const QByteArray &encoding, ExportMode mode)
       // do not set text-decoration on the default font since those values are /always/ propagated
       // and cannot be turned off with CSS
 
-      html += QLatin1Char('\"');
+      html += '\"';
 
       const QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
       emitBackgroundAttribute(fmt);
@@ -1895,7 +1810,8 @@ QString QTextHtmlExporter::toHtml(const QByteArray &encoding, ExportMode mode)
    } else {
       defaultCharFormat = QTextCharFormat();
    }
-   html += QLatin1Char('>');
+
+   html += '>';
 
    QTextFrameFormat rootFmt = doc->rootFrame()->frameFormat();
    rootFmt.clearProperty(QTextFormat::BackgroundBrush);
@@ -1909,17 +1825,17 @@ QString QTextHtmlExporter::toHtml(const QByteArray &encoding, ExportMode mode)
       emitTextFrame(doc->rootFrame());
    }
 
-   html += QLatin1String("</body></html>");
+   html += "</body></html>";
    return html;
 }
 
-void QTextHtmlExporter::emitAttribute(const char *attribute, const QString &value)
+void QTextHtmlExporter::emitAttribute(const QString &attribute, const QString &value)
 {
-   html += QLatin1Char(' ');
-   html += QLatin1String(attribute);
-   html += QLatin1String("=\"");
+   html += ' ';
+   html += attribute;
+   html += "=\"";
    html += value.toHtmlEscaped();
-   html += QLatin1Char('"');
+   html += '"';
 }
 
 bool QTextHtmlExporter::emitCharFormatStyle(const QTextCharFormat &format)
@@ -1928,33 +1844,38 @@ bool QTextHtmlExporter::emitCharFormatStyle(const QTextCharFormat &format)
 
    {
       const QString family = format.fontFamily();
-      if (!family.isEmpty() && family != defaultCharFormat.fontFamily()) {
+
+      if (! family.isEmpty() && family != defaultCharFormat.fontFamily()) {
          emitFontFamily(family);
          attributesEmitted = true;
       }
    }
 
-   if (format.hasProperty(QTextFormat::FontPointSize)
-         && format.fontPointSize() != defaultCharFormat.fontPointSize()) {
-      html += QLatin1String(" font-size:");
+   if (format.hasProperty(QTextFormat::FontPointSize) && format.fontPointSize() != defaultCharFormat.fontPointSize()) {
+      html += " font-size:";
       html += QString::number(format.fontPointSize());
-      html += QLatin1String("pt;");
+      html += "pt;";
       attributesEmitted = true;
+
    } else if (format.hasProperty(QTextFormat::FontSizeAdjustment)) {
       static const char *const sizeNames[] = {
          "small", "medium", "large", "x-large", "xx-large"
       };
+
       const char *name = 0;
       const int idx = format.intProperty(QTextFormat::FontSizeAdjustment) + 1;
+
       if (idx >= 0 && idx <= 4) {
          name = sizeNames[idx];
       }
+
       if (name) {
-         html += QLatin1String(" font-size:");
-         html += QLatin1String(name);
-         html += QLatin1Char(';');
+         html += " font-size:";
+         html += QString::fromLatin1(name);
+         html += ';';
          attributesEmitted = true;
       }
+
    } else if (format.hasProperty(QTextFormat::FontPixelSize)) {
       html += QLatin1String(" font-size:");
       html += QString::number(format.intProperty(QTextFormat::FontPixelSize));
@@ -1962,48 +1883,48 @@ bool QTextHtmlExporter::emitCharFormatStyle(const QTextCharFormat &format)
       attributesEmitted = true;
    }
 
-   if (format.hasProperty(QTextFormat::FontWeight)
-         && format.fontWeight() != defaultCharFormat.fontWeight()) {
+   if (format.hasProperty(QTextFormat::FontWeight) && format.fontWeight() != defaultCharFormat.fontWeight()) {
       html += QLatin1String(" font-weight:");
       html += QString::number(format.fontWeight() * 8);
       html += QLatin1Char(';');
       attributesEmitted = true;
    }
 
-   if (format.hasProperty(QTextFormat::FontItalic)
-         && format.fontItalic() != defaultCharFormat.fontItalic()) {
-      html += QLatin1String(" font-style:");
+   if (format.hasProperty(QTextFormat::FontItalic) && format.fontItalic() != defaultCharFormat.fontItalic()) {
+      html += " font-style:";
       html += (format.fontItalic() ? QLatin1String("italic") : QLatin1String("normal"));
-      html += QLatin1Char(';');
+      html += ';';
       attributesEmitted = true;
    }
 
-   QLatin1String decorationTag(" text-decoration:");
+   QString decorationTag(" text-decoration:");
    html += decorationTag;
    bool hasDecoration = false;
    bool atLeastOneDecorationSet = false;
 
    if ((format.hasProperty(QTextFormat::FontUnderline) || format.hasProperty(QTextFormat::TextUnderlineStyle))
          && format.fontUnderline() != defaultCharFormat.fontUnderline()) {
+
       hasDecoration = true;
+
       if (format.fontUnderline()) {
-         html += QLatin1String(" underline");
+         html += " underline";
          atLeastOneDecorationSet = true;
       }
    }
 
-   if (format.hasProperty(QTextFormat::FontOverline)
-         && format.fontOverline() != defaultCharFormat.fontOverline()) {
+   if (format.hasProperty(QTextFormat::FontOverline) && format.fontOverline() != defaultCharFormat.fontOverline()) {
       hasDecoration = true;
+
       if (format.fontOverline()) {
          html += QLatin1String(" overline");
          atLeastOneDecorationSet = true;
       }
    }
 
-   if (format.hasProperty(QTextFormat::FontStrikeOut)
-         && format.fontStrikeOut() != defaultCharFormat.fontStrikeOut()) {
+   if (format.hasProperty(QTextFormat::FontStrikeOut) && format.fontStrikeOut() != defaultCharFormat.fontStrikeOut()) {
       hasDecoration = true;
+
       if (format.fontStrikeOut()) {
          html += QLatin1String(" line-through");
          atLeastOneDecorationSet = true;
@@ -2011,36 +1932,36 @@ bool QTextHtmlExporter::emitCharFormatStyle(const QTextCharFormat &format)
    }
 
    if (hasDecoration) {
-      if (!atLeastOneDecorationSet) {
+      if (! atLeastOneDecorationSet) {
          html += QLatin1String("none");
       }
-      html += QLatin1Char(';');
+
+      html += ';';
       attributesEmitted = true;
+
    } else {
-      html.chop(qstrlen(decorationTag.latin1()));
+      html.chop(decorationTag.length());
    }
 
-   if (format.foreground() != defaultCharFormat.foreground()
-         && format.foreground().style() != Qt::NoBrush) {
+   if (format.foreground() != defaultCharFormat.foreground() && format.foreground().style() != Qt::NoBrush) {
       html += QLatin1String(" color:");
       html += format.foreground().color().name();
       html += QLatin1Char(';');
       attributesEmitted = true;
    }
 
-   if (format.background() != defaultCharFormat.background()
-         && format.background().style() == Qt::SolidPattern) {
+   if (format.background() != defaultCharFormat.background() && format.background().style() == Qt::SolidPattern) {
       html += QLatin1String(" background-color:");
       html += format.background().color().name();
       html += QLatin1Char(';');
       attributesEmitted = true;
    }
 
-   if (format.verticalAlignment() != defaultCharFormat.verticalAlignment()
-         && format.verticalAlignment() != QTextCharFormat::AlignNormal) {
+   if (format.verticalAlignment() != defaultCharFormat.verticalAlignment() && format.verticalAlignment() != QTextCharFormat::AlignNormal) {
       html += QLatin1String(" vertical-align:");
 
       QTextCharFormat::VerticalAlignment valign = format.verticalAlignment();
+
       if (valign == QTextCharFormat::AlignSubScript) {
          html += QLatin1String("sub");
       } else if (valign == QTextCharFormat::AlignSuperScript) {
@@ -2079,15 +2000,15 @@ bool QTextHtmlExporter::emitCharFormatStyle(const QTextCharFormat &format)
    return attributesEmitted;
 }
 
-void QTextHtmlExporter::emitTextLength(const char *attribute, const QTextLength &length)
+void QTextHtmlExporter::emitTextLength(const QString &attribute, const QTextLength &length)
 {
    if (length.type() == QTextLength::VariableLength) { // default
       return;
    }
 
-   html += QLatin1Char(' ');
-   html += QLatin1String(attribute);
-   html += QLatin1String("=\"");
+   html += ' ';
+   html += attribute;
+   html += "=\"";
    html += QString::number(length.rawValue());
 
    if (length.type() == QTextLength::PercentageLength) {
@@ -2252,20 +2173,22 @@ void QTextHtmlExporter::emitFragment(const QTextFragment &fragment)
    }
 
    QString txt = fragment.text();
-   const bool isObject = txt.contains(QChar::ObjectReplacementCharacter);
-   const bool isImage = isObject && format.isImageFormat();
 
-   QLatin1String styleTag("<span style=\"");
+   const bool isObject = txt.contains(QChar(QChar::ObjectReplacementCharacter));
+   const bool isImage  = isObject && format.isImageFormat();
+
+   QString styleTag("<span style=\"");
    html += styleTag;
 
    bool attributesEmitted = false;
-   if (!isImage) {
+   if (! isImage) {
       attributesEmitted = emitCharFormatStyle(format);
    }
+
    if (attributesEmitted) {
-      html += QLatin1String("\">");
+      html += "\">";
    } else {
-      html.chop(qstrlen(styleTag.latin1()));
+      html.chop(styleTag.length());
    }
 
    if (isObject) {
@@ -2296,10 +2219,11 @@ void QTextHtmlExporter::emitFragment(const QTextFragment &fragment)
             emitFloatStyle(imageFrame->frameFormat().position());
          }
 
-         html += QLatin1String(" />");
+         html += " />";
       }
+
    } else {
-      Q_ASSERT(!txt.contains(QChar::ObjectReplacementCharacter));
+      Q_ASSERT(! txt.contains(QChar(QChar::ObjectReplacementCharacter)));
 
       txt = txt.toHtmlEscaped();
 
@@ -2307,7 +2231,7 @@ void QTextHtmlExporter::emitFragment(const QTextFragment &fragment)
       QString forcedLineBreakRegExp = QString::fromLatin1("[\\na]");
       forcedLineBreakRegExp[3] = QChar::LineSeparator;
 
-      const QStringList lines = txt.split(QRegExp(forcedLineBreakRegExp));
+      const QStringList lines = txt.split(QRegularExpression(forcedLineBreakRegExp));
       for (int i = 0; i < lines.count(); ++i) {
          if (i > 0) {
             html += QLatin1String("<br />");   // space on purpose for compatibility with Netscape, Lynx & Co.

@@ -25,6 +25,7 @@
 
 #include <qnamespace.h>
 #include <qcontainerfwd.h>
+#include <qstringfwd.h>
 
 class QPaintDevice;
 class QWidget;
@@ -53,7 +54,6 @@ class QPrinter;
 class QTimer;
 class QTime;
 class QClipboard;
-class QString;
 class QByteArray;
 class QApplication;
 

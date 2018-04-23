@@ -612,7 +612,7 @@ QAction *QToolBar::addAction(const QIcon &icon, const QString &text)
    return action;
 }
 
-QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const char *member)
+QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const QString &member)
 {
    QAction *action = new QAction(text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
@@ -621,7 +621,7 @@ QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const
 }
 
 QAction *QToolBar::addAction(const QIcon &icon, const QString &text,
-                             const QObject *receiver, const char *member)
+                  const QObject *receiver, const QString &member)
 {
    QAction *action = new QAction(icon, text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
@@ -700,8 +700,8 @@ void QToolBar::actionEvent(QActionEvent *event)
          // reparent the action to this toolbar if it has been created
          // using the addAction(text) etc. convenience functions, to
          // preserve Qt 4.1.x behavior. The widget is already
-         // reparented to us due to the createWidget call inside
-         // createItem()
+         // reparented to us due to the createWidget call inside createItem()
+
          if (widgetAction != 0 && widgetAction->d_func()->autoCreated) {
             widgetAction->setParent(this);
          }

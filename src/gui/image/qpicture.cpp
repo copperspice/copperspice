@@ -1063,7 +1063,7 @@ QDataStream &operator>>(QDataStream &s, QPicture &r)
 
 #ifndef QT_NO_PICTUREIO
 
-#include <qregexp.h>
+#include <QRegularExpression.h>
 #include <qapplication.h>
 #include <qpictureformatplugin.h>
 
@@ -1152,7 +1152,7 @@ class QPictureHandler
                   picture_io_handler r, picture_io_handler w);
 
    QString  format;                           // picture format
-   QRegExp  header;                           // picture header pattern
+   QRegularExpression  header;                           // picture header pattern
 
    picture_io_handler  read_picture;          // picture read function
    picture_io_handler  write_picture;         // picture write function
@@ -1388,7 +1388,7 @@ QString QPictureIO::pictureFormat(QIODevice *d)
       if (QPHList *list = pictureHandlers()) {
          for (int i = 0; i < list->size(); ++i) {
 
-            if (list->at(i)->header.indexIn(bufStr) != -1) {
+            if (list->at(i)->header.match(bufStr).hasMatch()) {
                // try match with headers
                format = list->at(i)->format;
                break;
@@ -1401,7 +1401,6 @@ QString QPictureIO::pictureFormat(QIODevice *d)
    d->seek(pos);                                // restore position
    return format;
 }
-
 
 QStringList QPictureIO::inputFormats()
 {

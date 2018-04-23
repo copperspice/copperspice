@@ -58,13 +58,13 @@ enum DetailButtonLabel { ShowLabel = 0, HideLabel = 1 };
 void cs_require_version(int argc, char *argv[], const char *str)
 {
    QString cur_version = QString(CS_VERSION_STR);
-   QString req_version = QString(str);
+   QString req_version = QString::fromLatin1(str);
 
-   int current = (cur_version.section(QChar::fromLatin1('.'),0,0).toInt() << 16) +
-      (cur_version.section(QChar::fromLatin1('.'),1,1).toInt() << 8) + cur_version.section(QChar::fromLatin1('.'),2,2).toInt();
+   int current = (cur_version.section('.', 0, 0).toInteger<int>() << 16) +
+      (cur_version.section('.', 1, 1).toInteger<int>() << 8) + cur_version.section('.', 2, 2).toInteger<int>();
 
-   int required = (req_version.section(QChar::fromLatin1('.'),0,0).toInt() << 16) +
-      (req_version.section(QChar::fromLatin1('.'),1,1).toInt() << 8) + req_version.section(QChar::fromLatin1('.'),2,2).toInt();
+   int required = (req_version.section('.', 0, 0).toInteger<int>() << 16) +
+      (req_version.section('.', 1, 1).toInteger<int>() << 8) + req_version.section('.', 2, 2).toInteger<int>();
 
    if (current < required)   {
 
@@ -72,8 +72,8 @@ void cs_require_version(int argc, char *argv[], const char *str)
          new QApplication(argc, argv);
       }
 
-      QString errMsg = QApplication::tr("%1 requires CopperSpice version %2\n\nFound CopperSpice version %3\n").
-               arg(qAppName()).arg(req_version).arg(cur_version);
+      QString errMsg = QApplication::tr("%1 requires CopperSpice version %2\n\nFound CopperSpice version %3\n")
+               .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
 
       QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"), errMsg, QMessageBox::Abort, 0);
 
@@ -81,7 +81,7 @@ void cs_require_version(int argc, char *argv[], const char *str)
       box.setWindowIcon(icon);
       box.exec();
 
-      qFatal("%s", errMsg.toLatin1().data());
+      qFatal("%s", csPrintable(errMsg));
    }
 }
 
@@ -228,8 +228,8 @@ class QMessageBoxPrivate : public QDialogPrivate
    QAbstractButton *detectedEscapeButton;
    QLabel *informativeLabel;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
-   QByteArray signalToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
+   QString signalToDisconnectOnClose;
 };
 
 void QMessageBoxPrivate::init(const QString &title, const QString &text)
@@ -455,8 +455,7 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
       emit q->buttonClicked(button);
 
       if (receiverToDisconnectOnClose) {
-         QObject::disconnect(q, signalToDisconnectOnClose.constData(), receiverToDisconnectOnClose,
-                             memberToDisconnectOnClose.constData());
+         QObject::disconnect(q, signalToDisconnectOnClose, receiverToDisconnectOnClose, memberToDisconnectOnClose);
 
          receiverToDisconnectOnClose = 0;
       }
@@ -905,16 +904,19 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
    QDialog::keyPressEvent(e);
 }
 
-void QMessageBox::open(QObject *receiver, const char *member)
+void QMessageBox::open(QObject *receiver, const QString &member)
 {
    Q_D(QMessageBox);
 
-   const char *signal = member && strchr(member, '*') ? "buttonClicked(QAbstractButton*)" : "finished(int)";
+   const QString &signal = ! member.isEmpty() && member.contains('*') ?
+                  QString("buttonClicked(QAbstractButton*)") : QString("finished(int)");
+
    connect(this, signal, receiver, member);
 
-   d->signalToDisconnectOnClose = signal;
+   d->signalToDisconnectOnClose   = signal;
    d->receiverToDisconnectOnClose = receiver;
-   d->memberToDisconnectOnClose = member;
+   d->memberToDisconnectOnClose   = member;
+
    QDialog::open();
 }
 
@@ -1080,7 +1082,7 @@ void QMessageBox::aboutCs(QWidget *parent)
    aboutBox->setWindowIcon(icon);
 
    QLabel *msg1 = new QLabel;
-   msg1->setText(tr("CopperSpice libraries Version %1").arg(QLatin1String(CS_VERSION_STR)));
+   msg1->setText(tr("CopperSpice libraries Version %1").formatArg(QLatin1String(CS_VERSION_STR)));
 
    QFont font = msg1->font();
    font.setWeight(QFont::Bold);

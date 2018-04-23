@@ -82,7 +82,7 @@ class QColorDialogPrivate : public QDialogPrivate
    bool smallDisplay;
    QColorDialog::ColorDialogOptions opts;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
    bool nativeDialogInUse;
 
 #ifdef Q_OS_MAC

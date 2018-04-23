@@ -782,8 +782,8 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
 
             if (hover || selected) {
                if (sectionSize.width() > 0 && sectionSize.height() > 0) {
-                  QString key = QString::fromLatin1("qvdelegate-%1-%2-%3-%4-%5").arg(sectionSize.width())
-                                .arg(sectionSize.height()).arg(selected).arg(active).arg(hover);
+                  QString key = QString::fromLatin1("qvdelegate-%1-%2-%3-%4-%5").formatArg(sectionSize.width())
+                                .formatArg(sectionSize.height()).formatArg(selected).formatArg(active).formatArg(hover);
                   if (!QPixmapCache::find(key, pixmap)) {
                      pixmap = QPixmap(sectionSize);
                      pixmap.fill(Qt::transparent);
@@ -1143,7 +1143,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
                                                    option->rect, animRect);
                      pixmapSize.setWidth(animRect.width());
                   }
-                  QString name = QString::fromLatin1("qiprogress-%1-%2").arg(pixmapSize.width()).arg(pixmapSize.height());
+                  QString name = QString::fromLatin1("qiprogress-%1-%2").formatArg(pixmapSize.width()).formatArg(pixmapSize.height());
                   QPixmap pixmap;
                   if (!QPixmapCache::find(name, pixmap)) {
                      QImage image(pixmapSize, QImage::Format_ARGB32);

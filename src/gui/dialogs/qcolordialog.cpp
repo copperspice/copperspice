@@ -1943,52 +1943,18 @@ void QColorDialog::setVisible(bool visible)
    QDialog::setVisible(visible);
 }
 
-/*!
-    \overload
-    \since 4.5
-
-    Opens the dialog and connects its colorSelected() signal to the slot specified
-    by \a receiver and \a member.
-
-    The signal will be disconnected from the slot when the dialog is closed.
-*/
-void QColorDialog::open(QObject *receiver, const char *member)
+void QColorDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QColorDialog);
+
    connect(this, SIGNAL(colorSelected(const QColor &)), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
-   d->memberToDisconnectOnClose = member;
+   d->memberToDisconnectOnClose   = member;
+
    QDialog::open();
 }
 
-/*!
-    \fn QColorDialog::open()
-
-    \since 4.5
-    Shows the dialog as a \l{QDialog#Modal Dialogs}{window modal dialog},
-    returning immediately.
-
-    \sa QDialog::open()
-*/
-
-
-/*!
-    \since 4.5
-
-    Pops up a modal color dialog with the given window \a title (or "Select Color" if none is
-    specified), lets the user choose a color, and returns that color. The color is initially set
-    to \a initial. The dialog is a child of \a parent. It returns an invalid (see
-    QColor::isValid()) color if the user cancels the dialog.
-
-    The \a options argument allows you to customize the dialog.
-
-    On Symbian, this static function will use the native color dialog and not a QColorDialog.
-    On Symbian the parameters \a title and \a parent has no relevance and the
-    \a options parameter is only used to define if the native color dialog is
-    used or not.
-*/
-QColor QColorDialog::getColor(const QColor &initial, QWidget *parent, const QString &title,
-                              ColorDialogOptions options)
+QColor QColorDialog::getColor(const QColor &initial, QWidget *parent, const QString &title, ColorDialogOptions options)
 {
    QColorDialog dlg(parent);
 
@@ -2064,8 +2030,7 @@ void QColorDialog::done(int result)
    }
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(colorSelected(const QColor &)),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
+      disconnect(this, SIGNAL(colorSelected(const QColor &)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
 
       d->receiverToDisconnectOnClose = 0;
    }

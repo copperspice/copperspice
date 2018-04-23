@@ -709,19 +709,20 @@ int QProxyFontEngine::glyphCount() const
    return engine->fontProperty(QAbstractFontEngine::GlyphCount).toInt();
 }
 
-bool QProxyFontEngine::canRender(const QChar *string, int len)
+bool QProxyFontEngine::canRender(QStringView str)
 {
    QVarLengthArray<uint> glyphs(len);
    int numGlyphs = len;
 
-   if (!engine->convertStringToGlyphIndices(string, len, glyphs.data(), &numGlyphs, /*flags*/0)) {
+   if (! engine->convertStringToGlyphIndices(str, len, glyphs.data(), &numGlyphs, 0)) {
       return false;
    }
 
-   for (int i = 0; i < numGlyphs; ++i)
-      if (!glyphs[i]) {
+   for (int i = 0; i < numGlyphs; ++i) {
+      if (! glyphs[i]) {
          return false;
       }
+   }
 
    return true;
 }

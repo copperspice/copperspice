@@ -299,7 +299,7 @@ class QTextDocumentPrivate
    }
 
    void clearUndoRedoStacks(QTextDocument::Stacks stacksToClear, bool emitSignals = false);
- 
+
    void documentChange(int from, int length);
 
    inline void addCursor(QTextCursorPrivate *c) {
@@ -440,11 +440,11 @@ class QTextHtmlExporter
 
    void emitBlockAttributes(const QTextBlock &block);
    bool emitCharFormatStyle(const QTextCharFormat &format);
-   void emitTextLength(const char *attribute, const QTextLength &length);
+   void emitTextLength(const QString &attribute, const QTextLength &length);
    void emitAlignment(Qt::Alignment alignment);
    void emitFloatStyle(QTextFrameFormat::Position pos, StyleMode mode = EmitStyleTag);
    void emitMargins(const QString &top, const QString &bottom, const QString &left, const QString &right);
-   void emitAttribute(const char *attribute, const QString &value);
+   void emitAttribute(const QString &attribute, const QString &value);
    void emitFrameStyle(const QTextFrameFormat &format, FrameType frameType);
    void emitBorderStyle(QTextFrameFormat::BorderStyle style);
    void emitPageBreakPolicy(QTextFormat::PageBreakFlags policy);

@@ -141,7 +141,7 @@ void QProgressDialog::cancel()
 void QProgressDialog::disconnectOnClose()
 {
    if (receiverToDisconnectOnClose) {
-      QObject::disconnect(this, SIGNAL(canceled()), receiverToDisconnectOnClose, memberToDisconnectOnClose.constData());
+      QObject::disconnect(this, SIGNAL(canceled()), receiverToDisconnectOnClose, memberToDisconnectOnClose);
       receiverToDisconnectOnClose = 0;
    }
 
@@ -482,12 +482,12 @@ void QProgressDialog::forceShow()
    shown_once = true;
 }
 
-void QProgressDialog::open(QObject *receiver, const char *member)
+void QProgressDialog::open(QObject *receiver, const QString &member)
 {
    connect(this, SIGNAL(canceled()), receiver, member);
 
    receiverToDisconnectOnClose = receiver;
-   memberToDisconnectOnClose = member;
+   memberToDisconnectOnClose   = member;
 
    QDialog::open();
 }

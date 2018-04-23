@@ -495,54 +495,34 @@ QList<QFontDatabase::WritingSystem> QRawFont::supportedWritingSystems() const
    return QList<QFontDatabase::WritingSystem>();
 }
 
-/*!
-    Returns true if the font has a glyph that corresponds to the given \a character.
-
-    \sa supportedWritingSystems()
-*/
 bool QRawFont::supportsCharacter(QChar character) const
 {
-   return d->isValid() && d->fontEngine->canRender(&character, 1);
+   return d->isValid() && d->fontEngine->canRender(QString(character));
 }
 
-/*!
-    \overload
-   Returns true if the font has a glyph that corresponds to the UCS-4 encoded character \a ucs4.
-
-   \sa supportedWritingSystems()
-*/
 bool QRawFont::supportsCharacter(quint32 ucs4) const
 {
-   QChar str[2];
-   int len;
-   if (!QChar::requiresSurrogates(ucs4)) {
-      str[0] = QChar(ucs4);
-      len = 1;
-   } else {
-      str[0] = QChar(QChar::highSurrogate(ucs4));
-      str[1] = QChar(QChar::lowSurrogate(ucs4));
-      len = 2;
-   }
-
-   return d->isValid() && d->fontEngine->canRender(str, len);
+   QChar c = QChar(char32_t(ucs4));
+   return d->isValid() && d->fontEngine->canRender(QString(c));
 }
 
 // qfontdatabase.cpp
 extern int qt_script_for_writing_system(QFontDatabase::WritingSystem writingSystem);
 
-/*!
-   Fetches the physical representation based on a \a font query. The physical font returned is
-   the font that will be preferred by Qt in order to display text in the selected \a writingSystem.
-*/
+
 QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writingSystem)
 {
    QRawFont rawFont;
+
 #if defined(Q_OS_MAC)
    QTextLayout layout(QFontDatabase::writingSystemSample(writingSystem), font);
    layout.beginLayout();
+
    QTextLine line = layout.createLine();
    layout.endLayout();
+
    QList<QGlyphRun> list = layout.glyphRuns();
+
    if (list.size()) {
       // Pick the one matches the family name we originally requested,
       // if none of them match, just pick the first one

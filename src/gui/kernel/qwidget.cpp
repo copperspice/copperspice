@@ -2611,8 +2611,7 @@ bool QWidgetPrivate::setMinimumSize_helper(int &minw, int &minh)
 
    if (minw > QWIDGETSIZE_MAX || minh > QWIDGETSIZE_MAX) {
       qWarning("QWidget::setMinimumSize: (%s/%s) The largest allowed size is (%d,%d)",
-               q->objectName().toLocal8Bit().data(), q->metaObject()->className(), QWIDGETSIZE_MAX,
-               QWIDGETSIZE_MAX);
+               csPrintable(q->objectName()), csPrintable(q->metaObject()->className()), QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 
       minw = mw = qMin(minw, QWIDGETSIZE_MAX);
       minh = mh = qMin(minh, QWIDGETSIZE_MAX);
@@ -2620,7 +2619,7 @@ bool QWidgetPrivate::setMinimumSize_helper(int &minw, int &minh)
 
    if (minw < 0 || minh < 0) {
       qWarning("QWidget::setMinimumSize: (%s/%s) Negative sizes (%d,%d) are not possible",
-               q->objectName().toLocal8Bit().data(), q->metaObject()->className(), minw, minh);
+               csPrintable(q->objectName()), csPrintable(q->metaObject()->className()), minw, minh);
 
       minw = mw = qMax(minw, 0);
       minh = mh = qMax(minh, 0);
@@ -2673,8 +2672,7 @@ bool QWidgetPrivate::setMaximumSize_helper(int &maxw, int &maxh)
    Q_Q(QWidget);
    if (maxw > QWIDGETSIZE_MAX || maxh > QWIDGETSIZE_MAX) {
       qWarning("QWidget::setMaximumSize: (%s/%s) The largest allowed size is (%d,%d)",
-               q->objectName().toLocal8Bit().data(), q->metaObject()->className(), QWIDGETSIZE_MAX,
-               QWIDGETSIZE_MAX);
+               csPrintable(q->objectName()), csPrintable(q->metaObject()->className()), QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 
       maxw = qMin(maxw, QWIDGETSIZE_MAX);
       maxh = qMin(maxh, QWIDGETSIZE_MAX);
@@ -2682,7 +2680,7 @@ bool QWidgetPrivate::setMaximumSize_helper(int &maxw, int &maxh)
 
    if (maxw < 0 || maxh < 0) {
       qWarning("QWidget::setMaximumSize: (%s/%s) Negative sizes (%d,%d) are not possible",
-               q->objectName().toLocal8Bit().data(), q->metaObject()->className(), maxw, maxh);
+               csPrintable(q->objectName()), csPrintable(q->metaObject()->className()), maxw, maxh);
 
       maxw = qMax(maxw, 0);
       maxh = qMax(maxh, 0);
@@ -2702,7 +2700,7 @@ bool QWidgetPrivate::setMaximumSize_helper(int &maxw, int &maxh)
 void QWidget::setMaximumSize(int maxw, int maxh)
 {
    Q_D(QWidget);
-   if (!d->setMaximumSize_helper(maxw, maxh)) {
+   if (! d->setMaximumSize_helper(maxw, maxh)) {
       return;
    }
 
@@ -4130,12 +4128,13 @@ void QWidget::unsetLocale()
 static QString constructWindowTitleFromFilePath(const QString &filePath)
 {
    QFileInfo fi(filePath);
-   QString windowTitle = fi.fileName() + QLatin1String("[*]");
+   QString windowTitle = fi.fileName() + "[*]";
 
 #ifndef Q_OS_MAC
    QString appName = QApplication::applicationName();
-   if (!appName.isEmpty()) {
-      windowTitle += QLatin1Char(' ') + QChar(0x2014) + QLatin1Char(' ') + appName;
+
+   if (! appName.isEmpty()) {
+      windowTitle += ' ' + QString(QChar(0x2014)) + ' ' + appName;
    }
 #endif
 
@@ -4145,10 +4144,12 @@ static QString constructWindowTitleFromFilePath(const QString &filePath)
 QString QWidget::windowTitle() const
 {
    Q_D(const QWidget);
+
    if (d->extra && d->extra->topextra) {
       if (!d->extra->topextra->caption.isEmpty()) {
          return d->extra->topextra->caption;
       }
+
       if (!d->extra->topextra->filePath.isEmpty()) {
          return constructWindowTitleFromFilePath(d->extra->topextra->filePath);
       }
@@ -4235,7 +4236,7 @@ void QWidget::setWindowIconText(const QString &iconText)
 
 void QWidget::setWindowTitle(const QString &title)
 {
-   if (QWidget::windowTitle() == title && !title.isEmpty() && !title.isNull()) {
+   if (QWidget::windowTitle() == title && ! title.isEmpty()) {
       return;
    }
 
@@ -4250,6 +4251,7 @@ void QWidget::setWindowTitle(const QString &title)
 QIcon QWidget::windowIcon() const
 {
    const QWidget *w = this;
+
    while (w) {
       const QWidgetPrivate *d = w->d_func();
       if (d->extra && d->extra->topextra && d->extra->topextra->icon) {
@@ -4257,6 +4259,7 @@ QIcon QWidget::windowIcon() const
       }
       w = w->parentWidget();
    }
+
    return QApplication::windowIcon();
 }
 
@@ -4356,14 +4359,14 @@ void QWidget::setWindowRole(const QString &role)
 void QWidget::setFocusProxy(QWidget *w)
 {
    Q_D(QWidget);
-   if (!w && !d->extra) {
+   if (! w && !d->extra) {
       return;
    }
 
    for (QWidget *fp  = w; fp; fp = fp->focusProxy()) {
       if (fp == this) {
-         qWarning("QWidget: %s (%s) already in focus proxy chain", metaObject()->className(),
-                  objectName().toLocal8Bit().constData());
+         qWarning("QWidget: %s (%s) already in focus proxy chain", csPrintable(metaObject()->className()),
+                  csPrintable(objectName()));
          return;
       }
    }
@@ -4890,7 +4893,6 @@ void QWidget::setGeometry(const QRect &r)
       setAttribute(Qt::WA_PendingResizeEvent);
    }
 }
-
 
 QByteArray QWidget::saveGeometry() const
 {
@@ -6453,22 +6455,23 @@ bool QWidget::event(QEvent *event)
 
 #ifndef QT_NO_PROPERTIES
       case QEvent::DynamicPropertyChange: {
-         const QByteArray &propName = static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName();
+         const QString &propName = static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName();
 
          if (! propName.startsWith("_q_customDpi") && propName.length() == 13) {
-            uint value = property(propName.constData()).toUInt();
+            uint value = property(propName).toUInt();
 
-            if (!d->extra) {
+            if (! d->extra) {
                d->createExtra();
             }
 
-            const char axis = propName.at(12);
+            const QChar axis = propName.at(12);
 
             if (axis == 'X') {
                d->extra->customDpiX = value;
             } else if (axis == 'Y') {
                d->extra->customDpiY = value;
             }
+
             d->updateFont(d->data.fnt);
          }
          // fall through
@@ -6820,30 +6823,33 @@ void QWidget::setLayout(QLayout *l)
    }
    if (layout()) {
       if (layout() != l)
-         qWarning("QWidget::setLayout: Attempting to set QLayout \"%s\" on %s \"%s\", which already has a"
-                  " layout", l->objectName().toLocal8Bit().data(), metaObject()->className(),
-                  objectName().toLocal8Bit().data());
+         qWarning("QWidget::setLayout: Attempting to set QLayout \"%s\" on %s \"%s\", which already has a layout",
+                  csPrintable(l->objectName()), csPrintable(metaObject()->className()), csPrintable(objectName()));
       return;
    }
 
    QObject *oldParent = l->parent();
+
    if (oldParent && oldParent != this) {
+
       if (oldParent->isWidgetType()) {
          // Steal the layout off a widget parent. Takes effect when
          // morphing laid-out container widgets in Designer.
          QWidget *oldParentWidget = static_cast<QWidget *>(oldParent);
          oldParentWidget->takeLayout();
+
       } else {
          qWarning("QWidget::setLayout: Attempting to set QLayout \"%s\" on %s \"%s\", when the QLayout already has a parent",
-                  l->objectName().toLocal8Bit().data(), metaObject()->className(),
-                  objectName().toLocal8Bit().data());
+                  csPrintable(l->objectName()), csPrintable(metaObject()->className()), csPrintable(objectName()));
          return;
       }
    }
 
    Q_D(QWidget);
+
    l->d_func()->topLevel = true;
    d->layout = l;
+
    if (oldParent != this) {
       l->setParent(this);
       l->d_func()->reparentChildWidgets(this);

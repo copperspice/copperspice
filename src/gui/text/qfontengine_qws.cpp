@@ -517,18 +517,22 @@ qreal QFontEngineQPF1::maxCharWidth() const
 {
    return d->fm.maxwidth;
 }
+
 /*
 const char *QFontEngineQPF1::name() const
 {
     return "qt";
 }
 */
-bool QFontEngineQPF1::canRender(const QChar *str, int len)
+
+bool QFontEngineQPF1::canRender(QStringView str)
 {
-   for (int i = 0; i < len; i++)
-      if (!d->tree->inFont(str[i].unicode())) {
+   for (int i = 0; i < len; i++) {
+      if (! d->tree->inFont(str[i].unicode())) {
          return false;
       }
+   }
+
    return true;
 }
 

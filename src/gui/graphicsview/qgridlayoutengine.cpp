@@ -778,13 +778,13 @@ void QGridLayoutRowInfo::dump(int indent) const
       QString message;
 
       if (stretches.value(i).value() >= 0) {
-         message += QString::fromLatin1(" stretch %1").arg(stretches.value(i).value());
+         message += QString::fromLatin1(" stretch %1").formatArg(stretches.value(i).value());
       }
       if (spacings.value(i).value() >= 0.0) {
-         message += QString::fromLatin1(" spacing %1").arg(spacings.value(i).value());
+         message += QString::fromLatin1(" spacing %1").formatArg(spacings.value(i).value());
       }
       if (alignments.value(i) != 0) {
-         message += QString::fromLatin1(" alignment %1").arg(int(alignments.value(i)), 16);
+         message += QString::fromLatin1(" alignment %1").formatArg(int(alignments.value(i)), 16);
       }
 
       if (!message.isEmpty() || boxes.value(i) != QGridLayoutBox()) {
@@ -1298,9 +1298,9 @@ void QGridLayoutEngine::dump(int indent) const
       qDebug("%*s  %s", indent, "", qPrintable(message));
    }
 
-   if (q_defaultSpacings[Hor].value() >= 0.0 || q_defaultSpacings[Ver].value() >= 0.0)
-      qDebug("%*s Default spacings: %g %g", indent, "", q_defaultSpacings[Hor].value(),
-             q_defaultSpacings[Ver].value());
+   if (q_defaultSpacings[Hor].value() >= 0.0 || q_defaultSpacings[Ver].value() >= 0.0) {
+      qDebug("%*s Default spacings: %g %g", indent, "", q_defaultSpacings[Hor].value(), q_defaultSpacings[Ver].value());
+   }
 
    qDebug("%*s Column and row info", indent, "");
    q_infos[Hor].dump(indent + 2);
@@ -1312,14 +1312,24 @@ void QGridLayoutEngine::dump(int indent) const
 
    qDebug("%*s Geometries output", indent, "");
    QVector<qreal> *cellPos = &q_yy;
+
    for (int pass = 0; pass < 2; ++pass) {
       QString message;
+
       for (i = 0; i < cellPos->count(); ++i) {
-         message += QLatin1String((message.isEmpty() ? "[" : ", "));
+
+         if (message.isEmpty()) {
+            message += "[";
+         } else {
+            message += ", ";
+         }
+
          message += QString::number(cellPos->at(i));
       }
-      message += QLatin1Char(']');
-      qDebug("%*s %s %s", indent, "", (pass == 0 ? "rows:" : "columns:"), qPrintable(message));
+
+      message += ']';
+
+      qDebug("%*s %s %s", indent, "", (pass == 0 ? "rows:" : "columns:"), csPrintable(message));
       cellPos = &q_xx;
    }
 }

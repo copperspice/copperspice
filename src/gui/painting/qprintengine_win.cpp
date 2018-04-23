@@ -333,14 +333,14 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
    }
 
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
+
    QRgb brushColor = state->pen().brush().color().rgb();
    bool fallBack = state->pen().brush().style() != Qt::SolidPattern
                    || qAlpha(brushColor) != 0xff
                    || d->txop >= QTransform::TxProject
                    || ti.fontEngine->type() != QFontEngine::Win;
 
-
-   if (!fallBack) {
+   if (! fallBack) {
       QFontEngineWin *fe = static_cast<QFontEngineWin *>(ti.fontEngine);
 
       // Try selecting the font to see if we get a substitution font
@@ -349,22 +349,23 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
       if (GetDeviceCaps(d->hdc, TECHNOLOGY) != DT_CHARSTREAM) {
          wchar_t n[64];
          GetTextFace(d->hdc, 64, n);
-         fallBack = QString::fromWCharArray(n)
-                    != QString::fromWCharArray(fe->logfont.lfFaceName);
+         fallBack = QString::fromWCharArray(n) != QString::fromWCharArray(fe->logfont.lfFaceName);
       }
    }
-
 
    if (fallBack) {
       QPaintEngine::drawTextItem(p, textItem);
       return ;
    }
 
-   // We only want to convert the glyphs to text if the entire string is compatible with ASCII
+   // only want to convert the glyphs to text if the entire string is compatible with ASCII
    // and if we actually have access to the chars.
-   bool convertToText = ti.chars != 0;
-   for (int i = 0;  i < ti.num_chars; ++i) {
-      if (ti.chars[i].unicode() >= 0x80) {
+   bool convertToText = (ti.m_iter != ti.m_end);
+   int i = 0;
+
+   for (auto iterPos = ti.m_iter; iterPos < ti.m_end; ++iterPos) {
+
+      if (iterPos->unicode() >= 0x80) {
          convertToText = false;
          break;
       }
@@ -373,6 +374,8 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
          convertToText = false;
          break;
       }
+
+      ++i;
    }
 
    COLORREF cf = RGB(qRed(brushColor), qGreen(brushColor), qBlue(brushColor));

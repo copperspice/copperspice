@@ -47,7 +47,7 @@ class QAbstractPageSetupDialogPrivate : public QDialogPrivate
    QPrinter *printer;
    QPageSetupDialog::PageSetupDialogOptions opts;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 };
 
 QT_END_NAMESPACE

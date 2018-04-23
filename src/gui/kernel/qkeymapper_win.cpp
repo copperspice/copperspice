@@ -435,13 +435,14 @@ static inline int toKeyOrUnicode(int vk, int scancode, unsigned char *kbdBuffer,
    }
 
    if (res) {
-      code = unicodeBuffer[0].toUpper().unicode();
+      code = unicodeBuffer[0].toUpper()[0].unicode();
    }
 
    // Qt::Key_*'s are not encoded below 0x20, so try again, and DEL keys (0x7f) is encoded with a
    // proper Qt::Key_ code
 
-   if (code < 0x20 || code == 0x7f) { // Handles res == 0 too
+   if (code < 0x20 || code == 0x7f) {
+      // Handles res == 0
       code = KeyTbl[vk];
    }
 
@@ -1009,19 +1010,21 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
 
          // Find unicode character from Windows Message Queue
          MSG wm_char;
-         UINT charType = (msgType == WM_KEYDOWN
-                          ? WM_CHAR
-                          : msgType == WM_IME_KEYDOWN ? WM_IME_CHAR : WM_SYSCHAR);
+         UINT charType = (msgType == WM_KEYDOWN ? WM_CHAR : msgType == WM_IME_KEYDOWN ? WM_IME_CHAR : WM_SYSCHAR);
 
          QChar uch;
+
          if (PeekMessage(&wm_char, 0, charType, charType, PM_REMOVE)) {
             // Found a ?_CHAR
             uch = QChar((ushort)wm_char.wParam);
+
             if (msgType == WM_SYSKEYDOWN && uch.isLetter() && (msg.lParam & KF_ALTDOWN)) {
-               uch = uch.toLower();   // (See doc of WM_SYSCHAR) Alt-letter
+               // (See doc of WM_SYSCHAR) Alt-letter
+               uch = uch.toLower()[0];
             }
-            if (!code && !uch.row()) {
-               code = asciiToKeycode(uch.cell(), state);
+
+            if (! code && uch <= 0xFF)) {
+               code = asciiToKeycode(uch.unicode(), state);
             }
          }
 
@@ -1034,8 +1037,10 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
             wchar_t newKey[3] = {0};
             GetKeyboardState(keyState);
             int val = ToUnicode(vk_key, scancode, keyState, newKey, 2,  0);
+
             if (val == 1) {
                uch = QChar(newKey[0]);
+
             } else {
                // If we are still not able to find a unicode key, pass the WM_IME_KEYDOWN
                // message to DefWindowProc() for generating a proper WM_KEYDOWN.
@@ -1047,6 +1052,7 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
          if (uch.isNull()) {
             if (msg.wParam == VK_DELETE) {
                uch = QChar(QLatin1Char(0x7f)); // Windows doesn't know this one.
+
             } else {
                if (msgType != WM_SYSKEYDOWN || !code) {
                   UINT map = MapVirtualKey(msg.wParam, 2);
@@ -1056,8 +1062,9 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
                   }
                }
             }
-            if (!code && !uch.row()) {
-               code = asciiToKeycode(uch.cell(), state);
+
+            if (! code && uch <= 0xFF) {
+               code = asciiToKeycode(uch.unicode(), state);
             }
          }
 
@@ -1090,19 +1097,27 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
                k0 = q->sendKeyEvent(widget, grab, QEvent::KeyRelease, code,
                                     Qt::KeyboardModifier(state), rec->text, true, 0,
                                     scancode, msg.wParam, nModifiers);
+
                k1 = q->sendKeyEvent(widget, grab, QEvent::KeyPress, code,
                                     Qt::KeyboardModifier(state), rec->text, true, 0,
                                     scancode, msg.wParam, nModifiers);
             }
-         }
-         // No record of the key being previous pressed, so we now send a QEvent::KeyPress event,
-         // and store the key data into our records.
-         else {
+
+         } else {
+
+            // No record of the key being previous pressed, so we now send a QEvent::KeyPress event,
+            // and store the key data into our records.
+
             QString text;
-            if (!uch.isNull()) {
+            if (! uch.isNull()) {
                text += uch;
             }
-            char a = uch.row() ? 0 : uch.cell();
+
+            char a = 0;
+            if (uch <= 0xFF) {
+               a = uch.unicode();
+            }
+
             key_recorder.storeKey(msg.wParam, a, state, text);
             k0 = q->sendKeyEvent(widget, grab, QEvent::KeyPress, code, Qt::KeyboardModifier(state),
                                  text, false, 0, scancode, msg.wParam, nModifiers);

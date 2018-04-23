@@ -798,9 +798,9 @@ void QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
    bool inspectData;
    bool potentialInvalidAlpha;
 
-   QString pixmapCacheKey = QString::fromLatin1("$qt_xp_%1p%2s%3s%4b%5c%6w%7h").arg(themeData.name)
-                            .arg(partId).arg(stateId).arg(!themeData.noBorder).arg(!themeData.noContent)
-                            .arg(w).arg(h);
+   QString pixmapCacheKey = QString::fromLatin1("$qt_xp_%1p%2s%3s%4b%5c%6w%7h").formatArg(themeData.name)
+                            .formatArg(partId).formatArg(stateId).formatArg(!themeData.noBorder).formatArg(!themeData.noContent)
+                            .formatArg(w).formatArg(h);
    QPixmap cachedPixmap;
    ThemeMapKey key(themeData);
    ThemeMapData data = alphaCache.value(key);

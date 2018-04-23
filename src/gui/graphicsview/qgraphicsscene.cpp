@@ -4946,6 +4946,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
       }
 
       static int drawRect = qgetenv("QT_DRAW_SCENE_ITEM_RECTS").toInt();
+
       if (drawRect) {
          QPen oldPen = painter->pen();
          QBrush oldBrush = painter->brush();

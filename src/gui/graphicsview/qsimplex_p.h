@@ -92,22 +92,22 @@ struct QSimplexConstraint {
 #ifdef QT_DEBUG
    QString toString() {
       QString result;
-      result += QString::fromLatin1("-- QSimplexConstraint %1 --").arg(quintptr(this), 0, 16);
+      result += QString::fromLatin1("-- QSimplexConstraint %1 --").formatArg(quintptr(this), 0, 16);
 
       QHash<QSimplexVariable *, qreal>::const_iterator iter;
       for (iter = variables.constBegin(); iter != variables.constEnd(); ++iter) {
-         result += QString::fromLatin1("  %1 x %2").arg(iter.value()).arg(quintptr(iter.key()), 0, 16);
+         result += QString::fromLatin1("  %1 x %2").formatArg(iter.value()).formatArg(quintptr(iter.key()), 0, 16);
       }
 
       switch (ratio) {
          case LessOrEqual:
-            result += QString::fromLatin1("  (less) <= %1").arg(constant);
+            result += QString::fromLatin1("  (less) <= %1").formatArg(constant);
             break;
          case MoreOrEqual:
-            result += QString::fromLatin1("  (more) >= %1").arg(constant);
+            result += QString::fromLatin1("  (more) >= %1").formatArg(constant);
             break;
          default:
-            result += QString::fromLatin1("  (eqal) == %1").arg(constant);
+            result += QString::fromLatin1("  (eqal) == %1").formatArg(constant);
       }
 
       return result;

@@ -59,8 +59,7 @@ class QFontEngineXLFD : public QFontEngine
    bool getSfntTableData(uint tag, uchar *buffer, uint *length) const override;
    int synthesized() const override;
 
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const override;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
    void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const override;
 
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) override;
@@ -75,12 +74,12 @@ class QFontEngineXLFD : public QFontEngine
    qreal minRightBearing() const override;
    QImage alphaMapForGlyph(glyph_t) override;
 
+   bool canRender(QStringView str) override;
+   const char *name() const override;
+
    Type type() const override {
       return QFontEngine::XLFD;
    }
-
-   bool canRender(const QChar *string, int len) override;
-   const char *name() const override;
 
    inline XFontStruct *fontStruct() const {
       return _fs;

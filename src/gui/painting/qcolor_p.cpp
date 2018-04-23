@@ -88,15 +88,19 @@ bool qt_get_hex_rgb(const char *name, QRgb *rgb)
    return true;
 }
 
-bool qt_get_hex_rgb(const QChar *str, int len, QRgb *rgb)
+bool qt_get_hex_rgb(QStringView str, QRgb *rgb)
 {
+   int len = str.length();
+
    if (len > 13) {
       return false;
    }
+
    char tmp[16];
    for (int i = 0; i < len; ++i) {
       tmp[i] = str[i].toLatin1();
    }
+
    tmp[len] = 0;
    return qt_get_hex_rgb(tmp, rgb);
 }
@@ -321,7 +325,7 @@ bool qt_get_named_rgb(const QChar *name, int len, QRgb *rgb)
    char name_no_space[256];
    int pos = 0;
    for (int i = 0; i < len; i++) {
-      if (name[i] != QLatin1Char('\t') && name[i] != QLatin1Char(' ')) {
+      if (name[i] != '\t' && name[i] != ' ') {
          name_no_space[pos++] = name[i].toLatin1();
       }
    }
@@ -341,8 +345,9 @@ QStringList qt_get_colornames()
 {
    int i = 0;
    QStringList lst;
+
    for (i = 0; i < rgbTblSize; i++) {
-      lst << QLatin1String(rgbTbl[i].name);
+      lst << QString::fromLatin1(rgbTbl[i].name);
    }
    return lst;
 }

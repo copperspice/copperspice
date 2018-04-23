@@ -138,7 +138,7 @@ class Q_GUI_EXPORT QFontEngineQPF : public QFontEngine
    }
    bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
 
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
    void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const;
 
    void draw(QPaintEngine *p, qreal x, qreal y, const QTextItemInt &si);
@@ -157,12 +157,13 @@ class Q_GUI_EXPORT QFontEngineQPF : public QFontEngine
    QFixed underlinePosition() const;
    QFixed lineThickness() const;
 
-   Type type() const;
+   bool canRender(QStringView str) override;
 
-   bool canRender(const QChar *string, int len);
-   inline const char *name() const {
+   inline const char *name() const override {
       return "QPF2";
    }
+
+   Type type() const override;
 
    virtual int glyphCount() const {
       return glyphMapEntries;

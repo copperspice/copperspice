@@ -4813,11 +4813,13 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
          }
          break;
 #endif // QT_NO_MENU
+
 #ifndef QT_NO_TOOLBUTTON
       case CT_ToolButton:
          sz = QSize(sz.width() + 6, sz.height() + 5);
          break;
-#endif // QT_NO_TOOLBUTTON
+#endif
+
 #ifndef QT_NO_COMBOBOX
       case CT_ComboBox:
          if (const QStyleOptionComboBox *cmb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
@@ -4828,18 +4830,21 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             sz = QSize(sz.width() + fw + other, sz.height() + fw);
          }
          break;
-#endif // QT_NO_COMBOBOX
+
+#endif
+
       case CT_HeaderSection:
          if (const QStyleOptionHeader *hdr = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             bool nullIcon = hdr->icon.isNull();
             int margin = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
             int iconSize = nullIcon ? 0 : proxy()->pixelMetric(QStyle::PM_SmallIconSize, hdr, widget);
+
             QSize txt = hdr->fontMetrics.size(0, hdr->text);
             sz.setHeight(margin + qMax(iconSize, txt.height()) + margin);
-            sz.setWidth((nullIcon ? 0 : margin) + iconSize
-                        + (hdr->text.isNull() ? 0 : margin) + txt.width() + margin);
+            sz.setWidth((nullIcon ? 0 : margin) + iconSize + (hdr->text.isEmpty() ? 0 : margin) + txt.width() + margin);
          }
          break;
+
       case CT_TabWidget:
          sz += QSize(4, 4);
          break;

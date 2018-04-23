@@ -34,9 +34,9 @@ QT_BEGIN_NAMESPACE
 
 static bool checkWidget(QLayout *layout, QWidget *widget)
 {
-   if (!widget) {
-      qWarning("QLayout: Cannot add null widget to %s/%s", layout->metaObject()->className(),
-               layout->objectName().toLocal8Bit().data());
+   if (! widget) {
+      qWarning("QLayout: Can not add null widget to %s/%s", csPrintable(layout->metaObject()->className()),
+                  csPrintable(layout->objectName()));
       return false;
    }
    return true;
@@ -798,13 +798,13 @@ void QBoxLayout::setGeometry(const QRect &r)
       d->effectiveMargins(&left, &top, &right, &bottom);
 
       QRect s(cr.x() + left, cr.y() + top, cr.width() - (left + right), cr.height() - (top + bottom));
-     
+
       QVector<QLayoutStruct> a = d->geomArray;
       int n = a.count();
 
       int pos   = horz(d->dir) ? s.x() : s.y();
       int space = horz(d->dir) ? s.width() : s.height();
-   
+
       if (d->hasHfw && ! horz(d->dir)) {
 
          for (int i = 0; i < n; i++) {

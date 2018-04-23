@@ -187,7 +187,7 @@ bool QMultiScreen::initDevice()
 
 static int getDisplayId(const QString &spec)
 {
-   QRegExp regexp(QLatin1String(":(\\d+)\\b"));
+   QRegularExpression regexp(QLatin1String(":(\\d+)\\b"));
    if (regexp.lastIndexIn(spec) != -1) {
       const QString capture = regexp.cap(1);
       return capture.toInt();
@@ -197,7 +197,7 @@ static int getDisplayId(const QString &spec)
 
 static QPoint filterDisplayOffset(QString &spec)
 {
-   QRegExp regexp(QLatin1String(":offset=(\\d+),(\\d+)\\b"));
+   QRegularExpression regexp(QLatin1String(":offset=(\\d+),(\\d+)\\b"));
    if (regexp.indexIn(spec) == -1) {
       return QPoint();
    }
@@ -215,12 +215,12 @@ bool QMultiScreen::connect(const QString &displaySpec)
       dSpec = dSpec.mid(QString::fromLatin1("Multi:").size());
    }
 
-   const QString displayIdSpec = QString::fromLatin1(" :%1").arg(displayId);
+   const QString displayIdSpec = QString::fromLatin1(" :%1").formatArg(displayId);
    if (dSpec.endsWith(displayIdSpec)) {
       dSpec = dSpec.left(dSpec.size() - displayIdSpec.size());
    }
 
-   QStringList specs = dSpec.split(QLatin1Char(' '), QString::SkipEmptyParts);
+   QStringList specs = dSpec.split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
    for (QString spec : specs) {
       const int id = getDisplayId(spec);
       if (spec.startsWith("vnc:", Qt::CaseInsensitive)) {

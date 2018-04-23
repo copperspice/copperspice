@@ -1181,9 +1181,9 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
                if (!menuitem->icon.isNull())
                   qDrawShadePanel(p, xvis, y + motifItemFrame, maxpmw, h - 2 * motifItemFrame,
                                   opt->palette, true, 1, &opt->palette.brush(QPalette::Midlight));
+
             } else if (!(opt->state & State_Selected)) {
-               p->fillRect(xvis, y + motifItemFrame, maxpmw, h - 2 * motifItemFrame,
-                           opt->palette.brush(QPalette::Button));
+               p->fillRect(xvis, y + motifItemFrame, maxpmw, h - 2 * motifItemFrame, opt->palette.brush(QPalette::Button));
             }
 
             if (!menuitem->icon.isNull()) {             // draw icon
@@ -1236,18 +1236,20 @@ void QMotifStyle::drawControl(ControlElement element, const QStyleOption *opt, Q
             int xm = motifItemFrame + maxpmw + motifItemHMargin;
 
             vrect = visualRect(opt->direction, opt->rect,
-                               QRect(x + xm, y + motifItemVMargin, w - xm - menuitem->tabWidth,
-                                     h - 2 * motifItemVMargin));
+                               QRect(x + xm, y + motifItemVMargin, w - xm - menuitem->tabWidth, h - 2 * motifItemVMargin));
             xvis = vrect.x();
 
             QString s = menuitem->text;
-            if (!s.isNull()) {                        // draw text
-               int t = s.indexOf(QLatin1Char('\t'));
+            if (! s.isEmpty()) {                        // draw text
+               int t = s.indexOf('\t');
                int m = motifItemVMargin;
+
                int text_flags = Qt::AlignVCenter | Qt::TextShowMnemonic | Qt::TextDontClip | Qt::TextSingleLine;
                text_flags |= Qt::AlignLeft;
+
                QFont oldFont = p->font();
                p->setFont(menuitem->font);
+
                if (t >= 0) {                         // draw tab text
                   QRect vr = visualRect(opt->direction, opt->rect,
                                         QRect(x + w - menuitem->tabWidth - motifItemHMargin - motifItemFrame,
@@ -1966,8 +1968,8 @@ QMotifStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
       case CT_PushButton:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             sz = QCommonStyle::sizeFromContents(ct, opt, contentsSize, widget);
-            if (!btn->text.isEmpty() &&
-                  (btn->features & (QStyleOptionButton::AutoDefaultButton | QStyleOptionButton::DefaultButton))) {
+
+            if (! btn->text.isEmpty() && (btn->features & (QStyleOptionButton::AutoDefaultButton | QStyleOptionButton::DefaultButton))) {
                sz.setWidth(qMax(75, sz.width()));
             }
             sz += QSize(0, 1); // magical extra pixel
@@ -1994,7 +1996,7 @@ QMotifStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             // a little bit of border can never harm
             w += 2 * motifItemHMargin + 2 * motifItemFrame;
 
-            if (!mi->text.isNull() && mi->text.indexOf(QLatin1Char('\t')) >= 0)
+            if (! mi->text.isEmpty() && mi->text.indexOf(QLatin1Char('\t')) >= 0)
                // string contains tab
             {
                w += motifTabSpacing;

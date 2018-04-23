@@ -138,48 +138,55 @@ QString QDesktopServices::storageLocation(StandardLocation type)
 
    // http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
    if (type == QDesktopServices::CacheLocation) {
-      QString xdgCacheHome = QLatin1String(qgetenv("XDG_CACHE_HOME"));
+      QString xdgCacheHome = QString::fromUtf8(qgetenv("XDG_CACHE_HOME"));
+
       if (xdgCacheHome.isEmpty()) {
-         xdgCacheHome = QDir::homePath() + QLatin1String("/.cache");
+         xdgCacheHome = QDir::homePath() + "/.cache";
       }
-      xdgCacheHome += QLatin1Char('/') + QCoreApplication::organizationName()
-                      + QLatin1Char('/') + QCoreApplication::applicationName();
+
+      xdgCacheHome += '/' + QCoreApplication::organizationName() + '/' + QCoreApplication::applicationName();
       return xdgCacheHome;
    }
 
    if (type == QDesktopServices::DataLocation) {
-      QString xdgDataHome = QLatin1String(qgetenv("XDG_DATA_HOME"));
+      QString xdgDataHome = QString::fromUtf8(qgetenv("XDG_DATA_HOME"));
+
       if (xdgDataHome.isEmpty()) {
          xdgDataHome = QDir::homePath() + QLatin1String("/.local/share");
       }
-      xdgDataHome += QLatin1String("/data/")
-                     + QCoreApplication::organizationName() + QLatin1Char('/')
-                     + QCoreApplication::applicationName();
+
+      xdgDataHome += "/data/" + QCoreApplication::organizationName() + '/' + QCoreApplication::applicationName();
       return xdgDataHome;
    }
 
    // http://www.freedesktop.org/wiki/Software/xdg-user-dirs
-   QString xdgConfigHome = QLatin1String(qgetenv("XDG_CONFIG_HOME"));
+   QString xdgConfigHome = QString::fromUtf8(qgetenv("XDG_CONFIG_HOME"));
+
    if (xdgConfigHome.isEmpty()) {
       xdgConfigHome = QDir::homePath() + QLatin1String("/.config");
    }
+
    QFile file(xdgConfigHome + QLatin1String("/user-dirs.dirs"));
+
    if (file.exists() && file.open(QIODevice::ReadOnly)) {
       QHash<QString, QString> lines;
       QTextStream stream(&file);
+
       // Only look for lines like: XDG_DESKTOP_DIR="$HOME/Desktop"
-      QRegExp exp(QLatin1String("^XDG_(.*)_DIR=(.*)$"));
-      while (!stream.atEnd()) {
+      QRegularExpression exp("^XDG_(.*)_DIR=(.*)$");
+
+      while (! stream.atEnd()) {
          QString line = stream.readLine();
+
          if (exp.indexIn(line) != -1) {
             QStringList lst = exp.capturedTexts();
-            QString key = lst.at(1);
-            QString value = lst.at(2);
-            if (value.length() > 2
-                  && value.startsWith(QLatin1Char('\"'))
-                  && value.endsWith(QLatin1Char('\"'))) {
+            QString key     = lst.at(1);
+            QString value   = lst.at(2);
+
+            if (value.length() > 2 && value.startsWith(QLatin1Char('\"')) && value.endsWith(QLatin1Char('\"'))) {
                value = value.mid(1, value.length() - 2);
             }
+
             // Store the key and value: "DESKTOP", "$HOME/Desktop"
             lines[key] = value;
          }

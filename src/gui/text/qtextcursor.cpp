@@ -1756,12 +1756,6 @@ int QTextCursor::selectionStart() const
    return qMin(d->position, d->adjusted_anchor);
 }
 
-/*!
-    Returns the end of the selection or position() if the cursor
-    doesn't have a selection.
-
-    \sa selectionStart() position() anchor()
-*/
 int QTextCursor::selectionEnd() const
 {
    if (!d || !d->priv) {
@@ -1779,25 +1773,14 @@ static void getText(QString &text, QTextDocumentPrivate *priv, const QString &do
       const int offsetInFragment = qMax(0, pos - fragIt.position());
       const int len = qMin(int(frag->size_array[0] - offsetInFragment), end - pos);
 
-      text += QString(docText.constData() + frag->stringPosition + offsetInFragment, len);
+      text += docText.mid(frag->stringPosition + offsetInFragment, len);
       pos += len;
    }
 }
 
-/*!
-    Returns the current selection's text (which may be empty). This
-    only returns the text, with no rich text formatting information.
-    If you want a document fragment (i.e. formatted rich text) use
-    selection() instead.
-
-    \note If the selection obtained from an editor spans a line break,
-    the text will contain a Unicode U+2029 paragraph separator character
-    instead of a newline \c{\n} character. Use QString::replace() to
-    replace these characters with newlines.
-*/
 QString QTextCursor::selectedText() const
 {
-   if (!d || !d->priv || d->position == d->anchor) {
+   if (! d || !d->priv || d->position == d->anchor) {
       return QString();
    }
 
@@ -1811,10 +1794,12 @@ QString QTextCursor::selectedText() const
 
       Q_ASSERT(row_start != -1);
       for (int r = row_start; r < row_start + num_rows; ++r) {
+
          for (int c = col_start; c < col_start + num_cols; ++c) {
             QTextTableCell cell = table->cellAt(r, c);
             int rspan = cell.rowSpan();
             int cspan = cell.columnSpan();
+
             if (rspan != 1) {
                int cr = cell.row();
                if (cr != r) {

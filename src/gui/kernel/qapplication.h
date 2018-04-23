@@ -132,6 +132,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static QStyle *style();
    static void setStyle(QStyle *);
    static QStyle *setStyle(const QString &);
+
    enum ColorSpec { NormalColor = 0, CustomColor = 1, ManyColor = 2 };
    static int colorSpec();
    static void setColorSpec(int);
@@ -143,14 +144,17 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static void changeOverrideCursor(const QCursor &);
    static void restoreOverrideCursor();
 #endif
+
    static QPalette palette();
    static QPalette palette(const QWidget *);
-   static QPalette palette(const char *className);
-   static void setPalette(const QPalette &, const char *className = 0);
+   static QPalette palette(const QString &className);
+   static void setPalette(const QPalette &, const QString &className = QString());
+
    static QFont font();
    static QFont font(const QWidget *);
-   static QFont font(const char *className);
-   static void setFont(const QFont &, const char *className = 0);
+   static QFont font(const QString &className);
+   static void setFont(const QFont &, const QString &className = QString());
+
    static QFontMetrics fontMetrics();
 
    static void setWindowIcon(const QIcon &icon);

@@ -239,9 +239,11 @@ QRect QAccessibleWidget::rect(int child) const
    }
 
    QWidget *w = widget();
+
    if (!w->isVisible()) {
       return QRect();
    }
+
    QPoint wpos = w->mapToGlobal(QPoint(0, 0));
 
    return QRect(wpos.x(), wpos.y(), w->width(), w->height());
@@ -251,28 +253,28 @@ QRect QAccessibleWidget::rect(int child) const
 class QACConnectionObject : public QObject
 {
  public:
-   inline bool isSender(const QObject *receiver, const char *signal) const {
+   bool isSender(const QObject *receiver, const QString &signal) const {
       return CSInternalSender::isSender(this, receiver, signal);
    }
 
-   inline QObjectList receiverList(const char *signal) const {
+   QObjectList receiverList(const QString &signal) const {
       return CSInternalSender::receiverList(this, signal);
    }
 
-   inline QObjectList senderList() const {
+   QObjectList senderList() const {
       return CSInternalSender::senderList(this);
    }
 };
 
 void QAccessibleWidget::addControllingSignal(const QString &signal)
 {
-   QByteArray s = QMetaObject::normalizedSignature(signal.toUtf8().constData());
+   QString s = QMetaObject::normalizedSignature(signal);
 
-   if (object()->metaObject()->indexOfSignal(s.constData()) < 0) {
-      qWarning("Signal %s unknown in %s", s.constData(), object()->metaObject()->className());
+   if (object()->metaObject()->indexOfSignal(s) < 0) {
+      qWarning("Signal %s unknown in %s", csPrintable(s), object()->metaObject()->className());
    }
 
-   d->primarySignals << QLatin1String(s);
+   d->primarySignals << s;
 }
 
 void QAccessibleWidget::setValue(const QString &value)
@@ -331,7 +333,7 @@ QAccessible::Relation QAccessibleWidget::relationTo(int child,
    QACConnectionObject *connectionObject = (QACConnectionObject *)object();
 
    for (int sig = 0; sig < d->primarySignals.count(); ++sig) {
-      if (connectionObject->isSender(obj, d->primarySignals.at(sig).toUtf8().constData())) {
+      if (connectionObject->isSender(obj, d->primarySignals.at(sig))) {
          relation |= Controller;
          break;
       }
@@ -741,8 +743,10 @@ int QAccessibleWidget::navigate(RelationFlag relation, int entry, QAccessibleInt
             }
          }
          break;
+
       case Labelled: // only implemented in subclasses
          break;
+
       case Controller:
          if (entry > 0) {
             // check all senders we are connected to,
@@ -750,9 +754,11 @@ int QAccessibleWidget::navigate(RelationFlag relation, int entry, QAccessibleInt
             QACConnectionObject *connectionObject = (QACConnectionObject *)object();
             QObjectList allSenders = connectionObject->senderList();
             QObjectList senders;
+
             for (int s = 0; s < allSenders.size(); ++s) {
                QObject *sender = allSenders.at(s);
                QAccessibleInterface *candidate = QAccessible::queryAccessibleInterface(sender);
+
                if (!candidate) {
                   continue;
                }
@@ -773,7 +779,7 @@ int QAccessibleWidget::navigate(RelationFlag relation, int entry, QAccessibleInt
             QACConnectionObject *connectionObject = (QACConnectionObject *)object();
 
             for (int sig = 0; sig < d->primarySignals.count(); ++sig) {
-               QObjectList receivers = connectionObject->receiverList(d->primarySignals.at(sig).toUtf8().constData());
+               QObjectList receivers = connectionObject->receiverList(d->primarySignals.at(sig));
                allReceivers += receivers;
             }
 

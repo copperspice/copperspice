@@ -49,6 +49,7 @@ QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &
 int QTextCopyHelper::convertFormatIndex(const QTextFormat &oldFormat, int objectIndexToSet)
 {
    QTextFormat fmt = oldFormat;
+
    if (objectIndexToSet != -1) {
       fmt.setObjectIndex(objectIndexToSet);
    } else if (fmt.objectIndex() != -1) {
@@ -61,8 +62,10 @@ int QTextCopyHelper::convertFormatIndex(const QTextFormat &oldFormat, int object
       }
       fmt.setObjectIndex(newObjectIndex);
    }
+
    int idx = formatCollection.indexForFormat(fmt);
    Q_ASSERT(formatCollection.format(idx).type() == oldFormat.type());
+
    return idx;
 }
 
@@ -89,25 +92,29 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
    int blockIdx = -2;
    if (nextBlock.position() == pos + 1) {
       blockIdx = convertFormatIndex(nextBlock.blockFormat());
+
    } else if (pos == 0 && insertPos == 0) {
       dst->setBlockFormat(dst->blocksBegin(), dst->blocksBegin(),
                           convertFormat(src->blocksBegin().blockFormat()).toBlockFormat());
+
       dst->setCharFormat(-1, 1, convertFormat(src->blocksBegin().charFormat()).toCharFormat());
    }
 
-   QString txtToInsert(originalText.constData() + frag->stringPosition + inFragmentOffset, charsToCopy);
-   if (txtToInsert.length() == 1
-         && (txtToInsert.at(0) == QChar::ParagraphSeparator
+   QString txtToInsert = originalText.mid(frag->stringPosition + inFragmentOffset, charsToCopy);
+
+   if (txtToInsert.length() == 1 && (txtToInsert.at(0) == QChar::ParagraphSeparator
              || txtToInsert.at(0) == QTextBeginningOfFrame
-             || txtToInsert.at(0) == QTextEndOfFrame
-            )
-      ) {
+             || txtToInsert.at(0) == QTextEndOfFrame) ) {
+
       dst->insertBlock(txtToInsert.at(0), insertPos, blockIdx, charFormatIndex);
       ++insertPos;
+
    } else {
+
       if (nextBlock.textList()) {
          QTextBlock dstBlock = dst->blocksFind(insertPos);
-         if (!dstBlock.textList()) {
+
+         if (! dstBlock.textList()) {
             // insert a new text block with the block and char format from the
             // source block to make sure that the following text fragments
             // end up in a list as they should
@@ -117,8 +124,10 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
             ++insertPos;
          }
       }
+
       dst->insert(insertPos, txtToInsert, charFormatIndex);
       const int userState = nextBlock.userState();
+
       if (userState != -1) {
          dst->blocksFind(insertPos).setUserState(userState);
       }
@@ -571,26 +580,22 @@ bool QTextHtmlImporter::appendNodeText()
    }
 
    QString text = currentNode->text;
-
    QString textToInsert;
-   textToInsert.reserve(text.size());
 
    for (int i = 0; i < text.length(); ++i) {
       QChar ch = text.at(i);
 
-      if (ch.isSpace()
-            && ch != QChar::Nbsp
-            && ch != QChar::ParagraphSeparator) {
+      if (ch.isSpace() && ch != QChar::Nbsp && ch != QChar::ParagraphSeparator) {
 
          if (compressNextWhitespace == CollapseWhiteSpace) {
             compressNextWhitespace = RemoveWhiteSpace;   // allow this one, and remove the ones coming next.
+
          } else if (compressNextWhitespace == RemoveWhiteSpace) {
             continue;
          }
 
-         if (wsm == QTextHtmlParserNode::WhiteSpacePre
-               || textEditMode
-            ) {
+         if (wsm == QTextHtmlParserNode::WhiteSpacePre || textEditMode) {
+
             if (ch == QLatin1Char('\n')) {
                if (textEditMode) {
                   continue;
@@ -598,6 +603,7 @@ bool QTextHtmlImporter::appendNodeText()
             } else if (ch == QLatin1Char('\r')) {
                continue;
             }
+
          } else if (wsm != QTextHtmlParserNode::WhiteSpacePreWrap) {
             compressNextWhitespace = RemoveWhiteSpace;
             if (wsm == QTextHtmlParserNode::WhiteSpaceNoWrap) {
@@ -606,12 +612,12 @@ bool QTextHtmlImporter::appendNodeText()
                ch = QLatin1Char(' ');
             }
          }
+
       } else {
          compressNextWhitespace = PreserveWhiteSpace;
       }
 
-      if (ch == QLatin1Char('\n')
-            || ch == QChar::ParagraphSeparator) {
+      if (ch == QLatin1Char('\n') || ch == QChar::ParagraphSeparator) {
 
          if (!textToInsert.isEmpty()) {
             cursor.insertText(textToInsert, format);
@@ -687,10 +693,11 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processSpecialNodes()
 
          QTextListFormat listFmt;
          listFmt.setStyle(style);
-         if (!currentNode->textListNumberPrefix.isNull()) {
+
+         if (! currentNode->textListNumberPrefix.isEmpty()) {
             listFmt.setNumberPrefix(currentNode->textListNumberPrefix);
          }
-         if (!currentNode->textListNumberSuffix.isNull()) {
+         if (!currentNode->textListNumberSuffix.isEmpty()) {
             listFmt.setNumberSuffix(currentNode->textListNumberSuffix);
          }
 
@@ -915,7 +922,7 @@ QTextHtmlImporter::Table QTextHtmlImporter::scanTable(int tableNodeIdx)
             // skip all columns with spans from previous rows
             while (colsInRow < rowColSpanForColumn.size()) {
                const RowColSpanInfo &spanInfo = rowColSpanForColumn[colsInRow];
-   
+
                if (spanInfo.row + spanInfo.rowSpan > effectiveRow) {
                   Q_ASSERT(spanInfo.col == colsInRow);
                   colsInRow += spanInfo.colSpan;
@@ -923,11 +930,11 @@ QTextHtmlImporter::Table QTextHtmlImporter::scanTable(int tableNodeIdx)
                   break;
                }
             }
-   
+
             const QTextHtmlParserNode &c = at(cell);
             const int currentColumn = colsInRow;
             colsInRow += c.tableCellColSpan;
-   
+
             RowColSpanInfo spanInfo;
             spanInfo.row = effectiveRow;
             spanInfo.col = currentColumn;
@@ -936,7 +943,7 @@ QTextHtmlImporter::Table QTextHtmlImporter::scanTable(int tableNodeIdx)
             if (spanInfo.colSpan > 1 || spanInfo.rowSpan > 1) {
                rowColSpans.append(spanInfo);
             }
-   
+
             columnWidths.resize(qMax(columnWidths.count(), colsInRow));
             rowColSpanForColumn.resize(columnWidths.size());
             for (int i = currentColumn; i < currentColumn + c.tableCellColSpan; ++i) {

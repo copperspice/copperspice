@@ -40,29 +40,12 @@
 #include <qlabel_p.h>
 #include <qapplication.h>
 
-QT_BEGIN_NAMESPACE
-
-
-/*!
-    Constructs a QSystemTrayIcon object with the given \a parent.
-
-    The icon is initially invisible.
-
-    \sa visible
-*/
 QSystemTrayIcon::QSystemTrayIcon(QObject *parent)
    : QObject(parent), d_ptr(new QSystemTrayIconPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSystemTrayIcon object with the given \a icon and \a parent.
-
-    The icon is initially invisible.
-
-    \sa visible
-*/
 QSystemTrayIcon::QSystemTrayIcon(const QIcon &icon, QObject *parent)
    : QObject(parent), d_ptr(new QSystemTrayIconPrivate)
 {
@@ -70,9 +53,6 @@ QSystemTrayIcon::QSystemTrayIcon(const QIcon &icon, QObject *parent)
    setIcon(icon);
 }
 
-/*!
-    Removes the icon from the system tray and frees all allocated resources.
-*/
 QSystemTrayIcon::~QSystemTrayIcon()
 {
    Q_D(QSystemTrayIcon);
@@ -81,19 +61,6 @@ QSystemTrayIcon::~QSystemTrayIcon()
 
 #ifndef QT_NO_MENU
 
-/*!
-    Sets the specified \a menu to be the context menu for the system tray icon.
-
-    The menu will pop up when the user requests the context menu for the system
-    tray icon by clicking the mouse button.
-
-    On Mac OS X, this is currenly converted to a NSMenu, so the
-    aboutToHide() signal is not emitted.
-
-    \note The system tray icon does not take ownership of the menu. You must
-    ensure that it is deleted at the appropriate time by, for example, creating
-    the menu with a suitable parent object.
-*/
 void QSystemTrayIcon::setContextMenu(QMenu *menu)
 {
    Q_D(QSystemTrayIcon);
@@ -152,28 +119,6 @@ QString QSystemTrayIcon::toolTip() const
    return d->toolTip;
 }
 
-/*!
-    \fn void QSystemTrayIcon::show()
-
-    Shows the icon in the system tray.
-
-    \sa hide(), visible
-*/
-
-/*!
-    \fn void QSystemTrayIcon::hide()
-
-    Hides the system tray entry.
-
-    \sa show(), visible
-*/
-
-/*!
-    \since 4.3
-    Returns the geometry of the system tray icon in screen coordinates.
-
-    \sa visible
-*/
 QRect QSystemTrayIcon::geometry() const
 {
    Q_D(const QSystemTrayIcon);
@@ -183,23 +128,20 @@ QRect QSystemTrayIcon::geometry() const
    return d->geometry_sys();
 }
 
-/*!
-    \property QSystemTrayIcon::visible
-    \brief whether the system tray entry is visible
-
-    Setting this property to true or calling show() makes the system tray icon
-    visible; setting this property to false or calling hide() hides it.
-*/
 void QSystemTrayIcon::setVisible(bool visible)
 {
    Q_D(QSystemTrayIcon);
-   if (visible == d->visible) {
+
+  if (visible == d->visible) {
       return;
    }
+
    if (d->icon.isNull() && visible) {
       qWarning("QSystemTrayIcon::setVisible: No Icon set");
    }
+
    d->visible = visible;
+
    if (d->visible) {
       d->install_sys();
    } else {
@@ -427,6 +369,7 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
    }
 
    QGridLayout *layout = new QGridLayout;
+
    if (!si.isNull()) {
       QLabel *iconLabel = new QLabel;
       iconLabel->setPixmap(si.pixmap(iconSize, iconSize));
@@ -600,7 +543,5 @@ void QSystemTrayIcon::hide()
 {
    setVisible(false);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SYSTEMTRAYICON

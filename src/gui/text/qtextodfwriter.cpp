@@ -58,7 +58,7 @@ class QOutputStrategy
    virtual void addFile(const QString &fileName, const QString &mimeType, const QByteArray &bytes) = 0;
 
    QString createUniqueImageName() {
-      return QString::fromLatin1("Pictures/Picture%1").arg(counter++);
+      return QString::fromLatin1("Pictures/Picture%1").formatArg(counter++);
    }
 
    QIODevice *contentStream;
@@ -203,7 +203,7 @@ void QTextOdfWriter::writeFrame(QXmlStreamWriter &writer, const QTextFrame *fram
             }
             if (cell.format().isTableCellFormat()) {
                writer.writeAttribute(tableNS, QString::fromLatin1("style-name"),
-                                     QString::fromLatin1("T%1").arg(cell.tableCellFormatIndex()));
+                                     QString::fromLatin1("T%1").formatArg(cell.tableCellFormatIndex()));
             }
          }
          writeBlock(writer, block);
@@ -245,7 +245,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
             if (m_listStack.count() == listLevel - 1) {
                m_listStack.push(block.textList());
                writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("L%1")
-                                     .arg(block.textList()->formatIndex()));
+                                     .formatArg(block.textList()->formatIndex()));
             } else {
                m_listStack.push(0);
             }
@@ -265,7 +265,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
    if (block.length() == 1) { // only a linefeed
       writer.writeEmptyElement(textNS, QString::fromLatin1("p"));
       writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("p%1")
-                            .arg(block.blockFormatIndex()));
+                            .formatArg(block.blockFormatIndex()));
       if (block.textList()) {
          writer.writeEndElement();   // numbered-paragraph
       }
@@ -273,7 +273,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
    }
    writer.writeStartElement(textNS, QString::fromLatin1("p"));
    writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("p%1")
-                         .arg(block.blockFormatIndex()));
+                         .formatArg(block.blockFormatIndex()));
    for (QTextBlock::Iterator frag = block.begin(); !frag.atEnd(); frag++) {
       writer.writeCharacters(QString()); // Trick to make sure that the span gets no linefeed in front of it.
       writer.writeStartElement(textNS, QString::fromLatin1("span"));
@@ -286,7 +286,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
       }
 
       writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("c%1")
-                            .arg(frag.fragment().charFormatIndex()));
+                            .formatArg(frag.fragment().charFormatIndex()));
       bool escapeNextSpace = true;
       int precedingSpaces = 0;
       int exportedIndex = 0;
@@ -434,7 +434,7 @@ void QTextOdfWriter::writeFormats(QXmlStreamWriter &writer, QSet<int> formats) c
 void QTextOdfWriter::writeBlockFormat(QXmlStreamWriter &writer, QTextBlockFormat format, int formatIndex) const
 {
    writer.writeStartElement(styleNS, QString::fromLatin1("style"));
-   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("p%1").arg(formatIndex));
+   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("p%1").formatArg(formatIndex));
    writer.writeAttribute(styleNS, QString::fromLatin1("family"), QString::fromLatin1("paragraph"));
    writer.writeStartElement(styleNS, QString::fromLatin1("paragraph-properties"));
 
@@ -456,7 +456,8 @@ void QTextOdfWriter::writeBlockFormat(QXmlStreamWriter &writer, QTextBlockFormat
       } else {
          qWarning() << "QTextOdfWriter: unsupported paragraph alignment; " << format.alignment();
       }
-      if (! value.isNull()) {
+
+      if (! value.isEmpty()) {
          writer.writeAttribute(foNS, QString::fromLatin1("text-align"), value);
       }
    }
@@ -531,7 +532,7 @@ void QTextOdfWriter::writeBlockFormat(QXmlStreamWriter &writer, QTextBlockFormat
 void QTextOdfWriter::writeCharacterFormat(QXmlStreamWriter &writer, QTextCharFormat format, int formatIndex) const
 {
    writer.writeStartElement(styleNS, QString::fromLatin1("style"));
-   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("c%1").arg(formatIndex));
+   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("c%1").formatArg(formatIndex));
    writer.writeAttribute(styleNS, QString::fromLatin1("family"), QString::fromLatin1("text"));
    writer.writeEmptyElement(styleNS, QString::fromLatin1("text-properties"));
    if (format.fontItalic()) {
@@ -552,7 +553,7 @@ void QTextOdfWriter::writeCharacterFormat(QXmlStreamWriter &writer, QTextCharFor
       writer.writeAttribute(foNS, QString::fromLatin1("font-family"), QString::fromLatin1("Sans"));   // Qt default
    }
    if (format.hasProperty(QTextFormat::FontPointSize)) {
-      writer.writeAttribute(foNS, QString::fromLatin1("font-size"), QString::fromLatin1("%1pt").arg(format.fontPointSize()));
+      writer.writeAttribute(foNS, QString::fromLatin1("font-size"), QString::fromLatin1("%1pt").formatArg(format.fontPointSize()));
    }
    if (format.hasProperty(QTextFormat::FontCapitalization)) {
       switch (format.fontCapitalization()) {
@@ -677,7 +678,7 @@ void QTextOdfWriter::writeCharacterFormat(QXmlStreamWriter &writer, QTextCharFor
 void QTextOdfWriter::writeListFormat(QXmlStreamWriter &writer, QTextListFormat format, int formatIndex) const
 {
    writer.writeStartElement(textNS, QString::fromLatin1("list-style"));
-   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("L%1").arg(formatIndex));
+   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("L%1").formatArg(formatIndex));
 
    QTextListFormat::Style style = format.style();
    if (style == QTextListFormat::ListDecimal || style == QTextListFormat::ListLowerAlpha
@@ -705,7 +706,7 @@ void QTextOdfWriter::writeListFormat(QXmlStreamWriter &writer, QTextListFormat f
    writer.writeAttribute(textNS, QString::fromLatin1("level"), QString::number(format.indent()));
    writer.writeEmptyElement(styleNS, QString::fromLatin1("list-level-properties"));
    writer.writeAttribute(foNS, QString::fromLatin1("text-align"), QString::fromLatin1("start"));
-   QString spacing = QString::fromLatin1("%1mm").arg(format.indent() * 8);
+   QString spacing = QString::fromLatin1("%1mm").formatArg(format.indent() * 8);
    writer.writeAttribute(textNS, QString::fromLatin1("space-before"), spacing);
    //writer.writeAttribute(textNS, QString::fromLatin1("min-label-width"), spacing);
 
@@ -716,7 +717,7 @@ void QTextOdfWriter::writeListFormat(QXmlStreamWriter &writer, QTextListFormat f
 void QTextOdfWriter::writeFrameFormat(QXmlStreamWriter &writer, QTextFrameFormat format, int formatIndex) const
 {
    writer.writeStartElement(styleNS, QString::fromLatin1("style"));
-   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("s%1").arg(formatIndex));
+   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("s%1").formatArg(formatIndex));
    writer.writeAttribute(styleNS, QString::fromLatin1("family"), QString::fromLatin1("section"));
    writer.writeEmptyElement(styleNS, QString::fromLatin1("section-properties"));
    if (format.hasProperty(QTextFormat::FrameTopMargin)) {
@@ -749,7 +750,7 @@ void QTextOdfWriter::writeFrameFormat(QXmlStreamWriter &writer, QTextFrameFormat
 void QTextOdfWriter::writeTableCellFormat(QXmlStreamWriter &writer, QTextTableCellFormat format, int formatIndex) const
 {
    writer.writeStartElement(styleNS, QString::fromLatin1("style"));
-   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("T%1").arg(formatIndex));
+   writer.writeAttribute(styleNS, QString::fromLatin1("name"), QString::fromLatin1("T%1").formatArg(formatIndex));
    writer.writeAttribute(styleNS, QString::fromLatin1("family"), QString::fromLatin1("table"));
    writer.writeEmptyElement(styleNS, QString::fromLatin1("table-properties"));
 

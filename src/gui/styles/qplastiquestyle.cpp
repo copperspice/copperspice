@@ -490,8 +490,8 @@ static void qBrushSetAlphaF(QBrush *brush, qreal alpha)
       QPixmap pixmap;
 
       QString name = "qbrushtexture_alpha"
-                     % HexString<qreal>(alpha)
-                     % HexString<qint64>(texture.cacheKey());
+                     + HexString<qreal>(alpha)
+                     + HexString<qint64>(texture.cacheKey());
 
       if (!QPixmapCache::find(name, pixmap)) {
          QImage image = texture.toImage();
@@ -555,8 +555,8 @@ static QBrush qBrushLight(QBrush brush, int light)
       QPixmap pixmap;
 
       QString name = "qbrushtexture_light"
-                     % HexString<int>(light)
-                     % HexString<qint64>(texture.cacheKey());
+                     + HexString<int>(light)
+                     + HexString<qint64>(texture.cacheKey());
 
       if (!QPixmapCache::find(name, pixmap)) {
          QImage image = texture.toImage();
@@ -617,8 +617,8 @@ static QBrush qBrushDark(QBrush brush, int dark)
       QPixmap texture = brush.texture();
       QPixmap pixmap;
       QString name = "qbrushtexture_dark"
-                     % HexString<int>(dark)
-                     % HexString<qint64>(texture.cacheKey());
+                     + HexString<int>(dark)
+                     + HexString<qint64>(texture.cacheKey());
 
       if (!QPixmapCache::find(name, pixmap)) {
          QImage image = texture.toImage();
@@ -745,19 +745,20 @@ static void qt_plastique_draw_gradient(QPainter *painter, const QRect &rect, con
                                        const QColor &gradientStop)
 {
    QString gradientName = "qplastique_g"
-                          % HexString<int>(rect.width())
-                          % HexString<int>(rect.height())
-                          % HexString<QRgb>(gradientStart.rgba())
-                          % HexString<QRgb>(gradientStop.rgba());
+                          + HexString<int>(rect.width())
+                          + HexString<int>(rect.height())
+                          + HexString<QRgb>(gradientStart.rgba())
+                          + HexString<QRgb>(gradientStop.rgba());
 
    QPixmap cache;
    QPainter *p = painter;
    QRect r = rect;
 
-   bool doPixmapCache = painter->deviceTransform().isIdentity()
-                        && painter->worldMatrix().isIdentity();
+   bool doPixmapCache = painter->deviceTransform().isIdentity() && painter->worldMatrix().isIdentity();
+
    if (doPixmapCache && QPixmapCache::find(gradientName, cache)) {
       painter->drawPixmap(rect, cache);
+
    } else {
       if (doPixmapCache) {
          cache = QPixmap(rect.size());
@@ -1550,7 +1551,7 @@ void QPlastiqueStyle::drawPrimitive(PrimitiveElement element, const QStyleOption
             bool defaultButton = (button->features & (QStyleOptionButton::DefaultButton
                                   | QStyleOptionButton::AutoDefaultButton));
 
-            BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("pushbutton-%1").arg(defaultButton))
+            BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("pushbutton-%1").formatArg(defaultButton))
 
             QPen oldPen = p->pen();
             bool hover = (button->state & State_Enabled) && (button->state & State_MouseOver);
@@ -3832,7 +3833,7 @@ void QPlastiqueStyle::drawComplexControl(ComplexControl control, const QStyleOpt
             QPixmap cache;
 
             if ((option->subControls & SC_SliderGroove) && groove.isValid()) {
-               BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("slider_groove-%0-%1").arg(ticksAbove).arg(ticksBelow))
+               BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("slider_groove-%0-%1").formatArg(ticksAbove).formatArg(ticksBelow))
                p->fillRect(groove, option->palette.background());
 
                // draw groove

@@ -23,13 +23,11 @@
 #ifndef QVALIDATOR_H
 #define QVALIDATOR_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qregexp.h>
-#include <QtCore/qlocale.h>
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qstring.h>
+#include <qregularexpression.h>
+#include <qlocale.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_VALIDATOR
 
@@ -116,10 +114,7 @@ int QIntValidator::top() const
    return t;
 }
 
-
-
-#ifndef QT_NO_REGEXP
-
+// **
 class QDoubleValidatorPrivate;
 class QRegularExpressionValidatorPrivate;
 
@@ -182,33 +177,6 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
    int dec;
 };
 
-class Q_GUI_EXPORT QRegExpValidator : public QValidator
-{
-   GUI_CS_OBJECT(QRegExpValidator)
-
-   GUI_CS_PROPERTY_READ(regExp, regExp)
-   GUI_CS_PROPERTY_WRITE(regExp, setRegExp)
-   GUI_CS_PROPERTY_NOTIFY(regExp, regExpChanged)
-
- public:
-   explicit QRegExpValidator(QObject *parent = nullptr);
-   QRegExpValidator(const QRegExp &rx, QObject *parent = nullptr);
-   ~QRegExpValidator();
-
-   QValidator::State validate(QString &input, int &pos) const override;
-
-   void setRegExp(const QRegExp &rx);
-   inline const QRegExp &regExp() const;
-
-   GUI_CS_SIGNAL_1(Public, void regExpChanged(const QRegExp &regExp))
-   GUI_CS_SIGNAL_2(regExpChanged, regExp)
-
- private:
-   Q_DISABLE_COPY(QRegExpValidator)
-
-   QRegExp r;
-};
-
 class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
 {
    GUI_CS_OBJECT(QRegularExpressionValidator)
@@ -219,31 +187,26 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
 
  public:
    explicit QRegularExpressionValidator(QObject *parent = nullptr);
-
-   // broom - change to use, const QRegularExpression & regExp
-   explicit QRegularExpressionValidator(const QRegExp &regExp, QObject *parent = nullptr);
+   explicit QRegularExpressionValidator(const QRegularExpression &regExp, QObject *parent = nullptr);
 
    ~QRegularExpressionValidator();
 
    QValidator::State validate(QString &input, int &pos) const override;
 
-   QRegExp regularExpression() const;
+   const QRegularExpression &regularExpression() const;
 
-   GUI_CS_SLOT_1(Public, void setRegularExpression(const QRegExp &re))
+   GUI_CS_SIGNAL_1(Public, void regularExpressionChanged(const QRegularExpression &regExp))
+   GUI_CS_SIGNAL_2(regularExpressionChanged, regExp)
+
+   GUI_CS_SLOT_1(Public, void setRegularExpression(const QRegularExpression &regExp))
    GUI_CS_SLOT_2(setRegularExpression)
 
-   GUI_CS_SIGNAL_1(Public, void regularExpressionChanged(const QRegExp &re))
-   GUI_CS_SIGNAL_2(regularExpressionChanged, re)
-
  private:
+   QRegularExpression m_regexp;
+
    Q_DISABLE_COPY(QRegularExpressionValidator)
    Q_DECLARE_PRIVATE(QRegularExpressionValidator)
 };
-
-const QRegExp &QRegExpValidator::regExp() const
-{
-   return r;
-}
 
 double QDoubleValidator::bottom() const
 {
@@ -260,11 +223,6 @@ int QDoubleValidator::decimals() const
    return dec;
 }
 
-#endif // QT_NO_REGEXP
-
-
 #endif // QT_NO_VALIDATOR
-
-QT_END_NAMESPACE
 
 #endif // QVALIDATOR_H

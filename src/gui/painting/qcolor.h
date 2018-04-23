@@ -23,22 +23,17 @@
 #ifndef QCOLOR_H
 #define QCOLOR_H
 
-#include <QtGui/qrgb.h>
-#include <QtCore/qnamespace.h>
-#include <QtCore/qstringlist.h>
-
-QT_BEGIN_NAMESPACE
+#include <qrgb.h>
+#include <qnamespace.h>
+#include <qstringlist.h>
 
 class QColor;
 class QColormap;
 class QVariant;
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QColor &);
-
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
-#endif
 
 class Q_GUI_EXPORT QColor
 {
@@ -228,11 +223,9 @@ class Q_GUI_EXPORT QColor
    } ct;
 
    friend class QColormap;
-
-#ifndef QT_NO_DATASTREAM
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
-#endif
+
 };
 
 inline QColor::QColor()
@@ -247,7 +240,7 @@ inline QColor::QColor(int r, int g, int b, int a)
 
 inline QColor::QColor(const char *aname)
 {
-   setNamedColor(QLatin1String(aname));
+   setNamedColor(QString::fromLatin1(aname));
 }
 
 inline QColor::QColor(const QString &aname)
@@ -275,7 +268,5 @@ inline QColor QColor::darker(int f) const
 {
    return dark(f);
 }
-
-QT_END_NAMESPACE
 
 #endif // QCOLOR_H

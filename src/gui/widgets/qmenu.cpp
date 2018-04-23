@@ -1404,7 +1404,7 @@ QAction *QMenu::addAction(const QIcon &icon, const QString &text)
 
     \sa QWidget::addAction()
 */
-QAction *QMenu::addAction(const QString &text, const QObject *receiver, const char *member,
+QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QString &member,
                           const QKeySequence &shortcut)
 {
    QAction *action = new QAction(text, this);
@@ -1430,7 +1430,7 @@ QAction *QMenu::addAction(const QString &text, const QObject *receiver, const ch
     \sa QWidget::addAction()
 */
 QAction *QMenu::addAction(const QIcon &icon, const QString &text, const QObject *receiver,
-                          const char *member, const QKeySequence &shortcut)
+                          const QString &member, const QKeySequence &shortcut)
 {
    QAction *action = new QAction(icon, text, this);
 #ifdef QT_NO_SHORTCUT
@@ -2699,7 +2699,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 
 #ifndef QT_NO_WHATSTHIS
       case Qt::Key_F1:
-         if (!d->currentAction || d->currentAction->whatsThis().isNull()) {
+         if (!d->currentAction || d->currentAction->whatsThis().isEmpty()) {
             break;
          }
          QWhatsThis::enterWhatsThisMode();
@@ -2740,15 +2740,20 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 #ifndef QT_NO_SHORTCUT
          else {
             int clashCount = 0;
+
             QAction *first = 0, *currentSelected = 0, *firstAfterCurrent = 0;
-            QChar c = e->text().at(0).toUpper();
+            QChar c = e->text().at(0).toUpper()[0];
+
             for (int i = 0; i < d->actions.size(); ++i) {
                if (d->actionRects.at(i).isNull()) {
                   continue;
                }
+
                QAction *act = d->actions.at(i);
                QKeySequence sequence = QKeySequence::mnemonic(act->text());
+
                int key = sequence[0] & 0xffff;
+
                if (key == c.unicode()) {
                   clashCount++;
                   if (!first) {

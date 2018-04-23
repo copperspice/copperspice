@@ -1717,7 +1717,7 @@ void QWSServerPrivate::dereferenceFont(QWSClientPrivate *client, const QByteArra
 
 static void cleanupFontsDir()
 {
-   static bool dontDelete = !qgetenv("QWS_KEEP_FONTS").isEmpty();
+   static bool dontDelete = ! qgetenv("QWS_KEEP_FONTS").isEmpty();
    if (dontDelete) {
       return;
    }
@@ -1734,7 +1734,7 @@ static void cleanupFontsDir()
 
 void QWSServerPrivate::cleanupFonts(bool force)
 {
-   static bool dontDelete = !qgetenv("QWS_KEEP_FONTS").isEmpty();
+   static bool dontDelete = ! qgetenv("QWS_KEEP_FONTS").isEmpty();
    if (dontDelete) {
       return;
    }
@@ -3691,10 +3691,12 @@ void QWSServer::closeMouse()
 void QWSServer::openMouse()
 {
    Q_D(QWSServer);
-   QString mice = QString::fromLatin1(qgetenv("QWS_MOUSE_PROTO"));
+
+   QString mice = QString::fromUtf8(qgetenv("QWS_MOUSE_PROTO"));
+
 #if defined(QT_QWS_CASSIOPEIA)
    if (mice.isEmpty()) {
-      mice = QLatin1String("TPanel:/dev/tpanel");
+      mice = "TPanel:/dev/tpanel";
    }
 #endif
    if (mice.isEmpty()) {
@@ -3764,11 +3766,11 @@ QWSMouseHandler *QWSServerPrivate::newMouseHandler(const QString &spec)
    }
 
    int screen = -1;
-   const QList<QRegExp> regexps = QList<QRegExp>()
-                                  << QRegExp(QLatin1String(":screen=(\\d+)\\b"))
-                                  << QRegExp(QLatin1String("\\bscreen=(\\d+):"));
+   const QList<QRegularExpression> regexps = QList<QRegularExpression>()
+                                  << QRegularExpression(QLatin1String(":screen=(\\d+)\\b"))
+                                  << QRegularExpression(QLatin1String("\\bscreen=(\\d+):"));
    for (int i = 0; i < regexps.size(); ++i) {
-      QRegExp regexp = regexps.at(i);
+      QRegularExpression regexp = regexps.at(i);
       if (regexp.indexIn(mouseDev) == -1) {
          continue;
       }
@@ -3845,7 +3847,8 @@ void QWSServer::setKeyboardHandler(QWSKeyboardHandler *kh)
 */
 void QWSServer::openKeyboard()
 {
-   QString keyboards = QString::fromLatin1(qgetenv("QWS_KEYBOARD"));
+   QString keyboards = QString::fromUtf8(qgetenv("QWS_KEYBOARD"));
+
 #if defined(QT_QWS_CASSIOPEIA)
    if (keyboards.isEmpty()) {
       keyboards = QLatin1String("Buttons");
@@ -3863,6 +3866,7 @@ void QWSServer::openKeyboard()
    QString device;
    QString type;
    QStringList keyboard = keyboards.split(QLatin1Char(' '));
+
    for (int i = keyboard.size() - 1; i >= 0; --i) {
       const QString spec = keyboard.at(i);
       int colon = spec.indexOf(QLatin1Char(':'));

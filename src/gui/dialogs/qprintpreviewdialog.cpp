@@ -202,7 +202,7 @@ class QPrintPreviewDialogPrivate : public QDialogPrivate
 
 
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 };
 
 void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
@@ -240,7 +240,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    static const short factorsX2[] = { 25, 50, 100, 200, 250, 300, 400, 800, 1600 };
 
    for (int i = 0; i < int(sizeof(factorsX2) / sizeof(factorsX2[0])); ++i) {
-      zoomFactor->addItem(QPrintPreviewDialog::tr("%1%").arg(factorsX2[i] / 2.0));
+      zoomFactor->addItem(QPrintPreviewDialog::tr("%1%").formatArg(factorsX2[i] / 2.0));
    }
 
    QObject::connect(zoomFactor->lineEdit(), SIGNAL(editingFinished()), q, SLOT(_q_zoomFactorChanged()));
@@ -469,6 +469,7 @@ void QPrintPreviewDialogPrivate::updateNavActions()
 {
    int curPage = preview->currentPage();
    int numPages = preview->pageCount();
+
    nextPageAction->setEnabled(curPage < numPages);
    prevPageAction->setEnabled(curPage > 1);
    firstPageAction->setEnabled(curPage > 1);
@@ -482,9 +483,12 @@ void QPrintPreviewDialogPrivate::updatePageNumLabel()
 
    int numPages = preview->pageCount();
    int maxChars = QString::number(numPages).length();
-   pageNumLabel->setText(QString::fromLatin1("/ %1").arg(numPages));
-   int cyphersWidth = q->fontMetrics().width(QString().fill(QLatin1Char('8'), maxChars));
+
+   pageNumLabel->setText(QString("/ %1").formatArg(numPages));
+
+   int cyphersWidth = q->fontMetrics().width(QString().fill('8', maxChars));
    int maxWidth = pageNumEdit->minimumSizeHint().width() + cyphersWidth;
+
    pageNumEdit->setMinimumWidth(maxWidth);
    pageNumEdit->setMaximumWidth(maxWidth);
    pageNumEdit->setValidator(new QIntValidator(1, numPages, pageNumEdit));
@@ -493,12 +497,13 @@ void QPrintPreviewDialogPrivate::updatePageNumLabel()
 
 void QPrintPreviewDialogPrivate::updateZoomFactor()
 {
-   zoomFactor->lineEdit()->setText(QString().sprintf("%.1f%%", preview->zoomFactor() * 100));
+   zoomFactor->lineEdit()->setText(QString("%1%%").formatArg(preview->zoomFactor() * 100, 0, 'f', 1));
 }
 
 void QPrintPreviewDialogPrivate::_q_fit(QAction *action)
 {
    setFitting(true);
+
    if (action == fitPageAction) {
       preview->fitInView();
    } else {
@@ -523,7 +528,8 @@ void QPrintPreviewDialogPrivate::_q_zoomOut()
 void QPrintPreviewDialogPrivate::_q_pageNumEdited()
 {
    bool ok = false;
-   int res = pageNumEdit->text().toInt(&ok);
+   int res = pageNumEdit->text().toInteger<int>(&ok);
+
    if (ok) {
       preview->setCurrentPage(res);
    }
@@ -532,6 +538,7 @@ void QPrintPreviewDialogPrivate::_q_pageNumEdited()
 void QPrintPreviewDialogPrivate::_q_navigate(QAction *action)
 {
    int curPage = preview->currentPage();
+
    if (action == prevPageAction) {
       preview->setCurrentPage(curPage - 1);
    } else if (action == nextPageAction) {
@@ -639,7 +646,7 @@ void QPrintPreviewDialogPrivate::_q_zoomFactorChanged()
    factor = qMax(qreal(1.0), qMin(qreal(1000.0), factor));
    if (ok) {
       preview->setZoomFactor(factor / 100.0);
-      zoomFactor->setEditText(QString::fromLatin1("%1%").arg(factor));
+      zoomFactor->setEditText(QString::fromLatin1("%1%").formatArg(factor));
       setFitting(false);
    }
 }
@@ -690,26 +697,20 @@ void QPrintPreviewDialog::done(int result)
    QDialog::done(result);
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(finished(int)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
+      disconnect(this, SIGNAL(finished(int)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
       d->receiverToDisconnectOnClose = 0;
    }
+
    d->memberToDisconnectOnClose.clear();
 }
 
-/*!
-    \overload
-    \since 4.5
-
-    Opens the dialog and connects its finished(int) signal to the slot specified
-    by \a receiver and \a member.
-
-    The signal will be disconnected from the slot when the dialog is closed.
-*/
-void QPrintPreviewDialog::open(QObject *receiver, const char *member)
+void QPrintPreviewDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QPrintPreviewDialog);
+
    // the int parameter isn't very useful here; we could just as well connect
    // to reject(), but this feels less robust somehow
+
    connect(this, SIGNAL(finished(int)), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
    d->memberToDisconnectOnClose = member;

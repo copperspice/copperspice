@@ -285,7 +285,7 @@ bool QLinuxFbScreen::connect(const QString &displaySpec)
    }
 #endif
 
-   QRegExp ttyRegExp(QLatin1String("tty=(.*)"));
+   QRegularExpression ttyRegExp(QLatin1String("tty=(.*)"));
    if (args.indexOf(ttyRegExp) != -1) {
       d_ptr->ttyDevice = ttyRegExp.cap(1);
    }
@@ -409,9 +409,9 @@ bool QLinuxFbScreen::connect(const QString &displaySpec)
 
    // Handle display physical size spec.
    QStringList displayArgs = displaySpec.split(QLatin1Char(':'));
-   QRegExp mmWidthRx(QLatin1String("mmWidth=?(\\d+)"));
+   QRegularExpression mmWidthRx(QLatin1String("mmWidth=?(\\d+)"));
    int dimIdxW = displayArgs.indexOf(mmWidthRx);
-   QRegExp mmHeightRx(QLatin1String("mmHeight=?(\\d+)"));
+   QRegularExpression mmHeightRx(QLatin1String("mmHeight=?(\\d+)"));
    int dimIdxH = displayArgs.indexOf(mmHeightRx);
    if (dimIdxW >= 0) {
       mmWidthRx.exactMatch(displayArgs.at(dimIdxW));

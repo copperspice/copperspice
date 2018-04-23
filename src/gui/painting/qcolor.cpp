@@ -150,7 +150,8 @@ QColor::QColor(Spec spec)
 QString QColor::name() const
 {
    QString s;
-   s.sprintf("#%02x%02x%02x", red(), green(), blue());
+   s = QString("#%1%2%3").formatArg(red(), 2, 16, '0').formatArg(green(), 2, 16, '0').formatArg(blue(), 2, 16, '0');
+
    return s;
 }
 
@@ -161,7 +162,7 @@ void QColor::setNamedColor(const QString &name)
 
 bool QColor::isValidColor(const QString &name)
 {
-   return !name.isEmpty() && QColor().setColorFromString(name);
+   return ! name.isEmpty() && QColor().setColorFromString(name);
 }
 
 bool QColor::setColorFromString(const QString &name)
@@ -171,11 +172,13 @@ bool QColor::setColorFromString(const QString &name)
       return true;
    }
 
-   if (name.startsWith(QLatin1Char('#'))) {
+   if (name.startsWith('#')) {
       QRgb rgb;
-      if (qt_get_hex_rgb(name.constData(), name.length(), &rgb)) {
+
+      if (qt_get_hex_rgb(name, &rgb)) {
          setRgb(rgb);
          return true;
+
       } else {
          invalidate();
          return false;
@@ -184,17 +187,19 @@ bool QColor::setColorFromString(const QString &name)
 
 #ifndef QT_NO_COLORNAMES
    QRgb rgb;
-   if (qt_get_named_rgb(name.constData(), name.length(), &rgb)) {
+
+   if (qt_get_named_rgb(name, &rgb)) {
       setRgba(rgb);
       return true;
    } else
 #endif
+
    {
+
 #ifdef Q_WS_X11
       XColor result;
-      if (allowX11ColorNames()
-            && QApplication::instance()
-            && QX11Info::display()
+
+      if (allowX11ColorNames() && QApplication::instance() && QX11Info::display()
             && XParseColor(QX11Info::display(), QX11Info::appColormap(), name.toLatin1().constData(), &result)) {
          setRgb(result.red >> 8, result.green >> 8, result.blue >> 8);
          return true;

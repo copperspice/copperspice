@@ -1099,7 +1099,7 @@ void QCleanlooksStyle::drawPrimitive(PrimitiveElement elem,
 	    return;
 	 }
 
-	 BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("pushbutton-%1").arg(isDefault))
+	 BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("pushbutton-%1").formatArg(isDefault))
 	 r = rect.adjusted(0, 1, 0, -1);
 
 	 bool isEnabled = (option->state & State_Enabled);

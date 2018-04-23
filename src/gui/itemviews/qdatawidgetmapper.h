@@ -69,11 +69,13 @@ class Q_GUI_EXPORT QDataWidgetMapper: public QObject
    SubmitPolicy submitPolicy() const;
 
    void addMapping(QWidget *widget, int section);
-   void addMapping(QWidget *widget, int section, const QByteArray &propertyName);
+   void addMapping(QWidget *widget, int section, const QString &propertyName);
    void removeMapping(QWidget *widget);
    int mappedSection(QWidget *widget) const;
-   QByteArray mappedPropertyName(QWidget *widget) const;
+
+   QString mappedPropertyName(QWidget *widget) const;
    QWidget *mappedWidgetAt(int section) const;
+
    void clearMapping();
 
    int currentIndex() const;

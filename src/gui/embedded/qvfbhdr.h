@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 
 #ifdef QT_PRIVATE_QWS
 #define QT_VFB_DATADIR(DISPLAY)       QString::fromLatin1("%1/qtembedded-%2-%3") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(getuid()).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(getuid()).formatArg(DISPLAY)
 #define QT_VFB_MOUSE_PIPE(DISPLAY)    QT_VFB_DATADIR(DISPLAY) \
                                       .append(QLatin1String("/qtvfb_mouse"))
 #define QT_VFB_KEYBOARD_PIPE(DISPLAY) QT_VFB_DATADIR(DISPLAY) \
@@ -49,17 +49,17 @@ QT_BEGIN_NAMESPACE
 #define QTE_PIPE_QVFB(DISPLAY)        QTE_PIPE(DISPLAY)
 #else
 #define QT_VFB_DATADIR(DISPLAY)       QString::fromLatin1("%1/qtembedded-%2") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(DISPLAY)
 #define QT_VFB_MOUSE_PIPE(DISPLAY)    QString::fromLatin1("%1/.qtvfb_mouse-%2") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(DISPLAY)
 #define QT_VFB_KEYBOARD_PIPE(DISPLAY) QString::fromLatin1("%1/.qtvfb_keyboard-%2") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(DISPLAY)
 #define QT_VFB_MAP(DISPLAY)           QString::fromLatin1("%1/.qtvfb_map-%2") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(DISPLAY)
 #define QT_VFB_SOUND_PIPE(DISPLAY)    QString::fromLatin1("%1/.qt_soundserver-%2") \
-                                      .arg(QT_QWS_TEMP_DIR).arg(DISPLAY)
+                                      .formatArg(QT_QWS_TEMP_DIR).formatArg(DISPLAY)
 #define QTE_PIPE(DISPLAY)             QT_VFB_DATADIR(DISPLAY) \
-                                      .append(QLatin1String("/QtEmbedded-%1")).arg(DISPLAY)
+                                      .append(QLatin1String("/QtEmbedded-%1")).formatArg(DISPLAY)
 #define QTE_PIPE_QVFB(DISPLAY)        QTE_PIPE(DISPLAY)
 #endif
 

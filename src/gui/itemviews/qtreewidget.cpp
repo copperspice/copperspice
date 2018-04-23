@@ -3131,13 +3131,16 @@ void QTreeWidget::setItemSelected(const QTreeWidgetItem *item, bool select)
 QList<QTreeWidgetItem *> QTreeWidget::selectedItems() const
 {
    Q_D(const QTreeWidget);
+
    QModelIndexList indexes = selectionModel()->selectedIndexes();
    QList<QTreeWidgetItem *> items;
-   items.reserve(indexes.count());
+
    QSet<QTreeWidgetItem *> seen;
    seen.reserve(indexes.count());
+
    for (int i = 0; i < indexes.count(); ++i) {
       QTreeWidgetItem *item = d->item(indexes.at(i));
+
       if (isItemHidden(item) || seen.contains(item)) {
          continue;
       }

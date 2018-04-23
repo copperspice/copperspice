@@ -32,7 +32,7 @@
 #include <qdebug.h>
 
 #ifndef QT_NO_REGEXP
-# include <qregexp.h>
+# include <QRegularExpression.h>
 #endif
 
 #ifndef QT_NO_DATASTREAM
@@ -1107,29 +1107,35 @@ QKeySequence QKeySequence::mnemonic(const QString &text)
 
    bool found = false;
    int p = 0;
+
    while (p >= 0) {
       p = text.indexOf(QLatin1Char('&'), p) + 1;
+
       if (p <= 0 || p >= (int)text.length()) {
          break;
       }
+
       if (text.at(p) != QLatin1Char('&')) {
          QChar c = text.at(p);
+
          if (c.isPrint()) {
-            if (!found) {
-               c = c.toUpper();
+
+            if (! found) {
+               c   = c.toUpper()[0];
                ret = QKeySequence(c.unicode() + Qt::ALT);
-#ifdef QT_NO_DEBUG
-               return ret;
-#else
+
                found = true;
+
             } else {
                qWarning("QKeySequence::mnemonic: \"%s\" contains multiple occurrences of '&'", qPrintable(text));
-#endif
+
             }
          }
       }
+
       p++;
    }
+
    return ret;
 }
 
@@ -1324,36 +1330,43 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
    int fnum = 0;
    if (accel.length() == 1) {
+
 #ifdef Q_OS_MAC
       int qtKey = qtkeyForMacSymbol(accel[0]);
+
       if (qtKey != -1) {
          ret |= qtKey;
       } else
 #endif
+
       {
-         ret |= accel[0].toUpper().unicode();
+         ret |= accel[0].toUpper()[0].unicode();
       }
-   } else if (accel[0] == QLatin1Char('f') && (fnum = accel.mid(1).toInt()) && (fnum >= 1) && (fnum <= 35)) {
+
+   } else if (accel[0] == 'f' && (fnum = accel.mid(1).toInteger<int>()) && (fnum >= 1) && (fnum <= 35)) {
       ret |= Qt::Key_F1 + fnum - 1;
+
    } else {
       // For NativeText, check the traslation table first,
       // if we don't find anything then try it out with just the untranlated stuff.
       // PortableText will only try the untranlated table.
       bool found = false;
+
       for (int tran = 0; tran < 2; ++tran) {
          if (!nativeText) {
             ++tran;
          }
+
          for (int i = 0; keyname[i].name; ++i) {
-            QString keyName(tran == 0
-                            ? QShortcut::tr(keyname[i].name)
-                            : QString::fromLatin1(keyname[i].name));
+            QString keyName(tran == 0 ? QShortcut::tr(keyname[i].name) : QString::fromLatin1(keyname[i].name));
+
             if (accel == keyName.toLower()) {
                ret |= keyname[i].key;
                found = true;
                break;
             }
          }
+
          if (found) {
             break;
          }
@@ -1444,8 +1457,8 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
          p += QChar(QChar::lowSurrogate(key));
       }
    } else if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
-      p = nativeText ? QShortcut::tr("F%1").arg(key - Qt::Key_F1 + 1)
-          : QString::fromLatin1("F%1").arg(key - Qt::Key_F1 + 1);
+      p = nativeText ? QShortcut::tr("F%1").formatArg(key - Qt::Key_F1 + 1)
+          : QString::fromLatin1("F%1").formatArg(key - Qt::Key_F1 + 1);
    } else if (key) {
       int i = 0;
 #if defined(Q_OS_MAC)

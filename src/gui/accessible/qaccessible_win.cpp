@@ -304,19 +304,19 @@ void QAccessible::updateAccessibility(QObject *o, int who, Event reason)
    }
 
    if (soundName.size()) {
-#ifndef QT_NO_SETTINGS
-      QSettings settings(QLatin1String("HKEY_CURRENT_USER\\AppEvents\\Schemes\\Apps\\.Default\\") + soundName,
-                         QSettings::NativeFormat);
-      QString file = settings.value(QLatin1String(".Current/.")).toString();
-#else
       QString file;
+
+#ifndef QT_NO_SETTINGS
+      QSettings settings(QLatin1String("HKEY_CURRENT_USER\\AppEvents\\Schemes\\Apps\\.Default\\") + soundName, QSettings::NativeFormat);
+      file = settings.value(".Current/.").toString();
 #endif
-      if (!file.isEmpty()) {
-         PlaySound(reinterpret_cast<const wchar_t *>(soundName.utf16()), 0, SND_ALIAS | SND_ASYNC | SND_NODEFAULT | SND_NOWAIT);
+
+      if (! file.isEmpty()) {
+         PlaySound(&soundName.toStdWString()[0], 0, SND_ALIAS | SND_ASYNC | SND_NODEFAULT | SND_NOWAIT);
       }
    }
 
-   if (!isActive()) {
+   if (! isActive()) {
       return;
    }
 
@@ -324,6 +324,7 @@ void QAccessible::updateAccessibility(QObject *o, int who, Event reason)
 
    static PtrNotifyWinEvent ptrNotifyWinEvent = 0;
    static bool resolvedNWE = false;
+
    if (!resolvedNWE) {
       ptrNotifyWinEvent = (PtrNotifyWinEvent)QSystemLibrary::resolve(QLatin1String("user32"), "NotifyWinEvent");
       resolvedNWE = true;
@@ -683,11 +684,9 @@ class QWindowsAccessible : public IAccessible, IOleWindow, QAccessible
 
 static inline BSTR QStringToBSTR(const QString &str)
 {
-   return SysAllocStringLen((OLECHAR *)str.unicode(), str.length());
+   return SysAllocStringLen(&str.toStdWString()[0], str.length());
 }
 
-/*
-*/
 IAccessible *qt_createWindowsAccessible(QAccessibleInterface *access)
 {
    QWindowsAccessible *acc = new QWindowsAccessible(access);
@@ -697,9 +696,6 @@ IAccessible *qt_createWindowsAccessible(QAccessibleInterface *access)
    return iface;
 }
 
-/*
-  IUnknown
-*/
 HRESULT STDMETHODCALLTYPE QWindowsAccessible::QueryInterface(REFIID id, LPVOID *iface)
 {
    *iface = 0;
@@ -1361,12 +1357,14 @@ HRESULT STDMETHODCALLTYPE QWindowsAccessible::get_accValue(VARIANT varID, BSTR *
 
    AccessibleElement elem(varID.lVal, accessible);
    QString value = elem.text(Value);
-   if (!value.isNull()) {
+
+   if (! value.isEmpty()) {
       *pszValue = QStringToBSTR(value);
       return S_OK;
    }
 
    *pszValue = 0;
+
    return S_FALSE;
 }
 

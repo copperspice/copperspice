@@ -317,11 +317,13 @@ void QFontPrivate::alterCharForCapitalization(QChar &c) const
    switch (capital) {
       case QFont::AllUppercase:
       case QFont::SmallCaps:
-         c = c.toUpper();
+         c = c.toUpper()[0];
          break;
+
       case QFont::AllLowercase:
-         c = c.toLower();
+         c = c.toLower()[0];
          break;
+
       case QFont::MixedCase:
          break;
    }
@@ -2198,8 +2200,7 @@ bool QFont::fromString(const QString &descrip)
 
    int count = l.count();
    if (!count || (count > 2 && count < 9) || count > 11) {
-      qWarning("QFont::fromString: Invalid description '%s'",
-               descrip.isEmpty() ? "(empty)" : descrip.toLatin1().data());
+      qWarning("QFont::fromString: Invalid description '%s'", descrip.isEmpty() ? "(empty)" : csPrintable(descrip));
       return false;
    }
 
@@ -2209,26 +2210,29 @@ bool QFont::fromString(const QString &descrip)
    }
 
    if (count == 9) {
-      setStyleHint((StyleHint) l[2].toInt());
-      setWeight(qMax(qMin(99, l[3].toInt()), 0));
-      setItalic(l[4].toInt());
-      setUnderline(l[5].toInt());
-      setStrikeOut(l[6].toInt());
-      setFixedPitch(l[7].toInt());
-      setRawMode(l[8].toInt());
+      setStyleHint((StyleHint) l[2].toInteger<int>());
+      setWeight(qMax(qMin(99, l[3].toInteger<int>()), 0));
+      setItalic(l[4].toInteger<int>());
+      setUnderline(l[5].toInteger<int>());
+      setStrikeOut(l[6].toInteger<int>());
+      setFixedPitch(l[7].toInteger<int>());
+      setRawMode(l[8].toInteger<int>());
+
    } else if (count == 10) {
-      if (l[2].toInt() > 0) {
-         setPixelSize(l[2].toInt());
+      if (l[2].toInteger<int>() > 0) {
+         setPixelSize(l[2].toInteger<int>());
       }
-      setStyleHint((StyleHint) l[3].toInt());
-      setWeight(qMax(qMin(99, l[4].toInt()), 0));
-      setStyle((QFont::Style)l[5].toInt());
-      setUnderline(l[6].toInt());
-      setStrikeOut(l[7].toInt());
-      setFixedPitch(l[8].toInt());
-      setRawMode(l[9].toInt());
+      setStyleHint((StyleHint) l[3].toInteger<int>());
+      setWeight(qMax(qMin(99, l[4].toInteger<int>()), 0));
+      setStyle((QFont::Style)l[5].toInteger<int>());
+      setUnderline(l[6].toInteger<int>());
+      setStrikeOut(l[7].toInteger<int>());
+      setFixedPitch(l[8].toInteger<int>());
+      setRawMode(l[9].toInteger<int>());
    }
-   if (count >= 9 && !d->request.fixedPitch) { // assume 'false' fixedPitch equals default
+
+   if (count >= 9 && !d->request.fixedPitch) {
+      // assume 'false' fixedPitch equals default
       d->request.ignorePitch = true;
    }
 

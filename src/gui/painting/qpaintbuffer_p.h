@@ -84,6 +84,7 @@ class QTextItemIntCopy
  public:
    QTextItemIntCopy(const QTextItem &item);
    ~QTextItemIntCopy();
+
    QTextItemInt &operator () () {
       return m_item;
    }
@@ -91,6 +92,7 @@ class QTextItemIntCopy
  private:
    QTextItemInt m_item;
    QFont m_font;
+   QString m_text;
 };
 
 struct QPaintBufferCommand {
@@ -413,7 +415,7 @@ class Q_GUI_EXPORT QPaintBufferSignalProxy : public QObject
       emit aboutToDestroy(buffer);
    }
    static QPaintBufferSignalProxy *instance();
- 
+
    GUI_CS_SIGNAL_1(Public, void aboutToDestroy(const QPaintBufferPrivate *buffer))
    GUI_CS_SIGNAL_2(aboutToDestroy, buffer)
 };

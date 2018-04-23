@@ -100,7 +100,7 @@
 
 #define QMAC_SPEAK_TO_ME
 #ifdef QMAC_SPEAK_TO_ME
-#include <qregexp.h>
+#include <qregularexpression.h>
 #endif
 
 #ifndef kThemeBrushAlternatePrimaryHighlightColor

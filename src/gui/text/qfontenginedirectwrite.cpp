@@ -646,12 +646,13 @@ const char *QFontEngineDirectWrite::name() const
    return 0;
 }
 
-bool QFontEngineDirectWrite::canRender(const QChar *string, int len)
+bool QFontEngineDirectWrite::canRender(QStringView str)
 {
    QVarLengthArray<UINT32> codePoints(len);
    int actualLength = 0;
+
    for (int i = 0; i < len; ++i, actualLength++) {
-      codePoints[actualLength] = getChar(string, i, len);
+      codePoints[actualLength] = getChar(str, i, len);
    }
 
    QVarLengthArray<UINT16> glyphIndices(actualLength);

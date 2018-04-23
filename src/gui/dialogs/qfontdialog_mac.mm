@@ -487,17 +487,18 @@ void QFontDialogPrivate::closeCocoaFontPanel()
 void QFontDialogPrivate::setFont(void *delegate, const QFont &font)
 {
    QMacCocoaAutoReleasePool pool;
-   QFontEngine *fe = font.d->engineForScript(QChar::Script_Common);
-   NSFontManager *mgr = [NSFontManager sharedFontManager];
+   QFontEngine *fe      = font.d->engineForScript(QChar::Script_Common);
+   NSFontManager *mgr   = [NSFontManager sharedFontManager];
    const NSFont *nsFont = 0;
 
-   if (qstrcmp(fe->name(), "CoreText") == 0) {
+   if (fe->name() == "CoreText") {
       nsFont = reinterpret_cast<const NSFont *>(static_cast<QCoreTextFontEngineMulti *>(fe)->ctfont);
    } else
 
    {
       int weight = 5;
       NSFontTraitMask mask = 0;
+
       if (font.style() == QFont::StyleItalic) {
          mask |= NSItalicFontMask;
       }

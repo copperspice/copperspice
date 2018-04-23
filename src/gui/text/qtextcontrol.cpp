@@ -2619,7 +2619,7 @@ void QTextControl::insertFromMimeData(const QMimeData *source)
    } else {
       QString text = source->text();
 
-      if (! text.isNull()) {
+      if (! text.isEmpty()) {
          fragment = QTextDocumentFragment::fromPlainText(text);
          hasData = true;
       }

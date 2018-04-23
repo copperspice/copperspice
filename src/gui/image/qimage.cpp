@@ -3481,7 +3481,7 @@ static QImage convertWithPalette(const QImage &src, QImage::Format format,
 
 #if !defined(QT_NO_IMAGE_TEXT)
    QString textsKeys = src.text();
-   QStringList textKeyList = textsKeys.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+   QStringList textKeyList = textsKeys.split(QLatin1Char('\n'), QStringParser::SkipEmptyParts);
 
    for (const QString & textKey : textKeyList) {
       QStringList textKeySplitted = textKey.split(QLatin1String(": "));

@@ -200,8 +200,12 @@ enum PseudoElement {
 };
 
 struct PseudoElementInfo {
+   PseudoElementInfo(QStyle::SubControl var1, const char * var2)
+      : subControl(var1), name(QString::fromLatin1(var2))
+   {}
+
    QStyle::SubControl subControl;
-   const char *name;
+   const QString name;
 };
 
 static const PseudoElementInfo knownPseudoElements[NumPseudoElements] = {
@@ -288,7 +292,7 @@ static const PseudoElementInfo knownPseudoElements[NumPseudoElements] = {
 };
 
 //
-static const char *knownStyleHints[] = {
+static const QString knownStyleHints[] = {
    "activate-on-singleclick",
    "alignment",
    "arrow-keys-navigate-into-children",
@@ -382,8 +386,10 @@ static const int numKnownStyleHints = sizeof(knownStyleHints) / sizeof(knownStyl
 static QList<QVariant> subControlLayout(const QString &layout)
 {
    QList<QVariant> buttons;
+
    for (int i = 0; i < layout.count(); i++) {
       int button = layout[i].toLatin1();
+
       switch (button) {
          case 'm':
             buttons.append(PseudoElement_MdiMinButton);
@@ -657,7 +663,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    hasFont = v.extractFont(&font, &adj);
 
 #ifndef QT_NO_TOOLTIP
-   if (widget && qstrcmp(widget->metaObject()->className(), "QTipLabel") == 0) {
+   if (widget && (widget->metaObject()->className() == "QTipLabel")) {
       palette = QToolTip::palette();
    }
 #endif
@@ -711,7 +717,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
          bool knownStyleHint = false;
 
          for (int i = 0; i < numKnownStyleHints; i++) {
-            QLatin1String styleHint(knownStyleHints[i]);
+            QString styleHint(knownStyleHints[i]);
 
             if (decl.d->property.compare(styleHint) == 0) {
                QString  hintName = QString(styleHint);
@@ -1230,7 +1236,7 @@ void QRenderRule::configurePalette(QPalette *p, QPalette::ColorGroup cg, const Q
 
 static inline QWidget *parentWidget(const QWidget *w)
 {
-   if (qobject_cast<const QLabel *>(w) && qstrcmp(w->metaObject()->className(), "QTipLabel") == 0) {
+   if (qobject_cast<const QLabel *>(w) && w->metaObject()->className() == "QTipLabel") {
       QWidget *p = qvariant_cast<QWidget *>(w->property("_q_stylesheet_parent"));
 
       if (p) {
@@ -1254,15 +1260,19 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
       const QMetaObject *metaObject = WIDGET(node)->metaObject();
 
 #ifndef QT_NO_TOOLTIP
-      if (qstrcmp(metaObject->className(), "QTipLabel") == 0) {
-         return QStringList(QLatin1String("QToolTip"));
+      if (metaObject->className() == "QTipLabel") {
+         return QStringList("QToolTip");
       }
 #endif
 
       QStringList result;
+
       do {
-         result += QString::fromLatin1(metaObject->className()).replace(QLatin1Char(':'), QLatin1Char('-'));
+         QString tmp = metaObject->className();
+         result += tmp.replace(':', '-');
+
          metaObject = metaObject->superClass();
+
       } while (metaObject != 0);
 
       return result;
@@ -1282,18 +1292,22 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
 
       QVariant value = WIDGET(node)->property(name.toLatin1());
       if (! value.isValid()) {
-         if (name == QLatin1String("class")) {
-            QString className = QString::fromLatin1(WIDGET(node)->metaObject()->className());
+
+         if (name == "class") {
+            QString className = WIDGET(node)->metaObject()->className();
+
             if (className.contains(QLatin1Char(':'))) {
                className.replace(QLatin1Char(':'), QLatin1Char('-'));
             }
+
             cache[name] = className;
             return className;
 
          } else if (name == QLatin1String("style")) {
             QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(WIDGET(node)->style());
+
             if (proxy) {
-               QString styleName = QString::fromLatin1(proxy->baseStyle()->metaObject()->className());
+               QString styleName = proxy->baseStyle()->metaObject()->className();
                cache[name] = styleName;
                return styleName;
             }
@@ -1301,7 +1315,7 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
       }
       QString valueStr;
       if (value.type() == QVariant::StringList || value.type() == QVariant::List) {
-         valueStr = value.toStringList().join(QLatin1String(" "));
+         valueStr = value.toStringList().join(" ");
       } else {
          valueStr = value.toString();
       }
@@ -1316,24 +1330,31 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
       const QMetaObject *metaObject = WIDGET(node)->metaObject();
 
 #ifndef QT_NO_TOOLTIP
-      if (qstrcmp(metaObject->className(), "QTipLabel") == 0) {
-         return nodeName == QLatin1String("QToolTip");
+      if (metaObject->className() == "QTipLabel") {
+         return nodeName == "QToolTip";
       }
 #endif
 
       do {
-         const ushort *uc = (const ushort *)nodeName.constData();
-         const ushort *e = uc + nodeName.length();
-         const uchar *c = (uchar *)metaObject->className();
-         while (*c && uc != e && (*uc == *c || (*c == ':' && *uc == '-'))) {
-            ++uc;
-            ++c;
+         QString::const_iterator name_iter  = nodeName.begin();
+         QString::const_iterator name_end   = nodeName.end();
+         QString::const_iterator class_iter = metaObject->className().begin();
+         QString::const_iterator class_end  = metaObject->className().end();
+
+         while (class_iter != class_end && name_iter != name_end &&
+                  (*name_iter == *class_iter || (*class_iter == ':' && *name_iter == '-'))) {
+            ++name_iter;
+            ++class_iter;
          }
-         if (uc == e && !*c) {
+
+         if (name_iter == name_end && class_iter == class_end) {
             return true;
          }
+
          metaObject = metaObject->superClass();
+
       } while (metaObject != 0);
+
       return false;
    }
 
@@ -1535,7 +1556,7 @@ int QStyleSheetStyle::nativeFrameWidth(const QWidget *w)
    }
 #endif
 
-   if (qstrcmp(w->metaObject()->className(), "QTipLabel") == 0) {
+   if (w->metaObject()->className() == "QTipLabel") {
       return base->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, w);
    }
 
@@ -1630,13 +1651,16 @@ static void qt_check_if_internal_widget(const QWidget **w, int *element)
    Q_UNUSED(w);
    Q_UNUSED(element);
 #else
-   if (*w && qstrcmp((*w)->metaObject()->className(), "QDockWidgetTitleButton") == 0) {
-      if ((*w)->objectName() == QLatin1String("qt_dockwidget_closebutton")) {
+
+   if (*w && (*w)->metaObject()->className() == "QDockWidgetTitleButton") {
+
+      if ((*w)->objectName() == "qt_dockwidget_closebutton") {
          *element = PseudoElement_DockWidgetCloseButton;
 
-      } else if ((*w)->objectName() == QLatin1String("qt_dockwidget_floatbutton")) {
+      } else if ((*w)->objectName() == "qt_dockwidget_floatbutton") {
          *element = PseudoElement_DockWidgetFloatButton;
       }
+
       *w = (*w)->parentWidget();
    }
 #endif
@@ -1673,7 +1697,7 @@ QRenderRule QStyleSheetStyle::renderRule(const QWidget *w, int element, quint64 
       return newRule;
    }
 
-   const QString part = QLatin1String(knownPseudoElements[element].name);
+   const QString part = knownPseudoElements[element].name;
    QVector<QCss::Declaration> decls = declarations(rules, part, state);
    QRenderRule newRule(decls, w);
 
@@ -2010,14 +2034,14 @@ bool QStyleSheetStyle::hasStyleRule(const QWidget *w, int part) const
 {
    QHash<int, bool> &cache = styleSheetCaches->hasStyleRuleCache[w];
    QHash<int, bool>::const_iterator cacheIt = cache.constFind(part);
+
    if (cacheIt != cache.constEnd()) {
       return cacheIt.value();
    }
 
-   if (!initWidget(w)) {
+   if (! initWidget(w)) {
       return false;
    }
-
 
    const QVector<QCss::StyleRule> &rules = styleRules(w);
    if (part == PseudoElement_None) {
@@ -2026,7 +2050,7 @@ bool QStyleSheetStyle::hasStyleRule(const QWidget *w, int part) const
       return result;
    }
 
-   QString pseudoElement = QLatin1String(knownPseudoElements[part].name);
+   QString pseudoElement = knownPseudoElements[part].name;
    QVector<QCss::Declaration> declarations;
 
    for (int i = 0; i < rules.count(); i++) {
@@ -2516,7 +2540,7 @@ void QStyleSheetStyle::setProperties(QWidget *w)
       const QCss::Declaration &decl = decls.at(i);
       QString property = decl.d->property;
 
-      if (! property.startsWith(QLatin1String("qproperty-"), Qt::CaseInsensitive)) {
+      if (! property.startsWith("qproperty-", Qt::CaseInsensitive)) {
          continue;
       }
 
@@ -2524,18 +2548,21 @@ void QStyleSheetStyle::setProperties(QWidget *w)
 
       const QVariant value = w->property(property.toLatin1());
       const QMetaObject *metaObject = w->metaObject();
-      int index = metaObject->indexOfProperty(property.toLatin1().constData());
+      int index = metaObject->indexOfProperty(property);
 
       if (index == -1) {
          qWarning() << w << " does not have a property named " << property;
          continue;
       }
+
       QMetaProperty metaProperty = metaObject->property(index);
-      if (!metaProperty.isWritable() || !metaProperty.isDesignable()) {
-         qWarning() << w << " cannot design property named " << property;
+      if (! metaProperty.isWritable() || ! metaProperty.isDesignable()) {
+         qWarning() << w << " can not design property named " << property;
          continue;
       }
+
       QVariant v;
+
       switch (value.type()) {
          case QVariant::Icon:
             v = decl.iconValue();
@@ -2571,6 +2598,7 @@ void QStyleSheetStyle::setProperties(QWidget *w)
    }
    // apply the values
    const QList<QString> properties = propertyHash.keys();
+
    for (int i = 0; i < properties.count(); i++) {
       const QString &property = properties.at(i);
       w->setProperty(property.toLatin1(), propertyHash[property]);

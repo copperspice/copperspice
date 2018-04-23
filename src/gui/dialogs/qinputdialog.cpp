@@ -40,29 +40,29 @@
 
 QT_USE_NAMESPACE
 
-static const char *signalForMember(const char *member)
+static const QString &signalForMember(const QString &member)
 {
    static const int NumCandidates = 4;
-   static const char *const candidateSignals[NumCandidates] = {
+
+   static const QString candidateSignals[NumCandidates] = {
       "textValueSelected(QString)",
       "intValueSelected(int)",
       "doubleValueSelected(double)",
       "accepted()"
    };
 
-   QByteArray normalizedMember(QMetaObject::normalizedSignature(member));
-
+   QString normalizedMember(QMetaObject::normalizedSignature(member));
    int i = 0;
-   while (i < NumCandidates - 1) { // sic
-      if (QMetaObject::checkConnectArgs(candidateSignals[i], normalizedMember.constData())) {
+
+   while (i < NumCandidates - 1) {
+      if (QMetaObject::checkConnectArgs(candidateSignals[i], normalizedMember)) {
          break;
       }
       ++i;
    }
+
    return candidateSignals[i];
 }
-
-QT_BEGIN_NAMESPACE
 
 /*
     These internal classes add extra validation to QSpinBox and QDoubleSpinBox by emitting
@@ -89,7 +89,7 @@ class QInputDialogSpinBox : public QSpinBox
    GUI_CS_SLOT_2(notifyTextChanged)
 
    void keyPressEvent(QKeyEvent *event) override {
-      if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && !hasAcceptableInput()) {
+      if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && ! hasAcceptableInput()) {
 #ifndef QT_NO_PROPERTIES
          setProperty("value", property("value"));
 #endif
@@ -190,7 +190,7 @@ class QInputDialogPrivate : public QDialogPrivate
    QInputDialog::InputDialogOptions opts;
    QString textValue;
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 };
 
 QInputDialogPrivate::QInputDialogPrivate()
@@ -1049,12 +1049,14 @@ QString QInputDialog::cancelButtonText() const
 
     The signal will be disconnected from the slot when the dialog is closed.
 */
-void QInputDialog::open(QObject *receiver, const char *member)
+void QInputDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QInputDialog);
+
    connect(this, signalForMember(member), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
    d->memberToDisconnectOnClose = member;
+
    QDialog::open();
 }
 
@@ -1109,8 +1111,10 @@ void QInputDialog::done(int result)
 {
    Q_D(QInputDialog);
    QDialog::done(result);
+
    if (result) {
       InputMode mode = inputMode();
+
       switch (mode) {
          case DoubleInput:
             emit doubleValueSelected(doubleValue());
@@ -1125,17 +1129,18 @@ void QInputDialog::done(int result)
    }
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, signalForMember(d->memberToDisconnectOnClose.constData()),
-                 d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose.constData());
+      disconnect(this, signalForMember(d->memberToDisconnectOnClose), d->receiverToDisconnectOnClose,
+                  d->memberToDisconnectOnClose);
 
       d->receiverToDisconnectOnClose = 0;
    }
+
    d->memberToDisconnectOnClose.clear();
 }
 
 QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
-                              QLineEdit::EchoMode mode, const QString &text, bool *ok,
-                              Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
+                  QLineEdit::EchoMode mode, const QString &text, bool *ok,
+                  Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
 {
    QInputDialog dialog(parent, flags);
    dialog.setWindowTitle(title);
@@ -1319,117 +1324,5 @@ int QInputDialog::getInteger(QWidget *parent, const QString &title, const QStrin
    return getInt(parent, title, label, value, min, max, step, ok, flags);
 }
 
-/*!
-    \fn QString QInputDialog::getText(const QString &title, const QString &label,
-                                      QLineEdit::EchoMode echo = QLineEdit::Normal,
-                                      const QString &text = QString(), bool *ok = 0,
-                                      QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
 
-    Call getText(\a parent, \a title, \a label, \a echo, \a text, \a
-    ok, \a flags) instead.
-
-    The \a name parameter is ignored.
-*/
-
-/*!
-    \fn int QInputDialog::getInteger(const QString &title, const QString &label, int value = 0,
-                                     int min = -2147483647, int max = 2147483647,
-                                     int step = 1, bool *ok = 0,
-                                     QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
-
-
-    Call getInteger(\a parent, \a title, \a label, \a value, \a
-    min, \a max, \a step, \a ok, \a flags) instead.
-
-    The \a name parameter is ignored.
-*/
-
-/*!
-    \fn double QInputDialog::getDouble(const QString &title, const QString &label, double value = 0,
-                                       double min = -2147483647, double max = 2147483647,
-                                       int decimals = 1, bool *ok = 0,
-                                       QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
-
-    Call getDouble(\a parent, \a title, \a label, \a value, \a
-    min, \a max, \a decimals, \a ok, \a flags).
-
-    The \a name parameter is ignored.
-*/
-
-/*!
-    \fn QString QInputDialog::getItem(const QString &title, const QString &label, const QStringList &list,
-                                      int current = 0, bool editable = true, bool *ok = 0,
-                                      QWidget *parent = nullptr, const char *name = 0, Qt::WindowFlags flags = 0)
-
-    Call getItem(\a parent, \a title, \a label, \a list, \a current,
-    \a editable, \a ok, \a flags) instead.
-
-    The \a name parameter is ignored.
-*/
-
-/*!
-    \fn void QInputDialog::doubleValueChanged(double value)
-
-    This signal is emitted whenever the double value changes in the dialog.
-    The current value is specified by \a value.
-
-    This signal is only relevant when the input dialog is used in
-    DoubleInput mode.
-*/
-
-/*!
-    \fn void QInputDialog::doubleValueSelected(double value)
-
-    This signal is emitted whenever the user selects a double value by
-    accepting the dialog; for example, by clicking the \gui{OK} button.
-    The selected value is specified by \a value.
-
-    This signal is only relevant when the input dialog is used in
-    DoubleInput mode.
-*/
-
-/*!
-    \fn void QInputDialog::intValueChanged(int value)
-
-    This signal is emitted whenever the integer value changes in the dialog.
-    The current value is specified by \a value.
-
-    This signal is only relevant when the input dialog is used in
-    IntInput mode.
-*/
-
-/*!
-    \fn void QInputDialog::intValueSelected(int value)
-
-    This signal is emitted whenever the user selects a integer value by
-    accepting the dialog; for example, by clicking the \gui{OK} button.
-    The selected value is specified by \a value.
-
-    This signal is only relevant when the input dialog is used in
-    IntInput mode.
-*/
-
-/*!
-    \fn void QInputDialog::textValueChanged(const QString &text)
-
-    This signal is emitted whenever the text string changes in the dialog.
-    The current string is specified by \a text.
-
-    This signal is only relevant when the input dialog is used in
-    TextInput mode.
-*/
-
-/*!
-    \fn void QInputDialog::textValueSelected(const QString &text)
-
-    This signal is emitted whenever the user selects a text string by
-    accepting the dialog; for example, by clicking the \gui{OK} button.
-    The selected string is specified by \a text.
-
-    This signal is only relevant when the input dialog is used in
-    TextInput mode.
-*/
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_INPUTDIALOG
+#endif

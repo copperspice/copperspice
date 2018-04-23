@@ -67,6 +67,7 @@ class QTextCopyHelper
    QTextDocumentPrivate *src;
    QTextFormatCollection &formatCollection;
    const QString originalText;
+
    QMap<int, int> objectIndexMap;
 };
 

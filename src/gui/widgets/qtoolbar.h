@@ -89,8 +89,8 @@ class Q_GUI_EXPORT QToolBar : public QWidget
 
    QAction *addAction(const QString &text);
    QAction *addAction(const QIcon &icon, const QString &text);
-   QAction *addAction(const QString &text, const QObject *receiver, const char *member);
-   QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const char *member);
+   QAction *addAction(const QString &text, const QObject *receiver, const QString &member);
+   QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const QString &member);
 
    QAction *addSeparator();
    QAction *insertSeparator(QAction *before);

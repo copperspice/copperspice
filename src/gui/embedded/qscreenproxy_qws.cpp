@@ -24,7 +24,7 @@
 
 #ifndef QT_NO_QWS_PROXYSCREEN
 
-#include <qregexp.h>
+#include <QRegularExpression.h>
 
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_QWS_CURSOR
@@ -232,7 +232,7 @@ void QProxyScreen::configure()
 */
 static int getDisplayId(const QString &spec)
 {
-   QRegExp regexp(QLatin1String(":(\\d+)\\b"));
+   QRegularExpression regexp(QLatin1String(":(\\d+)\\b"));
    if (regexp.lastIndexIn(spec) != -1) {
       const QString capture = regexp.cap(1);
       return capture.toInt();

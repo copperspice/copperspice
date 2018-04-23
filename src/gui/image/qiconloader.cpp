@@ -487,10 +487,10 @@ QPixmap PixmapEntry::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
    int actualSize = qMin(size.width(), size.height());
 
    QString key = "$cs_theme_"
-                  % HexString<qint64>(basePixmap.cacheKey())
-                  % HexString<int>(mode)
-                  % HexString<qint64>(qApp->palette().cacheKey())
-                  % HexString<int>(actualSize);
+                  + HexString<qint64>(basePixmap.cacheKey())
+                  + HexString<int>(mode)
+                  + HexString<qint64>(qApp->palette().cacheKey())
+                  + HexString<int>(actualSize);
 
    QPixmap cachedPixmap;
    if (QPixmapCache::find(key, &cachedPixmap)) {

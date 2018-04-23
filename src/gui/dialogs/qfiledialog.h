@@ -178,8 +178,8 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    Options options() const;
 
    using QDialog::open;
+   void open(QObject *receiver, const QString &member);
 
-   void open(QObject *receiver, const char *member);
    void setVisible(bool visible) override;
 
    GUI_CS_SIGNAL_1(Public, void fileSelected(const QString &file))

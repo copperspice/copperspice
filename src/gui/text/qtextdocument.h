@@ -23,10 +23,10 @@
 #ifndef QTEXTDOCUMENT_H
 #define QTEXTDOCUMENT_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qsize.h>
-#include <QtCore/qrect.h>
-#include <QtGui/qfont.h>
+#include <qobject.h>
+#include <qsize.h>
+#include <qrect.h>
+#include <qfont.h>
 #include <qtextcursor.h>
 #include <QScopedPointer>
 
@@ -152,8 +152,8 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    QTextCursor find(const QString &subString, int from = 0, FindFlags options = 0) const;
    QTextCursor find(const QString &subString, const QTextCursor &from, FindFlags options = 0) const;
 
-   QTextCursor find(const QRegExp &expr, int from = 0, FindFlags options = 0) const;
-   QTextCursor find(const QRegExp &expr, const QTextCursor &from, FindFlags options = 0) const;
+   QTextCursor find(const QRegularExpression &expr, int from = 0, FindFlags options = 0) const;
+   QTextCursor find(const QRegularExpression &expr, const QTextCursor &from, FindFlags options = 0) const;
 
    QTextFrame *frameAt(int pos) const;
    QTextFrame *rootFrame() const;

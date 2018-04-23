@@ -29,6 +29,7 @@
 #include <QtGui/qinputcontext.h>
 #include <QtGui/qfont.h>
 #include <QtCore/qhash.h>
+#include <qstringfwd.h>
 
 #ifdef Q_WS_X11
 #include <QtCore/qlist.h>
@@ -42,7 +43,6 @@ QT_BEGIN_NAMESPACE
 class QKeyEvent;
 class QWidget;
 class QFont;
-class QString;
 
 class QXIMInputContext : public QInputContext
 {

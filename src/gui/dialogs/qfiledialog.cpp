@@ -87,6 +87,8 @@ typedef QUrl (*_qt_filedialog_save_file_url_hook)(QWidget *parent, const QString
       const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes);
 Q_GUI_EXPORT _qt_filedialog_save_file_url_hook qt_filedialog_save_file_url_hook = 0;
 
+static const qint32 QFileDialogMagic = 0xbe;
+const QString qt_file_dialog_filter_reg_exp = "^(.*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$";
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 bool Q_GUI_EXPORT qt_use_native_dialogs = true; // for the benefit of testing tools, until we have a proper API
@@ -167,18 +169,6 @@ QList<QUrl> QFileDialog::sidebarUrls() const
    return d->qFileDialogUi->sidebar->urls();
 }
 
-static const qint32 QFileDialogMagic = 0xbe;
-
-const char *qt_file_dialog_filter_reg_exp =
-   "^(.*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$";
-
-/*!
-    \since 4.3
-    Saves the state of the dialog's layout, history and current directory.
-
-    Typically this is used in conjunction with QSettings to remember the size
-    for a future session. A version number is stored as part of the data.
-*/
 QByteArray QFileDialog::saveState() const
 {
    Q_D(const QFileDialog);
@@ -485,22 +475,11 @@ QFileDialog::Options QFileDialog::options() const
    return d->opts;
 }
 
-/*!
-    \overload
-
-    \since 4.5
-
-    This function connects one of its signals to the slot specified by \a receiver
-    and \a member. The specific signal depends is filesSelected() if fileMode is
-    ExistingFiles and fileSelected() if fileMode is anything else.
-
-    The signal will be disconnected from the slot when the dialog is closed.
-*/
-void QFileDialog::open(QObject *receiver, const char *slot)
+void QFileDialog::open(QObject *receiver, const QString &slot)
 {
    Q_D(QFileDialog);
 
-   const char *signal;
+   QString signal;
 
    if (fileMode() == ExistingFiles) {
       signal = "filesSelected(QStringList)";
@@ -860,20 +839,6 @@ QStringList qt_make_filter_list(const QString &filter)
    return f.split(sep);
 }
 
-/*!
-    \since 4.4
-
-    Sets the filter used in the file dialog to the given \a filter.
-
-    If \a filter contains a pair of parentheses containing one or more
-    of \bold{anything*something}, separated by spaces, then only the
-    text contained in the parentheses is used as the filter. This means
-    that these calls are all equivalent:
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qfiledialog.cpp 6
-
-    \sa setNameFilters()
-*/
 void QFileDialog::setNameFilter(const QString &filter)
 {
    setNameFilters(qt_make_filter_list(filter));
@@ -889,18 +854,6 @@ void QFileDialog::setFilter(const QString &filter)
    setNameFilter(filter);
 }
 
-/*!
-    \property QFileDialog::nameFilterDetailsVisible
-    \obsolete
-    \brief This property holds whether the filter details is shown or not.
-    \since 4.4
-
-    When this property is true (the default), the filter details are shown
-    in the combo box.  When the property is set to false, these are hidden.
-
-    Use setOption(HideNameFilterDetails, !\e enabled) or
-    !testOption(HideNameFilterDetails).
-*/
 void QFileDialog::setNameFilterDetailsVisible(bool enabled)
 {
    setOption(HideNameFilterDetails, !enabled);
@@ -908,44 +861,41 @@ void QFileDialog::setNameFilterDetailsVisible(bool enabled)
 
 bool QFileDialog::isNameFilterDetailsVisible() const
 {
-   return !testOption(HideNameFilterDetails);
+   return ! testOption(HideNameFilterDetails);
 }
 
-
-/*
-    Strip the filters by removing the details, e.g. (*.*).
-*/
 QStringList qt_strip_filters(const QStringList &filters)
 {
    QStringList strippedFilters;
-   QRegExp r(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
+
+   static QRegularExpression regExp(qt_file_dialog_filter_reg_exp);
+   QRegularExpressionMatch match;
+
    for (int i = 0; i < filters.count(); ++i) {
       QString filterName;
-      int index = r.indexIn(filters[i]);
-      if (index >= 0) {
-         filterName = r.cap(1);
+      match = regExp.match(filters[i]);
+
+      if (match.hasMatch()) {
+         filterName = match.captured(1);
       }
+
       strippedFilters.append(filterName.simplified());
    }
+
    return strippedFilters;
 }
 
-
-/*!
-    \since 4.4
-
-    Sets the \a filters used in the file dialog.
-
-    \snippet doc/src/snippets/code/src_gui_dialogs_qfiledialog.cpp 7
-*/
 void QFileDialog::setNameFilters(const QStringList &filters)
 {
    Q_D(QFileDialog);
+
    d->defaultFileTypes = (filters == QStringList(QFileDialog::tr("All Files (*)")));
    QStringList cleanedFilters;
+
    for (int i = 0; i < filters.count(); ++i) {
       cleanedFilters << filters[i].simplified();
    }
+
    d->nameFilters = cleanedFilters;
 
    if (d->nativeDialogInUse) {
@@ -1852,10 +1802,7 @@ void QFileDialog::done(int result)
    QDialog::done(result);
 
    if (d->receiverToDisconnectOnClose) {
-
-      disconnect(this, d->signalToDisconnectOnClose.constData(), d->receiverToDisconnectOnClose,
-                  d->memberToDisconnectOnClose.constData());
-
+      disconnect(this, d->signalToDisconnectOnClose, d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
       d->receiverToDisconnectOnClose = 0;
    }
 
@@ -1906,7 +1853,7 @@ void QFileDialog::accept()
 #ifndef QT_NO_MESSAGEBOX
             QString message = tr("%1\nDirectory not found.\nPlease verify the "
                                  "correct directory name was given.");
-            QMessageBox::warning(this, windowTitle(), message.arg(info.fileName()));
+            QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
 #endif // QT_NO_MESSAGEBOX
             return;
          }
@@ -1940,7 +1887,7 @@ void QFileDialog::accept()
          } else {
             if (QMessageBox::warning(this, windowTitle(),
                                      tr("%1 already exists.\nDo you want to replace it?")
-                                     .arg(info.fileName()),
+                                     .formatArg(info.fileName()),
                                      QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
                   == QMessageBox::Yes) {
                d->emitFilesSelected(QStringList(fn));
@@ -1962,7 +1909,7 @@ void QFileDialog::accept()
 #ifndef QT_NO_MESSAGEBOX
                QString message = tr("%1\nFile not found.\nPlease verify the "
                                     "correct file name was given.");
-               QMessageBox::warning(this, windowTitle(), message.arg(info.fileName()));
+               QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
 #endif // QT_NO_MESSAGEBOX
                return;
             }
@@ -2588,12 +2535,12 @@ void QFileDialogPrivate::_q_deleteCurrent()
       Q_Q(QFileDialog);
       if (!(p & QFile::WriteUser) && (QMessageBox::warning(q_func(), QFileDialog::tr("Delete"),
                                       QFileDialog::tr("'%1' is write protected.\nDo you want to delete it anyway?")
-                                      .arg(fileName),
+                                      .formatArg(fileName),
                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)) {
          return;
       } else if (QMessageBox::warning(q_func(), QFileDialog::tr("Delete"),
                                       QFileDialog::tr("Are you sure you want to delete '%1'?")
-                                      .arg(fileName),
+                                      .formatArg(fileName),
                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No) {
          return;
       }
@@ -2822,7 +2769,7 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
    } else {
       QString message = QFileDialog::tr("%1\nDirectory not found.\nPlease verify the "
                                         "correct directory name was given.");
-      QMessageBox::warning(q, q->windowTitle(), message.arg(path2));
+      QMessageBox::warning(q, q->windowTitle(), message.formatArg(path2));
 #endif // QT_NO_MESSAGEBOX
    }
 }
@@ -2830,13 +2777,16 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
 // Makes a list of filters from a normal filter string "Image Files (*.png *.jpg)"
 QStringList qt_clean_filter_list(const QString &filter)
 {
-   QRegExp regexp(QString::fromLatin1(qt_file_dialog_filter_reg_exp));
    QString f = filter;
-   int i = regexp.indexIn(f);
-   if (i >= 0) {
-      f = regexp.cap(2);
+
+   static QRegularExpression regExp(qt_file_dialog_filter_reg_exp);
+   QRegularExpressionMatch match = regExp.match(f);
+
+   if (match.hasMatch()) {
+      f = match.captured(2);
    }
-   return f.split(QLatin1Char(' '), QString::SkipEmptyParts);
+
+   return f.split(' ', QStringParser::SkipEmptyParts);
 }
 
 /*!
@@ -3134,14 +3084,15 @@ bool QFileDialogPrivate::itemViewKeyboardEvent(QKeyEvent *event)
 QString QFileDialogPrivate::getEnvironmentVariable(const QString &string)
 {
 #ifdef Q_OS_UNIX
-   if (string.size() > 1 && string.startsWith(QLatin1Char('$'))) {
-      return QString::fromLocal8Bit(getenv(string.mid(1).toLatin1().constData()));
+   if (string.size() > 1 && string.startsWith('$')) {
+      return QString::fromUtf8(getenv(string.mid(1).toLatin1().constData()));
    }
 #else
-   if (string.size() > 2 && string.startsWith(QLatin1Char('%')) && string.endsWith(QLatin1Char('%'))) {
-      return QString::fromLocal8Bit(qgetenv(string.mid(1, string.size() - 2).toLatin1().constData()));
+   if (string.size() > 2 && string.startsWith('%') && string.endsWith('%')) {
+      return QString::fromUtf8(qgetenv(string.mid(1, string.size() - 2).toLatin1().constData()));
    }
 #endif
+
    return string;
 }
 
@@ -3387,10 +3338,10 @@ QStringList QFSCompleter::splitPath(const QString &path) const
    }
 #endif
 
-   QRegExp re(QLatin1Char('[') + QRegExp::escape(sep) + QLatin1Char(']'));
+   QRegularExpression re(QLatin1Char('[') + QRegularExpression::escape(sep) + QLatin1Char(']'));
 
 #if defined(Q_OS_WIN)
-   QStringList parts = pathCopy.split(re, QString::SkipEmptyParts);
+   QStringList parts = pathCopy.split(re, QStringParser::SkipEmptyParts);
    if (!doubleSlash.isEmpty() && !parts.isEmpty()) {
       parts[0].prepend(doubleSlash);
    }

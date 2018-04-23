@@ -49,10 +49,10 @@ class QFontEngineDirectWrite : public QFontEngine
    bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
    QFixed emSquareSize() const;
 
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
    void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const;
 
-   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, 
+   void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path,
          QTextItem::RenderFlags flags);
 
    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
@@ -65,8 +65,6 @@ class QFontEngineDirectWrite : public QFontEngine
    QFixed xHeight() const;
    qreal maxCharWidth() const;
 
-   const char *name() const;
-
    bool supportsSubPixelPositions() const;
 
    QImage alphaMapForGlyph(glyph_t, QFixed subPixelPosition, const QTransform &t);
@@ -74,8 +72,9 @@ class QFontEngineDirectWrite : public QFontEngine
 
    QFontEngine *cloneWithSize(qreal pixelSize) const;
 
-   bool canRender(const QChar *string, int len);
-   Type type() const;
+   bool canRender(QStringView str) override;
+   const char *name() const override;
+   Type type() const override;
 
  private:
    friend class QRawFontPrivate;

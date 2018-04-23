@@ -1367,7 +1367,7 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
          // and http://live.gnome.org/GnomeArt/Tutorials/GtkThemes/GtkComboBoxEntry
          if (const QStyleOptionComboBox *comboBox = qstyleoption_cast<const QStyleOptionComboBox *>(option)) {
             bool sunken = comboBox->state & State_On; // play dead, if combobox has no items
-            BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("cb-%0-%1").arg(sunken).arg(comboBox->editable));
+            BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("cb-%0-%1").formatArg(sunken).formatArg(comboBox->editable));
             QGtkPainter gtkCachedPainter(p);
             gtkCachedPainter.setUsePixmapCache(false); // cached externally
 
@@ -1779,7 +1779,7 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
 
                gtkPainter.paintSlider( scrollbarWidget, "slider", scrollBarSlider, state, shadow, style,
 
-                                       horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, QString(QLS("%0%1")).arg(fakePos).arg(maximum));
+                                       horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, QString(QLS("%0%1")).formatArg(fakePos).formatArg(maximum));
             }
 
             if (scrollBar->subControls & SC_ScrollBarAddLine) {
@@ -2073,7 +2073,7 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
 
                if (!trough_side_details) {
                   gtkPainter.paintBox( scaleWidget, "trough", grooveRect, state,
-                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).arg(slider->sliderPosition));
+                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).formatArg(slider->sliderPosition));
                } else {
                   QRect upperGroove = grooveRect;
                   QRect lowerGroove = grooveRect;
@@ -2097,9 +2097,9 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
                   }
 
                   gtkPainter.paintBox( scaleWidget, "trough-upper", upperGroove, state,
-                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).arg(slider->sliderPosition));
+                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).formatArg(slider->sliderPosition));
                   gtkPainter.paintBox( scaleWidget, "trough-lower", lowerGroove, state,
-                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).arg(slider->sliderPosition));
+                                       GTK_SHADOW_IN, style, QString(QLS("p%0")).formatArg(slider->sliderPosition));
                }
             }
 
@@ -3131,7 +3131,7 @@ void QGtkStyle::drawControl(ControlElement element,
                progressBar.setRect(rect.left() + step, rect.top(), slideWidth / 2, rect.height());
             }
 
-            QString key = QString(QLS("%0")).arg(fakePos);
+            QString key = QString(QLS("%0")).formatArg(fakePos);
             if (inverted) {
                key += QLatin1String("inv");
                gtkPainter.setFlipHorizontal(true);

@@ -202,11 +202,13 @@ EGLConfig QEgl::defaultConfig(int devType, API api, ConfigOptions options)
 
    // Allow overriding from an environment variable:
    QByteArray configId;
+
    if (api == OpenVG) {
       configId = qgetenv("QT_VG_EGL_CONFIG");
    } else {
       configId = qgetenv("QT_GL_EGL_CONFIG");
    }
+
    if (!configId.isEmpty()) {
       // Overridden, so get the EGLConfig for the specified config ID:
       EGLint properties[] = {

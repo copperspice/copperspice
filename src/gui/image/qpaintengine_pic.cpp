@@ -447,8 +447,10 @@ void QPicturePaintEngine::drawImage(const QRectF &r, const QImage &image, const 
 #ifdef QT_PICTURE_DEBUG
    qDebug() << " -> drawImage():" << r << sr;
 #endif
+
    int pos;
    SERIALIZE_CMD(QPicturePrivate::PdcDrawImage);
+
    if (d->pic_d->in_memory_only) {
       int index = d->pic_d->image_list.size();
       d->pic_d->image_list.append(image);
@@ -456,18 +458,21 @@ void QPicturePaintEngine::drawImage(const QRectF &r, const QImage &image, const 
    } else {
       d->s << r << image << sr << (quint32) flags;
    }
+
    writeCmdLength(pos, r, false);
 }
 
 void QPicturePaintEngine::drawTextItem(const QPointF &p , const QTextItem &ti)
 {
    Q_D(QPicturePaintEngine);
+
 #ifdef QT_PICTURE_DEBUG
    qDebug() << " -> drawTextItem():" << p << ti.text();
 #endif
 
    const QTextItemInt &si = static_cast<const QTextItemInt &>(ti);
-   if (si.chars == 0) {
+
+   if (si.m_iter == si.m_end) {
       QPaintEngine::drawTextItem(p, ti);   // Draw as path
    }
 
@@ -486,6 +491,7 @@ void QPicturePaintEngine::drawTextItem(const QPointF &p , const QTextItem &ti)
 
       d->s << p << ti.text() << fnt << ti.renderFlags() << double(fnt.d->dpi) / qt_defaultDpi() << justificationWidth;
       writeCmdLength(pos, /*brect=*/QRectF(), /*corr=*/false);
+
    } else if (d->pic_d->formatMajor >= 8) {
       // old old (buggy) format
       int pos;

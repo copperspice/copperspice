@@ -78,7 +78,7 @@ QStringList QPlatformIntegrationFactory::keys(const QString &platformPluginPath)
    if (!platformPluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(platformPluginPath);
       for (const QString & key : directLoader()->keys()) {
-         list += key + QString(QLatin1String(" (from %1)")).arg(platformPluginPath);
+         list += key + QString(QLatin1String(" (from %1)")).formatArg(platformPluginPath);
       }
    }
 

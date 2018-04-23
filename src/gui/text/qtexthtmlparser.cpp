@@ -309,12 +309,12 @@ static const struct QTextHtmlEntity {
 
 static bool operator<(const QString &entityStr, const QTextHtmlEntity &entity)
 {
-   return entityStr < QLatin1String(entity.name);
+   return entityStr < QString::fromLatin1(entity.name);
 }
 
 static bool operator<(const QTextHtmlEntity &entity, const QString &entityStr)
 {
-   return QLatin1String(entity.name) < entityStr;
+   return QString::fromLatin1(entity.name) < entityStr;
 }
 
 static QChar resolveEntity(const QString &entity)
@@ -432,12 +432,12 @@ static const QTextHtmlElement elements[Html_NumElements] = {
 
 static bool operator<(const QString &str, const QTextHtmlElement &e)
 {
-   return str < QLatin1String(e.name);
+   return str < QString::fromLatin1(e.name);
 }
 
 static bool operator<(const QTextHtmlElement &e, const QString &str)
 {
-   return QLatin1String(e.name) < str;
+   return QString::fromLatin1(e.name) < str;
 }
 
 static const QTextHtmlElement *lookupElementHelper(const QString &element)
@@ -456,9 +456,11 @@ static const QTextHtmlElement *lookupElementHelper(const QString &element)
 int QTextHtmlParser::lookupElement(const QString &element)
 {
    const QTextHtmlElement *e = lookupElementHelper(element);
-   if (!e) {
+
+   if (! e) {
       return -1;
    }
+
    return e->id;
 }
 
@@ -799,59 +801,66 @@ QString QTextHtmlParser::parseEntity()
 {
    int recover = pos;
    QString entity;
+
    while (pos < len) {
       QChar c = txt.at(pos++);
+
       if (c.isSpace() || pos - recover > 9) {
          goto error;
       }
-      if (c == QLatin1Char(';')) {
+      if (c == ';') {
          break;
       }
       entity += c;
    }
+
    {
       QChar resolved = resolveEntity(entity);
-      if (!resolved.isNull()) {
+
+      if (! resolved.isNull()) {
          return QString(resolved);
       }
    }
-   if (entity.length() > 1 && entity.at(0) == QLatin1Char('#')) {
+
+   if (entity.length() > 1 && entity.at(0) == '#') {
       entity.remove(0, 1); // removing leading #
 
       int base = 10;
       bool ok = false;
 
-      if (entity.at(0).toLower() == QLatin1Char('x')) { // hex entity?
+      if (entity.at(0).toLower() == "x") {
+         // hex entity?
          entity.remove(0, 1);
          base = 16;
       }
 
-      uint uc = entity.toUInt(&ok, base);
+      uint uc = entity.toInteger<uint>(&ok, base);
+
       if (ok) {
          if (uc >= 0x80 && uc < 0x80 + (sizeof(windowsLatin1ExtendedCharacters) / sizeof(windowsLatin1ExtendedCharacters[0]))) {
             uc = windowsLatin1ExtendedCharacters[uc - 0x80];
          }
-         QString str;
-         if (QChar::requiresSurrogates(uc)) {
-            str += QChar(QChar::highSurrogate(uc));
-            str += QChar(QChar::lowSurrogate(uc));
-         } else {
-            str = QChar(uc);
-         }
+
+         QString str = QChar(char32_t(uc));
          return str;
       }
    }
+
 error:
    pos = recover;
-   return QLatin1String("&");
+
+   return QString("&");
 }
 
 // parses one word, possibly quoted, and returns it
 QString QTextHtmlParser::parseWord()
 {
    QString word;
-   if (hasPrefix(QLatin1Char('\"'))) { // double quotes
+
+   if (hasPrefix('\"')) {
+      // double quotes
       ++pos;
+
       while (pos < len) {
          QChar c = txt.at(pos++);
          if (c == QLatin1Char('\"')) {
@@ -862,8 +871,11 @@ QString QTextHtmlParser::parseWord()
             word += c;
          }
       }
-   } else if (hasPrefix(QLatin1Char('\''))) { // single quotes
+
+   } else if (hasPrefix(QLatin1Char('\''))) {
+      // single quotes
       ++pos;
+
       while (pos < len) {
          QChar c = txt.at(pos++);
          if (c == QLatin1Char('\'')) {
@@ -872,17 +884,18 @@ QString QTextHtmlParser::parseWord()
             word += c;
          }
       }
-   } else { // normal text
+
+   } else {
+      // normal text
+
       while (pos < len) {
          QChar c = txt.at(pos++);
-         if (c == QLatin1Char('>')
-               || (c == QLatin1Char('/') && hasPrefix(QLatin1Char('>'), 1))
-               || c == QLatin1Char('<')
-               || c == QLatin1Char('=')
-               || c.isSpace()) {
+         if (c == QLatin1Char('>') || (c == QLatin1Char('/') && hasPrefix(QLatin1Char('>'), 1))
+               || c == QLatin1Char('<') || c == QLatin1Char('=') || c.isSpace()) {
             --pos;
             break;
          }
+
          if (c == QLatin1Char('&')) {
             word += parseEntity();
          } else {
@@ -1562,17 +1575,20 @@ void QTextHtmlParserNode::applyBackgroundImage(const QString &url, const QTextDo
 
 bool QTextHtmlParserNode::hasOnlyWhitespace() const
 {
-   for (int i = 0; i < text.count(); ++i)
-      if (!text.at(i).isSpace() || text.at(i) == QChar::LineSeparator) {
+   for (int i = 0; i < text.count(); ++i) {
+      if (! text.at(i).isSpace() || text.at(i) == QChar::LineSeparator) {
          return false;
       }
+   }
+
    return true;
 }
 
 static bool setIntAttribute(int *destination, const QString &value)
 {
    bool ok = false;
-   int val = value.toInt(&ok);
+   int val = value.toInteger<int>(&ok);
+
    if (ok) {
       *destination = val;
    }
@@ -1584,6 +1600,7 @@ static bool setFloatAttribute(qreal *destination, const QString &value)
 {
    bool ok = false;
    qreal val = value.toDouble(&ok);
+
    if (ok) {
       *destination = val;
    }
@@ -1658,6 +1675,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
 {
    // local state variable for qt3 textedit mode
    bool seenQt3Richtext = false;
+
    QString linkHref;
    QString linkType;
 
@@ -1668,20 +1686,24 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
    QTextHtmlParserNode *node = &nodes.last();
 
    for (int i = 0; i < attributes.count(); i += 2) {
-      QString key = attributes.at(i);
+      QString key   = attributes.at(i);
       QString value = attributes.at(i + 1);
 
       switch (node->id) {
          case Html_font:
             // the infamous font tag
             if (key == QLatin1String("size") && value.size()) {
-               int n = value.toInt();
-               if (value.at(0) != QLatin1Char('+') && value.at(0) != QLatin1Char('-')) {
+               int n = value.toInteger<int>();
+
+               if (value.at(0) != QLatin1Char('+') && value.at(0) != '-') {
                   n -= 3;
                }
+
                node->charFormat.setProperty(QTextFormat::FontSizeAdjustment, n);
+
             } else if (key == QLatin1String("face")) {
                node->charFormat.setFontFamily(value);
+
             } else if (key == QLatin1String("color")) {
                QColor c;
                c.setNamedColor(value);
@@ -1691,6 +1713,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                node->charFormat.setForeground(c);
             }
             break;
+
          case Html_ol:
          case Html_ul:
             if (key == QLatin1String("type")) {

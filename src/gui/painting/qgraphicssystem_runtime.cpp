@@ -293,16 +293,17 @@ QWindowSurface::WindowSurfaceFeatures QRuntimeWindowSurface::features() const
 }
 
 QRuntimeGraphicsSystem::QRuntimeGraphicsSystem()
-   : m_windowSurfaceDestroyPolicy(DestroyImmediately),
-     m_graphicsSystem(0)
+   : m_windowSurfaceDestroyPolicy(DestroyImmediately), m_graphicsSystem(0)
 {
    QApplicationPrivate::runtime_graphics_system = true;
 
-   if (!qgetenv("QT_DEFAULT_RUNTIME_SYSTEM").isEmpty()) {
-      m_graphicsSystemName = QString::fromLocal8Bit(qgetenv("QT_DEFAULT_RUNTIME_SYSTEM"));
+   if (! qgetenv("QT_DEFAULT_RUNTIME_SYSTEM").isEmpty()) {
+      m_graphicsSystemName = QString::fromUtf8(qgetenv("QT_DEFAULT_RUNTIME_SYSTEM"));
    } else {
+
 #ifdef QT_DEFAULT_RUNTIME_SYSTEM
       m_graphicsSystemName = QLatin1String(QT_DEFAULT_RUNTIME_SYSTEM);
+
       if (m_graphicsSystemName.isNull())
 #endif
          m_graphicsSystemName = QLatin1String("raster");

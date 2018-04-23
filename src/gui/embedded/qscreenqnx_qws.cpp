@@ -22,7 +22,7 @@
 
 #include <qscreenqnx_qws.h>
 #include <qapplication.h>
-#include <qregexp.h>
+#include <QRegularExpression.h>
 
 #include <gf/gf.h>
 
@@ -285,12 +285,12 @@ static inline bool createMemSurface(QQnxScreenContext *const d, int w, int h)
 */
 bool QQnxScreen::connect(const QString &displaySpec)
 {
-   const QStringList params = displaySpec.split(QLatin1Char(':'), QString::SkipEmptyParts);
+   const QStringList params = displaySpec.split(QLatin1Char(':'), QStringParser::SkipEmptyParts);
 
    // default to device 0
    int deviceIndex = 0;
    if (!params.isEmpty()) {
-      QRegExp deviceRegExp(QLatin1String("^device=(.+)$"));
+      QRegularExpression deviceRegExp(QLatin1String("^device=(.+)$"));
       if (params.indexOf(deviceRegExp) != -1) {
          deviceIndex = deviceRegExp.cap(1).toInt();
       }
@@ -305,7 +305,7 @@ bool QQnxScreen::connect(const QString &displaySpec)
    // default to display id passed to constructor
    int displayIndex = displayId;
    if (!params.isEmpty()) {
-      QRegExp displayRegexp(QLatin1String("^display=(\\d+)$"));
+      QRegularExpression displayRegexp(QLatin1String("^display=(\\d+)$"));
       if (params.indexOf(displayRegexp) != -1) {
          displayIndex = displayRegexp.cap(1).toInt();
       }
@@ -321,7 +321,7 @@ bool QQnxScreen::connect(const QString &displaySpec)
    // default to main_layer_index from the displayInfo struct
    int layerIndex = d->displayInfo.main_layer_index;
    if (!params.isEmpty()) {
-      QRegExp layerRegexp(QLatin1String("^layer=(\\d+)$"));
+      QRegularExpression layerRegexp(QLatin1String("^layer=(\\d+)$"));
       if (params.indexOf(layerRegexp) != -1) {
          layerIndex = layerRegexp.cap(1).toInt();
       }
@@ -372,12 +372,12 @@ bool QQnxScreen::connect(const QString &displaySpec)
    physWidth = qRound(dw * 25.4 / defaultDpi);
    physHeight = qRound(dh * 25.4 / defaultDpi);
    if (!params.isEmpty()) {
-      QRegExp mmWidthRegexp(QLatin1String("^mmWidth=(\\d+)$"));
+      QRegularExpression mmWidthRegexp(QLatin1String("^mmWidth=(\\d+)$"));
       if (params.indexOf(mmWidthRegexp) != -1) {
          physWidth = mmWidthRegexp.cap(1).toInt();
       }
 
-      QRegExp mmHeightRegexp(QLatin1String("^mmHeight=(\\d+)$"));
+      QRegularExpression mmHeightRegexp(QLatin1String("^mmHeight=(\\d+)$"));
       if (params.indexOf(mmHeightRegexp) != -1) {
          physHeight = mmHeightRegexp.cap(1).toInt();
       }

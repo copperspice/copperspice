@@ -23,7 +23,7 @@
 #ifndef QPRINTDIALOG_H
 #define QPRINTDIALOG_H
 
-#include <QtGui/qabstractprintdialog.h>
+#include <qabstractprintdialog.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -79,7 +79,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 
    int exec() override;
 
-#if defined (Q_OS_UNIX) && !defined(Q_OS_MAC)
+#if defined (Q_OS_UNIX) && ! defined(Q_OS_MAC)
    void accept() override;
 #endif
 
@@ -95,7 +95,7 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
 #endif
 
    using QDialog::open;
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    using QDialog::accepted;
    GUI_CS_SIGNAL_1(Public, void accepted(QPrinter *printer))
@@ -110,10 +110,10 @@ class Q_GUI_EXPORT QPrintDialog : public QAbstractPrintDialog
    GUI_CS_SLOT_2(_q_collapseOrExpandDialog)
 #endif
 
-# if defined(Q_OS_UNIX) && !defined (Q_OS_MAC) && !defined(QT_NO_MESSAGEBOX)
+#if defined(Q_OS_UNIX) && !defined (Q_OS_MAC) && !defined(QT_NO_MESSAGEBOX)
    GUI_CS_SLOT_1(Private, void _q_checkFields())
    GUI_CS_SLOT_2(_q_checkFields)
-# endif
+#endif
 
    friend class QUnixPrintWidget;
 };

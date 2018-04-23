@@ -23,11 +23,8 @@
 #ifndef QMOUSEDRIVERFACTORY_QWS_H
 #define QMOUSEDRIVERFACTORY_QWS_H
 
-#include <QtCore/qstringlist.h>
+#include <qstringlist.h>
 
-QT_BEGIN_NAMESPACE
-
-class QString;
 class QWSMouseHandler;
 
 class Q_GUI_EXPORT QMouseDriverFactory
@@ -37,6 +34,4 @@ class Q_GUI_EXPORT QMouseDriverFactory
    static QWSMouseHandler *create(const QString &, const QString &);
 };
 
-QT_END_NAMESPACE
-
-#endif // QMOUSEDRIVERFACTORY_QWS_H
+#endif

@@ -470,7 +470,7 @@ void QImageTextureGlyphCache::fillTexture(const Coord &c, glyph_t g, QFixed subP
    if (m_image.rect().contains(base)) {
       m_image.setPixel(base, 255);
    }
-   m_image.save(QString::fromLatin1("cache-%1.png").arg(qint64(this)));
+   m_image.save(QString::fromLatin1("cache-%1.png").formatArg(qint64(this)));
 #endif
 }
 

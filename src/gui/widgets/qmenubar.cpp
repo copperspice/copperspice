@@ -847,7 +847,7 @@ QAction *QMenuBar::addAction(const QString &text)
 
     \sa QWidget::addAction(), QWidget::actions()
 */
-QAction *QMenuBar::addAction(const QString &text, const QObject *receiver, const char *member)
+QAction *QMenuBar::addAction(const QString &text, const QObject *receiver, const QString &member)
 {
    QAction *ret = new QAction(text, this);
    QObject::connect(ret, SIGNAL(triggered(bool)), receiver, member);
@@ -1220,27 +1220,34 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
          key_consumed = false;
    }
 
-   if (!key_consumed &&
-         (!e->modifiers() ||
+   if (!key_consumed && (!e->modifiers() ||
           (e->modifiers() & (Qt::MetaModifier | Qt::AltModifier))) && e->text().length() == 1 && !d->popupState) {
+
       int clashCount = 0;
       QAction *first = 0, *currentSelected = 0, *firstAfterCurrent = 0;
+
       {
-         QChar c = e->text()[0].toUpper();
+         QChar c = e->text()[0].toUpper()[0];
+
          for (int i = 0; i < d->actions.size(); ++i) {
             if (d->actionRects.at(i).isNull()) {
                continue;
+
             }
+
             QAction *act = d->actions.at(i);
             QString s = act->text();
+
             if (!s.isEmpty()) {
                int ampersand = s.indexOf(QLatin1Char('&'));
+
                if (ampersand >= 0) {
                   if (s[ampersand + 1].toUpper() == c) {
                      clashCount++;
                      if (!first) {
                         first = act;
                      }
+
                      if (act == d->currentAction) {
                         currentSelected = act;
                      } else if (!firstAfterCurrent && currentSelected) {

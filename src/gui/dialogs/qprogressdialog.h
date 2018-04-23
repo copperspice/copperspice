@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    bool wasCanceled() const;
 
    using QDialog::open;
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    GUI_CS_SLOT_1(Public, void cancel())
    GUI_CS_SLOT_2(cancel)
@@ -172,7 +172,7 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    bool m_centerCancelPB;
 
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
 };
 
 #endif // QT_NO_PROGRESSDIALOG

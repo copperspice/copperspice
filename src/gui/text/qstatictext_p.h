@@ -25,7 +25,7 @@
 
 #include <qstatictext.h>
 #include <qtextureglyphcache_p.h>
-#include <QtGui/qcolor.h>
+#include <qcolor.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -51,8 +51,9 @@ class QStaticTextUserData
 class Q_GUI_EXPORT QStaticTextItem
 {
  public:
-   QStaticTextItem() : chars(0), numChars(0), useBackendOptimizations(false),
-      userDataNeedsUpdate(0), m_fontEngine(0), m_userData(0) {}
+   QStaticTextItem()
+      : useBackendOptimizations(false), userDataNeedsUpdate(0), m_fontEngine(0), m_userData(0)
+   { }
 
    QStaticTextItem(const QStaticTextItem &other) {
       operator=(other);
@@ -60,17 +61,15 @@ class Q_GUI_EXPORT QStaticTextItem
 
    void operator=(const QStaticTextItem &other) {
       glyphPositions = other.glyphPositions;
-      glyphs = other.glyphs;
-      chars = other.chars;
-      numGlyphs = other.numGlyphs;
-      numChars = other.numChars;
-      font = other.font;
-      color = other.color;
+      glyphs         = other.glyphs;
+      numGlyphs      = other.numGlyphs;
+      font           = other.font;
+      color          = other.color;
       useBackendOptimizations = other.useBackendOptimizations;
-      userDataNeedsUpdate = other.userDataNeedsUpdate;
+      userDataNeedsUpdate     = other.userDataNeedsUpdate;
 
       m_fontEngine = 0;
-      m_userData = 0;
+      m_userData   = 0;
       setUserData(other.userData());
       setFontEngine(other.fontEngine());
    }
@@ -91,6 +90,7 @@ class Q_GUI_EXPORT QStaticTextItem
          m_userData->ref.ref();
       }
    }
+
    QStaticTextUserData *userData() const {
       return m_userData;
    }
@@ -104,28 +104,30 @@ class Q_GUI_EXPORT QStaticTextItem
       QFixedPoint *glyphPositions;             // 8 bytes per glyph
       int positionOffset;
    };
+
    union {
       glyph_t *glyphs;                         // 4 bytes per glyph
       int glyphOffset;
    };
+
    union {
-      QChar *chars;                            // 2 bytes per glyph
       int charOffset;
    };
-   // =================
-   // 14 bytes per glyph
 
-   // 12 bytes for pointers
+
    int numGlyphs;                               // 4 bytes per item
-   int numChars;                                // 4 bytes per item
    QFont font;                                  // 8 bytes per item
    QColor color;                                // 10 bytes per item
    char useBackendOptimizations : 1;            // 1 byte per item
-   char userDataNeedsUpdate : 1;                //
-   // ================
-   // 51 bytes per item
+   char userDataNeedsUpdate : 1;
 
- private: // Needs special handling in setters, so private to avoid abuse
+
+   QString::const_iterator m_iter;
+   QString::const_iterator m_end;
+
+
+ private:
+   // Needs special handling in setters, so private to avoid abuse
    QFontEngine *m_fontEngine;                     // 4 bytes per item
    QStaticTextUserData *m_userData;               // 8 bytes per item
 

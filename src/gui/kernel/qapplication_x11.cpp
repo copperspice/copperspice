@@ -125,9 +125,6 @@ extern "C" {
 #  include <errno.h>
 #endif
 
-#if _POSIX_VERSION+0 < 200112L && !defined(Q_OS_BSD4)
-# define QT_NO_UNSETENV
-#endif
 
 //#define X_NOT_BROKEN
 #ifdef X_NOT_BROKEN
@@ -947,7 +944,7 @@ bool QApplicationPrivate::x11_apply_settings()
    }
 
    // read library (ie. plugin) path list
-   QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").arg(CS_VERSION >> 16).arg((CS_VERSION & 0xff00) >> 8);
+   QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").formatArg(CS_VERSION >> 16).formatArg((CS_VERSION & 0xff00) >> 8);
 
    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
    if (! pathlist.isEmpty()) {
@@ -2656,15 +2653,11 @@ void qt_init(QApplicationPrivate *priv, int,
 #endif // QT_NO_TABLET
 
       X11->startupId = getenv("DESKTOP_STARTUP_ID");
+
       if (X11->startupId) {
-#ifndef QT_NO_UNSETENV
          unsetenv("DESKTOP_STARTUP_ID");
-#else
-         // it's a small memory leak, however we won't crash if Qt is
-         // unloaded and someones tries to use the envoriment.
-         putenv(strdup("DESKTOP_STARTUP_ID="));
-#endif
       }
+
    } else {
       // read some non-GUI settings when not using the X server...
 
@@ -2673,7 +2666,7 @@ void qt_init(QApplicationPrivate *priv, int,
          settings.beginGroup(QLatin1String("CS"));
 
          // read library (ie. plugin) path list
-         QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").arg(CS_VERSION >> 16).arg((CS_VERSION & 0xff00) >> 8);
+         QString libpathkey = QString::fromLatin1("%1.%2/libraryPath").formatArg(CS_VERSION >> 16).formatArg((CS_VERSION & 0xff00) >> 8);
          QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
          if (! pathlist.isEmpty()) {

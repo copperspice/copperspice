@@ -27,7 +27,7 @@
 #include <qdebug.h>
 #include <qapplication.h>
 #include <qt_mac_p.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qmainwindow.h>
 #include <qdockwidget.h>
 #include <qtoolbar.h>

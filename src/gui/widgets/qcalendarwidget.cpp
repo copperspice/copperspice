@@ -945,7 +945,7 @@ class QCalendarView : public QTableView
    void internalUpdate() {
       updateGeometries();
    }
-   
+
    void setReadOnly(bool enable);
 
    void keyboardSearch(const QString &search)  override {
@@ -1978,8 +1978,10 @@ void QCalendarWidgetPrivate::_q_yearEditingFinished()
    qApp->removeEventFilter(q);
    spaceHolder->changeSize(0, 0);
    yearButton->show();
+
    QDate currentDate = getCurrentDate();
-   currentDate = currentDate.addYears(yearEdit->text().toInt() - currentDate.year());
+   currentDate = currentDate.addYears(yearEdit->text().toInteger<int>() - currentDate.year());
+
    updateCurrentPage(currentDate);
 }
 

@@ -136,7 +136,7 @@ static bool metFatal = false;
 
 static void jump(QtMsgType t, const char *m)
 {
-   if (!qtMessageHandler) {
+   if (! qtMessageHandler) {
       return;
    }
 
@@ -147,26 +147,30 @@ static void jump(QtMsgType t, const char *m)
       default:
          rich = QErrorMessage::tr("Debug Message:");
          break;
+
       case QtWarningMsg:
          rich = QErrorMessage::tr("Warning:");
          break;
+
       case QtFatalMsg:
          rich = QErrorMessage::tr("Fatal Error:");
    }
-   rich = QString::fromLatin1("<p><b>%1</b></p>").arg(rich);
-   rich += Qt::convertFromPlainText(QLatin1String(m), Qt::WhiteSpaceNormal);
+
+   rich  = QString("<p><b>%1</b></p>").formatArg(rich);
+   rich += Qt::convertFromPlainText(QString::fromLatin1(m), Qt::WhiteSpaceNormal);
 
    // ### work around text engine quirk
-   if (rich.endsWith(QLatin1String("</p>"))) {
+   if (rich.endsWith("</p>")) {
       rich.chop(4);
    }
 
-   if (!metFatal) {
+   if (! metFatal) {
       if (QThread::currentThread() == qApp->thread()) {
          qtMessageHandler->showMessage(rich);
       } else {
          QMetaObject::invokeMethod(qtMessageHandler, "showMessage", Qt::QueuedConnection, Q_ARG(const QString &, rich));
       }
+
       metFatal = (t == QtFatalMsg);
    }
 }

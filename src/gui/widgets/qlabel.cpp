@@ -374,59 +374,25 @@ void QLabel::setPicture(const QPicture &picture)
 }
 #endif // QT_NO_PICTURE
 
-/*!
-    Sets the label contents to plain text containing the textual
-    representation of integer \a num. Any previous content is cleared.
-    Does nothing if the integer's string representation is the same as
-    the current contents of the label.
-
-    The buddy shortcut, if any, is disabled.
-
-    \sa setText(), QString::setNum(), setBuddy()
-*/
 
 void QLabel::setNum(int num)
 {
-   QString str;
-   str.setNum(num);
-   setText(str);
+   setText(QString::number(num));
 }
-
-/*!
-    \overload
-
-    Sets the label contents to plain text containing the textual
-    representation of double \a num. Any previous content is cleared.
-    Does nothing if the double's string representation is the same as
-    the current contents of the label.
-
-    The buddy shortcut, if any, is disabled.
-
-    \sa setText(), QString::setNum(), setBuddy()
-*/
 
 void QLabel::setNum(double num)
 {
-   QString str;
-   str.setNum(num);
-   setText(str);
+   setText(QString::number(num));
 }
-
-/*!
-    \property QLabel::alignment
-    \brief the alignment of the label's contents
-
-    By default, the contents of the label are left-aligned and vertically-centered.
-
-    \sa text
-*/
 
 void QLabel::setAlignment(Qt::Alignment alignment)
 {
    Q_D(QLabel);
+
    if (alignment == (d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))) {
       return;
    }
+
    d->align = (d->align & ~(Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))
               | (alignment & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 
@@ -440,18 +406,6 @@ Qt::Alignment QLabel::alignment() const
    return QFlag(d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 }
 
-
-/*!
-    \property QLabel::wordWrap
-    \brief the label's word-wrapping policy
-
-    If this property is true then label text is wrapped where
-    necessary at word-breaks; otherwise it is not wrapped at all.
-
-    By default, word wrap is disabled.
-
-    \sa text
-*/
 void QLabel::setWordWrap(bool on)
 {
    Q_D(QLabel);
@@ -1395,10 +1349,12 @@ Qt::TextFormat QLabel::textFormat() const
 void QLabel::setTextFormat(Qt::TextFormat format)
 {
    Q_D(QLabel);
+
    if (format != d->textformat) {
       d->textformat = format;
       QString t = d->text;
-      if (!t.isNull()) {
+
+      if (! t.isEmpty()) {
          d->text.clear();
          setText(t);
       }
@@ -1426,16 +1382,6 @@ void QLabel::changeEvent(QEvent *ev)
    QFrame::changeEvent(ev);
 }
 
-/*!
-    \property QLabel::scaledContents
-    \brief whether the label will scale its contents to fill all
-    available space.
-
-    When enabled and the label shows a pixmap, it will scale the
-    pixmap to fill the available space.
-
-    This property's default is false.
-*/
 bool QLabel::hasScaledContents() const
 {
    Q_D(const QLabel);
@@ -1445,10 +1391,13 @@ bool QLabel::hasScaledContents() const
 void QLabel::setScaledContents(bool enable)
 {
    Q_D(QLabel);
+
    if ((bool)d->scaledcontents == enable) {
       return;
    }
+
    d->scaledcontents = enable;
+
    if (!enable) {
       delete d->scaledpixmap;
       d->scaledpixmap = 0;
@@ -1526,14 +1475,17 @@ void QLabelPrivate::ensureTextPopulated() const
 #ifndef QT_NO_SHORTCUT
          if (hasShortcut) {
             // Underline the first character that follows an ampersand (and remove the others ampersands)
-            int from = 0;
+            int from   = 0;
             bool found = false;
             QTextCursor cursor;
+
             while (!(cursor = control->document()->find((QLatin1String("&")), from)).isNull()) {
                cursor.deleteChar(); // remove the ampersand
                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
                from = cursor.position();
-               if (!found && cursor.selectedText() != QLatin1String("&")) { //not a second &
+
+               if (!found && cursor.selectedText() != "&") {
+                  //not a second &
                   found = true;
                   shortcutCursor = cursor;
                }

@@ -31,7 +31,7 @@
 #include <qfiledialog_p.h>
 #include <qt_mac_p.h>
 #include <qt_cocoa_helpers_mac_p.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <qbuffer.h>
 #include <qdebug.h>
 #include <qstringlist.h>

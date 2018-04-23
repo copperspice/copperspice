@@ -86,8 +86,7 @@ class QFileDialogPrivate : public QDialogPrivate
    void createMenuActions();
    void createWidgets();
 
-   void init(const QString &directory = QString(), const QString &nameFilter = QString(),
-             const QString &caption = QString());
+   void init(const QString &directory = QString(), const QString &nameFilter = QString(), const QString &caption = QString());
    bool itemViewKeyboardEvent(QKeyEvent *event);
    QString getEnvironmentVariable(const QString &string);
    static QString workingDirectory(const QString &path);
@@ -114,7 +113,7 @@ class QFileDialogPrivate : public QDialogPrivate
       DWORD maxLength;
       QString drive = path.left(3);
 
-      if (::GetVolumeInformation(reinterpret_cast<const wchar_t *>(drive.utf16()), NULL, 0, NULL, &maxLength, NULL, NULL, 0) == FALSE) {
+      if (::GetVolumeInformation(&drive.toStdWString()[0], NULL, 0, NULL, &maxLength, NULL, NULL, 0) == FALSE) {
          return -1;
       }
 
@@ -243,7 +242,7 @@ class QFileDialogPrivate : public QDialogPrivate
    void setNameFilters_sys(const QStringList &filters);
    void selectNameFilter_sys(const QString &filter);
    QString selectedNameFilter_sys() const;
-   
+
 
 #if defined(Q_OS_MAC)
    void *mDelegate;
@@ -265,8 +264,8 @@ class QFileDialogPrivate : public QDialogPrivate
    QString acceptLabel;
 
    QPointer<QObject> receiverToDisconnectOnClose;
-   QByteArray memberToDisconnectOnClose;
-   QByteArray signalToDisconnectOnClose;
+   QString memberToDisconnectOnClose;
+   QString signalToDisconnectOnClose;
 
    QFileDialog::Options opts;
 

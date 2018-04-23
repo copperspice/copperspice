@@ -40,23 +40,31 @@ void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
 {
    Q_Q(QGraphicsLayout);
    int n =  q->count();
-   //bool mwVisible = mw && mw->isVisible();
+
+   // bool mwVisible = mw && mw->isVisible();
+
    for (int i = 0; i < n; ++i) {
       QGraphicsLayoutItem *layoutChild = q->itemAt(i);
+
       if (!layoutChild) {
          // Skip stretch items
          continue;
       }
+
       if (layoutChild->isLayout()) {
          QGraphicsLayout *l = static_cast<QGraphicsLayout *>(layoutChild);
          l->d_func()->reparentChildItems(newParent);
+
       } else if (QGraphicsItem *itemChild = layoutChild->graphicsItem()) {
          QGraphicsItem *childParent = itemChild->parentItem();
+
 #ifdef QT_DEBUG
          if (childParent && childParent != newParent && itemChild->isWidget() && qt_graphicsLayoutDebug()) {
+
             QGraphicsWidget *w = static_cast<QGraphicsWidget *>(layoutChild);
+
             qWarning("QGraphicsLayout::addChildLayout: widget %s \"%s\" in wrong parent; moved to correct parent",
-                     w->metaObject()->className(), w->objectName().toLocal8Bit().constData());
+                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
          if (childParent != newParent) {
@@ -74,6 +82,7 @@ void QGraphicsLayoutPrivate::getMargin(qreal *result, qreal userMargin, QStyle::
    Q_Q(const QGraphicsLayout);
 
    QGraphicsLayoutItem *parent = q->parentLayoutItem();
+
    if (userMargin >= 0.0) {
       *result = userMargin;
    } else if (!parent) {
@@ -134,20 +143,25 @@ static bool removeLayoutItemFromLayout(QGraphicsLayout *lay, QGraphicsLayoutItem
 void QGraphicsLayoutPrivate::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
 {
    Q_Q(QGraphicsLayout);
+
    if (QGraphicsLayoutItem *maybeLayout = layoutItem->parentLayoutItem()) {
       if (maybeLayout->isLayout()) {
          removeLayoutItemFromLayout(static_cast<QGraphicsLayout *>(maybeLayout), layoutItem);
       }
    }
+
    layoutItem->setParentLayoutItem(q);
+
    if (layoutItem->isLayout()) {
       if (QGraphicsItem *parItem = parentItem()) {
          static_cast<QGraphicsLayout *>(layoutItem)->d_func()->reparentChildItems(parItem);
       }
+
    } else {
       if (QGraphicsItem *item = layoutItem->graphicsItem()) {
          QGraphicsItem *newParent = parentItem();
          QGraphicsItem *oldParent = item->parentItem();
+
          if (oldParent == newParent || !newParent) {
             return;
          }
@@ -156,7 +170,7 @@ void QGraphicsLayoutPrivate::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
          if (oldParent && item->isWidget()) {
             QGraphicsWidget *w = static_cast<QGraphicsWidget *>(item);
             qWarning("QGraphicsLayout::addChildLayoutItem: %s \"%s\" in wrong parent; moved to correct parent",
-                     w->metaObject()->className(), w->objectName().toLocal8Bit().constData());
+                     csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
 
@@ -169,6 +183,7 @@ void QGraphicsLayoutPrivate::activateRecursive(QGraphicsLayoutItem *item)
 {
    if (item->isLayout()) {
       QGraphicsLayout *layout = static_cast<QGraphicsLayout *>(item);
+
       if (layout->d_func()->activated) {
          if (QGraphicsLayout::instantInvalidatePropagation()) {
             return;

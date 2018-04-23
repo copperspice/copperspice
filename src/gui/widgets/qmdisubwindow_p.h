@@ -265,7 +265,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
 #ifndef QT_NO_ACTION
    void setEnabled(WindowStateAction, bool enable = true);
 #ifndef QT_NO_MENU
-   void addToSystemMenu(WindowStateAction, const QString &text, const char *slot);
+   void addToSystemMenu(WindowStateAction, const QString &text, const QString &slot);
 #endif
 #endif
 

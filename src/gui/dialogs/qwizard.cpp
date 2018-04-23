@@ -93,30 +93,40 @@ static QWidget *iWantTheFocus(QWidget *ancestor)
    return 0;
 }
 
-static bool objectInheritsXAndXIsCloserThanY(const QObject *object, const QByteArray &classX,
-      const QByteArray &classY)
+static bool objectInheritsXAndXIsCloserThanY(const QObject *object, const QString &classX, const QString &classY)
 {
    const QMetaObject *metaObject = object->metaObject();
+
    while (metaObject) {
       if (metaObject->className() == classX) {
          return true;
       }
+
       if (metaObject->className() == classY) {
          return false;
       }
+
       metaObject = metaObject->superClass();
    }
+
    return false;
 }
 
+// If you modify this list, make sure to update the documentation (and the auto test)
 const int NFallbackDefaultProperties = 7;
 
-const struct {
-   const char *className;
-   const char *property;
-   const char *changedSignal;
-} fallbackProperties[NFallbackDefaultProperties] = {
-   // If you modify this list, make sure to update the documentation (and the auto test)
+struct FallbackData {
+
+   FallbackData(const char *var1, const char *var2, const char *var3)
+      : className(QString::fromLatin1(var1)), property(QString::fromLatin1(var2)), changedSignal(QString::fromLatin1(var3))
+   { }
+
+   const QString className;
+   const QString property;
+   const QString changedSignal;
+};
+
+const FallbackData fallbackProperties[NFallbackDefaultProperties] = {
    { "QAbstractButton", "checked",       "toggled(bool)"              },
    { "QAbstractSlider", "value",         "valueChanged(int)"          },
    { "QComboBox",       "currentIndex",  "currentIndexChanged(int)"   },
@@ -129,41 +139,42 @@ const struct {
 class QWizardDefaultProperty
 {
  public:
-   QByteArray className;
-   QByteArray property;
-   QByteArray changedSignal;
+   QString className;
+   QString property;
+   QString changedSignal;
 
    inline QWizardDefaultProperty() {}
-   inline QWizardDefaultProperty(const char *className, const char *property,
-                                 const char *changedSignal)
+   inline QWizardDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
       : className(className), property(property), changedSignal(changedSignal) {}
 };
 
 class QWizardField
 {
  public:
-   inline QWizardField() {}
-   QWizardField(QWizardPage *page, const QString &spec, QObject *object, const char *property,
-                const char *changedSignal);
+   QWizardField() {}
+
+   QWizardField(QWizardPage *page, const QString &spec, QObject *object, const QString &property, const QString &changedSignal);
 
    void resolve(const QVector<QWizardDefaultProperty> &defaultPropertyTable);
    void findProperty(const QWizardDefaultProperty *properties, int propertyCount);
 
    QWizardPage *page;
-   QString name;
-   bool mandatory;
    QObject *object;
-   QByteArray property;
-   QByteArray changedSignal;
+
+   bool mandatory;
+
+   QString  name;
+   QString  property;
+   QString  changedSignal;
    QVariant initialValue;
 };
 
 QWizardField::QWizardField(QWizardPage *page, const QString &spec, QObject *object,
-                           const char *property, const char *changedSignal)
-   : page(page), name(spec), mandatory(false), object(object), property(property),
-     changedSignal(changedSignal)
+                           const QString &property, const QString &changedSignal)
+
+   : page(page), object(object), mandatory(false), name(spec), property(property), changedSignal(changedSignal)
 {
-   if (name.endsWith(QLatin1Char('*'))) {
+   if (name.endsWith('*')) {
       name.chop(1);
       mandatory = true;
    }
@@ -174,17 +185,18 @@ void QWizardField::resolve(const QVector<QWizardDefaultProperty> &defaultPropert
    if (property.isEmpty()) {
       findProperty(defaultPropertyTable.constData(), defaultPropertyTable.count());
    }
+
    initialValue = object->property(property);
 }
 
 void QWizardField::findProperty(const QWizardDefaultProperty *properties, int propertyCount)
 {
-   QByteArray className;
+   QString className;
 
    for (int i = 0; i < propertyCount; ++i) {
       if (objectInheritsXAndXIsCloserThanY(object, properties[i].className, className)) {
-         className = properties[i].className;
-         property = properties[i].property;
+         className    = properties[i].className;
+         property      = properties[i].property;
          changedSignal = properties[i].changedSignal;
       }
    }
@@ -220,6 +232,7 @@ class QWizardLayoutInfo
    bool sideWidget;
 
    bool operator==(const QWizardLayoutInfo &other);
+
    inline bool operator!=(const QWizardLayoutInfo &other) {
       return !operator==(other);
    }
@@ -265,12 +278,12 @@ class QWizardHeader : public QWidget
  protected:
    void paintEvent(QPaintEvent *event) override;
 
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
  private:
+
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    bool vistaDisabled() const;
 #endif
 
- private:
    QLabel *titleLabel;
    QLabel *subTitleLabel;
    QLabel *logoLabel;
@@ -600,6 +613,7 @@ class QWizardPrivate : public QDialogPrivate
    void _q_updateButtonStates();
    void _q_handleFieldObjectDestroyed(QObject *);
    void setStyle(QStyle *style);
+
 #ifdef Q_OS_MAC
    static QPixmap findDefaultBackgroundPixmap();
 #endif
@@ -610,6 +624,7 @@ class QWizardPrivate : public QDialogPrivate
    QVector<QWizardDefaultProperty> defaultPropertyTable;
    QList<int> history;
    QSet<int> initialized; // ### remove and move bit to QWizardPage?
+
    int start;
    bool startSetByUser;
    int current;
@@ -788,7 +803,7 @@ void QWizardPrivate::addField(const QWizardField &field)
    fields += myField;
 
    if (myField.mandatory && !myField.changedSignal.isEmpty()) {
-      QObject::connect(myField.object, myField.changedSignal.constData(), myField.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
    QObject::connect(myField.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));
@@ -802,7 +817,7 @@ void QWizardPrivate::removeFieldAt(int index)
    fieldIndexMap.remove(field.name);
 
    if (field.mandatory && !field.changedSignal.isEmpty()) {
-      QObject::disconnect(field.object, field.changedSignal.constData(), field.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
    QObject::disconnect(field.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));
@@ -886,7 +901,7 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
 }
 
 // keep in sync with QWizard::WizardButton
-static const char *const buttonSlots[QWizard::NStandardButtons] = {
+static const QString buttonSlots[QWizard::NStandardButtons] = {
    "back()", "next()", "next()", "accept()", "reject()", "helpRequested()"
 };
 
@@ -2734,7 +2749,7 @@ QString QWizard::buttonText(WizardButton which) const
    }
 
    const QString defText = buttonDefaultText(d->wizStyle, which, d);
-   if (!defText.isNull()) {
+   if (! defText.isEmpty()) {
       return defText;
    }
 
@@ -2950,43 +2965,20 @@ QPixmap QWizard::pixmap(WizardPixmap which) const
 
     \sa QWizardPage::registerField()
 */
-void QWizard::setDefaultProperty(const char *className, const char *property,
-                                 const char *changedSignal)
+void QWizard::setDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
 {
    Q_D(QWizard);
+
    for (int i = d->defaultPropertyTable.count() - 1; i >= 0; --i) {
-      if (qstrcmp(d->defaultPropertyTable.at(i).className, className) == 0) {
+      if (d->defaultPropertyTable.at(i).className == className) {
          d->defaultPropertyTable.remove(i);
          break;
       }
    }
+
    d->defaultPropertyTable.append(QWizardDefaultProperty(className, property, changedSignal));
 }
 
-/*!
-    \since 4.7
-
-    Sets the given \a widget to be shown on the left side of the wizard.
-    For styles which use the WatermarkPixmap (ClassicStyle and ModernStyle)
-    the side widget is displayed on top of the watermark, for other styles
-    or when the watermark is not provided the side widget is displayed
-    on the left side of the wizard.
-
-    Passing 0 shows no side widget.
-
-    When the \a widget is not 0 the wizard reparents it.
-
-    Any previous side widget is hidden.
-
-    You may call setSideWidget() with the same widget at different
-    times.
-
-    All widgets set here will be deleted by the wizard when it is
-    destroyed unless you separately reparent the widget after setting
-    some other side widget (or 0).
-
-    By default, no side widget is present.
-*/
 void QWizard::setSideWidget(QWidget *widget)
 {
    Q_D(QWizard);
@@ -3891,111 +3883,31 @@ int QWizardPage::nextId() const
    return -1;
 }
 
-/*!
-    \fn void QWizardPage::completeChanged()
-
-    This signal is emitted whenever the complete state of the page
-    (i.e., the value of isComplete()) changes.
-
-    If you reimplement isComplete(), make sure to emit
-    completeChanged() whenever the value of isComplete() changes, to
-    ensure that QWizard updates the enabled or disabled state of its
-    buttons.
-
-    \sa isComplete()
-*/
-
-/*!
-    Sets the value of the field called \a name to \a value.
-
-    This function can be used to set fields on any page of the wizard.
-    It is equivalent to calling
-    wizard()->\l{QWizard::setField()}{setField(\a name, \a value)}.
-
-    \sa QWizard::setField(), field(), registerField()
-*/
 void QWizardPage::setField(const QString &name, const QVariant &value)
 {
    Q_D(QWizardPage);
+
    if (!d->wizard) {
       return;
    }
    d->wizard->setField(name, value);
 }
 
-/*!
-    Returns the value of the field called \a name.
-
-    This function can be used to access fields on any page of the
-    wizard. It is equivalent to calling
-    wizard()->\l{QWizard::field()}{field(\a name)}.
-
-    Example:
-
-    \snippet examples/dialogs/classwizard/classwizard.cpp 17
-
-    \sa QWizard::field(), setField(), registerField()
-*/
 QVariant QWizardPage::field(const QString &name) const
 {
    Q_D(const QWizardPage);
-   if (!d->wizard) {
+
+   if (! d->wizard) {
       return QVariant();
    }
    return d->wizard->field(name);
 }
 
-/*!
-    Creates a field called \a name associated with the given \a
-    property of the given \a widget. From then on, that property
-    becomes accessible using field() and setField().
-
-    Fields are global to the entire wizard and make it easy for any
-    single page to access information stored by another page, without
-    having to put all the logic in QWizard or having the pages know
-    explicitly about each other.
-
-    If \a name ends with an asterisk (\c *), the field is a mandatory
-    field. When a page has mandatory fields, the \gui Next and/or
-    \gui Finish buttons are enabled only when all mandatory fields
-    are filled. This requires a \a changedSignal to be specified, to
-    tell QWizard to recheck the value stored by the mandatory field.
-
-    QWizard knows the most common Qt widgets. For these (or their
-    subclasses), you don't need to specify a \a property or a \a
-    changedSignal. The table below lists these widgets:
-
-    \table
-    \header \o Widget          \o Property                            \o Change Notification Signal
-    \row    \o QAbstractButton \o bool \l{QAbstractButton::}{checked} \o \l{QAbstractButton::}{toggled()}
-    \row    \o QAbstractSlider \o int \l{QAbstractSlider::}{value}    \o \l{QAbstractSlider::}{valueChanged()}
-    \row    \o QComboBox       \o int \l{QComboBox::}{currentIndex}   \o \l{QComboBox::}{currentIndexChanged()}
-    \row    \o QDateTimeEdit   \o QDateTime \l{QDateTimeEdit::}{dateTime} \o \l{QDateTimeEdit::}{dateTimeChanged()}
-    \row    \o QLineEdit       \o QString \l{QLineEdit::}{text}       \o \l{QLineEdit::}{textChanged()}
-    \row    \o QListWidget     \o int \l{QListWidget::}{currentRow}   \o \l{QListWidget::}{currentRowChanged()}
-    \row    \o QSpinBox        \o int \l{QSpinBox::}{value}           \o \l{QSpinBox::}{valueChanged()}
-    \endtable
-
-    You can use QWizard::setDefaultProperty() to add entries to this
-    table or to override existing entries.
-
-    To consider a field "filled", QWizard simply checks that their
-    current value doesn't equal their original value (the value they
-    had before initializePage() was called). For QLineEdit, it also
-    checks that
-    \l{QLineEdit::hasAcceptableInput()}{hasAcceptableInput()} returns
-    true, to honor any validator or mask.
-
-    QWizard's mandatory field mechanism is provided for convenience.
-    It can be bypassed by reimplementing QWizardPage::isComplete().
-
-    \sa field(), setField(), QWizard::setDefaultProperty()
-*/
-void QWizardPage::registerField(const QString &name, QWidget *widget, const char *property,
-                                const char *changedSignal)
+void QWizardPage::registerField(const QString &name, QWidget *widget, const QString &property, const QString &changedSignal)
 {
    Q_D(QWizardPage);
    QWizardField field(this, name, widget, property, changedSignal);
+
    if (d->wizard) {
       d->wizard->d_func()->addField(field);
    } else {
@@ -4003,12 +3915,6 @@ void QWizardPage::registerField(const QString &name, QWidget *widget, const char
    }
 }
 
-/*!
-    Returns the wizard associated with this page, or 0 if this page
-    hasn't been inserted into a QWizard yet.
-
-    \sa QWizard::addPage(), QWizard::setPage()
-*/
 QWizard *QWizardPage::wizard() const
 {
    Q_D(const QWizardPage);

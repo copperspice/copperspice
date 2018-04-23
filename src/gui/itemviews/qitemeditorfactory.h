@@ -40,23 +40,25 @@ class Q_GUI_EXPORT QItemEditorCreatorBase
    virtual ~QItemEditorCreatorBase() {}
 
    virtual QWidget *createWidget(QWidget *parent) const = 0;
-   virtual QByteArray valuePropertyName() const = 0;
+   virtual QString valuePropertyName() const = 0;
 };
 
 template <class T>
 class QItemEditorCreator : public QItemEditorCreatorBase
 {
  public:
-   inline QItemEditorCreator(const QByteArray &valuePropertyName);
-   inline QWidget *createWidget(QWidget *parent) const {
+   inline QItemEditorCreator(const QString &valuePropertyName);
+
+   inline QWidget *createWidget(QWidget *parent) const override {
       return new T(parent);
    }
-   inline QByteArray valuePropertyName() const {
+
+   inline QString valuePropertyName() const override {
       return propertyName;
    }
 
  private:
-   QByteArray propertyName;
+   QString propertyName;
 };
 
 template <class T>
@@ -66,20 +68,22 @@ class QStandardItemEditorCreator: public QItemEditorCreatorBase
    inline QStandardItemEditorCreator()
       : propertyName(T::staticMetaObject.userProperty().name()) {
    }
-   inline QWidget *createWidget(QWidget *parent) const {
+
+   inline QWidget *createWidget(QWidget *parent) const override {
       return new T(parent);
    }
-   inline QByteArray valuePropertyName() const {
+
+   inline QString valuePropertyName() const override {
       return propertyName;
    }
 
  private:
-   QByteArray propertyName;
+   QString propertyName;
 };
 
 
 template <class T>
-Q_INLINE_TEMPLATE QItemEditorCreator<T>::QItemEditorCreator(const QByteArray &avaluePropertyName)
+QItemEditorCreator<T>::QItemEditorCreator(const QString &avaluePropertyName)
    : propertyName(avaluePropertyName) {}
 
 class Q_GUI_EXPORT QItemEditorFactory
@@ -89,7 +93,7 @@ class Q_GUI_EXPORT QItemEditorFactory
    virtual ~QItemEditorFactory();
 
    virtual QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
-   virtual QByteArray valuePropertyName(QVariant::Type type) const;
+   virtual QString valuePropertyName(QVariant::Type type) const;
 
    void registerEditor(QVariant::Type type, QItemEditorCreatorBase *creator);
 

@@ -23,16 +23,13 @@
 #ifndef QABSTRACTPRINTDIALOG_H
 #define QABSTRACTPRINTDIALOG_H
 
-#include <QtGui/qdialog.h>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 #ifndef QT_NO_PRINTER
 
 class QAbstractPrintDialogPrivate;
 class QPrinter;
 
-// ### Qt5/remove this class
 class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 {
    GUI_CS_OBJECT(QAbstractPrintDialog)
@@ -99,7 +96,5 @@ class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractPrintDialog::PrintDialogOptions)
 
 #endif // QT_NO_PRINTER
-
-QT_END_NAMESPACE
 
 #endif // QABSTRACTPRINTDIALOG_H

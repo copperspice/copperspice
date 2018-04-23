@@ -155,7 +155,7 @@ class Q_GUI_EXPORT QWizard : public QDialog
    void setSideWidget(QWidget *widget);
    QWidget *sideWidget() const;
 
-   void setDefaultProperty(const char *className, const char *property, const char *changedSignal);
+   void setDefaultProperty(const QString &className, const QString &property, const QString &changedSignal);
 
    void setVisible(bool visible) override;
    QSize sizeHint() const override;
@@ -245,8 +245,7 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
  protected:
    void setField(const QString &name, const QVariant &value);
    QVariant field(const QString &name) const;
-   void registerField(const QString &name, QWidget *widget, const char *property = 0,
-                      const char *changedSignal = 0);
+   void registerField(const QString &name, QWidget *widget, const QString &property = QString(), const QString &changedSignal = QString());
    QWizard *wizard() const;
 
  private:

@@ -43,22 +43,32 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 
    GUI_CS_PROPERTY_READ(wrapping, wrapping)
    GUI_CS_PROPERTY_WRITE(wrapping, setWrapping)
+
    GUI_CS_PROPERTY_READ(frame, hasFrame)
    GUI_CS_PROPERTY_WRITE(frame, setFrame)
+
    GUI_CS_PROPERTY_READ(alignment, alignment)
    GUI_CS_PROPERTY_WRITE(alignment, setAlignment)
+
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+
    GUI_CS_PROPERTY_READ(buttonSymbols, buttonSymbols)
    GUI_CS_PROPERTY_WRITE(buttonSymbols, setButtonSymbols)
+
    GUI_CS_PROPERTY_READ(specialValueText, specialValueText)
    GUI_CS_PROPERTY_WRITE(specialValueText, setSpecialValueText)
+
    GUI_CS_PROPERTY_READ(text, text)
+
    GUI_CS_PROPERTY_READ(accelerated, isAccelerated)
    GUI_CS_PROPERTY_WRITE(accelerated, setAccelerated)
+
    GUI_CS_PROPERTY_READ(correctionMode, correctionMode)
    GUI_CS_PROPERTY_WRITE(correctionMode, setCorrectionMode)
+
    GUI_CS_PROPERTY_READ(acceptableInput, hasAcceptableInput)
+
    GUI_CS_PROPERTY_READ(keyboardTracking, keyboardTracking)
    GUI_CS_PROPERTY_WRITE(keyboardTracking, setKeyboardTracking)
 
@@ -66,40 +76,37 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    explicit QAbstractSpinBox(QWidget *parent = nullptr);
    ~QAbstractSpinBox();
 
-   enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01,
-                          StepDownEnabled = 0x02
-                        };
+   enum StepEnabledFlag { StepNone = 0x00, StepUpEnabled = 0x01, StepDownEnabled = 0x02 };
    using StepEnabled = QFlags<StepEnabledFlag>;
 
-   enum ButtonSymbols { UpDownArrows, PlusMinus, NoButtons };
-
-   ButtonSymbols buttonSymbols() const;
-   void setButtonSymbols(ButtonSymbols bs);
-
-   enum CorrectionMode  { CorrectToPreviousValue, CorrectToNearestValue };
-
-   void setCorrectionMode(CorrectionMode cm);
-   CorrectionMode correctionMode() const;
+   enum ButtonSymbols  { UpDownArrows, PlusMinus, NoButtons };
+   enum CorrectionMode { CorrectToPreviousValue, CorrectToNearestValue };
 
    bool hasAcceptableInput() const;
    QString text() const;
 
+   void setButtonSymbols(ButtonSymbols symbols);
+   ButtonSymbols buttonSymbols() const;
+
+   void setCorrectionMode(CorrectionMode cm);
+   CorrectionMode correctionMode() const;
+
    QString specialValueText() const;
    void setSpecialValueText(const QString &txt);
 
+   void setWrapping(bool wrapping);
    bool wrapping() const;
-   void setWrapping(bool w);
 
-   void setReadOnly(bool r);
+   void setReadOnly(bool enable);
    bool isReadOnly() const;
 
-   void setKeyboardTracking(bool kt);
+   void setKeyboardTracking(bool enable);
    bool keyboardTracking() const;
 
    void setAlignment(Qt::Alignment flag);
    Qt::Alignment alignment() const;
 
-   void setFrame(bool);
+   void setFrame(bool enable);
    bool hasFrame() const;
 
    void setAccelerated(bool on);

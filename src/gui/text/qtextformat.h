@@ -23,18 +23,16 @@
 #ifndef QTEXTFORMAT_H
 #define QTEXTFORMAT_H
 
-#include <QtGui/qcolor.h>
-#include <QtGui/qfont.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qvariant.h>
-#include <QtGui/qpen.h>
-#include <QtGui/qbrush.h>
-#include <QtGui/qtextoption.h>
+#include <qcolor.h>
+#include <qfont.h>
+#include <qshareddata.h>
+#include <qvector.h>
+#include <qvariant.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qtextoption.h>
+#include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
-class QString;
 class QVariant;
 class QFont;
 class QTextFormatCollection;
@@ -52,10 +50,8 @@ class QTextCursor;
 class QTextDocument;
 class QTextLength;
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
-#endif
 
 class Q_GUI_EXPORT QTextLength
 {
@@ -1160,7 +1156,5 @@ inline void QTextTableCellFormat::setPadding(qreal padding)
    setLeftPadding(padding);
    setRightPadding(padding);
 }
-
-QT_END_NAMESPACE
 
 #endif // QTEXTFORMAT_H

@@ -1775,7 +1775,7 @@ QStringList QCompleter::splitPath(const QString &path) const
    }
 #endif
 
-   QRegExp re(QLatin1Char('[') + QRegExp::escape(sep) + QLatin1Char(']'));
+   QRegularExpression re(QLatin1Char('[') + QRegularExpression::escape(sep) + QLatin1Char(']'));
    QStringList parts = pathCopy.split(re);
 
 #if defined(Q_OS_WIN)

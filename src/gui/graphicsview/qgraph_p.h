@@ -192,19 +192,19 @@ class Graph
             bool forward = data->from == v;
             if (forward) {
                edges += QString::fromLatin1("\"%1\"->\"%2\" [label=\"[%3,%4,%5,%6,%7]\" color=\"#000000\"] \n")
-                        .arg(v->toString())
-                        .arg(v1->toString())
-                        .arg(data->minSize)
-                        .arg(data->minPrefSize)
-                        .arg(data->prefSize)
-                        .arg(data->maxPrefSize)
-                        .arg(data->maxSize)
+                        .formatArg(v->toString())
+                        .formatArg(v1->toString())
+                        .formatArg(data->minSize)
+                        .formatArg(data->minPrefSize)
+                        .formatArg(data->prefSize)
+                        .formatArg(data->maxPrefSize)
+                        .formatArg(data->maxSize)
                         ;
             }
          }
-         strVertices += QString::fromLatin1("\"%1\" [label=\"%2\"]\n").arg(v->toString()).arg(v->toString());
+         strVertices += QString::fromLatin1("\"%1\" [label=\"%2\"]\n").formatArg(v->toString()).formatArg(v->toString());
       }
-      return QString::fromLatin1("%1\n%2\n").arg(strVertices).arg(edges);
+      return QString::fromLatin1("%1\n%2\n").formatArg(strVertices).formatArg(edges);
    }
 #endif
 

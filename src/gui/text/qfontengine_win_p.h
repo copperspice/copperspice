@@ -41,8 +41,7 @@ class QFontEngineWin : public QFontEngine
    int synthesized() const override;
    QFixed emSquareSize() const override;
 
-   bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-         QTextEngine::ShaperFlags flags) const override;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
 
    void recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFlags) const override;
 
@@ -70,10 +69,8 @@ class QFontEngineWin : public QFontEngine
    qreal minLeftBearing() const override;
    qreal minRightBearing() const override;
 
+   bool canRender(QStringView str) override;
    const char *name() const override;
-
-   bool canRender(const QChar *string, int len) override;
-
    Type type() const override;
 
    QImage alphaMapForGlyph(glyph_t t) override {
@@ -89,7 +86,7 @@ class QFontEngineWin : public QFontEngine
    virtual void getGlyphBearings(glyph_t glyph, qreal *leftBearing = 0, qreal *rightBearing = 0);
 #endif
 
-   int getGlyphIndexes(const QChar *ch, int numChars, QGlyphLayout *glyphs, bool mirrored) const;
+   int getGlyphIndexes(QStringView str, QGlyphLayout *glyphs, bool mirrored) const;
    void getCMap();
 
    bool getOutlineMetrics(glyph_t glyph, const QTransform &t, glyph_metrics_t *metrics) const;

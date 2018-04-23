@@ -1889,19 +1889,22 @@ bool QWorkspace::event(QEvent *e)
 {
 #ifndef QT_NO_SHORTCUT
    Q_D(QWorkspace);
+
    if (e->type() == QEvent::Shortcut) {
       QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
-      const char *theSlot = d->shortcutMap.value(se->shortcutId(), 0);
+      QString theSlot = QString::fromUtf8(d->shortcutMap.value(se->shortcutId(), 0));
 
-      if (theSlot) {
+      if (! theSlot.isEmpty()) {
          QMetaObject::invokeMethod(this, theSlot);
       }
 
    } else
 #endif
+
       if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
          return true;
       }
+
    return QWidget::event(e);
 }
 
@@ -1957,7 +1960,7 @@ bool QWorkspace::eventFilter(QObject *o, QEvent *e)
             if (d->maxWindow && d->maxWindow->windowWidget() && d->topTitle.size()) {
                d->inTitleChange = true;
                window()->setWindowTitle(tr("%1 - [%2]")
-                                        .arg(d->topTitle).arg(d->maxWindow->windowWidget()->windowTitle()));
+                                        .formatArg(d->topTitle).formatArg(d->maxWindow->windowWidget()->windowTitle()));
                d->inTitleChange = false;
             }
          }
@@ -2019,7 +2022,7 @@ void QWorkspacePrivate::showMaximizeControls()
       QString docTitle = maxWindow->windowWidget()->windowTitle();
       if (topTitle.size() && docTitle.size()) {
          inTitleChange = true;
-         q->window()->setWindowTitle(QWorkspace::tr("%1 - [%2]").arg(topTitle).arg(docTitle));
+         q->window()->setWindowTitle(QWorkspace::tr("%1 - [%2]").formatArg(topTitle).formatArg(docTitle));
          inTitleChange = false;
       }
       q->window()->setWindowModified(maxWindow->windowWidget()->isWindowModified());

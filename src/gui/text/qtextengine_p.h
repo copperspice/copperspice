@@ -23,20 +23,20 @@
 #ifndef QTEXTENGINE_P_H
 #define QTEXTENGINE_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qnamespace.h>
-#include <QtGui/qtextlayout.h>
+#include <qglobal.h>
+#include <qstring.h>
+#include <qvarlengtharray.h>
+#include <qnamespace.h>
+#include <qtextlayout.h>
 #include <qtextformat_p.h>
 #include <qfont_p.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qtextobject.h>
-#include <QtGui/qtextoption.h>
-#include <QtGui/qtextcursor.h>
-#include <QtCore/qset.h>
-#include <QtCore/qdebug.h>
+#include <qvector.h>
+#include <qpaintengine.h>
+#include <qtextobject.h>
+#include <qtextoption.h>
+#include <qtextcursor.h>
+#include <qset.h>
+#include <qdebug.h>
 
 #ifndef QT_BUILD_COMPAT_LIB
 #include <qtextdocument_p.h>
@@ -50,7 +50,6 @@ QT_BEGIN_NAMESPACE
 
 class QFontPrivate;
 class QFontEngine;
-class QString;
 class QPainter;
 class QAbstractTextDocumentLayout;
 
@@ -261,22 +260,23 @@ template <int N> struct QGlyphLayoutArray : public QGlyphLayout {
  private:
    void *buffer[(N * (sizeof(HB_Glyph) + sizeof(HB_GlyphAttributes)
                       + sizeof(QFixed) + sizeof(QFixed) + sizeof(QFixedPoint)
-                      + sizeof(QGlyphJustification)))
-                / sizeof(void *) + 1];
+                      + sizeof(QGlyphJustification))) / sizeof(void *) + 1];
 };
 
 struct QScriptItem;
-// Internal QTextItem
+
+// internal QTextItem
 class QTextItemInt : public QTextItem
 {
  public:
    inline QTextItemInt()
-      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), num_chars(0), chars(0),
-        logClusters(0), f(0), fontEngine(0) {
+      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(0), f(0), fontEngine(0) {
    }
+
    QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format = QTextCharFormat());
-   QTextItemInt(const QGlyphLayout &g, QFont *font, const QChar *chars, int numChars, QFontEngine *fe,
-                const QTextCharFormat &format = QTextCharFormat());
+
+   QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin, QString::const_iterator end,
+                  QFontEngine *fe, const QTextCharFormat &format = QTextCharFormat());
 
    // copy the structure items, adjusting the glyphs arrays to the right subarrays.
    // the width of the returned QTextItemInt is not adjusted, for speed reasons
@@ -291,8 +291,10 @@ class QTextItemInt : public QTextItem
    bool justified;
    QTextCharFormat::UnderlineStyle underlineStyle;
    const QTextCharFormat charFormat;
-   int num_chars;
-   const QChar *chars;
+
+   QString::const_iterator m_iter;
+   QString::const_iterator m_end;
+
    const unsigned short *logClusters;
    const QFont *f;
 

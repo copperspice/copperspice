@@ -65,8 +65,7 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    ColorDialogOptions options() const;
 
    using QDialog::open;
-
-   void open(QObject *receiver, const char *member);
+   void open(QObject *receiver, const QString &member);
 
    void setVisible(bool visible) override;
 

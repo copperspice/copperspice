@@ -30,11 +30,10 @@
 
 QT_BEGIN_NAMESPACE
 
-// hack - awful implementation from Qt
+// hack - awful implementation
 class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 {
 };
-
 
 QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
    : QDialog(*(new QAbstractPrintDialogPrivate), parent)
@@ -278,6 +277,7 @@ void QAbstractPrintDialog::setOptionTabs(const QList<QWidget *> &tabs)
 void QPrintDialog::done(int result)
 {
    Q_D(QPrintDialog);
+
    QDialog::done(result);
 
    if (result == Accepted) {
@@ -285,29 +285,22 @@ void QPrintDialog::done(int result)
    }
 
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(accepted(QPrinter *)), d->receiverToDisconnectOnClose,
-                  d->memberToDisconnectOnClose.constData());
-      d->receiverToDisconnectOnClose = 0;
+      disconnect(this, SIGNAL(accepted(QPrinter *)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+
+      d->receiverToDisconnectOnClose = nullptr;
    }
 
    d->memberToDisconnectOnClose.clear();
 }
 
-/*!
-    \since 4.5
-    \overload
-
-    Opens the dialog and connects its accepted() signal to the slot specified
-    by \a receiver and \a member.
-
-    The signal will be disconnected from the slot when the dialog is closed.
-*/
-void QPrintDialog::open(QObject *receiver, const char *member)
+void QPrintDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QPrintDialog);
+
    connect(this, SIGNAL(accepted(QPrinter *)), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
-   d->memberToDisconnectOnClose = member;
+   d->memberToDisconnectOnClose   = member;
+
    QDialog::open();
 }
 

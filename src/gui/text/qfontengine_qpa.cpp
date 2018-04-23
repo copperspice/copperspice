@@ -207,8 +207,6 @@ QVariant QFontEngineQPA::extractHeaderField(const uchar *data, HeaderTag request
    return QVariant();
 }
 
-
-
 static inline unsigned int getChar(const QChar *str, int &i, const int len)
 {
    uint ucs4 = str[i].unicode();
@@ -500,25 +498,29 @@ QFontEngine::Type QFontEngineQPA::type() const
    return QFontEngine::QPF2;
 }
 
-bool QFontEngineQPA::canRender(const QChar *string, int len)
+bool QFontEngineQPA::canRender(QStringView str)
 {
    const uchar *cmap = externalCMap ? externalCMap : (fontData + cmapOffset);
 
    if (symbol) {
       for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
-         glyph_t g = getTrueTypeGlyphIndex(cmap, uc);
-         if (!g && uc < 0x100) {
+         unsigned int uc = getChar(str, i, len);
+         glyph_t g    = getTrueTypeGlyphIndex(cmap, uc);
+
+         if (! g && uc < 0x100) {
             g = getTrueTypeGlyphIndex(cmap, uc + 0xf000);
          }
-         if (!g) {
+
+         if (! g) {
             return false;
          }
       }
+
    } else {
       for (int i = 0; i < len; ++i) {
-         unsigned int uc = getChar(string, i, len);
-         if (!getTrueTypeGlyphIndex(cmap, uc)) {
+         unsigned int uc = getChar(str, i, len);
+
+         if (! getTrueTypeGlyphIndex(cmap, uc)) {
             return false;
          }
       }

@@ -626,10 +626,11 @@ const char *QFontEngineXLFD::name() const
    return _name.constData();
 }
 
-bool QFontEngineXLFD::canRender(const QChar *string, int len)
+bool QFontEngineXLFD::canRender(QStringView str)
 {
    QVarLengthGlyphLayoutArray glyphs(len);
    int nglyphs = len;
+
    if (stringToCMap(string, len, &glyphs, &nglyphs, 0) == false) {
       glyphs.resize(nglyphs);
       stringToCMap(string, len, &glyphs, &nglyphs, 0);
@@ -827,7 +828,7 @@ QImage QFontEngineXLFD::alphaMapForGlyph(glyph_t glyph)
    glyphs.glyphs[0] = glyph;
 
    QImage image = bitmapForGlyphs(glyphs, metrics).toImage();
-   //image.save(QString::fromLatin1("x11cache-%1.png").arg((int)glyph));
+   //image.save(QString::fromLatin1("x11cache-%1.png").formatArg((int)glyph));
 
    image = image.convertToFormat(QImage::Format_Indexed8);
    QVector<QRgb> colors(256);

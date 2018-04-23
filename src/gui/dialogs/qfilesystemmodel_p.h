@@ -389,7 +389,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    bool disableRecursiveSort;
 
 #ifndef QT_NO_REGEXP
-   QList<QRegExp> nameFilters;
+   QList<QRegularExpression> nameFilters;
 #endif
 
    // ### Qt5 resolvedSymLinks goes away

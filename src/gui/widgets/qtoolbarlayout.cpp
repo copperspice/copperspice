@@ -428,9 +428,10 @@ bool QToolBarLayout::layoutActions(const QSize &size)
    QList<QWidget *> showWidgets, hideWidgets;
 
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
-   if (!tb) {
+   if (! tb) {
       return false;
    }
+
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);

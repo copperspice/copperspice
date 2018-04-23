@@ -38,14 +38,12 @@ class QProxyFontEngine : public QFontEngine
    QProxyFontEngine(QAbstractFontEngine *engine, const QFontDef &def);
    virtual ~QProxyFontEngine();
 
-   virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                             QTextEngine::ShaperFlags flags) const;
+   bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const override;
 
    virtual void recalcAdvances(QGlyphLayout *, QTextEngine::ShaperFlags) const;
    virtual QImage alphaMapForGlyph(glyph_t);
 
-   virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path,
-                                QTextItem::RenderFlags flags);
+   virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs, QPainterPath *path, QTextItem::RenderFlags flags);
 
    virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs);
    virtual glyph_metrics_t boundingBox(glyph_t glyph);
@@ -62,13 +60,14 @@ class QProxyFontEngine : public QFontEngine
    virtual qreal minRightBearing() const;
    virtual int glyphCount() const;
 
-   virtual bool canRender(const QChar *string, int len);
+   virtual bool canRender(QStringView str) override;
 
-   virtual Type type() const {
-      return Proxy;
-   }
-   virtual const char *name() const {
+   virtual const char *name() const override {
       return "proxy engine";
+   }
+
+   virtual Type type() const override {
+      return Proxy;
    }
 
 #if !defined(Q_WS_X11) && !defined(Q_OS_WIN) && !defined(Q_OS_MAC)

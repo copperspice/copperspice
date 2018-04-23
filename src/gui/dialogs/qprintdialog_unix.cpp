@@ -353,12 +353,15 @@ void QPrintPropertiesDialog::addItemToOptions(QOptionTreeItem *parent, QList<con
 {
    for (int i = 0; i < parent->childItems.count(); ++i) {
       QOptionTreeItem *itm = parent->childItems.at(i);
+
       if (itm->type == QOptionTreeItem::Option) {
          const ppd_option_t *opt = reinterpret_cast<const ppd_option_t *>(itm->ptr);
          options << opt;
+
          if (qstrcmp(opt->defchoice, opt->choices[itm->selected].choice) != 0) {
             markedOptions << opt->keyword << opt->choices[itm->selected].choice;
          }
+
       } else {
          addItemToOptions(itm, options, markedOptions);
       }
@@ -761,7 +764,7 @@ void QUnixPrintWidgetPrivate::_q_printerChanged(int index)
       if (index > printerCount - 3) { // PDF or postscript
          bool pdfPrinter = (index == printerCount - 2);
          widget.location->setText(QPrintDialog::tr("Local file"));
-         widget.type->setText(QPrintDialog::tr("Write %1 file").arg(pdfPrinter ? QString::fromLatin1("PDF")
+         widget.type->setText(QPrintDialog::tr("Write %1 file").formatArg(pdfPrinter ? QString::fromLatin1("PDF")
                               : QString::fromLatin1("PostScript")));
          widget.properties->setEnabled(true);
          widget.filename->setEnabled(true);
@@ -869,11 +872,13 @@ void QUnixPrintWidgetPrivate::applyPrinterProperties(QPrinter *p)
    }
    printer = p;
    if (p->outputFileName().isEmpty()) {
-      QString home = QString::fromLocal8Bit(qgetenv("HOME").constData());
-      QString cur = QDir::currentPath();
-      if (home.at(home.length() - 1) != QLatin1Char('/')) {
+      QString home = QString::fromUtf8(qgetenv("HOME"));
+      QString cur  = QDir::currentPath();
+
+      if (home.at(home.length() - 1) != '/') {
          home += QLatin1Char('/');
       }
+
       if (cur.at(cur.length() - 1) != QLatin1Char('/')) {
          cur += QLatin1Char('/');
       }
@@ -888,7 +893,7 @@ void QUnixPrintWidgetPrivate::applyPrinterProperties(QPrinter *p)
             cur += QLatin1String("print.pdf");
          }
       } else {
-         QRegExp re(QString::fromLatin1("(.*)\\.\\S+"));
+         QRegularExpression re(QString::fromLatin1("(.*)\\.\\S+"));
          if (re.exactMatch(p->docName())) {
             cur += re.cap(1);
          } else {
@@ -932,15 +937,15 @@ bool QUnixPrintWidgetPrivate::checkFields()
       bool opened = false;
       if (exists && fi.isDir()) {
          QMessageBox::warning(q, q->windowTitle(),
-                              QPrintDialog::tr("%1 is a directory.\nPlease choose a different file name.").arg(file));
+                              QPrintDialog::tr("%1 is a directory.\nPlease choose a different file name.").formatArg(file));
          return false;
       } else if ((exists && !fi.isWritable()) || !(opened = f.open(QFile::Append))) {
          QMessageBox::warning(q, q->windowTitle(),
-                              QPrintDialog::tr("File %1 is not writable.\nPlease choose a different file name.").arg(file));
+                              QPrintDialog::tr("File %1 is not writable.\nPlease choose a different file name.").formatArg(file));
          return false;
       } else if (exists) {
          int ret = QMessageBox::question(q, q->windowTitle(),
-                                         QPrintDialog::tr("%1 already exists.\nDo you want to overwrite it?").arg(file),
+                                         QPrintDialog::tr("%1 already exists.\nDo you want to overwrite it?").formatArg(file),
                                          QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
          if (ret == QMessageBox::No) {
             return false;

@@ -91,14 +91,16 @@ bool QtopiaPrintEngine::end()
 
    // Output the fax data to a file (TODO: send to the print queuing daemon).
    QString filename;
-   if ( !d->outputFileName.isEmpty() ) {
-      filename = QString::fromLocal8Bit(qgetenv("HOME").constData()) + QLatin1String("/Documents/") + d->outputFileName;
+
+   if ( ! d->outputFileName.isEmpty() ) {
+      filename = QString::fromUtf8(qgetenv("HOME")) + "/Documents/" + d->outputFileName;
    } else {
-      filename = QString::fromLocal8Bit(qgetenv("HOME").constData()) + QLatin1String("/tmp/qwsfax.tiff");
+      filename = QString::fromUtf8(qgetenv("HOME")) + "/tmp/qwsfax.tiff";
    }
 
    setProperty(QPrintEngine::PPK_OutputFileName, filename);
    QFile file( filename );
+
    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) ) {
       qDebug( "Failed to open %s for printer output",
               filename.toLatin1().constData() );

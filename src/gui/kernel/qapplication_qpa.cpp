@@ -476,7 +476,7 @@ static void init_platform(const QString &name, const QString &platformPluginPath
    if (!QApplicationPrivate::platform_integration) {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
 
-      QString fatalMessage = QString::fromLatin1("Failed to load platform plugin \"%1\". Available platforms are: \n").arg(name);
+      QString fatalMessage = QString::fromLatin1("Failed to load platform plugin \"%1\". Available platforms are: \n").formatArg(name);
 
       for(QString key : keys) {
          fatalMessage.append(key + QString::fromLatin1("\n"));
@@ -547,13 +547,17 @@ void qt_init(QApplicationPrivate *priv, int type)
    }
 
    QList<QByteArray> pluginList;
-   QString platformPluginPath = QLatin1String(qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH"));
+   QString platformPluginPath = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH"));
+
    QByteArray platformName;
+
 #ifdef QT_QPA_DEFAULT_PLATFORM_NAME
    platformName = QT_QPA_DEFAULT_PLATFORM_NAME;
 #endif
+
    QByteArray platformNameEnv = qgetenv("QT_QPA_PLATFORM");
-   if (!platformNameEnv.isEmpty()) {
+
+   if (! platformNameEnv.isEmpty()) {
       platformName = platformNameEnv;
    }
 

@@ -272,18 +272,18 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
    }
 
    QString key = "cs_"
-                 % HexString<quint64>(pm.cacheKey())
-                 % HexString<uint>(pe->mode)
-                 % HexString<quint64>(QApplication::palette().cacheKey())
-                 % HexString<uint>(actualSize.width())
-                 % HexString<uint>(actualSize.height());
+                 + HexString<quint64>(pm.cacheKey())
+                 + HexString<uint>(pe->mode)
+                 + HexString<quint64>(QApplication::palette().cacheKey())
+                 + HexString<uint>(actualSize.width())
+                 + HexString<uint>(actualSize.height());
 
    if (mode == QIcon::Active) {
-      if (QPixmapCache::find(key % HexString<uint>(mode), pm)) {
+      if (QPixmapCache::find(key + HexString<uint>(mode), pm)) {
          return pm;   // horray
       }
 
-      if (QPixmapCache::find(key % HexString<uint>(QIcon::Normal), pm)) {
+      if (QPixmapCache::find(key + HexString<uint>(QIcon::Normal), pm)) {
          QStyleOption opt(0);
          opt.palette    = QApplication::palette();
          QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
@@ -294,7 +294,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
       }
    }
 
-   if (!QPixmapCache::find(key % HexString<uint>(mode), pm)) {
+   if (!QPixmapCache::find(key + HexString<uint>(mode), pm)) {
       if (pm.size() != actualSize) {
          pm = pm.scaled(actualSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
       }
@@ -310,7 +310,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
          }
       }
 
-      QPixmapCache::insert(key % HexString<uint>(mode), pm);
+      QPixmapCache::insert(key + HexString<uint>(mode), pm);
    }
 
    return pm;

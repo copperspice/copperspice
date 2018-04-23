@@ -209,6 +209,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    qreal cursorToX(int cursor) const {
       return m_textLayout.lineAt(0).cursorToX(cursor);
    }
+
    qreal cursorToX() const {
       int cursor = m_cursor;
       if (m_preeditCursor != -1) {
@@ -220,17 +221,20 @@ class Q_GUI_EXPORT QLineControl : public QObject
    bool isReadOnly() const {
       return m_readOnly;
    }
+
    void setReadOnly(bool enable) {
       m_readOnly = enable;
    }
 
    QString text() const {
       QString res = m_maskData ? stripString(m_text) : m_text;
-      return (res.isNull() ? QString::fromLatin1("") : res);
+      return (res.isEmpty() ? QString("") : res);
    }
+
    void setText(const QString &txt) {
       internalSetText(txt, -1, false);
    }
+
    QString displayText() const {
       return m_textLayout.text();
    }
@@ -283,6 +287,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    const QValidator *validator() const {
       return m_validator;
    }
+
    void setValidator(const QValidator *v) {
       m_validator = const_cast<QValidator *>(v);
    }
@@ -292,6 +297,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    QCompleter *completer() const {
       return m_completer;
    }
+
    /* Note that you must set the widget for the completer separately */
    void setCompleter(const QCompleter *c) {
       m_completer = const_cast<QCompleter *>(c);
@@ -338,6 +344,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    }
 
    void updatePasswordEchoEditing(bool editing);
+
    bool passwordEchoEditing() const {
 #ifdef QT_GUI_PASSWORD_ECHO_DELAY
       if (m_passwordEchoTimer != 0) {
@@ -350,6 +357,7 @@ class Q_GUI_EXPORT QLineControl : public QObject
    QChar passwordCharacter() const {
       return m_passwordCharacter;
    }
+
    void setPasswordCharacter(const QChar &character) {
       m_passwordCharacter = character;
       updateDisplayText();
@@ -360,10 +368,13 @@ class Q_GUI_EXPORT QLineControl : public QObject
          if (m_text.isEmpty()) {
             return QApplication::keyboardInputDirection();
          }
+
          return m_text.isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight;
       }
+
       return m_layoutDirection;
    }
+
    void setLayoutDirection(Qt::LayoutDirection direction) {
       if (direction != m_layoutDirection) {
          m_layoutDirection = direction;

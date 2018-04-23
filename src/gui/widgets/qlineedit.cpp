@@ -517,7 +517,7 @@ const QValidator *QLineEdit::validator() const
     The initial setting is to have no input validator (i.e. any input
     is accepted up to maxLength()).
 
-    \sa validator() QIntValidator QDoubleValidator QRegExpValidator
+    \sa validator() QIntValidator QDoubleValidator QRegularExpressionValidator
 */
 
 void QLineEdit::setValidator(const QValidator *v)
@@ -1958,7 +1958,7 @@ void QLineEdit::dropEvent(QDropEvent *e)
    Q_D(QLineEdit);
    QString str = e->mimeData()->text();
 
-   if (!str.isNull() && !d->control->isReadOnly()) {
+   if (! str.isEmpty() && !d->control->isReadOnly()) {
       if (e->source() == this && e->dropAction() == Qt::CopyAction) {
          deselect();
       }

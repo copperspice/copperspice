@@ -138,27 +138,31 @@ QString QMdiSubWindowPrivate::originalWindowTitle()
 {
    Q_Q(QMdiSubWindow);
 
-   if (originalTitle.isNull()) {
+   if (originalTitle.isEmpty()) {
       originalTitle = q->window()->windowTitle();
 
-      if (originalTitle.isNull()) {
-         originalTitle = QLatin1String("");
+      if (originalTitle.isEmpty()) {
+         originalTitle = "";
       }
    }
+
    return originalTitle;
 }
 
 void QMdiSubWindowPrivate::setNewWindowTitle()
 {
    Q_Q(QMdiSubWindow);
+
    QString childTitle = q->windowTitle();
    if (childTitle.isEmpty()) {
       return;
    }
+
    QString original = originalWindowTitle();
-   if (!original.isEmpty()) {
-      if (!original.contains(QMdiSubWindow::tr("- [%1]").arg(childTitle))) {
-         q->window()->setWindowTitle(QMdiSubWindow::tr("%1 - [%2]").arg(original, childTitle));
+   if (! original.isEmpty()) {
+
+      if (!original.contains(QMdiSubWindow::tr("- [%1]").formatArg(childTitle))) {
+         q->window()->setWindowTitle(QMdiSubWindow::tr("%1 - [%2]").formatArgs(original, childTitle));
       }
 
    } else {
@@ -1031,7 +1035,7 @@ void QMdiSubWindowPrivate::updateDirtyRegions()
 
    for (Operation operation : operationMap.keys()) {
       operationMap.find(operation).value().region = getRegion(operation);
-   }   
+   }
 }
 
 /*!
@@ -1837,6 +1841,7 @@ void QMdiSubWindowPrivate::removeButtonsFromMenuBar()
    }
 
    QMenuBar *currentMenuBar = 0;
+
 #ifndef QT_NO_MAINWINDOW
    if (QMainWindow *mainWindow = qobject_cast<QMainWindow *>(q->window())) {
       // NB! We can't use menuBar() here because that one will actually create
@@ -1851,10 +1856,12 @@ void QMdiSubWindowPrivate::removeButtonsFromMenuBar()
 
    QWidget *topLevelWindow = q->window();
    topLevelWindow->removeEventFilter(q);
+
    if (baseWidget && !drawTitleBarWhenMaximized()) {
       topLevelWindow->setWindowModified(false);
    }
-   originalTitle = QString::null;
+
+   originalTitle = "";
 }
 
 #endif // QT_NO_MENUBAR
@@ -2169,10 +2176,9 @@ void QMdiSubWindowPrivate::setEnabled(WindowStateAction action, bool enable)
 }
 
 #ifndef QT_NO_MENU
-void QMdiSubWindowPrivate::addToSystemMenu(WindowStateAction action, const QString &text,
-      const char *slot)
+void QMdiSubWindowPrivate::addToSystemMenu(WindowStateAction action, const QString &text, const QString &slot)
 {
-   if (!systemMenu) {
+   if (! systemMenu) {
       return;
    }
    actions[action] = systemMenu->addAction(text, q_func(), slot);
@@ -2813,13 +2819,16 @@ bool QMdiSubWindow::eventFilter(QObject *object, QEvent *event)
          }
          break;
       }
+
       case QEvent::Enter:
          d->currentOperation = QMdiSubWindowPrivate::None;
          d->updateCursor();
          break;
+
       case QEvent::LayoutRequest:
          d->updateGeometryConstraints();
          break;
+
       case QEvent::WindowTitleChange:
          if (d->ignoreWindowTitleChange) {
             break;
@@ -2828,9 +2837,12 @@ bool QMdiSubWindow::eventFilter(QObject *object, QEvent *event)
             d->updateWindowTitle(true);
             d->lastChildWindowTitle = d->baseWidget->windowTitle();
 #ifndef QT_NO_MENUBAR
+
          } else if (maximizedButtonsWidget() && d->controlContainer->menuBar() && d->controlContainer->menuBar()
                     ->cornerWidget(Qt::TopRightCorner) == maximizedButtonsWidget()) {
-            d->originalTitle = QString::null;
+
+            d->originalTitle = "";
+
             if (d->baseWidget && d->baseWidget->windowTitle() == windowTitle()) {
                d->updateWindowTitle(true);
             } else {
@@ -2839,6 +2851,7 @@ bool QMdiSubWindow::eventFilter(QObject *object, QEvent *event)
 #endif
          }
          break;
+
       case QEvent::ModifiedChange: {
          if (object != d->baseWidget) {
             break;

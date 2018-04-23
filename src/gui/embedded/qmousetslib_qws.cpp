@@ -24,7 +24,7 @@
 
 #if !defined(QT_NO_QWS_MOUSE_TSLIB) || defined(QT_PLUGIN)
 
-#include <QtCore/qregexp.h>
+#include <QtCore/QRegularExpression.h>
 #include <QtCore/qstringlist.h>
 #include <qsocketnotifier.h>
 #include <qscreen_qws.h>
@@ -118,8 +118,8 @@ class QWSTslibMouseHandlerPrivate : public QObject
 QWSTslibMouseHandlerPrivate::QWSTslibMouseHandlerPrivate(QWSTslibMouseHandler *h, const QString &device)
    : handler(h), dev(0), mouseNotifier(0), jitter_limit(3)
 {
-   QStringList args = device.split(QLatin1Char(':'), QString::SkipEmptyParts);
-   QRegExp jitterRegex(QLatin1String("^jitter_limit=(\\d+)$"));
+   QStringList args = device.split(QLatin1Char(':'), QStringParser::SkipEmptyParts);
+   QRegularExpression jitterRegex(QLatin1String("^jitter_limit=(\\d+)$"));
    int index = args.indexOf(jitterRegex);
    if (index >= 0) {
       jitter_limit = jitterRegex.cap(1).toInt();
