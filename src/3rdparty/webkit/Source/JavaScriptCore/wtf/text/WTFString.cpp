@@ -49,14 +49,14 @@ String::String(const UChar* str)
 {
     if (!str)
         return;
-        
+
     size_t len = 0;
     while (str[len] != UChar(0))
         len++;
 
     if (len > numeric_limits<unsigned>::max())
         CRASH();
-    
+
     m_impl = StringImpl::create(str, len);
 }
 
@@ -249,7 +249,7 @@ void String::remove(unsigned position, int lengthToRemove)
 
 String String::substring(unsigned pos, unsigned len) const
 {
-    if (!m_impl) 
+    if (!m_impl)
         return String();
     return m_impl->substring(pos, len);
 }
@@ -333,43 +333,6 @@ const UChar* String::charactersWithNullTermination()
 
 String String::format(const char *format, ...)
 {
-#if PLATFORM(QT)
-    // Use QString::vsprintf to avoid the locale dependent formatting of vsnprintf.
-    // https://bugs.webkit.org/show_bug.cgi?id=18994
-    va_list args;
-    va_start(args, format);
-
-    QString buffer;
-    buffer.vsprintf(format, args);
-
-    va_end(args);
-
-    QByteArray ba = buffer.toUtf8();
-    return StringImpl::create(ba.constData(), ba.length());
-
-#elif OS(WINCE)
-    va_list args;
-    va_start(args, format);
-
-    Vector<char, 256> buffer;
-
-    int bufferSize = 256;
-    buffer.resize(bufferSize);
-    for (;;) {
-        int written = vsnprintf(buffer.data(), bufferSize, format, args);
-        va_end(args);
-
-        if (written == 0)
-            return String("");
-        if (written > 0)
-            return StringImpl::create(buffer.data(), written);
-        
-        bufferSize <<= 1;
-        buffer.resize(bufferSize);
-        va_start(args, format);
-    }
-
-#else
     va_list args;
     va_start(args, format);
 
@@ -378,33 +341,35 @@ String String::format(const char *format, ...)
     // Do the format once to get the length.
 #if COMPILER(MSVC)
     int result = _vscprintf(format, args);
+
 #else
     char ch;
     int result = vsnprintf(&ch, 1, format, args);
+
     // We need to call va_end() and then va_start() again here, as the
     // contents of args is undefined after the call to vsnprintf
     // according to http://man.cx/snprintf(3)
-    //
-    // Not calling va_end/va_start here happens to work on lots of
-    // systems, but fails e.g. on 64bit Linux.
+
+    // Not calling va_end/va_start here happens to work on lots of systems, but fails e.g. on 64bit Linux.
     va_end(args);
     va_start(args, format);
 #endif
 
     if (result == 0)
         return String("");
+
     if (result < 0)
         return String();
+
     unsigned len = result;
     buffer.grow(len + 1);
-    
+
     // Now do the formatting again, guaranteed to fit.
     vsnprintf(buffer.data(), buffer.size(), format, args);
 
     va_end(args);
-    
+
     return StringImpl::create(buffer.data(), len);
-#endif
 }
 
 String String::number(short n)
@@ -454,7 +419,7 @@ String String::number(unsigned long long n)
     return String::format("%llu", n);
 #endif
 }
-    
+
 String String::number(double n)
 {
     return String::format("%.6lg", n);
@@ -694,7 +659,7 @@ CString String::utf8(bool strict) const
     // Allocate a buffer big enough to hold all the characters
     // (an individual UTF-16 UChar can only expand to 3 UTF-8 bytes).
     // Optimization ideas, if we find this function is hot:
-    //  * We could speculatively create a CStringBuffer to contain 'length' 
+    //  * We could speculatively create a CStringBuffer to contain 'length'
     //    characters, and resize if necessary (i.e. if the buffer contains
     //    non-ascii characters). (Alternatively, scan the buffer first for
     //    ascii characters, so we know this will be sufficient).
@@ -877,11 +842,11 @@ static unsigned lengthOfCharactersAsInteger(const UChar* data, size_t length)
         if (!isSpaceOrNewline(data[i]))
             break;
     }
-    
+
     // Allow sign.
     if (i != length && (data[i] == '+' || data[i] == '-'))
         ++i;
-    
+
     // Allow digits.
     for (; i != length; ++i) {
         if (!isASCIIDigit(data[i]))

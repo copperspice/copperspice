@@ -1,21 +1,24 @@
-/*
-  Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
-*/
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
 
 #include "config.h"
 #include "InspectorServerQt.h"
@@ -65,10 +68,12 @@ static void generateWebSocketChallengeResponse(uint32_t number1, uint32_t number
     interpreted as a long int. The result is this number divided by
     the number of spaces.
  */
+
 static quint32 parseWebSocketChallengeNumber(QString field)
 {
     QString nString;
     int numSpaces = 0;
+
     for (int i = 0; i < field.size(); i++) {
         QChar c = field[i];
         if (c == QLatin1Char(' '))
@@ -76,8 +81,10 @@ static quint32 parseWebSocketChallengeNumber(QString field)
         else if ((c >= QLatin1Char('0')) && (c <= QLatin1Char('9')))
             nString.append(c);
     }
-    quint32 num = nString.toLong();
+
+    quint32 num = nString.toInteger<long>();
     quint32 result = (numSpaces ? (num / numSpaces) : num);
+
     return result;
 }
 
@@ -226,6 +233,7 @@ void InspectorServerRequestHandlerQt::tcpReadyRead()
                 responseHeader.setValue(QLatin1String("Sec-WebSocket-Origin"), header.value(QLatin1String("Origin")));
                 responseHeader.setValue(QLatin1String("Sec-WebSocket-Location"), (QLatin1String("ws://") + header.value(QLatin1String("Host")) + m_path));
                 responseHeader.setContentLength(response.size());
+
                 m_tcpConnection->write(responseHeader.toString().toLatin1());
                 m_tcpConnection->write(response);
                 m_tcpConnection->flush();
@@ -233,18 +241,21 @@ void InspectorServerRequestHandlerQt::tcpReadyRead()
                 if ((words.size() == 4)
                     && (words[1] == QString::fromLatin1("devtools"))
                     && (words[2] == QString::fromLatin1("page"))) {
-                    int pageNum = words[3].toInt();
+                    int pageNum = words[3].toInteger<int>();
 
                     m_inspectorClient = m_server->inspectorClientForPage(pageNum);
+
                     // Attach remoteFrontendChannel to inspector, also transferring ownership.
-                    if (m_inspectorClient)
+                    if (m_inspectorClient) {
                         m_inspectorClient->attachAndReplaceRemoteFrontend(new RemoteFrontendChannel(this));
+                    }
                 }
 
             }
 
             return;
         }
+
         if (m_contentLength && (m_tcpConnection->bytesAvailable() < m_contentLength))
             return;
 
@@ -252,24 +263,27 @@ void InspectorServerRequestHandlerQt::tcpReadyRead()
         m_endOfHeaders = false;
 
         QByteArray response;
-        int code = 200;
+        int code     = 200;
         QString text = QString::fromLatin1("OK");
 
         // If no path is specified, generate an index page.
-        if (m_path.isEmpty() || (m_path == QString(QLatin1Char('/')))) {
+        if (m_path.isEmpty() || (m_path == QString('/'))) {
             QString indexHtml = QLatin1String("<html><head><title>Remote Web Inspector</title></head><body><ul>\n");
+
             for (QMap<int, InspectorClientQt* >::const_iterator it = m_server->m_inspectorClients.begin();
-                 it != m_server->m_inspectorClients.end();
-                 ++it) {
-                indexHtml.append(QString::fromLatin1("<li><a href=\"/webkit/inspector/inspector.html?page=%1\">%2</li>\n")
-                                 .arg(it.key())
-                                 .arg(it.value()->m_inspectedWebPage->mainFrame()->url().toString()));
+                 it != m_server->m_inspectorClients.end(); ++it) {
+
+                indexHtml.append(QString("<li><a href=\"/webkit/inspector/inspector.html?page=%1\">%2</li>\n")
+                            .formatArg(it.key()).formatArg(it.value()->m_inspectedWebPage->mainFrame()->url().toString()));
             }
-            indexHtml.append(QLatin1String("</ul></body></html>"));
+
+            indexHtml.append("</ul></body></html>");
             response = indexHtml.toLatin1();
+
         } else {
-            QString path = QString::fromLatin1(":%1").arg(m_path);
+            QString path = QString(":%1").formatArg(m_path);
             QFile file(path);
+
             // It seems that there should be an enum or define for these status codes somewhere in Qt or WebKit,
             // but grep fails to turn one up.
             // QNetwork uses the numeric values directly.

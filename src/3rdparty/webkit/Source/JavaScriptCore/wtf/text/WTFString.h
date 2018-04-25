@@ -1,29 +1,27 @@
-/*
- * (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- */
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
 
 #ifndef WTFString_h
 #define WTFString_h
-
-// This file would be called String.h, but that conflicts with <string.h>
-// on systems without case-sensitive file systems.
 
 #include "StringImpl.h"
 
@@ -36,9 +34,7 @@ typedef const struct __CFString * CFStringRef;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
-class QString;
-QT_END_NAMESPACE
+#include <qstringfwd.h>
 #include <QDataStream>
 #endif
 
@@ -193,9 +189,9 @@ public:
         { return caseSensitive ? reverseFind(str, start) : reverseFindIgnoringCase(str, start); }
 
     const UChar* charactersWithNullTermination();
-    
+
     UChar32 characterStartingAt(unsigned) const; // Ditto.
-    
+
     bool contains(UChar c) const { return find(c) != notFound; }
     bool contains(const char* str, bool caseSensitive = true) const { return find(str, 0, caseSensitive) != notFound; }
     bool contains(const String& str, bool caseSensitive = true) const { return find(str, 0, caseSensitive) != notFound; }
@@ -296,15 +292,15 @@ public:
 
 #ifdef __OBJC__
     String(NSString*);
-    
-    // This conversion maps NULL to "", which loses the meaning of NULL, but we 
+
+    // This conversion maps NULL to "", which loses the meaning of NULL, but we
     // need this mapping because AppKit crashes when passed nil NSStrings.
     operator NSString*() const { if (!m_impl) return @""; return *m_impl; }
 #endif
 
 #if PLATFORM(QT)
     String(const QString&);
-    String(const QStringRef&);
+    String(QStringView);
     operator QString() const;
 #endif
 
@@ -322,21 +318,21 @@ public:
     String(const AECHAR*);
 #endif
 
-    // String::fromUTF8 will return a null string if
-    // the input data contains invalid UTF-8 sequences.
     static String fromUTF8(const char*, size_t);
     static String fromUTF8(const char*);
 
     // Tries to convert the passed in string to UTF-8, but will fall back to Latin-1 if the string is not valid UTF-8.
     static String fromUTF8WithLatin1Fallback(const char*, size_t);
-    
+
     // Determines the writing direction using the Unicode Bidi Algorithm rules P2 and P3.
     WTF::Unicode::Direction defaultWritingDirection(bool* hasStrongDirectionality = 0) const
     {
         if (m_impl)
             return m_impl->defaultWritingDirection(hasStrongDirectionality);
+
         if (hasStrongDirectionality)
             *hasStrongDirectionality = false;
+
         return WTF::Unicode::LeftToRight;
     }
 
@@ -374,7 +370,7 @@ inline bool equalIgnoringCase(const String& a, const String& b) { return equalIg
 inline bool equalIgnoringCase(const String& a, const char* b) { return equalIgnoringCase(a.impl(), b); }
 inline bool equalIgnoringCase(const char* a, const String& b) { return equalIgnoringCase(a, b.impl()); }
 
-inline bool equalPossiblyIgnoringCase(const String& a, const String& b, bool ignoreCase) 
+inline bool equalPossiblyIgnoringCase(const String& a, const String& b, bool ignoreCase)
 {
     return ignoreCase ? equalIgnoringCase(a, b) : (a == b);
 }

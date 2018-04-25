@@ -583,11 +583,11 @@ static String keyTextForKeyEvent(const QKeyEvent* event)
     switch (event->key()) {
     case Qt::Key_Tab:
     case Qt::Key_Backtab:
-        if (event->text().isNull())
+        if (event->text().isEmpty())
             return "\t";
         break;
     case Qt::Key_Enter:
-        if (event->text().isNull())
+        if (event->text().isEmpty())
             return "\r";
     }
     return event->text();

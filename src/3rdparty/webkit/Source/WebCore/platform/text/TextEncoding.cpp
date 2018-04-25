@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -33,12 +33,15 @@
 #include "TextEncodingRegistry.h"
 #if USE(ICU_UNICODE)
 #include <unicode/unorm.h>
+
 #elif USE(QT4_UNICODE)
-#include <QString>
+#include <qstring8.h>
+#include <qstring16.h>
 #elif USE(GLIB_UNICODE)
 #include <glib.h>
 #include "GOwnPtr.h"
 #endif
+
 #include <wtf/text/CString.h>
 #include <wtf/OwnPtr.h>
 #include <wtf/StdLibExtras.h>
@@ -94,6 +97,7 @@ CString TextEncoding::encode(const UChar* characters, size_t length, Unencodable
         // First try using the length of the original string, since normalization to NFC rarely increases length.
         normalizedCharacters.grow(sourceLength);
         int32_t normalizedLength = unorm_normalize(source, length, UNORM_NFC, 0, normalizedCharacters.data(), length, &err);
+
         if (err == U_BUFFER_OVERFLOW_ERROR) {
             err = U_ZERO_ERROR;
             normalizedCharacters.resize(normalizedLength);
@@ -105,13 +109,17 @@ CString TextEncoding::encode(const UChar* characters, size_t length, Unencodable
         sourceLength = normalizedLength;
     }
     return newTextCodec(*this)->encode(source, sourceLength, handling);
+
 #elif USE(QT4_UNICODE)
-    QString str(reinterpret_cast<const QChar*>(characters), length);
-    str = str.normalized(QString::NormalizationForm_C);
-    return newTextCodec(*this)->encode(reinterpret_cast<const UChar *>(str.utf16()), str.length(), handling);
+    QString16 str = QString16::fromUtf16(reinterpret_cast<const char16_t *>(characters), length);
+    str = str.normalized(QString16::NormalizationForm_C);
+
+    return newTextCodec(*this)->encode(reinterpret_cast<const UChar *>(str.constData()), str.size_storage(), handling);
+
 #elif USE(GLIB_UNICODE)
     GOwnPtr<char> UTF8Source;
     UTF8Source.set(g_utf16_to_utf8(characters, length, 0, 0, 0));
+
     if (!UTF8Source) {
         // If conversion to UTF-8 failed, try with the string without normalization
         return newTextCodec(*this)->encode(characters, length, handling);
@@ -141,10 +149,10 @@ const char* TextEncoding::domName() const
     if (noExtendedTextEncodingNameUsed())
         return m_name;
 
-    // We treat EUC-KR as windows-949 (its superset), but need to expose 
+    // We treat EUC-KR as windows-949 (its superset), but need to expose
     // the name 'EUC-KR' because the name 'windows-949' is not recognized by
     // most Korean web servers even though they do use the encoding
-    // 'windows-949' with the name 'EUC-KR'. 
+    // 'windows-949' with the name 'EUC-KR'.
     // FIXME: This is not thread-safe. At the moment, this function is
     // only accessed in a single thread, but eventually has to be made
     // thread-safe along with usesVisualOrdering().
@@ -198,11 +206,11 @@ const TextEncoding& TextEncoding::closestByteBasedEquivalent() const
 {
     if (isNonByteBasedEncoding())
         return UTF8Encoding();
-    return *this; 
+    return *this;
 }
 
-// HTML5 specifies that UTF-8 be used in form submission when a form is 
-// is a part of a document in UTF-16 probably because UTF-16 is not a 
+// HTML5 specifies that UTF-8 be used in form submission when a form is
+// is a part of a document in UTF-16 probably because UTF-16 is not a
 // byte-based encoding and can contain 0x00. By extension, the same
 // should be done for UTF-32. In case of UTF-7, it is a byte-based encoding,
 // but it's fraught with problems and we'd rather steer clear of it.

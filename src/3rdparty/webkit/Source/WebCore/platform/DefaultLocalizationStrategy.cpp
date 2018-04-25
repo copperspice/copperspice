@@ -48,6 +48,7 @@ namespace WebCore {
 //  2) It doesn't handle the %2$d syntax.
 // Note that because |format| is used as the second parameter to va_start, it cannot be a reference
 // type according to section 18.7/3 of the C++ N1905 standard.
+
 static String formatLocalizedString(String format, ...)
 {
 #if USE(CF)
@@ -57,16 +58,11 @@ static String formatLocalizedString(String format, ...)
     RetainPtr<CFStringRef> result(AdoptCF, CFStringCreateWithFormatAndArguments(0, 0, formatCFString.get(), arguments));
     va_end(arguments);
     return result.get();
-#elif PLATFORM(QT)
-    va_list arguments;
-    va_start(arguments, format);
-    QString result;
-    result.vsprintf(format.latin1().data(), arguments);
-    va_end(arguments);
-    return result;
+
 #else
     notImplemented();
     return format;
+
 #endif
 }
 
@@ -75,11 +71,11 @@ static String truncatedStringForLookupMenuItem(const String& original)
 {
     if (original.isEmpty())
         return original;
-    
+
     // Truncate the string if it's too long. This is in consistency with AppKit.
     unsigned maxNumberOfGraphemeClustersInLookupMenuItem = 24;
     DEFINE_STATIC_LOCAL(String, ellipsis, (&horizontalEllipsis, 1));
-    
+
     String trimmed = original.stripWhiteSpace();
     unsigned numberOfCharacters = numCharactersInGraphemeClusters(trimmed, maxNumberOfGraphemeClustersInLookupMenuItem);
     return numberOfCharacters == trimmed.length() ? trimmed : trimmed.left(numberOfCharacters) + ellipsis;
@@ -465,7 +461,7 @@ String DefaultLocalizationStrategy::contextMenuItemTagSubstitutionsMenu()
 
 String DefaultLocalizationStrategy::contextMenuItemTagShowSubstitutions(bool show)
 {
-    if (show) 
+    if (show)
         return WEB_UI_STRING("Show Substitutions", "menu item title");
     return WEB_UI_STRING("Hide Substitutions", "menu item title");
 }
@@ -592,35 +588,35 @@ String DefaultLocalizationStrategy::AXARIAContentGroupText(const String& ariaTyp
     if (ariaType == "ARIAApplicationLog")
         return WEB_UI_STRING("log", "An ARIA accessibility group that acts as a console log.");
     if (ariaType == "ARIAApplicationMarquee")
-        return WEB_UI_STRING("marquee", "An ARIA accessibility group that acts as a marquee.");    
+        return WEB_UI_STRING("marquee", "An ARIA accessibility group that acts as a marquee.");
     if (ariaType == "ARIAApplicationStatus")
-        return WEB_UI_STRING("application status", "An ARIA accessibility group that acts as a status update.");    
+        return WEB_UI_STRING("application status", "An ARIA accessibility group that acts as a status update.");
     if (ariaType == "ARIAApplicationTimer")
-        return WEB_UI_STRING("timer", "An ARIA accessibility group that acts as an updating timer.");    
+        return WEB_UI_STRING("timer", "An ARIA accessibility group that acts as an updating timer.");
     if (ariaType == "ARIADocument")
-        return WEB_UI_STRING("document", "An ARIA accessibility group that acts as a document.");    
+        return WEB_UI_STRING("document", "An ARIA accessibility group that acts as a document.");
     if (ariaType == "ARIADocumentArticle")
-        return WEB_UI_STRING("article", "An ARIA accessibility group that acts as an article.");    
+        return WEB_UI_STRING("article", "An ARIA accessibility group that acts as an article.");
     if (ariaType == "ARIADocumentNote")
-        return WEB_UI_STRING("note", "An ARIA accessibility group that acts as a note in a document.");    
+        return WEB_UI_STRING("note", "An ARIA accessibility group that acts as a note in a document.");
     if (ariaType == "ARIADocumentRegion")
-        return WEB_UI_STRING("region", "An ARIA accessibility group that acts as a distinct region in a document.");    
+        return WEB_UI_STRING("region", "An ARIA accessibility group that acts as a distinct region in a document.");
     if (ariaType == "ARIALandmarkApplication")
-        return WEB_UI_STRING("application", "An ARIA accessibility group that acts as an application.");    
+        return WEB_UI_STRING("application", "An ARIA accessibility group that acts as an application.");
     if (ariaType == "ARIALandmarkBanner")
-        return WEB_UI_STRING("banner", "An ARIA accessibility group that acts as a banner.");    
+        return WEB_UI_STRING("banner", "An ARIA accessibility group that acts as a banner.");
     if (ariaType == "ARIALandmarkComplementary")
-        return WEB_UI_STRING("complementary", "An ARIA accessibility group that acts as a region of complementary information.");    
+        return WEB_UI_STRING("complementary", "An ARIA accessibility group that acts as a region of complementary information.");
     if (ariaType == "ARIALandmarkContentInfo")
-        return WEB_UI_STRING("content", "An ARIA accessibility group that contains content.");    
+        return WEB_UI_STRING("content", "An ARIA accessibility group that contains content.");
     if (ariaType == "ARIALandmarkMain")
-        return WEB_UI_STRING("main", "An ARIA accessibility group that is the main portion of the website.");    
+        return WEB_UI_STRING("main", "An ARIA accessibility group that is the main portion of the website.");
     if (ariaType == "ARIALandmarkNavigation")
-        return WEB_UI_STRING("navigation", "An ARIA accessibility group that contains the main navigation elements of a website.");    
+        return WEB_UI_STRING("navigation", "An ARIA accessibility group that contains the main navigation elements of a website.");
     if (ariaType == "ARIALandmarkSearch")
-        return WEB_UI_STRING("search", "An ARIA accessibility group that contains a search feature of a website.");    
+        return WEB_UI_STRING("search", "An ARIA accessibility group that contains a search feature of a website.");
     if (ariaType == "ARIAUserInterfaceTooltip")
-        return WEB_UI_STRING("tooltip", "An ARIA accessibility group that acts as a tooltip.");    
+        return WEB_UI_STRING("tooltip", "An ARIA accessibility group that acts as a tooltip.");
     if (ariaType == "ARIATabPanel")
         return WEB_UI_STRING("tab panel", "An ARIA accessibility group that contains the content of a tab.");
     if (ariaType == "ARIADocumentMath")
@@ -634,7 +630,7 @@ String DefaultLocalizationStrategy::AXButtonActionVerb()
     return WEB_UI_STRING("press", "Verb stating the action that will occur when a button is pressed, as used by accessibility");
 }
 
-String DefaultLocalizationStrategy::AXRadioButtonActionVerb() 
+String DefaultLocalizationStrategy::AXRadioButtonActionVerb()
 {
     return WEB_UI_STRING("select", "Verb stating the action that will occur when a radio button is clicked, as used by accessibility");
 }
@@ -863,7 +859,7 @@ String DefaultLocalizationStrategy::localizedMediaTimeDescription(float time)
     if (! std::isfinite(time))
         return WEB_UI_STRING("indefinite time", "accessibility help text for an indefinite media controller time value");
 
-    int seconds = static_cast<int>(fabsf(time)); 
+    int seconds = static_cast<int>(fabsf(time));
     int days = seconds / (60 * 60 * 24);
     int hours = seconds / (60 * 60);
     int minutes = (seconds / 60) % 60;

@@ -1,35 +1,36 @@
-/*
-    Copyright (C) 2008,2009 Nokia Corporation and/or its subsidiary(-ies)
-    Copyright (C) 2007 Staikos Computing Services Inc.
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
-*/
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
 
 #ifndef QWEBFRAME_H
 #define QWEBFRAME_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qurl.h>
-#include <QtCore/qvariant.h>
-#include <QtGui/qicon.h>
+#include <qobject.h>
+#include <qurl.h>
+#include <qvariant.h>
+#include <qicon.h>
 #include <QtScript/qscriptengine.h>
-#include <QtNetwork/qnetworkaccessmanager.h>
+#include <qnetworkaccessmanager.h>
 #include "qwebkitglobal.h"
 
-QT_BEGIN_NAMESPACE
 class QRect;
 class QPoint;
 class QPainter;
@@ -39,7 +40,6 @@ class QWheelEvent;
 class QNetworkRequest;
 class QRegion;
 class QPrinter;
-QT_END_NAMESPACE
 
 class QWebNetworkRequest;
 class QWebFramePrivate;
@@ -211,42 +211,42 @@ public:
 
 public :
     WEB_CS_SLOT_1(Public, QVariant evaluateJavaScript(const QString & scriptSource))
-    WEB_CS_SLOT_2(evaluateJavaScript) 
+    WEB_CS_SLOT_2(evaluateJavaScript)
 
 #ifndef QT_NO_PRINTER
     WEB_CS_SLOT_1(Public, void print(QPrinter * printer) const)
-    WEB_CS_SLOT_2(print) 
+    WEB_CS_SLOT_2(print)
 #endif
 
     WEB_CS_SIGNAL_1(Public, void javaScriptWindowObjectCleared())
-    WEB_CS_SIGNAL_2(javaScriptWindowObjectCleared) 
+    WEB_CS_SIGNAL_2(javaScriptWindowObjectCleared)
 
     WEB_CS_SIGNAL_1(Public, void provisionalLoad())
-    WEB_CS_SIGNAL_2(provisionalLoad) 
+    WEB_CS_SIGNAL_2(provisionalLoad)
 
     WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & title))
-    WEB_CS_SIGNAL_2(titleChanged,title) 
+    WEB_CS_SIGNAL_2(titleChanged,title)
 
     WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & url))
-    WEB_CS_SIGNAL_2(urlChanged,url) 
+    WEB_CS_SIGNAL_2(urlChanged,url)
 
     WEB_CS_SIGNAL_1(Public, void initialLayoutCompleted())
-    WEB_CS_SIGNAL_2(initialLayoutCompleted) 
+    WEB_CS_SIGNAL_2(initialLayoutCompleted)
 
     WEB_CS_SIGNAL_1(Public, void iconChanged())
-    WEB_CS_SIGNAL_2(iconChanged) 
+    WEB_CS_SIGNAL_2(iconChanged)
 
     WEB_CS_SIGNAL_1(Public, void contentsSizeChanged(const QSize & size))
-    WEB_CS_SIGNAL_2(contentsSizeChanged,size) 
+    WEB_CS_SIGNAL_2(contentsSizeChanged,size)
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())
-    WEB_CS_SIGNAL_2(loadStarted) 
+    WEB_CS_SIGNAL_2(loadStarted)
 
     WEB_CS_SIGNAL_1(Public, void loadFinished(bool ok))
-    WEB_CS_SIGNAL_2(loadFinished,ok) 
+    WEB_CS_SIGNAL_2(loadFinished,ok)
 
     WEB_CS_SIGNAL_1(Public, void pageChanged())
-    WEB_CS_SIGNAL_2(pageChanged) 
+    WEB_CS_SIGNAL_2(pageChanged)
 
 private:
     friend class QGraphicsWebView;

@@ -32,6 +32,7 @@
 #include "FrameView.h"
 #include "GraphicsContext.h"
 #include "HTMLElement.h"
+
 #if USE(JSC)
 #include "JSGlobalObject.h"
 #include "JSHTMLElement.h"
@@ -39,6 +40,7 @@
 #include "PropertyNameArray.h"
 #include <parser/SourceCode.h>
 #include "qt_runtime.h"
+
 #elif USE(V8)
 #include "V8DOMWindow.h"
 #include "V8Binding.h"
@@ -49,13 +51,15 @@
 #include "StaticNodeList.h"
 #include "qwebframe.h"
 #include "qwebframe_p.h"
+
 #if USE(JSC)
 #include "runtime_root.h"
 #endif
 #include <wtf/Vector.h>
 #include <wtf/text/CString.h>
 
-#include <QPainter>
+#include <qpainter.h>
+#include <qstring.h>
 
 #if USE(V8)
 using namespace V8::Bindings;
@@ -67,77 +71,6 @@ class QWebElementPrivate {
 public:
 };
 
-/*
-    \class QWebElement
-    \since 4.6
-    \brief The QWebElement class provides convenient access to DOM elements in
-    a QWebFrame.
-    \inmodule QtWebKit
-
-    A QWebElement object allows easy access to the document model, represented
-    by a tree-like structure of DOM elements. The root of the tree is called
-    the document element and can be accessed using
-    QWebFrame::documentElement().
-
-    Specific elements can be accessed using findAll() and findFirst(). These
-    elements are identified using CSS selectors. The code snippet below
-    demonstrates the use of findAll().
-
-    \snippet webkitsnippets/webelement/main.cpp FindAll
-
-    The first list contains all \c span elements in the document. The second
-    list contains \c span elements that are children of \c p, classified with
-    \c intro.
-
-    Using findFirst() is more efficient than calling findAll(), and extracting
-    the first element only in the list returned.
-
-    Alternatively you can traverse the document manually using firstChild() and
-    nextSibling():
-
-    \snippet webkitsnippets/webelement/main.cpp Traversing with QWebElement
-
-    Individual elements can be inspected or changed using methods such as attribute()
-    or setAttribute(). For examle, to capture the user's input in a text field for later
-    use (auto-completion), a browser could do something like this:
-
-    \snippet webkitsnippets/webelement/main.cpp autocomplete1
-
-    When the same page is later revisited, the browser can fill in the text field automatically
-    by modifying the value attribute of the input element:
-
-    \snippet webkitsnippets/webelement/main.cpp autocomplete2
-
-    Another use case is to emulate a click event on an element. The following
-    code snippet demonstrates how to call the JavaScript DOM method click() of
-    a submit button:
-
-    \snippet webkitsnippets/webelement/main.cpp Calling a DOM element method
-
-    The underlying content of QWebElement is explicitly shared. Creating a copy
-    of a QWebElement does not create a copy of the content. Instead, both
-    instances point to the same element.
-
-    The contents of child elements can be converted to plain text with
-    toPlainText(); to XHTML using toInnerXml(). To include the element's tag in
-    the output, use toOuterXml().
-
-    It is possible to replace the contents of child elements using
-    setPlainText() and setInnerXml(). To replace the element itself and its
-    contents, use setOuterXml().
-
-    \section1 Examples
-
-    The \l{DOM Traversal Example} shows one way to traverse documents in a running
-    example.
-
-    The \l{Simple Selector Example} can be used to experiment with the searching
-    features of this class and provides sample code you can start working with.
-*/
-
-/*
-    Constructs a null web element.
-*/
 QWebElement::QWebElement()
     : d(0)
     , m_element(0)
@@ -929,7 +862,7 @@ QStringList QWebElement::classes() const
     if (!hasAttribute(QLatin1String("class")))
         return QStringList();
 
-    QStringList classes =  attribute(QLatin1String("class")).simplified().split(QLatin1Char(' '), QString::SkipEmptyParts);
+    QStringList classes =  attribute("class").simplified().split(' ', QStringParser::SkipEmptyParts);
     classes.removeDuplicates();
     return classes;
 }
@@ -1482,7 +1415,7 @@ QWebElement QWebElement::enclosingElement(WebCore::Node* node)
 */
 
 
-/* 
+/*
   Render the element into \a painter .
 */
 void QWebElement::render(QPainter* painter)

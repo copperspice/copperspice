@@ -59,7 +59,7 @@ class QWEBKIT_EXPORT QWebView : public QWidget {
 
     WEB_CS_PROPERTY_READ(renderHints, renderHints)
     WEB_CS_PROPERTY_WRITE(renderHints, setRenderHints)
-    
+
 public:
     explicit QWebView(QWidget* parent = 0);
     virtual ~QWebView();
@@ -119,46 +119,46 @@ public:
 
 public :
     WEB_CS_SLOT_1(Public, void stop())
-    WEB_CS_SLOT_2(stop) 
+    WEB_CS_SLOT_2(stop)
 
     WEB_CS_SLOT_1(Public, void back())
-    WEB_CS_SLOT_2(back) 
+    WEB_CS_SLOT_2(back)
 
     WEB_CS_SLOT_1(Public, void forward())
-    WEB_CS_SLOT_2(forward) 
+    WEB_CS_SLOT_2(forward)
 
     WEB_CS_SLOT_1(Public, void reload())
-    WEB_CS_SLOT_2(reload) 
+    WEB_CS_SLOT_2(reload)
 
-    WEB_CS_SLOT_1(Public, void print(QPrinter * un_named_arg1)const)
-    WEB_CS_SLOT_2(print) 
+    WEB_CS_SLOT_1(Public, void print(QPrinter * printer) const)
+    WEB_CS_SLOT_2(print)
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())
-    WEB_CS_SIGNAL_2(loadStarted) 
+    WEB_CS_SIGNAL_2(loadStarted)
 
     WEB_CS_SIGNAL_1(Public, void loadProgress(int progress))
-    WEB_CS_SIGNAL_2(loadProgress,progress) 
+    WEB_CS_SIGNAL_2(loadProgress,progress)
 
     WEB_CS_SIGNAL_1(Public, void loadFinished(bool ok))
-    WEB_CS_SIGNAL_2(loadFinished,ok) 
+    WEB_CS_SIGNAL_2(loadFinished,ok)
 
     WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & title))
-    WEB_CS_SIGNAL_2(titleChanged,title) 
+    WEB_CS_SIGNAL_2(titleChanged,title)
 
     WEB_CS_SIGNAL_1(Public, void statusBarMessage(const QString & text))
-    WEB_CS_SIGNAL_2(statusBarMessage,text) 
+    WEB_CS_SIGNAL_2(statusBarMessage,text)
 
     WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1) 
+    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1)
 
     WEB_CS_SIGNAL_1(Public, void selectionChanged())
-    WEB_CS_SIGNAL_2(selectionChanged) 
+    WEB_CS_SIGNAL_2(selectionChanged)
 
     WEB_CS_SIGNAL_1(Public, void iconChanged())
-    WEB_CS_SIGNAL_2(iconChanged) 
+    WEB_CS_SIGNAL_2(iconChanged)
 
     WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1)
 
 protected:
     void resizeEvent(QResizeEvent*);

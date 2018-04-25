@@ -108,8 +108,12 @@ String TextCodecQt::decode(const char* bytes, size_t length, bool flush, bool /*
     while (buf < end) {
         int size = end - buf;
         size = qMin(size, MaxInputChunkSize);
+
         QString decoded = m_codec->toUnicode(buf, size, &m_state);
-        unicode.append(reinterpret_cast_ptr<const UChar*>(decoded.unicode()), decoded.length());
+
+        QString16 tmp = decoded.toUtf16();
+        unicode.append(reinterpret_cast_ptr<const UChar*>(tmp.constData()), tmp.size_storage());
+
         buf += size;
     }
 
@@ -129,29 +133,38 @@ CString TextCodecQt::encode(const UChar* characters, size_t length, UnencodableH
     QTextCodec::ConverterState state;
     state.flags = QTextCodec::ConversionFlags(QTextCodec::ConvertInvalidToNull | QTextCodec::IgnoreHeader);
 
-    if (!length)
+    if (! length)
         return "";
 
-    QByteArray ba = m_codec->fromUnicode(reinterpret_cast<const QChar*>(characters), length, &state);
+    QString tmp   = QString::fromUtf16(reinterpret_cast<const char16_t *>(characters), length);
+    QByteArray ba = m_codec->fromUnicode(tmp, &state);
 
     // If some <b> characters </b> are unencodable, escape them as specified by <b> handling </b>
     // We append one valid encoded chunk to a QByteArray at a time. When we encounter an unencodable chunk we
     // escape it with getUnencodableReplacement, append it, then move to the next chunk.
+
     if (state.invalidChars) {
         state.invalidChars = 0;
         state.remainingChars = 0;
+
         int len = 0;
         ba.clear();
+
         for (size_t pos = 0; pos < length; ++pos) {
-            QByteArray tba = m_codec->fromUnicode(reinterpret_cast<const QChar*>(characters), ++len, &state);
+
+            QString tmp    = QString::fromUtf16(reinterpret_cast<const char16_t *>(characters), ++len);
+            QByteArray tba = m_codec->fromUnicode(tmp, &state);
+
             if (state.remainingChars)
                 continue;
+
             if (state.invalidChars) {
                 UnencodableReplacementArray replacement;
                 getUnencodableReplacement(characters[0], handling, replacement);
                 tba.replace('\0', replacement);
                 state.invalidChars = 0;
             }
+
             ba.append(tba);
             characters += len;
             len = 0;

@@ -1,21 +1,24 @@
-/*
- * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
 
 #include "config.h"
 #include "qt_runtime.h"
@@ -55,6 +58,7 @@
 #include <runtime/Error.h>
 #include <runtime_array.h>
 #include <runtime_object.h>
+#include <qstring16.h>
 
 // QtScript has these
 Q_DECLARE_METATYPE(QObjectList);
@@ -154,26 +158,37 @@ static JSRealType valueRealType(ExecState* exec, JSValue val)
 {
     if (val.isNumber())
         return Number;
+
     else if (val.isString())
         return String;
+
     else if (val.isBoolean())
         return Boolean;
+
     else if (val.isNull())
         return Null;
+
     else if (isJSByteArray(&exec->globalData(), val))
         return JSByteArray;
+
     else if (val.isObject()) {
         JSObject *object = val.toObject(exec);
+
         if (object->inherits(&RuntimeArray::s_info))  // RuntimeArray 'inherits' from Array, but not in C++
             return RTArray;
+
         else if (object->inherits(&JSArray::s_info))
             return Array;
+
         else if (object->inherits(&DateInstance::s_info))
             return Date;
+
         else if (object->inherits(&RegExpObject::s_info))
             return RegExp;
+
         else if (object->inherits(&RuntimeObject::s_info))
             return QObj;
+
         return Object;
     }
 
@@ -189,6 +204,7 @@ static QVariantMap convertValueToQVariantMap(ExecState* exec, JSObject* object, 
     PropertyNameArray properties(exec);
     object->getPropertyNames(exec, properties);
     PropertyNameArray::const_iterator it = properties.begin();
+
     QVariantMap result;
     int objdist = 0;
 
@@ -211,7 +227,8 @@ static QVariantMap convertValueToQVariantMap(ExecState* exec, JSObject* object, 
     return result;
 }
 
-QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance, HashSet<JSObject*>* visitedObjects, int recursionLimit)
+QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance,
+                  HashSet<JSObject*>* visitedObjects, int recursionLimit)
 {
     --recursionLimit;
 
@@ -228,49 +245,61 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
     }
 
     // check magic pointer values before dereferencing value
-    if (value == jsNaN()
-        || (value == jsUndefined()
-            && hint != QMetaType::QString
-            && hint != (QMetaType::Type) qMetaTypeId<QVariant>())) {
-        if (distance)
+    if (value == jsNaN() || (value == jsUndefined() && hint != QMetaType::QString && hint != (QMetaType::Type) qMetaTypeId<QVariant>())) {
+
+        if (distance) {
             *distance = -1;
+        }
+
         return QVariant();
     }
 
     JSLock lock(SilenceAssertionsOnly);
     JSRealType type = valueRealType(exec, value);
+
     if (hint == QMetaType::Void) {
         switch(type) {
             case Number:
                 hint = QMetaType::Double;
                 break;
+
             case Boolean:
                 hint = QMetaType::Bool;
                 break;
+
             case String:
             default:
                 hint = QMetaType::QString;
                 break;
+
             case Date:
                 hint = QMetaType::QDateTime;
                 break;
+
             case RegExp:
-                hint = QMetaType::QRegExp;
+                hint = QMetaType::QRegularExpression;
                 break;
+
             case Object:
                 if (object->inherits(&NumberObject::s_info))
                     hint = QMetaType::Double;
+
                 else if (object->inherits(&BooleanObject::s_info))
                     hint = QMetaType::Bool;
+
                 else
                     hint = QMetaType::QVariantMap;
+
                 break;
+
             case QObj:
                 hint = QMetaType::QObjectStar;
                 break;
+
             case JSByteArray:
                 hint = QMetaType::QByteArray;
                 break;
+
             case Array:
             case RTArray:
                 hint = QMetaType::QVariantList;
@@ -577,61 +606,70 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     }
                 }
 #endif // QT_NO_DATESTRING
+
             }
             break;
 
-        case QMetaType::QRegExp:
+        case QMetaType::QRegularExpression:
             if (type == RegExp) {
-/*
-                RegExpObject *re = static_cast<RegExpObject*>(object);
-*/
+
                 // Attempt to convert.. a bit risky
                 UString ustring = value.toString(exec);
                 QString qstring = QString((const QChar*)ustring.impl()->characters(), ustring.length());
 
                 // this is of the form '/xxxxxx/i'
-                int firstSlash = qstring.indexOf(QLatin1Char('/'));
-                int lastSlash = qstring.lastIndexOf(QLatin1Char('/'));
-                if (firstSlash >=0 && lastSlash > firstSlash) {
-                    QRegExp realRe;
+                int firstSlash = qstring.indexOf('/');
+                int lastSlash  = qstring.lastIndexOf('/');
 
-                    realRe.setPattern(qstring.mid(firstSlash + 1, lastSlash - firstSlash - 1));
+                if (firstSlash >= 0 && lastSlash > firstSlash) {
+                    QPatternOptionFlags flags = QPatternOption::NoPatternOption;
 
-                    if (qstring.mid(lastSlash + 1).contains(QLatin1Char('i')))
-                        realRe.setCaseSensitivity(Qt::CaseInsensitive);
+                    if (qstring.mid(lastSlash + 1).contains('i')) {
+                       flags |= QPatternOption::CaseInsensitiveOption;
+                    }
 
-                    ret = QVariant::fromValue(realRe);
+                    QRegularExpression realReg(qstring.mid(firstSlash + 1, lastSlash - firstSlash - 1), flags);
+
+                    ret = QVariant::fromValue(realReg);
                     dist = 0;
+
                 } else {
-                    qConvDebug() << "couldn't parse a JS regexp";
+                    qConvDebug() << "could not parse a JS regexp";
                 }
+
             } else if (type == String) {
                 UString ustring = value.toString(exec);
                 QString qstring = QString((const QChar*)ustring.impl()->characters(), ustring.length());
 
-                QRegExp re(qstring);
+                QRegularExpression re(qstring);
+
                 if (re.isValid()) {
-                    ret = QVariant::fromValue(re);
+                    ret  = QVariant::fromValue(re);
                     dist = 10;
                 }
             }
+
             break;
 
         case QMetaType::QObjectStar:
             if (type == QObj) {
                 QtInstance* qtinst = QtInstance::getInstance(object);
+
                 if (qtinst) {
                     if (qtinst->getObject()) {
                         qConvDebug() << "found instance, with object:" << (void*) qtinst->getObject();
                         ret = QVariant::fromValue(qtinst->getObject());
                         qConvDebug() << ret;
                         dist = 0;
+
                     } else {
-                        qConvDebug() << "can't convert deleted qobject";
+                        qConvDebug() << "can not convert deleted qobject";
                     }
+
                 } else {
-                    qConvDebug() << "wasn't a qtinstance";
+                    qConvDebug() << "was not a qtinstance";
                 }
+
             } else if (type == Null) {
                 QObject* nullobj = 0;
                 ret = QVariant::fromValue(nullobj);
@@ -864,31 +902,40 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         type == QMetaType::Double)
         return jsNumber(variant.toDouble());
 
-    if (type == QMetaType::QRegExp) {
-        QRegExp re = variant.value<QRegExp>();
+    if (type == QMetaType::QRegularExpression) {
+        QRegularExpression re = variant.value<QRegularExpression>();
 
         if (re.isValid()) {
-            UString pattern((UChar*)re.pattern().utf16(), re.pattern().length());
-            RegExpFlags flags = (re.caseSensitivity() == Qt::CaseInsensitive) ? FlagIgnoreCase : NoFlags;
+            QString16 tmp = re.pattern().toUtf16();
+            UString pattern((UChar*)tmp.constData(), tmp.size_storage());
+
+            RegExpFlags flags = NoFlags;
+
+            if (re.patternOptions() & QPatternOption::CaseInsensitiveOption) {
+               flags = FlagIgnoreCase;
+            }
 
             RefPtr<JSC::RegExp> regExp = JSC::RegExp::create(&exec->globalData(), pattern, flags);
-            if (regExp->isValid())
+
+            if (regExp->isValid()) {
                 return new (exec) RegExpObject(exec->lexicalGlobalObject(), exec->lexicalGlobalObject()->regExpStructure(), regExp.release());
+            }
+
             return jsNull();
         }
     }
 
-    if (type == QMetaType::QDateTime ||
-        type == QMetaType::QDate ||
-        type == QMetaType::QTime) {
+    if (type == QMetaType::QDateTime || type == QMetaType::QDate || type == QMetaType::QTime) {
 
         QDate date = QDate::currentDate();
         QTime time(0,0,0); // midnight
 
         if (type == QMetaType::QDate)
             date = variant.value<QDate>();
+
         else if (type == QMetaType::QTime)
             time = variant.value<QTime>();
+
         else {
             QDateTime dt = variant.value<QDateTime>().toLocalTime();
             date = dt.date();
@@ -991,8 +1038,9 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
 
     qConvDebug() << "fallback path for" << variant << variant.userType();
 
-    QString string = variant.toString();
-    UString ustring((UChar*)string.utf16(), string.length());
+    QString16 tmp = variant.toString().toUtf16();
+    UString ustring((UChar*)tmp.constData(), tmp.size_storage());
+
     return jsString(exec, ustring);
 }
 
@@ -1049,7 +1097,6 @@ public:
         MetaEnum
     };
 
-
     QtMethodMatchType()
         : m_kind(Invalid) { }
 
@@ -1073,7 +1120,7 @@ public:
     bool isMetaEnum() const
     { return (m_kind == MetaEnum); }
 
-    QByteArray name() const;
+    QString name() const;
 
     int enumeratorIndex() const
     { Q_ASSERT(isMetaEnum()); return m_typeId; }
@@ -1081,38 +1128,41 @@ public:
     static QtMethodMatchType variant()
     { return QtMethodMatchType(Variant); }
 
-    static QtMethodMatchType metaType(int typeId, const QByteArray &name)
+    static QtMethodMatchType metaType(int typeId, const QString &name)
     { return QtMethodMatchType(MetaType, typeId, name); }
 
-    static QtMethodMatchType metaEnum(int enumIndex, const QByteArray &name)
+    static QtMethodMatchType metaEnum(int enumIndex, const QString &name)
     { return QtMethodMatchType(MetaEnum, enumIndex, name); }
 
-    static QtMethodMatchType unresolved(const QByteArray &name)
-    { return QtMethodMatchType(Unresolved, /*typeId=*/0, name); }
+    static QtMethodMatchType unresolved(const QString &name)
+    { return QtMethodMatchType(Unresolved, 0, name); }
 
 private:
-    QtMethodMatchType(Kind kind, int typeId = 0, const QByteArray &name = QByteArray())
+    QtMethodMatchType(Kind kind, int typeId = 0, const QString &name = QString())
         : m_kind(kind), m_typeId(typeId), m_name(name) { }
 
     Kind m_kind;
     int m_typeId;
-    QByteArray m_name;
+    QString m_name;
 };
 
 QMetaType::Type QtMethodMatchType::typeId() const
 {
     if (isVariant())
         return (QMetaType::Type) QMetaType::type("QVariant");
+
     return (QMetaType::Type) (isMetaEnum() ? QMetaType::Int : m_typeId);
 }
 
-QByteArray QtMethodMatchType::name() const
+QString QtMethodMatchType::name() const
 {
-    if (!m_name.isEmpty())
+    if (! m_name.isEmpty())
         return m_name;
+
     else if (m_kind == Variant)
-        return "QVariant";
-    return QByteArray();
+        return QString("QVariant");
+
+    return QString();
 }
 
 struct QtMethodMatchData
@@ -1122,9 +1172,9 @@ struct QtMethodMatchData
     QVector<QtMethodMatchType> types;
     QVarLengthArray<QVariant, 10> args;
 
-    QtMethodMatchData(int dist, int idx, QVector<QtMethodMatchType> typs,
-                                const QVarLengthArray<QVariant, 10> &as)
+    QtMethodMatchData(int dist, int idx, QVector<QtMethodMatchType> typs, const QVarLengthArray<QVariant, 10> &as)
         : matchDistance(dist), index(idx), types(typs), args(as) { }
+
     QtMethodMatchData()
         : index(-1) { }
 
@@ -1141,40 +1191,41 @@ struct QtMethodMatchData
     }
 };
 
-static int indexOfMetaEnum(const QMetaObject *meta, const QByteArray &str)
+static int indexOfMetaEnum(const QMetaObject *meta, const QString &str)
 {
-    QByteArray scope;
-    QByteArray name;
+    QString scope;
+    QString name;
+
     int scopeIdx = str.indexOf("::");
+
     if (scopeIdx != -1) {
         scope = str.left(scopeIdx);
-        name = str.mid(scopeIdx + 2);
+        name  = str.mid(scopeIdx + 2);
+
     } else {
         name = str;
     }
+
     for (int i = meta->enumeratorCount() - 1; i >= 0; --i) {
         QMetaEnum m = meta->enumerator(i);
-        if ((m.name() == name)/* && (scope.isEmpty() || (m.scope() == scope))*/)
+
+        if ((m.name() == name))
             return i;
     }
+
     return -1;
 }
 
 // Helper function for resolving methods
 // Largely based on code in QtScript for compatibility reasons
-static int findMethodIndex(ExecState* exec,
-                           const QMetaObject *meta,
-                           const QByteArray &signature,
-                           bool allowPrivate,
-                           QVarLengthArray<QVariant, 10> &vars,
-                           void** vvars,
-                           JSObject **pError)
+static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QString &signature, bool allowPrivate,
+                  QVarLengthArray<QVariant, 10> &vars, void **vvars, JSObject **pError)
 {
     QList<int> matchingIndices;
 
     bool overloads = ! signature.contains('(');
-
     int count = meta->methodCount();
+
     for (int i = count - 1; i >= 0; --i) {
         const QMetaMethod m = meta->method(i);
 
@@ -1187,7 +1238,7 @@ static int findMethodIndex(ExecState* exec,
             matchingIndices.append(i);
 
         else if (overloads) {
-            QByteArray rawsignature = m.methodSignature();
+            QString rawsignature = m.methodSignature();
             rawsignature.truncate(rawsignature.indexOf('('));
 
             if (rawsignature == signature)
@@ -1197,11 +1248,13 @@ static int findMethodIndex(ExecState* exec,
 
     int chosenIndex = -1;
     *pError = 0;
+
     QVector<QtMethodMatchType> chosenTypes;
 
     QVarLengthArray<QVariant, 10> args;
     QVector<QtMethodMatchData> candidates;
     QVector<QtMethodMatchData> unresolved;
+
     QVector<int> tooFewArgs;
     QVector<int> conversionFailed;
 
@@ -1212,8 +1265,8 @@ static int findMethodIndex(ExecState* exec,
         bool unresolvedTypes = false;
 
         // resolve return type
-        QByteArray returnTypeName = method.typeName();
-        int rtype = QMetaType::type(returnTypeName.constData());
+        QString returnTypeName = method.typeName();
+        int rtype = QMetaType::type(returnTypeName);
 
         if ((rtype == 0) && !returnTypeName.isEmpty()) {
             if (returnTypeName == "QVariant") {
@@ -1241,17 +1294,19 @@ static int findMethodIndex(ExecState* exec,
         }
 
         // resolve argument types
-        QList<QByteArray> parameterTypeNames = method.parameterTypes();
+        QList<QString> parameterTypeNames = method.parameterTypes();
 
         for (int i = 0; i < parameterTypeNames.count(); ++i) {
-            QByteArray argTypeName = parameterTypeNames.at(i);
-            int atype = QMetaType::type(argTypeName.constData());
+            QString argTypeName = parameterTypeNames.at(i);
+            int atype = QMetaType::type(argTypeName);
 
             if (atype == 0) {
                 if (argTypeName == "QVariant") {
                     types.append(QtMethodMatchType::variant());
+
                 } else {
                     int enumIndex = indexOfMetaEnum(meta, argTypeName);
+
                     if (enumIndex != -1)
                         types.append(QtMethodMatchType::metaEnum(enumIndex, argTypeName));
                     else {
@@ -1259,6 +1314,7 @@ static int findMethodIndex(ExecState* exec,
                         types.append(QtMethodMatchType::unresolved(argTypeName));
                     }
                 }
+
             } else {
                 if (argTypeName == "QVariant")
                     types.append(QtMethodMatchType::variant());
@@ -1291,11 +1347,13 @@ static int findMethodIndex(ExecState* exec,
 
         bool converted = true;
         int matchDistance = 0;
+
         for (unsigned i = 0; converted && i + 1 < static_cast<unsigned>(types.count()); ++i) {
             JSValue arg = i < exec->argumentCount() ? exec->argument(i) : jsUndefined();
 
             int argdistance = -1;
             QVariant v = convertValueToQVariant(exec, arg, types.at(i+1).typeId(), &argdistance);
+
             if (argdistance >= 0) {
                 matchDistance += argdistance;
                 args[i+1] = v;
@@ -1314,15 +1372,19 @@ static int findMethodIndex(ExecState* exec,
                 // perfect match, use this one
                 chosenIndex = index;
                 break;
+
             } else {
                 QtMethodMatchData currentMatch(matchDistance, index, types, args);
+
                 if (candidates.isEmpty()) {
                     candidates.append(currentMatch);
+
                 } else {
                     QtMethodMatchData bestMatchSoFar = candidates.at(0);
-                    if ((args.count() > bestMatchSoFar.args.count())
-                        || ((args.count() == bestMatchSoFar.args.count())
+
+                    if ((args.count() > bestMatchSoFar.args.count()) || ((args.count() == bestMatchSoFar.args.count())
                             && (matchDistance <= bestMatchSoFar.matchDistance))) {
+
                         candidates.prepend(currentMatch);
                     } else {
                         candidates.append(currentMatch);
@@ -1339,14 +1401,17 @@ static int findMethodIndex(ExecState* exec,
 
     if (chosenIndex == -1 && candidates.count() == 0) {
         // No valid functions at all - format an error message
-        if (!conversionFailed.isEmpty()) {
-            QString message = QString::fromLatin1("incompatible type of argument(s) in call to %0(); candidates were\n")
-                              .arg(QLatin1String(signature));
+        if (! conversionFailed.isEmpty()) {
+
+            QString message = QString("Incompatible type of argument(s) in call to %0(), candidates were\n").formatArg(signature);
+
             for (int i = 0; i < conversionFailed.size(); ++i) {
-                if (i > 0)
-                    message += QLatin1String("\n");
+                if (i > 0) {
+                    message += "\n";
+                }
+
                 QMetaMethod mtd = meta->method(conversionFailed.at(i));
-                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
+                message += QString("    %0").formatArg(mtd.methodSignature());
             }
 
             *pError = throwError(exec, createTypeError(exec, message.toLatin1().constData()));
@@ -1354,20 +1419,24 @@ static int findMethodIndex(ExecState* exec,
         } else if (!unresolved.isEmpty()) {
             QtMethodMatchData argsInstance = unresolved.first();
             int unresolvedIndex = argsInstance.firstUnresolvedIndex();
+
             Q_ASSERT(unresolvedIndex != -1);
+
             QtMethodMatchType unresolvedType = argsInstance.types.at(unresolvedIndex);
-            QString message = QString::fromLatin1("cannot call %0(): unknown type `%1'")
-                .arg(QString::fromLatin1(signature))
-                .arg(QLatin1String(unresolvedType.name()));
+
+            QString message = QString("Can not call %0(): unknown type `%1'").formatArg(signature).formatArg(unresolvedType.name());
+
             *pError = throwError(exec, createTypeError(exec, message.toLatin1().constData()));
+
         } else {
-            QString message = QString::fromLatin1("too few arguments in call to %0(); candidates are\n")
-                              .arg(QLatin1String(signature));
+            QString message = QString("Too few arguments in call to %0(), candidates are\n").formatArg(signature);
+
             for (int i = 0; i < tooFewArgs.size(); ++i) {
                 if (i > 0)
-                    message += QLatin1String("\n");
+                    message += "\n";
+
                 QMetaMethod mtd = meta->method(tooFewArgs.at(i));
-                message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
+                message += QString("    %0").formatArg(mtd.methodSignature());
             }
 
             *pError = throwError(exec, createSyntaxError(exec, message.toLatin1().constData()));
@@ -1376,23 +1445,29 @@ static int findMethodIndex(ExecState* exec,
 
     if (chosenIndex == -1 && candidates.count() > 0) {
         QtMethodMatchData bestMatch = candidates.at(0);
-        if ((candidates.size() > 1)
-            && (bestMatch.args.count() == candidates.at(1).args.count())
+
+        if ((candidates.size() > 1) && (bestMatch.args.count() == candidates.at(1).args.count())
             && (bestMatch.matchDistance == candidates.at(1).matchDistance)) {
+
             // ambiguous call
-            QString message = QString::fromLatin1("ambiguous call of overloaded function %0(); candidates were\n")
-                                .arg(QLatin1String(signature));
+            QString message = QString("ambiguous call of overloaded function %0(), candidates were\n").formatArg(signature);
+
             for (int i = 0; i < candidates.size(); ++i) {
                 // Only candidate for overload if argument count and match distance is same as best match
+
                 if (candidates.at(i).args.count() == bestMatch.args.count()
                     || candidates.at(i).matchDistance == bestMatch.matchDistance) {
+
                     if (i > 0)
                         message += QLatin1String("\n");
+
                     QMetaMethod mtd = meta->method(candidates.at(i).index);
-                    message += QString::fromLatin1("    %0").arg(QString::fromLatin1(mtd.methodSignature().constData()));
+                    message += QString("    %0").formatArg(mtd.methodSignature());
                 }
             }
+
             *pError = throwError(exec, createTypeError(exec, message.toLatin1().constData()));
+
         } else {
             chosenIndex = bestMatch.index;
             args = bestMatch.args;
@@ -1413,7 +1488,7 @@ static int findMethodIndex(ExecState* exec,
 }
 
 // Signals are not fuzzy matched as much as methods
-static int findSignalIndex(const QMetaObject* meta, int initialIndex, QByteArray signature)
+static int findSignalIndex(const QMetaObject* meta, int initialIndex, QString signature)
 {
     int index = initialIndex;
     QMetaMethod method = meta->method(index);
@@ -1428,10 +1503,12 @@ static int findSignalIndex(const QMetaObject* meta, int initialIndex, QByteArray
     return index;
 }
 
-QtRuntimeMetaMethod::QtRuntimeMetaMethod(ExecState* exec, const Identifier& ident, PassRefPtr<QtInstance> inst, int index, const QByteArray& signature, bool allowPrivate)
+QtRuntimeMetaMethod::QtRuntimeMetaMethod(ExecState* exec, const Identifier& ident, PassRefPtr<QtInstance> inst,
+                  int index, const QString &signature, bool allowPrivate)
     : QtRuntimeMethod (new QtRuntimeMetaMethodData(), exec, ident, inst)
 {
     QW_D(QtRuntimeMetaMethod);
+
     d->m_signature = signature;
     d->m_index = index;
     d->m_allowPrivate = allowPrivate;
@@ -1441,6 +1518,7 @@ void QtRuntimeMetaMethod::visitChildren(SlotVisitor& visitor)
 {
     QtRuntimeMethod::visitChildren(visitor);
     QW_D(QtRuntimeMetaMethod);
+
     if (d->m_connect)
         visitor.append(&d->m_connect);
     if (d->m_disconnect)
@@ -1465,6 +1543,7 @@ EncodedJSValue QtRuntimeMetaMethod::call(ExecState* exec)
     JSLock lock(SilenceAssertionsOnly);
 
     QObject *obj = d->m_instance->getObject();
+
     if (obj) {
         QVarLengthArray<QVariant, 10> vargs;
         void *qargs[11];
@@ -1479,11 +1558,12 @@ EncodedJSValue QtRuntimeMetaMethod::call(ExecState* exec)
                 return JSValue::encode(convertQVariantToValue(exec, d->m_instance->rootObject(), vargs[0]));
         }
 
-        if (errorObj)
+        if (errorObj) {
             return JSValue::encode(errorObj);
+        }
 
     } else {
-        return throwVMError(exec, createError(exec, "cannot call function of deleted QObject"));
+        return throwVMError(exec, createError(exec, "can not call function of deleted QObject"));
     }
 
 */
@@ -1562,8 +1642,11 @@ JSValue QtRuntimeMetaMethod::connectGetter(ExecState* exec, JSValue slotBase, co
     QtRuntimeMetaMethod* thisObj = static_cast<QtRuntimeMetaMethod*>(asObject(slotBase));
     QW_DS(QtRuntimeMetaMethod, thisObj);
 
-    if (!d->m_connect)
-        d->m_connect.set(exec->globalData(), thisObj, new (exec) QtRuntimeConnectionMethod(exec, ident, true, d->m_instance, d->m_index, d->m_signature));
+    if (!d->m_connect) {
+        d->m_connect.set(exec->globalData(), thisObj, new (exec) QtRuntimeConnectionMethod(exec, ident, true,
+                  d->m_instance, d->m_index, d->m_signature));
+   }
+
     return d->m_connect.get();
 }
 
@@ -1572,8 +1655,11 @@ JSValue QtRuntimeMetaMethod::disconnectGetter(ExecState* exec, JSValue slotBase,
     QtRuntimeMetaMethod* thisObj = static_cast<QtRuntimeMetaMethod*>(asObject(slotBase));
     QW_DS(QtRuntimeMetaMethod, thisObj);
 
-    if (!d->m_disconnect)
-        d->m_disconnect.set(exec->globalData(), thisObj, new (exec) QtRuntimeConnectionMethod(exec, ident, false, d->m_instance, d->m_index, d->m_signature));
+    if (! d->m_disconnect)  {
+        d->m_disconnect.set(exec->globalData(), thisObj, new (exec) QtRuntimeConnectionMethod(exec, ident, false,
+                  d->m_instance, d->m_index, d->m_signature));
+    }
+
     return d->m_disconnect.get();
 }
 
@@ -1581,7 +1667,8 @@ JSValue QtRuntimeMetaMethod::disconnectGetter(ExecState* exec, JSValue slotBase,
 
 QMultiMap<QObject*, QtConnectionObject*> QtRuntimeConnectionMethod::connections;
 
-QtRuntimeConnectionMethod::QtRuntimeConnectionMethod(ExecState* exec, const Identifier& ident, bool isConnect, PassRefPtr<QtInstance> inst, int index, const QByteArray& signature)
+QtRuntimeConnectionMethod::QtRuntimeConnectionMethod(ExecState* exec, const Identifier& ident, bool isConnect,
+                  PassRefPtr<QtInstance> inst, int index, const QString &signature)
     : QtRuntimeMethod (new QtRuntimeConnectionMethodData(), exec, ident, inst)
 {
     QW_D(QtRuntimeConnectionMethod);
@@ -1682,9 +1769,9 @@ EncodedJSValue QtRuntimeConnectionMethod::call(ExecState *exec)
 
                 if (!ok) {
                     delete conn;
-                    QString msg = QString(QLatin1String("QtMetaMethod.connect: failed to connect to %1::%2()"))
-                            .arg(QLatin1String(sender->metaObject()->className()))
-                            .arg(QLatin1String(d->m_signature));
+                    QString msg = QString("QtMetaMethod.connect: failed to connect to %1::%2()")
+                            .formatArg(sender->metaObject()->className()).formatArg(d->m_signature);
+
                     return throwVMError(exec, createError(exec, msg.toLatin1().constData()));
                 }
                 else {
@@ -1697,7 +1784,7 @@ EncodedJSValue QtRuntimeConnectionMethod::call(ExecState *exec)
                 QList<QtConnectionObject*> conns = connections.values(sender);
                 bool ret = false;
 
-                foreach(QtConnectionObject* conn, conns) {
+                for (QtConnectionObject* conn : conns) {
                     // Is this the right connection?
                     if (conn->match(sender, signalIndex, thisObject, funcObject)) {
 
@@ -1712,24 +1799,25 @@ EncodedJSValue QtRuntimeConnectionMethod::call(ExecState *exec)
                     }
                 }
 
-                if (!ret) {
-                    QString msg = QString(QLatin1String("QtMetaMethod.disconnect: failed to disconnect from %1::%2()"))
-                            .arg(QLatin1String(sender->metaObject()->className()))
-                            .arg(QLatin1String(d->m_signature));
+                if (! ret) {
+                    QString msg = QString("QtMetaMethod.disconnect: failed to disconnect from %1::%2()")
+                            .formatArg(sender->metaObject()->className()).formatArg(d->m_signature);
 
                     return throwVMError(exec, createError(exec, msg.toLatin1().constData()));
                 }
             }
+
         } else {
-            QString msg = QString(QLatin1String("QtMetaMethod.%1: %2::%3() is not a signal"))
-                    .arg(QLatin1String(d->m_isConnect ? "connect": "disconnect"))
-                    .arg(QLatin1String(sender->metaObject()->className()))
-                    .arg(QLatin1String(d->m_signature));
+            QString msg = QString("QtMetaMethod.%1: %2::%3() is not a signal")
+                    .formatArg(d->m_isConnect ? QString("connect") : QString("disconnect"))
+                    .formatArg(sender->metaObject()->className())
+                    .formatArg(d->m_signature);
 
             return throwVMError(exec, createTypeError(exec, msg.toLatin1().constData()));
         }
+
     } else {
-        return throwVMError(exec, createError(exec, "cannot call function of deleted QObject"));
+        return throwVMError(exec, createError(exec, "Can not call function of deleted QObject"));
     }
 
     return JSValue::encode(jsUndefined());

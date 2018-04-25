@@ -1,21 +1,24 @@
-/*
- * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
 
 #include "config.h"
 #include "qt_instance.h"
@@ -84,7 +87,7 @@ QtInstance::QtInstance(QObject* o, PassRefPtr<RootObject> rootObject, QScriptEng
     , m_hashkey(o)
     , m_ownership(ownership)
 {
-    // This is a good place to register Qt metatypes that are in the QtWebKit module, as this is class will initialize if we have a QObject bridge.
+    // good place to register Qt metatypes in QtWebKit, as this is class will initialize if we have a QObject bridge.
     qRegisterMetaType<QWebElement>();
 }
 
@@ -152,7 +155,7 @@ void QtInstance::removeCachedMethod(JSObject* method)
     if (m_defaultMethod.get() == method)
         m_defaultMethod.clear();
 
-    for (QHash<QByteArray, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it) {
+    for (QHash<QString, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it) {
         if (it.value().get() == method) {
             m_methods.erase(it);
             return;
@@ -190,7 +193,8 @@ void QtInstance::visitAggregate(SlotVisitor& visitor)
 {
     if (m_defaultMethod)
         visitor.append(&m_defaultMethod);
-    for (QHash<QByteArray, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it)
+
+    for (QHash<QString, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it)
         visitor.append(&it.value());
 }
 
@@ -218,22 +222,27 @@ void QtInstance::getPropertyNames(ExecState *exec, PropertyNameArray &array)
         int i;
         for (i = 0; i < meta->propertyCount(); i++) {
             QMetaProperty prop = meta->property(i);
-            if (prop.isScriptable())
-                array.add(Identifier(exec, prop.name()));
+
+            if (prop.isScriptable()) {
+                array.add(Identifier(exec, prop.name().constData()));
+            }
         }
 
 #ifndef QT_NO_PROPERTIES
-        QList<QByteArray> dynProps = obj->dynamicPropertyNames();
-        foreach (const QByteArray& ba, dynProps)
+        QList<QString> dynProps = obj->dynamicPropertyNames();
+
+        for (const QString &ba : dynProps) {
             array.add(Identifier(exec, ba.constData()));
+        }
 #endif
 
         const int methodCount = meta->methodCount();
+
         for (i = 0; i < methodCount; i++) {
             QMetaMethod method = meta->method(i);
 
             if (method.access() != QMetaMethod::Private)
-                array.add(Identifier(exec, method.methodSignature().constData() ));
+                array.add(Identifier(exec, method.methodSignature().constData()));
         }
     }
 }
@@ -289,7 +298,7 @@ JSValue QtInstance::stringValue(ExecState* exec) const
         const QMetaObject* metaObj = obj->metaObject();
 
         QString name = obj->objectName();
-        QString str  = QString::fromUtf8("%0(name = \"%1\")").arg(QLatin1String(metaObj->className())).arg(name);
+        QString str  = QString::fromUtf8("%0(name = \"%1\")").formatArg(metaObj->className()).formatArg(name);
 
         buf = str.toLatin1();
     }
@@ -317,20 +326,24 @@ JSValue QtInstance::valueOf(ExecState* exec) const
 JSValue convertQVariantToValue(ExecState*, PassRefPtr<RootObject> root, const QVariant& variant);
 QVariant convertValueToQVariant(ExecState*, JSValue, QMetaType::Type hint, int *distance);
 
-QByteArray QtField::name() const
+QString QtField::name() const
 {
-    if (m_type == MetaProperty)
+    if (m_type == MetaProperty) {
         return m_property.name();
+    }
 
-    if (m_type == ChildObject && m_childObject)
-        return m_childObject->objectName().toLatin1();
+    if (m_type == ChildObject && m_childObject) {
+        return m_childObject->objectName();
+    }
+
 
 #ifndef QT_NO_PROPERTIES
-    if (m_type == DynamicProperty)
+    if (m_type == DynamicProperty) {
         return m_dynamicProperty;
+    }
 #endif
 
-    return QByteArray(); // deleted child object
+    return QString(); // deleted child object
 }
 
 JSValue QtField::valueFromInstance(ExecState* exec, const Instance* inst) const
@@ -340,20 +353,26 @@ JSValue QtField::valueFromInstance(ExecState* exec, const Instance* inst) const
 
     if (obj) {
         QVariant val;
+
         if (m_type == MetaProperty) {
+
             if (m_property.isReadable())
                 val = m_property.read(obj);
             else
                 return jsUndefined();
+
+
         } else if (m_type == ChildObject)
             val = QVariant::fromValue((QObject*) m_childObject);
+
 #ifndef QT_NO_PROPERTIES
         else if (m_type == DynamicProperty)
             val = obj->property(m_dynamicProperty);
 #endif
         return convertQVariantToValue(exec, inst->rootObject(), val);
     }
-    QString msg = QString(QLatin1String("cannot access member `%1' of deleted QObject")).arg(QLatin1String(name()));
+
+    QString msg = QString("Can not access member `%1' of deleted QObject").formatArg(name());
     return throwError(exec, createError(exec, msg.toLatin1().constData()));
 }
 
@@ -364,6 +383,7 @@ void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue 
 
     const QtInstance* instance = static_cast<const QtInstance*>(inst);
     QObject* obj = instance->getObject();
+
     if (obj) {
         QMetaType::Type argtype = QMetaType::Void;
         if (m_type == MetaProperty)
@@ -371,16 +391,19 @@ void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue 
 
         // dynamic properties just get any QVariant
         QVariant val = convertValueToQVariant(exec, aValue, argtype, 0);
+
         if (m_type == MetaProperty) {
             if (m_property.isWritable())
                 m_property.write(obj, val);
         }
+
 #ifndef QT_NO_PROPERTIES
         else if (m_type == DynamicProperty)
-            obj->setProperty(m_dynamicProperty.constData(), val);
+            obj->setProperty(m_dynamicProperty, val);
 #endif
+
     } else {
-        QString msg = QString(QLatin1String("cannot access member `%1' of deleted QObject")).arg(QLatin1String(name()));
+        QString msg = QString("Can not access member `%1' of deleted QObject").formatArg(name());
         throwError(exec, createError(exec, msg.toLatin1().constData()));
     }
 }

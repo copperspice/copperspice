@@ -1,26 +1,30 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
 /*
  * Copyright (C) 2000 Peter Kelly (pmk@post.com)
  * Copyright (C) 2005, 2006, 2008 Apple Inc. All rights reserved.
  * Copyright (C) 2006 Alexey Proskuryakov (ap@webkit.org)
  * Copyright (C) 2007 Samuel Weinig (sam@webkit.org)
- * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
- * Copyright (C) 2008 Holger Hans Peter Freyther
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
  */
 
 #include "config.h"
@@ -244,7 +248,7 @@ TextPosition0 XMLDocumentParser::textPosition() const
 }
 
 // This method incorrectly reinterprets zero-base lineNumber method as one-based number.
-// FIXME: This error is kept for compatibility. We should fix it eventually. 
+// FIXME: This error is kept for compatibility. We should fix it eventually.
 TextPosition1 XMLDocumentParser::textPositionOneBased() const
 {
     return TextPosition1(WTF::OneBasedNumber::fromOneBasedInt(lineNumber()), WTF::OneBasedNumber::fromOneBasedInt(columnNumber()));
@@ -316,21 +320,25 @@ HashMap<String, String> parseAttributes(const String& string, bool& attrsOK)
     state.gotAttributes = false;
 
     QXmlStreamReader stream;
-    QString dummy = QString(QLatin1String("<?xml version=\"1.0\"?><attrs %1 />")).arg(string);
+    QString dummy = QString("<?xml version=\"1.0\"?><attrs %1 />").formatArg(string);
+
     stream.addData(dummy);
+
     while (!stream.atEnd()) {
         stream.readNext();
         if (stream.isStartElement()) {
             attributesStartElementNsHandler(&state, stream.attributes());
         }
     }
+
     attrsOK = state.gotAttributes;
     return state.attributes;
 }
 
 static inline String prefixFromQName(const QString& qName)
 {
-    const int offset = qName.indexOf(QLatin1Char(':'));
+    const int offset = qName.indexOf(:');
+
     if (offset <= 0)
         return String();
     else

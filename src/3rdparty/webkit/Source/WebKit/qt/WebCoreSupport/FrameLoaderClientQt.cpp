@@ -106,21 +106,26 @@ static QString drtDescriptionSuitableForTestResult(WebCore::Frame* webCoreFrame)
     QString name = frame->frameName();
 
     bool isMainFrame = frame == frame->page()->mainFrame();
+
     if (isMainFrame) {
         if (!name.isEmpty())
-            return QString::fromLatin1("main frame \"%1\"").arg(name);
+            return QString("main frame \"%1\"").formatArg(name);
+
         return QLatin1String("main frame");
     }
+
     if (!name.isEmpty())
-        return QString::fromLatin1("frame \"%1\"").arg(name);
+        return QString("frame \"%1\"").formatArg(name);
+
     return QLatin1String("frame (anonymous)");
 }
 
 static QString drtPrintFrameUserGestureStatus(WebCore::Frame* frame)
 {
     if (frame->loader()->isProcessingUserGesture())
-        return QString::fromLatin1("Frame with user gesture \"%1\"").arg(QLatin1String("true"));
-    return QString::fromLatin1("Frame with user gesture \"%1\"").arg(QLatin1String("false"));
+        return QString("Frame with user gesture \"%1\"").formatArg(QLatin1String("true"));
+
+    return QString("Frame with user gesture \"%1\"").formatArg(QLatin1String("false"));
 }
 
 static QString drtDescriptionSuitableForTestResult(const WebCore::KURL& kurl)
@@ -134,7 +139,7 @@ static QString drtDescriptionSuitableForTestResult(const WebCore::KURL& kurl)
 static QString drtDescriptionSuitableForTestResult(const WebCore::ResourceError& error)
 {
     QString failingURL = error.failingURL();
-    return QString::fromLatin1("<NSError domain NSURLErrorDomain, code %1, failing URL \"%2\">").arg(error.errorCode()).arg(failingURL);
+    return QString::fromLatin1("<NSError domain NSURLErrorDomain, code %1, failing URL \"%2\">").formatArg(error.errorCode()).formatArg(failingURL);
 }
 
 static QString drtDescriptionSuitableForTestResult(const WebCore::ResourceRequest& request)
@@ -142,14 +147,16 @@ static QString drtDescriptionSuitableForTestResult(const WebCore::ResourceReques
     QString url = drtDescriptionSuitableForTestResult(request.url());
     QString httpMethod = request.httpMethod();
     QString mainDocumentUrl = drtDescriptionSuitableForTestResult(request.firstPartyForCookies());
-    return QString::fromLatin1("<NSURLRequest URL %1, main document URL %2, http method %3>").arg(url).arg(mainDocumentUrl).arg(httpMethod);
+
+    return QString::fromLatin1("<NSURLRequest URL %1, main document URL %2, http method %3>")
+                  .formatArg(url).formatArg(mainDocumentUrl).formatArg(httpMethod);
 }
 
 static QString drtDescriptionSuitableForTestResult(const WebCore::ResourceResponse& response)
 {
     QString url = drtDescriptionSuitableForTestResult(response.url());
     int httpStatusCode = response.httpStatusCode();
-    return QString::fromLatin1("<NSURLResponse %1, http status code %2>").arg(url).arg(httpStatusCode);
+    return QString::fromLatin1("<NSURLResponse %1, http status code %2>").formatArg(url).formatArg(httpStatusCode);
 }
 
 static QString drtDescriptionSuitableForTestResult(const RefPtr<WebCore::Node> node, int exception)
@@ -1050,8 +1057,9 @@ void FrameLoaderClientQt::dispatchWillSendRequest(WebCore::DocumentLoader*, unsi
         return;
     }
 
-    for (int i = 0; i < sendRequestClearHeaders.size(); ++i)
-          newRequest.setHTTPHeaderField(sendRequestClearHeaders.at(i).toLocal8Bit().constData(), QString());
+    for (int i = 0; i < sendRequestClearHeaders.size(); ++i) {
+          newRequest.setHTTPHeaderField(sendRequestClearHeaders.at(i).toUtf8().constData(), QString());
+    }
 
     if (QWebPagePrivate::drtRun) {
         QMap<QString, QString>::const_iterator it = URLsToRedirect.constFind(url.toString());

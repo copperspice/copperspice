@@ -555,7 +555,8 @@ String WebPlatformStrategies::unknownFileSizeText()
 
 String WebPlatformStrategies::imageTitle(const String& filename, const IntSize& size)
 {
-    return QCoreApplication::translate("QWebPage", "%1 (%2x%3 pixels)", "Title string for images").arg(filename).arg(size.width()).arg(size.height());
+    return QCoreApplication::translate("QWebPage", "%1 (%2x%3 pixels)", "Title string for images")
+                  .formatArg(filename).formatArg(size.width()).formatArg(size.height());
 }
 
 String WebPlatformStrategies::mediaElementLoadingStateText()

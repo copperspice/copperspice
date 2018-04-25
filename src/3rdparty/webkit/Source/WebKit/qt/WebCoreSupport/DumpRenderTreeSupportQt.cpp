@@ -454,7 +454,7 @@ void DumpRenderTreeSupportQt::suspendActiveDOMObjects(QWebFrame* frame)
 {
     Frame* coreFrame = QWebFramePrivate::core(frame);
     if (coreFrame->document())
-        // FIXME: This function should be changed take a ReasonForSuspension parameter 
+        // FIXME: This function should be changed take a ReasonForSuspension parameter
         // https://bugs.webkit.org/show_bug.cgi?id=45732
         coreFrame->document()->suspendActiveDOMObjects(ActiveDOMObject::JavaScriptDebuggerPaused);
 }
@@ -772,13 +772,13 @@ QString DumpRenderTreeSupportQt::viewportAsText(QWebPage* page, int deviceDPI, c
         availableSize);
 
     QString res;
-    res = res.sprintf("viewport size %dx%d scale %f with limits [%f, %f] and userScalable %f\n",
-            conf.layoutSize.width(),
-            conf.layoutSize.height(),
-            conf.initialScale,
-            conf.minimumScale,
-            conf.maximumScale,
-            conf.userScalable);
+    res = QString("viewport size %1x%2 scale %3 with limits [%4, %5] and userScalable %6\n")
+            .formatArg(conf.layoutSize.width())
+            .formatArg(conf.layoutSize.height())
+            .formatArg(conf.initialScale, 0, 'f')
+            .formatArg(conf.minimumScale, 0, 'f')
+            .formatArg(conf.maximumScale, 0, 'f')
+            .formatArg(conf.userScalable, 0, 'f');
 
     return res;
 }
@@ -798,7 +798,8 @@ void DumpRenderTreeSupportQt::removeMockDeviceOrientation()
 #endif
 }
 
-void DumpRenderTreeSupportQt::setMockDeviceOrientation(bool canProvideAlpha, double alpha, bool canProvideBeta, double beta, bool canProvideGamma, double gamma)
+void DumpRenderTreeSupportQt::setMockDeviceOrientation(bool canProvideAlpha, double alpha, bool canProvideBeta,
+                  double beta, bool canProvideGamma, double gamma)
 {
 #if ENABLE(DEVICE_ORIENTATION)
     DeviceOrientationClientMockQt::client()->setOrientation(canProvideAlpha, alpha, canProvideBeta, beta, canProvideGamma, gamma);

@@ -311,14 +311,14 @@ public:
     DocumentType* doctype() const { return m_docType.get(); }
 
     DOMImplementation* implementation();
-    
+
     Element* documentElement() const
     {
         if (!m_documentElement)
             cacheDocumentElement();
         return m_documentElement.get();
     }
-    
+
     virtual PassRefPtr<Element> createElement(const AtomicString& tagName, ExceptionCode&);
     PassRefPtr<DocumentFragment> createDocumentFragment();
     PassRefPtr<Text> createTextNode(const String& data);
@@ -353,7 +353,7 @@ public:
     String readyState() const;
 
     String defaultCharset() const;
-    
+
     String inputEncoding() const { return Document::encoding(); }
     String charset() const { return Document::encoding(); }
     String characterSet() const { return Document::encoding(); }
@@ -402,7 +402,7 @@ public:
         unsigned index = type - FirstUnnamedDocumentCachedType;
         ASSERT(index < NumUnnamedDocumentCachedTypes);
         m_collectionInfo[index].checkConsistency();
-        return &m_collectionInfo[index]; 
+        return &m_collectionInfo[index];
     }
 
     CollectionCache* nameCollectionInfo(CollectionType, const AtomicString& name);
@@ -421,14 +421,14 @@ public:
     virtual bool isPluginDocument() const { return false; }
     virtual bool isMediaDocument() const { return false; }
 #if ENABLE(XHTMLMP)
-    bool isXHTMLMPDocument() const; 
+    bool isXHTMLMPDocument() const;
     bool shouldProcessNoscriptElement() const { return m_shouldProcessNoScriptElement; }
     void setShouldProcessNoscriptElement(bool shouldDo) { m_shouldProcessNoScriptElement = shouldDo; }
 #endif
     virtual bool isFrameSet() const { return false; }
-    
+
     PassRefPtr<CSSPrimitiveValueCache> cssPrimitiveValueCache() const;
-    
+
     CSSStyleSelector* styleSelectorIfExists() const { return m_styleSelector.get(); }
 
     bool usesViewSourceStyles() const { return m_usesViewSourceStyles; }
@@ -437,7 +437,7 @@ public:
     bool sawElementsInKnownNamespaces() const { return m_sawElementsInKnownNamespaces; }
 
     CSSStyleSelector* styleSelector()
-    { 
+    {
         if (!m_styleSelector)
             createStyleSelector();
         return m_styleSelector.get();
@@ -450,7 +450,7 @@ public:
 
     /**
      * This method returns true if all top-level stylesheets have loaded (including
-     * any @imports that they may be loading).
+     * any imports that they may be loading).
      */
     bool haveStylesheetsLoaded() const
     {
@@ -458,7 +458,7 @@ public:
     }
 
     /**
-     * Increments the number of pending sheets.  The <link> elements
+     * Increments the number of pending sheets.  The link elements
      * invoke this to add themselves to the loading list.
      */
     void addPendingSheet() { m_pendingStylesheets++; }
@@ -515,7 +515,7 @@ public:
     PassRefPtr<NodeIterator> createNodeIterator(Node* root, unsigned whatToShow,
         PassRefPtr<NodeFilter>, bool expandEntityReferences, ExceptionCode&);
 
-    PassRefPtr<TreeWalker> createTreeWalker(Node* root, unsigned whatToShow, 
+    PassRefPtr<TreeWalker> createTreeWalker(Node* root, unsigned whatToShow,
         PassRefPtr<NodeFilter>, bool expandEntityReferences, ExceptionCode&);
 
     // Special support for editing
@@ -552,11 +552,11 @@ public:
     void clearAXObjectCache();
     AXObjectCache* axObjectCache() const;
     bool axObjectCacheExists() const;
-    
+
     // to get visually ordered hebrew and arabic pages right
     void setVisuallyOrdered();
     bool visuallyOrdered() const { return m_visuallyOrdered; }
-    
+
     void setDocumentLoader(DocumentLoader* documentLoader) { m_documentLoader = documentLoader; }
     DocumentLoader* loader() const { return m_documentLoader; }
 
@@ -602,17 +602,17 @@ public:
 
     CSSStyleSheet* elementSheet();
     CSSStyleSheet* mappedElementSheet();
-    
+
     virtual PassRefPtr<DocumentParser> createParser();
     DocumentParser* parser() const { return m_parser.get(); }
     ScriptableDocumentParser* scriptableDocumentParser() const;
-    
+
     bool printing() const { return m_printing; }
     void setPrinting(bool p) { m_printing = p; }
 
     bool paginatedForScreen() const { return m_paginatedForScreen; }
     void setPaginatedForScreen(bool p) { m_paginatedForScreen = p; }
-    
+
     bool paginated() const { return printing() || paginatedForScreen(); }
 
     enum CompatibilityMode { QuirksMode, LimitedQuirksMode, NoQuirksMode };
@@ -644,7 +644,7 @@ public:
     bool shouldScheduleLayout();
     bool isLayoutTimerActive();
     int elapsedTime() const;
-    
+
     void setTextColor(const Color& color) { m_textColor = color; }
     Color textColor() const { return m_textColor; }
 
@@ -657,7 +657,7 @@ public:
     void resetLinkColor();
     void resetVisitedLinkColor();
     void resetActiveLinkColor();
-    
+
     MouseEventWithHitTestResults prepareMouseEvent(const HitTestRequest&, const IntPoint&, const PlatformMouseEvent&);
 
     StyleSheetList* styleSheets();
@@ -674,8 +674,8 @@ public:
     Node* focusedNode() const { return m_focusedNode.get(); }
 
     void getFocusableNodes(Vector<RefPtr<Node> >&);
-    
-    // The m_ignoreAutofocus flag specifies whether or not the document has been changed by the user enough 
+
+    // The m_ignoreAutofocus flag specifies whether or not the document has been changed by the user enough
     // for WebCore to ignore the autofocus attribute on any form controls
     bool ignoreAutofocus() const { return m_ignoreAutofocus; };
     void setIgnoreAutofocus(bool shouldIgnore = true) { m_ignoreAutofocus = shouldIgnore; };
@@ -694,7 +694,7 @@ public:
     // Updates for :target (CSS3 selector).
     void setCSSTarget(Element*);
     Element* cssTarget() const { return m_cssTarget; }
-    
+
     void scheduleForcedStyleRecalc();
     void scheduleStyleRecalc();
     void unscheduleStyleRecalc();
@@ -719,7 +719,7 @@ public:
     void textNodesMerged(Text* oldNode, unsigned offset);
     void textNodeSplit(Text* oldNode);
 
-    DOMWindow* defaultView() const { return domWindow(); } 
+    DOMWindow* defaultView() const { return domWindow(); }
     DOMWindow* domWindow() const;
 
     // Helper functions for forwarding DOMWindow event related tasks to the DOMWindow if it exists.
@@ -761,11 +761,8 @@ public:
      * The order followed is as specified in section 17.11.1 of the HTML4 spec, which is elements with tab indexes
      * first (from lowest to highest), and then elements without tab indexes (in document order).
      *
-     * @param fromNode The node from which to start searching. The node after this will be focused. May be null.
+     * fromNode - The node from which to start searching. The node after this will be focused. May be null.
      *
-     * @return The focus node that comes after fromNode
-     *
-     * See http://www.w3.org/TR/html4/interact/forms.html#h-17.11.1
      */
     Node* nextFocusableNode(Node* start, KeyboardEvent*);
 
@@ -774,11 +771,7 @@ public:
      * fromNode. The order followed is as specified in section 17.11.1 of the HTML4 spec, which is elements with tab
      * indexes first (from lowest to highest), and then elements without tab indexes (in document order).
      *
-     * @param fromNode The node from which to start searching. The node before this will be focused. May be null.
-     *
-     * @return The focus node that comes before fromNode
-     *
-     * See http://www.w3.org/TR/html4/interact/forms.html#h-17.11.1
+     * fromNode - The node from which to start searching. The node before this will be focused. May be null.
      */
     Node* previousFocusableNode(Node* start, KeyboardEvent*);
 
@@ -791,8 +784,8 @@ public:
      * tag. This enables scripts to use meta tags to perform refreshes and set expiry dates in addition to them being
      * specified in a HTML file.
      *
-     * @param equiv The http header name (value of the meta tag's "equiv" attribute)
-     * @param content The header value (value of the meta tag's "content" attribute)
+     *  equivThe http header name (value of the meta tag's "equiv" attribute)
+     * content The header value (value of the meta tag's "content" attribute)
      */
     void processHttpEquiv(const String& equiv, const String& content);
     void processViewport(const String& features);
@@ -842,7 +835,7 @@ public:
     //
     const KURL& firstPartyForCookies() const { return m_firstPartyForCookies; }
     void setFirstPartyForCookies(const KURL& url) { m_firstPartyForCookies = url; }
-    
+
     // The following implements the rule from HTML 4 for what valid names are.
     // To get this right for all the XML cases, we probably have to improve this or move it
     // and make it sensitive to the type of document.
@@ -852,10 +845,10 @@ public:
     // It also does a validity check, and returns false if the qualified name
     // is invalid.  It also sets ExceptionCode when name is invalid.
     static bool parseQualifiedName(const String& qualifiedName, String& prefix, String& localName, ExceptionCode&);
-    
+
     // Checks to make sure prefix and namespace do not conflict (per DOM Core 3)
     static bool hasPrefixNamespaceMismatch(const QualifiedName&);
-    
+
     HTMLElement* body() const;
     void setBody(PassRefPtr<HTMLElement>, ExceptionCode&);
 
@@ -874,9 +867,9 @@ public:
     bool queryCommandState(const String& command);
     bool queryCommandSupported(const String& command);
     String queryCommandValue(const String& command);
-    
+
     // designMode support
-    enum InheritedBool { off = false, on = true, inherit };    
+    enum InheritedBool { off = false, on = true, inherit };
     void setDesignMode(InheritedBool value);
     InheritedBool getDesignMode() const;
     bool inDesignMode() const;
@@ -885,7 +878,7 @@ public:
     Document* topDocument() const;
 
     int docID() const { return m_docID; }
-    
+
     ScriptRunner* scriptRunner() { return m_scriptRunner.get(); }
 
 #if ENABLE(XSLT)
@@ -915,11 +908,11 @@ public:
                                      XPathResult* result,
                                      ExceptionCode& ec);
 #endif // ENABLE(XPATH)
-    
+
     enum PendingSheetLayout { NoLayoutWithPendingSheets, DidLayoutWithPendingSheets, IgnoreLayoutWithPendingSheets };
 
     bool didLayoutWithPendingStylesheets() const { return m_pendingSheetLayout == DidLayoutWithPendingSheets; }
-    
+
     void setHasNodesWithPlaceholderStyle() { m_hasNodesWithPlaceholderStyle = true; }
 
     IconURL iconURL(IconType) const;
@@ -931,10 +924,10 @@ public:
 
     void updateFocusAppearanceSoon(bool restorePreviousSelection);
     void cancelFocusAppearanceUpdate();
-        
+
     // FF method for accessing the selection added for compatibility.
     DOMSelection* getSelection() const;
-    
+
     // Extension for manipulating canvas drawing contexts for use in CSS
     CanvasRenderingContext* getCSSCanvasContext(const String& type, const String& name, int width, int height);
     HTMLCanvasElement* getCSSCanvasElement(const String& name);
@@ -952,8 +945,8 @@ public:
 
     bool inPageCache() const { return m_inPageCache; }
     void setInPageCache(bool flag);
-    
-    // Elements can register themselves for the "documentWillBecomeInactive()" and  
+
+    // Elements can register themselves for the "documentWillBecomeInactive()" and
     // "documentDidBecomeActive()" callbacks
     void registerForDocumentActivationCallbacks(Element*);
     void unregisterForDocumentActivationCallbacks(Element*);
@@ -994,7 +987,7 @@ public:
     virtual void removeAllEventListeners();
 
     CheckedRadioButtons& checkedRadioButtons() { return m_checkedRadioButtons; }
-    
+
 #if ENABLE(SVG)
     const SVGDocumentExtensions* svgExtensions();
     SVGDocumentExtensions* accessSVGExtensions();
@@ -1038,12 +1031,12 @@ public:
     MediaCanStartListener* takeAnyMediaCanStartListener();
 
     const QualifiedName& idAttributeName() const { return m_idAttributeName; }
-    
+
 #if ENABLE(FULLSCREEN_API)
     bool webkitIsFullScreen() const { return m_fullScreenElement.get(); }
     bool webkitFullScreenKeyboardInputAllowed() const { return m_fullScreenElement.get() && m_areKeysEnabledInFullScreen; }
     Element* webkitCurrentFullScreenElement() const { return m_fullScreenElement.get(); }
-    
+
     enum FullScreenCheckType {
         EnforceIFrameAllowFulScreenRequirement,
         ExemptIFrameAllowFulScreenRequirement,
@@ -1051,18 +1044,18 @@ public:
 
     void requestFullScreenForElement(Element*, unsigned short flags, FullScreenCheckType);
     void webkitCancelFullScreen();
-    
+
     void webkitWillEnterFullScreenForElement(Element*);
     void webkitDidEnterFullScreenForElement(Element*);
     void webkitWillExitFullScreenForElement(Element*);
     void webkitDidExitFullScreenForElement(Element*);
-    
+
     void setFullScreenRenderer(RenderFullScreen*);
     RenderFullScreen* fullScreenRenderer() const { return m_fullScreenRenderer; }
-    
+
     void setFullScreenRendererSize(const IntSize&);
     void setFullScreenRendererBackgroundColor(Color);
-    
+
     void fullScreenChangeDelayTimerFired(Timer<Document>*);
     bool fullScreenIsAllowedForElement(Element*) const;
     void fullScreenElementRemoved();
@@ -1146,7 +1139,7 @@ private:
     OwnPtr<CSSStyleSelector> m_styleSelector;
     bool m_didCalculateStyleSelector;
     bool m_hasDirtyStyleSelector;
-    
+
     mutable RefPtr<CSSPrimitiveValueCache> m_cssPrimitiveValueCache;
 
     Frame* m_frame;
@@ -1188,7 +1181,7 @@ private:
     // to track that this happened so that we can do a full repaint when the stylesheets
     // do eventually load.
     PendingSheetLayout m_pendingSheetLayout;
-    
+
     bool m_hasNodesWithPlaceholderStyle;
 
     RefPtr<CSSStyleSheet> m_elemSheet;
@@ -1214,14 +1207,14 @@ private:
 
     uint64_t m_domTreeVersion;
     static uint64_t s_globalTreeVersion;
-    
+
     HashSet<NodeIterator*> m_nodeIterators;
     HashSet<Range*> m_ranges;
 
     unsigned short m_listenerTypes;
 
     RefPtr<StyleSheetList> m_styleSheets; // All of the stylesheets that are currently in effect for our media type and stylesheet set.
-    
+
     typedef ListHashSet<Node*, 32> StyleSheetCandidateListHashSet;
     StyleSheetCandidateListHashSet m_styleSheetCandidateNodes; // All of the nodes that could potentially provide stylesheets to the document (<link>, <style>, <?xml-stylesheet>)
 
@@ -1232,7 +1225,7 @@ private:
 
     typedef HashMap<FormElementKey, Vector<String>, FormElementKeyHash, FormElementKeyHashTraits> FormElementStateMap;
     FormElementStateMap m_stateForNewFormElements;
-    
+
     Color m_linkColor;
     Color m_visitedLinkColor;
     Color m_activeLinkColor;
@@ -1244,7 +1237,7 @@ private:
     bool m_visuallyOrdered;
     ReadyState m_readyState;
     bool m_bParsing;
-    
+
     Timer<Document> m_styleRecalcTimer;
     bool m_pendingStyleRecalcShouldForce;
     bool m_inStyleRecalc;
@@ -1277,11 +1270,11 @@ private:
 
     mutable AXObjectCache* m_axObjectCache;
     OwnPtr<DocumentMarkerController> m_markers;
-    
+
     Timer<Document> m_updateFocusAppearanceTimer;
 
     Element* m_cssTarget;
-    
+
     bool m_processingLoadEvent;
     RefPtr<SerializedScriptValue> m_pendingStateObject;
     double m_startTime;
@@ -1290,7 +1283,7 @@ private:
     // using setExtraLayoutDelay to modify the minimum delay used at different
     // points during the lifetime of the Document.
     int m_extraLayoutDelay;
-    
+
     OwnPtr<ScriptRunner> m_scriptRunner;
 
 #if ENABLE(XSLT)
@@ -1311,11 +1304,11 @@ private:
 #endif
 
     RenderObject* m_savedRenderer;
-    
+
     RefPtr<TextResourceDecoder> m_decoder;
 
     InheritedBool m_designMode;
-    
+
     CheckedRadioButtons m_checkedRadioButtons;
 
     typedef HashMap<AtomicStringImpl*, CollectionCache*> NamedCollectionMap;
@@ -1325,11 +1318,11 @@ private:
 #if ENABLE(XPATH)
     RefPtr<XPathEvaluator> m_xpathEvaluator;
 #endif
-    
+
 #if ENABLE(SVG)
     OwnPtr<SVGDocumentExtensions> m_svgExtensions;
 #endif
-    
+
 #if ENABLE(DASHBOARD_SUPPORT)
     Vector<DashboardRegionValue> m_dashboardRegions;
     bool m_hasDashboardRegions;
@@ -1346,7 +1339,7 @@ private:
     HashSet<Element*> m_mediaVolumeCallbackElements;
     HashSet<Element*> m_privateBrowsingStateChangedElements;
 
-    HashMap<StringImpl*, Element*, CaseFoldingHash> m_elementsByAccessKey;    
+    HashMap<StringImpl*, Element*, CaseFoldingHash> m_elementsByAccessKey;
     bool m_accessKeyMapValid;
 
     bool m_useSecureKeyboardEntryWhenActive;

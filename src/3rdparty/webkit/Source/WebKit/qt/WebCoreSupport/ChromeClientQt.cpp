@@ -339,7 +339,8 @@ bool ChromeClientQt::runJavaScriptPrompt(Frame* f, const String& message, const 
 
     // Fix up a quirk in the QInputDialog class. If no input happened the string should be empty
     // but it is null. See https://bugs.webkit.org/show_bug.cgi?id=30914.
-    if (rc && x.isNull())
+
+    if (rc && x.isEmpty())
         result = String("");
     else
         result = x;
@@ -422,7 +423,7 @@ void ChromeClientQt::invalidateContentsAndWindow(const IntRect &windowRect, bool
    QRect rect_1(windowRect);
 
     // No double buffer, so only update the QWidget if content changed.
-    if (platformPageClient()) {        
+    if (platformPageClient()) {
         QRect rect_2 = rect_1.intersected(QRect(QPoint(0, 0), m_webPage->viewportSize()));
 
         if (! rect_2.isEmpty())
@@ -512,14 +513,16 @@ void ChromeClientQt::setToolTip(const String &tip, TextDirection)
 {
 #ifndef QT_NO_TOOLTIP
     QWidget* view = m_webPage->view();
-    if (!view)
+
+    if (! view) {
         return;
+    }
 
     if (tip.isEmpty()) {
         view->setToolTip(QString());
         QToolTip::hideText();
     } else {
-        QString dtip = QLatin1String("<p>") + Qt::escape(tip) + QLatin1String("</p>");
+        QString dtip = "<p>" + QString(tip).toHtmlEscaped() + "</p>";
         view->setToolTip(dtip);
     }
 #else
@@ -698,7 +701,7 @@ void ChromeClientQt::exitFullscreenForNode(Node* node)
     ASSERT(node && node->hasTagName(HTMLNames::videoTag));
 
     fullScreenVideo()->exitFullScreenForNode(node);
-} 
+}
 #endif
 
 QWebSelectMethod* ChromeClientQt::createSelectPopup() const

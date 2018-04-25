@@ -77,8 +77,8 @@ static QString dumpRange(WebCore::Range *range)
     WebCore::ExceptionCode code;
 
     QString str = QString::fromLatin1("range from %1 of %2 to %3 of %4")
-            .arg(range->startOffset(code)).arg(dumpPath(range->startContainer(code)))
-            .arg(range->endOffset(code)).arg(dumpPath(range->endContainer(code)));
+            .formatArg(range->startOffset(code)).formatArg(dumpPath(range->startContainer(code)))
+            .formatArg(range->endOffset(code)).formatArg(dumpPath(range->endContainer(code)));
 
     return str;
 }
@@ -448,7 +448,7 @@ void EditorClientQt::handleKeyboardEvent(KeyboardEvent* event)
             m_page->triggerAction(action);
             event->setDefaultHandled();
             return;
-        } else 
+        } else
 #endif // QT_NO_SHORTCUT
         {
             String commandName = editorCommandForKeyDownEvent(event);

@@ -34,16 +34,17 @@ KURL::KURL(const QUrl& url)
 
 KURL::operator QUrl() const
 {
-    QString str = QString::fromRawData(reinterpret_cast<const QChar*>(m_string.characters()), m_string.length());
+    QString str = QString::fromUtf16(reinterpret_cast<const char16_t *>(m_string.characters()), m_string.length());
     QByteArray ba = str.toUtf8();
 
     QUrl url = QUrl::fromEncoded(ba);
+
     return url;
 }
 
 String KURL::fileSystemPath() const
 {
-    if (!isValid() || !protocolIs("file"))
+    if (! isValid() || ! protocolIs("file"))
         return String();
 
     return static_cast<QUrl>(*this).toLocalFile();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Lars Knoll 
+ * Copyright (C) 2006 Lars Knoll
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,10 +54,12 @@ const char* currentTextBreakLocaleID()
 
     TextBreakIterator* setUpIterator(TextBreakIterator& iterator, QTextBoundaryFinder::BoundaryType type, const UChar* characters, int length)
     {
-        if (!characters || !length)
+        if (! characters || ! length)
             return 0;
 
-        if (iterator.isValid() && type == iterator.type() && iterator.string() == QString::fromRawData(reinterpret_cast<const QChar*>(characters), length)) {
+        if (iterator.isValid() && type == iterator.type() &&
+                  iterator.string() == QString::fromUtf16(reinterpret_cast<const char16_t *>(characters), length)) {
+
             iterator.toStart();
             return &iterator;
         }

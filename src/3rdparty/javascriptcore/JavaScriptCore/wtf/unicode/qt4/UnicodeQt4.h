@@ -31,7 +31,7 @@
 #define WTF_UNICODE_QT4_H
 
 #include <qchar.h>
-#include <qstring8.h>
+#include <qstring.h>
 #include <qstring16.h>
 
 #include <config.h>

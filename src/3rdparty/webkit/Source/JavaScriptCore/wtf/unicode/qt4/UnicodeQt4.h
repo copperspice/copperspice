@@ -1,23 +1,28 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
 /*
  *  Copyright (C) 2006 George Staikos <staikos@kde.org>
  *  Copyright (C) 2006 Alexey Proskuryakov <ap@nypop.com>
- *  Copyright (C) 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Library General Public
- *  License as published by the Free Software Foundation; either
- *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Library General Public License for more details.
- *
- *  You should have received a copy of the GNU Library General Public License
- *  along with this library; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
- *
  */
 
 #ifndef WTF_UNICODE_QT4_H
@@ -25,8 +30,9 @@
 
 #include "UnicodeMacrosFromICU.h"
 
-#include <QChar>
-#include <QString>
+#include <qchar.h>
+#include <qstring8.h>
+#include <qstring16.h>
 
 #include <config.h>
 
@@ -61,7 +67,7 @@ namespace QUnicodeTables {
 QT_END_NAMESPACE
 
 // ugly hack to make UChar compatible with JSChar in API/JSStringRef.h
-#if defined(Q_OS_WIN) || (COMPILER(RVCT) && !OS(LINUX))
+#if defined(Q_OS_WIN) || (COMPILER(RVCT) && ! OS(LINUX))
 typedef wchar_t UChar;
 #else
 typedef uint16_t UChar;
@@ -151,225 +157,256 @@ enum CharCategory {
     Symbol_Other = U_MASK(QChar::Symbol_Other)
 };
 
-
-// FIXME: handle surrogates correctly in all methods
-
-inline UChar32 toLower(UChar32 ch)
+inline UChar32 toLower(UChar32 c)
 {
-    return QChar::toLower(uint32_t(ch));
+   return QChar(char32_t(c)).toLower()[0].unicode();
 }
 
 inline int toLower(UChar* result, int resultLength, const UChar* src, int srcLength,  bool* error)
 {
-    const UChar *e = src + srcLength;
-    const UChar *s = src;
-    UChar *r = result;
-    uint rindex = 0;
+   const UChar *e = src + srcLength;
+   const UChar *s = src;
+   UChar *r    = result;
+   int rindex  = 0;
 
-    // this avoids one out of bounds check in the loop
-    if (s < e && QChar(*s).isLowSurrogate()) {
-        if (r)
-            r[rindex] = *s++;
-        ++rindex;
-    }
+   // this avoids one out of bounds check in the loop
+   if (s < e && (*s >= 0xDC00 && *s <= 0xDFFF)) {
 
-    int needed = 0;
-    while (s < e && (rindex < uint(resultLength) || !r)) {
-        uint c = *s;
-        if (QChar(c).isLowSurrogate() && QChar(*(s - 1)).isHighSurrogate())
-            c = QChar::surrogateToUcs4(*(s - 1), c);
-        const QUnicodeTables::Properties *prop = QUnicodeTables::properties(c);
-        if (prop->lowerCaseSpecial) {
-            QString qstring;
-            if (c < 0x10000) {
-                qstring += QChar(c);
-            } else {
-                qstring += QChar(*(s-1));
-                qstring += QChar(*s);
+      if (r) {
+         r[rindex] = *s++;
+      }
+
+      ++rindex;
+   }
+
+   int needed = 0;
+
+   while (s < e && (rindex < uint(resultLength) || ! r)) {
+      uint c = *s;
+
+      if (c >= 0xDC00 && c <= 0xDFFF) {
+         // current char is a lowSurrogate
+         uint prevC = *(s-1);
+
+         if (prevC >= 0xD800 && prevC <= 0xDBFF) {
+            // previous char is a highSurrogate
+            c = (prevC & 0x03FF) << 10 | (c & 0x03FF) | 0x010000;
+         }
+      }
+
+      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(c);
+
+      if (prop->lowerCaseSpecial) {
+
+         QString16 tmp = QChar(char32_t(c));
+         tmp = tmp.toLower();
+
+         for (int i = 0; i < tmp.size_storage(); ++i) {
+
+            if (rindex >= resultLength) {
+               needed += tmp.size_storage() - i;
+               break;
             }
-            qstring = qstring.toLower();
-            for (int i = 0; i < qstring.length(); ++i) {
-                if (rindex >= uint(resultLength)) {
-                    needed += qstring.length() - i;
-                    break;
-                }
-                if (r)
-                    r[rindex] = qstring.at(i).unicode();
-                ++rindex;
+
+            if (r) {
+               r[rindex] = tmp.constData()[i];
+               ++rindex;
             }
-        } else {
-            if (r)
-                r[rindex] = *s + prop->lowerCaseDiff;
-            ++rindex;
-        }
-        ++s;
-    }
-    if (s < e)
-        needed += e - s;
-    *error = (needed != 0);
-    if (rindex < uint(resultLength))
-        r[rindex] = 0;
-    return rindex + needed;
+         }
+
+      } else if (r) {
+         r[rindex] = *s + prop->lowerCaseDiff;
+         ++rindex;
+      }
+
+      ++s;
+   }
+
+   if (s < e) {
+      needed += e - s;
+   }
+
+   *error = (needed != 0);
+
+   if (rindex < uint(resultLength)) {
+      r[rindex] = 0;
+   }
+
+   return rindex + needed;
 }
 
 inline UChar32 toUpper(UChar32 c)
 {
-    return QChar::toUpper(uint32_t(c));
+   return QChar(char32_t(c)).toUpper()[0].unicode();
 }
 
 inline int toUpper(UChar* result, int resultLength, const UChar* src, int srcLength,  bool* error)
 {
-    const UChar *e = src + srcLength;
-    const UChar *s = src;
-    UChar *r = result;
-    int rindex = 0;
+   const UChar *e = src + srcLength;
+   const UChar *s = src;
+   UChar *r   = result;
+   int rindex = 0;
 
-    // this avoids one out of bounds check in the loop
-    if (s < e && QChar(*s).isLowSurrogate()) {
-        if (r)
-            r[rindex] = *s++;
-        ++rindex;
-    }
+   // this avoids one out of bounds check in the loop
+   if (s < e && (*s >= 0xDC00 && *s <= 0xDFFF)) {
 
-    int needed = 0;
-    while (s < e && (rindex < resultLength || !r)) {
-        uint c = *s;
-        if (QChar(c).isLowSurrogate() && QChar(*(s - 1)).isHighSurrogate())
-            c = QChar::surrogateToUcs4(*(s - 1), c);
-        const QUnicodeTables::Properties *prop = QUnicodeTables::properties(c);
-        if (prop->upperCaseSpecial) {
-            QString qstring;
-            if (c < 0x10000) {
-                qstring += QChar(c);
-            } else {
-                qstring += QChar(*(s-1));
-                qstring += QChar(*s);
+      if (r) {
+         r[rindex] = *s++;
+      }
+
+      ++rindex;
+   }
+
+   int needed = 0;
+
+   while (s < e && (rindex < resultLength || !r)) {
+      uint c = *s;
+
+      if (c >= 0xDC00 && c <= 0xDFFF) {
+         // current char is a lowSurrogate
+         uint prevC = *(s-1);
+
+         if (prevC >= 0xD800 && prevC <= 0xDBFF) {
+            // previous char is a highSurrogate
+            c = (prevC & 0x03FF) << 10 | (c & 0x03FF) | 0x010000;
+         }
+      }
+
+      const QUnicodeTables::Properties *prop = QUnicodeTables::properties(c);
+
+      if (prop->upperCaseSpecial) {
+         QString16 tmp = QChar(char32_t(c));
+         tmp = tmp.toUpper();
+
+         for (int i = 0; i < tmp.size_storage(); ++i) {
+            if (rindex >= resultLength) {
+               needed += tmp.size_storage() - i;
+               break;
             }
-            qstring = qstring.toUpper();
-            for (int i = 0; i < qstring.length(); ++i) {
-                if (rindex >= resultLength) {
-                    needed += qstring.length() - i;
-                    break;
-                }
-                if (r)
-                    r[rindex] = qstring.at(i).unicode();
-                ++rindex;
+
+            if (r) {
+               r[rindex] = tmp.constData()[i];
+               ++rindex;
             }
-        } else {
-            if (r)
-                r[rindex] = *s + prop->upperCaseDiff;
-            ++rindex;
-        }
-        ++s;
-    }
-    if (s < e)
-        needed += e - s;
-    *error = (needed != 0);
-    if (rindex < resultLength)
-        r[rindex] = 0;
-    return rindex + needed;
+         }
+
+      } else if (r) {
+         r[rindex] = *s + prop->upperCaseDiff;
+         ++rindex;
+      }
+
+      ++s;
+   }
+
+   if (s < e) {
+      needed += e - s;
+   }
+
+   *error = (needed != 0);
+   if (rindex < resultLength) {
+      r[rindex] = 0;
+   }
+
+   return rindex + needed;
 }
 
 inline int toTitleCase(UChar32 c)
 {
-    return QChar::toTitleCase(uint32_t(c));
+   return QChar(char32_t(c)).toTitleCase()[0].unicode();
 }
 
 inline UChar32 foldCase(UChar32 c)
 {
-    return QChar::toCaseFolded(uint32_t(c));
+   return QChar(char32_t(c)).toCaseFolded()[0].unicode();
 }
 
-inline int foldCase(UChar* result, int resultLength, const UChar* src, int srcLength,  bool* error)
+inline int foldCase(UChar *result, int resultLength, const UChar *src, int srcLength, bool *error)
 {
-    // FIXME: handle special casing. Easiest with some low level API in Qt
-    *error = false;
-    if (resultLength < srcLength) {
-        *error = true;
-        return srcLength;
-    }
-    for (int i = 0; i < srcLength; ++i)
-        result[i] = QChar::toCaseFolded(ushort(src[i]));
-    return srcLength;
+   *error = false;
+
+   if (resultLength < srcLength) {
+      *error = true;
+      return srcLength;
+   }
+
+   for (int i = 0; i < srcLength; ++i) {
+      QChar tmp = char32_t(src[i]);
+      result[i] = tmp.toCaseFolded()[0].unicode();
+   }
+
+   return srcLength;
 }
 
 inline bool isArabicChar(UChar32 c)
 {
-    return c >= 0x0600 && c <= 0x06FF;
+   return c >= 0x0600 && c <= 0x06FF;
 }
 
 inline bool isPrintableChar(UChar32 c)
 {
-    const uint test = U_MASK(QChar::Other_Control) |
-                      U_MASK(QChar::Other_NotAssigned);
-    return !(U_MASK(QChar::category(uint32_t(c))) & test);
+   return QChar(char32_t(c)).isPrint();
 }
 
 inline bool isSeparatorSpace(UChar32 c)
 {
-    return QChar::category(uint32_t(c)) == QChar::Separator_Space;
+   return QChar(char32_t(c)).category() == QChar::Separator_Space;
 }
 
 inline bool isPunct(UChar32 c)
 {
-    const uint test = U_MASK(QChar::Punctuation_Connector) |
-                      U_MASK(QChar::Punctuation_Dash) |
-                      U_MASK(QChar::Punctuation_Open) |
-                      U_MASK(QChar::Punctuation_Close) |
-                      U_MASK(QChar::Punctuation_InitialQuote) |
-                      U_MASK(QChar::Punctuation_FinalQuote) |
-                      U_MASK(QChar::Punctuation_Other);
-    return U_MASK(QChar::category(uint32_t(c))) & test;
+   return QChar(char32_t(c)).isPunct();
 }
 
 inline bool isLower(UChar32 c)
 {
-    return QChar::category(uint32_t(c)) == QChar::Letter_Lowercase;
+   return QChar(char32_t(c)).isLower();
 }
 
 inline bool hasLineBreakingPropertyComplexContext(UChar32)
 {
-    // FIXME: Implement this to return whether the character has line breaking property SA (Complex Context).
-    return false;
+   // Implement this to return whether the character has line breaking property SA (Complex Context).
+   return false;
 }
 
 inline UChar32 mirroredChar(UChar32 c)
 {
-    return QChar::mirroredChar(uint32_t(c));
+   return QChar(char32_t(c)).mirroredChar().unicode();
 }
 
 inline uint8_t combiningClass(UChar32 c)
 {
-    return QChar::combiningClass(uint32_t(c));
+   return QChar(char32_t(c)).combiningClass();
 }
 
 inline DecompositionType decompositionType(UChar32 c)
 {
-    return (DecompositionType)QChar::decompositionTag(c);
+   return (DecompositionType)QChar(char32_t(c)).decompositionTag();
 }
 
-inline int umemcasecmp(const UChar* a, const UChar* b, int len)
+inline int umemcasecmp(const UChar *a, const UChar *b, int len)
 {
-    // handle surrogates correctly
-    for (int i = 0; i < len; ++i) {
-        uint c1 = QChar::toCaseFolded(ushort(a[i]));
-        uint c2 = QChar::toCaseFolded(ushort(b[i]));
-        if (c1 != c2)
-            return c1 - c2;
-    }
-    return 0;
+   for (int i = 0; i < len; ++i) {
+       uint c1 = QChar(char32_t(a[i])).toCaseFolded()[0].unicode();
+       uint c2 = QChar(char32_t(b[i])).toCaseFolded()[0].unicode();
+
+      if (c1 != c2) {
+         return c1 - c2;
+      }
+   }
+
+   return 0;
 }
 
 inline Direction direction(UChar32 c)
 {
-    return (Direction)QChar::direction(uint32_t(c));
+   return (Direction)QChar(char32_t(c)).direction();
 }
 
 inline CharCategory category(UChar32 c)
 {
-    return (CharCategory) U_MASK(QChar::category(uint32_t(c)));
+   return (CharCategory)  U_MASK(QChar(char32_t(c)).category());
 }
 
 } }
 
-#endif // WTF_UNICODE_QT4_H
+#endif

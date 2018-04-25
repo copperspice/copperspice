@@ -1,21 +1,25 @@
-/*
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies)
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+/***********************************************************************
+*
+* Copyright (c) 2012-2018 Barbara Geller
+* Copyright (c) 2012-2018 Ansel Sermersheim
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* <http://www.gnu.org/licenses/>.
+*
+***********************************************************************/
+
 #include "config.h"
 #include "qt_pixmapruntime.h"
 
@@ -35,6 +39,7 @@
 #include <runtime_object.h>
 #include <runtime_root.h>
 #include "runtime/FunctionPrototype.h"
+#include <qstring16.h>
 
 using namespace WebCore;
 namespace JSC {
@@ -118,15 +123,18 @@ public:
     {
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
+
         instance->toImage().save(&buffer, "PNG");
-        const QString encodedString = QLatin1String("data:image/png;base64,") + QLatin1String(byteArray.toBase64());
-        const UString ustring((UChar*)encodedString.utf16(), encodedString.length());
+
+        const QString16 encodedString = "data:image/png;base64," + QString16::fromLatin1(byteArray.toBase64());
+        const UString ustring((UChar*)encodedString.constData(), encodedString.size_storage());
+
         return jsString(exec, ustring);
     }
 };
 
 class QtPixmapToStringMethod : public QtPixmapRuntimeMethod {
-    public:
+public:
     static const char* name() { return "toString"; }
     JSValue invoke(ExecState* exec, QtPixmapInstance* instance)
     {
@@ -239,8 +247,9 @@ JSValue QtPixmapInstance::defaultValue(ExecState* exec, PreferredPrimitiveType p
 
 JSValue QtPixmapInstance::valueOf(ExecState* exec) const
 {
-    const QString stringValue = QString::fromLatin1("[Qt Native Pixmap %1,%2]").arg(width()).arg(height());
-    UString ustring((UChar*)stringValue.utf16(), stringValue.length());
+    const QString16 stringValue = QString16("[Native Pixmap %1,%2]").formatArg(width()).formatArg(height());
+    UString ustring((UChar*)stringValue.constData(), stringValue.size_storage());
+
     return jsString(exec, ustring);
 }
 

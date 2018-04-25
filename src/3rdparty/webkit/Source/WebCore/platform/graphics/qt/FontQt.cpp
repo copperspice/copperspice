@@ -45,6 +45,7 @@
 #include <QTextLayout>
 #include <qalgorithms.h>
 #include <qdebug.h>
+#include <qstring16.h>
 
 #include <limits.h>
 
@@ -52,26 +53,31 @@ namespace WebCore {
 
 static const QString fromRawDataWithoutRef(const String& string, int start = 0, int len = -1)
 {
-    if (len < 0)
+    if (len < 0) {
         len = string.length() - start;
+    }
+
     Q_ASSERT(start + len <= string.length());
 
-    // We don't detach. This assumes the WebCore string data will stay valid for the
-    // lifetime of the QString we pass back, since we don't ref the WebCore string.
-    return QString::fromRawData(reinterpret_cast<const QChar*>(string.characters() + start), len);
+    return QString::fromUtf16(reinterpret_cast<const char16_t *>(string.characters() + start), len);
 }
 
 static QTextLine setupLayout(QTextLayout* layout, const TextRun& style)
 {
     int flags = style.rtl() ? Qt::TextForceRightToLeft : Qt::TextForceLeftToRight;
+
     if (style.expansion())
         flags |= Qt::TextJustificationForced;
+
     layout->setFlags(flags);
     layout->beginLayout();
+
     QTextLine line = layout->createLine();
     line.setLineWidth(INT_MAX/256);
+
     if (style.expansion())
         line.setLineWidth(line.naturalTextWidth() + style.expansion());
+
     layout->endLayout();
     return line;
 }
