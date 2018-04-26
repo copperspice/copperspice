@@ -33,8 +33,8 @@ QBearerEngine::QBearerEngine(QObject *parent)
 
 QBearerEngine::~QBearerEngine()
 {
-   QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator it;
-   QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator end;
+   QHash<QString, QNetworkConfigurationPrivatePointer>::iterator it;
+   QHash<QString, QNetworkConfigurationPrivatePointer>::iterator end;
 
    for (it = snapConfigurations.begin(), end = snapConfigurations.end(); it != end; ++it) {
       it.value()->isValid = false;
@@ -70,8 +70,8 @@ bool QBearerEngine::requiresPolling() const
 */
 bool QBearerEngine::configurationsInUse() const
 {
-   QHash<QString, QNetworkConfigurationPrivatePointer>::ConstIterator it;
-   QHash<QString, QNetworkConfigurationPrivatePointer>::ConstIterator end;
+   QHash<QString, QNetworkConfigurationPrivatePointer>::const_iterator it;
+   QHash<QString, QNetworkConfigurationPrivatePointer>::const_iterator end;
 
    QMutexLocker locker(&mutex);
 

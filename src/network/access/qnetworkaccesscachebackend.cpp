@@ -71,7 +71,7 @@ bool QNetworkAccessCacheBackend::sendCacheContents()
 
    // set the raw headers
    QNetworkCacheMetaData::RawHeaderList rawHeaders = item.rawHeaders();
-   QNetworkCacheMetaData::RawHeaderList::ConstIterator it = rawHeaders.constBegin(), end = rawHeaders.constEnd();
+   QNetworkCacheMetaData::RawHeaderList::const_iterator it = rawHeaders.constBegin(), end = rawHeaders.constEnd();
 
    for ( ; it != end; ++it) {
       if (it->first.toLower() == "cache-control" &&

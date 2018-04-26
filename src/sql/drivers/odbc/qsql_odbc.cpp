@@ -829,11 +829,13 @@ void QODBCDriverPrivate::splitTableQualifier(const QString &qualifier, QString &
    if (l.count() > 3) {
       return;   // can't possibly be a valid table qualifier
    }
+
    int i = 0, n = l.count();
+
    if (n == 1) {
       table = qualifier;
    } else {
-      for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
+      for (QStringList::iterator it = l.begin(); it != l.end(); ++it) {
          if (n == 3) {
             if (i == 0) {
                catalog = *it;

@@ -23,42 +23,34 @@
 #ifndef QABSTRACTXMLFORWARDITERATOR_P_H
 #define QABSTRACTXMLFORWARDITERATOR_P_H
 
-#include <QtCore/QList>
-#include <QtCore/QVector>
-#include <QtCore/QSharedData>
-#include <QtCore/QString>
+#include <QList>
+#include <QVector>
+#include <QSharedData>
+#include <QString>
+#include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
-template<typename T> class QVector;
 
 /* In this file we in some cases do not use QAbstractXmlForwardIterator's Ptr typedef.
  * This is a compiler workaround for MS VS 6.0. */
 
-template<typename T>
+template <typename T>
+class QAbstractXmlForwardIterator;
+
+class QAbstractXmlForwardIteratorPrivate;
+
+template <typename T>
 inline bool qIsForwardIteratorEnd(const T &unit)
 {
    return !unit;
 }
 
-/**
- * @short Helper class for StringSplitter
- *
- * Needed by the QAbstractXmlForwardIterator sub-class.
- *
- * @relates StringSplitter
- */
-template<>
+template <>
 inline bool qIsForwardIteratorEnd(const QString &unit)
 {
    return unit.isEmpty();
 }
 
-template<typename T> class QAbstractXmlForwardIterator;
-
-class QAbstractXmlForwardIteratorPrivate;
-
-template<typename T>
+template <typename T>
 class QAbstractXmlForwardIterator : public QSharedData
 {
  public:

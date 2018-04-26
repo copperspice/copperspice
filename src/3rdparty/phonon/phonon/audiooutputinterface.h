@@ -104,35 +104,9 @@ class AudioOutputInterface42 : public AudioOutputInterface40
 
         using AudioOutputInterface40::setOutputDevice;
 
-        /**
-         * Helper function for backends to get a list of (driver, handle) pairs for
-         * AudioOutputDevice objects that are listed by the platform plugin.
-         *
-         * Example:
-         * \code
-           typedef QPair<QByteArray, QString> PhononDeviceAccess;
-           const QList<PhononDeviceAccess> &deviceAccessList = deviceAccessListFor(deviceDesc);
-           for (const PhononDeviceAccess &access : deviceAccessList) {
-               const QByteArray &driver = access.first;
-               const QString &handle = access.second;
-               if (openDevice(driver, handle)) {
-                   // we found the first pair in the list that works. done.
-                   return;
-               }
-               // continue trying the other (driver, handle) pairs
-           }
-           // none of the (driver, handle) pairs worked, that means the whole AudioOutputDevice is
-           // inaccessible and the frontend needs to know (either by emitting audioDeviceFailed or
-           // returning false when called from setOutputDevice)
-         * \endcode
-         *
-         * At the time of this writing the following driver strings are known to be in use:
-         * \li \c alsa: The handle is the string to pass to snd_pcm_open (e.g. "dmix:CARD=0,DEV=1")
-         * \li \c oss: The handle is the device file (e.g. "/dev/dsp")
-         * \li \c pulseaudio: The handle contains the server string and the sink/source name
-         * separated by a newline character.
-         * (e.g. unix:/tmp/pulse-mkretz/native\nalsa_output.pci_8086_293e_sound_card_0_alsa_playback_0)
-         */
+        // Helper function for backends to get a list of (driver, handle) pairs for
+        // AudioOutputDevice objects that are listed by the platform plugin.
+
         PHONON_EXPORT QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &) const;
 };
 
@@ -149,6 +123,5 @@ CS_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phon
 #endif
 
 QT_END_NAMESPACE
-
 
 #endif // PHONON_AUDIOOUTPUTINTERFACE_H

@@ -75,7 +75,7 @@ QNetworkAccessBackend *QNetworkAccessManagerPrivate::findBackend(QNetworkAccessM
 {
    if (QNetworkAccessBackendFactoryData::valid.load()) {
       QMutexLocker locker(&factoryData()->mutex);
-      QNetworkAccessBackendFactoryData::ConstIterator it = factoryData()->constBegin(),
+      QNetworkAccessBackendFactoryData::const_iterator it = factoryData()->constBegin(),
                                                       end = factoryData()->constEnd();
       while (it != end) {
          QNetworkAccessBackend *backend = (*it)->create(op, request);
@@ -93,8 +93,8 @@ QStringList QNetworkAccessManagerPrivate::backendSupportedSchemes() const
 {
    if (QNetworkAccessBackendFactoryData::valid.load()) {
       QMutexLocker locker(&factoryData()->mutex);
-      QNetworkAccessBackendFactoryData::ConstIterator it = factoryData()->constBegin();
-      QNetworkAccessBackendFactoryData::ConstIterator end = factoryData()->constEnd();
+      QNetworkAccessBackendFactoryData::const_iterator it = factoryData()->constBegin();
+      QNetworkAccessBackendFactoryData::const_iterator end = factoryData()->constEnd();
       QStringList schemes;
       while (it != end) {
          schemes += (*it)->supportedSchemes();

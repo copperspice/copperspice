@@ -813,12 +813,15 @@ QSqlIndex QTDSDriver::primaryIndex(const QString &tablename) const
    QSqlQuery t(createResult());
    t.setForwardOnly(true);
    t.exec(QString::fromLatin1("sp_helpindex '%1'").formatArg(table));
+
    if (t.next()) {
       QStringList fNames = t.value(2).toString().simplified().split(QLatin1Char(','));
       QRegExp regx(QLatin1String("\\s*(\\S+)(?:\\s+(DESC|desc))?\\s*"));
-      for (QStringList::Iterator it = fNames.begin(); it != fNames.end(); ++it) {
+
+      for (QStringList::iterator it = fNames.begin(); it != fNames.end(); ++it) {
          regx.indexIn(*it);
          QSqlField f(regx.cap(1), rec.field(regx.cap(1)).type());
+
          if (regx.cap(2).toLower() == QLatin1String("desc")) {
             idx.append(f, true);
          } else {

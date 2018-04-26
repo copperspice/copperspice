@@ -926,7 +926,7 @@ class ReportContext : public QSharedData
       /**
        * It is an error to use the HTML output method when characters
        * which are legal in XML but not in HTML, specifically the control
-       * characters \#x7F-#x9F, appear in the instance of the data model.
+       * characters x7F - x9F, appear in the instance of the data model.
        */
       SERE0014,
 

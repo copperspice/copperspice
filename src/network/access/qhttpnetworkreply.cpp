@@ -374,7 +374,8 @@ void QHttpNetworkReplyPrivate::removeAutoDecompressHeader()
    // The header "Content-Encoding  = gzip" is retained.
    // Content-Length is removed since the actual one send by the server is for compressed data
    QByteArray name("content-length");
-   QList<QPair<QByteArray, QByteArray> >::Iterator it = fields.begin(),
+
+   QList<QPair<QByteArray, QByteArray> >::iterator it = fields.begin(),
                                                    end = fields.end();
    while (it != end) {
       if (qstricmp(name.constData(), it->first.constData()) == 0) {

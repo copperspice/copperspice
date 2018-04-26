@@ -4127,6 +4127,7 @@ void QSvgHandler::resolveGradients(QSvgNode *node)
 
    QList<QSvgNode *> ren = structureNode->renderers();
    for (QList<QSvgNode *>::iterator it = ren.begin(); it != ren.end(); ++it) {
+
       QSvgFillStyle *fill = static_cast<QSvgFillStyle *>((*it)->styleProperty(QSvgStyleProperty::FILL));
       if (fill && !fill->isGradientResolved()) {
          QString id = fill->gradientId();

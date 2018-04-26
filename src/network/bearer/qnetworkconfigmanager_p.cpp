@@ -92,8 +92,8 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
    QNetworkConfigurationPrivatePointer defaultConfiguration;
 
    for (QBearerEngine *engine : sessionEngines) {
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator it;
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator end;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator it;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator end;
 
       QMutexLocker locker(&engine->mutex);
 
@@ -136,8 +136,8 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
    */
 
    for (QBearerEngine *engine : sessionEngines) {
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator it;
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator end;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator it;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator end;
 
       QMutexLocker locker(&engine->mutex);
 
@@ -199,8 +199,8 @@ QList<QNetworkConfiguration> QNetworkConfigurationManagerPrivate::allConfigurati
    QMutexLocker locker(&mutex);
 
    for (QBearerEngine *engine : sessionEngines) {
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator it;
-      QHash<QString, QNetworkConfigurationPrivatePointer>::Iterator end;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator it;
+      QHash<QString, QNetworkConfigurationPrivatePointer>::iterator end;
 
       QMutexLocker locker(&engine->mutex);
 
@@ -353,9 +353,6 @@ void QNetworkConfigurationManagerPrivate::configurationChanged(QNetworkConfigura
 
 void QNetworkConfigurationManagerPrivate::updateConfigurations()
 {
-   // typedef QMultiMap<int, QString> PluginKeyMap;
-   // typedef PluginKeyMap::const_iterator PluginKeyMapConstIterator;
-
    QMutexLocker locker(&mutex);
 
    if (firstUpdate) {
@@ -370,10 +367,10 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
 
       /*
             // const PluginKeyMap keyMap = l->keyMap();
-            // const PluginKeyMapConstIterator cend = keyMap.constEnd();
+            // const PluginKeyMapconst_iterator cend = keyMap.constEnd();
             // QStringList addedEngines;
 
-            for (PluginKeyMapConstIterator it = keyMap.constBegin(); it != cend; ++it) {
+            for (PluginKeyMapconst_iterator it = keyMap.constBegin(); it != cend; ++it) {
                const QString &key = it.value();
 
                if (addedEngines.contains(key))  {

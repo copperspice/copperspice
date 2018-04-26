@@ -179,13 +179,15 @@ void QSqlDatabasePrivate::cleanConnections()
 {
    QConnectionDict *dict = dbDict();
    Q_ASSERT(dict);
-   QWriteLocker locker(&dict->lock);
 
+   QWriteLocker locker(&dict->lock);
    QConnectionDict::iterator it = dict->begin();
+
    while (it != dict->end()) {
       invalidateDb(it.value(), it.key(), false);
       ++it;
    }
+
    dict->clear();
 }
 

@@ -507,7 +507,7 @@ bool QNetworkReply::hasRawHeader(const QByteArray &headerName) const
 QByteArray QNetworkReply::rawHeader(const QByteArray &headerName) const
 {
    Q_D(const QNetworkReply);
-   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it = d->findRawHeader(headerName);
+   QNetworkHeadersPrivate::RawHeadersList::const_iterator it = d->findRawHeader(headerName);
 
    if (it != d->rawHeaders.constEnd()) {
       return it->second;

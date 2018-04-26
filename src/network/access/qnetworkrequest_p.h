@@ -44,7 +44,7 @@ class QNetworkHeadersPrivate
    AttributesMap attributes;
    QPointer<QObject> originatingObject;
 
-   RawHeadersList::ConstIterator findRawHeader(const QByteArray &key) const;
+   RawHeadersList::const_iterator findRawHeader(const QByteArray &key) const;
    RawHeadersList allRawHeaders() const;
    QList<QByteArray> rawHeadersKeys() const;
    void setRawHeader(const QByteArray &key, const QByteArray &value);

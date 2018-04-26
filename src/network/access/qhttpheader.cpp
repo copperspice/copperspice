@@ -163,7 +163,7 @@ bool QHttpHeader::parse(const QString &str)
    }
 
    QStringList lines;
-   QStringList::Iterator it = lst.begin();
+   QStringList::iterator it = lst.begin();
 
    for (; it != lst.end(); ++it) {
       if (!(*it).isEmpty()) {
@@ -201,7 +201,8 @@ QString QHttpHeader::value(const QString &key) const
 {
    Q_D(const QHttpHeader);
    QString lowercaseKey = key.toLower();
-   QList<QPair<QString, QString> >::ConstIterator it = d->values.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
+
    while (it != d->values.constEnd()) {
       if ((*it).first.toLower() == lowercaseKey) {
          return (*it).second;
@@ -216,7 +217,8 @@ QStringList QHttpHeader::allValues(const QString &key) const
    Q_D(const QHttpHeader);
    QString lowercaseKey = key.toLower();
    QStringList valueList;
-   QList<QPair<QString, QString> >::ConstIterator it = d->values.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
+
    while (it != d->values.constEnd()) {
       if ((*it).first.toLower() == lowercaseKey) {
          valueList.append((*it).second);
@@ -231,7 +233,7 @@ QStringList QHttpHeader::keys() const
    Q_D(const QHttpHeader);
    QStringList keyList;
    QSet<QString> seenKeys;
-   QList<QPair<QString, QString> >::ConstIterator it = d->values.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
    while (it != d->values.constEnd()) {
       const QString &key = (*it).first;
       QString lowercaseKey = key.toLower();
@@ -248,7 +250,8 @@ bool QHttpHeader::hasKey(const QString &key) const
 {
    Q_D(const QHttpHeader);
    QString lowercaseKey = key.toLower();
-   QList<QPair<QString, QString> >::ConstIterator it = d->values.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
+
    while (it != d->values.constEnd()) {
       if ((*it).first.toLower() == lowercaseKey) {
          return true;
@@ -262,7 +265,8 @@ void QHttpHeader::setValue(const QString &key, const QString &value)
 {
    Q_D(QHttpHeader);
    QString lowercaseKey = key.toLower();
-   QList<QPair<QString, QString> >::Iterator it = d->values.begin();
+   QList<QPair<QString, QString> >::iterator it = d->values.begin();
+
    while (it != d->values.end()) {
       if ((*it).first.toLower() == lowercaseKey) {
          (*it).second = value;
@@ -310,7 +314,8 @@ void QHttpHeader::removeValue(const QString &key)
 {
    Q_D(QHttpHeader);
    QString lowercaseKey = key.toLower();
-   QList<QPair<QString, QString> >::Iterator it = d->values.begin();
+   QList<QPair<QString, QString> >::iterator it = d->values.begin();
+
    while (it != d->values.end()) {
       if ((*it).first.toLower() == lowercaseKey) {
          d->values.erase(it);
@@ -326,8 +331,10 @@ void QHttpHeader::removeValue(const QString &key)
 void QHttpHeader::removeAllValues(const QString &key)
 {
    Q_D(QHttpHeader);
+
    QString lowercaseKey = key.toLower();
-   QList<QPair<QString, QString> >::Iterator it = d->values.begin();
+   QList<QPair<QString, QString> >::iterator it = d->values.begin();
+
    while (it != d->values.end()) {
       if ((*it).first.toLower() == lowercaseKey) {
          it = d->values.erase(it);
@@ -366,7 +373,7 @@ QString QHttpHeader::toString() const
 
    QString ret = QLatin1String("");
 
-   QList<QPair<QString, QString> >::ConstIterator it = d->values.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
    while (it != d->values.constEnd()) {
       ret += (*it).first + QLatin1String(": ") + (*it).second + QLatin1String("\r\n");
       ++it;

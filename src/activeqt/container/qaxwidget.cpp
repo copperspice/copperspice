@@ -56,7 +56,7 @@
 #include <qmetaobject.h>
 #include <qpainter.h>
 #include <qpointer.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 #include <quuid.h>
 #include <qwhatsthis.h>
 
@@ -1479,9 +1479,9 @@ HRESULT WINAPI QAxClientSite::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)
 HRESULT WINAPI QAxClientSite::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName)
 {
     AX_DEBUG(QAxClientSite::SetActiveObject);
-    
+
     Q_UNUSED(pszObjName);
-    // we are ignoring the name of the object, as suggested by MSDN documentation 
+    // we are ignoring the name of the object, as suggested by MSDN documentation
     // for IOleInPlaceUIWindow::SetActiveObject().
 
     if (m_spInPlaceActiveObject) {

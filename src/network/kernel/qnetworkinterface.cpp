@@ -39,11 +39,13 @@ static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePriv
    // The math is:
    //    broadcast = IP | ~netmask
 
-   QList<QNetworkInterfacePrivate *>::Iterator it = list.begin();
-   const QList<QNetworkInterfacePrivate *>::Iterator end = list.end();
+   QList<QNetworkInterfacePrivate *>::iterator it        = list.begin();
+   const QList<QNetworkInterfacePrivate *>::iterator end = list.end();
+
    for ( ; it != end; ++it) {
-      QList<QNetworkAddressEntry>::Iterator addr_it = (*it)->addressEntries.begin();
-      const QList<QNetworkAddressEntry>::Iterator addr_end = (*it)->addressEntries.end();
+      QList<QNetworkAddressEntry>::iterator addr_it        = (*it)->addressEntries.begin();
+      const QList<QNetworkAddressEntry>::iterator addr_end = (*it)->addressEntries.end();
+
       for ( ; addr_it != addr_end; ++addr_it) {
          if (addr_it->ip().protocol() != QAbstractSocket::IPv4Protocol) {
             continue;
@@ -73,7 +75,7 @@ QNetworkInterfaceManager::~QNetworkInterfaceManager()
 QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interfaceFromName(const QString &name)
 {
    QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList = allInterfaces();
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> >::ConstIterator it = interfaceList.constBegin();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> >::const_iterator it = interfaceList.constBegin();
 
    bool ok;
    uint index = name.toInteger<uint>(&ok);
@@ -92,8 +94,8 @@ QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interface
 
 QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interfaceFromIndex(int index)
 {
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList     = allInterfaces();
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> >::ConstIterator it = interfaceList.constBegin();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList      = allInterfaces();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> >::const_iterator it = interfaceList.constBegin();
 
    for ( ; it != interfaceList.constEnd(); ++it)
       if ((*it)->index == index) {

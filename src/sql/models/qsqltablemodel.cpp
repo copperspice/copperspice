@@ -155,6 +155,7 @@ void QSqlTableModelPrivate::revertCachedRow(int row)
 {
    Q_Q(QSqlTableModel);
    ModifiedRow r = cache.value(row);
+
    switch (r.op) {
       case QSqlTableModelPrivate::None:
          Q_ASSERT_X(false, "QSqlTableModelPrivate::revertCachedRow()", "Invalid entry in cache map");
@@ -166,12 +167,15 @@ void QSqlTableModelPrivate::revertCachedRow(int row)
                              q->createIndex(row, q->columnCount() - 1));
          break;
       case QSqlTableModelPrivate::Insert: {
-         QMap<int, QSqlTableModelPrivate::ModifiedRow>::Iterator it = cache.find(row);
+         QMap<int, QSqlTableModelPrivate::ModifiedRow>::iterator it = cache.find(row);
+
          if (it == cache.end()) {
             return;
          }
+
          q->beginRemoveRows(QModelIndex(), row, row);
          it = cache.erase(it);
+
          while (it != cache.end()) {
             int oldKey = it.key();
             const QSqlTableModelPrivate::ModifiedRow oldValue = it.value();
@@ -769,7 +773,7 @@ bool QSqlTableModel::submitAll()
          return select();
 
       case OnManualSubmit:
-         for (QSqlTableModelPrivate::CacheMap::ConstIterator it = d->cache.constBegin();
+         for (QSqlTableModelPrivate::CacheMap::const_iterator it = d->cache.constBegin();
                   it != d->cache.constEnd(); ++it) {
 
             switch (it.value().op) {
@@ -1101,7 +1105,7 @@ bool QSqlTableModel::insertRows(int row, int count, const QModelIndex &parent)
          beginInsertRows(parent, row, row + count - 1);
 
          if (! d->cache.isEmpty()) {
-            QMap<int, QSqlTableModelPrivate::ModifiedRow>::Iterator it = d->cache.end();
+            QMap<int, QSqlTableModelPrivate::ModifiedRow>::iterator it = d->cache.end();
 
             while (it != d->cache.begin() && (--it).key() >= row) {
                int oldKey = it.key();
@@ -1164,7 +1168,7 @@ int QSqlTableModel::rowCount(const QModelIndex &parent) const
 
    int rc = QSqlQueryModel::rowCount();
    if (d->strategy == OnManualSubmit) {
-      for (QSqlTableModelPrivate::CacheMap::ConstIterator it = d->cache.constBegin();
+      for (QSqlTableModelPrivate::CacheMap::const_iterator it = d->cache.constBegin();
             it != d->cache.constEnd(); ++it) {
          if (it.value().op == QSqlTableModelPrivate::Insert) {
             ++rc;
@@ -1192,9 +1196,11 @@ QModelIndex QSqlTableModel::indexInQuery(const QModelIndex &item) const
 {
    Q_D(const QSqlTableModel);
    const QModelIndex it = QSqlQueryModel::indexInQuery(item); // this adjusts columns only
+
    if (d->strategy == OnManualSubmit) {
       int rowOffset = 0;
-      QSqlTableModelPrivate::CacheMap::ConstIterator i = d->cache.constBegin();
+      QSqlTableModelPrivate::CacheMap::const_iterator i = d->cache.constBegin();
+
       while (i != d->cache.constEnd() && i.key() <= it.row()) {
          if (i.value().op == QSqlTableModelPrivate::Insert) {
             ++rowOffset;

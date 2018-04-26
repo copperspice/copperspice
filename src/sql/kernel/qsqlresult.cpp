@@ -875,7 +875,7 @@ bool QSqlResult::hasOutValues() const
    if (d->types.isEmpty()) {
       return false;
    }
-   QHash<int, QSql::ParamType>::ConstIterator it;
+   QHash<int, QSql::ParamType>::const_iterator it;
    for (it = d->types.constBegin(); it != d->types.constEnd(); ++it) {
       if (it.value() != QSql::In) {
          return true;

@@ -2811,7 +2811,7 @@ QString WriteInitialization::Item::writeSetupUi(const QString &parent, Item::Emp
       generateMultiDirectiveEnd(m_setupUiStream, m_setupUiData.directives);
    }
 
-   QMultiMap<QString, QString>::ConstIterator it = m_setupUiData.setters.constBegin();
+   QMultiMap<QString, QString>::const_iterator it = m_setupUiData.setters.constBegin();
    while (it != m_setupUiData.setters.constEnd()) {
       openIfndef(m_setupUiStream, it.key());
       m_setupUiStream << m_indent << uniqueName << it.value() << endl;
@@ -2841,7 +2841,8 @@ void WriteInitialization::Item::writeRetranslateUi(const QString &parentPath)
    }
 
    QString oldDirective;
-   QMultiMap<QString, QString>::ConstIterator it = m_retranslateUiData.setters.constBegin();
+   QMultiMap<QString, QString>::const_iterator it = m_retranslateUiData.setters.constBegin();
+
    while (it != m_retranslateUiData.setters.constEnd()) {
       const QString newDirective = it.key();
       if (oldDirective != newDirective) {

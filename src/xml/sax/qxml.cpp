@@ -3817,7 +3817,8 @@ bool QXmlSimpleReaderPrivate::processElementEmptyTag()
          namespaceSupport.popContext();
          // call the handler for prefix mapping
          prefixesAfter = namespaceSupport.prefixes();
-         for (QStringList::Iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it) {
+
+         for (QStringList::iterator it = prefixesBefore.begin(); it != prefixesBefore.end(); ++it) {
             if (!prefixesAfter.contains(*it)) {
                if (!contentHnd->endPrefixMapping(*it)) {
                   reportParseError(contentHnd->errorString());
@@ -5280,13 +5281,16 @@ bool QXmlSimpleReaderPrivate::parsePEReference()
             bool skipIt = true;
             QString xmlRefString;
 
-            QMap<QString, QString>::Iterator it;
+            QMap<QString, QString>::iterator it;
             it = parameterEntities.find(ref());
+
             if (it != parameterEntities.end()) {
                skipIt = false;
                xmlRefString = *it;
+
             } else if (entityRes) {
-               QMap<QString, QXmlSimpleReaderPrivate::ExternParameterEntity>::Iterator it2;
+               QMap<QString, QXmlSimpleReaderPrivate::ExternParameterEntity>::iterator it2;
+
                it2 = externParameterEntities.find(ref());
                QXmlInputSource *ret = 0;
                if (it2 != externParameterEntities.end()) {
@@ -7619,9 +7623,11 @@ bool QXmlSimpleReaderPrivate::processReference()
          stringAddC(QLatin1Char('"'));
       }
       parseReference_charDataRead = true;
+
    } else {
-      QMap<QString, QString>::Iterator it;
+      QMap<QString, QString>::iterator it;
       it = entities.find(reference);
+
       if (it != entities.end()) {
          // "Internal General"
          switch (parseReference_context) {
@@ -7655,9 +7661,11 @@ bool QXmlSimpleReaderPrivate::processReference()
                reportParseError(QLatin1String(XMLERR_INTERNALGENERALENTITYINDTD));
                return false;
          }
+
       } else {
-         QMap<QString, QXmlSimpleReaderPrivate::ExternEntity>::Iterator itExtern;
+         QMap<QString, QXmlSimpleReaderPrivate::ExternEntity>::iterator itExtern;
          itExtern = externEntities.find(reference);
+
          if (itExtern == externEntities.end()) {
             // entity not declared
             // ### check this case for conformance

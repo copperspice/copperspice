@@ -169,8 +169,8 @@ QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
    bool isEncrypted = url.scheme().toLower() == "https";
 
    // scan our cookies for something that matches
-   QList<QNetworkCookie>::ConstIterator it  = d->allCookies.constBegin();
-   QList<QNetworkCookie>::ConstIterator end = d->allCookies.constEnd();
+   QList<QNetworkCookie>::const_iterator it  = d->allCookies.constBegin();
+   QList<QNetworkCookie>::const_iterator end = d->allCookies.constEnd();
 
    for ( ; it != end; ++it) {
       if (!isParentDomain(url.host(), it->domain())) {
@@ -190,7 +190,8 @@ QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
       }
 
       // insert this cookie into result, sorted by path
-      QList<QNetworkCookie>::Iterator insertIt = result.begin();
+      QList<QNetworkCookie>::iterator insertIt = result.begin();
+
       while (insertIt != result.end()) {
          if (insertIt->path().length() < it->path().length()) {
             // insert here
@@ -234,7 +235,8 @@ bool QNetworkCookieJar::updateCookie(const QNetworkCookie &cookie)
 bool QNetworkCookieJar::deleteCookie(const QNetworkCookie &cookie)
 {
    Q_D(QNetworkCookieJar);
-   QList<QNetworkCookie>::Iterator it;
+   QList<QNetworkCookie>::iterator it;
+
    for (it = d->allCookies.begin(); it != d->allCookies.end(); ++it) {
       if (it->hasSameIdentifier(cookie)) {
          d->allCookies.erase(it);

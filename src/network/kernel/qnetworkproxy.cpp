@@ -528,8 +528,7 @@ QByteArray QNetworkProxy::rawHeader(const QByteArray &headerName) const
    if (d->type != HttpProxy && d->type != HttpCachingProxy) {
       return QByteArray();
    }
-   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it =
-      d->headers.findRawHeader(headerName);
+   QNetworkHeadersPrivate::RawHeadersList::const_iterator it = d->headers.findRawHeader(headerName);
    if (it != d->headers.rawHeaders.constEnd()) {
       return it->second;
    }

@@ -45,8 +45,8 @@ qint64 QHttpNetworkHeaderPrivate::contentLength() const
 
    QByteArray value;
 
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it  = fields.constBegin();
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator end = fields.constEnd();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator it  = fields.constBegin();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator end = fields.constEnd();
 
    for ( ; it != end; ++it)
       if ( qstricmp("content-length", it->first.constData() ) == 0) {
@@ -93,8 +93,8 @@ QByteArray QHttpNetworkHeaderPrivate::headerField(const QByteArray &name, const 
 QList<QByteArray> QHttpNetworkHeaderPrivate::headerFieldValues(const QByteArray &name) const
 {
    QList<QByteArray> result;
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it  = fields.constBegin();
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator end = fields.constEnd();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator it  = fields.constBegin();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator end = fields.constEnd();
 
    for ( ; it != end; ++it)
       if (qstricmp(name.constData(), it->first.constData()) == 0) {
@@ -106,7 +106,7 @@ QList<QByteArray> QHttpNetworkHeaderPrivate::headerFieldValues(const QByteArray 
 
 void QHttpNetworkHeaderPrivate::setHeaderField(const QByteArray &name, const QByteArray &data)
 {
-   QList<QPair<QByteArray, QByteArray> >::Iterator it = fields.begin();
+   QList<QPair<QByteArray, QByteArray> >::iterator it = fields.begin();
 
    while (it != fields.end()) {
       if (qstricmp(name.constData(), it->first.constData()) == 0) {

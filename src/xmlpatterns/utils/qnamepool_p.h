@@ -161,38 +161,17 @@ class NamePool : public QSharedData
    QXmlName fromClarkName(const QString &clarkName);
 
  private:
-   /**
-    * @note This function can not be called concurrently.
-    */
    QXmlName::NamespaceCode unlockedAllocateNamespace(const QString &uri);
-
-   /**
-    * @note This function can not be called concurrently.
-    */
    QXmlName::LocalNameCode unlockedAllocateLocalName(const QString &ln);
-
-   /**
-    * It's assumed that @p prefix is a valid @c NCName.
-    *
-    * @note This function can not be called concurrently.
-    */
    QXmlName::PrefixCode unlockedAllocatePrefix(const QString &prefix);
 
    Q_DISABLE_COPY(NamePool)
 
-   /**
-    * @note This function can not be called concurrently.
-    */
    const QString &displayPrefix(const QXmlName::NamespaceCode nc) const;
 
    mutable QReadWriteLock lock;
 };
 
-/**
- * @short Formats QName.
- *
- * @relates QXmlName
- */
 static inline QString formatKeyword(const NamePool::Ptr &np, const QXmlName name)
 {
    return QLatin1String("<span class='XQuery-keyword'>")   +
@@ -200,19 +179,10 @@ static inline QString formatKeyword(const NamePool::Ptr &np, const QXmlName name
           QLatin1String("</span>");
 }
 
-/**
- * @see NamespaceResolver::Constants
- */
 class StandardNamespaces
 {
  public:
    enum ID {
-      /**
-       * This does not mean empty in the sense of "empty", but
-       * in the sense of an empty string, "".
-       *
-       * Its value, zero, is significant.
-       */
       empty = 0,
       fn,
       local,
@@ -221,26 +191,8 @@ class StandardNamespaces
       xs,
       xsi,
       xslt,
-      /**
-       * @short A special value that when passed as the namespace part
-       * to NamespaceResolver::addBinding(), undeclares the prefix.
-       *
-       * This is used by the namespace prolog declaration.
-       *
-       * A dummy value is added to the name pool.
-       */
       UndeclarePrefix,
-
-      /**
-       * Signals that a node shouldn't inherit namespaces from its parent. Must be used
-       * with StandardPrefixes::StopNamespaceInheritance.
-       */
       StopNamespaceInheritance,
-
-      /**
-       * A namespace used to identify for instance @c \#all template
-       * mode in XSL-T.
-       */
       InternalXSLT
    };
 };

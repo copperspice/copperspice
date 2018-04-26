@@ -143,7 +143,7 @@ bool QNetworkRequest::hasRawHeader(const QByteArray &headerName) const
 
 QByteArray QNetworkRequest::rawHeader(const QByteArray &headerName) const
 {
-   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it = d->findRawHeader(headerName);
+   QNetworkHeadersPrivate::RawHeadersList::const_iterator it = d->findRawHeader(headerName);
 
    if (it != d->rawHeaders.constEnd()) {
       return it->second;
@@ -452,11 +452,11 @@ static QVariant parseHeaderValue(QNetworkRequest::KnownHeaders header, const QBy
    return QVariant();
 }
 
-QNetworkHeadersPrivate::RawHeadersList::ConstIterator
+QNetworkHeadersPrivate::RawHeadersList::const_iterator
 QNetworkHeadersPrivate::findRawHeader(const QByteArray &key) const
 {
-   RawHeadersList::ConstIterator it  = rawHeaders.constBegin();
-   RawHeadersList::ConstIterator end = rawHeaders.constEnd();
+   RawHeadersList::const_iterator it  = rawHeaders.constBegin();
+   RawHeadersList::const_iterator end = rawHeaders.constEnd();
 
    for ( ; it != end; ++it)
       if (qstricmp(it->first.constData(), key.constData()) == 0) {
@@ -474,7 +474,7 @@ QNetworkHeadersPrivate::RawHeadersList QNetworkHeadersPrivate::allRawHeaders() c
 QList<QByteArray> QNetworkHeadersPrivate::rawHeadersKeys() const
 {
    QList<QByteArray> result;
-   RawHeadersList::ConstIterator it = rawHeaders.constBegin(), end = rawHeaders.constEnd();
+   RawHeadersList::const_iterator it = rawHeaders.constBegin(), end = rawHeaders.constEnd();
 
    for ( ; it != end; ++it) {
       result << it->first;
@@ -507,8 +507,8 @@ void QNetworkHeadersPrivate::setAllRawHeaders(const RawHeadersList &list)
    cookedHeaders.clear();
    rawHeaders = list;
 
-   RawHeadersList::ConstIterator it = rawHeaders.constBegin();
-   RawHeadersList::ConstIterator end = rawHeaders.constEnd();
+   RawHeadersList::const_iterator it = rawHeaders.constBegin();
+   RawHeadersList::const_iterator end = rawHeaders.constEnd();
    for ( ; it != end; ++it) {
       parseAndSetHeader(it->first, it->second);
    }
@@ -545,7 +545,7 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
 
 void QNetworkHeadersPrivate::setRawHeaderInternal(const QByteArray &key, const QByteArray &value)
 {
-   RawHeadersList::Iterator it = rawHeaders.begin();
+   RawHeadersList::iterator it = rawHeaders.begin();
 
    while (it != rawHeaders.end()) {
       if (qstricmp(it->first.constData(), key.constData()) == 0) {

@@ -499,7 +499,7 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
    }
 
    QNetworkHeadersPrivate cacheHeaders;
-   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it;
+   QNetworkHeadersPrivate::RawHeadersList::const_iterator it;
    cacheHeaders.setAllRawHeaders(metaData.rawHeaders());
 
    it = cacheHeaders.findRawHeader("etag");
@@ -1217,7 +1217,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
 
    // reconstruct the HTTP header
    QList<QPair<QByteArray, QByteArray> > headerMap = hm;
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it = headerMap.constBegin(), end = headerMap.constEnd();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator it = headerMap.constBegin(), end = headerMap.constEnd();
 
    for (; it != end; ++it) {
       QByteArray value = q->rawHeader(it->first);
@@ -1256,7 +1256,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
          QNetworkCacheMetaData metaData = nc->metaData(httpRequest.url());
          QNetworkHeadersPrivate cacheHeaders;
          cacheHeaders.setAllRawHeaders(metaData.rawHeaders());
-         QNetworkHeadersPrivate::RawHeadersList::ConstIterator it;
+         QNetworkHeadersPrivate::RawHeadersList::const_iterator it;
          it = cacheHeaders.findRawHeader("Cache-Control");
          bool mustReValidate = false;
          if (it != cacheHeaders.rawHeaders.constEnd()) {
@@ -1502,7 +1502,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    q->setAttribute(QNetworkRequest::SourceIsFromCacheAttribute, true);
 
    QNetworkCacheMetaData::RawHeaderList rawHeaders = metaData.rawHeaders();
-   QNetworkCacheMetaData::RawHeaderList::ConstIterator it = rawHeaders.constBegin(),
+   QNetworkCacheMetaData::RawHeaderList::const_iterator it = rawHeaders.constBegin(),
                                                        end = rawHeaders.constEnd();
    QUrl redirectUrl;
    for ( ; it != end; ++it) {
@@ -1554,7 +1554,7 @@ QNetworkCacheMetaData QNetworkReplyHttpImplPrivate::fetchCacheMetaData(const QNe
 
    QNetworkHeadersPrivate cacheHeaders;
    cacheHeaders.setAllRawHeaders(metaData.rawHeaders());
-   QNetworkHeadersPrivate::RawHeadersList::ConstIterator it;
+   QNetworkHeadersPrivate::RawHeadersList::const_iterator it;
 
    QList<QByteArray> newHeaders = q->rawHeaderList();
 

@@ -183,7 +183,7 @@ static QNetworkInterfacePrivate *findInterface(int socket, QList<QNetworkInterfa
 #  endif
 
    // find the interface data
-   QList<QNetworkInterfacePrivate *>::Iterator if_it = interfaces.begin();
+   QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
    for ( ; if_it != interfaces.end(); ++if_it)
       if ((*if_it)->index == ifindex) {
          // existing interface
@@ -192,7 +192,7 @@ static QNetworkInterfacePrivate *findInterface(int socket, QList<QNetworkInterfa
       }
 #else
    // Search by name
-   QList<QNetworkInterfacePrivate *>::Iterator if_it = interfaces.begin();
+   QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
    for ( ; if_it != interfaces.end(); ++if_it)
       if ((*if_it)->name == QLatin1String(req.ifr_name)) {
          // existing interface
@@ -218,7 +218,8 @@ static QList<QNetworkInterfacePrivate *> interfaceListing()
       return interfaces;   // error
    }
    QSet<QByteArray> names = interfaceNames(socket);
-   QSet<QByteArray>::ConstIterator it = names.constBegin();
+   QSet<QByteArray>::const_iterator it = names.constBegin();
+
    for ( ; it != names.constEnd(); ++it) {
       ifreq req;
       memset(&req, 0, sizeof(ifreq));
@@ -385,7 +386,7 @@ static QList<QNetworkInterfacePrivate *> createInterfaces(ifaddrs *rawList)
       // Get the interface index
       int ifindex = if_nametoindex(ptr->ifa_name);
 
-      QList<QNetworkInterfacePrivate *>::Iterator if_it = interfaces.begin();
+      QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
       for ( ; if_it != interfaces.end(); ++if_it)
          if ((*if_it)->index == ifindex)
             // this one has been added already
@@ -428,7 +429,8 @@ static QList<QNetworkInterfacePrivate *> interfaceListing()
       QString name = QString::fromLatin1(ptr->ifa_name);
 
       QNetworkInterfacePrivate *iface = 0;
-      QList<QNetworkInterfacePrivate *>::Iterator if_it = interfaces.begin();
+      QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
+
       for ( ; if_it != interfaces.end(); ++if_it)
          if ((*if_it)->name == name) {
             // found this interface already
