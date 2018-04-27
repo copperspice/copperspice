@@ -476,7 +476,7 @@ bool QTableModel::setItemData(const QModelIndex &index, const QMap<int, QVariant
    if (itm) {
       itm->view = 0; // prohibits item from calling itemChanged()
       bool changed = false;
-      for (QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
+      for (QMap<int, QVariant>::const_iterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
          if (itm->data(it.key()) != it.value()) {
             itm->setData(it.key(), it.value());
             changed = true;
@@ -494,7 +494,7 @@ bool QTableModel::setItemData(const QModelIndex &index, const QMap<int, QVariant
    }
 
    itm = createItem();
-   for (QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
+   for (QMap<int, QVariant>::const_iterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
       itm->setData(it.key(), it.value());
    }
    view->setItem(index.row(), index.column(), itm);

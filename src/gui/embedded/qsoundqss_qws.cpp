@@ -990,7 +990,7 @@ void QWSSoundServerPrivate::playFile(int wid, int sid, const QString &filename,
 
 void QWSSoundServerPrivate::checkPresetVolumes(int wid, int sid, QWSSoundServerProvider *p)
 {
-   QList<PresetVolume>::Iterator it = volumes.begin();
+   QList<PresetVolume>::iterator it = volumes.begin();
    while (it != volumes.end()) {
       PresetVolume v = *it;
       if (v.wid == wid && v.sid == sid) {
@@ -1057,7 +1057,7 @@ void QWSSoundServerPrivate::stopAll(int wid)
 {
    QWSSoundServerProvider *bucket;
    if (!active.isEmpty()) {
-      QList<QWSSoundServerProvider *>::Iterator it = active.begin();
+      QList<QWSSoundServerProvider *>::iterator it = active.begin();
       while (it != active.end()) {
          bucket = *it;
          if (bucket->groupId() == wid) {
@@ -1069,7 +1069,7 @@ void QWSSoundServerPrivate::stopAll(int wid)
       }
    }
    if (!inactive.isEmpty()) {
-      QList<QWSSoundServerProvider *>::Iterator it = inactive.begin();
+      QList<QWSSoundServerProvider *>::iterator it = inactive.begin();
       while (it != inactive.end()) {
          bucket = *it;
          if (bucket->groupId() == wid) {
@@ -1094,7 +1094,7 @@ void QWSSoundServerPrivate::setVolume(int wid, int sid, int lv, int rv)
    }
    // If gotten here, then it means wid/sid wasn't set up yet.
    // first find and remove current preset volumes, then add this one.
-   QList<PresetVolume>::Iterator it = volumes.begin();
+   QList<PresetVolume>::iterator it = volumes.begin();
    while (it != volumes.end()) {
       PresetVolume v = *it;
       if (v.wid == wid && v.sid == sid) {
@@ -1125,7 +1125,7 @@ void QWSSoundServerPrivate::setMute(int wid, int sid, bool m)
    }
    // if gotten here then setting is being applied before item
    // is created.
-   QList<PresetVolume>::Iterator it = volumes.begin();
+   QList<PresetVolume>::iterator it = volumes.begin();
    while (it != volumes.end()) {
       PresetVolume v = *it;
       if (v.wid == wid && v.sid == sid) {
@@ -1376,7 +1376,7 @@ void  QWSSoundServerPrivate::feedDevice(int fd)
       }
    }
 
-   QList<QWSSoundServerProvider *>::Iterator it = active.begin();
+   QList<QWSSoundServerProvider *>::iterator it = active.begin();
    while (it != active.end()) {
       bucket = *it;
       if (bucket->finished()) {

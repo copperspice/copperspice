@@ -92,7 +92,7 @@ void QSyntaxHighlighterPrivate::applyFormatChanges()
    const int preeditAreaLength = layout->preeditAreaText().length();
 
    if (preeditAreaLength != 0) {
-      QList<QTextLayout::FormatRange>::Iterator it = ranges.begin();
+      QList<QTextLayout::FormatRange>::iterator it = ranges.begin();
       while (it != ranges.end()) {
          if (it->start >= preeditAreaStart
                && it->start + it->length <= preeditAreaStart + preeditAreaLength) {

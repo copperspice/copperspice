@@ -38,23 +38,20 @@ template <typename T>
 class QVector
 {
  public:
-   using iterator        = typename std::vector<T>::iterator;
-   using const_iterator  = typename std::vector<T>::const_iterator;
-
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = typename std::vector<T>::const_pointer;
-   using const_reference = typename std::vector<T>::const_reference;
    using difference_type = typename std::vector<T>::difference_type;
    using pointer         = typename std::vector<T>::pointer;
    using reference       = typename std::vector<T>::reference;
    using size_type       = typename std::vector<T>::difference_type;      // makes this signed instead of unsigned
    using value_type      = typename std::vector<T>::value_type;
 
-   // from std
-   using allocator_type         = typename std::vector<T>::allocator_type;
+   using allocator_type  = typename std::vector<T>::allocator_type;
+
+   using iterator        = typename std::vector<T>::iterator;
+   using const_iterator  = typename std::vector<T>::const_iterator;
+
+   using const_pointer   = typename std::vector<T>::const_pointer;
+   using const_reference = typename std::vector<T>::const_reference;
+
    using reverse_iterator       = typename std::vector<T>::reverse_iterator;
    using const_reverse_iterator = typename std::vector<T>::const_reverse_iterator;
 
@@ -92,6 +89,11 @@ class QVector
 
    void append(const QVector<T> &other) {
       m_data.insert(m_data.end(), other.m_data.begin(), other.m_data.end());
+   }
+
+   template <typename Iter>
+   void append(Iter begin, Iter end) {
+      m_data.insert(m_data.end(), begin, end);
    }
 
    const_reference at(size_type i) const;
@@ -181,7 +183,7 @@ class QVector
    }
 
    void insert(size_type i, const T &value);
-   void insert(size_type i, size_type n, const T &value);
+   void insert(size_type i, size_type count, const T &value);
 
    const_reference constLast() const {
       Q_ASSERT(! isEmpty());
@@ -198,7 +200,7 @@ class QVector
       return m_data.back();
    }
 
-   size_type length() {
+   size_type length() const {
       return size();
    }
 
@@ -401,12 +403,17 @@ class QVector
       return m_data.erase(pos);
    }
 
-   iterator insert(iterator before, size_type n, const T &value) {
-      return m_data.insert(before, n, value);
+   iterator insert(iterator before, size_type count, const T &value) {
+      return m_data.insert(before, count, value);
    }
 
    iterator insert(iterator before, const T &value) {
       return m_data.insert(before, value);
+   }
+
+   template <typename Iter>
+   iterator insert(iterator pos, Iter begin, Iter end) {
+      m_data.insert(pos, begin, end);
    }
 
    // operators

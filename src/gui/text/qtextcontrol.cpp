@@ -1444,13 +1444,13 @@ static QRectF boundingRectOfFloatsInSelection(const QTextCursor &cursor)
    QTextFrame *frame = cursor.currentFrame();
    const QList<QTextFrame *> children = frame->childFrames();
 
-   const QList<QTextFrame *>::ConstIterator firstFrame = std::lower_bound(children.constBegin(), children.constEnd(),
+   const QList<QTextFrame *>::const_iterator firstFrame = std::lower_bound(children.constBegin(), children.constEnd(),
          cursor.selectionStart(), firstFramePosLessThanCursorPos);
 
-   const QList<QTextFrame *>::ConstIterator lastFrame = std::upper_bound(children.constBegin(), children.constEnd(),
+   const QList<QTextFrame *>::const_iterator lastFrame = std::upper_bound(children.constBegin(), children.constEnd(),
          cursor.selectionEnd(), cursorPosLessThanLastFramePos);
 
-   for (QList<QTextFrame *>::ConstIterator it = firstFrame; it != lastFrame; ++it) {
+   for (QList<QTextFrame *>::const_iterator it = firstFrame; it != lastFrame; ++it) {
       if ((*it)->frameFormat().position() != QTextFrameFormat::InFlow) {
          r |= frame->document()->documentLayout()->frameBoundingRect(*it);
       }
@@ -2648,7 +2648,7 @@ bool QTextControl::findNextPrevAnchor(const QTextCursor &startCursor, bool next,
       const int startPos = startCursor.selectionEnd();
 
       QTextBlock block = d->doc->findBlock(startPos);
-      QTextBlock::Iterator it = block.begin();
+      QTextBlock::iterator it = block.begin();
 
       while (!it.atEnd() && it.fragment().position() < startPos) {
          ++it;
@@ -2701,15 +2701,15 @@ bool QTextControl::findNextPrevAnchor(const QTextCursor &startCursor, bool next,
       }
 
       QTextBlock block = d->doc->findBlock(startPos);
-      QTextBlock::Iterator blockStart = block.begin();
-      QTextBlock::Iterator it = block.end();
+      QTextBlock::iterator blockStart = block.begin();
+      QTextBlock::iterator it = block.end();
 
       if (startPos == block.position()) {
          it = block.begin();
       } else {
          do {
             if (it == blockStart) {
-               it = QTextBlock::Iterator();
+               it = QTextBlock::iterator();
                block = QTextBlock();
             } else {
                --it;
@@ -2732,7 +2732,7 @@ bool QTextControl::findNextPrevAnchor(const QTextCursor &startCursor, bool next,
                }
 
                if (it == blockStart) {
-                  it = QTextBlock::Iterator();
+                  it = QTextBlock::iterator();
                } else {
                   --it;
                }
@@ -2752,7 +2752,7 @@ bool QTextControl::findNextPrevAnchor(const QTextCursor &startCursor, bool next,
                }
 
                if (it == blockStart) {
-                  it = QTextBlock::Iterator();
+                  it = QTextBlock::iterator();
                } else {
                   --it;
                }
@@ -2805,8 +2805,8 @@ void QTextControlPrivate::activateLinkUnderCursor(QString href)
       QTextBlock block = cursor.block();
       const int cursorPos = cursor.position();
 
-      QTextBlock::Iterator it = block.begin();
-      QTextBlock::Iterator linkFragment;
+      QTextBlock::iterator it = block.begin();
+      QTextBlock::iterator linkFragment;
 
       for (; !it.atEnd(); ++it) {
          QTextFragment fragment = it.fragment();
@@ -3004,7 +3004,7 @@ QPointF QTextControl::anchorPosition(const QString &name) const
          break;
       }
 
-      for (QTextBlock::Iterator it = block.begin(); !it.atEnd(); ++it) {
+      for (QTextBlock::iterator it = block.begin(); !it.atEnd(); ++it) {
          QTextFragment fragment = it.fragment();
          format = fragment.charFormat();
          if (format.isAnchor() && format.anchorNames().contains(name)) {

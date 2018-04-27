@@ -126,11 +126,13 @@ QList<qreal> QTextOption::tabArray() const
    }
 
    QList<qreal> answer;
-   QList<QTextOption::Tab>::ConstIterator iter = d->tabStops.constBegin();
+   QList<QTextOption::Tab>::const_iterator iter = d->tabStops.constBegin();
+
    while (iter != d->tabStops.constEnd()) {
       answer.append( (*iter).position);
       ++iter;
    }
+
    return answer;
 }
 

@@ -231,26 +231,23 @@ class QMultiMap
       typename std::multimap<Key, Val, C>::const_iterator m_iter;
    };
 
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = const Val *;
-   using const_reference = const Val &;
+   using difference_type = typename std::multimap<Key, Val, C>::difference_type;
    using pointer         = Val *;
    using reference       = Val &;
-
-   using difference_type = typename std::multimap<Key, Val, C>::difference_type;
    using size_type       = typename std::multimap<Key, Val, C>::difference_type;   // signed instead of unsigned
    using value_type      = Val;
 
    using key_type        = typename std::multimap<Key, Val, C>::key_type;
    using mapped_type     = typename std::multimap<Key, Val, C>::mapped_type;
-
    using key_compare     = typename std::multimap<Key, Val, C>::key_compare;
 
-   // from std
-   using allocator_type         = typename std::multimap<Key, Val, C>::allocator_type;
+   using allocator_type  = typename std::multimap<Key, Val, C>::allocator_type;
+
+   // iterator and const_iterator are classes
+
+   using const_pointer   = const Val *;
+   using const_reference = const Val &;
+
    using reverse_iterator       = std::reverse_iterator<iterator>;
    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -883,9 +880,9 @@ class QMutableMultiMapIterator
       }
    }
 
-   void setValue(const Val &t) const {
+   void setValue(const Val &value) const {
       if (c->constEnd() != const_iterator(n)) {
-         *n = t;
+         *n = value;
       }
    }
 

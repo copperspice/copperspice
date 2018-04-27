@@ -133,7 +133,7 @@ QToolBoxPrivate::Page *QToolBoxPrivate::page(QWidget *widget) const
       return 0;
    }
 
-   for (PageList::ConstIterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
+   for (PageList::const_iterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
       if ((*i).widget == widget) {
          return (Page *) & (*i);
       }
@@ -405,7 +405,7 @@ void QToolBoxPrivate::_q_buttonClicked()
    Q_Q(QToolBox);
    QToolBoxButton *tb = qobject_cast<QToolBoxButton *>(q->sender());
    QWidget *item = 0;
-   for (QToolBoxPrivate::PageList::ConstIterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
+   for (QToolBoxPrivate::PageList::const_iterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
       if ((*i).button == tb) {
          item = (*i).widget;
          break;
@@ -449,10 +449,12 @@ void QToolBox::setCurrentIndex(int index)
 void QToolBoxPrivate::relayout()
 {
    Q_Q(QToolBox);
+
    delete layout;
    layout = new QVBoxLayout(q);
    layout->setMargin(0);
-   for (QToolBoxPrivate::PageList::ConstIterator i = pageList.constBegin(); i != pageList.constEnd(); ++i) {
+
+   for (QToolBoxPrivate::PageList::const_iterator i = pageList.constBegin(); i != pageList.constEnd(); ++i) {
       layout->addWidget((*i).button);
       layout->addWidget((*i).sv);
    }

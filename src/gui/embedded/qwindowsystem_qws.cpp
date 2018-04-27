@@ -1743,7 +1743,7 @@ void QWSServerPrivate::cleanupFonts(bool force)
    qDebug() << "cleanupFonts()";
 #endif
    if (!fontReferenceCount.isEmpty()) {
-      QMap<QByteArray, int>::Iterator it = fontReferenceCount.begin();
+      QMap<QByteArray, int>::iterator it = fontReferenceCount.begin();
       while (it != fontReferenceCount.end()) {
          if (it.value() && !force) {
             ++it;
@@ -3175,7 +3175,7 @@ void QWSServerPrivate::invokeSelectCursor(QWSSelectCursorCommand *cmd, QWSClient
       curs = QWSCursor::systemCursor(id);
    } else {
       QWSCursorMap cursMap = client->cursors;
-      QWSCursorMap::Iterator it = cursMap.find(id);
+      QWSCursorMap::iterator it = cursMap.find(id);
       if (it != cursMap.end()) {
          curs = it.value();
       }

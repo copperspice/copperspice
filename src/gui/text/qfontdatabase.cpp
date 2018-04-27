@@ -1097,7 +1097,7 @@ static QStringList familyList(const QFontDef &req)
 
    // append the substitute list for each family in family_list
    QStringList subs_list;
-   QStringList::ConstIterator it = family_list.constBegin(), end = family_list.constEnd();
+   QStringList::const_iterator it = family_list.constBegin(), end = family_list.constEnd();
    for (; it != end; ++it) {
       subs_list += QFont::substitutes(*it);
    }

@@ -314,7 +314,7 @@ int QTextTablePrivate::findCellIndex(int fragment) const
 {
    QFragmentFindHelper helper(pieceTable->fragmentMap().position(fragment), pieceTable->fragmentMap());
 
-   QList<int>::ConstIterator it = std::lower_bound(cells.constBegin(), cells.constEnd(), helper);
+   QList<int>::const_iterator it = std::lower_bound(cells.constBegin(), cells.constEnd(), helper);
 
    if ((it == cells.constEnd()) || (helper < *it)) {
       return -1;
@@ -336,7 +336,7 @@ void QTextTablePrivate::fragmentAdded(const QChar &type, uint fragment)
       const uint pos = pieceTable->fragmentMap().position(fragment);
 
       QFragmentFindHelper helper(pos, pieceTable->fragmentMap());
-      QList<int>::Iterator it = std::lower_bound(cells.begin(), cells.end(), helper);
+      QList<int>::iterator it = std::lower_bound(cells.begin(), cells.end(), helper);
       cells.insert(it, fragment);
 
       if (!fragment_start || pos < pieceTable->fragmentMap().position(fragment_start)) {
@@ -554,7 +554,8 @@ QTextTableCell QTextTable::cellAt(int position) const
    }
 
    QFragmentFindHelper helper(position, map);
-   QList<int>::ConstIterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
+   QList<int>::const_iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
+
    if (it != d->cells.begin()) {
       --it;
    }
@@ -1018,7 +1019,7 @@ void QTextTable::mergeCells(int row, int column, int numRows, int numCols)
    // find the position at which to insert the contents of the merged cells
    QFragmentFindHelper helper(origCellPosition, p->fragmentMap());
 
-   QList<int>::Iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
+   QList<int>::iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
 
    Q_ASSERT(it != d->cells.end());
    Q_ASSERT(! (helper < *it));
@@ -1054,7 +1055,7 @@ void QTextTable::mergeCells(int row, int column, int numRows, int numCols)
 
          if (firstCellIndex == -1) {
             QFragmentFindHelper helper(pos, p->fragmentMap());
-            QList<int>::Iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
+            QList<int>::iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
 
             Q_ASSERT(it != d->cells.end());
             Q_ASSERT(! (helper < *it));

@@ -261,7 +261,7 @@ static int incr_timer_id = 0;
 static bool qt_x11_incr_event_filter(void *message, long *result)
 {
    XEvent *event = reinterpret_cast<XEvent *>(message);
-   TransactionMap::Iterator it = transactions->find(event->xany.window);
+   TransactionMap::iterator it = transactions->find(event->xany.window);
    if (it != transactions->end()) {
       if ((*it)->x11Event(event) != 0) {
          return true;

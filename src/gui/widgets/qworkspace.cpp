@@ -1362,7 +1362,7 @@ void QWorkspacePrivate::activateWindow(QWidget *w, bool change_focus)
 
    active = 0;
    // First deactivate all other workspace clients
-   QList<QWorkspaceChild *>::Iterator it(windows.begin());
+   QList<QWorkspaceChild *>::iterator it(windows.begin());
    while (it != windows.end()) {
       QWorkspaceChild *c = *it;
       ++it;
@@ -1434,7 +1434,7 @@ void QWorkspacePrivate::place(QWidget *w)
    Q_Q(QWorkspace);
 
    QList<QWidget *> widgets;
-   for (QList<QWorkspaceChild *>::Iterator it(windows.begin()); it != windows.end(); ++it)
+   for (QList<QWorkspaceChild *>::iterator it(windows.begin()); it != windows.end(); ++it)
       if (*it != w) {
          widgets.append(*it);
       }
@@ -1461,7 +1461,7 @@ void QWorkspacePrivate::place(QWidget *w)
          r1.setRect(x, y, w->width(), w->height());
 
          QWidget *l;
-         QList<QWidget *>::Iterator it(widgets.begin());
+         QList<QWidget *>::iterator it(widgets.begin());
          while (it != widgets.end()) {
             l = *it;
             ++it;
@@ -1505,7 +1505,7 @@ void QWorkspacePrivate::place(QWidget *w)
          }
 
          QWidget *l;
-         QList<QWidget *>::Iterator it(widgets.begin());
+         QList<QWidget *>::iterator it(widgets.begin());
          while (it != widgets.end()) {
             l = *it;
             ++it;
@@ -1536,7 +1536,7 @@ void QWorkspacePrivate::place(QWidget *w)
          }
 
          QWidget *l;
-         QList<QWidget *>::Iterator it(widgets.begin());
+         QList<QWidget *>::iterator it(widgets.begin());
          while (it != widgets.end()) {
             l = *it;
             ++it;
@@ -1581,7 +1581,7 @@ void QWorkspacePrivate::insertIcon(QWidget *w)
    int x = 0;
    int y = cr.height() - w->height();
 
-   QList<QWidget *>::Iterator it(icons.begin());
+   QList<QWidget *>::iterator it(icons.begin());
    while (it != icons.end()) {
       QWidget *i = *it;
       ++it;
@@ -1686,7 +1686,7 @@ void QWorkspacePrivate::minimizeWindow(QWidget *w)
          wasMax = true;
          maxWindow = 0;
          hideMaximizeControls();
-         for (QList<QWorkspaceChild *>::Iterator it(windows.begin()); it != windows.end(); ++it) {
+         for (QList<QWorkspaceChild *>::iterator it(windows.begin()); it != windows.end(); ++it) {
             QWorkspaceChild *c = *it;
             if (c->titlebar) {
                c->titlebar->setMovable(true);
@@ -1746,7 +1746,7 @@ void QWorkspacePrivate::normalizeWindow(QWidget *w)
       }
 
       hideMaximizeControls();
-      for (QList<QWorkspaceChild *>::Iterator it(windows.begin()); it != windows.end(); ++it) {
+      for (QList<QWorkspaceChild *>::iterator it(windows.begin()); it != windows.end(); ++it) {
          QWorkspaceChild *c = *it;
          if (c->titlebar) {
             c->titlebar->setMovable(true);
@@ -1840,7 +1840,7 @@ void QWorkspacePrivate::showWindow(QWidget *w)
 
 QWorkspaceChild *QWorkspacePrivate::findChild(QWidget *w)
 {
-   QList<QWorkspaceChild *>::Iterator it(windows.begin());
+   QList<QWorkspaceChild *>::iterator it(windows.begin());
    while (it != windows.end()) {
       QWorkspaceChild *c = *it;
       ++it;
@@ -1870,8 +1870,10 @@ QWidgetList QWorkspace::windowList(WindowOrder order) const
             windows.append(c->windowWidget());
          }
       }
+
    } else {
-      QList<QWorkspaceChild *>::ConstIterator it(d->windows.begin());
+      QList<QWorkspaceChild *>::const_iterator it(d->windows.begin());
+
       while (it != d->windows.end()) {
          QWorkspaceChild *c = *it;
          ++it;
@@ -1974,7 +1976,7 @@ bool QWorkspace::eventFilter(QObject *o, QEvent *e)
 
       case QEvent::Close:
          if (o == window()) {
-            QList<QWorkspaceChild *>::Iterator it(d->windows.begin());
+            QList<QWorkspaceChild *>::iterator it(d->windows.begin());
             while (it != d->windows.end()) {
                QWorkspaceChild *c = *it;
                ++it;
@@ -2427,7 +2429,7 @@ void QWorkspace::cascade()
 
    // make a list of all relevant mdi clients
    QList<QWorkspaceChild *> widgets;
-   QList<QWorkspaceChild *>::Iterator it(d->windows.begin());
+   QList<QWorkspaceChild *>::iterator it(d->windows.begin());
    QWorkspaceChild *wc = 0;
 
    for (it = d->focus.begin(); it != d->focus.end(); ++it) {
@@ -2502,7 +2504,7 @@ void QWorkspace::tile()
    int n = 0;
    QWorkspaceChild *c;
 
-   QList<QWorkspaceChild *>::Iterator it(d->windows.begin());
+   QList<QWorkspaceChild *>::iterator it(d->windows.begin());
    while (it != d->windows.end()) {
       c = *it;
       ++it;
@@ -2607,7 +2609,7 @@ void QWorkspace::arrangeIcons()
    int x = 0;
    int y = -1;
 
-   QList<QWidget *>::Iterator it(d->icons.begin());
+   QList<QWidget *>::iterator it(d->icons.begin());
    while (it != d->icons.end()) {
       QWidget *i = *it;
       if (y == -1) {
@@ -3298,7 +3300,7 @@ void QWorkspaceChild::internalRaise()
    QWidget *stackUnderWidget = 0;
    if (!windowWidget() || (windowWidget()->windowFlags() & Qt::WindowStaysOnTopHint) == 0) {
 
-      QList<QWorkspaceChild *>::Iterator it(((QWorkspace *)parent())->d_func()->windows.begin());
+      QList<QWorkspaceChild *>::iterator it(((QWorkspace *)parent())->d_func()->windows.begin());
       while (it != ((QWorkspace *)parent())->d_func()->windows.end()) {
          QWorkspaceChild *c = *it;
          ++it;
@@ -3384,7 +3386,7 @@ void QWorkspace::setScrollBarsEnabled(bool enable)
       d->corner = 0;
    }
 
-   QList<QWorkspaceChild *>::Iterator it(d->windows.begin());
+   QList<QWorkspaceChild *>::iterator it(d->windows.begin());
    while (it != d->windows.end()) {
       QWorkspaceChild *child = *it;
       ++it;
@@ -3406,7 +3408,7 @@ QRect QWorkspacePrivate::updateWorkspace()
       }
 
       QRect r(0, 0, 0, 0);
-      QList<QWorkspaceChild *>::Iterator it(windows.begin());
+      QList<QWorkspaceChild *>::iterator it(windows.begin());
       while (it != windows.end()) {
          QWorkspaceChild *child = *it;
          ++it;
@@ -3475,7 +3477,7 @@ QRect QWorkspacePrivate::updateWorkspace()
       cr.setRect(0, 0, q->width() - vsbExt, q->height() - hsbExt);
    }
 
-   QList<QWidget *>::Iterator ii(icons.begin());
+   QList<QWidget *>::iterator ii(icons.begin());
    while (ii != icons.end()) {
       QWidget *w = *ii;
       ++ii;
@@ -3510,7 +3512,7 @@ void QWorkspacePrivate::_q_scrollBarChanged()
    yoffset = vbar->value();
    xoffset = hbar->value();
 
-   QList<QWorkspaceChild *>::Iterator it(windows.begin());
+   QList<QWorkspaceChild *>::iterator it(windows.begin());
    while (it != windows.end()) {
       QWorkspaceChild *child = *it;
       ++it;

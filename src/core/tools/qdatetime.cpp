@@ -3224,11 +3224,14 @@ int QDateTimeParser::sectionSize(int sectionIndex) const
       // is the previous value and displayText() is the new value.
       // The size difference is always due to leading zeroes.
       int sizeAdjustment = 0;
+
       if (displayText().size() != text.size()) {
          // Any zeroes added before this section will affect our size.
          int preceedingZeroesAdded = 0;
+
          if (sectionNodes.size() > 1 && context == DateTimeEdit) {
-            for (QVector<SectionNode>::ConstIterator sectionIt = sectionNodes.constBegin();
+
+            for (QVector<SectionNode>::const_iterator sectionIt = sectionNodes.constBegin();
                   sectionIt != sectionNodes.constBegin() + sectionIndex; ++sectionIt) {
                preceedingZeroesAdded += sectionIt->zeroesAdded;
             }

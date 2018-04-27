@@ -331,7 +331,7 @@ void QActionGroup::setVisible(bool b)
 {
    Q_D(QActionGroup);
    d->visible = b;
-   for (QList<QAction *>::Iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
+   for (QList<QAction *>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
       if (!(*it)->d_func()->forceInvisible) {
          (*it)->setVisible(b);
          (*it)->d_func()->forceInvisible = false;

@@ -205,7 +205,7 @@ class QWSServerPrivate {
    void disconnectClient(QWSClient *);
    void screenSave(int level);
    void doClient(QWSClient *);
-   typedef QMap<int, QWSClient *>::Iterator ClientIterator;
+   typedef QMap<int, QWSClient *>::iterator ClientIterator;
    typedef QMap<int, QWSClient *> ClientMap;
    void handleWindowClose(QWSWindow *w);
    void releaseMouse(QWSWindow *w);

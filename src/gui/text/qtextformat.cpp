@@ -227,7 +227,7 @@ static inline int getHash(const QTextFormatPrivate *d, int format)
 uint QTextFormatPrivate::recalcHash() const
 {
    hashValue = 0;
-   for (QVector<Property>::ConstIterator it = props.constBegin(); it != props.constEnd(); ++it) {
+   for (QVector<Property>::const_iterator it = props.constBegin(); it != props.constEnd(); ++it) {
       hashValue += (it->key << 16) + variantHash(it->value);
    }
 
@@ -356,7 +356,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QTextFormat &fmt)
       fmt.d = new QTextFormatPrivate();
    }
 
-   for (QMap<qint32, QVariant>::ConstIterator it = properties.constBegin();
+   for (QMap<qint32, QVariant>::const_iterator it = properties.constBegin();
          it != properties.constEnd(); ++it) {
       fmt.d->insertProperty(it.key(), it.value());
    }
@@ -1905,7 +1905,7 @@ QTextBlockFormat::QTextBlockFormat(const QTextFormat &fmt)
 void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> &tabs)
 {
    QList<QVariant> list;
-   QList<QTextOption::Tab>::ConstIterator iter = tabs.constBegin();
+   QList<QTextOption::Tab>::const_iterator iter = tabs.constBegin();
    while (iter != tabs.constEnd()) {
       QVariant v;
       v.setValue<QTextOption::Tab>(*iter);
@@ -1929,7 +1929,7 @@ QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const
    }
    QList<QTextOption::Tab> answer;
    QList<QVariant> variantsList = qvariant_cast<QList<QVariant> >(variant);
-   QList<QVariant>::Iterator iter = variantsList.begin();
+   QList<QVariant>::iterator iter = variantsList.begin();
    while (iter != variantsList.end()) {
       answer.append( qvariant_cast<QTextOption::Tab>(*iter));
       ++iter;

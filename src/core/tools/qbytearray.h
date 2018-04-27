@@ -35,7 +35,7 @@
 class QByteRef;
 class QDataStream;
 
-template <typename T> 
+template <typename T>
 class QList;
 
 using QByteArrayData = QArrayData;
@@ -129,8 +129,6 @@ class Q_CORE_EXPORT QByteArray
  public:
    using iterator         = char *;
    using const_iterator   = const char *;
-   using Iterator         = iterator;
-   using ConstIterator    = const_iterator;
 
    using reference        = char &;
    using const_reference  = const char &;

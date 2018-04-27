@@ -53,25 +53,21 @@ class QMutableListIterator;
 template <typename T>
 class QList
 {
-
  public:
-   using iterator        = typename std::deque<T>::iterator;
-   using const_iterator  = typename std::deque<T>::const_iterator;
-
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = typename std::deque<T>::const_pointer;
-   using const_reference = typename std::deque<T>::const_reference;
    using difference_type = typename std::deque<T>::difference_type;
    using pointer         = typename std::deque<T>::pointer;
    using reference       = typename std::deque<T>::reference;
    using size_type       = typename std::deque<T>::difference_type;      // makes this signed instead of unsigned
    using value_type      = typename std::deque<T>::value_type;
 
-   // from std
-   using allocator_type         = typename std::deque<T>::allocator_type;
+   using allocator_type  = typename std::deque<T>::allocator_type;
+
+   using iterator        = typename std::deque<T>::iterator;
+   using const_iterator  = typename std::deque<T>::const_iterator;
+
+   using const_pointer   = typename std::deque<T>::const_pointer;
+   using const_reference = typename std::deque<T>::const_reference;
+
    using reverse_iterator       = typename std::deque<T>::reverse_iterator;
    using const_reverse_iterator = typename std::deque<T>::const_reverse_iterator;
 

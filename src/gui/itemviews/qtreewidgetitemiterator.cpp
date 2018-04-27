@@ -44,7 +44,7 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &
     The iterator is set to point to the first top-level item contained in the widget,
     or the next matching item if the top-level item doesn't match the flags.
 
-    \sa QTreeWidgetItemIterator::IteratorFlag
+    \sa QTreeWidgetItemIterator::iteratorFlag
 */
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFlags flags)
@@ -69,7 +69,7 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
     The iterator is set to point to \a item, or the next matching item if \a item
     doesn't match the flags.
 
-    \sa QTreeWidgetItemIterator::IteratorFlag
+    \sa QTreeWidgetItemIterator::iteratorFlag
 */
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags)
@@ -414,7 +414,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
 
 
 /*!
-    \enum QTreeWidgetItemIterator::IteratorFlag
+    \enum QTreeWidgetItemIterator::iteratorFlag
 
     These flags can be passed to a QTreeWidgetItemIterator constructor
     (OR-ed together if more than one is used), so that the iterator

@@ -205,11 +205,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       using difference_type = std::ptrdiff_t;
       using value_type      = QChar32;
       using size_type       = std::ptrdiff_t;
-
       using storage_type    = char16_t;
-
-      using Iterator        = iterator;
-      using ConstIterator   = const_iterator;
 
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;

@@ -29,8 +29,22 @@ template<class T>
 class QStack : public QVector<T>
 {
    public:
-      using const_reference = typename QVector<T>::const_reference;
+      using difference_type = typename QVector<T>::difference_type;
+      using pointer         = typename QVector<T>::pointer;
       using reference       = typename QVector<T>::reference;
+      using size_type       = typename QVector<T>::difference_type;
+      using value_type      = typename QVector<T>::value_type;
+
+      using allocator_type  = typename QVector<T>::allocator_type;
+
+      using iterator        = typename QVector<T>::iterator;
+      using const_iterator  = typename QVector<T>::const_iterator;
+
+      using const_pointer   = typename QVector<T>::const_pointer;
+      using const_reference = typename QVector<T>::const_reference;
+
+      using reverse_iterator       = typename QVector<T>::reverse_iterator;
+      using const_reverse_iterator = typename QVector<T>::const_reverse_iterator;
 
       QStack() = default;
       ~QStack () = default;

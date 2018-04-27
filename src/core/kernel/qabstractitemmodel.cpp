@@ -991,9 +991,11 @@ bool QAbstractItemModel::setData(const QModelIndex &index, const QVariant &value
 bool QAbstractItemModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
 {
    bool b = true;
-   for (QMap<int, QVariant>::ConstIterator it = roles.begin(); it != roles.end(); ++it) {
+
+   for (QMap<int, QVariant>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
       b = b && setData(index, it.value(), it.key());
    }
+
    return b;
 }
 
@@ -1444,7 +1446,7 @@ bool QAbstractItemModel::setHeaderData(int section, Qt::Orientation orientation,
 */
 void QAbstractItemModel::encodeData(const QModelIndexList &indexes, QDataStream &stream) const
 {
-   QModelIndexList::ConstIterator it = indexes.begin();
+   QModelIndexList::const_iterator it = indexes.begin();
 
    for (; it != indexes.end(); ++it) {
       stream << (*it).row() << (*it).column() << itemData(*it);

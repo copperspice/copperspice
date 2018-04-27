@@ -188,7 +188,7 @@ class QAuServerQWS : public QAuServer
 #ifndef MEDIA_SERVER
    // Find registered bucket with given id, return null if none found
    QAuBucketQWS *find( int id ) {
-      QHash<int, QAuBucketQWS *>::Iterator it = buckets.find( id );
+      QHash<int, QAuBucketQWS *>::iterator it = buckets.find( id );
       if ( it != buckets.end() ) {
          return it.value();
       }

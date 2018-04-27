@@ -288,7 +288,7 @@ template <typename T>
 QDataStream &operator<<(QDataStream &s, const QLinkedList<T> &l)
 {
    s << quint32(l.size());
-   typename QLinkedList<T>::ConstIterator it = l.constBegin();
+   typename QLinkedList<T>::const_itterator it = l.constBegin();
 
    for (; it != l.constEnd(); ++it) {
       s << *it;
@@ -391,8 +391,8 @@ QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
 {
    out << quint32(hash.size());
 
-   typename QHash<Key, T>::ConstIterator iter = hash.begin();
-   typename QHash<Key, T>::ConstIterator end  = hash.end();
+   typename QHash<Key, T>::const_iterator iter = hash.begin();
+   typename QHash<Key, T>::const_iterator end  = hash.end();
 
    while (iter != end) {
       out << iter.key() << iter.value();
@@ -440,8 +440,8 @@ QDataStream &operator<<(QDataStream &out, const QMultiHash<Key, T> &hash)
 {
    out << quint32(hash.size());
 
-   typename QMultiHash<Key, T>::ConstIterator iter = hash.begin();
-   typename QMultiHash<Key, T>::ConstIterator end  = hash.end();
+   typename QMultiHash<Key, T>::const_iterator iter = hash.begin();
+   typename QMultiHash<Key, T>::const_iterator end  = hash.end();
 
    while (iter != end) {
       out << iter.key() << iter.value();
@@ -488,8 +488,8 @@ template <class Key, class Val, class C>
 QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
-   typename QMap<Key, Val, C>::ConstIterator it = map.end();
-   typename QMap<Key, Val, C>::ConstIterator begin = map.begin();
+   typename QMap<Key, Val, C>::const_iterator it = map.end();
+   typename QMap<Key, Val, C>::const_iterator begin = map.begin();
 
    while (it != begin) {
       --it;
@@ -537,8 +537,8 @@ QDataStream &operator<<(QDataStream &out, const QMultiMap<Key, Val, C> &map)
 {
    out << quint32(map.size());
 
-   typename QMultiMap<Key, Val, C>::ConstIterator it    = map.end();
-   typename QMultiMap<Key, Val, C>::ConstIterator begin = map.begin();
+   typename QMultiMap<Key, Val, C>::const_iterator it    = map.end();
+   typename QMultiMap<Key, Val, C>::const_iterator begin = map.begin();
 
    while (it != begin) {
       --it;

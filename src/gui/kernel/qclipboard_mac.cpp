@@ -406,7 +406,7 @@ QMacPasteboard::setMimeData(QMimeData *mime_src)
 
       for (int f = 0; f < formats.size(); ++f) {
          QString mimeType = formats.at(f);
-         for (QList<QMacPasteboardMime *>::Iterator it = availableConverters.begin(); it != availableConverters.end(); ++it) {
+         for (QList<QMacPasteboardMime *>::iterator it = availableConverters.begin(); it != availableConverters.end(); ++it) {
             QMacPasteboardMime *c = (*it);
             QString flavor(c->flavorFor(mimeType));
             if (!flavor.isEmpty()) {

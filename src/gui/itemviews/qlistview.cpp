@@ -2750,7 +2750,8 @@ bool QIconModeViewBase::filterStartDrag(Qt::DropActions supportedActions)
    QModelIndexList indexes = dd->selectionModel->selectedIndexes();
    if (indexes.count() > 0 ) {
       if (viewport()->acceptDrops()) {
-         QModelIndexList::ConstIterator it = indexes.constBegin();
+         QModelIndexList::const_iterator it = indexes.constBegin();
+
          for (; it != indexes.constEnd(); ++it)
             if (dd->model->flags(*it) & Qt::ItemIsDragEnabled
                   && (*it).column() == dd->column) {

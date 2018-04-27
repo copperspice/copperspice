@@ -651,6 +651,7 @@ QTextCodec *QTextCodec::codecForMib(int mib)
    QByteArray key = "MIB: " + QByteArray::number(mib);
    QTextCodecCache *cache = qTextCodecCache();
    QTextCodec *codec;
+
    if (cache) {
       codec = cache->value(key);
       if (codec) {
@@ -658,9 +659,11 @@ QTextCodec *QTextCodec::codecForMib(int mib)
       }
    }
 
-   QList<QTextCodec *>::ConstIterator i;
+   QList<QTextCodec *>::const_iterator i;
+
    for (int i = 0; i < all->size(); ++i) {
       QTextCodec *cursor = all->at(i);
+
       if (cursor->mibEnum() == mib) {
          if (cache) {
             cache->insert(key, cursor);

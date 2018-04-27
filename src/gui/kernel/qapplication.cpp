@@ -669,7 +669,7 @@ QApplication::~QApplication()
    if (QWidgetPrivate::allWidgets) {
       QWidgetSet *mySet = QWidgetPrivate::allWidgets;
       QWidgetPrivate::allWidgets = 0;
-      for (QWidgetSet::ConstIterator it = mySet->constBegin(); it != mySet->constEnd(); ++it) {
+      for (QWidgetSet::const_iterator it = mySet->constBegin(); it != mySet->constEnd(); ++it) {
          QWidget *w = *it;
          if (!w->parent()) {                      // window
             w->destroy(true, true);
@@ -1047,7 +1047,7 @@ void QApplication::setStyle(QStyle *style)
    if (QApplicationPrivate::app_style) {
       if (QApplicationPrivate::is_app_running && !QApplicationPrivate::is_app_closing) {
 
-         for (QWidgetList::ConstIterator it = all.constBegin(); it != all.constEnd(); ++it) {
+         for (QWidgetList::const_iterator it = all.constBegin(); it != all.constEnd(); ++it) {
             QWidget *w = *it;
 
             if (!(w->windowType() == Qt::Desktop) && w->testAttribute(Qt::WA_WState_Polished)) {
@@ -1098,7 +1098,7 @@ void QApplication::setStyle(QStyle *style)
    // re-polish existing widgets if necessary
    if (QApplicationPrivate::is_app_running && !QApplicationPrivate::is_app_closing) {
 
-      for (QWidgetList::ConstIterator it1 = all.constBegin(); it1 != all.constEnd(); ++it1) {
+      for (QWidgetList::const_iterator it1 = all.constBegin(); it1 != all.constEnd(); ++it1) {
          QWidget *w = *it1;
 
          if (w->windowType() != Qt::Desktop && w->testAttribute(Qt::WA_WState_Polished)) {
@@ -1114,7 +1114,7 @@ void QApplication::setStyle(QStyle *style)
          }
       }
 
-      for (QWidgetList::ConstIterator it2 = all.constBegin(); it2 != all.constEnd(); ++it2) {
+      for (QWidgetList::const_iterator it2 = all.constBegin(); it2 != all.constEnd(); ++it2) {
          QWidget *w = *it2;
          if (w->windowType() != Qt::Desktop && !w->testAttribute(Qt::WA_SetStyle)) {
             QEvent e(QEvent::StyleChange);
@@ -1244,7 +1244,7 @@ QPalette QApplication::palette(const QWidget *w)
    PaletteHash *hash = app_palettes();
 
    if (w && hash && hash->size()) {
-      QHash<QString, QPalette>::ConstIterator it = hash->constFind(w->metaObject()->className());
+      QHash<QString, QPalette>::const_iterator it = hash->constFind(w->metaObject()->className());
 
       if (it != hash->constEnd()) {
          return *it;
@@ -1269,7 +1269,7 @@ QPalette QApplication::palette(const QString &className)
    PaletteHash *hash = app_palettes();
 
    if (! className.isEmpty() && hash && hash->size()) {
-      QHash<QString, QPalette>::ConstIterator it = hash->constFind(className);
+      QHash<QString, QPalette>::const_iterator it = hash->constFind(className);
 
       if (it != hash->constEnd()) {
          return *it;
@@ -1319,7 +1319,7 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
 
       QWidgetList wids = QApplication::allWidgets();
 
-      for (QWidgetList::ConstIterator it = wids.constBegin(); it != wids.constEnd(); ++it) {
+      for (QWidgetList::const_iterator it = wids.constBegin(); it != wids.constEnd(); ++it) {
          QWidget *w = *it;
 
          if (all || (className.isEmpty() && w->isWindow()) || w->inherits(className)) {
@@ -1332,7 +1332,7 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
 #ifndef QT_NO_GRAPHICSVIEW
       QList<QGraphicsScene *> &scenes = qApp->d_func()->scene_list;
 
-      for (QList<QGraphicsScene *>::ConstIterator it = scenes.constBegin(); it != scenes.constEnd(); ++it) {
+      for (QList<QGraphicsScene *>::const_iterator it = scenes.constBegin(); it != scenes.constEnd(); ++it) {
          QApplication::sendEvent(*it, &e);
       }
 #endif
@@ -1407,7 +1407,7 @@ QFont QApplication::font(const QWidget *widget)
 #endif
 
    if (widget && hash && hash->size()) {
-      QHash<QString, QFont>::ConstIterator it = hash->constFind(widget->metaObject()->className());
+      QHash<QString, QFont>::const_iterator it = hash->constFind(widget->metaObject()->className());
 
       if (it != hash->constEnd()) {
          return it.value();
@@ -1429,7 +1429,7 @@ QFont QApplication::font(const QString &className)
    FontHash *hash = app_fonts();
 
    if (! className.isEmpty() && hash && hash->size()) {
-      QHash<QString, QFont>::ConstIterator it = hash->constFind(className);
+      QHash<QString, QFont>::const_iterator it = hash->constFind(className);
 
       if (it != hash->constEnd()) {
          return *it;
@@ -1469,7 +1469,7 @@ void QApplication::setFont(const QFont &font, const QString &className)
 
       QWidgetList wids = QApplication::allWidgets();
 
-      for (QWidgetList::ConstIterator it = wids.constBegin(); it != wids.constEnd(); ++it) {
+      for (QWidgetList::const_iterator it = wids.constBegin(); it != wids.constEnd(); ++it) {
          QWidget *w = *it;
 
          if (all || (className.isEmpty() && w->isWindow()) || w->inherits(className)) {
@@ -1482,7 +1482,7 @@ void QApplication::setFont(const QFont &font, const QString &className)
       // Send to all scenes as well.
       QList<QGraphicsScene *> &scenes = qApp->d_func()->scene_list;
 
-      for (QList<QGraphicsScene *>::ConstIterator it = scenes.constBegin(); it != scenes.constEnd(); ++it) {
+      for (QList<QGraphicsScene *>::const_iterator it = scenes.constBegin(); it != scenes.constEnd(); ++it) {
          QApplication::sendEvent(*it, &e);
       }
 #endif
@@ -1546,7 +1546,7 @@ void QApplication::setWindowIcon(const QIcon &icon)
 #endif
       QEvent e(QEvent::ApplicationWindowIconChange);
       QWidgetList all = QApplication::allWidgets();
-      for (QWidgetList::ConstIterator it = all.constBegin(); it != all.constEnd(); ++it) {
+      for (QWidgetList::const_iterator it = all.constBegin(); it != all.constEnd(); ++it) {
          QWidget *w = *it;
          if (w->isWindow()) {
             sendEvent(w, &e);
@@ -1572,7 +1572,7 @@ QWidgetList QApplication::topLevelWidgets()
    QWidgetList list;
    QWidgetList all = allWidgets();
 
-   for (QWidgetList::ConstIterator it = all.constBegin(); it != all.constEnd(); ++it) {
+   for (QWidgetList::const_iterator it = all.constBegin(); it != all.constEnd(); ++it) {
       QWidget *w = *it;
       if (w->isWindow() && w->windowType() != Qt::Desktop) {
          list.append(w);
@@ -3911,23 +3911,26 @@ class QSessionManagerPrivate
 };
 
 QSessionManager *qt_session_manager_self = 0;
+
 QSessionManager::QSessionManager(QApplication *app, QString &id, QString &key)
    : QObject(app), d_ptr(new QSessionManagerPrivate)
 {
    Q_D(QSessionManager);
 
-   setObjectName(QLatin1String("qt_sessionmanager"));
+   setObjectName("qt_sessionmanager");
    qt_session_manager_self = this;
 
 #if defined(Q_OS_WIN)
-   wchar_t guidstr[40];
+   std::wstring guidstr(40, L'\0');
    GUID guid;
+
    CoCreateGuid(&guid);
-   StringFromGUID2(guid, guidstr, 40);
-   id = QString::fromWCharArray(guidstr);
+   StringFromGUID2(guid, &guidstr[0], 40);
+   id = QString::fromStdWString(guidstr);
+
    CoCreateGuid(&guid);
-   StringFromGUID2(guid, guidstr, 40);
-   key = QString::fromWCharArray(guidstr);
+   StringFromGUID2(guid, &guidstr[0], 40);
+   key = QString::fromStdWString(guidstr);
 #endif
 
    d->sessionId = id;
@@ -4530,8 +4533,8 @@ void QApplicationPrivate::translateRawTouchEvent(QWidget *window,
       return;
    }
 
-   QHash<QWidget *, StatesAndTouchPoints>::ConstIterator it = widgetsNeedingEvents.constBegin();
-   const QHash<QWidget *, StatesAndTouchPoints>::ConstIterator end = widgetsNeedingEvents.constEnd();
+   QHash<QWidget *, StatesAndTouchPoints>::const_iterator it = widgetsNeedingEvents.constBegin();
+   const QHash<QWidget *, StatesAndTouchPoints>::const_iterator end = widgetsNeedingEvents.constEnd();
    for (; it != end; ++it) {
       QWidget *widget = it.key();
       if (!QApplicationPrivate::tryModalHelper(widget, 0)) {

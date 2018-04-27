@@ -137,6 +137,8 @@ class QFuture
       typedef const T *pointer;
       typedef const T &reference;
 
+      using size_type = difference_type;
+
       inline const_iterator() {}
       inline const_iterator(QFuture const *const _future, int _index) : future(_future), index(_index) {}
 
@@ -195,20 +197,20 @@ class QFuture
          return r;
       }
 
-      inline const_iterator operator+(int n) const {
+      inline const_iterator operator+(size_type n) const {
          return const_iterator(future, index + n);
       }
 
-      inline const_iterator operator-(int n) const {
+      inline const_iterator operator-(size_type n) const {
          return const_iterator(future, index - n);
       }
 
-      inline const_iterator &operator+=(int n) {
+      inline const_iterator &operator+=(size_type n) {
          index += n;
          return *this;
       }
 
-      inline const_iterator &operator-=(int n) {
+      inline const_iterator &operator-=(size_type n) {
          index -= n;
          return *this;
       }
@@ -219,7 +221,6 @@ class QFuture
    };
 
    friend class const_iterator;
-   typedef const_iterator ConstIterator;
 
    const_iterator begin() const {
       return  const_iterator(this, 0);

@@ -196,7 +196,8 @@ inline void QUrl::removeAllEncodedQueryItems(const QByteArray &key)
 inline void QUrl::setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray> > &qry)
 {
    QUrlQuery q;
-   QList<QPair<QByteArray, QByteArray> >::ConstIterator it = qry.constBegin();
+   QList<QPair<QByteArray, QByteArray> >::const_iterator it = qry.constBegin();
+
    for ( ; it != qry.constEnd(); ++it) {
       q.addQueryItem(fromEncodedComponent_helper(it->first), fromEncodedComponent_helper(it->second));
    }
@@ -206,7 +207,7 @@ inline void QUrl::setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray>
 inline QList<QPair<QByteArray, QByteArray> > QUrl::encodedQueryItems() const
 {
    QList<QPair<QString, QString> > items = QUrlQuery(*this).queryItems(QUrl::FullyEncoded);
-   QList<QPair<QString, QString> >::ConstIterator it = items.constBegin();
+   QList<QPair<QString, QString> >::const_iterator it = items.constBegin();
    QList<QPair<QByteArray, QByteArray> > result;
 
    for ( ; it != items.constEnd(); ++it) {

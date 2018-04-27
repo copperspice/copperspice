@@ -415,7 +415,7 @@ static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &
       }
 
       int pos = 0;
-      QProcessEnvironmentPrivate::Hash::ConstIterator it = copy.constBegin(), end = copy.constEnd();
+      QProcessEnvironmentPrivate::Hash::const_iterator it = copy.constBegin(), end = copy.constEnd();
 
       static const wchar_t equal = L'=';
       static const wchar_t nul   = L'\0';

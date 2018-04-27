@@ -573,7 +573,7 @@ void QPrintDialogPrivate::setTabs(const QList<QWidget *> &tabWidgets)
       delete options.tabs->widget(2);
    }
 
-   QList<QWidget *>::ConstIterator iter = tabWidgets.begin();
+   QList<QWidget *>::const_iterator iter = tabWidgets.begin();
    while (iter != tabWidgets.constEnd()) {
       QWidget *tab = *iter;
       options.tabs->addTab(tab, tab->windowTitle());

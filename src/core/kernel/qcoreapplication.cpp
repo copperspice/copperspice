@@ -1307,8 +1307,9 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
    }
 
    if (self && !self->d_func()->translators.isEmpty()) {
-      QList<QTranslator *>::ConstIterator it;
+      QList<QTranslator *>::const_iterator it;
       QTranslator *translationFile;
+
       for (it = self->d_func()->translators.constBegin(); it != self->d_func()->translators.constEnd(); ++it) {
          translationFile = *it;
          result = translationFile->translate(context, sourceText, disambiguation, n);

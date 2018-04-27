@@ -2056,7 +2056,8 @@ bool QApplicationPrivate::qws_apply_settings()
    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
    if (! pathlist.isEmpty()) {
-      QStringList::ConstIterator it = pathlist.constBegin();
+      QStringList::const_iterator it = pathlist.constBegin();
+
       while (it != pathlist.constEnd()) {
          QApplication::addLibraryPath(*it++);
       }
@@ -2138,7 +2139,7 @@ bool QApplicationPrivate::qws_apply_settings()
    settings.beginGroup(QLatin1String("Font Substitutions"));
    QStringList fontsubs = settings.childKeys();
    if (!fontsubs.isEmpty()) {
-      QStringList::Iterator it = fontsubs.begin();
+      QStringList::iterator it = fontsubs.begin();
       for (; it != fontsubs.end(); ++it) {
          QString fam = *it;
          QStringList subs = settings.value(fam).toStringList();

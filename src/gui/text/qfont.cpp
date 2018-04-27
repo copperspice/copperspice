@@ -2002,7 +2002,7 @@ QString QFont::substitute(const QString &familyName)
    QFontSubst *fontSubst = globalFontSubst();
    Q_ASSERT(fontSubst != 0);
 
-   QFontSubst::ConstIterator it = fontSubst->constFind(familyName.toLower());
+   QFontSubst::const_iterator it = fontSubst->constFind(familyName.toLower());
    if (it != fontSubst->constEnd() && !(*it).isEmpty()) {
       return (*it).first();
    }
@@ -2040,7 +2040,7 @@ void QFont::insertSubstitutions(const QString &familyName, const QStringList &su
    QFontSubst *fontSubst = globalFontSubst();
    Q_ASSERT(fontSubst != 0);
    QStringList &list = (*fontSubst)[familyName.toLower()];
-   QStringList::ConstIterator it = substituteNames.constBegin();
+   QStringList::const_iterator it = substituteNames.constBegin();
    while (it != substituteNames.constEnd()) {
       QString s = (*it).toLower();
       if (!list.contains(s)) {
@@ -2068,7 +2068,7 @@ QStringList QFont::substitutions()
    Q_ASSERT(fontSubst != 0);
 
    QStringList ret;
-   QFontSubst::ConstIterator it = fontSubst->constBegin();
+   QFontSubst::const_iterator it = fontSubst->constBegin();
 
    while (it != fontSubst->constEnd()) {
       ret.append(it.key());
@@ -2616,8 +2616,8 @@ QFontCache::~QFontCache()
 {
    clear();
    {
-      EngineDataCache::ConstIterator it  = engineDataCache.constBegin();
-      EngineDataCache::ConstIterator end = engineDataCache.constEnd();
+      EngineDataCache::const_iterator it  = engineDataCache.constBegin();
+      EngineDataCache::const_iterator end = engineDataCache.constEnd();
 
       while (it != end) {
          if (it.value()->ref.deref() == 0) {
@@ -2636,8 +2636,8 @@ QFontCache::~QFontCache()
 void QFontCache::clear()
 {
    {
-      EngineDataCache::Iterator it  = engineDataCache.begin();
-      EngineDataCache::Iterator end = engineDataCache.end();
+      EngineDataCache::iterator it  = engineDataCache.begin();
+      EngineDataCache::iterator end = engineDataCache.end();
 
       while (it != end) {
          QFontEngineData *data = it.value();
@@ -2663,7 +2663,7 @@ void QFontCache::clear()
       }
    }
 
-   for (EngineCache::Iterator it = engineCache.begin(), end = engineCache.end();
+   for (EngineCache::iterator it = engineCache.begin(), end = engineCache.end();
 	it != end; ++it) {
       if (it->data->ref.deref() == 0) {
          delete it->data;
@@ -2688,8 +2688,8 @@ void QFontCache::removeEngineForFont(const QByteArray &_fontName)
 
 QFontEngineData *QFontCache::findEngineData(const Key &key) const
 {
-   EngineDataCache::ConstIterator it  = engineDataCache.find(key);
-   EngineDataCache::ConstIterator end = engineDataCache.end();
+   EngineDataCache::const_iterator it  = engineDataCache.find(key);
+   EngineDataCache::const_iterator end = engineDataCache.end();
 
    if (it == end) {
       return 0;
@@ -2711,8 +2711,8 @@ void QFontCache::insertEngineData(const Key &key, QFontEngineData *engineData)
 
 QFontEngine *QFontCache::findEngine(const Key &key)
 {
-   EngineCache::Iterator it  = engineCache.find(key);
-   EngineCache::Iterator end = engineCache.end();
+   EngineCache::iterator it  = engineCache.find(key);
+   EngineCache::iterator end = engineCache.end();
 
    if (it == end) {
       return 0;
@@ -2798,8 +2798,8 @@ void QFontCache::cleanupPrinterFonts()
       FC_DEBUG("  CLEAN engine data:");
 
       // clean out all unused engine data
-      EngineDataCache::Iterator it  = engineDataCache.begin();
-      EngineDataCache::Iterator end = engineDataCache.end();
+      EngineDataCache::iterator it  = engineDataCache.begin();
+      EngineDataCache::iterator end = engineDataCache.end();
 
       while (it != end) {
          if (it.key().screen == 0) {
@@ -2820,7 +2820,7 @@ void QFontCache::cleanupPrinterFonts()
 
          } else {
 
-      	    EngineDataCache::Iterator rem = it++;
+      	    EngineDataCache::iterator rem = it++;
       	    decreaseCost(sizeof(QFontEngineData));
 
       	    FC_DEBUG("    %p", rem.value());
@@ -2835,8 +2835,8 @@ void QFontCache::cleanupPrinterFonts()
       }
    }
 
-   EngineCache::Iterator it  = engineCache.begin();
-   EngineCache::Iterator end = engineCache.end();
+   EngineCache::iterator it  = engineCache.begin();
+   EngineCache::iterator end = engineCache.end();
 
    while (it != end) {
       if (it.value().data->ref.load() != 1 || it.key().screen == 0) {
@@ -2888,8 +2888,8 @@ void QFontCache::timerEvent(QTimerEvent *)
       const uint engine_data_cost =
          sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
 
-      EngineDataCache::ConstIterator it  = engineDataCache.constBegin();
-      EngineDataCache::ConstIterator end = engineDataCache.constEnd();
+      EngineDataCache::const_iterator it  = engineDataCache.constBegin();
+      EngineDataCache::const_iterator end = engineDataCache.constEnd();
 
       for (; it != end; ++it) {
 
@@ -2917,8 +2917,8 @@ void QFontCache::timerEvent(QTimerEvent *)
    {
       FC_DEBUG("  SWEEP engine:");
 
-      EngineCache::ConstIterator it  = engineCache.constBegin();
-      EngineCache::ConstIterator end = engineCache.constEnd();
+      EngineCache::const_iterator it  = engineCache.constBegin();
+      EngineCache::const_iterator end = engineCache.constEnd();
 
       for (; it != end; ++it) {
 
@@ -2975,8 +2975,8 @@ void QFontCache::timerEvent(QTimerEvent *)
       FC_DEBUG("  CLEAN engine data:");
 
       // clean out all unused engine data
-      EngineDataCache::Iterator it  = engineDataCache.begin();
-      EngineDataCache::Iterator end = engineDataCache.end();
+      EngineDataCache::iterator it  = engineDataCache.begin();
+      EngineDataCache::iterator end = engineDataCache.end();
 
       while (it != end) {
 	 if (it.value()->ref.load() > 1) {
@@ -2984,7 +2984,7 @@ void QFontCache::timerEvent(QTimerEvent *)
 	    continue;
 	 }
 
-         EngineDataCache::Iterator rem = it++;
+         EngineDataCache::iterator rem = it++;
 
          decreaseCost(sizeof(QFontEngineData));
 
@@ -3000,8 +3000,8 @@ void QFontCache::timerEvent(QTimerEvent *)
    do {
       current_cost = total_cost;
 
-      EngineCache::Iterator it  = engineCache.begin();
-      EngineCache::Iterator end = engineCache.end();
+      EngineCache::iterator it  = engineCache.begin();
+      EngineCache::iterator end = engineCache.end();
 
       // determine the oldest and least popular of the unused engines
       uint oldest = ~0u;

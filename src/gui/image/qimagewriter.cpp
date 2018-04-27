@@ -676,7 +676,7 @@ QList<QByteArray> QImageWriter::supportedImageFormats()
    }
 
    QList<QByteArray> sortedFormats;
-   for (QSet<QByteArray>::ConstIterator it = formats.constBegin(); it != formats.constEnd(); ++it) {
+   for (QSet<QByteArray>::const_iterator it = formats.constBegin(); it != formats.constEnd(); ++it) {
       sortedFormats << *it;
    }
 

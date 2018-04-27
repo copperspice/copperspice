@@ -261,7 +261,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    }
 
    inline QAbstractItemDelegate *delegateForIndex(const QModelIndex &index) const {
-      QMap<int, QPointer<QAbstractItemDelegate> >::ConstIterator it;
+      QMap<int, QPointer<QAbstractItemDelegate> >::const_iterator it;
 
       it = rowDelegates.find(index.row());
       if (it != rowDelegates.end()) {

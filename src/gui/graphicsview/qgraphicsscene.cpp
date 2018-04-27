@@ -1008,8 +1008,8 @@ void QGraphicsScenePrivate::removeSceneEventFilter(QGraphicsItem *watched, QGrap
       return;
    }
 
-   QMultiMap<QGraphicsItem *, QGraphicsItem *>::Iterator it = sceneEventFilters.lowerBound(watched);
-   QMultiMap<QGraphicsItem *, QGraphicsItem *>::Iterator end = sceneEventFilters.upperBound(watched);
+   QMultiMap<QGraphicsItem *, QGraphicsItem *>::iterator it = sceneEventFilters.lowerBound(watched);
+   QMultiMap<QGraphicsItem *, QGraphicsItem *>::iterator end = sceneEventFilters.upperBound(watched);
    do {
       if (it.value() == filter) {
          it = sceneEventFilters.erase(it);
@@ -1048,8 +1048,8 @@ bool QGraphicsScenePrivate::filterEvent(QGraphicsItem *item, QEvent *event)
       return false;
    }
 
-   QMultiMap<QGraphicsItem *, QGraphicsItem *>::Iterator it = sceneEventFilters.lowerBound(item);
-   QMultiMap<QGraphicsItem *, QGraphicsItem *>::Iterator end = sceneEventFilters.upperBound(item);
+   QMultiMap<QGraphicsItem *, QGraphicsItem *>::iterator it = sceneEventFilters.lowerBound(item);
+   QMultiMap<QGraphicsItem *, QGraphicsItem *>::iterator end = sceneEventFilters.upperBound(item);
    while (it != end) {
       // ### The filterer and filteree might both be deleted.
       if (it.value()->sceneEventFilter(it.key(), event)) {
@@ -5859,8 +5859,9 @@ void QGraphicsScenePrivate::touchEventHandler(QTouchEvent *sceneTouchEvent)
    }
 
    bool ignoreSceneTouchEvent = true;
-   QHash<QGraphicsItem *, StatesAndTouchPoints>::ConstIterator it = itemsNeedingEvents.constBegin();
-   const QHash<QGraphicsItem *, StatesAndTouchPoints>::ConstIterator end = itemsNeedingEvents.constEnd();
+   QHash<QGraphicsItem *, StatesAndTouchPoints>::const_iterator       it  = itemsNeedingEvents.constBegin();
+   const QHash<QGraphicsItem *, StatesAndTouchPoints>::const_iterator end = itemsNeedingEvents.constEnd();
+
    for (; it != end; ++it) {
       QGraphicsItem *item = it.key();
 
@@ -6445,7 +6446,7 @@ void QGraphicsScenePrivate::cancelGesturesForChildren(QGesture *original)
    // if the owner is part of our sub-hierarchy, cancel it.
 
    QSet<QGesture *> canceledGestures;
-   QHash<QGesture *, QGraphicsObject *>::Iterator iter = gestureTargets.begin();
+   QHash<QGesture *, QGraphicsObject *>::iterator iter = gestureTargets.begin();
    while (iter != gestureTargets.end()) {
       QGraphicsObject *item = iter.value();
       // note that we don't touch the gestures for our originalItem
@@ -6459,7 +6460,7 @@ void QGraphicsScenePrivate::cancelGesturesForChildren(QGesture *original)
 
    // sort them per target item by cherry picking from almostCanceledGestures and delivering
    QSet<QGesture *> almostCanceledGestures = canceledGestures;
-   QSet<QGesture *>::Iterator setIter;
+   QSet<QGesture *>::iterator setIter;
    while (!almostCanceledGestures.isEmpty()) {
       QGraphicsObject *target = 0;
       QSet<QGesture *> gestures;

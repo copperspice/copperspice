@@ -170,19 +170,11 @@ class QMultiHash
          return &value();
       }
 
-      bool operator==(const iterator &other) const {
+      bool operator==(const_iterator other) const {
          return m_iter == other.m_iter;
       }
 
-      bool operator==(const const_iterator &other) const {
-         return m_iter == other.m_iter;
-      }
-
-      bool operator!=(const iterator & other) const {
-         return m_iter != other.m_iter;
-      }
-
-      bool operator!=(const const_iterator &other) const {
+      bool operator!=(const_iterator other) const {
          return m_iter != other.m_iter;
       }
 
@@ -223,27 +215,23 @@ class QMultiHash
       typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::const_iterator m_iter;
    };
 
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = const Val *;
-   using const_reference = const Val &;
+   using difference_type = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::difference_type;
    using pointer         = Val *;
    using reference       = Val &;
-
-   using difference_type = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::difference_type;
    using size_type       = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::difference_type;
    using value_type      = Val;
 
    using key_type        = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::key_type;
    using mapped_type     = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::mapped_type;
-
    using hasher          = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::hasher;
    using key_equal       = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::key_equal;
 
-   // from std
    using allocator_type         = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::allocator_type;
+
+   // iterator and const_iterator are classes
+
+   using const_pointer   = const Val *;
+   using const_reference = const Val &;
 
    // java
    using Java_Iterator          = QMultiHashIterator<Key, Val, Hash, KeyEqual>;

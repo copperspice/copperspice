@@ -1746,7 +1746,7 @@ QString QDir::rootPath()
 
 bool QDir::match(const QStringList &filters, const QString &fileName)
 {
-   for (QStringList::ConstIterator sit = filters.constBegin(); sit != filters.constEnd(); ++sit) {
+   for (QStringList::const_iterator sit = filters.constBegin(); sit != filters.constEnd(); ++sit) {
 
       QPatternOptionFlags options = QPatternOption::ExactMatchOption | QPatternOption::WildcardOption
                   | QPatternOption::CaseInsensitiveOption;

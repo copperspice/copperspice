@@ -410,8 +410,8 @@ bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
 {
    Q_D(const QShortcutMap);
    QShortcutEntry entry(seq); // needed for searching
-   QList<QShortcutEntry>::ConstIterator itEnd = d->sequences.constEnd();
-   QList<QShortcutEntry>::ConstIterator it = std::lower_bound(d->sequences.constBegin(), itEnd, entry);
+   QList<QShortcutEntry>::const_iterator itEnd = d->sequences.constEnd();
+   QList<QShortcutEntry>::const_iterator it = std::lower_bound(d->sequences.constBegin(), itEnd, entry);
 
    for (; it != itEnd; ++it) {
       if (matches(entry.keyseq, (*it).keyseq) == QKeySequence::ExactMatch && correctContext(*it) && (*it).enabled) {
@@ -459,8 +459,8 @@ QKeySequence::SequenceMatch QShortcutMap::find(QKeyEvent *e)
 
    for (int i = d->newEntries.count() - 1; i >= 0 ; --i) {
       QShortcutEntry entry(d->newEntries.at(i)); // needed for searching
-      QList<QShortcutEntry>::ConstIterator itEnd = d->sequences.constEnd();
-      QList<QShortcutEntry>::ConstIterator it = std::lower_bound(d->sequences.constBegin(), itEnd, entry);
+      QList<QShortcutEntry>::const_iterator itEnd = d->sequences.constEnd();
+      QList<QShortcutEntry>::const_iterator it = std::lower_bound(d->sequences.constBegin(), itEnd, entry);
 
       int oneKSResult = QKeySequence::NoMatch;
       int tempRes = QKeySequence::NoMatch;

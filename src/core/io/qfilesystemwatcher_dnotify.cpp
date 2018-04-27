@@ -193,7 +193,7 @@ QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()
 {
    QMutexLocker locker(&mutex);
 
-   for (QHash<int, Directory>::ConstIterator iter = fdToDirectory.constBegin();
+   for (QHash<int, Directory>::const_iterator iter = fdToDirectory.constBegin();
          iter != fdToDirectory.constEnd();
          ++iter) {
       qt_safe_close(iter->fd);
@@ -373,7 +373,8 @@ void QDnotifyFileSystemWatcherEngine::refresh(int fd)
    QMutexLocker locker(&mutex);
 
    bool wasParent = false;
-   QHash<int, Directory>::Iterator iter = fdToDirectory.find(fd);
+   QHash<int, Directory>::iterator iter = fdToDirectory.find(fd);
+
    if (iter == fdToDirectory.end()) {
       QHash<int, int>::Iterator pIter = parentToFD.find(fd);
       if (pIter == parentToFD.end()) {

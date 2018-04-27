@@ -213,11 +213,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using difference_type = std::ptrdiff_t;
       using value_type      = QChar32;
       using size_type       = std::ptrdiff_t;
-
       using storage_type    = char;
-
-      using Iterator        = iterator;
-      using ConstIterator   = const_iterator;
 
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;

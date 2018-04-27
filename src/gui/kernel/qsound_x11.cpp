@@ -154,7 +154,7 @@ static void callback(AuServer *, AuEventHandlerRec *, AuEvent *e, AuPointer p)
       if (e->type == AuEventTypeElementNotify &&
             e->auelementnotify.kind == AuElementNotifyKindState) {
          if (e->auelementnotify.cur_state == AuStateStop) {
-            AuServerHash::Iterator it = inprogress->find(p);
+            AuServerHash::iterator it = inprogress->find(p);
             if (it != inprogress->end()) {
                (*it)->setDone((QSound *)p);
             }

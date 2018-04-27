@@ -1109,8 +1109,9 @@ QEventDispatcherMac::~QEventDispatcherMac()
    QEventDispatcherMacPrivate::macTimerHash.clear();
 
    // Remove CFSockets from the runloop.
-   for (MacSocketHash::ConstIterator it = d->macSockets.constBegin(); it != d->macSockets.constEnd(); ++it) {
+   for (MacSocketHash::const_iterator it = d->macSockets.constBegin(); it != d->macSockets.constEnd(); ++it) {
       MacSocketInfo *socketInfo = (*it);
+
       if (CFSocketIsValid(socketInfo->socket)) {
          qt_mac_remove_socket_from_runloop(socketInfo->socket, socketInfo->runloop);
          CFRunLoopSourceInvalidate(socketInfo->runloop);

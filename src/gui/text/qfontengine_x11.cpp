@@ -215,7 +215,7 @@ static QFontEngine::FaceId fontFile(const QByteArray &_xname, QFreetypeFace **fr
 
    QByteArray best_mapping;
 
-   for (QStringList::ConstIterator it = fontpath.constBegin(); it != fontpath.constEnd(); ++it) {
+   for (QStringList::const_iterator it = fontpath.constBegin(); it != fontpath.constEnd(); ++it) {
       if (!(*it).startsWith(QLatin1Char('/'))) {
          continue;   // not a path name, a font server
       }

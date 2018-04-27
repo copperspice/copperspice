@@ -310,8 +310,9 @@ static char **_q_dupEnvironment(const QProcessEnvironmentPrivate::Hash &environm
    envp[environment.count()] = 0;
    envp[environment.count() + 1] = 0;
 
-   QProcessEnvironmentPrivate::Hash::ConstIterator it = environment.constBegin();
-   const QProcessEnvironmentPrivate::Hash::ConstIterator end = environment.constEnd();
+   QProcessEnvironmentPrivate::Hash::const_iterator it        = environment.constBegin();
+   const QProcessEnvironmentPrivate::Hash::const_iterator end = environment.constEnd();
+
    for ( ; it != end; ++it) {
       QByteArray key = it.key().key;
       QByteArray value = it.value().bytes();

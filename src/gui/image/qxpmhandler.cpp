@@ -1167,7 +1167,7 @@ static bool write_xpm_image(const QImage &sourceImage, QIODevice *device, const 
      << '\"' << w << ' ' << h << ' ' << ncolors << ' ' << cpp << '\"';
 
    // write palette
-   QMap<QRgb, int>::Iterator c = colorMap.begin();
+   QMap<QRgb, int>::iterator c = colorMap.begin();
 
    while (c != colorMap.end()) {
       QRgb color = c.key();

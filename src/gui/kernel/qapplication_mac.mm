@@ -1726,7 +1726,8 @@ bool QApplicationPrivate::qt_mac_apply_settings()
    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
    if (!pathlist.isEmpty()) {
-      QStringList::ConstIterator it = pathlist.begin();
+      QStringList::const_iterator it = pathlist.begin();
+
       while (it != pathlist.end()) {
          QApplication::addLibraryPath(*it++);
       }

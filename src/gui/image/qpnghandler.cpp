@@ -657,7 +657,7 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
    png_textp text_ptr = new png_text[text.size()];
    memset(text_ptr, 0, text.size() * sizeof(png_text));
 
-   QMap<QString, QString>::ConstIterator it = text.constBegin();
+   QMap<QString, QString>::const_iterator it = text.constBegin();
    int i = 0;
 
    while (it != text.constEnd()) {

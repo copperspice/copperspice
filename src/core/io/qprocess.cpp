@@ -141,16 +141,16 @@ QStringList QProcessEnvironmentPrivate::keys() const
 
 void QProcessEnvironmentPrivate::insert(const QProcessEnvironmentPrivate &other)
 {
-   Hash::ConstIterator it = other.hash.constBegin();
-   Hash::ConstIterator end = other.hash.constEnd();
+   Hash::const_iterator it = other.hash.constBegin();
+   Hash::const_iterator end = other.hash.constEnd();
 
    for ( ; it != end; ++it) {
       hash.insert(it.key(), it.value());
    }
 
 #ifdef Q_OS_UNIX
-   QHash<QString, Key>::ConstIterator nit  = other.nameMap.constBegin();
-   QHash<QString, Key>::ConstIterator nend = other.nameMap.constEnd();
+   QHash<QString, Key>::const_iterator nit  = other.nameMap.constBegin();
+   QHash<QString, Key>::const_iterator nend = other.nameMap.constEnd();
 
    for ( ; nit != nend; ++nit) {
       nameMap.insert(nit.key(), nit.value());
@@ -286,7 +286,7 @@ QString QProcessEnvironment::value(const QString &name, const QString &defaultVa
    }
 
    QProcessEnvironmentPrivate::MutexLocker locker(d);
-   QProcessEnvironmentPrivate::Hash::ConstIterator it = d->hash.constFind(d->prepareName(name));
+   QProcessEnvironmentPrivate::Hash::const_iterator it = d->hash.constFind(d->prepareName(name));
    if (it == d->hash.constEnd()) {
       return defaultValue;
    }

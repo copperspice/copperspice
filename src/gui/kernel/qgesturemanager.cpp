@@ -144,7 +144,7 @@ void QGestureManager::unregisterGestureRecognizer(Qt::GestureType type)
 
 void QGestureManager::cleanupCachedGestures(QObject *target, Qt::GestureType type)
 {
-   QMap<ObjectGesture, QList<QGesture *> >::Iterator iter = m_objectGestures.begin();
+   QMap<ObjectGesture, QList<QGesture *> >::iterator iter = m_objectGestures.begin();
    while (iter != m_objectGestures.end()) {
       ObjectGesture objectGesture = iter.key();
       if (objectGesture.gesture == type && target == objectGesture.object) {
@@ -413,7 +413,7 @@ void QGestureManager::cancelGesturesForChildren(QGesture *original)
    // if the owner is part of our sub-hierarchy, cancel it.
 
    QSet<QGesture *> cancelledGestures;
-   QSet<QGesture *>::Iterator iter = m_activeGestures.begin();
+   QSet<QGesture *>::iterator iter = m_activeGestures.begin();
    while (iter != m_activeGestures.end()) {
       QWidget *widget = m_gestureTargets.value(*iter);
       // note that we don't touch the gestures for our originatingWidget

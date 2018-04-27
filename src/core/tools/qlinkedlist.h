@@ -35,25 +35,21 @@ class QMutableLinkedListIterator;
 template <class T>
 class QLinkedList
 {
-
  public:
-   using iterator        = typename std::list<T>::iterator;
-   using const_iterator  = typename std::list<T>::const_iterator;
-
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = typename std::list<T>::const_pointer;
-   using const_reference = typename std::list<T>::const_reference;
    using difference_type = typename std::list<T>::difference_type;
    using pointer         = typename std::list<T>::pointer;
    using reference       = typename std::list<T>::reference;
    using size_type       = typename std::list<T>::difference_type;      // makes this signed instead of unsigned
    using value_type      = typename std::list<T>::value_type;
 
-   // from std
-   using allocator_type         = typename std::list<T>::allocator_type;
+   using allocator_type  = typename std::list<T>::allocator_type;
+
+   using iterator        = typename std::list<T>::iterator;
+   using const_iterator  = typename std::list<T>::const_iterator;
+
+   using const_pointer   = typename std::list<T>::const_pointer;
+   using const_reference = typename std::list<T>::const_reference;
+
    using reverse_iterator       = typename std::list<T>::reverse_iterator;
    using const_reverse_iterator = typename std::list<T>::const_reverse_iterator;
 

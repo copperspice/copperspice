@@ -46,15 +46,6 @@ class QSet
    };
 
  public:
-   using iterator        = typename std::unordered_set<T, Hash>::iterator;
-   using const_iterator  = typename std::unordered_set<T, Hash>::const_iterator;
-
-   // legacy
-   using Iterator        = iterator;
-   using ConstIterator   = const_iterator;
-
-   using const_pointer   = typename std::unordered_set<T, Hash>::const_pointer;
-   using const_reference = typename std::unordered_set<T, Hash>::const_reference;
    using difference_type = typename std::unordered_set<T, Hash>::difference_type;
    using pointer         = typename std::unordered_set<T, Hash>::pointer;
    using reference       = typename std::unordered_set<T, Hash>::reference;
@@ -65,8 +56,13 @@ class QSet
    using key_equal       = typename std::unordered_set<T, Hash>::key_equal;
    using hasher          = typename std::unordered_set<T, Hash>::hasher;
 
-   // from std
    using allocator_type  = typename std::unordered_set<T, Hash>::allocator_type;
+
+   using iterator        = typename std::unordered_set<T, Hash>::iterator;
+   using const_iterator  = typename std::unordered_set<T, Hash>::const_iterator;
+
+   using const_pointer   = typename std::unordered_set<T, Hash>::const_pointer;
+   using const_reference = typename std::unordered_set<T, Hash>::const_reference;
 
    // java
    using Java_Iterator        = QSetIterator<T>;

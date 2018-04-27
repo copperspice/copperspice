@@ -957,7 +957,7 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
 
       // append the substitute list for each family in family_list
       QStringList subs_list;
-      QStringList::ConstIterator it = family_list.constBegin(), end = family_list.constEnd();
+      QStringList::const_iterator it = family_list.constBegin(), end = family_list.constEnd();
       for (; it != end; ++it) {
          subs_list += QFont::substitutes(*it);
       }
@@ -982,7 +982,8 @@ void QFontDatabase::load(const QFontPrivate *d, int script)
 
    // load the font
    QFontEngine *engine = 0;
-   QStringList::ConstIterator it = family_list.constBegin(), end = family_list.constEnd();
+   QStringList::const_iterator it = family_list.constBegin(), end = family_list.constEnd();
+
    for (; !engine && it != end; ++it) {
       req.family = *it;
 

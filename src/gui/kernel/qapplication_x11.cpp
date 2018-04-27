@@ -948,7 +948,7 @@ bool QApplicationPrivate::x11_apply_settings()
 
    QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
    if (! pathlist.isEmpty()) {
-      QStringList::ConstIterator it = pathlist.constBegin();
+      QStringList::const_iterator it = pathlist.constBegin();
       while (it != pathlist.constEnd()) {
          QApplication::addLibraryPath(*it++);
       }
@@ -1038,7 +1038,7 @@ bool QApplicationPrivate::x11_apply_settings()
       settings.beginGroup(QLatin1String("Font Substitutions"));
       QStringList fontsubs = settings.childKeys();
       if (!fontsubs.isEmpty()) {
-         QStringList::Iterator it = fontsubs.begin();
+         QStringList::iterator it = fontsubs.begin();
          for (; it != fontsubs.end(); ++it) {
             QString fam = *it;
             QStringList subs = settings.value(fam).toStringList();
@@ -2670,7 +2670,7 @@ void qt_init(QApplicationPrivate *priv, int,
          QStringList pathlist = settings.value(libpathkey).toString().split(QLatin1Char(':'));
 
          if (! pathlist.isEmpty()) {
-            QStringList::ConstIterator it = pathlist.constBegin();
+            QStringList::const_iterator it = pathlist.constBegin();
             while (it != pathlist.constEnd()) {
                QApplication::addLibraryPath(*it++);
             }
@@ -2944,7 +2944,7 @@ void QApplication::setOverrideCursor(const QCursor &cursor)
    qApp->d_func()->cursor_list.prepend(cursor);
 
    QWidgetList all = allWidgets();
-   for (QWidgetList::ConstIterator it = all.constBegin(); it != all.constEnd(); ++it) {
+   for (QWidgetList::const_iterator it = all.constBegin(); it != all.constEnd(); ++it) {
       QWidget *w = *it;
       if ((w->testAttribute(Qt::WA_SetCursor) || w->isWindow()) && (w->windowType() != Qt::Desktop)) {
          qt_x11_enforce_cursor(w);
@@ -2962,7 +2962,7 @@ void QApplication::restoreOverrideCursor()
 
    if (QWidgetPrivate::mapper != 0 && !closingDown()) {
       QWidgetList all = allWidgets();
-      for (QWidgetList::ConstIterator it = all.constBegin(); it != all.constEnd(); ++it) {
+      for (QWidgetList::const_iterator it = all.constBegin(); it != all.constEnd(); ++it) {
          QWidget *w = *it;
          if ((w->testAttribute(Qt::WA_SetCursor) || w->isWindow()) && (w->windowType() != Qt::Desktop)) {
             qt_x11_enforce_cursor(w);
@@ -5770,7 +5770,7 @@ static void sm_setProperty(const QString &name, const QStringList &value)
    SmPropValue *prop = new SmPropValue[value.count()];
    int count = 0;
    QList<QByteArray> vl;
-   for (QStringList::ConstIterator it = value.begin(); it != value.end(); ++it) {
+   for (QStringList::const_iterator it = value.begin(); it != value.end(); ++it) {
       prop[count].length = (*it).length();
       vl.append((*it).toUtf8());
       prop[count].value = (char *)vl.last().data();
