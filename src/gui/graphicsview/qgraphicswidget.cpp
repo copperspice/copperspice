@@ -1171,31 +1171,38 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
          QApplication::sendEvent(this, &event);
          break;
       }
+
       case ItemParentHasChanged: {
          // Deliver ParentChange.
          QEvent event(QEvent::ParentChange);
          QApplication::sendEvent(this, &event);
          break;
       }
+
       case ItemCursorHasChanged: {
          // Deliver CursorChange.
          QEvent event(QEvent::CursorChange);
          QApplication::sendEvent(this, &event);
          break;
       }
+
       case ItemToolTipHasChanged: {
          // Deliver ToolTipChange.
          QEvent event(QEvent::ToolTipChange);
          QApplication::sendEvent(this, &event);
          break;
       }
+
       case ItemChildAddedChange: {
-         QGraphicsItem *child = qVariantValue<QGraphicsItem *>(value);
+         QGraphicsItem *child = value.value<QGraphicsItem *>();
+
          if (child->isWidget()) {
             static_cast<QGraphicsWidget *>(child)->d_func()->resolveLayoutDirection();
          }
+
          break;
       }
+
       default:
          break;
    }

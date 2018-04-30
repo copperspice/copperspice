@@ -939,8 +939,7 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
       icon  = true;
    }
 
-   // force CS_OWNDC when the GL graphics system is
-   // used as the default renderer
+   // force CS_OWNDC when the GL graphics system is used as the default renderer
    if (qt_win_owndc_required) {
       style |= CS_OWNDC;
    }
@@ -954,7 +953,7 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
 
    if (classExists == -1) {
       WNDCLASS wcinfo;
-      classExists = GetClassInfo((HINSTANCE)qWinAppInst(), (wchar_t *)cname.utf16(), &wcinfo);
+      classExists = GetClassInfo((HINSTANCE)qWinAppInst(), cname.toStdWString().c_str(), &wcinfo);
       classExists = classExists && wcinfo.lpfnWndProc != QtWndProc;
    }
 
@@ -962,7 +961,8 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
       cname += QString::number((quintptr)QtWndProc);
    }
 
-   if (winclassNames()->contains(cname)) {      // already registered in our list
+   if (winclassNames()->contains(cname)) {
+      // already registered in our list
       return cname;
    }
 
@@ -990,19 +990,23 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
       wc.hIconSm  = 0;
 
    }
-   wc.hCursor      = 0;
+   wc.hCursor   = 0;
    HBRUSH brush = 0;
+
    if (w && !qt_widget_private(w)->isGLWidget) {
       brush = (HBRUSH)GetSysColorBrush(COLOR_WINDOW);
    }
-   wc.hbrBackground = brush;
 
+   wc.hbrBackground = brush;
    wc.lpszMenuName  = 0;
-   wc.lpszClassName = (wchar_t *)cname.utf16();
+
+   std::wstring tmp(cname.toStdWString());
+   wc.lpszClassName = &tmp[0];
+
    ATOM atom = RegisterClassEx(&wc);
 
 #ifndef QT_NO_DEBUG
-   if (!atom) {
+   if (! atom) {
       qErrnoWarning("QApplication::regClass: Registering window class failed.");
    }
 #else
@@ -1010,6 +1014,7 @@ const QString qt_reg_winclass(QWidget *w)        // register window class
 #endif
 
    winclassNames()->insert(cname, 1);
+
    return cname;
 }
 
@@ -1021,11 +1026,13 @@ Q_GUI_EXPORT const QString qt_getRegisteredWndClass()
 static void unregWinClasses()
 {
    WinClassNameHash *hash = winclassNames();
-   QHash<QString, int>::ConstIterator it = hash->constBegin();
+   QHash<QString, int>::const_iterator it = hash->constBegin();
+
    while (it != hash->constEnd()) {
-      UnregisterClass((wchar_t *)it.key().utf16(), qWinAppInst());
+      UnregisterClass(it.key().toStdWString().c_str(), qWinAppInst());
       ++it;
    }
+
    hash->clear();
 }
 
@@ -1036,9 +1043,9 @@ static void unregWinClasses()
  *****************************************************************************/
 
 struct QWinConfigRequest {
-   WId         id;                                        // widget to be configured
-   int         req;                                        // 0=move, 1=resize, 2=setGeo
-   int         x, y, w, h;                                // request parameters
+   WId id;                                        // widget to be configured
+   int req;                                       // 0=move, 1=resize, 2=setGeo
+   int x, y, w, h;                                // request parameters
 };
 
 static QList<QWinConfigRequest *> *configRequests = 0;
@@ -1833,24 +1840,31 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
                break;
             }
 
-            if (!msg.wParam) {
-               QString area = QString::fromWCharArray((wchar_t *)msg.lParam);
+            if ( !msg.wParam) {
+
+               std::wstring tmp((wchar_t *)msg.lParam);
+               QString area = QString::fromStdWString(tmp);
 
                if (area == QLatin1String("intl")) {
+
                   QLocalePrivate::updateSystemPrivate();
-                  if (!widget->testAttribute(Qt::WA_SetLocale)) {
+                  if (! widget->testAttribute(Qt::WA_SetLocale)) {
                      widget->dptr()->setLocale_helper(QLocale(), true);
                   }
+
                   QEvent e(QEvent::LocaleChange);
                   QApplication::sendEvent(qApp, &e);
                }
+
             } else if (msg.wParam == SPI_SETICONTITLELOGFONT) {
                if (QApplication::desktopSettingsAware()) {
                   widget = (QETWidget *)QWidget::find(hwnd);
+
                   if (widget && !widget->parentWidget()) {
                      qt_set_windows_font_resources();
                   }
                }
+
             } else if (msg.wParam == SPI_SETNONCLIENTMETRICS) {
                widget = (QETWidget *)QWidget::find(hwnd);
                if (widget && !widget->parentWidget()) {
@@ -2255,14 +2269,19 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             if (!widget->isWindow()) {
                int ret = 0;
                QAccessibleInterface *acc = QAccessible::queryAccessibleInterface(widget);
+
                if (acc) {
                   QString text = acc->text(QAccessible::Name, 0);
+
                   if (text.isEmpty()) {
                      text = widget->objectName();
                   }
+
                   ret = qMin(wParam - 1, text.size());
                   text.resize(ret);
-                  memcpy((void *)lParam, text.utf16(), (text.size() + 1) * sizeof(ushort));
+
+                  QString16 tmp = text.toUtf16();
+                  memcpy((void *)lParam, tmp.constData(), (text.size_storage() + 1) * sizeof(ushort));
                   delete acc;
                }
                if (!ret) {
@@ -2364,12 +2383,14 @@ extern "C" LRESULT QT_WIN_CALLBACK QtWndProc(HWND hwnd, UINT message, WPARAM wPa
             break;
 
          case WM_INPUTLANGCHANGE: {
-            wchar_t info[7];
-            if (!GetLocaleInfo(MAKELCID(lParam, SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, info, 6)) {
+            std::wstring info(7, L'\0');
+
+            if (! GetLocaleInfo(MAKELCID(lParam, SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, &info[0], 6)) {
                inputcharset = CP_ACP;
             } else {
-               inputcharset = QString::fromWCharArray(info).toInt();
+               inputcharset = QString::fromStdWString(info).toInteger<int>();
             }
+
             QKeyMapper::changeKeyboard();
             break;
          }

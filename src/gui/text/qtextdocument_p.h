@@ -145,9 +145,9 @@ class QTextDocumentPrivate
    Q_DECLARE_PUBLIC(QTextDocument)
 
  public:
-   typedef QFragmentMap<QTextFragmentData> FragmentMap;
-   typedef FragmentMap::ConstIterator FragmentIterator;
-   typedef QFragmentMap<QTextBlockData> BlockMap;
+   using FragmentMap      = QFragmentMap<QTextFragmentData>;
+   using FragmentIterator = FragmentMap::const_iterator;
+   using BlockMap         = QFragmentMap<QTextBlockData>;
 
    QTextDocumentPrivate();
    virtual ~QTextDocumentPrivate();
@@ -432,7 +432,7 @@ class QTextHtmlExporter
    enum StyleMode { EmitStyleTag, OmitStyleTag };
    enum FrameType { TextFrame, TableFrame, RootFrame };
 
-   void emitFrame(QTextFrame::Iterator frameIt);
+   void emitFrame(QTextFrame::iterator frameIt);
    void emitTextFrame(const QTextFrame *frame);
    void emitBlock(const QTextBlock &block);
    void emitTable(const QTextTable *table);

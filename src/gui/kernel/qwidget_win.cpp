@@ -414,40 +414,51 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
          }
       }
 
-      id = CreateWindowEx(exsty, reinterpret_cast<const wchar_t *>(windowClassName.utf16()),
-                          reinterpret_cast<const wchar_t *>(title.utf16()), style,
-                          x, y, w, h,
-                          parentw, NULL, appinst, NULL);
-      if (!id) {
+      std::wstring tmp1(windowClassName.toStdWString());
+      std::wstring tmp2(title.toStdWString());
+
+      id = CreateWindowEx(exsty, &tmp1[0], &tmp2[0], style, x, y, w, h, parentw, NULL, appinst, NULL);
+
+      if (! id) {
          qErrnoWarning("QWidget::create: Failed to create window");
       }
+
       setWinId(id);
       if ((flags & Qt::WindowStaysOnTopHint) || (type == Qt::ToolTip)) {
          SetWindowPos(id, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
          if (flags & Qt::WindowStaysOnBottomHint) {
-            qWarning() << "QWidget: Incompatible window flags: the window can't be on top and on bottom at the same time";
+            qWarning() << "QWidget: Incompatible window flagsn the window can not be on top and on bottom at the same time";
          }
+
       } else if (flags & Qt::WindowStaysOnBottomHint) {
          SetWindowPos(id, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
       }
       winUpdateIsOpaque();
+
    } else if (q->testAttribute(Qt::WA_NativeWindow) || paintOnScreen()) { // create child widget
-      id = CreateWindowEx(exsty, reinterpret_cast<const wchar_t *>(windowClassName.utf16()),
-                          reinterpret_cast<const wchar_t *>(title.utf16()), style,
-                          data.crect.left(), data.crect.top(), data.crect.width(), data.crect.height(),
+
+      std::wstring tmp1(windowClassName.toStdWString());
+      std::wstring tmp2(title.toStdWString());
+
+      id = CreateWindowEx(exsty, &tmp1[0], &tmp2[0], style, data.crect.left(), data.crect.top(), data.crect.width(), data.crect.height(),
                           parentw, NULL, appinst, NULL);
-      if (!id) {
+
+      if (! id) {
          qErrnoWarning("QWidget::create: Failed to create window");
       }
+
       SetWindowPos(id, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
       setWinId(id);
    }
 
    if (desktop) {
       q->setAttribute(Qt::WA_WState_Visible);
+
    } else if (topLevel && !q->testAttribute(Qt::WA_DontShowOnScreen)) {
       RECT  cr;
       GetClientRect(id, &cr);
+
       // one cannot trust cr.left and cr.top, use a correction POINT instead
       POINT pt;
       pt.x = 0;
@@ -457,8 +468,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       if (data.crect.width() == 0 || data.crect.height() == 0) {
          data.crect = QRect(pt.x, pt.y, data.crect.width(), data.crect.height());
       } else {
-         data.crect = QRect(QPoint(pt.x, pt.y),
-                            QPoint(pt.x + cr.right - 1, pt.y + cr.bottom - 1));
+         data.crect = QRect(QPoint(pt.x, pt.y), QPoint(pt.x + cr.right - 1, pt.y + cr.bottom - 1));
       }
 
       if (data.fstrut_dirty) {
@@ -468,9 +478,9 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
    }
 
    if (topLevel) {
-      if (data.window_flags & Qt::CustomizeWindowHint
-            && data.window_flags & Qt::WindowTitleHint) {
+      if (data.window_flags & Qt::CustomizeWindowHint && data.window_flags & Qt::WindowTitleHint) {
          HMENU systemMenu = GetSystemMenu((HWND)q->internalWinId(), FALSE);
+
          if (data.window_flags & Qt::WindowCloseButtonHint) {
             EnableMenuItem(systemMenu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
          } else {
@@ -479,14 +489,14 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       }
    }
 
-   q->setAttribute(Qt::WA_WState_Created);                // accept move/resize events
+   q->setAttribute(Qt::WA_WState_Created);        // accept move/resize events
    hd = 0;                                        // no display context
 
    if (q->testAttribute(Qt::WA_AcceptTouchEvents)) {
       registerTouchWindow();
    }
 
-   if (window) {                                // got window from outside
+   if (window) {                                  // got window from outside
       if (IsWindowVisible(window)) {
          q->setAttribute(Qt::WA_WState_Visible);
       } else {
@@ -807,18 +817,21 @@ void QWidgetPrivate::unsetCursor_sys()
 void QWidgetPrivate::setWindowTitle_sys(const QString &caption)
 {
    Q_Q(QWidget);
-   if (!q->isWindow()) {
+
+   if (! q->isWindow()) {
       return;
    }
 
    Q_ASSERT(q->testAttribute(Qt::WA_WState_Created));
-   SetWindowText(q->internalWinId(), (wchar_t *)caption.utf16());
+   SetWindowText(q->internalWinId(), caption.toStdWString().c_str());
 }
 
 HICON qt_createIcon(QIcon icon, int xSize, int ySize, QPixmap **cache)
 {
    HICON result = 0;
-   if (!icon.isNull()) { // valid icon
+
+   if (!icon.isNull()) {
+      // valid icon
       QSize size = icon.actualSize(QSize(xSize, ySize));
       QPixmap pm = icon.pixmap(size);
       if (pm.isNull()) {

@@ -23,11 +23,9 @@
 #ifndef QFRAGMENTMAP_P_H
 #define QFRAGMENTMAP_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <stdlib.h>
 #include <qtools_p.h>
-
-QT_BEGIN_NAMESPACE
 
 template <int N = 1>
 class QFragment
@@ -76,7 +74,6 @@ class QFragmentMapData
       return (fragments + index);
    }
 
-
    inline Fragment &F(uint index) {
       return fragments[index] ;
    }
@@ -91,6 +88,7 @@ class QFragmentMapData
 
    inline uint position(uint node, uint field = 0) const {
       Q_ASSERT(field < Fragment::size_array_max);
+
       const Fragment *f = fragment(node);
       uint offset = f->size_left_array[field];
 
@@ -142,7 +140,6 @@ class QFragmentMapData
       }
    }
 
-
    uint findNode(int k, uint field = 0) const;
 
    uint insert_single(int key, uint length);
@@ -184,7 +181,6 @@ class QFragmentMapData
    };
 
  private:
-
    void rotateLeft(uint x);
    void rotateRight(uint x);
    void rebalance(uint x);
@@ -212,12 +208,14 @@ void QFragmentMapData<Fragment>::init()
       fragments = newFragments;
       head->allocated = 64;
    }
+
    Q_CHECK_PTR(fragments);
 
    head->tag = (((quint32)'p') << 24) | (((quint32)'m') << 16) | (((quint32)'a') << 8) | 'p'; //TAG('p', 'm', 'a', 'p');
    head->root = 0;
    head->freelist = 1;
    head->node_count = 0;
+
    // mark all items to the right as unused
    F(head->freelist).right = 0;
 }
@@ -268,7 +266,6 @@ void QFragmentMapData<Fragment>::freeFragment(uint i)
 
    --head->node_count;
 }
-
 
 template <class Fragment>
 uint QFragmentMapData<Fragment>::next(uint n) const
@@ -727,31 +724,30 @@ int QFragmentMapData<Fragment>::length(uint field) const
 }
 
 
-template <class Fragment> // NOTE: must inherit QFragment
+template <class Fragment>       // NOTE: must inherit QFragment
 class QFragmentMap
 {
  public:
-   class Iterator
+   class iterator
    {
     public:
-      QFragmentMap *pt;
-      quint32 n;
-
-      Iterator() : pt(0), n(0) {}
-      Iterator(QFragmentMap *p, int node) : pt(p), n(node) {}
-      Iterator(const Iterator &it) : pt(it.pt), n(it.n) {}
+      iterator() : pt(0), n(0) {}
+      iterator(QFragmentMap *p, int node) : pt(p), n(node) {}
+      iterator(const iterator &it) : pt(it.pt), n(it.n) {}
 
       inline bool atEnd() const {
          return !n;
       }
 
-      bool operator==(const Iterator &it) const {
+      bool operator==(const iterator &it) const {
          return pt == it.pt && n == it.n;
       }
-      bool operator!=(const Iterator &it) const {
+
+      bool operator!=(const iterator &it) const {
          return pt != it.pt || n != it.n;
       }
-      bool operator<(const Iterator &it) const {
+
+      bool operator<(const iterator &it) const {
          return position() < it.position();
       }
 
@@ -785,43 +781,39 @@ class QFragmentMap
          return pt->fragment(n);
       }
 
-      Iterator &operator++() {
+      iterator &operator++() {
          n = pt->data.next(n);
          return *this;
       }
-      Iterator &operator--() {
+      iterator &operator--() {
          n = pt->data.previous(n);
          return *this;
       }
 
+      QFragmentMap *pt;
+      quint32 n;
    };
 
 
-   class ConstIterator
+   class const_iterator
    {
     public:
-      const QFragmentMap *pt;
-      quint32 n;
-
-      /**
-       * Functions
-       */
-      ConstIterator() : pt(0), n(0) {}
-      ConstIterator(const QFragmentMap *p, int node) : pt(p), n(node) {}
-      ConstIterator(const ConstIterator &it) : pt(it.pt), n(it.n) {}
-      ConstIterator(const Iterator &it) : pt(it.pt), n(it.n) {}
+      const_iterator() : pt(0), n(0) {}
+      const_iterator(const QFragmentMap *p, int node) : pt(p), n(node) {}
+      const_iterator(const const_iterator &it) : pt(it.pt), n(it.n) {}
+      const_iterator(const iterator &it) : pt(it.pt), n(it.n) {}
 
       inline bool atEnd() const {
          return !n;
       }
 
-      bool operator==(const ConstIterator &it) const {
+      bool operator==(const const_iterator &it) const {
          return pt == it.pt && n == it.n;
       }
-      bool operator!=(const ConstIterator &it) const {
+      bool operator!=(const const_iterator &it) const {
          return pt != it.pt || n != it.n;
       }
-      bool operator<(const ConstIterator &it) const {
+      bool operator<(const const_iterator &it) const {
          return position() < it.position();
       }
 
@@ -847,14 +839,17 @@ class QFragmentMap
          return pt->fragment(n);
       }
 
-      ConstIterator &operator++() {
+      const_iterator &operator++() {
          n = pt->data.next(n);
          return *this;
       }
-      ConstIterator &operator--() {
+      const_iterator &operator--() {
          n = pt->data.previous(n);
          return *this;
       }
+
+      const QFragmentMap *pt;
+      quint32 n;
    };
 
 
@@ -863,33 +858,33 @@ class QFragmentMap
       if (!data.fragments) {
          return;   // in case of out-of-memory, we won't have fragments
       }
-      for (Iterator it = begin(); !it.atEnd(); ++it) {
+      for (iterator it = begin(); !it.atEnd(); ++it) {
          it.value()->free();
       }
    }
 
    inline void clear() {
-      for (Iterator it = begin(); !it.atEnd(); ++it) {
+      for (iterator it = begin(); !it.atEnd(); ++it) {
          it.value()->free();
       }
       data.init();
    }
 
-   inline Iterator begin() {
-      return Iterator(this, data.minimum(data.root()));
+   inline iterator begin() {
+      return iterator(this, data.minimum(data.root()));
    }
-   inline Iterator end() {
-      return Iterator(this, 0);
+   inline iterator end() {
+      return iterator(this, 0);
    }
-   inline ConstIterator begin() const {
-      return ConstIterator(this, data.minimum(data.root()));
+   inline const_iterator begin() const {
+      return const_iterator(this, data.minimum(data.root()));
    }
-   inline ConstIterator end() const {
-      return ConstIterator(this, 0);
+   inline const_iterator end() const {
+      return const_iterator(this, 0);
    }
 
-   inline ConstIterator last() const {
-      return ConstIterator(this, data.maximum(data.root()));
+   inline const_iterator last() const {
+      return const_iterator(this, data.maximum(data.root()));
    }
 
    inline bool isEmpty() const {
@@ -902,11 +897,11 @@ class QFragmentMap
       return data.length(field);
    }
 
-   Iterator find(int k, uint field = 0) {
-      return Iterator(this, data.findNode(k, field));
+   iterator find(int k, uint field = 0) {
+      return iterator(this, data.findNode(k, field));
    }
-   ConstIterator find(int k, uint field = 0) const {
-      return ConstIterator(this, data.findNode(k, field));
+   const_iterator find(int k, uint field = 0) const {
+      return const_iterator(this, data.findNode(k, field));
    }
 
    uint findNode(int k, uint field = 0) const {
@@ -968,15 +963,13 @@ class QFragmentMap
    }
 
  private:
-   friend class Iterator;
-   friend class ConstIterator;
+   friend class iterator;
+   friend class const_iterator;
 
    QFragmentMapData<Fragment> data;
 
    QFragmentMap(const QFragmentMap &m);
    QFragmentMap &operator= (const QFragmentMap &m);
 };
-
-QT_END_NAMESPACE
 
 #endif // QFRAGMENTMAP_P_H

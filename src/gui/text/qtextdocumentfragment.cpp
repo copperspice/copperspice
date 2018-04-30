@@ -378,31 +378,17 @@ QString QTextDocumentFragment::toPlainText() const
 
 #ifndef QT_NO_TEXTHTMLPARSER
 
-/*!
-    \since 4.2
-
-    Returns the contents of the document fragment as HTML,
-    using the specified \a encoding (e.g., "UTF-8", "ISO 8859-1").
-
-    \sa toPlainText(), QTextDocument::toHtml(), QTextCodec
-*/
 QString QTextDocumentFragment::toHtml(const QByteArray &encoding) const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
    return QTextHtmlExporter(d->doc).toHtml(encoding, QTextHtmlExporter::ExportFragment);
 }
 
-#endif // QT_NO_TEXTHTMLPARSER
+#endif
 
-/*!
-    Returns a document fragment that contains the given \a plainText.
-
-    When inserting such a fragment into a QTextDocument the current char format of
-    the QTextCursor used for insertion is used as format for the text.
-*/
 QTextDocumentFragment QTextDocumentFragment::fromPlainText(const QString &plainText)
 {
    QTextDocumentFragment res;

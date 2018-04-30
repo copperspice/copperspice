@@ -178,14 +178,17 @@ QPalette QGuiPlatformPlugin::palette()
 QString QGuiPlatformPlugin::systemIconThemeName()
 {
    QString result;
+
 #ifdef Q_WS_X11
    if (X11->desktopEnvironment == DE_GNOME) {
+
 #ifndef QT_NO_STYLE_GTK
       result = QGtkStylePrivate::getIconThemeName();
 #endif
       if (result.isEmpty()) {
          result = QString::fromLatin1("gnome");
       }
+
    } else if (X11->desktopEnvironment == DE_KDE) {
       result =  X11->desktopVersion >= 4 ? QString::fromLatin1("oxygen") : QString::fromLatin1("crystalsvg");
       QSettings settings(QKde::kdeHome() + QLatin1String("/share/config/kdeglobals"), QSettings::IniFormat);
@@ -196,29 +199,34 @@ QString QGuiPlatformPlugin::systemIconThemeName()
    return result;
 }
 
-
 QStringList QGuiPlatformPlugin::iconThemeSearchPaths()
 {
    QStringList paths;
+
 #if defined(Q_WS_X11)
    QString xdgDirString = QFile::decodeName(getenv("XDG_DATA_DIRS"));
+
    if (xdgDirString.isEmpty()) {
-      xdgDirString = QLatin1String("/usr/local/share/:/usr/share/");
+      xdgDirString = "/usr/local/share/:/usr/share/";
    }
 
-   QStringList xdgDirs = xdgDirString.split(QLatin1Char(':'));
+   QStringList xdgDirs = xdgDirString.split(':');
 
    for (int i = 0 ; i < xdgDirs.size() ; ++i) {
       QDir dir(xdgDirs[i]);
+
       if (dir.exists()) {
-         paths.append(dir.path() + QLatin1String("/icons"));
+         paths.append(dir.path() + "/icons");
       }
    }
+
    if (X11->desktopEnvironment == DE_KDE) {
       paths << QLatin1Char(':') + QKde::kdeHome() + QLatin1String("/share/icons");
       QStringList kdeDirs = QFile::decodeName(getenv("KDEDIRS")).split(QLatin1Char(':'));
+
       for (int i = 0 ; i < kdeDirs.count() ; ++i) {
-         QDir dir(QLatin1Char(':') + kdeDirs.at(i) + QLatin1String("/share/icons"));
+         QDir dir(':' + kdeDirs.at(i) + "/share/icons");
+
          if (dir.exists()) {
             paths.append(dir.path());
          }
@@ -226,17 +234,21 @@ QStringList QGuiPlatformPlugin::iconThemeSearchPaths()
    }
 
    // Add home directory first in search path
-   QDir homeDir(QDir::homePath() + QLatin1String("/.icons"));
+   QDir homeDir(QDir::homePath() + "/.icons");
+
    if (homeDir.exists()) {
       paths.prepend(homeDir.path());
    }
 #endif
 
 #if defined(Q_OS_WIN)
-   paths.append(qApp->applicationDirPath() + QLatin1String("/icons"));
+   paths.append(qApp->applicationDirPath() + "/icons");
+
 #elif defined(Q_OS_MAC)
-   paths.append(qApp->applicationDirPath() + QLatin1String("/../Resources/icons"));
+   paths.append(qApp->applicationDirPath() + "/../Resources/icons");
+
 #endif
+
    return paths;
 }
 

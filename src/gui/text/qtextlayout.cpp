@@ -132,10 +132,12 @@ QTextLayout::QTextLayout(const QString &text)
 QTextLayout::QTextLayout(const QString &text, const QFont &font, QPaintDevice *paintdevice)
 {
    QFont f(font);
+
    if (paintdevice) {
       f = QFont(font, paintdevice);
    }
-   d = new QTextEngine((text.isNull() ? (const QString &)QString::fromLatin1("") : text), f.d.data());
+
+   d = new QTextEngine(text, f.d.data());
 }
 
 QTextLayout::QTextLayout(const QTextBlock &block)
@@ -1394,8 +1396,9 @@ found:
             || (lbh.maxGlyphs == INT_MAX && line.textWidth > line.width)) {
 
          eng->option.setWrapMode(QTextOption::WrapAnywhere);
-         line.length = 0;
+         line.length    = 0;
          line.textWidth = 0;
+
          layout_helper(lbh.maxGlyphs);
          eng->option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
       }
@@ -1448,18 +1451,23 @@ int QTextLine::textLength() const
 static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si, QTextItemInt &gf,
                   QTextEngine *eng, int start, int glyph_start)
 {
-   int ge = glyph_start + gf.glyphs.numGlyphs;
-   int gs = glyph_start;
-   int end = start + gf.num_chars;
+   int ge  = glyph_start + gf.glyphs.numGlyphs;
+   int gs  = glyph_start;
+   int end = start + (gf.m_end - gf.m_iter);
+
    unsigned short *logClusters = eng->logClusters(&si);
+
    QGlyphLayout glyphs = eng->shapedGlyphs(&si);
    QFixed orig_width = gf.width;
 
    int *ul = eng->underlinePositions;
-   if (ul)
+
+   if (ul) {
       while (*ul != -1 && *ul < start) {
          ++ul;
       }
+   }
+
    bool rtl = si.analysis.bidiLevel % 2;
    if (rtl) {
       x += si.width;
@@ -1468,57 +1476,77 @@ static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si,
    do {
       int gtmp = ge;
       int stmp = end;
+
       if (ul && *ul != -1 && *ul < end) {
          stmp = *ul;
          gtmp = logClusters[*ul - si.position];
       }
 
       gf.glyphs = glyphs.mid(gs, gtmp - gs);
-      gf.num_chars = stmp - start;
-      gf.chars = eng->layoutData->string.unicode() + start;
+      gf.m_iter = eng->layoutData->string.begin() + start;
+      gf.m_end  = gf.m_iter + (stmp - start);
+
       QFixed w = 0;
+
       while (gs < gtmp) {
          w += glyphs.effectiveAdvance(gs);
          ++gs;
       }
-      start = stmp;
+
+      start    = stmp;
       gf.width = w;
+
       if (rtl) {
          x -= w;
       }
-      if (gf.num_chars) {
+
+      if (gf.m_iter != gf.m_end) {
          p->drawTextItem(QPointF(x.toReal(), y.toReal()), gf);
       }
-      if (!rtl) {
+
+      if (! rtl) {
          x += w;
       }
+
       if (ul && *ul != -1 && *ul < end) {
          // draw underline
          gtmp = (*ul == end - 1) ? ge : logClusters[*ul + 1 - si.position];
          ++stmp;
+
          gf.glyphs = glyphs.mid(gs, gtmp - gs);
-         gf.num_chars = stmp - start;
-         gf.chars = eng->layoutData->string.unicode() + start;
+         gf.m_iter = eng->layoutData->string.begin() + start;
+         gf.m_end  = gf.m_iter + (stmp - start);
+
          gf.logClusters = logClusters + start - si.position;
          w = 0;
+
          while (gs < gtmp) {
             w += glyphs.effectiveAdvance(gs);
             ++gs;
          }
+
          ++start;
          gf.width = w;
          gf.underlineStyle = QTextCharFormat::SingleUnderline;
+
          if (rtl) {
             x -= w;
          }
+
          p->drawTextItem(QPointF(x.toReal(), y.toReal()), gf);
-         if (!rtl) {
+
+         if (! rtl) {
             x += w;
          }
+
          gf.underlineStyle = QTextCharFormat::NoUnderline;
-         ++gf.chars;
+
+         ++gf.m_iter;
+         ++gf.m_end;
+
          ++ul;
       }
+
    } while (gs < ge);
 
    gf.width = orig_width;
@@ -1527,6 +1555,7 @@ static void drawMenuText(QPainter *p, QFixed x, QFixed y, const QScriptItem &si,
 static void setPenAndDrawBackground(QPainter *p, const QPen &defaultPen, const QTextCharFormat &chf, const QRectF &r)
 {
    QBrush c = chf.foreground();
+
    if (c.style() == Qt::NoBrush) {
       p->setPen(defaultPen);
    }
@@ -1821,12 +1850,12 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
 
                QRectF itemRect(iterator.x.toReal(), itemY.toReal(), iterator.itemWidth.toReal(), si.height().toReal());
 
-               eng->docLayout()->drawInlineObject(p, itemRect,
-                                                  QTextInlineObject(iterator.item, eng),
-                                                  si.position + eng->block.position(),
-                                                  format);
+               eng->docLayout()->drawInlineObject(p, itemRect, QTextInlineObject(iterator.item, eng),
+                                                  si.position + eng->block.position(), format);
+
                if (selection) {
                   QBrush bg = format.brushProperty(ObjectSelectionBrush);
+
                   if (bg.style() != Qt::NoBrush) {
                      QColor c = bg.color();
                      c.setAlpha(128);
@@ -1835,27 +1864,30 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                }
             } else { // si.isTab
                QFont f = eng->font(si);
+
                QTextItemInt gf(si, &f, format);
-               gf.chars = 0;
-               gf.num_chars = 0;
                gf.width = iterator.itemWidth;
+
                p->drawTextItem(QPointF(iterator.x.toReal(), y.toReal()), gf);
+
                if (eng->option.flags() & QTextOption::ShowTabsAndSpaces) {
                   QChar visualTab(0x2192);
-                  int w = QFontMetrics(f).width(visualTab);
+
+                  int w   = QFontMetrics(f).width(visualTab);
                   qreal x = iterator.itemWidth.toReal() - w; // Right-aligned
-                  if (x < 0)
+
+                  if (x < 0) {
                      p->setClipRect(QRectF(iterator.x.toReal(), line.y.toReal(),
-                                           iterator.itemWidth.toReal(), line.height().toReal()),
-                                    Qt::IntersectClip);
-                  else {
+                                           iterator.itemWidth.toReal(), line.height().toReal()), Qt::IntersectClip);
+                  } else {
                      x /= 2;   // Centered
                   }
-                  p->drawText(QPointF(iterator.x.toReal() + x,
-                                      y.toReal()), visualTab);
+
+                  p->drawText(QPointF(iterator.x.toReal() + x, y.toReal()), visualTab);
                }
 
             }
+
             p->restore();
          }
 
@@ -1865,21 +1897,24 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
       unsigned short *logClusters = eng->logClusters(&si);
       QGlyphLayout glyphs = eng->shapedGlyphs(&si);
 
-      QTextItemInt gf(glyphs.mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart),
-                      &f, eng->layoutData->string.unicode() + iterator.itemStart,
-                      iterator.itemEnd - iterator.itemStart, eng->fontEngine(si), format);
+      QTextItemInt gf(glyphs.mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart), &f,
+                  eng->layoutData->string.begin() + iterator.itemStart, eng->layoutData->string.begin() + iterator.itemEnd,
+                  eng->fontEngine(si), format);
+
       gf.logClusters = logClusters + iterator.itemStart - si.position;
-      gf.width = iterator.itemWidth;
-      gf.justified = line.justified;
+      gf.width       = iterator.itemWidth;
+      gf.justified   = line.justified;
       gf.initWithScriptItem(si);
 
       Q_ASSERT(gf.fontEngine);
 
       if (eng->underlinePositions) {
-         // can't have selections in this case
+         // can not have selections in this case
          drawMenuText(p, iterator.x, itemBaseLine, si, gf, eng, iterator.itemStart, iterator.glyphsStart);
+
       } else {
          QPointF pos(iterator.x.toReal(), itemBaseLine.toReal());
+
          if (format.penProperty(QTextFormat::TextOutline).style() != Qt::NoPen) {
             QPainterPath path;
             path.setFillRule(Qt::WindingFill);
@@ -1890,6 +1925,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
             if (gf.flags) {
                const QFontEngine *fe = gf.fontEngine;
                const qreal lw = fe->lineThickness().toReal();
+
                if (gf.flags & QTextItem::Underline) {
                   qreal offs = fe->underlinePosition().toReal();
                   path.addRect(pos.x(), pos.y() + offs, gf.width.toReal(), lw);

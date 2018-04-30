@@ -42,8 +42,6 @@
 #include <qprintengine_pdf_p.h>
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 extern qint64 qt_pixmap_id(const QPixmap &pixmap);
 extern qint64 qt_image_id(const QImage &image);
 
@@ -76,6 +74,7 @@ void QPdfPage::streamImage(int w, int h, int object)
 inline QPaintEngine::PaintEngineFeatures qt_pdf_decide_features()
 {
    QPaintEngine::PaintEngineFeatures f = QPaintEngine::AllFeatures;
+
    f &= ~(QPaintEngine::PorterDuff | QPaintEngine::PerspectiveTransform
           | QPaintEngine::ObjectBoundingModeGradients
 #ifndef USE_NATIVE_GRADIENTS
@@ -83,6 +82,7 @@ inline QPaintEngine::PaintEngineFeatures qt_pdf_decide_features()
 #endif
           | QPaintEngine::RadialGradientFill
           | QPaintEngine::ConicalGradientFill);
+
    return f;
 }
 
@@ -1205,6 +1205,7 @@ void QPdfEnginePrivate::writeTail()
    writeFonts();
    writePageRoot();
    addXrefEntry(xrefPositions.size(), false);
+
    xprintf("xref\n"
            "0 %d\n"
            "%010d 65535 f \n", xrefPositions.size() - 1, xrefPositions[0]);
@@ -1247,22 +1248,28 @@ void QPdfEnginePrivate::printString(const QString &string)
    // The 'text string' type in PDF is encoded either as PDFDocEncoding, or
    // Unicode UTF-16 with a Unicode byte order mark as the first character
    // (0xfeff), with the high-order byte first.
-   QByteArray array("(\xfe\xff");
-   const ushort *utf16 = string.utf16();
 
-   for (int i = 0; i < string.size(); ++i) {
-      char part[2] = {char((*(utf16 + i)) >> 8), char((*(utf16 + i)) & 0xff)};
+   QByteArray array("(\xfe\xff");
+
+   QString16 str16 = string.toUtf16();
+   const char16_t *utf16 = str16.constData();
+
+   for (int i = 0; i < str16.size_storage(); ++i) {
+      char16_t c   = utf16[i];
+      char part[2] = { char(c >> 8), char(c & 0xff) };
+
       for (int j = 0; j < 2; ++j) {
+
          if (part[j] == '(' || part[j] == ')' || part[j] == '\\') {
             array.append('\\');
          }
+
          array.append(part[j]);
       }
    }
+
    array.append(")");
    write(array);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_PRINTER

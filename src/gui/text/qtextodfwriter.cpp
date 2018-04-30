@@ -274,7 +274,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
    writer.writeStartElement(textNS, QString::fromLatin1("p"));
    writer.writeAttribute(textNS, QString::fromLatin1("style-name"), QString::fromLatin1("p%1")
                          .formatArg(block.blockFormatIndex()));
-   for (QTextBlock::Iterator frag = block.begin(); !frag.atEnd(); frag++) {
+   for (QTextBlock::iterator frag = block.begin(); !frag.atEnd(); frag++) {
       writer.writeCharacters(QString()); // Trick to make sure that the span gets no linefeed in front of it.
       writer.writeStartElement(textNS, QString::fromLatin1("span"));
 
@@ -496,7 +496,7 @@ void QTextOdfWriter::writeBlockFormat(QXmlStreamWriter &writer, QTextBlockFormat
    if (format.hasProperty(QTextFormat::TabPositions)) {
       QList<QTextOption::Tab> tabs = format.tabPositions();
       writer.writeStartElement(styleNS, QString::fromLatin1("tab-stops"));
-      QList<QTextOption::Tab>::Iterator iterator = tabs.begin();
+      QList<QTextOption::Tab>::iterator iterator = tabs.begin();
       while (iterator != tabs.end()) {
          writer.writeEmptyElement(styleNS, QString::fromLatin1("tab-stop"));
          writer.writeAttribute(styleNS, QString::fromLatin1("position"), pixelToPoint(iterator->position) );
@@ -866,7 +866,7 @@ bool QTextOdfWriter::writeAll()
 
    // add blocks (for blockFormats)
    QTextDocumentPrivate::BlockMap &blocks = m_document->docHandle()->blockMap();
-   QTextDocumentPrivate::BlockMap::Iterator blockIt = blocks.begin();
+   QTextDocumentPrivate::BlockMap::iterator blockIt = blocks.begin();
    while (blockIt != blocks.end()) {
       const QTextBlockData *const block = blockIt.value();
       formats << block->format;
@@ -876,7 +876,7 @@ bool QTextOdfWriter::writeAll()
    // add objects for lists, frames and tables
    QVector<QTextFormat> allFormats = m_document->allFormats();
    QList<int> copy = formats.toList();
-   for (QList<int>::Iterator iter = copy.begin(); iter != copy.end(); ++iter) {
+   for (QList<int>::iterator iter = copy.begin(); iter != copy.end(); ++iter) {
       QTextObject *object = m_document->objectForFormat(allFormats[*iter]);
       if (object) {
          formats << object->formatIndex();

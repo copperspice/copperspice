@@ -218,7 +218,7 @@ void QTextDocumentPrivate::clear()
    QT_TRY {
       cursors.clear();
 
-      QMap<int, QTextObject *>::Iterator objectIt = objects.begin();
+      QMap<int, QTextObject *>::iterator objectIt = objects.begin();
       while (objectIt != objects.end())
       {
          if (*objectIt != rtFrame) {
@@ -239,21 +239,26 @@ void QTextDocumentPrivate::clear()
       modifiedState = 0;
       modified = false;
       formats = QTextFormatCollection();
+
       int len = fragments.length();
       fragments.clear();
+
       blocks.clear();
       cachedResources.clear();
+
       delete rtFrame;
       rtFrame = 0;
+
       init();
       cursors = oldCursors;
       inContentsChange = true;
       q->contentsChange(0, len, 0);
       inContentsChange = false;
-      if (lout)
-      {
+
+      if (lout) {
          lout->documentChanged(0, len, 0);
       }
+
    } QT_CATCH(...) {
       cursors = oldCursors; // at least recover the cursors
       QT_RETHROW;
@@ -281,7 +286,7 @@ void QTextDocumentPrivate::setLayout(QAbstractTextDocumentLayout *layout)
    lout = layout;
 
    if (!firstLayout)
-      for (BlockMap::Iterator it = blocks.begin(); !it.atEnd(); ++it) {
+      for (BlockMap::iterator it = blocks.begin(); !it.atEnd(); ++it) {
          it->free();
       }
 
@@ -294,7 +299,6 @@ void QTextDocumentPrivate::setLayout(QAbstractTextDocumentLayout *layout)
    }
 }
 
-
 void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int format, QTextUndoCommand::Operation op)
 {
    // ##### optimize when only appending to the fragment!
@@ -302,10 +306,12 @@ void QTextDocumentPrivate::insert_string(int pos, int strPos, uint length, int f
 
    split(pos);
    uint x = fragments.insert_single(pos, length);
+
    QTextFragmentData *X = fragments.fragment(x);
    X->format = format;
    X->stringPosition = strPos;
    uint w = fragments.previous(x);
+
    if (w) {
       unite(w);
    }
@@ -329,9 +335,11 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
 {
    split(pos);
    uint x = fragments.insert_single(pos, 1);
+
    QTextFragmentData *X = fragments.fragment(x);
    X->format = format;
    X->stringPosition = strPos;
+
    // no need trying to unite, since paragraph separators are always in a fragment of their own
 
    Q_ASSERT(isValidBlockSeparator(text.at(strPos)));
@@ -341,6 +349,7 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
    if (blocks.length() && command == QTextUndoCommand::BlockRemoved) {
       ++block_pos;
    }
+
    int size = 1;
    int n = blocks.findNode(block_pos);
    int key = n ? blocks.position(n) : blocks.length();
@@ -405,8 +414,7 @@ int QTextDocumentPrivate::insertBlock(const QChar &blockSeparator,
    QTextBlockData *B = blocks.fragment(b);
 
    QT_INIT_TEXTUNDOCOMMAND(c, QTextUndoCommand::BlockInserted, (editBlock != 0),
-                           op, charFormat, strPos, pos, blockFormat,
-                           static_cast<quint32>(B->revision));
+                           op, charFormat, strPos, pos, blockFormat, static_cast<quint32>(B->revision));
 
    appendUndoItem(c);
    Q_ASSERT(undoState == undoStack.size());
@@ -517,11 +525,12 @@ int QTextDocumentPrivate::remove_block(int pos, int *blockFormat, int command, Q
 
    if (blocks.size(b) == 1 && command == QTextUndoCommand::BlockAdded) {
       Q_ASSERT((int)blocks.position(b) == pos);
-      //  	qDebug("removing empty block");
-      // empty block remove the block itself
+
    } else {
       // non empty block, merge with next one into this block
-      //  	qDebug("merging block with next");
+      //	qDebug("merging block with next");
+
+
       int n = blocks.next(b);
       Q_ASSERT((int)blocks.position(n) == pos + 1);
       blocks.setSize(b, blocks.size(b) + blocks.size(n) - 1);
@@ -536,6 +545,7 @@ int QTextDocumentPrivate::remove_block(int pos, int *blockFormat, int command, Q
    }
 
    QTextFrame *frame = qobject_cast<QTextFrame *>(objectForFormat(fragments.fragment(x)->format));
+
    if (frame) {
       frame->d_func()->fragmentRemoved(text.at(fragments.fragment(x)->stringPosition), x);
       framesDirty = true;
@@ -725,7 +735,7 @@ void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFor
    split(endPos);
 
    while (pos < endPos) {
-      FragmentMap::Iterator it = fragments.find(pos);
+      FragmentMap::iterator it = fragments.find(pos);
       Q_ASSERT(!it.atEnd());
 
       QTextFragmentData *fragment = it.value();
@@ -1207,6 +1217,7 @@ void QTextDocumentPrivate::enableUndoRedo(bool enable)
    }
    modifiedState = modified ? -1 : undoState;
    undoEnabled = enable;
+
    if (!undoEnabled) {
       compressPieceTable();
    }
@@ -1268,11 +1279,8 @@ void QTextDocumentPrivate::finishEdit()
 
    if (needsEnsureMaximumBlockCount) {
       needsEnsureMaximumBlockCount = false;
+
       if (ensureMaximumBlockCount()) {
-         // if ensureMaximumBlockCount() returns true
-         // it will have called endEditBlock() and
-         // compressPieceTable() itself, so we return here
-         // to prevent getting two contentsChanged emits
          return;
       }
    }
@@ -1374,34 +1382,34 @@ void QTextDocumentPrivate::adjustDocumentChangesAndCursors(int from, int addedOr
    int removedInside = qMax(0, overlap_end - overlap_start);
    removed -= removedInside;
 
-   //     qDebug("adjustDocumentChanges: from=%d, addedOrRemoved=%d, diff=%d, removedInside=%d", from, addedOrRemoved, diff, removedInside);
    docChangeFrom = qMin(docChangeFrom, from);
    docChangeOldLength += removed + diff;
    docChangeLength += added - removedInside + diff;
-   //     qDebug("    -> %d %d %d", docChangeFrom, docChangeOldLength, docChangeLength);
 
 }
-
 
 QString QTextDocumentPrivate::plainText() const
 {
    QString result;
-   result.resize(length());
-   const QChar *text_unicode = text.unicode();
-   QChar *data = result.data();
-   for (QTextDocumentPrivate::FragmentIterator it = begin(); it != end(); ++it) {
-      const QTextFragmentData *f = *it;
-      ::memcpy(data, text_unicode + f->stringPosition, f->size_array[0] * sizeof(QChar));
-      data += f->size_array[0];
+   QString::const_iterator iter_text = text.begin();
+
+   for (QTextDocumentPrivate::FragmentIterator frag_iter = this->begin(); frag_iter != this->end(); ++frag_iter) {
+      const QTextFragmentData *f = *frag_iter;
+
+      QString::const_iterator iter_start = iter_text + f->stringPosition;
+      result.append(iter_start, iter_start + f->size_array[0]);
    }
+
    // remove trailing block separator
    result.chop(1);
+
    return result;
 }
 
 int QTextDocumentPrivate::blockCharFormatIndex(int node) const
 {
    int pos = blocks.position(node);
+
    if (pos == 0) {
       return initialBlockCharFormatIndex;
    }
@@ -1728,31 +1736,24 @@ void QTextDocumentPrivate::compressPieceTable()
    }
 
    const uint garbageCollectionThreshold = 96 * 1024; // bytes
+   bool compressTable = (unreachableCharacterCount * sizeof(QChar)) > garbageCollectionThreshold;
 
-   //qDebug() << "unreachable bytes:" << unreachableCharacterCount * sizeof(QChar) << " -- limit" << garbageCollectionThreshold << "text size =" << text.size() << "capacity:" << text.capacity();
-
-   bool compressTable = unreachableCharacterCount * sizeof(QChar) > garbageCollectionThreshold
-                        && text.size() >= text.capacity() * 0.9;
-   if (!compressTable) {
+   if (! compressTable) {
       return;
    }
 
    QString newText;
-   newText.resize(text.size());
-   QChar *newTextPtr = newText.data();
    int newLen = 0;
 
-   for (FragmentMap::Iterator it = fragments.begin(); !it.atEnd(); ++it) {
-      memcpy(newTextPtr, text.constData() + it->stringPosition, it->size_array[0] * sizeof(QChar));
+   for (FragmentMap::iterator it = fragments.begin(); ! it.atEnd(); ++it) {
+      auto start_iter = text.begin() + it->stringPosition;
+      newText.append(start_iter, start_iter + it->size_array[0]);
+
       it->stringPosition = newLen;
-      newTextPtr += it->size_array[0];
       newLen += it->size_array[0];
    }
 
-   newText.resize(newLen);
-   newText.squeeze();
-   //qDebug() << "removed" << text.size() - newText.size() << "characters";
-   text = newText;
+   text = std::move(newText);
    unreachableCharacterCount = 0;
 }
 

@@ -234,7 +234,7 @@ class Q_CORE_EXPORT QVariant
 
    Type type() const;
    int userType() const;
-   const QString8 &typeName() const;
+   const QString &typeName() const;
 
    bool canConvert(Type t) const;
    bool convert(Type t);
@@ -299,8 +299,8 @@ class Q_CORE_EXPORT QVariant
    void load(QDataStream &ds);
    void save(QDataStream &ds) const;
 
-   static const QString8 &typeToName(Type type);
-   static Type nameToType(const QString8 &name);
+   static const QString &typeToName(Type type);
+   static Type nameToType(const QString &name);
 
    void *data();
    const void *constData() const;

@@ -144,6 +144,7 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
    bool sort_localeaware;
 
    int filter_column;
+
    QRegularExpression filter_regexp;
    int filter_role;
 
@@ -2005,18 +2006,11 @@ QRegularExpression QSortFilterProxyModel::filterRegExp() const
 void QSortFilterProxyModel::setFilterRegExp(const QRegularExpression &regExp)
 {
    Q_D(QSortFilterProxyModel);
+
    d->filter_regexp = regExp;
    d->filter_changed();
 }
 
-/*!
-    \property QSortFilterProxyModel::filterKeyColumn
-    \brief the column where the key used to filter the contents of the
-    source model is read from.
-
-    The default value is 0. If the value is -1, the keys will be read
-    from all columns.
-*/
 int QSortFilterProxyModel::filterKeyColumn() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2030,41 +2024,42 @@ void QSortFilterProxyModel::setFilterKeyColumn(int column)
    d->filter_changed();
 }
 
-/*!
-    \property QSortFilterProxyModel::filterCaseSensitivity
-
-    \brief the case sensitivity of the QRegularExpression pattern used to filter the
-    contents of the source model
-
-    By default, the filter is case sensitive.
-
-    \sa filterRegExp, sortCaseSensitivity
-*/
 Qt::CaseSensitivity QSortFilterProxyModel::filterCaseSensitivity() const
 {
    Q_D(const QSortFilterProxyModel);
-   return d->filter_regexp.caseSensitivity();
+
+   QPatternOptionFlags flags = d->filter_regexp.patternOptions();
+
+   if (flags & QPatternOption::CaseInsensitiveOption) {
+      return Qt::CaseInsensitive;
+   } else {
+      return Qt::CaseSensitive;
+   }
 }
 
 void QSortFilterProxyModel::setFilterCaseSensitivity(Qt::CaseSensitivity cs)
 {
    Q_D(QSortFilterProxyModel);
-   if (cs == d->filter_regexp.caseSensitivity()) {
+
+   QPatternOptionFlags flags = d->filter_regexp.patternOptions();
+   QPatternOptionFlags newFlags = flags;
+
+   if (cs == Qt::CaseSensitive) {
+      newFlags = flags & ~QPatternOptionFlags(QPatternOption::CaseInsensitiveOption);
+
+   } else {
+      newFlags = flags | QPatternOption::CaseInsensitiveOption;
+
+   }
+
+   if (flags == newFlags) {
       return;
    }
-   d->filter_regexp.setCaseSensitivity(cs);
+
+   d->filter_regexp.setPatternOptions(flags);
    d->filter_changed();
 }
 
-/*!
-    \since 4.2
-    \property QSortFilterProxyModel::sortCaseSensitivity
-    \brief the case sensitivity setting used for comparing strings when sorting
-
-    By default, sorting is case sensitive.
-
-    \sa filterCaseSensitivity, lessThan()
-*/
 Qt::CaseSensitivity QSortFilterProxyModel::sortCaseSensitivity() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2074,6 +2069,7 @@ Qt::CaseSensitivity QSortFilterProxyModel::sortCaseSensitivity() const
 void QSortFilterProxyModel::setSortCaseSensitivity(Qt::CaseSensitivity cs)
 {
    Q_D(QSortFilterProxyModel);
+
    if (d->sort_casesensitivity == cs) {
       return;
    }
@@ -2082,15 +2078,6 @@ void QSortFilterProxyModel::setSortCaseSensitivity(Qt::CaseSensitivity cs)
    d->sort();
 }
 
-/*!
-    \since 4.3
-    \property QSortFilterProxyModel::isSortLocaleAware
-    \brief the local aware setting used for comparing strings when sorting
-
-    By default, sorting is not local aware.
-
-    \sa sortCaseSensitivity, lessThan()
-*/
 bool QSortFilterProxyModel::isSortLocaleAware() const
 {
    Q_D(const QSortFilterProxyModel);
@@ -2320,28 +2307,17 @@ bool QSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex 
    return false;
 }
 
-/*!
-    Returns true if the item in the row indicated by the given \a source_row
-    and \a source_parent should be included in the model; otherwise returns
-    false.
-
-    The default implementation returns true if the value held by the relevant item
-    matches the filter string, wildcard string or regular expression.
-
-    \note By default, the Qt::DisplayRole is used to determine if the row
-    should be accepted or not. This can be changed by setting the
-    \l{QSortFilterProxyModel::filterRole}{filterRole} property.
-
-    \sa filterAcceptsColumn(), setFilterFixedString(), setFilterRegExp(), setFilterWildcard()
-*/
 bool QSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
    Q_D(const QSortFilterProxyModel);
-   if (d->filter_regexp.isEmpty()) {
+
+   if (! d->filter_regexp.isValid()) {
       return true;
    }
+
    if (d->filter_column == -1) {
       int column_count = d->model->columnCount(source_parent);
+
       for (int column = 0; column < column_count; ++column) {
          QModelIndex source_index = d->model->index(source_row, column, source_parent);
          QString key = d->model->data(source_index, d->filter_role).toString();
@@ -2351,10 +2327,12 @@ bool QSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
       }
       return false;
    }
+
    QModelIndex source_index = d->model->index(source_row, d->filter_column, source_parent);
    if (!source_index.isValid()) { // the column may not exist
       return true;
    }
+
    QString key = d->model->data(source_index, d->filter_role).toString();
    return key.contains(d->filter_regexp);
 }

@@ -65,7 +65,7 @@ class Q_CORE_EXPORT QJsonObject
       return isEmpty();
    }
 
-   iterator erase(const_iterator it);
+   iterator erase(const_iterator iter);
    iterator find(const QString &key);
 
    const_iterator find(const QString &key) const {

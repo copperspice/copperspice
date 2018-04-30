@@ -43,17 +43,21 @@ QT_BEGIN_NAMESPACE
 
 static inline bool shellExecute(const QUrl &url)
 {
-    if (!url.isValid())
-        return false;
-
-    const QString nativeFilePath =
-            url.isLocalFile() ? QDir::toNativeSeparators(url.toLocalFile()) : url.toString();
-    const quintptr result = (quintptr)ShellExecute(0, 0, (wchar_t*)nativeFilePath.utf16(), 0, 0, SW_SHOWNORMAL);
-    // ShellExecute returns a value greater than 32 if successful
-    if (result <= 32) {
-        qWarning("ShellExecute '%s' failed (error %s).", qPrintable(url.toString()), qPrintable(QString::number(result)));
+    if (! url.isValid()) {
         return false;
     }
+
+    const QString nativeFilePath = url.isLocalFile() ? QDir::toNativeSeparators(url.toLocalFile()) : url.toString();
+
+    std::wstring tmp(nativeFilePath.toStdWString());
+    const quintptr result = (quintptr)ShellExecute(0, 0, &tmp[0], 0, 0, SW_SHOWNORMAL);
+
+    // ShellExecute returns a value greater than 32 if successful
+    if (result <= 32) {
+        qWarning("ShellExecute '%s' failed (error %s).", csPrintable(url.toString()), csPrintable(QString::number(result)));
+        return false;
+    }
+
     return true;
 }
 
@@ -64,10 +68,11 @@ static bool openDocument(const QUrl &file)
 
 static QString expandEnvStrings(const QString &command)
 {
-   wchar_t buffer[MAX_PATH];
+   std::wstring buffer(MAX_PATH, L'\0');
+   std::wstring tmp(command.toStdWString());
 
-   if (ExpandEnvironmentStrings((wchar_t *)command.utf16(), buffer, MAX_PATH)) {
-      return QString::fromWCharArray(buffer);
+   if (ExpandEnvironmentStrings(&tmp[0], &buffer[0], MAX_PATH)) {
+      return QString::fromStdWString(buffer);
    } else {
       return command;
    }
@@ -76,39 +81,49 @@ static QString expandEnvStrings(const QString &command)
 
 static bool launchWebBrowser(const QUrl &url)
 {
-   if (url.scheme() == QLatin1String("mailto")) {
+   if (url.scheme() == "mailto") {
       //Retrieve the commandline for the default mail client
       //the default key used below is the command line for the mailto: shell command
+
       DWORD  bufferSize = sizeof(wchar_t) * MAX_PATH;
       long  returnValue =  -1;
       QString command;
 
       HKEY handle;
       LONG res;
-      wchar_t keyValue[MAX_PATH] = {0};
-      QString keyName(QLatin1String("mailto"));
+
+      std::wstring keyValue(MAX_PATH, L'\0');
+      QString keyName("mailto");
 
       //Check if user has set preference, otherwise use default.
       res = RegOpenKeyEx(HKEY_CURRENT_USER,
                          L"Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\mailto\\UserChoice",
                          0, KEY_READ, &handle);
+
       if (res == ERROR_SUCCESS) {
-         returnValue = RegQueryValueEx(handle, L"Progid", 0, 0, reinterpret_cast<unsigned char *>(keyValue), &bufferSize);
-         if (!returnValue) {
-            keyName = QString::fromUtf16((const ushort *)keyValue);
+         returnValue = RegQueryValueEx(handle, L"Progid", 0, 0, reinterpret_cast<unsigned char *>(&keyValue[0]), &bufferSize);
+
+         if (! returnValue) {
+            keyName = QString::fromStdWString(keyValue);
          }
+
          RegCloseKey(handle);
       }
-      keyName += QLatin1String("\\Shell\\Open\\Command");
-      res = RegOpenKeyExW(HKEY_CLASSES_ROOT, (const wchar_t *)keyName.utf16(), 0, KEY_READ, &handle);
+
+      keyName += "\\Shell\\Open\\Command";
+      std::wstring tmp1(keyName.toStdWString());
+
+      res = RegOpenKeyExW(HKEY_CLASSES_ROOT, &tmp1[0], 0, KEY_READ, &handle);
+
       if (res != ERROR_SUCCESS) {
          return false;
       }
 
       bufferSize = sizeof(wchar_t) * MAX_PATH;
-      returnValue = RegQueryValueEx(handle, L"", 0, 0, reinterpret_cast<unsigned char *>(keyValue), &bufferSize);
-      if (!returnValue) {
-         command = QString::fromRawData((QChar *)keyValue, bufferSize);
+      returnValue = RegQueryValueEx(handle, L"", 0, 0, reinterpret_cast<unsigned char *>(&keyValue[0]), &bufferSize);
+
+      if (! returnValue) {
+         command = QString::fromStdWString(keyValue);
       }
       RegCloseKey(handle);
 
@@ -118,18 +133,23 @@ static bool launchWebBrowser(const QUrl &url)
 
       command = expandEnvStrings(command);
       command = command.trimmed();
+
       //Make sure the path for the process is in quotes
       int index = -1 ;
+
       if (command[0] != QLatin1Char('\"')) {
          index = command.indexOf(QLatin1String(".exe "), 0, Qt::CaseInsensitive);
          command.insert(index + 4, QLatin1Char('\"'));
          command.insert(0, QLatin1Char('\"'));
       }
+
       //pass the url as the parameter
       index =  command.lastIndexOf(QLatin1String("%1"));
+
       if (index != -1) {
          command.replace(index, 2, url.toString());
       }
+
       //start the process
       PROCESS_INFORMATION pi;
       ZeroMemory(&pi, sizeof(pi));
@@ -137,9 +157,10 @@ static bool launchWebBrowser(const QUrl &url)
       ZeroMemory(&si, sizeof(si));
       si.cb = sizeof(si);
 
-      returnValue = CreateProcess(NULL, (wchar_t *)command.utf16(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+      std::wstring tmp2(command.toStdWString());
+      returnValue = CreateProcess(NULL, &tmp2[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 
-      if (!returnValue) {
+      if (! returnValue) {
          return false;
       }
 
@@ -148,7 +169,7 @@ static bool launchWebBrowser(const QUrl &url)
       return true;
    }
 
-   if (!url.isValid()) {
+   if (! url.isValid()) {
       return false;
    }
 
@@ -156,8 +177,9 @@ static bool launchWebBrowser(const QUrl &url)
       return openDocument(url);
    }
 
-   quintptr returnValue = (quintptr)ShellExecute(0, 0, (wchar_t *)QString::fromUtf8(url.toEncoded().constData()).utf16(),
-                          0, 0, SW_SHOWNORMAL);
+   std::wstring tmp3 = QString::fromUtf8(url.toEncoded()).toStdWString();
+   quintptr returnValue = (quintptr)ShellExecute(0, 0, &tmp3[0], 0, 0, SW_SHOWNORMAL);
+
    return (returnValue > 32);
 }
 
@@ -165,22 +187,24 @@ QString QDesktopServices::storageLocation(StandardLocation type)
 {
    QString result;
 
-   QSystemLibrary library(QLatin1String("shell32"));
+   QSystemLibrary library("shell32");
 
    typedef BOOL (WINAPI * GetSpecialFolderPath)(HWND, LPWSTR, int, BOOL);
-   static GetSpecialFolderPath SHGetSpecialFolderPath =
-      (GetSpecialFolderPath)library.resolve("SHGetSpecialFolderPathW");
-   if (!SHGetSpecialFolderPath) {
+
+   static GetSpecialFolderPath SHGetSpecialFolderPath = (GetSpecialFolderPath)library.resolve("SHGetSpecialFolderPathW");
+
+   if (! SHGetSpecialFolderPath) {
       return QString();
    }
 
-   wchar_t path[MAX_PATH];
+   std::wstring path(MAX_PATH, L'\0');
 
    switch (type) {
       case DataLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_LOCAL_APPDATA, FALSE)) {
-            result = QString::fromWCharArray(path);
-            if (!QCoreApplication::organizationName().isEmpty()) {
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_LOCAL_APPDATA, FALSE)) {
+            result = QString::fromStdWString(path);
+
+            if (! QCoreApplication::organizationName().isEmpty()) {
                result = result + QLatin1String("\\") + QCoreApplication::organizationName();
             }
             if (!QCoreApplication::applicationName().isEmpty()) {
@@ -190,44 +214,44 @@ QString QDesktopServices::storageLocation(StandardLocation type)
          break;
 
       case DesktopLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_DESKTOPDIRECTORY, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_DESKTOPDIRECTORY, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case DocumentsLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_PERSONAL, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_PERSONAL, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case FontsLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_FONTS, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_FONTS, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case ApplicationsLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_PROGRAMS, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_PROGRAMS, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case MusicLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_MYMUSIC, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYMUSIC, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case MoviesLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_MYVIDEO, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYVIDEO, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
       case PicturesLocation:
-         if (SHGetSpecialFolderPath(0, path, CSIDL_MYPICTURES, FALSE)) {
-            result = QString::fromWCharArray(path);
+         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYPICTURES, FALSE)) {
+            result = QString::fromStdWString(path);
          }
          break;
 
@@ -235,7 +259,7 @@ QString QDesktopServices::storageLocation(StandardLocation type)
          // Although Microsoft has a Cache key it is a pointer to IE's cache, not a cache
          // location for everyone.  Most applications seem to be using a
          // cache directory located in their AppData directory
-         return storageLocation(DataLocation) + QLatin1String("\\cache");
+         return storageLocation(DataLocation) + "\\cache";
 
       case QDesktopServices::HomeLocation:
          return QDir::homePath();

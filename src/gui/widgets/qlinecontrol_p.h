@@ -23,18 +23,21 @@
 #ifndef QLINECONTROL_P_H
 #define QLINECONTROL_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_LINEEDIT
+
 #include <qwidget_p.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qtextlayout.h>
-#include <QtGui/qstyleoption.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qclipboard.h>
-#include <QtCore/qpoint.h>
-#include <QtGui/qcompleter.h>
-#include <QtGui/qaccessible.h>
+#include <qtextengine_p.h>
+
+#include <qlineedit.h>
+#include <qtextlayout.h>
+#include <qstyleoption.h>
+#include <qpointer.h>
+#include <qclipboard.h>
+#include <qpoint.h>
+#include <qcompleter.h>
+#include <qaccessible.h>
 #include <qplatformdefs.h>
 
 QT_BEGIN_NAMESPACE
@@ -369,7 +372,11 @@ class Q_GUI_EXPORT QLineControl : public QObject
             return QApplication::keyboardInputDirection();
          }
 
-         return m_text.isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight;
+         if (QTextEngine::isRightToLeft(m_text)) {
+            return Qt::RightToLeft;
+         } else {
+            return Qt::LeftToRight;
+         }
       }
 
       return m_layoutDirection;

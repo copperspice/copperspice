@@ -171,7 +171,7 @@ void QAbstractTextDocumentLayout::drawInlineObject(QPainter *p, const QRectF &re
 
 void QAbstractTextDocumentLayoutPrivate::_q_handlerDestroyed(QObject *obj)
 {
-   HandlerHash::Iterator it = handlers.begin();
+   HandlerHash::iterator it = handlers.begin();
    while (it != handlers.end())
       if ((*it).component == obj) {
          it = handlers.erase(it);

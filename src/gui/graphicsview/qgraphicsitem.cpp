@@ -8019,23 +8019,11 @@ QString QGraphicsTextItem::toHtml() const
    return QString();
 }
 
-/*!
-    Sets the item's text to \a text, assuming that text is HTML formatted. If
-    the item has keyboard input focus, this function will also call
-    ensureVisible() to ensure that the text is visible in all viewports.
-
-    \sa toHtml(), hasFocus(), QGraphicsSimpleTextItem
-*/
 void QGraphicsTextItem::setHtml(const QString &text)
 {
    dd->textControl()->setHtml(text);
 }
 
-/*!
-    Returns the item's text converted to plain text, or an empty QString if no text has been set.
-
-    \sa setPlainText()
-*/
 QString QGraphicsTextItem::toPlainText() const
 {
    if (dd->control) {

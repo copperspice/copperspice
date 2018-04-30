@@ -874,51 +874,44 @@ void QTextDocument::setMetaInformation(MetaInformation info, const QString &stri
    }
 }
 
-/*!
-    Returns the plain text contained in the document. If you want
-    formatting information use a QTextCursor instead.
-
-    \sa toHtml()
-*/
 QString QTextDocument::toPlainText() const
 {
    Q_D(const QTextDocument);
-   QString txt = d->plainText();
 
-   QChar *uc = txt.data();
-   QChar *e = uc + txt.size();
+   QString retval;
 
-   for (; uc != e; ++uc) {
-      switch (uc->unicode()) {
-         case 0xfdd0: // QTextBeginningOfFrame
-         case 0xfdd1: // QTextEndOfFrame
+   for (QChar c : d->plainText()) {
+
+      switch (c.unicode()) {
+
+         case 0xfdd0:    // QTextBeginningOfFrame
+         case 0xfdd1:    // QTextEndOfFrame
          case QChar::ParagraphSeparator:
          case QChar::LineSeparator:
-            *uc = QLatin1Char('\n');
+            retval.append('\n');
             break;
+
          case QChar::Nbsp:
-            *uc = QLatin1Char(' ');
+            retval.append(' ');
             break;
+
          default:
-            ;
+            retval.append(c);
       }
    }
-   return txt;
+
+   return retval;
 }
 
-/*!
-    Replaces the entire contents of the document with the given plain
-    \a text.
-
-    \sa setHtml()
-*/
 void QTextDocument::setPlainText(const QString &text)
 {
    Q_D(QTextDocument);
+
    bool previousState = d->isUndoRedoEnabled();
    d->enableUndoRedo(false);
    d->beginEditBlock();
    d->clear();
+
    QTextCursor(this).insertText(text);
    d->endEditBlock();
    d->enableUndoRedo(previousState);
@@ -944,6 +937,7 @@ void QTextDocument::setPlainText(const QString &text)
 void QTextDocument::setHtml(const QString &html)
 {
    Q_D(QTextDocument);
+
    bool previousState = d->isUndoRedoEnabled();
    d->enableUndoRedo(false);
    d->beginEditBlock();
@@ -955,145 +949,103 @@ void QTextDocument::setHtml(const QString &html)
 
 #endif // QT_NO_TEXTHTMLPARSER
 
-/*!
-    \enum QTextDocument::FindFlag
-
-    This enum describes the options available to QTextDocument's find function. The options
-    can be OR-ed together from the following list:
-
-    \value FindBackward Search backwards instead of forwards.
-    \value FindCaseSensitively By default find works case insensitive. Specifying this option
-    changes the behaviour to a case sensitive find operation.
-    \value FindWholeWords Makes find match only complete words.
-*/
-
-/*!
-    \enum QTextDocument::MetaInformation
-
-    This enum describes the different types of meta information that can be
-    added to a document.
-
-    \value DocumentTitle    The title of the document.
-    \value DocumentUrl      The url of the document. The loadResource() function uses
-                            this url as the base when loading relative resources.
-
-    \sa metaInformation(), setMetaInformation()
-*/
-
-/*!
-    \fn QTextCursor QTextDocument::find(const QString &subString, int position, FindFlags options) const
-
-    \overload
-
-    Finds the next occurrence of the string, \a subString, in the document.
-    The search starts at the given \a position, and proceeds forwards
-    through the document unless specified otherwise in the search options.
-    The \a options control the type of search performed.
-
-    Returns a cursor with the match selected if \a subString
-    was found; otherwise returns a null cursor.
-
-    If the \a position is 0 (the default) the search begins from the beginning
-    of the document; otherwise it begins at the specified position.
-*/
 QTextCursor QTextDocument::find(const QString &subString, int from, FindFlags options) const
 {
-   QRegularExpression expr(subString);
-   expr.setPatternSyntax(QRegularExpression::FixedString);
-   expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
+   QPatternOptionFlags flags;
+
+   if (options & QTextDocument::FindCaseSensitively) {
+      flags = QPatternOption::NoPatternOption;
+   } else {
+      flags = QPatternOption::CaseInsensitiveOption;
+   }
+
+   QRegularExpression expr(QRegularExpression::escape(subString), flags);
 
    return find(expr, from, options);
 }
 
-/*!
-    \fn QTextCursor QTextDocument::find(const QString &subString, const QTextCursor &cursor, FindFlags options) const
-
-    Finds the next occurrence of the string, \a subString, in the document.
-    The search starts at the position of the given \a cursor, and proceeds
-    forwards through the document unless specified otherwise in the search
-    options. The \a options control the type of search performed.
-
-    Returns a cursor with the match selected if \a subString was found; otherwise
-    returns a null cursor.
-
-    If the given \a cursor has a selection, the search begins after the
-    selection; otherwise it begins at the cursor's position.
-
-    By default the search is case-sensitive, and can match text anywhere in the
-    document.
-*/
 QTextCursor QTextDocument::find(const QString &subString, const QTextCursor &from, FindFlags options) const
 {
    int pos = 0;
-   if (!from.isNull()) {
+
+   if (! from.isNull()) {
       if (options & QTextDocument::FindBackward) {
          pos = from.selectionStart();
       } else {
          pos = from.selectionEnd();
       }
    }
-   QRegularExpression expr(subString);
-   expr.setPatternSyntax(QRegularExpression::FixedString);
-   expr.setCaseSensitivity((options & QTextDocument::FindCaseSensitively) ? Qt::CaseSensitive : Qt::CaseInsensitive);
+
+   QPatternOptionFlags flags;
+
+   if (options & QTextDocument::FindCaseSensitively) {
+      flags = QPatternOption::NoPatternOption;
+   } else {
+      flags = QPatternOption::CaseInsensitiveOption;
+   }
+
+   QRegularExpression expr(QRegularExpression::escape(subString), flags);
 
    return find(expr, pos, options);
 }
 
-
 static bool findInBlock(const QTextBlock &block, const QRegularExpression &expression, int offset,
                         QTextDocument::FindFlags options, QTextCursor &cursor)
 {
-   const QRegularExpression expr(expression);
-   QString text = block.text();
-   text.replace(QChar::Nbsp, QLatin1Char(' '));
+   QRegularExpression expr(expression);
 
-   int idx = -1;
+   if (options & QTextDocument::FindWholeWords) {
+      QString pattern = expr.pattern();
+
+      pattern = "(?<!\\w)" + pattern + "(?!\\w)";
+      expr.setPattern(pattern);
+   }
+
+   QRegularExpressionMatch match;
+
+   QString text = block.text();
+   text.replace(QChar::Nbsp, ' ');
+
+   QString::const_iterator iter;
+
+   bool goBackwards;
+
+   if (options & QTextDocument::FindBackward) {
+      goBackwards = true;
+   } else {
+      goBackwards = false;
+   }
+
+   iter = text.begin() + offset;
+
    while (offset >= 0 && offset <= text.length()) {
-      idx = (options & QTextDocument::FindBackward) ?
-            expr.lastIndexIn(text, offset) : expr.indexIn(text, offset);
-      if (idx == -1) {
+
+      if (goBackwards) {
+         match = expr.rmatch(text, iter);
+
+      } else {
+         match = expr.match(text, iter);
+
+      }
+
+      if (! match.hasMatch()) {
          return false;
       }
 
-      if (options & QTextDocument::FindWholeWords) {
-         const int start = idx;
-         const int end = start + expr.matchedLength();
-         if ((start != 0 && text.at(start - 1).isLetterOrNumber())
-               || (end != text.length() && text.at(end).isLetterOrNumber())) {
-            //if this is not a whole word, continue the search in the string
-            offset = (options & QTextDocument::FindBackward) ? idx - 1 : end + 1;
-            idx = -1;
-            continue;
-         }
-      }
-      //we have a hit, return the cursor for that.
+      // we have a hit, return the cursor for that
       break;
    }
-   if (idx == -1) {
+
+   if (! match.hasMatch()) {
       return false;
    }
-   cursor = QTextCursor(block.docHandle(), block.position() + idx);
-   cursor.setPosition(cursor.position() + expr.matchedLength(), QTextCursor::KeepAnchor);
+
+   cursor = QTextCursor(block.docHandle(), block.position() + (iter - text.begin()));
+   cursor.setPosition(cursor.position() + match.capturedLength(0), QTextCursor::KeepAnchor);
+
    return true;
 }
 
-/*!
-    \fn QTextCursor QTextDocument::find(const QRegularExpression & expr, int position, FindFlags options) const
-
-    \overload
-
-    Finds the next occurrence, matching the regular expression, \a expr, in the document.
-    The search starts at the given \a position, and proceeds forwards
-    through the document unless specified otherwise in the search options.
-    The \a options control the type of search performed. The FindCaseSensitively
-    option is ignored for this overload, use QRegularExpression::caseSensitivity instead.
-
-    Returns a cursor with the match selected if a match was found; otherwise
-    returns a null cursor.
-
-    If the \a position is 0 (the default) the search begins from the beginning
-    of the document; otherwise it begins at the specified position.
-*/
 QTextCursor QTextDocument::find(const QRegularExpression &expr, int from, FindFlags options) const
 {
    Q_D(const QTextDocument);
@@ -1731,7 +1683,7 @@ static QTextFormat formatDifference(const QTextFormat &from, const QTextFormat &
    QTextFormat diff = to;
 
    const QMap<int, QVariant> props = to.properties();
-   for (QMap<int, QVariant>::ConstIterator it = props.begin(), end = props.end();
+   for (QMap<int, QVariant>::const_iterator it = props.begin(), end = props.end();
          it != end; ++it)
       if (it.value() == from.property(it.key())) {
          diff.clearProperty(it.key());
@@ -2323,7 +2275,7 @@ void QTextHtmlExporter::emitBlockAttributes(const QTextBlock &block)
 void QTextHtmlExporter::emitBlock(const QTextBlock &block)
 {
    if (block.begin().atEnd()) {
-      // ### HACK, remove once QTextFrame::Iterator is fixed
+      // ### HACK, remove once QTextFrame::iterator is fixed
       int p = block.position();
       if (p > 0) {
          --p;
@@ -2458,7 +2410,7 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
       html += QLatin1String("<br />");
    }
 
-   QTextBlock::Iterator it = block.begin();
+   QTextBlock::iterator it = block.begin();
    if (fragmentMarkers && !it.atEnd() && block == doc->begin()) {
       html += QLatin1String("<!--StartFragment-->");
    }
@@ -2704,10 +2656,10 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
    html += QLatin1String("</table>");
 }
 
-void QTextHtmlExporter::emitFrame(QTextFrame::Iterator frameIt)
+void QTextHtmlExporter::emitFrame(QTextFrame::iterator frameIt)
 {
    if (!frameIt.atEnd()) {
-      QTextFrame::Iterator next = frameIt;
+      QTextFrame::iterator next = frameIt;
       ++next;
       if (next.atEnd()
             && frameIt.currentFrame() == 0
@@ -2717,7 +2669,7 @@ void QTextHtmlExporter::emitFrame(QTextFrame::Iterator frameIt)
       }
    }
 
-   for (QTextFrame::Iterator it = frameIt;
+   for (QTextFrame::iterator it = frameIt;
          !it.atEnd(); ++it) {
       if (QTextFrame *f = it.currentFrame()) {
          if (QTextTable *table = qobject_cast<QTextTable *>(f)) {
@@ -2760,14 +2712,15 @@ void QTextHtmlExporter::emitTextFrame(const QTextFrame *f)
 
 void QTextHtmlExporter::emitFrameStyle(const QTextFrameFormat &format, FrameType frameType)
 {
-   QLatin1String styleAttribute(" style=\"");
+   QString styleAttribute(" style=\"");
+
    html += styleAttribute;
    const int originalHtmlLength = html.length();
 
    if (frameType == TextFrame) {
-      html += QLatin1String("-qt-table-type: frame;");
+      html += "-qt-table-type: frame;";
    } else if (frameType == RootFrame) {
-      html += QLatin1String("-qt-table-type: root;");
+      html += "-qt-table-type: root;";
    }
 
    const QTextFrameFormat defaultFormat;
@@ -2776,9 +2729,9 @@ void QTextHtmlExporter::emitFrameStyle(const QTextFrameFormat &format, FrameType
    emitPageBreakPolicy(format.pageBreakPolicy());
 
    if (format.borderBrush() != defaultFormat.borderBrush()) {
-      html += QLatin1String(" border-color:");
+      html += " border-color:";
       html += format.borderBrush().color().name();
-      html += QLatin1Char(';');
+      html += ';';
    }
 
    if (format.borderStyle() != defaultFormat.borderStyle()) {
@@ -2795,29 +2748,15 @@ void QTextHtmlExporter::emitFrameStyle(const QTextFrameFormat &format, FrameType
                   QString::number(format.leftMargin()),
                   QString::number(format.rightMargin()));
 
-   if (html.length() == originalHtmlLength) { // nothing emitted?
-      html.chop(qstrlen(styleAttribute.latin1()));
+   if (html.length() == originalHtmlLength) {
+      // nothing emitted?
+      html.chop(styleAttribute.length());
+
    } else {
       html += QLatin1Char('\"');
    }
 }
 
-/*!
-    Returns a string containing an HTML representation of the document.
-
-    The \a encoding parameter specifies the value for the charset attribute
-    in the html header. For example if 'utf-8' is specified then the
-    beginning of the generated html will look like this:
-    \snippet doc/src/snippets/code/src_gui_text_qtextdocument.cpp 0
-
-    If no encoding is specified then no such meta information is generated.
-
-    If you later on convert the returned html string into a byte array for
-    transmission over a network or when saving to disk you should specify
-    the encoding you're going to use for the conversion to a byte array here.
-
-    \sa {Supported HTML Subset}
-*/
 #ifndef QT_NO_TEXTHTMLPARSER
 QString QTextDocument::toHtml(const QByteArray &encoding) const
 {

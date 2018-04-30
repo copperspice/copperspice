@@ -35,7 +35,7 @@ class Q_CORE_EXPORT QBasicMutex
 {
  public:
    inline void lock() {
-      if (!fastTryLock()) {
+      if (! fastTryLock()) {
          lockInternal();
       }
    }
@@ -83,16 +83,18 @@ class Q_CORE_EXPORT QMutex : public QBasicMutex
 class Q_CORE_EXPORT QMutexLocker
 {
  public:
-   inline explicit QMutexLocker(QBasicMutex *m) {
-      Q_ASSERT_X((reinterpret_cast<quintptr>(m) & quintptr(1u)) == quintptr(0),
+   inline explicit QMutexLocker(QBasicMutex *mutex) {
+      Q_ASSERT_X((reinterpret_cast<quintptr>(mutex) & quintptr(1u)) == quintptr(0),
                  "QMutexLocker", "QMutex pointer is misaligned");
-      if (m) {
-         m->lock();
-         val = reinterpret_cast<quintptr>(m) | quintptr(1u);
+
+      if (mutex) {
+         mutex->lock();
+         val = reinterpret_cast<quintptr>(mutex) | quintptr(1u);
       } else {
          val = 0;
       }
    }
+
    inline ~QMutexLocker() {
       unlock();
    }

@@ -435,14 +435,16 @@ class QZipPrivate
 void QZipPrivate::fillFileInfo(int index, QZipReader::FileInfo &fileInfo) const
 {
    FileHeader header = fileHeaders.at(index);
-   fileInfo.filePath = QString::fromLocal8Bit(header.file_name);
+   fileInfo.filePath = QString::fromLatin1(header.file_name);
+
    const quint32 mode = (qFromLittleEndian<quint32>(&header.h.external_file_attributes[0]) >> 16) & 0xFFFF;
-   fileInfo.isDir = S_ISDIR(mode);
-   fileInfo.isFile = S_ISREG(mode);
-   fileInfo.isSymLink = S_ISLNK(mode);
-   fileInfo.permissions = modeToPermissions(mode);
-   fileInfo.crc32 = readUInt(header.h.crc_32);
-   fileInfo.size = readUInt(header.h.uncompressed_size);
+
+   fileInfo.isDir        = S_ISDIR(mode);
+   fileInfo.isFile       = S_ISREG(mode);
+   fileInfo.isSymLink    = S_ISLNK(mode);
+   fileInfo.permissions  = modeToPermissions(mode);
+   fileInfo.crc32        = readUInt(header.h.crc_32);
+   fileInfo.size         = readUInt(header.h.uncompressed_size);
    fileInfo.lastModified = readMSDosDate(header.h.last_mod_file);
 }
 
@@ -629,6 +631,7 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
       // shamelessly copied form zlib
       len += (len >> 12) + (len >> 14) + 11;
       int res;
+
       do {
          data.resize(len);
          res = deflate((uchar *)data.data(), &len, (const uchar *)contents.constData(), contents.length());
@@ -637,27 +640,32 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
             case Z_OK:
                data.resize(len);
                break;
+
             case Z_MEM_ERROR:
                qWarning("QZip: Z_MEM_ERROR: Not enough memory to compress file, skipping");
                data.resize(0);
                break;
+
             case Z_BUF_ERROR:
                len *= 2;
                break;
          }
       } while (res == Z_BUF_ERROR);
    }
+
    // TODO add a check if data.length() > contents.length().  Then try to store the original and revert the compression method to be uncompressed
    writeUInt(header.h.compressed_size, data.length());
    uint crc_32 = ::crc32(0, 0, 0);
    crc_32 = ::crc32(crc_32, (const uchar *)contents.constData(), contents.length());
    writeUInt(header.h.crc_32, crc_32);
 
-   header.file_name = fileName.toLocal8Bit();
+   header.file_name = fileName.toLatin1();
+
    if (header.file_name.size() > 0xffff) {
       qWarning("QZip: Filename too long, chopping it to 65535 characters");
       header.file_name = header.file_name.left(0xffff);
    }
+
    writeUShort(header.h.file_name_length, header.file_name.length());
    //h.extra_field_length[2];
 
@@ -665,6 +673,7 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName,
    //uchar internal_file_attributes[2];
    //uchar external_file_attributes[4];
    quint32 mode = permissionsToMode(permissions);
+
    switch (type) {
       case File:
          mode |= S_IFREG;
@@ -846,44 +855,34 @@ QList<QZipReader::FileInfo> QZipReader::fileInfoList() const
 
 }
 
-/*!
-    Return the number of items in the zip archive.
-*/
 int QZipReader::count() const
 {
    d->scanFiles();
    return d->fileHeaders.count();
 }
 
-/*!
-    Returns a FileInfo of an entry in the zipfile.
-    The \a index is the index into the directory listing of the zipfile.
-    Returns an invalid FileInfo if \a index is out of boundaries.
-
-    \sa fileInfoList()
-*/
 QZipReader::FileInfo QZipReader::entryInfoAt(int index) const
 {
    d->scanFiles();
    QZipReader::FileInfo fi;
+
    if (index >= 0 && index < d->fileHeaders.count()) {
       d->fillFileInfo(index, fi);
    }
    return fi;
 }
 
-/*!
-    Fetch the file contents from the zip archive and return the uncompressed bytes.
-*/
 QByteArray QZipReader::fileData(const QString &fileName) const
 {
    d->scanFiles();
    int i;
+
    for (i = 0; i < d->fileHeaders.size(); ++i) {
-      if (QString::fromLocal8Bit(d->fileHeaders.at(i).file_name) == fileName) {
+      if (QString::fromLatin1(d->fileHeaders.at(i).file_name) == fileName) {
          break;
       }
    }
+
    if (i == d->fileHeaders.size()) {
       return QByteArray();
    }

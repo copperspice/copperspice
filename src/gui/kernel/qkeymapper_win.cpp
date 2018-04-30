@@ -1023,7 +1023,7 @@ bool QKeyMapperPrivate::translateKeyEvent(QWidget *widget, const MSG &msg, bool 
                uch = uch.toLower()[0];
             }
 
-            if (! code && uch <= 0xFF)) {
+            if (! code && uch <= 0xFF) {
                code = asciiToKeycode(uch.unicode(), state);
             }
          }

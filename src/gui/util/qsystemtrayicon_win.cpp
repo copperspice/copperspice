@@ -35,9 +35,11 @@
 #include <qt_windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
+
 #include <qsystemlibrary_p.h>
-#include <QApplication>
-#include <QSettings>
+#include <qapplication.h>
+#include <qsettings.h>
+#include <qstring16.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -172,7 +174,9 @@ void QSystemTrayIconSys::setIconContents(NOTIFYICONDATA &tnd)
 
    if (! tip.isEmpty()) {
       tip = tip.left(maxTipLength - 1) + QChar();
-      memcpy(tnd.szTip, tip.utf16(), qMin(tip.length() + 1, maxTipLength) * sizeof(wchar_t));
+      QString16 tmp = tip.toUtf16();
+
+      memcpy(tnd.szTip, tmp.constData(), qMin(tmp.size_storage() + 1, maxTipLength) * sizeof(wchar_t));
    }
 }
 
@@ -199,8 +203,11 @@ bool QSystemTrayIconSys::showMessage(const QString &title, const QString &messag
    NOTIFYICONDATA tnd;
    memset(&tnd, 0, notifyIconSize);
 
-   memcpy(tnd.szInfo, message.utf16(), qMin(message.length() + 1, 256) * sizeof(wchar_t));
-   memcpy(tnd.szInfoTitle, title.utf16(), qMin(title.length() + 1, 64) * sizeof(wchar_t));
+   QString16 tmp = message.toUtf16();
+   memcpy(tnd.szInfo, tmp.constData(), qMin(tmp.size_storage() + 1, 256) * sizeof(wchar_t));
+
+   tmp = title.toUtf16();
+   memcpy(tnd.szInfoTitle, tmp.constData(), qMin(tmp.size_storage() + 1, 64) * sizeof(wchar_t));
 
    tnd.uID = q_uNOTIFYICONID;
    tnd.dwInfoFlags = iconFlag(type);

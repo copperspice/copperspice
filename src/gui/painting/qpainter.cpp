@@ -6213,6 +6213,7 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
    if (justificationPadding > 0) {
       engine.option.setAlignment(Qt::AlignJustify);
       engine.forceJustification = true;
+
       // this works because justify() is only interested in the difference between width and textWidth
       line.width = justificationPadding;
       engine.justify(line);
@@ -6222,26 +6223,30 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
    for (int i = 0; i < nItems; ++i) {
       int item = visualOrder[i];
       const QScriptItem &si = engine.layoutData->items.at(item);
+
       if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
          x += si.width;
          continue;
       }
+
       QFont f = engine.font(si);
       QTextItemInt gf(si, &f);
+
       gf.glyphs = engine.shapedGlyphs(&si);
-      gf.chars = engine.layoutData->string.unicode() + si.position;
-      gf.num_chars = engine.length(item);
+      gf.m_iter = engine.layoutData->string.begin() + si.position;
+      gf.m_end  = gf.m_iter + engine.length(item);
+
       if (engine.forceJustification) {
          for (int j = 0; j < gf.glyphs.numGlyphs; ++j) {
             gf.width += gf.glyphs.effectiveAdvance(j);
          }
+
       } else {
          gf.width = si.width;
       }
+
       gf.logClusters = engine.logClusters(&si);
-
       drawTextItem(QPointF(x.toReal(), p.y()), gf);
-
       x += gf.width;
    }
 }
@@ -7891,23 +7896,29 @@ void qt_format_text(const QFont &fnt, const QRectF &_r,
    // we need to copy r here to protect against the case (&r == brect).
    QRectF r(_r);
 
-   bool dontclip  = (tf & Qt::TextDontClip);
-   bool wordwrap  = (tf & Qt::TextWordWrap) || (tf & Qt::TextWrapAnywhere);
-   bool singleline = (tf & Qt::TextSingleLine);
-   bool showmnemonic = (tf & Qt::TextShowMnemonic);
+   bool dontclip      = (tf & Qt::TextDontClip);
+   bool wordwrap      = (tf & Qt::TextWordWrap) || (tf & Qt::TextWrapAnywhere);
+   bool singleline    = (tf & Qt::TextSingleLine);
+   bool showmnemonic  = (tf & Qt::TextShowMnemonic);
    bool hidemnmemonic = (tf & Qt::TextHideMnemonic);
 
    Qt::LayoutDirection layout_direction;
+
    if (tf & Qt::TextForceLeftToRight) {
       layout_direction = Qt::LeftToRight;
+
    } else if (tf & Qt::TextForceRightToLeft) {
       layout_direction = Qt::RightToLeft;
+
    } else if (option) {
       layout_direction = option->textDirection();
+
    } else if (painter) {
       layout_direction = painter->layoutDirection();
+
    } else {
       layout_direction = Qt::LeftToRight;
+
    }
 
    tf = QStyle::visualAlignment(layout_direction, QFlag(tf));
@@ -7917,7 +7928,7 @@ void qt_format_text(const QFont &fnt, const QRectF &_r,
                       (((tf & Qt::AlignLeft) && !isRightToLeft) ||
                        ((tf & Qt::AlignRight) && isRightToLeft)));
 
-   if (!painter) {
+   if (! painter) {
       tf |= Qt::TextDontPrint;
    }
 
@@ -7928,25 +7939,34 @@ void qt_format_text(const QFont &fnt, const QRectF &_r,
    QFontMetricsF fm(fnt);
    QString text = str;
    int offset = 0;
+
 start_lengthVariant:
    bool hasMoreLengthVariants = false;
+
    // compatible behaviour to the old implementation. Replace
    // tabs by spaces
+
    int old_offset = offset;
+
    for (; offset < text.length(); offset++) {
       QChar chr = text.at(offset);
+
       if (chr == QLatin1Char('\r') || (singleline && chr == QLatin1Char('\n'))) {
          text[offset] = QLatin1Char(' ');
+
       } else if (chr == QLatin1Char('\n')) {
          text[offset] = QChar::LineSeparator;
+
       } else if (chr == QLatin1Char('&')) {
          ++maxUnderlines;
+
       } else if (chr == QLatin1Char('\t')) {
          if (!expandtabs) {
             text[offset] = QLatin1Char(' ');
          } else if (!tabarraylen && !tabstops) {
             tabstops = qRound(fm.width(QLatin1Char('x')) * 8);
          }
+
       } else if (chr == QChar(ushort(0x9c))) {
          // string with multiple length variants
          hasMoreLengthVariants = true;
@@ -7955,28 +7975,31 @@ start_lengthVariant:
    }
 
    int length = offset - old_offset;
+
    if ((hidemnmemonic || showmnemonic) && maxUnderlines > 0) {
       underlinePositions.resize(maxUnderlines + 1);
 
-      QChar *cout = text.data() + old_offset;
-      QChar *cin = cout;
-      int l = length;
-      while (l) {
-         if (*cin == QLatin1Char('&')) {
-            ++cin;
+      QString::const_iterator iter = text.begin() + old_offset;
+      int len = length;
+
+      while (len) {
+         if (*iter == '&') {
+            iter = text.erase(iter, iter + 1);
+
             --length;
-            --l;
-            if (!l) {
+            --len;
+
+            if (! len) {
                break;
             }
-            if (*cin != QLatin1Char('&') && !hidemnmemonic) {
-               underlinePositions[numUnderlines++] = cout - text.data() - old_offset;
+
+            if (*iter != '&' && ! hidemnmemonic) {
+               underlinePositions[numUnderlines++] = iter - text.begin() - old_offset;
             }
          }
-         *cout = *cin;
-         ++cout;
-         ++cin;
-         --l;
+
+         ++iter;
+         --len;
       }
    }
 
@@ -7991,6 +8014,7 @@ start_lengthVariant:
 
    QString finalText = text.mid(old_offset, length);
    QStackTextEngine engine(finalText, fnt);
+
    if (option) {
       engine.option = *option;
    }

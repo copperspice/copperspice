@@ -71,7 +71,7 @@ Q_GLOBAL_STATIC(QOpenUrlHandlerRegistry, handlerRegistry)
 
 void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 {
-   HandlerHash::Iterator it = handlers.begin();
+   HandlerHash::iterator it = handlers.begin();
    while (it != handlers.end()) {
       if (it->receiver == handler) {
          it = handlers.erase(it);
@@ -88,7 +88,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
    static bool insideOpenUrlHandler = false;
 
    if (!insideOpenUrlHandler) {
-      QOpenUrlHandlerRegistry::HandlerHash::ConstIterator handler = registry->handlers.constFind(url.scheme());
+      QOpenUrlHandlerRegistry::HandlerHash::const_iterator handler = registry->handlers.constFind(url.scheme());
 
       if (handler != registry->handlers.constEnd()) {
          insideOpenUrlHandler = true;

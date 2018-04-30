@@ -26,120 +26,13 @@
 #include <qfontengine_p.h>
 #include <qabstracttextdocumentlayout.h>
 
-#include <QtGui/qapplication.h>
+#include <qapplication.h>
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QStaticText
-    \brief The QStaticText class enables optimized drawing of text when the text and its layout
-    is updated rarely.
-    \since 4.7
-
-    \ingroup multimedia
-    \ingroup text
-    \mainclass
-
-    QStaticText provides a way to cache layout data for a block of text so that it can be drawn
-    more efficiently than by using QPainter::drawText() in which the layout information is
-    recalculated with every call.
-
-    The class primarily provides an optimization for cases where the text, its font and the
-    transformations on the painter are static over several paint events. If the text or its layout
-    is changed for every iteration, QPainter::drawText() is the more efficient alternative, since
-    the static text's layout would have to be recalculated to take the new state into consideration.
-
-    Translating the painter will not cause the layout of the text to be recalculated, but will cause
-    a very small performance impact on drawStaticText(). Altering any other parts of the painter's
-    transformation or the painter's font will cause the layout of the static text to be
-    recalculated. This should be avoided as often as possible to maximize the performance
-    benefit of using QStaticText.
-
-    In addition, only affine transformations are supported by drawStaticText(). Calling
-    drawStaticText() on a projected painter will perform slightly worse than using the regular
-    drawText() call, so this should be avoided.
-
-    \code
-    class MyWidget: public QWidget
-    {
-    public:
-        MyWidget(QWidget *parent = nullptr) : QWidget(parent), m_staticText("This is static text")
-
-    protected:
-        void paintEvent(QPaintEvent *)
-        {
-            QPainter painter(this);
-            painter.drawStaticText(0, 0, m_staticText);
-        }
-
-    private:
-        QStaticText m_staticText;
-    };
-    \endcode
-
-    The QStaticText class can be used to mimic the behavior of QPainter::drawText() to a specific
-    point with no boundaries, and also when QPainter::drawText() is called with a bounding
-    rectangle.
-
-    If a bounding rectangle is not required, create a QStaticText object without setting a preferred
-    text width. The text will then occupy a single line.
-
-    If you set a text width on the QStaticText object, this will bound the text. The text will
-    be formatted so that no line exceeds the given width. The text width set for QStaticText will
-    not automatically be used for clipping. To achieve clipping in addition to line breaks, use
-    QPainter::setClipRect(). The position of the text is decided by the argument passed to
-    QPainter::drawStaticText() and can change from call to call with a minimal impact on
-    performance.
-
-    For extra convenience, it is possible to apply formatting to the text using the HTML subset
-    supported by QTextDocument. QStaticText will attempt to guess the format of the input text using
-    Qt::mightBeRichText(), and interpret it as rich text if this function returns true. To force
-    QStaticText to display its contents as either plain text or rich text, use the function
-    QStaticText::setTextFormat() and pass in, respectively, Qt::PlainText and Qt::RichText.
-
-    QStaticText can only represent text, so only HTML tags which alter the layout or appearance of
-    the text will be respected. Adding an image to the input HTML, for instance, will cause the
-    image to be included as part of the layout, affecting the positions of the text glyphs, but it
-    will not be displayed. The result will be an empty area the size of the image in the output.
-    Similarly, using tables will cause the text to be laid out in table format, but the borders
-    will not be drawn.
-
-    If it's the first time the static text is drawn, or if the static text, or the painter's font
-    has been altered since the last time it was drawn, the text's layout has to be
-    recalculated. On some paint engines, changing the matrix of the painter will also cause the
-    layout to be recalculated. In particular, this will happen for any engine except for the
-    OpenGL2 paint engine. Recalculating the layout will impose an overhead on the
-    QPainter::drawStaticText() call where it occurs. To avoid this overhead in the paint event, you
-    can call prepare() ahead of time to ensure that the layout is calculated.
-
-    \sa QPainter::drawText(), QPainter::drawStaticText(), QTextLayout, QTextDocument
-*/
-
-/*!
-    \enum QStaticText::PerformanceHint
-
-    This enum the different performance hints that can be set on the QStaticText. These hints
-    can be used to indicate that the QStaticText should use additional caches, if possible,
-    to improve performance at the expense of memory. In particular, setting the performance hint
-    AggressiveCaching on the QStaticText will improve performance when using the OpenGL graphics
-    system or when drawing to a QGLWidget.
-
-    \value ModerateCaching Do basic caching for high performance at a low memory cost.
-    \value AggressiveCaching Use additional caching when available. This may improve performance
-           at a higher memory cost.
-*/
-
-/*!
-    Constructs an empty QStaticText
-*/
 QStaticText::QStaticText()
    : data(new QStaticTextPrivate)
 {
 }
 
-/*!
-    Constructs a QStaticText object with the given \a text.
-*/
 QStaticText::QStaticText(const QString &text)
    : data(new QStaticTextPrivate)
 {
@@ -147,17 +40,11 @@ QStaticText::QStaticText(const QString &text)
    data->invalidate();
 }
 
-/*!
-    Constructs a QStaticText object which is a copy of \a other.
-*/
 QStaticText::QStaticText(const QStaticText &other)
 {
    data = other.data;
 }
 
-/*!
-    Destroys the QStaticText.
-*/
 QStaticText::~QStaticText()
 {
    Q_ASSERT(!data || data->ref.load() >= 1);
@@ -173,22 +60,6 @@ void QStaticText::detach()
    }
 }
 
-/*!
-  Prepares the QStaticText object for being painted with the given \a matrix and the given \a font
-  to avoid overhead when the actual drawStaticText() call is made.
-
-  When drawStaticText() is called, the layout of the QStaticText will be recalculated if any part
-  of the QStaticText object has changed since the last time it was drawn. It will also be
-  recalculated if the painter's font is not the same as when the QStaticText was last drawn, or,
-  on any other paint engine than the OpenGL2 engine, if the painter's matrix has been altered
-  since the static text was last drawn.
-
-  To avoid the overhead of creating the layout the first time you draw the QStaticText after
-  making changes, you can use the prepare() function and pass in the \a matrix and \a font you
-  expect to use when drawing the text.
-
-  \sa QPainter::setFont(), QPainter::setMatrix()
-*/
 void QStaticText::prepare(const QTransform &matrix, const QFont &font)
 {
    data->matrix = matrix;
@@ -196,44 +67,23 @@ void QStaticText::prepare(const QTransform &matrix, const QFont &font)
    data->init();
 }
 
-
-/*!
-    Assigns \a other to this QStaticText.
-*/
 QStaticText &QStaticText::operator=(const QStaticText &other)
 {
    data = other.data;
    return *this;
 }
 
-/*!
-    Compares \a other to this QStaticText. Returns true if the texts, fonts and text widths
-    are equal.
-*/
 bool QStaticText::operator==(const QStaticText &other) const
 {
-   return (data == other.data
-           || (data->text == other.data->text
-               && data->font == other.data->font
-               && data->textWidth == other.data->textWidth));
+   return (data == other.data || (data->text == other.data->text
+               && data->font == other.data->font && data->textWidth == other.data->textWidth));
 }
 
-/*!
-    Compares \a other to this QStaticText. Returns true if the texts, fonts or maximum sizes
-    are different.
-*/
 bool QStaticText::operator!=(const QStaticText &other) const
 {
    return !(*this == other);
 }
 
-/*!
-    Sets the text of the QStaticText to \a text.
-
-    \note This function will cause the layout of the text to require recalculation.
-
-    \sa text()
-*/
 void QStaticText::setText(const QString &text)
 {
    detach();
@@ -352,21 +202,11 @@ void QStaticText::setTextWidth(qreal textWidth)
    data->invalidate();
 }
 
-/*!
-    Returns the preferred width for this QStaticText.
-
-    \sa setTextWidth()
-*/
 qreal QStaticText::textWidth() const
 {
    return data->textWidth;
 }
 
-/*!
-  Returns the size of the bounding rect for this QStaticText.
-
-  \sa textWidth()
-*/
 QSizeF QStaticText::size() const
 {
    if (data->needsRelayout) {
@@ -376,7 +216,7 @@ QSizeF QStaticText::size() const
 }
 
 QStaticTextPrivate::QStaticTextPrivate()
-   : textWidth(-1.0), items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0),
+   : textWidth(-1.0), items(0), itemCount(0), glyphPool(0), positionPool(0),
      needsRelayout(true), useBackendOptimizations(false), textFormat(Qt::AutoText),
      untransformedCoordinates(false)
 {
@@ -384,7 +224,7 @@ QStaticTextPrivate::QStaticTextPrivate()
 
 QStaticTextPrivate::QStaticTextPrivate(const QStaticTextPrivate &other)
    : text(other.text), font(other.font), textWidth(other.textWidth), matrix(other.matrix),
-     items(0), itemCount(0), glyphPool(0), positionPool(0), charPool(0), textOption(other.textOption),
+     items(0), itemCount(0), glyphPool(0), positionPool(0), textOption(other.textOption),
      needsRelayout(true), useBackendOptimizations(other.useBackendOptimizations),
      textFormat(other.textFormat), untransformedCoordinates(other.untransformedCoordinates)
 {
@@ -395,7 +235,6 @@ QStaticTextPrivate::~QStaticTextPrivate()
    delete[] items;
    delete[] glyphPool;
    delete[] positionPool;
-   delete[] charPool;
 }
 
 QStaticTextPrivate *QStaticTextPrivate::get(const QStaticText *q)
@@ -414,8 +253,7 @@ class DrawTextItemRecorder: public QPaintEngine
    }
 
    void updateState(const QPaintEngineState &newState) override {
-      if (newState.state() & QPaintEngine::DirtyPen
-            && newState.pen().color() != m_currentColor) {
+      if (newState.state() & QPaintEngine::DirtyPen && newState.pen().color() != m_currentColor) {
          m_dirtyPen = true;
          m_currentColor = newState.pen().color();
       }
@@ -426,12 +264,13 @@ class DrawTextItemRecorder: public QPaintEngine
 
       QStaticTextItem currentItem;
       currentItem.setFontEngine(ti.fontEngine);
-      currentItem.font = ti.font();
-      currentItem.charOffset = m_chars.size();
-      currentItem.numChars = ti.num_chars;
-      currentItem.glyphOffset = m_glyphs.size(); // Store offset into glyph pool
-      currentItem.positionOffset = m_glyphs.size(); // Offset into position pool
+
+      currentItem.font           = ti.font();
+      currentItem.glyphOffset    = m_glyphs.size();    // Store offset into glyph pool
+      currentItem.positionOffset = m_glyphs.size();    // Offset into position pool
+
       currentItem.useBackendOptimizations = m_useBackendOptimizations;
+
       if (m_dirtyPen) {
          currentItem.color = m_currentColor;
       }
@@ -445,20 +284,16 @@ class DrawTextItemRecorder: public QPaintEngine
 
       int size = glyphs.size();
       Q_ASSERT(size == positions.size());
-      currentItem.numGlyphs = size;
 
+      currentItem.numGlyphs = size;
       m_glyphs.resize(m_glyphs.size() + size);
       m_positions.resize(m_glyphs.size());
-      m_chars.resize(m_chars.size() + ti.num_chars);
 
       glyph_t *glyphsDestination = m_glyphs.data() + currentItem.glyphOffset;
       memcpy(glyphsDestination, glyphs.constData(), sizeof(glyph_t) * currentItem.numGlyphs);
 
       QFixedPoint *positionsDestination = m_positions.data() + currentItem.positionOffset;
       memcpy(positionsDestination, positions.constData(), sizeof(QFixedPoint) * currentItem.numGlyphs);
-
-      QChar *charsDestination = m_chars.data() + currentItem.charOffset;
-      memcpy(charsDestination, ti.chars, sizeof(QChar) * currentItem.numChars);
 
       m_items.append(currentItem);
    }
@@ -493,15 +328,10 @@ class DrawTextItemRecorder: public QPaintEngine
       return m_glyphs;
    }
 
-   QVector<QChar> chars() const {
-      return m_chars;
-   }
-
  private:
    QVector<QStaticTextItem> m_items;
    QVector<QFixedPoint> m_positions;
    QVector<glyph_t> m_glyphs;
-   QVector<QChar> m_chars;
 
    bool m_dirtyPen;
    bool m_useBackendOptimizations;
@@ -565,10 +395,6 @@ class DrawTextItemDevice: public QPaintDevice
 
    QVector<QStaticTextItem> items() const {
       return m_paintEngine->items();
-   }
-
-   QVector<QChar> chars() const {
-      return m_paintEngine->chars();
    }
 
  private:
@@ -651,7 +477,6 @@ void QStaticTextPrivate::init()
    delete[] items;
    delete[] glyphPool;
    delete[] positionPool;
-   delete[] charPool;
 
    position = QPointF(0, 0);
 
@@ -667,10 +492,9 @@ void QStaticTextPrivate::init()
    QVector<QStaticTextItem> deviceItems = device.items();
    QVector<QFixedPoint> positions = device.positions();
    QVector<glyph_t> glyphs = device.glyphs();
-   QVector<QChar> chars = device.chars();
 
    itemCount = deviceItems.size();
-   items = new QStaticTextItem[itemCount];
+   items     = new QStaticTextItem[itemCount];
 
    glyphPool = new glyph_t[glyphs.size()];
    memcpy(glyphPool, glyphs.constData(), glyphs.size() * sizeof(glyph_t));
@@ -678,15 +502,11 @@ void QStaticTextPrivate::init()
    positionPool = new QFixedPoint[positions.size()];
    memcpy(positionPool, positions.constData(), positions.size() * sizeof(QFixedPoint));
 
-   charPool = new QChar[chars.size()];
-   memcpy(charPool, chars.constData(), chars.size() * sizeof(QChar));
-
    for (int i = 0; i < itemCount; ++i) {
       items[i] = deviceItems.at(i);
 
       items[i].glyphs = glyphPool + items[i].glyphOffset;
       items[i].glyphPositions = positionPool + items[i].positionOffset;
-      items[i].chars = charPool + items[i].charOffset;
    }
 
    needsRelayout = false;
@@ -697,7 +517,8 @@ QStaticTextItem::~QStaticTextItem()
    if (m_userData != 0 && !m_userData->ref.deref()) {
       delete m_userData;
    }
-   if (!m_fontEngine->ref.deref()) {
+
+   if (! m_fontEngine->ref.deref()) {
       delete m_fontEngine;
    }
 }
@@ -714,4 +535,3 @@ void QStaticTextItem::setFontEngine(QFontEngine *fe)
    }
 }
 
-QT_END_NAMESPACE

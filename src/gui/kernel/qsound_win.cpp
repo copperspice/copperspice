@@ -111,20 +111,24 @@ DWORD WINAPI SoundPlayProc(LPVOID param)
          flags |= SND_LOOP;
       }
 
-      PlaySound((wchar_t *)filename.utf16(), 0, flags);
+      std::wstring tmp(filename.toStdWString());
+      PlaySound(&tmp[0], 0, flags);
+
       if (sound && loops == 1) {
          server->decLoop(sound);
       }
 
       // GUI thread continues, but we are done as well.
       SetEvent(event);
+
    } else {
       // signal GUI thread to continue - sound might be reset!
       QPointer<QSound> guarded_sound = sound;
       SetEvent(event);
 
       for (int l = 0; l < loops && server->current; ++l) {
-         PlaySound((wchar_t *)filename.utf16(), 0, SND_FILENAME | SND_SYNC);
+         std::wstring tmp(filename.toStdWString());
+         PlaySound(&tmp[0], 0, SND_FILENAME | SND_SYNC);
 
          if (guarded_sound) {
             server->decLoop(guarded_sound);

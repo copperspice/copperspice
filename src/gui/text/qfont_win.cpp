@@ -41,19 +41,24 @@ extern HDC   shared_dc();                // common dc for all fonts
 extern QFont::Weight weightFromInteger(int weight); // qfontdatabase.cpp
 
 // ### maybe move to qapplication_win
-QFont qt_LOGFONTtoQFont(LOGFONT &lf, bool /*scale*/)
+QFont qt_LOGFONTtoQFont(LOGFONT &lf, bool scale)
 {
-   QString family = QString::fromWCharArray(lf.lfFaceName);
+   std::wstring tmp(lf.lfFaceName);
+   QString family = QString::fromStdWString(tmp);
+
    QFont qf(family);
    qf.setItalic(lf.lfItalic);
+
    if (lf.lfWeight != FW_DONTCARE) {
       qf.setWeight(weightFromInteger(lf.lfWeight));
    }
+
    int lfh = qAbs(lf.lfHeight);
    qf.setPointSizeF(lfh * 72.0 / GetDeviceCaps(shared_dc(), LOGPIXELSY));
    qf.setUnderline(false);
    qf.setOverline(false);
    qf.setStrikeOut(false);
+
    return qf;
 }
 

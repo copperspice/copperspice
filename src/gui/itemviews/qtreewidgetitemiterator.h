@@ -23,10 +23,10 @@
 #ifndef QTREEWIDGETITEMITERATOR_H
 #define QTREEWIDGETITEMITERATOR_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+#include <cstddef>
 
-QT_BEGIN_NAMESPACE
+#include <qglobal.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_TREEWIDGET
 
@@ -37,8 +37,6 @@ class QTreeWidgetItemIteratorPrivate;
 
 class Q_GUI_EXPORT QTreeWidgetItemIterator
 {
-   friend class QTreeModel;
-
  public:
    enum IteratorFlag {
       All           = 0x00000000,
@@ -62,22 +60,25 @@ class Q_GUI_EXPORT QTreeWidgetItemIterator
       NotEditable   = 0x00020000,
       UserFlag      = 0x01000000 // The first flag that can be used by the user.
    };
-   using IteratorFlags = QFlags<IteratorFlag>;
 
-   QTreeWidgetItemIterator(const QTreeWidgetItemIterator &it);
+   using IteratorFlags = QFlags<IteratorFlag>;
+   using size_type     = std::ptrdiff_t;
+
+   QTreeWidgetItemIterator(const QTreeWidgetItemIterator &iter);
    explicit QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFlags flags = All);
    explicit QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags = All);
+
    ~QTreeWidgetItemIterator();
 
    QTreeWidgetItemIterator &operator=(const QTreeWidgetItemIterator &it);
 
    QTreeWidgetItemIterator &operator++();
    inline const QTreeWidgetItemIterator operator++(int);
-   inline QTreeWidgetItemIterator &operator+=(int n);
+   inline QTreeWidgetItemIterator &operator+=(size_type n);
 
    QTreeWidgetItemIterator &operator--();
    inline const QTreeWidgetItemIterator operator--(int);
-   inline QTreeWidgetItemIterator &operator-=(int n);
+   inline QTreeWidgetItemIterator &operator-=(size_type n);
 
    inline QTreeWidgetItem *operator*() const;
 
@@ -86,7 +87,10 @@ class Q_GUI_EXPORT QTreeWidgetItemIterator
    QScopedPointer<QTreeWidgetItemIteratorPrivate> d_ptr;
    QTreeWidgetItem *current;
    IteratorFlags flags;
+
+   friend class QTreeModel;
    Q_DECLARE_PRIVATE(QTreeWidgetItemIterator)
+
 };
 
 inline const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator++(int)
@@ -103,7 +107,7 @@ inline const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator--(int)
    return it;
 }
 
-inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator+=(int n)
+inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator+=(size_type n)
 {
    if (n < 0) {
       return (*this) -= (-n);
@@ -114,7 +118,7 @@ inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator+=(int n)
    return *this;
 }
 
-inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator-=(int n)
+inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator-=(size_type n)
 {
    if (n < 0) {
       return (*this) += (-n);
@@ -131,8 +135,6 @@ inline QTreeWidgetItem *QTreeWidgetItemIterator::operator*() const
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTreeWidgetItemIterator::IteratorFlags)
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TREEWIDGET
 

@@ -82,9 +82,9 @@ class Q_CORE_EXPORT QThread : public QObject
    // default argument causes thread to block indefinately
    bool wait(unsigned long time = ULONG_MAX);
 
-   static void sleep(unsigned long);
-   static void msleep(unsigned long);
-   static void usleep(unsigned long);
+   static void sleep(unsigned long secs);
+   static void msleep(unsigned long msecs);
+   static void usleep(unsigned long usecs);
 
    CORE_CS_SIGNAL_1(Public, void started())
    CORE_CS_SIGNAL_2(started)

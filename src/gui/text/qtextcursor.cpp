@@ -1579,15 +1579,9 @@ void QTextCursor::deleteChar()
    d->setX();
 }
 
-/*!
-    If there is no selected text, deletes the character \e before the
-    current cursor position; otherwise deletes the selected text.
-
-    \sa deleteChar() hasSelection() clearSelection()
-*/
 void QTextCursor::deletePreviousChar()
 {
-   if (!d || !d->priv) {
+   if (! d || !d->priv) {
       return;
    }
 
@@ -1603,16 +1597,8 @@ void QTextCursor::deletePreviousChar()
 
    QTextDocumentPrivate::FragmentIterator fragIt = d->priv->find(d->anchor);
    const QTextFragmentData *const frag = fragIt.value();
+
    int fpos = fragIt.position();
-   QChar uc = d->priv->buffer().at(d->anchor - fpos + frag->stringPosition);
-   if (d->anchor > fpos && uc.isLowSurrogate()) {
-      // second half of a surrogate, check if we have the first half as well,
-      // if yes delete both at once
-      uc = d->priv->buffer().at(d->anchor - 1 - fpos + frag->stringPosition);
-      if (uc.isHighSurrogate()) {
-         --d->anchor;
-      }
-   }
 
    d->adjusted_anchor = d->anchor;
    d->remove();

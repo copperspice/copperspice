@@ -236,7 +236,7 @@ QTextBlockGroup::~QTextBlockGroup()
 void QTextBlockGroup::blockInserted(const QTextBlock &block)
 {
    Q_D(QTextBlockGroup);
-   QTextBlockGroupPrivate::BlockList::Iterator it = std::lower_bound(d->blocks.begin(), d->blocks.end(), block);
+   QTextBlockGroupPrivate::BlockList::iterator it = std::lower_bound(d->blocks.begin(), d->blocks.end(), block);
    d->blocks.insert(it, block);
    d->markBlocksDirty();
 }
@@ -332,7 +332,7 @@ QTextFrameLayoutData::~QTextFrameLayoutData()
 */
 
 /*!
-    \typedef QTextFrame::Iterator
+    \typedef QTextFrame::iterator
 
     Qt-style synonym for QTextFrame::iterator.
 */
@@ -932,7 +932,7 @@ QTextBlockUserData::~QTextBlockUserData()
 */
 
 /*!
-    \typedef QTextBlock::Iterator
+    \typedef QTextBlock::iterator
 
     Qt-style synonym for QTextBlock::iterator.
 */
@@ -1127,32 +1127,15 @@ QTextCharFormat QTextBlock::charFormat() const
    return p->formatCollection()->charFormat(charFormatIndex());
 }
 
-/*!
-    Returns an index into the document's internal list of character formats
-    for the text block's character format.
-
-    \sa QTextDocument::allFormats()
-*/
 int QTextBlock::charFormatIndex() const
 {
-   if (!p || !n) {
+   if (! p || !n) {
       return -1;
    }
 
    return p->blockCharFormatIndex(n);
 }
 
-/*!
-  \since 4.7
-
-  Returns the resolved text direction.
-
-  If the block has no explicit direction set, it will resolve the
-  direction from the blocks content. Returns either Qt::LeftToRight
-  or Qt::RightToLeft.
-
-  \sa QTextFormat::layoutDirection(), QString::isRightToLeft(), Qt::LayoutDirection
-*/
 Qt::LayoutDirection QTextBlock::textDirection() const
 {
    Qt::LayoutDirection dir = blockFormat().layoutDirection();
@@ -1166,30 +1149,35 @@ Qt::LayoutDirection QTextBlock::textDirection() const
    }
 
    const QString buffer = p->buffer();
-
    const int pos = position();
-   QTextDocumentPrivate::FragmentIterator it = p->find(pos);
-   QTextDocumentPrivate::FragmentIterator end = p->find(pos + length() - 1); // -1 to omit the block separator char
 
-   for (; it != end; ++it) {
-      const QTextFragmentData *const frag = it.value();
-      const QChar *p = buffer.constData() + frag->stringPosition;
-      const QChar *const end = p + frag->size_array[0];
+   QTextDocumentPrivate::FragmentIterator frag_iter = p->find(pos);
+   QTextDocumentPrivate::FragmentIterator frag_end  = p->find(pos + length() - 1); // -1 to omit the block separator char
 
-      while (p < end) {
-         switch (QChar::direction(p->unicode())) {
+   for (; frag_iter != frag_end; ++frag_iter) {
+      const QTextFragmentData *const frag = frag_iter.value();
+
+      QString::const_iterator iter_beg = buffer.begin() + frag->stringPosition;
+      QString::const_iterator iter_end = iter_beg + frag->size_array[0];
+
+      while (iter_beg < iter_end) {
+         switch (iter_beg->direction()) {
+
             case QChar::DirL:
                return Qt::LeftToRight;
 
             case QChar::DirR:
             case QChar::DirAL:
                return Qt::RightToLeft;
+
             default:
                break;
          }
-         ++p;
+
+         ++iter_beg;
       }
    }
+
    return Qt::LeftToRight;
 }
 

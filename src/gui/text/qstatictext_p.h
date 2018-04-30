@@ -27,8 +27,6 @@
 #include <qtextureglyphcache_p.h>
 #include <qcolor.h>
 
-QT_BEGIN_NAMESPACE
-
 class QStaticText;
 
 class QStaticTextUserData
@@ -110,21 +108,11 @@ class Q_GUI_EXPORT QStaticTextItem
       int glyphOffset;
    };
 
-   union {
-      int charOffset;
-   };
-
-
    int numGlyphs;                               // 4 bytes per item
    QFont font;                                  // 8 bytes per item
    QColor color;                                // 10 bytes per item
    char useBackendOptimizations : 1;            // 1 byte per item
    char userDataNeedsUpdate : 1;
-
-
-   QString::const_iterator m_iter;
-   QString::const_iterator m_end;
-
 
  private:
    // Needs special handling in setters, so private to avoid abuse
@@ -161,7 +149,6 @@ class QStaticTextPrivate
 
    glyph_t *glyphPool;                  // 4 bytes per text
    QFixedPoint *positionPool;           // 4 bytes per text
-   QChar *charPool;                     // 4 bytes per text
 
    QTextOption textOption;              // 28 bytes per text
 
@@ -169,12 +156,9 @@ class QStaticTextPrivate
    unsigned char useBackendOptimizations  : 1;
    unsigned char textFormat               : 2;
    unsigned char untransformedCoordinates : 1;
-   // ================
-   // 195 bytes per text
 
    static QStaticTextPrivate *get(const QStaticText *q);
 };
 
-QT_END_NAMESPACE
 
-#endif // QSTATICTEXT_P_H
+#endif

@@ -20,6 +20,10 @@
 *
 ***********************************************************************/
 
+#include <qlabel_p.h>
+#include <qstylesheetstyle_p.h>
+#include <qtextengine_p.h>
+
 #include <qpainter.h>
 #include <qevent.h>
 #include <qdrawutil.h>
@@ -32,124 +36,22 @@
 #include <qclipboard.h>
 #include <qdebug.h>
 #include <qurl.h>
-#include <qlabel_p.h>
-#include <qstylesheetstyle_p.h>
 #include <qmath.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QLabel
-    \brief The QLabel widget provides a text or image display.
-
-    \ingroup basicwidgets
-
-    QLabel is used for displaying text or an image. No user
-    interaction functionality is provided. The visual appearance of
-    the label can be configured in various ways, and it can be used
-    for specifying a focus mnemonic key for another widget.
-
-    A QLabel can contain any of the following content types:
-
-    \table
-    \header \o Content \o Setting
-    \row \o Plain text
-         \o Pass a QString to setText().
-    \row \o Rich text
-         \o Pass a QString that contains rich text to setText().
-    \row \o A pixmap
-         \o Pass a QPixmap to setPixmap().
-    \row \o A movie
-         \o Pass a QMovie to setMovie().
-    \row \o A number
-         \o Pass an \e int or a \e double to setNum(), which converts
-            the number to plain text.
-    \row \o Nothing
-         \o The same as an empty plain text. This is the default. Set
-            by clear().
-    \endtable
-
-    \warning When passing a QString to the constructor or calling setText(),
-    make sure to sanitize your input, as QLabel tries to guess whether it
-    displays the text as plain text or as rich text. You may want to call
-    setTextFormat() explicitly, e.g. in case you expect the text to be in
-    plain format but cannot control the text source (for instance when
-    displaying data loaded from the Web).
-
-    When the content is changed using any of these functions, any
-    previous content is cleared.
-
-    By default, labels display \l{alignment}{left-aligned, vertically-centered}
-    text and images, where any tabs in the text to be displayed are
-    \l{Qt::TextExpandTabs}{automatically expanded}. However, the look
-    of a QLabel can be adjusted and fine-tuned in several ways.
-
-    The positioning of the content within the QLabel widget area can
-    be tuned with setAlignment() and setIndent(). Text content can
-    also wrap lines along word boundaries with setWordWrap(). For
-    example, this code sets up a sunken panel with a two-line text in
-    the bottom right corner (both lines being flush with the right
-    side of the label):
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qlabel.cpp 0
-
-    The properties and functions QLabel inherits from QFrame can also
-    be used to specify the widget frame to be used for any given label.
-
-    A QLabel is often used as a label for an interactive widget. For
-    this use QLabel provides a useful mechanism for adding an
-    mnemonic (see QKeySequence) that will set the keyboard focus to
-    the other widget (called the QLabel's "buddy"). For example:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qlabel.cpp 1
-
-    In this example, keyboard focus is transferred to the label's
-    buddy (the QLineEdit) when the user presses Alt+P. If the buddy
-    was a button (inheriting from QAbstractButton), triggering the
-    mnemonic would emulate a button click.
-
-    \table 100%
-    \row
-    \o \inlineimage macintosh-label.png Screenshot of a Macintosh style label
-    \o A label shown in the \l{Macintosh Style Widget Gallery}{Macintosh widget style}.
-    \row
-    \o \inlineimage plastique-label.png Screenshot of a Plastique style label
-    \o A label shown in the \l{Plastique Style Widget Gallery}{Plastique widget style}.
-    \row
-    \o \inlineimage windowsxp-label.png Screenshot of a Windows XP style label
-    \o A label shown in the \l{Windows XP Style Widget Gallery}{Windows XP widget style}.
-    \endtable
-
-    \sa QLineEdit, QTextEdit, QPixmap, QMovie,
-        {fowler}{GUI Design Handbook: Label}
-*/
-
 #ifndef QT_NO_PICTURE
-/*!
-    Returns the label's picture or 0 if the label doesn't have a
-    picture.
-*/
 
 const QPicture *QLabel::picture() const
 {
    Q_D(const QLabel);
    return d->picture;
 }
+
 #endif
 
-
-/*!
-    Constructs an empty label.
-
-    The \a parent and widget flag \a f, arguments are passed
-    to the QFrame constructor.
-
-    \sa setAlignment(), setFrameStyle(), setIndent()
-*/
 QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
    : QFrame(*new QLabelPrivate(), parent, f)
 {
@@ -1414,14 +1316,12 @@ Qt::LayoutDirection QLabelPrivate::textDirection() const
       return opt.textDirection();
    }
 
-   return text.isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight;
+   if (QTextEngine::isRightToLeft(text)) {
+      return Qt::RightToLeft;
+   } else {
+      return Qt::LeftToRight;
+   }
 }
-
-/*!
-    \fn void QLabel::setAlignment(Qt::AlignmentFlag flag)
-    \internal
-
-*/
 
 // Returns the rect that is available for us to draw the document
 QRect QLabelPrivate::documentRect() const
@@ -1647,4 +1547,3 @@ void QLabel::_q_linkHovered(const QString &un_named_arg1)
    d->_q_linkHovered(un_named_arg1);
 }
 
-QT_END_NAMESPACE

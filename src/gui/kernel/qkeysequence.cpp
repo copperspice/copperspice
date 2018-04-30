@@ -1397,6 +1397,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
 {
    bool nativeText = (format == QKeySequence::NativeText);
    QString s;
+
 #if defined(Q_OS_MAC)
    if (nativeText) {
       // On Mac OS X the order (by default) is Meta, Alt, Shift, Control.
@@ -1411,6 +1412,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
       static const int DontSwapQtKeyOrder[] = { Qt::Key_Control, Qt::Key_Alt, Qt::Key_Shift, Qt::Key_Meta, 0 };
       const int *modifierOrder;
       const int *qtkeyOrder;
+
       if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
          modifierOrder = DontSwapModifierOrder;
          qtkeyOrder = DontSwapQtKeyOrder;
@@ -1426,41 +1428,39 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
       }
    } else
 #endif
+
    {
       // On other systems the order is Meta, Control, Alt, Shift
       if ((key & Qt::META) == Qt::META) {
-         s = nativeText ? QShortcut::tr("Meta") : QString::fromLatin1("Meta");
+         s = nativeText ? QShortcut::tr("Meta") : QString("Meta");
       }
       if ((key & Qt::CTRL) == Qt::CTRL) {
-         addKey(s, nativeText ? QShortcut::tr("Ctrl") : QString::fromLatin1("Ctrl"), format);
+         addKey(s, nativeText ? QShortcut::tr("Ctrl") : QString("Ctrl"), format);
       }
       if ((key & Qt::ALT) == Qt::ALT) {
-         addKey(s, nativeText ? QShortcut::tr("Alt") : QString::fromLatin1("Alt"), format);
+         addKey(s, nativeText ? QShortcut::tr("Alt") : QString("Alt"), format);
       }
       if ((key & Qt::SHIFT) == Qt::SHIFT) {
-         addKey(s, nativeText ? QShortcut::tr("Shift") : QString::fromLatin1("Shift"), format);
+         addKey(s, nativeText ? QShortcut::tr("Shift") : QString("Shift"), format);
       }
       if ((key & Qt::KeypadModifier) == Qt::KeypadModifier) {
-         addKey(s, nativeText ? QShortcut::tr("Numpad") : QString::fromLatin1("Numpad"), format);
+         addKey(s, nativeText ? QShortcut::tr("Numpad") : QString("Numpad"), format);
       }
    }
-
 
    key &= ~(Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier | Qt::KeypadModifier);
    QString p;
 
    if (key && key < Qt::Key_Escape && key != Qt::Key_Space) {
-      if (!QChar::requiresSurrogates(key)) {
-         p = QChar(ushort(key)).toUpper();
-      } else {
-         p += QChar(QChar::highSurrogate(key));
-         p += QChar(QChar::lowSurrogate(key));
-      }
+      p = QChar(char32_t(key)).toUpper();
+
    } else if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
       p = nativeText ? QShortcut::tr("F%1").formatArg(key - Qt::Key_F1 + 1)
           : QString::fromLatin1("F%1").formatArg(key - Qt::Key_F1 + 1);
+
    } else if (key) {
       int i = 0;
+
 #if defined(Q_OS_MAC)
       if (nativeText) {
          QChar ch = qt_macSymbolForQtKey(key);
@@ -1471,10 +1471,13 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
          }
       } else
 #endif
+
       {
+
 #ifdef Q_OS_MAC
       NonSymbol:
 #endif
+
          while (keyname[i].name) {
             if (key == keyname[i].key) {
                p = nativeText ? QShortcut::tr(keyname[i].name)
@@ -1483,17 +1486,14 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
             }
             ++i;
          }
+
          // If we can't find the actual translatable keyname,
          // fall back on the unicode representation of it...
          // Or else characters like Qt::Key_aring may not get displayed
          // (Really depends on you locale)
-         if (!keyname[i].name) {
-            if (!QChar::requiresSurrogates(key)) {
-               p = QChar(ushort(key)).toUpper();
-            } else {
-               p += QChar(QChar::highSurrogate(key));
-               p += QChar(QChar::lowSurrogate(key));
-            }
+
+         if (! keyname[i].name) {
+            p = QChar(char32_t(key)).toUpper();
          }
       }
    }
@@ -1506,12 +1506,7 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
       addKey(s, p, format);
    return s;
 }
-/*!
-    Matches the sequence with \a seq. Returns ExactMatch if
-    successful, PartialMatch if \a seq matches incompletely,
-    and NoMatch if the sequences have nothing in common.
-    Returns NoMatch if \a seq is shorter.
-*/
+
 QKeySequence::SequenceMatch QKeySequence::matches(const QKeySequence &seq) const
 {
    uint userN = count(),
@@ -1535,10 +1530,6 @@ QKeySequence::SequenceMatch QKeySequence::matches(const QKeySequence &seq) const
    return match;
 }
 
-
-/*!
-   Returns the key sequence as a QVariant
-*/
 QKeySequence::operator QVariant() const
 {
    return QVariant(QVariant::KeySequence, this);

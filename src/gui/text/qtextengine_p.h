@@ -438,6 +438,8 @@ class Q_GUI_EXPORT QTextEngine
    void itemize() const;
 
    bool isRightToLeft() const;
+   static bool isRightToLeft(QStringView str);
+
    static void bidiReorder(int numRuns, const quint8 *levels, int *visualOrder);
 
    const HB_CharAttributes *attributes() const;

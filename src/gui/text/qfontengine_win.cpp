@@ -454,22 +454,16 @@ void QFontEngineWin::recalcAdvances(QGlyphLayout *glyphs, QTextEngine::ShaperFla
          // font-width cache failed
          if (glyphs->advances_x[i] == 0) {
             int width = 0;
-            if (!oldFont) {
+
+            if (! oldFont) {
                oldFont = SelectObject(hdc, hfont);
             }
 
             if (! ttf) {
-               QChar ch[2] = { ushort(glyph), 0 };
-               int chrLen = 1;
-
-               if (glyph > 0xffff) {
-                  ch[0] = QChar::highSurrogate(glyph);
-                  ch[1] = QChar::lowSurrogate(glyph);
-                  ++chrLen;
-               }
+               QString16 str = QChar(char32_t(glyph));
 
                SIZE size = {0, 0};
-               GetTextExtentPoint32(hdc, (wchar_t *)ch, chrLen, &size);
+               GetTextExtentPoint32(hdc, (wchar_t *)str.constData(), str.size_storage(), &size);
                width = size.cx;
 
             } else {
@@ -1010,21 +1004,49 @@ QFontEngine::Properties QFontEngineWin::properties() const
    HGDIOBJ oldfont = SelectObject(hdc, hf);
    OUTLINETEXTMETRIC *otm = getOutlineTextMetric(hdc);
    Properties p;
+
    p.emSquare = unitsPerEm;
    p.italicAngle = otm->otmItalicAngle;
-   p.postscriptName = QString::fromWCharArray((wchar_t *)((char *)otm + (quintptr)otm->otmpFamilyName)).toLatin1();
-   p.postscriptName += QString::fromWCharArray((wchar_t *)((char *)otm + (quintptr)otm->otmpStyleName)).toLatin1();
-   p.postscriptName = QFontEngine::convertToPostscriptFontFamilyName(p.postscriptName);
+
+   const wchar_t * tmp1 = (const wchar_t *)((const char *)otm + (quintptr)otm->otmpFamilyName);
+   const wchar_t * tmp2 = (const wchar_t *)((const char *)otm + (quintptr)otm->otmpStyleName);
+
+   p.postscriptName.clear();
+   while (*tmp1) {
+      if (*tmp1 > 0xFF) {
+         p.postscriptName.append('?');
+      } else {
+         p.postscriptName.append(*tmp1);
+      }
+
+      ++tmp1;
+   }
+
+   while (*tmp2) {
+      if (*tmp2 > 0xFF) {
+         p.postscriptName.append('?');
+      } else {
+         p.postscriptName.append(*tmp2);
+      }
+
+      ++tmp2;
+   }
+
+   p.postscriptName  = QFontEngine::convertToPostscriptFontFamilyName(p.postscriptName);
+
    p.boundingBox = QRectF(otm->otmrcFontBox.left, -otm->otmrcFontBox.top,
                           otm->otmrcFontBox.right - otm->otmrcFontBox.left,
                           otm->otmrcFontBox.top - otm->otmrcFontBox.bottom);
-   p.ascent = otm->otmAscent;
-   p.descent = -otm->otmDescent;
-   p.leading = (int)otm->otmLineGap;
+
+   p.ascent    = otm->otmAscent;
+   p.descent   = -otm->otmDescent;
+   p.leading   = (int)otm->otmLineGap;
    p.capHeight = 0;
    p.lineWidth = otm->otmsUnderscoreSize;
+
    free(otm);
    DeleteObject(SelectObject(hdc, oldfont));
+
    return p;
 }
 
@@ -1293,7 +1315,10 @@ void QFontEngineMultiWin::loadEngine(int at)
    QString fam = fallbacks.at(at - 1);
 
    LOGFONT lf = static_cast<QFontEngineWin *>(engines.at(0))->logfont;
-   memcpy(lf.lfFaceName, fam.utf16(), sizeof(wchar_t) * qMin(fam.length() + 1, 32));  // 32 = Windows hard-coded
+
+   QString16 tmp(fam.toUtf16());
+   memcpy(lf.lfFaceName, tmp.constData(), sizeof(wchar_t) * qMin(tmp.size_storage() + 1, 32));  // 32 = Windows hard-coded
+
    HFONT hfont = CreateFontIndirect(&lf);
 
    bool stockFont = false;

@@ -37,32 +37,22 @@
 #include <qdebug.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
 
 
 DEFINE_GUID(IID_IActiveIMMApp,
             0x08c0e040, 0x62d1, 0x11d1, 0x93, 0x26, 0x0, 0x60, 0xb0, 0x67, 0xb8, 0x6e);
 
-
-
 DEFINE_GUID(CLSID_CActiveIMM,
             0x4955DD33, 0xB159, 0x11d0, 0x8F, 0xCF, 0x0, 0xAA, 0x00, 0x6B, 0xCC, 0x59);
-
-
 
 DEFINE_GUID(IID_IActiveIMMMessagePumpOwner,
             0xb5cf2cfa, 0x8aeb, 0x11d1, 0x93, 0x64, 0x0, 0x60, 0xb0, 0x67, 0xb8, 0x6e);
 
-
-
 interface IEnumRegisterWordW;
 interface IEnumInputContext;
 
-
 bool qt_sendSpontaneousEvent(QObject *, QEvent *);
-
 
 #define IFMETHOD HRESULT STDMETHODCALLTYPE
 
@@ -814,13 +804,15 @@ QString QWinInputContext::language()
 int QWinInputContext::reconvertString(RECONVERTSTRING *reconv)
 {
    QWidget *w = focusWidget();
-   if (!w) {
+
+   if (! w) {
       return -1;
    }
 
    Q_ASSERT(w->testAttribute(Qt::WA_WState_Created));
    QString surroundingText = qvariant_cast<QString>(w->inputMethodQuery(Qt::ImSurroundingText));
    int memSize = sizeof(RECONVERTSTRING) + (surroundingText.length() + 1) * sizeof(ushort);
+
    // If memory is not allocated, return the required size.
    if (!reconv) {
       if (surroundingText.isEmpty()) {
@@ -833,6 +825,7 @@ int QWinInputContext::reconvertString(RECONVERTSTRING *reconv)
    // find the word in the surrounding text.
    QTextBoundaryFinder bounds(QTextBoundaryFinder::Word, surroundingText);
    bounds.setPosition(pos);
+
    if (bounds.isAtBoundary()) {
       if (QTextBoundaryFinder::EndWord == bounds.boundaryReasons()) {
          bounds.toPreviousBoundary();
@@ -840,27 +833,33 @@ int QWinInputContext::reconvertString(RECONVERTSTRING *reconv)
    } else {
       bounds.toPreviousBoundary();
    }
+
    int startPos = bounds.position();
    bounds.toNextBoundary();
+
    int endPos = bounds.position();
+
    // select the text, this will be overwritten by following ime events.
    QList<QInputMethodEvent::Attribute> attrs;
    attrs << QInputMethodEvent::Attribute(QInputMethodEvent::Selection, startPos, endPos - startPos, QVariant());
+
    QInputMethodEvent e(QString(), attrs);
    qt_sendSpontaneousEvent(w, &e);
 
    reconv->dwSize = memSize;
    reconv->dwVersion = 0;
 
-   reconv->dwStrLen = surroundingText.length();
-   reconv->dwStrOffset = sizeof(RECONVERTSTRING);
-   reconv->dwCompStrLen = endPos - startPos;
-   reconv->dwCompStrOffset = startPos * sizeof(ushort);
-   reconv->dwTargetStrLen = reconv->dwCompStrLen;
+   reconv->dwStrLen          = surroundingText.length();
+   reconv->dwStrOffset       = sizeof(RECONVERTSTRING);
+   reconv->dwCompStrLen      = endPos - startPos;
+   reconv->dwCompStrOffset   = startPos * sizeof(ushort);
+   reconv->dwTargetStrLen    = reconv->dwCompStrLen;
    reconv->dwTargetStrOffset = reconv->dwCompStrOffset;
-   memcpy((char *)(reconv + 1), surroundingText.utf16(), surroundingText.length()*sizeof(ushort));
+
+   QString16 tmp(surroundingText.toUtf16());
+   memcpy((char *)(reconv + 1), tmp.constData(), tmp.size_storage() * sizeof(ushort));
+
    return memSize;
 }
 
-QT_END_NAMESPACE
-#endif // QT_NO_IM
+#endif

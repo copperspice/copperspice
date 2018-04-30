@@ -82,7 +82,7 @@ class Itemizer
          return;
       }
 
-      QScriptItemArray::Iterator iter = m_items.end();
+      QScriptItemArray::iterator iter = m_items.end();
       do {
          iter--;
          if (iter->analysis.flags < QScriptAnalysis::TabOrObject) {
@@ -226,9 +226,8 @@ class Itemizer
 #define BIDI_DEBUG 0
 
 #if (BIDI_DEBUG >= 1)
-#include <iostream>
 
-using namespace std;
+#include <iostream>
 
 static const char *directions[] = {
    "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON",
@@ -244,6 +243,7 @@ struct QBidiStatus {
       last = QChar:: DirON;
       dir = QChar::DirON;
    }
+
    QChar::Direction eor;
    QChar::Direction lastStrong;
    QChar::Direction last;
@@ -282,9 +282,11 @@ struct QBidiControl {
    inline QChar::Direction basicDirection() const {
       return (base ? QChar::DirR : QChar:: DirL);
    }
+
    inline unsigned int baseLevel() const {
       return base;
    }
+
    inline QChar::Direction direction() const {
       return ((level % 2) ? QChar::DirR : QChar:: DirL);
    }
@@ -300,8 +302,7 @@ struct QBidiControl {
 };
 
 
-static void appendItems(QScriptAnalysis *analysis, int &start, int &stop, const QBidiControl &control,
-                        QChar::Direction dir)
+static void appendItems(QScriptAnalysis *analysis, int &start, int &stop, const QBidiControl &control, QChar::Direction dir)
 {
    if (start > stop) {
       return;
@@ -330,6 +331,7 @@ static void appendItems(QScriptAnalysis *analysis, int &start, int &stop, const 
 
    QScriptAnalysis *s = analysis + start;
    const QScriptAnalysis *e = analysis + stop;
+
    while (s <= e) {
       s->bidiLevel = level;
       ++s;
@@ -338,23 +340,26 @@ static void appendItems(QScriptAnalysis *analysis, int &start, int &stop, const 
    start = stop;
 }
 
-static QChar::Direction skipBoundryNeutrals(QScriptAnalysis *analysis, const ushort *unicode,
-                  int length, int &sor, int &eor, QBidiControl &control)
+static QChar::Direction skipBoundryNeutrals(QScriptAnalysis *analysis, QStringView str, int &sor, int &eor, QBidiControl &control)
 {
    QChar::Direction dir = control.basicDirection();
    int level = sor > 0 ? analysis[sor - 1].bidiLevel : control.level;
+   int len   = str.length();
 
-   while (sor < length) {
-      dir = QChar::direction(unicode[sor]);
-      // Keep skipping DirBN as if it doesn't exist
+   while (sor < len) {
+      dir =  str[sor].direction();
+
+      // Keep skipping DirBN as if it does not exist
       if (dir != QChar::DirBN) {
          break;
       }
+
       analysis[sor++].bidiLevel = level;
    }
 
    eor = sor;
-   if (eor == length) {
+
+   if (eor == len) {
       dir = control.basicDirection();
    }
 
@@ -376,31 +381,32 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
 
    int length = engine->layoutData->string.length();
 
-   const ushort *unicode = (const ushort *)engine->layoutData->string.unicode();
+   QStringView str_view(engine->layoutData->string);
    int current = 0;
 
    QChar::Direction dir = rightToLeft ? QChar::DirR : QChar::DirL;
    QBidiStatus status;
 
-   QChar::Direction sdir = QChar::direction(*unicode);
+   QChar::Direction sdir = str_view[0].direction();
+
    if (sdir != QChar::DirL && sdir != QChar::DirR && sdir != QChar::DirEN && sdir != QChar::DirAN) {
       sdir = QChar::DirON;
    } else {
       dir = QChar::DirON;
    }
-   status.eor = sdir;
-   status.lastStrong = rightToLeft ? QChar::DirR : QChar::DirL;
-   status.last = status.lastStrong;
-   status.dir = sdir;
 
+   status.eor        = sdir;
+   status.lastStrong = rightToLeft ? QChar::DirR : QChar::DirL;
+   status.last       = status.lastStrong;
+   status.dir        = sdir;
 
    while (current <= length) {
-
       QChar::Direction dirCurrent;
-      if (current == (int)length) {
+
+      if (current == length) {
          dirCurrent = control.basicDirection();
       } else {
-         dirCurrent = QChar::direction(unicode[current]);
+         dirCurrent = str_view[current].direction();
       }
 
 #if (BIDI_DEBUG >= 2)
@@ -471,18 +477,20 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                   eor = current;
                   status.eor = QChar::DirL;
                   break;
+
                case QChar::DirR:
                case QChar::DirAL:
                case QChar::DirEN:
                case QChar::DirAN:
                   if (eor >= 0) {
                      appendItems(analysis, sor, eor, control, dir);
-                     status.eor = dir = skipBoundryNeutrals(analysis, unicode, length, sor, eor, control);
+                     status.eor = dir = skipBoundryNeutrals(analysis, str_view, sor, eor, control);
                   } else {
                      eor = current;
                      status.eor = dir;
                   }
                   break;
+
                case QChar::DirES:
                case QChar::DirET:
                case QChar::DirCS:
@@ -502,7 +510,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                         }
                         eor = current - 1;
                         appendItems(analysis, sor, eor, control, dir);
-                        status.eor = dir = skipBoundryNeutrals(analysis, unicode, length, sor, eor, control);
+                        status.eor = dir = skipBoundryNeutrals(analysis, str_view, sor, eor, control);
                      } else {
                         if (status.eor != QChar::DirL) {
                            appendItems(analysis, sor, eor, control, dir);
@@ -1083,26 +1091,32 @@ void QTextEngine::shapeTextWithHarfbuzz(int item) const
 
    HB_ShaperItem entire_shaper_item;
    memset(&entire_shaper_item, 0, sizeof(entire_shaper_item));
+
    entire_shaper_item.string = reinterpret_cast<const HB_UChar16 *>(layoutData->string.constData());
-   entire_shaper_item.stringLength = layoutData->string.length();
-   entire_shaper_item.item.script = (HB_Script)si.analysis.script;
-   entire_shaper_item.item.pos = si.position;
-   entire_shaper_item.item.length = length(item);
+
+   entire_shaper_item.stringLength   = layoutData->string.length();
+   entire_shaper_item.item.script    = (HB_Script)si.analysis.script;
+   entire_shaper_item.item.pos       = si.position;
+   entire_shaper_item.item.length    = length(item);
    entire_shaper_item.item.bidiLevel = si.analysis.bidiLevel;
 
-   HB_UChar16 upperCased[256]; // XXX what about making this 4096, so we don't have to extend it ever.
+   HB_UChar16 upperCased[256];    // ### what about making this 4096, so we do not have to extend it
+
    if (hasCaseChange(si)) {
       HB_UChar16 *uc = upperCased;
+
       if (entire_shaper_item.item.length > 256) {
          uc = new HB_UChar16[entire_shaper_item.item.length];
       }
+
       for (uint i = 0; i < entire_shaper_item.item.length; ++i) {
          if (si.analysis.flags == QScriptAnalysis::Lowercase) {
-            uc[i] = QChar::toLower(entire_shaper_item.string[si.position + i]);
+            uc[i] = QChar(entire_shaper_item.string[si.position + i]).toLower()[0].unicode();
          } else {
-            uc[i] = QChar::toUpper(entire_shaper_item.string[si.position + i]);
+            uc[i] = QChar(entire_shaper_item.string[si.position + i]).toUpper()[0].unicode();
          }
       }
+
       entire_shaper_item.item.pos = 0;
       entire_shaper_item.string = uc;
       entire_shaper_item.stringLength = entire_shaper_item.item.length;
@@ -1414,23 +1428,21 @@ void QTextEngine::itemize() const
    }
 
    int length = layoutData->string.length();
-   if (!length) {
+   if (! length) {
       return;
    }
 
    bool ignore = ignoreBidi;
-   bool rtl = isRightToLeft();
+   bool rtl    = isRightToLeft();
 
    if (!ignore && !rtl) {
       ignore = true;
-      const QChar *start = layoutData->string.unicode();
-      const QChar *const end = start + length;
-      while (start < end) {
-         if (start->unicode() >= 0x590) {
+
+      for (QChar c : layoutData->string) {
+         if (c >= 0x590) {
             ignore = false;
             break;
          }
-         ++start;
       }
    }
 
@@ -1441,60 +1453,74 @@ void QTextEngine::itemize() const
 
    if (ignore) {
       memset(analysis, 0, length * sizeof(QScriptAnalysis));
+
       if (option.textDirection() == Qt::RightToLeft) {
          for (int i = 0; i < length; ++i) {
             analysis[i].bidiLevel = 1;
          }
+
          layoutData->hasBidi = true;
       }
+
    } else {
       layoutData->hasBidi = bidiItemize(const_cast<QTextEngine *>(this), analysis, control);
    }
 
-   const ushort *uc = reinterpret_cast<const ushort *>(layoutData->string.unicode());
-   const ushort *e = uc + length;
    int lastScript = QChar::Script_Common;
-   while (uc < e) {
-      switch (*uc) {
+   QString tmp;
+
+   for (QChar c : layoutData->string)  {
+      tmp.append(c);
+
+      switch (c.unicode()) {
          case QChar::ObjectReplacementCharacter:
             analysis->script = QChar::Script_Common;
-            analysis->flags = QScriptAnalysis::Object;
+            analysis->flags  = QScriptAnalysis::Object;
             break;
+
          case QChar::LineSeparator:
             if (analysis->bidiLevel % 2) {
                --analysis->bidiLevel;
             }
+
             analysis->script = QChar::Script_Common;
-            analysis->flags = QScriptAnalysis::LineOrParagraphSeparator;
+            analysis->flags  = QScriptAnalysis::LineOrParagraphSeparator;
+
             if (option.flags() & QTextOption::ShowLineAndParagraphSeparators) {
-               *const_cast<ushort *>(uc) = 0x21B5;   // visual line separator
+               // visual line separator
+               tmp.chop(1);
+               tmp.append(U'\u21B5');
             }
             break;
+
          case QChar::Tabulation:
             analysis->script = QChar::Script_Common;
-            analysis->flags = QScriptAnalysis::Tab;
+            analysis->flags  = QScriptAnalysis::Tab;
             analysis->bidiLevel = control.baseLevel();
             break;
+
          case QChar::Space:
          case QChar::Nbsp:
             if (option.flags() & QTextOption::ShowTabsAndSpaces) {
                analysis->script = QChar::Script_Common;
-               analysis->flags = QScriptAnalysis::Space;
+               analysis->flags  = QScriptAnalysis::Space;
                analysis->bidiLevel = control.baseLevel();
                break;
             }
+
          // fall through
          default:
-            int script = QChar::script(*uc);
-            analysis->script = script == QChar::Script_Inherited ? lastScript : script;
-            analysis->flags = QScriptAnalysis::None;
+            int script = c.script();
+            analysis->script = (script == QChar::Script_Inherited ? lastScript : script);
+            analysis->flags  = QScriptAnalysis::None;
             break;
       }
+
       lastScript = analysis->script;
-      ++uc;
       ++analysis;
    }
 
+   layoutData->string = tmp;
    Itemizer itemizer(layoutData->string, scriptAnalysis.data(), layoutData->items);
 
    const QTextDocumentPrivate *p = block.docHandle();
@@ -1548,16 +1574,38 @@ bool QTextEngine::isRightToLeft() const
       default:
          break;
    }
-   if (!layoutData) {
+
+   if (! layoutData) {
       itemize();
    }
+
    // this places the cursor in the right position depending on the keyboard layout
    if (layoutData->string.isEmpty()) {
       return QApplication::keyboardInputDirection() == Qt::RightToLeft;
    }
-   return layoutData->string.isRightToLeft();
+
+   return QTextEngine::isRightToLeft(layoutData->string);
 }
 
+bool QTextEngine::isRightToLeft(QStringView str)
+{
+   for (QChar c : str) {
+
+      switch (c.direction()) {
+         case QChar::DirL:
+            return false;
+
+         case QChar::DirR:
+         case QChar::DirAL:
+            return true;
+
+         default:
+            break;
+      }
+   }
+
+   return false;
+}
 
 int QTextEngine::findItem(int strPos) const
 {
@@ -1565,8 +1613,10 @@ int QTextEngine::findItem(int strPos) const
 
    int left = 1;
    int right = layoutData->items.size() - 1;
+
    while (left <= right) {
       int middle = ((right - left) / 2) + left;
+
       if (strPos > layoutData->items[middle].position) {
          left = middle + 1;
       } else if (strPos < layoutData->items[middle].position) {
@@ -1575,6 +1625,7 @@ int QTextEngine::findItem(int strPos) const
          return middle;
       }
    }
+
    return right;
 }
 
@@ -2723,10 +2774,13 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
    }
 
    QList<QTextOption::Tab> tabArray = option.tabs();
-   if (!tabArray.isEmpty()) {
-      if (isRightToLeft()) { // rebase the tabArray positions.
+   if (! tabArray.isEmpty()) {
+
+      if (isRightToLeft()) {
+         // rebase the tabArray positions.
          QList<QTextOption::Tab> newTabs;
-         QList<QTextOption::Tab>::Iterator iter = tabArray.begin();
+         QList<QTextOption::Tab>::iterator iter = tabArray.begin();
+
          while (iter != tabArray.end()) {
             QTextOption::Tab tab = *iter;
             if (tab.type == QTextOption::LeftTab) {
@@ -3179,28 +3233,35 @@ void QTextItemInt::initWithScriptItem(const QScriptItem &si)
    }
 }
 
-QTextItemInt QTextItemInt::midItem(QFontEngine *fontEngine, int firstGlyphIndex, int numGlyphs) const
+QTextItemInt QTextItemInt::midItem(QFontEngine *fontEngine, int firstGlyphIndex, int len) const
 {
    QTextItemInt ti = *this;
-   const int end   = firstGlyphIndex + numGlyphs;
+   const int end   = firstGlyphIndex + len;
 
-   ti.glyphs = glyphs.mid(firstGlyphIndex, numGlyphs);
+   ti.glyphs     = glyphs.mid(firstGlyphIndex, len);
    ti.fontEngine = fontEngine;
 
-   if (logClusters && chars) {
+   if (logClusters && (m_iter != m_end)) {
       const int logClusterOffset = logClusters[0];
-      while (logClusters[ti.chars - chars] - logClusterOffset < firstGlyphIndex) {
-         ++ti.chars;
+
+      int index = 0;
+
+      while (logClusters[index] - logClusterOffset < firstGlyphIndex) {
+         ++ti.m_iter;
+         ++index;
       }
 
-      ti.logClusters += (ti.chars - chars);
+      ti.logClusters += index;
 
-      ti.num_chars = 0;
-      int char_start = ti.chars - chars;
-      while (char_start + ti.num_chars < num_chars && ti.logClusters[ti.num_chars] - logClusterOffset < end) {
-         ++ti.num_chars;
+      ti.m_end       = ti.m_iter;
+      int char_start = index;
+
+      while (ti.m_end != m_end && ti.logClusters[index] - logClusterOffset < end) {
+         ++ti.m_end;
+         ++index;
       }
    }
+
    return ti;
 }
 

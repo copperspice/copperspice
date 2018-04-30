@@ -245,14 +245,21 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
 
       // nameRecord now points to string data
       BigEndian<quint16> *stringStorage = reinterpret_cast<BigEndian<quint16> *>(nameRecord);
-      const quint16 *sourceString = newFamilyName.utf16();
-      for (int i = 0; i < newFamilyName.size(); ++i) {
+
+      QString16 tmp = newFamilyName.toUtf16();
+      const char16_t *sourceString = tmp.constData();
+
+      for (int i = 0; i < tmp.size_storage(); ++i) {
          stringStorage[i] = sourceString[i];
       }
-      stringStorage += newFamilyName.size();
 
-      sourceString = regularString.utf16();
-      for (int i = 0; i < regularString.size(); ++i) {
+      stringStorage += tmp.size_storage();
+
+      //
+      tmp = regularString.toUtf16();
+      sourceString = tmp.constData();
+
+      for (int i = 0; i < tmp.size_storage(); ++i) {
          stringStorage[i] = sourceString[i];
       }
    }

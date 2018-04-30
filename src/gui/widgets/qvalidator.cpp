@@ -263,7 +263,7 @@ QValidator::State QDoubleValidator::validate(QString &input, int &) const
 {
    Q_D(const QDoubleValidator);
 
-   QLocaleData::NumberMode numMode = QLocalePrivate::DoubleStandardMode;
+   QLocaleData::NumberMode numMode = QLocaleData::DoubleStandardMode;
 
    switch (d->notation) {
       case StandardNotation:
@@ -285,8 +285,8 @@ QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QL
 
    QByteArray buff;
 
-   if (! locale().d->m_data->validateChars(input, numMode, &buff, q->dec,
-                   locale().numberOptions() & QLocale::RejectGroupSeparator)) {
+   if (! locale.d->m_data->validateChars(input, numMode, &buff, q->dec,
+                   locale.numberOptions() & QLocale::RejectGroupSeparator)) {
      return QValidator::Invalid;
    }
 

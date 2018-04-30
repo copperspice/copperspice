@@ -130,39 +130,31 @@ static const int windowsRightBorder      = 12; // right border on windows
 extern Q_GUI_EXPORT HDC qt_win_display_dc();
 extern QRegion qt_region_from_HRGN(HRGN rgn);
 
-
-
-// Theme data helper ------------------------------------------------------------------------------
-/* \internal
-    Returns true if the themedata is valid for use.
-*/
 bool XPThemeData::isValid()
 {
    return QWindowsXPStylePrivate::useXP() && name.size() && handle();
 }
 
-
-/* \internal
-    Returns the theme engine handle to the specific class.
-    If the handle hasn't been opened before, it opens the data, and
-    adds it to a static map, for caching.
-*/
+// internal
 HTHEME XPThemeData::handle()
 {
-   if (!QWindowsXPStylePrivate::useXP()) {
+   if (! QWindowsXPStylePrivate::useXP()) {
       return 0;
    }
 
-   if (!htheme && QWindowsXPStylePrivate::handleMap) {
+   if (! htheme && QWindowsXPStylePrivate::handleMap) {
       htheme = QWindowsXPStylePrivate::handleMap->operator[](name);
    }
 
-   if (!htheme) {
-      htheme = pOpenThemeData(QWindowsXPStylePrivate::winId(widget), (wchar_t *)name.utf16());
+   if (! htheme) {
+      std::wstring tmp(name.toStdWString());
+      htheme = pOpenThemeData(QWindowsXPStylePrivate::winId(widget), &tmp[0]);
+
       if (htheme) {
-         if (!QWindowsXPStylePrivate::handleMap) {
+         if (! QWindowsXPStylePrivate::handleMap) {
             QWindowsXPStylePrivate::handleMap = new QMap<QString, HTHEME>;
          }
+
          QWindowsXPStylePrivate::handleMap->operator[](name) = htheme;
       }
    }
@@ -170,9 +162,7 @@ HTHEME XPThemeData::handle()
    return htheme;
 }
 
-/* \internal
-    Converts a QRect to the native RECT structure.
-*/
+// internal
 RECT XPThemeData::toRECT(const QRect &qr)
 {
    RECT r;
@@ -180,6 +170,7 @@ RECT XPThemeData::toRECT(const QRect &qr)
    r.right = qr.x() + qr.width();
    r.top = qr.y();
    r.bottom = qr.y() + qr.height();
+
    return r;
 }
 
@@ -290,7 +281,7 @@ void QWindowsXPStylePrivate::cleanupHandleMap()
       return;
    }
 
-   QMap<QString, HTHEME>::Iterator it;
+   QMap<QString, HTHEME>::iterator it;
    for (it = handleMap->begin(); it != handleMap->end(); ++it) {
       pCloseThemeData(it.value());
    }

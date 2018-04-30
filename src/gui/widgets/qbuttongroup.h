@@ -48,8 +48,8 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
    void setExclusive(bool);
    bool exclusive() const;
 
-   void addButton(QAbstractButton *, int id = -1);
-   void removeButton(QAbstractButton *);
+   void addButton(QAbstractButton *button, int id = -1);
+   void removeButton(QAbstractButton * button);
 
    QList<QAbstractButton *> buttons() const;
 

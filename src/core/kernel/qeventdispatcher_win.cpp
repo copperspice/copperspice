@@ -553,7 +553,7 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
    Q_D(QEventDispatcherWin32);
 
-   if (!d->internalHwnd) {
+   if (! d->internalHwnd) {
       createInternalHwnd();
    }
 
@@ -577,12 +577,12 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
          MSG msg;
          bool haveMessage;
 
-         if (! (flags & QEventLoop::ExcludeUserInputEvents) && !d->queuedUserInputEvents.isEmpty()) {
+         if (! (flags & QEventLoop::ExcludeUserInputEvents) && ! d->queuedUserInputEvents.isEmpty()) {
             // process queued user input events
             haveMessage = true;
             msg = d->queuedUserInputEvents.takeFirst();
 
-         } else if (!(flags & QEventLoop::ExcludeSocketNotifiers) && !d->queuedSocketEvents.isEmpty()) {
+         } else if (! (flags & QEventLoop::ExcludeSocketNotifiers) && ! d->queuedSocketEvents.isEmpty()) {
             // process queued socket events
             haveMessage = true;
             msg = d->queuedSocketEvents.takeFirst();
@@ -615,7 +615,8 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
                d->queuedSocketEvents.append(msg);
             }
          }
-         if (!haveMessage) {
+
+         if (! haveMessage) {
             // no message - check for signalled objects
             for (int i = 0; i < (int)nCount; i++) {
                pHandles[i] = d->winEventNotifierList.at(i)->handle();
@@ -632,20 +633,21 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
 
             if (d->internalHwnd == msg.hwnd && msg.message == WM_QT_SENDPOSTEDEVENTS) {
                if (seenWM_QT_SENDPOSTEDEVENTS) {
-                  // when calling processEvents() "manually", we only want to send posted
-                  // events once
+                  // when calling processEvents() "manually", we only want to send posted events once
                   needWM_QT_SENDPOSTEDEVENTS = true;
                   continue;
                }
                seenWM_QT_SENDPOSTEDEVENTS = true;
 
             } else if (msg.message == WM_TIMER) {
-               // avoid live-lock by keeping track of the timers we've already sent
+               // avoid live-lock by keeping track of the timers we have already sent
                bool found = false;
-               for (int i = 0; !found && i < processedTimers.count(); ++i) {
+
+               for (int i = 0; ! found && i < processedTimers.count(); ++i) {
                   const MSG processed = processedTimers.constData()[i];
                   found = (processed.wParam == msg.wParam && processed.hwnd == msg.hwnd && processed.lParam == msg.lParam);
                }
+
                if (found) {
                   continue;
                }
@@ -659,7 +661,7 @@ bool QEventDispatcherWin32::processEvents(QEventLoop::ProcessEventsFlags flags)
                return false;
             }
 
-            if (!filterEvent(&msg)) {
+            if (! filterEvent(&msg)) {
                TranslateMessage(&msg);
                DispatchMessage(&msg);
             }
@@ -936,8 +938,9 @@ void QEventDispatcherWin32::unregisterEventNotifier(QWinEventNotifier *notifier)
    if (!notifier) {
       qWarning("QWinEventNotifier: Internal error");
       return;
+
    } else if (notifier->thread() != thread() || thread() != QThread::currentThread()) {
-      qWarning("QWinEventNotifier: event notifiers cannot be disabled from another thread");
+      qWarning("QWinEventNotifier: Event notifiers can not be disabled from another thread");
       return;
    }
 

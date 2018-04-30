@@ -134,9 +134,11 @@ QStringList QIconLoader::themeSearchPaths() const
 {
    if (m_iconDirs.isEmpty()) {
       m_iconDirs = qt_guiPlatformPlugin()->iconThemeSearchPaths();
+
       // Always add resource directory as search path
-      m_iconDirs.append(QLatin1String(":/icons"));
+      m_iconDirs.append(":/icons");
    }
+
    return m_iconDirs;
 }
 
@@ -147,10 +149,13 @@ QIconTheme::QIconTheme(const QString &themeName)
 
    QList <QIconDirInfo> keyList;
    QStringList iconDirs = QIcon::themeSearchPaths();
+
    for ( int i = 0 ; i < iconDirs.size() ; ++i) {
       QDir iconDir(iconDirs[i]);
+
       QString themeDir = iconDir.path() + QLatin1Char('/') + themeName;
       themeIndex.setFileName(themeDir + QLatin1String("/index.theme"));
+
       if (themeIndex.exists()) {
          m_contentDir = themeDir;
          m_valid = true;
