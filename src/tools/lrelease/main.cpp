@@ -87,8 +87,9 @@ static bool loadTsFile(Translator &tor, const QString &tsFileName, bool /* verbo
 {
    ConversionData cd;
    bool ok = tor.load(tsFileName, cd, QLatin1String("auto"));
+
    if (!ok) {
-      printErr(LR::tr("lrelease error: %1").arg(cd.error()));
+      printErr(LR::tr("lrelease error: %1").formatArg(cd.error()));
    } else {
       if (!cd.errors().isEmpty()) {
          printOut(cd.error());
@@ -104,19 +105,18 @@ static bool releaseTranslator(Translator &tor, const QString &qmFileName,
    tor.reportDuplicates(tor.resolveDuplicates(), qmFileName, cd.isVerbose());
 
    if (cd.isVerbose()) {
-      printOut(LR::tr("Updating '%1'...\n").arg(qmFileName));
+      printOut(LR::tr("Updating '%1'...\n").formatArg(qmFileName));
    }
    if (removeIdentical) {
       if (cd.isVerbose()) {
-         printOut(LR::tr("Removing translations equal to source text in '%1'...\n").arg(qmFileName));
+         printOut(LR::tr("Removing translations equal to source text in '%1'...\n").formatArg(qmFileName));
       }
       tor.stripIdenticalSourceTranslations();
    }
 
    QFile file(qmFileName);
-   if (!file.open(QIODevice::WriteOnly)) {
-      printErr(LR::tr("lrelease error: cannot create '%1': %2\n")
-               .arg(qmFileName, file.errorString()));
+   if (! file.open(QIODevice::WriteOnly)) {
+      printErr(LR::tr("lrelease error: cannot create '%1': %2\n").formatArg(qmFileName).formatArg(file.errorString()));
       return false;
    }
 
@@ -125,17 +125,16 @@ static bool releaseTranslator(Translator &tor, const QString &qmFileName,
    file.close();
 
    if (!ok) {
-      printErr(LR::tr("lrelease error: cannot save '%1': %2")
-               .arg(qmFileName, cd.error()));
+      printErr(LR::tr("lrelease error: cannot save '%1': %2").formatArg(qmFileName).formatArg(cd.error()));
    } else if (!cd.errors().isEmpty()) {
       printOut(cd.error());
    }
+
    cd.clearErrors();
    return ok;
 }
 
-static bool releaseTsFile(const QString &tsFileName,
-                          ConversionData &cd, bool removeIdentical)
+static bool releaseTsFile(const QString &tsFileName, ConversionData &cd, bool removeIdentical)
 {
    Translator tor;
    if (!loadTsFile(tor, tsFileName, cd.isVerbose())) {
@@ -157,7 +156,7 @@ static bool releaseTsFile(const QString &tsFileName,
 static void print(const QString &fileName, int lineNo, const QString &msg)
 {
    if (lineNo) {
-      printErr(QString::fromLatin1("%2(%1): %3").arg(lineNo).arg(fileName, msg));
+      printErr(QString("%2(%1): %3").formatArg(lineNo).formatArg(fileName).formatArg(msg));
    } else {
       printErr(msg);
    }
@@ -183,54 +182,67 @@ int main(int argc, char **argv)
    cd.m_verbose = true; // the default is true starting with Qt 4.2
    bool removeIdentical = false;
    Translator tor;
+
    QStringList inputFiles;
    QString outputFile;
 
    for (int i = 1; i < argc; ++i) {
-      if (!strcmp(argv[i], "-compress")) {
+      if (! strcmp(argv[i], "-compress")) {
          cd.m_saveMode = SaveStripped;
          continue;
-      } else if (!strcmp(argv[i], "-idbased")) {
+
+      } else if (! strcmp(argv[i], "-idbased")) {
          cd.m_idBased = true;
          continue;
-      } else if (!strcmp(argv[i], "-nocompress")) {
+
+      } else if (! strcmp(argv[i], "-nocompress")) {
          cd.m_saveMode = SaveEverything;
          continue;
+
       } else if (!strcmp(argv[i], "-removeidentical")) {
          removeIdentical = true;
          continue;
+
       } else if (!strcmp(argv[i], "-nounfinished")) {
          cd.m_ignoreUnfinished = true;
          continue;
+
       } else if (!strcmp(argv[i], "-markuntranslated")) {
          if (i == argc - 1) {
             printUsage();
             return 1;
          }
-         cd.m_unTrPrefix = QString::fromLocal8Bit(argv[++i]);
+         cd.m_unTrPrefix = QString::fromUtf8(argv[++i]);
+
       } else if (!strcmp(argv[i], "-silent")) {
          cd.m_verbose = false;
          continue;
+
       } else if (!strcmp(argv[i], "-verbose")) {
          cd.m_verbose = true;
          continue;
+
       } else if (!strcmp(argv[i], "-version")) {
-         printOut(LR::tr("lrelease version %1\n").arg(QLatin1String(CS_VERSION_STR)));
+         printOut(LR::tr("lrelease version %1\n").formatArg(QLatin1String(CS_VERSION_STR)));
          return 0;
+
       } else if (!strcmp(argv[i], "-qm")) {
          if (i == argc - 1) {
             printUsage();
             return 1;
          }
-         outputFile = QString::fromLocal8Bit(argv[++i]);
+         outputFile = QString::fromUtf8(argv[++i]);
+
       } else if (!strcmp(argv[i], "-help")) {
          printUsage();
          return 0;
+
       } else if (argv[i][0] == '-') {
          printUsage();
          return 1;
+
       } else {
-         inputFiles << QString::fromLocal8Bit(argv[i]);
+         inputFiles << QString::fromUtf8(argv[i]);
       }
    }
 

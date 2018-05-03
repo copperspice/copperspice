@@ -145,8 +145,8 @@ bool UiReader::characters(const QString &ch)
 bool UiReader::fatalError(const QXmlParseException &exception)
 {
    QString msg = LU::tr("XML error: Parse error at line %1, column %2 (%3).")
-                 .arg(exception.lineNumber()).arg(exception.columnNumber())
-                 .arg(exception.message());
+                 .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
+
    m_cd.appendError(msg);
    return false;
 }
@@ -154,10 +154,10 @@ bool UiReader::fatalError(const QXmlParseException &exception)
 void UiReader::flush()
 {
    if (!m_context.isEmpty() && !m_source.isEmpty()) {
-      TranslatorMessage msg(m_context, m_source,
-                            m_comment, QString(), m_cd.m_sourceFileName,
-                            m_lineNumber, QStringList());
+
+      TranslatorMessage msg(m_context, m_source, m_comment, QString(), m_cd.m_sourceFileName, m_lineNumber, QStringList());
       msg.setExtraComment(m_extracomment);
+
       if (m_needUtf8 && msg.needs8Bit()) {
          msg.setUtf8(true);
       }
@@ -174,7 +174,7 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
    QFile file(filename);
 
    if (!file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Can not open %1: %2").arg(filename, file.errorString()));
+      cd.appendError(LU::tr("Can not open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
    QXmlInputSource in(&file);

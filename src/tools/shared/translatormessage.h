@@ -29,28 +29,30 @@
 #include <QStringList>
 #include <QHash>
 
-
-QT_BEGIN_NAMESPACE
-
 enum TranslatorSaveMode { SaveEverything, SaveStripped };
 
 class TranslatorMessage
 {
  public:
    enum Type { Unfinished, Finished, Obsolete };
-   typedef QHash<QString, QString> ExtraData;
+   using ExtraData = QHash<QString, QString>;
+
    class Reference
    {
       QString m_fileName;
       int m_lineNumber;
+
     public:
       Reference(const QString &n, int l) : m_fileName(n), m_lineNumber(l) {}
+
       bool operator==(const Reference &other) const {
          return fileName() == other.fileName() && lineNumber() == other.lineNumber();
       }
+
       QString fileName() const {
          return m_fileName;
       }
+
       int lineNumber() const {
          return m_lineNumber;
       }
@@ -172,7 +174,7 @@ class TranslatorMessage
    }
 
    bool isNull() const {
-      return m_sourcetext.isNull() && m_lineNumber == -1 && m_translations.isEmpty();
+      return m_sourcetext.isEmpty() && m_lineNumber == -1 && m_translations.isEmpty();
    }
 
    Type type() const {
@@ -240,7 +242,6 @@ class TranslatorMessage
 
 Q_DECLARE_TYPEINFO(TranslatorMessage, Q_MOVABLE_TYPE);
 
-QT_END_NAMESPACE
 
 #endif // QT_NO_TRANSLATION
 

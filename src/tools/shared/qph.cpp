@@ -22,10 +22,10 @@
 
 #include "translator.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QByteArray>
+#include <QDebug>
+#include <QTextCodec>
+#include <QTextStream>
 
 #include <QtXml/QXmlStreamReader>
 #include <QtXml/QXmlStreamAttribute>
@@ -111,33 +111,41 @@ static bool loadQPH(Translator &translator, QIODevice &dev, ConversionData &)
 static QString protect(const QString &str)
 {
    QString result;
-   result.reserve(str.length() * 12 / 10);
-   for (int i = 0; i != str.size(); ++i) {
-      uint c = str.at(i).unicode();
-      switch (c) {
+
+   for (QChar c : str) {
+
+      switch (c.unicode()) {
          case '\"':
             result += QLatin1String("&quot;");
             break;
+
          case '&':
             result += QLatin1String("&amp;");
             break;
+
          case '>':
             result += QLatin1String("&gt;");
             break;
+
          case '<':
             result += QLatin1String("&lt;");
             break;
+
          case '\'':
             result += QLatin1String("&apos;");
             break;
+
          default:
             if (c < 0x20 && c != '\r' && c != '\n' && c != '\t') {
-               result += QString(QLatin1String("&#%1;")).arg(c);
-            } else { // this also covers surrogates
-               result += QChar(c);
+               result += QString("&#%1;").formatArg(c);
+
+            } else {
+               // this also covers surrogates
+               result += c;
             }
       }
    }
+
    return result;
 }
 

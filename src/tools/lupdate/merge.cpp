@@ -236,12 +236,12 @@ int applyNumberHeuristic(Translator &tor)
       if (untranslated[i]) {
          TranslatorMessage &msg = tor.message(i);
          const QString &key = zeroKey(msg.sourceText());
+
          if (!key.isEmpty()) {
-            QMap<QString, QPair<QString, QString> >::ConstIterator t =
-               translated.constFind(key);
+            QMap<QString, QPair<QString, QString> >::const_iterator t = translated.constFind(key);
+
             if (t != translated.constEnd() && t->first != msg.sourceText()) {
-               msg.setTranslation(translationAttempt(t->second, t->first,
-                                                     msg.sourceText()));
+               msg.setTranslation(translationAttempt(t->second, t->first, msg.sourceText()));
                inserted++;
             }
          }
@@ -274,9 +274,11 @@ int applySameTextHeuristic(Translator &tor)
          if (msg.type() == TranslatorMessage::Unfinished) {
             untranslated[i] = true;
          }
+
       } else {
          const QString &key = msg.sourceText();
-         QMap<QString, QStringList>::ConstIterator t = translated.constFind(key);
+         QMap<QString, QStringList>::const_iterator t = translated.constFind(key);
+
          if (t != translated.constEnd()) {
             /*
               The same source text is translated at least two
@@ -286,6 +288,7 @@ int applySameTextHeuristic(Translator &tor)
                translated.remove(key);
                avoid.insert(key, true);
             }
+
          } else if (!avoid.contains(key)) {
             translated.insert(key, msg.translations());
          }
@@ -295,7 +298,8 @@ int applySameTextHeuristic(Translator &tor)
    for (int i = 0; i < tor.messageCount(); ++i) {
       if (untranslated[i]) {
          TranslatorMessage &msg = tor.message(i);
-         QMap<QString, QStringList>::ConstIterator t = translated.constFind(msg.sourceText());
+         QMap<QString, QStringList>::const_iterator t = translated.constFind(msg.sourceText());
+
          if (t != translated.constEnd()) {
             msg.setTranslations(*t);
             ++inserted;
@@ -304,7 +308,6 @@ int applySameTextHeuristic(Translator &tor)
    }
    return inserted;
 }
-
 
 
 /*
@@ -489,7 +492,7 @@ Translator merge(const Translator &tor, const Translator &virginTor,
 
    if (options & Verbose) {
       int totalFound = neww + known;
-      err += LU::tr("    Found %n source text(s) (%1 new and %2 already existing)\n", 0, totalFound).arg(neww).arg(known);
+      err += LU::tr("    Found %n source text(s) (%1 new and %2 already existing)\n", 0, totalFound).formatArg(neww).formatArg(known);
 
       if (obsoleted) {
          if (options & NoObsolete) {

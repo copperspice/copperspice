@@ -49,9 +49,8 @@ void showHelp(const QString &argv0, const QString &error)
            "  -no-compress         disable all compression\n"
            "  -binary              output a binary file for use as a dynamic resource\n"
            "  -namespace           turn off namespace macros\n"
-           "  -project             Output a resource file containing all\n"
-           "                       files from the current directory\n"
-           "  -version             display version\n"
+           "  -project             generate resource file containing all files from the current directory\n"
+           "  -version             display rcc version\n"
            "  -help                display this information\n",
            qPrintable(argv0));
 }

@@ -31,8 +31,6 @@
 
 #include <iostream>
 
-QT_USE_NAMESPACE
-
 class LC
 {
    Q_DECLARE_TR_FUNCTIONS(LConvert)
@@ -43,14 +41,15 @@ static int usage(const QStringList &args)
    Q_UNUSED(args);
 
    QString loaders;
-   QString line(QLatin1String("    %1 - %2\n"));
+   QString line("    %1 - %2\n");
+
    for (Translator::FileFormat format : Translator::registeredFileFormats()) {
-      loaders += line.arg(format.extension, -5).arg(format.description);
+      loaders += line.formatArg(format.extension, -5).formatArg(format.description);
    }
 
    std::cout << qPrintable(LC::tr("\nUsage:\n"
                                   "    lconvert [options] <infile> [<infile>...]\n\n"
-                                  "lconvert is part of Qt's Linguist tool chain. It can be used as a\n"
+                                  "lconvert is part of Linguist tool chain. It can be used as a\n"
                                   "stand-alone tool to convert and filter translation data files.\n"
                                   "The following file formats are supported:\n\n%1\n"
                                   "If multiple input files are specified, they are merged with\n"
@@ -110,7 +109,7 @@ static int usage(const QStringList &args)
                                   "    0 on success\n"
                                   "    1 on command line parse failures\n"
                                   "    2 on read failures\n"
-                                  "    3 on write failures\n").arg(loaders));
+                                  "    3 on write failures\n").formatArg(loaders));
    return 1;
 }
 

@@ -310,6 +310,7 @@ void Releaser::squeeze(TranslatorSaveMode mode)
    QDataStream ms(&m_messageArray, QIODevice::WriteOnly);
    QMap<ByteTranslatorMessage, void *>::const_iterator it, next;
    int cpPrev = 0, cpNext = 0;
+
    for (it = messages.constBegin(); it != messages.constEnd(); ++it) {
       cpPrev = cpNext;
       next = it;
@@ -323,9 +324,11 @@ void Releaser::squeeze(TranslatorSaveMode mode)
       writeMessage(it.key(), ms, mode, Prefix(qMax(cpPrev, cpNext + 1)));
    }
 
-   QMap<Offset, void *>::Iterator offset;
+   QMap<Offset, void *>::iterator offset;
    offset = offsets.begin();
+
    QDataStream ds(&m_offsetArray, QIODevice::WriteOnly);
+
    while (offset != offsets.end()) {
       Offset k = offset.key();
       ++offset;
@@ -563,67 +566,71 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
 
    QString context, contextUtf8;
    bool contextIsSystem, contextIsUtf8, contextNeeds8Bit;
+
    QString sourcetext, sourcetextUtf8;
    bool sourcetextIsSystem, sourcetextIsUtf8, sourcetextNeeds8Bit;
+
    QString comment, commentUtf8;
    bool commentIsSystem, commentIsUtf8, commentNeeds8Bit;
+
    QStringList translations;
 
    for (const uchar *start = offsetArray; start != offsetArray + (numItems << 3); start += 8) {
-      //quint32 hash = read32(start);
       quint32 ro = read32(start + 4);
-      //qDebug() << "\nHASH:" << hash;
+
       const uchar *m = messageArray + ro;
 
       for (;;) {
          uchar tag = read8(m++);
-         //qDebug() << "Tag:" << tag << " ADDR: " << m;
+
          switch (tag) {
             case Tag_End:
                goto end;
+
             case Tag_Translation: {
                int len = read32(m);
+
                if (len % 1) {
-                  cd.appendError(QLatin1String("QM-Format error"));
+                  cd.appendError("QM-Format error");
                   return false;
                }
+
                m += 4;
-               QString str = QString((const QChar *)m, len / 2);
-               if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
-                  for (int i = 0; i < str.length(); ++i)
-                     str[i] = QChar((str.at(i).unicode() >> 8) +
-                                    ((str.at(i).unicode() << 8) & 0xff00));
-               }
+
+               QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
+               QString str = codec->toUnicode((const char *)m, len);
+
                translations << str;
                m += len;
+
                break;
             }
+
             case Tag_Obsolete1:
                m += 4;
-               //qDebug() << "OBSOLETE";
                break;
+
             case Tag_SourceText: {
                quint32 len = read32(m);
                m += 4;
-               //qDebug() << "SOURCE LEN: " << len;
-               //qDebug() << "SOURCE: " << QByteArray((const char*)m, len);
-               fromBytes((const char *)m, len, codec, utf8Codec,
-                         &sourcetext, &sourcetextUtf8,
+
+               fromBytes((const char *)m, len, codec, utf8Codec, &sourcetext, &sourcetextUtf8,
                          &sourcetextIsSystem, &sourcetextIsUtf8, &sourcetextNeeds8Bit);
+
                m += len;
                break;
             }
+
             case Tag_Context: {
                quint32 len = read32(m);
                m += 4;
-               //qDebug() << "CONTEXT LEN: " << len;
-               //qDebug() << "CONTEXT: " << QByteArray((const char*)m, len);
-               fromBytes((const char *)m, len, codec, utf8Codec,
-                         &context, &contextUtf8,
+
+               fromBytes((const char *)m, len, codec, utf8Codec, &context, &contextUtf8,
                          &contextIsSystem, &contextIsUtf8, &contextNeeds8Bit);
                m += len;
                break;
             }
+
             case Tag_Comment: {
                quint32 len = read32(m);
                m += 4;
@@ -775,11 +782,11 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
       int generatedCount = finished + unfinished;
       cd.appendError(QCoreApplication::translate("LRelease",
                      "    Generated %n translation(s) (%1 finished and %2 unfinished)", 0,
-                     QCoreApplication::CodecForTr, generatedCount).arg(finished).arg(unfinished));
+                     QCoreApplication::CodecForTr, generatedCount).formatArg(finished).formatArg(unfinished));
+
       if (untranslated)
          cd.appendError(QCoreApplication::translate("LRelease",
-                        "    Ignored %n untranslated source text(s)", 0,
-                        QCoreApplication::CodecForTr, untranslated));
+                        "    Ignored %n untranslated source text(s)", 0, QCoreApplication::CodecForTr, untranslated));
    }
    return saved;
 }

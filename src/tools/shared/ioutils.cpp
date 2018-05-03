@@ -38,17 +38,23 @@ using namespace ProFileEvaluatorInternal;
 IoUtils::FileType IoUtils::fileType(const QString &fileName)
 {
    Q_ASSERT(fileName.isEmpty() || isAbsolutePath(fileName));
+
 #ifdef Q_OS_WIN
-   DWORD attr = GetFileAttributesW((WCHAR *)fileName.utf16());
+   DWORD attr = GetFileAttributesW(fileName.toStdWString().c_str());
+
    if (attr == INVALID_FILE_ATTRIBUTES) {
       return FileNotFound;
    }
+
    return (attr & FILE_ATTRIBUTE_DIRECTORY) ? FileIsDir : FileIsRegular;
+
 #else
    struct ::stat st;
+
    if (::stat(fileName.toLocal8Bit().constData(), &st)) {
       return FileNotFound;
    }
+
    return S_ISDIR(st.st_mode) ? FileIsDir : FileIsRegular;
 #endif
 }
@@ -74,7 +80,7 @@ bool IoUtils::isRelativePath(const QString &path)
 
 QStringRef IoUtils::fileName(const QString &fileName)
 {
-   return fileName.midRef(fileName.lastIndexOf(QLatin1Char('/')) + 1);
+   return fileName.midView(fileName.lastIndexOf('/') + 1);
 }
 
 QString IoUtils::resolvePath(const QString &baseDir, const QString &fileName)
@@ -82,8 +88,10 @@ QString IoUtils::resolvePath(const QString &baseDir, const QString &fileName)
    if (fileName.isEmpty()) {
       return QString();
    }
+
    if (isAbsolutePath(fileName)) {
       return QDir::cleanPath(fileName);
    }
+
    return QDir::cleanPath(baseDir + QLatin1Char('/') + fileName);
 }

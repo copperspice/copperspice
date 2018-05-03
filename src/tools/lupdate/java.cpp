@@ -107,16 +107,19 @@ static QChar getChar()
    if (yyInPos >= yyInStr.size()) {
       return EOF;
    }
+
    QChar c = yyInStr[yyInPos++];
-   if (c.unicode() == '\n') {
+
+   if (c == '\n') {
       ++yyCurLineNo;
    }
-   return c.unicode();
+
+   return c;
 }
 
 static int getToken()
 {
-   const char tab[] = "bfnrt\"\'\\";
+   const char tab[]     = "bfnrt\"\'\\";
    const char backTab[] = "\b\f\n\r\t\"\'\\";
 
    yyIdent.clear();
@@ -220,15 +223,21 @@ static int getToken()
                while ( yyCh != EOF && yyCh != QLatin1Char('\n') && yyCh != QLatin1Char('"') ) {
                   if ( yyCh == QLatin1Char('\\') ) {
                      yyCh = getChar();
+
                      if ( yyCh == QLatin1Char('u') ) {
                         yyCh = getChar();
-                        uint unicode(0);
+
+                        char32_t unicode(0);
+
                         for (int i = 4; i > 0; --i) {
                            unicode = unicode << 4;
+
                            if ( yyCh.isDigit() ) {
                               unicode += yyCh.digitValue();
+
                            } else {
-                              int sub(yyCh.toLower().toLatin1() - 87);
+                              int sub(yyCh.toLower()[0].toLatin1() - 87);
+
                               if ( sub > 15 || sub < 10) {
                                  yyMsg() << qPrintable(LU::tr("Invalid Unicode value.\n"));
                                  break;
@@ -237,13 +246,17 @@ static int getToken()
                            }
                            yyCh = getChar();
                         }
-                        yyString.append(QChar(unicode));
-                     } else if ( yyCh == QLatin1Char('\n') ) {
+
+                        yyString.append(QChar(char32_t(unicode)));
+
+                     } else if (yyCh == '\n') {
                         yyCh = getChar();
+
                      } else {
                         yyString.append( QLatin1Char(backTab[strchr( tab, yyCh.toLatin1() ) - tab]) );
                         yyCh = getChar();
                      }
+
                   } else {
                      yyString.append(yyCh);
                      yyCh = getChar();
@@ -609,8 +622,9 @@ static void parse( Translator *tor )
 bool loadJava(Translator &translator, const QString &filename, ConversionData &cd)
 {
    QFile file(filename);
+
    if (!file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Cannot open %1: %2").arg(filename, file.errorString()));
+      cd.appendError(LU::tr("Cannot open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
 

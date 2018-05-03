@@ -123,7 +123,7 @@ static void printUsage()
                "           Display the version of lupdate and exit.\n"
                "    @lst-file\n"
                "           Read additional file names (one per line) from lst-file.\n"
-            ).arg(m_defaultExtensions));
+            ).formatArg(m_defaultExtensions));
 }
 
 static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFileNames,
@@ -132,41 +132,47 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 {
    QDir dir;
    QString err;
+
    foreach (const QString & fileName, tsFileNames) {
       QString fn = dir.relativeFilePath(fileName);
+
       ConversionData cd;
       Translator tor;
       cd.m_sortContexts = !(options & NoSort);
+
       if (QFile(fileName).exists()) {
          if (!tor.load(fileName, cd, QLatin1String("auto"))) {
             printErr(cd.error());
             *fail = true;
             continue;
          }
+
          tor.resolveDuplicates();
          cd.clearErrors();
+
          if (setCodec && fetchedTor.codec() != tor.codec())
-            printErr(LU::tr("lupdate warning: Codec for tr() '%1' disagrees with"
-                            " existing file's codec '%2'. Expect trouble.\n")
-                     .arg(QString::fromLatin1(fetchedTor.codecName()),
-                          QString::fromLatin1(tor.codecName())));
+            printErr(LU::tr("lupdate warning: Codec for tr() '%1' disagrees with existing file's codec '%2'. Expect trouble.\n")
+                  .formatArgs(QString::fromLatin1(fetchedTor.codecName()), QString::fromLatin1(tor.codecName())));
+
          if (!targetLanguage.isEmpty() && targetLanguage != tor.languageCode())
             printErr(LU::tr("lupdate warning: Specified target language '%1' disagrees with"
-                            " existing file's language '%2'. Ignoring.\n")
-                     .arg(targetLanguage, tor.languageCode()));
+                  " existing file's language '%2'. Ignoring.\n").formatArgs(targetLanguage, tor.languageCode()));
+
          if (!sourceLanguage.isEmpty() && sourceLanguage != tor.sourceLanguageCode())
             printErr(LU::tr("lupdate warning: Specified source language '%1' disagrees with"
-                            " existing file's language '%2'. Ignoring.\n")
-                     .arg(sourceLanguage, tor.sourceLanguageCode()));
+                  " existing file's language '%2'. Ignoring.\n").formatArgs(sourceLanguage, tor.sourceLanguageCode()));
+
       } else {
          if (setCodec) {
             tor.setCodec(fetchedTor.codec());
          }
+
          if (!targetLanguage.isEmpty()) {
             tor.setLanguageCode(targetLanguage);
          } else {
             tor.setLanguageCode(Translator::guessLanguageCodeFromFileName(fileName));
          }
+
          if (!sourceLanguage.isEmpty()) {
             tor.setSourceLanguageCode(sourceLanguage);
          }
@@ -179,8 +185,9 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       } else if (options & AbsoluteLocations) {
          tor.setLocationsType(Translator::AbsoluteLocations);
       }
+
       if (options & Verbose) {
-         printOut(LU::tr("Updating '%1'...\n").arg(fn));
+         printOut(LU::tr("Updating '%1'...\n").formatArg(fn));
       }
 
       UpdateOptions theseOptions = options;
@@ -198,7 +205,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       }
       if (options & PluralOnly) {
          if (options & Verbose) {
-            printOut(LU::tr("Stripping non plural forms in '%1'...\n").arg(fn));
+            printOut(LU::tr("Stripping non plural forms in '%1'...\n").formatArg(fn));
          }
          out.stripNonPluralForms();
       }
@@ -222,7 +229,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 static void print(const QString &fileName, int lineNo, const QString &msg)
 {
    if (lineNo) {
-      printErr(QString::fromLatin1("%2(%1): %3").arg(lineNo).arg(fileName, msg));
+      printErr(QString::fromLatin1("%2(%1): %3").formatArg(lineNo).formatArgs(fileName, msg));
    } else {
       printErr(msg);
    }
@@ -231,6 +238,7 @@ static void print(const QString &fileName, int lineNo, const QString &msg)
 static void processSources(Translator &fetchedTor, const QStringList &sourceFiles, ConversionData &cd)
 {
    QStringList sourceFilesCpp;
+
    for (QStringList::const_iterator it = sourceFiles.begin(); it != sourceFiles.end(); ++it) {
       if (it->endsWith(QLatin1String(".java"), Qt::CaseInsensitive)) {
          loadJava(fetchedTor, *it, cd);
@@ -382,9 +390,11 @@ int main(int argc, char **argv)
                  || arg == QLatin1String("-nosort")) {
          options |= NoSort;
          continue;
+
       } else if (arg == QLatin1String("-version")) {
-         printOut(QObject::tr("lupdate version %1\n").arg(QLatin1String(CS_VERSION_STR)));
+         printOut(QObject::tr("lupdate version %1\n").formatArg(CS_VERSION_STR));
          return 0;
+
       } else if (arg == QLatin1String("-codecfortr")) {
          ++i;
          if (i == argc) {
@@ -393,6 +403,7 @@ int main(int argc, char **argv)
          }
          codecForTr = args[i].toLatin1();
          continue;
+
       } else if (arg == QLatin1String("-ts")) {
          metTsFlag = true;
          continue;
@@ -418,24 +429,27 @@ int main(int argc, char **argv)
          }
          continue;
       } else if (arg.startsWith(QLatin1String("-")) && arg != QLatin1String("-")) {
-         printErr(LU::tr("Unrecognized option '%1'.\n").arg(arg));
+         printErr(LU::tr("Unrecognized option '%1'.\n").formatArg(arg));
          return 1;
       }
 
       QStringList files;
+
       if (arg.startsWith(QLatin1String("@"))) {
          QFile lstFile(arg.mid(1));
+
          if (!lstFile.open(QIODevice::ReadOnly)) {
-            printErr(LU::tr("lupdate error: List file '%1' is not readable.\n")
-                     .arg(lstFile.fileName()));
+            printErr(LU::tr("lupdate error: List file '%1' is not readable.\n").formatArg(lstFile.fileName()));
             return 1;
          }
          while (!lstFile.atEnd()) {
-            files << QString::fromLocal8Bit(lstFile.readLine().trimmed());
+            files << QString::fromUtf8(lstFile.readLine().trimmed());
          }
+
       } else {
          files << arg;
       }
+
       if (metTsFlag) {
          foreach (const QString & file, files) {
             bool found = false;
@@ -445,16 +459,14 @@ int main(int argc, char **argv)
                   if (!fi.exists() || fi.isWritable()) {
                      tsFileNames.append(QFileInfo(file).absoluteFilePath());
                   } else {
-                     printErr(LU::tr("lupdate warning: For some reason, '%1' is not writable.\n")
-                              .arg(file));
+                     printErr(LU::tr("lupdate warning: For some reason, '%1' is not writable.\n").formatArg(file));
                   }
                   found = true;
                   break;
                }
             }
             if (!found) {
-               printErr(LU::tr("lupdate error: File '%1' has no recognized extension.\n")
-                        .arg(file));
+               printErr(LU::tr("lupdate error: File '%1' has no recognized extension.\n").formatArg(file));
                return 1;
             }
          }
@@ -464,13 +476,13 @@ int main(int argc, char **argv)
          foreach (const QString & file, files) {
             QFileInfo fi(file);
             if (!fi.exists()) {
-               printErr(LU::tr("lupdate error: File '%1' does not exist.\n").arg(file));
+               printErr(LU::tr("lupdate error: File '%1' does not exist.\n").formatArg(file));
                return 1;
             }
 
             if (fi.isDir()) {
                if (options & Verbose) {
-                  printOut(LU::tr("Scanning directory '%1'...\n").arg(file));
+                  printOut(LU::tr("Scanning directory '%1'...\n").formatArg(file));
                }
                QDir dir = QDir(fi.filePath());
                projectRoots.insert(dir.absolutePath() + QLatin1Char('/'));
