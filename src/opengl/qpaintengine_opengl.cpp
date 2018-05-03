@@ -4803,7 +4803,8 @@ void QGLGlyphCache::cleanCache()
    QList<const QGLContext *> keys = qt_context_cache.keys();
    for (int i = 0; i < keys.size(); ++i) {
       QGLFontGlyphHash *font_cache = qt_context_cache.value(keys.at(i));
-      QGLFontGlyphHash::Iterator it = font_cache->begin();
+      QGLFontGlyphHash::iterator it = font_cache->begin();
+
       for (; it != font_cache->end(); ++it) {
          qt_delete_glyph_hash(it.value());
       }
@@ -5152,8 +5153,6 @@ void QOpenGLPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
 
    {
       QStaticTextItem staticTextItem;
-      staticTextItem.m_iter = ti.m_iter;
-      staticTextItem.m_end  = ti.m_end;
 
       staticTextItem.setFontEngine(ti.fontEngine);
       staticTextItem.glyphs = glyphs.data();

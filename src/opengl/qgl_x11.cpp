@@ -157,7 +157,7 @@ Q_GLOBAL_STATIC(QGLCMapCleanupHandler, cmap_handler)
 static void cleanup_cmaps()
 {
    CMapEntryHash *hash = cmap_handler()->cmap_hash;
-   QHash<int, QCMapEntry *>::ConstIterator it = hash->constBegin();
+   QHash<int, QCMapEntry *>::const_iterator it = hash->constBegin();
    while (it != hash->constEnd()) {
       delete it.value();
       ++it;
@@ -178,7 +178,8 @@ Colormap qt_gl_choose_cmap(Display *dpy, XVisualInfo *vi)
    }
 
    CMapEntryHash *hash = cmap_handler()->cmap_hash;
-   CMapEntryHash::ConstIterator it = hash->constFind((long) vi->visualid + (vi->screen * 256));
+   CMapEntryHash::const_iterator it = hash->constFind((long) vi->visualid + (vi->screen * 256));
+
    if (it != hash->constEnd()) {
       return it.value()->cmap;   // found colormap for visual
    }
@@ -1031,8 +1032,8 @@ uint QGLContext::colorIndex(const QColor &c) const
 
       XVisualInfo *info = (XVisualInfo *) d->vi;
       CMapEntryHash *hash = cmap_handler()->cmap_hash;
-      CMapEntryHash::ConstIterator it = hash->constFind(long(info->visualid)
-                                        + (info->screen * 256));
+      CMapEntryHash::const_iterator it = hash->constFind(long(info->visualid) + (info->screen * 256));
+
       QCMapEntry *x = 0;
       if (it != hash->constEnd()) {
          x = it.value();
@@ -1051,7 +1052,8 @@ uint QGLContext::colorIndex(const QColor &c) const
 
          // already in the map?
          QRgb target = c.rgb();
-         QMap<int, QRgb>::Iterator it = cmap.begin();
+         QMap<int, QRgb>::iterator it = cmap.begin();
+
          for (; it != cmap.end(); ++it) {
             if ((*it) == target) {
                return it.key();

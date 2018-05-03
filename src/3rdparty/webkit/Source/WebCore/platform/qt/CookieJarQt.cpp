@@ -46,12 +46,15 @@ static QNetworkCookieJar *cookieJar(const Document *document)
 {
     if (!document)
         return 0;
+
     Frame* frame = document->frame();
     if (!frame)
         return 0;
+
     FrameLoader* loader = frame->loader();
     if (!loader)
         return 0;
+
     QNetworkAccessManager* manager = loader->networkingContext()->networkAccessManager();
     QNetworkCookieJar* jar = manager->cookieJar();
     return jar;
@@ -60,11 +63,13 @@ static QNetworkCookieJar *cookieJar(const Document *document)
 void setCookies(Document* document, const KURL& url, const String& value)
 {
     QNetworkCookieJar* jar = cookieJar(document);
-    if (!jar)
+    if (! jar) {
         return;
+    }
 
     QList<QNetworkCookie> cookies = QNetworkCookie::parseCookies(QString(value).toLatin1());
-    QList<QNetworkCookie>::Iterator it = cookies.begin();
+    QList<QNetworkCookie>::iterator it = cookies.begin();
+
     while (it != cookies.end()) {
         if (it->isHttpOnly())
             it = cookies.erase(it);

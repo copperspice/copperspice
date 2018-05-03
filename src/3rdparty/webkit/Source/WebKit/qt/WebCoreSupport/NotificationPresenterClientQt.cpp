@@ -125,7 +125,7 @@ const QUrl NotificationWrapper::openerPageUrl() const
 #if ENABLE(NOTIFICATIONS)
     Notification* notification = NotificationPresenterClientQt::notificationPresenter()->notificationForWrapper(this);
     if (notification) {
-        if (notification->scriptExecutionContext()) 
+        if (notification->scriptExecutionContext())
             url = static_cast<Document*>(notification->scriptExecutionContext())->page()->mainFrame()->document()->url();
     }
 #endif
@@ -155,7 +155,7 @@ NotificationPresenterClientQt::NotificationPresenterClientQt() : m_clientCount(0
 NotificationPresenterClientQt::~NotificationPresenterClientQt()
 {
     while (!m_notifications.isEmpty()) {
-        NotificationsQueue::Iterator iter = m_notifications.begin();
+        NotificationsQueue::iterator iter = m_notifications.begin();
         detachNotification(iter.key());
     }
 }
@@ -246,7 +246,7 @@ void NotificationPresenterClientQt::cancel(Notification* notification)
             printf("DESKTOP NOTIFICATION CLOSED: %s\n", QString(notification->contents().title()).toUtf8().constData());
     }
 
-    NotificationsQueue::Iterator iter = m_notifications.find(notification);
+    NotificationsQueue::iterator iter = m_notifications.find(notification);
     if (iter != m_notifications.end()) {
         sendEvent(notification, eventNames().closeEvent);
         detachNotification(notification);
@@ -274,9 +274,11 @@ void NotificationPresenterClientQt::notificationClicked(const QString& title)
 {
     if (!dumpNotification)
         return;
-    NotificationsQueue::ConstIterator end = m_notifications.end();
-    NotificationsQueue::ConstIterator iter = m_notifications.begin();
+
+    NotificationsQueue::const_iterator end = m_notifications.end();
+    NotificationsQueue::const_iterator iter = m_notifications.begin();
     Notification* notification = 0;
+
     while (iter != end) {
         notification = iter.key();
         QString notificationTitle;
@@ -294,8 +296,8 @@ void NotificationPresenterClientQt::notificationClicked(const QString& title)
 
 Notification* NotificationPresenterClientQt::notificationForWrapper(const NotificationWrapper* wrapper) const
 {
-    NotificationsQueue::ConstIterator end = m_notifications.end();
-    NotificationsQueue::ConstIterator iter = m_notifications.begin();
+    NotificationsQueue::const_iterator end = m_notifications.end();
+    NotificationsQueue::const_iterator iter = m_notifications.begin();
     while (iter != end && iter.value() != wrapper)
         iter++;
     if (iter != end)
@@ -306,13 +308,14 @@ Notification* NotificationPresenterClientQt::notificationForWrapper(const Notifi
 void NotificationPresenterClientQt::notificationObjectDestroyed(Notification* notification)
 {
     // Called from ~Notification(), Remove the entry from the notifications list and delete the icon.
-    NotificationsQueue::Iterator iter = m_notifications.find(notification);
+    NotificationsQueue::iterator iter = m_notifications.find(notification);
+
     if (iter != m_notifications.end())
         delete m_notifications.take(notification);
 }
 
 void NotificationPresenterClientQt::requestPermission(ScriptExecutionContext* context, PassRefPtr<VoidCallback> callback)
-{  
+{
     if (dumpNotification)
         printf("DESKTOP NOTIFICATION PERMISSION REQUESTED: %s\n", QString(context->securityOrigin()->toString()).toUtf8().constData());
 
@@ -389,8 +392,8 @@ void NotificationPresenterClientQt::sendEvent(Notification* notification, const 
 void NotificationPresenterClientQt::removeReplacedNotificationFromQueue(Notification* notification)
 {
     Notification* oldNotification = 0;
-    NotificationsQueue::Iterator end = m_notifications.end();
-    NotificationsQueue::Iterator iter = m_notifications.begin();
+    NotificationsQueue::iterator end = m_notifications.end();
+    NotificationsQueue::iterator iter = m_notifications.begin();
 
     while (iter != end) {
         Notification* existingNotification = iter.key();

@@ -277,10 +277,12 @@ void QGLCmap::resize(int newSize)
 
 int QGLCmap::find(QRgb color) const
 {
-   QMap<uint, int>::ConstIterator it = d->colorMap.find(color);
+   QMap<uint, int>::const_iterator it = d->colorMap.find(color);
+
    if (it != d->colorMap.end()) {
       return *it;
    }
+
    return -1;
 }
 

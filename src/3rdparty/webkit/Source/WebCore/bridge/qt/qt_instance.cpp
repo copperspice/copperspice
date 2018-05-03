@@ -155,7 +155,7 @@ void QtInstance::removeCachedMethod(JSObject* method)
     if (m_defaultMethod.get() == method)
         m_defaultMethod.clear();
 
-    for (QHash<QString, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it) {
+    for (QHash<QString, WriteBarrier<JSObject> >::iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it) {
         if (it.value().get() == method) {
             m_methods.erase(it);
             return;
@@ -167,8 +167,10 @@ QtInstance* QtInstance::getInstance(JSObject* object)
 {
     if (!object)
         return 0;
+
     if (!object->inherits(&QtRuntimeObject::s_info))
         return 0;
+
     return static_cast<QtInstance*>(static_cast<RuntimeObject*>(object)->getInternalInstance());
 }
 
@@ -194,7 +196,7 @@ void QtInstance::visitAggregate(SlotVisitor& visitor)
     if (m_defaultMethod)
         visitor.append(&m_defaultMethod);
 
-    for (QHash<QString, WriteBarrier<JSObject> >::Iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it)
+    for (QHash<QString, WriteBarrier<JSObject> >::iterator it = m_methods.begin(), end = m_methods.end(); it != end; ++it)
         visitor.append(&it.value());
 }
 

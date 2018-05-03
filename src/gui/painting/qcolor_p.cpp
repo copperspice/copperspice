@@ -299,7 +299,7 @@ static bool get_named_rgb(const char *name_no_space, QRgb *rgb)
 
 bool qt_get_named_rgb(const char *name, QRgb *rgb)
 {
-   int len = int(strlen(name));
+   int len = strlen(name);
    if (len > 255) {
       return false;
    }
@@ -312,24 +312,29 @@ bool qt_get_named_rgb(const char *name, QRgb *rgb)
          name_no_space[pos++] = name[i];
       }
    }
+
    name_no_space[pos] = 0;
 
    return get_named_rgb(name_no_space, rgb);
 }
 
-bool qt_get_named_rgb(const QChar *name, int len, QRgb *rgb)
+bool qt_get_named_rgb(const QStringView name, QRgb *rgb)
 {
-   if (len > 255) {
+   if (name.length() > 255) {
       return false;
    }
+
    char name_no_space[256];
    int pos = 0;
-   for (int i = 0; i < len; i++) {
-      if (name[i] != '\t' && name[i] != ' ') {
-         name_no_space[pos++] = name[i].toLatin1();
+
+   for (QChar c : name) {
+      if (c != '\t' && c != ' ') {
+         name_no_space[pos++] = c.toLatin1();
       }
    }
+
    name_no_space[pos] = 0;
+
    return get_named_rgb(name_no_space, rgb);
 }
 
@@ -355,6 +360,11 @@ QStringList qt_get_colornames()
 #else
 
 bool qt_get_named_rgb(const char *, QRgb *)
+{
+   return false;
+}
+
+bool qt_get_named_rgb(QStringView name, QRgb *)
 {
    return false;
 }

@@ -404,20 +404,25 @@ struct  QtFontFamily {
 
    QtFontFamily(const QString &n)
       :
+
 #ifdef Q_WS_X11
       fixedPitch(true), ftWritingSystemCheck(false),
       xlfdLoaded(false), synthetic(false), symbol_checked(false),
 #else
       fixedPitch(false),
 #endif
+
 #ifdef Q_OS_WIN
       writingSystemCheck(false),
       loaded(false),
 #endif
-#if !defined(QWS) && defined(Q_OS_MAC)
+
+#if ! defined(QWS) && defined(Q_OS_MAC)
       fixedPitchComputed(false),
 #endif
+
       name(n), count(0), foundries(0)
+
 #if defined(Q_WS_QWS) || defined(Q_WS_QPA) && !defined(QT_NO_FREETYPE)
       , bogusWritingSystems(false)
 #endif

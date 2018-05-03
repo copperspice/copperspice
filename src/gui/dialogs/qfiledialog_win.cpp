@@ -67,6 +67,13 @@ static int __stdcall winGetExistDirCallbackProc(HWND hwnd, UINT uMsg, LPARAM lPa
 
 static QString tCaption;
 
+static const QString qt_file_dialog_filter_reg_exp = "^(.*)\\(([a-zA-Z0-9_.*? +;#\\-\\[\\]@\\{\\}/!<>\\$%&=^~:\\|]*)\\)$";
+
+QStringList qt_make_filter_list(const QString &filter);
+
+const int maxNameLen  = 1023;
+const int maxMultiLen = 65535;
+
 struct CS_OpenFile : public OPENFILENAME
 {
    CS_OpenFile() = default;
@@ -91,12 +98,6 @@ static void qt_win_resolve_libs()
       triedResolve = true;
    }
 }
-
-extern const QString qt_file_dialog_filter_reg_exp;                   // defined in qfiledialog.cpp
-extern QStringList qt_make_filter_list(const QString &filter);
-
-const int maxNameLen  = 1023;
-const int maxMultiLen = 65535;
 
 // Returns the wildcard part of a filter.
 static QString qt_win_extract_filter(const QString &rawFilter)

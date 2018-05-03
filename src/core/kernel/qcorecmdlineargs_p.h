@@ -106,28 +106,22 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
 }
 
 #if defined(Q_OS_WIN32)
-static inline QStringList qWinCmdArgs(QString cmdLine) // not const-ref: this might be modified
+
+static inline QStringList qCmdLineArgs(int t1, char *t2[])
 {
+   // windows only
+
    QStringList args;
-
    int argc = 0;
-   QVector<wchar_t *> argv = qWinCmdLine<wchar_t>(&cmdLine.toStdWString()[0], cmdLine.length(), argc);
 
-   for (int a = 0; a < argc; ++a) {
-      args << QString::fromStdWString(std::wstring(argv[a]));
+   std::wstring tmp(GetCommandLine());
+   QVector<wchar_t *> argv = qWinCmdLine<wchar_t>(&tmp[0], tmp.length(), argc);
+
+   for (int index = 0; index < argc; ++index) {
+      args << QString::fromStdWString(std::wstring(argv[index]));
    }
 
    return args;
-}
-
-static inline QStringList qCmdLineArgs(int argc, char *argv[])
-{
-   Q_UNUSED(argc)
-   Q_UNUSED(argv)
-
-   QString cmdLine = QString::fromStdWString(std::wstring(GetCommandLine()));
-
-   return qWinCmdArgs(cmdLine);
 }
 #endif
 
@@ -136,9 +130,11 @@ static inline QStringList qCmdLineArgs(int argc, char *argv[])
 static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {
    QStringList args;
+
    for (int i = 0; i != argc; ++i) {
-      args += QString::fromLocal8Bit(argv[i]);
+      args += QString::fromUtf8(argv[i]);
    }
+
    return args;
 }
 

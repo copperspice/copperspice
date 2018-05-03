@@ -1995,7 +1995,8 @@ QGLContext::~QGLContext()
 
 void QGLContextPrivate::cleanup()
 {
-   QHash<QGLContextResourceBase *, void *>::ConstIterator it;
+   QHash<QGLContextResourceBase *, void *>::const_iterator it;
+
    for (it = m_resources.begin(); it != m_resources.end(); ++it) {
       it.key()->freeResource(it.value());
    }
@@ -2006,6 +2007,7 @@ void QGLContextPrivate::cleanup()
 void QGLContextPrivate::setVertexAttribArrayEnabled(int arrayIndex, bool enabled)
 {
    Q_ASSERT(arrayIndex < QT_GL_VERTEX_ARRAY_TRACKED_COUNT);
+
 #ifdef glEnableVertexAttribArray
    Q_ASSERT(glEnableVertexAttribArray);
 #endif
@@ -4665,7 +4667,7 @@ int QGLWidget::fontDisplayListBase(const QFont &font, int listBase)
 
    } else {
       int maxBase = listBase - 256;
-      QMap<QString, int>::ConstIterator it;
+      QMap<QString, int>::const_iterator it;
 
       for (it = d->displayListCache.constBegin(); it != d->displayListCache.constEnd(); ++it) {
          if (maxBase < it.value()) {
@@ -5642,7 +5644,7 @@ void QGLContextGroupResourceBase::cleanup(const QGLContext *ctx, void *value)
 void QGLContextGroup::cleanupResources(const QGLContext *context)
 {
    // Notify all resources that a context has been deleted
-   QHash<QGLContextGroupResourceBase *, void *>::ConstIterator it;
+   QHash<QGLContextGroupResourceBase *, void *>::const_iterator it;
    for (it = m_resources.begin(); it != m_resources.end(); ++it) {
       it.key()->contextDeleted(context);
    }

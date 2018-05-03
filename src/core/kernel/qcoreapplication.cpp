@@ -1491,9 +1491,7 @@ QStringList QCoreApplication::arguments()
    }
 
 #ifdef Q_OS_WIN
-   QString cmdline = QString::fromStdWString(std::wstring(GetCommandLine()));
-
-   list = qWinCmdArgs(cmdline);
+   list = qCmdLineArgs(0, nullptr);
 
    if (self->d_func()->application_type) {
       // GUI app? Skip known - see qapplication.cpp

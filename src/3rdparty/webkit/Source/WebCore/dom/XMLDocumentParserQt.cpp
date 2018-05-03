@@ -337,12 +337,13 @@ HashMap<String, String> parseAttributes(const String& string, bool& attrsOK)
 
 static inline String prefixFromQName(const QString& qName)
 {
-    const int offset = qName.indexOf(:');
+    const int offset = qName.indexOf(':');
 
-    if (offset <= 0)
+    if (offset <= 0) {
         return String();
-    else
+    } else {
         return qName.left(offset);
+    }
 }
 
 static inline void handleElementNamespaces(Element* newElement, const QXmlStreamNamespaceDeclarations &ns,
@@ -352,8 +353,10 @@ static inline void handleElementNamespaces(Element* newElement, const QXmlStream
         const QXmlStreamNamespaceDeclaration &decl = ns[i];
         String namespaceURI = decl.namespaceUri();
         String namespaceQName = decl.prefix().isEmpty() ? String("xmlns") : String("xmlns:");
+
         namespaceQName.append(decl.prefix());
         newElement->setAttributeNS("http://www.w3.org/2000/xmlns/", namespaceQName, namespaceURI, ec, scriptingPermission);
+
         if (ec) // exception setting attributes
             return;
     }
