@@ -59,7 +59,9 @@ static void print_backtrace(FILE *outb)
    void *stack[128];
    int stack_size = backtrace(stack, sizeof(stack) / sizeof(void *));
    char **stack_symbols = backtrace_symbols(stack, stack_size);
+
    fprintf(outb, "Stack [%d]:\n", stack_size);
+
    if (FILE *cppfilt = popen("c++filt", "rw")) {
       dup2(fileno(outb), fileno(cppfilt));
       for (int i = stack_size - 1; i >= 0; --i) {
@@ -266,19 +268,23 @@ void qt_signal_handler(int sig)
       (*QSegfaultHandler::callback)();
       _exit(1);
    }
+
    FILE *outb = stderr;
    if (char *crash_loc = ::getenv("QT_CRASH_OUTPUT")) {
       if (FILE *new_outb = fopen(crash_loc, "w")) {
-         fprintf(stderr, "Crash (backtrace written to %s)!!!\n", crash_loc);
+         fprintf(stderr, "Crash (backtrace written to %s)\n", crash_loc);
          outb = new_outb;
       }
    } else {
-      fprintf(outb, "Crash!!!\n");
+      fprintf(outb, "Crash\n");
    }
+
    print_backtrace(outb);
+
    if (outb != stderr) {
       fclose(outb);
    }
+
    _exit(1);
 }
 

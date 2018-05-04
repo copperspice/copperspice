@@ -65,8 +65,10 @@ static gboolean socketNotifierSourceCheck(GSource *source)
       if (p->pollfd.revents & G_IO_NVAL) {
          // disable the invalid socket notifier
          static const char *t[] = { "Read", "Write", "Exception" };
+
          qWarning("QSocketNotifier: Invalid socket %d and type '%s', disabling...",
                   p->pollfd.fd, t[int(p->socketNotifier->type())]);
+
          // ### note, modifies src->pollfds!
          p->socketNotifier->setEnabled(false);
       }

@@ -68,7 +68,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
 
    // is signalMethod a signal
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
-      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), "was not a valid signal");
+      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), " was not a valid signal");
       return false;
    }
 
@@ -124,7 +124,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
 
    // is signalMethod a signal
    if (signalMetaMethod.methodType() != QMetaMethod::Signal ) {
-      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), "was not a valid signal");
+      qWarning("%s%s%s%s%s", "QObject::connect() ", csPrintable(senderClass), "::", csPrintable(signature), " was not a valid signal");
       return false;
    }
 
@@ -248,7 +248,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::Conne
          }
       }
 
-      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig);
+      qWarning("QMetaObject::invokeMethod() No such method %s::%s", csPrintable(metaObject->className()), csPrintable(sig));
 
       for (int k = 0; k < msgList.size(); ++k ) {
          qWarning(" Related methods: %s", csPrintable(msgList[k]) );
@@ -296,7 +296,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::Conne
          }
       }
 
-      qWarning("QMetaObject::invokeMethod() No such method %s::%s", metaObject->className(), sig);
+      qWarning("QMetaObject::invokeMethod() No such method %s::%s", csPrintable(metaObject->className()), csPrintable(sig));
 
       for (int k = 0; k < msgList.size(); ++k ) {
          qWarning(" Related methods: %s", csPrintable(msgList[k]) );
@@ -343,7 +343,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
    }
 
    if (m_bento == 0)  {
-      qWarning("QMetaMethod::invoke() MetaMethod registration issue, Receiver is %s", m_metaObject->className());
+      qWarning("QMetaMethod::invoke() MetaMethod registration issue, Receiver is %s", csPrintable(m_metaObject->className()));
       return false;
    }
 
@@ -361,7 +361,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
    if (passedArgCount != methodArgCount) {
       qWarning("QMetaMethod::invoke() Passed argument count does not equal the method argument count, Receiver is %s",
-               m_metaObject->className());
+               csPrintable(m_metaObject->className()));
 
       return false;
    }
@@ -414,7 +414,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       if (currentThread == objectThread) {
          qWarning("QMetaMethod::invoke() Dead lock detected in BlockingQueuedConnection, Receiver is %s(%p)",
-                  m_metaObject->className(), object);
+                  csPrintable(m_metaObject->className()), object);
       }
 
       QSemaphore semaphore;
@@ -485,7 +485,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, Ts &&...Vs) c
 
       if (currentThread == objectThread) {
          qWarning("QMetaMethod::invoke() Dead lock detected in BlockingQueuedConnection, Receiver is %s(%p)",
-                  m_metaObject->className(), object);
+                  csPrintable(m_metaObject->className()), object);
       }
 
       QSemaphore semaphore;

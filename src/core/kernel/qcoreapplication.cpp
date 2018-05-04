@@ -802,9 +802,10 @@ int QCoreApplication::exec()
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(self);
 
    if (threadData != QThreadData::current()) {
-      qWarning("%s::exec: Must be called from the main thread", self->metaObject()->className());
+      qWarning("%s::exec: Must be called from the main thread", csPrintable(self->metaObject()->className()));
       return -1;
    }
+
    if (!threadData->eventLoops.isEmpty()) {
       qWarning("QCoreApplication::exec: The event loop is already running");
       return -1;

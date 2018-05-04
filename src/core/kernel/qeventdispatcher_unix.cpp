@@ -205,7 +205,7 @@ int QEventDispatcherUNIXPrivate::doSelect(QEventLoop::ProcessEventsFlags flags, 
 
       if (!wakeUps.testAndSetRelease(1, 0)) {
          // hopefully, this is dead code
-         qWarning("QEventDispatcherUNIX: internal error, wakeUps.testAndSetRelease(1, 0) failed!");
+         qWarning("QEventDispatcherUNIX: internal error, wakeUps.testAndSetRelease(1, 0) failed");
       }
       ++nevents;
    }

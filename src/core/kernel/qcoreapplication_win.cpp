@@ -168,7 +168,7 @@ void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdParam,
    static bool already_called = false;
 
    if (already_called) {
-      qWarning("Qt: Internal error: qWinMain should be called only once");
+      qWarning("Internal error: qWinMain should be called only once");
       return;
    }
    already_called = true;

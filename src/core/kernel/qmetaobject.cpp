@@ -178,7 +178,8 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
          }
 
       } else if (! (metaObj->method(slotIndex).attributes() & QMetaMethod::Cloned)) {
-         qWarning("QMetaObject::connectSlotsByName() No matching signal for: %s::%s", metaObj->className(), slotName);
+         qWarning("QMetaObject::connectSlotsByName() No matching signal for: %s::%s",
+                  csPrintable(metaObj->className()), csPrintable(slotName));
 
       }
    }
@@ -689,7 +690,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
       QString leftParn = tokens[index++];
 
       if (leftParn != "(")   {
-         qWarning("QMetaObject:getSignature() Unable to parse signature: %s", fullName);
+         qWarning("QMetaObject:getSignature() Unable to parse signature: %s", csPrintable(fullName));
       }
 
       signature += leftParn;
