@@ -39,7 +39,7 @@ typedef struct _HB_GlyphMetrics HB_GlyphMetrics;
 struct _HB_GlyphMetrics
 {
     HB_Fixed advance;
-    
+
     /* Do we need ink/logical extents for the glyph here? */
 };
 
@@ -98,7 +98,7 @@ const char *hb_attribute_type_to_string(HB_AttributeType attribute_type);
 
 struct HB_Attribute {
     HB_AttributeType type;
-    int start; 
+    int start;
     int end;
 };
 
@@ -125,7 +125,7 @@ struct _HB_ShapeInput {
      * the enum are mandatory.
      */
     HB_ShapeFlags flags;
-    
+
     HB_CodePoint *text;
     int length;       /* total length of text to shape */
     int shape_offset; /* start of section to shape */
@@ -144,7 +144,7 @@ struct _HB_ShapeInput {
 
 struct HB_GlyphItem {
     HB_Glyph glyph;
-    
+
     HB_Fixed x_offset;
     HB_Fixed y_offset;
     HB_Fixed advance;
@@ -159,16 +159,16 @@ typedef enum {
 } HB_Result;
 
 /*
- * Buffer for output 
+ * Buffer for output
  */
 typedef struct _HB_GlyphBuffer HB_GlyphBuffer;
 struct _HB_GlyphBuffer {
     int glyph_item_size;
     int total_glyphs;
-    
+
     int *log_clusters; /* Uniscribe style */
     int cluster_space;
-  
+
     int glyph_space;
     void *glyph_buffer;
 };

@@ -1451,7 +1451,9 @@ HB_Bool HB_ShapeItem(HB_ShaperItem *shaper_item)
         shaper_item->num_glyphs = shaper_item->item.length;
         return false;
     }
+
     assert(shaper_item->item.script < HB_ScriptCount);
+
     result = HB_ScriptEngines[shaper_item->item.script].shape(shaper_item);
     shaper_item->glyphIndicesPresent = false;
     return result;
