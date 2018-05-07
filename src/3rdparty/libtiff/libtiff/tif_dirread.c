@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.178 2012-08-19 16:56:34 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.191 2015-09-05 20:31:41 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2172,11 +2172,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntrySlong8Array(TIFF* tif, TIFFDirEn
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
@@ -2414,11 +2409,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloatArray(TIFF* tif, TIFFDirEnt
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
@@ -2657,11 +2647,6 @@ TIFFReadDirEntryDoubleArray(TIFF* tif, TIFFDirEntry* direntry, double** value)
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
@@ -2723,11 +2708,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryIfd8Array(TIFF* tif, TIFFDirEntr
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
@@ -3194,11 +3174,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryCheckRangeLongSlong(int32 value)
 /*
  * Largest 32-bit unsigned integer value.
  */
-#if defined(__WIN32__) && defined(_MSC_VER)
-# define TIFF_UINT32_MAX 0xFFFFFFFFI64
-#else
-# define TIFF_UINT32_MAX 0xFFFFFFFFLL
-#endif
+#define TIFF_UINT32_MAX 0xFFFFFFFFU
 
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeLongLong8(uint64 value)
@@ -3212,7 +3188,7 @@ TIFFReadDirEntryCheckRangeLongLong8(uint64 value)
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeLongSlong8(int64 value)
 {
-	if ((value<0) || (value > TIFF_UINT32_MAX))
+	if ((value < 0) || (value > (int64) TIFF_UINT32_MAX))
 		return(TIFFReadDirEntryErrRange);
 	else
 		return(TIFFReadDirEntryErrOk);
@@ -3229,19 +3205,21 @@ TIFFReadDirEntryCheckRangeSlongLong(uint32 value)
 		return(TIFFReadDirEntryErrOk);
 }
 
+/* Check that the 8-byte unsigned value can fit in a 4-byte unsigned range */
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeSlongLong8(uint64 value)
 {
-	if (value > 0x7FFFFFFFUL)
+	if (value > 0x7FFFFFFF)
 		return(TIFFReadDirEntryErrRange);
 	else
 		return(TIFFReadDirEntryErrOk);
 }
 
+/* Check that the 8-byte signed value can fit in a 4-byte signed range */
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeSlongSlong8(int64 value)
 {
-	if ((value < 0L-0x80000000L) || (value > 0x7FFFFFFFL))
+        if ((value < 0-((int64) 0x7FFFFFFF+1)) || (value > 0x7FFFFFFF))
 		return(TIFFReadDirEntryErrRange);
 	else
 		return(TIFFReadDirEntryErrOk);
@@ -3286,11 +3264,7 @@ TIFFReadDirEntryCheckRangeLong8Slong8(int64 value)
 /*
  * Largest 64-bit signed integer value.
  */
-#if defined(__WIN32__) && defined(_MSC_VER)
-# define TIFF_INT64_MAX 0x7FFFFFFFFFFFFFFFI64
-#else
-# define TIFF_INT64_MAX 0x7FFFFFFFFFFFFFFFLL
-#endif
+#define TIFF_INT64_MAX ((int64)(((uint64) ~0) >> 1))
 
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeSlong8Long8(uint64 value)
@@ -3374,7 +3348,7 @@ static void TIFFReadDirEntryOutputErr(TIFF* tif, enum TIFFReadDirEntryErr err, c
 	} else {
 		switch (err) {
 			case TIFFReadDirEntryErrCount:
-				TIFFErrorExt(tif->tif_clientdata, module,
+				TIFFWarningExt(tif->tif_clientdata, module,
 				"Incorrect count for \"%s\"; tag ignored",
 					     tagname);
 				break;
@@ -3430,6 +3404,8 @@ TIFFReadDirectory(TIFF* tif)
 	const TIFFField* fip;
 	uint32 fii=FAILED_FII;
         toff_t nextdiroff;
+    int bitspersample_read = FALSE;
+
 	tif->tif_diroff=tif->tif_nextdiroff;
 	if (!TIFFCheckDirOffset(tif,tif->tif_nextdiroff))
 		return 0;           /* last offset or bad offset (IFD looping) */
@@ -3706,6 +3682,8 @@ TIFFReadDirectory(TIFF* tif)
 					}
 					if (!TIFFSetField(tif,dp->tdir_tag,value))
 						goto bad;
+                    if( dp->tdir_tag == TIFFTAG_BITSPERSAMPLE )
+                        bitspersample_read = TRUE;
 				}
 				break;
 			case TIFFTAG_SMINSAMPLEVALUE:
@@ -3763,6 +3741,19 @@ TIFFReadDirectory(TIFF* tif)
 					uint32 countrequired;
 					uint32 incrementpersample;
 					uint16* value=NULL;
+                    /* It would be dangerous to instanciate those tag values */
+                    /* since if td_bitspersample has not yet been read (due to */
+                    /* unordered tags), it could be read afterwards with a */
+                    /* values greater than the default one (1), which may cause */
+                    /* crashes in user code */
+                    if( !bitspersample_read )
+                    {
+                        fip = TIFFFieldWithTag(tif,dp->tdir_tag);
+                        TIFFWarningExt(tif->tif_clientdata,module,
+                                       "Ignoring %s since BitsPerSample tag not found",
+                                       fip ? fip->field_name : "unknown tagname");
+                        continue;
+                    }
 					countpersample=(1L<<tif->tif_dir.td_bitspersample);
 					if ((dp->tdir_tag==TIFFTAG_TRANSFERFUNCTION)&&(dp->tdir_count==(uint64)countpersample))
 					{
@@ -4278,7 +4269,8 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 	TIFFDirectory *td = &tif->tif_dir;
 	uint32 strip;
 
-    _TIFFFillStriles( tif );
+    if( !_TIFFFillStriles( tif ) )
+        return -1;
 
 	if (td->td_stripbytecount)
 		_TIFFfree(td->td_stripbytecount);
@@ -4377,6 +4369,11 @@ TIFFCheckDirOffset(TIFF* tif, uint64 diroff)
 
 	if (diroff == 0)			/* no more directories */
 		return 0;
+	if (tif->tif_dirnumber == 65535) {
+	    TIFFErrorExt(tif->tif_clientdata, "TIFFCheckDirOffset",
+			 "Cannot handle more than 65535 TIFF directories");
+	    return 0;
+	}
 
 	for (n = 0; n < tif->tif_dirnumber && tif->tif_dirlist; n++) {
 		if (tif->tif_dirlist[n] == diroff)
@@ -4396,7 +4393,10 @@ TIFFCheckDirOffset(TIFF* tif, uint64 diroff)
 		    tif->tif_dirnumber, 2 * sizeof(uint64), "for IFD list");
 		if (!new_dirlist)
 			return 0;
-		tif->tif_dirlistsize = 2 * tif->tif_dirnumber;
+		if( tif->tif_dirnumber >= 32768 )
+		    tif->tif_dirlistsize = 65535;
+		else
+		    tif->tif_dirlistsize = 2 * tif->tif_dirnumber;
 		tif->tif_dirlist = new_dirlist;
 	}
 
@@ -4708,6 +4708,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
             return 0;
         }
 	fip=tif->tif_fields[fii];
+	assert(fip != NULL); /* should not happen */
 	assert(fip->set_field_type!=TIFF_SETGET_OTHER);  /* if so, we shouldn't arrive here but deal with this in specialized code */
 	assert(fip->set_field_type!=TIFF_SETGET_INT);    /* if so, we shouldn't arrive here as this is only the case for pseudo-tags */
 	err=TIFFReadDirEntryErrOk;
@@ -5355,7 +5356,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 	}
 	if (err!=TIFFReadDirEntryErrOk)
 	{
-		TIFFReadDirEntryOutputErr(tif,err,module,fip ? fip->field_name : "unknown tagname",recover);
+		TIFFReadDirEntryOutputErr(tif,err,module,fip->field_name,recover);
 		return(0);
 	}
 	return(1);

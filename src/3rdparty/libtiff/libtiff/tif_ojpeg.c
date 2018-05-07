@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.56 2012-05-24 03:15:18 fwarmerdam Exp $ */
+/* $Id: tif_ojpeg.c,v 1.60 2015-05-31 00:38:46 bfriesen Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -39,7 +39,7 @@
    OF THIS SOFTWARE.
 
    Joris Van Damme and/or AWare Systems may be available for custom
-   developement. If you like what you see, and need anything similar or related,
+   development. If you like what you see, and need anything similar or related,
    contact <info@awaresystems.be>.
 */
 
@@ -141,7 +141,7 @@
  * OJPEG_BUFFER: Define the size of the desired buffer here. Should be small enough so as to guarantee
  * 	instant processing, optimal streaming and optimal use of processor cache, but also big
  * 	enough so as to not result in significant call overhead. It should be at least a few
- * 	bytes to accomodate some structures (this is verified in asserts), but it would not be
+ * 	bytes to accommodate some structures (this is verified in asserts), but it would not be
  * 	sensible to make it this small anyway, and it should be at most 64K since it is indexed
  * 	with uint16. We recommend 2K.
  * EGYPTIANWALK: You could also define EGYPTIANWALK here, but it is not used anywhere and has
@@ -528,6 +528,8 @@ OJPEGVSetField(TIFF* tif, uint32 tag, va_list ap)
 	uint32 ma;
 	uint64* mb;
 	uint32 n;
+	const TIFFField* fip;
+
 	switch(tag)
 	{
 		case TIFFTAG_JPEGIFOFFSET:
@@ -597,7 +599,10 @@ OJPEGVSetField(TIFF* tif, uint32 tag, va_list ap)
 		default:
 			return (*sp->vsetparent)(tif,tag,ap);
 	}
-	TIFFSetFieldBit(tif,TIFFFieldWithTag(tif,tag)->field_bit);
+	fip = TIFFFieldWithTag(tif,tag);
+	if( fip == NULL ) /* shouldn't happen */
+	    return(0);
+	TIFFSetFieldBit(tif,fip->field_bit);
 	tif->tif_flags|=TIFF_DIRTYDIRECT;
 	return(1);
 }
@@ -1492,14 +1497,17 @@ OJPEGReadHeaderInfoSecStreamDht(TIFF* tif)
 		nb[sizeof(uint32)+1]=JPEG_MARKER_DHT;
 		nb[sizeof(uint32)+2]=(m>>8);
 		nb[sizeof(uint32)+3]=(m&255);
-		if (OJPEGReadBlock(sp,m-2,&nb[sizeof(uint32)+4])==0)
+		if (OJPEGReadBlock(sp,m-2,&nb[sizeof(uint32)+4])==0) {
+                        _TIFFfree(nb);
 			return(0);
+                }
 		o=nb[sizeof(uint32)+4];
 		if ((o&240)==0)
 		{
 			if (3<o)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,"Corrupt DHT marker in JPEG data");
+                                _TIFFfree(nb);
 				return(0);
 			}
 			if (sp->dctable[o]!=0)
@@ -1511,12 +1519,14 @@ OJPEGReadHeaderInfoSecStreamDht(TIFF* tif)
 			if ((o&240)!=16)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,"Corrupt DHT marker in JPEG data");
+                                _TIFFfree(nb);
 				return(0);
 			}
 			o&=15;
 			if (3<o)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,"Corrupt DHT marker in JPEG data");
+                                _TIFFfree(nb);
 				return(0);
 			}
 			if (sp->actable[o]!=0)
@@ -1955,6 +1965,7 @@ OJPEGReadBufferFill(OJPEGState* sp)
 				break;
 			case osibsJpegInterchangeFormat:
 				sp->in_buffer_source=osibsStrile;
+                                break;
 			case osibsStrile:
 				if (!_TIFFFillStriles( sp->tif ) 
 				    || sp->tif->tif_dir.td_stripoffset == NULL

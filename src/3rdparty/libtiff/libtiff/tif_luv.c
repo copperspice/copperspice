@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.35 2011-04-02 20:54:09 bfriesen Exp $ */
+/* $Id: tif_luv.c,v 1.40 2015-06-21 01:09:09 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -379,6 +379,9 @@ LogLuvDecodeStrip(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
 	tmsize_t rowlen = TIFFScanlineSize(tif);
 
+        if (rowlen == 0)
+                return 0;
+
 	assert(cc%rowlen == 0);
 	while (cc && (*tif->tif_decoderow)(tif, bp, rowlen, s))
 		bp += rowlen, cc -= rowlen;
@@ -394,6 +397,9 @@ static int
 LogLuvDecodeTile(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
 	tmsize_t rowlen = TIFFTileRowSize(tif);
+
+        if (rowlen == 0)
+                return 0;
 
 	assert(cc%rowlen == 0);
 	while (cc && (*tif->tif_decoderow)(tif, bp, rowlen, s))
@@ -644,6 +650,9 @@ LogLuvEncodeStrip(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
 	tmsize_t rowlen = TIFFScanlineSize(tif);
 
+        if (rowlen == 0)
+                return 0;
+
 	assert(cc%rowlen == 0);
 	while (cc && (*tif->tif_encoderow)(tif, bp, rowlen, s) == 1)
 		bp += rowlen, cc -= rowlen;
@@ -658,6 +667,9 @@ static int
 LogLuvEncodeTile(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
 	tmsize_t rowlen = TIFFTileRowSize(tif);
+
+        if (rowlen == 0)
+                return 0;
 
 	assert(cc%rowlen == 0);
 	while (cc && (*tif->tif_encoderow)(tif, bp, rowlen, s) == 1)
@@ -683,7 +695,9 @@ LogLuvEncodeTile(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 #ifndef M_PI
 #define M_PI		3.14159265358979323846
 #endif
+#undef log2 /* Conflict with C'99 function */
 #define log2(x)		((1./M_LN2)*log(x))
+#undef exp2  /* Conflict with C'99 function */
 #define exp2(x)		exp(M_LN2*(x))
 
 #define itrunc(x,m)	((m)==SGILOGENCODE_NODITHER ? \

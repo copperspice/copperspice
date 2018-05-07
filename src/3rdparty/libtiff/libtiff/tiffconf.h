@@ -1,5 +1,5 @@
 /*
-  Configuration defines for Qt.
+  Configuration defines for CopperSpice.
   This file maintained for backward compatibility. Do not use definitions
   from this file in your programs.
 */
@@ -48,25 +48,17 @@
 /* Define to 1 if the system has the type `int8'. */
 /* #undef HAVE_INT8 */
 
-/* The size of a `int', as computed by sizeof. */
-#define SIZEOF_INT 4
-
-/* The size of a `long', as computed by sizeof. */
-#if LONG_MAX == INT64_MAX
-#define SIZEOF_LONG 8
-#else
-#define SIZEOF_LONG 4
-#endif
-
 /* Compatibility stuff. */
 
-/* Define as 0 or 1 according to the floating point format suported by the  machine */
+/* Define as 0 or 1 according to the floating point format suported by the
+   machine */
 #define HAVE_IEEEFP 1
 
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
-/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian (Intel) */
+/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
+   (Intel) */
 #if (Q_BYTE_ORDER == Q_BIG_ENDIAN)
 #define HOST_BIGENDIAN 1
 #else

@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.82 2012-06-06 00:17:49 fwarmerdam Exp $ */
+/* $Id: tif_getimage.c,v 1.90 2015-06-17 01:34:08 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -182,8 +182,23 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 				    "Planarconfiguration", td->td_planarconfig);
 				return (0);
 			}
+			if( td->td_samplesperpixel != 3 )
+            {
+                sprintf(emsg,
+                        "Sorry, can not handle image with %s=%d",
+                        "Samples/pixel", td->td_samplesperpixel);
+                return 0;
+            }
 			break;
 		case PHOTOMETRIC_CIELAB:
+            if( td->td_samplesperpixel != 3 || td->td_bitspersample != 8 )
+            {
+                sprintf(emsg,
+                        "Sorry, can not handle image with %s=%d and %s=%d",
+                        "Samples/pixel", td->td_samplesperpixel,
+                        "Bits/sample", td->td_bitspersample);
+                return 0;
+            }
 			break;
 		default:
 			sprintf(emsg, "Sorry, can not handle image with %s=%d",
@@ -597,6 +612,10 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     int32 fromskew, toskew;
     uint32 nrow;
     int ret = 1, flip;
+    uint32 this_tw, tocol;
+    int32 this_toskew, leftmost_toskew;
+    int32 leftmost_fromskew;
+    uint32 leftmost_tw;
 
     buf = (unsigned char*) _TIFFmalloc(TIFFTileSize(tif));
     if (buf == 0) {
@@ -617,37 +636,50 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 	    toskew = -(int32)(tw - w);
     }
      
+    /*
+     *	Leftmost tile is clipped on left side if col_offset > 0.
+     */
+    leftmost_fromskew = img->col_offset % tw;
+    leftmost_tw = tw - leftmost_fromskew;
+    leftmost_toskew = toskew + leftmost_fromskew;
     for (row = 0; row < h; row += nrow)
     {
         rowstoread = th - (row + img->row_offset) % th;
     	nrow = (row + rowstoread > h ? h - row : rowstoread);
-	for (col = 0; col < w; col += tw) 
+	fromskew = leftmost_fromskew;
+	this_tw = leftmost_tw;
+	this_toskew = leftmost_toskew;
+	tocol = 0;
+	col = img->col_offset;
+	while (tocol < w)
         {
-	    if (TIFFReadTile(tif, buf, col+img->col_offset,  
+	    if (TIFFReadTile(tif, buf, col,  
 			     row+img->row_offset, 0, 0)==(tmsize_t)(-1) && img->stoponerr)
             {
                 ret = 0;
                 break;
             }
-	    
-	    pos = ((row+img->row_offset) % th) * TIFFTileRowSize(tif);  
-
-    	    if (col + tw > w) 
-            {
-                /*
-                 * Tile is clipped horizontally.  Calculate
-                 * visible portion and skewing factors.
-                 */
-                uint32 npix = w - col;
-                fromskew = tw - npix;
-                (*put)(img, raster+y*w+col, col, y,
-                       npix, nrow, fromskew, toskew + fromskew, buf + pos);
-            }
-            else 
-            {
-                (*put)(img, raster+y*w+col, col, y, tw, nrow, 0, toskew, buf + pos);
-            }
-        }
+            pos = ((row+img->row_offset) % th) * TIFFTileRowSize(tif) + \
+		   ((tmsize_t) fromskew * img->samplesperpixel);
+	    if (tocol + this_tw > w) 
+	    {
+		/*
+		 * Rightmost tile is clipped on right side.
+		 */
+		fromskew = tw - (w - tocol);
+		this_tw = tw - fromskew;
+		this_toskew = toskew + fromskew;
+	    }
+	    (*put)(img, raster+y*w+tocol, tocol, y, this_tw, nrow, fromskew, this_toskew, buf + pos);
+	    tocol += this_tw;
+	    col += this_tw;
+	    /*
+	     * After the leftmost tile, tiles are no longer clipped on left side.
+	     */
+	    fromskew = 0;
+	    this_tw = tw;
+	    this_toskew = toskew;
+	}
 
         y += (flip & FLIP_VERTICALLY ? -(int32) nrow : (int32) nrow);
     }
@@ -698,6 +730,10 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 	uint32 nrow;
 	int ret = 1, flip;
         int colorchannels;
+	uint32 this_tw, tocol;
+	int32 this_toskew, leftmost_toskew;
+	int32 leftmost_fromskew;
+	uint32 leftmost_tw;
 
 	tilesize = TIFFTileSize(tif);  
 	bufsize = TIFFSafeMultiply(tmsize_t,alpha?4:3,tilesize);
@@ -742,20 +778,31 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
             break;
         }
 
+	/*
+	 *	Leftmost tile is clipped on left side if col_offset > 0.
+	 */
+	leftmost_fromskew = img->col_offset % tw;
+	leftmost_tw = tw - leftmost_fromskew;
+	leftmost_toskew = toskew + leftmost_fromskew;
 	for (row = 0; row < h; row += nrow)
 	{
 		rowstoread = th - (row + img->row_offset) % th;
 		nrow = (row + rowstoread > h ? h - row : rowstoread);
-		for (col = 0; col < w; col += tw)
+		fromskew = leftmost_fromskew;
+		this_tw = leftmost_tw;
+		this_toskew = leftmost_toskew;
+		tocol = 0;
+		col = img->col_offset;
+		while (tocol < w)
 		{
-			if (TIFFReadTile(tif, p0, col+img->col_offset,  
+			if (TIFFReadTile(tif, p0, col,  
 			    row+img->row_offset,0,0)==(tmsize_t)(-1) && img->stoponerr)
 			{
 				ret = 0;
 				break;
 			}
 			if (colorchannels > 1 
-                            && TIFFReadTile(tif, p1, col+img->col_offset,  
+                            && TIFFReadTile(tif, p1, col,  
                                             row+img->row_offset,0,1) == (tmsize_t)(-1) 
                             && img->stoponerr)
 			{
@@ -763,7 +810,7 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 				break;
 			}
 			if (colorchannels > 1 
-                            && TIFFReadTile(tif, p2, col+img->col_offset,  
+                            && TIFFReadTile(tif, p2, col,  
                                             row+img->row_offset,0,2) == (tmsize_t)(-1) 
                             && img->stoponerr)
 			{
@@ -771,7 +818,7 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 				break;
 			}
 			if (alpha
-                            && TIFFReadTile(tif,pa,col+img->col_offset,  
+                            && TIFFReadTile(tif,pa,col,  
                                             row+img->row_offset,0,colorchannels) == (tmsize_t)(-1) 
                             && img->stoponerr)
                         {
@@ -779,23 +826,27 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
                             break;
 			}
 
-			pos = ((row+img->row_offset) % th) * TIFFTileRowSize(tif);  
-
-			if (col + tw > w)
+			pos = ((row+img->row_offset) % th) * TIFFTileRowSize(tif) + \
+			   ((tmsize_t) fromskew * img->samplesperpixel);
+			if (tocol + this_tw > w) 
 			{
 				/*
-				 * Tile is clipped horizontally.  Calculate
-				 * visible portion and skewing factors.
+				 * Rightmost tile is clipped on right side.
 				 */
-				uint32 npix = w - col;
-				fromskew = tw - npix;
-				(*put)(img, raster+y*w+col, col, y,
-				    npix, nrow, fromskew, toskew + fromskew,
-				    p0 + pos, p1 + pos, p2 + pos, (alpha?(pa+pos):NULL));
-			} else {
-				(*put)(img, raster+y*w+col, col, y,
-				    tw, nrow, 0, toskew, p0 + pos, p1 + pos, p2 + pos, (alpha?(pa+pos):NULL));
+				fromskew = tw - (w - tocol);
+				this_tw = tw - fromskew;
+				this_toskew = toskew + fromskew;
 			}
+			(*put)(img, raster+y*w+tocol, tocol, y, this_tw, nrow, fromskew, this_toskew, \
+				p0 + pos, p1 + pos, p2 + pos, (alpha?(pa+pos):NULL));
+			tocol += this_tw;
+			col += this_tw;
+			/*
+			* After the leftmost tile, tiles are no longer clipped on left side.
+			*/
+			fromskew = 0;
+			this_tw = tw;
+			this_toskew = toskew;
 		}
 
 		y += (flip & FLIP_VERTICALLY ?-(int32) nrow : (int32) nrow);
@@ -842,6 +893,12 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 	int32 fromskew, toskew;
 	int ret = 1, flip;
 
+	TIFFGetFieldDefaulted(tif, TIFFTAG_YCBCRSUBSAMPLING, &subsamplinghor, &subsamplingver);
+	if( subsamplingver == 0 ) {
+		TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "Invalid vertical YCbCr subsampling");
+		return (0);
+	}
+
 	buf = (unsigned char*) _TIFFmalloc(TIFFStripSize(tif));
 	if (buf == 0) {
 		TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for strip buffer");
@@ -859,7 +916,7 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 	}
 
 	TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
-	TIFFGetFieldDefaulted(tif, TIFFTAG_YCBCRSUBSAMPLING, &subsamplinghor, &subsamplingver);
+
 	scanline = TIFFScanlineSize(tif);
 	fromskew = (w < imagewidth ? imagewidth - w : 0);
 	for (row = 0; row < h; row += nrow)
@@ -879,7 +936,8 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 			break;
 		}
 
-		pos = ((row + img->row_offset) % rowsperstrip) * scanline;
+		pos = ((row + img->row_offset) % rowsperstrip) * scanline + \
+			((tmsize_t) img->col_offset * img->samplesperpixel);
 		(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, buf + pos);
 		y += (flip & FLIP_VERTICALLY ? -(int32) nrow : (int32) nrow);
 	}
@@ -1010,7 +1068,8 @@ gtStripSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 			}
 		}
 
-		pos = ((row + img->row_offset) % rowsperstrip) * scanline;
+		pos = ((row + img->row_offset) % rowsperstrip) * scanline + \
+			((tmsize_t) img->col_offset * img->samplesperpixel);
 		(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, p0 + pos, p1 + pos,
 		    p2 + pos, (alpha?(pa+pos):NULL));
 		y += (flip & FLIP_VERTICALLY ? -(int32) nrow : (int32) nrow);
@@ -1852,7 +1911,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr42tile)
 
     (void) y;
     fromskew = (fromskew * 10) / 4;
-    if ((h & 3) == 0 && (w & 1) == 0) {
+    if ((w & 3) == 0 && (h & 1) == 0) {
         for (; h >= 2; h -= 2) {
             x = w>>2;
             do {
@@ -1929,7 +1988,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr41tile)
     /* XXX adjust fromskew */
     do {
 	x = w>>2;
-	do {
+	while(x>0) {
 	    int32 Cb = pp[4];
 	    int32 Cr = pp[5];
 
@@ -1940,7 +1999,8 @@ DECLAREContigPutFunc(putcontig8bitYCbCr41tile)
 
 	    cp += 4;
 	    pp += 6;
-	} while (--x);
+		x--;
+	}
 
         if( (w&3) != 0 )
         {
@@ -2031,7 +2091,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr21tile)
 	fromskew = (fromskew * 4) / 2;
 	do {
 		x = w>>1;
-		do {
+		while(x>0) {
 			int32 Cb = pp[2];
 			int32 Cr = pp[3];
 
@@ -2040,7 +2100,8 @@ DECLAREContigPutFunc(putcontig8bitYCbCr21tile)
 
 			cp += 2;
 			pp += 4;
-		} while (--x);
+			x --;
+		}
 
 		if( (w&1) != 0 )
 		{
@@ -2541,7 +2602,7 @@ PickContigCase(TIFFRGBAImage* img)
 					 * must always be <= horizontal subsampling; so
 					 * there are only a few possibilities and we just
 					 * enumerate the cases.
-					 * Joris: added support for the [1,2] case, nonetheless, to accomodate
+					 * Joris: added support for the [1,2] case, nonetheless, to accommodate
 					 * some OJPEG files
 					 */
 					uint16 SubsamplingHor;
