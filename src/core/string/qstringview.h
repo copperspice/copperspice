@@ -292,8 +292,8 @@ class Q_CORE_EXPORT QStringView : public CsString::CsBasicStringView<S>
       }
 
    private:
-      const_iterator cs_internal_find_fast(value_type c, const_iterator iter_begin) const;
-      const_iterator cs_internal_find_fast(const S &str, const_iterator iter_begin) const;
+      const_iterator cs_internal_find_fast(value_type c,  const_iterator iter_begin) const;
+      const_iterator cs_internal_find_fast(const S &str,  const_iterator iter_begin) const;
       const_iterator cs_internal_rfind_fast(value_type c, const_iterator iter_begin) const;
       const_iterator cs_internal_rfind_fast(const S &str, const_iterator iter_begin) const;
 
@@ -789,8 +789,9 @@ QStringView<S> QStringView<S>::trimmed() const
    }
 
    ++last_iter;
-
    retval = QStringView<S>(first_iter, last_iter);
+
+   return retval;
 }
 
 template <typename S>

@@ -279,7 +279,7 @@ bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::Conne
       QList<QString> msgList;
 
       // find registerd methods which match the name
-      for (int k = 0; k < metaObject->methodCount(); ++index) {
+      for (int k = 0; k < metaObject->methodCount(); ++k) {
 
          int numOfChars = sig.indexOf('(') + 1;
 

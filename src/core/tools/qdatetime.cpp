@@ -2334,6 +2334,8 @@ QDataStream &operator>>(QDataStream &in, QDateTime &dateTime)
 
    in >> ts;
    dateTime.d->spec = (QDateTimePrivate::Spec)ts;
+
+   return in;
 }
 
 // checks if there is an unqoted 'AP' or 'ap' in the string

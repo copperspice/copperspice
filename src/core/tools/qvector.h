@@ -413,7 +413,7 @@ class QVector
 
    template <typename Iter>
    iterator insert(iterator pos, Iter begin, Iter end) {
-      m_data.insert(pos, begin, end);
+      return m_data.insert(pos, begin, end);
    }
 
    // operators

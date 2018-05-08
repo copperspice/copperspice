@@ -303,11 +303,9 @@ class QRegexTraits
             } else {
                return tmp;
             }
-
-         } else {
-            return -1;
-
          }
+
+         return -1;
       }
 
       locale_type imbue(locale_type locale) {
@@ -758,6 +756,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(const S &str, typename 
 {
    if (m_valid) {
       // broom -- implementation pending rmatch
+      return QRegularExpressionMatch<S>();
 
    } else {
       return QRegularExpressionMatch<S>();
@@ -770,6 +769,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::rmatch(QStringView<S> str, typ
 {
    if (m_valid) {
       // broom -- implementation pending rmatch
+      return QRegularExpressionMatch<S>();
 
    } else {
       return QRegularExpressionMatch<S>();
