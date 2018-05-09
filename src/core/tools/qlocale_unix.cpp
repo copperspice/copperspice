@@ -192,9 +192,11 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
          static QString languages = QString::fromLatin1(qgetenv("LANGUAGE"));
          if (!languages.isEmpty()) {
             QStringList lst = languages.split(QLatin1Char(':'));
+
             for (int i = 0; i < lst.size();) {
                const QString &name = lst.at(i);
                QString lang, script, cntry;
+
                if (name.isEmpty() || !qt_splitLocaleName(name, lang, script, cntry)) {
                   lst.removeAt(i);
                } else {
@@ -203,30 +205,39 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
             }
             return lst;
          }
+
          if (!d->lc_messages_var.isEmpty()) {
             QString lang, script, cntry;
+
             if (qt_splitLocaleName(QString::fromLatin1(d->lc_messages_var.constData(), d->lc_messages_var.size()),
                                    lang, script, cntry)) {
                if (!cntry.length() && lang.length()) {
                   return QStringList(lang);
                }
-               return QStringList(lang % QLatin1Char('-') % cntry);
+
+               return QStringList(lang + '-' + cntry);
             }
          }
          return QVariant();
       }
+
       case StringToStandardQuotation:
          return lc_messages.quoteString(in.value<QStringRef>());
+
       case StringToAlternateQuotation:
          return lc_messages.quoteString(in.value<QStringRef>(), QLocale::AlternateQuotation);
+
       case ListToSeparatedString:
          return lc_messages.createSeparatedList(in.value<QStringList>());
+
       case LocaleChanged:
          d->updateLocale();
          break;
+
       default:
          break;
    }
+
    return QVariant();
 }
 #endif // QT_NO_SYSTEMLOCALE

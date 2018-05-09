@@ -374,6 +374,7 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
 
          if (const wchar_t *equal = wcschr(entry + 1, L'=')) {
             int nameLen   = equal - entry;
+
             QString name  = QString::fromStdWString(std::wstring(entry, nameLen));
             QString value = QString::fromStdWString(std::wstring(equal + 1, entryLen - nameLen - 1));
             env.d->hash.insert(QProcessEnvironmentPrivate::Key(name), value);

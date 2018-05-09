@@ -26,7 +26,6 @@
 #include <QtXml/QDomElement>
 #endif
 
-QT_BEGIN_NAMESPACE
 #ifdef QFORMINTERNAL_NAMESPACE
 using namespace QFormInternal;
 #endif
@@ -142,8 +141,10 @@ void DomUI::read(QXmlStreamReader &reader)
 
    for (bool finished = false; !finished && !reader.hasError();) {
       switch (reader.readNext()) {
+
          case QXmlStreamReader::StartElement : {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == QLatin1String("author")) {
                setElementAuthor(reader.readElementText());
                continue;
@@ -508,6 +509,7 @@ DomWidget *DomUI::takeElementWidget()
    DomWidget *a = m_widget;
    m_widget = 0;
    m_children ^= Widget;
+
    return a;
 }
 
@@ -1249,7 +1251,6 @@ DomActionGroup::~DomActionGroup()
 
 void DomActionGroup::read(QXmlStreamReader &reader)
 {
-
    foreach (const QXmlStreamAttribute & attribute, reader.attributes()) {
       QStringRef name = attribute.name();
       if (name == QLatin1String("name")) {
@@ -3864,6 +3865,7 @@ void DomLayoutItem::read(QXmlStreamReader &reader)
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement : {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == QLatin1String("widget")) {
                DomWidget *v = new DomWidget();
                v->read(reader);
@@ -4490,17 +4492,19 @@ DomWidget::~DomWidget()
 
 void DomWidget::read(QXmlStreamReader &reader)
 {
+   for (const QXmlStreamAttribute & attribute : reader.attributes()) {
+      QStringView name = attribute.name();
 
-   foreach (const QXmlStreamAttribute & attribute, reader.attributes()) {
-      QStringRef name = attribute.name();
       if (name == QLatin1String("class")) {
          setAttributeClass(attribute.value().toString());
          continue;
       }
+
       if (name == QLatin1String("name")) {
          setAttributeName(attribute.value().toString());
          continue;
       }
+
       if (name == QLatin1String("native")) {
          setAttributeNative((attribute.value().toString() == QLatin1String("true") ? true : false));
          continue;
@@ -4512,6 +4516,7 @@ void DomWidget::read(QXmlStreamReader &reader)
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement : {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == QLatin1String("class")) {
                m_class.append(reader.readElementText());
                continue;
@@ -8475,9 +8480,8 @@ void DomResourceIcon::clearElementSelectedOn()
 
 void DomString::clear(bool clear_all)
 {
-
    if (clear_all) {
-      m_text = QLatin1String("");
+      m_text = QString("");
       m_has_attr_notr = false;
       m_has_attr_comment = false;
       m_has_attr_extraComment = false;
@@ -8492,7 +8496,7 @@ DomString::DomString()
    m_has_attr_notr = false;
    m_has_attr_comment = false;
    m_has_attr_extraComment = false;
-   m_text = QLatin1String("");
+   m_text = QString("");
 }
 
 DomString::~DomString()
@@ -8501,39 +8505,48 @@ DomString::~DomString()
 
 void DomString::read(QXmlStreamReader &reader)
 {
+   for (const QXmlStreamAttribute &attribute : reader.attributes()) {
+      QStringView name = attribute.name();
 
-   foreach (const QXmlStreamAttribute & attribute, reader.attributes()) {
-      QStringRef name = attribute.name();
       if (name == QLatin1String("notr")) {
          setAttributeNotr(attribute.value().toString());
          continue;
       }
+
       if (name == QLatin1String("comment")) {
          setAttributeComment(attribute.value().toString());
          continue;
       }
+
       if (name == QLatin1String("extracomment")) {
          setAttributeExtraComment(attribute.value().toString());
          continue;
       }
+
       reader.raiseError(QLatin1String("Unexpected attribute ") + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   for (bool finished = false; ! finished && ! reader.hasError();) {
+
       switch (reader.readNext()) {
+
          case QXmlStreamReader::StartElement : {
             const QString tag = reader.name().toString().toLower();
             reader.raiseError(QLatin1String("Unexpected element ") + tag);
          }
+
          break;
+
          case QXmlStreamReader::EndElement :
             finished = true;
             break;
+
          case QXmlStreamReader::Characters :
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
+
          default :
             break;
       }
@@ -11536,5 +11549,4 @@ void DomStringPropertySpecification::write(QXmlStreamWriter &writer, const QStri
    writer.writeEndElement();
 }
 
-QT_END_NAMESPACE
 

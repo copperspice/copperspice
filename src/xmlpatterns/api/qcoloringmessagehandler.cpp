@@ -71,9 +71,12 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
 
          break;
       }
+
       case QtFatalMsg: {
          const QString errorCode(identifier.fragment());
-         Q_ASSERT(!errorCode.isEmpty());
+
+         Q_ASSERT(! errorCode.isEmpty());
+
          QUrl uri(identifier);
          uri.setFragment(QString());
 
@@ -86,8 +89,9 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
 
          QString errorId;
-         /* If it's a standard error code, we do not want to output the whole URI. */
-         if (uri.toString() == QLatin1String("http://www.w3.org/2005/xqt-errors")) {
+         /* if it is a standard error code, we do not want to output the whole URI. */
+
+         if (uri.toString() == "http://www.w3.org/2005/xqt-errors") {
             errorId = errorCode;
          } else {
             errorId = QString::fromLatin1(identifier.toEncoded());

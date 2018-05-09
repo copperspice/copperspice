@@ -128,173 +128,41 @@ const char *const ColorOutputPrivate::backgrounds[] = {
    "0;43"
 };
 
-/*!
-  \class ColorOutput
-  \since 4.4
-  \nonreentrant
-  \brief Outputs colored messages to \c stderr.
-  \internal
-
-  ColorOutput is a convenience class for outputting messages to \c
-  stderr using color escape codes, as mandated in ECMA-48. ColorOutput
-  will only color output when it is detected to be suitable. For
-  instance, if \c stderr is detected to be attached to a file instead
-  of a TTY, no coloring will be done.
-
-  ColorOutput does its best attempt. but it is generally undefined
-  what coloring or effect the various coloring flags has. It depends
-  strongly on what terminal software that is being used.
-
-  When using `echo -e 'my escape sequence'`, \c{\033} works as an
-  initiator but not when printing from a C++ program, despite having
-  escaped the backslash.  That's why we below use characters with
-  value 0x1B.
-
-  It can be convenient to subclass ColorOutput with a private scope,
-  such that the functions are directly available in the class using
-  it.
-
-  \section1 Usage
-
-  To output messages, call write() or writeUncolored(). write() takes
-  as second argument an integer, which ColorOutput uses as a lookup
-  key to find the color it should color the text in. The mapping from
-  keys to colors is done using insertMapping(). Typically this is used
-  by having enums for the various kinds of messages, which
-  subsequently are registered.
-
-  \code
-  enum MyMessage
-  {
-    Error,
-    Important
-  };
-
-  ColorOutput output;
-  output.insertMapping(Error, ColorOutput::RedForeground);
-  output.insertMapping(Import, ColorOutput::BlueForeground);
-
-  output.write("This is important", Important);
-  output.write("Jack, I'm only the selected official!", Error);
-  \endcode
-
-  \sa {http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html}                        {Bash Prompt HOWTO, 6.1. Colours}
-     {http://linuxgazette.net/issue51/livingston-blade.html}                    {Linux Gazette, Tweaking Eterm, Edward Livingston-Blade}
-     {http://www.ecma-international.org/publications/standards/Ecma-048.htm}    {Standard ECMA-48, Control Functions for Coded Character Sets, ECMA International},
-     {http://en.wikipedia.org/wiki/ANSI_escape_code}                            {Wikipedia, ANSI escape code}
-     {http://linuxgazette.net/issue65/padala.html}                              {Linux Gazette, So You Like Color!, Pradeep Padala}
- */
-
-/*!
-  \enum ColorOutput::ColorCodeComponent
-  \value BlackForeground
-  \value BlueForeground
-  \value GreenForeground
-  \value CyanForeground
-  \value RedForeground
-  \value PurpleForeground
-  \value BrownForeground
-  \value LightGrayForeground
-  \value DarkGrayForeground
-  \value LightBlueForeground
-  \value LightGreenForeground
-  \value LightCyanForeground
-  \value LightRedForeground
-  \value LightPurpleForeground
-  \value YellowForeground
-  \value WhiteForeground
-  \value BlackBackground
-  \value BlueBackground
-  \value GreenBackground
-  \value CyanBackground
-  \value RedBackground
-  \value PurpleBackground
-  \value BrownBackground
-
-  \value DefaultColor ColorOutput performs no coloring. This typically
-                     means black on white or white on black, depending
-                     on the settings of the user's terminal.
- */
-
-/*!
- Sets the color mapping to be \a cMapping.
-
- Negative values are disallowed.
-
- \sa colorMapping(), insertMapping()
- */
 void ColorOutput::setColorMapping(const ColorMapping &cMapping)
 {
    d->colorMapping = cMapping;
 }
 
-/*!
- Returns the color mappings in use.
-
- \sa setColorMapping(), insertMapping()
- */
 ColorOutput::ColorMapping ColorOutput::colorMapping() const
 {
    return d->colorMapping;
 }
 
-/*!
-  Constructs a ColorOutput instance, ready for use.
- */
 ColorOutput::ColorOutput() : d(new ColorOutputPrivate())
 {
 }
 
-/*!
- Destructs this ColorOutput instance.
- */
 ColorOutput::~ColorOutput()
 {
    delete d;
 }
 
-/*!
- Sends \a message to \c stderr, using the color looked up in colorMapping() using \a colorID.
-
- If \a color isn't available in colorMapping(), result and behavior is undefined.
-
- If \a colorID is 0, which is the default value, the previously used coloring is used. ColorOutput
- is initialized to not color at all.
-
- If \a message is empty, effects are undefined.
-
- \a message will be printed as is. For instance, no line endings will be inserted.
- */
 void ColorOutput::write(const QString &message, int colorID)
 {
    d->write(colorify(message, colorID));
 }
 
-/*!
- Writes \a message to \c stderr as if for instance
- QTextStream would have been used, and adds a line ending at the end.
-
- This function can be practical to use such that one can use ColorOutput for all forms of writing.
- */
 void ColorOutput::writeUncolored(const QString &message)
 {
-   d->write(message + QLatin1Char('\n'));
+   d->write(message + '\n');
 }
 
-/*!
- Treats \a message and \a colorID identically to write(), but instead of writing
- \a message to \c stderr, it is prepared for being written to \c stderr, but is then
- returned.
-
- This is useful when the colored string is inserted into a translated string(dividing
- the string into several small strings prevents proper translation).
- */
 QString ColorOutput::colorify(const QString &message, int colorID) const
 {
    Q_ASSERT_X(colorID == -1 || d->colorMapping.contains(colorID), Q_FUNC_INFO,
               qPrintable(QString("There is no color registered by id %1").formatArg(colorID)));
 
-   Q_ASSERT_X(!message.isEmpty(), Q_FUNC_INFO, "It makes no sense to attempt to print an empty string.");
+   Q_ASSERT_X(! message.isEmpty(), Q_FUNC_INFO, "Can not print an empty string.");
 
    if (colorID != -1) {
       d->currentColorID = colorID;

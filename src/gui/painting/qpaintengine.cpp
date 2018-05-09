@@ -724,11 +724,14 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
    if (ti.glyphs.numGlyphs) {
       ti.fontEngine->addOutlineToPath(0, 0, ti.glyphs, &path, ti.flags);
    }
-   if (!path.isEmpty()) {
+
+   if (! path.isEmpty()) {
       painter()->save();
+
       painter()->setRenderHint(QPainter::Antialiasing,
-                               bool((painter()->renderHints() & QPainter::TextAntialiasing)
-                                    && !(painter()->font().styleStrategy() & QFont::NoAntialias)));
+                  bool((painter()->renderHints() & QPainter::TextAntialiasing)
+                  && ! (painter()->font().styleStrategy() & QFont::NoAntialias)));
+
       painter()->translate(p.x(), p.y());
       painter()->fillPath(path, state->pen().brush());
       painter()->restore();

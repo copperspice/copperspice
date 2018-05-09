@@ -110,4 +110,4 @@ struct TreeWalker {
    virtual void acceptButtonGroup(const DomButtonGroup *buttonGroup);
 };
 
-#endif // TREEWALKER_H
+#endif

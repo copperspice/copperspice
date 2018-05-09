@@ -40,7 +40,7 @@ class QSimpleTextCodec: public QTextCodec
    ~QSimpleTextCodec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QStringView &str, ConverterState *) const override;
+   QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
    QByteArray name() const override;
    QList<QByteArray> aliases() const override;

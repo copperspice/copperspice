@@ -965,18 +965,11 @@ void QInputDialog::setDoubleRange(double min, double max)
    d->doubleSpinBox->setRange(min, max);
 }
 
-/*!
-    \since 4.5
 
-    \property QInputDialog::doubleDecimals
-
-    \brief sets the percision of the double spinbox in decimals
-
-    \sa QDoubleSpinBox::setDecimals()
-*/
 void QInputDialog::setDoubleDecimals(int decimals)
 {
    Q_D(QInputDialog);
+
    d->ensureDoubleSpinBox();
    d->doubleSpinBox->setDecimals(decimals);
 }
@@ -984,6 +977,7 @@ void QInputDialog::setDoubleDecimals(int decimals)
 int QInputDialog::doubleDecimals() const
 {
    Q_D(const QInputDialog);
+
    if (d->doubleSpinBox) {
       return d->doubleSpinBox->decimals();
    } else {
@@ -1165,14 +1159,13 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
 */
 // ### Qt5: Use only the version above.
 QString QInputDialog::getText(QWidget *parent, const QString &title, const QString &label,
-                              QLineEdit::EchoMode mode, const QString &text, bool *ok,
-                              Qt::WindowFlags flags)
+                  QLineEdit::EchoMode mode, const QString &text, bool *ok, Qt::WindowFlags flags)
 {
    return getText(parent, title, label, mode, text, ok, flags, Qt::ImhNone);
 }
 
 int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &label, int value,
-                         int min, int max, int step, bool *ok, Qt::WindowFlags flags)
+                  int min, int max, int step, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
    dialog.setWindowTitle(title);
@@ -1192,38 +1185,8 @@ int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &l
    }
 }
 
-/*!
-    Static convenience function to get a floating point number from the user.
-
-    \a title is the text which is displayed in the title bar of the dialog.
-    \a label is the text which is shown to the user (it should say what should
-    be entered).
-    \a value is the default floating point number that the line edit will be
-    set to.
-    \a min and \a max are the minimum and maximum values the user may choose.
-    \a decimals is the maximum number of decimal places the number may have.
-
-    If \a ok is nonnull, *\a ok will be set to true if the user pressed \gui OK
-    and to false if the user pressed \gui Cancel. The dialog's parent is
-    \a parent. The dialog will be modal and uses the widget \a flags.
-
-    This function returns the floating point number which has been entered by
-    the user.
-
-    Use this static function like this:
-
-    \snippet examples/dialogs/standarddialogs/dialog.cpp 1
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QInputDialog constructors.
-
-    \sa getText(), getInt(), getItem()
-*/
-
 double QInputDialog::getDouble(QWidget *parent, const QString &title, const QString &label,
-                               double value, double min, double max, int decimals, bool *ok,
-                               Qt::WindowFlags flags)
+                  double value, double min, double max, int decimals, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
    dialog.setWindowTitle(title);
@@ -1232,49 +1195,21 @@ double QInputDialog::getDouble(QWidget *parent, const QString &title, const QStr
    dialog.setDoubleRange(min, max);
    dialog.setDoubleValue(value);
 
+
+
+
    int ret = dialog.exec();
+
    if (ok) {
       *ok = !!ret;
    }
+
    if (ret) {
       return dialog.doubleValue();
    } else {
       return value;
    }
 }
-
-/*!
-    Static convenience function to let the user select an item from a string
-    list.
-
-    \a title is the text which is displayed in the title bar of the dialog.
-    \a label is the text which is shown to the user (it should say what should
-    be entered).
-    \a items is the string list which is inserted into the combobox.
-    \a current is the number  of the item which should be the current item.
-    \a inputMethodHints is the input method hints that will be used if the
-    combobox is editable and an input method is active.
-
-    If \a editable is true the user can enter their own text; otherwise the
-    user may only select one of the existing items.
-
-    If \a ok is nonnull \e *\a ok will be set to true if the user pressed
-    \gui OK and to false if the user pressed \gui Cancel. The dialog's parent
-    is \a parent. The dialog will be modal and uses the widget \a flags.
-
-    This function returns the text of the current item, or if \a editable is
-    true, the current text of the combobox.
-
-    Use this static function like this:
-
-    \snippet examples/dialogs/standarddialogs/dialog.cpp 2
-
-    \warning Do not delete \a parent during the execution of the dialog. If you
-    want to do this, you should create the dialog yourself using one of the
-    QInputDialog constructors.
-
-    \sa getText(), getInt(), getDouble()
-*/
 
 QString QInputDialog::getItem(QWidget *parent, const QString &title, const QString &label,
                               const QStringList &items, int current, bool editable, bool *ok,

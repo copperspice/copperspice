@@ -616,6 +616,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
          }
          return cursor;
       }
+
       QList<QByteArray> aliases = cursor->aliases();
       for (int y = 0; y < aliases.size(); ++y)
          if (nameMatch(aliases.at(y), name)) {
@@ -630,6 +631,7 @@ QTextCodec *QTextCodec::codecForName(const QByteArray &name)
    if (codec && cache) {
       cache->insert(name, codec);
    }
+
    return codec;
 }
 
@@ -644,7 +646,7 @@ QTextCodec *QTextCodec::codecForMib(int mib)
 
    setup();
 
-   if (!validCodecs()) {
+   if (! validCodecs()) {
       return 0;
    }
 
@@ -947,13 +949,16 @@ void QTextDecoder::toUnicode(QString *target, const char *chars, int len)
    Q_ASSERT(target);
 
    switch (c->mibEnum()) {
-      case 106: // utf8
+      case 106:
+         // utf8
          static_cast<const QUtf8Codec *>(c)->convertToUnicode(target, chars, len, &state);
          break;
 
-      case 4: { // latin1
+      case 4: {
+         // latin1
          target->resize(len);
          ushort *data = (ushort *)target->data();
+
          for (int i = len; i >= 0; --i) {
             data[i] = (uchar) chars[i];
          }
@@ -984,6 +989,7 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
    QTextCodec *c = 0;
 
    c = QTextCodec::codecForUtfText(ba, c);
+
    if (!c) {
       QByteArray header = ba.left(512).toLower();
       if ((pos = header.indexOf("http-equiv=")) != -1) {

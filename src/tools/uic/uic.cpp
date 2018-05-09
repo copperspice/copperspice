@@ -63,7 +63,7 @@ bool Uic::printDependencies()
 
    } else {
       f.setFileName(fileName);
-      if (!f.open(QIODevice::ReadOnly)) {
+      if (! f.open(QIODevice::ReadOnly)) {
          return false;
       }
    }

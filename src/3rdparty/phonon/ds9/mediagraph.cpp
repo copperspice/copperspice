@@ -661,14 +661,15 @@ namespace Phonon
 
             //cleanup of the previous filters
             m_result = cleanup();
+
             if (FAILED(m_result)) {
                 return m_result;
             }
 
             m_mediaSource = source;
 
-            switch (source.type())
-            {
+            switch (source.type()) {
+
             case Phonon::MediaSource::Disc:
                 if (source.discType() == Phonon::Dvd) {
                     m_result = E_NOTIMPL;
@@ -1002,6 +1003,7 @@ namespace Phonon
                         return false;
                 }
             }
+
 #ifdef GRAPH_DEBUG
             {
                 FILTER_INFO info;
@@ -1032,7 +1034,7 @@ namespace Phonon
                     SysFreeString(str);
                 }
 
-                hr = mediaContent->get_Title(&str);
+                hr  = mediaContent->get_Title(&str);
                 tmp = str;
 
                 if (SUCCEEDED(hr)) {

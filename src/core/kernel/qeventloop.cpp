@@ -61,9 +61,6 @@ QEventLoop::QEventLoop(QObject *parent)
    }
 }
 
-/*!
-    Destroys the event loop object.
-*/
 QEventLoop::~QEventLoop()
 { }
 
@@ -110,7 +107,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
    Q_D(QEventLoop);
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
-   //we need to protect from race condition with QThread::exit
+   // we need to protect from race condition with QThread::exit
    QMutexLocker locker(&threadData->get_QThreadPrivate()->mutex);
 
    if (threadData->quitNow) {
@@ -121,8 +118,9 @@ int QEventLoop::exec(ProcessEventsFlags flags)
       qWarning("QEventLoop::exec: instance %p has already called exec()", this);
       return -1;
    }
+
    d->inExec = true;
-   d->exit = false;
+   d->exit   = false;
 
    ++threadData->loopLevel;
    threadData->eventLoops.push(this);
@@ -130,12 +128,13 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
    // remove posted quit events when entering a new event loop
    QCoreApplication *app = QCoreApplication::instance();
+
    if (app && app->thread() == thread()) {
       QCoreApplication::removePostedEvents(app, QEvent::Quit);
    }
 
    try {
-      while (!d->exit) {
+      while (! d->exit) {
          processEvents(flags | WaitForMoreEvents | EventLoopExec);
       }
 
@@ -149,6 +148,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
       QEventLoop *eventLoop = threadData->eventLoops.pop();
       Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
       Q_UNUSED(eventLoop); // --release warning
+
       d->inExec = false;
       --threadData->loopLevel;
 
@@ -161,6 +161,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
    QEventLoop *eventLoop = threadData->eventLoops.pop();
    Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
    Q_UNUSED(eventLoop); // --release warning
+
    d->inExec = false;
    --threadData->loopLevel;
 

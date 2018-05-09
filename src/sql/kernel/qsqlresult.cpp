@@ -251,24 +251,10 @@ QSqlResult::~QSqlResult()
    delete d;
 }
 
-/*!
-    Sets the current query for the result to \a query. You must call
-    reset() to execute the query on the database.
-
-    \sa reset(), lastQuery()
-*/
-
 void QSqlResult::setQuery(const QString &query)
 {
    d->sql = query;
 }
-
-/*!
-    Returns the current SQL query text, or an empty string if there
-    isn't one.
-
-    \sa setQuery()
-*/
 
 QString QSqlResult::lastQuery() const
 {
@@ -413,99 +399,6 @@ QSqlError QSqlResult::lastError() const
     determined or if the query is not a \c SELECT statement.
 
     \sa numRowsAffected()
-*/
-
-/*!
-    \fn int QSqlResult::numRowsAffected()
-
-    Returns the number of rows affected by the last query executed, or
-    -1 if it cannot be determined or if the query is a \c SELECT
-    statement.
-
-    \sa size()
-*/
-
-/*!
-    \fn QVariant QSqlResult::data(int index)
-
-    Returns the data for field \a index in the current row as
-    a QVariant. This function is only called if the result is in
-    an active state and is positioned on a valid record and \a index is
-    non-negative. Derived classes must reimplement this function and
-    return the value of field \a index, or QVariant() if it cannot be
-    determined.
-*/
-
-/*!
-    \fn  bool QSqlResult::reset(const QString &query)
-
-    Sets the result to use the SQL statement \a query for subsequent
-    data retrieval.
-
-    Derived classes must reimplement this function and apply the \a
-    query to the database. This function is only called after the
-    result is set to an inactive state and is positioned before the
-    first record of the new result. Derived classes should return
-    true if the query was successful and ready to be used, or false
-    otherwise.
-
-    \sa setQuery()
-*/
-
-/*!
-    \fn bool QSqlResult::fetch(int index)
-
-    Positions the result to an arbitrary (zero-based) row \a index.
-
-    This function is only called if the result is in an active state.
-    Derived classes must reimplement this function and position the
-    result to the row \a index, and call setAt() with an appropriate
-    value. Return true to indicate success, or false to signify
-    failure.
-
-    \sa isActive(), fetchFirst(), fetchLast(), fetchNext(), fetchPrevious()
-*/
-
-/*!
-    \fn bool QSqlResult::fetchFirst()
-
-    Positions the result to the first record (row 0) in the result.
-
-    This function is only called if the result is in an active state.
-    Derived classes must reimplement this function and position the
-    result to the first record, and call setAt() with an appropriate
-    value. Return true to indicate success, or false to signify
-    failure.
-
-    \sa fetch(), fetchLast()
-*/
-
-/*!
-    \fn bool QSqlResult::fetchLast()
-
-    Positions the result to the last record (last row) in the result.
-
-    This function is only called if the result is in an active state.
-    Derived classes must reimplement this function and position the
-    result to the last record, and call setAt() with an appropriate
-    value. Return true to indicate success, or false to signify
-    failure.
-
-    \sa fetch(), fetchFirst()
-*/
-
-/*!
-    Positions the result to the next available record (row) in the
-    result.
-
-    This function is only called if the result is in an active
-    state. The default implementation calls fetch() with the next
-    index. Derived classes can reimplement this function and position
-    the result to the next record in some other way, and call setAt()
-    with an appropriate value. Return true to indicate success, or
-    false to signify failure.
-
-    \sa fetch(), fetchPrevious()
 */
 
 bool QSqlResult::fetchNext()
@@ -677,6 +570,7 @@ bool QSqlResult::exec()
    d->executedQuery = query;
    setQuery(orig);
    d->resetBindCount();
+
    return ret;
 }
 
@@ -719,8 +613,10 @@ void QSqlResult::bindValue(const QString &placeholder, const QVariant &val,
                            QSql::ParamType paramType)
 {
    d->binds = NamedBinding;
+
    // if the index has already been set when doing emulated named
    // bindings - don't reset it
+
    int idx = d->indexes.value(placeholder, -1);
    if (idx >= 0) {
       if (d->values.count() <= idx) {

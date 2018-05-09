@@ -31,8 +31,6 @@
 #include <QtCore/QStack>
 #include <QtCore/QTextStream>
 
-QT_BEGIN_NAMESPACE
-
 class Driver;
 class Uic;
 class DomBrush;
@@ -43,17 +41,21 @@ struct Option;
 
 namespace CPP {
 // Handle for a flat DOM font to get comparison functionality required for maps
+
 class FontHandle
 {
  public:
    FontHandle(const DomFont *domFont);
    int compare(const FontHandle &) const;
+
  private:
    const DomFont *m_domFont;
+
 #if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    friend uint qHash(const FontHandle &);
 #endif
 };
+
 inline bool operator ==(const FontHandle &f1, const FontHandle &f2)
 {
    return f1.compare(f2) == 0;
@@ -90,16 +92,20 @@ class SizePolicyHandle
  public:
    SizePolicyHandle(const DomSizePolicy *domSizePolicy);
    int compare(const SizePolicyHandle &) const;
+
  private:
    const DomSizePolicy *m_domSizePolicy;
+
 #if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    friend uint qHash(const SizePolicyHandle &);
 #endif
 };
+
 inline bool operator ==(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
 {
    return f1.compare(f2) == 0;
 }
+
 #if !(defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3))
 inline bool operator  <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
 {
@@ -108,10 +114,9 @@ inline bool operator  <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
 #endif
 
 
-
 struct WriteInitialization : public TreeWalker {
-   typedef QList<DomProperty *> DomPropertyList;
-   typedef QHash<QString, DomProperty *> DomPropertyMap;
+   using DomPropertyList = QList<DomProperty *>;
+   using DomPropertyMap  = QHash<QString, DomProperty *>;
 
    WriteInitialization(Uic *uic, bool activateScripts);
 
@@ -164,10 +169,13 @@ struct WriteInitialization : public TreeWalker {
    QString iconCall(const DomProperty *prop);
    QString pixCall(const DomProperty *prop) const;
    QString pixCall(const QString &type, const QString &text) const;
+
    QString trCall(const QString &str, const QString &comment = QString()) const;
    QString trCall(DomString *str, const QString &defaultString = QString()) const;
+
    QString noTrCall(DomString *str, const QString &defaultString = QString()) const;
    QString autoTrCall(DomString *str, const QString &defaultString = QString()) const;
+
    QTextStream &autoTrOutput(DomString *str, const QString &defaultString = QString());
 
    // Apply a comma-separated list of values using a function "setSomething(int idx, value)"
@@ -255,7 +263,6 @@ struct WriteInitialization : public TreeWalker {
    QString disableSorting(DomWidget *w, const QString &varName);
    void enableSorting(DomWidget *w, const QString &varName, const QString &tempName);
 
-
    //
    // Sql
    //
@@ -300,8 +307,10 @@ struct WriteInitialization : public TreeWalker {
    QHash<QString, DomAction *> m_registeredActions;
    typedef QHash<uint, QString> ColorBrushHash;
    ColorBrushHash m_colorBrushHash;
+
    // Map from font properties to  font variable name for reuse
    // Map from size policy to  variable for reuse
+
 #if defined(Q_OS_MAC) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
    typedef QHash<FontHandle, QString> FontPropertiesNameMap;
    typedef QHash<IconHandle, QString> IconPropertiesNameMap;
@@ -311,6 +320,7 @@ struct WriteInitialization : public TreeWalker {
    typedef QMap<IconHandle, QString> IconPropertiesNameMap;
    typedef QMap<SizePolicyHandle, QString> SizePolicyNameMap;
 #endif
+
    FontPropertiesNameMap m_fontPropertiesNameMap;
    IconPropertiesNameMap m_iconPropertiesNameMap;
    SizePolicyNameMap     m_sizePolicyNameMap;
@@ -323,8 +333,7 @@ struct WriteInitialization : public TreeWalker {
       void acceptLayoutFunction(DomLayoutFunction *node);
 
       // Write out the layout margin and spacing properties applying the defaults.
-      void writeProperties(const QString &indent, const QString &varName,
-                           const DomPropertyMap &pm, int marginType,
+      void writeProperties(const QString &indent, const QString &varName,  const DomPropertyMap &pm, int marginType,
                            bool suppressMarginDefault, QTextStream &str) const;
     private:
       void writeProperty(int p, const QString &indent, const QString &objectName, const DomPropertyMap &pm,
@@ -361,7 +370,5 @@ struct WriteInitialization : public TreeWalker {
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEINITIALIZATION_H

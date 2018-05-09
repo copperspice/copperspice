@@ -304,7 +304,7 @@ QFont QFontDialogPrivate::getFont(bool *ok, const QFont &initial, QWidget *paren
    dlg.setOptions(options);
    dlg.setCurrentFont(initial);
 
-   if (!title.isEmpty()) {
+   if (! title.isEmpty()) {
       dlg.setWindowTitle(title);
    }
 

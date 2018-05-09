@@ -116,7 +116,7 @@ static bool openDocument(const QUrl &file)
    }
 
    // LSOpen does not work in this case, use QProcess open instead.
-   return QProcess::startDetached(QLatin1String("open"), QStringList() << file.toLocalFile());
+   return QProcess::startDetached("open", QStringList() << file.toLocalFile());
 }
 
 /*

@@ -20,18 +20,15 @@
 *
 ***********************************************************************/
 
-#include <QtCore/QFile>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTimer>
-#include <QtCore/QXmlStreamReader>
+#include <qfile.h>
+#include <qtextcodec.h>
+#include <qtimer.h>
+#include <qnetworkrequest.h>
+#include <qxmlstreamreader.h>
 
-#include <QtNetwork/QNetworkRequest>
-
-#include "qatomicstring_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qacceltreeresourceloader_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qatomicstring_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qacceltreeresourceloader_p.h>
 
 using namespace QPatternist;
 
@@ -366,10 +363,11 @@ QSet<QUrl> AccelTreeResourceLoader::deviceURIs() const
 {
    QHash<QUrl, AccelTree::Ptr>::const_iterator it(m_loadedDocuments.constBegin());
    const QHash<QUrl, AccelTree::Ptr>::const_iterator end(m_loadedDocuments.constEnd());
+
    QSet<QUrl> retval;
 
    while (it != end) {
-      if (it.key().toString().startsWith(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:"))) {
+      if (it.key().toString().startsWith("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:")) {
          retval.insert(it.key());
       }
 
@@ -399,6 +397,3 @@ void QPatternist::NetworkLoop::finished()
       exit(0);
    }
 }
-
-QT_END_NAMESPACE
-

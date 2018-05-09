@@ -27,9 +27,8 @@
 #include <qcoloroutput_p.h>
 #include <qabstractmessagehandler.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutput
 {
  public:
@@ -53,7 +52,5 @@ class ColoringMessageHandler : public QAbstractMessageHandler, private ColorOutp
    QHash<QString, ColorType> m_classToColor;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

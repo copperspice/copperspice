@@ -48,22 +48,23 @@ MediaSource::MediaSource(const QString &filename)
     : d(new MediaSourcePrivate(LocalFile))
 {
     const QFileInfo fileInfo(filename);
+
     if (fileInfo.exists()) {
 
         bool localFs = QAbstractFileEngine::LocalDiskFlag &
                      QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
 
-        if (localFs && ! filename.startsWith(QLatin1String(":/")) && ! filename.startsWith(QLatin1String("qrc://"))) {
+        if (localFs && ! filename.startsWith(":/") && ! filename.startsWith("qrc://")) {
             d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
 
         } else {
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            // it's a Qt resource -> use QFile
+            // it is a resource -> use QFile
             d->type = Stream;
             d->ioDevice = new QFile(filename);
             d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
-            d->url =  QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+            d->url  = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
 #else
             d->type = Invalid;
 #endif
@@ -190,7 +191,8 @@ MediaSource::Type MediaSource::type() const
     if (d->type == Stream && d->stream == 0) {
         return Invalid;
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+#endif
+
     return d->type;
 }
 

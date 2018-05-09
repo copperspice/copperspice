@@ -246,6 +246,7 @@ QXmlName NamePool::allocateQName(const QString &uri, const QString &localName, c
    const QXmlName::LocalNameCode localCode = unlockedAllocateLocalName(localName);
 
    Q_ASSERT(prefix.isEmpty() || QXmlUtils::isNCName(prefix));
+
    const QXmlName::PrefixCode prefixCode = unlockedAllocatePrefix(prefix);
 
    return QXmlName(nsCode, localCode, prefixCode);

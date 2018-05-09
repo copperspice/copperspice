@@ -876,8 +876,11 @@ void WriteInitialization::acceptWidget(DomWidget *node)
                                                  << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptoolTip->elementString()) << ");\n";
       }
 #endif // QT_NO_TOOLTIP
+
    } else if (m_uic->customWidgetsInfo()->extends(parentClass, QLatin1String("QTabWidget"))) {
+
       QString icon;
+
       if (const DomProperty *picon = attributes.value(QLatin1String("icon"))) {
          icon += QLatin1String(", ");
          icon += iconCall(picon);
@@ -894,7 +897,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
 #ifndef QT_NO_TOOLTIP
       if (const DomProperty *ptoolTip = attributes.value(QLatin1String("toolTip"))) {
          autoTrOutput(ptoolTip->elementString()) << m_indent << parentWidget << "->setTabToolTip("
-                                                 << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptoolTip->elementString()) << ");\n";
+             << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptoolTip->elementString()) << ");\n";
       }
 #endif
 
@@ -921,6 +924,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
 
    if (m_uic->customWidgetsInfo()->extends(className, QLatin1String("QTreeView"))
          || m_uic->customWidgetsInfo()->extends(className, QLatin1String("QTreeWidget"))) {
+
       DomPropertyList headerProperties;
       foreach (const QString & realPropertyName, realPropertyNames) {
          const QString upperPropertyName = realPropertyName.at(0).toUpper()
@@ -994,6 +998,7 @@ void WriteInitialization::addButtonGroup(const DomWidget *buttonNode, const QStr
    // Legacy feature: Create missing groups on the fly as the UIC button group feature
    // was present before the actual Designer support (4.5)
    const bool createGroupOnTheFly = group == 0;
+
    if (createGroupOnTheFly) {
       DomButtonGroup *newGroup = new DomButtonGroup;
       newGroup->setAttributeName(attributeName);
@@ -1002,9 +1007,10 @@ void WriteInitialization::addButtonGroup(const DomWidget *buttonNode, const QStr
               qPrintable(m_option.messagePrefix()),
               attributeName.toLatin1().data());
    }
+
    const QString groupName = m_driver->findOrInsertButtonGroup(group);
    // Create on demand
-   if (!m_buttonGroups.contains(groupName)) {
+   if (! m_buttonGroups.contains(groupName)) {
       const QString className = QLatin1String("QButtonGroup");
       m_output << m_indent;
       if (createGroupOnTheFly) {
@@ -2153,11 +2159,14 @@ void WriteInitialization::initializeComboBox(DomWidget *w)
    bool makeStringListCall = true;
    bool translatable = false;
    QStringList list;
+
    for (int i = 0; i < items.size(); ++i) {
       const DomItem *item = items.at(i);
       const DomPropertyMap properties = propertyMap(item->elementProperty());
-      const DomProperty *text = properties.value(QLatin1String("text"));
+
+      const DomProperty *text   = properties.value(QLatin1String("text"));
       const DomProperty *pixmap = properties.value(QLatin1String("icon"));
+
       bool needsTr = needsTranslation(text->elementString());
       if (pixmap != 0 || (i > 0 && translatable != needsTr)) {
          makeStringListCall = false;
@@ -2169,14 +2178,18 @@ void WriteInitialization::initializeComboBox(DomWidget *w)
 
    if (makeStringListCall) {
       QTextStream &o = translatable ? m_refreshOut : m_output;
+
       if (translatable) {
          o << m_indent << varName << "->clear();\n";
       }
+
       o << m_indent << varName << "->insertItems(0, QStringList()" << '\n';
       for (int i = 0; i < list.size(); ++i) {
          o << m_indent << " << " << list.at(i) << "\n";
       }
+
       o << m_indent << ");\n";
+
    } else {
       for (int i = 0; i < items.size(); ++i) {
          const DomItem *item = items.at(i);
@@ -2185,6 +2198,7 @@ void WriteInitialization::initializeComboBox(DomWidget *w)
          const DomProperty *icon = properties.value(QLatin1String("icon"));
 
          QString iconValue;
+
          if (icon) {
             iconValue = iconCall(icon);
          }
@@ -2197,6 +2211,7 @@ void WriteInitialization::initializeComboBox(DomWidget *w)
          if (needsTranslation(text->elementString())) {
             m_output << "QString());\n";
             m_refreshOut << m_indent << varName << "->setItemText(" << i << ", " << trCall(text->elementString()) << ");\n";
+
          } else {
             m_output << noTrCall(text->elementString()) << ");\n";
          }
@@ -2209,13 +2224,16 @@ QString WriteInitialization::disableSorting(DomWidget *w, const QString &varName
 {
    // turn off sortingEnabled to force programmatic item order (setItem())
    QString tempName;
-   if (!w->elementItem().isEmpty()) {
+
+   if (! w->elementItem().isEmpty()) {
       tempName = m_driver->unique(QLatin1String("__sortingEnabled"));
+
       m_refreshOut << "\n";
       m_refreshOut << m_indent << "const bool " << tempName
                    << " = " << varName << "->isSortingEnabled();\n";
       m_refreshOut << m_indent << varName << "->setSortingEnabled(false);\n";
    }
+
    return tempName;
 }
 
@@ -2265,7 +2283,8 @@ void WriteInitialization::addStringInitializer(Item *item,
    if (const DomProperty *p = properties.value(name)) {
       DomString *str = p->elementString();
       QString text = toString(str);
-      if (!text.isEmpty()) {
+
+      if (! text.isEmpty()) {
          bool translatable = needsTranslation(str);
          QString value = autoTrCall(str);
          addInitializer(item, name, column, value, directive, translatable);
@@ -2532,7 +2551,7 @@ void WriteInitialization::initializeTableWidget(DomWidget *w)
 QString WriteInitialization::trCall(const QString &str, const QString &commentHint) const
 {
    if (str.isEmpty()) {
-      return QLatin1String("QString()");
+      return QString("QString()");
    }
 
    QString result;
@@ -2549,7 +2568,7 @@ QString WriteInitialization::trCall(const QString &str, const QString &commentHi
    }
 
    result += fixString(str, m_dindent);
-   result += QLatin1String(", ");
+   result += ", ";
    result += comment;
 
    if (m_option.translateFunction.isEmpty()) {
@@ -2576,25 +2595,31 @@ QString WriteInitialization::trCall(DomString *str, const QString &defaultString
 {
    QString value = defaultString;
    QString comment;
+
    if (str) {
-      value = toString(str);
+      value   = toString(str);
       comment = str->attributeComment();
    }
+
    return trCall(value, comment);
 }
 
 QString WriteInitialization::noTrCall(DomString *str, const QString &defaultString) const
 {
    QString value = defaultString;
+
    if (!str && defaultString.isEmpty()) {
       return QString();
    }
+
    if (str) {
       value = str->text();
    }
+
    QString ret = QLatin1String("QString::fromUtf8(");
    ret += fixString(value, m_dindent);
    ret += QLatin1Char(')');
+
    return ret;
 }
 
@@ -2603,6 +2628,7 @@ QString WriteInitialization::autoTrCall(DomString *str, const QString &defaultSt
    if ((!str && !defaultString.isEmpty()) || needsTranslation(str)) {
       return trCall(str, defaultString);
    }
+
    return noTrCall(str, defaultString);
 }
 

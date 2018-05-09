@@ -249,15 +249,13 @@ void QSvgRendererPrivate::callRepaintNeeded(QSvgRenderer *const q)
 }
 
 template<typename TInputType>
-static bool loadDocument(QSvgRenderer *const q,
-                         QSvgRendererPrivate *const d,
-                         const TInputType &in)
+static bool loadDocument(QSvgRenderer *const q, QSvgRendererPrivate *const d, const TInputType &in)
 {
    delete d->render;
    d->render = QSvgTinyDocument::load(in);
 
    if (d->render && d->render->animated() && d->fps > 0) {
-      if (!d->timer) {
+      if (! d->timer) {
          d->timer = new QTimer(q);
       } else {
          d->timer->stop();
@@ -270,7 +268,7 @@ static bool loadDocument(QSvgRenderer *const q,
       d->timer->stop();
    }
 
-   //force first update
+   // force first update
    QSvgRendererPrivate::callRepaintNeeded(q);
 
    return d->render;

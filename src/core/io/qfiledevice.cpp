@@ -158,11 +158,6 @@ bool QFileDevice::flush()
    return true;
 }
 
-/*!
-  Calls QFileDevice::flush() and closes the file. Errors from flush are ignored.
-
-  \sa QIODevice::close()
-*/
 void QFileDevice::close()
 {
    Q_D(QFileDevice);

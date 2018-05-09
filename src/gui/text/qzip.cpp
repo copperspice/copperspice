@@ -897,13 +897,13 @@ QByteArray QZipReader::fileData(const QString &fileName) const
    d->device->seek(start);
    LocalFileHeader lh;
    d->device->read((char *)&lh, sizeof(LocalFileHeader));
+
    uint skip = readUShort(lh.file_name_length) + readUShort(lh.extra_field_length);
    d->device->seek(d->device->pos() + skip);
 
    int compression_method = readUShort(lh.compression_method);
-   //qDebug("file=%s: compressed_size=%d, uncompressed_size=%d", fileName.toLocal8Bit().data(), compressed_size, uncompressed_size);
 
-   //qDebug("file at %lld", d->device->pos());
+
    QByteArray compressed = d->device->read(compressed_size);
    if (compression_method == 0) {
       // no compression

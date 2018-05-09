@@ -189,10 +189,13 @@ void QSqlError::setNumber(int number)
 QString QSqlError::text() const
 {
    QString result = databaseError;
-   if (!databaseError.endsWith(QLatin1String("\n"))) {
-      result += QLatin1Char(' ');
+
+   if (! databaseError.endsWith("\n")) {
+      result += ' ';
    }
+
    result += driverError;
+
    return result;
 }
 

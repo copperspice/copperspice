@@ -712,6 +712,7 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(QAbstractFileEngine::Fil
          }
       }
    }
+
    return retval;
 }
 

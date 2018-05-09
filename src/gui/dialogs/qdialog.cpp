@@ -173,6 +173,7 @@ void QDialog::open()
       d->wasModalitySet = testAttribute(Qt::WA_SetWindowModality);
       setWindowModality(Qt::WindowModal);
       setAttribute(Qt::WA_SetWindowModality, false);
+
 #ifdef Q_OS_MAC
       setParent(parentWidget(), Qt::Sheet);
 #endif
@@ -181,20 +182,6 @@ void QDialog::open()
    setResult(0);
    show();
 }
-
-/*!
-    Shows the dialog as a \l{QDialog#Modal Dialogs}{modal dialog},
-    blocking until the user closes it. The function returns a \l
-    DialogCode result.
-
-    If the dialog is \l{Qt::ApplicationModal}{application modal}, users cannot
-    interact with any other window in the same application until they close
-    the dialog. If the dialog is \l{Qt::ApplicationModal}{window modal}, only
-    interaction with the parent window is blocked while the dialog is open.
-    By default, the dialog is application modal.
-
-    \sa open(), show(), result(), setWindowModality()
-*/
 
 int QDialog::exec()
 {
@@ -712,7 +699,9 @@ void QDialog::showExtension(bool showIt)
          d->extension->setGeometry(0, height(), w, s.height());
          setFixedSize(w, height() + s.height());
       }
+
       d->extension->show();
+
 #ifndef QT_NO_SIZEGRIP
       const bool sizeGripEnabled = isSizeGripEnabled();
       setSizeGripEnabled(false);
@@ -830,7 +819,6 @@ void QDialog::setSizeGripEnabled(bool enabled)
    }
 #endif //QT_NO_SIZEGRIP
 }
-
 
 
 /*! \reimp */

@@ -29,11 +29,11 @@
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtCore/QTimer>
-#include "phononnamespace_p.h"
-#include "platform_p.h"
+#include <qstringlist.h>
+#include <qurl.h>
+#include <qtimer.h>
+#include <phononnamespace_p.h>
+#include <platform_p.h>
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
@@ -47,6 +47,7 @@ PHONON_OBJECT_IMPL
 MediaObject::~MediaObject()
 {
     K_D(MediaObject);
+
     if (d->m_backendObject) {
         switch (state()) {
 
@@ -72,15 +73,17 @@ Phonon::State MediaObject::state() const
     if (d->errorOverride) {
         return d->state;
     }
+
     if (d->ignoreLoadingToBufferingStateChange) {
         return BufferingState;
     }
+
     if (d->ignoreErrorToLoadingStateChange) {
         return LoadingState;
     }
 #endif
 
-    if (!d->m_backendObject) {
+    if (! d->m_backendObject) {
         return d->state;
     }
     return INTERFACE_CALL(state());
@@ -100,6 +103,7 @@ static inline bool isPlayable(const MediaSource::Type t)
 void MediaObject::play()
 {
     K_D(MediaObject);
+
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(play());
     }
@@ -108,6 +112,7 @@ void MediaObject::play()
 void MediaObject::pause()
 {
     K_D(MediaObject);
+
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(pause());
     }
@@ -160,23 +165,24 @@ ErrorType MediaObject::errorType() const
 QStringList MediaObject::metaData(Phonon::MetaData f) const
 {
     switch (f) {
-    case ArtistMetaData:
-        return metaData(QLatin1String("ARTIST"     ));
-    case AlbumMetaData:
-        return metaData(QLatin1String("ALBUM"      ));
-    case TitleMetaData:
-        return metaData(QLatin1String("TITLE"      ));
-    case DateMetaData:
-        return metaData(QLatin1String("DATE"       ));
-    case GenreMetaData:
-        return metaData(QLatin1String("GENRE"      ));
-    case TracknumberMetaData:
-        return metaData(QLatin1String("TRACKNUMBER"));
-    case DescriptionMetaData:
-        return metaData(QLatin1String("DESCRIPTION"));
-    case MusicBrainzDiscIdMetaData:
-        return metaData(QLatin1String("MUSICBRAINZ_DISCID"));
+       case ArtistMetaData:
+           return metaData(QLatin1String("ARTIST"     ));
+       case AlbumMetaData:
+           return metaData(QLatin1String("ALBUM"      ));
+       case TitleMetaData:
+           return metaData(QLatin1String("TITLE"      ));
+       case DateMetaData:
+           return metaData(QLatin1String("DATE"       ));
+       case GenreMetaData:
+           return metaData(QLatin1String("GENRE"      ));
+       case TracknumberMetaData:
+           return metaData(QLatin1String("TRACKNUMBER"));
+       case DescriptionMetaData:
+           return metaData(QLatin1String("DESCRIPTION"));
+       case MusicBrainzDiscIdMetaData:
+           return metaData(QLatin1String("MUSICBRAINZ_DISCID"));
     }
+
     return QStringList();
 }
 
@@ -230,7 +236,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 {
     K_D(MediaObject);
 
-    if (! k_ptr->backendObject()) {  
+    if (! k_ptr->backendObject()) {
         d->mediaSource = newSource;
         return;
     }
@@ -238,7 +244,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     pDebug() << Q_FUNC_INFO << newSource.url();
 
     // first call stop as that often is the expected state for setting a new URL
-    stop(); 
+    stop();
 
     d->mediaSource = newSource;
 
@@ -250,8 +256,8 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    } 
-#endif 
+    }
+#endif
 
     INTERFACE_CALL(setSource(d->mediaSource));
 }
@@ -317,9 +323,10 @@ void MediaObject::clearQueue()
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
     //pDebug() << Q_FUNC_INFO;
-    prefinishMark = pINTERFACE_CALL(prefinishMark());
+    prefinishMark  = pINTERFACE_CALL(prefinishMark());
     transitionTime = pINTERFACE_CALL(transitionTime());
     //pDebug() << Q_FUNC_INFO;
+
     if (m_backendObject) {
         state = pINTERFACE_CALL(state());
         currentTime = pINTERFACE_CALL(currentTime());
@@ -338,7 +345,7 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     errorString = text;
     state = ErrorState;
 
-    QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));   
+    QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
 }
 
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
@@ -360,47 +367,54 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     }
 
     // backend MediaObject reached ErrorState, try a KioMediaSource
-    if (newstate == Phonon::ErrorState && !kiofallback) {
+    if (newstate == Phonon::ErrorState && ! kiofallback) {
         kiofallback = Platform::createMediaStream(mediaSource.url(), q);
         if (!kiofallback) {
             pDebug() << "backend MediaObject reached ErrorState, no KIO fallback available";
             emit q->stateChanged(newstate, oldstate);
             return;
         }
+
         pDebug() << "backend MediaObject reached ErrorState, trying Platform::createMediaStream now";
         ignoreLoadingToBufferingStateChange = false;
         ignoreErrorToLoadingStateChange = false;
+
         switch (oldstate) {
-        case Phonon::BufferingState:
-            // play() has already been called, we need to make sure it is called
-            // on the backend with the KioMediaStream MediaSource now, too
-            ignoreLoadingToBufferingStateChange = true;
-            break;
-        case Phonon::LoadingState:
-            ignoreErrorToLoadingStateChange = true;
-            // no extras
-            break;
-        default:
-            pError() << "backend MediaObject reached ErrorState after " << oldstate
-                << ". It seems a KioMediaStream will not help here, trying anyway.";
-            emit q->stateChanged(Phonon::LoadingState, oldstate);
-            break;
+
+           case Phonon::BufferingState:
+               // play() has already been called, we need to make sure it is called
+               // on the backend with the KioMediaStream MediaSource now, too
+               ignoreLoadingToBufferingStateChange = true;
+               break;
+
+           case Phonon::LoadingState:
+               ignoreErrorToLoadingStateChange = true;
+               // no extras
+               break;
+
+           default:
+               pError() << "backend MediaObject reached ErrorState after " << oldstate
+                   << ". It seems a KioMediaStream will not help here, trying anyway.";
+               emit q->stateChanged(Phonon::LoadingState, oldstate);
+               break;
         }
+
         kiofallback->d_func()->setMediaObjectPrivate(this);
         MediaSource mediaSource(kiofallback);
         mediaSource.setAutoDelete(true);
         pINTERFACE_CALL(setSource(mediaSource));
+
         if (oldstate == Phonon::BufferingState) {
             q->play();
         }
         return;
-    } else if (ignoreLoadingToBufferingStateChange &&
-            kiofallback &&
-            oldstate == Phonon::LoadingState) {
+
+    } else if (ignoreLoadingToBufferingStateChange && kiofallback && oldstate == Phonon::LoadingState) {
         if (newstate != Phonon::BufferingState) {
             emit q->stateChanged(newstate, Phonon::BufferingState);
         }
         return;
+
     } else if (ignoreErrorToLoadingStateChange && kiofallback && oldstate == ErrorState) {
         if (newstate != LoadingState) {
             emit q->stateChanged(newstate, Phonon::LoadingState);
@@ -410,7 +424,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
 
     emit q->stateChanged(newstate, oldstate);
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+#endif
 
 void MediaObjectPrivate::_k_aboutToFinish()
 {
@@ -419,7 +433,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     kiofallback = 0; // kiofallback auto-deletes
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+#endif
 
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
@@ -437,8 +451,9 @@ void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
     Q_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
-    if (!sourceQueue.isEmpty() && sourceQueue.head() == source)
+    if (! sourceQueue.isEmpty() && sourceQueue.head() == source) {
         sourceQueue.dequeue();
+    }
 
     emit q->currentSourceChanged(source);
 }
@@ -447,12 +462,13 @@ void MediaObjectPrivate::setupBackendObject()
 {
     Q_Q(MediaObject);
     Q_ASSERT(m_backendObject);
-   
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 
+
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
            q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
 #else
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
            q, SLOT(stateChanged(Phonon::State, Phonon::State)));
 #endif
 
@@ -468,11 +484,11 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(aboutToFinish()),              q, SLOT(_k_aboutToFinish()));
     QObject::connect(m_backendObject, SIGNAL(prefinishMarkReached(qint32)), q, SLOT(prefinishMarkReached(qint32)));
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),     q, SLOT(totalTimeChanged(qint64)));
-     
+
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
             q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
 
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource &)), 
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource &)),
             q, SLOT(_k_currentSourceChanged(const MediaSource &)));
 
     // set up attributes
@@ -480,22 +496,22 @@ void MediaObjectPrivate::setupBackendObject()
     pINTERFACE_CALL(setPrefinishMark(prefinishMark));
     pINTERFACE_CALL(setTransitionTime(transitionTime));
 
-    switch(state)
-    {
-    case LoadingState:
-    case StoppedState:
-    case ErrorState:
-        break;
+    switch(state) {
+       case LoadingState:
+       case StoppedState:
+       case ErrorState:
+           break;
 
-    case PlayingState:
-    case BufferingState:
-        QTimer::singleShot(0, q, SLOT(_k_resumePlay()));
-        break;
+       case PlayingState:
+       case BufferingState:
+           QTimer::singleShot(0, q, SLOT(_k_resumePlay()));
+           break;
 
-    case PausedState:
-        QTimer::singleShot(0, q, SLOT(_k_resumePause()));
-        break;
+       case PausedState:
+           QTimer::singleShot(0, q, SLOT(_k_resumePause()));
+           break;
     }
+
     const State backendState = pINTERFACE_CALL(state());
     if (state != backendState && state != ErrorState) {
         // careful: if state is ErrorState we might be switching from a
@@ -520,7 +536,7 @@ void MediaObjectPrivate::setupBackendObject()
             Q_ASSERT(mediaSource.stream());
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
-#endif 
+#endif
         pINTERFACE_CALL(setSource(mediaSource));
     }
 }
@@ -528,6 +544,7 @@ void MediaObjectPrivate::setupBackendObject()
 void MediaObjectPrivate::_k_resumePlay()
 {
     qobject_cast<MediaObjectInterface *>(m_backendObject)->play();
+
     if (currentTime > 0) {
         qobject_cast<MediaObjectInterface *>(m_backendObject)->seek(currentTime);
     }
@@ -536,6 +553,7 @@ void MediaObjectPrivate::_k_resumePlay()
 void MediaObjectPrivate::_k_resumePause()
 {
     pINTERFACE_CALL(pause());
+
     if (currentTime > 0) {
         qobject_cast<MediaObjectInterface *>(m_backendObject)->seek(currentTime);
     }

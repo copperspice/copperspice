@@ -151,6 +151,7 @@ QByteArray qt_inflateGZipDataFrom(QIODevice *device)
 QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
 {
    QFile file(fileName);
+
    if (!file.open(QFile::ReadOnly)) {
       qWarning("Cannot open file '%s', because: %s",
                qPrintable(fileName), qPrintable(file.errorString()));
@@ -166,6 +167,7 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
 
    QSvgTinyDocument *doc = 0;
    QSvgHandler handler(&file);
+
    if (handler.ok()) {
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();

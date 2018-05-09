@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 class QFileSystemIterator
 {
  public:
-   QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters, const QStringList &nameFilters, 
+   QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters, const QStringList &nameFilters,
          QDirIterator::IteratorFlags flags = QDirIterator::FollowSymlinks | QDirIterator::Subdirectories);
 
    ~QFileSystemIterator();
@@ -65,13 +65,7 @@ class QFileSystemIterator
    QT_DIR *dir;
    QT_DIRENT *dirEntry;
 
-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
-   // for readdir_r
-   QScopedPointer<QT_DIRENT, QScopedPointerPodDeleter> mt_file;
-
-#endif
    int lastError;
-
 #endif
 
    Q_DISABLE_COPY(QFileSystemIterator)

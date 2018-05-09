@@ -55,7 +55,7 @@ void ReportContext::createError(const QString &description, const QtMsgType type
 
 void ReportContext::error(const QString &msg, const ErrorCode code, const QSourceLocation &sourceLocation)
 {
-   createError(msg, QtFatalMsg, QUrl(CommonNamespaces::XPERR + QLatin1Char('#') + codeToString(code)), sourceLocation);
+   createError(msg, QtFatalMsg, QUrl(CommonNamespaces::XPERR + '#' + codeToString(code)), sourceLocation);
 }
 
 QSourceLocation ReportContext::lookupSourceLocation(const SourceLocationReflection *const r) const

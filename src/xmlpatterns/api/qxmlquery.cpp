@@ -34,218 +34,12 @@
 #include "qxmlquery.h"
 #include "qxmlquery_p.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \class QXmlQuery
-
-  \brief The QXmlQuery class performs XQueries on XML data, or on non-XML data modeled to look like XML.
-
-  \reentrant
-  \since 4.4
-  \ingroup xml-tools
-
-  The QXmlQuery class compiles and executes queries written in the
-  \l {http://www.w3.org/TR/xquery/}{XQuery language}. QXmlQuery is
-  typically used to query XML data, but it can also query non-XML
-  data that has been modeled to look like XML.
-
-  Using QXmlQuery to query XML data, as in the snippet below, is
-  simple because it can use the built-in \l {QAbstractXmlNodeModel}
-  {XML data model} as its delegate to the underlying query engine for
-  traversing the data. The built-in data model is specified in \l
-  {http://www.w3.org/TR/xpath-datamodel/} {XQuery 1.0 and XPath 2.0
-  Data Model}.
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qabstractxmlreceiver.cpp 0
-
-  The example uses QXmlQuery to match the first paragraph of an XML
-  document and then \l {QXmlSerializer} {output the result} to a
-  device as XML.
-
-  Using QXmlQuery to query \e {non-XML} data requires writing a
-  subclass of QAbstractXmlNodeModel to use as a replacement for the
-  built-in XML data model. The custom data model will be able to
-  traverse the non-XML data as required by the QAbstractXmlNodeModel
-  interface. An instance of this custom data model then becomes the
-  delegate used by the query engine to traverse the non-XML data. For
-  an example of how to use QXmlQuery to query non-XML data, see the
-  documentation for QAbstractXmlNodeModel.
-
-  \section1 Running XQueries
-
-  To run a query set up with QXmlQuery, call one of the evaluation
-  functions.
-
-  \list
-
-  \o evaluateTo(QAbstractXmlReceiver *) is called with a pointer to an
-  XML \l {QAbstractXmlReceiver} {receiver}, which receives the query
-  results as a sequence of callbacks. The receiver callback class is
-  like the callback class used for translating the output of a SAX
-  parser. QXmlSerializer, for example, is a receiver callback class
-  for translating the sequence of callbacks for output as unformatted
-  XML text.
-
-  \endlist
-
-  \list
-
-  \o evaluateTo(QXmlResultItems *) is called with a pointer to an
-  iterator for an empty sequence of query \l {QXmlResultItems} {result
-  items}.  The Java-like iterator allows the query results to be
-  accessed sequentially.
-
-  \endlist
-
-  \list
-
-  \o evaluateTo(QStringList *) is like evaluateTo(QXmlResultItems *),
-  but the query must evaluate to a sequence of strings.
-
-  \endlist
-
-  \section1 Running XPath Expressions
-
-  The XPath language is a subset of the XQuery language, so
-  running an XPath expression is the same as running an XQuery
-  query. Pass the XPath expression to QXmlQuery using setQuery().
-
-  \section1 Running XSLT stylesheets
-
-  Running an XSLT stylesheet is like running an XQuery, except that
-  when you construct your QXmlQuery, you must pass QXmlQuery::XSLT20
-  to tell QXmlQuery to interpret whatever it gets from setQuery() as
-  an XSLT stylesheet instead of as an XQuery. You must also set the
-  input document by calling setFocus().
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlquery.cpp 7
-
-  \note Currently, setFocus() must be called \e before setQuery() when
-  using XSLT.
-
-  Another way to run an XSLT stylesheet is to use the \c xmlpatterns
-  command line utility.
-
-  \code
-  xmlpatterns myStylesheet.xsl myInput.xml
-  \endcode
-
-  \note For the current release, XSLT support should be considered
-  experimental. See section \l{XQuery#XSLT 2.0} {XSLT conformance} for
-  details.
-
-  Stylesheet parameters are bound using bindVariable().
-
-  \section1 Binding A Query To A Starting Node
-
-  When a query is run on XML data, as in the snippet above, the
-  \c{doc()} function returns the node in the built-in data model where
-  the query evaluation will begin. But when a query is run on a custom
-  node model containing non-XML data, one of the bindVariable()
-  functions must be called to bind a variable name to a starting node
-  in the custom model.  A $variable reference is used in the XQuery
-  text to access the starting node in the custom model. It is not
-  necessary to declare the variable name external in the query. See
-  the example in the documentation for QAbstractXmlNodeModel.
-
-  \section1 Reentrancy and Thread-Safety
-
-  QXmlQuery is reentrant but not thread-safe. It is safe to use the
-  QxmlQuery copy constructor to create a copy of a query and run the
-  same query multiple times. Behind the scenes, QXmlQuery will reuse
-  resources such as opened files and compiled queries to the extent
-  possible. But it is not safe to use the same instance of QXmlQuery
-  in multiple threads.
-
-  \section1 Error Handling
-
-  Errors can occur during query evaluation. Examples include type
-  errors and file loading errors. When an error occurs:
-
-  \list
-
-  \o The error message is sent to the messageHandler().
-
-  \o QXmlResultItems::hasError() will return \c{true}, or
-  evaluateTo() will return \c{false};
-
-  \o The results of the evaluation are undefined.
-
-  \endlist
-
-  \section1 Resource Management
-
-  When a query runs, it parses documents, allocating internal data
-  structures to hold them, and it may load other resources over the
-  network. It reuses these allocated resources when possible, to
-  avoid having to reload and reparse them.
-
-  When setQuery() is called, the query text is compiled into an
-  internal data structure and optimized. The optimized form can
-  then be reused for multiple evaluations of the query. Since the
-  compile-and-optimize process can be expensive, repeating it for
-  the same query should be avoided by using a separate instance of
-  QXmlQuery for each query text.
-
-  Once a document has been parsed, its internal representation is
-  maintained in the QXmlQuery instance and shared among multiple
-  QXmlQuery instances.
-
-  An instance of QCoreApplication must exist before QXmlQuery can be
-  used.
-
-  \section1 Event Handling
-
-  When QXmlQuery accesses resources (e.g., calling \c fn:doc() to load a file,
-  or accessing a device via a bound variable), the event loop is used, which
-  means events will be processed. To avoid processing events when QXmlQuery
-  accesses resources, create your QXmlQuery instance in a separate thread.
- */
-
-/*!
- \enum QXmlQuery::QueryLanguage
- \since 4.5
-
- Specifies whether you want QXmlQuery to interpret the input to
- setQuery() as an XQuery or as an XSLT stylesheet.
-
- \value XQuery10 XQuery 1.0.
- \value XSLT20 XSLT 2.0
- \omitvalue XmlSchema11IdentityConstraintSelector The selector, the restricted
-            XPath pattern found in W3C XML Schema 1.1 for uniqueness
-            contraints. Apart from restricting the syntax, the type check stage
-            for the expression assumes a sequence of nodes to be the focus.
- \omitvalue XmlSchema11IdentityConstraintField The field, the restricted
-            XPath pattern found in W3C XML Schema 1.1 for uniqueness
-            contraints. Apart from restricting the syntax, the type check stage
-            for the expression assumes a sequence of nodes to be the focus.
- \omitvalue XPath20 Signifies XPath 2.0. Has no effect in the public API, it's
-            used internally. As With XmlSchema11IdentityConstraintSelector and
-            XmlSchema11IdentityConstraintField, the type check stage
-            for the expression assumes a sequence of nodes to be the focus.
-
- \sa setQuery()
- */
-
 // ### Qt5/Merge constructor overloads
-/*!
-  Constructs an invalid, empty query that cannot be used until
-  setQuery() is called.
 
-  \note This constructor must not be used if you intend to use
-  this QXmlQuery to process XSL-T stylesheets. The other constructor
-  must be used in that case.
- */
 QXmlQuery::QXmlQuery() : d(new QXmlQueryPrivate())
 {
 }
 
-/*!
-  Constructs a QXmlQuery that is a copy of \a other. The new
-  instance will share resources with the existing query
-  to the extent possible.
- */
 QXmlQuery::QXmlQuery(const QXmlQuery &other) : d(new QXmlQueryPrivate(*other.d))
 {
    /* First we have invoked QXmlQueryPrivate's synthesized copy constructor.
@@ -253,47 +47,20 @@ QXmlQuery::QXmlQuery(const QXmlQuery &other) : d(new QXmlQueryPrivate(*other.d))
    d->detach();
 }
 
-/*!
-  Constructs a query that will use \a np as its name pool. The query
-  cannot be evaluated until setQuery() has been called.
- */
 QXmlQuery::QXmlQuery(const QXmlNamePool &np) : d(new QXmlQueryPrivate(np))
 {
 }
 
-/*!
-
-  Constructs a query that will be used to run Xqueries or XSL-T
-  stylesheets, depending on the value of \a queryLanguage. It will use
-  \a np as its name pool.
-
-  \note If your QXmlQuery will process XSL-T stylesheets, this
-  constructor must be used. The default constructor can only
-  create instances of QXmlQuery for running XQueries.
-
-  \note The XSL-T support in this release is considered experimental.
-  See the \l{XQuery#XSLT 2.0} {XSLT conformance} for details.
-
- \since 4.5
- \sa queryLanguage()
- */
-QXmlQuery::QXmlQuery(QueryLanguage queryLanguage,
-                     const QXmlNamePool &np) : d(new QXmlQueryPrivate(np))
+QXmlQuery::QXmlQuery(QueryLanguage queryLanguage, const QXmlNamePool &np) : d(new QXmlQueryPrivate(np))
 {
    d->queryLanguage = queryLanguage;
 }
 
-/*!
-  Destroys this QXmlQuery.
- */
 QXmlQuery::~QXmlQuery()
 {
    delete d;
 }
 
-/*!
-  Assigns \a other to this QXmlQuery instance.
- */
 QXmlQuery &QXmlQuery::operator=(const QXmlQuery &other)
 {
    /* Keep this section in sync with QXmlQuery::QXmlQuery(const QXmlQuery &).
@@ -306,46 +73,6 @@ QXmlQuery &QXmlQuery::operator=(const QXmlQuery &other)
    return *this;
 }
 
-/*!
-  Changes the \l {QAbstractMessageHandler}{message handler} for this
-  QXmlQuery to \a aMessageHandler. The query sends all compile and
-  runtime messages to this message handler. QXmlQuery does not take
-  ownership of \a aMessageHandler.
-
-  Normally, the default message handler is sufficient. It writes
-  compile and runtime messages to \e stderr. The default message
-  handler includes color codes if \e stderr can render colors.
-
-  Note that changing the message handler after the query has been
-  compiled has no effect, i.e. the query uses the same message handler
-  at runtime that it uses at compile time.
-
-  When QXmlQuery calls QAbstractMessageHandler::message(),
-  the arguments are as follows:
-
-  \table
-  \header
-    \o message() argument
-    \o Semantics
-  \row
-    \o QtMsgType type
-    \o Only QtWarningMsg and QtFatalMsg are used. The former
-       identifies a compile or runtime warning, while the
-       latter identifies a dynamic or static error.
-  \row
-    \o const QString & description
-    \o An XHTML document which is the actual message. It is translated
-       into the current language.
-  \row
-    \o const QUrl &identifier
-    \o Identifies the error with a URI, where the fragment is
-       the error code, and the rest of the URI is the error namespace.
-  \row
-    \o const QSourceLocation & sourceLocation
-    \o Identifies where the error occurred.
-  \endtable
-
- */
 void QXmlQuery::setMessageHandler(QAbstractMessageHandler *aMessageHandler)
 {
    d->messageHandler = aMessageHandler;
@@ -360,38 +87,6 @@ QAbstractMessageHandler *QXmlQuery::messageHandler() const
    return d->messageHandler;
 }
 
-/*!
-  Sets this QXmlQuery to an XQuery read from the \a sourceCode
-  device.  The device must have been opened with at least
-  QIODevice::ReadOnly.
-
-  \a documentURI represents the query obtained from the \a sourceCode
-  device. It is the base URI of the static context, as defined in the
-  \l {http://www.w3.org/TR/xquery/}{XQuery language}. It is used
-  internally to resolve relative URIs that appear in the query, and
-  for message reporting. \a documentURI can be empty. If it is empty,
-  the \l{QCoreApplication::applicationFilePath()} {application file
-  path} is used. If it is not empty, it may be either relative or
-  absolute. If it is relative, it is resolved itself against the
-  \l {QCoreApplication::applicationFilePath()} {application file
-  path} before it is used. If \a documentURI is neither a valid URI
-  nor empty, the result is undefined.
-
-  If the query contains a static error (e.g. syntax error), an error
-  message is sent to the messageHandler(), and isValid() will return
-  \e false.
-
-  Variables must be bound before setQuery() is called.
-
-  The encoding of the XQuery in \a sourceCode is detected internally
-  using the rules for setting and detecting encoding of XQuery files,
-  which are explained in the \l {http://www.w3.org/TR/xquery/}
-  {XQuery language}.
-
-  If \a sourceCode is \c null or not readable, or if \a documentURI is not
-  a valid URI, behavior is undefined.
-  \sa isValid()
- */
 void QXmlQuery::setQuery(QIODevice *sourceCode, const QUrl &documentURI)
 {
    if (!sourceCode) {
@@ -520,63 +215,20 @@ void QXmlQuery::bindVariable(const QXmlName &name, const QXmlItem &value)
    vl->addBinding(name, variant);
 }
 
-/*!
-  \overload
-
-  This function constructs a QXmlName from \a localName using the
-  query's \l {QXmlNamePool} {namespace}. The function then behaves as
-  the overloaded function. It is equivalent to the following snippet.
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlquery.cpp 0
- */
 void QXmlQuery::bindVariable(const QString &localName, const QXmlItem &value)
 {
    bindVariable(QXmlName(d->namePool, localName), value);
 }
 
-/*!
-  Binds the variable \a name to the \a device so that $\a name can be
-  used from within the query to refer to the \a device. The QIODevice
-  \a device is exposed to the query as a URI of type \c{xs:anyURI},
-  which can be passed to the \c{fn:doc()} function to be read. E.g.,
-  this function can be used to pass an XML document in memory to
-  \c{fn:doc}.
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlquery.cpp 1
-
-  The caller must ensure that \a device has been opened with at least
-  QIODevice::ReadOnly prior to this binding. Otherwise, behavior is
-  undefined.
-
-  If the query will access an XML document contained in a QString, use
-  a QBuffer as shown in the following snippet. Suppose \e myQString
-  contains \c{<document>content</document>}
-
-  \snippet doc/src/snippets/qxmlquery/bindingExample.cpp 0
-
-  \a name must not be \e null. \a {name}.isNull() must return false.
-  If \a name has already been bound, its previous binding will be
-  overridden. The URI that \a name evaluates to is arbitrary and may
-  change.
-
-  If the type of the variable binding changes (e.g., if a previous
-  binding by the same name was a QVariant, or if there was no previous
-  binding), isValid() will return \c{false}, and recompilation of the
-  query text is required. To recompile the query, call setQuery(). For
-  this reason, bindVariable() should be called before setQuery(), if
-  possible.
-
-  \note \a device must not be deleted while this QXmlQuery exists.
-*/
 void QXmlQuery::bindVariable(const QXmlName &name, QIODevice *device)
 {
-   if (device && !device->isReadable()) {
+   if (device && ! device->isReadable()) {
       qWarning("A null, or readable QIODevice must be passed.");
       return;
    }
 
    if (name.isNull()) {
-      qWarning("The variable name cannot be null.");
+      qWarning("The variable name can not be null.");
       return;
    }
 
@@ -596,46 +248,21 @@ void QXmlQuery::bindVariable(const QXmlName &name, QIODevice *device)
        * same which means that the URI is the same, and hence the resource
        * loader will return the document for the old QIODevice.
        */
-      d->resourceLoader()->clear(QUrl(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+
+      d->resourceLoader()->clear(QUrl("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                                       d->namePool.d->stringForLocalName(name.localName())));
+
    } else {
       vl->removeBinding(name);
       d->recompileRequired();
    }
 }
 
-/*!
-  \overload
-
-  If \a localName is a valid \l {QXmlName::isNCName()} {NCName}, this
-  function is equivalent to the following snippet.
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlquery.cpp 2
-
-  A QXmlName is constructed from \a localName, and is passed
-  to the appropriate overload along with \a device.
-
-  \sa QXmlName::isNCName()
- */
 void QXmlQuery::bindVariable(const QString &localName, QIODevice *device)
 {
    bindVariable(QXmlName(d->namePool, localName), device);
 }
 
-/*!
-  Evaluates this query and sends the result as a sequence of callbacks
-  to the \l {QAbstractXmlReceiver} {receiver} \a callback. QXmlQuery
-  does not take ownership of \a callback.
-
-  If an error occurs during the evaluation, error messages are sent to
-  messageHandler() and \c false is returned.
-
-  If this query \l {isValid()} {is invalid}, \c{false} is returned
-  and the behavior is undefined. If \a callback is null,
-  behavior is undefined.
-
-  \sa QAbstractXmlReceiver, isValid()
- */
 bool QXmlQuery::evaluateTo(QAbstractXmlReceiver *callback) const
 {
    if (!callback) {

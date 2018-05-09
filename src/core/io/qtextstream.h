@@ -168,7 +168,6 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(const QByteArray &array);
    QTextStream &operator<<(const void *ptr);
 
-   // broom - fix this code
    QTextStream &operator<<(const char *s) {
       return *this << QString::fromLatin1(s);
    }

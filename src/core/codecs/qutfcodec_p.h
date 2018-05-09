@@ -34,17 +34,17 @@ enum DataEndianness {
 
 struct QUtf8 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *);
-   static QByteArray convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *);
+   static QByteArray convertFromUnicode(QStringView str, QTextCodec::ConverterState *);
 };
 
 struct QUtf16 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-   static QByteArray convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(QStringView str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
 };
 
 struct QUtf32 {
    static QString convertToUnicode(const char *, int, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
-   static QByteArray convertFromUnicode(const QStringView &str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
+   static QByteArray convertFromUnicode(QStringView str, QTextCodec::ConverterState *, DataEndianness = DetectEndianness);
 };
 
 #ifndef QT_NO_TEXTCODEC
@@ -55,7 +55,7 @@ class QUtf8Codec : public QTextCodec
    ~QUtf8Codec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QStringView &str, ConverterState *) const override;
+   QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
    void convertToUnicode(QString *target, const char *, int, ConverterState *) const;
 
    QByteArray name() const override;
@@ -76,7 +76,7 @@ class QUtf16Codec : public QTextCodec
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QStringView &str, ConverterState *) const override;
+   QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
  protected:
    DataEndianness e;
@@ -120,7 +120,7 @@ class QUtf32Codec : public QTextCodec
    int mibEnum() const override;
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QStringView &str, ConverterState *) const override;
+   QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
  protected:
    DataEndianness e;

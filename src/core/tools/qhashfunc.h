@@ -124,7 +124,7 @@ inline uint qHash(const QString16 &key, uint seed = 0)
    return h;
 }
 
-inline uint qHash(const QStringView &key, uint seed = 0)
+inline uint qHash(QStringView key, uint seed = 0)
 {
    uint h = seed;
 

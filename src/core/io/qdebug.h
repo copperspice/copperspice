@@ -117,8 +117,8 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(char t) {
-      stream->ts << t;
+   inline QDebug &operator<<(char c) {
+      stream->ts << c;
       return maybeSpace();
    }
 
@@ -172,27 +172,27 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(const char *t) {
-      stream->ts << QString::fromLatin1(t);
+   inline QDebug &operator<<(const char *c) {
+      stream->ts << QString::fromLatin1(c);
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(QChar t) {
-      stream->ts << '\'' << t << '\'';
+   inline QDebug &operator<<(QChar c) {
+      stream->ts << '\'' << c << '\'';
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(const QString &t) {
-      stream->ts << '\"' << t  << '\"';
+   inline QDebug &operator<<(const QString &str) {
+      stream->ts << '\"' << str << '\"';
       return maybeSpace();
    }
 
-   inline QDebug &operator<<(const QStringView &t) {
-      return operator<<(QString(t));
+   inline QDebug &operator<<(QStringView str) {
+      return operator<<(QString(str));
    }
 
-   inline QDebug &operator<<(const QByteArray &t) {
-      stream->ts  << '\"' << t << '\"';
+   inline QDebug &operator<<(const QByteArray &str) {
+      stream->ts  << '\"' << str << '\"';
       return maybeSpace();
    }
 

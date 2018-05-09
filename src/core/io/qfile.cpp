@@ -102,42 +102,37 @@ bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags 
 
 QAbstractFileEngine *QFilePrivate::engine() const
 {
-   if (!fileEngine) {
+   if (! fileEngine) {
       fileEngine = QAbstractFileEngine::create(fileName);
    }
+
    return fileEngine;
 }
 
 QFile::QFile()
-   : QFileDevice(*new QFilePrivate, 0)
+   : QFileDevice(*new QFilePrivate, nullptr)
 {
 }
-/*!
-    Constructs a new file object with the given \a parent.
-*/
+
 QFile::QFile(QObject *parent)
    : QFileDevice(*new QFilePrivate, parent)
 {
 }
-/*!
-    Constructs a new file object to represent the file with the given \a name.
-*/
+
 QFile::QFile(const QString &name)
-   : QFileDevice(*new QFilePrivate, 0)
+   : QFileDevice(*new QFilePrivate, nullptr)
 {
    Q_D(QFile);
    d->fileName = name;
 }
-/*!
-    Constructs a new file object with the given \a parent to represent the
-    file with the specified \a name.
-*/
+
 QFile::QFile(const QString &name, QObject *parent)
    : QFileDevice(*new QFilePrivate, parent)
 {
    Q_D(QFile);
    d->fileName = name;
 }
+
 /*!
     \internal
 */
@@ -146,157 +141,61 @@ QFile::QFile(QFilePrivate &dd, QObject *parent)
 {
 }
 
-
-/*!
-    Destroys the file object, closing it if necessary.
-*/
 QFile::~QFile()
 {
 }
 
-/*!
-    Returns the name set by setFileName() or to the QFile
-    constructors.
-
-    \sa setFileName(), QFileInfo::fileName()
-*/
 QString QFile::fileName() const
 {
    Q_D(const QFile);
    return d->engine()->fileName(QAbstractFileEngine::DefaultName);
 }
 
-/*!
-    Sets the \a name of the file. The name can have no path, a
-    relative path, or an absolute path.
-
-    Do not call this function if the file has already been opened.
-
-    If the file name has no path or a relative path, the path used
-    will be the application's current directory path
-    \e{at the time of the open()} call.
-
-    Example:
-    \snippet doc/src/snippets/code/src_corelib_io_qfile.cpp 0
-
-    Note that the directory separator "/" works for all operating
-    systems supported by Qt.
-
-    \sa fileName(), QFileInfo, QDir
-*/
-void
-QFile::setFileName(const QString &name)
+void QFile::setFileName(const QString &name)
 {
    Q_D(QFile);
+
    if (isOpen()) {
       qWarning("QFile::setFileName: File (%s) is already opened",
                qPrintable(fileName()));
       close();
    }
+
    if (d->fileEngine) { //get a new file engine later
       delete d->fileEngine;
       d->fileEngine = 0;
    }
+
    d->fileName = name;
 }
 
-/*!
-    \fn QString QFile::decodeName(const char *localFileName)
-
-    \overload
-
-    Returns the Unicode version of the given \a localFileName. See
-    encodeName() for details.
-*/
-
-/*!
-    By default, this function converts \a fileName to the local 8-bit
-    encoding determined by the user's locale. This is sufficient for
-    file names that the user chooses. File names hard-coded into the
-    application should only use 7-bit ASCII filename characters.
-
-    \sa decodeName() setEncodingFunction()
-*/
-
-QByteArray
-QFile::encodeName(const QString &fileName)
+QByteArray QFile::encodeName(const QString &fileName)
 {
    return (*QFilePrivate::encoder)(fileName);
 }
 
-/*!
-    \typedef QFile::EncoderFn
-
-    This is a typedef for a pointer to a function with the following
-    signature:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qfile.cpp 1
-
-    \sa setEncodingFunction(), encodeName()
-*/
-
-/*!
-    This does the reverse of QFile::encodeName() using \a localFileName.
-
-    \sa setDecodingFunction(), encodeName()
-*/
-
-QString
-QFile::decodeName(const QByteArray &localFileName)
+QString QFile::decodeName(const QByteArray &localFileName)
 {
    return (*QFilePrivate::decoder)(localFileName);
 }
 
-/*!
-    \fn void QFile::setEncodingFunction(EncoderFn function)
-
-    \nonreentrant
-
-    Sets the \a function for encoding Unicode file names. The
-    default encodes in the locale-specific 8-bit encoding.
-
-    \sa encodeName(), setDecodingFunction()
-*/
-
-void
-QFile::setEncodingFunction(EncoderFn f)
+void QFile::setEncodingFunction(EncoderFn f)
 {
    if (!f) {
       f = locale_encode;
    }
+
    QFilePrivate::encoder = f;
 }
 
-/*!
-    \typedef QFile::DecoderFn
-
-    This is a typedef for a pointer to a function with the following
-    signature:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qfile.cpp 2
-
-    \sa setDecodingFunction()
-*/
-
-/*!
-    \fn void QFile::setDecodingFunction(DecoderFn function)
-
-    \nonreentrant
-
-    Sets the \a function for decoding 8-bit file names. The
-    default uses the locale-specific 8-bit encoding.
-
-    \sa setEncodingFunction(), decodeName()
-*/
-
 void QFile::setDecodingFunction(DecoderFn f)
 {
-   if (!f) {
+   if (! f) {
       f = locale_decode;
    }
+
    QFilePrivate::decoder = f;
 }
-
 
 bool QFile::exists() const
 {
@@ -321,18 +220,6 @@ QString QFile::readLink() const
 }
 
 /*!
-    \fn static QString QFile::symLinkTarget(const QString &fileName)
-    \since 4.2
-
-    Returns the absolute path of the file or directory referred to by the
-    symlink (or shortcut on Windows) specified by \a fileName, or returns an
-    empty string if the \a fileName does not correspond to a symbolic link.
-
-    This name may not represent an existing file; it is only a string.
-    QFile::exists() returns true if the symlink points to an existing file.
-*/
-
-/*!
     \obsolete
 
     Use symLinkTarget() instead.
@@ -343,23 +230,15 @@ QFile::readLink(const QString &fileName)
    return QFileInfo(fileName).readLink();
 }
 
-/*!
-    Removes the file specified by fileName(). Returns true if successful;
-    otherwise returns false.
-
-    The file is closed before it is removed.
-
-    \sa setFileName()
-*/
-
-bool
-QFile::remove()
+bool QFile::remove()
 {
    Q_D(QFile);
+
    if (d->fileName.isEmpty()) {
       qWarning("QFile::remove: Empty or null file name");
       return false;
    }
+
    unsetError();
    close();
    if (error() == QFile::NoError) {
@@ -369,6 +248,7 @@ QFile::remove()
       }
       d->setError(QFile::RemoveError, d->fileEngine->errorString());
    }
+
    return false;
 }
 
@@ -453,8 +333,8 @@ QFile::rename(const QString &newName)
       // We need to restore the original file
 
       if (!tempFile.rename(d->fileName)) {
-         d->setError(QFile::RenameError, errorString() + '\n' + tr("Unable to restore from %1: %2").
-                  arg(QDir::toNativeSeparators(tempFile.fileName()), tempFile.errorString()));
+         d->setError(QFile::RenameError, errorString() + '\n' + tr("Unable to restore from %1: %2")
+                  .formatArgs(QDir::toNativeSeparators(tempFile.fileName()), tempFile.errorString()));
       }
 
       return false;

@@ -70,13 +70,13 @@ bool qt_show_painter_debug_output = true;
 extern QPixmap qt_pixmapForBrush(int style, bool invert);
 
 void qt_format_text(const QFont &font,
-                    const QRectF &_r, int tf, const QTextOption *option, const QString &str, QRectF *brect,
-                    int tabstops, int *tabarray, int tabarraylen,
-                    QPainter *painter);
+                  const QRectF &_r, int tf, const QTextOption *option, const QString &str, QRectF *brect,
+                  int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
+
 static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const QFontEngine *fe,
-                                   QTextCharFormat::UnderlineStyle underlineStyle,
-                                   QTextItem::RenderFlags flags, qreal width,
-                                   const QTextCharFormat &charFormat);
+                  QTextCharFormat::UnderlineStyle underlineStyle,
+                  QTextItem::RenderFlags flags, qreal width, const QTextCharFormat &charFormat);
+
 // Helper function to calculate left most position, width and flags for decoration drawing
 Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t *glyphArray,
       const QFixedPoint *positions, int glyphCount,
@@ -355,7 +355,6 @@ void QPainterPrivate::detachPainterPrivate(QPainter *q)
    }
 }
 
-
 void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperation op)
 {
 #ifdef QT_DEBUG_DRAW
@@ -432,7 +431,7 @@ void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperatio
          }
       }
       // avoid mapping QRegions with perspective transforms
-      if (!hasPerspectiveTransform) {
+      if (! hasPerspectiveTransform) {
          // The trick with txinv and invMatrix is done in order to
          // avoid transforming the clip to logical coordinates, and
          // then back to device coordinates. This is a problem with
@@ -666,7 +665,6 @@ void QPainterPrivate::drawStretchedGradient(const QPainterPath &path, DrawOperat
       q->setBrush(brush);
    }
 }
-
 
 void QPainterPrivate::updateMatrix()
 {
@@ -950,560 +948,21 @@ void QPainterPrivate::updateState(QPainterState *newState)
    }
 }
 
-
-/*!
-    \class QPainter
-    \brief The QPainter class performs low-level painting on widgets and
-    other paint devices.
-
-    \ingroup painting
-
-    \reentrant
-
-    QPainter provides highly optimized functions to do most of the
-    drawing GUI programs require. It can draw everything from simple
-    lines to complex shapes like pies and chords. It can also draw
-    aligned text and pixmaps. Normally, it draws in a "natural"
-    coordinate system, but it can also do view and world
-    transformation. QPainter can operate on any object that inherits
-    the QPaintDevice class.
-
-    The common use of QPainter is inside a widget's paint event:
-    Construct and customize (e.g. set the pen or the brush) the
-    painter. Then draw. Remember to destroy the QPainter object after
-    drawing. For example:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 0
-
-    The core functionality of QPainter is drawing, but the class also
-    provide several functions that allows you to customize QPainter's
-    settings and its rendering quality, and others that enable
-    clipping. In addition you can control how different shapes are
-    merged together by specifying the painter's composition mode.
-
-    The isActive() function indicates whether the painter is active. A
-    painter is activated by the begin() function and the constructor
-    that takes a QPaintDevice argument. The end() function, and the
-    destructor, deactivates it.
-
-    Together with the QPaintDevice and QPaintEngine classes, QPainter
-    form the basis for Qt's paint system. QPainter is the class used
-    to perform drawing operations. QPaintDevice represents a device
-    that can be painted on using a QPainter. QPaintEngine provides the
-    interface that the painter uses to draw onto different types of
-    devices. If the painter is active, device() returns the paint
-    device on which the painter paints, and paintEngine() returns the
-    paint engine that the painter is currently operating on. For more
-    information, see the \l {Paint System}.
-
-    Sometimes it is desirable to make someone else paint on an unusual
-    QPaintDevice. QPainter supports a static function to do this,
-    setRedirected().
-
-    \warning When the paintdevice is a widget, QPainter can only be
-    used inside a paintEvent() function or in a function called by
-    paintEvent(); that is unless the Qt::WA_PaintOutsidePaintEvent
-    widget attribute is set. On Mac OS X and Windows, you can only
-    paint in a paintEvent() function regardless of this attribute's
-    setting.
-
-    \tableofcontents
-
-    \section1 Settings
-
-    There are several settings that you can customize to make QPainter
-    draw according to your preferences:
-
-    \list
-
-    \o font() is the font used for drawing text. If the painter
-        isActive(), you can retrieve information about the currently set
-        font, and its metrics, using the fontInfo() and fontMetrics()
-        functions respectively.
-
-    \o brush() defines the color or pattern that is used for filling
-       shapes.
-
-    \o pen() defines the color or stipple that is used for drawing
-       lines or boundaries.
-
-    \o backgroundMode() defines whether there is a background() or
-       not, i.e it is either Qt::OpaqueMode or Qt::TransparentMode.
-
-    \o background() only applies when backgroundMode() is \l
-       Qt::OpaqueMode and pen() is a stipple. In that case, it
-       describes the color of the background pixels in the stipple.
-
-    \o brushOrigin() defines the origin of the tiled brushes, normally
-       the origin of widget's background.
-
-    \o viewport(), window(), worldTransform() make up the painter's coordinate
-        transformation system. For more information, see the \l
-        {Coordinate Transformations} section and the \l {Coordinate
-        System} documentation.
-
-    \o hasClipping() tells whether the painter clips at all. (The paint
-       device clips, too.) If the painter clips, it clips to clipRegion().
-
-    \o layoutDirection() defines the layout direction used by the
-       painter when drawing text.
-
-    \o worldMatrixEnabled() tells whether world transformation is enabled.
-
-    \o viewTransformEnabled() tells whether view transformation is
-        enabled.
-
-    \endlist
-
-    Note that some of these settings mirror settings in some paint
-    devices, e.g.  QWidget::font(). The QPainter::begin() function (or
-    equivalently the QPainter constructor) copies these attributes
-    from the paint device.
-
-    You can at any time save the QPainter's state by calling the
-    save() function which saves all the available settings on an
-    internal stack. The restore() function pops them back.
-
-    \section1 Drawing
-
-    QPainter provides functions to draw most primitives: drawPoint(),
-    drawPoints(), drawLine(), drawRect(), drawRoundedRect(),
-    drawEllipse(), drawArc(), drawPie(), drawChord(), drawPolyline(),
-    drawPolygon(), drawConvexPolygon() and drawCubicBezier().  The two
-    convenience functions, drawRects() and drawLines(), draw the given
-    number of rectangles or lines in the given array of \l
-    {QRect}{QRects} or \l {QLine}{QLines} using the current pen and
-    brush.
-
-    The QPainter class also provides the fillRect() function which
-    fills the given QRect, with the given QBrush, and the eraseRect()
-    function that erases the area inside the given rectangle.
-
-    All of these functions have both integer and floating point
-    versions.
-
-    \table 100%
-    \row
-    \o \inlineimage qpainter-basicdrawing.png
-    \o
-    \bold {Basic Drawing Example}
-
-    The \l {painting/basicdrawing}{Basic Drawing} example shows how to
-    display basic graphics primitives in a variety of styles using the
-    QPainter class.
-
-    \endtable
-
-    If you need to draw a complex shape, especially if you need to do
-    so repeatedly, consider creating a QPainterPath and drawing it
-    using drawPath().
-
-    \table 100%
-    \row
-    \o
-    \bold {Painter Paths example}
-
-    The QPainterPath class provides a container for painting
-    operations, enabling graphical shapes to be constructed and
-    reused.
-
-    The \l {painting/painterpaths}{Painter Paths} example shows how
-    painter paths can be used to build complex shapes for rendering.
-
-    \o \inlineimage qpainter-painterpaths.png
-    \endtable
-
-    QPainter also provides the fillPath() function which fills the
-    given QPainterPath with the given QBrush, and the strokePath()
-    function that draws the outline of the given path (i.e. strokes
-    the path).
-
-    See also the \l {demos/deform}{Vector Deformation} demo which
-    shows how to use advanced vector techniques to draw text using a
-    QPainterPath, the \l {demos/gradients}{Gradients} demo which shows
-    the different types of gradients that are available in Qt, and the \l
-    {demos/pathstroke}{Path Stroking} demo which shows Qt's built-in
-    dash patterns and shows how custom patterns can be used to extend
-    the range of available patterns.
-
-    \table
-    \header
-    \o \l {demos/deform}{Vector Deformation}
-    \o \l {demos/gradients}{Gradients}
-    \o \l {demos/pathstroke}{Path Stroking}
-    \row
-    \o \inlineimage qpainter-vectordeformation.png
-    \o \inlineimage qpainter-gradients.png
-    \o \inlineimage qpainter-pathstroking.png
-    \endtable
-
-
-    There are functions to draw pixmaps/images, namely drawPixmap(),
-    drawImage() and drawTiledPixmap(). Both drawPixmap() and drawImage()
-    produce the same result, except that drawPixmap() is faster
-    on-screen while drawImage() may be faster on a QPrinter or other
-    devices.
-
-    Text drawing is done using drawText(). When you need
-    fine-grained positioning, boundingRect() tells you where a given
-    drawText() command will draw.
-
-    There is a drawPicture() function that draws the contents of an
-    entire QPicture. The drawPicture() function is the only function
-    that disregards all the painter's settings as QPicture has its own
-    settings.
-
-    \section1 Rendering Quality
-
-    To get the optimal rendering result using QPainter, you should use
-    the platform independent QImage as paint device; i.e. using QImage
-    will ensure that the result has an identical pixel representation
-    on any platform.
-
-    The QPainter class also provides a means of controlling the
-    rendering quality through its RenderHint enum and the support for
-    floating point precision: All the functions for drawing primitives
-    has a floating point version. These are often used in combination
-    with the \l {RenderHint}{QPainter::Antialiasing} render hint.
-
-    \table 100%
-    \row
-    \o \inlineimage qpainter-concentriccircles.png
-    \o
-    \bold {Concentric Circles Example}
-
-    The \l {painting/concentriccircles}{Concentric Circles} example
-    shows the improved rendering quality that can be obtained using
-    floating point precision and anti-aliasing when drawing custom
-    widgets.
-
-    The application's main window displays several widgets which are
-    drawn using the various combinations of precision and
-    anti-aliasing.
-
-    \endtable
-
-    The RenderHint enum specifies flags to QPainter that may or may
-    not be respected by any given engine.  \l
-    {RenderHint}{QPainter::Antialiasing} indicates that the engine
-    should antialias edges of primitives if possible, \l
-    {RenderHint}{QPainter::TextAntialiasing} indicates that the engine
-    should antialias text if possible, and the \l
-    {RenderHint}{QPainter::SmoothPixmapTransform} indicates that the
-    engine should use a smooth pixmap transformation algorithm.
-    \l {RenderHint}{HighQualityAntialiasing} is an OpenGL-specific rendering hint
-    indicating that the engine should use fragment programs and offscreen
-    rendering for antialiasing.
-
-    The renderHints() function returns a flag that specifies the
-    rendering hints that are set for this painter.  Use the
-    setRenderHint() function to set or clear the currently set
-    RenderHints.
-
-    \section1 Coordinate Transformations
-
-    Normally, the QPainter operates on the device's own coordinate
-    system (usually pixels), but QPainter has good support for
-    coordinate transformations.
-
-    \table
-    \header
-    \o  nop \o rotate() \o scale() \o translate()
-    \row
-    \o \inlineimage qpainter-clock.png
-    \o \inlineimage qpainter-rotation.png
-    \o \inlineimage qpainter-scale.png
-    \o \inlineimage qpainter-translation.png
-    \endtable
-
-    The most commonly used transformations are scaling, rotation,
-    translation and shearing. Use the scale() function to scale the
-    coordinate system by a given offset, the rotate() function to
-    rotate it clockwise and translate() to translate it (i.e. adding a
-    given offset to the points). You can also twist the coordinate
-    system around the origin using the shear() function. See the \l
-    {demos/affine}{Affine Transformations} demo for a visualization of
-    a sheared coordinate system.
-
-    See also the \l {painting/transformations}{Transformations}
-    example which shows how transformations influence the way that
-    QPainter renders graphics primitives. In particular it shows how
-    the order of transformations affects the result.
-
-    \table 100%
-    \row
-    \o
-    \bold {Affine Transformations Demo}
-
-    The \l {demos/affine}{Affine Transformations} demo show Qt's
-    ability to perform affine transformations on painting
-    operations. The demo also allows the user to experiment with the
-    transformation operations and see the results immediately.
-
-    \o \inlineimage qpainter-affinetransformations.png
-    \endtable
-
-    All the tranformation operations operate on the transformation
-    worldTransform(). A matrix transforms a point in the plane to another
-    point. For more information about the transformation matrix, see
-    the \l {Coordinate System} and QTransform documentation.
-
-    The setWorldTransform() function can replace or add to the currently
-    set worldTransform(). The resetTransform() function resets any
-    transformations that were made using translate(), scale(),
-    shear(), rotate(), setWorldTransform(), setViewport() and setWindow()
-    functions. The deviceTransform() returns the matrix that transforms
-    from logical coordinates to device coordinates of the platform
-    dependent paint device. The latter function is only needed when
-    using platform painting commands on the platform dependent handle,
-    and the platform does not do transformations nativly.
-
-    When drawing with QPainter, we specify points using logical
-    coordinates which then are converted into the physical coordinates
-    of the paint device. The mapping of the logical coordinates to the
-    physical coordinates are handled by QPainter's combinedTransform(), a
-    combination of viewport() and window() and worldTransform(). The
-    viewport() represents the physical coordinates specifying an
-    arbitrary rectangle, the window() describes the same rectangle in
-    logical coordinates, and the worldTransform() is identical with the
-    transformation matrix.
-
-    See also \l {Coordinate System}
-
-    \section1 Clipping
-
-    QPainter can clip any drawing operation to a rectangle, a region,
-    or a vector path. The current clip is available using the
-    functions clipRegion() and clipPath(). Whether paths or regions are
-    preferred (faster) depends on the underlying paintEngine(). For
-    example, the QImage paint engine prefers paths while the X11 paint
-    engine prefers regions. Setting a clip is done in the painters
-    logical coordinates.
-
-    After QPainter's clipping, the paint device may also clip. For
-    example, most widgets clip away the pixels used by child widgets,
-    and most printers clip away an area near the edges of the paper.
-    This additional clipping is not reflected by the return value of
-    clipRegion() or hasClipping().
-
-    \section1 Composition Modes
-    \target Composition Modes
-
-    QPainter provides the CompositionMode enum which defines the
-    Porter-Duff rules for digital image compositing; it describes a
-    model for combining the pixels in one image, the source, with the
-    pixels in another image, the destination.
-
-    The two most common forms of composition are \l
-    {QPainter::CompositionMode}{Source} and \l
-    {QPainter::CompositionMode}{SourceOver}.  \l
-    {QPainter::CompositionMode}{Source} is used to draw opaque objects
-    onto a paint device. In this mode, each pixel in the source
-    replaces the corresponding pixel in the destination. In \l
-    {QPainter::CompositionMode}{SourceOver} composition mode, the
-    source object is transparent and is drawn on top of the
-    destination.
-
-    Note that composition transformation operates pixelwise. For that
-    reason, there is a difference between using the graphic primitive
-    itself and its bounding rectangle: The bounding rect contains
-    pixels with alpha == 0 (i.e the pixels surrounding the
-    primitive). These pixels will overwrite the other image's pixels,
-    affectively clearing those, while the primitive only overwrites
-    its own area.
-
-    \table 100%
-    \row
-    \o \inlineimage qpainter-compositiondemo.png
-
-    \o
-    \bold {Composition Modes Demo}
-
-    The \l {demos/composition}{Composition Modes} demo, available in
-    Qt's demo directory, allows you to experiment with the various
-    composition modes and see the results immediately.
-
-    \endtable
-
-    \section1 Limitations
-    \target Limitations
-
-    If you are using coordinates with Qt's raster-based paint engine, it is
-    important to note that, while coordinates greater than +/- 2\sup 15 can
-    be used, any painting performed with coordinates outside this range is not
-    guaranteed to be shown; the drawing may be clipped. This is due to the
-    use of \c{short int} in the implementation.
-
-    The outlines generated by Qt's stroker are only an approximation when dealing
-    with curved shapes. It is in most cases impossible to represent the outline of
-    a bezier curve segment using another bezier curve segment, and so Qt approximates
-    the curve outlines by using several smaller curves. For performance reasons there
-    is a limit to how many curves Qt uses for these outlines, and thus when using
-    large pen widths or scales the outline error increases. To generate outlines with
-    smaller errors it is possible to use the QPainterPathStroker class, which has the
-    setCurveThreshold member function which let's the user specify the error tolerance.
-    Another workaround is to convert the paths to polygons first and then draw the
-    polygons instead.
-
-    \section1 Performance
-
-    QPainter is a rich framework that allows developers to do a great
-    variety of graphical operations, such as gradients, composition
-    modes and vector graphics. And QPainter can do this across a
-    variety of different hardware and software stacks. Naturally the
-    underlying combination of hardware and software has some
-    implications for performance, and ensuring that every single
-    operation is fast in combination with all the various combinations
-    of composition modes, brushes, clipping, transformation, etc, is
-    close to an impossible task because of the number of
-    permutations. As a compromise we have selected a subset of the
-    QPainter API and backends, where performance is guaranteed to be as
-    good as we can sensibly get it for the given combination of
-    hardware and software.
-
-    The backends we focus on as high-performance engines are:
-
-    \list
-
-    \o Raster - This backend implements all rendering in pure software
-    and is always used to render into QImages. For optimal performance
-    only use the format types QImage::Format_ARGB32_Premultiplied,
-    QImage::Format_RGB32 or QImage::Format_RGB16. Any other format,
-    including QImage::Format_ARGB32, has significantly worse
-    performance. This engine is also used by default on Windows and on
-    QWS. It can be used as default graphics system on any
-    OS/hardware/software combination by passing \c {-graphicssystem
-    raster} on the command line
-
-    \o OpenGL 2.0 (ES) - This backend is the primary backend for
-    hardware accelerated graphics. It can be run on desktop machines
-    and embedded devices supporting the OpenGL 2.0 or OpenGL/ES 2.0
-    specification. This includes most graphics chips produced in the
-    last couple of years. The engine can be enabled by using QPainter
-    onto a QGLWidget or by passing \c {-graphicssystem opengl} on the
-    command line when the underlying system supports it.
-
-    \o OpenVG - This backend implements the Khronos standard for 2D
-    and Vector Graphics. It is primarily for embedded devices with
-    hardware support for OpenVG.  The engine can be enabled by
-    passing \c {-graphicssystem openvg} on the command line when
-    the underlying system supports it.
-
-    \endlist
-
-    These operations are:
-
-    \list
-
-    \o Simple transformations, meaning translation and scaling, pluss
-    0, 90, 180, 270 degree rotations.
-
-    \o \c drawPixmap() in combination with simple transformations and
-    opacity with non-smooth transformation mode
-    (\c QPainter::SmoothPixmapTransform not enabled as a render hint).
-
-    \o Rectangle fills with solid color, two-color linear gradients
-    and simple transforms.
-
-    \o Rectangular clipping with simple transformations and intersect
-    clip.
-
-    \o Composition Modes \c QPainter::CompositionMode_Source and
-    QPainter::CompositionMode_SourceOver
-
-    \o Rounded rectangle filling using solid color and two-color
-    linear gradients fills.
-
-    \o 3x3 patched pixmaps, via qDrawBorderPixmap.
-
-    \endlist
-
-    This list gives an indication of which features to safely use in
-    an application where performance is critical. For certain setups,
-    other operations may be fast too, but before making extensive use
-    of them, it is recommended to benchmark and verify them on the
-    system where the software will run in the end. There are also
-    cases where expensive operations are ok to use, for instance when
-    the result is cached in a QPixmap.
-
-    \sa QPaintDevice, QPaintEngine, {QtSvg Module}, {Basic Drawing Example},
-        {Drawing Utility Functions}
-*/
-
-/*!
-    \enum QPainter::RenderHint
-
-    Renderhints are used to specify flags to QPainter that may or
-    may not be respected by any given engine.
-
-    \value Antialiasing Indicates that the engine should antialias
-    edges of primitives if possible.
-
-    \value TextAntialiasing Indicates that the engine should antialias
-    text if possible. To forcibly disable antialiasing for text, do not
-    use this hint. Instead, set QFont::NoAntialias on your font's style
-    strategy.
-
-    \value SmoothPixmapTransform Indicates that the engine should use
-    a smooth pixmap transformation algorithm (such as bilinear) rather
-    than nearest neighbor.
-
-    \value HighQualityAntialiasing An OpenGL-specific rendering hint
-    indicating that the engine should use fragment programs and offscreen
-    rendering for antialiasing.
-
-    \value NonCosmeticDefaultPen The engine should interpret pens with a width
-    of 0 (which otherwise enables QPen::isCosmetic()) as being a non-cosmetic
-    pen with a width of 1.
-
-    \sa renderHints(), setRenderHint(), {QPainter#Rendering
-    Quality}{Rendering Quality}, {Concentric Circles Example}
-
-*/
-
-/*!
-    Constructs a painter.
-
-    \sa begin(), end()
-*/
-
 QPainter::QPainter()
    : d_ptr(new QPainterPrivate(this))
 {
 }
 
-/*!
-    \fn QPainter::QPainter(QPaintDevice *device)
-
-    Constructs a painter that begins painting the paint \a device
-    immediately.
-
-    This constructor is convenient for short-lived painters, e.g. in a
-    QWidget::paintEvent() and should be used only once. The
-    constructor calls begin() for you and the QPainter destructor
-    automatically calls end().
-
-    Here's an example using begin() and end():
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 1
-
-    The same example using this constructor:
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 2
-
-    Since the constructor cannot provide feedback when the initialization
-    of the painter failed you should rather use begin() and end() to paint
-    on external devices, e.g. printers.
-
-    \sa begin(), end()
-*/
-
 QPainter::QPainter(QPaintDevice *pd)
    : d_ptr(0)
 {
    Q_ASSERT(pd != 0);
+
    if (!QPainterPrivate::attachPainterPrivate(this, pd)) {
       d_ptr.reset(new QPainterPrivate(this));
       begin(pd);
    }
+
    Q_ASSERT(d_ptr);
 }
 
@@ -1534,13 +993,6 @@ QPainter::~QPainter()
       }
    }
 }
-
-/*!
-    Returns the paint device on which this painter is currently
-    painting, or 0 if the painter is not active.
-
-    \sa isActive()
-*/
 
 QPaintDevice *QPainter::device() const
 {
@@ -1701,34 +1153,6 @@ void QPainter::restore()
    delete tmp;
 }
 
-
-/*!
-
-    \fn bool QPainter::begin(QPaintDevice *device)
-
-    Begins painting the paint \a device and returns true if
-    successful; otherwise returns false.
-
-    Notice that all painter settings (setPen(), setBrush() etc.) are reset
-    to default values when begin() is called.
-
-    The errors that can occur are serious problems, such as these:
-
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 3
-
-    Note that most of the time, you can use one of the constructors
-    instead of begin(), and that end() is automatically done at
-    destruction.
-
-    \warning A paint device can only be painted by one painter at a
-    time.
-
-    \warning Painting on a QImage with the format
-    QImage::Format_Indexed8 is not supported.
-
-    \sa end(), QPainter()
-*/
-
 static inline void qt_cleanup_painter_state(QPainterPrivate *d)
 {
    d->states.clear();
@@ -1796,7 +1220,7 @@ bool QPainter::begin(QPaintDevice *pd)
 
    d->engine = pd->paintEngine();
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::begin: Paint device returned engine == 0, type: %d", pd->devType());
       return false;
    }
@@ -2046,6 +1470,7 @@ QPaintEngine *QPainter::paintEngine() const
 void QPainter::beginNativePainting()
 {
    Q_D(QPainter);
+
    if (!d->engine) {
       qWarning("QPainter::beginNativePainting: Painter not active");
       return;
@@ -2056,15 +1481,6 @@ void QPainter::beginNativePainting()
    }
 }
 
-/*!
-    \since 4.6
-
-    Restores the painter after manually issuing native painting commands. Lets
-    the painter restore any native state that it relies on before calling any
-    other painter commands.
-
-    \sa beginNativePainting()
-*/
 void QPainter::endNativePainting()
 {
    Q_D(const QPainter);
@@ -2079,13 +1495,6 @@ void QPainter::endNativePainting()
       d->engine->syncState();
    }
 }
-
-/*!
-    Returns the font metrics for the painter if the painter is
-    active. Otherwise, the return value is undefined.
-
-    \sa font(), isActive(), {QPainter#Settings}{Settings}
-*/
 
 QFontMetrics QPainter::fontMetrics() const
 {
@@ -4216,19 +3625,6 @@ void QPainter::setBackground(const QBrush &bg)
    }
 }
 
-/*!
-    Sets the painter's font to the given \a font.
-
-    This font is used by subsequent drawText() functions. The text
-    color is the same as the pen color.
-
-    If you set a font that isn't available, Qt finds a close match.
-    font() will return what you set using setFont() and fontInfo() returns the
-    font actually being used (which may be the same).
-
-    \sa font(), drawText(), {QPainter#Settings}{Settings}
-*/
-
 void QPainter::setFont(const QFont &font)
 {
    Q_D(QPainter);
@@ -4250,14 +3646,10 @@ void QPainter::setFont(const QFont &font)
    }
 }
 
-/*!
-    Returns the currently set font used for drawing text.
-
-    \sa setFont(), drawText(), {QPainter#Settings}{Settings}
-*/
 const QFont &QPainter::font() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
       qWarning("QPainter::font: Painter not active");
       return d->fakeState()->font;
@@ -4265,30 +3657,6 @@ const QFont &QPainter::font() const
    return d->state->font;
 }
 
-/*!
-    \since 4.4
-
-    Draws the given rectangle \a rect with rounded corners.
-
-    The \a xRadius and \a yRadius arguments specify the radii
-    of the ellipses defining the corners of the rounded rectangle.
-    When \a mode is Qt::RelativeSize, \a xRadius and
-    \a yRadius are specified in percentage of half the rectangle's
-    width and height respectively, and should be in the range
-    0.0 to 100.0.
-
-    A filled rectangle has a size of rect.size(). A stroked rectangle
-    has a size of rect.size() plus the pen width.
-
-    \table 100%
-    \row
-    \o \inlineimage qpainter-roundrect.png
-    \o
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 8
-    \endtable
-
-    \sa drawRect(), QPen
-*/
 void QPainter::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
 #ifdef QT_DEBUG_DRAW
@@ -5888,9 +5256,7 @@ void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
 }
 
 void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positions,
-                                 int glyphCount,
-                                 const QRawFont &font, bool overline, bool underline,
-                                 bool strikeOut)
+                  int glyphCount, const QRawFont &font, bool overline, bool underline, bool strikeOut)
 {
    Q_Q(QPainter);
 
@@ -5902,8 +5268,10 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
    QFixed leftMost;
    QFixed rightMost;
    QFixed baseLine;
+
    for (int i = 0; i < glyphCount; ++i) {
       glyph_metrics_t gm = fontEngine->boundingBox(glyphArray[i]);
+
       if (i == 0 || leftMost > positions[i].x) {
          leftMost = positions[i].x;
       }
@@ -5975,80 +5343,21 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
 }
 #endif // QT_NO_RAWFONT
 
-/*!
-
-    \fn void QPainter::drawStaticText(const QPoint &topLeftPosition, const QStaticText &staticText)
-    \since 4.7
-    \overload
-
-    Draws the \a staticText at the \a topLeftPosition.
-
-    \note The y-position is used as the top of the font.
-
-*/
-
-/*!
-    \fn void QPainter::drawStaticText(int left, int top, const QStaticText &staticText)
-    \since 4.7
-    \overload
-
-    Draws the \a staticText at coordinates \a left and \a top.
-
-    \note The y-position is used as the top of the font.
-*/
-
-/*!
-    \fn void QPainter::drawText(const QPointF &position, const QString &text)
-
-    Draws the given \a text with the currently defined text direction,
-    beginning at the given \a position.
-
-    This function does not handle the newline character (\n), as it cannot
-    break text into multiple lines, and it cannot display the newline character.
-    Use the QPainter::drawText() overload that takes a rectangle instead
-    if you want to draw multiple lines of text with the newline character, or
-    if you want the text to be wrapped.
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-position is used as the baseline of the font.
-*/
-
 void QPainter::drawText(const QPointF &p, const QString &str)
 {
    drawText(p, str, 0, 0);
 }
 
-/*!
-    \since 4.7
-
-    Draws the given \a staticText at the given \a topLeftPosition.
-
-    The text will be drawn using the font and the transformation set on the painter. If the
-    font and/or transformation set on the painter are different from the ones used to initialize
-    the layout of the QStaticText, then the layout will have to be recalculated. Use
-    QStaticText::prepare() to initialize \a staticText with the font and transformation with which
-    it will later be drawn.
-
-    If \a topLeftPosition is not the same as when \a staticText was initialized, or when it was
-    last drawn, then there will be a slight overhead when translating the text to its new position.
-
-    \note If the painter's transformation is not affine, then \a staticText will be drawn using
-    regular calls to drawText(), losing any potential for performance improvement.
-
-    \note The y-position is used as the top of the font.
-
-    \sa QStaticText
-*/
 void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText &staticText)
 {
    Q_D(QPainter);
-   if (!d->engine || staticText.text().isEmpty() || pen().style() == Qt::NoPen) {
+
+   if (! d->engine || staticText.text().isEmpty() || pen().style() == Qt::NoPen) {
       return;
    }
 
    QStaticTextPrivate *staticText_d =
-      const_cast<QStaticTextPrivate *>(QStaticTextPrivate::get(&staticText));
+                  const_cast<QStaticTextPrivate *>(QStaticTextPrivate::get(&staticText));
 
    if (font() != staticText_d->font) {
       staticText_d->font = font();
@@ -6057,16 +5366,18 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
 
    // If we don't have an extended paint engine, or if the painter is projected,
    // we go through standard code path
-   if (d->extended == 0 || !d->state->matrix.isAffine()) {
+   if (d->extended == 0 || ! d->state->matrix.isAffine()) {
       staticText_d->paintText(topLeftPosition, this);
       return;
    }
 
    bool supportsTransformations = d->extended->supportsTransformations(staticText_d->font.pixelSize(),
                                   d->state->matrix);
-   if (supportsTransformations && !staticText_d->untransformedCoordinates) {
+
+   if (supportsTransformations && ! staticText_d->untransformedCoordinates) {
       staticText_d->untransformedCoordinates = true;
       staticText_d->needsRelayout = true;
+
    } else if (!supportsTransformations && staticText_d->untransformedCoordinates) {
       staticText_d->untransformedCoordinates = false;
       staticText_d->needsRelayout = true;
@@ -6092,15 +5403,14 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
       qreal m33 = d->state->matrix.m33();
 
       oldMatrix = d->state->matrix;
-      d->state->matrix.setMatrix(m11, m12, m13,
-                                 m21, m22, m23,
-                                 0.0, 0.0, m33);
+      d->state->matrix.setMatrix(m11, m12, m13, m21, m22, m23, 0.0, 0.0, m33);
    }
 
    // If the transform is not identical to the text transform,
    // we have to relayout the text (for other transformations than plain translation)
+
    bool staticTextNeedsReinit = staticText_d->needsRelayout;
-   if (!staticText_d->untransformedCoordinates && staticText_d->matrix != d->state->matrix) {
+   if (! staticText_d->untransformedCoordinates && staticText_d->matrix != d->state->matrix) {
       staticText_d->matrix = d->state->matrix;
       staticTextNeedsReinit = true;
    }
@@ -6115,8 +5425,10 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
       QFixed fy = QFixed::fromReal(transformedPosition.y());
       QFixed oldX = QFixed::fromReal(staticText_d->position.x());
       QFixed oldY = QFixed::fromReal(staticText_d->position.y());
+
       for (int item = 0; item < staticText_d->itemCount; ++item) {
          QStaticTextItem *textItem = staticText_d->items + item;
+
          for (int i = 0; i < textItem->numGlyphs; ++i) {
             textItem->glyphPositions[i].x += fx - oldX;
             textItem->glyphPositions[i].y += fy - oldY;
@@ -6129,8 +5441,10 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
 
    QPen oldPen = d->state->pen;
    QColor currentColor = oldPen.color();
+
    for (int i = 0; i < staticText_d->itemCount; ++i) {
       QStaticTextItem *item = staticText_d->items + i;
+
       if (item->color.isValid() && currentColor != item->color) {
          setPen(item->color);
          currentColor = item->color;
@@ -6138,23 +5452,23 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
       d->extended->drawStaticTextItem(item);
 
       qt_draw_decoration_for_glyphs(this, item->glyphs, item->glyphPositions,
-                                    item->numGlyphs, item->fontEngine(), staticText_d->font,
-                                    QTextCharFormat());
+                  item->numGlyphs, item->fontEngine(), staticText_d->font, QTextCharFormat());
    }
+
    if (currentColor != oldPen.color()) {
       setPen(oldPen);
    }
 
-   if (!staticText_d->untransformedCoordinates && oldMatrix.isTranslating()) {
+   if (! staticText_d->untransformedCoordinates && oldMatrix.isTranslating()) {
       d->state->matrix = oldMatrix;
    }
 }
 
-/*!
-   \internal
-*/
+
+// internal version
 void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justificationPadding)
 {
+
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output) {
       printf("QPainter::drawText(), pos=[%.2f,%.2f], str='%s'\n", p.x(), p.y(), csPrintable(str));
@@ -6168,7 +5482,7 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
    }
 
    if (tf & Qt::TextBypassShaping) {
-      // Skip harfbuzz complex shaping, shape using glyph advances only
+      // skip harfbuzz complex shaping, shape using glyph advances only
       int len = str.length();
       int numGlyphs = len;
 
@@ -6178,13 +5492,14 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
       if (! fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
          glyphs.resize(numGlyphs);
 
-         if (!fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
+         if (! fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
             Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap should not fail twice");
          }
       }
 
       QTextItemInt gf(glyphs, &d->state->font, str.begin(), str.end(), fontEngine);
       drawTextItem(p, gf);
+
       return;
    }
 
@@ -6254,82 +5569,30 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
 void QPainter::drawText(const QRect &r, int flags, const QString &str, QRect *br)
 {
 #ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
+   if (qt_show_painter_debug_output) {
       printf("QPainter::drawText(), r=[%d,%d,%d,%d], flags=%d, str='%s'\n",
              r.x(), r.y(), r.width(), r.height(), flags, str.toLatin1().constData());
+   }
 #endif
 
    Q_D(QPainter);
 
-   if (!d->engine || str.length() == 0 || pen().style() == Qt::NoPen) {
+   if (! d->engine || str.length() == 0 || pen().style() == Qt::NoPen) {
       return;
    }
 
-   if (!d->extended) {
+   if (! d->extended) {
       d->updateState(d->state);
    }
 
    QRectF bounds;
    qt_format_text(d->state->font, r, flags, 0, str, br ? &bounds : 0, 0, 0, 0, this);
+
    if (br) {
       *br = bounds.toAlignedRect();
    }
 }
 
-/*!
-    \fn void QPainter::drawText(const QPoint &position, const QString &text)
-
-    \overload
-
-    Draws the given \a text with the currently defined text direction,
-    beginning at the given \a position.
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-position is used as the baseline of the font.
-
-*/
-
-/*!
-    \fn void QPainter::drawText(const QRectF &rectangle, int flags, const QString &text, QRectF *boundingRect)
-    \overload
-
-    Draws the given \a text within the provided \a rectangle.
-
-    \table 100%
-    \row
-    \o \inlineimage qpainter-text.png
-    \o
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 17
-    \endtable
-
-    The \a boundingRect (if not null) is set to the what the bounding rectangle
-    should be in order to enclose the whole text. The \a flags argument is a bitwise
-    OR of the following flags:
-
-    \list
-    \o Qt::AlignLeft
-    \o Qt::AlignRight
-    \o Qt::AlignHCenter
-    \o Qt::AlignJustify
-    \o Qt::AlignTop
-    \o Qt::AlignBottom
-    \o Qt::AlignVCenter
-    \o Qt::AlignCenter
-    \o Qt::TextDontClip
-    \o Qt::TextSingleLine
-    \o Qt::TextExpandTabs
-    \o Qt::TextShowMnemonic
-    \o Qt::TextWordWrap
-    \o Qt::TextIncludeTrailingSpaces
-    \endlist
-
-    \sa Qt::AlignmentFlag, Qt::TextFlag, boundingRect(), layoutDirection()
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-coordinate of \a rectangle is used as the top of the font.
-*/
 void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *br)
 {
 #ifdef QT_DEBUG_DRAW
@@ -6351,91 +5614,18 @@ void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *
    qt_format_text(d->state->font, r, flags, 0, str, br, 0, 0, 0, this);
 }
 
-/*!
-    \fn void QPainter::drawText(const QRect &rectangle, int flags, const QString &text, QRect *boundingRect)
-    \overload
-
-    Draws the given \a text within the provided \a rectangle according
-    to the specified \a flags. The \a boundingRect (if not null) is set to
-    the what the bounding rectangle should be in order to enclose the whole text.
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-coordinate of \a rectangle is used as the top of the font.
-*/
-
-/*!
-    \fn void QPainter::drawText(int x, int y, const QString &text)
-
-    \overload
-
-    Draws the given \a text at position (\a{x}, \a{y}), using the painter's
-    currently defined text direction.
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-position is used as the baseline of the font.
-
-*/
-
-/*!
-    \fn void QPainter::drawText(int x, int y, int width, int height, int flags,
-                                const QString &text, QRect *boundingRect)
-
-    \overload
-
-    Draws the given \a text within the rectangle with origin (\a{x},
-    \a{y}), \a width and \a height.
-
-    The \a boundingRect (if not null) is set to the actual bounding
-    rectangle of the output.  The \a flags argument is a bitwise OR of
-    the following flags:
-
-    \list
-    \o Qt::AlignLeft
-    \o Qt::AlignRight
-    \o Qt::AlignHCenter
-    \o Qt::AlignJustify
-    \o Qt::AlignTop
-    \o Qt::AlignBottom
-    \o Qt::AlignVCenter
-    \o Qt::AlignCenter
-    \o Qt::TextSingleLine
-    \o Qt::TextExpandTabs
-    \o Qt::TextShowMnemonic
-    \o Qt::TextWordWrap
-    \endlist
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-position is used as the top of the font.
-
-    \sa Qt::AlignmentFlag, Qt::TextFlag
-*/
-
-/*!
-    \fn void QPainter::drawText(const QRectF &rectangle, const QString &text,
-        const QTextOption &option)
-    \overload
-
-    Draws the given \a text in the \a rectangle specified using the \a option
-    to control its positioning and orientation.
-
-    By default, QPainter draws text anti-aliased.
-
-    \note The y-coordinate of \a rectangle is used as the top of the font.
-*/
 void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption &o)
 {
 #ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
+   if (qt_show_painter_debug_output) {
       printf("QPainter::drawText(), r=[%.2f,%.2f,%.2f,%.2f], str='%s'\n",
              r.x(), r.y(), r.width(), r.height(), text.toLatin1().constData());
+      }
 #endif
 
    Q_D(QPainter);
 
-   if (!d->engine || text.length() == 0 || pen().style() == Qt::NoPen) {
+   if (! d->engine || text.length() == 0 || pen().style() == Qt::NoPen) {
       return;
    }
 
@@ -6445,41 +5635,6 @@ void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption 
 
    qt_format_text(d->state->font, r, 0, &o, text, 0, 0, 0, 0, this);
 }
-
-/*!
-    \fn void QPainter::drawTextItem(int x, int y, const QTextItem &ti)
-
-    \internal
-    \overload
-*/
-
-/*!
-    \fn void QPainter::drawTextItem(const QPoint &p, const QTextItem &ti)
-
-    \internal
-    \overload
-
-    Draws the text item \a ti at position \a p.
-*/
-
-/*!
-    \fn void QPainter::drawTextItem(const QPointF &p, const QTextItem &ti)
-
-    \internal
-    \since 4.1
-
-    Draws the text item \a ti at position \a p.
-
-    This method ignores the painters background mode and
-    color. drawText and qt_format_text have to do it themselves, as
-    only they know the extents of the complete string.
-
-    It ignores the font set on the painter as the text item has one of its own.
-
-    The underline and strikeout parameters of the text items font are
-    ignored aswell. You'll need to pass in the correct flags to get
-    underlining and strikeout.
-*/
 
 static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
 {
@@ -6670,27 +5825,27 @@ Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t
 
 void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawTextItem(), pos=[%.f,%.f], str='%s'\n",
-             p.x(), p.y(), qPrintable(_ti.text()));
-#endif
-
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       return;
    }
 
+#ifdef QT_DEBUG_DRAW
+   if (qt_show_painter_debug_output) {
+      printf("QPainter::drawTextItem(), pos=[%.f,%.f], str='%s'\n",
+                  p.x(), p.y(), qPrintable(_ti.text()));
+   }
+#endif
+
 #ifndef QT_NO_DEBUG
-   qt_painter_thread_test(d->device->devType(),
-                          "text and fonts",
-                          QFontDatabase::supportsThreadedFontRendering());
+   qt_painter_thread_test(d->device->devType(), "text and fonts",
+                  QFontDatabase::supportsThreadedFontRendering());
 #endif
 
    QTextItemInt &ti = const_cast<QTextItemInt &>(static_cast<const QTextItemInt &>(_ti));
 
-   if (!d->extended && d->state->bgMode == Qt::OpaqueMode) {
+   if (! d->extended && d->state->bgMode == Qt::OpaqueMode) {
       QRectF rect(p.x(), p.y() - ti.ascent.toReal(), ti.width.toReal(), (ti.ascent + ti.descent + 1).toReal());
       fillRect(rect, d->state->bgBrush);
    }
@@ -6700,12 +5855,12 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
    }
 
    const RenderHints oldRenderHints = d->state->renderHints;
-   if (!d->state->renderHints & QPainter::Antialiasing && d->state->matrix.type() >= QTransform::TxScale) {
-      // draw antialias decoration (underline/overline/strikeout) with
-      // transformed text
+   if (! d->state->renderHints & QPainter::Antialiasing && d->state->matrix.type() >= QTransform::TxScale) {
+      // draw antialias decoration (underline/overline/strikeout) with transformed text
 
       bool aa = true;
       const QTransform &m = d->state->matrix;
+
       if (d->state->matrix.type() < QTransform::TxShear) {
          bool isPlain90DegreeRotation =
             (qFuzzyIsNull(m.m11())
@@ -6728,22 +5883,24 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
             ;
          aa = !isPlain90DegreeRotation;
       }
+
       if (aa) {
          setRenderHint(QPainter::Antialiasing, true);
       }
    }
 
-   if (!d->extended) {
+   if (! d->extended) {
       d->updateState(d->state);
    }
 
-   if (!ti.glyphs.numGlyphs) {
+   if (! ti.glyphs.numGlyphs) {
       // nothing to do
+
    } else if (ti.fontEngine->type() == QFontEngine::Multi) {
       QFontEngineMulti *multi = static_cast<QFontEngineMulti *>(ti.fontEngine);
 
-      const QGlyphLayout &glyphs = ti.glyphs;
-      int which = glyphs.glyphs[0] >> 24;
+      const QGlyphLayout &glyphLayout = ti.glyphs;
+      int which = glyphLayout.glyphs[0] >> 24;
 
       qreal x = p.x();
       qreal y = p.y();
@@ -6754,20 +5911,23 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
       }
 
       int start = 0;
-      int end, i;
-      for (end = 0; end < ti.glyphs.numGlyphs; ++end) {
-         const int e = glyphs.glyphs[end] >> 24;
+      int end;
+      int i;
+
+      for (end = 0; end < glyphLayout.numGlyphs; ++end) {
+         const int e = glyphLayout.glyphs[end] >> 24;
+
          if (e == which) {
             continue;
          }
 
-
          QTextItemInt ti2 = ti.midItem(multi->engine(which), start, end - start);
          ti2.width = 0;
+
          // set the high byte to zero and calc the width
          for (i = start; i < end; ++i) {
-            glyphs.glyphs[i] = glyphs.glyphs[i] & 0xffffff;
-            ti2.width += ti.glyphs.effectiveAdvance(i);
+            glyphLayout.glyphs[i] = glyphLayout.glyphs[i] & 0xffffff;
+            ti2.width += glyphLayout.effectiveAdvance(i);
          }
 
          if (rtl) {
@@ -6776,14 +5936,14 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
 
          d->engine->drawTextItem(QPointF(x, y), ti2);
 
-         if (!rtl) {
+         if (! rtl) {
             x += ti2.width.toReal();
          }
 
          // reset the high byte for all glyphs and advance to the next sub-string
          const int hi = which << 24;
          for (i = start; i < end; ++i) {
-            glyphs.glyphs[i] = hi | glyphs.glyphs[i];
+            glyphLayout.glyphs[i] = hi | glyphLayout.glyphs[i];
          }
 
          // change engine
@@ -6793,10 +5953,11 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
 
       QTextItemInt ti2 = ti.midItem(multi->engine(which), start, end - start);
       ti2.width = 0;
+
       // set the high byte to zero and calc the width
       for (i = start; i < end; ++i) {
-         glyphs.glyphs[i] = glyphs.glyphs[i] & 0xffffff;
-         ti2.width += ti.glyphs.effectiveAdvance(i);
+         glyphLayout.glyphs[i] = glyphLayout.glyphs[i] & 0xffffff;
+         ti2.width += glyphLayout.effectiveAdvance(i);
       }
 
       if (rtl) {
@@ -6805,6 +5966,7 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
 
       if (d->extended) {
          d->extended->drawTextItem(QPointF(x, y), ti2);
+
       } else {
          d->engine->drawTextItem(QPointF(x, y), ti2);
       }
@@ -6812,7 +5974,7 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
       // reset the high byte for all glyphs
       const int hi = which << 24;
       for (i = start; i < end; ++i) {
-         glyphs.glyphs[i] = hi | glyphs.glyphs[i];
+         glyphLayout.glyphs[i] = hi | glyphLayout.glyphs[i];
       }
 
    } else {
@@ -6822,11 +5984,13 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
          d->engine->drawTextItem(p, ti);
       }
    }
+
    drawTextItemDecoration(this, p, ti.fontEngine, ti.underlineStyle, ti.flags, ti.width.toReal(),
                           ti.charFormat);
 
    if (d->state->renderHints != oldRenderHints) {
       d->state->renderHints = oldRenderHints;
+
       if (d->extended) {
          d->extended->renderHintsChanged();
       } else {
@@ -6835,72 +5999,16 @@ void QPainter::drawTextItem(const QPointF &p, const QTextItem &_ti)
    }
 }
 
-/*!
-    \fn QRectF QPainter::boundingRect(const QRectF &rectangle, int flags, const QString &text)
-
-    Returns the bounding rectangle of the \a text as it will appear
-    when drawn inside the given \a rectangle with the specified \a
-    flags using the currently set font(); i.e the function tells you
-    where the drawText() function will draw when given the same
-    arguments.
-
-    If the \a text does not fit within the given \a rectangle using
-    the specified \a flags, the function returns the required
-    rectangle.
-
-    The \a flags argument is a bitwise OR of the following flags:
-    \list
-         \o Qt::AlignLeft
-         \o Qt::AlignRight
-         \o Qt::AlignHCenter
-         \o Qt::AlignTop
-         \o Qt::AlignBottom
-         \o Qt::AlignVCenter
-         \o Qt::AlignCenter
-         \o Qt::TextSingleLine
-         \o Qt::TextExpandTabs
-         \o Qt::TextShowMnemonic
-         \o Qt::TextWordWrap
-         \o Qt::TextIncludeTrailingSpaces
-    \endlist
-    If several of the horizontal or several of the vertical alignment
-    flags are set, the resulting alignment is undefined.
-
-    \sa drawText(), Qt::Alignment, Qt::TextFlag
-*/
-
-/*!
-    \fn QRect QPainter::boundingRect(const QRect &rectangle, int flags,
-                                     const QString &text)
-
-    \overload
-
-    Returns the bounding rectangle of the \a text as it will appear
-    when drawn inside the given \a rectangle with the specified \a
-    flags using the currently set font().
-*/
-
-/*!
-    \fn QRect QPainter::boundingRect(int x, int y, int w, int h, int flags,
-                                     const QString &text);
-
-    \overload
-
-    Returns the bounding rectangle of the given \a text as it will
-    appear when drawn inside the rectangle beginning at the point
-    (\a{x}, \a{y}) with width \a w and height \a h.
-*/
 QRect QPainter::boundingRect(const QRect &rect, int flags, const QString &str)
 {
    if (str.isEmpty()) {
       return QRect(rect.x(), rect.y(), 0, 0);
    }
+
    QRect brect;
    drawText(rect, flags | Qt::TextDontPrint, str, &brect);
    return brect;
 }
-
-
 
 QRectF QPainter::boundingRect(const QRectF &rect, int flags, const QString &str)
 {
@@ -6912,19 +6020,6 @@ QRectF QPainter::boundingRect(const QRectF &rect, int flags, const QString &str)
    return brect;
 }
 
-/*!
-    \fn QRectF QPainter::boundingRect(const QRectF &rectangle,
-        const QString &text, const QTextOption &option)
-
-    \overload
-
-    Instead of specifying flags as a bitwise OR of the
-    Qt::AlignmentFlag and Qt::TextFlag, this overloaded function takes
-    an \a option argument. The QTextOption class provides a
-    description of general rich text properties.
-
-    \sa QTextOption
-*/
 QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextOption &o)
 {
    Q_D(QPainter);
@@ -6938,19 +6033,6 @@ QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextO
    return br;
 }
 
-/*!
-    \fn void QPainter::drawTiledPixmap(const QRectF &rectangle, const QPixmap &pixmap, const QPointF &position)
-
-    Draws a tiled \a pixmap, inside the given \a rectangle with its
-    origin at the given \a position.
-
-    Calling drawTiledPixmap() is similar to calling drawPixmap()
-    several times to fill (tile) an area with a pixmap, but is
-    potentially much more efficient depending on the underlying window
-    system.
-
-    \sa drawPixmap()
-*/
 void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &sp)
 {
 #ifdef QT_DEBUG_DRAW
@@ -7684,30 +6766,11 @@ Q_GLOBAL_STATIC(QAtomicInt, globalRedirectionAtomic)
 
 /*!
     \threadsafe
-
     \obsolete
 
-    Please use QWidget::render() instead.
-
-    Redirects all paint commands for the given paint \a device, to the
-    \a replacement device. The optional point \a offset defines an
-    offset within the source device.
-
-    The redirection will not be effective until the begin() function
-    has been called; make sure to call end() for the given \a
-    device's painter (if any) before redirecting. Call
-    restoreRedirected() to restore the previous redirection.
-
-    \warning Making use of redirections in the QPainter API implies
-    that QPainter::begin() and QPaintDevice destructors need to hold
-    a mutex for a short period. This can impact performance. Use of
-    QWidget::render is strongly encouraged.
-
-    \sa redirected(), restoreRedirected()
+    Please use QWidget::render() instead.  
 */
-void QPainter::setRedirected(const QPaintDevice *device,
-                             QPaintDevice *replacement,
-                             const QPoint &offset)
+void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replacement, const QPoint &offset)
 {
    Q_ASSERT(device != 0);
 
@@ -7836,19 +6899,24 @@ void qt_painter_removePaintDevice(QPaintDevice *dev)
    }
 
    QMutex *mutex = 0;
+
    QT_TRY {
       mutex = globalRedirectionsMutex();
    } QT_CATCH(...) {
       // ignore the missing mutex, since we could be called from
       // a destructor, and destructors shall not throw
    }
+
    QMutexLocker locker(mutex);
    QPaintDeviceRedirectionList *redirections = 0;
+
    QT_TRY {
       redirections = globalRedirections();
+
    } QT_CATCH(...) {
       // do nothing - code below is safe with redirections being 0.
    }
+
    if (redirections) {
       for (int i = 0; i < redirections->size(); ) {
          if (redirections->at(i) == dev || redirections->at(i).replacement == dev) {
@@ -7860,26 +6928,20 @@ void qt_painter_removePaintDevice(QPaintDevice *dev)
    }
 }
 
-void qt_format_text(const QFont &fnt, const QRectF &_r,
-                    int tf, const QString &str, QRectF *brect,
-                    int tabstops, int *ta, int tabarraylen,
-                    QPainter *painter)
+void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QString &str,
+                  QRectF *brect, int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
-   qt_format_text(fnt, _r,
-                  tf, 0, str, brect,
-                  tabstops, ta, tabarraylen,
-                  painter);
+   qt_format_text(fnt, _r, tf, 0, str, brect, tabstops, ta, tabarraylen, painter);
 }
-void qt_format_text(const QFont &fnt, const QRectF &_r,
-                    int tf, const QTextOption *option, const QString &str, QRectF *brect,
-                    int tabstops, int *ta, int tabarraylen,
-                    QPainter *painter)
-{
 
+void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOption *option, const QString &str,
+                  QRectF *brect, int tabstops, int *ta, int tabarraylen, QPainter *painter)
+{
    Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != 0) ); // we either have an option or flags
 
    if (option) {
       tf |= option->alignment();
+
       if (option->wrapMode() != QTextOption::NoWrap) {
          tf |= Qt::TextWordWrap;
       }
@@ -7933,37 +6995,37 @@ void qt_format_text(const QFont &fnt, const QRectF &_r,
    }
 
    uint maxUnderlines = 0;
-   int numUnderlines = 0;
+   int numUnderlines  = 0;
+
    QVarLengthArray<int, 32> underlinePositions(1);
 
    QFontMetricsF fm(fnt);
    QString text = str;
-   int offset = 0;
+   int offset   = 0;
 
 start_lengthVariant:
    bool hasMoreLengthVariants = false;
 
-   // compatible behaviour to the old implementation. Replace
-   // tabs by spaces
-
+   // compatible behaviour to the old implementation. Replace tabs by spaces
    int old_offset = offset;
 
    for (; offset < text.length(); offset++) {
       QChar chr = text.at(offset);
 
-      if (chr == QLatin1Char('\r') || (singleline && chr == QLatin1Char('\n'))) {
-         text[offset] = QLatin1Char(' ');
+      if (chr == '\r' || (singleline && chr == '\n')) {        
+         text.replace(offset, 1, ' ');
 
-      } else if (chr == QLatin1Char('\n')) {
-         text[offset] = QChar::LineSeparator;
+      } else if (chr == '\n') {
+         text.replace(offset, 1, QChar(QChar::LineSeparator));
 
-      } else if (chr == QLatin1Char('&')) {
+      } else if (chr == '&') {
          ++maxUnderlines;
 
-      } else if (chr == QLatin1Char('\t')) {
-         if (!expandtabs) {
-            text[offset] = QLatin1Char(' ');
-         } else if (!tabarraylen && !tabstops) {
+      } else if (chr == '\t') {
+         if (! expandtabs) {
+            text.replace(offset, 1, ' ');
+
+         } else if (!tabarraylen && ! tabstops) {
             tabstops = qRound(fm.width(QLatin1Char('x')) * 8);
          }
 
@@ -8010,7 +7072,7 @@ start_lengthVariant:
 
    underlinePositions[numUnderlines] = -1;
    qreal height = 0;
-   qreal width = 0;
+   qreal width  = 0;
 
    QString finalText = text.mid(old_offset, length);
    QStackTextEngine engine(finalText, fnt);
@@ -8025,6 +7087,7 @@ start_lengthVariant:
 
    if (engine.option.tabs().isEmpty() && ta) {
       QList<qreal> tabs;
+
       for (int i = 0; i < tabarraylen; i++) {
          tabs.append(qreal(ta[i]));
       }
@@ -8038,26 +7101,30 @@ start_lengthVariant:
       engine.option.setAlignment(Qt::AlignLeft);   // do not do alignment twice
    }
 
-   if (!option && (tf & Qt::TextWrapAnywhere)) {
+   if (! option && (tf & Qt::TextWrapAnywhere)) {
       engine.option.setWrapMode(QTextOption::WrapAnywhere);
    }
 
    if (tf & Qt::TextJustificationForced) {
       engine.forceJustification = true;
    }
+
    QTextLayout textLayout(&engine);
    textLayout.setCacheEnabled(true);
    textLayout.engine()->underlinePositions = underlinePositions.data();
 
    if (finalText.isEmpty()) {
       height = fm.height();
-      width = 0;
+      width  = 0;
       tf |= Qt::TextDontPrint;
+
    } else {
       qreal lineWidth = 0x01000000;
+
       if (wordwrap || (tf & Qt::TextJustificationForced)) {
          lineWidth = qMax(0, r.width());
       }
+
       if (!wordwrap) {
          tf |= Qt::TextIncludeTrailingSpaces;
       }
@@ -8067,18 +7134,22 @@ start_lengthVariant:
       qreal leading = fm.leading();
       height = -leading;
 
-      while (1) {
+      while (true) {
          QTextLine l = textLayout.createLine();
-         if (!l.isValid()) {
+
+         if (! l.isValid()) {
             break;
          }
 
          l.setLineWidth(lineWidth);
          height += leading;
-         l.setPosition(QPointF(0., height));
+
+         l.setPosition(QPointF(0.0, height));
          height += l.height();
-         width = qMax(width, l.naturalTextWidth());
-         if (!dontclip && !brect && height >= r.height()) {
+
+         width   = qMax(width, l.naturalTextWidth());
+
+         if (! dontclip && ! brect && height >= r.height()) {
             break;
          }
       }
@@ -8087,15 +7158,20 @@ start_lengthVariant:
 
    qreal yoff = 0;
    qreal xoff = 0;
+
    if (tf & Qt::AlignBottom) {
       yoff = r.height() - height;
+
    } else if (tf & Qt::AlignVCenter) {
       yoff = (r.height() - height) / 2;
+
       if (painter) {
          QTransform::TransformationType type = painter->transform().type();
+
          if (type <= QTransform::TxScale) {
             // do the rounding manually to work around inconsistencies
             // in the paint engines when drawing on floating point offsets
+
             const qreal scale = painter->transform().m22();
             if (scale != 0) {
                yoff = -qRound(-yoff * scale) / scale;
@@ -8103,12 +7179,16 @@ start_lengthVariant:
          }
       }
    }
+
    if (tf & Qt::AlignRight) {
       xoff = r.width() - width;
+
    } else if (tf & Qt::AlignHCenter) {
       xoff = (r.width() - width) / 2;
+
       if (painter) {
          QTransform::TransformationType type = painter->transform().type();
+
          if (type <= QTransform::TxScale) {
             // do the rounding manually to work around inconsistencies
             // in the paint engines when drawing on floating point offsets
@@ -8125,13 +7205,15 @@ start_lengthVariant:
       offset++;
       goto start_lengthVariant;
    }
+
    if (brect) {
       *brect = bounds;
    }
 
-   if (!(tf & Qt::TextDontPrint)) {
+   if (! (tf & Qt::TextDontPrint)) {
       bool restore = false;
-      if (!dontclip && !r.contains(bounds)) {
+
+      if (! dontclip && !r.contains(bounds)) {
          restore = true;
          painter->save();
          painter->setClipRect(r, Qt::IntersectClip);
@@ -8142,10 +7224,11 @@ start_lengthVariant:
 
          qreal advance = line.horizontalAdvance();
          xoff = 0;
+
          if (tf & Qt::AlignRight) {
             QTextEngine *eng = textLayout.engine();
-            xoff = r.width() - advance -
-                   eng->leadingSpaceWidth(eng->lines[line.lineNumber()]).toReal();
+            xoff = r.width() - advance - eng->leadingSpaceWidth(eng->lines[line.lineNumber()]).toReal();
+
          } else if (tf & Qt::AlignHCenter) {
             xoff = (r.width() - advance) / 2;
          }
@@ -8159,18 +7242,10 @@ start_lengthVariant:
    }
 }
 
-/*!
-    Sets the layout direction used by the painter when drawing text,
-    to the specified \a direction.
-
-    The default is Qt::LayoutDirectionAuto, which will implicitly determine the
-    direction from the text drawn.
-
-    \sa QTextOption::setTextDirection(), layoutDirection(), drawText(), {QPainter#Settings}{Settings}
-*/
 void QPainter::setLayoutDirection(Qt::LayoutDirection direction)
 {
    Q_D(QPainter);
+
    if (d->state) {
       d->state->layoutDirection = direction;
    }
@@ -8251,399 +7326,17 @@ void QPainterState::init(QPainter *p)
    opacity = 1;
 }
 
-/*!
-    \fn void QPainter::setBackgroundColor(const QColor &color)
-
-    Use setBackground() instead.
-*/
-
-/*!
-    \fn const QColor &QPainter::backgroundColor() const
-
-    Use background() and QBrush::color() instead.
-
-    \oldcode
-        QColor myColor = backgroundColor();
-    \newcode
-        QColor myColor = background().color();
-    \endcode
-
-    Note that the background can be a complex brush such as a texture
-    or a gradient.
-*/
-
-/*!
-    \fn void QPainter::drawText(int x, int y, const QString &text, int pos, int length)
-    \compat
-
-    Use drawText() combined with QString::mid() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(x, y, text, pos, length);
-    \newcode
-        QPainter painter(this);
-        painter.drawText(x, y, text.mid(pos, length));
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawText(const QPoint &point, const QString &text, int pos, int length)
-    \compat
-
-    Use drawText() combined with QString::mid() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(point, text, pos, length);
-    \newcode
-        QPainter painter(this);
-        painter.drawText(point, text.mid(pos, length));
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawText(int x, int y, const QString &text, int length)
-    \compat
-
-    Use drawText() combined with QString::left() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(x, y, text, length);
-    \newcode
-        QPainter painter(this);
-        painter.drawText(x, y, text.left(length));
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawText(const QPoint &point, const QString &text, int length)
-    \compat
-
-    Use drawText() combined with QString::left() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(point, text, length);
-    \newcode
-        QPainter painter(this);
-        painter.drawText(point, text.left(length));
-    \endcode
-*/
-
-/*!
-    \fn bool QPainter::begin(QPaintDevice *device, const QWidget *init)
-    \compat
-
-    Use begin() instead.
-
-    If the paint \a device is a QWidget, QPainter is initialized after
-    the widget's settings automatically. Otherwise, you must call the
-    initFrom() function to initialize the painters pen, background and
-    font to the same as any given widget.
-
-    \oldcode
-        QPainter painter(this);
-        painter.begin(device, init);
-    \newcode
-        QPainter painter(this);
-        painter.begin(device);
-        painter.initFrom(init);
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QRectF &target, const QImage &image, const QRectF &source,
-                         Qt::ImageConversionFlags flags)
-
-    Draws the rectangular portion \a source of the given \a image
-    into the \a target rectangle in the paint device.
-
-    \note The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
-
-    If the image needs to be modified to fit in a lower-resolution
-    result (e.g. converting from 32-bit to 8-bit), use the \a flags to
-    specify how you would prefer this to happen.
-
-    \table 100%
-    \row
-    \o
-    \snippet doc/src/snippets/code/src_gui_painting_qpainter.cpp 20
-    \endtable
-
-    \sa drawPixmap()
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QRect &target, const QImage &image, const QRect &source,
-                                 Qt::ImageConversionFlags flags)
-    \overload
-
-    Draws the rectangular portion \a source of the given \a image
-    into the \a target rectangle in the paint device.
-
-    \note The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QPointF &point, const QImage &image)
-
-    \overload
-
-    Draws the given \a image at the given \a point.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QPoint &point, const QImage &image)
-
-    \overload
-
-    Draws the given \a image at the given \a point.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QPointF &point, const QImage &image, const QRectF &source,
-                                 Qt::ImageConversionFlags flags = 0)
-
-    \overload
-
-    Draws the rectangular portion \a source of the given \a image with
-    its origin at the given \a point.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QPoint &point, const QImage &image, const QRect &source,
-                                 Qt::ImageConversionFlags flags = 0)
-    \overload
-
-    Draws the rectangular portion \a source of the given \a image with
-    its origin at the given \a point.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QRectF &rectangle, const QImage &image)
-
-    \overload
-
-    Draws the given \a image into the given \a rectangle.
-
-    \note The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
-*/
-
-/*!
-    \fn void QPainter::drawImage(const QRect &rectangle, const QImage &image)
-
-    \overload
-
-    Draws the given \a image into the given \a rectangle.
-
-   \note The image is scaled to fit the rectangle, if both the image and rectangle size disagree.
-*/
-
-/*!
-    \fn void QPainter::drawImage(int x, int y, const QImage &image,
-                                 int sx, int sy, int sw, int sh,
-                                 Qt::ImageConversionFlags flags)
-    \overload
-
-    Draws an image at (\a{x}, \a{y}) by copying a part of \a image into
-    the paint device.
-
-    (\a{x}, \a{y}) specifies the top-left point in the paint device that is
-    to be drawn onto. (\a{sx}, \a{sy}) specifies the top-left point in \a
-    image that is to be drawn. The default is (0, 0).
-
-    (\a{sw}, \a{sh}) specifies the size of the image that is to be drawn.
-    The default, (0, 0) (and negative) means all the way to the
-    bottom-right of the image.
-*/
-
-/*!
-    \fn void QPainter::redirect(QPaintDevice *pdev, QPaintDevice *replacement)
-
-    Use setRedirected() instead.
-*/
-
-/*!
-    \fn QPaintDevice *QPainter::redirect(QPaintDevice *pdev)
-
-    Use redirected() instead.
-*/
-
-/*!
-    \fn QRect QPainter::boundingRect(const QRect &rectangle, int flags,
-                                     const QString &text, int length)
-    \compat
-
-    Returns the bounding rectangle for the given \a length of the \a
-    text constrained by the provided \a rectangle.
-
-    Use boundingRect() combined with QString::left() instead.
-
-    \oldcode
-        QRect rectangle = boundingRect(rect, flags, text, length);
-    \newcode
-        QRect rectangle = boundingRect(rect, flags, text.left(length));
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawText(const QRect &rectangle, int flags, const QString &text,
-                                int length, QRect *br)
-    \compat
-
-    Use drawText() combined with QString::left() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(rectangle, flags, text, length, br );
-    \newcode
-        QPainter painter(this);
-        painter.drawText(rectangle, flags, text.left(length), br );
-    \endcode
-*/
-
-/*!
-    \fn QRect QPainter::boundingRect(int x, int y, int width, int height, int flags,
-                                     const QString &text, int length);
-
-    \compat
-
-    Returns the bounding rectangle for the given \a length of the \a
-    text constrained by the rectangle that begins at point (\a{x},
-    \a{y}) with the given \a width and \a height.
-
-    Use boundingRect() combined with QString::left() instead.
-
-    \oldcode
-        QRect rectangle = boundingRect(x, y, width, height, flags, text, length);
-    \newcode
-        QRect rectangle = boundingRect(x, y, width, height, flags, text.left(length));
-    \endcode
-*/
-
-/*!
-    \fn void QPainter::drawText(int x, int y, int width, int height, int flags,
-                                const QString &text, int length, QRect *br)
-
-    \compat
-
-    Use drawText() combined with QString::left() instead.
-
-    \oldcode
-        QPainter painter(this);
-        painter.drawText(x, y, width, height, flags, text, length, br );
-    \newcode
-        QPainter painter(this);
-        painter.drawText(x, y, width, height, flags, text.left(length), br );
-    \endcode
-*/
-
-
-/*!
-    \class QPaintEngineState
-    \since 4.1
-
-    \brief The QPaintEngineState class provides information about the
-    active paint engine's current state.
-    \reentrant
-
-    QPaintEngineState records which properties that have changed since
-    the last time the paint engine was updated, as well as their
-    current value.
-
-    Which properties that have changed can at any time be retrieved
-    using the state() function. This function returns an instance of
-    the QPaintEngine::DirtyFlags type which stores an OR combination
-    of QPaintEngine::DirtyFlag values. The QPaintEngine::DirtyFlag
-    enum defines whether a property has changed since the last update
-    or not.
-
-    If a property is marked with a dirty flag, its current value can
-    be retrieved using the corresponding get function:
-
-    \target GetFunction
-
-    \table
-    \header \o Property Flag \o Current Property Value
-    \row \o QPaintEngine::DirtyBackground \o backgroundBrush()
-    \row \o QPaintEngine::DirtyBackgroundMode \o backgroundMode()
-    \row \o QPaintEngine::DirtyBrush \o brush()
-    \row \o QPaintEngine::DirtyBrushOrigin \o brushOrigin()
-    \row \o QPaintEngine::DirtyClipRegion \e or QPaintEngine::DirtyClipPath
-         \o clipOperation()
-    \row \o QPaintEngine::DirtyClipPath \o clipPath()
-    \row \o QPaintEngine::DirtyClipRegion \o clipRegion()
-    \row \o QPaintEngine::DirtyCompositionMode \o compositionMode()
-    \row \o QPaintEngine::DirtyFont \o font()
-    \row \o QPaintEngine::DirtyTransform \o transform()
-    \row \o QPaintEngine::DirtyClipEnabled \o isClipEnabled()
-    \row \o QPaintEngine::DirtyPen \o pen()
-    \row \o QPaintEngine::DirtyHints \o renderHints()
-    \endtable
-
-    The QPaintEngineState class also provide the painter() function
-    which returns a pointer to the painter that is currently updating
-    the paint engine.
-
-    An instance of this class, representing the current state of the
-    active paint engine, is passed as argument to the
-    QPaintEngine::updateState() function. The only situation in which
-    you will have to use this class directly is when implementing your
-    own paint engine.
-
-    \sa QPaintEngine
-*/
-
-
-/*!
-    \fn QPaintEngine::DirtyFlags QPaintEngineState::state() const
-
-    Returns a combination of flags identifying the set of properties
-    that need to be updated when updating the paint engine's state
-    (i.e. during a call to the QPaintEngine::updateState() function).
-
-    \sa QPaintEngine::updateState()
-*/
-
-
-/*!
-    Returns the pen in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyPen flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
-
 QPen QPaintEngineState::pen() const
 {
    return static_cast<const QPainterState *>(this)->pen;
 }
 
-/*!
-    Returns the brush in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyBrush flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QBrush QPaintEngineState::brush() const
 {
    return static_cast<const QPainterState *>(this)->brush;
 }
 
-/*!
-    Returns the brush origin in the current paint engine state.
-
-    This variable should only be used when the state() returns a
-    combination which includes the QPaintEngine::DirtyBrushOrigin flag.
-
-    \sa state(), QPaintEngine::updateState()
-*/
 
 QPointF QPaintEngineState::brushOrigin() const
 {

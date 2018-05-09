@@ -144,13 +144,16 @@ class QDESIGNER_UILIB_EXPORT DomUI
    ~DomUI();
 
    void read(QXmlStreamReader &reader);
+
 #ifdef QUILOADER_QDOM_READ
    void read(const QDomElement &node);
 #endif
    void write(QXmlStreamWriter &writer, const QString &tagName = QString()) const;
+
    inline QString text() const {
       return m_text;
    }
+
    inline void setText(const QString &s) {
       m_text = s;
    }
@@ -159,13 +162,16 @@ class QDESIGNER_UILIB_EXPORT DomUI
    inline bool hasAttributeVersion() const {
       return m_has_attr_version;
    }
+
    inline QString attributeVersion() const {
       return m_attr_version;
    }
+
    inline void setAttributeVersion(const QString &a) {
       m_attr_version = a;
       m_has_attr_version = true;
    }
+
    inline void clearAttributeVersion() {
       m_has_attr_version = false;
    }
@@ -3915,6 +3921,7 @@ class QDESIGNER_UILIB_EXPORT DomStringList
    // child element data
    uint m_children;
    QStringList m_string;
+
    enum Child {
       String = 1
    };
@@ -4160,13 +4167,17 @@ class QDESIGNER_UILIB_EXPORT DomString
    ~DomString();
 
    void read(QXmlStreamReader &reader);
+
 #ifdef QUILOADER_QDOM_READ
    void read(const QDomElement &node);
 #endif
+
    void write(QXmlStreamWriter &writer, const QString &tagName = QString()) const;
+
    inline QString text() const {
       return m_text;
    }
+
    inline void setText(const QString &s) {
       m_text = s;
    }
@@ -4175,13 +4186,16 @@ class QDESIGNER_UILIB_EXPORT DomString
    inline bool hasAttributeNotr() const {
       return m_has_attr_notr;
    }
+
    inline QString attributeNotr() const {
       return m_attr_notr;
    }
+
    inline void setAttributeNotr(const QString &a) {
       m_attr_notr = a;
       m_has_attr_notr = true;
    }
+
    inline void clearAttributeNotr() {
       m_has_attr_notr = false;
    }
@@ -4189,13 +4203,16 @@ class QDESIGNER_UILIB_EXPORT DomString
    inline bool hasAttributeComment() const {
       return m_has_attr_comment;
    }
+
    inline QString attributeComment() const {
       return m_attr_comment;
    }
+
    inline void setAttributeComment(const QString &a) {
       m_attr_comment = a;
       m_has_attr_comment = true;
    }
+
    inline void clearAttributeComment() {
       m_has_attr_comment = false;
    }
@@ -4203,13 +4220,16 @@ class QDESIGNER_UILIB_EXPORT DomString
    inline bool hasAttributeExtraComment() const {
       return m_has_attr_extraComment;
    }
+
    inline QString attributeExtraComment() const {
       return m_attr_extraComment;
    }
+
    inline void setAttributeExtraComment(const QString &a) {
       m_attr_extraComment = a;
       m_has_attr_extraComment = true;
    }
+
    inline void clearAttributeExtraComment() {
       m_has_attr_extraComment = false;
    }
@@ -4494,6 +4514,7 @@ class QDESIGNER_UILIB_EXPORT DomUrl
    inline DomString *elementString() const {
       return m_string;
    }
+
    DomString *takeElementString();
    void setElementString(DomString *a);
    inline bool hasElementString() const {
@@ -4509,6 +4530,7 @@ class QDESIGNER_UILIB_EXPORT DomUrl
    // child element data
    uint m_children;
    DomString *m_string;
+
    enum Child {
       String = 1
    };
@@ -4524,13 +4546,17 @@ class QDESIGNER_UILIB_EXPORT DomProperty
    ~DomProperty();
 
    void read(QXmlStreamReader &reader);
+
 #ifdef QUILOADER_QDOM_READ
    void read(const QDomElement &node);
 #endif
+
    void write(QXmlStreamWriter &writer, const QString &tagName = QString()) const;
+
    inline QString text() const {
       return m_text;
    }
+
    inline void setText(const QString &s) {
       m_text = s;
    }

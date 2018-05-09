@@ -95,9 +95,6 @@ void QObject::dumpObjectInfo()
                 receiverMetaObject->className(),
                 obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );
 
-            //    qDebug("          --> %s::%s %s",
-            //    slotMetaMethod.methodSignature().constData());
-
          } else {
             // receiver does not inherit from QObject
             qDebug("          --> %s", typeid (*receiver).name() );

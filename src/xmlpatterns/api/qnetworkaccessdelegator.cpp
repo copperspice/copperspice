@@ -21,18 +21,13 @@
 ***********************************************************************/
 
 #include <QUrl>
-
 #include <QNetworkAccessManager>
-
 #include "qnetworkaccessdelegator_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-NetworkAccessDelegator::NetworkAccessDelegator(QNetworkAccessManager *const genericManager,
-      QNetworkAccessManager *const variableURIManager) : m_genericManager(genericManager)
-   , m_variableURIManager(variableURIManager)
+NetworkAccessDelegator::NetworkAccessDelegator(QNetworkAccessManager *const genericManager, QNetworkAccessManager *const variableURIManager)
+   : m_genericManager(genericManager), m_variableURIManager(variableURIManager)
 {
 }
 
@@ -40,16 +35,19 @@ QNetworkAccessManager *NetworkAccessDelegator::managerFor(const QUrl &uri)
 {
    /* Unfortunately we have to do it this way, QUrl::isParentOf() doesn't
     * understand URI schemes like this one. */
+
    const QString requestedUrl(uri.toString());
 
    /* On the topic of timeouts:
     *
     * Currently the schemes QNetworkAccessManager handles should/will do
     * timeouts for 4.4, but we need to do timeouts for our own. */
-   if (requestedUrl.startsWith(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:"))) {
+
+   if (requestedUrl.startsWith("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:")) {
       return m_variableURIManager;
+
    } else {
-      if (!m_genericManager) {
+      if (! m_genericManager) {
          m_genericManager = new QNetworkAccessManager(this);
       }
 
@@ -57,5 +55,4 @@ QNetworkAccessManager *NetworkAccessDelegator::managerFor(const QUrl &uri)
    }
 }
 
-QT_END_NAMESPACE
 

@@ -820,7 +820,6 @@ inline void QPainter::drawImage(const QPoint &p, const QImage &image, const QRec
    drawImage(QRect(p.x(), p.y(), -1, -1), image, sr, flags);
 }
 
-
 inline void QPainter::drawImage(const QRectF &r, const QImage &image)
 {
    drawImage(r, image, QRect(0, 0, image.width(), image.height()));

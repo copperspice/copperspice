@@ -84,24 +84,28 @@ bool qt_get_hex_rgb(const char *name, QRgb *rgb)
       *rgb = 0;
       return false;
    }
+
    *rgb = qRgb(r, g , b);
+
    return true;
 }
 
 bool qt_get_hex_rgb(QStringView str, QRgb *rgb)
 {
-   int len = str.length();
+   auto len = str.length();
 
    if (len > 13) {
       return false;
    }
 
    char tmp[16];
+
    for (int i = 0; i < len; ++i) {
       tmp[i] = str[i].toLatin1();
    }
 
    tmp[len] = 0;
+
    return qt_get_hex_rgb(tmp, rgb);
 }
 

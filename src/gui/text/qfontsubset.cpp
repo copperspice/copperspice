@@ -280,18 +280,19 @@ QByteArray QFontSubset::glyphName(unsigned short unicode, bool symbol)
 #ifndef QT_NO_FREETYPE
 static FT_Face ft_face(const QFontEngine *engine)
 {
+
 #ifdef Q_WS_X11
-#ifndef QT_NO_FONTCONFIG
    if (engine->type() == QFontEngine::Freetype) {
       const QFontEngineFT *ft = static_cast<const QFontEngineFT *>(engine);
       return ft->non_locked_face();
    } else
-#endif
+
       if (engine->type() == QFontEngine::XLFD) {
          const QFontEngineXLFD *xlfd = static_cast<const QFontEngineXLFD *>(engine);
          return xlfd->non_locked_face();
       }
 #endif
+
 #ifdef Q_WS_QWS
    if (engine->type() == QFontEngine::Freetype) {
       const QFontEngineFT *ft = static_cast<const QFontEngineFT *>(engine);

@@ -167,6 +167,7 @@ QXmlName::QXmlName(QXmlNamePool &namePool,
 {
    Q_ASSERT_X(prefix.isEmpty() || QXmlUtils::isNCName(prefix), Q_FUNC_INFO,
               "The prefix is invalid, maybe the arguments were mixed up?");
+
    Q_ASSERT_X(QXmlUtils::isNCName(localName), Q_FUNC_INFO,
               "The local name is invalid, maybe the arguments were mixed up?");
 

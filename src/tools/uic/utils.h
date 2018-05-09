@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 inline bool toBool(const QString &str)
 {
-   return str.toLower() == QLatin1String("true");
+   return str.toLower() == "true";
 }
 
 inline QString toString(const DomString *str)
@@ -44,29 +44,36 @@ inline QString fixString(const QString &str, const QString &indent)
 {
    QString cursegment;
    QStringList result;
+
    const QByteArray utf8 = str.toUtf8();
-   const int utf8Length = utf8.length();
+   const int utf8Length  = utf8.length();
 
    for (int i = 0; i < utf8Length; ++i) {
       const uchar cbyte = utf8.at(i);
+
       if (cbyte >= 0x80) {
-         cursegment += QLatin1Char('\\');
+         cursegment += '\\';
          cursegment += QString::number(cbyte, 8);
+
       } else {
          switch (cbyte) {
             case '\\':
-               cursegment += QLatin1String("\\\\");
+               cursegment += "\\\\";
                break;
+
             case '\"':
-               cursegment += QLatin1String("\\\"");
+               cursegment += "\\\"";
                break;
+
             case '\r':
                break;
+
             case '\n':
-               cursegment += QLatin1String("\\n\"\n\"");
+               cursegment += "\\n\"\n\"";
                break;
+
             default:
-               cursegment += QLatin1Char(cbyte);
+               cursegment += cbyte;
          }
       }
 
@@ -76,19 +83,19 @@ inline QString fixString(const QString &str, const QString &indent)
       }
    }
 
-   if (!cursegment.isEmpty()) {
+   if (! cursegment.isEmpty()) {
       result << cursegment;
    }
 
-
-   QString joinstr = QLatin1String("\"\n");
+   QString joinstr = "\"\n";
    joinstr += indent;
    joinstr += indent;
-   joinstr += QLatin1Char('"');
+   joinstr += '"';
 
-   QString rc(QLatin1Char('"'));
+   QString rc('"');
    rc += result.join(joinstr);
-   rc += QLatin1Char('"');
+   rc += '"';
+
    return rc;
 }
 

@@ -146,8 +146,9 @@ Item VariableLoader::itemForName(const QXmlName &name) const
    const QVariant &variant = m_bindingHash.value(name);
 
    if (variant.userType() == qMetaTypeId<QIODevice *>()) {
-      return Item(AnyURI::fromValue(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
-                                    m_namePool->stringForLocalName(name.localName())));
+
+      return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
+                  m_namePool->stringForLocalName(name.localName()) ));
    }
 
    const QXmlItem item(qvariant_cast<QXmlItem>(variant));
@@ -157,12 +158,13 @@ Item VariableLoader::itemForName(const QXmlName &name) const
 
    } else {
       const QVariant atomicValue(item.toAtomicValue());
+
       /* If the atomicValue is null it means it doesn't exist in m_bindingHash, and therefore it must
        * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
        * has accepted. */
 
       if (atomicValue.isNull()) {
-         return Item(AnyURI::fromValue(QLatin1String("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:") +
+         return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                                        m_namePool->stringForLocalName(name.localName())));
       } else {
          return AtomicValue::toXDM(atomicValue);
@@ -170,14 +172,12 @@ Item VariableLoader::itemForName(const QXmlName &name) const
    }
 }
 
-Item VariableLoader::evaluateSingleton(const QXmlName name,
-                                       const DynamicContext::Ptr &)
+Item VariableLoader::evaluateSingleton(const QXmlName name, const DynamicContext::Ptr &)
 {
    return itemForName(name);
 }
 
-bool VariableLoader::isSameType(const QVariant &v1,
-                                const QVariant &v2) const
+bool VariableLoader::isSameType(const QVariant &v1, const QVariant &v2) const
 {
    /* Are both of type QIODevice *? */
    if (v1.userType() == qMetaTypeId<QIODevice *>() && v1.userType() == v2.userType()) {

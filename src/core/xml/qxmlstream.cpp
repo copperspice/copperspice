@@ -79,11 +79,6 @@ QXmlStreamReader::QXmlStreamReader(QIODevice *device)
    setDevice(device);
 }
 
-/*!
-  Creates a new stream reader that reads from \a data.
-
-  \sa addData(), clear(), setDevice()
- */
 QXmlStreamReader::QXmlStreamReader(const QByteArray &data)
    : d_ptr(new QXmlStreamReaderPrivate(this))
 {
@@ -97,16 +92,11 @@ QXmlStreamReader::QXmlStreamReader(const QString &data)
    Q_D(QXmlStreamReader);
 
    d->dataBuffer = d->codec->fromUnicode(data);
-   d->decoder = d->codec->makeDecoder();
+   d->decoder    = d->codec->makeDecoder();
 
    d->lockEncoding = true;
 }
 
-/*!
-  Creates a new stream reader that reads from \a data.
-
-  \sa addData(), clear(), setDevice()
- */
 QXmlStreamReader::QXmlStreamReader(const char *data)
    : d_ptr(new QXmlStreamReaderPrivate(this))
 {
@@ -114,12 +104,10 @@ QXmlStreamReader::QXmlStreamReader(const char *data)
    d->dataBuffer = QByteArray(data);
 }
 
-/*!
-  Destructs the reader.
- */
 QXmlStreamReader::~QXmlStreamReader()
 {
    Q_D(QXmlStreamReader);
+
    if (d->deleteDevice) {
       delete d->device;
    }
@@ -484,7 +472,8 @@ void QXmlStreamReaderPrivate::init()
    readBufferPos = 0;
    nbytesread = 0;
 
-   codec = QTextCodec::codecForMib(106); // utf8
+   codec = QTextCodec::codecForMib(106);       // utf8
+
    delete decoder;
    decoder = 0;
 
@@ -586,6 +575,7 @@ inline uint QXmlStreamReaderPrivate::getChar()
    uint c;
    if (putStack.size()) {
       c = atEnd ? 0 : putStack.pop();
+
    } else {
       if (readBufferPos < readBuffer.size()) {
          c = readBuffer.at(readBufferPos++).unicode();
@@ -600,6 +590,7 @@ inline uint QXmlStreamReaderPrivate::getChar()
 inline uint QXmlStreamReaderPrivate::peekChar()
 {
    uint c;
+
    if (putStack.size()) {
       c = putStack.top();
    } else if (readBufferPos < readBuffer.size()) {
@@ -616,7 +607,7 @@ inline uint QXmlStreamReaderPrivate::peekChar()
 /*!
   \internal
 
-  Scans characters until \a str is encountered, and validates the characters
+  Scans characters until str is encountered, and validates the characters
   as according to the Char[2] production and do the line-ending normalization.
   If any character is invalid, false is returned, otherwise true upon success.
 
@@ -631,7 +622,7 @@ bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
    int oldLineNumber = lineNumber;
 
    while (uint c = getChar()) {
-      /* First, we do the validation & normalization. */
+      // First, we do the validation & normalization.
 
       switch (c) {
          case '\r':
@@ -658,8 +649,9 @@ bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
             textBuffer += char32_t(c);
       }
 
-      /* Second, attempt to lookup str. */
+      // Second, attempt to lookup str
       if (c == uint(*str)) {
+
          if (!*(str + 1)) {
             if (tokenToInject >= 0) {
                injectToken(tokenToInject);
@@ -673,9 +665,11 @@ bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
          }
       }
    }
+
    putString(textBuffer, pos);
    textBuffer.resize(pos);
    lineNumber = oldLineNumber;
+
    return false;
 }
 
@@ -935,8 +929,10 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
             if (c == 0) {
                putString(textBuffer, pos);
                textBuffer.resize(pos);
-            } else if (c == '>' && textBuffer.at(textBuffer.size() - 2) == QLatin1Char(']')) {
+
+            } else if (c == '>' && textBuffer.at(textBuffer.size() - 2) == ']') {
                raiseWellFormedError(QXmlStream::tr("Sequence ']]>' not allowed in content."));
+
             } else {
                putChar(c);
                break;
@@ -1199,15 +1195,16 @@ ushort QXmlStreamReaderPrivate::getChar_helper()
       nbytesread = rawReadBuffer.size();
       dataBuffer.clear();
    }
-   if (!nbytesread) {
+
+   if (! nbytesread) {
       atEnd = true;
       return 0;
    }
 
    if (! decoder) {
 
-      if (nbytesread < 4) { // the 4 is to cover 0xef 0xbb 0xbf plus
-         // one extra for the utf8 codec
+      if (nbytesread < 4) {
+         // the 4 is to cover 0xef 0xbb 0xbf plus one extra for the utf8 codec
          atEnd = true;
          return 0;
       }
@@ -1560,7 +1557,7 @@ void QXmlStreamReaderPrivate::startDocument()
       QStringView key(symString(attrib.key));
       QStringView value(symString(attrib.value));
 
-      if (prefix.isEmpty() && key == QLatin1String("encoding")) {
+      if (prefix.isEmpty() && key == "encoding") {
          const QString name(value.toString());
          documentEncoding = value;
 
@@ -1568,23 +1565,25 @@ void QXmlStreamReaderPrivate::startDocument()
             err = QXmlStream::tr("The standalone pseudo attribute must appear after the encoding.");
          }
 
-         if (!QXmlUtils::isEncName(name)) {
+         if (! QXmlUtils::isEncName(name)) {
             err = QXmlStream::tr("%1 is an invalid encoding name.").formatArg(name);
-         } else {
 
+         } else {
             QTextCodec *const newCodec = QTextCodec::codecForName(name.toLatin1());
+
             if (! newCodec) {
                err = QXmlStream::tr("Encoding %1 is unsupported").formatArg(name);
 
-            } else if (newCodec != codec && !lockEncoding) {
+            } else if (newCodec != codec && ! lockEncoding) {
                codec = newCodec;
                delete decoder;
+
                decoder = codec->makeDecoder();
                decoder->toUnicode(&readBuffer, rawReadBuffer.data(), nbytesread);
             }
          }
 
-      } else if (prefix.isEmpty() && key == QLatin1String("standalone")) {
+      } else if (prefix.isEmpty() && key == "standalone") {
          hasStandalone = true;
 
          if (value == "yes") {
@@ -2229,8 +2228,8 @@ class QXmlStreamWriterPrivate : public QXmlStreamPrivateTagStack
       delete encoder;
    }
 
-   void write(const QStringView &);
-   void write(const QString &);
+   void write(QStringView str);
+   void write(const QString &str);
    void writeEscaped(const QString &, bool escapeWhitespace = false);
    void write(const char *s, int len);
 
@@ -2279,7 +2278,7 @@ QXmlStreamWriterPrivate::QXmlStreamWriterPrivate(QXmlStreamWriter *q)
    stringDevice = nullptr;
    deleteDevice = false;
 
-   codec = QTextCodec::codecForMib(106); // utf8
+   codec = QTextCodec::codecForMib(106);                   // utf8
    encoder = codec->makeEncoder(QTextCodec::IgnoreHeader); // no byte order mark for utf8
 
    checkIfASCIICompatibleCodec();
@@ -2301,7 +2300,7 @@ void QXmlStreamWriterPrivate::checkIfASCIICompatibleCodec()
    isCodecASCIICompatible = (bytes.count() == 1);
 }
 
-void QXmlStreamWriterPrivate::write(const QStringView &str)
+void QXmlStreamWriterPrivate::write(QStringView str)
 {
    if (device) {
 
@@ -2380,6 +2379,7 @@ void QXmlStreamWriterPrivate::writeEscaped(const QString &s, bool escapeWhitespa
          escaped += QChar(c);
       }
    }
+
    write(escaped);
 }
 
@@ -2390,6 +2390,7 @@ void QXmlStreamWriterPrivate::write(const char *s, int len)
       if (hasError) {
          return;
       }
+
       if (isCodecASCIICompatible) {
          if (device->write(s, len) != len) {
             hasError = true;
@@ -2573,12 +2574,6 @@ void QXmlStreamWriter::setDevice(QIODevice *device)
    d->device = device;
 }
 
-/*!
-    Returns the current device associated with the QXmlStreamWriter,
-    or 0 if no device has been assigned.
-
-    \sa setDevice()
-*/
 QIODevice *QXmlStreamWriter::device() const
 {
    Q_D(const QXmlStreamWriter);
@@ -2589,6 +2584,7 @@ QIODevice *QXmlStreamWriter::device() const
 void QXmlStreamWriter::setCodec(QTextCodec *codec)
 {
    Q_D(QXmlStreamWriter);
+
    if (codec) {
       d->codec = codec;
       delete d->encoder;
@@ -2619,20 +2615,6 @@ bool QXmlStreamWriter::autoFormatting() const
    Q_D(const QXmlStreamWriter);
    return d->autoFormatting;
 }
-
-/*!
-    \property QXmlStreamWriter::autoFormattingIndent
-    \since 4.4
-
-    \brief the number of spaces or tabs used for indentation when
-    auto-formatting is enabled.  Positive numbers indicate spaces,
-    negative numbers tabs.
-
-    The default indentation is 4.
-
-    \sa autoFormatting
-*/
-
 
 void QXmlStreamWriter::setAutoFormattingIndent(int spacesOrTabs)
 {
@@ -2672,8 +2654,10 @@ bool QXmlStreamWriter::hasError() const
 void QXmlStreamWriter::writeAttribute(const QString &qualifiedName, const QString &value)
 {
    Q_D(QXmlStreamWriter);
+
    Q_ASSERT(d->inStartElement);
-   Q_ASSERT(qualifiedName.count(QLatin1Char(':')) <= 1);
+   Q_ASSERT(qualifiedName.count(':') <= 1);
+
    d->write(" ");
    d->write(qualifiedName);
    d->write("=\"");
@@ -2693,7 +2677,7 @@ void QXmlStreamWriter::writeAttribute(const QString &namespaceUri, const QString
 {
    Q_D(QXmlStreamWriter);
    Q_ASSERT(d->inStartElement);
-   Q_ASSERT(!name.contains(QLatin1Char(':')));
+   Q_ASSERT(!name.contains(':'));
 
    QXmlStreamWriterPrivate::NamespaceDeclaration &namespaceDeclaration = d->findNamespace(namespaceUri, true, true);
    d->write(" ");
@@ -2759,8 +2743,10 @@ void QXmlStreamWriter::writeCDATA(const QString &text)
 {
    Q_D(QXmlStreamWriter);
    d->finishStartElement();
+
    QString copy(text);
    copy.replace(QLatin1String("]]>"), QLatin1String("]]]]><![CDATA[>"));
+
    d->write("<![CDATA[");
    d->write(copy);
    d->write("]]>");
@@ -2789,9 +2775,11 @@ void QXmlStreamWriter::writeComment(const QString &text)
 {
    Q_D(QXmlStreamWriter);
    Q_ASSERT(!text.contains(QLatin1String("--")) && !text.endsWith(QLatin1Char('-')));
+
    if (!d->finishStartElement(false) && d->autoFormatting) {
       d->indent(d->tagStack.size());
    }
+
    d->write("<!--");
    d->write(text);
    d->write("-->");
@@ -2814,8 +2802,6 @@ void QXmlStreamWriter::writeDTD(const QString &dtd)
       d->write("\n");
    }
 }
-
-
 
 /*!  \overload
   Writes an empty element with qualified name \a qualifiedName.
@@ -3030,7 +3016,7 @@ void QXmlStreamWriter::writeProcessingInstruction(const QString &target, const Q
  */
 void QXmlStreamWriter::writeStartDocument()
 {
-   writeStartDocument(QLatin1String("1.0"));
+   writeStartDocument("1.0");
 }
 
 
@@ -3136,12 +3122,15 @@ void QXmlStreamWriter::writeCurrentToken(const QXmlStreamReader &reader)
    switch (reader.tokenType()) {
       case QXmlStreamReader::NoToken:
          break;
+
       case QXmlStreamReader::StartDocument:
          writeStartDocument();
          break;
+
       case QXmlStreamReader::EndDocument:
          writeEndDocument();
          break;
+
       case QXmlStreamReader::StartElement: {
          QXmlStreamNamespaceDeclarations namespaceDeclarations = reader.namespaceDeclarations();
          for (int i = 0; i < namespaceDeclarations.size(); ++i) {
@@ -3153,6 +3142,7 @@ void QXmlStreamWriter::writeCurrentToken(const QXmlStreamReader &reader)
          writeAttributes(reader.attributes());
       }
       break;
+
       case QXmlStreamReader::EndElement:
          writeEndElement();
          break;

@@ -963,9 +963,9 @@ class Q_CORE_EXPORT QLocale
    NumberOptions numberOptions() const;
 
    enum QuotationStyle { StandardQuotation, AlternateQuotation };
-   QString quoteString(const QString &str,     QuotationStyle style = StandardQuotation) const;
+   QString quoteString(const QString &str, QuotationStyle style = StandardQuotation) const;
 
-   QString quoteString(const QStringView &str, QuotationStyle style = StandardQuotation) const;
+   QString quoteString(QStringView str, QuotationStyle style = StandardQuotation) const;
 
    QString createSeparatedList(const QStringList &strl) const;
 

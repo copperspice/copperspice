@@ -36,7 +36,7 @@ class QIsciiCodec : public QTextCodec
    ~QIsciiCodec();
 
    QString convertToUnicode(const char *, int, ConverterState *) const override;
-   QByteArray convertFromUnicode(const QStringView &str, ConverterState *) const override;
+   QByteArray convertFromUnicode(QStringView str, ConverterState *) const override;
 
    QByteArray name() const override;
    int mibEnum() const override;

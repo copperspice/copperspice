@@ -100,10 +100,7 @@ class QX11PaintEngine : public QPaintEngine
    QX11PaintEngine(QX11PaintEnginePrivate &dptr);
 
    void drawXLFD(const QPointF &p, const QTextItemInt &si);
-
-#ifndef QT_NO_FONTCONFIG
    void drawFreetype(const QPointF &p, const QTextItemInt &si);
-#endif
 
    friend class QPixmap;
    friend class QFontEngineBox;
@@ -154,7 +151,7 @@ class QX11PaintEnginePrivate : public QPaintEnginePrivate
    void setupAdaptedOrigin(const QPoint &p);
    void resetAdaptedOrigin();
 
-   void decidePathFallback() { 
+   void decidePathFallback() {
       use_path_fallback = has_alpha_brush || has_alpha_pen || has_custom_pen || has_complex_xform
                           || (render_hints & QPainter::Antialiasing);
    }

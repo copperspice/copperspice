@@ -67,7 +67,7 @@ class QDirIteratorPrivate
    const QDir::Filters filters;
    const QDirIterator::IteratorFlags iteratorFlags;
 
-   QVector<QRegularExpression8> nameRegExps;
+   QVector<QRegularExpression> nameRegExps;
 
    QDirIteratorPrivateIteratorStack<QAbstractFileEngineIterator> fileEngineIterators;
 
@@ -101,7 +101,7 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
          options |= QPatternOption::CaseInsensitiveOption;
       }
 
-      QRegularExpression8 regExp(nameFilters.at(i), options);
+      QRegularExpression regExp(nameFilters.at(i), options);
       nameRegExps.append(regExp);
    }
 #endif
@@ -295,8 +295,8 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    if (! nameFilters.isEmpty() && ! ((filters & QDir::AllDirs) && fi.isDir())) {
       bool matched = false;
 
-      for (const auto & item : nameRegExps) {
-         if (item.match(fileName).hasMatch()) {
+      for (const auto &regExp : nameRegExps) {
+         if (regExp.match(fileName).hasMatch()) {
             matched = true;
             break;
          }
@@ -337,9 +337,10 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // skip files
-   const bool skipFiles    = !(filters & QDir::Files);
+   const bool skipFiles = !(filters & QDir::Files);
+
    if (skipFiles && fi.isFile()) {
-      // Basically we need a reason not to exclude this file otherwise we just eliminate it   
+      // Basically we need a reason not to exclude this file otherwise we just eliminate it
       return false;
    }
 
@@ -369,67 +370,25 @@ QDirIterator::QDirIterator(const QDir &dir, IteratorFlags flags)
    };
 
    const QDirPrivate *other = static_cast<const MyQDir *>(&dir)->priv();
-   d.reset(new QDirIteratorPrivate(other->dirEntry, other->nameFilters, other->filters, flags,
-                                   !other->fileEngine.isNull()));
+   d.reset(new QDirIteratorPrivate(other->dirEntry, other->nameFilters, other->filters, flags, ! other->fileEngine.isNull()));
 }
 
-/*!
-    Constructs a QDirIterator that can iterate over \a path, with no name
-    filtering and \a filters for entry filtering. You can pass options via \a
-    flags to decide how the directory should be iterated.
-
-    By default, \a filters is QDir::NoFilter, and \a flags is NoIteratorFlags,
-    which provides the same behavior as in QDir::entryList().
-
-    \note To list symlinks that point to non existing files, QDir::System must be
-     passed to the flags.
-
-    \sa hasNext(), next(), IteratorFlags
-*/
 QDirIterator::QDirIterator(const QString &path, QDir::Filters filters, IteratorFlags flags)
    : d(new QDirIteratorPrivate(QFileSystemEntry(path), QStringList(), filters, flags))
 {
 }
 
-/*!
-    Constructs a QDirIterator that can iterate over \a path. You can pass
-    options via \a flags to decide how the directory should be iterated.
-
-    By default, \a flags is NoIteratorFlags, which provides the same behavior
-    as in QDir::entryList().
-
-    \note To list symlinks that point to non existing files, QDir::System must be
-     passed to the flags.
-
-    \sa hasNext(), next(), IteratorFlags
-*/
 QDirIterator::QDirIterator(const QString &path, IteratorFlags flags)
    : d(new QDirIteratorPrivate(QFileSystemEntry(path), QStringList(), QDir::NoFilter, flags))
 {
 }
 
-/*!
-    Constructs a QDirIterator that can iterate over \a path, using \a
-    nameFilters and \a filters. You can pass options via \a flags to decide
-    how the directory should be iterated.
-
-    By default, \a flags is NoIteratorFlags, which provides the same behavior
-    as QDir::entryList().
-
-    \note To list symlinks that point to non existing files, QDir::System must be
-     passed to the flags.
-
-    \sa hasNext(), next(), IteratorFlags
-*/
 QDirIterator::QDirIterator(const QString &path, const QStringList &nameFilters,
                            QDir::Filters filters, IteratorFlags flags)
    : d(new QDirIteratorPrivate(QFileSystemEntry(path), nameFilters, filters, flags))
 {
 }
 
-/*!
-    Destroys the QDirIterator.
-*/
 QDirIterator::~QDirIterator()
 {
 }

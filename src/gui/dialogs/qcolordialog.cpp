@@ -427,8 +427,6 @@ void QWellArray::keyPressEvent(QKeyEvent *e)
 
 }
 
-//////////// QWellArray END
-
 static bool initrgb = false;
 static QRgb s_standardRGB[6 * 8];
 static QRgb s_customRGB[2 * 8];
@@ -934,22 +932,25 @@ class QColorShower : public QWidget
  public:
    QColorShower(QColorDialog *parent);
 
-   //things that don't emit signals
+   // things that don't emit signals
    void setHsv(int h, int s, int v);
 
    int currentAlpha() const {
       return (colorDialog->options() & QColorDialog::ShowAlphaChannel) ? alphaEd->value() : 255;
    }
+
    void setCurrentAlpha(int a) {
       alphaEd->setValue(a);
       rgbEd();
    }
+
    void showAlpha(bool b);
    bool isAlphaVisible() const;
 
    QRgb currentColor() const {
       return curCol;
    }
+
    QColor currentQColor() const {
       return curQColor;
    }
@@ -966,7 +967,6 @@ class QColorShower : public QWidget
    GUI_CS_SLOT_2(setRgb)
 
  private:
-
    GUI_CS_SLOT_1(Private, void rgbEd())
    GUI_CS_SLOT_2(rgbEd)
 
@@ -993,6 +993,7 @@ class QColorShower : public QWidget
    QLabel *alphaLab;
    QColorShowLabel *lab;
    bool rgbOriginal;
+
    QColorDialog *colorDialog;
 
    friend class QColorDialog;
@@ -1481,6 +1482,7 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
          }
       }
    }
+
    // Check custom colors
    if (custom) {
       for (i = 0; i < 2; i++) {
@@ -1537,6 +1539,7 @@ void QColorDialogPrivate::init(const QColor &initial)
 
    nextCust = 0;
    QVBoxLayout *mainLay = new QVBoxLayout(q);
+
    // there's nothing in this dialog that benefits from sizing up
    mainLay->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -1555,7 +1558,7 @@ void QColorDialogPrivate::init(const QColor &initial)
    const int lumSpace = topLay->spacing() / 2;
 #endif
 
-   if (!smallDisplay) {
+   if (! smallDisplay) {
       leftLay = new QVBoxLayout;
       topLay->addLayout(leftLay);
    }
@@ -1563,10 +1566,12 @@ void QColorDialogPrivate::init(const QColor &initial)
    initRGB();
 
 #ifndef QT_NO_SETTINGS
-   if (!customSet) {
-      QSettings settings(QSettings::UserScope, QLatin1String("CopperSpice"));
+   if (! customSet) {
+      QSettings settings(QSettings::UserScope, "CopperSpice");
+
       for (int i = 0; i < 2 * 8; ++i) {
-         QVariant v = settings.value(QLatin1String("CS/customColors/") + QString::number(i));
+         QVariant v = settings.value("CS/customColors/" + QString::number(i));
+
          if (v.isValid()) {
             QRgb rgb = v.toUInt();
             s_customRGB[i] = rgb;
@@ -1575,7 +1580,7 @@ void QColorDialogPrivate::init(const QColor &initial)
    }
 #endif
 
-   if (!smallDisplay) {
+   if (! smallDisplay) {
       standard = new QColorWell(q, 6, 8, s_standardRGB);
       lblBasicColors = new QLabel(q);
 
@@ -1607,13 +1612,13 @@ void QColorDialogPrivate::init(const QColor &initial)
       leftLay->addWidget(addCusBt);
 
    } else {
-
       // better color picker size for small displays
 
 #if defined(QT_SMALL_COLORDIALOG)
       QSize screenSize = QApplication::desktop()->availableGeometry(QCursor::pos()).size();
       pWidth = pHeight = qMin(screenSize.width(), screenSize.height());
       pHeight -= 20;
+
       if (screenSize.height() > screenSize.width()) {
          pWidth -= 20;
       }
@@ -1648,15 +1653,18 @@ void QColorDialogPrivate::init(const QColor &initial)
    cLay->addSpacing(lumSpace);
    cLay->addWidget(cp);
 #endif
+
    cLay->addSpacing(lumSpace);
 
    lp = new QColorLuminancePicker(q);
+
 #if defined(QT_SMALL_COLORDIALOG)
    QSize screenSize = QApplication::desktop()->availableGeometry(QCursor::pos()).size();
    const int minDimension = qMin(screenSize.height(), screenSize.width());
    //set picker to be finger-usable
    int pickerWidth = !nonTouchUI ? minDimension / 9 : minDimension / 12;
    lp->setFixedWidth(pickerWidth);
+
    if (!nonTouchUI) {
       pickLay->addWidget(lp);
    } else {
@@ -1677,7 +1685,7 @@ void QColorDialogPrivate::init(const QColor &initial)
    QObject::connect(cs, SIGNAL(currentColorChanged(const QColor &)), q, SLOT(currentColorChanged(const QColor &)));
 
 #if defined(QT_SMALL_COLORDIALOG)
-   if (!nonTouchUI) {
+   if (! nonTouchUI) {
       pWidth -= cp->size().width();
    }
    topLay->addWidget(cs);
@@ -1727,47 +1735,7 @@ static const Qt::WindowFlags DefaultWindowFlags =
    Qt::Dialog | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint
    | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
 
-/*!
-    \class QColorDialog
-    \brief The QColorDialog class provides a dialog widget for specifying colors.
 
-    \ingroup standard-dialogs
-
-    The color dialog's function is to allow users to choose colors.
-    For example, you might use this in a drawing program to allow the
-    user to set the brush color.
-
-    The static functions provide modal color dialogs.
-    \omit
-    If you require a modeless dialog, use the QColorDialog constructor.
-    \endomit
-
-    The static getColor() function shows the dialog, and allows the user to
-    specify a color. This function can also be used to let users choose a
-    color with a level of transparency: pass the ShowAlphaChannel option as
-    an additional argument.
-
-    The user can store customCount() different custom colors. The
-    custom colors are shared by all color dialogs, and remembered
-    during the execution of the program. Use setCustomColor() to set
-    the custom colors, and use customColor() to get them.
-
-    Additional widgets that allow users to pick colors are available
-    as \l{Qt Solutions}.
-
-    The \l{dialogs/standarddialogs}{Standard Dialogs} example shows
-    how to use QColorDialog as well as other built-in Qt dialogs.
-
-    \image plastique-colordialog.png A color dialog in the Plastique widget style.
-
-    \sa QColor, QFileDialog, QPrintDialog, QFontDialog, {Standard Dialogs Example}
-*/
-
-/*!
-    \since 4.5
-
-    Constructs a color dialog with the given \a parent.
-*/
 QColorDialog::QColorDialog(QWidget *parent)
    : QDialog(*new QColorDialogPrivate, parent, DefaultWindowFlags)
 {
@@ -1775,23 +1743,13 @@ QColorDialog::QColorDialog(QWidget *parent)
    d->init(Qt::white);
 }
 
-/*!
-    \since 4.5
 
-    Constructs a color dialog with the given \a parent and specified
-    \a initial color.
-*/
 QColorDialog::QColorDialog(const QColor &initial, QWidget *parent)
    : QDialog(*new QColorDialogPrivate, parent, DefaultWindowFlags)
 {
    Q_D(QColorDialog);
    d->init(initial);
 }
-
-/*!
-    \property QColorDialog::currentColor
-    \brief the currently selected color in the dialog
-*/
 
 void QColorDialog::setCurrentColor(const QColor &color)
 {
@@ -1958,7 +1916,7 @@ QColor QColorDialog::getColor(const QColor &initial, QWidget *parent, const QStr
 {
    QColorDialog dlg(parent);
 
-   if (!title.isEmpty()) {
+   if (! title.isEmpty()) {
       dlg.setWindowTitle(title);
    }
 

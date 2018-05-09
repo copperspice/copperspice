@@ -78,6 +78,7 @@ class TSReader : public QXmlStreamReader
 
    // needed to expand <byte ... />
    QString readContents();
+
    // needed to join <lengthvariant>s
    QString readTransContents();
 

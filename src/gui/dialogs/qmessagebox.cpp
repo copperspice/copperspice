@@ -46,8 +46,6 @@
 #include <QtGui/qfontmetrics.h>
 #include <QtGui/qclipboard.h>
 
-QT_BEGIN_NAMESPACE
-
 enum Button { Old_Ok = 1, Old_Cancel = 2, Old_Yes = 3, Old_No = 4, Old_Abort = 5, Old_Retry = 6,
               Old_Ignore = 7, Old_YesAll = 8, Old_NoAll = 9, Old_ButtonMask = 0xFF,
               NewButtonMask = 0xFFFFFC00
@@ -1078,11 +1076,11 @@ void QMessageBox::aboutCs(QWidget *parent)
    aboutBox->setAttribute(Qt::WA_DeleteOnClose);
    aboutBox->setWindowTitle(tr("About CopperSpice"));
 
-   QIcon icon(QLatin1String(":/copperspice/qmessagebox/images/cslogo-64.png"));
+   QIcon icon(":/copperspice/qmessagebox/images/cslogo-64.png");
    aboutBox->setWindowIcon(icon);
 
    QLabel *msg1 = new QLabel;
-   msg1->setText(tr("CopperSpice libraries Version %1").formatArg(QLatin1String(CS_VERSION_STR)));
+   msg1->setText(tr("CopperSpice libraries Version %1").formatArg(CS_VERSION_STR));
 
    QFont font = msg1->font();
    font.setWeight(QFont::Bold);
@@ -1090,7 +1088,7 @@ void QMessageBox::aboutCs(QWidget *parent)
    msg1->setFont(font);
 
    QLabel *msg2 = new QLabel;
-   msg2->setText(tr("CopperSpice is a C++ toolkit for cross platform applications on X11, Windows, and OS X\n"
+   msg2->setText(tr("CopperSpice is a set of C++ libraries for cross platform applications on X11, Windows, and Mac OS X\n"
                     "CopperSpice is licensed under the GNU LGPL version 2.1"));
 
    font = msg2->font();
@@ -1107,7 +1105,7 @@ void QMessageBox::aboutCs(QWidget *parent)
    msg3->setFont(font);
 
    QLabel *csImage = 0;
-   QPixmap pm(QLatin1String(":/copperspice/qmessagebox/images/cslogo-64.png"));
+   QPixmap pm(":/copperspice/qmessagebox/images/cslogo-64.png");
 
    if (! pm.isNull()) {
       csImage = new QLabel;
@@ -1490,24 +1488,10 @@ QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb
    return QPixmap();
 }
 
-/*!
-    \obsolete
-
-    Returns the pixmap used for a standard icon. This allows the
-    pixmaps to be used in more complex message boxes. \a icon
-    specifies the required icon, e.g. QMessageBox::Question,
-    QMessageBox::Information, QMessageBox::Warning or
-    QMessageBox::Critical.
-
-    Call QStyle::standardIcon() with QStyle::SP_MessageBoxInformation etc.
-    instead.
-*/
-
+// obsolete
 QPixmap QMessageBox::standardIcon(Icon icon)
 {
    return QMessageBoxPrivate::standardIcon(icon, 0);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_MESSAGEBOX

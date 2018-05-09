@@ -41,10 +41,10 @@ class Q_CORE_EXPORT QLibrary : public QObject
 
  public:
    enum LoadHint {
-      ResolveAllSymbolsHint = 0x01,
+      ResolveAllSymbolsHint     = 0x01,
       ExportExternalSymbolsHint = 0x02,
-      LoadArchiveMemberHint = 0x04,
-      ImprovedSearchHeuristics = 0x08
+      LoadArchiveMemberHint     = 0x04,
+      ImprovedSearchHeuristics  = 0x08
    };
    using LoadHints = QFlags<LoadHint>;
 
@@ -56,10 +56,10 @@ class Q_CORE_EXPORT QLibrary : public QObject
    explicit QLibrary(const QString &fileName, const QString &version, QObject *parent = nullptr);
    ~QLibrary();
 
-   void *resolve(const char *symbol);
-   static void *resolve(const QString &fileName, const char *symbol);
-   static void *resolve(const QString &fileName, int verNum, const char *symbol);
-   static void *resolve(const QString &fileName, const QString &version, const char *symbol);
+   void *resolve(const QString &symbol);
+   static void *resolve(const QString &fileName, const QString &symbol);
+   static void *resolve(const QString &fileName, int verNum, const QString &symbol);
+   static void *resolve(const QString &fileName, const QString &version, const QString &symbol);
 
    bool load();
    bool unload();
