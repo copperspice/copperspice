@@ -120,7 +120,7 @@ void QTimer::singleShot(int msec, QObject *receiver, const QString &member)
    if (receiver && ! member.isEmpty()) {
 
       if (msec == 0) {
-         // special code shortpath for 0-timers
+         // special code shortpath for 0 timers
          int bracketPosition = member.indexOf('(');
 
          if (bracketPosition == -1) {
@@ -129,9 +129,9 @@ void QTimer::singleShot(int msec, QObject *receiver, const QString &member)
          }
 
          // extract method name
-         QString methodName = member.left(bracketPosition - 1);
-
+         QString methodName = member.left(bracketPosition);
          QMetaObject::invokeMethod(receiver, methodName, Qt::QueuedConnection);
+
          return;
       }
 

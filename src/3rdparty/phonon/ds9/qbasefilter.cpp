@@ -368,14 +368,19 @@ namespace Phonon
             QMutexLocker locker(&m_mutex);
 
             m_graph = graph;
-            m_name  = QString::fromStdWString(std::wstring(name));
+
+            if (name == nullptr) {
+               m_name = "";
+            } else {
+               m_name  = QString::fromStdWString(std::wstring(name));
+            }
 
             return S_OK;
         }
 
         STDMETHODIMP QBaseFilter::EnumPins(IEnumPins **ep)
         {
-            if (!ep) {
+            if (! ep) {
                 return E_POINTER;
             }
 
