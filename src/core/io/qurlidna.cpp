@@ -2497,27 +2497,29 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
 
    QString::const_iterator last_iter = domain.begin();
 
-   while (true) {
-      QString::const_iterator iter = nextDotDelimiter(domain, last_iter);
 
-      int labelLength = iter - last_iter;
+   while (true) {
+      QString::const_iterator next_iter = nextDotDelimiter(domain, last_iter);
+
+      int labelLength = next_iter - last_iter;
 
       if (labelLength == 0) {
-         if (iter == domain.end()) {
+         if (next_iter == domain.end()) {
             break;
          }
 
-         if (dot == ForbidLeadingDot || iter != domain.begin()) {
+         if (dot == ForbidLeadingDot || next_iter != domain.begin()) {
             // two delimiters in a row, empty label not allowed
             return QString();
          }
       }
 
-      // copy the label to the destination, lovwer case
+      // copy the label to the destination, lower case
       int prevLen = retval.size();
       bool simple = true;
 
-      QStringView tmpLabel(last_iter, iter);
+      QStringView tmpLabel(last_iter, next_iter);
+
       for (auto ch : tmpLabel) {
          if (ch > 0x7F) {
             simple = false;
@@ -2584,14 +2586,16 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
          }
       }
 
-      last_iter = iter + 1;
-
-      if (last_iter != domain.end()) {
-         retval += '.';
-
-      } else {
+      if (next_iter == domain.end()) {
          break;
+      }
 
+      last_iter = next_iter + 1;
+
+      if (last_iter == domain.end()) {
+         break;
+      } else {
+         retval += '.';
       }
    }
 
