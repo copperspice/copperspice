@@ -44,6 +44,10 @@ QJsonValue::QJsonValue(Type type)
    } else if (type == Type::Object) {
       m_data = std::make_shared<QJsonDataObject>();
 
+   } else {
+      // type is null or unknown
+      m_data = std::make_shared<QJsonDataNull>();
+
    }
 }
 
@@ -157,7 +161,6 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
 QVariant QJsonValue::toVariant() const
 {
   switch (type()) {
-
       case Type::Bool:
          return toBool();
 

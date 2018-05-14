@@ -88,7 +88,7 @@ class Q_CORE_EXPORT QJsonObject
 
    void remove(const QString &key);
 
-   int size() const;
+   size_type size() const;
 
    QJsonValue take(const QString &key);
 

@@ -91,7 +91,16 @@ class Q_CORE_EXPORT QJsonDocument
    void setArray(const QJsonArray &array);
 
    QVariant toVariant() const;
-   QString toJson(JsonFormat format = Indented) const;
+
+   QByteArray toJson(JsonFormat format = Indented) const {
+      return toJsonByteArray(format);
+   }
+
+   QByteArray toJsonByteArray(JsonFormat format = Indented) const {
+      return toJsonString(format).toUtf8();
+   }
+
+   QString toJsonString(JsonFormat format = Indented) const;
 
    //
    static QJsonDocument fromJson(QStringView json, QJsonParseError *error = nullptr);

@@ -361,14 +361,16 @@ bool QJsonParser::parseValue(QJsonValue &value)
    ++m_position;
 
    switch (ch.unicode()) {
-      case 'n':
 
+      case 'n':
          if (m_data.end() - m_position < 4) {
             lastError = QJsonParseError::IllegalValue;
             return false;
          }
 
          if (QStringView(m_position, m_data.end()).startsWith("ull")) {
+            m_position += 3;
+
             value = QJsonValue(QJsonValue::Null);
             return true;
          }
@@ -383,6 +385,8 @@ bool QJsonParser::parseValue(QJsonValue &value)
          }
 
          if (QStringView(m_position, m_data.end()).startsWith("rue")) {
+            m_position += 3;
+
             value = QJsonValue(true);
             return true;
          }
@@ -397,6 +401,8 @@ bool QJsonParser::parseValue(QJsonValue &value)
          }
 
          if (QStringView(m_position, m_data.end()).startsWith("alse")) {
+            m_position += 4;
+
             value = QJsonValue(false);
             return true;
          }
@@ -444,6 +450,10 @@ bool QJsonParser::parseValue(QJsonValue &value)
 
       default:
          --m_position;
+
+         if (! parseNumber(value)) {
+            return false;
+         }
    }
 
    return true;

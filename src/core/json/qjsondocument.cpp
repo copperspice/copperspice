@@ -89,7 +89,7 @@ QVariant QJsonDocument::toVariant() const
    }
 }
 
-QString QJsonDocument::toJson(JsonFormat format) const
+QString QJsonDocument::toJsonString(JsonFormat format) const
 {
    QString retval;
 

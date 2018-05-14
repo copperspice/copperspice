@@ -58,11 +58,7 @@ class QJsonData
          return defaultValue;
       }
 
-      virtual QString toString(const QString &defaultValue) {
-         return defaultValue;
-      }
-
-      virtual QJsonArray toArray(const QJsonArray &defaultValue) {
+      virtual QJsonArray toArray(const QJsonArray &defaultValue) const {
          return defaultValue;
       }
 
@@ -80,7 +76,7 @@ class QJsonDataObject : public QJsonData
          : m_map(std::move(value))
       { }
 
-      std::unique_ptr<QJsonData> clone() const {
+      std::unique_ptr<QJsonData> clone() const override {
          return std::make_unique<QJsonDataObject>(*this);
       }
 
@@ -105,11 +101,11 @@ class QJsonDataArray : public QJsonData
          : m_vector(std::move(value))
       { }
 
-      std::unique_ptr<QJsonData> clone() const {
+      std::unique_ptr<QJsonData> clone() const override {
          return std::make_unique<QJsonDataArray>(*this);
       }
 
-      QJsonArray toArray(const QJsonArray &defaultValue) override {
+      QJsonArray toArray(const QJsonArray &defaultValue) const override {
          return QJsonArray(m_vector.begin(), m_vector.end());
       }
 
@@ -128,7 +124,7 @@ class QJsonDataBool : public QJsonData
          : m_data(value)
       { }
 
-      std::unique_ptr<QJsonData> clone() const {
+      std::unique_ptr<QJsonData> clone() const override {
          return std::make_unique<QJsonDataBool>(*this);
       }
 
@@ -144,14 +140,37 @@ class QJsonDataBool : public QJsonData
       bool m_data;
 };
 
+class QJsonDataNull : public QJsonData
+{
+   public:
+      QJsonDataNull()
+      { }
+
+      std::unique_ptr<QJsonData> clone() const override {
+         return std::make_unique<QJsonDataNull>(*this);
+      }
+
+      int toInt(int defaultValue) const override {
+         return defaultValue;
+      }
+
+      double toDouble(double defaultValue) const override {
+         return defaultValue;
+      }
+
+      QJsonValue::Type type() const override {
+         return QJsonValue::Type::Null;
+      }
+};
+
 class QJsonDataNumber : public QJsonData
 {
    public:
-      QJsonDataNumber(bool value)
+      QJsonDataNumber(double value)
          : m_data(value)
       { }
 
-      std::unique_ptr<QJsonData> clone() const {
+      std::unique_ptr<QJsonData> clone() const override {
          return std::make_unique<QJsonDataNumber>(*this);
       }
 
@@ -175,14 +194,14 @@ class QJsonDataString : public QJsonData
 {
    public:
       QJsonDataString(QString value)
-         : m_data(value)
+         : m_data(std::move(value))
       { }
 
       std::unique_ptr<QJsonData> clone() const override {
          return std::make_unique<QJsonDataString>(*this);
       }
 
-      QString toString(const QString &defaultValue) override {
+      QString toString(const QString &defaultValue) const override {
          return m_data;
       }
 
